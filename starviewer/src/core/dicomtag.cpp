@@ -69,7 +69,7 @@ QString DICOMTag::getName() const
 
 QString DICOMTag::getKeyAsQString() const
 {
-    return QString("(%1,%2)").arg(QString::number(m_group,16).rightJustified(4,'0')).arg(QString::number(m_element,16).rightJustified(4,'0'));
+    return QString("(%1,%2)").arg(QString::number(m_group,16).rightJustified(4, '0')).arg(QString::number(m_element,16).rightJustified(4, '0'));
 }
 
 bool DICOMTag::operator==(const DICOMTag &tag)

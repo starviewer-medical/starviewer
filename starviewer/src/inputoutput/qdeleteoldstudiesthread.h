@@ -18,7 +18,7 @@ Q_OBJECT
 public:
     /** Constructor de la classe
       */
-    QDeleteOldStudiesThread( QObject *parent = 0 );
+    QDeleteOldStudiesThread(QObject *parent = 0);
 
     ///Esborra els estudis vells engegant un thread
     void deleteOldStudies();

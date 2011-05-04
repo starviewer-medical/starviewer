@@ -22,7 +22,7 @@ DicomPrintFactory::~DicomPrintFactory()
 }
 
 Printer* DicomPrintFactory::getPrinter()
-{	
+{
     return m_printer;
 }
 

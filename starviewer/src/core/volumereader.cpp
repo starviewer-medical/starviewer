@@ -149,7 +149,7 @@ void VolumeReader::logWarningLastError(const QStringList &fileList) const
         case VolumePixelDataReader::CannotReadFile:
             WARN_LOG("No podem llegir els següents arxius (raó desconeguda)\n" + fileList.join("\n"));
             break;
-        
+
         case VolumePixelDataReader::UnknownError:
             WARN_LOG("No podem carregar els arxius perquè ha donat un error desconegut");
             break;
@@ -173,14 +173,14 @@ QStringList VolumeReader::getFilesToRead(Volume *volume) const
 VolumeReader::PixelDataReaderType VolumeReader::getSuitableReader(Volume *volume) const
 {
     // Primer de tot comprovarem si hem de forçar la lectura amb alguna llibreria específica
-    // Això només es farà servir com a backdoor en casos molt específics i controlats per poder 
+    // Això només es farà servir com a backdoor en casos molt específics i controlats per poder
     // oferir un workaround fins que puguem oferir una bugfix release que arregli el problema correctament
     PixelDataReaderType forcedReaderLibrary;
     if (mustForceReaderLibraryBackdoor(volume, forcedReaderLibrary))
     {
         return forcedReaderLibrary;
     }
-    
+
     int firstImageRows = 0;
     int firstImageColumns = 0;
     QList<Image *> imageSet = volume->getImages();
@@ -189,7 +189,7 @@ VolumeReader::PixelDataReaderType VolumeReader::getSuitableReader(Volume *volume
         firstImageRows = imageSet.first()->getRows();
         firstImageColumns = imageSet.first()->getColumns();
     }
-    
+
     bool containsDifferentSizeImages = false;
     bool containsColorImages = false;
     bool avoidWrongPixelType = false;
@@ -197,7 +197,7 @@ VolumeReader::PixelDataReaderType VolumeReader::getSuitableReader(Volume *volume
     foreach (Image *image, imageSet)
     {
         // Comprovem que no tingui imatges de diferents mides
-        // TODO Aquesta comprovació podria desaparèixer ja que ara fem que les 
+        // TODO Aquesta comprovació podria desaparèixer ja que ara fem que les
         // imatges de diferents mides es guardin en volums diferents, per tant, hauria de
         // ser anòmal i inesperat trobar-nos amb aquest cas. Tot i així ens serveix per evitar que
         // si es donés el cas ens petés el programa
@@ -220,10 +220,10 @@ VolumeReader::PixelDataReaderType VolumeReader::getSuitableReader(Volume *volume
         else if (image->getBitsAllocated() == 16 && image->getBitsStored() == 16 && !image->getSOPInstanceUID().contains("MHDImage"))
         {
             // Aquesta comprovació es fa per evitar casos com el del ticket #1257
-            // Com que itkImage sempre s'allotja amb el tipus de pixel signed short int, 
+            // Com que itkImage sempre s'allotja amb el tipus de pixel signed short int,
             // quan tenim 16 bits allocated i stored, podria ser que el rang de dades necessités
             // que el tipus de pixel fos unsigned short int (0..65536) perquè la imatge es visualitzi correctament
-            
+
             // Només ho aplicarem si es tracta de modalitats d'imatge "no volumètriques" per acotar el problema
             // i evitar que es produeixi el problema remarcat al ticket #1313
             QStringList supportedModalities;
@@ -255,7 +255,7 @@ VolumeReader::PixelDataReaderType VolumeReader::getSuitableReader(Volume *volume
 bool VolumeReader::mustForceReaderLibraryBackdoor(Volume *volume, PixelDataReaderType &forcedReaderLibrary) const
 {
     Q_ASSERT(volume);
-    
+
     bool forceLibrary = false;
     Settings settings;
 
@@ -284,7 +284,7 @@ bool VolumeReader::mustForceReaderLibraryBackdoor(Volume *volume, PixelDataReade
         {
             modality = firstImage->getParentSeries()->getModality();
         }
-        
+
         // Primer comprovem si hi ha modalitats a forçar per ITK
         QStringList forceITKForModalities = settings.getValue(CoreSettings::ForceITKImageReaderForSpecifiedModalities).toString().trimmed().split("\\");
         if (forceITKForModalities.contains(modality))

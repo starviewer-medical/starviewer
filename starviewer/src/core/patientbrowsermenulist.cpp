@@ -10,7 +10,7 @@
 
 namespace udg {
 
-PatientBrowserMenuList::PatientBrowserMenuList( QWidget * parent ) : QWidget(parent)
+PatientBrowserMenuList::PatientBrowserMenuList(QWidget * parent) : QWidget(parent)
 {
     m_verticalLayout = new QVBoxLayout(this);
     m_verticalLayout->setMargin(0);
@@ -20,7 +20,7 @@ PatientBrowserMenuList::~PatientBrowserMenuList()
 {
 }
 
-void PatientBrowserMenuList::addItemsGroup( const QString &caption, const QList< QPair<QString,QString> > &itemsList )
+void PatientBrowserMenuList::addItemsGroup(const QString &caption, const QList<QPair<QString, QString> > &itemsList)
 {
     QWidget *groupWidget = new QWidget(this);
 
@@ -30,7 +30,7 @@ void PatientBrowserMenuList::addItemsGroup( const QString &caption, const QList<
     captionLabel->setFrameShape(QFrame::StyledPanel);
 
     // Li donem l'style sheet a la caption que titula el grup d'ítems
-    QString backgroundColor = captionLabel->palette().color( captionLabel->backgroundRole() ).name();
+    QString backgroundColor = captionLabel->palette().color(captionLabel->backgroundRole()).name();
     captionLabel->setStyleSheet("border: 2px solid #3E73B9;"
                              "border-radius: 5;"
                              "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,"
@@ -47,19 +47,19 @@ void PatientBrowserMenuList::addItemsGroup( const QString &caption, const QList<
     int numberOfItems = itemsList.count();
 
     int maxColumns = 2;
-    if ( numberOfItems >= 20 )
+    if (numberOfItems >= 20)
         maxColumns = 3;
 
     int row = 0;
     int column = 0;
-    int itemsPerColumn = ceil ( (double) numberOfItems / maxColumns );
+    int itemsPerColumn = ceil ((double) numberOfItems / maxColumns);
 
-    typedef QPair<QString,QString> MyPair;
-    foreach( MyPair itemPair, itemsList )
+    typedef QPair<QString, QString> MyPair;
+    foreach (MyPair itemPair, itemsList)
     {
-        gridLayoutWidgets->addWidget( createBasicItem(itemPair.first,itemPair.second), row, column );
+        gridLayoutWidgets->addWidget(createBasicItem(itemPair.first, itemPair.second), row, column);
         row++;
-        if( row >= itemsPerColumn )
+        if (row >= itemsPerColumn)
         {
             row = 0;
             column++;
@@ -69,31 +69,31 @@ void PatientBrowserMenuList::addItemsGroup( const QString &caption, const QList<
     m_verticalLayout->addWidget(groupWidget);
 }
 
-PatientBrowserMenuBasicItem *PatientBrowserMenuList::createBasicItem( const QString &label, const QString &identifier )
+PatientBrowserMenuBasicItem *PatientBrowserMenuList::createBasicItem(const QString &label, const QString &identifier)
 {
     PatientBrowserMenuBasicItem *seriebasicWidget = new PatientBrowserMenuBasicItem(this);
 
-    seriebasicWidget->setText( label );
-    seriebasicWidget->setIdentifier( identifier );
+    seriebasicWidget->setText(label);
+    seriebasicWidget->setIdentifier(identifier);
     seriebasicWidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
-    connect( seriebasicWidget, SIGNAL( selectedItem(QString) ), SIGNAL( selectedItem(QString) ) );
-    connect( seriebasicWidget, SIGNAL( isActive(QString) ), SIGNAL( isActive(QString) ) ) ;
-    connect( seriebasicWidget, SIGNAL( isNotActive() ), SIGNAL( isNotActive() ) );
+    connect(seriebasicWidget, SIGNAL(selectedItem(QString)), SIGNAL(selectedItem(QString)));
+    connect(seriebasicWidget, SIGNAL(isActive(QString)), SIGNAL(isActive(QString)));
+    connect(seriebasicWidget, SIGNAL(isNotActive()), SIGNAL(isNotActive()));
 
-    m_itemsList.push_back( seriebasicWidget );
+    m_itemsList.push_back(seriebasicWidget);
 
     return seriebasicWidget;
 }
 
-void PatientBrowserMenuList::markItem( const QString &identifier )
+void PatientBrowserMenuList::markItem(const QString &identifier)
 {
     int i = 0;
     bool found = false;
 
-    while( i < m_itemsList.size() && !found )
+    while (i < m_itemsList.size() && !found)
     {
-        if( m_itemsList.value(i)->getIdentifier() == identifier )
+        if (m_itemsList.value(i)->getIdentifier() == identifier)
         {
             found = true;
             m_itemsList.value(i)->setFontBold();
@@ -108,13 +108,13 @@ QString PatientBrowserMenuList::getMarkedItem() const
     return m_markedItem;
 }
 
-bool PatientBrowserMenuList::event( QEvent * event )
+bool PatientBrowserMenuList::event(QEvent * event)
 {
-    if ( event->type() == QEvent::Close ) // s'ha pulsat l'escape
+    if (event->type() == QEvent::Close) // s'ha pulsat l'escape
     {
         emit close();
     }
-    return QWidget::event( event );
+    return QWidget::event(event);
 }
 
 }

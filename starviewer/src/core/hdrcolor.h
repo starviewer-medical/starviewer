@@ -1,12 +1,9 @@
 #ifndef UDGHDRCOLOR_H
 #define UDGHDRCOLOR_H
 
-
 #include <QColor>
 
-
 namespace udg {
-
 
 /**
  * Color amb les components representades en coma flotant.
@@ -18,9 +15,9 @@ public:
     /// Crea un color (0, 0, 0, 0).
     HdrColor();
     /// Crea un color amb els paràmetres desitjats.
-    HdrColor( float r, float g, float b, float a = 1.0 );
+    HdrColor(float r, float g, float b, float a = 1.0);
     /// Crea un color a partir d'un QColor.
-    HdrColor( const QColor &color );
+    HdrColor(const QColor &color);
     /// Destructor.
     ~HdrColor();
 
@@ -29,25 +26,25 @@ public:
     /// Cert si alpha = 0.
     bool isTransparent() const;
     /// Multiplica les components de color per \a f i retorna el color.
-    HdrColor& multiplyColorBy( float f );
+    HdrColor& multiplyColorBy(float f);
     /// Posa a 1 les components més grans que 1 i a 0 les més petites que 0.
     HdrColor& clamp();
 
     /// Suma component a component.
-    HdrColor operator +( const HdrColor &c ) const;
+    HdrColor operator +(const HdrColor &c) const;
     /// Suma component a component.
-    HdrColor& operator +=( const HdrColor &c );
+    HdrColor& operator +=(const HdrColor &c);
     /// Producte component a component.
-    HdrColor operator *( const HdrColor &c ) const;
+    HdrColor operator *(const HdrColor &c) const;
     /// Producte component a component.
-    HdrColor& operator *=( const HdrColor &c );
+    HdrColor& operator *=(const HdrColor &c);
     /// Producte de totes les components per un real.
-    HdrColor operator *( float f ) const;
+    HdrColor operator *(float f) const;
     /// Producte de totes les components per un real.
-    HdrColor& operator *=( float f );
+    HdrColor& operator *=(float f);
 
     /// Producte de totes les components per un real.
-    friend HdrColor operator *( float f, const HdrColor &c );
+    friend HdrColor operator *(float f, const HdrColor &c);
 
     /// Retorna una string representativa del color.
     QString toString() const;
@@ -56,14 +53,12 @@ public:
 
 };
 
-
 inline HdrColor::HdrColor()
 {
     red = green = blue = alpha = 0.0;
 }
 
-
-inline HdrColor::HdrColor( float r, float g, float b, float a )
+inline HdrColor::HdrColor(float r, float g, float b, float a)
 {
     red = r;
     green = g;
@@ -71,8 +66,7 @@ inline HdrColor::HdrColor( float r, float g, float b, float a )
     alpha = a;
 }
 
-
-inline HdrColor::HdrColor( const QColor &color )
+inline HdrColor::HdrColor(const QColor &color)
 {
     red = color.redF();
     green = color.greenF();
@@ -80,25 +74,21 @@ inline HdrColor::HdrColor( const QColor &color )
     alpha = color.alphaF();
 }
 
-
 inline HdrColor::~HdrColor()
 {
 }
-
 
 inline bool HdrColor::isBlack() const
 {
     return red == 0.0 && green == 0.0 && blue == 0.0;
 }
 
-
 inline bool HdrColor::isTransparent() const
 {
     return alpha == 0.0;
 }
 
-
-inline HdrColor& HdrColor::multiplyColorBy( float f )
+inline HdrColor& HdrColor::multiplyColorBy(float f)
 {
     red *= f;
     green *= f;
@@ -106,24 +96,21 @@ inline HdrColor& HdrColor::multiplyColorBy( float f )
     return *this;
 }
 
-
 inline HdrColor& HdrColor::clamp()
 {
-    red = qBound( 0.0f, red, 1.0f );
-    green = qBound( 0.0f, green, 1.0f );
-    blue = qBound( 0.0f, blue, 1.0f );
-    alpha = qBound( 0.0f, alpha, 1.0f );
+    red = qBound(0.0f, red, 1.0f);
+    green = qBound(0.0f, green, 1.0f);
+    blue = qBound(0.0f, blue, 1.0f);
+    alpha = qBound(0.0f, alpha, 1.0f);
     return *this;
 }
 
-
-inline HdrColor HdrColor::operator +( const HdrColor &c ) const
+inline HdrColor HdrColor::operator +(const HdrColor &c) const
 {
-    return HdrColor( red + c.red, green + c.green, blue + c.blue, alpha + c.alpha );
+    return HdrColor(red + c.red, green + c.green, blue + c.blue, alpha + c.alpha);
 }
 
-
-inline HdrColor& HdrColor::operator +=( const HdrColor &c )
+inline HdrColor& HdrColor::operator +=(const HdrColor &c)
 {
     red += c.red;
     green += c.green;
@@ -132,14 +119,12 @@ inline HdrColor& HdrColor::operator +=( const HdrColor &c )
     return *this;
 }
 
-
-inline HdrColor HdrColor::operator *( const HdrColor &c ) const
+inline HdrColor HdrColor::operator *(const HdrColor &c) const
 {
-    return HdrColor( red * c.red, green * c.green, blue * c.blue, alpha * c.alpha );
+    return HdrColor(red * c.red, green * c.green, blue * c.blue, alpha * c.alpha);
 }
 
-
-inline HdrColor& HdrColor::operator *=( const HdrColor &c )
+inline HdrColor& HdrColor::operator *=(const HdrColor &c)
 {
     red *= c.red;
     green *= c.green;
@@ -148,14 +133,12 @@ inline HdrColor& HdrColor::operator *=( const HdrColor &c )
     return *this;
 }
 
-
-inline HdrColor HdrColor::operator *( float f ) const
+inline HdrColor HdrColor::operator *(float f) const
 {
-    return HdrColor( red * f, green * f, blue * f, alpha * f );
+    return HdrColor(red * f, green * f, blue * f, alpha * f);
 }
 
-
-inline HdrColor& HdrColor::operator *=( float f )
+inline HdrColor& HdrColor::operator *=(float f)
 {
     red *= f;
     green *= f;
@@ -164,20 +147,16 @@ inline HdrColor& HdrColor::operator *=( float f )
     return *this;
 }
 
-
-inline HdrColor operator *( float f, const HdrColor &c )
+inline HdrColor operator *(float f, const HdrColor &c)
 {
     return c * f;
 }
 
-
 inline QString HdrColor::toString() const
 {
-    return QString( "(%1, %2, %3, %4)" ).arg( red ).arg( green ).arg( blue ).arg( alpha );
+    return QString("(%1, %2, %3, %4)").arg(red).arg(green).arg(blue).arg(alpha);
 }
 
-
 }
-
 
 #endif

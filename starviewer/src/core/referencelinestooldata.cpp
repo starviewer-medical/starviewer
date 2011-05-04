@@ -22,22 +22,22 @@ QList<ImagePlane *> ReferenceLinesToolData::getPlanesToProject() const
     return m_planesToProject;
 }
 
-void ReferenceLinesToolData::setFrameOfReferenceUID( const QString &frameOfReference )
+void ReferenceLinesToolData::setFrameOfReferenceUID(const QString &frameOfReference)
 {
     m_frameOfReferenceUID = frameOfReference;
 }
 
-void ReferenceLinesToolData::setPlanesToProject( QList<ImagePlane *> planes )
+void ReferenceLinesToolData::setPlanesToProject(QList<ImagePlane *> planes)
 {
     m_planesToProject.clear();
     m_planesToProject = planes;
     emit changed();
 }
 
-void ReferenceLinesToolData::setPlanesToProject( ImagePlane *plane )
+void ReferenceLinesToolData::setPlanesToProject(ImagePlane *plane)
 {
     m_planesToProject.clear();
-    if( plane )
+    if (plane)
         m_planesToProject << plane;
     emit changed();
 }

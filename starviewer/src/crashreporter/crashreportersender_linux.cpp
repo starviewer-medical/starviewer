@@ -8,11 +8,11 @@
 
 namespace udg {
 
-bool CrashReporterSender::sendReport(QString url, QString minidumpPath, QHash<QString,QString> &options)
+bool CrashReporterSender::sendReport(QString url, QString minidumpPath, QHash<QString, QString> &options)
 {
     std::map<std::string, std::string> parameters;
     // Afegim els parametres
-    Q_FOREACH(QString key, options.keys())
+    Q_FOREACH (QString key, options.keys())
     {
         parameters[key.toStdString()] = options.take(key).toStdString();
     }
@@ -35,10 +35,9 @@ bool CrashReporterSender::sendReport(QString url, QString minidumpPath, QHash<QS
         printf("Response:\n");
         printf("%s\n", response.c_str());
     }
-    
-    return success;
-    
-}
 
+    return success;
+
+}
 
 };

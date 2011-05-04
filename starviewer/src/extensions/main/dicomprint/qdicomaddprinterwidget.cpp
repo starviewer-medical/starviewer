@@ -9,11 +9,11 @@ namespace udg {
 // Public Methods
 QDicomAddPrinterWidget::QDicomAddPrinterWidget()
 {
-    setupUi( this );
+    setupUi(this);
 
     Qt::WindowFlags flags;
     flags = Qt::WindowMinimizeButtonHint;
-    setWindowFlags( flags );
+    setWindowFlags(flags);
 
     createConnections();
     configureInputValidator();
@@ -26,18 +26,18 @@ void QDicomAddPrinterWidget::clearInputs()
     m_printerPortLineEdit->setText("");
     m_printerDescriptionLineEdit->setText("");
     m_printerDefaultPrinterCheckBox->setChecked(false);
-    
+
     m_addButton->setEnabled(false);
 }
 
 // Private Methods
 void QDicomAddPrinterWidget::createConnections()
-{   
+{
     connect(m_addButton, SIGNAL(clicked()), SLOT(addPrinter()));
     connect(m_cancelButton, SIGNAL(clicked()), SLOT(close()));
-    connect( m_printerAetitleLineEdit, SIGNAL( textChanged(const QString &) ), SLOT( enableAddButton() ) );
-    connect( m_printerHostnameLineEdit, SIGNAL( textChanged(const QString &) ), SLOT( enableAddButton() ) );
-    connect( m_printerPortLineEdit, SIGNAL( textChanged(const QString &) ), SLOT( enableAddButton() ) );
+    connect(m_printerAetitleLineEdit, SIGNAL(textChanged(const QString &)), SLOT(enableAddButton()));
+    connect(m_printerHostnameLineEdit, SIGNAL(textChanged(const QString &)), SLOT(enableAddButton()));
+    connect(m_printerPortLineEdit, SIGNAL(textChanged(const QString &)), SLOT(enableAddButton()));
 }
 
 void QDicomAddPrinterWidget::configureInputValidator()
@@ -48,10 +48,10 @@ void QDicomAddPrinterWidget::configureInputValidator()
 // Private Slots
 void QDicomAddPrinterWidget::enableAddButton()
 {
-    if (m_printerAetitleLineEdit->text().length() == 0 || m_printerPortLineEdit->text().length() == 0 || 
+    if (m_printerAetitleLineEdit->text().length() == 0 || m_printerPortLineEdit->text().length() == 0 ||
         m_printerHostnameLineEdit->text().length() == 0)
     {
-       m_addButton->setEnabled(false);
+        m_addButton->setEnabled(false);
     }
     else
     {
@@ -60,12 +60,12 @@ void QDicomAddPrinterWidget::enableAddButton()
 }
 
 void QDicomAddPrinterWidget::addPrinter()
-{   
+{
     DicomPrinterManager dicomPrinterManager;
-    DicomPrinter dicomPrinter = dicomPrinterManager.getAvailableParametersValues(m_printerAetitleLineEdit->text(),m_printerPortLineEdit->text().toInt()); 
+    DicomPrinter dicomPrinter = dicomPrinterManager.getAvailableParametersValues(m_printerAetitleLineEdit->text(), m_printerPortLineEdit->text().toInt());
 
     getPrinterSettingsFromControls(dicomPrinter);
-    
+
     if (!dicomPrinterManager.addPrinter(dicomPrinter))
     {
         QString messageError = tr("%1 can't add the printer %2 because a printer with the same AETitle already exists.").arg(ApplicationNameString, dicomPrinter.getAETitle());
@@ -86,8 +86,8 @@ void QDicomAddPrinterWidget::getPrinterSettingsFromControls(DicomPrinter& printe
     printer.setDescription(m_printerDescriptionLineEdit->text());
     printer.setIsDefault(m_printerDefaultPrinterCheckBox->isChecked());
 
-    /*Indiquem un valor de  FilmLayout per la impressora perquè és un camp "Mandatory" segons DICOM, escollim el primer valor
+    /*Indiquem un valor de FilmLayout per la impressora perquè és un camp "Mandatory" segons DICOM, escollim el primer valor
       dels disponibles. A part d'aquest camp dels paràmetres configurables d'impressió no n'hi cap més d'obligatori*/
     printer.setDefaultFilmLayout(printer.getAvailableFilmLayoutValues().at(0));
 }
-}    
+}

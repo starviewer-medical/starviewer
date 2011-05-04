@@ -220,11 +220,11 @@ void Patient::patientFusionLogMessage(const Patient &patient)
         case SamePatients:
             INFO_LOG("Fusionem dos pacients iguals: >>" + m_patientID + ":" + m_fullName + " >>" + patient.m_patientID + ":" + patient.m_fullName);
             break;
-        
+
         case IndeterminableSimilarity:
             INFO_LOG("Fusionem dos pacients amb similitut indeterminable: >>" + m_patientID + ":" + m_fullName + " >>" + patient.m_patientID + ":" + patient.m_fullName);
             break;
-        
+
         case DifferentPatients:
             INFO_LOG("Fusionem dos pacients diferents: >>" + m_patientID + ":" + m_fullName + " >>" + patient.m_patientID + ":" + patient.m_fullName);
             break;
@@ -244,7 +244,7 @@ Patient Patient::operator +(const Patient &patient)
     QList<Study *> studyListToAdd = patient.getStudies();
     foreach (Study *study, studyListToAdd)
     {
-        // TODO al tanto! potser hi ha problemes ja que l'addStudy li assigna el parentPatient! 
+        // TODO al tanto! potser hi ha problemes ja que l'addStudy li assigna el parentPatient!
         // Potser caldria fer una copia de l'study
         result.addStudy(study);
     }
@@ -271,7 +271,7 @@ Patient Patient::operator +=(const Patient &patient)
         {
             // TODO al tanto! potser hi ha problemes ja que l'addStudy li assigna el parentPatient!
             // Potser caldria fer una copia de l'study
-            this->addStudy(study); 
+            this->addStudy(study);
         }
         else
         {
@@ -323,7 +323,6 @@ Patient::PatientsSimilarity Patient::compareTo(const Patient *patient)
         return SamePatients;
     }
 
-
     // Pre-tractament sobre el nom del pacient per treure caràcters extranys
     QString nameOfThis = clearStrangeSymbols(this->getFullName());
     QString nameOfParameter = clearStrangeSymbols(patient->getFullName());
@@ -352,7 +351,7 @@ Patient::PatientsSimilarity Patient::compareTo(const Patient *patient)
     if (namesSimilarity != IndeterminableSimilarity)
     {
         // Si tenen molta similitud, retornem aquest valor
-        return namesSimilarity; 
+        return namesSimilarity;
     }
 
     return metricToSimilarity(computeStringEditDistanceMetric(patient->m_patientID, this->m_patientID, NeedlemanWunschDistance));
@@ -384,7 +383,7 @@ QList<Patient *> Patient::mergePatients(QList<Patient *> patientsList)
     else if (patientsList.count() > 1)
     {
         // El mètode no és gaire eficient perquè prova "tots contra tots"
-        // ja que un cop fusionem un, en principi es podria eliminar de 
+        // ja que un cop fusionem un, en principi es podria eliminar de
         // la llista de fusió i no ho fem i tornem a comprovar
         // TODO millorar l'algorisme de fusió dins de la llista
 
@@ -404,9 +403,9 @@ QList<Patient *> Patient::mergePatients(QList<Patient *> patientsList)
                 if (currentPatient->compareTo(setIterator.peekNext()) == Patient::SamePatients)
                 {
                     // BINGO! Són iguals! El fusionem i l'eliminem del conjunt
-                    *currentPatient += (*setIterator.peekNext()) ;
+                    *currentPatient += (*setIterator.peekNext());
                     setIterator.next();
-                    setIterator.remove();   
+                    setIterator.remove();
                 }
                 else
                 {
@@ -495,7 +494,7 @@ double Patient::computeStringEditDistanceMetric(const QString &stringA, const QS
     int stringALength = stringA.length();
     int stringBLength = stringB.length();
 
-    if (stringALength == 0) 
+    if (stringALength == 0)
     {
         return 1.;
     }
@@ -520,7 +519,7 @@ double Patient::computeStringEditDistanceMetric(const QString &stringA, const QS
         currentStringBCharacter = stringB.at(j - 1);
         d[0] = j;
 
-        for (int i = 1; i <= stringALength; ++i) 
+        for (int i = 1; i <= stringALength; ++i)
         {
             cost = stringA.at(i - 1) == currentStringBCharacter ? 0 : 1;
             d[i] = qMin(qMin(d[i - 1] + gap, p[i] + gap), p[i - 1] + cost);

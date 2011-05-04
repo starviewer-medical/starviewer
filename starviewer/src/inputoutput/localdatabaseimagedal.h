@@ -14,7 +14,7 @@ class DicomMask;
 /** Aquesta classe conté els mètodes per operar amb l'objecte image en la caché de l'aplicació
 */
 
-class LocalDatabaseImageDAL: public LocalDatabaseBaseDAL
+class LocalDatabaseImageDAL : public LocalDatabaseBaseDAL
 {
 public:
 
@@ -48,10 +48,10 @@ private :
     ///Emplena un l'objecte imatge de la fila passada per paràmetre
     Image *fillImage(char **reply, int row, int columns);
 
-    ///Genera la sentència sql per fer selectes d'imatges, de la màscara només té en compte per construir la sentència el StudyUID, SeriesUID i SOPInstanceUID 
+    ///Genera la sentència sql per fer selectes d'imatges, de la màscara només té en compte per construir la sentència el StudyUID, SeriesUID i SOPInstanceUID
     QString buildSqlSelect(const DicomMask &imageMaskToSelect);
 
-    ///Genera la sentència sql per comptar número d'imatges, de la màscara només té en compte per construir la sentència el StudyUID, SeriesUID i SOPInstanceUID 
+    ///Genera la sentència sql per comptar número d'imatges, de la màscara només té en compte per construir la sentència el StudyUID, SeriesUID i SOPInstanceUID
     QString buildSqlSelectCountImages(const DicomMask &imageMaskToSelect);
 
     ///Genera la sentència sql per inserir la nova imatge a la base de dades
@@ -60,10 +60,10 @@ private :
     ///Genera la sentència sql per updatar la imatge a la base de dades
     QString buildSqlUpdate(Image *imageToUpdate);
 
-    ///Genera la sentencia Sql per esborrar Imatges, de la màscara només té en compte per construir la sentència el StudyUID, SeriesUID i SOPInstanceUID 
+    ///Genera la sentencia Sql per esborrar Imatges, de la màscara només té en compte per construir la sentència el StudyUID, SeriesUID i SOPInstanceUID
     QString buildSqlDelete(const DicomMask &imageMaskToDelete);
 
-    ///Genera la sentència del where a partir de la màscara tenint en compte per construir la sentència el StudyUID, SeriesUID i SOPInstanceUID 
+    ///Genera la sentència del where a partir de la màscara tenint en compte per construir la sentència el StudyUID, SeriesUID i SOPInstanceUID
     QString buildWhereSentence(const DicomMask &imageMask);
 
     ///Retorna el Pixel Spacing en format d'string separat per "\\"

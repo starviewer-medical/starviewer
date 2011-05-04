@@ -16,13 +16,13 @@ ImageOrientationOperationsMapper::~ImageOrientationOperationsMapper()
 
 void ImageOrientationOperationsMapper::setInitialOrientation(const QString &topLabel, const QString &leftLabel)
 {
-    m_initialOrientation = formatOrientationLabel(topLabel+"\\"+leftLabel);
+    m_initialOrientation = formatOrientationLabel(topLabel + "\\" + leftLabel);
     m_hasToUpdateOperations = true;
 }
-    
+
 void ImageOrientationOperationsMapper::setDesiredOrientation(const QString &topLabel, const QString &leftLabel)
 {
-    m_desiredOrientation = formatOrientationLabel(topLabel+"\\"+leftLabel);
+    m_desiredOrientation = formatOrientationLabel(topLabel + "\\" + leftLabel);
     m_hasToUpdateOperations = true;
 }
 
@@ -54,7 +54,7 @@ void ImageOrientationOperationsMapper::initializeOrientationTable()
     const QString Rotate90DegreesAndFlip("1,1");
     const QString Rotate180DegreesAndFlip("2,1");
     const QString Rotate270DegreesAndFlip("3,1");
-    
+
     // Mapeig de les operacions per la vista sagital
     // Definim les etiquetes possibles d'orientació
     const QString AnteriorFeet("A\\F");
@@ -74,7 +74,7 @@ void ImageOrientationOperationsMapper::initializeOrientationTable()
     m_orientationMappingTable.insert(AnteriorFeet + "-" + FeetPosterior, Rotate270Degrees);
     m_orientationMappingTable.insert(AnteriorFeet + "-" + HeadPosterior, Rotate270DegreesAndFlip);
 
-    m_orientationMappingTable.insert(AnteriorHead + "-" + AnteriorFeet, Rotate180DegreesAndFlip); 
+    m_orientationMappingTable.insert(AnteriorHead + "-" + AnteriorFeet, Rotate180DegreesAndFlip);
     m_orientationMappingTable.insert(AnteriorHead + "-" + PosteriorFeet, Rotate180Degrees);
     m_orientationMappingTable.insert(AnteriorHead + "-" + PosteriorHead, Flip);
     m_orientationMappingTable.insert(AnteriorHead + "-" + FeetAnterior, Rotate90Degrees);
@@ -239,17 +239,17 @@ void ImageOrientationOperationsMapper::updateOperations()
         m_clockwiseTurns = 0;
         m_horizontalFlip = false;
     }
-    m_hasToUpdateOperations = false;    
+    m_hasToUpdateOperations = false;
 }
 
 QString ImageOrientationOperationsMapper::formatOrientationLabel(const QString &label)
 {
     QString labelCopy = label;
-    
+
     // Substituim les etiquetes Superior i Inferior pels seus equivalents
-    labelCopy.replace("S","H");
-    labelCopy.replace("I","F");
-    
+    labelCopy.replace("S", "H");
+    labelCopy.replace("I", "F");
+
     return labelCopy;
 }
 

@@ -11,7 +11,7 @@
 
 namespace udg {
 
-DicomPrintExtensionMediator::DicomPrintExtensionMediator(QObject *parent): ExtensionMediator(parent)
+DicomPrintExtensionMediator::DicomPrintExtensionMediator(QObject *parent) : ExtensionMediator(parent)
 {
 }
 
@@ -21,23 +21,23 @@ DicomPrintExtensionMediator::~DicomPrintExtensionMediator()
 
 DisplayableID DicomPrintExtensionMediator::getExtensionID() const
 {
-    return DisplayableID("DicomPrintExtension",tr("DICOM Print"));
+    return DisplayableID("DicomPrintExtension", tr("DICOM Print"));
 }
 
 bool DicomPrintExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext)
-{   
-	QDicomPrintExtension *dicomPrintExtension;
+{
+    QDicomPrintExtension *dicomPrintExtension;
 
-	if ( !(dicomPrintExtension = qobject_cast<QDicomPrintExtension*>(extension)) )
+    if (!(dicomPrintExtension = qobject_cast<QDicomPrintExtension*>(extension)))
     {
         return false;
-    } 
+    }
 
     Volume *input = extensionContext.getDefaultVolume();
-    if( !input )
-        QMessageBox::information(0, udg::ApplicationNameString, tr("The selected item is not an image") );
+    if (!input)
+        QMessageBox::information(0, udg::ApplicationNameString, tr("The selected item is not an image"));
     else
-        dicomPrintExtension->setInput( input );
+        dicomPrintExtension->setInput(input);
 
     return true;
 }

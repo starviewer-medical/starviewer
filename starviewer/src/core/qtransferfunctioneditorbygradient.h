@@ -24,18 +24,14 @@
 #ifndef UDGQTRANSFERFUNCTIONEDITORBYGRADIENT_H
 #define UDGQTRANSFERFUNCTIONEDITORBYGRADIENT_H
 
-
 #include "qtransferfunctioneditor.h"
 
 #include <QLineEdit>
 #include "transferfunction.h"
 
-
 namespace udg {
 
-
 class ShadeWidget;
-
 
 /**
  * Editor de funcions de transferència basat en gràfiques.
@@ -58,11 +54,11 @@ class QTransferFunctionEditorByGradient : public QTransferFunctionEditor
 
 public:
 
-    QTransferFunctionEditorByGradient( QWidget * parent = 0 );
+    QTransferFunctionEditorByGradient(QWidget * parent = 0);
     virtual ~QTransferFunctionEditorByGradient();
 
     /// Assigna una funció de transferència a l'editor.
-    virtual void setTransferFunction( const TransferFunction & transferFunction );
+    virtual void setTransferFunction(const TransferFunction & transferFunction);
     /// Retorna la funció de transferència de l'editor.
     virtual const TransferFunction & getTransferFunction() const;
 
@@ -76,8 +72,8 @@ signals:
 
 private slots:
 
-    void setTransferFunction( const QGradientStops & stops );
-    void setTransferFunctionName( const QString & name );
+    void setTransferFunction(const QGradientStops & stops);
+    void setTransferFunctionName(const QString & name);
 
 private:
     QLineEdit * m_nameLineEdit;
@@ -91,8 +87,6 @@ private:
 
 };
 
-
 }
-
 
 #endif

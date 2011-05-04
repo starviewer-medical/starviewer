@@ -17,7 +17,7 @@ class ToolRegistry;
 class ToolData;
 
 /**
-    Classe que gestiona les Tools que usualment tindrem en una extensió, associades a un o més visualitzadors. 
+    Classe que gestiona les Tools que usualment tindrem en una extensió, associades a un o més visualitzadors.
     Aquesta s'encarrega de determinar les tools i les configuracions que suporten els visualitzadors que hi configurem
 */
 class ToolManager : public QObject {
@@ -46,12 +46,12 @@ public:
     /**
      * Donat un viewer, li assigna totes les tools que s'hagin registrat amb el ToolManager anteriorment.
      * Té la mateixa funció que setViewerTools() però no cal especificar-li
-     * la llista de tools que volem per aquest visor, ja que automàticament hi configura totes 
+     * la llista de tools que volem per aquest visor, ja que automàticament hi configura totes
      * les tools que s'hagin registrat anteriorment, que serà el cas més comú.
      * @param viewer El viewer al que volem assignar les tools registrades
      */
     void setupRegisteredTools(QViewer *viewer);
-    
+
     /**
      * Elimina la tool demanada d'un viewer determinat. És a dir, si després d'aquesta crida li demanem a
      * aquest viewer activar la tool especificada, no es podrà activar aquella tool per aquell viewer.
@@ -66,11 +66,11 @@ public:
      * Un cop registrada, successives crides a aquest mètode per la
      * mateixa Tool, ens retornarà la mateixa QAction
      * @param toolName Nom de la tool que volem registrar
-     * @return QAction de la tool registrada. En cas que la tool demanada no existeixi, 
+     * @return QAction de la tool registrada. En cas que la tool demanada no existeixi,
      *         tindrem una QAction buida.
      */
     QAction* registerTool(const QString &toolName);
-    
+
     /**
      * Ens retorna la QAction associada a la Tool demanada.
      * Només té en compte les Tools que hàgim registrat amb registerTool() prèviament
@@ -98,7 +98,7 @@ public:
     void addExclusiveToolsGroup(const QString &groupName, const QStringList &tools);
 
     /**
-     * Registra una Action Tool i ens retorna la QAction associada. 
+     * Registra una Action Tool i ens retorna la QAction associada.
      * Un cop registrada, successives crides a aquest mètode per la
      * mateixa Action Tool, ens retornarà la mateixa QAction
      * @param actionToolName Nom de la "Action Tool" que volem registrar
@@ -120,7 +120,7 @@ public:
      */
     void enableRegisteredActionTools(QViewer *viewer);
     void disableRegisteredActionTools(QViewer *viewer);
-    
+
 public slots:
     /**
      * Desactiva totes les tools temporalment.

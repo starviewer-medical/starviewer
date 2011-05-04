@@ -15,14 +15,14 @@
 #include "mhdfileclassifierstep.h"
 #include "orderimagesfillerstep.h"
 // TODO encara no hi ha suport a KINs i Presentation States, per tant
-// fins que no tinguem suport i implementem correctament els respectius 
+// fins que no tinguem suport i implementem correctament els respectius
 // filler steps no caldrà afegir-los dins del pipeline
 //#include "keyimagenotefillerstep.h"
 //#include "presentationstatefillerstep.h"
 
 namespace udg {
 
-PatientFiller::PatientFiller(QObject * parent) 
+PatientFiller::PatientFiller(QObject * parent)
  : QObject(parent)
 {
     registerSteps();
@@ -54,9 +54,9 @@ void PatientFiller::registerSteps()
     // \TODO Donat que al postProcessing no tenim política d'etiquetes, s'ha posat el Temporal al final
     // perquè necessita que s'hagi executat l'Order abans. S'hauria de millorar.
     m_registeredSteps.append(new TemporalDimensionFillerStep());
-    
+
     // TODO encara no hi ha suport a KINs i Presentation States, per tant
-    // fins que no tinguem suport i implementem correctament els respectius 
+    // fins que no tinguem suport i implementem correctament els respectius
     // filler steps no caldrà afegir-los dins del pipeline
     //m_registeredSteps.append(new KeyImageNoteFillerStep());
     //m_registeredSteps.append(new PresentationStateFillerStep());
@@ -139,7 +139,7 @@ bool PatientFiller::containsMHDFiles(const QStringList &files)
 {
     if (!files.isEmpty())
     {
-        return files.first().endsWith(".mhd",Qt::CaseInsensitive);
+        return files.first().endsWith(".mhd", Qt::CaseInsensitive);
     }
     else
     {

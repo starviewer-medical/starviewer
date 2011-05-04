@@ -8,7 +8,7 @@
 
 namespace udg {
 
-class Q2DViewerExtensionMediator: public ExtensionMediator {
+class Q2DViewerExtensionMediator : public ExtensionMediator {
 Q_OBJECT
 public:
     Q2DViewerExtensionMediator(QObject *parent = 0);
@@ -22,7 +22,6 @@ public:
 };
 
 static InstallExtension<Q2DViewerExtension, Q2DViewerExtensionMediator> registerQ2DViewerExtension;
-
 
 } // End udg namespace
 

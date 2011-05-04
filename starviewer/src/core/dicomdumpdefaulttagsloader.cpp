@@ -24,14 +24,13 @@ DICOMDumpDefaultTagsLoader::~DICOMDumpDefaultTagsLoader()
 {
 }
 
-
 void DICOMDumpDefaultTagsLoader::loadDefaults()
-{   
+{
     /// DICOM Dump Default Tags definits per defecte, agafa el directori de l'executable TODO això podria ser un setting més
     QString defaultPath = "/etc/xdg/" + OrganizationNameString + "/" + ApplicationNameString + "/dicomdumpdefaulttags/"; // Path linux
-    
+
     if (!QFile::exists(defaultPath))
-    {    
+    {
         defaultPath = qApp->applicationDirPath() + "/dicomdumpdefaulttags/";
     }
     if (!QFile::exists(defaultPath))
@@ -44,7 +43,7 @@ void DICOMDumpDefaultTagsLoader::loadDefaults()
         // En entorn de desenvolupament Mac OS X
         defaultPath = qApp->applicationDirPath() + "/../../../../dicomdumpdefaulttags/";
     }
-    
+
     if (QFile::exists(defaultPath))
     {
         INFO_LOG(QString("Directori a on es van a buscar els hanging protocols per defecte: %1").arg(defaultPath));

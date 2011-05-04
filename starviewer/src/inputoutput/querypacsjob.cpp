@@ -31,8 +31,8 @@ void QueryPacsJob::run()
 {
     Settings settings;
 
-    INFO_LOG("Thread iniciat per cercar al PACS: AELocal= " + settings.getValue(InputOutputSettings::LocalAETitle).toString() + "; AEPACS= " + 
-        getPacsDevice().getAETitle() + "; PACS Adr= " + getPacsDevice().getAddress() + "; PACS Port= " + 
+    INFO_LOG("Thread iniciat per cercar al PACS: AELocal= " + settings.getValue(InputOutputSettings::LocalAETitle).toString() + "; AEPACS= " +
+        getPacsDevice().getAETitle() + "; PACS Adr= " + getPacsDevice().getAddress() + "; PACS Port= " +
         QString().setNum(getPacsDevice().getQueryRetrieveServicePort()) + ";");
 
     //busquem els estudis
@@ -69,7 +69,7 @@ QList<Image*> QueryPacsJob::getImageList()
     return m_queryPacs->getQueryResultsAsImageList();
 }
 
-QHash<QString,QString> QueryPacsJob::getHashTablePacsIDOfStudyInstanceUID()
+QHash<QString, QString> QueryPacsJob::getHashTablePacsIDOfStudyInstanceUID()
 {
     Q_ASSERT (isFinished());
     return m_queryPacs->getHashTablePacsIDOfStudyInstanceUID();
@@ -106,7 +106,7 @@ QString QueryPacsJob::getStatusDescription()
         case PACSRequestStatus::QueryCancelled:
             message = tr("Query %1 to PACS %2 has been cancelled.").arg(getQueryLevelAsQString(), pacsAETitle);
             break;
-        case PACSRequestStatus::QueryCanNotConnectToPACS :
+        case PACSRequestStatus::QueryCanNotConnectToPACS:
             message = tr("%1 can't connect to PACS %2 trying to query %3.\n").arg(ApplicationNameString, pacsAETitle, getQueryLevelAsQString());
             message += tr("\nBe sure that your computer is connected on network and the PACS parameters are correct.");
             message += tr("If the problem persists contact with an administrator.");

@@ -53,7 +53,7 @@ void ListenRISRequests::newRISRequest()
         risRequestData = QString(tcpSocket->readAll());
         INFO_LOG("Dades rebudes: " + risRequestData);
     }
-    else 
+    else
     {
         INFO_LOG("No s'ha rebut dades, error: " + tcpSocket->errorString());
     }
@@ -85,13 +85,13 @@ void ListenRISRequests::processRequest(QString risRequestData)
 void ListenRISRequests::networkError(QTcpServer *tcpServer)
 {
     ERROR_LOG("No es poden escoltar les peticions del RIS pel port " + QString().setNum(Settings().getValue(InputOutputSettings::RISRequestsPort).toUInt()) + ", error " + tcpServer->errorString());
-        
-    switch(tcpServer->serverError())
+
+    switch (tcpServer->serverError())
     {
-        case QAbstractSocket::AddressInUseError :
-            emit errorListening(RisPortInUse); 
+        case QAbstractSocket::AddressInUseError:
+            emit errorListening(RisPortInUse);
             break;
-        default :
+        default:
             emit errorListening(UnknownNetworkError);
             break;
     }

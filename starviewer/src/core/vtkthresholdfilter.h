@@ -14,21 +14,20 @@ class Volume;
 class VtkThresholdFilter : public Filter{
 
 public:
-	VtkThresholdFilter();
-	~VtkThresholdFilter();
+    VtkThresholdFilter();
+    ~VtkThresholdFilter();
 
-	void thresholdByUpper (float thresh);
-	void thresholdByLower (float thresh);
-	void thresholdBetween (float lower, float upper);
+    void thresholdByUpper (float thresh);
+    void thresholdByLower (float thresh);
+    void thresholdBetween (float lower, float upper);
     void setInValue (double val);
     void setOutValue (double val);
     void update();
     void setInput(Volume * input);
     //Volume * getOutput();
 
-
 protected:
-	vtkImageThreshold * imageThreshold;
+    vtkImageThreshold * imageThreshold;
 };
 
 }

@@ -8,29 +8,30 @@
 
 namespace udg {
 
-LocalDatabaseUtilDAL::LocalDatabaseUtilDAL(DatabaseConnection *dbConnection):LocalDatabaseBaseDAL(dbConnection)
+LocalDatabaseUtilDAL::LocalDatabaseUtilDAL(DatabaseConnection *dbConnection)
+ : LocalDatabaseBaseDAL(dbConnection)
 {
 }
 
 void LocalDatabaseUtilDAL::compact()
 {
-    Q_ASSERT( m_dbConnection );
+    Q_ASSERT(m_dbConnection);
 
     QString compactSentence = "vacuum";
 
-    m_lastSqliteError = sqlite3_exec( m_dbConnection->getConnection(), qPrintable(compactSentence), 0, 0, 0);
+    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(compactSentence), 0, 0, 0);
 
-    if (getLastError() != SQLITE_OK) 
+    if (getLastError() != SQLITE_OK)
         logError(compactSentence);
 }
 
 int LocalDatabaseUtilDAL::getDatabaseRevision()
 {
-    int columns , rows;
-    char **reply = NULL , **error = NULL;
+    int columns, rows;
+    char **reply = NULL, **error = NULL;
 
     m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(), qPrintable(buildSqlGetDatabaseRevision()),
-                                    &reply, &rows, &columns, error);
+                                          &reply, &rows, &columns, error);
 
     if (getLastError() != SQLITE_OK)
     {

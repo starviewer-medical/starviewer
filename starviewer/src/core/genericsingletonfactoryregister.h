@@ -20,11 +20,11 @@ template <class AncestorType, class BaseClass, typename ClassIdentifier, class S
 class GenericSingletonFactoryRegister
 {
 public:
-    
+
     /**
      * Mètode constructor que ens serveix per registrar una classe amb un id concret en un Factory.
      * @param id Identificador de la classe que es vol registrar
-     * @return 
+     * @return
      */
     GenericSingletonFactoryRegister(const ClassIdentifier &id)
     {
@@ -34,7 +34,7 @@ public:
     ///Mètode auxiliar i que no s'hauria d'utilitzar directament
     static AncestorType* createInstance(ParentType* parent)
     {
-        return dynamic_cast<AncestorType*>( new BaseClass(parent) );
+        return dynamic_cast<AncestorType*>(new BaseClass(parent));
     }
 };
 

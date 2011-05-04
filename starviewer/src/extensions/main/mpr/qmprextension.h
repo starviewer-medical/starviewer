@@ -30,17 +30,17 @@ public:
     QMPRExtension(QWidget *parent = 0);
     ~QMPRExtension();
 
-    /// Rota els graus definits per 'angle' sobre l'eix i punt de rotació que defineixen la intersecció de dos plans. 
+    /// Rota els graus definits per 'angle' sobre l'eix i punt de rotació que defineixen la intersecció de dos plans.
     /// El primer pla es el que volem rotar i l'altre sobre el qual estroba l'eix d'intersecció/rotació
     /// Caldria resoldre què fer quan els plans son coplanars!!!!
     void rotate(double degrees, double rotationAxis[3], vtkPlaneSource* plane);
 
     /// Rota el pla especificat pel seu centre
-    void rotateMiddle(double degrees, double rotationAxis[3],  vtkPlaneSource* plane);
+    void rotateMiddle(double degrees, double rotationAxis[3], vtkPlaneSource* plane);
 
 public slots:
     /// Li assigna el volum amb el que s'aplica l'MPR.
-    /// A cada finestra es veurà el tall corresponent per defecte. De bon principi cada visor visualitzarà la llesca central corresponent a cada vista. 
+    /// A cada finestra es veurà el tall corresponent per defecte. De bon principi cada visor visualitzarà la llesca central corresponent a cada vista.
     /// En les vistes axial i sagital es veuran els respectius plans de tall.
     void setInput(Volume *input);
 
@@ -71,7 +71,7 @@ private:
     ///Inicialitza les tools que tindrà l'extensió
     void initializeTools();
 
-    /// Actualitza valors dels plans i del reslice final 
+    /// Actualitza valors dels plans i del reslice final
     /// TODO: separar en dos mètodes diferenciats segons quin pla????
     void updatePlanes();
 
@@ -118,13 +118,13 @@ private:
 private slots:
     /// Marca quins són els viewers que s'han de considerar seleccionats
     void changeSelectedViewer();
-    
+
     /// Efectua un screenshot sobre el visor que estigui seleccionat
     void screenShot();
 
     /// Mostrar el diàleg per exportar la sèrie del visor seleccionat.
     void showScreenshotsExporterDialog();
-    
+
     /// Gestiona els events de cada finestra per controlar els eixos de manipulació
     void handleAxialViewEvents(unsigned long eventID);
     void handleSagitalViewEvents(unsigned long eventID);
@@ -159,10 +159,10 @@ private slots:
     void updateProjectionLabel();
 
 private:
-    /// Distància mínima en la que s'ha de trobar un punt per 
+    /// Distància mínima en la que s'ha de trobar un punt per
     /// considerar-se prou proper per fer una operació de picking
     static const double PickingDistanceThreshold;
-    
+
     /// El reslice de cada vista
     vtkImageReslice *m_sagitalReslice, *m_coronalReslice;
 
@@ -200,7 +200,7 @@ private:
     int m_sagitalExtentLength[2];
     /// Mida de l'extent de l'X i l'Y del pla coronal.
     int m_coronalExtentLength[2];
-    
+
     /// Conjunt de tools disponibles en aquesta extensió
     QStringList m_extensionToolsList;
 

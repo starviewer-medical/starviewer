@@ -16,7 +16,7 @@
 #include "logging.h"
 #include "inputoutputsettings.h"
 
-namespace udg{
+namespace udg {
 
 //Constant que contindrà quin Abanstract Syntax de Find utilitzem entre els diversos que hi ha utilitzem
 static const char *FindStudyAbstractSyntax = UID_FINDStudyRootQueryRetrieveInformationModel;
@@ -26,7 +26,7 @@ QueryPacs::QueryPacs(PacsDevice pacsDevice)
     m_pacsDevice = pacsDevice;
 }
 
-void QueryPacs::foundMatchCallback(void * callbackData, T_DIMSE_C_FindRQ * request, int responseCount, T_DIMSE_C_FindRSP *rsp, 
+void QueryPacs::foundMatchCallback(void * callbackData, T_DIMSE_C_FindRQ * request, int responseCount, T_DIMSE_C_FindRSP *rsp,
     DcmDataset *responseIdentifiers)
 {
     Q_UNUSED(rsp);
@@ -57,7 +57,7 @@ void QueryPacs::foundMatchCallback(void * callbackData, T_DIMSE_C_FindRQ * reque
         {
             //en el cas que l'objecte que cercàvem fos un estudi
             queryPacsCaller->addPatientStudy(dicomTagReader);
-        } 
+        }
         else if (queryRetrieveLevel == "SERIES")
         {
             //si la query retorna un objecte sèrie
@@ -102,8 +102,8 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::query()
     findRequest.DataSetType = DIMSE_DATASET_PRESENT;
 
     /* finally conduct transmission of data */
-    OFCondition condition = DIMSE_findUser(m_pacsConnection->getConnection(), m_presId, &findRequest, m_mask, foundMatchCallback, this, DIMSE_NONBLOCKING, 
-                                Settings().getValue(InputOutputSettings::PACSConnectionTimeout).toInt(), &findResponse, &statusDetail);
+    OFCondition condition = DIMSE_findUser(m_pacsConnection->getConnection(), m_presId, &findRequest, m_mask, foundMatchCallback, this, DIMSE_NONBLOCKING,
+                                           Settings().getValue(InputOutputSettings::PACSConnectionTimeout).toInt(), &findResponse, &statusDetail);
 
     m_pacsConnection->disconnect();
 
@@ -201,7 +201,7 @@ QList<Image*> QueryPacs::getQueryResultsAsImageList()
     return m_imageList;
 }
 
-QHash<QString,QString> QueryPacs::getHashTablePacsIDOfStudyInstanceUID()
+QHash<QString, QString> QueryPacs::getHashTablePacsIDOfStudyInstanceUID()
 {
     return m_hashPacsIDOfStudyInstanceUID;
 }
@@ -232,7 +232,7 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::processResponseStatusFromFindUs
             break;
 
         case STATUS_FIND_Failed_IdentifierDoesNotMatchSOPClass: // 0xa900
-        case STATUS_FIND_Failed_UnableToProcess: //0xc000 
+        case STATUS_FIND_Failed_UnableToProcess: //0xc000
             // Identifier does not match SOP Class or Unable To Process
             // Related fields DCM_OffendingElement (0000,0901) DCM_ErrorComment (0000,0902)
             relatedFieldsList << DCM_OffendingElement << DCM_ErrorComment;
@@ -245,7 +245,7 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::processResponseStatusFromFindUs
             // L'usuari ha sol·licitat cancel·lar la descàrrega
             queryRequestStatus = PACSRequestStatus::QueryCancelled;
             break;
-        
+
         default:
             ERROR_LOG(messageErrorLog + QString(DU_cfindStatusString(findResponse->DimseStatus)));
             // S'ha produït un error no contemplat. En principi no s'hauria d'arribar mai a aquesta branca
@@ -262,11 +262,11 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::processResponseStatusFromFindUs
             INFO_LOG("Status details");
             foreach (DcmTagKey tagKey, relatedFieldsList)
             {
-                // Fem un log per cada camp relacionat amb l'error amb el format 
+                // Fem un log per cada camp relacionat amb l'error amb el format
                 // NomDelTag (xxxx,xxxx): ContingutDelTag
                 statusDetail->findAndGetString(tagKey, text, false);
                 INFO_LOG(QString(DcmTag(tagKey).getTagName()) + " " + QString(tagKey.toString().c_str()) + ": " + QString(text));
-            } 
+            }
         }
     }
 

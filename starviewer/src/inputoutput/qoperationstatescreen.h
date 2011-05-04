@@ -20,12 +20,12 @@ class SendDICOMFilesToPACSJob;
 class Study;
 
 /// Interfície que implementa la llista d'operacions realitzades cap a un PACS
-class QOperationStateScreen : public QDialog , private Ui::QOperationStateScreenBase{
+class QOperationStateScreen : public QDialog, private Ui::QOperationStateScreenBase {
 Q_OBJECT
 public:
     enum ColumnIndex { Status = 0, Direction = 1, FromTo = 2, PatientID = 3, PatientName = 4, Date = 5, Started = 6, Series = 7, Files = 8, PACSJobID = 9 };
 
-    QOperationStateScreen( QWidget *parent = 0 );
+    QOperationStateScreen(QWidget *parent = 0);
     ~QOperationStateScreen();
 
     ///Estableix instància de PacsManager que s'encarrega de fer les peticions als PACS
@@ -35,10 +35,10 @@ protected :
     /** Event que s'activa al tancar al rebren un event de tancament
      * @param event de tancament
      */
-    void closeEvent( QCloseEvent* ce );
+    void closeEvent(QCloseEvent* ce);
 
 private slots:
-    
+
     ///Slot que s'activa quan s'ha encuat un nou PACSJob insereix al QTreeWidget la informació del nou job i la posa com a Pedent de realitzar
     void newPACSJobEnqueued(PACSJob *);
 
@@ -80,7 +80,7 @@ private:
 
     ///Afegeix al QTreeWidget el nou job encuat, i el mostra
     void insertNewPACSJob(PACSJob *pacsJob);
- 
+
     ///Retorna l'objecte Study relatiu a PACSJob, només funciona amb PACSJob de tipus RetrieveDICOMFilesFromPACSJob i SendDICOMFilesToPACSJob
     Study *getStudyFromPACSJob(PACSJob* pacsJob);
 
@@ -96,4 +96,3 @@ private:
 };
 
 #endif
-

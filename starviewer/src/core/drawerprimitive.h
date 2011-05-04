@@ -75,7 +75,7 @@ public:
      */
     bool isModified() const;
 
-    /// Aquest mètode ens retorna la distància que hi ha des d'una determinada primitiva fins al punt passat per paràmetre
+    /// Aquest mètode ens retorna la distància que hi ha des d'una determinada primitiva fins al punt passat per paràmetre.
     /// i ens dóna un paràmetre de sortida indicant quin és el punt de la primitiva més proper a aquest punt.
     virtual double getDistanceToPoint(double *point3D, double closestPoint[3]) = 0;
 
@@ -154,10 +154,10 @@ protected:
 protected:
     /// Tipus de representació que podem usar per construir la Primitiva en escena
     enum RepresentationType { VTKRepresentation, OpenGLRepresentation };
-    
+
     /// Representació interna que es fa servir per la primitiva
     RepresentationType m_internalRepresentation;
-    
+
     /// Defineix si la primitiva és visible o no
     bool m_isVisible;
 
@@ -183,11 +183,10 @@ protected:
     bool m_modified;
 
 private:
-    /// Portarà el control de reference count ( sucedani d'smart pointer(TM) )
+    /// Portarà el control de reference count (sucedani d'smart pointer(TM))
     int m_referenceCount;
 };
 
 }
 
 #endif
-

@@ -26,24 +26,24 @@ public:
 
     void postProcessing();
 
-    QString name() {  return "OrderImagesFillerStep";  }
+    QString name() { return "OrderImagesFillerStep"; }
 
 private:
     /// Mètodes per processar la informació específica de series
-    void processImage( Image *image );
+    void processImage(Image *image);
 
     /// Mètode per calcular la distància a on es troba la llesca
-    double distance( Image *image );
+    double distance(Image *image);
 
     /// Mètode que transforma l'estructura d'imatges ordenades a una llista i l'insereix a la sèrie.
-    void setOrderedImagesIntoSeries( Series *series );
+    void setOrderedImagesIntoSeries(Series *series);
 
     /// Estructura per guardar les imatges ordenades
     //  NormalVector    Distance    InstanceNumber0FrameNumber
-    QMap< QString, QMap< double , QMap< unsigned long  , Image* >* >* > *m_orderedImageSet;
+    QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*> *m_orderedImageSet;
 
     //     Series        Volume     NormalVector    Distance  InstanceNumber0FrameNumber
-    QHash< Series *, QMap< int, QMap< QString, QMap< double , QMap< unsigned long , Image* >* >* >* >* > OrderImagesInternalInfo;
+    QHash<Series *, QMap<int, QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*>*>*> OrderImagesInternalInfo;
 
     //    Series       Volume     AcqNumber MultipleAcqNumbers?
     QHash<Series*, QHash<int, QPair<QString, bool>*> > m_acquisitionNumberEvaluation;

@@ -15,29 +15,29 @@ namespace udg
 
 class Image;
 
-class DicomPrintPage: public PrintPage
+class DicomPrintPage : public PrintPage
 {
 public:
-    
+
     ///Especifica/Retorna la mida sobre de la placa sobre el que s'imprimirà
-    void setFilmSize(const QString &filmSize);	
+    void setFilmSize(const QString &filmSize);
     QString getFilmSize() const;
 
     ///Especifica/Retorna layout de la placa sobre el que s'imprimirà
-    void setFilmLayout(const QString &filmLayout);	
+    void setFilmLayout(const QString &filmLayout);
     QString getFilmLayout() const;
 
     ///Retorna el número de columnes/files del layout
     int getFilmLayoutColumns();
     int getFilmLayoutRows();
-       
+
     ///Especifica/Retorna l'orientació (Horitzontal/Vertical) de la placa en que s'imprimirà
-    void setFilmOrientation(const QString &filmOrientation);	
+    void setFilmOrientation(const QString &filmOrientation);
     QString getFilmOrientation() const;
 
     ///Especifica/retorna el Magnification amb le que s'imprimirà
-    void setMagnificationType(const QString &magnificationType);	
-    QString	getMagnificationType() const;
+    void setMagnificationType(const QString &magnificationType);
+    QString getMagnificationType() const;
 
     ///Especifica/retorna la densitat màxima amb la que s'imprimirà
     void setMaxDensity(ushort maxDensity);
@@ -46,7 +46,7 @@ public:
     ///Especifica/retorna la densitat mínima amb la que s'imprimirà
     void setMinDensity(ushort minDensity);
     ushort getMinDensity();
- 
+
     ///Especifica si s'imprimirà les imatges amb trim o sense
     void setTrim(bool trim);
     bool getTrim();
@@ -77,18 +77,16 @@ public:
     ///La majoria d'impressores només tenen 6 posicions per les anotacions Agfa, Kodak, Sony, Codonics. Tenir en compte que totes les impressores les posicions
     ///de les anotacions són de la 1 a la 6 i Sony és de la 0 a la 5.
     void addAnnotation(int position, const QString &annotationText);
-    
+
     ///Retorna les anotacions que ens han indicat que s'han d'imprimir amb la pàgina
     QMap<int, QString> getPageAnnotations();
-
-
 
 private:
 
     QString m_filmSize;
-    QString	m_filmLayout;
+    QString m_filmLayout;
     QString m_filmOrientation;
-    QString	m_magnificationType;
+    QString m_magnificationType;
     bool m_trim;
     QString m_borderDensity;
     QString m_emptyImageDensity;

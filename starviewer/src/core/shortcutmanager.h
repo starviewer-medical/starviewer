@@ -13,7 +13,7 @@ public:
 
     ShortcutManager();
 
-    static QList<QKeySequence> getShortcuts( const QString &key );
+    static QList<QKeySequence> getShortcuts(const QString &key);
 };
 
 }

@@ -21,7 +21,8 @@ namespace udg {
 const int QPopUpRISRequestsScreen::msTimeOutToHidePopUp = 5000;
 const int QPopUpRISRequestsScreen::msTimeOutToMovePopUpToBottomRight = 5000;
 
-QPopUpRISRequestsScreen::QPopUpRISRequestsScreen(QWidget *parent): QDialog(parent)
+QPopUpRISRequestsScreen::QPopUpRISRequestsScreen(QWidget *parent)
+ : QDialog(parent)
 {
     setupUi(this);
     this->setWindowFlags(Qt::SubWindow | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
@@ -43,7 +44,7 @@ QPopUpRISRequestsScreen::QPopUpRISRequestsScreen(QWidget *parent): QDialog(paren
     // TODO: Aquesta és la única manera que s'ha trobat de que el text, al canviar-lo a un tamany major, no quedi tallat
     // caldria refer el diàleg i vigilar el tema de com es fa per situar-lo, etc. perquè ara mateix és una mica "hack".
     this->layout()->setSizeConstraint(QLayout::SetFixedSize);
-    
+
     //Posem EventFilter al Widget i al GroupBox perquè si fan click en qualsevol zona del widget aquest s'amagui. L'objectiu és que si
     //el Popup es posa en una zona on molesta l'usuari fent-hi click el pugui amagar.
     this->installEventFilter(this);
@@ -52,7 +53,7 @@ QPopUpRISRequestsScreen::QPopUpRISRequestsScreen(QWidget *parent): QDialog(paren
 
 void QPopUpRISRequestsScreen::queryStudiesByAccessionNumberStarted()
 {
-    //Si arriba una altra petició mentre hi ha activat el timer per amagar el PopUp o s'està amagant, hem de fer que aquest no s'amagui per 
+    //Si arriba una altra petició mentre hi ha activat el timer per amagar el PopUp o s'està amagant, hem de fer que aquest no s'amagui per
     //mostrar la nova petició
     m_qTimerToHidePopUp->stop();
     m_hidePopUpAnimation.stop();
@@ -94,7 +95,7 @@ void QPopUpRISRequestsScreen::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pac
     else
     {
         //Si quan s'ha descarregat l'estudi el PopUp encara no s'ha mogut a baix a l'esquerre, el que fem es forçar-los a moures sense espera
-        //el timeout del Timer, sinó podria passar que ja tinguem els visors amb l'estudi carregat i el PopUp encara aparagués al centre de pantalla molestant a 
+        //el timeout del Timer, sinó podria passar que ja tinguem els visors amb l'estudi carregat i el PopUp encara aparagués al centre de pantalla molestant a
         //l'usuari
         if (m_qTimerToMovePopUpToBottomRight->isActive())
         {
@@ -106,11 +107,11 @@ void QPopUpRISRequestsScreen::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pac
         {
             //Si no està a la llista de PACSJob per descarregar vol dir que és d'una altra petició de RIS que ha estat matxacada per l'actual
             //Com que el QPopUpRisRequestScreen només segueix l'última petició del RIS les ignorem
-            if (retrieveDICOMFilesFromPACSJob->getStatus() == PACSRequestStatus::RetrieveOk || 
+            if (retrieveDICOMFilesFromPACSJob->getStatus() == PACSRequestStatus::RetrieveOk ||
                 retrieveDICOMFilesFromPACSJob->getStatus() == PACSRequestStatus::RetrieveSomeDICOMFilesFailed)
             {
                 m_numberOfStudiesRetrieved++;
-                
+
                 refreshScreenRetrieveStatus();
             }
             else
@@ -169,7 +170,7 @@ void QPopUpRISRequestsScreen::showRetrieveFinished()
     {
         m_operationDescription->setText(tr("No studies has been retrieved.").arg(m_numberOfStudiesRetrieved));
     }
-    else if (m_numberOfStudiesRetrieved  == 1)
+    else if (m_numberOfStudiesRetrieved == 1)
     {
         m_operationDescription->setText(tr("%1 study has been retrieved.").arg(m_numberOfStudiesRetrieved));
     }
@@ -208,17 +209,17 @@ void QPopUpRISRequestsScreen::showEvent(QShowEvent *)
 
 bool QPopUpRISRequestsScreen::eventFilter(QObject *, QEvent *event)
 {
-    if (event->type() == QEvent::MouseButtonPress) 
+    if (event->type() == QEvent::MouseButtonPress)
     {
         //Parem els rellotges perquè no saltin les animacions amb el PopUp amagat, sinó ens podríem trobar que si rebem una altra petició
         //aparegués el PopUp movent-se
         m_qTimerToHidePopUp->stop();
-        m_qTimerToMovePopUpToBottomRight->stop();    
+        m_qTimerToMovePopUpToBottomRight->stop();
 
         hidePopUpSmoothly();
         return true;
-    } 
-    else 
+    }
+    else
     {
         return false;
     }
@@ -226,7 +227,7 @@ bool QPopUpRISRequestsScreen::eventFilter(QObject *, QEvent *event)
 
 void QPopUpRISRequestsScreen::hidePopUpSmoothly()
 {
-    if(m_hidePopUpAnimation.state() != QAbstractAnimation::Running)
+    if (m_hidePopUpAnimation.state() != QAbstractAnimation::Running)
     {
         m_hidePopUpAnimation.setTargetObject(this);
         m_hidePopUpAnimation.setPropertyName("windowOpacity");
@@ -244,7 +245,7 @@ void QPopUpRISRequestsScreen::hidePopUp()
 
 void QPopUpRISRequestsScreen::moveToBottomRight()
 {
-    if(m_moveToBottomAnimation.state() != QAbstractAnimation::Running)
+    if (m_moveToBottomAnimation.state() != QAbstractAnimation::Running)
     {
         m_moveToBottomAnimation.setTargetObject(this);
         m_moveToBottomAnimation.setPropertyName("pos");

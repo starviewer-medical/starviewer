@@ -11,7 +11,7 @@
 namespace udg {
 
 ZoomTool::ZoomTool(QViewer *viewer, QObject *parent)
- : Tool(viewer,parent)
+ : Tool(viewer, parent)
 {
     m_state = None;
     m_toolName = "ZoomTool";
@@ -73,7 +73,7 @@ void ZoomTool::doZoom()
         int dy = m_viewer->getEventPositionY() - m_viewer->getLastEventPositionY();
         // TODO el 10.0 és un valor constant que podria refinar-se si es volgués (motion factor)
         double dyf = 10.0 * (double)(dy) / (double)(center[1]);
-        m_viewer->zoom(pow((double)1.1, dyf) );
+        m_viewer->zoom(pow((double)1.1, dyf));
     }
 }
 
@@ -84,7 +84,7 @@ void ZoomTool::endZoom()
         m_viewer->setCursor(Qt::ArrowCursor);
         m_state = None;
         m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate(m_viewer->getInteractor()->GetStillUpdateRate());
-    
+
         Q3DViewer *q3DViewer = qobject_cast<Q3DViewer*>(m_viewer);
         if (q3DViewer)
         {

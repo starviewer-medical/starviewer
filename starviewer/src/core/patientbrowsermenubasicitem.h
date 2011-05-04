@@ -11,10 +11,10 @@ Widget per utilitzar com a item de menú. Pot representar diversos objectes i te
 class PatientBrowserMenuBasicItem : public QLabel {
 Q_OBJECT
 public:
-    PatientBrowserMenuBasicItem( QWidget *parent = 0 );
+    PatientBrowserMenuBasicItem(QWidget *parent = 0);
     ~PatientBrowserMenuBasicItem(){}
 
-    void setIdentifier( const QString &identifier );
+    void setIdentifier(const QString &identifier);
     QString getIdentifier() const;
 
     /// La posem en negreta per marcar que es la que s'esta visualitzant
@@ -32,7 +32,7 @@ signals:
 
 protected:
     /// Sobrecàrrega del mètode que tracta tots els events
-    bool event( QEvent * event);
+    bool event(QEvent * event);
 
 private:
     /// Identificador de l'ítem

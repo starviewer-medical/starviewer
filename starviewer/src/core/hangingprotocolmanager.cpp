@@ -176,7 +176,7 @@ int HangingProtocolManager::setInputToHangingProtocolImageSets(HangingProtocol *
             }
         }
     }
-    
+
     return numberOfFilledImageSets;
 }
 
@@ -242,12 +242,12 @@ void HangingProtocolManager::applyHangingProtocol(HangingProtocol *hangingProtoc
 
             bool isDownloading = m_studiesDownloading->contains(hangingProtocolImageSet->getPreviousStudyToDisplay()->getInstanceUID());
 
-            m_studiesDownloading->insert(hangingProtocolImageSet->getPreviousStudyToDisplay()->getInstanceUID(), structPreviousStudyDownloading);            
+            m_studiesDownloading->insert(hangingProtocolImageSet->getPreviousStudyToDisplay()->getInstanceUID(), structPreviousStudyDownloading);
             m_patient = patient;
 
             if (!isDownloading)
             {
-                connect(m_patient, SIGNAL(patientFused()), SLOT(previousStudyDownloaded()));   
+                connect(m_patient, SIGNAL(patientFused()), SLOT(previousStudyDownloaded()));
                 m_previousStudiesManager->downloadStudy(hangingProtocolImageSet->getPreviousStudyToDisplay(), hangingProtocolImageSet->getPreviousStudyPacs());
             }
         }
@@ -289,7 +289,7 @@ Series* HangingProtocolManager::searchSerie(QList<Series *> &listOfSeries, Hangi
     {
         return 0;
     }
-    
+
     Series *selectedSeries = 0;
     Study *referenceStudy = 0;
 
@@ -338,14 +338,14 @@ Series* HangingProtocolManager::searchSerie(QList<Series *> &listOfSeries, Hangi
             // Important, no hi posem cap serie!
             imageSet->setSeriesToDisplay(0);
             imageSet->setImageToDisplay(0);
-            return 0; 
+            return 0;
         }
     }
 
     int currentSeriesIndex = 0;
     int numberOfSeries = listOfSeries.size();
-    
-    while(!selectedSeries && currentSeriesIndex < numberOfSeries)
+
+    while (!selectedSeries && currentSeriesIndex < numberOfSeries)
     {
         Series *serie = listOfSeries.value(currentSeriesIndex);
         bool isCandidateSeries = true;
@@ -372,7 +372,7 @@ Series* HangingProtocolManager::searchSerie(QList<Series *> &listOfSeries, Hangi
                 int currentImageIndex = 0;
                 QList<Image*> listOfImages = serie->getImages();
                 int numberOfImages = listOfImages.size();
-                while(!selectedSeries && currentImageIndex < numberOfImages)
+                while (!selectedSeries && currentImageIndex < numberOfImages)
                 {
                     Image *image = listOfImages.value(currentImageIndex);
                     if (isValidImage(image, imageSet))
@@ -383,7 +383,7 @@ Series* HangingProtocolManager::searchSerie(QList<Series *> &listOfSeries, Hangi
                     }
                     ++currentImageIndex;
                 }
-            }  
+            }
         }
 
         if (selectedSeries && quitStudy)
@@ -393,7 +393,7 @@ Series* HangingProtocolManager::searchSerie(QList<Series *> &listOfSeries, Hangi
 
         ++currentSeriesIndex;
     }
-    
+
     if (!selectedSeries)
     {
         // Important, no hi posem cap serie!
@@ -443,13 +443,13 @@ bool HangingProtocolManager::isValidSerie(Series *serie, HangingProtocolImageSet
         else if (restriction.selectorAttribute == "SeriesDescription")
         {
             bool contains = serie->getDescription().contains(restriction.valueRepresentation, Qt::CaseInsensitive);
-            bool match = (restriction.usageFlag  == HangingProtocolImageSet::NoMatch);
+            bool match = (restriction.usageFlag == HangingProtocolImageSet::NoMatch);
             valid = contains ^ match;
         }
         else if (restriction.selectorAttribute == "StudyDescription")
         {
             bool contains = serie->getParentStudy()->getDescription().contains(restriction.valueRepresentation, Qt::CaseInsensitive);
-            bool match = (restriction.usageFlag  == HangingProtocolImageSet::NoMatch);
+            bool match = (restriction.usageFlag == HangingProtocolImageSet::NoMatch);
             valid = contains ^ match;
         }
         else if (restriction.selectorAttribute == "PatientName")
@@ -499,7 +499,7 @@ bool HangingProtocolManager::isValidImage(Image *image, HangingProtocolImageSet 
         if (restriction.selectorAttribute == "ViewPosition")
         {
             bool contains = image->getViewPosition().contains(restriction.valueRepresentation, Qt::CaseInsensitive);
-            bool match = (restriction.usageFlag  == HangingProtocolImageSet::NoMatch);
+            bool match = (restriction.usageFlag == HangingProtocolImageSet::NoMatch);
             valid = contains ^ match;
         }
         else if (restriction.selectorAttribute == "ImageLaterality")
@@ -526,7 +526,7 @@ bool HangingProtocolManager::isValidImage(Image *image, HangingProtocolImageSet 
         }
         else if (restriction.selectorAttribute == "CodeMeaning") // TODO Es podria canviar el nom, ja que és massa genèric. Seria més adequat ViewCodeMeaning per exemple
         {
-            bool match = (restriction.usageFlag  == HangingProtocolImageSet::Match);
+            bool match = (restriction.usageFlag == HangingProtocolImageSet::Match);
 
             if (!(image->getViewCodeMeaning().contains(restriction.valueRepresentation)))
             {
@@ -542,7 +542,7 @@ bool HangingProtocolManager::isValidImage(Image *image, HangingProtocolImageSet 
         else if (restriction.selectorAttribute == "ImageType")
         {
             bool isLocalyzer = image->getImageType().contains(restriction.valueRepresentation, Qt::CaseInsensitive);
-            bool match = (restriction.usageFlag  == HangingProtocolImageSet::NoMatch);
+            bool match = (restriction.usageFlag == HangingProtocolImageSet::NoMatch);
             valid = isLocalyzer ^ match;
         }
         else if (restriction.selectorAttribute == "MinimumNumberOfImages")
@@ -555,7 +555,7 @@ bool HangingProtocolManager::isValidImage(Image *image, HangingProtocolImageSet 
         }
         ++i;
     }
-    
+
     return valid;
 }
 
@@ -600,7 +600,7 @@ void HangingProtocolManager::previousStudyDownloaded()
             // Busquem la millor serie de l'estudi que ho satisfa
             QList<Series *> studySeries = study->getSeries();
             Series *series = searchSerie(studySeries, structPreviousStudyDownloading->displaySet->getImageSet(), false);
-            
+
             Q2DViewerWidget *viewerWidget = structPreviousStudyDownloading->widgetToDisplay;
             structPreviousStudyDownloading->displaySet->getImageSet()->setDownloaded(true);
 
@@ -670,9 +670,9 @@ void HangingProtocolManager::setInputToViewer(Q2DViewerWidget *viewerWidget, Ser
                 {
                     image = series->getImageByIndex(displaySet->getImageSet()->getImageToDisplay());
                 }
-                
+
                 Volume *volumeContainsImage = series->getVolumeOfImage(image);
-                
+
                 if (!volumeContainsImage)
                 {
                     // No existeix cap imatge al tall corresponent, agafem el volum per defecte

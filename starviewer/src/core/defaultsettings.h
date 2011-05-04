@@ -9,7 +9,7 @@ namespace udg {
 
 /**
  * Classe base per definir i registrar els settings per defecte de cada mòdul d'starviewer.
- * Cada implementació haurà d'implementar el mètode init() que s'encarrega de registrar els 
+ * Cada implementació haurà d'implementar el mètode init() que s'encarrega de registrar els
  * settings amb els corresponents valors per defecte.
  * Per una part, cada subclasse definirà amb constants al .h totes les claus dels settings perquè aquestes
  * siguin accessibles per a tothom, independentment de si tenen un valor definit per defecte o no.
@@ -26,6 +26,6 @@ public:
 
 };
 
-} // end namespace udg 
+} // end namespace udg
 
 #endif

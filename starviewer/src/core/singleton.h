@@ -59,7 +59,7 @@ protected:
 };
 
 /**
-    Classe que implementa el patró Singleton però a nivell de punter. Es fa servir de la mateixa manera que Singleton però amb 
+    Classe que implementa el patró Singleton però a nivell de punter. Es fa servir de la mateixa manera que Singleton però amb
     la particularitat de que el singleton es fa a nivell de punter en comptes d'objecte.
     Aquest singleton només s'hauria de fer servir quan hi ha problemes que impedeixen fer servir l'anterior. Alguns d'aquests problemes
     serien problemes en l'ordre de destrucció d'objectes estàtics (com el cas de la DcmDatasetCache per culpa de dcmtk).

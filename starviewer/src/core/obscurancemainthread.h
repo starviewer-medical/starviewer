@@ -1,7 +1,6 @@
 #ifndef UDGOBSCURANCEMAINTHREAD_H
 #define UDGOBSCURANCEMAINTHREAD_H
 
-
 #include <QThread>
 
 #include <QVector>
@@ -9,12 +8,9 @@
 #include "obscurance.h"
 #include "transferfunction.h"
 
-
 class vtkVolume;
 
-
 namespace udg {
-
 
 /**
  * Thread principal per al càlcul d'obscurances. Controla els altres threads.
@@ -32,15 +28,15 @@ public:
     /// Variants de les obscurances.
     enum Variant { Density, DensitySmooth, Opacity, OpacitySmooth, OpacitySaliency, OpacitySmoothSaliency, OpacityColorBleeding, OpacitySmoothColorBleeding };
 
-    static bool hasColor( Variant variant );
+    static bool hasColor(Variant variant);
 
-    ObscuranceMainThread( int numberOfDirections, double maximumDistance, Function function, Variant variant, bool doublePrecision = true, QObject *parent = 0 );
+    ObscuranceMainThread(int numberOfDirections, double maximumDistance, Function function, Variant variant, bool doublePrecision = true, QObject *parent = 0);
     virtual ~ObscuranceMainThread();
 
     bool hasColor() const;
-    void setVolume( vtkVolume *volume );
-    void setTransferFunction( const TransferFunction &transferFunction );
-    void setSaliency( const double *saliency, double fxSaliencyA, double fxSaliencyB, double fxSaliencyLow, double fxSaliencyHigh );
+    void setVolume(vtkVolume *volume);
+    void setTransferFunction(const TransferFunction &transferFunction);
+    void setSaliency(const double *saliency, double fxSaliencyA, double fxSaliencyB, double fxSaliencyLow, double fxSaliencyHigh);
 
     Obscurance* getObscurance() const;
 
@@ -50,7 +46,7 @@ public slots:
 
 signals:
 
-    void progress( int percent );
+    void progress(int percent);
     void computed();
 
 protected:
@@ -59,7 +55,7 @@ protected:
 
 private:
 
-    static void getLineStarts( QVector<Vector3> &lineStarts, int dimX, int dimY, int dimZ, const Vector3 &forward );
+    static void getLineStarts(QVector<Vector3> &lineStarts, int dimX, int dimY, int dimZ, const Vector3 &forward);
     QVector<Vector3> getDirections() const;
 
 private:
@@ -80,8 +76,6 @@ private:
 
 };
 
-
 }
-
 
 #endif

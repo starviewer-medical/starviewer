@@ -41,7 +41,7 @@ public:
 
     /// Ens retorna l'i-èssim vèrtex del polígon. Si l'índex està fora de rang ens retornarà un array sense inicialitzar
     const double* getVertix(int i);
-    
+
     vtkProp* getAsVtkProp();
 
     /// Ens retorna el nombre de punts que té el polígon

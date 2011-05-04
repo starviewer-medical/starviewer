@@ -24,6 +24,6 @@ public:
     static const QString DefaultExtension;
 };
 
-} // end namespace udg 
+} // end namespace udg
 
 #endif

@@ -16,7 +16,7 @@
 #include "querypacsjob.h"
 #include "retrievedicomfilesfrompacsjob.h"
 
-namespace udg{
+namespace udg {
 
 RISRequestManager::RISRequestManager(PacsManager *pacsManager)
 {
@@ -57,7 +57,7 @@ void RISRequestManager::createConnections()
     connect(m_listenRISRequests, SIGNAL(requestRetrieveStudy(DicomMask)), SLOT(processRISRequest(DicomMask)));
     connect(m_listenRISRequests, SIGNAL(errorListening(ListenRISRequests::ListenRISRequestsError)), SLOT(showListenRISRequestsError(ListenRISRequests::ListenRISRequestsError)));
     /**Hem d'indica a la classe ListenRISRequests que pot començar a escoltar/parar peticions a través d'un signal, perquè si ho fèssim invocant el mètode listen()
-       o stopListen directament aquest seria executat pel thread que l'invoca i podria fer petar l'aplicaciño, en canvi amb un signal aquest és atés pel thread 
+       o stopListen directament aquest seria executat pel thread que l'invoca i podria fer petar l'aplicaciño, en canvi amb un signal aquest és atés pel thread
        al que pertany ListenRISRequests*/
     connect(this, SIGNAL(listenRISRequests()), m_listenRISRequests, SLOT(listen()));
     connect(this, SIGNAL(stopListenRISRequests()), m_listenRISRequests, SLOT(stopListen()));
@@ -73,7 +73,7 @@ void RISRequestManager::listen()
 void RISRequestManager::processRISRequest(DicomMask dicomMaskRISRequest)
 {
     INFO_LOG("Encuem sol·licitud de descàrrega d'un estudi del RIS amb accession number " + dicomMaskRISRequest.getAccessionNumber());
-    //Per anar atenent les descàrregues a mesura que ens arriben encuem les peticions, només fem una cerca al PACS a la vegada, una 
+    //Per anar atenent les descàrregues a mesura que ens arriben encuem les peticions, només fem una cerca al PACS a la vegada, una
     //vegada hem trobat l'estudi en algun PACS, es posa a descarregar i s'aten una altra petició
     m_queueRISRequests.enqueue(dicomMaskRISRequest);
 
@@ -88,12 +88,12 @@ void RISRequestManager::queryPACSRISStudyRequest(DicomMask maskRISRequest)
 {
     INFO_LOG("Comencem a cercar l'estudi sol·licitat pel RIS amb accession number " + maskRISRequest.getAccessionNumber());
     //Al iniciar una nova consulta netegem la llista UID d'estudis demanats per descarregar i pendents de descarregar
-    //TODO:Si ens arriba una altre petició del RIS mentre encara descarreguem l'anterior petició no es farà seguiment de la descarrega actual, sinó de la 
+    //TODO:Si ens arriba una altre petició del RIS mentre encara descarreguem l'anterior petició no es farà seguiment de la descarrega actual, sinó de la
     //última que ha arribat
     m_studiesInstancesUIDRequestedToRetrieve.clear();
 
     // TODO Ara mateix cal que nosaltres mateixos fem aquesta comprovació però potser seria interessant que el mètode PACSDevicemanager::queryStudy()
-    // fes aquesta comprovació i ens retornes algun codi que pugui descriure com ha anat la consulta i així poder actuar en conseqüència mostrant 
+    // fes aquesta comprovació i ens retornes algun codi que pugui descriure com ha anat la consulta i així poder actuar en conseqüència mostrant
     // un message box, fent un log o el que calgui segons la ocasió.
     QList<PacsDevice> queryablePACS = PacsDeviceManager().getPACSList(PacsDeviceManager::PacsWithQueryRetrieveServiceEnabled, true);
     if (queryablePACS.isEmpty())
@@ -109,7 +109,7 @@ void RISRequestManager::queryPACSRISStudyRequest(DicomMask maskRISRequest)
     m_qpopUpRISRequestsScreen->activateWindow();
     m_qpopUpRISRequestsScreen->show();
 
-    foreach(const PacsDevice &pacsDevice, queryablePACS)
+    foreach (const PacsDevice &pacsDevice, queryablePACS)
     {
         enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, maskRISRequest, QueryPacsJob::study));
     }
@@ -120,13 +120,13 @@ void RISRequestManager::enqueueQueryPACSJobToPACSManagerAndConnectSignals(QueryP
     connect(queryPACSJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(queryPACSJobFinished(PACSJob*)));
     connect(queryPACSJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(queryPACSJobCancelled(PACSJob*)));
     m_queryPACSJobPendingExecuteOrExecuting.insert(queryPACSJob->getPACSJobID(), queryPACSJob);
-    
+
     m_pacsManager->enqueuePACSJob(queryPACSJob);
 }
 
 void RISRequestManager::queryPACSJobFinished(PACSJob *pacsJob)
 {
-    QueryPacsJob *queryPACSJob= qobject_cast<QueryPacsJob*>(pacsJob);
+    QueryPacsJob *queryPACSJob = qobject_cast<QueryPacsJob*>(pacsJob);
 
     if (queryPACSJob == NULL)
     {
@@ -215,9 +215,9 @@ void RISRequestManager::errorQueryingStudy(QueryPacsJob *queryPACSJob)
 
 void RISRequestManager::retrieveFoundStudiesFromPACS(QueryPacsJob *queryPACSJob)
 {
-    foreach(Patient *patient, queryPACSJob->getPatientStudyList())
+    foreach (Patient *patient, queryPACSJob->getPatientStudyList())
     {
-        foreach(Study *study, patient->getStudies())
+        foreach (Study *study, patient->getStudies())
         {
             if (!m_studiesInstancesUIDRequestedToRetrieve.contains(study->getInstanceUID()))
             {
@@ -228,7 +228,7 @@ void RISRequestManager::retrieveFoundStudiesFromPACS(QueryPacsJob *queryPACSJob)
 
                 if (Settings().getValue(InputOutputSettings::RISRequestViewOnceRetrieved).toBool())
                 {
-                    //TODO: Això és una mica lleig haver de controlar des d'aquí que fe amb l'estudi una vegada descarregat, no es podria posar com a 
+                    //TODO: Això és una mica lleig haver de controlar des d'aquí que fe amb l'estudi una vegada descarregat, no es podria posar com a
                     //propietat al Job, i centralitzar-ho a un responsable que fos l'encarregat de fer l'acció pertinent
                     if (m_studiesInstancesUIDRequestedToRetrieve.count() == 0)
                     {
@@ -256,7 +256,7 @@ RetrieveDICOMFilesFromPACSJob* RISRequestManager::retrieveStudy(QString pacsIDTo
     PacsDevice pacsDevice = PacsDeviceManager().getPACSDeviceByID(pacsIDToRetrieve);
     DicomMask studyToRetrieveDICOMMask;
     studyToRetrieveDICOMMask.setStudyInstanceUID(study->getInstanceUID());
-    
+
     RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = new RetrieveDICOMFilesFromPACSJob(pacsDevice, study, studyToRetrieveDICOMMask, RetrieveDICOMFilesFromPACSJob::Medium);
     m_qpopUpRISRequestsScreen->addStudyToRetrieveByAccessionNumber(retrieveDICOMFilesFromPACSJob);
     connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobFinished(PACSJob *)));
@@ -307,7 +307,6 @@ void RISRequestManager::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacsJob)
             }
         }
 
-
         if (m_pacsJobIDToViewWhenFinished.removeOne(retrieveDICOMFilesFromPACSJob->getPACSJobID()))
         {
             emit viewStudyRetrievedFromRISRequest(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getInstanceUID());
@@ -328,12 +327,12 @@ void RISRequestManager::showListenRISRequestsError(ListenRISRequests::ListenRISR
     QString message;
     int risPort = Settings().getValue(InputOutputSettings::RISRequestsPort).toInt();
 
-    switch(error)
+    switch (error)
     {
-        case ListenRISRequests::RisPortInUse :
+        case ListenRISRequests::RisPortInUse:
             message = tr("Can't listen RIS requests on port %1, the port is in use by another application.").arg(risPort);
             break;
-        case ListenRISRequests::UnknownNetworkError :
+        case ListenRISRequests::UnknownNetworkError:
             message = tr("Can't listen RIS requests on port %1, an unknown network error has produced.").arg(risPort);
             message += tr("\nIf the problem persists contact with an administrator.");
             break;
@@ -343,4 +342,3 @@ void RISRequestManager::showListenRISRequestsError(ListenRISRequests::ListenRISR
 }
 
 };
-

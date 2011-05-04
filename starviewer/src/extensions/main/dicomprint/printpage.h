@@ -13,10 +13,10 @@ namespace udg
 
 class Image;
 
-class PrintPage 
+class PrintPage
 {
 public:
-    
+
     ///Especifica/retorna el número de pàgina
     void setPageNumber(int pageNumber);
     int getPageNumber();
@@ -29,7 +29,7 @@ private:
 
     int m_pageNumber;
     QList<Image*> m_imagesToPrint;
-    
+
 };
 };
 #endif

@@ -57,7 +57,7 @@ void MenuGridWidget::initializeWidget()
     m_noHangingProtocolsAvailableLabel->setGeometry(0, 64, 64, 80);
     m_noHangingProtocolsAvailableLabel->setMargin(6);
     vBoxLayoutHanging->addWidget(m_noHangingProtocolsAvailableLabel);
-    
+
     m_gridLayout->addLayout(vBoxLayoutHanging, 2, 0, 1, 1);
     m_gridLayout->addLayout(m_gridLayoutHanging, 3, 0, 1, 1);
 }
@@ -95,7 +95,7 @@ ItemMenu* MenuGridWidget::createIcon(const HangingProtocol *hangingProtocol)
         double x2 = listOfPositions.value(2).toDouble();
         double y2 = listOfPositions.value(3).toDouble();
 
-        newIcon->setGeometry(x1 * 64, (1 - y1) * 64, ((x2 -x1) * 64), (y1 - y2) * 64);
+        newIcon->setGeometry(x1 * 64, (1 - y1) * 64, ((x2 - x1) * 64), (y1 - y2) * 64);
         newIcon->show();
     }
 
@@ -144,7 +144,7 @@ void MenuGridWidget::addHangingItems(const QList<HangingProtocol *> &items)
         m_noHangingProtocolsAvailableLabel->hide();
         m_caption->show();
     }
-    
+
     foreach (HangingProtocol *hangingProtocol, items)
     {
         ItemMenu *icon = createIcon(hangingProtocol);
@@ -187,7 +187,7 @@ void MenuGridWidget::addSearchingItem()
 {
     // S'assumeix que el widget ha d'estar creat
     Q_ASSERT(m_searchingWidget);
-    
+
     if (m_searchingWidget->isVisible() || (m_gridLayoutHanging == 0))
     {
         return;
@@ -196,7 +196,7 @@ void MenuGridWidget::addSearchingItem()
     // Afegim el widget dins del layout del menú i el fem visible
     m_gridLayoutHanging->addWidget(m_searchingWidget, m_nextHangingProtocolColumn, m_nextHangingProtocolRow);
     m_searchingWidget->setVisible(true);
-	
+
     m_loadingColumn = m_nextHangingProtocolColumn;
     m_loadingRow = m_nextHangingProtocolRow;
 }

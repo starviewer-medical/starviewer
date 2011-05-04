@@ -1,9 +1,7 @@
 #ifndef UDGABORTRENDERCOMMAND_H
 #define UDGABORTRENDERCOMMAND_H
 
-
 #include <vtkCommand.h>
-
 
 namespace udg {
 
@@ -15,7 +13,7 @@ class AbortRenderCommand : public vtkCommand {
 public:
 
     static AbortRenderCommand* New();
-    virtual void Execute( vtkObject *caller, unsigned long eventId, void *callData );
+    virtual void Execute(vtkObject *caller, unsigned long eventId, void *callData);
 
 protected:
 
@@ -24,8 +22,6 @@ protected:
 
 };
 
-
 }
-
 
 #endif

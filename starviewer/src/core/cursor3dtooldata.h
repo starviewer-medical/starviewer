@@ -6,7 +6,7 @@
 namespace udg {
 
 class ImagePlane;
-        
+
 /**
     Classe que guarda les dades compartides per la tool de cursor 3D.
 */
@@ -43,7 +43,7 @@ public:
     /**
     * Visibilitat del cursor
     */
-    void setVisible( bool visibility );
+    void setVisible(bool visibility);
 
     /**
     * Retorna cert si és visible, fals altrament.
@@ -58,28 +58,28 @@ public slots:
      * Dins d'una mateixa sèrie, totes les imatges tenen el mateix frame of reference
      * @param frameOfReference
      */
-    void setFrameOfReferenceUID( const QString &frameOfReference );
+    void setFrameOfReferenceUID(const QString &frameOfReference);
 
     /**
      * Li assignem l'instance UID
      * @param instanceUID
     */
-    void setInstanceUID( const QString &instanceUID );
-    
+    void setInstanceUID(const QString &instanceUID);
+
     /**
      * Assigna el pla de la imatge de referencia
      * Aquest pla pot canviar cada cop que es canvia de llesca en el viewer
      * Quan canvïi aquest valor, s'emetrà el senyal changed()
      * @param imagePlane
      */
-    void setImagePlane( ImagePlane *imagePlane );
+    void setImagePlane(ImagePlane *imagePlane);
 
     /**
      * Assigna una posició al punt origen
      * Quan canvïi aquest valor, s'emetrà el senyal changed()
      * @param double
      */
-    void setOriginPointPosition( double *position );
+    void setOriginPointPosition(double *position);
 
 private:
     /// El frame of reference UID del pla de referència

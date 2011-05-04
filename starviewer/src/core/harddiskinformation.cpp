@@ -46,19 +46,19 @@ qint64 HardDiskInformation::getDirectorySizeInBytes(const QString &directoryPath
     QStringList directoryList;
     qint64 directorySize = 0;
 
-    fileInfoList =  directory.entryInfoList( QDir::Files );//llista de fitxers del directori
+    fileInfoList = directory.entryInfoList(QDir::Files);//llista de fitxers del directori
 
-    foreach(QFileInfo fileInfo, fileInfoList)
+    foreach (QFileInfo fileInfo, fileInfoList)
     {
         directorySize += fileInfo.size();
     }
 
-    directoryList =  directory.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);//obtenim llistat de subdirectoris
+    directoryList = directory.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);//obtenim llistat de subdirectoris
 
-    foreach(const QString &subdirectory, directoryList) //per cada subdirectori
+    foreach (const QString &subdirectory, directoryList) //per cada subdirectori
     {
         directorySize += getDirectorySizeInBytes(directoryPath + "/" + subdirectory);
-    } 
+    }
 
     return directorySize;
 }
@@ -71,7 +71,7 @@ quint64 HardDiskInformation::getTotalBytesPlataformEspecific(const QString &path
 #ifdef _WIN32
     ULARGE_INTEGER totalBytes;
 
-    if ( GetDiskFreeSpaceExA(path.toAscii(), NULL, &totalBytes, NULL) )
+    if (GetDiskFreeSpaceExA(path.toAscii(), NULL, &totalBytes, NULL))
     {
         total = static_cast<quint64>(totalBytes.QuadPart);
         existsError = false;
@@ -79,9 +79,9 @@ quint64 HardDiskInformation::getTotalBytesPlataformEspecific(const QString &path
 #else
     struct statvfs fsd;
 
-    if ( statvfs(path.toAscii(), &fsd) == 0 )
+    if (statvfs(path.toAscii(), &fsd) == 0)
     {
-        total = static_cast<quint64>( fsd.f_blocks ) * static_cast<quint64>( fsd.f_frsize );
+        total = static_cast<quint64>(fsd.f_blocks) * static_cast<quint64>(fsd.f_frsize);
         existsError = false;
     }
 #endif // _WIN32
@@ -103,7 +103,7 @@ quint64 HardDiskInformation::getFreeBytesPlataformEspecific(const QString &path)
 #ifdef _WIN32
     ULARGE_INTEGER freeBytes;
 
-    if ( GetDiskFreeSpaceExA(path.toAscii(), &freeBytes, NULL, NULL) )
+    if (GetDiskFreeSpaceExA(path.toAscii(), &freeBytes, NULL, NULL))
     {
         total = static_cast<quint64>(freeBytes.QuadPart);
         existsError = false;
@@ -111,14 +111,14 @@ quint64 HardDiskInformation::getFreeBytesPlataformEspecific(const QString &path)
 #else
     struct statvfs fsd;
 
-    if ( statvfs( qPrintable(path), &fsd) == 0 )
+    if (statvfs(qPrintable(path), &fsd) == 0)
     {
-        total = static_cast<quint64>( fsd.f_bavail ) * static_cast<quint64>( fsd.f_bsize );
+        total = static_cast<quint64>(fsd.f_bavail) * static_cast<quint64>(fsd.f_bsize);
         existsError = false;
     }
 #endif // _WIN32
 
-    if(existsError)
+    if (existsError)
     {
         logLastError("getFreeBytesPlataformEspecific: " + path);
         total = 0;
@@ -133,19 +133,19 @@ void HardDiskInformation::logLastError(const QString &additionalInformation)
 #ifdef Q_OS_WIN32
     // obtenim el missatge d'error
     TCHAR errorMessage[512];
-    FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM,0,GetLastError(),0,errorMessage,1024,NULL);
+    FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, 0, GetLastError(), 0, errorMessage, 1024, NULL);
     // formatem a QString
-#ifdef UNICODE      
+#ifdef UNICODE
     qtErrorMessage = QString::fromUtf16((ushort*)errorMessage);
 #else
     qtErrorMessage = QString::fromLocal8Bit(errorMessage);
 #endif
-    
+
 #else
-    // TODO implementar per altres sistemes ( MAC, LINUX )
+    // TODO implementar per altres sistemes (MAC, LINUX)
     qtErrorMessage = "TODO! No tenim implementat l'obtenció del missatge d'error en aquest sistema operatiu";
 #endif // Q_OS_WIN32
-    ERROR_LOG( "Error: " + qtErrorMessage + ". " + additionalInformation);
+    ERROR_LOG("Error: " + qtErrorMessage + ". " + additionalInformation);
 }
 
 }; //end udg namespace

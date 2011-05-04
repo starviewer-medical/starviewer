@@ -20,7 +20,7 @@ SettingsParser::~SettingsParser()
 {
 }
 
-QString SettingsParser::parse( const QString &stringToParse )
+QString SettingsParser::parse(const QString &stringToParse)
 {
     // Construirem una expressió regular que trobarà les claus definides.
     // També tindrà en compte si la clau va acompanyada d'un sufix de màscara
@@ -37,8 +37,8 @@ QString SettingsParser::parse( const QString &stringToParse )
     // si el truncatge i/o el padding es fan per la dreta o l'esquerra
 
     // Expressió regular: Qualsevol de les claus, que pot anar acompanyada opcionalment d'una mascara de truncatge
-    regExp.setPattern( keysPattern + maskPattern ); 
-    
+    regExp.setPattern(keysPattern + maskPattern);
+
     QString parsedString = stringToParse; // String on anirem parsejant els resultats
     int keyIndex = 0; // índex de l'string on comença el patró trobat
     QString capturedKey; // Clau trobada
@@ -47,33 +47,33 @@ QString SettingsParser::parse( const QString &stringToParse )
     QString maskedString; // String que parseja la màscara
     int truncate = 0; // nombre de caràcters a truncar --->> en comptes de truncate, posar-li width
     QChar paddingChar; // caràcter amb el que farem el padding
-    
+
     // Mentres hi hagi expressions, les capturem i parsejem
     // Els "replace" es fan d'un en un, ja que podem tenir claus repetides i cal fer-ho pas a pas,
     // tal com anem tractant cada expressió regular
-    while( (keyIndex = regExp.indexIn(parsedString)) != -1 ) 
+    while ((keyIndex = regExp.indexIn(parsedString)) != -1)
     {
         capturedKey = regExp.cap(1); // la clau trobada, 1a part de l'expressió regular
         capturedMask = regExp.cap(2); // la màscara trobada, 2a part de l'expressió regular
-        keyToReplace = QString(capturedKey).replace("%",""); // li eliminem els '%'
+        keyToReplace = QString(capturedKey).replace("%", ""); // li eliminem els '%'
         // Si s'ha trobat sufix de màscara, el parsejem
-        if( !capturedMask.isEmpty() )
+        if (!capturedMask.isEmpty())
         {
             // Obtenim les sub-parts de la màscara ([n:c])
             QRegExp maskRegExp("\\[(\\d+):(\\S)?\\]");
-            if( maskRegExp.indexIn( capturedMask ) != -1 )
+            if (maskRegExp.indexIn(capturedMask) != -1)
             {
                 truncate = maskRegExp.cap(1).toInt(); // nombre de caràcters a truncar
                 // trunquem
-                maskedString = QString(m_parseableStringsTable.value( keyToReplace )).right(truncate);
+                maskedString = QString(m_parseableStringsTable.value(keyToReplace)).right(truncate);
                 // si hi ha caràcter de padding, tractem de fer el padding
-                if( !maskRegExp.cap(2).isEmpty() )
+                if (!maskRegExp.cap(2).isEmpty())
                 {
                     paddingChar = maskRegExp.cap(2).at(0); // caràcter de padding
-                    maskedString = maskedString.rightJustified( truncate, paddingChar );
+                    maskedString = maskedString.rightJustified(truncate, paddingChar);
                 }
                 // Substituim el valor a parsejar i la màscara
-                parsedString.replace( keyIndex, capturedKey.size()+capturedMask.size(), maskedString );
+                parsedString.replace(keyIndex, capturedKey.size() + capturedMask.size(), maskedString);
             }
             else
             {
@@ -82,7 +82,7 @@ QString SettingsParser::parse( const QString &stringToParse )
         }
         else // altrament, substituim únicament la clau
         {
-            parsedString.replace( keyIndex, capturedKey.size(), m_parseableStringsTable.value( keyToReplace ) );
+            parsedString.replace(keyIndex, capturedKey.size(), m_parseableStringsTable.value(keyToReplace));
         }
     }
 
@@ -94,7 +94,7 @@ void SettingsParser::initializeParseableStringsTable()
     // omplim els valors de les diferents paraules clau
     QString localHostName = QHostInfo::localHostName();
     m_parseableStringsTable["HOSTNAME"] = localHostName;
-    
+
     // obtenció de la ip
     QStringList ipV4Addresses = getLocalHostIPv4Addresses();
     QString ip;
@@ -102,9 +102,9 @@ void SettingsParser::initializeParseableStringsTable()
     {
         // Assumim que la primera de la llista és la IP bona
         ip = ipV4Addresses.first();
-        
+
         m_parseableStringsTable["IP"] = ip;
-        
+
         // "partim" els prefixos de la ip
         QStringList ipParts = ip.split(".");
         // Això no hauria de fallar mai ja que la llista d'IPs ha de contenir valors correctament formatats ja que aquests han estat prèviament validats.
@@ -129,16 +129,16 @@ void SettingsParser::initializeParseableStringsTable()
 
     // home path
     m_parseableStringsTable["HOMEPATH"] = QDir::homePath();
-    
+
     // nom d'usuari
     QStringList environmentList = QProcess::systemEnvironment();
     int index = environmentList.indexOf("USERNAME"); // windows
-    if( index != -1 )
+    if (index != -1)
         m_parseableStringsTable["USERNAME"] = environmentList.at(index);
     else
     {
         index = environmentList.indexOf("USER"); // linux, mac
-        if( index != -1 )
+        if (index != -1)
             m_parseableStringsTable["USERNAME"] = environmentList.at(index);
     }
 }
@@ -154,9 +154,9 @@ bool SettingsParser::isIPv4Address(const QString &ipAddress)
 QStringList SettingsParser::getLocalHostIPv4Addresses()
 {
     QStringList ipV4List;
-    
+
     QHostInfo hostInfo = QHostInfo::fromName(QHostInfo::localHostName());
-    // TODO També es podria optar per fer servir QNetworkInterface::allAddresses(), tot i que ens retorna l'adreça 127.0.0.1 a més a més, 
+    // TODO També es podria optar per fer servir QNetworkInterface::allAddresses(), tot i que ens retorna l'adreça 127.0.0.1 a més a més,
     // en comptes de fer servir hostInfo.addresses()
     foreach (QHostAddress ip, hostInfo.addresses())
     {
@@ -171,7 +171,7 @@ QStringList SettingsParser::getLocalHostIPv4Addresses()
             DEBUG_LOG(ipString + " -> NO és una adreça IPv4 vàlida");
         }
     }
-    
+
     return ipV4List;
 }
 

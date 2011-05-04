@@ -27,7 +27,7 @@ class PreviousStudiesManager;
 class HangingProtocolManager : public QObject {
 Q_OBJECT
 public:
-    
+
     HangingProtocolManager(QObject *parent = 0);
     ~HangingProtocolManager();
 
@@ -70,7 +70,7 @@ private:
     bool isValidSerie(Series *serie, HangingProtocolImageSet *imageSet);
 
     /// Ordena els estudis per data per tal que els hanging protocols els tingui ordenats.
-    QList<Study *> sortStudiesByDate( const QList<Study *> &studies );
+    QList<Study *> sortStudiesByDate(const QList<Study *> &studies);
 
     /// Mètode encarregat d'assignar l'input al viewer a partir de les especificacions del displaySet+imageSet.
     void setInputToViewer(Q2DViewerWidget *viewerWidget, Series *series, HangingProtocolDisplaySet *displaySet);
@@ -78,13 +78,13 @@ private:
     /// Buscar els estudis previs
     Study* searchPreviousStudy(HangingProtocol *protocol, Study *referenceStudy, const QList<Study *> &previousStudies);
 
-    /// Assigna una sèrie (i una imatge) vàlida a cada ImageSet. Retorna el número d'ImageSets que tenen input assignat. 
+    /// Assigna una sèrie (i una imatge) vàlida a cada ImageSet. Retorna el número d'ImageSets que tenen input assignat.
     int setInputToHangingProtocolImageSets(HangingProtocol *hangingProtocol, const QList<Series *> &inputSeries, const QList<Study *> &previousStudies, const QHash<QString, QString> &originOfPreviousStudies);
 
     /// Fa una còpia del repositori de HP per poder-los modificar sense que el repositori es vegi afectat.
     void copyHangingProtocolRepository();
 
-    /// Busca la imatge número index dins tots els estudis de la modalitat del hanging protocol 
+    /// Busca la imatge número index dins tots els estudis de la modalitat del hanging protocol
     Image* getImageByIndexInPatientModality(Patient *patient, int index, QList<QString> hangingProtocolModalities);
 
 private:

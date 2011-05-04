@@ -17,24 +17,24 @@
 
 namespace udg {
 
-EditorTool::EditorTool( QViewer *viewer, QObject *parent )
- : Tool(viewer,parent), m_volumeCont(0), m_insideValue(255), m_outsideValue(0), m_isLeftButtonPressed(false)
+EditorTool::EditorTool(QViewer *viewer, QObject *parent)
+ : Tool(viewer, parent), m_volumeCont(0), m_insideValue(255), m_outsideValue(0), m_isLeftButtonPressed(false)
 {
     m_editorState = Paint;
-    m_editorSize  = 3;
+    m_editorSize = 3;
     m_toolName = "EditorTool";
     m_squareActor = vtkActor::New();
     m_myData = new EditorToolData;
 
     m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
     // ens assegurem que desde la creació tenim un viewer vàlid
-    Q_ASSERT( m_2DViewer );
+    Q_ASSERT(m_2DViewer);
 
-    m_2DViewer->setCursor( QCursor( QPixmap(":/images/pencilcursor.png") ) );
+    m_2DViewer->setCursor(QCursor(QPixmap(":/images/pencilcursor.png")));
     this->initialize();
 
     // \TODO:cada cop que canvïi l'input a l'overlay cal fer algunes inicialitzacions
-    connect( m_2DViewer, SIGNAL(overlayChanged() ), SLOT( initialize() ) );
+    connect(m_2DViewer, SIGNAL(overlayChanged()), SLOT(initialize()));
 }
 
 EditorTool::~EditorTool()
@@ -45,30 +45,30 @@ EditorTool::~EditorTool()
 
 void EditorTool::initialize()
 {
-    if(m_2DViewer->getOverlayInput()!=0)
+    if (m_2DViewer->getOverlayInput()!=0)
     {
         double range[2];
         m_2DViewer->getOverlayInput()->getScalarRange(range);
 
         m_outsideValue = (int)range[0];
-		if((int)range[0]!=(int)range[1])
-		{
-			m_insideValue  = (int)range[1];
-		}else{
-			//en cas que siguin iguals
-			m_insideValue  = (int)(range[0] + m_2DViewer->getCurrentColorWindow());
-		}
+        if ((int)range[0]!=(int)range[1])
+        {
+            m_insideValue = (int)range[1];
+        }else{
+            //en cas que siguin iguals
+            m_insideValue = (int)(range[0] + m_2DViewer->getCurrentColorWindow());
+        }
         int ext[6];
-        int i,j,k;
+        int i, j, k;
         m_volumeCont = 0;
         m_2DViewer->getOverlayInput()->getWholeExtent(ext);
-    
+
         Volume::VoxelType *value = m_2DViewer->getOverlayInput()->getScalarPointer();
-        for(i=ext[0];i<=ext[1];i++)
+        for (i = ext[0]; i <= ext[1]; i++)
         {
-            for(j=ext[2];j<=ext[3];j++)
+            for (j = ext[2]; j <= ext[3]; j++)
             {
-                for(k=ext[4];k<=ext[5];k++)
+                for (k = ext[4]; k <= ext[5]; k++)
                 {
                     if ((*value) == m_insideValue)
                     {
@@ -82,20 +82,20 @@ void EditorTool::initialize()
     }
 }
 
-void EditorTool::handleEvent( unsigned long eventID )
+void EditorTool::handleEvent(unsigned long eventID)
 {
-    switch( eventID )
+    switch (eventID)
     {
     case vtkCommand::LeftButtonPressEvent:
-        if(m_2DViewer->getOverlayInput()!=0)
+        if (m_2DViewer->getOverlayInput() != 0)
         {
             m_isLeftButtonPressed = true;
-            this->setEditorPoint(  );
+            this->setEditorPoint();
         }
     break;
 
     case vtkCommand::MouseMoveEvent:
-        if(m_2DViewer->getInput()!=0)
+        if (m_2DViewer->getInput() != 0)
         {
             this->setPaintCursor();
         }
@@ -118,7 +118,7 @@ void EditorTool::handleEvent( unsigned long eventID )
         int key = m_viewer->getInteractor()->GetKeyCode();
         // '+' = key code 43
         // '-' = key code 45
-        switch( key )
+        switch (key)
         {
         case 43: // '+'
             this->increaseEditorSize();
@@ -138,28 +138,28 @@ void EditorTool::handleEvent( unsigned long eventID )
 
 void EditorTool::increaseState()
 {
-    switch( m_editorState )
+    switch (m_editorState)
     {
     case Paint:
         m_editorState = Erase;
-        m_2DViewer->setCursor( QCursor( QPixmap(":/images/erasercursor.png") ) );
+        m_2DViewer->setCursor(QCursor(QPixmap(":/images/erasercursor.png")));
     break;
 
     case Erase:
         m_editorState = EraseRegion;
-        m_2DViewer->setCursor( QCursor( QPixmap(":/images/eraseregioncursor.png") ) );
+        m_2DViewer->setCursor(QCursor(QPixmap(":/images/eraseregioncursor.png")));
         m_squareActor->VisibilityOff();
         m_2DViewer->render();
     break;
 
     case EraseRegion:
         m_editorState = EraseSlice;
-        m_2DViewer->setCursor( QCursor( QPixmap(":/images/slicecursor.png") ) );
+        m_2DViewer->setCursor(QCursor(QPixmap(":/images/slicecursor.png")));
     break;
 
     case EraseSlice:
         m_editorState = Paint;
-        m_2DViewer->setCursor( QCursor( QPixmap(":/images/pencilcursor.png") ) );
+        m_2DViewer->setCursor(QCursor(QPixmap(":/images/pencilcursor.png")));
         this->setPaintCursor();
     break;
 
@@ -170,29 +170,29 @@ void EditorTool::increaseState()
 
 void EditorTool::decreaseState()
 {
-    switch( m_editorState )
+    switch (m_editorState)
     {
     case EraseRegion:
         m_editorState = Erase;
-        m_2DViewer->setCursor( QCursor( QPixmap(":/images/erasercursor.png") ) );
+        m_2DViewer->setCursor(QCursor(QPixmap(":/images/erasercursor.png")));
         this->setPaintCursor();
     break;
 
     case EraseSlice:
         m_editorState = EraseRegion;
-        m_2DViewer->setCursor( QCursor( QPixmap(":/images/eraseregioncursor.png") ) );
+        m_2DViewer->setCursor(QCursor(QPixmap(":/images/eraseregioncursor.png")));
     break;
 
     case Paint:
         m_editorState = EraseSlice;
-        m_2DViewer->setCursor( QCursor( QPixmap(":/images/slicecursor.png") ) );
+        m_2DViewer->setCursor(QCursor(QPixmap(":/images/slicecursor.png")));
         m_squareActor->VisibilityOff();
         m_2DViewer->render();
     break;
 
     case Erase:
         m_editorState = Paint;
-        m_2DViewer->setCursor( QCursor( QPixmap(":/images/pencilcursor.png") ) );
+        m_2DViewer->setCursor(QCursor(QPixmap(":/images/pencilcursor.png")));
     break;
 
     default:
@@ -221,14 +221,14 @@ void EditorTool::setEraseRegion()
     m_editorState = EraseRegion;
 }
 
-void EditorTool::setEditorPoint(  )
+void EditorTool::setEditorPoint()
 {
     double pos[3];
-    if(m_editorState != NoEditor)
+    if (m_editorState != NoEditor)
     {
-        if( m_2DViewer->getCurrentCursorImageCoordinate(pos) )
+        if (m_2DViewer->getCurrentCursorImageCoordinate(pos))
         {
-            switch( m_editorState)
+            switch (m_editorState)
             {
                 case Erase:
                 {
@@ -260,13 +260,13 @@ void EditorTool::setEditorPoint(  )
 
 void EditorTool::setPaintCursor()
 {
-    if((m_isLeftButtonPressed)&&(m_2DViewer->getOverlayInput()!=0))
+    if ((m_isLeftButtonPressed) && (m_2DViewer->getOverlayInput() != 0))
     {
         setEditorPoint();
     }
-  
+
     double pos[3];
-    if((m_editorState == Erase || m_editorState == Paint)&& m_2DViewer->getCurrentCursorImageCoordinate(pos) )
+    if ((m_editorState == Erase || m_editorState == Paint) && m_2DViewer->getCurrentCursorImageCoordinate(pos))
     {
         int size = m_editorSize;
         vtkPoints *points = vtkPoints::New();
@@ -275,41 +275,41 @@ void EditorTool::setPaintCursor()
         double spacing[3];
         m_2DViewer->getInput()->getSpacing(spacing);
         double sizeView[2];
-        sizeView[0]=(double)(size+0.5)*spacing[0];
-        sizeView[1]=(double)(size+0.5)*spacing[1];
-  
-        points->SetPoint(0, pos[0] - sizeView[0], pos[1] - sizeView[1], pos[2]-1);
-        points->SetPoint(1, pos[0] + sizeView[0], pos[1] - sizeView[1], pos[2]-1);
-        points->SetPoint(2, pos[0] + sizeView[0], pos[1] + sizeView[1], pos[2]-1);
-        points->SetPoint(3, pos[0] - sizeView[0], pos[1] + sizeView[1], pos[2]-1);
+        sizeView[0]=(double)(size + 0.5) * spacing[0];
+        sizeView[1]=(double)(size + 0.5) * spacing[1];
+
+        points->SetPoint(0, pos[0] - sizeView[0], pos[1] - sizeView[1], pos[2] - 1);
+        points->SetPoint(1, pos[0] + sizeView[0], pos[1] - sizeView[1], pos[2] - 1);
+        points->SetPoint(2, pos[0] + sizeView[0], pos[1] + sizeView[1], pos[2] - 1);
+        points->SetPoint(3, pos[0] - sizeView[0], pos[1] + sizeView[1], pos[2] - 1);
 
         vtkIdType pointIds[4];
         pointIds[0] = 0;
         pointIds[1] = 1;
         pointIds[2] = 2;
         pointIds[3] = 3;
-  
-        vtkUnstructuredGrid*    grid = vtkUnstructuredGrid::New();
+
+        vtkUnstructuredGrid* grid = vtkUnstructuredGrid::New();
 
         grid->Allocate(1);
         grid->SetPoints(points);
-  
-        grid->InsertNextCell(VTK_QUAD,4,pointIds);
-  
-        m_squareActor -> GetProperty()->SetColor(0.15, 0.83, 0.26);
-        m_squareActor -> GetProperty()->SetOpacity(0.2);
-  
+
+        grid->InsertNextCell(VTK_QUAD, 4, pointIds);
+
+        m_squareActor->GetProperty()->SetColor(0.15, 0.83, 0.26);
+        m_squareActor->GetProperty()->SetOpacity(0.2);
+
         vtkDataSetMapper *squareMapper = vtkDataSetMapper::New();
-        squareMapper->SetInput( grid );
-  
-        m_squareActor->SetMapper( squareMapper );
-  
+        squareMapper->SetInput(grid);
+
+        m_squareActor->SetMapper(squareMapper);
+
         m_squareActor->VisibilityOn();
-  
-        m_2DViewer->getRenderer()->AddViewProp( m_squareActor );
+
+        m_2DViewer->getRenderer()->AddViewProp(m_squareActor);
         m_2DViewer->getRenderer()->ResetCameraClippingRange();
         m_2DViewer->render();
-  
+
         squareMapper->Delete();
         points->Delete();
         grid->Delete();
@@ -322,8 +322,8 @@ void EditorTool::setPaintCursor()
 
 void EditorTool::eraseMask()
 {
-    int i,j;
-	Volume::VoxelType *value;
+    int i, j;
+    Volume::VoxelType *value;
     double pos[3];
     double origin[3];
     double spacing[3];
@@ -332,18 +332,18 @@ void EditorTool::eraseMask()
     m_2DViewer->getCurrentCursorImageCoordinate(pos);
     m_2DViewer->getInput()->getSpacing(spacing);
     m_2DViewer->getInput()->getOrigin(origin);
-    centralIndex[0]=(int)((((double)pos[0]-origin[0])/spacing[0])+0.5);
-    centralIndex[1]=(int)((((double)pos[1]-origin[1])/spacing[1])+0.5);
-    index[2]=m_2DViewer->getCurrentSlice();
+    centralIndex[0] = (int)((((double)pos[0] - origin[0]) / spacing[0]) + 0.5);
+    centralIndex[1] = (int)((((double)pos[1] - origin[1]) / spacing[1]) + 0.5);
+    index[2] = m_2DViewer->getCurrentSlice();
 
-    for(i=-m_editorSize;i<=m_editorSize;i++)
+    for (i = -m_editorSize; i <= m_editorSize;i++)
     {
-        for(j=-m_editorSize;j<=m_editorSize;j++)
+        for (j = -m_editorSize; j <= m_editorSize; j++)
         {
-            index[0]=centralIndex[0]+i;
-            index[1]=centralIndex[1]+j;
+            index[0] = centralIndex[0] + i;
+            index[1] = centralIndex[1] + j;
             value = m_2DViewer->getOverlayInput()->getScalarPointer(index);
-            if(value && ( (*value) == m_insideValue) )
+            if (value && ((*value) == m_insideValue))
             {
                 (*value) = m_outsideValue;
                 m_volumeCont--;
@@ -354,8 +354,8 @@ void EditorTool::eraseMask()
 
 void EditorTool::paintMask()
 {
-    //DEBUG_LOG( QString( "Màxim = %1 // Mínim = %2" ).arg( m_outsideValue ).arg( m_insideValue ) );
-    int i,j;
+    //DEBUG_LOG(QString("Màxim = %1 // Mínim = %2").arg(m_outsideValue).arg(m_insideValue));
+    int i, j;
     Volume::VoxelType *value;
     double pos[3];
     double origin[3];
@@ -365,17 +365,17 @@ void EditorTool::paintMask()
     m_2DViewer->getCurrentCursorImageCoordinate(pos);
     m_2DViewer->getInput()->getSpacing(spacing);
     m_2DViewer->getInput()->getOrigin(origin);
-    centralIndex[0]=(int)((((double)pos[0]-origin[0])/spacing[0])+0.5);
-    centralIndex[1]=(int)((((double)pos[1]-origin[1])/spacing[1])+0.5);
-    index[2]=m_2DViewer->getCurrentSlice();
-    for(i=-m_editorSize;i<=m_editorSize;i++)
+    centralIndex[0] = (int)((((double)pos[0] - origin[0]) / spacing[0]) + 0.5);
+    centralIndex[1] = (int)((((double)pos[1] - origin[1]) / spacing[1]) + 0.5);
+    index[2] = m_2DViewer->getCurrentSlice();
+    for (i = -m_editorSize; i <= m_editorSize; i++)
     {
-        for(j=-m_editorSize;j<=m_editorSize;j++)
+        for (j = -m_editorSize; j <= m_editorSize; j++)
         {
-            index[0]=centralIndex[0]+i;
-            index[1]=centralIndex[1]+j;
+            index[0] = centralIndex[0] + i;
+            index[1] = centralIndex[1] + j;
             value = m_2DViewer->getOverlayInput()->getScalarPointer(index);
-            if(value && ((*value) != m_insideValue) )
+            if (value && ((*value) != m_insideValue))
             {
                 (*value) = m_insideValue;
                 m_volumeCont++;
@@ -386,20 +386,20 @@ void EditorTool::paintMask()
 
 void EditorTool::eraseSliceMask()
 {
-    int i,j;
+    int i, j;
     Volume::VoxelType *value;
     int index[3];
     int ext[6];
     m_2DViewer->getInput()->getWholeExtent(ext);
-    index[2]=m_2DViewer->getCurrentSlice();
-    for(i=ext[0];i<=ext[1];i++)
+    index[2] = m_2DViewer->getCurrentSlice();
+    for (i = ext[0]; i <= ext[1]; i++)
     {
-        for(j=ext[2];j<=ext[3];j++)
+        for (j = ext[2]; j <= ext[3]; j++)
         {
-            index[0]=i;
-            index[1]=j;
+            index[0] = i;
+            index[1] = j;
             value = m_2DViewer->getOverlayInput()->getScalarPointer(index);
-            if((*value) == m_insideValue)
+            if ((*value) == m_insideValue)
             {
                 (*value) = m_outsideValue;
                 m_volumeCont--;
@@ -419,27 +419,27 @@ void EditorTool::eraseRegionMask()
     m_2DViewer->getCurrentCursorImageCoordinate(pos);
     m_2DViewer->getInput()->getSpacing(spacing);
     m_2DViewer->getInput()->getOrigin(origin);
-    index[0]=(int)((((double)pos[0]-origin[0])/spacing[0])+0.5);
-    index[1]=(int)((((double)pos[1]-origin[1])/spacing[1])+0.5);
-    index[2]=m_2DViewer->getCurrentSlice();
-    eraseRegionMaskRecursive(index[0],index[1],index[2]);
+    index[0] = (int)((((double)pos[0] - origin[0]) / spacing[0]) + 0.5);
+    index[1] = (int)((((double)pos[1] - origin[1]) / spacing[1]) + 0.5);
+    index[2] = m_2DViewer->getCurrentSlice();
+    eraseRegionMaskRecursive(index[0], index[1], index[2]);
 }
 
 void EditorTool::eraseRegionMaskRecursive(int a, int b, int c)
 {
     int ext[6];
     m_2DViewer->getInput()->getWholeExtent(ext);
-    if((a>=ext[0])&&(a<=ext[1])&&(b>=ext[2])&&(b<=ext[3])&&(c>=ext[4])&&(c<=ext[5]))
+    if ((a >= ext[0]) && (a <= ext[1]) && (b >= ext[2]) && (b <= ext[3]) && (c >= ext[4]) && (c <= ext[5]))
     {
-        Volume::VoxelType *value = m_2DViewer->getOverlayInput()->getScalarPointer(a,b,c);
+        Volume::VoxelType *value = m_2DViewer->getOverlayInput()->getScalarPointer(a, b, c);
         if ((*value) == m_insideValue)
         {
-            (*value)= m_outsideValue;
+            (*value) = m_outsideValue;
             m_volumeCont--;
-            eraseRegionMaskRecursive( a+1, b, c);
-            eraseRegionMaskRecursive( a-1, b, c);
-            eraseRegionMaskRecursive( a, b+1, c);
-            eraseRegionMaskRecursive( a, b-1, c);
+            eraseRegionMaskRecursive(a + 1, b, c);
+            eraseRegionMaskRecursive(a - 1, b, c);
+            eraseRegionMaskRecursive(a, b + 1, c);
+            eraseRegionMaskRecursive(a, b - 1, c);
         }
     }
 }
@@ -452,7 +452,7 @@ void EditorTool::increaseEditorSize()
 
 void EditorTool::decreaseEditorSize()
 {
-    if(m_editorSize > 0)
+    if (m_editorSize > 0)
     {
         m_editorSize--;
         this->setPaintCursor();
@@ -465,4 +465,3 @@ ToolData *EditorTool::getToolData() const
 }
 
 }
-

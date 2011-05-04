@@ -16,7 +16,7 @@ class ToolRepresentation : public QObject
 {
 Q_OBJECT
 public:
-    ToolRepresentation( Drawer *drawer, QObject *parent = 0 );
+    ToolRepresentation(Drawer *drawer, QObject *parent = 0);
     ~ToolRepresentation();
 
     /**

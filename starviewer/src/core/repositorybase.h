@@ -5,7 +5,7 @@
 
 namespace udg {
 
-class RepositoryBase  : public QObject{
+class RepositoryBase : public QObject {
 Q_OBJECT
 public:
     RepositoryBase(QObject *parent = 0);

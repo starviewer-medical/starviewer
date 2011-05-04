@@ -12,10 +12,10 @@ QCINEController::QCINEController(QWidget *parent)
 {
     setupUi(this);
 
-    m_playToolButton->setPopupMode( QToolButton::MenuButtonPopup );
+    m_playToolButton->setPopupMode(QToolButton::MenuButtonPopup);
 
     QMenu *menu = new QMenu;
-    
+
     QWidgetAction *velocityWidgetAction = new QWidgetAction(this);
     velocityWidgetAction->setDefaultWidget(m_velocityControl);
     menu->addAction(velocityWidgetAction);
@@ -39,41 +39,41 @@ QCINEController::~QCINEController()
 {
 }
 
-void QCINEController::setQViewer( QViewer *viewer )
+void QCINEController::setQViewer(QViewer *viewer)
 {
-    if( !m_cineController )
+    if (!m_cineController)
     {
         m_cineController = new QViewerCINEController(this);
 
-        connect( m_loopCheckBox, SIGNAL( toggled(bool) ), m_cineController ,SLOT( enableLoop(bool) ) );
-        connect( m_boomerangCheckBox, SIGNAL( toggled(bool) ), m_cineController, SLOT( enableBoomerang(bool) ) );
-        connect( m_loopCheckBox, SIGNAL( toggled(bool) ), m_boomerangCheckBox, SLOT( setEnabled(bool) ) );
+        connect(m_loopCheckBox, SIGNAL(toggled(bool)), m_cineController, SLOT(enableLoop(bool)));
+        connect(m_boomerangCheckBox, SIGNAL(toggled(bool)), m_cineController, SLOT(enableBoomerang(bool)));
+        connect(m_loopCheckBox, SIGNAL(toggled(bool)), m_boomerangCheckBox, SLOT(setEnabled(bool)));
 
-        m_playToolButton->setDefaultAction( m_cineController->getPlayAction() );
+        m_playToolButton->setDefaultAction(m_cineController->getPlayAction());
 
-        connect( m_velocityControl, SIGNAL( valueChanged(int) ), m_cineController, SLOT( setVelocity(int) ) );
-        connect( m_cineController, SIGNAL( velocityChanged(int) ), SLOT( updateVelocityLabel(int) ) );
-        connect( m_cineController, SIGNAL( velocityChanged(int) ), m_velocityControl, SLOT( setValue(int) ) );
-        m_cineController->setInputViewer( viewer );
-        m_cineController->enableLoop( m_loopCheckBox->isChecked() );
-        m_cineController->enableBoomerang( m_boomerangCheckBox->isChecked() );
+        connect(m_velocityControl, SIGNAL(valueChanged(int)), m_cineController, SLOT(setVelocity(int)));
+        connect(m_cineController, SIGNAL(velocityChanged(int)), SLOT(updateVelocityLabel(int)));
+        connect(m_cineController, SIGNAL(velocityChanged(int)), m_velocityControl, SLOT(setValue(int)));
+        m_cineController->setInputViewer(viewer);
+        m_cineController->enableLoop(m_loopCheckBox->isChecked());
+        m_cineController->enableBoomerang(m_boomerangCheckBox->isChecked());
     }
     else
-        m_cineController->setInputViewer( viewer );
-    
+        m_cineController->setInputViewer(viewer);
+
     m_loopCheckBox->setChecked(true);
 }
 
-void QCINEController::updateVelocityLabel( int value )
+void QCINEController::updateVelocityLabel(int value)
 {
-    m_velocityLabel->setText( tr("%1 img/s").arg( value ) );
+    m_velocityLabel->setText(tr("%1 img/s").arg(value));
 }
 
-void QCINEController::updateLoopStatus( bool enabled )
+void QCINEController::updateLoopStatus(bool enabled)
 {
-    m_boomerangCheckBox->setEnabled( enabled );
-    m_cineController->enableLoop( enabled );
-    m_cineController->enableBoomerang( m_boomerangCheckBox->isChecked() );
+    m_boomerangCheckBox->setEnabled(enabled);
+    m_cineController->enableLoop(enabled);
+    m_cineController->enableBoomerang(m_boomerangCheckBox->isChecked());
 }
 
 }

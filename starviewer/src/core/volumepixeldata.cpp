@@ -62,7 +62,7 @@ void VolumePixelData::setData(vtkImageData *vtkImage)
 
 VolumePixelData::VoxelType* VolumePixelData::getScalarPointer(int x, int y, int z)
 {
-    return static_cast<VolumePixelData::VoxelType *>(this->getVtkData()->GetScalarPointer(x,y,z));
+    return static_cast<VolumePixelData::VoxelType *>(this->getVtkData()->GetScalarPointer(x, y, z));
 }
 
 bool VolumePixelData::computeCoordinateIndex(const double coordinate[3], int index[3])
@@ -77,11 +77,11 @@ bool VolumePixelData::computeCoordinateIndex(const double coordinate[3], int ind
     double *spacing = this->getVtkData()->GetSpacing();
     int *extent = this->getVtkData()->GetExtent();
     bool inside = true;
-    
+
     for (int i = 0; i < 3; i++)
     {
         index[i] = qRound((coordinate[i] - origin[i]) / spacing[i]);
-        inside = inside && index[i] >= extent[2*i] && index[i] <= extent[2*i+1];    // TODO És sempre correcte això?
+        inside = inside && index[i] >= extent[2 * i] && index[i] <= extent[2 * i + 1];    // TODO És sempre correcte això?
     }
 
     return inside;
@@ -140,7 +140,7 @@ void VolumePixelData::convertToNeutralPixelData()
         value = 150 - i * 20;
         if (i > 4)
         {
-            value = 150 - (10 - i - 1)*20;
+            value = 150 - (10 - i - 1) * 20;
         }
 
         for (int j = 0; j < 10; j++)

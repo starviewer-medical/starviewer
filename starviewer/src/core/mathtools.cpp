@@ -43,7 +43,7 @@ double MathTools::logTwo(const double x, const bool zero)
 
 double MathTools::angleInRadians(double vec1[3], double vec2[3])
 {
-    return acos(MathTools::dotProduct(vec1,vec2) / (vtkMath::Norm(vec1)*vtkMath::Norm(vec2)));
+    return acos(MathTools::dotProduct(vec1, vec2) / (vtkMath::Norm(vec1)*vtkMath::Norm(vec2)));
 }
 
 double MathTools::angleInDegrees(double vec1[3], double vec2[3])
@@ -81,7 +81,7 @@ int MathTools::planeIntersection(double p[3], double n[3], double q[3], double m
     double pq[3], sum[3], pqDotm, dot_u_m;
 
     pq[0] = q[0] - p[0];
-    pq[1] = q[1] - p[1] ;
+    pq[1] = q[1] - p[1];
     pq[2] = q[2] - p[2];
 
     pqDotm = MathTools::dotProduct(pq, m);
@@ -125,7 +125,7 @@ int MathTools::planeIntersection(double p[3], double n[3], double q[3], double m
     point2[2] = point[2] + vector[2];
 
     // Li donem una recta definida per dos punts, i el pla definit per la normal i un punt. T és la coordenada paramètrica al llarg de la recta i el punt de la intersecció queda a intersectPoint
-    if (vtkPlane::IntersectWithLine(point, point2, t, r,  tt, intersectionPoint) == 0)
+    if (vtkPlane::IntersectWithLine(point, point2, t, r, tt, intersectionPoint) == 0)
     {
         // si retorna 0 és que o bé línia i pla no intersecten o són paralels entre sí
         if (tt == MathTools::DoubleMaximumValue)
@@ -156,7 +156,7 @@ double* MathTools::directorVector(const double point1[3], const double point2[3]
 
 double MathTools::modulus(double vector[3])
 {
-    return sqrt(pow(vector[0],2) + pow(vector[1],2) + pow(vector[2], 2));
+    return sqrt(pow(vector[0], 2) + pow(vector[1], 2) + pow(vector[2], 2));
 }
 
 double MathTools::dotProduct(double vector1[3], double vector2[3])
@@ -166,7 +166,7 @@ double MathTools::dotProduct(double vector1[3], double vector2[3])
 
 void MathTools::crossProduct(double vectorDirector1[3], double vectorDirector2[3], double crossProductVector[3])
 {
-    crossProductVector[0] = vectorDirector1[1] * vectorDirector2[2] - vectorDirector1[2] * vectorDirector2[1]; 
+    crossProductVector[0] = vectorDirector1[1] * vectorDirector2[2] - vectorDirector1[2] * vectorDirector2[1];
     crossProductVector[1] = vectorDirector1[2] * vectorDirector2[0] - vectorDirector1[0] * vectorDirector2[2];
     crossProductVector[2] = vectorDirector1[0] * vectorDirector2[1] - vectorDirector1[1] * vectorDirector2[0];
 }
@@ -240,7 +240,7 @@ double MathTools::getPointToFiniteLineDistance(double point[3], double lineFirst
 
 double* MathTools::infiniteLinesIntersection(double *p1, double *p2, double *p3, double *p4, int &state)
 {
-    /** 
+    /**
      *  Solution by Wolfram Mathematics
      *
      *   http://mathworld.wolfram.com/Line-LineIntersection.html
@@ -273,26 +273,26 @@ double* MathTools::infiniteLinesIntersection(double *p1, double *p2, double *p3,
 
     // Coplanarity test
     double cross[3];
-    MathTools::crossProduct(dv1,dv2,cross);
+    MathTools::crossProduct(dv1, dv2, cross);
 
     double dot = MathTools::dotProduct(dv1, cross);
 
     // Coplanarity check
-    if (MathTools::closeEnough(dot,0.0))
+    if (MathTools::closeEnough(dot, 0.0))
     {
         double numerator1[3], numerator2[3], denominator1[3];
         double numerator, denominator;
 
-        MathTools::crossProduct(dv3,dv2,numerator1);
-        MathTools::crossProduct(dv1,dv2,numerator2);
+        MathTools::crossProduct(dv3, dv2, numerator1);
+        MathTools::crossProduct(dv1, dv2, numerator2);
 
-        numerator = MathTools::dotProduct(numerator1,numerator2);
+        numerator = MathTools::dotProduct(numerator1, numerator2);
 
-        MathTools::crossProduct(dv1,dv2,denominator1);
+        MathTools::crossProduct(dv1, dv2, denominator1);
 
-        denominator = pow(MathTools::modulus(denominator1),2);
+        denominator = pow(MathTools::modulus(denominator1), 2);
 
-        if (MathTools::closeEnough(denominator,0.0))
+        if (MathTools::closeEnough(denominator, 0.0))
         {
             state = ParallelLines;
             return intersection;

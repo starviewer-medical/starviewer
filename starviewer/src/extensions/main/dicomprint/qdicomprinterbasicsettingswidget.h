@@ -9,7 +9,7 @@
 namespace udg {
 
 ///Classe que mostra i permet especificar els paràmetres bàsics de configuració d'una impressora dicom;
-class QDicomPrinterBasicSettingsWidget : public QWidget , private::Ui::QDicomPrinterBasicSettingsWidgetBase {
+class QDicomPrinterBasicSettingsWidget : public QWidget, private::Ui::QDicomPrinterBasicSettingsWidgetBase {
 Q_OBJECT
 
 public:
@@ -24,7 +24,7 @@ public:
 
 signals:
 
-    ///signal que s'emet quan es canvia algun dels settings d'una impressora 
+    ///signal que s'emet quan es canvia algun dels settings d'una impressora
     void basicDicomPrinterSettingChanged();
 
 private slots:
@@ -36,7 +36,7 @@ private :
 
     void createConnections();
 
-    ///Emplena DicomPrinter amb  les dades del GroupBox Film Settings
+    ///Emplena DicomPrinter amb les dades del GroupBox Film Settings
     void getFilmSettings(DicomPrinter &dicomPrinter);
 
     ///Emplena DicomPrinter amb les dades del GroupBox Print Settings

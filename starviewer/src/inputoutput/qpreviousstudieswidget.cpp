@@ -128,7 +128,7 @@ void QPreviousStudiesWidget::initializeTree()
 
     // Inicialitzem la capçalera
     QStringList labels;
-    labels << "" <<  "" << tr("Modality") << tr("Description") << tr("Date") << tr("Name");
+    labels << "" << "" << tr("Modality") << tr("Description") << tr("Date") << tr("Name");
     m_previousStudiesTree->setHeaderLabels(labels);
 
     // Fem 8 columnes perquè la primera l'amagarem
@@ -217,7 +217,7 @@ void QPreviousStudiesWidget::insertStudiesToTree(QList<Study*> studiesList, QHas
 {
     if (studiesList.size() > 0)
     {
-        foreach(Study *study, studiesList)
+        foreach (Study *study, studiesList)
         {
             insertStudyToTree(study, hashPacsIDOfStudyInstanceUID[study->getInstanceUID()]);
         }

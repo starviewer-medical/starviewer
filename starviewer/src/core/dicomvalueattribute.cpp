@@ -63,7 +63,6 @@ void DICOMValueAttribute::setValue(const QByteArray &value)
     setValueRepresentation(DICOMValueAttribute::ByteArray);
 }
 
-
 void DICOMValueAttribute::setValue(const QDate &value)
 {
     m_value = value.toString("yyyyMMdd");
@@ -115,7 +114,6 @@ QTime DICOMValueAttribute::getValueAsTime()
 {
     return m_value.toTime();
 }
-
 
 DICOMValueAttribute::ValueRepresentation DICOMValueAttribute::getValueRepresentation()
 {

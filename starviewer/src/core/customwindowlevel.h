@@ -11,7 +11,7 @@ namespace udg {
 
 class CustomWindowLevel {
 
-public:    
+public:
     CustomWindowLevel();
 
     ~CustomWindowLevel();
@@ -30,7 +30,7 @@ public:
     /// Mètode que retorna el level del custom window level
     double getLevel() const;
 
-private:    
+private:
     QString m_name;
     double m_width;
     double m_level;

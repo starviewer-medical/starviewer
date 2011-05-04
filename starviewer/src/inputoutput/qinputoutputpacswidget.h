@@ -25,7 +25,7 @@ class PacsManager;
 class PACSJob;
 class QueryPacsJob;
 
-/** 
+/**
  * Widget en el que controla les operacions d'entrada/sortida del PACS
  */
 class QInputOutputPacsWidget : public QWidget, private Ui::QInputOutputPacsWidgetBase
@@ -33,8 +33,8 @@ class QInputOutputPacsWidget : public QWidget, private Ui::QInputOutputPacsWidge
 Q_OBJECT
 public:
     /// Definició d'accions que podem fer d'haver descarregat estudis
-    enum ActionsAfterRetrieve{ None = 0, View = 1, Load = 2};
-    
+    enum ActionsAfterRetrieve { None = 0, View = 1, Load = 2 };
+
     /// Constructor de la classe
     QInputOutputPacsWidget(QWidget *parent = 0);
     ~QInputOutputPacsWidget();
@@ -57,7 +57,7 @@ signals:
 
     ///Signal que s'emet per indicar que s'ha demanat visualitzar un estudi
     void viewRetrievedStudy(QString studyInstanceUID);
-    
+
     /// Signal que s'emet per indicar que un cop descarregat l'estudi s'ha de carregar únicament
     void loadRetrievedStudy(QString studyInstanceUID);
 
@@ -80,7 +80,7 @@ private:
     void createContextMenuQStudyTreeWidget();
 
     /**Comprova que els paràmetres per la cerca siguin correctes, que no es tractir d'un consulta pesada i que ens hagin seleccionat
-     * algun PACS per consultar 
+     * algun PACS per consultar
      */
     bool AreValidQueryParameters(DicomMask *maskToQuery, QList<PacsDevice> pacsToQuery);
 
@@ -113,7 +113,7 @@ private slots:
     /// Importa cap a la base de dades local els estudis seleccionats
     void retrieveSelectedStudies();
 
-    /// Importa cap a la base de dades local els estudis seleccionats indicant 
+    /// Importa cap a la base de dades local els estudis seleccionats indicant
     /// que s'han de visualitzar immediatament un cop descarregats
     void retrieveAndViewSelectedStudies();
 
@@ -140,7 +140,7 @@ private:
     QHash<QString, QString> m_hashPacsIDOfStudyInstanceUID;
     PacsManager *m_pacsManager;
     ///Per cada job de descàrrega guardem quina acció hem de fer quan ha acabat la descàrrega
-    QHash<int,ActionsAfterRetrieve> m_actionsWhenRetrieveJobFinished;
+    QHash<int, ActionsAfterRetrieve> m_actionsWhenRetrieveJobFinished;
 
     ///Hash que ens guarda tots els QueryPACSJob pendent d'executar o que s'estan executant llançats des d'aquesta classe
     QHash<int, QueryPacsJob*> m_queryPACSJobPendingExecuteOrExecuting;

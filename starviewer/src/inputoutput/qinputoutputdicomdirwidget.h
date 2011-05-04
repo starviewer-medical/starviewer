@@ -19,7 +19,7 @@ class DicomMask;
 class Patient;
 class StatsWatcher;
 
-/** 
+/**
  * Widget en el que controla les operacions d'entrada/sortida d'un dicomdir
  */
 class QInputOutputDicomdirWidget : public QWidget, private Ui::QInputOutputDicomdirWidgetBase
@@ -38,7 +38,7 @@ public:
     void clear();
 
 public slots:
-    /// Mostra un diàleg per escollir un arxiu de DICOMDIR i carregar-lo. 
+    /// Mostra un diàleg per escollir un arxiu de DICOMDIR i carregar-lo.
     /// Retorna fals si no s'ha escollit cap arxiu o l'arxiu escollit no és vàlid, cert altrament.
     bool openDicomdir();
 

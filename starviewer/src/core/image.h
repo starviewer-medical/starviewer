@@ -254,7 +254,7 @@ private:
 
     /// Valors de rescalat de la VOI LUT. (0028,1050),(0028,1051) Tipus 1C, present si no hi ha VOI LUT Sequence
     /// Com que podem tenir més d'un tindrem una llista
-    QList< QPair< double, double > > m_windowLevelList;
+    QList<QPair<double, double> > m_windowLevelList;
 
     /// "Explicació" dels window levels, texte descriptiu.(0028,1055) Tipus 3.
     QStringList m_windowLevelExplanationList;

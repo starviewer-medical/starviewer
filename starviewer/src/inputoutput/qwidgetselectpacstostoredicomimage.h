@@ -9,11 +9,11 @@ namespace udg {
 class PacsDevice;
 
 ///
-class QWidgetSelectPacsToStoreDicomImage : public QWidget , private Ui::QWidgetSelectPacsToStoreDicomImageBase {
+class QWidgetSelectPacsToStoreDicomImage : public QWidget, private Ui::QWidgetSelectPacsToStoreDicomImageBase {
 Q_OBJECT
 
 public:
-    
+
     QWidgetSelectPacsToStoreDicomImage(QWidget *parent = 0);
 
     ///Retorna la llista de PACS Seleccionats

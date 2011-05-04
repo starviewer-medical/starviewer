@@ -13,7 +13,7 @@ Q_OBJECT
 
 public:
     /// Constructor de la classe
-    QListenRisRequestsConfigurationScreen( QWidget *parent = 0 );
+    QListenRisRequestsConfigurationScreen(QWidget *parent = 0);
 
     ///Destructor de classe
     ~QListenRisRequestsConfigurationScreen();
@@ -35,7 +35,7 @@ private:
     ///crea els connects dels signals i slots
     void createConnections();
 
-    ///Carrega la configuració actual del RIS 
+    ///Carrega la configuració actual del RIS
     void loadRisConfiguration();
 
     ///Configura la màscara del textbox

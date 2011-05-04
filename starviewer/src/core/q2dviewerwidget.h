@@ -74,8 +74,8 @@ private slots:
 
     /// Assigna el rang i el valor corresponent de l'slider segons l'input del viewer
     void resetSliderRangeAndValue();
-    
-    /// Actualitza el valor de l'etiqueta que ens indica quina 
+
+    /// Actualitza el valor de l'etiqueta que ens indica quina
     /// projecció del pla estem veient
     void updateProjectionLabel();
 

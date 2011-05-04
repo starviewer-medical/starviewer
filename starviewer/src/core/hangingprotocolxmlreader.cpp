@@ -11,7 +11,6 @@
 #include <QList>
 #include <QFileInfoList>
 
-
 namespace udg {
 
 HangingProtocolXMLReader::HangingProtocolXMLReader(QObject *parent)
@@ -150,7 +149,7 @@ HangingProtocolImageSet::Restriction HangingProtocolXMLReader::readRestriction(Q
     return restriction;
 }
 
-HangingProtocolImageSet* HangingProtocolXMLReader::readImageSet(QXmlStreamReader *reader, const QList<HangingProtocolImageSet::Restriction>  &restrictionList)
+HangingProtocolImageSet* HangingProtocolXMLReader::readImageSet(QXmlStreamReader *reader, const QList<HangingProtocolImageSet::Restriction> &restrictionList)
 {
     HangingProtocolImageSet * imageSet = new HangingProtocolImageSet();
     imageSet->setIdentifier(reader->attributes().value("identifier").toString().toInt());

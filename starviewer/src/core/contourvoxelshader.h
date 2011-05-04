@@ -1,19 +1,15 @@
 #ifndef UDGCONTOURVOXELSHADER_H
 #define UDGCONTOURVOXELSHADER_H
 
-
 #include "voxelshader.h"
 
 #include <vtkDirectionEncoder.h>
 
 #include "trilinearinterpolator.h"
 
-
 class vtkEncodedGradientEstimator;
 
-
 namespace udg {
-
 
 /**
  * És un voxel shader que pinta un contorn negre en funció d'un paràmetre.
@@ -26,20 +22,20 @@ public:
     virtual ~ContourVoxelShader();
 
     /// Assigna l'estimador del gradient.
-    void setGradientEstimator( vtkEncodedGradientEstimator *gradientEstimator );
+    void setGradientEstimator(vtkEncodedGradientEstimator *gradientEstimator);
     /// Assigna el llindar a partir del qual s'aplica el contorn.
-    void setThreshold( double threshold );
+    void setThreshold(double threshold);
 
     /// Retorna el color corresponent al vòxel a la posició offset.
-    virtual HdrColor shade( const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor = HdrColor() );
+    virtual HdrColor shade(const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor = HdrColor());
     /// Retorna el color corresponent al vòxel a la posició position, fent servir valors interpolats.
-    virtual HdrColor shade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, float remainingOpacity,
-                            const HdrColor &baseColor = HdrColor() );
+    virtual HdrColor shade(const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, float remainingOpacity,
+                            const HdrColor &baseColor = HdrColor());
     /// Retorna el color corresponent al vòxel a la posició offset.
-    HdrColor nvShade( const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor = HdrColor() );
+    HdrColor nvShade(const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor = HdrColor());
     /// Retorna el color corresponent al vòxel a la posició position, fent servir valors interpolats.
-    HdrColor nvShade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, float remainingOpacity,
-                      const HdrColor &baseColor = HdrColor() );
+    HdrColor nvShade(const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, float remainingOpacity,
+                      const HdrColor &baseColor = HdrColor());
     /// Retorna un string representatiu del voxel shader.
     virtual QString toString() const;
 
@@ -51,73 +47,67 @@ protected:
 
 };
 
-
-inline HdrColor ContourVoxelShader::shade( const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor )
+inline HdrColor ContourVoxelShader::shade(const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor)
 {
-    return nvShade( position, offset, direction, remainingOpacity, baseColor );
+    return nvShade(position, offset, direction, remainingOpacity, baseColor);
 }
 
-
-inline HdrColor ContourVoxelShader::shade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, float remainingOpacity,
-                                           const HdrColor &baseColor )
+inline HdrColor ContourVoxelShader::shade(const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, float remainingOpacity,
+                                           const HdrColor &baseColor)
 {
-    return nvShade( position, direction, interpolator, remainingOpacity, baseColor );
+    return nvShade(position, direction, interpolator, remainingOpacity, baseColor);
 }
 
-
-inline HdrColor ContourVoxelShader::nvShade( const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor )
+inline HdrColor ContourVoxelShader::nvShade(const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor)
 {
-    Q_UNUSED( position );
-    Q_UNUSED( remainingOpacity );
+    Q_UNUSED(position);
+    Q_UNUSED(remainingOpacity);
 
-    Q_ASSERT( m_encodedNormals );
-    Q_ASSERT( m_directionEncoder );
+    Q_ASSERT(m_encodedNormals);
+    Q_ASSERT(m_directionEncoder);
 
-    if ( baseColor.isTransparent() || baseColor.isBlack() ) return baseColor;
+    if (baseColor.isTransparent() || baseColor.isBlack()) return baseColor;
 
-    float *gradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[offset] );
-    Vector3 normal( gradient[0], gradient[1], gradient[2] );
+    float *gradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[offset]);
+    Vector3 normal(gradient[0], gradient[1], gradient[2]);
     double dotProduct = direction * normal;
-    if ( dotProduct < 0.0 ) dotProduct = -dotProduct;
-    HdrColor black( 0.0, 0.0, 0.0, baseColor.alpha );
+    if (dotProduct < 0.0) dotProduct = -dotProduct;
+    HdrColor black(0.0, 0.0, 0.0, baseColor.alpha);
 
     return dotProduct < m_threshold ? black : baseColor;
 }
 
-
-inline HdrColor ContourVoxelShader::nvShade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator,
-                                             float remainingOpacity, const HdrColor &baseColor )
+inline HdrColor ContourVoxelShader::nvShade(const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator,
+                                             float remainingOpacity, const HdrColor &baseColor)
 {
-    Q_UNUSED( remainingOpacity );
+    Q_UNUSED(remainingOpacity);
 
-    Q_ASSERT( interpolator );
-    Q_ASSERT( m_encodedNormals );
-    Q_ASSERT( m_directionEncoder );
+    Q_ASSERT(interpolator);
+    Q_ASSERT(m_encodedNormals);
+    Q_ASSERT(m_directionEncoder);
 
-    if ( baseColor.isTransparent() || baseColor.isBlack() ) return baseColor;
+    if (baseColor.isTransparent() || baseColor.isBlack()) return baseColor;
 
     int offsets[8];
     double weights[8];
-    interpolator->getOffsetsAndWeights( position, offsets, weights );
+    interpolator->getOffsetsAndWeights(position, offsets, weights);
 
     Vector3 normal;
 
-    for ( int i = 0; i < 8; i++ )
+    for (int i = 0; i < 8; i++)
     {
-        float *gradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[offsets[i]] );
-        Vector3 localNormal( gradient[0], gradient[1], gradient[2] );
+        float *gradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[offsets[i]]);
+        Vector3 localNormal(gradient[0], gradient[1], gradient[2]);
         normal += weights[i] * localNormal;
     }
 
     double dotProduct = direction * normal;
-    if ( dotProduct < 0.0 ) dotProduct = -dotProduct;
-    HdrColor black( 0.0, 0.0, 0.0, baseColor.alpha );
+    if (dotProduct < 0.0) dotProduct = -dotProduct;
+    HdrColor black(0.0, 0.0, 0.0, baseColor.alpha);
 
     return dotProduct < m_threshold ? black : baseColor;
 }
 
-
 }
-
 
 #endif

@@ -26,7 +26,7 @@ public:
     };
 
     /// Identificador de l'Image Set
-    void setIdentifier( int identifier );
+    void setIdentifier(int identifier);
 
     /// Obtenir l'identificador de l'Image Set
     int getIdentifier() const;
@@ -35,10 +35,10 @@ public:
     void setHangingProtocol(HangingProtocol *hangingProtocol);
 
     /// Obtenir el hanging protocol al que pertany
-    HangingProtocol* getHangingProtocol() const ;
+    HangingProtocol* getHangingProtocol() const;
 
     /// Afegir una restricció
-    void addRestriction( Restriction restriction );
+    void addRestriction(Restriction restriction);
 
     /// Assignar la llista de restriccions
     void setRestrictions(const QList<Restriction> &restrictions);
@@ -47,19 +47,19 @@ public:
     QList<Restriction> getRestrictions() const;
 
     /// Posar el tipus d'element
-    void setTypeOfItem( QString );
-    	
+    void setTypeOfItem(QString);
+
     /// Obtenir el tipus d'element
     QString getTypeOfItem() const;
 
     /// Posar el número de la imatge a mostrar
-    void setImageToDisplay( int imageNumber );
+    void setImageToDisplay(int imageNumber);
 
     /// Obtenir el número de la imatge a mostrar
     int getImageToDisplay() const;
 
     /// Assignar la sèrie que es representa
-    void setSeriesToDisplay( Series * series );
+    void setSeriesToDisplay(Series * series);
 
     /// Obtenir la sèrie que es representa
     Series * getSeriesToDisplay() const;
@@ -68,31 +68,31 @@ public:
     void show();
 
     /// Metode per indicar si es un estudi previ o no
-    void setIsPreviousStudy( bool hasPreviousStudy );
+    void setIsPreviousStudy(bool hasPreviousStudy);
 
     /// Mètode per saber si te previs o no
     bool isPreviousStudy();
 
-	/// Mètode per posar si esta descarregat o no
-	void setDownloaded( bool option );
+    /// Mètode per posar si esta descarregat o no
+    void setDownloaded(bool option);
 
-	/// Mètode per saber si està descarregat o no
-	bool isDownloaded();
+    /// Mètode per saber si està descarregat o no
+    bool isDownloaded();
 
     /// Posa quin és l'estudi previ
-    void setPreviousStudyToDisplay( Study * study );
+    void setPreviousStudyToDisplay(Study * study);
 
     /// Obte l'estudi previ a mostrar. Pot estar descarregat o no.
-	Study * getPreviousStudyToDisplay();
+    Study * getPreviousStudyToDisplay();
 
-	/// Guarda el pacs on es troba l'estudi
-	void setPreviousStudyPacs( QString pacs );
+    /// Guarda el pacs on es troba l'estudi
+    void setPreviousStudyPacs(QString pacs);
 
-	/// Obté el pacs on es troba l'estudi
-	QString getPreviousStudyPacs();
+    /// Obté el pacs on es troba l'estudi
+    QString getPreviousStudyPacs();
 
     /// Posa l'ImageSet del qual és previ
-    void setPreviousImageSetReference( int imageSetNumber );
+    void setPreviousImageSetReference(int imageSetNumber);
 
     /// Obté l'ImageSet del qual és previ
     int getPreviousImageSetReference();
@@ -119,7 +119,7 @@ private:
     /// Serie que s'ajusta a les restriccions
     Series * m_serieToDisplay;
 
-    /// Número d'imatge a mostrar, es coneix aquest número un cop 
+    /// Número d'imatge a mostrar, es coneix aquest número un cop
     // trobada la imatge que compleix les restriccions
     int m_imageToDisplay;
 
@@ -130,18 +130,18 @@ private:
     /// Indica si conte un estudi previ
     bool m_isPreviousStudy;
 
-	/// Indica si esta o no descarregat
-	bool m_downloaded;
+    /// Indica si esta o no descarregat
+    bool m_downloaded;
 
     /// Estudi previ a l'image set, sense descarregar
     Study * m_previousStudyToDisplay;
 
     /// Pacs origen on es troba l'estdi
-	QString m_previousStudyPacs;
+    QString m_previousStudyPacs;
 
     /// Posa l'image set que té de referencia i del qual ha de ser previ
     int m_previousImageSetReference;
-    
+
 };
 
 }

@@ -26,7 +26,7 @@ void DynamicMatrix::setValue(int row, int column, int value)
         for (int i = m_indexRow; i < -1 * row; i++)
         {
             QList<int> list;
-            for(int j = 0; j < m_columnCount; j++)
+            for (int j = 0; j < m_columnCount; j++)
             {
                 list.append(-1);
             }
@@ -41,7 +41,7 @@ void DynamicMatrix::setValue(int row, int column, int value)
         for (int i = m_matrix.count() - 1; i < listSelected; i++)
         {
             QList<int> list;
-            for(int j = 0; j < m_columnCount; j++)
+            for (int j = 0; j < m_columnCount; j++)
             {
                 list.append(-1);
             }
@@ -53,7 +53,7 @@ void DynamicMatrix::setValue(int row, int column, int value)
     int columnSelected = column + m_indexColumn;
     if (columnSelected < 0)
     {
-        for (int i = m_indexColumn; i < - 1 * column; i++)
+        for (int i = m_indexColumn; i < -1 * column; i++)
         {
             for (int j = 0; j < m_matrix.count(); j++)
             {
@@ -147,7 +147,7 @@ void DynamicMatrix::print()
     }
     DEBUG_LOG(result);
     //escriure la matriu
-    for (int i = m_matrix.count() - 1; i >=  0; i--)
+    for (int i = m_matrix.count() - 1; i >= 0; i--)
     {
         result = QString("");
         for (int j = 0; j < m_columnCount; j++)

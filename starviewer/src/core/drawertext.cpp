@@ -10,7 +10,7 @@
 
 namespace udg {
 
-DrawerText::DrawerText(QObject *parent) 
+DrawerText::DrawerText(QObject *parent)
     : DrawerPrimitive(parent)
 {
     m_horizontalJustification = "Centered";
@@ -121,7 +121,7 @@ void DrawerText::updateVtkActorProperties()
     properties->SetColor(m_color.redF(), m_color.greenF(), m_color.blueF());
 
     m_vtkActor->SetPadding(m_padding);
-    m_vtkActor->SetPosition(-1.0 , -1.0);
+    m_vtkActor->SetPosition(-1.0, -1.0);
     m_vtkActor->SetHeight(m_height);
     m_vtkActor->SetWidth(m_width);
 
@@ -399,13 +399,13 @@ double DrawerText::getDistanceToPoint(double *point3D, double closestPoint[3])
     closestPoint[0] = m_attachPoint[0];
     closestPoint[1] = m_attachPoint[1];
     closestPoint[2] = m_attachPoint[2];
-    
+
     return MathTools::getDistance3D(m_attachPoint, point3D);
 }
 
 void DrawerText::getBounds(double bounds[6])
 {
-    // TODO Ara només tenim en compte l'attach point però es podria tenir 
+    // TODO Ara només tenim en compte l'attach point però es podria tenir
     // en compte d'alguna manera la capsa que envolta el texte
     for (int i = 0; i < 3; i++)
     {

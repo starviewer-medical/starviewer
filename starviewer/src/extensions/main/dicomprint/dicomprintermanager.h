@@ -15,58 +15,58 @@ namespace udg
     class Printer;
     class DicomPrinter;
 
-class DicomPrinterManager: public PrinterManager
+class DicomPrinterManager : public PrinterManager
 {
 public:
-    
+
     DicomPrinterManager();
-    
+
     ~DicomPrinterManager();
 
     /** Afegeix una impressora Dicom (\p printer) al sistema.
-        Retorna True si s'ha pogut afegir la impressora i False si la impressora ja existeix al sistema. 
+        Retorna True si s'ha pogut afegir la impressora i False si la impressora ja existeix al sistema.
         En cas que s'hagi pogut afegir, s'assigna l'id a la impressora passada per paràmetre.
         */
-    bool addPrinter( DicomPrinter &printer );
-    
+    bool addPrinter(DicomPrinter &printer);
+
     /** Modifica la impressora amb identificador printerID amb els nous paràmetres guardats a newDicomPrinter.
-        Retorna True si s'ha pogut modificar correctament i False si la impressora a modificar no existeix o no és vàlida. */    
-    bool updatePrinter( int printerID, DicomPrinter &newDicomPrinter );
-    
+        Retorna True si s'ha pogut modificar correctament i False si la impressora a modificar no existeix o no és vàlida. */
+    bool updatePrinter(int printerID, DicomPrinter &newDicomPrinter);
+
     /// Esborra la impressora amb identificador printerID.
-    void deletePrinter( int printerID );
-    
+    void deletePrinter(int printerID);
+
     /// Retorna un objecte DicomPrinter que conté les dades de la impressora amb identificador printerID.
-    DicomPrinter getPrinterByID( int printerID );
-    
+    DicomPrinter getPrinterByID(int printerID);
+
     /// Retorna una llista de DicomPrinters que hi ha emmagatzemades al sistema.
     QList<DicomPrinter> getDicomPrinterList();
 
     /** Retorna un objecte DicomPrinter amb les dades de la impressora que té com a AETitle el valor AETitlePrinter
-        i com a Port el valor portPrinter. 
-        TO-DO: Ara mateix et retorna valors per defecte ja que no es comunica amb la impressora. Falta realitza la implementació 
+        i com a Port el valor portPrinter.
+        TO-DO: Ara mateix et retorna valors per defecte ja que no es comunica amb la impressora. Falta realitza la implementació
         per obtenir les dades directament de la impressora.*/
-    DicomPrinter getAvailableParametersValues( const QString &AETitlePrinter, int portPrinter );
-                                                            
+    DicomPrinter getAvailableParametersValues(const QString &AETitlePrinter, int portPrinter);
+
 private:
 
     /// Retorna un Settings::KeyValueMapType omplert amb les dades de la impressora dicomPrinter.
-    Settings::KeyValueMapType dicomPrinterToKeyValueMap( DicomPrinter &dicomPrinter );
+    Settings::KeyValueMapType dicomPrinterToKeyValueMap(DicomPrinter &dicomPrinter);
 
     /// Retorna un DicomPrinter omplert amb les dades que conté el Settings::KeyValueMapType.
-    DicomPrinter keyValueMapToDicomPrinter( Settings::KeyValueMapType &item);
+    DicomPrinter keyValueMapToDicomPrinter(Settings::KeyValueMapType &item);
 
     /// Retorna l'index on està emmagatzemada la impressora printer dins del sistema (Settings).
     int indexOfPrinterInSettings(DicomPrinter &printer);
 
-    /// Retorna una llista de valors  que pot agafar el MediumType d'una impressora Dicom.
+    /// Retorna una llista de valors que pot agafar el MediumType d'una impressora Dicom.
     QStringList getAvailableMediumTypeValues();
 
     /// Retorna una llista de possibles valors que pot agafar el FilmSize d'una impressora Dicom.
     QStringList getAvailableFilmSizeValues();
 
     /// Retorna una llista de possibles valors que pot agafar el FilmLayout d'una impressora Dicom.
-    QStringList getAvailableFilmLayoutValues();	
+    QStringList getAvailableFilmLayoutValues();
 
     /// Retorna una llista de possibles valors que pot agafar el FilmOrentation d'una impressora Dicom.
     QStringList getAvailableFilmOrientationValues();
@@ -101,7 +101,7 @@ private:
     /// Retorna una llista de possibles valors que pot agafar el Polarity d'uma impressora Dicom.
     QStringList getAvailablePolarityValues();
 
-    /**Ens posa totes les impressores que tenim configurades com a impressores no per defecte, és a dir cap d'elles és la 
+    /**Ens posa totes les impressores que tenim configurades com a impressores no per defecte, és a dir cap d'elles és la
       *impressora seleccionada per imprimir per defecte*/
     void setAllPrintersAsNoDefaultPrinter();
 
@@ -110,5 +110,5 @@ private:
     /// Conté el nom de la secció del Settings on es guarden les dades de la impressora.
     static const QString DicomPrinterListSectionName;
 };
-}; 
+};
 #endif

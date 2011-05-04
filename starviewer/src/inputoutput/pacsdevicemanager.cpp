@@ -19,30 +19,30 @@ bool PacsDeviceManager::addPACS(PacsDevice &pacs)
 {
     // Si el PACS ja existeix no l'afegim
     bool ok = !this->isPACSConfigured(pacs);
-    if( ok )
+    if (ok)
     {
         // En cas que existeixi, li assignarem l'ID
         QList<PacsDevice> pacsList = getPACSList();
-        if( pacsList.isEmpty() )
+        if (pacsList.isEmpty())
         {
             // Si encara no teníem cap PACS, l'ID inicial serà 0
-            pacs.setID( QString::number(0) );
+            pacs.setID(QString::number(0));
         }
         else
         {
             // En cas que ja en tinguem de configurats, l'ID serà
             // l'ID més alt dels configurats + 1
             int highestID = 0;
-            foreach( PacsDevice pacs, pacsList )
+            foreach (PacsDevice pacs, pacsList)
             {
-                if( pacs.getID().toInt() > highestID )
+                if (pacs.getID().toInt() > highestID)
                     highestID = pacs.getID().toInt();
             }
-            pacs.setID( QString::number(highestID + 1) );
+            pacs.setID(QString::number(highestID + 1));
         }
 
         Settings settings;
-        settings.addListItem( InputOutputSettings::PacsListConfigurationSectionName, pacsDeviceToKeyValueMap(pacs) );
+        settings.addListItem(InputOutputSettings::PacsListConfigurationSectionName, pacsDeviceToKeyValueMap(pacs));
     }
 
     return ok;
@@ -58,20 +58,20 @@ void PacsDeviceManager::updatePACS(PacsDevice &pacsToUpdate)
 
     // Recorrem tota la llista de PACS i els afegim de nou
     // Si trobem el que volem fer update, afegim l'actualitzat
-    foreach( PacsDevice device, pacsList )
+    foreach (PacsDevice device, pacsList)
     {
-        if( pacsToUpdate.getID() == device.getID() )
+        if (pacsToUpdate.getID() == device.getID())
         {
-            addPACS( pacsToUpdate );
+            addPACS(pacsToUpdate);
         }
         else
         {
-            addPACS( device );
+            addPACS(device);
         }
     }
 }
 
-bool PacsDeviceManager::deletePACS( const QString &pacsIDString)
+bool PacsDeviceManager::deletePACS(const QString &pacsIDString)
 {
     // Obtenim la llista completa de PACS
     QList<PacsDevice> pacsList = getPACSList();
@@ -81,30 +81,30 @@ bool PacsDeviceManager::deletePACS( const QString &pacsIDString)
 
     // Recorrem tota la llista de PACS i els afegim de nou
     // excepte el que volem esborrar
-    foreach( PacsDevice device, pacsList )
+    foreach (PacsDevice device, pacsList)
     {
-        if( pacsIDString != device.getID() )
+        if (pacsIDString != device.getID())
         {
-            addPACS( device );    
+            addPACS(device);
         }
     }
     return true;
 }
 
-QList<PacsDevice> PacsDeviceManager::getPACSList( FilterPACSByService filter, bool onlyDefault )
+QList<PacsDevice> PacsDeviceManager::getPACSList(FilterPACSByService filter, bool onlyDefault)
 {
     QList<PacsDevice> configuredPacsList;
     Settings settings;
     Settings::SettingListType list = settings.getList(InputOutputSettings::PacsListConfigurationSectionName);
-    foreach( Settings::KeyValueMapType item, list )
+    foreach (Settings::KeyValueMapType item, list)
     {
         PacsDevice pacs;
         pacs = keyValueMapToPacsDevice(item);
         // depenent del paràmetre "onlyDefault" afegirem o no els pacs
-        if( (onlyDefault && pacs.isDefault()) || !onlyDefault )
+        if ((onlyDefault && pacs.isDefault()) || !onlyDefault)
         {
             //Filtrem per servei si ens ho han demanat
-            if (filter == PacsDeviceManager::AllPacs || 
+            if (filter == PacsDeviceManager::AllPacs ||
                 (filter == PacsDeviceManager::PacsWithQueryRetrieveServiceEnabled && pacs.isQueryRetrieveServiceEnabled()) ||
                 (filter == PacsDeviceManager::PacsWithStoreServiceEnabled && pacs.isStoreServiceEnabled()))
             {
@@ -116,7 +116,7 @@ QList<PacsDevice> PacsDeviceManager::getPACSList( FilterPACSByService filter, bo
     return configuredPacsList;
 }
 
-PacsDevice PacsDeviceManager::getPACSDeviceByID( const QString &pacsIDString )
+PacsDevice PacsDeviceManager::getPACSDeviceByID(const QString &pacsIDString)
 {
     QList<PacsDevice> pacsList = getPACSList();
     PacsDevice pacs;
@@ -124,9 +124,9 @@ PacsDevice PacsDeviceManager::getPACSDeviceByID( const QString &pacsIDString )
     bool found = false;
     int i = 0;
     int count = pacsList.count();
-    while( !found && i < count )
+    while (!found && i < count)
     {
-        if( pacsIDString == pacsList.at(i).getID() )
+        if (pacsIDString == pacsList.at(i).getID())
         {
             found = true;
             pacs = pacsList.at(i);
@@ -134,7 +134,7 @@ PacsDevice PacsDeviceManager::getPACSDeviceByID( const QString &pacsIDString )
         i++;
     }
 
-    if( !found )
+    if (!found)
     {
         DEBUG_LOG("No existeix cap PACS amb aquest ID: " + pacsIDString);
         ERROR_LOG("No existeix cap PACS amb aquest ID: " + pacsIDString);
@@ -146,9 +146,9 @@ bool PacsDeviceManager::isPACSConfigured(const PacsDevice &pacs)
 {
     QList<PacsDevice> pacsList = getPACSList();
 
-    foreach(PacsDevice pacsDevice, pacsList)
+    foreach (PacsDevice pacsDevice, pacsList)
     {
-        if (pacsDevice.getAETitle() == pacs.getAETitle() && 
+        if (pacsDevice.getAETitle() == pacs.getAETitle() &&
             pacsDevice.getQueryRetrieveServicePort() == pacs.getQueryRetrieveServicePort() &&
             pacsDevice.getAddress() == pacs.getAddress())
         {
@@ -159,7 +159,7 @@ bool PacsDeviceManager::isPACSConfigured(const PacsDevice &pacs)
     return false;
 }
 
-Settings::KeyValueMapType PacsDeviceManager::pacsDeviceToKeyValueMap( const PacsDevice &pacsDevice )
+Settings::KeyValueMapType PacsDeviceManager::pacsDeviceToKeyValueMap(const PacsDevice &pacsDevice)
 {
     Settings::KeyValueMapType item;
 
@@ -177,34 +177,34 @@ Settings::KeyValueMapType PacsDeviceManager::pacsDeviceToKeyValueMap( const Pacs
     return item;
 }
 
-PacsDevice PacsDeviceManager::keyValueMapToPacsDevice( const Settings::KeyValueMapType &item )
+PacsDevice PacsDeviceManager::keyValueMapToPacsDevice(const Settings::KeyValueMapType &item)
 {
     PacsDevice pacsDevice;
     // TODO cal comprovar que hi ha les claus que volem? sinó quedarà amb valors empty
-    pacsDevice.setID( item.value("ID").toString() );
-    pacsDevice.setAETitle( item.value("AETitle" ).toString() );
-    pacsDevice.setLocation( item.value("Location" ).toString() );
-    pacsDevice.setInstitution( item.value("Institution" ).toString() );
-    pacsDevice.setAddress( item.value("PacsHostname" ).toString() );
-    pacsDevice.setDescription( item.value("Description" ).toString() );
+    pacsDevice.setID(item.value("ID").toString());
+    pacsDevice.setAETitle(item.value("AETitle").toString());
+    pacsDevice.setLocation(item.value("Location").toString());
+    pacsDevice.setInstitution(item.value("Institution").toString());
+    pacsDevice.setAddress(item.value("PacsHostname").toString());
+    pacsDevice.setDescription(item.value("Description").toString());
 
-    /*A partir d'Starviewer 0.9 s'ofereix la possibilitat d'enviar imatges a PACS, aquest canvi implicar que s'ha de poder indicar 
-      a quin port del PACS s'han d'enviar les imatges per guardar-les, per mantenir la comptabilitat amb PACS que han estat guardats al 
+    /*A partir d'Starviewer 0.9 s'ofereix la possibilitat d'enviar imatges a PACS, aquest canvi implicar que s'ha de poder indicar
+      a quin port del PACS s'han d'enviar les imatges per guardar-les, per mantenir la comptabilitat amb PACS que han estat guardats al
       settings amb versions anteriors s'executa el codi que hi ha a continuació*/
 
     if (!item.contains("QueryRetrieveServiceEnabled"))
     {
         //Si no està guardat als settings si està activat el servei de Query/Retrieve per defecte li indiquem que està activat
         pacsDevice.setQueryRetrieveServiceEnabled(true);
-        pacsDevice.setQueryRetrieveServicePort( item.value("PacsPort" ).toInt() );
+        pacsDevice.setQueryRetrieveServicePort(item.value("PacsPort").toInt());
     }
     else
     {
-        pacsDevice.setQueryRetrieveServiceEnabled( item.value("QueryRetrieveServiceEnabled").toBool() );
-        
+        pacsDevice.setQueryRetrieveServiceEnabled(item.value("QueryRetrieveServiceEnabled").toBool());
+
         if (pacsDevice.isQueryRetrieveServiceEnabled())
         {
-            pacsDevice.setQueryRetrieveServicePort( item.value( "PacsPort" ).toInt() );
+            pacsDevice.setQueryRetrieveServicePort(item.value("PacsPort").toInt());
         }
     }
 
@@ -213,15 +213,15 @@ PacsDevice PacsDeviceManager::keyValueMapToPacsDevice( const Settings::KeyValueM
         /*Si no està guardat als settings si està activat el servei de Store Query/Retrieve per defecte li indique, que està activat i li
           donem el mateix port que el servei de Query/Retrieve*/
         pacsDevice.setStoreServiceEnabled(true);
-        pacsDevice.setStoreServicePort( item.value("PacsPort" ).toInt() );
+        pacsDevice.setStoreServicePort(item.value("PacsPort").toInt());
     }
     else
     {
-        pacsDevice.setStoreServiceEnabled ( item.value("StoreServiceEnabled" ).toBool() );
+        pacsDevice.setStoreServiceEnabled (item.value("StoreServiceEnabled").toBool());
 
         if (pacsDevice.isStoreServiceEnabled())
         {
-            pacsDevice.setStoreServicePort( item.value("StoreServicePort").toInt() );
+            pacsDevice.setStoreServicePort(item.value("StoreServicePort").toInt());
         }
     }
 

@@ -17,7 +17,7 @@ namespace udg {
 
 class Image;
 
-class SendDICOMFilesToPACS: public QObject{
+class SendDICOMFilesToPACS : public QObject {
 Q_OBJECT
 public:
     SendDICOMFilesToPACS(PacsDevice pacsDevice);
@@ -46,7 +46,7 @@ public:
 
 signals:
    ///Sinal que indica que s'ha fet l'enviament de la imatge passada per paràmetre al PACS, i el número d'imatges que es porten enviades
-   void DICOMFileSent(Image *image, int numberOfDICOMFilesSent);
+    void DICOMFileSent(Image *image, int numberOfDICOMFilesSent);
 
 private :
 
@@ -62,7 +62,7 @@ private :
     ///Retorna un Status indicant com ha finalitzat l'operació C-Store
     PACSRequestStatus::SendRequestStatus getStatusStoreSCU();
 
-private: 
+private:
     //Indica números d'imatges enviades correctament/Imatges enviades però que ha retorna warning/Total d'imatges que s'ha enviat
     int m_numberOfDICOMFilesSentSuccessfully, m_numberOfDICOMFilesSentWithWarning, m_numberOfDICOMFilesToSend;
     PacsDevice m_pacs;

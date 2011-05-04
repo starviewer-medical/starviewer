@@ -81,11 +81,11 @@ DICOMTag DICOMDumpDefaultTagsReader::readTag(QXmlStreamReader *reader)
     {
         if (reader->name() == "group")
         {
-            dicomTag.setGroup(reader->readElementText().toUInt(0,16));
+            dicomTag.setGroup(reader->readElementText().toUInt(0, 16));
         }
         else if (reader->name() == "element")
         {
-            dicomTag.setElement(reader->readElementText().toUInt(0,16));
+            dicomTag.setElement(reader->readElementText().toUInt(0, 16));
         }
         else if (reader->name() == "name")
         {

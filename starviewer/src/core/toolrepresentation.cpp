@@ -6,14 +6,14 @@
 
 namespace udg {
 
-ToolRepresentation::ToolRepresentation( Drawer *drawer, QObject *parent )
+ToolRepresentation::ToolRepresentation(Drawer *drawer, QObject *parent)
  : QObject(parent), m_drawer(drawer)
 {
 }
 
 ToolRepresentation::~ToolRepresentation()
 {
-    foreach( DrawerPrimitive *primitive, m_primitivesList )
+    foreach (DrawerPrimitive *primitive, m_primitivesList)
     {
         delete primitive;
     }

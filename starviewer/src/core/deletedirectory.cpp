@@ -17,9 +17,9 @@ DeleteDirectory::~DeleteDirectory()
 bool DeleteDirectory::deleteDirectory(QString directoryPath, bool deleteRootDirectory)
 {
     bool result;
-    result = removeDirectory( QDir(directoryPath), deleteRootDirectory );
+    result = removeDirectory(QDir(directoryPath), deleteRootDirectory);
 
-    if( !result )
+    if (!result)
     {
         if (deleteRootDirectory)
         {
@@ -37,15 +37,15 @@ bool DeleteDirectory::isDirectoryEmpty(const QString &path)
 {
     QDir dir(path);
 
-    return dir.entryInfoList( QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files ).count() == 0;
+    return dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files).count() == 0;
 }
 
-bool DeleteDirectory::removeDirectory(const QDir &dir, bool deleteRootDirectory )
+bool DeleteDirectory::removeDirectory(const QDir &dir, bool deleteRootDirectory)
 {
     bool ok = true;
-    if ( dir.exists() )//QDir::NoDotAndDotDot
+    if (dir.exists())//QDir::NoDotAndDotDot
     {
-        QFileInfoList entries = dir.entryInfoList( QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files );
+        QFileInfoList entries = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files);
         int count = entries.size();
         for (int i = 0; i < count && ok; i++)
         {
@@ -58,7 +58,7 @@ bool DeleteDirectory::removeDirectory(const QDir &dir, bool deleteRootDirectory 
             else
             {
                 QFile file(path);
-                if ( !file.remove() )
+                if (!file.remove())
                 {
                     ok = false;
                     ERROR_LOG("No s'ha pogut esborrar el fitxer " + path);
@@ -71,9 +71,9 @@ bool DeleteDirectory::removeDirectory(const QDir &dir, bool deleteRootDirectory 
             }
         }
 
-        if( deleteRootDirectory )
+        if (deleteRootDirectory)
         {
-            if ( !dir.rmdir(dir.absolutePath()) )
+            if (!dir.rmdir(dir.absolutePath()))
             {
                 ok = false;
                 ERROR_LOG("No s'ha pogut esborrar el directori " + dir.absolutePath());

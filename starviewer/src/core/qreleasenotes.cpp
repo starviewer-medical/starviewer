@@ -6,7 +6,7 @@
 
 namespace udg {
 
-QReleaseNotes::QReleaseNotes(QWidget *parent) 
+QReleaseNotes::QReleaseNotes(QWidget *parent)
  : QWidget(parent)
 {
     setupUi(this);
@@ -43,7 +43,7 @@ void QReleaseNotes::closeEvent(QCloseEvent *event)
     //si el 'Don't show on future releases' esta marcat
     if (isDontShowAnymoreChecked())
     {
-        //modificar els settings per que no es mostrin mai més  
+        //modificar els settings per que no es mostrin mai més
         settings.setValue(CoreSettings::NeverShowNewVersionReleaseNotes, true);
     }
     //i tancar la finestra

@@ -16,12 +16,12 @@ class QViewer;
     només a la base de dades local o poden ser enviades també al PACS seleccionat a través del widget.
     Actualment, les sèries que es generen són de tipus Secondary Capture.
 */
-class QExporterTool : public QDialog , private Ui::QExporterBase
+class QExporterTool : public QDialog, private Ui::QExporterBase
 {
 Q_OBJECT
 public:
     /// @pre el viewer no pot ser null
-    QExporterTool(  QViewer *viewer , QWidget *parent = 0 );
+    QExporterTool(QViewer *viewer, QWidget *parent = 0);
 
     ~QExporterTool();
 
@@ -40,7 +40,7 @@ private:
 
     /// Mètodes per saber si tenim suficient espai pel volum que volem generar
     bool canAllocateEnoughMemory();
-    bool canAllocateEnoughMemory( int numberOfScreenshots );
+    bool canAllocateEnoughMemory(int numberOfScreenshots);
 
 private slots:
     /// Generar i guardar la nova sèrie a la bdd i enviar-la al PACS si és el cas.
@@ -53,7 +53,7 @@ private slots:
     void phasesOfCurrentImageRadioButtonClicked();
 
     /// S'utilitza per actualizar diferents elements segons quines destinacions tenim seleccionades
-    void destinationsChanged( bool checked );
+    void destinationsChanged(bool checked);
 
 private:
     /// Visor passat en el constructor.

@@ -33,7 +33,7 @@ DistanceTool::DistanceTool(QViewer *viewer, QObject *parent)
 DistanceTool::~DistanceTool()
 {
     bool hasToRefresh = false;
-    // Cal decrementar el reference count perquè 
+    // Cal decrementar el reference count perquè
     // l'annotació s'esborri si "matem" l'eina
     if (m_line)
     {
@@ -91,7 +91,7 @@ void DistanceTool::annotateNewPoint()
         m_line->setSecondPoint(clickedWorldPoint);
         m_lineState = FirstPointFixed;
 
-        m_2DViewer->getDrawer()->draw(m_line , m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+        m_2DViewer->getDrawer()->draw(m_line, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
     }
     else
     {
@@ -113,7 +113,7 @@ void DistanceTool::annotateNewPoint()
         {
             bool distanceIsComputed = false;
             double distance;
-            // En cas de Ultrasons es fa un tractament especial perquè VTK no agafa l'spacing correcte. 
+            // En cas de Ultrasons es fa un tractament especial perquè VTK no agafa l'spacing correcte.
             // TODO S'hauria d'unificar.
             // Podem tenir imatges de la mateixa sèrie amb spacings diferents
             if (m_2DViewer->getInput()->getImage(0)->getParentSeries()->getModality() == "US")
@@ -134,7 +134,7 @@ void DistanceTool::annotateNewPoint()
                 else
                 {
                     // S'ha aplicat una reconstrucció, per tant l'spacing que es donarà serà el de vtk
-                    // TODO Això en algun moment desapareixerà ja que caldria deshabilitar les reconstruccions per 
+                    // TODO Això en algun moment desapareixerà ja que caldria deshabilitar les reconstruccions per
                     // modalitats en les que les reconstruccions no tinguin sentit
                     distanceIsComputed = false;
                 }
@@ -159,14 +159,14 @@ void DistanceTool::annotateNewPoint()
         {
             for (i = 0; i < 3; i++)
             {
-                leftPoint[i] = firstPoint[i]; 
+                leftPoint[i] = firstPoint[i];
             }
         }
         else
         {
             for (i = 0; i < 3; i++)
             {
-                leftPoint[i] = secondPoint[i]; 
+                leftPoint[i] = secondPoint[i];
             }
         }
 
@@ -182,7 +182,7 @@ void DistanceTool::annotateNewPoint()
         text->setAttachmentPoint(leftPoint);
         text->setHorizontalJustification("Right");
         text->shadowOn();
-        m_2DViewer->getDrawer()->draw(text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+        m_2DViewer->getDrawer()->draw(text, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
         // Reiniciem l'estat de la tool
         initialize();
     }

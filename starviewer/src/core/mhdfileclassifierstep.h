@@ -19,7 +19,7 @@ public:
 
     void postProcessing(){}
 
-    QString name() {  return "MHDFileClassifierStep";  }
+    QString name() { return "MHDFileClassifierStep"; }
 };
 
 }

@@ -82,7 +82,6 @@ QViewer::QViewer(QWidget *parent)
     this->setCurrentWidgetByViewerStatus(m_viewerStatus);
     this->initializeWorkInProgressByViewerStatus(m_viewerStatus);
 
-
     this->setMouseTracking(false);
     m_patientBrowserMenu = new PatientBrowserMenu(0);
     // Ara mateix el comportament per defecte serà que un cop seleccionat un volum li assignem immediatament com a input
@@ -388,7 +387,7 @@ bool QViewer::record(const QString &baseName, RecordFileFormatType format)
         
         vtkImageData *data = m_grabList.at(0);
 
-        videoWriter->SetFileName(qPrintable(baseName+fileExtension));
+        videoWriter->SetFileName(qPrintable(baseName + fileExtension));
         videoWriter->SetInput(data);
         videoWriter->Start();
 
@@ -535,7 +534,7 @@ void QViewer::setWindowLevelData(WindowLevelPresetsToolData *windowLevelData)
 {
     if (m_windowLevelData)
     {
-        disconnect(m_windowLevelData,0,this,0);
+        disconnect(m_windowLevelData, 0, this, 0);
         delete m_windowLevelData;
     }
 
@@ -623,7 +622,7 @@ void QViewer::contextMenuRelease()
 
     int *size = this->getRenderWindowSize();
     // Remember to flip y
-    QPoint point = QPoint(eventPositionX, size[1]-eventPositionY);
+    QPoint point = QPoint(eventPositionX, size[1] - eventPositionY);
 
     // Map to global
     QPoint globalPoint = this->mapToGlobal(point);
@@ -705,21 +704,21 @@ void QViewer::setCameraOrientation(int orientation)
         switch (orientation)
         {
             case Axial:
-                camera->SetFocalPoint(0,0,0);
-                camera->SetPosition(0,0,-1); // -1 if medical ?
-                camera->SetViewUp(0,-1,0);
+                camera->SetFocalPoint(0, 0, 0);
+                camera->SetPosition(0, 0, -1); // -1 if medical ?
+                camera->SetViewUp(0, -1, 0);
                 break;
 
             case Coronal:
-                camera->SetFocalPoint(0,0,0);
-                camera->SetPosition(0,-1,0); // 1 if medical ?
-                camera->SetViewUp(0,0,1);
+                camera->SetFocalPoint(0, 0, 0);
+                camera->SetPosition(0, -1, 0); // 1 if medical ?
+                camera->SetViewUp(0, 0, 1);
                 break;
 
             case Sagital:
-                camera->SetFocalPoint(0,0,0);
-                camera->SetPosition(1,0,0); // -1 if medical ?
-                camera->SetViewUp(0,0,1);
+                camera->SetFocalPoint(0, 0, 0);
+                camera->SetPosition(1, 0, 0); // -1 if medical ?
+                camera->SetViewUp(0, 0, 1);
                 break;
         }
         this->getRenderer()->ResetCamera();
@@ -774,7 +773,6 @@ void QViewer::setAutomaticallyLoadPatientBrowserMenuSelectedInput(bool load)
         disconnect(m_patientBrowserMenu, SIGNAL(selectedVolume(Volume*)), this, SLOT(setInputAndRender(Volume*)));
     }
 }
-
 
 QViewer::ViewerStatus QViewer::getViewerStatus() const
 {

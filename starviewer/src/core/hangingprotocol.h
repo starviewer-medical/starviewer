@@ -95,7 +95,7 @@ public:
 
     /// Assigna el tipus d'icona per representar-lo
     void setIconType(const QString &iconType);
-    
+
     /// Obté el tipus d'icona per representar-lo
     QString getIconType() const;
 

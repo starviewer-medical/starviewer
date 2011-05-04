@@ -15,52 +15,52 @@
 
 namespace udg {
 
-SlicingKeyboardTool::SlicingKeyboardTool( QViewer *viewer, QObject *parent )
- : Tool(viewer,parent)
+SlicingKeyboardTool::SlicingKeyboardTool(QViewer *viewer, QObject *parent)
+ : Tool(viewer, parent)
 {
     m_toolName = "SlicingKeyboardTool";
     m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
-    if( !m_2DViewer )
-        DEBUG_LOG( "No s'ha pogut realitzar el casting a 2DViewer!!!" );
+    if (!m_2DViewer)
+        DEBUG_LOG("No s'ha pogut realitzar el casting a 2DViewer!!!");
 }
 
 SlicingKeyboardTool::~SlicingKeyboardTool()
 {
 }
 
-void SlicingKeyboardTool::handleEvent( unsigned long eventID )
+void SlicingKeyboardTool::handleEvent(unsigned long eventID)
 {
-    switch( eventID )
+    switch (eventID)
     {
     case vtkCommand::KeyPressEvent:
     {
         QString keySymbol = m_2DViewer->getInteractor()->GetKeySym();
-        if( keySymbol == "Home" )
+        if (keySymbol == "Home")
         {
             m_2DViewer->setSlice(0);
         }
-        else if( keySymbol == "End" )
+        else if (keySymbol == "End")
         {
-            m_2DViewer->setSlice( m_2DViewer->getMaximumSlice() );
+            m_2DViewer->setSlice(m_2DViewer->getMaximumSlice());
         }
-        else if( keySymbol == "Up" )
+        else if (keySymbol == "Up")
         {
-            m_2DViewer->setSlice( m_2DViewer->getCurrentSlice() + 1 );
+            m_2DViewer->setSlice(m_2DViewer->getCurrentSlice() + 1);
         }
-        else if( keySymbol == "Down" )
+        else if (keySymbol == "Down")
         {
-            m_2DViewer->setSlice( m_2DViewer->getCurrentSlice() - 1 );
+            m_2DViewer->setSlice(m_2DViewer->getCurrentSlice() - 1);
         }
-        else if( keySymbol == "Left" )
+        else if (keySymbol == "Left")
         {
-            m_2DViewer->setPhase( m_2DViewer->getCurrentPhase() - 1 );
+            m_2DViewer->setPhase(m_2DViewer->getCurrentPhase() - 1);
         }
-        else if( keySymbol == "Right" )
+        else if (keySymbol == "Right")
         {
-            m_2DViewer->setPhase( m_2DViewer->getCurrentPhase() + 1 );
+            m_2DViewer->setPhase(m_2DViewer->getCurrentPhase() + 1);
         }
         // TODO Vigilar que no es pot fer només començar perquè no hi ha cap viewer seleccionat si no s'aplica cap HP
-        else if(keySymbol == "plus" || keySymbol == "minus")
+        else if (keySymbol == "plus" || keySymbol == "minus")
         {
             if ((m_2DViewer->getCurrentSlice() == m_2DViewer->getMaximumSlice() && keySymbol == "plus") ||
                 (m_2DViewer->getCurrentSlice() == m_2DViewer->getMinimumSlice() && keySymbol == "minus"))
@@ -75,11 +75,11 @@ void SlicingKeyboardTool::handleEvent( unsigned long eventID )
                     if (currentStudy != NULL)
                     {
                         Patient *currentPatient = currentStudy->getParentPatient();
-                        foreach(Study *study, currentPatient->getStudies())
+                        foreach (Study *study, currentPatient->getStudies())
                         {
-                            foreach(Series *series, study->getSeries())
+                            foreach (Series *series, study->getSeries())
                             {
-                                foreach(Volume *volume, series->getVolumesList())
+                                foreach (Volume *volume, series->getVolumesList())
                                 {
                                     if (volume->getIdentifier() == currentVolume->getIdentifier())
                                     {

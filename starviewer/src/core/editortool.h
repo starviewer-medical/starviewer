@@ -18,12 +18,12 @@ class EditorTool : public Tool {
 Q_OBJECT
 public:
     /// Estats de la tool
-    enum { NoEditor , Paint , Erase , EraseSlice , EraseRegion };
+    enum { NoEditor, Paint, Erase, EraseSlice, EraseRegion };
 
-    EditorTool( QViewer *viewer, QObject *parent = 0 );
+    EditorTool(QViewer *viewer, QObject *parent = 0);
     ~EditorTool();
 
-    void handleEvent( unsigned long eventID );
+    void handleEvent(unsigned long eventID);
 
     /**
      * Retorna les dades de la tool
@@ -63,38 +63,38 @@ private:
     void setEditorPoint();
 
     /**
-     * Esborra una porció quadrada de la màscara de mida m_editorSize 
+     * Esborra una porció quadrada de la màscara de mida m_editorSize
      */
     void eraseMask();
 
     /**
-     * Pinta una porció quadrada de la màscara de mida m_editorSize 
+     * Pinta una porció quadrada de la màscara de mida m_editorSize
      */
     void paintMask();
 
     /**
-     * Esborra una llesca de la màscara 
+     * Esborra una llesca de la màscara
      */
     void eraseSliceMask();
 
     /**
-     * Esborra una porció conectada de la màscara (en 2D) 
+     * Esborra una porció conectada de la màscara (en 2D)
      */
     void eraseRegionMask();
 
     /**
-     * Crida recursiva de la funció eraseRegionMask 
+     * Crida recursiva de la funció eraseRegionMask
      * @param a, @param b, @param c índex del volum de la màscara que estem mirant en cada crida
      */
     void eraseRegionMaskRecursive(int a, int b, int c);
 
     /**
-     * Decrementa un estat de la tool. Ordre: Paint, Erase, EraseRegion, EraseSlice 
+     * Decrementa un estat de la tool. Ordre: Paint, Erase, EraseRegion, EraseSlice
      */
     void decreaseState();
 
     /**
-     * Incrementa un estat de la tool. Ordre: Paint, Erase, EraseRegion, EraseSlice 
+     * Incrementa un estat de la tool. Ordre: Paint, Erase, EraseRegion, EraseSlice
      */
     void increaseState();
 
@@ -124,9 +124,9 @@ private:
 
     ///Mida de la tool
     int m_editorSize;
-    
+
     vtkActor *m_squareActor;
-    
+
     //\TODO:Aquesta variable no caldria, ja que hauria d'estar només al ToolData
     int m_volumeCont;
     EditorToolData* m_myData;

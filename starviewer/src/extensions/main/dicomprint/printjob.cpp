@@ -9,6 +9,6 @@ void PrintJob::setNumberOfCopies(int numberOfCopies)
 
 int PrintJob::getNumberOfCopies()
 {
-   return m_numberOfCopies;
+    return m_numberOfCopies;
 }
 }

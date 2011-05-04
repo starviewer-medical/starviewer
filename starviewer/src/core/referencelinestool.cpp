@@ -47,7 +47,7 @@ ReferenceLinesTool::ReferenceLinesTool(QViewer *viewer, QObject *parent)
     // Cada cop que canvii l'slab thickness haurem d'actualitzar els plans a projectar
     connect(m_2DViewer, SIGNAL(slabThicknessChanged(int)), SLOT(updateImagePlane()));
 
-    connect(m_2DViewer, SIGNAL(selected()),SLOT(refreshReferenceViewerData()));
+    connect(m_2DViewer, SIGNAL(selected()), SLOT(refreshReferenceViewerData()));
 }
 
 ReferenceLinesTool::~ReferenceLinesTool()
@@ -158,7 +158,7 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
         if (m_showPlaneThickness)
         {
             // Calculem totes les possibles interseccions
-            QList< QVector<double> > upperPlaneBounds = referencePlane->getUpperBounds();
+            QList<QVector<double> > upperPlaneBounds = referencePlane->getUpperBounds();
             double firstIntersectionPoint[3], secondIntersectionPoint[3];
 
             int numberOfIntersections = this->getIntersections(upperPlaneBounds.at(0), upperPlaneBounds.at(1), upperPlaneBounds.at(2), upperPlaneBounds.at(3), localizerPlane, firstIntersectionPoint, secondIntersectionPoint);
@@ -168,11 +168,11 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
                 m_2DViewer->projectDICOMPointToCurrentDisplayedImage(secondIntersectionPoint, secondIntersectionPoint);
 
                 // Linia discontinua
-                m_projectedIntersectionLines[ drawerLineOffset ]->setFirstPoint(firstIntersectionPoint);
-                m_projectedIntersectionLines[ drawerLineOffset ]->setSecondPoint(secondIntersectionPoint);
+                m_projectedIntersectionLines[drawerLineOffset]->setFirstPoint(firstIntersectionPoint);
+                m_projectedIntersectionLines[drawerLineOffset]->setSecondPoint(secondIntersectionPoint);
                 // Linia de background
-                m_backgroundProjectedIntersectionLines[ drawerLineOffset ]->setFirstPoint(firstIntersectionPoint);
-                m_backgroundProjectedIntersectionLines[ drawerLineOffset ]->setSecondPoint(secondIntersectionPoint);
+                m_backgroundProjectedIntersectionLines[drawerLineOffset]->setFirstPoint(firstIntersectionPoint);
+                m_backgroundProjectedIntersectionLines[drawerLineOffset]->setSecondPoint(secondIntersectionPoint);
 
                 m_2DViewer->getDrawer()->showGroup("ReferenceLines");
             }
@@ -182,7 +182,7 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
                 m_2DViewer->getDrawer()->hideGroup("ReferenceLines");
             }
 
-            QList< QVector<double> > lowerPlaneBounds = referencePlane->getLowerBounds();
+            QList<QVector<double> > lowerPlaneBounds = referencePlane->getLowerBounds();
             numberOfIntersections = this->getIntersections(lowerPlaneBounds.at(0), lowerPlaneBounds.at(1), lowerPlaneBounds.at(2), lowerPlaneBounds.at(3), localizerPlane, firstIntersectionPoint, secondIntersectionPoint);
 
             // un cop tenim les interseccions nomes cal projectar-les i pintar la linia
@@ -192,11 +192,11 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
                 m_2DViewer->projectDICOMPointToCurrentDisplayedImage(secondIntersectionPoint, secondIntersectionPoint);
 
                 // Linia discontinua
-                m_projectedIntersectionLines[ drawerLineOffset+1 ]->setFirstPoint(firstIntersectionPoint);
-                m_projectedIntersectionLines[ drawerLineOffset+1 ]->setSecondPoint(secondIntersectionPoint);
+                m_projectedIntersectionLines[drawerLineOffset + 1]->setFirstPoint(firstIntersectionPoint);
+                m_projectedIntersectionLines[drawerLineOffset + 1]->setSecondPoint(secondIntersectionPoint);
                 // Linia de background
-                m_backgroundProjectedIntersectionLines[ drawerLineOffset+1 ]->setFirstPoint(firstIntersectionPoint);
-                m_backgroundProjectedIntersectionLines[ drawerLineOffset+1 ]->setSecondPoint(secondIntersectionPoint);
+                m_backgroundProjectedIntersectionLines[drawerLineOffset + 1]->setFirstPoint(firstIntersectionPoint);
+                m_backgroundProjectedIntersectionLines[drawerLineOffset + 1]->setSecondPoint(secondIntersectionPoint);
 
                 m_2DViewer->getDrawer()->showGroup("ReferenceLines");
             }
@@ -211,7 +211,7 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
         }
         else // nomes agafem el pla "central"
         {
-            QList< QVector<double> > planeBounds = referencePlane->getCentralBounds();
+            QList<QVector<double> > planeBounds = referencePlane->getCentralBounds();
             double firstIntersectionPoint[3], secondIntersectionPoint[3];
 
             int numberOfIntersections = this->getIntersections(planeBounds.at(0), planeBounds.at(1), planeBounds.at(2), planeBounds.at(3), localizerPlane, firstIntersectionPoint, secondIntersectionPoint);
@@ -221,11 +221,11 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
                 m_2DViewer->projectDICOMPointToCurrentDisplayedImage(secondIntersectionPoint, secondIntersectionPoint);
 
                 // Linia discontinua
-                m_projectedIntersectionLines[ drawerLineOffset ]->setFirstPoint(firstIntersectionPoint);
-                m_projectedIntersectionLines[ drawerLineOffset ]->setSecondPoint(secondIntersectionPoint);
+                m_projectedIntersectionLines[drawerLineOffset]->setFirstPoint(firstIntersectionPoint);
+                m_projectedIntersectionLines[drawerLineOffset]->setSecondPoint(secondIntersectionPoint);
                 // Linia de background
-                m_backgroundProjectedIntersectionLines[ drawerLineOffset ]->setFirstPoint(firstIntersectionPoint);
-                m_backgroundProjectedIntersectionLines[ drawerLineOffset ]->setSecondPoint(secondIntersectionPoint);
+                m_backgroundProjectedIntersectionLines[drawerLineOffset]->setFirstPoint(firstIntersectionPoint);
+                m_backgroundProjectedIntersectionLines[drawerLineOffset]->setSecondPoint(secondIntersectionPoint);
 
                 m_2DViewer->getDrawer()->showGroup("ReferenceLines");
             }
@@ -368,11 +368,11 @@ DrawerLine* ReferenceLinesTool::createNewLine(bool isBackgroundLine)
 
     if (isBackgroundLine)
     {
-        line->setColor(QColor(0,0,0));
+        line->setColor(QColor(0, 0, 0));
     }
     else
     {
-        line->setColor(QColor(255,160,0));
+        line->setColor(QColor(255, 160, 0));
         line->setLinePattern(DrawerPrimitive::DiscontinuousLinePattern);
     }
 

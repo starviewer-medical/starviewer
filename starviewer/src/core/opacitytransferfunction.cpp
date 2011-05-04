@@ -4,27 +4,22 @@
 
 #include <vtkPiecewiseFunction.h>
 
-
 namespace udg {
-
 
 OpacityTransferFunction::OpacityTransferFunction()
     : m_vtkOpacityTransferFunction(0)
 {
 }
 
-
 OpacityTransferFunction::OpacityTransferFunction(const OpacityTransferFunction &opacityTransferFunction)
     : TransferFunctionTemplate<double>(opacityTransferFunction), m_vtkOpacityTransferFunction(0)
 {
 }
 
-
 OpacityTransferFunction::~OpacityTransferFunction()
 {
     if (m_vtkOpacityTransferFunction) m_vtkOpacityTransferFunction->Delete();
 }
-
 
 OpacityTransferFunction& OpacityTransferFunction::operator =(const OpacityTransferFunction &opacityTransferFunction)
 {
@@ -36,7 +31,6 @@ OpacityTransferFunction& OpacityTransferFunction::operator =(const OpacityTransf
 
     return *this;
 }
-
 
 vtkPiecewiseFunction* OpacityTransferFunction::vtkOpacityTransferFunction() const
 {
@@ -54,7 +48,6 @@ vtkPiecewiseFunction* OpacityTransferFunction::vtkOpacityTransferFunction() cons
     return m_vtkOpacityTransferFunction;
 }
 
-
 QString OpacityTransferFunction::toString() const
 {
     QString string;
@@ -68,7 +61,6 @@ QString OpacityTransferFunction::toString() const
 
     return string;
 }
-
 
 QVariant OpacityTransferFunction::toVariant() const
 {
@@ -88,7 +80,6 @@ QVariant OpacityTransferFunction::toVariant() const
     return variant;
 }
 
-
 OpacityTransferFunction OpacityTransferFunction::fromVariant(const QVariant &variant)
 {
     OpacityTransferFunction opacityTransferFunction;
@@ -105,6 +96,5 @@ OpacityTransferFunction OpacityTransferFunction::fromVariant(const QVariant &var
 
     return opacityTransferFunction;
 }
-
 
 } // namespace udg

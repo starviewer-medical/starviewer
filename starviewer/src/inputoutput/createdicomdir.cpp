@@ -29,24 +29,24 @@ CreateDicomdir::~CreateDicomdir()
 {
 }
 
-void CreateDicomdir::setDevice( recordDeviceDicomDir deviceToCreateDicomdir )
+void CreateDicomdir::setDevice(recordDeviceDicomDir deviceToCreateDicomdir)
 {
     //indiquem que el propòsit d'aquest dicomdir
-    switch ( deviceToCreateDicomdir )
+    switch (deviceToCreateDicomdir)
     {
-        case recordDeviceDicomDir(HardDisk) :
+        case recordDeviceDicomDir(HardDisk):
             m_optProfile = DicomDirInterface::AP_GeneralPurpose;
             break;
-        case recordDeviceDicomDir(CdRom) :
+        case recordDeviceDicomDir(CdRom):
             m_optProfile = DicomDirInterface::AP_GeneralPurpose;
             break;
-        case recordDeviceDicomDir(DvdRom) :
+        case recordDeviceDicomDir(DvdRom):
             m_optProfile = DicomDirInterface::AP_GeneralPurposeDVD;
             break;
-        case recordDeviceDicomDir(UsbPen) :
+        case recordDeviceDicomDir(UsbPen):
             m_optProfile = DicomDirInterface::AP_USBandFlash;
             break;
-        default :
+        default:
             m_optProfile = DicomDirInterface::AP_GeneralPurpose;
             break;
     }
@@ -54,23 +54,23 @@ void CreateDicomdir::setDevice( recordDeviceDicomDir deviceToCreateDicomdir )
 
 void CreateDicomdir::setStrictMode(bool enabled)
 {
-    if ( enabled )
+    if (enabled)
     {
-        m_ddir.enableInventMode( OFFalse );//Rebutgem imatges que contingui tags de tipus 1 amb longitut 0
-        m_ddir.disableEncodingCheck( OFFalse );//Rebutja Imatges que no compleixin l'estàndard dicom en la codificació de la informació dels pixels
-        m_ddir.disableResolutionCheck( OFFalse );//rebutja imatges que no compleixin l'estàndard dicom en la codificació de la informació dels pixels
-        m_ddir.enableInventPatientIDMode( OFFalse );//rebutgem imatges que no tinguin PatientID
+        m_ddir.enableInventMode(OFFalse);//Rebutgem imatges que contingui tags de tipus 1 amb longitut 0
+        m_ddir.disableEncodingCheck(OFFalse);//Rebutja Imatges que no compleixin l'estàndard dicom en la codificació de la informació dels pixels
+        m_ddir.disableResolutionCheck(OFFalse);//rebutja imatges que no compleixin l'estàndard dicom en la codificació de la informació dels pixels
+        m_ddir.enableInventPatientIDMode(OFFalse);//rebutgem imatges que no tinguin PatientID
 
-        INFO_LOG( "Es creara el DICOMDIR en mode estricte de compliment del DICOM" );
+        INFO_LOG("Es creara el DICOMDIR en mode estricte de compliment del DICOM");
     }
     else // no volem mode estricte
     {
-        m_ddir.enableInventMode( OFTrue) ;//si una imatge, no té algun tag de nivell 1, que són els tags obligatoris i que no poden tenir longitut 1, al crear el dicomdir se'ls inventa
-        m_ddir.disableEncodingCheck( OFTrue) ;//Accepta Imatges que no compleixin l'estàndard dicom en la codificació de la informació dels pixels
-        m_ddir.disableResolutionCheck( OFTrue );//Accepta Imatges que no compleixi la resolució espacial
-        m_ddir.enableInventPatientIDMode( OFTrue );//en cas que una pacient no tingui PatientID se l'inventa
+        m_ddir.enableInventMode(OFTrue);//si una imatge, no té algun tag de nivell 1, que són els tags obligatoris i que no poden tenir longitut 1, al crear el dicomdir se'ls inventa
+        m_ddir.disableEncodingCheck(OFTrue);//Accepta Imatges que no compleixin l'estàndard dicom en la codificació de la informació dels pixels
+        m_ddir.disableResolutionCheck(OFTrue);//Accepta Imatges que no compleixi la resolució espacial
+        m_ddir.enableInventPatientIDMode(OFTrue);//en cas que una pacient no tingui PatientID se l'inventa
 
-        INFO_LOG( "Es creara el DICOMDIR en mode permisiu en el compliment del DICOM" );
+        INFO_LOG("Es creara el DICOMDIR en mode permisiu en el compliment del DICOM");
     }
 }
 
@@ -81,7 +81,7 @@ void CreateDicomdir::setCheckTransferSyntax(bool checkTransferSyntax)
     m_ddir.disableTransferSyntaxCheck(checkTransferSyntax);
 }
 
-Status CreateDicomdir::create( QString dicomdirPath )
+Status CreateDicomdir::create(QString dicomdirPath)
 {
     QString outputDirectory = dicomdirPath + "/DICOMDIR";//Nom del fitxer dicomDir
     OFList<OFString> fileNames;/* create list of input files */
@@ -96,53 +96,52 @@ Status CreateDicomdir::create( QString dicomdirPath )
     Status state;
 
     //busquem el fitxers al dicomdir. Anteriorment a la classe ConvertoToDicomdir s'han d'haver copiat els fitxers dels estudis seleccionats, al directori dicomdir destí
-    OFStandard::searchDirectoryRecursively( "" , fileNames, opt_pattern , qPrintable( QDir::toNativeSeparators( dicomdirPath ) ) );
+    OFStandard::searchDirectoryRecursively("", fileNames, opt_pattern, qPrintable(QDir::toNativeSeparators(dicomdirPath)));
 
     //comprovem que el directori no estigui buit
-    if ( fileNames.empty() )
+    if (fileNames.empty())
     {
-        ERROR_LOG ( "El directori origen està buit" );
-        state.setStatus( " no input files: the directory is empty " , false , 1301 );
+        ERROR_LOG ("El directori origen està buit");
+        state.setStatus(" no input files: the directory is empty ", false, 1301);
         return state;
     }
 
     //creem el dicomdir
-    result = m_ddir.createNewDicomDir( m_optProfile , qPrintable( QDir::toNativeSeparators( outputDirectory ) ) , opt_fileset );
+    result = m_ddir.createNewDicomDir(m_optProfile, qPrintable(QDir::toNativeSeparators(outputDirectory)), opt_fileset);
 
-    if ( !result.good() )
+    if (!result.good())
     {
-        ERROR_LOG ( "Error al crear el DICOMDIR. ERROR : " + QString( result.text() ) );
-        state.setStatus( result );
+        ERROR_LOG ("Error al crear el DICOMDIR. ERROR : " + QString(result.text()));
+        state.setStatus(result);
         return state;
     }
 
     /* set fileset descriptor and character set */
-    result = m_ddir.setFilesetDescriptor( opt_descriptor , opt_charset );
-    if ( result.good() )
+    result = m_ddir.setFilesetDescriptor(opt_descriptor, opt_charset);
+    if (result.good())
     {
-        OFListIterator( OFString ) iter = fileNames.begin();
-        OFListIterator( OFString ) last = fileNames.end();
+        OFListIterator(OFString) iter = fileNames.begin();
+        OFListIterator(OFString) last = fileNames.end();
 
-        
         //iterem sobre la llista de fitxer i els afegim al dicomdir
-        while ( ( iter != last ) && result.good() )
+        while ((iter != last) && result.good())
         {
             //afegim els fitxers al dicomdir
-            result = m_ddir.addDicomFile( qPrintable(QString((*iter).c_str()).toUpper()) , qPrintable( QDir::toNativeSeparators ( dicomdirPath ) ) );
-            if ( result.good() )
+            result = m_ddir.addDicomFile(qPrintable(QString((*iter).c_str()).toUpper()), qPrintable(QDir::toNativeSeparators (dicomdirPath)));
+            if (result.good())
                 iter++;
         }
 
-        if( !result.good() )
+        if (!result.good())
         {
-            ERROR_LOG( "Error al convertir a DICOMDIR el fitxer : " + dicomdirPath + "/" + ( *iter ).c_str() + result.text());
+            ERROR_LOG("Error al convertir a DICOMDIR el fitxer : " + dicomdirPath + "/" + (*iter).c_str() + result.text());
             result = EC_IllegalCall;
         }
         else
-            result = m_ddir.writeDicomDir ( opt_enctype , opt_glenc ); //escribim el dicomDir
+            result = m_ddir.writeDicomDir (opt_enctype, opt_glenc); //escribim el dicomDir
     }
 
-    return state.setStatus( result );
+    return state.setStatus(result);
 }
 
 }

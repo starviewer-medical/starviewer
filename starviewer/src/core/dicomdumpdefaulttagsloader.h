@@ -13,7 +13,7 @@ namespace udg {
 
 class DICOMDumpDefaultTagsLoader {
 
-public:    
+public:
     DICOMDumpDefaultTagsLoader();
 
     ~DICOMDumpDefaultTagsLoader();

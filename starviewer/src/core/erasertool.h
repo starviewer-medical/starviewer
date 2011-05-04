@@ -19,20 +19,20 @@ class EraserTool : public Tool {
 Q_OBJECT
 public:
     /// Possibles estats de la tool
-    enum { StartClick , None };
-  
+    enum { StartClick, None };
+
     EraserTool(QViewer *viewer, QObject *parent = 0);
     ~EraserTool();
 
     void handleEvent(unsigned long eventID);
 
-private: 
+private:
     /// Inicia el procés de determinació de la zona d'esborrat
     void startEraserAction();
-    
+
     /// Dibuixa l'àrea d'esborrat
     void drawAreaOfErasure();
-    
+
     /// Cercarà quina és la primitiva més propera, i si està lo suficientment aprop l'esborrarà.
     void erasePrimitive();
 
@@ -51,16 +51,16 @@ private slots:
 private:
     /// Viewer 2D sobre el qual treballem
     Q2DViewer *m_2DViewer;
-    
+
     /// Ens permet determinar l'estat de la tool
     int m_state;
-    
+
     /// Primer punt de l'àrea d'esborrat
     double m_startPoint[3];
-    
+
     /// Darrer punt de l'àrea d'esborrat
     double m_endPoint[3];
-    
+
     /// Polígon que ens marca la zona d'esborrat.
     DrawerPolygon *m_polygon;
 };

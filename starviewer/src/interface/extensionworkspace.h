@@ -10,7 +10,7 @@ class QToolButton;
 
 namespace udg {
 
-class ExtensionWorkspace : public QTabWidget{
+class ExtensionWorkspace : public QTabWidget {
 Q_OBJECT
 public:
 
@@ -21,16 +21,16 @@ public:
     /// Afegeix una nova aplicació
     /// Li indiquem el widget, títol visible per l'usuari i nom intern de l'aplicació
     //\TODO: paràmetre de recursos?, afegir un id d'aplicació per poder-la referenciar, afegir una label/nom, +altres possibles paràmetres
-    void addApplication( QWidget *application , QString caption, const QString &extensionIdentifier );
+    void addApplication(QWidget *application, QString caption, const QString &extensionIdentifier);
 
     /// Treu una aplicació de l'espai de mini-aplicacions i l'elimina de memòria
-    void removeApplication( QWidget *application );
+    void removeApplication(QWidget *application);
 
     /// Elimina per complet totes les extensions que hi hagi al workspace
     void killThemAll();
 
     /// Ens retorna el mapa que conté les extensions obertes associades al seu nom
-    QMap<QWidget *,QString> getActiveExtensions() const;
+    QMap<QWidget *, QString> getActiveExtensions() const;
 
 public slots:
     /// Per tancar l'aplicació que està oberta en aquell moment
@@ -51,7 +51,7 @@ private slots:
 
 private:
     /// Mapa que conté les extensions que tenim obertes, associades al seu nom
-    QMap<QWidget *,QString> m_activeExtensions;
+    QMap<QWidget *, QString> m_activeExtensions;
 };
 
 };  //  end  namespace udg

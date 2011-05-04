@@ -17,7 +17,7 @@ d'errors que utilitzarem nosaltres en la nostre aplicació, aixi si mai el contr
  *d'error!
  *
  */
-namespace udg{
+namespace udg {
 
 class Status
 {
@@ -26,35 +26,35 @@ public :
 
     Status();
 
-	/** Retorna un text descrivint l'error o l'exit del procés
-	 * @return text descriptiu de l'exit o l'error de la crida
-	 */
+    /** Retorna un text descrivint l'error o l'exit del procés
+     * @return text descriptiu de l'exit o l'error de la crida
+     */
     QString text() const;
 
-	/** per contruir l'objecte status
- 	 * @param OFCodition resultant d'una crida
-	 * @return retorna l'objecte status
-	 */
-    Status setStatus( const OFCondition );
+    /** per contruir l'objecte status
+      * @param OFCodition resultant d'una crida
+     * @return retorna l'objecte status
+     */
+    Status setStatus(const OFCondition);
 
-	/** Crea un objecte Status
-	 * @param descripció de l'status
-	 * @param indica si s'ha finalitzat amb èxit
-	 * @param número d'erro en cas d'haver-ni
-	 * @return retorna l'objecte status
- 	 */
-    Status setStatus( QString , bool , int );
+    /** Crea un objecte Status
+     * @param descripció de l'status
+     * @param indica si s'ha finalitzat amb èxit
+     * @param número d'erro en cas d'haver-ni
+     * @return retorna l'objecte status
+      */
+    Status setStatus(QString, bool, int);
 
-	/** Retorna si l'èxit de l'element cridat
-	 * @return boolea indicant l'exit de la crida
-	 */
+    /** Retorna si l'èxit de l'element cridat
+     * @return boolea indicant l'exit de la crida
+     */
     bool good() const;
 
-	/** Retorna el codi d'estat
-	 * @return codi d'estat
-  	 */
+    /** Retorna el codi d'estat
+     * @return codi d'estat
+       */
     int code() const;
-    
+
 private :
 
     QString m_descText;

@@ -10,13 +10,13 @@ class QMouseEvent;
 
 namespace udg {
 
-/** Classe que mostra les pantalles (o monitors) disponibles en una petita finestra (QDialog) 
-    i deixa seleccionar a quin es vol moure la finestra principal. 
+/** Classe que mostra les pantalles (o monitors) disponibles en una petita finestra (QDialog)
+    i deixa seleccionar a quin es vol moure la finestra principal.
     Retorna l'identificador de la pantalla, i és fora d'aquesta que s'ha de fer les operacions
     de moure o no la pantalla.
 */
 class QScreenDistribution : public QWidget {
-Q_OBJECT  
+Q_OBJECT
 
 public:
     /// Constructor, window és la finestra que es mourà.
@@ -33,7 +33,7 @@ protected:
     /// Captura del moviment del ratolí, comproba si el ratolí està a sobre d'algun dels icones de les
     /// pantalles i el repinta donant-li relleu.
     void mouseMoveEvent(QMouseEvent *event);
-    /// Captura la posició del click de ratolí i comproba sobre quin icona de pantalla s'ha fet click. 
+    /// Captura la posició del click de ratolí i comproba sobre quin icona de pantalla s'ha fet click.
     /// A continuació crida a ScreenManager per moure la finestra principal a aquesta.
     void mousePressEvent(QMouseEvent *event);
     /// Pinta la distribució de les pantalles. Si el ratolí està sobre d'alguna, la pinta amb relleu.

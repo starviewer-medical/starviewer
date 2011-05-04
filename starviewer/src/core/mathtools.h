@@ -30,7 +30,7 @@ static const double Epsilon;
 static const double DoubleMaximumValue;
 
 ///
-/// Operacions aritmètiques 
+/// Operacions aritmètiques
 ///
 
 /// Ens retorna el mínim dels dos valors
@@ -58,15 +58,15 @@ static double logTwo(const double x, const bool zero = true);
 /// Arrel cúbica
 static double cubeRoot(double x);
 
-/// Determina si podem considerar pràcticament iguals els dos 
-/// valors passats per paràmetre si la seva diferència és menor al valor d'Epsilon 
+/// Determina si podem considerar pràcticament iguals els dos
+/// valors passats per paràmetre si la seva diferència és menor al valor d'Epsilon
 static bool closeEnough(float f1, float f2);
 
 /// Distància entre punts 2D i 3D
 static double getDistance2D(const double firstPoint[2], const double secondPoint[2]);
 static double getDistance3D(const double firstPoint[3], const double secondPoint[3]);
 
-/// Distància entre un punt i un segment finit definit per lineFirstPoint i lineSecondPoint.
+/// Distància entre un punt i un segment finit definit per lineFirstPoint i lineSecondPoint
 /// El paràmetre de sortida closestPoint, ens indicarà quin és el punt de la línia que queda més a prop del punt indicat
 static double getPointToFiniteLineDistance(double point[3], double lineFirstPoint[3], double lineSecondPoint[3], double closestPoint[3]);
 
@@ -75,15 +75,15 @@ static double getPointToFiniteLineDistance(double point[3], double lineFirstPoin
 ///
 
 /// Calcula la intersecció de dos plans definits per un punt i una normal (p,n) i (q,m) respectivament
-/// Retorna 0 si els plans no intersecten perquè són paral·lels , altrament >0
-static int planeIntersection(double p[3] , double n[3], double q[3] , double m[3], double r[3] , double t[3]);
+/// Retorna 0 si els plans no intersecten perquè són paral·lels, altrament >0
+static int planeIntersection(double p[3], double n[3], double q[3], double m[3], double r[3], double t[3]);
 
-/// Calcula la intersecció de tres plans definits per un punt i una normal (p,n) , (q,m) , (r,t) respectivament
-/// Retorna 0 si ... -1 si ... perquè són paral·lels , altrament >0
-static int planeIntersection(double p[3] , double n[3], double q[3] , double m[3], double r[3] , double t[3] , double intersectionPoint[3]);
+/// Calcula la intersecció de tres plans definits per un punt i una normal (p,n), (q,m), (r,t) respectivament
+/// Retorna 0 si ... -1 si ... perquè són paral·lels, altrament >0
+static int planeIntersection(double p[3], double n[3], double q[3], double m[3], double r[3], double t[3], double intersectionPoint[3]);
 
 /**
-* Retorna el punt d'intersecció de dues línies 
+* Retorna el punt d'intersecció de dues línies
 * infinites definides per dos segments
 * @param p1 Primer punt de la primera recta
 * @param p2 Segon punt de la primera recta
@@ -113,8 +113,8 @@ static void crossProduct(double vectorDirector1[3], double vectorDirector2[3], d
 static double normalize(double vector[3]);
 
 /// Calcula l'angle entre dos vectors. Retorna el valor en radians o graus
-static double angleInRadians(double vec1[3] , double vec2[3]);
-static double angleInDegrees(double vec1[3] , double vec2[3]);
+static double angleInRadians(double vec1[3], double vec2[3]);
+static double angleInDegrees(double vec1[3], double vec2[3]);
 
 /// Retorna cert si \a x és NaN.
 static bool isNaN(double x);
@@ -123,7 +123,4 @@ static bool isNaN(double x);
 
 } // end namespace udg
 
-
 #endif
-
-

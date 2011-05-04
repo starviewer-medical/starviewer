@@ -18,7 +18,7 @@ class RepresentationsLayer : public QObject
 {
 Q_OBJECT
 public:
-    RepresentationsLayer( Q2DViewer *viewer, QObject *parent = 0 );
+    RepresentationsLayer(Q2DViewer *viewer, QObject *parent = 0);
     ~RepresentationsLayer();
 
     ///Afegeix una representacio a la llista.
@@ -46,9 +46,9 @@ private:
     int m_currentSlice;
 
     ///Contenidors de ToolRepresentation, un per cada pla
-    QMultiMap< int, ToolRepresentation *> m_axialToolRepresentations;
-    QMultiMap< int, ToolRepresentation *> m_sagitalToolRepresentations;
-    QMultiMap< int, ToolRepresentation *> m_coronalToolRepresentations;
+    QMultiMap<int, ToolRepresentation *> m_axialToolRepresentations;
+    QMultiMap<int, ToolRepresentation *> m_sagitalToolRepresentations;
+    QMultiMap<int, ToolRepresentation *> m_coronalToolRepresentations;
 
 };
 

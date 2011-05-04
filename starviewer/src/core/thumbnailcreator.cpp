@@ -60,14 +60,14 @@ QImage ThumbnailCreator::getThumbnail(const Image *image, int resolution)
 
 QImage ThumbnailCreator::getThumbnail(DICOMTagReader *reader, int resolution)
 {
-    return createThumbnail(reader,resolution);
+    return createThumbnail(reader, resolution);
 }
 
 QImage ThumbnailCreator::makeEmptyThumbnailWithCustomText(const QString &text, int resolution)
 {
-	QImage thumbnail;
-	
-	thumbnail = QImage(resolution, resolution, QImage::Format_RGB32);
+    QImage thumbnail;
+
+    thumbnail = QImage(resolution, resolution, QImage::Format_RGB32);
     thumbnail.fill(Qt::black);
 
     QPainter painter(&thumbnail);
@@ -80,20 +80,20 @@ QImage ThumbnailCreator::makeEmptyThumbnailWithCustomText(const QString &text, i
 QImage ThumbnailCreator::createImageThumbnail(const QString &imageFileName, int resolution)
 {
     DICOMTagReader reader(imageFileName);
-    return createThumbnail(&reader,resolution);
+    return createThumbnail(&reader, resolution);
 }
 
 QImage ThumbnailCreator::createThumbnail(DICOMTagReader *reader, int resolution)
 {
     QImage thumbnail;
-    
+
     if (isSuitableForThumbnailCreation(reader))
     {
         try
         {
             // Carreguem el fitxer dicom a escalar
             DicomImage *dicomImage = new DicomImage(reader->getDcmDataset(), reader->getDcmDataset()->getOriginalXfer());
-            thumbnail = createThumbnail(dicomImage,resolution);
+            thumbnail = createThumbnail(dicomImage, resolution);
 
             // Cal esborrar la DicomImage per no tenir fugues de memòria
             if (dicomImage)
@@ -200,17 +200,17 @@ bool ThumbnailCreator::isSuitableForThumbnailCreation(DICOMTagReader *reader) co
         DEBUG_LOG("El DICOMTagReader no té cap DcmDataset assignat, no podem generar el thumbnail.");
         return false;
     }
-    
+
     bool suitable = true;
 
-    // Ens hem trobat que per algunes imatges que contenen Overlays, la DICOMImage no es pot crear. 
+    // Ens hem trobat que per algunes imatges que contenen Overlays, la DICOMImage no es pot crear.
     // Els casos que hem trobat estan descrits al ticket #1121
-    // La solució adoptada ara mateix és que si trobem que la imatge conté algun dels tags següents, 
+    // La solució adoptada ara mateix és que si trobem que la imatge conté algun dels tags següents,
     // descartem la creació del thumbnail i en creem un de "neutre" indicant que no s'ha pogut crear aquest
     // En quant siguem capaços de tornar a llegir aquestes imatges sense problema, aquesta comprovació desapareixerà
     QList<DICOMTag> tags;
-    tags << DICOMOverlayRows << DICOMOverlayColumns << DICOMOverlayType << DICOMOverlayOrigin << DICOMOverlayBitsAllocated << DICOMOverlayBitPosition <<  DICOMOverlayData;
-    foreach(DICOMTag tag, tags)
+    tags << DICOMOverlayRows << DICOMOverlayColumns << DICOMOverlayType << DICOMOverlayOrigin << DICOMOverlayBitsAllocated << DICOMOverlayBitPosition << DICOMOverlayData;
+    foreach (DICOMTag tag, tags)
     {
         if (reader->tagExists(tag))
         {
@@ -229,7 +229,7 @@ QImage ThumbnailCreator::convertToQImage(DicomImage *dicomImage)
 
     // El següent codi crea una imatge PGM o PPM a memòria i carreguem aquest buffer directament a la QImage
     // Basat en el codi de http://forum.dcmtk.org/viewtopic.php?t=120&highlight=qpixmap
-    
+
     int bytesPerComponent;
     QString imageFormat;
     QString imageHeader;
@@ -250,7 +250,7 @@ QImage ThumbnailCreator::convertToQImage(DicomImage *dicomImage)
     const int width = (int)(dicomImage->getWidth());
     const int height = (int)(dicomImage->getHeight());
     imageHeader += QString("\n%1 %2\n255\n").arg(width).arg(height);
-    
+
     // QImage en la que carregarem el buffer de dades
     QImage thumbnail;
     // Create output buffer for DicomImage class

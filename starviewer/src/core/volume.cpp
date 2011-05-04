@@ -290,7 +290,7 @@ Image* Volume::getImage(int sliceNumber, int phaseNumber) const
     if (!m_imageSet.isEmpty())
     {
         int imageIndex = sliceNumber * m_numberOfPhases + phaseNumber;
-        if ( imageIndex >= 0 && imageIndex < m_imageSet.count())
+        if (imageIndex >= 0 && imageIndex < m_imageSet.count())
         {
             image = m_imageSet.at(imageIndex);
         }
@@ -342,7 +342,7 @@ Volume::VoxelType* Volume::getScalarPointer(int x, int y, int z)
 
 Volume::VoxelType* Volume::getScalarPointer(int index[3])
 {
-	return this->getScalarPointer(index[0], index[1], index[2]);
+    return this->getScalarPointer(index[0], index[1], index[2]);
 }
 
 bool Volume::getVoxelValue(double coordinate[3], QVector<double> &voxelValue)
@@ -354,10 +354,10 @@ void Volume::convertToNeutralVolume()
 {
     m_volumePixelData->convertToNeutralPixelData();
 
-    // Quan creem el volum neutre indiquem que només tenim 1 sola fase 
+    // Quan creem el volum neutre indiquem que només tenim 1 sola fase
     // TODO Potser s'haurien de crear tantes fases com les que indiqui la sèrie?
     this->setNumberOfPhases(1);
-    
+
     // Indiquem que hem carregat les dades
     m_volumePixelDataLoaded = true;
 }
@@ -368,7 +368,7 @@ bool Volume::fitsIntoMemory()
     {
         return true;
     }
-    
+
     unsigned long long int size = 0;
     foreach (Image *image, m_imageSet)
     {
@@ -382,7 +382,7 @@ bool Volume::fitsIntoMemory()
         delete[] p;
         return true;
     }
-    catch (std::bad_alloc)
+    catch (std::bad_alloc &ba)
     {
         return false;
     }

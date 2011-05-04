@@ -91,10 +91,10 @@ bool StarviewerApplicationCommandLine::parseAndRun(QStringList arguments, QStrin
     }
 }
 
-bool StarviewerApplicationCommandLine::takeOptionToRun(QPair<StarviewerApplicationCommandLine::StarviewerCommandLineOption,QString> &optionValue)
-{   
+bool StarviewerApplicationCommandLine::takeOptionToRun(QPair<StarviewerApplicationCommandLine::StarviewerCommandLineOption, QString> &optionValue)
+{
     bool optionValueTaken = false;
-    
+
     m_mutexCommandLineOptionListToProcess.lock();
     if (!m_commandLineOptionListToProcess.isEmpty())
     {
@@ -107,7 +107,7 @@ bool StarviewerApplicationCommandLine::takeOptionToRun(QPair<StarviewerApplicati
     return optionValueTaken;
 }
 
-void StarviewerApplicationCommandLine::AddOptionToCommandLineOptionListToProcess(QPair<StarviewerApplicationCommandLine::StarviewerCommandLineOption,QString> optionValue)
+void StarviewerApplicationCommandLine::AddOptionToCommandLineOptionListToProcess(QPair<StarviewerApplicationCommandLine::StarviewerCommandLineOption, QString> optionValue)
 {
     m_mutexCommandLineOptionListToProcess.lock();
     m_commandLineOptionListToProcess.append(optionValue);

@@ -16,7 +16,7 @@ class QApplicationMainWindow;
 /**
 Gestor de mini-aplicacions i serveis de l'aplicació principal
 */
-class ExtensionHandler : public QObject{
+class ExtensionHandler : public QObject {
 Q_OBJECT
 public:
     ExtensionHandler(QApplicationMainWindow *mainApp, QObject *parent = 0);
@@ -25,8 +25,8 @@ public:
 
 public slots:
     /// rep la petició d'un servei/mini-aplicació i fa el que calgui
-    void request( int who );
-    bool request( const QString &who );
+    void request(int who);
+    bool request(const QString &who);
 
     /**
      * Obrirà l'extensió per defecte. Si no hi ha dades de pacient vàlides, no farà res.
@@ -37,7 +37,7 @@ public slots:
      * Assigna el contexte de l'extensió
      * @param context contexte
      */
-    void setContext( const ExtensionContext &context );
+    void setContext(const ExtensionContext &context);
 
     /**
      * Obtenim el contexte de l'extensió
@@ -66,7 +66,7 @@ private slots:
      * s'assumeix que cada entrada correspon a un pacient diferent, amb un o varis estudis
      * Afegim un segon paràmetre que ens indica si els pacients a processar només cal carregar-los o fer-ne un "view"
      */
-    void processInput(QList<Patient *> patientsList, bool loadOnly = false );
+    void processInput(QList<Patient *> patientsList, bool loadOnly = false);
 
 private:
     /// Crea les connexions de signals i slots
@@ -74,7 +74,7 @@ private:
 
     /// Afegeix un pacient a la mainwindow tenint en compte si cal fusionar o no i si es pot reemplaçar el pacient actual ja carregat
     /// Afegim un segon paràmetre que ens indica si els pacients a processar només cal carregar-los o fer-ne un "view"
-    void addPatientToWindow(Patient *patient, bool canReplaceActualPatient, bool loadOnly = false );
+    void addPatientToWindow(Patient *patient, bool canReplaceActualPatient, bool loadOnly = false);
 
     /// Processa el pacient donat per tal que pugui ser usat per les extensions
     //  Li crea els volums al repositori i assigna quina és la sèrie per defecte

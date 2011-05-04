@@ -9,7 +9,7 @@
 
 namespace udg {
 
-typedef Singleton< GenericFactory<ExtensionMediator, QString> > ExtensionMediatorFactory;
+typedef Singleton<GenericFactory<ExtensionMediator, QString> > ExtensionMediatorFactory;
 
 }
 

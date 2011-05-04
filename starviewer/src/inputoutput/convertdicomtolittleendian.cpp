@@ -28,7 +28,7 @@ ConvertDicomToLittleEndian::~ConvertDicomToLittleEndian()
 {
 }
 
-Status ConvertDicomToLittleEndian::convert( QString inputFile , QString outputFile )
+Status ConvertDicomToLittleEndian::convert(QString inputFile, QString outputFile)
 {
     DcmFileFormat fileformat;
     DcmDataset * dataset = fileformat.getDataset();
@@ -45,35 +45,35 @@ Status ConvertDicomToLittleEndian::convert( QString inputFile , QString outputFi
     OFCmdUnsignedInt opt_itempad = 0;
     OFBool opt_oDataset = OFFalse;
 
-    error = fileformat.loadFile( qPrintable( QDir::toNativeSeparators( inputFile ) ) , opt_ixfer, EGL_noChange , DCM_MaxReadLength , opt_readMode );
+    error = fileformat.loadFile(qPrintable(QDir::toNativeSeparators(inputFile)), opt_ixfer, EGL_noChange, DCM_MaxReadLength, opt_readMode);
 
-    if ( error.bad() ) 
+    if (error.bad())
     {
         ERROR_LOG(QString("No s'ha pogut obrir el fitxer a convertir LittleEndian %1, descripcio error: %2").arg(inputFile, error.text()));
-        return state.setStatus( error );
+        return state.setStatus(error);
     }
     dataset->loadAllDataIntoMemory();
 
-    DcmXfer opt_oxferSyn( opt_oxfer );
+    DcmXfer opt_oxferSyn(opt_oxfer);
 
-    dataset->chooseRepresentation( opt_oxfer , NULL );
+    dataset->chooseRepresentation(opt_oxfer, NULL);
 
-    if ( !dataset->canWriteXfer( opt_oxfer ) )
+    if (!dataset->canWriteXfer(opt_oxfer))
     {
-        descriptionError =  "Error: no conversion to transfer syntax " + QString( opt_oxferSyn.getXferName() ) + " possible";
-        state.setStatus( qPrintable(descriptionError) , false , 1300 );
+        descriptionError = "Error: no conversion to transfer syntax " + QString(opt_oxferSyn.getXferName()) + " possible";
+        state.setStatus(qPrintable(descriptionError), false, 1300);
         ERROR_LOG(descriptionError);
         return state;
     }
 
-    error = fileformat.saveFile( qPrintable( QDir::toNativeSeparators( outputFile ) ) , opt_oxfer , opt_oenctype , opt_oglenc , opt_opadenc , OFstatic_cast( Uint32 , opt_filepad ) , OFstatic_cast( Uint32 , opt_itempad ) , opt_oDataset );
+    error = fileformat.saveFile(qPrintable(QDir::toNativeSeparators(outputFile)), opt_oxfer, opt_oenctype, opt_oglenc, opt_opadenc, OFstatic_cast(Uint32, opt_filepad), OFstatic_cast(Uint32, opt_itempad), opt_oDataset);
 
     if (!error.good())
     {
         ERROR_LOG(QString("S'ha produit un error al intentar gravar la imatge %1 convertida a LittleEndian al path %2, descripcio error: %3").arg(inputFile, outputFile, error.text()));
     }
 
-    return state.setStatus( error );
+    return state.setStatus(error);
 }
 
 }

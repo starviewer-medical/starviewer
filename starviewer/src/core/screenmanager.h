@@ -29,10 +29,10 @@ public:
     int getNumberOfScreens();
     /// Retorna a quina pantalla està la finestra
     int getIdOfScreen(QWidget *window);
-    
+
     /// Retorna l'identificador de pantalla segons una posició global
     int getScreenID(const QPoint &point) const;
-    
+
     /// Retorna la geometria disponible de la pantalla indicada. Depenent de la plataforma el que es considera
     /// dins del disponible pot variar, com per exemple a windows on s'exclouria de l'espai total el que ocupa la barra de tasques
     /// Resultat indefinit si l'identificador de pantalla no es correspon amb cap id vàlid
@@ -61,16 +61,16 @@ private:
     /// Indica si la primera pantalla està a la dreta de la segona. Per que sigui cert han de ser de la mateixa alçada
     /// i el left de la primera ha de ser igual al right de la segona
     bool isRight(int desktop1, int desktop2);
-    /// Indica si la primera pantalla està en diagonal a sobre a l'esquerra de la segona. Per que sigui cert 
+    /// Indica si la primera pantalla està en diagonal a sobre a l'esquerra de la segona. Per que sigui cert
     /// el punt bottomRight de la primera ha de ser igual al punt topLeft de la segona
     bool isTopLeft(int desktop1, int desktop2);
-    /// Indica si la primera pantalla està en diagonal a sobre a la dreta de la segona. Per que sigui cert 
+    /// Indica si la primera pantalla està en diagonal a sobre a la dreta de la segona. Per que sigui cert
     /// el punt bottomLeft de la primera ha de ser igual al punt topRight de la segona
     bool isTopRight(int desktop1, int desktop2);
-    /// Indica si la primera pantalla està en diagonal a sota a l'esquerra de la segona. Per que sigui cert 
+    /// Indica si la primera pantalla està en diagonal a sota a l'esquerra de la segona. Per que sigui cert
     /// el punt topRight de la primera ha de ser igual al punt bottomLeft de la segona
     bool isBottomLeft(int desktop1, int desktop2);
-    /// Indica si la primera pantalla està en diagonal a sota a la dreta de la segona. Per que sigui cert 
+    /// Indica si la primera pantalla està en diagonal a sota a la dreta de la segona. Per que sigui cert
     /// el punt topLeft de la primera ha de ser igual al punt bottomRight de la segona
     bool isBottomRight(int desktop1, int desktop2);
 
@@ -99,7 +99,7 @@ private:
     /// Indica si la primera pantalla està més a la dreta que la segona. Comprova que el left de la primera estigui
     /// per la dreta del left de la segona.
     bool isMoreOnRight(int desktop1, int desktop2);
-    
+
     /// Retorna l'identificador de la pantalla que hi ha a l'esquerra de la que es passa per paràmetres.
     int whoIsLeft(int desktopIAm);
     /// Retorna l'identificador de la pantalla que hi ha a la dreta de la que es passa per paràmetres.

@@ -22,7 +22,7 @@ public:
 
     void applyFilter(Volume* output);
 
-    void computeSpeedMap(itk::Image< float, 3 >* speedMap);
+    void computeSpeedMap(itk::Image<float, 3>* speedMap);
 
     double erfc(double x);
 
@@ -76,7 +76,6 @@ public:
 
     void setUpperVentriclesThreshold (int x) {m_upperVentriclesThreshold=x;};
 
-
 private:
 
     ///Volum que volem segmentar
@@ -102,7 +101,6 @@ private:
     double m_volume;
     int    m_cont;
     int    m_edemaCont;
-
 
     ///valors mètode edema
     double m_initialDistance;

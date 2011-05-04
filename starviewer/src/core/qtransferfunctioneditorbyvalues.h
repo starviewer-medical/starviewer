@@ -1,7 +1,6 @@
 #ifndef UDGQTRANSFERFUNCTIONEDITORBYVALUES_H
 #define UDGQTRANSFERFUNCTIONEDITORBYVALUES_H
 
-
 #include "qtransferfunctioneditor.h"
 #include "ui_qtransferfunctioneditorbyvaluesbase.h"
 
@@ -9,9 +8,7 @@
 
 namespace udg {
 
-
 class QTransferFunctionIntervalEditor;
-
 
 /**
  * Editor de funcions de transferència basat en valors.
@@ -34,14 +31,14 @@ class QTransferFunctionEditorByValues
 public:
 
     /// Crea l'editor amb un sol interval de 0 a 255 amb RGBA = (0,0,0,0).
-    QTransferFunctionEditorByValues( QWidget * parent = 0 );
+    QTransferFunctionEditorByValues(QWidget * parent = 0);
     virtual ~QTransferFunctionEditorByValues();
 
     /// Assigna el valor de propietat màxim mapat per aquest editor.
-    virtual void setMaximum( unsigned short maximum );
+    virtual void setMaximum(unsigned short maximum);
 
     /// Assigna una funció de transferència a l'editor.
-    virtual void setTransferFunction( const TransferFunction & transferFunction );
+    virtual void setTransferFunction(const TransferFunction & transferFunction);
     /// Retorna la funció de transferència de l'editor.
     virtual const TransferFunction & getTransferFunction() const;
 
@@ -85,8 +82,6 @@ private:
 
 };
 
-
 }
-
 
 #endif

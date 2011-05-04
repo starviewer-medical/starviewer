@@ -20,14 +20,14 @@ namespace udg {
     Amb aquesta simple línia de codi ja tenim registrada la nostra extensió en el factory.
 */
 template <class FactoryType>
-class ExtensionFactoryRegister: public GenericSingletonFactoryRegister<QWidget, FactoryType, QString, ExtensionFactory, QWidget>
+class ExtensionFactoryRegister : public GenericSingletonFactoryRegister<QWidget, FactoryType, QString, ExtensionFactory, QWidget>
 {
 public:
     ///Mètode
     ExtensionFactoryRegister(const QString &identifier)
-        :GenericSingletonFactoryRegister<QWidget, FactoryType, QString, ExtensionFactory, QWidget>( identifier )
+        :GenericSingletonFactoryRegister<QWidget, FactoryType, QString, ExtensionFactory, QWidget>(identifier)
     {
-        DEBUG_LOG( "ExtensionFactoryRegister" + identifier );
+        DEBUG_LOG("ExtensionFactoryRegister" + identifier);
     }
 };
 

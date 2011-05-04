@@ -59,7 +59,7 @@ private:
 private slots:
     /// Insereix els estudis a l'arbre.
     void insertStudiesToTree(QList<Study*> studiesList, QHash<QString, QString> hashPacsIDOfStudyInstanceUID);
-    
+
     /// Invoca la descàrrega i càrrega de l'estudi identificat amb l'uid proporcionat.
     void retrieveAndLoadStudy(const QString &studyInstanceUID);
 
@@ -71,8 +71,8 @@ private slots:
 private:
 
     /// Enumeració creada per tal de saber si els signals que emet QueryScreen pertanyen a alguna de les peticions d'aquesta classe
-    enum Status {Initialized, Pending, Downloading, Finished, Failed};
-    enum Columns {DownloadingStatus = 0, DownloadButton = 1, Modality = 2, Description = 3, Date = 4, Name = 5};
+    enum Status { Initialized, Pending, Downloading, Finished, Failed };
+    enum Columns { DownloadingStatus = 0, DownloadButton = 1, Modality = 2, Description = 3, Date = 4, Name = 5 };
 
     /// Contenidor d'objectes associats a l'estudi que serveix per facilitar la intercomunicació
     struct StudyInfo
@@ -86,7 +86,7 @@ private:
     };
 
     /// Estructura que s'encarrega de guardar els contenidors associats a cada Study
-    QHash< QString, StudyInfo *> m_infomationPerStudy;
+    QHash<QString, StudyInfo *> m_infomationPerStudy;
     /// Widget utilitzat per mostrar la llista dels estudis previs
     QTreeWidget *m_previousStudiesTree;
     /// Widget que apareix quan s'està fent la consulta dels possibles estudis previs.

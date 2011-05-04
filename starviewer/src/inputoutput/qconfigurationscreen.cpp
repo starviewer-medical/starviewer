@@ -30,9 +30,9 @@ QConfigurationScreen::QConfigurationScreen(QWidget *parent) : QWidget(parent)
     m_buttonApplyPacs->setIcon(QIcon(":images/apply.png"));
 
     configureInputValidator();
-    
+
     Settings().restoreColumnsWidths(InputOutputSettings::ConfigurationScreenPACSList, m_PacsTreeView);
-    
+
     m_PacsTreeView->setColumnHidden(0, true); // amaguem la columna amb l'ID del PACS que és irrellevant per l'usuari
     m_PacsTreeView->sortByColumn(1, Qt::AscendingOrder);//Ordenem per AETitle
 
@@ -47,8 +47,8 @@ QConfigurationScreen::~QConfigurationScreen()
 void QConfigurationScreen::createConnections()
 {
     //connecta el boto aplicar del Pacs amb l'slot apply
-    connect(m_buttonApplyPacs, SIGNAL(clicked()),  SLOT(applyChanges()));
-    
+    connect(m_buttonApplyPacs, SIGNAL(clicked()), SLOT(applyChanges()));
+
     connect(m_textAETitleMachine, SIGNAL(textChanged(const QString &)), SLOT(enableApplyButtons()));
     connect(m_textTimeout, SIGNAL(textChanged(const QString &)), SLOT(enableApplyButtons()));
     connect(m_textLocalPort, SIGNAL(textChanged(const QString &)), SLOT(enableApplyButtons()));
@@ -65,8 +65,8 @@ void QConfigurationScreen::createConnections()
 
     connect(m_checkBoxQueryRetrieveEnabled, SIGNAL(stateChanged(int)), SLOT(queryRetrieveServiceEnabledChanged()));
     connect(m_checkBoxStoreEnabled, SIGNAL(stateChanged(int)), SLOT(storeServiceEnabledChanged()));
-    
-    connect(m_textQueryRetrieveServicePort, SIGNAL(editingFinished()), SLOT(m_textQueryRetrieveServicePortChanged())); 
+
+    connect(m_textQueryRetrieveServicePort, SIGNAL(editingFinished()), SLOT(m_textQueryRetrieveServicePortChanged()));
 
     //manteniment PACS
     connect(m_buttonAddPacs, SIGNAL(clicked()), SLOT(addPacs()));
@@ -148,13 +148,13 @@ void QConfigurationScreen::addPacs()
 void QConfigurationScreen::updateSelectedPACSInformation()
 {
     QTreeWidgetItem *selectedItem = 0;
-    if(!m_PacsTreeView->selectedItems().isEmpty())
+    if (!m_PacsTreeView->selectedItems().isEmpty())
     {
         // només en podem tenir un de seleccionat
         selectedItem = m_PacsTreeView->selectedItems().first();
         // TODO en comptes d'obtenir del manager, potser es podria obtenir la informació directament del tree widget i estalviar aquest pas de "query"
         PacsDevice selectedPacs = PacsDeviceManager().getPACSDeviceByID(selectedItem->text(0));// selectedItem->text(0) --> ID del pacs seleccionat al TreeWidget
-        if(selectedPacs.isEmpty())
+        if (selectedPacs.isEmpty())
         {
             ERROR_LOG("No s'ha trobat cap PACS configurat amb l'ID: " + selectedItem->text(0));
             DEBUG_LOG("No s'ha trobat cap PACS configurat amb l'ID: " + selectedItem->text(0));
@@ -170,16 +170,16 @@ void QConfigurationScreen::updateSelectedPACSInformation()
             m_textDescription->setText(selectedPacs.getDescription());
             m_checkDefault->setChecked(selectedPacs.isDefault());
             m_checkBoxQueryRetrieveEnabled->setChecked(selectedPacs.isQueryRetrieveServiceEnabled());
-            m_textQueryRetrieveServicePort->setText(selectedPacs.isQueryRetrieveServiceEnabled() ?  QString().setNum(selectedPacs.getQueryRetrieveServicePort()) : "");
+            m_textQueryRetrieveServicePort->setText(selectedPacs.isQueryRetrieveServiceEnabled() ? QString().setNum(selectedPacs.getQueryRetrieveServicePort()) : "");
             m_textQueryRetrieveServicePort->setEnabled(selectedPacs.isQueryRetrieveServiceEnabled());
             m_checkBoxStoreEnabled->setChecked(selectedPacs.isStoreServiceEnabled());
-            m_textStoreServicePort->setText(selectedPacs.isStoreServiceEnabled() ? QString().setNum(selectedPacs.getStoreServicePort()) : "" );
+            m_textStoreServicePort->setText(selectedPacs.isStoreServiceEnabled() ? QString().setNum(selectedPacs.getStoreServicePort()) : "");
             m_textStoreServicePort->setEnabled(selectedPacs.isStoreServiceEnabled());
         }
         // indiquem quin és l'ID del PACS seleccionat
         m_selectedPacsID = selectedPacs.getID();
     }
-    else 
+    else
     {
         m_selectedPacsID = "";
     }
@@ -196,7 +196,7 @@ void QConfigurationScreen::updatePacs()
     if (validatePacsDeviceToSave())
     {
         PacsDevice pacs = getPacsDeviceFromControls();
-        
+
         INFO_LOG("Actualitzant dades del PACS: " + pacs.getAETitle());
 
         PacsDeviceManager().updatePACS(pacs);
@@ -230,7 +230,7 @@ void QConfigurationScreen::fillPacsListView()
 
     QList<PacsDevice> pacsList = PacsDeviceManager().getPACSList();
 
-    foreach(PacsDevice pacs, pacsList)
+    foreach (PacsDevice pacs, pacsList)
     {
         QTreeWidgetItem* item = new QTreeWidgetItem(m_PacsTreeView);
 
@@ -266,7 +266,7 @@ void QConfigurationScreen::test()
             QApplication::restoreOverrideCursor();
             QString message;
 
-            switch(echoToPACS.getLastError())
+            switch (echoToPACS.getLastError())
             {
                 case EchoToPACS::EchoFailed:
                     message = tr("PACS \"%1\" doesn't respond correctly.\nBe sure that the IP and AETitle of It are correct.").arg(pacsDevice.getAETitle());
@@ -289,7 +289,7 @@ bool QConfigurationScreen::validatePacsDeviceToEcho()
 {
     if (m_textAETitle->text().length() == 0)
     {
-         QMessageBox::warning(this, ApplicationNameString, tr("AETitle field can't be empty."));
+        QMessageBox::warning(this, ApplicationNameString, tr("AETitle field can't be empty."));
         return false;
     }
 
@@ -490,7 +490,7 @@ void QConfigurationScreen::queryRetrieveServiceEnabledChanged()
 void QConfigurationScreen::storeServiceEnabledChanged()
 {
     m_textStoreServicePort->setEnabled(m_checkBoxStoreEnabled->isChecked());
-    /*Si ens indiquen que el servei d'Store està permés li donem el mateix port que del Query/Retrieve, ja que la majoria de 
+    /*Si ens indiquen que el servei d'Store està permés li donem el mateix port que del Query/Retrieve, ja que la majoria de
       PACS utilitzen el mateix port per Q/R que per store*/
     m_textStoreServicePort->setText(m_checkBoxStoreEnabled->isChecked() ? m_textQueryRetrieveServicePort->text() : "");
 }

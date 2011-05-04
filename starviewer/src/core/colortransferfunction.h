@@ -1,23 +1,18 @@
 #ifndef COLORTRANSFERFUNCTION_H
 #define COLORTRANSFERFUNCTION_H
 
-
 #include "transferfunctiontemplate.h"
-
 
 class QColor;
 class QVariant;
 
 class vtkColorTransferFunction;
 
-
 namespace udg {
-
 
 /// Retorna la interpolació lineal entre a i b avaluant "a + alpha * (b - a)", que és equivalent a "a * (1 - alpha) + b * alpha".
 template <>
 QColor lerp(const QColor &a, const QColor &b, double alpha);
-
 
 /**
     Representa una funció de transferència de color f: X -> C, on X és el conjunt de valors de propietat (reals) i C el conjunt de colors (QColors).
@@ -59,8 +54,6 @@ private:
 
 };
 
-
 } // namespace udg
-
 
 #endif // COLORTRANSFERFUNCTION_H

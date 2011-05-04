@@ -10,7 +10,7 @@ namespace udg {
 
 /** Aquesta classe s'encarrega de dur a terme les operacions relacionades amb l'objecte estudi de la cache de l'aplicació.
 */
-class LocalDatabaseUtilDAL: public LocalDatabaseBaseDAL
+class LocalDatabaseUtilDAL : public LocalDatabaseBaseDAL
 {
 public:
 

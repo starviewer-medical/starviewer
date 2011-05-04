@@ -58,7 +58,7 @@ public:
     /// @return la llista de modalitats en un string delimitades pel caràcter '/'
     QString getModalitiesAsSingleString() const;
 
-    /// Retorna les modalitats que conté l'estudi. 
+    /// Retorna les modalitats que conté l'estudi.
     /// @return una llista d'strings
     QStringList getModalities() const;
 
@@ -140,7 +140,7 @@ private:
 
     /// Llista de les modalitats de l'estudi
     QStringList m_modalities;
-    
+
     /// Data i hora en que l'estudi va començar. (0008,0020),(0008,0030) Tipus 2.
     QDate m_date;
     QTime m_time;

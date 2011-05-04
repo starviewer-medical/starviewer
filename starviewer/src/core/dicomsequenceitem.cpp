@@ -81,7 +81,7 @@ QString DICOMSequenceItem::toString()
     QString result;
 
     result = "item:";
-    foreach(DICOMAttribute *attribute, this->getAttributes())
+    foreach (DICOMAttribute *attribute, this->getAttributes())
     {
         result += "\n" + attribute->toString();
     }

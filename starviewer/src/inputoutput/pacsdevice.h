@@ -3,9 +3,9 @@
 
 #include <QString>
 
-namespace udg{
+namespace udg {
 
-/** 
+/**
  * Classe que encapsula els paràmetres necessaris per definir un servidor PACS al qual connectar-nos
  * Aquests paràmetres són:
  *
@@ -19,7 +19,7 @@ namespace udg{
  *      - Descripció del PACS
  *      - Ubicació del PACS
  *
- * Altres dades 
+ * Altres dades
  *      - AETitle de la màquina local
  *      - Nombre màxim de connexions simultànies
  *      - Timeout de la connexió
@@ -61,7 +61,7 @@ public:
     void setDefault(bool isDefault);
     bool isDefault() const;
 
-    /// Assigna/Retorna l'ID del PACS. Camp clau assignat per l'aplicació. 
+    /// Assigna/Retorna l'ID del PACS. Camp clau assignat per l'aplicació.
     void setID(const QString &id);
     QString getID() const;
 
@@ -79,13 +79,13 @@ public:
 
     /// Ens diu si aquest objecte conté dades o no
     bool isEmpty() const;
-    
+
     bool operator ==(const PacsDevice &device);
 
 private:
     /// Ens retorna el KeyName que identifica el PACS
     QString getKeyName() const;
-    
+
     /// Ens retorna la llista de noms claus de PACS seleccionats per defecte
     QStringList getDefaultPACSKeyNamesList() const;
 

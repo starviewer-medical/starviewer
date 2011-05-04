@@ -18,30 +18,30 @@
 namespace udg
 {
 
-QInputOutputDicomdirWidget::QInputOutputDicomdirWidget( QWidget *parent ) : QWidget( parent )
+QInputOutputDicomdirWidget::QInputOutputDicomdirWidget(QWidget *parent) : QWidget(parent)
 {
-    setupUi( this );
+    setupUi(this);
 
     createConnections();
     createContextMenuQStudyTreeWidget();
 
     Settings settings;
-    settings.restoreColumnsWidths( InputOutputSettings::DICOMDIRStudyListColumnsWidth, m_studyTreeWidget->getQTreeWidget() );
+    settings.restoreColumnsWidths(InputOutputSettings::DICOMDIRStudyListColumnsWidth, m_studyTreeWidget->getQTreeWidget());
 
     QStudyTreeWidget::ColumnIndex sortByColumn = (QStudyTreeWidget::ColumnIndex) settings.getValue(InputOutputSettings::DICOMDIRStudyListSortByColumn).toInt();
     Qt::SortOrder sortOrderColumn = (Qt::SortOrder) settings.getValue(InputOutputSettings::DICOMDIRStudyListSortOrder).toInt();
     m_studyTreeWidget->setSortByColumn (sortByColumn, sortOrderColumn);
 
-    m_statsWatcher = new StatsWatcher("QueryInputOutputDicomdirWidget",this);
-    m_statsWatcher->addClicksCounter( m_viewButton );
-    m_statsWatcher->addClicksCounter( m_retrieveButton );
-    m_statsWatcher->addClicksCounter( m_openDICOMDIRToolButton );
+    m_statsWatcher = new StatsWatcher("QueryInputOutputDicomdirWidget", this);
+    m_statsWatcher->addClicksCounter(m_viewButton);
+    m_statsWatcher->addClicksCounter(m_retrieveButton);
+    m_statsWatcher->addClicksCounter(m_openDICOMDIRToolButton);
 }
 
 QInputOutputDicomdirWidget::~QInputOutputDicomdirWidget()
 {
     Settings settings;
-    settings.saveColumnsWidths( InputOutputSettings::DICOMDIRStudyListColumnsWidth, m_studyTreeWidget->getQTreeWidget() );
+    settings.saveColumnsWidths(InputOutputSettings::DICOMDIRStudyListColumnsWidth, m_studyTreeWidget->getQTreeWidget());
 
     //Guardem per quin columna està ordenada la llista d'estudis i en quin ordre
     settings.setValue(InputOutputSettings::DICOMDIRStudyListSortByColumn, m_studyTreeWidget->getSortColumn());
@@ -50,7 +50,7 @@ QInputOutputDicomdirWidget::~QInputOutputDicomdirWidget()
 
 void QInputOutputDicomdirWidget::createConnections()
 {
-    connect (m_openDICOMDIRToolButton, SIGNAL(clicked()), SLOT( openDicomdir())); 
+    connect (m_openDICOMDIRToolButton, SIGNAL(clicked()), SLOT(openDicomdir()));
 
     connect(m_studyTreeWidget, SIGNAL(studyExpanded(QString)), SLOT(expandSeriesOfStudy(QString)));
     connect(m_studyTreeWidget, SIGNAL(seriesExpanded(QString, QString)), SLOT(expandImagesOfSeries(QString, QString)));
@@ -62,17 +62,17 @@ void QInputOutputDicomdirWidget::createConnections()
     connect(m_retrieveButton, SIGNAL(clicked()), SLOT(retrieveSelectedStudies()));
 }
 
-void  QInputOutputDicomdirWidget::createContextMenuQStudyTreeWidget()
+void QInputOutputDicomdirWidget::createContextMenuQStudyTreeWidget()
 {
     QAction *action;
 
-    action = m_contextMenuQStudyTreeWidget.addAction( QIcon(":/images/view.png") , tr( "&View" ) , this , SLOT( view() ) , ShortcutManager::getShortcuts(Shortcuts::ViewSelectedStudies).first() );
-    (void) new QShortcut( action->shortcut() , this , SLOT( view() ) );
+    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/view.png"), tr("&View"), this, SLOT(view()), ShortcutManager::getShortcuts(Shortcuts::ViewSelectedStudies).first());
+    (void) new QShortcut(action->shortcut(), this, SLOT(view()));
 
-    action = m_contextMenuQStudyTreeWidget.addAction( QIcon(":/images/retrieve.png") , tr("&Import") , this , SLOT( retrieveSelectedStudies() ) , ShortcutManager::getShortcuts(Shortcuts::ImportToLocalDatabaseSelectedDICOMDIRStudies).first() );
-    (void) new QShortcut( action->shortcut() , this , SLOT( retrieveSelectedStudies() ) );
+    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/retrieve.png"), tr("&Import"), this, SLOT(retrieveSelectedStudies()), ShortcutManager::getShortcuts(Shortcuts::ImportToLocalDatabaseSelectedDICOMDIRStudies).first());
+    (void) new QShortcut(action->shortcut(), this, SLOT(retrieveSelectedStudies()));
 
-    m_studyTreeWidget->setContextMenu( & m_contextMenuQStudyTreeWidget ); //Especifiquem que es el menu del dicomdir
+    m_studyTreeWidget->setContextMenu(& m_contextMenuQStudyTreeWidget); //Especifiquem que es el menu del dicomdir
 }
 
 bool QInputOutputDicomdirWidget::openDicomdir()
@@ -82,65 +82,65 @@ bool QInputOutputDicomdirWidget::openDicomdir()
     Status state;
     bool ok = false;
     // L'asterisc abans de DICOMDIR i dicomdir hi és per compatibilitat amb Mac.
-    dicomdirPath = QFileDialog::getOpenFileName(0, QFileDialog::tr( "Open" ), settings.getValue( InputOutputSettings::LastOpenedDICOMDIRPath ).toString(), "DICOMDIR (*DICOMDIR *dicomdir)");
+    dicomdirPath = QFileDialog::getOpenFileName(0, QFileDialog::tr("Open"), settings.getValue(InputOutputSettings::LastOpenedDICOMDIRPath).toString(), "DICOMDIR (*DICOMDIR *dicomdir)");
 
     if (!dicomdirPath.isEmpty())//Si és buit no ens han seleccionat cap fitxer
     {
-        QApplication::setOverrideCursor( Qt::WaitCursor );
+        QApplication::setOverrideCursor(Qt::WaitCursor);
         state = m_readDicomdir.open (dicomdirPath);//Obrim el dicomdir
         QApplication::restoreOverrideCursor();
-        if ( !state.good() )
+        if (!state.good())
         {
-            QMessageBox::warning( this , ApplicationNameString , tr( "Error opening DICOMDIR" ) );
-            ERROR_LOG( "Error al obrir el DICOMDIR " + dicomdirPath + state.text() );
+            QMessageBox::warning(this, ApplicationNameString, tr("Error opening DICOMDIR"));
+            ERROR_LOG("Error al obrir el DICOMDIR " + dicomdirPath + state.text());
         }
         else
         {
-            INFO_LOG( "Obert el DICOMDIR " + dicomdirPath );
-            settings.setValue( InputOutputSettings::LastOpenedDICOMDIRPath, QFileInfo(dicomdirPath).dir().path() );
+            INFO_LOG("Obert el DICOMDIR " + dicomdirPath);
+            settings.setValue(InputOutputSettings::LastOpenedDICOMDIRPath, QFileInfo(dicomdirPath).dir().path());
             ok = true;
             //cerquem els estudis al dicomdir per a que es mostrin
             emit clearSearchTexts();//Netegem el filtre de cerca al obrir el dicomdir
             queryStudy(DicomMask());
-        }        
+        }
     }
 
-    return ok;   
+    return ok;
 }
 
-void QInputOutputDicomdirWidget::queryStudy( DicomMask queryMask )
+void QInputOutputDicomdirWidget::queryStudy(DicomMask queryMask)
 {
     QList<Patient *> patientStudyList;
     Status state;
 
-    QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     m_studyTreeWidget->clear();
 
-    state = m_readDicomdir.readStudies( patientStudyList , queryMask );
-    if ( !state.good() )
+    state = m_readDicomdir.readStudies(patientStudyList, queryMask);
+    if (!state.good())
     {
         QApplication::restoreOverrideCursor();
-        if ( state.code() == 1302 ) //Aquest és l'error quan no tenim un dicomdir obert l'ig
+        if (state.code() == 1302) //Aquest és l'error quan no tenim un dicomdir obert l'ig
         {
-            QMessageBox::warning( this , ApplicationNameString , tr( "Before search you have to open a DICOMDIR." ) );
-            ERROR_LOG( "No s'ha obert cap directori DICOMDIR " + state.text() );
+            QMessageBox::warning(this, ApplicationNameString, tr("Before search you have to open a DICOMDIR."));
+            ERROR_LOG("No s'ha obert cap directori DICOMDIR " + state.text());
         }
         else
         {
-            QMessageBox::warning( this , ApplicationNameString , tr( "Error querying in DICOMDIR" ) );
-            ERROR_LOG( "Error cercant estudis al DICOMDIR " + state.text() );
+            QMessageBox::warning(this, ApplicationNameString, tr("Error querying in DICOMDIR"));
+            ERROR_LOG("Error cercant estudis al DICOMDIR " + state.text());
         }
         return;
     }
 
-    if ( patientStudyList.isEmpty() )
+    if (patientStudyList.isEmpty())
     {
         QApplication::restoreOverrideCursor();
-        QMessageBox::information( this , ApplicationNameString , tr( "No study match found." ) );
+        QMessageBox::information(this, ApplicationNameString, tr("No study match found."));
     }
     else
     {
-        m_studyTreeWidget->insertPatientList( patientStudyList );
+        m_studyTreeWidget->insertPatientList(patientStudyList);
         QApplication::restoreOverrideCursor();
     }
 }
@@ -150,19 +150,19 @@ void QInputOutputDicomdirWidget::clear()
     m_studyTreeWidget->clear();
 }
 
-void QInputOutputDicomdirWidget::expandSeriesOfStudy( QString studyInstanceUID )
+void QInputOutputDicomdirWidget::expandSeriesOfStudy(QString studyInstanceUID)
 {
     QList<Series*> seriesList;
 
-    INFO_LOG( "Cerca de sèries al DICOMDIR de l'estudi " + studyInstanceUID );
+    INFO_LOG("Cerca de sèries al DICOMDIR de l'estudi " + studyInstanceUID);
 
-    m_readDicomdir.readSeries( studyInstanceUID , "" , seriesList ); //"" pq no busquem cap serie en concret
+    m_readDicomdir.readSeries(studyInstanceUID, "", seriesList); //"" pq no busquem cap serie en concret
 
-    if ( seriesList.isEmpty() )
+    if (seriesList.isEmpty())
     {
-        QMessageBox::information( this , ApplicationNameString , tr( "No series match for this study.\n" ) );
+        QMessageBox::information(this, ApplicationNameString, tr("No series match for this study.\n"));
     }
-    else m_studyTreeWidget->insertSeriesList( studyInstanceUID , seriesList );//inserim la informació de la sèrie al llistat
+    else m_studyTreeWidget->insertSeriesList(studyInstanceUID, seriesList);//inserim la informació de la sèrie al llistat
 }
 
 void QInputOutputDicomdirWidget::expandImagesOfSeries(QString studyInstanceUID, QString seriesInstanceUID)
@@ -175,10 +175,10 @@ void QInputOutputDicomdirWidget::expandImagesOfSeries(QString studyInstanceUID, 
 
     if (imageList.isEmpty())
     {
-        QMessageBox::information( this , ApplicationNameString , tr( "No images match for this series.\n" ) );
+        QMessageBox::information(this, ApplicationNameString, tr("No images match for this series.\n"));
         return;
     }
-    else m_studyTreeWidget->insertImageList( studyInstanceUID, seriesInstanceUID, imageList );
+    else m_studyTreeWidget->insertImageList(studyInstanceUID, seriesInstanceUID, imageList);
 }
 
 void QInputOutputDicomdirWidget::retrieveSelectedStudies()
@@ -188,7 +188,7 @@ void QInputOutputDicomdirWidget::retrieveSelectedStudies()
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
     // TODO ara només permetrem importar estudis sencers
-    foreach(QString studyInstanceUID, m_studyTreeWidget->getSelectedStudiesUID())
+    foreach (QString studyInstanceUID, m_studyTreeWidget->getSelectedStudiesUID())
     {
         importDicom.import(m_readDicomdir.getDicomdirFilePath(), studyInstanceUID, QString(), QString());
         if (importDicom.getLastError() != DICOMDIRImporter::Ok)
@@ -220,7 +220,7 @@ void QInputOutputDicomdirWidget::view()
     Patient *patient;
     QList<Patient *> selectedPatientsList;
 
-    if(selectedStudiesInstanceUID.isEmpty())
+    if (selectedStudiesInstanceUID.isEmpty())
     {
         QMessageBox::warning(this, ApplicationNameString, tr("Select at least one study to view."));
         return;
@@ -228,31 +228,31 @@ void QInputOutputDicomdirWidget::view()
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
     //TODO: S'hauria de millorar el mètode ja que per la seva estructura lo d'obrir l'estudi per la sèrie que ens tinguin seleccionada només ho farà per un estudi ja que aquest mètode només se li passa per paràmetre una sèrie per defecte
-    foreach(QString studyInstanceUIDSelected, selectedStudiesInstanceUID)
+    foreach (QString studyInstanceUIDSelected, selectedStudiesInstanceUID)
     {
         patientToProcessMask.setStudyInstanceUID(studyInstanceUIDSelected);
         patient = m_readDicomdir.retrieve(patientToProcessMask);
 
-        if(patient)
+        if (patient)
         {
             // Marquem la sèrie per defecte
             // TODO ara sempre posem el mateix UID, per tant de moment només funciona bé del tot quan seleccionem un únic estudi
             patient->setSelectedSeries(m_studyTreeWidget->getCurrentSeriesUID());
             selectedPatientsList << patient;
         }
-        else DEBUG_LOG("No s'ha pogut obtenir l'estudi amb UID " + studyInstanceUIDSelected );
+        else DEBUG_LOG("No s'ha pogut obtenir l'estudi amb UID " + studyInstanceUIDSelected);
     }
 
     QApplication::restoreOverrideCursor();
-    
-    if( !selectedPatientsList.isEmpty() )
+
+    if (!selectedPatientsList.isEmpty())
     {
         DEBUG_LOG("Llançat signal per visualitzar estudi del pacient " + patient->getFullName());
-        emit viewPatients( Patient::mergePatients( selectedPatientsList ) );
+        emit viewPatients(Patient::mergePatients(selectedPatientsList));
     }
     else
     {
-        QMessageBox::warning( this, ApplicationNameString, tr("No valid data found. Maybe some files are missing or corrupted.") );
+        QMessageBox::warning(this, ApplicationNameString, tr("No valid data found. Maybe some files are missing or corrupted."));
     }
 }
 
@@ -262,66 +262,66 @@ void QInputOutputDicomdirWidget::showDICOMDIRImporterError(QString studyInstance
 
     switch (error)
     {
-        case DICOMDIRImporter::ErrorOpeningDicomdir :
+        case DICOMDIRImporter::ErrorOpeningDicomdir:
             message = tr("Trying to import study with UID %1 ").arg(studyInstanceUID);
             message += tr("the DICOMDIR file could not be opened, be sure that its path is correct.\n");
             message += tr("\n\nIf the problem persists contact with an administrator.");
-            QMessageBox::critical( this , ApplicationNameString , message );
+            QMessageBox::critical(this, ApplicationNameString, message);
             break;
-        case DICOMDIRImporter::ErrorCopyingFiles :
+        case DICOMDIRImporter::ErrorCopyingFiles:
             message = tr("Some files of study with UID %2 could not be imported. Be sure that you have write permissions on the %1 cache directory.").arg(ApplicationNameString, studyInstanceUID);
             message += tr("\n\nIf the problem persists contact with an administrator.");
-            QMessageBox::critical( this , ApplicationNameString , message );
+            QMessageBox::critical(this, ApplicationNameString, message);
             break;
-        case DICOMDIRImporter::NoEnoughSpace :
+        case DICOMDIRImporter::NoEnoughSpace:
             {
                 HardDiskInformation hardDiskInformation;
                 Settings settings;
                 quint64 freeSpaceInHardDisk = hardDiskInformation.getNumberOfFreeMBytes(LocalDatabaseManager::getCachePath());
-                quint64 minimumFreeSpaceRequired = quint64( settings.getValue(InputOutputSettings::MinimumFreeGigaBytesForCache ).toULongLong() * 1024 );
+                quint64 minimumFreeSpaceRequired = quint64(settings.getValue(InputOutputSettings::MinimumFreeGigaBytesForCache).toULongLong() * 1024);
                 message = tr("The study can't be imported because there isn't enough space.");
                 message += "\n";
                 message += tr("Try to free hard disk space, delete local studies or change in %1 configuration the size of reserved disk space for system to be able to import the study.").arg(ApplicationNameString);
                 message += "\n\n";
                 message += tr("Current location resources:");
                 message += "\n";
-                message += "    " + tr("* Reserved disk space for system: %1Gb").arg(minimumFreeSpaceRequired/1024.0);
+                message += "    " + tr("* Reserved disk space for system: %1Gb").arg(minimumFreeSpaceRequired / 1024.0);
                 message += "\n";
-                message += "    " + tr("* Free disk space: %1Gb").arg(freeSpaceInHardDisk/1024.0);
-                
-                QMessageBox::warning( this , ApplicationNameString , message );
+                message += "    " + tr("* Free disk space: %1Gb").arg(freeSpaceInHardDisk / 1024.0);
+
+                QMessageBox::warning(this, ApplicationNameString, message);
                 break;
             }
-        case DICOMDIRImporter::ErrorFreeingSpace :
+        case DICOMDIRImporter::ErrorFreeingSpace:
             message = tr("An error has occurred freeing space, some studies can't be imported.");
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
-            QMessageBox::critical( this , ApplicationNameString , message );
+            QMessageBox::critical(this, ApplicationNameString, message);
             break;
-        case DICOMDIRImporter::DatabaseError :
+        case DICOMDIRImporter::DatabaseError:
             message = tr("A database error has occurred, some studies can't be imported.");
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
-            QMessageBox::critical( this , ApplicationNameString , message );
+            QMessageBox::critical(this, ApplicationNameString, message);
             break;
-       case DICOMDIRImporter::PatientInconsistent :
+        case DICOMDIRImporter::PatientInconsistent:
             message = tr("The study with UID %2 can't be imported, because %1 has not been capable of read correctly DICOM information of the study.").arg(ApplicationNameString, studyInstanceUID);
             message += tr("\n\nThe study may be corrupted, if It is not corrupted please contact with %1 team.").arg(ApplicationNameString);
-            QMessageBox::critical( this , ApplicationNameString , message );
+            QMessageBox::critical(this, ApplicationNameString, message);
             break;
-       case DICOMDIRImporter::DicomdirInconsistent :
+        case DICOMDIRImporter::DicomdirInconsistent:
             message = tr("Trying to import study with UID %1 ").arg(studyInstanceUID);
             message += tr("has occurred an error. This DICOMDIR is inconsistent, can't be imported.");
             message += tr("\n\nPlease contact with %1 team.").arg(ApplicationNameString);
-            QMessageBox::critical( this , ApplicationNameString , message );
+            QMessageBox::critical(this, ApplicationNameString, message);
             break;
-      case DICOMDIRImporter::Ok :
+        case DICOMDIRImporter::Ok:
             break;
         default:
             message = tr("An unknown error has occurred importing DICOMDIR.");
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
-            QMessageBox::critical( this , ApplicationNameString , message );
+            QMessageBox::critical(this, ApplicationNameString, message);
     }
 }
 

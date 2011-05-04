@@ -2,7 +2,6 @@
 #ifndef UDGECHOTOPACS_H
 #define UDGECHOTOPACS_H
 
-
 namespace udg {
 
 /** Classe que s'encarrega de fer un echoSCU a un PACS */
@@ -13,7 +12,7 @@ class EchoToPACS
 {
 public:
 
-    enum EchoRequestStatus {EchoOk, EchoCanNotConnectToPACS, EchoFailed};
+    enum EchoRequestStatus { EchoOk, EchoCanNotConnectToPACS, EchoFailed };
 
     EchoToPACS();
 

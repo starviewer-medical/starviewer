@@ -15,7 +15,7 @@ class Volume;
 /**
 Controlador de seqüències de CINE acoplable a qualsevol QViewer
 */
-class QViewerCINEController: public QObject
+class QViewerCINEController : public QObject
 {
 Q_OBJECT
 public:
@@ -27,10 +27,10 @@ public:
      * Li assignem el viewer amb el que treballar
      * @param viewer
      */
-    void setInputViewer( QViewer *viewer );
+    void setInputViewer(QViewer *viewer);
 
     enum CINEDimensionType{ SpatialDimension, TemporalDimension };
-    void setCINEDimension( int dimension );
+    void setCINEDimension(int dimension);
 
     QAction *getPlayAction() const;
     QAction *getRecordAction() const;
@@ -41,12 +41,12 @@ public:
      * Li donem el path absolut de l'arxiu on es gravarà el vídeo
      * @param filename Path absolut, amb o sense extensió
      */
-    void setRecordFilename( const QString filename );
+    void setRecordFilename(const QString filename);
 
 signals:
     void playing();
     void paused();
-    void velocityChanged( int velocity );
+    void velocityChanged(int velocity);
 
 public slots:
     /// Engega la reproducció
@@ -59,18 +59,18 @@ public slots:
     void record();
 
     /// Li donem la velocitat de reproducció expresada en el nombre d'imatges que volem veure per segon
-    void setVelocity( int imagesPerSecond );
+    void setVelocity(int imagesPerSecond);
 
     /// L'indiquem que volem engegar el mode loop
     /// En aquest mode, un cop arribem a la última imatge, tornem a començar de nou des de la inicial
-    void enableLoop( bool enable );
+    void enableLoop(bool enable);
 
     /// L'indiquem que volem engegar el mode boomerang
     /// En aquest mode es recorren les imatges repetidament en l'ordre 1..n n..1 (endavant i endarrera)
-    void enableBoomerang( bool enable );
+    void enableBoomerang(bool enable);
 
     /// Li indiquem l'interval de reproducció
-    void setPlayInterval( int firstImage, int lastImage );
+    void setPlayInterval(int firstImage, int lastImage);
 
     /**
      * Reseteja la informació de CINE segons l'input donat
@@ -79,8 +79,8 @@ public slots:
     void resetCINEInformation(Volume *input);
 
     /// Actualitza la informació que té del volum actual
-    void updateThickness( int );
-    
+    void updateThickness(int);
+
 protected:
     void timerEvent(QTimerEvent *event);
 

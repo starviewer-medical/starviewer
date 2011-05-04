@@ -18,6 +18,6 @@ public:
     static const QString VerticalSplitterGeometry;
 };
 
-} // end namespace udg 
+} // end namespace udg
 
 #endif

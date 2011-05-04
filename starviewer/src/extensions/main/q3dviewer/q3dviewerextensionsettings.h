@@ -17,6 +17,6 @@ public:
     static const QString CustomClutsDirPath;
 };
 
-} // end namespace udg 
+} // end namespace udg
 
 #endif

@@ -11,7 +11,7 @@
 
 namespace udg {
 
-SeedTool::SeedTool( QViewer *viewer, QObject *parent ) : Tool( viewer, parent )
+SeedTool::SeedTool(QViewer *viewer, QObject *parent) : Tool(viewer, parent)
 {
     m_toolName = "SeedTool";
     m_hasSharedData = false;
@@ -20,21 +20,21 @@ SeedTool::SeedTool( QViewer *viewer, QObject *parent ) : Tool( viewer, parent )
     m_myData = new SeedToolData;
 
     m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
-    if( !m_2DViewer )
-        DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ") + viewer->metaObject()->className() );
+    if (!m_2DViewer)
+        DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ") + viewer->metaObject()->className());
 
     m_state = None;
     m_drawn = false;
-    m_myData->setVolume( m_2DViewer->getInput() );
+    m_myData->setVolume(m_2DViewer->getInput());
 }
 
 SeedTool::~SeedTool()
 {
 }
 
-void SeedTool::handleEvent( unsigned long eventID )
+void SeedTool::handleEvent(unsigned long eventID)
 {
-    switch( eventID )
+    switch (eventID)
     {
     case vtkCommand::LeftButtonPressEvent:
         setSeed();
@@ -56,43 +56,43 @@ void SeedTool::handleEvent( unsigned long eventID )
 void SeedTool::setToolData(ToolData * data)
 {
     //Fem aquesta comparació perquè a vegades ens passa la data que ja tenim a m_myData
-    if( m_myData != data )
-    { 
+    if (m_myData != data)
+    {
         // creem de nou les dades
         m_toolData = data;
         m_myData = qobject_cast<SeedToolData *>(data);
         //si tenim dades vol dir que ja hem pintat abans la seed si el volume ha canviat
-        if(m_2DViewer->getInput() != m_myData->getVolume())
+        if (m_2DViewer->getInput() != m_myData->getVolume())
         {
             //canvi de input
             m_drawn = false;
-            m_myData->setVolume( m_2DViewer->getInput() );
+            m_myData->setVolume(m_2DViewer->getInput());
             //si tenim dades vol dir que el viewer ha eliminat el punt pel que el posem a 0 perquè es torni a crear
-            m_myData->setPoint( NULL );
+            m_myData->setPoint(NULL);
         }else{
             //canvi de tool
             m_drawn = true;
             m_2DViewer->getDrawer()->erasePrimitive(m_myData->getPoint());
             m_myData->setPoint(NULL);
             m_myData->setSeedPosition(m_myData->getSeedPosition());
-            m_2DViewer->getDrawer()->draw( m_myData->getPoint() , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+            m_2DViewer->getDrawer()->draw(m_myData->getPoint(), m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
         }
     }
 }
 
 void SeedTool::setSeed()
 {
-    Q_ASSERT( m_2DViewer );
-    
-    m_state=Seeding;
+    Q_ASSERT(m_2DViewer);
+
+    m_state = Seeding;
     updateSeedPosition();
 }
 
 void SeedTool::doSeeding()
 {
-    Q_ASSERT( m_2DViewer );
+    Q_ASSERT(m_2DViewer);
 
-    if( m_state==Seeding )
+    if (m_state == Seeding)
     {
         updateSeedPosition();
     }
@@ -105,50 +105,50 @@ void SeedTool::endSeeding()
 
 void SeedTool::updateSeedPosition()
 {
-    Q_ASSERT( m_2DViewer );
+    Q_ASSERT(m_2DViewer);
 
-	double xyz[3];
-    if( m_2DViewer->getCurrentCursorImageCoordinate( xyz ) )
+    double xyz[3];
+    if (m_2DViewer->getCurrentCursorImageCoordinate(xyz))
     {
         QVector<double> seedPosition(3);
-        seedPosition[0]=xyz[0];
-        seedPosition[1]=xyz[1];
-        seedPosition[2]=xyz[2];
+        seedPosition[0] = xyz[0];
+        seedPosition[1] = xyz[1];
+        seedPosition[2] = xyz[2];
 
         //DEBUG_LOG(QString("Seed Pos: [%1,%2,%3]").arg(seedPosition[0]).arg(seedPosition[1]).arg(seedPosition[2]));
 
-        m_myData->setSeedPosition( seedPosition );
+        m_myData->setSeedPosition(seedPosition);
         // TODO Apanyo perquè funcioni de moment, però s'ha d'arreglar
         // s'hauria d'emetre únicament "seedChanged()" i prou
-        m_2DViewer->setSeedPosition( xyz );
-        emit seedChanged(seedPosition[0],seedPosition[1],seedPosition[2]);
-        
-        if(!m_drawn)
+        m_2DViewer->setSeedPosition(xyz);
+        emit seedChanged(seedPosition[0], seedPosition[1], seedPosition[2]);
+
+        if (!m_drawn)
         {
-            m_2DViewer->getDrawer()->draw( m_myData->getPoint() , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+            m_2DViewer->getDrawer()->draw(m_myData->getPoint(), m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
             m_drawn = true;
         }else{
             m_myData->getPoint()->update();
             m_2DViewer->render();
         }
 
-        //m_2DViewer->getDrawer()->draw( m_myData->getPoint() , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+        //m_2DViewer->getDrawer()->draw(m_myData->getPoint(), m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
     }
 }
 
 void SeedTool::setSeed(QVector<double> seedPosition, int slice)
 {
-    Q_ASSERT( m_2DViewer );
-    
-    m_myData->setSeedPosition( seedPosition );
+    Q_ASSERT(m_2DViewer);
+
+    m_myData->setSeedPosition(seedPosition);
     double xyz[3];
-    xyz[0]=seedPosition[0];
-    xyz[1]=seedPosition[1];
-    xyz[2]=seedPosition[2];
-    m_2DViewer->setSeedPosition( xyz );
-    emit seedChanged(seedPosition[0],seedPosition[1],seedPosition[2]);
+    xyz[0] = seedPosition[0];
+    xyz[1] = seedPosition[1];
+    xyz[2] = seedPosition[2];
+    m_2DViewer->setSeedPosition(xyz);
+    emit seedChanged(seedPosition[0], seedPosition[1], seedPosition[2]);
     //DEBUG_LOG(QString("Seed Pos: [%1,%2,%3], slice = %4").arg(seedPosition[0]).arg(seedPosition[1]).arg(seedPosition[2]).arg(slice));
-    m_2DViewer->getDrawer()->draw( m_myData->getPoint() , m_2DViewer->getView(), slice );
+    m_2DViewer->getDrawer()->draw(m_myData->getPoint(), m_2DViewer->getView(), slice);
 }
 
 ToolData *SeedTool::getToolData() const
@@ -157,5 +157,3 @@ ToolData *SeedTool::getToolData() const
 }
 
 }
-
-

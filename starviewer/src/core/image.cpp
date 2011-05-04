@@ -108,7 +108,7 @@ double Image::getSliceThickness() const
 
 void Image::setImagePositionPatient(double position[3])
 {
-    memcpy(m_imagePositionPatient, position, 3*sizeof(double));
+    memcpy(m_imagePositionPatient, position, 3 * sizeof(double));
 }
 
 const double* Image::getImagePositionPatient() const
@@ -143,7 +143,7 @@ QString Image::getPhotometricInterpretation() const
     return m_photometricInterpretation;
 }
 
-void Image::setRows(int rows )
+void Image::setRows(int rows)
 {
     m_rows = rows;
 }
@@ -153,7 +153,7 @@ int Image::getRows() const
     return m_rows;
 }
 
-void Image::setColumns(int columns )
+void Image::setColumns(int columns)
 {
     m_columns = columns;
 }
@@ -406,7 +406,7 @@ QString Image::getFormattedImageTime() const
         if (split.size() == 2) // Té fracció al final
         {
             // Trunquem a milisegons i no a milionèssimes de segons
-            convertedTime = convertedTime.addMSecs(split[1].leftJustified(3,'0',true).toInt());
+            convertedTime = convertedTime.addMSecs(split[1].leftJustified(3, '0', true).toInt());
         }
         formattedTime = convertedTime.toString("HH:mm:ss");
     }
@@ -498,36 +498,36 @@ QString Image::getProjectionLabelFromPlaneOrientation(const QString &orientation
         {
             if ((rowAxis.startsWith("R") || rowAxis.startsWith("L")) && (columnAxis.startsWith("A") || columnAxis.startsWith("P")))
             {
-                label="AXIAL";
+                label = "AXIAL";
             }
             else if ((columnAxis.startsWith("R") || columnAxis.startsWith("L")) && (rowAxis.startsWith("A") || rowAxis.startsWith("P")))
             {
-                label="AXIAL";
+                label = "AXIAL";
             }
             else if ((rowAxis.startsWith("R") || rowAxis.startsWith("L")) && (columnAxis.startsWith("H") || columnAxis.startsWith("F")))
             {
-                label="CORONAL";
+                label = "CORONAL";
             }
             else if ((columnAxis.startsWith("R") || columnAxis.startsWith("L")) && (rowAxis.startsWith("H") || rowAxis.startsWith("F")))
             {
-                label="CORONAL";
+                label = "CORONAL";
             }
             else if ((rowAxis.startsWith("A") || rowAxis.startsWith("P")) && (columnAxis.startsWith("H") || columnAxis.startsWith("F")))
             {
-                label="SAGITAL";
+                label = "SAGITAL";
             }
             else if ((columnAxis.startsWith("A") || columnAxis.startsWith("P")) && (rowAxis.startsWith("H") || rowAxis.startsWith("F")))
             {
-                label="SAGITAL";
+                label = "SAGITAL";
             }
             else
             {
-                label="OBLIQUE";
+                label = "OBLIQUE";
             }
         }
         else
         {
-            label="N/A";
+            label = "N/A";
         }
     }
 

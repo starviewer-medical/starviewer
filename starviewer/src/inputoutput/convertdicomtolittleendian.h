@@ -20,7 +20,7 @@ public:
      * @param outputFile ruta completa indicant on s'ha de desar el fitxer convertit, s'hi ha d'incloure el nom del fitxer
      * @return
      */
-    Status convert( QString inputFile , QString outputFile );
+    Status convert(QString inputFile, QString outputFile);
 
     ~ConvertDicomToLittleEndian();
 };

@@ -11,9 +11,9 @@
 
 namespace udg {
 
-QDICOMDIRConfigurationScreen::QDICOMDIRConfigurationScreen( QWidget *parent ) : QWidget(parent)
+QDICOMDIRConfigurationScreen::QDICOMDIRConfigurationScreen(QWidget *parent) : QWidget(parent)
 {
-    setupUi( this );
+    setupUi(this);
     loadDICOMDIRDefaults();
     createConnections();
 }
@@ -25,41 +25,41 @@ QDICOMDIRConfigurationScreen::~QDICOMDIRConfigurationScreen()
 void QDICOMDIRConfigurationScreen::createConnections()
 {
     // Connecta el boto examinar programa de gravació amb el dialog per escollir el path del programa
-    connect( m_buttonExaminateBurningApplication , SIGNAL( clicked() ), SLOT( examinateDICOMDIRBurningApplicationPath() ) );
-    connect( m_buttonExaminateDICOMDIRFolderPathToCopy , SIGNAL( clicked() ), SLOT( examinateDICOMDIRFolderPathToCopy() ) );
+    connect(m_buttonExaminateBurningApplication, SIGNAL(clicked()), SLOT(examinateDICOMDIRBurningApplicationPath()));
+    connect(m_buttonExaminateDICOMDIRFolderPathToCopy, SIGNAL(clicked()), SLOT(examinateDICOMDIRFolderPathToCopy()));
 }
 
 void QDICOMDIRConfigurationScreen::loadDICOMDIRDefaults()
 {
     Settings settings;
 
-    m_textBurningApplicationPath->setText( settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationPathKey).toString() );
-    m_textBurningApplicationParameters->setText( settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationParametersKey).toString() );
-    m_textBurningApplicationCDParameters->setText( settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationCDParametersKey).toString() );
-    m_textBurningApplicationDVDParameters->setText( settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationDVDParametersKey).toString() );
+    m_textBurningApplicationPath->setText(settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationPathKey).toString());
+    m_textBurningApplicationParameters->setText(settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationParametersKey).toString());
+    m_textBurningApplicationCDParameters->setText(settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationCDParametersKey).toString());
+    m_textBurningApplicationDVDParameters->setText(settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationDVDParametersKey).toString());
 
-    bool hasDifferentCDDVDParameters = settings.getValue( InputOutputSettings::DICOMDIRBurningApplicationHasDifferentCDDVDParametersKey).toBool();
+    bool hasDifferentCDDVDParameters = settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationHasDifferentCDDVDParametersKey).toBool();
 
-    m_textBurningApplicationCDParameters->setEnabled( hasDifferentCDDVDParameters );
-    m_textBurningApplicationDVDParameters->setEnabled( hasDifferentCDDVDParameters );
-    m_checkBoxHasDifferentCDDVDParameteres->setChecked( hasDifferentCDDVDParameters );
+    m_textBurningApplicationCDParameters->setEnabled(hasDifferentCDDVDParameters);
+    m_textBurningApplicationDVDParameters->setEnabled(hasDifferentCDDVDParameters);
+    m_checkBoxHasDifferentCDDVDParameteres->setChecked(hasDifferentCDDVDParameters);
 
-    m_checkBoxConvertDICOMDIRImagesToLittleEndian->setChecked( settings.getValue(InputOutputSettings::ConvertDICOMDIRImagesToLittleEndianKey).toBool() );
+    m_checkBoxConvertDICOMDIRImagesToLittleEndian->setChecked(settings.getValue(InputOutputSettings::ConvertDICOMDIRImagesToLittleEndianKey).toBool());
 
-    if( m_textBurningApplicationPath->text().endsWith("k3b") )
+    if (m_textBurningApplicationPath->text().endsWith("k3b"))
     {
         m_burningApplicationDownloadURL->setText("<a href='http://k3b.plainblack.com'> k3b.plainblack.com </a>");
-    }     
+    }
     else
     {
-        if( m_textBurningApplicationPath->text().endsWith("ImgBurn.exe") )
-        {        
+        if (m_textBurningApplicationPath->text().endsWith("ImgBurn.exe"))
+        {
             m_burningApplicationDownloadURL->setText("<a href='http://www.imgburn.com'> www.imgburn.com </a>");
-        }         
+        }
         else
         {
-            if( m_textBurningApplicationPath->text().endsWith("Burn") )
-            {            
+            if (m_textBurningApplicationPath->text().endsWith("Burn"))
+            {
                 m_burningApplicationDownloadURL->setText("<a href='http://burn-osx.sourceforge.net'> burn-osx.sourceforge.net </a>");
             }
             else
@@ -81,43 +81,43 @@ bool QDICOMDIRConfigurationScreen::validateChanges()
 
     QString messageBoxText = tr("Some configuration options are not valid:\n");
 
-    if ( m_textBurningApplicationPath->isModified() )
+    if (m_textBurningApplicationPath->isModified())
     {
-        if ( !QFile::exists(m_textBurningApplicationPath->text()) ) // Si el fitxer indicat no existeix
+        if (!QFile::exists(m_textBurningApplicationPath->text())) // Si el fitxer indicat no existeix
         {
-            QMessageBox::warning( this , ApplicationNameString , tr( "Invalid burning application path." ) );
+            QMessageBox::warning(this, ApplicationNameString, tr("Invalid burning application path."));
             return false;
         }
 
-        QFileInfo burningApplicationPathInfo( m_textBurningApplicationPath->text() );
-        if ( !burningApplicationPathInfo.isExecutable() )
+        QFileInfo burningApplicationPathInfo(m_textBurningApplicationPath->text());
+        if (!burningApplicationPathInfo.isExecutable())
         {
-            QMessageBox::warning( this , ApplicationNameString , tr( "Burning application path has to be an executable file." ) );
+            QMessageBox::warning(this, ApplicationNameString, tr("Burning application path has to be an executable file."));
             return false;
         }
     }
 
-    if ( m_checkBoxCopyFolderContentToDICOMDIRCdDvd->isChecked() || m_checkBoxCopyFolderContentToDICOMDIRUsbHardDisk->isChecked() )
+    if (m_checkBoxCopyFolderContentToDICOMDIRCdDvd->isChecked() || m_checkBoxCopyFolderContentToDICOMDIRUsbHardDisk->isChecked())
     {
         //Si ens han indiquen que s'ha de copiar el contingut del DICOMDIR en algun dispostiu és obligatori indicar el Path
-        if ( m_textDICOMDIRFolderPathToCopy->text().isEmpty() )
+        if (m_textDICOMDIRFolderPathToCopy->text().isEmpty())
         {
-            QMessageBox::warning( this, ApplicationNameString, tr( "You have to indicate the path of folder to copy to DICOMDIR.") );
+            QMessageBox::warning(this, ApplicationNameString, tr("You have to indicate the path of folder to copy to DICOMDIR."));
             return false;
         }
 
     }
 
-    if ( m_textDICOMDIRFolderPathToCopy->isModified() && !m_textDICOMDIRFolderPathToCopy->text().isEmpty() )
+    if (m_textDICOMDIRFolderPathToCopy->isModified() && !m_textDICOMDIRFolderPathToCopy->text().isEmpty())
     {
-        if ( !QFile::exists( m_textDICOMDIRFolderPathToCopy->text() ) )
+        if (!QFile::exists(m_textDICOMDIRFolderPathToCopy->text()))
         {
-            QMessageBox::warning( this, ApplicationNameString, tr( "Invalid path of folder to copy to DICOMDIR.") );
+            QMessageBox::warning(this, ApplicationNameString, tr("Invalid path of folder to copy to DICOMDIR."));
             return false;
         }
-        else if ( !ConvertToDicomdir().AreValidRequirementsOfFolderContentToCopyToDICOMDIR( m_textDICOMDIRFolderPathToCopy->text() ) )
+        else if (!ConvertToDicomdir().AreValidRequirementsOfFolderContentToCopyToDICOMDIR(m_textDICOMDIRFolderPathToCopy->text()))
         {//Comprovem que el directori no tingui cap item que es digui DICOM o DICOMDIR
-            QMessageBox::warning( this, ApplicationNameString, tr( "Invalid content of the folder to copy to DICOMDIR, this folder can't contains any item called DICOM or DICOMDIR.") );
+            QMessageBox::warning(this, ApplicationNameString, tr("Invalid content of the folder to copy to DICOMDIR, this folder can't contains any item called DICOM or DICOMDIR."));
             return false;
         }
     }
@@ -127,7 +127,7 @@ bool QDICOMDIRConfigurationScreen::validateChanges()
 
 bool QDICOMDIRConfigurationScreen::applyChanges()
 {
-    if ( validateChanges() )
+    if (validateChanges())
     {
         applyChangesDICOMDIR();
         return true;
@@ -143,25 +143,25 @@ void QDICOMDIRConfigurationScreen::examinateDICOMDIRBurningApplicationPath()
     Settings settings;
 
     // A la pàgina de QT indica que en el cas que nomes deixem seleccionar un fitxer, agafar el primer element de la llista i punt, no hi ha cap mètode que te retornin directament el fitxer selccionat
-    QFileDialog *dialog = new QFileDialog( 0 , QFileDialog::tr( "Open" ) , settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationPathKey).toString(), "" );
-    dialog->setFileMode( QFileDialog::ExistingFile );
+    QFileDialog *dialog = new QFileDialog(0, QFileDialog::tr("Open"), settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationPathKey).toString(), "");
+    dialog->setFileMode(QFileDialog::ExistingFile);
 
-    if ( dialog->exec() == QDialog::Accepted )
+    if (dialog->exec() == QDialog::Accepted)
     {
-        if ( !dialog->selectedFiles().empty() )
+        if (!dialog->selectedFiles().empty())
         {
             QString burningApplicationPath = dialog->selectedFiles().takeFirst();
-            QFileInfo infoBurningApplicationFile( burningApplicationPath );
+            QFileInfo infoBurningApplicationFile(burningApplicationPath);
             // Es comprova si es tracta d'una aplicació de Mac i en cas afirmatiu es modifica el path per tal d'indicar exactament on és l'executable
-            if( infoBurningApplicationFile.isBundle() )
+            if (infoBurningApplicationFile.isBundle())
             {
                 // El path es treu una mica a lo "bruto". Per fer-ho bé s'hauria de llegir el Bundle i extreure'n
                 // la localització de l'executable (CFBundleExecutable): http://developer.apple.com/documentation/CoreFoundation/Conceptual/CFBundles/BundleTypes/BundleTypes.html
                 burningApplicationPath = burningApplicationPath + "/Contents/MacOS/" + infoBurningApplicationFile.bundleName();
             }
 
-            m_textBurningApplicationPath->setText( burningApplicationPath );
-            m_textBurningApplicationPath->setModified( true );// indiquem que m_textBurningApplicationPath ha modificat el seu valor
+            m_textBurningApplicationPath->setText(burningApplicationPath);
+            m_textBurningApplicationPath->setModified(true);// indiquem que m_textBurningApplicationPath ha modificat el seu valor
         }
     }
     delete dialog;
@@ -169,11 +169,11 @@ void QDICOMDIRConfigurationScreen::examinateDICOMDIRBurningApplicationPath()
 
 void QDICOMDIRConfigurationScreen::examinateDICOMDIRFolderPathToCopy()
 {
-    QString folderPathToCopy = QFileDialog::getExistingDirectory(0, tr("Folder to copy to DICOMDIR..."), m_textDICOMDIRFolderPathToCopy->text() );
+    QString folderPathToCopy = QFileDialog::getExistingDirectory(0, tr("Folder to copy to DICOMDIR..."), m_textDICOMDIRFolderPathToCopy->text());
 
     if (!folderPathToCopy.isEmpty())
     {
-        m_textDICOMDIRFolderPathToCopy->setText( QDir::toNativeSeparators(folderPathToCopy) );
+        m_textDICOMDIRFolderPathToCopy->setText(QDir::toNativeSeparators(folderPathToCopy));
     }
 }
 
@@ -181,39 +181,39 @@ void QDICOMDIRConfigurationScreen::applyChangesDICOMDIR()
 {
     Settings settings;
 
-    settings.setValue( InputOutputSettings::DICOMDIRBurningApplicationPathKey, m_textBurningApplicationPath->text() );
-    settings.setValue( InputOutputSettings::DICOMDIRBurningApplicationParametersKey, m_textBurningApplicationParameters->text() );
-    settings.setValue( InputOutputSettings::DICOMDIRBurningApplicationCDParametersKey, m_textBurningApplicationCDParameters->text() );
-    settings.setValue( InputOutputSettings::DICOMDIRBurningApplicationDVDParametersKey, m_textBurningApplicationDVDParameters->text() );
-    settings.setValue( InputOutputSettings::DICOMDIRBurningApplicationHasDifferentCDDVDParametersKey, m_checkBoxHasDifferentCDDVDParameteres->isChecked() );
-    settings.setValue( InputOutputSettings::ConvertDICOMDIRImagesToLittleEndianKey, m_checkBoxConvertDICOMDIRImagesToLittleEndian->isChecked() );
-    settings.setValue( InputOutputSettings::DICOMDIRFolderPathToCopy, m_textDICOMDIRFolderPathToCopy->text() );
-    settings.setValue( InputOutputSettings::CopyFolderContentToDICOMDIROnCDOrDVD, m_checkBoxCopyFolderContentToDICOMDIRCdDvd->isChecked() );
-    settings.setValue( InputOutputSettings::CopyFolderContentToDICOMDIROnUSBOrHardDisk, m_checkBoxCopyFolderContentToDICOMDIRUsbHardDisk->isChecked() );
+    settings.setValue(InputOutputSettings::DICOMDIRBurningApplicationPathKey, m_textBurningApplicationPath->text());
+    settings.setValue(InputOutputSettings::DICOMDIRBurningApplicationParametersKey, m_textBurningApplicationParameters->text());
+    settings.setValue(InputOutputSettings::DICOMDIRBurningApplicationCDParametersKey, m_textBurningApplicationCDParameters->text());
+    settings.setValue(InputOutputSettings::DICOMDIRBurningApplicationDVDParametersKey, m_textBurningApplicationDVDParameters->text());
+    settings.setValue(InputOutputSettings::DICOMDIRBurningApplicationHasDifferentCDDVDParametersKey, m_checkBoxHasDifferentCDDVDParameteres->isChecked());
+    settings.setValue(InputOutputSettings::ConvertDICOMDIRImagesToLittleEndianKey, m_checkBoxConvertDICOMDIRImagesToLittleEndian->isChecked());
+    settings.setValue(InputOutputSettings::DICOMDIRFolderPathToCopy, m_textDICOMDIRFolderPathToCopy->text());
+    settings.setValue(InputOutputSettings::CopyFolderContentToDICOMDIROnCDOrDVD, m_checkBoxCopyFolderContentToDICOMDIRCdDvd->isChecked());
+    settings.setValue(InputOutputSettings::CopyFolderContentToDICOMDIROnUSBOrHardDisk, m_checkBoxCopyFolderContentToDICOMDIRUsbHardDisk->isChecked());
 
-    if ( m_textBurningApplicationPath->isModified() )
+    if (m_textBurningApplicationPath->isModified())
     {
-        INFO_LOG( "Es modificarà el path del programa de gravació per " + m_textBurningApplicationPath->text() );
+        INFO_LOG("Es modificarà el path del programa de gravació per " + m_textBurningApplicationPath->text());
     }
 
-    if ( m_textBurningApplicationParameters->isModified() )
+    if (m_textBurningApplicationParameters->isModified())
     {
-        INFO_LOG( "Es modificarà el parametres del programa de gravació per " + m_textBurningApplicationParameters->text() );
-    }
-    
-    if ( m_textBurningApplicationCDParameters->isModified() )
-    {
-        INFO_LOG( "Es modificarà el parametres del programa de gravació (referent a la gravació en CD) per " + m_textBurningApplicationCDParameters->text() );
+        INFO_LOG("Es modificarà el parametres del programa de gravació per " + m_textBurningApplicationParameters->text());
     }
 
-    if ( m_textBurningApplicationDVDParameters->isModified() )
+    if (m_textBurningApplicationCDParameters->isModified())
     {
-        INFO_LOG( "Es modificarà el parametres del programa de gravació (referent a la gravació en DVD) per " + m_textBurningApplicationDVDParameters->text() );
+        INFO_LOG("Es modificarà el parametres del programa de gravació (referent a la gravació en CD) per " + m_textBurningApplicationCDParameters->text());
     }
 
-    if ( m_textDICOMDIRFolderPathToCopy->isModified() )
+    if (m_textBurningApplicationDVDParameters->isModified())
     {
-        INFO_LOG( "Es modificarà el path del directori a copiar al DICOMDIR " + m_textDICOMDIRFolderPathToCopy->text() );
+        INFO_LOG("Es modificarà el parametres del programa de gravació (referent a la gravació en DVD) per " + m_textBurningApplicationDVDParameters->text());
+    }
+
+    if (m_textDICOMDIRFolderPathToCopy->isModified())
+    {
+        INFO_LOG("Es modificarà el path del directori a copiar al DICOMDIR " + m_textDICOMDIRFolderPathToCopy->text());
     }
 
 }

@@ -20,11 +20,11 @@ QScreenDistribution::QScreenDistribution(QWidget *parent)
 {
     setMouseTracking(true);
     m_mouseInScreen = -1;
-    this->setMinimumSize(QSize(300,200));
+    this->setMinimumSize(QSize(300, 200));
 }
 
 QScreenDistribution::~QScreenDistribution()
-{    
+{
 }
 
 QSize QScreenDistribution::sizeHint() const
@@ -139,7 +139,7 @@ void QScreenDistribution::paintEvent(QPaintEvent *event)
 
             painter.setPen(pen);
         }
-        
+
         //Pintar el numero
         painter.drawText(m_screens.at(i), Qt::AlignCenter, QString::number(i + 1));
     }
@@ -148,7 +148,7 @@ void QScreenDistribution::paintEvent(QPaintEvent *event)
 
 void QScreenDistribution::computeSizesAndPositions()
 {
-    QDesktopWidget *desktop = QApplication::desktop();   
+    QDesktopWidget *desktop = QApplication::desktop();
 
     int minimumX = 0;
     int minimumY = 0;
@@ -184,7 +184,7 @@ void QScreenDistribution::computeSizesAndPositions()
     }
 
     int totalWidth = maximumX - minimumX;
-    int totalHeight = maximumY - minimumY;    
+    int totalHeight = maximumY - minimumY;
 
     // Calculem la proporció en que s'ha de dividir per que no es deformi el dibuix
     float widthDivisor = (float)totalWidth / ((float)width() - WidgetMargin * 2);

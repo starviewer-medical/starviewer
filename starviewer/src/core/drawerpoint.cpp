@@ -8,7 +8,7 @@
 
 namespace udg {
 
-DrawerPoint::DrawerPoint(QObject *parent) 
+DrawerPoint::DrawerPoint(QObject *parent)
 : DrawerPrimitive(parent), m_pointRadius(2.0), m_pointActor(NULL)
 {
 }
@@ -19,18 +19,18 @@ DrawerPoint::~DrawerPoint()
 
 void DrawerPoint::setPosition(double point[3])
 {
-    m_position[0]=point[0];
-    m_position[1]=point[1];
-    m_position[2]=point[2];
+    m_position[0] = point[0];
+    m_position[1] = point[1];
+    m_position[2] = point[2];
 
     emit changed();
 }
 
 void DrawerPoint::setPosition(QVector<double> point)
 {
-    m_position[0]=point[0];
-    m_position[1]=point[1];
-    m_position[2]=point[2];
+    m_position[0] = point[0];
+    m_position[1] = point[1];
+    m_position[2] = point[2];
 
     emit changed();
 }

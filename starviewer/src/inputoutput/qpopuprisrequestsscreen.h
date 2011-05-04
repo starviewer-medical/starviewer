@@ -16,7 +16,7 @@ class PACSJob;
 class RetrieveDICOMFilesFromPACSJob;
 class Patient;
 
-class QPopUpRISRequestsScreen : public QDialog, private Ui::QPopUpRISRequestsScreenBase{
+class QPopUpRISRequestsScreen : public QDialog, private Ui::QPopUpRISRequestsScreenBase {
 Q_OBJECT
 public:
 
@@ -87,4 +87,3 @@ private:
 };
 
 #endif
-

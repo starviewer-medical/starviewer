@@ -18,7 +18,7 @@
 #include "pacsconnection.h"
 #include "pacsrequeststatus.h"
 
-namespace udg{
+namespace udg {
 
 //Constant que contindrà quin Abanstract Syntax de Move utilitzem entre els diversos que hi ha utilitzem
 static const char *MoveAbstractSyntax = UID_MOVEStudyRootQueryRetrieveInformationModel;
@@ -31,8 +31,8 @@ RetrieveDICOMFilesFromPACS::RetrieveDICOMFilesFromPACS(PacsDevice pacs)
 
 OFCondition RetrieveDICOMFilesFromPACS::acceptSubAssociation(T_ASC_Network *associationNetwork, T_ASC_Association **association)
 {
-    const char *knownAbstractSyntaxes[] = {UID_VerificationSOPClass};
-    const char *transferSyntaxes[] = {NULL, NULL, NULL, NULL};
+    const char *knownAbstractSyntaxes[] = { UID_VerificationSOPClass };
+    const char *transferSyntaxes[] = { NULL, NULL, NULL, NULL };
     int numTransferSyntaxes;
 
     OFCondition condition = ASC_receiveAssociation(associationNetwork, association, ASC_DEFAULTMAXPDU);
@@ -94,13 +94,13 @@ void RetrieveDICOMFilesFromPACS::moveCallback(void *callbackData, T_DIMSE_C_Move
 
 /*  Aquest en teoria és el codi per cancel·lar una descàrrega però el PACS del l'UDIAT no suporta les requestCancel, per tant la única manera
     de fer-ho és com es fa en el mètode subOperationSCP que s'aborta la connexió amb el PACS.
-  
+
     MoveSCPCallbackData *moveSCPCallbackData = (MoveSCPCallbackData*) callbackData;
 
     if (moveSCPCallbackData->retrieveDICOMFilesFromPACS->m_abortIsRequested)
     {
         OFCondition condition = DIMSE_sendCancelRequest(moveSCPCallbackData->association, moveSCPCallbackData->presentationContextId, request->MessageID);
-       
+
         if (condition.good())
         {
             INFO_LOG("S'ha cancel·lat la descarrega");
@@ -145,7 +145,7 @@ void RetrieveDICOMFilesFromPACS::storeSCPCallback(void *callbackData, T_DIMSE_St
 
             // Guardem la imatge
             OFCondition stateSaveImage = retrieveDICOMFilesFromPACS->save(storeSCPCallbackData->dcmFileFormat, dicomFileAbsolutePath);
-            
+
             if (stateSaveImage.bad())
             {
                 storeResponse->DimseStatus = STATUS_STORE_Refused_OutOfResources;
@@ -159,7 +159,7 @@ void RetrieveDICOMFilesFromPACS::storeSCPCallback(void *callbackData, T_DIMSE_St
             }
             else
             {
-                // Should really check the image to make sure it is consistent, that its 
+                // Should really check the image to make sure it is consistent, that its
                 // sopClass and sopInstance correspond with those in the request.
                 if (storeResponse->DimseStatus == STATUS_Success)
                 {
@@ -180,11 +180,11 @@ void RetrieveDICOMFilesFromPACS::storeSCPCallback(void *callbackData, T_DIMSE_St
                         ERROR_LOG(QString("No concorda sop instance rebuda amb la sol.licitada per la imatge %1").arg(storeSCPCallbackData->fileName));
                     }
                 }
-            
+
                 //TODO:Té processar el fitxer si ha fallat alguna de les anteriors comprovacions ?
                 retrieveDICOMFilesFromPACS->m_numberOfImagesRetrieved++;
                 DICOMTagReader *dicomTagReader = new DICOMTagReader(dicomFileAbsolutePath, storeSCPCallbackData->dcmFileFormat->getAndRemoveDataset());
-                emit retrieveDICOMFilesFromPACS->DICOMFileRetrieved(dicomTagReader, retrieveDICOMFilesFromPACS->m_numberOfImagesRetrieved);            
+                emit retrieveDICOMFilesFromPACS->DICOMFileRetrieved(dicomTagReader, retrieveDICOMFilesFromPACS->m_numberOfImagesRetrieved);
             }
         }
     }
@@ -246,11 +246,11 @@ OFCondition RetrieveDICOMFilesFromPACS::subOperationSCP(T_ASC_Association **subA
             case DIMSE_C_STORE_RQ:
                 condition = storeSCP(*subAssociation, &dimseMessage, presentationContextID);
                 break;
-            
+
             case DIMSE_C_ECHO_RQ:
                 condition = echoSCP(*subAssociation, &dimseMessage, presentationContextID);
                 break;
-            
+
             default:
                 ERROR_LOG("El PACS ens ha sol.licitat un tipus d'operacio invalida");
                 condition = DIMSE_BADCOMMANDTYPE;
@@ -286,7 +286,7 @@ OFCondition RetrieveDICOMFilesFromPACS::subOperationSCP(T_ASC_Association **subA
 
         // Tanquem la connexió amb el PACS perquè segons indica la documentació DICOM al PS 3.4 (Baseline Behavior of SCP) C.4.2.3.1 si abortem
         // la connexió per la qual rebem les imatges, el comportament del PACS és desconegut, per exemple DCM4CHEE tanca la connexió amb el PACS, però
-        // el RAIM_Server no la tanca i la manté fent que no sortim mai d'aquesta classe. Degut a que no es pot saber en aquesta situació com actuaran 
+        // el RAIM_Server no la tanca i la manté fent que no sortim mai d'aquesta classe. Degut a que no es pot saber en aquesta situació com actuaran
         // els PACS es tanca aquí la connexió amb el PACS.
         condition = ASC_abortAssociation(m_pacsConnection->getConnection());
         if (!condition.good())
@@ -353,7 +353,7 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::retrieve(Di
     }
 
     // Which presentation context should be used, It's important that the connection has MoveStudyRoot level
-    T_ASC_Association *association = m_pacsConnection->getConnection(); 
+    T_ASC_Association *association = m_pacsConnection->getConnection();
     presentationContextID = ASC_findAcceptedPresentationContextID(association, MoveAbstractSyntax);
     if (presentationContextID == 0)
     {
@@ -366,7 +366,7 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::retrieve(Di
     moveSCPCallbackData.retrieveDICOMFilesFromPACS = this;
 
     // Set the destination of the images to us
-    T_DIMSE_C_MoveRQ moveRequest = getConfiguredMoveRequest(association); 
+    T_DIMSE_C_MoveRQ moveRequest = getConfiguredMoveRequest(association);
     ASC_getAPTitles(association->params, moveRequest.MoveDestination, NULL, NULL);
 
     OFCondition condition = DIMSE_moveUser(association, presentationContextID, &moveRequest, dicomMask.getDicomMask(), moveCallback, &moveSCPCallbackData, DIMSE_BLOCKING, 0, m_pacsConnection->getNetwork(), subOperationCallback, this, &moveResponse, &statusDetail, NULL /*responseIdentifiers*/);
@@ -420,13 +420,13 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResp
     PACSRequestStatus::RetrieveRequestStatus retrieveRequestStatus;
 
     // Al PS 3.4, secció C.4.2.1.5, taula C.4-2 podem trobar un descripció dels errors.
-    // Al PS 3.4, secció C.4.2.3.1 es descriu els tipus generals d'error 
+    // Al PS 3.4, secció C.4.2.3.1 es descriu els tipus generals d'error
     //      Failure o Refused: No s'ha pogut descarregat alguna imatge
     //      Warning: S'ha pogut descarregar com a mínim una imatge
     //      Success: Totes les imatges s'han descarregat correctament
 
     // Per a detalls sobre els "related fields" consultar PS 3.7, Annex C - Status Type Enconding
-    
+
     if (moveResponse->DimseStatus == STATUS_Success)
     {
         return PACSRequestStatus::RetrieveOk;
@@ -464,8 +464,8 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResp
             retrieveRequestStatus = PACSRequestStatus::RetrieveDestinationAETileUnknown;
             break;
 
-        case STATUS_MOVE_Failed_IdentifierDoesNotMatchSOPClass : //0xa900
-        case STATUS_MOVE_Failed_UnableToProcess : // 0xc000 
+        case STATUS_MOVE_Failed_IdentifierDoesNotMatchSOPClass: //0xa900
+        case STATUS_MOVE_Failed_UnableToProcess: // 0xc000
             // Unable to Process or Identifier does not match SOP Class
             // Related fields DCM_OffendingElement (0000,0901) DCM_ErrorComment (0000,0902)
             relatedFieldsList << DCM_OffendingElement << DCM_ErrorComment;
@@ -477,17 +477,17 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResp
         case STATUS_MOVE_Warning_SubOperationsCompleteOneOrMoreFailures: // 0xb000
             // Sub-operations Complete – One or more Failures
             // Related fields DCM_NumberOfRemainingSuboperations (0000,1020), DCM_NumberOfFailedSuboperations (0000,1022), DCM_NumberOfWarningSuboperations (0000,1023)
-            relatedFieldsList << DCM_NumberOfRemainingSuboperations << DCM_NumberOfFailedSuboperations  << DCM_NumberOfWarningSuboperations;
+            relatedFieldsList << DCM_NumberOfRemainingSuboperations << DCM_NumberOfFailedSuboperations << DCM_NumberOfWarningSuboperations;
 
             WARN_LOG("Error no s'ha pogut descarregar tot l'estudi. Descripcio rebuda: " + QString(DU_cmoveStatusString(moveResponse->DimseStatus)));
             retrieveRequestStatus = PACSRequestStatus::RetrieveSomeDICOMFilesFailed;
             break;
-        
+
         case STATUS_MOVE_Cancel_SubOperationsTerminatedDueToCancelIndication:
             // L'usuari ha sol·licitat cancel·lar la descàrrega
             retrieveRequestStatus = PACSRequestStatus::RetrieveCancelled;
             break;
-        
+
         default:
             ERROR_LOG(messageErrorLog + QString(DU_cmoveStatusString(moveResponse->DimseStatus)));
             // S'ha produït un error no contemplat. En principi no s'hauria d'arribar mai a aquesta branca
@@ -504,11 +504,11 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResp
             INFO_LOG("Status details");
             foreach (DcmTagKey tagKey, relatedFieldsList)
             {
-                // Fem un log per cada camp relacionat amb l'error amb el format 
+                // Fem un log per cada camp relacionat amb l'error amb el format
                 // NomDelTag (xxxx,xxxx): ContingutDelTag
                 statusDetail->findAndGetString(tagKey, text, false);
                 INFO_LOG(QString(DcmTag(tagKey).getTagName()) + " " + QString(tagKey.toString().c_str()) + ": " + QString(text));
-            } 
+            }
         }
     }
 

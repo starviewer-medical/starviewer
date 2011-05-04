@@ -32,13 +32,13 @@ QInputOutputPacsWidget::QInputOutputPacsWidget(QWidget *parent) : QWidget(parent
     createContextMenuQStudyTreeWidget();
 
     Settings settings;
-    settings.restoreColumnsWidths( InputOutputSettings::PACSStudyListColumnsWidth, m_studyTreeWidget->getQTreeWidget() );
-    
+    settings.restoreColumnsWidths(InputOutputSettings::PACSStudyListColumnsWidth, m_studyTreeWidget->getQTreeWidget());
+
     QStudyTreeWidget::ColumnIndex sortByColumn = (QStudyTreeWidget::ColumnIndex) settings.getValue(InputOutputSettings::PACSStudyListSortByColumn).toInt();
     Qt::SortOrder sortOrderColumn = (Qt::SortOrder) settings.getValue(InputOutputSettings::PACSStudyListSortOrder).toInt();
     m_studyTreeWidget->setSortByColumn (sortByColumn, sortOrderColumn);
 
-    m_statsWatcher = new StatsWatcher("QueryInputOutputPacsWidget",this);
+    m_statsWatcher = new StatsWatcher("QueryInputOutputPacsWidget", this);
     m_statsWatcher->addClicksCounter(m_retrievAndViewButton);
     m_statsWatcher->addClicksCounter(m_retrieveButton);
 
@@ -56,7 +56,7 @@ QInputOutputPacsWidget::QInputOutputPacsWidget(QWidget *parent) : QWidget(parent
 QInputOutputPacsWidget::~QInputOutputPacsWidget()
 {
     Settings settings;
-    settings.saveColumnsWidths( InputOutputSettings::PACSStudyListColumnsWidth, m_studyTreeWidget->getQTreeWidget() );
+    settings.saveColumnsWidths(InputOutputSettings::PACSStudyListColumnsWidth, m_studyTreeWidget->getQTreeWidget());
 
     //Guardem per quin columna està ordenada la llista d'estudis i en quin ordre
     settings.setValue(InputOutputSettings::PACSStudyListSortByColumn, m_studyTreeWidget->getSortColumn());
@@ -78,7 +78,7 @@ void QInputOutputPacsWidget::createConnections()
     connect(m_cancelQueryButton, SIGNAL(clicked()), SLOT(cancelCurrentQueriesToPACS()));
 }
 
-void  QInputOutputPacsWidget::createContextMenuQStudyTreeWidget()
+void QInputOutputPacsWidget::createContextMenuQStudyTreeWidget()
 {
     QAction *action;
 
@@ -111,7 +111,7 @@ void QInputOutputPacsWidget::queryStudy(DicomMask queryMask, QList<PacsDevice> p
         m_studyTreeWidget->clear();
         m_hashPacsIDOfStudyInstanceUID.clear();
 
-        foreach(const PacsDevice &pacsDeviceToQuery, pacsToQueryList)
+        foreach (const PacsDevice &pacsDeviceToQuery, pacsToQueryList)
         {
             enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDeviceToQuery, queryMask, QueryPacsJob::study));
         }
@@ -122,7 +122,7 @@ void QInputOutputPacsWidget::enqueueQueryPACSJobToPACSManagerAndConnectSignals(Q
 {
     connect(queryPACSJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(queryPACSJobFinished(PACSJob*)));
     connect(queryPACSJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(queryPACSJobCancelled(PACSJob*)));
-    
+
     m_pacsManager->enqueuePACSJob(queryPACSJob);
     m_queryPACSJobPendingExecuteOrExecuting.insert(queryPACSJob->getPACSJobID(), queryPACSJob);
     setQueryInProgress(true);
@@ -130,12 +130,12 @@ void QInputOutputPacsWidget::enqueueQueryPACSJobToPACSManagerAndConnectSignals(Q
 
 void QInputOutputPacsWidget::cancelCurrentQueriesToPACS()
 {
-    foreach(QueryPacsJob *queryPACSJob, m_queryPACSJobPendingExecuteOrExecuting)
+    foreach (QueryPacsJob *queryPACSJob, m_queryPACSJobPendingExecuteOrExecuting)
     {
         m_pacsManager->requestCancelPACSJob(queryPACSJob);
         m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
     }
-    
+
     /*Les consultes al PACS poden tarda variis segons a cancel·lar-se, ja que com està documentat hi ha PACS que una vegada un PACS rep l'orde de cancel·lació
       envien els resultats que havien trobat fins aquell moment i després tanquen la connexió, per fer transparent això a l'usuari, ja que ell no ho notarà en
       quin moment es cancel·len, ja amaguem el gif indicant que s'ha cancel·lat la consulta, perquè tingui la sensació que s'han cancel·lat immediatament*/
@@ -163,7 +163,7 @@ void QInputOutputPacsWidget::queryPACSJobCancelled(PACSJob *pacsJob)
 
 void QInputOutputPacsWidget::queryPACSJobFinished(PACSJob *pacsJob)
 {
-    QueryPacsJob *queryPACSJob= qobject_cast<QueryPacsJob*>(pacsJob);
+    QueryPacsJob *queryPACSJob = qobject_cast<QueryPacsJob*>(pacsJob);
 
     if (queryPACSJob == NULL)
     {
@@ -198,7 +198,7 @@ void QInputOutputPacsWidget::showQueryPACSJobResults(QueryPacsJob *queryPACSJob)
     else if (queryPACSJob->getQueryLevel() == QueryPacsJob::series)
     {
         QList<Series*> seriesList = queryPACSJob->getSeriesList();
-        QString studyInstanceUID = queryPACSJob->getDicomMask().getStudyInstanceUID(); 
+        QString studyInstanceUID = queryPACSJob->getDicomMask().getStudyInstanceUID();
 
         if (seriesList.isEmpty())
         {
@@ -212,14 +212,14 @@ void QInputOutputPacsWidget::showQueryPACSJobResults(QueryPacsJob *queryPACSJob)
     else if (queryPACSJob->getQueryLevel() == QueryPacsJob::image)
     {
         QList<Image*> imageList = queryPACSJob->getImageList();
-        QString studyInstanceUID = queryPACSJob->getDicomMask().getStudyInstanceUID(); 
+        QString studyInstanceUID = queryPACSJob->getDicomMask().getStudyInstanceUID();
         QString seriesInstanceUID = queryPACSJob->getDicomMask().getSeriesInstanceUID();
 
         if (imageList.isEmpty())
         {
             QMessageBox::information(this, ApplicationNameString, tr("No images match series %1.\n").arg(seriesInstanceUID));
         }
-        else 
+        else
         {
             m_studyTreeWidget->insertImageList(studyInstanceUID, seriesInstanceUID, imageList);
         }
@@ -230,7 +230,7 @@ void QInputOutputPacsWidget::showErrorQueringPACS(QueryPacsJob *queryPACSJob)
 {
     if (queryPACSJob->getStatus() != PACSRequestStatus::QueryOk && queryPACSJob->getStatus() != PACSRequestStatus::QueryCancelled)
     {
-        switch(queryPACSJob->getQueryLevel())
+        switch (queryPACSJob->getQueryLevel())
         {
             case QueryPacsJob::study:
                 QMessageBox::critical(this, ApplicationNameString, queryPACSJob->getStatusDescription());
@@ -251,7 +251,7 @@ void QInputOutputPacsWidget::clear()
 void QInputOutputPacsWidget::expandSeriesOfStudy(QString studyInstanceUID)
 {
     PacsDevice pacsDevice = PacsDeviceManager().getPACSDeviceByID(getPacsIDFromQueriedStudies(studyInstanceUID));
-    QString pacsDescription = pacsDevice.getAETitle() + " Institució" + pacsDevice.getInstitution()  + " IP:" + pacsDevice.getAddress();
+    QString pacsDescription = pacsDevice.getAETitle() + " Institució" + pacsDevice.getInstitution() + " IP:" + pacsDevice.getAddress();
 
     INFO_LOG("Cercant informacio de les series de l'estudi" + studyInstanceUID + " del PACS " + pacsDescription);
 
@@ -261,7 +261,7 @@ void QInputOutputPacsWidget::expandSeriesOfStudy(QString studyInstanceUID)
 void QInputOutputPacsWidget::expandImagesOfSeries(QString studyInstanceUID, QString seriesInstanceUID)
 {
     PacsDevice pacsDevice = PacsDeviceManager().getPACSDeviceByID(getPacsIDFromQueriedStudies(studyInstanceUID));
-    QString pacsDescription = pacsDevice.getAETitle() + " Institució" + pacsDevice.getInstitution()  + " IP:" + pacsDevice.getAddress();
+    QString pacsDescription = pacsDevice.getAETitle() + " Institució" + pacsDevice.getInstitution() + " IP:" + pacsDevice.getAddress();
 
     INFO_LOG("Cercant informacio de les imatges de la serie" + seriesInstanceUID + " de l'estudi" + studyInstanceUID + " del PACS " + pacsDescription);
 
@@ -270,14 +270,14 @@ void QInputOutputPacsWidget::expandImagesOfSeries(QString studyInstanceUID, QStr
 
 void QInputOutputPacsWidget::retrieveSelectedStudies()
 {
-    if(m_studyTreeWidget->getSelectedStudiesUID().isEmpty())
+    if (m_studyTreeWidget->getSelectedStudiesUID().isEmpty())
     {
         QApplication::restoreOverrideCursor();
         QMessageBox::warning(this, ApplicationNameString, tr("Select a study to retrieve."));
         return;
     }
 
-    foreach(DicomMask dicomMask, m_studyTreeWidget->getDicomMaskOfSelectedItems())
+    foreach (DicomMask dicomMask, m_studyTreeWidget->getDicomMaskOfSelectedItems())
     {
         retrieve(getPacsIDFromQueriedStudies(dicomMask.getStudyInstanceUID()), m_studyTreeWidget->getStudy(dicomMask.getStudyInstanceUID()), dicomMask, None);
     }
@@ -285,14 +285,14 @@ void QInputOutputPacsWidget::retrieveSelectedStudies()
 
 void QInputOutputPacsWidget::retrieveAndViewSelectedStudies()
 {
-    if(m_studyTreeWidget->getSelectedStudiesUID().isEmpty())
+    if (m_studyTreeWidget->getSelectedStudiesUID().isEmpty())
     {
         QApplication::restoreOverrideCursor();
         QMessageBox::warning(this, ApplicationNameString, tr("Select a study to retrieve and view."));
         return;
     }
 
-    foreach(DicomMask dicomMask, m_studyTreeWidget->getDicomMaskOfSelectedItems())
+    foreach (DicomMask dicomMask, m_studyTreeWidget->getDicomMaskOfSelectedItems())
     {
         retrieve(getPacsIDFromQueriedStudies(dicomMask.getStudyInstanceUID()), m_studyTreeWidget->getStudy(dicomMask.getStudyInstanceUID()), dicomMask, View);
     }
@@ -323,7 +323,7 @@ void QInputOutputPacsWidget::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacs
 
     emit studyRetrieveFinished(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getInstanceUID());
 
-    switch(m_actionsWhenRetrieveJobFinished.take(retrieveDICOMFilesFromPACSJob->getPACSJobID()))
+    switch (m_actionsWhenRetrieveJobFinished.take(retrieveDICOMFilesFromPACSJob->getPACSJobID()))
     {
         case Load:
             emit loadRetrievedStudy(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getInstanceUID());;
@@ -345,7 +345,7 @@ void QInputOutputPacsWidget::retrieve(QString pacsIDToRetrieve, Study *studyToRe
     PacsDevice pacsDevice = PacsDeviceManager().getPACSDeviceByID(pacsIDToRetrieve);
     RetrieveDICOMFilesFromPACSJob::RetrievePriorityJob retrievePriorityJob = actionsAfterRetrieve == View ? RetrieveDICOMFilesFromPACSJob::High : RetrieveDICOMFilesFromPACSJob::Medium;
 
-    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = new RetrieveDICOMFilesFromPACSJob(pacsDevice, studyToRetrieve , maskStudyToRetrieve, 
+    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = new RetrieveDICOMFilesFromPACSJob(pacsDevice, studyToRetrieve, maskStudyToRetrieve,
         retrievePriorityJob);
 
     m_pacsManager->enqueuePACSJob(retrieveDICOMFilesFromPACSJob);
@@ -363,7 +363,7 @@ bool QInputOutputPacsWidget::AreValidQueryParameters(DicomMask *maskToQuery, QLi
         return false;
     }
 
-    if( maskToQuery->isEmpty() )
+    if (maskToQuery->isEmpty())
     {
         QMessageBox::StandardButton response;
         response = QMessageBox::question(this, ApplicationNameString, tr("No search fields were filled.") + "\n" + tr("The query can take a long time.\nDo you want continue?"), QMessageBox::Yes | QMessageBox::No, QMessageBox::No);

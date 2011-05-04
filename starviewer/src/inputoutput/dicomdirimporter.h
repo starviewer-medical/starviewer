@@ -25,10 +25,10 @@ class DICOMDIRImporter : QObject {
 
 public:
 
-    enum DICOMDIRImporterError {Ok, DatabaseError, NoEnoughSpace, ErrorFreeingSpace, ErrorCopyingFiles, PatientInconsistent, ErrorOpeningDicomdir, DicomdirInconsistent};
+    enum DICOMDIRImporterError { Ok, DatabaseError, NoEnoughSpace, ErrorFreeingSpace, ErrorCopyingFiles, PatientInconsistent, ErrorOpeningDicomdir, DicomdirInconsistent };
 
     ///Importa les dades del dicomdir que es trova a dicomdirPath que pertanyen a l'study amb UID studyUID
-    void import( QString dicomdirPath, QString studyUID, QString seriesUID, QString imageUID );
+    void import(QString dicomdirPath, QString studyUID, QString seriesUID, QString imageUID);
 
     ///Retorna l'últim error produït al importar el dicomdir
     DICOMDIRImporterError getLastError();

@@ -22,7 +22,7 @@ class TableMenu : public QWidget
 {
 Q_OBJECT
 public:
-    TableMenu( QWidget *parent = 0 );
+    TableMenu(QWidget *parent = 0);
 
     ~TableMenu();
 
@@ -35,23 +35,23 @@ public:
 public slots:
 
     /// Mètode que cada vegada que el mouse es situi sobre items comprova si cal afegir files o columnes
-    void verifySelected( ItemMenu * selected );
+    void verifySelected(ItemMenu * selected);
 
     /// Mètode que cada vegada que es seleccioni un dels items emet el grid resultat
-    void emitSelected( ItemMenu * selected );
+    void emitSelected(ItemMenu * selected);
 
 signals:
-    
+
     /// Emet que s'ha escollit un grid
-    void selectedGrid( int , int );
+    void selectedGrid(int, int);
 
 protected:
 
     /// Sobrecàrrega del mètode que tracta tots els events
-    bool event( QEvent * event);
+    bool event(QEvent * event);
 
     /// Sobrecàrrega del mètode que tracta els events del mouse
-    void mouseMoveEvent ( QMouseEvent * event );
+    void mouseMoveEvent (QMouseEvent * event);
 
 private:
 
@@ -65,7 +65,7 @@ private:
 
     /// Nombre de columnes actuals
     int m_columns;
-    
+
     /// Nombre de files actuals
     int m_rows;
 

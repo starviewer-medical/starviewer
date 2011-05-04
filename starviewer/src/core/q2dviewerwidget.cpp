@@ -136,12 +136,12 @@ void Q2DViewerWidget::setSelected(bool option)
     QBrush brush = QApplication::palette().window();
     if (option)
     {
-		// Si seleccionem el widget, li canviem el color de fons
-		brush.setColor(QColor(85, 160, 255));	
+        // Si seleccionem el widget, li canviem el color de fons
+        brush.setColor(QColor(85, 160, 255));
     }
-	QPalette palette = this->palette();
-	palette.setBrush(QPalette::Active, QPalette::Window, brush);
-	setPalette(palette);
+    QPalette palette = this->palette();
+    palette.setBrush(QPalette::Active, QPalette::Window, brush);
+    setPalette(palette);
     m_2DView->setActive(option);
 }
 
@@ -152,12 +152,12 @@ Q2DViewer* Q2DViewerWidget::getViewer()
 
 bool Q2DViewerWidget::hasPhases()
 {
-    int phases = 0 ;
+    int phases = 0;
     if (m_mainVolume)
     {
         phases = m_mainVolume->getNumberOfPhases();
     }
-    return (phases > 1) ;
+    return (phases > 1);
 }
 
 void Q2DViewerWidget::setDefaultAction(QAction *synchronizeAction)

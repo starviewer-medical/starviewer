@@ -19,7 +19,7 @@ public:
     DICOMSequenceAttribute();
 
     ~DICOMSequenceAttribute();
-   
+
     /// Retorna sempre fals
     virtual bool isValueAttribute();
 

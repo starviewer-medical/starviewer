@@ -44,7 +44,7 @@ void ToolManager::setViewerTools(QViewer *viewer, const QStringList &toolsList)
 
 void ToolManager::setupRegisteredTools(QViewer *viewer)
 {
-    setViewerTools(viewer,getRegisteredToolsList());
+    setViewerTools(viewer, getRegisteredToolsList());
 }
 
 void ToolManager::setViewerTool(QViewer *viewer, const QString &toolName, ToolConfiguration *configuration)
@@ -200,7 +200,7 @@ void ToolManager::undoDisableAllToolsTemporarily()
 
 void ToolManager::activateTool(const QString &toolName)
 {
-    // TODO Caldria comprovar si la tool es troba en un grup exclusiu per "fer fora" les altres tools 
+    // TODO Caldria comprovar si la tool es troba en un grup exclusiu per "fer fora" les altres tools
     // en el cas que prescindíssim del mecanisme que fem servir amb QActionToolGroup
     QList<ViewerToolConfigurationPairType> viewerConfigList = m_toolViewerMap.values(toolName);
 
@@ -232,7 +232,7 @@ void ToolManager::activateTool(const QString &toolName)
                 if (!data) // No hi són al repositori, les obtindrem de la pròpia tool i les registrarem al repositori
                 {
                     data = tool->getToolData();
-                    m_sharedToolDataRepository[ toolName ] = data;
+                    m_sharedToolDataRepository[toolName] = data;
                 }
                 else
                 {

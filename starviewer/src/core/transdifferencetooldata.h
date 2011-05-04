@@ -32,51 +32,51 @@ public:
     Volume* getDifferenceVolume(){return m_differenceVolume;}
 
     /// Get X de la translacio
-    int getSliceTranslationX( int sl ){return m_sliceTranslations[sl].first;}
+    int getSliceTranslationX(int sl){return m_sliceTranslations[sl].first;}
 
     /// Set X de la translacio
-    void setSliceTranslationX( int sl, int trX ){m_sliceTranslations[sl].first = trX;}
+    void setSliceTranslationX(int sl, int trX){m_sliceTranslations[sl].first = trX;}
 
     /// Increase X de la translacio
-    void increaseSliceTranslationX( int sl, int trX ){m_sliceTranslations[sl].first += trX;}
+    void increaseSliceTranslationX(int sl, int trX){m_sliceTranslations[sl].first += trX;}
 
     /// Get Y de la translacio
-    int getSliceTranslationY( int sl ){return m_sliceTranslations[sl].second;}
+    int getSliceTranslationY(int sl){return m_sliceTranslations[sl].second;}
 
     /// Set Y de la translacio
-    void setSliceTranslationY( int sl, int trY ){m_sliceTranslations[sl].second = trY;}
+    void setSliceTranslationY(int sl, int trY){m_sliceTranslations[sl].second = trY;}
 
     /// Increase Y de la translacio
-    void increaseSliceTranslationY( int sl, int trY ){m_sliceTranslations[sl].second += trY;}
+    void increaseSliceTranslationY(int sl, int trY){m_sliceTranslations[sl].second += trY;}
 
     /// Get la llesca de referència
-    int getReferenceSlice( ){return m_referenceSlice;}
+    int getReferenceSlice(){return m_referenceSlice;}
 
     /// Set la llesca de referència
-    void setReferenceSlice( int sl ){m_referenceSlice = sl;}
+    void setReferenceSlice(int sl){m_referenceSlice = sl;}
 
-    void setActualDisplacement(int dx, int dy){emit actualDisplacement(dx,dy);}
+    void setActualDisplacement(int dx, int dy){emit actualDisplacement(dx, dy);}
 
-    void setFinalDisplacement(int dx, int dy){emit finalDisplacement(dx,dy);}
+    void setFinalDisplacement(int dx, int dy){emit finalDisplacement(dx, dy);}
 
 public slots:
 
 signals:
     /// Envia el desplaçament que s'ha fet des de la posició d'origen
-    void actualDisplacement(int,int);
+    void actualDisplacement(int, int);
 
     /// Envia el desplaçament que s'ha fet des de la posició d'origen
-    void finalDisplacement(int,int);
+    void finalDisplacement(int, int);
 
 private:
     /// Dades de les transformacions aplicades a cada llesca
-    QVector< QPair<int,int> > m_sliceTranslations;
+    QVector<QPair<int, int> > m_sliceTranslations;
 
     ///Dades del volum original i la diferència
     Volume* m_inputVolume;
     Volume* m_differenceVolume;
 
-    int m_dx,m_dy;
+    int m_dx, m_dy;
 
     /// Slice de referència
     int m_referenceSlice;

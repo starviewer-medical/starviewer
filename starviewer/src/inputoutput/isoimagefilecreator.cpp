@@ -30,7 +30,7 @@ QString IsoImageFileCreator::getIsoImageLabel() const
     return m_isoImageLabel;
 }
 
-void IsoImageFileCreator::setIsoImageLabel( const QString &isoImageLabel )
+void IsoImageFileCreator::setIsoImageLabel(const QString &isoImageLabel)
 {
     m_isoImageLabel = isoImageLabel;
 }
@@ -40,7 +40,7 @@ QString IsoImageFileCreator::getInputPath() const
     return m_inputPath;
 }
 
-void IsoImageFileCreator::setInputPath( const QString &inputPath )
+void IsoImageFileCreator::setInputPath(const QString &inputPath)
 {
     m_inputPath = inputPath;
 }
@@ -50,7 +50,7 @@ QString IsoImageFileCreator::getOutputIsoImageFilePath() const
     return m_outputIsoImageFilePath;
 }
 
-void IsoImageFileCreator::setOutputIsoImageFilePath( const QString &outputIsoImageFilePath )
+void IsoImageFileCreator::setOutputIsoImageFilePath(const QString &outputIsoImageFilePath)
 {
     m_outputIsoImageFilePath = outputIsoImageFilePath;
 }
@@ -68,7 +68,7 @@ QString IsoImageFileCreator::getLastErrorDescription() const
 void IsoImageFileCreator::startCreateIsoImageFile()
 {
     // Es comprova que el directori o fitxer a partir del qual es vol generar el fitxer d'imatge ISO existeix
-    if( !QFile::exists(m_inputPath) )
+    if (!QFile::exists(m_inputPath))
     {
         m_lastErrorDescription = QObject::tr("The input path \"%1\" that we want to turn into an ISO image doesn't exist.").arg(m_inputPath);
         m_lastError = InputPathNotFound;
@@ -77,10 +77,10 @@ void IsoImageFileCreator::startCreateIsoImageFile()
     else
     {
         QFileInfo outputIsoImageFilePathInfo(m_outputIsoImageFilePath);
-        QFileInfo outputIsoImageDirPathInfo(outputIsoImageFilePathInfo.dir(),"");
+        QFileInfo outputIsoImageDirPathInfo(outputIsoImageFilePathInfo.dir(), "");
 
         // Es comprova que el directori on es vol guardar el fitxer de imatge ISO existeixi
-        if ( !outputIsoImageFilePathInfo.dir().exists() )
+        if (!outputIsoImageFilePathInfo.dir().exists())
         {
             m_lastErrorDescription = QObject::tr("The directory \"%1\" where you want to save ISO image file doesn't exist.").arg(QDir::toNativeSeparators(outputIsoImageFilePathInfo.absolutePath()));
             m_lastError = OutputPathNotFound;
@@ -90,7 +90,7 @@ void IsoImageFileCreator::startCreateIsoImageFile()
         {
             // Es comprova que es disposi de permisos d'escriptura en el directori on es vol guardar el fitxer d'imatge ISO
             // Es a dir, es comproven els permisos del directori.
-            if ( !outputIsoImageDirPathInfo.isWritable() )
+            if (!outputIsoImageDirPathInfo.isWritable())
             {
                 m_lastErrorDescription = QObject::tr("You don't have permissions to write in the output ISO image directory \"%1\".").arg(QDir::toNativeSeparators(outputIsoImageFilePathInfo.absolutePath()));
                 m_lastError = OutputDirPathAccessDenied;
@@ -100,7 +100,7 @@ void IsoImageFileCreator::startCreateIsoImageFile()
             {
                 // Es comprova que es diposi de permisos de escritura en el path on s'ha de crear el fitxer d'imatge ISO
                 // Es a dir, es comproven els permisos del fitxer
-                if ( QFile::exists(outputIsoImageFilePathInfo.absoluteFilePath()) && !outputIsoImageFilePathInfo.isWritable() )
+                if (QFile::exists(outputIsoImageFilePathInfo.absoluteFilePath()) && !outputIsoImageFilePathInfo.isWritable())
                 {
                     m_lastErrorDescription = QObject::tr("You don't have permissions to write in the output ISO image directory \"%1\".").arg(QDir::toNativeSeparators(outputIsoImageFilePathInfo.absolutePath()));
                     m_lastError = OutputFilePathAccessDenied;
@@ -113,7 +113,7 @@ void IsoImageFileCreator::startCreateIsoImageFile()
                     // Afegim als paràmetres l'etiqueta de la imatge ISO en cas de que tingui valor vàlid
                     if (!m_isoImageLabel.isEmpty())
                     {
-                        processParameters << "-V"; 
+                        processParameters << "-V";
                         processParameters << m_isoImageLabel;
                     }
 
@@ -123,7 +123,7 @@ void IsoImageFileCreator::startCreateIsoImageFile()
                     processParameters << "-joliet";
                     processParameters << "-r";
 
-                    processParameters << "-o"; 
+                    processParameters << "-o";
                     processParameters << m_outputIsoImageFilePath; // Nom i directori on guardarem la imatge
                     processParameters << m_inputPath; // Path a convertir en iso
 
@@ -131,20 +131,20 @@ void IsoImageFileCreator::startCreateIsoImageFile()
 
                     // Es comprova que existeixi el mkisofs al path on hauria d'estar per windows, mac i linux
                     // Windows
-                    if ( !QFile::exists(mkisofsFilePath + ".exe") )
+                    if (!QFile::exists(mkisofsFilePath + ".exe"))
                     {
                         // Mac
-                        if ( !QFile::exists(mkisofsFilePath) )
+                        if (!QFile::exists(mkisofsFilePath))
                         {
                             // Linux
                             mkisofsFilePath = "/usr/bin/mkisofs";
-                        
+
                             // Si no existeix per cap sistema s'ha produit un error degut a que no s'ha pogut localitzar el mkisofs
-                            if ( !QFile::exists(mkisofsFilePath) )
+                            if (!QFile::exists(mkisofsFilePath))
                             {
                                 m_lastErrorDescription = QObject::tr("The mkisofs program cannot be found on the system.");
                                 m_lastError = InternalError;
-                            
+
                                 emit finishedCreateIsoImageFile(false);
                             }
                         }
@@ -153,7 +153,7 @@ void IsoImageFileCreator::startCreateIsoImageFile()
                     {
                         // Es crea el process i es connecta el seu signal finished amb l'slot finishCreationProcess
                         m_process = new QProcess();
-                        connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(finishCreationProcess(int))); 
+                        connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(finishCreationProcess(int)));
                         m_process->start(mkisofsFilePath, processParameters);
                     }
                 }
@@ -164,14 +164,14 @@ void IsoImageFileCreator::startCreateIsoImageFile()
 
 void IsoImageFileCreator::finishCreationProcess(int exitCode)
 {
-    // Després de que s'emeti el signal finished del QProcess, s'executa aquest Slot on es comprova si el procés a finialitzat o no 
+    // Després de que s'emeti el signal finished del QProcess, s'executa aquest Slot on es comprova si el procés a finialitzat o no
     // correctament i s'emet el signal finishedCreateIsoImageFile(bool)
-    if( exitCode != 0 )
+    if (exitCode != 0)
     {
         m_lastErrorDescription = QObject::tr("An error occurred with the ISO image file create process.");
         m_lastError = InternalError;
 
-        ERROR_LOG( "Error al crear ISO; Exit code qprocess: " + exitCode );
+        ERROR_LOG("Error al crear ISO; Exit code qprocess: " + exitCode);
         emit finishedCreateIsoImageFile(false);
     }
     else

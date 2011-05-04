@@ -1,19 +1,14 @@
 #ifndef UDGVTKVOLUMERAYCASTVOXELSHADERCOMPOSITEFUNCTION_H
 #define UDGVTKVOLUMERAYCASTVOXELSHADERCOMPOSITEFUNCTION_H
 
-
 #include <vtkVolumeRayCastFunction.h>
-
 
 #include <QList>
 
-
 namespace udg {
-
 
 class TrilinearInterpolator;
 class VoxelShader;
-
 
 /**
  * Classe que fa un ray casting permetent aplicar un voxel shader per decidir el color de cada vòxel.
@@ -25,26 +20,26 @@ public:
     enum CompositeMethod { ClassifyInterpolate, InterpolateClassify };
 
     static vtkVolumeRayCastVoxelShaderCompositeFunction* New();
-    vtkTypeRevisionMacro( vtkVolumeRayCastVoxelShaderCompositeFunction, vtkVolumeRayCastFunction );
-    void PrintSelf( ostream &os, vtkIndent indent );
+    vtkTypeRevisionMacro(vtkVolumeRayCastVoxelShaderCompositeFunction, vtkVolumeRayCastFunction);
+    void PrintSelf(ostream &os, vtkIndent indent);
 
-    void SetCompositeMethod( CompositeMethod compositeMethod ) { m_compositeMethod = qBound( ClassifyInterpolate, compositeMethod, InterpolateClassify); }
+    void SetCompositeMethod(CompositeMethod compositeMethod) { m_compositeMethod = qBound(ClassifyInterpolate, compositeMethod, InterpolateClassify); }
     CompositeMethod GetCompositeMethod() const { return m_compositeMethod; }
     void SetCompositeMethodToInterpolateFirst() { m_compositeMethod = InterpolateClassify; }
     void SetCompositeMethodToClassifyFirst() { m_compositeMethod = ClassifyInterpolate; }
     const char* GetCompositeMethodAsString() const;
 
     //BTX
-    void CastRay( vtkVolumeRayCastDynamicInfo *dynamicInfo, vtkVolumeRayCastStaticInfo *staticInfo );
+    void CastRay(vtkVolumeRayCastDynamicInfo *dynamicInfo, vtkVolumeRayCastStaticInfo *staticInfo);
 
-    float GetZeroOpacityThreshold( vtkVolume *volume );
+    float GetZeroOpacityThreshold(vtkVolume *volume);
     //ETX
 
-    void AddVoxelShader( VoxelShader *voxelShader );
-    void InsertVoxelShader( int i, VoxelShader *voxelShader );
-    int IndexOfVoxelShader( VoxelShader *voxelShader );
-    void RemoveVoxelShader( int i );
-    void RemoveVoxelShader( VoxelShader *voxelShader );
+    void AddVoxelShader(VoxelShader *voxelShader);
+    void InsertVoxelShader(int i, VoxelShader *voxelShader);
+    int IndexOfVoxelShader(VoxelShader *voxelShader);
+    void RemoveVoxelShader(int i);
+    void RemoveVoxelShader(VoxelShader *voxelShader);
     void RemoveAllVoxelShaders();
 
 protected:
@@ -53,7 +48,7 @@ protected:
     ~vtkVolumeRayCastVoxelShaderCompositeFunction();
 
     //BTX
-    void SpecificFunctionInitialize( vtkRenderer *renderer, vtkVolume *volume, vtkVolumeRayCastStaticInfo *staticInfo, vtkVolumeRayCastMapper *mapper );
+    void SpecificFunctionInitialize(vtkRenderer *renderer, vtkVolume *volume, vtkVolumeRayCastStaticInfo *staticInfo, vtkVolumeRayCastMapper *mapper);
     //ETX
 
     CompositeMethod m_compositeMethod;
@@ -65,12 +60,11 @@ private:
     /// Opacitat mínima que ha de restar per continuar el ray casting.
     static const float MINIMUM_REMAINING_OPACITY;
 
-    vtkVolumeRayCastVoxelShaderCompositeFunction( const vtkVolumeRayCastVoxelShaderCompositeFunction& );    // Not implemented.
-    void operator=( const vtkVolumeRayCastVoxelShaderCompositeFunction& );                                  // Not implemented.
+    vtkVolumeRayCastVoxelShaderCompositeFunction(const vtkVolumeRayCastVoxelShaderCompositeFunction&);    // Not implemented.
+    void operator=(const vtkVolumeRayCastVoxelShaderCompositeFunction&);                                  // Not implemented.
 
 };
 
 }
-
 
 #endif

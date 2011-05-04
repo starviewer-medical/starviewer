@@ -26,7 +26,7 @@ class PACSJob;
 class SendDICOMFilesToPACSJob;
 class PacsManager;
 
-/** 
+/**
  * Widget en el que controla les operacions d'entrada/sortida de la base de dades local
  */
 class QInputOutputLocalDatabaseWidget : public QWidget, private Ui::QInputOutputLocalDatabaseWidgetBase
@@ -34,7 +34,7 @@ class QInputOutputLocalDatabaseWidget : public QWidget, private Ui::QInputOutput
 Q_OBJECT
 
 public:
-    
+
     QInputOutputLocalDatabaseWidget(QWidget *parent = 0);
     ~QInputOutputLocalDatabaseWidget();
 
@@ -45,7 +45,7 @@ public:
     void queryStudy(DicomMask queryMask);
 
     /**Li passem un punte a la interfície que crea dicomdir, per a que s'hi pugui comunicar-se per preguntar
-     * si l'estudi abans de ser esborrat està a llista d'estudis per crear un nou dicomdir, o per indicar-li 
+     * si l'estudi abans de ser esborrat està a llista d'estudis per crear un nou dicomdir, o per indicar-li
      * que s'ha afegit demanat afegir un nou estudi a llista d'estudis per crear dicomdir
      */
     //TODO s'hauria buscar una manera més elegant de comunicar les dos classes, fer un singletton de QCreateDicomdir ?
@@ -60,9 +60,9 @@ public:
 public slots:
     ///Emet signal selectedPatients indicant que s'han seleccionat estudis per ser visualitzats
     /// Afegim un terer paràmetre "loadOnly" que ens indicarà si únicament volem carregar les dades sense necessitat de fer un "view"
-    /// Així diferenciem els casos en que volem carregar dades del pacient "en background" (només fusionem dades del pacient i prou, 
+    /// Així diferenciem els casos en que volem carregar dades del pacient "en background" (només fusionem dades del pacient i prou,
     /// sense aplicar canvis visibles sobre la interfície) útil pels casos de carregar estudis previs, per exemple.
-    void view(QStringList selectedStudiesInstanceUID, QString selectedSeriesInstanceUID, bool loadOnly = false );
+    void view(QStringList selectedStudiesInstanceUID, QString selectedSeriesInstanceUID, bool loadOnly = false);
 
     ///Afegeix l'estudi amb l'Study Instance UID passat per paràmetre al Widget
     void addStudyToQStudyTreeWidget(QString studyInstanceUID);
@@ -89,7 +89,7 @@ private:
     bool showDatabaseManagerError(LocalDatabaseManager::LastError error, const QString &doingWhat = "");
 
     ///Esborra els estudis vells
-    // TODO Aquesta responsabilitat d'esborrar els estudis vells al iniciar-se l'aplicació s'hauria de 
+    // TODO Aquesta responsabilitat d'esborrar els estudis vells al iniciar-se l'aplicació s'hauria de
     // traslladar a un altre lloc, no és responsabilitat d'aquesta inferfície
     void deleteOldStudies();
 

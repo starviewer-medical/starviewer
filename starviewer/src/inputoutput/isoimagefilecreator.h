@@ -10,28 +10,28 @@ namespace udg {
 
 /** Crea un arxiu d'imatge ISO a partir d'un directori o fitxer.
 */
-class IsoImageFileCreator: public QObject {
+class IsoImageFileCreator : public QObject {
 Q_OBJECT
 public:
 
     enum ImageFileCreationError { InputPathNotFound, OutputPathNotFound, OutputDirPathAccessDenied, OutputFilePathAccessDenied, InternalError };
 
     IsoImageFileCreator();
-    IsoImageFileCreator( const QString &inputPath, const QString &outputIsoImageFilePath );
+    IsoImageFileCreator(const QString &inputPath, const QString &outputIsoImageFilePath);
     ~IsoImageFileCreator();
 
     /// Estableix/Retorna el label del fitxer d'imatge ISO que es vol crear
     QString getIsoImageLabel() const;
-    void setIsoImageLabel( const QString &isoImageLabel );
+    void setIsoImageLabel(const QString &isoImageLabel);
 
     /// Estableix/Retorna el path del fitxer o directori a partir del qual es vol crear el fitxer d'imatge ISO
     QString getInputPath() const;
-    void setInputPath( const QString &inputPath );
+    void setInputPath(const QString &inputPath);
 
     /// Estableix/Retorna el path del fitxer d'imatge ISO que es vol crear
     QString getOutputIsoImageFilePath() const;
-    void setOutputIsoImageFilePath( const QString &outputIsoImageFilePath );
-  
+    void setOutputIsoImageFilePath(const QString &outputIsoImageFilePath);
+
     /// Retorna la descripció de l'últim error que s'ha produit
     QString getLastErrorDescription() const;
 
@@ -41,7 +41,7 @@ public:
     /** Inicia la creació del fitxer d'imatge ISO a partir d'un directori o fitxer
      * El path del fitxer d'imatge ISO que es crearà es troba a l'atribut m_inputPath
      * El path del directori o fitxer a partir del qual es crea el fitxer d'imatge ISO es troba a l'atribut m_outputIsoImageFilePath
-     * És important tenir en compte que només inicia el procés no espera a la seva finalització. Per saber quan acaba es disposa del 
+     * És important tenir en compte que només inicia el procés no espera a la seva finalització. Per saber quan acaba es disposa del
      + signal finishedCreateIsoImageFile que s'emet just al finalitzar el procés.
      */
     void startCreateIsoImageFile();

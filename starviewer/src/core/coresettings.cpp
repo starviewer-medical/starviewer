@@ -98,5 +98,4 @@ void CoreSettings::init()
     settingsRegistry->addSetting(MaximumNumberOfVisibleWindowLevelComboItems, 50);
 }
 
-} // End namespace udg 
-
+} // End namespace udg

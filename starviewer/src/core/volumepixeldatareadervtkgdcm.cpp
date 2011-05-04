@@ -58,7 +58,7 @@ int VolumePixelDataReaderVTKGDCM::read(const QStringList &filenames)
     }
 
     // vtk - GDCM
-    // Convertim la QStringList a vtkStringArray que és l'input 
+    // Convertim la QStringList a vtkStringArray que és l'input
     // que accepta vtkGDCMImageReader
     if (filenames.size() > 1)
     {
@@ -74,9 +74,9 @@ int VolumePixelDataReaderVTKGDCM::read(const QStringList &filenames)
     else
     {
         DEBUG_LOG("Llegim un sol arxiu amb vtkGDCM");
-        m_vtkGDCMReader->SetFileName(qPrintable(filenames.first()));    
+        m_vtkGDCMReader->SetFileName(qPrintable(filenames.first()));
     }
-    
+
     try
     {
         m_vtkGDCMReader->Update();
@@ -117,7 +117,7 @@ void VolumePixelDataReaderVTKGDCM::applyColorProcessing()
     //
     // Extret de gdcmviewer.cxx (gdcm\Utilities\VTK\Applications)
     //
-    
+
     // In case of palette color, let's tell VTK to map color:
     // MONOCHROME1 is also implemented with a lookup table
 
@@ -189,7 +189,7 @@ void VolumePixelDataReaderVTKGDCM::applyColorProcessing()
 void VolumePixelDataReaderVTKGDCM::printDebugInfo()
 {
     Q_ASSERT(m_vtkGDCMReader);
-    
+
     DEBUG_LOG("Scalar type selected by the reader");
     switch (m_vtkGDCMReader->GetDataScalarType())
     {
@@ -240,7 +240,7 @@ void VolumePixelDataReaderVTKGDCM::printDebugInfo()
         case gdcm::PixelFormat::SINGLEBIT: // bool / monochrome
             DEBUG_LOG("SINGLE BIT");
             break;
-        
+
         case gdcm::PixelFormat::UNKNOWN:
             DEBUG_LOG("UNKNOWN");
             break;
@@ -253,7 +253,7 @@ void VolumePixelDataReaderVTKGDCM::printDebugInfo()
 
 void VolumePixelDataReaderVTKGDCM::slotProgress()
 {
-    emit progress((int)(m_vtkGDCMReader->GetProgress()*100));
+    emit progress((int)(m_vtkGDCMReader->GetProgress() * 100));
 }
 
 } // End namespace udg

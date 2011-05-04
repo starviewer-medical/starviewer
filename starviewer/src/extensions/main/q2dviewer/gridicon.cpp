@@ -17,7 +17,7 @@ GridIcon::GridIcon(QWidget *parent, const QString &iconType)
     m_label = new QLabel(this);
     m_label->setFrameShape(QFrame::StyledPanel);
     QPixmap pixmap;
-    
+
     if (!iconType.isEmpty())
     {
         if (iconType == "COR")

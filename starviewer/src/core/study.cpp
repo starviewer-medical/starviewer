@@ -177,7 +177,7 @@ bool Study::setTime(QString time)
     if (split.size() == 2) //té fracció al final
     {
         // Trunquem a milisegons i no a milionèssimes de segons
-        convertedTime = convertedTime.addMSecs(split[1].leftJustified(3,'0',true).toInt());
+        convertedTime = convertedTime.addMSecs(split[1].leftJustified(3, '0', true).toInt());
     }
 
     return this->setTime(convertedTime);

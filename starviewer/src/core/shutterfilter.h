@@ -14,9 +14,9 @@ namespace udg {
 
 /**
 Filtre per aplicar diversos tipus de shutter a les imatges. Segueix el que es deineix a l'estàndar DICOM.
-Poden haver-hi fins a tres shutters superposats ( Cercle, Rectangular i Poligonal ). També es poden aplicar bitmap shutters que hi ha en els overlays.
+Poden haver-hi fins a tres shutters superposats (Cercle, Rectangular i Poligonal). També es poden aplicar bitmap shutters que hi ha en els overlays.
 
-La manera d'operar és senzilla, primer es dóna un input ( \code vtkImageData ). Després definim els diferents shutters ( SetRectangular/Circular/PolygonalShutter() ) i finalment obtenim el resultat amb \code getOutput().
+La manera d'operar és senzilla, primer es dóna un input (\code vtkImageData). Després definim els diferents shutters (SetRectangular/Circular/PolygonalShutter()) i finalment obtenim el resultat amb \code getOutput().
 
 Cada cop que donem un input s'esborren els shutters definits. També podem esborrar tots els shutters definits amb \code clearAllShutters() o un de concret amb els mètodes més específics clearRectangular/Circular/PolygonalShutter()
 
@@ -41,36 +41,36 @@ public:
     enum { CircularShutter, PolygonalShutter, RectangularShutter, BitmapShutter };
 
     /// Li assignem les dades d'entrada
-    void setInput( Volume *volume );
+    void setInput(Volume *volume);
 
     /// Aplica els shutters definits en l'arxiu de presentation state donat
-    void setPresentationStateShutters( const QString &presentationStateFile );
+    void setPresentationStateShutters(const QString &presentationStateFile);
 
     /// Defineix el shutter rectangular
-    void setRectangularShutter( double leftVertical, double rightVertical, double upperHorizontal, double lowerHorizontal );
+    void setRectangularShutter(double leftVertical, double rightVertical, double upperHorizontal, double lowerHorizontal);
 
     /// Defineix el shutter poligonal
-    void setPolygonalShutter( std::vector< double[2] > vertexs );
+    void setPolygonalShutter(std::vector<double[2]> vertexs);
 
     /// Defineix el shutter circular
-    void setCircularShutter( double center[2], double radius );
+    void setCircularShutter(double center[2], double radius);
 
     /// Crea un shutter a partir d'un vtkImageData/array de dades
-    void setBitmapShutter( vtkImageData *bitmap );
-    void setBitmapShutter( unsigned char *data, unsigned int width, unsigned int height, unsigned int left, unsigned int top, unsigned int foreground );
+    void setBitmapShutter(vtkImageData *bitmap);
+    void setBitmapShutter(unsigned char *data, unsigned int width, unsigned int height, unsigned int left, unsigned int top, unsigned int foreground);
 
     /// Reinicia tots els shutters
     void clearAllShutters();
 
     /// Reinicia un shuter en concret
-    void clearShutter( int shutterID );
+    void clearShutter(int shutterID);
     void clearCircularShutter();
     void clearPolygonalShutter();
     void clearRectangularShutter();
     void clearBitmapShutter();
 
     /// assigna/obté el color amb que es pinta la part que queda retallada
-    void setBackground( double background ){ m_background = background; }
+    void setBackground(double background){ m_background = background; }
     double getBackground() const { return m_background; }
 
     /// Obtenim les dades d'input després d'aplicar els shutters definits

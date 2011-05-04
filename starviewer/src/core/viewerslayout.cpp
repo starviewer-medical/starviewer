@@ -4,7 +4,7 @@
 
 namespace udg {
 
-ViewersLayout::ViewersLayout(QWidget *parent) 
+ViewersLayout::ViewersLayout(QWidget *parent)
  : QWidget(parent), m_selectedViewer(0)
 {
     initLayouts();
@@ -65,13 +65,13 @@ void ViewersLayout::addColumns(int columns)
             m_totalRows = 1;
             m_visibleRows = 1;
         }
-        
+
         int viewerPosition = m_visibleColumns;
         ++m_visibleColumns;
         ++m_totalColumns;
         for (int rows = 0; rows < m_totalRows; ++rows)
         {
-            // Si tenim visors creats anteriorment amb geometries, 
+            // Si tenim visors creats anteriorment amb geometries,
             // els aprofitem, sinó en creem de nous
             Q2DViewerWidget *newViewer;
             if (!m_freeLayoutViewersList.isEmpty())
@@ -82,10 +82,10 @@ void ViewersLayout::addColumns(int columns)
             {
                 newViewer = getNewQ2DViewerWidget();
             }
-            
+
             m_viewersLayout->addWidget(newViewer, rows, m_totalColumns - 1);
             newViewer->show();
-            m_vectorViewers.insert(viewerPosition,newViewer);
+            m_vectorViewers.insert(viewerPosition, newViewer);
             viewerPosition += m_visibleColumns;
             if (rows >= m_visibleRows)
             {
@@ -110,7 +110,7 @@ void ViewersLayout::addRows(int rows)
         //Afegim tants widgets com columnes
         for (int column = 0; column < m_totalColumns; ++column)
         {
-            // Si tenim visors creats anteriorment amb geometries, 
+            // Si tenim visors creats anteriorment amb geometries,
             // els aprofitem, sinó en creem de nous
             Q2DViewerWidget *newViewer;
             if (!m_freeLayoutViewersList.isEmpty())
@@ -199,7 +199,7 @@ void ViewersLayout::setGrid(int rows, int columns)
     // Mirem si les tenim amagades i mostrem totes les necessaries
     int windowsToShow = 0;
     int windowsToCreate = 0;
-    
+
     if (columns > m_visibleColumns)
     {
         int windowsToHide = m_totalColumns - m_visibleColumns;
@@ -256,13 +256,13 @@ void ViewersLayout::setGrid(int rows, int columns)
     {
         hideRows(m_visibleRows - rows);
     }
-    
+
     m_isRegular = true;
 }
 
 Q2DViewerWidget* ViewersLayout::addViewer(const QString &geometry)
 {
-    if (m_isRegular) 
+    if (m_isRegular)
     {
         // Si tenim un grid regular, hauríem de fer un  cleanUp() prèviament
         // per poder afegir els viewers amb geometries
@@ -271,7 +271,7 @@ Q2DViewerWidget* ViewersLayout::addViewer(const QString &geometry)
 
     Q2DViewerWidget *newViewer = getNewQ2DViewerWidget();
     m_freeLayoutViewersList << newViewer;
-	
+
     setViewerGeometry(newViewer, geometry);
     newViewer->show();
 
@@ -320,7 +320,7 @@ void ViewersLayout::cleanUp()
 {
     // No hi ha cap visor seleccionat
     setSelectedViewer(0);
-    
+
     // Eliminem tots els widgets que contingui viewers layout
     // i els propis widgets
     for (int i = 0; i < getNumberOfViewers(); ++i)
@@ -421,7 +421,7 @@ int ViewersLayout::getNumberOfViewers() const
 Q2DViewerWidget* ViewersLayout::getViewerWidget(int number)
 {
     Q2DViewerWidget *viewerWidget = 0;
-    
+
     // Comprovem que el viewer demanat estigui dins del rang
     if (number < getNumberOfViewers() && number >= 0)
     {
@@ -445,7 +445,7 @@ void ViewersLayout::setViewerGeometry(Q2DViewerWidget *viewer, const QString &ge
         DEBUG_LOG("El viewer proporcionat és nul! No s'aplicarà cap geometria.");
         return;
     }
-    
+
     QStringList splittedGeometryList = geometry.split("\\");
     if (splittedGeometryList.count() < 4)
     {

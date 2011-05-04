@@ -12,12 +12,12 @@ namespace udg {
 class QViewer;
 
 /**
-    Fa captures de pantalla dels visors. 
+    Fa captures de pantalla dels visors.
     Ctrl+S fa la captura simple del que s'està veient en aquell moment
     Ctrl+A fa totes les captures possibles. En el cas que el viewer sigui el 2D, fara les captures de totes
     les imatges de la sèrie, altrament farà una captura simple
 */
-class ScreenShotTool: public Tool {
+class ScreenShotTool : public Tool {
 Q_OBJECT
 public:
     ScreenShotTool(QViewer *viewer, QObject *parent = 0);
@@ -36,16 +36,16 @@ private slots:
     /// Fa la captura d'imatge del viewer
     /// Si single és true fa la captura del que s'està veient, sinó ho fa per totes en cas que sigui un 2DViewer
     void screenShot(bool singleShot = true);
-    
+
     /// Llegeix les configuracions que han estat guardades
     void readSettings();
 
     /// Guarda les configuracions
     void writeSettings();
-    
+
     /// Composa un nom de fitxer per defecte
     QString compoundSelectedName();
-    
+
 private:
     /// Constants
     static const QString PngFileFilter;
@@ -55,13 +55,13 @@ private:
 
     /// Path de l'última imatge guardada
     QString m_lastScreenShotPath;
-    
+
     /// Filtre de l'extensió d'arxiu de l'última imatge guardada
     QString m_lastScreenShotExtensionFilter;
-    
+
     /// Nom de l'última imatge guardada
     QString m_lastScreenShotFileName;
-    
+
     /// Llista amb els filtres d'extensió de fitxers que podem escollir
     QString m_fileExtensionFilters;
 };

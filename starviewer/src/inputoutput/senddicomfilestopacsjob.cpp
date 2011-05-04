@@ -13,7 +13,8 @@
 namespace udg
 {
 
-SendDICOMFilesToPACSJob::SendDICOMFilesToPACSJob(PacsDevice pacsDevice, QList<Image*> imagesToSend):PACSJob(pacsDevice)
+SendDICOMFilesToPACSJob::SendDICOMFilesToPACSJob(PacsDevice pacsDevice, QList<Image*> imagesToSend)
+ : PACSJob(pacsDevice)
 {
     Q_ASSERT(imagesToSend.count() > 0);
     Q_ASSERT(imagesToSend.at(0)->getParentSeries());
@@ -43,12 +44,12 @@ void SendDICOMFilesToPACSJob::run()
 
     if (m_imagesToSend.count() > 0)
     {
-        INFO_LOG( "S'enviaran fitxers de l' estudi " + m_imagesToSend.at(0)->getParentSeries()->getParentStudy()->getInstanceUID() +
-            " al PACS " + getPacsDevice().getAETitle() );
+        INFO_LOG("S'enviaran fitxers de l' estudi " + m_imagesToSend.at(0)->getParentSeries()->getParentStudy()->getInstanceUID() +
+            " al PACS " + getPacsDevice().getAETitle());
 
         /*S'ha d'especificar com a DirectConnection, perquè sinó aquest signal l'aten qui ha creat el Job, que és la interfície, per tant
          no s'atendria fins que la interfície estigui lliure poguent provocar comportaments incorrectes*/
-        connect(m_sendDICOMFilesToPACS, SIGNAL( DICOMFileSent(Image *, int) ), SLOT( DICOMFileSent(Image *, int) ), Qt::DirectConnection );
+        connect(m_sendDICOMFilesToPACS, SIGNAL(DICOMFileSent(Image *, int)), SLOT(DICOMFileSent(Image *, int)), Qt::DirectConnection);
 
         m_sendRequestStatus = m_sendDICOMFilesToPACS->send(getFilesToSend());
 
@@ -97,7 +98,7 @@ QString SendDICOMFilesToPACSJob::getStatusDescription()
         case PACSRequestStatus::SendAllDICOMFilesFailed:
         case PACSRequestStatus::SendUnknowStatus:
             message = tr("The sent images from study %1 of patient %2 to PACS %3 has failed.\n\n")
-                .arg(studyID, patientName, pacsAETitle); 
+                .arg(studyID, patientName, pacsAETitle);
             message += tr("Wait a few minutes and try again, if the problem persist contact with an administrator.");
             break;
         case PACSRequestStatus::SendSomeDICOMFilesFailed:

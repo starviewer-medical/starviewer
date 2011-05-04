@@ -19,11 +19,11 @@ class DicomPrintJob;
 class Volume;
 class ToolManager;
 
-class QDicomPrintExtension : public QWidget , private::Ui::QDicomPrintExtensionBase {
+class QDicomPrintExtension : public QWidget, private::Ui::QDicomPrintExtensionBase {
 Q_OBJECT
 
 public:
-    QDicomPrintExtension( QWidget *parent = 0 );
+    QDicomPrintExtension(QWidget *parent = 0);
     ~QDicomPrintExtension();
 
 public slots:
@@ -31,16 +31,16 @@ public slots:
     void configurationPrinter();
 
     ///Li assigna el volum que s'ha d'imprimir
-    void setInput( Volume *input );
+    void setInput(Volume *input);
     /// Actualitzem tots els elements que estan lligats al Volume que estem visualitzant.
     void updateInput();
 
 private slots:
 
-    //Actualitza la informació que mostrem de la impressora 
+    //Actualitza la informació que mostrem de la impressora
     void selectedDicomPrinterChanged(int indexOfSelectedDicomPrinter);
     ///Omple el combobox amb les impressores i mostra com a seleccionada la que esta marca com a impressora per defecte
-    void  fillSelectedDicomPrinterComboBox();
+    void fillSelectedDicomPrinterComboBox();
     ///activa/desactiva el fram que conté poder escollir el interval i des de quina imatge fins quina imprimir en funció del mode de selecció d'imatges escollit
     void imageSelectionModeChanged();
     ///Slot que s'executa quan canviem de valor a través del Slider l'interval d'imatges a imprimir
@@ -102,7 +102,7 @@ private:
     DicomPrintPage fillDicomPrintPagePrintSettings(DicomPrinter dicomPrinter);
 
     ///Mostra per pantalla els errors que s'han produït alhora d'imprimir
-    /*Degut a només podem tenir una pàgina per FilmSession degut a limitacions de dcmtk fa que haguem d'imprimir pàgina per pàgina 
+    /*Degut a només podem tenir una pàgina per FilmSession degut a limitacions de dcmtk fa que haguem d'imprimir pàgina per pàgina
       per això ens podem trobar que la primera pàgina s'imprimeixi bé, i les restants no, per això passem el paràmetre printedSomePage per indica que només
       algunes de les pàgines han fallat*/
     void showDicomPrintError(DicomPrint::DicomPrintError error, bool printedSomePage);

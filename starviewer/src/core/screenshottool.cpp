@@ -23,7 +23,7 @@ const QString ScreenShotTool::JpegFileFilter = tr("Jpeg (*.jpg)");
 const QString ScreenShotTool::BmpFileFilter = tr("BMP (*.bmp)");
 const QString ScreenShotTool::TiffFileFilter = tr("TIFF (*.tiff)");
 
-ScreenShotTool::ScreenShotTool(QViewer *viewer, QObject *parent) : Tool(viewer,parent)
+ScreenShotTool::ScreenShotTool(QViewer *viewer, QObject *parent) : Tool(viewer, parent)
 {
     m_toolName = "ScreenShotTool";
     readSettings();
@@ -67,7 +67,7 @@ void ScreenShotTool::singleCapture()
 {
     screenShot(true);
 }
-        
+
 void ScreenShotTool::completeCapture()
 {
     screenShot(false);
@@ -112,7 +112,7 @@ void ScreenShotTool::screenShot(bool singleShot)
         }
         else
         {
-            Q2DViewer *viewer2D = dynamic_cast< Q2DViewer * >(m_viewer);
+            Q2DViewer *viewer2D = dynamic_cast<Q2DViewer *>(m_viewer);
             if (viewer2D)
             {
                 // Tenim un  Q2DViewer, llavors podem guardar totes les imatges
@@ -221,7 +221,7 @@ QString ScreenShotTool::compoundSelectedName()
 void ScreenShotTool::readSettings()
 {
     Settings settings;
-    
+
     m_lastScreenShotPath = settings.getValue(CoreSettings::ScreenShotToolFolder).toString();
     m_lastScreenShotExtensionFilter = settings.getValue(CoreSettings::ScreenShotToolFileExtension).toString();
     m_lastScreenShotFileName = settings.getValue(CoreSettings::ScreenShotToolFilename).toString();

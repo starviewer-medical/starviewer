@@ -77,7 +77,7 @@ public:
     /// Indiquem que cal actualitzar l'Overlay actual
     void updateOverlay();
 
-    /// Assignem l'opacitat del volum solapat. 
+    /// Assignem l'opacitat del volum solapat.
     /// Els valors podran anar de 0.0 a 1.0, on 0.0 és transparent i 1.0 és completament opac.
     void setOverlayOpacity(double opacity);
 
@@ -176,8 +176,8 @@ public:
 
     /**
      * Donada una coordenada de món, l'ajustem perquè caigui dins dels límits de l'imatge actual
-     * Això ens serveix per tools que agafen qualsevol punt de món, però necessiten que aquesta estigui 
-     * dins dels límits de la imatge, com pot ser una ROI. Aquest mètode acaba d'ajustar la coordenada perquè 
+     * Això ens serveix per tools que agafen qualsevol punt de món, però necessiten que aquesta estigui
+     * dins dels límits de la imatge, com pot ser una ROI. Aquest mètode acaba d'ajustar la coordenada perquè
      * estigui dins dels límits de la pròpia imatge
      * @param xyz[] Coordenada que volem ajustar. Serà un paràmetre d'entrada/sortida i el seu contingut
      * es modificarà perquè caigui dins dels límits de la imatge
@@ -190,7 +190,7 @@ public:
     /// Retorna un vector de 4 strings en el que tenim quatre elements que representen les etiquetes
     /// indicant on està la dreta/esquerra, cap/peu, davant/darrere del pacient
     /// El primer element correspon a la esquerra de la imatge, el segon el damunt, el tercer a la dreta i el quart a sota
-    /// Si tenim una imatge axial pura la llista seria R,H,L,F (Right, Head, Left, Feet )
+    /// Si tenim una imatge axial pura la llista seria R,H,L,F (Right, Head, Left, Feet)
     QVector<QString> getCurrentDisplayedImageOrientationLabels() const;
 
     /// Ens diu quin és el pla de projecció de la imatge que es veu en aquell moment
@@ -198,7 +198,7 @@ public:
     QString getCurrentPlaneProjectionLabel() const;
 
     /// Obté els índexs dels eixos de coordenades corresponents a la vista 2D indicada
-    /// Aquests índexs indiquen com hem d'indexar una coordenada 3D per obtenir 
+    /// Aquests índexs indiquen com hem d'indexar una coordenada 3D per obtenir
     /// la corresponent projecció sobre la vista 2D sobre la que estem operant
     static void getXYZIndexesForView(int &x, int &y, int &z, int view);
     static int getXIndexForView(int view);
@@ -266,7 +266,7 @@ public slots:
     void verticalFlip();
 
     // TODO aquests mètodes també haurien d'estar en versió QString!
-    
+
     /// Li indiquem quin mode de projecció volem aplicar sobre l'slab
     /// @param projectionMode Valor que identifica quina projecció apliquem
     void setSlabProjectionMode(int projectionMode);
@@ -283,11 +283,11 @@ public slots:
     void alignLeft();
     void alignRight();
 
-    /// Posa la posició d'alineament de la imatge (dreta, esquerre, centrat )
+    /// Posa la posició d'alineament de la imatge (dreta, esquerre, centrat)
     void setAlignPosition(AlignPosition alignPosition);
 
     /// Aplica les transformacions 2D necessàries sobre la imatge actual perquè aquesta tingui la orientació indicada
-    /// La orientació indicada ha de ser possible de conseguir mitjançant operacions de rotació i flip. En cas que no 
+    /// La orientació indicada ha de ser possible de conseguir mitjançant operacions de rotació i flip. En cas que no
     /// existeixin combinacions possibles, no es canviarà la orientació de la imatge
     void setImageOrientation(const QString &orientation);
 
@@ -306,7 +306,7 @@ signals:
 
     /// Senyal que s'envia quan la llavor s'ha canviat
     /// TODO Mirar de treure-ho i posar-ho en la tool SeedTool
-    void seedPositionChanged(double x, double y, double z);    
+    void seedPositionChanged(double x, double y, double z);
 
     /// S'emet quan canvia l'slab thickness
     /// @param thickness Nou valor de thickness
@@ -328,7 +328,7 @@ private:
     void updateAnnotationsInformation(AnnotationFlags annotation = Q2DViewer::AllAnnotation);
 
     /// Desglossem les actualitzacions de les diferents informacions que es mostren per pantalla
-	void updatePatientAnnotationInformation();
+    void updatePatientAnnotationInformation();
     void updateSliceAnnotationInformation();
 
     /// Refresca els valors de les annotacions de llesca. Si els valors referents
@@ -351,7 +351,7 @@ private:
     /// R:L (Right-Left), A:P (Anterior-Posterior), S:I (Superior-Inferior), H:F(Head-Feet)
     static QString getOppositeOrientationLabel(const QString &label);
 
-    /// A partir de l'string d'orientació del pacient mapeja les anotacions correctes segons com estem mirant el model. 
+    /// A partir de l'string d'orientació del pacient mapeja les anotacions correctes segons com estem mirant el model.
     /// A això li afecta també si la vista és axial, sagital o coronal
     void mapOrientationStringToAnnotation();
 
@@ -363,7 +363,7 @@ private:
 
     /// Re-inicia la càmera en la vista actual. Posa els paràmetres de rotació, zoom, desplaçament, flip, etc. als seus valors inicials
     void resetCamera();
-    
+
     /// Thick slab
     void computeRangeAndSlice(int newSlabThickness);
 
@@ -404,7 +404,7 @@ private:
     bool isVolumeLoadingAsynchronously();
 
 private slots:
-    /// Actualitza les transformacions de càmera (de moment rotació i flip )
+    /// Actualitza les transformacions de càmera (de moment rotació i flip)
     void updateCamera();
 
     /// Reimplementem per tal de que faci un setInputAsynchronously
@@ -447,7 +447,7 @@ protected:
 
     /// Annotacions de texte referents a informació de la sèrie
     /// (nom de pacient, protocol,descripció de sèrie, data de l'estudi, etc)
-    /// i altre informació rellevant (nº imatge, ww/wl, etc )
+    /// i altre informació rellevant (nº imatge, ww/wl, etc)
     vtkCornerAnnotation *m_cornerAnnotations;
 
 private:
@@ -460,7 +460,7 @@ private:
     /// Els strings amb els textes de cada part de la imatge
     QString m_lowerLeftText, m_lowerRightText, m_upperLeftText, m_upperRightText;
 
-    /// Aquest string indica les anotacions que ens donen les referències del pacient (Right,Left,Posterior,Anterior,Inferior,Superior) 
+    /// Aquest string indica les anotacions que ens donen les referències del pacient (Right,Left,Posterior,Anterior,Inferior,Superior)
     QString m_patientOrientationText[4];
 
     /// Textes adicionals d'anotoació
@@ -511,7 +511,7 @@ private:
     /// Conté el mapeig d'operacions a fer quan voelm passar d'una orientació a un altre
     ImageOrientationOperationsMapper *m_imageOrientationOperationsMapper;
 
-    /// Posició a on s'ha d'alinear la imatge (dreta, esquerre o centrat )
+    /// Posició a on s'ha d'alinear la imatge (dreta, esquerre o centrat)
     AlignPosition m_alignPosition;
 
     /// Llista d'excepcions per les quals no s'ha d'aplicar una orientació concreta per estudis de mamografia.

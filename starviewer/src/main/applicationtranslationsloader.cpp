@@ -20,39 +20,39 @@ ApplicationTranslationsLoader::~ApplicationTranslationsLoader()
 QLocale ApplicationTranslationsLoader::getDefaultLocale()
 {
     Settings settings;
-    QString defaultLocale = settings.getValue( CoreSettings::LanguageLocale ).toString();
+    QString defaultLocale = settings.getValue(CoreSettings::LanguageLocale).toString();
 
-	// configurem les locales de l'aplicació
-	// TODO ara està simplificat només als idiomes que nosaltres
-	// suportem. Mirar si es pot millorar i fer més genèric
-	QLocale::Language language;
-	QLocale::Country country;
+    // configurem les locales de l'aplicació
+    // TODO ara està simplificat només als idiomes que nosaltres
+    // suportem. Mirar si es pot millorar i fer més genèric
+    QLocale::Language language;
+    QLocale::Country country;
 
-	if( defaultLocale.startsWith("en_") )
-		language = QLocale::English;
-	else if( defaultLocale.startsWith("es_") )
-		language = QLocale::Spanish;
-	else if( defaultLocale.startsWith("ca_") )
-		language = QLocale::Catalan;
-	else
-		language = QLocale::C; // TODO no hauria de ser anglès per defecte?
+    if (defaultLocale.startsWith("en_"))
+        language = QLocale::English;
+    else if (defaultLocale.startsWith("es_"))
+        language = QLocale::Spanish;
+    else if (defaultLocale.startsWith("ca_"))
+        language = QLocale::Catalan;
+    else
+        language = QLocale::C; // TODO no hauria de ser anglès per defecte?
 
-	if( defaultLocale.endsWith("_GB") )
-		country = QLocale::UnitedKingdom;
-	else if( defaultLocale.endsWith("_ES") )
-		country = QLocale::Spain;
-	else
-		country = QLocale::AnyCountry; // // TODO no hauria de ser EEUU/UK per defecte?
+    if (defaultLocale.endsWith("_GB"))
+        country = QLocale::UnitedKingdom;
+    else if (defaultLocale.endsWith("_ES"))
+        country = QLocale::Spain;
+    else
+        country = QLocale::AnyCountry; // // TODO no hauria de ser EEUU/UK per defecte?
 
-	return QLocale(language, country);
+    return QLocale(language, country);
 }
 
 bool ApplicationTranslationsLoader::loadTranslation(QString translationFilePath)
 {
     QTranslator *translator = new QTranslator(m_application);
-    if (translator->load( translationFilePath ))
+    if (translator->load(translationFilePath))
     {
-        m_application->installTranslator( translator );
+        m_application->installTranslator(translator);
         return true;
     }
     else

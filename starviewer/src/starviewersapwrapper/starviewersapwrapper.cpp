@@ -11,20 +11,20 @@ void configureLogging()
 {
     // primer comprovem que existeixi el direcotori ~/.starviewer/log/ on guradarem els logs
     QDir logDir = udg::UserLogsPath;
-    if( !logDir.exists() )
+    if (!logDir.exists())
     {
         // creem el directori
-        logDir.mkpath( udg::UserLogsPath );
+        logDir.mkpath(udg::UserLogsPath);
     }
     // TODO donem per fet que l'arxiu es diu així i es troba a la localització que indiquem. S'hauria de fer una mica més flexible o genèric;
     // està així perquè de moment volem anar per feina i no entretenir-nos però s'ha de fer bé.
     QString configurationFile = "/etc/starviewer/log.conf";
-    if( ! QFile::exists(configurationFile) )
+    if (!QFile::exists(configurationFile))
     {
         configurationFile = QCoreApplication::applicationDirPath() + "/log.conf";
     }
-    LOGGER_INIT( configurationFile.toStdString() );
-    DEBUG_LOG("Arxiu de configuració del log: " + configurationFile );
+    LOGGER_INIT(configurationFile.toStdString());
+    DEBUG_LOG("Arxiu de configuració del log: " + configurationFile);
 }
 
 ///Imprimim l'ajuda del programa
@@ -38,11 +38,11 @@ QString getStarviewerExecutableFilePath()
 {
     #ifdef _WIN32
         /*En windows per poder executar l'starviewer hem de tenir en compte que si està en algun directori que conte espais
-         *com el directori C:\Program Files\Starviewer\starviewer.exe, hem de posar el path entre cometes 
+         *com el directori C:\Program Files\Starviewer\starviewer.exe, hem de posar el path entre cometes
          * per a que no ho interpreti com a paràmetres, per exemple "C:\Program Files\Starviewer\starviewer.exe" */
 
         return "\"" + QCoreApplication::applicationDirPath() + "/starviewer.exe" + "\""; //afegim les cometes per si algun dels directori conté espai
-    #else 
+    #else
         return QCoreApplication::applicationDirPath() + "/starviewer";
     #endif
 }
@@ -51,11 +51,11 @@ QString getStarviewerExecutableFilePath()
 void retrieveStudy(QString accessionNumber)
 {
     QProcess process;
-    QString starviewerCommandLine = " -accessionnumber " + accessionNumber; 
+    QString starviewerCommandLine = " -accessionnumber " + accessionNumber;
 
     /*executem una instància del Starviewer utiltizant la opció de línia de comandes -accessionnumber "valor del accessio number"*/
-	
-	INFO_LOG("Starviewer_sapwrapper::S'iniciara nova instancia del Starviewer per demanar descarrega de l'estudi amb accession number" +  accessionNumber);
+
+    INFO_LOG("Starviewer_sapwrapper::S'iniciara nova instancia del Starviewer per demanar descarrega de l'estudi amb accession number" +  accessionNumber);
     process.startDetached(getStarviewerExecutableFilePath() + starviewerCommandLine);
 }
 
@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
     }
     else
     {
-        INFO_LOG(QString("StarviewerSAPWrapper::Número de parametres incorrecte, s'han passat %1 parametres").arg(QString().setNum(argc -1)));
+        INFO_LOG(QString("StarviewerSAPWrapper::Número de parametres incorrecte, s'han passat %1 parametres").arg(QString().setNum(argc - 1)));
         printHelp();
     }
 }

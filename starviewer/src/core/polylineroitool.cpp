@@ -22,7 +22,7 @@ PolylineROITool::PolylineROITool(QViewer *viewer, QObject *parent)
 PolylineROITool::~PolylineROITool()
 {
     bool hasToRefresh = false;
-    // Cal decrementar el reference count perquè 
+    // Cal decrementar el reference count perquè
     // l'annotació s'esborri si "matem" l'eina
     if (!m_mainPolyline.isNull())
     {
@@ -88,7 +88,7 @@ void PolylineROITool::annotateNewPoint()
     double pickedPoint[3];
     m_2DViewer->getEventWorldCoordinate(pickedPoint);
     m_2DViewer->putCoordinateInCurrentImageBounds(pickedPoint);
-    
+
     bool firstPoint = false;
     if (!m_mainPolyline)
     {
@@ -99,7 +99,7 @@ void PolylineROITool::annotateNewPoint()
     }
     // Afegim el punt de la nova polilínia
     m_mainPolyline->addPoint(pickedPoint);
-    
+
     if (firstPoint) // L'afegim a l'escena
     {
         m_2DViewer->getDrawer()->draw(m_mainPolyline, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
@@ -195,7 +195,7 @@ void PolylineROITool::initialize()
     {
         delete m_roiPolygon;
     }
-    
+
     m_closingPolyline = NULL;
     m_mainPolyline = NULL;
     m_roiPolygon = NULL;

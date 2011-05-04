@@ -21,12 +21,12 @@ HangingProtocolDisplaySet::~HangingProtocolDisplaySet()
 {
 }
 
-void HangingProtocolDisplaySet::setIdentifier( int identifier )
+void HangingProtocolDisplaySet::setIdentifier(int identifier)
 {
     m_identifier = identifier;
 }
 
-void HangingProtocolDisplaySet::setDescription( QString description )
+void HangingProtocolDisplaySet::setDescription(QString description)
 {
     m_description = description;
 }
@@ -46,18 +46,17 @@ void HangingProtocolDisplaySet::setHangingProtocol(HangingProtocol *hangingProto
     m_hangingProtocol = hangingProtocol;
 }
 
-
 HangingProtocol* HangingProtocolDisplaySet::getHangingProtocol() const
 {
     return m_hangingProtocol;
 }
 
-void HangingProtocolDisplaySet::setPosition( QString position )
+void HangingProtocolDisplaySet::setPosition(QString position)
 {
     m_position = position;
 }
 
-void HangingProtocolDisplaySet::setPatientOrientation( QString orientation )
+void HangingProtocolDisplaySet::setPatientOrientation(QString orientation)
 {
     m_patientOrientation = orientation;
 }
@@ -82,7 +81,7 @@ QString HangingProtocolDisplaySet::getPatientOrientation() const
     return m_patientOrientation;
 }
 
-void HangingProtocolDisplaySet::setReconstruction( QString reconstruction )
+void HangingProtocolDisplaySet::setReconstruction(QString reconstruction)
 {
     m_reconstruction = reconstruction;
 }
@@ -92,7 +91,7 @@ QString HangingProtocolDisplaySet::getReconstruction() const
     return m_reconstruction;
 }
 
-void HangingProtocolDisplaySet::setPhase( int phase )
+void HangingProtocolDisplaySet::setPhase(int phase)
 {
     m_phase = phase;
 }
@@ -110,10 +109,10 @@ void HangingProtocolDisplaySet::show()
         imagSetIdentifier = m_imageSet->getIdentifier();
     }
 
-    DEBUG_LOG( QString("    Identifier %1\n    Description:%2\n    ImageSetNumber: %3\n    Position: %4\n").arg(m_identifier).arg(m_description).arg(imagSetIdentifier).arg(m_position) );
+    DEBUG_LOG(QString("    Identifier %1\n    Description:%2\n    ImageSetNumber: %3\n    Position: %4\n").arg(m_identifier).arg(m_description).arg(imagSetIdentifier).arg(m_position));
 }
 
-void HangingProtocolDisplaySet::setSlice( int sliceNumber )
+void HangingProtocolDisplaySet::setSlice(int sliceNumber)
 {
     m_sliceNumber = sliceNumber;
 }
@@ -123,7 +122,7 @@ int HangingProtocolDisplaySet::getSlice()
     return m_sliceNumber;
 }
 
-void HangingProtocolDisplaySet::setIconType( QString iconType )
+void HangingProtocolDisplaySet::setIconType(QString iconType)
 {
     m_iconType = iconType;
 }
@@ -133,7 +132,7 @@ QString HangingProtocolDisplaySet::getIconType() const
     return m_iconType;
 }
 
-void HangingProtocolDisplaySet::setAlignment( QString alignment )
+void HangingProtocolDisplaySet::setAlignment(QString alignment)
 {
     m_alignment = alignment;
 }
@@ -143,7 +142,7 @@ QString HangingProtocolDisplaySet::getAlignment() const
     return m_alignment;
 }
 
-void HangingProtocolDisplaySet::setToolActivation( QString toolActive )
+void HangingProtocolDisplaySet::setToolActivation(QString toolActive)
 {
     m_activateTool = toolActive;
 }

@@ -14,20 +14,20 @@ PatientFillerInput::~PatientFillerInput()
     delete m_dicomFile;
 }
 
-void PatientFillerInput::addPatient( Patient *patient )
+void PatientFillerInput::addPatient(Patient *patient)
 {
-    if( patient )
+    if (patient)
         m_patientList << patient;
     else
         DEBUG_LOG("S'ha passat un pacient NUL, per tant no s'ha afegit res a la llista");
 }
 
-Patient *PatientFillerInput::getPatient( int index )
+Patient *PatientFillerInput::getPatient(int index)
 {
     Patient *patient = 0;
-    if( index < m_patientList.size() )
+    if (index < m_patientList.size())
     {
-        patient = m_patientList.at( index );
+        patient = m_patientList.at(index);
     }
     else
         DEBUG_LOG("Índex fora de rang");
@@ -35,15 +35,15 @@ Patient *PatientFillerInput::getPatient( int index )
     return patient;
 }
 
-Patient *PatientFillerInput::getPatientByName( QString name )
+Patient *PatientFillerInput::getPatientByName(QString name)
 {
     bool found = false;
     int i = 0;
     Patient *patient = 0;
 
-    while( i < m_patientList.size() && !found )
+    while (i < m_patientList.size() && !found)
     {
-        if( m_patientList.at(i)->getFullName() == name )
+        if (m_patientList.at(i)->getFullName() == name)
         {
             patient = m_patientList[i];
             found = true;
@@ -54,15 +54,15 @@ Patient *PatientFillerInput::getPatientByName( QString name )
     return patient;
 }
 
-Patient *PatientFillerInput::getPatientByID( QString id )
+Patient *PatientFillerInput::getPatientByID(QString id)
 {
     bool found = false;
     int i = 0;
     Patient *patient = 0;
 
-    while( i < m_patientList.size() && !found )
+    while (i < m_patientList.size() && !found)
     {
-        if( m_patientList.at(i)->getID() == id )
+        if (m_patientList.at(i)->getID() == id)
         {
             patient = m_patientList[i];
             found = true;
@@ -93,22 +93,22 @@ QString PatientFillerInput::getFile() const
     return m_file;
 }
 
-void PatientFillerInput::addLabel( QString label )
+void PatientFillerInput::addLabel(QString label)
 {
-    if( !m_globalLabels.contains(label) )
+    if (!m_globalLabels.contains(label))
     {
         m_globalLabels << label;
         m_allLabels << label; // afegim a la llista de tots també
     }
 }
 
-void PatientFillerInput::addLabelToSeries( QString label, Series *series )
+void PatientFillerInput::addLabelToSeries(QString label, Series *series)
 {
-    if( !m_seriesLabels.values( series ).contains( label ) )
-        m_seriesLabels.insert( series, label );
+    if (!m_seriesLabels.values(series).contains(label))
+        m_seriesLabels.insert(series, label);
 
     // aquí ho separem perquè podria ser que la serie que especifiquem no tingui aquella label i una altre sí i s'hagi afegit ja abans
-    if( !m_allLabels.contains(label) )
+    if (!m_allLabels.contains(label))
         m_allLabels << label;
 }
 
@@ -129,15 +129,15 @@ bool PatientFillerInput::hasAllLabels(QStringList requiredLabelsList) const
 
 void PatientFillerInput::initializeAllLabels()
 {
-    while(!m_allLabels.isEmpty())
+    while (!m_allLabels.isEmpty())
     {
         m_allLabels.removeFirst();
     }
-    while(!m_globalLabels.isEmpty())
+    while (!m_globalLabels.isEmpty())
     {
         m_globalLabels.removeFirst();
     }
-    foreach ( Series *key, m_seriesLabels.keys() )
+    foreach (Series *key, m_seriesLabels.keys())
     {
         m_seriesLabels.remove(key);
     }
@@ -182,7 +182,7 @@ void PatientFillerInput::resetCurrentMultiframeVolumeNumber()
 {
     m_currentMultiframeVolumeNumber = 1;
 }
-    
+
 void PatientFillerInput::increaseCurrentMultiframeVolumeNumber()
 {
     m_currentMultiframeVolumeNumber++;

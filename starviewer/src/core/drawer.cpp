@@ -47,7 +47,7 @@ void Drawer::draw(DrawerPrimitive *primitive, int plane, int slice)
             break;
     }
 
-    // En el cas que el pla sigui Axial/Sagital/Coronal, cal comprovar 
+    // En el cas que el pla sigui Axial/Sagital/Coronal, cal comprovar
     // la visibilitat de la primitiva segons la llesca
     if (m_2DViewer->getView() == plane && plane != QViewer::Top2DPlane)
     {
@@ -60,7 +60,7 @@ void Drawer::draw(DrawerPrimitive *primitive, int plane, int slice)
             primitive->setVisibility(false);
         }
     }
-    
+
     // Procedim a "pintar-la"
     vtkProp *prop = primitive->getAsVtkProp();
     if (prop)
@@ -252,7 +252,7 @@ void Drawer::hide(int plane, int slice)
 
 void Drawer::show(int plane, int slice)
 {
-    QList< DrawerPrimitive*> primitivesList;
+    QList<DrawerPrimitive*> primitivesList;
     switch (plane)
     {
         case QViewer::AxialPlane:
@@ -271,7 +271,7 @@ void Drawer::show(int plane, int slice)
             primitivesList = m_top2DPlanePrimitives;
             break;
     }
-    
+
     foreach (DrawerPrimitive *primitive, primitivesList)
     {
         if (primitive->isModified() || !primitive->isVisible())
@@ -300,7 +300,7 @@ void Drawer::hideGroup(const QString &groupName)
             hasToRender = true;
         }
     }
-    
+
     if (hasToRender)
     {
         m_2DViewer->render();
@@ -320,7 +320,7 @@ void Drawer::showGroup(const QString &groupName)
             hasToRender = true;
         }
     }
-    
+
     if (hasToRender)
     {
         m_2DViewer->render();
@@ -393,7 +393,7 @@ void Drawer::erasePrimitivesInsideBounds(double bounds[6], int view, int slice)
 
     foreach (DrawerPrimitive *primitive, primitivesList)
     {
-        if (isPrimitiveInside(primitive,view,bounds))
+        if (isPrimitiveInside(primitive, view, bounds))
         {
             erasePrimitive(primitive);
         }
@@ -402,7 +402,7 @@ void Drawer::erasePrimitivesInsideBounds(double bounds[6], int view, int slice)
 
 bool Drawer::isPrimitiveInside(DrawerPrimitive *primitive, int view, double bounds[6])
 {
-    // Comprovem que els bounds de la primitiva estiguin continguts 
+    // Comprovem que els bounds de la primitiva estiguin continguts
     // dins dels que ens han passat per paràmetre
     double primitiveBounds[6];
     primitive->getBounds(primitiveBounds);
@@ -434,6 +434,5 @@ bool Drawer::erasePrimitiveFromContainer(DrawerPrimitive *primitive, QMultiMap<i
 
     return found;
 }
-
 
 }

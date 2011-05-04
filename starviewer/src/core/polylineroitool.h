@@ -24,7 +24,7 @@ private slots:
     void initialize();
 
 private:
-    /// Gestiona quin punt de la ROI estem dibuixant. Es cridarà cada cop que 
+    /// Gestiona quin punt de la ROI estem dibuixant. Es cridarà cada cop que
     /// haguem fet un clic amb el botó esquerre del mouse.
     void handlePointAddition();
 

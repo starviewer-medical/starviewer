@@ -31,7 +31,7 @@ void QBasicSearchWidget::initialize()
 {
     m_fromStudyDate->setDate(QDate::currentDate());
     m_toStudyDate->setDate(QDate::currentDate());
-    //Indiquem que les setmanes del calendari que apareixen per escollir la data comencin el dilluns 
+    //Indiquem que les setmanes del calendari que apareixen per escollir la data comencin el dilluns
     m_fromStudyDate->calendarWidget()->setFirstDayOfWeek(Qt::Monday);
     m_toStudyDate->calendarWidget()->setFirstDayOfWeek(Qt::Monday);
 
@@ -74,14 +74,14 @@ DicomMask QBasicSearchWidget::buildDicomMask()
     mask.setPatientBirth("");
 
     /*Per PatientId i PatientName si el lineEdit és buit es fa un Universal Matching. Universal Matching és quan indiquem que cerquem per un tag de dicom però
-    no li donem valor, en aquest cas la normativa DICOM indica que el SCP ha de fer match per tots els objectes DICOM, el universal matching és un mecanisme per 
-    indicar al fer c-find, d'aquell tag ens n'ha de retornar el valor que té tots els objecte DICOM que compleixen la cerca. La normativa 
-    DICOM indica que fer una wildcard amb '*' és el mateix que fer Universal Matching. Nosaltres hem optat per fer Universal matching perquè hi ha algun scp 
-    que si li passem un asterisc sol '*' al fer la cerca no es comportant correctament, per exemple retorna cap resultat. 
+    no li donem valor, en aquest cas la normativa DICOM indica que el SCP ha de fer match per tots els objectes DICOM, el universal matching és un mecanisme per
+    indicar al fer c-find, d'aquell tag ens n'ha de retornar el valor que té tots els objecte DICOM que compleixen la cerca. La normativa
+    DICOM indica que fer una wildcard amb '*' és el mateix que fer Universal Matching. Nosaltres hem optat per fer Universal matching perquè hi ha algun scp
+    que si li passem un asterisc sol '*' al fer la cerca no es comportant correctament, per exemple retorna cap resultat.
 
     Si pel contrari algun dels lineEdit tenen valor, llavors fem wild card matching "*" + valor "*", posant "*" a davant i a darrera del valor indiquem
     que el SCP que ens ha de retornar tots els objectes dicom que per aquell tag alguna part de la seu text coincideix amb el valor que ens han indicat.
-    
+
     Per més informació consultar el PS 3.4 C.2.2.2 */
 
     //S'afegeix '*' al patientId i patientName automàticament
@@ -111,7 +111,7 @@ DicomMask QBasicSearchWidget::buildDicomMask()
         mask.setSeriesModality("");
         mask.setSeriesNumber("");
         mask.setSeriesInstanceUID("");
-        mask.setRequestAttributeSequence("" , "");
+        mask.setRequestAttributeSequence("", "");
         mask.setPPSStartDate("");
         mask.setPPStartTime("");
 
@@ -183,9 +183,9 @@ DicomMask QBasicSearchWidget::buildDicomMask()
     return mask;
 }
 
-void QBasicSearchWidget::setDefaultDate( DefaultDateFlags flag )
+void QBasicSearchWidget::setDefaultDate(DefaultDateFlags flag)
 {
-    switch( flag )
+    switch (flag)
     {
     case AnyDate:
         m_anyDateRadioButton->setChecked(true);
@@ -248,7 +248,7 @@ QString QBasicSearchWidget::getStudyDatesStringMask()
             else if (m_toDateCheck->isChecked())
             {
                 //indiquem que volem buscar tots els estudis que no superin aquesta data
-                date = "-"+ m_toStudyDate->date().toString("yyyyMMdd");
+                date = "-" + m_toStudyDate->date().toString("yyyyMMdd");
             }
         }
 
@@ -303,6 +303,5 @@ void QBasicSearchWidget::showEvent(QShowEvent * event)
 QBasicSearchWidget::~QBasicSearchWidget()
 {
 }
-
 
 }

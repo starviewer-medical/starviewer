@@ -14,22 +14,23 @@
 
 namespace udg {
 
-LocalDatabaseImageDAL::LocalDatabaseImageDAL(DatabaseConnection *dbConnection):LocalDatabaseBaseDAL(dbConnection)
+LocalDatabaseImageDAL::LocalDatabaseImageDAL(DatabaseConnection *dbConnection)
+ : LocalDatabaseBaseDAL(dbConnection)
 {
 }
 
 void LocalDatabaseImageDAL::insert(Image *newImage)
 {
-    m_lastSqliteError = sqlite3_exec( m_dbConnection->getConnection(), qPrintable(buildSqlInsert(newImage)), 0, 0, 0 );
+    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlInsert(newImage)), 0, 0, 0);
 
-    if (getLastError() != SQLITE_OK) logError(buildSqlInsert(newImage)); 
+    if (getLastError() != SQLITE_OK) logError(buildSqlInsert(newImage));
 }
 
 void LocalDatabaseImageDAL::del(const DicomMask &imageMaskToDelete)
 {
     m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlDelete(imageMaskToDelete)), 0, 0, 0);
 
-    if (getLastError() != SQLITE_OK) logError(buildSqlDelete(imageMaskToDelete)); 
+    if (getLastError() != SQLITE_OK) logError(buildSqlDelete(imageMaskToDelete));
 }
 
 void LocalDatabaseImageDAL::update(Image *imageToUpdate)
@@ -41,13 +42,13 @@ void LocalDatabaseImageDAL::update(Image *imageToUpdate)
 
 QList<Image*> LocalDatabaseImageDAL::query(const DicomMask &imageMask)
 {
-    int columns , rows;
-    char **reply = NULL , **error = NULL;
+    int columns, rows;
+    char **reply = NULL, **error = NULL;
     QList<Image*> imageList;
 
     m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
-                                      qPrintable(buildSqlSelect(imageMask)),
-                                    &reply, &rows, &columns, error);
+                                          qPrintable(buildSqlSelect(imageMask)),
+                                          &reply, &rows, &columns, error);
     if (getLastError() != SQLITE_OK)
     {
         logError (buildSqlSelect(imageMask));
@@ -55,7 +56,7 @@ QList<Image*> LocalDatabaseImageDAL::query(const DicomMask &imageMask)
     }
 
     //index = 1 ignorem les capçaleres
-    for (int index = 1; index <= rows ; index++)
+    for (int index = 1; index <= rows; index++)
     {
         imageList.append(fillImage(reply, index, columns));
     }
@@ -68,11 +69,11 @@ QList<Image*> LocalDatabaseImageDAL::query(const DicomMask &imageMask)
 int LocalDatabaseImageDAL::count(const DicomMask &imageMaskToCount)
 {
     int columns, rows;
-    char **reply = NULL , **error = NULL;
+    char **reply = NULL, **error = NULL;
 
     m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
-                                      qPrintable(buildSqlSelectCountImages(imageMaskToCount)),
-                                    &reply, &rows, &columns, error);
+                                          qPrintable(buildSqlSelectCountImages(imageMaskToCount)),
+                                          &reply, &rows, &columns, error);
 
     if (getLastError() != SQLITE_OK)
     {
@@ -91,9 +92,9 @@ Image* LocalDatabaseImageDAL::fillImage(char **reply, int row, int columns)
     Image *image = new Image();
 
     image->setSOPInstanceUID(reply[0 + row * columns]);
-    image->setFrameNumber( QString(reply[1 + row * columns]).toInt() );
+    image->setFrameNumber(QString(reply[1 + row * columns]).toInt());
     image->setInstanceNumber(reply[4 + row * columns]);
-    image->setImageOrientationPatient(getImageOrientationPatientAsDouble(reply[5 + row * columns ]));
+    image->setImageOrientationPatient(getImageOrientationPatientAsDouble(reply[5 + row * columns]));
     image->setPatientOrientation(reply[6 + row * columns]);
     image->setPixelSpacing(getPixelSpacingAsDouble(reply[7 + row * columns])[0], getPixelSpacingAsDouble(reply[7 + row * columns])[1]);
     image->setSliceThickness(QString(reply[8 + row * columns]).toDouble());
@@ -122,7 +123,7 @@ Image* LocalDatabaseImageDAL::fillImage(char **reply, int row, int columns)
     image->setRetrievedTime(QTime().fromString(reply[32 + row * columns], "hhmmss"));
 
     //TODO argghh!!! Això només hauria d'estar en un únic lloc, no aquí i en retrieveimages.cpp
-    image->setPath( LocalDatabaseManager::getCachePath() + reply[2 + row * columns] + "/" + reply[3 + row * columns] + "/" + reply[0 + row * columns] );
+    image->setPath(LocalDatabaseManager::getCachePath() + reply[2 + row * columns] + "/" + reply[3 + row * columns] + "/" + reply[0 + row * columns]);
 
     return image;
 }
@@ -131,9 +132,8 @@ QString LocalDatabaseImageDAL::buildSqlSelect(const DicomMask &imageMaskToSelect
 {
     QString selectSentence, orderSentence;
 
-
     selectSentence = "Select SOPInstanceUID, FrameNumber, StudyInstanceUID, SeriesInstanceUID, InstanceNumber,"
-                                    "ImageOrientationPatient, PatientOrientation, PixelSpacing, SliceThickness," 
+                                    "ImageOrientationPatient, PatientOrientation, PixelSpacing, SliceThickness,"
                                     "PatientPosition, SamplesPerPixel, Rows, Columns, BitsAllocated, BitsStored,"
                                     "PixelRepresentation, RescaleSlope, WindowLevelWidth, WindowLevelCenter,"
                                     "WindowLevelExplanations, SliceLocation, RescaleIntercept,"
@@ -157,13 +157,12 @@ QString LocalDatabaseImageDAL::buildSqlSelectCountImages(const DicomMask &imageM
     return selectSentence + buildWhereSentence(imageMaskToSelect);
 }
 
-
 QString LocalDatabaseImageDAL::buildSqlInsert(Image *newImage)
 {
     QString insertSentence;
 
     insertSentence = QString("Insert into Image (SOPInstanceUID, FrameNumber, StudyInstanceUID, SeriesInstanceUID, InstanceNumber,"
-                                             "ImageOrientationPatient, PatientOrientation, PixelSpacing, SliceThickness," 
+                                             "ImageOrientationPatient, PatientOrientation, PixelSpacing, SliceThickness,"
                                              "PatientPosition, SamplesPerPixel, Rows, Columns, BitsAllocated, BitsStored,"
                                              "PixelRepresentation, RescaleSlope, WindowLevelWidth, WindowLevelCenter,"
                                              "WindowLevelExplanations, SliceLocation,"
@@ -177,40 +176,40 @@ QString LocalDatabaseImageDAL::buildSqlInsert(Image *newImage)
                                              "'%20', '%21', "
                                              "%22, '%23', '%24', '%25',"
                                              "'%26',  '%27', %28, '%29', %30,"
-                                             "%31, '%32', '%33', %34)" )
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( newImage->getSOPInstanceUID() ) )
-                            .arg( newImage->getFrameNumber())
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( newImage->getParentSeries()->getParentStudy()->getInstanceUID() ) )
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( newImage->getParentSeries()->getInstanceUID() ) )
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( newImage->getInstanceNumber() ) )
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( getImageOrientationPatientAsQString(newImage) ) )
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( newImage->getPatientOrientation() ) )
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( getPixelSpacingAsQString(newImage) ) )
-                            .arg( newImage->getSliceThickness() )
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( getPatientPositionAsQString(newImage) ) )
-                            .arg( newImage->getSamplesPerPixel() )
-                            .arg( newImage->getRows() )
-                            .arg( newImage->getColumns() )
-                            .arg( newImage->getBitsAllocated() )
-                            .arg( newImage->getBitsStored() )
-                            .arg( newImage->getPixelRepresentation() )
-                            .arg( newImage->getRescaleSlope() )
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( getWindowWidthAsQString(newImage) ) )
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( getWindowCenterAsQString(newImage) ) )
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( getWindowLevelExplanationAsQString(newImage) ) )
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( newImage->getSliceLocation() ) )
-                            .arg( newImage->getRescaleIntercept() )
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( newImage->getPhotometricInterpretation() ) )
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( newImage->getImageType() ) )
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( newImage->getViewPosition() ) )
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( newImage->getImageLaterality() ) )
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( newImage->getViewCodeMeaning() ) )
-                            .arg( newImage->getPhaseNumber() )
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( newImage->getImageTime() ) )
-                            .arg (newImage->getVolumeNumberInSeries() )
-                            .arg( newImage->getOrderNumberInVolume())
-                            .arg( newImage->getRetrievedDate().toString("yyyyMMdd") )
-                            .arg( newImage->getRetrievedTime().toString("hhmmss") )
+                                             "%31, '%32', '%33', %34)")
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(newImage->getSOPInstanceUID()))
+                            .arg(newImage->getFrameNumber())
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(newImage->getParentSeries()->getParentStudy()->getInstanceUID()))
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(newImage->getParentSeries()->getInstanceUID()))
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(newImage->getInstanceNumber()))
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(getImageOrientationPatientAsQString(newImage)))
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(newImage->getPatientOrientation()))
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(getPixelSpacingAsQString(newImage)))
+                            .arg(newImage->getSliceThickness())
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(getPatientPositionAsQString(newImage)))
+                            .arg(newImage->getSamplesPerPixel())
+                            .arg(newImage->getRows())
+                            .arg(newImage->getColumns())
+                            .arg(newImage->getBitsAllocated())
+                            .arg(newImage->getBitsStored())
+                            .arg(newImage->getPixelRepresentation())
+                            .arg(newImage->getRescaleSlope())
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(getWindowWidthAsQString(newImage)))
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(getWindowCenterAsQString(newImage)))
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(getWindowLevelExplanationAsQString(newImage)))
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(newImage->getSliceLocation()))
+                            .arg(newImage->getRescaleIntercept())
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(newImage->getPhotometricInterpretation()))
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(newImage->getImageType()))
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(newImage->getViewPosition()))
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(newImage->getImageLaterality()))
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(newImage->getViewCodeMeaning()))
+                            .arg(newImage->getPhaseNumber())
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(newImage->getImageTime()))
+                            .arg (newImage->getVolumeNumberInSeries())
+                            .arg(newImage->getOrderNumberInVolume())
+                            .arg(newImage->getRetrievedDate().toString("yyyyMMdd"))
+                            .arg(newImage->getRetrievedTime().toString("hhmmss"))
                             .arg(0);
 
     return insertSentence;
@@ -220,7 +219,7 @@ QString LocalDatabaseImageDAL::buildSqlUpdate(Image *imageToUpdate)
 {
     QString updateSentence;
 
-    updateSentence = QString("Update Image set StudyInstanceUID = '%1'," 
+    updateSentence = QString("Update Image set StudyInstanceUID = '%1',"
                                               "SeriesInstanceUID = '%2',"
                                               "InstanceNumber = '%3',"
                                               "ImageOrientationPatient = '%4',"
@@ -254,40 +253,40 @@ QString LocalDatabaseImageDAL::buildSqlUpdate(Image *imageToUpdate)
                                               "State = %32 "
                                      "Where SOPInstanceUID = '%33' And "
                                            "FrameNumber = %34")
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( imageToUpdate->getParentSeries()->getParentStudy()->getInstanceUID() ) )
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( imageToUpdate->getParentSeries()->getInstanceUID() ) )
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( imageToUpdate->getInstanceNumber() ) )
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( getImageOrientationPatientAsQString(imageToUpdate) ) )
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( imageToUpdate->getPatientOrientation() ) )
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( getPixelSpacingAsQString(imageToUpdate) ) )
-                            .arg( imageToUpdate->getSliceThickness() )
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( getPatientPositionAsQString(imageToUpdate) ) )
-                            .arg( imageToUpdate->getSamplesPerPixel() )
-                            .arg( imageToUpdate->getRows() )
-                            .arg( imageToUpdate->getColumns() )
-                            .arg( imageToUpdate->getBitsAllocated() )
-                            .arg( imageToUpdate->getBitsStored() )
-                            .arg( imageToUpdate->getPixelRepresentation() )
-                            .arg( imageToUpdate->getRescaleSlope() )
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( getWindowWidthAsQString(imageToUpdate) ) )
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( getWindowCenterAsQString(imageToUpdate) ) )
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( getWindowLevelExplanationAsQString(imageToUpdate) ) )
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( imageToUpdate->getSliceLocation() ) )
-                            .arg( imageToUpdate->getRescaleIntercept() )
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( imageToUpdate->getPhotometricInterpretation() ) )
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( imageToUpdate->getImageType() ) )
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( imageToUpdate->getViewPosition() ) )
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( imageToUpdate->getImageLaterality() ) )
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( imageToUpdate->getViewCodeMeaning() ) )
-                            .arg ( imageToUpdate->getPhaseNumber() )
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( imageToUpdate->getImageTime() ) )
-                            .arg ( imageToUpdate->getVolumeNumberInSeries() )
-                            .arg( imageToUpdate->getOrderNumberInVolume() )
-                            .arg( imageToUpdate->getRetrievedDate().toString("yyyyMMdd"))
-                            .arg( imageToUpdate->getRetrievedTime().toString("hhmmss"))
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(imageToUpdate->getParentSeries()->getParentStudy()->getInstanceUID()))
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(imageToUpdate->getParentSeries()->getInstanceUID()))
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(imageToUpdate->getInstanceNumber()))
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(getImageOrientationPatientAsQString(imageToUpdate)))
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(imageToUpdate->getPatientOrientation()))
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(getPixelSpacingAsQString(imageToUpdate)))
+                            .arg(imageToUpdate->getSliceThickness())
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(getPatientPositionAsQString(imageToUpdate)))
+                            .arg(imageToUpdate->getSamplesPerPixel())
+                            .arg(imageToUpdate->getRows())
+                            .arg(imageToUpdate->getColumns())
+                            .arg(imageToUpdate->getBitsAllocated())
+                            .arg(imageToUpdate->getBitsStored())
+                            .arg(imageToUpdate->getPixelRepresentation())
+                            .arg(imageToUpdate->getRescaleSlope())
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(getWindowWidthAsQString(imageToUpdate)))
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(getWindowCenterAsQString(imageToUpdate)))
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(getWindowLevelExplanationAsQString(imageToUpdate)))
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(imageToUpdate->getSliceLocation()))
+                            .arg(imageToUpdate->getRescaleIntercept())
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(imageToUpdate->getPhotometricInterpretation()))
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(imageToUpdate->getImageType()))
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(imageToUpdate->getViewPosition()))
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(imageToUpdate->getImageLaterality()))
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(imageToUpdate->getViewCodeMeaning()))
+                            .arg (imageToUpdate->getPhaseNumber())
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(imageToUpdate->getImageTime()))
+                            .arg (imageToUpdate->getVolumeNumberInSeries())
+                            .arg(imageToUpdate->getOrderNumberInVolume())
+                            .arg(imageToUpdate->getRetrievedDate().toString("yyyyMMdd"))
+                            .arg(imageToUpdate->getRetrievedTime().toString("hhmmss"))
                             .arg(0)
-                            .arg( DatabaseConnection::formatTextToValidSQLSyntax( imageToUpdate->getSOPInstanceUID() ) )
-                            .arg( imageToUpdate->getFrameNumber() );
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(imageToUpdate->getSOPInstanceUID()))
+                            .arg(imageToUpdate->getFrameNumber());
 
     return updateSentence;
 }
@@ -301,27 +300,27 @@ QString LocalDatabaseImageDAL::buildWhereSentence(const DicomMask &imageMask)
 {
     QString whereSentence = "";
 
-    if (!imageMask.getStudyInstanceUID().isEmpty()) 
-        whereSentence = QString("where StudyInstanceUID = '%1'").arg( DatabaseConnection::formatTextToValidSQLSyntax( imageMask.getStudyInstanceUID() ) );
+    if (!imageMask.getStudyInstanceUID().isEmpty())
+        whereSentence = QString("where StudyInstanceUID = '%1'").arg(DatabaseConnection::formatTextToValidSQLSyntax(imageMask.getStudyInstanceUID()));
 
     if (!imageMask.getSeriesInstanceUID().isEmpty())
     {
-        if (whereSentence.isEmpty()) 
+        if (whereSentence.isEmpty())
             whereSentence = "where";
         else
             whereSentence += " and ";
 
-        whereSentence += QString(" SeriesInstanceUID = '%1'").arg( DatabaseConnection::formatTextToValidSQLSyntax( imageMask.getSeriesInstanceUID() ) );
+        whereSentence += QString(" SeriesInstanceUID = '%1'").arg(DatabaseConnection::formatTextToValidSQLSyntax(imageMask.getSeriesInstanceUID()));
     }
 
     if (!imageMask.getSOPInstanceUID().isEmpty())
     {
-        if (whereSentence.isEmpty()) 
+        if (whereSentence.isEmpty())
             whereSentence = "where";
         else
             whereSentence += " and ";
 
-        whereSentence += QString(" SOPInstanceUID = '%1'").arg( DatabaseConnection::formatTextToValidSQLSyntax( imageMask.getSOPInstanceUID() ) );
+        whereSentence += QString(" SOPInstanceUID = '%1'").arg(DatabaseConnection::formatTextToValidSQLSyntax(imageMask.getSOPInstanceUID()));
     }
 
     return whereSentence;
@@ -339,7 +338,7 @@ QString LocalDatabaseImageDAL::getPixelSpacingAsQString(Image *newImage)
 
 double* LocalDatabaseImageDAL::getPixelSpacingAsDouble(const QString &pixelSpacing)
 {
-    QStringList list = pixelSpacing.split( "\\" );
+    QStringList list = pixelSpacing.split("\\");
 
     if (list.size() == 2)
     {
@@ -357,7 +356,7 @@ double* LocalDatabaseImageDAL::getPixelSpacingAsDouble(const QString &pixelSpaci
 
 double* LocalDatabaseImageDAL::getImageOrientationPatientAsDouble(const QString &ImageOrientationPatient)
 {
-    QStringList list = ImageOrientationPatient.split( "\\" );
+    QStringList list = ImageOrientationPatient.split("\\");
 
     for (int index = 0; index < 6; index++)
     {
@@ -386,7 +385,7 @@ QString LocalDatabaseImageDAL::getImageOrientationPatientAsQString(Image *newIma
 
 double* LocalDatabaseImageDAL::getPatientPositionAsDouble(const QString &patientPosition)
 {
-    QStringList list = patientPosition.split( "\\" );
+    QStringList list = patientPosition.split("\\");
 
     for (int index = 0; index < 3; index++)
     {
@@ -414,43 +413,42 @@ QString LocalDatabaseImageDAL::getWindowWidthAsQString(Image *newImage)
 {
     QString windowWidth = "", value;
 
-    for (int index = 0 ; index < newImage->getNumberOfWindowLevels(); index ++)
+    for (int index = 0; index < newImage->getNumberOfWindowLevels(); index++)
     {
         windowWidth += value.setNum(newImage->getWindowLevel(index).first, 'g', 10) + "\\";
     }
 
-    return windowWidth.left(windowWidth.length() -1); //treiem l'últim "\\" afegit
+    return windowWidth.left(windowWidth.length() - 1); //treiem l'últim "\\" afegit
 }
 
 QString LocalDatabaseImageDAL::getWindowCenterAsQString(Image *newImage)
 {
     QString windowCenter = "", value;
 
-    for (int index = 0 ; index < newImage->getNumberOfWindowLevels(); index ++)
+    for (int index = 0; index < newImage->getNumberOfWindowLevels(); index++)
     {
         windowCenter += value.setNum(newImage->getWindowLevel(index).second, 'g', 10) + "\\";
     }
 
-    return windowCenter.left(windowCenter.length() -1); //treiem l'últim "\\" afegit
+    return windowCenter.left(windowCenter.length() - 1); //treiem l'últim "\\" afegit
 }
 
 QString LocalDatabaseImageDAL::getWindowLevelExplanationAsQString(Image *newImage)
 {
     QString windowLevelExplanation = "";
 
-    for (int index = 0 ; index < newImage->getNumberOfWindowLevels(); index ++)
+    for (int index = 0; index < newImage->getNumberOfWindowLevels(); index++)
     {
         windowLevelExplanation += newImage->getWindowLevelExplanation(index) + "\\";
     }
 
-    return windowLevelExplanation.left(windowLevelExplanation.length() -1); //treiem l'últim "\\" afegit
+    return windowLevelExplanation.left(windowLevelExplanation.length() - 1); //treiem l'últim "\\" afegit
 }
 
 QStringList LocalDatabaseImageDAL::getWindowLevelExplanationAsQStringList(const QString &explanationList)
 {
     return explanationList.split("\\");
 }
-
 
 void LocalDatabaseImageDAL::setWindowLevel(Image *selectedImage, const QString &windowLevelWidth, const QString &windowLevelCenter)
 {

@@ -12,10 +12,10 @@ class DicomMask;
 
 /** Classe de cerca bàsica d'elemens
 */
-class QAdvancedSearchWidget : public QWidget , private Ui::QAdvancedSearchWidgetBase{
+class QAdvancedSearchWidget : public QWidget, private Ui::QAdvancedSearchWidgetBase {
 Q_OBJECT
 public:
-    QAdvancedSearchWidget( QWidget *parent = 0 );
+    QAdvancedSearchWidget(QWidget *parent = 0);
     ~QAdvancedSearchWidget();
 
     ///neteja els camps de la cerca bàsica
@@ -24,7 +24,7 @@ public:
     DicomMask buildDicomMask();
 
 private slots:
-    
+
     ///Posa un * al tab el qual pertany el lineedit que se li ha donat valor, per a que l'usuari sàpiga quin tabs ha posat valors de cerca
     void updateAdvancedSearchModifiedStatus();
 

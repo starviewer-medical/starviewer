@@ -69,7 +69,7 @@ Q2DViewer::Q2DViewer(QWidget *parent)
     // Creem el picker per obtenir les coordenades de la imatge
     m_imagePointPicker = vtkPropPicker::New();
     this->getInteractor()->SetPicker(m_imagePointPicker);
-    
+
     // Creem el drawer, passant-li com a visor l'objecte this
     m_drawer = new Drawer(this);
 
@@ -194,7 +194,7 @@ QVector<QString> Q2DViewer::getCurrentDisplayedImageOrientationLabels() const
     // Si no estem a la vista axial (adquisició original) obtindrem les etiquetes a
     // través de la primera imatge
     int index = (m_lastView == Axial) ? m_currentSlice : 0;
-    
+
     QVector<QString> labelsVector(4);
     QString orientation;
     Image *image = m_mainVolume->getImage(index);
@@ -211,7 +211,7 @@ QVector<QString> Q2DViewer::getCurrentDisplayedImageOrientationLabels() const
         DEBUG_LOG("L'índex d'imatge actual és incorrecte o no hi ha imatges al volum. Això no hauria de passar en aquest mètode.");
         return labelsVector;
     }
-    
+
     // Tenim les orientacions originals de la imatge en una llista
     QStringList list = orientation.split("\\");
 
@@ -229,7 +229,7 @@ QVector<QString> Q2DViewer::getCurrentDisplayedImageOrientationLabels() const
             ok = true;
             list << "";
             break;
-    
+
         case 3:
             ok = true;
             break;
@@ -256,10 +256,10 @@ QVector<QString> Q2DViewer::getCurrentDisplayedImageOrientationLabels() const
                 index += 2;
             }
 
-            labelsVector[(0 + index) % 4] =  this->getOppositeOrientationLabel(list.at(1)); // Esquerra
-            labelsVector[(2 + index) % 4] =  list.at(1); // Dreta
-            labelsVector[(1 + index) % 4] =  list.at(2); // A dalt
-            labelsVector[(3 + index) % 4] =  this->getOppositeOrientationLabel(list.at(2)); // A baix
+            labelsVector[(0 + index) % 4] = this->getOppositeOrientationLabel(list.at(1)); // Esquerra
+            labelsVector[(2 + index) % 4] = list.at(1); // Dreta
+            labelsVector[(1 + index) % 4] = list.at(2); // A dalt
+            labelsVector[(3 + index) % 4] = this->getOppositeOrientationLabel(list.at(2)); // A baix
         }
         else if (m_lastView == Coronal)
         {
@@ -369,19 +369,19 @@ void Q2DViewer::mapOrientationStringToAnnotation()
     {
         m_patientOrientationText[i] = labels.at(i);
     }
-    
+
     // Text actor -> 0:Esquerra, 1:Abaix, 2:Dreta, 3:A dalt
     // Labels     -> 0:Esquerra, 1:A dalt, 2:Dreta, 3:Abaix
     if (!m_patientOrientationText[0].isEmpty())
     {
         m_patientOrientationTextActor[0]->SetInput(qPrintable(m_patientOrientationText[0]));
     }
-    
+
     if (!m_patientOrientationText[3].isEmpty())
     {
         m_patientOrientationTextActor[1]->SetInput(qPrintable(m_patientOrientationText[3]));
     }
-    
+
     if (!m_patientOrientationText[2].isEmpty())
     {
         m_patientOrientationTextActor[2]->SetInput(qPrintable(m_patientOrientationText[2]));
@@ -505,7 +505,7 @@ int* Q2DViewer::getSliceRange()
     if (m_mainVolume)
     {
         int *range = new int[2];
-        this->getSliceRange(range[0],range[1]);
+        this->getSliceRange(range[0], range[1]);
         return range;
     }
     else
@@ -517,14 +517,14 @@ int* Q2DViewer::getSliceRange()
 int Q2DViewer::getMinimumSlice()
 {
     int min, trash;
-    this->getSliceRange(min,trash);
+    this->getSliceRange(min, trash);
     return min;
 }
 
 int Q2DViewer::getMaximumSlice()
 {
     int max, trash;
-    this->getSliceRange(trash,max);
+    this->getSliceRange(trash, max);
     return max;
 }
 
@@ -822,9 +822,9 @@ void Q2DViewer::setOverlayInput(Volume *volume)
         }
         m_blender->SetInput(1, m_overlayVolume->getVtkData());
         m_blender->SetOpacity(1, 1.0 - m_overlayOpacity);
-    }    
+    }
     updateOverlay();
-    emit overlayChanged();    
+    emit overlayChanged();
 }
 
 Volume* Q2DViewer::getOverlayInput()
@@ -840,7 +840,7 @@ void Q2DViewer::updateOverlay()
             // Actualitzem el pipeline
             m_windowLevelLUTMapper->RemoveAllInputs();
             m_windowLevelLUTMapper->SetInput(m_mainVolume->getVtkData());
-            // TODO aquest procediment és possible que sigui insuficient, 
+            // TODO aquest procediment és possible que sigui insuficient,
             // caldria unficar el pipeline en un mateix mètode
             break;
 
@@ -986,8 +986,8 @@ void Q2DViewer::resetCamera()
         Q_ASSERT(camera);
 
         int initialSliceIndex = 0;
-        double cameraViewUp[3] = {0.0,0.0,0.0};
-        double cameraPosition[3] = {0.0,0.0,0.0};
+        double cameraViewUp[3] = {0.0, 0.0, 0.0};
+        double cameraPosition[3] = {0.0, 0.0, 0.0};
         double cameraRoll = 0.0;
         double cameraAzimuth = 0.0;
         QString position;
@@ -1022,7 +1022,7 @@ void Q2DViewer::resetCamera()
                 {
                     cameraRoll = -90.0;
                 }
-                
+
                 // Indiquem quina és la llesca inicial
                 initialSliceIndex = m_maxSliceValue/2;
 
@@ -1058,7 +1058,7 @@ void Q2DViewer::resetCamera()
         }
 
         // Ajustem la càmera
-        camera->SetFocalPoint(0,0,0);
+        camera->SetFocalPoint(0, 0, 0);
         camera->SetViewUp(cameraViewUp);
         camera->SetPosition(cameraPosition);
         camera->SetRoll(cameraRoll);
@@ -1067,16 +1067,16 @@ void Q2DViewer::resetCamera()
             camera->Azimuth(cameraAzimuth);
         }
 
-        // Posicionem la imatge 
-        // TODO No ho fem amb setSlice() perquè introdueix flickering degut a 
-        // l'emit sliceChanged() que provoca un render() a través del Drawer. 
+        // Posicionem la imatge
+        // TODO No ho fem amb setSlice() perquè introdueix flickering degut a
+        // l'emit sliceChanged() que provoca un render() a través del Drawer.
         // Cal veure com evitar aquesta duplicació de codi de setSlice() perquè tot segueixi funcionant igual
         checkAndUpdateSliceValue(initialSliceIndex);
         updateDisplayExtent();
         getRenderer()->ResetCamera(); // Aquesta línia és de més a més (adicional al codi de setSlice()!)
         updateAnnotationsInformation(Q2DViewer::SliceAnnotation | Q2DViewer::WindowInformationAnnotation);
         mapOrientationStringToAnnotation();
-        
+
         // Ajustem la imatge al viewport
         fitImageIntoViewport();
 
@@ -1170,7 +1170,7 @@ void Q2DViewer::resizeEvent(QResizeEvent *resize)
             case AlignLeft:
                 alignLeft();
                 break;
-        
+
             case AlignCenter:
                 fitImageIntoViewport();
                 break;
@@ -1270,7 +1270,7 @@ ImagePlane* Q2DViewer::getImagePlane(int sliceNumber, int phaseNumber, bool vtkR
     {
         int *dimensions = m_mainVolume->getDimensions();
         double *spacing = m_mainVolume->getSpacing();
-        const double *origin  = m_mainVolume->getOrigin();
+        const double *origin = m_mainVolume->getOrigin();
         switch (m_lastView)
         {
             case Axial: // XY
@@ -1385,9 +1385,9 @@ void Q2DViewer::projectDICOMPointToCurrentDisplayedImage(const double pointToPro
         projectionMatrix->Identity();
         for (int column = 0; column < 3; column++)
         {
-            projectionMatrix->SetElement(0,column,currentPlaneRowVector[column]);
-            projectionMatrix->SetElement(1,column,currentPlaneColumnVector[column]);
-            projectionMatrix->SetElement(2,column,currentPlaneNormalVector[column]);
+            projectionMatrix->SetElement(0, column, currentPlaneRowVector[column]);
+            projectionMatrix->SetElement(1, column, currentPlaneColumnVector[column]);
+            projectionMatrix->SetElement(2, column, currentPlaneNormalVector[column]);
         }
 
         // Un cop tenim la matriu podem fer la projeccio
@@ -1427,11 +1427,11 @@ void Q2DViewer::projectDICOMPointToCurrentDisplayedImage(const double pointToPro
                 {
                     if (vtkReconstructionHack)
                     {
-                        // HACK Serveix de parxe pels casos de crani que no van bé. 
+                        // HACK Serveix de parxe pels casos de crani que no van bé.
                         // TODO Encara està per acabar, és una primera aproximació
-                        projectionMatrix->SetElement(0,0,0);
-                        projectionMatrix->SetElement(0,1,1);
-                        projectionMatrix->SetElement(0,2,0);
+                        projectionMatrix->SetElement(0, 0, 0);
+                        projectionMatrix->SetElement(0, 1, 1);
+                        projectionMatrix->SetElement(0, 2, 0);
                         // Projectem el punt amb la matriu
                         projectionMatrix->MultiplyPoint(homogeneousPointToProject, homogeneousProjectedPoint);
                     }
@@ -1465,7 +1465,7 @@ bool Q2DViewer::getCurrentCursorImageCoordinate(double xyz[3])
     {
         return inside;
     }
-    
+
     int position[2];
     this->getEventPosition(position);
     if (m_imagePointPicker->PickProp(position[0], position[1], getRenderer()))
@@ -1474,7 +1474,7 @@ bool Q2DViewer::getCurrentCursorImageCoordinate(double xyz[3])
         // Calculem el pixel trobat
         m_imagePointPicker->GetPickPosition(xyz);
         // Calculem la profunditat correcta ja que si tenim altres actors pel mig poden interferir en la mesura
-        // TODO Una altre solució possible és tenir renderers separats i en el que fem el pick només tenir-hi l'image actor 
+        // TODO Una altre solució possible és tenir renderers separats i en el que fem el pick només tenir-hi l'image actor
         double bounds[6];
         m_imageActor->GetDisplayBounds(bounds);
         int zIndex = getZIndexForView(m_lastView);
@@ -1588,14 +1588,14 @@ void Q2DViewer::updateSliceAnnotationInformation()
         // Hi ha estudis que són de la modalitat MG que no s'han d'orientar. S'han afegit unes excepcions per poder-los controlar.
         bool found = false;
         QListIterator<QString> iterator(m_mammographyAutoOrientationExceptions);
-        while(!found && iterator.hasNext())
+        while (!found && iterator.hasNext())
         {
             found = image->getParentSeries()->getParentStudy()->getDescription().contains(iterator.next(), Qt::CaseInsensitive);
         }
-        
+
         if (!found)
         {
-            m_enabledAnnotations =  m_enabledAnnotations & ~Q2DViewer::SliceAnnotation;
+            m_enabledAnnotations = m_enabledAnnotations & ~Q2DViewer::SliceAnnotation;
 
             // En la modalitat de mamografia s'ha de mostar informació especifica de la imatge que s'està mostrant.
             // Per tant si estem a la vista original agafem la imatge actual, altrament no mostrem cap informació.
@@ -1712,7 +1712,7 @@ void Q2DViewer::updateSliceAnnotationInformation()
     if (m_enabledAnnotations & Q2DViewer::PatientInformationAnnotation)
     {
         // Si la vista és "AXIAL" (és a dir mostrem la imatge en l'adquisició original)
-        // i tenim informació de la hora d'adquisició de la imatge, la incloem en la informació mostrada        
+        // i tenim informació de la hora d'adquisició de la imatge, la incloem en la informació mostrada
         if (m_lastView == Axial)
         {
             Image *currentImage = getCurrentDisplayedImage();
@@ -1832,7 +1832,7 @@ void Q2DViewer::updateDisplayExtent()
         sliceValue = m_currentSlice * m_numberOfPhases + m_currentPhase;
     }
 
-    // A partir de l'extent del volum, la vista i la llesca en la que ens trobem, 
+    // A partir de l'extent del volum, la vista i la llesca en la que ens trobem,
     // calculem l'extent que li correspon a l'actor imatge
     int zIndex = getZIndexForView(m_lastView);
     int imageActorExtent[6];
@@ -1852,7 +1852,7 @@ void Q2DViewer::enableAnnotation(AnnotationFlags annotation, bool enable)
     }
     else
     {
-        m_enabledAnnotations =  m_enabledAnnotations & ~annotation;
+        m_enabledAnnotations = m_enabledAnnotations & ~annotation;
     }
 
     refreshAnnotations();
@@ -1912,7 +1912,7 @@ void Q2DViewer::setSlabThickness(int thickness)
 
     computeRangeAndSlice(thickness);
     // TODO Comprovar aquest pipeline si és millor calcular ara o més tard
-    if (m_slabThickness == 1  && isThickSlabActive())
+    if (m_slabThickness == 1 && isThickSlabActive())
     {
         DEBUG_LOG("Desactivem thick Slab i resetejem pipeline normal");
         m_thickSlabActive = false;
@@ -2077,7 +2077,7 @@ void Q2DViewer::checkAndUpdateSliceValue(int value)
 void Q2DViewer::putCoordinateInCurrentImageBounds(double xyz[3])
 {
     double bounds[6];
-    m_imageActor->GetBounds(bounds);    
+    m_imageActor->GetBounds(bounds);
 
     int xIndex = getXIndexForView(m_lastView);
     int yIndex = getYIndexForView(m_lastView);
@@ -2131,7 +2131,7 @@ void Q2DViewer::clearViewer()
 void Q2DViewer::invertWindowLevel()
 {
     // Passa el window level a negatiu o positiu, per invertir els colors
-    double windowLevel[2];    
+    double windowLevel[2];
     this->getCurrentWindowLevel(windowLevel);
 
     // Això és necessari fer-ho així i no amb setWindowLevel perquè si invertim el color de la imatge sense haver modificat abans el window/level
@@ -2166,11 +2166,11 @@ void Q2DViewer::alignLeft()
                 motionVector[0]=bounds[0]-viewerLeft[0];
             }
             break;
-        
+
         case Sagital:
             motionVector[1]=bounds[2]-viewerLeft[1];
             break;
-        
+
         case Coronal:
             motionVector[0]=bounds[0]-viewerLeft[0];
             break;
@@ -2210,11 +2210,11 @@ void Q2DViewer::alignRight()
                 motionVector[0] = bounds[1]-viewerRight[0];
             }
             break;
-        
+
         case Sagital:
             motionVector[1] = bounds[3]-viewerRight[1];
             break;
-        
+
         case Coronal:
             motionVector[0] = bounds[1]-viewerRight[0];
             break;
@@ -2231,11 +2231,11 @@ void Q2DViewer::setAlignPosition(AlignPosition alignPosition)
         case AlignRight:
             alignRight();
             break;
-    
+
         case AlignLeft:
             alignLeft();
             break;
-    
+
         case AlignCenter:
             m_alignPosition = Q2DViewer::AlignCenter;
             break;
@@ -2254,7 +2254,7 @@ void Q2DViewer::setImageOrientation(const QString &orientation)
     }
     m_imageOrientationOperationsMapper->setInitialOrientation(labels[2], labels[3]);
     m_imageOrientationOperationsMapper->setDesiredOrientation(desiredTop, desiredLeft);
-    
+
     // TODO ara mateix fet així és ineficient ja que es poden cridar fins a dos cops updateCamera() innecessàriament
     // Caldria refactoritzar els mètodes de rotació i flip per aplicar aquests canvis requerint un únic updateCamera()
     rotateClockWise(m_imageOrientationOperationsMapper->getNumberOfClockwiseTurnsToApply());
@@ -2300,7 +2300,7 @@ void Q2DViewer::fitImageIntoViewport()
     bottomCorner[yIndex] = bounds[yIndex * 2 + 1];
     bottomCorner[zIndex] = 0.0;
 
-    // Apliquem el zoom 
+    // Apliquem el zoom
     scaleToFit3D(topCorner, bottomCorner);
 }
 
@@ -2363,4 +2363,3 @@ void Q2DViewer::updateDefaultPreset()
 }
 
 };  // End namespace udg
-

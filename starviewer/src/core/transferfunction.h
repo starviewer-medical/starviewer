@@ -1,16 +1,12 @@
 #ifndef UDGTRANSFERFUNCTION_H
 #define UDGTRANSFERFUNCTION_H
 
-
 #include "colortransferfunction.h"
 #include "opacitytransferfunction.h"
 
-
 class vtkLookupTable;
 
-
 namespace udg {
-
 
 /**
     Representa una funció de transferència f: (X,Y) -> (C,O), on X és el conjunt de valors de propietat (reals), Y el conjunt de magnituds del gradient (reals positius),
@@ -192,8 +188,6 @@ private:
 
 };
 
-
 }
-
 
 #endif

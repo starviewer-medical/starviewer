@@ -7,11 +7,9 @@ HangingProtocolMask::HangingProtocolMask(QObject *parent)
 {
 }
 
-
 HangingProtocolMask::~HangingProtocolMask()
 {
 }
-
 
 void HangingProtocolMask::setProtocolsList(const QList<QString> &protocols)
 {

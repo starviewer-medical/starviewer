@@ -7,7 +7,7 @@ namespace udg {
 
 const QString ApplicationCommandLineOptions::optionSelectorCharacter("-");
 
-bool ApplicationCommandLineOptions::addOption(QString optionName, bool optionArgumentIsRequired, QString description) 
+bool ApplicationCommandLineOptions::addOption(QString optionName, bool optionArgumentIsRequired, QString description)
 {
     if (!m_commandLineOptions.contains(optionName))
     {
@@ -58,23 +58,23 @@ bool ApplicationCommandLineOptions::parse()
                 parameter = parameter.right(parameter.length() -1); //treiem el "-" del paràmetre
                 if (m_commandLineOptions.contains(parameter)) //Comprovem si és una opció vàlida
                 {
-                    //Si és una opció que ens han especificat com a vàlida l'inserim com a parsejada, de moment com argument de l'opció hi posem ""     
+                    //Si és una opció que ens han especificat com a vàlida l'inserim com a parsejada, de moment com argument de l'opció hi posem ""
                     m_parsedOptions.insert(parameter, "");
-                    
+
                     lastParameterWasAnOption = true;
                     lastOption = m_commandLineOptions.value(parameter);
                     nextParameterHasToBeAnArgumentOption = lastOption.argumentIsRequired;
                 }
-                else m_parserErrorMessage +=  QObject::tr("Unknown option ") + optionSelectorCharacter + parameter + "\n";
+                else m_parserErrorMessage += QObject::tr("Unknown option ") + optionSelectorCharacter + parameter + "\n";
             }
             else
             {
-                /*Si l'últim paràmetre parsejat era una opció que se li havia de passar obligatòriament un argument ex "-accessionnumber 12345" 
+                /*Si l'últim paràmetre parsejat era una opció que se li havia de passar obligatòriament un argument ex "-accessionnumber 12345"
                  *i no se li ha especificat cap argument ex: "-accessionnumber -studyUID" guardem l'error i parem.*/
                 m_parserErrorMessage += lastOption.name + QObject::tr(" option requires an argument") + "\n";
             }
         }
-        else 
+        else
         {
             //és un argument
             if (lastParameterWasAnOption)
@@ -82,7 +82,7 @@ bool ApplicationCommandLineOptions::parse()
                 //Si tenim un argument i l'últim paràmetre era un opció, vol dir aquest paràmetre és un argument
                 m_parsedOptions[lastOption.name] = parameter;
             }
-			else m_parserErrorMessage += QObject::tr("Unexpected value ") + parameter + "\n";
+            else m_parserErrorMessage += QObject::tr("Unexpected value ") + parameter + "\n";
 
             lastParameterWasAnOption = false;
             nextParameterHasToBeAnArgumentOption = false;
@@ -125,15 +125,15 @@ QString ApplicationCommandLineOptions::getOptionsDescription()
 {
     QString optionsDescription;
 
-    foreach(Option option, m_commandLineOptions.values())
+    foreach (Option option, m_commandLineOptions.values())
     {
-        optionsDescription +=  optionSelectorCharacter + option.name;
-        
+        optionsDescription += optionSelectorCharacter + option.name;
+
         if (option.argumentIsRequired)
         {
             optionsDescription += QObject::tr(" <value>");
         }
-        
+
         optionsDescription += "\n\t" + option.description + "\n";
     }
 

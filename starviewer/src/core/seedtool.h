@@ -15,12 +15,12 @@ class SeedTool : public Tool {
 Q_OBJECT
 public:
     /// Estats de la tool
-    enum { None , Seeding };
+    enum { None, Seeding };
 
-    SeedTool(QViewer *viewer, QObject *parent = 0 );
+    SeedTool(QViewer *viewer, QObject *parent = 0);
     ~SeedTool();
 
-    void handleEvent( long unsigned eventID );
+    void handleEvent(long unsigned eventID);
 
     /// Retorna les dades pròpies de la seed
     ToolData *getToolData() const;
@@ -62,8 +62,6 @@ private:
 
 };
 
-
 }
-
 
 #endif
