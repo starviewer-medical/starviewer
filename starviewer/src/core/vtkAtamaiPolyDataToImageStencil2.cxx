@@ -324,7 +324,7 @@ static double DistanceMeasure( T *point1, T *point2 )
  return distance;
 }
 
-static double DistanceMeasure( float *point1, float *point2 )
+static double DistanceMeasure( double *point1, double *point2 )
 {
  double x = point1[0] - point2[0];
  double y = point1[1] - point2[1];
