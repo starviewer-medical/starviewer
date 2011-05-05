@@ -2,18 +2,17 @@
 
 #ifdef CUDA_AVAILABLE
 
-#include <QCoreApplication>
-#include <QSet>
-#include <QThread>
-
-#include "qexperimental3dviewer.h"
+#include "camera.h"
+#include "cudaviewpointintensityinformationchannel.h"
 #include "experimental3dvolume.h"
 #include "informationtheory.h"
 #include "logging.h"
-
-#include "camera.h"
-#include "cudaviewpointintensityinformationchannel.h"
 #include "matrix4.h"
+#include "qexperimental3dviewer.h"
+
+#include <QCoreApplication>
+#include <QSet>
+#include <QThread>
 
 namespace udg {
 
@@ -61,19 +60,52 @@ void ViewpointIntensityInformationChannel::compute(bool &intensityProbabilitiesG
 {
     // Si no hi ha res a calcular marxem
     if (!intensityProbabilitiesGivenView && !viewProbabilities && !intensityProbabilities && !HI && !HIv && !HIV && !jointEntropy && !vmii && !mii
-        && !viewpointUnstabilities && !imi && !intensityClustering) return;
+        && !viewpointUnstabilities && !imi && !intensityClustering)
+    {
+        return;
+    }
 
     // Dependències
-    if (HI) intensityProbabilities = true;
-    if (HIV) viewProbabilities = true;
-    if (HIV) HIv = true;
-    if (jointEntropy) viewProbabilities = true;
-    if (mii) vmii = true;
-    if (vmii) intensityProbabilities = true;
-    if (viewpointUnstabilities) viewProbabilities = true;
-    if (imi) intensityProbabilities = true;
-    if (intensityClustering) intensityProbabilities = true;
-    if (intensityProbabilities) viewProbabilities = true;
+    if (HI)
+    {
+        intensityProbabilities = true;
+    }
+    if (HIV)
+    {
+        viewProbabilities = true;
+    }
+    if (HIV)
+    {
+        HIv = true;
+    }
+    if (jointEntropy)
+    {
+        viewProbabilities = true;
+    }
+    if (mii)
+    {
+        vmii = true;
+    }
+    if (vmii)
+    {
+        intensityProbabilities = true;
+    }
+    if (viewpointUnstabilities)
+    {
+        viewProbabilities = true;
+    }
+    if (imi)
+    {
+        intensityProbabilities = true;
+    }
+    if (intensityClustering)
+    {
+        intensityProbabilities = true;
+    }
+    if (intensityProbabilities)
+    {
+        viewProbabilities = true;
+    }
 
     computeCuda(intensityProbabilitiesGivenView, viewProbabilities, intensityProbabilities, HI, HIv, HIV, jointEntropy, vmii, mii, viewpointUnstabilities, imi,
                 intensityClustering, display);
@@ -180,12 +212,31 @@ void ViewpointIntensityInformationChannel::computeCuda(bool computeIntensityProb
 
     // Inicialitzar progrés
     int nSteps = 0;
-    if (computeIntensityProbabilitiesGivenView || computeViewProbabilities) nSteps++;    // p(I|V) + p(V)
-    if (computeIntensityProbabilities || computeHI) nSteps++;   // p(I) + H(I)
-    if (computeImi) nSteps++;   // IMI
+    // p(I|V) + p(V)
+    if (computeIntensityProbabilitiesGivenView || computeViewProbabilities)
+    {
+        nSteps++;
+    }
+    // p(I) + H(I)
+    if (computeIntensityProbabilities || computeHI)
+    {
+        nSteps++;
+    }
+    // IMI
+    if (computeImi)
+    {
+        nSteps++;
+    }
     // H(I|v) + H(I|V) + H(V,I) + VMIi + MIi + viewpoint unstabilities
-    if (computeHIv || computeHIV || computeJointEntropy || computeVmii || computeMii || computeViewpointUnstabilities) nSteps++;
-    if (computeIntensityClustering) nSteps++;   // intensity clustering
+    if (computeHIv || computeHIV || computeJointEntropy || computeVmii || computeMii || computeViewpointUnstabilities)
+    {
+        nSteps++;
+    }
+    // intensity clustering
+    if (computeIntensityClustering)
+    {
+        nSteps++;
+    }
 
     emit totalProgressMaximum(nSteps);
     int step = 0;
@@ -193,7 +244,10 @@ void ViewpointIntensityInformationChannel::computeCuda(bool computeIntensityProb
 
     // Inicialització de CUDA
     cviicSetupRayCast(m_volume->getImage(), m_transferFunction, 1024, 720, m_backgroundColor, display);
-    if (computeIntensityProbabilities) cviicSetupIntensityProbabilities();
+    if (computeIntensityProbabilities)
+    {
+        cviicSetupIntensityProbabilities();
+    }
 
     // p(I|V) + p(V)
     if (computeIntensityProbabilitiesGivenView || computeViewProbabilities)
@@ -236,7 +290,10 @@ void ViewpointIntensityInformationChannel::computeCuda(bool computeIntensityProb
     }
 
     // Finalització de CUDA
-    if (computeIntensityProbabilities) cviicCleanupIntensityProbabilities();
+    if (computeIntensityProbabilities)
+    {
+        cviicCleanupIntensityProbabilities();
+    }
     cviicCleanupRayCast();
 }
 
@@ -251,9 +308,15 @@ QVector<float> ViewpointIntensityInformationChannel::intensityProbabilitiesInVie
         QVector<float> pIv = cviicRayCastAndGetHistogram(m_viewpoints.at(i), viewMatrix(m_viewpoints.at(i)));   // p(I|v) * viewedVolume
         double viewedVolume = 0.0;
         int nIntensities = m_volume->getRangeMax() + 1;
-        for (int j = 0; j < nIntensities; j++) viewedVolume += pIv.at(j);
+        for (int j = 0; j < nIntensities; j++)
+        {
+            viewedVolume += pIv.at(j);
+        }
         Q_ASSERT(!MathTools::isNaN(viewedVolume));
-        for (int j = 0; j < nIntensities; j++) pIv[j] /= viewedVolume;  // p(I|v)
+        for (int j = 0; j < nIntensities; j++)
+        {
+            pIv[j] /= viewedVolume;  // p(I|v)
+        }
         return pIv;
     }
 }
@@ -279,12 +342,18 @@ void ViewpointIntensityInformationChannel::computeViewProbabilitiesCuda(bool com
         QVector<float> histogram = cviicRayCastAndGetHistogram(m_viewpoints.at(i), viewMatrix(m_viewpoints.at(i))); // p(I|v) * viewedVolume
 
         double viewedVolume = 0.0;
-        for (int j = 0; j < nIntensities; j++) viewedVolume += histogram.at(j);
+        for (int j = 0; j < nIntensities; j++)
+        {
+            viewedVolume += histogram.at(j);
+        }
         Q_ASSERT(!MathTools::isNaN(viewedVolume));
 
         if (computeIntensityProbabilitiesGivenView)
         {
-            for (int j = 0; j < nIntensities; j++) m_intensityProbabilitiesGivenView[i][j] = histogram.at(j) / viewedVolume;    // p(I|v)
+            for (int j = 0; j < nIntensities; j++)
+            {
+                m_intensityProbabilitiesGivenView[i][j] = histogram.at(j) / viewedVolume;    // p(I|v)
+            }
         }
 
         m_viewProbabilities[i] = viewedVolume;
@@ -330,7 +399,10 @@ void ViewpointIntensityInformationChannel::computeIntensityProbabilitiesAndEntro
         QVector<float> histogram = cviicRayCastAndGetHistogram(m_viewpoints.at(i), viewMatrix(m_viewpoints.at(i))); // p(I|v) * viewedVolume
 
         double viewedVolume = 0.0;
-        for (int j = 0; j < nIntensities; j++) viewedVolume += histogram.at(j);
+        for (int j = 0; j < nIntensities; j++)
+        {
+            viewedVolume += histogram.at(j);
+        }
         Q_ASSERT(!MathTools::isNaN(viewedVolume));
 
         cviicAccumulateIntensityProbabilities(m_viewProbabilities.at(i), viewedVolume);
@@ -367,12 +439,30 @@ void ViewpointIntensityInformationChannel::computeViewMeasuresCuda(bool computeH
     int nViewpoints = m_viewpoints.size();
     int nIntensities = m_volume->getRangeMax() + 1;
 
-    if (computeHIv) m_HIv.resize(nViewpoints);
-    if (computeHIV) m_HIV = 0.0f;
-    if (computeJointEntropy) m_jointEntropy = 0.0f;
-    if (computeVmii) m_vmii.resize(nViewpoints);
-    if (computeMii) m_mii = 0.0f;
-    if (computeViewpointUnstabilities) m_viewpointUnstabilities.resize(nViewpoints);
+    if (computeHIv)
+    {
+        m_HIv.resize(nViewpoints);
+    }
+    if (computeHIV)
+    {
+        m_HIV = 0.0f;
+    }
+    if (computeJointEntropy)
+    {
+        m_jointEntropy = 0.0f;
+    }
+    if (computeVmii)
+    {
+        m_vmii.resize(nViewpoints);
+    }
+    if (computeMii)
+    {
+        m_mii = 0.0f;
+    }
+    if (computeViewpointUnstabilities)
+    {
+        m_viewpointUnstabilities.resize(nViewpoints);
+    }
 
     emit partialProgress(0);
     QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
@@ -397,7 +487,10 @@ void ViewpointIntensityInformationChannel::computeViewMeasuresCuda(bool computeH
         if (computeJointEntropy)
         {
             QVector<float> jpIv(intensityProbabilitiesInView);  // p(I,v) <- p(I|v)
-            for (int j = 0; j < nIntensities; j++) jpIv[j] *= m_viewProbabilities.at(i);    // p(I,v) = p(I|v) * p(v)
+            for (int j = 0; j < nIntensities; j++)
+            {
+                jpIv[j] *= m_viewProbabilities.at(i);    // p(I,v) = p(I|v) * p(v)
+            }
             m_jointEntropy += InformationTheory::entropy(jpIv);
         }
 
@@ -428,7 +521,10 @@ void ViewpointIntensityInformationChannel::computeViewMeasuresCuda(bool computeH
                 float pvj = m_viewProbabilities.at(neighbour);  // p(vj)
                 float pvij = pvi + pvj; // p(v')
 
-                if (pvij == 0.0f) continue;
+                if (pvij == 0.0f)
+                {
+                    continue;
+                }
 
                 QVector<float> intensityProbabilitiesInNeighbour = this->intensityProbabilitiesInView(neighbour);   // p(I|vj)
 
@@ -481,12 +577,18 @@ void ViewpointIntensityInformationChannel::computeImiCuda()
     for (int i = 0; i < nViewpoints; i++)
     {
         float pv = m_viewProbabilities.at(i);
-        if (pv == 0.0f) continue;
+        if (pv == 0.0f)
+        {
+            continue;
+        }
 
         QVector<float> histogram = cviicRayCastAndGetHistogram(m_viewpoints.at(i), viewMatrix(m_viewpoints.at(i))); // p(I|v) * viewedVolume
 
         double viewedVolume = 0.0;
-        for (int j = 0; j < nIntensities; j++) viewedVolume += histogram.at(j);
+        for (int j = 0; j < nIntensities; j++)
+        {
+            viewedVolume += histogram.at(j);
+        }
         Q_ASSERT(!MathTools::isNaN(viewedVolume));
 
         cviicAccumulateImi(pv, viewedVolume);
@@ -505,7 +607,10 @@ void ViewpointIntensityInformationChannel::computeImiCuda()
         float imi = m_imi.at(j);
         Q_ASSERT(!MathTools::isNaN(imi));
         Q_ASSERT(imi >= 0.0f);
-        if (imi > m_maximumImi) m_maximumImi = imi;
+        if (imi > m_maximumImi)
+        {
+            m_maximumImi = imi;
+        }
     }
 }
 
@@ -519,18 +624,30 @@ void ViewpointIntensityInformationChannel::computeIntensityClusteringCuda()
 
     // Construïm la matriu p(V|C), on cada fila sigui una p(V|c): inicialment és p(V|I), on cada fila és una p(V|i)
     QList< QVector<float> > pVC;
-    for (int j = 0; j < nIntensities; j++) pVC << QVector<float>(nViewpoints);  // tota la matriu queda plena de zeros inicialment
+    for (int j = 0; j < nIntensities; j++)
+    {
+        pVC << QVector<float>(nViewpoints);  // tota la matriu queda plena de zeros inicialment
+    }
     for (int i = 0; i < nViewpoints; i++)
     {
         float pv = m_viewProbabilities[i];  // p(v)
-        if (pv == 0.0f) continue;
+        if (pv == 0.0f)
+        {
+            continue;
+        }
         QVector<float> pIv = intensityProbabilitiesInView(i);   // p(I|v)
         for (int j = 0; j < nIntensities; j++)
         {
             float piv = pIv[j]; // p(i|v)
-            if (piv == 0.0f) continue;
+            if (piv == 0.0f)
+            {
+                continue;
+            }
             float pi = m_intensityProbabilities[j]; // p(i)
-            if (pi == 0.0f) continue;
+            if (pi == 0.0f)
+            {
+                continue;
+            }
             float pvi = pv * piv / pi;
             Q_ASSERT(!MathTools::isNaN(pvi));
             pVC[j][i] = pvi;
@@ -539,7 +656,10 @@ void ViewpointIntensityInformationChannel::computeIntensityClusteringCuda()
 
     // Construïm el clustering inicial: un cluster per cada intensitat.
     QList< QList<int> > clusters;   // cada element és un cluster (un cluster està representat per la llista d'intensitats que el formen)
-    for (int j = 0; j < nIntensities; j++) clusters << (QList<int>() << j); // clusters = [[0], [1], ..., [nIntensities-1]]
+    for (int j = 0; j < nIntensities; j++)
+    {
+        clusters << (QList<int>() << j); // clusters = [[0], [1], ..., [nIntensities-1]]
+    }
 
     // Calculem la pèrdua d'informació mútua per cada possible clustering
     // cada element és la pèrdua d'informació mútua resultat de fusionar l'element de la mateixa posició de clusters amb el següent
@@ -621,10 +741,16 @@ void ViewpointIntensityInformationChannel::computeIntensityClusteringCuda()
             QString clustersString = "[";
             for (int i = 0; i < clusters.size(); i++)
             {
-                if (i > 0) clustersString += ", ";
+                if (i > 0)
+                {
+                    clustersString += ", ";
+                }
                 clustersString += "[";
                 clustersString += QString::number(clusters[i].first());
-                if (clusters[i].size() > 1) clustersString += "-" + QString::number(clusters[i].last());
+                if (clusters[i].size() > 1)
+                {
+                    clustersString += "-" + QString::number(clusters[i].last());
+                }
                 clustersString += "]";
             }
             clustersString += "]";

@@ -1,19 +1,19 @@
 #include "viewpointinformationchannel.h"
 
+#include "experimental3dvolume.h"
+#include "informationtheory.h"
+#include "logging.h"
+#include "qexperimental3dviewer.h"
+
 #include <QCoreApplication>
 #include <QSet>
 #include <QThread>
 
-#include "qexperimental3dviewer.h"
-#include "experimental3dvolume.h"
-#include "informationtheory.h"
-#include "logging.h"
-
 #include <limits>
 
 #ifndef CUDA_AVAILABLE
-#include <QTemporaryFile>
 #include "mathtools.h"
+#include <QTemporaryFile>
 #else // CUDA_AVAILABLE
 #include "camera.h"
 #include "cudaviewpointinformationchannel.h"
@@ -46,12 +46,18 @@ void ViewpointInformationChannel::setColorVomiPalette(const QVector<Vector3Float
     if (nColors == 1) // tots el mateix
     {
         DEBUG_LOG("tots els colors iguals");
-        for (int i = 0; i < nViewpoints; i++) m_viewpointColors[i] = colorVomiPalette.at(0);
+        for (int i = 0; i < nViewpoints; i++)
+        {
+            m_viewpointColors[i] = colorVomiPalette.at(0);
+        }
     }
     else if (nViewpoints <= nColors)  // agafem els primers colors
     {
         DEBUG_LOG("primers colors");
-        for (int i = 0; i < nViewpoints; i++) m_viewpointColors[i] = colorVomiPalette.at(i);
+        for (int i = 0; i < nViewpoints; i++)
+        {
+            m_viewpointColors[i] = colorVomiPalette.at(i);
+        }
     }
     else    // trobar els més separats -> que la distància mínima entre ells sigui màxima entre totes les mínimes
     {
@@ -81,7 +87,10 @@ void ViewpointInformationChannel::setColorVomiPalette(const QVector<Vector3Float
                     m_n = n;
                     m_k = k;
                     m_data.resize(k);
-                    for (int i = 0; i < k; ++i) m_data[i] = i;
+                    for (int i = 0; i < k; ++i)
+                    {
+                        m_data[i] = i;
+                    }
                 }   // Combination(n,k)
                 QVector<int> data() const
                 {
@@ -90,25 +99,43 @@ void ViewpointInformationChannel::setColorVomiPalette(const QVector<Vector3Float
                 QString toString() const
                 {
                     QString s = "{ ";
-                    for (int i = 0; i < m_k; ++i) s += QString::number(m_data.at(i)) + " ";
+                    for (int i = 0; i < m_k; ++i)
+                    {
+                        s += QString::number(m_data.at(i)) + " ";
+                    }
                     s += "}";
                     return s;
                 }   // toString()
                 Combination* successor() const
                 {
-                    if (m_data[0] == m_n - m_k) return 0;
+                    if (m_data[0] == m_n - m_k)
+                    {
+                        return 0;
+                    }
                     Combination *ans = new Combination(m_n, m_k);
                     int i;
-                    for (i = 0; i < m_k; ++i) ans->m_data[i] = m_data.at(i);
+                    for (i = 0; i < m_k; ++i)
+                    {
+                        ans->m_data[i] = m_data.at(i);
+                    }
                     for (i = m_k - 1; i > 0 && ans->m_data.at(i) == m_n - m_k + i; --i);
                     ++ans->m_data[i];
-                    for (int j = i; j < m_k - 1; ++j) ans->m_data[j+1] = ans->m_data[j] + 1;
+                    for (int j = i; j < m_k - 1; ++j)
+                    {
+                        ans->m_data[j+1] = ans->m_data[j] + 1;
+                    }
                     return ans;
                 }   // successor()
                 static quint64 choose(int n, int k)
                 {
-                    if (n < k) return 0;  // special case
-                    if (n == k) return 1;
+                    if (n < k)
+                    {
+                        return 0;  // special case
+                    }
+                    if (n == k)
+                    {
+                        return 1;
+                    }
                     int delta, iMax;
                     if (k < n - k)    // ex: choose(100,3)
                     {
@@ -121,7 +148,10 @@ void ViewpointInformationChannel::setColorVomiPalette(const QVector<Vector3Float
                         iMax = n - k;
                     }
                     quint64 ans = delta + 1;
-                    for (int i = 2; i <= iMax; ++i) ans = (ans * (delta + i)) / i;
+                    for (int i = 2; i <= iMax; ++i)
+                    {
+                        ans = (ans * (delta + i)) / i;
+                    }
                     return ans;
                 }   // choose()
             };  // Combination class
@@ -165,10 +195,16 @@ void ViewpointInformationChannel::setColorVomiPalette(const QVector<Vector3Float
 
 #ifndef QT_NO_DEBUG
         DEBUG_LOG("best indices:");
-        for (int i = 0; i < nColors; i++) DEBUG_LOG(QString::number(bestIndices.at(i)));
+        for (int i = 0; i < nColors; i++)
+        {
+            DEBUG_LOG(QString::number(bestIndices.at(i)));
+        }
 #endif
 
-        for (int i = 0; i < nColors; i++) m_viewpointColors[bestIndices.at(i)] = colorVomiPalette.at(i);
+        for (int i = 0; i < nColors; i++)
+        {
+            m_viewpointColors[bestIndices.at(i)] = colorVomiPalette.at(i);
+        }
 
         float maxChange;
         do
@@ -177,7 +213,10 @@ void ViewpointInformationChannel::setColorVomiPalette(const QVector<Vector3Float
 
             for (int i = 0; i < nViewpoints; i++)
             {
-                if (bestIndices.contains(i)) continue;
+                if (bestIndices.contains(i))
+                {
+                    continue;
+                }
 
                 Vector3 viewpoint = m_viewpoints.at(i);
                 QVector<int> neighbours = m_viewpointGenerator.neighbours(i);
@@ -198,7 +237,10 @@ void ViewpointInformationChannel::setColorVomiPalette(const QVector<Vector3Float
                 float change = (color - m_viewpointColors.at(i)).length();
                 m_viewpointColors[i] = color;
 
-                if (change > maxChange) maxChange = change;
+                if (change > maxChange)
+                {
+                    maxChange = change;
+                }
             }
         } while (maxChange > 0.1f);
     }
@@ -246,7 +288,10 @@ void ViewpointInformationChannel::filterViewpoints(const QVector<bool> &filter)
         if (filter.at(i))
         {
             m_viewpoints << m_viewpointGenerator.viewpoint(i);
-            if (!m_viewpointColors.isEmpty()) viewpointColors << m_viewpointColors.at(i);
+            if (!m_viewpointColors.isEmpty())
+            {
+                viewpointColors << m_viewpointColors.at(i);
+            }
         }
     }
 
@@ -261,37 +306,114 @@ void ViewpointInformationChannel::compute(bool &HV, bool &HVz, bool &HZ, bool &H
     // Si no hi ha res a calcular marxem
     if (!HV && !HVz && !HZ && !HZv && !HZV && !vmi && !vmi2 && !vmi3 && !mi && !viewpointUnstabilities && !vomi && !vomi2 && !vomi3 && !viewpointVomi
         && !viewpointVomi2 && !colorVomi && !evmiOpacity && !evmiVomi && !bestViews && !guidedTour && !exploratoryTour)
+    {
         return;
+    }
 
     bool viewProbabilities = false;
     bool voxelProbabilities = false;
 
     // Dependències
-    if (vmi3) vomi2 = true;
-    if (viewpointVomi2) vomi2 = true;
-    if (vomi2) HV = true;
-    if (vomi2) HVz = true;
-    if (HV) viewProbabilities = true;
-    if (HVz) viewProbabilities = true;
-    if (HVz) voxelProbabilities = true;
-    if (vomi3) vmi2 = true;
-    if (vmi2) HZ = true;
-    if (vmi2) HZv = true;
-    if (HZ) voxelProbabilities = true;
-    if (HZV) viewProbabilities = true;
-    if (HZV) HZv = true;
-    if (guidedTour) bestViews = true;
-    if (bestViews) mi = true;
-    if (exploratoryTour) mi = true;
-    if (mi) vmi = true;
-    if (vmi) voxelProbabilities = true;
-    if (viewpointUnstabilities) viewProbabilities = true;
-    if (viewpointVomi) vomi = true;
-    if (evmiOpacity) voxelProbabilities = true;
-    if (evmiVomi) vomi = true;
-    if (vomi) voxelProbabilities = true;
-    if (colorVomi) voxelProbabilities = true;
-    if (voxelProbabilities) viewProbabilities = true;
+    if (vmi3)
+    {
+        vomi2 = true;
+    }
+    if (viewpointVomi2)
+    {
+        vomi2 = true;
+    }
+    if (vomi2)
+    {
+        HV = true;
+    }
+    if (vomi2)
+    {
+        HVz = true;
+    }
+    if (HV)
+    {
+        viewProbabilities = true;
+    }
+    if (HVz)
+    {
+        viewProbabilities = true;
+    }
+    if (HVz)
+    {
+        voxelProbabilities = true;
+    }
+    if (vomi3)
+    {
+        vmi2 = true;
+    }
+    if (vmi2)
+    {
+        HZ = true;
+    }
+    if (vmi2)
+    {
+        HZv = true;
+    }
+    if (HZ)
+    {
+        voxelProbabilities = true;
+    }
+    if (HZV)
+    {
+        viewProbabilities = true;
+    }
+    if (HZV)
+    {
+        HZv = true;
+    }
+    if (guidedTour)
+    {
+        bestViews = true;
+    }
+    if (bestViews)
+    {
+        mi = true;
+    }
+    if (exploratoryTour)
+    {
+        mi = true;
+    }
+    if (mi)
+    {
+        vmi = true;
+    }
+    if (vmi)
+    {
+        voxelProbabilities = true;
+    }
+    if (viewpointUnstabilities)
+    {
+        viewProbabilities = true;
+    }
+    if (viewpointVomi)
+    {
+        vomi = true;
+    }
+    if (evmiOpacity)
+    {
+        voxelProbabilities = true;
+    }
+    if (evmiVomi)
+    {
+        vomi = true;
+    }
+    if (vomi)
+    {
+        voxelProbabilities = true;
+    }
+    if (colorVomi)
+    {
+        voxelProbabilities = true;
+    }
+    if (voxelProbabilities)
+    {
+        viewProbabilities = true;
+    }
 
 #ifndef CUDA_AVAILABLE
     Q_UNUSED(display);
@@ -474,25 +596,67 @@ void ViewpointInformationChannel::computeCpu(bool computeViewProbabilities, bool
 
     // Inicialitzar progrés
     int nSteps = 1; // ray casting (p(Z|V))
-    if (computeViewProbabilities || computeHV) nSteps++;    // p(V) + H(V)
-    if (computeVoxelProbabilities || computeHZ) nSteps++;   // p(Z) + H(Z)
-    if (computeHVz || computeVomi || computeColorVomi) nSteps++;    // H(V|z) + VoMI + color VoMI
-    if (computeVomi2) nSteps++; // VoMI2
+    // p(V) + H(V)
+    if (computeViewProbabilities || computeHV)
+    {
+        nSteps++;
+    }
+    // p(Z) + H(Z)
+    if (computeVoxelProbabilities || computeHZ)
+    {
+        nSteps++;
+    }
+    // H(V|z) + VoMI + color VoMI
+    if (computeHVz || computeVomi || computeColorVomi)
+    {
+        nSteps++;
+    }
+    // VoMI2
+    if (computeVomi2)
+    {
+        nSteps++;
+    }
     // H(Z|v) + H(Z|V) + VMI + VMI2 + MI + viewpoint unstabilities + viewpoint VoMI (INF) + viewpoint VoMI2 (INF2) + EVMI with opacity + EVMI with VoMI
     if (computeHZv || computeHZV || computeVmi || computeVmi2 || computeMi || computeViewpointUnstabilities || computeViewpointVomi || computeViewpointVomi2
-        || computeEvmiOpacity || computeEvmiVomi) nSteps++;
-    if (computeVmi3) nSteps++;  // VMI3
-    if (computeVomi3) nSteps++; // VoMI3
-    if (computeBestViews) nSteps++; // best views
-    if (computeGuidedTour) nSteps++;    // guided tour
-    if (computeExploratoryTour) nSteps++;   // exploratory tour
+        || computeEvmiOpacity || computeEvmiVomi)
+    {
+        nSteps++;
+    }
+    // VMI3
+    if (computeVmi3)
+    {
+        nSteps++;
+    }
+    // VoMI3
+    if (computeVomi3)
+    {
+        nSteps++;
+    }
+    // best views
+    if (computeBestViews)
+    {
+        nSteps++;
+    }
+    // guided tour
+    if (computeGuidedTour)
+    {
+        nSteps++;
+    }
+    // exploratory tour
+    if (computeExploratoryTour)
+    {
+        nSteps++;
+    }
 
     emit totalProgressMaximum(nSteps);
     int step = 0;
     emit totalProgress(step);
 
     createVoxelProbabilitiesPerViewFiles();
-    if (m_voxelProbabilitiesPerViewFiles.isEmpty()) return; // caldria llançar alguna excepció o retornar error
+    if (m_voxelProbabilitiesPerViewFiles.isEmpty())
+    {
+        return; // caldria llançar alguna excepció o retornar error
+    }
 
     float totalViewedVolume;
 
@@ -602,7 +766,10 @@ void ViewpointInformationChannel::createVoxelProbabilitiesPerViewFiles()
         if (!m_voxelProbabilitiesPerViewFiles.at(i)->open())
         {
             DEBUG_LOG(QString("No s'ha pogut obrir el fitxer: error %1").arg(m_voxelProbabilitiesPerViewFiles.at(i)->errorString()));
-            for (int j = 0; j < i; j++) m_voxelProbabilitiesPerViewFiles.at(j)->close();
+            for (int j = 0; j < i; j++)
+            {
+                m_voxelProbabilitiesPerViewFiles.at(j)->close();
+            }
             m_voxelProbabilitiesPerViewFiles.clear();   // el deixarem buit si hi ha hagut problemes
             break;
         }
@@ -638,7 +805,10 @@ float ViewpointInformationChannel::rayCastingCpu(bool computeViewProbabilities)
     int nVoxels = m_volume->getSize();
     double totalViewedVolume = 0.0;
 
-    if (computeViewProbabilities) m_viewProbabilities.resize(nViewpoints);
+    if (computeViewProbabilities)
+    {
+        m_viewProbabilities.resize(nViewpoints);
+    }
 
     emit partialProgress(0);
     QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
@@ -727,7 +897,10 @@ void ViewpointInformationChannel::computeVoxelProbabilitiesAndEntropyCpu(bool co
     protected:
         virtual void run()
         {
-            for (int i = m_start; i < m_end; i++) m_voxelProbabilities[i] += m_viewProbability * m_voxelProbabilitiesInView.at(i);
+            for (int i = m_start; i < m_end; i++)
+            {
+                m_voxelProbabilities[i] += m_viewProbability * m_voxelProbabilitiesInView.at(i);
+            }
         }
     private:
         float m_viewProbability;
@@ -755,7 +928,10 @@ void ViewpointInformationChannel::computeVoxelProbabilitiesAndEntropyCpu(bool co
         pzThreads[k] = new PZThread(m_voxelProbabilities, start, end);
         start += nVoxelsPerThread;
         end += nVoxelsPerThread;
-        if (end > nVoxels) end = nVoxels;
+        if (end > nVoxels)
+        {
+            end = nVoxels;
+        }
     }
 
     for (int i = 0; i < nViewpoints; i++)
@@ -768,13 +944,19 @@ void ViewpointInformationChannel::computeVoxelProbabilitiesAndEntropyCpu(bool co
             pzThreads[k]->start();
         }
 
-        for (int k = 0; k < nThreads; k++) pzThreads[k]->wait();
+        for (int k = 0; k < nThreads; k++)
+        {
+            pzThreads[k]->wait();
+        }
 
         emit partialProgress(100 * (i + 1) / nViewpoints);
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
 
-    for (int k = 0; k < nThreads; k++) delete pzThreads[k];
+    for (int k = 0; k < nThreads; k++)
+    {
+        delete pzThreads[k];
+    }
     delete[] pzThreads;
 
 #ifndef QT_NO_DEBUG
@@ -832,7 +1014,10 @@ void ViewpointInformationChannel::computeViewMeasuresCpu(bool computeHZv, bool c
                     float pz = m_voxelProbabilities.at(i);
                     float pzv = m_voxelProbabilitiesInView.at(i);
                     float pvz = m_viewProbability * pzv / pz;
-                    if (pvz > 0.0f) viewpointVomi += pvz * m_vomi.at(i);
+                    if (pvz > 0.0f)
+                    {
+                        viewpointVomi += pvz * m_vomi.at(i);
+                    }
                 }
                 m_viewpointVomi = viewpointVomi;
             }
@@ -844,7 +1029,10 @@ void ViewpointInformationChannel::computeViewMeasuresCpu(bool computeHZv, bool c
                     float pz = m_voxelProbabilities.at(i);
                     float pzv = m_voxelProbabilitiesInView.at(i);
                     float pvz = m_viewProbability * pzv / pz;
-                    if (pvz > 0.0f) viewpointVomi2 += pvz * m_vomi2.at(i);
+                    if (pvz > 0.0f)
+                    {
+                        viewpointVomi2 += pvz * m_vomi2.at(i);
+                    }
                 }
                 m_viewpointVomi2 = viewpointVomi2;
             }
@@ -868,12 +1056,30 @@ void ViewpointInformationChannel::computeViewMeasuresCpu(bool computeHZv, bool c
     int nThreads = QThread::idealThreadCount();
     ViewpointVomiThread **viewpointVomiThreads;
 
-    if (computeHZv) m_HZv.resize(nViewpoints);
-    if (computeHZV) m_HZV = 0.0f;
-    if (computeVmi) m_vmi.resize(nViewpoints);
-    if (computeVmi2) m_vmi2.resize(nViewpoints);
-    if (computeMi) m_mi = 0.0f;
-    if (computeViewpointUnstabilities) m_viewpointUnstabilities.resize(nViewpoints);
+    if (computeHZv)
+    {
+        m_HZv.resize(nViewpoints);
+    }
+    if (computeHZV)
+    {
+        m_HZV = 0.0f;
+    }
+    if (computeVmi)
+    {
+        m_vmi.resize(nViewpoints);
+    }
+    if (computeVmi2)
+    {
+        m_vmi2.resize(nViewpoints);
+    }
+    if (computeMi)
+    {
+        m_mi = 0.0f;
+    }
+    if (computeViewpointUnstabilities)
+    {
+        m_viewpointUnstabilities.resize(nViewpoints);
+    }
     if (computeViewpointVomi || computeViewpointVomi2)
     {
         if (computeViewpointVomi)
@@ -894,7 +1100,10 @@ void ViewpointInformationChannel::computeViewMeasuresCpu(bool computeHZv, bool c
             viewpointVomiThreads[k] = new ViewpointVomiThread(m_voxelProbabilities, computeViewpointVomi, m_vomi, computeViewpointVomi2, m_vomi2, start, end);
             start += nVoxelsPerThread;
             end += nVoxelsPerThread;
-            if (end > nVoxels) end = nVoxels;
+            if (end > nVoxels)
+            {
+                end = nVoxels;
+            }
         }
     }
     QVector<float> ppZOpacity;  // p'(Z) (opacitat)
@@ -909,7 +1118,10 @@ void ViewpointInformationChannel::computeViewMeasuresCpu(bool computeHZv, bool c
             ppZOpacity[j] = m_voxelProbabilities.at(j) * m_evmiOpacityTransferFunction.getOpacity(voxels[j]);
             total += ppZOpacity.at(j);
         }
-        for (int j = 0; j < nVoxels; j++) ppZOpacity[j] /= total;
+        for (int j = 0; j < nVoxels; j++)
+        {
+            ppZOpacity[j] /= total;
+        }
     }
     QVector<float> ppZVomi; // p'(Z) (VoMI)
     if (computeEvmiVomi)
@@ -922,7 +1134,10 @@ void ViewpointInformationChannel::computeViewMeasuresCpu(bool computeHZv, bool c
             ppZVomi[j] = m_voxelProbabilities.at(j) * m_vomi.at(j);
             total += ppZVomi.at(j);
         }
-        for (int j = 0; j < nVoxels; j++) ppZVomi[j] /= total;
+        for (int j = 0; j < nVoxels; j++)
+        {
+            ppZVomi[j] /= total;
+        }
     }
 
     emit partialProgress(0);
@@ -982,7 +1197,10 @@ void ViewpointInformationChannel::computeViewMeasuresCpu(bool computeHZv, bool c
                 float pvj = m_viewProbabilities.at(neighbour);  // p(vj)
                 float pvij = pvi + pvj; // p(v̂)
 
-                if (pvij == 0.0f) continue;
+                if (pvij == 0.0f)
+                {
+                    continue;
+                }
 
                 QVector<float> voxelProbabilitiesInNeighbour = this->voxelProbabilitiesInView(neighbour);
 
@@ -1014,8 +1232,14 @@ void ViewpointInformationChannel::computeViewMeasuresCpu(bool computeHZv, bool c
                 for (int k = 0; k < nThreads; k++)
                 {
                     viewpointVomiThreads[k]->wait();
-                    if (computeViewpointVomi) viewpointVomi += viewpointVomiThreads[k]->viewpointVomi();
-                    if (computeViewpointVomi2) viewpointVomi2 += viewpointVomiThreads[k]->viewpointVomi2();
+                    if (computeViewpointVomi)
+                    {
+                        viewpointVomi += viewpointVomiThreads[k]->viewpointVomi();
+                    }
+                    if (computeViewpointVomi2)
+                    {
+                        viewpointVomi2 += viewpointVomiThreads[k]->viewpointVomi2();
+                    }
                 }
 
                 if (computeViewpointVomi)
@@ -1066,7 +1290,10 @@ void ViewpointInformationChannel::computeViewMeasuresCpu(bool computeHZv, bool c
 
     if (computeViewpointVomi || computeViewpointVomi2)
     {
-        for (int k = 0; k < nThreads; k++) delete viewpointVomiThreads[k];
+        for (int k = 0; k < nThreads; k++)
+        {
+            delete viewpointVomiThreads[k];
+        }
         delete[] viewpointVomiThreads;
     }
 
@@ -1077,8 +1304,14 @@ void ViewpointInformationChannel::computeViewMeasuresCpu(bool computeHZv, bool c
         for (int i = 0; i < nViewpoints; i++)
         {
             float pv = m_viewProbabilities.at(i);
-            if (computeVmi) sumVmi1 += pv * m_vmi.at(i);
-            if (computeVmi2) sumVmi2 += pv * m_vmi2.at(i);
+            if (computeVmi)
+            {
+                sumVmi1 += pv * m_vmi.at(i);
+            }
+            if (computeVmi2)
+            {
+                sumVmi2 += pv * m_vmi2.at(i);
+            }
         }
         if (computeVmi)
         {
@@ -1144,7 +1377,10 @@ void ViewpointInformationChannel::computeVmi3Cpu()
             vmi3Threads[k]->start();
             start += nVoxelsPerThread;
             end += nVoxelsPerThread;
-            if (end > nVoxels) end = nVoxels;
+            if (end > nVoxels)
+            {
+                end = nVoxels;
+            }
         }
 
         float vmi3 = 0.0f;
@@ -1183,8 +1419,8 @@ void ViewpointInformationChannel::computeVomiCpu(bool computeHVz, bool computeVo
     public:
         VomiThread(const QVector<float> &voxelProbabilities, bool computeHVz, QVector<float> &HVz, bool computeVomi, QVector<float> &vomi,
                    bool computeColorVomi, QVector<Vector3Float> &colorVomi, int start, int end)
-            : m_viewProbability(0.0f), m_voxelProbabilities(voxelProbabilities), m_computeHVz(computeHVz), m_HVz(HVz), m_computeVomi(computeVomi),
-              m_vomi(vomi), m_computeColorVomi(computeColorVomi), m_viewColor(1.0f, 1.0f, 1.0f), m_colorVomi(colorVomi), m_start(start), m_end(end)
+            : m_viewProbability(0.0f), m_voxelProbabilities(voxelProbabilities), m_computeHVz(computeHVz), m_HVz(HVz), m_computeVomi(computeVomi), m_vomi(vomi),
+              m_computeColorVomi(computeColorVomi), m_viewColor(1.0f, 1.0f, 1.0f), m_colorVomi(colorVomi), m_start(start), m_end(end)
         {
         }
         void setViewData(float viewProbability, const QVector<float> &voxelProbabilitiesInView)
@@ -1207,9 +1443,18 @@ void ViewpointInformationChannel::computeVomiCpu(bool computeHVz, bool computeVo
                 float pvz = m_viewProbability * pzv / pz;
                 if (pvz > 0.0f)
                 {
-                    if (m_computeHVz) m_HVz[i] -= pvz * MathTools::logTwo(pvz);
-                    if (m_computeVomi) m_vomi[i] += pvz * MathTools::logTwo(pvz / m_viewProbability);
-                    if (m_computeColorVomi) m_colorVomi[i] += pvz * MathTools::logTwo(pvz / m_viewProbability) * color;
+                    if (m_computeHVz)
+                    {
+                        m_HVz[i] -= pvz * MathTools::logTwo(pvz);
+                    }
+                    if (m_computeVomi)
+                    {
+                        m_vomi[i] += pvz * MathTools::logTwo(pvz / m_viewProbability);
+                    }
+                    if (m_computeColorVomi)
+                    {
+                        m_colorVomi[i] += pvz * MathTools::logTwo(pvz / m_viewProbability) * color;
+                    }
                 }
             }
         }
@@ -1261,30 +1506,45 @@ void ViewpointInformationChannel::computeVomiCpu(bool computeHVz, bool computeVo
         vomiThreads[k] = new VomiThread(m_voxelProbabilities, computeHVz, m_HVz, computeVomi, m_vomi, computeColorVomi, m_colorVomi, start, end);
         start += nVoxelsPerThread;
         end += nVoxelsPerThread;
-        if (end > nVoxels) end = nVoxels;
+        if (end > nVoxels)
+        {
+            end = nVoxels;
+        }
     }
 
     for (int i = 0; i < nViewpoints; i++)
     {
         float pv = m_viewProbabilities.at(i);
-        if (pv == 0.0f) continue;
+        if (pv == 0.0f)
+        {
+            continue;
+        }
 
         QVector<float> voxelProbabilitiesInView = this->voxelProbabilitiesInView(i);
 
         for (int k = 0; k < nThreads; k++)
         {
             vomiThreads[k]->setViewData(m_viewProbabilities.at(i), voxelProbabilitiesInView);
-            if (computeColorVomi) vomiThreads[k]->setViewColor(m_viewpointColors.at(i));
+            if (computeColorVomi)
+            {
+                vomiThreads[k]->setViewColor(m_viewpointColors.at(i));
+            }
             vomiThreads[k]->start();
         }
 
-        for (int k = 0; k < nThreads; k++) vomiThreads[k]->wait();
+        for (int k = 0; k < nThreads; k++)
+        {
+            vomiThreads[k]->wait();
+        }
 
         emit partialProgress(100 * (i + 1) / nViewpoints);
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
 
-    for (int k = 0; k < nThreads; k++) delete vomiThreads[k];
+    for (int k = 0; k < nThreads; k++)
+    {
+        delete vomiThreads[k];
+    }
     delete[] vomiThreads;
 
     if (computeVomi)
@@ -1292,7 +1552,10 @@ void ViewpointInformationChannel::computeVomiCpu(bool computeHVz, bool computeVo
         m_minimumVomi = std::numeric_limits<float>::infinity();
         m_maximumVomi = -std::numeric_limits<float>::infinity();
     }
-    if (computeColorVomi) m_maximumColorVomi = 0.0f;
+    if (computeColorVomi)
+    {
+        m_maximumColorVomi = 0.0f;
+    }
 
     for (int j = 0; j < nVoxels; j++)
     {
@@ -1306,8 +1569,14 @@ void ViewpointInformationChannel::computeVomiCpu(bool computeHVz, bool computeVo
             float vomi = m_vomi.at(j);
             Q_ASSERT(!MathTools::isNaN(vomi));
             Q_ASSERT(vomi >= 0.0f);
-            if (vomi < m_minimumVomi) m_minimumVomi = vomi;
-            if (vomi > m_maximumVomi) m_maximumVomi = vomi;
+            if (vomi < m_minimumVomi)
+            {
+                m_minimumVomi = vomi;
+            }
+            if (vomi > m_maximumVomi)
+            {
+                m_maximumVomi = vomi;
+            }
         }
 
         if (computeColorVomi)
@@ -1317,9 +1586,18 @@ void ViewpointInformationChannel::computeVomiCpu(bool computeHVz, bool computeVo
             /// \todo pot ser < 0???
             //Q_ASSERT(colorVomi.x >= 0.0f && colorVomi.y >= 0.0f && colorVomi.z >= 0.0f);
             //Q_ASSERT_X(colorVomi.x >= 0.0f && colorVomi.y >= 0.0f && colorVomi.z >= 0.0f, "comprovació color vomi", qPrintable(colorVomi.toString()));
-            if (colorVomi.x > m_maximumColorVomi) m_maximumColorVomi = colorVomi.x;
-            if (colorVomi.y > m_maximumColorVomi) m_maximumColorVomi = colorVomi.y;
-            if (colorVomi.z > m_maximumColorVomi) m_maximumColorVomi = colorVomi.z;
+            if (colorVomi.x > m_maximumColorVomi)
+            {
+                m_maximumColorVomi = colorVomi.x;
+            }
+            if (colorVomi.y > m_maximumColorVomi)
+            {
+                m_maximumColorVomi = colorVomi.y;
+            }
+            if (colorVomi.z > m_maximumColorVomi)
+            {
+                m_maximumColorVomi = colorVomi.z;
+            }
         }
     }
 
@@ -1362,8 +1640,14 @@ void ViewpointInformationChannel::computeVomi2Cpu()
                 m_vomi2[i] = m_HV - m_HVz.at(i);
                 Q_ASSERT(!MathTools::isNaN(m_vomi2.at(i)));
                 //Q_ASSERT(vomi2 >= 0.0f);  // la VoMI2 sí que pot ser negativa
-                if (m_vomi2.at(i) < m_minimumVomi2) m_minimumVomi2 = m_vomi2.at(i);
-                if (m_vomi2.at(i) > m_maximumVomi2) m_maximumVomi2 = m_vomi2.at(i);
+                if (m_vomi2.at(i) < m_minimumVomi2)
+                {
+                    m_minimumVomi2 = m_vomi2.at(i);
+                }
+                if (m_vomi2.at(i) > m_maximumVomi2)
+                {
+                    m_maximumVomi2 = m_vomi2.at(i);
+                }
             }
         }
     private:
@@ -1395,14 +1679,23 @@ void ViewpointInformationChannel::computeVomi2Cpu()
         vomi2Threads[k]->start();
         start += nVoxelsPerThread;
         end += nVoxelsPerThread;
-        if (end > nVoxels) end = nVoxels;
+        if (end > nVoxels)
+        {
+            end = nVoxels;
+        }
     }
 
     for (int k = 0; k < nThreads; k++)
     {
         vomi2Threads[k]->wait();
-        if (vomi2Threads[k]->minimumVomi2() < m_minimumVomi2) m_minimumVomi2 = vomi2Threads[k]->minimumVomi2();
-        if (vomi2Threads[k]->maximumVomi2() > m_maximumVomi2) m_maximumVomi2 = vomi2Threads[k]->maximumVomi2();
+        if (vomi2Threads[k]->minimumVomi2() < m_minimumVomi2)
+        {
+            m_minimumVomi2 = vomi2Threads[k]->minimumVomi2();
+        }
+        if (vomi2Threads[k]->maximumVomi2() > m_maximumVomi2)
+        {
+            m_maximumVomi2 = vomi2Threads[k]->maximumVomi2();
+        }
         delete vomi2Threads[k];
         emit partialProgress(100 * (k + 1) / nThreads);
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
@@ -1443,7 +1736,10 @@ void ViewpointInformationChannel::computeVomi3Cpu()
                 float pz = m_voxelProbabilities.at(i);
                 float pzv = m_voxelProbabilitiesInView.at(i);
                 float pvz = m_viewProbability * pzv / pz;
-                if (pvz > 0.0f) m_vomi3[i] += pvz * m_vmi2;
+                if (pvz > 0.0f)
+                {
+                    m_vomi3[i] += pvz * m_vmi2;
+                }
             }
         }
     private:
@@ -1474,13 +1770,19 @@ void ViewpointInformationChannel::computeVomi3Cpu()
         vomi3Threads[k] = new Vomi3Thread(m_voxelProbabilities, m_vomi3, start, end);
         start += nVoxelsPerThread;
         end += nVoxelsPerThread;
-        if (end > nVoxels) end = nVoxels;
+        if (end > nVoxels)
+        {
+            end = nVoxels;
+        }
     }
 
     for (int i = 0; i < nViewpoints; i++)
     {
         float pv = m_viewProbabilities.at(i);
-        if (pv == 0.0f) continue;
+        if (pv == 0.0f)
+        {
+            continue;
+        }
 
         QVector<float> voxelProbabilitiesInView = this->voxelProbabilitiesInView(i);
 
@@ -1490,13 +1792,19 @@ void ViewpointInformationChannel::computeVomi3Cpu()
             vomi3Threads[k]->start();
         }
 
-        for (int k = 0; k < nThreads; k++) vomi3Threads[k]->wait();
+        for (int k = 0; k < nThreads; k++)
+        {
+            vomi3Threads[k]->wait();
+        }
 
         emit partialProgress(100 * (i + 1) / nViewpoints);
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
 
-    for (int k = 0; k < nThreads; k++) delete vomi3Threads[k];
+    for (int k = 0; k < nThreads; k++)
+    {
+        delete vomi3Threads[k];
+    }
     delete[] vomi3Threads;
 
     m_minimumVomi3 = std::numeric_limits<float>::infinity();
@@ -1507,8 +1815,14 @@ void ViewpointInformationChannel::computeVomi3Cpu()
         float vomi3 = m_vomi3.at(j);
         Q_ASSERT(!MathTools::isNaN(vomi3));
         //Q_ASSERT(vomi3 >= 0.0f);  // la VoMI3 sí que pot ser negativa
-        if (vomi3 < m_minimumVomi3) m_minimumVomi3 = vomi3;
-        if (vomi3 > m_maximumVomi3) m_maximumVomi3 = vomi3;
+        if (vomi3 < m_minimumVomi3)
+        {
+            m_minimumVomi3 = vomi3;
+        }
+        if (vomi3 > m_maximumVomi3)
+        {
+            m_maximumVomi3 = vomi3;
+        }
     }
 
 #ifndef QT_NO_DEBUG
@@ -1541,18 +1855,57 @@ void ViewpointInformationChannel::computeCuda(bool computeViewProbabilities, boo
 
     // Inicialitzar progrés
     int nSteps = 0;
-    if (computeViewProbabilities || computeHV) nSteps++;    // p(V) + H(V)
-    if (computeVoxelProbabilities || computeHZ) nSteps++;   // p(Z) + H(Z)
-    if (computeHVz || computeVomi || computeColorVomi) nSteps++;    // H(V|z) + VoMI + color VoMI
-    if (computeVomi2) nSteps++; // VoMI2
+    // p(V) + H(V)
+    if (computeViewProbabilities || computeHV)
+    {
+        nSteps++;
+    }
+    // p(Z) + H(Z)
+    if (computeVoxelProbabilities || computeHZ)
+    {
+        nSteps++;
+    }
+    // H(V|z) + VoMI + color VoMI
+    if (computeHVz || computeVomi || computeColorVomi)
+    {
+        nSteps++;
+    }
+    // VoMI2
+    if (computeVomi2)
+    {
+        nSteps++;
+    }
     // H(Z|v) + H(Z|V) + VMI + VMI2 + MI + viewpoint unstabilities + viewpoint VoMI (INF) + viewpoint VoMI2 (INF2) + EVMI with opacity + EVMI with VoMI
     if (computeHZv || computeHZV || computeVmi || computeVmi2 || computeMi || computeViewpointUnstabilities || computeViewpointVomi || computeViewpointVomi2
-        || computeEvmiOpacity || computeEvmiVomi) nSteps++;
-    if (computeVmi3) nSteps++;  // VMI3
-    if (computeVomi3) nSteps++; // VoMI3
-    if (computeBestViews) nSteps++; // best views
-    if (computeGuidedTour) nSteps++;    // guided tour
-    if (computeExploratoryTour) nSteps++;   // exploratory tour
+        || computeEvmiOpacity || computeEvmiVomi)
+    {
+        nSteps++;
+    }
+    // VMI3
+    if (computeVmi3)
+    {
+        nSteps++;
+    }
+    // VoMI3
+    if (computeVomi3)
+    {
+        nSteps++;
+    }
+    // best views
+    if (computeBestViews)
+    {
+        nSteps++;
+    }
+    // guided tour
+    if (computeGuidedTour)
+    {
+        nSteps++;
+    }
+    // exploratory tour
+    if (computeExploratoryTour)
+    {
+        nSteps++;
+    }
 
     emit totalProgressMaximum(nSteps);
     int step = 0;
@@ -1560,7 +1913,10 @@ void ViewpointInformationChannel::computeCuda(bool computeViewProbabilities, boo
 
     // Inicialització de CUDA
     cvicSetupRayCast(m_volume->getImage(), m_transferFunction, 1024, 720, m_backgroundColor, display);
-    if (computeVoxelProbabilities) cvicSetupVoxelProbabilities();
+    if (computeVoxelProbabilities)
+    {
+        cvicSetupVoxelProbabilities();
+    }
 
     // p(V) + H(V)
     if (computeViewProbabilities || computeHV)
@@ -1645,7 +2001,10 @@ void ViewpointInformationChannel::computeCuda(bool computeViewProbabilities, boo
     }
 
     // Finalització de CUDA
-    if (computeVoxelProbabilities) cvicCleanupVoxelProbabilities();
+    if (computeVoxelProbabilities)
+    {
+        cvicCleanupVoxelProbabilities();
+    }
     cvicCleanupRayCast();
 }
 
@@ -1654,9 +2013,15 @@ QVector<float> ViewpointInformationChannel::voxelProbabilitiesInViewCuda(int i)
     QVector<float> pZv = cvicRayCastAndGetHistogram(m_viewpoints.at(i), viewMatrix(m_viewpoints.at(i)));    // p(Z|v) * viewedVolume
     double viewedVolume = 0.0;
     int nVoxels = m_volume->getSize();
-    for (int j = 0; j < nVoxels; j++) viewedVolume += pZv.at(j);
+    for (int j = 0; j < nVoxels; j++)
+    {
+        viewedVolume += pZv.at(j);
+    }
     Q_ASSERT(viewedVolume == viewedVolume);
-    for (int j = 0; j < nVoxels; j++) pZv[j] /= viewedVolume; // p(Z|v)
+    for (int j = 0; j < nVoxels; j++)
+    {
+        pZv[j] /= viewedVolume; // p(Z|v)
+    }
     return pZv;
 }
 
@@ -1676,7 +2041,10 @@ void ViewpointInformationChannel::computeViewProbabilitiesAndEntropyCuda(bool co
         QVector<float> histogram = cvicRayCastAndGetHistogram(m_viewpoints.at(i), viewMatrix(m_viewpoints.at(i)));  // p(Z|v) * viewedVolume
 
         double viewedVolume = 0.0;
-        for (int j = 0; j < nVoxels; j++) viewedVolume += histogram.at(j);
+        for (int j = 0; j < nVoxels; j++)
+        {
+            viewedVolume += histogram.at(j);
+        }
         Q_ASSERT(!MathTools::isNaN(viewedVolume));
 
         m_viewProbabilities[i] = viewedVolume;
@@ -1727,7 +2095,10 @@ void ViewpointInformationChannel::computeVoxelProbabilitiesAndEntropyCuda(bool c
         QVector<float> histogram = cvicRayCastAndGetHistogram(m_viewpoints.at(i), viewMatrix(m_viewpoints.at(i)));  // p(Z|v) * viewedVolume
 
         double viewedVolume = 0.0;
-        for (int j = 0; j < nVoxels; j++) viewedVolume += histogram.at(j);
+        for (int j = 0; j < nVoxels; j++)
+        {
+            viewedVolume += histogram.at(j);
+        }
         Q_ASSERT(!MathTools::isNaN(viewedVolume));
 
         cvicAccumulateVoxelProbabilities(m_viewProbabilities.at(i), viewedVolume);
@@ -1793,7 +2164,10 @@ void ViewpointInformationChannel::computeViewMeasuresCuda(bool computeHZv, bool 
                     float pz = m_voxelProbabilities.at(i);
                     float pzv = m_voxelProbabilitiesInView.at(i);
                     float pvz = m_viewProbability * pzv / pz;
-                    if (pvz > 0.0f) viewpointVomi += pvz * m_vomi.at(i);
+                    if (pvz > 0.0f)
+                    {
+                        viewpointVomi += pvz * m_vomi.at(i);
+                    }
                 }
                 m_viewpointVomi = viewpointVomi;
             }
@@ -1805,7 +2179,10 @@ void ViewpointInformationChannel::computeViewMeasuresCuda(bool computeHZv, bool 
                     float pz = m_voxelProbabilities.at(i);
                     float pzv = m_voxelProbabilitiesInView.at(i);
                     float pvz = m_viewProbability * pzv / pz;
-                    if (pvz > 0.0f) viewpointVomi2 += pvz * m_vomi2.at(i);
+                    if (pvz > 0.0f)
+                    {
+                        viewpointVomi2 += pvz * m_vomi2.at(i);
+                    }
                 }
                 m_viewpointVomi2 = viewpointVomi2;
             }
@@ -1829,12 +2206,30 @@ void ViewpointInformationChannel::computeViewMeasuresCuda(bool computeHZv, bool 
     int nThreads = QThread::idealThreadCount();
     ViewpointVomiThread **viewpointVomiThreads;
 
-    if (computeHZv) m_HZv.resize(nViewpoints);
-    if (computeHZV) m_HZV = 0.0f;
-    if (computeVmi) m_vmi.resize(nViewpoints);
-    if (computeVmi2) m_vmi2.resize(nViewpoints);
-    if (computeMi) m_mi = 0.0f;
-    if (computeViewpointUnstabilities) m_viewpointUnstabilities.resize(nViewpoints);
+    if (computeHZv)
+    {
+        m_HZv.resize(nViewpoints);
+    }
+    if (computeHZV)
+    {
+        m_HZV = 0.0f;
+    }
+    if (computeVmi)
+    {
+        m_vmi.resize(nViewpoints);
+    }
+    if (computeVmi2)
+    {
+        m_vmi2.resize(nViewpoints);
+    }
+    if (computeMi)
+    {
+        m_mi = 0.0f;
+    }
+    if (computeViewpointUnstabilities)
+    {
+        m_viewpointUnstabilities.resize(nViewpoints);
+    }
     if (computeViewpointVomi || computeViewpointVomi2)
     {
         if (computeViewpointVomi)
@@ -1855,7 +2250,10 @@ void ViewpointInformationChannel::computeViewMeasuresCuda(bool computeHZv, bool 
             viewpointVomiThreads[k] = new ViewpointVomiThread(m_voxelProbabilities, computeViewpointVomi, m_vomi, computeViewpointVomi2, m_vomi2, start, end);
             start += nVoxelsPerThread;
             end += nVoxelsPerThread;
-            if (end > nVoxels) end = nVoxels;
+            if (end > nVoxels)
+            {
+                end = nVoxels;
+            }
         }
     }
     QVector<float> ppZOpacity;  // p'(Z) (opacitat)
@@ -1870,7 +2268,10 @@ void ViewpointInformationChannel::computeViewMeasuresCuda(bool computeHZv, bool 
             ppZOpacity[j] = m_voxelProbabilities.at(j) * m_evmiOpacityTransferFunction.getOpacity(voxels[j]);
             total += ppZOpacity.at(j);
         }
-        for (int j = 0; j < nVoxels; j++) ppZOpacity[j] /= total;
+        for (int j = 0; j < nVoxels; j++)
+        {
+            ppZOpacity[j] /= total;
+        }
     }
     QVector<float> ppZVomi; // p'(Z) (VoMI)
     if (computeEvmiVomi)
@@ -1883,7 +2284,10 @@ void ViewpointInformationChannel::computeViewMeasuresCuda(bool computeHZv, bool 
             ppZVomi[j] = m_voxelProbabilities.at(j) * m_vomi.at(j);
             total += ppZVomi.at(j);
         }
-        for (int j = 0; j < nVoxels; j++) ppZVomi[j] /= total;
+        for (int j = 0; j < nVoxels; j++)
+        {
+            ppZVomi[j] /= total;
+        }
     }
 
     emit partialProgress(0);
@@ -1941,7 +2345,10 @@ void ViewpointInformationChannel::computeViewMeasuresCuda(bool computeHZv, bool 
                 float pvj = m_viewProbabilities.at(neighbour);  // p(vj)
                 float pvij = pvi + pvj; // p(v')
 
-                if (pvij == 0.0f) continue;
+                if (pvij == 0.0f)
+                {
+                    continue;
+                }
 
                 QVector<float> voxelProbabilitiesInNeighbour = this->voxelProbabilitiesInView(neighbour);   // p(Z|vj)
 
@@ -1973,8 +2380,14 @@ void ViewpointInformationChannel::computeViewMeasuresCuda(bool computeHZv, bool 
                 for (int k = 0; k < nThreads; k++)
                 {
                     viewpointVomiThreads[k]->wait();
-                    if (computeViewpointVomi) viewpointVomi += viewpointVomiThreads[k]->viewpointVomi();
-                    if (computeViewpointVomi2) viewpointVomi2 += viewpointVomiThreads[k]->viewpointVomi2();
+                    if (computeViewpointVomi)
+                    {
+                        viewpointVomi += viewpointVomiThreads[k]->viewpointVomi();
+                    }
+                    if (computeViewpointVomi2)
+                    {
+                        viewpointVomi2 += viewpointVomiThreads[k]->viewpointVomi2();
+                    }
                 }
 
                 if (computeViewpointVomi)
@@ -2025,7 +2438,10 @@ void ViewpointInformationChannel::computeViewMeasuresCuda(bool computeHZv, bool 
 
     if (computeViewpointVomi || computeViewpointVomi2)
     {
-        for (int k = 0; k < nThreads; k++) delete viewpointVomiThreads[k];
+        for (int k = 0; k < nThreads; k++)
+        {
+            delete viewpointVomiThreads[k];
+        }
         delete[] viewpointVomiThreads;
     }
 
@@ -2036,8 +2452,14 @@ void ViewpointInformationChannel::computeViewMeasuresCuda(bool computeHZv, bool 
         for (int i = 0; i < nViewpoints; i++)
         {
             float pv = m_viewProbabilities.at(i);
-            if (computeVmi) sumVmi1 += pv * m_vmi.at(i);
-            if (computeVmi2) sumVmi2 += pv * m_vmi2.at(i);
+            if (computeVmi)
+            {
+                sumVmi1 += pv * m_vmi.at(i);
+            }
+            if (computeVmi2)
+            {
+                sumVmi2 += pv * m_vmi2.at(i);
+            }
         }
         if (computeVmi)
         {
@@ -2103,7 +2525,10 @@ void ViewpointInformationChannel::computeVmi3Cuda()
             vmi3Threads[k]->start();
             start += nVoxelsPerThread;
             end += nVoxelsPerThread;
-            if (end > nVoxels) end = nVoxels;
+            if (end > nVoxels)
+            {
+                end = nVoxels;
+            }
         }
 
         float vmi3 = 0.0f;
@@ -2149,17 +2574,32 @@ void ViewpointInformationChannel::computeVomiCuda(bool computeHVz, bool computeV
     for (int i = 0; i < nViewpoints; i++)
     {
         float pv = m_viewProbabilities.at(i);
-        if (pv == 0.0f) continue;
+        if (pv == 0.0f)
+        {
+            continue;
+        }
 
         QVector<float> histogram = cvicRayCastAndGetHistogram(m_viewpoints.at(i), viewMatrix(m_viewpoints.at(i)));  // p(Z|v) * viewedVolume
 
         double viewedVolume = 0.0;
-        for (int j = 0; j < nVoxels; j++) viewedVolume += histogram.at(j);
+        for (int j = 0; j < nVoxels; j++)
+        {
+            viewedVolume += histogram.at(j);
+        }
         Q_ASSERT(!MathTools::isNaN(viewedVolume));
 
-        if (computeHVz) cvicAccumulateHVz(pv, viewedVolume);
-        if (computeVomi) cvicAccumulateVomi(pv, viewedVolume);
-        if (computeColorVomi) cvicAccumulateColorVomi(pv, m_viewpointColors.at(i), viewedVolume);
+        if (computeHVz)
+        {
+            cvicAccumulateHVz(pv, viewedVolume);
+        }
+        if (computeVomi)
+        {
+            cvicAccumulateVomi(pv, viewedVolume);
+        }
+        if (computeColorVomi)
+        {
+            cvicAccumulateColorVomi(pv, m_viewpointColors.at(i), viewedVolume);
+        }
 
         emit partialProgress(100 * (i + 1) / nViewpoints);
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
@@ -2197,8 +2637,14 @@ void ViewpointInformationChannel::computeVomiCuda(bool computeHVz, bool computeV
             float vomi = m_vomi.at(j);
             Q_ASSERT(!MathTools::isNaN(vomi));
             Q_ASSERT(vomi >= 0.0f);
-            if (vomi < m_minimumVomi) m_minimumVomi = vomi;
-            if (vomi > m_maximumVomi) m_maximumVomi = vomi;
+            if (vomi < m_minimumVomi)
+            {
+                m_minimumVomi = vomi;
+            }
+            if (vomi > m_maximumVomi)
+            {
+                m_maximumVomi = vomi;
+            }
         }
 
         if (computeColorVomi)
@@ -2208,9 +2654,18 @@ void ViewpointInformationChannel::computeVomiCuda(bool computeHVz, bool computeV
             /// \todo pot ser < 0???
             //Q_ASSERT(colorVomi.x >= 0.0f && colorVomi.y >= 0.0f && colorVomi.z >= 0.0f);
             //Q_ASSERT_X(colorVomi.x >= 0.0f && colorVomi.y >= 0.0f && colorVomi.z >= 0.0f, "comprovació color vomi", qPrintable(colorVomi.toString()));
-            if (colorVomi.x > m_maximumColorVomi) m_maximumColorVomi = colorVomi.x;
-            if (colorVomi.y > m_maximumColorVomi) m_maximumColorVomi = colorVomi.y;
-            if (colorVomi.z > m_maximumColorVomi) m_maximumColorVomi = colorVomi.z;
+            if (colorVomi.x > m_maximumColorVomi)
+            {
+                m_maximumColorVomi = colorVomi.x;
+            }
+            if (colorVomi.y > m_maximumColorVomi)
+            {
+                m_maximumColorVomi = colorVomi.y;
+            }
+            if (colorVomi.z > m_maximumColorVomi)
+            {
+                m_maximumColorVomi = colorVomi.z;
+            }
         }
     }
 
@@ -2248,8 +2703,14 @@ void ViewpointInformationChannel::computeVomi2Cuda()
         float vomi2 = m_vomi2.at(j);
         Q_ASSERT(!MathTools::isNaN(vomi2));
         //Q_ASSERT(vomi2 >= 0.0f);  // la VoMI2 sí que pot ser negativa
-        if (vomi2 < m_minimumVomi2) m_minimumVomi2 = vomi2;
-        if (vomi2 > m_maximumVomi2) m_maximumVomi2 = vomi2;
+        if (vomi2 < m_minimumVomi2)
+        {
+            m_minimumVomi2 = vomi2;
+        }
+        if (vomi2 > m_maximumVomi2)
+        {
+            m_maximumVomi2 = vomi2;
+        }
     }
 
 #ifndef QT_NO_DEBUG
@@ -2276,12 +2737,18 @@ void ViewpointInformationChannel::computeVomi3Cuda()
     for (int i = 0; i < nViewpoints; i++)
     {
         float pv = m_viewProbabilities.at(i);
-        if (pv == 0.0f) continue;
+        if (pv == 0.0f)
+        {
+            continue;
+        }
 
         QVector<float> histogram = cvicRayCastAndGetHistogram(m_viewpoints.at(i), viewMatrix(m_viewpoints.at(i)));  // p(Z|v) * viewedVolume
 
         double viewedVolume = 0.0;
-        for (int j = 0; j < nVoxels; j++) viewedVolume += histogram.at(j);
+        for (int j = 0; j < nVoxels; j++)
+        {
+            viewedVolume += histogram.at(j);
+        }
         Q_ASSERT(!MathTools::isNaN(viewedVolume));
 
         cvicAccumulateVomi3(pv, viewedVolume, m_vmi2.at(i));
@@ -2301,8 +2768,14 @@ void ViewpointInformationChannel::computeVomi3Cuda()
         float vomi3 = m_vomi3.at(j);
         Q_ASSERT(!MathTools::isNaN(vomi3));
         //Q_ASSERT(vomi3 >= 0.0f);  // la VoMI3 sí que pot ser negativa
-        if (vomi3 < m_minimumVomi3) m_minimumVomi3 = vomi3;
-        if (vomi3 > m_maximumVomi3) m_maximumVomi3 = vomi3;
+        if (vomi3 < m_minimumVomi3)
+        {
+            m_minimumVomi3 = vomi3;
+        }
+        if (vomi3 > m_maximumVomi3)
+        {
+            m_maximumVomi3 = vomi3;
+        }
     }
 
 #ifndef QT_NO_DEBUG
@@ -2315,11 +2788,14 @@ void ViewpointInformationChannel::computeVomi3Cuda()
     DEBUG_LOG(QString("sum VoMI3 = %1").arg(sumVomi3));
 #endif
 
-    // Posar els zeros a vomi màxima
+//    // Posar els zeros a vomi màxima
 //    for (int j = 0; j < nVoxels; j++)
 //    {
 //        float vomi3 = m_vomi3.at(j);
-//        if (vomi3 == 0.0f) m_vomi3[j] = m_maximumVomi3;
+//        if (vomi3 == 0.0f)
+//        {
+//            m_vomi3[j] = m_maximumVomi3;
+//        }
 //    }
 
 //    m_minimumVomi3 = std::numeric_limits<float>::infinity();
@@ -2330,8 +2806,14 @@ void ViewpointInformationChannel::computeVomi3Cuda()
 //        float vomi3 = m_vomi3.at(j);
 //        Q_ASSERT(!MathTools::isNaN(vomi3));
 //        //Q_ASSERT(vomi3 >= 0.0f);  // la VoMI3 sí que pot ser negativa
-//        if (vomi3 < m_minimumVomi3) m_minimumVomi3 = vomi3;
-//        if (vomi3 > m_maximumVomi3) m_maximumVomi3 = vomi3;
+//        if (vomi3 < m_minimumVomi3)
+//        {
+//            m_minimumVomi3 = vomi3;
+//        }
+//        if (vomi3 > m_maximumVomi3)
+//        {
+//            m_maximumVomi3 = vomi3;
+//        }
 //    }
 }
 
@@ -2365,7 +2847,10 @@ void ViewpointInformationChannel::computeBestViews()
     m_bestViews << qMakePair(minVmiIndex, m_viewpoints.at(minVmiIndex));
 
     QList<int> viewpointIndexList;
-    for (int i = 0; i < nViewpoints; i++) viewpointIndexList << i;
+    for (int i = 0; i < nViewpoints; i++)
+    {
+        viewpointIndexList << i;
+    }
     viewpointIndexList.removeAt(minVmiIndex);
 
     float pvv = m_viewProbabilities.at(minVmiIndex);    // p(v̂)
@@ -2400,7 +2885,10 @@ void ViewpointInformationChannel::computeBestViews()
     {
         int nRemainingViews = viewpointIndexList.size();
 
-        if (nRemainingViews == 0) break;
+        if (nRemainingViews == 0)
+        {
+            break;
+        }
 
         float pvvMin = 0.0f;
         QVector<float> pZvvMin;
@@ -2415,7 +2903,10 @@ void ViewpointInformationChannel::computeBestViews()
 
             float pvvi = pvv + pvi;         // p(v̂) afegint aquesta vista
             QVector<float> pZvvi(pZvv);   // vector p(Z|v̂) afegint aquesta vista
-            for (int j = 0; j < nVoxels; j++) pZvvi[j] = (pvv * pZvv.at(j) + pvi * pZvi.at(j)) / pvvi;
+            for (int j = 0; j < nVoxels; j++)
+            {
+                pZvvi[j] = (pvv * pZvv.at(j) + pvi * pZvi.at(j)) / pvvi;
+            }
             float IvviZ = InformationTheory::kullbackLeiblerDivergence(pZvvi, m_voxelProbabilities);  // I(v̂,Z) afegint aquesta vista
 
             if (i == 0 || IvviZ < IvvZMin)
@@ -2467,7 +2958,10 @@ void ViewpointInformationChannel::computeGuidedTour()
     QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
 
     QSet<int> viewpointIndices;
-    for (int i = 0; i < nViewpoints; i++) viewpointIndices << i;
+    for (int i = 0; i < nViewpoints; i++)
+    {
+        viewpointIndices << i;
+    }
 
     while (!bestViews.isEmpty())
     {
@@ -2490,7 +2984,10 @@ void ViewpointInformationChannel::computeGuidedTour()
 
             float dissimilarity;
 
-            if (pvij == 0.0f) dissimilarity = 0.0f;
+            if (pvij == 0.0f)
+            {
+                dissimilarity = 0.0f;
+            }
             else
             {
                 QVector<float> pZvj = voxelProbabilitiesInView(j);    // p(Z|vj)
@@ -2527,14 +3024,20 @@ void ViewpointInformationChannel::computeGuidedTour()
             {
                 int j = neighbours.at(k);
 
-                if (!indices.contains(j)) continue;
+                if (!indices.contains(j))
+                {
+                    continue;
+                }
 
                 float pvj = m_viewProbabilities.at(j);    // p(vj)
                 float pvij = pvi + pvj; // p(v̂)
 
                 float dissimilarity;
 
-                if (pvij == 0.0f) dissimilarity = 0.0f;
+                if (pvij == 0.0f)
+                {
+                    dissimilarity = 0.0f;
+                }
                 else
                 {
                     QVector<float> pZvj = voxelProbabilitiesInView(j);
@@ -2592,7 +3095,10 @@ void ViewpointInformationChannel::computeExploratoryTour()
     m_exploratoryTour << qMakePair(minVmiIndex, m_viewpoints.at(minVmiIndex));
 
     QList<int> viewpointIndexList;
-    for (int i = 0; i < nViewpoints; i++) viewpointIndexList << i;
+    for (int i = 0; i < nViewpoints; i++)
+    {
+        viewpointIndexList << i;
+    }
     viewpointIndexList.removeAt(minVmiIndex);
 
     float pvv = m_viewProbabilities.at(minVmiIndex);    // p(v̂)
@@ -2611,7 +3117,10 @@ void ViewpointInformationChannel::computeExploratoryTour()
     {
         int nRemainingViews = viewpointIndexList.size();
 
-        if (nRemainingViews == 0) break;
+        if (nRemainingViews == 0)
+        {
+            break;
+        }
 
         float pvvMin = 0.0f;
         QVector<float> pZvvMin;
@@ -2628,14 +3137,20 @@ void ViewpointInformationChannel::computeExploratoryTour()
         {
             int viewIndex = neighbours.at(k);
 
-            if (!viewpointIndexList.contains(viewIndex)) continue;
+            if (!viewpointIndexList.contains(viewIndex))
+            {
+                continue;
+            }
 
             float pvi = m_viewProbabilities.at(viewIndex);
             QVector<float> pZvi = voxelProbabilitiesInView(viewIndex);    // p(Z|vi)
 
             float pvvi = pvv + pvi;         // p(v̂) afegint aquesta vista
             QVector<float> pZvvi(pZvv);   // vector p(Z|v̂) afegint aquesta vista
-            for (int j = 0; j < nVoxels; j++) pZvvi[j] = (pvv * pZvv.at(j) + pvi * pZvi.at(j)) / pvvi;
+            for (int j = 0; j < nVoxels; j++)
+            {
+                pZvvi[j] = (pvv * pZvv.at(j) + pvi * pZvi.at(j)) / pvvi;
+            }
             float IvviZ = InformationTheory::kullbackLeiblerDivergence(pZvvi, m_voxelProbabilities);  // I(v̂,Z) afegint aquesta vista
             float ratioi = IvviZ / m_mi;
 
@@ -2649,7 +3164,10 @@ void ViewpointInformationChannel::computeExploratoryTour()
             }
         }
 
-        if (iMin < 0) break;  // no hi ha més veïns que puguem afegir, per tant pleguem
+        if (iMin < 0)
+        {
+            break;  // no hi ha més veïns que puguem afegir, per tant pleguem
+        }
 
         pvv = pvvMin;
         pZvv = pZvvMin;
