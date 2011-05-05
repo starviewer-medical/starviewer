@@ -66,6 +66,8 @@ signals:
     void colorTransferFunctionChanged(const ColorTransferFunction &colorTransferFunction);
     /// S'emet quan canvia la funció de transferència d'opacitat escalar.
     void scalarOpacityTransferFunctionChanged(const OpacityTransferFunction &scalarOpacityTransferFunction);
+    /// S'emet quan canvia la funció de transferència d'opacitat del gradient.
+    void gradientOpacityTransferFunctionChanged(const OpacityTransferFunction &gradientOpacityTransferFunction);
     /// S'emet quan s'afegeix un punt de color.
     void colorPointAdded(double x, const QColor &color);
     /// S'emet quan s'esborra un punt de color.
@@ -78,6 +80,10 @@ signals:
     void scalarOpacityPointAdded(double x, double opacity);
     /// S'emet quan s'esborra un punt d'opacitat escalar.
     void scalarOpacityPointRemoved(double x);
+    /// S'emet quan s'afegeix un punt d'opacitat del gradient.
+    void gradientOpacityPointAdded(double y, double opacity);
+    /// S'emet quan s'esborra un punt d'opacitat del gradient.
+    void gradientOpacityPointRemoved(double y);
 
 private:
 
@@ -87,12 +93,15 @@ private:
     class SetNameCommand;
     class SetColorTransferFunctionCommand;
     class SetScalarOpacityTransferFunctionCommand;
+    class SetGradientOpacityTransferFunctionCommand;
     class AddColorPointCommand;
     class RemoveColorPointCommand;
     class MoveColorPointCommand;
     class ChangeColorPointCommand;
     class AddScalarOpacityPointCommand;
     class RemoveScalarOpacityPointCommand;
+    class AddGradientOpacityPointCommand;
+    class RemoveGradientOpacityPointCommand;
     ///@}
 
     Q_DISABLE_COPY(TransferFunctionEditor)
@@ -103,12 +112,15 @@ private:
     void setNameCommand(const QString &name);
     void setColorTransferFunctionCommand(const ColorTransferFunction &colorTransferFunction);
     void setScalarOpacityTransferFunctionCommand(const OpacityTransferFunction &scalarOpacityTransferFunction);
+    void setGradientOpacityTransferFunctionCommand(const OpacityTransferFunction &gradientOpacityTransferFunction);
     void addColorPointCommand(double x, const QColor &color);
     void removeColorPointCommand(double x);
     void moveColorPointCommand(double origin, double destination);
     void changeColorPointCommand(double x, const QColor &color);
     void addScalarOpacityPointCommand(double x, double opacity);
     void removeScalarOpacityPointCommand(double x);
+    void addGradientOpacityPointCommand(double y, double opacity);
+    void removeGradientOpacityPointCommand(double y);
     ///@}
 
 private:
