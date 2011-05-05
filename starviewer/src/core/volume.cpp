@@ -382,7 +382,7 @@ bool Volume::fitsIntoMemory()
         delete[] p;
         return true;
     }
-    catch (std::bad_alloc &ba)
+    catch (std::bad_alloc)
     {
         return false;
     }
