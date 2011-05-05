@@ -68,13 +68,11 @@ QExperimental3DExtension::~QExperimental3DExtension()
     //delete m_volume;
     delete m_normalVolume;
     delete m_clusterizedVolume;
-
     if (m_computingObscurance)
     {
         m_obscuranceMainThread->stop();
         m_obscuranceMainThread->wait();
     }
-
     delete m_obscuranceMainThread;
     delete m_obscurance;
 }
@@ -257,7 +255,6 @@ void QExperimental3DExtension::loadVomi(QString fileName)
     {
         int nVoxels = m_vomi.size();
         m_maximumVomi = 0.0f;
-
         for (int j = 0; j < nVoxels; j++) if (m_vomi.at(j) > m_maximumVomi) m_maximumVomi = m_vomi.at(j);
 
         m_baseVomiRadioButton->setEnabled(true);
@@ -281,7 +278,6 @@ void QExperimental3DExtension::loadVomi2(QString fileName)
     {
         int nVoxels = m_vomi2.size();
         m_maximumVomi2 = 0.0f;
-
         for (int j = 0; j < nVoxels; j++) if (m_vomi2.at(j) > m_maximumVomi2) m_maximumVomi2 = m_vomi2.at(j);
 
         m_baseVomiRadioButton->setEnabled(true);
@@ -305,7 +301,6 @@ void QExperimental3DExtension::loadVomi3(QString fileName)
     {
         int nVoxels = m_vomi3.size();
         m_maximumVomi3 = 0.0f;
-
         for (int j = 0; j < nVoxels; j++) if (m_vomi3.at(j) > m_maximumVomi3) m_maximumVomi3 = m_vomi3.at(j);
 
         m_baseVomiRadioButton->setEnabled(true);
@@ -409,7 +404,6 @@ void QExperimental3DExtension::loadColorVomi(QString fileName)
     {
         int nVoxels = m_colorVomi.size();
         m_maximumColorVomi = 0.0f;
-
         for (int j = 0; j < nVoxels; j++)
         {
             const Vector3Float &colorVomi = m_colorVomi.at(j);
@@ -669,7 +663,6 @@ void QExperimental3DExtension::loadImi(QString fileName)
     {
         int nIntensities = m_imi.size();
         m_maximumImi = 0.0f;
-
         for (int j = 0; j < nIntensities; j++) if (m_imi.at(j) > m_maximumImi) m_maximumImi = m_imi.at(j);
 
         m_baseImiRadioButton->setEnabled(true);
@@ -866,7 +859,6 @@ bool QExperimental3DExtension::saveDataAsText(const QList< QPair<int, Vector3> >
 
     QTextStream out(&file);
     int n = list.size();
-
     for (int i = 0; i < n; i++) out << format.arg(i + base1).arg(list.at(i).first + base2).arg(list.at(i).second.toString()) << "\n";
 
     file.close();
@@ -1215,7 +1207,6 @@ void QExperimental3DExtension::saveTransferFunction()
 {
     QString transferFunctionFileName = getFileNameToSave(Experimental3DSettings::TransferFunctionDir, tr("Save transfer function"),
                                                          tr("XML files (*.xml);;Transfer function files (*.tf);;All files (*)"), "xml");
-
     if (!transferFunctionFileName.isNull()) saveTransferFunction(transferFunctionFileName);
 }
 
@@ -3660,7 +3651,6 @@ void QExperimental3DExtension::generateColorTransferFunctionFromImi()
 
     m_transferFunctionEditor->setTransferFunction(imiTransferFunction.simplify());
     setTransferFunction();
-
 }
 
 void QExperimental3DExtension::generateOpacityTransferFunctionFromImi()
@@ -3680,7 +3670,6 @@ void QExperimental3DExtension::generateOpacityTransferFunctionFromImi()
 
     m_transferFunctionEditor->setTransferFunction(imiTransferFunction.simplify());
     setTransferFunction();
-
 }
 
 void QExperimental3DExtension::generateTransferFunctionFromImi()
@@ -3702,7 +3691,6 @@ void QExperimental3DExtension::generateTransferFunctionFromImi()
 
     m_transferFunctionEditor->setTransferFunction(imiTransferFunction.simplify());
     setTransferFunction();
-
 }
 
 void QExperimental3DExtension::generateTransferFunctionFromIntensityClusters()

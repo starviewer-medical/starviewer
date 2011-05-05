@@ -18,8 +18,8 @@ class QExperimental3DViewer;
 class Matrix4;
 
 /**
- * Representa el canal d'informació entre un conjunt de punts de vista (V) i un conjunt de valors d'intensitat del volum (I).
- * Conté mètodes per calcular mesures relatives a aquest canal.
+    Representa el canal d'informació entre un conjunt de punts de vista (V) i un conjunt de valors d'intensitat del volum (I).
+    Conté mètodes per calcular mesures relatives a aquest canal.
  */
 class ViewpointIntensityInformationChannel : public QObject {
 

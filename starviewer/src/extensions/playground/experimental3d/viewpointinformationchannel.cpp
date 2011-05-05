@@ -70,60 +70,60 @@ void ViewpointInformationChannel::setColorVomiPalette(const QVector<Vector3Float
 
             class Combination
             {
-                private:
-                    int m_n;
-                    int m_k;
-                    QVector<int> m_data;
-                public:
-                    Combination(int n, int k)
+            private:
+                int m_n;
+                int m_k;
+                QVector<int> m_data;
+            public:
+                Combination(int n, int k)
+                {
+                    Q_ASSERT(n >= 0 && k >= 0);
+                    m_n = n;
+                    m_k = k;
+                    m_data.resize(k);
+                    for (int i = 0; i < k; ++i) m_data[i] = i;
+                }   // Combination(n,k)
+                QVector<int> data() const
+                {
+                    return m_data;
+                }
+                QString toString() const
+                {
+                    QString s = "{ ";
+                    for (int i = 0; i < m_k; ++i) s += QString::number(m_data.at(i)) + " ";
+                    s += "}";
+                    return s;
+                }   // toString()
+                Combination* successor() const
+                {
+                    if (m_data[0] == m_n - m_k) return 0;
+                    Combination *ans = new Combination(m_n, m_k);
+                    int i;
+                    for (i = 0; i < m_k; ++i) ans->m_data[i] = m_data.at(i);
+                    for (i = m_k - 1; i > 0 && ans->m_data.at(i) == m_n - m_k + i; --i);
+                    ++ans->m_data[i];
+                    for (int j = i; j < m_k - 1; ++j) ans->m_data[j+1] = ans->m_data[j] + 1;
+                    return ans;
+                }   // successor()
+                static quint64 choose(int n, int k)
+                {
+                    if (n < k) return 0;  // special case
+                    if (n == k) return 1;
+                    int delta, iMax;
+                    if (k < n - k)    // ex: choose(100,3)
                     {
-                        Q_ASSERT(n >= 0 && k >= 0);
-                        m_n = n;
-                        m_k = k;
-                        m_data.resize(k);
-                        for (int i = 0; i < k; ++i) m_data[i] = i;
-                    }   // Combination(n,k)
-                    QVector<int> data() const
-                    {
-                        return m_data;
+                        delta = n - k;
+                        iMax = k;
                     }
-                    QString toString() const
+                    else                // ex: choose(100,97)
                     {
-                        QString s = "{ ";
-                        for (int i = 0; i < m_k; ++i) s += QString::number(m_data.at(i)) + " ";
-                        s += "}";
-                        return s;
-                    }   // toString()
-                    Combination* successor() const
-                    {
-                        if (m_data[0] == m_n - m_k) return 0;
-                        Combination *ans = new Combination(m_n, m_k);
-                        int i;
-                        for (i = 0; i < m_k; ++i) ans->m_data[i] = m_data.at(i);
-                        for (i = m_k - 1; i > 0 && ans->m_data.at(i) == m_n - m_k + i; --i);
-                        ++ans->m_data[i];
-                        for (int j = i; j < m_k - 1; ++j) ans->m_data[j+1] = ans->m_data[j] + 1;
-                        return ans;
-                    }   // successor()
-                    static quint64 choose(int n, int k)
-                    {
-                        if (n < k) return 0;  // special case
-                        if (n == k) return 1;
-                        int delta, iMax;
-                        if (k < n - k)    // ex: choose(100,3)
-                        {
-                            delta = n - k;
-                            iMax = k;
-                        }
-                        else                // ex: choose(100,97)
-                        {
-                            delta = k;
-                            iMax = n - k;
-                        }
-                        quint64 ans = delta + 1;
-                        for (int i = 2; i <= iMax; ++i) ans = (ans * (delta + i)) / i;
-                        return ans;
-                    }   // choose()
+                        delta = k;
+                        iMax = n - k;
+                    }
+                    quint64 ans = delta + 1;
+                    for (int i = 2; i <= iMax; ++i) ans = (ans * (delta + i)) / i;
+                    return ans;
+                }   // choose()
             };  // Combination class
 
             quint64 nCombinations = Combination::choose(nViewpoints, nColors);
@@ -171,7 +171,6 @@ void ViewpointInformationChannel::setColorVomiPalette(const QVector<Vector3Float
         for (int i = 0; i < nColors; i++) m_viewpointColors[bestIndices.at(i)] = colorVomiPalette.at(i);
 
         float maxChange;
-
         do
         {
             maxChange = 0.0f;
@@ -715,26 +714,26 @@ void ViewpointInformationChannel::computeViewProbabilitiesAndEntropyCpu(float to
 void ViewpointInformationChannel::computeVoxelProbabilitiesAndEntropyCpu(bool computeHZ)
 {
     class PZThread : public QThread {
-        public:
-            PZThread(QVector<float> &voxelProbabilities, int start, int end)
-                : m_viewProbability(0.0f), m_voxelProbabilities(voxelProbabilities), m_start(start), m_end(end)
-            {
-            }
-            void setViewData(float viewProbability, const QVector<float> &voxelProbabilitiesInView)
-            {
-                m_viewProbability = viewProbability;
-                m_voxelProbabilitiesInView = voxelProbabilitiesInView;
-            }
-        protected:
-            virtual void run()
-            {
-                for (int i = m_start; i < m_end; i++) m_voxelProbabilities[i] += m_viewProbability * m_voxelProbabilitiesInView.at(i);
-            }
-        private:
-            float m_viewProbability;
-            QVector<float> &m_voxelProbabilities;
-            QVector<float> m_voxelProbabilitiesInView;
-            int m_start, m_end;
+    public:
+        PZThread(QVector<float> &voxelProbabilities, int start, int end)
+            : m_viewProbability(0.0f), m_voxelProbabilities(voxelProbabilities), m_start(start), m_end(end)
+        {
+        }
+        void setViewData(float viewProbability, const QVector<float> &voxelProbabilitiesInView)
+        {
+            m_viewProbability = viewProbability;
+            m_voxelProbabilitiesInView = voxelProbabilitiesInView;
+        }
+    protected:
+        virtual void run()
+        {
+            for (int i = m_start; i < m_end; i++) m_voxelProbabilities[i] += m_viewProbability * m_voxelProbabilitiesInView.at(i);
+        }
+    private:
+        float m_viewProbability;
+        QVector<float> &m_voxelProbabilities;
+        QVector<float> m_voxelProbabilitiesInView;
+        int m_start, m_end;
     };
 
     int nViewpoints = m_viewpoints.size();
@@ -802,65 +801,65 @@ void ViewpointInformationChannel::computeViewMeasuresCpu(bool computeHZv, bool c
                                                          bool computeEvmiOpacity, bool computeEvmiVomi)
 {
     class ViewpointVomiThread : public QThread {
-        public:
-            ViewpointVomiThread(const QVector<float> &voxelProbabilities, bool computeViewpointVomi, const QVector<float> &vomi, bool computeViewpointVomi2,
-                                const QVector<float> &vomi2, int start, int end)
-                : m_viewProbability(0.0f), m_voxelProbabilities(voxelProbabilities), m_computeViewpointVomi(computeViewpointVomi), m_vomi(vomi),
-                  m_viewpointVomi(0.0f), m_computeViewpointVomi2(computeViewpointVomi2), m_vomi2(vomi2), m_viewpointVomi2(0.0f), m_start(start), m_end(end)
+    public:
+        ViewpointVomiThread(const QVector<float> &voxelProbabilities, bool computeViewpointVomi, const QVector<float> &vomi, bool computeViewpointVomi2,
+                            const QVector<float> &vomi2, int start, int end)
+            : m_viewProbability(0.0f), m_voxelProbabilities(voxelProbabilities), m_computeViewpointVomi(computeViewpointVomi), m_vomi(vomi),
+              m_viewpointVomi(0.0f), m_computeViewpointVomi2(computeViewpointVomi2), m_vomi2(vomi2), m_viewpointVomi2(0.0f), m_start(start), m_end(end)
+        {
+        }
+        void setViewData(float viewProbability, const QVector<float> &voxelProbabilitiesInView)
+        {
+            m_viewProbability = viewProbability;
+            m_voxelProbabilitiesInView = voxelProbabilitiesInView;
+        }
+        float viewpointVomi() const
+        {
+            return m_viewpointVomi;
+        }
+        float viewpointVomi2() const
+        {
+            return m_viewpointVomi2;
+        }
+    protected:
+        virtual void run()
+        {
+            if (m_computeViewpointVomi)
             {
-            }
-            void setViewData(float viewProbability, const QVector<float> &voxelProbabilitiesInView)
-            {
-                m_viewProbability = viewProbability;
-                m_voxelProbabilitiesInView = voxelProbabilitiesInView;
-            }
-            float viewpointVomi() const
-            {
-                return m_viewpointVomi;
-            }
-            float viewpointVomi2() const
-            {
-                return m_viewpointVomi2;
-            }
-        protected:
-            virtual void run()
-            {
-                if (m_computeViewpointVomi)
+                double viewpointVomi = 0.0;
+                for (int i = m_start; i < m_end; i++)
                 {
-                    double viewpointVomi = 0.0;
-                    for (int i = m_start; i < m_end; i++)
-                    {
-                        float pz = m_voxelProbabilities.at(i);
-                        float pzv = m_voxelProbabilitiesInView.at(i);
-                        float pvz = m_viewProbability * pzv / pz;
-                        if (pvz > 0.0f) viewpointVomi += pvz * m_vomi.at(i);
-                    }
-                    m_viewpointVomi = viewpointVomi;
+                    float pz = m_voxelProbabilities.at(i);
+                    float pzv = m_voxelProbabilitiesInView.at(i);
+                    float pvz = m_viewProbability * pzv / pz;
+                    if (pvz > 0.0f) viewpointVomi += pvz * m_vomi.at(i);
                 }
-                if (m_computeViewpointVomi2)
-                {
-                    double viewpointVomi2 = 0.0;
-                    for (int i = m_start; i < m_end; i++)
-                    {
-                        float pz = m_voxelProbabilities.at(i);
-                        float pzv = m_voxelProbabilitiesInView.at(i);
-                        float pvz = m_viewProbability * pzv / pz;
-                        if (pvz > 0.0f) viewpointVomi2 += pvz * m_vomi2.at(i);
-                    }
-                    m_viewpointVomi2 = viewpointVomi2;
-                }
+                m_viewpointVomi = viewpointVomi;
             }
-        private:
-            float m_viewProbability;
-            const QVector<float> &m_voxelProbabilities;
-            QVector<float> m_voxelProbabilitiesInView;
-            bool m_computeViewpointVomi;
-            const QVector<float> &m_vomi;
-            float m_viewpointVomi;
-            bool m_computeViewpointVomi2;
-            const QVector<float> &m_vomi2;
-            float m_viewpointVomi2;
-            int m_start, m_end;
+            if (m_computeViewpointVomi2)
+            {
+                double viewpointVomi2 = 0.0;
+                for (int i = m_start; i < m_end; i++)
+                {
+                    float pz = m_voxelProbabilities.at(i);
+                    float pzv = m_voxelProbabilitiesInView.at(i);
+                    float pvz = m_viewProbability * pzv / pz;
+                    if (pvz > 0.0f) viewpointVomi2 += pvz * m_vomi2.at(i);
+                }
+                m_viewpointVomi2 = viewpointVomi2;
+            }
+        }
+    private:
+        float m_viewProbability;
+        const QVector<float> &m_voxelProbabilities;
+        QVector<float> m_voxelProbabilitiesInView;
+        bool m_computeViewpointVomi;
+        const QVector<float> &m_vomi;
+        float m_viewpointVomi;
+        bool m_computeViewpointVomi2;
+        const QVector<float> &m_vomi2;
+        float m_viewpointVomi2;
+        int m_start, m_end;
     };
 
     int nViewpoints = m_viewpoints.size();
@@ -1096,30 +1095,30 @@ void ViewpointInformationChannel::computeViewMeasuresCpu(bool computeHZv, bool c
 void ViewpointInformationChannel::computeVmi3Cpu()
 {
     class Vmi3Thread : public QThread {
-        public:
-            Vmi3Thread(const QVector<float> &voxelProbabilitiesInView, const QVector<float> &vomi2, int start, int end)
-                : m_sum(0.0), m_voxelProbabilitiesInView(voxelProbabilitiesInView), m_vomi2(vomi2), m_start(start), m_end(end)
+    public:
+        Vmi3Thread(const QVector<float> &voxelProbabilitiesInView, const QVector<float> &vomi2, int start, int end)
+            : m_sum(0.0), m_voxelProbabilitiesInView(voxelProbabilitiesInView), m_vomi2(vomi2), m_start(start), m_end(end)
+        {
+        }
+        float sum() const
+        {
+            return m_sum;
+        }
+    protected:
+        virtual void run()
+        {
+            for (int i = m_start; i < m_end; i++)
             {
+                float pzv = m_voxelProbabilitiesInView.at(i);
+                float vomi2 = m_vomi2.at(i);
+                m_sum += pzv * vomi2;
             }
-            float sum() const
-            {
-                return m_sum;
-            }
-        protected:
-            virtual void run()
-            {
-                for (int i = m_start; i < m_end; i++)
-                {
-                    float pzv = m_voxelProbabilitiesInView.at(i);
-                    float vomi2 = m_vomi2.at(i);
-                    m_sum += pzv * vomi2;
-                }
-            }
-        private:
-            double m_sum;
-            const QVector<float> &m_voxelProbabilitiesInView;
-            const QVector<float> &m_vomi2;
-            int m_start, m_end;
+        }
+    private:
+        double m_sum;
+        const QVector<float> &m_voxelProbabilitiesInView;
+        const QVector<float> &m_vomi2;
+        int m_start, m_end;
     };
 
     int nViewpoints = m_viewpoints.size();
@@ -1181,51 +1180,51 @@ void ViewpointInformationChannel::computeVmi3Cpu()
 void ViewpointInformationChannel::computeVomiCpu(bool computeHVz, bool computeVomi, bool computeColorVomi)
 {
     class VomiThread : public QThread {
-        public:
-            VomiThread(const QVector<float> &voxelProbabilities, bool computeHVz, QVector<float> &HVz, bool computeVomi, QVector<float> &vomi,
-                       bool computeColorVomi, QVector<Vector3Float> &colorVomi, int start, int end)
-                : m_viewProbability(0.0f), m_voxelProbabilities(voxelProbabilities), m_computeHVz(computeHVz), m_HVz(HVz), m_computeVomi(computeVomi),
-                  m_vomi(vomi), m_computeColorVomi(computeColorVomi), m_viewColor(1.0f, 1.0f, 1.0f), m_colorVomi(colorVomi), m_start(start), m_end(end)
+    public:
+        VomiThread(const QVector<float> &voxelProbabilities, bool computeHVz, QVector<float> &HVz, bool computeVomi, QVector<float> &vomi,
+                   bool computeColorVomi, QVector<Vector3Float> &colorVomi, int start, int end)
+            : m_viewProbability(0.0f), m_voxelProbabilities(voxelProbabilities), m_computeHVz(computeHVz), m_HVz(HVz), m_computeVomi(computeVomi),
+              m_vomi(vomi), m_computeColorVomi(computeColorVomi), m_viewColor(1.0f, 1.0f, 1.0f), m_colorVomi(colorVomi), m_start(start), m_end(end)
+        {
+        }
+        void setViewData(float viewProbability, const QVector<float> &voxelProbabilitiesInView)
+        {
+            m_viewProbability = viewProbability;
+            m_voxelProbabilitiesInView = voxelProbabilitiesInView;
+        }
+        void setViewColor(const Vector3Float &viewColor)
+        {
+            m_viewColor = viewColor;
+        }
+    protected:
+        virtual void run()
+        {
+            Vector3Float color = Vector3Float(1.0f, 1.0f, 1.0f) - m_viewColor;
+            for (int i = m_start; i < m_end; i++)
             {
-            }
-            void setViewData(float viewProbability, const QVector<float> &voxelProbabilitiesInView)
-            {
-                m_viewProbability = viewProbability;
-                m_voxelProbabilitiesInView = voxelProbabilitiesInView;
-            }
-            void setViewColor(const Vector3Float &viewColor)
-            {
-                m_viewColor = viewColor;
-            }
-        protected:
-            virtual void run()
-            {
-                Vector3Float color = Vector3Float(1.0f, 1.0f, 1.0f) - m_viewColor;
-                for (int i = m_start; i < m_end; i++)
+                float pz = m_voxelProbabilities.at(i);
+                float pzv = m_voxelProbabilitiesInView.at(i);
+                float pvz = m_viewProbability * pzv / pz;
+                if (pvz > 0.0f)
                 {
-                    float pz = m_voxelProbabilities.at(i);
-                    float pzv = m_voxelProbabilitiesInView.at(i);
-                    float pvz = m_viewProbability * pzv / pz;
-                    if (pvz > 0.0f)
-                    {
-                        if (m_computeHVz) m_HVz[i] -= pvz * MathTools::logTwo(pvz);
-                        if (m_computeVomi) m_vomi[i] += pvz * MathTools::logTwo(pvz / m_viewProbability);
-                        if (m_computeColorVomi) m_colorVomi[i] += pvz * MathTools::logTwo(pvz / m_viewProbability) * color;
-                    }
+                    if (m_computeHVz) m_HVz[i] -= pvz * MathTools::logTwo(pvz);
+                    if (m_computeVomi) m_vomi[i] += pvz * MathTools::logTwo(pvz / m_viewProbability);
+                    if (m_computeColorVomi) m_colorVomi[i] += pvz * MathTools::logTwo(pvz / m_viewProbability) * color;
                 }
             }
-        private:
-            float m_viewProbability;
-            const QVector<float> &m_voxelProbabilities;
-            QVector<float> m_voxelProbabilitiesInView;
-            bool m_computeHVz;
-            QVector<float> &m_HVz;
-            bool m_computeVomi;
-            QVector<float> &m_vomi;
-            bool m_computeColorVomi;
-            Vector3Float m_viewColor;
-            QVector<Vector3Float> &m_colorVomi;
-            int m_start, m_end;
+        }
+    private:
+        float m_viewProbability;
+        const QVector<float> &m_voxelProbabilities;
+        QVector<float> m_voxelProbabilitiesInView;
+        bool m_computeHVz;
+        QVector<float> &m_HVz;
+        bool m_computeVomi;
+        QVector<float> &m_vomi;
+        bool m_computeColorVomi;
+        Vector3Float m_viewColor;
+        QVector<Vector3Float> &m_colorVomi;
+        int m_start, m_end;
     };
 
     int nViewpoints = m_viewpoints.size();
@@ -1341,39 +1340,39 @@ void ViewpointInformationChannel::computeVomiCpu(bool computeHVz, bool computeVo
 void ViewpointInformationChannel::computeVomi2Cpu()
 {
     class Vomi2Thread : public QThread {
-        public:
-            Vomi2Thread(float HV, const QVector<float> &HVz, QVector<float> &vomi2, int start, int end)
-                : m_HV(HV), m_HVz(HVz), m_vomi2(vomi2), m_minimumVomi2(std::numeric_limits<float>::infinity()),
-                  m_maximumVomi2(-std::numeric_limits<float>::infinity()), m_start(start), m_end(end)
+    public:
+        Vomi2Thread(float HV, const QVector<float> &HVz, QVector<float> &vomi2, int start, int end)
+            : m_HV(HV), m_HVz(HVz), m_vomi2(vomi2), m_minimumVomi2(std::numeric_limits<float>::infinity()),
+              m_maximumVomi2(-std::numeric_limits<float>::infinity()), m_start(start), m_end(end)
+        {
+        }
+        float minimumVomi2() const
+        {
+            return m_minimumVomi2;
+        }
+        float maximumVomi2() const
+        {
+            return m_maximumVomi2;
+        }
+    protected:
+        virtual void run()
+        {
+            for (int i = m_start; i < m_end; i++)
             {
+                m_vomi2[i] = m_HV - m_HVz.at(i);
+                Q_ASSERT(!MathTools::isNaN(m_vomi2.at(i)));
+                //Q_ASSERT(vomi2 >= 0.0f);  // la VoMI2 sí que pot ser negativa
+                if (m_vomi2.at(i) < m_minimumVomi2) m_minimumVomi2 = m_vomi2.at(i);
+                if (m_vomi2.at(i) > m_maximumVomi2) m_maximumVomi2 = m_vomi2.at(i);
             }
-            float minimumVomi2() const
-            {
-                return m_minimumVomi2;
-            }
-            float maximumVomi2() const
-            {
-                return m_maximumVomi2;
-            }
-        protected:
-            virtual void run()
-            {
-                for (int i = m_start; i < m_end; i++)
-                {
-                    m_vomi2[i] = m_HV - m_HVz.at(i);
-                    Q_ASSERT(!MathTools::isNaN(m_vomi2.at(i)));
-                    //Q_ASSERT(vomi2 >= 0.0f);  // la VoMI2 sí que pot ser negativa
-                    if (m_vomi2.at(i) < m_minimumVomi2) m_minimumVomi2 = m_vomi2.at(i);
-                    if (m_vomi2.at(i) > m_maximumVomi2) m_maximumVomi2 = m_vomi2.at(i);
-                }
-            }
-        private:
-            float m_HV;
-            const QVector<float> &m_HVz;
-            QVector<float> &m_vomi2;
-            float m_minimumVomi2;
-            float m_maximumVomi2;
-            int m_start, m_end;
+        }
+    private:
+        float m_HV;
+        const QVector<float> &m_HVz;
+        QVector<float> &m_vomi2;
+        float m_minimumVomi2;
+        float m_maximumVomi2;
+        int m_start, m_end;
     };
 
     int nVoxels = m_volume->getSize();
@@ -1425,35 +1424,35 @@ void ViewpointInformationChannel::computeVomi2Cpu()
 void ViewpointInformationChannel::computeVomi3Cpu()
 {
     class Vomi3Thread : public QThread {
-        public:
-            Vomi3Thread(const QVector<float> &voxelProbabilities, QVector<float> &vomi3, int start, int end)
-                : m_viewProbability(0.0f), m_voxelProbabilities(voxelProbabilities), m_vmi2(0.0f), m_vomi3(vomi3), m_start(start), m_end(end)
+    public:
+        Vomi3Thread(const QVector<float> &voxelProbabilities, QVector<float> &vomi3, int start, int end)
+            : m_viewProbability(0.0f), m_voxelProbabilities(voxelProbabilities), m_vmi2(0.0f), m_vomi3(vomi3), m_start(start), m_end(end)
+        {
+        }
+        void setViewData(float viewProbability, const QVector<float> &voxelProbabilitiesInView, float vmi2)
+        {
+            m_viewProbability = viewProbability;
+            m_voxelProbabilitiesInView = voxelProbabilitiesInView;
+            m_vmi2 = vmi2;
+        }
+    protected:
+        virtual void run()
+        {
+            for (int i = m_start; i < m_end; i++)
             {
+                float pz = m_voxelProbabilities.at(i);
+                float pzv = m_voxelProbabilitiesInView.at(i);
+                float pvz = m_viewProbability * pzv / pz;
+                if (pvz > 0.0f) m_vomi3[i] += pvz * m_vmi2;
             }
-            void setViewData(float viewProbability, const QVector<float> &voxelProbabilitiesInView, float vmi2)
-            {
-                m_viewProbability = viewProbability;
-                m_voxelProbabilitiesInView = voxelProbabilitiesInView;
-                m_vmi2 = vmi2;
-            }
-        protected:
-            virtual void run()
-            {
-                for (int i = m_start; i < m_end; i++)
-                {
-                    float pz = m_voxelProbabilities.at(i);
-                    float pzv = m_voxelProbabilitiesInView.at(i);
-                    float pvz = m_viewProbability * pzv / pz;
-                    if (pvz > 0.0f) m_vomi3[i] += pvz * m_vmi2;
-                }
-            }
-        private:
-            float m_viewProbability;
-            const QVector<float> &m_voxelProbabilities;
-            QVector<float> m_voxelProbabilitiesInView;
-            float m_vmi2;
-            QVector<float> &m_vomi3;
-            int m_start, m_end;
+        }
+    private:
+        float m_viewProbability;
+        const QVector<float> &m_voxelProbabilities;
+        QVector<float> m_voxelProbabilitiesInView;
+        float m_vmi2;
+        QVector<float> &m_vomi3;
+        int m_start, m_end;
     };
 
     int nViewpoints = m_viewpoints.size();
@@ -1763,65 +1762,65 @@ void ViewpointInformationChannel::computeViewMeasuresCuda(bool computeHZv, bool 
                                                           bool computeEvmiOpacity, bool computeEvmiVomi)
 {
     class ViewpointVomiThread : public QThread {
-        public:
-            ViewpointVomiThread(const QVector<float> &voxelProbabilities, bool computeViewpointVomi, const QVector<float> &vomi, bool computeViewpointVomi2,
-                                const QVector<float> &vomi2, int start, int end)
-                : m_viewProbability(0.0f), m_voxelProbabilities(voxelProbabilities), m_computeViewpointVomi(computeViewpointVomi), m_vomi(vomi),
-                  m_viewpointVomi(0.0f), m_computeViewpointVomi2(computeViewpointVomi2), m_vomi2(vomi2), m_viewpointVomi2(0.0f), m_start(start), m_end(end)
+    public:
+        ViewpointVomiThread(const QVector<float> &voxelProbabilities, bool computeViewpointVomi, const QVector<float> &vomi, bool computeViewpointVomi2,
+                            const QVector<float> &vomi2, int start, int end)
+            : m_viewProbability(0.0f), m_voxelProbabilities(voxelProbabilities), m_computeViewpointVomi(computeViewpointVomi), m_vomi(vomi),
+              m_viewpointVomi(0.0f), m_computeViewpointVomi2(computeViewpointVomi2), m_vomi2(vomi2), m_viewpointVomi2(0.0f), m_start(start), m_end(end)
+        {
+        }
+        void setViewData(float viewProbability, const QVector<float> &voxelProbabilitiesInView)
+        {
+            m_viewProbability = viewProbability;
+            m_voxelProbabilitiesInView = voxelProbabilitiesInView;
+        }
+        float viewpointVomi() const
+        {
+            return m_viewpointVomi;
+        }
+        float viewpointVomi2() const
+        {
+            return m_viewpointVomi2;
+        }
+    protected:
+        virtual void run()
+        {
+            if (m_computeViewpointVomi)
             {
-            }
-            void setViewData(float viewProbability, const QVector<float> &voxelProbabilitiesInView)
-            {
-                m_viewProbability = viewProbability;
-                m_voxelProbabilitiesInView = voxelProbabilitiesInView;
-            }
-            float viewpointVomi() const
-            {
-                return m_viewpointVomi;
-            }
-            float viewpointVomi2() const
-            {
-                return m_viewpointVomi2;
-            }
-        protected:
-            virtual void run()
-            {
-                if (m_computeViewpointVomi)
+                double viewpointVomi = 0.0;
+                for (int i = m_start; i < m_end; i++)
                 {
-                    double viewpointVomi = 0.0;
-                    for (int i = m_start; i < m_end; i++)
-                    {
-                        float pz = m_voxelProbabilities.at(i);
-                        float pzv = m_voxelProbabilitiesInView.at(i);
-                        float pvz = m_viewProbability * pzv / pz;
-                        if (pvz > 0.0f) viewpointVomi += pvz * m_vomi.at(i);
-                    }
-                    m_viewpointVomi = viewpointVomi;
+                    float pz = m_voxelProbabilities.at(i);
+                    float pzv = m_voxelProbabilitiesInView.at(i);
+                    float pvz = m_viewProbability * pzv / pz;
+                    if (pvz > 0.0f) viewpointVomi += pvz * m_vomi.at(i);
                 }
-                if (m_computeViewpointVomi2)
-                {
-                    double viewpointVomi2 = 0.0;
-                    for (int i = m_start; i < m_end; i++)
-                    {
-                        float pz = m_voxelProbabilities.at(i);
-                        float pzv = m_voxelProbabilitiesInView.at(i);
-                        float pvz = m_viewProbability * pzv / pz;
-                        if (pvz > 0.0f) viewpointVomi2 += pvz * m_vomi2.at(i);
-                    }
-                    m_viewpointVomi2 = viewpointVomi2;
-                }
+                m_viewpointVomi = viewpointVomi;
             }
-        private:
-            float m_viewProbability;
-            const QVector<float> &m_voxelProbabilities;
-            QVector<float> m_voxelProbabilitiesInView;
-            bool m_computeViewpointVomi;
-            const QVector<float> &m_vomi;
-            float m_viewpointVomi;
-            bool m_computeViewpointVomi2;
-            const QVector<float> &m_vomi2;
-            float m_viewpointVomi2;
-            int m_start, m_end;
+            if (m_computeViewpointVomi2)
+            {
+                double viewpointVomi2 = 0.0;
+                for (int i = m_start; i < m_end; i++)
+                {
+                    float pz = m_voxelProbabilities.at(i);
+                    float pzv = m_voxelProbabilitiesInView.at(i);
+                    float pvz = m_viewProbability * pzv / pz;
+                    if (pvz > 0.0f) viewpointVomi2 += pvz * m_vomi2.at(i);
+                }
+                m_viewpointVomi2 = viewpointVomi2;
+            }
+        }
+    private:
+        float m_viewProbability;
+        const QVector<float> &m_voxelProbabilities;
+        QVector<float> m_voxelProbabilitiesInView;
+        bool m_computeViewpointVomi;
+        const QVector<float> &m_vomi;
+        float m_viewpointVomi;
+        bool m_computeViewpointVomi2;
+        const QVector<float> &m_vomi2;
+        float m_viewpointVomi2;
+        int m_start, m_end;
     };
 
     int nViewpoints = m_viewpoints.size();
@@ -2055,30 +2054,30 @@ void ViewpointInformationChannel::computeViewMeasuresCuda(bool computeHZv, bool 
 void ViewpointInformationChannel::computeVmi3Cuda()
 {
     class Vmi3Thread : public QThread {
-        public:
-            Vmi3Thread(const QVector<float> &voxelProbabilitiesInView, const QVector<float> &vomi2, int start, int end)
-                : m_sum(0.0), m_voxelProbabilitiesInView(voxelProbabilitiesInView), m_vomi2(vomi2), m_start(start), m_end(end)
+    public:
+        Vmi3Thread(const QVector<float> &voxelProbabilitiesInView, const QVector<float> &vomi2, int start, int end)
+            : m_sum(0.0), m_voxelProbabilitiesInView(voxelProbabilitiesInView), m_vomi2(vomi2), m_start(start), m_end(end)
+        {
+        }
+        float sum() const
+        {
+            return m_sum;
+        }
+    protected:
+        virtual void run()
+        {
+            for (int i = m_start; i < m_end; i++)
             {
+                float pzv = m_voxelProbabilitiesInView.at(i);
+                float vomi2 = m_vomi2.at(i);
+                m_sum += pzv * vomi2;
             }
-            float sum() const
-            {
-                return m_sum;
-            }
-        protected:
-            virtual void run()
-            {
-                for (int i = m_start; i < m_end; i++)
-                {
-                    float pzv = m_voxelProbabilitiesInView.at(i);
-                    float vomi2 = m_vomi2.at(i);
-                    m_sum += pzv * vomi2;
-                }
-            }
-        private:
-            double m_sum;
-            const QVector<float> &m_voxelProbabilitiesInView;
-            const QVector<float> &m_vomi2;
-            int m_start, m_end;
+        }
+    private:
+        double m_sum;
+        const QVector<float> &m_voxelProbabilitiesInView;
+        const QVector<float> &m_vomi2;
+        int m_start, m_end;
     };
 
     int nViewpoints = m_viewpoints.size();
