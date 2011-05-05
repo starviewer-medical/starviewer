@@ -35,4 +35,4 @@ for(var i = 0; i < filenames.length; ++i)
 
 msword.quit();
 
-WScript.Echo("The help files have benn generated successfully on " + saveToFolderName);
+WScript.Echo("The help files have been generated successfully on " + saveToFolderName);
