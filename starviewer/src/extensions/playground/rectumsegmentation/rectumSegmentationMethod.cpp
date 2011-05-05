@@ -312,17 +312,19 @@ double rectumSegmentationMethod::applyMethod()
     m_cont=0;
     int cont2=0;
     IntermediateImageType::SizeType sizeOut = inputRegion.GetSize();
-    for(j=0;j<sizeOut[1];j++){
-        for(i=0;i<sizeOut[0];i++){
-            if(itSeg.Get()==m_insideMaskValue && (i>=m_minROI[0])&&(i<=m_maxROI[0])&&(j>=m_minROI[1])&&(j<=m_maxROI[1]) )
+    for (j = 0; j < sizeOut[1]; ++j)
+    {
+        for (i = 0; i < sizeOut[0]; ++i)
+        {
+            if (itSeg.Get() == m_insideMaskValue && i >= m_minROI[0] && i <= m_maxROI[0] && j >= m_minROI[1] && j <= m_maxROI[1])
 			{
                 itMask.Set(m_insideMaskValue);
-                m_cont++;
+                ++m_cont;
             }
 			else
 			{
                 itMask.Set(m_outsideMaskValue);
-                cont2++;
+                ++cont2;
             }
             ++itSeg;
             ++itMask;
