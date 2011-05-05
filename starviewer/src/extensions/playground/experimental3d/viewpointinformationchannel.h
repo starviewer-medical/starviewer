@@ -23,8 +23,8 @@ class Matrix4;
 #endif
 
 /**
- * Representa el canal d'informació entre un conjunt de punts de vista (V) i un conjunt de vòxels del volum (Z).
- * Conté mètodes per calcular mesures relatives a aquest canal.
+    Representa el canal d'informació entre un conjunt de punts de vista (V) i un conjunt de vòxels del volum (Z).
+    Conté mètodes per calcular mesures relatives a aquest canal.
  */
 class ViewpointInformationChannel : public QObject {
 

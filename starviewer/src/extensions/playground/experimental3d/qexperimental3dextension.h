@@ -13,7 +13,7 @@ class ObscuranceMainThread;
 class Volume;
 
 /**
- * Aquesta extensió serveix per fer tot tipus d'experiments relacionats amb la visualització 3D, fent un ray casting amb CPU.
+    Aquesta extensió serveix per fer tot tipus d'experiments relacionats amb la visualització 3D, fent un ray casting amb CPU.
  */
 class QExperimental3DExtension : public QWidget, private ::Ui::QExperimental3DExtensionBase {
 
