@@ -71,6 +71,25 @@ void TransferFunctionEditor::SetScalarOpacityTransferFunctionCommand::undo()
     m_editor->setScalarOpacityTransferFunctionCommand(m_oldScalarOpacityTransferFunction);
 }
 
+TransferFunctionEditor::SetGradientOpacityTransferFunctionCommand
+                      ::SetGradientOpacityTransferFunctionCommand(TransferFunctionEditor *editor,
+                                                                  const OpacityTransferFunction &gradientOpacityTransferFunction)
+    : m_editor(editor), m_oldGradientOpacityTransferFunction(editor->transferFunction().gradientOpacityTransferFunction()),
+      m_newGradientOpacityTransferFunction(gradientOpacityTransferFunction)
+{
+    setText(tr("Set gradient opacity transfer function %1").arg(gradientOpacityTransferFunction.name()));
+}
+
+void TransferFunctionEditor::SetGradientOpacityTransferFunctionCommand::redo()
+{
+    m_editor->setGradientOpacityTransferFunctionCommand(m_newGradientOpacityTransferFunction);
+}
+
+void TransferFunctionEditor::SetGradientOpacityTransferFunctionCommand::undo()
+{
+    m_editor->setGradientOpacityTransferFunctionCommand(m_oldGradientOpacityTransferFunction);
+}
+
 TransferFunctionEditor::AddColorPointCommand::AddColorPointCommand(TransferFunctionEditor *editor, double x, const QColor &color)
     : m_editor(editor), m_x(x), m_color(color)
 {
@@ -165,6 +184,38 @@ void TransferFunctionEditor::RemoveScalarOpacityPointCommand::redo()
 void TransferFunctionEditor::RemoveScalarOpacityPointCommand::undo()
 {
     m_editor->addScalarOpacityPointCommand(m_x, m_opacity);
+}
+
+TransferFunctionEditor::AddGradientOpacityPointCommand::AddGradientOpacityPointCommand(TransferFunctionEditor *editor, double y, double opacity)
+    : m_editor(editor), m_y(y), m_opacity(opacity)
+{
+    setText(tr("Add gradient opacity point at (%1, %2)").arg(y).arg(opacity));
+}
+
+void TransferFunctionEditor::AddGradientOpacityPointCommand::redo()
+{
+    m_editor->addGradientOpacityPointCommand(m_y, m_opacity);
+}
+
+void TransferFunctionEditor::AddGradientOpacityPointCommand::undo()
+{
+    m_editor->removeGradientOpacityPointCommand(m_y);
+}
+
+TransferFunctionEditor::RemoveGradientOpacityPointCommand::RemoveGradientOpacityPointCommand(TransferFunctionEditor *editor, double y)
+    : m_editor(editor), m_y(y), m_opacity(editor->transferFunction().getGradientOpacity(y))
+{
+    setText(tr("Remove gradient opacity point at %1").arg(y));
+}
+
+void TransferFunctionEditor::RemoveGradientOpacityPointCommand::redo()
+{
+    m_editor->removeGradientOpacityPointCommand(m_y);
+}
+
+void TransferFunctionEditor::RemoveGradientOpacityPointCommand::undo()
+{
+    m_editor->addGradientOpacityPointCommand(m_y, m_opacity);
 }
 
 } // namespace udg

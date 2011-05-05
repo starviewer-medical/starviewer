@@ -58,6 +58,17 @@ private:
     OpacityTransferFunction m_newScalarOpacityTransferFunction;
 };
 
+class TransferFunctionEditor::SetGradientOpacityTransferFunctionCommand : public QUndoCommand {
+public:
+    SetGradientOpacityTransferFunctionCommand(TransferFunctionEditor *editor, const OpacityTransferFunction &gradientOpacityTransferFunction);
+    virtual void undo();
+    virtual void redo();
+private:
+    TransferFunctionEditor *m_editor;
+    OpacityTransferFunction m_oldGradientOpacityTransferFunction;
+    OpacityTransferFunction m_newGradientOpacityTransferFunction;
+};
+
 class TransferFunctionEditor::AddColorPointCommand : public QUndoCommand {
 public:
     AddColorPointCommand(TransferFunctionEditor *editor, double x, const QColor &color);
@@ -122,6 +133,28 @@ public:
 private:
     TransferFunctionEditor *m_editor;
     double m_x;
+    double m_opacity;
+};
+
+class TransferFunctionEditor::AddGradientOpacityPointCommand : public QUndoCommand {
+public:
+    AddGradientOpacityPointCommand(TransferFunctionEditor *editor, double y, double opacity);
+    virtual void undo();
+    virtual void redo();
+private:
+    TransferFunctionEditor *m_editor;
+    double m_y;
+    double m_opacity;
+};
+
+class TransferFunctionEditor::RemoveGradientOpacityPointCommand : public QUndoCommand {
+public:
+    RemoveGradientOpacityPointCommand(TransferFunctionEditor *editor, double y);
+    virtual void undo();
+    virtual void redo();
+private:
+    TransferFunctionEditor *m_editor;
+    double m_y;
     double m_opacity;
 };
 

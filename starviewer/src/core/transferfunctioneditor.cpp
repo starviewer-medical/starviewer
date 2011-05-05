@@ -67,6 +67,12 @@ void TransferFunctionEditor::setScalarOpacityTransferFunctionCommand(const Opaci
     emit scalarOpacityTransferFunctionChanged(scalarOpacityTransferFunction);
 }
 
+void TransferFunctionEditor::setGradientOpacityTransferFunctionCommand(const OpacityTransferFunction &gradientOpacityTransferFunction)
+{
+    m_transferFunction.setGradientOpacityTransferFunction(gradientOpacityTransferFunction);
+    emit gradientOpacityTransferFunctionChanged(gradientOpacityTransferFunction);
+}
+
 void TransferFunctionEditor::addColorPoint(double x, const QColor &color)
 {
     if (m_transferFunction.isSetColor(x))
@@ -228,6 +234,20 @@ void TransferFunctionEditor::removeScalarOpacityPointCommand(double x)
     Q_ASSERT(m_transferFunction.isSetScalarOpacity(x));
     m_transferFunction.unsetScalarOpacity(x);
     emit scalarOpacityPointRemoved(x);
+}
+
+void TransferFunctionEditor::addGradientOpacityPointCommand(double y, double opacity)
+{
+    Q_ASSERT(!m_transferFunction.isSetGradientOpacity(y));
+    m_transferFunction.setGradientOpacity(y, opacity);
+    emit gradientOpacityPointAdded(y, opacity);
+}
+
+void TransferFunctionEditor::removeGradientOpacityPointCommand(double y)
+{
+    Q_ASSERT(m_transferFunction.isSetGradientOpacity(y));
+    m_transferFunction.unsetGradientOpacity(y);
+    emit gradientOpacityPointRemoved(y);
 }
 
 void TransferFunctionEditor::redo()
