@@ -255,7 +255,13 @@ void QExperimental3DExtension::loadVomi(QString fileName)
     {
         int nVoxels = m_vomi.size();
         m_maximumVomi = 0.0f;
-        for (int j = 0; j < nVoxels; j++) if (m_vomi.at(j) > m_maximumVomi) m_maximumVomi = m_vomi.at(j);
+        for (int j = 0; j < nVoxels; j++)
+        {
+            if (m_vomi.at(j) > m_maximumVomi)
+            {
+                m_maximumVomi = m_vomi.at(j);
+            }
+        }
 
         m_baseVomiRadioButton->setEnabled(true);
         m_vomiCheckBox->setEnabled(true);
@@ -278,7 +284,13 @@ void QExperimental3DExtension::loadVomi2(QString fileName)
     {
         int nVoxels = m_vomi2.size();
         m_maximumVomi2 = 0.0f;
-        for (int j = 0; j < nVoxels; j++) if (m_vomi2.at(j) > m_maximumVomi2) m_maximumVomi2 = m_vomi2.at(j);
+        for (int j = 0; j < nVoxels; j++)
+        {
+            if (m_vomi2.at(j) > m_maximumVomi2)
+            {
+                m_maximumVomi2 = m_vomi2.at(j);
+            }
+        }
 
         m_baseVomiRadioButton->setEnabled(true);
         m_vomiCheckBox->setEnabled(true);
@@ -301,7 +313,13 @@ void QExperimental3DExtension::loadVomi3(QString fileName)
     {
         int nVoxels = m_vomi3.size();
         m_maximumVomi3 = 0.0f;
-        for (int j = 0; j < nVoxels; j++) if (m_vomi3.at(j) > m_maximumVomi3) m_maximumVomi3 = m_vomi3.at(j);
+        for (int j = 0; j < nVoxels; j++)
+        {
+            if (m_vomi3.at(j) > m_maximumVomi3)
+            {
+                m_maximumVomi3 = m_vomi3.at(j);
+            }
+        }
 
         m_baseVomiRadioButton->setEnabled(true);
         m_vomiCheckBox->setEnabled(true);
@@ -352,7 +370,10 @@ void QExperimental3DExtension::loadColorVomiPalette(QString fileName)
     {
         fileName = getFileNameToLoad(Experimental3DSettings::ColorVoxelMutualInformationPaletteDir, tr("Load color VoMI palette"),
                                      tr("Text files (*.txt);;All files (*)"));
-        if (fileName.isNull()) return;
+        if (fileName.isNull())
+        {
+            return;
+        }
     }
 
     QFile colorVomiPaletteFile(fileName);
@@ -360,7 +381,10 @@ void QExperimental3DExtension::loadColorVomiPalette(QString fileName)
     if (!colorVomiPaletteFile.open(QFile::ReadOnly | QFile::Text))
     {
         DEBUG_LOG(QString("No es pot llegir el fitxer ") + fileName);
-        if (m_interactive) QMessageBox::warning(this, tr("Can't load color VoMI palette"), QString(tr("Can't load color VoMI palette from file ")) + fileName);
+        if (m_interactive)
+        {
+            QMessageBox::warning(this, tr("Can't load color VoMI palette"), QString(tr("Can't load color VoMI palette from file ")) + fileName);
+        }
         return;
     }
 
@@ -373,7 +397,10 @@ void QExperimental3DExtension::loadColorVomiPalette(QString fileName)
         QString line = in.readLine();
         QStringList numbers = line.split(' ', QString::SkipEmptyParts);
 
-        if (numbers.size() < 3) continue;
+        if (numbers.size() < 3)
+        {
+            continue;
+        }
 
         Vector3Float color;
 
@@ -393,7 +420,10 @@ void QExperimental3DExtension::loadColorVomiPalette(QString fileName)
         m_colorVomiPalette << color;
     }
 
-    if (m_colorVomiPalette.isEmpty()) m_colorVomiPalette << Vector3Float(1.0f, 1.0f, 1.0f);
+    if (m_colorVomiPalette.isEmpty())
+    {
+        m_colorVomiPalette << Vector3Float(1.0f, 1.0f, 1.0f);
+    }
 
     colorVomiPaletteFile.close();
 }
@@ -407,9 +437,18 @@ void QExperimental3DExtension::loadColorVomi(QString fileName)
         for (int j = 0; j < nVoxels; j++)
         {
             const Vector3Float &colorVomi = m_colorVomi.at(j);
-            if (colorVomi.x > m_maximumColorVomi) m_maximumColorVomi = colorVomi.x;
-            if (colorVomi.y > m_maximumColorVomi) m_maximumColorVomi = colorVomi.y;
-            if (colorVomi.z > m_maximumColorVomi) m_maximumColorVomi = colorVomi.z;
+            if (colorVomi.x > m_maximumColorVomi)
+            {
+                m_maximumColorVomi = colorVomi.x;
+            }
+            if (colorVomi.y > m_maximumColorVomi)
+            {
+                m_maximumColorVomi = colorVomi.y;
+            }
+            if (colorVomi.z > m_maximumColorVomi)
+            {
+                m_maximumColorVomi = colorVomi.z;
+            }
         }
 
         m_colorVomiCheckBox->setEnabled(true);
@@ -424,19 +463,31 @@ void QExperimental3DExtension::saveColorVomi(QString fileName)
 
 void QExperimental3DExtension::loadEvmiOpacityOtherTransferFunction(QString fileName)
 {
-    if (!m_computeEvmiOpacityUseOtherPushButton->isChecked()) return;
+    if (!m_computeEvmiOpacityUseOtherPushButton->isChecked())
+    {
+        return;
+    }
 
     if (fileName.isEmpty())
     {
         fileName = getFileNameToLoad(Experimental3DSettings::TransferFunctionDir, tr("Load transfer function"),
                                      tr("XML files (*.xml);;Transfer function files (*.tf);;All files (*)"));
-        if (fileName.isNull()) return;
+        if (fileName.isNull())
+        {
+            return;
+        }
     }
 
     TransferFunction *transferFunction;
 
-    if (fileName.endsWith(".xml")) transferFunction = TransferFunctionIO::fromXmlFile(fileName);
-    else transferFunction = TransferFunctionIO::fromFile(fileName);
+    if (fileName.endsWith(".xml"))
+    {
+        transferFunction = TransferFunctionIO::fromXmlFile(fileName);
+    }
+    else
+    {
+        transferFunction = TransferFunctionIO::fromFile(fileName);
+    }
 
     m_evmiOpacityTransferFunction = *transferFunction;
 
@@ -477,7 +528,10 @@ void QExperimental3DExtension::loadBestViews(QString fileName)
     if (fileName.isEmpty())
     {
         fileName = getFileNameToLoad(Experimental3DSettings::BestViewsDir, tr("Load best views"), tr("Data files (*.dat);;All files (*)"));
-        if (fileName.isNull()) return;
+        if (fileName.isNull())
+        {
+            return;
+        }
     }
 
     if (loadData(fileName, m_bestViews))
@@ -485,7 +539,10 @@ void QExperimental3DExtension::loadBestViews(QString fileName)
         m_saveBestViewsPushButton->setEnabled(true);
         m_tourBestViewsPushButton->setEnabled(true);
     }
-    else if (m_interactive) QMessageBox::warning(this, tr("Can't load best views"), QString(tr("Can't load best views from file ")) + fileName);
+    else if (m_interactive)
+    {
+        QMessageBox::warning(this, tr("Can't load best views"), QString(tr("Can't load best views from file ")) + fileName);
+    }
 }
 
 void QExperimental3DExtension::saveBestViews(QString fileName)
@@ -494,15 +551,27 @@ void QExperimental3DExtension::saveBestViews(QString fileName)
     {
         fileName = getFileNameToSave(Experimental3DSettings::BestViewsDir, tr("Save best views"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"),
                                      "dat");
-        if (fileName.isNull()) return;
+        if (fileName.isNull())
+        {
+            return;
+        }
     }
 
     bool error;
 
-    if (fileName.endsWith(".txt")) error = !saveDataAsText(m_bestViews, fileName, QString("%1: v%2 %3"), 0, 1);
-    else error = !saveData(m_bestViews, fileName);
+    if (fileName.endsWith(".txt"))
+    {
+        error = !saveDataAsText(m_bestViews, fileName, QString("%1: v%2 %3"), 0, 1);
+    }
+    else
+    {
+        error = !saveData(m_bestViews, fileName);
+    }
 
-    if (error && m_interactive) QMessageBox::warning(this, tr("Can't save best views"), QString(tr("Can't save best views to file ")) + fileName);
+    if (error && m_interactive)
+    {
+        QMessageBox::warning(this, tr("Can't save best views"), QString(tr("Can't save best views to file ")) + fileName);
+    }
 }
 
 void QExperimental3DExtension::loadGuidedTour(QString fileName)
@@ -510,7 +579,10 @@ void QExperimental3DExtension::loadGuidedTour(QString fileName)
     if (fileName.isEmpty())
     {
         fileName = getFileNameToLoad(Experimental3DSettings::GuidedTourDir, tr("Load guided tour"), tr("Data files (*.dat);;All files (*)"));
-        if (fileName.isNull()) return;
+        if (fileName.isNull())
+        {
+            return;
+        }
     }
 
     if (loadData(fileName, m_guidedTour))
@@ -518,7 +590,10 @@ void QExperimental3DExtension::loadGuidedTour(QString fileName)
         m_saveGuidedTourPushButton->setEnabled(true);
         m_guidedTourPushButton->setEnabled(true);
     }
-    else if (m_interactive) QMessageBox::warning(this, tr("Can't load guided tour"), QString(tr("Can't load guided tour from file ")) + fileName);
+    else if (m_interactive)
+    {
+        QMessageBox::warning(this, tr("Can't load guided tour"), QString(tr("Can't load guided tour from file ")) + fileName);
+    }
 }
 
 void QExperimental3DExtension::saveGuidedTour(QString fileName)
@@ -527,15 +602,27 @@ void QExperimental3DExtension::saveGuidedTour(QString fileName)
     {
         fileName = getFileNameToSave(Experimental3DSettings::GuidedTourDir, tr("Save guided tour"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"),
                                      "dat");
-        if (fileName.isNull()) return;
+        if (fileName.isNull())
+        {
+            return;
+        }
     }
 
     bool error;
 
-    if (fileName.endsWith(".txt")) error = !saveDataAsText(m_guidedTour, fileName, QString("%1: v%2 %3"), 0, 1);
-    else error = !saveData(m_guidedTour, fileName);
+    if (fileName.endsWith(".txt"))
+    {
+        error = !saveDataAsText(m_guidedTour, fileName, QString("%1: v%2 %3"), 0, 1);
+    }
+    else
+    {
+        error = !saveData(m_guidedTour, fileName);
+    }
 
-    if (error && m_interactive)QMessageBox::warning(this, tr("Can't save guided tour"), QString(tr("Can't save guided tour to file ")) + fileName);
+    if (error && m_interactive)
+    {
+        QMessageBox::warning(this, tr("Can't save guided tour"), QString(tr("Can't save guided tour to file ")) + fileName);
+    }
 }
 
 void QExperimental3DExtension::loadExploratoryTour(QString fileName)
@@ -543,7 +630,10 @@ void QExperimental3DExtension::loadExploratoryTour(QString fileName)
     if (fileName.isEmpty())
     {
         fileName = getFileNameToLoad(Experimental3DSettings::ExploratoryTourDir, tr("Load exploratory tour"), tr("Data files (*.dat);;All files (*)"));
-        if (fileName.isNull()) return;
+        if (fileName.isNull())
+        {
+            return;
+        }
     }
 
     if (loadData(fileName, m_exploratoryTour))
@@ -551,7 +641,10 @@ void QExperimental3DExtension::loadExploratoryTour(QString fileName)
         m_saveExploratoryTourPushButton->setEnabled(true);
         m_exploratoryTourPushButton->setEnabled(true);
     }
-    else if (m_interactive) QMessageBox::warning(this, tr("Can't load exploratory tour"), QString(tr("Can't load exploratory tour from file ")) + fileName);
+    else if (m_interactive)
+    {
+        QMessageBox::warning(this, tr("Can't load exploratory tour"), QString(tr("Can't load exploratory tour from file ")) + fileName);
+    }
 }
 
 void QExperimental3DExtension::saveExploratoryTour(QString fileName)
@@ -560,15 +653,27 @@ void QExperimental3DExtension::saveExploratoryTour(QString fileName)
     {
         fileName = getFileNameToSave(Experimental3DSettings::ExploratoryTourDir, tr("Save exploratory tour"),
                                      tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat");
-        if (fileName.isNull()) return;
+        if (fileName.isNull())
+        {
+            return;
+        }
     }
 
     bool error;
 
-    if (fileName.endsWith(".txt")) error = !saveDataAsText(m_exploratoryTour, fileName, QString("%1: v%2 %3"), 0, 1);
-    else error = !saveData(m_exploratoryTour, fileName);
+    if (fileName.endsWith(".txt"))
+    {
+        error = !saveDataAsText(m_exploratoryTour, fileName, QString("%1: v%2 %3"), 0, 1);
+    }
+    else
+    {
+        error = !saveData(m_exploratoryTour, fileName);
+    }
 
-    if (error && m_interactive)QMessageBox::warning(this, tr("Can't save exploratory tour"), QString(tr("Can't save exploratory tour to file ")) + fileName);
+    if (error && m_interactive)
+    {
+        QMessageBox::warning(this, tr("Can't save exploratory tour"), QString(tr("Can't save exploratory tour to file ")) + fileName);
+    }
 }
 
 void QExperimental3DExtension::saveViewedVolumeI(QString fileName)
@@ -663,7 +768,13 @@ void QExperimental3DExtension::loadImi(QString fileName)
     {
         int nIntensities = m_imi.size();
         m_maximumImi = 0.0f;
-        for (int j = 0; j < nIntensities; j++) if (m_imi.at(j) > m_maximumImi) m_maximumImi = m_imi.at(j);
+        for (int j = 0; j < nIntensities; j++)
+        {
+            if (m_imi.at(j) > m_maximumImi)
+            {
+                m_maximumImi = m_imi.at(j);
+            }
+        }
 
         m_baseImiRadioButton->setEnabled(true);
 //        m_baseImiCoolWarmRadioButton->setEnabled(true);
@@ -694,7 +805,10 @@ bool QExperimental3DExtension::loadData(QString &fileName, const QString &settin
     if (fileName.isEmpty())
     {
         fileName = getFileNameToLoad(setting, QString(tr("Load %1")).arg(name), extensions);
-        if (fileName.isNull()) return false;
+        if (fileName.isNull())
+        {
+            return false;
+        }
     }
 
     QFile file(fileName);
@@ -702,7 +816,10 @@ bool QExperimental3DExtension::loadData(QString &fileName, const QString &settin
     if (!file.open(QIODevice::ReadOnly))
     {
         DEBUG_LOG(QString("No es pot llegir el fitxer ") + fileName + ": " + file.errorString());
-        if (m_interactive) QMessageBox::warning(this, QString(tr("Can't load %1 from file ")).arg(name).arg(fileName), file.errorString());
+        if (m_interactive)
+        {
+            QMessageBox::warning(this, QString(tr("Can't load %1 from file ")).arg(name).arg(fileName), file.errorString());
+        }
         return false;
     }
 
@@ -717,7 +834,10 @@ bool QExperimental3DExtension::loadData(QString &fileName, const QString &settin
 template <class T>
 void QExperimental3DExtension::loadData(QDataStream &in, T &data)
 {
-    if (!in.atEnd()) in >> data;
+    if (!in.atEnd())
+    {
+        in >> data;
+    }
 }
 
 template <class T>
@@ -741,18 +861,27 @@ bool QExperimental3DExtension::saveData(QString &fileName, const QString &settin
     if (fileName.isEmpty())
     {
         fileName = getFileNameToSave(setting, QString(tr("Save %1")).arg(name), extensions, defaultSuffix);
-        if (fileName.isNull()) return false;
+        if (fileName.isNull())
+        {
+            return false;
+        }
     }
 
     bool text = fileName.endsWith(".txt");
     QFile file(fileName);
     QIODevice::OpenMode mode = QIODevice::WriteOnly | QIODevice::Truncate;
-    if (text) mode |= QIODevice::Text;
+    if (text)
+    {
+        mode |= QIODevice::Text;
+    }
 
     if (!file.open(mode))
     {
         DEBUG_LOG(QString("No es pot escriure al fitxer ") + fileName + ": " + file.errorString());
-        if (m_interactive) QMessageBox::warning(this, QString(tr("Can't save %1 to file ")).arg(name).arg(fileName), file.errorString());
+        if (m_interactive)
+        {
+            QMessageBox::warning(this, QString(tr("Can't save %1 to file ")).arg(name).arg(fileName), file.errorString());
+        }
         return false;
     }
 
@@ -789,14 +918,20 @@ template <class T>
 void QExperimental3DExtension::saveData(QDataStream &out, const QVector<T> &data)
 {
     int n = data.size();
-    for (int i = 0; i < n; i++) out << data.at(i);
+    for (int i = 0; i < n; i++)
+    {
+        out << data.at(i);
+    }
 }
 
 template <class T>
 void QExperimental3DExtension::saveData(QTextStream &out, const QVector<T> &data, const QString &textFormat, int base)
 {
     int n = data.size();
-    for (int i = 0; i < n; i++) out << textFormat.arg(i + base).arg(data.at(i)) << "\n";
+    for (int i = 0; i < n; i++)
+    {
+        out << textFormat.arg(i + base).arg(data.at(i)) << "\n";
+    }
 }
 
 template <class T>
@@ -840,7 +975,10 @@ bool QExperimental3DExtension::saveData(const QList<T> &list, const QString &fil
     QDataStream out(&file);
     int n = list.size();
 
-    for (int i = 0; i < n; i++) out << list.at(i);
+    for (int i = 0; i < n; i++)
+    {
+        out << list.at(i);
+    }
 
     file.close();
 
@@ -859,7 +997,10 @@ bool QExperimental3DExtension::saveDataAsText(const QList< QPair<int, Vector3> >
 
     QTextStream out(&file);
     int n = list.size();
-    for (int i = 0; i < n; i++) out << format.arg(i + base1).arg(list.at(i).first + base2).arg(list.at(i).second.toString()) << "\n";
+    for (int i = 0; i < n; i++)
+    {
+        out << format.arg(i + base1).arg(list.at(i).first + base2).arg(list.at(i).second.toString()) << "\n";
+    }
 
     file.close();
 
@@ -1146,15 +1287,24 @@ void QExperimental3DExtension::loadTransferFunction()
 {
     QString transferFunctionFileName = getFileNameToLoad(Experimental3DSettings::TransferFunctionDir, tr("Load transfer function"),
                                                          tr("XML files (*.xml);;Transfer function files (*.tf);;All files (*)"));
-    if (!transferFunctionFileName.isNull()) loadTransferFunction(transferFunctionFileName);
+    if (!transferFunctionFileName.isNull())
+    {
+        loadTransferFunction(transferFunctionFileName);
+    }
 }
 
 void QExperimental3DExtension::loadTransferFunction(const QString &fileName)
 {
     TransferFunction *transferFunction;
 
-    if (fileName.endsWith(".xml")) transferFunction = TransferFunctionIO::fromXmlFile(fileName);
-    else transferFunction = TransferFunctionIO::fromFile(fileName);
+    if (fileName.endsWith(".xml"))
+    {
+        transferFunction = TransferFunctionIO::fromXmlFile(fileName);
+    }
+    else
+    {
+        transferFunction = TransferFunctionIO::fromFile(fileName);
+    }
 
     m_transferFunctionEditor->setTransferFunction(*transferFunction);
     m_transferFunctionEditor2->setTransferFunction(*transferFunction);
@@ -1164,7 +1314,10 @@ void QExperimental3DExtension::loadTransferFunction(const QString &fileName)
     int row = m_recentTransferFunctionsModel->rowCount();
     m_recentTransferFunctionsModel->insertRow(row);
     QString name = transferFunction->name();
-    if (name.isEmpty()) name = tr("<unnamed>");
+    if (name.isEmpty())
+    {
+        name = tr("<unnamed>");
+    }
     m_recentTransferFunctionsModel->setData(m_recentTransferFunctionsModel->index(row, 0), name);
 
     delete transferFunction;
@@ -1176,15 +1329,24 @@ void QExperimental3DExtension::loadColorTransferFunction()
 {
     QString transferFunctionFileName = getFileNameToLoad(Experimental3DSettings::ColorTransferFunctionDir, tr("Load color transfer function"),
                                                          tr("XML files (*.xml);;Transfer function files (*.tf);;All files (*)"));
-    if (!transferFunctionFileName.isNull()) loadColorTransferFunction(transferFunctionFileName);
+    if (!transferFunctionFileName.isNull())
+    {
+        loadColorTransferFunction(transferFunctionFileName);
+    }
 }
 
 void QExperimental3DExtension::loadColorTransferFunction(const QString &fileName)
 {
     TransferFunction *transferFunction;
 
-    if (fileName.endsWith(".xml")) transferFunction = TransferFunctionIO::fromXmlFile(fileName);
-    else transferFunction = TransferFunctionIO::fromFile(fileName);
+    if (fileName.endsWith(".xml"))
+    {
+        transferFunction = TransferFunctionIO::fromXmlFile(fileName);
+    }
+    else
+    {
+        transferFunction = TransferFunctionIO::fromFile(fileName);
+    }
 
     TransferFunction currentTransferFunction = m_transferFunctionEditor->transferFunction();
     if (m_viewClusterizedVolume)
@@ -1207,21 +1369,33 @@ void QExperimental3DExtension::saveTransferFunction()
 {
     QString transferFunctionFileName = getFileNameToSave(Experimental3DSettings::TransferFunctionDir, tr("Save transfer function"),
                                                          tr("XML files (*.xml);;Transfer function files (*.tf);;All files (*)"), "xml");
-    if (!transferFunctionFileName.isNull()) saveTransferFunction(transferFunctionFileName);
+    if (!transferFunctionFileName.isNull())
+    {
+        saveTransferFunction(transferFunctionFileName);
+    }
 }
 
 void QExperimental3DExtension::saveTransferFunction(const QString &fileName)
 {
     syncGradientToNormalTransferFunction();
 
-    if (fileName.endsWith(".xml")) TransferFunctionIO::toXmlFile(fileName, m_transferFunctionEditor->transferFunction());
-    else TransferFunctionIO::toFile(fileName, m_transferFunctionEditor->transferFunction());
+    if (fileName.endsWith(".xml"))
+    {
+        TransferFunctionIO::toXmlFile(fileName, m_transferFunctionEditor->transferFunction());
+    }
+    else
+    {
+        TransferFunctionIO::toFile(fileName, m_transferFunctionEditor->transferFunction());
+    }
 
     m_recentTransferFunctions << m_transferFunctionEditor->transferFunction();
     int row = m_recentTransferFunctionsModel->rowCount();
     m_recentTransferFunctionsModel->insertRow(row);
     QString name = m_transferFunctionEditor->transferFunction().name();
-    if (name.isEmpty()) name = tr("<unnamed>");
+    if (name.isEmpty())
+    {
+        name = tr("<unnamed>");
+    }
     m_recentTransferFunctionsModel->setData(m_recentTransferFunctionsModel->index(row, 0), name);
 }
 
@@ -1229,15 +1403,24 @@ void QExperimental3DExtension::transferFunctionOptimizationLoadImportance()
 {
     QString importanceFileName = getFileNameToLoad(Experimental3DSettings::ImportanceDir, tr("Load importance"),
                                                    tr("XML files (*.xml);;Transfer function files (*.tf);;All files (*)"));
-    if (!importanceFileName.isNull()) transferFunctionOptimizationLoadImportance(importanceFileName);
+    if (!importanceFileName.isNull())
+    {
+        transferFunctionOptimizationLoadImportance(importanceFileName);
+    }
 }
 
 void QExperimental3DExtension::transferFunctionOptimizationLoadImportance(const QString &fileName)
 {
     TransferFunction *importance;
 
-    if (fileName.endsWith(".xml")) importance = TransferFunctionIO::fromXmlFile(fileName);
-    else importance = TransferFunctionIO::fromFile(fileName);
+    if (fileName.endsWith(".xml"))
+    {
+        importance = TransferFunctionIO::fromXmlFile(fileName);
+    }
+    else
+    {
+        importance = TransferFunctionIO::fromFile(fileName);
+    }
 
     m_transferFunctionOptimizationManualWeightsEditor->setTransferFunction(*importance);
 
@@ -1248,13 +1431,22 @@ void QExperimental3DExtension::transferFunctionOptimizationSaveImportance()
 {
     QString importanceFileName = getFileNameToSave(Experimental3DSettings::ImportanceDir, tr("Save importance"),
                                                    tr("XML files (*.xml);;Transfer function files (*.tf);;All files (*)"), "xml");
-    if (!importanceFileName.isNull()) transferFunctionOptimizationSaveImportance(importanceFileName);
+    if (!importanceFileName.isNull())
+    {
+        transferFunctionOptimizationSaveImportance(importanceFileName);
+    }
 }
 
 void QExperimental3DExtension::transferFunctionOptimizationSaveImportance(const QString &fileName)
 {
-    if (fileName.endsWith(".xml")) TransferFunctionIO::toXmlFile(fileName, m_transferFunctionOptimizationManualWeightsEditor->transferFunction());
-    else TransferFunctionIO::toFile(fileName, m_transferFunctionOptimizationManualWeightsEditor->transferFunction());
+    if (fileName.endsWith(".xml"))
+    {
+        TransferFunctionIO::toXmlFile(fileName, m_transferFunctionOptimizationManualWeightsEditor->transferFunction());
+    }
+    else
+    {
+        TransferFunctionIO::toFile(fileName, m_transferFunctionOptimizationManualWeightsEditor->transferFunction());
+    }
 }
 
 void QExperimental3DExtension::addRecentTransferFunction()
@@ -1265,7 +1457,10 @@ void QExperimental3DExtension::addRecentTransferFunction()
     int row = m_recentTransferFunctionsModel->rowCount();
     m_recentTransferFunctionsModel->insertRow(row);
     QString name = m_transferFunctionEditor->transferFunction().name();
-    if (name.isEmpty()) name = tr("<unnamed>");
+    if (name.isEmpty())
+    {
+        name = tr("<unnamed>");
+    }
     m_recentTransferFunctionsModel->setData(m_recentTransferFunctionsModel->index(row, 0), name);
 }
 
@@ -1295,18 +1490,24 @@ void QExperimental3DExtension::setTransferFunction(bool render)
         normalToClusterizedTransferFunction();
     }
 
-    if (render) m_viewer->render();
+    if (render)
+    {
+        m_viewer->render();
+    }
 }
 
 void QExperimental3DExtension::tour(const QList<Vector3> &viewpoints, double speedFactor)
 {
-    if (viewpoints.isEmpty()) return;
+    if (viewpoints.isEmpty())
+    {
+        return;
+    }
 
     uint frameCounter = 0;
     QString tourFileName = m_saveNextTourLineEdit->text();
     bool saveTour = m_saveNextTourCheckBox->isChecked();
 
-    const double ALMOST_1 = 0.9;
+    const double Almost1 = 0.9;
 
     int *dimensions = m_volume->getImage()->GetDimensions();
     int maxDimension = qMax(qMax(dimensions[0], dimensions[1]), dimensions[2]);
@@ -1319,7 +1520,10 @@ void QExperimental3DExtension::tour(const QList<Vector3> &viewpoints, double spe
 
     Vector3 currentPoint = previousPoint;
     setViewpoint(currentPoint);
-    if (saveTour) m_viewer->screenshot(tourFileName.arg(frameCounter++, 8, 10, QChar('0')));
+    if (saveTour)
+    {
+        m_viewer->screenshot(tourFileName.arg(frameCounter++, 8, 10, QChar('0')));
+    }
 
     for (int i = 1; i < viewpoints.size(); i++)
     {
@@ -1333,14 +1537,20 @@ void QExperimental3DExtension::tour(const QList<Vector3> &viewpoints, double spe
             Vector3 n = nextPoint;
             n.normalize();
 
-            if (c * n < -ALMOST_1) // la línia entre els punts passa pel centre del volum
+            if (c * n < -Almost1) // la línia entre els punts passa pel centre del volum
             {
                 DEBUG_LOG(QString("punt intermig: c = %1, n = %2, c * n = %3").arg(c.toString()).arg(n.toString()).arg(c * n));
                 // afegim un punt intermig (0,0,radi) o (radi,0,0)
                 double radius = (currentPoint.length() + nextRadius) / 2.0;
 
-                if (qAbs(c * Vector3(0.0, 0.0, 1.0)) > ALMOST_1) nextPoint.set(radius, 0.0, 0.0);
-                else nextPoint.set(0.0, 0.0, radius);
+                if (qAbs(c * Vector3(0.0, 0.0, 1.0)) > Almost1)
+                {
+                    nextPoint.set(radius, 0.0, 0.0);
+                }
+                else
+                {
+                    nextPoint.set(0.0, 0.0, radius);
+                }
 
                 i--;
             }
@@ -1350,7 +1560,10 @@ void QExperimental3DExtension::tour(const QList<Vector3> &viewpoints, double spe
         {
             Vector3 direction = nextPoint - currentPoint;
 
-            if (direction.length() < maxDistance) currentPoint = nextPoint;
+            if (direction.length() < maxDistance)
+            {
+                currentPoint = nextPoint;
+            }
             else
             {
                 double currentRadius = currentPoint.length();
@@ -1374,7 +1587,10 @@ void QExperimental3DExtension::tour(const QList<Vector3> &viewpoints, double spe
             }
 
             setViewpoint(currentPoint);
-            if (saveTour) m_viewer->screenshot(tourFileName.arg(frameCounter++, 8, 10, QChar('0')));
+            if (saveTour)
+            {
+                m_viewer->screenshot(tourFileName.arg(frameCounter++, 8, 10, QChar('0')));
+            }
         }
 
         DEBUG_LOG(nextPoint.toString());
@@ -1384,7 +1600,10 @@ void QExperimental3DExtension::tour(const QList<Vector3> &viewpoints, double spe
 void QExperimental3DExtension::chooseBackgroundColor()
 {
     QColor color = QColorDialog::getColor(m_viewer->getBackgroundColor(), this);
-    if (color.isValid()) m_viewer->setBackgroundColor(color);
+    if (color.isValid())
+    {
+        m_viewer->setBackgroundColor(color);
+    }
 }
 
 float passIfNegative(float f)
@@ -1399,7 +1618,10 @@ void QExperimental3DExtension::render()
 
     m_volume->resetShadingOptions();
 
-    if (m_baseAmbientLightingRadioButton->isChecked()) m_volume->addAmbientLighting();
+    if (m_baseAmbientLightingRadioButton->isChecked())
+    {
+        m_volume->addAmbientLighting();
+    }
     else if (m_baseFullLightingRadioButton->isChecked())
     {
         m_viewer->updateShadingTable();
@@ -1407,21 +1629,45 @@ void QExperimental3DExtension::render()
                                   m_baseSpecularPowerDoubleSpinBox->value());
     }
     else if (m_baseCoolWarmRadioButton->isChecked())
+    {
         m_volume->addCoolWarm(m_baseCoolWarmBDoubleSpinBox->value(), m_baseCoolWarmYDoubleSpinBox->value(), m_baseCoolWarmAlphaDoubleSpinBox->value(),
                               m_baseCoolWarmBetaDoubleSpinBox->value());
-    else if (m_baseWhiteRadioButton->isChecked()) m_volume->addWhite();
+    }
+    else if (m_baseWhiteRadioButton->isChecked())
+    {
+        m_volume->addWhite();
+    }
     else if (m_baseVomiRadioButton->isChecked())
     {
-        if (m_baseVomi1RadioButton->isChecked()) m_volume->addVomi(m_vomi, m_minimumVomi, m_maximumVomi, m_baseVomiFactorDoubleSpinBox->value());
-        else if (m_baseVomi2RadioButton->isChecked()) m_volume->addVomi(m_vomi2, m_minimumVomi2, m_maximumVomi2, m_baseVomiFactorDoubleSpinBox->value());
-        else if (m_baseVomi3RadioButton->isChecked()) m_volume->addVomi(m_vomi3, m_minimumVomi3, m_maximumVomi3, m_baseVomiFactorDoubleSpinBox->value());
+        if (m_baseVomi1RadioButton->isChecked())
+        {
+            m_volume->addVomi(m_vomi, m_minimumVomi, m_maximumVomi, m_baseVomiFactorDoubleSpinBox->value());
+        }
+        else if (m_baseVomi2RadioButton->isChecked())
+        {
+            m_volume->addVomi(m_vomi2, m_minimumVomi2, m_maximumVomi2, m_baseVomiFactorDoubleSpinBox->value());
+        }
+        else if (m_baseVomi3RadioButton->isChecked())
+        {
+            m_volume->addVomi(m_vomi3, m_minimumVomi3, m_maximumVomi3, m_baseVomiFactorDoubleSpinBox->value());
+        }
     }
-    //else if (m_baseVomiRadioButton->isChecked()) m_volume->addVoxelSaliencies(m_vomi, m_maximumVomi, m_baseVomiFactorDoubleSpinBox->value());
-    else if (m_baseImiRadioButton->isChecked()) m_volume->addImi(m_imi, m_maximumImi, m_baseImiFactorDoubleSpinBox->value());
+//    else if (m_baseVomiRadioButton->isChecked())
+//    {
+//        m_volume->addVoxelSaliencies(m_vomi, m_maximumVomi, m_baseVomiFactorDoubleSpinBox->value());
+//    }
+    else if (m_baseImiRadioButton->isChecked())
+    {
+        m_volume->addImi(m_imi, m_maximumImi, m_baseImiFactorDoubleSpinBox->value());
+    }
     else if (m_baseVoxelSalienciesRadioButton->isChecked())
+    {
         m_volume->addVoxelSaliencies(m_voxelSaliencies, m_maximumSaliency, m_baseVoxelSalienciesFactorDoubleSpinBox->value());
-    //else if (m_baseVoxelSalienciesRadioButton->isChecked())
-    //    m_volume->addVomi(m_voxelSaliencies, m_maximumSaliency, m_baseVoxelSalienciesFactorDoubleSpinBox->value());
+    }
+//    else if (m_baseVoxelSalienciesRadioButton->isChecked())
+//    {
+//        m_volume->addVomi(m_voxelSaliencies, m_maximumSaliency, m_baseVoxelSalienciesFactorDoubleSpinBox->value());
+//    }
     else if (m_baseFilteringAmbientOcclusionRadioButton->isChecked())
     {
         switch (m_baseFilteringAmbientOcclusionTypeComboBox->currentIndex())
@@ -1454,33 +1700,53 @@ void QExperimental3DExtension::render()
                                                         m_baseFilteringAmbientOcclusionStipplingFactorDoubleSpinBox->value());
     }
 
-    if (m_contourCheckBox->isChecked()) m_volume->addContour(m_contourDoubleSpinBox->value());
+    if (m_contourCheckBox->isChecked())
+    {
+        m_volume->addContour(m_contourDoubleSpinBox->value());
+    }
     if (m_obscuranceCheckBox->isChecked())
+    {
         m_volume->addObscurance(m_obscurance, m_obscuranceFactorDoubleSpinBox->value(), m_obscuranceLowFilterDoubleSpinBox->value(),
                                 m_obscuranceHighFilterDoubleSpinBox->value(), m_additiveObscuranceVomiCheckBox->isChecked(),
                                 m_additiveObscuranceVomiWeightDoubleSpinBox->value());
+    }
     if (m_vomiCheckBox->isChecked())
     {
         if (m_vomi1RadioButton->isChecked())
+        {
             m_volume->addVomi(m_vomi, m_minimumVomi, m_maximumVomi, m_vomiFactorDoubleSpinBox->value(), m_additiveObscuranceVomiCheckBox->isChecked(),
                               m_additiveObscuranceVomiWeightDoubleSpinBox->value());
+        }
         else if (m_vomi2RadioButton->isChecked())
+        {
             m_volume->addVomi(m_vomi2, m_minimumVomi2, m_maximumVomi2, m_vomiFactorDoubleSpinBox->value(), m_additiveObscuranceVomiCheckBox->isChecked(),
                               m_additiveObscuranceVomiWeightDoubleSpinBox->value());
+        }
         else if (m_vomi3RadioButton->isChecked())
+        {
             m_volume->addVomi(m_vomi3, m_minimumVomi3, m_maximumVomi3, m_vomiFactorDoubleSpinBox->value(), m_additiveObscuranceVomiCheckBox->isChecked(),
                               m_additiveObscuranceVomiWeightDoubleSpinBox->value());
+        }
     }
     if (m_vomiCoolWarmCheckBox->isChecked())
+    {
         m_volume->addVomiCoolWarm(m_vomi, m_maximumVomi, m_vomiCoolWarmFactorDoubleSpinBox->value(), m_vomiCoolWarmYDoubleSpinBox->value(),
                                   m_vomiCoolWarmBDoubleSpinBox->value());
-    if (m_colorVomiCheckBox->isChecked()) m_volume->addColorVomi(m_colorVomi, m_maximumColorVomi, m_colorVomiFactorDoubleSpinBox->value());
+    }
+    if (m_colorVomiCheckBox->isChecked())
+    {
+        m_volume->addColorVomi(m_colorVomi, m_maximumColorVomi, m_colorVomiFactorDoubleSpinBox->value());
+    }
     if (m_opacityVomiCheckBox->isChecked())
+    {
         m_volume->addOpacity(m_vomi, m_maximumVomi, m_opacityLowThresholdDoubleSpinBox->value(), m_opacityLowFactorDoubleSpinBox->value(),
                              m_opacityHighThresholdDoubleSpinBox->value(), m_opacityHighFactorDoubleSpinBox->value());
+    }
     if (m_opacitySaliencyCheckBox->isChecked())
+    {
         m_volume->addOpacity(m_voxelSaliencies, m_maximumSaliency, m_opacityLowThresholdDoubleSpinBox->value(), m_opacityLowFactorDoubleSpinBox->value(),
                              m_opacityHighThresholdDoubleSpinBox->value(), m_opacityHighFactorDoubleSpinBox->value());
+    }
     if (m_opacityFilteringCheckBox->isChecked())
     {
         QVector<float> absFiltering = QtConcurrent::blockingMapped(m_spatialImportanceFunction, qAbs<float>);
@@ -1488,8 +1754,10 @@ void QExperimental3DExtension::render()
                              m_opacityLowFactorDoubleSpinBox->value(), m_opacityHighThresholdDoubleSpinBox->value(), m_opacityHighFactorDoubleSpinBox->value());
     }
     if (m_opacityProbabilisticAmbientOcclusionCheckBox->isChecked())
+    {
         m_volume->addOpacity(m_probabilisticAmbientOcclusion, 1.0f, m_opacityLowThresholdDoubleSpinBox->value(), m_opacityLowFactorDoubleSpinBox->value(),
                              m_opacityHighThresholdDoubleSpinBox->value(), m_opacityHighFactorDoubleSpinBox->value());
+    }
     if (m_filteringAmbientOcclusionCheckBox->isChecked())
     {
         switch (m_filteringAmbientOcclusionTypeComboBox->currentIndex())
@@ -1515,14 +1783,28 @@ void QExperimental3DExtension::render()
         }
     }
     if (m_probabilisticAmbientOcclusionCheckBox->isChecked())
+    {
         m_volume->addVomiGamma(m_probabilisticAmbientOcclusion, 1.0f, m_probabilisticAmbientOcclusionFactorDoubleSpinBox->value(),
                                m_probabilisticAmbientOcclusionGammaDoubleSpinBox->value(), m_additiveObscuranceVomiCheckBox->isChecked(),
                                m_additiveObscuranceVomiWeightDoubleSpinBox->value());
-    if (m_opacityVarianceCheckBox->isChecked()) m_volume->addOpacity(m_volumeVariance, m_opacityVarianceMaxDoubleSpinBox->value());
-    if (m_celShadingCheckBox->isChecked()) m_volume->addCelShading(m_celShadingQuantumsSpinBox->value());
+    }
+    if (m_opacityVarianceCheckBox->isChecked())
+    {
+        m_volume->addOpacity(m_volumeVariance, m_opacityVarianceMaxDoubleSpinBox->value());
+    }
+    if (m_celShadingCheckBox->isChecked())
+    {
+        m_volume->addCelShading(m_celShadingQuantumsSpinBox->value());
+    }
 
-    if (m_cpuRenderingCheckBox->isChecked()) m_volume->forceCpuRendering();
-    if (m_cpuShaderRenderingCheckBox->isChecked()) m_volume->forceCpuShaderRendering();
+    if (m_cpuRenderingCheckBox->isChecked())
+    {
+        m_volume->forceCpuRendering();
+    }
+    if (m_cpuShaderRenderingCheckBox->isChecked())
+    {
+        m_volume->forceCpuShaderRendering();
+    }
 
     m_viewer->render();
 }
@@ -1568,7 +1850,10 @@ void QExperimental3DExtension::setCamera()
 void QExperimental3DExtension::loadCamera()
 {
     QString cameraFileName = getFileNameToLoad(Experimental3DSettings::CameraDir, tr("Load camera parameters"), tr("Camera files (*.cam);;All files (*)"));
-    if (!cameraFileName.isNull()) loadCamera(cameraFileName);
+    if (!cameraFileName.isNull())
+    {
+        loadCamera(cameraFileName);
+    }
 }
 
 void QExperimental3DExtension::loadCamera(const QString &fileName)
@@ -1579,7 +1864,10 @@ void QExperimental3DExtension::loadCamera(const QString &fileName)
     {
         DEBUG_LOG(QString("No es pot llegir el fitxer ") + fileName);
         ERROR_LOG(QString("No es pot llegir el fitxer ") + fileName);
-        if (m_interactive) QMessageBox::warning(this, tr("Can't load"), QString(tr("Can't load from file ")) + fileName);
+        if (m_interactive)
+        {
+            QMessageBox::warning(this, tr("Can't load"), QString(tr("Can't load from file ")) + fileName);
+        }
         return;
     }
 
@@ -1587,17 +1875,44 @@ void QExperimental3DExtension::loadCamera(const QString &fileName)
 
     Vector3 position, focus, up;
 
-    if (!in.atEnd()) in >> position.x;
-    if (!in.atEnd()) in >> position.y;
-    if (!in.atEnd()) in >> position.z;
+    if (!in.atEnd())
+    {
+        in >> position.x;
+    }
+    if (!in.atEnd())
+    {
+        in >> position.y;
+    }
+    if (!in.atEnd())
+    {
+        in >> position.z;
+    }
 
-    if (!in.atEnd()) in >> focus.x;
-    if (!in.atEnd()) in >> focus.y;
-    if (!in.atEnd()) in >> focus.z;
+    if (!in.atEnd())
+    {
+        in >> focus.x;
+    }
+    if (!in.atEnd())
+    {
+        in >> focus.y;
+    }
+    if (!in.atEnd())
+    {
+        in >> focus.z;
+    }
 
-    if (!in.atEnd()) in >> up.x;
-    if (!in.atEnd()) in >> up.y;
-    if (!in.atEnd()) in >> up.z;
+    if (!in.atEnd())
+    {
+        in >> up.x;
+    }
+    if (!in.atEnd())
+    {
+        in >> up.y;
+    }
+    if (!in.atEnd())
+    {
+        in >> up.z;
+    }
 
     m_cameraPositionXDoubleSpinBox->setValue(position.x);
     m_cameraPositionYDoubleSpinBox->setValue(position.y);
@@ -1628,7 +1943,10 @@ void QExperimental3DExtension::saveCamera()
         if (!cameraFile.open(QFile::WriteOnly | QFile::Truncate | QFile::Text))
         {
             ERROR_LOG(QString("No es pot escriure al fitxer ") + cameraFileName);
-            if (m_interactive) QMessageBox::warning(this, tr("Can't save"), QString(tr("Can't save to file ")) + cameraFileName);
+            if (m_interactive)
+            {
+                QMessageBox::warning(this, tr("Can't save"), QString(tr("Can't save to file ")) + cameraFileName);
+            }
             return;
         }
 
@@ -1669,16 +1987,30 @@ void QExperimental3DExtension::setViewpoint()
     {
         switch (m_cameraViewpointDistributionWidget->numberOfViewpoints())
         {
-            case 4: viewpointGenerator.setToUniform4(distance); break;
-            case 6: viewpointGenerator.setToUniform6(distance); break;
-            case 8: viewpointGenerator.setToUniform8(distance); break;
-            case 12: viewpointGenerator.setToUniform12(distance); break;
-            case 20: viewpointGenerator.setToUniform20(distance); break;
-            default: Q_ASSERT_X(false, "setViewpoint", qPrintable(QString("Nombre de punts de vista uniformes incorrecte: %1")
-                                                                 .arg(m_cameraViewpointDistributionWidget->numberOfViewpoints())));
+            case 4:
+                viewpointGenerator.setToUniform4(distance);
+                break;
+            case 6:
+                viewpointGenerator.setToUniform6(distance);
+                break;
+            case 8:
+                viewpointGenerator.setToUniform8(distance);
+                break;
+            case 12:
+                viewpointGenerator.setToUniform12(distance);
+                break;
+            case 20:
+                viewpointGenerator.setToUniform20(distance);
+                break;
+            default:
+                Q_ASSERT_X(false, "setViewpoint", qPrintable(QString("Nombre de punts de vista uniformes incorrecte: %1")
+                                                             .arg(m_cameraViewpointDistributionWidget->numberOfViewpoints())));
         }
     }
-    else viewpointGenerator.setToQuasiUniform(m_cameraViewpointDistributionWidget->recursionLevel(), distance);
+    else
+    {
+        viewpointGenerator.setToQuasiUniform(m_cameraViewpointDistributionWidget->recursionLevel(), distance);
+    }
 
     setViewpoint(viewpointGenerator.viewpoint(m_viewpointSpinBox->value() - 1));
 }
@@ -1702,7 +2034,10 @@ void QExperimental3DExtension::tour()
     for (int i = 0; i < indices.size(); i++)
     {
         int index = indices.at(i).toInt() - 1;
-        if (index >= 0 && index < viewpoints.size()) tourViewpoints << viewpoints.at(index);
+        if (index >= 0 && index < viewpoints.size())
+        {
+            tourViewpoints << viewpoints.at(index);
+        }
     }
 
     tour(tourViewpoints, m_tourSpeedDoubleSpinBox->value());
@@ -1727,9 +2062,13 @@ void QExperimental3DExtension::computeCancelObscurance()
 
         int numberOfDirections;
         if (m_obscuranceViewpointDistributionWidget->isUniform())
+        {
             numberOfDirections = -1 * m_obscuranceViewpointDistributionWidget->numberOfViewpoints();
+        }
         else
+        {
             numberOfDirections = m_obscuranceViewpointDistributionWidget->recursionLevel();
+        }
 
         m_obscuranceMainThread = new ObscuranceMainThread(numberOfDirections, m_obscuranceMaximumDistanceDoubleSpinBox->value(),
                                                           static_cast<ObscuranceMainThread::Function>(m_obscuranceFunctionComboBox->currentIndex()),
@@ -1806,7 +2145,10 @@ void QExperimental3DExtension::loadObscurance()
         else
         {
             m_obscuranceSavePushButton->setEnabled(false);
-            if (m_interactive) QMessageBox::warning(this, tr("Can't load obscurance"), QString(tr("Can't load obscurance from file ")) + obscuranceFileName);
+            if (m_interactive)
+            {
+                QMessageBox::warning(this, tr("Can't load obscurance"), QString(tr("Can't load obscurance from file ")) + obscuranceFileName);
+            }
         }
     }
 }
@@ -1820,7 +2162,10 @@ void QExperimental3DExtension::saveObscurance()
     {
         if (!m_obscurance->save(obscuranceFileName))
         {
-            if (m_interactive) QMessageBox::warning(this, tr("Can't save obscurance"), QString(tr("Can't save obscurance to file ")) + obscuranceFileName);
+            if (m_interactive)
+            {
+                QMessageBox::warning(this, tr("Can't save obscurance"), QString(tr("Can't save obscurance to file ")) + obscuranceFileName);
+            }
         }
     }
 }
@@ -1862,7 +2207,10 @@ void QExperimental3DExtension::computeSmi()
 
             Vector3 position(viewpoint);
             Vector3 up(0.0, 1.0, 0.0);
-            if (qAbs(position.normalize() * up) > 0.9) up = Vector3(0.0, 0.0, 1.0);
+            if (qAbs(position.normalize() * up) > 0.9)
+            {
+                up = Vector3(0.0, 0.0, 1.0);
+            }
             volumeReslicer.setViewpoint(viewpoint, up);
 
             volumeReslicer.setSpacing(1.0, 1.0, 1.0);
@@ -1905,7 +2253,10 @@ void QExperimental3DExtension::computeSliceUnstabilities()
 
             Vector3 position(viewpoint);
             Vector3 up(0.0, 1.0, 0.0);
-            if (qAbs(position.normalize() * up) > 0.9) up = Vector3(0.0, 0.0, 1.0);
+            if (qAbs(position.normalize() * up) > 0.9)
+            {
+                up = Vector3(0.0, 0.0, 1.0);
+            }
             volumeReslicer.setViewpoint(viewpoint, up);
 
             volumeReslicer.setSpacing(1.0, 1.0, 1.0);
@@ -1948,7 +2299,10 @@ void QExperimental3DExtension::computePmi()
 
             Vector3 position(viewpoint);
             Vector3 up(0.0, 1.0, 0.0);
-            if (qAbs(position.normalize() * up) > 0.9) up = Vector3(0.0, 0.0, 1.0);
+            if (qAbs(position.normalize() * up) > 0.9)
+            {
+                up = Vector3(0.0, 0.0, 1.0);
+            }
             volumeReslicer.setViewpoint(viewpoint, up);
 
             volumeReslicer.setSpacing(1.0, 1.0, 1.0);
@@ -1991,7 +2345,10 @@ void QExperimental3DExtension::computePropertySaliencies()
 
             Vector3 position(viewpoint);
             Vector3 up(0.0, 1.0, 0.0);
-            if (qAbs(position.normalize() * up) > 0.9) up = Vector3(0.0, 0.0, 1.0);
+            if (qAbs(position.normalize() * up) > 0.9)
+            {
+                up = Vector3(0.0, 0.0, 1.0);
+            }
             volumeReslicer.setViewpoint(viewpoint, up);
 
             volumeReslicer.setSpacing(1.0, 1.0, 1.0);
@@ -2031,7 +2388,9 @@ void QExperimental3DExtension::computeSelectedVmi()
     if (!computeHV && !computeHVz && !computeHZ && !computeHZv && !computeHZV && !computeVmi && !computeVmi2 && !computeVmi3 && !computeMi
         && !computeViewpointUnstabilities && !computeVomi && !computeVomi2 && !computeVomi3 && !computeViewpointVomi && !computeViewpointVomi2
         && !computeColorVomi && !computeEvmiOpacity && !computeEvmiVomi && !computeBestViews && !computeGuidedTour && !computeExploratoryTour)
+    {
         return;
+    }
 
     setCursor(QCursor(Qt::WaitCursor));
 
@@ -2045,13 +2404,22 @@ void QExperimental3DExtension::computeSelectedVmi()
     ViewpointInformationChannel viewpointInformationChannel(viewpointGenerator, m_volume, m_viewer, m_transferFunctionEditor->transferFunction());
 
     // Paleta de colors per la color VoMI
-    if (computeColorVomi) viewpointInformationChannel.setColorVomiPalette(m_colorVomiPalette);
+    if (computeColorVomi)
+    {
+        viewpointInformationChannel.setColorVomiPalette(m_colorVomiPalette);
+    }
 
     // Funció de transferència per l'EVMI amb opacitat
     if (computeEvmiOpacity)
     {
-        if (m_computeEvmiOpacityUseOtherPushButton->isChecked()) viewpointInformationChannel.setEvmiOpacityTransferFunction(m_evmiOpacityTransferFunction);
-        else viewpointInformationChannel.setEvmiOpacityTransferFunction(m_transferFunctionEditor->transferFunction());
+        if (m_computeEvmiOpacityUseOtherPushButton->isChecked())
+        {
+            viewpointInformationChannel.setEvmiOpacityTransferFunction(m_evmiOpacityTransferFunction);
+        }
+        else
+        {
+            viewpointInformationChannel.setEvmiOpacityTransferFunction(m_transferFunctionEditor->transferFunction());
+        }
     }
 
     // Paràmetres extres per calcular les millors vistes (els passem sempre perquè tinguin algun valor, per si s'ha de calcular el guided tour per exemple)
@@ -2072,7 +2440,10 @@ void QExperimental3DExtension::computeSelectedVmi()
         filter[selectedViewpoint] = true;
 
         QVector<int> neighbours = viewpointGenerator.neighbours(selectedViewpoint);
-        for (int i = 0; i < neighbours.size(); i++) filter[neighbours.at(i)] = true;
+        for (int i = 0; i < neighbours.size(); i++)
+        {
+            filter[neighbours.at(i)] = true;
+        }
 
         viewpointInformationChannel.filterViewpoints(filter);
     }
@@ -2268,7 +2639,7 @@ void QExperimental3DExtension::computeSelectedVmii()
 {
 #ifndef CUDA_AVAILABLE
     QMessageBox::information(this, tr("Operation only available with CUDA"),
-                             "VMIi computations are only implemented in CUDA. Compile with CUDA support to use them.");
+                             tr("VMIi computations are only implemented in CUDA. Compile with CUDA support to use them."));
 #else // CUDA_AVAILABLE
     // Què ha demanat l'usuari
     bool computePIV = false;                                // p(I|V)
@@ -2287,7 +2658,9 @@ void QExperimental3DExtension::computeSelectedVmii()
     // Si no hi ha res a calcular marxem
     if (!computePIV && !computePV && !computePI && !computeHI && !computeHIv && !computeHIV && !computeJointEntropy && !computeVmii && !computeMii
         && !computeViewpointUnstabilities && !computeImi && !computeIntensityClustering)
+    {
         return;
+    }
 
     setCursor(QCursor(Qt::WaitCursor));
 
@@ -2315,7 +2688,10 @@ void QExperimental3DExtension::computeSelectedVmii()
         filter[selectedViewpoint] = true;
 
         QVector<int> neighbours = viewpointGenerator.neighbours(selectedViewpoint);
-        for (int i = 0; i < neighbours.size(); i++) filter[neighbours.at(i)] = true;
+        for (int i = 0; i < neighbours.size(); i++)
+        {
+            filter[neighbours.at(i)] = true;
+        }
 
         viewpointIntensityInformationChannel.filterViewpoints(filter);
     }
@@ -2412,21 +2788,30 @@ void QExperimental3DExtension::computeSelectedVmii()
 void QExperimental3DExtension::tourBestViews()
 {
     QList<Vector3> viewpoints;
-    for (int i = 0; i < m_bestViews.size(); i++) viewpoints << m_bestViews.at(i).second;
+    for (int i = 0; i < m_bestViews.size(); i++)
+    {
+        viewpoints << m_bestViews.at(i).second;
+    }
     tour(viewpoints, m_tourSpeedDoubleSpinBox->value());
 }
 
 void QExperimental3DExtension::guidedTour()
 {
     QList<Vector3> viewpoints;
-    for (int i = 0; i < m_guidedTour.size(); i++) viewpoints << m_guidedTour.at(i).second;
+    for (int i = 0; i < m_guidedTour.size(); i++)
+    {
+        viewpoints << m_guidedTour.at(i).second;
+    }
     tour(viewpoints, m_tourSpeedDoubleSpinBox->value());
 }
 
 void QExperimental3DExtension::exploratoryTour()
 {
     QList<Vector3> viewpoints;
-    for (int i = 0; i < m_exploratoryTour.size(); i++) viewpoints << m_exploratoryTour.at(i).second;
+    for (int i = 0; i < m_exploratoryTour.size(); i++)
+    {
+        viewpoints << m_exploratoryTour.at(i).second;
+    }
     tour(viewpoints, m_tourSpeedDoubleSpinBox->value());
 }
 
@@ -2452,7 +2837,10 @@ void QExperimental3DExtension::loadAndRunProgram()
 {
     QString programFileName = getFileNameToLoad(Experimental3DSettings::ProgramDir, tr("Load program"), tr("Text files (*.txt);;All files (*)"));
 
-    if (programFileName.isNull()) return;
+    if (programFileName.isNull())
+    {
+        return;
+    }
 
     QFile programFile(programFileName);
 
@@ -2480,75 +2868,144 @@ void QExperimental3DExtension::loadAndRunProgram()
             QString line = in.readLine();
             QStringList words = line.split(' ', QString::SkipEmptyParts);
 
-            if (words.isEmpty()) continue;
+            if (words.isEmpty())
+            {
+                continue;
+            }
 
             QString command = words.at(0);
 
-            if (command == "//") continue;
+            if (command == "//")
+            {
+                continue;
+            }
             else if (command == "tab")
             {
-                if (programCheckWordCount(lineNumber, line, 2)) errors |= !programTab(lineNumber, line, run);
-                else errors = true;
+                if (programCheckWordCount(lineNumber, line, 2))
+                {
+                    errors |= !programTab(lineNumber, line, run);
+                }
+                else
+                {
+                    errors = true;
+                }
             }
             else if (command == "rendering-interpolation")
             {
-                if (programCheckWordCount(lineNumber, line, 2)) errors |= !programRenderingInterpolation(lineNumber, line, run);
-                else errors = true;
+                if (programCheckWordCount(lineNumber, line, 2))
+                {
+                    errors |= !programRenderingInterpolation(lineNumber, line, run);
+                }
+                else
+                {
+                    errors = true;
+                }
             }
             else if (command == "rendering-gradientestimator")
             {
-                if (programCheckWordCount(lineNumber, line, 2)) errors |= !programRenderingGradientEstimator(lineNumber, line, run);
-                else errors = true;
+                if (programCheckWordCount(lineNumber, line, 2))
+                {
+                    errors |= !programRenderingGradientEstimator(lineNumber, line, run);
+                }
+                else
+                {
+                    errors = true;
+                }
             }
             else if (command == "rendering-baseshading")
             {
-                if (programCheckWordCount(lineNumber, line, 2)) errors |= !programRenderingBaseShading(lineNumber, line, run);
-                else errors = true;
+                if (programCheckWordCount(lineNumber, line, 2))
+                {
+                    errors |= !programRenderingBaseShading(lineNumber, line, run);
+                }
+                else
+                {
+                    errors = true;
+                }
             }
             else if (command == "rendering-check" || command == "rendering-uncheck")
             {
-                if (programCheckWordCount(lineNumber, line, 2)) errors |= !programRenderingCheckOrUncheck(lineNumber, line, run);
-                else errors = true;
+                if (programCheckWordCount(lineNumber, line, 2))
+                {
+                    errors |= !programRenderingCheckOrUncheck(lineNumber, line, run);
+                }
+                else
+                {
+                    errors = true;
+                }
             }
             else if (command == "tf-load")
             {
                 if (programCheckWordCount(lineNumber, line, 2))
                 {
-                    if (run) loadTransferFunction(words.at(1));
+                    if (run)
+                    {
+                        loadTransferFunction(words.at(1));
+                    }
                 }
-                else errors = true;
+                else
+                {
+                    errors = true;
+                }
             }
             else if (command == "render")
             {
-                if (run) render();
+                if (run)
+                {
+                    render();
+                }
             }
             else if (command == "camera-load")
             {
                 if (programCheckWordCount(lineNumber, line, 2))
                 {
-                    if (run) loadCamera(words.at(1));
+                    if (run)
+                    {
+                        loadCamera(words.at(1));
+                    }
                 }
-                else errors = true;
+                else
+                {
+                    errors = true;
+                }
             }
             else if (command == "vmi-viewpoints")
             {
-                if (programCheckWordCount(lineNumber, line, 3)) errors |= !programVmiViewpoints(lineNumber, line, run);
-                else errors = true;
+                if (programCheckWordCount(lineNumber, line, 3))
+                {
+                    errors |= !programVmiViewpoints(lineNumber, line, run);
+                }
+                else
+                {
+                    errors = true;
+                }
             }
             else if (command == "vmi-check" || command == "vmi-uncheck")
             {
-                if (programCheckWordCount(lineNumber, line, 2)) errors |= !programVmiCheckOrUncheck(lineNumber, line, run);
-                else errors = true;
+                if (programCheckWordCount(lineNumber, line, 2))
+                {
+                    errors |= !programVmiCheckOrUncheck(lineNumber, line, run);
+                }
+                else
+                {
+                    errors = true;
+                }
             }
             else if (command == "vmi-run")
             {
-                if (run) computeSelectedVmi();
+                if (run)
+                {
+                    computeSelectedVmi();
+                }
             }
             else if (command == "vmi-vomigradient")
             {
                 if (run)
                 {
-                    if (m_vomiGradientPushButton->isEnabled()) computeVomiGradient();
+                    if (m_vomiGradientPushButton->isEnabled())
+                    {
+                        computeVomiGradient();
+                    }
                     else
                     {
                         logProgramError(lineNumber, "No es pot calcular el gradient de la VoMI", line);
@@ -2558,16 +3015,28 @@ void QExperimental3DExtension::loadAndRunProgram()
             }
             else if (command == "vmi-load" || command == "vmi-save")
             {
-                if (programCheckWordCount(lineNumber, line, 3)) errors |= !programVmiLoadOrSave(lineNumber, line, run);
-                else errors = true;
+                if (programCheckWordCount(lineNumber, line, 3))
+                {
+                    errors |= !programVmiLoadOrSave(lineNumber, line, run);
+                }
+                else
+                {
+                    errors = true;
+                }
             }
             else if (command == "screenshot")
             {
                 if (programCheckWordCount(lineNumber, line, 2))
                 {
-                    if (run) m_viewer->screenshot(words.at(1));
+                    if (run)
+                    {
+                        m_viewer->screenshot(words.at(1));
+                    }
                 }
-                else errors = true;
+                else
+                {
+                    errors = true;
+                }
             }
             else
             {
@@ -2606,7 +3075,10 @@ bool QExperimental3DExtension::programCheckWordCount(int lineNumber, const QStri
         logProgramError(lineNumber, "Falten paràmetres", line);
         return false;
     }
-    else return true;
+    else
+    {
+        return true;
+    }
 }
 
 bool QExperimental3DExtension::programTab(int lineNumber, const QString &line, bool run)
@@ -2615,27 +3087,45 @@ bool QExperimental3DExtension::programTab(int lineNumber, const QString &line, b
 
     if (tab == "rendering")
     {
-        if (run) m_controlsTabWidget->setCurrentWidget(m_renderingTab);
+        if (run)
+        {
+            m_controlsTabWidget->setCurrentWidget(m_renderingTab);
+        }
     }
     else if (tab == "camera")
     {
-        if (run) m_controlsTabWidget->setCurrentWidget(m_cameraTab);
+        if (run)
+        {
+            m_controlsTabWidget->setCurrentWidget(m_cameraTab);
+        }
     }
     else if (tab == "obscurance")
     {
-        if (run) m_controlsTabWidget->setCurrentWidget(m_obscuranceTab);
+        if (run)
+        {
+            m_controlsTabWidget->setCurrentWidget(m_obscuranceTab);
+        }
     }
     else if (tab == "smi")
     {
-        if (run) m_controlsTabWidget->setCurrentWidget(m_smiTab);
+        if (run)
+        {
+            m_controlsTabWidget->setCurrentWidget(m_smiTab);
+        }
     }
     else if (tab == "vmi")
     {
-        if (run) m_controlsTabWidget->setCurrentWidget(m_vmiTab);
+        if (run)
+        {
+            m_controlsTabWidget->setCurrentWidget(m_vmiTab);
+        }
     }
     else if (tab == "program")
     {
-        if (run) m_controlsTabWidget->setCurrentWidget(m_programTab);
+        if (run)
+        {
+            m_controlsTabWidget->setCurrentWidget(m_programTab);
+        }
     }
     else
     {
@@ -2652,15 +3142,24 @@ bool QExperimental3DExtension::programRenderingInterpolation(int lineNumber, con
 
     if (interpolation == "nn")
     {
-        if (run) m_interpolationComboBox->setCurrentIndex(0);
+        if (run)
+        {
+            m_interpolationComboBox->setCurrentIndex(0);
+        }
     }
     else if (interpolation == "lic")
     {
-        if (run) m_interpolationComboBox->setCurrentIndex(1);
+        if (run)
+        {
+            m_interpolationComboBox->setCurrentIndex(1);
+        }
     }
     else if (interpolation == "lci")
     {
-        if (run) m_interpolationComboBox->setCurrentIndex(2);
+        if (run)
+        {
+            m_interpolationComboBox->setCurrentIndex(2);
+        }
     }
     else
     {
@@ -2677,15 +3176,24 @@ bool QExperimental3DExtension::programRenderingGradientEstimator(int lineNumber,
 
     if (gradientEstimator == "finitedifference")
     {
-        if (run) m_gradientEstimatorComboBox->setCurrentIndex(0);
+        if (run)
+        {
+            m_gradientEstimatorComboBox->setCurrentIndex(0);
+        }
     }
     else if (gradientEstimator == "4dlr1")
     {
-        if (run) m_gradientEstimatorComboBox->setCurrentIndex(1);
+        if (run)
+        {
+            m_gradientEstimatorComboBox->setCurrentIndex(1);
+        }
     }
     else if (gradientEstimator == "4dlr2")
     {
-        if (run) m_gradientEstimatorComboBox->setCurrentIndex(2);
+        if (run)
+        {
+            m_gradientEstimatorComboBox->setCurrentIndex(2);
+        }
     }
     else
     {
@@ -2703,7 +3211,10 @@ bool QExperimental3DExtension::programRenderingBaseShading(int lineNumber, const
 
     if (base == "ambient")
     {
-        if (run) m_baseAmbientLightingRadioButton->setChecked(true);
+        if (run)
+        {
+            m_baseAmbientLightingRadioButton->setChecked(true);
+        }
     }
     else if (base == "vomi")
     {
@@ -2712,7 +3223,10 @@ bool QExperimental3DExtension::programRenderingBaseShading(int lineNumber, const
             if (m_baseVomiRadioButton->isEnabled())
             {
                 m_baseVomiRadioButton->setChecked(true);
-                if (words.size() > 2) m_baseVomiFactorDoubleSpinBox->setValue(words.at(2).toDouble());
+                if (words.size() > 2)
+                {
+                    m_baseVomiFactorDoubleSpinBox->setValue(words.at(2).toDouble());
+                }
             }
             else
             {
@@ -2728,7 +3242,10 @@ bool QExperimental3DExtension::programRenderingBaseShading(int lineNumber, const
             if (m_baseVoxelSalienciesRadioButton->isEnabled())
             {
                 m_baseVoxelSalienciesRadioButton->setChecked(true);
-                if (words.size() > 2) m_baseVoxelSalienciesFactorDoubleSpinBox->setValue(words.at(2).toDouble());
+                if (words.size() > 2)
+                {
+                    m_baseVoxelSalienciesFactorDoubleSpinBox->setValue(words.at(2).toDouble());
+                }
             }
             else
             {
@@ -2757,7 +3274,10 @@ bool QExperimental3DExtension::programRenderingCheckOrUncheck(int lineNumber, co
         if (run)
         {
             m_contourCheckBox->setChecked(check);
-            if (check && words.size() > 2) m_contourDoubleSpinBox->setValue(words.at(2).toDouble());
+            if (check && words.size() > 2)
+            {
+                m_contourDoubleSpinBox->setValue(words.at(2).toDouble());
+            }
         }
     }
     else if (checkbox == "obscurance")
@@ -2775,7 +3295,10 @@ bool QExperimental3DExtension::programRenderingCheckOrUncheck(int lineNumber, co
                     if (words.size() > 3)
                     {
                         m_obscuranceLowFilterDoubleSpinBox->setValue(words.at(3).toDouble());
-                        if (words.size() > 4) m_obscuranceHighFilterDoubleSpinBox->setValue(words.at(4).toDouble());
+                        if (words.size() > 4)
+                        {
+                            m_obscuranceHighFilterDoubleSpinBox->setValue(words.at(4).toDouble());
+                        }
                     }
                 }
             }
@@ -2793,7 +3316,10 @@ bool QExperimental3DExtension::programRenderingCheckOrUncheck(int lineNumber, co
             if (m_vomiCheckBox->isEnabled())
             {
                 m_vomiCheckBox->setChecked(check);
-                if (check && words.size() > 2) m_vomiFactorDoubleSpinBox->setValue(words.at(2).toDouble());
+                if (check && words.size() > 2)
+                {
+                    m_vomiFactorDoubleSpinBox->setValue(words.at(2).toDouble());
+                }
             }
             else
             {
@@ -2809,7 +3335,10 @@ bool QExperimental3DExtension::programRenderingCheckOrUncheck(int lineNumber, co
             if (m_colorVomiCheckBox->isEnabled())
             {
                 m_colorVomiCheckBox->setChecked(check);
-                if (check && words.size() > 2) m_colorVomiFactorDoubleSpinBox->setValue(words.at(2).toDouble());
+                if (check && words.size() > 2)
+                {
+                    m_colorVomiFactorDoubleSpinBox->setValue(words.at(2).toDouble());
+                }
             }
             else
             {
@@ -2853,7 +3382,10 @@ bool QExperimental3DExtension::programRenderingCheckOrUncheck(int lineNumber, co
         if (run)
         {
             m_celShadingCheckBox->setChecked(check);
-            if (check && words.size() > 2) m_celShadingQuantumsSpinBox->setValue(words.at(2).toInt());
+            if (check && words.size() > 2)
+            {
+                m_celShadingQuantumsSpinBox->setValue(words.at(2).toInt());
+            }
         }
     }
     else
@@ -2876,17 +3408,47 @@ bool QExperimental3DExtension::programVmiViewpoints(int lineNumber, const QStrin
 
         switch (number)
         {
-            case 4: if (run) m_vmiViewpointDistributionWidget->setToUniform4(); break;
-            case 6: if (run) m_vmiViewpointDistributionWidget->setToUniform6(); break;
-            case 8: if (run) m_vmiViewpointDistributionWidget->setToUniform8(); break;
-            case 12: if (run) m_vmiViewpointDistributionWidget->setToUniform12(); break;
-            case 20: if (run) m_vmiViewpointDistributionWidget->setToUniform20(); break;
-            default: logProgramError(lineNumber, "Nombre incorrecte de punts uniformes", line); return false;
+            case 4:
+                if (run)
+                {
+                    m_vmiViewpointDistributionWidget->setToUniform4();
+                }
+                break;
+            case 6:
+                if (run)
+                {
+                    m_vmiViewpointDistributionWidget->setToUniform6();
+                }
+                break;
+            case 8:
+                if (run)
+                {
+                    m_vmiViewpointDistributionWidget->setToUniform8();
+                }
+                break;
+            case 12:
+                if (run)
+                {
+                    m_vmiViewpointDistributionWidget->setToUniform12();
+                }
+                break;
+            case 20:
+                if (run)
+                {
+                    m_vmiViewpointDistributionWidget->setToUniform20();
+                }
+                break;
+            default:
+                logProgramError(lineNumber, "Nombre incorrecte de punts uniformes", line);
+                return false;
         }
     }
     else if (distribution == "q-uni")
     {
-        if (run) m_vmiViewpointDistributionWidget->setToQuasiUniform(words.at(2).toInt());
+        if (run)
+        {
+            m_vmiViewpointDistributionWidget->setToQuasiUniform(words.at(2).toInt());
+        }
     }
     else
     {
@@ -2905,19 +3467,31 @@ bool QExperimental3DExtension::programVmiCheckOrUncheck(int lineNumber, const QS
 
     if (checkbox == "HZv")
     {
-        if (run) m_computeHZvCheckBox->setChecked(check);
+        if (run)
+        {
+            m_computeHZvCheckBox->setChecked(check);
+        }
     }
     else if (checkbox == "vmi")
     {
-        if (run) m_computeVmiCheckBox->setChecked(check);
+        if (run)
+        {
+            m_computeVmiCheckBox->setChecked(check);
+        }
     }
     else if (checkbox == "unstabilities")
     {
-        if (run) m_computeViewpointUnstabilitiesCheckBox->setChecked(check);
+        if (run)
+        {
+            m_computeViewpointUnstabilitiesCheckBox->setChecked(check);
+        }
     }
     else if (checkbox == "bestviews")
     {
-        if (run) m_computeBestViewsCheckBox->setChecked(check);
+        if (run)
+        {
+            m_computeBestViewsCheckBox->setChecked(check);
+        }
 
         if (check && words.size() > 3)
         {
@@ -2946,22 +3520,34 @@ bool QExperimental3DExtension::programVmiCheckOrUncheck(int lineNumber, const QS
     }
     else if (checkbox == "guidedtour")
     {
-        if (run) m_computeGuidedTourCheckBox->setChecked(check);
+        if (run)
+        {
+            m_computeGuidedTourCheckBox->setChecked(check);
+        }
     }
     else if (checkbox == "vomi")
     {
-        if (run) m_computeVomiCheckBox->setChecked(check);
+        if (run)
+        {
+            m_computeVomiCheckBox->setChecked(check);
+        }
     }
     else if (checkbox == "vvomi")
     {
-        if (run) m_computeViewpointVomiCheckBox->setChecked(check);
+        if (run)
+        {
+            m_computeViewpointVomiCheckBox->setChecked(check);
+        }
     }
     else if (checkbox == "cvomi")
     {
         if (run)
         {
             m_computeColorVomiCheckBox->setChecked(check);
-            if (check && words.size() > 2) loadColorVomiPalette(words.at(2));
+            if (check && words.size() > 2)
+            {
+                loadColorVomiPalette(words.at(2));
+            }
         }
     }
     else
@@ -2984,10 +3570,16 @@ bool QExperimental3DExtension::programVmiLoadOrSave(int lineNumber, const QStrin
     {
         if (run)
         {
-            if (load) loadHZv(fileName);
+            if (load)
+            {
+                loadHZv(fileName);
+            }
             else
             {
-                if (m_saveHZvPushButton->isEnabled()) saveHZv(fileName);
+                if (m_saveHZvPushButton->isEnabled())
+                {
+                    saveHZv(fileName);
+                }
                 else
                 {
                     logProgramError(lineNumber, "No es pot desar l'entropia dels punts de vista", line);
@@ -3000,10 +3592,16 @@ bool QExperimental3DExtension::programVmiLoadOrSave(int lineNumber, const QStrin
     {
         if (run)
         {
-            if (load) loadVmi(fileName);
+            if (load)
+            {
+                loadVmi(fileName);
+            }
             else
             {
-                if (m_saveVmiPushButton->isEnabled()) saveVmi(fileName);
+                if (m_saveVmiPushButton->isEnabled())
+                {
+                    saveVmi(fileName);
+                }
                 else
                 {
                     logProgramError(lineNumber, "No es pot desar la VMI", line);
@@ -3016,10 +3614,16 @@ bool QExperimental3DExtension::programVmiLoadOrSave(int lineNumber, const QStrin
     {
         if (run)
         {
-            if (load) loadViewpointUnstabilities(fileName);
+            if (load)
+            {
+                loadViewpointUnstabilities(fileName);
+            }
             else
             {
-                if (m_saveViewpointUnstabilitiesPushButton->isEnabled()) saveViewpointUnstabilities(fileName);
+                if (m_saveViewpointUnstabilitiesPushButton->isEnabled())
+                {
+                    saveViewpointUnstabilities(fileName);
+                }
                 else
                 {
                     logProgramError(lineNumber, "No es pot desar la inestabilitat dels punts de vista", line);
@@ -3032,10 +3636,16 @@ bool QExperimental3DExtension::programVmiLoadOrSave(int lineNumber, const QStrin
     {
         if (run)
         {
-            if (load) loadBestViews(fileName);
+            if (load)
+            {
+                loadBestViews(fileName);
+            }
             else
             {
-                if (m_saveBestViewsPushButton->isEnabled()) saveBestViews(fileName);
+                if (m_saveBestViewsPushButton->isEnabled())
+                {
+                    saveBestViews(fileName);
+                }
                 else
                 {
                     logProgramError(lineNumber, "No es pot desar les millors vistes", line);
@@ -3048,10 +3658,16 @@ bool QExperimental3DExtension::programVmiLoadOrSave(int lineNumber, const QStrin
     {
         if (run)
         {
-            if (load) loadGuidedTour(fileName);
+            if (load)
+            {
+                loadGuidedTour(fileName);
+            }
             else
             {
-                if (m_saveGuidedTourPushButton->isEnabled()) saveGuidedTour(fileName);
+                if (m_saveGuidedTourPushButton->isEnabled())
+                {
+                    saveGuidedTour(fileName);
+                }
                 else
                 {
                     logProgramError(lineNumber, "No es pot desar el guided tour", line);
@@ -3064,10 +3680,16 @@ bool QExperimental3DExtension::programVmiLoadOrSave(int lineNumber, const QStrin
     {
         if (run)
         {
-            if (load) loadVomi(fileName);
+            if (load)
+            {
+                loadVomi(fileName);
+            }
             else
             {
-                if (m_saveVomiPushButton->isEnabled()) saveVomi(fileName);
+                if (m_saveVomiPushButton->isEnabled())
+                {
+                    saveVomi(fileName);
+                }
                 else
                 {
                     logProgramError(lineNumber, "No es pot desar la VoMI", line);
@@ -3080,10 +3702,16 @@ bool QExperimental3DExtension::programVmiLoadOrSave(int lineNumber, const QStrin
     {
         if (run)
         {
-            if (load) loadViewpointVomi(fileName);
+            if (load)
+            {
+                loadViewpointVomi(fileName);
+            }
             else
             {
-                if (m_saveViewpointVomiPushButton->isEnabled()) saveViewpointVomi(fileName);
+                if (m_saveViewpointVomiPushButton->isEnabled())
+                {
+                    saveViewpointVomi(fileName);
+                }
                 else
                 {
                     logProgramError(lineNumber, "No es pot desar la VoMI dels punts de vista", line);
@@ -3096,10 +3724,16 @@ bool QExperimental3DExtension::programVmiLoadOrSave(int lineNumber, const QStrin
     {
         if (run)
         {
-            if (load) loadColorVomi(fileName);
+            if (load)
+            {
+                loadColorVomi(fileName);
+            }
             else
             {
-                if (m_saveColorVomiPushButton->isEnabled()) saveColorVomi(fileName);
+                if (m_saveColorVomiPushButton->isEnabled())
+                {
+                    saveColorVomi(fileName);
+                }
                 else
                 {
                     logProgramError(lineNumber, "No es pot desar la color VoMI", line);
@@ -3263,7 +3897,10 @@ void QExperimental3DExtension::getFileNameToSaveTour()
 {
     QString fileName = getFileNameToSave(Experimental3DSettings::TourDir, tr("Save tour"), tr("PNG files (*.png);;All files (*)"), "png");
 
-    if (fileName.isNull()) return;
+    if (fileName.isNull())
+    {
+        return;
+    }
 
     if (!fileName.contains("%1"))
     {
@@ -3311,7 +3948,10 @@ void QExperimental3DExtension::gaussianFilter()
     for (int i = 0; i < size; i++)
     {
         float f = qAbs(m_spatialImportanceFunction.at(i));
-        if (f > m_maximumSpatialImportanceFunction) m_maximumSpatialImportanceFunction = f;
+        if (f > m_maximumSpatialImportanceFunction)
+        {
+            m_maximumSpatialImportanceFunction = f;
+        }
     }
 #endif // CUDA_AVAILABLE
 
@@ -3332,7 +3972,7 @@ void QExperimental3DExtension::boxMeanFilter()
 
 #ifndef CUDA_AVAILABLE
     QMessageBox::information(this, tr("Operation only available with CUDA"),
-                             "The box filter is only implemented in CUDA. Compile with CUDA support to use it.");
+                             tr("The box filter is only implemented in CUDA. Compile with CUDA support to use it."));
 #else // CUDA_AVAILABLE
     m_spatialImportanceFunction = cfBoxMeanDifference(cast->GetOutput(), m_filteringRadiusSpinBox->value());
     int size = m_volume->getSize();
@@ -3340,7 +3980,10 @@ void QExperimental3DExtension::boxMeanFilter()
     for (int i = 0; i < size; i++)
     {
         float f = qAbs(m_spatialImportanceFunction.at(i));
-        if (f > m_maximumSpatialImportanceFunction) m_maximumSpatialImportanceFunction = f;
+        if (f > m_maximumSpatialImportanceFunction)
+        {
+            m_maximumSpatialImportanceFunction = f;
+        }
     }
 #endif // CUDA_AVAILABLE
 
@@ -3361,7 +4004,7 @@ void QExperimental3DExtension::probabilisticAmbientOcclusionGaussianChebychev()
 
 #ifndef CUDA_AVAILABLE
     QMessageBox::information(this, tr("Operation only available with CUDA"),
-                             "The PAO Gaussian Chebychev is only implemented in CUDA. Compile with CUDA support to use it.");
+                             tr("The PAO Gaussian Chebychev is only implemented in CUDA. Compile with CUDA support to use it."));
 #else // CUDA_AVAILABLE
     m_probabilisticAmbientOcclusion = cfProbabilisticAmbientOcclusionGaussianChebychev(cast->GetOutput(),
                                                                                        m_probabilisticAmbientOcclusionRadiusSpinBox->value());
@@ -3392,7 +4035,7 @@ void QExperimental3DExtension::probabilisticAmbientOcclusionBoxMeanChebychev()
 
 #ifndef CUDA_AVAILABLE
     QMessageBox::information(this, tr("Operation only available with CUDA"),
-                             "The PAO box mean Chebychev is only implemented in CUDA. Compile with CUDA support to use it.");
+                             tr("The PAO box mean Chebychev is only implemented in CUDA. Compile with CUDA support to use it."));
 #else // CUDA_AVAILABLE
     m_probabilisticAmbientOcclusion = cfProbabilisticAmbientOcclusionBoxMeanChebychev(cast->GetOutput(), m_probabilisticAmbientOcclusionRadiusSpinBox->value());
 #ifndef QT_NO_DEBUG
@@ -3422,7 +4065,7 @@ void QExperimental3DExtension::probabilisticAmbientOcclusionGaussian()
 
 #ifndef CUDA_AVAILABLE
     QMessageBox::information(this, tr("Operation only available with CUDA"),
-                             "The PAO Gaussian is only implemented in CUDA. Compile with CUDA support to use it.");
+                             tr("The PAO Gaussian is only implemented in CUDA. Compile with CUDA support to use it."));
 #else // CUDA_AVAILABLE
     m_probabilisticAmbientOcclusion = cfProbabilisticAmbientOcclusionGaussian(cast->GetOutput(), m_probabilisticAmbientOcclusionRadiusSpinBox->value());
 #ifndef QT_NO_DEBUG
@@ -3451,7 +4094,8 @@ void QExperimental3DExtension::probabilisticAmbientOcclusionCube()
     cast->Update();
 
 #ifndef CUDA_AVAILABLE
-    QMessageBox::information(this, tr("Operation only available with CUDA"), "The PAO cube is only implemented in CUDA. Compile with CUDA support to use it.");
+    QMessageBox::information(this, tr("Operation only available with CUDA"),
+                             tr("The PAO cube is only implemented in CUDA. Compile with CUDA support to use it."));
 #else // CUDA_AVAILABLE
     m_probabilisticAmbientOcclusion = cfProbabilisticAmbientOcclusionCube(cast->GetOutput(), m_probabilisticAmbientOcclusionRadiusSpinBox->value());
 #ifndef QT_NO_DEBUG
@@ -3481,7 +4125,7 @@ void QExperimental3DExtension::probabilisticAmbientOcclusionSphere()
 
 #ifndef CUDA_AVAILABLE
     QMessageBox::information(this, tr("Operation only available with CUDA"),
-                             "The PAO sphere is only implemented in CUDA. Compile with CUDA support to use it.");
+                             tr("The PAO sphere is only implemented in CUDA. Compile with CUDA support to use it."));
 #else // CUDA_AVAILABLE
     m_probabilisticAmbientOcclusion = cfProbabilisticAmbientOcclusionSphere(cast->GetOutput(), m_probabilisticAmbientOcclusionRadiusSpinBox->value());
 #ifndef QT_NO_DEBUG
@@ -3511,7 +4155,7 @@ void QExperimental3DExtension::probabilisticAmbientOcclusionTangentSphereVarianc
 
 #ifndef CUDA_AVAILABLE
     QMessageBox::information(this, tr("Operation only available with CUDA"),
-                             "The PAOTS variance is only implemented in CUDA. Compile with CUDA support to use it.");
+                             tr("The PAOTS variance is only implemented in CUDA. Compile with CUDA support to use it."));
 #else // CUDA_AVAILABLE
     m_probabilisticAmbientOcclusion = cfProbabilisticAmbientOcclusionTangentSphereVariance(cast->GetOutput(),
                                                                                            m_probabilisticAmbientOcclusionRadiusSpinBox->value());
@@ -3541,7 +4185,8 @@ void QExperimental3DExtension::probabilisticAmbientOcclusionTangentSphereCdf()
     cast->Update();
 
 #ifndef CUDA_AVAILABLE
-    QMessageBox::information(this, tr("Operation only available with CUDA"), "The PAOTS cdf is only implemented in CUDA. Compile with CUDA support to use it.");
+    QMessageBox::information(this, tr("Operation only available with CUDA"),
+                             tr("The PAOTS cdf is only implemented in CUDA. Compile with CUDA support to use it."));
 #else // CUDA_AVAILABLE
     m_probabilisticAmbientOcclusion = cfProbabilisticAmbientOcclusionTangentSphereCdf(cast->GetOutput(), m_probabilisticAmbientOcclusionRadiusSpinBox->value());
 #ifndef QT_NO_DEBUG
@@ -3571,7 +4216,7 @@ void QExperimental3DExtension::probabilisticAmbientOcclusionTangentSphereGaussia
 
 #ifndef CUDA_AVAILABLE
     QMessageBox::information(this, tr("Operation only available with CUDA"),
-                             "The PAOTS Gaussian is only implemented in CUDA. Compile with CUDA support to use it.");
+                             tr("The PAOTS Gaussian is only implemented in CUDA. Compile with CUDA support to use it."));
 #else // CUDA_AVAILABLE
     m_probabilisticAmbientOcclusion = cfProbabilisticAmbientOcclusionTangentSphereGaussian(cast->GetOutput(),
                                                                                            m_probabilisticAmbientOcclusionRadiusSpinBox->value());
@@ -3611,7 +4256,7 @@ void QExperimental3DExtension::volumeVariance()
 
 #ifndef CUDA_AVAILABLE
     QMessageBox::information(this, tr("Operation only available with CUDA"),
-                             "The volume variance is only implemented in CUDA. Compile with CUDA support to use it.");
+                             tr("The volume variance is only implemented in CUDA. Compile with CUDA support to use it."));
 #else // CUDA_AVAILABLE
     m_volumeVariance = cfVolumeVariance(cast->GetOutput(), m_probabilisticAmbientOcclusionRadiusSpinBox->value());
 #ifndef QT_NO_DEBUG
@@ -3633,7 +4278,10 @@ void QExperimental3DExtension::volumeVariance()
 
 void QExperimental3DExtension::generateColorTransferFunctionFromImi()
 {
-    if (m_imi.isEmpty()) return;
+    if (m_imi.isEmpty())
+    {
+        return;
+    }
 
     TransferFunction imiTransferFunction = m_transferFunctionEditor->transferFunction();
     imiTransferFunction.clearColor();
@@ -3655,7 +4303,10 @@ void QExperimental3DExtension::generateColorTransferFunctionFromImi()
 
 void QExperimental3DExtension::generateOpacityTransferFunctionFromImi()
 {
-    if (m_imi.isEmpty()) return;
+    if (m_imi.isEmpty())
+    {
+        return;
+    }
 
     TransferFunction imiTransferFunction = m_transferFunctionEditor->transferFunction();
     imiTransferFunction.clearOpacity();
@@ -3674,7 +4325,10 @@ void QExperimental3DExtension::generateOpacityTransferFunctionFromImi()
 
 void QExperimental3DExtension::generateTransferFunctionFromImi()
 {
-    if (m_imi.isEmpty()) return;
+    if (m_imi.isEmpty())
+    {
+        return;
+    }
 
     TransferFunction imiTransferFunction;
     imiTransferFunction.setName("IMI transfer function");
@@ -3695,7 +4349,10 @@ void QExperimental3DExtension::generateTransferFunctionFromImi()
 
 void QExperimental3DExtension::generateTransferFunctionFromIntensityClusters()
 {
-    if (m_intensityClusters.isEmpty()) return;
+    if (m_intensityClusters.isEmpty())
+    {
+        return;
+    }
 
     const TransferFunction &currentTransferFunction = m_transferFunctionEditor->transferFunction();
     TransferFunction clusteringTransferFunction;
@@ -3725,7 +4382,10 @@ void QExperimental3DExtension::generateTransferFunctionFromIntensityClusters()
             for (int j = 0; j < points.size(); j++)
             {
                 double a = currentTransferFunction.getOpacity(points.at(j));
-                if (a < opacity) opacity = a;
+                if (a < opacity)
+                {
+                    opacity = a;
+                }
             }
         }
         else if (m_transferFunctionFromIntensityClusteringOpacityCurrentMeanRadioButton->isChecked())   // l'opacitat serà la mitjana de l'interval
@@ -3743,10 +4403,16 @@ void QExperimental3DExtension::generateTransferFunctionFromIntensityClusters()
 
             opacity /= x2 - x1;
 
-            if (x1 == x2) opacity = m_normalTransferFunction.getOpacity(x); // cas especial
+            if (x1 == x2)
+            {
+                opacity = m_normalTransferFunction.getOpacity(x); // cas especial
+            }
         }
 
-        if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeCenterPointRadioButton->isChecked()) clusteringTransferFunction.set(x, color, opacity);
+        if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeCenterPointRadioButton->isChecked())
+        {
+            clusteringTransferFunction.set(x, color, opacity);
+        }
         else if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeRangeRadioButton->isChecked())
         {
             clusteringTransferFunction.set(x1, color, opacity);
@@ -3762,9 +4428,12 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
 {
 #ifndef CUDA_AVAILABLE
     QMessageBox::information(this, tr("Operation only available with CUDA"),
-                             "VMIi computations are only implemented in CUDA. Compile with CUDA support to use them.");
+                             tr("VMIi computations are only implemented in CUDA. Compile with CUDA support to use them."));
 #else // CUDA_AVAILABLE
-    if (m_intensityClusters.isEmpty()) return;
+    if (m_intensityClusters.isEmpty())
+    {
+        return;
+    }
 
     setCursor(QCursor(Qt::WaitCursor));
 
@@ -3800,7 +4469,10 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
     }
 
     bool switchMode = !m_viewClusterizedVolume;
-    if (switchMode) viewClusterizedVolume();
+    if (switchMode)
+    {
+        viewClusterizedVolume();
+    }
 
     const double DeltaLimit1 = m_geneticTransferFunctionFromIntensityClusteringDelta1DoubleSpinBox->value();
     const double DeltaLimit2 = m_geneticTransferFunctionFromIntensityClusteringDelta2DoubleSpinBox->value();
@@ -3842,12 +4514,18 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
         }
         if (minimizeDkl_IV_W)
         {
-            if (piWeights) weights = viewpointIntensityInformationChannel.intensityProbabilities();
+            if (piWeights)
+            {
+                weights = viewpointIntensityInformationChannel.intensityProbabilities();
+            }
             const QVector<float> &bestPV = viewpointIntensityInformationChannel.viewProbabilities();
             const QVector< QVector<float> > &bestPIV = viewpointIntensityInformationChannel.intensityProbabilitiesGivenView();
             int nViewpoints = bestPV.size();
             best = 0.0;
-            for (int k = 0; k < nViewpoints; k++) best += bestPV.at(k) * InformationTheory::kullbackLeiblerDivergence(bestPIV.at(k), weights, true);
+            for (int k = 0; k < nViewpoints; k++)
+            {
+                best += bestPV.at(k) * InformationTheory::kullbackLeiblerDivergence(bestPIV.at(k), weights, true);
+            }
         }
         if (maximizeHIV)
         {
@@ -3917,7 +4595,10 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
             double delta = deltaRange * qrand() / RAND_MAX + deltaMin;
             double newOpacity = qBound(0.0, opacity + delta, 1.0);
             // si la intensitat actual té pes 0 li posem l'opacitat directament a 0 i ens estalviem temps
-            if ((minimizeDkl_I_W || minimizeDkl_IV_W) && weights.at(j) == 0.0f) newOpacity = 0.0;
+            if ((minimizeDkl_I_W || minimizeDkl_IV_W) && weights.at(j) == 0.0f)
+            {
+                newOpacity = 0.0;
+            }
             DEBUG_LOG(QString("........................................ cluster %1: opacitat vella = %2, delta = %3%4, opacitat nova = %5").arg(j).arg(opacity)
                              .arg(delta > 0.0 ? "+" : "").arg(delta).arg(newOpacity));
 
@@ -3974,12 +4655,18 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
         }
         if (minimizeDkl_IV_W)
         {
-            if (piWeights) weights = viewpointIntensityInformationChannel.intensityProbabilities();
+            if (piWeights)
+            {
+                weights = viewpointIntensityInformationChannel.intensityProbabilities();
+            }
             const QVector<float> &evolvedPV = viewpointIntensityInformationChannel.viewProbabilities();
             const QVector< QVector<float> > &evolvedPIV = viewpointIntensityInformationChannel.intensityProbabilitiesGivenView();
             int nViewpoints = evolvedPV.size();
             evolved = 0.0;
-            for (int k = 0; k < nViewpoints; k++) evolved += evolvedPV.at(k) * InformationTheory::kullbackLeiblerDivergence(evolvedPIV.at(k), weights, true);
+            for (int k = 0; k < nViewpoints; k++)
+            {
+                evolved += evolvedPV.at(k) * InformationTheory::kullbackLeiblerDivergence(evolvedPIV.at(k), weights, true);
+            }
             DEBUG_LOG(QString(".......................................... D_KL(I|V || W) mínima = %1, D_KL(I|V || W) evolucionada = %2").arg(best)
                                                                                                                                         .arg(evolved));
             accept = evolved < best;
@@ -4045,7 +4732,10 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
 
     m_geneticTransferFunctionFromIntensityClusteringProgressBar->setValue(100);
 
-    if (switchMode) viewNormalVolume();
+    if (switchMode)
+    {
+        viewNormalVolume();
+    }
 
     setCursor(QCursor(Qt::ArrowCursor));
 #endif // CUDA_AVAILABLE
@@ -4055,9 +4745,12 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
 {
 #ifndef CUDA_AVAILABLE
     QMessageBox::information(this, tr("Operation only available with CUDA"),
-                             "VMIi computations are only implemented in CUDA. Compile with CUDA support to use them.");
+                             tr("VMIi computations are only implemented in CUDA. Compile with CUDA support to use them."));
 #else // CUDA_AVAILABLE
-    if (m_intensityClusters.isEmpty()) return;
+    if (m_intensityClusters.isEmpty())
+    {
+        return;
+    }
 
     setCursor(QCursor(Qt::WaitCursor));
 
@@ -4093,7 +4786,10 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
     }
 
     bool switchMode = !m_viewClusterizedVolume;
-    if (switchMode) viewClusterizedVolume();
+    if (switchMode)
+    {
+        viewClusterizedVolume();
+    }
 
     int iterations = m_fineTuneGeneticTransferFunctionFromIntensityClusteringIterationsSpinBox->value();
     TransferFunction bestTransferFunction = m_transferFunctionEditor->transferFunction();
@@ -4132,12 +4828,18 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
         }
         if (minimizeDkl_IV_W)
         {
-            if (piWeights) weights = viewpointIntensityInformationChannel.intensityProbabilities();
+            if (piWeights)
+            {
+                weights = viewpointIntensityInformationChannel.intensityProbabilities();
+            }
             const QVector<float> &bestPV = viewpointIntensityInformationChannel.viewProbabilities();
             const QVector< QVector<float> > &bestPIV = viewpointIntensityInformationChannel.intensityProbabilitiesGivenView();
             int nViewpoints = bestPV.size();
             best = 0.0;
-            for (int k = 0; k < nViewpoints; k++) best += bestPV.at(k) * InformationTheory::kullbackLeiblerDivergence(bestPIV.at(k), weights, true);
+            for (int k = 0; k < nViewpoints; k++)
+            {
+                best += bestPV.at(k) * InformationTheory::kullbackLeiblerDivergence(bestPIV.at(k), weights, true);
+            }
         }
         if (maximizeHIV)
         {
@@ -4167,7 +4869,8 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
         int cluster;
 //        double x1, x2, x;
         double opacity;
-        do {
+        do
+        {
             cluster = 1 + qrand() % (m_intensityClusters.size() - 1);
 //            x1 = m_intensityClusters[cluster].first();
 //            x2 = m_intensityClusters[cluster].last();
@@ -4182,16 +4885,31 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
 
         switch (m_fineTuneGeneticTransferFunctionFromIntensityClusteringLevelComboBox->currentIndex())
         {
-            case 0: base = 0.0; step = 0.1; start = 0; break;                                   // primer decimal
-            case 1: base = qFloor(10.0 * opacity) / 10.0; step = 0.01; start = -10; break;      // segon decimal
-            case 2: base = qFloor(100.0 * opacity) / 100.0; step = 0.001; start = -10; break;   // tercer decimal
+            case 0: // primer decimal
+                base = 0.0;
+                step = 0.1;
+                start = 0;
+                break;
+            case 1: // segon decimal
+                base = qFloor(10.0 * opacity) / 10.0;
+                step = 0.01;
+                start = -10;
+                break;
+            case 2: // tercer decimal
+                base = qFloor(100.0 * opacity) / 100.0;
+                step = 0.001;
+                start = -10;
+                break;
         }
 
         for (int j = start; j <= end; j++)
         {
             TransferFunction fineTunedTransferFunction(bestTransferFunction);
             double newOpacity = base + j * step;
-            if (newOpacity < 0.0 - step || newOpacity > 1.0 + step) continue;   // ens saltem el pas perquè és feina en va
+            if (newOpacity < 0.0 - step || newOpacity > 1.0 + step)
+            {
+                continue;   // ens saltem el pas perquè és feina en va
+            }
             newOpacity = qBound(0.0, newOpacity, 1.0);
 
             // si la intensitat actual té pes 0 li posem l'opacitat directament a 0 i ens estalviem temps
@@ -4256,13 +4974,18 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
             }
             if (minimizeDkl_IV_W)
             {
-                if (piWeights) weights = viewpointIntensityInformationChannel.intensityProbabilities();
+                if (piWeights)
+                {
+                    weights = viewpointIntensityInformationChannel.intensityProbabilities();
+                }
                 const QVector<float> &fineTunedPV = viewpointIntensityInformationChannel.viewProbabilities();
                 const QVector< QVector<float> > &fineTunedPIV = viewpointIntensityInformationChannel.intensityProbabilitiesGivenView();
                 int nViewpoints = fineTunedPV.size();
                 fineTuned = 0.0;
                 for (int k = 0; k < nViewpoints; k++)
+                {
                     fineTuned += fineTunedPV.at(k) * InformationTheory::kullbackLeiblerDivergence(fineTunedPIV.at(k), weights, true);
+                }
                 DEBUG_LOG(QString(".......................................... D_KL(I|V || W) mínima = %1, D_KL(I|V || W) ajustada = %2").arg(best)
                                                                                                                                         .arg(fineTuned));
                 accept = fineTuned < best;
@@ -4332,7 +5055,10 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
 
     m_fineTuneGeneticTransferFunctionFromIntensityClusteringProgressBar->setValue(100);
 
-    if (switchMode) viewNormalVolume();
+    if (switchMode)
+    {
+        viewNormalVolume();
+    }
 
     setCursor(QCursor(Qt::ArrowCursor));
 #endif // CUDA_AVAILABLE
@@ -4342,7 +5068,7 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
 {
 #ifndef CUDA_AVAILABLE
     QMessageBox::information(this, tr("Operation only available with CUDA"),
-                             "VMIi computations are only implemented in CUDA. Compile with CUDA support to use them.");
+                             tr("VMIi computations are only implemented in CUDA. Compile with CUDA support to use them."));
 #else // CUDA_AVAILABLE
 //    QFile file("/users/bdoc/mruiz/scratch/resultats/optimitzacio-ft-article/evolucio-wbc-uniform_volume.txt");
 //    file.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text);
@@ -4352,7 +5078,10 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
     QTime time;
     time.start();
 
-    if (!m_clusterizedVolume) return;
+    if (!m_clusterizedVolume)
+    {
+        return;
+    }
 
     m_optimizing = true;
 
@@ -4382,7 +5111,10 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
     }
 
     bool switchMode = !m_viewClusterizedVolume;
-    if (switchMode) viewClusterizedVolume();
+    if (switchMode)
+    {
+        viewClusterizedVolume();
+    }
 
     // posem opacitat 0 als clusters amb pes 0
     {
@@ -4395,10 +5127,19 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
 
         for (int j = 0; j < nClusters; j++)    // evolucionar-los tots
         {
-            if (!m_clusterHasData.at(j)) continue;
+            if (!m_clusterHasData.at(j))
+            {
+                continue;
+            }
 
-            if (weights.at(j) > 0.0) newTransferFunction.setScalarOpacity(j, currentTransferFunction.getScalarOpacity(j));
-            else newTransferFunction.setScalarOpacity(j, 0.0);
+            if (weights.at(j) > 0.0)
+            {
+                newTransferFunction.setScalarOpacity(j, currentTransferFunction.getScalarOpacity(j));
+            }
+            else
+            {
+                newTransferFunction.setScalarOpacity(j, 0.0);
+            }
         }
 
         m_transferFunctionEditor->setTransferFunction(newTransferFunction);
@@ -4499,14 +5240,20 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
         }
         if (minimizeDkl_IV_W)
         {
-            if (piWeights) weights = viewpointIntensityInformationChannel.intensityProbabilities();
+            if (piWeights)
+            {
+                weights = viewpointIntensityInformationChannel.intensityProbabilities();
+            }
             bestPI = viewpointIntensityInformationChannel.intensityProbabilities();
             bestPV = viewpointIntensityInformationChannel.viewProbabilities();
             bestPIV = viewpointIntensityInformationChannel.intensityProbabilitiesGivenView();
             bestTotalViewedVolume = viewpointIntensityInformationChannel.totalViewedVolume();
             int nViewpoints = bestPV.size();
             best = 0.0;
-            for (int k = 0; k < nViewpoints; k++) best += bestPV.at(k) * InformationTheory::kullbackLeiblerDivergence(bestPIV.at(k), weights, true);
+            for (int k = 0; k < nViewpoints; k++)
+            {
+                best += bestPV.at(k) * InformationTheory::kullbackLeiblerDivergence(bestPIV.at(k), weights, true);
+            }
             if (beta > 0.0)
             {
                 best = best - beta * bestTotalViewedVolume;     // resta
@@ -4540,7 +5287,10 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
         QVector<short> sign(nClusters);
         int rejected = 0;
 
-        for (int i = 0; i < nClusters; i++) K[i] = qMin(2.0 * K.at(i), maximumK);
+        for (int i = 0; i < nClusters; i++)
+        {
+            K[i] = qMin(2.0 * K.at(i), maximumK);
+        }
 
         const int MaximumRejections = 10;
         const int SameSignThreshold = 5;
@@ -4601,7 +5351,10 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
                         double pv = lastPV.at(k);
                         double piv = lastPIV.at(k).at(j);
                         sumP += piv;
-                        if (pv == 0.0 || piv == 0.0) continue;  // tots dos es troben multiplicant en algun moment
+                        if (pv == 0.0 || piv == 0.0)
+                        {
+                            continue;  // tots dos es troben multiplicant en algun moment
+                        }
                         double Dkl = InformationTheory::kullbackLeiblerDivergence(lastPIV.at(k), weights, true);
                         derivative += pv * (MathTools::logTwo(piv / w) - Dkl) * piv / ((1.0 - piv) * opacity);
                     }
@@ -4621,7 +5374,10 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
 
                 if (derivative > 0.0)
                 {
-                    if (sign.at(j) >= 0) sign[j]++;
+                    if (sign.at(j) >= 0)
+                    {
+                        sign[j]++;
+                    }
                     else
                     {
                         sign[j] = +1;
@@ -4635,16 +5391,28 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
                         sign[j] = -1;
                         K[j] /= 2.0;
                     }
-                    else sign[j]--;
+                    else
+                    {
+                        sign[j]--;
+                    }
                 }
 
-                //if (qAbs(K.at(j) * derivative) > opacity) K[j] /= 2.0;  // si el delta ha de ser molt gran reduïm el pas
+//                if (qAbs(K.at(j) * derivative) > opacity)
+//                {
+//                    K[j] /= 2.0;  // si el delta ha de ser molt gran reduïm el pas
+//                }
                 // si fa molta estona que ens movem en el mateix sentit augmentem el pas
-                if (sign.at(j) != 0 && sign.at(j) % SameSignThreshold == 0) K[j] *= 2.0;
+                if (sign.at(j) != 0 && sign.at(j) % SameSignThreshold == 0)
+                {
+                    K[j] *= 2.0;
+                }
 
                 delta = -K.at(j) * derivative;
                 // si el pes és més gran que 0 però l'opacitat és 0 hem d'incrementar l'opacitat (la derivada és NaN)
-                if (w > 0.0 && opacity == 0.0) delta = +Epsilon;
+                if (w > 0.0 && opacity == 0.0)
+                {
+                    delta = +Epsilon;
+                }
                 //double newOpacity = qBound(0.0, opacity + delta, 1.0);
                 double newOpacity = opacity + delta;
                 if (newOpacity < 0.0)
@@ -4652,11 +5420,23 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
                     newOpacity = opacity / 2.0; // no volem opacitats negatives perquè si treballem amb opacitats molt petites ens perjudica
                     K[j] /= 2.0;
                 }
-                if (w == 0.0) newOpacity = 0.0; // si la intensitat actual té pes 0 li posem l'opacitat directament a 0 i ens estalviem temps
+                if (w == 0.0)
+                {
+                    newOpacity = 0.0; // si la intensitat actual té pes 0 li posem l'opacitat directament a 0 i ens estalviem temps
+                }
                 // si té pes i té opacitat però no es veu, li doblem l'opacitat amb la intenció d'augmentar-ne la visibilitat
-                if (w > 0.0 && opacity > 0.0 && sumP == 0.0) newOpacity = 2.0 * opacity;
-                if (newOpacity < minOpacity) minOpacity = newOpacity;
-                if (newOpacity > maxOpacity) maxOpacity = newOpacity;
+                if (w > 0.0 && opacity > 0.0 && sumP == 0.0)
+                {
+                    newOpacity = 2.0 * opacity;
+                }
+                if (newOpacity < minOpacity)
+                {
+                    minOpacity = newOpacity;
+                }
+                if (newOpacity > maxOpacity)
+                {
+                    maxOpacity = newOpacity;
+                }
                 newOpacities[j] = newOpacity;
 //                DEBUG_LOG(QString("................................ cluster %1: opacitat vella = %2, derivada = %3, k = %4, delta = %5%6, opacitat nova = %7")
 //                                 .arg(j).arg(opacity).arg(derivative).arg(K.at(j)).arg(delta > 0.0 ? "+" : "").arg(delta).arg(newOpacity));
@@ -4672,7 +5452,10 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
             for (int j = 0; j < nClusters; j++)    // evolucionar-los tots
             //for (int j = 1; j < nClusters; j++)    // deixar el primer tal com està (a 0)
             {
-                if (!m_clusterHasData.at(j)) continue;
+                if (!m_clusterHasData.at(j))
+                {
+                    continue;
+                }
 
     //            double x1 = m_intensityClusters[j].first();
     //            double x2 = m_intensityClusters[j].last();
@@ -4681,7 +5464,10 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
                 //double opacity = lastTransferFunction.getOpacity(j);
                 double newOpacity = qBound(0.0, (newOpacities.at(j) + shift) * scale, 1.0); // el qBound és per si no reescalem l'opacitat
                 // cal tornar a posar l'opacitat a 0 si el pes és 0 perquè amb el reescalat pot augmentar
-                if (weights.at(j) == 0.0) newOpacity = 0.0; // si la intensitat actual té pes 0 li posem l'opacitat directament a 0 i ens estalviem temps
+                if (weights.at(j) == 0.0)
+                {
+                    newOpacity = 0.0; // si la intensitat actual té pes 0 li posem l'opacitat directament a 0 i ens estalviem temps
+                }
                 //DEBUG_LOG(QString("................................ cluster %1: opacitat vella = %2, opacitat nova desitjada = %3, opacitat nova final = %4")
                 //                 .arg(j).arg(opacity).arg(newOpacities.at(j)).arg(newOpacity));
 
@@ -4760,7 +5546,10 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
             }
             if (minimizeDkl_IV_W)
             {
-                if (piWeights) weights = viewpointIntensityInformationChannel.intensityProbabilities();
+                if (piWeights)
+                {
+                    weights = viewpointIntensityInformationChannel.intensityProbabilities();
+                }
                 optimizedPI = viewpointIntensityInformationChannel.intensityProbabilities();
                 optimizedPV = viewpointIntensityInformationChannel.viewProbabilities();
                 optimizedPIV = viewpointIntensityInformationChannel.intensityProbabilitiesGivenView();
@@ -4768,7 +5557,9 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
                 int nViewpoints = optimizedPV.size();
                 optimized = 0.0;
                 for (int k = 0; k < nViewpoints; k++)
+                {
                     optimized += optimizedPV.at(k) * InformationTheory::kullbackLeiblerDivergence(optimizedPIV.at(k), weights, true);
+                }
                 if (beta > 0.0)
                 {
                     optimized = optimized - beta * optimizedTotalViewedVolume;   // resta
@@ -4841,15 +5632,24 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
         setTransferFunction();
         DEBUG_LOG(QString("------------------------------------- fi de ronda: distància mínima = %1").arg(best));
 
-        if (best == previousBest) maximumK /= 2.0;
-        else maximumK = 1.0;
+        if (best == previousBest)
+        {
+            maximumK /= 2.0;
+        }
+        else
+        {
+            maximumK = 1.0;
+        }
 
         DEBUG_LOG(QString("==================== optimització per la derivada, fi ronda %1 ====================").arg(round));
     }
 
     DEBUG_LOG(QString("------------------------------------- fi: distància mínima = %1").arg(best));
 
-    if (switchMode) viewNormalVolume();
+    if (switchMode)
+    {
+        viewNormalVolume();
+    }
 
     setCursor(QCursor(Qt::ArrowCursor));
 
@@ -4865,7 +5665,10 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
 
 void QExperimental3DExtension::optimizeTransferFunctionAutomaticallyForOneViewpoint(bool on)
 {
-    if (on == m_optimizeTransferFunctionAutomaticallyForOneViewpoint) return;
+    if (on == m_optimizeTransferFunctionAutomaticallyForOneViewpoint)
+    {
+        return;
+    }
 
     m_optimizeTransferFunctionAutomaticallyForOneViewpoint = on;
 
@@ -4932,15 +5735,24 @@ OpacityTransferFunction QExperimental3DExtension::innernessProportionalOpacityTr
         image->GetPoint(i, point);
         Vector3 p(point[0], point[1], point[2]);
         double d = (p - c).length();
-        if (d > maximumDistanceToCenter.at(intensity)) maximumDistanceToCenter[intensity] = d;
-        if (d > globalMaximumDistanceToCenter) globalMaximumDistanceToCenter = d;
+        if (d > maximumDistanceToCenter.at(intensity))
+        {
+            maximumDistanceToCenter[intensity] = d;
+        }
+        if (d > globalMaximumDistanceToCenter)
+        {
+            globalMaximumDistanceToCenter = d;
+        }
     }
 
     OpacityTransferFunction result;
 
     for (int i = 0; i < nIntensities; i++)
     {
-        if (maximumDistanceToCenter.at(i) == MissingData) continue;
+        if (maximumDistanceToCenter.at(i) == MissingData)
+        {
+            continue;
+        }
         // l'opacitat és inversament proporcional a la distància mitjana al centre
         result.set(i, 1.0 - (maximumDistanceToCenter.at(i) / globalMaximumDistanceToCenter));
     }
@@ -4971,7 +5783,10 @@ void QExperimental3DExtension::generateInnernessProportionalOpacityTransferFunct
 
 void QExperimental3DExtension::createClusterizedVolume()
 {
-    if (m_intensityClusters.isEmpty()) return;
+    if (m_intensityClusters.isEmpty())
+    {
+        return;
+    }
 
     QVector<unsigned short> map;
 
@@ -4990,7 +5805,10 @@ void QExperimental3DExtension::createClusterizedVolume()
     unsigned short *data = reinterpret_cast<unsigned short*>(image->GetScalarPointer());
     int size = image->GetNumberOfPoints();
 
-    for (int i = 0; i < size; i++) data[i] = map.at(data[i]);
+    for (int i = 0; i < size; i++)
+    {
+        data[i] = map.at(data[i]);
+    }
 
     image->Modified();
     image->Update();
@@ -5002,7 +5820,10 @@ void QExperimental3DExtension::createClusterizedVolume()
 
 void QExperimental3DExtension::fillWeightsEditor()
 {
-    if (!m_clusterizedVolume) return;
+    if (!m_clusterizedVolume)
+    {
+        return;
+    }
 
     TransferFunction weightsFullTransferFunction;
     weightsFullTransferFunction.setColorTransferFunction(m_clusterizedTransferFunction.colorTransferFunction());
@@ -5019,12 +5840,18 @@ void QExperimental3DExtension::fillWeightsEditor()
     // posem pesos que no sumen 1 perquè així és més fàcil editar-los i de totes maneres els normalitzem més tard
     if (m_geneticTransferFunctionFromIntensityClusteringWeightsUniformRadioButton->isChecked()) // pesos uniformes
     {
-        for (int i = 0; i < nClusters; i++) weights[i] = 1.0;
+        for (int i = 0; i < nClusters; i++)
+        {
+            weights[i] = 1.0;
+        }
     }
     else if (m_geneticTransferFunctionFromIntensityClusteringWeightsIntensityProbabilitiesRadioButton->isChecked())
     {
         // ho posem com a l'uniforme per poder posar opacitats a 0 abans de començar
-        for (int i = 0; i < nClusters; i++) weights[i] = 1.0;
+        for (int i = 0; i < nClusters; i++)
+        {
+            weights[i] = 1.0;
+        }
         m_transferFunctionOptimizationWeightsManualCheckBox->setChecked(false);
         m_geneticTransferFunctionFromIntensityClusteringWeightsVolumeDistributionCheckBox->setChecked(false);
         m_transferFunctionOptimizationWeights2DIntensityVolumeCheckBox->setChecked(false);
@@ -5034,14 +5861,19 @@ void QExperimental3DExtension::fillWeightsEditor()
     {
         OpacityTransferFunction innerness = innernessProportionalOpacityTransferFunction(m_clusterizedVolume);
 
-        for (int i = 0; i < nClusters; i++) weights[i] = innerness(i);
+        for (int i = 0; i < nClusters; i++)
+        {
+            weights[i] = innerness(i);
+        }
     }
 
     // multipliquem els pesos pels pesos manuals
     if (m_transferFunctionOptimizationWeightsManualCheckBox->isChecked())
     {
         for (int i = 0; i < nClusters; i++)
+        {
             weights[i] *= m_transferFunctionOptimizationManualWeightsEditor->transferFunction().opacityTransferFunction().get(i);
+        }
     }
 
     // multipliquem els pesos per la distribució del volum
@@ -5051,9 +5883,15 @@ void QExperimental3DExtension::fillWeightsEditor()
         int size = m_clusterizedVolume->getImage()->GetNumberOfPoints();
         QVector<int> count(nClusters);
 
-        for (int i = 0; i < size; i++) count[data[i]]++;
+        for (int i = 0; i < size; i++)
+        {
+            count[data[i]]++;
+        }
 
-        for (int i = 0; i < nClusters; i++) weights[i] *= count.at(i);
+        for (int i = 0; i < nClusters; i++)
+        {
+            weights[i] *= count.at(i);
+        }
     }
 
     // multipliquem els pesos pel volum de la intensitat (només 2D)
@@ -5103,19 +5941,37 @@ void QExperimental3DExtension::fillWeightsEditor()
     {
         int intensityZeroEnd = m_transferFunctionOptimizationWeightsZeroUpToIntensitySpinBox->value();
         int gradientZeroEnd = m_transferFunctionOptimizationWeightsZeroUpToGradientSpinBox->value();
-        if (m_clusteringType != IntensityGradient) gradientZeroEnd = -1;
+        if (m_clusteringType != IntensityGradient)
+        {
+            gradientZeroEnd = -1;
+        }
 
         for (int i = 0; i < nClusters; i++)
         {
             int intensity;
-            if (m_clusteringType == IntensityGradient) intensity = intensityBinFromCluster2D(i);
-            else intensity = i;
+            if (m_clusteringType == IntensityGradient)
+            {
+                intensity = intensityBinFromCluster2D(i);
+            }
+            else
+            {
+                intensity = i;
+            }
 
             int gradient;
-            if (m_clusteringType == IntensityGradient) gradient = gradientBinFromCluster2D(i);
-            else gradient = 0;
+            if (m_clusteringType == IntensityGradient)
+            {
+                gradient = gradientBinFromCluster2D(i);
+            }
+            else
+            {
+                gradient = 0;
+            }
 
-            if (intensity <= intensityZeroEnd || gradient <= gradientZeroEnd) weights[i] = 0.0;
+            if (intensity <= intensityZeroEnd || gradient <= gradientZeroEnd)
+            {
+                weights[i] = 0.0;
+            }
         }
     }
 
@@ -5125,14 +5981,20 @@ void QExperimental3DExtension::fillWeightsEditor()
 
         for (int i = 0; i < nClusters; i++)
         {
-            if (weights.at(i) > maximumWeight) maximumWeight = weights.at(i);
+            if (weights.at(i) > maximumWeight)
+            {
+                maximumWeight = weights.at(i);
+            }
         }
 
         OpacityTransferFunction weightsTransferFunction;
 
         if (maximumWeight > 0.0)    // quan el pes màxim és 0 no hem de fer res
         {
-            for (int i = 0; i < nClusters; i++) weightsTransferFunction.set(i, weights.at(i) / maximumWeight);
+            for (int i = 0; i < nClusters; i++)
+            {
+                weightsTransferFunction.set(i, weights.at(i) / maximumWeight);
+            }
         }
 
         weightsFullTransferFunction.setOpacityTransferFunction(weightsTransferFunction);
@@ -5143,13 +6005,19 @@ void QExperimental3DExtension::fillWeightsEditor()
 
 void QExperimental3DExtension::checkData()
 {
-    if (!m_clusterizedVolume || !m_clusterHasData.isEmpty()) return;
+    if (!m_clusterizedVolume || !m_clusterHasData.isEmpty())
+    {
+        return;
+    }
 
     const unsigned short *data = reinterpret_cast<unsigned short*>(m_clusterizedVolume->getImage()->GetScalarPointer());
     int size = m_clusterizedVolume->getImage()->GetNumberOfPoints();
     m_clusterHasData.fill(false, numberOfClusters());
 
-    for (int i = 0; i < size; i++) m_clusterHasData[data[i]] = true;
+    for (int i = 0; i < size; i++)
+    {
+        m_clusterHasData[data[i]] = true;
+    }
 }
 
 QVector<float> QExperimental3DExtension::getWeights() const
@@ -5161,7 +6029,10 @@ QVector<float> QExperimental3DExtension::getWeights() const
     for (int i = 0; i < weights.size(); i++)
     {
         float weight = weightsTransferFunction.getOpacity(i);
-        if (!m_clusterHasData.at(i)) weight = 0.0f;
+        if (!m_clusterHasData.at(i))
+        {
+            weight = 0.0f;
+        }
         weights[i] = weight;
         totalWeight += weight;
     }
@@ -5304,7 +6175,10 @@ void QExperimental3DExtension::clusterizedToNormalTransferFunction()
         QColor color = m_clusterizedTransferFunction.getColor(i);
         double opacity = m_clusterizedTransferFunction.getOpacity(i);
 
-        if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeCenterPointRadioButton->isChecked()) m_normalTransferFunction.set(x, color, opacity);
+        if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeCenterPointRadioButton->isChecked())
+        {
+            m_normalTransferFunction.set(x, color, opacity);
+        }
         else if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeRangeRadioButton->isChecked())
         {
             m_normalTransferFunction.set(x1, color, opacity);
@@ -5315,7 +6189,10 @@ void QExperimental3DExtension::clusterizedToNormalTransferFunction()
 
 void QExperimental3DExtension::viewNormalVolume()
 {
-    if (!m_viewNormalVolumeRadioButton->isChecked()) m_viewNormalVolumeRadioButton->setChecked(true);
+    if (!m_viewNormalVolumeRadioButton->isChecked())
+    {
+        m_viewNormalVolumeRadioButton->setChecked(true);
+    }
     m_viewClusterizedVolume = false;
     m_volume = m_normalVolume;
     m_viewer->removeCurrentVolume();
@@ -5329,7 +6206,10 @@ void QExperimental3DExtension::viewNormalVolume()
 
 void QExperimental3DExtension::viewClusterizedVolume()
 {
-    if (!m_viewClusterizedVolumeRadioButton->isChecked()) m_viewClusterizedVolumeRadioButton->setChecked(true);
+    if (!m_viewClusterizedVolumeRadioButton->isChecked())
+    {
+        m_viewClusterizedVolumeRadioButton->setChecked(true);
+    }
     m_viewClusterizedVolume = true;
     m_volume = m_clusterizedVolume;
     m_viewer->removeCurrentVolume();
@@ -5402,10 +6282,16 @@ void QExperimental3DExtension::intensityGradientClustering()
     for (int i = 0; i < intensityBins; i++)
     {
         int binSize = intensities / intensityBins;
-        if (i < intensities % intensityBins) binSize++;
+        if (i < intensities % intensityBins)
+        {
+            binSize++;
+        }
         intensityMap << QVector<unsigned short>(binSize, i);
         QList<int> cluster;
-        for (int j = intensityMap.size() - binSize; j < intensityMap.size(); j++) cluster << j;
+        for (int j = intensityMap.size() - binSize; j < intensityMap.size(); j++)
+        {
+            cluster << j;
+        }
         m_intensityClusters << cluster;
     }
 
@@ -5413,10 +6299,16 @@ void QExperimental3DExtension::intensityGradientClustering()
     for (int i = 0; i < gradientBins; i++)
     {
         int binSize = gradients / gradientBins;
-        if (i < gradients % gradientBins) binSize++;
+        if (i < gradients % gradientBins)
+        {
+            binSize++;
+        }
         gradientMap << QVector<unsigned short>(binSize, i);
         QList<int> cluster;
-        for (int j = gradientMap.size() - binSize; j < gradientMap.size(); j++) cluster << j;
+        for (int j = gradientMap.size() - binSize; j < gradientMap.size(); j++)
+        {
+            cluster << j;
+        }
         m_gradientClusters << cluster;
     }
 
@@ -5457,7 +6349,10 @@ void QExperimental3DExtension::create2DClusterizedVolume()
     int size = image->GetNumberOfPoints();
     const unsigned char *gradient = m_volume->gradientMagnitudes();
 
-    for (int i = 0; i < size; i++) data[i] = m_intensityGradientMap.at(data[i]).at(gradient[i]);
+    for (int i = 0; i < size; i++)
+    {
+        data[i] = m_intensityGradientMap.at(data[i]).at(gradient[i]);
+    }
 
     image->Modified();
     image->Update();
@@ -5661,7 +6556,10 @@ void QExperimental3DExtension::importanceClustering()
     const unsigned short *mask = reinterpret_cast<unsigned short*>(m_viewer->getMainVolume()->getStudy()->getSeries().at(1)->getFirstVolume()
                                                                                                                            ->getVtkData()->GetScalarPointer());
 
-    for (int i = 0; i < size; i++) data[i] = mask[i] > 0 ? data[i] + m_importantStart : data[i];
+    for (int i = 0; i < size; i++)
+    {
+        data[i] = mask[i] > 0 ? data[i] + m_importantStart : data[i];
+    }
 
     image->Modified();
     image->Update();
@@ -5679,7 +6577,10 @@ void QExperimental3DExtension::importanceClustering()
 
 void QExperimental3DExtension::normalToClusterizedTransferFunction2DImportance()
 {
-    if (!m_clusterizedVolume || m_clusteringType != Importance) return;
+    if (!m_clusterizedVolume || m_clusteringType != Importance)
+    {
+        return;
+    }
 
     m_clusterizedTransferFunction = m_normalTransferFunction;
 

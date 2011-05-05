@@ -5,11 +5,11 @@
 
 #include <QObject>
 
-#include <QColor>
-#include <QPair>
-
 #include "transferfunction.h"
 #include "viewpointgenerator.h"
+
+#include <QColor>
+#include <QPair>
 
 namespace udg {
 
