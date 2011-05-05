@@ -308,13 +308,12 @@ double rectumSegmentationMethod::applyMethod()
     //itk::ImageRegionIterator< InternalImageType > itSeg( binaryDilate->GetOutput(), binaryDilate->GetOutput()->GetLargestPossibleRegion() );
     itk::ImageRegionIterator< InternalImageType > itSeg( connectedThreshold2->GetOutput(), connectedThreshold2->GetOutput()->GetLargestPossibleRegion() );
     itSeg.GoToBegin();
-    unsigned int i,j;
     m_cont=0;
     int cont2=0;
     IntermediateImageType::SizeType sizeOut = inputRegion.GetSize();
-    for (j = 0; j < sizeOut[1]; ++j)
+    for (int j = 0; j < static_cast<int>(sizeOut[1]); ++j)
     {
-        for (i = 0; i < sizeOut[0]; ++i)
+        for (int i = 0; i < static_cast<int>(sizeOut[0]); ++i)
         {
             if (itSeg.Get() == m_insideMaskValue && i >= m_minROI[0] && i <= m_maxROI[0] && j >= m_minROI[1] && j <= m_maxROI[1])
 			{
