@@ -2,7 +2,7 @@
 
 #include "transferfunctioneditorcommands.h"
 
-#include <QPair>
+#include <QPointF>
 #include <QUndoStack>
 
 namespace udg {
@@ -218,45 +218,6 @@ void TransferFunctionEditor::moveScalarOpacityPoint(double origin, double destin
     }
 }
 
-void TransferFunctionEditor::moveScalarOpacityPoints(const QList<double> &origins, double offset)
-{
-    if (origins.isEmpty())
-    {
-        return;
-    }
-    
-    // Recorrem els orígens per apuntar els punts que hem d'esborrar i els que hem d'afegir
-    QList<double> removes;
-    removes.reserve(origins.size());
-    QList< QPair<double, double> > adds;
-    adds.reserve(origins.size());
-    foreach (double origin, origins)
-    {
-        if (m_transferFunction.isSetScalarOpacity(origin))
-        {
-            removes.append(origin); // apuntem el punt que hem d'esborrar
-            adds.append(qMakePair(origin + offset, m_transferFunction.getScalarOpacity(origin)));   // apuntem el punt que hem d'afegir
-        }
-    }
-
-    if (removes.isEmpty())
-    {
-        return;
-    }
-
-    // Fem l'edició
-    m_undoStack->beginMacro(tr("Move %1 scalar opacity points").arg(removes.size()));
-    for (int i = 0; i < removes.size(); i++)    // esborrem punts
-    {
-        removeScalarOpacityPoint(removes.at(i));
-    }
-    for (int i = 0; i < adds.size(); i++)   // afegim punts
-    {
-        addScalarOpacityPoint(adds.at(i).first, adds.at(i).second);
-    }
-    m_undoStack->endMacro();
-}
-
 void TransferFunctionEditor::changeScalarOpacityPoint(double x, double opacity)
 {
     if (m_transferFunction.isSetScalarOpacity(x))
@@ -266,6 +227,46 @@ void TransferFunctionEditor::changeScalarOpacityPoint(double x, double opacity)
         addScalarOpacityPoint(x, opacity);
         m_undoStack->endMacro();
     }
+}
+
+void TransferFunctionEditor::moveAndChangeScalarOpacityPoints(const QList< QPair<double, QPointF> > &moves)
+{
+    if (moves.isEmpty())
+    {
+        return;
+    }
+    
+    // Recorrem els moviments per apuntar els punts que hem d'esborrar i els que hem d'afegir
+    QList<double> removes;
+    removes.reserve(moves.size());
+    QList<QPointF> adds;
+    adds.reserve(moves.size());
+    for (int i = 0; i < moves.size(); i++)
+    {
+        double x = moves.at(i).first;
+        if (m_transferFunction.isSetScalarOpacity(x))
+        {
+            removes.append(x);  // apuntem el punt que hem d'esborrar
+            adds.append(moves.at(i).second);    // apuntem el punt que hem d'afegir
+        }
+    }
+
+    if (removes.isEmpty())
+    {
+        return;
+    }
+
+    // Fem l'edició
+    m_undoStack->beginMacro(tr("Move and change %1 scalar opacity points").arg(removes.size()));
+    for (int i = 0; i < removes.size(); i++)    // esborrem punts
+    {
+        removeScalarOpacityPoint(removes.at(i));
+    }
+    for (int i = 0; i < adds.size(); i++)   // afegim punts
+    {
+        addScalarOpacityPoint(adds.at(i).x(), adds.at(i).y());
+    }
+    m_undoStack->endMacro();
 }
 
 void TransferFunctionEditor::addGradientOpacityPoint(double y, double opacity)
@@ -320,45 +321,6 @@ void TransferFunctionEditor::moveGradientOpacityPoint(double origin, double dest
     }
 }
 
-void TransferFunctionEditor::moveGradientOpacityPoints(const QList<double> &origins, double offset)
-{
-    if (origins.isEmpty())
-    {
-        return;
-    }
-    
-    // Recorrem els orígens per apuntar els punts que hem d'esborrar i els que hem d'afegir
-    QList<double> removes;
-    removes.reserve(origins.size());
-    QList< QPair<double, double> > adds;
-    adds.reserve(origins.size());
-    foreach (double origin, origins)
-    {
-        if (m_transferFunction.isSetGradientOpacity(origin))
-        {
-            removes.append(origin); // apuntem el punt que hem d'esborrar
-            adds.append(qMakePair(origin + offset, m_transferFunction.getGradientOpacity(origin))); // apuntem el punt que hem d'afegir
-        }
-    }
-
-    if (removes.isEmpty())
-    {
-        return;
-    }
-
-    // Fem l'edició
-    m_undoStack->beginMacro(tr("Move %1 gradient opacity points").arg(removes.size()));
-    for (int i = 0; i < removes.size(); i++)    // esborrem punts
-    {
-        removeGradientOpacityPoint(removes.at(i));
-    }
-    for (int i = 0; i < adds.size(); i++)   // afegim punts
-    {
-        addGradientOpacityPoint(adds.at(i).first, adds.at(i).second);
-    }
-    m_undoStack->endMacro();
-}
-
 void TransferFunctionEditor::changeGradientOpacityPoint(double y, double opacity)
 {
     if (m_transferFunction.isSetGradientOpacity(y))
@@ -368,6 +330,46 @@ void TransferFunctionEditor::changeGradientOpacityPoint(double y, double opacity
         addGradientOpacityPoint(y, opacity);
         m_undoStack->endMacro();
     }
+}
+
+void TransferFunctionEditor::moveAndChangeGradientOpacityPoints(const QList< QPair<double, QPointF> > &moves)
+{
+    if (moves.isEmpty())
+    {
+        return;
+    }
+    
+    // Recorrem els moviments per apuntar els punts que hem d'esborrar i els que hem d'afegir
+    QList<double> removes;
+    removes.reserve(moves.size());
+    QList<QPointF> adds;
+    adds.reserve(moves.size());
+    for (int i = 0; i < moves.size(); i++)
+    {
+        double y = moves.at(i).first;
+        if (m_transferFunction.isSetGradientOpacity(y))
+        {
+            removes.append(y);  // apuntem el punt que hem d'esborrar
+            adds.append(moves.at(i).second);    // apuntem el punt que hem d'afegir
+        }
+    }
+
+    if (removes.isEmpty())
+    {
+        return;
+    }
+
+    // Fem l'edició
+    m_undoStack->beginMacro(tr("Move and change %1 gradient opacity points").arg(removes.size()));
+    for (int i = 0; i < removes.size(); i++)    // esborrem punts
+    {
+        removeGradientOpacityPoint(removes.at(i));
+    }
+    for (int i = 0; i < adds.size(); i++)   // afegim punts
+    {
+        addGradientOpacityPoint(adds.at(i).x(), adds.at(i).y());
+    }
+    m_undoStack->endMacro();
 }
 
 void TransferFunctionEditor::redo()

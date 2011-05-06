@@ -5,6 +5,9 @@
 
 #include "transferfunction.h"
 
+#include <QPair>
+
+class QPointF;
 class QUndoStack;
 
 namespace udg {
@@ -62,10 +65,10 @@ public slots:
     /// Mou un punt d'opacitat escalar. Si no existeix l'origen no fa res.
     /// Si ja existeix la destinació esborra l'origen i assigna l'opacitat de l'origen a la destinació.
     void moveScalarOpacityPoint(double origin, double destination);
-    /// Mou diversos punts d'opacitat escalar alhora, sumant offset a cada origen.
-    void moveScalarOpacityPoints(const QList<double> &origins, double offset);
     /// Canvia l'opacitat escalar d'un punt. Si no existeix no fa res.
     void changeScalarOpacityPoint(double x, double opacity);
+    /// Mou i canvia l'opacitat escalar de diversos punts alhora. La llista de moviments té el format [(x1, (x2,o2)), ...].
+    void moveAndChangeScalarOpacityPoints(const QList< QPair<double, QPointF> > &moves);
 
     /// Afegeix un punt d'opacitat del gradient. Si ja existeix un punt d'opacitat del gradient a x li canvia l'opacitat.
     void addGradientOpacityPoint(double y, double opacity);
@@ -74,10 +77,10 @@ public slots:
     /// Mou un punt d'opacitat del gradient. Si no existeix l'origen no fa res.
     /// Si ja existeix la destinació esborra l'origen i assigna l'opacitat de l'origen a la destinació.
     void moveGradientOpacityPoint(double origin, double destination);
-    /// Mou diversos punts d'opacitat del gradient alhora, sumant offset a cada origen.
-    void moveGradientOpacityPoints(const QList<double> &origins, double offset);
     /// Canvia l'opacitat del gradient d'un punt. Si no existeix no fa res.
     void changeGradientOpacityPoint(double y, double opacity);
+    /// Mou i canvia l'opacitat del gradient de diversos punts alhora. La llista de moviments té el format [(y1, (y2,o2)), ...].
+    void moveAndChangeGradientOpacityPoints(const QList< QPair<double, QPointF> > &moves);
 
     /// Desfà l'última edició feta.
     void redo();
