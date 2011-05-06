@@ -64,6 +64,12 @@ void DrawerPolygon::setVertix(int i, double x, double y, double z)
     }
 }
 
+void DrawerPolygon::removeVertices()
+{
+    m_pointsList.clear();
+    emit changed();
+}
+
 const double* DrawerPolygon::getVertix(int i)
 {
     if (i >= m_pointsList.count() || i < 0)
