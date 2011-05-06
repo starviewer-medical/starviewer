@@ -29,6 +29,9 @@ public:
     void addVertix(double point[3]);
     void addVertix(double x, double y, double z);
 
+    /// Buida la llista de vèrtexs
+    void removeVertices();
+
     /**
      * Assigna el valor del vèrtex i-éssim del polígon. En aquest cas equival a
      * actualitzar el valor d'aquest punt indicat. Si 'i' està fora de rang,
