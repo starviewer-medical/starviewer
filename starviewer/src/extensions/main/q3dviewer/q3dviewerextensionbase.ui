@@ -540,6 +540,11 @@
              </item>
              <item>
               <property name="text">
+               <string>GPU Ray Casting</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
                <string>MIP</string>
               </property>
              </item>

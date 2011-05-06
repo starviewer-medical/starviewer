@@ -23,6 +23,7 @@
 // Ray Cast
 #include <vtkVolumeRayCastMapper.h>
 #include <vtkVolumeRayCastCompositeFunction.h>
+#include <vtkOpenGLGPUVolumeRayCastMapper.h>
 // MIP
 #include <vtkVolumeRayCastMIPFunction.h>
 #include <vtkFiniteDifferenceGradientEstimator.h>
@@ -83,6 +84,7 @@ Q3DViewer::Q3DViewer(QWidget *parent)
     m_volumeProperty->SetInterpolationTypeToLinear();
     m_vtkVolume->SetProperty(m_volumeProperty);
     m_volumeMapper = vtkVolumeRayCastMapper::New();
+    m_gpuRayCastMapper = vtkOpenGLGPUVolumeRayCastMapper::New();
     m_vtkVolume->SetMapper(m_volumeMapper);
     m_renderer->AddViewProp(m_vtkVolume);
 
@@ -184,6 +186,7 @@ Q3DViewer::~Q3DViewer()
     if (m_vtkVolume) m_vtkVolume->Delete();
     if (m_volumeProperty) m_volumeProperty->Delete();
     if (m_volumeMapper) m_volumeMapper->Delete();
+    m_gpuRayCastMapper->Delete();
     if (m_volumeRayCastFunction) m_volumeRayCastFunction->Delete();
     if (m_volumeRayCastAmbientContourFunction) m_volumeRayCastAmbientContourFunction->Delete();
     if (m_volumeRayCastDirectIlluminationContourFunction) m_volumeRayCastDirectIlluminationContourFunction->Delete();
@@ -311,6 +314,7 @@ void Q3DViewer::setClippingPlanes(vtkPlanes *clippingPlanes)
     {
         m_clippingPlanes = clippingPlanes;
         m_volumeMapper->SetClippingPlanes(m_clippingPlanes);
+        m_gpuRayCastMapper->SetClippingPlanes(m_clippingPlanes);
     }
     else
     {
@@ -341,6 +345,11 @@ void Q3DViewer::setRenderFunctionToRayCasting()
 void Q3DViewer::setRenderFunctionToRayCastingObscurance()
 {
     m_renderFunction = RayCastingObscurance;
+}
+
+void Q3DViewer::setRenderFunctionToGpuRayCasting()
+{
+    m_renderFunction = GpuRayCasting;
 }
 
 void Q3DViewer::setRenderFunctionToContouring()
@@ -378,6 +387,9 @@ QString Q3DViewer::getRenderFunctionAsString()
     break;
     case RayCastingObscurance:
         result = "RayCastingObscurance";
+    break;
+    case GpuRayCasting:
+        result = "GPU Ray Casting";
     break;
     case MIP3D:
         result = "MIP 3D";
@@ -417,6 +429,7 @@ void Q3DViewer::setInput(Volume *volume)
     if (m_clippingPlanes)
     {
         m_volumeMapper->RemoveAllClippingPlanes();
+        m_gpuRayCastMapper->RemoveAllClippingPlanes();
         m_clippingPlanes->Delete();
         m_clippingPlanes = 0;
     }
@@ -481,6 +494,7 @@ void Q3DViewer::setInput(Volume *volume)
     delete currentPlane;
 
     m_volumeMapper->SetInput(m_imageData);
+    m_gpuRayCastMapper->SetInput(m_imageData);
 
     unsigned short *data = reinterpret_cast<unsigned short*>(m_imageData->GetPointData()->GetScalars()->GetVoidPointer(0));
     m_ambientVoxelShader->setData(data, static_cast<unsigned short>(m_range));
@@ -525,6 +539,9 @@ void Q3DViewer::applyCurrentRenderingMethod()
         break;
         case RayCastingObscurance:
             renderRayCastingObscurance();
+        break;
+        case GpuRayCasting:
+            renderGpuRayCasting();
         break;
         case MIP3D:
             renderMIP3D();
@@ -782,6 +799,28 @@ void Q3DViewer::renderRayCastingObscurance()
                                                                    gradientShader->GetBlueSpecularShadingTable(m_vtkVolume));
     }
 
+    // no funciona sense fer la còpia
+    TransferFunction *transferFunction = m_transferFunction;
+    setTransferFunction(new TransferFunction(*transferFunction));
+    delete transferFunction;
+
+    render();
+}
+
+void Q3DViewer::renderGpuRayCasting()
+{
+    if (!m_renderer->HasViewProp(m_vtkVolume))
+    {
+        m_renderer->RemoveAllViewProps();
+        m_renderer->AddViewProp(m_vtkVolume);
+    }
+
+    m_volumeProperty->DisableGradientOpacityOn();
+    m_volumeProperty->SetInterpolationTypeToLinear();
+
+    m_vtkVolume->SetMapper(m_gpuRayCastMapper);
+
+    // TODO Realment cal tornar a assignar la funció de transferència?
     // no funciona sense fer la còpia
     TransferFunction *transferFunction = m_transferFunction;
     setTransferFunction(new TransferFunction(*transferFunction));

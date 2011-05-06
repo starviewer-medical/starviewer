@@ -9,6 +9,7 @@
 // FWD declarations
 
 class vtkImageData;
+class vtkOpenGLGPUVolumeRayCastMapper;
 class vtkVolume;
 class vtkVolumeProperty;
 class vtkVolumeRayCastCompositeFunction;
@@ -34,7 +35,7 @@ Classe base per als visualitzadors 3D
 class Q3DViewer : public QViewer{
 Q_OBJECT
 public:
-    enum RenderFunction{ RayCasting, RayCastingObscurance,
+    enum RenderFunction{ RayCasting, RayCastingObscurance, GpuRayCasting,
                          MIP3D, IsoSurface, Texture2D, Texture3D, Contouring };
     enum ObscuranceQuality { Low, Medium, High };
 
@@ -69,6 +70,7 @@ public slots:
     void setRenderFunction(RenderFunction function);
     void setRenderFunctionToRayCasting();
     void setRenderFunctionToRayCastingObscurance();
+    void setRenderFunctionToGpuRayCasting();
     void setRenderFunctionToMIP3D();
     void setRenderFunctionToIsoSurface();
     void setRenderFunctionToTexture2D();
@@ -130,6 +132,9 @@ private:
     /// fa la visualització per raycasting amb obscurances
     void renderRayCastingObscurance();
 
+    /// Fa la visualització per ray casting amb GPU.
+    void renderGpuRayCasting();
+
     /// fa la visualització per contouring
     void renderContouring();
 
@@ -188,6 +193,8 @@ private:
 
     /// Mapper del volum.
     vtkVolumeRayCastMapper *m_volumeMapper;
+    /// Mapper de ray casting amb GPU.
+    vtkOpenGLGPUVolumeRayCastMapper *m_gpuRayCastMapper;
 
     /// Voxel shaders.
     AmbientVoxelShader *m_ambientVoxelShader;
