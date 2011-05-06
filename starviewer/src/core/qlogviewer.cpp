@@ -56,11 +56,15 @@ void QLogViewer::saveLogFileAs()
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save as..."), QString(), tr("Log Files (*.log)"));
 
     if (fileName.isEmpty())
+    {
         return;
+    }
 
     QFile file(fileName);
     if (!file.open(QFile::WriteOnly))
+    {
         return;
+    }
 
     QTextStream logStream(&file);
     logStream << m_logBrowser->document()->toPlainText();

@@ -20,7 +20,10 @@ bool ApplicationCommandLineOptions::addOption(QString optionName, bool optionArg
         m_commandLineOptions.insert(optionName, newOption);
         return true;
     }
-    else return false;
+    else
+    {
+        return false;
+    }
 }
 
 bool ApplicationCommandLineOptions::parseArgumentList(QStringList argumentList)
@@ -65,7 +68,10 @@ bool ApplicationCommandLineOptions::parse()
                     lastOption = m_commandLineOptions.value(parameter);
                     nextParameterHasToBeAnArgumentOption = lastOption.argumentIsRequired;
                 }
-                else m_parserErrorMessage += QObject::tr("Unknown option ") + optionSelectorCharacter + parameter + "\n";
+                else
+                {
+                    m_parserErrorMessage += QObject::tr("Unknown option ") + optionSelectorCharacter + parameter + "\n";
+                }
             }
             else
             {
@@ -82,7 +88,10 @@ bool ApplicationCommandLineOptions::parse()
                 //Si tenim un argument i l'últim paràmetre era un opció, vol dir aquest paràmetre és un argument
                 m_parsedOptions[lastOption.name] = parameter;
             }
-            else m_parserErrorMessage += QObject::tr("Unexpected value ") + parameter + "\n";
+            else
+            {
+                m_parserErrorMessage += QObject::tr("Unexpected value ") + parameter + "\n";
+            }
 
             lastParameterWasAnOption = false;
             nextParameterHasToBeAnArgumentOption = false;
@@ -108,7 +117,10 @@ QString ApplicationCommandLineOptions::getOptionArgument(QString optionName)
     {
         return m_parsedOptions[optionName];
     }
-    else return NULL;
+    else
+    {
+        return NULL;
+    }
 }
 
 int ApplicationCommandLineOptions::getNumberOfParsedOptions()

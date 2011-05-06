@@ -122,16 +122,25 @@ bool SendDICOMFilesToPACS::storeSCU(T_ASC_Association *association, QString file
     {
         presentationContextID = ASC_findAcceptedPresentationContextID(association, sopClass, filexfer.getXferID());
     }
-    else presentationContextID = ASC_findAcceptedPresentationContextID(association, sopClass);
+    else
+    {
+        presentationContextID = ASC_findAcceptedPresentationContextID(association, sopClass);
+    }
 
     if (presentationContextID == 0)
     {
         //No hem trobat cap presentation context vàlid dels que hem configuarat a la connexió pacsserver.cpp
         const char *modalityName = dcmSOPClassUIDToModality(sopClass);
 
-        if (!modalityName) modalityName = dcmFindNameOfUID(sopClass);
+        if (!modalityName)
+        {
+            modalityName = dcmFindNameOfUID(sopClass);
+        }
 
-        if (!modalityName) modalityName = "unknown SOP class";
+        if (!modalityName)
+        {
+            modalityName = "unknown SOP class";
+        }
 
         ERROR_LOG("No s'ha trobat un presentation context vàlid en la connexió per la modalitat : " + QString(modalityName)
                    + " amb la SOPClass " + QString(sopClass) + " pel fitxer " + filepathToStore);

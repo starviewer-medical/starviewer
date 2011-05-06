@@ -14,7 +14,9 @@ Rotate3DTool::Rotate3DTool(QViewer *viewer, QObject *parent) : Tool(viewer, pare
     m_state = None;
     m_interactorStyle = vtkInteractorStyle::SafeDownCast(viewer->getInteractor()->GetInteractorStyle());
     if (!m_interactorStyle)
+    {
         DEBUG_LOG("L'interactor Style és buit!");
+    }
 }
 
 Rotate3DTool::~Rotate3DTool()

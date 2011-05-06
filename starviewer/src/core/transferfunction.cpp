@@ -264,7 +264,10 @@ QList<double> TransferFunction::keys(double begin, double end) const
     QList<double>::const_iterator itEnd = m_keys.constEnd();
     QList<double> keys;
 
-    while (lowerBound != itEnd && *lowerBound <= end) keys << *(lowerBound++);
+    while (lowerBound != itEnd && *lowerBound <= end)
+    {
+        keys << *(lowerBound++);
+    }
 
     return keys;
 }
@@ -315,7 +318,10 @@ TransferFunction TransferFunction::to01(double x1, double x2) const
     double shift = -x1, scale = 1.0 / (x2 - x1);
     TransferFunction transferFunction01;
 
-    foreach (double x, m_keys) transferFunction01.set((x + shift) * scale, getColor(x), getScalarOpacity(x));
+    foreach (double x, m_keys)
+    {
+        transferFunction01.set((x + shift) * scale, getColor(x), getScalarOpacity(x));
+    }
 
     transferFunction01.setGradientOpacityTransferFunction(gradientOpacityTransferFunction());
 
@@ -443,7 +449,10 @@ TransferFunction TransferFunction::fromVariant(const QVariant &variant)
 
 void TransferFunction::updateKeys() const
 {
-    if (!m_changed) return;
+    if (!m_changed)
+    {
+        return;
+    }
 
     m_keys = m_color.keys();
     m_keys << m_scalarOpacity.keys();
@@ -451,7 +460,10 @@ void TransferFunction::updateKeys() const
 
     for (int i = 0; i < m_keys.size() - 1; i++)
     {
-        if (m_keys.at(i) == m_keys.at(i+1)) m_keys.removeAt(i + 1);
+        if (m_keys.at(i) == m_keys.at(i+1))
+        {
+            m_keys.removeAt(i + 1);
+        }
     }
 
     m_changed = false;

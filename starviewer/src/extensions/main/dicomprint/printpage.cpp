@@ -1,8 +1,7 @@
 #include "printpage.h"
 #include "image.h"
 
-namespace udg
-{
+namespace udg {
 
 void PrintPage::setPageNumber(int pageNumber)
 {

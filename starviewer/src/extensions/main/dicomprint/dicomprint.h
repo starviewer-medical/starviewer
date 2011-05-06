@@ -13,8 +13,7 @@ namespace udg {
 class DicomPrinter;
 class DicomPrintJob;
 
-class DicomPrint
-{
+class DicomPrint {
 public:
 
     enum DicomPrintError { CanNotConnectToDicomPrinter, ErrorSendingDicomPrintJob, ErrorLoadingImagesToPrint, ErrorCreatingPrintSpool, UnknowError, Ok,

@@ -12,8 +12,7 @@ class Drawer;
 /**
 Classe contenidor de ToolRepresentation
 */
-class ToolRepresentation : public QObject
-{
+class ToolRepresentation : public QObject {
 Q_OBJECT
 public:
     ToolRepresentation(Drawer *drawer, QObject *parent = 0);

@@ -31,9 +31,13 @@ QString Utils::generateUID(const QString &prefix)
 {
     char uid[512];
     if (prefix.isEmpty())
+    {
         dcmGenerateUniqueIdentifier(uid); // tindrà el prefix de dcmtk
+    }
     else
+    {
         dcmGenerateUniqueIdentifier(uid, qPrintable(prefix));
+    }
 
     DEBUG_LOG("Obtained UID: " + QString(uid));
 

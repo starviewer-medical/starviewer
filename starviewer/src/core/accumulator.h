@@ -5,8 +5,7 @@
 
 namespace udg {
 
-template <class T> class Accumulator
-{
+template <class T> class Accumulator {
 public:
     Accumulator() {}
     virtual ~Accumulator() {}
@@ -16,8 +15,7 @@ public:
     virtual T getValue() const = 0;
 };
 
-class AccumulatorFactory
-{
+class AccumulatorFactory {
 public:
     enum AccumulatorType { Maximum = 0, Minimum = 1, Average = 2 };
     template <class T> static Accumulator<T> * getAccumulator(AccumulatorType type, unsigned long size);

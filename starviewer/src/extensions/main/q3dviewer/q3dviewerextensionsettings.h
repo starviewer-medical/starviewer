@@ -5,8 +5,7 @@
 
 namespace udg {
 
-class Q3DViewerExtensionSettings : public DefaultSettings
-{
+class Q3DViewerExtensionSettings : public DefaultSettings {
 public:
     Q3DViewerExtensionSettings();
     ~Q3DViewerExtensionSettings();

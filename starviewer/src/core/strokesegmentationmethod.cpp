@@ -1178,7 +1178,8 @@ double StrokeSegmentationMethod::applyMethodEdema2(Volume * lesionMask)
     return (double)m_edemaCont * spacing[0] * spacing[1] * spacing[2];
 }
 
-double StrokeSegmentationMethod::erfc(double x) {
+double StrokeSegmentationMethod::erfc(double x)
+{
     // Compute the complementary error function erfc(x).
     // Erfc(x) = (2/sqrt(pi)) Integral(exp(-t^2))dt between x and infinity
     //
@@ -1193,13 +1194,19 @@ double StrokeSegmentationMethod::erfc(double x) {
     double v = 1.0; // The return value
     double z = std::fabs(x);
 
-    if (z <= 0) return v; // erfc(0)=1
+    if (z <= 0)
+    {
+        return v; // erfc(0)=1
+    }
 
     double t = 1.0 / (1.0 + 0.5 * z);
 
     v = t * std::exp((-z * z) + a1 + t * (a2 + t * (a3 + t * (a4 + t * (a5 + t * (a6 + t * (a7 + t * (a8 + t * (a9 + t * a10)))))))));
 
-    if (x < 0) v = 2.0 - v; // erfc(-x)=2-erfc(x)
+    if (x < 0)
+    {
+        v = 2.0 - v; // erfc(-x)=2-erfc(x)
+    }
 
     return v;
  }

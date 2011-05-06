@@ -100,8 +100,14 @@ void Q3DViewerExtension::loadClutPresets()
     QString path = QDir::toNativeSeparators(UserDataRootPath + "cluts/");
     m_clutsDir.setPath(path);
 
-    if (!m_clutsDir.exists()) m_clutsDir.mkpath(path);
-    if (!m_clutsDir.isReadable()) return; // no es pot accedir al directori
+    if (!m_clutsDir.exists())
+    {
+        m_clutsDir.mkpath(path);
+    }
+    if (!m_clutsDir.isReadable())
+    {
+        return; // no es pot accedir al directori
+    }
 
     QStringList nameFilters;
     nameFilters << "*.tf";
@@ -436,7 +442,10 @@ void Q3DViewerExtension::endComputeObscurance()
 
 void Q3DViewerExtension::enableObscuranceRendering(bool on)
 {
-    if (!on) m_obscuranceCheckBox->setChecked(false);
+    if (!on)
+    {
+        m_obscuranceCheckBox->setChecked(false);
+    }
 
     m_obscuranceCheckBox->setEnabled(on);
     m_obscuranceCheckBox->setVisible(on);
@@ -521,7 +530,9 @@ void Q3DViewerExtension::toggleClutEditor()
         m_editorByValues->setTransferFunction(m_currentClut);
     }
     else    // hide
+    {
         hideClutEditor();
+    }
 }
 
 void Q3DViewerExtension::hideClutEditor()
@@ -547,11 +558,17 @@ void Q3DViewerExtension::applyRenderingStyle(const QModelIndex &index)
         case RenderingStyle::Texture3D:
         case RenderingStyle::Texture2D:
             if (renderingStyle.method == RenderingStyle::RayCasting)
+            {
                 m_renderingMethodComboBox->setCurrentIndex(renderingStyle.obscurance ? 1 : 0);
+            }
             else if (renderingStyle.method == RenderingStyle::Texture3D)
+            {
                 m_renderingMethodComboBox->setCurrentIndex(3);
+            }
             else
+            {
                 m_renderingMethodComboBox->setCurrentIndex(4);
+            }
 
             applyClut(renderingStyle.transferFunction);
             m_shadingCheckBox->setChecked(renderingStyle.diffuseLighting);
@@ -559,13 +576,19 @@ void Q3DViewerExtension::applyRenderingStyle(const QModelIndex &index)
             if (renderingStyle.diffuseLighting)
             {
                 m_specularCheckBox->setChecked(renderingStyle.specularLighting);
-                if (renderingStyle.specularLighting) m_specularPowerDoubleSpinBox->setValue(renderingStyle.specularPower);
+                if (renderingStyle.specularLighting)
+                {
+                    m_specularPowerDoubleSpinBox->setValue(renderingStyle.specularPower);
+                }
             }
 
             if (renderingStyle.method == RenderingStyle::RayCasting)
             {
                 m_contourCheckBox->setChecked(renderingStyle.contour);
-                if (renderingStyle.contour) m_contourThresholdDoubleSpinBox->setValue(renderingStyle.contourThreshold);
+                if (renderingStyle.contour)
+                {
+                    m_contourThresholdDoubleSpinBox->setValue(renderingStyle.contourThreshold);
+                }
 
                 if (renderingStyle.obscurance)
                 {
@@ -578,7 +601,9 @@ void Q3DViewerExtension::applyRenderingStyle(const QModelIndex &index)
                             m_obscuranceComputeCancelPushButton->click();
                         }
                         else // altrament aplicar-les i ja està
+                        {
                             m_obscuranceCheckBox->setChecked(true);
+                        }
                     }
 
                     m_obscuranceFactorDoubleSpinBox->setValue(renderingStyle.obscuranceFactor);
@@ -718,7 +743,10 @@ void Q3DViewerExtension::updateView(bool fast)
 
     m_3DView->applyCurrentRenderingMethod();
 
-    if (fast) m_3DView->getRenderWindow()->SetDesiredUpdateRate(m_3DView->getInteractor()->GetStillUpdateRate());
+    if (fast)
+    {
+        m_3DView->getRenderWindow()->SetDesiredUpdateRate(m_3DView->getInteractor()->GetStillUpdateRate());
+    }
 
     this->setCursor(QCursor(Qt::ArrowCursor));
 }

@@ -10,11 +10,9 @@
   * Implementació de la interfície Printer per una impressora del tipus Dicom
   */
 
-namespace udg
-{
+namespace udg {
 
-class DicomPrinter : public Printer
-{
+class DicomPrinter : public Printer {
 public:
 
     DicomPrinter();

@@ -9,8 +9,7 @@ namespace udg {
     Encapsula un identificador numèric.
 */
 
-class Identifier
-{
+class Identifier {
 public:
     /// Constructor
     Identifier();
@@ -26,7 +25,10 @@ public:
     /// Ens indica si l'dentificador té un valor vàlid o no
     bool isNull();
 
-    int getValue() const { return m_id; }
+    int getValue() const
+    {
+        return m_id;
+    }
 
     bool operator != (const Identifier &identifier);
     bool operator==(const Identifier &id);

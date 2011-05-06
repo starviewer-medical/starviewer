@@ -17,8 +17,7 @@ namespace udg {
 */
 
 template <class AncestorType, class BaseClass, typename ClassIdentifier, class SingletonRegistry, class ParentType = QObject>
-class GenericSingletonFactoryRegister
-{
+class GenericSingletonFactoryRegister {
 public:
 
     /**

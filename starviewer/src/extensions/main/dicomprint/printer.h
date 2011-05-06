@@ -10,8 +10,7 @@
 
 namespace udg {
 
-class Printer
-{
+class Printer {
 public:
 
     /// Posa el nom de la impressora.

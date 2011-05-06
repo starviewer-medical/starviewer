@@ -66,7 +66,9 @@ void WindowLevelPresetsTool::handleEvent(unsigned long eventID)
 void WindowLevelPresetsTool::applyPreset(char key)
 {
     if (m_standardPresets.isEmpty())
+    {
         return;
+    }
 
     QString preset;
 

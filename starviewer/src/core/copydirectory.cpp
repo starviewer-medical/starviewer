@@ -7,8 +7,7 @@
 #include "deletedirectory.h"
 #include "logging.h"
 
-namespace udg
-{
+namespace udg {
 
 bool CopyDirectory::copyDirectory(const QString &sourceDirectoryPath, const QString &destinationDirectoryPath)
 {

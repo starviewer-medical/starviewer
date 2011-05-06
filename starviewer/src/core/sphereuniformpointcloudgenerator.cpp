@@ -46,7 +46,9 @@ void SphereUniformPointCloudGenerator::createPOVCloud()
 
     // We scale all vertices about the sphere radius due to all vertices are situed at radius 1 of the center of the sphere
     for (unsigned short i = 0; i < m_vertices.size(); i++)
+    {
         m_vertices[i] *= m_radius;
+    }
 
     createGeographicVertices();
 }
@@ -76,20 +78,38 @@ QVector<QVector<int> > SphereUniformPointCloudGenerator::getNeighbours() const
         {
             if (m_faces.at(3 * j) == i)
             {
-                if (!vertexNeighbours.contains(m_faces.at(3 * j + 1))) vertexNeighbours << m_faces.at(3 * j + 1);
-                if (!vertexNeighbours.contains(m_faces.at(3 * j + 2))) vertexNeighbours << m_faces.at(3 * j + 2);
+                if (!vertexNeighbours.contains(m_faces.at(3 * j + 1)))
+                {
+                    vertexNeighbours << m_faces.at(3 * j + 1);
+                }
+                if (!vertexNeighbours.contains(m_faces.at(3 * j + 2)))
+                {
+                    vertexNeighbours << m_faces.at(3 * j + 2);
+                }
             }
 
             if (m_faces.at(3 * j + 1) == i)
             {
-                if (!vertexNeighbours.contains(m_faces.at(3 * j))) vertexNeighbours << m_faces.at(3 * j);
-                if (!vertexNeighbours.contains(m_faces.at(3 * j + 2))) vertexNeighbours << m_faces.at(3 * j + 2);
+                if (!vertexNeighbours.contains(m_faces.at(3 * j)))
+                {
+                    vertexNeighbours << m_faces.at(3 * j);
+                }
+                if (!vertexNeighbours.contains(m_faces.at(3 * j + 2)))
+                {
+                    vertexNeighbours << m_faces.at(3 * j + 2);
+                }
             }
 
             if (m_faces.at(3 * j + 2) == i)
             {
-                if (!vertexNeighbours.contains(m_faces.at(3 * j))) vertexNeighbours << m_faces.at(3 * j);
-                if (!vertexNeighbours.contains(m_faces.at(3 * j + 1))) vertexNeighbours << m_faces.at(3 * j + 1);
+                if (!vertexNeighbours.contains(m_faces.at(3 * j)))
+                {
+                    vertexNeighbours << m_faces.at(3 * j);
+                }
+                if (!vertexNeighbours.contains(m_faces.at(3 * j + 1)))
+                {
+                    vertexNeighbours << m_faces.at(3 * j + 1);
+                }
             }
         }
 
@@ -172,8 +192,14 @@ bool SphereUniformPointCloudGenerator::findSphereCloudVertex(const Vector3 & v, 
 
     while (i < m_vertices.size() && !trobat)
     {
-        if (equal(v, m_vertices[i], 0.0001)) trobat = true;
-        else i++;
+        if (equal(v, m_vertices[i], 0.0001))
+        {
+            trobat = true;
+        }
+        else
+        {
+            i++;
+        }
     }
 
     position = i;
@@ -233,7 +259,10 @@ void SphereUniformPointCloudGenerator::createSphereCloudTriangle(const Vector3 &
  */
 void SphereUniformPointCloudGenerator::subdivide(Vector3 v1, Vector3 v2, Vector3 v3, unsigned short depth)
 {
-    if (depth == 0) createSphereCloudTriangle(v1, v2, v3);
+    if (depth == 0)
+    {
+        createSphereCloudTriangle(v1, v2, v3);
+    }
     else
     {
         Vector3 v12, v23, v31;
@@ -269,11 +298,16 @@ void SphereUniformPointCloudGenerator::createGeographicVertices()
         gv.y = 90.0 - acos(v.z / gv.x) * 180.0 / MathTools::PiNumber;
         // longitud
         if (v.x == 0.0 && v.y == 0.0)
+        {
             gv.z = 0.0;
+        }
         else
         {
             gv.z = acos(v.x / sqrt(v.x * v.x + v.y * v.y)) * 180.0 / MathTools::PiNumber;
-            if (v.y < 0.0) gv.z = -gv.z;
+            if (v.y < 0.0)
+            {
+                gv.z = -gv.z;
+            }
         }
         m_geographicVertices[i] = gv;
     }

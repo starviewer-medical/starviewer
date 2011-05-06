@@ -12,8 +12,7 @@ namespace udg {
 /**
 Classe que encapsula un vtkOrienatationMarker que servirà d'element d'orientació per a visors 3D. Per funcionar només cal crear una instància de la classe i indicar-li el vtkInteractor. La fem heretar de QObjecte per si cal connectar-li signals i slots des d'una altre classe
 */
-class Q3DOrientationMarker : public QObject
-{
+class Q3DOrientationMarker : public QObject {
 Q_OBJECT
 public:
     Q3DOrientationMarker(vtkRenderWindowInteractor *interactor, QObject *parent = 0);

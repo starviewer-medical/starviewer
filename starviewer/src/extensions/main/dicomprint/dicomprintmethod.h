@@ -7,15 +7,13 @@
 * Implementació per la Interfície PrintMethod per impressores Dicom en DCMTK.
 */
 
-namespace udg
-{
+namespace udg {
     class Printer;
     class PrintJob;
     class DicomPrinter;
     class DicomPrintJob;
 
-class DicomPrintMethod : public PrintMethod
-{
+class DicomPrintMethod : public PrintMethod {
 public:
 
      DicomPrintMethod();

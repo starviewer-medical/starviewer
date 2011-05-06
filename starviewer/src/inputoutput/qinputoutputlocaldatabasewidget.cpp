@@ -17,8 +17,7 @@
 #include "retrievedicomfilesfrompacsjob.h"
 #include "shortcutmanager.h"
 
-namespace udg
-{
+namespace udg {
 
 QInputOutputLocalDatabaseWidget::QInputOutputLocalDatabaseWidget(QWidget *parent) : QWidget(parent)
 {
@@ -134,7 +133,10 @@ void QInputOutputLocalDatabaseWidget::queryStudy(DicomMask queryMask)
 
     patientStudyList = localDatabaseManager.queryPatientStudy(queryMask);
 
-    if (showDatabaseManagerError(localDatabaseManager.getLastError())) return;
+    if (showDatabaseManagerError(localDatabaseManager.getLastError()))
+    {
+        return;
+    }
 
     /* Aquest mètode a part de ser cridada quan l'usuari fa click al botó search, també es cridada al
      * constructor d'aquesta classe, per a que al engegar l'aplicació ja es mostri la llista d'estudis
@@ -164,7 +166,10 @@ void QInputOutputLocalDatabaseWidget::addStudyToQStudyTreeWidget(QString studyUI
 
     studyMask.setStudyInstanceUID(studyUID);
     patientList = localDatabaseManager.queryPatientStudy(studyMask);
-    if (showDatabaseManagerError(localDatabaseManager.getLastError())) return;
+    if (showDatabaseManagerError(localDatabaseManager.getLastError()))
+    {
+        return;
+    }
 
     if (patientList.count() == 1)
     {
@@ -190,14 +195,20 @@ void QInputOutputLocalDatabaseWidget::expandSeriesOfStudy(QString studyInstanceU
     mask.setStudyInstanceUID(studyInstanceUID);
     seriesList = localDatabaseManager.querySeries(mask);
 
-    if (showDatabaseManagerError(localDatabaseManager.getLastError())) return;
+    if (showDatabaseManagerError(localDatabaseManager.getLastError()))
+    {
+        return;
+    }
 
     if (seriesList.isEmpty())
     {
         QMessageBox::information(this, ApplicationNameString, tr("No series match for this study.\n"));
         return;
     }
-    else m_studyTreeWidget->insertSeriesList(studyInstanceUID, seriesList); //inserim la informació de les sèries al estudi
+    else
+    {
+        m_studyTreeWidget->insertSeriesList(studyInstanceUID, seriesList); //inserim la informació de les sèries al estudi
+    }
 }
 
 void QInputOutputLocalDatabaseWidget::expandImagesOfSeries(QString studyInstanceUID, QString seriesInstanceUID)
@@ -212,14 +223,20 @@ void QInputOutputLocalDatabaseWidget::expandImagesOfSeries(QString studyInstance
     mask.setSeriesInstanceUID(seriesInstanceUID);
     imageList = localDatabaseManager.queryImage(mask);
 
-    if (showDatabaseManagerError(localDatabaseManager.getLastError())) return;
+    if (showDatabaseManagerError(localDatabaseManager.getLastError()))
+    {
+        return;
+    }
 
     if (imageList.isEmpty())
     {
         QMessageBox::information(this, ApplicationNameString, tr("No images match for this study.\n"));
         return;
     }
-    else m_studyTreeWidget->insertImageList(studyInstanceUID, seriesInstanceUID, imageList);
+    else
+    {
+        m_studyTreeWidget->insertImageList(studyInstanceUID, seriesInstanceUID, imageList);
+    }
 }
 
 void QInputOutputLocalDatabaseWidget::setSeriesToSeriesListWidget()
@@ -235,7 +252,10 @@ void QInputOutputLocalDatabaseWidget::setSeriesToSeriesListWidget()
     mask.setStudyInstanceUID(studyInstanceUID);
 
     seriesList = localDatabaseManager.querySeries(mask);
-    if (showDatabaseManagerError(localDatabaseManager.getLastError())) return;
+    if (showDatabaseManagerError(localDatabaseManager.getLastError()))
+    {
+        return;
+    }
 
     m_seriesListWidget->clear();
 
@@ -302,13 +322,18 @@ void QInputOutputLocalDatabaseWidget::deleteSelectedItemsFromLocalDatabase()
                     }
 
                     if (showDatabaseManagerError(localDatabaseManager.getLastError()))
-                    break;
+                    {
+                        break;
+                    }
                 }
             }
             QApplication::restoreOverrideCursor();
         }
     }
-    else QMessageBox::information(this, ApplicationNameString, tr("Please select at least one item to delete."));
+    else
+    {
+        QMessageBox::information(this, ApplicationNameString, tr("Please select at least one item to delete."));
+    }
 }
 
 void QInputOutputLocalDatabaseWidget::view(QStringList selectedStudiesInstanceUID, QString selectedSeriesInstanceUID, bool loadOnly)
@@ -346,7 +371,10 @@ void QInputOutputLocalDatabaseWidget::view(QStringList selectedStudiesInstanceUI
             patient->setSelectedSeries(selectedSeriesInstanceUID);
             selectedPatientsList << patient;
         }
-        else DEBUG_LOG("No s'ha pogut obtenir l'estudi amb UID " + studyInstanceUIDSelected);
+        else
+        {
+            DEBUG_LOG("No s'ha pogut obtenir l'estudi amb UID " + studyInstanceUIDSelected);
+        }
     }
 
     if (selectedPatientsList.count() > 0)
@@ -401,7 +429,9 @@ void QInputOutputLocalDatabaseWidget::addSelectedStudiesToCreateDicomdirList()
         studyMask.setStudyInstanceUID(studyUID);
         patientList = localDatabaseManager.queryPatientStudy(studyMask);
         if (showDatabaseManagerError(localDatabaseManager.getLastError()))
+        {
             return;
+        }
 
         // \TODO Això s'ha de fer perquè queryPatientStudy retorna llista de Patients
         // Nosaltres, en realitat, volem llista d'study amb les dades de Patient omplertes.
@@ -529,7 +559,9 @@ bool QInputOutputLocalDatabaseWidget::showDatabaseManagerError(LocalDatabaseMana
     QString message;
 
     if (!doingWhat.isEmpty())
+    {
         message = tr("An error has occurred while ") + doingWhat + ":\n\n";
+    }
 
     switch (error)
     {

@@ -66,12 +66,18 @@ inline HdrColor ContourVoxelShader::nvShade(const Vector3 &position, int offset,
     Q_ASSERT(m_encodedNormals);
     Q_ASSERT(m_directionEncoder);
 
-    if (baseColor.isTransparent() || baseColor.isBlack()) return baseColor;
+    if (baseColor.isTransparent() || baseColor.isBlack())
+    {
+        return baseColor;
+    }
 
     float *gradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[offset]);
     Vector3 normal(gradient[0], gradient[1], gradient[2]);
     double dotProduct = direction * normal;
-    if (dotProduct < 0.0) dotProduct = -dotProduct;
+    if (dotProduct < 0.0)
+    {
+        dotProduct = -dotProduct;
+    }
     HdrColor black(0.0, 0.0, 0.0, baseColor.alpha);
 
     return dotProduct < m_threshold ? black : baseColor;
@@ -86,7 +92,10 @@ inline HdrColor ContourVoxelShader::nvShade(const Vector3 &position, const Vecto
     Q_ASSERT(m_encodedNormals);
     Q_ASSERT(m_directionEncoder);
 
-    if (baseColor.isTransparent() || baseColor.isBlack()) return baseColor;
+    if (baseColor.isTransparent() || baseColor.isBlack())
+    {
+        return baseColor;
+    }
 
     int offsets[8];
     double weights[8];
@@ -102,7 +111,10 @@ inline HdrColor ContourVoxelShader::nvShade(const Vector3 &position, const Vecto
     }
 
     double dotProduct = direction * normal;
-    if (dotProduct < 0.0) dotProduct = -dotProduct;
+    if (dotProduct < 0.0)
+    {
+        dotProduct = -dotProduct;
+    }
     HdrColor black(0.0, 0.0, 0.0, baseColor.alpha);
 
     return dotProduct < m_threshold ? black : baseColor;

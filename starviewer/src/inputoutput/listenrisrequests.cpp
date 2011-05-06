@@ -10,8 +10,7 @@
 #include "inputoutputsettings.h"
 #include "starviewerapplication.h"
 
-namespace udg
-{
+namespace udg {
 
 const int ListenRISRequests::TimeOutToReadData = 15000;
 
@@ -63,7 +62,10 @@ void ListenRISRequests::newRISRequest()
     INFO_LOG("Faig delete del socket");
     delete tcpSocket;
 
-    if (!risRequestData.isEmpty()) processRequest(risRequestData);
+    if (!risRequestData.isEmpty())
+    {
+        processRequest(risRequestData);
+    }
 }
 
 void ListenRISRequests::processRequest(QString risRequestData)

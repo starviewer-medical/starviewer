@@ -55,7 +55,10 @@ bool MHDFileClassifierStep::fillIndividually()
         found = m_input->getPatient(i)->hasFile(file);
         i++;
     }
-    if (found) return true;
+    if (found)
+    {
+        return true;
+    }
 
     //TODO faltaria comprovar si tenim algun pacient igual o no? i assignar al mateix estudi o algo semblant? En certa manera si sempre assignem la mateixa informació, posteriorment els pacients que anem creant, ja es fusionaran ells mateixos. Els id's que han de ser diferents haurien de ser els de les series
 

@@ -58,7 +58,10 @@ public:
     virtual vtkRenderer* getRenderer();
 
     /// Ens retorna el volum d'entrada
-    virtual Volume* getInput() { return m_mainVolume; }
+    virtual Volume* getInput()
+    {
+        return m_mainVolume;
+    }
 
     /// Retorna el vtkRenderWindow
     vtkRenderWindow* getRenderWindow();
@@ -105,7 +108,10 @@ public:
     bool saveGrabbedViews(const QString &baseName, FileType extension);
 
     /// Retorna el nombre de vistes capturades que estan desades
-    int grabbedViewsCount(){ return m_grabList.size(); }
+    int grabbedViewsCount()
+    {
+        return m_grabList.size();
+    }
 
     /// Grava en format de vídeo els frames que s'hagin capturat amb grabCurrentView. 
     /// Un cop gravat, esborra la llista de frames.
@@ -184,7 +190,10 @@ public slots:
     void setActive(bool active);
 
     /// Elimina totes les captures de pantalla
-    void clearGrabbedViews(){ m_grabList.clear(); };
+    void clearGrabbedViews()
+    {
+        m_grabList.clear();
+    };
 
     /// Obté el window/level per defecte. Si no se n'especifica cap amb setDefaultWindowLevel
     /// agafa un window/level que permeti veure correctament el Volum.

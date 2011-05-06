@@ -1,7 +1,7 @@
 #include "printjob.h"
 
-namespace udg
-{
+namespace udg {
+
 void PrintJob::setNumberOfCopies(int numberOfCopies)
 {
     m_numberOfCopies = numberOfCopies;

@@ -28,13 +28,18 @@ bool launchCrashReporter(const char* dumpDirPath, const char* minidumpId, void* 
     // So crashHandler indeed means, no QStrings, no qDebug(), no QAnything, seriously!
 
     if (!succeeded)
+    {
         return false;
+    }
 
     pid_t pid = fork();
 
     if (pid == -1) // fork failed
+    {
         return false;
-    if (pid == 0) { // we are the fork
+    }
+    if (pid == 0) 
+    { // we are the fork
         execl(static_cast<CrashHandler*>(crashHandler)->getCrashReporterPath(),
               static_cast<CrashHandler*>(crashHandler)->getCrashReporterPath(),
               dumpDirPath,
@@ -54,7 +59,9 @@ static bool launchCrashReporter(const wchar_t* dumpDirPath, const wchar_t* minid
                                 MDRawAssertionInfo *assertion, bool succeeded)
 {
     if (!succeeded)
+    {
         return false;
+    }
 
     // DON'T USE THE HEAP!!!
     // So crashHandler indeed means, no QStrings, no qDebug(), no QAnything, seriously!
@@ -65,7 +72,8 @@ static bool launchCrashReporter(const wchar_t* dumpDirPath, const wchar_t* minid
     wchar_t crashReporterPathWchar[256];
     char* out = (char*)crashReporterPathWchar;
     const char* in = crashReporterPath - 1;
-    do {
+    do
+    {
         *out++ = *++in; //latin1 chars fit in first byte of each wchar
         *out++ = '\0';  //every second byte is NULL
     }

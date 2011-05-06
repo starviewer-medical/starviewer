@@ -29,8 +29,7 @@ namespace udg {
     \endcode
 */
 
-class VolumeRepository : public Repository<Volume>
-{
+class VolumeRepository : public Repository<Volume> {
 Q_OBJECT
 public:
 

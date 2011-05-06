@@ -21,8 +21,7 @@ class QueryPacs;
 /** Classe que cercar estudis en un dispositiu pacs, creant un nou job utilitzant les threadweaver
 */
 
-class QueryPacsJob : public PACSJob
-{
+class QueryPacsJob : public PACSJob {
     Q_OBJECT
 public:
 

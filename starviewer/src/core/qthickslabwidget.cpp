@@ -66,9 +66,13 @@ void QThickSlabWidget::link(Q2DViewer *viewer)
 
     // Si tenim input habilitem el combo, sinó el deshabilitem
     if (m_currentViewer->getInput())
+    {
         m_projectionModeComboBox->setEnabled(true);
+    }
     else
+    {
         m_projectionModeComboBox->setEnabled(false);
+    }
 }
 
 void QThickSlabWidget::unlink()
@@ -116,9 +120,13 @@ void QThickSlabWidget::applyProjectionMode(int comboItem)
         m_maximumThicknessCheckBox->setEnabled(true);
 
         if (!m_maximumThicknessCheckBox->isChecked())
+        {
             m_slabThicknessLabel->setEnabled(true);
+        }
         else
+        {
             m_slabThicknessLabel->setEnabled(false);
+        }
 
         // fem que si avancem d'un en un el valor d'slab (amb teclat o amb la roda del ratolí)
         // s'actualitzi amb el signal valueChanged()
@@ -154,14 +162,18 @@ void QThickSlabWidget::applyProjectionMode(int comboItem)
             m_slabThicknessSlider->setValue(m_currentViewer->getMaximumSlice() + 1);
         }
         else
+        {
             m_currentViewer->setSlabThickness(m_slabThicknessSlider->value());
+        }
 
         QApplication::restoreOverrideCursor();
 
         // Cal mantenir l'slider disabled si el checkbox de màxim thickness està habilitat,
         // ja que al aplicar una projecció nova es pot tornar a habilitar al fer el setValue()
         if (m_maximumThicknessCheckBox->isChecked())
+        {
             m_slabThicknessSlider->setEnabled(false);
+        }
     }
 }
 
@@ -212,7 +224,9 @@ void QThickSlabWidget::onViewChanged()
 {
     // Si no tenim cap projecció aplicada, no cal fer res
     if (m_projectionModeComboBox->currentText() == tr("Disabled"))
+    {
         return;
+    }
 
     // Quan canviem de vista, sempre que tinguem la opció marcada, mantenim el thickness màxim per aquella vista
     if (m_maximumThicknessCheckBox->isChecked())
@@ -237,7 +251,9 @@ void QThickSlabWidget::enableVolumeMode(bool enable)
         m_slabThicknessSlider->setEnabled(false);
     }
     else
+    {
         m_slabThicknessSlider->setEnabled(true);
+    }
 }
 
 void QThickSlabWidget::disconnectSignalsAndSlots()

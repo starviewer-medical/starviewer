@@ -14,9 +14,7 @@ class TransferFunction;
  *
  * \author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.edu>
  */
-class QTransferFunctionEditor : public QWidget
-{
-
+class QTransferFunctionEditor : public QWidget {
     Q_OBJECT
 
 public:

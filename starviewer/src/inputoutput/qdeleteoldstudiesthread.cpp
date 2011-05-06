@@ -2,8 +2,7 @@
 
 #include "logging.h"
 
-namespace udg
-{
+namespace udg {
 
 QDeleteOldStudiesThread::QDeleteOldStudiesThread(QObject *parent)
  : QThread(parent)

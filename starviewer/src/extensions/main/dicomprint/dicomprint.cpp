@@ -14,8 +14,8 @@
 #include "logging.h"
 #include "deletedirectory.h"
 
-namespace udg
-{
+namespace udg {
+
 int DicomPrint::print(DicomPrinter printer, DicomPrintJob printJob)
 {
     PrintDicomSpool printDicomSpool;

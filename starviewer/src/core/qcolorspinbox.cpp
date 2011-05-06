@@ -36,7 +36,10 @@ void QColorSpinBox::setColor(const QColor & color)
 void QColorSpinBox::setOpacity(int opacity)
 {
     m_color.setAlpha(opacity);
-    if (!m_settingColor) emit colorChanged(m_color);
+    if (!m_settingColor)
+    {
+        emit colorChanged(m_color);
+    }
 }
 
 }

@@ -176,7 +176,9 @@ void TemporalDimensionFillerStep::postProcessing()
                     }
                     // L'esborrem perquè ja no el necessitarem més
                     if (volumeInfo)
+                    {
                         delete volumeInfo;
+                    }
                 }
                 else
                 {
@@ -199,7 +201,9 @@ void TemporalDimensionFillerStep::postProcessing()
 
             currentPhase++;
             if (currentPhase == numberOfPhases)
+            {
                 currentPhase = 0;
+            }
         }
 
         currentVolume = -1;

@@ -2,8 +2,7 @@
 
 #include "dicomprintjob.h"
 
-namespace udg
-{
+namespace udg {
 
 DicomPrintJob::DicomPrintJob()
 {

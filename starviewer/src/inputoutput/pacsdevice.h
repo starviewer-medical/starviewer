@@ -28,8 +28,7 @@ namespace udg {
  * les mateixes per a qualsevol connexió amb un PACS i per tant no haurien de formar part d'aquesta classe
  *
  */
-class PacsDevice
-{
+class PacsDevice {
 public:
     PacsDevice();
 

@@ -15,8 +15,7 @@ El mètode \sa newInstance és l'encarregat de crear una instància de les class
 tenint en compte un parametre de configuració.
 
 */
-class DICOMWriter
-{
+class DICOMWriter {
 
 public:
 

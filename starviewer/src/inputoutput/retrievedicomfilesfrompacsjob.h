@@ -17,8 +17,7 @@ class RetrieveDICOMFilesFromPACS;
 class PacsDevice;
 class DICOMTagReader;
 
-class RetrieveDICOMFilesFromPACSJob : public PACSJob
-{
+class RetrieveDICOMFilesFromPACSJob : public PACSJob {
 Q_OBJECT
 public:
     ///Definim la prioritat del Job, aquesta prioritat ens definirà l'ordre d'execució en la cua

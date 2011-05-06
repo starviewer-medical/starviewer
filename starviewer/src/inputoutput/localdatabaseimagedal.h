@@ -14,8 +14,7 @@ class DicomMask;
 /** Aquesta classe conté els mètodes per operar amb l'objecte image en la caché de l'aplicació
 */
 
-class LocalDatabaseImageDAL : public LocalDatabaseBaseDAL
-{
+class LocalDatabaseImageDAL : public LocalDatabaseBaseDAL {
 public:
 
     LocalDatabaseImageDAL(DatabaseConnection *dbConnection);

@@ -11,8 +11,7 @@ class PolylineTemporalROIToolData;
 /**
 Tool per dibuixar ROIS polilinies i calcular mitjanes de series temporals
 */
-class PolylineTemporalROITool : public PolylineROITool
-{
+class PolylineTemporalROITool : public PolylineROITool {
 Q_OBJECT
 public:
     PolylineTemporalROITool(QViewer *viewer, QObject *parent = 0);

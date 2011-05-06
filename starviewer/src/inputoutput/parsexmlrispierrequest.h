@@ -22,8 +22,7 @@ namespace udg {
 
 class DicomMask;
 
-class ParseXmlRisPIERRequest : QObject
-{
+class ParseXmlRisPIERRequest : QObject {
 Q_OBJECT
 public:
 

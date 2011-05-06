@@ -10,8 +10,7 @@ class DicomPrinter;
 /**
   * Classe que ens permet afegir una nova impressora Dicom al Sistema
 **/
-class QDicomAddPrinterWidget : public QWidget, private::Ui::QDicomAddPrinterWidgetBase
-{
+class QDicomAddPrinterWidget : public QWidget, private::Ui::QDicomAddPrinterWidgetBase {
 Q_OBJECT
 
 public:

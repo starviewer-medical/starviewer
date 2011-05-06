@@ -88,7 +88,9 @@ bool DICOMImageFileGenerator::generateSecondaryCaptureDICOMFiles()
 
         // \TODO Si falla a l'escriure cal decidir què fer amb els fitxers que prèviament s'han pogut generar. Esborrar-los?
         if (! writer->write())
+        {
             return false;
+        }
 
         image->setPath(writer->getPath());
 

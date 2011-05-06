@@ -78,7 +78,10 @@ inline void TrilinearInterpolator::getOffsetsAndWeights(const Vector3 &position,
     double bx = 1.0 - ax, by = 1.0 - ay, bz = 1.0 - az;
     int baseOffset = x * m_increments[1] + y * m_increments[2] + z * m_increments[4];
 
-    for (int i = 0; i < 8; i++) offsets[i] = baseOffset + m_increments[i];
+    for (int i = 0; i < 8; i++)
+    {
+        offsets[i] = baseOffset + m_increments[i];
+    }
 
     weights[0] = bx * by * bz;
     weights[1] = ax * by * bz;
@@ -90,10 +93,12 @@ inline void TrilinearInterpolator::getOffsetsAndWeights(const Vector3 &position,
     weights[7] = ax * ay * az;
 }
 
-template <class TOutput, class TInput> inline TOutput TrilinearInterpolator::interpolate(const TInput *values, const int offsets[], const double weights[])
-{
+template <class TOutput, class TInput> inline TOutput TrilinearInterpolator::interpolate(const TInput *values, const int offsets[], const double weights[]) {
     TOutput interpolatedValue = weights[0] * values[offsets[0]];
-    for (int i = 1; i < 8; i++) interpolatedValue += weights[i] * values[offsets[i]];
+    for (int i = 1; i < 8; i++)
+    {
+        interpolatedValue += weights[i] * values[offsets[i]];
+    }
 
     return interpolatedValue;
 }

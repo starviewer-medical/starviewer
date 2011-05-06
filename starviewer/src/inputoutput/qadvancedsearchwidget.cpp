@@ -3,8 +3,7 @@
 #include "dicommask.h"
 #include "status.h"
 
-namespace udg
-{
+namespace udg {
 
 QAdvancedSearchWidget::QAdvancedSearchWidget(QWidget *parent)
  : QWidget(parent)

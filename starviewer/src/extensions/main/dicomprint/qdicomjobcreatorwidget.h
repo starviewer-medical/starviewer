@@ -10,8 +10,7 @@
 
 namespace udg {
 
-class QDicomJobCreatorWidget : public QPrintJobCreatorWidget, private::Ui::QDicomJobCreatorWidgetBase
-{
+class QDicomJobCreatorWidget : public QPrintJobCreatorWidget, private::Ui::QDicomJobCreatorWidgetBase {
 Q_OBJECT
 
 public:

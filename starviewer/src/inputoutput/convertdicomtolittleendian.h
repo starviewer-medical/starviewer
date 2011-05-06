@@ -9,8 +9,7 @@ class Status;
 
 /** Converteix les imatges guardades al format littleEndian, necessari per crear els DicomDir
 */
-class ConvertDicomToLittleEndian
-{
+class ConvertDicomToLittleEndian {
 public:
 
     ConvertDicomToLittleEndian();

@@ -19,7 +19,9 @@ NonClosedAngleTool::NonClosedAngleTool(QViewer *viewer, QObject *parent)
 
     m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
     if (!m_2DViewer)
+    {
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ")+ viewer->metaObject()->className());
+    }
 
     connect(m_2DViewer, SIGNAL(volumeChanged(Volume *)), SLOT(initialize()));
 }
@@ -44,7 +46,9 @@ NonClosedAngleTool::~NonClosedAngleTool()
     }
 
     if (hasToRefresh)
+    {
         m_2DViewer->render();
+    }
 }
 
 void NonClosedAngleTool::handleEvent(long unsigned eventID)
@@ -101,9 +105,13 @@ void NonClosedAngleTool::annotateLinePoints()
         line->increaseReferenceCount();
     }
     else if (m_state == None)
+    {
         line = m_firstLine;
+    }
     else
+    {
         line = m_secondLine;
+    }
 
     double clickedWorldPoint[3];
     m_2DViewer->getEventWorldCoordinate(clickedWorldPoint);
@@ -116,9 +124,13 @@ void NonClosedAngleTool::annotateLinePoints()
         m_lineState = FirstPoint;
 
         if (m_state == None)
+        {
             m_firstLine = line;
+        }
         else
+        {
             m_secondLine = line;
+        }
 
         m_2DViewer->getDrawer()->draw(line, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
     }
@@ -130,18 +142,26 @@ void NonClosedAngleTool::annotateLinePoints()
         m_lineState = NoPoints;
 
         if (m_state == None)
+        {
             m_state = FirstLineFixed;
+        }
         else
+        {
             m_state = SecondLineFixed;
+        }
     }
 }
 
 void NonClosedAngleTool::handleLineDrawing()
 {
     if (m_firstLine && m_state == None)
+    {
         this->simulateLine(m_firstLine);
+    }
     else if (m_secondLine && m_state == FirstLineFixed)
+    {
         this->simulateLine(m_secondLine);
+    }
 }
 
 void NonClosedAngleTool::simulateLine(DrawerLine *line)
@@ -227,10 +247,14 @@ void NonClosedAngleTool::computeAngle()
     for (int i = 0; i < 3; i++)
     {
         if (fabs(vd1[i]) < 0.0001)
+        {
             vd1[i] = 0.0;
+        }
 
         if (fabs(vd2[i]) < 0.0001)
+        {
             vd2[i] = 0.0;
+        }
     }
 
     double angle = MathTools::angleInDegrees(vd1, vd2);
@@ -238,11 +262,17 @@ void NonClosedAngleTool::computeAngle()
     DrawerText * text = new DrawerText;
 
     if (state == MathTools::ParallelLines)
+    {
         text->setText(tr("0.0 degrees"));
+    }
     else if (state == MathTools::SkewIntersection)   //Won't occur
+    {
         text->setText(tr("Skew lines."));
+    }
     else
+    {
         text->setText(tr("%1 degrees").arg(angle, 0, 'f', 1));
+    }
 
     textPosition(m_middleLine->getFirstPoint(), m_middleLine->getSecondPoint(), text);
     text->shadowOn();

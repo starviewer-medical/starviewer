@@ -7,8 +7,7 @@
 
 namespace udg {
 
-class HangingProtocolMask : public QObject
-{
+class HangingProtocolMask : public QObject {
 Q_OBJECT
 public:
     HangingProtocolMask(QObject *parent = 0);

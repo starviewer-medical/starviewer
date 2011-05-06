@@ -5,8 +5,7 @@
 
 namespace udg {
 
-class CoreSettings : public DefaultSettings
-{
+class CoreSettings : public DefaultSettings {
 public:
     CoreSettings();
     ~CoreSettings();

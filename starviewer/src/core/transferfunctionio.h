@@ -30,8 +30,7 @@ class TransferFunction;
  *
  * \author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.edu>
  */
-class TransferFunctionIO
-{
+class TransferFunctionIO {
 
 public:
 

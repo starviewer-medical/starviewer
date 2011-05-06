@@ -12,8 +12,7 @@ namespace udg {
 /**
 Genera fitxers DICOM utilitzant la llibreria dcmtk.
 */
-class DICOMWriterDCMTK : public DICOMWriter
-{
+class DICOMWriterDCMTK : public DICOMWriter {
 
 public:
     DICOMWriterDCMTK();

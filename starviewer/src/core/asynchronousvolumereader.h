@@ -21,8 +21,7 @@ class Volume;
   Aquesta classe no es pot cridar de forma concurrent des de diferents threads.
   */
 
-class AsynchronousVolumeReader : public QObject
-{
+class AsynchronousVolumeReader : public QObject {
     Q_OBJECT
 public:
     explicit AsynchronousVolumeReader(QObject *parent = 0);

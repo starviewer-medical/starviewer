@@ -14,8 +14,7 @@ Item de menu. Envia un senyal quan esta activat i quan és seleccinat. Així com
 També es pot escollir el comportament del canvi de color.
 */
 
-class ItemMenu : public QFrame
-{
+class ItemMenu : public QFrame {
 Q_OBJECT
 public:
     ItemMenu(QWidget * parent = 0);

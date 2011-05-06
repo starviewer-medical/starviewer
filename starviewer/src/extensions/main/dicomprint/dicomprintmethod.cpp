@@ -5,8 +5,8 @@
 #include "dicomprintjob.h"
 #include "dicomprintmethod.h"
 
-namespace udg
-{
+namespace udg {
+
 DicomPrintMethod::DicomPrintMethod()
 {
 }

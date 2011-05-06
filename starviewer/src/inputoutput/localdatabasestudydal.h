@@ -12,8 +12,7 @@ class DicomMask;
 
 /** Aquesta classe s'encarrega de dur a terme les operacions relacionades amb l'objecte estudi de la cache de l'aplicació.
 */
-class LocalDatabaseStudyDAL : public LocalDatabaseBaseDAL
-{
+class LocalDatabaseStudyDAL : public LocalDatabaseBaseDAL {
 public:
 
     LocalDatabaseStudyDAL(DatabaseConnection *dbConnection);

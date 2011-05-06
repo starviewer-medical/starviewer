@@ -15,8 +15,7 @@ namespace udg {
  * siguin accessibles per a tothom, independentment de si tenen un valor definit per defecte o no.
  * D'altra banda els settings que tinguin un valor per defecte es registraran en el mètode init()
  */
-class DefaultSettings
-{
+class DefaultSettings {
 public:
     DefaultSettings();
     ~DefaultSettings();

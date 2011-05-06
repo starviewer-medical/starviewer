@@ -99,9 +99,13 @@ bool PacsDevice::isDefault() const
 {
     QStringList pacsList = getDefaultPACSKeyNamesList();
     if (pacsList.contains(getKeyName()))
+    {
         return true;
+    }
     else
+    {
         return false;
+    }
 }
 
 void PacsDevice::setID(const QString &id)

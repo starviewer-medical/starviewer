@@ -8,8 +8,7 @@
 #include "pacsconnection.h"
 #include "logging.h"
 
-namespace udg
-{
+namespace udg {
 EchoToPACS::EchoToPACS()
 {
     m_lastError = EchoFailed;

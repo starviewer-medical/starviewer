@@ -11,8 +11,7 @@ class WindowLevelPresetsToolData;
 /**
 Diàleg per escollir manualment els ajustaments pel window level
 */
-class QCustomWindowLevelDialog : public QDialog, private Ui::QCustomWindowLevelDialogBase
-{
+class QCustomWindowLevelDialog : public QDialog, private Ui::QCustomWindowLevelDialogBase {
 Q_OBJECT
 public:
     QCustomWindowLevelDialog(QDialog *parent = 0);

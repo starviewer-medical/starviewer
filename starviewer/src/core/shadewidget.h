@@ -34,8 +34,7 @@ namespace udg {
 class HoverPoints;
 
 
-class ShadeWidget : public QWidget
-{
+class ShadeWidget : public QWidget {
     Q_OBJECT
 public:
     enum ShadeType {
@@ -53,11 +52,17 @@ public:
 
     void paintEvent(QPaintEvent *e);
 
-    QSize sizeHint() const { return QSize(150, 40); }
+    QSize sizeHint() const
+    {
+        return QSize(150, 40);
+    }
     QPolygonF points() const;
     void setPoints(QPolygonF p);
 
-    HoverPoints *hoverPoints() const { return m_hoverPoints; }
+    HoverPoints *hoverPoints() const
+    {
+        return m_hoverPoints;
+    }
 
     uint colorAt(int x);
 

@@ -125,9 +125,13 @@ void QExporterTool::generateAndStoreNewSeries()
     progress.setWindowModality(Qt::WindowModal);
     progress.setMinimum(0);
     if (m_sendToPacsCheckBox->isChecked())
+    {
         progress.setMaximum(4);
+    }
     else
+    {
         progress.setMaximum(3);
+    }
     progress.setMinimumDuration(0);
     progress.setCancelButton(0);
     progress.setModal(true);

@@ -3,8 +3,7 @@
 #include "applicationcommandlineoptions.h"
 #include "logging.h"
 
-namespace udg
-{
+namespace udg {
 
 const QString StarviewerApplicationCommandLine::accessionNumberOption("accessionnumber");
 

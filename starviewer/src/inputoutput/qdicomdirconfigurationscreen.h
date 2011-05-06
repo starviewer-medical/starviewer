@@ -9,8 +9,7 @@ class Status;
 
 /** Widget en el que es configuren els paràmetres del programa de gravació
 */
-class QDICOMDIRConfigurationScreen : public QWidget, private Ui::QDICOMDIRConfigurationScreenBase
-{
+class QDICOMDIRConfigurationScreen : public QWidget, private Ui::QDICOMDIRConfigurationScreenBase {
 Q_OBJECT
 
 public:

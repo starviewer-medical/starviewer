@@ -11,9 +11,7 @@ namespace udg {
  *
  * \author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.edu>
  */
-class QColorSpinBox : public QSpinBox
-{
-
+class QColorSpinBox : public QSpinBox {
     Q_OBJECT
 
 public:

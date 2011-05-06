@@ -14,8 +14,7 @@ class PreviousStudiesManager;
 class QueryScreen;
 class Patient;
 
-class QPreviousStudiesWidget : public QFrame
-{
+class QPreviousStudiesWidget : public QFrame {
 Q_OBJECT
 public:
     QPreviousStudiesWidget(QWidget *parent = 0);

@@ -57,7 +57,8 @@ ShadeWidget::ShadeWidget(ShadeType type, QWidget *parent)
     : QWidget(parent), m_shade_type(type), m_alpha_gradient(QLinearGradient(0, 0, 0, 0))
 {
     // Checkers background
-    if (m_shade_type == ARGBShade) {
+    if (m_shade_type == ARGBShade)
+    {
         QPixmap pm(20, 20);
         QPainter pmp(&pm);
         pmp.fillRect(0, 0, 10, 10, Qt::lightGray);
@@ -70,9 +71,10 @@ ShadeWidget::ShadeWidget(ShadeType type, QWidget *parent)
         setAutoFillBackground(true);
         setPalette(pal);
 
-    } else {
+    }
+    else
+    {
         setAttribute(Qt::WA_NoBackground);
-
     }
 
     QPolygonF points;
@@ -111,8 +113,10 @@ uint ShadeWidget::colorAt(int x)
     generateShade();
 
     QPolygonF pts = m_hoverPoints->points();
-    for (int i=1; i < pts.size(); ++i) {
-        if (pts.at(i-1).x() <= x && pts.at(i).x() >= x) {
+    for (int i=1; i < pts.size(); ++i)
+    {
+        if (pts.at(i-1).x() <= x && pts.at(i).x() >= x)
+        {
             QLineF l(pts.at(i-1), pts.at(i));
             l.setLength(l.length() * ((x - l.x1()) / l.dx()));
             return m_shade.pixel(qRound(qMin(l.x2(), (qreal(m_shade.width() - 1)))),
@@ -126,10 +130,12 @@ uint ShadeWidget::colorAt(int x)
 
 void ShadeWidget::setGradientStops(const QGradientStops &stops)
 {
-    if (m_shade_type == ARGBShade) {
+    if (m_shade_type == ARGBShade)
+    {
         m_alpha_gradient = QLinearGradient(0, 0, width(), 0);
 
-        for (int i=0; i<stops.size(); ++i) {
+        for (int i=0; i<stops.size(); ++i)
+        {
             QColor c = stops.at(i).second;
             m_alpha_gradient.setColorAt(stops.at(i).first, QColor(c.red(), c.green(), c.blue()));
         }
@@ -155,9 +161,10 @@ void ShadeWidget::paintEvent(QPaintEvent *)
 
 void ShadeWidget::generateShade()
 {
-    if (m_shade.isNull() || m_shade.size() != size()) {
-
-        if (m_shade_type == ARGBShade) {
+    if (m_shade.isNull() || m_shade.size() != size())
+    {
+        if (m_shade_type == ARGBShade)
+        {
             m_shade = QImage(size(), QImage::Format_ARGB32/*_Premultiplied*/);
             m_shade.fill(0);
 
@@ -170,19 +177,29 @@ void ShadeWidget::generateShade()
             fade.setColorAt(1, QColor(0, 0, 0, 0));
             p.fillRect(rect(), fade);
 
-        } else {
+        }
+        else
+        {
             m_shade = QImage(size(), QImage::Format_RGB32);
             QLinearGradient shade(0, 0, 0, height() - 1);   // afegit (- 1)
             shade.setColorAt(1, Qt::black);
 
             if (m_shade_type == RedShade)
+            {
                 shade.setColorAt(0, Qt::red);
+            }
             else if (m_shade_type == GreenShade)
+            {
                 shade.setColorAt(0, Qt::green);
+            }
             else if (m_shade_type == BlueShade)
+            {
                 shade.setColorAt(0, Qt::blue);
+            }
             else
+            {
                 shade.setColorAt(0, Qt::black);
+            }
 
             QPainter p(&m_shade);
             p.fillRect(rect(), shade);

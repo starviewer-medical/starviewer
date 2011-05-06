@@ -111,10 +111,14 @@ T TransferFunctionTemplate<T>::get(double x) const
     typename QMap<double, T>::const_iterator lowerBound = m_map.lowerBound(x);
 
     if (lowerBound == m_map.end())  // > últim
+    {
         return (--lowerBound).value();
+    }
 
     if (lowerBound.key() == x || lowerBound == m_map.begin())   // exacte o < primer
+    {
         return lowerBound.value();
+    }
 
     typename QMap<double, T>::const_iterator a = lowerBound - 1, b = lowerBound;
     double alpha = (x - a.key()) / (b.key() - a.key());
@@ -177,15 +181,27 @@ void TransferFunctionTemplate<T>::trim(double x1, double x2)
     while (it.hasNext())
     {
         it.next();
-        if (it.key() < x1) it.remove();
-        else break;
+        if (it.key() < x1)
+        {
+            it.remove();
+        }
+        else
+        {
+            break;
+        }
     }
     it.toBack();
     while (it.hasPrevious())
     {
         it.previous();
-        if (it.key() > x2) it.remove();
-        else break;
+        if (it.key() > x2)
+        {
+            it.remove();
+        }
+        else
+        {
+            break;
+        }
     }
 }
 
@@ -196,10 +212,16 @@ void TransferFunctionTemplate<T>::simplify()
 
     foreach (double x, keys)
     {
-        if (m_map.size() == 1) break;   // cas especial: si només queda un punt no l'hem de treure
+        if (m_map.size() == 1)
+        {
+            break;   // cas especial: si només queda un punt no l'hem de treure
+        }
         T y = get(x);
         unset(x);
-        if (get(x) != y) set(x, y);
+        if (get(x) != y)
+        {
+            set(x, y);
+        }
     }
 }
 

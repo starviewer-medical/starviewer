@@ -31,7 +31,10 @@ ColorTransferFunction::ColorTransferFunction(const ColorTransferFunction &colorT
 
 ColorTransferFunction::~ColorTransferFunction()
 {
-    if (m_vtkColorTransferFunction) m_vtkColorTransferFunction->Delete();
+    if (m_vtkColorTransferFunction)
+    {
+        m_vtkColorTransferFunction->Delete();
+    }
 }
 
 ColorTransferFunction& ColorTransferFunction::operator =(const ColorTransferFunction &colorTransferFunction)
@@ -69,7 +72,10 @@ void ColorTransferFunction::set(double x, double red, double green, double blue)
 
 vtkColorTransferFunction* ColorTransferFunction::vtkColorTransferFunction() const
 {
-    if (m_vtkColorTransferFunction) m_vtkColorTransferFunction->Delete();
+    if (m_vtkColorTransferFunction)
+    {
+        m_vtkColorTransferFunction->Delete();
+    }
     m_vtkColorTransferFunction = vtkColorTransferFunction::New();
 
     QMapIterator<double, QColor> it(m_map);

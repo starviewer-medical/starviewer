@@ -8,8 +8,7 @@ namespace udg {
 
 class PacsDevice;
 
-class EchoToPACS
-{
+class EchoToPACS {
 public:
 
     enum EchoRequestStatus { EchoOk, EchoCanNotConnectToPACS, EchoFailed };

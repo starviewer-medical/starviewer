@@ -7,16 +7,14 @@
 #include "printjob.h"
 #include "dicomprintpage.h"
 
-namespace udg
-{
+namespace udg {
 
 /**
 * Implementació de la interfície PrintJob per impressores Dicom en DCMTK.
 * Un PrintJob serà un objecte que contindrà la informació necessària per fer la impressió (Prioritat, Pàgines a imprimir...)
 */
 
-class DicomPrintJob : public PrintJob
-{
+class DicomPrintJob : public PrintJob {
 public:
 
     DicomPrintJob();

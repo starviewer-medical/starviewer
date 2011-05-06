@@ -18,7 +18,10 @@ OpacityTransferFunction::OpacityTransferFunction(const OpacityTransferFunction &
 
 OpacityTransferFunction::~OpacityTransferFunction()
 {
-    if (m_vtkOpacityTransferFunction) m_vtkOpacityTransferFunction->Delete();
+    if (m_vtkOpacityTransferFunction)
+    {
+        m_vtkOpacityTransferFunction->Delete();
+    }
 }
 
 OpacityTransferFunction& OpacityTransferFunction::operator =(const OpacityTransferFunction &opacityTransferFunction)
@@ -34,7 +37,10 @@ OpacityTransferFunction& OpacityTransferFunction::operator =(const OpacityTransf
 
 vtkPiecewiseFunction* OpacityTransferFunction::vtkOpacityTransferFunction() const
 {
-    if (m_vtkOpacityTransferFunction) m_vtkOpacityTransferFunction->Delete();
+    if (m_vtkOpacityTransferFunction)
+    {
+        m_vtkOpacityTransferFunction->Delete();
+    }
     m_vtkOpacityTransferFunction = vtkPiecewiseFunction::New();
 
     QMapIterator<double, double> it(m_map);

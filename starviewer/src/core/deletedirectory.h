@@ -10,8 +10,7 @@ namespace udg {
 
 /** Aquesta classe, esborra tot els fitxers i subdirectoris que contingui un directori
 */
-class DeleteDirectory : public QObject
-{
+class DeleteDirectory : public QObject {
 Q_OBJECT
 public:
 

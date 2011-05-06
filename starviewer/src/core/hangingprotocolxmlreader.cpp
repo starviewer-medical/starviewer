@@ -108,7 +108,8 @@ HangingProtocol* HangingProtocolXMLReader::readFile(const QString &path)
         }
     }
 
-    if (reader->hasError()) {
+    if (reader->hasError())
+    {
         DEBUG_LOG(QString("[Line: %1, Column:%2] Error in hanging protocol file %3: %4, error: %5").arg(reader->lineNumber()).arg(reader->columnNumber()).arg(path).arg(reader->errorString()).arg(reader->error()));
         ERROR_LOG(QString("[Line: %1, Column:%2] Error in hanging protocol file %3: %4, error: %5").arg(reader->lineNumber()).arg(reader->columnNumber()).arg(path).arg(reader->errorString()).arg(reader->error()));
     }
@@ -128,9 +129,13 @@ HangingProtocolImageSet::Restriction HangingProtocolXMLReader::readRestriction(Q
         {
             QString text = reader->readElementText();
             if (text == "MATCH")
+            {
                 restriction.usageFlag = HangingProtocolImageSet::Match;
+            }
             else if (text == "NO_MATCH")
+            {
                 restriction.usageFlag = HangingProtocolImageSet::NoMatch;
+            }
         }
         else if (reader->name() == "selectorAttribute")
         {

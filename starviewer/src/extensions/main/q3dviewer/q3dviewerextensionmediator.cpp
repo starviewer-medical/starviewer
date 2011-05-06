@@ -32,9 +32,13 @@ bool Q3DViewerExtensionMediator::initializeExtension(QWidget* extension, const E
 
     Volume *input = extensionContext.getDefaultVolume();
     if (!input)
+    {
         QMessageBox::information(0, tr("Starviewer"), tr("The selected item is not an image"));
+    }
     else
+    {
         q3DViewerExtension->setInput(input);
+    }
 
     return true;
 }

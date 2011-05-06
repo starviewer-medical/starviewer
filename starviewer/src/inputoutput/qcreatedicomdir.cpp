@@ -166,9 +166,13 @@ void QCreateDicomdir::showDICOMDIRSize()
     m_dicomdirSizeOnDiskLabel->setText(sizeOfDicomdirText);
 
     if (sizeInMb < m_progressBarOcupat->maximum())
+    {
         m_progressBarOcupat->setValue((int)sizeInMb);
+    }
     else
+    {
         m_progressBarOcupat->setValue(m_progressBarOcupat->maximum());
+    }
 
     m_progressBarOcupat->repaint();
 
@@ -215,7 +219,9 @@ void QCreateDicomdir::addStudies(const QList<Study *> &studies)
             }
         }
         else
+        {
             existingStudies << study->getInstanceUID();
+        }
     }
     QApplication::restoreOverrideCursor();
 
@@ -303,7 +309,9 @@ void QCreateDicomdir::createDicomdir()
                 Status state = createDicomdirOnCdOrDvd();
                 // Error 4001 és el cas en que alguna imatge de l'estudi no compleix amb l'estàndard dicom tot i així el deixem gravar
                 if (state.good() || (!state.good() && state.code() == 4001))
+                {
                     burnDicomdir();
+                }
                 break;
     }
 }
@@ -501,7 +509,10 @@ void QCreateDicomdir::examineDicomdirPath()
         {
             initialDirectory = m_lineEditDicomdirPath->text();
         }// Si no existeix directori entrat el directori inicial serà el home
-        else initialDirectory = QDir::homePath();
+        else
+        {
+            initialDirectory = QDir::homePath();
+        }
     }
     else
     {
@@ -557,11 +568,15 @@ void QCreateDicomdir::removeSelectedStudy()
             resetDICOMDIRList();
         }
         else
-
-        updateDICOMDIRSizeWithFolderToCopyToDICOMDIRSize();
+        {
+            updateDICOMDIRSizeWithFolderToCopyToDICOMDIRSize();
+        }
         showDICOMDIRSize();
     }
-    else QMessageBox::information(this, ApplicationNameString, tr("Please select a study to remove of the list."));
+    else
+    {
+        QMessageBox::information(this, ApplicationNameString, tr("Please select a study to remove of the list."));
+    }
 }
 
 bool QCreateDicomdir::studyExistsInDICOMDIRList(QString studyUID)
@@ -572,7 +587,10 @@ bool QCreateDicomdir::studyExistsInDICOMDIRList(QString studyUID)
     {
         return true;
     }
-    else return false;
+    else
+    {
+        return false;
+    }
 }
 
 void QCreateDicomdir::burnDicomdir()
@@ -680,7 +698,10 @@ bool QCreateDicomdir::enoughFreeSpace(QString path)
     {
         return false;
     }
-    else return true;
+    else
+    {
+        return true;
+    }
 }
 
 void QCreateDicomdir::clearTemporaryDICOMDIRPath()
@@ -726,11 +747,20 @@ bool QCreateDicomdir::dicomdirPathIsADicomdir(QString dicomdirPath)
                 //si conté un fitxer anomenat dicomdir
                 return fileList.contains("DICOMDIR", Qt::CaseInsensitive);
             }
-            else return false;
+            else
+            {
+                return false;
+            }
         }
-        else return false;
+        else
+        {
+            return false;
+        }
     }
-    else return false;
+    else
+    {
+        return false;
+    }
 }
 
 void QCreateDicomdir::closeEvent(QCloseEvent* ce)

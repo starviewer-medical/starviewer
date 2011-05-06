@@ -29,7 +29,10 @@ public:
     /// @param data
     void setToolData(ToolData * data);
 
-    void handleEvent(long unsigned eventID){ eventID = eventID; }; // Cal implementar-lo, ja que a Tool és virtual pur TODO potser seria millor deixar-ho implementat buit en el pare?
+    void handleEvent(long unsigned eventID)
+    {
+        eventID = eventID;
+    }; // Cal implementar-lo, ja que a Tool és virtual pur TODO potser seria millor deixar-ho implementat buit en el pare?
 
 private slots:
     /// Actualitza les línies a projectar sobre la imatge segons les dades de la tool

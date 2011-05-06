@@ -8,8 +8,7 @@
 
 namespace udg {
 
-class HangingProtocolsRepository : public Repository<HangingProtocol>
-{
+class HangingProtocolsRepository : public Repository<HangingProtocol> {
 Q_OBJECT
 
 public:

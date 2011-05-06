@@ -27,12 +27,16 @@ bool DICOMFileGenerator::setDirPath(QString path)
     if (!dir.exists())
     {
         if (!dir.mkpath(dir.path()))
+        {
             return false;
+        }
     }
     else
     {
         if (!dir.isReadable())
+        {
             return false;
+        }
     }
 
     m_dir = dir;

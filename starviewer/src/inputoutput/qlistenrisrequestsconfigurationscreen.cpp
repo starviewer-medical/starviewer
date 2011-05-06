@@ -83,7 +83,10 @@ bool QListenRisRequestsConfigurationScreen::applyChanges()
 
         return true;
     }
-    else return false;
+    else
+    {
+        return false;
+    }
 }
 
 void QListenRisRequestsConfigurationScreen::enableApplyButtons()

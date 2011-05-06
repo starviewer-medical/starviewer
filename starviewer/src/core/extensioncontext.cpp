@@ -32,14 +32,18 @@ Volume *ExtensionContext::getDefaultVolume() const
     QList<Series *> selectedSeries = m_patient->getSelectedSeries();
 
     if (selectedSeries.isEmpty())
+    {
         searchForDefaultSeries = true;
+    }
     else
     {
         // TODO de moment només agafem la primera de les possibles seleccionades
         defaultSeries = selectedSeries.at(0);
         // necessitem que les sèries siguin visualitzables
         if (!defaultSeries->isViewable())
+        {
             searchForDefaultSeries = true;
+        }
         else
         {
             defaultVolume = defaultSeries->getFirstVolume();

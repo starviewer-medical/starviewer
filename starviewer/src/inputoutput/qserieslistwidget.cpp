@@ -48,13 +48,21 @@ void QSeriesListWidget::insertSeries(QString studyInstanceUID, Series *series)
         text += QString::number(series->getNumberOfImages());
         QString modality = series->getModality();
         if (modality == "KO")
+        {
             text += tr(" Key Object Note");
+        }
         else if (modality == "PR")
+        {
             text += tr(" Presentation State");
+        }
         else if (modality == "SR")
+        {
             text += tr(" Structured Report");
+        }
         else
+        {
             text += tr(" Images");
+        }
     }
 
     QIcon icon(series->getThumbnail());
@@ -94,9 +102,15 @@ void QSeriesListWidget::setCurrentSeries(const QString &seriesUID)
         {
             stop = true;
         }
-        else index++;
+        else
+        {
+            index++;
+        }
     }
-    if (stop) m_seriesListWidget->setCurrentItem(llistaSeries.at(index));
+    if (stop)
+    {
+        m_seriesListWidget->setCurrentItem(llistaSeries.at(index));
+    }
 }
 
 void QSeriesListWidget::removeSeries(const QString &seriesInstanceUID)
@@ -111,20 +125,32 @@ void QSeriesListWidget::removeSeries(const QString &seriesInstanceUID)
         {
             stop = true;
         }
-        else index++;
+        else
+        {
+            index++;
+        }
     }
 
-    if (stop) delete llistaSeries.at(index);
+    if (stop)
+    {
+        delete llistaSeries.at(index);
+    }
 }
 
 void QSeriesListWidget::clicked(QListWidgetItem *item)
 {
-    if (item != NULL) emit(selectedSeriesIcon(item->statusTip()));
+    if (item != NULL)
+    {
+        emit(selectedSeriesIcon(item->statusTip()));
+    }
 }
 
 void QSeriesListWidget::view(QListWidgetItem *item)
 {
-    if (item != NULL) emit(viewSeriesIcon());
+    if (item != NULL)
+    {
+        emit(viewSeriesIcon());
+    }
 }
 
 QString QSeriesListWidget::getCurrentSeriesUID()

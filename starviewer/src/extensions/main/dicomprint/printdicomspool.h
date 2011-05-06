@@ -12,11 +12,9 @@ class DVPSPrintMessageHandler;
 class DcmDataset;
 class OFCondition;
 
-namespace udg
-{
+namespace udg {
 
-class PrintDicomSpool
-{
+class PrintDicomSpool {
 public:
 
     enum PrintDicomSpoolError { CanNotConnectToDICOMPrinter, ErrorCreatingFilmSession, ErrorCreatingFilmbox, ErrorCreatingImageBox, ErrorLoadingImageToPrint, Ok };

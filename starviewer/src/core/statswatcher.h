@@ -16,8 +16,7 @@ class QAction;
 class QMenu;
 
 namespace udg {
-class StatsWatcher : public QObject
-{
+class StatsWatcher : public QObject {
 Q_OBJECT
 public:
     StatsWatcher(QObject *parent = 0);

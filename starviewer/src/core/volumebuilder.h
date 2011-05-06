@@ -14,8 +14,7 @@ i aquesta a un estudi (nou o no depenén del tipus de generador).
 Es dóna la possiblitat d'assignar una descripció a la nova sèrie que es generarà (\sa setSeriesDescription()).
 */
 
-class VolumeBuilder
-{
+class VolumeBuilder {
 public:
     VolumeBuilder();
 

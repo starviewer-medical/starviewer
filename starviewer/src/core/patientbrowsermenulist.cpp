@@ -48,7 +48,9 @@ void PatientBrowserMenuList::addItemsGroup(const QString &caption, const QList<Q
 
     int maxColumns = 2;
     if (numberOfItems >= 20)
+    {
         maxColumns = 3;
+    }
 
     int row = 0;
     int column = 0;

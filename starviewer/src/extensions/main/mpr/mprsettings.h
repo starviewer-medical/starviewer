@@ -5,8 +5,7 @@
 
 namespace udg {
 
-class MPRSettings : public DefaultSettings
-{
+class MPRSettings : public DefaultSettings {
 public:
     MPRSettings();
     ~MPRSettings();

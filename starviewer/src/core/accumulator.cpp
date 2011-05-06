@@ -29,13 +29,21 @@ template <class T>
 Accumulator<T> * AccumulatorFactory::getAccumulator(const QString &type, unsigned long size)
 {
     if (type = "Maximum")
+    {
         return new MaximumAccumulator<T>(size);
+    }
     else if (type = "Minimum")
+    {
         return new MinimumAccumulator<T>(size);
+    }
     else if (type = "Average")
+    {
         return new AverageAccumulator<T>(size);
+    }
     else
+    {
         return 0;
+    }
 }
 
 }

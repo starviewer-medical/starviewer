@@ -11,8 +11,7 @@ namespace udg {
    Aquesta classe és una implementació de la classe Repository
 */
 
-class CustomWindowLevelsRepository : public Repository<CustomWindowLevel>
-{
+class CustomWindowLevelsRepository : public Repository<CustomWindowLevel> {
 
 public:
 

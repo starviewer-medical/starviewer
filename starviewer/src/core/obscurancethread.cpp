@@ -125,7 +125,9 @@ void ObscuranceThread::runDensity() // optimitzat
                 if (cos < 0.0)
                 {
                     if (m_obscurance->isDoublePrecision())
-                    m_obscurance->addObscurance(uIndex, -cos * obscurance((rv - ru).length()));
+                    {
+                        m_obscurance->addObscurance(uIndex, -cos * obscurance((rv - ru).length()));
+                    }
                 }
             }
 
@@ -221,7 +223,10 @@ void ObscuranceThread::runDensitySmooth()
 
                     itPostponedVoxels = postponedVoxels.erase(itPostponedVoxels);
                 }
-                else ++itPostponedVoxels;
+                else
+                {
+                    ++itPostponedVoxels;
+                }
             }
 
             while (!unresolvedVoxels.isEmpty() && unresolvedVoxels.top().first <= value)
@@ -435,7 +440,10 @@ void ObscuranceThread::runOpacitySmooth()
 
                     itPostponedVoxels = postponedVoxels.erase(itPostponedVoxels);
                 }
-                else ++itPostponedVoxels;
+                else
+                {
+                    ++itPostponedVoxels;
+                }
             }
 
             while (!unresolvedVoxels.isEmpty() && unresolvedVoxels.top().first <= opacity)
@@ -611,8 +619,14 @@ void ObscuranceThread::runOpacitySmoothSaliency()
             unsigned short value = dataPtr[vIndex];
             double opacity = m_transferFunction.getOpacity(value);
             double fxSaliency = 1.0 + m_saliency[m_startDelta + vIndex] * (m_fxSaliencyA + m_fxSaliencyB) - m_fxSaliencyA;
-            if (fxSaliency < m_fxSaliencyLow) fxSaliency = minFxSaliency;
-            else if (fxSaliency > m_fxSaliencyHigh) fxSaliency = maxFxSaliency;
+            if (fxSaliency < m_fxSaliencyLow)
+            {
+                fxSaliency = minFxSaliency;
+            }
+            else if (fxSaliency > m_fxSaliencyHigh)
+            {
+                fxSaliency = maxFxSaliency;
+            }
             opacity *= fxSaliency;
 
             QLinkedList<QPair<double, Vector3> >::iterator itPostponedVoxels = postponedVoxels.begin();
@@ -655,7 +669,10 @@ void ObscuranceThread::runOpacitySmoothSaliency()
 
                     itPostponedVoxels = postponedVoxels.erase(itPostponedVoxels);
                 }
-                else ++itPostponedVoxels;
+                else
+                {
+                    ++itPostponedVoxels;
+                }
             }
 
             while (!unresolvedVoxels.isEmpty() && unresolvedVoxels.top().first <= opacity)
@@ -805,7 +822,10 @@ void ObscuranceThread::runOpacityColorBleeding()    /// \todo encara és smooth
 
                     itPostponedVoxels = postponedVoxels.erase(itPostponedVoxels);
                 }
-                else ++itPostponedVoxels;
+                else
+                {
+                    ++itPostponedVoxels;
+                }
             }
 
             while (!unresolvedVoxels.isEmpty() && unresolvedVoxels.top().first <= opacity)
@@ -936,7 +956,10 @@ void ObscuranceThread::runOpacitySmoothColorBleeding()
                         const Vector3 uNormal(uGradient[0], uGradient[1], uGradient[2]);
                         const double cos = uNormal * m_direction;
 
-                        if (cos < 0.0) m_obscurance->addColorBleeding(uIndex, -cos * obscurance(distance) * vColorVector);
+                        if (cos < 0.0)
+                        {
+                            m_obscurance->addColorBleeding(uIndex, -cos * obscurance(distance) * vColorVector);
+                        }
 
                         itPostponedVoxels = postponedVoxels.erase(itPostponedVoxels);
 
@@ -962,7 +985,10 @@ void ObscuranceThread::runOpacitySmoothColorBleeding()
                     const Vector3 uNormal(uGradient[0], uGradient[1], uGradient[2]);
                     const double cos = uNormal * m_direction;
 
-                    if (cos < 0.0) m_obscurance->addColorBleeding(uIndex, -cos * obscurance(distance) * vColorVector);
+                    if (cos < 0.0)
+                    {
+                        m_obscurance->addColorBleeding(uIndex, -cos * obscurance(distance) * vColorVector);
+                    }
                 }
                 else    // ru no és tapat -> el posposem
                 {
@@ -987,7 +1013,10 @@ void ObscuranceThread::runOpacitySmoothColorBleeding()
             const Vector3 uNormal(uGradient[0], uGradient[1], uGradient[2]);
             const double cos = uNormal * m_direction;
 
-            if (cos < 0.0) m_obscurance->addColorBleeding(uIndex, -cos * AMBIENT_COLOR);
+            if (cos < 0.0)
+            {
+                m_obscurance->addColorBleeding(uIndex, -cos * AMBIENT_COLOR);
+            }
         }
 
         while (!unresolvedVoxels.isEmpty())
@@ -1000,7 +1029,10 @@ void ObscuranceThread::runOpacitySmoothColorBleeding()
             const Vector3 uNormal(uGradient[0], uGradient[1], uGradient[2]);
             const double cos = uNormal * m_direction;
 
-            if (cos < 0.0) m_obscurance->addColorBleeding(uIndex, -cos * AMBIENT_COLOR);
+            if (cos < 0.0)
+            {
+                m_obscurance->addColorBleeding(uIndex, -cos * AMBIENT_COLOR);
+            }
         }
     }
 }
@@ -1009,7 +1041,10 @@ inline double ObscuranceThread::obscurance(double distance) const
 {
     const double EXP_NORM = 1.0 - exp(-1.0);
 
-    if (distance > m_obscuranceMaximumDistance) return 1.0;
+    if (distance > m_obscuranceMaximumDistance)
+    {
+        return 1.0;
+    }
 
     switch (m_obscuranceFunction)
     {
@@ -1035,7 +1070,10 @@ inline double ObscuranceThread::obscurance(double distance) const
                                           m_sXYZ[2] * blockedGradient[m_xyz[2]]);  // normal en espai local (transformat)
         const double a = blockedNormalLocal.x, b = blockedNormalLocal.y, c = blockedNormalLocal.z, d = -blockedNormalLocal * blocked;
         // distance from blocking to tangent plane at blocked
-        if (qAbs(a * blocking.x + b * blocking.y + c * blocking.z + d) <= 1.5) return false;
+        if (qAbs(a * blocking.x + b * blocking.y + c * blocking.z + d) <= 1.5)
+        {
+            return false;
+        }
     }
 
     return true;

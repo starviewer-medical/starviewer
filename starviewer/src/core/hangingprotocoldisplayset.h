@@ -8,8 +8,7 @@ namespace udg {
 class HangingProtocol;
 class HangingProtocolImageSet;
 
-class HangingProtocolDisplaySet : public QObject
-{
+class HangingProtocolDisplaySet : public QObject {
 Q_OBJECT
 public:
     HangingProtocolDisplaySet(QObject *parent = 0);

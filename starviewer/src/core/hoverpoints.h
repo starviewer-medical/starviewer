@@ -28,8 +28,7 @@
 
 namespace udg {
 
-class HoverPoints : public QObject
-{
+class HoverPoints : public QObject {
     Q_OBJECT
 public:
     enum PointShape {
@@ -64,32 +63,77 @@ public:
     void paintPoints();
 
     inline QRectF boundingRect() const;
-    void setBoundingRect(const QRectF &boundingRect) { m_bounds = boundingRect; }
+    void setBoundingRect(const QRectF &boundingRect)
+    {
+        m_bounds = boundingRect;
+    }
 
-    QPolygonF points() const { return m_points; }
+    QPolygonF points() const
+    {
+        return m_points;
+    }
     void setPoints(const QPolygonF &points);
 
-    QSizeF pointSize() const { return m_pointSize; }
-    void setPointSize(const QSizeF &size) { m_pointSize = size; }
+    QSizeF pointSize() const
+    {
+        return m_pointSize;
+    }
+    void setPointSize(const QSizeF &size)
+    {
+        m_pointSize = size;
+    }
 
-    SortType sortType() const { return m_sortType; }
-    void setSortType(SortType sortType) { m_sortType = sortType; }
+    SortType sortType() const
+    {
+        return m_sortType;
+    }
+    void setSortType(SortType sortType)
+    {
+        m_sortType = sortType;
+    }
 
-    ConnectionType connectionType() const { return m_connectionType; }
-    void setConnectionType(ConnectionType connectionType) { m_connectionType = connectionType; }
+    ConnectionType connectionType() const
+    {
+        return m_connectionType;
+    }
+    void setConnectionType(ConnectionType connectionType)
+    {
+        m_connectionType = connectionType;
+    }
 
-    void setConnectionPen(const QPen &pen) { m_connectionPen = pen; }
-    void setShapePen(const QPen &pen) { m_pointPen = pen; }
-    void setShapeBrush(const QBrush &brush) { m_pointBrush = brush; }
+    void setConnectionPen(const QPen &pen)
+    {
+        m_connectionPen = pen;
+    }
+    void setShapePen(const QPen &pen)
+    {
+        m_pointPen = pen;
+    }
+    void setShapeBrush(const QBrush &brush)
+    {
+        m_pointBrush = brush;
+    }
 
-    void setPointLock(int pos, LockType lock) { m_locks[pos] = lock; }
+    void setPointLock(int pos, LockType lock)
+    {
+        m_locks[pos] = lock;
+    }
 
-    void setEditable(bool editable) { m_editable = editable; }
-    bool editable() const { return m_editable; }
+    void setEditable(bool editable)
+    {
+        m_editable = editable;
+    }
+    bool editable() const
+    {
+        return m_editable;
+    }
 
 public slots:
     void setEnabled(bool enabled);
-    void setDisabled(bool disabled) { setEnabled(!disabled); }
+    void setDisabled(bool disabled)
+    {
+        setEnabled(!disabled);
+    }
 
 signals:
     void pointsChanged(const QPolygonF &points);
@@ -136,9 +180,13 @@ inline QRectF HoverPoints::pointBoundingRect(int i) const
 inline QRectF HoverPoints::boundingRect() const
 {
     if (m_bounds.isEmpty())
+    {
         return m_widget->rect();
+    }
     else
+    {
         return m_bounds;
+    }
 }
 
 }

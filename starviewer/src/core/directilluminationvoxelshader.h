@@ -65,7 +65,10 @@ inline HdrColor DirectIlluminationVoxelShader::nvShade(const Vector3 &position, 
 
     HdrColor color = AmbientVoxelShader::shade(position, offset, direction, remainingOpacity, baseColor);
 
-    if (color.isTransparent()) return color;
+    if (color.isTransparent())
+    {
+        return color;
+    }
 
     unsigned short normal = m_encodedNormals[offset];
     color.red = color.red * m_redDiffuseShadingTable[normal] + m_redSpecularShadingTable[normal];
@@ -96,10 +99,16 @@ inline HdrColor DirectIlluminationVoxelShader::nvShade(const Vector3 &position, 
 
     HdrColor color = m_ambientColors[static_cast<int>(value)];
 
-    if (color.isTransparent()) return color;
+    if (color.isTransparent())
+    {
+        return color;
+    }
 
     int normals[8];
-    for (int i = 0; i < 8; i++) normals[i] = m_encodedNormals[offsets[i]];
+    for (int i = 0; i < 8; i++)
+    {
+        normals[i] = m_encodedNormals[offsets[i]];
+    }
 
     double diffuseRed = TrilinearInterpolator::interpolate<double>(m_redDiffuseShadingTable, normals, weights);
     double diffuseGreen = TrilinearInterpolator::interpolate<double>(m_greenDiffuseShadingTable, normals, weights);

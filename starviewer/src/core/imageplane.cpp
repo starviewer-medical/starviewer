@@ -199,7 +199,9 @@ bool ImagePlane::fillFromImage(const Image *image)
         return true;
     }
     else
+    {
         return false;
+    }
 }
 
 bool ImagePlane::operator ==(const ImagePlane &imagePlane)
@@ -221,10 +223,14 @@ bool ImagePlane::operator ==(const ImagePlane &imagePlane)
         m_rows == imagePlane.m_rows &&
         m_columns == imagePlane.m_columns &&
         m_thickness == imagePlane.m_thickness
-   )
+      )
+    {
         return true;
+    }
     else
+    {
         return false;
+    }
 }
 
 bool ImagePlane::operator !=(const ImagePlane &imagePlane)
@@ -322,17 +328,25 @@ int ImagePlane::getIntersections(ImagePlane *planeToIntersect, double firstInter
 
     // Primera "paral·lela" (X)
     if(vtkPlane::IntersectWithLine((double *)tlhc.data(), (double *)trhc.data(), localizerNormalVector, localizerOrigin, t, firstIntersectionPoint))
+    {
         numberOfIntersections++;
+    }
     if(vtkPlane::IntersectWithLine((double *)brhc.data(), (double *)blhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint))
+    {
         numberOfIntersections++;
+    }
 
     if(numberOfIntersections == 0) // provar amb la segona "paral·lela" (Y)
     {
         if(vtkPlane::IntersectWithLine((double *)trhc.data(), (double *)brhc.data(), localizerNormalVector, localizerOrigin, t, firstIntersectionPoint))
+        {
             numberOfIntersections++;
+        }
 
         if(vtkPlane::IntersectWithLine((double *)blhc.data(), (double *)tlhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint))
+        {
             numberOfIntersections++;
+        }
     }
 
     return numberOfIntersections;

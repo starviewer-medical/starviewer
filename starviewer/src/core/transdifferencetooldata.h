@@ -23,41 +23,77 @@ public:
     void setInputVolume(Volume* input);
 
     /// Get del volum d'entrada
-    Volume* getInputVolume(){return m_inputVolume;}
+    Volume* getInputVolume()
+    {
+        return m_inputVolume;
+    }
 
     /// Set del volum diferència
     void setDifferenceVolume(Volume* input);
 
     /// Get del volum diferència
-    Volume* getDifferenceVolume(){return m_differenceVolume;}
+    Volume* getDifferenceVolume()
+    {
+        return m_differenceVolume;
+    }
 
     /// Get X de la translacio
-    int getSliceTranslationX(int sl){return m_sliceTranslations[sl].first;}
+    int getSliceTranslationX(int sl)
+    {
+        return m_sliceTranslations[sl].first;
+    }
 
     /// Set X de la translacio
-    void setSliceTranslationX(int sl, int trX){m_sliceTranslations[sl].first = trX;}
+    void setSliceTranslationX(int sl, int trX)
+    {
+        m_sliceTranslations[sl].first = trX;
+    }
 
     /// Increase X de la translacio
-    void increaseSliceTranslationX(int sl, int trX){m_sliceTranslations[sl].first += trX;}
+    void increaseSliceTranslationX(int sl, int trX)
+    {
+        m_sliceTranslations[sl].first += trX;
+    }
 
     /// Get Y de la translacio
-    int getSliceTranslationY(int sl){return m_sliceTranslations[sl].second;}
+    int getSliceTranslationY(int sl)
+    {
+        return m_sliceTranslations[sl].second;
+    }
 
     /// Set Y de la translacio
-    void setSliceTranslationY(int sl, int trY){m_sliceTranslations[sl].second = trY;}
+    void setSliceTranslationY(int sl, int trY)
+    {
+        m_sliceTranslations[sl].second = trY;
+    }
 
     /// Increase Y de la translacio
-    void increaseSliceTranslationY(int sl, int trY){m_sliceTranslations[sl].second += trY;}
+    void increaseSliceTranslationY(int sl, int trY)
+    {
+        m_sliceTranslations[sl].second += trY;
+    }
 
     /// Get la llesca de referència
-    int getReferenceSlice(){return m_referenceSlice;}
+    int getReferenceSlice()
+    {
+        return m_referenceSlice;
+    }
 
     /// Set la llesca de referència
-    void setReferenceSlice(int sl){m_referenceSlice = sl;}
+    void setReferenceSlice(int sl)
+    {
+        m_referenceSlice = sl;
+    }
 
-    void setActualDisplacement(int dx, int dy){emit actualDisplacement(dx, dy);}
+    void setActualDisplacement(int dx, int dy)
+    {
+        emit actualDisplacement(dx, dy);
+    }
 
-    void setFinalDisplacement(int dx, int dy){emit finalDisplacement(dx, dy);}
+    void setFinalDisplacement(int dx, int dy)
+    {
+        emit finalDisplacement(dx, dy);
+    }
 
 public slots:
 

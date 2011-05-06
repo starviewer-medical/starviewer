@@ -10,8 +10,7 @@
 #include "starviewerapplication.h"
 #include "senddicomfilestopacs.h"
 
-namespace udg
-{
+namespace udg {
 
 SendDICOMFilesToPACSJob::SendDICOMFilesToPACSJob(PacsDevice pacsDevice, QList<Image*> imagesToSend)
  : PACSJob(pacsDevice)

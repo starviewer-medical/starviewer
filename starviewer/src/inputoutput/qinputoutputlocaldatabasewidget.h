@@ -29,8 +29,7 @@ class PacsManager;
 /**
  * Widget en el que controla les operacions d'entrada/sortida de la base de dades local
  */
-class QInputOutputLocalDatabaseWidget : public QWidget, private Ui::QInputOutputLocalDatabaseWidgetBase
-{
+class QInputOutputLocalDatabaseWidget : public QWidget, private Ui::QInputOutputLocalDatabaseWidgetBase {
 Q_OBJECT
 
 public:

@@ -24,7 +24,10 @@ public:
 
     void postProcessing() {}
 
-    QString name() { return "ImageFillerStep"; }
+    QString name()
+    {
+        return "ImageFillerStep";
+    }
 
 private:
     /// Mètode per processar la informació específica de pacient,series i imatge

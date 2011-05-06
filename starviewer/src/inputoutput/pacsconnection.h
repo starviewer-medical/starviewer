@@ -12,8 +12,7 @@ class QString;
 /** Aquest classe s'encarrega de configurar la connexió i connectar amb el PACS en funció del servei que li volguem sol·licitar.*/
 namespace udg {
 
-class PACSConnection
-{
+class PACSConnection {
 
 public:
 

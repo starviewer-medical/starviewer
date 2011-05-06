@@ -5,8 +5,7 @@
 
 namespace udg {
 
-class QLogViewer : public QDialog, private Ui::QLogViewerBase
-{
+class QLogViewer : public QDialog, private Ui::QLogViewerBase {
 Q_OBJECT
 public:
     QLogViewer(QWidget *parent = 0);

@@ -41,7 +41,9 @@ SlicingTool::~SlicingTool()
 void SlicingTool::handleEvent(unsigned long eventID)
 {
     if (!m_2DViewer->getInput())
+    {
         return;
+    }
 
     switch (eventID)
     {
@@ -98,7 +100,9 @@ void SlicingTool::handleEvent(unsigned long eventID)
         // TODO aquest comportament de fer switch es podria eliminar ja que no és gaire usable
         // de moment es manté perquè ja tenim un conjunt d'usuaris acostumats a aquest comportament
         if (!m_mouseMovement)
+        {
             switchSlicingMode();
+        }
     break;
 
     case vtkCommand::KeyPressEvent:
@@ -148,9 +152,13 @@ void SlicingTool::doSlicing()
         if (value == 0)
         {
             if (increase > 0)
+            {
                 value = 1;
+            }
             else if (increase < 0)
+            {
                 value = -1;
+            }
         }
         this->updateIncrement(value);
         // estadístiques
@@ -173,7 +181,9 @@ void SlicingTool::inputChanged(Volume *input)
     if (input)
     {
         if (input->getNumberOfPhases() > 1)
+        {
             m_inputHasPhases = true;
+        }
     }
     else
     {
@@ -198,7 +208,9 @@ void SlicingTool::switchSlicingMode()
         }
     }
     else
+    {
         statMessage += "Try to switch slicing mode with input with no phases";
+    }
 
     StatsWatcher::log(statMessage);
 }
@@ -207,7 +219,9 @@ void SlicingTool::updateIncrement(int increment)
 {
     // si mantenim control apretat sempe mourem fases independentment de l'slicing mode
     if (m_forcePhaseMode)
+    {
         m_2DViewer->setPhase(m_2DViewer->getCurrentPhase() + increment);
+    }
     else // altrament continuem amb el comportament habitual
     {
         switch (m_slicingMode)
@@ -226,13 +240,19 @@ void SlicingTool::updateIncrement(int increment)
 void SlicingTool::computeImagesForScrollMode()
 {
     if (m_forcePhaseMode)
+    {
         m_numberOfImages = m_2DViewer->getInput()->getNumberOfPhases();
+    }
     else
     {
         if (m_slicingMode == SliceMode)
+        {
             m_numberOfImages = m_2DViewer->getMaximumSlice();
+        }
         else
+        {
             m_numberOfImages = m_2DViewer->getInput()->getNumberOfPhases();
+        }
     }
 }
 
@@ -248,7 +268,9 @@ void SlicingTool::chooseBestDefaultScrollMode(Volume *input)
             StatsWatcher::log("Slicing Tool: Default Scroll Mode = PHASE");
         }
         else
+        {
             StatsWatcher::log("Slicing Tool: Default Scroll Mode = SLICE");
+        }
     }
 }
 

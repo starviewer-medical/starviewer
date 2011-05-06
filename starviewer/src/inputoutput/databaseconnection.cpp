@@ -73,7 +73,10 @@ QString DatabaseConnection::formatTextToValidSQLSyntax(QChar qchar)
 
 sqlite3* DatabaseConnection::getConnection()
 {
-    if (!isConnected()) open();
+    if (!isConnected())
+    {
+        open();
+    }
 
     return m_databaseConnection;
 }

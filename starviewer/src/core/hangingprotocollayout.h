@@ -5,8 +5,7 @@
 
 namespace udg {
 
-class HangingProtocolLayout : public QObject
-{
+class HangingProtocolLayout : public QObject {
 Q_OBJECT
 public:
     HangingProtocolLayout(QObject *parent = 0);

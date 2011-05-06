@@ -10,8 +10,7 @@ namespace udg {
     class Printer;
     class PrintJob;
 
-class PrintMethod
-{
+class PrintMethod {
 public:
     virtual void setPrinter(Printer &_printer) = 0;
     virtual void setPrintJob(PrintJob &_printJob) = 0;

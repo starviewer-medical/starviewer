@@ -13,8 +13,7 @@ namespace udg {
     @endcode
 */
 template <class Extension, class Mediator>
-class InstallExtension
-{
+class InstallExtension {
 public:
     InstallExtension()
     {

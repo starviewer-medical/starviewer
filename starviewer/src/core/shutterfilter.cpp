@@ -62,9 +62,13 @@ void ShutterFilter::setPresentationStateShutters(const QString &presentationStat
                 int backValue = presentationStateHandler->getShutterPresentationValue();
                 m_inputData->getScalarRange(range);
                 if (backValue == 0)
+                {
                     m_background = range[0];
+                }
                 else
+                {
                     m_background = backValue * (range[1] / backValue) + range[0];
+                }
 
                 DEBUG_LOG(QString("Valor de background del Shutter donat pel presentation state: %1").arg(m_background));
 
@@ -78,7 +82,9 @@ void ShutterFilter::setPresentationStateShutters(const QString &presentationStat
                                );
                 }
                 else
+                {
                     DEBUG_LOG("No hi ha RECTANGULAR shutter al presentation state");
+                }
 
                 if (presentationStateHandler->haveShutter(DVPSU_circular))
                 {
@@ -93,7 +99,9 @@ void ShutterFilter::setPresentationStateShutters(const QString &presentationStat
                     this->setCircularShutter(center, radius);
                 }
                 else
+                {
                     DEBUG_LOG("No hi ha CIRCULAR shutter al presentation state");
+                }
 
                 if (presentationStateHandler->haveShutter(DVPSU_polygonal))
                 {
@@ -118,7 +126,9 @@ void ShutterFilter::setPresentationStateShutters(const QString &presentationStat
                             vertexs->InsertCellPoint(i);
                         }
                         else
+                        {
                             msg += "???\\???,\n";
+                        }
                     }
                     // per tancar el polígon
                     vertexs->InsertCellPoint(0);
@@ -140,7 +150,9 @@ void ShutterFilter::setPresentationStateShutters(const QString &presentationStat
                     DEBUG_LOG(QString(msg));
                 }
                 else
+                {
                     DEBUG_LOG("No hi ha POLYGONAL shutter al presentation state");
+                }
 
                 if (presentationStateHandler->haveShutter(DVPSU_bitmap))
                 {
@@ -157,9 +169,13 @@ void ShutterFilter::setPresentationStateShutters(const QString &presentationStat
                             DEBUG_LOG(QString("L'overlay %1 és bo com a bitmap shutter i es pinta al layer #%2").arg(overlayIndex).arg(layer));
 
                             if (presentationStateHandler->overlayInPresentationStateIsROI(overlayIndex))
+                            {
                                 DEBUG_LOG("L'overlay és un ROI!!!!!!!!!!");
+                            }
                             else
+                            {
                                 DEBUG_LOG("L'overlay és un BITMAP SHUTTER :D !!!!");
+                            }
 
                             OFCondition status;
                             status = presentationStateHandler->activateOverlayAsBitmapShutter(overlayIndex);
@@ -189,16 +205,24 @@ void ShutterFilter::setPresentationStateShutters(const QString &presentationStat
                     }
                 }
                 else
+                {
                     DEBUG_LOG("No hi ha BITMAP shutter al presentation state");
+                }
             }
             else
+            {
                 DEBUG_LOG(QString("No s'han pogut carregar les dades del presentation state al corresponenr handler: ") + status.text());
+            }
         }
         else
+        {
             DEBUG_LOG(QString("No s'ha pogut carregar el fitxer de presentation state: ") + status.text());
+        }
     }
     else
+    {
         DEBUG_LOG("No hi ha dades d'input, no es pot aplicar cap shutter");
+    }
 }
 
 void ShutterFilter::setRectangularShutter(double leftVertical, double rightVertical, double upperHorizontal, double lowerHorizontal)
@@ -211,7 +235,9 @@ void ShutterFilter::setRectangularShutter(double leftVertical, double rightVerti
     vtkPoints *points = vtkPoints::New();
     // \TODO tenim un petit problema quan la coordenada x és 0 (potser és quan coincideix amb l'origen 0) Deu ser degut a un bug del filtre d'stencil. Per evitar això fem que si coincideix l'origen x, li fem un petit increment perquè funcioni el retallat
     if (leftVertical == origin[0])
+    {
         leftVertical += 0.001;
+    }
     // comencem per la cantonada inferior esquerre i continuem en sentit anti-horari
     points->InsertPoint(0, leftVertical, lowerHorizontal, origin[2] - 1.);
     points->InsertPoint(1, rightVertical, lowerHorizontal, origin[2] - 1.);
@@ -221,7 +247,9 @@ void ShutterFilter::setRectangularShutter(double leftVertical, double rightVerti
     vtkCellArray *vertexs = vtkCellArray::New();
     vertexs->InsertNextCell(5);
     for (int i = 0; i < 5; i++)
+    {
         vertexs->InsertCellPoint(i % 4); // 0,1,2,3,0
+    }
 
     vtkPolyData *polyData = vtkPolyData::New();
     polyData->SetPoints(points);
@@ -430,9 +458,13 @@ vtkImageData *ShutterFilter::getOutput()
         {
             polygonalStencil = vtkImageStencil::New();
             if (rectangularStencil) // si hi ha shutter rectangular el concatenem
+            {
                 polygonalStencil->SetInput(rectangularStencil->GetOutput());
+            }
             else
+            {
                 polygonalStencil->SetInput(m_inputData->getVtkData());
+            }
             // això sembla que s'ha de fer així pel sentit en que ens donen els punts
             polygonalStencil->ReverseStencilOff();
             polygonalStencil->SetBackgroundValue(m_background);
@@ -443,11 +475,17 @@ vtkImageData *ShutterFilter::getOutput()
         {
             circularStencil = vtkImageStencil::New();
             if (polygonalStencil) // si hi ha shutter poligonal el concatenem
+            {
                 circularStencil->SetInput(polygonalStencil->GetOutput());
+            }
             else if (rectangularStencil) // sinó mire si n'hi de rectamgular per concatenar
+            {
                 circularStencil->SetInput(rectangularStencil->GetOutput());
+            }
             else
+            {
                 circularStencil->SetInput(m_inputData->getVtkData());
+            }
 
             circularStencil->ReverseStencilOn();
             circularStencil->SetBackgroundValue(m_background);
@@ -457,14 +495,22 @@ vtkImageData *ShutterFilter::getOutput()
         // \TODO faltaria la part del bitmap shutter, encara per resoldre
         vtkImageData *output = 0;
         if (circularStencil)
+        {
             output = circularStencil->GetOutput();
+        }
         else if (polygonalStencil)
+        {
             output = polygonalStencil->GetOutput();
+        }
         else if (rectangularStencil)
+        {
             output = rectangularStencil->GetOutput();
+        }
 
         if (output)
+        {
             output->Update();
+        }
 
         return output;
     }

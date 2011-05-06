@@ -19,8 +19,8 @@
 #include "inputoutputsettings.h"
 #include "dicomtagreader.h"
 
-namespace udg
-{
+namespace udg {
+
 RetrieveDICOMFilesFromPACSJob::RetrieveDICOMFilesFromPACSJob(PacsDevice pacsDevice, Study *studyToRetrieveDICOMFiles, DicomMask dicomMaskToRetrieve, RetrievePriorityJob retrievePriorityJob)
  : PACSJob(pacsDevice)
 {

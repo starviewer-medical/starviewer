@@ -117,13 +117,19 @@ bool ExtensionHandler::request(const QString &who)
         while (extensionIndex < count && !found)
         {
             if (m_mainApp->getExtensionWorkspace()->tabText(extensionIndex) == requestedExtensionLabel)
+            {
                 found = true;
+            }
             else
+            {
                 extensionIndex++;
+            }
         }
         // Si la trobem, no caldrà crear-la de nou
         if (found)
+        {
             createExtension = false;
+        }
     }
 
     // Segons la configuració i les extensions existents, haurem de crear o no l'extensió demanada
@@ -175,7 +181,9 @@ void ExtensionHandler::createConnections()
 void ExtensionHandler::processInput(const QStringList &inputFiles)
 {
     if (inputFiles.isEmpty())
+    {
         return;
+    }
 
     QProgressDialog progressDialog(m_mainApp);
     progressDialog.setModal(true);
@@ -330,9 +338,13 @@ void ExtensionHandler::generatePatientVolumes(Patient *patient, const QString &d
                 while (!found && i<imageList.count() - 1)
                 {
                     if (imageList.at(i + 1)->getPhaseNumber() > imageList.at(i)->getPhaseNumber())
+                    {
                         numberOfPhases++;
+                    }
                     else
+                    {
                         found = true;
+                    }
                     i++;
                 }
                 int numberOfSlicesPerPhase = imageList.count() / numberOfPhases;
@@ -364,7 +376,9 @@ void ExtensionHandler::addPatientToWindow(Patient *patient, bool canReplaceActua
 
         //mirem si hi ha alguna extensió oberta, sinó obrim la de per defecte
         if (m_mainApp->getExtensionWorkspace()->count() == 0)
+        {
             openDefaultExtension();
+        }
 
         if (!loadOnly)
         {

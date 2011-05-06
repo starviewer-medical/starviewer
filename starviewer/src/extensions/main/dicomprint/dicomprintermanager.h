@@ -10,13 +10,11 @@
 * Aquest classe permet Afegir/Modificar/Esborrar les impressores DICOM que tenim guardades al sistema mitjançant Settings.
 */
 
-namespace udg
-{
+namespace udg {
     class Printer;
     class DicomPrinter;
 
-class DicomPrinterManager : public PrinterManager
-{
+class DicomPrinterManager : public PrinterManager {
 public:
 
     DicomPrinterManager();

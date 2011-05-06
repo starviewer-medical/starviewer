@@ -11,8 +11,7 @@ class Volume;
     Classe base per a tots els filtres
 */
 
-class Filter
-{
+class Filter {
 public:
     Filter();
 

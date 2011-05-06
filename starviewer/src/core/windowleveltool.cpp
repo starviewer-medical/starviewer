@@ -32,7 +32,9 @@ void WindowLevelTool::handleEvent(unsigned long eventID)
 
     case vtkCommand::MouseMoveEvent:
         if (m_state == WindowLevelling)
+        {
             this->doWindowLevel();
+        }
     break;
 
     case vtkCommand::RightButtonReleaseEvent:

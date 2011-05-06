@@ -18,8 +18,7 @@ class QString;
 
 namespace udg {
 
-class DICOMAnonymizer
-{
+class DICOMAnonymizer {
 
 public:
 

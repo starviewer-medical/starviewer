@@ -13,8 +13,7 @@
 namespace udg {
 
 ///Classe utilitza per adormir el Thread al mètode waitForAllPACSJobsFinished, m'entre s'espera que hagin finalitzat totes les operacions.
-class Sleeper : public QThread
-{
+class Sleeper : public QThread {
 public:
     static void msleep(unsigned long msecs)
     {

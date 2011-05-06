@@ -5,8 +5,7 @@
 
 namespace udg {
 
-class Shortcuts : public DefaultSettings
-{
+class Shortcuts : public DefaultSettings {
 public:
     Shortcuts();
     ~Shortcuts();

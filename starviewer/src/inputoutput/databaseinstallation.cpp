@@ -121,7 +121,10 @@ bool DatabaseInstallation::checkDatabaseRevision()
 
         return updateDatabaseRevision();
     }
-    else return true;
+    else
+    {
+        return true;
+    }
 }
 
 bool DatabaseInstallation::isDatabaseFileWritable()
@@ -261,7 +264,10 @@ bool DatabaseInstallation::createDatabaseFile()
     int status;
 
     //Comprovem que existeixi el path on s'ha de crear la base de dades, sinó el crea
-    if (!checkDatabasePath()) return false;
+    if (!checkDatabasePath())
+    {
+        return false;
+    }
 
     sqlTablesScriptFile.open(QIODevice::ReadOnly); //obrim el fitxer
 

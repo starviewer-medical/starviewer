@@ -6,8 +6,7 @@
 #include "dicommask.h"
 #include "status.h"
 
-namespace udg
-{
+namespace udg {
 
 QBasicSearchWidget::QBasicSearchWidget(QWidget *parent)
  : QWidget(parent)
@@ -88,16 +87,28 @@ DicomMask QBasicSearchWidget::buildDicomMask()
     QString patientID = m_patientIDText->text();
     if (!patientID.isEmpty())
     {
-        if (!patientID.startsWith("*")) patientID = "*" + patientID;
-        if (!patientID.endsWith("*")) patientID = patientID + "*";
+        if (!patientID.startsWith("*"))
+        {
+            patientID = "*" + patientID;
+        }
+        if (!patientID.endsWith("*"))
+        {
+            patientID = patientID + "*";
+        }
     }
     mask.setPatientId(patientID);
 
     QString patientName = m_patientNameText->text();
     if (!patientName.isEmpty())
     {
-        if (!patientName.startsWith("*")) patientName = "*" + patientName;
-        if (!patientName.endsWith("*")) patientName = patientName + "*";
+        if (!patientName.startsWith("*"))
+        {
+            patientName = "*" + patientName;
+        }
+        if (!patientName.endsWith("*"))
+        {
+            patientName = patientName + "*";
+        }
     }
     mask.setPatientName(patientName);
 

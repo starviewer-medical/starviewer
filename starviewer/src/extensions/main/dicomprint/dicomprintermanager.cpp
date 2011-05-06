@@ -7,8 +7,7 @@
 #include "dicomprinter.h"
 #include "settings.h"
 
-namespace udg
-{
+namespace udg {
 
 const QString DicomPrinterManager::DicomPrinterListSectionName = "DicomPrinterList";
 

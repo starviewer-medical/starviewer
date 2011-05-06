@@ -5,8 +5,7 @@
 #include "pacsdevice.h"
 #include "starviewerapplication.h"
 
-namespace udg
-{
+namespace udg {
 
 QWidgetSelectPacsToStoreDicomImage::QWidgetSelectPacsToStoreDicomImage(QWidget *parent)
     : QWidget(parent)

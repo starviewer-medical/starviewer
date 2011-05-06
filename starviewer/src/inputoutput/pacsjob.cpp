@@ -1,7 +1,6 @@
 #include "pacsjob.h"
 
-namespace udg
-{
+namespace udg {
 
 int PACSJob::m_jobIDCounter = 0;
 

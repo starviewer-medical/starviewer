@@ -15,8 +15,7 @@ class Image;
 /**
 Mòdul que s'encarrega d'ordenar correctament les imatges de les sèries. Un dels seus requisits és que es tingui l'etiqueta de DICOMClassified, la ImageFillerStep i el TemporalDimensionFillerStep.
 */
-class OrderImagesFillerStep : public PatientFillerStep
-{
+class OrderImagesFillerStep : public PatientFillerStep {
 public:
     OrderImagesFillerStep();
 
@@ -26,7 +25,10 @@ public:
 
     void postProcessing();
 
-    QString name() { return "OrderImagesFillerStep"; }
+    QString name()
+    {
+        return "OrderImagesFillerStep";
+    }
 
 private:
     /// Mètodes per processar la informació específica de series

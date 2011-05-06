@@ -22,7 +22,9 @@ void LocalDatabaseUtilDAL::compact()
     m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(compactSentence), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK)
+    {
         logError(compactSentence);
+    }
 }
 
 int LocalDatabaseUtilDAL::getDatabaseRevision()

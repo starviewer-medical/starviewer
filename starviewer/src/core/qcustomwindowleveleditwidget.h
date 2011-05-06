@@ -8,8 +8,7 @@ namespace udg {
 /// Widget que permet afegir, modificar i eliminar els WW/WL definits per l'usuari.
 /// Un cop acabat s'actualitza el CustomWindowLevelRepository i es reescriu el fitxer. S'hauria de discutir
 /// si és aquesta classe l'encarregada de modificar el fitxer.
-class QCustomWindowLevelEditWidget : public QDialog, private Ui::QCustomWindowLevelEditWidgetBase
-{
+class QCustomWindowLevelEditWidget : public QDialog, private Ui::QCustomWindowLevelEditWidgetBase {
 Q_OBJECT
 public:
     QCustomWindowLevelEditWidget(QWidget *parent = 0);

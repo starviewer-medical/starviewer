@@ -76,7 +76,9 @@ Series *CreateInformationModelObject::createSeries(DICOMTagReader *dicomTagReade
     series->setViewPosition(dicomTagReader->getValueAttributeAsQString(DICOMViewPosition));
     QString laterality = dicomTagReader->getValueAttributeAsQString(DICOMLaterality);
     if (!laterality.isEmpty())
+    {
         series->setLaterality(laterality.at(0));
+    }
 
     return series;
 }

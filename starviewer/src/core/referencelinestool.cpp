@@ -135,7 +135,9 @@ void ReferenceLinesTool::updateProjectionLines()
 void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePlane *localizerPlane, int drawerLineOffset)
 {
     if (!(referencePlane && localizerPlane))
+    {
         return;
+    }
 
     // Primer mirem que siguin plans diferents
     if (*localizerPlane != *referencePlane)
@@ -384,7 +386,9 @@ void ReferenceLinesTool::checkAvailableLines()
     int planesToProject = m_myData->getPlanesToProject().count();
     int neededLines = planesToProject;
     if (m_showPlaneThickness)
+    {
         neededLines *= 2;
+    }
 
     // Llistat de linies de background
     int numberOfLines = m_backgroundProjectedIntersectionLines.count();

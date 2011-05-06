@@ -7,8 +7,7 @@
 
 namespace udg {
 
-class ShortcutManager
-{
+class ShortcutManager {
 public:
 
     ShortcutManager();

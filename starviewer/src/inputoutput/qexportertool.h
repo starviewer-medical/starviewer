@@ -16,8 +16,7 @@ class QViewer;
     només a la base de dades local o poden ser enviades també al PACS seleccionat a través del widget.
     Actualment, les sèries que es generen són de tipus Secondary Capture.
 */
-class QExporterTool : public QDialog, private Ui::QExporterBase
-{
+class QExporterTool : public QDialog, private Ui::QExporterBase {
 Q_OBJECT
 public:
     /// @pre el viewer no pot ser null
