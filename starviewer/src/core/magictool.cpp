@@ -3,11 +3,10 @@
 #include "q2dviewer.h"
 #include "volume.h"
 #include "drawer.h"
-#include "drawertext.h"
 #include "drawerpolygon.h"
 
-#include <QPointer>
 #include <QMessageBox>
+#include <qmath.h>
 
 //vtk
 #include <vtkCommand.h>
@@ -16,40 +15,44 @@
 
 namespace udg {
 
+static const double  MagicSize = 3.0;
+static const double  MagicFactor = 1.0;
+
 MagicTool::MagicTool(QViewer *viewer, QObject *parent)
-: Tool(viewer, parent)
+: ROITool(viewer, parent)
 {
-    m_magicSize = 3;
-    m_magicFactor = 3.0;
-    m_lowerlevel = 0;
-    m_upperlevel = 0;
+    m_magicSize = MagicSize;
+    m_magicFactor = MagicFactor;
+    m_lowerLevel = 0.0;
+    m_upperLevel = 0.0;
     m_toolName = "MagicTool";
 
-    //En aquest text hi visualitzem el magic factor, si cal
-    m_text = new DrawerText;
-    m_text->setVisibility(false);
+    m_roiPolygon = NULL;
 
-    m_mainPolygon = NULL;
-
-    m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
-    // ens assegurem que desde la creació tenim un viewer vàlid
-    Q_ASSERT(m_2DViewer);
-
-    m_2DViewer->setCursor(QCursor(QPixmap(":/images/magictool.png")));
-    this->initialize();
+    connect(m_2DViewer, SIGNAL(volumeChanged(Volume *)), SLOT(initialize()));
 }
 
 MagicTool::~MagicTool()
 {
-    //no fem el delete perquè si no destruiríem la línia
-    //if (!m_mainPolygon.isNull())
-        //delete m_mainPolygon;
-
-    m_2DViewer->setCursor(Qt::ArrowCursor);
+    if (!m_roiPolygon.isNull())
+    {
+        m_roiPolygon->decreaseReferenceCount();
+        delete m_roiPolygon;
+        m_2DViewer->render();
+    }
 }
 
 void MagicTool::initialize()
 {
+    // Alliberem les primitives perquè puguin ser esborrades
+    if (!m_roiPolygon.isNull())
+    {
+        m_roiPolygon->decreaseReferenceCount();
+        delete m_roiPolygon;
+        m_2DViewer->render();
+    }
+
+    m_roiPolygon = NULL;
 }
 
 void MagicTool::handleEvent(unsigned long eventID)
@@ -57,140 +60,149 @@ void MagicTool::handleEvent(unsigned long eventID)
     switch (eventID)
     {
     case vtkCommand::LeftButtonPressEvent:
-        if (m_2DViewer->getInput() != 0)
-        {
-            if (m_2DViewer->getView() != Q2DViewer::Axial)
-            {
-                DEBUG_LOG("ERROR: This tool can only be used in the acquisition direction");
-            }
-            else
-            {
-                this->setMagicPoint();
-            }
-        }
-    break;
-
+        startMagicRegion();
+        break;
+    case vtkCommand::LeftButtonReleaseEvent:
+        closeForm();
+        break;
     case vtkCommand::MouseMoveEvent:
-        if (m_text->isVisible() && m_2DViewer->getInput() != 0)
-        {
-            m_2DViewer->getDrawer()->erasePrimitive(m_text);
-        }
-    break;
-
-    case vtkCommand::KeyPressEvent:
-    {
-        int key = m_viewer->getInteractor()->GetKeyCode();
-        // '+' = key code 43
-        // '-' = key code 45
-        switch (key)
-        {
-        case 43: // '+'
-            this->increaseMagicSize();
+        modifyMagicFactor();
         break;
-
-        case 45: // '-'
-            this->decreaseMagicSize();
-        break;
-        }
-    }
-    break;
-
     default:
-    break;
+        break;
     }
 }
 
-void MagicTool::setMagicPoint()
+void MagicTool::startMagicRegion()
 {
-    double pos[3];
-    if (m_2DViewer->getCurrentCursorImageCoordinate(pos))
+    if (m_2DViewer->getInput())
     {
-        int index[3];
-        double origin[3];
-        double spacing[3];
-        m_2DViewer->getInput()->getSpacing(spacing);
-        m_2DViewer->getInput()->getOrigin(origin);
-        index[0] = (int)((((double)pos[0] - origin[0]) / spacing[0]) + 0.5);
-        index[1] = (int)((((double)pos[1] - origin[1]) / spacing[1]) + 0.5);
-        index[2] = m_2DViewer->getCurrentSlice();
-
-        //Calculem la desviació estàndard dins la finestra que ens marca la magic size
-        double stdv = getStandardDeviation(index[0], index[1], index[2]);
-
-        //Calculem els llindars com el valor en el pixel +/- la desviació estàndard * magic factor
-        Volume::VoxelType *value = m_2DViewer->getInput()->getScalarPointer(index[0], index[1], index[2]);
-        m_lowerlevel = (*value) - m_magicFactor*stdv;
-        m_upperlevel = (*value) + m_magicFactor * stdv;
-
-        //Creem la màscara
-        int ext[6];
-        m_2DViewer->getInput()->getWholeExtent(ext);
-        if (ext[0] == 0 && ext[2] == 0)
+        if (m_2DViewer->getView() != Q2DViewer::Axial)
         {
-            m_mask = QVector<bool>((ext[1] + 1) * (ext[3] + 1), false);
-        }else{
-            DEBUG_LOG("ERROR: extension no comença a 0");
+            QMessageBox::warning(m_2DViewer->parentWidget(), tr("Error"), tr("This tool can only be used in the acquisition direction. Sorry for the inconvinience."));
         }
+        else
+        {
+            if (m_2DViewer->getCurrentCursorImageCoordinate(m_pickedPosition))
+            {
+                m_magicFactor = MagicFactor;
+                m_magicSize = MagicSize;
+                m_roiPolygon = new DrawerPolygon;
+                m_roiPolygon->increaseReferenceCount();
+                m_2DViewer->getDrawer()->draw(m_roiPolygon, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
 
-        //Posem a true els punts on la imatge està dins els llindard i connectat amb la llavor (region growing)
-        //this->paintRegionMask();
-        this->paintRegionMask();
-
-        //Trobem els punts frontera i creem el polígon
-        this->detectBorder();
-
-        //Refresquem el viewer (no cal)
-        //m_2DViewer->refresh();
+                this->generateRegion();
+            }
+        }
     }
 }
 
-void MagicTool::paintRegionMask()
+void MagicTool::closeForm()
 {
-    double pos[3];
-    double origin[3];
-    double spacing[3];
+    if (m_roiPolygon)
+    {
+        this->generateRegion();
+        this->printData();
+        m_roiPolygon->decreaseReferenceCount();
+        m_roiPolygon = NULL;
+    }
+}
+
+void MagicTool::modifyMagicFactor()
+{
+    if (m_roiPolygon)
+    {
+        int dy = 0.1 * (m_viewer->getEventPositionY() - m_viewer->getLastEventPositionY());
+        if (m_magicFactor - dy > 0.0)
+        {
+            m_magicFactor -= dy;
+        }
+        this->generateRegion();
+    }
+}
+
+void MagicTool::generateRegion()
+{
+    this->computeLevelRange();
+
+    //Posem a true els punts on la imatge està dins els llindard i connectat amb la llavor (region growing)
+    this->computeRegionMask();
+
+    //Trobem els punts frontera i creem el polígon
+    this->computePolygon();
+
+    m_2DViewer->render();
+}
+
+void MagicTool::computeLevelRange()
+{
     int index[3];
+    m_2DViewer->getInput()->getPixelData()->computeCoordinateIndex(m_pickedPosition, index);
+
+    //Calculem la desviació estàndard dins la finestra que ens marca la magic size
+    double stdv = getStandardDeviation(index[0], index[1], index[2]);
+
+    //Calculem els llindars com el valor en el pixel +/- la desviació estàndard * magic factor
+    QVector<double> voxelValue;
+    m_2DViewer->getInput()->getVoxelValue(m_pickedPosition, voxelValue);
+    m_lowerLevel = voxelValue.at(0) - m_magicFactor * stdv;
+    m_upperLevel = voxelValue.at(0) + m_magicFactor * stdv;
+
+}
+
+void MagicTool::computeRegionMask()
+{
     int ext[6];
-    int i;
-    bool trobat;
-    QVector<int> movements;
     m_2DViewer->getInput()->getWholeExtent(ext);
 
-    m_2DViewer->getCurrentCursorImageCoordinate(pos);
-    m_2DViewer->getInput()->getSpacing(spacing);
-    m_2DViewer->getInput()->getOrigin(origin);
-    index[0] = (int)((((double)pos[0] - origin[0]) / spacing[0]) + 0.5);
-    index[1] = (int)((((double)pos[1] - origin[1]) / spacing[1]) + 0.5);
-    index[2] = m_2DViewer->getCurrentSlice();
+    //Creem la màscara
+    if (ext[0] == 0 && ext[2] == 0)
+    {
+        m_mask = QVector<bool>((ext[1] + 1) * (ext[3] + 1), false);
+    }
+    else
+    {
+        DEBUG_LOG("ERROR: extension no comença a 0");
+    }
 
+    //Busquem el voxel inicial
+    int index[3];
+    m_2DViewer->getInput()->getPixelData()->computeCoordinateIndex(m_pickedPosition, index);
     int a = index[0];
     int b = index[1];
-    int c = m_2DViewer->getCurrentSlice();
-    //m_2DViewer->getInput()->getWholeExtent(m_ext);
-    m_input = m_2DViewer->getInput()->getVtkData();
-    //m_i=0;
-
-    //Initial voxel
-    Volume::VoxelType *value = (Volume::VoxelType *)m_input->GetScalarPointer(a, b, c);
-    if (((*value) >= m_lowerlevel) && ((*value) <= m_upperlevel)){
+    int c = index[2];
+    //\TODO S'hauria de fer servir VolumePixelData::getVoxelValue o similar
+    double value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(a, b, c, 0);
+    if ((value >= m_lowerLevel) && (value <= m_upperLevel))
+    {
         m_mask[b * ext[1] + a] = true;
-    }else{
+    }
+    else
+    {
         return;
     }
-    //First movement
-    i = 0;
-    trobat = false;
-    while (i<4 && !(trobat))
+
+    // Comencem el Region Growing
+    QVector<int> movements;
+    //First movement \TODO Codi duplicat amb main loop
+    int i = 0;
+    bool trobat = false;
+    while (i < 4 && !trobat)
     {
         this->doMovement(a, b, i);
-        value = (Volume::VoxelType *)m_input->GetScalarPointer(a, b, c);
-        if (((*value) >= m_lowerlevel) && ((*value) <= m_upperlevel)){
+        //\TODO S'hauria de fer servir VolumePixelData::getVoxelValue o similar
+        value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(a, b, c, 0);
+        if ((value >= m_lowerLevel) && (value <= m_upperLevel))
+        {
             m_mask[b * ext[1] + a] = true;
             trobat = true;
             movements.push_back(i);
         }
-        if (!trobat) this->undoMovement(a, b, i);
-        i++;
+        if (!trobat)
+        {
+            this->undoMovement(a, b, i);
+        }
+        ++i;
     }
 
     //main loop
@@ -198,28 +210,32 @@ void MagicTool::paintRegionMask()
     while (movements.size() > 0)
     {
         trobat = false;
-        while (i < 4 && !(trobat))
+        while (i < 4 && !trobat)
         {
             this->doMovement(a, b, i);
             if ((a > ext[0]) && (a < ext[1]) && (b > ext[2]) && (b < ext[3]))
             {
-                value = (Volume::VoxelType *)m_input->GetScalarPointer(a, b, c);
-                if (((*value) >= m_lowerlevel) && ((*value) <= m_upperlevel) && (!m_mask[b * ext[1] + a])){
+                //\TODO S'hauria de fer servir VolumePixelData::getVoxelValue o similar
+                value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(a, b, c, 0);
+                if ((value >= m_lowerLevel) && (value <= m_upperLevel) && (!m_mask[b * ext[1] + a]))
+                {
                     m_mask[b * ext[1] + a] = true;
                     trobat = true;
                     movements.push_back(i);
                     i = 0;
                 }
             }
-            if (!trobat){
+            if (!trobat)
+            {
                 this->undoMovement(a, b, i);
-                i++;
+                ++i;
             }
         }
-        if (!trobat){
+        if (!trobat)
+        {
             this->undoMovement(a, b, movements.back());
-            i=movements.back();
-            i++;
+            i = movements.back();
+            ++i;
             movements.pop_back();
         }
     }
@@ -267,67 +283,57 @@ void MagicTool::undoMovement(int &a, int &b, int movement)
     }
 }
 
-void MagicTool::detectBorder()
+void MagicTool::computePolygon()
 {
-    int i, j;
-    int index[3];
     int ext[6];
     m_2DViewer->getInput()->getWholeExtent(ext);
-    index[2] = m_2DViewer->getCurrentSlice();
+
+    int i = ext[0];
+    int j;
 
     //Busquem el primer punt
     bool trobat = false;
-    i = ext[0];
-    while ((i <= ext[1]) && !(trobat))
+    while ((i <= ext[1]) && !trobat)
     {
         j = ext[2];
-        while ((j <= ext[3]) && !(trobat))
+        while ((j <= ext[3]) && !trobat)
         {
-            if (m_mask[j * ext[1] + i]) trobat = true;
-            j++;
+            if (m_mask[j * ext[1] + i])
+            {
+                trobat = true;
+            }
+            ++j;
         }
-        i++;
+        ++i;
     }
     //L'índex és -1 pq els hem incrementat una vegada més
+    int index[3];
     index[0] = i - 1;
     index[1] = j - 1;
+    index[2] = m_2DViewer->getCurrentSlice();
 
-    m_mainPolygon = new DrawerPolygon;
-    double point[3];
-    double initialPoint[3];
+    m_roiPolygon->removeVertices();
 
-    int initialIndex[3];
+    // \TODO Acabar d'entendre això
+    this->addPoint(7, index[0], index[1], index[2]);
+    this->addPoint(1, index[0], index[1], index[2]);
+
     int nextIndex[3];
-    int direction=0;
-    initialIndex[0] = index[0];
-    initialIndex[1] = index[1];
-    initialIndex[2] = index[2];
     nextIndex[2] = index[2];
 
-    double origin[3];
-    double spacing[3];
-    m_2DViewer->getInput()->getSpacing(spacing);
-    m_2DViewer->getInput()->getOrigin(origin);
-    point[0] = (index[0] - 0.5) * spacing[0] + origin[0];
-    point[1] = (index[1]) * spacing[1] + origin[1];
-    point[2] = (index[2]) * spacing[2] + origin[2];
-    initialPoint[0] = point[0];
-    initialPoint[1] = point[1];
-
-    m_mainPolygon->addVertix(point);
-    point[0] = (index[0]) * spacing[0] + origin[0];
-    point[1] = (index[1]-0.5) * spacing[1] + origin[1];
-    m_mainPolygon->addVertix(point);
+    int direction = 0;
 
     bool loop = false;
     bool next = false;
-    while (!loop){
+    while (!loop)
+    {
         this->getNextIndex(direction, index[0], index[1], nextIndex[0], nextIndex[1]);
         next = m_mask[nextIndex[1] * ext[1] + nextIndex[0]];
-        while ((!next) && (!loop)){
-            if (((direction % 2) != 0) && (!next))
+        while (!next && !loop)
+        {
+            if (((direction % 2) != 0) && !next)
             {
-                this->addPoint(direction, index[0], index[1], point[2]);
+                this->addPoint(direction, index[0], index[1], index[2]);
                 loop = this->isLoopReached();
             }
             direction = this->getNextDirection(direction);
@@ -340,24 +346,8 @@ void MagicTool::detectBorder()
         direction = this->getNextDirection(direction);
     }
 
-    m_2DViewer->getDrawer()->draw(m_mainPolygon, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
-
-    DrawerText * text = new DrawerText;
-
-    QString areaUnits;
-    if (spacing[0] == 0.0 && spacing[1] == 0.0)
-        areaUnits = "px2";
-    else
-        areaUnits = "mm2";
-
-    float area = m_mainPolygon->computeArea(m_2DViewer->getView());
-    text->setText(tr("Area: %1 %2").arg(area, 0, 'f', 0).arg(areaUnits));
-
-    double pos[3];
-    m_2DViewer->getCurrentCursorImageCoordinate(pos);
-    text->setAttachmentPoint(pos);
-    m_2DViewer->getDrawer()->draw(text, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
-
+    m_roiPolygon->update();
+    m_hasToComputeStatisticsData = true;
 }
 
 void MagicTool::getNextIndex(int direction, int x1, int y1, int &x2, int &y2)
@@ -404,8 +394,7 @@ void MagicTool::getNextIndex(int direction, int x1, int y1, int &x2, int &y2)
 int MagicTool::getNextDirection(int direction)
 {
     int a = direction + 1;
-    if (a == 8) return 0;
-    return a;
+    return (a == 8)? 0: a;
 }
 
 int MagicTool::getInverseDirection(int direction)
@@ -416,7 +405,6 @@ int MagicTool::getInverseDirection(int direction)
 void MagicTool::addPoint(int direction, int x1, int y1, double z1)
 {
     double point[3];
-    point[2] = z1;
     double origin[3];
     double spacing[3];
     m_2DViewer->getInput()->getSpacing(spacing);
@@ -425,133 +413,79 @@ void MagicTool::addPoint(int direction, int x1, int y1, double z1)
     switch (direction)
     {
     case 1:
-        point[0] = (x1) * spacing[0] + origin[0];
+        point[0] = x1 * spacing[0] + origin[0];
         point[1] = (y1 - 0.5) * spacing[1] + origin[1];
         break;
     case 3:
         point[0] = (x1 + 0.5) * spacing[0] + origin[0];
-        point[1] = (y1) * spacing[1] + origin[1];
+        point[1] = y1 * spacing[1] + origin[1];
         break;
     case 5:
-        point[0] = (x1) * spacing[0] + origin[0];
+        point[0] = x1 * spacing[0] + origin[0];
         point[1] = (y1 + 0.5) * spacing[1] + origin[1];
         break;
     case 7:
         point[0] = (x1 - 0.5) * spacing[0] + origin[0];
-        point[1] = (y1) * spacing[1] + origin[1];
+        point[1] = y1 * spacing[1] + origin[1];
         break;
     default:
         DEBUG_LOG("ERROR: This direction doesn't exist");
     }
-    m_mainPolygon->addVertix(point);
+    point[2] = z1 * spacing[2] + origin[2];
+
+    m_roiPolygon->addVertix(point);
 }
 
 bool MagicTool::isLoopReached()
 {
-    const double* pini; //= new double[2];
-    const double* pend; //= new double[2];
-    pini = this->m_mainPolygon->getVertix(0);
-    pend = this->m_mainPolygon->getVertix(m_mainPolygon->getNumberOfPoints()-1);
-    return ((fabs(pini[0] - pend[0]) < 0.0001) && (fabs(pini[1] - pend[1]) < 0.0001));
+    const double *firstVertix = this->m_roiPolygon->getVertix(0);
+    const double *lastVertix = this->m_roiPolygon->getVertix(m_roiPolygon->getNumberOfPoints() - 1);
+    return ((qAbs(firstVertix[0] - lastVertix[0]) < 0.0001) && (qAbs(firstVertix[1] - lastVertix[1]) < 0.0001));
 }
 
 double MagicTool::getStandardDeviation(int a, int b, int c)
 {
     int ext[6];
     m_2DViewer->getInput()->getWholeExtent(ext);
-    Volume::VoxelType *value;
+    int minX = qMax(a - m_magicSize, ext[0]);
+    int maxX = qMin(a + m_magicSize, ext[1]);
+    int minY = qMax(b - m_magicSize, ext[2]);
+    int maxY = qMin(b + m_magicSize, ext[3]);
+
     int index[3];
     index[2] = c;
+
+    //Calculem la mitjana
     double mean = 0.0;
+    for (int i = minX; i <= maxX; ++i)
+    {
+        for (int j = minY; j <= maxY; ++j)
+        {
+            index[0] = i;
+            index[1] = j;
+            // \TODO S'hauria de fer servir VolumePixelData::getVoxelValue o similar
+            double value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(index[0], index[1], index[2], 0);
+            mean += value;
+        }
+    }
+    int numberOfSamples = (maxX - minX + 1) * (maxY - minY + 1);
+    mean = mean / (double)numberOfSamples;
+
+    //Calculem la desviació estandard
     double deviation = 0.0;
-
-    int minx, maxx, miny, maxy;
-
-    if (a - m_magicSize > ext[0])
+    for (int i = minX; i <= maxX; ++i)
     {
-        minx = a - m_magicSize;
-    }else{
-        minx = ext[0];
-    }
-    if (a + m_magicSize < ext[1])
-    {
-        maxx = a + m_magicSize;
-    }else{
-        maxx = ext[1];
-    }
-    if (b - m_magicSize > ext[2])
-    {
-        miny = b - m_magicSize;
-    }else{
-        miny = ext[2];
-    }
-    if (b + m_magicSize < ext[3])
-    {
-        maxy = b + m_magicSize;
-    }else{
-        maxy = ext[3];
-    }
-
-    int i, j;
-    for (i = minx; i <= maxx; i++)
-    {
-        for (j = miny; j <= maxy; j++)
+        for (int j = minY; j <= maxY; ++j)
         {
             index[0] = i;
             index[1] = j;
-            value = m_2DViewer->getInput()->getScalarPointer(index);
-            mean += (*value);
+            //\TODO S'hauria de fer servir VolumePixelData::getVoxelValue o similar
+            double value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(index[0], index[1], index[2], 0);
+            deviation += qPow(value - mean, 2);
         }
     }
-    int numberofsamples = (maxx - minx + 1) * (maxy - miny + 1);
-    mean = mean / (double)numberofsamples;
-    for (i = minx; i <= maxx; i++)
-    {
-        for (j = miny; j <= maxy; j++)
-        {
-            index[0] = i;
-            index[1] = j;
-            value = m_2DViewer->getInput()->getScalarPointer(index);
-            deviation += ((double)(*value) - mean) * ((double)(*value) - mean);
-        }
-    }
-    deviation = sqrt(deviation / (double)numberofsamples);
+    deviation = qSqrt(deviation / (double)numberOfSamples);
     return deviation;
-}
-
-void MagicTool::increaseMagicSize()
-{
-    m_magicFactor += 0.1;
-    //L'esborrem si ja l'havíem pintat
-    if (m_text->isVisible() && m_2DViewer->getInput() != 0)
-    {
-        m_2DViewer->getDrawer()->erasePrimitive(m_text);
-    }
-    m_text->setText(tr("Magic Factor: %1").arg(m_magicFactor));
-    double pos[3];
-    m_2DViewer->getCurrentCursorImageCoordinate(pos);
-    m_text->setAttachmentPoint(pos);
-    m_text->setVisibility(true);
-    m_2DViewer->getDrawer()->draw(m_text, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
-}
-
-void MagicTool::decreaseMagicSize()
-{
-    if (m_magicSize > 0)
-    {
-        m_magicFactor -= 0.1;
-    }
-    //L'esborrem si ja l'havíem pintat
-    if (m_text->isVisible() && m_2DViewer->getInput()!=0)
-    {
-        m_2DViewer->getDrawer()->erasePrimitive(m_text);
-    }
-    m_text->setText(tr("Magic Factor: %1").arg(m_magicFactor));
-    double pos[3];
-    m_2DViewer->getCurrentCursorImageCoordinate(pos);
-    m_text->setAttachmentPoint(pos);
-    m_text->setVisibility(true);
-    m_2DViewer->getDrawer()->draw(m_text, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
 }
 
 }
