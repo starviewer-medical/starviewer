@@ -96,10 +96,6 @@ signals:
     void colorPointAdded(double x, const QColor &color);
     /// S'emet quan s'esborra un punt de color.
     void colorPointRemoved(double x);
-    /// S'emet quan es mou un punt de color.
-    void colorPointMoved(double origin, double destination);
-    /// S'emet quan es canvia el color d'un punt.
-    void colorPointChanged(double x, const QColor &color);
     /// S'emet quan s'afegeix un punt d'opacitat escalar.
     void scalarOpacityPointAdded(double x, double opacity);
     /// S'emet quan s'esborra un punt d'opacitat escalar.
@@ -120,8 +116,6 @@ private:
     class SetGradientOpacityTransferFunctionCommand;
     class AddColorPointCommand;
     class RemoveColorPointCommand;
-    class MoveColorPointCommand;
-    class ChangeColorPointCommand;
     class AddScalarOpacityPointCommand;
     class RemoveScalarOpacityPointCommand;
     class AddGradientOpacityPointCommand;
@@ -139,8 +133,6 @@ private:
     void setGradientOpacityTransferFunctionCommand(const OpacityTransferFunction &gradientOpacityTransferFunction);
     void addColorPointCommand(double x, const QColor &color);
     void removeColorPointCommand(double x);
-    void moveColorPointCommand(double origin, double destination);
-    void changeColorPointCommand(double x, const QColor &color);
     void addScalarOpacityPointCommand(double x, double opacity);
     void removeScalarOpacityPointCommand(double x);
     void addGradientOpacityPointCommand(double y, double opacity);

@@ -122,38 +122,6 @@ void TransferFunctionEditor::RemoveColorPointCommand::undo()
     m_editor->addColorPointCommand(m_x, m_color);
 }
 
-TransferFunctionEditor::MoveColorPointCommand::MoveColorPointCommand(TransferFunctionEditor *editor, double origin, double destination)
-    : m_editor(editor), m_origin(origin), m_destination(destination)
-{
-    setText(tr("Move color point from %1 to %2").arg(origin).arg(destination));
-}
-
-void TransferFunctionEditor::MoveColorPointCommand::redo()
-{
-    m_editor->moveColorPointCommand(m_origin, m_destination);
-}
-
-void TransferFunctionEditor::MoveColorPointCommand::undo()
-{
-    m_editor->moveColorPointCommand(m_destination, m_origin);
-}
-
-TransferFunctionEditor::ChangeColorPointCommand::ChangeColorPointCommand(TransferFunctionEditor *editor, double x, const QColor &color)
-    : m_editor(editor), m_x(x), m_oldColor(editor->transferFunction().getColor(x)), m_newColor(color)
-{
-    setText(tr("Change color point at %1").arg(x));
-}
-
-void TransferFunctionEditor::ChangeColorPointCommand::redo()
-{
-    m_editor->changeColorPointCommand(m_x, m_newColor);
-}
-
-void TransferFunctionEditor::ChangeColorPointCommand::undo()
-{
-    m_editor->changeColorPointCommand(m_x, m_oldColor);
-}
-
 TransferFunctionEditor::AddScalarOpacityPointCommand::AddScalarOpacityPointCommand(TransferFunctionEditor *editor, double x, double opacity)
     : m_editor(editor), m_x(x), m_opacity(opacity)
 {

@@ -82,7 +82,7 @@ void TransferFunctionEditor::addColorPoint(double x, const QColor &color)
 {
     if (m_transferFunction.isSetColor(x))
     {
-        m_undoStack->push(new ChangeColorPointCommand(this, x, color));
+        changeColorPoint(x, color);
     }
     else
     {
@@ -116,29 +116,13 @@ void TransferFunctionEditor::moveColorPoint(double origin, double destination)
 {
     if (m_transferFunction.isSetColor(origin))
     {
-        if (m_transferFunction.isSetColor(destination))
-        {
-            m_undoStack->beginMacro(tr("Move color point from %1 to %2").arg(origin).arg(destination));
-            m_undoStack->push(new ChangeColorPointCommand(this, destination, m_transferFunction.getColor(origin)));
-            m_undoStack->push(new RemoveColorPointCommand(this, origin));
-            m_undoStack->endMacro();
-        }
-        else
-        {
-            m_undoStack->push(new MoveColorPointCommand(this, origin, destination));
-        }
+        m_undoStack->beginMacro(tr("Move color point from %1 to %2").arg(origin).arg(destination));
+        addColorPoint(destination, m_transferFunction.getColor(origin));
+        removeColorPoint(origin);
+        m_undoStack->endMacro();
     }
 }
 
-void TransferFunctionEditor::moveColorPointCommand(double origin, double destination)
-{
-    QColor color = m_transferFunction.getColor(origin);
-    m_transferFunction.unsetColor(origin);
-    m_transferFunction.setColor(destination, color);
-    emit colorPointMoved(origin, destination);
-}
-
-// TODO: és correcta la implementació?
 void TransferFunctionEditor::moveColorPoints(const QList<double> &origins, double offset)
 {
     if (origins.isEmpty())
@@ -146,85 +130,47 @@ void TransferFunctionEditor::moveColorPoints(const QList<double> &origins, doubl
         return;
     }
 
-    // Creem una llista d'accions a fer per cada origen i destinació
-
-    // fem servir enters perquè C++2003 no accepta un tipus local (per exemple enum) com a argument de template
-    // amb C++0x sí que es pot posar un enum
-    const char Add = 0, Change = 1, Remove = 2;
-    QMap<double, QPair<QColor, char> > actions;
-    int numberOfMoves = 0;
-
+    // Recorrem els orígens per apuntar els punts que hem d'esborrar i els que hem d'afegir
+    QList<double> removes;
+    removes.reserve(origins.size());
+    QList< QPair<double, QColor> > adds;
+    adds.reserve(origins.size());
     foreach (double origin, origins)
     {
-        if (!m_transferFunction.isSetColor(origin)) // l'origen no està definit a la funció, passem
+        if (m_transferFunction.isSetColor(origin))
         {
-            continue;
+            removes.append(origin); // apuntem el punt que hem d'esborrar
+            adds.append(qMakePair(origin + offset, m_transferFunction.getColor(origin)));   // apuntem el punt que hem d'afegir
         }
-
-        double destination = origin + offset;
-
-        if (actions.contains(origin))   // l'origen ja existeix a la llista, hauria de ser com a destinació, és a dir, Add o Change
-        {
-            Q_ASSERT(actions[origin].second != Remove);
-        }
-        else    // l'origen no existeix a la llista, el marquem per esborrar
-        {
-            actions[origin] = qMakePair(QColor(), Remove);
-        }
-
-        if (actions.contains(destination))  // la destinació ja existeix a la llista, hauria de ser com a origen, és a dir, Remove; la marquem per canviar
-        {
-            Q_ASSERT(actions[destination].second == Remove);
-            actions[destination] = qMakePair(m_transferFunction.getColor(origin), Change);
-        }
-        else    // la destinació no existeix a la llista
-        {
-            if (m_transferFunction.isSetColor(destination)) // la destinació està definida a la funció, la marquem per canviar
-            {
-                actions[destination] = qMakePair(m_transferFunction.getColor(origin), Change);
-            }
-            else    // la destinació no està definida a la funció, la marquem per afegir
-            {
-                actions[destination] = qMakePair(m_transferFunction.getColor(origin), Add);
-            }
-        }
-
-        numberOfMoves++;
     }
 
-    // Executem les accions decidides
-
-    QList<double> keys = actions.keys();
-    m_undoStack->beginMacro(tr("Move %1 color points").arg(numberOfMoves));
-
-    for (int i = 0; i < keys.size(); i++)
+    if (removes.isEmpty())
     {
-        double x = keys.at(i);
-        QColor color = actions[x].first;
-        char action = actions[x].second;
-
-        switch (action)
-        {
-            case Add: m_undoStack->push(new AddColorPointCommand(this, x, color)); break;
-            case Change: m_undoStack->push(new ChangeColorPointCommand(this, x, color)); break;
-            case Remove: m_undoStack->push(new RemoveColorPointCommand(this, x)); break;
-            default: Q_ASSERT(false); break;    // no ha de passar
-        }
+        return;
     }
 
+    // Fem l'edició
+    m_undoStack->beginMacro(tr("Move %1 color points").arg(removes.size()));
+    for (int i = 0; i < removes.size(); i++)    // esborrem punts
+    {
+        removeColorPoint(removes.at(i));
+    }
+    for (int i = 0; i < adds.size(); i++)   // afegim punts
+    {
+        addColorPoint(adds.at(i).first, adds.at(i).second);
+    }
     m_undoStack->endMacro();
 }
 
 void TransferFunctionEditor::changeColorPoint(double x, const QColor &color)
 {
-    m_undoStack->push(new ChangeColorPointCommand(this, x, color));
-}
-
-void TransferFunctionEditor::changeColorPointCommand(double x, const QColor &color)
-{
-    Q_ASSERT(m_transferFunction.isSetColor(x));
-    m_transferFunction.setColor(x, color);
-    emit colorPointChanged(x, color);
+    if (m_transferFunction.isSetColor(x))
+    {
+        m_undoStack->beginMacro(tr("Change color point at %1").arg(x));
+        removeColorPoint(x);
+        addColorPoint(x, color);
+        m_undoStack->endMacro();
+    }
 }
 
 void TransferFunctionEditor::addScalarOpacityPoint(double x, double opacity)
@@ -266,14 +212,7 @@ void TransferFunctionEditor::moveScalarOpacityPoint(double origin, double destin
     if (m_transferFunction.isSetScalarOpacity(origin))
     {
         m_undoStack->beginMacro(tr("Move scalar opacity point from %1 to %2").arg(origin).arg(destination));
-        if (m_transferFunction.isSetScalarOpacity(destination))
-        {
-            changeScalarOpacityPoint(destination, m_transferFunction.getScalarOpacity(origin));
-        }
-        else
-        {
-            addScalarOpacityPoint(destination, m_transferFunction.getScalarOpacity(origin));
-        }
+        addScalarOpacityPoint(destination, m_transferFunction.getScalarOpacity(origin));
         removeScalarOpacityPoint(origin);
         m_undoStack->endMacro();
     }

@@ -91,29 +91,6 @@ private:
     QColor m_color;
 };
 
-class TransferFunctionEditor::MoveColorPointCommand : public QUndoCommand {
-public:
-    MoveColorPointCommand(TransferFunctionEditor *editor, double origin, double destination);
-    virtual void undo();
-    virtual void redo();
-private:
-    TransferFunctionEditor *m_editor;
-    double m_origin;
-    double m_destination;
-};
-
-class TransferFunctionEditor::ChangeColorPointCommand : public QUndoCommand {
-public:
-    ChangeColorPointCommand(TransferFunctionEditor *editor, double x, const QColor &color);
-    virtual void undo();
-    virtual void redo();
-private:
-    TransferFunctionEditor *m_editor;
-    double m_x;
-    QColor m_oldColor;
-    QColor m_newColor;
-};
-
 class TransferFunctionEditor::AddScalarOpacityPointCommand : public QUndoCommand {
 public:
     AddScalarOpacityPointCommand(TransferFunctionEditor *editor, double x, double opacity);
