@@ -635,22 +635,26 @@ void Q3DViewerExtension::updateUiForRenderingMethod(int index)
             m_obscuranceOptionsWidget->show();
             break;
 
-        case 2: // mip
-            break;
-
-        case 3: // textures 3d
+        case 2: // GPU ray casting
             m_shadingOptionsWidget->show();
             break;
 
-        case 4: // textures 2d
+        case 3: // mip
+            break;
+
+        case 4: // textures 3d
             m_shadingOptionsWidget->show();
             break;
 
-        case 5: // isosuperfícies
+        case 5: // textures 2d
+            m_shadingOptionsWidget->show();
+            break;
+
+        case 6: // isosuperfícies
             m_isosurfaceOptionsWidget->show();
             break;
 
-        case 6: // contouring
+        case 7: // contouring
             break;
     }
 }
@@ -672,23 +676,27 @@ void Q3DViewerExtension::updateView(bool fast)
             break;
 
         case 2:
-            m_3DView->setRenderFunctionToMIP3D();
+            m_3DView->setRenderFunctionToGpuRayCasting();
             break;
 
         case 3:
-            m_3DView->setRenderFunctionToTexture3D();
+            m_3DView->setRenderFunctionToMIP3D();
             break;
 
         case 4:
-            m_3DView->setRenderFunctionToTexture2D();
+            m_3DView->setRenderFunctionToTexture3D();
             break;
 
         case 5:
+            m_3DView->setRenderFunctionToTexture2D();
+            break;
+
+        case 6:
             m_3DView->setIsoValue(m_isoValueSpinBox->value());    // necessari per la primera vegada
             m_3DView->setRenderFunctionToIsoSurface();
             break;
 
-        case 6:
+        case 7:
             m_3DView->setRenderFunctionToContouring();
             break;
     }
