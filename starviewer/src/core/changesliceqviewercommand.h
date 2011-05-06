@@ -10,8 +10,7 @@ class Q2DViewer;
 /**
   Command de Q2DViewer que permet especificar un canvi de llesca.
 */
-class ChangeSliceQViewerCommand : public QViewerCommand
-{
+class ChangeSliceQViewerCommand : public QViewerCommand {
     Q_OBJECT
 public:
     enum SlicePosition { MinimumSlice, MiddleSlice, MaximumSlice };

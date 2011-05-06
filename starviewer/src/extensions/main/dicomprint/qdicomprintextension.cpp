@@ -490,7 +490,10 @@ void QDicomPrintExtension::updateSelectionImagesValue()
     {
         tickInterval = 10;
     }
-    else tickInterval = 20;
+    else
+    {
+        tickInterval = 20;
+    }
 
     m_toImageSlider->setTickInterval(tickInterval);
     m_fromImageSlider->setTickInterval(tickInterval);

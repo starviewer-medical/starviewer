@@ -20,8 +20,7 @@ Classe "mare" de l'Extensió. És l'única que enten a l'Extensió i sap on es t
 
 \TODO Cal revisar tot aquest esquema. Ara és temporal per poder separar en directoris a l'espera del "Nou Disseny(tm)"
 */
-class ExtensionMediator : public QObject
-{
+class ExtensionMediator : public QObject {
 Q_OBJECT
 public:
     ExtensionMediator(QObject *parent = 0);

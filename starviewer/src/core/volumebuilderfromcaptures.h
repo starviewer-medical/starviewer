@@ -26,8 +26,7 @@ Image associat al Volume no estan relacionats amb cap fitxer (path == ""). Si es
 Volume.
 */
 
-class VolumeBuilderFromCaptures : public VolumeBuilder
-{
+class VolumeBuilderFromCaptures : public VolumeBuilder {
 public:
 
     VolumeBuilderFromCaptures();

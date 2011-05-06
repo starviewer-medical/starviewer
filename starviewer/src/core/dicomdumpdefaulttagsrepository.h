@@ -11,8 +11,7 @@ namespace udg {
    Aquesta classe és una implementació de la classe Repository
 */
 
-class DICOMDumpDefaultTagsRepository : public Repository<DICOMDumpDefaultTags>
-{
+class DICOMDumpDefaultTagsRepository : public Repository<DICOMDumpDefaultTags> {
 
 public:
 

@@ -8,16 +8,14 @@
  * S'ha aplicat el patró Abstract Factory.
  */
 
-namespace udg
-{
+namespace udg {
 class Printer;
 class PrintMethod;
 class PrinterManager;
 class QPrinterConfigurationWidget;
 class QPrintJobCreatorWidget;
 
-class DicomPrintFactory : public ImagePrintFactory
-{
+class DicomPrintFactory : public ImagePrintFactory {
 public:
 
     DicomPrintFactory();

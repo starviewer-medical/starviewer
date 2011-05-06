@@ -17,9 +17,13 @@ PatientFillerInput::~PatientFillerInput()
 void PatientFillerInput::addPatient(Patient *patient)
 {
     if (patient)
+    {
         m_patientList << patient;
+    }
     else
+    {
         DEBUG_LOG("S'ha passat un pacient NUL, per tant no s'ha afegit res a la llista");
+    }
 }
 
 Patient *PatientFillerInput::getPatient(int index)
@@ -30,7 +34,9 @@ Patient *PatientFillerInput::getPatient(int index)
         patient = m_patientList.at(index);
     }
     else
+    {
         DEBUG_LOG("Índex fora de rang");
+    }
 
     return patient;
 }
@@ -105,11 +111,14 @@ void PatientFillerInput::addLabel(QString label)
 void PatientFillerInput::addLabelToSeries(QString label, Series *series)
 {
     if (!m_seriesLabels.values(series).contains(label))
+    {
         m_seriesLabels.insert(series, label);
-
+    }
     // aquí ho separem perquè podria ser que la serie que especifiquem no tingui aquella label i una altre sí i s'hagi afegit ja abans
     if (!m_allLabels.contains(label))
+    {
         m_allLabels << label;
+    }
 }
 
 QStringList PatientFillerInput::getLabels() const
@@ -122,7 +131,9 @@ bool PatientFillerInput::hasAllLabels(QStringList requiredLabelsList) const
     foreach (QString requiredLabel, requiredLabelsList)
     {
         if (!getLabels().contains(requiredLabel))
+        {
             return false;
+        }
     }
     return true;
 }

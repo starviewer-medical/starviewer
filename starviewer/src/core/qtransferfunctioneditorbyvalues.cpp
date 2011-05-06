@@ -78,11 +78,17 @@ void QTransferFunctionEditorByValues::setMaximum(unsigned short maximum)
 void QTransferFunctionEditorByValues::setTransferFunction(const TransferFunction & transferFunction)
 {
     // si no hi ha hagut canvis i ens passen una funció igual llavors no cal fer res
-    if (!m_changed && m_transferFunction == transferFunction) return;
+    if (!m_changed && m_transferFunction == transferFunction)
+    {
+        return;
+    }
 
     m_nameLineEdit->setText(transferFunction.name());
 
-    while (m_numberOfIntervals > 1) removeInterval();
+    while (m_numberOfIntervals > 1)
+    {
+        removeInterval();
+    }
 
     QTransferFunctionIntervalEditor * current =
             m_intervalEditorsWidget->findChild<QTransferFunctionIntervalEditor *>("interval0");
@@ -96,14 +102,20 @@ void QTransferFunctionEditorByValues::setTransferFunction(const TransferFunction
     {
         double x = points.at(i);
 
-        if (i == 0) current->setIsInterval(false);  // cas especial: primer
+        if (i == 0)
+        {
+            current->setIsInterval(false);  // cas especial: primer
+        }
 
         if (i == 0 || transferFunction.get(x) != current->color())
         {
             if (i > 0)
             {
                 current = next;
-                if (i < points.size() - 1) next = addIntervalAndReturnIt();   // si és l'últim no en creem cap més
+                if (i < points.size() - 1)
+                {
+                    next = addIntervalAndReturnIt();   // si és l'últim no en creem cap més
+                }
             }
 
             current->setStart(static_cast<int>(qRound(x)));
@@ -118,7 +130,10 @@ void QTransferFunctionEditorByValues::setTransferFunction(const TransferFunction
         }
     }
 
-    if (lastIsInterval) removeInterval();
+    if (lastIsInterval)
+    {
+        removeInterval();
+    }
 
     m_changed = true;
     getTransferFunction();  // actualitzem m_transferFunction
@@ -138,7 +153,10 @@ const TransferFunction & QTransferFunctionEditorByValues::getTransferFunction() 
         foreach (interval, intervalList)
         {
             m_transferFunction.set(interval->start(), interval->color(), interval->color().alphaF());
-            if (interval->isInterval()) m_transferFunction.set(interval->end(), interval->color(), interval->color().alphaF());
+            if (interval->isInterval())
+            {
+                m_transferFunction.set(interval->end(), interval->color(), interval->color().alphaF());
+            }
         }
 
         m_changed = false;
@@ -154,7 +172,10 @@ void QTransferFunctionEditorByValues::addInterval()
 
 void QTransferFunctionEditorByValues::removeInterval()
 {
-    if (m_numberOfIntervals == 1) return;
+    if (m_numberOfIntervals == 1)
+    {
+        return;
+    }
 
     m_numberOfIntervals--;
 
@@ -174,7 +195,10 @@ void QTransferFunctionEditorByValues::removeInterval()
 
 QTransferFunctionIntervalEditor * QTransferFunctionEditorByValues::addIntervalAndReturnIt()
 {
-    if (m_numberOfIntervals == m_maximum + 1u) return 0;
+    if (m_numberOfIntervals == m_maximum + 1u)
+    {
+        return 0;
+    }
 
     QTransferFunctionIntervalEditor * last =
             m_intervalEditorsWidget->findChild<QTransferFunctionIntervalEditor *>(

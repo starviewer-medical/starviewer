@@ -21,7 +21,9 @@ SeedTool::SeedTool(QViewer *viewer, QObject *parent) : Tool(viewer, parent)
 
     m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
     if (!m_2DViewer)
+    {
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ") + viewer->metaObject()->className());
+    }
 
     m_state = None;
     m_drawn = false;
@@ -69,7 +71,9 @@ void SeedTool::setToolData(ToolData * data)
             m_myData->setVolume(m_2DViewer->getInput());
             //si tenim dades vol dir que el viewer ha eliminat el punt pel que el posem a 0 perquè es torni a crear
             m_myData->setPoint(NULL);
-        }else{
+        }
+        else
+        {
             //canvi de tool
             m_drawn = true;
             m_2DViewer->getDrawer()->erasePrimitive(m_myData->getPoint());
@@ -127,7 +131,9 @@ void SeedTool::updateSeedPosition()
         {
             m_2DViewer->getDrawer()->draw(m_myData->getPoint(), m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
             m_drawn = true;
-        }else{
+        }
+        else
+        {
             m_myData->getPoint()->update();
             m_2DViewer->render();
         }

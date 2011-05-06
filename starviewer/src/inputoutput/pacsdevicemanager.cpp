@@ -36,7 +36,9 @@ bool PacsDeviceManager::addPACS(PacsDevice &pacs)
             foreach (PacsDevice pacs, pacsList)
             {
                 if (pacs.getID().toInt() > highestID)
+                {
                     highestID = pacs.getID().toInt();
+                }
             }
             pacs.setID(QString::number(highestID + 1));
         }

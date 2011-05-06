@@ -371,7 +371,10 @@ bool QConfigurationScreen::applyChanges()
             QMessageBox::StandardButton response = QMessageBox::question(this, ApplicationNameString, tr("The port %1 for incoming connections is in use by another application. Are you sure you want to apply the changes?").arg(m_textLocalPort->text()),
                                                                        QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
 
-            if (response == QMessageBox::No) return false;
+            if (response == QMessageBox::No)
+            {
+                return false;
+            }
         }
         applyChangesPacs();
         applyChangesInstitutionInformation();

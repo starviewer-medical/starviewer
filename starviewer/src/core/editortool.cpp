@@ -54,7 +54,9 @@ void EditorTool::initialize()
         if ((int)range[0]!=(int)range[1])
         {
             m_insideValue = (int)range[1];
-        }else{
+        }
+        else
+        {
             //en cas que siguin iguals
             m_insideValue = (int)(range[0] + m_2DViewer->getCurrentColorWindow());
         }

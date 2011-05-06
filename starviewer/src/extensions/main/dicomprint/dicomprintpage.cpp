@@ -5,8 +5,7 @@
 
 #include "dicomprinter.h"
 
-namespace udg
-{
+namespace udg {
 
 void DicomPrintPage::setFilmSize(const QString &filmSize)
 {

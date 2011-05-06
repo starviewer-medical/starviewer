@@ -14,8 +14,7 @@ class Q2DViewer;
 /**
 Classe contenidor de ToolRepresentation
 */
-class RepresentationsLayer : public QObject
-{
+class RepresentationsLayer : public QObject {
 Q_OBJECT
 public:
     RepresentationsLayer(Q2DViewer *viewer, QObject *parent = 0);

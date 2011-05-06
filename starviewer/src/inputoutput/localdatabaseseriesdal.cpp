@@ -19,21 +19,30 @@ void LocalDatabaseSeriesDAL::insert(Series *newSeries)
 {
     m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlInsert(newSeries)), 0, 0, 0);
 
-    if (getLastError() != SQLITE_OK) logError(buildSqlInsert(newSeries));
+    if (getLastError() != SQLITE_OK)
+    {
+        logError(buildSqlInsert(newSeries));
+    }
 }
 
 void LocalDatabaseSeriesDAL::update(Series *seriesToUpdate)
 {
     m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlUpdate(seriesToUpdate)), 0, 0, 0);
 
-    if (getLastError() != SQLITE_OK) logError(buildSqlUpdate(seriesToUpdate));
+    if (getLastError() != SQLITE_OK)
+    {
+        logError(buildSqlUpdate(seriesToUpdate));
+    }
 }
 
 void LocalDatabaseSeriesDAL::del(const DicomMask &seriesMaskToDelete)
 {
     m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlDelete(seriesMaskToDelete)), 0, 0, 0);
 
-    if (getLastError() != SQLITE_OK) logError(buildSqlDelete(seriesMaskToDelete));
+    if (getLastError() != SQLITE_OK)
+    {
+        logError(buildSqlDelete(seriesMaskToDelete));
+    }
 }
 
 QList<Series*> LocalDatabaseSeriesDAL::query(const DicomMask &seriesMask)
@@ -190,14 +199,20 @@ QString LocalDatabaseSeriesDAL::buildWhereSentence(const DicomMask &seriesMask)
     QString whereSentence = "";
 
     if (!seriesMask.getStudyInstanceUID().isEmpty())
+    {
         whereSentence = QString("where StudyInstanceUID = '%1'").arg(DatabaseConnection::formatTextToValidSQLSyntax(seriesMask.getStudyInstanceUID()));
+    }
 
     if (!seriesMask.getSeriesInstanceUID().isEmpty())
     {
         if (whereSentence.isEmpty())
+        {
             whereSentence = "where";
+        }
         else
+        {
             whereSentence += " and ";
+        }
 
         whereSentence += QString(" InstanceUID = '%1'").arg(DatabaseConnection::formatTextToValidSQLSyntax(seriesMask.getSeriesInstanceUID()));
     }

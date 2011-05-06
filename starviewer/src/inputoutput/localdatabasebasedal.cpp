@@ -6,8 +6,7 @@
 #include "databaseconnection.h"
 #include "logging.h"
 
-namespace udg
-{
+namespace udg {
 
 LocalDatabaseBaseDAL::LocalDatabaseBaseDAL(DatabaseConnection *dbConnection)
 {

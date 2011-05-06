@@ -12,8 +12,7 @@ namespace udg {
 class HangingProtocol;
 class HangingProtocolDisplaySet;
 
-class HangingProtocolXMLReader : public QObject
-{
+class HangingProtocolXMLReader : public QObject {
 Q_OBJECT
 public:
     HangingProtocolXMLReader(QObject *parent = 0);

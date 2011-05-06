@@ -74,14 +74,20 @@ void ConvertToDicomdir::addStudy(const QString &studyUID)
         {
             stop = true;
         }
-        else index++;
+        else
+        {
+            index++;
+        }
     }
 
     if (stop) //una vegada hem trobat la posició on ha d'anar l'inserim
     {
         m_studiesToConvert.insert(index, studyToConvert);
     }
-    else m_studiesToConvert.push_back(studyToConvert);//en aquest cas val al final
+    else
+    {
+        m_studiesToConvert.push_back(studyToConvert);//en aquest cas val al final
+    }
 }
 
 /*TODO:Si la creació del DICOMDIR Falla aquest mètode esborra el contingut del directori on s'havia de crear el DICOMDIR, al fer això
@@ -254,7 +260,10 @@ void ConvertToDicomdir::setConvertDicomdirImagesToLittleEndian(bool convertDicom
     {
         INFO_LOG("Les imatges del dicomdir es transformaran a LittleEndian");
     }
-    else INFO_LOG("Les imatges del dicomdir mantindran la seva transfer syntax");
+    else
+    {
+        INFO_LOG("Les imatges del dicomdir mantindran la seva transfer syntax");
+    }
 }
 
 bool ConvertToDicomdir::getConvertDicomdirImagesToLittleEndian()
@@ -313,7 +322,10 @@ Status ConvertToDicomdir::copyStudiesToDicomdirPath(QList<Study*> studyList)
         state = copyStudyToDicomdirPath(study);
 
         delete study;
-        if (!state.good()) break;
+        if (!state.good())
+        {
+            break;
+        }
         m_OldPatientId = studyToConvert.patientId;
     }
 
@@ -341,7 +353,10 @@ Status ConvertToDicomdir::copyStudyToDicomdirPath(Study *study)
         {
             state = copySeriesToDicomdirPath(series);
 
-            if (!state.good()) break;
+            if (!state.good())
+            {
+                break;
+            }
         }
     }
 
@@ -373,7 +388,9 @@ Status ConvertToDicomdir::copySeriesToDicomdirPath(Series *series)
             state = copyImageToDicomdirPath(imageToCopy);
 
             if (!state.good())
+            {
                 break;
+            }
         }
     }
 
@@ -398,7 +415,10 @@ Status ConvertToDicomdir::copyImageToDicomdirPath(Image *image)
             {
                 state.setStatus("", true, 0);
             }
-            else state.setStatus(QString("Can't anonymize image Little Endian Image %1").arg(imageOutputPath), false, 3003);
+            else
+            {
+                state.setStatus(QString("Can't anonymize image Little Endian Image %1").arg(imageOutputPath), false, 3003);
+            }
         }
     }
     else
@@ -412,7 +432,10 @@ Status ConvertToDicomdir::copyImageToDicomdirPath(Image *image)
             {
                 state.setStatus("", true, 0);
             }
-            else state.setStatus(QString("Can't anonymize image %1 to %2").arg(image->getPath(), imageOutputPath), false, 3003);
+            else
+            {
+                state.setStatus(QString("Can't anonymize image %1 to %2").arg(image->getPath(), imageOutputPath), false, 3003);
+            }
         }
         else
         {
@@ -448,7 +471,10 @@ void ConvertToDicomdir::createReadmeTxt()
         return;
     }
 
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) return;
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        return;
+    }
 
     QTextStream out(&file);
     out << "The DICOMDIR has been generated with " << ApplicationNameString << " Version " << StarviewerVersionString << "\n";

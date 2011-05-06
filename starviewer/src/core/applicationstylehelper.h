@@ -18,8 +18,7 @@ namespace udg {
   retornarà valors vàlids per una pantalla "normal" (on normal = de resolució no més gran d'1 Mpx)
   */
 
-class ApplicationStyleHelper
-{
+class ApplicationStyleHelper {
 public:
     ApplicationStyleHelper();
 

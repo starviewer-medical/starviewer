@@ -62,19 +62,31 @@ void QTransferFunctionIntervalEditor::setMaximum(int maximum)
 
     if (m_isLast)
     {
-        if (this->isInterval()) this->setEnd(m_maximum);
-        else this->setStart(m_maximum);
+        if (this->isInterval())
+        {
+            this->setEnd(m_maximum);
+        }
+        else
+        {
+            this->setStart(m_maximum);
+        }
     }
 }
 
 void QTransferFunctionIntervalEditor::setIsFirst(bool isFirst)
 {
     m_isFirst = isFirst;
-    if (m_isFirst && m_isLast) firstAndLast();
+    if (m_isFirst && m_isLast)
+    {
+        firstAndLast();
+    }
     else
     {
         m_isIntervalCheckBox->setEnabled(true);
-        if (m_isFirst) this->setStart(0);
+        if (m_isFirst)
+        {
+            this->setStart(0);
+        }
         m_intervalStartSpinBox->setReadOnly(m_isFirst);
     }
 }
@@ -87,15 +99,24 @@ bool QTransferFunctionIntervalEditor::isFirst() const
 void QTransferFunctionIntervalEditor::setIsLast(bool isLast)
 {
     m_isLast = isLast;
-    if (m_isFirst && m_isLast) firstAndLast();
+    if (m_isFirst && m_isLast)
+    {
+        firstAndLast();
+    }
     else
     {
         m_isIntervalCheckBox->setEnabled(true);
-        if (m_isLast) this->setEnd(m_maximum);
+        if (m_isLast)
+        {
+            this->setEnd(m_maximum);
+        }
         m_intervalEndSpinBox->setReadOnly(m_isLast);
         if (!m_isIntervalCheckBox->isChecked())
         {
-            if (m_isLast) this->setStart(m_maximum);
+            if (m_isLast)
+            {
+                this->setStart(m_maximum);
+            }
             m_intervalStartSpinBox->setReadOnly(m_isLast);
         }
     }
@@ -150,12 +171,18 @@ void QTransferFunctionIntervalEditor::setIsInterval(bool isInterval)
 
 void QTransferFunctionIntervalEditor::setPreviousEnd(int previousEnd)
 {
-    if (previousEnd >= this->start()) this->setStart(previousEnd + 1);
+    if (previousEnd >= this->start())
+    {
+        this->setStart(previousEnd + 1);
+    }
 }
 
 void QTransferFunctionIntervalEditor::setNextStart(int nextStart)
 {
-    if (nextStart <= this->end()) this->setEnd(nextStart - 1);
+    if (nextStart <= this->end())
+    {
+        this->setEnd(nextStart - 1);
+    }
 }
 
 void QTransferFunctionIntervalEditor::firstAndLast()
@@ -171,10 +198,15 @@ void QTransferFunctionIntervalEditor::firstAndLast()
 void QTransferFunctionIntervalEditor::isIntervalToggled(bool checked)
 {
     if (!checked)
+    {
         this->setEnd(this->start());
+    }
     if (m_isLast)
     {
-        if (!checked) this->setStart(m_maximum);
+        if (!checked)
+        {
+            this->setStart(m_maximum);
+        }
         m_intervalStartSpinBox->setReadOnly(!checked);
     }
 }
@@ -182,13 +214,17 @@ void QTransferFunctionIntervalEditor::isIntervalToggled(bool checked)
 void QTransferFunctionIntervalEditor::adjustWithNewStart(int start)
 {
     if (!m_isIntervalCheckBox->isChecked() || start > this->end())
+    {
         this->setEnd(start);
+    }
 }
 
 void QTransferFunctionIntervalEditor::adjustWithNewEnd(int end)
 {
     if (end < this->start())
+    {
         this->setStart(end);
+    }
 }
 
 void QTransferFunctionIntervalEditor::selectColor()
@@ -196,7 +232,10 @@ void QTransferFunctionIntervalEditor::selectColor()
     QColor color = this->color();
     bool ok;
     color = QColor::fromRgba(QColorDialog::getRgba(color.rgba(), &ok, this));
-    if (ok) this->setColor(color);
+    if (ok)
+    {
+        this->setColor(color);
+    }
 }
 
 }

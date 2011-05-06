@@ -8,8 +8,7 @@ namespace udg {
 class Volume;
 class Image;
 
-class DICOMImageFileGenerator : public DICOMFileGenerator
-{
+class DICOMImageFileGenerator : public DICOMFileGenerator {
 public:
     DICOMImageFileGenerator();
 

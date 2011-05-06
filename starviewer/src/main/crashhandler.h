@@ -5,13 +5,11 @@
 
 #include <QString>
 
-namespace google_breakpad
-{
+namespace google_breakpad {
 class ExceptionHandler;
 }
 
-class CrashHandler
-{
+class CrashHandler {
 public:
     CrashHandler();
 

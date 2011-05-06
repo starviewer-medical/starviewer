@@ -12,8 +12,7 @@ class Status;
 /** Converteix un directori determinat a dicomdir. Per a que un directori es pugui convertir a dicomdir, els fitxer dicom han de tenir
     un nom com a molt de 8 caràcters.
 */
-class CreateDicomdir
-{
+class CreateDicomdir {
 public:
 
     enum recordDeviceDicomDir { HardDisk, CdRom, DvdRom, UsbPen };

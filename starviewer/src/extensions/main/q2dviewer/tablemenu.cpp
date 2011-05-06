@@ -110,8 +110,14 @@ void TableMenu::verifySelected(ItemMenu * selected)
     int rows = values.value(0).toInt();
     int columns = values.value(1).toInt();
 
-    if (rows == m_rows) addRow(); // Hem d'afegir una fila a la graella
-    if (columns == m_columns) addColumn(); // Hem d'afegir una columna a la graella
+    if (rows == m_rows)
+    {
+        addRow(); // Hem d'afegir una fila a la graella
+    }
+    if (columns == m_columns)
+    {
+        addColumn(); // Hem d'afegir una columna a la graella
+    }
 
     // Marquem i desmarquem les caselles segons la seleccio actual
     for (numRow = 0; numRow < m_rows; numRow++)

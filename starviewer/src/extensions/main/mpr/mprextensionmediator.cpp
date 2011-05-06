@@ -32,9 +32,13 @@ bool MPRExtensionMediator::initializeExtension(QWidget* extension, const Extensi
 
     Volume *input = extensionContext.getDefaultVolume();
     if (!input)
+    {
         QMessageBox::information(0, tr("Starviewer"), tr("The selected item is not an image"));
+    }
     else
+    {
         mprExtension->setInput(input);
+    }
 
     return true;
 }

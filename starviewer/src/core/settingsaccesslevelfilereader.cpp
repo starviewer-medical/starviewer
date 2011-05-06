@@ -47,9 +47,13 @@ bool SettingsAccessLevelFileReader::read(const QString &filePath)
                     value = settings.value(key).toString();
                     ok = true;
                     if (value == "user")
+                    {
                         accessLevel = Settings::UserLevel;
+                    }
                     else if (value == "system")
+                    {
                         accessLevel = Settings::SystemLevel;
+                    }
                     else
                     {
                         DEBUG_LOG("Valor inesperat d'accessLevel: " + value);

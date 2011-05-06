@@ -30,13 +30,17 @@ StatsWatcher::~StatsWatcher()
 void StatsWatcher::addClicksCounter(QAbstractButton *button)
 {
     if (m_registerLogs)
+    {
         connect(button, SIGNAL(clicked(bool)), SLOT(registerClick(bool)));
+    }
 }
 
 void StatsWatcher::addTriggerCounter(QMenu *menu)
 {
     if (m_registerLogs)
+    {
         connect(menu, SIGNAL(triggered(QAction *)), SLOT(registerActionTrigger(QAction *)));
+    }
 }
 
 void StatsWatcher::log(const QString &message)
@@ -66,12 +70,18 @@ void StatsWatcher::registerClick(bool checked)
         if (button->isCheckable())
         {
             if (checked)
+            {
                 statMessage = "S'ha activat amb un click el botó";
+            }
             else
+            {
                 statMessage = "S'ha desactivat amb un click el botó";
+            }
         }
         else
+        {
             statMessage = "Sha fet un click sobre el botó";
+        }
     }
     else // és un altre tipus d'objecte
     {
@@ -129,7 +139,9 @@ void StatsWatcher::registerSliderAction(int action)
     case QAbstractSlider::SliderMove:
         // només registrem quan s'ha fet un move amb rodeta
         if (!slider->isSliderDown())
+        {
             statMessage = "Desplaçar amb rodeta";
+        }
         break;
 
         // cas especial. petit hack per connectar amb sliderReleased
@@ -139,7 +151,9 @@ void StatsWatcher::registerSliderAction(int action)
     }
 
     if (!statMessage.isEmpty())
+    {
         log(QString("[%1] S'ha fet l'acció [%2] sobre l'slider [%3]").arg(m_context).arg(statMessage).arg(sender()->objectName()));
+    }
 }
 
 } //end namespace udg

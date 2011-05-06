@@ -16,8 +16,7 @@
 #include "../inputoutput/pacsdevice.h"
 #include "../inputoutput/inputoutputsettings.h"
 
-namespace udg
-{
+namespace udg {
 
 QString CreateDicomPrintSpool::createPrintSpool(DicomPrinter dicomPrinter, DicomPrintPage dicomPrintPage, const QString &spoolDirectoryPath)
 {

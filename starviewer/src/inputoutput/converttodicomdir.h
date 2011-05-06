@@ -25,8 +25,7 @@ class DICOMAnonymizer;
   * S'ha de seguir l'estructura jeràrquica de directoris de Pacient/Estudi/Series/Imatges
   * La imatge ha d'estar en format littleEndian
 */
-class ConvertToDicomdir : public QObject
-{
+class ConvertToDicomdir : public QObject {
 Q_OBJECT
 public:
     ConvertToDicomdir();

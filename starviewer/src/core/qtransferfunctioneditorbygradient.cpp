@@ -75,7 +75,10 @@ QTransferFunctionEditorByGradient::~ QTransferFunctionEditorByGradient()
 
 void QTransferFunctionEditorByGradient::setTransferFunction(const TransferFunction & transferFunction)
 {
-    if (m_transferFunction == transferFunction) return;
+    if (m_transferFunction == transferFunction)
+    {
+        return;
+    }
 
     m_nameLineEdit->setText(transferFunction.name());
 
@@ -117,17 +120,22 @@ void QTransferFunctionEditorByGradient::pointsUpdated()
 
     qSort(points.begin(), points.end(), x_less_than);
 
-    for (int i=0; i<points.size(); ++i) {
+    for (int i=0; i<points.size(); ++i)
+    {
         double x = int(points.at(i).x());
         if (i < points.size() - 1 && x == points.at(i+1).x())    // si no és l'últim punt i és a la mateixa x que el següent
+        {
             continue;    // no es fa res per aquest punt
+        }
         QColor color((0x00ff0000 & m_red_shade->colorAt(int(x))) >> 16,
                      (0x0000ff00 & m_green_shade->colorAt(int(x))) >> 8,
                      (0x000000ff & m_blue_shade->colorAt(int(x))),
                      (0xff000000 & m_alpha_shade->colorAt(int(x))) >> 24);    // calcula el color del punt
 
         if (x / w > 1)
+        {
             return;
+        }
 
         stops << QGradientStop(x / w, color);
     }
@@ -154,7 +162,8 @@ void QTransferFunctionEditorByGradient::setGradientStops(const QGradientStops &s
     double h_blue = m_blue_shade->height();
     double h_alpha = m_alpha_shade->height();
 
-    for (int i=0; i<stops.size(); ++i) {
+    for (int i=0; i<stops.size(); ++i)
+    {
         double pos = stops.at(i).first;
         QRgb color = stops.at(i).second.rgba();
         pts_red << QPointF(pos * m_red_shade->width(), h_red - qRed(color) * h_red / 255);

@@ -13,8 +13,7 @@ class Series;
 
 /** Classe que conté els mètodes d'accés a la Taula series
 */
-class LocalDatabaseSeriesDAL : public LocalDatabaseBaseDAL
-{
+class LocalDatabaseSeriesDAL : public LocalDatabaseBaseDAL {
 public:
     LocalDatabaseSeriesDAL(DatabaseConnection *dbConnection);
 

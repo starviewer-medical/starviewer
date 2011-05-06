@@ -30,7 +30,10 @@ ObscuranceMainThread::ObscuranceMainThread(int numberOfDirections, double maximu
 
 ObscuranceMainThread::~ObscuranceMainThread()
 {
-    if (m_volume) m_volume->Delete();
+    if (m_volume)
+    {
+        m_volume->Delete();
+    }
 }
 
 bool ObscuranceMainThread::hasColor() const
@@ -125,13 +128,25 @@ void ObscuranceMainThread::run()
         Vector3 absDirection(qAbs(direction.x), qAbs(direction.y), qAbs(direction.z));
         if (absDirection.x >= absDirection.y)
         {
-            if (absDirection.x >= absDirection.z) dominant = 0;
-            else dominant = 2;
+            if (absDirection.x >= absDirection.z)
+            {
+                dominant = 0;
+            }
+            else
+            {
+                dominant = 2;
+            }
         }
         else
         {
-            if (absDirection.y >= absDirection.z) dominant = 1;
-            else dominant = 2;
+            if (absDirection.y >= absDirection.z)
+            {
+                dominant = 1;
+            }
+            else
+            {
+                dominant = 2;
+            }
         }
 
         // vector per avançar
@@ -273,7 +288,10 @@ QVector<Vector3> ObscuranceMainThread::getDirections() const
 {
     ViewpointGenerator viewpointGenerator;
 
-    if (m_numberOfDirections >= 0) viewpointGenerator.setToQuasiUniform(m_numberOfDirections);
+    if (m_numberOfDirections >= 0)
+    {
+        viewpointGenerator.setToQuasiUniform(m_numberOfDirections);
+    }
     else
     {
         switch (m_numberOfDirections)

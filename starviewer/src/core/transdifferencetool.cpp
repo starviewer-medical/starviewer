@@ -24,7 +24,9 @@ TransDifferenceTool::TransDifferenceTool(QViewer *viewer, QObject *parent)
     Q_ASSERT(m_viewer);
     m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
     if (!m_2DViewer)
+    {
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ") + viewer->metaObject()->className());
+    }
 }
 
 TransDifferenceTool::~TransDifferenceTool()
@@ -37,17 +39,23 @@ void TransDifferenceTool::handleEvent(unsigned long eventID)
     {
     case vtkCommand::LeftButtonPressEvent:
         if (m_myData->getInputVolume() != 0 && m_myData->getDifferenceVolume() != 0)
+        {
             this->startTransDifference();
+        }
     break;
 
     case vtkCommand::MouseMoveEvent:
         if (m_state == Moving && m_myData->getInputVolume() != 0 && m_myData->getDifferenceVolume() != 0)
+        {
             this->doTransDifference();
+        }
     break;
 
     case vtkCommand::LeftButtonReleaseEvent:
         if (m_myData->getInputVolume() != 0 && m_myData->getDifferenceVolume() != 0)
+        {
             this->endTransDifference();
+        }
     break;
     case vtkCommand::KeyPressEvent:
     {
@@ -155,7 +163,8 @@ void TransDifferenceTool::initializeDifferenceImage()
     mainVolume->getWholeExtent(ext);
 
     //Si no hi ha volume diferència
-    if (differenceVolume == 0){
+    if (differenceVolume == 0)
+    {
         //Allocating memory for the output image
         vtkImageData *imdif = vtkImageData::New();
         //imdif->CopyInformation(m_mainVolume->getVtkData());
@@ -179,9 +188,12 @@ void TransDifferenceTool::initializeDifferenceImage()
     double range[2];
     differenceVolume->getScalarRange(range);
     int max;
-    if (-range[0] > range[1]){
+    if (-range[0] > range[1])
+    {
         max = -range[0];
-    }else{
+    }
+    else
+    {
         max = range[1];
     }
 
@@ -219,9 +231,12 @@ void TransDifferenceTool::computeSingleDifferenceImage(int dx, int dy, int slice
 
     int currentSlice;
     //Si no ens han posat slice agafem la que està el visor
-    if (slice == -1){
+    if (slice == -1)
+    {
         currentSlice = m_2DViewer->getCurrentSlice();
-    }else{
+    }
+    else
+    {
         currentSlice = slice;
     }
 
@@ -285,7 +300,10 @@ void TransDifferenceTool::computeSingleDifferenceImage(int dx, int dy, int slice
     //Posem 0 a les files que no hem fet perquè es visualitzi més bonic
     indexDif[0] = 0;
     //Per evitar que se'ns en vagi de rang
-    if (jmin > size[1]) jmin = size[1];
+    if (jmin > size[1])
+    {
+        jmin = size[1];
+    }
 
     for (j = 0; j < jmin; j++)
     {
@@ -297,7 +315,10 @@ void TransDifferenceTool::computeSingleDifferenceImage(int dx, int dy, int slice
             valueDif++;
         }
     }
-    if (jmax < 0) jmax = 0;
+    if (jmax < 0)
+    {
+        jmax = 0;
+    }
     for (j = jmax; j < size[1]; j++)
     {
         indexDif[1] = j;

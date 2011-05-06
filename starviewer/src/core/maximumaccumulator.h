@@ -7,13 +7,15 @@
 
 namespace udg {
 
-template <class T> class MaximumAccumulator : public Accumulator<T>
-{
+template <class T> class MaximumAccumulator : public Accumulator<T> {
 public:
     MaximumAccumulator(unsigned long /*size*/) : Accumulator<T>() {}
     virtual ~MaximumAccumulator() {}
 
-    inline virtual void initialize() { m_first = true; }
+    inline virtual void initialize()
+    {
+        m_first = true;
+    }
     inline virtual void accumulate(T input)
     {
         if (m_first)
@@ -24,7 +26,10 @@ public:
         }
         m_maximum = qMax(m_maximum, input);
     }
-    inline virtual T getValue() const { return m_maximum; }
+    inline virtual T getValue() const
+    {
+        return m_maximum;
+    }
 
 private:
     T m_maximum;

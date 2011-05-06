@@ -51,7 +51,9 @@ bool DICOMWriterDCMTK::addSequenceAttribute(DICOMSequenceAttribute * attribute)
     DcmSequenceOfItems * sequence = generateDcmSequenceOfItems(attribute);
 
     if (sequence == NULL)
+    {
         return false;
+    }
 
     return dataset->insert(sequence, true).good();
 }
@@ -62,7 +64,9 @@ DcmSequenceOfItems * DICOMWriterDCMTK::generateDcmSequenceOfItems(DICOMSequenceA
     DcmSequenceOfItems * sequence = new DcmSequenceOfItems(tag);
 
     if (sequence == NULL)
+    {
         return NULL;
+    }
 
     foreach (DICOMSequenceItem * dicomItem, sequenceAttribute->getItems())
     {
@@ -80,14 +84,18 @@ DcmSequenceOfItems * DICOMWriterDCMTK::generateDcmSequenceOfItems(DICOMSequenceA
                     OFCondition cond = item->putAndInsertUint8Array(itemTag, static_cast<Uint8 *>((void *) valueAttribute->getValueAsByteArray().data()), static_cast<unsigned long>(valueAttribute->getValueAsByteArray().length()), true);
 
                     if (cond.bad())
+                    {
                         return NULL;
+                    }
                 }
                 else
                 {
                     OFCondition cond = item->putAndInsertString(itemTag, qPrintable(valueAttribute->getValueAsQString()), true);
 
                     if (cond.bad())
+                    {
                         return NULL;
+                    }
                 }
             }
             else if (attribute->isSequenceAttribute())
@@ -96,11 +104,15 @@ DcmSequenceOfItems * DICOMWriterDCMTK::generateDcmSequenceOfItems(DICOMSequenceA
                 DcmSequenceOfItems * sequence2 = generateDcmSequenceOfItems(sequenceAttribute2);
 
                 if (sequence2 == NULL)
+                {
                     return NULL;
+                }
 
                 OFCondition cond = item->insert(sequence2, true);
                 if (cond.bad())
+                {
                     return NULL;
+                }
             }
             else
             {
@@ -112,7 +124,9 @@ DcmSequenceOfItems * DICOMWriterDCMTK::generateDcmSequenceOfItems(DICOMSequenceA
         OFCondition insertCondition = sequence->append(item);
 
         if (insertCondition.bad())
+        {
             return NULL;
+        }
     }
 
     return sequence;

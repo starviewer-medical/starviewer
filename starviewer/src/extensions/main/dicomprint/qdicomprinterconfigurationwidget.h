@@ -13,8 +13,7 @@ class QDicomAddPrinterWidget;
  * Implementació de la interfície QPrinterConfigurationWidget per impressió d'imatge DICOM en DCMTK.
  */
 
-class QDicomPrinterConfigurationWidget : public QPrinterConfigurationWidget, private::Ui::QDicomPrinterConfigurationWidgetBase
-{
+class QDicomPrinterConfigurationWidget : public QPrinterConfigurationWidget, private::Ui::QDicomPrinterConfigurationWidgetBase {
 Q_OBJECT
 
 public:

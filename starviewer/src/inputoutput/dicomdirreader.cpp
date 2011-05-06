@@ -33,7 +33,10 @@ Status DICOMDIRReader::open(const QString &dicomdirFilePath)
     Status state;
 
     //no existeix cap comanda per tancar un dicomdir, quan en volem obrir un de nou, l'única manera d'obrir un nou dicomdir, és a través del construtor de DcmDicomDir, passant el path per paràmetre, per això si ja existia un Dicomdir ober, fem un delete, per tancar-lo
-    if (m_dicomdir != NULL) delete m_dicomdir;
+    if (m_dicomdir != NULL)
+    {
+        delete m_dicomdir;
+    }
 
     //Guardem el directori on es troba el dicomdir
     QFileInfo dicomdirFileInfo(dicomdirFilePath);
@@ -67,7 +70,10 @@ Status DICOMDIRReader::readStudies(QList<Patient*> &outResultsStudyList, DicomMa
 {
     Status state;
 
-    if (m_dicomdir == NULL) return state.setStatus("Error: Not open dicomfile", false, 1302); //FER RETORNAR STATUS AMB ERROR
+    if (m_dicomdir == NULL)
+    {
+        return state.setStatus("Error: Not open dicomfile", false, 1302); //FER RETORNAR STATUS AMB ERROR
+    }
 
     DcmDirectoryRecord *root = &(m_dicomdir->getRootRecord());//accedim a l'estructura d'arbres del dicomdir
     DcmDirectoryRecord *patientRecord = root->getSub(0);//accedim al primer pacient
@@ -88,9 +94,13 @@ Status DICOMDIRReader::readStudies(QList<Patient*> &outResultsStudyList, DicomMa
 
                 //comprovem si l'estudi compleix la màscara de cerca que ens han passat
                 if (matchStudyToDicomMask(study, &studyMask))
+                {
                     patient->addStudy(study);
+                }
                 else
+                {
                     delete study;
+                }
 
                 studyRecord = patientRecord->nextSub(studyRecord); //accedim al següent estudi del pacient
             }
@@ -99,9 +109,15 @@ Status DICOMDIRReader::readStudies(QList<Patient*> &outResultsStudyList, DicomMa
             {
                 outResultsStudyList.append(patient);
             }
-            else delete patient;
+            else
+            {
+                delete patient;
+            }
         }
-        else delete patient;
+        else
+        {
+            delete patient;
+        }
 
         patientRecord = root->nextSub(patientRecord); //accedim al següent pacient del dicomdir
     }
@@ -114,7 +130,10 @@ Status DICOMDIRReader::readSeries(const QString &studyUID, const QString &series
 {
     Status state;
 
-    if (m_dicomdir == NULL) return state.setStatus("Error: Not open dicomfile", false, 1302); //FER
+    if (m_dicomdir == NULL)
+    {
+        return state.setStatus("Error: Not open dicomfile", false, 1302); //FER
+    }
 
     DcmDirectoryRecord *root = &(m_dicomdir->getRootRecord());//accedim a l'estructura d'abres del dicomdir
     DcmDirectoryRecord *patientRecord = root->getSub(0);//accedim al primer pacient
@@ -138,10 +157,16 @@ Status DICOMDIRReader::readSeries(const QString &studyUID, const QString &series
             {
                 found = true;
             }
-            else studyRecord = patientRecord->nextSub(studyRecord);//si no trobem accedim al seguent estudi del pacient
+            else
+            {
+                studyRecord = patientRecord->nextSub(studyRecord);//si no trobem accedim al seguent estudi del pacient
+            }
         }
 
-        if (!found) patientRecord = root->nextSub(patientRecord); //accedim al següent pacient
+        if (!found)
+        {
+            patientRecord = root->nextSub(patientRecord); //accedim al següent pacient
+        }
     }
 
     if (found)//si hem found l'estudi amb el UID que cercàvem
@@ -153,9 +178,13 @@ Status DICOMDIRReader::readSeries(const QString &studyUID, const QString &series
             Series *series = fillSeries(seriesRecord);
 
             if (seriesUID.length() == 0 || series->getInstanceUID() == seriesUID)
+            {
                 outResultsSeriesList.append(series);
+            }
             else
+            {
                 delete series;
+            }
 
             seriesRecord = studyRecord->nextSub(seriesRecord); //accedim a la següent sèrie de l'estudi
         }
@@ -168,7 +197,10 @@ Status DICOMDIRReader::readImages(const QString &seriesUID, const QString &sopIn
 {
     Status state;
 
-    if (m_dicomdir == NULL) return state.setStatus("Error: Not open dicomfile", false, 1302); //FER
+    if (m_dicomdir == NULL)
+    {
+        return state.setStatus("Error: Not open dicomfile", false, 1302); //FER
+    }
 
     DcmDirectoryRecord *root = &(m_dicomdir->getRootRecord());//accedim a l'estructura d'abres del dicomdir
     DcmDirectoryRecord *patientRecord = root->getSub(0);//accedim al primer pacient
@@ -196,12 +228,18 @@ Status DICOMDIRReader::readImages(const QString &seriesUID, const QString &sopIn
                 {
                     found = true;
                 }
-                else seriesRecord = studyRecord->nextSub(seriesRecord); //accedim a la següent sèrie de l'estudi
+                else
+                {
+                    seriesRecord = studyRecord->nextSub(seriesRecord); //accedim a la següent sèrie de l'estudi
+                }
             }
             studyRecord = patientRecord->nextSub(studyRecord);//si no trobem accedim al seguent estudi del pacient
         }
 
-        if (!found) patientRecord = root->nextSub(patientRecord); //accedim al següent pacient
+        if (!found)
+        {
+            patientRecord = root->nextSub(patientRecord); //accedim al següent pacient
+        }
     }
 
     if (found)//si hem found la sèrie amb el UID que cercàvem
@@ -214,9 +252,13 @@ Status DICOMDIRReader::readImages(const QString &seriesUID, const QString &sopIn
             Image *image = fillImage(imageRecord);
 
             if (sopInstanceUID.length() == 0 || sopInstanceUID == image->getSOPInstanceUID())
+            {
                 outResultsImageList.append(image);//inserim a la llista la imatge*/
+            }
             else
+            {
                 delete image;
+            }
 
             imageRecord = seriesRecord->nextSub(imageRecord); //accedim a la següent imatge de la sèrie
         }
@@ -264,10 +306,14 @@ QStringList DICOMDIRReader::getFiles(const QString &studyUID)
                 found = true;
             }
             else
+            {
                 studyRecord = patientRecord->nextSub(studyRecord);//si no trobem accedim al seguent estudi del pacient
+            }
         }
         if (!found)
+        {
             patientRecord = root->nextSub(patientRecord); //accedim al següent pacient
+        }
     }
 
     if (found) // si hem trobat l'uid que es demanava podem continuar amb la cerca dels arxius
@@ -304,17 +350,27 @@ Patient* DICOMDIRReader::retrieve(DicomMask maskToRetrieve)
 
     QList<Patient *> patientsList = patientFiller.processFiles(files);
     if (patientsList.isEmpty())
+    {
         return NULL;
+    }
     else
+    {
         return patientsList.first();
+    }
 }
 
 //Per fer el match seguirem els criteris del PACS
 bool DICOMDIRReader::matchPatientToDicomMask(Patient *patient, DicomMask *mask)
 {
-    if (!matchDicomMaskToPatientId(mask, patient)) return false;
+    if (!matchDicomMaskToPatientId(mask, patient))
+    {
+        return false;
+    }
 
-    if (!matchDicomMaskToPatientName(mask, patient)) return false;
+    if (!matchDicomMaskToPatientName(mask, patient))
+    {
+        return false;
+    }
 
     return true;
 }
@@ -322,9 +378,15 @@ bool DICOMDIRReader::matchPatientToDicomMask(Patient *patient, DicomMask *mask)
 //Per fer el match seguirem els criteris del PACS
 bool DICOMDIRReader::matchStudyToDicomMask(Study *study, DicomMask *mask)
 {
-    if (!matchDicomMaskToStudyDate(mask, study)) return false;
+    if (!matchDicomMaskToStudyDate(mask, study))
+    {
+        return false;
+    }
 
-    if (!matchDicomMaskToStudyUID(mask, study)) return false;
+    if (!matchDicomMaskToStudyUID(mask, study))
+    {
+        return false;
+    }
 
     return true;
 }
@@ -343,7 +405,10 @@ bool DICOMDIRReader::matchDicomMaskToPatientId(DicomMask *mask, Patient *patient
 
         return patient->getID().contains(clearedMaskPatientID, Qt::CaseInsensitive);
     }
-    else return true;
+    else
+    {
+        return true;
+    }
 }
 
 bool DICOMDIRReader::matchDicomMaskToStudyDate(DicomMask *mask, Study *study)
@@ -378,7 +443,10 @@ bool DICOMDIRReader::matchDicomMaskToStudyDate(DicomMask *mask, Study *study)
         {
             return maskStudyDate.mid(0, 8) <= studyDate && maskStudyDate.mid(9, 8) >= studyDate;
         }
-        else return false;
+        else
+        {
+            return false;
+        }
     }
 
     return true;
@@ -393,7 +461,10 @@ bool DICOMDIRReader::matchDicomMaskToPatientName(DicomMask *mask, Patient *patie
 
         return patient->getFullName().contains(clearedPatientNameMask, Qt::CaseInsensitive);
     }
-    else return true;
+    else
+    {
+        return true;
+    }
 }
 
 Patient* DICOMDIRReader::fillPatient(DcmDirectoryRecord *dcmDirectoryRecordPatient)
@@ -493,7 +564,9 @@ QString DICOMDIRReader::backSlashToSlash(const QString &original)
     ret = original;
 
     while (ret.indexOf("\\") != -1)
+    {
         ret.replace(ret.indexOf("\\"), 1, "/");
+    }
 
     return ret;
 }
@@ -510,7 +583,10 @@ QString DICOMDIRReader::buildImageRelativePath(const QString &imageRelativePath)
     {
         return backSlashToSlash(imageRelativePath).toLower();
     }
-    else return backSlashToSlash(imageRelativePath);
+    else
+    {
+        return backSlashToSlash(imageRelativePath);
+    }
 }
 
 }

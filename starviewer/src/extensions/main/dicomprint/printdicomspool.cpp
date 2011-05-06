@@ -129,7 +129,10 @@ void PrintDicomSpool::printStoredPrintDcmtkContent(DVPSPrintMessageHandler &prin
         {
             result = createAndSendBasicGrayscaleImageBox(printerConnection, storedPrintDcmtk, imageNumber, spoolDirectoryPath);
 
-            if (result != EC_Normal) break;
+            if (result != EC_Normal)
+            {
+                break;
+            }
         }
     }
 

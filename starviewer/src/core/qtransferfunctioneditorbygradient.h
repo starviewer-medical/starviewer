@@ -47,9 +47,7 @@ class ShadeWidget;
  *
  * \author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.edu>
  */
-class QTransferFunctionEditorByGradient : public QTransferFunctionEditor
-{
-
+class QTransferFunctionEditorByGradient : public QTransferFunctionEditor {
     Q_OBJECT
 
 public:

@@ -45,7 +45,9 @@ QCrashReporter::QCrashReporter(const QStringList& args, QWidget *parent)
                 if (inter.hardwareAddress() != "00:00:00:00:00:00" && entry.ip().toString().contains(".") && entry.ip().toString() != "127.0.0.1")
                 {
                     if (!ipAddresses.isEmpty())
+                    {
                         ipAddresses += ", ";
+                    }
 
                     ipAddresses += entry.ip().toString();
                 }
@@ -60,7 +62,9 @@ QCrashReporter::QCrashReporter(const QStringList& args, QWidget *parent)
 #ifdef WIN32
     char * userDomain = getenv ("USERDOMAIN");
     if (userDomain != NULL)
+    {
         hostInformation += QString("\n%1: %2").arg(tr("User Domain")).arg(userDomain);
+    }
 #endif
 
     m_hostInformationTextEdit->setPlainText(hostInformation);

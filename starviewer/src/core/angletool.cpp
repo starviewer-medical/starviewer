@@ -20,7 +20,9 @@ AngleTool::AngleTool(QViewer *viewer, QObject *parent)
 
     m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
     if (!m_2DViewer)
+    {
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ") + viewer->metaObject()->className());
+    }
 
     connect(m_2DViewer, SIGNAL(volumeChanged(Volume *)), SLOT(initialize()));
 }
@@ -47,7 +49,9 @@ AngleTool::~AngleTool()
         }
 
         if (hasToRefresh)
+        {
             m_2DViewer->render();
+        }
     }
 }
 
@@ -93,7 +97,9 @@ void AngleTool::findInitialDegreeArc()
     }
 
     for (int i = 0; i < 3; i++)
+    {
         horizontalP2[i] = p2[i];
+    }
 
     vd1 = MathTools::directorVector(p1, p2);
 
@@ -228,7 +234,9 @@ void AngleTool::handlePointAddition()
         if (m_2DViewer->getInteractor()->GetRepeatCount() == 0)
         {
             if (m_state == None)
+            {
                 this->annotateFirstPoint();
+            }
             else if (m_state == FirstPointFixed)
             {
                 this->fixFirstSegment();
@@ -247,7 +255,9 @@ void AngleTool::handlePointAddition()
 void AngleTool::simulateCorrespondingSegmentOfAngle()
 {
     if (!m_mainPolyline)
+    {
         return;
+    }
 
     if (m_state != None)
     {
@@ -257,16 +267,22 @@ void AngleTool::simulateCorrespondingSegmentOfAngle()
 
         int pointIndex;
         if (m_state == FirstPointFixed)
+        {
             pointIndex = 1;
+        }
         else if (m_state == CenterFixed)
+        {
             pointIndex = 2;
+        }
 
         // Assignem el segon o tercer punt de l'angle segons l'estat
         m_mainPolyline->setPoint(pointIndex, clickedWorldPoint);
         m_mainPolyline->update();
 
         if (m_state == CenterFixed)
+        {
             drawCircle();
+        }
 
         m_2DViewer->render();
     }

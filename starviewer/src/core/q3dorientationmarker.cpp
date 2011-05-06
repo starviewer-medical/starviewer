@@ -14,7 +14,8 @@
 namespace udg {
 
 Q3DOrientationMarker::Q3DOrientationMarker(vtkRenderWindowInteractor *interactor, QObject *parent)
-  : QObject(parent){
+ : QObject(parent)
+{
 
   // Extret de http://public.kitware.com/cgi-bin/viewcvs.cgi/*checkout*/Examples/GUI/Tcl/ProbeWithSplineWidget.tcl?root=VTK&content-type=text/plain
 //  Create a composite orientation marker using

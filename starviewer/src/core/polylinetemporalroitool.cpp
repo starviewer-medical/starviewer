@@ -223,7 +223,9 @@ double PolylineTemporalROITool::computeTemporalMean()
             auxPoints->GetPoint(1, p1);
             if ((rayP1[rayPointIndex] <= p0[rayPointIndex] && rayP1[rayPointIndex] >= p1[rayPointIndex])
                 || (rayP1[rayPointIndex] >= p0[rayPointIndex] && rayP1[rayPointIndex] <= p1[rayPointIndex]))
+            {
                 indexList << i;
+            }
         }
         // Obtenim les interseccions entre tots els segments de la ROI i el raig actual
         foreach (int segment, indexList)
@@ -279,7 +281,9 @@ double PolylineTemporalROITool::computeTemporalMean()
             }
         }
         else
+        {
             DEBUG_LOG("EL NOMBRE D'INTERSECCIONS ENTRE EL RAIG I LA ROI Ã‰S IMPARELL!!");
+        }
 
         // Fem el següent pas en la coordenada que escombrem
         rayP1[rayPointIndex] += spacing[1];
@@ -298,7 +302,9 @@ double PolylineTemporalROITool::computeTemporalMean()
 
     // Destruim els diferents segments que hem creat per simular la roi
     for (i = 0; i < numberOfSegments; i++)
+    {
         segments[i]->Delete();
+    }
 
     return 0.0;
 }

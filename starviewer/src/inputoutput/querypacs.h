@@ -24,8 +24,7 @@ class Image;
 class DICOMTagReader;
 class PACSConnection;
 
-class QueryPacs
-{
+class QueryPacs {
 public:
     ///Constructor de la classe
     QueryPacs(PacsDevice pacsDevice);

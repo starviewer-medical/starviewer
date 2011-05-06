@@ -43,7 +43,10 @@ public:
     ~Q3DViewer();
 
     /// retorna el tipu de visualització que es té assignat
-    RenderFunction getRenderFunction() const { return m_renderFunction; }
+    RenderFunction getRenderFunction() const
+    {
+        return m_renderFunction;
+    }
 
     /// retorna el tipu de visualització que es té assignat com a un string
     QString getRenderFunctionAsString();

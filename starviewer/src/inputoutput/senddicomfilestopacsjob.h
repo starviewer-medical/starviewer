@@ -17,8 +17,7 @@ class Study;
 class Image;
 class SendDICOMFilesToPACS;
 
-class SendDICOMFilesToPACSJob : public PACSJob
-{
+class SendDICOMFilesToPACSJob : public PACSJob {
 Q_OBJECT
 public:
 

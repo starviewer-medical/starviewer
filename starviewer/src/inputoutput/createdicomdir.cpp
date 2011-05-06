@@ -129,7 +129,9 @@ Status CreateDicomdir::create(QString dicomdirPath)
             //afegim els fitxers al dicomdir
             result = m_ddir.addDicomFile(qPrintable(QString((*iter).c_str()).toUpper()), qPrintable(QDir::toNativeSeparators (dicomdirPath)));
             if (result.good())
+            {
                 iter++;
+            }
         }
 
         if (!result.good())
@@ -138,7 +140,9 @@ Status CreateDicomdir::create(QString dicomdirPath)
             result = EC_IllegalCall;
         }
         else
+        {
             result = m_ddir.writeDicomDir (opt_enctype, opt_glenc); //escribim el dicomDir
+        }
     }
 
     return state.setStatus(result);

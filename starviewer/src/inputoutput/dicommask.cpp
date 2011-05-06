@@ -517,9 +517,13 @@ bool DicomMask::operator ==(const DicomMask &mask)
         && getPPSStartTime() == mask.getPPSStartTime()
         && getImageNumber() == mask.getImageNumber()
         && getSOPInstanceUID() == mask.getSOPInstanceUID())
+    {
         return true;
+    }
     else
+    {
         return false;
+    }
 }
 
 DicomMask DicomMask::operator +(const DicomMask &mask)
@@ -530,39 +534,110 @@ DicomMask DicomMask::operator +(const DicomMask &mask)
      * s'emplenaran amb el valor de la màscara passada per paràmetre
      */
 
-    if (!mask.getPatientAge().isNull() && getPatientAge().isEmpty()) returnDicomMask.setPatientAge(mask.getPatientAge());
-    if (!mask.getPatientBirth().isNull() && getPatientBirth().isEmpty()) returnDicomMask.setPatientBirth(mask.getPatientBirth());
-    if (!mask.getPatientId().isNull() && getPatientId().isEmpty()) returnDicomMask.setPatientId(mask.getPatientId());
-    if (!mask.getPatientName().isNull() && getPatientName().isEmpty()) returnDicomMask.setPatientName(mask.getPatientName());
-    if (!mask.getPatientSex().isNull() && getPatientSex().isEmpty()) returnDicomMask.setPatientSex(mask.getPatientSex());
+    if (!mask.getPatientAge().isNull() && getPatientAge().isEmpty())
+    {
+        returnDicomMask.setPatientAge(mask.getPatientAge());
+    }
+    if (!mask.getPatientBirth().isNull() && getPatientBirth().isEmpty())
+    {
+        returnDicomMask.setPatientBirth(mask.getPatientBirth());
+    }
+    if (!mask.getPatientId().isNull() && getPatientId().isEmpty())
+    {
+        returnDicomMask.setPatientId(mask.getPatientId());
+    }
+    if (!mask.getPatientName().isNull() && getPatientName().isEmpty())
+    {
+        returnDicomMask.setPatientName(mask.getPatientName());
+    }
+    if (!mask.getPatientSex().isNull() && getPatientSex().isEmpty())
+    {
+        returnDicomMask.setPatientSex(mask.getPatientSex());
+    }
+    if (!mask.getStudyId().isNull() && getStudyId().isEmpty())
+    {
+        returnDicomMask.setStudyId(mask.getStudyId());
+    }
+    if (!mask.getStudyDate().isNull() && getStudyDate().isEmpty())
+    {
+        returnDicomMask.setStudyDate(mask.getStudyDate());
+    }
+    if (!mask.getStudyDescription().isNull() && getStudyDescription().isEmpty())
+    {
+        returnDicomMask.setStudyDescription(mask.getStudyDescription());
+    }
+    if (!mask.getStudyModality().isNull() && getStudyModality().isEmpty())
+    {
+        returnDicomMask.setStudyModality(mask.getStudyModality());
+    }
+    if (!mask.getStudyTime().isNull() && getStudyTime().isEmpty())
+    {
+        returnDicomMask.setStudyTime(mask.getStudyTime());
+    }
+    if (!mask.getStudyInstanceUID().isNull() && getStudyInstanceUID().isEmpty())
+    {
+        returnDicomMask.setStudyInstanceUID(mask.getStudyInstanceUID());
+    }
+    if (!mask.getReferringPhysiciansName().isNull() && getReferringPhysiciansName().isEmpty())
+    {
+        returnDicomMask.setReferringPhysiciansName(mask.getReferringPhysiciansName());
+    }
+    if (!mask.getAccessionNumber().isNull() && getAccessionNumber().isEmpty())
+    {
+        returnDicomMask.setAccessionNumber(mask.getAccessionNumber());
+    }
 
-    if (!mask.getStudyId().isNull() && getStudyId().isEmpty()) returnDicomMask.setStudyId(mask.getStudyId());
-    if (!mask.getStudyDate().isNull() && getStudyDate().isEmpty()) returnDicomMask.setStudyDate(mask.getStudyDate());
-    if (!mask.getStudyDescription().isNull() && getStudyDescription().isEmpty()) returnDicomMask.setStudyDescription(mask.getStudyDescription());
-    if (!mask.getStudyModality().isNull() && getStudyModality().isEmpty()) returnDicomMask.setStudyModality(mask.getStudyModality());
-    if (!mask.getStudyTime().isNull() && getStudyTime().isEmpty()) returnDicomMask.setStudyTime(mask.getStudyTime());
-    if (!mask.getStudyInstanceUID().isNull() && getStudyInstanceUID().isEmpty()) returnDicomMask.setStudyInstanceUID(mask.getStudyInstanceUID());
-    if (!mask.getReferringPhysiciansName().isNull() && getReferringPhysiciansName().isEmpty()) returnDicomMask.setReferringPhysiciansName(mask.getReferringPhysiciansName());
-    if (!mask.getAccessionNumber().isNull() && getAccessionNumber().isEmpty()) returnDicomMask.setAccessionNumber(mask.getAccessionNumber());
-
-    if (!mask.getSeriesDate().isNull() &&getSeriesDate().isEmpty()) returnDicomMask.setSeriesDate(mask.getSeriesDate());
-    if (!mask.getSeriesDescription().isNull() && getSeriesDescription().isEmpty()) returnDicomMask.setSeriesDescription(mask.getSeriesDescription());
-    if (!mask.getSeriesModality().isNull() && getSeriesModality().isEmpty()) returnDicomMask.setSeriesModality(mask.getSeriesModality());
-    if (!mask.getSeriesNumber().isNull() && getSeriesNumber().isEmpty()) returnDicomMask.setSeriesNumber(mask.getSeriesNumber());
-    if (!mask.getSeriesProtocolName().isNull() && getSeriesProtocolName().isEmpty()) returnDicomMask.setSeriesProtocolName(mask.getSeriesProtocolName());
-    if (!mask.getSeriesTime().isNull() && getSeriesTime().isEmpty()) returnDicomMask.setSeriesTime(mask.getSeriesTime());
-    if (!mask.getSeriesInstanceUID().isNull() && getSeriesInstanceUID().isEmpty()) returnDicomMask.setSeriesInstanceUID(mask.getSeriesInstanceUID());
+    if (!mask.getSeriesDate().isNull() &&getSeriesDate().isEmpty())
+    {
+        returnDicomMask.setSeriesDate(mask.getSeriesDate());
+    }
+    if (!mask.getSeriesDescription().isNull() && getSeriesDescription().isEmpty())
+    {
+        returnDicomMask.setSeriesDescription(mask.getSeriesDescription());
+    }
+    if (!mask.getSeriesModality().isNull() && getSeriesModality().isEmpty())
+    {
+        returnDicomMask.setSeriesModality(mask.getSeriesModality());
+    }
+    if (!mask.getSeriesNumber().isNull() && getSeriesNumber().isEmpty())
+    {
+        returnDicomMask.setSeriesNumber(mask.getSeriesNumber());
+    }
+    if (!mask.getSeriesProtocolName().isNull() && getSeriesProtocolName().isEmpty())
+    {
+        returnDicomMask.setSeriesProtocolName(mask.getSeriesProtocolName());
+    }
+    if (!mask.getSeriesTime().isNull() && getSeriesTime().isEmpty())
+    {
+        returnDicomMask.setSeriesTime(mask.getSeriesTime());
+    }
+    if (!mask.getSeriesInstanceUID().isNull() && getSeriesInstanceUID().isEmpty())
+    {
+        returnDicomMask.setSeriesInstanceUID(mask.getSeriesInstanceUID());
+    }
     if (!mask.getRequestedProcedureID().isNull() && getRequestedProcedureID().isEmpty() &&
         !mask.getScheduledProcedureStepID().isNull() && getScheduledProcedureStepID().isEmpty())
     {
         returnDicomMask.setRequestAttributeSequence(mask.getRequestedProcedureID(), mask.getScheduledProcedureStepID());
     }
 
-    if (!mask.getPPSStartDate().isNull() && getPPSStartDate().isEmpty()) returnDicomMask.setPPSStartDate(mask.getPPSStartDate());
-    if (!mask.getPPSStartTime().isNull() && getPPSStartTime().isEmpty()) returnDicomMask.setPPStartTime(mask.getPPSStartTime());
+    if (!mask.getPPSStartDate().isNull() && getPPSStartDate().isEmpty())
+    {
+        returnDicomMask.setPPSStartDate(mask.getPPSStartDate());
+    }
+    if (!mask.getPPSStartTime().isNull() && getPPSStartTime().isEmpty())
+    {
+        returnDicomMask.setPPStartTime(mask.getPPSStartTime());
+    }
 
-    if (!mask.getSOPInstanceUID().isNull() && getSOPInstanceUID().isEmpty()) returnDicomMask.setSOPInstanceUID(mask.getScheduledProcedureStepID());
-    if (!mask.getImageNumber().isNull() && getImageNumber().isEmpty()) returnDicomMask.setImageNumber(mask.getImageNumber());
+    if (!mask.getSOPInstanceUID().isNull() && getSOPInstanceUID().isEmpty())
+    {
+        returnDicomMask.setSOPInstanceUID(mask.getScheduledProcedureStepID());
+    }
+    if (!mask.getImageNumber().isNull() && getImageNumber().isEmpty())
+    {
+        returnDicomMask.setImageNumber(mask.getImageNumber());
+    }
 
     return returnDicomMask;
 
@@ -597,7 +672,10 @@ QString DicomMask::getQueryRetrieveLevel()
     {
         return "SERIES";
     }
-    else return "STUDY"; //PER DEFECTE DEL DICOM COM A MÍNIM SON A NIVELL D'ESTUDI
+    else
+    {
+        return "STUDY"; //PER DEFECTE DEL DICOM COM A MÍNIM SON A NIVELL D'ESTUDI
+    }
 }
 
 QString DicomMask::getFilledMaskFields() const
@@ -605,17 +683,29 @@ QString DicomMask::getFilledMaskFields() const
     QString maskFields;
 
     if (!QString(m_patientId).remove("*").isEmpty())
+    {
         maskFields += "Patient_ID=[#*#] ";
+    }
     if (!QString(m_patientName).remove("*").isEmpty())
+    {
         maskFields += "Patient_Name=[#*#] ";
+    }
     if (!QString(m_patientBirth).remove("*").isEmpty())
+    {
         maskFields += "Patient_Birth=[#*#] ";
+    }
     if (!QString(m_patientSex).remove("*").isEmpty())
+    {
         maskFields += "Patient_Sex=[" + m_patientSex + "] ";
+    }
     if (!QString(m_patientAge).remove("*").isEmpty())
+    {
         maskFields += "Patient_Age=[" + m_patientAge + "] ";
+    }
     if (!QString(m_studyId).remove("*").isEmpty())
+    {
         maskFields += "Study_ID=[#*#] ";
+    }
     // en el cas de la data fem un tractament especial per fer-ho més llegible i amb més informació
     if (!QString(m_studyDate).remove("*").isEmpty())
     {
@@ -634,11 +724,17 @@ QString DicomMask::getFilledMaskFields() const
         {
             date = QDate::fromString(dateString, "yyyyMMdd");
             if (date == today)
+            {
                 formattedDates << "Today";
+            }
             else if (date == yesterday)
+            {
                 formattedDates << "Yesterday";
+            }
             else
+            {
                 formattedDates << date.toString("dd/MM/yyyy") + " (" + QString::number(date.daysTo(today)) + " days ago)";
+            }
         }
 
         if (formattedDates.count() == 2)
@@ -646,48 +742,88 @@ QString DicomMask::getFilledMaskFields() const
             maskFields += "From " + formattedDates.at(0) + " to " + formattedDates.at(1) + "]";
         }
         else
+        {
             maskFields += formattedDates.at(0) + "]";
+        }
 
     }
 
     if (!QString(m_studyTime).remove("*").isEmpty())
+    {
         maskFields += "Study_Time=[" + m_studyTime + "] ";
+    }
     if (!QString(m_studyDescription).remove("*").isEmpty())
+    {
         maskFields += "Study_Description=[" + m_studyDescription + "] ";
+    }
     if (!QString(m_studyModality).remove("*").isEmpty())
+    {
         maskFields += "Study_Modality=[" + m_studyModality + "] ";
+    }
     if (!QString(m_studyInstanceUID).remove("*").isEmpty())
+    {
         maskFields += "Study_UID=[#*#] ";
+    }
     if (!QString(m_accessionNumber).remove("*").isEmpty())
+    {
         maskFields += "Accession_Number=[#*#] ";
+    }
     if (!QString(m_referringPhysiciansName).remove("*").isEmpty())
+    {
         maskFields += "Referring_PhysiciansName=[#*#] ";
+    }
     if (!QString(m_seriesNumber).remove("*").isEmpty())
+    {
         maskFields += "Series_Number=[#*#] ";
+    }
     if (!QString(m_seriesDate).remove("*").isEmpty())
+    {
         maskFields += "Series_Date=[" + m_seriesDate + "] ";
+    }
     if (!QString(m_seriesTime).remove("*").isEmpty())
+    {
         maskFields += "Series_Time=[" + m_seriesTime + "] ";
+    }
     if (!QString(m_seriesModality).remove("*").isEmpty())
+    {
         maskFields += "Series_Modality=[" + m_seriesModality + "] ";
+    }
     if (!QString(m_seriesDescription).remove("*").isEmpty())
+    {
         maskFields += "Series_Description=[" + m_seriesDescription + "] ";
+    }
     if (!QString(m_seriesProtocolName).remove("*").isEmpty())
+    {
         maskFields += "Series_Protocol_Name=[" + m_seriesProtocolName + "] ";
+    }
     if (!QString(m_seriesInstanceUID).remove("*").isEmpty())
+    {
         maskFields += "Series_UID=[#*#] ";
+    }
     if (!QString(m_requestedProcedureID).remove("*").isEmpty())
+    {
         maskFields += "Requested_Procedure_ID=[#*#] ";
+    }
     if (!QString(m_scheduledProcedureStepID).remove("*").isEmpty())
+    {
         maskFields += "Scheduled_Procedure_Step_ID=[#*#] ";
+    }
     if (!QString(m_PPSStartDate).remove("*").isEmpty())
+    {
         maskFields += "PPS_Start_Date=[#*#] ";
+    }
     if (!QString(m_PPSStartTime).remove("*").isEmpty())
+    {
         maskFields += "PPS_Start_Time=[#*#] ";
+    }
     if (!QString(m_SOPInstanceUID).remove("*").isEmpty())
+    {
         maskFields += "SOP_Instance_UID=[#*#] ";
+    }
     if (!QString(m_imageNumber).remove("*").isEmpty())
+    {
         maskFields += "Image_Number=[" + m_imageNumber + "] ";
+    }
 
     return maskFields;
 }

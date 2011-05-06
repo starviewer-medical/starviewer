@@ -10,8 +10,7 @@ class QViewer;
 /**
 Widget per controlar el CINE en els QViewer
 */
-class QCINEController : public QWidget, private Ui::QCINEControllerBase
-{
+class QCINEController : public QWidget, private Ui::QCINEControllerBase {
 Q_OBJECT
 public:
     QCINEController(QWidget *parent = 0);

@@ -11,8 +11,7 @@ namespace udg {
 /** Classe encarregada d'esborrar en un thread els estudis vells
 */
 
-class QDeleteOldStudiesThread : public QThread
-{
+class QDeleteOldStudiesThread : public QThread {
 Q_OBJECT
 
 public:

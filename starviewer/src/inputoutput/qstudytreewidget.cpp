@@ -228,7 +228,10 @@ void QStudyTreeWidget::insertImageList(QString studyInstanceUID, QString seriesI
         //Afegim la llista d'imatges
         seriesItem->addChildren(qTreeWidgetItemImageList);
     }
-    else DEBUG_LOG("NO S'HA POGUT TROBAR LA SERIE A LA QUE S'HAVIA D'INSERIR LA IMATGE");
+    else
+    {
+        DEBUG_LOG("NO S'HA POGUT TROBAR LA SERIE A LA QUE S'HAVIA D'INSERIR LA IMATGE");
+    }
 }
 
 void QStudyTreeWidget::setMaximumExpandTreeItemsLevel(QStudyTreeWidget::ItemTreeLevels maximumExpandTreeItemsLevel)
@@ -314,9 +317,15 @@ QString QStudyTreeWidget::getCurrentStudyUID()
         {
             return m_studyTreeView->currentItem()->parent()->parent()->text(UID);
         }
-        else return "";
+        else
+        {
+            return "";
+        }
     }
-    else return "";
+    else
+    {
+        return "";
+    }
 }
 
 QStringList QStudyTreeWidget::getSelectedStudiesUID()
@@ -328,17 +337,23 @@ QStringList QStudyTreeWidget::getSelectedStudiesUID()
         if (isItemStudy(item)) //es un estudi
         {
             if (!result.contains(item->text(UID)))
+            {
                 result << item->text(UID);
+            }
         }
         else if (isItemSeries(item))
         {
             if (!result.contains(item->parent()->text(UID)))
+            {
                 result << item->parent()->text(UID);
+            }
         }
         else if (isItemImage(item))
         {
             if (!result.contains(item->parent()->parent()->text(UID)))
+            {
                 result << item->parent()->parent()->text(UID);
+            }
         }
         else
         {
@@ -394,9 +409,15 @@ QString QStudyTreeWidget::getCurrentSeriesUID()
         {
             return m_studyTreeView->currentItem()->parent()->text(UID);
         }
-        else return "";
+        else
+        {
+            return "";
+        }
     }
-    else return "";
+    else
+    {
+        return "";
+    }
 }
 
 QTreeWidgetItem* QStudyTreeWidget::getStudyQTreeWidgetItem(QString studyUID)
@@ -408,7 +429,10 @@ QTreeWidgetItem* QStudyTreeWidget::getStudyQTreeWidgetItem(QString studyUID)
     {
         return qStudyList.at(0);
     }
-    else return NULL;
+    else
+    {
+        return NULL;
+    }
 }
 
 QTreeWidgetItem* QStudyTreeWidget::getSeriesQTreeWidgetItem(QString studyInstanceUID, QString seriesInstanceUID)
@@ -424,7 +448,10 @@ QTreeWidgetItem* QStudyTreeWidget::getSeriesQTreeWidgetItem(QString studyInstanc
         {
             item = studyItem->child(index);
         }
-        else index++;
+        else
+        {
+            index++;
+        }
     }
 
     return item;
@@ -501,7 +528,10 @@ void QStudyTreeWidget::setCurrentSeries(QString seriesUID)
     QList<QTreeWidgetItem*> qStudyList(m_studyTreeView->findItems(seriesUID, Qt::MatchRecursive, UID));
 
     //Només hauria de trobar una sèrie amb el mateix UID, sinó tindrem una inconsistència de DICOM, el series UID ha de ser únic
-    if (qStudyList.count() > 0) m_studyTreeView->setCurrentItem (qStudyList.at(0));
+    if (qStudyList.count() > 0)
+    {
+        m_studyTreeView->setCurrentItem (qStudyList.at(0));
+    }
 }
 
 void QStudyTreeWidget::sort()
@@ -518,7 +548,9 @@ void QStudyTreeWidget::setContextMenu(QMenu * contextMenu)
 void QStudyTreeWidget::contextMenuEvent(QContextMenuEvent *event)
 {
     if (!m_studyTreeView->selectedItems().isEmpty())
+    {
         m_contextMenu->exec(event->globalPos());
+    }
 }
 
 void QStudyTreeWidget::currentItemChanged(QTreeWidgetItem * current, QTreeWidgetItem *)
@@ -539,7 +571,10 @@ void QStudyTreeWidget::currentItemChanged(QTreeWidgetItem * current, QTreeWidget
 
         emit(currentImageChanged()); //sempre que canviem d'element segur que canviem d'imatge
     }
-    else emit notCurrentItemSelected(); //cas en que no hi cap item seleccionat
+    else
+    {
+        emit notCurrentItemSelected(); //cas en que no hi cap item seleccionat
+    }
 }
 
 void QStudyTreeWidget::itemExpanded(QTreeWidgetItem *itemExpanded)
@@ -592,7 +627,10 @@ void QStudyTreeWidget::itemCollapsed(QTreeWidgetItem *itemCollapsed)
     if (m_doubleClickedItemUID != itemCollapsed->text(UID)) // si l'item col·lapsat no se li acaba de fer un doble click
     {
         //Si és una estudi està collapsed, canviem la icona per la carpeta tancada
-        if (isItemStudy(itemCollapsed)) itemCollapsed->setIcon(ObjectName, m_closeFolder);
+        if (isItemStudy(itemCollapsed))
+        {
+            itemCollapsed->setIcon(ObjectName, m_closeFolder);
+        }
 
         m_doubleClickedItemUID = "";
     }
@@ -607,11 +645,23 @@ void QStudyTreeWidget::itemCollapsed(QTreeWidgetItem *itemCollapsed)
 void QStudyTreeWidget::doubleClicked(QTreeWidgetItem *item, int)
 {
     //al fer doblec click al QTreeWidget ja expandeix o amaga automàticament l'objecte
-    if (item == NULL) return;
+    if (item == NULL)
+    {
+        return;
+    }
 
-    if (isItemStudy(item)) emit(studyDoubleClicked());
-    else if (isItemSeries(item)) emit(seriesDoubleClicked());
-    else if (isItemImage(item)) emit(imageDoubleClicked());
+    if (isItemStudy(item))
+    {
+        emit(studyDoubleClicked());
+    }
+    else if (isItemSeries(item))
+    {
+        emit(seriesDoubleClicked());
+    }
+    else if (isItemImage(item))
+    {
+        emit(imageDoubleClicked());
+    }
 
     /*Pel comportament del tree widget quan es fa un un doble click es col·lapsa o expandeix l'item en funció del seu estat, com que
      *nosaltres pel doble click no volem que s'expendeixi o es col·lapsi, guardem per quin element s'ha fet el doble click, per anul·laro quan es detecti un signal d'expand o collapse item
@@ -646,7 +696,10 @@ QString QStudyTreeWidget::paddingLeft(QString text, int length)
         }
         paddedText += text;
     }
-    else paddedText = text;
+    else
+    {
+        paddedText = text;
+    }
 
     return paddedText;
 }

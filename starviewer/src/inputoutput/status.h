@@ -19,8 +19,7 @@ d'errors que utilitzarem nosaltres en la nostre aplicació, aixi si mai el contr
  */
 namespace udg {
 
-class Status
-{
+class Status {
 
 public :
 

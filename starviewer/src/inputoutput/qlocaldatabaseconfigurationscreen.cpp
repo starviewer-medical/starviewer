@@ -120,7 +120,10 @@ bool QLocalDatabaseConfigurationScreen::validateChanges()
                         QMessageBox::critical(this, ApplicationNameString, tr("%1 can't create the directory. Please check users permission.").arg(ApplicationNameString));
                         return false;
                     }
-                    else return true;
+                    else
+                    {
+                        return true;
+                    }
                     break;
                 case 1:
                     return false;
@@ -156,7 +159,10 @@ bool QLocalDatabaseConfigurationScreen::validateChanges()
         }
     }
 
-    if (!valid) QMessageBox::information(this, ApplicationNameString, messageBoxText);
+    if (!valid)
+    {
+        QMessageBox::information(this, ApplicationNameString, messageBoxText);
+    }
 
     return valid;
 }
@@ -176,7 +182,10 @@ bool QLocalDatabaseConfigurationScreen::applyChanges()
 
         return true;
     }
-    else return false;
+    else
+    {
+        return false;
+    }
 }
 
 void QLocalDatabaseConfigurationScreen::enableApplyButtons()
@@ -317,7 +326,10 @@ void QLocalDatabaseConfigurationScreen::compactCache()
         QMessageBox::critical(this, ApplicationNameString, tr("The database cannot be compacted, an unknown error has occurred.\n\n") +
             tr("Close all %1 windows and try again.").arg(ApplicationNameString) + tr("If the problem persists contact with an administrator."));
     }
-    else QMessageBox::information(this, ApplicationNameString, "Starviewer database has been compacted successfully.");
+    else
+    {
+        QMessageBox::information(this, ApplicationNameString, "Starviewer database has been compacted successfully.");
+    }
 }
 
 void QLocalDatabaseConfigurationScreen::cacheImagePathEditingFinish()

@@ -15,8 +15,7 @@
 #include "localdatabasemanager.h"
 #include "shortcutmanager.h"
 
-namespace udg
-{
+namespace udg {
 
 QInputOutputDicomdirWidget::QInputOutputDicomdirWidget(QWidget *parent) : QWidget(parent)
 {
@@ -162,7 +161,10 @@ void QInputOutputDicomdirWidget::expandSeriesOfStudy(QString studyInstanceUID)
     {
         QMessageBox::information(this, ApplicationNameString, tr("No series match for this study.\n"));
     }
-    else m_studyTreeWidget->insertSeriesList(studyInstanceUID, seriesList);//inserim la informació de la sèrie al llistat
+    else
+    {
+        m_studyTreeWidget->insertSeriesList(studyInstanceUID, seriesList);//inserim la informació de la sèrie al llistat
+    }
 }
 
 void QInputOutputDicomdirWidget::expandImagesOfSeries(QString studyInstanceUID, QString seriesInstanceUID)
@@ -178,7 +180,10 @@ void QInputOutputDicomdirWidget::expandImagesOfSeries(QString studyInstanceUID, 
         QMessageBox::information(this, ApplicationNameString, tr("No images match for this series.\n"));
         return;
     }
-    else m_studyTreeWidget->insertImageList(studyInstanceUID, seriesInstanceUID, imageList);
+    else
+    {
+        m_studyTreeWidget->insertImageList(studyInstanceUID, seriesInstanceUID, imageList);
+    }
 }
 
 void QInputOutputDicomdirWidget::retrieveSelectedStudies()
@@ -205,7 +210,10 @@ void QInputOutputDicomdirWidget::retrieveSelectedStudies()
                 break;
             }
         }
-        else emit studyRetrieved(studyInstanceUID);
+        else
+        {
+            emit studyRetrieved(studyInstanceUID);
+        }
     }
 
     QApplication::restoreOverrideCursor();
@@ -240,7 +248,10 @@ void QInputOutputDicomdirWidget::view()
             patient->setSelectedSeries(m_studyTreeWidget->getCurrentSeriesUID());
             selectedPatientsList << patient;
         }
-        else DEBUG_LOG("No s'ha pogut obtenir l'estudi amb UID " + studyInstanceUIDSelected);
+        else
+        {
+            DEBUG_LOG("No s'ha pogut obtenir l'estudi amb UID " + studyInstanceUIDSelected);
+        }
     }
 
     QApplication::restoreOverrideCursor();

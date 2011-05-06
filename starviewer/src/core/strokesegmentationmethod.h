@@ -30,9 +30,15 @@ public:
 
     double applyMethodEdema2(Volume * lesionMask);
 
-    int getNumberOfVoxels() {return m_cont;}
+    int getNumberOfVoxels()
+    {
+        return m_cont;
+    }
 
-    int getEdemaNumberOfVoxels() {return m_edemaCont;}
+    int getEdemaNumberOfVoxels()
+    {
+        return m_edemaCont;
+    }
 
     double applyVentriclesMethod();
 
@@ -42,9 +48,15 @@ public:
 
     int applyMethod4();
 
-    void setVolume(Volume * vol){m_Volume=vol;}
+    void setVolume(Volume * vol)
+    {
+        m_Volume=vol;
+    }
 
-    void setMask(Volume * vol){m_Mask=vol;}
+    void setMask(Volume * vol)
+    {
+        m_Mask=vol;
+    }
 
     void setSeedPosition (double x, double y, double z);
 
@@ -52,29 +64,65 @@ public:
 
     void setHistogramUpperLevel (int x);
 
-    void setInsideMaskValue (int x) {m_insideMaskValue=x;};
+    void setInsideMaskValue (int x)
+    {
+        m_insideMaskValue=x;
+    };
 
-    void setOutsideMaskValue (int x) {m_outsideMaskValue=x;};
+    void setOutsideMaskValue (int x)
+    {
+        m_outsideMaskValue=x;
+    };
 
-    void setInitialDistance (double x) {m_initialDistance=x;};
+    void setInitialDistance (double x)
+    {
+        m_initialDistance=x;
+    };
 
-    void setTimeThreshold (int x) {m_timeThreshold=x;};
+    void setTimeThreshold (int x)
+    {
+        m_timeThreshold=x;
+    };
 
-    void setStoppingTime (double x) {m_stoppingTime=x;};
+    void setStoppingTime (double x)
+    {
+        m_stoppingTime=x;
+    };
 
-    void setMultiplier (double x) {m_multiplier=x;};
+    void setMultiplier (double x)
+    {
+        m_multiplier=x;
+    };
 
-    void setMean (double x) {m_mean=x;};
+    void setMean (double x)
+    {
+        m_mean=x;
+    };
 
-    void setVariance (double x) {m_variance=x;};
+    void setVariance (double x)
+    {
+        m_variance=x;
+    };
 
-    void setConstant (double x) {m_constant=x;};
+    void setConstant (double x)
+    {
+        m_constant=x;
+    };
 
-    void setAlpha (double x) {m_alpha=x;};
+    void setAlpha (double x)
+    {
+        m_alpha=x;
+    };
 
-    void setLowerVentriclesThreshold (int x) {m_lowerVentriclesThreshold=x;};
+    void setLowerVentriclesThreshold (int x)
+    {
+        m_lowerVentriclesThreshold=x;
+    };
 
-    void setUpperVentriclesThreshold (int x) {m_upperVentriclesThreshold=x;};
+    void setUpperVentriclesThreshold (int x)
+    {
+        m_upperVentriclesThreshold=x;
+    };
 
 private:
 

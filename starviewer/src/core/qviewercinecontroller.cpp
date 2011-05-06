@@ -73,7 +73,9 @@ void QViewerCINEController::setCINEDimension(int dimension)
         DEBUG_LOG("Paràmetre ilegal!");
     }
     else
+    {
         m_cineDimension = dimension;
+    }
 }
 
 QAction *QViewerCINEController::getPlayAction() const
@@ -130,9 +132,13 @@ void QViewerCINEController::record()
 {
     //ens curem en salut
     if (!m_2DViewer)
+    {
         return;
+    }
     if (!m_2DViewer->getInput())
+    {
         return;
+    }
 
     int phases = m_2DViewer->getInput()->getNumberOfPhases();
     int currentSlice = m_2DViewer->getCurrentSlice();
@@ -163,7 +169,9 @@ void QViewerCINEController::enableLoop(bool enable)
 {
     m_loopEnabled = enable;
     if (!m_loopEnabled)
+    {
         pause();
+    }
 }
 
 void QViewerCINEController::enableBoomerang(bool enable)
@@ -188,15 +196,21 @@ void QViewerCINEController::timerEvent(QTimerEvent *event)
 void QViewerCINEController::handleCINETimerEvent()
 {
     if (!m_2DViewer)
+    {
         return;
+    }
 
     int currentImageIndex;
     int nextImageIndex;
 
     if (m_cineDimension == TemporalDimension)
+    {
         currentImageIndex = m_2DViewer->getCurrentPhase();
+    }
     else
+    {
         currentImageIndex = m_2DViewer->getCurrentSlice();
+    }
 
     // Si estem al final de l'interval
     if (currentImageIndex == m_lastSliceInterval)
@@ -209,10 +223,14 @@ void QViewerCINEController::handleCINETimerEvent()
                 nextImageIndex = currentImageIndex + m_nextStep;
             }
             else
+            {
                 nextImageIndex = m_firstSliceInterval;
+            }
         }
         else if (m_boomerangEnabled) // pot ser que hagim desactivat el repeat, però no el boomerang!
+        {
             m_nextStep = 1;
+        }
         else
         {
             // tornem a l'inici TODO potser no hauria de ser així... i deixar en la última imatge de la seqüència
@@ -249,9 +267,13 @@ void QViewerCINEController::handleCINETimerEvent()
     }
 
     if (m_cineDimension == TemporalDimension)
+    {
         m_2DViewer->setPhase(nextImageIndex);
+    }
     else
+    {
         m_2DViewer->setSlice(nextImageIndex);
+    }
 }
 
 void QViewerCINEController::resetCINEInformation(Volume *input)
@@ -280,12 +302,18 @@ void QViewerCINEController::updateThickness(int thickness)
     if (m_cineDimension == SpatialDimension)
     {
         if (m_2DViewer->isThickSlabActive())
+        {
             m_lastSliceInterval = m_2DViewer->getMaximumSlice() - thickness + 1;
+        }
         else
+        {
             m_lastSliceInterval = m_2DViewer->getMaximumSlice();
+        }
     }
     else
+    {
         m_lastSliceInterval = m_2DViewer->getInput()->getNumberOfPhases() - 1;
+    }
 }
 
 }

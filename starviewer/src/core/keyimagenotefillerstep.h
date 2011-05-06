@@ -11,18 +11,23 @@ class Series;
 /**
 Mòdul que s'encarrega d'omplir la informació d'objectes KIN. Un dels seus prerequisits serà que s'hagi superat el mòdul DICOMFileClassifierFillerStep. Les Series a processar han de de ser de modalitat KO.
 */
-class KeyImageNoteFillerStep : public PatientFillerStep
-{
+class KeyImageNoteFillerStep : public PatientFillerStep {
 public:
     KeyImageNoteFillerStep();
 
     ~KeyImageNoteFillerStep();
 
-    bool fillIndividually(){return false;};
+    bool fillIndividually()
+    {
+        return false;
+    };
 
     void postProcessing(){};
 
-    QString name() { return "KeyImageNoteFillerStep"; }
+    QString name()
+    {
+        return "KeyImageNoteFillerStep";
+    }
 
 private:
     // TODO mètode per implementar

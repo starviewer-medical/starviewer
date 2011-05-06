@@ -8,13 +8,11 @@
 * Implementació per la Interfície PrintPage, que defineix una pàgina d'impressió amb imatges DICOM.
 */
 
-namespace udg
-{
+namespace udg {
 
 class Image;
 
-class PrintPage
-{
+class PrintPage {
 public:
 
     ///Especifica/retorna el número de pàgina

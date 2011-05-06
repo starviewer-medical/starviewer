@@ -23,8 +23,7 @@ class DicomMask;
   * de la cerca d'estudis, permetent consultar les series d'aquell estudi.
   * Aquesta classe es sincronitza amb la informació mostrada a QSeriesListWidget
   */
-class QStudyTreeWidget : public QWidget, private Ui::QStudyTreeWidgetBase
-{
+class QStudyTreeWidget : public QWidget, private Ui::QStudyTreeWidgetBase {
 Q_OBJECT
 public:
 

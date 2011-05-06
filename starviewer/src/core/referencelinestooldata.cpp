@@ -38,7 +38,9 @@ void ReferenceLinesToolData::setPlanesToProject(ImagePlane *plane)
 {
     m_planesToProject.clear();
     if (plane)
+    {
         m_planesToProject << plane;
+    }
     emit changed();
 }
 

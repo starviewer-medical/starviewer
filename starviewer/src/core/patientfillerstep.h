@@ -25,10 +25,16 @@ public:
     void setInput(PatientFillerInput *input);
 
     /// Retorna la llista d'etiquetes que s'han de complir per poder processar aquest step.
-    QStringList getRequiredLabels() const { return m_requiredLabelsList; }
+    QStringList getRequiredLabels() const
+    {
+        return m_requiredLabelsList;
+    }
 
     /// Retorna la prioritat que té assignada
-    PriorityFlags getPriority() const { return m_priority; }
+    PriorityFlags getPriority() const
+    {
+        return m_priority;
+    }
 
     /// Donat l'input, omple la part de l'estructura Patient que li pertoca a l'step. Si no és capaç de tractar el
     /// que li toca retorna fals, true altrament. S'ha d'utilitzar passant els steps individualment fitxer a fitxer.

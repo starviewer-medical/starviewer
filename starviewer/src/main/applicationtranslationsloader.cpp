@@ -29,20 +29,34 @@ QLocale ApplicationTranslationsLoader::getDefaultLocale()
     QLocale::Country country;
 
     if (defaultLocale.startsWith("en_"))
+    {
         language = QLocale::English;
+    }
     else if (defaultLocale.startsWith("es_"))
+    {
         language = QLocale::Spanish;
+    }
     else if (defaultLocale.startsWith("ca_"))
+    {
         language = QLocale::Catalan;
+    }
     else
+    {
         language = QLocale::C; // TODO no hauria de ser anglès per defecte?
+    }
 
     if (defaultLocale.endsWith("_GB"))
+    {
         country = QLocale::UnitedKingdom;
+    }
     else if (defaultLocale.endsWith("_ES"))
+    {
         country = QLocale::Spain;
+    }
     else
+    {
         country = QLocale::AnyCountry; // // TODO no hauria de ser EEUU/UK per defecte?
+    }
 
     return QLocale(language, country);
 }

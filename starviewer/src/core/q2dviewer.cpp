@@ -1450,7 +1450,9 @@ void Q2DViewer::projectDICOMPointToCurrentDisplayedImage(const double pointToPro
         }
     }
     else
+    {
         DEBUG_LOG("No hi ha cap pla actual valid");
+    }
 }
 
 Drawer* Q2DViewer::getDrawer() const

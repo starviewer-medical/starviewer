@@ -5,8 +5,7 @@
 
 namespace udg {
 
-class Q2DViewerSettings : public DefaultSettings
-{
+class Q2DViewerSettings : public DefaultSettings {
 public:
     Q2DViewerSettings();
     ~Q2DViewerSettings();

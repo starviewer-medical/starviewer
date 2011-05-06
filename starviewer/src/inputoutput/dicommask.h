@@ -13,8 +13,7 @@ namespace udg {
 
 class Status;
 
-class DicomMask
-{
+class DicomMask {
 public:
 
     DicomMask();

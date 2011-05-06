@@ -28,8 +28,7 @@ class QueryPacsJob;
 /**
  * Widget en el que controla les operacions d'entrada/sortida del PACS
  */
-class QInputOutputPacsWidget : public QWidget, private Ui::QInputOutputPacsWidgetBase
-{
+class QInputOutputPacsWidget : public QWidget, private Ui::QInputOutputPacsWidgetBase {
 Q_OBJECT
 public:
     /// Definició d'accions que podem fer d'haver descarregat estudis

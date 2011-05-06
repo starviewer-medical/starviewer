@@ -10,9 +10,13 @@ Identifier::Identifier()
 Identifier::Identifier(int id)
 {
     if (id >= 0)
+    {
         m_id = id;
+    }
     else
+    {
         m_id = -1;
+    }
 }
 
 Identifier::Identifier(const Identifier &id)

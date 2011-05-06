@@ -11,8 +11,7 @@ namespace udg {
 
     class Printer;
 
-class PrinterManager
-{
+class PrinterManager {
 public:
     //virtual void addPrinter(Printer &printer) = 0;
     //virtual void updatePrinter(const int &printerID, Printer &newPrinter) = 0;

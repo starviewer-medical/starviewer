@@ -78,12 +78,18 @@ void AppImportFile::openDirectory(bool recursively)
             }
         }
         else // tindrem en compte únicament els arxius que hi hagi en el directori arrel sense explorar recursivament
+        {
             filenames << generateFilenames(directoryName);
+        }
 
         if (!filenames.isEmpty())
+        {
             emit selectedFiles(filenames);
+        }
         else
+        {
             QMessageBox::warning(0, ApplicationNameString, tr("No supported input files found"));
+        }
     }
 }
 

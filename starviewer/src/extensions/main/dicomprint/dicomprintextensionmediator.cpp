@@ -35,9 +35,13 @@ bool DicomPrintExtensionMediator::initializeExtension(QWidget* extension, const 
 
     Volume *input = extensionContext.getDefaultVolume();
     if (!input)
+    {
         QMessageBox::information(0, udg::ApplicationNameString, tr("The selected item is not an image"));
+    }
     else
+    {
         dicomPrintExtension->setInput(input);
+    }
 
     return true;
 }

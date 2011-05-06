@@ -14,8 +14,7 @@ class Series;
 /**
 Classe base per a la generació de nous fitxers DICOM. Cada generador té la capacitat de generar un tipus de fitxers.
 */
-class DICOMFileGenerator
-{
+class DICOMFileGenerator {
 public:
     DICOMFileGenerator();
 

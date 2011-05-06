@@ -51,7 +51,10 @@ void QStarviewerSAPWrapper::sendRequestToLocalStarviewer(QString accessionNumber
     {
         INFO_LOG("QStarviewerSAPWrapper::No he pogut desconnectar del Starviewer");
     }
-    else INFO_LOG("QStarviewerSAPWrapper::He desconnectat del Starviewer");
+    else
+    {
+        INFO_LOG("QStarviewerSAPWrapper::He desconnectat del Starviewer");
+    }
 
     if (tcpSocket.error() != QAbstractSocket::UnknownSocketError)
     {

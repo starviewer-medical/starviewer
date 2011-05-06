@@ -185,7 +185,8 @@ QUrl ApplicationVersionChecker::createLocalUrl()
     return result;
 }
 
-bool ApplicationVersionChecker::checkLocalUrl(const QUrl &url){
+bool ApplicationVersionChecker::checkLocalUrl(const QUrl &url)
+{
     //comprobar si existeix localment el fitxer
     return QFile::exists(QString(url.toString()));
 }

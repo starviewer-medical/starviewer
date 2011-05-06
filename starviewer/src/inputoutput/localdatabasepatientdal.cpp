@@ -34,14 +34,20 @@ void LocalDatabasePatientDAL::update(Patient *patientToUpdate)
 {
     m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlUpdate(patientToUpdate)), 0, 0, 0);
 
-    if (getLastError() != SQLITE_OK) logError(buildSqlUpdate(patientToUpdate));
+    if (getLastError() != SQLITE_OK)
+    {
+        logError(buildSqlUpdate(patientToUpdate));
+    }
 }
 
 void LocalDatabasePatientDAL::del(qlonglong patientID)
 {
     m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlDelete(patientID)), 0, 0, 0);
 
-    if (getLastError() != SQLITE_OK) logError(buildSqlDelete(patientID));
+    if (getLastError() != SQLITE_OK)
+    {
+        logError(buildSqlDelete(patientID));
+    }
 }
 
 QList<Patient*> LocalDatabasePatientDAL::query(const DicomMask &patientMask)
@@ -92,7 +98,9 @@ QString LocalDatabasePatientDAL::buildSqlSelect(const DicomMask &patientMaskToSe
                        "From Patient ";
 
     if (!patientMaskToSelect.getPatientId().isEmpty())
+    {
         whereSentence = QString(" Where DICOMPatientID = '%1' ").arg(DatabaseConnection::formatTextToValidSQLSyntax(patientMaskToSelect.getPatientId()));
+    }
 
     return selectSentence + whereSentence;
 }

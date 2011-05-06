@@ -59,7 +59,9 @@ void QCINEController::setQViewer(QViewer *viewer)
         m_cineController->enableBoomerang(m_boomerangCheckBox->isChecked());
     }
     else
+    {
         m_cineController->setInputViewer(viewer);
+    }
 
     m_loopCheckBox->setChecked(true);
 }

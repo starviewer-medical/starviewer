@@ -28,9 +28,12 @@ bool CrashReporterSender::sendReport(QString url, QString minidumpPath, QHash<QS
                                                             &response,
                                                             &error);
 
-    if (success) {
+    if (success)
+    {
         printf("Successfully sent the minidump file.\n");
-    } else {
+    }
+    else
+    {
         printf("Failed to send minidump: %s\n", error.c_str());
         printf("Response:\n");
         printf("%s\n", response.c_str());

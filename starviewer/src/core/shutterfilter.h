@@ -70,8 +70,14 @@ public:
     void clearBitmapShutter();
 
     /// assigna/obté el color amb que es pinta la part que queda retallada
-    void setBackground(double background){ m_background = background; }
-    double getBackground() const { return m_background; }
+    void setBackground(double background)
+    {
+        m_background = background;
+    }
+    double getBackground() const
+    {
+        return m_background;
+    }
 
     /// Obtenim les dades d'input després d'aplicar els shutters definits
     vtkImageData *getOutput();

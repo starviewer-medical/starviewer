@@ -21,7 +21,10 @@ void AbortRenderCommand::Execute(vtkObject *caller, unsigned long eventId, void 
         return;
     }
 
-    if (renderWindow->GetEventPending()) renderWindow->SetAbortRender(1);
+    if (renderWindow->GetEventPending()) 
+    {
+        renderWindow->SetAbortRender(1);
+    }
 }
 
 AbortRenderCommand::AbortRenderCommand()

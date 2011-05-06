@@ -7,8 +7,7 @@
 
 namespace udg {
 
-class PrintJob
-{
+class PrintJob {
 public:
 
     ///Especifica/retorna el número de pàgines que s'han d'implementar del JOB

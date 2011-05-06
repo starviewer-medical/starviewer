@@ -17,8 +17,7 @@ L'objecte d'input (PatientFillerInput) contindrà una llista de fitxers i una es
 
 TODO De moment només classifiquem imatges que és el que permet l'objecte Series.
 */
-class DICOMFileClassifierFillerStep : public PatientFillerStep
-{
+class DICOMFileClassifierFillerStep : public PatientFillerStep {
 public:
     DICOMFileClassifierFillerStep();
 
@@ -28,7 +27,10 @@ public:
 
     void postProcessing() {}
 
-    QString name() { return "DICOMFileClassifierFillerStep"; }
+    QString name()
+    {
+        return "DICOMFileClassifierFillerStep";
+    }
 
 private:
     /// Classifica l'arxiu que tenim al lector de tags. Presuposa que es treballa amb un lector correcte.

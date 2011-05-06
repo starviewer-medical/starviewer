@@ -102,19 +102,31 @@ void ClippingPlanesTool::updateInput()
             plane->GetOrigin(origin);
             // xmin, xmax
             if(origin[0] < bounds[0])
+            {
                 bounds[0] = origin[0];
+            }
             if(origin[0] > bounds[1])
+            {
                 bounds[1] = origin[0];
+            }
             // ymin, ymax
             if(origin[1] < bounds[2])
+            {
                 bounds[2] = origin[1];
+            }
             if(origin[1] > bounds[3])
+            {
                 bounds[3] = origin[1];
+            }
             // zmin, zmax
             if(origin[2] < bounds[4])
+            {
                 bounds[4] = origin[2];
+            }
             if(origin[2] > bounds[5])
+            {
                 bounds[5] = origin[2];
+            }
         }
 
         // indiquem els bounds del widget explícitament

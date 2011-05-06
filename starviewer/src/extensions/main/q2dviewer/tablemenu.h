@@ -18,8 +18,7 @@ Classe per implementar el menu per seleccionar els grids com si es crees una tau
 // FWD declarations
 class ItemMenu;
 
-class TableMenu : public QWidget
-{
+class TableMenu : public QWidget {
 Q_OBJECT
 public:
     TableMenu(QWidget *parent = 0);

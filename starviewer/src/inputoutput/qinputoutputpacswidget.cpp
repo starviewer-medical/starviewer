@@ -22,8 +22,7 @@
 #include "shortcutmanager.h"
 #include "querypacsjob.h"
 
-namespace udg
-{
+namespace udg {
 
 QInputOutputPacsWidget::QInputOutputPacsWidget(QWidget *parent) : QWidget(parent)
 {
@@ -370,7 +369,9 @@ bool QInputOutputPacsWidget::AreValidQueryParameters(DicomMask *maskToQuery, QLi
         return (response == QMessageBox::Yes);
     }
     else
+    {
         return true;
+    }
 }
 
 QString QInputOutputPacsWidget::getPacsIDFromQueriedStudies(QString studyInstanceUID)
@@ -382,7 +383,9 @@ QString QInputOutputPacsWidget::getPacsIDFromQueriedStudies(QString studyInstanc
         return "";
     }
     else
+    {
         return m_hashPacsIDOfStudyInstanceUID[studyInstanceUID];
+    }
 }
 
 DicomMask QInputOutputPacsWidget::buildSeriesDicomMask(QString studyInstanceUID)

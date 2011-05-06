@@ -30,10 +30,12 @@
 
 namespace udg {
 
-class PlanesInteractionCallback : public vtkCommand
-{
+class PlanesInteractionCallback : public vtkCommand {
 public:
-    static PlanesInteractionCallback *New(){ return new PlanesInteractionCallback; }
+    static PlanesInteractionCallback *New()
+    {
+        return new PlanesInteractionCallback;
+    }
     Q3DMPRViewer *m_viewer;
     virtual void Execute(vtkObject *vtkNotUsed(caller), unsigned long event, void *vtkNotUsed(callData))
     {

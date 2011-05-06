@@ -14,8 +14,7 @@ class PacsDevice;
 /** Interfície que mostra els PACS els quals es pot connectar l'aplicació, permet seleccionar quins es vol connectar l'usuari
 */
 
-class QPacsList : public QWidget, private Ui::QPacsListBase
-{
+class QPacsList : public QWidget, private Ui::QPacsListBase {
 Q_OBJECT
 public:
 

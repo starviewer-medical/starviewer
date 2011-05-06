@@ -41,10 +41,22 @@ TransferFunction * TransferFunctionIO::fromFile(QFile & file)
         lineIn >> first;
         first = first.trimmed();
 
-        if (first.isEmpty()) continue;
-        else if (first == "[Name]") mode = NAME;
-        else if (first == "[Color]") mode = COLOR;
-        else if (first == "[Opacity]") mode = OPACITY;
+        if (first.isEmpty())
+        {
+            continue;
+        }
+        else if (first == "[Name]")
+        {
+            mode = NAME;
+        }
+        else if (first == "[Color]")
+        {
+            mode = COLOR;
+        }
+        else if (first == "[Opacity]")
+        {
+            mode = OPACITY;
+        }
         else
         {
             if (mode == NAME)
@@ -70,7 +82,10 @@ TransferFunction * TransferFunctionIO::fromFile(QFile & file)
                         transferFunction->setOpacity(x, opacity);
                     }
                 }
-                else continue;
+                else
+                {
+                    continue;
+                }
             }
         }
     }
@@ -114,8 +129,14 @@ TransferFunction* TransferFunctionIO::fromXmlFile(QFile &file)    /// \todo afeg
 
     // nom
     QDomNode nameNode = transferFunctionElement.elementsByTagName("name").item(0);
-    if (!nameNode.isNull()) transferFunction->setName(nameNode.toElement().text());
-    else transferFunction->setName(QFileInfo(file).fileName()); // nom per defecte
+    if (!nameNode.isNull())
+    {
+        transferFunction->setName(nameNode.toElement().text());
+    }
+    else
+    {
+        transferFunction->setName(QFileInfo(file).fileName()); // nom per defecte
+    }
 
     // color
     QDomNode colorNode = transferFunctionElement.elementsByTagName("color").item(0);

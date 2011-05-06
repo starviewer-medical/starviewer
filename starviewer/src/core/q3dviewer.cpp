@@ -181,20 +181,58 @@ Q3DViewer::~Q3DViewer()
     delete m_directIlluminationContourObscuranceVoxelShader;
     // eliminem tots els elements vtk creats
     if (m_4DLinearRegressionGradientEstimator)
+    {
         m_4DLinearRegressionGradientEstimator->Delete();
-    if (m_imageData) m_imageData->Delete();
-    if (m_vtkVolume) m_vtkVolume->Delete();
-    if (m_volumeProperty) m_volumeProperty->Delete();
-    if (m_volumeMapper) m_volumeMapper->Delete();
+    }
+    if (m_imageData)
+    {
+        m_imageData->Delete();
+    }
+    if (m_vtkVolume)
+    {
+        m_vtkVolume->Delete();
+    }
+    if (m_volumeProperty)
+    {
+        m_volumeProperty->Delete();
+    }
+    if (m_volumeMapper) 
+    {
+        m_volumeMapper->Delete();
+    }
     m_gpuRayCastMapper->Delete();
-    if (m_volumeRayCastFunction) m_volumeRayCastFunction->Delete();
-    if (m_volumeRayCastAmbientContourFunction) m_volumeRayCastAmbientContourFunction->Delete();
-    if (m_volumeRayCastDirectIlluminationContourFunction) m_volumeRayCastDirectIlluminationContourFunction->Delete();
-    if (m_volumeRayCastAmbientObscuranceFunction) m_volumeRayCastAmbientObscuranceFunction->Delete();
-    if (m_volumeRayCastDirectIlluminationObscuranceFunction) m_volumeRayCastDirectIlluminationObscuranceFunction->Delete();
-    if (m_volumeRayCastAmbientContourObscuranceFunction) m_volumeRayCastAmbientContourObscuranceFunction->Delete();
-    if (m_volumeRayCastDirectIlluminationContourObscuranceFunction) m_volumeRayCastDirectIlluminationContourObscuranceFunction->Delete();
-    if (m_volumeRayCastIsosurfaceFunction) m_volumeRayCastIsosurfaceFunction->Delete();
+    if (m_volumeRayCastFunction)
+    {
+        m_volumeRayCastFunction->Delete();
+    }
+    if (m_volumeRayCastAmbientContourFunction)
+    {
+        m_volumeRayCastAmbientContourFunction->Delete();
+    }
+    if (m_volumeRayCastDirectIlluminationContourFunction)
+    {
+        m_volumeRayCastDirectIlluminationContourFunction->Delete();
+    }
+    if (m_volumeRayCastAmbientObscuranceFunction)
+    {
+        m_volumeRayCastAmbientObscuranceFunction->Delete();
+    }
+    if (m_volumeRayCastDirectIlluminationObscuranceFunction)
+    {
+        m_volumeRayCastDirectIlluminationObscuranceFunction->Delete();
+    }
+    if (m_volumeRayCastAmbientContourObscuranceFunction)
+    {
+        m_volumeRayCastAmbientContourObscuranceFunction->Delete();
+    }
+    if (m_volumeRayCastDirectIlluminationContourObscuranceFunction)
+    {
+        m_volumeRayCastDirectIlluminationContourObscuranceFunction->Delete();
+    }
+    if (m_volumeRayCastIsosurfaceFunction)
+    {
+        m_volumeRayCastIsosurfaceFunction->Delete();
+    }
 }
 
 void Q3DViewer::getCurrentWindowLevel(double wl[2])
@@ -288,8 +326,14 @@ void Q3DViewer::setWindowLevel(double window , double level)
 
         m_transferFunction->trim(0, m_range);
 
-        if (!pointInZero) m_transferFunction->setOpacity(0.0, 0.0);
-        if (!pointInRange) m_transferFunction->setOpacity(m_range, 0.0);
+        if (!pointInZero)
+        {
+            m_transferFunction->setOpacity(0.0, 0.0);
+        }
+        if (!pointInRange)
+        {
+            m_transferFunction->setOpacity(m_range, 0.0);
+        }
 
         this->applyCurrentRenderingMethod();
         emit windowLevelChanged(window, level);
@@ -605,7 +649,10 @@ void Q3DViewer::setTransferFunction(TransferFunction *transferFunction)
 
 void Q3DViewer::setNewTransferFunction()
 {
-    if (m_newTransferFunction) delete m_newTransferFunction;
+    if (m_newTransferFunction)
+    {
+        delete m_newTransferFunction;
+    }
 
     m_newTransferFunction = new TransferFunction(*m_transferFunction);
     m_window = m_range;
@@ -722,10 +769,19 @@ void Q3DViewer::renderRayCasting()
 
     if (m_contourOn)
     {
-        if (m_volumeProperty->GetShade()) m_volumeMapper->SetVolumeRayCastFunction(m_volumeRayCastDirectIlluminationContourFunction);
-        else m_volumeMapper->SetVolumeRayCastFunction(m_volumeRayCastAmbientContourFunction);
+        if (m_volumeProperty->GetShade())
+        {
+            m_volumeMapper->SetVolumeRayCastFunction(m_volumeRayCastDirectIlluminationContourFunction);
+        }
+        else
+        {
+            m_volumeMapper->SetVolumeRayCastFunction(m_volumeRayCastAmbientContourFunction);
+        }
     }
-    else m_volumeMapper->SetVolumeRayCastFunction(m_volumeRayCastFunction);
+    else
+    {
+        m_volumeMapper->SetVolumeRayCastFunction(m_volumeRayCastFunction);
+    }
 
     if (m_contourOn && m_volumeProperty->GetShade())
     {
@@ -766,24 +822,41 @@ void Q3DViewer::renderRayCastingObscurance()
         if (m_contourOn)
         {
             if (m_volumeProperty->GetShade())
+            {
                 m_volumeMapper->SetVolumeRayCastFunction(m_volumeRayCastDirectIlluminationContourObscuranceFunction);
+            }
             else
+            {
                 m_volumeMapper->SetVolumeRayCastFunction(m_volumeRayCastAmbientContourObscuranceFunction);
+            }
         }
         else
         {
             if (m_volumeProperty->GetShade())
+            {
                 m_volumeMapper->SetVolumeRayCastFunction(m_volumeRayCastDirectIlluminationObscuranceFunction);
+            }
             else
+            {
                 m_volumeMapper->SetVolumeRayCastFunction(m_volumeRayCastAmbientObscuranceFunction);
+            }
         }
     }
     else if (m_contourOn)
     {
-        if (m_volumeProperty->GetShade()) m_volumeMapper->SetVolumeRayCastFunction(m_volumeRayCastDirectIlluminationContourFunction);
-        else m_volumeMapper->SetVolumeRayCastFunction(m_volumeRayCastAmbientContourFunction);
+        if (m_volumeProperty->GetShade())
+        {
+            m_volumeMapper->SetVolumeRayCastFunction(m_volumeRayCastDirectIlluminationContourFunction);
+        }
+        else
+        {
+            m_volumeMapper->SetVolumeRayCastFunction(m_volumeRayCastAmbientContourFunction);
+        }
     }
-    else m_volumeMapper->SetVolumeRayCastFunction(m_volumeRayCastFunction);
+    else
+    {
+        m_volumeMapper->SetVolumeRayCastFunction(m_volumeRayCastFunction);
+    }
 
     if ((m_contourOn || m_obscuranceOn) && m_volumeProperty->GetShade())
     {
@@ -1155,7 +1228,9 @@ void Q3DViewer::computeObscurance(ObscuranceQuality quality)
 
     /// \todo Només canviant això ja recalcularà les normals o cal fer alguna cosa més?
     if (m_4DLinearRegressionGradientEstimator->GetRadius() < gradientRadius)
+    {
         m_4DLinearRegressionGradientEstimator->SetRadius(gradientRadius);
+    }
 
     m_obscuranceMainThread->setVolume(m_vtkVolume);
     m_obscuranceMainThread->setTransferFunction(*m_transferFunction);
@@ -1205,7 +1280,10 @@ void Q3DViewer::setContour(bool on)
 {
     m_contourOn = on;
 
-    if (on) m_contourVoxelShader->setGradientEstimator(m_volumeMapper->GetGradientEstimator());
+    if (on)
+    {
+        m_contourVoxelShader->setGradientEstimator(m_volumeMapper->GetGradientEstimator());
+    }
 }
 
 void Q3DViewer::setContourThreshold(double threshold)

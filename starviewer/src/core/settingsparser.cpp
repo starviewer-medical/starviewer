@@ -134,12 +134,16 @@ void SettingsParser::initializeParseableStringsTable()
     QStringList environmentList = QProcess::systemEnvironment();
     int index = environmentList.indexOf("USERNAME"); // windows
     if (index != -1)
+    {
         m_parseableStringsTable["USERNAME"] = environmentList.at(index);
+    }
     else
     {
         index = environmentList.indexOf("USER"); // linux, mac
         if (index != -1)
+        {
             m_parseableStringsTable["USERNAME"] = environmentList.at(index);
+        }
     }
 }
 

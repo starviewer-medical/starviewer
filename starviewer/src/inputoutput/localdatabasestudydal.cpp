@@ -19,21 +19,30 @@ void LocalDatabaseStudyDAL::insert(Study *newStudy, const QDate &lastAccessDate)
 {
     m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlInsert(newStudy, lastAccessDate)), 0, 0, 0);
 
-    if (getLastError() != SQLITE_OK) logError(buildSqlInsert(newStudy, lastAccessDate));
+    if (getLastError() != SQLITE_OK)
+    {
+        logError(buildSqlInsert(newStudy, lastAccessDate));
+    }
 }
 
 void LocalDatabaseStudyDAL::update(Study *studyToUpdate, const QDate &lastAccessDate)
 {
     m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlUpdate(studyToUpdate, lastAccessDate)), 0, 0, 0);
 
-    if (getLastError() != SQLITE_OK) logError(buildSqlUpdate(studyToUpdate, lastAccessDate));
+    if (getLastError() != SQLITE_OK)
+    {
+        logError(buildSqlUpdate(studyToUpdate, lastAccessDate));
+    }
 }
 
 void LocalDatabaseStudyDAL::del(const DicomMask &studyMaskToDelete)
 {
     m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlDelete(studyMaskToDelete)), 0, 0, 0);
 
-    if (getLastError() != SQLITE_OK) logError(buildSqlDelete(studyMaskToDelete));
+    if (getLastError() != SQLITE_OK)
+    {
+        logError(buildSqlDelete(studyMaskToDelete));
+    }
 }
 
 QList<Study*> LocalDatabaseStudyDAL::queryOrderByLastAccessDate(const DicomMask &studyMask, QDate lastAccessDateMinor, QDate lastAccessDateEqualOrMajor)
@@ -198,13 +207,20 @@ QString LocalDatabaseStudyDAL::buildSqlSelect(const DicomMask &studyMaskToSelect
                        "From Study ";
 
     if (!studyMaskToSelect.getStudyInstanceUID().isEmpty())
+    {
         whereSentence = QString(" Where InstanceUID = '%1' ").arg(DatabaseConnection::formatTextToValidSQLSyntax(studyMaskToSelect.getStudyInstanceUID()));
+    }
 
     if (lastAccessDateMinor.isValid())
     {
         if (!whereSentence.isEmpty())
+        {
             whereSentence += " and ";
-        else whereSentence = " where ";
+        }
+        else
+        {
+            whereSentence = " where ";
+        }
 
         whereSentence += QString(" LastAccessDate < '%1' ").arg(lastAccessDateMinor.toString("yyyyMMdd"));
     }
@@ -212,8 +228,13 @@ QString LocalDatabaseStudyDAL::buildSqlSelect(const DicomMask &studyMaskToSelect
     if (lastAccessDateEqualOrMajor.isValid())
     {
         if (!whereSentence.isEmpty())
+        {
             whereSentence += " and ";
-        else whereSentence = " where ";
+        }
+        else
+        {
+            whereSentence = " where ";
+        }
 
         whereSentence += QString(" '%1' <= LastAccessDate ").arg(lastAccessDateEqualOrMajor.toString("yyyyMMdd"));
     }
@@ -233,14 +254,18 @@ QString LocalDatabaseStudyDAL::buildSqlSelectStudyPatient(const DicomMask &study
     whereSentence = "Where Study.PatientID = Patient.ID ";
 
     if (!studyMaskToSelect.getStudyInstanceUID().isEmpty())
+    {
         whereSentence += QString(" and InstanceUID = '%1' ").arg(DatabaseConnection::formatTextToValidSQLSyntax(studyMaskToSelect.getStudyInstanceUID()));
+    }
 
     if (!studyMaskToSelect.getPatientId().isEmpty() && studyMaskToSelect.getPatientId() != "*")
     {
         whereSentence += QString(" and Patient.DICOMPatientID like '%%1%' ").arg(DatabaseConnection::formatTextToValidSQLSyntax(studyMaskToSelect.getPatientId().replace("*", "")));
     }
     if (!studyMaskToSelect.getPatientName().isEmpty() && studyMaskToSelect.getPatientName() != "*")
+    {
         whereSentence += QString(" and Patient.Name like '%%1%' ").arg(DatabaseConnection::formatTextToValidSQLSyntax(studyMaskToSelect.getPatientName().replace("*", "")));
+    }
 
     //Si filtrem per data
     if (studyMaskToSelect.getStudyDate().length() == 8)
@@ -264,9 +289,13 @@ QString LocalDatabaseStudyDAL::buildSqlSelectStudyPatient(const DicomMask &study
     }
 
     if (lastAccessDateMinor.isValid())
+    {
         whereSentence += QString(" and LastAccessDate < '%1' ").arg(lastAccessDateMinor.toString("yyyyMMdd"));
+    }
     if (lastAccessDateEqualOrMajor.isValid())
+    {
         whereSentence += QString(" and '%1' <= LastAccessDate ").arg(lastAccessDateEqualOrMajor.toString("yyyyMMdd"));
+    }
 
     if (studyMaskToSelect.getSeriesModality().length() > 0)
     {
@@ -359,7 +388,9 @@ QString LocalDatabaseStudyDAL::buildSqlDelete(const DicomMask &studyMaskToDelete
 
     deleteSentence = "Delete From Study ";
     if (!studyMaskToDelete.getStudyInstanceUID().isEmpty())
+    {
         whereSentence = QString(" Where InstanceUID = '%1'").arg(DatabaseConnection::formatTextToValidSQLSyntax(studyMaskToDelete.getStudyInstanceUID()));
+    }
 
     return deleteSentence + whereSentence;
 }

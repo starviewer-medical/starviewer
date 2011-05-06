@@ -17,8 +17,7 @@
 #include "localdatabasemanager.h"
 #include "deletedirectory.h"
 
-namespace udg
-{
+namespace udg {
 
 void DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString seriesUID, QString sopInstanceUID)
 {
@@ -34,7 +33,10 @@ void DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString se
         {
             m_lastError = ErrorFreeingSpace;
         }
-        else m_lastError = NoEnoughSpace;
+        else
+        {
+            m_lastError = NoEnoughSpace;
+        }
 
         return;
     }
@@ -95,7 +97,10 @@ void DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString se
                 //No s'ha pogut inserir el patient, perquè patientfiller no ha pogut emplenar l'informació de patient correctament
                 m_lastError = PatientInconsistent;
             }
-            else m_lastError = DatabaseError;
+            else
+            {
+                m_lastError = DatabaseError;
+            }
 
             deleteFailedImportedStudy(studyUID); // si hi hagut un error borrem els fitxers importats de l'estudi de la cache local
         }
@@ -134,7 +139,10 @@ void DICOMDIRImporter::importStudy(QString studyUID, QString seriesUID, QString 
         foreach (Series *seriesToImport, seriesListToImport)
         {
             importSeries(studyUID, seriesToImport->getInstanceUID(), sopInstanceUID);
-            if (getLastError() != Ok) break;
+            if (getLastError() != Ok)
+            {
+                break;
+            }
         }
     }
     else
@@ -163,7 +171,10 @@ void DICOMDIRImporter::importSeries(QString studyUID, QString seriesUID, QString
     foreach (Image *imageToImport, imageListToImport)
     {
         importImage(imageToImport, seriesPath);
-        if (getLastError() != Ok) break;
+        if (getLastError() != Ok)
+        {
+            break;
+        }
     }
 }
 
@@ -225,7 +236,10 @@ bool DICOMDIRImporter::copyDicomdirImageToLocal(QString dicomdirImagePath, QStri
 
         return true;
     }
-    else return false;
+    else
+    {
+        return false;
+    }
 }
 
 QString DICOMDIRImporter::getDicomdirImagePath(Image *image)

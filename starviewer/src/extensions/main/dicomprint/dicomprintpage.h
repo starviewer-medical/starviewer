@@ -10,13 +10,11 @@
 * Implementació per la Interfície DicomPrintPage que defineix una pàgina amb imatges per imprimir en impressores Dicom en DCMTK.
 */
 
-namespace udg
-{
+namespace udg {
 
 class Image;
 
-class DicomPrintPage : public PrintPage
-{
+class DicomPrintPage : public PrintPage {
 public:
 
     ///Especifica/Retorna la mida sobre de la placa sobre el que s'imprimirà

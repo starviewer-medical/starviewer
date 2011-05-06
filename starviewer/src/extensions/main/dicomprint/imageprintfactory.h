@@ -15,8 +15,7 @@ namespace udg {
     class QPrintingConfigurationWidget;
     class QPrintJobCreatorWidget;
 
-class ImagePrintFactory
-{
+class ImagePrintFactory {
 public:
     /// Retorna la impressora.
     virtual Printer * getPrinter() = 0;

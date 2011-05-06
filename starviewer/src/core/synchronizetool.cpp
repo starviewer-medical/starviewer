@@ -30,13 +30,21 @@ SynchronizeTool::~SynchronizeTool()
 void SynchronizeTool::setConfiguration(ToolConfiguration *configuration)
 {
     if (!(configuration->containsValue("Slicing")))
+    {
         configuration->addAttribute("Slicing", QVariant(false));
+    }
     if (!(configuration->containsValue("WindowLevel")))
+    {
         configuration->addAttribute("WindowLevel", QVariant(false));
+    }
     if (!(configuration->containsValue("ZoomFactor")))
+    {
         configuration->addAttribute("ZoomFactor", QVariant(false));
+    }
     if (!(configuration->containsValue("Pan")))
+    {
         configuration->addAttribute("Pan", QVariant(false));
+    }
 
     m_toolConfiguration = configuration;
 }
@@ -44,7 +52,9 @@ void SynchronizeTool::setConfiguration(ToolConfiguration *configuration)
 void SynchronizeTool::setToolData(ToolData *data)
 {
     if (m_toolData)
+    {
         setEnabled(false);
+    }
 
     this->m_toolData = dynamic_cast<SynchronizeToolData*>(data);
 }
@@ -94,7 +104,9 @@ void SynchronizeTool::setIncrement(int slice)
         DEBUG_LOG(QString("setIncrement::Thickness = %1").arg(thickness));
         // si la imatge no conté thickness (0.0), llavors li donem un valor nominal
         if (thickness == 0.0)
+        {
             thickness = 1.0;
+        }
 
         double increment = (slice - m_lastSlice) * thickness; // Distancia incrementada
         m_lastSlice = slice;
@@ -150,7 +162,9 @@ void SynchronizeTool::applySliceChanges()
         DEBUG_LOG(QString("applySliceChanges::Thickness = %1").arg(thickness));
         // si la imatge no conté thickness (0.0), llavors li donem un valor nominal
         if (thickness == 0.0)
+        {
             thickness = 1.0;
+        }
 
         double sliceIncrement = (this->m_toolData->getIncrement()/thickness) + m_roundLostThickness;
         int slices = qRound(sliceIncrement);

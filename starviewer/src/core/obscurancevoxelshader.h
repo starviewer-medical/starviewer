@@ -87,11 +87,20 @@ inline HdrColor ObscuranceVoxelShader::nvShade(const Vector3 &position, int offs
     if (!color.isTransparent() && !color.isBlack())
     {
         double obscurance = m_obscurance->obscurance(offset);
-        if (obscurance < m_lowFilter) obscurance = 0.0;
-        else if (obscurance > m_highFilter) obscurance = 1.0;
+        if (obscurance < m_lowFilter)
+        {
+            obscurance = 0.0;
+        }
+        else if (obscurance > m_highFilter)
+        {
+            obscurance = 1.0;
+        }
         obscurance *= m_factor;
 
-        if (!m_additive) color.multiplyColorBy(obscurance);
+        if (!m_additive)
+        {
+            color.multiplyColorBy(obscurance);
+        }
         else
         {
             HdrColor obscuranceColor = m_ambientColors[m_data[offset]];
@@ -123,14 +132,27 @@ inline HdrColor ObscuranceVoxelShader::nvShade(const Vector3 &position, const Ve
 
         double obscurance;
         if (m_obscurance->isDoublePrecision())
+        {
             obscurance = TrilinearInterpolator::interpolate<double>(m_obscurance->doubleObscurance(), offsets, weights);
+        }
         else
+        {
             obscurance = TrilinearInterpolator::interpolate<float>(m_obscurance->floatObscurance(), offsets, weights);
-        if (obscurance < m_lowFilter) obscurance = 0.0;
-        else if (obscurance > m_highFilter) obscurance = 1.0;
+        }
+        if (obscurance < m_lowFilter)
+        {
+            obscurance = 0.0;
+        }
+        else if (obscurance > m_highFilter)
+        {
+            obscurance = 1.0;
+        }
         obscurance *= m_factor;
 
-        if (!m_additive) color.multiplyColorBy(obscurance);
+        if (!m_additive)
+        {
+            color.multiplyColorBy(obscurance);
+        }
         else
         {
             double value = TrilinearInterpolator::interpolate<double>(m_data, offsets, weights);

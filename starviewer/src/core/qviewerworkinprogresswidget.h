@@ -14,8 +14,7 @@ namespace udg {
   widget.
   */
 
-class QViewerWorkInProgressWidget : public QWidget, private Ui::QViewerWorkInProgressWidget
-{
+class QViewerWorkInProgressWidget : public QWidget, private Ui::QViewerWorkInProgressWidget {
     Q_OBJECT
 public:
     explicit QViewerWorkInProgressWidget(QWidget *parent = 0);

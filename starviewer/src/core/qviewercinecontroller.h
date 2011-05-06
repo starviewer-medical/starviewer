@@ -15,8 +15,7 @@ class Volume;
 /**
 Controlador de seqüències de CINE acoplable a qualsevol QViewer
 */
-class QViewerCINEController : public QObject
-{
+class QViewerCINEController : public QObject {
 Q_OBJECT
 public:
     QViewerCINEController(QObject *parent = 0);

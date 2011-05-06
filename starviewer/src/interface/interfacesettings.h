@@ -5,8 +5,7 @@
 
 namespace udg {
 
-class InterfaceSettings : public DefaultSettings
-{
+class InterfaceSettings : public DefaultSettings {
 public:
     InterfaceSettings();
     ~InterfaceSettings();

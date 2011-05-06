@@ -13,8 +13,7 @@ namespace udg {
 /** Classe que s'encarrega d'escolta per un port especificat a la configuració peticions d'un RIS i atendre les peticions d'aquests
 */
 
-class ListenRISRequests : public QObject
-{
+class ListenRISRequests : public QObject {
 Q_OBJECT
 public:
 

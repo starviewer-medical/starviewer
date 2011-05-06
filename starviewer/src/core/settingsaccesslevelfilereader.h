@@ -9,8 +9,7 @@ namespace udg {
     Lector de fitxers .INI en els que es defineixen els nivells d'accés
     que li volem configurar als settings
  */
-class SettingsAccessLevelFileReader
-{
+class SettingsAccessLevelFileReader {
 public:
     SettingsAccessLevelFileReader();
     ~SettingsAccessLevelFileReader();

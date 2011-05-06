@@ -14,8 +14,7 @@ namespace udg {
   els paràmetres necessaris per tal de cridar el mètode execute()
   */
 
-class QViewerCommand : public QObject
-{
+class QViewerCommand : public QObject {
     Q_OBJECT
 public:
     virtual ~QViewerCommand();

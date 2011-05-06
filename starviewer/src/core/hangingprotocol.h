@@ -10,8 +10,7 @@ class HangingProtocolMask;
 class HangingProtocolImageSet;
 class HangingProtocolDisplaySet;
 
-class HangingProtocol : public QObject
-{
+class HangingProtocol : public QObject {
 Q_OBJECT
 public:
     HangingProtocol(QObject *parent = 0);

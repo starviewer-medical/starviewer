@@ -109,38 +109,74 @@ inline Vector3Double* Obscurance::doubleColorBleeding() const
 
 inline double Obscurance::obscurance(int i) const
 {
-    if (m_doublePrecision) return m_doubleObscurance[i];
-    else return m_floatObscurance[i];
+    if (m_doublePrecision)
+    {
+        return m_doubleObscurance[i];
+    }
+    else
+    {
+        return m_floatObscurance[i];
+    }
 }
 
 inline void Obscurance::setObscurance(int i, double obscurance)
 {
-    if (m_doublePrecision) m_doubleObscurance[i] = obscurance;
-    else m_floatObscurance[i] = obscurance;
+    if (m_doublePrecision)
+    {
+        m_doubleObscurance[i] = obscurance;
+    }
+    else
+    {
+        m_floatObscurance[i] = obscurance;
+    }
 }
 
 inline void Obscurance::addObscurance(int i, double obscurance)
 {
-    if (m_doublePrecision) m_doubleObscurance[i] += obscurance;
-    else m_floatObscurance[i] += obscurance;
+    if (m_doublePrecision)
+    {
+        m_doubleObscurance[i] += obscurance;
+    }
+    else
+    {
+        m_floatObscurance[i] += obscurance;
+    }
 }
 
 inline Vector3 Obscurance::colorBleeding(int i) const
 {
-    if (m_doublePrecision) return m_doubleColorBleeding[i];
-    else return m_floatColorBleeding[i];
+    if (m_doublePrecision)
+    {
+        return m_doubleColorBleeding[i];
+    }
+    else
+    {
+        return m_floatColorBleeding[i];
+    }
 }
 
 inline void Obscurance::setColorBleeding(int i, const Vector3 &colorBleeding)
 {
-    if (m_doublePrecision) m_doubleColorBleeding[i] = colorBleeding;
-    else m_floatColorBleeding[i] = colorBleeding;
+    if (m_doublePrecision)
+    {
+        m_doubleColorBleeding[i] = colorBleeding;
+    }
+    else
+    {
+        m_floatColorBleeding[i] = colorBleeding;
+    }
 }
 
 inline void Obscurance::addColorBleeding(int i, const Vector3 &colorBleeding)
 {
-    if (m_doublePrecision) m_doubleColorBleeding[i] += colorBleeding;
-    else m_floatColorBleeding[i] += colorBleeding;
+    if (m_doublePrecision)
+    {
+        m_doubleColorBleeding[i] += colorBleeding;
+    }
+    else
+    {
+        m_floatColorBleeding[i] += colorBleeding;
+    }
 }
 
 }

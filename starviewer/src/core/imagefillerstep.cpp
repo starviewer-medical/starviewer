@@ -202,9 +202,13 @@ bool ImageFillerStep::fillCommonImageInformation(Image *image, DICOMTagReader *d
                 QStringList list;
                 list = spacing.split("\\");
                 if (list.size() == 2)
+                {
                     image->setPixelSpacing(list.at(0).toDouble(), list.at(1).toDouble());
+                }
                 else
+                {
                     DEBUG_LOG("No s'ha trobat cap valor de pixel spacing definit de forma estàndar esperada.");
+                }
             }
         }
     }
@@ -959,7 +963,10 @@ QString ImageFillerStep::mapDirectionCosinesToOrientationString(double vector[3]
             *optr++= orientationZ;
             absZ = 0;
         }
-        else break;
+        else
+        {
+            break;
+        }
         *optr='\0';
     }
     return QString(orientation);

@@ -49,10 +49,16 @@ DicomMask ParseXmlRisPIERRequest::parseXml(QString xmlRisPIERRequest)
                 xmlReader->readNext();
             }
         }
-        else xmlReader->readNext();
+        else
+        {
+            xmlReader->readNext();
+        }
     }
 
-    if (xmlReader->error()) ERROR_LOG("S'ha produït un error parsejant el Xml: " + xmlReader->errorString());
+    if (xmlReader->error())
+    {
+        ERROR_LOG("S'ha produït un error parsejant el Xml: " + xmlReader->errorString());
+    }
 
     return mask;
 }
@@ -89,7 +95,10 @@ void ParseXmlRisPIERRequest::parseTagMsg(QXmlStreamReader *xmlReader, DicomMask 
                 xmlReader->readNext();
             }
         }
-        else xmlReader->readNext();
+        else
+        {
+            xmlReader->readNext();
+        }
     }
 }
 

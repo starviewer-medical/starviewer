@@ -23,21 +23,30 @@ void LocalDatabaseImageDAL::insert(Image *newImage)
 {
     m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlInsert(newImage)), 0, 0, 0);
 
-    if (getLastError() != SQLITE_OK) logError(buildSqlInsert(newImage));
+    if (getLastError() != SQLITE_OK)
+    {
+        logError(buildSqlInsert(newImage));
+    }
 }
 
 void LocalDatabaseImageDAL::del(const DicomMask &imageMaskToDelete)
 {
     m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlDelete(imageMaskToDelete)), 0, 0, 0);
 
-    if (getLastError() != SQLITE_OK) logError(buildSqlDelete(imageMaskToDelete));
+    if (getLastError() != SQLITE_OK)
+    {
+        logError(buildSqlDelete(imageMaskToDelete));
+    }
 }
 
 void LocalDatabaseImageDAL::update(Image *imageToUpdate)
 {
     m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlUpdate(imageToUpdate)), 0, 0, 0);
 
-    if (getLastError() != SQLITE_OK) logError(buildSqlUpdate(imageToUpdate));
+    if (getLastError() != SQLITE_OK)
+    {
+        logError(buildSqlUpdate(imageToUpdate));
+    }
 }
 
 QList<Image*> LocalDatabaseImageDAL::query(const DicomMask &imageMask)
@@ -301,14 +310,20 @@ QString LocalDatabaseImageDAL::buildWhereSentence(const DicomMask &imageMask)
     QString whereSentence = "";
 
     if (!imageMask.getStudyInstanceUID().isEmpty())
+    {
         whereSentence = QString("where StudyInstanceUID = '%1'").arg(DatabaseConnection::formatTextToValidSQLSyntax(imageMask.getStudyInstanceUID()));
+    }
 
     if (!imageMask.getSeriesInstanceUID().isEmpty())
     {
         if (whereSentence.isEmpty())
+        {
             whereSentence = "where";
+        }
         else
+        {
             whereSentence += " and ";
+        }
 
         whereSentence += QString(" SeriesInstanceUID = '%1'").arg(DatabaseConnection::formatTextToValidSQLSyntax(imageMask.getSeriesInstanceUID()));
     }
@@ -316,9 +331,13 @@ QString LocalDatabaseImageDAL::buildWhereSentence(const DicomMask &imageMask)
     if (!imageMask.getSOPInstanceUID().isEmpty())
     {
         if (whereSentence.isEmpty())
+        {
             whereSentence = "where";
+        }
         else
+        {
             whereSentence += " and ";
+        }
 
         whereSentence += QString(" SOPInstanceUID = '%1'").arg(DatabaseConnection::formatTextToValidSQLSyntax(imageMask.getSOPInstanceUID()));
     }
@@ -361,9 +380,13 @@ double* LocalDatabaseImageDAL::getImageOrientationPatientAsDouble(const QString 
     for (int index = 0; index < 6; index++)
     {
         if (list.size() == 6)
+        {
             m_imageOrientationPatient[index] = list.at(index).toDouble();
+        }
         else
+        {
             m_imageOrientationPatient[index] = 0;
+        }
     }
 
     return m_imageOrientationPatient;
@@ -390,9 +413,13 @@ double* LocalDatabaseImageDAL::getPatientPositionAsDouble(const QString &patient
     for (int index = 0; index < 3; index++)
     {
         if (list.size() == 3)
+        {
             m_patientPosition[index] = list.at(index).toDouble();
+        }
         else
+        {
             m_patientPosition[index] = 0;
+        }
     }
 
     return m_patientPosition;

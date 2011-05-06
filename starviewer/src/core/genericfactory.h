@@ -49,8 +49,7 @@ namespace udg {
 */
 
 template <class BaseClass, typename ClassIdentifier, class ParentType = QObject>
-class GenericFactory
-{
+class GenericFactory {
     typedef BaseClass* (*BaseClassCreateFunction)(ParentType*);
     typedef std::map<ClassIdentifier, BaseClassCreateFunction> FunctionRegistry;
 

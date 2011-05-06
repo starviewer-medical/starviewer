@@ -8,12 +8,10 @@ class DVPSStoredPrint;
 class DVPresentationState;
 class DVPSAnnotationContent_PList;
 
-namespace udg
-{
+namespace udg {
 class Image;
 
-class CreateDicomPrintSpool
-{
+class CreateDicomPrintSpool {
 public:
 
     enum CreateDicomPrintSpoolError { ErrorLoadingImageToPrint, ErrorCreatingImageSpool, Ok };
