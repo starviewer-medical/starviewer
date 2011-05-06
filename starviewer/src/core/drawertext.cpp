@@ -56,7 +56,18 @@ vtkProp* DrawerText::getAsVtkProp()
         m_vtkActor = vtkCaptionActor2D::New();
 
         // Assignem el text
-        m_vtkActor->SetCaption(qPrintable(m_text));
+        if (!m_text.isEmpty())
+        {
+            m_vtkActor->SetCaption(qPrintable(m_text));
+            if (m_isVisible)
+            {
+                m_vtkActor->VisibilityOn();
+            }
+        }
+        else
+        {
+            m_vtkActor->VisibilityOff();
+        }
 
         // Assignem la posició en pantalla
         m_vtkActor->SetAttachmentPoint(m_attachPoint);
@@ -85,7 +96,18 @@ void DrawerText::updateVtkProp()
     if (m_vtkActor)
     {
         // Assignem el text
-        m_vtkActor->SetCaption(qPrintable(m_text));
+        if (!m_text.isEmpty())
+        {
+            m_vtkActor->SetCaption(qPrintable(m_text));
+            if (m_isVisible)
+            {
+                m_vtkActor->VisibilityOn();
+            }
+        }
+        else
+        {
+            m_vtkActor->VisibilityOff();
+        }
         // Assignem la posició en pantalla
         m_vtkActor->SetAttachmentPoint(m_attachPoint);
         updateVtkActorProperties();
