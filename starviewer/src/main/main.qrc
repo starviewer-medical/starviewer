@@ -123,5 +123,6 @@
         <file>images/clippingBox.png</file>
         <file>xmlSchemes/DICOMDumpDefaultTags.xml</file>
         <file>xmlSchemes/CustomWindowLevels.xml</file>
+        <file>images/magictool.png</file>
     </qresource>
 </RCC>
