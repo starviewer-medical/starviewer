@@ -35,8 +35,7 @@ MagicTool::MagicTool(QViewer *viewer, QObject *parent)
     // ens assegurem que desde la creació tenim un viewer vàlid
     Q_ASSERT(m_2DViewer);
 
-    //TODO: Buscar una icona nova!!
-    m_2DViewer->setCursor(QCursor(QPixmap(":/images/repeat.png")));
+    m_2DViewer->setCursor(QCursor(QPixmap(":/images/magictool.png")));
     this->initialize();
 }
 
