@@ -17,6 +17,7 @@ const long double MathTools::PiNumberDivBy2Long = 1.5707963267948966192313216916
 const double MathTools::Epsilon = 1E-9;
 const double MathTools::DegreesToRadiansAsDouble = 0.017453292519943295;
 const double MathTools::RadiansToDegreesAsDouble = 57.29577951308232;
+// TODO Potser seria més conevnient fer servir std::numeric_limits<double>::max(). Caldria incloure <limits>
 const double MathTools::DoubleMaximumValue = VTK_DOUBLE_MAX;
 
 double MathTools::logTwo(const double x, const bool zero)
