@@ -2,7 +2,6 @@
 
 #include "transferfunctioneditorcommands.h"
 
-#include <QPointF>
 #include <QUndoStack>
 
 namespace udg {
@@ -229,7 +228,7 @@ void TransferFunctionEditor::changeScalarOpacityPoint(double x, double opacity)
     }
 }
 
-void TransferFunctionEditor::moveAndChangeScalarOpacityPoints(const QList< QPair<double, QPointF> > &moves)
+void TransferFunctionEditor::moveAndChangeScalarOpacityPoints(const QList< QPair< double, QPair<double, double> > > &moves)
 {
     if (moves.isEmpty())
     {
@@ -239,7 +238,7 @@ void TransferFunctionEditor::moveAndChangeScalarOpacityPoints(const QList< QPair
     // Recorrem els moviments per apuntar els punts que hem d'esborrar i els que hem d'afegir
     QList<double> removes;
     removes.reserve(moves.size());
-    QList<QPointF> adds;
+    QList< QPair<double, double> > adds;
     adds.reserve(moves.size());
     for (int i = 0; i < moves.size(); i++)
     {
@@ -264,7 +263,7 @@ void TransferFunctionEditor::moveAndChangeScalarOpacityPoints(const QList< QPair
     }
     for (int i = 0; i < adds.size(); i++)   // afegim punts
     {
-        addScalarOpacityPoint(adds.at(i).x(), adds.at(i).y());
+        addScalarOpacityPoint(adds.at(i).first, adds.at(i).second);
     }
     m_undoStack->endMacro();
 }
@@ -332,7 +331,7 @@ void TransferFunctionEditor::changeGradientOpacityPoint(double y, double opacity
     }
 }
 
-void TransferFunctionEditor::moveAndChangeGradientOpacityPoints(const QList< QPair<double, QPointF> > &moves)
+void TransferFunctionEditor::moveAndChangeGradientOpacityPoints(const QList< QPair< double, QPair<double, double> > > &moves)
 {
     if (moves.isEmpty())
     {
@@ -342,7 +341,7 @@ void TransferFunctionEditor::moveAndChangeGradientOpacityPoints(const QList< QPa
     // Recorrem els moviments per apuntar els punts que hem d'esborrar i els que hem d'afegir
     QList<double> removes;
     removes.reserve(moves.size());
-    QList<QPointF> adds;
+    QList< QPair<double, double> > adds;
     adds.reserve(moves.size());
     for (int i = 0; i < moves.size(); i++)
     {
@@ -367,7 +366,7 @@ void TransferFunctionEditor::moveAndChangeGradientOpacityPoints(const QList< QPa
     }
     for (int i = 0; i < adds.size(); i++)   // afegim punts
     {
-        addGradientOpacityPoint(adds.at(i).x(), adds.at(i).y());
+        addGradientOpacityPoint(adds.at(i).first, adds.at(i).second);
     }
     m_undoStack->endMacro();
 }

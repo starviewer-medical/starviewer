@@ -7,7 +7,6 @@
 
 #include <QPair>
 
-class QPointF;
 class QUndoStack;
 
 namespace udg {
@@ -68,7 +67,7 @@ public slots:
     /// Canvia l'opacitat escalar d'un punt. Si no existeix no fa res.
     void changeScalarOpacityPoint(double x, double opacity);
     /// Mou i canvia l'opacitat escalar de diversos punts alhora. La llista de moviments té el format [(x1, (x2,o2)), ...].
-    void moveAndChangeScalarOpacityPoints(const QList< QPair<double, QPointF> > &moves);
+    void moveAndChangeScalarOpacityPoints(const QList< QPair< double, QPair<double, double> > > &moves);
 
     /// Afegeix un punt d'opacitat del gradient. Si ja existeix un punt d'opacitat del gradient a x li canvia l'opacitat.
     void addGradientOpacityPoint(double y, double opacity);
@@ -80,7 +79,7 @@ public slots:
     /// Canvia l'opacitat del gradient d'un punt. Si no existeix no fa res.
     void changeGradientOpacityPoint(double y, double opacity);
     /// Mou i canvia l'opacitat del gradient de diversos punts alhora. La llista de moviments té el format [(y1, (y2,o2)), ...].
-    void moveAndChangeGradientOpacityPoints(const QList< QPair<double, QPointF> > &moves);
+    void moveAndChangeGradientOpacityPoints(const QList< QPair< double, QPair<double, double> > > &moves);
 
     /// Desfà l'última edició feta.
     void redo();
