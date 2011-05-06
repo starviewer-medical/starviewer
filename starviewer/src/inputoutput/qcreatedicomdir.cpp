@@ -651,6 +651,8 @@ void QCreateDicomdir::openBurningApplication(bool createIsoResult)
         ERROR_LOG("Error al crear ISO amb descripció: " + m_isoImageFileCreator->getLastErrorDescription());
     }
     delete m_isoImageFileCreator;
+    // Un cop acabada l'acció de gravar, esborrem el directori temporal
+    clearTemporaryDICOMDIRPath();
     QApplication::restoreOverrideCursor();
 }
 
