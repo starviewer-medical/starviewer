@@ -34,6 +34,7 @@ public slots:
 
     /// Assigna la funció de transferència.
     void setTransferFunction(const TransferFunction &transferFunction);
+
     /// Assigna el nom de la funció de transferència.
     void setName(const QString &name);
     /// Assigna la funció de transferència de color.
@@ -42,6 +43,7 @@ public slots:
     void setScalarOpacityTransferFunction(const OpacityTransferFunction &scalarOpacityTransferFunction);
     /// Assigna la funció de transferència d'opacitat del gradient.
     void setGradientOpacityTransferFunction(const OpacityTransferFunction &gradientOpacityTransferFunction);
+
     /// Afegeix un punt de color. Si ja existeix un punt de color a x li canvia el color.
     void addColorPoint(double x, const QColor &color);
     /// Esborra un punt de color. Si no existeix no fa res.
@@ -52,6 +54,7 @@ public slots:
     void moveColorPoints(const QList<double> &origins, double offset);
     /// Canvia el color d'un punt. Si no existeix no fa res.
     void changeColorPoint(double x, const QColor &color);
+
     /// Afegeix un punt d'opacitat escalar. Si ja existeix un punt d'opacitat escalar a x li canvia l'opacitat.
     void addScalarOpacityPoint(double x, double opacity);
     /// Esborra un punt d'opacitat escalar. Si no existeix no fa res.
@@ -63,6 +66,7 @@ public slots:
     void moveScalarOpacityPoints(const QList<double> &origins, double offset);
     /// Canvia l'opacitat escalar d'un punt. Si no existeix no fa res.
     void changeScalarOpacityPoint(double x, double opacity);
+
     /// Afegeix un punt d'opacitat del gradient. Si ja existeix un punt d'opacitat del gradient a x li canvia l'opacitat.
     void addGradientOpacityPoint(double y, double opacity);
     /// Esborra un punt d'opacitat del gradient. Si no existeix no fa res.
