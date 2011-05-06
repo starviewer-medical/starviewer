@@ -77,12 +77,6 @@ private:
     /// Mètode intern per transformar les propietats de la primitiva a propietats de vtk
     void updateVtkActorProperties();
 
-    /// Ens diu  si point es correnspon amb algun dels dos punts que formen un determinat segment de la polilínia
-    bool isPointIncludedInLineBounds(double point[3], double *p1, double *p2);
-
-    /// Mètode que intercanvia els punts de sentit antihorari a horari
-    void swap();
-
 private:
     /// Llista de punts de la polilínia
     QList<double *> m_pointsList;

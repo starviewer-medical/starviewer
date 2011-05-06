@@ -191,14 +191,6 @@ int DrawerPolyline::getNumberOfPoints()
     return m_pointsList.count();
 }
 
-void DrawerPolyline::swap()
-{
-    for (int i = 0; i < (int)(m_pointsList.count() / 2); i++)
-    {
-        m_pointsList.swap(i, (m_pointsList.count() - 1) - i);
-    }
-}
-
 double DrawerPolyline::getDistanceToPoint(double *point3D, double closestPoint[3])
 {
     double minimumDistanceFound = MathTools::DoubleMaximumValue;
@@ -228,13 +220,6 @@ double DrawerPolyline::getDistanceToPoint(double *point3D, double closestPoint[3
     }
 
     return minimumDistanceFound;
-}
-
-bool DrawerPolyline::isPointIncludedInLineBounds(double point[3], double *lineP1, double *lineP2)
-{
-    double range = 10.0;
-
-    return (MathTools::getDistance3D(point, lineP1) <= range || MathTools::getDistance3D(point, lineP2) <= range);
 }
 
 void DrawerPolyline::getBounds(double bounds[6])
