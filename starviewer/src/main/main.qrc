@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/" >
+    <qresource prefix="/">
         <file>../core/core_ca_ES.qm</file>
         <file>../core/core_en_GB.qm</file>
         <file>../core/core_es_ES.qm</file>
@@ -58,7 +58,7 @@
         <file>images/info.png</file>
         <file>images/invertWL.png</file>
         <file>images/kinThumbnail.png</file>
-	<file>images/linePath.png</file>
+        <file>images/linePath.png</file>
         <file>images/loader.gif</file>
         <file>images/logs.png</file>
         <file>images/mip.png</file>
