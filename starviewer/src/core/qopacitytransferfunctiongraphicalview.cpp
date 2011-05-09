@@ -4,6 +4,10 @@
 #include "qopacitytransferfunctiongraphicalviewline.h"
 #include "qopacitytransferfunctiongraphicalviewnode.h"
 
+#include <cmath>
+
+#include <QWheelEvent>
+
 namespace udg {
 
 QOpacityTransferFunctionGraphicalView::QOpacityTransferFunctionGraphicalView(QWidget *parent)
@@ -79,6 +83,20 @@ void QOpacityTransferFunctionGraphicalView::setOpacityTransferFunction(const Opa
     }
 
     fitInView(rect);
+}
+
+void QOpacityTransferFunctionGraphicalView::wheelEvent(QWheelEvent *event)
+{
+    double scale = pow(2.0, event->delta() / 240.0);
+
+    if (event->modifiers().testFlag(Qt::ShiftModifier)) // zoom vertical
+    {
+        this->scale(1.0, scale);
+    }
+    else    // zoom horitzontal
+    {
+        this->scale(scale, 1.0);
+    }
 }
 
 void QOpacityTransferFunctionGraphicalView::fitInView(const QRectF &rect)
