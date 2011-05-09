@@ -58,7 +58,7 @@ private:
     void clearSeriesModality();
 
     ///S'executa quan es mostra el widget, fa que la primera vegada que es mostri es doni el focus al lineEdit PatientName
-    void showEvent(QShowEvent * event);
+    void showEvent(QShowEvent *event);
 
 private:
 

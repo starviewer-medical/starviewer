@@ -103,7 +103,7 @@ void QInputOutputLocalDatabaseWidget::createContextMenuQStudyTreeWidget()
 }
 
 //TODO s'hauria buscar una manera més elegant de comunicar les dos classes, fer un singletton de QCreateDicomdir ?
-void QInputOutputLocalDatabaseWidget::setQCreateDicomdir(QCreateDicomdir * qcreateDicomdir)
+void QInputOutputLocalDatabaseWidget::setQCreateDicomdir(QCreateDicomdir *qcreateDicomdir)
 {
     m_qcreateDicomdir = qcreateDicomdir;
 }
@@ -123,7 +123,7 @@ void QInputOutputLocalDatabaseWidget::setPacsManager(PacsManager *pacsManager)
 void QInputOutputLocalDatabaseWidget::queryStudy(DicomMask queryMask)
 {
     LocalDatabaseManager localDatabaseManager;
-    QList<Patient *> patientStudyList;
+    QList<Patient*> patientStudyList;
 
     StatsWatcher::log("Cerca d'estudis a la base de dades local amb paràmetres: " + queryMask.getFilledMaskFields());
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
@@ -259,7 +259,7 @@ void QInputOutputLocalDatabaseWidget::setSeriesToSeriesListWidget()
 
     m_seriesListWidget->clear();
 
-    foreach (Series* series, seriesList)
+    foreach (Series *series, seriesList)
     {
         m_seriesListWidget->insertSeries(studyInstanceUID, series);
     }
@@ -340,7 +340,7 @@ void QInputOutputLocalDatabaseWidget::view(QStringList selectedStudiesInstanceUI
 {
     DicomMask patientToProcessMask;
     Patient *patient;
-    QList<Patient *> selectedPatientsList;
+    QList<Patient*> selectedPatientsList;
 
     if (selectedStudiesInstanceUID.isEmpty())
     {
@@ -422,7 +422,7 @@ void QInputOutputLocalDatabaseWidget::addSelectedStudiesToCreateDicomdirList()
     DicomMask studyMask;
     LocalDatabaseManager localDatabaseManager;
     QList<Patient*> patientList;
-    QList<Study *> studies;
+    QList<Study*> studies;
 
     foreach (QString studyUID, m_studyTreeWidget->getSelectedStudiesUID())
     {

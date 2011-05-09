@@ -20,13 +20,13 @@ DistanceTool::DistanceTool(QViewer *viewer, QObject *parent)
     m_toolName = "DistanceTool";
     m_hasSharedData = false;
 
-    m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
+    m_2DViewer = qobject_cast<Q2DViewer*>(viewer);
     if (!m_2DViewer)
     {
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ")+ viewer->metaObject()->className());
     }
 
-    connect(m_2DViewer, SIGNAL(volumeChanged(Volume *)), SLOT(initialize()));
+    connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(initialize()));
     initialize();
 }
 
@@ -99,7 +99,7 @@ void DistanceTool::annotateNewPoint()
         m_line->update();
 
         // Posem el text
-        DrawerText * text = new DrawerText;
+        DrawerText *text = new DrawerText;
         // HACK Comprovem si l'imatge té pixel spacing per saber si la mesura ha d'anar en píxels o mm
         // TODO Proporcionar algun mètode alternatiu per no haver d'haver de fer aquest hack
         double *vtkSpacing = m_2DViewer->getInput()->getSpacing();

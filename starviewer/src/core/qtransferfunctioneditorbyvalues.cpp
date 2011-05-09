@@ -9,18 +9,18 @@
 
 namespace udg {
 
-QTransferFunctionEditorByValues::QTransferFunctionEditorByValues(QWidget * parent)
+QTransferFunctionEditorByValues::QTransferFunctionEditorByValues(QWidget *parent)
     : QTransferFunctionEditor(parent)
 {
     setupUi(this);
 
     // Creem una scroll area per si hi ha molts intervals (no es pot crear des del Qt Designer)
 
-    QScrollArea * scrollArea = new QScrollArea(this);
-    qobject_cast<QBoxLayout *>(this->layout())->insertWidget(1, scrollArea);
+    QScrollArea *scrollArea = new QScrollArea(this);
+    qobject_cast<QBoxLayout*>(this->layout())->insertWidget(1, scrollArea);
 
     m_intervalEditorsWidget = new QWidget(scrollArea);
-    QBoxLayout * layout = new QVBoxLayout(m_intervalEditorsWidget);
+    QBoxLayout *layout = new QVBoxLayout(m_intervalEditorsWidget);
     m_intervalEditorsLayout = new QVBoxLayout();
     layout->addLayout(m_intervalEditorsLayout);
     layout->addStretch();
@@ -65,8 +65,8 @@ void QTransferFunctionEditorByValues::setMaximum(unsigned short maximum)
     QTransferFunctionEditor::setMaximum(maximum);
 
     QList<QTransferFunctionIntervalEditor *> intervalList =
-        m_intervalEditorsWidget->findChildren<QTransferFunctionIntervalEditor *>();
-    QTransferFunctionIntervalEditor * interval;
+        m_intervalEditorsWidget->findChildren<QTransferFunctionIntervalEditor*>();
+    QTransferFunctionIntervalEditor *interval;
     foreach (interval, intervalList)
     {
         interval->setMaximum(m_maximum);
@@ -90,10 +90,10 @@ void QTransferFunctionEditorByValues::setTransferFunction(const TransferFunction
         removeInterval();
     }
 
-    QTransferFunctionIntervalEditor * current =
-            m_intervalEditorsWidget->findChild<QTransferFunctionIntervalEditor *>("interval0");
+    QTransferFunctionIntervalEditor *current =
+            m_intervalEditorsWidget->findChild<QTransferFunctionIntervalEditor*>("interval0");
     // sempre tindrem a punt el següent (per evitar restriccions amb els valors)
-    QTransferFunctionIntervalEditor * next = addIntervalAndReturnIt();
+    QTransferFunctionIntervalEditor *next = addIntervalAndReturnIt();
 
     QList<double> points = transferFunction.keys();
     bool lastIsInterval = false;
@@ -147,9 +147,9 @@ const TransferFunction & QTransferFunctionEditorByValues::getTransferFunction() 
 
         m_transferFunction.setName(m_nameLineEdit->text());
 
-        QList<QTransferFunctionIntervalEditor *> intervalList =
-                m_intervalEditorsWidget->findChildren<QTransferFunctionIntervalEditor *>();
-        QTransferFunctionIntervalEditor * interval;
+        QList<QTransferFunctionIntervalEditor*> intervalList =
+                m_intervalEditorsWidget->findChildren<QTransferFunctionIntervalEditor*>();
+        QTransferFunctionIntervalEditor *interval;
         foreach (interval, intervalList)
         {
             m_transferFunction.set(interval->start(), interval->color(), interval->color().alphaF());
@@ -179,14 +179,14 @@ void QTransferFunctionEditorByValues::removeInterval()
 
     m_numberOfIntervals--;
 
-    QTransferFunctionIntervalEditor * last =
-            m_intervalEditorsWidget->findChild<QTransferFunctionIntervalEditor *>(
+    QTransferFunctionIntervalEditor *last =
+            m_intervalEditorsWidget->findChild<QTransferFunctionIntervalEditor*>(
             QString("interval%1").arg(m_numberOfIntervals));
     last->setParent(0);
     delete last;
 
-    QTransferFunctionIntervalEditor * beforeLast =
-            m_intervalEditorsWidget->findChild<QTransferFunctionIntervalEditor *>(
+    QTransferFunctionIntervalEditor *beforeLast =
+            m_intervalEditorsWidget->findChild<QTransferFunctionIntervalEditor*>(
             QString("interval%1").arg(m_numberOfIntervals - 1));
     beforeLast->setIsLast(true);
 
@@ -200,10 +200,10 @@ QTransferFunctionIntervalEditor * QTransferFunctionEditorByValues::addIntervalAn
         return 0;
     }
 
-    QTransferFunctionIntervalEditor * last =
-            m_intervalEditorsWidget->findChild<QTransferFunctionIntervalEditor *>(
+    QTransferFunctionIntervalEditor *last =
+            m_intervalEditorsWidget->findChild<QTransferFunctionIntervalEditor*>(
             QString("interval%1").arg(m_numberOfIntervals - 1));
-    QTransferFunctionIntervalEditor * afterLast
+    QTransferFunctionIntervalEditor *afterLast
             = new QTransferFunctionIntervalEditor(m_intervalEditorsWidget);
     afterLast->setMaximum(m_maximum);
 

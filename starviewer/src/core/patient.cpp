@@ -171,12 +171,12 @@ Series *Patient::getSeries(const QString &uid)
     return result;
 }
 
-QList<Series *> Patient::getSelectedSeries()
+QList<Series*> Patient::getSelectedSeries()
 {
-    QList<Series *> selectedSeries;
+    QList<Series*> selectedSeries;
     foreach (Study *study, m_studiesSet)
     {
-        QList<Series *> list = study->getSelectedSeries();
+        QList<Series*> list = study->getSelectedSeries();
         if (!list.empty())
         {
             selectedSeries << list;
@@ -187,10 +187,10 @@ QList<Series *> Patient::getSelectedSeries()
 
 bool Patient::hasFile(const QString &filename)
 {
-    QList<Study *> studyList = this->getStudies();
+    QList<Study*> studyList = this->getStudies();
     foreach (Study *study, studyList)
     {
-        QList<Series *> seriesList = study->getSeries();
+        QList<Series*> seriesList = study->getSeries();
         foreach (Series *series, seriesList)
         {
             if (series->getImagesPathList().contains(filename))
@@ -241,7 +241,7 @@ Patient Patient::operator +(const Patient &patient)
     result.m_studiesSet = this->m_studiesSet;
 
     // Ara recorrem els estudis que té "l'altre pacient" per afegir-los al resultat si no els té ja
-    QList<Study *> studyListToAdd = patient.getStudies();
+    QList<Study*> studyListToAdd = patient.getStudies();
     foreach (Study *study, studyListToAdd)
     {
         // TODO al tanto! potser hi ha problemes ja que l'addStudy li assigna el parentPatient!
@@ -262,7 +262,7 @@ Patient Patient::operator +=(const Patient &patient)
     patientFusionLogMessage(patient);
 
     // Recorrem els estudis que té "l'altre pacient" per afegir-los al resultat (aquesta mateixa instància) si no els té ja
-    QList<Study *> studyListToAdd = patient.getStudies();
+    QList<Study*> studyListToAdd = patient.getStudies();
     QString uid;
     foreach (Study *study, studyListToAdd)
     {
@@ -277,7 +277,7 @@ Patient Patient::operator +=(const Patient &patient)
         {
             // És el mateix estudi, però podria ser que tingués sèries noves
             // obtenim les series actuals
-            QList<Series *> seriesList = study->getSeries();
+            QList<Series*> seriesList = study->getSeries();
             foreach (Series *series, seriesList)
             {
                 // Si la sèrie no existeix actualment, l'afegim
@@ -373,9 +373,9 @@ QString Patient::toString() const
     return result;
 }
 
-QList<Patient *> Patient::mergePatients(QList<Patient *> patientsList)
+QList<Patient*> Patient::mergePatients(QList<Patient*> patientsList)
 {
-    QList<Patient *> resultingPatientsList;
+    QList<Patient*> resultingPatientsList;
     if (patientsList.count() == 1)
     {
         resultingPatientsList = patientsList;
@@ -387,8 +387,8 @@ QList<Patient *> Patient::mergePatients(QList<Patient *> patientsList)
         // la llista de fusió i no ho fem i tornem a comprovar
         // TODO millorar l'algorisme de fusió dins de la llista
 
-        QSet<Patient *> patientSet = patientsList.toSet();
-        QMutableSetIterator<Patient *> setIterator(patientSet);
+        QSet<Patient*> patientSet = patientsList.toSet();
+        QMutableSetIterator<Patient*> setIterator(patientSet);
         while (setIterator.hasNext())
         {
             // Agafem el primer element del conjunt i el treiem
@@ -431,10 +431,10 @@ void Patient::setSelectedSeries(const QString &selectedSeriesUID)
     }
     else
     {
-        QList<Study *> studyList = this->getStudies();
+        QList<Study*> studyList = this->getStudies();
         if (!studyList.isEmpty())
         {
-            QList<Series *> seriesList = studyList.first()->getSeries();
+            QList<Series*> seriesList = studyList.first()->getSeries();
             if (!seriesList.isEmpty())
             {
                 seriesList.first()->select();

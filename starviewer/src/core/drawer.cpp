@@ -65,7 +65,7 @@ void Drawer::draw(DrawerPrimitive *primitive, int plane, int slice)
     vtkProp *prop = primitive->getAsVtkProp();
     if (prop)
     {
-        connect(primitive, SIGNAL(dying(DrawerPrimitive *)), SLOT(erasePrimitive(DrawerPrimitive *)));
+        connect(primitive, SIGNAL(dying(DrawerPrimitive*)), SLOT(erasePrimitive(DrawerPrimitive *)));
         m_2DViewer->getRenderer()->AddViewProp(prop);
         if (primitive->isVisible())
         {

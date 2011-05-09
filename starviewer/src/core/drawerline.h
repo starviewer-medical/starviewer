@@ -37,7 +37,7 @@ public:
     double* getSecondPoint();
 
     /// Calcula la distancia entre punt i punt
-    double computeDistance(double * spacing = NULL);
+    double computeDistance(double *spacing = NULL);
 
     /// Calcula la distància que té respecte al punt passat per paràmetre
     double getDistanceToPoint(double *point3D, double closestPoint[3]);

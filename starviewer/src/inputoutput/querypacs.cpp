@@ -26,13 +26,13 @@ QueryPacs::QueryPacs(PacsDevice pacsDevice)
     m_pacsDevice = pacsDevice;
 }
 
-void QueryPacs::foundMatchCallback(void * callbackData, T_DIMSE_C_FindRQ * request, int responseCount, T_DIMSE_C_FindRSP *rsp,
+void QueryPacs::foundMatchCallback(void *callbackData, T_DIMSE_C_FindRQ *request, int responseCount, T_DIMSE_C_FindRSP *rsp,
     DcmDataset *responseIdentifiers)
 {
     Q_UNUSED(rsp);
     Q_UNUSED(responseCount);
 
-    QueryPacs* queryPacsCaller = (QueryPacs*)callbackData;
+    QueryPacs *queryPacsCaller = (QueryPacs*)callbackData;
 
     if (queryPacsCaller->m_cancelQuery)
     {

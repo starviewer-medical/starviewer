@@ -14,7 +14,7 @@ TransDifferenceToolData::~TransDifferenceToolData()
 {
 }
 
-void TransDifferenceToolData::setInputVolume(Volume* input)
+void TransDifferenceToolData::setInputVolume(Volume *input)
 {
     m_inputVolume = input;
     //Quan canviem l'input cal invalidar el volum diferència
@@ -23,7 +23,7 @@ void TransDifferenceToolData::setInputVolume(Volume* input)
     m_sliceTranslations = QVector<QPair<int, int> >(m_inputVolume->getDimensions()[2], QPair<int, int>(0, 0));
 }
 
-void TransDifferenceToolData::setDifferenceVolume(Volume* input)
+void TransDifferenceToolData::setDifferenceVolume(Volume *input)
 {
     m_differenceVolume = input;
 }

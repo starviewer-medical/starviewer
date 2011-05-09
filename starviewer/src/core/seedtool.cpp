@@ -19,7 +19,7 @@ SeedTool::SeedTool(QViewer *viewer, QObject *parent) : Tool(viewer, parent)
 
     m_myData = new SeedToolData;
 
-    m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
+    m_2DViewer = qobject_cast<Q2DViewer*>(viewer);
     if (!m_2DViewer)
     {
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ") + viewer->metaObject()->className());
@@ -62,7 +62,7 @@ void SeedTool::setToolData(ToolData * data)
     {
         // creem de nou les dades
         m_toolData = data;
-        m_myData = qobject_cast<SeedToolData *>(data);
+        m_myData = qobject_cast<SeedToolData*>(data);
         //si tenim dades vol dir que ja hem pintat abans la seed si el volume ha canviat
         if (m_2DViewer->getInput() != m_myData->getVolume())
         {

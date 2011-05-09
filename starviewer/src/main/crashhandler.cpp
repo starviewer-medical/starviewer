@@ -22,7 +22,7 @@
 #include <string>
 #include <iostream>
 
-bool launchCrashReporter(const char* dumpDirPath, const char* minidumpId, void* crashHandler, bool succeeded)
+bool launchCrashReporter(const char *dumpDirPath, const char *minidumpId, void *crashHandler, bool succeeded)
 {
     // DON'T USE THE HEAP!!!
     // So crashHandler indeed means, no QStrings, no qDebug(), no QAnything, seriously!
@@ -55,7 +55,7 @@ bool launchCrashReporter(const char* dumpDirPath, const char* minidumpId, void* 
 }
 
 #else
-static bool launchCrashReporter(const wchar_t* dumpDirPath, const wchar_t* minidumpId, void* crashHandler, EXCEPTION_POINTERS *exinfo,
+static bool launchCrashReporter(const wchar_t *dumpDirPath, const wchar_t *minidumpId, void *crashHandler, EXCEPTION_POINTERS *exinfo,
                                 MDRawAssertionInfo *assertion, bool succeeded)
 {
     if (!succeeded)
@@ -66,12 +66,12 @@ static bool launchCrashReporter(const wchar_t* dumpDirPath, const wchar_t* minid
     // DON'T USE THE HEAP!!!
     // So crashHandler indeed means, no QStrings, no qDebug(), no QAnything, seriously!
 
-    const char* crashReporterPath = static_cast<CrashHandler*>(crashHandler)->getCrashReporterPath();
+    const char *crashReporterPath = static_cast<CrashHandler*>(crashHandler)->getCrashReporterPath();
 
     //convert crashReporterPath to widechars, which sadly means the product name must be Latin1
     wchar_t crashReporterPathWchar[256];
-    char* out = (char*)crashReporterPathWchar;
-    const char* in = crashReporterPath - 1;
+    char *out = (char*)crashReporterPathWchar;
+    const char *in = crashReporterPath - 1;
     do
     {
         *out++ = *++in; //latin1 chars fit in first byte of each wchar
@@ -135,7 +135,7 @@ CrashHandler::CrashHandler()
 #endif //NO_CRASH_REPORTER
 }
 
-void CrashHandler::setCrashReporterPath(const char* path)
+void CrashHandler::setCrashReporterPath(const char *path)
 {
     m_crashReporterPath = path;
 }

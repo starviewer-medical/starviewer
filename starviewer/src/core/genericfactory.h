@@ -77,7 +77,7 @@ public:
      */
     BaseClass* create(const ClassIdentifier &className, ParentType* parent = 0) const
     {
-        BaseClass* theObject = NULL;
+        BaseClass *theObject = NULL;
 
         typename FunctionRegistry::const_iterator regEntry = m_registry.find(className);
 

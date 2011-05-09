@@ -17,14 +17,14 @@ public:
 
     QDicomJobCreatorWidget();
     ~QDicomJobCreatorWidget();
-    PrintJob * getPrintJob();
+    PrintJob* getPrintJob();
 
 private:
     void createConnections();
     void createActions();
 
 private:
-    PrintJob * m_printJob;
+    PrintJob *m_printJob;
 };
 }
 

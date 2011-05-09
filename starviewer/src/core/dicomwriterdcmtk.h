@@ -20,10 +20,10 @@ public:
     ~DICOMWriterDCMTK();
 
     /// Afegir un nou atribut basic al fitxer DICOM
-    virtual void addValueAttribute(DICOMValueAttribute * attribute);
+    virtual void addValueAttribute(DICOMValueAttribute *attribute);
 
     /// Afegir una sequencia al fitxer DICOM
-    virtual bool addSequenceAttribute(DICOMSequenceAttribute * attribute);
+    virtual bool addSequenceAttribute(DICOMSequenceAttribute *attribute);
 
     /// Generar el fitxer
     virtual bool write();
@@ -31,10 +31,10 @@ public:
 private:
 
     /// Genera els elements d'una seqüència
-    DcmSequenceOfItems * generateDcmSequenceOfItems(DICOMSequenceAttribute * sequenceAttribute);
+    DcmSequenceOfItems *generateDcmSequenceOfItems(DICOMSequenceAttribute * sequenceAttribute);
 
 private:
-    DcmFileFormat * m_fileFormat;
+    DcmFileFormat *m_fileFormat;
 };
 
 }

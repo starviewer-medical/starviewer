@@ -105,9 +105,9 @@ private:
 
     /// Array amb tots els viewers que podem manipular
     /// Visors dins del grid regular (distribuits dins del gridLayout)
-    QVector<Q2DViewerWidget *> m_vectorViewers;
+    QVector<Q2DViewerWidget*> m_vectorViewers;
     /// Visors definits amb geometries lliures (distribuits fora del gridLayout)
-    QList<Q2DViewerWidget *> m_freeLayoutViewersList;
+    QList<Q2DViewerWidget*> m_freeLayoutViewersList;
 
     /// Llistat de geometries que cada viewer visible té assignada
     QStringList m_geometriesList;

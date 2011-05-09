@@ -21,7 +21,7 @@ public:
     Cursor3DTool(QViewer *viewer, QObject *parent = 0);
     ~Cursor3DTool();
 
-    void setToolData(ToolData * data);
+    void setToolData(ToolData *data);
 
     void handleEvent(long unsigned eventID);
 

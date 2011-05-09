@@ -76,12 +76,12 @@ int HangingProtocolImageSet::getImageToDisplay() const
     return m_imageToDisplay;
 }
 
-void HangingProtocolImageSet::setSeriesToDisplay(Series * series)
+void HangingProtocolImageSet::setSeriesToDisplay(Series *series)
 {
     m_serieToDisplay = series;
 }
 
-Series * HangingProtocolImageSet::getSeriesToDisplay() const
+Series* HangingProtocolImageSet::getSeriesToDisplay() const
 {
     return m_serieToDisplay;
 }
@@ -117,12 +117,12 @@ bool HangingProtocolImageSet::isDownloaded()
     return m_downloaded;
 }
 
-void HangingProtocolImageSet::setPreviousStudyToDisplay(Study * study)
+void HangingProtocolImageSet::setPreviousStudyToDisplay(Study *study)
 {
     m_previousStudyToDisplay = study;
 }
 
-Study * HangingProtocolImageSet::getPreviousStudyToDisplay()
+Study* HangingProtocolImageSet::getPreviousStudyToDisplay()
 {
     return m_previousStudyToDisplay;
 }

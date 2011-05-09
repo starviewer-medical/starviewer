@@ -56,7 +56,7 @@ private slots:
 
 private:
     /// Visor passat en el constructor.
-    QViewer * m_viewer;
+    QViewer *m_viewer;
 
 };
 

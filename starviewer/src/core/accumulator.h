@@ -18,8 +18,8 @@ public:
 class AccumulatorFactory {
 public:
     enum AccumulatorType { Maximum = 0, Minimum = 1, Average = 2 };
-    template <class T> static Accumulator<T> * getAccumulator(AccumulatorType type, unsigned long size);
-    template <class T> static Accumulator<T> * getAccumulator(const QString &type, unsigned long size);
+    template <class T> static Accumulator<T>* getAccumulator(AccumulatorType type, unsigned long size);
+    template <class T> static Accumulator<T>* getAccumulator(const QString &type, unsigned long size);
 };
 
 }

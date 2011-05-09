@@ -17,7 +17,7 @@ També es pot escollir el comportament del canvi de color.
 class ItemMenu : public QFrame {
 Q_OBJECT
 public:
-    ItemMenu(QWidget * parent = 0);
+    ItemMenu(QWidget *parent = 0);
 
     ~ItemMenu();
 
@@ -44,7 +44,7 @@ signals:
 protected:
 
     /// Sobrecàrrega del mètode que tracta tots els events
-    bool event(QEvent * event);
+    bool event(QEvent *event);
 
 protected:
 

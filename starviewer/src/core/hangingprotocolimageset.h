@@ -59,10 +59,10 @@ public:
     int getImageToDisplay() const;
 
     /// Assignar la sèrie que es representa
-    void setSeriesToDisplay(Series * series);
+    void setSeriesToDisplay(Series *series);
 
     /// Obtenir la sèrie que es representa
-    Series * getSeriesToDisplay() const;
+    Series* getSeriesToDisplay() const;
 
     /// Mètode per mostrar els valors
     void show();
@@ -80,10 +80,10 @@ public:
     bool isDownloaded();
 
     /// Posa quin és l'estudi previ
-    void setPreviousStudyToDisplay(Study * study);
+    void setPreviousStudyToDisplay(Study *study);
 
     /// Obte l'estudi previ a mostrar. Pot estar descarregat o no.
-    Study * getPreviousStudyToDisplay();
+    Study* getPreviousStudyToDisplay();
 
     /// Guarda el pacs on es troba l'estudi
     void setPreviousStudyPacs(QString pacs);
@@ -117,7 +117,7 @@ private:
     QString m_typeOfItem;
 
     /// Serie que s'ajusta a les restriccions
-    Series * m_serieToDisplay;
+    Series *m_serieToDisplay;
 
     /// Número d'imatge a mostrar, es coneix aquest número un cop
     // trobada la imatge que compleix les restriccions
@@ -134,7 +134,7 @@ private:
     bool m_downloaded;
 
     /// Estudi previ a l'image set, sense descarregar
-    Study * m_previousStudyToDisplay;
+    Study *m_previousStudyToDisplay;
 
     /// Pacs origen on es troba l'estdi
     QString m_previousStudyPacs;

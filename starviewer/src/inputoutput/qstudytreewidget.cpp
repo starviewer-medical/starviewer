@@ -45,7 +45,7 @@ void QStudyTreeWidget::createConnections()
     connect(m_studyTreeView, SIGNAL(itemCollapsed(QTreeWidgetItem *)), SLOT (itemCollapsed(QTreeWidgetItem *)));
 }
 
-QTreeWidget *QStudyTreeWidget::getQTreeWidget() const
+QTreeWidget* QStudyTreeWidget::getQTreeWidget() const
 {
     return m_studyTreeView;
 }
@@ -53,7 +53,7 @@ QTreeWidget *QStudyTreeWidget::getQTreeWidget() const
 QList<DicomMask> QStudyTreeWidget::getDicomMaskOfSelectedItems()
 {
     QList<DicomMask> dicomMaskList;
-    QList<QTreeWidgetItem *> selectedItems = m_studyTreeView->selectedItems();
+    QList<QTreeWidgetItem*> selectedItems = m_studyTreeView->selectedItems();
 
     foreach (QTreeWidgetItem *item, selectedItems)
     {
@@ -101,7 +101,7 @@ void QStudyTreeWidget::insertPatientList(QList<Patient*> patientList)
     QApplication::restoreOverrideCursor();
 }
 
-void QStudyTreeWidget::insertPatient(Patient* patient)
+void QStudyTreeWidget::insertPatient(Patient *patient)
 {
     if (patient->getNumberOfStudies() > 0)
     {
@@ -331,7 +331,7 @@ QString QStudyTreeWidget::getCurrentStudyUID()
 QStringList QStudyTreeWidget::getSelectedStudiesUID()
 {
     QStringList result;
-    QList<QTreeWidgetItem *> selectedItems = m_studyTreeView->selectedItems();
+    QList<QTreeWidgetItem*> selectedItems = m_studyTreeView->selectedItems();
     foreach (QTreeWidgetItem *item, selectedItems)
     {
         if (isItemStudy(item)) //es un estudi
@@ -437,7 +437,7 @@ QTreeWidgetItem* QStudyTreeWidget::getStudyQTreeWidgetItem(QString studyUID)
 
 QTreeWidgetItem* QStudyTreeWidget::getSeriesQTreeWidgetItem(QString studyInstanceUID, QString seriesInstanceUID)
 {
-    QTreeWidgetItem* studyItem, *item = NULL;
+    QTreeWidgetItem *studyItem, *item = NULL;
     int index = 0;
 
     studyItem = getStudyQTreeWidgetItem(studyInstanceUID);
@@ -474,7 +474,7 @@ QString QStudyTreeWidget::getCurrentImageUID()
 
 void QStudyTreeWidget::removeStudy(QString studyInstanceUIDToRemove)
 {
-    QList<QTreeWidgetItem *> qStudyList(m_studyTreeView->findItems(studyInstanceUIDToRemove, Qt::MatchExactly, UID));
+    QList<QTreeWidgetItem*> qStudyList(m_studyTreeView->findItems(studyInstanceUIDToRemove, Qt::MatchExactly, UID));
     QTreeWidgetItem *item;
     int indexOfStudy = 0;
 
@@ -540,7 +540,7 @@ void QStudyTreeWidget::sort()
     m_studyTreeView->sortItems(m_studyTreeView->sortColumn(), Qt::AscendingOrder);
 }
 
-void QStudyTreeWidget::setContextMenu(QMenu * contextMenu)
+void QStudyTreeWidget::setContextMenu(QMenu *contextMenu)
 {
     m_contextMenu = contextMenu;
 }
@@ -553,7 +553,7 @@ void QStudyTreeWidget::contextMenuEvent(QContextMenuEvent *event)
     }
 }
 
-void QStudyTreeWidget::currentItemChanged(QTreeWidgetItem * current, QTreeWidgetItem *)
+void QStudyTreeWidget::currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *)
 {
     if (current != NULL)
     {
@@ -594,7 +594,7 @@ void QStudyTreeWidget::itemExpanded(QTreeWidgetItem *itemExpanded)
         /* Com que inserim un item en blanc per simular fills dels estudis i de les sèries cada vegada que ens fan un expand hem d'eliminar l'item en blanc i
         * emetem un signal per a que qui el reculli s'encarregui de fer els passos corresponents per expandir l'estudi o imatge amb el seus fills pertinents
         */
-        foreach (QTreeWidgetItem * childItem, itemExpanded->takeChildren())
+        foreach (QTreeWidgetItem *childItem, itemExpanded->takeChildren())
         {
             delete childItem;
         }

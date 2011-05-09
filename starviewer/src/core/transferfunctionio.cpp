@@ -28,7 +28,7 @@ TransferFunction * TransferFunctionIO::fromFile(QFile & file)
     }
 
     QTextStream in(&file);
-    TransferFunction * transferFunction = new TransferFunction();
+    TransferFunction *transferFunction = new TransferFunction();
     transferFunction->setName(QFileInfo(file).fileName());  // nom per defecte
     enum { NAME, COLOR, OPACITY } mode = COLOR;
 
@@ -95,7 +95,7 @@ TransferFunction * TransferFunctionIO::fromFile(QFile & file)
     return transferFunction;
 }
 
-TransferFunction * TransferFunctionIO::fromFile(const QString & fileName)
+TransferFunction* TransferFunctionIO::fromFile(const QString & fileName)
 {
     QFile file(fileName);
     return fromFile(file);

@@ -38,16 +38,16 @@ public:
         @pre Tots els inputs han de tenir el mateix extent (exceptuant l'eix de les z) i que tots els
         inputs han de tenir el mateix número de components per cada pixel.
     */
-    void addCapture(vtkImageData * data);
+    void addCapture(vtkImageData *data);
 
     /**
         Genera un nou objecte Volume a partir de les captures afegides i la sèrie generada s'assigna a l'estudi introduït.
         @pre S'ha d'haver introduit l'estudi al que volem que s'afegeixi el Volume i s'ha d'haver afegit alguna captura.
     */
-    Volume * build();
+    Volume* build();
 
     /// Afegir l'estudi al que volem que pertanyi la nova sèrie que es crearà.
-    void setParentStudy(Study * study);
+    void setParentStudy(Study *study);
 
     /**
         Assignar la modalitat que volem que tingui la sèrie tenint en compte que el SOP Class UID sempre
@@ -60,10 +60,10 @@ public:
 private:
 
     /// Object encarregat de generar el nou vtkImageData
-    vtkImageAppend * m_vtkImageAppend;
+    vtkImageAppend *m_vtkImageAppend;
 
     /// Estudi al que s'afegirà la nova sèrie que es generarà
-    Study * m_parentStudy;
+    Study *m_parentStudy;
 
     /// Modalitat que s'assignarà a la nova sèrie
     QString m_modality;

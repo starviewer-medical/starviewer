@@ -10,7 +10,7 @@
 namespace udg {
 
 template <class T>
-Accumulator<T> * AccumulatorFactory::getAccumulator(AccumulatorType type, unsigned long size)
+Accumulator<T>* AccumulatorFactory::getAccumulator(AccumulatorType type, unsigned long size)
 {
     switch (type)
     {
@@ -26,7 +26,7 @@ Accumulator<T> * AccumulatorFactory::getAccumulator(AccumulatorType type, unsign
 }
 
 template <class T>
-Accumulator<T> * AccumulatorFactory::getAccumulator(const QString &type, unsigned long size)
+Accumulator<T>* AccumulatorFactory::getAccumulator(const QString &type, unsigned long size)
 {
     if (type = "Maximum")
     {

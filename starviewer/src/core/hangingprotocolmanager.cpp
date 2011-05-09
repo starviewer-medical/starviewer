@@ -54,19 +54,19 @@ void HangingProtocolManager::copyHangingProtocolRepository()
     }
 }
 
-QList<HangingProtocol *> HangingProtocolManager::searchHangingProtocols(Patient *patient)
+QList<HangingProtocol*> HangingProtocolManager::searchHangingProtocols(Patient *patient)
 {
-    QList<Study *> previousStudies;
+    QList<Study*> previousStudies;
     QHash<QString, QString> originOfPreviousStudies;
 
     return searchHangingProtocols(patient, previousStudies, originOfPreviousStudies);
 }
 
-QList<HangingProtocol *> HangingProtocolManager::searchHangingProtocols(Patient *patient, const QList<Study *> &previousStudies, const QHash<QString, QString> &originOfPreviousStudies)
+QList<HangingProtocol*> HangingProtocolManager::searchHangingProtocols(Patient *patient, const QList<Study *> &previousStudies, const QHash<QString, QString> &originOfPreviousStudies)
 {
-    QList<HangingProtocol *> outputHangingProtocolList;
+    QList<HangingProtocol*> outputHangingProtocolList;
 
-    QList<Series *> allSeries;
+    QList<Series*> allSeries;
 
     foreach (Study *study, sortStudiesByDate(patient->getStudies()))
     {
@@ -123,11 +123,11 @@ QList<HangingProtocol *> HangingProtocolManager::searchHangingProtocols(Patient 
     return outputHangingProtocolList;
 }
 
-int HangingProtocolManager::setInputToHangingProtocolImageSets(HangingProtocol *hangingProtocol, const QList<Series *> &inputSeries, const QList<Study *> &previousStudies, const QHash<QString, QString> &originOfPreviousStudies)
+int HangingProtocolManager::setInputToHangingProtocolImageSets(HangingProtocol *hangingProtocol, const QList<Series*> &inputSeries, const QList<Study*> &previousStudies, const QHash<QString, QString> &originOfPreviousStudies)
 {
     int numberOfFilledImageSets = 0;
     // Còpia de les sèries perquè es van eliminant de la llista al ser assignades
-    QList<Series *> candidateSeries = inputSeries;
+    QList<Series*> candidateSeries = inputSeries;
 
     foreach (HangingProtocolImageSet *imageSet, hangingProtocol->getImageSets())
     {
@@ -202,7 +202,7 @@ void HangingProtocolManager::applyHangingProtocol(int hangingProtocolNumber, Vie
 {
     HangingProtocol *hangingProtocol = 0;
     bool found = false;
-    QListIterator<HangingProtocol *> iterator(m_availableHangingProtocols);
+    QListIterator<HangingProtocol*> iterator(m_availableHangingProtocols);
 
     while (!found && iterator.hasNext())
     {
@@ -282,7 +282,7 @@ bool HangingProtocolManager::isModalityCompatible(HangingProtocol *protocol, con
     return protocol->getHangingProtocolMask()->getProtocolList().contains(modality);
 }
 
-Series* HangingProtocolManager::searchSerie(QList<Series *> &listOfSeries, HangingProtocolImageSet *imageSet, bool quitStudy)
+Series* HangingProtocolManager::searchSerie(QList<Series*> &listOfSeries, HangingProtocolImageSet *imageSet, bool quitStudy)
 {
     // Si la llista és buida, el resultat de la cerca serà nul
     if (listOfSeries.isEmpty())
@@ -559,9 +559,9 @@ bool HangingProtocolManager::isValidImage(Image *image, HangingProtocolImageSet 
     return valid;
 }
 
-Study* HangingProtocolManager::searchPreviousStudy(HangingProtocol *protocol, Study *referenceStudy, const QList<Study *> &previousStudies)
+Study* HangingProtocolManager::searchPreviousStudy(HangingProtocol *protocol, Study *referenceStudy, const QList<Study*> &previousStudies)
 {
-    QList<Study *> sortedPreviousStudies = sortStudiesByDate(previousStudies);
+    QList<Study*> sortedPreviousStudies = sortStudiesByDate(previousStudies);
 
     foreach (Study *study, sortedPreviousStudies)
     {
@@ -598,7 +598,7 @@ void HangingProtocolManager::previousStudyDownloaded()
             StructPreviousStudyDownloading *structPreviousStudyDownloading = m_studiesDownloading->take(study->getInstanceUID());
 
             // Busquem la millor serie de l'estudi que ho satisfa
-            QList<Series *> studySeries = study->getSeries();
+            QList<Series*> studySeries = study->getSeries();
             Series *series = searchSerie(studySeries, structPreviousStudyDownloading->displaySet->getImageSet(), false);
 
             Q2DViewerWidget *viewerWidget = structPreviousStudyDownloading->widgetToDisplay;
@@ -628,9 +628,9 @@ void HangingProtocolManager::errorDowlonadingPreviousStudies(const QString &stud
     }
 }
 
-QList<Study *> HangingProtocolManager::sortStudiesByDate(const QList<Study *> &studies)
+QList<Study*> HangingProtocolManager::sortStudiesByDate(const QList<Study *> &studies)
 {
-    QMultiMap<long, Study *> sortedStudiesByDate;
+    QMultiMap<long, Study*> sortedStudiesByDate;
 
     foreach (Study *study, studies)
     {

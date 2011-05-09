@@ -14,12 +14,12 @@ class Q3DViewerExtensionMediator : public ExtensionMediator {
     Q_OBJECT
 public:
 
-    Q3DViewerExtensionMediator(QObject * parent = 0);
+    Q3DViewerExtensionMediator(QObject *parent = 0);
     ~Q3DViewerExtensionMediator();
 
     virtual DisplayableID getExtensionID() const;
 
-    virtual bool initializeExtension(QWidget* extension, const ExtensionContext &extensionContext);
+    virtual bool initializeExtension(QWidget *extension, const ExtensionContext &extensionContext);
 
 };
 

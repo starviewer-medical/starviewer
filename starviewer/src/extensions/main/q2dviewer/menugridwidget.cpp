@@ -120,7 +120,7 @@ void MenuGridWidget::dropContent()
     m_itemList.clear();
 }
 
-void MenuGridWidget::setHangingItems(const QList<HangingProtocol *> &listOfCandidates)
+void MenuGridWidget::setHangingItems(const QList<HangingProtocol*> &listOfCandidates)
 {
     dropContent();
     if (listOfCandidates.isEmpty())
@@ -134,7 +134,7 @@ void MenuGridWidget::setHangingItems(const QList<HangingProtocol *> &listOfCandi
     }
 }
 
-void MenuGridWidget::addHangingItems(const QList<HangingProtocol *> &items)
+void MenuGridWidget::addHangingItems(const QList<HangingProtocol*> &items)
 {
     int positionRow = 0;
     int positionColumn = 0;

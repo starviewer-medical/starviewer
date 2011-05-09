@@ -31,7 +31,7 @@ ToolManager::~ToolManager()
 void ToolManager::setViewerTools(QViewer *viewer, const QStringList &toolsList)
 {
     // Cada cop que eliminem un viewer que estem gestionant, l'haurem de "desregistrar" del ToolManager
-    connect(viewer, SIGNAL(destroyed(QObject *)), SLOT(unregisterViewer(QObject *)));
+    connect(viewer, SIGNAL(destroyed(QObject*)), SLOT(unregisterViewer(QObject *)));
     ViewerToolConfigurationPairType pair;
     pair.first = viewer;
     pair.second = NULL;
@@ -50,7 +50,7 @@ void ToolManager::setupRegisteredTools(QViewer *viewer)
 void ToolManager::setViewerTool(QViewer *viewer, const QString &toolName, ToolConfiguration *configuration)
 {
     // Cada cop que eliminem un viewer que estem gestionant, l'haurem de "desregistrar" del ToolManager
-    connect(viewer, SIGNAL(destroyed(QObject *)), SLOT(unregisterViewer(QObject *)));
+    connect(viewer, SIGNAL(destroyed(QObject*)), SLOT(unregisterViewer(QObject*)));
     ViewerToolConfigurationPairType pair;
     pair.first = viewer;
     pair.second = configuration;
@@ -118,12 +118,12 @@ void ToolManager::addExclusiveToolsGroup(const QString &groupName, const QString
     }
     // Guarrada! TODO Aixo es un workaround per poder desactivar "automaticament" les tools dins d'un mateix grup
     // Lo correcte seria plantejar be el tema dels signals mappers o fer una implementacio propia mes elaborada
-    connect(actionGroup, SIGNAL(triggered(QAction *)), SLOT(refreshConnections()));
+    connect(actionGroup, SIGNAL(triggered(QAction*)), SLOT(refreshConnections()));
 }
 
 QAction* ToolManager::registerActionTool(const QString &actionToolName)
 {
-    QPair<QAction *, QString> pair;
+    QPair<QAction*, QString> pair;
     // Si no està registrada la obtenim del registre i l'afegim al nostre map
     if (!m_actionToolRegistry.contains(actionToolName))
     {
@@ -156,7 +156,7 @@ void ToolManager::triggerTool(const QString &toolName)
 
 void ToolManager::enableActionTools(QViewer *viewer, const QStringList &actionToolsList)
 {
-    QPair<QAction *, QString> pair;
+    QPair<QAction*, QString> pair;
     foreach (const QString &actionToolName, actionToolsList)
     {
         pair = m_actionToolRegistry.value(actionToolName);
@@ -166,7 +166,7 @@ void ToolManager::enableActionTools(QViewer *viewer, const QStringList &actionTo
 
 void ToolManager::disableActionTools(QViewer *viewer, const QStringList &actionToolsList)
 {
-    QPair<QAction *, QString> pair;
+    QPair<QAction*, QString> pair;
     foreach (const QString &actionToolName, actionToolsList)
     {
         pair = m_actionToolRegistry.value(actionToolName);

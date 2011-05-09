@@ -259,9 +259,9 @@ void Q2DViewerExtension::searchPreviousStudiesWithHangingProtocols()
     }
 }
 
-void Q2DViewerExtension::addPreviousHangingProtocols(QList<Study *> studies, QHash<QString, QString> qhash)
+void Q2DViewerExtension::addPreviousHangingProtocols(QList<Study*> studies, QHash<QString, QString> qhash)
 {
-    disconnect(m_previousStudiesManager, SIGNAL(queryPreviousStudiesFinished(QList<Study *>, QHash<QString, QString>)), this, SLOT(addPreviousHangingProtocols(QList<Study *>, QHash<QString, QString>)));
+    disconnect(m_previousStudiesManager, SIGNAL(queryPreviousStudiesFinished(QList<Study*>, QHash<QString, QString>)), this, SLOT(addPreviousHangingProtocols(QList<Study*>, QHash<QString, QString>)));
 
     QList<HangingProtocol*> hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient, studies, qhash);
     m_predefinedSeriesGrid->setHangingItems(hangingCandidates);
@@ -274,7 +274,7 @@ void Q2DViewerExtension::showPredefinedGrid()
     QPoint point = m_buttonGrid->mapToGlobal(QPoint(0, 0));
     m_predefinedSeriesGrid->move(point.x(), (point.y() + m_buttonGrid->frameGeometry().height()));
 
-    QList<Study *> listStudies = m_patient->getStudies();
+    QList<Study*> listStudies = m_patient->getStudies();
     int numberOfSeries = 0;
     for (int i = 0; i < listStudies.size(); ++i)
     {
@@ -488,7 +488,7 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
 
             disconnect(m_lastSelectedViewer->getViewer(), SIGNAL(viewChanged(int)), this, SLOT(updateDICOMInformationButton(int)));
             // És necessari associar cada cop al viewer actual les associacions del menú de la tool d'screen shot
-            ScreenShotTool *screenShotTool = dynamic_cast<ScreenShotTool *>(m_lastSelectedViewer->getViewer()->getToolProxy()->getTool("ScreenShotTool"));
+            ScreenShotTool *screenShotTool = dynamic_cast<ScreenShotTool*>(m_lastSelectedViewer->getViewer()->getToolProxy()->getTool("ScreenShotTool"));
             disconnect(m_singleShotAction, SIGNAL(triggered()), screenShotTool, SLOT(singleCapture()));
             disconnect(m_multipleShotAction, SIGNAL(triggered()), screenShotTool, SLOT(completeCapture()));
             // Desactivem les "ActionTool" pel visor que acaba de deseleccionar-se
@@ -509,7 +509,7 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
             connect(viewerWidget->getViewer(), SIGNAL(viewChanged(int)), SLOT(updateDICOMInformationButton(int)));
 
             // És necessari associar cada cop al viewer actual les associacions del menú de la tool d'screen shot
-            ScreenShotTool *screenShotTool = dynamic_cast<ScreenShotTool *>(viewerWidget->getViewer()->getToolProxy()->getTool("ScreenShotTool"));
+            ScreenShotTool *screenShotTool = dynamic_cast<ScreenShotTool*>(viewerWidget->getViewer()->getToolProxy()->getTool("ScreenShotTool"));
             if (screenShotTool)
             {
                 connect(m_singleShotAction, SIGNAL(triggered()), screenShotTool, SLOT(singleCapture()));

@@ -62,7 +62,7 @@ void VolumePixelData::setData(vtkImageData *vtkImage)
 
 VolumePixelData::VoxelType* VolumePixelData::getScalarPointer(int x, int y, int z)
 {
-    return static_cast<VolumePixelData::VoxelType *>(this->getVtkData()->GetScalarPointer(x, y, z));
+    return static_cast<VolumePixelData::VoxelType*>(this->getVtkData()->GetScalarPointer(x, y, z));
 }
 
 bool VolumePixelData::computeCoordinateIndex(const double coordinate[3], int index[3])

@@ -173,7 +173,7 @@ Volume* Volume::getPhaseVolume(int index)
     return result;
 }
 
-QList<Image *> Volume::getPhaseImages(int index)
+QList<Image*> Volume::getPhaseImages(int index)
 {
     QList<Image *> phaseImages;
     if (index >= 0 && index < m_numberOfPhases)
@@ -209,14 +209,14 @@ void Volume::addImage(Image *image)
     }
 }
 
-void Volume::setImages(const QList<Image *> &imageList)
+void Volume::setImages(const QList<Image*> &imageList)
 {
     m_imageSet.clear();
     m_imageSet = imageList;
     m_volumePixelDataLoaded = false;
 }
 
-QList<Image *> Volume::getImages() const
+QList<Image*> Volume::getImages() const
 {
     return m_imageSet;
 }

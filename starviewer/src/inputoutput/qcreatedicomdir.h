@@ -26,7 +26,7 @@ public:
      * Afegeix una llista d'estudis per convertir a DICOMDIR
      * @param studies Llista d'estudis per convertir a DICOMDIR
      */
-    void addStudies(const QList<Study *> &studies);
+    void addStudies(const QList<Study*> &studies);
 
     /**
      * Comprova si l'estudi amb UID passat per paràmetre està dins la llista d'estudis pendents de passa a DICOMDIR
@@ -53,7 +53,7 @@ protected:
      * Event que s'activa al tancar al rebren un event de tancament
      * @param event de tancament
      */
-    void closeEvent(QCloseEvent* ce);
+    void closeEvent(QCloseEvent *ce);
 
 private:
 

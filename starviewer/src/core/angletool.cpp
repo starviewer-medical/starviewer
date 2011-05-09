@@ -18,13 +18,13 @@ AngleTool::AngleTool(QViewer *viewer, QObject *parent)
     m_toolName = "AngleTool";
     m_hasSharedData = false;
 
-    m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
+    m_2DViewer = qobject_cast<Q2DViewer*>(viewer);
     if (!m_2DViewer)
     {
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ") + viewer->metaObject()->className());
     }
 
-    connect(m_2DViewer, SIGNAL(volumeChanged(Volume *)), SLOT(initialize()));
+    connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(initialize()));
 }
 
 AngleTool::~AngleTool()
@@ -189,7 +189,7 @@ void AngleTool::drawCircle()
     m_circlePolyline->deleteAllPoints();
     for (int i = initialAngle; i > finalAngle; i--)
     {
-        degreesIncrease = i*1.0*MathTools::DegreesToRadiansAsDouble;
+        degreesIncrease = i * 1.0 * MathTools::DegreesToRadiansAsDouble;
         newPoint = new double[3];
 
         /*

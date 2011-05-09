@@ -30,15 +30,15 @@ public:
     QString getFilterName();
 
     /* Metode que retorna el volum transformat */
-    Volume * getOutput();
+    Volume* getOutput();
 
 protected:
 
     /* Volum d'entrada */
-    Volume * m_inputVolume;
+    Volume* m_inputVolume;
 
     /* Volum de sortida */
-    Volume * m_outputVolume;
+    Volume* m_outputVolume;
 
     /* Nom del filtre */
     QString m_filterName;

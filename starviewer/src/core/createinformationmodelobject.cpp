@@ -10,7 +10,7 @@
 
 namespace udg{
 
-Patient *CreateInformationModelObject::createPatient(DICOMTagReader *dicomTagReader)
+Patient* CreateInformationModelObject::createPatient(DICOMTagReader *dicomTagReader)
 {
     Patient *patient = new Patient;
 
@@ -22,7 +22,7 @@ Patient *CreateInformationModelObject::createPatient(DICOMTagReader *dicomTagRea
     return patient;
 }
 
-Study *CreateInformationModelObject::createStudy(DICOMTagReader *dicomTagReader)
+Study* CreateInformationModelObject::createStudy(DICOMTagReader *dicomTagReader)
 {
     Study *study = new Study;
     QString studyModalities;
@@ -50,7 +50,7 @@ Study *CreateInformationModelObject::createStudy(DICOMTagReader *dicomTagReader)
     return study;
 }
 
-Series *CreateInformationModelObject::createSeries(DICOMTagReader *dicomTagReader)
+Series* CreateInformationModelObject::createSeries(DICOMTagReader *dicomTagReader)
 {
     Series *series = new Series;
 
@@ -83,9 +83,9 @@ Series *CreateInformationModelObject::createSeries(DICOMTagReader *dicomTagReade
     return series;
 }
 
-Image *CreateInformationModelObject::createImage(DICOMTagReader *dicomTagReader)
+Image* CreateInformationModelObject::createImage(DICOMTagReader *dicomTagReader)
 {
-    Image * image = new Image();
+    Image *image = new Image();
 
     image->setSOPInstanceUID(dicomTagReader->getValueAttributeAsQString(DICOMSOPInstanceUID));
     image->setInstanceNumber(dicomTagReader->getValueAttributeAsQString(DICOMInstanceNumber));

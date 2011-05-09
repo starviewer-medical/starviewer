@@ -90,7 +90,7 @@ Status DICOMDIRReader::readStudies(QList<Patient*> &outResultsStudyList, DicomMa
             //en aquest while accedim a les dades de l'estudi
             while (studyRecord != NULL)
             {
-                Study* study = fillStudy(studyRecord);
+                Study *study = fillStudy(studyRecord);
 
                 //comprovem si l'estudi compleix la màscara de cerca que ens han passat
                 if (matchStudyToDicomMask(study, &studyMask))
@@ -348,7 +348,7 @@ Patient* DICOMDIRReader::retrieve(DicomMask maskToRetrieve)
 
     PatientFiller patientFiller;
 
-    QList<Patient *> patientsList = patientFiller.processFiles(files);
+    QList<Patient*> patientsList = patientFiller.processFiles(files);
     if (patientsList.isEmpty())
     {
         return NULL;
@@ -486,7 +486,7 @@ Study* DICOMDIRReader::fillStudy(DcmDirectoryRecord *dcmDirectoryRecordStudy)
 {
     OFString tagValue;
 
-    Study* study = new Study();
+    Study *study = new Study();
     //Id estudi
     dcmDirectoryRecordStudy->findAndGetOFStringArray(DCM_StudyID, tagValue);
     study->setID(tagValue.c_str());

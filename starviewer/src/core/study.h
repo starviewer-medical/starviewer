@@ -108,16 +108,16 @@ public:
     bool seriesExists(QString uid);
 
     /// Retorna una llista de les sèries marcades com a seleccionades
-    QList<Series *> getSelectedSeries();
+    QList<Series*> getSelectedSeries();
 
     /// Mètode per obtenir el nombre de series que conté l'estudi
     int getNumberOfSeries();
 
     /// Mètode per obtenir la llista de series de l'estudi
-    QList<Series *> getSeries();
+    QList<Series*> getSeries();
 
     /// Ens retorna la llista de Series que es poden visualitzar en un viewer
-    QList<Series *> getViewableSeries();
+    QList<Series*> getViewableSeries();
 
     QString toString();
 
@@ -176,7 +176,7 @@ private:
     QString m_institutionName;
 
     /// Llista de les Series de l'estudi ordenades per número de serie
-    QList<Series *> m_seriesSet;
+    QList<Series*> m_seriesSet;
 
     /// L'entitat Patient a la qual pertany aquest estudi
     Patient *m_parentPatient;

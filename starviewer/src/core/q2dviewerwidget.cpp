@@ -65,7 +65,7 @@ void Q2DViewerWidget::createConnections()
     connect(m_slider, SIGNAL(sliderPressed()), SLOT(emitSelectedViewer()));
 
     connect(m_2DView, SIGNAL (selected()), SLOT(emitSelectedViewer()));
-    connect(m_2DView, SIGNAL(volumeChanged(Volume *)), SLOT(updateInput(Volume *)));
+    connect(m_2DView, SIGNAL(volumeChanged(Volume*)), SLOT(updateInput(Volume*)));
 
     connect(m_2DView, SIGNAL(slabThicknessChanged(int)), SLOT(updateSlider()));
     connect(m_synchronizeButtonAction, SIGNAL(toggled(bool)), SLOT(enableSynchronization(bool)));
@@ -175,7 +175,7 @@ void Q2DViewerWidget::enableSynchronization(bool enable)
     }
     else
     {
-        SynchronizeTool *synchronizeTool = dynamic_cast<SynchronizeTool *>(getViewer()->getToolProxy()->getTool("SynchronizeTool"));
+        SynchronizeTool *synchronizeTool = dynamic_cast<SynchronizeTool*>(getViewer()->getToolProxy()->getTool("SynchronizeTool"));
         if (synchronizeTool)
         {
             synchronizeTool->setEnabled(enable);

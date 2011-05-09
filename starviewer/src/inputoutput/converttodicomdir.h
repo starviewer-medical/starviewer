@@ -89,13 +89,13 @@ private:
      * @param studyUID Uid de l'estudi a convertir
      * @return Indica l'estat en què finalitza el mètode
      */
-    Status copyStudyToDicomdirPath(Study* study);
+    Status copyStudyToDicomdirPath(Study *study);
 
     /** Converteix una sèrie al format littleendian, i la copia al directori dicomdir
      * @param series
      * @return Indica l'estat en què finalitza el mètode
      */
-    Status copySeriesToDicomdirPath(Series* series);
+    Status copySeriesToDicomdirPath(Series *series);
 
     /** Converteix una imatge al format littleendian, i la copia al directori dicomdir
      * @param image

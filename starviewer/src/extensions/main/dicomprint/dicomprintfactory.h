@@ -38,15 +38,15 @@ public:
 
 private:
 
-    Printer* m_printer;
+    Printer *m_printer;
 
-    PrintMethod* m_printMethod;
+    PrintMethod *m_printMethod;
 
-    PrinterManager* m_printerManager;
+    PrinterManager *m_printerManager;
 
-    QPrinterConfigurationWidget* m_qPrinterconfigurationWidget;
+    QPrinterConfigurationWidget *m_qPrinterconfigurationWidget;
 
-    QPrintJobCreatorWidget* m_qPrintJobCreatorWidget;
+    QPrintJobCreatorWidget *m_qPrintJobCreatorWidget;
 };
 }
 

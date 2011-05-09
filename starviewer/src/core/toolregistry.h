@@ -42,7 +42,7 @@ public:
      * @return un QPair amb l'acció creada i l'string de l'SLOT a cridar. Si la "Action
      *  Tool" demanada no està registrada, retornarà un QPair amb un objecte QAction i QString buits (no NULS!)
      */
-    QPair<QAction *, QString> getActionToolPair(const QString &actionToolName);
+    QPair<QAction*, QString> getActionToolPair(const QString &actionToolName);
 };
 
 }

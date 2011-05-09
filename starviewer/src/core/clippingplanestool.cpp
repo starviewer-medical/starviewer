@@ -37,7 +37,7 @@ ClippingPlanesTool::ClippingPlanesTool(QViewer *viewer, QObject *parent)
     {
         updateInput();
     }
-    connect(m_3DViewer, SIGNAL(volumeChanged(Volume *)), SLOT(updateInput()));
+    connect(m_3DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(updateInput()));
 }
 
 ClippingPlanesTool::~ClippingPlanesTool()

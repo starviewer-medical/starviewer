@@ -32,13 +32,13 @@ public:
      * Retorna el pla d'imatge
      * @return
      */
-    ImagePlane *getImagePlane() const;
+    ImagePlane* getImagePlane() const;
 
     /**
      * Retorna el punt origen
      * @return
      */
-    double *getOriginPointPosition() const;
+    double* getOriginPointPosition() const;
 
     /**
     * Visibilitat del cursor
@@ -89,10 +89,10 @@ private:
     QString m_instanceUID;
 
     /// Pla d'imatge del pla de referència
-    ImagePlane *m_referenceImagePlane;
+    ImagePlane* m_referenceImagePlane;
 
     /// Punt a on es troba el cursor 3D
-    double * m_originPointPosition;
+    double* m_originPointPosition;
 
     /// Visibilitat del cursor
     bool m_isVisible;

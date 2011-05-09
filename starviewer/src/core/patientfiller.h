@@ -30,7 +30,7 @@ class DICOMTagReader;
 class PatientFiller : public QObject {
 Q_OBJECT
 public:
-    PatientFiller(QObject * parent = 0);
+    PatientFiller(QObject *parent = 0);
     ~PatientFiller();
 
 public slots:
@@ -44,7 +44,7 @@ public slots:
     void finishDICOMFilesProcess();
 
     /// Processa tots els fitxers que se li passin de cop, retornant la llista d'objectes Patient que es generin.
-    QList<Patient *> processFiles(const QStringList &files);
+    QList<Patient*> processFiles(const QStringList &files);
 
 signals:
     /// Senyal que s'emet cada vegada que es processa un fitxer indicant quin és dintre del "lot" a processar.
@@ -62,14 +62,14 @@ private:
     bool containsMHDFiles(const QStringList &files);
 
     /// Processa els arxius assumint que aquests són MHD i ens retorna la pertinent llista de pacients
-    QList<Patient *> processMHDFiles(const QStringList &files);
+    QList<Patient*> processMHDFiles(const QStringList &files);
 
     /// Processa els arxius assumint que aquests són DICOM i ens retorna la pertinent llista de pacients
-    QList<Patient *> processDICOMFiles(const QStringList &files);
+    QList<Patient*> processDICOMFiles(const QStringList &files);
 
 private:
     /// Registre d'steps
-    QList<PatientFillerStep *> m_registeredSteps;
+    QList<PatientFillerStep*> m_registeredSteps;
 
     /// S'encarrega de guardar l'input durant tota l'execucció dels mòduls. S'utilitza
     /// en cas que es processin fitxer individualment.

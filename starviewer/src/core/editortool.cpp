@@ -26,7 +26,7 @@ EditorTool::EditorTool(QViewer *viewer, QObject *parent)
     m_squareActor = vtkActor::New();
     m_myData = new EditorToolData;
 
-    m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
+    m_2DViewer = qobject_cast<Q2DViewer*>(viewer);
     // ens assegurem que desde la creació tenim un viewer vàlid
     Q_ASSERT(m_2DViewer);
 
@@ -291,7 +291,7 @@ void EditorTool::setPaintCursor()
         pointIds[2] = 2;
         pointIds[3] = 3;
 
-        vtkUnstructuredGrid* grid = vtkUnstructuredGrid::New();
+        vtkUnstructuredGrid *grid = vtkUnstructuredGrid::New();
 
         grid->Allocate(1);
         grid->SetPoints(points);
@@ -461,7 +461,7 @@ void EditorTool::decreaseEditorSize()
     }
 }
 
-ToolData *EditorTool::getToolData() const
+ToolData* EditorTool::getToolData() const
 {
     return m_myData;
 }

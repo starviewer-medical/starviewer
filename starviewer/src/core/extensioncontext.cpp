@@ -29,7 +29,7 @@ Volume *ExtensionContext::getDefaultVolume() const
     Volume *defaultVolume = NULL;
     Series *defaultSeries = NULL;
     bool searchForDefaultSeries = false;
-    QList<Series *> selectedSeries = m_patient->getSelectedSeries();
+    QList<Series*> selectedSeries = m_patient->getSelectedSeries();
 
     if (selectedSeries.isEmpty())
     {
@@ -56,7 +56,7 @@ Volume *ExtensionContext::getDefaultVolume() const
         bool ok = false;
         foreach (Study *study, m_patient->getStudies())
         {
-            QList<Series *> viewableSeries = study->getViewableSeries();
+            QList<Series*> viewableSeries = study->getViewableSeries();
             if (!viewableSeries.isEmpty())
             {
                 ok = true;

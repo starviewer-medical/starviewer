@@ -21,7 +21,7 @@ DisplayableID MPRExtensionMediator::getExtensionID() const
     return DisplayableID("MPRExtension", tr("MPR 2D"));
 }
 
-bool MPRExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext)
+bool MPRExtensionMediator::initializeExtension(QWidget *extension, const ExtensionContext &extensionContext)
 {
     QMPRExtension *mprExtension;
 

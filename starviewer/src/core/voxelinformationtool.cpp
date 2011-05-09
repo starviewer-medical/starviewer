@@ -14,7 +14,7 @@ VoxelInformationTool::VoxelInformationTool(QViewer *viewer, QObject *parent)
 {
     m_toolName = "VoxelInformationTool";
 
-    m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
+    m_2DViewer = qobject_cast<Q2DViewer*>(viewer);
     if (!m_2DViewer)
     {
         DEBUG_LOG("No s'ha pogut realitzar el casting a 2DViewer!!!");
@@ -22,7 +22,7 @@ VoxelInformationTool::VoxelInformationTool(QViewer *viewer, QObject *parent)
     createCaption();
     connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(updateCaption()));
     connect(m_2DViewer, SIGNAL(phaseChanged(int)), SLOT(updateCaption()));
-    connect(m_2DViewer, SIGNAL(volumeChanged(Volume *)), SLOT(createCaption()));
+    connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(createCaption()));
 }
 
 VoxelInformationTool::~VoxelInformationTool()

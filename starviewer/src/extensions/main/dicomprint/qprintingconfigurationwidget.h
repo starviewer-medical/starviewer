@@ -16,7 +16,7 @@ Q_OBJECT
 
 public:
     virtual void setPrinter(Printer& _printer) = 0;
-    virtual Printer * getPrinter() = 0;
+    virtual Printer* getPrinter() = 0;
 };
 }
 

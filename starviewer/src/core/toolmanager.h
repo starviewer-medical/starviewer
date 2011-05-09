@@ -169,7 +169,7 @@ private:
     ToolRegistry *m_toolRegistry;
 
     /// Definició de tipus del parell Viewer-ToolConfig
-    typedef QPair<QViewer *, ToolConfiguration *> ViewerToolConfigurationPairType;
+    typedef QPair<QViewer*, ToolConfiguration*> ViewerToolConfigurationPairType;
 
     /// Mapa en el que per cada nom de tool (clau), associem el viewer i la configuració que li correspon
     /// Una mateixa tool pot tenir més d'un parell <QViewer *,ToolConfiguration *>, és a dir, la mateixa tool pot
@@ -180,16 +180,16 @@ private:
     QSignalMapper *m_toolsActionSignalMapper;
 
     /// Mapa que associa el nom del grup amb les accions agrupades de les tools exclusives
-    QMap<QString, QActionGroup *> m_toolsGroups;
+    QMap<QString, QActionGroup*> m_toolsGroups;
 
     /// Mapa que guarda les ToolData per Tools amb dades compartides
-    QMap<QString, ToolData *> m_sharedToolDataRepository;
+    QMap<QString, ToolData*> m_sharedToolDataRepository;
 
     /// Mapa que guarda la relació de tools les quals hem registrat la seva acció. Per cada Tool, guardem la seva respectiva QAction
-    QMap<QString, QAction *> m_toolsActionsRegistry;
+    QMap<QString, QAction*> m_toolsActionsRegistry;
 
     /// Mapa que guarda la relació d'"Action Tools" amb les respectives parelles QAction/SLOT
-    QMap<QString, QPair<QAction *, QString> > m_actionToolRegistry;
+    QMap<QString, QPair<QAction*, QString> > m_actionToolRegistry;
 };
 
 }

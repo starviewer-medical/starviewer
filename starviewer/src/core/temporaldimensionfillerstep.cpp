@@ -18,10 +18,10 @@ TemporalDimensionFillerStep::TemporalDimensionFillerStep()
 
 TemporalDimensionFillerStep::~TemporalDimensionFillerStep()
 {
-    VolumeInfo * volumeInfo;
-    QHash<int, VolumeInfo *> * volumeHash;
+    VolumeInfo *volumeInfo;
+    QHash<int, VolumeInfo*> *volumeHash;
 
-    foreach (Series * key, TemporalDimensionInternalInfo.keys())
+    foreach (Series *key, TemporalDimensionInternalInfo.keys())
     {
         volumeHash = TemporalDimensionInternalInfo.take(key);
 
@@ -43,7 +43,7 @@ bool TemporalDimensionFillerStep::fillIndividually()
     //Obtenim el VolumeInfo. Si no existeix en generem un de nou i l'afegim a l'estructura.
     if (TemporalDimensionInternalInfo.contains(m_input->getCurrentSeries()))
     {
-        QHash<int, VolumeInfo *> *volumeHash = TemporalDimensionInternalInfo.value(m_input->getCurrentSeries());
+        QHash<int, VolumeInfo*> *volumeHash = TemporalDimensionInternalInfo.value(m_input->getCurrentSeries());
 
         if (volumeHash->contains(m_input->getCurrentVolumeNumber()))
         {
@@ -66,7 +66,7 @@ bool TemporalDimensionFillerStep::fillIndividually()
     }
     else
     {
-        QHash<int, VolumeInfo *> * volumeHash = new QHash<int, VolumeInfo *>();
+        QHash<int, VolumeInfo*> *volumeHash = new QHash<int, VolumeInfo*>();
         volumeInfo = new VolumeInfo;
         volumeHash->insert(m_input->getCurrentVolumeNumber(), volumeInfo);
         TemporalDimensionInternalInfo.insert(m_input->getCurrentSeries(), volumeHash);
@@ -113,9 +113,9 @@ bool TemporalDimensionFillerStep::fillIndividually()
     }
     else
     {
-        foreach (Image * image, m_input->getCurrentImages())
+        foreach (Image *image, m_input->getCurrentImages())
         {
-            const double * imagePositionPatient = image->getImagePositionPatient();
+            const double *imagePositionPatient = image->getImagePositionPatient();
 
             if (!(imagePositionPatient[0] == 0. && imagePositionPatient[1] == 0. && imagePositionPatient[2] == 0.))
             {
@@ -151,9 +151,9 @@ void TemporalDimensionFillerStep::postProcessing()
     int currentPhase;
     int numberOfPhases;
 
-    foreach (Series * key, TemporalDimensionInternalInfo.keys())
+    foreach (Series *key, TemporalDimensionInternalInfo.keys())
     {
-        QHash<int, VolumeInfo *> *volumeHash = TemporalDimensionInternalInfo.take(key);
+        QHash<int, VolumeInfo*> *volumeHash = TemporalDimensionInternalInfo.take(key);
 
         foreach (Image *image, key->getImages())
         {
@@ -162,7 +162,7 @@ void TemporalDimensionFillerStep::postProcessing()
                 currentVolume = image->getVolumeNumberInSeries();
                 if (volumeHash->contains(currentVolume))
                 {
-                    VolumeInfo * volumeInfo = volumeHash->take(currentVolume);
+                    VolumeInfo *volumeInfo = volumeHash->take(currentVolume);
 
                     if (volumeInfo->multipleAcquisitionNumber)
                     {

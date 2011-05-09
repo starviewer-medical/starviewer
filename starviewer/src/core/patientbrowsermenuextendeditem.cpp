@@ -23,7 +23,7 @@ PatientBrowserMenuExtendedItem::~PatientBrowserMenuExtendedItem()
 
 void PatientBrowserMenuExtendedItem::createInitialWidget()
 {
-    QVBoxLayout * verticalLayout = new QVBoxLayout(this);
+    QVBoxLayout *verticalLayout = new QVBoxLayout(this);
     m_icon = new QLabel(this);
     m_icon->setPixmap(QPixmap::fromImage(ThumbnailCreator::makeEmptyThumbnailWithCustomText(NoItemText)));
     m_icon->setAlignment(Qt::AlignCenter);
@@ -45,7 +45,7 @@ void PatientBrowserMenuExtendedItem::setText(const QString &text)
     m_text->setText(text);
 }
 
-bool PatientBrowserMenuExtendedItem::event(QEvent * event)
+bool PatientBrowserMenuExtendedItem::event(QEvent *event)
 {
     if (event->type() == QEvent::Close) // s'ha pulsat l'escape
     {

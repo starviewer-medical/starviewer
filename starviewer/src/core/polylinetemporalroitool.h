@@ -26,7 +26,7 @@ public:
     ToolData *getToolData() const;
 
     /// Assigna les dades pròpies de l'eina (persistent data)
-    void setToolData(ToolData * data);
+    void setToolData(ToolData *data);
 
 private slots:
 

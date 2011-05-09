@@ -280,9 +280,9 @@ QString PreviousStudiesManager::getPreviousStudyDateMask(QDate studyDate)
     return "-" + studyDate.toString("yyyyMMdd");
 }
 
-void PreviousStudiesManager::downloadStudy(Study * study, QString pacs)
+void PreviousStudiesManager::downloadStudy(Study *study, QString pacs)
 {
-    QueryScreen * queryScreen = SingletonPointer<QueryScreen>::instance();
+    QueryScreen* queryScreen = SingletonPointer<QueryScreen>::instance();
     queryScreen->retrieveStudy(QInputOutputPacsWidget::Load, pacs, study);
     connect(queryScreen, SIGNAL(studyRetrieveFailed(QString)), SIGNAL(errorDownloadingPreviousStudy(QString)));
 }

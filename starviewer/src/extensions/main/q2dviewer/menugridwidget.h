@@ -29,10 +29,10 @@ public:
     void dropContent();
 
     /// Posa els hanging protocols que ha de representar el menú
-    void setHangingItems(const QList<HangingProtocol *> &listOfCandidates);
+    void setHangingItems(const QList<HangingProtocol*> &listOfCandidates);
 
     /// Afegeix hanging protocols al menú
-    void addHangingItems(const QList<HangingProtocol *> &items);
+    void addHangingItems(const QList<HangingProtocol*> &items);
 
     /// Posa una element que informa que s'estan carregant
     void addSearchingItem();
@@ -68,7 +68,7 @@ protected:
     QGridLayout *m_gridLayout;
 
     /// Llista dels items
-    QList<ItemMenu *> m_itemList;
+    QList<ItemMenu*> m_itemList;
 
     /// Fila a on col·locar el següent element a la zona de hangings
     int m_nextHangingProtocolRow;

@@ -31,7 +31,7 @@ class QTransferFunctionEditorByValues
 public:
 
     /// Crea l'editor amb un sol interval de 0 a 255 amb RGBA = (0,0,0,0).
-    QTransferFunctionEditorByValues(QWidget * parent = 0);
+    QTransferFunctionEditorByValues(QWidget *parent = 0);
     virtual ~QTransferFunctionEditorByValues();
 
     /// Assigna el valor de propietat màxim mapat per aquest editor.
@@ -52,7 +52,7 @@ public slots:
 private:
 
     /// Afegeix un interval al final i el retorna. Si ja n'hi ha el màxim no fa res.
-    QTransferFunctionIntervalEditor * addIntervalAndReturnIt();
+    QTransferFunctionIntervalEditor *addIntervalAndReturnIt();
 
 private slots:
 
@@ -62,9 +62,9 @@ private slots:
 private:
 
     /// Widget on es situaran els editors d'interval, dins d'una àrea d'scroll.
-    QWidget * m_intervalEditorsWidget;
+    QWidget *m_intervalEditorsWidget;
     /// El layout del widget anterior.
-    QVBoxLayout * m_intervalEditorsLayout;
+    QVBoxLayout *m_intervalEditorsLayout;
 
     /// Nombre d'intervals de l'editor.
     unsigned int m_numberOfIntervals;

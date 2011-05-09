@@ -43,7 +43,7 @@ void VolumeBuilderFromCaptures::addCapture(vtkImageData *data)
     m_vtkImageAppend->AddInput(imageFlip->GetOutput());
 }
 
-void VolumeBuilderFromCaptures::setParentStudy(Study * study)
+void VolumeBuilderFromCaptures::setParentStudy(Study *study)
 {
     m_parentStudy = study;
 }
@@ -64,13 +64,13 @@ bool VolumeBuilderFromCaptures::setModality(QString modality)
     }
 }
 
-Volume * VolumeBuilderFromCaptures::build()
+Volume* VolumeBuilderFromCaptures::build()
 {
     Q_ASSERT(m_parentStudy);
     Q_ASSERT(m_vtkImageAppend->GetNumberOfInputs());
 
     //Creem la nova sèrie
-    Series * newSeries = new Series();
+    Series *newSeries = new Series();
 
     //Omplim la informació de la sèrie a partir de la sèrie de referència
 
@@ -98,7 +98,7 @@ Volume * VolumeBuilderFromCaptures::build()
     newVtkData->ShallowCopy(m_vtkImageAppend->GetOutput());
 
     //Creem el nou volume
-    Volume * newVolume = new Volume();
+    Volume *newVolume = new Volume();
     newSeries->addVolume(newVolume);
 
     //Generem les noves imatges a partir del vtkData generat per vtkImageAppend
@@ -167,13 +167,13 @@ Volume * VolumeBuilderFromCaptures::build()
     bitsStored = bitsAllocated;
     highBit = bitsStored - 1;
 
-    int * dimensions = newVtkData->GetDimensions();
-    double * spacing = newVtkData->GetSpacing();
+    int *dimensions = newVtkData->GetDimensions();
+    double *spacing = newVtkData->GetSpacing();
 
     rows = dimensions[1];
     columns = dimensions[0];
 
-    Image * currentImage;
+    Image *currentImage;
 
     for (int i = 0; i < dimensions[2]; i++)
     {

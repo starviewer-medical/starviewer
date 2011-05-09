@@ -22,7 +22,7 @@
 
 namespace udg {
 
-PatientFiller::PatientFiller(QObject * parent)
+PatientFiller::PatientFiller(QObject *parent)
  : QObject(parent)
 {
     registerSteps();
@@ -32,7 +32,7 @@ PatientFiller::PatientFiller(QObject * parent)
 
 PatientFiller::~PatientFiller()
 {
-    foreach (PatientFillerStep* fillerStep, m_registeredSteps)
+    foreach (PatientFillerStep *fillerStep, m_registeredSteps)
     {
         delete fillerStep;
     }
@@ -68,14 +68,14 @@ void PatientFiller::processDICOMFile(DICOMTagReader *dicomTagReader)
 
     m_patientFillerInput->setDICOMFile(dicomTagReader);
 
-    QList<PatientFillerStep *> processedFillerSteps;
-    QList<PatientFillerStep *> candidatesFillerSteps = m_registeredSteps;
+    QList<PatientFillerStep*> processedFillerSteps;
+    QList<PatientFillerStep*> candidatesFillerSteps = m_registeredSteps;
     bool continueIterating = true;
 
     while (!candidatesFillerSteps.isEmpty() && continueIterating)
     {
-        QList<PatientFillerStep *> fillerStepsToProcess;
-        QList<PatientFillerStep *> newCandidatesFillerSteps;
+        QList<PatientFillerStep*> fillerStepsToProcess;
+        QList<PatientFillerStep*> newCandidatesFillerSteps;
         continueIterating = false;
 
         for (int i = 0; i < candidatesFillerSteps.size(); ++i)
@@ -147,7 +147,7 @@ bool PatientFiller::containsMHDFiles(const QStringList &files)
     }
 }
 
-QList<Patient *> PatientFiller::processMHDFiles(const QStringList &files)
+QList<Patient*> PatientFiller::processMHDFiles(const QStringList &files)
 {
     PatientFillerInput patientFillerInput;
     m_imageCounter = 0;
@@ -168,7 +168,7 @@ QList<Patient *> PatientFiller::processMHDFiles(const QStringList &files)
     return patientFillerInput.getPatientsList();
 }
 
-QList<Patient *> PatientFiller::processDICOMFiles(const QStringList &files)
+QList<Patient*> PatientFiller::processDICOMFiles(const QStringList &files)
 {
     m_imageCounter = 0;
 

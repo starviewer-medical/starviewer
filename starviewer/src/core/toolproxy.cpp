@@ -87,7 +87,7 @@ Tool* ToolProxy::getTool(const QString &toolName)
 void ToolProxy::forwardEvent(unsigned long eventID)
 {
     //no es pot fer un foreach sobre un map perquè retorna parella d'elements, per això passem tots els elements del map a una QList.
-    QList<Tool *> toolsList = m_toolsMap.values();
+    QList<Tool*> toolsList = m_toolsMap.values();
 
     foreach (Tool *tool, toolsList)
     {

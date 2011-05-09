@@ -40,7 +40,7 @@ private:
     };
 
     /// Estructura que s'utiliza en cas que es processi l'step individiualment per fitxers.
-    QHash<Series *, QHash<int, VolumeInfo*>*> TemporalDimensionInternalInfo;
+    QHash<Series*, QHash<int, VolumeInfo*>*> TemporalDimensionInternalInfo;
 };
 
 }

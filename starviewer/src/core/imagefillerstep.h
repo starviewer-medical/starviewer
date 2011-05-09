@@ -35,10 +35,10 @@ private:
 
     /// Mètode encarregat de processar el fitxer DICOM per extreure'n el conjunt de les imatges
     /// que el conformen, omplint la informació necessària
-    QList<Image *> processDICOMFile(DICOMTagReader *dicomReader);
+    QList<Image*> processDICOMFile(DICOMTagReader *dicomReader);
 
     /// Mètode específic per processar els arxius que siguin de tipus Enhanced
-    QList<Image *> processEnhancedDICOMFile(DICOMTagReader *dicomReader);
+    QList<Image*> processEnhancedDICOMFile(DICOMTagReader *dicomReader);
 
     /// Donat un dicomReader guardem a la cache el corresponent thumbnail.
     /// La intenció d'aquest mètode és estalviar temps en la càrrega de thumbnails per arxius

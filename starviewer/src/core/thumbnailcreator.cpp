@@ -260,10 +260,10 @@ QImage ThumbnailCreator::convertToQImage(DicomImage *dicomImage)
     if (buffer != NULL)
     {
         // Copy PGM/PPM header to buffer
-        OFBitmanipTemplate<Uint8>::copyMem((const Uint8 *)imageHeader.toAscii().data(), buffer, offset);
-        if (dicomImage->getOutputData((void *)(buffer + offset), length, 8))
+        OFBitmanipTemplate<Uint8>::copyMem((const Uint8*)imageHeader.toAscii().data(), buffer, offset);
+        if (dicomImage->getOutputData((void*)(buffer + offset), length, 8))
         {
-            if (!thumbnail.loadFromData((const unsigned char *)buffer, length, imageFormat.toLatin1()))
+            if (!thumbnail.loadFromData((const unsigned char*)buffer, length, imageFormat.toLatin1()))
             {
                 DEBUG_LOG("La càrrega del buffer al thumbnail ha fallat :(");
             }

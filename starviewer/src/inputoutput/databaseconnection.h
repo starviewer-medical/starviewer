@@ -31,7 +31,7 @@ public:
     /** Retorna la connexió a la base de dades
      * @return connexio a la base de dades, si el punter és nul, és que hi hagut error alhora de connectar, o que el path no és correcte
      */
-    sqlite3 * getConnection();
+    sqlite3* getConnection();
 
     ///Retorna l'últim missatge d'error produït a la base de dades
     QString getLastErrorMessage();

@@ -42,7 +42,7 @@ public:
     QList<Image*> getFilesToSend();
 
     ///Retorna l'estudi de les imatges que s'havia de guardar
-    Study *getStudyOfDICOMFilesToSend();
+    Study* getStudyOfDICOMFilesToSend();
 
 signals:
 

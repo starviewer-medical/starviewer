@@ -169,7 +169,7 @@ double StrokeSegmentationMethod::applyMethodVTK()
     imageThreshold->SetOutValue(m_outsideMaskValue);
     DEBUG_LOG(QString("min: %1, mout: %2").arg(m_insideMaskValue).arg(m_outsideMaskValue));
     imageThreshold->Update();
-    vtkImageData* imMask = imageThreshold->GetOutput();
+    vtkImageData *imMask = imageThreshold->GetOutput();
 
     m_Volume->getVtkData()->GetSpacing(spacing[0], spacing[1], spacing[2]);
     m_Volume->getVtkData()->GetOrigin(origin[0], origin[1], origin[2]);
@@ -194,7 +194,7 @@ void StrokeSegmentationMethod::applyMethodVTKRecursive(vtkImageData* imMask, int
     if ((a >= m_Volume->getWholeExtent()[0]) && (a <= m_Volume->getWholeExtent()[1]) && (b >= m_Volume->getWholeExtent()[2]) && (b <= m_Volume->getWholeExtent()[3]) && (c >= m_Volume->getWholeExtent()[4]) && (c <= m_Volume->getWholeExtent()[5]))
     {
         value = m_Volume->getScalarPointer(a, b, c);
-        maskValue = (Volume::VoxelType *)imMask->GetScalarPointer(a, b, c);
+        maskValue = (Volume::VoxelType*)imMask->GetScalarPointer(a, b, c);
         if ((*maskValue) == m_insideMaskValue - 100)
         {
             (*maskValue)= m_insideMaskValue;
@@ -411,7 +411,7 @@ double StrokeSegmentationMethod::applyCleanSkullMethod()
     return m_volume;
 }
 
-void StrokeSegmentationMethod::applyFilter(Volume* output)
+void StrokeSegmentationMethod::applyFilter(Volume *output)
 {
     typedef float InternalPixelType;
     typedef itk::Image<InternalPixelType, 3> InternalImageType;
@@ -497,7 +497,7 @@ void StrokeSegmentationMethod::computeSpeedMap(itk::Image<float, 3>* speedMap)
     return;
 }
 
-double StrokeSegmentationMethod::applyMethodEdema(Volume * lesionMask)
+double StrokeSegmentationMethod::applyMethodEdema(Volume *lesionMask)
 {
     typedef float InternalPixelType;
     typedef itk::Image<InternalPixelType, 3> InternalImageType;
@@ -931,7 +931,7 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume * lesionMask)
     return (double)m_edemaCont * volspacing[0] * volspacing[1] * volspacing[2];
 }
 
-double StrokeSegmentationMethod::applyMethodEdema2(Volume * lesionMask)
+double StrokeSegmentationMethod::applyMethodEdema2(Volume *lesionMask)
 {
     typedef float InternalPixelType;
     typedef itk::Image<InternalPixelType, 3> InternalImageType;

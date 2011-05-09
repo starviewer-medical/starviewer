@@ -15,7 +15,7 @@ public:
 
     ~MPRExtensionMediator();
 
-    virtual bool initializeExtension(QWidget* extension, const ExtensionContext &extensionContext);
+    virtual bool initializeExtension(QWidget *extension, const ExtensionContext &extensionContext);
 
     virtual DisplayableID getExtensionID() const;
 };

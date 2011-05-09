@@ -48,7 +48,7 @@ public:
     void setPatientInNewWindow(Patient *patient);
 
     /// Ens retorna el punter al pacient que té ara
-    Patient *getCurrentPatient();
+    Patient* getCurrentPatient();
 
     /// Retorna el numero de finestres amb diferents models que tenim obertes, el num. de QApplicationMainWindow
     unsigned int getCountQApplicationMainWindow();
@@ -81,7 +81,7 @@ private:
     void createLanguageMenu();
 
     /// Crea una acció per canviar d'idioma passant l'idioma (ex. Catalan) i el locale al que s'ha de canviar (ex. ca_ES)
-    QAction *createLanguageAction(const QString &language, const QString &locale);
+    QAction* createLanguageAction(const QString &language, const QString &locale);
 
     /// Elimina totes les extensions que contingui el workspace i elimina els volums del pacient actual
     /// TODO: Cal que s'hi esborrin les dades de Patient, Study, Series, etc. també.

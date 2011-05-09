@@ -35,7 +35,7 @@ protected :
     /** Event que s'activa al tancar al rebren un event de tancament
      * @param event de tancament
      */
-    void closeEvent(QCloseEvent* ce);
+    void closeEvent(QCloseEvent *ce);
 
 private slots:
 
@@ -82,7 +82,7 @@ private:
     void insertNewPACSJob(PACSJob *pacsJob);
 
     ///Retorna l'objecte Study relatiu a PACSJob, només funciona amb PACSJob de tipus RetrieveDICOMFilesFromPACSJob i SendDICOMFilesToPACSJob
-    Study *getStudyFromPACSJob(PACSJob* pacsJob);
+    Study* getStudyFromPACSJob(PACSJob *pacsJob);
 
     /**Retorna un QString per mostrar-lo per la QOperationStateScreen indicant com ha finalitzat un PACSJob
       *Per RetrieveDICOMFilesFromPACS pot retornar : RETRIEVED, CANCELLED, ERROR

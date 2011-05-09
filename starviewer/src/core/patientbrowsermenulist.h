@@ -30,7 +30,7 @@ public:
     QString getMarkedItem() const;
 
     /// Tractament dels events
-    bool event(QEvent * event);
+    bool event(QEvent *event);
 
 signals:
     /// Senyal que s'emet quan el mouse entra en el widget i ens notifica el seu identificador

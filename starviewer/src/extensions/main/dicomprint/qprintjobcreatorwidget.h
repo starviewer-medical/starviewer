@@ -15,7 +15,7 @@ class QPrintJobCreatorWidget : public QWidget {
 Q_OBJECT
 
 public:
-    virtual PrintJob * getPrintJob() = 0;
+    virtual PrintJob* getPrintJob() = 0;
 };
 }
 

@@ -25,7 +25,7 @@ ReferenceLinesTool::ReferenceLinesTool(QViewer *viewer, QObject *parent)
     m_toolData = m_myData;
     connect(m_myData, SIGNAL(changed()), SLOT(updateProjectionLines()));
 
-    m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
+    m_2DViewer = qobject_cast<Q2DViewer*>(viewer);
     if (!m_2DViewer)
     {
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ") + viewer->metaObject()->className());
@@ -41,7 +41,7 @@ ReferenceLinesTool::ReferenceLinesTool(QViewer *viewer, QObject *parent)
     refreshReferenceViewerData();
 
     // Cada cop que el viewer canvïi d'input, hem d'actualitzar el frame of reference
-    connect(m_2DViewer, SIGNAL(volumeChanged(Volume *)), SLOT(refreshReferenceViewerData()));
+    connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(refreshReferenceViewerData()));
     // Cada cop que el viewer canvïi de llesca, hem d'actualitzar el pla de projecció
     connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(updateImagePlane()));
     // Cada cop que canvii l'slab thickness haurem d'actualitzar els plans a projectar
@@ -72,7 +72,7 @@ ReferenceLinesTool::~ReferenceLinesTool()
     }
 }
 
-void ReferenceLinesTool::setToolData(ToolData * data)
+void ReferenceLinesTool::setToolData(ToolData *data)
 {
     // Desfem els vincles anteriors
     disconnect(m_myData, SIGNAL(changed()), this, SLOT(updateProjectionLines()));
@@ -80,7 +80,7 @@ void ReferenceLinesTool::setToolData(ToolData * data)
 
     // Creem de nou les dades
     m_toolData = data;
-    m_myData = qobject_cast<ReferenceLinesToolData *>(data);
+    m_myData = qobject_cast<ReferenceLinesToolData*>(data);
     // Quan canvïn les dades (ImagePlane), actualitzem les línies de projecció
     connect(m_myData, SIGNAL(changed()), SLOT(updateProjectionLines()));
 
@@ -102,7 +102,7 @@ void ReferenceLinesTool::updateProjectionLines()
         // Primer cal que comparteixin el mateix FrameOfReference
         if (m_myFrameOfReferenceUID == m_myData->getFrameOfReferenceUID())
         {
-            QList<ImagePlane *> planesToProject = m_myData->getPlanesToProject();
+            QList<ImagePlane*> planesToProject = m_myData->getPlanesToProject();
             // Primer comprovar si tenim el nombre adequat de linies creades, donat el nombre de plans a projectar
             checkAvailableLines();
             if (planesToProject.count() == 0)
@@ -249,10 +249,10 @@ void ReferenceLinesTool::projectPlane(ImagePlane *planeToProject)
     QList<QVector<double> > planeBounds = planeToProject->getCentralBounds();
     double projectedVertix1[3], projectedVertix2[3], projectedVertix3[3], projectedVertix4[3];
 
-    m_2DViewer->projectDICOMPointToCurrentDisplayedImage((double *)planeBounds.at(0).data(), projectedVertix1);
-    m_2DViewer->projectDICOMPointToCurrentDisplayedImage((double *)planeBounds.at(1).data(), projectedVertix2);
-    m_2DViewer->projectDICOMPointToCurrentDisplayedImage((double *)planeBounds.at(2).data(), projectedVertix3);
-    m_2DViewer->projectDICOMPointToCurrentDisplayedImage((double *)planeBounds.at(3).data(), projectedVertix4);
+    m_2DViewer->projectDICOMPointToCurrentDisplayedImage((double*)planeBounds.at(0).data(), projectedVertix1);
+    m_2DViewer->projectDICOMPointToCurrentDisplayedImage((double*)planeBounds.at(1).data(), projectedVertix2);
+    m_2DViewer->projectDICOMPointToCurrentDisplayedImage((double*)planeBounds.at(2).data(), projectedVertix3);
+    m_2DViewer->projectDICOMPointToCurrentDisplayedImage((double*)planeBounds.at(3).data(), projectedVertix4);
 
     // Donem els punts al poligon a dibuixar
     m_projectedReferencePlane->setVertix(0, projectedVertix1);
@@ -271,11 +271,11 @@ int ReferenceLinesTool::getIntersections(QVector<double> tlhc, QVector<double> t
     localizerPlane->getOrigin(localizerOrigin);
 
     // Primera "paral·lela"
-    if (vtkPlane::IntersectWithLine((double *)tlhc.data(), (double *)trhc.data(), localizerNormalVector, localizerOrigin, t, firstIntersectionPoint))
+    if (vtkPlane::IntersectWithLine((double*)tlhc.data(), (double*)trhc.data(), localizerNormalVector, localizerOrigin, t, firstIntersectionPoint))
     {
         numberOfIntersections++;
     }
-    if (vtkPlane::IntersectWithLine((double *)brhc.data(), (double *)blhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint))
+    if (vtkPlane::IntersectWithLine((double*)brhc.data(), (double*)blhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint))
     {
         numberOfIntersections++;
     }
@@ -287,7 +287,7 @@ int ReferenceLinesTool::getIntersections(QVector<double> tlhc, QVector<double> t
             numberOfIntersections++;
         }
 
-        if (vtkPlane::IntersectWithLine((double *)blhc.data(), (double *)tlhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint))
+        if (vtkPlane::IntersectWithLine((double*)blhc.data(), (double*)tlhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint))
         {
             numberOfIntersections++;
         }
@@ -336,7 +336,7 @@ void ReferenceLinesTool::updateImagePlane()
         case SingleImage:
             if (m_2DViewer->isThickSlabActive())
             {
-                QList<ImagePlane *> planes;
+                QList<ImagePlane*> planes;
                 planes << m_2DViewer->getCurrentImagePlane();
                 planes << m_2DViewer->getImagePlane(m_2DViewer->getCurrentSlice() + m_2DViewer->getSlabThickness() - 1, m_2DViewer->getCurrentPhase());
 

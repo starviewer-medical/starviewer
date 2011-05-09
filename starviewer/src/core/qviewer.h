@@ -303,7 +303,7 @@ protected:
     QVTKWidget *m_vtkWidget;
 
     /// La llista de captures de pantalla
-    QList<vtkImageData *> m_grabList;
+    QList<vtkImageData*> m_grabList;
 
     /// Filtre per connectar el que es visualitza pel renderer en un pipeline, epr guardar les imatges en un arxiu, per exemple
     vtkWindowToImageFilter *m_windowToImageFilter;

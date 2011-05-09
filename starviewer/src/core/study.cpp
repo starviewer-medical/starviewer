@@ -286,7 +286,7 @@ void Study::removeSeries(QString uid)
     }
 }
 
-Series *Study::getSeries(QString uid)
+Series* Study::getSeries(QString uid)
 {
     int index = this->findSeriesIndex(uid);
     if (index != -1)
@@ -311,9 +311,9 @@ bool Study::seriesExists(QString uid)
     }
 }
 
-QList<Series *> Study::getSelectedSeries()
+QList<Series*> Study::getSelectedSeries()
 {
-    QList<Series *> seriesList;
+    QList<Series*> seriesList;
     foreach (Series *series, m_seriesSet)
     {
         if (series->isSelected())
@@ -329,14 +329,14 @@ int Study::getNumberOfSeries()
     return m_seriesSet.size();
 }
 
-QList<Series *> Study::getSeries()
+QList<Series*> Study::getSeries()
 {
     return m_seriesSet;
 }
 
-QList<Series *> Study::getViewableSeries()
+QList<Series*> Study::getViewableSeries()
 {
-    QList<Series *> result;
+    QList<Series*> result;
     foreach (Series *series, m_seriesSet)
     {
         if (series->isViewable())

@@ -42,8 +42,8 @@ void RepresentationsLayer::addRepresentation(ToolRepresentation *toolRepresentat
 
 void RepresentationsLayer::clearViewer()
 {
-    QList<ToolRepresentation *> list;
-    QMultiMap<int, ToolRepresentation *>::const_iterator it;
+    QList<ToolRepresentation*> list;
+    QMultiMap<int, ToolRepresentation*>::const_iterator it;
     switch (m_currentPlane)
     {
     case QViewer::AxialPlane:
@@ -95,7 +95,7 @@ void RepresentationsLayer::clearViewer()
 
 void RepresentationsLayer::clearAll()
 {
-    QMultiMap<int, ToolRepresentation *>::const_iterator it;
+    QMultiMap<int, ToolRepresentation*>::const_iterator it;
 
     //Axial
     it = m_axialToolRepresentations.begin();

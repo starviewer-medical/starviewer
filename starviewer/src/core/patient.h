@@ -75,13 +75,13 @@ public:
     int getNumberOfStudies();
 
     /// Mètode per obtenir la llista d'estudis del pacient
-    QList<Study *> getStudies() const;
+    QList<Study*> getStudies() const;
 
     /// Mètode ràpid per trobar si hi ha una series amb el uid donat. Retorna nul si aquesta no existeix
     Series *getSeries(const QString &uid);
 
     /// Ens retorna una llista amb les sèries que estiguin seleccionades
-    QList<Series *> getSelectedSeries();
+    QList<Series*> getSelectedSeries();
 
     /// Ens diu si aquest arxiu pertany a alguna series del pacient
     bool hasFile(const QString &filename);
@@ -107,7 +107,7 @@ public:
     /// estaran fusionats els pacients que siguin considerats iguals. És a dir si d'un
     /// mateix pacient tenim dos estudis, però a la llista estan com dos pacients separats
     /// en la llista resultant seran un únic pacient amb els dos estudis
-    static QList<Patient *> mergePatients(QList<Patient *> patientsList);
+    static QList<Patient*> mergePatients(QList<Patient*> patientsList);
 
     /// Marca com a seleccionada la sèrie amb l'UID indicat
     /// En cas que no existeixi tal UID, se selecciona la primera
@@ -185,7 +185,7 @@ private:
     bool m_identityIsRemoved;
 
     /// Llista que conté els estudis del pacient ordenats per data
-    QList<Study *> m_studiesSet;
+    QList<Study*> m_studiesSet;
 };
 
 }
