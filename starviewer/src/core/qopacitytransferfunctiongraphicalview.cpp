@@ -16,6 +16,7 @@ QOpacityTransferFunctionGraphicalView::QOpacityTransferFunctionGraphicalView(QWi
     setFrameShape(QFrame::NoFrame);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    setRenderHint(QPainter::Antialiasing);
 
     setScene(new QGraphicsScene(this));
     scale(1.0, -1.0);
