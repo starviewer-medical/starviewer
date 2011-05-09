@@ -102,7 +102,7 @@ void QOpacityTransferFunctionGraphicalView::wheelEvent(QWheelEvent *event)
 
 void QOpacityTransferFunctionGraphicalView::fitInView(const QRectF &rect)
 {
-    QRectF sceneRect(rect.x() - 0.1 * rect.width(), rect.y() - 0.1 * rect.height(), 1.2 * rect.width(), 1.2 * rect.height());
+    QRectF sceneRect(rect.x() - 0.05 * rect.width(), rect.y() - 0.05 * rect.height(), 1.1 * rect.width(), 1.1 * rect.height());
     scene()->setSceneRect(sceneRect);
 
     // cridem el mètode del pare per ajustar el zoom
