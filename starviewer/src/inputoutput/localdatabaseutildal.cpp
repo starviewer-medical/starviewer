@@ -43,13 +43,16 @@ int LocalDatabaseUtilDAL::getDatabaseRevision()
 
     if (rows > 0)
     {
-        QRegExp rexRevisionDatabase("\\d+");//La Revisió es guarda en el format $Revision \d+ $, nosaltres només volem el número per això busquem el \d+
-        int pos = rexRevisionDatabase.indexIn(reply[1]);
+        QString revisionDatabaseAsQString(reply[1]);
         sqlite3_free_table(reply);
 
-        if (pos > -1)
+        bool databaseReplyIsAnIntegerValue = false;
+        int revisionDatabaseAsInt = revisionDatabaseAsQString.toInt(&databaseReplyIsAnIntegerValue);
+        
+        if (databaseReplyIsAnIntegerValue)
         {
-            return rexRevisionDatabase.cap(0).toInt();
+            //El número de revisió ha de tenir format numèric, sinó s'ha produït un error.
+            return revisionDatabaseAsInt;
         }
         else
         {

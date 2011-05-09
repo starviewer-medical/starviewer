@@ -9,10 +9,9 @@ CREATE TABLE DatabaseRevision
   Revision                      TEXT
 ); 
 
--- Per actualitzar el número de revisió amb el del commit substituir $Rev$Rev$, la DatabaseRevision agafarà automàticament com a valor 
--- la revisió en que s'ha fet el commit amb el canvi a la base de dades.
-
-INSERT INTO DatabaseRevision (Revision) VALUES ('$Rev$'); 
+-- IMPORTANT!!! Cal canviar el número de revisió per un de superior cada vegada que es faci un canvi a aquest fitxer i calgui
+-- que la BD s'actualitzi
+INSERT INTO DatabaseRevision (Revision) VALUES ('6516');
 
 CREATE TABLE Patient
 ( 
