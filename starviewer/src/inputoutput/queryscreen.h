@@ -61,12 +61,12 @@ public slots:
 
     /// Guarda els objectes que compleixien la màscara passada per paràmetres de l'estudi
     /// passat per paràmetre al primer PACS que es troba com a PACS per defecte
-    void sendDicomObjectsToPacs(PacsDevice pacsDevice, QList<Image *> images);
+    void sendDicomObjectsToPacs(PacsDevice pacsDevice, QList<Image*> images);
 
 signals:
     /// Signal que ens indica quins pacients s'han seleccionat per visualitzar
     /// Afegim un segon paràmetre per indicar si aquests pacients s'han de carregar únicament i si s'han de visualitzar
-    void selectedPatients(QList<Patient *> selectedPatients, bool loadOnly = false);
+    void selectedPatients(QList<Patient*> selectedPatients, bool loadOnly = false);
 
     /// Indica que s'ha produït un error en la descarrega d'un estudi sol·licitat a través del mètode public retrieveStudy
     void studyRetrieveFailed(QString studyInstanceUID);
@@ -80,7 +80,7 @@ signals:
 protected :
     ///  Event que s'activa al tancar al rebren un event de tancament
     ///  @param event de tancament
-    void closeEvent(QCloseEvent* event);
+    void closeEvent(QCloseEvent *event);
 
 private slots:
     /// Escull a on fer la cerca, si a nivell local o PACS

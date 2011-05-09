@@ -26,7 +26,7 @@ DICOMImageFileGenerator::~DICOMImageFileGenerator()
 
 }
 
-void DICOMImageFileGenerator::setInput(Volume * volume)
+void DICOMImageFileGenerator::setInput(Volume *volume)
 {
     m_input = volume;
 }
@@ -52,14 +52,14 @@ bool DICOMImageFileGenerator::generateDICOMFiles()
 
 bool DICOMImageFileGenerator::generateSecondaryCaptureDICOMFiles()
 {
-    vtkImageData * data = m_input->getVtkData();
+    vtkImageData *data = m_input->getVtkData();
 
-    int * dimensions = data->GetDimensions();
-    int bytesPerImage = data->GetScalarSize()*data->GetNumberOfScalarComponents()*dimensions[0]*dimensions[1];
-    const char * scalarPointer = static_cast<const char *>(data->GetScalarPointer());
+    int *dimensions = data->GetDimensions();
+    int bytesPerImage = data->GetScalarSize() * data->GetNumberOfScalarComponents() * dimensions[0] * dimensions[1];
+    const char* scalarPointer = static_cast<const char*>(data->GetScalarPointer());
     int i = 1;
 
-    DICOMWriter * writer;
+    DICOMWriter *writer;
 
     foreach (Image *image, m_input->getImages())
     {
@@ -101,7 +101,7 @@ bool DICOMImageFileGenerator::generateSecondaryCaptureDICOMFiles()
     return true;
 }
 
-void DICOMImageFileGenerator::fillGeneralImageInfo(DICOMWriter * writer, Image * image)
+void DICOMImageFileGenerator::fillGeneralImageInfo(DICOMWriter *writer, Image *image)
 {
     DICOMValueAttribute instanceNumber;
     instanceNumber.setTag(DICOMInstanceNumber);
@@ -116,7 +116,7 @@ void DICOMImageFileGenerator::fillGeneralImageInfo(DICOMWriter * writer, Image *
 
 }
 
-void DICOMImageFileGenerator::fillImagePixelInfo(DICOMWriter * writer, Image * image)
+void DICOMImageFileGenerator::fillImagePixelInfo(DICOMWriter *writer, Image *image)
 {
     DICOMValueAttribute samplesPerPixel;
     samplesPerPixel.setTag(DICOMSamplesPerPixel);
@@ -169,7 +169,7 @@ void DICOMImageFileGenerator::fillImagePixelInfo(DICOMWriter * writer, Image * i
 
 }
 
-void DICOMImageFileGenerator::fillSCInfo(DICOMWriter * writer, Image * image)
+void DICOMImageFileGenerator::fillSCInfo(DICOMWriter *writer, Image *image)
 {
     Q_UNUSED(image);
 
@@ -179,7 +179,7 @@ void DICOMImageFileGenerator::fillSCInfo(DICOMWriter * writer, Image * image)
     writer->addValueAttribute(&conversionType);
 }
 
-void DICOMImageFileGenerator::fillSOPInfo(DICOMWriter * writer, Image * image)
+void DICOMImageFileGenerator::fillSOPInfo(DICOMWriter *writer, Image *image)
 {
     DICOMValueAttribute classUID;
     classUID.setTag(DICOMSOPClassUID);

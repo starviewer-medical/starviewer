@@ -75,7 +75,7 @@ void initializeTranslations(QApplication &app)
     QList<QString> extensionsMediatorNames = udg::ExtensionMediatorFactory::instance()->getFactoryNamesList();
     foreach (QString mediatorName, extensionsMediatorNames)
     {
-        udg::ExtensionMediator* mediator = udg::ExtensionMediatorFactory::instance()->create(mediatorName);
+        udg::ExtensionMediator *mediator = udg::ExtensionMediatorFactory::instance()->create(mediatorName);
 
         if (mediator)
         {

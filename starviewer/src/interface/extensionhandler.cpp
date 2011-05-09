@@ -35,7 +35,7 @@ ExtensionHandler::ExtensionHandler(QApplicationMainWindow *mainApp, QObject *par
     //TODO:xapussa per a que l'starviewer escolti les peticions del RIS, com que tot el codi d'escoltar les peticions del ris està a la
     //queryscreen l'hem d'instanciar ja a l'inici perquè ja escolti les peticions
     QueryScreenSingleton::instance();
-    connect(QueryScreenSingleton::instance(), SIGNAL(selectedPatients(QList<Patient *>, bool)), SLOT(processInput(QList<Patient*>, bool)));
+    connect(QueryScreenSingleton::instance(), SIGNAL(selectedPatients(QList<Patient*>, bool)), SLOT(processInput(QList<Patient*>, bool)));
 }
 
 ExtensionHandler::~ExtensionHandler()
@@ -68,27 +68,27 @@ void ExtensionHandler::request(int who)
             // HACK degut a que la QueryScreen és un singleton, això provoca efectes colaterals quan teníem
             // dues finestres (mirar ticket #542). Fem aquest petit hack perquè això no passi.
             // Queda pendent resoldre-ho de la forma adequada
-            disconnect(QueryScreenSingleton::instance(), SIGNAL(selectedPatients(QList<Patient *>, bool)), 0, 0);
+            disconnect(QueryScreenSingleton::instance(), SIGNAL(selectedPatients(QList<Patient*>, bool)), 0, 0);
             QueryScreenSingleton::instance()->showPACSTab();
-            connect(QueryScreenSingleton::instance(), SIGNAL(selectedPatients(QList<Patient *>, bool)), SLOT(processInput(QList<Patient*>, bool)));
+            connect(QueryScreenSingleton::instance(), SIGNAL(selectedPatients(QList<Patient*>, bool)), SLOT(processInput(QList<Patient*>, bool)));
             break;
 
         case 8:
             // HACK degut a que la QueryScreen és un singleton, això provoca efectes colaterals quan teníem
             // dues finestres (mirar ticket #542). Fem aquest petit hack perquè això no passi.
             // Queda pendent resoldre-ho de la forma adequada
-            disconnect(QueryScreenSingleton::instance(), SIGNAL(selectedPatients(QList<Patient *>, bool)), 0, 0);
+            disconnect(QueryScreenSingleton::instance(), SIGNAL(selectedPatients(QList<Patient*>, bool)), 0, 0);
             QueryScreenSingleton::instance()->openDicomdir();
-            connect(QueryScreenSingleton::instance(), SIGNAL(selectedPatients(QList<Patient *>, bool)), SLOT(processInput(QList<Patient*>, bool)));
+            connect(QueryScreenSingleton::instance(), SIGNAL(selectedPatients(QList<Patient*>, bool)), SLOT(processInput(QList<Patient*>, bool)));
             break;
 
         case 10: // Mostrar local
             // HACK degut a que la QueryScreen és un singleton, això provoca efectes colaterals quan teníem
             // dues finestres (mirar ticket #542). Fem aquest petit hack perquè això no passi.
             // Queda pendent resoldre-ho de la forma adequada
-            disconnect(QueryScreenSingleton::instance(), SIGNAL(selectedPatients(QList<Patient *>, bool)), 0, 0);
+            disconnect(QueryScreenSingleton::instance(), SIGNAL(selectedPatients(QList<Patient*>, bool)), 0, 0);
             QueryScreenSingleton::instance()->showLocalExams();
-            connect(QueryScreenSingleton::instance(), SIGNAL(selectedPatients(QList<Patient *>, bool)), SLOT(processInput(QList<Patient*>, bool)));
+            connect(QueryScreenSingleton::instance(), SIGNAL(selectedPatients(QList<Patient*>, bool)), SLOT(processInput(QList<Patient*>, bool)));
             break;
     }
 }
@@ -221,12 +221,12 @@ void ExtensionHandler::processInput(const QStringList &inputFiles)
         bool error = true;
 
         // marquem les series seleccionades
-        QList<Study *> studyList = patientsList.at(i)->getStudies();
+        QList<Study*> studyList = patientsList.at(i)->getStudies();
         if (!studyList.isEmpty())
         {
             Study *study = studyList.first();
 
-            QList<Series *> seriesList = study->getSeries();
+            QList<Series*> seriesList = study->getSeries();
             if (!seriesList.isEmpty())
             {
                 Series *series = seriesList.first();
@@ -271,7 +271,7 @@ void ExtensionHandler::processInput(const QStringList &inputFiles)
     else
     {
         // Carreguem únicament els correctes
-        QList<Patient *> rightPatients;
+        QList<Patient*> rightPatients;
         foreach (int index, correctlyLoadedPatients)
         {
             rightPatients << patientsList.at(index);
@@ -280,7 +280,7 @@ void ExtensionHandler::processInput(const QStringList &inputFiles)
     }
 }
 
-void ExtensionHandler::processInput(QList<Patient *> patientsList, bool loadOnly)
+void ExtensionHandler::processInput(QList<Patient*> patientsList, bool loadOnly)
 {
     // Si de tots els pacients que es carreguen intentem carregar-ne un d'igual al que ja tenim carregat, el mantenim
     bool canReplaceActualPatient = true;
@@ -314,7 +314,7 @@ void ExtensionHandler::generatePatientVolumes(Patient *patient, const QString &d
         foreach (Series *series, study->getViewableSeries())
         {
             int currentVolumeNumber;
-            QMap<int, QList<Image *> > volumesImages;
+            QMap<int, QList<Image*> > volumesImages;
             foreach (Image *image, series->getImages())
             {
                 currentVolumeNumber = image->getVolumeNumberInSeries();
@@ -324,12 +324,12 @@ void ExtensionHandler::generatePatientVolumes(Patient *patient, const QString &d
                 }
                 else
                 {
-                    QList<Image *> newImageList;
+                    QList<Image*> newImageList;
                     newImageList << image;
                     volumesImages.insert(currentVolumeNumber, newImageList);
                 }
             }
-            typedef QList<Image *> ImageListType;
+            typedef QList<Image*> ImageListType;
             foreach (ImageListType imageList, volumesImages)
             {
                 int numberOfPhases = 1;

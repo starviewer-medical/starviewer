@@ -38,7 +38,7 @@ void QPacsList::refresh()
 
     foreach (PacsDevice pacs, pacsList)
     {
-        QTreeWidgetItem* item = new QTreeWidgetItem(m_PacsTreeView);
+        QTreeWidgetItem *item = new QTreeWidgetItem(m_PacsTreeView);
 
         item->setText(0, pacs.getID());
         item->setText(1, pacs.getAETitle());
@@ -57,7 +57,7 @@ QList<PacsDevice> QPacsList::getSelectedPacs()
 {
     PacsDeviceManager pacsDeviceManager;
     QList<PacsDevice> selectedPacsList;
-    QList<QTreeWidgetItem *> qPacsList(m_PacsTreeView->selectedItems());
+    QList<QTreeWidgetItem*> qPacsList(m_PacsTreeView->selectedItems());
 
     QTreeWidgetItem *item;
     for (int i = 0; i < qPacsList.count(); i++)

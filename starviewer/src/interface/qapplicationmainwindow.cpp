@@ -430,7 +430,7 @@ void QApplicationMainWindow::createLanguageMenu()
     }
 }
 
-QAction *QApplicationMainWindow::createLanguageAction(const QString &language, const QString &locale)
+QAction* QApplicationMainWindow::createLanguageAction(const QString &language, const QString &locale)
 {
     Settings settings;
     QString defaultLocale = settings.getValue(CoreSettings::LanguageLocale).toString();
@@ -512,7 +512,7 @@ void QApplicationMainWindow::setPatient(Patient *patient)
     m_extensionHandler->openDefaultExtension();
 }
 
-Patient *QApplicationMainWindow::getCurrentPatient()
+Patient* QApplicationMainWindow::getCurrentPatient()
 {
     return m_patient;
 }
@@ -522,7 +522,7 @@ unsigned int QApplicationMainWindow::getCountQApplicationMainWindow()
     unsigned int count = 0;
     foreach (QWidget *widget, QApplication::topLevelWidgets())
     {
-        if (qobject_cast<QApplicationMainWindow *>(widget))
+        if (qobject_cast<QApplicationMainWindow*>(widget))
         {
             ++count;
         }

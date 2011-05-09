@@ -18,7 +18,7 @@ ROITool::ROITool(QViewer *viewer, QObject *parent)
     m_toolName = "ROITool";
     m_hasSharedData = false;
 
-    m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
+    m_2DViewer = qobject_cast<Q2DViewer*>(viewer);
     if (!m_2DViewer)
     {
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ") + viewer->metaObject()->className());
@@ -43,7 +43,7 @@ void ROITool::computeStatisticsData()
     int endPosition;
     double *firstIntersection;
     double *secondIntersection;
-    QList<double *> intersectionList;
+    QList<double*> intersectionList;
     QList<int> intersectedSegmentsIndexList;
     double sweepLineBeginPoint[3];
     double sweepLineEndPoint[3];
@@ -57,8 +57,8 @@ void ROITool::computeStatisticsData()
     int numberOfSegments = projectedROIPolygon->getNumberOfPoints();
 
     // Llistes de punts inicials i finals de cada segement
-    QVector<const double *> segmentsStartPoints;
-    QVector<const double *> segmentsEndPoints;
+    QVector<const double*> segmentsStartPoints;
+    QVector<const double*> segmentsEndPoints;
 
     // Creem els diferents segments
     for (int i = 0; i < numberOfSegments - 1; ++i)
@@ -167,7 +167,7 @@ void ROITool::computeStatisticsData()
         // Obtenim les interseccions entre tots els segments de la ROI i la línia d'escombrat actual
         foreach (int segmentIndex, intersectedSegmentsIndexList)
         {
-            double *foundPoint = MathTools::infiniteLinesIntersection((double *)segmentsStartPoints.at(segmentIndex), (double *)segmentsEndPoints.at(segmentIndex), sweepLineBeginPoint, sweepLineEndPoint, intersectionState);
+            double *foundPoint = MathTools::infiniteLinesIntersection((double*)segmentsStartPoints.at(segmentIndex), (double*)segmentsEndPoints.at(segmentIndex), sweepLineBeginPoint, sweepLineEndPoint, intersectionState);
             if (intersectionState == MathTools::LinesIntersect)
             {
                 // Cal ordenar les interseccions en la direcció horitzontal per tal que el recompte de píxels es faci correctament

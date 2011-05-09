@@ -77,12 +77,12 @@ bool Series::imageExists(const QString &identifier)
     }
 }
 
-QList<Image *> Series::getImages() const
+QList<Image*> Series::getImages() const
 {
     return m_imageSet;
 }
 
-void Series::setImages(QList<Image *> imageSet)
+void Series::setImages(QList<Image*> imageSet)
 {
     // Buidar la llista abans d'afegir-hi la nova
     m_imageSet.clear();
@@ -410,9 +410,9 @@ Identifier Series::addVolume(Volume *volume)
     return volumeID;
 }
 
-QList<Volume *> Series::getVolumesList()
+QList<Volume*> Series::getVolumesList()
 {
-    QList<Volume *> volumesList;
+    QList<Volume*> volumesList;
     foreach (Identifier id, m_volumesList)
     {
         volumesList << VolumeRepository::getRepository()->getVolume(id);

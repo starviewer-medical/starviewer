@@ -63,7 +63,7 @@ void QExporterTool::createConnections()
 void QExporterTool::initialize()
 {
     // Depenent de si és un visor 2d o no (3D) habilitem unes opcions o unes altres
-    Q2DViewer * q2DViewer = qobject_cast<Q2DViewer *>(m_viewer);
+    Q2DViewer *q2DViewer = qobject_cast<Q2DViewer*>(m_viewer);
 
     if (q2DViewer)
     {
@@ -148,7 +148,7 @@ void QExporterTool::generateAndStoreNewSeries()
     }
     else if (m_allImagesRadioButton->isChecked())
     {
-        Q2DViewer * viewer2D = qobject_cast<Q2DViewer *>(m_viewer);
+        Q2DViewer *viewer2D = qobject_cast<Q2DViewer*>(m_viewer);
 
         // Guardem la llesca i la fase acutal
         int currentSlice = viewer2D->getCurrentSlice();
@@ -177,7 +177,7 @@ void QExporterTool::generateAndStoreNewSeries()
     }
     else if (m_imagesOfCurrentPhaseRadioButton->isChecked())
     {
-        Q2DViewer * viewer2D = qobject_cast<Q2DViewer *>(m_viewer);
+        Q2DViewer *viewer2D = qobject_cast<Q2DViewer*>(m_viewer);
 
         // Guardem la llesca acutal
         int currentSlice = viewer2D->getCurrentSlice();
@@ -195,7 +195,7 @@ void QExporterTool::generateAndStoreNewSeries()
     }
     else if (m_phasesOfCurrentImageRadioButton->isChecked())
     {
-        Q2DViewer * viewer2D = qobject_cast<Q2DViewer *>(m_viewer);
+        Q2DViewer *viewer2D = qobject_cast<Q2DViewer*>(m_viewer);
 
         // Guardem la fase acutal
         int currentPhase = viewer2D->getCurrentPhase();
@@ -222,7 +222,7 @@ void QExporterTool::generateAndStoreNewSeries()
 
     builder->setSeriesDescription(m_seriesDescription->text());
 
-    Volume * generetedVolume = builder->build();
+    Volume *generetedVolume = builder->build();
 
     progress.setLabelText(tr("Generating files..."));
     progress.setValue(progress.value() + 1);
@@ -255,7 +255,7 @@ void QExporterTool::generateAndStoreNewSeries()
             progress.setLabelText(tr("Sending to PACS..."));
             progress.setValue(progress.value() + 1);
             qApp->processEvents();
-            QueryScreen * queryScreen = SingletonPointer<QueryScreen>::instance();
+            QueryScreen *queryScreen = SingletonPointer<QueryScreen>::instance();
             PacsDeviceManager deviceManager;
             PacsDevice device = deviceManager.getPACSDeviceByID(m_pacsNodeComboBox->itemData(m_pacsNodeComboBox->currentIndex()).toString());
 
@@ -297,7 +297,7 @@ void QExporterTool::currentImageRadioButtonClicked()
 
 void QExporterTool::allImagesRadioButtonClicked()
 {
-    Q2DViewer * viewer2D = qobject_cast<Q2DViewer *>(m_viewer);
+    Q2DViewer *viewer2D = qobject_cast<Q2DViewer*>(m_viewer);
 
     if (viewer2D)
     {
@@ -312,7 +312,7 @@ void QExporterTool::allImagesRadioButtonClicked()
 
 void QExporterTool::imageOfCurrentPhaseRadioButtonClicked()
 {
-    Q2DViewer * viewer2D = qobject_cast<Q2DViewer *>(m_viewer);
+    Q2DViewer *viewer2D = qobject_cast<Q2DViewer*>(m_viewer);
 
     if (viewer2D)
     {
@@ -327,7 +327,7 @@ void QExporterTool::imageOfCurrentPhaseRadioButtonClicked()
 
 void QExporterTool::phasesOfCurrentImageRadioButtonClicked()
 {
-    Q2DViewer * viewer2D = qobject_cast<Q2DViewer *>(m_viewer);
+    Q2DViewer *viewer2D = qobject_cast<Q2DViewer*>(m_viewer);
 
     if (viewer2D)
     {
@@ -367,7 +367,7 @@ void QExporterTool::destinationsChanged(bool checked)
 
 void QExporterTool::generate2DPreview(int slice, int phase)
 {
-    Q2DViewer * viewer2D = qobject_cast<Q2DViewer *>(m_viewer);
+    Q2DViewer *viewer2D = qobject_cast<Q2DViewer*>(m_viewer);
 
     Q_ASSERT(viewer2D);
 
@@ -402,7 +402,7 @@ void QExporterTool::generateCurrentPreview()
 void QExporterTool::generatePreview()
 {
     QString path = QString("%1/preview.png").arg(QDir::tempPath());
-    vtkImageWriter * writer = vtkPNGWriter::New();
+    vtkImageWriter *writer = vtkPNGWriter::New();
     writer->SetInput(captureCurrentView());
     writer->SetFileName(qPrintable(path));
     writer->Write();
@@ -420,7 +420,7 @@ bool QExporterTool::canAllocateEnoughMemory()
     }
     else if (m_allImagesRadioButton->isChecked())
     {
-        Q2DViewer * viewer2D = qobject_cast<Q2DViewer *>(m_viewer);
+        Q2DViewer *viewer2D = qobject_cast<Q2DViewer*>(m_viewer);
 
         int maxSlice = viewer2D->getMaximumSlice() + 1;
         int phases = viewer2D->getInput()->getNumberOfPhases();
@@ -428,13 +428,13 @@ bool QExporterTool::canAllocateEnoughMemory()
     }
     else if (m_imagesOfCurrentPhaseRadioButton->isChecked())
     {
-        Q2DViewer * viewer2D = qobject_cast<Q2DViewer *>(m_viewer);
+        Q2DViewer *viewer2D = qobject_cast<Q2DViewer*>(m_viewer);
 
         numberOfScreenshots = viewer2D->getMaximumSlice() + 1;
     }
     else if (m_phasesOfCurrentImageRadioButton->isChecked())
     {
-        Q2DViewer * viewer2D = qobject_cast<Q2DViewer *>(m_viewer);
+        Q2DViewer *viewer2D = qobject_cast<Q2DViewer*>(m_viewer);
 
         numberOfScreenshots = viewer2D->getInput()->getNumberOfPhases();
     }
@@ -448,7 +448,7 @@ bool QExporterTool::canAllocateEnoughMemory()
 }
 bool QExporterTool::canAllocateEnoughMemory(int numberOfScreenshots)
 {
-    int * windowSize = m_viewer->getRenderWindowSize();
+    int *windowSize = m_viewer->getRenderWindowSize();
     // Calculem quanta memòria ens ocuparà el nou volum a generar
     // Cal calcular la quantitat de bytes memòria amb un tipus de píxel
     // prou gran com perquè no ens desbordi el valor i ens doni el valor correcte

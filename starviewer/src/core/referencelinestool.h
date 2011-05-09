@@ -27,7 +27,7 @@ public:
 
     /// Re-implementa la funció del pare, afegint noves connexions
     /// @param data
-    void setToolData(ToolData * data);
+    void setToolData(ToolData *data);
 
     void handleEvent(long unsigned eventID)
     {
@@ -96,8 +96,8 @@ private:
     DrawerPolygon *m_projectedReferencePlane;
 
     /// En aquestes llistes mantindrem totes les linies a projectar
-    QList<DrawerLine *> m_projectedIntersectionLines;
-    QList<DrawerLine *> m_backgroundProjectedIntersectionLines;
+    QList<DrawerLine*> m_projectedIntersectionLines;
+    QList<DrawerLine*> m_backgroundProjectedIntersectionLines;
 
     /// Aquesta variable serveix per controlar si volem mostrar el gruix de la llesca o si pel contrari
     /// amb la llesca tal qual ens conformem

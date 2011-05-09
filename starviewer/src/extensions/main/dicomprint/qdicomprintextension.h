@@ -65,7 +65,7 @@ private slots:
     void timeoutTimer();
 
 private:
-    ImagePrintFactory * m_factory;
+    ImagePrintFactory *m_factory;
     QPrinterConfigurationWidget *m_printerConfigurationWidgetProof;
 
     ///Crea les connexions

@@ -20,7 +20,7 @@ public:
     ~TransDifferenceToolData();
 
     /// Set del volum d'entrada
-    void setInputVolume(Volume* input);
+    void setInputVolume(Volume *input);
 
     /// Get del volum d'entrada
     Volume* getInputVolume()
@@ -29,7 +29,7 @@ public:
     }
 
     /// Set del volum diferència
-    void setDifferenceVolume(Volume* input);
+    void setDifferenceVolume(Volume *input);
 
     /// Get del volum diferència
     Volume* getDifferenceVolume()
@@ -109,8 +109,8 @@ private:
     QVector<QPair<int, int> > m_sliceTranslations;
 
     ///Dades del volum original i la diferència
-    Volume* m_inputVolume;
-    Volume* m_differenceVolume;
+    Volume *m_inputVolume;
+    Volume *m_differenceVolume;
 
     int m_dx, m_dy;
 

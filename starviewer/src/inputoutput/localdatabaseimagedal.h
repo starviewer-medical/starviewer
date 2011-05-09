@@ -45,7 +45,7 @@ private :
     double m_patientPosition[3];
 
     ///Emplena un l'objecte imatge de la fila passada per paràmetre
-    Image *fillImage(char **reply, int row, int columns);
+    Image* fillImage(char **reply, int row, int columns);
 
     ///Genera la sentència sql per fer selectes d'imatges, de la màscara només té en compte per construir la sentència el StudyUID, SeriesUID i SOPInstanceUID
     QString buildSqlSelect(const DicomMask &imageMaskToSelect);

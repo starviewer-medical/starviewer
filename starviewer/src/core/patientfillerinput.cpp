@@ -164,7 +164,7 @@ void PatientFillerInput::setDICOMFile(DICOMTagReader *dicomTagReader)
     m_dicomFile = dicomTagReader;
 }
 
-DICOMTagReader * PatientFillerInput::getDICOMFile()
+DICOMTagReader* PatientFillerInput::getDICOMFile()
 {
     return m_dicomFile;
 }
@@ -174,7 +174,7 @@ void PatientFillerInput::setCurrentImages(const QList<Image *> &images)
     m_currentImages = images;
 }
 
-QList<Image *> PatientFillerInput::getCurrentImages()
+QList<Image*> PatientFillerInput::getCurrentImages()
 {
     return m_currentImages;
 }
@@ -184,7 +184,7 @@ void PatientFillerInput::setCurrentSeries(Series *series)
     m_currentSeries = series;
 }
 
-Series * PatientFillerInput::getCurrentSeries()
+Series* PatientFillerInput::getCurrentSeries()
 {
     return m_currentSeries;
 }

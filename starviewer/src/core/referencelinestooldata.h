@@ -26,7 +26,7 @@ public:
      * Retorna els plans a projectar
      * @return
      */
-    QList<ImagePlane *> getPlanesToProject() const;
+    QList<ImagePlane*> getPlanesToProject() const;
 
 public slots:
     /**
@@ -41,7 +41,7 @@ public slots:
      * Assigna els plans de la serie de referencia
      * @param imagePlane
      */
-    void setPlanesToProject(QList<ImagePlane *> planes);
+    void setPlanesToProject(QList<ImagePlane*> planes);
     void setPlanesToProject(ImagePlane *plane);
 
 private:
@@ -49,7 +49,7 @@ private:
     QString m_frameOfReferenceUID;
 
     /// Llista de plans a projectar
-    QList<ImagePlane *> m_planesToProject;
+    QList<ImagePlane*> m_planesToProject;
 };
 
 }

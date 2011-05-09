@@ -50,7 +50,7 @@ private:
     PACSRequestStatus::QueryRequestStatus query();
 
     ///Aquest és un mètode que és cridat en callback per les dcmtk, per cada objecte dicom que es trobi en el PACS que compleix la query dcmtk el crida. Aquest mètode ens insereix la llista d'estudis, sèries o imatges l'objecte dicom trobat en funció del nivell del que sigui l'objecte.
-    static void foundMatchCallback(void * callbackData, T_DIMSE_C_FindRQ * request, int responseCount, T_DIMSE_C_FindRSP *rsp, DcmDataset *responseIdentifiers);
+    static void foundMatchCallback(void *callbackData, T_DIMSE_C_FindRQ *request, int responseCount, T_DIMSE_C_FindRSP *rsp, DcmDataset *responseIdentifiers);
 
     ///Cancel·la la consulta actual
     void cancelQuery(T_DIMSE_C_FindRQ *request);

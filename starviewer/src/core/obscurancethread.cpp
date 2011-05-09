@@ -118,7 +118,7 @@ void ObscuranceThread::runDensity() // optimitzat
                 Voxel u = { qRound(ru.x), qRound(ru.y), qRound(ru.z) };
 
                 int uIndex = m_startDelta + u.x * incX + u.y * incY + u.z * incZ;
-                float * uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
+                float *uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
                 Vector3 uNormal(uGradient[0], uGradient[1], uGradient[2]);
                 double cos = uNormal * m_direction;
 
@@ -144,7 +144,7 @@ void ObscuranceThread::runDensity() // optimitzat
             Voxel u = { qRound(ru.x), qRound(ru.y), qRound(ru.z) };
 
             int uIndex = m_startDelta + u.x * incX + u.y * incY + u.z * incZ;
-            float * uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
+            float *uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
             Vector3 uNormal(uGradient[0], uGradient[1], uGradient[2]);
 
             double cos = uNormal * m_direction;
@@ -166,7 +166,7 @@ void ObscuranceThread::runDensitySmooth()
     QStack<QPair<ushort, Vector3> > unresolvedVoxels;
     QLinkedList<QPair<ushort, Vector3> > postponedVoxels;
 
-    const unsigned short * dataPtr = m_data + m_startDelta;
+    const unsigned short *dataPtr = m_data + m_startDelta;
     int nLineStarts = m_lineStarts.size();
 
     // iterar per cada línia
@@ -194,7 +194,7 @@ void ObscuranceThread::runDensitySmooth()
                     Voxel u = { qRound(ru.x), qRound(ru.y), qRound(ru.z) };
 
                     int uIndex = m_startDelta + u.x * incX + u.y * incY + u.z * incZ;
-                    float * uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
+                    float *uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
                     Vector3 uNormal(uGradient[0], uGradient[1], uGradient[2]);
 
                     double distance = (rv - ru).length();
@@ -236,7 +236,7 @@ void ObscuranceThread::runDensitySmooth()
                 Voxel u = { qRound(ru.x), qRound(ru.y), qRound(ru.z) };
 
                 int uIndex = m_startDelta + u.x * incX + u.y * incY + u.z * incZ;
-                float * uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
+                float *uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
                 Vector3 uNormal(uGradient[0], uGradient[1], uGradient[2]);
 
                 double distance = (rv - ru).length();
@@ -276,7 +276,7 @@ void ObscuranceThread::runDensitySmooth()
             Voxel u = { qRound(ru.x), qRound(ru.y), qRound(ru.z) };
 
             int uIndex = m_startDelta + u.x * incX + u.y * incY + u.z * incZ;
-            float * uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
+            float *uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
             Vector3 uNormal(uGradient[0], uGradient[1], uGradient[2]);
 
             double cos = uNormal * m_direction;
@@ -292,7 +292,7 @@ void ObscuranceThread::runDensitySmooth()
             Voxel u = { qRound(ru.x), qRound(ru.y), qRound(ru.z) };
 
             int uIndex = m_startDelta + u.x * incX + u.y * incY + u.z * incZ;
-            float * uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
+            float *uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
             Vector3 uNormal(uGradient[0], uGradient[1], uGradient[2]);
 
             double cos = uNormal * m_direction;
@@ -313,7 +313,7 @@ void ObscuranceThread::runOpacity()
 
     QStack<QPair<double, Vector3> > unresolvedVoxels;
 
-    const unsigned short * dataPtr = m_data + m_startDelta;
+    const unsigned short *dataPtr = m_data + m_startDelta;
     int nLineStarts = m_lineStarts.size();
 
     // iterar per cada línia
@@ -336,7 +336,7 @@ void ObscuranceThread::runOpacity()
                 Voxel u = { qRound(ru.x), qRound(ru.y), qRound(ru.z) };
 
                 int uIndex = m_startDelta + u.x * incX + u.y * incY + u.z * incZ;
-                float * uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
+                float *uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
                 Vector3 uNormal(uGradient[0], uGradient[1], uGradient[2]);
                 double cos = uNormal * m_direction;
 
@@ -360,7 +360,7 @@ void ObscuranceThread::runOpacity()
             Voxel u = { qRound(ru.x), qRound(ru.y), qRound(ru.z) };
 
             int uIndex = m_startDelta + u.x * incX + u.y * incY + u.z * incZ;
-            float * uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
+            float *uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
             Vector3 uNormal(uGradient[0], uGradient[1], uGradient[2]);
 
             double cos = uNormal * m_direction;
@@ -382,7 +382,7 @@ void ObscuranceThread::runOpacitySmooth()
     QStack<QPair<double, Vector3> > unresolvedVoxels;
     QLinkedList<QPair<double, Vector3> > postponedVoxels;
 
-    const unsigned short * dataPtr = m_data + m_startDelta;
+    const unsigned short *dataPtr = m_data + m_startDelta;
     int nLineStarts = m_lineStarts.size();
 
     // iterar per cada línia
@@ -411,7 +411,7 @@ void ObscuranceThread::runOpacitySmooth()
                     Voxel u = { qRound(ru.x), qRound(ru.y), qRound(ru.z) };
 
                     int uIndex = m_startDelta + u.x * incX + u.y * incY + u.z * incZ;
-                    float * uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
+                    float *uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
                     Vector3 uNormal(uGradient[0], uGradient[1], uGradient[2]);
 
                     double distance = (rv - ru).length();
@@ -453,7 +453,7 @@ void ObscuranceThread::runOpacitySmooth()
                 Voxel u = { qRound(ru.x), qRound(ru.y), qRound(ru.z) };
 
                 int uIndex = m_startDelta + u.x * incX + u.y * incY + u.z * incZ;
-                float * uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
+                float *uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
                 Vector3 uNormal(uGradient[0], uGradient[1], uGradient[2]);
 
                 double distance = (rv - ru).length();
@@ -493,7 +493,7 @@ void ObscuranceThread::runOpacitySmooth()
             Voxel u = { qRound(ru.x), qRound(ru.y), qRound(ru.z) };
 
             int uIndex = m_startDelta + u.x * incX + u.y * incY + u.z * incZ;
-            float * uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
+            float *uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
             Vector3 uNormal(uGradient[0], uGradient[1], uGradient[2]);
 
             double cos = uNormal * m_direction;
@@ -509,7 +509,7 @@ void ObscuranceThread::runOpacitySmooth()
             Voxel u = { qRound(ru.x), qRound(ru.y), qRound(ru.z) };
 
             int uIndex = m_startDelta + u.x * incX + u.y * incY + u.z * incZ;
-            float * uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
+            float *uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
             Vector3 uNormal(uGradient[0], uGradient[1], uGradient[2]);
 
             double cos = uNormal * m_direction;
@@ -530,7 +530,7 @@ void ObscuranceThread::runOpacitySaliency()    // = runOpacity() (de moment)
 
     QStack<QPair<double, Vector3> > unresolvedVoxels;
 
-    const unsigned short * dataPtr = m_data + m_startDelta;
+    const unsigned short *dataPtr = m_data + m_startDelta;
     int nLineStarts = m_lineStarts.size();
 
     // iterar per cada línia
@@ -553,7 +553,7 @@ void ObscuranceThread::runOpacitySaliency()    // = runOpacity() (de moment)
                 Voxel u = { qRound(ru.x), qRound(ru.y), qRound(ru.z) };
 
                 int uIndex = m_startDelta + u.x * incX + u.y * incY + u.z * incZ;
-                float * uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
+                float *uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
                 Vector3 uNormal(uGradient[0], uGradient[1], uGradient[2]);
                 double cos = uNormal * m_direction;
 
@@ -577,7 +577,7 @@ void ObscuranceThread::runOpacitySaliency()    // = runOpacity() (de moment)
             Voxel u = { qRound(ru.x), qRound(ru.y), qRound(ru.z) };
 
             int uIndex = m_startDelta + u.x * incX + u.y * incY + u.z * incZ;
-            float * uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
+            float *uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
             Vector3 uNormal(uGradient[0], uGradient[1], uGradient[2]);
 
             double cos = uNormal * m_direction;
@@ -600,7 +600,7 @@ void ObscuranceThread::runOpacitySmoothSaliency()
     QStack<QPair<double, Vector3> > unresolvedVoxels;
     QLinkedList<QPair<double, Vector3> > postponedVoxels;
 
-    const unsigned short * dataPtr = m_data + m_startDelta;
+    const unsigned short *dataPtr = m_data + m_startDelta;
     int nLineStarts = m_lineStarts.size();
 
     // iterar per cada línia
@@ -640,7 +640,7 @@ void ObscuranceThread::runOpacitySmoothSaliency()
                     Voxel u = { qRound(ru.x), qRound(ru.y), qRound(ru.z) };
 
                     int uIndex = m_startDelta + u.x * incX + u.y * incY + u.z * incZ;
-                    float * uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
+                    float *uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
                     Vector3 uNormal(uGradient[0], uGradient[1], uGradient[2]);
 
                     double distance = (rv - ru).length();
@@ -682,7 +682,7 @@ void ObscuranceThread::runOpacitySmoothSaliency()
                 Voxel u = { qRound(ru.x), qRound(ru.y), qRound(ru.z) };
 
                 int uIndex = m_startDelta + u.x * incX + u.y * incY + u.z * incZ;
-                float * uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
+                float *uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
                 Vector3 uNormal(uGradient[0], uGradient[1], uGradient[2]);
 
                 double distance = (rv - ru).length();
@@ -762,7 +762,7 @@ void ObscuranceThread::runOpacityColorBleeding()    /// \todo encara és smooth
     QStack<QPair<double, Vector3> > unresolvedVoxels;
     QLinkedList<QPair<double, Vector3> > postponedVoxels;
 
-    const unsigned short * dataPtr = m_data + m_startDelta;
+    const unsigned short *dataPtr = m_data + m_startDelta;
     int nLineStarts = m_lineStarts.size();
 
     // iterar per cada línia
@@ -793,7 +793,7 @@ void ObscuranceThread::runOpacityColorBleeding()    /// \todo encara és smooth
                     Voxel u = { qRound(ru.x), qRound(ru.y), qRound(ru.z) };
 
                     int uIndex = m_startDelta + u.x * incX + u.y * incY + u.z * incZ;
-                    float * uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
+                    float *uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
                     Vector3 uNormal(uGradient[0], uGradient[1], uGradient[2]);
 
                     double distance = (rv - ru).length();
@@ -835,7 +835,7 @@ void ObscuranceThread::runOpacityColorBleeding()    /// \todo encara és smooth
                 Voxel u = { qRound(ru.x), qRound(ru.y), qRound(ru.z) };
 
                 int uIndex = m_startDelta + u.x * incX + u.y * incY + u.z * incZ;
-                float * uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
+                float *uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
                 Vector3 uNormal(uGradient[0], uGradient[1], uGradient[2]);
 
                 double distance = (rv - ru).length();
@@ -875,7 +875,7 @@ void ObscuranceThread::runOpacityColorBleeding()    /// \todo encara és smooth
             Voxel u = { qRound(ru.x), qRound(ru.y), qRound(ru.z) };
 
             int uIndex = m_startDelta + u.x * incX + u.y * incY + u.z * incZ;
-            float * uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
+            float *uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
             Vector3 uNormal(uGradient[0], uGradient[1], uGradient[2]);
 
             double cos = uNormal * m_direction;
@@ -891,7 +891,7 @@ void ObscuranceThread::runOpacityColorBleeding()    /// \todo encara és smooth
             Voxel u = { qRound(ru.x), qRound(ru.y), qRound(ru.z) };
 
             int uIndex = m_startDelta + u.x * incX + u.y * incY + u.z * incZ;
-            float * uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
+            float *uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
             Vector3 uNormal(uGradient[0], uGradient[1], uGradient[2]);
 
             double cos = uNormal * m_direction;
@@ -1025,7 +1025,7 @@ void ObscuranceThread::runOpacitySmoothColorBleeding()
             const Voxel u = { qRound(ru.x), qRound(ru.y), qRound(ru.z) };
 
             const int uIndex = m_startDelta + u.x * incX + u.y * incY + u.z * incZ;
-            const float * uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
+            const float *uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
             const Vector3 uNormal(uGradient[0], uGradient[1], uGradient[2]);
             const double cos = uNormal * m_direction;
 

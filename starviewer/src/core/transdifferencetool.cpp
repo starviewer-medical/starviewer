@@ -22,7 +22,7 @@ TransDifferenceTool::TransDifferenceTool(QViewer *viewer, QObject *parent)
 
     // ens assegurem que desde la creació tenim un viewer vàlid
     Q_ASSERT(m_viewer);
-    m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
+    m_2DViewer = qobject_cast<Q2DViewer*>(viewer);
     if (!m_2DViewer)
     {
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ") + viewer->metaObject()->className());
@@ -98,14 +98,14 @@ ToolData *TransDifferenceTool::getToolData() const
     return m_myData;
 }
 
-void TransDifferenceTool::setToolData(ToolData * data)
+void TransDifferenceTool::setToolData(ToolData *data)
 {
     //Fem aquesta comparació perquè a vegades ens passa la data que ja tenim a m_myData
     if (m_myData != data)
     {
         // creem de nou les dades
         m_toolData = data;
-        m_myData = qobject_cast<TransDifferenceToolData *>(data);
+        m_myData = qobject_cast<TransDifferenceToolData*>(data);
     }
 }
 
@@ -156,8 +156,8 @@ void TransDifferenceTool::initializeDifferenceImage()
     //Potser caldria aplicar les mateixes translacions que ja hi ha?
     //m_sliceTranslations = QVector<QPair<int,int > >(mainVolume->getDimensions()[2],QPair<int,int>(0,0));
 
-    Volume* mainVolume = m_myData->getInputVolume();
-    Volume* differenceVolume = m_myData->getDifferenceVolume();
+    Volume *mainVolume = m_myData->getInputVolume();
+    Volume *differenceVolume = m_myData->getDifferenceVolume();
 
     int ext[6];
     mainVolume->getWholeExtent(ext);
@@ -240,8 +240,8 @@ void TransDifferenceTool::computeSingleDifferenceImage(int dx, int dy, int slice
         currentSlice = slice;
     }
 
-    Volume* mainVolume = m_myData->getInputVolume();
-    Volume* differenceVolume = m_myData->getDifferenceVolume();
+    Volume *mainVolume = m_myData->getInputVolume();
+    Volume *differenceVolume = m_myData->getDifferenceVolume();
 
     //les translacions són les que ja hi havia a la llesca més el que ens hem mogut amb el cursor
     int tx = dx;

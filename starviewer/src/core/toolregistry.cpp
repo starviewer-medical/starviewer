@@ -362,9 +362,9 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
     return toolAction;
 }
 
-QPair<QAction *, QString> ToolRegistry::getActionToolPair(const QString &actionToolName)
+QPair<QAction*, QString> ToolRegistry::getActionToolPair(const QString &actionToolName)
 {
-    QPair<QAction *, QString> pair;
+    QPair<QAction*, QString> pair;
     QAction *action = new QAction(0);
     QString slot;
     QString statusTip;

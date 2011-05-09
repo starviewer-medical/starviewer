@@ -45,7 +45,7 @@ private slots:
     void setZoomFactor(double factor);
 
     /// Posa el pan
-    void setPan(double * motionVector);
+    void setPan(double *motionVector);
 
     /// Aplica els canvis de canvi de llesca
     void applySliceChanges();

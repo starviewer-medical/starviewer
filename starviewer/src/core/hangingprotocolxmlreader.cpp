@@ -25,7 +25,7 @@ HangingProtocolXMLReader::~HangingProtocolXMLReader()
 HangingProtocol* HangingProtocolXMLReader::readFile(const QString &path)
 {
     QFile file(path);
-    HangingProtocol* hangingProtocolLoaded = NULL;
+    HangingProtocol *hangingProtocolLoaded = NULL;
 
     if (!file.open(QFile::ReadOnly | QFile::Text))
     {
@@ -156,7 +156,7 @@ HangingProtocolImageSet::Restriction HangingProtocolXMLReader::readRestriction(Q
 
 HangingProtocolImageSet* HangingProtocolXMLReader::readImageSet(QXmlStreamReader *reader, const QList<HangingProtocolImageSet::Restriction> &restrictionList)
 {
-    HangingProtocolImageSet * imageSet = new HangingProtocolImageSet();
+    HangingProtocolImageSet *imageSet = new HangingProtocolImageSet();
     imageSet->setIdentifier(reader->attributes().value("identifier").toString().toInt());
 
     while (reader->readNextStartElement())

@@ -25,8 +25,8 @@ public:
 
 private:
 
-    DicomPrinter * m_printer;
-    DicomPrintJob * m_printJob;
+    DicomPrinter *m_printer;
+    DicomPrintJob *m_printJob;
 };
 };
 #endif

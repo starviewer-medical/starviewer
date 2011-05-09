@@ -89,7 +89,7 @@ void QOperationStateScreen::newPACSJobEnqueued(PACSJob *pacsJob)
 
 void QOperationStateScreen::PACSJobStarted(PACSJob *pacsJob)
 {
-    QTreeWidgetItem* qtreeWidgetItem = getQTreeWidgetItemByPACSJobId(pacsJob->getPACSJobID());
+    QTreeWidgetItem *qtreeWidgetItem = getQTreeWidgetItemByPACSJobId(pacsJob->getPACSJobID());
 
     if (qtreeWidgetItem != NULL)
     {
@@ -99,7 +99,7 @@ void QOperationStateScreen::PACSJobStarted(PACSJob *pacsJob)
 
 void QOperationStateScreen::PACSJobFinished(PACSJob *pacsJob)
 {
-    QTreeWidgetItem* qtreeWidgetItem = getQTreeWidgetItemByPACSJobId(pacsJob->getPACSJobID());
+    QTreeWidgetItem *qtreeWidgetItem = getQTreeWidgetItemByPACSJobId(pacsJob->getPACSJobID());
 
     if (qtreeWidgetItem != NULL)
     {
@@ -111,7 +111,7 @@ void QOperationStateScreen::PACSJobFinished(PACSJob *pacsJob)
 
 void QOperationStateScreen::PACSJobCancelled(PACSJob *pacsJob)
 {
-    QTreeWidgetItem* qtreeWidgetItem = getQTreeWidgetItemByPACSJobId(pacsJob->getPACSJobID());
+    QTreeWidgetItem *qtreeWidgetItem = getQTreeWidgetItemByPACSJobId(pacsJob->getPACSJobID());
 
     if (qtreeWidgetItem != NULL)
     {
@@ -123,7 +123,7 @@ void QOperationStateScreen::PACSJobCancelled(PACSJob *pacsJob)
 
 void QOperationStateScreen::DICOMFileCommit(PACSJob *pacsJob, int numberOfImages)
 {
-    QTreeWidgetItem* qtreeWidgetItem = getQTreeWidgetItemByPACSJobId(pacsJob->getPACSJobID());
+    QTreeWidgetItem *qtreeWidgetItem = getQTreeWidgetItemByPACSJobId(pacsJob->getPACSJobID());
 
     if (qtreeWidgetItem != NULL)
     {
@@ -133,7 +133,7 @@ void QOperationStateScreen::DICOMFileCommit(PACSJob *pacsJob, int numberOfImages
 
 void QOperationStateScreen::DICOMSeriesCommit(PACSJob *pacsJob, int numberOfSeries)
 {
-    QTreeWidgetItem* qtreeWidgetItem = getQTreeWidgetItemByPACSJobId(pacsJob->getPACSJobID());
+    QTreeWidgetItem *qtreeWidgetItem = getQTreeWidgetItemByPACSJobId(pacsJob->getPACSJobID());
 
     if (qtreeWidgetItem != NULL)
     {
@@ -144,7 +144,7 @@ void QOperationStateScreen::DICOMSeriesCommit(PACSJob *pacsJob, int numberOfSeri
 void QOperationStateScreen::clearList()
 {
     // seleccionem els elements que volem esborrar
-    QList<QTreeWidgetItem *> clearableItems;
+    QList<QTreeWidgetItem*> clearableItems;
     clearableItems = m_treeRetrieveStudy->findItems(tr("RETRIEVED"), Qt::MatchExactly, QOperationStateScreen::Status);
     clearableItems += m_treeRetrieveStudy->findItems(tr("SENT"), Qt::MatchExactly, QOperationStateScreen::Status);
     clearableItems += m_treeRetrieveStudy->findItems(tr("ERROR"), Qt::MatchExactly, QOperationStateScreen::Status);
@@ -184,7 +184,7 @@ void QOperationStateScreen::cancelSelectedRequests()
 
 void QOperationStateScreen::requestedCancelPACSJob(PACSJob *pacsJob)
 {
-    QTreeWidgetItem* qtreeWidgetItem = getQTreeWidgetItemByPACSJobId(pacsJob->getPACSJobID());
+    QTreeWidgetItem *qtreeWidgetItem = getQTreeWidgetItemByPACSJobId(pacsJob->getPACSJobID());
 
     if (qtreeWidgetItem != NULL)
     {
@@ -196,7 +196,7 @@ void QOperationStateScreen::insertNewPACSJob(PACSJob *pacsJob)
 {
     Q_ASSERT(pacsJob->getPACSJobType() == PACSJob::SendDICOMFilesToPACSJobType || pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType);
 
-    QTreeWidgetItem* item = new QTreeWidgetItem();
+    QTreeWidgetItem *item = new QTreeWidgetItem();
     Study *study = getStudyFromPACSJob(pacsJob);
 
     item->setText(QOperationStateScreen::Status, tr("PENDING"));
@@ -258,7 +258,7 @@ QString QOperationStateScreen::getPACSJobStatusResume(PACSJob *pacsJob)
     }
 }
 
-void QOperationStateScreen::closeEvent(QCloseEvent* ce)
+void QOperationStateScreen::closeEvent(QCloseEvent *ce)
 {
     Settings settings;
     settings.saveColumnsWidths(InputOutputSettings::OperationStateColumnsWidth, m_treeRetrieveStudy);
@@ -268,7 +268,7 @@ void QOperationStateScreen::closeEvent(QCloseEvent* ce)
 QTreeWidgetItem* QOperationStateScreen::getQTreeWidgetItemByPACSJobId(int pacsJobID)
 {
     QTreeWidgetItem *qtreeWidgetItem = NULL;
-    QList<QTreeWidgetItem *> qTreeWidgetPacsJobItems = m_treeRetrieveStudy->findItems(QString().setNum(pacsJobID), Qt::MatchExactly, QOperationStateScreen::PACSJobID);
+    QList<QTreeWidgetItem*> qTreeWidgetPacsJobItems = m_treeRetrieveStudy->findItems(QString().setNum(pacsJobID), Qt::MatchExactly, QOperationStateScreen::PACSJobID);
 
     if (!qTreeWidgetPacsJobItems.isEmpty())
     {

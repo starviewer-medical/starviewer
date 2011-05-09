@@ -26,14 +26,14 @@ class ObscuranceThread : public QThread {
 
 public:
 
-    ObscuranceThread(int id, int numberOfThreads, const TransferFunction & transferFunction, QObject * parent = 0);
+    ObscuranceThread(int id, int numberOfThreads, const TransferFunction & transferFunction, QObject *parent = 0);
     virtual ~ObscuranceThread();
 
     /// Assigna l'estimador del gradient, d'on es treuran les normals.
     void setGradientEstimator(vtkEncodedGradientEstimator *gradientEstimator);
     void setData(const ushort *data, int dataSize, const int dimensions[3], const int increments[3]);
     void setObscuranceParameters(double obscuranceMaximumDistance, ObscuranceMainThread::Function obscuranceFunction, ObscuranceMainThread::Variant obscuranceVariant, Obscurance *obscurance);
-    void setSaliency(const double * saliency, double fxSaliencyA, double fxSaliencyB, double fxSaliencyLow, double fxSaliencyHigh);
+    void setSaliency(const double *saliency, double fxSaliencyA, double fxSaliencyB, double fxSaliencyLow, double fxSaliencyHigh);
     void setPerDirectionParameters(const Vector3 & direction, const Vector3 & forward, const int xyz[3], const int sXYZ[3], const QVector<Vector3> & lineStarts, qptrdiff startDelta);
 
 protected:
@@ -59,23 +59,23 @@ private:
 
     int m_id, m_numberOfThreads;
     const TransferFunction & m_transferFunction;
-    vtkDirectionEncoder * m_directionEncoder;
-    const ushort * m_encodedNormals;
+    vtkDirectionEncoder *m_directionEncoder;
+    const ushort *m_encodedNormals;
     const ushort *m_data;
     int m_dataSize;
-    const int * m_dimensions;
-    const int * m_increments;
+    const int *m_dimensions;
+    const int *m_increments;
     double m_obscuranceMaximumDistance;
     Function m_obscuranceFunction;
     Variant m_obscuranceVariant;
     Obscurance *m_obscurance;
-    const double * m_saliency;
+    const double *m_saliency;
     double m_fxSaliencyA, m_fxSaliencyB;
     double m_fxSaliencyLow, m_fxSaliencyHigh;
 
     Vector3 m_direction, m_forward;
-    const int * m_xyz;
-    const int * m_sXYZ;
+    const int *m_xyz;
+    const int *m_sXYZ;
     QVector<Vector3> m_lineStarts;
     qptrdiff m_startDelta;
 

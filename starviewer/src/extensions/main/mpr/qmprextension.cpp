@@ -300,15 +300,15 @@ void QMPRExtension::screenShot()
     ScreenShotTool *screenShotTool = 0;
     if (m_axial2DView->isActive())
     {
-        screenShotTool = dynamic_cast<ScreenShotTool *>(m_axial2DView->getToolProxy()->getTool("ScreenShotTool"));
+        screenShotTool = dynamic_cast<ScreenShotTool*>(m_axial2DView->getToolProxy()->getTool("ScreenShotTool"));
     }
     else if (m_sagital2DView->isActive())
     {
-        screenShotTool = dynamic_cast<ScreenShotTool *>(m_sagital2DView->getToolProxy()->getTool("ScreenShotTool"));
+        screenShotTool = dynamic_cast<ScreenShotTool*>(m_sagital2DView->getToolProxy()->getTool("ScreenShotTool"));
     }
     else if (m_coronal2DView->isActive())
     {
-        screenShotTool = dynamic_cast<ScreenShotTool *>(m_coronal2DView->getToolProxy()->getTool("ScreenShotTool"));
+        screenShotTool = dynamic_cast<ScreenShotTool*>(m_coronal2DView->getToolProxy()->getTool("ScreenShotTool"));
     }
 
     if (screenShotTool)
@@ -323,7 +323,7 @@ void QMPRExtension::screenShot()
 
 void QMPRExtension::showScreenshotsExporterDialog()
 {
-    Q2DViewer * viewer = 0;
+    Q2DViewer *viewer = 0;
     if (m_axial2DView->isActive())
     {
         viewer = m_axial2DView;
@@ -1455,8 +1455,8 @@ void QMPRExtension::updatePlane(vtkPlaneSource *planeSource, vtkImageReslice *re
 
 void QMPRExtension::getSagitalXVector(double x[3])
 {
-    double* p1 = m_sagitalPlaneSource->GetPoint1();
-    double* o  = m_sagitalPlaneSource->GetOrigin();
+    double *p1 = m_sagitalPlaneSource->GetPoint1();
+    double *o  = m_sagitalPlaneSource->GetOrigin();
     x[0] = p1[0] - o[0];
     x[1] = p1[1] - o[1];
     x[2] = p1[2] - o[2];
@@ -1464,8 +1464,8 @@ void QMPRExtension::getSagitalXVector(double x[3])
 
 void QMPRExtension::getSagitalYVector(double y[3])
 {
-    double* p1 = m_sagitalPlaneSource->GetPoint2();
-    double* o  = m_sagitalPlaneSource->GetOrigin();
+    double *p1 = m_sagitalPlaneSource->GetPoint2();
+    double *o  = m_sagitalPlaneSource->GetOrigin();
     y[0] = p1[0] - o[0];
     y[1] = p1[1] - o[1];
     y[2] = p1[2] - o[2];
@@ -1473,8 +1473,8 @@ void QMPRExtension::getSagitalYVector(double y[3])
 
 void QMPRExtension::getCoronalXVector(double x[3])
 {
-    double* p1 = m_coronalPlaneSource->GetPoint1();
-    double* o  = m_coronalPlaneSource->GetOrigin();
+    double *p1 = m_coronalPlaneSource->GetPoint1();
+    double *o  = m_coronalPlaneSource->GetOrigin();
     x[0] = p1[0] - o[0];
     x[1] = p1[1] - o[1];
     x[2] = p1[2] - o[2];
@@ -1482,8 +1482,8 @@ void QMPRExtension::getCoronalXVector(double x[3])
 
 void QMPRExtension::getAxialXVector(double x[3])
 {
-    double* p1 = m_axialPlaneSource->GetPoint1();
-    double* o  = m_axialPlaneSource->GetOrigin();
+    double *p1 = m_axialPlaneSource->GetPoint1();
+    double *o  = m_axialPlaneSource->GetOrigin();
     x[0] = p1[0] - o[0];
     x[1] = p1[1] - o[1];
     x[2] = p1[2] - o[2];
@@ -1491,16 +1491,16 @@ void QMPRExtension::getAxialXVector(double x[3])
 
 void QMPRExtension::getAxialYVector(double y[3])
 {
-    double* p2 = m_axialPlaneSource->GetPoint2();
-    double* o  = m_axialPlaneSource->GetOrigin();
+    double *p2 = m_axialPlaneSource->GetPoint2();
+    double *o  = m_axialPlaneSource->GetOrigin();
     y[0] = p2[0] - o[0];
     y[1] = p2[1] - o[1];
     y[2] = p2[2] - o[2];
 }
 void QMPRExtension::getCoronalYVector(double y[3])
 {
-    double* p1 = m_coronalPlaneSource->GetPoint2();
-    double* o  = m_coronalPlaneSource->GetOrigin();
+    double *p1 = m_coronalPlaneSource->GetPoint2();
+    double *o  = m_coronalPlaneSource->GetOrigin();
     y[0] = p1[0] - o[0];
     y[1] = p1[1] - o[1];
     y[2] = p1[2] - o[2];
@@ -1555,7 +1555,7 @@ bool QMPRExtension::isParallel(double axis[3])
     return false;
 }
 
-void QMPRExtension::rotateMiddle(double degrees, double rotationAxis[3], vtkPlaneSource* plane)
+void QMPRExtension::rotateMiddle(double degrees, double rotationAxis[3], vtkPlaneSource *plane)
 {
 //     MathTools::normalize(rotationAxis);
     m_transform->Identity();
@@ -1573,7 +1573,7 @@ void QMPRExtension::rotateMiddle(double degrees, double rotationAxis[3], vtkPlan
     plane->Update();
 }
 
-void QMPRExtension::rotate(double degrees, double rotationAxis[3], vtkPlaneSource* plane)
+void QMPRExtension::rotate(double degrees, double rotationAxis[3], vtkPlaneSource *plane)
 {
     // Normalitzem l'eix de rotació, serà molt millor per les operacions a fer
     MathTools::normalize(rotationAxis);

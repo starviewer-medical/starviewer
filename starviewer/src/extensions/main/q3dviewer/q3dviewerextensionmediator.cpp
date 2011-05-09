@@ -7,7 +7,7 @@
 
 namespace udg {
 
-Q3DViewerExtensionMediator::Q3DViewerExtensionMediator(QObject * parent)
+Q3DViewerExtensionMediator::Q3DViewerExtensionMediator(QObject *parent)
     : ExtensionMediator(parent)
 {
 }
@@ -21,11 +21,11 @@ DisplayableID Q3DViewerExtensionMediator::getExtensionID() const
     return DisplayableID("Q3DViewerExtension", tr("3D Viewer"));
 }
 
-bool Q3DViewerExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext)
+bool Q3DViewerExtensionMediator::initializeExtension(QWidget *extension, const ExtensionContext &extensionContext)
 {
-    Q3DViewerExtension * q3DViewerExtension;
+    Q3DViewerExtension *q3DViewerExtension;
 
-    if (!(q3DViewerExtension = qobject_cast<Q3DViewerExtension *>(extension)))
+    if (!(q3DViewerExtension = qobject_cast<Q3DViewerExtension*>(extension)))
     {
         return false;
     }

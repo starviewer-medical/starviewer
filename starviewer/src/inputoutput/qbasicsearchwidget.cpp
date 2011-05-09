@@ -298,7 +298,7 @@ void QBasicSearchWidget::clearSeriesModality()
     m_textOtherModality->clear();
 }
 
-void QBasicSearchWidget::showEvent(QShowEvent * event)
+void QBasicSearchWidget::showEvent(QShowEvent *event)
 {
     Q_UNUSED(event);
 

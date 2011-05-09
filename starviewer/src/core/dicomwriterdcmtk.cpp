@@ -25,14 +25,14 @@ DICOMWriterDCMTK::~DICOMWriterDCMTK()
     delete m_fileFormat;
 }
 
-void DICOMWriterDCMTK::addValueAttribute(DICOMValueAttribute * attribute)
+void DICOMWriterDCMTK::addValueAttribute(DICOMValueAttribute *attribute)
 {
-    DcmDataset * dataset = m_fileFormat->getDataset();
+    DcmDataset *dataset = m_fileFormat->getDataset();
     DcmTag tag(attribute->getTag()->getGroup(), attribute->getTag()->getElement());
 
     if (attribute->getValueRepresentation() == DICOMValueAttribute::ByteArray)
     {
-        dataset->putAndInsertUint8Array(tag, static_cast<Uint8 *>((void *) attribute->getValueAsByteArray().data()), static_cast<unsigned long>(attribute->getValueAsByteArray().length()), true);
+        dataset->putAndInsertUint8Array(tag, static_cast<Uint8*>((void*) attribute->getValueAsByteArray().data()), static_cast<unsigned long>(attribute->getValueAsByteArray().length()), true);
     }
     else
     {
@@ -45,10 +45,10 @@ void DICOMWriterDCMTK::addValueAttribute(DICOMValueAttribute * attribute)
 
 }
 
-bool DICOMWriterDCMTK::addSequenceAttribute(DICOMSequenceAttribute * attribute)
+bool DICOMWriterDCMTK::addSequenceAttribute(DICOMSequenceAttribute *attribute)
 {
-    DcmDataset * dataset = m_fileFormat->getDataset();
-    DcmSequenceOfItems * sequence = generateDcmSequenceOfItems(attribute);
+    DcmDataset *dataset = m_fileFormat->getDataset();
+    DcmSequenceOfItems *sequence = generateDcmSequenceOfItems(attribute);
 
     if (sequence == NULL)
     {
@@ -58,30 +58,30 @@ bool DICOMWriterDCMTK::addSequenceAttribute(DICOMSequenceAttribute * attribute)
     return dataset->insert(sequence, true).good();
 }
 
-DcmSequenceOfItems * DICOMWriterDCMTK::generateDcmSequenceOfItems(DICOMSequenceAttribute * sequenceAttribute)
+DcmSequenceOfItems* DICOMWriterDCMTK::generateDcmSequenceOfItems(DICOMSequenceAttribute *sequenceAttribute)
 {
     DcmTag tag(sequenceAttribute->getTag()->getGroup(), sequenceAttribute->getTag()->getElement());
-    DcmSequenceOfItems * sequence = new DcmSequenceOfItems(tag);
+    DcmSequenceOfItems *sequence = new DcmSequenceOfItems(tag);
 
     if (sequence == NULL)
     {
         return NULL;
     }
 
-    foreach (DICOMSequenceItem * dicomItem, sequenceAttribute->getItems())
+    foreach (DICOMSequenceItem *dicomItem, sequenceAttribute->getItems())
     {
-        DcmItem * item = new DcmItem(DCM_Item);
+        DcmItem *item = new DcmItem(DCM_Item);
 
-        foreach (DICOMAttribute * attribute, dicomItem->getAttributes())
+        foreach (DICOMAttribute *attribute, dicomItem->getAttributes())
         {
             if (attribute->isValueAttribute())
             {
-                DICOMValueAttribute * valueAttribute = dynamic_cast<DICOMValueAttribute *>(attribute);
+                DICOMValueAttribute *valueAttribute = dynamic_cast<DICOMValueAttribute*>(attribute);
                 DcmTag itemTag(valueAttribute->getTag()->getGroup(), valueAttribute->getTag()->getElement());
 
                 if (valueAttribute->getValueRepresentation() == DICOMValueAttribute::ByteArray)
                 {
-                    OFCondition cond = item->putAndInsertUint8Array(itemTag, static_cast<Uint8 *>((void *) valueAttribute->getValueAsByteArray().data()), static_cast<unsigned long>(valueAttribute->getValueAsByteArray().length()), true);
+                    OFCondition cond = item->putAndInsertUint8Array(itemTag, static_cast<Uint8*>((void*) valueAttribute->getValueAsByteArray().data()), static_cast<unsigned long>(valueAttribute->getValueAsByteArray().length()), true);
 
                     if (cond.bad())
                     {
@@ -100,8 +100,8 @@ DcmSequenceOfItems * DICOMWriterDCMTK::generateDcmSequenceOfItems(DICOMSequenceA
             }
             else if (attribute->isSequenceAttribute())
             {
-                DICOMSequenceAttribute * sequenceAttribute2 = dynamic_cast<DICOMSequenceAttribute*> (attribute);
-                DcmSequenceOfItems * sequence2 = generateDcmSequenceOfItems(sequenceAttribute2);
+                DICOMSequenceAttribute *sequenceAttribute2 = dynamic_cast<DICOMSequenceAttribute*> (attribute);
+                DcmSequenceOfItems *sequence2 = generateDcmSequenceOfItems(sequenceAttribute2);
 
                 if (sequence2 == NULL)
                 {
@@ -134,11 +134,11 @@ DcmSequenceOfItems * DICOMWriterDCMTK::generateDcmSequenceOfItems(DICOMSequenceA
 
 bool DICOMWriterDCMTK::write()
 {
-    DcmElement * element;
+    DcmElement *element;
     m_fileFormat->getDataset()->findAndGetElement(DCM_Rows, element);
     element->print(std::cout);
 
-    DcmElement * element_col;
+    DcmElement *element_col;
     m_fileFormat->getDataset()->findAndGetElement(DCM_Columns, element_col);
     element_col->print(std::cout);
 

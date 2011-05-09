@@ -32,7 +32,7 @@ signals:
 
 protected:
     /// Sobrecàrrega del mètode que tracta tots els events
-    bool event(QEvent * event);
+    bool event(QEvent *event);
 
 private:
     /// Identificador de l'ítem

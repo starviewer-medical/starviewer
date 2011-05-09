@@ -18,12 +18,12 @@ QString Cursor3DToolData::getFrameOfReferenceUID() const
     return m_frameOfReferenceUID;
 }
 
-ImagePlane *Cursor3DToolData::getImagePlane() const
+ImagePlane* Cursor3DToolData::getImagePlane() const
 {
     return m_referenceImagePlane;
 }
 
-double * Cursor3DToolData::getOriginPointPosition() const
+double* Cursor3DToolData::getOriginPointPosition() const
 {
     return m_originPointPosition;
 }

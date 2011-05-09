@@ -87,7 +87,7 @@ public:
     void setNumberOfPhases(int phases);
     int getNumberOfPhases() const;
     Volume* getPhaseVolume(int index);
-    QList<Image *> getPhaseImages(int index);
+    QList<Image*> getPhaseImages(int index);
     void setNumberOfSlicesPerPhase(int slicesPerPhase);
     int getNumberOfSlicesPerPhase() const;
 
@@ -95,10 +95,10 @@ public:
     void addImage(Image *image);
 
     /// Assignem directament el conjunt d'imatges que composen aquest volum
-    void setImages(const QList<Image *> &imageList);
+    void setImages(const QList<Image*> &imageList);
 
     /// Retorna les imatges que composen el volum
-    QList<Image *> getImages() const;
+    QList<Image*> getImages() const;
 
     /// Retorna el nombre total de frames que té el volum amb els objectes Image que conté
     int getNumberOfFrames() const;
@@ -163,7 +163,7 @@ private:
     bool m_volumePixelDataLoaded;
 
     /// Conjunt d'imatges que composen el volum
-    QList<Image *> m_imageSet;
+    QList<Image*> m_imageSet;
 
     /// Identificador de volum
     Identifier m_identifier;

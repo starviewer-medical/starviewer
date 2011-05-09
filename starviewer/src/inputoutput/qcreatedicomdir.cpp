@@ -180,7 +180,7 @@ void QCreateDicomdir::showDICOMDIRSize()
     m_labelMbCdDvdOcupat->setText(sizeOfDicomdirText);
 }
 
-void QCreateDicomdir::addStudies(const QList<Study *> &studies)
+void QCreateDicomdir::addStudies(const QList<Study*> &studies)
 {
     QStringList existingStudies;
     QStringList notAddedStudies;
@@ -204,7 +204,7 @@ void QCreateDicomdir::addStudies(const QList<Study *> &studies)
             else
             {
                 //Afegim la informació de l'estudi a la llista
-                QTreeWidgetItem* item = new QTreeWidgetItem(m_dicomdirStudiesList);
+                QTreeWidgetItem *item = new QTreeWidgetItem(m_dicomdirStudiesList);
                 m_dicomdirSizeBytes = m_dicomdirSizeBytes + studySizeBytes;
 
                 Patient *patient = study->getParentPatient();
@@ -424,7 +424,7 @@ Status QCreateDicomdir::startCreateDicomdir(QString dicomdirPath)
         return state.setStatus("Not enough space to create DICOMDIR", false, 3000);
     }
 
-    QList<QTreeWidgetItem *> dicomdirStudiesList(m_dicomdirStudiesList ->findItems("*", Qt::MatchWildcard, 0));
+    QList<QTreeWidgetItem*> dicomdirStudiesList(m_dicomdirStudiesList ->findItems("*", Qt::MatchWildcard, 0));
     QTreeWidgetItem *item;
 
     if (dicomdirStudiesList.count() == 0) // Comprovem que hi hagi estudis seleccionats per crear dicomdir
@@ -581,7 +581,7 @@ void QCreateDicomdir::removeSelectedStudy()
 
 bool QCreateDicomdir::studyExistsInDICOMDIRList(QString studyUID)
 {
-    QList<QTreeWidgetItem *> dicomdirStudiesList(m_dicomdirStudiesList ->findItems(studyUID, Qt::MatchExactly, 7));
+    QList<QTreeWidgetItem*> dicomdirStudiesList(m_dicomdirStudiesList ->findItems(studyUID, Qt::MatchExactly, 7));
 
     if (dicomdirStudiesList.count() > 0)
     {
@@ -765,7 +765,7 @@ bool QCreateDicomdir::dicomdirPathIsADicomdir(QString dicomdirPath)
     }
 }
 
-void QCreateDicomdir::closeEvent(QCloseEvent* ce)
+void QCreateDicomdir::closeEvent(QCloseEvent *ce)
 {
     Settings settings;
     settings.saveColumnsWidths(InputOutputSettings::CreateDICOMDIRStudyListColumnsWidth, m_dicomdirStudiesList);

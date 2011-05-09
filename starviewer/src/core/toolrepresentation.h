@@ -38,7 +38,7 @@ protected:
     Drawer *m_drawer;
 
     ///Llista de primitives a pintar
-    QList<DrawerPrimitive *> m_primitivesList;
+    QList<DrawerPrimitive*> m_primitivesList;
 };
 
 }

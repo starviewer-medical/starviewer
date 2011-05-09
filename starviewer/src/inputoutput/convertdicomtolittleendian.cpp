@@ -31,7 +31,7 @@ ConvertDicomToLittleEndian::~ConvertDicomToLittleEndian()
 Status ConvertDicomToLittleEndian::convert(QString inputFile, QString outputFile)
 {
     DcmFileFormat fileformat;
-    DcmDataset * dataset = fileformat.getDataset();
+    DcmDataset *dataset = fileformat.getDataset();
     OFCondition error;
     Status state;
     E_TransferSyntax opt_ixfer = EXS_Unknown; //Transfer Syntax del fitxer d'entrada

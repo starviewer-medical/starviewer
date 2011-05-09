@@ -20,15 +20,15 @@ public:
     /// Neteja els casos propers al crani
     double applyCleanSkullMethod();
 
-    void applyFilter(Volume* output);
+    void applyFilter(Volume *output);
 
     void computeSpeedMap(itk::Image<float, 3>* speedMap);
 
     double erfc(double x);
 
-    double applyMethodEdema(Volume * lesionMask);
+    double applyMethodEdema(Volume *lesionMask);
 
-    double applyMethodEdema2(Volume * lesionMask);
+    double applyMethodEdema2(Volume *lesionMask);
 
     int getNumberOfVoxels()
     {
@@ -48,12 +48,12 @@ public:
 
     int applyMethod4();
 
-    void setVolume(Volume * vol)
+    void setVolume(Volume *vol)
     {
         m_Volume=vol;
     }
 
-    void setMask(Volume * vol)
+    void setMask(Volume *vol)
     {
         m_Mask=vol;
     }
@@ -127,11 +127,11 @@ public:
 private:
 
     ///Volum que volem segmentar
-    Volume* m_Volume;
+    Volume *m_Volume;
 
     ///Volum on guardarem el resultat de la segmetnaci�que volem segmentar
-    Volume* m_Mask;
-    Volume* m_filteredInputImage;
+    Volume *m_Mask;
+    Volume *m_filteredInputImage;
 
     ///Posici�de la llavor
     double m_px, m_py, m_pz;

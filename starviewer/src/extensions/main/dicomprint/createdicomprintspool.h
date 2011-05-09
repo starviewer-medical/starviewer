@@ -40,8 +40,8 @@ private:
 
     DicomPrintPage m_dicomPrintPage;
     DicomPrinter m_dicomPrinter;
-    DVPSStoredPrint* m_storedPrint;
-    DVPresentationState * m_presentationState;
+    DVPSStoredPrint *m_storedPrint;
+    DVPresentationState *m_presentationState;
     DVPSAnnotationContent_PList *m_annotationBoxes;
     CreateDicomPrintSpoolError m_lastError;
     QString m_annotationDisplayFormatIDTagValue;

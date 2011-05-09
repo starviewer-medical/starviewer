@@ -16,7 +16,7 @@ public:
     ~PatientBrowserMenuExtendedItem();
 
     // Tractament dels events
-    bool event(QEvent * event);
+    bool event(QEvent *event);
 
     void setPixmap(const QPixmap &pixmap);
     void setText(const QString &text);

@@ -79,7 +79,7 @@ private:
     void selectPrinter(int printerID);
 
     int m_selectedPrinterId;
-    QDicomAddPrinterWidget * m_addPrinterWidget;
+    QDicomAddPrinterWidget *m_addPrinterWidget;
 };
 };
 #endif

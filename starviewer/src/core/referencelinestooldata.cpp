@@ -17,7 +17,7 @@ QString ReferenceLinesToolData::getFrameOfReferenceUID() const
     return m_frameOfReferenceUID;
 }
 
-QList<ImagePlane *> ReferenceLinesToolData::getPlanesToProject() const
+QList<ImagePlane*> ReferenceLinesToolData::getPlanesToProject() const
 {
     return m_planesToProject;
 }
@@ -27,7 +27,7 @@ void ReferenceLinesToolData::setFrameOfReferenceUID(const QString &frameOfRefere
     m_frameOfReferenceUID = frameOfReference;
 }
 
-void ReferenceLinesToolData::setPlanesToProject(QList<ImagePlane *> planes)
+void ReferenceLinesToolData::setPlanesToProject(QList<ImagePlane*> planes)
 {
     m_planesToProject.clear();
     m_planesToProject = planes;

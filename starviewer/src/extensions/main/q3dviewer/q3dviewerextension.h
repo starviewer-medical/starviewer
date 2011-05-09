@@ -25,11 +25,11 @@ class Q3DViewerExtension : public QWidget, private ::Ui::Q3DViewerExtensionBase 
 Q_OBJECT
 public:
 
-    Q3DViewerExtension(QWidget * parent = 0);
+    Q3DViewerExtension(QWidget *parent = 0);
     virtual ~Q3DViewerExtension();
 
     /// Li donem l'input a processar
-    void setInput(Volume * input);
+    void setInput(Volume *input);
 
 public slots:
 

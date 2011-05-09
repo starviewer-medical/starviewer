@@ -66,7 +66,7 @@ private slots:
      * s'assumeix que cada entrada correspon a un pacient diferent, amb un o varis estudis
      * Afegim un segon paràmetre que ens indica si els pacients a processar només cal carregar-los o fer-ne un "view"
      */
-    void processInput(QList<Patient *> patientsList, bool loadOnly = false);
+    void processInput(QList<Patient*> patientsList, bool loadOnly = false);
 
 private:
     /// Crea les connexions de signals i slots

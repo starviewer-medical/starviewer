@@ -33,7 +33,7 @@ public:
      * del widget que se'ns passa.
      * @return Retorna false en el supòsit que hi hagi alguna cosa que impedeixi inicialitzar-la, true en la resta de casos
      */
-    virtual bool initializeExtension(QWidget* extension, const ExtensionContext &extensionContext) = 0;
+    virtual bool initializeExtension(QWidget *extension, const ExtensionContext &extensionContext) = 0;
 
     /**
      * Mètode transicional. Aquest mètode està dissenyat exclusivament perquè quan fem un "view" afegint dades a un estudi ja
@@ -42,7 +42,7 @@ public:
      * TODO aquest mètode hauria de ser temporal i ser re-emplaçat el més aviat possible quan la funció que implementa
      * quedi coberta per una altra via.
      */
-    virtual bool reinitializeExtension(QWidget* extension);
+    virtual bool reinitializeExtension(QWidget *extension);
 
     /**
      * Retorna l'identificador de la classe Extension amb qui dialoga.

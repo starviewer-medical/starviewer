@@ -16,7 +16,7 @@ PolylineROITool::PolylineROITool(QViewer *viewer, QObject *parent)
 {
     m_toolName = "PolylineROITool";
 
-    connect(m_2DViewer, SIGNAL(volumeChanged(Volume *)), SLOT(initialize()));
+    connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(initialize()));
 }
 
 PolylineROITool::~PolylineROITool()

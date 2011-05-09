@@ -94,7 +94,7 @@ void QSeriesListWidget::setCurrentSeries(const QString &seriesUID)
 {
     int index = 0;
     bool stop = false;
-    QList<QListWidgetItem *> llistaSeries = m_seriesListWidget->findItems ("", Qt::MatchContains);
+    QList<QListWidgetItem*> llistaSeries = m_seriesListWidget->findItems ("", Qt::MatchContains);
 
     while (!stop && index < llistaSeries.count())
     {
@@ -117,7 +117,7 @@ void QSeriesListWidget::removeSeries(const QString &seriesInstanceUID)
 {
     int index = 0;
     bool stop = false;
-    QList<QListWidgetItem *> llistaSeries = m_seriesListWidget->findItems("", Qt::MatchContains);
+    QList<QListWidgetItem*> llistaSeries = m_seriesListWidget->findItems("", Qt::MatchContains);
 
     while (!stop && index < llistaSeries.count())
     {

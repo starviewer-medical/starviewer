@@ -32,7 +32,7 @@ void PatientBrowserMenuBasicItem::setFontBold()
     setStyleSheet("border: 1px solid gray; border-radius: 2;font-weight: bold");
 }
 
-bool PatientBrowserMenuBasicItem::event(QEvent * event)
+bool PatientBrowserMenuBasicItem::event(QEvent *event)
 {
     if (event->type() == QEvent::Enter)
     {

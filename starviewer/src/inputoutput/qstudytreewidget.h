@@ -41,7 +41,7 @@ public:
     void insertPatientList(QList<Patient*> patientList);
 
     ///Insereix el pacient al QStudyTreeWiget
-    void insertPatient(Patient* patient);
+    void insertPatient(Patient *patient);
 
     /** Insereix un llista de sèries a l'estudi seleccionat actualment
      * @param seriesList series afegir
@@ -99,7 +99,7 @@ public:
     void setContextMenu(QMenu *contextMenu);
 
     /// Retorna el QTreeWidget que conté el widget
-    QTreeWidget *getQTreeWidget() const;
+    QTreeWidget* getQTreeWidget() const;
 
     ///Per cada element selecciona Study/Series/Imatge retorna la seva DicomMask
     QList<DicomMask> getDicomMaskOfSelectedItems();
@@ -153,7 +153,7 @@ public slots:
 
 private slots:
     ///Emet signal quan es selecciona un estudi o serie diferent a l'anterior
-    void currentItemChanged(QTreeWidgetItem * current, QTreeWidgetItem * previous);
+    void currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
 
     ///Emet signal quan s'expandeix un item, i no té items fills
     void itemExpanded(QTreeWidgetItem *itemExpanded);
@@ -202,7 +202,7 @@ private:
     /**Dona una sèrie emplena un QTreeWidgetItem en format sèrie
      *@param informació de la serie
      */
-    QTreeWidgetItem *fillSeries(Series *serie);
+    QTreeWidgetItem* fillSeries(Series *serie);
 
     ///Retorna llista QTreeWidgetItem resultant dels estudis que té el pacient
     QList<QTreeWidgetItem*> fillPatient(Patient *);

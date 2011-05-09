@@ -109,7 +109,7 @@ bool QInputOutputDicomdirWidget::openDicomdir()
 
 void QInputOutputDicomdirWidget::queryStudy(DicomMask queryMask)
 {
-    QList<Patient *> patientStudyList;
+    QList<Patient*> patientStudyList;
     Status state;
 
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
@@ -226,7 +226,7 @@ void QInputOutputDicomdirWidget::view()
     QStringList selectedStudiesInstanceUID = m_studyTreeWidget->getSelectedStudiesUID();
     DicomMask patientToProcessMask;
     Patient *patient;
-    QList<Patient *> selectedPatientsList;
+    QList<Patient*> selectedPatientsList;
 
     if (selectedStudiesInstanceUID.isEmpty())
     {

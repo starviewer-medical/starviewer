@@ -14,12 +14,12 @@ Filter::~Filter()
     delete m_inputVolume;
 }
 
-void Filter::setInput(Volume * input)
+void Filter::setInput(Volume *input)
 {
     m_inputVolume = input;
 }
 
-Volume * Filter::getOutput()
+Volume* Filter::getOutput()
 {
     return m_outputVolume;
 }

@@ -248,11 +248,11 @@ QList<QVector<double> > ImagePlane::getBounds(int location)
     break;
 
     case 1: // upper
-        factor = m_thickness*0.5;
+        factor = m_thickness * 0.5;
     break;
 
     case 2: // lower
-        factor = -m_thickness*0.5;
+        factor = -m_thickness * 0.5;
     break;
     }
 
@@ -327,23 +327,23 @@ int ImagePlane::getIntersections(ImagePlane *planeToIntersect, double firstInter
     QVector<double> blhc = upperPlaneBounds.at(3);
 
     // Primera "paral·lela" (X)
-    if(vtkPlane::IntersectWithLine((double *)tlhc.data(), (double *)trhc.data(), localizerNormalVector, localizerOrigin, t, firstIntersectionPoint))
+    if(vtkPlane::IntersectWithLine((double*)tlhc.data(), (double*)trhc.data(), localizerNormalVector, localizerOrigin, t, firstIntersectionPoint))
     {
         numberOfIntersections++;
     }
-    if(vtkPlane::IntersectWithLine((double *)brhc.data(), (double *)blhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint))
+    if(vtkPlane::IntersectWithLine((double*)brhc.data(), (double*)blhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint))
     {
         numberOfIntersections++;
     }
 
     if(numberOfIntersections == 0) // provar amb la segona "paral·lela" (Y)
     {
-        if(vtkPlane::IntersectWithLine((double *)trhc.data(), (double *)brhc.data(), localizerNormalVector, localizerOrigin, t, firstIntersectionPoint))
+        if(vtkPlane::IntersectWithLine((double*)trhc.data(), (double*)brhc.data(), localizerNormalVector, localizerOrigin, t, firstIntersectionPoint))
         {
             numberOfIntersections++;
         }
 
-        if(vtkPlane::IntersectWithLine((double *)blhc.data(), (double *)tlhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint))
+        if(vtkPlane::IntersectWithLine((double*)blhc.data(), (double*)tlhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint))
         {
             numberOfIntersections++;
         }
@@ -356,7 +356,7 @@ void ImagePlane::updateCenter()
 {
     for(int i = 0; i < 3; i++)
     {
-        m_center[i] = m_origin[i] + 0.5 * (m_rowDirectionVector[i] * this->getRowLength() + m_columnDirectionVector[i]*this->getColumnLength());
+        m_center[i] = m_origin[i] + 0.5 * (m_rowDirectionVector[i] * this->getRowLength() + m_columnDirectionVector[i] * this->getColumnLength());
     }
 }
 
@@ -387,7 +387,7 @@ void ImagePlane::setCenter(double center[3])
         for (int i = 0; i < 3; ++i)
         {
             m_center[i] = center[i];
-            m_origin[i] = m_center[i] - 0.5 *(m_rowDirectionVector[i] * this->getRowLength() + m_columnDirectionVector[i] * this->getColumnLength());
+            m_origin[i] = m_center[i] - 0.5 * (m_rowDirectionVector[i] * this->getRowLength() + m_columnDirectionVector[i] * this->getColumnLength());
         }
     }
 }

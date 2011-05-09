@@ -52,14 +52,14 @@ void QViewerCINEController::setInputViewer(QViewer *viewer)
         disconnect(m_2DViewer, 0, this, 0);
     }
 
-    m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
+    m_2DViewer = qobject_cast<Q2DViewer*>(viewer);
     if (!m_2DViewer)
     {
         DEBUG_LOG("S'HA PROPORCIONAT UN VIEWER NO SUPORTAT. ARA NOMÉS SUPORTEM Q2DVIEWER!!!!!!!!!!!!");
         return;
     }
 
-    connect(m_2DViewer, SIGNAL(volumeChanged(Volume *)), SLOT(resetCINEInformation(Volume *)));
+    connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(resetCINEInformation(Volume*)));
     connect(m_2DViewer, SIGNAL(slabThicknessChanged(int)), SLOT(updateThickness(int)));
 
     resetCINEInformation(m_2DViewer->getInput());

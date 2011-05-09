@@ -23,7 +23,7 @@ public:
     ToolData *getToolData() const;
 
     /// Assigna les dades pròpies de la seed (persistent data)
-    void setToolData(ToolData * data);
+    void setToolData(ToolData *data);
 
     /// Inicialitza i calcula tota la imatge diferència
     void initializeDifferenceImage();

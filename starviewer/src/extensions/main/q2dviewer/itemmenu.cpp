@@ -5,7 +5,7 @@
 
 namespace udg {
 
-ItemMenu::ItemMenu(QWidget * parent)
+ItemMenu::ItemMenu(QWidget *parent)
  : QFrame(parent)
 {
     setAutoFillBackground(true);
@@ -20,7 +20,7 @@ ItemMenu::~ItemMenu()
 
 }
 
-bool ItemMenu::event(QEvent * event)
+bool ItemMenu::event(QEvent *event)
 {
     if (event->type() == QEvent::Enter)
     {

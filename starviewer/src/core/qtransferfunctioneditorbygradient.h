@@ -52,7 +52,7 @@ class QTransferFunctionEditorByGradient : public QTransferFunctionEditor {
 
 public:
 
-    QTransferFunctionEditorByGradient(QWidget * parent = 0);
+    QTransferFunctionEditorByGradient(QWidget *parent = 0);
     virtual ~QTransferFunctionEditorByGradient();
 
     /// Assigna una funció de transferència a l'editor.
@@ -74,7 +74,7 @@ private slots:
     void setTransferFunctionName(const QString & name);
 
 private:
-    QLineEdit * m_nameLineEdit;
+    QLineEdit *m_nameLineEdit;
     ShadeWidget *m_red_shade;
     ShadeWidget *m_green_shade;
     ShadeWidget *m_blue_shade;

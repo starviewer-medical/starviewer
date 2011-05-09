@@ -766,7 +766,7 @@ void QViewer::setAutomaticallyLoadPatientBrowserMenuSelectedInput(bool load)
 {
     if (load)
     {
-        connect(m_patientBrowserMenu, SIGNAL(selectedVolume(Volume *)), this, SLOT(setInputAndRender(Volume *)));
+        connect(m_patientBrowserMenu, SIGNAL(selectedVolume(Volume*)), this, SLOT(setInputAndRender(Volume*)));
     }
     else
     {

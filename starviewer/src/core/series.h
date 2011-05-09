@@ -131,8 +131,8 @@ public:
     bool imageExists(const QString &identifier);
 
     /// Retorna una llista de totes les imatges de la sèrie
-    QList<Image *> getImages() const;
-    void setImages(QList<Image *> imageSet);
+    QList<Image*> getImages() const;
+    void setImages(QList<Image*> imageSet);
 
     /// Ens diu quantes imatges té aquesta sèrie
     /// @return El nombre d'imatges. 0 en cas que no sigui una sèrie d'imatges o no en contingui
@@ -189,7 +189,7 @@ public:
     Identifier addVolume(Volume *volume);
 
     /// Retorna una llista amb tots els volums de la sèrie.
-    QList<Volume *> getVolumesList();
+    QList<Volume*> getVolumesList();
 
     /// Retorna la llista d'identificadors de volum
     QList<Identifier> getVolumesIDList() const;
@@ -300,7 +300,7 @@ private:
 
     /// Llista de les Image de la serie ordenades per criteris d'ordenació com SliceLocation,InstanceNumber, etc
     /// TODO falta definir quina és l'estrategia d'ordenació per defecte
-    QList<Image *> m_imageSet;
+    QList<Image*> m_imageSet;
 
     /// Estudi pare
     Study *m_parentStudy;

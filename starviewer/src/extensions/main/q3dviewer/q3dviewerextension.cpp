@@ -20,7 +20,7 @@
 
 namespace udg {
 
-Q3DViewerExtension::Q3DViewerExtension(QWidget * parent)
+Q3DViewerExtension::Q3DViewerExtension(QWidget *parent)
  : QWidget(parent)
 {
     setupUi(this);
@@ -85,7 +85,7 @@ void Q3DViewerExtension::initializeTools()
     m_toolManager->addExclusiveToolsGroup("RightButtonGroup", rightButtonExclusiveTools);
 
     // Fem que quan es clicki al botó es faci un screen shot
-    ScreenShotTool *screenShotTool = dynamic_cast<ScreenShotTool *>(m_3DView->getToolProxy()->getTool("ScreenShotTool"));
+    ScreenShotTool *screenShotTool = dynamic_cast<ScreenShotTool*>(m_3DView->getToolProxy()->getTool("ScreenShotTool"));
     connect(m_screenShotToolButton, SIGNAL(clicked()), screenShotTool, SLOT(singleCapture()));
 }
 
@@ -116,7 +116,7 @@ void Q3DViewerExtension::loadClutPresets()
 
     foreach (const QString & clutName, clutList)
     {
-        TransferFunction * transferFunction = TransferFunctionIO::fromFile(m_clutsDir.absoluteFilePath(clutName));
+        TransferFunction *transferFunction = TransferFunctionIO::fromFile(m_clutsDir.absoluteFilePath(clutName));
         if (transferFunction)
         {
             m_clutNameToFileName[transferFunction->name()] = clutName;
@@ -322,7 +322,7 @@ void Q3DViewerExtension::createConnections()
 
 }
 
-void Q3DViewerExtension::setInput(Volume * input)
+void Q3DViewerExtension::setInput(Volume *input)
 {
     m_input = input;
     m_3DView->setInput(m_input);
@@ -352,7 +352,7 @@ void Q3DViewerExtension::applyPresetClut(const QString & clutName)
     DEBUG_LOG("applyPresetClut()");
 
     const QString & fileName = m_clutNameToFileName[clutName];
-    TransferFunction * transferFunction = TransferFunctionIO::fromFile(m_clutsDir.absoluteFilePath(QDir::toNativeSeparators(fileName)));
+    TransferFunction *transferFunction = TransferFunctionIO::fromFile(m_clutsDir.absoluteFilePath(QDir::toNativeSeparators(fileName)));
     if (transferFunction)
     {
         //m_currentClut = *transferFunction;
@@ -473,8 +473,8 @@ void Q3DViewerExtension::loadClut()
 
     if (!transferFunctionFileName.isNull())
     {
-        TransferFunction * transferFunction = TransferFunctionIO::fromFile(transferFunctionFileName);
-        QTransferFunctionEditor * currentEditor = qobject_cast<QTransferFunctionEditor*>(m_editorsStackedWidget->currentWidget());
+        TransferFunction *transferFunction = TransferFunctionIO::fromFile(transferFunctionFileName);
+        QTransferFunctionEditor *currentEditor = qobject_cast<QTransferFunctionEditor*>(m_editorsStackedWidget->currentWidget());
         currentEditor->setTransferFunction(*transferFunction);
         delete transferFunction;
         emit newTransferFunction();
@@ -497,7 +497,7 @@ void Q3DViewerExtension::saveClut()
     if (saveDialog.exec() == QDialog::Accepted)
     {
         QString transferFunctionFileName = saveDialog.selectedFiles().first();
-        QTransferFunctionEditor * currentEditor = qobject_cast<QTransferFunctionEditor*>(m_editorsStackedWidget->currentWidget());
+        QTransferFunctionEditor *currentEditor = qobject_cast<QTransferFunctionEditor*>(m_editorsStackedWidget->currentWidget());
         TransferFunctionIO::toFile(transferFunctionFileName, currentEditor->getTransferFunction());
 
         QFileInfo transferFunctionFileInfo(transferFunctionFileName);
@@ -507,7 +507,7 @@ void Q3DViewerExtension::saveClut()
 
 void Q3DViewerExtension::switchEditor()
 {
-    QTransferFunctionEditor * currentEditor = qobject_cast<QTransferFunctionEditor*>(m_editorsStackedWidget->currentWidget());
+    QTransferFunctionEditor *currentEditor = qobject_cast<QTransferFunctionEditor*>(m_editorsStackedWidget->currentWidget());
     const TransferFunction & currentTransferFunction = currentEditor->getTransferFunction();
     m_editorsStackedWidget->setCurrentIndex(1 - m_editorsStackedWidget->currentIndex());
     currentEditor = qobject_cast<QTransferFunctionEditor*>(m_editorsStackedWidget->currentWidget());

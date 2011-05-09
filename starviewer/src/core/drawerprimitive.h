@@ -127,7 +127,7 @@ signals:
     void changed();
 
     /// S'emet just quan s'invoca el destructor
-    void dying(DrawerPrimitive *);
+    void dying(DrawerPrimitive*);
 
 protected slots:
     /**

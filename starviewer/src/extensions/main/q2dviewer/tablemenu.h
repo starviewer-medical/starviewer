@@ -34,10 +34,10 @@ public:
 public slots:
 
     /// Mètode que cada vegada que el mouse es situi sobre items comprova si cal afegir files o columnes
-    void verifySelected(ItemMenu * selected);
+    void verifySelected(ItemMenu *selected);
 
     /// Mètode que cada vegada que es seleccioni un dels items emet el grid resultat
-    void emitSelected(ItemMenu * selected);
+    void emitSelected(ItemMenu *selected);
 
 signals:
 
@@ -47,10 +47,10 @@ signals:
 protected:
 
     /// Sobrecàrrega del mètode que tracta tots els events
-    bool event(QEvent * event);
+    bool event(QEvent *event);
 
     /// Sobrecàrrega del mètode que tracta els events del mouse
-    void mouseMoveEvent (QMouseEvent * event);
+    void mouseMoveEvent (QMouseEvent *event);
 
 private:
 
@@ -69,13 +69,13 @@ private:
     int m_rows;
 
     /// Grid per mostrar els elements de la taula
-    QGridLayout * m_gridLayout;
+    QGridLayout *m_gridLayout;
 
     /// Label que informa de les files i columnes seleccionades
-    QLabel * m_information;
+    QLabel *m_information;
 
     /// Llista dels items
-    QList<ItemMenu *> m_itemList;
+    QList<ItemMenu*> m_itemList;
 
 };
 

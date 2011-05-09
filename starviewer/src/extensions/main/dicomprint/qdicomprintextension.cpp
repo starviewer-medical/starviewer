@@ -320,7 +320,7 @@ DicomPrintPage QDicomPrintExtension::fillDicomPrintPagePrintSettings(DicomPrinte
     return dicomPrintPage;
 }
 
-void QDicomPrintExtension::addSeriesInformationAsAnnotationsToDicomPrintPage(DicomPrintPage *dicomPrintPage, Series* seriesToPrint)
+void QDicomPrintExtension::addSeriesInformationAsAnnotationsToDicomPrintPage(DicomPrintPage *dicomPrintPage, Series *seriesToPrint)
 {
     QDate dateToPrintInAnnotation;
     QTime timeToPrintInAnnotation;
@@ -588,7 +588,7 @@ void QDicomPrintExtension::updateVolumeSupport()
     // Comprovem si és multi-frame
     // Si les imatges tenen el mateix path, és que són multi-frame
     // TODO això no deixa de ser un hack temporal. Quan millorem el disseny tindrem millors mètodes per esbrinar això.
-    QList<Image *> imageList = m_2DView->getInput()->getImages();
+    QList<Image*> imageList = m_2DView->getInput()->getImages();
     if (imageList.count() > 1)
     {
         // Comprovant la primera i segona imatges n'hi ha prou

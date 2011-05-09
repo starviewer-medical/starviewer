@@ -4,7 +4,7 @@
 
 namespace udg {
 
-QTransferFunctionIntervalEditor::QTransferFunctionIntervalEditor(QWidget * parent)
+QTransferFunctionIntervalEditor::QTransferFunctionIntervalEditor(QWidget *parent)
     : QWidget(parent)
 {
     setupUi(this);
@@ -23,7 +23,7 @@ QTransferFunctionIntervalEditor::QTransferFunctionIntervalEditor(QWidget * paren
     connect(m_colorSpinBox, SIGNAL(colorChanged(const QColor&)), SIGNAL(colorChanged(const QColor&)));
 }
 
-QTransferFunctionIntervalEditor::QTransferFunctionIntervalEditor(int maximum, QWidget * parent)
+QTransferFunctionIntervalEditor::QTransferFunctionIntervalEditor(int maximum, QWidget *parent)
     : QWidget(parent)
 {
     setupUi(this);

@@ -13,7 +13,7 @@ TableMenu::TableMenu(QWidget *parent)
 {
     setWindowFlags(Qt::Popup);
 
-    QGridLayout * verticalLayout = new QGridLayout(this);
+    QGridLayout *verticalLayout = new QGridLayout(this);
     m_gridLayout = new QGridLayout();
     m_information = new QLabel();
     m_information->setAlignment(Qt::AlignHCenter);
@@ -34,7 +34,7 @@ void TableMenu::initializeTable()
     m_columns = 0;
     m_rows = 0;
 
-    ItemMenu * firstItem = new ItemMenu(this);
+    ItemMenu *firstItem = new ItemMenu(this);
     firstItem->setFrameShape(QFrame::StyledPanel);
     firstItem->setMinimumSize(30, 30);
     firstItem->setMaximumSize(30, 30);
@@ -56,7 +56,7 @@ void TableMenu::initializeTable()
 
 void TableMenu::addColumn()
 {
-    ItemMenu * newItem;
+    ItemMenu *newItem;
     int numRow = 0;
 
     m_columns++;
@@ -79,7 +79,7 @@ void TableMenu::addColumn()
 
 void TableMenu::addRow()
 {
-    ItemMenu * newItem;
+    ItemMenu *newItem;
     int numColumn = 0;
 
     m_rows++;
@@ -100,9 +100,9 @@ void TableMenu::addRow()
     }
 }
 
-void TableMenu::verifySelected(ItemMenu * selected)
+void TableMenu::verifySelected(ItemMenu *selected)
 {
-    ItemMenu * item;
+    ItemMenu *item;
     int numRow;
     int numColumn;
 
@@ -139,7 +139,7 @@ void TableMenu::verifySelected(ItemMenu * selected)
     m_information->setText(QString(tr("%1x%2").arg(columns + 1).arg(rows + 1)));
 }
 
-bool TableMenu::event(QEvent * event)
+bool TableMenu::event(QEvent *event)
 {
     if (event->type() == QEvent::Leave)
     {
@@ -154,7 +154,7 @@ bool TableMenu::event(QEvent * event)
     }
 }
 
-void TableMenu::emitSelected(ItemMenu * selected)
+void TableMenu::emitSelected(ItemMenu *selected)
 {
 
     QStringList values = (selected->getData()).split(",");
@@ -171,7 +171,7 @@ void TableMenu::emitSelected(ItemMenu * selected)
 void TableMenu::dropTable()
 {
     int i;
-    ItemMenu * item;
+    ItemMenu *item;
 
     for (i = 0; i < m_itemList.size(); i++)
     {
@@ -183,7 +183,7 @@ void TableMenu::dropTable()
     m_itemList.clear();
 }
 
-void TableMenu::mouseMoveEvent (QMouseEvent * event)
+void TableMenu::mouseMoveEvent (QMouseEvent *event)
 {
     if (event->x() >= (this->width() - 20))
     {

@@ -36,7 +36,7 @@ public:
 
 private slots:
     /// Marca el volume del job que se li passa conforme ja està carregat
-    void unmarkVolumeFromJobAsLoading(ThreadWeaver::Job* job);
+    void unmarkVolumeFromJobAsLoading(ThreadWeaver::Job *job);
 
 private:
     /// Ens indica si el volume que se li passa s'està carregant

@@ -19,7 +19,7 @@ class QTransferFunctionEditor : public QWidget {
 
 public:
 
-    QTransferFunctionEditor(QWidget * parent = 0);
+    QTransferFunctionEditor(QWidget *parent = 0);
     virtual ~QTransferFunctionEditor();
 
     /// Retorna el valor de propietat màxim mapat per aquest editor.

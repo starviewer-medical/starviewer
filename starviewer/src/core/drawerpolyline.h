@@ -62,7 +62,7 @@ public:
     void getBounds(double bounds[6]);
 
     /// Retorna la llista de punts de la polilínia
-    QList<double *> getPointsList();
+    QList<double*> getPointsList();
 
 public slots:
     void update();
@@ -79,7 +79,7 @@ private:
 
 private:
     /// Llista de punts de la polilínia
-    QList<double *> m_pointsList;
+    QList<double*> m_pointsList;
 
     /// Estructures de vtk, per construir la polilínia
     vtkPolyData *m_vtkPolydata;

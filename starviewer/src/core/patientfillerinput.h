@@ -65,7 +65,7 @@ public:
 
     /// Assignar/Obtenir la llista d'imatges que s'han de processar.
     void setCurrentImages(const QList<Image *> &images);
-    QList<Image *> getCurrentImages();
+    QList<Image*> getCurrentImages();
 
     /// Afegir / Obtenir la sèrie del fitxer que s'ha de processar.
     void setCurrentSeries(Series *series);
@@ -96,7 +96,7 @@ public:
 
 private:
     /// Llista de pacients a omplir
-    QList<Patient *> m_patientList;
+    QList<Patient*> m_patientList;
 
     /// Arxius que cal tractar per omplir la llista de pacients
     QString m_file;
@@ -109,13 +109,13 @@ private:
     QStringList m_allLabels;
 
     /// Llista d'etiquetes assignades a nivell de sèries. Per cada Series tenim vàries etiquetes
-    QMultiMap<Series *, QString> m_seriesLabels;
+    QMultiMap<Series*, QString> m_seriesLabels;
 
     /// Atribut que s'utilitza per executar els fillers individualment.
     DICOMTagReader *m_dicomFile;
 
     /// Guarda les imatges que els fillers han de processar.
-    QList<Image *> m_currentImages;
+    QList<Image*> m_currentImages;
 
     /// Guardem la sèrie del fitxer que els fillers han de processar. S'utilitza si es vol exectuar els fillers individualment per fitxers.
     Series *m_currentSeries;

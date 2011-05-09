@@ -22,17 +22,17 @@ public:
     virtual ~DICOMWriter();
 
     /// Crea una nova instància d'alguna de les classes que implementa la interfície
-    static DICOMWriter * newInstance();
+    static DICOMWriter* newInstance();
 
     /// Assignar obtenir el path del fitxer
     void setPath(const QString &path);
     QString getPath();
 
     /// Afegir un nou atribut basic al fitxer DICOM
-    virtual void addValueAttribute(DICOMValueAttribute * attribute) = 0;
+    virtual void addValueAttribute(DICOMValueAttribute *attribute) = 0;
 
     /// Afegir una sequencia al fitxer DICOM
-    virtual bool addSequenceAttribute(DICOMSequenceAttribute * attribute) = 0;
+    virtual bool addSequenceAttribute(DICOMSequenceAttribute *attribute) = 0;
 
     /// Generar el fitxer
     virtual bool write() = 0;

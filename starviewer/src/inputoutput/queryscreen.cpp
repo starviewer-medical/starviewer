@@ -307,7 +307,7 @@ void QueryScreen::loadRetrievedStudyFromPacs(QString studyInstanceUID)
     m_qInputOutputLocalDatabaseWidget->view(studyUIDList, "", true);
 }
 
-void QueryScreen::sendDicomObjectsToPacs(PacsDevice pacsDevice, QList<Image *> images)
+void QueryScreen::sendDicomObjectsToPacs(PacsDevice pacsDevice, QList<Image*> images)
 {
     m_qInputOutputLocalDatabaseWidget->sendDICOMFilesToPACS(pacsDevice, images);
 }
@@ -376,7 +376,7 @@ DicomMask QueryScreen::buildDicomMask()
     return m_qbasicSearchWidget->buildDicomMask() + m_qadvancedSearchWidget->buildDicomMask();
 }
 
-void QueryScreen::closeEvent(QCloseEvent* event)
+void QueryScreen::closeEvent(QCloseEvent *event)
 {
     // Guardem els settings
     writeSettings();

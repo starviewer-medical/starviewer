@@ -85,7 +85,7 @@ private:
     };
 
     /// Estructura que s'encarrega de guardar els contenidors associats a cada Study
-    QHash<QString, StudyInfo *> m_infomationPerStudy;
+    QHash<QString, StudyInfo*> m_infomationPerStudy;
     /// Widget utilitzat per mostrar la llista dels estudis previs
     QTreeWidget *m_previousStudiesTree;
     /// Widget que apareix quan s'està fent la consulta dels possibles estudis previs.

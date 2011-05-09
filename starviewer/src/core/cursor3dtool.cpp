@@ -27,14 +27,14 @@ Cursor3DTool::Cursor3DTool(QViewer *viewer, QObject *parent)
     m_toolData = m_myData;
     connect(m_toolData, SIGNAL(changed()), SLOT(updateProjectedPoint()));
 
-    m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
+    m_2DViewer = qobject_cast<Q2DViewer*>(viewer);
     if (!m_2DViewer)
     {
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ") + viewer->metaObject()->className());
     }
 
     // Cada cop que el viewer canvïi d'input, hem d'actualitzar el frame of reference
-    connect(m_2DViewer, SIGNAL(volumeChanged(Volume *)), SLOT(refreshReferenceViewerData()));
+    connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(refreshReferenceViewerData()));
     connect(m_2DViewer, SIGNAL(selected()), SLOT(refreshReferenceViewerData()));
     connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(hideCrossHair()));
 
@@ -53,10 +53,10 @@ Cursor3DTool::~Cursor3DTool()
     }
 }
 
-void Cursor3DTool::setToolData(ToolData * data)
+void Cursor3DTool::setToolData(ToolData *data)
 {
     m_toolData = data;
-    m_myData = qobject_cast<Cursor3DToolData *>(data);
+    m_myData = qobject_cast<Cursor3DToolData*>(data);
     connect(m_toolData, SIGNAL(changed()), SLOT(updateProjectedPoint()));
 
     if (m_2DViewer->isActive())
@@ -117,10 +117,10 @@ void Cursor3DTool::updatePosition()
     if (m_2DViewer->isActive() && m_state == Computing)
     {
         int index[3];
-        double * dicomWorldPosition = new double[4];
+        double *dicomWorldPosition = new double[4];
         double coordinates[3];
         double xyz[3];
-        ImagePlane * currentPlane = NULL;
+        ImagePlane *currentPlane = NULL;
         Image *image = NULL;
 
         //Cal fer els càlculs per passar del món VTK al mon que té el DICOM per guardar el punt en dicom a les dades compartides de la tool.

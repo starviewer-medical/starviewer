@@ -66,7 +66,7 @@ signals:
 
 private:
 
-    ThreadWeaver::Weaver* m_queryWeaver;
+    ThreadWeaver::Weaver *m_queryWeaver;
     ThreadWeaver::Weaver *m_sendDICOMFilesToPACSWeaver;
     ThreadWeaver::Weaver *m_retrieveDICOMFilesFromPACSWeaver;
 };

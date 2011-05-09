@@ -17,7 +17,7 @@ class QColorSpinBox : public QSpinBox {
 public:
 
     /// Crea un QColorSpinBox blanc i amb alfa 0.
-    QColorSpinBox(QWidget * parent = 0);
+    QColorSpinBox(QWidget *parent = 0);
     virtual ~QColorSpinBox();
 
     /// Retorna el color RGBA associat a l'spinbox.

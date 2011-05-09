@@ -33,10 +33,10 @@ public:
     /// Rota els graus definits per 'angle' sobre l'eix i punt de rotació que defineixen la intersecció de dos plans.
     /// El primer pla es el que volem rotar i l'altre sobre el qual estroba l'eix d'intersecció/rotació
     /// Caldria resoldre què fer quan els plans son coplanars!!!!
-    void rotate(double degrees, double rotationAxis[3], vtkPlaneSource* plane);
+    void rotate(double degrees, double rotationAxis[3], vtkPlaneSource *plane);
 
     /// Rota el pla especificat pel seu centre
-    void rotateMiddle(double degrees, double rotationAxis[3], vtkPlaneSource* plane);
+    void rotateMiddle(double degrees, double rotationAxis[3], vtkPlaneSource *plane);
 
 public slots:
     /// Li assigna el volum amb el que s'aplica l'MPR.
@@ -101,7 +101,7 @@ private:
     void createConnections();
 
     /// Ens retorna la línia d'intersecció entre dos plans definida per un punt i un vector
-    void planeIntersection(vtkPlaneSource* plane1, vtkPlaneSource *plane2, double r[3], double t[3]);
+    void planeIntersection(vtkPlaneSource *plane1, vtkPlaneSource *plane2, double r[3], double t[3]);
 
     /// Calcula el punt d'intersecció de 3 plans a l'espai
     void planeIntersection(vtkPlaneSource *plane1, vtkPlaneSource *plane2, vtkPlaneSource *plane3, double intersectionPoint[3]);

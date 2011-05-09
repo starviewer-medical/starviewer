@@ -15,7 +15,7 @@ public:
     ~DICOMImageFileGenerator();
 
     /// Afegir el volume a partir del qual s'ha de generar els fitxers
-    void setInput(Volume * volume);
+    void setInput(Volume *volume);
 
     /** Mètode encarregat de generar el/s fitxer/s a partir del volume introduït
         @pre Cal haver afegit un Volume \sa setInput
@@ -24,13 +24,13 @@ public:
 
 private:
     bool generateSecondaryCaptureDICOMFiles();
-    void fillGeneralImageInfo(DICOMWriter * writer, Image * image);
-    void fillImagePixelInfo(DICOMWriter * writer, Image * image);
-    void fillSCInfo(DICOMWriter * writer, Image * image);
-    void fillSOPInfo(DICOMWriter * writer, Image * image);
+    void fillGeneralImageInfo(DICOMWriter *writer, Image *image);
+    void fillImagePixelInfo(DICOMWriter *writer, Image *image);
+    void fillSCInfo(DICOMWriter *writer, Image *image);
+    void fillSOPInfo(DICOMWriter *writer, Image *image);
 
 private:
-    Volume * m_input;
+    Volume *m_input;
 
 };
 

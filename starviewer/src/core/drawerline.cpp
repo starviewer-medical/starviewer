@@ -147,7 +147,7 @@ void DrawerLine::updateVtkActorProperties()
     properties->SetColor(color.redF(), color.greenF(), color.blueF());
 }
 
-double DrawerLine::computeDistance(double * spacing)
+double DrawerLine::computeDistance(double *spacing)
 {
     double distance;
     if (spacing == NULL)

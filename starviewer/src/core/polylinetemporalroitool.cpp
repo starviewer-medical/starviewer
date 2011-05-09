@@ -31,14 +31,14 @@ ToolData *PolylineTemporalROITool::getToolData() const
     return m_myData;
 }
 
-void PolylineTemporalROITool::setToolData(ToolData * data)
+void PolylineTemporalROITool::setToolData(ToolData *data)
 {
     // Fem aquesta comparació perquè a vegades ens passa la data que ja tenim a m_myData
     if (m_myData != data)
     {
         // creem de nou les dades
         m_toolData = data;
-        m_myData = qobject_cast<PolylineTemporalROIToolData *>(data);
+        m_myData = qobject_cast<PolylineTemporalROIToolData*>(data);
     }
 }
 

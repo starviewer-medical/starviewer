@@ -21,7 +21,7 @@ public:
     ~VolumeBuilder();
 
     /// Mètode encarregat de generar el nou Volume.
-    virtual Volume * build() = 0;
+    virtual Volume* build() = 0;
 
     /// Assignar/Obtenir la descripció que es vol assignar a la nova sèrie que es generarà.
     void setSeriesDescription(QString description);

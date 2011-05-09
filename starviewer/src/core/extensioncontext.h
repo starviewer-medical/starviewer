@@ -24,7 +24,7 @@ public:
     /// Mètode de conveniència que ens dóna un volum per defecte a partir del contexte assignat.
     /// Això ens servirà per obtenir un volum a partir tant del pacient o si no
     /// tenim pacient (cas mhd's) fer-ho amb el volumeIdentifier
-    Volume *getDefaultVolume() const;
+    Volume* getDefaultVolume() const;
 
 private:
     Patient* m_patient;

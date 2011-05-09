@@ -38,7 +38,7 @@ bool ImageFillerStep::fillIndividually()
     if (dicomReader)
     {
         ok = true;
-        QList<Image *> generatedImages = processDICOMFile(dicomReader);
+        QList<Image*> generatedImages = processDICOMFile(dicomReader);
         if (!generatedImages.isEmpty())
         {
             m_input->setCurrentImages(generatedImages);
@@ -49,11 +49,11 @@ bool ImageFillerStep::fillIndividually()
     return ok;
 }
 
-QList<Image *> ImageFillerStep::processDICOMFile(DICOMTagReader *dicomReader)
+QList<Image*> ImageFillerStep::processDICOMFile(DICOMTagReader *dicomReader)
 {
     Q_ASSERT(dicomReader);
 
-    QList<Image *> generatedImages;
+    QList<Image*> generatedImages;
     bool ok = dicomReader->tagExists(DICOMPixelData);
     if (ok)
     {
@@ -354,7 +354,7 @@ bool ImageFillerStep::processImage(Image *image, DICOMTagReader *dicomReader)
         DICOMSequenceAttribute *viewCodeSequence = dicomReader->getSequenceAttribute(DICOMViewCodeSequence);
         if (viewCodeSequence)
         {
-            QList<DICOMSequenceItem *> items = viewCodeSequence->getItems();
+            QList<DICOMSequenceItem*> items = viewCodeSequence->getItems();
             // Per definició, només hauríem de tenir un ítem
             switch (items.count())
             {
@@ -383,11 +383,11 @@ bool ImageFillerStep::processImage(Image *image, DICOMTagReader *dicomReader)
     return ok;
 }
 
-QList<Image *> ImageFillerStep::processEnhancedDICOMFile(DICOMTagReader *dicomReader)
+QList<Image*> ImageFillerStep::processEnhancedDICOMFile(DICOMTagReader *dicomReader)
 {
     Q_ASSERT(dicomReader);
 
-    QList<Image *> generatedImages;
+    QList<Image*> generatedImages;
     // Comprovem si l'arxiu és una imatge, per això caldrà que existeixi el tag PixelData->TODO es podria eliminar perquè ja ho comprovem abans! Falta fer la comprovació quan llegim fitxer a fitxer
     if (dicomReader->tagExists(DICOMPixelData))
     {
@@ -419,7 +419,7 @@ QList<Image *> ImageFillerStep::processEnhancedDICOMFile(DICOMTagReader *dicomRe
         if (sharedFunctionalGroupsSequence)
         {
             // Aquesta seqüència pot contenir un ítem o cap
-            QList<DICOMSequenceItem *> sharedItems = sharedFunctionalGroupsSequence->getItems();
+            QList<DICOMSequenceItem*> sharedItems = sharedFunctionalGroupsSequence->getItems();
             if (!sharedItems.isEmpty())
             {
                 foreach (Image *image, generatedImages)
@@ -437,7 +437,7 @@ QList<Image *> ImageFillerStep::processEnhancedDICOMFile(DICOMTagReader *dicomRe
         DICOMSequenceAttribute *perFrameFunctionalGroupsSequence = dicomReader->getSequenceAttribute(DICOMPerFrameFunctionalGroupsSequence);
         if (perFrameFunctionalGroupsSequence)
         {
-            QList<DICOMSequenceItem *> perFrameItems = perFrameFunctionalGroupsSequence->getItems();
+            QList<DICOMSequenceItem*> perFrameItems = perFrameFunctionalGroupsSequence->getItems();
             int frameNumber = 0;
             foreach (DICOMSequenceItem *item, perFrameItems)
             {
@@ -493,7 +493,7 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
         if (imageFrameTypeSequence)
         {
             // Segons DICOM només es permet que contingui un sol ítem
-            QList<DICOMSequenceItem *> imageFrameTypeItems = imageFrameTypeSequence->getItems();
+            QList<DICOMSequenceItem*> imageFrameTypeItems = imageFrameTypeSequence->getItems();
             if (!imageFrameTypeItems.empty())
             {
                 DICOMSequenceItem *item = imageFrameTypeItems.at(0);
@@ -520,7 +520,7 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
         if (pixelMeasuresSequence)
         {
             // Segons DICOM només es permet que contingui un sol ítem
-            QList<DICOMSequenceItem *> pixelMeasuresItems = pixelMeasuresSequence->getItems();
+            QList<DICOMSequenceItem*> pixelMeasuresItems = pixelMeasuresSequence->getItems();
             if (!pixelMeasuresItems.empty())
             {
                 DICOMSequenceItem *item = pixelMeasuresItems.at(0);
@@ -563,7 +563,7 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
         if (planeOrientationSequence)
         {
             // Segons DICOM només es permet que contingui un sol ítem
-            QList<DICOMSequenceItem *> planeOrientationItems = planeOrientationSequence->getItems();
+            QList<DICOMSequenceItem*> planeOrientationItems = planeOrientationSequence->getItems();
             if (!planeOrientationItems.empty())
             {
                 DICOMSequenceItem *item = planeOrientationItems.at(0);
@@ -589,7 +589,7 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
         if (planePositionSequence)
         {
             // Segons DICOM només es permet que contingui un sol ítem
-            QList<DICOMSequenceItem *> planePositionItems = planePositionSequence->getItems();
+            QList<DICOMSequenceItem*> planePositionItems = planePositionSequence->getItems();
             if (!planePositionItems.empty())
             {
                 DICOMSequenceItem *item = planePositionItems.at(0);
@@ -627,7 +627,7 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
         if (pixelValueTransformationSequence)
         {
             // Segons DICOM només es permet que contingui un sol ítem
-            QList<DICOMSequenceItem *> pixelValueTransformationItems = pixelValueTransformationSequence->getItems();
+            QList<DICOMSequenceItem*> pixelValueTransformationItems = pixelValueTransformationSequence->getItems();
             if (!pixelValueTransformationItems.empty())
             {
                 DICOMSequenceItem *item = pixelValueTransformationItems.at(0);
@@ -701,7 +701,7 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
         if (patientOrientationInFrameSequence)
         {
             // Segons DICOM només es permet que contingui un sol ítem
-            QList<DICOMSequenceItem *> patientOrientationInFrameItems = patientOrientationInFrameSequence->getItems();
+            QList<DICOMSequenceItem*> patientOrientationInFrameItems = patientOrientationInFrameSequence->getItems();
             if (!patientOrientationInFrameItems.empty())
             {
                 DICOMSequenceItem *item = patientOrientationInFrameItems.at(0);
@@ -733,7 +733,7 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
     if (frameVOILUTSequence)
     {
         // Segons DICOM només es permet que contingui un sol ítem
-        QList<DICOMSequenceItem *> frameVOILUTItems = frameVOILUTSequence->getItems();
+        QList<DICOMSequenceItem*> frameVOILUTItems = frameVOILUTSequence->getItems();
         if (!frameVOILUTItems.empty())
         {
             DICOMSequenceItem *item = frameVOILUTItems.at(0);
@@ -796,7 +796,7 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
     if (frameAnatomySequence)
     {
         // Segons DICOM només es permet que contingui un sol ítem
-        QList<DICOMSequenceItem *> frameAnatomyItems = frameAnatomySequence->getItems();
+        QList<DICOMSequenceItem*> frameAnatomyItems = frameAnatomySequence->getItems();
         if (!frameAnatomyItems.empty())
         {
             DICOMSequenceItem *item = frameAnatomyItems.at(0);
@@ -846,7 +846,7 @@ void ImageFillerStep::computePixelSpacing(Image *image, DICOMTagReader *dicomRea
         {
             // Aquesta seqüència pot tenir més d'un ítem. TODO Nosaltres només tractem el primer, però ho hauríem de fer per tots,
             // ja que defineix més d'una regió i podríem estar obtenint informació equivocada
-            QList<DICOMSequenceItem *> items = ultraSoundsRegionsSequence->getItems();
+            QList<DICOMSequenceItem*> items = ultraSoundsRegionsSequence->getItems();
             if (!items.isEmpty())
             {
                 int physicalUnitsX = items.at(0)->getValueAttribute(DICOMPhysicalUnitsXDirection)->getValueAsInt();

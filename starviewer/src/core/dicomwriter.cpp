@@ -11,7 +11,7 @@ DICOMWriter::~DICOMWriter()
 
 }
 
-DICOMWriter * DICOMWriter::newInstance()
+DICOMWriter* DICOMWriter::newInstance()
 {
     return new DICOMWriterDCMTK();
 }

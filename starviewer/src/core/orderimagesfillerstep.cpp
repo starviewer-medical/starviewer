@@ -19,12 +19,12 @@ OrderImagesFillerStep::OrderImagesFillerStep()
 
 OrderImagesFillerStep::~OrderImagesFillerStep()
 {
-    QMap<unsigned long, Image*> * instanceNumberSet;
-    QMap<double, QMap<unsigned long, Image*>*> * imagePositionSet;
+    QMap<unsigned long, Image*> *instanceNumberSet;
+    QMap<double, QMap<unsigned long, Image*>*> *imagePositionSet;
     QMap<QString, QMap<double, QMap< unsigned long, Image*>*>*> *normalVectorImageSet;
-    QMap<int, QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*>*> * volumesInSeries;
+    QMap<int, QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*>*> *volumesInSeries;
 
-    foreach (Series * key, OrderImagesInternalInfo.keys())
+    foreach (Series *key, OrderImagesInternalInfo.keys())
     {
         volumesInSeries = OrderImagesInternalInfo.take(key);
         foreach (int volumeNumber, volumesInSeries->keys())
@@ -58,7 +58,7 @@ OrderImagesFillerStep::~OrderImagesFillerStep()
 
 bool OrderImagesFillerStep::fillIndividually()
 {
-    QMap<int, QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*>*> * volumesInSeries;
+    QMap<int, QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*>*> *volumesInSeries;
 
     if (OrderImagesInternalInfo.contains(m_input->getCurrentSeries()))
     {
@@ -126,7 +126,7 @@ bool OrderImagesFillerStep::fillIndividually()
 
 void OrderImagesFillerStep::postProcessing()
 {
-    foreach (Series * key, OrderImagesInternalInfo.keys())
+    foreach (Series *key, OrderImagesInternalInfo.keys())
     {
         setOrderedImagesIntoSeries(key);
     }
@@ -140,8 +140,8 @@ void OrderImagesFillerStep::processImage(Image *image)
     // el passem a string que ens serà més fàcil de comparar,perquè així és com es guarda a l'estructura d'ordenació
     QString planeNormalString = QString("%1\\%2\\%3").arg(planeNormalVector[0], 0, 'f', 5).arg(planeNormalVector[1], 0, 'f', 5).arg(planeNormalVector[2], 0, 'f', 5);
 
-    QMap<double, QMap<unsigned long, Image*> *> * imagePositionSet;
-    QMap<unsigned long, Image*> * instanceNumberSet;
+    QMap<double, QMap<unsigned long, Image*>*> *imagePositionSet;
+    QMap<unsigned long, Image*> *instanceNumberSet;
 
     double distance = this->distance(image);
 
@@ -227,12 +227,12 @@ void OrderImagesFillerStep::processImage(Image *image)
 void OrderImagesFillerStep::setOrderedImagesIntoSeries(Series *series)
 {
     QList<Image *> imageSet;
-    QMap<unsigned long, Image*> * instanceNumberSet;
-    QMap<double, QMap<unsigned long, Image*>*> * imagePositionSet;
+    QMap<unsigned long, Image*> *instanceNumberSet;
+    QMap<double, QMap<unsigned long, Image*>*> *imagePositionSet;
     QMap<double, QMap<double, QMap<unsigned long, Image*>*>*> lastOrderedImageSet;
-    QMap<int, QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*>*> * volumesInSeries;
+    QMap<int, QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*>*> *volumesInSeries;
 
-    Image * currentImage;
+    Image *currentImage;
     int orderNumberInVolume;
 
     volumesInSeries = OrderImagesInternalInfo.take(series);
