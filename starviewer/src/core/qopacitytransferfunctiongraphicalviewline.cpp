@@ -7,7 +7,7 @@ namespace udg {
 QOpacityTransferFunctionGraphicalViewLine::QOpacityTransferFunctionGraphicalViewLine()
     : m_leftNode(0), m_rightNode(0)
 {
-    setZValue(-2.0);
+    setZValue(-1.0);
 }
 
 QOpacityTransferFunctionGraphicalViewNode* QOpacityTransferFunctionGraphicalViewLine::leftNode() const
@@ -18,6 +18,7 @@ QOpacityTransferFunctionGraphicalViewNode* QOpacityTransferFunctionGraphicalView
 void QOpacityTransferFunctionGraphicalViewLine::setLeftNode(QOpacityTransferFunctionGraphicalViewNode *leftNode)
 {
     m_leftNode = leftNode;
+    update();
 }
 
 QOpacityTransferFunctionGraphicalViewNode* QOpacityTransferFunctionGraphicalViewLine::rightNode() const
@@ -28,6 +29,7 @@ QOpacityTransferFunctionGraphicalViewNode* QOpacityTransferFunctionGraphicalView
 void QOpacityTransferFunctionGraphicalViewLine::setRightNode(QOpacityTransferFunctionGraphicalViewNode *rightNode)
 {
     m_rightNode = rightNode;
+    update();
 }
 
 void QOpacityTransferFunctionGraphicalViewLine::update()

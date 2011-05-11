@@ -100,7 +100,6 @@ void QOpacityTransferFunctionGraphicalViewNode::fixLines(QOpacityTransferFunctio
     if (leftLine)
     {
         leftLine->setRightNode(leftNode);
-        leftLine->update();
     }
     leftNode->setLeftLine(leftLine);
     leftNode->setRightLine(centerLine);
@@ -112,7 +111,6 @@ void QOpacityTransferFunctionGraphicalViewNode::fixLines(QOpacityTransferFunctio
     if (rightLine)
     {
         rightLine->setLeftNode(rightNode);
-        rightLine->update();
     }
 }
 
