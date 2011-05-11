@@ -7,6 +7,7 @@
 #include <cmath>
 #include <typeinfo>
 
+#include <QMouseEvent>
 #include <QWheelEvent>
 #include <QtConcurrentFilter>
 
@@ -102,8 +103,17 @@ void QOpacityTransferFunctionGraphicalView::mousePressEvent(QMouseEvent *event)
         if (scene()->selectedItems().isEmpty()) // si no hi ha items seleccionats
         {
             m_state = Adding;
-            addNode(mapToScene(event->pos()));
-            QGraphicsView::mousePressEvent(event);  // Al lloro! Tornem a fer el mousePressEvent per poder arrossegar el nou node!
+            QOpacityTransferFunctionGraphicalViewNode *node = addNode(mapToScene(event->pos()));
+            // Després d'afegir el node a la vista volem poder moure'l abans d'afegir-lo definitivament a la funció.
+            // Per fer això necessitem que QGraphicsView comenci la interacció amb el node com si haguéssim clicat damunt d'ell des del principi.
+            // Per aconseguir-ho creem un nou esdeveniment com el que estem processant però amb la posició actualitzada.
+            // Això cal perquè el node no s'afegeix sempre just a sota el cursor perquè l'opacitat està limitada entre 0 i 1.
+            // Llavors fem que QGraphicsView processi aquest nou esdeveniment i l'enganyem perquè faci el que volem (trollface.jpg).
+            // De pas també posem el cursor a sobre el node.
+            QPoint position = mapFromScene(node->pos());
+            QCursor::setPos(mapToGlobal(position));
+            QMouseEvent mouseEvent(event->type(), position, event->button(), event->buttons(), event->modifiers());
+            QGraphicsView::mousePressEvent(&mouseEvent);
         }
         else
         {
@@ -170,7 +180,7 @@ bool lessThan(const QGraphicsItem *item1, const QGraphicsItem *item2)
 
 }
 
-void QOpacityTransferFunctionGraphicalView::addNode(const QPointF &position)
+QOpacityTransferFunctionGraphicalViewNode* QOpacityTransferFunctionGraphicalView::addNode(const QPointF &position)
 {
     QOpacityTransferFunctionGraphicalViewNode *node = new QOpacityTransferFunctionGraphicalViewNode();  // (n*)
     node->setPos(position);
@@ -238,6 +248,8 @@ void QOpacityTransferFunctionGraphicalView::addNode(const QPointF &position)
         rightLine->setRightNode(rightNode);
         rightNode->setLeftLine(rightLine);
     }
+
+    return node;
 }
 
 } // namespace udg
