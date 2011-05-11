@@ -6,6 +6,7 @@
 namespace udg {
 
 class OpacityTransferFunction;
+class QOpacityTransferFunctionGraphicalViewNode;
 
 /**
     Vista gràfica d'una funció de transferència d'opacitat.
@@ -55,8 +56,8 @@ private:
 
     void fitInView(const QRectF &rect);
 
-    /// Afegeix un nou node.
-    void addNode(const QPointF &position);
+    /// Afegeix un nou node i el retorna.
+    QOpacityTransferFunctionGraphicalViewNode* addNode(const QPointF &position);
     /// Esborra un node a x si existeix.
     //void removeNode(double x);
     /// Fa els preparatius per comenar a moure nodes.
