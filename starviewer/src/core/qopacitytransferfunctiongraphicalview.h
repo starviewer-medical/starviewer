@@ -28,7 +28,7 @@ signals:
     /// S'emet quan s'afegeix un node.
     void nodeAdded(double x, double opacity);
     /// S'emet quan s'esborra un node.
-    //void nodeRemoved(double x);
+    void nodeRemoved(double x);
     /// S'emet quan es mou un node.
     //void nodeMoved(double origin, double destination);
     /// S'emet quan es mou ms d'un node.
@@ -50,16 +50,16 @@ protected:
 private:
 
     /// Estat que ens indica que estem fent entre el mouse press i el mouse release.
-    enum State { Ready, Adding };
+    enum State { Ready, Adding, Removing };
 
     Q_DISABLE_COPY(QOpacityTransferFunctionGraphicalView)
 
     void fitInView(const QRectF &rect);
 
     /// Afegeix un nou node i el retorna.
-    QOpacityTransferFunctionGraphicalViewNode* addNode(const QPointF &position);
-    /// Esborra un node a x si existeix.
-    //void removeNode(double x);
+    QOpacityTransferFunctionGraphicalViewNode* addNode(const QPoint &position);
+    /// Esborra un node a position si existeix.
+    void removeNode(const QPoint &position);
     /// Fa els preparatius per comenar a moure nodes.
     //void beginMoveNodes();
     /// Finalitza el moviment de nodes.

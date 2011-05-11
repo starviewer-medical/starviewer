@@ -11,6 +11,22 @@
 #include <QWheelEvent>
 #include <QtConcurrentFilter>
 
+namespace {
+
+/// Retorna cert si item és un QOpacityTransferFunctionGraphicalViewNode.
+bool isNode(const QGraphicsItem *item)
+{
+    return typeid(*item) == typeid(udg::QOpacityTransferFunctionGraphicalViewNode);
+}
+
+/// Retorna cert si la x d'item1 és més petita que la x d'item2.
+bool lessThan(const QGraphicsItem *item1, const QGraphicsItem *item2)
+{
+    return item1->x() < item2->x();
+}
+
+} // namespace
+
 namespace udg {
 
 QOpacityTransferFunctionGraphicalView::QOpacityTransferFunctionGraphicalView(QWidget *parent)
@@ -103,7 +119,7 @@ void QOpacityTransferFunctionGraphicalView::mousePressEvent(QMouseEvent *event)
         if (scene()->selectedItems().isEmpty()) // si no hi ha items seleccionats
         {
             m_state = Adding;
-            QOpacityTransferFunctionGraphicalViewNode *node = addNode(mapToScene(event->pos()));
+            QOpacityTransferFunctionGraphicalViewNode *node = addNode(event->pos());
             // Després d'afegir el node a la vista volem poder moure'l abans d'afegir-lo definitivament a la funció.
             // Per fer això necessitem que QGraphicsView comenci la interacció amb el node com si haguéssim clicat damunt d'ell des del principi.
             // Per aconseguir-ho creem un nou esdeveniment com el que estem processant però amb la posició actualitzada.
@@ -120,10 +136,10 @@ void QOpacityTransferFunctionGraphicalView::mousePressEvent(QMouseEvent *event)
             //beginMoveNodes();
         }
     }
-//    else if (event->button() == Qt::RightButton)
-//    {
-//        removeNode(mapToScene(event->pos()).x());
-//    }
+    else if (event->button() == Qt::RightButton)
+    {
+        m_state = Removing;
+    }
 }
 
 void QOpacityTransferFunctionGraphicalView::mouseMoveEvent(QMouseEvent *event)
@@ -139,6 +155,11 @@ void QOpacityTransferFunctionGraphicalView::mouseReleaseEvent(QMouseEvent *event
     {
         QGraphicsItem *node = scene()->selectedItems().first();
         emit nodeAdded(node->x(), node->y());
+        m_state = Ready;
+    }
+    else if (m_state == Removing)
+    {
+        removeNode(event->pos());
         m_state = Ready;
     }
 }
@@ -166,25 +187,12 @@ void QOpacityTransferFunctionGraphicalView::fitInView(const QRectF &rect)
     QGraphicsView::fitInView(rect);
 }
 
-namespace {
-
-bool isNode(const QGraphicsItem *item)
+QOpacityTransferFunctionGraphicalViewNode* QOpacityTransferFunctionGraphicalView::addNode(const QPoint &position)
 {
-    return typeid(*item) == typeid(QOpacityTransferFunctionGraphicalViewNode);
-}
-
-bool lessThan(const QGraphicsItem *item1, const QGraphicsItem *item2)
-{
-    return item1->x() < item2->x();
-}
-
-}
-
-QOpacityTransferFunctionGraphicalViewNode* QOpacityTransferFunctionGraphicalView::addNode(const QPointF &position)
-{
+    QPointF scenePosition = mapToScene(position);
     QOpacityTransferFunctionGraphicalViewNode *node = new QOpacityTransferFunctionGraphicalViewNode();  // (n*)
-    node->setPos(position);
-    node->setToolTip(QString("(%1, %2").arg(position.x()).arg(position.y()));
+    node->setPos(scenePosition);
+    node->setToolTip(QString("(%1, %2").arg(scenePosition.x()).arg(scenePosition.y()));
     scene()->addItem(node);
 
     // Busquem els nodes anterior i posterior
@@ -250,6 +258,76 @@ QOpacityTransferFunctionGraphicalViewNode* QOpacityTransferFunctionGraphicalView
     }
 
     return node;
+}
+
+void QOpacityTransferFunctionGraphicalView::removeNode(const QPoint &position)
+{
+    // Busquem el node més proper a position i que sigui prou a prop
+    QList<QGraphicsItem*> items = this->items(position);    // tots els items (nodes i línies) a position
+    QtConcurrent::blockingFilter(items, isNode);    // filtrem per quedar-nos només amb els nodes
+    if (items.isEmpty())
+    {
+        return;
+    }
+    QOpacityTransferFunctionGraphicalViewNode *node;
+    if (items.size() == 1)
+    {
+        node = dynamic_cast<QOpacityTransferFunctionGraphicalViewNode*>(items.first());
+    }
+    else
+    {
+        qSort(items.begin(), items.end(), lessThan);    // ordenem per x
+        QOpacityTransferFunctionGraphicalViewNode *auxiliarNode = new QOpacityTransferFunctionGraphicalViewNode();  // node auxiliar per fer la cerca
+        auxiliarNode->setPos(mapToScene(position));
+        QList<QGraphicsItem*>::const_iterator it = qLowerBound(items.begin(), items.end(), auxiliarNode, lessThan); // busquem el node més proper a x
+        delete auxiliarNode;
+        if (it == items.begin())
+        {
+            node = dynamic_cast<QOpacityTransferFunctionGraphicalViewNode*>(*it);
+        }
+        else if (it == items.end())
+        {
+            node = dynamic_cast<QOpacityTransferFunctionGraphicalViewNode*>(*(it - 1));
+        }
+        else
+        {
+            double x = mapToScene(position).x();
+            if (qAbs(x - (*it)->x()) < qAbs(x - (*(it - 1))->x()))
+            {
+                node = dynamic_cast<QOpacityTransferFunctionGraphicalViewNode*>(*it);
+            }
+            else
+            {
+                node = dynamic_cast<QOpacityTransferFunctionGraphicalViewNode*>(*(it - 1));
+            }
+        }
+    }
+
+    // Refem els enllaços entre els nodes i les línies restants
+    if (node->leftLine() && node->rightLine())              // ?-(ln)--ll--(n/)--rl/--(rn)-? ==> ?-(ln)--ll--(rn)-?
+    {
+        node->leftLine()->setRightNode(node->rightLine()->rightNode());
+        node->rightLine()->rightNode()->setLeftLine(node->leftLine());
+        scene()->removeItem(node->rightLine());
+        delete node->rightLine();
+    }
+    else if (node->leftLine())  // && !node->rightLine()    // ?-(ln)--ll/--(n/) ==> ?-(ln)
+    {
+        node->leftLine()->leftNode()->setRightLine(0);
+        scene()->removeItem(node->leftLine());
+        delete node->leftLine();
+    }
+    else if (node->rightLine()) // && !node->leftLine()     // (n/)--rl/--(rn)-? ==> (rn)-?
+    {
+        node->rightLine()->rightNode()->setLeftLine(0);
+        scene()->removeItem(node->rightLine());
+        delete node->rightLine();
+    }
+
+    // Esborrem el node
+    scene()->removeItem(node);
+    emit nodeRemoved(node->x());
+    delete node;
 }
 
 } // namespace udg

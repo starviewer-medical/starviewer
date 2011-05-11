@@ -103,6 +103,7 @@ void QTransferFunctionGraphicalView::enableEditingConnections()
     connect(m_colorView, SIGNAL(nodeChangedColor(double,QColor)), m_editor, SLOT(changeColorPoint(double,QColor)));
 
     connect(m_scalarOpacityView, SIGNAL(nodeAdded(double,double)), m_editor, SLOT(addScalarOpacityPoint(double,double)));
+    connect(m_scalarOpacityView, SIGNAL(nodeRemoved(double)), m_editor, SLOT(removeScalarOpacityPoint(double)));
 
     m_editingConnectionsEnabled = true;
 }
@@ -121,6 +122,7 @@ void QTransferFunctionGraphicalView::disableEditingConnections()
     disconnect(m_colorView, SIGNAL(nodeChangedColor(double,QColor)), m_editor, SLOT(changeColorPoint(double,QColor)));
 
     disconnect(m_scalarOpacityView, SIGNAL(nodeAdded(double,double)), m_editor, SLOT(addScalarOpacityPoint(double,double)));
+    disconnect(m_scalarOpacityView, SIGNAL(nodeRemoved(double)), m_editor, SLOT(removeScalarOpacityPoint(double)));
 
     m_editingConnectionsEnabled = false;
 }
