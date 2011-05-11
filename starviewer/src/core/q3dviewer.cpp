@@ -15,7 +15,6 @@
 // include's vtk
 #include <QVTKWidget.h> // pel setAutomaticImageCacheEnabled
 #include <vtkRenderer.h>
-#include <vtkCamera.h>
 #include <vtkRenderWindow.h>
 // rendering 3D
 #include <vtkVolumeProperty.h>
