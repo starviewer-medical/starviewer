@@ -11,7 +11,6 @@
 #include <vtkImagePlaneWidget.h>
 #include <vtkInteractorStyle.h>
 #include <vtkCommand.h>
-#include <vtkCamera.h>
 #include <vtkWindowToImageFilter.h>
 #include <vtkLookupTable.h>
 
