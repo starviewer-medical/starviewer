@@ -269,7 +269,7 @@ void QOpacityTransferFunctionGraphicalView::removeNode(const QPoint &position)
     {
         return;
     }
-    QOpacityTransferFunctionGraphicalViewNode *node;
+    QOpacityTransferFunctionGraphicalViewNode *node;    // (n/)
     if (items.size() == 1)
     {
         node = dynamic_cast<QOpacityTransferFunctionGraphicalViewNode*>(items.first());
