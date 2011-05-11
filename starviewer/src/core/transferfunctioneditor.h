@@ -90,6 +90,7 @@ signals:
 
     /// S'emet quan canvia la funció de transferència.
     void transferFunctionChanged(const TransferFunction &transferFunction);
+
     /// S'emet quan canvia el nom de la funció de transferència.
     void nameChanged(const QString &name);
     /// S'emet quan canvia la funció de transferència de color.
@@ -98,14 +99,17 @@ signals:
     void scalarOpacityTransferFunctionChanged(const OpacityTransferFunction &scalarOpacityTransferFunction);
     /// S'emet quan canvia la funció de transferència d'opacitat del gradient.
     void gradientOpacityTransferFunctionChanged(const OpacityTransferFunction &gradientOpacityTransferFunction);
+
     /// S'emet quan s'afegeix un punt de color.
     void colorPointAdded(double x, const QColor &color);
     /// S'emet quan s'esborra un punt de color.
     void colorPointRemoved(double x);
+
     /// S'emet quan s'afegeix un punt d'opacitat escalar.
     void scalarOpacityPointAdded(double x, double opacity);
     /// S'emet quan s'esborra un punt d'opacitat escalar.
     void scalarOpacityPointRemoved(double x);
+
     /// S'emet quan s'afegeix un punt d'opacitat del gradient.
     void gradientOpacityPointAdded(double y, double opacity);
     /// S'emet quan s'esborra un punt d'opacitat del gradient.

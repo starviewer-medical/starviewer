@@ -7,7 +7,7 @@
 namespace udg {
 
 /**
-    Vista gr‡fica d'una funciÛ de transferËncia.
+    Vista gr√†fica d'una funci√≥ de transfer√®ncia.
  */
 class QTransferFunctionGraphicalView : public QTransferFunctionView, private Ui::QTransferFunctionGraphicalViewBase {
 
@@ -15,7 +15,7 @@ class QTransferFunctionGraphicalView : public QTransferFunctionView, private Ui:
 
 public:
 
-    /// Crea la vista, que treballar‡ amb l'editor donat.
+    /// Crea la vista, que treballar√† amb l'editor donat.
     explicit QTransferFunctionGraphicalView(TransferFunctionEditor *editor, QWidget *parent = 0);
 
 protected:
@@ -25,22 +25,32 @@ protected:
 
 protected slots:
 
-    /// Assigna la funciÛ de transferËncia.
+    /// Assigna la funci√≥ de transfer√®ncia.
     virtual void setTransferFunction(const TransferFunction &transferFunction);
-    /// Assigna el nom de la funciÛ de transferËncia.
+
+    /// Assigna el nom de la funci√≥ de transfer√®ncia.
     virtual void setName(const QString &name);
-    /// Assigna la funciÛ de transferËncia de color.
+    /// Assigna la funci√≥ de transfer√®ncia de color.
     virtual void setColorTransferFunction(const ColorTransferFunction &colorTransferFunction);
+    /// Assigna la funci√≥ de transfer√®ncia d'opacitat escalar.
+    virtual void setScalarOpacityTransferFunction(const OpacityTransferFunction &scalarOpacityTransferFunction);
+//    /// Assigna la funci√≥ de transfer√®ncia d'opacitat del gradient.
+//    virtual void setGradientOpacityTransferFunction(const OpacityTransferFunction &gradientOpacityTransferFunction);
+
     /// Afegeix un punt de color.
     virtual void addColorPoint(double x, const QColor &color);
     /// Esborra un punt de color.
     virtual void removeColorPoint(double x);
-    /// Mou un punt de color.
-    virtual void moveColorPoint(double origin, double destination);
-    /// Canvia el color d'un punt.
-    virtual void changeColorPoint(double x, const QColor &color);
-    /// Assigna la funciÛ de transferËncia d'opacitat escalar.
-    virtual void setScalarOpacityTransferFunction(const OpacityTransferFunction &opacityTransferFunction);
+
+    /// Afegeix un punt d'opacitat escalar.
+    virtual void addScalarOpacityPoint(double x, double opacity);
+    /// Esborra un punt d'opacitat escalar.
+    virtual void removeScalarOpacityPoint(double x);
+
+//    /// Afegeix un punt d'opacitat del gradient.
+//    virtual void addGradientOpacityPoint(double y, double opacity);
+//    /// Esborra un punt d'opacitat del gradient.
+//    virtual void removeGradientOpacityPoint(double y);
 
 private:
 

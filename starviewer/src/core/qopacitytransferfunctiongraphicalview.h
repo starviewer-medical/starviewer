@@ -25,7 +25,7 @@ public:
 signals:
 
     /// S'emet quan s'afegeix un node.
-    //void nodeAdded(double x, double opacity);
+    void nodeAdded(double x, double opacity);
     /// S'emet quan s'esborra un node.
     //void nodeRemoved(double x);
     /// S'emet quan es mou un node.
@@ -39,21 +39,24 @@ protected:
 
     ///@{
     /// Gestió d'esdeveniments. \todo Explicar una mica què fem a cadascun.
-    //virtual void mousePressEvent(QMouseEvent *event);
-    //virtual void mouseMoveEvent(QMouseEvent *event);
-    //virtual void mouseReleaseEvent(QMouseEvent *event);
+    virtual void mousePressEvent(QMouseEvent *event);
+    virtual void mouseMoveEvent(QMouseEvent *event);
+    virtual void mouseReleaseEvent(QMouseEvent *event);
     //virtual void mouseDoubleClickEvent(QMouseEvent *event);
     virtual void wheelEvent(QWheelEvent *event);
     ///@}
 
 private:
 
+    /// Estat que ens indica que estem fent entre el mouse press i el mouse release.
+    enum State { Ready, Adding };
+
     Q_DISABLE_COPY(QOpacityTransferFunctionGraphicalView)
 
     void fitInView(const QRectF &rect);
 
-    /// Afegeix un nou node a x.
-    //void addNode(double x);
+    /// Afegeix un nou node.
+    void addNode(const QPointF &position);
     /// Esborra un node a x si existeix.
     //void removeNode(double x);
     /// Fa els preparatius per comenar a moure nodes.
@@ -64,6 +67,9 @@ private:
     //void changeNodeOpacity(double x);
 
 private:
+
+    /// Estat actual.
+    State m_state;
 
     /// Nivell de zoom actual.
     //double m_zoom;

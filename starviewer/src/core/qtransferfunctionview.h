@@ -33,28 +33,30 @@ protected slots:
 
     /// Assigna la funció de transferència.
     virtual void setTransferFunction(const TransferFunction &transferFunction) = 0;
+
     /// Assigna el nom de la funció de transferència.
     virtual void setName(const QString &name) = 0;
     /// Assigna la funció de transferència de color.
     virtual void setColorTransferFunction(const ColorTransferFunction &colorTransferFunction) = 0;
+    /// Assigna la funció de transferència d'opacitat escalar.
+    virtual void setScalarOpacityTransferFunction(const OpacityTransferFunction &scalarOpacityTransferFunction) = 0;
+//    /// Assigna la funció de transferència d'opacitat del gradient.
+//    virtual void setGradientOpacityTransferFunction(const OpacityTransferFunction &gradientOpacityTransferFunction) = 0;
+
     /// Afegeix un punt de color.
     virtual void addColorPoint(double x, const QColor &color) = 0;
     /// Esborra un punt de color.
     virtual void removeColorPoint(double x) = 0;
-    /// Mou un punt de color.
-    virtual void moveColorPoint(double origin, double destination) = 0;
-    /// Canvia el color d'un punt.
-    virtual void changeColorPoint(double x, const QColor &color) = 0;
-    /// Assigna la funció de transferència d'opacitat escalar.
-    virtual void setScalarOpacityTransferFunction(const OpacityTransferFunction &scalarOpacityTransferFunction) = 0;
-//    /// Afegeix un punt d'opacitat escalar.
-//    virtual void addScalarOpacityPoint(double x, double opacity) = 0;
-//    /// Esborra un punt d'opacitat escalar.
-//    virtual void removeScalarOpacityPoint(double x) = 0;
-//    /// Mou un punt d'opacitat escalar.
-//    virtual void moveScalarOpacityPoint(double origin, double destination) = 0;
-//    /// Canvia l'opacitat escalar d'un punt.
-//    virtual void changeScalarOpacityPoint(double x, double opacity) = 0;
+
+    /// Afegeix un punt d'opacitat escalar.
+    virtual void addScalarOpacityPoint(double x, double opacity) = 0;
+    /// Esborra un punt d'opacitat escalar.
+    virtual void removeScalarOpacityPoint(double x) = 0;
+
+//    /// Afegeix un punt d'opacitat del gradient.
+//    virtual void addGradientOpacityPoint(double y, double opacity) = 0;
+//    /// Esborra un punt d'opacitat del gradient.
+//    virtual void removeGradientOpacityPoint(double y) = 0;
 
 protected:
 
