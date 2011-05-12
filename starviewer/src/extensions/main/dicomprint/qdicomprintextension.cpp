@@ -45,10 +45,6 @@ QDicomPrintExtension::QDicomPrintExtension(QWidget *parent)
     m_2DView->enableAnnotation(Q2DViewer::WindowInformationAnnotation | Q2DViewer::PatientOrientationAnnotation | Q2DViewer::SliceAnnotation | Q2DViewer::PatientInformationAnnotation | Q2DViewer::AcquisitionInformationAnnotation, true);
 }
 
-QDicomPrintExtension::~QDicomPrintExtension()
-{
-}
-
 void QDicomPrintExtension::createConnections()
 {
     //TODO: no cal invocar un mètode per mostrar la configuració d'una impressora el mètode show dels widgets ja és un slot, llavors el mètode configurationPrinter() es pot esborrar 

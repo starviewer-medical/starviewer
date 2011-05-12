@@ -16,10 +16,6 @@ namespace udg {
 class DicomPrintJob {
 public:
 
-    DicomPrintJob();
-
-    ~DicomPrintJob();
-
     /// Afegim la Prioritat que tindrà la impressió (High, Medium, Low)
     void setPrintPriority(const QString& printPriority);
 

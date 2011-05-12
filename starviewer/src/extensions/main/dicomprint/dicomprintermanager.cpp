@@ -9,16 +9,6 @@ namespace udg {
 
 const QString DicomPrinterManager::DicomPrinterListSectionName = "DicomPrinterList";
 
-DicomPrinterManager::DicomPrinterManager()
-{
-
-}
-
-DicomPrinterManager::~DicomPrinterManager()
-{
-
-}
-
 bool DicomPrinterManager::addPrinter(DicomPrinter &printer)
 {
     if (this->indexOfPrinterInSettings(printer) == -1)
