@@ -700,7 +700,7 @@ void HangingProtocolManager::setInputToViewer(Q2DViewerWidget *viewerWidget, Ser
 
 Image* HangingProtocolManager::getImageByIndexInPatientModality(Patient *patient, int index, QList<QString> hangingProtocolModalities)
 {
-    QList<Image*> *allImagesInStudy = new QList<Image*>();
+    QList<Image*> allImagesInStudy;
 
     // TODO Es podria millorar amb una cerca fins a la imatge que està a l'índex, envers d'un recorregut agafant-les totes
     foreach (Study *study, patient->getStudies())
@@ -709,14 +709,14 @@ Image* HangingProtocolManager::getImageByIndexInPatientModality(Patient *patient
         {
             if (hangingProtocolModalities.contains(series->getModality()))
             {
-                allImagesInStudy->append(series->getImages());
+                allImagesInStudy.append(series->getImages());
             }
         }
     }
 
-    if (index < allImagesInStudy->size())
+    if (index < allImagesInStudy.size())
     {
-        return allImagesInStudy->at(index);
+        return allImagesInStudy.at(index);
     }
     else
     {
