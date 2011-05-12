@@ -131,7 +131,7 @@ qlonglong LocalDatabaseStudyDAL::getPatientIDFromStudyInstanceUID(const QString 
 {
     int columns, rows;
     char **reply = NULL, **error = NULL;
-    qlonglong patientID = NULL;
+    qlonglong patientID = -1;
 
     m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(), qPrintable(buildSqlGetPatientIDFromStudyInstanceUID(studyInstanceUID)),
         &reply, &rows, &columns, error);

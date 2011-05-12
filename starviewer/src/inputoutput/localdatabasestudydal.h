@@ -36,7 +36,7 @@ public:
     QList<Patient*> queryPatientStudy(const DicomMask &patientStudyMaskToQuery, QDate lastAccessDateMinor = QDate(), QDate lastAccessDateEqualOrMajor = QDate());
 
     ///Retorna el ID amb que Starviewer indentifica un pacient (aquest és diferent del Patient ID de DICOM) a partir de l'UID d'un estudi, si no troba l'estudi
-    ///retorna NULL
+    ///retorna -1
     qlonglong getPatientIDFromStudyInstanceUID(const QString &studyInstanceUID);
 
 private :

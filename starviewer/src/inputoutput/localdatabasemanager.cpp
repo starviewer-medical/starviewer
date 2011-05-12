@@ -641,7 +641,7 @@ int LocalDatabaseManager::savePatientOfStudy(DatabaseConnection *dbConnect, Stud
     LocalDatabaseStudyDAL studyDAL(dbConnect);
     qlonglong patientID = studyDAL.getPatientIDFromStudyInstanceUID(study->getInstanceUID());
 
-    if (patientID == NULL)
+    if (patientID == -1)
     {
         //si no existeix l'inserim a la BD
         patientDAL.insert(study->getParentPatient());
@@ -781,7 +781,7 @@ int LocalDatabaseManager::deletePatientOfStudyFromDatabase(DatabaseConnection *d
     {
         return localDatabaseStudyDAL.getLastError();
     }
-    else if (patientID == NULL)
+    else if (patientID == -1)
     {
         ERROR_LOG(QString("No hem trobat el pacient a esborrar de l'estudi amb UID %1").arg(maskToDelete.getStudyInstanceUID()));
         return localDatabaseStudyDAL.getLastError();
