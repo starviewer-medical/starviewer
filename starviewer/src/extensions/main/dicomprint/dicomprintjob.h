@@ -4,7 +4,6 @@
 #include <QString>
 #include <QList>
 
-#include "printjob.h"
 #include "dicomprintpage.h"
 
 namespace udg {
@@ -14,7 +13,7 @@ namespace udg {
 * Un PrintJob serà un objecte que contindrà la informació necessària per fer la impressió (Prioritat, Pàgines a imprimir...)
 */
 
-class DicomPrintJob : public PrintJob {
+class DicomPrintJob {
 public:
 
     DicomPrintJob();
@@ -51,6 +50,10 @@ public:
     ///Retorna les PrintPage del PrintJob
     QList<DicomPrintPage> getDicomPrintPages();
 
+    ///Especifica/retorna el número de pàgines que s'han d'implementar del JOB
+    void setNumberOfCopies(int numberOfCopies);
+    int getNumberOfCopies();
+
 private:
 
     QString m_printPriority;
@@ -58,6 +61,7 @@ private:
     QString m_label;
     QString m_filmDestination;
     QList<DicomPrintPage> m_listDicomPrintPage;
+    int m_numberOfCopies;
 };
 };
 #endif

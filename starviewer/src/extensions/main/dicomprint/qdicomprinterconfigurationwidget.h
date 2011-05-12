@@ -2,7 +2,6 @@
 #define UDGQDICOMPRINTERCONFIGURATIONWIDGET_H
 
 #include "ui_qdicomprinterconfigurationwidgetbase.h"
-#include "qprinterconfigurationwidget.h"
 
 namespace udg {
 
@@ -13,7 +12,7 @@ class QDicomAddPrinterWidget;
  * Implementació de la interfície QPrinterConfigurationWidget per impressió d'imatge DICOM en DCMTK.
  */
 
-class QDicomPrinterConfigurationWidget : public QPrinterConfigurationWidget, private::Ui::QDicomPrinterConfigurationWidgetBase {
+class QDicomPrinterConfigurationWidget : public QWidget, private::Ui::QDicomPrinterConfigurationWidgetBase {
 Q_OBJECT
 
 public:

@@ -2,7 +2,6 @@
 #define UDGDICOMPRINTERMANAGER_H
 
 #include <QList>
-#include "printermanager.h"
 #include "settings.h"
 
 /**
@@ -11,10 +10,9 @@
 */
 
 namespace udg {
-    class Printer;
     class DicomPrinter;
 
-class DicomPrinterManager : public PrinterManager {
+class DicomPrinterManager {
 public:
 
     DicomPrinterManager();

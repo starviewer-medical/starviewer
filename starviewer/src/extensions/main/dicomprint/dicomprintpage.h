@@ -4,8 +4,6 @@
 #include <QString>
 #include <QMap>
 
-#include "printpage.h"
-
 /**
 * Implementació per la Interfície DicomPrintPage que defineix una pàgina amb imatges per imprimir en impressores Dicom en DCMTK.
 */
@@ -14,7 +12,7 @@ namespace udg {
 
 class Image;
 
-class DicomPrintPage : public PrintPage {
+class DicomPrintPage {
 public:
 
     ///Especifica/Retorna la mida sobre de la placa sobre el que s'imprimirà
@@ -79,6 +77,14 @@ public:
     ///Retorna les anotacions que ens han indicat que s'han d'imprimir amb la pàgina
     QMap<int, QString> getPageAnnotations();
 
+    ///Especifica/retorna el número de pàgina
+    void setPageNumber(int pageNumber);
+    int getPageNumber();
+
+    ///Especifica/retorna les imatges que s'han d'imprimir en aquesta pàgina. Les imatges s'imprimiren segons l'ordre d'inserció a la llista
+    void setImagesToPrint(QList<Image*> imagesToPrint);
+    QList<Image*> getImagesToPrint();
+
 private:
 
     QString m_filmSize;
@@ -94,6 +100,8 @@ private:
     QString m_configurationInformation;
     QMap<int, QString> m_pageAnnotations;
     QString m_annotationDisplayFormatID;
+    int m_pageNumber;
+    QList<Image*> m_imagesToPrint;
 };
 };
 #endif

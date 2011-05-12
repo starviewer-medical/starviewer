@@ -4,12 +4,7 @@
 #include <QMessageBox>
 
 #include "qdicomprintextension.h"
-#include "imageprintfactory.h"
-#include "dicomprintfactory.h"
-#include "qprintjobcreatorwidget.h"
-#include "qdicomjobcreatorwidget.h"
-#include "qprinterconfigurationwidget.h"
-#include "qprintingconfigurationwidget.h"
+#include "qdicomprinterconfigurationwidget.h"
 #include "dicomprintermanager.h"
 #include "dicomprinter.h"
 #include "dicomprintpage.h"
@@ -34,11 +29,10 @@ QDicomPrintExtension::QDicomPrintExtension(QWidget *parent)
     setupUi(this);
     // Inicialitzem els settings
 
-    m_factory = new DicomPrintFactory();
     m_noSupportedSeriesFrame->setVisible(false);
     fillSelectedDicomPrinterComboBox();
 
-    m_printerConfigurationWidgetProof = m_factory->getPrinterConfigurationWidget();
+    m_qDicomPrinterConfigurationWidgetProof = new QDicomPrinterConfigurationWidget();
 
     m_qTimer = new QTimer();
     m_sentToPrintSuccessfullyFrame->setVisible(false);
@@ -57,9 +51,10 @@ QDicomPrintExtension::~QDicomPrintExtension()
 
 void QDicomPrintExtension::createConnections()
 {
+    //TODO: no cal invocar un mètode per mostrar la configuració d'una impressora el mètode show dels widgets ja és un slot, llavors el mètode configurationPrinter() es pot esborrar 
     connect(m_configurationPrinterToolButton, SIGNAL(clicked()), SLOT(configurationPrinter()));
     connect(m_selectedPrinterComboBox, SIGNAL(currentIndexChanged(int)), SLOT(selectedDicomPrinterChanged(int)));
-    connect(m_printerConfigurationWidgetProof, SIGNAL(printerSettingsChanged()), SLOT(fillSelectedDicomPrinterComboBox()));
+    connect(m_qDicomPrinterConfigurationWidgetProof, SIGNAL(printerSettingsChanged()), SLOT(fillSelectedDicomPrinterComboBox()));
     connect(m_selectionImageRadioButton, SIGNAL(clicked()), SLOT(imageSelectionModeChanged()));
     connect(m_currentImageRadioButton, SIGNAL(clicked()), SLOT(imageSelectionModeChanged()));
     //Sliders quan canvia de valor
@@ -126,7 +121,7 @@ void QDicomPrintExtension::updateInput()
 
 void QDicomPrintExtension::configurationPrinter()
 {
-    m_printerConfigurationWidgetProof->show();
+    m_qDicomPrinterConfigurationWidgetProof->show();
 }
 
 void QDicomPrintExtension::fillSelectedDicomPrinterComboBox()

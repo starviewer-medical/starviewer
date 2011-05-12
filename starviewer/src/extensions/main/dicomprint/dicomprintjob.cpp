@@ -63,4 +63,15 @@ QList<DicomPrintPage> DicomPrintJob::getDicomPrintPages()
 {
     return m_listDicomPrintPage;
 }
+
+void DicomPrintJob::setNumberOfCopies(int numberOfCopies)
+{
+    m_numberOfCopies = numberOfCopies;
+}
+
+int DicomPrintJob::getNumberOfCopies()
+{
+    return m_numberOfCopies;
+}
+
 }
