@@ -232,6 +232,10 @@ Q3DViewer::~Q3DViewer()
     {
         m_volumeRayCastIsosurfaceFunction->Delete();
     }
+    if (m_clippingPlanes)
+    {
+        m_clippingPlanes->Delete();
+    }
 }
 
 void Q3DViewer::getCurrentWindowLevel(double wl[2])
@@ -356,6 +360,7 @@ void Q3DViewer::setClippingPlanes(vtkPlanes *clippingPlanes)
     if (clippingPlanes)
     {
         m_clippingPlanes = clippingPlanes;
+        m_clippingPlanes->Register(0);
         m_volumeMapper->SetClippingPlanes(m_clippingPlanes);
         m_gpuRayCastMapper->SetClippingPlanes(m_clippingPlanes);
     }
