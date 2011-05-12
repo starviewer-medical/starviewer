@@ -162,4 +162,24 @@ QMap<int, QString> DicomPrintPage::getPageAnnotations()
     return m_pageAnnotations;
 }
 
+void DicomPrintPage::setPageNumber(int pageNumber)
+{
+    m_pageNumber = pageNumber;
+}
+
+int DicomPrintPage::getPageNumber()
+{
+    return m_pageNumber;
+}
+
+void DicomPrintPage::setImagesToPrint(QList<Image*> imagesToPrint)
+{
+    m_imagesToPrint = imagesToPrint;
+}
+
+QList<Image*> DicomPrintPage::getImagesToPrint()
+{
+    return m_imagesToPrint;
+}
+
 }

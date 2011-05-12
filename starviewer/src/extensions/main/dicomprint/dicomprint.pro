@@ -4,29 +4,16 @@
 # L'objectiu � una biblioteca:
 
 FORMS += qdicomprintextensionbase.ui \
-         qdicomjobcreatorwidgetbase.ui \
          qdicomprinterconfigurationwidgetbase.ui \
          qdicomaddprinterwidgetbase.ui \
          qdicomprinterbasicsettingswidgetbase.ui
          
 HEADERS +=  qdicomprintextension.h \
             dicomprintextensionmediator.h \
-            imageprintfactory.h \
-            dicomprintfactory.h \
-            qprinterconfigurationwidget.h \
             qdicomprinterconfigurationwidget.h \
-            printermanager.h \
             dicomprintermanager.h \
-            printer.h \
             dicomprinter.h \
-            qprintingconfigurationwidget.h \
-            qprintjobcreatorwidget.h \
-            qdicomjobcreatorwidget.h \
-            printjob.h \
             dicomprintjob.h \
-            printmethod.h \
-            dicomprintmethod.h \
-            printpage.h \
             dicomprintpage.h \
             dicomprint.h \
             createdicomprintspool.h \
@@ -36,15 +23,10 @@ HEADERS +=  qdicomprintextension.h \
             
 SOURCES +=  qdicomprintextension.cpp \
             dicomprintextensionmediator.cpp \
-            dicomprintfactory.cpp \
             qdicomprinterconfigurationwidget.cpp \
             dicomprinter.cpp \
             dicomprintermanager.cpp \
-            qdicomjobcreatorwidget.cpp \
-            printjob.cpp \
             dicomprintjob.cpp \
-            dicomprintmethod.cpp \
-            printpage.cpp \
             dicomprintpage.cpp \
             dicomprint.cpp \
             createdicomprintspool.cpp \

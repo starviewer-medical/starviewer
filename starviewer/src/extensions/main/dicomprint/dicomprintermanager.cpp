@@ -1,8 +1,6 @@
 #include <QString>
 #include <QSettings>
 
-#include "printer.h"
-#include "printermanager.h"
 #include "dicomprintermanager.h"
 #include "dicomprinter.h"
 #include "settings.h"

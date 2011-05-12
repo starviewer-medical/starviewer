@@ -4,7 +4,6 @@
 #include <QString>
 #include <QStringList>
 #include <QList>
-#include "printer.h"
 
 /**
   * Implementació de la interfície Printer per una impressora del tipus Dicom
@@ -12,7 +11,7 @@
 
 namespace udg {
 
-class DicomPrinter : public Printer {
+class DicomPrinter {
 public:
 
     DicomPrinter();
@@ -265,6 +264,10 @@ private:
 
 private:
 
+    QString m_name;
+    QString m_type;
+    QString m_description;
+    bool m_isDefaultPrinter;
     int m_ID;
     QString m_aeTitle;
     QString m_hostname;

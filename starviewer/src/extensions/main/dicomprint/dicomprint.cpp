@@ -9,7 +9,6 @@
 #include "createdicomprintspool.h"
 #include "printdicomspool.h"
 #include "../inputoutput/pacsdevice.h"
-#include "../inputoutput/status.h"
 #include "../inputoutput/echotopacs.h"
 #include "logging.h"
 #include "deletedirectory.h"

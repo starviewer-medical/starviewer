@@ -9,9 +9,7 @@
 
 namespace udg {
 
-class ImagePrintFactory;
-class QPrintJobCreatorWidget;
-class QPrinterConfigurationWidget;
+class QDicomPrinterConfigurationWidget;
 class Study;
 class Image;
 class DicomPrintPage;
@@ -65,8 +63,6 @@ private slots:
     void timeoutTimer();
 
 private:
-    ImagePrintFactory *m_factory;
-    QPrinterConfigurationWidget *m_printerConfigurationWidgetProof;
 
     ///Crea les connexions
     void createConnections();
@@ -121,6 +117,8 @@ private:
     ToolManager *m_toolManager;
 
     QTimer *m_qTimer;
+
+    QDicomPrinterConfigurationWidget *m_qDicomPrinterConfigurationWidgetProof;
 };
 
 } // end namespace udg.

@@ -1,5 +1,4 @@
 #include "qdicomprinterconfigurationwidget.h"
-#include "printer.h"
 #include "dicomprinter.h"
 #include "dicomprintermanager.h"
 #include "starviewerapplication.h"
