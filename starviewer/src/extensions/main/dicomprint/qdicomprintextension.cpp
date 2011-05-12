@@ -52,7 +52,7 @@ QDicomPrintExtension::~QDicomPrintExtension()
 void QDicomPrintExtension::createConnections()
 {
     //TODO: no cal invocar un mètode per mostrar la configuració d'una impressora el mètode show dels widgets ja és un slot, llavors el mètode configurationPrinter() es pot esborrar 
-    connect(m_configurationPrinterToolButton, SIGNAL(clicked()), SLOT(configurationPrinter()));
+    connect(m_configurationPrinterToolButton, SIGNAL(clicked()), m_qDicomPrinterConfigurationWidgetProof, SLOT(show()));
     connect(m_selectedPrinterComboBox, SIGNAL(currentIndexChanged(int)), SLOT(selectedDicomPrinterChanged(int)));
     connect(m_qDicomPrinterConfigurationWidgetProof, SIGNAL(printerSettingsChanged()), SLOT(fillSelectedDicomPrinterComboBox()));
     connect(m_selectionImageRadioButton, SIGNAL(clicked()), SLOT(imageSelectionModeChanged()));
@@ -117,11 +117,6 @@ void QDicomPrintExtension::updateInput()
     updateSelectionImagesValue();
 
     updateVolumeSupport();
-}
-
-void QDicomPrintExtension::configurationPrinter()
-{
-    m_qDicomPrinterConfigurationWidgetProof->show();
 }
 
 void QDicomPrintExtension::fillSelectedDicomPrinterComboBox()
