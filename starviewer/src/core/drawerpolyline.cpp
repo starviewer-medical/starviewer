@@ -58,8 +58,7 @@ void DrawerPolyline::setPoint(int i, double point[3])
     }
     else
     {
-        double *array = new double[3];
-        array = m_pointsList.takeAt(i);
+        double *array = m_pointsList.takeAt(i);
         for (int j = 0; j < 3; j++)
         {
             array[j] = point[j];
