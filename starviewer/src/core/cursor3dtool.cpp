@@ -178,6 +178,7 @@ void Cursor3DTool::updatePosition()
                 dicomWorldPosition[2] = (double)index[2];
                 dicomWorldPosition[3] = 1.0;
                 projectionMatrix->MultiplyPoint(dicomWorldPosition, dicomWorldPosition);// Matriu * punt
+                projectionMatrix->Delete();
 
                 // 4.- Modificar les dades compartides del punt per tal que els altres s'actualitzin i situar el punt origen
                 m_crossHair->setCentrePoint(xyz[0], xyz[1], xyz[2]);
