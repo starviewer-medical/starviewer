@@ -43,7 +43,9 @@ ClippingPlanesTool::ClippingPlanesTool(QViewer *viewer, QObject *parent)
 ClippingPlanesTool::~ClippingPlanesTool()
 {
     m_vtkQtConnections->Disconnect(m_boundingBoxClipperWidget, vtkCommand::InteractionEvent);
+    m_vtkQtConnections->Delete();
     m_boundingBoxClipperWidget->Off();
+    m_boundingBoxClipperWidget->Delete();
 }
 
 void ClippingPlanesTool::handleEvent(long unsigned eventID)
@@ -73,6 +75,7 @@ void ClippingPlanesTool::updateViewerClippingPlanes()
     vtkPlanes *planes = vtkPlanes::New();
     m_boundingBoxClipperWidget->GetPlanes(planes);
     m_3DViewer->setClippingPlanes(planes);
+    planes->Delete();
 }
 
 void ClippingPlanesTool::updateInput()
