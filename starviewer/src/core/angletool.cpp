@@ -148,7 +148,7 @@ void AngleTool::fixFirstSegment()
 
 void AngleTool::drawCircle()
 {
-    double degreesIncrease, *newPoint, radius;
+    double degreesIncrease, radius;
     int initialAngle, finalAngle;
 
     double *firstPoint = m_mainPolyline->getPoint(0);
@@ -190,7 +190,7 @@ void AngleTool::drawCircle()
     for (int i = initialAngle; i > finalAngle; i--)
     {
         degreesIncrease = i * 1.0 * MathTools::DegreesToRadiansAsDouble;
-        newPoint = new double[3];
+        double newPoint[3];
 
         /*
             TODO Aquí hauríem de fer alguna cosa d'aquest estil, però si ho fem així,
