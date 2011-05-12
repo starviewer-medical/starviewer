@@ -155,7 +155,7 @@ bool CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, const
 {
     unsigned long bitmapWidth, bitmapHeight, bitmapSize;
     double pixelAspectRatio;
-    void *pixelData;
+    char *pixelData;
     DcmFileFormat *imageToPrintDcmFileFormat = NULL;
     DcmDataset *imageToPrintDataset = NULL;
     OFCondition status;
@@ -232,7 +232,7 @@ bool CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, const
     return ok;
 }
 
-bool CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, const void *pixelData, unsigned long bitmapWidth, unsigned long bitmapHeight, double pixelAspectRatio, const QString &spoolDirectoryPath)
+bool CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, const char *pixelData, unsigned long bitmapWidth, unsigned long bitmapHeight, double pixelAspectRatio, const QString &spoolDirectoryPath)
 {
     char InstanceUIDOfTransformedImage[70];
     OFString requestedImageSizeAsOFString;
@@ -303,7 +303,8 @@ bool CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
 
     if (pxData)
     {
-        pxData->putUint16Array(OFstatic_cast(Uint16*, OFconst_cast(void*, pixelData)), OFstatic_cast(unsigned long, bitmapWidth * bitmapHeight));
+        void *pixelDataAsVoid = OFconst_cast(char*, pixelData);
+        pxData->putUint16Array(OFstatic_cast(Uint16*, pixelDataAsVoid), OFstatic_cast(unsigned long, bitmapWidth * bitmapHeight));
         transformedImageDatasetToPrint->insert(pxData, OFTrue);
 
         if (m_presentationState->getPresentationLUT() == DVPSP_table)
