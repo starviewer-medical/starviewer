@@ -11,6 +11,7 @@ Cursor3DToolData::Cursor3DToolData(QObject *parent)
 
 Cursor3DToolData::~Cursor3DToolData()
 {
+    delete[] m_originPointPosition;
 }
 
 QString Cursor3DToolData::getFrameOfReferenceUID() const
@@ -39,9 +40,12 @@ void Cursor3DToolData::setImagePlane(ImagePlane *imagePlane)
     emit changed();
 }
 
-void Cursor3DToolData::setOriginPointPosition(double *position)
+void Cursor3DToolData::setOriginPointPosition(double position[3])
 {
-    m_originPointPosition = position;
+    for (int i = 0; i < 3; i++)
+    {
+        m_originPointPosition[i] = position[i];
+    }
     emit changed();
 }
 

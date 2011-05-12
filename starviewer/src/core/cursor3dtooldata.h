@@ -79,7 +79,7 @@ public slots:
      * Quan canvïi aquest valor, s'emetrà el senyal changed()
      * @param double
      */
-    void setOriginPointPosition(double *position);
+    void setOriginPointPosition(double position[3]);
 
 private:
     /// El frame of reference UID del pla de referència

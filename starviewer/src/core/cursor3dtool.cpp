@@ -117,7 +117,7 @@ void Cursor3DTool::updatePosition()
     if (m_2DViewer->isActive() && m_state == Computing)
     {
         int index[3];
-        double *dicomWorldPosition = new double[4];
+        double dicomWorldPosition[4];
         double coordinates[3];
         double xyz[3];
         ImagePlane *currentPlane = NULL;
