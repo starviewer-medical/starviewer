@@ -6,10 +6,6 @@
 #include <QProcess>
 #include <QCoreApplication>
 
-#ifdef _WIN32
-#include "windows.h"
-#endif
-
 namespace udg {
 
 void QStarviewerSAPWrapper::sendRequestToLocalStarviewer(QString accessionNumber)
@@ -41,7 +37,6 @@ void QStarviewerSAPWrapper::sendRequestToLocalStarviewer(QString accessionNumber
     else
     {
         INFO_LOG("QStarviewerSAPWrapper::S'ha enviat la petició correctament al Starviewer");
-        printf(qPrintable(QString("The request to retrieve the study with accession number %1 has been sent successfully.\n").arg(accessionNumber)));
     }
 
     tcpSocket.flush();
@@ -73,7 +68,6 @@ void QStarviewerSAPWrapper::errorConnecting(int starviewerRisPort, QString error
     QString messageError = QString("Can't connect with Starviewer on port %1, be sure that Starviewer is running. Error description: %2.\n").arg(QString().setNum(starviewerRisPort), errorDescription);
 
     ERROR_LOG(QString("QStarviewerSAPWrapper::No s'ha pogut connectar amb l'Starviewer pel port %1, descripcio error: %2").arg(QString().setNum(starviewerRisPort), errorDescription));
-    printf(qPrintable(messageError));
 }
 
 void QStarviewerSAPWrapper::errorWriting(QString errorDescription)
@@ -81,7 +75,6 @@ void QStarviewerSAPWrapper::errorWriting(QString errorDescription)
     QString messageError = QString("Error can't send the request to Starviewer. Error description:  %1.\n").arg(errorDescription);
 
     ERROR_LOG("QStarviewerSAPWrapper::No s'ha pogut enviar la peticio al Starviewer, descripcio error: " + errorDescription);
-    printf(qPrintable(messageError));
 }
 
 void QStarviewerSAPWrapper::errorClosing(QString errorDescription)
@@ -89,6 +82,5 @@ void QStarviewerSAPWrapper::errorClosing(QString errorDescription)
     QString messageError = QString("Error while disconnecting from host. Error description:  %1.\n").arg(errorDescription);
 
     ERROR_LOG("QStarviewerSAPWrapper::S'ha produit un error desconnectant del host, descripcio del error: " + errorDescription);
-    printf(qPrintable(messageError));
 }
 }
