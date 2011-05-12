@@ -9,14 +9,6 @@
 
 namespace udg {
 
-/// Retorna la interpolació lineal entre a i b avaluant "a + alpha * (b - a)", que és equivalent a "a * (1 - alpha) + b * alpha".
-template <typename T>
-T lerp(const T &a, const T &b, double alpha)
-{
-    Q_ASSERT(!MathTools::isNaN(alpha));
-    return a + alpha * (b - a);
-}
-
 /**
     Representa una funció de transferència bàsica f: X -> Y, on X és un conjunt de valors reals (valors de propietat o magnitud del gradient) i Y un conjunt de valors de tipus T.
     Aquesta funció té uns quants punts definits explícitament i la resta s'obtenen per interpolació lineal o extrapolació del veí més proper. La funció de transferència també té un nom.
@@ -69,6 +61,11 @@ protected:
     QString m_name;
     /// Mapa amb els punts (x,y) definits explícitament.
     QMap<double, T> m_map;
+
+private:
+
+    /// Retorna la interpolació lineal entre a i b avaluant "a + alpha * (b - a)", que és equivalent a "a * (1 - alpha) + b * alpha".
+    static T linearInterpolation(const T &a, const T &b, double alpha);
 
 };
 
@@ -123,7 +120,7 @@ T TransferFunctionTemplate<T>::get(double x) const
     typename QMap<double, T>::const_iterator a = lowerBound - 1, b = lowerBound;
     double alpha = (x - a.key()) / (b.key() - a.key());
 
-    return lerp(a.value(), b.value(), alpha);
+    return linearInterpolation(a.value(), b.value(), alpha);
 }
 
 template <typename T>
@@ -228,6 +225,13 @@ void TransferFunctionTemplate<T>::simplify()
 template <typename T>
 TransferFunctionTemplate<T>::TransferFunctionTemplate()
 {
+}
+
+template <typename T>
+T TransferFunctionTemplate<T>::linearInterpolation(const T &a, const T &b, double alpha)
+{
+    Q_ASSERT(!MathTools::isNaN(alpha));
+    return a + alpha * (b - a);
 }
 
 } // namespace udg

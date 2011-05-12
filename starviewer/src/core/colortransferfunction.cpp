@@ -8,7 +8,7 @@
 namespace udg {
 
 template <>
-QColor lerp(const QColor &a, const QColor &b, double alpha)
+QColor TransferFunctionTemplate<QColor>::linearInterpolation(const QColor &a, const QColor &b, double alpha)
 {
     Q_ASSERT(a.isValid());
     Q_ASSERT(b.isValid());
