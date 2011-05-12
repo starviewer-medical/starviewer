@@ -16,8 +16,6 @@ public:
 
     DicomPrinter();
 
-    ~DicomPrinter();
-
     /// Afegeix l'ID de l'impressora
     void setID(int ID);
 

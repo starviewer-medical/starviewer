@@ -29,11 +29,6 @@ QDicomPrinterConfigurationWidget::QDicomPrinterConfigurationWidget()
     printerSelectionChanged();
 }
 
-QDicomPrinterConfigurationWidget::~QDicomPrinterConfigurationWidget()
-{
-
-}
-
 // Public Slots
 void QDicomPrinterConfigurationWidget::printerSelectionChanged()
 {

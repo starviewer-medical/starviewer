@@ -15,10 +15,6 @@ namespace udg {
 class DicomPrinterManager {
 public:
 
-    DicomPrinterManager();
-
-    ~DicomPrinterManager();
-
     /** Afegeix una impressora Dicom (\p printer) al sistema.
         Retorna True si s'ha pogut afegir la impressora i False si la impressora ja existeix al sistema.
         En cas que s'hagi pogut afegir, s'assigna l'id a la impressora passada per paràmetre.

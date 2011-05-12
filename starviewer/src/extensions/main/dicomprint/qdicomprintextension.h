@@ -22,7 +22,6 @@ Q_OBJECT
 
 public:
     QDicomPrintExtension(QWidget *parent = 0);
-    ~QDicomPrintExtension();
 
 public slots:
 

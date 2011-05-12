@@ -12,10 +12,6 @@ DicomPrinter::DicomPrinter()
     m_supportsAnnotationBox = false;
 }
 
-DicomPrinter::~DicomPrinter()
-{
-}
-
 void DicomPrinter::setID(int ID)
 {
     m_ID = ID;

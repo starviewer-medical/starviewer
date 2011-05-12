@@ -17,7 +17,6 @@ Q_OBJECT
 
 public:
     QDicomPrinterConfigurationWidget();
-    ~QDicomPrinterConfigurationWidget();
 
 signals:
 

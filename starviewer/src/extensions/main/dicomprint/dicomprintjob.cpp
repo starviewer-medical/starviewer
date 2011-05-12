@@ -4,16 +4,6 @@
 
 namespace udg {
 
-DicomPrintJob::DicomPrintJob()
-{
-
-}
-
-DicomPrintJob::~DicomPrintJob()
-{
-
-}
-
 void DicomPrintJob::setPrintPriority(const QString& printPriority)
 {
     m_printPriority = printPriority;
