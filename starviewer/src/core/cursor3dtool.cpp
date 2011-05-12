@@ -192,6 +192,8 @@ void Cursor3DTool::updatePosition()
                 INFO_LOG("No es pot actualitzar la posició del cursor 3D perquè no podem obtenir el pla corresponent.");
             }
         }
+
+        delete currentPlane;
     }
 }
 
