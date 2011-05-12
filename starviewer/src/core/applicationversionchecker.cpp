@@ -72,6 +72,10 @@ void ApplicationVersionChecker::checkReleaseNotes()
         QUrl url = createLocalUrl();
         if (checkLocalUrl(url))
         {
+            if (m_releaseNotes)
+            {
+                delete m_releaseNotes;
+            }
             m_releaseNotes = new QReleaseNotes(0);
             m_releaseNotes->setDontShowVisible(false);
             m_releaseNotes->setUrl(url);
@@ -95,6 +99,10 @@ void ApplicationVersionChecker::checkReleaseNotes()
     {
         if (checkTimeInterval())
         {
+            if (m_releaseNotes)
+            {
+                delete m_releaseNotes;
+            }
             m_releaseNotes = new QReleaseNotes(0);
             m_releaseNotes->setDontShowVisible(true);
             m_releaseNotes->setWindowTitle(tr("New Version Available"));
@@ -141,6 +149,10 @@ void ApplicationVersionChecker::showReleaseNotes()
     QUrl url = createLocalUrl();
     if (checkLocalUrl(url))
     {
+        if (m_releaseNotes)
+        {
+            delete m_releaseNotes;
+        }
         m_releaseNotes = new QReleaseNotes(0);
         m_releaseNotes->setDontShowVisible(false);
         m_releaseNotes->setUrl(url);
