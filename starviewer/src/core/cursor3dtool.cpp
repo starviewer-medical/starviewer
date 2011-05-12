@@ -251,28 +251,25 @@ void Cursor3DTool::updateProjectedPoint()
 
 void Cursor3DTool::projectPoint()
 {
-    double *position = new double[3];
+    double position[3];
     m_2DViewer->projectDICOMPointToCurrentDisplayedImage(m_myData->getOriginPointPosition(), position);
 
-    if (position)
+    double distance;
+    int nearestSlice = getNearestSlice(m_myData->getOriginPointPosition(), distance);
+
+    if (nearestSlice != -1 && distance < (m_2DViewer->getThickness() * 1.5))
     {
-        double distance;
-        int nearestSlice = getNearestSlice(m_myData->getOriginPointPosition(), distance);
-
-        if (nearestSlice != -1 && distance < (m_2DViewer->getThickness() * 1.5))
-        {
-            m_2DViewer->setSlice(nearestSlice);
-            m_crossHair->setCentrePoint(position[0], position[1], position[2]);
-            m_crossHair->setVisibility(true);
-        }
-        else // L'amaguem perquè sinó estariem mostrant un punt incorrecte
-        {
-            m_crossHair->setVisibility(false);
-        }
-
-        m_crossHair->update();
-        m_2DViewer->render();
+        m_2DViewer->setSlice(nearestSlice);
+        m_crossHair->setCentrePoint(position[0], position[1], position[2]);
+        m_crossHair->setVisibility(true);
     }
+    else // L'amaguem perquè sinó estariem mostrant un punt incorrecte
+    {
+        m_crossHair->setVisibility(false);
+    }
+
+    m_crossHair->update();
+    m_2DViewer->render();
 }
 
 void Cursor3DTool::updateFrameOfReference()
