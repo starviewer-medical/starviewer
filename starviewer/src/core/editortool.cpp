@@ -41,6 +41,7 @@ EditorTool::~EditorTool()
 {
     m_2DViewer->setCursor(Qt::ArrowCursor);
     m_squareActor -> Delete();
+    delete m_myData;
 }
 
 void EditorTool::initialize()
