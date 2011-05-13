@@ -36,6 +36,15 @@ DrawerPolyline::~DrawerPolyline()
     {
         m_vtkCellArray->Delete();
     }
+    
+    if (m_vtkActor)
+    {
+        m_vtkActor->Delete();
+    }
+    if (m_vtkMapper)
+    {
+        m_vtkMapper->Delete();
+    }
 }
 
 void DrawerPolyline::addPoint(double point[3])
