@@ -118,7 +118,11 @@ void ViewpointInformationChannel::setColorVomiPalette(const QVector<Vector3Float
                     {
                         ans->m_data[i] = m_data.at(i);
                     }
-                    for (i = m_k - 1; i > 0 && ans->m_data.at(i) == m_n - m_k + i; --i);
+                    i = m_k - 1;
+                    while (i > 0 && ans->m_data.at(i) == m_n - m_k + i)
+                    {
+                        --i;
+                    }
                     ++ans->m_data[i];
                     for (int j = i; j < m_k - 1; ++j)
                     {
