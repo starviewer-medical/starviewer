@@ -9,12 +9,24 @@
 namespace udg {
 
 DrawerPoint::DrawerPoint(QObject *parent)
-: DrawerPrimitive(parent), m_pointRadius(2.0), m_pointActor(NULL)
+: DrawerPrimitive(parent), m_pointRadius(2.0), m_pointActor(0), m_pointSphere(0), m_pointMapper(0)
 {
 }
 
 DrawerPoint::~DrawerPoint()
 {
+    if (m_pointActor)
+    {
+        m_pointActor->Delete();
+    }
+    if (m_pointSphere)
+    {
+        m_pointSphere->Delete();
+    }
+    if (m_pointMapper)
+    {
+        m_pointMapper->Delete();
+    }
 }
 
 void DrawerPoint::setPosition(double point[3])
