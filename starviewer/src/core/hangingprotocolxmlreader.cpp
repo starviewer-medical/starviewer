@@ -105,6 +105,10 @@ HangingProtocol* HangingProtocolXMLReader::readFile(const QString &path)
                 hangingProtocol->setProtocolsList(protocols);
                 hangingProtocolLoaded = hangingProtocol;
             }
+            else
+            {
+                delete hangingProtocol;
+            }
         }
     }
 
