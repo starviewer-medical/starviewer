@@ -938,7 +938,7 @@ QString ImageFillerStep::makePatientOrientationFromImageOrientationPatient(const
 
 QString ImageFillerStep::mapDirectionCosinesToOrientationString(double vector[3])
 {
-    char *orientation = new char[4];
+    char orientation[4];
     char *optr = orientation;
     *optr='\0';
 
