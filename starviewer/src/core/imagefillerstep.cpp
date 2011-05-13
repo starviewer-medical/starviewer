@@ -118,6 +118,10 @@ QList<Image*> ImageFillerStep::processDICOMFile(DICOMTagReader *dicomReader)
                         generatedImages << image;
                     }
                 }
+                else
+                {
+                    delete image;
+                }
             }
             m_input->setCurrentVolumeNumber(volumeNumber);
         }
