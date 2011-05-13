@@ -88,7 +88,6 @@ class gdcmAnonymizerStarviewer : public gdcm::Subject
 {
 public:
 
-    //Anonymizer():F(new File),CMS(NULL) {} Substituim aquest constructor pel de sota. Comentar per Marc
     gdcmAnonymizerStarviewer():F(new File) {}
     ~gdcmAnonymizerStarviewer();
 
@@ -136,11 +135,6 @@ public:
     /// NOT THREAD SAFE
     bool BasicApplicationLevelConfidentialityProfile(bool deidentify = true);
 
-    /// Set/Get CMS key that will be used to encrypt the dataset within BasicApplicationLevelConfidentialityProfile
-    /* Comentat per Marc
-    void SetCryptographicMessageSyntax(CryptographicMessageSyntax *cms);
-    const CryptographicMessageSyntax *GetCryptographicMessageSyntax() const;
-    */
     /// for wrapped language: instanciate a reference counted object
     static SmartPointer<gdcmAnonymizerStarviewer> New() { return new gdcmAnonymizerStarviewer; }
 
@@ -155,13 +149,11 @@ protected:
 
 private:
     bool BasicApplicationLevelConfidentialityProfile1();
-    //bool BasicApplicationLevelConfidentialityProfile2(); És el mètode de desencriptar no el necessitem. Comentar per Marc
     bool CheckIfSequenceContainsAttributeToAnonymize(File const &file, SequenceOfItems* sqi) const;
 
 private:
     // I would prefer to have a smart pointer to DataSet but DataSet does not derive from Object...
     SmartPointer<File> F;
-    //CryptographicMessageSyntax *CMS; Commentar per Marc
 };
 
 /**
