@@ -118,11 +118,8 @@ QList<DicomPrinter> DicomPrinterManager::getDicomPrinterList()
 
 //TODO: Ara mateix et retorna valors per defecte ja que no es comunica amb la impressora. Falta realitza la implementació per obtenir les dades
 // directament de la impressora.
-DicomPrinter DicomPrinterManager::getAvailableParametersValues(const QString &AETitlePrinter, int portPrinter)
+DicomPrinter DicomPrinterManager::getDefaultAvailableParametersValuesDICOMPrinters()
 {
-    Q_UNUSED(AETitlePrinter);
-    Q_UNUSED(portPrinter);
-
     DicomPrinter dicomPrinter;
 
     dicomPrinter.setAvailableMediumTypeValues(this->getAvailableMediumTypeValues());

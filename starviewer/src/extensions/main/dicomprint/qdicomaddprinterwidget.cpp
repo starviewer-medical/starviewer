@@ -62,7 +62,7 @@ void QDicomAddPrinterWidget::enableAddButton()
 void QDicomAddPrinterWidget::addPrinter()
 {
     DicomPrinterManager dicomPrinterManager;
-    DicomPrinter dicomPrinter = dicomPrinterManager.getAvailableParametersValues(m_printerAetitleLineEdit->text(), m_printerPortLineEdit->text().toInt());
+    DicomPrinter dicomPrinter = dicomPrinterManager.getDefaultAvailableParametersValuesDICOMPrinters();
 
     getPrinterSettingsFromControls(dicomPrinter);
 

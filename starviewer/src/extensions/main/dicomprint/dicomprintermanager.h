@@ -34,11 +34,12 @@ public:
     /// Retorna una llista de DicomPrinters que hi ha emmagatzemades al sistema.
     QList<DicomPrinter> getDicomPrinterList();
 
-    /** Retorna un objecte DicomPrinter amb les dades de la impressora que té com a AETitle el valor AETitlePrinter
-        i com a Port el valor portPrinter.
-        TO-DO: Ara mateix et retorna valors per defecte ja que no es comunica amb la impressora. Falta realitza la implementació
-        per obtenir les dades directament de la impressora.*/
-    DicomPrinter getAvailableParametersValues(const QString &AETitlePrinter, int portPrinter);
+    /** Retorna un objecte DicomPrinter amb el rang de valors que pot assignar-se a cada paràmetre configurable de la impressora. Aquests rang de valors són els que per
+        defecte estableix el DICOM, però la impressora no té perquè acceptar-los tots.
+        TO-DO: S'hauria de substituir aquest mètode per un que es connectes a la impressora a través del seu AETitle i IP demanant-li per cada paràmetre configurable
+                quins valors accepta
+    */
+    DicomPrinter getDefaultAvailableParametersValuesDICOMPrinters();
 
 private:
 
