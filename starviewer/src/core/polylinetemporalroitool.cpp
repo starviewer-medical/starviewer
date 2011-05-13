@@ -288,6 +288,12 @@ double PolylineTemporalROITool::computeTemporalMean()
         // Fem el següent pas en la coordenada que escombrem
         rayP1[rayPointIndex] += spacing[1];
         rayP2[rayPointIndex] += spacing[1];
+
+        while (!intersectionList.isEmpty())
+        {
+            double *intersection = intersectionList.takeFirst();
+            delete[] intersection;
+        }
     }
 
     //std::cout<<"Num of voxels:"<<numberOfVoxels<<std::endl;
