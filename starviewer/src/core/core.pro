@@ -202,6 +202,7 @@ HEADERS += extensionfactory.h \
     dicomdictionary.h \
     dicomimagefilegenerator.h \
     imageorientationoperationsmapper.h \
+    orientation.h \
     copydirectory.h \
     qreleasenotes.h \
     qdicomdumpbrowser.h \
@@ -407,6 +408,7 @@ SOURCES += extensionmediator.cpp \
     dicomfilegenerator.cpp \
     dicomimagefilegenerator.cpp \
     imageorientationoperationsmapper.cpp \
+    orientation.cpp \
     copydirectory.cpp \
     qreleasenotes.cpp \
     qdicomdumpbrowser.cpp \
