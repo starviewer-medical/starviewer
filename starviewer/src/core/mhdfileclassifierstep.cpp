@@ -34,6 +34,7 @@ bool MHDFileClassifierStep::fillIndividually()
     {
         case 0: // no és un arxiu mhd :(
             DEBUG_LOG(file + " no es pot llegir com arxiu mhd vàlid amb vtkMetaImageReader");
+            mhdReader->Delete();
             return false;
         case 1: // I think I can read the file but I cannot prove it
             DEBUG_LOG("vtkMetaImageReader creu que pot llegir l'arxiu " + file + " però no pot provar-ho de totes totes");
@@ -45,6 +46,7 @@ bool MHDFileClassifierStep::fillIndividually()
             DEBUG_LOG("vtkMetaImageReader assegura que pot llegir l'arxiu " + file + " i que a més ha validat ser el reader adequat per llegir l'arxiu");
             break;
     }
+    mhdReader->Delete();
 
     // abans de res comprovar que l'arxiu no estigui ja classificat
     // comprovem primer que l'arxiu no estigui ja dins de l'estructura, el qual vol dir que ja l'han classificat
