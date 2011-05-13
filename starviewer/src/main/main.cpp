@@ -23,7 +23,8 @@
 #endif
 
 #include <QApplication>
-#include <QSplashScreen>
+#include <QLabel>
+#include <QDesktopWidget>
 #include <QLocale>
 #include <QTextCodec>
 #include <QDir>
@@ -130,7 +131,11 @@ int main(int argc, char *argv[])
     #else
     splashPixmap.load(":/images/splash.png");
     #endif
-    QSplashScreen splash(splashPixmap);
+    QLabel splash(0, Qt::WindowStaysOnTopHint|Qt::SplashScreen|Qt::FramelessWindowHint);
+    splash.setAttribute(Qt::WA_TranslucentBackground);
+    splash.setPixmap(splashPixmap);
+    splash.resize(splashPixmap.size());
+    splash.move(QApplication::desktop()->screenGeometry().center() - splash.rect().center());
 
     if (!app.isRunning())
     {
@@ -236,7 +241,7 @@ int main(int argc, char *argv[])
 
         QObject::connect(&app, SIGNAL(lastWindowClosed()),
                          &app, SLOT(quit()));
-        splash.finish(mainWin);
+        splash.close();
 
         /*S'ha esperat a tenir-ho tot carregat per processar els aguments rebuts per línia de comandes, d'aquesta manera per exemoke si en llança algun QMessageBox,
           ja es llança mostrant-se la MainWindow.*/
