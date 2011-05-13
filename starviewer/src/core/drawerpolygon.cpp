@@ -22,6 +22,18 @@ DrawerPolygon::~DrawerPolygon()
 {
     emit dying(this);
 
+    if (m_vtkPolydata)
+    {
+        m_vtkPolydata->Delete();
+    }
+    if (m_vtkPoints)
+    {
+        m_vtkPoints->Delete();
+    }
+    if (m_vtkCellArray)
+    {
+        m_vtkCellArray->Delete();
+    }
     if (m_vtkActor)
     {
         m_vtkActor->Delete();
