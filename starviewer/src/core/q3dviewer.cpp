@@ -1184,6 +1184,8 @@ void Q3DViewer::computeObscurance(ObscuranceQuality quality)
     Q_ASSERT(!m_obscuranceMainThread || m_obscuranceMainThread->isFinished());
 
     delete m_obscuranceMainThread; m_obscuranceMainThread = 0;
+    delete m_obscurance;
+    m_obscurance = 0;
 
     if (!m_4DLinearRegressionGradientEstimator)
     {
