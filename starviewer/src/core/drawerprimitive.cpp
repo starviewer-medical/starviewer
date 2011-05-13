@@ -5,13 +5,18 @@
 namespace udg {
 
 DrawerPrimitive::DrawerPrimitive(QObject *parent)
-: QObject(parent), m_internalRepresentation(VTKRepresentation), m_isVisible(true), m_coordinateSystem(WorldCoordinateSystem), m_color(QColor(255, 165, 0)), m_isFilled(false), m_linePattern(ContinuousLinePattern), m_lineWidth(1.0), m_opacity(1.0), m_modified(false), m_referenceCount(0)
+: QObject(parent), m_internalRepresentation(VTKRepresentation), m_isVisible(true), m_coordinateSystem(WorldCoordinateSystem), m_color(QColor(255, 165, 0)),
+  m_isFilled(false), m_linePattern(ContinuousLinePattern), m_lineWidth(1.0), m_opacity(1.0), m_modified(false), m_referenceCount(0), m_coordinate(0)
 {
     connect(this, SIGNAL(changed()), SLOT(setModified()));
 }
 
 DrawerPrimitive::~DrawerPrimitive()
 {
+    if (m_coordinate)
+    {
+        m_coordinate->Delete();
+    }
 }
 
 void DrawerPrimitive::setVisibility(bool visible)
@@ -144,18 +149,22 @@ void DrawerPrimitive::setModified(bool modified)
 
 vtkCoordinate* DrawerPrimitive::getVtkCoordinateObject()
 {
-    vtkCoordinate *coordinate = vtkCoordinate::New();
+    if (m_coordinate)
+    {
+        m_coordinate->Delete();
+    }
+    m_coordinate = vtkCoordinate::New();
     switch (m_coordinateSystem)
     {
         case WorldCoordinateSystem:
-            coordinate->SetCoordinateSystemToWorld();
+            m_coordinate->SetCoordinateSystemToWorld();
             break;
 
         case DisplayCoordinateSystem:
-            coordinate->SetCoordinateSystemToDisplay();
+            m_coordinate->SetCoordinateSystemToDisplay();
             break;
     }
-    return coordinate;
+    return m_coordinate;
 }
 
 }

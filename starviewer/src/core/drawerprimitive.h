@@ -185,6 +185,10 @@ protected:
 private:
     /// Portarà el control de reference count (sucedani d'smart pointer(TM))
     int m_referenceCount;
+    
+    /// Guarda un punter a l'objecte vtkCoordinate que retorna el mètode getVtkCoordinateObject() per poder-lo destruir després.
+    vtkCoordinate *m_coordinate;
+
 };
 
 }
