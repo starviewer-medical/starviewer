@@ -4,6 +4,7 @@
 #include "logging.h"
 #include "thumbnailcreator.h"
 #include "mathtools.h"
+#include "orientation.h"
 
 #include <QFileInfo>
 
@@ -496,38 +497,44 @@ QString Image::getProjectionLabelFromPlaneOrientation(const QString &orientation
 
         if (!rowAxis.isEmpty() && !columnAxis.isEmpty())
         {
-            if ((rowAxis.startsWith("R") || rowAxis.startsWith("L")) && (columnAxis.startsWith("A") || columnAxis.startsWith("P")))
+            if ((rowAxis.startsWith(Orientation::RightLabel) || rowAxis.startsWith(Orientation::LeftLabel)) && 
+                (columnAxis.startsWith(Orientation::AnteriorLabel) || columnAxis.startsWith(Orientation::PosteriorLabel)))
             {
-                label = "AXIAL";
+                label = Orientation::getPlaneOrientationLabel(Orientation::Axial);
             }
-            else if ((columnAxis.startsWith("R") || columnAxis.startsWith("L")) && (rowAxis.startsWith("A") || rowAxis.startsWith("P")))
+            else if ((columnAxis.startsWith(Orientation::RightLabel) || columnAxis.startsWith(Orientation::LeftLabel)) && 
+                (rowAxis.startsWith(Orientation::AnteriorLabel) || rowAxis.startsWith(Orientation::PosteriorLabel)))
             {
-                label = "AXIAL";
+                label = Orientation::getPlaneOrientationLabel(Orientation::Axial);
             }
-            else if ((rowAxis.startsWith("R") || rowAxis.startsWith("L")) && (columnAxis.startsWith("H") || columnAxis.startsWith("F")))
+            else if ((rowAxis.startsWith(Orientation::RightLabel) || rowAxis.startsWith(Orientation::LeftLabel)) && 
+                (columnAxis.startsWith(Orientation::HeadLabel) || columnAxis.startsWith(Orientation::FeetLabel)))
             {
-                label = "CORONAL";
+                label = Orientation::getPlaneOrientationLabel(Orientation::Coronal);
             }
-            else if ((columnAxis.startsWith("R") || columnAxis.startsWith("L")) && (rowAxis.startsWith("H") || rowAxis.startsWith("F")))
+            else if ((columnAxis.startsWith(Orientation::RightLabel) || columnAxis.startsWith(Orientation::LeftLabel)) && 
+                (rowAxis.startsWith(Orientation::HeadLabel) || rowAxis.startsWith(Orientation::FeetLabel)))
             {
-                label = "CORONAL";
+                label = Orientation::getPlaneOrientationLabel(Orientation::Coronal);
             }
-            else if ((rowAxis.startsWith("A") || rowAxis.startsWith("P")) && (columnAxis.startsWith("H") || columnAxis.startsWith("F")))
+            else if ((rowAxis.startsWith(Orientation::AnteriorLabel) || rowAxis.startsWith(Orientation::PosteriorLabel)) && 
+                (columnAxis.startsWith(Orientation::HeadLabel) || columnAxis.startsWith(Orientation::FeetLabel)))
             {
-                label = "SAGITAL";
+                label = Orientation::getPlaneOrientationLabel(Orientation::Sagittal);
             }
-            else if ((columnAxis.startsWith("A") || columnAxis.startsWith("P")) && (rowAxis.startsWith("H") || rowAxis.startsWith("F")))
+            else if ((columnAxis.startsWith(Orientation::AnteriorLabel) || columnAxis.startsWith(Orientation::PosteriorLabel)) && 
+                (rowAxis.startsWith(Orientation::HeadLabel) || rowAxis.startsWith(Orientation::FeetLabel)))
             {
-                label = "SAGITAL";
+                label = Orientation::getPlaneOrientationLabel(Orientation::Sagittal);
             }
             else
             {
-                label = "OBLIQUE";
+                label = Orientation::getPlaneOrientationLabel(Orientation::Oblique);
             }
         }
         else
         {
-            label = "N/A";
+            label = Orientation::getPlaneOrientationLabel(Orientation::NotAvailable);
         }
     }
 

@@ -13,6 +13,7 @@
 #include "windowlevelpresetstooldata.h"
 #include "coresettings.h"
 #include "qviewerworkinprogresswidget.h"
+#include "orientation.h"
 // Thickslab
 #include "vtkProjectionImageFilter.h"
 #include "asynchronousvolumereader.h"
@@ -558,29 +559,29 @@ QString Q2DViewer::getOppositeOrientationLabel(const QString &label)
     QString oppositeLabel;
     while (i < label.size())
     {
-        if (label.at(i) == 'L')
+        if (QString(label.at(i)) == Orientation::LeftLabel)
         {
-            oppositeLabel += "R";
+            oppositeLabel += Orientation::RightLabel;
         }
-        else if (label.at(i) == 'R')
+        else if (QString(label.at(i)) == Orientation::RightLabel)
         {
-            oppositeLabel += "L";
+            oppositeLabel += Orientation::LeftLabel;
         }
-        else if (label.at(i) == 'A')
+        else if (QString(label.at(i)) == Orientation::AnteriorLabel)
         {
-            oppositeLabel += "P";
+            oppositeLabel += Orientation::PosteriorLabel;
         }
-        else if (label.at(i) == 'P')
+        else if (QString(label.at(i)) == Orientation::PosteriorLabel)
         {
-            oppositeLabel += "A";
+            oppositeLabel += Orientation::AnteriorLabel;
         }
-        else if (label.at(i) == 'H')
+        else if (QString(label.at(i)) == Orientation::HeadLabel)
         {
-            oppositeLabel += "F";
+            oppositeLabel += Orientation::FeetLabel;
         }
-        else if (label.at(i) == 'F')
+        else if (QString(label.at(i)) == Orientation::FeetLabel)
         {
-            oppositeLabel += "H";
+            oppositeLabel += Orientation::HeadLabel;
         }
         else
         {
@@ -1663,24 +1664,24 @@ void Q2DViewer::updateSliceAnnotationInformation()
                 QString laterality = image->getImageLaterality();
                 if (projection == "CC" || projection == "XCC" || projection == "XCCL" || projection == "XCCM" || projection == "FB")
                 {
-                    if (laterality == "L")
+                    if (laterality == Orientation::LeftLabel)
                     {
-                        desiredOrientation = "A\\R";
+                        desiredOrientation = Orientation::AnteriorLabel + "\\" + Orientation::RightLabel;
                     }
-                    else if (laterality == "R")
+                    else if (laterality == Orientation::RightLabel)
                     {
-                        desiredOrientation = "P\\L";
+                        desiredOrientation = Orientation::PosteriorLabel + "\\" + Orientation::LeftLabel;
                     }
                 }
                 else if (projection == "MLO" || projection == "ML" || projection == "LM" || projection == "LMO" || projection == "SIO")
                 {
-                    if (laterality == "L")
+                    if (laterality == Orientation::LeftLabel)
                     {
-                        desiredOrientation = "A\\F";
+                        desiredOrientation = Orientation::AnteriorLabel + "\\" + Orientation::FeetLabel;
                     }
-                    else if (laterality == "R")
+                    else if (laterality == Orientation::RightLabel)
                     {
-                        desiredOrientation = "P\\F";
+                        desiredOrientation = Orientation::PosteriorLabel + "\\" + Orientation::FeetLabel;
                     }
                 }
                 else
