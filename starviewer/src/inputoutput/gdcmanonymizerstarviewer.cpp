@@ -481,10 +481,10 @@ bool gdcmAnonymizerStarviewer::CheckIfSequenceContainsAttributeToAnonymize(File 
 // N AnonymizeEvent (depend on number of tag found)
 bool gdcmAnonymizerStarviewer::BasicApplicationLevelConfidentialityProfile1()
 {
-    static const unsigned int deidSize = sizeof(Tag);
-    static const unsigned int numDeIds = sizeof(BasicApplicationLevelConfidentialityProfileAttributes) / deidSize;
-    static const Tag *start = BasicApplicationLevelConfidentialityProfileAttributes;
-    static const Tag *end = start + numDeIds;
+    //static const unsigned int deidSize = sizeof(Tag);
+    //static const unsigned int numDeIds = sizeof(BasicApplicationLevelConfidentialityProfileAttributes) / deidSize;
+    //static const Tag *start = BasicApplicationLevelConfidentialityProfileAttributes;
+    //static const Tag *end = start + numDeIds;
 
     //CryptographicMessageSyntax &p7 = *CMS; Comentar per Marc
     //p7.SetCertificate(this->x509);
