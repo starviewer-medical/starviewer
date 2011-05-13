@@ -21,6 +21,15 @@ DrawerPolygon::DrawerPolygon(QObject *parent)
 DrawerPolygon::~DrawerPolygon()
 {
     emit dying(this);
+
+    if (m_vtkActor)
+    {
+        m_vtkActor->Delete();
+    }
+    if (m_vtkMapper)
+    {
+        m_vtkMapper->Delete();
+    }
 }
 
 void DrawerPolygon::addVertix(double point[3])
