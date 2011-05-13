@@ -37,15 +37,9 @@ ApplicationVersionChecker::ApplicationVersionChecker(QObject *parent)
 ApplicationVersionChecker::~ApplicationVersionChecker()
 {
     // destruir el manager de connexions
-    if (m_manager)
-    {
-        delete m_manager;
-    }
-     // i la finestra de les release notes
-    if (m_releaseNotes)
-    {
-        delete m_releaseNotes;
-    }
+    delete m_manager;
+    // i la finestra de les release notes
+    delete m_releaseNotes;
 }
 
 void ApplicationVersionChecker::checkReleaseNotes()
@@ -72,10 +66,7 @@ void ApplicationVersionChecker::checkReleaseNotes()
         QUrl url = createLocalUrl();
         if (checkLocalUrl(url))
         {
-            if (m_releaseNotes)
-            {
-                delete m_releaseNotes;
-            }
+            delete m_releaseNotes;
             m_releaseNotes = new QReleaseNotes(0);
             m_releaseNotes->setDontShowVisible(false);
             m_releaseNotes->setUrl(url);
@@ -99,10 +90,7 @@ void ApplicationVersionChecker::checkReleaseNotes()
     {
         if (checkTimeInterval())
         {
-            if (m_releaseNotes)
-            {
-                delete m_releaseNotes;
-            }
+            delete m_releaseNotes;
             m_releaseNotes = new QReleaseNotes(0);
             m_releaseNotes->setDontShowVisible(true);
             m_releaseNotes->setWindowTitle(tr("New Version Available"));
@@ -149,10 +137,7 @@ void ApplicationVersionChecker::showReleaseNotes()
     QUrl url = createLocalUrl();
     if (checkLocalUrl(url))
     {
-        if (m_releaseNotes)
-        {
-            delete m_releaseNotes;
-        }
+        delete m_releaseNotes;
         m_releaseNotes = new QReleaseNotes(0);
         m_releaseNotes->setDontShowVisible(false);
         m_releaseNotes->setUrl(url);
