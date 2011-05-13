@@ -1,5 +1,7 @@
 #include "q3dorientationmarker.h"
 
+#include "orientation.h"
+
 // Per el maracdor d'orientació
 #include <vtkAnnotatedCubeActor.h>
 #include <vtkProperty.h>
@@ -23,7 +25,8 @@ Q3DOrientationMarker::Q3DOrientationMarker(vtkRenderWindowInteractor *interactor
 //
     // \TODO se suposa que aquesta orientació és correcta si estem veient el volum en axial. Caldria mirar el sistema de com posar les etiquetes correctament, automàticament a partir per exemple del tag dicom o deixar-ho en mans de la classe que ho faci servir i proporcionar mètodes d'aquesta classe per posar les etiquetes correctament
     m_cubeActor = vtkAnnotatedCubeActor::New();
-    this->setOrientationText("L", "R", "P", "A", "H", "F");
+    this->setOrientationText(Orientation::LeftLabel, Orientation::RightLabel, Orientation::PosteriorLabel, Orientation::AnteriorLabel, Orientation::HeadLabel, 
+        Orientation::FeetLabel);
 //     m_cubeActor->SetXPlusFaceText("L");
 //     m_cubeActor->SetXMinusFaceText("R");
 //     m_cubeActor->SetYPlusFaceText("P");

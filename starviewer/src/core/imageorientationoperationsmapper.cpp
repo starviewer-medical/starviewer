@@ -1,5 +1,7 @@
 #include "imageorientationoperationsmapper.h"
 
+#include "orientation.h"
+
 #include <QStringList>
 
 namespace udg {
@@ -57,14 +59,14 @@ void ImageOrientationOperationsMapper::initializeOrientationTable()
 
     // Mapeig de les operacions per la vista sagital
     // Definim les etiquetes possibles d'orientació
-    const QString AnteriorFeet("A\\F");
-    const QString AnteriorHead("A\\H");
-    const QString PosteriorFeet("P\\F");
-    const QString PosteriorHead("P\\H");
-    const QString FeetAnterior("F\\A");
-    const QString FeetPosterior("F\\P");
-    const QString HeadAnterior("H\\A");
-    const QString HeadPosterior("H\\P");
+    const QString AnteriorFeet(Orientation::AnteriorLabel + "\\" + Orientation::FeetLabel);
+    const QString AnteriorHead(Orientation::AnteriorLabel + "\\" + Orientation::HeadLabel);
+    const QString PosteriorFeet(Orientation::PosteriorLabel + "\\" + Orientation::FeetLabel);
+    const QString PosteriorHead(Orientation::PosteriorLabel + "\\" + Orientation::HeadLabel);
+    const QString FeetAnterior(Orientation::FeetLabel + "\\" + Orientation::AnteriorLabel);
+    const QString FeetPosterior(Orientation::FeetLabel + "\\" + Orientation::PosteriorLabel);
+    const QString HeadAnterior(Orientation::HeadLabel + "\\" + Orientation::AnteriorLabel);
+    const QString HeadPosterior(Orientation::HeadLabel + "\\" + Orientation::PosteriorLabel);
 
     m_orientationMappingTable.insert(AnteriorFeet + "-" + AnteriorHead, Rotate180DegreesAndFlip); // Per passar de AF -> AH calen 2 rotacions i 1 flip horitzontal
     m_orientationMappingTable.insert(AnteriorFeet + "-" + PosteriorFeet, Flip);
@@ -132,14 +134,14 @@ void ImageOrientationOperationsMapper::initializeOrientationTable()
 
     // Mappeig de les operacions per la vista axial
     // Definim les etiquetes possibles d'orientació
-    const QString AnteriorRight("A\\R");
-    const QString AnteriorLeft("A\\L");
-    const QString PosteriorRight("P\\R");
-    const QString PosteriorLeft("P\\L");
-    const QString RightAnterior("R\\A");
-    const QString RightPosterior("R\\P");
-    const QString LeftAnterior("L\\A");
-    const QString LeftPosterior("L\\P");
+    const QString AnteriorRight(Orientation::AnteriorLabel + "\\" + Orientation::RightLabel);
+    const QString AnteriorLeft(Orientation::AnteriorLabel + "\\" + Orientation::LeftLabel);
+    const QString PosteriorRight(Orientation::PosteriorLabel + "\\" + Orientation::RightLabel);
+    const QString PosteriorLeft(Orientation::PosteriorLabel + "\\" + Orientation::LeftLabel);
+    const QString RightAnterior(Orientation::RightLabel + "\\" + Orientation::AnteriorLabel);
+    const QString RightPosterior(Orientation::RightLabel + "\\" + Orientation::PosteriorLabel);
+    const QString LeftAnterior(Orientation::LeftLabel + "\\" + Orientation::AnteriorLabel);
+    const QString LeftPosterior(Orientation::LeftLabel + "\\" + Orientation::PosteriorLabel);
 
     m_orientationMappingTable.insert(AnteriorRight + "-" + AnteriorLeft, Rotate180DegreesAndFlip);
     m_orientationMappingTable.insert(AnteriorRight + "-" + PosteriorRight, Flip);
@@ -247,8 +249,8 @@ QString ImageOrientationOperationsMapper::formatOrientationLabel(const QString &
     QString labelCopy = label;
 
     // Substituim les etiquetes Superior i Inferior pels seus equivalents
-    labelCopy.replace("S", "H");
-    labelCopy.replace("I", "F");
+    labelCopy.replace("S", Orientation::HeadLabel);
+    labelCopy.replace("I", Orientation::FeetLabel);
 
     return labelCopy;
 }
