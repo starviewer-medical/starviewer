@@ -29,7 +29,6 @@ HEADERS += experimental3dextensionmediator.h \
     filteringambientocclusionvoxelshader.h \
     filteringambientocclusionmapvoxelshader.h \
     vomigammavoxelshader.h \
-    viewpointintensityinformationchannel.h \
     imivoxelshader.h \
     filteringambientocclusionstipplingvoxelshader.h \
     whitevoxelshader.h \
@@ -64,7 +63,6 @@ SOURCES += experimental3dextensionmediator.cpp \
     filteringambientocclusionvoxelshader.cpp \
     filteringambientocclusionmapvoxelshader.cpp \
     vomigammavoxelshader.cpp \
-    viewpointintensityinformationchannel.cpp \
     imivoxelshader.cpp \
     filteringambientocclusionstipplingvoxelshader.cpp \
     whitevoxelshader.cpp \
@@ -81,8 +79,10 @@ cuda {
     HEADERS += cudaviewpointinformationchannel.h \
         qcudarenderwindow.h \
         cudafiltering.h \
+        viewpointintensityinformationchannel.h \
         cudaviewpointintensityinformationchannel.h
-    SOURCES += qcudarenderwindow.cpp
+    SOURCES += qcudarenderwindow.cpp \
+        viewpointintensityinformationchannel.cpp
     CUSOURCES += cudaviewpointinformationchannel.cu \
         cudafiltering.cu \
         cudaviewpointintensityinformationchannel.cu
