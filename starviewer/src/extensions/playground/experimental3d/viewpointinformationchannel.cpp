@@ -1058,7 +1058,7 @@ void ViewpointInformationChannel::computeViewMeasuresCpu(bool computeHZv, bool c
     int nVoxels = m_volume->getSize();
 
     int nThreads = QThread::idealThreadCount();
-    ViewpointVomiThread **viewpointVomiThreads;
+    ViewpointVomiThread **viewpointVomiThreads = 0;
 
     if (computeHZv)
     {
@@ -2975,8 +2975,9 @@ void ViewpointInformationChannel::computeGuidedTour()
 
         QVector<float> pZvi = voxelProbabilitiesInView(i);    // p(Z|vi);
 
-        int target, targetIndex;
-        float minDissimilarity;
+        int target = 0;
+        int targetIndex = 0;
+        float minDissimilarity = 0.0f;
         int remainingViews = bestViews.size();
 
         // trobar el target
