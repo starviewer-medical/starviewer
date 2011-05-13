@@ -1,7 +1,5 @@
 #include "viewpointintensityinformationchannel.h"
 
-#ifdef CUDA_AVAILABLE
-
 #include "camera.h"
 #include "cudaviewpointintensityinformationchannel.h"
 #include "experimental3dvolume.h"
@@ -763,5 +761,3 @@ void ViewpointIntensityInformationChannel::computeIntensityClusteringCuda()
 }
 
 } // namespace udg
-
-#endif // CUDA_AVAILABLE

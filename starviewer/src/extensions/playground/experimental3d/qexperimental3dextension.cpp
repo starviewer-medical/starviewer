@@ -12,7 +12,6 @@
 #include "vector3.h"
 #include "viewpointgenerator.h"
 #include "viewpointinformationchannel.h"
-#include "viewpointintensityinformationchannel.h"
 #include "volume.h"
 #include "volumereslicer.h"
 
@@ -34,6 +33,7 @@
 
 #ifdef CUDA_AVAILABLE
 #include "cudafiltering.h"
+#include "viewpointintensityinformationchannel.h"
 #endif
 
 namespace udg {

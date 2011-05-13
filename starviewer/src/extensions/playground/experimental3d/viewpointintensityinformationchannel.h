@@ -1,8 +1,6 @@
 #ifndef VIEWPOINTINTENSITYINFORMATIONCHANNEL_H
 #define VIEWPOINTINTENSITYINFORMATIONCHANNEL_H
 
-#ifdef CUDA_AVAILABLE
-
 #include <QObject>
 
 #include "transferfunction.h"
@@ -111,7 +109,5 @@ private:
 };
 
 } // namespace udg
-
-#endif // CUDA_AVAILABLE
 
 #endif // VIEWPOINTINTENSITYINFORMATIONCHANNEL_H
