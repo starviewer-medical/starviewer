@@ -1,39 +1,19 @@
-/*=========================================================================
+#include "vtk4dlinearregressiongradientestimator.h"
 
-  Module:    $RCSfile: vtk4DLinearRegressionGradientEstimator.h,v $
+#include "logging.h"
 
-  Copyright (c) Marc Ruiz Altisent
-
-=========================================================================*/
-#include "vtk4DLinearRegressionGradientEstimator.h"
-
-#include "vtkCharArray.h"
+#include "vtkDataArray.h"
 #include "vtkDirectionEncoder.h"
-#include "vtkDoubleArray.h"
-#include "vtkFloatArray.h"
 #include "vtkImageData.h"
-#include "vtkIntArray.h"
-#include "vtkLongArray.h"
 #include "vtkMultiThreader.h"
 #include "vtkObjectFactory.h"
 #include "vtkPointData.h"
-#include "vtkShortArray.h"
-#include "vtkUnsignedCharArray.h"
-#include "vtkUnsignedIntArray.h"
-#include "vtkUnsignedLongArray.h"
-#include "vtkUnsignedShortArray.h"
 
+namespace {
 
-namespace udg {
-
-
-vtkCxxRevisionMacro(vtk4DLinearRegressionGradientEstimator, "$Revision: 1.0 $");
-vtkStandardNewMacro(vtk4DLinearRegressionGradientEstimator);
-
-// This is the templated function that actually computes the EncodedNormal
-// and the GradientMagnitude
+// Aquest és el mètode que calcula realment les normals i les magnituds del gradient.
 template <class T>
-void vtkComputeGradients(vtk4DLinearRegressionGradientEstimator *estimator, T *dataPtr, int threadId, int threadCount, int radius)
+void computeGradients(udg::Vtk4DLinearRegressionGradientEstimator *estimator, T *data, int threadId, int threadCount, int radius)
 {
     int size[3];
     estimator->GetInputSize(size);
@@ -41,11 +21,9 @@ void vtkComputeGradients(vtk4DLinearRegressionGradientEstimator *estimator, T *d
     int xStart, xLimit, yStart, yLimit, zStart, zLimit;
     float fThreadCount = threadCount;
 
-    // Compute an offset based on the threadId. The volume will
-    // be broken into large slabs (threadCount slabs). For this thread
-    // we need to access the correct slab. Also compute the z plane that
-    // this slab starts on, and the z limit of this slab (one past the
-    // end of the slab)
+    // Compute an offset based on the threadId. The volume will be broken into large slabs (threadCount slabs).
+    // For this thread we need to access the correct slab.
+    // Also compute the z plane that this slab starts on, and the z limit of this slab (one past the end of the slab).
     if (estimator->GetBoundsClip())
     {
         int bounds[6];
@@ -67,8 +45,7 @@ void vtkComputeGradients(vtk4DLinearRegressionGradientEstimator *estimator, T *d
         zLimit = static_cast<int>(((threadId + 1) / fThreadCount) * size[2]);
     }
 
-    // Do final error checking on limits - make sure they are all within bounds
-    // of the scalar input
+    // Do final error checking on limits - make sure they are all within bounds of the scalar input
     xStart = xStart < 0 ? 0 : xStart;
     yStart = yStart < 0 ? 0 : yStart;
     zStart = zStart < 0 ? 0 : zStart;
@@ -76,11 +53,11 @@ void vtkComputeGradients(vtk4DLinearRegressionGradientEstimator *estimator, T *d
     yLimit = yLimit > size[1] ? size[1] : yLimit;
     zLimit = zLimit > size[2] ? size[2] : zLimit;
 
-    bool useClip = estimator->GetUseCylinderClip(); // casting implícit des d'int
+    bool useClip = estimator->GetUseCylinderClip() != 0;
     int *clip = estimator->GetCircleLimits();
 
-    unsigned short *normalPtr = estimator->EncodedNormals;
-    unsigned char *gradientPtr = estimator->GradientMagnitudes;
+    unsigned short *normalPointer = estimator->EncodedNormals;
+    unsigned char *gradientPointer = estimator->GradientMagnitudes;
 
     // Compute steps through the volume in x, y, and z
     int xStep = 1;
@@ -94,7 +71,7 @@ void vtkComputeGradients(vtk4DLinearRegressionGradientEstimator *estimator, T *d
 //     zStep *= estimator->SampleSpacingInVoxels;
 
     /// \todo El zeroPad s'hauria de fer servir. De moment actuem sempre com si fós cert.
-//     bool zeroPad = estimator->GetZeroPad(); // casting implícit des d'int
+//     bool zeroPad = estimator->GetZeroPad() != 0; // casting implícit des d'int
 
     // Precàlcul de distàncies euclidianes i offsets dins la màscara
     int diameter = 2 * radius + 1, diameter2 = diameter * diameter;
@@ -103,13 +80,23 @@ void vtkComputeGradients(vtk4DLinearRegressionGradientEstimator *estimator, T *d
     //int maskOffset[maskSize];
 
     for (int ix = -radius, im = 0; ix <= radius; ix++)
+    {
         for (int iy = -radius; iy <= radius; iy++)
+        {
             for (int iz = -radius; iz <= radius; iz++, im++)
             {
-                if (ix == 0 && iy == 0 && iz == 0) w[im] = 0.0f;
-                else w[im] = 1.0f / sqrt(static_cast<float>(ix * ix + iy * iy + iz * iz));
+                if (ix == 0 && iy == 0 && iz == 0)
+                {
+                    w[im] = 0.0f;
+                }
+                else
+                {
+                    w[im] = 1.0f / sqrt(static_cast<float>(ix * ix + iy * iy + iz * iz));
+                }
                 //maskOffset[im] = ix * xStep + iy * yStep + iz * zStep;    // amb això va un 11% més lent (???)
             }
+        }
+    }
 
     float aspect[3];
     estimator->GetInputAspect(aspect);
@@ -122,12 +109,12 @@ void vtkComputeGradients(vtk4DLinearRegressionGradientEstimator *estimator, T *d
 //     aspect[1] = aspect[1] * 2.0 * estimator->SampleSpacingInVoxels;
 //     aspect[2] = aspect[2] * 2.0 * estimator->SampleSpacingInVoxels;
 
-    // adjust the aspect
+    // Adjust the aspect
     aspect[0] *= 2.0;
     aspect[1] *= 2.0;
     aspect[2] *= 2.0;
 
-    bool computeGradientMagnitudes = estimator->GetComputeGradientMagnitudes(); // casting implícit des d'int
+    bool computeGradientMagnitudes = estimator->GetComputeGradientMagnitudes() != 0;
     float scale = estimator->GetGradientMagnitudeScale();
     float bias = estimator->GetGradientMagnitudeBias();
 
@@ -136,8 +123,7 @@ void vtkComputeGradients(vtk4DLinearRegressionGradientEstimator *estimator, T *d
 
     vtkDirectionEncoder *directionEncoder = estimator->GetDirectionEncoder();
 
-    // Loop through all the data and compute the encoded normal and
-    // gradient magnitude for each scalar location
+    // Loop through all the data and compute the encoded normal and gradient magnitude for each scalar location
     for (int z = zStart; z < zLimit; z++)
     {
         for (int y = yStart; y < yLimit; y++)
@@ -158,13 +144,13 @@ void vtkComputeGradients(vtk4DLinearRegressionGradientEstimator *estimator, T *d
             int offset = z * size[0] * size[1] + y * size[0] + xLow;
 
             // Set some pointers
-            T *dPtr = dataPtr + offset;
-            unsigned short *nPtr = normalPtr + offset;
-            unsigned char *gPtr = gradientPtr + offset;
+            T *dPtr = data + offset;
+            unsigned short *nPtr = normalPointer + offset;
+            unsigned char *gPtr = gradientPointer + offset;
 
             for (int x = xLow; x < xHigh; x++)
             {
-                /// \TODO Optimitzar treient les coses mës enfora encara, precalculant i guardant en taules tot el que es pugui
+                /// \TODO Optimitzar treient les coses més enfora encara, precalculant i guardant en taules tot el que es pugui
                 float A = 0.0, B = 0.0, C = 0.0, D = 0.0;
 
                 for (int ix = -radius, im = 0; ix <= radius; ix++)
@@ -173,7 +159,8 @@ void vtkComputeGradients(vtk4DLinearRegressionGradientEstimator *estimator, T *d
                     if (xPix < 0 || xPix >= size[0])
                     {
                         im += diameter2;
-                        continue;    // v = 0
+                        // v = 0
+                        continue;
                     }
                     T *dPtrPixxStep = dPtr + ix * xStep;
 
@@ -183,18 +170,24 @@ void vtkComputeGradients(vtk4DLinearRegressionGradientEstimator *estimator, T *d
                         if (yPiy < 0 || yPiy >= size[1])
                         {
                             im += diameter;
-                            continue;    // v = 0
+                            // v = 0
+                            continue;
                         }
                         T *dPtrPixxStepPiyyStep = dPtrPixxStep + iy * yStep;
 
                         for (int iz = -radius; iz <= radius; iz++, im++)
                         {
                             int zPiz = z + iz;
-                            if (zPiz < 0 || zPiz >= size[2]) continue;    // v = 0
+                            if (zPiz < 0 || zPiz >= size[2])
+                            {
+                                // v = 0
+                                continue;
+                            }
                             // valor del vòxel (no pot ser 0 perquè ja hem fet les comprovacions abans)
                             float v = *(dPtrPixxStepPiyyStep + iz * zStep);
                             //float v = dPtr[maskOffset[im]];   // d'aquesta manera va més lent (???)
-                            v *= w[im]; // w[im] = distància euclidiana
+                            // w[im] = distància euclidiana
+                            v *= w[im];
                             A += v * ix;
                             B += v * iy;
                             C += v * iz;
@@ -311,9 +304,8 @@ void vtkComputeGradients(vtk4DLinearRegressionGradientEstimator *estimator, T *d
           }
 */
 
-                // Take care of the aspect ratio of the data
-                // Scaling in the vtkVolume is isotropic, so this is the
-                // only place we have to worry about non-isotropic scaling.
+                // Take care of the aspect ratio of the data.
+                // Scaling in the vtkVolume is isotropic, so this is the only place we have to worry about non-isotropic scaling.
                 float normal[3];
                 normal[0] = A / aspect[0];
                 normal[1] = B / aspect[1];
@@ -327,9 +319,18 @@ void vtkComputeGradients(vtk4DLinearRegressionGradientEstimator *estimator, T *d
                     // Encode this into an 8 bit value
                     float gValue = (gradientMagnitude + bias) * scale;
 
-                    if (gValue < 0.0) *gPtr = 0;
-                    else if (gValue > 255.0) *gPtr = 255;
-                    else *gPtr = static_cast<unsigned char>(gValue);
+                    if (gValue < 0.0)
+                    {
+                        *gPtr = 0;
+                    }
+                    else if (gValue > 255.0)
+                    {
+                        *gPtr = 255;
+                    }
+                    else
+                    {
+                        *gPtr = static_cast<unsigned char>(gValue);
+                    }
 
                     gPtr++;
                 }
@@ -341,7 +342,10 @@ void vtkComputeGradients(vtk4DLinearRegressionGradientEstimator *estimator, T *d
                     normal[1] /= gradientMagnitude;
                     normal[2] /= gradientMagnitude;
                 }
-                else normal[0] = normal[1] = normal[2] = 0.0;
+                else
+                {
+                    normal[0] = normal[1] = normal[2] = 0.0;
+                }
 
                 // Convert the gradient direction into an encoded index value
                 *nPtr = directionEncoder->GetEncodedDirection(normal);
@@ -354,73 +358,64 @@ void vtkComputeGradients(vtk4DLinearRegressionGradientEstimator *estimator, T *d
     delete[] w;
 }
 
-// Construct a vtk4DLinearRegressionGradientEstimator
-vtk4DLinearRegressionGradientEstimator::vtk4DLinearRegressionGradientEstimator()
+// Fa el casting de tipus de dades.
+static VTK_THREAD_RETURN_TYPE switchOnDataType(void *arg)
 {
-    Radius = 1;
-}
+    vtkMultiThreader::ThreadInfo *threadInfo = reinterpret_cast<vtkMultiThreader::ThreadInfo*>(arg);
+    int threadId = threadInfo->ThreadID;
+    int threadCount = threadInfo->NumberOfThreads;
+    udg::Vtk4DLinearRegressionGradientEstimator *estimator = reinterpret_cast<udg::Vtk4DLinearRegressionGradientEstimator*>(threadInfo->UserData);
+    vtkDataArray *scalars = estimator->Input->GetPointData()->GetScalars();
 
-// Destruct a vtk4DLinearRegressionGradientEstimator - free up any memory used
-vtk4DLinearRegressionGradientEstimator::~vtk4DLinearRegressionGradientEstimator()
-{
-}
-
-static VTK_THREAD_RETURN_TYPE vtkSwitchOnDataType(void *arg)
-{
-  vtk4DLinearRegressionGradientEstimator   *estimator;
-  int                                    thread_count;
-  int                                    thread_id;
-  vtkDataArray                           *scalars;
-
-  thread_id = ((vtkMultiThreader::ThreadInfo *)(arg))->ThreadID;
-  thread_count = ((vtkMultiThreader::ThreadInfo *)(arg))->NumberOfThreads;
-  estimator = (vtk4DLinearRegressionGradientEstimator *)
-    (((vtkMultiThreader::ThreadInfo *)(arg))->UserData);
-  scalars = estimator->Input->GetPointData()->GetScalars();
-
-  if (scalars == NULL)
+    if (!scalars)
     {
+        return VTK_THREAD_RETURN_VALUE;
+    }
+
+    // Find the data type of the Input and call the correct templated function to actually compute the normals and magnitudes
+    switch (scalars->GetDataType())
+    {
+            vtkTemplateMacro(computeGradients(estimator, static_cast<VTK_TT*>(scalars->GetVoidPointer(0)), threadId, threadCount, estimator->getRadius()));
+        default:
+            DEBUG_LOG("No es pot calcular el gradient per aquest tipus de dades.");
+            WARN_LOG("No es pot calcular el gradient per aquest tipus de dades.");
+    }
+
     return VTK_THREAD_RETURN_VALUE;
-    }
-
-  // Find the data type of the Input and call the correct
-  // templated function to actually compute the normals and magnitudes
-
-  switch (scalars->GetDataType())
-    {
-    vtkTemplateMacro(
-      vtkComputeGradients(estimator,
-                          static_cast<VTK_TT*>(scalars->GetVoidPointer(0)),
-                          thread_id, thread_count, estimator->GetRadius())
-     );
-    default:
-      vtkGenericWarningMacro("unable to encode scalar type!");
-    }
-
-  return VTK_THREAD_RETURN_VALUE;
 }
 
+} // End namespace
 
-// This method is used to compute the encoded normal and the
-// magnitude of the gradient for each voxel location in the
-// Input.
-void vtk4DLinearRegressionGradientEstimator::UpdateNormals()
+namespace udg {
+
+vtkCxxRevisionMacro(Vtk4DLinearRegressionGradientEstimator, "$Revision: 1.0 $");
+vtkStandardNewMacro(Vtk4DLinearRegressionGradientEstimator);
+
+unsigned int Vtk4DLinearRegressionGradientEstimator::getRadius() const
 {
-  vtkDebugMacro(<< "Updating Normals!");
-  this->Threader->SetNumberOfThreads(this->NumberOfThreads);
-
-  this->Threader->SetSingleMethod(vtkSwitchOnDataType,
-                                  (vtkObject *)this);
-
-  this->Threader->SingleMethodExecute();
+    return m_radius;
 }
 
-// Print the vtk4DLinearRegressionGradientEstimator
-void vtk4DLinearRegressionGradientEstimator::PrintSelf(ostream& os,
-                                                     vtkIndent indent)
+void Vtk4DLinearRegressionGradientEstimator::setRadius(unsigned int radius)
 {
-  this->Superclass::PrintSelf(os, indent);
+    m_radius = radius;
 }
 
-
+Vtk4DLinearRegressionGradientEstimator::Vtk4DLinearRegressionGradientEstimator()
+    : m_radius(1)
+{
 }
+
+Vtk4DLinearRegressionGradientEstimator::~Vtk4DLinearRegressionGradientEstimator()
+{
+}
+
+void Vtk4DLinearRegressionGradientEstimator::UpdateNormals(void)
+{
+    DEBUG_LOG("S'estan actualitzant les normals");
+    this->Threader->SetNumberOfThreads(this->NumberOfThreads);
+    this->Threader->SetSingleMethod(switchOnDataType, this);
+    this->Threader->SingleMethodExecute();
+}
+
+} // End namespace udg

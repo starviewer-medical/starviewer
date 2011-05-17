@@ -25,7 +25,7 @@ class ObscuranceMainThread;
 class AmbientVoxelShader;
 class DirectIlluminationVoxelShader;
 class ObscuranceVoxelShader;
-class vtk4DLinearRegressionGradientEstimator;
+class Vtk4DLinearRegressionGradientEstimator;
 class Obscurance;
 class ContourVoxelShader;
 
@@ -254,7 +254,7 @@ private:
     double m_shift;
 
     /// Estimador de gradient que farem servir per les obscurances (i per la resta després de calcular les obscurances).
-    vtk4DLinearRegressionGradientEstimator *m_4DLinearRegressionGradientEstimator;
+    Vtk4DLinearRegressionGradientEstimator *m_4DLinearRegressionGradientEstimator;
 
     /// Orientació que tenim
     int m_currentOrientation;
