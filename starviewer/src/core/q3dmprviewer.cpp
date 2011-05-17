@@ -94,6 +94,7 @@ Q3DMPRViewer::~Q3DMPRViewer()
     m_sagitalImagePlaneWidget->Delete();
     m_coronalImagePlaneWidget->Delete();
     m_outlineActor->Delete();
+    delete m_orientationMarker;
 }
 
 void Q3DMPRViewer::setInput(Volume *volume)
