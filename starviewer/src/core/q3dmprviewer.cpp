@@ -255,6 +255,8 @@ void Q3DMPRViewer::createOutline()
         vtkPolyDataMapper *outlineMapper = vtkPolyDataMapper::New();
         outlineMapper->SetInput(outlineFilter->GetOutput());
         m_outlineActor->SetMapper(outlineMapper);
+        outlineFilter->Delete();
+        outlineMapper->Delete();
     }
     else
     {
