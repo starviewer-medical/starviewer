@@ -176,6 +176,9 @@ void Q3DMPRViewer::initializePlanes()
     m_coronalImagePlaneWidget->TextureInterpolateOn();
     m_coronalImagePlaneWidget->SetLookupTable(m_axialImagePlaneWidget->GetLookupTable());
     m_coronalImagePlaneWidget->SetResliceInterpolateToCubic();
+
+    picker->Delete();
+    ipwProp->Delete();
     
     // INTERACCIÓ
     m_axialImagePlaneWidget->SetInteractor(getInteractor());
