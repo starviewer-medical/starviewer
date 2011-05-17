@@ -4,7 +4,7 @@
 #include "logging.h"
 #include "starviewerapplication.h"
 
-// qt
+// Qt
 #include <QFile>
 #include <QTextStream>
 #include <QDir>
@@ -18,8 +18,8 @@ QLogViewer::QLogViewer(QWidget *parent)
 {
     setupUi(this);
     readSettings();
-//     // carreguem l'arxiu de log
-//     updateData();
+//  Carreguem l'arxiu de log
+//  updateData();
     createConnections();
 }
 

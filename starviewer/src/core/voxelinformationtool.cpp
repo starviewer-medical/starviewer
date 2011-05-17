@@ -4,7 +4,7 @@
 #include "drawertext.h"
 #include "drawer.h"
 #include "logging.h"
-// vtk
+// Vtk
 #include <vtkCommand.h>
 
 namespace udg {

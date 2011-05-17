@@ -83,7 +83,8 @@ void StatsWatcher::registerClick(bool checked)
             statMessage = "Sha fet un click sobre el botó";
         }
     }
-    else // és un altre tipus d'objecte
+    // És un altre tipus d'objecte
+    else
     {
         statMessage = "S'ha fet un click sobre l'objecte";
     }
@@ -137,14 +138,14 @@ void StatsWatcher::registerSliderAction(int action)
         break;
 
     case QAbstractSlider::SliderMove:
-        // només registrem quan s'ha fet un move amb rodeta
+        // Només registrem quan s'ha fet un move amb rodeta
         if (!slider->isSliderDown())
         {
             statMessage = "Desplaçar amb rodeta";
         }
         break;
 
-        // cas especial. petit hack per connectar amb sliderReleased
+        // Cas especial. petit hack per connectar amb sliderReleased
     case 10:
         statMessage = "Desplaçar clickant";
         break;
@@ -156,4 +157,4 @@ void StatsWatcher::registerSliderAction(int action)
     }
 }
 
-} //end namespace udg
+} // End namespace udg

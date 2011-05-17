@@ -158,6 +158,6 @@ private:
 
 };
 
-} // namespace udg
+} // End namespace udg
 
 #endif // TRANSFERFUNCTIONEDITOR_H

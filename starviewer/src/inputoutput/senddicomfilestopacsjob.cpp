@@ -46,8 +46,8 @@ void SendDICOMFilesToPACSJob::run()
         INFO_LOG("S'enviaran fitxers de l' estudi " + m_imagesToSend.at(0)->getParentSeries()->getParentStudy()->getInstanceUID() +
             " al PACS " + getPacsDevice().getAETitle());
 
-        /*S'ha d'especificar com a DirectConnection, perquè sinó aquest signal l'aten qui ha creat el Job, que és la interfície, per tant
-         no s'atendria fins que la interfície estigui lliure poguent provocar comportaments incorrectes*/
+        // S'ha d'especificar com a DirectConnection, perquè sinó aquest signal l'aten qui ha creat el Job, que és la interfície, per tant
+        // no s'atendria fins que la interfície estigui lliure poguent provocar comportaments incorrectes
         connect(m_sendDICOMFilesToPACS, SIGNAL(DICOMFileSent(Image *, int)), SLOT(DICOMFileSent(Image *, int)), Qt::DirectConnection);
 
         m_sendRequestStatus = m_sendDICOMFilesToPACS->send(getFilesToSend());
@@ -74,8 +74,8 @@ PACSRequestStatus::SendRequestStatus SendDICOMFilesToPACSJob::getStatus()
     return m_sendRequestStatus;
 }
 
-/*TODO:Centralitzem la contrucció dels missatges d'error perquè a totes les interfícies en puguin utilitzar un, i no calgui tenir el tractament d'errors duplicat
-       ni traduccions, però és el millor lloc aquí posar aquest codi? */
+// TODO:Centralitzem la contrucció dels missatges d'error perquè a totes les interfícies en puguin utilitzar un, i no calgui tenir el tractament d'errors duplicat
+//      ni traduccions, però és el millor lloc aquí posar aquest codi?
 QString SendDICOMFilesToPACSJob::getStatusDescription()
 {
     QString message;
@@ -140,8 +140,8 @@ Study* SendDICOMFilesToPACSJob::getStudyOfDICOMFilesToSend()
 
 void SendDICOMFilesToPACSJob::DICOMFileSent(Image *imageSent, int numberOfDICOMFilesSent)
 {
-    /*Pressuposem que les imatges venen agrupades per sèries, sino és així s'ha de modificar aquest codi, perquè sinó es comptabilitzaran més series enviades
-      de les que realment s'han enviat*/
+    // Pressuposem que les imatges venen agrupades per sèries, sino és així s'ha de modificar aquest codi, perquè sinó es comptabilitzaran més series enviades
+    // de les que realment s'han enviat
     emit DICOMFileSent(this, numberOfDICOMFilesSent);
 
     if (imageSent->getParentSeries()->getInstanceUID() != m_lastDICOMFileSeriesInstanceUID && !m_lastDICOMFileSeriesInstanceUID.isEmpty())

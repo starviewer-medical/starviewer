@@ -123,6 +123,6 @@ private:
     const int SamePosition;
 };
 
-} // end namespace udg
+} // End namespace udg
 
 #endif // UDGSCREENMANAGER_H

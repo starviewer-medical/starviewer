@@ -15,26 +15,22 @@ public:
     DatabaseInstallation();
     ~DatabaseInstallation();
 
-    /** Comprova que el directori on es guarda la base dades, les imatges i la base de dades existeixin sinó l'intenta crear.
-     * També comprova que la base de dades estigui en la revisió que necessita la compilació actual de l'starviewer i sinó la
-     * intenta actualitzar
-     * @return indica si la base de dades existeix
-     */
+    /// Comprova que el directori on es guarda la base dades, les imatges i la base de dades existeixin sinó l'intenta crear.
+    /// També comprova que la base de dades estigui en la revisió que necessita la compilació actual de l'starviewer i sinó la
+    /// intenta actualitzar
+    /// @return indica si la base de dades existeix
     bool checkStarviewerDatabase();
 
-    /** Comprova si existeix el directori de la base de dades
-     * @return indica si el directori existeix
-     */
+    /// Comprova si existeix el directori de la base de dades
+    /// @return indica si el directori existeix
     bool existsDatabasePath();
 
-    /** Comprova si existeix el directori on es guarden les imatges descarregades
-     * @return indica si el directori existeix
-     */
+    /// Comprova si existeix el directori on es guarden les imatges descarregades
+    /// @return indica si el directori existeix
     bool existsLocalImagePath();
 
-    /** Comprova si existeix el fitxer de la base de dades
-     * @return indica si el directori existeix
-     */
+    /// Comprova si existeix el fitxer de la base de dades
+    /// @return indica si el directori existeix
     bool existsDatabaseFile();
 
     ///Esborra la base de dades actual i torna a crear-ne una de nova
@@ -54,9 +50,8 @@ private slots:
     void setValueProgressBar();
 
 private:
-   /** Comprova que el directori on es guarden les imatges descarregades existeixi si no l'intenta crear
-     * @return indicat si el directori existeix o no
-     */
+    /// Comprova que el directori on es guarden les imatges descarregades existeixi si no l'intenta crear
+    /// @return indicat si el directori existeix o no
     bool checkLocalImagePath();
 
     ///Comprova que existeix el path de la base de dades i sinó existeix el crea
@@ -68,19 +63,16 @@ private:
     /// Retorna cert si tenim permisos d'escriptura a la base de dades, fals altrament
     bool isDatabaseFileWritable();
 
-    /** Crea el directori per guardar les imatges de la cache
-     * @return indica si s'ha pogut crear el directori
-     */
+    /// Crea el directori per guardar les imatges de la cache
+    /// @return indica si s'ha pogut crear el directori
     bool createLocalImageDir();
 
-    /** Crea el directori per guardar la base de dades
-     * @return indica si s'ha pogut crear el directori
-     */
+    /// Crea el directori per guardar la base de dades
+    /// @return indica si s'ha pogut crear el directori
     bool createDatabaseDirectory();
 
-    /** Crea la base de dades
-     * @return indica si s'ha pogut crear la base de dades
-     */
+    /// Crea la base de dades
+    /// @return indica si s'ha pogut crear la base de dades
     bool createDatabaseFile();
 
 private:

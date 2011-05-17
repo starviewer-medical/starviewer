@@ -2,7 +2,7 @@
 #include "qviewer.h"
 #include "logging.h"
 #include "q3dviewer.h"
-// vtk
+// Vtk
 #include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
 #include <vtkRenderWindowInteractor.h>
@@ -15,7 +15,7 @@ ZoomTool::ZoomTool(QViewer *viewer, QObject *parent)
 {
     m_state = None;
     m_toolName = "ZoomTool";
-    // ens assegurem que desde la creació tenim un viewer vàlid
+    // Ens assegurem que desde la creació tenim un viewer vàlid
     Q_ASSERT(m_viewer);
 }
 
@@ -88,7 +88,8 @@ void ZoomTool::endZoom()
         Q3DViewer *q3DViewer = qobject_cast<Q3DViewer*>(m_viewer);
         if (q3DViewer)
         {
-            m_viewer->render(); // necessari perquè es torni a renderitzar a alta resolució en el 3D
+            // Necessari perquè es torni a renderitzar a alta resolució en el 3D
+            m_viewer->render();
         }
     }
 }

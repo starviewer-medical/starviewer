@@ -3,7 +3,7 @@
 #include "windowlevelpresetstooldata.h"
 #include "transferfunction.h"
 
-//includes vtk
+// Includes vtk
 #include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
 #include <vtkCellPicker.h>
@@ -22,7 +22,7 @@
 // Per el marcador d'orientació
 #include "q3dorientationmarker.h"
 
-//includes propis
+// Includes propis
 #include "volume.h"
 #include "image.h"
 #include "logging.h"
@@ -52,7 +52,7 @@ public:
             break;
 
             case vtkCommand::InteractionEvent:
-                // actualitzem únicament si ha canviat el window level
+                // Actualitzem únicament si ha canviat el window level
                 double wl[2];
                 m_viewer->getCurrentWindowLevel(wl);
                 if (wl[0] != lastWindowLevel[0] || wl[1] != lastWindowLevel[1])
@@ -73,7 +73,7 @@ Q3DMPRViewer::Q3DMPRViewer(QWidget *parent)
     // Assignem el color de fons de pantalla
     // TODO Podríem tenir un mètode genèric per fer això
     m_renderer->SetBackground(0.4392, 0.5020, 0.5647);
-    // interacció
+    // Interacció
     m_axialPlaneVisible = true;
     m_sagitalPlaneVisible = true;
     m_coronalPlaneVisible = true;
@@ -100,14 +100,14 @@ void Q3DMPRViewer::setInput(Volume *volume)
 {
     m_mainVolume = volume;
     this->createOutline();
-    // li proporcionem les dades als plans
+    // Li proporcionem les dades als plans
     this->updatePlanesData();
-    // ajustem els valors del window Level per defecte
+    // Ajustem els valors del window Level per defecte
     this->updateWindowLevelData();
-    //li donem la orientació per defecte
+    // Li donem la orientació per defecte
     this->resetViewToAxial();
     render();
-    // indiquem el canvi de volum
+    // Indiquem el canvi de volum
     emit volumeChanged(m_mainVolume);
 }
 
@@ -134,7 +134,7 @@ void Q3DMPRViewer::initializePlanes()
     vtkCellPicker *picker = vtkCellPicker::New();
     picker->SetTolerance(0.005);
 
-    //Assignem les propietats per defecte
+    // Assignem les propietats per defecte
     vtkProperty *ipwProp = vtkProperty::New();
 
     // Creem tres vistes ortogonals utilitzant la classe ImagePlaneWidget
@@ -144,9 +144,8 @@ void Q3DMPRViewer::initializePlanes()
     m_coronalImagePlaneWidget = vtkImagePlaneWidget::New();
     // Els 3 widgets s'utilizen per visualizar el model
     // (mostra imatges en 2D amb 3 orientacions diferents)
-    //
-    //     Pla AXIAL
-    //
+    
+    // Pla AXIAL    
     m_axialImagePlaneWidget->DisplayTextOn();
     m_axialImagePlaneWidget->SetPicker(picker);
     m_axialImagePlaneWidget->RestrictPlaneToVolumeOn();
@@ -155,9 +154,8 @@ void Q3DMPRViewer::initializePlanes()
     m_axialImagePlaneWidget->SetTexturePlaneProperty(ipwProp);
     m_axialImagePlaneWidget->TextureInterpolateOn();
     m_axialImagePlaneWidget->SetResliceInterpolateToCubic();
-    //
-    //     Pla SAGITAL
-    //
+    
+    // Pla SAGITAL
     m_sagitalImagePlaneWidget->DisplayTextOn();
     m_sagitalImagePlaneWidget->SetPicker(picker);
     m_sagitalImagePlaneWidget->RestrictPlaneToVolumeOn();
@@ -167,9 +165,8 @@ void Q3DMPRViewer::initializePlanes()
     m_sagitalImagePlaneWidget->TextureInterpolateOn();
     m_sagitalImagePlaneWidget->SetLookupTable(m_axialImagePlaneWidget->GetLookupTable());
     m_sagitalImagePlaneWidget->SetResliceInterpolateToCubic();
-    //
-    //     Pla CORONAL
-    //
+    
+    // Pla CORONAL
     m_coronalImagePlaneWidget->DisplayTextOn();
     m_coronalImagePlaneWidget->SetPicker(picker);
     m_coronalImagePlaneWidget->SetKeyPressActivationValue('y');
@@ -178,9 +175,8 @@ void Q3DMPRViewer::initializePlanes()
     m_coronalImagePlaneWidget->TextureInterpolateOn();
     m_coronalImagePlaneWidget->SetLookupTable(m_axialImagePlaneWidget->GetLookupTable());
     m_coronalImagePlaneWidget->SetResliceInterpolateToCubic();
-    //
-    //     INTERACCIÓ
-    //
+    
+    // INTERACCIÓ
     m_axialImagePlaneWidget->SetInteractor(getInteractor());
     m_sagitalImagePlaneWidget->SetInteractor(getInteractor());
     m_coronalImagePlaneWidget->SetInteractor(getInteractor());
@@ -209,7 +205,7 @@ void Q3DMPRViewer::updatePlanesData()
         {
             m_axialResliced->setData(m_axialImagePlaneWidget->GetResliceOutput());
         }
-        //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
+        // TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
         m_axialResliced->setImages(m_mainVolume->getImages());
 
         m_sagitalImagePlaneWidget->SetInput(m_mainVolume->getVtkData());
@@ -222,7 +218,7 @@ void Q3DMPRViewer::updatePlanesData()
         {
             m_sagitalResliced->setData(m_sagitalImagePlaneWidget->GetResliceOutput());
         }
-        //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
+        // TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
         m_sagitalResliced->setImages(m_mainVolume->getImages());
 
         m_coronalImagePlaneWidget->SetInput(m_mainVolume->getVtkData());
@@ -235,7 +231,7 @@ void Q3DMPRViewer::updatePlanesData()
         {
             m_coronalResliced->setData(m_coronalImagePlaneWidget->GetResliceOutput());
         }
-        //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
+        // TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
         m_coronalResliced->setImages(m_mainVolume->getImages());
     }
     else
@@ -248,7 +244,7 @@ void Q3DMPRViewer::createOutline()
 {
     if (m_mainVolume)
     {
-        // creem l'outline
+        // Creem l'outline
         vtkOutlineFilter *outlineFilter = vtkOutlineFilter::New();
         outlineFilter->SetInput(m_mainVolume->getVtkData());
         vtkPolyDataMapper *outlineMapper = vtkPolyDataMapper::New();
@@ -352,7 +348,7 @@ void Q3DMPRViewer::setWindowLevel(double window, double level)
 {
     if (m_mainVolume)
     {
-        // amb un n'hi ha prou ja que cada vtkImagePlaneWidget comparteix la mateixa LUT
+        // Amb un n'hi ha prou ja que cada vtkImagePlaneWidget comparteix la mateixa LUT
         m_axialImagePlaneWidget->SetWindowLevel(window, level);
     }
     else
@@ -489,4 +485,4 @@ void Q3DMPRViewer::getCoronalPlaneNormal(double normal[3])
     m_coronalImagePlaneWidget->GetNormal(normal);
 }
 
-};  // end namespace udg
+};  // End namespace udg

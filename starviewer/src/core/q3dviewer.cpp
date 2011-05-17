@@ -8,15 +8,17 @@
 #include "transferfunction.h"
 #include "coresettings.h"
 
-// include's qt
+// Include's qt
 #include <QString>
 #include <QMessageBox>
 
-// include's vtk
-#include <QVTKWidget.h> // pel setAutomaticImageCacheEnabled
+// Include's vtk
+
+// Pel setAutomaticImageCacheEnabled
+#include <QVTKWidget.h> 
 #include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
-// rendering 3D
+// Rendering 3D
 #include <vtkVolumeProperty.h>
 #include <vtkVolume.h>
 // Ray Cast
@@ -26,7 +28,7 @@
 // MIP
 #include <vtkVolumeRayCastMIPFunction.h>
 #include <vtkFiniteDifferenceGradientEstimator.h>
-//Contouring
+// Contouring
 #include <vtkPolyDataMapper.h>
 #include <vtkContourFilter.h>
 #include <vtkReverseSense.h>
@@ -44,11 +46,11 @@
 #include <vtkPiecewiseFunction.h>
 // Casting
 #include <vtkImageShiftScale.h>
-// reorientació del volum
+// Reorientació del volum
 #include <vtkMatrix4x4.h>
 // Clippping Planes
 #include <vtkPlanes.h>
-// obscurances
+// Obscurances
 #include "obscurancemainthread.h"
 #include "ambientvoxelshader.h"
 #include "directilluminationvoxelshader.h"
@@ -58,7 +60,7 @@
 #include <vtkPointData.h>
 #include <vtkEncodedGradientShader.h>
 
-// avortar render
+// Avortar render
 #include "abortrendercommand.h"
 
 namespace udg {
@@ -67,17 +69,18 @@ Q3DViewer::Q3DViewer(QWidget *parent)
  : QViewer(parent), m_imageData(0), m_vtkVolume(0), m_volumeProperty(0), m_newTransferFunction(0), m_clippingPlanes(0)
 {
     m_vtkWidget->setAutomaticImageCacheEnabled(true);
-    // avortar render
+    // Avortar render
     AbortRenderCommand *abortRenderCommand = AbortRenderCommand::New();
     getRenderWindow()->AddObserver(vtkCommand::AbortCheckEvent, abortRenderCommand);
     abortRenderCommand->Delete();
 
-    m_renderFunction = RayCasting; // per defecte
+    // Per defecte
+    m_renderFunction = RayCasting;
 
     setDefaultOrientationForCurrentInput();
     m_orientationMarker = new Q3DOrientationMarker(this->getInteractor());
 
-    // creem el pipeline del volum
+    // Creem el pipeline del volum
     m_vtkVolume = vtkVolume::New();
     m_volumeProperty = vtkVolumeProperty::New();
     m_volumeProperty->SetInterpolationTypeToLinear();
@@ -88,7 +91,7 @@ Q3DViewer::Q3DViewer(QWidget *parent)
     m_renderer->AddViewProp(m_vtkVolume);
 
     m_transferFunction = new TransferFunction;
-    // creem una funció de transferència per defecte TODO la tenim només per tenir alguna cosa per defecte
+    // Creem una funció de transferència per defecte TODO la tenim només per tenir alguna cosa per defecte
     // Opacitat
     m_transferFunction->setOpacity(20.0, 0.0);
     m_transferFunction->setOpacity(255.0, 0.2);
@@ -178,7 +181,7 @@ Q3DViewer::~Q3DViewer()
     delete m_directIlluminationObscuranceVoxelShader;
     delete m_ambientContourObscuranceVoxelShader;
     delete m_directIlluminationContourObscuranceVoxelShader;
-    // eliminem tots els elements vtk creats
+    // Eliminem tots els elements vtk creats
     if (m_4DLinearRegressionGradientEstimator)
     {
         m_4DLinearRegressionGradientEstimator->Delete();
@@ -483,15 +486,16 @@ void Q3DViewer::setInput(Volume *volume)
     }
     m_mainVolume = volume;
 
-    // aquí corretgim el fet que no s'hagi adquirit la imatge en un espai ortogonal
-    //\TODO: caldria fer el mateix amb el vtkImageActor del q2Dviewer (veure tiquet #702)
+    // Aquí corretgim el fet que no s'hagi adquirit la imatge en un espai ortogonal
+    // \TODO: caldria fer el mateix amb el vtkImageActor del q2Dviewer (veure tiquet #702)
     ImagePlane * currentPlane = new ImagePlane();
-    Image *imageReference = m_mainVolume->getImage(0); //Sempre penem la primera llesca suposem que és constant
+    // Sempre penem la primera llesca suposem que és constant
+    Image *imageReference = m_mainVolume->getImage(0);
     currentPlane->fillFromImage(imageReference);
     double currentPlaneRowVector[3], currentPlaneColumnVector[3];
     currentPlane->getRowDirectionVector(currentPlaneRowVector);
     currentPlane->getColumnDirectionVector(currentPlaneColumnVector);
-    //En realitat el vector normal no és el que ens dona la funció getNormalVector, sinó que és perpendicular a l'eix de coordenades
+    // En realitat el vector normal no és el que ens dona la funció getNormalVector, sinó que és perpendicular a l'eix de coordenades
     //currentPlane->getNormalVector(currentPlaneNormalVector);
 
     vtkMatrix4x4 *projectionMatrix = vtkMatrix4x4::New();
@@ -560,14 +564,16 @@ void Q3DViewer::setInput(Volume *volume)
     m_firstRender = true;
 
     int *dimensions = volume->getDimensions();
-    m_canEnableShading = dimensions[0] > 1 && dimensions[1] > 1 && dimensions[2] > 1;   // ens basem només en les dimensions; de moment donem per fet que hi ha prou memòria
+
+    // Ens basem només en les dimensions; de moment donem per fet que hi ha prou memòria
+    m_canEnableShading = dimensions[0] > 1 && dimensions[1] > 1 && dimensions[2] > 1;
 
     applyCurrentRenderingMethod();
 
-    // apliquem el window/level actual
+    // Apliquem el window/level actual
     setWindowLevel(m_window, m_level);
 
-    // indiquem el canvi de volum
+    // Indiquem el canvi de volum
     emit volumeChanged(m_mainVolume);
 
     unsetCursor();
@@ -646,7 +652,8 @@ void Q3DViewer::setTransferFunction(TransferFunction *transferFunction)
             QMessageBox::warning(this, tr("Can't apply rendering style"), tr("The system hasn't enough memory to apply properly this rendering style with this volume.\nShading will be disabled, it won't render as expected."));
             m_canEnableShading = false;
             this->setShading(false);
-            this->applyCurrentRenderingMethod(); // TODO Comprovar si seria suficient amb un render()
+            // TODO Comprovar si seria suficient amb un render()
+            this->applyCurrentRenderingMethod(); 
         }
     }
 }
@@ -708,7 +715,8 @@ bool Q3DViewer::rescale(Volume *volume)
     double rangeLength = max - min;
     double shift = -min;
     double window = rangeLength;
-    double level = (rangeLength / 2.0); // Sabem que el mínim és 0
+    // Sabem que el mínim és 0
+    double level = (rangeLength / 2.0);
     DEBUG_LOG(QString("Q3DViewer: volume scalar range: min = %1, max = %2, range = %3, shift = %4").arg(min).arg(max).arg(rangeLength).arg(shift));
 
     vtkImageShiftScale *rescaler = vtkImageShiftScale::New();
@@ -722,7 +730,8 @@ bool Q3DViewer::rescale(Volume *volume)
 
     try
     {
-        rescaler->Update(); // el lloc on pot generar l'excepció és aquí
+        // El lloc on pot generar l'excepció és aquí
+        rescaler->Update();
 
         if (m_imageData)
         {
@@ -752,7 +761,7 @@ bool Q3DViewer::rescale(Volume *volume)
     {
         ERROR_LOG(QString("Excepció al voler fer rescale(): ") + e.what());
         QMessageBox::warning(this, tr("Volume too large"), tr("Current volume is too large. Please select another volume or close other extensions and try again."));
-        // mantenim tots els atributs de la classe tal com estaven, per rebutjar el volum netament
+        // Mantenim tots els atributs de la classe tal com estaven, per rebutjar el volum netament
         rescaler->Delete();
         return false;
     }
@@ -801,7 +810,7 @@ void Q3DViewer::renderRayCasting()
                                                                    gradientShader->GetBlueSpecularShadingTable(m_vtkVolume));
     }
 
-    // no funciona sense fer la còpia
+    // No funciona sense fer la còpia
     TransferFunction *transferFunction = m_transferFunction;
     setTransferFunction(new TransferFunction(*transferFunction));
     delete transferFunction;
@@ -876,7 +885,7 @@ void Q3DViewer::renderRayCastingObscurance()
                                                                    gradientShader->GetBlueSpecularShadingTable(m_vtkVolume));
     }
 
-    // no funciona sense fer la còpia
+    // No funciona sense fer la còpia
     TransferFunction *transferFunction = m_transferFunction;
     setTransferFunction(new TransferFunction(*transferFunction));
     delete transferFunction;
@@ -898,7 +907,7 @@ void Q3DViewer::renderGpuRayCasting()
     m_vtkVolume->SetMapper(m_gpuRayCastMapper);
 
     // TODO Realment cal tornar a assignar la funció de transferència?
-    // no funciona sense fer la còpia
+    // No funciona sense fer la còpia
     TransferFunction *transferFunction = m_transferFunction;
     setTransferFunction(new TransferFunction(*transferFunction));
     delete transferFunction;
@@ -914,7 +923,7 @@ void Q3DViewer::renderMIP3D()
         m_renderer->AddViewProp(m_vtkVolume);
     }
 
-    // quan fem MIP3D deixarem disable per defecte ja que la orientació no la sabem ben bé quina és ja que el pla de tall pot ser arbitrari \TODO no sempre un mip serà sobre un pla mpr, llavors tampoc és del tot correcte decidir això aquí
+    // Quan fem MIP3D deixarem disable per defecte ja que la orientació no la sabem ben bé quina és ja que el pla de tall pot ser arbitrari \TODO no sempre un mip serà sobre un pla mpr, llavors tampoc és del tot correcte decidir això aquí
 //         m_orientationMarker->disable();
     //================================================================================================
     // Create a transfer function mapping scalar value to opacity
@@ -942,7 +951,7 @@ void Q3DViewer::renderMIP3D()
 
     grayTransferFunction->Delete();
 
-    // creem la funció del raig MIP, en aquest cas maximitzem l'opacitat, si fos Scalar value, ho faria pel valor
+    // Creem la funció del raig MIP, en aquest cas maximitzem l'opacitat, si fos Scalar value, ho faria pel valor
     vtkVolumeRayCastMIPFunction* mipFunction = vtkVolumeRayCastMIPFunction::New();
     mipFunction->SetMaximizeMethodToOpacity();
 
@@ -1021,7 +1030,7 @@ void Q3DViewer::renderIsoSurface()
         m_renderer->AddViewProp(m_vtkVolume);
     }
 
-    //\TODO Les funcions de transferència no es definiran "a pelo" aquí mai més. Això és cosa de la classe TransferFunction
+    // \TODO Les funcions de transferència no es definiran "a pelo" aquí mai més. Això és cosa de la classe TransferFunction
     // Create a transfer function mapping scalar value to opacity
     vtkPiecewiseFunction *oTFun = vtkPiecewiseFunction::New();
     oTFun->AddSegment(0.0, 0.0, m_range, 0.3);
@@ -1072,14 +1081,15 @@ void Q3DViewer::renderTexture2D()
         m_renderer->AddViewProp(m_vtkVolume);
     }
 
-    /// \todo Això és massa lent, potser l'hauríem de treure.
+    /// \TODO Això és massa lent, potser l'hauríem de treure.
     m_volumeProperty->DisableGradientOpacityOn();
-    m_volumeProperty->SetInterpolationTypeToNearest();  // nearest perquè vagi més ràpid
+    // Nearest perquè vagi més ràpid
+    m_volumeProperty->SetInterpolationTypeToNearest();
 
     vtkVolumeTextureMapper2D *volumeMapper = vtkVolumeTextureMapper2D::New();
 
-    // target texture size: en teoria com més gran millor
-    // màxim en una Quadro FX 4500 = 4096x4096
+    // Target texture size: en teoria com més gran millor
+    // Màxim en una Quadro FX 4500 = 4096x4096
 //     volumeMapper->SetTargetTextureSize(4096, 4096);
 
     // max number of planes: This is the maximum number of planes that will be created for texture mapping the volume. If the volume has more
@@ -1092,7 +1102,7 @@ void Q3DViewer::renderTexture2D()
     m_vtkVolume->SetMapper(volumeMapper);
     volumeMapper->Delete();
 
-    // no funciona sense fer la còpia
+    // No funciona sense fer la còpia
     TransferFunction *transferFunction = m_transferFunction;
     setTransferFunction(new TransferFunction(*transferFunction));
     delete transferFunction;
@@ -1116,7 +1126,7 @@ void Q3DViewer::renderTexture3D()
     m_vtkVolume->SetMapper(volumeMapper);
     volumeMapper->Delete();
 
-    // no funciona sense fer la còpia
+    // No funciona sense fer la còpia
     TransferFunction *transferFunction = m_transferFunction;
     setTransferFunction(new TransferFunction(*transferFunction));
     delete transferFunction;
@@ -1190,8 +1200,10 @@ void Q3DViewer::computeObscurance(ObscuranceQuality quality)
     if (!m_4DLinearRegressionGradientEstimator)
     {
         m_4DLinearRegressionGradientEstimator = vtk4DLinearRegressionGradientEstimator::New();
-        m_volumeMapper->SetGradientEstimator(m_4DLinearRegressionGradientEstimator);  // radi 1 per defecte (-> 3³)
-        m_4DLinearRegressionGradientEstimator->SetInput(m_volumeMapper->GetInput());  /// \todo hauria de funcionar sense això, però no !?!?!
+        // Radi 1 per defecte (-> 3³)
+        m_volumeMapper->SetGradientEstimator(m_4DLinearRegressionGradientEstimator);
+        /// \TODO hauria de funcionar sense això, però no !?!?!
+        m_4DLinearRegressionGradientEstimator->SetInput(m_volumeMapper->GetInput());
     }
 
     Settings settings;
@@ -1226,8 +1238,9 @@ void Q3DViewer::computeObscurance(ObscuranceQuality quality)
             ERROR_LOG(QString("Valor inesperat per a la qualitat de les obscurances: %1").arg(quality));
     }
 
-    double distance = m_vtkVolume->GetLength() / 2.0;   /// \todo de moment la meitat de la diagonal, però podria ser una altra funció
-    // el primer paràmetre és el nombre de direccions
+    /// \TODO de moment la meitat de la diagonal, però podria ser una altra funció
+    double distance = m_vtkVolume->GetLength() / 2.0;
+    // El primer paràmetre és el nombre de direccions
     // pot ser >= 0 i llavors es fan 10*4^n+2 direccions (12, 42, 162, 642, ...)
     // també pot ser < 0 i llavors es fan -n direccions (valors permesos: -4, -6, -8, -12, -20; amb qualsevol altre s'aplica -4)
     m_obscuranceMainThread = new ObscuranceMainThread(numberOfDirections, distance, function, variant, this);
@@ -1245,13 +1258,13 @@ void Q3DViewer::computeObscurance(ObscuranceQuality quality)
     connect(m_obscuranceMainThread, SIGNAL(computed()), this, SLOT(endComputeObscurance()));
     m_obscuranceMainThread->start();
 
-    // perquè el DirectIlluminationVoxelShader tingui les noves normals
-    // no funciona sense fer la còpia
+    // Perquè el DirectIlluminationVoxelShader tingui les noves normals
+    // No funciona sense fer la còpia
     TransferFunction *transferFunction = m_transferFunction;
     setTransferFunction(new TransferFunction(*transferFunction));
     delete transferFunction;
 
-    // perquè el ContourVoxelShader tingui les noves normals
+    // Perquè el ContourVoxelShader tingui les noves normals
     setContour(m_contourOn);
 }
 
@@ -1359,4 +1372,4 @@ bool Q3DViewer::isSupportedVolume(Volume *volume)
     return volume->getVtkData()->GetNumberOfScalarComponents() == 1;
 }
 
-};  // end namespace udg {
+};  // End namespace udg {

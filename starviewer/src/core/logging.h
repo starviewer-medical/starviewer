@@ -2,12 +2,13 @@
 #define _LOGGING_
 
 #include <QString>
-#include <cstdlib> // per posar la variable d'entorn
+// Per posar la variable d'entorn
+#include <cstdlib> 
 /*!
     Aquest arxiu conté totes les macros per a fer logs en l'aplicació.
 */
 
-// include log4cxx header files.
+// Include log4cxx header files.
 #include <log4cxx/logger.h>
 #include <log4cxx/basicconfigurator.h>
 #include <log4cxx/propertyconfigurator.h>

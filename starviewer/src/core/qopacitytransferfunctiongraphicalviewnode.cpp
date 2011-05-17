@@ -114,4 +114,4 @@ void QOpacityTransferFunctionGraphicalViewNode::fixLines(QOpacityTransferFunctio
     }
 }
 
-} // namespace udg
+} // End namespace udg

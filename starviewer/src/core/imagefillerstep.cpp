@@ -10,9 +10,10 @@
 #include "dicomsequenceitem.h"
 #include "dicomvalueattribute.h"
 #include "thumbnailcreator.h"
-
-#include <cmath> // Pel fabs
-#include <QApplication> // Pel process events TODO Treure i fer amb threads.
+// Pel fabs
+#include <cmath>
+// Pel process events TODO Treure i fer amb threads.
+#include <QApplication>
 #include <QFileInfo>
 
 namespace udg {
@@ -293,7 +294,8 @@ bool ImageFillerStep::processImage(Image *image, DICOMTagReader *dicomReader)
             {
                 image->setPatientOrientation(value);
             }
-            else  // Si no tenim aquest valor, el calculem a partir dels direction cosines
+            // Si no tenim aquest valor, el calculem a partir dels direction cosines
+            else
             {
                 // Li passem el vector amb tots els direction cosines (row, column i normal) perquè pugui calcular correctament totes les etiquetes
                 image->setPatientOrientation(makePatientOrientationFromImageOrientationPatient(image->getImageOrientationPatient()));
@@ -846,7 +848,8 @@ void ImageFillerStep::computePixelSpacing(Image *image, DICOMTagReader *dicomRea
         // En el cas de la modalitat US, hem de fer alguns càlculs extra per tal obtenir un pixel spacing aproximat
         //
         DICOMSequenceAttribute *ultraSoundsRegionsSequence = dicomReader->getSequenceAttribute(DICOMSequenceOfUltrasoundRegions);
-        if (ultraSoundsRegionsSequence) // Ho hem de comprovar perquè és opcional.
+        // Ho hem de comprovar perquè és opcional.
+        if (ultraSoundsRegionsSequence)
         {
             // Aquesta seqüència pot tenir més d'un ítem. TODO Nosaltres només tractem el primer, però ho hauríem de fer per tots,
             // ja que defineix més d'una regió i podríem estar obtenint informació equivocada
@@ -856,7 +859,8 @@ void ImageFillerStep::computePixelSpacing(Image *image, DICOMTagReader *dicomRea
                 int physicalUnitsX = items.at(0)->getValueAttribute(DICOMPhysicalUnitsXDirection)->getValueAsInt();
                 int physicalUnitsY = items.at(0)->getValueAttribute(DICOMPhysicalUnitsYDirection)->getValueAsInt();
 
-                if (physicalUnitsX == 3 && physicalUnitsY == 3) // 3 significa que les unitats son cm
+                // 3 significa que les unitats son cm
+                if (physicalUnitsX == 3 && physicalUnitsY == 3)
                 {
                     double physicalDeltaX = items.at(0)->getValueAttribute(DICOMPhysicalDeltaX)->getValueAsDouble();
                     double physicalDeltaY = items.at(0)->getValueAttribute(DICOMPhysicalDeltaY)->getValueAsDouble();
@@ -871,7 +875,8 @@ void ImageFillerStep::computePixelSpacing(Image *image, DICOMTagReader *dicomRea
             }
         }
     }
-    else // Per altres modalitats li assignarem a partir d'aquest tag
+    // Per altres modalitats li assignarem a partir d'aquest tag
+    else
     {
         // Als mòduls CR Image (C.8.1.2), X-Ray Acquisition (C.8.7.2), DX Detector (C.8.11.4),
         // XA/XRF Acquisition (C.8.19.3), X-Ray 3D Angiographic Image Contributing Sources (C.8.21.2.1) i

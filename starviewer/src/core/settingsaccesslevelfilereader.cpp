@@ -89,4 +89,4 @@ QMap<QString, Settings::AccessLevel> SettingsAccessLevelFileReader::getAccessLev
     return m_accessLevelTable;
 }
 
-} // end namespace udg
+} // End namespace udg

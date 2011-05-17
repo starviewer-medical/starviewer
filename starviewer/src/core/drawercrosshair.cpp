@@ -4,7 +4,7 @@
 #include "logging.h"
 #include "drawerline.h"
 #include "mathtools.h"
-// vtk
+// Vtk
 #include <vtkActor2D.h>
 #include <vtkPropAssembly.h>
 

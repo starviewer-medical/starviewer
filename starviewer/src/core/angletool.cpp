@@ -168,7 +168,7 @@ void AngleTool::drawCircle()
 
     // Calculem el rang de les iteracions per pintar l'angle correctament
     initialAngle = 360 - m_initialDegreeArc;
-    finalAngle = int(360 - (m_currentAngle+m_initialDegreeArc));
+    finalAngle = int(360 - (m_currentAngle + m_initialDegreeArc));
 
     double pv[3];
     MathTools::crossProduct(firstSegment, secondSegment, pv);
@@ -191,16 +191,15 @@ void AngleTool::drawCircle()
     {
         degreesIncrease = i * 1.0 * MathTools::DegreesToRadiansAsDouble;
         double newPoint[3];
-
-        /*
-            TODO Aquí hauríem de fer alguna cosa d'aquest estil, però si ho fem així,
-            no se'ns dibuixa l'arc de circumferència que ens esperem sobre la vista coronal.
-            Potser és degut a com obtenim els punts o per una altra causa. Caldria mirar-ho
-            per així evitar la consciència del pla en el que ens trobem
-            newPoint[xIndex] = cos(degreesIncrease)*radius + circleCentre[xIndex];
-            newPoint[yIndex] = sin(degreesIncrease)*radius + circleCentre[yIndex];
-            newPoint[zIndex] = 0.0;
-        */
+        
+            // TODO Aquí hauríem de fer alguna cosa d'aquest estil, però si ho fem així,
+            // no se'ns dibuixa l'arc de circumferència que ens esperem sobre la vista coronal.
+            // Potser és degut a com obtenim els punts o per una altra causa. Caldria mirar-ho
+            // per així evitar la consciència del pla en el que ens trobem
+            // newPoint[xIndex] = cos(degreesIncrease)*radius + circleCentre[xIndex];
+            // newPoint[yIndex] = sin(degreesIncrease)*radius + circleCentre[yIndex];
+            // newPoint[zIndex] = 0.0;
+       
         switch (view)
         {
             case QViewer::AxialPlane:
@@ -296,7 +295,7 @@ void AngleTool::finishDrawing()
     // Eliminem l'arc de circumferència (s'esborra automàticament del drawer)
     delete m_circlePolyline;
 
-    // afegim l'annotació textual
+    // Afegim l'annotació textual
     DrawerText *text = new DrawerText;
     text->setText(tr("%1 degrees").arg(m_currentAngle, 0, 'f', 1));
     text->shadowOn();
@@ -306,7 +305,8 @@ void AngleTool::finishDrawing()
 
 void AngleTool::placeText(DrawerText *angleText)
 {
-    const double Padding = 5.0; // padding de 5 pixels
+    // Padding de 5 pixels
+    const double Padding = 5.0;
 
     double *p1 = m_mainPolyline->getPoint(0);
     double *p2 = m_mainPolyline->getPoint(1);
@@ -328,9 +328,10 @@ void AngleTool::placeText(DrawerText *angleText)
         else
         {
             double p2InDisplay[3];
-            m_2DViewer->computeWorldToDisplay(p2[0], p2[1], p2[2], p2InDisplay); // passem p2 a coordenades de display
+            // Passem p2 a coordenades de display
+            m_2DViewer->computeWorldToDisplay(p2[0], p2[1], p2[2], p2InDisplay);
 
-            // apliquem el padding
+            // Apliquem el padding
             if (p2[verticalCoord] <= p3[verticalCoord])
             {
                 p2InDisplay[1] -= Padding;
@@ -339,9 +340,10 @@ void AngleTool::placeText(DrawerText *angleText)
             {
                 p2InDisplay[1] += Padding;
             }
-            m_2DViewer->computeDisplayToWorld(p2InDisplay[0], p2InDisplay[1], p2InDisplay[2], position); // tornem a coordenades de món
-            // ara position és l'attachment point que volem
+            // Tornem a coordenades de món
+            m_2DViewer->computeDisplayToWorld(p2InDisplay[0], p2InDisplay[1], p2InDisplay[2], position);
 
+            // Ara position és l'attachment point que volem
             angleText->setAttachmentPoint(position);
         }
     }
@@ -356,9 +358,10 @@ void AngleTool::placeText(DrawerText *angleText)
         else
         {
             double p2InDisplay[3];
-            m_2DViewer->computeWorldToDisplay(p2[0], p2[1], p2[2], p2InDisplay); // passem p2 a coordenades de display
+            // Passem p2 a coordenades de display
+            m_2DViewer->computeWorldToDisplay(p2[0], p2[1], p2[2], p2InDisplay);
 
-            // apliquem el padding
+            // Apliquem el padding
             if (p2[verticalCoord] <= p3[verticalCoord])
             {
                 p2InDisplay[1] += Padding;
@@ -367,9 +370,10 @@ void AngleTool::placeText(DrawerText *angleText)
             {
                 p2InDisplay[1] -= Padding;
             }
-            m_2DViewer->computeDisplayToWorld(p2InDisplay[0], p2InDisplay[1], p2InDisplay[2], position); // tornem a coordenades de món
-            // ara position és l'attachment point que volem
-
+            // Tornem a coordenades de món
+            m_2DViewer->computeDisplayToWorld(p2InDisplay[0], p2InDisplay[1], p2InDisplay[2], position);
+            
+            // Ara position és l'attachment point que volem
             angleText->setAttachmentPoint(position);
         }
     }

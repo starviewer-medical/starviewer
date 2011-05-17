@@ -42,6 +42,6 @@ private:
 
 };
 
-} // namespace udg
+} // End namespace udg
 
 #endif // QCOLORTRANSFERFUNCTIONGRAPHICALVIEWNODE_H

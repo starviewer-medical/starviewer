@@ -81,8 +81,9 @@ void QExporterTool::initialize()
             m_allImagesRadioButton->setVisible(false);
         }
     }
-    else // Si no és un 2DViewer només oferim la opció de guardar la imatge actual
+    else
     {
+        // Si no és un 2DViewer només oferim la opció de guardar la imatge actual
         m_imagesOfCurrentPhaseRadioButton->setVisible(false);
         m_phasesOfCurrentImageRadioButton->setVisible(false);
         m_allImagesRadioButton->setVisible(false);
@@ -250,7 +251,8 @@ void QExporterTool::generateAndStoreNewSeries()
         manager.save(generetedVolume->getImage(0)->getParentSeries());
         // TODO Comprovar error
 
-        if (m_sendToPacsCheckBox->isChecked()) //Enviem a PACS
+        // Enviem a PACS
+        if (m_sendToPacsCheckBox->isChecked())
         {
             progress.setLabelText(tr("Sending to PACS..."));
             progress.setValue(progress.value() + 1);

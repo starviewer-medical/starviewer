@@ -61,7 +61,7 @@ signals:
     void itemRemoved(Identifier id);
 
 private:
-    /// ha de quedar amagat perquè no poguem crear instàncies
+    /// Ha de quedar amagat perquè no poguem crear instàncies
     VolumeRepository();
 };
 

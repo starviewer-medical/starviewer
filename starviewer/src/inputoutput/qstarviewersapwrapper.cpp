@@ -12,19 +12,24 @@ void QStarviewerSAPWrapper::sendRequestToLocalStarviewer(QString accessionNumber
 {
     Settings settings;
     QTcpSocket tcpSocket;
-    QString locaHostAddress = "127.0.0.1";//IP del localhost
-    int starviewerRisPort = settings.getValue(InputOutputSettings::RISRequestsPort).toInt();//Port pel que Starviewer espera peticions del RIS
+    // IP del localhost
+    QString locaHostAddress = "127.0.0.1";
+    // Port pel que Starviewer espera peticions del RIS
+    int starviewerRisPort = settings.getValue(InputOutputSettings::RISRequestsPort).toInt();
 
     INFO_LOG(QString("QStarviewerSAPWrapper::Demanare a l'Starviewer local pel port %1 la descarrega de l'estudi amb accession number %2").arg(QString().setNum(starviewerRisPort), accessionNumber));
 
-    tcpSocket.connectToHost(locaHostAddress, starviewerRisPort);//Connectem contra el localhost
-    if (!tcpSocket.waitForConnected()) //Esperem que ens haguem connectat
+    // Connectem contra el localhost
+    tcpSocket.connectToHost(locaHostAddress, starviewerRisPort);
+    // Esperem que ens haguem connectat
+    if (!tcpSocket.waitForConnected())
     {
         errorConnecting(starviewerRisPort, tcpSocket.errorString());
         return;
     }
 
-    tcpSocket.write(getXmlPier(accessionNumber).toLocal8Bit()); //Enviem la petició de descarregar del estudi
+    // Enviem la petició de descarregar del estudi
+    tcpSocket.write(getXmlPier(accessionNumber).toLocal8Bit());
     if (!tcpSocket.waitForBytesWritten())
     {
         INFO_LOG("QStarviewerSAPWrapper::No s'ha pogut enviar la petició a Starviewer");
@@ -41,7 +46,8 @@ void QStarviewerSAPWrapper::sendRequestToLocalStarviewer(QString accessionNumber
 
     tcpSocket.flush();
 
-    tcpSocket.disconnectFromHost();//desconnectem
+    // Desconnectem
+    tcpSocket.disconnectFromHost();
     if (tcpSocket.state() != QAbstractSocket::UnconnectedState && !tcpSocket.waitForDisconnected())
     {
         INFO_LOG("QStarviewerSAPWrapper::No he pogut desconnectar del Starviewer");

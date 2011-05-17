@@ -42,13 +42,13 @@ public:
     Q3DViewer(QWidget *parent = 0);
     ~Q3DViewer();
 
-    /// retorna el tipu de visualització que es té assignat
+    /// Retorna el tipus de visualització que es té assignat
     RenderFunction getRenderFunction() const
     {
         return m_renderFunction;
     }
 
-    /// retorna el tipu de visualització que es té assignat com a un string
+    /// Retorna el tipus de visualització que es té assignat com a un string
     QString getRenderFunctionAsString();
 
     /// Obté el window level actual de la imatge
@@ -69,7 +69,7 @@ public:
 public slots:
     virtual void setInput(Volume* volume);
 
-    /// assignem el tipus de visualització 3D que volem. RayCasting, MIP, reconstrucció de superfícies...
+    /// Assignem el tipus de visualització 3D que volem. RayCasting, MIP, reconstrucció de superfícies...
     void setRenderFunction(RenderFunction function);
     void setRenderFunctionToRayCasting();
     void setRenderFunctionToRayCastingObscurance();
@@ -84,7 +84,7 @@ public slots:
     void resetViewToSagital();
     void resetViewToCoronal();
 
-    /// mètodes per controlar la visibilitat de l'orientation marker widget
+    /// Mètodes per controlar la visibilitat de l'orientation marker widget
     void enableOrientationMarker(bool enable);
     void orientationMarkerOn();
     void orientationMarkerOff();
@@ -124,39 +124,39 @@ signals:
     void obscuranceCancelledByProgram();
     /// Informa del rang de valors del volum quan aquest canvia.
     void scalarRange(double min, double max);
-    /// indica el nou window level
+    /// Indica el nou window level
     void windowLevelChanged(double window, double level);
     void transferFunctionChanged ();
 
 private:
-    /// fa la visualització per raycasting
+    /// Fa la visualització per raycasting
     void renderRayCasting();
 
-    /// fa la visualització per raycasting amb obscurances
+    /// Fa la visualització per raycasting amb obscurances
     void renderRayCastingObscurance();
 
     /// Fa la visualització per ray casting amb GPU.
     void renderGpuRayCasting();
 
-    /// fa la visualització per contouring
+    /// Fa la visualització per contouring
     void renderContouring();
 
-    /// fa la visualització per MIP3D
+    /// Fa la visualització per MIP3D
     void renderMIP3D();
 
-    /// fa la visualització per reconstrucció de superfíces
+    /// Fa la visualització per reconstrucció de superfíces
     void renderIsoSurface();
 
-    /// fa la visualització per textures 2D \TODO afegir comprovació de si el hard o suporta o no
+    /// Fa la visualització per textures 2D \TODO afegir comprovació de si el hard o suporta o no
     void renderTexture2D();
 
-    /// fa la visualització per textures 3D \TODO afegir comprovació de si el hard o suporta o no
+    /// Fa la visualització per textures 3D \TODO afegir comprovació de si el hard o suporta o no
     void renderTexture3D();
 
     /// Reescala les dades de volume en el format adequat per als corresponents algorismes. Retorna fals si no pot crear el volum reescalat.
     bool rescale(Volume *volume);
 
-    /// reinicia la orientació
+    /// Reinicia la orientació
     void resetOrientation();
 
     /// S'encarrega de decidir quina és la millor orientació
@@ -178,7 +178,7 @@ private slots:
     void endComputeObscurance();
 
 protected:
-    /// la funció que es fa servir pel rendering
+    /// La funció que es fa servir pel rendering
     RenderFunction m_renderFunction;
 
 private:
@@ -263,6 +263,6 @@ private:
     vtkPlanes *m_clippingPlanes;
 };
 
-};  //  end  namespace udg
+};  // End namespace udg
 
 #endif

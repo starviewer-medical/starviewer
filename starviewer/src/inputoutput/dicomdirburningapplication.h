@@ -3,7 +3,8 @@
 
 #include <QString>
 
-#include "createdicomdir.h" // Per utilitzar CreateDicomdir::recordDeviceDicomDir, per tal de conèixer si es vol gravar en CD o DVD
+// Per utilitzar CreateDicomdir::recordDeviceDicomDir, per tal de conèixer si es vol gravar en CD o DVD
+#include "createdicomdir.h"
 
 namespace udg {
 
@@ -37,9 +38,8 @@ public:
     /// Retorna l'últim error que s'ha produit
     DICOMDIRBurningApplicationError getLastError() const;
 
-    /** Grava el fitxer iso que es troba al path especificat a l'atribut m_isoPath en un CD o DVD
-     * @return true si el fitxer iso s'ha gravat correctament i false en cas contrari
-     */
+    /// Grava el fitxer iso que es troba al path especificat a l'atribut m_isoPath en un CD o DVD
+    /// @return true si el fitxer iso s'ha gravat correctament i false en cas contrari
     bool burnIsoImageFile();
 
 private:

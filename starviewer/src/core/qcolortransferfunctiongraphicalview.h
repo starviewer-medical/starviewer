@@ -22,7 +22,7 @@ public:
     /// Assigna la funció de transferència de color.
     void setColorTransferFunction(const ColorTransferFunction &colorTransferFunction);
     /// Demana que s'actualitzi el fons després de moure el ratolí
-    /// \todo Es podria fer privat i el node com a classe aniuada privada.
+    /// \TODO Es podria fer privat i el node com a classe aniuada privada.
     void requestBackgroundUpdate();
     // void fitInView();    // per ajustar el zoom automàticament
 
@@ -76,6 +76,6 @@ private:
 
 };
 
-} // namespace udg
+} // End namespace udg
 
 #endif // QCOLORTRANSFERFUNCTIONGRAPHICALVIEW_H

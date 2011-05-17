@@ -45,7 +45,7 @@ public:
     void resetView(CameraOrientationType view);
 
 signals:
-    /// senyal que indica que algun dels plans han canviat
+    /// Senyal que indica que algun dels plans han canviat
     void planesHasChanged(void);
 
 public slots:
@@ -67,17 +67,17 @@ public slots:
     void setWindowLevel(double window, double level);
     void setTransferFunction(TransferFunction *transferFunction);
 
-    /// mètodes per controlar la visibilitat de l'outline
+    /// Mètodes per controlar la visibilitat de l'outline
     void enableOutline(bool enable);
     void outlineOn();
     void outlineOff();
 
-    /// mètodes per controlar la visibilitat de l'orientation marker widget
+    /// Mètodes per controlar la visibilitat de l'orientation marker widget
     void enableOrientationMarker(bool enable);
     void orientationMarkerOn();
     void orientationMarkerOff();
 
-    /// chapussa per agafar els events dels image plane widgets i enviar una senya conforme han canviat \TODO mirar si es pot millorar un mètode en comptes de fer això
+    /// Chapussa per agafar els events dels image plane widgets i enviar una senya conforme han canviat \TODO mirar si es pot millorar un mètode en comptes de fer això
     void planeInteraction();
 
 protected:
@@ -113,13 +113,13 @@ protected:
     /// Valors dels window level per defecte. Pot venir donat pel DICOM o assignat per nosaltres a un valor estàndar de constrast
     double m_defaultWindow, m_defaultLevel;
 
-    /// control de visibilitat dels plans
+    /// Control de visibilitat dels plans
     bool m_axialPlaneVisible, m_sagitalPlaneVisible, m_coronalPlaneVisible;
 
-    /// control de visibilitat de l'outline i l'orientation marker widget \TODO és possible que aquests membres acabin sent superflus i innecessaris
+    /// Control de visibilitat de l'outline i l'orientation marker widget \TODO és possible que aquests membres acabin sent superflus i innecessaris
     bool m_isOutlineEnabled;
 };
 
-};  //  end  namespace udg
+};  // End namespace udg
 
 #endif

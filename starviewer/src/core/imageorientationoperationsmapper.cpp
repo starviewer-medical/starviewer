@@ -68,7 +68,8 @@ void ImageOrientationOperationsMapper::initializeOrientationTable()
     const QString HeadAnterior(Orientation::HeadLabel + "\\" + Orientation::AnteriorLabel);
     const QString HeadPosterior(Orientation::HeadLabel + "\\" + Orientation::PosteriorLabel);
 
-    m_orientationMappingTable.insert(AnteriorFeet + "-" + AnteriorHead, Rotate180DegreesAndFlip); // Per passar de AF -> AH calen 2 rotacions i 1 flip horitzontal
+    // Per passar de AF -> AH calen 2 rotacions i 1 flip horitzontal
+    m_orientationMappingTable.insert(AnteriorFeet + "-" + AnteriorHead, Rotate180DegreesAndFlip);
     m_orientationMappingTable.insert(AnteriorFeet + "-" + PosteriorFeet, Flip);
     m_orientationMappingTable.insert(AnteriorFeet + "-" + PosteriorHead, Rotate180Degrees);
     m_orientationMappingTable.insert(AnteriorFeet + "-" + HeadAnterior, Rotate90Degrees);
@@ -255,4 +256,4 @@ QString ImageOrientationOperationsMapper::formatOrientationLabel(const QString &
     return labelCopy;
 }
 
-} // end namespace udg
+} // End namespace udg

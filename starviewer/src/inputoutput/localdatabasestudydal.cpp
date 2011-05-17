@@ -142,7 +142,8 @@ qlonglong LocalDatabaseStudyDAL::getPatientIDFromStudyInstanceUID(const QString 
     }
     else
     {
-        if (rows >= 1) //A la row 0 hi ha el header
+        // A la row 0 hi ha el header
+        if (rows >= 1)
         {
             //Si cerquem per UID només podem tenir un resultat, ja que UID és camp clau al a taula Study
             patientID = QString(reply[1]).toLongLong();

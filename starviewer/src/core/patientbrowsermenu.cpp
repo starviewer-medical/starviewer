@@ -64,7 +64,8 @@ void PatientBrowserMenu::setPatient(Patient *patient)
                     itemsList << itemPair;
                 }
             }
-            else // Només tenim un sol volum per la sèrie
+            // Només tenim un sol volum per la sèrie
+            else
             {
                 Volume *volume = series->getFirstVolume();
                 QPair<QString, QString> itemPair;

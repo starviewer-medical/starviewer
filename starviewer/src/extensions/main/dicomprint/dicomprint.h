@@ -19,8 +19,8 @@ public:
     enum DicomPrintError { CanNotConnectToDicomPrinter, ErrorSendingDicomPrintJob, ErrorLoadingImagesToPrint, ErrorCreatingPrintSpool, UnknowError, Ok,
                            NotRespondedAsExpected };
 
-    /*retorna el número de pàgines impreses, com ara tenim el hack de que només poden enviar cada vegada filmbox a imprimir podria ser que s'hagués
-     enviat a imprimir correctament alguna de les pàgines, per tant per saber si és aquest el cas indiquem el número de pàgines que s'han imprés*/
+    /// retorna el número de pàgines impreses, com ara tenim el hack de que només poden enviar cada vegada filmbox a imprimir podria ser que s'hagués
+    /// enviat a imprimir correctament alguna de les pàgines, per tant per saber si és aquest el cas indiquem el número de pàgines que s'han imprés
     int print(DicomPrinter printer, DicomPrintJob printJob);
 
     ///Comprova si amb la configuració passada per paràmetre una impressora respón

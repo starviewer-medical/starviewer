@@ -32,9 +32,8 @@ public:
     void setPacsManager(PacsManager *pacsManager);
 
 protected :
-    /** Event que s'activa al tancar al rebren un event de tancament
-     * @param event de tancament
-     */
+    /// Event que s'activa al tancar al rebren un event de tancament
+    /// @param event de tancament
     void closeEvent(QCloseEvent *ce);
 
 private slots:
@@ -84,9 +83,9 @@ private:
     ///Retorna l'objecte Study relatiu a PACSJob, només funciona amb PACSJob de tipus RetrieveDICOMFilesFromPACSJob i SendDICOMFilesToPACSJob
     Study* getStudyFromPACSJob(PACSJob *pacsJob);
 
-    /**Retorna un QString per mostrar-lo per la QOperationStateScreen indicant com ha finalitzat un PACSJob
-      *Per RetrieveDICOMFilesFromPACS pot retornar : RETRIEVED, CANCELLED, ERROR
-      *Per SendDICOMFilesToPACS pot retornar : SENT, CANCELLED, ERROR*/
+    /// Retorna un QString per mostrar-lo per la QOperationStateScreen indicant com ha finalitzat un PACSJob
+    /// Per RetrieveDICOMFilesFromPACS pot retornar : RETRIEVED, CANCELLED, ERROR
+    /// Per SendDICOMFilesToPACS pot retornar : SENT, CANCELLED, ERROR
     QString getPACSJobStatusResume(PACSJob *pacsJob);
 
     ///Ens retorna un QTreeWidgetItem a partir del seu pacsJobID si no el trobem es retorna null;

@@ -34,12 +34,14 @@ bool launchCrashReporter(const char *dumpDirPath, const char *minidumpId, void *
 
     pid_t pid = fork();
 
-    if (pid == -1) // fork failed
+    if (pid == -1)
     {
+        // Fork failed
         return false;
     }
     if (pid == 0) 
-    { // we are the fork
+    { 
+        // We are the fork
         execl(static_cast<CrashHandler*>(crashHandler)->getCrashReporterPath(),
               static_cast<CrashHandler*>(crashHandler)->getCrashReporterPath(),
               dumpDirPath,
@@ -50,7 +52,7 @@ bool launchCrashReporter(const char *dumpDirPath, const char *minidumpId, void *
         return false;
     }
 
-    // we called fork()
+    // We called fork()
     return true;
 }
 
@@ -68,14 +70,16 @@ static bool launchCrashReporter(const wchar_t *dumpDirPath, const wchar_t *minid
 
     const char *crashReporterPath = static_cast<CrashHandler*>(crashHandler)->getCrashReporterPath();
 
-    //convert crashReporterPath to widechars, which sadly means the product name must be Latin1
+    // Convert crashReporterPath to widechars, which sadly means the product name must be Latin1
     wchar_t crashReporterPathWchar[256];
     char *out = (char*)crashReporterPathWchar;
     const char *in = crashReporterPath - 1;
     do
     {
-        *out++ = *++in; //latin1 chars fit in first byte of each wchar
-        *out++ = '\0';  //every second byte is NULL
+        // Latin1 chars fit in first byte of each wchar
+        *out++ = *++in;
+        // Every second byte is NULL
+        *out++ = '\0';
     }
     while (*in);
 
@@ -111,11 +115,11 @@ static bool launchCrashReporter(const wchar_t *dumpDirPath, const wchar_t *minid
 CrashHandler::CrashHandler()
 {
 #ifndef NO_CRASH_REPORTER
-    // primer comprovem que existeixi el directori ~/.starviewer/dumps/ on guradarem els dumps
+    // Primer comprovem que existeixi el directori ~/.starviewer/dumps/ on guradarem els dumps
     QDir dumpsDir = udg::UserDataRootPath + "dumps/";
     if (!dumpsDir.exists())
     {
-        // creem el directori
+        // Creem el directori
         dumpsDir.mkpath(dumpsDir.absolutePath());
     }
 

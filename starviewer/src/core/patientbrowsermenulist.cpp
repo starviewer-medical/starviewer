@@ -43,7 +43,7 @@ void PatientBrowserMenuList::addItemsGroup(const QString &caption, const QList<Q
     groupLayout->addWidget(captionLabel);
     groupLayout->addLayout(gridLayoutWidgets);
 
-    //comptem el nombre de series que seran visibles
+    // Comptem el nombre de series que seran visibles
     int numberOfItems = itemsList.count();
 
     int maxColumns = 2;
@@ -112,7 +112,8 @@ QString PatientBrowserMenuList::getMarkedItem() const
 
 bool PatientBrowserMenuList::event(QEvent * event)
 {
-    if (event->type() == QEvent::Close) // s'ha pulsat l'escape
+    // Si s'ha pulsat l'escape
+    if (event->type() == QEvent::Close)
     {
         emit close();
     }

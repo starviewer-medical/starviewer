@@ -49,7 +49,7 @@ QString DICOMSequenceAttribute::toString()
         result += "\n" + item->toString();
     }
 
-    //Per aconseguir la identació
+    // Per aconseguir la identació
     result.replace(QString("\n"), QString("\n  "));
 
     return result;

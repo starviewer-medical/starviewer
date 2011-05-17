@@ -6,7 +6,8 @@
 #ifdef _WIN32
     #include <windows.h>
 #else
-    #include <sys/statvfs.h> // per statvfs
+    // Per statvfs
+    #include <sys/statvfs.h>
 #endif // _WIN32
 
 namespace udg{
@@ -46,16 +47,19 @@ qint64 HardDiskInformation::getDirectorySizeInBytes(const QString &directoryPath
     QStringList directoryList;
     qint64 directorySize = 0;
 
-    fileInfoList = directory.entryInfoList(QDir::Files);//llista de fitxers del directori
+    // Llista de fitxers del directori
+    fileInfoList = directory.entryInfoList(QDir::Files);
 
     foreach (QFileInfo fileInfo, fileInfoList)
     {
         directorySize += fileInfo.size();
     }
 
-    directoryList = directory.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);//obtenim llistat de subdirectoris
+    // Obtenim llistat de subdirectoris
+    directoryList = directory.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
 
-    foreach (const QString &subdirectory, directoryList) //per cada subdirectori
+    // Per cada subdirectori
+    foreach (const QString &subdirectory, directoryList)
     {
         directorySize += getDirectorySizeInBytes(directoryPath + "/" + subdirectory);
     }
@@ -131,10 +135,10 @@ void HardDiskInformation::logLastError(const QString &additionalInformation)
 {
     QString qtErrorMessage;
 #ifdef Q_OS_WIN32
-    // obtenim el missatge d'error
+    // Obtenim el missatge d'error
     TCHAR errorMessage[512];
     FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, 0, GetLastError(), 0, errorMessage, 1024, NULL);
-    // formatem a QString
+    // Formatem a QString
 #ifdef UNICODE
     qtErrorMessage = QString::fromUtf16((ushort*)errorMessage);
 #else
@@ -148,4 +152,4 @@ void HardDiskInformation::logLastError(const QString &additionalInformation)
     ERROR_LOG("Error: " + qtErrorMessage + ". " + additionalInformation);
 }
 
-}; //end udg namespace
+}; // End udg namespace

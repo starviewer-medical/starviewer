@@ -151,16 +151,19 @@ bool DICOMAnonymizer::anonymizeDICOMFile(const QString &inputPathFile, const QSt
         return false;
     }
 
-    m_gdcmAnonymizer->Replace(gdcm::Tag(0x0010, 0x0010), qPrintable(m_patientNameAnonymized)); //Estableix el mom del pacient anonimitzat
+    // Estableix el mom del pacient anonimitzat
+    m_gdcmAnonymizer->Replace(gdcm::Tag(0x0010, 0x0010), qPrintable(m_patientNameAnonymized));
 
     if (getReplacePatientIDInsteadOfRemove())
     {
-        m_gdcmAnonymizer->Replace(gdcm::Tag(0x0010, 0x0020), qPrintable(getAnonimyzedPatientID(originalPatientID))); //ID Pacient
+        // ID Pacient
+        m_gdcmAnonymizer->Replace(gdcm::Tag(0x0010, 0x0020), qPrintable(getAnonimyzedPatientID(originalPatientID)));
     }
 
     if (getReplaceStudyIDInsteadOfRemove())
     {
-        m_gdcmAnonymizer->Replace(gdcm::Tag(0x0020, 0x0010), qPrintable(getAnonymizedStudyID(originalStudyInstanceUID))); //ID Estudi
+        // ID Estudi
+        m_gdcmAnonymizer->Replace(gdcm::Tag(0x0020, 0x0010), qPrintable(getAnonymizedStudyID(originalStudyInstanceUID)));
     }
 
     if (getRemovePrivateTags())

@@ -95,7 +95,7 @@ private:
     int m_firstSliceInterval;
     int m_lastSliceInterval;
 
-    /// ens indica si la reproducció va cap endavant o cap endarera
+    /// Ens indica si la reproducció va cap endavant o cap endarera
     int m_nextStep;
 
     /// Velocitat expresada en imatges per segon

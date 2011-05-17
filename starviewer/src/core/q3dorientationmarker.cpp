@@ -19,9 +19,9 @@ Q3DOrientationMarker::Q3DOrientationMarker(vtkRenderWindowInteractor *interactor
  : QObject(parent)
 {
 
-  // Extret de http://public.kitware.com/cgi-bin/viewcvs.cgi/*checkout*/Examples/GUI/Tcl/ProbeWithSplineWidget.tcl?root=VTK&content-type=text/plain
-//  Create a composite orientation marker using
-//  vtkAnnotatedCubeActor and vtkAxesActor.
+// Extret de http://public.kitware.com/cgi-bin/viewcvs.cgi/*checkout*/Examples/GUI/Tcl/ProbeWithSplineWidget.tcl?root=VTK&content-type=text/plain
+// Create a composite orientation marker using
+// vtkAnnotatedCubeActor and vtkAxesActor.
 //
     // \TODO se suposa que aquesta orientació és correcta si estem veient el volum en axial. Caldria mirar el sistema de com posar les etiquetes correctament, automàticament a partir per exemple del tag dicom o deixar-ho en mans de la classe que ho faci servir i proporcionar mètodes d'aquesta classe per posar les etiquetes correctament
     m_cubeActor = vtkAnnotatedCubeActor::New();
@@ -95,7 +95,7 @@ Q3DOrientationMarker::Q3DOrientationMarker(vtkRenderWindowInteractor *interactor
     textProp3->ShallowCopy(textProp);
     axes->GetZAxisCaptionActor2D()->SetCaptionTextProperty(textProp3);
 
-//     Combine the two actors into one with vtkPropAssembly ...
+// Combine the two actors into one with vtkPropAssembly ...
 //
     vtkPropAssembly *assembly = vtkPropAssembly::New();
 //     vtkAssembly *assembly = vtkAssembly::New();
@@ -149,4 +149,4 @@ void Q3DOrientationMarker::disable()
     this->setEnabled(false);
 }
 
-} // end namespace udg
+} // End namespace udg

@@ -4,7 +4,7 @@
 #include "logging.h"
 #include "drawerpolygon.h"
 #include "drawer.h"
-//vtk
+// Vtk
 #include <vtkPoints.h>
 #include <vtkLine.h>
 
@@ -36,7 +36,7 @@ void PolylineTemporalROITool::setToolData(ToolData *data)
     // Fem aquesta comparació perquè a vegades ens passa la data que ja tenim a m_myData
     if (m_myData != data)
     {
-        // creem de nou les dades
+        // Creem de nou les dades
         m_toolData = data;
         m_myData = qobject_cast<PolylineTemporalROIToolData*>(data);
     }
@@ -111,9 +111,9 @@ double PolylineTemporalROITool::computeTemporalMean()
     }
 
     TemporalImageType::RegionType region = m_myData->getTemporalImage()->GetLargestPossibleRegion();
-    //std::cout<<"Region="<<region<<std::endl;
+    // std::cout<<"Region="<<region<<std::endl;
     TemporalImageType::SizeType size = region.GetSize();
-    //std::cout<<"Size="<<size<<std::endl;
+    // std::cout<<"Size="<<size<<std::endl;
     int temporalSize = size[0];
     QVector<double> mean (temporalSize);
     QVector<double> aux (temporalSize);
@@ -173,12 +173,18 @@ double PolylineTemporalROITool::computeTemporalMean()
     switch (currentView)
     {
     case Q2DViewer::Axial:
-        rayP1[0] = bounds[0];// xmin
-        rayP1[1] = bounds[2];// y
-        rayP1[2] = bounds[4];// z
-        rayP2[0] = bounds[1];// xmax
-        rayP2[1] = bounds[2];// y
-        rayP2[2] = bounds[4];// z
+        // xmin
+        rayP1[0] = bounds[0];
+        // y
+        rayP1[1] = bounds[2];
+        // z
+        rayP1[2] = bounds[4];
+        // xmax
+        rayP2[0] = bounds[1];
+        // y
+        rayP2[1] = bounds[2];
+        // z
+        rayP2[2] = bounds[4];
 
         rayPointIndex = 1;
         intersectionIndex = 0;
@@ -186,12 +192,18 @@ double PolylineTemporalROITool::computeTemporalMean()
     break;
 
     case Q2DViewer::Sagital:
-        rayP1[0] = bounds[0];// xmin
-        rayP1[1] = bounds[2];// ymin
-        rayP1[2] = bounds[4];// zmin
-        rayP2[0] = bounds[0];// xmin
-        rayP2[1] = bounds[2];// ymin
-        rayP2[2] = bounds[5];// zmax
+        // xmin
+        rayP1[0] = bounds[0];
+        // ymin
+        rayP1[1] = bounds[2];
+        // zmin
+        rayP1[2] = bounds[4];
+        // xmin
+        rayP2[0] = bounds[0];
+        // ymin
+        rayP2[1] = bounds[2];
+        // zmax
+        rayP2[2] = bounds[5];
 
         rayPointIndex = 1;
         intersectionIndex = 2;
@@ -199,12 +211,18 @@ double PolylineTemporalROITool::computeTemporalMean()
     break;
 
     case Q2DViewer::Coronal:
-        rayP1[0] = bounds[0];// xmin
-        rayP1[1] = bounds[2];// ymin
-        rayP1[2] = bounds[4];// zmin
-        rayP2[0] = bounds[1];// xmax
-        rayP2[1] = bounds[2];// ymin
-        rayP2[2] = bounds[4];// zmin
+        // xmin
+        rayP1[0] = bounds[0];
+        // ymin
+        rayP1[1] = bounds[2];
+        // zmin
+        rayP1[2] = bounds[4];
+        // xmax
+        rayP2[0] = bounds[1];
+        // ymin
+        rayP2[1] = bounds[2];
+        // zmin
+        rayP2[2] = bounds[4];
 
         rayPointIndex = 2;
         intersectionIndex = 0;
@@ -252,7 +270,9 @@ double PolylineTemporalROITool::computeTemporalMean()
                 secondIntersection = intersectionList.at(endPosition);
 
                 // Tractem els dos sentits de les interseccions
-                if (firstIntersection[intersectionIndex] <= secondIntersection[intersectionIndex])//d'esquerra cap a dreta
+
+                // D'esquerra cap a dreta
+                if (firstIntersection[intersectionIndex] <= secondIntersection[intersectionIndex])
                 {
                     while (firstIntersection[intersectionIndex] <= secondIntersection[intersectionIndex])
                     {
@@ -265,7 +285,8 @@ double PolylineTemporalROITool::computeTemporalMean()
                         firstIntersection[intersectionIndex] += spacing[0];
                     }
                 }
-                else // De dreta cap a esquerra
+                // De dreta cap a esquerra
+                else 
                 {
                     while (firstIntersection[intersectionIndex] >= secondIntersection[intersectionIndex])
                     {
@@ -296,12 +317,12 @@ double PolylineTemporalROITool::computeTemporalMean()
         }
     }
 
-    //std::cout<<"Num of voxels:"<<numberOfVoxels<<std::endl;
+    // std::cout<<"Num of voxels:"<<numberOfVoxels<<std::endl;
 
     for (j=0;j<temporalSize;j++)
     {
         mean[j] /= numberOfVoxels;
-        //std::cout<<"i: "<<j<<": "<<mean[j]<<std::endl;
+        // std::cout<<"i: "<<j<<": "<<mean[j]<<std::endl;
     }
 
     this->m_myData->setMeanVector(mean);

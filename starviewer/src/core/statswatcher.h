@@ -9,7 +9,7 @@
 
 #include <QObject>
 
-// fwd declarations
+// Fwd declarations
 class QAbstractButton;
 class QAbstractSlider;
 class QAction;
@@ -27,7 +27,8 @@ public:
     void addClicksCounter(QAbstractButton *button);
 
     /// Compta quan una acció s'ha disparat
-    void addTriggerCounter(QMenu *menu);// compta quan es dispara, ja sigui amb un clik o un shortcut
+    // Compta quan es dispara, ja sigui amb un clik o un shortcut
+    void addTriggerCounter(QMenu *menu);
 
     /// Registra les accions fetes sobre un slider
     void addSliderObserver(QAbstractSlider *slider);
@@ -56,6 +57,6 @@ private:
     bool m_registerLogs;
 };
 
-} //end namespace udg
+} // End namespace udg
 
 #endif

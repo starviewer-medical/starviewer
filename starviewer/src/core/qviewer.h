@@ -2,7 +2,7 @@
 #define UDGQVIEWER_H
 
 #include <QWidget>
-// llista de captures de pantalla
+// Llista de captures de pantalla
 #include <QList>
 #include <vtkImageData.h>
 
@@ -314,7 +314,7 @@ protected:
     /// Renderer per defecte
     vtkRenderer *m_renderer;
 
-    /// indica si el menú de contexte està actiu o no. Per defecte sempre està actiu
+    /// Indica si el menú de contexte està actiu o no. Per defecte sempre està actiu
     bool m_contextMenuActive;
 
     /// ToolProxy
@@ -354,6 +354,6 @@ private:
     QStackedLayout *m_stackedLayout;
 };
 
-};  //  end  namespace udg {
+};  // End namespace udg
 
 #endif

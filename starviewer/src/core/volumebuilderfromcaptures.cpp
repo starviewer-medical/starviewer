@@ -37,7 +37,8 @@ void VolumeBuilderFromCaptures::addCapture(vtkImageData *data)
     // \TODO Realitzem alguna comprovació o deixem que el vtkImageAppend es queixi?
     vtkSmartPointer<vtkImageFlip> imageFlip = vtkSmartPointer<vtkImageFlip>::New();
     imageFlip->SetInput(data);
-    imageFlip->SetFilteredAxis(1); //Flip horitzontal
+    // Flip horitzontal
+    imageFlip->SetFilteredAxis(1);
     imageFlip->Update();
 
     m_vtkImageAppend->AddInput(imageFlip->GetOutput());
@@ -69,12 +70,12 @@ Volume* VolumeBuilderFromCaptures::build()
     Q_ASSERT(m_parentStudy);
     Q_ASSERT(m_vtkImageAppend->GetNumberOfInputs());
 
-    //Creem la nova sèrie
+    // Creem la nova sèrie
     Series *newSeries = new Series();
 
-    //Omplim la informació de la sèrie a partir de la sèrie de referència
+    // Omplim la informació de la sèrie a partir de la sèrie de referència
 
-    //Assignem la modalitat segons el valor introduit. El valor per defecte és 'OT' (Other).
+    // Assignem la modalitat segons el valor introduit. El valor per defecte és 'OT' (Other).
     newSeries->setModality(m_modality);
     newSeries->setSOPClassUID(QString(UID_SecondaryCaptureImageStorage));
 
@@ -86,22 +87,22 @@ Volume* VolumeBuilderFromCaptures::build()
     newSeries->setSeriesNumber(QString("0000")+QString::number(m_parentStudy->getSeries().count()));
     newSeries->setDescription(this->getSeriesDescription());
 
-     //Assignem la sèrie a l'estudi al qual partenyia l'inputVolume.
+    // Assignem la sèrie a l'estudi al qual partenyia l'inputVolume.
     newSeries->setParentStudy(m_parentStudy);
     m_parentStudy->addSeries(newSeries);
 
-    //Obtenim el nou vtkImageData a partir de la sortida del vtkImageAppend.
-    //Fem un flip horitzontal per tal utilitzar el mateix sistema de coordenades que DICOM.
+    // Obtenim el nou vtkImageData a partir de la sortida del vtkImageAppend.
+    // Fem un flip horitzontal per tal utilitzar el mateix sistema de coordenades que DICOM.
     m_vtkImageAppend->Update();
 
     vtkSmartPointer<vtkImageData> newVtkData = vtkSmartPointer<vtkImageData>::New();
     newVtkData->ShallowCopy(m_vtkImageAppend->GetOutput());
 
-    //Creem el nou volume
+    // Creem el nou volume
     Volume *newVolume = new Volume();
     newSeries->addVolume(newVolume);
 
-    //Generem les noves imatges a partir del vtkData generat per vtkImageAppend
+    // Generem les noves imatges a partir del vtkData generat per vtkImageAppend
     int samplesPerPixel = newVtkData->GetNumberOfScalarComponents();
     int bitsAllocated;
     int bitsStored;
@@ -208,7 +209,7 @@ Volume* VolumeBuilderFromCaptures::build()
     newVolume->setNumberOfPhases(1);
     newVolume->setNumberOfSlicesPerPhase(newSeries->getImages().count());
 
-    //Informació de DEBUG
+    // Informació de DEBUG
     DEBUG_LOG(QString("\nNova sèrie generada:") +
      QString("\n  SeriesInstanceUID: ") + newSeries->getInstanceUID() +
      QString("\n  SeriesNumber: ") + newSeries->getSeriesNumber() +

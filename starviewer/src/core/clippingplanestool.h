@@ -49,6 +49,6 @@ protected:
     vtkEventQtSlotConnect *m_vtkQtConnections;
 };
 
-} // end namespace udg
+} // End namespace udg
 
 #endif

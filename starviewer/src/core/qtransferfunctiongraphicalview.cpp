@@ -127,4 +127,4 @@ void QTransferFunctionGraphicalView::disableEditingConnections()
     m_editingConnectionsEnabled = false;
 }
 
-} // namespace udg
+} // End namespace udg

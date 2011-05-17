@@ -74,7 +74,8 @@ bool QListenRisRequestsConfigurationScreen::applyChanges()
         if (m_textPortListenRisRequests->isModified())
         {
             settings.setValue(InputOutputSettings::RISRequestsPort, m_textPortListenRisRequests->text().toInt());
-            m_textPortListenRisRequests->setModified(false);//Indiquem que no s'ha modfiicat perquè ja hem guardat el seu valor
+            // Indiquem que no s'ha modfiicat perquè ja hem guardat el seu valor
+            m_textPortListenRisRequests->setModified(false);
         }
 
         settings.setValue(InputOutputSettings::RISRequestViewOnceRetrieved, m_checkBoxViewAutomaticallyStudies->isChecked());

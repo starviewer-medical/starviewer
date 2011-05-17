@@ -85,11 +85,12 @@ void QCrashReporter::restartButtonClickedSlot()
 
     QString starviewerPath = QCoreApplication::applicationDirPath() + "/" + STARVIEWER_EXE;
 #ifdef WIN32
-    /*En windows per poder executar l'starviewer hem de tenir en compte que si està en algun directori que conte espais
-     *com el directori C:\Program Files\Starviewer\starviewer.exe, hem de posar el path entre cometes
-     * per a que no ho interpreti com a paràmetres, per exemple "C:\Program Files\Starviewer\starviewer.exe" */
+    // En windows per poder executar l'starviewer hem de tenir en compte que si està en algun directori que conte espais
+    // com el directori C:\Program Files\Starviewer\starviewer.exe, hem de posar el path entre cometes
+    // per a que no ho interpreti com a paràmetres, per exemple "C:\Program Files\Starviewer\starviewer.exe"
 
-     starviewerPath = "\"" + starviewerPath + "\""; //afegim les cometes per si algun dels directori conté espai
+    //afegim les cometes per si algun dels directori conté espai
+     starviewerPath = "\"" + starviewerPath + "\"";
 #endif
 
     restart(starviewerPath);

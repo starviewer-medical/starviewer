@@ -14,8 +14,9 @@
 #include "volume.h"
 #include "logging.h"
 
-// dcmtk: presentation state
-#include <dvpstat.h> // DVPresentationState
+// Dcmtk: presentation state
+// DVPresentationState
+#include <dvpstat.h>
 
 namespace udg {
 
@@ -25,7 +26,7 @@ ShutterFilter::ShutterFilter()
     m_circularPolyDataStencil = 0;
     m_polygonalPolyDataStencil = 0;
     m_inputData = 0;
-    // per defecte el background és negre
+    // Per defecte el background és negre
     m_background = 0;
 }
 
@@ -52,12 +53,12 @@ void ShutterFilter::setPresentationStateShutters(const QString &presentationStat
             status = presentationStateHandler->read(*presentationStateData);
             if (status.good())
             {
-                // obtenim els paràmetres de les coordenades per mapejar bé els punts a l'espai
+                // Obtenim els paràmetres de les coordenades per mapejar bé els punts a l'espai
                 double origin[3];
                 double spacing[3];
                 m_inputData->getOrigin(origin);
                 m_inputData->getSpacing(spacing);
-                // càlcul d'un background adequat amb el rang de dades. Els valors de background poden anar de 0 o 65535 i el rang de dades pot ser qualsevol altre, com per exemple 127..255;
+                // Càlcul d'un background adequat amb el rang de dades. Els valors de background poden anar de 0 o 65535 i el rang de dades pot ser qualsevol altre, com per exemple 127..255;
                 double range[2];
                 int backValue = presentationStateHandler->getShutterPresentationValue();
                 m_inputData->getScalarRange(range);
@@ -109,7 +110,7 @@ void ShutterFilter::setPresentationStateShutters(const QString &presentationStat
                     QString msg = "Hi ha POLYGONAL shutter al presentation state, #de punts:";
                     msg += QString("%1 amb coordenades: ").arg(vertices);
                     //\TODO caldria passar això al mètode propi de la classe?
-                    // creem els punts
+                    // Creem els punts
                     vtkPoints *points = vtkPoints::New();
                     vtkCellArray *vertexs = vtkCellArray::New();
                     vertexs->InsertNextCell(vertices + 1);
@@ -130,7 +131,7 @@ void ShutterFilter::setPresentationStateShutters(const QString &presentationStat
                             msg += "???\\???,\n";
                         }
                     }
-                    // per tancar el polígon
+                    // Per tancar el polígon
                     vertexs->InsertCellPoint(0);
                     vtkPolyData *polyData = vtkPolyData::New();
                     polyData->SetPoints(points);
@@ -139,10 +140,11 @@ void ShutterFilter::setPresentationStateShutters(const QString &presentationStat
                     vtkLinearExtrusionFilter *extruder = vtkLinearExtrusionFilter::New();
                     extruder->SetScaleFactor(10);
                     extruder->SetExtrusionTypeToNormalExtrusion();
-                    extruder->SetVector(0, 0, 1); // assumirem ara per ara, només es fa en axial
+                    // Assumirem ara per ara, només es fa en axial
+                    extruder->SetVector(0, 0, 1);
                     extruder->SetInput(polyData);
 
-                    // creem l'stencil
+                    // Creem l'stencil
                     m_polygonalPolyDataStencil = vtkAtamaiPolyDataToImageStencil2::New();
                     m_polygonalPolyDataStencil->SetInput(extruder->GetOutput());
                     extruder->Delete();
@@ -186,7 +188,8 @@ void ShutterFilter::setPresentationStateShutters(const QString &presentationStat
                             bool isROI = false;
                             unsigned int width = 0, height = 0, left = 0, top = 0;
                             const void *data = 0;
-                            Uint16 foreground = 0; // color amb que es pinta l'overlay
+                            // Color amb que es pinta l'overlay
+                            Uint16 foreground = 0;
                             status = presentationStateHandler->getOverlayData(
                                     layer,
                                     overlayIndex,
@@ -238,7 +241,7 @@ void ShutterFilter::setRectangularShutter(double leftVertical, double rightVerti
     {
         leftVertical += 0.001;
     }
-    // comencem per la cantonada inferior esquerre i continuem en sentit anti-horari
+    // Comencem per la cantonada inferior esquerre i continuem en sentit anti-horari
     points->InsertPoint(0, leftVertical, lowerHorizontal, origin[2] - 1.);
     points->InsertPoint(1, rightVertical, lowerHorizontal, origin[2] - 1.);
     points->InsertPoint(2, rightVertical, upperHorizontal, origin[2] - 1.);
@@ -248,7 +251,8 @@ void ShutterFilter::setRectangularShutter(double leftVertical, double rightVerti
     vertexs->InsertNextCell(5);
     for (int i = 0; i < 5; i++)
     {
-        vertexs->InsertCellPoint(i % 4); // 0,1,2,3,0
+        // 0,1,2,3,0
+        vertexs->InsertCellPoint(i % 4);
     }
 
     vtkPolyData *polyData = vtkPolyData::New();
@@ -258,7 +262,8 @@ void ShutterFilter::setRectangularShutter(double leftVertical, double rightVerti
     vtkLinearExtrusionFilter *extruder = vtkLinearExtrusionFilter::New();
     extruder->SetScaleFactor(2);
     extruder->SetExtrusionTypeToNormalExtrusion();
-    extruder->SetVector(0, 0, 1); // assumirem ara per ara, només es fa en axial
+    // Assumirem ara per ara, només es fa en axial
+    extruder->SetVector(0, 0, 1);
     extruder->SetInput(polyData);
 
     m_rectangularPolyDataStencil = vtkPolyDataToImageStencil::New();
@@ -268,7 +273,7 @@ void ShutterFilter::setRectangularShutter(double leftVertical, double rightVerti
 
 void ShutterFilter::setPolygonalShutter(std::vector<double[2]> vtkNotUsed(vertexs))
 {
-    //\TODO per implementar
+    // \TODO per implementar
     DEBUG_LOG("Mètode no implementat");
 }
 
@@ -283,13 +288,15 @@ void ShutterFilter::setCircularShutter(double center[2], double radius)
     vtkRegularPolygonSource *circle = vtkRegularPolygonSource::New();
     circle->SetCenter(center[0], center[1], origin[2] - 1.0);
     circle->SetRadius(radius);
-    circle->SetNumberOfSides(35); // com més sides, més línies, per tant el cercle tindria més resolució.
+    // Com més sides, més línies, per tant el cercle tindria més resolució.
+    circle->SetNumberOfSides(35);
     circle->GeneratePolygonOff();
 
     vtkLinearExtrusionFilter *extruder = vtkLinearExtrusionFilter::New();
     extruder->SetScaleFactor(2);
     extruder->SetExtrusionTypeToNormalExtrusion();
-    extruder->SetVector(0, 0, 1); // assumirem ara per ara, només es fa en axial
+    // Assumirem ara per ara, només es fa en axial
+    extruder->SetVector(0, 0, 1);
     extruder->SetInput(circle->GetOutput());
 
     m_circularPolyDataStencil = vtkPolyDataToImageStencil::New();
@@ -299,19 +306,19 @@ void ShutterFilter::setCircularShutter(double center[2], double radius)
 
 void ShutterFilter::setBitmapShutter(vtkImageData *vtkNotUsed(bitmap))
 {
-    //\TODO per implementar
+    // \TODO per implementar
     DEBUG_LOG("Mètode no implementat");
 }
 
 void ShutterFilter::setBitmapShutter(unsigned char *data, unsigned int vtkNotUsed(width), unsigned int vtkNotUsed(height), unsigned int vtkNotUsed(left), unsigned int vtkNotUsed(top), unsigned int vtkNotUsed(foreground))
 {
-    // creem la màscara que farà de bitmap shutter
-    // coses a tenir en compte
+    // Creem la màscara que farà de bitmap shutter
+    // Coses a tenir en compte
     // La màscara ha de tenir el mateix extent que l'input
-    //      ara mateix només ho fem per una imatge per tant anem a saco
+    // Ara mateix només ho fem per una imatge per tant anem a saco
     // S'ha de tenir en compte que podem tenir més shutters a part (poly, circle, etc) Fer bé la combinació.
 
-    // creem el vtkImageData a partir del bitmap del DICOM
+    // Creem el vtkImageData a partir del bitmap del DICOM
     vtkImageData *bitmapShutter = vtkImageData::New();
     bitmapShutter->SetDimensions(m_inputData->getDimensions());
     bitmapShutter->SetWholeExtent(m_inputData->getWholeExtent());
@@ -333,12 +340,13 @@ void ShutterFilter::setBitmapShutter(unsigned char *data, unsigned int vtkNotUse
         {
             for (int k = 0; k <= wholeExtent[5]; k++)
             {
-                int index = ((wholeExtent[1] + 1) * j * + i) + k * ((wholeExtent[1] + 1) * (wholeExtent[3] + 1)); //  \TODO mirar si això està bé
+                //  \TODO mirar si això està bé
+                int index = ((wholeExtent[1] + 1) * j * + i) + k * ((wholeExtent[1] + 1) * (wholeExtent[3] + 1));
 
-                // get scalar pointer to current pixel
+                // Get scalar pointer to current pixel
                 unsigned char *currentVoxel = (unsigned char *) bitmapShutter->GetScalarPointer(i, j, k);
 
-                // set scalar value accordingly
+                // Set scalar value accordingly
 //                             *currentVoxel = (unsigned char *)data[index];
                 *currentVoxel = unsignedData[index];
 //                 DEBUG_LOG(QString("índex: %1, %2, %3 = %4 : valor: %5").arg(i).arg(j).arg(k).arg(index).arg(&currentVoxel));
@@ -433,13 +441,13 @@ void ShutterFilter::clearRectangularShutter()
 
 void ShutterFilter::clearBitmapShutter()
 {
-    //\TODO per implementar
+    // \TODO per implementar
     DEBUG_LOG("Mètode no implementat");
 }
 
 vtkImageData *ShutterFilter::getOutput()
 {
-    // si hi ha algun shutter l'apliquem sobre la imatge
+    // Si hi ha algun shutter l'apliquem sobre la imatge
     // \TODO falta verificar que la concatenació d'stencils sigui correcta
     // \TODO fer còpia local de l'output i no cal refer el pipeline si es demana més d'un cop
     if (m_inputData)
@@ -457,7 +465,8 @@ vtkImageData *ShutterFilter::getOutput()
         if (m_polygonalPolyDataStencil)
         {
             polygonalStencil = vtkImageStencil::New();
-            if (rectangularStencil) // si hi ha shutter rectangular el concatenem
+            // Si hi ha shutter rectangular el concatenem
+            if (rectangularStencil)
             {
                 polygonalStencil->SetInput(rectangularStencil->GetOutput());
             }
@@ -465,7 +474,7 @@ vtkImageData *ShutterFilter::getOutput()
             {
                 polygonalStencil->SetInput(m_inputData->getVtkData());
             }
-            // això sembla que s'ha de fer així pel sentit en que ens donen els punts
+            // Això sembla que s'ha de fer així pel sentit en que ens donen els punts
             polygonalStencil->ReverseStencilOff();
             polygonalStencil->SetBackgroundValue(m_background);
             polygonalStencil->SetStencil(m_polygonalPolyDataStencil->GetOutput());
@@ -474,11 +483,13 @@ vtkImageData *ShutterFilter::getOutput()
         if (m_circularPolyDataStencil)
         {
             circularStencil = vtkImageStencil::New();
-            if (polygonalStencil) // si hi ha shutter poligonal el concatenem
+            // Si hi ha shutter poligonal el concatenem
+            if (polygonalStencil)
             {
                 circularStencil->SetInput(polygonalStencil->GetOutput());
             }
-            else if (rectangularStencil) // sinó mire si n'hi de rectamgular per concatenar
+            // Sinó mire si n'hi de rectamgular per concatenar
+            else if (rectangularStencil) 
             {
                 circularStencil->SetInput(rectangularStencil->GetOutput());
             }

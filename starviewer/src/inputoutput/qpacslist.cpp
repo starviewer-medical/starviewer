@@ -13,9 +13,12 @@ QPacsList::QPacsList(QWidget *parent)
 {
     setupUi(this);
 
-    m_PacsTreeView->setColumnHidden(0, true); //la columna PacsId està amagada
-    m_PacsTreeView->setColumnHidden(4, true); //la columna PACSAddress està amagada
-    m_PacsTreeView->sortByColumn(1, Qt::AscendingOrder); //ordenem per la columna AETitle
+    // La columna PacsId està amagada
+    m_PacsTreeView->setColumnHidden(0, true);
+    // La columna PACSAddress està amagada
+    m_PacsTreeView->setColumnHidden(4, true);
+    // Ordenem per la columna AETitle
+    m_PacsTreeView->sortByColumn(1, Qt::AscendingOrder);
 
     m_filterPacsByService = PacsDeviceManager::PacsWithQueryRetrieveServiceEnabled;
     m_showQueryPacsDefaultHighlighted = true;
@@ -64,8 +67,10 @@ QList<PacsDevice> QPacsList::getSelectedPacs()
     {
         PacsDevice pacs;
         item = qPacsList.at(i);
-        pacs = pacsDeviceManager.getPACSDeviceByID(item->text(0)); //fem el query per cercar la informació del PACS
-        selectedPacsList.append(pacs); //inserim a la llista
+        // Fem el query per cercar la informació del PACS
+        pacs = pacsDeviceManager.getPACSDeviceByID(item->text(0));
+        // Inserim a la llista
+        selectedPacsList.append(pacs);
     }
 
     return selectedPacsList;

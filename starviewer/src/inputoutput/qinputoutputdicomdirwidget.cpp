@@ -71,7 +71,8 @@ void QInputOutputDicomdirWidget::createContextMenuQStudyTreeWidget()
     action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/retrieve.png"), tr("&Import"), this, SLOT(retrieveSelectedStudies()), ShortcutManager::getShortcuts(Shortcuts::ImportToLocalDatabaseSelectedDICOMDIRStudies).first());
     (void) new QShortcut(action->shortcut(), this, SLOT(retrieveSelectedStudies()));
 
-    m_studyTreeWidget->setContextMenu(& m_contextMenuQStudyTreeWidget); //Especifiquem que es el menu del dicomdir
+    // Especifiquem que es el menu del dicomdir
+    m_studyTreeWidget->setContextMenu(& m_contextMenuQStudyTreeWidget);
 }
 
 bool QInputOutputDicomdirWidget::openDicomdir()
@@ -83,10 +84,12 @@ bool QInputOutputDicomdirWidget::openDicomdir()
     // L'asterisc abans de DICOMDIR i dicomdir hi és per compatibilitat amb Mac.
     dicomdirPath = QFileDialog::getOpenFileName(0, QFileDialog::tr("Open"), settings.getValue(InputOutputSettings::LastOpenedDICOMDIRPath).toString(), "DICOMDIR (*DICOMDIR *dicomdir)");
 
-    if (!dicomdirPath.isEmpty())//Si és buit no ens han seleccionat cap fitxer
+    //Si és buit no ens han seleccionat cap fitxer
+    if (!dicomdirPath.isEmpty())
     {
         QApplication::setOverrideCursor(Qt::WaitCursor);
-        state = m_readDicomdir.open (dicomdirPath);//Obrim el dicomdir
+        // Obrim el dicomdir
+        state = m_readDicomdir.open (dicomdirPath);
         QApplication::restoreOverrideCursor();
         if (!state.good())
         {
@@ -99,7 +102,8 @@ bool QInputOutputDicomdirWidget::openDicomdir()
             settings.setValue(InputOutputSettings::LastOpenedDICOMDIRPath, QFileInfo(dicomdirPath).dir().path());
             ok = true;
             //cerquem els estudis al dicomdir per a que es mostrin
-            emit clearSearchTexts();//Netegem el filtre de cerca al obrir el dicomdir
+            // Netegem el filtre de cerca al obrir el dicomdir
+            emit clearSearchTexts();
             queryStudy(DicomMask());
         }
     }
@@ -119,8 +123,9 @@ void QInputOutputDicomdirWidget::queryStudy(DicomMask queryMask)
     if (!state.good())
     {
         QApplication::restoreOverrideCursor();
-        if (state.code() == 1302) //Aquest és l'error quan no tenim un dicomdir obert l'ig
+        if (state.code() == 1302)
         {
+            //Aquest és l'error quan no tenim un dicomdir obert l'ig
             QMessageBox::warning(this, ApplicationNameString, tr("Before search you have to open a DICOMDIR."));
             ERROR_LOG("No s'ha obert cap directori DICOMDIR " + state.text());
         }
@@ -155,7 +160,8 @@ void QInputOutputDicomdirWidget::expandSeriesOfStudy(QString studyInstanceUID)
 
     INFO_LOG("Cerca de sèries al DICOMDIR de l'estudi " + studyInstanceUID);
 
-    m_readDicomdir.readSeries(studyInstanceUID, "", seriesList); //"" pq no busquem cap serie en concret
+    //"" pq no busquem cap serie en concret
+    m_readDicomdir.readSeries(studyInstanceUID, "", seriesList);
 
     if (seriesList.isEmpty())
     {
@@ -163,7 +169,8 @@ void QInputOutputDicomdirWidget::expandSeriesOfStudy(QString studyInstanceUID)
     }
     else
     {
-        m_studyTreeWidget->insertSeriesList(studyInstanceUID, seriesList);//inserim la informació de la sèrie al llistat
+        // Inserim la informació de la sèrie al llistat
+        m_studyTreeWidget->insertSeriesList(studyInstanceUID, seriesList);
     }
 }
 

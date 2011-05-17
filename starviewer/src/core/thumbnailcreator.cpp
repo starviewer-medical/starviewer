@@ -45,7 +45,7 @@ QImage ThumbnailCreator::getThumbnail(const Series *series, int resolution)
         }
         else
         {
-            // si la sèrie no conté imatges en el thumbnail ho indicarem
+            // Si la sèrie no conté imatges en el thumbnail ho indicarem
             thumbnail = makeEmptyThumbnailWithCustomText(QObject::tr("No Images Available"));
         }
     }

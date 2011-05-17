@@ -99,7 +99,8 @@ void Shortcuts::init()
     settingsRegistry->addSetting(MagicTool, shortcutsList);
 
     shortcutsList.clear();
-    shortcutsList.append(QString(""));//\TODO
+    //\TODO
+    shortcutsList.append(QString(""));
     settingsRegistry->addSetting(ScreenShotTool, shortcutsList);
 
     shortcutsList.clear();
@@ -123,7 +124,8 @@ void Shortcuts::init()
     settingsRegistry->addSetting(VoxelInformationTool, shortcutsList);
 
     shortcutsList.clear();
-    shortcutsList.append(QString("")); //\TODO
+    //\TODO
+    shortcutsList.append(QString(""));
     settingsRegistry->addSetting(SynchronizeTool, shortcutsList);
 
     shortcutsList.clear();
@@ -139,11 +141,13 @@ void Shortcuts::init()
     settingsRegistry->addSetting(AngleTool, shortcutsList);
 
     shortcutsList.clear();
-    shortcutsList.append(QString("Shift+A")); //\TODO
+    //\TODO
+    shortcutsList.append(QString("Shift+A"));
     settingsRegistry->addSetting(NonClosedAngleTool, shortcutsList);
 
     shortcutsList.clear();
-    shortcutsList.append(QString("N"));//\TODO
+    //\TODO
+    shortcutsList.append(QString("N"));
     settingsRegistry->addSetting(EditorTool, shortcutsList);
 
     shortcutsList.clear();
@@ -159,15 +163,18 @@ void Shortcuts::init()
     settingsRegistry->addSetting(InvertWindowLevelTool, shortcutsList);
 
     shortcutsList.clear();
-    shortcutsList.append(QString("Ctrl+1"));//\TODO
+    //\TODO
+    shortcutsList.append(QString("Ctrl+1"));
     settingsRegistry->addSetting(AxialViewTool, shortcutsList);
 
     shortcutsList.clear();
-    shortcutsList.append(QString("Ctrl+2"));//\TODO
+    //\TODO
+    shortcutsList.append(QString("Ctrl+2"));
     settingsRegistry->addSetting(SagitalViewTool, shortcutsList);
 
     shortcutsList.clear();
-    shortcutsList.append(QString("Ctrl+3"));//\TODO
+    //\TODO
+    shortcutsList.append(QString("Ctrl+3"));
     settingsRegistry->addSetting(CoronalViewTool, shortcutsList);
 
     shortcutsList.clear();
@@ -191,7 +198,8 @@ void Shortcuts::init()
     settingsRegistry->addSetting(ClearCurrentViewAnnotationsTool, shortcutsList);
 
     shortcutsList.clear();
-    shortcutsList.append(QString("")); //\TODO
+    //\TODO
+    shortcutsList.append(QString(""));
     settingsRegistry->addSetting(TransDifferenceTool, shortcutsList);
 
     shortcutsList.clear();
@@ -227,7 +235,8 @@ void Shortcuts::init()
     settingsRegistry->addSetting(OpenExams, shortcutsList);
 
     shortcutsList.clear();
-    shortcutsList.append(QString("")); //\TODO
+    //\TODO
+    shortcutsList.append(QString(""));
     settingsRegistry->addSetting(Preferences, shortcutsList);
 
     shortcutsList.clear();
@@ -279,4 +288,4 @@ void Shortcuts::init()
     settingsRegistry->addSetting(MaximizeMultipleScreens, shortcutsList);
 }
 
-} // end namespace udg
+} // End namespace udg

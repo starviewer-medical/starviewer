@@ -53,7 +53,7 @@ void RepresentationsLayer::clearViewer()
             list << it.value();
             it++;
         }
-        //elimina les primitives del contenidor
+        // Elimina les primitives del contenidor
         m_axialToolRepresentations.remove(m_currentSlice);
     break;
 
@@ -64,7 +64,7 @@ void RepresentationsLayer::clearViewer()
             list << it.value();
             it++;
         }
-        //elimina les primitives del contenidor
+        // Elimina les primitives del contenidor
         m_sagitalToolRepresentations.remove(m_currentSlice);
     break;
 
@@ -75,7 +75,7 @@ void RepresentationsLayer::clearViewer()
             list << it.value();
             it++;
         }
-        //elimina les primitives del contenidor
+        // Elimina les primitives del contenidor
         m_coronalToolRepresentations.remove(m_currentSlice);
     break;
 
@@ -97,7 +97,7 @@ void RepresentationsLayer::clearAll()
 {
     QMultiMap<int, ToolRepresentation*>::const_iterator it;
 
-    //Axial
+    // Axial
     it = m_axialToolRepresentations.begin();
     while (it != m_axialToolRepresentations.end())
     {
@@ -105,7 +105,7 @@ void RepresentationsLayer::clearAll()
         it++;
     }
 
-    //Sagital
+    // Sagital
     it = m_sagitalToolRepresentations.begin();
     while (it != m_sagitalToolRepresentations.end())
     {
@@ -113,7 +113,7 @@ void RepresentationsLayer::clearAll()
         it++;
     }
 
-    //Coronal
+    // Coronal
     it = m_coronalToolRepresentations.begin();
     while (it != m_coronalToolRepresentations.end())
     {

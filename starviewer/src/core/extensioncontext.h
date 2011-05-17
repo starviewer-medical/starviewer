@@ -17,7 +17,7 @@ public:
 
     ~ExtensionContext();
 
-    /// get/set del pacient amb el que ha de treballar l'extensió.
+    /// Get/set del pacient amb el que ha de treballar l'extensió.
     Patient* getPatient() const;
     void setPatient(Patient *patient);
 

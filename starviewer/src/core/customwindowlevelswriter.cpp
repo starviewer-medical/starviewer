@@ -24,7 +24,7 @@ CustomWindowLevelsWriter::~CustomWindowLevelsWriter()
 
 void CustomWindowLevelsWriter::write()
 {
-    // establir el path per defecte on es guardarà el fitxer
+    // Establir el path per defecte on es guardarà el fitxer
     QString path = getPath();
 
     if (path.isEmpty())
@@ -35,7 +35,7 @@ void CustomWindowLevelsWriter::write()
     QFile file(path);
     if (file.exists())
     {
-        // si ja existeix l'esborrem ja que si és més llarg que el nou, hi quedaran caràcters del vell
+        // Si ja existeix l'esborrem ja que si és més llarg que el nou, hi quedaran caràcters del vell
         QFile::remove(path);
     }
     if (!file.open(QFile::ReadWrite | QFile::Text))
@@ -45,7 +45,7 @@ void CustomWindowLevelsWriter::write()
 
     QXmlStreamWriter writer(&file);
 
-    // encara que no hi hagi res al repository s'esborra el fitxer i es crea de nou
+    // Encara que no hi hagi res al repository s'esborra el fitxer i es crea de nou
     writer.setAutoFormatting(true);
     writer.writeStartDocument();
     writer.writeStartElement(QString("CustomWindowLevels"));
@@ -57,7 +57,7 @@ void CustomWindowLevelsWriter::write()
     {
         writer.writeStartElement(QString("CustomWindowLevel"));
         writer.writeAttribute(QString("name"), QString("%1").arg(windowLevel->getName()));
-        // un tag nou per window i per level
+        // Un tag nou per window i per level
         writer.writeTextElement(QString("width"), QString("%1").arg(windowLevel->getWidth()));
         writer.writeTextElement(QString("level"), QString("%1").arg(windowLevel->getLevel()));
         writer.writeEndElement();
@@ -90,7 +90,8 @@ QString CustomWindowLevelsWriter::getPath()
 
     if (fileInfo.isDir())
     {
-        userPath += "customwindowlevels.xml"; // Per si de cas al setting s'ha definit un directori.
+        // Per si de cas al setting s'ha definit un directori.
+        userPath += "customwindowlevels.xml";
     }
 
     return userPath;

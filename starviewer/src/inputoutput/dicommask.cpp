@@ -4,9 +4,12 @@
 #include <QDateTime>
 #include <QDate>
 #include <dcsequen.h>
-#include <dimse.h> // provide the structure DcmDataSet
-#include <dcdeftag.h> //provide the information for the tags
-#include <ofcond.h> //provide the OFcondition structure and his members
+// Provide the structure DcmDataSet
+#include <dimse.h>
+// Provide the information for the tags
+#include <dcdeftag.h>
+// Provide the OFcondition structure and his members
+#include <ofcond.h>
 #include <QString>
 
 #include "status.h"
@@ -289,18 +292,18 @@ DcmDataset* DicomMask::getDicomMask()
 {
     DcmDataset *maskDcmDataset = new DcmDataset();
 
-    /*Especifiquem que per defecte l'Specific character set utilitzat per fer les consultes cap al PACS serà ISO_IR 100, és a dir Latin 1, ja que els PACS
-     que utilitza l'IDI utilitzen aquesta codificació (és el que suporta dcm4chee), a més amb Latin1 és la codificació que utilitzen
-     la majoria de països europeus. Per dubtes consultar C.12.1.1.2 on s'especifiquen quins Specific characters set, també és important
-     consultar el conformance statement del PACS contra el que consultem per saber quin Specific character set suporta. Com que el character set és Latin1 haurem d
-     transformar tots el tags dicom que siguin string (SH, LO, ST, PN, LT, UT) a Latin1
-*/
+    //Especifiquem que per defecte l'Specific character set utilitzat per fer les consultes cap al PACS serà ISO_IR 100, és a dir Latin 1, ja que els PACS
+    // que utilitza l'IDI utilitzen aquesta codificació (és el que suporta dcm4chee), a més amb Latin1 és la codificació que utilitzen
+    // la majoria de països europeus. Per dubtes consultar C.12.1.1.2 on s'especifiquen quins Specific characters set, també és important
+    // consultar el conformance statement del PACS contra el que consultem per saber quin Specific character set suporta. Com que el character set és Latin1 haurem d
+    // transformar tots el tags dicom que siguin string (SH, LO, ST, PN, LT, UT) a Latin1
 
     DcmElement *elemSpecificCharacterSet = newDicomElement(DCM_SpecificCharacterSet);
-    elemSpecificCharacterSet->putString("ISO_IR 100"); //ISO_IR 100 és Latin1
+    // ISO_IR 100 és Latin1
+    elemSpecificCharacterSet->putString("ISO_IR 100");
     maskDcmDataset->insert(elemSpecificCharacterSet, OFTrue);
 
-    /*Especifiquem a quin nivell es fa el QueryRetrieve, a través del mètode getQueryRetrieveLevel, que ens retorna el nivell en funció dels camps de la màscara*/
+    // Especifiquem a quin nivell es fa el QueryRetrieve, a través del mètode getQueryRetrieveLevel, que ens retorna el nivell en funció dels camps de la màscara
     DcmElement *elem = newDicomElement(DCM_QueryRetrieveLevel);
     elem->putString(qPrintable(getQueryRetrieveLevel()));
     maskDcmDataset->insert(elem, OFTrue);
@@ -530,9 +533,8 @@ DicomMask DicomMask::operator +(const DicomMask &mask)
 {
     DicomMask returnDicomMask = * this;
 
-    /* L'operador + no fa que cerquem pels dos valors, sinó que per la màscara this, totes les seves propietats que siguin empties,
-     * s'emplenaran amb el valor de la màscara passada per paràmetre
-     */
+    // L'operador + no fa que cerquem pels dos valors, sinó que per la màscara this, totes les seves propietats que siguin empties,
+    // s'emplenaran amb el valor de la màscara passada per paràmetre
 
     if (!mask.getPatientAge().isNull() && getPatientAge().isEmpty())
     {
@@ -674,7 +676,8 @@ QString DicomMask::getQueryRetrieveLevel()
     }
     else
     {
-        return "STUDY"; //PER DEFECTE DEL DICOM COM A MÍNIM SON A NIVELL D'ESTUDI
+        // PER DEFECTE DEL DICOM COM A MÍNIM SON A NIVELL D'ESTUDI
+        return "STUDY";
     }
 }
 

@@ -7,8 +7,8 @@
 #include "series.h"
 #include "image.h"
 #include "createinformationmodelobject.h"
-
-#include <QApplication> //Per el process events, TODO Treure i fer amb threads.
+//Per el process events, TODO Treure i fer amb threads.
+#include <QApplication>
 
 namespace udg {
 
@@ -38,15 +38,15 @@ void DICOMFileClassifierFillerStep::classifyFile()
 {
     Q_ASSERT(m_dicomReader);
 
-    // primer recopilem tota la informació que ens permet ubicar l'arxiu dins de l'estructura
+    // Pprimer recopilem tota la informació que ens permet ubicar l'arxiu dins de l'estructura
     QString patientID = m_dicomReader->getValueAttributeAsQString(DICOMPatientID);
     QString studyUID = m_dicomReader->getValueAttributeAsQString(DICOMStudyInstanceUID);
     QString seriesUID = m_dicomReader->getValueAttributeAsQString(DICOMSeriesInstanceUID);
 
-    // fem una classificació top-down. Comencem mirant a quin pacient pertany,després estudi, serie fins arribar al nivell
+    // Fem una classificació top-down. Comencem mirant a quin pacient pertany,després estudi, serie fins arribar al nivell
     // d'imatge/kin/PS. TODO potser seria més eficient començar directament per imatge? En cas de descartar aniríem més
     // ràpid o no? o és ben igual?
-    // obtenim el pacient si ja existeix, altrament el creem
+    // Obtenim el pacient si ja existeix, altrament el creem
     Patient *patient = m_input->getPatientByID(patientID);
     if (!patient)
     {
@@ -54,7 +54,7 @@ void DICOMFileClassifierFillerStep::classifyFile()
         m_input->addPatient(patient);
     }
 
-    // obtenim l'estudi corresponent si ja existeix, altrament el creem
+    // Obtenim l'estudi corresponent si ja existeix, altrament el creem
     Study *study = patient->getStudy(studyUID);
     if (!study)
     {
@@ -62,7 +62,7 @@ void DICOMFileClassifierFillerStep::classifyFile()
         patient->addStudy(study);
     }
 
-    // obtenim la serie corresponent si ja existeix, altrament la creem
+    // Obtenim la serie corresponent si ja existeix, altrament la creem
     Series *series = study->getSeries(seriesUID);
     if (!series)
     {

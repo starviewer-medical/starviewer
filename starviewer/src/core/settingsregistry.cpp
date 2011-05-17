@@ -65,4 +65,4 @@ void SettingsRegistry::loadAccesLevelTable()
     }
 }
 
-} // end namespace udg
+} // End namespace udg

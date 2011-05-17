@@ -101,7 +101,7 @@ public:
     /// Posa si el hanging protocol és de previes o no
     void setPrevious(bool isPrevious);
 
-    /// retorna si el hanging protocol te previes o no
+    /// Retorna si el hanging protocol te previes o no
     bool isPrevious();
 
     /// Assigna una prioritat al hanging protocol

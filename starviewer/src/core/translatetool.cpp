@@ -1,7 +1,7 @@
 #include "translatetool.h"
 #include "qviewer.h"
 #include "logging.h"
-// vtk
+// Vtk
 #include <vtkInteractorStyle.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkRenderWindow.h>
@@ -16,7 +16,7 @@ TranslateTool::TranslateTool(QViewer *viewer, QObject *parent)
 {
     m_state = None;
     m_toolName = "TranslateTool";
-    // ens assegurem que desde la creació tenim un viewer vàlid
+    // Ens assegurem que desde la creació tenim un viewer vàlid
     Q_ASSERT(m_viewer);
 }
 

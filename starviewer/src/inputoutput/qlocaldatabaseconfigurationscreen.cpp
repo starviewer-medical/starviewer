@@ -98,7 +98,8 @@ bool QLocalDatabaseConfigurationScreen::validateChanges()
 
     if (m_textDatabaseRoot->isModified())
     {
-        if (!dir.exists(m_textDatabaseRoot->text()) && m_createDatabase == false) // si el fitxer indicat no existeix i no s'ha demanat que es crei una nova base de dades, el path és invàlid
+        // Si el fitxer indicat no existeix i no s'ha demanat que es crei una nova base de dades, el path és invàlid
+        if (!dir.exists(m_textDatabaseRoot->text()) && m_createDatabase == false)
         {
             QMessageBox::warning(this, ApplicationNameString, tr("Invalid database path."));
             return false;
@@ -173,7 +174,8 @@ bool QLocalDatabaseConfigurationScreen::applyChanges()
     {
         applyChangesCache();
 
-        if (m_textDatabaseRoot->isModified() && m_createDatabase == false) // només s'ha de reiniciar en el cas que que s'hagi canviat el path de la base de dades, per una ja existent. En el cas que la base de dades no existeixi, a l'usuari al fer click al botó crear base de dades, ja se li haurà informat que s'havia de reiniciar l'aplicació
+        // Només s'ha de reiniciar en el cas que que s'hagi canviat el path de la base de dades, per una ja existent. En el cas que la base de dades no existeixi, a l'usuari al fer click al botó crear base de dades, ja se li haurà informat que s'havia de reiniciar l'aplicació
+        if (m_textDatabaseRoot->isModified() && m_createDatabase == false)
         {
             QMessageBox::warning(this, ApplicationNameString, tr("The application has to be restarted to apply the changes."));
         }
@@ -196,7 +198,8 @@ void QLocalDatabaseConfigurationScreen::enableApplyButtons()
 
 void QLocalDatabaseConfigurationScreen::configurationChangedDatabaseRoot()
 {
-    m_createDatabase = false; //indiquem no s'ha demanat que es creï la base de dades indicada a m_textDatabaseRoot
+    // Indiquem no s'ha demanat que es creï la base de dades indicada a m_textDatabaseRoot
+    m_createDatabase = false;
     enableApplyButtons();
 }
 
@@ -211,7 +214,8 @@ void QLocalDatabaseConfigurationScreen::examinateDataBaseRoot()
         if (!dialog->selectedFiles().empty())
         {
             m_textDatabaseRoot->setText(dialog->selectedFiles().takeFirst());
-            m_textDatabaseRoot->setModified(true);// indiquem que m_textDatabaseRoot ha modificat el seu valor
+            // Indiquem que m_textDatabaseRoot ha modificat el seu valor
+            m_textDatabaseRoot->setModified(true);
         }
     }
 
@@ -283,8 +287,8 @@ void QLocalDatabaseConfigurationScreen::deleteStudies()
 
 void QLocalDatabaseConfigurationScreen::clearCache()
 {
-    /*Esborrem les imatges que tenim a la base de dades local , i reinstal·lem la bd ja que no té sentit eliminar tots els registres i compactar-la, ja que
-      tardaríem més que si la tornem a reinstal·lar.*/
+    // Esborrem les imatges que tenim a la base de dades local , i reinstal·lem la bd ja que no té sentit eliminar tots els registres i compactar-la, ja que
+    // tardaríem més que si la tornem a reinstal·lar.
     DeleteDirectory deleteDirectory;
     QProgressDialog qprogressDialog(tr("Deleting studies"), ApplicationNameString, 0, 0, this);;
 

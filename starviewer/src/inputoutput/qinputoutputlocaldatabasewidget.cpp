@@ -99,7 +99,8 @@ void QInputOutputLocalDatabaseWidget::createContextMenuQStudyTreeWidget()
     action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/store.png"), tr("Send to PACS"), this, SLOT(selectedStudiesStoreToPacs()), ShortcutManager::getShortcuts(Shortcuts::StoreSelectedStudiesToPACS).first());
     (void) new QShortcut(action->shortcut(), this, SLOT(selectedStudiesStoreToPacs()));
 #endif
-    m_studyTreeWidget->setContextMenu(&m_contextMenuQStudyTreeWidget);//Especifiquem que és el menú per la cache
+    // Especifiquem que és el menú per la cache
+    m_studyTreeWidget->setContextMenu(&m_contextMenuQStudyTreeWidget);
 }
 
 //TODO s'hauria buscar una manera més elegant de comunicar les dos classes, fer un singletton de QCreateDicomdir ?
@@ -138,14 +139,13 @@ void QInputOutputLocalDatabaseWidget::queryStudy(DicomMask queryMask)
         return;
     }
 
-    /* Aquest mètode a part de ser cridada quan l'usuari fa click al botó search, també es cridada al
-     * constructor d'aquesta classe, per a que al engegar l'aplicació ja es mostri la llista d'estudis
-     * que hi ha a la base de dades local. Si el mètode no troba cap estudi a la base de dades local
-     * es llença el missatge que no s'han trobat estudis, però com que no és idonii, en el cas aquest que es
-     * crida des del constructor que es mostri el missatge de que no s'han trobat estudis al engegar l'aplicació, el que
-     * es fa és que per llançar el missatge es comprovi que la finestra estigui activa. Si la finestra no està activa
-     * vol dir que el mètode ha estat invocat des del constructor
-     */
+    // Aquest mètode a part de ser cridada quan l'usuari fa click al botó search, també es cridada al
+    // constructor d'aquesta classe, per a que al engegar l'aplicació ja es mostri la llista d'estudis
+    // que hi ha a la base de dades local. Si el mètode no troba cap estudi a la base de dades local
+    // es llença el missatge que no s'han trobat estudis, però com que no és idonii, en el cas aquest que es
+    // crida des del constructor que es mostri el missatge de que no s'han trobat estudis al engegar l'aplicació, el que
+    // es fa és que per llançar el missatge es comprovi que la finestra estigui activa. Si la finestra no està activa
+    // vol dir que el mètode ha estat invocat des del constructor
     if (patientStudyList.isEmpty() && isActiveWindow())
     {
         QApplication::restoreOverrideCursor();
@@ -153,7 +153,8 @@ void QInputOutputLocalDatabaseWidget::queryStudy(DicomMask queryMask)
     }
     else
     {
-        m_studyTreeWidget->insertPatientList(patientStudyList);//es mostra la llista d'estudis
+        // Es mostra la llista d'estudis
+        m_studyTreeWidget->insertPatientList(patientStudyList);
         QApplication::restoreOverrideCursor();
     }
 }
@@ -207,7 +208,8 @@ void QInputOutputLocalDatabaseWidget::expandSeriesOfStudy(QString studyInstanceU
     }
     else
     {
-        m_studyTreeWidget->insertSeriesList(studyInstanceUID, seriesList); //inserim la informació de les sèries al estudi
+        // Inserim la informació de les sèries al estudi
+        m_studyTreeWidget->insertSeriesList(studyInstanceUID, seriesList);
     }
 }
 
@@ -294,7 +296,8 @@ void QInputOutputLocalDatabaseWidget::deleteSelectedItemsFromLocalDatabase()
                                          .arg(studyToDelete->getID(), studyToDelete->getParentPatient()->getFullName());
                     }
                     else
-                    {   //TODO:Hauriem de mostar el Series ID en lloc del Series UID
+                    {   
+                        // TODO:Hauriem de mostar el Series ID en lloc del Series UID
                         warningMessage = tr("The series with UID %1 of study %2 patient %3 is in use by the DICOMDIR List. If you want to delete "
                                             "this series you should remove the study from the DICOMDIR List first.")
                                          .arg(dicomMaskToDelete.getSeriesInstanceUID(), studyToDelete->getID(), studyToDelete->getParentPatient()->getFullName());
@@ -395,16 +398,16 @@ void QInputOutputLocalDatabaseWidget::viewFromQSeriesListWidget()
 {
     QStringList selectedStudiesInstanceUID;
 
-    selectedStudiesInstanceUID << m_seriesListWidget->getCurrentStudyUID();//Agafem l'estudi uid de la sèrie seleccionada
+    // Agafem l'estudi uid de la sèrie seleccionada
+    selectedStudiesInstanceUID << m_seriesListWidget->getCurrentStudyUID();
     view(selectedStudiesInstanceUID, m_seriesListWidget->getCurrentSeriesUID());
 
     StatsWatcher::log("Obrim estudi seleccionant sèrie desde thumbnail");
 }
 
-/*TODO en comptes de fer un signal cap a la queryscreen, perquè aquesta indiqui a la QInputOutPacsWidget que guardi un estudi al PACS
- *, no hauria de ser aquesta funció l'encarregada de guardar l'estudi directament al PACS, entenc que no és responsabilitat de
- * QInputOutputPacsWidget
- */
+// TODO en comptes de fer un signal cap a la queryscreen, perquè aquesta indiqui a la QInputOutPacsWidget que guardi un estudi al PACS,
+// no hauria de ser aquesta funció l'encarregada de guardar l'estudi directament al PACS, entenc que no és responsabilitat de
+// QInputOutputPacsWidget
 void QInputOutputLocalDatabaseWidget::selectedStudiesStoreToPacs()
 {
     if (m_studyTreeWidget->getSelectedStudies().count() == 0)
@@ -445,13 +448,13 @@ void QInputOutputLocalDatabaseWidget::addSelectedStudiesToCreateDicomdirList()
     m_qcreateDicomdir->addStudies(studies);
 }
 
-/*TODO: Aquesta responsabilitat d'esborrar els estudis vells al iniciar-se l'aplicació s'hauria de traslladar a un altre lloc, no és responsabilitat
-        d'aquesta inferfície */
+// TODO: Aquesta responsabilitat d'esborrar els estudis vells al iniciar-se l'aplicació s'hauria de traslladar a un altre lloc, no és responsabilitat
+//       d'aquesta inferfície
 void QInputOutputLocalDatabaseWidget::deleteOldStudies()
 {
     Settings settings;
-    /*Mirem si està activada la opció de la configuració d'esborrar els estudis vells no visualitzats en un número de dies determinat
-      fem la comprovació, per evitar engegar el thread si no s'han d'esborrar els estudis vells*/
+    // Mirem si està activada la opció de la configuració d'esborrar els estudis vells no visualitzats en un número de dies determinat
+    // fem la comprovació, per evitar engegar el thread si no s'han d'esborrar els estudis vells
     if (settings.getValue(InputOutputSettings::DeleteLeastRecentlyUsedStudiesInDaysCriteria).toBool())
     {
         m_qdeleteOldStudiesThread.deleteOldStudies();
@@ -536,18 +539,18 @@ void QInputOutputLocalDatabaseWidget::sendDICOMFilesToPACSJobFinished(PACSJob *p
         }
     }
 
-    /*Com que l'objecte és un punter altres classes poden haver capturat el Signal per això li fem un deleteLater() en comptes d'un delete, per evitar
-      que quan responguin al signal es trobin que l'objecte ja no existeix. L'objecte serà destruït per Qt quan es retorni el eventLoop*/
+    // Com que l'objecte és un punter altres classes poden haver capturat el Signal per això li fem un deleteLater() en comptes d'un delete, per evitar
+    // que quan responguin al signal es trobin que l'objecte ja no existeix. L'objecte serà destruït per Qt quan es retorni el eventLoop
     pacsJob->deleteLater();
 }
 
 void QInputOutputLocalDatabaseWidget::newPACSJobEnqueued(PACSJob *pacsJob)
 {
-    /*Connectem amb el signal RetrieveDICOMFilesFromPACSJob de que s'esborrarà un estudi de la caché per treure'ls de la QStudyTreeWidget quan se
-      n'esborrin*/
-    /*TODO: RetrieveDICOMFilesFromPACS no hauria d'emetre aquest signal, hauria de ser una CacheManager d'aquesta manera treuriem la responsabilitat
-            de RetrieveDICOMFilesFromPACS de fer-ho, i a més no caldria connectar el signal cada vegada que fan un nou Job. Una vegada s'hagi implementar la
-            CacheManager aquest mètode HA DE DESAPAREIXER, quan es tregui aquest mètode recordar a treure l'include a "retrievedicomfilesfrompacsjob.h" */
+    // Connectem amb el signal RetrieveDICOMFilesFromPACSJob de que s'esborrarà un estudi de la caché per treure'ls de la QStudyTreeWidget quan se
+    // n'esborrin
+    // TODO: RetrieveDICOMFilesFromPACS no hauria d'emetre aquest signal, hauria de ser una CacheManager d'aquesta manera treuriem la responsabilitat
+    //       de RetrieveDICOMFilesFromPACS de fer-ho, i a més no caldria connectar el signal cada vegada que fan un nou Job. Una vegada s'hagi implementar la
+    //       CacheManager aquest mètode HA DE DESAPAREIXER, quan es tregui aquest mètode recordar a treure l'include a "retrievedicomfilesfrompacsjob.h"
     if (pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType)
     {
         connect(dynamic_cast<RetrieveDICOMFilesFromPACSJob*> (pacsJob), SIGNAL(studyFromCacheWillBeDeleted(QString)), SLOT(removeStudyFromQStudyTreeWidget(QString)));

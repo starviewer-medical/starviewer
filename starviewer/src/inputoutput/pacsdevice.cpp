@@ -76,9 +76,11 @@ void PacsDevice::setDefault(bool isDefault)
 {
     QStringList pacsList = getDefaultPACSKeyNamesList();
     QString keyName = getKeyName();
-    if (isDefault) // afegir
+    // Afegir
+    if (isDefault)
     {
-        if (!pacsList.contains(keyName)) // si no està marcat ja
+        // Si no està marcat ja
+        if (!pacsList.contains(keyName))
         {
             Settings settings;
             QString value = settings.getValue(InputOutputSettings::DefaultPACSListToQuery).toString();
@@ -86,8 +88,9 @@ void PacsDevice::setDefault(bool isDefault)
             settings.setValue(InputOutputSettings::DefaultPACSListToQuery, value);
         }
     }
-    else // eliminar
+    else
     {
+        // Eliminar
         Settings settings;
         QString value = settings.getValue(InputOutputSettings::DefaultPACSListToQuery).toString();
         value.remove(keyName + "//");
@@ -199,7 +202,8 @@ QStringList PacsDevice::getDefaultPACSKeyNamesList() const
         Settings::SettingListType list = settings.getList(InputOutputSettings::PacsListConfigurationSectionName);
         foreach (Settings::KeyValueMapType item, list)
         {
-            if (item.contains("."))// El camp "default" té aquesta clau
+            // El camp "default" té aquesta clau
+            if (item.contains("."))
             {
                 if (item.value(".").toString() == "S")
                 {

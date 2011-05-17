@@ -96,6 +96,6 @@ private:
 
 };
 
-} // end namespace udg
+} // End namespace udg
 
 #endif

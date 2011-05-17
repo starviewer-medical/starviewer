@@ -108,7 +108,7 @@ private:
     /// Dades de les transformacions aplicades a cada llesca
     QVector<QPair<int, int> > m_sliceTranslations;
 
-    ///Dades del volum original i la diferència
+    /// Dades del volum original i la diferència
     Volume *m_inputVolume;
     Volume *m_differenceVolume;
 

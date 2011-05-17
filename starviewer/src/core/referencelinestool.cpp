@@ -10,7 +10,7 @@
 #include "drawerpolygon.h"
 #include "drawerline.h"
 #include "mathtools.h"
-// vtk
+// Vtk
 #include <vtkPlane.h>
 
 namespace udg {
@@ -142,19 +142,16 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
     // Primer mirem que siguin plans diferents
     if (*localizerPlane != *referencePlane)
     {
-        //
+        
         // Projecció de la intersecció dels plans
-        //
         /// Llegir http://fixunix.com/dicom/51195-scanogram-lines-mr.html
 
-        // recollim les dades del pla del localitzador sobre el qual volem projectar el de referència
+        // Recollim les dades del pla del localitzador sobre el qual volem projectar el de referència
         double localizerNormalVector[3], localizerOrigin[3];
         localizerPlane->getNormalVector(localizerNormalVector);
         localizerPlane->getOrigin(localizerOrigin);
 
-        //
         // TODO mirar exactament quan cal amagar les línies i quan no, depenent de les interseccions trobades
-        //
         // un cop tenim les interseccions nomes cal projectar-les i pintar la linia
 
         if (m_showPlaneThickness)
@@ -187,7 +184,7 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
             QList<QVector<double> > lowerPlaneBounds = referencePlane->getLowerBounds();
             numberOfIntersections = this->getIntersections(lowerPlaneBounds.at(0), lowerPlaneBounds.at(1), lowerPlaneBounds.at(2), lowerPlaneBounds.at(3), localizerPlane, firstIntersectionPoint, secondIntersectionPoint);
 
-            // un cop tenim les interseccions nomes cal projectar-les i pintar la linia
+            // Un cop tenim les interseccions nomes cal projectar-les i pintar la linia
             if (numberOfIntersections > 0)
             {
                 m_2DViewer->projectDICOMPointToCurrentDisplayedImage(firstIntersectionPoint, firstIntersectionPoint);
@@ -206,12 +203,13 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
             {
                 // TODO en comptes de fer un hide, posar valors 0,0 a cada coordenada perquè no afecti a altres línies que sí interecten?
                 m_2DViewer->getDrawer()->hideGroup("ReferenceLines");
-                // si no hi ha cap intersecció apliquem el pla directament, "a veure què"
-                //TODO això és per debug ONLY!!
+                // Si no hi ha cap intersecció apliquem el pla directament, "a veure què"
+                // TODO això és per debug ONLY!!
     //             projectPlane(referencePlane);
             }
         }
-        else // nomes agafem el pla "central"
+        // Nomes agafem el pla "central"
+        else
         {
             QList<QVector<double> > planeBounds = referencePlane->getCentralBounds();
             double firstIntersectionPoint[3], secondIntersectionPoint[3];
@@ -280,7 +278,8 @@ int ReferenceLinesTool::getIntersections(QVector<double> tlhc, QVector<double> t
         numberOfIntersections++;
     }
 
-    if (numberOfIntersections == 0) // Provar amb la segona "paral·lela"
+    // Provar amb la segona "paral·lela"
+    if (numberOfIntersections == 0)
     {
         if (vtkPlane::IntersectWithLine((double *)trhc.data(), (double *)brhc.data(), localizerNormalVector, localizerOrigin, t, firstIntersectionPoint))
         {

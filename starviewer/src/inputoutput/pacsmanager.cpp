@@ -85,8 +85,8 @@ bool PacsManager::isExecutingPACSJob(PACSJob::PACSJobType pacsJobType)
 
 void PacsManager::requestCancelPACSJob(PACSJob *pacsJob)
 {
-    /*El emit de requestedCancelPACSJob s'ha de fer abans de desencuar i requestAbort perquè sinó ens podem trobar que primer rebem el signal del PACSJob
-     PACSJobCancelledi llavors el requestedCancelPACSJob*/
+    // El emit de requestedCancelPACSJob s'ha de fer abans de desencuar i requestAbort perquè sinó ens podem trobar que primer rebem el signal del PACSJob
+    // PACSJobCancelledi llavors el requestedCancelPACSJob
 
     bool pacsJobIsExecuting;
 

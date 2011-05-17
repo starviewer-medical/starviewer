@@ -34,17 +34,13 @@ public:
 
     ~QApplicationMainWindow();
 
-    /**
-     * Assigna un pacient a la finestra.
-     * Farà les accions pertinents segons si ja es tenia un pacient o bé és el primer pacient que s'assigna
-     * @param patient El pacient
-     */
+    /// Assigna un pacient a la finestra.
+    /// Farà les accions pertinents segons si ja es tenia un pacient o bé és el primer pacient que s'assigna
+    /// @param patient El pacient
     void setPatient(Patient *patient);
 
-    /**
-     * Crea una nova finestra i l'obre. Si li proporcionem dades de pacient, els hi afegeix
-     * @param context Dades de pacient que volem que contingui la nova finestra
-     */
+    /// Crea una nova finestra i l'obre. Si li proporcionem dades de pacient, els hi afegeix
+    /// @param context Dades de pacient que volem que contingui la nova finestra
     void setPatientInNewWindow(Patient *patient);
 
     /// Ens retorna el punter al pacient que té ara

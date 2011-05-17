@@ -31,7 +31,8 @@ public:
         GradientOpacity = 0x08,
         LoadSave = 0x10,
         Recent = 0x20,
-        Everything = 0x3f   // 0x01 | 0x02 | 0x04 | 0x08 | 0x10 | 0x20
+        // 0x01 | 0x02 | 0x04 | 0x08 | 0x10 | 0x20
+        Everything = 0x3f
     };
     Q_DECLARE_FLAGS(Features, Feature)
 
@@ -78,6 +79,6 @@ private:
 
 };
 
-} // namespace udg
+} // End namespace udg
 
 #endif // QTRANSFERFUNCTIONEDITOR2_H

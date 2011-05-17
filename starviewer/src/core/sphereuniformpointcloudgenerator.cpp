@@ -294,9 +294,9 @@ void SphereUniformPointCloudGenerator::createGeographicVertices()
         const Vector3 & v = m_vertices[i];
         Vector3 gv;
         gv.x = v.length();
-        // latitud
+        // Latitud
         gv.y = 90.0 - acos(v.z / gv.x) * 180.0 / MathTools::PiNumber;
-        // longitud
+        // Longitud
         if (v.x == 0.0 && v.y == 0.0)
         {
             gv.z = 0.0;

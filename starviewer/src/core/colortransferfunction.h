@@ -30,7 +30,8 @@ public:
     ColorTransferFunction& operator =(const ColorTransferFunction &colorTransferFunction);
 
     /// Defineix explícitament el punt (x,color).
-    void set(double x, const QColor &color);    // cal redefinir-lo si es defineixen les altres variants
+    // Cal redefinir-lo si es defineixen les altres variants
+    void set(double x, const QColor &color);
     /// Defineix explícitament el punt (x,(red,green,blue)).
     void set(double x, int red, int green, int blue);
     /// Defineix explícitament el punt (x,(red,green,blue)).
@@ -50,10 +51,11 @@ public:
 private:
 
     /// Funció de transferència de color en format VTK.
-    mutable ::vtkColorTransferFunction *m_vtkColorTransferFunction; // s'ha de guardar per poder fer el Delete() més tard
+    // S'ha de guardar per poder fer el Delete() més tard
+    mutable ::vtkColorTransferFunction *m_vtkColorTransferFunction;
 
 };
 
-} // namespace udg
+} // End namespace udg
 
 #endif // COLORTRANSFERFUNCTION_H

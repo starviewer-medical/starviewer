@@ -93,7 +93,8 @@ Series* LocalDatabaseSeriesDAL::fillSeries(char **reply, int row, int columns)
     series->setBodyPartExamined(reply[12 + row * columns]);
     series->setViewPosition(reply[13 + row * columns]);
     series->setManufacturer(reply[14 + row * columns]);
-    series->setLaterality(reply[15 + row * columns][0]);//Laterality és un char
+    // Laterality és un char
+    series->setLaterality(reply[15 + row * columns][0]);
     series->setRetrievedDate(QDate().fromString(reply[16 + row * columns], "yyyyMMdd"));
     series->setRetrievedTime(QTime().fromString(reply[17 + row * columns], "hhmmss"));
     series->setImagesPath(LocalDatabaseManager::getCachePath() + "/" + studyInstanceUID + "/" + series->getInstanceUID());

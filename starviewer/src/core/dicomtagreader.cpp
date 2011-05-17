@@ -7,7 +7,7 @@
 #include "dicomsequenceitem.h"
 // Qt
 #include <QStringList>
-// dcmtk
+// Dcmtk
 #include <dcfilefo.h>
 #include <dcdeftag.h>
 #include <dcmetinf.h>
@@ -57,7 +57,7 @@ bool DICOMTagReader::setFile(const QString &filename)
     if (status.good())
     {
         m_hasValidFile = true;
-        // eliminem l'objecte anterior si n'hi hagués
+        // Eliminem l'objecte anterior si n'hi hagués
         deleteDataLastLoadedFile();
 
         m_dicomHeader = new DcmMetaInfo(*dicomFile.getMetaInfo());
@@ -159,7 +159,7 @@ DICOMSequenceAttribute* DICOMTagReader::getSequenceAttribute(const DICOMTag &seq
     DcmTagKey dcmtkSequenceTag(sequenceTag.getGroup(), sequenceTag.getElement());
 
     QStringList result;
-    // obtenim els atributs de cada item d'una seqüència de "primer nivell"
+    // Obtenim els atributs de cada item d'una seqüència de "primer nivell"
     DcmSequenceOfItems *sequence = NULL;
 
     OFCondition status = m_dicomData->findAndGetSequence(dcmtkSequenceTag, sequence, OFTrue);
@@ -190,8 +190,8 @@ DICOMSequenceAttribute* DICOMTagReader::convertToDICOMSequenceAttribute(DcmSeque
         for (unsigned int j = 0; j < dcmtkItem->card(); j++)
         {
             DcmElement *element = dcmtkItem->getElement(j);
-
-            if (!element->isLeaf()) // És una Sequence of Items
+            // És una Sequence of Items
+            if (!element->isLeaf())
             {
                 dicomItem->addAttribute(convertToDICOMSequenceAttribute(OFstatic_cast(DcmSequenceOfItems*, element), returnValueOfTags));
             }

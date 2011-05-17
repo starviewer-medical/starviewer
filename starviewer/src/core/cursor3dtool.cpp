@@ -10,7 +10,7 @@
 #include "imageplane.h"
 #include "drawercrosshair.h"
 #include "drawer.h"
-// vtk
+// Vtk
 #include <vtkCommand.h>
 #include <vtkMatrix4x4.h>
 #include <vtkPlane.h>
@@ -47,7 +47,7 @@ Cursor3DTool::~Cursor3DTool()
 {
     if (m_crossHair)
     {
-        //HACK succedani d'Smart Pointer per tal que el drawer no elimini el crossHair quan s'activi el thickslab
+        // HACK succedani d'Smart Pointer per tal que el drawer no elimini el crossHair quan s'activi el thickslab
         m_crossHair->decreaseReferenceCount();
         delete m_crossHair;
     }
@@ -123,7 +123,7 @@ void Cursor3DTool::updatePosition()
         ImagePlane *currentPlane = NULL;
         Image *image = NULL;
 
-        //Cal fer els càlculs per passar del món VTK al mon que té el DICOM per guardar el punt en dicom a les dades compartides de la tool.
+        // Cal fer els càlculs per passar del món VTK al mon que té el DICOM per guardar el punt en dicom a les dades compartides de la tool.
         // 1.- Trobar el punt correcte en el món VTK
         if (m_2DViewer->getCurrentCursorImageCoordinate(xyz))
         {
@@ -147,7 +147,8 @@ void Cursor3DTool::updatePosition()
                 case Q2DViewer::Coronal:
                     if (index[2] < m_2DViewer->getInput()->getImages().count())
                     {
-                        image = m_2DViewer->getInput()->getImage(index[2]); //La llesca sempre és l'index[2] del DICOM
+                        // La llesca sempre és l'index[2] del DICOM
+                        image = m_2DViewer->getInput()->getImage(index[2]);
                         currentPlane = new ImagePlane();
                         currentPlane->fillFromImage(image);
                     }
@@ -177,7 +178,8 @@ void Cursor3DTool::updatePosition()
                 dicomWorldPosition[1] = (double)index[1];
                 dicomWorldPosition[2] = (double)index[2];
                 dicomWorldPosition[3] = 1.0;
-                projectionMatrix->MultiplyPoint(dicomWorldPosition, dicomWorldPosition);// Matriu * punt
+                // Matriu * punt
+                projectionMatrix->MultiplyPoint(dicomWorldPosition, dicomWorldPosition);
                 projectionMatrix->Delete();
 
                 // 4.- Modificar les dades compartides del punt per tal que els altres s'actualitzin i situar el punt origen
@@ -185,7 +187,8 @@ void Cursor3DTool::updatePosition()
                 m_crossHair->setVisibility(true);
                 m_crossHair->update();
                 m_2DViewer->render();
-                m_myData->setOriginPointPosition(dicomWorldPosition); // Punt al món real (DICOM)
+                // Punt al món real (DICOM)
+                m_myData->setOriginPointPosition(dicomWorldPosition);
             }
             else
             {
@@ -206,10 +209,10 @@ void Cursor3DTool::removePosition()
         m_viewer->setCursor(Qt::ArrowCursor);
     }
     /// S'ha demanat que el cursor no desparegui al deixar de clicar.
-//     m_crossHair->setVisibility(false);
-//     m_crossHair->update();
-//     m_2DViewer->render();
-//     m_myData->setVisible(false);
+//  m_crossHair->setVisibility(false);
+//  m_crossHair->update();
+//  m_2DViewer->render();
+//  m_myData->setVisible(false);
 }
 
 void Cursor3DTool::updateProjectedPoint()
@@ -233,7 +236,7 @@ void Cursor3DTool::updateProjectedPoint()
         }
         else
         {
-            //Només podem projectar si tenen el mateix frame of reference UID
+            // Només podem projectar si tenen el mateix frame of reference UID
             if (m_myFrameOfReferenceUID == m_myData->getFrameOfReferenceUID())
             {
                 m_crossHair->setVisibility(true);
@@ -263,8 +266,9 @@ void Cursor3DTool::projectPoint()
         m_crossHair->setCentrePoint(position[0], position[1], position[2]);
         m_crossHair->setVisibility(true);
     }
-    else // L'amaguem perquè sinó estariem mostrant un punt incorrecte
+    else
     {
+        // L'amaguem perquè sinó estariem mostrant un punt incorrecte
         m_crossHair->setVisibility(false);
     }
 
@@ -274,7 +278,8 @@ void Cursor3DTool::projectPoint()
 
 void Cursor3DTool::updateFrameOfReference()
 {
-    Q_ASSERT(m_2DViewer->getInput()); // hi ha d'haver input per força
+    // Hi ha d'haver input per força
+    Q_ASSERT(m_2DViewer->getInput());
 
     // TODO De moment agafem la primera imatge perquè assumim que totes pertanyen a la mateixa sèrie.
     // També ho fem així de moment per evitar problemes amb imatges multiframe, que encara no tractem correctament
@@ -282,10 +287,10 @@ void Cursor3DTool::updateFrameOfReference()
     if (image)
     {
         Series *series = image->getParentSeries();
-        // ens guardem el nostre
+        // Ens guardem el nostre
         m_myFrameOfReferenceUID = series->getFrameOfReferenceUID();
         m_myInstanceUID = series->getInstanceUID();
-        // i actualitzem el de les dades
+        // I actualitzem el de les dades
         m_myData->setFrameOfReferenceUID(m_myFrameOfReferenceUID);
         m_myData->setInstanceUID(m_myInstanceUID);
     }
@@ -297,7 +302,7 @@ void Cursor3DTool::updateFrameOfReference()
 
 void Cursor3DTool::refreshReferenceViewerData()
 {
-    // si es projectaven plans sobre el nostre drawer, les amaguem
+    // Si es projectaven plans sobre el nostre drawer, les amaguem
     if (m_2DViewer->getInput())
     {
         updateFrameOfReference();

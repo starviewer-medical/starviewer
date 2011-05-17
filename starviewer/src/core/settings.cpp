@@ -6,8 +6,10 @@
 #include "settingsparser.h"
 
 #include <QTreeWidget>
-#include <QHeaderView> // Pel restoreColumnsWidths
-#include <QSplitter> // Pels saveGeometry(),restoreGeometry() de QSplitter
+// Pel restoreColumnsWidths
+#include <QHeaderView>
+// Pels saveGeometry(),restoreGeometry() de QSplitter
+#include <QSplitter>
 
 namespace udg {
 
@@ -121,7 +123,7 @@ void Settings::addListItem(const QString &key, const KeyValueMapType &item)
 
     qsettings->beginWriteArray(key);
     qsettings->setArrayIndex(arraySize);
-    // omplim
+    // Omplim
     dumpKeyValueMap(item, qsettings);
     qsettings->endArray();
 }
@@ -159,10 +161,10 @@ void Settings::removeListItem(const QString &key, int index)
 void Settings::setList(const QString &key, const SettingListType &list)
 {
     QSettings *qsettings = getSettingsObject(key);
-    // eliminem tot el que pogués haver d'aquella llista anteriorment
+    // Eliminem tot el que pogués haver d'aquella llista anteriorment
     remove(key);
     int index = 0;
-    // escrivim la llista
+    // Escrivim la llista
     qsettings->beginWriteArray(key);
     foreach (const KeyValueMapType &item, list)
     {
@@ -259,4 +261,4 @@ QSettings *Settings::getSettingsObject(const QString &key)
     return m_qsettingsObjectsMap.value(SettingsRegistry::instance()->getAccessLevel(key));
 }
 
-}  // end namespace udg
+}  // End namespace udg

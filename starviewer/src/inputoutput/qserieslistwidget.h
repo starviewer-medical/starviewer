@@ -13,8 +13,10 @@ namespace udg {
 
 class Series;
 
-const int scaledSeriesSizeX = 100;///< Mida de la imatge escalada a l'eix x
-const int scaledSeriesSizeY = 100;///< Mida de la imatge escalada a l'eix y
+/// Mida de la imatge escalada a l'eix x
+const int scaledSeriesSizeX = 100;
+/// Mida de la imatge escalada a l'eix y
+const int scaledSeriesSizeY = 100;
 
 class QSeriesListWidget : public QWidget, private Ui::QSeriesListWidgetBase {
 Q_OBJECT
@@ -43,14 +45,12 @@ public slots:
     ///Insereix l'informació d'una sèrie
     void insertSeries(QString studyInstanceUID, Series *series);
 
-    /** slot que s'activa quant es selecciona una serie, emiteix signal a QStudyTreeWidget, perquè selecciona la mateixa serie que el QSeriesListWidget
-     *  @param serie Seleccionada
-     */
+    /// slot que s'activa quant es selecciona una serie, emiteix signal a QStudyTreeWidget, perquè selecciona la mateixa serie que el QSeriesListWidget
+    ///  @param serie Seleccionada
     void clicked(QListWidgetItem *item);
 
-    /** slot que s'activa quant es fa doblec
-     *  @param item de la serie Seleccionada
-     */
+    /// slot que s'activa quant es fa doblec
+    ///  @param item de la serie Seleccionada
     void view(QListWidgetItem *item);
 
 signals:
@@ -62,9 +62,12 @@ signals:
 
 private:
 
-    QHash<QString, QString> m_HashSeriesStudy;///Guardem per cada sèrie a quin estudi pertany
-    QStringList m_nonDicomImageSeriesList;//modalitats de sèries que no són images, com (KO, PR, SR)
-    int m_lastInsertedImageRow; //indica a quina ha estat la última fila que hem inseritat una sèrie que era una imatge
+    /// Guardem per cada sèrie a quin estudi pertany
+    QHash<QString, QString> m_HashSeriesStudy;
+    /// modalitats de sèries que no són images, com (KO, PR, SR)
+    QStringList m_nonDicomImageSeriesList;
+    // Indica a quina ha estat la última fila que hem inseritat una sèrie que era una imatge
+    int m_lastInsertedImageRow;
 
     /// crea les connexions dels signals i slots
     void createConnections();

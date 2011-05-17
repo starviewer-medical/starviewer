@@ -91,8 +91,8 @@ PACSRequestStatus::QueryRequestStatus QueryPacsJob::getStatus()
     return m_queryRequestStatus;
 }
 
-/*TODO:Centralitzem la contrucció dels missatges d'error perquè a totes les interfícies en puguin utilitzar un, i no calgui tenir el tractament d'errors duplicat
-       ni traduccions, però és el millor lloc aquí posar aquest codi? */
+// TODO:Centralitzem la contrucció dels missatges d'error perquè a totes les interfícies en puguin utilitzar un, i no calgui tenir el tractament d'errors duplicat
+//      ni traduccions, però és el millor lloc aquí posar aquest codi?
 QString QueryPacsJob::getStatusDescription()
 {
     QString message;

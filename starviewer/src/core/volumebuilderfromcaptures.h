@@ -70,6 +70,6 @@ private:
 
 };
 
-};  // end namespace udg
+};  // End namespace udg
 
 #endif // VOLUMEBUILDERFROMCAPTURES_H

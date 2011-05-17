@@ -38,12 +38,11 @@ public:
     /// Retorna l'últim error que s'ha produit
     ImageFileCreationError getLastError() const;
 
-    /** Inicia la creació del fitxer d'imatge ISO a partir d'un directori o fitxer
-     * El path del fitxer d'imatge ISO que es crearà es troba a l'atribut m_inputPath
-     * El path del directori o fitxer a partir del qual es crea el fitxer d'imatge ISO es troba a l'atribut m_outputIsoImageFilePath
-     * És important tenir en compte que només inicia el procés no espera a la seva finalització. Per saber quan acaba es disposa del
-     + signal finishedCreateIsoImageFile que s'emet just al finalitzar el procés.
-     */
+    /// Inicia la creació del fitxer d'imatge ISO a partir d'un directori o fitxer
+    /// El path del fitxer d'imatge ISO que es crearà es troba a l'atribut m_inputPath
+    /// El path del directori o fitxer a partir del qual es crea el fitxer d'imatge ISO es troba a l'atribut m_outputIsoImageFilePath
+    /// És important tenir en compte que només inicia el procés no espera a la seva finalització. Per saber quan acaba es disposa del
+    /// signal finishedCreateIsoImageFile que s'emet just al finalitzar el procés.
     void startCreateIsoImageFile();
 
 signals:

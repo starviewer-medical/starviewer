@@ -67,7 +67,7 @@ void QViewerCINEController::setInputViewer(QViewer *viewer)
 
 void QViewerCINEController::setCINEDimension(int dimension)
 {
-    // checkejem per si el que ens passen és vàlid o no
+    // Checkejem per si el que ens passen és vàlid o no
     if (dimension != SpatialDimension && dimension != TemporalDimension)
     {
         DEBUG_LOG("Paràmetre ilegal!");
@@ -130,7 +130,7 @@ void QViewerCINEController::pause()
 
 void QViewerCINEController::record()
 {
-    //ens curem en salut
+    // Ens curem en salut
     if (!m_2DViewer)
     {
         return;
@@ -227,13 +227,14 @@ void QViewerCINEController::handleCINETimerEvent()
                 nextImageIndex = m_firstSliceInterval;
             }
         }
-        else if (m_boomerangEnabled) // pot ser que hagim desactivat el repeat, però no el boomerang!
+        else if (m_boomerangEnabled)
         {
+            // Pot ser que hagim desactivat el repeat, però no el boomerang!
             m_nextStep = 1;
         }
         else
         {
-            // tornem a l'inici TODO potser no hauria de ser així... i deixar en la última imatge de la seqüència
+            // Tornem a l'inici TODO potser no hauria de ser així... i deixar en la última imatge de la seqüència
             nextImageIndex = m_firstSliceInterval;
             pause();
         }
@@ -255,7 +256,8 @@ void QViewerCINEController::handleCINETimerEvent()
                 m_nextStep = 1;
                 pause();
             }
-            else // Inici de la reproduccio
+            // Inici de la reproduccio
+            else
             {
                 nextImageIndex = currentImageIndex + m_nextStep;
             }
@@ -283,14 +285,17 @@ void QViewerCINEController::resetCINEInformation(Volume *input)
         int phases = input->getNumberOfPhases();
         if (phases > 1)
         {
-            setCINEDimension(TemporalDimension); // si tenim fases, per defecte treballem sota la temporal
+            // Si tenim fases, per defecte treballem sota la temporal
+            setCINEDimension(TemporalDimension); 
             setVelocity(input->getNumberOfPhases());
         }
         else
         {
             // TODO potser seria més correcte si s'interrogués a partir d'input!
-            setCINEDimension(SpatialDimension); // si no tenim fases, només podem treballar sobre la dim espaial
-            setVelocity(10); // li donarem una velocitat de 10 img/sec
+            // Si no tenim fases, només podem treballar sobre la dim espaial
+            setCINEDimension(SpatialDimension);
+            // Li donarem una velocitat de 10 img/sec
+            setVelocity(10);
         }
         m_firstSliceInterval = 0;
         this->updateThickness(m_2DViewer->getSlabThickness());

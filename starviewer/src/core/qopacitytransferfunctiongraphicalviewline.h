@@ -38,6 +38,6 @@ private:
 
 };
 
-} // namespace udg
+} // End namespace udg
 
 #endif // QOPACITYTRANSFERFUNCTIONGRAPHICALVIEWLINE_H

@@ -79,6 +79,6 @@ private:
 
 };
 
-} // namespace udg
+} // End namespace udg
 
 #endif // QOPACITYTRANSFERFUNCTIONGRAPHICALVIEW_H

@@ -10,4 +10,4 @@ DefaultSettings::~DefaultSettings()
 {
 }
 
-} // end namespace udg 
+} // End namespace udg 

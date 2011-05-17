@@ -20,7 +20,7 @@ public:
     RepresentationsLayer(Q2DViewer *viewer, QObject *parent = 0);
     ~RepresentationsLayer();
 
-    ///Afegeix una representacio a la llista.
+    /// Afegeix una representacio a la llista.
     void addRepresentation(ToolRepresentation *toolRepresentation);
 
     /**
@@ -28,11 +28,11 @@ public:
     */
     void clearViewer();
 
-    ///Esboora totes les toolRepresentation's del viewer
+    /// Esborra totes les toolRepresentation's del viewer
     void clearAll();
 
 public slots:
-    ///Actualitza les variables de plane i slice
+    /// Actualitza les variables de plane i slice
     void refresh();
 
 private:
@@ -44,7 +44,7 @@ private:
     int m_currentPlane;
     int m_currentSlice;
 
-    ///Contenidors de ToolRepresentation, un per cada pla
+    /// Contenidors de ToolRepresentation, un per cada pla
     QMultiMap<int, ToolRepresentation*> m_axialToolRepresentations;
     QMultiMap<int, ToolRepresentation*> m_sagitalToolRepresentations;
     QMultiMap<int, ToolRepresentation*> m_coronalToolRepresentations;

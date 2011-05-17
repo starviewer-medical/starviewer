@@ -1,6 +1,7 @@
 #include "retrievedicomfilesfrompacs.h"
 
-#include <osconfig.h> // Make sure OS specific configuration is included first
+// Make sure OS specific configuration is included first
+#include <osconfig.h>
 #include <diutil.h>
 #include <dcfilefo.h>
 // Pels tags DcmTagKey DCM_xxxx
@@ -49,7 +50,8 @@ OFCondition RetrieveDICOMFilesFromPACS::acceptSubAssociation(T_ASC_Network *asso
         transferSyntaxes[3] = UID_LittleEndianImplicitTransferSyntax;
         numTransferSyntaxes = 4;
 #else
-        if (gLocalByteOrder == EBO_LittleEndian)  // Defined in dcxfer.h
+        // Defined in dcxfer.h
+        if (gLocalByteOrder == EBO_LittleEndian)
         {
         transferSyntaxes[0] = UID_LittleEndianExplicitTransferSyntax;
         transferSyntaxes[1] = UID_BigEndianExplicitTransferSyntax;
@@ -92,25 +94,24 @@ void RetrieveDICOMFilesFromPACS::moveCallback(void *callbackData, T_DIMSE_C_Move
     Q_UNUSED(request);
     Q_UNUSED(callbackData);
 
-/*  Aquest en teoria és el codi per cancel·lar una descàrrega però el PACS del l'UDIAT no suporta les requestCancel, per tant la única manera
-    de fer-ho és com es fa en el mètode subOperationSCP que s'aborta la connexió amb el PACS.
+    // Aquest en teoria és el codi per cancel·lar una descàrrega però el PACS del l'UDIAT no suporta les requestCancel, per tant la única manera
+    // de fer-ho és com es fa en el mètode subOperationSCP que s'aborta la connexió amb el PACS.
 
-    MoveSCPCallbackData *moveSCPCallbackData = (MoveSCPCallbackData*) callbackData;
+    //MoveSCPCallbackData *moveSCPCallbackData = (MoveSCPCallbackData*) callbackData;
 
-    if (moveSCPCallbackData->retrieveDICOMFilesFromPACS->m_abortIsRequested)
-    {
-        OFCondition condition = DIMSE_sendCancelRequest(moveSCPCallbackData->association, moveSCPCallbackData->presentationContextId, request->MessageID);
+    //if (moveSCPCallbackData->retrieveDICOMFilesFromPACS->m_abortIsRequested)
+    //{
+    //    OFCondition condition = DIMSE_sendCancelRequest(moveSCPCallbackData->association, moveSCPCallbackData->presentationContextId, request->MessageID);
 
-        if (condition.good())
-        {
-            INFO_LOG("S'ha cancel·lat la descarrega");
-        }
-        else
-        {
-            ERROR_LOG("Error al intentar cancel.lar la descarrga. Descripcio error: " + QString(condition.text()));
-        }
-    }
-*/
+    //    if (condition.good())
+    //    {
+    //        INFO_LOG("S'ha cancel·lat la descarrega");
+    //    }
+    //    else
+    //    {
+    //        ERROR_LOG("Error al intentar cancel.lar la descarrga. Descripcio error: " + QString(condition.text()));
+    //    }
+    //}
 }
 
 OFCondition RetrieveDICOMFilesFromPACS::echoSCP(T_ASC_Association *association, T_DIMSE_Message *dimseMessage, T_ASC_PresentationContextID presentationContextID)
@@ -131,9 +132,11 @@ void RetrieveDICOMFilesFromPACS::storeSCPCallback(void *callbackData, T_DIMSE_St
     // Paràmetres de sortida: storeResponse, statusDetail
     Q_UNUSED(imageFileName);
 
-    if (progress->state == DIMSE_StoreEnd) // Si el paquest és de finalització d'una imatge hem de guardar-la
+    // Si el paquest és de finalització d'una imatge hem de guardar-la
+    if (progress->state == DIMSE_StoreEnd)
     {
-        *statusDetail = NULL; // No status detail
+        // No status detail
+        *statusDetail = NULL; 
 
         if ((imageDataSet) && (*imageDataSet))
         {
@@ -312,7 +315,8 @@ void RetrieveDICOMFilesFromPACS::subOperationCallback(void *subOperationCallback
     RetrieveDICOMFilesFromPACS *retrieveDICOMFilesFromPACS = (RetrieveDICOMFilesFromPACS*) subOperationCallbackData;
     if (associationNetwork == NULL)
     {
-        return; // Help no net !
+        // Help no net !
+        return;
     }
 
     if (*subAssociation == NULL)
@@ -415,7 +419,8 @@ T_DIMSE_C_MoveRQ RetrieveDICOMFilesFromPACS::getConfiguredMoveRequest(T_ASC_Asso
 
 PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResponseStatusFromMoveSCP(T_DIMSE_C_MoveRSP *moveResponse, DcmDataset *statusDetail)
 {
-    QList<DcmTagKey> relatedFieldsList;// Llista de camps relacionats amb l'error que poden contenir informació adicional
+    // Llista de camps relacionats amb l'error que poden contenir informació adicional
+    QList<DcmTagKey> relatedFieldsList;
     QString messageErrorLog = "No s'ha pogut descarregar l'estudi, descripcio error rebuda";
     PACSRequestStatus::RetrieveRequestStatus retrieveRequestStatus;
 
@@ -434,7 +439,8 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResp
 
     switch (moveResponse->DimseStatus)
     {
-        case STATUS_MOVE_Refused_OutOfResourcesNumberOfMatches: // 0xa701
+        case STATUS_MOVE_Refused_OutOfResourcesNumberOfMatches:
+            // 0xa701
             // Refused: Out of Resources – Unable to calculate number of matches
             // Related Fields DCM_ErrorComment (0000,0902)
             relatedFieldsList << DCM_ErrorComment;
@@ -443,7 +449,8 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResp
             retrieveRequestStatus = PACSRequestStatus::RetrieveFailureOrRefused;
             break;
 
-        case STATUS_MOVE_Refused_OutOfResourcesSubOperations: // 0xa702
+        case STATUS_MOVE_Refused_OutOfResourcesSubOperations:
+            // 0xa702
             // Refused: Out of Resources – Unable to perform sub-operations
             // Related Fields DCM_NumberOfRemainingSuboperations (0000,1020), DCM_NumberOfCompletedSuboperations (0000,1021)
             // DCM_NumberOfFailedSuboperations (0000,1022), DCM_NumberOfWarningSuboperations (0000,1023)
@@ -454,7 +461,8 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResp
             retrieveRequestStatus = PACSRequestStatus::RetrieveFailureOrRefused;
             break;
 
-        case STATUS_MOVE_Failed_MoveDestinationUnknown: // 0xa801
+        case STATUS_MOVE_Failed_MoveDestinationUnknown:
+            // 0xa801
             // Refused: Move Destination unknown
             // Related Fields DCM_ErrorComment (0000,0902)
             relatedFieldsList << DCM_ErrorComment;
@@ -464,8 +472,10 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResp
             retrieveRequestStatus = PACSRequestStatus::RetrieveDestinationAETileUnknown;
             break;
 
-        case STATUS_MOVE_Failed_IdentifierDoesNotMatchSOPClass: //0xa900
-        case STATUS_MOVE_Failed_UnableToProcess: // 0xc000
+        case STATUS_MOVE_Failed_IdentifierDoesNotMatchSOPClass:
+            //0xa900
+        case STATUS_MOVE_Failed_UnableToProcess:
+            // 0xc000
             // Unable to Process or Identifier does not match SOP Class
             // Related fields DCM_OffendingElement (0000,0901) DCM_ErrorComment (0000,0902)
             relatedFieldsList << DCM_OffendingElement << DCM_ErrorComment;
@@ -474,7 +484,8 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResp
             retrieveRequestStatus = PACSRequestStatus::RetrieveFailureOrRefused;
             break;
 
-        case STATUS_MOVE_Warning_SubOperationsCompleteOneOrMoreFailures: // 0xb000
+        case STATUS_MOVE_Warning_SubOperationsCompleteOneOrMoreFailures:
+            // 0xb000
             // Sub-operations Complete – One or more Failures
             // Related fields DCM_NumberOfRemainingSuboperations (0000,1020), DCM_NumberOfFailedSuboperations (0000,1022), DCM_NumberOfWarningSuboperations (0000,1023)
             relatedFieldsList << DCM_NumberOfRemainingSuboperations << DCM_NumberOfFailedSuboperations << DCM_NumberOfWarningSuboperations;

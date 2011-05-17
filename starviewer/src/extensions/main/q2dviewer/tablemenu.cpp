@@ -71,7 +71,8 @@ void TableMenu::addColumn()
         newItem->setFixed(true);
         m_gridLayout->addWidget(newItem, numRow, m_columns);
         m_itemList.insert(((m_columns + 1) * numRow + m_columns), newItem);
-        newItem->show();//TODO Necessari al passar a qt 4.3
+        // TODO Necessari al passar a qt 4.3
+        newItem->show();
         connect(newItem, SIGNAL(isActive(ItemMenu *)), this, SLOT(verifySelected(ItemMenu *)));
         connect(newItem, SIGNAL(isSelected(ItemMenu *)), this, SLOT(emitSelected(ItemMenu *)));
     }
@@ -94,7 +95,8 @@ void TableMenu::addRow()
         newItem->setFixed(true);
         m_gridLayout->addWidget(newItem, m_rows, numColumn);
         m_itemList.insert((m_rows * (m_columns + 1) + numColumn), newItem);
-        newItem->show();//TODO Necessari al passar a qt 4.3
+        // TODO Necessari al passar a qt 4.3
+        newItem->show();
         connect(newItem, SIGNAL(isActive(ItemMenu *)), this, SLOT(verifySelected(ItemMenu *)));
         connect(newItem, SIGNAL(isSelected(ItemMenu *)), this, SLOT(emitSelected(ItemMenu *)));
     }
@@ -112,11 +114,13 @@ void TableMenu::verifySelected(ItemMenu *selected)
 
     if (rows == m_rows)
     {
-        addRow(); // Hem d'afegir una fila a la graella
+        // Hem d'afegir una fila a la graella
+        addRow();
     }
     if (columns == m_columns)
     {
-        addColumn(); // Hem d'afegir una columna a la graella
+        // Hem d'afegir una columna a la graella
+        addColumn();
     }
 
     // Marquem i desmarquem les caselles segons la seleccio actual

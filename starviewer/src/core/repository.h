@@ -56,7 +56,7 @@ private:
     int m_nextIdentifierNumber;
 };
 
-};  //  end  namespace udg
+};  // End namespace udg
 
 #include "repository.cpp"
 

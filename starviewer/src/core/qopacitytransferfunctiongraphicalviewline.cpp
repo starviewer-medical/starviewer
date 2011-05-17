@@ -44,4 +44,4 @@ void QOpacityTransferFunctionGraphicalViewLine::update()
     }
 }
 
-} // namespace udg
+} // End namespace udg

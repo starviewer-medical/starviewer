@@ -73,4 +73,4 @@ private:
     QMap<QString, QString> m_orientationMappingTable;
 };
 
-} // end namespace udg
+} // End namespace udg

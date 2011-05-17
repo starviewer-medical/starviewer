@@ -12,7 +12,8 @@ ApplicationCommandLineOptions StarviewerApplicationCommandLine::getStarviewerApp
     ApplicationCommandLineOptions starviewerCommandLineOptions;
 
     //Configurem les opcions que Starviewer accepta des de línia de comandes
-    #ifndef STARVIEWER_LITE //Opció no disponible Starviewer Lite
+    #ifndef STARVIEWER_LITE
+    //Opció no disponible Starviewer Lite
     starviewerCommandLineOptions.addOption(accessionNumberOption, true, QObject::tr("Retrieve the study with the accession number from the query default PACS."));
     #endif
 
@@ -64,8 +65,8 @@ bool StarviewerApplicationCommandLine::parseAndRun(QStringList arguments, QStrin
     {
         if (commandLineOptions.getNumberOfParsedOptions() == 0)
         {
-            /*Vol dir que han executat una nova instància del Starviewer que ha detectat que hi havia una altra instància executant-se
-              i ens ha enviat un missatge en blanc perquè obrim un nova finestra d'Starviewer*/
+            // Vol dir que han executat una nova instància del Starviewer que ha detectat que hi havia una altra instància executant-se
+            // i ens ha enviat un missatge en blanc perquè obrim un nova finestra d'Starviewer
             QPair<StarviewerCommandLineOption, QString> commandLineOptionValue(openBlankWindow, "");
             AddOptionToCommandLineOptionListToProcess(commandLineOptionValue);
         }

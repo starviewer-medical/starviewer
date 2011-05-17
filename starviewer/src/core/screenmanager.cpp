@@ -17,7 +17,7 @@ void ScreenManager::maximize(QWidget *window)
 {
     DynamicMatrix dynamicMatrix = computeScreenMatrix(window);
 
-    // agafa el top left i el bottomright per determinar les dimensions de la finestra
+    // Agafa el top left i el bottomright per determinar les dimensions de la finestra
     QPoint topLeft = getTopLeft(dynamicMatrix);
     QPoint bottomRight = getBottomRight(dynamicMatrix);
 
@@ -42,8 +42,10 @@ void ScreenManager::maximize(QWidget *window)
         // Se li ha de passar la geometria de la finestra, sense cantonades.
         int x = topLeft.x() + leftBorder;
         int y = topLeft.y() + topBorder;
-        int width = bottomRight.x() - x - rightBorder; // x val x + leftBorder
-        int height = bottomRight.y() - y - bottomBorder; // y val y + topBorder
+        // x val x + leftBorder
+        int width = bottomRight.x() - x - rightBorder;
+        // y val y + topBorder
+        int height = bottomRight.y() - y - bottomBorder;
 
         window->setGeometry(x, y, width, height);
     }
@@ -127,10 +129,11 @@ void ScreenManager::moveToPreviousDesktop(QWidget *window)
         }
     }
 
-    // si no hi ha cap patalla per sobre de la actual, agafarem la de més avall a la dreta
+    // Si no hi ha cap patalla per sobre de la actual, agafarem la de més avall a la dreta
     if (desktopIllBe == -1)
     {
-        desktopIllBe = 0; // amb això assegurem que mai arribarà al moveToDesktop valent -1
+        // Amb això assegurem que mai arribarà al moveToDesktop valent -1
+        desktopIllBe = 0;
         for (int i = 1; i < getNumberOfScreens(); i++)
         {
             // Si està per sota de l'actual ens la quedem
@@ -195,10 +198,11 @@ void ScreenManager::moveToNextDesktop(QWidget *window)
         }
     }
 
-    // si no hi ha cap patalla per sota de la actual, agafarem la de més amunt a l'esquerra
+    // Si no hi ha cap patalla per sota de la actual, agafarem la de més amunt a l'esquerra
     if (desktopIllBe == -1)
     {
-        desktopIllBe = 0; // amb això assegurem que mai arribarà al moveToDesktop valent -1
+        // Amb això assegurem que mai arribarà al moveToDesktop valent -1
+        desktopIllBe = 0;
         for (int i = 1; i < getNumberOfScreens(); i++)
         {
             // Si està per sobre de l'actual ens la quedem
@@ -241,7 +245,7 @@ DynamicMatrix ScreenManager::computeScreenMatrix(QWidget *window)
 {
     int desktopIAm = m_applicationDesktop->screenNumber(window);
 
-    //primer de tot buscar les pantalles de la mateixa fila
+    // Primer de tot buscar les pantalles de la mateixa fila
     DynamicMatrix dynamicMatrix;
     int indexLeft = 0;
     int indexRight = 0;
@@ -266,17 +270,18 @@ DynamicMatrix ScreenManager::computeScreenMatrix(QWidget *window)
             }
         }
     }
-    //ara anar mirant si tota la fila te pantalles a sobre o a sota
+    // Ara anar mirant si tota la fila te pantalles a sobre o a sota
     changes = true;
     bool keepLookingUp = true;
     bool keepLookingDown = true;
     while (changes)
     {
         changes = false;
-        //mirar si es pot afegir la fila de sobre
+        // Mirar si es pot afegir la fila de sobre
         QList<int> topRow;
         int index = indexLeft;
-        bool rowFound = keepLookingUp; //si hem de mirar la fila de sobre true altrament false
+        // Si hem de mirar la fila de sobre true altrament false
+        bool rowFound = keepLookingUp; 
         while (keepLookingUp && index <= indexRight)
         {
             bool found = false;
@@ -302,7 +307,7 @@ DynamicMatrix ScreenManager::computeScreenMatrix(QWidget *window)
                 index = indexRight + 1;
             }
         }
-        //si s'ha pogut afegir TOTA la fila de sobre
+        // Si s'ha pogut afegir TOTA la fila de sobre
         if (rowFound)
         {
             indexTop++;
@@ -313,10 +318,11 @@ DynamicMatrix ScreenManager::computeScreenMatrix(QWidget *window)
             changes = true;
         }
 
-        //mirar si es pot afegir la fila de sota
+        // Mirar si es pot afegir la fila de sota
         QList<int> bottomRow;
         index = indexLeft;
-        rowFound = keepLookingDown; // si em de mirar la fila de sota true, altrament false
+        // Si em de mirar la fila de sota true, altrament false
+        rowFound = keepLookingDown;
         while (keepLookingDown && index <= indexRight)
         {
             bool found = false;
@@ -342,7 +348,7 @@ DynamicMatrix ScreenManager::computeScreenMatrix(QWidget *window)
                 index = indexRight + 1;
             }
         }
-        //si s'ha pogut afegir TOTA la fila de sobre
+        // Si s'ha pogut afegir TOTA la fila de sobre
         if (rowFound)
         {
             indexBottom--;
@@ -393,7 +399,8 @@ void ScreenManager::fitInto(QWidget *window, int IdDesktop)
         width = newDesktopWidth;
         x += leftBorder;
     }
-    else // altrament centrar
+    // Altrament centrar
+    else
     {
         x = x + newDesktopWidth / 2 - width / 2 + leftBorder;
     }
@@ -404,7 +411,8 @@ void ScreenManager::fitInto(QWidget *window, int IdDesktop)
         height = newDesktopHeight;
         y += topBorder;
     }
-    else // altrament centrar
+    // Altrament centrar
+    else
     {
         y = y + newDesktopHeight / 2 - height / 2 + topBorder;
     }
@@ -419,10 +427,10 @@ void ScreenManager::fitInto(QWidget *window, int IdDesktop)
 
 bool ScreenManager::isTop(int desktop1, int desktop2)
 {
-    // esta posat a sobre
+    // Esta posat a sobre
     if (abs(m_applicationDesktop->screenGeometry(desktop1).bottom() - m_applicationDesktop->screenGeometry(desktop2).top()) < SamePosition)
     {
-        // te la mateixa alçada
+        // Te la mateixa alçada
         int leftPart = abs(m_applicationDesktop->screenGeometry(desktop1).left() - m_applicationDesktop->screenGeometry(desktop2).left());
         int rightPart = abs(m_applicationDesktop->screenGeometry(desktop1).right() - m_applicationDesktop->screenGeometry(desktop2).right());
         if (leftPart + rightPart < SamePosition)
@@ -436,10 +444,10 @@ bool ScreenManager::isTop(int desktop1, int desktop2)
 
 bool ScreenManager::isBottom(int desktop1, int desktop2)
 {
-    // esta posat a sota
+    // Esta posat a sota
     if (abs(m_applicationDesktop->screenGeometry(desktop1).top() - m_applicationDesktop->screenGeometry(desktop2).bottom()) < SamePosition)
     {
-        // te la mateixa alçada
+        // Te la mateixa alçada
         int leftPart = abs(m_applicationDesktop->screenGeometry(desktop1).left() - m_applicationDesktop->screenGeometry(desktop2).left());
         int rightPart = abs(m_applicationDesktop->screenGeometry(desktop1).right() - m_applicationDesktop->screenGeometry(desktop2).right());
         if (leftPart + rightPart < SamePosition)
@@ -453,10 +461,10 @@ bool ScreenManager::isBottom(int desktop1, int desktop2)
 
 bool ScreenManager::isLeft(int desktop1, int desktop2)
 {
-    // esta posat a l'esquerra
+    // Esta posat a l'esquerra
     if (abs(m_applicationDesktop->screenGeometry(desktop1).right() - m_applicationDesktop->screenGeometry(desktop2).left()) < SamePosition)
     {
-        // te la mateixa alçada
+        // Te la mateixa alçada
         int topPart = abs(m_applicationDesktop->screenGeometry(desktop1).top() - m_applicationDesktop->screenGeometry(desktop2).top());
         int bottomPart = abs(m_applicationDesktop->screenGeometry(desktop1).bottom() - m_applicationDesktop->screenGeometry(desktop2).bottom());
         if (topPart + bottomPart < SamePosition)
@@ -469,10 +477,10 @@ bool ScreenManager::isLeft(int desktop1, int desktop2)
 
 bool ScreenManager::isRight(int desktop1, int desktop2)
 {
-    // esta posat a l'esquerra
+    // Esta posat a l'esquerra
     if (abs(m_applicationDesktop->screenGeometry(desktop1).left() - m_applicationDesktop->screenGeometry(desktop2).right()) < SamePosition)
     {
-        // te la mateixa alçada
+        // Te la mateixa alçada
         int topPart = abs(m_applicationDesktop->screenGeometry(desktop1).top() - m_applicationDesktop->screenGeometry(desktop2).top());
         int bottomPart = abs(m_applicationDesktop->screenGeometry(desktop1).bottom() - m_applicationDesktop->screenGeometry(desktop2).bottom());
         if (topPart + bottomPart < SamePosition)
@@ -655,15 +663,15 @@ int ScreenManager::whoIsBottom(int desktopIAm)
 
 QPoint ScreenManager::getTopLeft(const DynamicMatrix &dynamicMatrix) const
 {
-    //Primer de tot buscar la cantonada esquerra, a partir de la llista de monitors a l'esquerra,
-    //agafar el màxim, per si la barra de windows esta a l'esquerra en algun d'ells
+    // Primer de tot buscar la cantonada esquerra, a partir de la llista de monitors a l'esquerra,
+    // agafar el màxim, per si la barra de windows esta a l'esquerra en algun d'ells
     QList<int> screens = dynamicMatrix.getLeftColumn();
     int x = m_applicationDesktop->availableGeometry(screens[0]).left();
     for (int i = 1; i < screens.count(); i++)
     {
         x = std::max(x, m_applicationDesktop->availableGeometry(screens[i]).left());
     }
-    //el mateix per la part superior
+    // El mateix per la part superior
     screens = dynamicMatrix.getTopRow();
     int y = m_applicationDesktop->availableGeometry(screens[0]).top();
     for (int i = 1; i < screens.count(); i++)
@@ -677,15 +685,15 @@ QPoint ScreenManager::getTopLeft(const DynamicMatrix &dynamicMatrix) const
 QPoint ScreenManager::getBottomRight(const DynamicMatrix &dynamicMatrix) const
 {
 
-    //Primer de tot buscar la cantonada dreta, a partir de la llista de monitors a lla dreta,
-    //agafar el mínim, per si la barra de windows esta a la dreta en algun d'ells
+    // Primer de tot buscar la cantonada dreta, a partir de la llista de monitors a lla dreta,
+    // agafar el mínim, per si la barra de windows esta a la dreta en algun d'ells
     QList<int> screens = dynamicMatrix.getRightColumn();
     int x = m_applicationDesktop->availableGeometry(screens[0]).right();
     for (int i = 1; i < screens.count(); i++)
     {
         x = std::min(x, m_applicationDesktop->availableGeometry(screens[i]).right());
     }
-    //el mateix per la part de baix
+    // El mateix per la part de baix
     screens = dynamicMatrix.getBottomRow();
     int y = m_applicationDesktop->availableGeometry(screens[0]).bottom();
     for (int i = 1; i < screens.count(); i++)
@@ -696,4 +704,4 @@ QPoint ScreenManager::getBottomRight(const DynamicMatrix &dynamicMatrix) const
     return QPoint(x, y);
 }
 
-} // end namespace udg
+} // End namespace udg

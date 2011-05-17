@@ -30,7 +30,7 @@ public:
         SingletonRegistry::instance()->registerCreateFunction(id, createInstance);
     }
 
-    ///Mètode auxiliar i que no s'hauria d'utilitzar directament
+    /// Mètode auxiliar i que no s'hauria d'utilitzar directament
     static AncestorType* createInstance(ParentType* parent)
     {
         return dynamic_cast<AncestorType*>(new BaseClass(parent));

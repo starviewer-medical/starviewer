@@ -2,13 +2,16 @@
 #define UDGVOLUMEPIXELDATAREADERITKGDCM_H
 
 #include "volumepixeldatareader.h"
-#include "volume.h" // Pel tipus de dades itk definits
+// Pel tipus de dades itk definits
+#include "volume.h"
 
 #include <itkImageSeriesReader.h>
 #include <itkImageFileReader.h>
 #include <itkGDCMImageIO.h>
-#include "itkQtAdaptor.h" // Per notificar el progrés de lectura
-#include "itkImageToVTKImageFilter.h" //Converts an ITK image into a VTK image and plugs a itk data pipeline to a VTK datapipeline.
+// Per notificar el progrés de lectura
+#include "itkQtAdaptor.h"
+//Converts an ITK image into a VTK image and plugs a itk data pipeline to a VTK datapipeline.
+#include "itkImageToVTKImageFilter.h"
 
 namespace udg {
 

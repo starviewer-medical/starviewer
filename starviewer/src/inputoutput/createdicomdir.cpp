@@ -2,11 +2,15 @@
 
 #include <QString>
 #include <QDir>
-#include <osconfig.h>     /* make sure OS specific configuration is included first */
+// Make sure OS specific configuration is included first
+#include <osconfig.h>
 #include <dctk.h>
-#include <dcddirif.h>     /* for class DicomDirInterface */
-#include <ofstd.h>        /* for class OFStandard */
-#include <ofcond.h>       /* for class OFCondition */
+// For class DicomDirInterface
+#include <dcddirif.h>
+// For class OFStandard
+#include <ofstd.h>
+// For class OFCondition
+#include <ofcond.h>
 
 #include "status.h"
 #include "logging.h"
@@ -19,9 +23,10 @@ namespace udg {
 
 CreateDicomdir::CreateDicomdir()
 {
-    m_optProfile = DicomDirInterface::AP_GeneralPurpose;//PErmet gravar al discdur i tb usb's
-    /* La normativa dicom indica que el nom dels fitxers de dicomdir han de tenir una longitud de 8 caràcters i han d'estar en majúscules. Linux per a sistemes de fitxer vfat com podrian ser els pendrive i per a nom de fitxers de 8 o menys caràcters sempre mostra els noms en minúscules, independenment de que nosaltres els guardem en majúscules, degut això quan volem crear un dicomdir en un dispositiu vfat es copien els noms de les imatges en minúscules, al generar el dicomdir ens dona problemes, per què es troben imatges en minúscules i DICOM no ho permet. Per solucionar aquests casos hem d'activar de dcmtk enableMapFilenamesMode, que si es troba amb fitxers en minúscules ho ignora i crea el dicomdir.
-    */
+    // Permet gravar al discdur i tb usb's
+    m_optProfile = DicomDirInterface::AP_GeneralPurpose;
+    // La normativa dicom indica que el nom dels fitxers de dicomdir han de tenir una longitud de 8 caràcters i han d'estar en majúscules. Linux per a sistemes de fitxer vfat com podrian ser els pendrive i per a nom de fitxers de 8 o menys caràcters sempre mostra els noms en minúscules, independenment de que nosaltres els guardem en majúscules, degut això quan volem crear un dicomdir en un dispositiu vfat es copien els noms de les imatges en minúscules, al generar el dicomdir ens dona problemes, per què es troben imatges en minúscules i DICOM no ho permet. Per solucionar aquests casos hem d'activar de dcmtk enableMapFilenamesMode, que si es troba amb fitxers en minúscules ho ignora i crea el dicomdir.
+    
     m_ddir.enableMapFilenamesMode(OFTrue);
 }
 
@@ -56,19 +61,29 @@ void CreateDicomdir::setStrictMode(bool enabled)
 {
     if (enabled)
     {
-        m_ddir.enableInventMode(OFFalse);//Rebutgem imatges que contingui tags de tipus 1 amb longitut 0
-        m_ddir.disableEncodingCheck(OFFalse);//Rebutja Imatges que no compleixin l'estàndard dicom en la codificació de la informació dels pixels
-        m_ddir.disableResolutionCheck(OFFalse);//rebutja imatges que no compleixin l'estàndard dicom en la codificació de la informació dels pixels
-        m_ddir.enableInventPatientIDMode(OFFalse);//rebutgem imatges que no tinguin PatientID
+        // Rebutgem imatges que contingui tags de tipus 1 amb longitut 0
+        m_ddir.enableInventMode(OFFalse);
+        // Rebutja Imatges que no compleixin l'estàndard dicom en la codificació de la informació dels pixels
+        m_ddir.disableEncodingCheck(OFFalse);
+        // Rebutja imatges que no compleixin l'estàndard dicom en la codificació de la informació dels pixels
+        m_ddir.disableResolutionCheck(OFFalse);
+        // Rebutgem imatges que no tinguin PatientID
+        m_ddir.enableInventPatientIDMode(OFFalse);
 
         INFO_LOG("Es creara el DICOMDIR en mode estricte de compliment del DICOM");
     }
-    else // no volem mode estricte
+    else
     {
-        m_ddir.enableInventMode(OFTrue);//si una imatge, no té algun tag de nivell 1, que són els tags obligatoris i que no poden tenir longitut 1, al crear el dicomdir se'ls inventa
-        m_ddir.disableEncodingCheck(OFTrue);//Accepta Imatges que no compleixin l'estàndard dicom en la codificació de la informació dels pixels
-        m_ddir.disableResolutionCheck(OFTrue);//Accepta Imatges que no compleixi la resolució espacial
-        m_ddir.enableInventPatientIDMode(OFTrue);//en cas que una pacient no tingui PatientID se l'inventa
+        // No volem mode estricte
+
+        // Si una imatge, no té algun tag de nivell 1, que són els tags obligatoris i que no poden tenir longitut 1, al crear el dicomdir se'ls inventa
+        m_ddir.enableInventMode(OFTrue);
+        // Accepta Imatges que no compleixin l'estàndard dicom en la codificació de la informació dels pixels
+        m_ddir.disableEncodingCheck(OFTrue);
+        // Accepta Imatges que no compleixi la resolució espacial
+        m_ddir.disableResolutionCheck(OFTrue);
+        // En cas que una pacient no tingui PatientID se l'inventa
+        m_ddir.enableInventPatientIDMode(OFTrue);
 
         INFO_LOG("Es creara el DICOMDIR en mode permisiu en el compliment del DICOM");
     }
@@ -76,15 +91,17 @@ void CreateDicomdir::setStrictMode(bool enabled)
 
 void CreateDicomdir::setCheckTransferSyntax(bool checkTransferSyntax)
 {
-    /*Atenció el nom del mètode disableTransferSyntaxCheck és enganyós, perquè per desactivar el check dels transfer syntax, s'ha d'invocar passant-li
-      la variable amb el valor false, i per indicar que s'ha de comprovar la transfer syntax s'ha de cridar amb la variable a cert*/
+    // Atenció el nom del mètode disableTransferSyntaxCheck és enganyós, perquè per desactivar el check dels transfer syntax, s'ha d'invocar passant-li
+    // la variable amb el valor false, i per indicar que s'ha de comprovar la transfer syntax s'ha de cridar amb la variable a cert
     m_ddir.disableTransferSyntaxCheck(checkTransferSyntax);
 }
 
 Status CreateDicomdir::create(QString dicomdirPath)
 {
-    QString outputDirectory = dicomdirPath + "/DICOMDIR";//Nom del fitxer dicomDir
-    OFList<OFString> fileNames;/* create list of input files */
+    // Nom del fitxer dicomDir
+    QString outputDirectory = dicomdirPath + "/DICOMDIR";
+    // Create list of input files
+    OFList<OFString> fileNames; 
     const char *opt_pattern = NULL;
     const char *opt_fileset = DEFAULT_FILESETID;
     const char *opt_descriptor = NULL;
@@ -116,7 +133,7 @@ Status CreateDicomdir::create(QString dicomdirPath)
         return state;
     }
 
-    /* set fileset descriptor and character set */
+    // set fileset descriptor and character set
     result = m_ddir.setFilesetDescriptor(opt_descriptor, opt_charset);
     if (result.good())
     {
@@ -141,7 +158,8 @@ Status CreateDicomdir::create(QString dicomdirPath)
         }
         else
         {
-            result = m_ddir.writeDicomDir (opt_enctype, opt_glenc); //escribim el dicomDir
+            // Escribim el dicomDir
+            result = m_ddir.writeDicomDir (opt_enctype, opt_glenc);
         }
     }
 

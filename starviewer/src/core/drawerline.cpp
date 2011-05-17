@@ -1,7 +1,7 @@
 #include "drawerline.h"
 #include "logging.h"
 #include "mathtools.h"
-// vtk
+// Vtk
 #include <vtkLineSource.h>
 #include <vtkPolyDataMapper2D.h>
 #include <vtkProperty2D.h>

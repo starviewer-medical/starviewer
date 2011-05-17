@@ -144,7 +144,8 @@ void QDicomPrintExtension::fillSelectedDicomPrinterComboBox()
 
     if (m_selectedPrinterComboBox->count() > 0)
     {
-        if (!m_noSupportedSeriesFrame->isVisible()) // Només ho habilitarem si la serie se suporta
+        // Només ho habilitarem si la serie se suporta
+        if (!m_noSupportedSeriesFrame->isVisible())
         {
             setEnabledPrintControls(true);
         }
@@ -267,11 +268,10 @@ int QDicomPrintExtension::getNumberOfPagesToPrint()
     DicomPrinter selectedDicomPrinter = getSelectedDicomPrinter();
 
     numberOfImagesToPrint = (m_toImageSlider->value() - m_fromImageSlider->value() + 1) / m_intervalImagesSlider->value();
-    /*Si tenim residu hem d'augmena en 1 el número d'imatges Ex: han seleccionat de la 1 a la 15 d'imatge, cada 10 imatges,
-      haurem d'imprimir la 1 i la 11 -> 2 Imatges
-      15 / 10 = 1
-      15 % 10 = 5, és més gran de 1 per tant hem d'afegir una altre imatge
-      */
+    // Si tenim residu hem d'augmena en 1 el número d'imatges Ex: han seleccionat de la 1 a la 15 d'imatge, cada 10 imatges,
+    // haurem d'imprimir la 1 i la 11 -> 2 Imatges
+    // 15 / 10 = 1
+    // 15 % 10 = 5, és més gran de 1 per tant hem d'afegir una altre imatge
     numberOfImagesToPrint += (m_toImageSlider->value() - m_fromImageSlider->value() + 1) % m_intervalImagesSlider->value() > 0 ? 1 : 0;
 
     numberOfImagesPerPage = selectedDicomPrinter.getDefaultFilmLayoutRows() * selectedDicomPrinter.getDefaultFilmLayoutColumns();
@@ -349,7 +349,8 @@ void QDicomPrintExtension::selectedDicomPrinterChanged(int indexOfSelectedDicomP
 
         m_qdicomPrinterBasicSettingsWidget->setDicomPrinterBasicSettings(selectedDicomPrinter);
 
-        if (!m_noSupportedSeriesFrame->isVisible())// Només ho habilitarem si la serie se suporta
+        // Només ho habilitarem si la serie se suporta
+        if (!m_noSupportedSeriesFrame->isVisible())
         {
             setEnabledPrintControls(true);
         }
@@ -509,8 +510,8 @@ void QDicomPrintExtension::setEnabledPrintControls(bool enable)
     m_qdicomPrinterBasicSettingsWidget->setEnabled(enable);
     m_numberOfCopiesSpinBox->setEnabled(enable);
 
-    /*Si ens indiquen que activem els controls d'impressió però tenim el checkbox d'imprimir només pàgina actual el frame
-      per seleccionar les imatges a imprimir el desactivem, no té sentit que estigui activat*/
+    // Si ens indiquen que activem els controls d'impressió però tenim el checkbox d'imprimir només pàgina actual el frame
+    // per seleccionar les imatges a imprimir el desactivem, no té sentit que estigui activat
     if (enable && m_currentImageRadioButton->isChecked())
     {
         m_selectionImagesFrame->setEnabled(false);

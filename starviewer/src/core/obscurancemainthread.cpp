@@ -78,13 +78,15 @@ void ObscuranceMainThread::run()
 
     vtkVolumeRayCastMapper *mapper = vtkVolumeRayCastMapper::SafeDownCast(m_volume->GetMapper());
     vtkEncodedGradientEstimator *gradientEstimator = mapper->GetGradientEstimator();
-    gradientEstimator->GetEncodedNormals(); /// \todo fent això aquí crec que va més ràpid, però s'hauria de comprovar i provar també amb l'Update()
+    /// \TODO fent això aquí crec que va més ràpid, però s'hauria de comprovar i provar també amb l'Update()
+    gradientEstimator->GetEncodedNormals();
 
     // Creem els threads
-    int numberOfThreads = vtkMultiThreader::GetGlobalDefaultNumberOfThreads();  /// \todo QThread::idealThreadCount() amb Qt >= 4.3
+    /// \todo QThread::idealThreadCount() amb Qt >= 4.3
+    int numberOfThreads = vtkMultiThreader::GetGlobalDefaultNumberOfThreads();
     QVector<ObscuranceThread *> threads(numberOfThreads);
 
-    // variables necessàries
+    // Variables necessàries
     vtkImageData *image = mapper->GetInput();
     unsigned short *data = reinterpret_cast<unsigned short*>(image->GetPointData()->GetScalars()->GetVoidPointer(0));
     int dataSize = image->GetPointData()->GetScalars()->GetSize();
@@ -110,20 +112,20 @@ void ObscuranceMainThread::run()
         threads[i] = thread;
     }
 
-    // estructures de dades reaprofitables
+    // Estructures de dades reaprofitables
     QVector<Vector3> lineStarts;
 
     const QVector<Vector3> directions = getDirections();
     int nDirections = directions.size();
 
-    // iterem per les direccions
+    // Iterem per les direccions
     for (int i = 0; i < nDirections && !m_stopped; i++)
     {
         const Vector3 &direction = directions.at(i);
 
         DEBUG_LOG(QString("Direcció %1: %2").arg(i).arg(direction.toString()));
 
-        // direcció dominant (0 = x, 1 = y, 2 = z)
+        // Direcció dominant (0 = x, 1 = y, 2 = z)
         int dominant;
         Vector3 absDirection(qAbs(direction.x), qAbs(direction.y), qAbs(direction.z));
         if (absDirection.x >= absDirection.y)
@@ -149,7 +151,7 @@ void ObscuranceMainThread::run()
             }
         }
 
-        // vector per avançar
+        // Vector per avançar
         Vector3 forward;
         switch (dominant)
         {
@@ -157,10 +159,11 @@ void ObscuranceMainThread::run()
             case 1: forward = Vector3(direction.y, direction.z, direction.x); break;
             case 2: forward = Vector3(direction.z, direction.x, direction.y); break;
         }
-        forward /= qAbs(forward.x);   // la direcció x passa a ser 1 o -1
+        // La direcció x passa a ser 1 o -1
+        forward /= qAbs(forward.x);
         DEBUG_LOG(QString("forward = ") + forward.toString());
 
-        // dimensions i increments segons la direcció dominant
+        // Dimensions i increments segons la direcció dominant
         int x = dominant, y = (dominant + 1) % 3, z = (dominant + 2) % 3;
         int dimX = dimensions[x], dimY = dimensions[y], dimZ = dimensions[z];
         int incX = increments[x], incY = increments[y], incZ = increments[z];
@@ -188,16 +191,16 @@ void ObscuranceMainThread::run()
             sZ = -1;
         }
         DEBUG_LOG(QString("forward = ") + forward.toString());
-        // ara els 3 components són positius
+        // Ara els 3 components són positius
 
-        // llista dels vòxels que són començament de línia
+        // Llista dels vòxels que són començament de línia
         getLineStarts(lineStarts, dimX, dimY, dimZ, forward);
 
 //         int incXYZ[3] = { incX, incY, incZ };
         int xyz[3] = { x, y, z };
         int sXYZ[3] = { sX, sY, sZ };
 
-        // iniciem els threads
+        // Iniciem els threads
         for (int j = 0; j < numberOfThreads; j++)
         {
             ObscuranceThread * thread = threads[j];
@@ -205,7 +208,7 @@ void ObscuranceMainThread::run()
             thread->start();
         }
 
-        // esperem que acabin els threads
+        // Esperem que acabin els threads
         for (int j = 0; j < numberOfThreads; j++)
         {
             threads[j]->wait();
@@ -214,13 +217,13 @@ void ObscuranceMainThread::run()
         emit progress(100 * (i + 1) / nDirections);
     }
 
-    // destruïm els threads
+    // Destruïm els threads
     for (int j = 0; j < numberOfThreads; j++)
     {
         delete threads[j];
     }
-
-    if (m_stopped)    // si han cancel·lat el procés ja podem plegar
+    // Si han cancel·lat el procés ja podem plegar
+    if (m_stopped)
     {
         emit progress(0);
         delete m_obscurance; m_obscurance = 0;
@@ -236,8 +239,9 @@ void ObscuranceMainThread::getLineStarts(QVector<Vector3> &lineStarts, int dimX,
 {
     lineStarts.resize(0);
 
-    // tots els (0,y,z) són començament de línia
-    Vector3 lineStart;  // (0,0,0)
+    // Tots els (0,y,z) són començament de línia
+    // (0,0,0)
+    Vector3 lineStart;
     for (int iy = 0; iy < dimY; ++iy)
     {
         lineStart.y = iy;
@@ -250,16 +254,18 @@ void ObscuranceMainThread::getLineStarts(QVector<Vector3> &lineStarts, int dimX,
     }
     DEBUG_LOG(QString("line starts: %1").arg(lineStarts.size()));
 
-    // més començaments de línia
-    Vector3 rv; // (0,0,0)
+    // Més començaments de línia
+    // (0,0,0)
+    Vector3 rv;
     Voxel v = { 0, 0, 0 }, pv = v;
 
-    // iterar per la línia que comença a (0,0,0)
+    // Iterar per la línia que comença a (0,0,0)
     while (v.x < dimX)
     {
         if (v.y != pv.y)
         {
-            lineStart.x = rv.x; lineStart.y = rv.y - v.y;   // [y] = 0
+            // [y] = 0
+            lineStart.x = rv.x; lineStart.y = rv.y - v.y;
             for (double iz = rv.z - v.z; iz < dimZ; iz++)
             {
                 lineStart.z = iz;
@@ -268,7 +274,8 @@ void ObscuranceMainThread::getLineStarts(QVector<Vector3> &lineStarts, int dimX,
         }
         if (v.z != pv.z)
         {
-            lineStart.x = rv.x; lineStart.z = rv.z - v.z;   // [z] = 0
+            // [z] = 0
+            lineStart.x = rv.x; lineStart.z = rv.z - v.z;
             for (double iy = rv.y - v.y; iy < dimY; iy++)
             {
                 lineStart.y = iy;
@@ -276,7 +283,7 @@ void ObscuranceMainThread::getLineStarts(QVector<Vector3> &lineStarts, int dimX,
             }
         }
 
-        // avançar el vòxel
+        // Avançar el vòxel
         rv += forward;
         pv = v;
         v.x = qRound(rv.x); v.y = qRound(rv.y); v.z = qRound(rv.z);

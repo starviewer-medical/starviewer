@@ -31,7 +31,7 @@ void QTransferFunctionEditor2::init(Features features, View view)
 {
     setupUi(this);
 
-    // els farem servir en el futur, quan ja estiguin implementades les coses bàsiques
+    // Els farem servir en el futur, quan ja estiguin implementades les coses bàsiques
     Q_UNUSED(features);
     Q_UNUSED(view);
 
@@ -47,7 +47,7 @@ void QTransferFunctionEditor2::makeConnections()
 {
     connect(m_editor, SIGNAL(transferFunctionChanged(TransferFunction)), SLOT(emitTransferFunctionChanged()));
     connect(m_editor, SIGNAL(nameChanged(QString)), SLOT(emitTransferFunctionChanged()));
-    // afegir connexions per tots els signals de l'editor
+    // Afegir connexions per tots els signals de l'editor
 }
 
 void QTransferFunctionEditor2::emitTransferFunctionChanged()
@@ -55,4 +55,4 @@ void QTransferFunctionEditor2::emitTransferFunctionChanged()
     emit transferFunctionChanged(m_editor->transferFunction());
 }
 
-} // namespace udg
+} // End namespace udg

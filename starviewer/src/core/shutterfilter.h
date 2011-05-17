@@ -1,9 +1,9 @@
 #ifndef UDGSHUTTERFILTER_H
 #define UDGSHUTTERFILTER_H
 
-// stl
+// Stl
 #include <vector>
-//qt
+//Qt
 #include <QString>
 
 class vtkImageData;
@@ -33,7 +33,7 @@ class Volume;
 
 class ShutterFilter{
 public:
-    ///\TODO Queda pendent determinar correctament l'extrusió. Per una part, la coordenada Z dels punts que formen els polígons de l'extrusió hauria d'estar una llesca més per sota de l'origen i l'scale factor de l'extrusion hauria d'assegurar que el polígon atravessarà totes les llesques del volum
+    /// \TODO Queda pendent determinar correctament l'extrusió. Per una part, la coordenada Z dels punts que formen els polígons de l'extrusió hauria d'estar una llesca més per sota de l'origen i l'scale factor de l'extrusion hauria d'assegurar que el polígon atravessarà totes les llesques del volum
     ShutterFilter();
 
     ~ShutterFilter();
@@ -69,7 +69,7 @@ public:
     void clearRectangularShutter();
     void clearBitmapShutter();
 
-    /// assigna/obté el color amb que es pinta la part que queda retallada
+    /// Assigna/obté el color amb que es pinta la part que queda retallada
     void setBackground(double background)
     {
         m_background = background;
@@ -83,7 +83,7 @@ public:
     vtkImageData *getOutput();
 
 private:
-    /// stencils per retallar les imatges
+    /// Stencils per retallar les imatges
     vtkPolyDataToImageStencil *m_rectangularPolyDataStencil, *m_circularPolyDataStencil;
     /// Pel cas poligonal fem servir un altre tipu d'stencil ja que si tenim puntes l'anterior es pot comportar malament
     vtkAtamaiPolyDataToImageStencil2 *m_polygonalPolyDataStencil;
@@ -91,7 +91,7 @@ private:
     /// Les dades d'input
     Volume *m_inputData;
 
-    /// color amb que es pinta la part que no es veu
+    /// Color amb que es pinta la part que no es veu
     double m_background;
 };
 

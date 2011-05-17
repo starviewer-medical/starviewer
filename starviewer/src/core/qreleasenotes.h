@@ -31,6 +31,6 @@ protected:
     void closeEvent(QCloseEvent *event);
 };
 
-} // end namespace udg
+} // End namespace udg
 
 #endif //UDGQRELEASENOTES_H

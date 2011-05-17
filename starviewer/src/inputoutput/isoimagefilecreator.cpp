@@ -124,8 +124,10 @@ void IsoImageFileCreator::startCreateIsoImageFile()
                     processParameters << "-r";
 
                     processParameters << "-o";
-                    processParameters << m_outputIsoImageFilePath; // Nom i directori on guardarem la imatge
-                    processParameters << m_inputPath; // Path a convertir en iso
+                    // Nom i directori on guardarem la imatge
+                    processParameters << m_outputIsoImageFilePath;
+                    // Path a convertir en iso
+                    processParameters << m_inputPath;
 
                     QString mkisofsFilePath = QCoreApplication::applicationDirPath() + "/mkisofs";
 

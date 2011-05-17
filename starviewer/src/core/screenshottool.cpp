@@ -6,7 +6,7 @@
 #include "coresettings.h"
 // Definicions globals d'aplicació
 #include "starviewerapplication.h"
-// vtk
+// Vtk
 #include <vtkCommand.h>
 #include <vtkRenderWindowInteractor.h>
 // Qt
@@ -14,7 +14,8 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QString>
-#include <QApplication> // Pel "wait cursor"
+// Pel "wait cursor"
+#include <QApplication>
 
 namespace udg {
 
@@ -50,11 +51,13 @@ void ScreenShotTool::handleEvent(unsigned long eventID)
             // CTRL+a = key code 1
             switch (key)
             {
-                case 19: // Ctrl+s, "single shot"
+                // Ctrl+s, "single shot"
+                case 19:
                     this->screenShot();
                     break;
 
-                case 1: // Ctrl+a, "multiple shot"
+                // Ctrl+a, "multiple shot"
+                case 1:
                     this->screenShot(false);
                     break;
             }
@@ -105,7 +108,8 @@ void ScreenShotTool::screenShot(bool singleShot)
         // Guardem el nom de l'ultim fitxer
         m_lastScreenShotFileName = QFileInfo(filename).fileName();
 
-        QApplication::setOverrideCursor(Qt::WaitCursor);// Pel que pugui trigar el procés
+        // Pel que pugui trigar el procés
+        QApplication::setOverrideCursor(Qt::WaitCursor);
         if (singleShot)
         {
             m_viewer->grabCurrentView();
@@ -136,7 +140,8 @@ void ScreenShotTool::screenShot(bool singleShot)
                 viewer2D->setSlice(currentSlice);
                 viewer2D->setPhase(currentPhase);
             }
-            else // Tenim un visor que no és 2D, per tant fem un "single shot"
+            // Tenim un visor que no és 2D, per tant fem un "single shot"
+            else
             {
                 m_viewer->grabCurrentView();
             }

@@ -23,9 +23,9 @@ void LocalDatabasePatientDAL::insert(Patient *newPatient)
     }
     else
     {
-        /*El mètode retorna un tipus sqlite3_int64 aquest en funció de l'entorn de compilació equival a un determinat tipus http://www.sqlite.org/c3ref/int64.html
-         __int64 per windows i long long int per la resta, qlonglong de qt http://doc.qt.nokia.com/4.1/qtglobal.html#qlonglong-typedef equival als mateixos tipus
-         pel mateix entorn de compilació per això retornem el ID com un qlonglong.*/
+        // El mètode retorna un tipus sqlite3_int64 aquest en funció de l'entorn de compilació equival a un determinat tipus http://www.sqlite.org/c3ref/int64.html
+        // __int64 per windows i long long int per la resta, qlonglong de qt http://doc.qt.nokia.com/4.1/qtglobal.html#qlonglong-typedef equival als mateixos tipus
+        // pel mateix entorn de compilació per això retornem el ID com un qlonglong.
         newPatient->setDatabaseID(sqlite3_last_insert_rowid(m_dbConnection->getConnection()));
     }
 }

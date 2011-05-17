@@ -29,4 +29,4 @@ void QTransferFunctionView::makeConnections()
 //    connect(m_editor, SIGNAL(gradientOpacityPointRemoved(double)), SLOT(removeGradientOpacityPoint(double)));
 }
 
-} // namespace udg
+} // End namespace udg

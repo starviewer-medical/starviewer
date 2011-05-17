@@ -7,9 +7,9 @@
 #include "patient.h"
 #include "changesliceqviewercommand.h"
 #include "renderqviewercommand.h"
-//qt
+// Qt
 #include <QTime>
-//vtk
+// Vtk
 #include <vtkRenderWindowInteractor.h>
 #include <vtkCommand.h>
 
@@ -85,7 +85,8 @@ void SlicingKeyboardTool::handleEvent(unsigned long eventID)
                                 {
                                     if (volume->getIdentifier() == currentVolume->getIdentifier())
                                     {
-                                        currentVolumeIndex = volumesList.size(); // Encara no hem afegit el nou volume, si no, seria size - 1
+                                        // Encara no hem afegit el nou volume, si no, seria size - 1
+                                        currentVolumeIndex = volumesList.size();
                                     }
 
                                     volumesList << volume;

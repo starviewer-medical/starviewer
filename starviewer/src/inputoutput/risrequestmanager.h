@@ -71,9 +71,8 @@ private slots:
 
 private:
 
-    /**Inicialitza les variables globals per escoltar i executar peticions del RIS.
-      *No inicialitzem al construtor perquè si no ens indiquen que hem d'escoltar no cal, inicialitzar les variables i ocupar memòria
-      */
+    /// Inicialitza les variables globals per escoltar i executar peticions del RIS.
+    /// No inicialitzem al construtor perquè si no ens indiquen que hem d'escoltar no cal, inicialitzar les variables i ocupar memòria
     void initialize();
 
     ///Crea les connexions entre Signals i Slots
@@ -100,13 +99,13 @@ private:
 
 private:
 
-    /*No podem executar diverses peticions de RIS a la vegada, per això creem aquesta cua, que ens permetrà en el cas que se'ns
-     *demani una petició, quan ja n'hi hagi un altre executant, encuar la sol·licitud i esperar a llançar-la que l'actual hagi finalitzat.
-     El motiu de que no podem executar més d'una sol·licitud a la vegada, és degut a la naturalesa assíncrona del PacsManager,
-      quan retorna els resultats no sabem a quina sol·licitud del RIS pertany, no hi ha cap ordre establert, dificultant les coses.
-     Necessitem saber si per un determinada sol·licitud hem trobat un estudi que compleixi el criteri de cerca, controls
-     d'errors, etc.. si processim més d'una sol·licitud a la vegada, no sabríem de quina sol·licitud són els resultats o error,
-     dificultant el control de les sol·licituds*/
+    /// No podem executar diverses peticions de RIS a la vegada, per això creem aquesta cua, que ens permetrà en el cas que se'ns
+    /// demani una petició, quan ja n'hi hagi un altre executant, encuar la sol·licitud i esperar a llançar-la que l'actual hagi finalitzat.
+    /// El motiu de que no podem executar més d'una sol·licitud a la vegada, és degut a la naturalesa assíncrona del PacsManager,
+    /// quan retorna els resultats no sabem a quina sol·licitud del RIS pertany, no hi ha cap ordre establert, dificultant les coses.
+    /// Necessitem saber si per un determinada sol·licitud hem trobat un estudi que compleixi el criteri de cerca, controls
+    /// d'errors, etc.. si processim més d'una sol·licitud a la vegada, no sabríem de quina sol·licitud són els resultats o error,
+    /// dificultant el control de les sol·licituds
     QQueue<DicomMask> m_queueRISRequests;
     ListenRISRequests *m_listenRISRequests;
 
@@ -117,8 +116,8 @@ private:
     ///QThread que s'encarrega d'executar la classe escolta si arriben peticions del RIS
     QThread *m_listenRISRequestsQThread;
 
-    /*Pot ser que diversos PACS continguin el mateix estudi amb un mateix accession number, per evitar descarregar-lo més d'una vegada ens guardem en una
-      llista quins són els estudis descarregats.*/
+    /// Pot ser que diversos PACS continguin el mateix estudi amb un mateix accession number, per evitar descarregar-lo més d'una vegada ens guardem en una
+    /// llista quins són els estudis descarregats.
     QStringList m_studiesInstancesUIDRequestedToRetrieve;
     //Llista de PACSJob pels quals una vegada l'estudi estigui descarregat s'ha de fer un view/load
     QList<int> m_pacsJobIDToViewWhenFinished;

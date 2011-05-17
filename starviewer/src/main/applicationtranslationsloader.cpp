@@ -22,7 +22,7 @@ QLocale ApplicationTranslationsLoader::getDefaultLocale()
     Settings settings;
     QString defaultLocale = settings.getValue(CoreSettings::LanguageLocale).toString();
 
-    // configurem les locales de l'aplicació
+    // Configurem les locales de l'aplicació
     // TODO ara està simplificat només als idiomes que nosaltres
     // suportem. Mirar si es pot millorar i fer més genèric
     QLocale::Language language;
@@ -42,7 +42,8 @@ QLocale ApplicationTranslationsLoader::getDefaultLocale()
     }
     else
     {
-        language = QLocale::C; // TODO no hauria de ser anglès per defecte?
+        // TODO no hauria de ser anglès per defecte?
+        language = QLocale::C;
     }
 
     if (defaultLocale.endsWith("_GB"))
@@ -55,7 +56,8 @@ QLocale ApplicationTranslationsLoader::getDefaultLocale()
     }
     else
     {
-        country = QLocale::AnyCountry; // // TODO no hauria de ser EEUU/UK per defecte?
+        // TODO no hauria de ser EEUU/UK per defecte?
+        country = QLocale::AnyCountry;
     }
 
     return QLocale(language, country);
@@ -75,4 +77,4 @@ bool ApplicationTranslationsLoader::loadTranslation(QString translationFilePath)
     }
 }
 
-} // end namespace
+} // End namespace

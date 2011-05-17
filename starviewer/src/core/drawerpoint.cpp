@@ -1,6 +1,6 @@
 #include "drawerpoint.h"
 #include "logging.h"
-// vtk
+// Vtk
 #include <vtkPolyDataMapper.h>
 #include <vtkProperty.h>
 #include <vtkActor.h>
@@ -107,7 +107,7 @@ void DrawerPoint::updateVtkActorProperties()
     // Sistema de coordenades
     // TODO És un mapper 3D i per això no disposa d'aquest mètode Caldria veure si això pot suposar algun
     // problema amb la gestió dels sistemes de coordenades
-    //m_pointMapper->SetTransformCoordinate(this->getVtkCoordinateObject());
+    // m_pointMapper->SetTransformCoordinate(this->getVtkCoordinateObject());
 
     // Assignem gruix de l'esfera
     m_pointSphere->SetRadius(m_pointRadius);

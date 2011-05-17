@@ -257,8 +257,8 @@ private:
     QDate m_date;
     QTime m_time;
 
-    //\TODO aquest tag està dins de l'Equipment IE module. Se suposa que és mes correcte posar-ho a nivell de sèrie.
-    //Llegir A.1.2.3 SERIES IE, apartat c., A.1.2.4 EQUIPMENT IE i C.7.5 Common Equipment IE Modules - PS 3.3
+    // \TODO aquest tag està dins de l'Equipment IE module. Se suposa que és mes correcte posar-ho a nivell de sèrie.
+    // Llegir A.1.2.3 SERIES IE, apartat c., A.1.2.4 EQUIPMENT IE i C.7.5 Common Equipment IE Modules - PS 3.3
     /// Nom de l'institució en la que s'ha fet
     QString m_institutionName;
 

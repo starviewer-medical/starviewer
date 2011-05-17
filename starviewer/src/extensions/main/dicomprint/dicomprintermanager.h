@@ -15,14 +15,13 @@ namespace udg {
 class DicomPrinterManager {
 public:
 
-    /** Afegeix una impressora Dicom (\p printer) al sistema.
-        Retorna True si s'ha pogut afegir la impressora i False si la impressora ja existeix al sistema.
-        En cas que s'hagi pogut afegir, s'assigna l'id a la impressora passada per paràmetre.
-        */
+    /// Afegeix una impressora Dicom (\p printer) al sistema.
+    /// Retorna True si s'ha pogut afegir la impressora i False si la impressora ja existeix al sistema.
+    /// En cas que s'hagi pogut afegir, s'assigna l'id a la impressora passada per paràmetre.
     bool addPrinter(DicomPrinter &printer);
 
-    /** Modifica la impressora amb identificador printerID amb els nous paràmetres guardats a newDicomPrinter.
-        Retorna True si s'ha pogut modificar correctament i False si la impressora a modificar no existeix o no és vàlida. */
+    /// Modifica la impressora amb identificador printerID amb els nous paràmetres guardats a newDicomPrinter.
+    /// Retorna True si s'ha pogut modificar correctament i False si la impressora a modificar no existeix o no és vàlida.
     bool updatePrinter(int printerID, DicomPrinter &newDicomPrinter);
 
     /// Esborra la impressora amb identificador printerID.
@@ -34,11 +33,10 @@ public:
     /// Retorna una llista de DicomPrinters que hi ha emmagatzemades al sistema.
     QList<DicomPrinter> getDicomPrinterList();
 
-    /** Retorna un objecte DicomPrinter amb el rang de valors que pot assignar-se a cada paràmetre configurable de la impressora. Aquests rang de valors són els que per
-        defecte estableix el DICOM, però la impressora no té perquè acceptar-los tots.
-        TO-DO: S'hauria de substituir aquest mètode per un que es connectes a la impressora a través del seu AETitle i IP demanant-li per cada paràmetre configurable
-                quins valors accepta
-    */
+    /// Retorna un objecte DicomPrinter amb el rang de valors que pot assignar-se a cada paràmetre configurable de la impressora. Aquests rang de valors són els que per
+    /// defecte estableix el DICOM, però la impressora no té perquè acceptar-los tots.
+    /// TO-DO: S'hauria de substituir aquest mètode per un que es connectes a la impressora a través del seu AETitle i IP demanant-li per cada paràmetre configurable
+    ///        quins valors accepta
     DicomPrinter getDefaultAvailableParametersValuesDICOMPrinters();
 
 private:
@@ -94,8 +92,8 @@ private:
     /// Retorna una llista de possibles valors que pot agafar el Polarity d'uma impressora Dicom.
     QStringList getAvailablePolarityValues();
 
-    /**Ens posa totes les impressores que tenim configurades com a impressores no per defecte, és a dir cap d'elles és la
-      *impressora seleccionada per imprimir per defecte*/
+    /// Ens posa totes les impressores que tenim configurades com a impressores no per defecte, és a dir cap d'elles és la
+    /// impressora seleccionada per imprimir per defecte
     void setAllPrintersAsNoDefaultPrinter();
 
 private:

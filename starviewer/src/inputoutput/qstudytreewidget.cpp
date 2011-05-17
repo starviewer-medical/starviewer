@@ -58,8 +58,9 @@ QList<DicomMask> QStudyTreeWidget::getDicomMaskOfSelectedItems()
     foreach (QTreeWidgetItem *item, selectedItems)
     {
         DicomMask dicomMask;
-        if (isItemStudy(item)) //es un estudi
+        if (isItemStudy(item))
         {
+            // És un estudi
             dicomMask.setStudyInstanceUID(item->text(UID));
         }
         else if (isItemSeries(item))
@@ -136,16 +137,16 @@ QList<QTreeWidgetItem*> QStudyTreeWidget::fillPatient(Patient *patient)
         item->setText(Institution, studyToInsert->getInstitutionName());
         item->setText(AccNumber, studyToInsert->getAccessionNumber());
         item->setText(UID, studyToInsert->getInstanceUID());
-        item->setText(Type, "STUDY");//indiquem de que es tracta d'un estudi
+        // Indiquem de que es tracta d'un estudi
+        item->setText(Type, "STUDY");
         item->setText(RefPhysName, studyToInsert->getReferringPhysiciansName());
 
         //Comprovem si el TreeItem s'ha d'expandir en funció del nivell màxim que ens han indicat que ens podem expandir
         if (m_maximumExpandTreeItemsLevel > StudyLevel)
         {
-            /* degut que per cada item estudi tenim items fills que són series, i que consultar les series per cada estudi és
-               una operació costosa (per exemple quan es consulta al pacs) només inserirem les sèries per a que les pugui
-               consultar l'usuari quan es facin un expand d'estudi, però per a que apareixi el botó "+" de desplegar l'estudi inserim un item en blanc
-             */
+            // degut que per cada item estudi tenim items fills que són series, i que consultar les series per cada estudi és
+            // una operació costosa (per exemple quan es consulta al pacs) només inserirem les sèries per a que les pugui
+            // consultar l'usuari quan es facin un expand d'estudi, però per a que apareixi el botó "+" de desplegar l'estudi inserim un item en blanc
             QTreeWidgetItem *expandableItem = new QTreeWidgetItem();
 
             expandableItem->setText(Type, "EXPANDABLE_ITEM");
@@ -181,11 +182,13 @@ QTreeWidgetItem* QStudyTreeWidget::fillSeries(Series *series)
     seriesItem->setText(ObjectName, tr("Series %1").arg(paddingLeft(series->getSeriesNumber(), 4)));
     seriesItem->setText(Modality, series->getModality());
 
-    seriesItem->setText(Description, series->getDescription().simplified());//treiem els espaics en blanc del davant i darrera
+    // Treiem els espaics en blanc del davant i darrera
+    seriesItem->setText(Description, series->getDescription().simplified());
 
     seriesItem->setText(Date, formatDateTime(series->getDate(), series->getTime()));
     seriesItem->setText(UID, series->getInstanceUID());
-    seriesItem->setText(Type, "SERIES"); //indiquem que es tracta d'una sèrie
+    // Indiquem que es tracta d'una sèrie
+    seriesItem->setText(Type, "SERIES");
 
     seriesItem->setText(ProtocolName, series->getProtocolName());
     seriesItem->setText(PPStartDate, series->getPerformedProcedureStepStartDate());
@@ -196,10 +199,9 @@ QTreeWidgetItem* QStudyTreeWidget::fillSeries(Series *series)
     //Comprovem si el TreeItem s'ha d'expandir en funció del nivell màxim que ens han indicat que ens podem expandir
     if (m_maximumExpandTreeItemsLevel > SeriesLevel)
     {
-        /* degut que per cada item serie tenim items fills que són imatges, i que consultar les imatges per cada sèrie és
-        una operació costosa (per exemple quan es consulta al pacs) només inserirem les sèries per a que les pugui
-        consultar l'usuari quan es facin un expand de la sèrie, però per a que apareixi el botó "+" de desplegar la sèrie inserim un item en blanc
-        */
+        // degut que per cada item serie tenim items fills que són imatges, i que consultar les imatges per cada sèrie és
+        // una operació costosa (per exemple quan es consulta al pacs) només inserirem les sèries per a que les pugui
+        // consultar l'usuari quan es facin un expand de la sèrie, però per a que apareixi el botó "+" de desplegar la sèrie inserim un item en blanc
         QTreeWidgetItem *expandableItem = new QTreeWidgetItem();
 
         expandableItem->setText(Type, "EXPANDABLE_ITEM");
@@ -220,9 +222,11 @@ void QStudyTreeWidget::insertImageList(QString studyInstanceUID, QString seriesI
             newImageItem = new QTreeWidgetItem();
 
             newImageItem->setIcon(ObjectName, m_iconSeries);
-            newImageItem->setText(ObjectName, tr("File %1").arg(paddingLeft(image->getInstanceNumber(), 4)));//Li fem un padding per poder ordenar la columna, ja que s'ordena per String
+            // Li fem un padding per poder ordenar la columna, ja que s'ordena per String
+            newImageItem->setText(ObjectName, tr("File %1").arg(paddingLeft(image->getInstanceNumber(), 4)));
             newImageItem->setText(UID, image->getSOPInstanceUID());
-            newImageItem->setText(Type, "IMAGE"); //indiquem que es tracta d'una imatge
+            newImageItem->setText(Type, "IMAGE");
+            // Indiquem que es tracta d'una imatge
             qTreeWidgetItemImageList.append(newImageItem);
         }
         //Afegim la llista d'imatges
@@ -305,8 +309,9 @@ QString QStudyTreeWidget::getCurrentStudyUID()
 {
     if (m_studyTreeView->currentItem() != NULL)
     {
-        if (isItemStudy(m_studyTreeView->currentItem())) //es un estudi
+        if (isItemStudy(m_studyTreeView->currentItem()))
         {
+            // És un estudi
             return m_studyTreeView->currentItem()->text(UID);
         }
         else if (isItemSeries(m_studyTreeView->currentItem()))
@@ -334,8 +339,9 @@ QStringList QStudyTreeWidget::getSelectedStudiesUID()
     QList<QTreeWidgetItem*> selectedItems = m_studyTreeView->selectedItems();
     foreach (QTreeWidgetItem *item, selectedItems)
     {
-        if (isItemStudy(item)) //es un estudi
+        if (isItemStudy(item))
         {
+            // És un estudi
             if (!result.contains(item->text(UID)))
             {
                 result << item->text(UID);
@@ -422,7 +428,8 @@ QString QStudyTreeWidget::getCurrentSeriesUID()
 
 QTreeWidgetItem* QStudyTreeWidget::getStudyQTreeWidgetItem(QString studyUID)
 {
-    QList<QTreeWidgetItem*> qStudyList(m_studyTreeView->findItems(studyUID, Qt::MatchExactly, UID));//busquem l'estudi a la que pertany la sèrie
+    // Busquem l'estudi a la que pertany la sèrie
+    QList<QTreeWidgetItem*> qStudyList(m_studyTreeView->findItems(studyUID, Qt::MatchExactly, UID));
 
     //TODO d'aquesta manera podríem tenir problemes si tenim un StudyUID duplicat
     if (qStudyList.count() > 0)
@@ -442,7 +449,8 @@ QTreeWidgetItem* QStudyTreeWidget::getSeriesQTreeWidgetItem(QString studyInstanc
 
     studyItem = getStudyQTreeWidgetItem(studyInstanceUID);
 
-    while (item == NULL && index < studyItem->childCount())//cerquem la sèrie de la que depen la imatge
+    // Cerquem la sèrie de la que depen la imatge
+    while (item == NULL && index < studyItem->childCount())
     {
         if (studyItem->child(index)->text(UID) == seriesInstanceUID)
         {
@@ -513,8 +521,8 @@ void QStudyTreeWidget::removeSeries(const QString &studyInstanceUID, const QStri
 
         if (studyItem->childCount() == 0 && seriesDeleted)
         {
-            /*Si després d'esborrar la sèrie l'estudi no té cap fill esborrem el QTreeWidgeItem estudi, no té sentit tenir un estudi sol
-              si no té series*/
+            // Si després d'esborrar la sèrie l'estudi no té cap fill esborrem el QTreeWidgeItem estudi, no té sentit tenir un estudi sol
+            // si no té series
             delete studyItem;
         }
     }
@@ -569,11 +577,13 @@ void QStudyTreeWidget::currentItemChanged(QTreeWidgetItem *current, QTreeWidgetI
             emit(currentSeriesChanged(m_oldCurrentSeriesUID));
         }
 
-        emit(currentImageChanged()); //sempre que canviem d'element segur que canviem d'imatge
+        // Sempre que canviem d'element segur que canviem d'imatge
+        emit(currentImageChanged());
     }
     else
     {
-        emit notCurrentItemSelected(); //cas en que no hi cap item seleccionat
+        // Cas en que no hi cap item seleccionat
+        emit notCurrentItemSelected();
     }
 }
 
@@ -585,15 +595,13 @@ void QStudyTreeWidget::itemExpanded(QTreeWidgetItem *itemExpanded)
     {
         return;
     }
-    /* El QTreeWidget després de fer doble click expandeix o col·lapsa l'item en funció del seu estat, a nosaltres no ens interessa
-     * que es faci això, per aquest motiu en cas d'un signal de collapse o expand, el que fem és comprovar si per aquell item s'acaba
-     *de fer doble click, si és així anul·lem l'acció de col·lapsar o expandir
-     */
+    // El QTreeWidget després de fer doble click expandeix o col·lapsa l'item en funció del seu estat, a nosaltres no ens interessa
+    // que es faci això, per aquest motiu en cas d'un signal de collapse o expand, el que fem és comprovar si per aquell item s'acaba
+    // de fer doble click, si és així anul·lem l'acció de col·lapsar o expandir
     if (m_doubleClickedItemUID != itemExpanded->text(UID))
     {
-        /* Com que inserim un item en blanc per simular fills dels estudis i de les sèries cada vegada que ens fan un expand hem d'eliminar l'item en blanc i
-        * emetem un signal per a que qui el reculli s'encarregui de fer els passos corresponents per expandir l'estudi o imatge amb el seus fills pertinents
-        */
+        // Com que inserim un item en blanc per simular fills dels estudis i de les sèries cada vegada que ens fan un expand hem d'eliminar l'item en blanc i
+        // emetem un signal per a que qui el reculli s'encarregui de fer els passos corresponents per expandir l'estudi o imatge amb el seus fills pertinents
         foreach (QTreeWidgetItem *childItem, itemExpanded->takeChildren())
         {
             delete childItem;
@@ -601,7 +609,8 @@ void QStudyTreeWidget::itemExpanded(QTreeWidgetItem *itemExpanded)
 
         if (isItemStudy(itemExpanded))
         {
-            itemExpanded->setIcon(ObjectName, m_openFolder);//canviem la icona per la de carpeta oberta quan l'item està expanded
+            // Canviem la icona per la de carpeta oberta quan l'item està expanded
+            itemExpanded->setIcon(ObjectName, m_openFolder);
             emit (studyExpanded(itemExpanded->text(UID)));
         }
         else if (isItemSeries(itemExpanded))
@@ -612,19 +621,22 @@ void QStudyTreeWidget::itemExpanded(QTreeWidgetItem *itemExpanded)
         m_doubleClickedItemUID = "";
     }
     else
-    {//si s'ha fet un doble click a l'item hem d'anul·lar l'acció que ha fet qt de col·lapsar l'item per tan nosaltres el tornem a expandir
-        m_doubleClickedItemUID = "";//Molt important fer-lo abans de fer collapseItem, sinó entrariem en bucle pq s'emetria signal de collapseItem
+    {
+        // Si s'ha fet un doble click a l'item hem d'anul·lar l'acció que ha fet qt de col·lapsar l'item per tan nosaltres el tornem a expandir
+        // Molt important fer-lo abans de fer collapseItem, sinó entrariem en bucle pq s'emetria signal de collapseItem
+        m_doubleClickedItemUID = "";
         m_studyTreeView->collapseItem(itemExpanded);
     }
 }
 
 void QStudyTreeWidget::itemCollapsed(QTreeWidgetItem *itemCollapsed)
 {
-    /* El QTreeWidget després de fer doble click expandeix o col·lapsa l'item en funció del seu estat, a nosaltres no ens interessa
-     * que es faci això, per aquest motiu en cas d'un signal de collapse o expand, el que fem és comprovar si per aquell item s'acaba
-     *de fer doble click, si és així anul·lem l'acció de col·lapsar o expandir
-     */
-    if (m_doubleClickedItemUID != itemCollapsed->text(UID)) // si l'item col·lapsat no se li acaba de fer un doble click
+    // El QTreeWidget després de fer doble click expandeix o col·lapsa l'item en funció del seu estat, a nosaltres no ens interessa
+    // que es faci això, per aquest motiu en cas d'un signal de collapse o expand, el que fem és comprovar si per aquell item s'acaba
+    // de fer doble click, si és així anul·lem l'acció de col·lapsar o expandir
+
+    // si l'item col·lapsat no se li acaba de fer un doble click
+    if (m_doubleClickedItemUID != itemCollapsed->text(UID))
     {
         //Si és una estudi està collapsed, canviem la icona per la carpeta tancada
         if (isItemStudy(itemCollapsed))
@@ -635,8 +647,10 @@ void QStudyTreeWidget::itemCollapsed(QTreeWidgetItem *itemCollapsed)
         m_doubleClickedItemUID = "";
     }
     else
-    {//si s'ha fet un doble click a l'item hem d'anul·lar l'acció que ha fet qt de col·lapsar l'item per tan nosaltres el tornem a expandir
-        m_doubleClickedItemUID = "";//Molt important fer-lo abans de fer expandItem, sinó entrariem en bucle, pq s'emetria signal d'expandItem
+    {
+        // Si s'ha fet un doble click a l'item hem d'anul·lar l'acció que ha fet qt de col·lapsar l'item per tan nosaltres el tornem a expandir
+        // Molt important fer-lo abans de fer expandItem, sinó entrariem en bucle, pq s'emetria signal d'expandItem
+        m_doubleClickedItemUID = "";
         m_studyTreeView->expandItem (itemCollapsed);
     }
 
@@ -663,9 +677,8 @@ void QStudyTreeWidget::doubleClicked(QTreeWidgetItem *item, int)
         emit(imageDoubleClicked());
     }
 
-    /*Pel comportament del tree widget quan es fa un un doble click es col·lapsa o expandeix l'item en funció del seu estat, com que
-     *nosaltres pel doble click no volem que s'expendeixi o es col·lapsi, guardem per quin element s'ha fet el doble click, per anul·laro quan es detecti un signal d'expand o collapse item
-     */
+    // Pel comportament del tree widget quan es fa un un doble click es col·lapsa o expandeix l'item en funció del seu estat, com que
+    // nosaltres pel doble click no volem que s'expendeixi o es col·lapsi, guardem per quin element s'ha fet el doble click, per anul·laro quan es detecti un signal d'expand o collapse item
     m_doubleClickedItemUID = item->text(UID);
 }
 

@@ -1,7 +1,8 @@
 #include "convertdicomtolittleendian.h"
 
 #include <QString>
-#include <osconfig.h>    /* make sure OS specific configuration is included first */
+// Make sure OS specific configuration is included first
+#include <osconfig.h>
 #include <ofstdinc.h>
 #include <dctk.h>
 #include <ofconapp.h>
@@ -12,7 +13,8 @@
 #endif
 
 #ifdef WITH_ZLIB
-#include <zlib.h>        /* for zlibVersion() */
+// For zlibVersion()
+#include <zlib.h>
 #endif
 
 #include "status.h"
@@ -34,7 +36,8 @@ Status ConvertDicomToLittleEndian::convert(QString inputFile, QString outputFile
     DcmDataset *dataset = fileformat.getDataset();
     OFCondition error;
     Status state;
-    E_TransferSyntax opt_ixfer = EXS_Unknown; //Transfer Syntax del fitxer d'entrada
+    //Transfer Syntax del fitxer d'entrada
+    E_TransferSyntax opt_ixfer = EXS_Unknown;
     E_FileReadMode opt_readMode = ERM_autoDetect;
     E_TransferSyntax opt_oxfer = EXS_LittleEndianExplicit;
     QString descriptionError;

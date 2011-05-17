@@ -55,9 +55,9 @@ void QBasicSearchWidget::setEnabledSeriesModality(bool enabled)
 
 DicomMask QBasicSearchWidget::buildDicomMask()
 {
-    /*Per fer cerques entre valors consultat el capítol 4 de DICOM punt C.2.2.2.5*/
-    /*Per defecte si passem un valor buit a la màscara,farà una cerca per tots els els valor d'aquella camp*/
-    /*En aquí hem de fer un set a tots els camps que volem cercar */
+    // Per fer cerques entre valors consultat el capítol 4 de DICOM punt C.2.2.2.5
+    // Per defecte si passem un valor buit a la màscara,farà una cerca per tots els els valor d'aquella camp
+    // En aquí hem de fer un set a tots els camps que volem cercar
     DicomMask mask;
     QString modalityMask;
 
@@ -72,16 +72,16 @@ DicomMask QBasicSearchWidget::buildDicomMask()
     mask.setPatientSex("");
     mask.setPatientBirth("");
 
-    /*Per PatientId i PatientName si el lineEdit és buit es fa un Universal Matching. Universal Matching és quan indiquem que cerquem per un tag de dicom però
-    no li donem valor, en aquest cas la normativa DICOM indica que el SCP ha de fer match per tots els objectes DICOM, el universal matching és un mecanisme per
-    indicar al fer c-find, d'aquell tag ens n'ha de retornar el valor que té tots els objecte DICOM que compleixen la cerca. La normativa
-    DICOM indica que fer una wildcard amb '*' és el mateix que fer Universal Matching. Nosaltres hem optat per fer Universal matching perquè hi ha algun scp
-    que si li passem un asterisc sol '*' al fer la cerca no es comportant correctament, per exemple retorna cap resultat.
+    // Per PatientId i PatientName si el lineEdit és buit es fa un Universal Matching. Universal Matching és quan indiquem que cerquem per un tag de dicom però
+    // no li donem valor, en aquest cas la normativa DICOM indica que el SCP ha de fer match per tots els objectes DICOM, el universal matching és un mecanisme per
+    // indicar al fer c-find, d'aquell tag ens n'ha de retornar el valor que té tots els objecte DICOM que compleixen la cerca. La normativa
+    // DICOM indica que fer una wildcard amb '*' és el mateix que fer Universal Matching. Nosaltres hem optat per fer Universal matching perquè hi ha algun scp
+    // que si li passem un asterisc sol '*' al fer la cerca no es comportant correctament, per exemple retorna cap resultat.
 
-    Si pel contrari algun dels lineEdit tenen valor, llavors fem wild card matching "*" + valor "*", posant "*" a davant i a darrera del valor indiquem
-    que el SCP que ens ha de retornar tots els objectes dicom que per aquell tag alguna part de la seu text coincideix amb el valor que ens han indicat.
+    // Si pel contrari algun dels lineEdit tenen valor, llavors fem wild card matching "*" + valor "*", posant "*" a davant i a darrera del valor indiquem
+    // que el SCP que ens ha de retornar tots els objectes dicom que per aquell tag alguna part de la seu text coincideix amb el valor que ens han indicat.
 
-    Per més informació consultar el PS 3.4 C.2.2.2 */
+    // Per més informació consultar el PS 3.4 C.2.2.2
 
     //S'afegeix '*' al patientId i patientName automàticament
     QString patientID = m_patientIDText->text();
@@ -127,7 +127,8 @@ DicomMask QBasicSearchWidget::buildDicomMask()
         mask.setPPStartTime("");
 
         if (m_buttonGroupModality->isEnabled())
-        { //es crea una sentencia per poder fer un in
+        { 
+            // Es crea una sentencia per poder fer un in
             if (m_checkCT->isChecked())
             {
                 mask.setSeriesModality("CT");
@@ -304,9 +305,9 @@ void QBasicSearchWidget::showEvent(QShowEvent *event)
 
     if (!m_widgetHasBeenShowed)
     {
-        /*La primera vegada que mostrem el widget donem focus al patientName. Tot i que en teoria el TabOrder està ben definit pels controls del widget això es fa
-          per si mai ens equivoquem i s'altera el TabOrder de manera incorrecte. Com és un Widget molt utilitzat ens interessa assegurar-nos que sempre
-          en primer lloc està enfocant al PatientName, ja que és pel camp que més cerquen.*/
+        // La primera vegada que mostrem el widget donem focus al patientName. Tot i que en teoria el TabOrder està ben definit pels controls del widget això es fa
+        // per si mai ens equivoquem i s'altera el TabOrder de manera incorrecte. Com és un Widget molt utilitzat ens interessa assegurar-nos que sempre
+        // en primer lloc està enfocant al PatientName, ja que és pel camp que més cerquen.
         m_patientNameText->setFocus();
         m_widgetHasBeenShowed = true;
     }

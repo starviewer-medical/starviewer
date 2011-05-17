@@ -11,4 +11,4 @@ RepositoryBase::~RepositoryBase()
 {
 }
 
-};  // end namespace udg {
+};  // End namespace udg

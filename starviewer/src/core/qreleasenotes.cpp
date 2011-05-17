@@ -11,10 +11,10 @@ QReleaseNotes::QReleaseNotes(QWidget *parent)
 {
     setupUi(this);
 
-    //no cal fer un metode a part per les connexions si només en tenim una
+    // No cal fer un metode a part per les connexions si només en tenim una
     connect(m_closePushButton, SIGNAL(clicked()), this, SLOT(close()));
 
-    //Fer que la finestra sempre quedi davant i no es pugui fer res fins que no es tanqui
+    // Fer que la finestra sempre quedi davant i no es pugui fer res fins que no es tanqui
     setWindowModality(Qt::ApplicationModal);
 }
 
@@ -40,14 +40,14 @@ void QReleaseNotes::setUrl(const QUrl &url)
 void QReleaseNotes::closeEvent(QCloseEvent *event)
 {
     Settings settings;
-    //si el 'Don't show on future releases' esta marcat
+    // Si el 'Don't show on future releases' esta marcat
     if (isDontShowAnymoreChecked())
     {
-        //modificar els settings per que no es mostrin mai més
+        // Modificar els settings per que no es mostrin mai més
         settings.setValue(CoreSettings::NeverShowNewVersionReleaseNotes, true);
     }
-    //i tancar la finestra
+    // I tancar la finestra
     event->accept();
 }
 
-}; // end namespace udg
+}; // End namespace udg

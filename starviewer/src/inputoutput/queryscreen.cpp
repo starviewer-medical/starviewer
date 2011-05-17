@@ -386,7 +386,8 @@ void QueryScreen::closeEvent(QCloseEvent *event)
     // el mètode quit des de main.cpp. Per això quan s'invoca el mètode close() de la QueryScreen és necessari tancar totes les finestres obertes
     // des de la QueryScreen perquè Starviewer es tanqui en cas que no hi ha hagi cap visor QApplicationMainWindow.
 #ifndef STARVIEWER_LITE
-    m_operationStateScreen->close(); //Tanquem la QOperationStateScreen al tancar la QueryScreen
+    // Tanquem la QOperationStateScreen al tancar la QueryScreen
+    m_operationStateScreen->close();
 #endif
     m_qcreateDicomdir->close();
 

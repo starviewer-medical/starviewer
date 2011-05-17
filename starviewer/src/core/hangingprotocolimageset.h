@@ -19,10 +19,14 @@ public:
 
     struct Restriction
     {
-        SelectorUsageFlag usageFlag; // Match o NoMatch
-        QString selectorAttribute; // TAG
-        QString valueRepresentation; // valor del TAG
-        int selectorValueNumber; // Només si el TAG és multivalor
+        // Match o NoMatch
+        SelectorUsageFlag usageFlag;
+        // TAG
+        QString selectorAttribute;
+        // Valor del TAG
+        QString valueRepresentation;
+        // Només si el TAG és multivalor
+        int selectorValueNumber;
     };
 
     /// Identificador de l'Image Set
@@ -120,7 +124,7 @@ private:
     Series *m_serieToDisplay;
 
     /// Número d'imatge a mostrar, es coneix aquest número un cop
-    // trobada la imatge que compleix les restriccions
+    /// trobada la imatge que compleix les restriccions
     int m_imageToDisplay;
 
     /// Índex de la imatge dins l'estudi. Es coneix aquest número

@@ -301,8 +301,9 @@ Series* HangingProtocolManager::searchSerie(QList<Series*> &listOfSeries, Hangin
         if (referenceImageSet->isDownloaded())
         {
             // L'estudi de referència està descarregat
-            if (referenceImageSet->getSeriesToDisplay() != 0) // No te sèrie anterior, per tant no és valid
+            if (referenceImageSet->getSeriesToDisplay() != 0)
             {
+                // No te sèrie anterior, per tant no és valid
                 referenceStudy = referenceImageSet->getSeriesToDisplay()->getParentStudy();
             }
         }
@@ -319,7 +320,8 @@ Series* HangingProtocolManager::searchSerie(QList<Series*> &listOfSeries, Hangin
     }
 
     // Pot ser que busquem una imatge en concret, llavors no cal examinar totes les sèries i/o totes les imatges
-    if (imageSet->getImageNumberInPatientModality() != -1)// Només pot ser vàlida una imatge
+    // Només pot ser vàlida una imatge
+    if (imageSet->getImageNumberInPatientModality() != -1)
     {
         Patient *patient = listOfSeries.at(0)->getParentStudy()->getParentPatient();
         QList<QString> modalities = imageSet->getHangingProtocol()->getHangingProtocolMask()->getProtocolList();
@@ -524,7 +526,8 @@ bool HangingProtocolManager::isValidImage(Image *image, HangingProtocolImageSet 
                 valid = false;
             }
         }
-        else if (restriction.selectorAttribute == "CodeMeaning") // TODO Es podria canviar el nom, ja que és massa genèric. Seria més adequat ViewCodeMeaning per exemple
+         // TODO Es podria canviar el nom, ja que és massa genèric. Seria més adequat ViewCodeMeaning per exemple
+        else if (restriction.selectorAttribute == "CodeMeaning")
         {
             bool match = (restriction.usageFlag == HangingProtocolImageSet::Match);
 
@@ -621,7 +624,8 @@ void HangingProtocolManager::errorDowlonadingPreviousStudies(const QString &stud
         int count = m_studiesDownloading->count(studyUID);
         for (int i = 0; i < count; ++i)
         {
-            StructPreviousStudyDownloading *element = m_studiesDownloading->take(studyUID); // s'agafa i es treu de la llista
+            // S'agafa i es treu de la llista
+            StructPreviousStudyDownloading *element = m_studiesDownloading->take(studyUID);
             element->widgetToDisplay->getViewer()->setViewerStatus(QViewer::DownloadingError);
             delete element;
         }
@@ -662,7 +666,8 @@ void HangingProtocolManager::setInputToViewer(Q2DViewerWidget *viewerWidget, Ser
             if ((displaySet->getSlice() > -1 && series->getVolumesList().size() > 1) || displaySet->getImageSet()->getTypeOfItem() == "image")
             {
                 Image *image;
-                if (displaySet->getSlice() > -1) // TODO En el cas de fases no funcionaria, perquè l'índex no és correcte
+                // TODO En el cas de fases no funcionaria, perquè l'índex no és correcte
+                if (displaySet->getSlice() > -1)
                 {
                     image = series->getImageByIndex(displaySet->getSlice());
                 }

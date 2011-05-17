@@ -3,7 +3,7 @@
 #include "mathtools.h"
 #include "q2dviewer.h"
 #include "applicationstylehelper.h"
-// vtk
+// Vtk
 #include <vtkTextProperty.h>
 #include <vtkTextActor.h>
 #include <vtkCaptionActor2D.h>

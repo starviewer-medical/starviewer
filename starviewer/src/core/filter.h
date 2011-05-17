@@ -7,7 +7,7 @@ namespace udg {
 
 class Volume;
 
-/*
+/**
     Classe base per a tots els filtres
 */
 

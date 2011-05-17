@@ -1,7 +1,8 @@
 #include "databaseconnection.h"
 
 #include <sqlite3.h>
-#include <QObject> // per les traduccions: tr()
+// Per les traduccions: tr()
+#include <QObject>
 #include <QSemaphore>
 #include <QDir>
 #include <QString>
@@ -27,11 +28,11 @@ void DatabaseConnection::open()
 {
     // Cal obrir amb UTF8 perquè l'sqlite3 nomes treballa amb aquesta codificació i sinó no troba la base de dades.
     sqlite3_open(qPrintable(QDir::toNativeSeparators(QString(m_databasePath.toUtf8()))), &m_databaseConnection);
-    /*En el moment que es fa el commit de les dades inserides o updates a la base de dades, sqlite bloqueja tota la base
-     *de dades, per tant no es pot fer cap consulta. Indicant el busy_timeout a 10000 ms el que fem, és que si tenim una
-     *setència contra sqlite que es troba la bd o una taula bloquejada, va fent intents cada x temps per mirar si continua
-     *bloqueja fins a 15000ms una vegada passat aquest temps dona errora de taula o base de dades bloquejada
-     */
+    // En el moment que es fa el commit de les dades inserides o updates a la base de dades, sqlite bloqueja tota la base
+    // de dades, per tant no es pot fer cap consulta. Indicant el busy_timeout a 10000 ms el que fem, és que si tenim una
+    // setència contra sqlite que es troba la bd o una taula bloquejada, va fent intents cada x temps per mirar si continua
+    // bloqueja fins a 15000ms una vegada passat aquest temps dona errora de taula o base de dades bloquejada
+    
     sqlite3_busy_timeout(m_databaseConnection, 15000);
 }
 
@@ -66,8 +67,8 @@ QString DatabaseConnection::formatTextToValidSQLSyntax(QString string)
 
 QString DatabaseConnection::formatTextToValidSQLSyntax(QChar qchar)
 {
-    /*Retornem un QString perquè si retornem QChar('') si qchar és null al converti-lo a QString(QChar('')) el QString s'inicialitza incorrectament agafant
-     com a valor un caràcter estrany en comptes de QString("") */
+    // Retornem un QString perquè si retornem QChar('') si qchar és null al converti-lo a QString(QChar('')) el QString s'inicialitza incorrectament agafant
+    // com a valor un caràcter estrany en comptes de QString("")
     return qchar.isNull() ? "" : QString(qchar);
 }
 

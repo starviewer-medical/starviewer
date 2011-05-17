@@ -83,7 +83,8 @@ bool QDICOMDIRConfigurationScreen::validateChanges()
 
     if (m_textBurningApplicationPath->isModified())
     {
-        if (!QFile::exists(m_textBurningApplicationPath->text())) // Si el fitxer indicat no existeix
+        // Si el fitxer indicat no existeix
+        if (!QFile::exists(m_textBurningApplicationPath->text()))
         {
             QMessageBox::warning(this, ApplicationNameString, tr("Invalid burning application path."));
             return false;
@@ -161,7 +162,8 @@ void QDICOMDIRConfigurationScreen::examinateDICOMDIRBurningApplicationPath()
             }
 
             m_textBurningApplicationPath->setText(burningApplicationPath);
-            m_textBurningApplicationPath->setModified(true);// indiquem que m_textBurningApplicationPath ha modificat el seu valor
+            // Indiquem que m_textBurningApplicationPath ha modificat el seu valor
+            m_textBurningApplicationPath->setModified(true);
         }
     }
     delete dialog;

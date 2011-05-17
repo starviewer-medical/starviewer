@@ -55,6 +55,6 @@ private:
 
 };
 
-} // namespace udg
+} // End namespace udg
 
 #endif // QOPACITYTRANSFERFUNCTIONGRAPHICALVIEWNODE_H

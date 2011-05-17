@@ -325,7 +325,7 @@ void Volume::getStackDirection(double direction[3], int stack)
     {
         const double *firstOrigin = firstImage->getImagePositionPatient();
         const double *secondOrigin = secondImage->getImagePositionPatient();
-        // calculem la direcció real de com estan apilades
+        // Calculem la direcció real de com estan apilades
         double *zDirection = MathTools::directorVector(firstOrigin, secondOrigin);
         MathTools::normalize(zDirection);
         for (int i = 0; i < 3; i++)

@@ -172,7 +172,8 @@ void ShadeWidget::generateShade()
             p.fillRect(rect(), m_alpha_gradient);
 
             p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-            QLinearGradient fade(0, 0, 0, height() - 1);    // afegit (- 1)
+            // Afegit (- 1)
+            QLinearGradient fade(0, 0, 0, height() - 1);
             fade.setColorAt(0, QColor(0, 0, 0, 255));
             fade.setColorAt(1, QColor(0, 0, 0, 0));
             p.fillRect(rect(), fade);
@@ -181,7 +182,8 @@ void ShadeWidget::generateShade()
         else
         {
             m_shade = QImage(size(), QImage::Format_RGB32);
-            QLinearGradient shade(0, 0, 0, height() - 1);   // afegit (- 1)
+            // Afegit (- 1)
+            QLinearGradient shade(0, 0, 0, height() - 1);
             shade.setColorAt(1, Qt::black);
 
             if (m_shade_type == RedShade)

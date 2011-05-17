@@ -47,7 +47,7 @@ void QWindowLevelComboBox::clearPresets()
 {
     if (m_presetsData)
     {
-        // desconectem tot el que teníem connectat aquí
+        // Desconectem tot el que teníem connectat aquí
         disconnect(m_presetsData, 0, this, 0);
         disconnect(m_presetsData, 0, m_customWindowLevelDialog, 0);
         disconnect(m_customWindowLevelDialog, 0, m_presetsData, 0);

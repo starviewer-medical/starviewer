@@ -59,9 +59,13 @@ public:
     /// Resta els vectors, assigna el resultat sobre l'actual i el retorna per referència.
     TVector3<T>& operator -=(const TVector3<T> &v);
     /// Retorna el producte escalar dels vectors.
-    T operator *(const TVector3<T> &v) const; // producte escalar
+    
+    // Producte escalar
+    T operator *(const TVector3<T> &v) const;
     /// Retorna el producte vectorial dels vectors.
-    TVector3<T> operator ^(const TVector3<T> &v) const;   // producte vectorial
+    
+    // Producte vectorial
+    TVector3<T> operator ^(const TVector3<T> &v) const;
 
     /// Retorna una representació del vector en forma de text.
     QString toString() const;
@@ -206,14 +210,16 @@ inline TVector3<T>& TVector3<T>::operator -=(const TVector3<T> &v)
     return *this;
 }
 
+// Producte escalar
 template <class T>
-inline T TVector3<T>::operator *(const TVector3<T> &v) const  // producte escalar
+inline T TVector3<T>::operator *(const TVector3<T> &v) const
 {
     return x * v.x + y * v.y + z * v.z;
 }
 
+// Producte vectorial
 template <class T>
-inline TVector3<T> TVector3<T>::operator ^(const TVector3<T> &v) const    // producte vectorial
+inline TVector3<T> TVector3<T>::operator ^(const TVector3<T> &v) const
 {
     return TVector3<T>(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x);
 }

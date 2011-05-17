@@ -126,31 +126,31 @@ public:
 
 private:
 
-    ///Volum que volem segmentar
+    /// Volum que volem segmentar
     Volume *m_Volume;
 
-    ///Volum on guardarem el resultat de la segmetnaci�que volem segmentar
+    /// Volum on guardarem el resultat de la segmetnaci�que volem segmentar
     Volume *m_Mask;
     Volume *m_filteredInputImage;
 
-    ///Posici�de la llavor
+    /// Posici�de la llavor
     double m_px, m_py, m_pz;
 
-    ///llindars de l'histograma
+    /// Llindars de l'histograma
     int m_lowerThreshold, m_upperThreshold;
 
-    ///llindars de l'histograma
+    /// Llindars de l'histograma
     int m_lowerVentriclesThreshold, m_upperVentriclesThreshold;
 
-    ///valors interns i externs de la m�cara
+    /// Valors interns i externs de la m�cara
     int m_insideMaskValue, m_outsideMaskValue;
 
-    ///valors interns i externs de la m�cara
+    /// Valors interns i externs de la m�cara
     double m_volume;
     int    m_cont;
     int    m_edemaCont;
 
-    ///valors mètode edema
+    /// Valors mètode edema
     double m_initialDistance;
     int  m_timeThreshold;
     double m_stoppingTime;
@@ -160,7 +160,7 @@ private:
     double m_constant;
     double m_alpha;
 
-    ///Retorna quants voxels != de 0 hi ha a la m�cara
+    /// Retorna quants voxels != de 0 hi ha a la m�cara
     int computeSizeMask();
 
 };

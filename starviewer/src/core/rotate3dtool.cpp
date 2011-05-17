@@ -1,7 +1,7 @@
 #include "rotate3dtool.h"
 #include "logging.h"
 #include "qviewer.h"
-//vtk
+// Vtk
 #include <vtkInteractorStyle.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkCommand.h>

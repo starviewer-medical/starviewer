@@ -15,8 +15,8 @@ bool DicomPrinterManager::addPrinter(DicomPrinter &printer)
     {
         if (printer.getIsDefault())
         {
-            /*Només podem tenir una impressora per imprimir per defecte, per tant si aquesta està marcada com a impressora
-              per defecte, desmarquem les altres*/
+            // Només podem tenir una impressora per imprimir per defecte, per tant si aquesta està marcada com a impressora
+            // per defecte, desmarquem les altres
             setAllPrintersAsNoDefaultPrinter();
         }
 
@@ -36,8 +36,8 @@ bool DicomPrinterManager::updatePrinter(int printerID, DicomPrinter &printer)
     {
         if (printer.getIsDefault())
         {
-            /*Només podem tenir una impressora per imprimir per defecte, per tant si aquesta està marcada com a impressora
-              per defecte, desmarquem les altres*/
+            // Només podem tenir una impressora per imprimir per defecte, per tant si aquesta està marcada com a impressora
+            // per defecte, desmarquem les altres
             setAllPrintersAsNoDefaultPrinter();
         }
 

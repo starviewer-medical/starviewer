@@ -138,11 +138,11 @@ private slots:
     void releaseAxialViewAxisActor();
     void releaseSagitalViewAxisActor();
 
-    void rotateAxialViewAxisActor(); // void moveAxialViewAxisActor(double x, double y);
-    void rotateSagitalViewAxisActor(); // void rotateAxisActor(double x, double y);
+    void rotateAxialViewAxisActor();
+    void rotateSagitalViewAxisActor();
 
-    void pushAxialViewAxisActor(); // void pushAxisActor(double x, double y);
-    void pushSagitalViewAxialAxisActor(); // void pushAxialActor(double x, double y);
+    void pushAxialViewAxisActor();
+    void pushSagitalViewAxialAxisActor();
     void pushSagitalViewCoronalAxisActor();
 
     /// Fa les accions pertinents quan una llesca s'ha actualitzat

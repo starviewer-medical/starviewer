@@ -11,7 +11,8 @@
 #include <vtkImageMapToColors16.h>
 #include <vtkImageMapToColors.h>
 #include <vtkImageYBRToRGB.h>
-#include <gdcmPixelFormat.h> // Només per qüestions d'informació de debug
+// Només per qüestions d'informació de debug
+#include <gdcmPixelFormat.h>
 // Qt
 #include <QStringList>
 
@@ -57,7 +58,7 @@ int VolumePixelDataReaderVTKGDCM::read(const QStringList &filenames)
         return errorCode;
     }
 
-    // vtk - GDCM
+    // Vtk - GDCM
     // Convertim la QStringList a vtkStringArray que és l'input
     // que accepta vtkGDCMImageReader
     if (filenames.size() > 1)
@@ -173,7 +174,7 @@ void VolumePixelDataReaderVTKGDCM::applyColorProcessing()
     else if (imageFormat == VTK_RGB || imageFormat == VTK_RGBA)
     {
         DEBUG_LOG("Llegim directament de vtkGDCMImageReader. No cal aplicar cap mapeig adicional, les dades estan en format RGB/RGBA");
-        // easy case !
+        // Easy case !
         imageData = m_vtkGDCMReader->GetOutput();
     }
     else
@@ -217,27 +218,33 @@ void VolumePixelDataReaderVTKGDCM::printDebugInfo()
             DEBUG_LOG("INT 12");
             break;
 
-        case gdcm::PixelFormat::UINT32: // For some DICOM files (RT or SC)
+        // For some DICOM files (RT or SC)
+        case gdcm::PixelFormat::UINT32:
             DEBUG_LOG("unsigned INT 32");
             break;
 
-        case gdcm::PixelFormat::INT32: //    "   "
+        //    "   "
+        case gdcm::PixelFormat::INT32:
             DEBUG_LOG("INT 32");
             break;
 
-        case gdcm::PixelFormat::FLOAT16: // sure why not...
+        // Sure why not...
+        case gdcm::PixelFormat::FLOAT16:
             DEBUG_LOG("FLOAT 16");
             break;
 
-        case gdcm::PixelFormat::FLOAT32: // good ol' 'float'
+        // Good ol' 'float'
+        case gdcm::PixelFormat::FLOAT32:
             DEBUG_LOG("FLOAT 32");
             break;
 
-        case gdcm::PixelFormat::FLOAT64: // aka 'double'
+        // Aka 'double'
+        case gdcm::PixelFormat::FLOAT64:
             DEBUG_LOG("FLOAT 64");
             break;
 
-        case gdcm::PixelFormat::SINGLEBIT: // bool / monochrome
+        // bool / monochrome
+        case gdcm::PixelFormat::SINGLEBIT:
             DEBUG_LOG("SINGLE BIT");
             break;
 

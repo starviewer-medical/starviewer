@@ -241,10 +241,9 @@ public:
     void setAnnotationDisplayFormatID(const QString &annotationDisplayFormatID);
     QString getAnnotationDisplayFormatID() const;
 
-    /**Especifica/retorna el valor de ConfigurationInformation per la impressora, depén de la impressora, per exemple per agfa permet afegir
-      *anotacions a les imatges, aplicar LUT's, ... s'ha de mirar al dicom confomance de cada impressora per mirar quin valor pot agafar aquest camp
-      */
-    //El configuration Information no té AvailableConfiguration mètodes, perquè per cada impressora el valor és diferent.
+    /// Especifica/retorna el valor de ConfigurationInformation per la impressora, depén de la impressora, per exemple per agfa permet afegir
+    /// anotacions a les imatges, aplicar LUT's, ... s'ha de mirar al dicom confomance de cada impressora per mirar quin valor pot agafar aquest camp
+    /// El configuration Information no té AvailableConfiguration mètodes, perquè per cada impressora el valor és diferent.
     void setDefaultConfigurationInformation(const QString configurationInformation);
     QString getDefaultConfigurationInformation() const;
 
@@ -256,8 +255,8 @@ public:
 
 private:
 
-    /**Mètode que retorna el número de columnes i files del layout, s'implementa en un sol mètode per no tenir codi duplicat
-    si s'implementés un mètode per obtenir el número de columnes i una altre per obtenir el número de files*/
+    /// Mètode que retorna el número de columnes i files del layout, s'implementa en un sol mètode per no tenir codi duplicat
+    /// si s'implementés un mètode per obtenir el número de columnes i una altre per obtenir el número de files
     void getDefaultFilmLayoutColumnsRows(int &colums, int &rows);
 
 private:

@@ -71,11 +71,12 @@ void QSeriesListWidget::insertSeries(QString studyInstanceUID, Series *series)
     item->setIcon(icon);
     item->setToolTip(text);
 
-    /* A l'status Tip de cada item es guarda la UID de la serie, ja que aquest camp no el vull mostrar i no tinc
-   enlloc per amagar-lo, ho utilitzo per identificar la sèrie */
+    // A l'status Tip de cada item es guarda la UID de la serie, ja que aquest camp no el vull mostrar i no tinc
+    // enlloc per amagar-lo, ho utilitzo per identificar la sèrie
     item->setStatusTip(series->getInstanceUID());
 
-    m_HashSeriesStudy[series->getInstanceUID()] = studyInstanceUID;//Guardem per la sèrie a quin estudi pertany
+    // Guardem per la sèrie a quin estudi pertany
+    m_HashSeriesStudy[series->getInstanceUID()] = studyInstanceUID;
 
     //TODO s'hauria de millorar el sistema d'ordenació de les sèries
     //Comprovem la posició que hem d'inserir la sèrie, si és un DICOM Non-Image (no és una imatge) val final, sinó va després de la última imatge inserida
@@ -168,7 +169,8 @@ void QSeriesListWidget::clear()
     m_seriesListWidget->clear();
     m_HashSeriesStudy.clear();
 
-    m_lastInsertedImageRow = -1;//Indiquem que la última imatge insertada està a la posició 0 perquè hem un clear
+    // Indiquem que la última imatge insertada està a la posició 0 perquè hem un clear
+    m_lastInsertedImageRow = -1;
 }
 
 QSeriesListWidget::~QSeriesListWidget()
