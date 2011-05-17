@@ -56,7 +56,7 @@
 #include "directilluminationvoxelshader.h"
 #include "obscurancevoxelshader.h"
 #include "contourvoxelshader.h"
-#include "vtk4DLinearRegressionGradientEstimator.h"
+#include "vtk4dlinearregressiongradientestimator.h"
 #include <vtkPointData.h>
 #include <vtkEncodedGradientShader.h>
 
@@ -1199,7 +1199,7 @@ void Q3DViewer::computeObscurance(ObscuranceQuality quality)
 
     if (!m_4DLinearRegressionGradientEstimator)
     {
-        m_4DLinearRegressionGradientEstimator = vtk4DLinearRegressionGradientEstimator::New();
+        m_4DLinearRegressionGradientEstimator = Vtk4DLinearRegressionGradientEstimator::New();
         // Radi 1 per defecte (-> 3³)
         m_volumeMapper->SetGradientEstimator(m_4DLinearRegressionGradientEstimator);
         /// \TODO hauria de funcionar sense això, però no !?!?!
@@ -1246,9 +1246,9 @@ void Q3DViewer::computeObscurance(ObscuranceQuality quality)
     m_obscuranceMainThread = new ObscuranceMainThread(numberOfDirections, distance, function, variant, this);
 
     /// \todo Només canviant això ja recalcularà les normals o cal fer alguna cosa més?
-    if (m_4DLinearRegressionGradientEstimator->GetRadius() < gradientRadius)
+    if (m_4DLinearRegressionGradientEstimator->getRadius() < gradientRadius)
     {
-        m_4DLinearRegressionGradientEstimator->SetRadius(gradientRadius);
+        m_4DLinearRegressionGradientEstimator->setRadius(gradientRadius);
     }
 
     m_obscuranceMainThread->setVolume(m_vtkVolume);

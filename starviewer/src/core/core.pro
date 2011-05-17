@@ -165,7 +165,7 @@ HEADERS += extensionfactory.h \
     obscurancemainthread.h \
     obscurancethread.h \
     obscurancevoxelshader.h \
-    vtk4DLinearRegressionGradientEstimator.h \
+    vtk4dlinearregressiongradientestimator.h \
     combiningvoxelshader.h \
     vtkVolumeRayCastSingleVoxelShaderCompositeFunction.h \
     obscurance.h \
@@ -374,7 +374,7 @@ SOURCES += extensionmediator.cpp \
     obscurancemainthread.cpp \
     obscurancethread.cpp \
     obscurancevoxelshader.cpp \
-    vtk4DLinearRegressionGradientEstimator.cxx \
+    vtk4dlinearregressiongradientestimator.cpp \
     combiningvoxelshader.cpp \
     vtkVolumeRayCastSingleVoxelShaderCompositeFunction.cxx \
     obscurance.cpp \
