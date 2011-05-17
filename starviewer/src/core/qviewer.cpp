@@ -417,6 +417,8 @@ bool QViewer::record(const QString &baseName, RecordFileFormatType format)
         return false;
     }
 #else
+    Q_UNUSED(baseName)
+    Q_UNUSED(format)
     return false;
 #endif
 }
