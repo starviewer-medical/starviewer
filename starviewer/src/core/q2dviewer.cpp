@@ -1469,6 +1469,8 @@ void Q2DViewer::projectDICOMPointToCurrentDisplayedImage(const double pointToPro
                 projectedPoint[1] = homogeneousProjectedPoint[2] + ori[1];
                 break;
         }
+
+        projectionMatrix->Delete();
     }
     else
     {
