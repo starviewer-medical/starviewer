@@ -193,6 +193,7 @@ void Q3DMPRViewer::initializePlanes()
     m_axialImagePlaneWidget->AddObserver(vtkCommand::AnyEvent, planesInteractionCallback);
     m_sagitalImagePlaneWidget->AddObserver(vtkCommand::AnyEvent, planesInteractionCallback);
     m_coronalImagePlaneWidget->AddObserver(vtkCommand::AnyEvent, planesInteractionCallback);
+    planesInteractionCallback->Delete();
 }
 
 void Q3DMPRViewer::updatePlanesData()
