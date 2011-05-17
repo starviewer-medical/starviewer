@@ -115,7 +115,9 @@ void ReferenceLinesTool::updateProjectionLines()
                 foreach (ImagePlane *referencePlane, planesToProject)
                 {
                     // Aquí ja ho deixem en mans de la projecció
-                    projectIntersection(referencePlane, m_2DViewer->getCurrentImagePlane(), drawerLineOffset);
+                    ImagePlane *localizerPlane = m_2DViewer->getCurrentImagePlane();
+                    projectIntersection(referencePlane, localizerPlane, drawerLineOffset);
+                    delete localizerPlane;
                     drawerLineOffset += m_showPlaneThickness ? 2 : 1;
                 }
             }

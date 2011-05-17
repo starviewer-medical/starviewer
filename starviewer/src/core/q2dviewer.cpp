@@ -1398,6 +1398,7 @@ void Q2DViewer::projectDICOMPointToCurrentDisplayedImage(const double pointToPro
         currentPlane->getColumnDirectionVector(currentPlaneColumnVector);
         currentPlane->getNormalVector(currentPlaneNormalVector);
         currentPlane->getOrigin(currentPlaneOrigin);
+        delete currentPlane;
 
         // A partir d'aquestes dades creem la matriu de projecció,
         // que projectarà el punt donat sobre el pla actual

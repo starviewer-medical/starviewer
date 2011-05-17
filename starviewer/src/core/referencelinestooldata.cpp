@@ -10,6 +10,10 @@ ReferenceLinesToolData::ReferenceLinesToolData(QObject *parent)
 
 ReferenceLinesToolData::~ReferenceLinesToolData()
 {
+    foreach (ImagePlane *plane, m_planesToProject)
+    {
+        delete plane;
+    }
 }
 
 QString ReferenceLinesToolData::getFrameOfReferenceUID() const
@@ -29,6 +33,10 @@ void ReferenceLinesToolData::setFrameOfReferenceUID(const QString &frameOfRefere
 
 void ReferenceLinesToolData::setPlanesToProject(QList<ImagePlane*> planes)
 {
+    foreach (ImagePlane *plane, m_planesToProject)
+    {
+        delete plane;
+    }
     m_planesToProject.clear();
     m_planesToProject = planes;
     emit changed();
@@ -36,6 +44,10 @@ void ReferenceLinesToolData::setPlanesToProject(QList<ImagePlane*> planes)
 
 void ReferenceLinesToolData::setPlanesToProject(ImagePlane *plane)
 {
+    foreach (ImagePlane *plane, m_planesToProject)
+    {
+        delete plane;
+    }
     m_planesToProject.clear();
     if (plane)
     {
