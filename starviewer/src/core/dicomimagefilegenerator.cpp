@@ -77,7 +77,7 @@ bool DICOMImageFileGenerator::generateSecondaryCaptureDICOMFiles()
         fillSCInfo(writer, image);
         fillSOPInfo(writer, image);
 
-        //Afegim el pixel data
+        // Afegim el pixel data
         DICOMValueAttribute pixelData;
         pixelData.setTag(DICOMPixelData);
         pixelData.setValue(QByteArray(scalarPointer, bytesPerImage));
@@ -163,7 +163,8 @@ void DICOMImageFileGenerator::fillImagePixelInfo(DICOMWriter *writer, Image *ima
     {
         DICOMValueAttribute planarConfiguration;
         planarConfiguration.setTag(DICOMPlanarConfiguration);
-        planarConfiguration.setValue(0); // 0 = R1 G1 B1 R2 G2 B2 ... i 1 = R1 R2 ... G1 G2 ... B1 B2 ...
+        // 0 = R1 G1 B1 R2 G2 B2 ... i 1 = R1 R2 ... G1 G2 ... B1 B2 ...
+        planarConfiguration.setValue(0);
         writer->addValueAttribute(&planarConfiguration);
     }
 

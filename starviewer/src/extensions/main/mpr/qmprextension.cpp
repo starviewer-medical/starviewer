@@ -3,7 +3,8 @@
 #include "drawer.h"
 #include "drawerpoint.h"
 #include "logging.h"
-#include "mathtools.h"  // Per càlculs d'interseccions
+// Per càlculs d'interseccions
+#include "mathtools.h"
 #include "mprsettings.h"
 #include "patientbrowsermenu.h"
 #include "q3dviewer.h"
@@ -18,8 +19,10 @@
 #include <QMenu>
 // VTK
 #include <vtkAxisActor2D.h>
-#include <vtkCommand.h> // Pels events
-#include <vtkImageChangeInformation.h>  // Per portar a l'origen
+// Pels events
+#include <vtkCommand.h>
+// Per portar a l'origen
+#include <vtkImageChangeInformation.h>
 #include <vtkImageReslice.h>
 #include <vtkPlaneSource.h>
 #include <vtkProperty2D.h>
@@ -119,7 +122,8 @@ QMPRExtension::~QMPRExtension()
 void QMPRExtension::init()
 {
     m_axialPlaneSource = vtkPlaneSource::New();
-    m_axialPlaneSource->SetXResolution(1); // Així estan configurats a vtkImagePlaneWidget
+    // Així estan configurats a vtkImagePlaneWidget
+    m_axialPlaneSource->SetXResolution(1);
     m_axialPlaneSource->SetYResolution(1);
 
     m_sagitalPlaneSource = vtkPlaneSource::New();
@@ -664,7 +668,8 @@ void QMPRExtension::detectSagitalViewAxisActor()
 
 void QMPRExtension::rotateSagitalViewAxisActor()
 {
-    double clickedWorldPoint[3];    // coordenades de sagital
+    // Coordenades de sagital
+    double clickedWorldPoint[3];
     m_sagital2DView->getEventWorldCoordinate(clickedWorldPoint);
 
     // transformació de coordenades de món a coordenades de sagital
@@ -694,7 +699,8 @@ void QMPRExtension::rotateSagitalViewAxisActor()
     // direcció de l'eix de rotació (coordenades de sagital)
     double direction[3];
     MathTools::crossProduct(vec1, vec2, direction);
-    transform->Inverse();   // transformació de coordenades de sagital a coordenades de món
+    // Transformació de coordenades de sagital a coordenades de món
+    transform->Inverse();
     transform->TransformVector(direction, direction);
     // ara direction és la direcció de l'eix de rotació en coordenades de món
 
@@ -749,7 +755,8 @@ void QMPRExtension::pushSagitalViewCoronalAxisActor()
 {
     m_sagital2DView->setCursor(Qt::ClosedHandCursor);
 
-    double clickedWorldPoint[3];    // coordenades de sagital
+    // Coordenades de sagital
+    double clickedWorldPoint[3];
     m_sagital2DView->getEventWorldCoordinate(clickedWorldPoint);
 
     // translació del pla coronal (coordenades de sagital)
@@ -898,7 +905,8 @@ void QMPRExtension::setInput(Volume *input)
         m_sagitalReslice->Delete();
     }
     m_sagitalReslice = vtkImageReslice::New();
-    m_sagitalReslice->AutoCropOutputOn(); // Perquè l'extent d'output sigui suficient i no es "mengi" dades
+    // Perquè l'extent d'output sigui suficient i no es "mengi" dades
+    m_sagitalReslice->AutoCropOutputOn();
     m_sagitalReslice->SetInterpolationModeToCubic();
     m_sagitalReslice->SetInput(m_volume->getVtkData());
 
@@ -950,15 +958,13 @@ void QMPRExtension::setInput(Volume *input)
 
 void QMPRExtension::initOrientation()
 {
-/**
-    IMPORTANT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // IMPORTANT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-    Ara li donem a cada pla unes dimensions, extent, espaiat, etc d'acord com si aquests plans haguessin de ser ortogonals,però segons el pla de tall serà d'una manera o altre
-    La vista axial mantindrà els espaiats i extents originals
-    La vista sagital, com que únicament es podrà rotar sobre l'eix Y, mantindrà l'extent de la seva X igual que l'extent Y original. Els altres s'hauran d'adaptar a les distàncies corresponents a les diagonals zmax-xmax
-    En la vista coronal, com que pot tenir qualsevol orientacio tindrà que adaptar els seus extents als màxims
+    // Ara li donem a cada pla unes dimensions, extent, espaiat, etc d'acord com si aquests plans haguessin de ser ortogonals,però segons el pla de tall serà d'una manera o altre
+    // La vista axial mantindrà els espaiats i extents originals
+    // La vista sagital, com que únicament es podrà rotar sobre l'eix Y, mantindrà l'extent de la seva X igual que l'extent Y original. Els altres s'hauran d'adaptar a les distàncies corresponents a les diagonals zmax-xmax
+    // En la vista coronal, com que pot tenir qualsevol orientacio tindrà que adaptar els seus extents als màxims
 
-*/
     int extent[6];
     m_volume->getWholeExtent(extent);
     int extentLength[3] = { extent[1] - extent[0] + 1, extent[3] - extent[2] + 1, extent[5] - extent[4] + 1 };
@@ -1199,7 +1205,8 @@ void QMPRExtension::updateControls()
 
     // Projecció sagital sobre axial i viceversa
     MathTools::planeIntersection(m_axialPlaneSource->GetOrigin(), m_axialPlaneSource->GetNormal(), m_sagitalPlaneSource->GetOrigin(), m_sagitalPlaneSource->GetNormal(), r, t);
-    MathTools::normalize(t);    // normalitzem t per que sempre tinguem la mateixa llargada (1)
+    // Normalitzem t per que sempre tinguem la mateixa llargada (1)
+    MathTools::normalize(t);
 
     position1[0] = r[0] - t[0] * Length;
     position1[1] = r[1] - t[1] * Length;
@@ -1220,7 +1227,8 @@ void QMPRExtension::updateControls()
     // Projecció coronal sobre sagital
 
     MathTools::planeIntersection(m_coronalPlaneSource->GetOrigin(), m_coronalPlaneSource->GetNormal(), m_sagitalPlaneSource->GetOrigin(), m_sagitalPlaneSource->GetNormal(), r, t);
-    MathTools::normalize(t);    // normalitzem t per que sempre tinguem la mateixa llargada (1)
+    // Normalitzem t per que sempre tinguem la mateixa llargada (1)
+    MathTools::normalize(t);
 
     position1[0] = r[0] - t[0] * Length;
     position1[1] = r[1] - t[1] * Length;
@@ -1237,7 +1245,8 @@ void QMPRExtension::updateControls()
 
     // Projecció thick slab sobre sagital
     MathTools::planeIntersection(m_thickSlabPlaneSource->GetOrigin(), m_thickSlabPlaneSource->GetNormal(), m_sagitalPlaneSource->GetOrigin(), m_sagitalPlaneSource->GetNormal(), r, t);
-    MathTools::normalize(t);    // normalitzem t per que sempre tinguem la mateixa llargada (1)
+    // Normalitzem t per que sempre tinguem la mateixa llargada (1)
+    MathTools::normalize(t);
 
     position1[0] = r[0] - t[0] * Length;
     position1[1] = r[1] - t[1] * Length;
@@ -1254,7 +1263,8 @@ void QMPRExtension::updateControls()
 
     // Projecció coronal sobre axial
     MathTools::planeIntersection(m_coronalPlaneSource->GetOrigin(), m_coronalPlaneSource->GetNormal(), m_axialPlaneSource->GetOrigin(), m_axialPlaneSource->GetNormal(), r, t);
-    MathTools::normalize(t);    // normalitzem t per que sempre tinguem la mateixa llargada (1)
+    // Normalitzem t per que sempre tinguem la mateixa llargada (1)
+    MathTools::normalize(t);
 
     position1[0] = r[0] - t[0] * Length;
     position1[1] = r[1] - t[1] * Length;
@@ -1269,7 +1279,8 @@ void QMPRExtension::updateControls()
 
     // Projecció thick slab sobre axial
     MathTools::planeIntersection(m_thickSlabPlaneSource->GetOrigin(), m_thickSlabPlaneSource->GetNormal(), m_axialPlaneSource->GetOrigin(), m_axialPlaneSource->GetNormal(), r, t);
-    MathTools::normalize(t);    // normalitzem t per que sempre tinguem la mateixa llargada (1)
+    // Normalitzem t per que sempre tinguem la mateixa llargada (1)
+    MathTools::normalize(t);
 
     position1[0] = r[0] - t[0] * Length;
     position1[1] = r[1] - t[1] * Length;
@@ -1351,14 +1362,16 @@ void QMPRExtension::updatePlane(vtkPlaneSource *planeSource, vtkImageReslice *re
         int extent[6];
         m_volume->getWholeExtent(extent);
 
-        double bounds[] = { origin[0] + spacing[0] * extent[0], // xmin
-                            origin[0] + spacing[0] * extent[1], // xmax
-                            origin[1] + spacing[1] * extent[2], // ymin
-                            origin[1] + spacing[1] * extent[3], // ymax
-                            origin[2] + spacing[2] * extent[4], // zmin
-                            origin[2] + spacing[2] * extent[5] };// zmax
+        // L'ordre de les dades és xmin, xmax, ymin, ymax, zmin i zmax
+        double bounds[] = { origin[0] + spacing[0] * extent[0],
+                            origin[0] + spacing[0] * extent[1],
+                            origin[1] + spacing[1] * extent[2],
+                            origin[1] + spacing[1] * extent[3],
+                            origin[2] + spacing[2] * extent[4],
+                            origin[2] + spacing[2] * extent[5] };
 
-        for (i = 0; i <= 4; i += 2) // Reverse bounds if necessary
+        // Reverse bounds if necessary
+        for (i = 0; i <= 4; i += 2)
         {
             if (bounds[i] > bounds[i + 1])
             {
@@ -1449,7 +1462,8 @@ void QMPRExtension::updatePlane(vtkPlaneSource *planeSource, vtkImageReslice *re
     reslice->SetOutputSpacing(planeSizeX / extentLength[0], planeSizeY / extentLength[1], 1.0);
     reslice->SetOutputOrigin(0.0, 0.0, 0.0);
     // TODO Li passem thickSlab que és double però això només accepta int's! Buscar si aquesta és la manera adequada. Potsre si volem fer servir doubles ho hauríem de combinar amb l'outputSpacing
-    reslice->SetOutputExtent(0, extentLength[0] - 1, 0, extentLength[1] - 1, 0, static_cast<int>(m_thickSlab)); // obtenim una única llesca
+    // Obtenim una única llesca
+    reslice->SetOutputExtent(0, extentLength[0] - 1, 0, extentLength[1] - 1, 0, static_cast<int>(m_thickSlab));
     reslice->Update();
 }
 
@@ -1596,18 +1610,23 @@ void QMPRExtension::rotate(double degrees, double rotationAxis[3], vtkPlaneSourc
         lp = sqrt(rotationAxis[1] * rotationAxis[1] + rotationAxis[2] * rotationAxis[2]);
         alpha = asin(rotationAxis[1] / lp);
 //         alpha = acos(rotationAxis[2] / lp);
-        m_transform->RotateX(-alpha * MathTools::RadiansToDegreesAsDouble); // o RotateWXYZ(alpha, [1,0,0])
+        // O RotateWXYZ(alpha, [1,0,0])
+        m_transform->RotateX(-alpha * MathTools::RadiansToDegreesAsDouble);
         // (3)
         double beta, l;
         l = sqrt(rotationAxis[0] * rotationAxis[0] + rotationAxis[1] * rotationAxis[1] + rotationAxis[2] * rotationAxis[2]);
         beta = asin(rotationAxis[0]);
-        m_transform->RotateY(beta * MathTools::RadiansToDegreesAsDouble); // o RotateWXYZ(beta, [0,1,0])
+        // O RotateWXYZ(beta, [0,1,0])
+        m_transform->RotateY(beta * MathTools::RadiansToDegreesAsDouble);
         // (4)
-        m_transform->RotateZ(degrees); // o RotateWXYZ(degrees, [0,0,1])
+        // O RotateWXYZ(degrees, [0,0,1])
+        m_transform->RotateZ(degrees);
         // (5)
-        m_transform->RotateY(-beta * MathTools::RadiansToDegreesAsDouble); // o RotateWXYZ(-beta, [0,1,0])
+        // O RotateWXYZ(-beta, [0,1,0])
+        m_transform->RotateY(-beta * MathTools::RadiansToDegreesAsDouble);
         // (6)
-        m_transform->RotateX(alpha * MathTools::RadiansToDegreesAsDouble); // o RotateWXYZ(-alpha, [1,0,0])
+        // O RotateWXYZ(-alpha, [1,0,0])
+        m_transform->RotateX(alpha * MathTools::RadiansToDegreesAsDouble);
         // (7)
         m_transform->Translate(-m_intersectionPoint[0], -m_intersectionPoint[1], -m_intersectionPoint[2]);
 

@@ -28,21 +28,15 @@ public slots:
     void request(int who);
     bool request(const QString &who);
 
-    /**
-     * Obrirà l'extensió per defecte. Si no hi ha dades de pacient vàlides, no farà res.
-     */
+    /// Obrirà l'extensió per defecte. Si no hi ha dades de pacient vàlides, no farà res.
     void openDefaultExtension();
 
-    /**
-     * Assigna el contexte de l'extensió
-     * @param context contexte
-     */
+    /// Assigna el contexte de l'extensió
+    /// @param context contexte
     void setContext(const ExtensionContext &context);
 
-    /**
-     * Obtenim el contexte de l'extensió
-     * @return El contexte de l'extensió, es pot modificar
-     */
+    /// Obtenim el contexte de l'extensió
+    /// @return El contexte de l'extensió, es pot modificar
     ExtensionContext &getContext();
 
     /// Actualitza la configuració que se li indica
@@ -51,21 +45,17 @@ public slots:
     void updateConfiguration(const QString &configuration);
 
 private slots:
-    /**
-     * Processa un conjunt d'arxius d'input i els processa per decidir què fer amb aquests, com per exemple
-     * crear nous pacient, obrir finestres, afegir les dades al pacient actual, etc
-     * @param inputFiles Els arxius a processar, que poden ser del tipus suportat per l'aplicació o no
-     */
+    /// Processa un conjunt d'arxius d'input i els processa per decidir què fer amb aquests, com per exemple
+    /// crear nous pacient, obrir finestres, afegir les dades al pacient actual, etc
+    /// @param inputFiles Els arxius a processar, que poden ser del tipus suportat per l'aplicació o no
     void processInput(const QStringList &inputFiles);
 
-    /**
-     * Donada una llista de pacients d'entrada, s'encarrega de posar a punt
-     * aquests i assignar-lis la finestra adequada, decidint si obrir noves finestres
-     * i/o fusionar o matxacar el pacient actual d'aquesta finestra.
-     * La llista s'assumeix que no té pacients iguals separats, és a dir,
-     * s'assumeix que cada entrada correspon a un pacient diferent, amb un o varis estudis
-     * Afegim un segon paràmetre que ens indica si els pacients a processar només cal carregar-los o fer-ne un "view"
-     */
+    /// Donada una llista de pacients d'entrada, s'encarrega de posar a punt
+    /// aquests i assignar-lis la finestra adequada, decidint si obrir noves finestres
+    /// i/o fusionar o matxacar el pacient actual d'aquesta finestra.
+    /// La llista s'assumeix que no té pacients iguals separats, és a dir,
+    /// s'assumeix que cada entrada correspon a un pacient diferent, amb un o varis estudis
+    /// Afegim un segon paràmetre que ens indica si els pacients a processar només cal carregar-los o fer-ne un "view"
     void processInput(QList<Patient*> patientsList, bool loadOnly = false);
 
 private:

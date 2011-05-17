@@ -149,7 +149,7 @@ protected:
 
 private:
     bool BasicApplicationLevelConfidentialityProfile1();
-    bool CheckIfSequenceContainsAttributeToAnonymize(File const &file, SequenceOfItems* sqi) const;
+    bool CheckIfSequenceContainsAttributeToAnonymize(File const &file, SequenceOfItems *sqi) const;
 
 private:
     // I would prefer to have a smart pointer to DataSet but DataSet does not derive from Object...

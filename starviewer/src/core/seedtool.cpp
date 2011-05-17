@@ -57,24 +57,24 @@ void SeedTool::handleEvent(unsigned long eventID)
 
 void SeedTool::setToolData(ToolData * data)
 {
-    //Fem aquesta comparació perquè a vegades ens passa la data que ja tenim a m_myData
+    // Fem aquesta comparació perquè a vegades ens passa la data que ja tenim a m_myData
     if (m_myData != data)
     {
-        // creem de nou les dades
+        // Creem de nou les dades
         m_toolData = data;
         m_myData = qobject_cast<SeedToolData*>(data);
-        //si tenim dades vol dir que ja hem pintat abans la seed si el volume ha canviat
+        // Si tenim dades vol dir que ja hem pintat abans la seed si el volume ha canviat
         if (m_2DViewer->getInput() != m_myData->getVolume())
         {
-            //canvi de input
+            // Canvi de input
             m_drawn = false;
             m_myData->setVolume(m_2DViewer->getInput());
-            //si tenim dades vol dir que el viewer ha eliminat el punt pel que el posem a 0 perquè es torni a crear
+            // Si tenim dades vol dir que el viewer ha eliminat el punt pel que el posem a 0 perquè es torni a crear
             m_myData->setPoint(NULL);
         }
         else
         {
-            //canvi de tool
+            // Canvi de tool
             m_drawn = true;
             m_2DViewer->getDrawer()->erasePrimitive(m_myData->getPoint());
             m_myData->setPoint(NULL);
@@ -123,7 +123,7 @@ void SeedTool::updateSeedPosition()
 
         m_myData->setSeedPosition(seedPosition);
         // TODO Apanyo perquè funcioni de moment, però s'ha d'arreglar
-        // s'hauria d'emetre únicament "seedChanged()" i prou
+        // S'hauria d'emetre únicament "seedChanged()" i prou
         m_2DViewer->setSeedPosition(xyz);
         emit seedChanged(seedPosition[0], seedPosition[1], seedPosition[2]);
 

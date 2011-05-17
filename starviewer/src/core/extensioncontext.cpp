@@ -39,7 +39,7 @@ Volume *ExtensionContext::getDefaultVolume() const
     {
         // TODO de moment només agafem la primera de les possibles seleccionades
         defaultSeries = selectedSeries.at(0);
-        // necessitem que les sèries siguin visualitzables
+        // Necessitem que les sèries siguin visualitzables
         if (!defaultSeries->isViewable())
         {
             searchForDefaultSeries = true;
@@ -49,7 +49,7 @@ Volume *ExtensionContext::getDefaultVolume() const
             defaultVolume = defaultSeries->getFirstVolume();
         }
     }
-    // en comptes de searchForDefaultSeries podríem fer servir
+    // En comptes de searchForDefaultSeries podríem fer servir
     // defaultVolume, però amb la var. booleana el codi és més llegible
     if (searchForDefaultSeries)
     {

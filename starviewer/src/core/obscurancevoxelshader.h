@@ -79,7 +79,7 @@ inline HdrColor ObscuranceVoxelShader::nvShade(const Vector3 &position, int offs
     Q_UNUSED(direction);
     Q_UNUSED(remainingOpacity);
 
-    //Q_ASSERT(m_data);
+    // Q_ASSERT(m_data);
     Q_ASSERT(m_obscurance);
 
     HdrColor color = baseColor;

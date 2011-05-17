@@ -77,8 +77,9 @@ void AppImportFile::openDirectory(bool recursively)
                 filenames << generateFilenames(dirName);
             }
         }
-        else // tindrem en compte únicament els arxius que hi hagi en el directori arrel sense explorar recursivament
+        else
         {
+            // Tindrem en compte únicament els arxius que hi hagi en el directori arrel sense explorar recursivament
             filenames << generateFilenames(directoryName);
         }
 

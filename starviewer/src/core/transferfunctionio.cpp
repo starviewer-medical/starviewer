@@ -29,7 +29,8 @@ TransferFunction * TransferFunctionIO::fromFile(QFile & file)
 
     QTextStream in(&file);
     TransferFunction *transferFunction = new TransferFunction();
-    transferFunction->setName(QFileInfo(file).fileName());  // nom per defecte
+    // Nom per defecte
+    transferFunction->setName(QFileInfo(file).fileName());
     enum { NAME, COLOR, OPACITY } mode = COLOR;
 
     while (!in.atEnd())
@@ -101,8 +102,9 @@ TransferFunction* TransferFunctionIO::fromFile(const QString & fileName)
     return fromFile(file);
 }
 
-TransferFunction* TransferFunctionIO::fromXmlFile(QFile &file)    /// \todo afegir-hi comprovació d'errors
+TransferFunction* TransferFunctionIO::fromXmlFile(QFile &file)
 {
+    /// \TODO afegir-hi comprovació d'errors
     QDomDocument xml;
 
     if (!file.open(QFile::ReadOnly | QFile::Text))
@@ -127,7 +129,7 @@ TransferFunction* TransferFunctionIO::fromXmlFile(QFile &file)    /// \todo afeg
 
     QDomElement transferFunctionElement = xml.documentElement();
 
-    // nom
+    // Nom
     QDomNode nameNode = transferFunctionElement.elementsByTagName("name").item(0);
     if (!nameNode.isNull())
     {
@@ -135,10 +137,11 @@ TransferFunction* TransferFunctionIO::fromXmlFile(QFile &file)    /// \todo afeg
     }
     else
     {
-        transferFunction->setName(QFileInfo(file).fileName()); // nom per defecte
+        // Nom per defecte
+        transferFunction->setName(QFileInfo(file).fileName());
     }
 
-    // color
+    // Color
     QDomNode colorNode = transferFunctionElement.elementsByTagName("color").item(0);
     if (!colorNode.isNull())
     {
@@ -155,7 +158,7 @@ TransferFunction* TransferFunctionIO::fromXmlFile(QFile &file)    /// \todo afeg
         }
     }
 
-    // opacitat
+    // Opacitat
     QDomNode opacityNode = transferFunctionElement.elementsByTagName("opacity").item(0);
     if (!opacityNode.isNull())
     {
@@ -170,7 +173,7 @@ TransferFunction* TransferFunctionIO::fromXmlFile(QFile &file)    /// \todo afeg
         }
     }
 
-    // opacitat del gradient
+    // Opacitat del gradient
     QDomNode gradientOpacityNode = transferFunctionElement.elementsByTagName("gradientopacity").item(0);
     if (!gradientOpacityNode.isNull())
     {
@@ -249,13 +252,13 @@ void TransferFunctionIO::toXmlFile(QFile &file, const TransferFunction &transfer
     transferFunctionElement.setAttribute("version", 0);
     xml.appendChild(transferFunctionElement);
 
-    // nom
+    // Nom
     QDomElement nameElement = xml.createElement("name");
     transferFunctionElement.appendChild(nameElement);
     QDomText nameText = xml.createTextNode(transferFunction.name());
     nameElement.appendChild(nameText);
 
-    // color
+    // Color
     QDomElement colorElement = xml.createElement("color");
     transferFunctionElement.appendChild(colorElement);
     QList<double> colorPoints = transferFunction.colorKeys();
@@ -270,7 +273,7 @@ void TransferFunctionIO::toXmlFile(QFile &file, const TransferFunction &transfer
         colorElement.appendChild(colorPointElement);
     }
 
-    // opacitat
+    // Opacitat
     QDomElement opacityElement = xml.createElement("opacity");
     transferFunctionElement.appendChild(opacityElement);
     QList<double> opacityPoints = transferFunction.opacityKeys();
@@ -282,7 +285,7 @@ void TransferFunctionIO::toXmlFile(QFile &file, const TransferFunction &transfer
         opacityElement.appendChild(opacityPointElement);
     }
 
-    // opacitat del gradient
+    // Opacitat del gradient
     QDomElement gradientOpacityElement = xml.createElement("gradientopacity");
     transferFunctionElement.appendChild(gradientOpacityElement);
     QList<double> gradientOpacityPoints = transferFunction.gradientOpacityKeys();

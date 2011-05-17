@@ -84,7 +84,8 @@ void ObscuranceThread::run()
     }
 }
 
-void ObscuranceThread::runDensity() // optimitzat
+// Optimitzat
+void ObscuranceThread::runDensity()
 {
     int x = m_xyz[0], y = m_xyz[1], z = m_xyz[2];
     int sX = m_sXYZ[0], sY = m_sXYZ[1], sZ = m_sXYZ[2];
@@ -92,12 +93,13 @@ void ObscuranceThread::runDensity() // optimitzat
     int incX = sX * m_increments[x], incY = sY * m_increments[y], incZ = sZ * m_increments[z];
 
     QStack<QPair<ushort, Vector3> > unresolvedVoxels;
-    unresolvedVoxels.reserve(dimX);   // amb això assegurem que tenim la capacitat necessària en el cas pitjor
+    // Amb això assegurem que tenim la capacitat necessària en el cas pitjor
+    unresolvedVoxels.reserve(dimX);
 
     const ushort *dataPtr = m_data + m_startDelta;
     int nLineStarts = m_lineStarts.size();
 
-    // iterar per cada línia
+    // Iterar per cada línia
     for (int j = m_id; j < nLineStarts; j += m_numberOfThreads)
     {
         Vector3 rv = m_lineStarts.at(j);
@@ -106,10 +108,10 @@ void ObscuranceThread::runDensity() // optimitzat
 //         if (unresolvedVoxels.capacity() < dimX) std::cout << "perdem capacitat!!!!" << std::endl; // hi ha pèrdua de capacitat = COST!!!
                                                                                                     // provar alternatives al pop
 
-        // iterar per la línia
+        // Iterar per la línia
         while (v.x < dimX && v.y < dimY && v.z < dimZ)
         {
-            // tractar el vòxel
+            // Tractar el vòxel
             ushort value = dataPtr[v.x * incX + v.y * incY + v.z * incZ];
 
             while (!unresolvedVoxels.isEmpty() && unresolvedVoxels.top().first <= value)
@@ -133,7 +135,7 @@ void ObscuranceThread::runDensity() // optimitzat
 
             unresolvedVoxels.push(qMakePair(value, rv));
 
-            // avançar el vòxel
+            // Avançar el vòxel
             rv += m_forward;
             v.x = qRound(rv.x); v.y = qRound(rv.y); v.z = qRound(rv.z);
         }
@@ -169,7 +171,7 @@ void ObscuranceThread::runDensitySmooth()
     const unsigned short *dataPtr = m_data + m_startDelta;
     int nLineStarts = m_lineStarts.size();
 
-    // iterar per cada línia
+    // Iterar per cada línia
     for (int j = m_id; j < nLineStarts; j += m_numberOfThreads)
     {
         Vector3 rv = m_lineStarts.at(j);
@@ -177,10 +179,10 @@ void ObscuranceThread::runDensitySmooth()
         Q_ASSERT(unresolvedVoxels.isEmpty());
         Q_ASSERT(postponedVoxels.isEmpty());
 
-        // iterar per la línia
+        // Iterar per la línia
         while (v.x < dimX && v.y < dimY && v.z < dimZ)
         {
-            // tractar el vòxel
+            // Tractar el vòxel
             unsigned short value = dataPtr[v.x * incX + v.y * incY + v.z * incZ];
 
             QLinkedList<QPair<ushort, Vector3> >::iterator itPostponedVoxels = postponedVoxels.begin();
@@ -201,20 +203,22 @@ void ObscuranceThread::runDensitySmooth()
 
                     if (distance <= 3.0)
                     {
-                        // tangent plane at u
-                        Vector3 uNormalLocal(sX * uGradient[x], sY * uGradient[y], sZ * uGradient[z]); // normal en espai local (transformat)
+                        // Tangent plane at u
+                        // Normal en espai local (transformat)
+                        Vector3 uNormalLocal(sX * uGradient[x], sY * uGradient[y], sZ * uGradient[z]);
                         double a = uNormalLocal.x, b = uNormalLocal.y, c = uNormalLocal.z, d = -uNormalLocal * ru;
-                        // distance from v to tangent plane at u
+                        // Distance from v to tangent plane at u
                         double D = qAbs(a * rv.x + b * rv.y + c * rv.z + d);
 
-                        if (D <= 1.5) // not blocking -> advance to the next
+                        // Not blocking -> advance to the next
+                        if (D <= 1.5)
                         {
                             ++itPostponedVoxels;
                             continue;
                         }
                     }
 
-                    // blocking
+                    // Blocking
                     double cos = uNormal * m_direction;
                     if (cos < 0.0)
                     {
@@ -243,13 +247,14 @@ void ObscuranceThread::runDensitySmooth()
 
                 if (distance <= 3.0)
                 {
-                    // tangent plane at u
-                    Vector3 uNormalLocal(sX * uGradient[x], sY * uGradient[y], sZ * uGradient[z]); // normal en espai local (transformat)
+                    // Tangent plane at u
+                    // Normal en espai local (transformat)
+                    Vector3 uNormalLocal(sX * uGradient[x], sY * uGradient[y], sZ * uGradient[z]);
                     double a = uNormalLocal.x, b = uNormalLocal.y, c = uNormalLocal.z, d = -uNormalLocal * ru;
-                    // distance from v to tangent plane at u
+                    // Distance from v to tangent plane at u
                     double D = qAbs(a * rv.x + b * rv.y + c * rv.z + d);
-
-                    if (D <= 1.5) // add u to postponed list
+                    // Add u to postponed list
+                    if (D <= 1.5)
                     {
                         postponedVoxels.append(uPair);
                         continue;
@@ -265,7 +270,7 @@ void ObscuranceThread::runDensitySmooth()
 
             unresolvedVoxels.push(qMakePair(value, rv));
 
-            // avançar el vòxel
+            // Avançar el vòxel
             rv += m_forward;
             v.x = qRound(rv.x); v.y = qRound(rv.y); v.z = qRound(rv.z);
         }
@@ -316,17 +321,17 @@ void ObscuranceThread::runOpacity()
     const unsigned short *dataPtr = m_data + m_startDelta;
     int nLineStarts = m_lineStarts.size();
 
-    // iterar per cada línia
+    // Iterar per cada línia
     for (int j = m_id; j < nLineStarts; j += m_numberOfThreads)
     {
         Vector3 rv = m_lineStarts.at(j);
         Voxel v = { qRound(rv.x), qRound(rv.y), qRound(rv.z) };
         Q_ASSERT(unresolvedVoxels.isEmpty());
 
-        // iterar per la línia
+        // Iterar per la línia
         while (v.x < dimX && v.y < dimY && v.z < dimZ)
         {
-            // tractar el vòxel
+            // Tractar el vòxel
             unsigned short value = dataPtr[v.x * incX + v.y * incY + v.z * incZ];
             double opacity = m_transferFunction.getOpacity(value);
 
@@ -349,7 +354,7 @@ void ObscuranceThread::runOpacity()
 
             unresolvedVoxels.push(qMakePair(opacity, rv));
 
-            // avançar el vòxel
+            // Avançar el vòxel
             rv += m_forward;
             v.x = qRound(rv.x); v.y = qRound(rv.y); v.z = qRound(rv.z);
         }
@@ -385,7 +390,7 @@ void ObscuranceThread::runOpacitySmooth()
     const unsigned short *dataPtr = m_data + m_startDelta;
     int nLineStarts = m_lineStarts.size();
 
-    // iterar per cada línia
+    // Iterar per cada línia
     for (int j = m_id; j < nLineStarts; j += m_numberOfThreads)
     {
         Vector3 rv = m_lineStarts.at(j);
@@ -393,10 +398,10 @@ void ObscuranceThread::runOpacitySmooth()
         Q_ASSERT(unresolvedVoxels.isEmpty());
         Q_ASSERT(postponedVoxels.isEmpty());
 
-        // iterar per la línia
+        // Iterar per la línia
         while (v.x < dimX && v.y < dimY && v.z < dimZ)
         {
-            // tractar el vòxel
+            // Tractar el vòxel
             unsigned short value = dataPtr[v.x * incX + v.y * incY + v.z * incZ];
             double opacity = m_transferFunction.getOpacity(value);
 
@@ -418,20 +423,21 @@ void ObscuranceThread::runOpacitySmooth()
 
                     if (distance <= 3.0)
                     {
-                        // tangent plane at u
-                        Vector3 uNormalLocal(sX * uGradient[x], sY * uGradient[y], sZ * uGradient[z]); // normal en espai local (transformat)
+                        // Tangent plane at u
+                        // Normal en espai local (transformat)
+                        Vector3 uNormalLocal(sX * uGradient[x], sY * uGradient[y], sZ * uGradient[z]);
                         double a = uNormalLocal.x, b = uNormalLocal.y, c = uNormalLocal.z, d = -uNormalLocal * ru;
-                        // distance from v to tangent plane at u
+                        // Distance from v to tangent plane at u
                         double D = qAbs(a * rv.x + b * rv.y + c * rv.z + d);
-
-                        if (D <= 1.5) // not blocking -> advance to the next
+                        // Not blocking -> advance to the next
+                        if (D <= 1.5)
                         {
                             ++itPostponedVoxels;
                             continue;
                         }
                     }
 
-                    // blocking
+                    // Blocking
                     double cos = uNormal * m_direction;
                     if (cos < 0.0)
                     {
@@ -460,13 +466,14 @@ void ObscuranceThread::runOpacitySmooth()
 
                 if (distance <= 3.0)
                 {
-                    // tangent plane at u
-                    Vector3 uNormalLocal(sX * uGradient[x], sY * uGradient[y], sZ * uGradient[z]); // normal en espai local (transformat)
+                    // Tangent plane at u
+                    // Normal en espai local (transformat)
+                    Vector3 uNormalLocal(sX * uGradient[x], sY * uGradient[y], sZ * uGradient[z]);
                     double a = uNormalLocal.x, b = uNormalLocal.y, c = uNormalLocal.z, d = -uNormalLocal * ru;
-                    // distance from v to tangent plane at u
+                    // Distance from v to tangent plane at u
                     double D = qAbs(a * rv.x + b * rv.y + c * rv.z + d);
-
-                    if (D <= 1.5) // add u to postponed list
+                    // Add u to postponed list
+                    if (D <= 1.5)
                     {
                         postponedVoxels.append(uPair);
                         continue;
@@ -482,7 +489,7 @@ void ObscuranceThread::runOpacitySmooth()
 
             unresolvedVoxels.push(qMakePair(opacity, rv));
 
-            // avançar el vòxel
+            // Avançar el vòxel
             rv += m_forward;
             v.x = qRound(rv.x); v.y = qRound(rv.y); v.z = qRound(rv.z);
         }
@@ -521,7 +528,8 @@ void ObscuranceThread::runOpacitySmooth()
     }
 }
 
-void ObscuranceThread::runOpacitySaliency()    // = runOpacity() (de moment)
+// = runOpacity() (de moment)
+void ObscuranceThread::runOpacitySaliency()
 {
     int x = m_xyz[0], y = m_xyz[1], z = m_xyz[2];
     int sX = m_sXYZ[0], sY = m_sXYZ[1], sZ = m_sXYZ[2];
@@ -533,17 +541,17 @@ void ObscuranceThread::runOpacitySaliency()    // = runOpacity() (de moment)
     const unsigned short *dataPtr = m_data + m_startDelta;
     int nLineStarts = m_lineStarts.size();
 
-    // iterar per cada línia
+    // Iterar per cada línia
     for (int j = m_id; j < nLineStarts; j += m_numberOfThreads)
     {
         Vector3 rv = m_lineStarts.at(j);
         Voxel v = { qRound(rv.x), qRound(rv.y), qRound(rv.z) };
         Q_ASSERT(unresolvedVoxels.isEmpty());
 
-        // iterar per la línia
+        // Iterar per la línia
         while (v.x < dimX && v.y < dimY && v.z < dimZ)
         {
-            // tractar el vòxel
+            // Tractar el vòxel
             unsigned short value = dataPtr[v.x * incX + v.y * incY + v.z * incZ];
             double opacity = m_transferFunction.getOpacity(value);
 
@@ -566,7 +574,7 @@ void ObscuranceThread::runOpacitySaliency()    // = runOpacity() (de moment)
 
             unresolvedVoxels.push(qMakePair(opacity, rv));
 
-            // avançar el vòxel
+            // Avançar el vòxel
             rv += m_forward;
             v.x = qRound(rv.x); v.y = qRound(rv.y); v.z = qRound(rv.z);
         }
@@ -603,7 +611,7 @@ void ObscuranceThread::runOpacitySmoothSaliency()
     const unsigned short *dataPtr = m_data + m_startDelta;
     int nLineStarts = m_lineStarts.size();
 
-    // iterar per cada línia
+    // Iterar per cada línia
     for (int j = m_id; j < nLineStarts; j += m_numberOfThreads)
     {
         Vector3 rv = m_lineStarts.at(j);
@@ -611,11 +619,12 @@ void ObscuranceThread::runOpacitySmoothSaliency()
         Q_ASSERT(unresolvedVoxels.isEmpty());
         Q_ASSERT(postponedVoxels.isEmpty());
 
-        // iterar per la línia
+        // Iterar per la línia
         while (v.x < dimX && v.y < dimY && v.z < dimZ)
         {
-            // tractar el vòxel
-            int vIndex = v.x * incX + v.y * incY + v.z * incZ;  // índex de v (sense el delta)
+            // Tractar el vòxel
+            // Index de v (sense el delta)
+            int vIndex = v.x * incX + v.y * incY + v.z * incZ;
             unsigned short value = dataPtr[vIndex];
             double opacity = m_transferFunction.getOpacity(value);
             double fxSaliency = 1.0 + m_saliency[m_startDelta + vIndex] * (m_fxSaliencyA + m_fxSaliencyB) - m_fxSaliencyA;
@@ -647,20 +656,22 @@ void ObscuranceThread::runOpacitySmoothSaliency()
 
                     if (distance <= 3.0)
                     {
-                        // tangent plane at u
-                        Vector3 uNormalLocal(sX * uGradient[x], sY * uGradient[y], sZ * uGradient[z]); // normal en espai local (transformat)
+                        // Tangent plane at u
+                        // Normal en espai local (transformat)
+                        Vector3 uNormalLocal(sX * uGradient[x], sY * uGradient[y], sZ * uGradient[z]);
                         double a = uNormalLocal.x, b = uNormalLocal.y, c = uNormalLocal.z, d = -uNormalLocal * ru;
-                        // distance from v to tangent plane at u
+                        // Distance from v to tangent plane at u
                         double D = qAbs(a * rv.x + b * rv.y + c * rv.z + d);
 
-                        if (D <= 1.5) // not blocking -> advance to the next
+                        // Not blocking -> advance to the next
+                        if (D <= 1.5)
                         {
                             ++itPostponedVoxels;
                             continue;
                         }
                     }
 
-                    // blocking
+                    // Blocking
                     double cos = uNormal * m_direction;
                     if (cos < 0.0)
                     {
@@ -689,13 +700,15 @@ void ObscuranceThread::runOpacitySmoothSaliency()
 
                 if (distance <= 3.0)
                 {
-                    // tangent plane at u
-                    Vector3 uNormalLocal(sX * uGradient[x], sY * uGradient[y], sZ * uGradient[z]); // normal en espai local (transformat)
+                    // Tangent plane at u
+                    // Normal en espai local (transformat)
+                    Vector3 uNormalLocal(sX * uGradient[x], sY * uGradient[y], sZ * uGradient[z]);
                     double a = uNormalLocal.x, b = uNormalLocal.y, c = uNormalLocal.z, d = -uNormalLocal * ru;
-                    // distance from v to tangent plane at u
+                    // Distance from v to tangent plane at u
                     double D = qAbs(a * rv.x + b * rv.y + c * rv.z + d);
 
-                    if (D <= 1.5) // add u to postponed list
+                    // Add u to postponed list
+                    if (D <= 1.5)
                     {
                         postponedVoxels.append(uPair);
                         continue;
@@ -711,7 +724,7 @@ void ObscuranceThread::runOpacitySmoothSaliency()
 
             unresolvedVoxels.push(qMakePair(opacity, rv));
 
-            // avançar el vòxel
+            // Avançar el vòxel
             rv += m_forward;
             v.x = qRound(rv.x); v.y = qRound(rv.y); v.z = qRound(rv.z);
         }
@@ -750,7 +763,8 @@ void ObscuranceThread::runOpacitySmoothSaliency()
     }
 }
 
-void ObscuranceThread::runOpacityColorBleeding()    /// \todo encara és smooth
+/// \todo encara és smooth
+void ObscuranceThread::runOpacityColorBleeding()
 {
     const Vector3 AMBIENT_COLOR(1.0, 1.0, 1.0);
 
@@ -765,7 +779,7 @@ void ObscuranceThread::runOpacityColorBleeding()    /// \todo encara és smooth
     const unsigned short *dataPtr = m_data + m_startDelta;
     int nLineStarts = m_lineStarts.size();
 
-    // iterar per cada línia
+    // Iterar per cada línia
     for (int j = m_id; j < nLineStarts; j += m_numberOfThreads)
     {
         Vector3 rv = m_lineStarts.at(j);
@@ -773,10 +787,10 @@ void ObscuranceThread::runOpacityColorBleeding()    /// \todo encara és smooth
         Q_ASSERT(unresolvedVoxels.isEmpty());
         Q_ASSERT(postponedVoxels.isEmpty());
 
-        // iterar per la línia
+        // Iterar per la línia
         while (v.x < dimX && v.y < dimY && v.z < dimZ)
         {
-            // tractar el vòxel
+            // Tractar el vòxel
             unsigned short value = dataPtr[v.x * incX + v.y * incY + v.z * incZ];
             double opacity = m_transferFunction.getOpacity(value);
             QColor vColor = m_transferFunction.getColor(value);
@@ -800,20 +814,21 @@ void ObscuranceThread::runOpacityColorBleeding()    /// \todo encara és smooth
 
                     if (distance <= 3.0)
                     {
-                        // tangent plane at u
-                        Vector3 uNormalLocal(sX * uGradient[x], sY * uGradient[y], sZ * uGradient[z]); // normal en espai local (transformat)
+                        // Tangent plane at u
+                        // Normal en espai local (transformat)
+                        Vector3 uNormalLocal(sX * uGradient[x], sY * uGradient[y], sZ * uGradient[z]);
                         double a = uNormalLocal.x, b = uNormalLocal.y, c = uNormalLocal.z, d = -uNormalLocal * ru;
-                        // distance from v to tangent plane at u
+                        // Distance from v to Tangent plane at u
                         double D = qAbs(a * rv.x + b * rv.y + c * rv.z + d);
-
-                        if (D <= 1.5) // not blocking -> advance to the next
+                        // Not blocking -> advance to the next
+                        if (D <= 1.5)
                         {
                             ++itPostponedVoxels;
                             continue;
                         }
                     }
 
-                    // blocking
+                    // Blocking
                     double cos = uNormal * m_direction;
                     if (cos < 0.0)
                     {
@@ -842,13 +857,14 @@ void ObscuranceThread::runOpacityColorBleeding()    /// \todo encara és smooth
 
                 if (distance <= 3.0)
                 {
-                    // tangent plane at u
-                    Vector3 uNormalLocal(sX * uGradient[x], sY * uGradient[y], sZ * uGradient[z]); // normal en espai local (transformat)
+                    // Tangent plane at u
+                    // Normal en espai local (transformat)
+                    Vector3 uNormalLocal(sX * uGradient[x], sY * uGradient[y], sZ * uGradient[z]);
                     double a = uNormalLocal.x, b = uNormalLocal.y, c = uNormalLocal.z, d = -uNormalLocal * ru;
-                    // distance from v to tangent plane at u
+                    // Distance from v to Tangent plane at u
                     double D = qAbs(a * rv.x + b * rv.y + c * rv.z + d);
-
-                    if (D <= 1.5) // add u to postponed list
+                    // Add u to postponed list
+                    if (D <= 1.5)
                     {
                         postponedVoxels.append(uPair);
                         continue;
@@ -864,7 +880,7 @@ void ObscuranceThread::runOpacityColorBleeding()    /// \todo encara és smooth
 
             unresolvedVoxels.push(qMakePair(opacity, rv));
 
-            // avançar el vòxel
+            // Avançar el vòxel
             rv += m_forward;
             v.x = qRound(rv.x); v.y = qRound(rv.y); v.z = qRound(rv.z);
         }
@@ -919,7 +935,7 @@ void ObscuranceThread::runOpacitySmoothColorBleeding()
     const int nLineStarts = m_lineStarts.size();
 
     // u és el tapat, v és el que tapa
-    // iterar per cada línia
+    // Iterar per cada línia
     for (int j = m_id; j < nLineStarts; j += m_numberOfThreads)
     {
         Vector3 rv = m_lineStarts.at(j);
@@ -928,10 +944,10 @@ void ObscuranceThread::runOpacitySmoothColorBleeding()
         Q_ASSERT(unresolvedVoxels.isEmpty());
         Q_ASSERT(postponedVoxels.isEmpty());
 
-        // iterar per la línia
+        // Iterar per la línia
         while (v.x < dimX && v.y < dimY && v.z < dimZ)
         {
-            // tractar el vòxel
+            // Tractar el vòxel
             const double value = dataPtr[v.x * incX + v.y * incY + v.z * incZ];
             const double opacity = m_transferFunction.getOpacity(value);
             const QColor vColor = m_transferFunction.getColor(value);
@@ -950,8 +966,8 @@ void ObscuranceThread::runOpacitySmoothColorBleeding()
                     const int uIndex = m_startDelta + u.x * incX + u.y * incY + u.z * incZ;
                     const float *uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
                     const double distance = (rv - ru).length();
-
-                    if (smoothBlocking(rv, ru, distance, uGradient))  // ru és tapat -> calculem el color bleeding
+                    // ru és tapat -> calculem el color bleeding
+                    if (smoothBlocking(rv, ru, distance, uGradient)) 
                     {
                         const Vector3 uNormal(uGradient[0], uGradient[1], uGradient[2]);
                         const double cos = uNormal * m_direction;
@@ -962,8 +978,8 @@ void ObscuranceThread::runOpacitySmoothColorBleeding()
                         }
 
                         itPostponedVoxels = postponedVoxels.erase(itPostponedVoxels);
-
-                        continue;   // evitem avançar l'iterador
+                        // Evitem Avançar l'iterador
+                        continue;
                     }
                 }
 
@@ -979,8 +995,8 @@ void ObscuranceThread::runOpacitySmoothColorBleeding()
                 const int uIndex = m_startDelta + u.x * incX + u.y * incY + u.z * incZ;
                 const float *uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
                 const double distance = (rv - ru).length();
-
-                if (smoothBlocking(rv, ru, distance, uGradient))  // ru és tapat -> calculem el color bleeding
+                // ru és tapat -> calculem el color bleeding
+                if (smoothBlocking(rv, ru, distance, uGradient))
                 {
                     const Vector3 uNormal(uGradient[0], uGradient[1], uGradient[2]);
                     const double cos = uNormal * m_direction;
@@ -990,7 +1006,8 @@ void ObscuranceThread::runOpacitySmoothColorBleeding()
                         m_obscurance->addColorBleeding(uIndex, -cos * obscurance(distance) * vColorVector);
                     }
                 }
-                else    // ru no és tapat -> el posposem
+                // ru no és tapat -> el posposem
+                else
                 {
                     postponedVoxels.append(uPair);
                 }
@@ -998,7 +1015,7 @@ void ObscuranceThread::runOpacitySmoothColorBleeding()
 
             unresolvedVoxels.push(qMakePair(opacity, rv));
 
-            // avançar el vòxel
+            // Avançar el vòxel
             rv += m_forward;
             v.x = qRound(rv.x); v.y = qRound(rv.y); v.z = qRound(rv.z);
         }
@@ -1064,12 +1081,13 @@ inline double ObscuranceThread::obscurance(double distance) const
 {
     if (distance <= 3.0)
     {
-        // tangent plane at blocked
+        // Tangent plane at blocked
         const Vector3 blockedNormalLocal(m_sXYZ[0] * blockedGradient[m_xyz[0]],
                                           m_sXYZ[1] * blockedGradient[m_xyz[1]],
-                                          m_sXYZ[2] * blockedGradient[m_xyz[2]]);  // normal en espai local (transformat)
+                                          // Normal en espai local (transformat)
+                                          m_sXYZ[2] * blockedGradient[m_xyz[2]]);
         const double a = blockedNormalLocal.x, b = blockedNormalLocal.y, c = blockedNormalLocal.z, d = -blockedNormalLocal * blocked;
-        // distance from blocking to tangent plane at blocked
+        // Distance from blocking to tangent plane at blocked
         if (qAbs(a * blocking.x + b * blocking.y + c * blocking.z + d) <= 1.5)
         {
             return false;

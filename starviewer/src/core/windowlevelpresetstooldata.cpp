@@ -14,11 +14,17 @@ WindowLevelPresetsToolData::WindowLevelPresetsToolData(QObject *parent)
     addPreset(tr("CT Lung"), 1500, -650, StandardPresets);
     addPreset(tr("CT Soft Tissues"), 400, 40, StandardPresets);
     addPreset(tr("CT Soft Tissues+Contrast"), 400, 70, StandardPresets);
-    addPreset(tr("CT Liver+Contrast"), 300, 60, StandardPresets); // 60-100
+
+    // 60-100
+    addPreset(tr("CT Liver+Contrast"), 300, 60, StandardPresets);
     addPreset(tr("CT Liver"), 200, 40, StandardPresets);
     addPreset(tr("CT Neck+Contrast"), 300, 50, StandardPresets);
-    addPreset(tr("Angiography"), 500, 100, StandardPresets); // 100-200
-    addPreset(tr("Osteoporosis"), 1000, 300, StandardPresets); //100-1500:window!
+
+    // 100-200
+    addPreset(tr("Angiography"), 500, 100, StandardPresets);
+
+    //100-1500:window!
+    addPreset(tr("Osteoporosis"), 1000, 300, StandardPresets);
     addPreset(tr("Emphysema"), 800, -800, StandardPresets);
     addPreset(tr("Petrous Bone"), 4000, 700, StandardPresets);
     addPreset(tr("Custom"), 0, 0, CustomPreset);

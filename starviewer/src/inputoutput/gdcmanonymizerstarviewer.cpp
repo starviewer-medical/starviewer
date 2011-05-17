@@ -427,7 +427,7 @@ std::vector<Tag> gdcmAnonymizerStarviewer::GetBasicApplicationLevelConfidentiali
     return std::vector<Tag>(start, end);
 }
 
-bool gdcmAnonymizerStarviewer::CheckIfSequenceContainsAttributeToAnonymize(File const &file, SequenceOfItems* sqi) const
+bool gdcmAnonymizerStarviewer::CheckIfSequenceContainsAttributeToAnonymize(File const &file, SequenceOfItems *sqi) const
 {
     static const unsigned int deidSize = sizeof(Tag);
     static const unsigned int numDeIds = sizeof(BasicApplicationLevelConfidentialityProfileAttributes) / deidSize;

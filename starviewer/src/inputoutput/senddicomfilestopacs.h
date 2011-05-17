@@ -25,10 +25,9 @@ public:
     ///Retorna el PACS que s'ha passat al constructor i amb el qual es fa el send de fitxers DICOM
     PacsDevice getPacs();
 
-   /** Guarda les imatges que s'especifiquen a la llista en el pacs establert per la connexió
-    * @param ImageListStore de les imatges a enviar al PACS
-    * @return indica estat del mètode
-    */
+    /// Guarda les imatges que s'especifiquen a la llista en el pacs establert per la connexió
+    /// @param ImageListStore de les imatges a enviar al PACS
+    /// @return indica estat del mètode
     PACSRequestStatus::SendRequestStatus send(QList<Image*> imageListToSend);
 
     ///Demanem cancel·lar l'enviament d'imatges. La cancel·lació de les imatges és assíncrona no es duu a terme fins que ha finalitzat l'enviament de la imatge que

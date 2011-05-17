@@ -27,8 +27,8 @@ int PACSJob::getPACSJobID()
 
 void PACSJob::aboutToBeDequeued(ThreadWeaver::WeaverInterface *)
 {
-    /*Si ens desenqueuen de la cua de jobs pendents d'executar, vol dir que aquest Job no s'executarà, per tant emetem signal indicant que
-     ens han cancel·lat*/
+    // Si ens desenqueuen de la cua de jobs pendents d'executar, vol dir que aquest Job no s'executarà, per tant emetem signal indicant que
+    // ens han cancel·lat
     emit PACSJobCancelled(this);
 }
 

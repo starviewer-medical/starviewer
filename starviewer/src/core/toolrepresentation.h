@@ -30,14 +30,14 @@ signals:
     void finished();
 
 protected:
-    ///Actualitza el viewer
+    /// Actualitza el viewer
     void refresh();
 
 protected:
-    ///Drawer del viewer amb el que es pintaran les primitives
+    /// Drawer del viewer amb el que es pintaran les primitives
     Drawer *m_drawer;
 
-    ///Llista de primitives a pintar
+    /// Llista de primitives a pintar
     QList<DrawerPrimitive*> m_primitivesList;
 };
 

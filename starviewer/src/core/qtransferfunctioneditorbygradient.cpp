@@ -123,14 +123,17 @@ void QTransferFunctionEditorByGradient::pointsUpdated()
     for (int i=0; i<points.size(); ++i)
     {
         double x = int(points.at(i).x());
-        if (i < points.size() - 1 && x == points.at(i+1).x())    // si no és l'últim punt i és a la mateixa x que el següent
+        // Si no és l'últim punt i és a la mateixa x que el següent
+        if (i < points.size() - 1 && x == points.at(i+1).x())
         {
-            continue;    // no es fa res per aquest punt
+            // No es fa res per aquest punt
+            continue;
         }
+        // Calcula el color del punt
         QColor color((0x00ff0000 & m_red_shade->colorAt(int(x))) >> 16,
                      (0x0000ff00 & m_green_shade->colorAt(int(x))) >> 8,
                      (0x000000ff & m_blue_shade->colorAt(int(x))),
-                     (0xff000000 & m_alpha_shade->colorAt(int(x))) >> 24);    // calcula el color del punt
+                     (0xff000000 & m_alpha_shade->colorAt(int(x))) >> 24);
 
         if (x / w > 1)
         {

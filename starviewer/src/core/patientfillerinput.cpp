@@ -104,7 +104,8 @@ void PatientFillerInput::addLabel(QString label)
     if (!m_globalLabels.contains(label))
     {
         m_globalLabels << label;
-        m_allLabels << label; // afegim a la llista de tots també
+        // Afegim a la llista de tots també
+        m_allLabels << label;
     }
 }
 
@@ -114,7 +115,7 @@ void PatientFillerInput::addLabelToSeries(QString label, Series *series)
     {
         m_seriesLabels.insert(series, label);
     }
-    // aquí ho separem perquè podria ser que la serie que especifiquem no tingui aquella label i una altre sí i s'hagi afegit ja abans
+    // Aquí ho separem perquè podria ser que la serie que especifiquem no tingui aquella label i una altre sí i s'hagi afegit ja abans
     if (!m_allLabels.contains(label))
     {
         m_allLabels << label;

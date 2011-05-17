@@ -80,7 +80,8 @@ void DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString se
     //Comprovem que s'hagi importat correctament el nou estudi
     if (getLastError() != Ok)
     {
-        deleteFailedImportedStudy(studyUID); // si hi hagut un error borrem els fitxers importats de l'estudi de la cache local
+        // Si hi hagut un error borrem els fitxers importats de l'estudi de la cache local
+        deleteFailedImportedStudy(studyUID);
     }
     else
     {
@@ -102,7 +103,8 @@ void DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString se
                 m_lastError = DatabaseError;
             }
 
-            deleteFailedImportedStudy(studyUID); // si hi hagut un error borrem els fitxers importats de l'estudi de la cache local
+            // Si hi hagut un error borrem els fitxers importats de l'estudi de la cache local
+            deleteFailedImportedStudy(studyUID);
         }
     }
 
@@ -121,7 +123,8 @@ void DICOMDIRImporter::importStudy(QString studyUID, QString seriesUID, QString 
 
     m_readDicomdir.readStudies(patientStudyListToImport, mask);
 
-    if (!patientStudyListToImport.isEmpty())//comprovem que s'hagin trobat estudis per importar
+    // Comprovem que s'hagin trobat estudis per importar
+    if (!patientStudyListToImport.isEmpty())
     {
         QList<Series*> seriesListToImport;
 
@@ -244,16 +247,16 @@ bool DICOMDIRImporter::copyDicomdirImageToLocal(QString dicomdirImagePath, QStri
 
 QString DICOMDIRImporter::getDicomdirImagePath(Image *image)
 {
-    if (QFile::exists(image->getPath()))//comprovem si la imatge a importar existeix
+    // Comprovem si la imatge a importar existeix
+    if (QFile::exists(image->getPath()))
     {
         return image->getPath();
     }
     else if (QFile::exists(image->getPath().toLower()))
     {
-        /* Linux per defecte en les unitats vfat, mostra els noms de fitxer que són shortname (8 o menys caràcters) en minúscules
-           com que en el fitxer de dicomdir les rutes del fitxer es guarden en majúscules, si fem un exist del nom del fitxer sobre
-           unitats vfat falla, per això el que fem es convertir el nom del fitxer a minúscules
-         */
+        // Linux per defecte en les unitats vfat, mostra els noms de fitxer que són shortname (8 o menys caràcters) en minúscules
+        // com que en el fitxer de dicomdir les rutes del fitxer es guarden en majúscules, si fem un exist del nom del fitxer sobre
+        // unitats vfat falla, per això el que fem es convertir el nom del fitxer a minúscules
         return image->getPath().toLower();
     }
     else
@@ -270,9 +273,9 @@ void DICOMDIRImporter::createConnections(PatientFiller *patientFiller, LocalData
     connect(this, SIGNAL(imageImportedToDisk(DICOMTagReader*)), patientFiller, SLOT(processDICOMFile(DICOMTagReader*)));
     connect(this, SIGNAL(importFinished()), patientFiller, SLOT(finishDICOMFilesProcess()));
 
-    /*Connexió entre el processat dels fitxers DICOM i l'inserció al a BD, és important que aquest signal sigui un Qt:DirectConnection perquè així el
-      el processa els thread dels fillers, d'aquesta manera el thread de descarrega que està esperant a fillersThread.wait() quan en surt
-      perquè els thread dels fillers ja ha finalitzat, ja  s'ha inserit el pacient a la base de dades.*/
+    // Connexió entre el processat dels fitxers DICOM i l'inserció al a BD, és important que aquest signal sigui un Qt:DirectConnection perquè així el
+    // el processa els thread dels fillers, d'aquesta manera el thread de descarrega que està esperant a fillersThread.wait() quan en surt
+    // perquè els thread dels fillers ja ha finalitzat, ja  s'ha inserit el pacient a la base de dades.
     connect(patientFiller, SIGNAL(patientProcessed(Patient*)), localDatabaseManager, SLOT(save(Patient*)), Qt::DirectConnection);
 
     //Connexions per finalitzar els threads

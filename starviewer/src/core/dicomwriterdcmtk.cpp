@@ -38,9 +38,9 @@ void DICOMWriterDCMTK::addValueAttribute(DICOMValueAttribute *attribute)
     {
         dataset->putAndInsertString(tag, qPrintable(attribute->getValueAsQString()), true);
 
-        /*Uint16 valor;
-        if (dataset->findAndGetUint16(DCM_Rows, valor).good())
-            std::cout << valor << std::endl;*/
+        // Uint16 valor;
+        // if (dataset->findAndGetUint16(DCM_Rows, valor).good())
+        //    std::cout << valor << std::endl;
     }
 
 }

@@ -51,7 +51,7 @@ public:
     bool operator<(const PatientFillerStep &patientFillerStep) const;
 
 protected:
-    /// mètodes de conveniència
+    /// Mètodes de conveniència
     /// Ens diu si aquella sèrie és d'imatges, kin's o presentation states
     bool isImageSeries(Series *series);
     bool isKeyImageNoteSeries(Series *series);
@@ -64,7 +64,7 @@ protected:
     /// Llista d'etiquetes necessàries per poder processar aquest step.
     QStringList m_requiredLabelsList;
 
-    /// prioritat de l'step. Per defecte tindrem prioritat normal en tots els steps, excepte en aquells que es defineixi
+    /// Prioritat de l'step. Per defecte tindrem prioritat normal en tots els steps, excepte en aquells que es defineixi
     /// alguna prioritat diferent.
     PriorityFlags m_priority;
 

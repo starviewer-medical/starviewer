@@ -8,7 +8,7 @@
 #include <QMessageBox>
 #include <qmath.h>
 
-//vtk
+// Vtk
 #include <vtkCommand.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkImageData.h>
@@ -125,10 +125,10 @@ void MagicTool::generateRegion()
 {
     this->computeLevelRange();
 
-    //Posem a true els punts on la imatge està dins els llindard i connectat amb la llavor (region growing)
+    // Posem a true els punts on la imatge està dins els llindard i connectat amb la llavor (region growing)
     this->computeRegionMask();
 
-    //Trobem els punts frontera i creem el polígon
+    // Trobem els punts frontera i creem el polígon
     this->computePolygon();
 
     m_2DViewer->render();
@@ -139,10 +139,10 @@ void MagicTool::computeLevelRange()
     int index[3];
     m_2DViewer->getInput()->getPixelData()->computeCoordinateIndex(m_pickedPosition, index);
 
-    //Calculem la desviació estàndard dins la finestra que ens marca la magic size
+    // Calculem la desviació estàndard dins la finestra que ens marca la magic size
     double stdv = getStandardDeviation(index[0], index[1], index[2]);
 
-    //Calculem els llindars com el valor en el pixel +/- la desviació estàndard * magic factor
+    // Calculem els llindars com el valor en el pixel +/- la desviació estàndard * magic factor
     QVector<double> voxelValue;
     m_2DViewer->getInput()->getVoxelValue(m_pickedPosition, voxelValue);
     m_lowerLevel = voxelValue.at(0) - m_magicFactor * stdv;
@@ -155,7 +155,7 @@ void MagicTool::computeRegionMask()
     int ext[6];
     m_2DViewer->getInput()->getWholeExtent(ext);
 
-    //Creem la màscara
+    // Creem la màscara
     if (ext[0] == 0 && ext[2] == 0)
     {
         m_mask = QVector<bool>((ext[1] + 1) * (ext[3] + 1), false);
@@ -165,13 +165,13 @@ void MagicTool::computeRegionMask()
         DEBUG_LOG("ERROR: extension no comença a 0");
     }
 
-    //Busquem el voxel inicial
+    // Busquem el voxel inicial
     int index[3];
     m_2DViewer->getInput()->getPixelData()->computeCoordinateIndex(m_pickedPosition, index);
     int a = index[0];
     int b = index[1];
     int c = index[2];
-    //\TODO S'hauria de fer servir VolumePixelData::getVoxelValue o similar
+    // \TODO S'hauria de fer servir VolumePixelData::getVoxelValue o similar
     double value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(a, b, c, 0);
     if ((value >= m_lowerLevel) && (value <= m_upperLevel))
     {
@@ -184,13 +184,13 @@ void MagicTool::computeRegionMask()
 
     // Comencem el Region Growing
     QVector<int> movements;
-    //First movement \TODO Codi duplicat amb main loop
+    // First movement \TODO Codi duplicat amb main loop
     int i = 0;
     bool trobat = false;
     while (i < 4 && !trobat)
     {
         this->doMovement(a, b, i);
-        //\TODO S'hauria de fer servir VolumePixelData::getVoxelValue o similar
+        // \TODO S'hauria de fer servir VolumePixelData::getVoxelValue o similar
         value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(a, b, c, 0);
         if ((value >= m_lowerLevel) && (value <= m_upperLevel))
         {
@@ -205,7 +205,7 @@ void MagicTool::computeRegionMask()
         ++i;
     }
 
-    //main loop
+    // Main loop
     i = 0;
     while (movements.size() > 0)
     {
@@ -215,7 +215,7 @@ void MagicTool::computeRegionMask()
             this->doMovement(a, b, i);
             if ((a > ext[0]) && (a < ext[1]) && (b > ext[2]) && (b < ext[3]))
             {
-                //\TODO S'hauria de fer servir VolumePixelData::getVoxelValue o similar
+                // \TODO S'hauria de fer servir VolumePixelData::getVoxelValue o similar
                 value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(a, b, c, 0);
                 if ((value >= m_lowerLevel) && (value <= m_upperLevel) && (!m_mask[b * ext[1] + a]))
                 {
@@ -245,10 +245,12 @@ void MagicTool::doMovement(int &a, int &b, int movement)
 {
     switch (movement)
     {
-        case 0: //up
+        // Up
+        case 0:
             a++;
             break;
-        case 1://down
+        // Down
+        case 1:
             a--;
             break;
         case 2:
@@ -266,10 +268,12 @@ void MagicTool::undoMovement(int &a, int &b, int movement)
 {
     switch (movement)
     {
-        case 0: //up
+        // Up
+        case 0:
             a--;
             break;
-        case 1://down
+        // Down
+        case 1:
             a++;
             break;
         case 2:
@@ -291,7 +295,7 @@ void MagicTool::computePolygon()
     int i = ext[0];
     int j;
 
-    //Busquem el primer punt
+    // Busquem el primer punt
     bool trobat = false;
     while ((i <= ext[1]) && !trobat)
     {
@@ -306,7 +310,7 @@ void MagicTool::computePolygon()
         }
         ++i;
     }
-    //L'índex és -1 pq els hem incrementat una vegada més
+    // L'índex és -1 pq els hem incrementat una vegada més
     int index[3];
     index[0] = i - 1;
     index[1] = j - 1;
@@ -455,7 +459,7 @@ double MagicTool::getStandardDeviation(int a, int b, int c)
     int index[3];
     index[2] = c;
 
-    //Calculem la mitjana
+    // Calculem la mitjana
     double mean = 0.0;
     for (int i = minX; i <= maxX; ++i)
     {
@@ -471,7 +475,7 @@ double MagicTool::getStandardDeviation(int a, int b, int c)
     int numberOfSamples = (maxX - minX + 1) * (maxY - minY + 1);
     mean = mean / (double)numberOfSamples;
 
-    //Calculem la desviació estandard
+    // Calculem la desviació estandard
     double deviation = 0.0;
     for (int i = minX; i <= maxX; ++i)
     {
@@ -479,7 +483,7 @@ double MagicTool::getStandardDeviation(int a, int b, int c)
         {
             index[0] = i;
             index[1] = j;
-            //\TODO S'hauria de fer servir VolumePixelData::getVoxelValue o similar
+            // \TODO S'hauria de fer servir VolumePixelData::getVoxelValue o similar
             double value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(index[0], index[1], index[2], 0);
             deviation += qPow(value - mean, 2);
         }

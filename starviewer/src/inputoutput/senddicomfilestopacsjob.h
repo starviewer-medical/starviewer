@@ -34,8 +34,8 @@ public:
     ///Retorna l'Status del Job
     PACSRequestStatus::SendRequestStatus getStatus();
 
-    /**Retorna l'Status descrit en un QString , aquest QString està pensat per ser mostrat en QMessageBox per informar a l'usuari de l'estat que ha retornat
-        el job en el mateixa descripció s'indica de quin és l'estudi afectat*/
+    /// Retorna l'Status descrit en un QString , aquest QString està pensat per ser mostrat en QMessageBox per informar a l'usuari de l'estat que ha retornat
+    /// el job en el mateixa descripció s'indica de quin és l'estudi afectat
     QString getStatusDescription();
 
     ///Retorna la llista d'imatges que s'han indicat que s'havien de guardar

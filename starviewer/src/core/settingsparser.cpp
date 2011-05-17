@@ -1,14 +1,16 @@
 #include "settingsparser.h"
 
-#include <QHostInfo> // localhostname, ip
+// localhostname, ip
+#include <QHostInfo>
 #include <QRegExp>
 #include <QDir>
-#include <QProcess> // pel systemEnvironment
+// Pel systemEnvironment
+#include <QProcess>
 #include "logging.h"
 
 namespace udg {
 
-// caràcter delimitador per les paraules clau
+// Caràcter delimitador per les paraules clau
 const QChar delimiterChar('%');
 
 SettingsParser::SettingsParser()
@@ -39,23 +41,34 @@ QString SettingsParser::parse(const QString &stringToParse)
     // Expressió regular: Qualsevol de les claus, que pot anar acompanyada opcionalment d'una mascara de truncatge
     regExp.setPattern(keysPattern + maskPattern);
 
-    QString parsedString = stringToParse; // String on anirem parsejant els resultats
-    int keyIndex = 0; // índex de l'string on comença el patró trobat
-    QString capturedKey; // Clau trobada
-    QString capturedMask; // Màscara trobada
-    QString keyToReplace; // Clau que voldrem substituir
-    QString maskedString; // String que parseja la màscara
-    int truncate = 0; // nombre de caràcters a truncar --->> en comptes de truncate, posar-li width
-    QChar paddingChar; // caràcter amb el que farem el padding
+    // String on anirem parsejant els resultats
+    QString parsedString = stringToParse;
+    // índex de l'string on comença el patró trobat
+    int keyIndex = 0;
+    // Clau trobada
+    QString capturedKey;
+    // Màscara trobada
+    QString capturedMask;
+    // Clau que voldrem substituir
+    QString keyToReplace;
+    // String que parseja la màscara
+    QString maskedString;
+    // Nombre de caràcters a truncar --->> en comptes de truncate, posar-li width
+    int truncate = 0;
+    // Caràcter amb el que farem el padding
+    QChar paddingChar;
 
     // Mentres hi hagi expressions, les capturem i parsejem
     // Els "replace" es fan d'un en un, ja que podem tenir claus repetides i cal fer-ho pas a pas,
     // tal com anem tractant cada expressió regular
     while ((keyIndex = regExp.indexIn(parsedString)) != -1)
     {
-        capturedKey = regExp.cap(1); // la clau trobada, 1a part de l'expressió regular
-        capturedMask = regExp.cap(2); // la màscara trobada, 2a part de l'expressió regular
-        keyToReplace = QString(capturedKey).replace("%", ""); // li eliminem els '%'
+        // La clau trobada, 1a part de l'expressió regular
+        capturedKey = regExp.cap(1);
+        // La màscara trobada, 2a part de l'expressió regular
+        capturedMask = regExp.cap(2);
+        // Li eliminem els '%'
+        keyToReplace = QString(capturedKey).replace("%", "");
         // Si s'ha trobat sufix de màscara, el parsejem
         if (!capturedMask.isEmpty())
         {
@@ -63,13 +76,15 @@ QString SettingsParser::parse(const QString &stringToParse)
             QRegExp maskRegExp("\\[(\\d+):(\\S)?\\]");
             if (maskRegExp.indexIn(capturedMask) != -1)
             {
-                truncate = maskRegExp.cap(1).toInt(); // nombre de caràcters a truncar
-                // trunquem
+                // Nombre de caràcters a truncar
+                truncate = maskRegExp.cap(1).toInt(); 
+                // Trunquem
                 maskedString = QString(m_parseableStringsTable.value(keyToReplace)).right(truncate);
-                // si hi ha caràcter de padding, tractem de fer el padding
+                // Si hi ha caràcter de padding, tractem de fer el padding
                 if (!maskRegExp.cap(2).isEmpty())
                 {
-                    paddingChar = maskRegExp.cap(2).at(0); // caràcter de padding
+                    // Caràcter de padding
+                    paddingChar = maskRegExp.cap(2).at(0);
                     maskedString = maskedString.rightJustified(truncate, paddingChar);
                 }
                 // Substituim el valor a parsejar i la màscara
@@ -80,7 +95,8 @@ QString SettingsParser::parse(const QString &stringToParse)
                 DEBUG_LOG("EP! Hem comés algun error de sintaxi amb l'expressió regular!");
             }
         }
-        else // altrament, substituim únicament la clau
+        // Altrament, substituim únicament la clau
+        else
         {
             parsedString.replace(keyIndex, capturedKey.size(), m_parseableStringsTable.value(keyToReplace));
         }
@@ -91,11 +107,11 @@ QString SettingsParser::parse(const QString &stringToParse)
 
 void SettingsParser::initializeParseableStringsTable()
 {
-    // omplim els valors de les diferents paraules clau
+    // Omplim els valors de les diferents paraules clau
     QString localHostName = QHostInfo::localHostName();
     m_parseableStringsTable["HOSTNAME"] = localHostName;
 
-    // obtenció de la ip
+    // Obtenció de la ip
     QStringList ipV4Addresses = getLocalHostIPv4Addresses();
     QString ip;
     if (!ipV4Addresses.isEmpty())
@@ -105,7 +121,7 @@ void SettingsParser::initializeParseableStringsTable()
 
         m_parseableStringsTable["IP"] = ip;
 
-        // "partim" els prefixos de la ip
+        // "Partim" els prefixos de la ip
         QStringList ipParts = ip.split(".");
         // Això no hauria de fallar mai ja que la llista d'IPs ha de contenir valors correctament formatats ja que aquests han estat prèviament validats.
         if (ipParts.count() == 4)
@@ -127,19 +143,21 @@ void SettingsParser::initializeParseableStringsTable()
         WARN_LOG("No s'ha recongeut cap adreça IPv4 en l'equip.");
     }
 
-    // home path
+    // Home path
     m_parseableStringsTable["HOMEPATH"] = QDir::homePath();
 
-    // nom d'usuari
+    // Nom d'usuari
     QStringList environmentList = QProcess::systemEnvironment();
-    int index = environmentList.indexOf("USERNAME"); // windows
+    // Windows
+    int index = environmentList.indexOf("USERNAME");
     if (index != -1)
     {
         m_parseableStringsTable["USERNAME"] = environmentList.at(index);
     }
     else
     {
-        index = environmentList.indexOf("USER"); // linux, mac
+        // Linux, Mac
+        index = environmentList.indexOf("USER");
         if (index != -1)
         {
             m_parseableStringsTable["USERNAME"] = environmentList.at(index);
@@ -179,4 +197,4 @@ QStringList SettingsParser::getLocalHostIPv4Addresses()
     return ipV4List;
 }
 
-} // end namespace udg
+} // End namespace udg

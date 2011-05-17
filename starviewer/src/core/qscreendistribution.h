@@ -58,6 +58,6 @@ private:
     static const int MaximumScreenNumberPixelSize;
 };
 
-} // end namespace udg
+} // End namespace udg
 
 #endif //UDGQSCREENDISTRIBUTION_H

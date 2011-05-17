@@ -43,7 +43,7 @@ HangingProtocol::HangingProtocol(const HangingProtocol *hangingProtocol)
     m_layout->setNumberOfScreens(hangingProtocol->m_layout->getNumberOfScreens());
     m_layout->setVerticalPixelsList(hangingProtocol->m_layout->getVerticalPixelsList());
 
-    //Copia de la mascara
+    // Copia de la mascara
     m_mask = new HangingProtocolMask();
     m_mask->setProtocolsList(hangingProtocol->m_mask->getProtocolList());
 
@@ -267,8 +267,8 @@ bool HangingProtocol::isBetterThan(HangingProtocol *hangingToCompare)
     }
     else
     {
-        //Si un des 2 hangings no té la prioritat definida, la prioritat només serveix
-        //per dir si un hanging ha de ser el més o el menys aconsellat.
+        // Si un des 2 hangings no té la prioritat definida, la prioritat només serveix
+        // per dir si un hanging ha de ser el més o el menys aconsellat.
         if (this->getPriority() == 10 || hangingToCompare->getPriority() == 0)
         {
             return true;

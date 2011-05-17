@@ -10,11 +10,11 @@ namespace udg {
 class CopyDirectory{
 public:
 
-    ///Copia el directori origen al directori destí
+    /// Copia el directori origen al directori destí
     static bool copyDirectory(const QString &sourceDirectory, const QString &sourceDestination);
 
 };
 
-};  //  end  namespace udg
+};  // End  namespace udg
 
 #endif

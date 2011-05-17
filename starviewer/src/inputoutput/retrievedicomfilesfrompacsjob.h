@@ -39,8 +39,8 @@ public:
     ///Retorna l'Status del Job
     PACSRequestStatus::RetrieveRequestStatus getStatus();
 
-    /**Retorna l'Status descrit en un QString , aquest QString està pensat per ser mostrat en QMessageBox per informar a l'usuari de l'estat que ha retornat
-        el job en el mateixa descripció s'indica de quin és l'estudi afectat*/
+    /// Retorna l'Status descrit en un QString , aquest QString està pensat per ser mostrat en QMessageBox per informar a l'usuari de l'estat que ha retornat
+    /// el job en el mateixa descripció s'indica de quin és l'estudi afectat
     QString getStatusDescription();
 
 signals:
@@ -54,14 +54,14 @@ signals:
     ///Signal que s'emet quan el DICOMTagReader està a punt per ser processats. Aquest signal és d'ús intern
     void DICOMTagReaderReadyForProcess(DICOMTagReader *dicomTagReader);
 
-    /**Signal que indica que la descàrrega de fitxers DICOM ha finalitzat. Aquest signal es fa quan la descarrega de fitxers DICOM ha acabat però encara
-       queda processar els fillers per obtenir l'objecte Patient a guardar a la base de dades. Aquest signal és d'us intern*/
+    /// Signal que indica que la descàrrega de fitxers DICOM ha finalitzat. Aquest signal es fa quan la descarrega de fitxers DICOM ha acabat però encara
+    /// queda processar els fillers per obtenir l'objecte Patient a guardar a la base de dades. Aquest signal és d'us intern
     void DICOMFilesRetrieveFinished();
 
-    /**Abans de descarregar un estudi es comprova si hi ha espaci suficient, si no n'hi ha s'itentan esborrar estuis de la caché local per alliberar
-       espai, amb aquest signal s'indica que l'estudi amb instanceUID s'esborrarà de la caché*/
-    /*TODO:Aquest signal no s'hauria de fer des d'aquesta classe sinó des d'una CacheManager, però com de moment encara no està implementada
-      temporalment emetem el signal des d'aquí*/
+    /// Abans de descarregar un estudi es comprova si hi ha espaci suficient, si no n'hi ha s'itentan esborrar estuis de la caché local per alliberar
+    /// espai, amb aquest signal s'indica que l'estudi amb instanceUID s'esborrarà de la caché
+    /// TODO:Aquest signal no s'hauria de fer des d'aquesta classe sinó des d'una CacheManager, però com de moment encara no està implementada
+    /// temporalment emetem el signal des d'aquí
     void studyFromCacheWillBeDeleted(const QString &studyInstanceUID);
 
 private slots:
@@ -82,9 +82,9 @@ private:
     bool existStudyInLocalDatabase(QString studyInstanceUID);
 
     ///Esborra els fitxers descarregats de la caché si l'estudi no existeix a la base de dades
-    /*Aquest mètode està pensat en casos que la descàrrega falla i volem esborrar els fitxers descarregats, només s'esborran si l'estudi no està inserit
-      a la bd, si l'estudi està inserit no l'esborrem, perquè part dels fitxers descarregats ja podien estar inserit a la base de dades per una anterior
-      descàrrega*/
+    /// Aquest mètode està pensat en casos que la descàrrega falla i volem esborrar els fitxers descarregats, només s'esborran si l'estudi no està inserit
+    /// a la bd, si l'estudi està inserit no l'esborrem, perquè part dels fitxers descarregats ja podien estar inserit a la base de dades per una anterior
+    /// descàrrega
     void deleteRetrievedDICOMFilesIfStudyNotExistInDatabase();
 
     ///Demana que es cancel·li la descarrega del job

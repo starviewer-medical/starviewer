@@ -66,15 +66,16 @@ private:
     ///  Aplica els canvis fets a la configuració de la cache
     void applyChangesCache();
 
-    /** Valida que els canvis de la configuració siguin correctes
-     *  Path de la base de dades i directori dicom's existeix
-     *  @return indica si els canvis son correctes
-     */
+    /// Valida que els canvis de la configuració siguin correctes
+    ///  Path de la base de dades i directori dicom's existeix
+    ///  @return indica si els canvis son correctes
     bool validateChanges();
 
 private:
-    bool m_configurationChanged; ///Indica si la configuració ha canviat
-    bool m_createDatabase; /// Indica si s'ha comprovat demanat que es creï la base de dades indicada a m_textDatabaseRoot
+    /// Indica si la configuració ha canviat
+    bool m_configurationChanged;
+    /// Indica si s'ha comprovat demanat que es creï la base de dades indicada a m_textDatabaseRoot
+    bool m_createDatabase;
 };
 
 };// end namespace udg

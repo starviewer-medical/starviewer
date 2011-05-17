@@ -89,12 +89,12 @@ bool OrderImagesFillerStep::fillIndividually()
         processImage(image);
     }
 
-    //Evaluació dels AcquisitionNumbers
+    // Avaluació dels AcquisitionNumbers
     if (m_acquisitionNumberEvaluation.contains(m_input->getCurrentSeries()))
     {
         if (m_acquisitionNumberEvaluation.value(m_input->getCurrentSeries()).contains(m_input->getCurrentVolumeNumber()))
         {
-            //Comparem els Acquisition Numbers
+            // Comparem els Acquisition Numbers
             QPair<QString, bool> *pair = m_acquisitionNumberEvaluation[m_input->getCurrentSeries()][m_input->getCurrentVolumeNumber()];
             if (!pair->second)
             {
@@ -134,10 +134,10 @@ void OrderImagesFillerStep::postProcessing()
 
 void OrderImagesFillerStep::processImage(Image *image)
 {
-    // obtenim el vector normal del pla, que ens determina també a quin "stack" pertany la imatge
+    // Obtenim el vector normal del pla, que ens determina també a quin "stack" pertany la imatge
     double planeNormalVector[3];
     image->getImagePlaneNormal(planeNormalVector);
-    // el passem a string que ens serà més fàcil de comparar,perquè així és com es guarda a l'estructura d'ordenació
+    // El passem a string que ens serà més fàcil de comparar,perquè així és com es guarda a l'estructura d'ordenació
     QString planeNormalString = QString("%1\\%2\\%3").arg(planeNormalVector[0], 0, 'f', 5).arg(planeNormalVector[1], 0, 'f', 5).arg(planeNormalVector[2], 0, 'f', 5);
 
     QMap<double, QMap<unsigned long, Image*>*> *imagePositionSet;
@@ -145,23 +145,24 @@ void OrderImagesFillerStep::processImage(Image *image)
 
     double distance = this->distance(image);
 
-    // primer busquem quina és la key (normal del pla) més semblant de totes les que hi ha
-    // cada key és la normal de cada pla guardat com a string.
+    // Primer busquem quina és la key (normal del pla) més semblant de totes les que hi ha
+    // Cada key és la normal de cada pla guardat com a string.
     // En cas que tinguem diferents normals, indicaria que tenim per exemple, diferents stacks en el mateix volum
     QStringList planeNormals = m_orderedImageSet->uniqueKeys();
 
-    // aquest bucle serveix per trobar si la normal de la nova imatge
+    // Aquest bucle serveix per trobar si la normal de la nova imatge
     // coincideix amb alguna normal de les imatges ja processada
     QString keyPlaneNormal;
     foreach (QString normal, planeNormals)
     {
         if (normal == planeNormalString)
         {
-            // la normal d'aquest pla ja existeix (cas més típic)
+            // La normal d'aquest pla ja existeix (cas més típic)
             keyPlaneNormal = normal;
             break;
         }
-        else // les normals són diferents, comprovar si ho són completament o no
+        // Les normals són diferents, comprovar si ho són completament o no
+        else
         {
             if (normal.isEmpty())
             {
@@ -170,7 +171,7 @@ void OrderImagesFillerStep::processImage(Image *image)
             }
             else
             {
-                // tot i que siguin diferents, pot ser que siguin gairebé iguals
+                // Tot i que siguin diferents, pot ser que siguin gairebé iguals
                 // llavors cal comprovar que de fet són prou diferents
                 // ja que d'avegades només hi ha petites imprecisions simplement
                 double normalVector[3];
@@ -182,7 +183,7 @@ void OrderImagesFillerStep::processImage(Image *image)
                 double angle = MathTools::angleInDegrees(normalVector, planeNormalVector);
                 if (angle < 1.0)
                 {
-                    // si l'angle entre les normals
+                    // Si l'angle entre les normals
                     // està dins d'un threshold,
                     // les podem considerar iguals
                     // TODO definir millor aquest threshold
@@ -192,13 +193,13 @@ void OrderImagesFillerStep::processImage(Image *image)
             }
         }
     }
-    // ara cal inserir la imatge a la llista ordenada
-    // si no hem posat cap valor, vol dir que la normal és nova i no existia fins el moment
+    // Ara cal inserir la imatge a la llista ordenada
+    // Si no hem posat cap valor, vol dir que la normal és nova i no existia fins el moment
     if (keyPlaneNormal.isEmpty())
     {
-        // assignem la clau
+        // Assignem la clau
         keyPlaneNormal = planeNormalString;
-        // ara cal inserir la nova clau
+        // Ara cal inserir la nova clau
         instanceNumberSet = new QMap<unsigned long, Image*>();
         instanceNumberSet->insert(QString("%1%2%3").arg(image->getInstanceNumber()).arg("0").arg(image->getFrameNumber()).toULong(), image);
 
@@ -206,7 +207,8 @@ void OrderImagesFillerStep::processImage(Image *image)
         imagePositionSet->insert(distance, instanceNumberSet);
         m_orderedImageSet->insert(keyPlaneNormal, imagePositionSet);
     }
-    else // la normal ja existia [m_orderedImageSet->contains(keyPlaneNormal) == true], per tant només cal actualitzar l'estructura
+    // La normal ja existia [m_orderedImageSet->contains(keyPlaneNormal) == true], per tant només cal actualitzar l'estructura
+    else
     {
         imagePositionSet = m_orderedImageSet->value(keyPlaneNormal);
         if (imagePositionSet->contains(distance))
@@ -239,7 +241,8 @@ void OrderImagesFillerStep::setOrderedImagesIntoSeries(Series *series)
 
     foreach (int currentVolumeNumber, volumesInSeries->keys())
     {
-        if (m_acquisitionNumberEvaluation[series][currentVolumeNumber]->second) //Multiple acquisition number
+        // Multiple acquisition number
+        if (m_acquisitionNumberEvaluation[series][currentVolumeNumber]->second)
         {
             DEBUG_LOG(QString("No totes les imatges tenen el mateix AcquisitionNumber. Ordenem el volume %1 de la serie %2 per Instance Number").arg(currentVolumeNumber).arg(series->getInstanceUID()));
             INFO_LOG(QString("No totes les imatges tenen el mateix AcquisitionNumber. Ordenem el volume %1 de la serie %2 per Instance Number").arg(currentVolumeNumber).arg(series->getInstanceUID()));
@@ -274,7 +277,8 @@ void OrderImagesFillerStep::setOrderedImagesIntoSeries(Series *series)
         else
         {
             m_orderedImageSet = volumesInSeries->take(currentVolumeNumber);
-            if (m_orderedImageSet->count() > 1) // Cal ordernar les agrupacions d'imatges
+            // Cal ordernar les agrupacions d'imatges
+            if (m_orderedImageSet->count() > 1)
             {
                 foreach (QString key, m_orderedImageSet->keys())
                 {
@@ -320,11 +324,11 @@ void OrderImagesFillerStep::setOrderedImagesIntoSeries(Series *series)
 
 double OrderImagesFillerStep::distance(Image *image)
 {
-    //Càlcul de la distància (basat en l'algorisme de Jolinda Smith)
+    // Càlcul de la distància (basat en l'algorisme de Jolinda Smith)
     double distance = .0;
-    // origen del pla
+    // Origen del pla
     const double *imagePosition = image->getImagePositionPatient();
-    // normal del pla sobre la qual projectarem l'origen
+    // Normal del pla sobre la qual projectarem l'origen
     double normal[3];
     image->getImagePlaneNormal(normal);
 

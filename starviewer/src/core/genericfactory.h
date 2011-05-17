@@ -22,7 +22,7 @@ namespace udg {
 
     Exemple d'utilització:
     @code
-     //Creem una Factory de Vehicles que seran identificats per una string. Vehicles i els seus fills són subclasses de QObject
+     // Creem una Factory de Vehicles que seran identificats per una string. Vehicles i els seus fills són subclasses de QObject
      typedef GenericFactory<Vehicle, std::string> VehicleFactory;
 
      VehicleFactory vehicles;
@@ -54,7 +54,7 @@ class GenericFactory {
     typedef std::map<ClassIdentifier, BaseClassCreateFunction> FunctionRegistry;
 
 public:
-    ///Constructor de la classe
+    /// Constructor de la classe
     GenericFactory(){}
 
     /**

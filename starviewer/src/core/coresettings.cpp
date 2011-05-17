@@ -3,7 +3,8 @@
 
 #include "starviewerapplication.h"
 #include <QDir>
-#include <QLocale> // Pel LanguageLocale
+// Pel LanguageLocale
+#include <QLocale>
 #include <QStringList>
 
 namespace udg {

@@ -100,15 +100,16 @@ void DICOMFileGenerator::fillStudyInfo(DICOMWriter *writer, Study *study)
     accessionNumber.setValue(study->getAccessionNumber());
     writer->addValueAttribute(&accessionNumber);
 
-    if (!study->getDescription().isEmpty()) // Tipus 3
+    // Tipus 3
+    if (!study->getDescription().isEmpty())
     {
         DICOMValueAttribute studyDescription;
         studyDescription.setTag(DICOMStudyDescription);
         studyDescription.setValue(study->getDescription());
         writer->addValueAttribute(&studyDescription);
     }
-
-    if (!study->getPatientAge().isEmpty()) // Tipus 3
+    // Tipus 3
+    if (!study->getPatientAge().isEmpty())
     {
         DICOMValueAttribute patientAge;
         patientAge.setTag(DICOMPatientsAge);
@@ -157,31 +158,32 @@ void DICOMFileGenerator::fillSeriesInfo(DICOMWriter *writer, Series *series)
     laterality.setValue(QString(""));
     writer->addValueAttribute(&laterality);
 
-    if (series->getDate().isValid()) // Tipus 3
+    // Tipus 3
+    if (series->getDate().isValid())
     {
         DICOMValueAttribute seriesDate;
         seriesDate.setTag(DICOMSeriesDate);
         seriesDate.setValue(series->getDate());
         writer->addValueAttribute(&seriesDate);
     }
-
-    if (series->getTime().isValid()) // Tipus 3
+    // Tipus 3
+    if (series->getTime().isValid())
     {
         DICOMValueAttribute seriesTime;
         seriesTime.setTag(DICOMSeriesTime);
         seriesTime.setValue(series->getTime());
         writer->addValueAttribute(&seriesTime);
     }
-
-    if (!series->getProtocolName().isEmpty()) // Tipus 3
+    // Tipus 3
+    if (!series->getProtocolName().isEmpty())
     {
         DICOMValueAttribute protocolName;
         protocolName.setTag(DICOMProtocolName);
         protocolName.setValue(series->getProtocolName());
         writer->addValueAttribute(&protocolName);
     }
-
-    if (!series->getDescription().isEmpty()) // Tipus 3
+    // Tipus 3
+    if (!series->getDescription().isEmpty())
     {
         DICOMValueAttribute seriesDescription;
         seriesDescription.setTag(DICOMSeriesDescription);
@@ -200,7 +202,8 @@ void DICOMFileGenerator::fillGeneralEquipmentInfo(DICOMWriter *writer, Series *s
     manufacturer.setValue(series->getManufacturer());
     writer->addValueAttribute(&manufacturer);
 
-    if (!series->getInstitutionName().isEmpty()) // Tipus 3
+    // Tipus 3
+    if (!series->getInstitutionName().isEmpty())
     {
         DICOMValueAttribute institutionName;
         institutionName.setTag(DICOMInstitutionName);

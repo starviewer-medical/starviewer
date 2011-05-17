@@ -29,8 +29,8 @@ public:
     ///Permet afegir un argument que acceptarem com a vàlid per la comanda de línies. Retorna fals si ja existeix l'argument
     bool addOption(QString optionName, bool optionArgumentIsRequired, QString description);
 
-    /**Especifica la llista d'arguments a parsejar, si hi ha alguna opció de més que no s'ha definit o alguna opció té
-       més d'un valor es retorna fals indicant que no s'ha parsejat correctament l'argument */
+    /// Especifica la llista d'arguments a parsejar, si hi ha alguna opció de més que no s'ha definit o alguna opció té
+    /// més d'un valor es retorna fals indicant que no s'ha parsejat correctament l'argument
     bool parseArgumentList(QStringList argumentList);
 
     ///Retorna la llista d'arguments
@@ -39,10 +39,9 @@ public:
     ///Retorna cert si ens han especificat aquella opció al la línia d'arguments
     bool isSet(QString optionName);
 
-    /*Retorna el valor que han especificat per aquella opció
-     *   Si optionName no ha estat definit com a una opció vàlida retorna NULL
-     *   Si han especificat l'opció però no li han donat cap argument retorna buit
-     */
+    /// Retorna el valor que han especificat per aquella opció
+    /// Si optionName no ha estat definit com a una opció vàlida retorna NULL
+    /// Si han especificat l'opció però no li han donat cap argument retorna buit
     QString getOptionArgument(QString optionName);
 
     ///Retorna l'error de parsejar una una llista d'arguments

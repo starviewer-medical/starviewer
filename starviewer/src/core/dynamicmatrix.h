@@ -54,6 +54,6 @@ private:
     int m_columnCount;
 };
 
-} // end namespace udg
+} // End namespace udg
 
 #endif //UDGDYNAMICMATRIX_H

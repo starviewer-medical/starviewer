@@ -37,8 +37,8 @@ QStringList ApplicationCommandLineOptions::getArgumentList()
     return m_argumentList;
 }
 
-/**Les comandes de línia està compostes per un opció que es precedida d'un '-' i llavors pot contenir a continuació un argument,
-  * indicant el valor de la opció*/
+// Les comandes de línia està compostes per un opció que es precedida d'un '-' i llavors pot contenir a continuació un argument,
+// indicant el valor de la opció
 bool ApplicationCommandLineOptions::parse()
 {
     QStringList argumentList = m_argumentList;
@@ -47,7 +47,8 @@ bool ApplicationCommandLineOptions::parse()
     Option lastOption;
 
     m_parserErrorMessage = "";
-    argumentList.removeFirst();//Treiem el primer string que és el nom de l'aplicació;
+    // Treiem el primer string que és el nom de l'aplicació
+    argumentList.removeFirst();
 
     //Mentre hi hagi arguments per processar o no s'hagi produït un error parsegem els arguments
     while (!argumentList.isEmpty() && m_parserErrorMessage.isEmpty())
@@ -58,8 +59,10 @@ bool ApplicationCommandLineOptions::parse()
         {
             if (!nextParameterHasToBeAnArgumentOption)
             {
-                parameter = parameter.right(parameter.length() -1); //treiem el "-" del paràmetre
-                if (m_commandLineOptions.contains(parameter)) //Comprovem si és una opció vàlida
+                // Treiem el "-" del paràmetre
+                parameter = parameter.right(parameter.length() -1);
+                // Comprovem si és una opció vàlida
+                if (m_commandLineOptions.contains(parameter))
                 {
                     //Si és una opció que ens han especificat com a vàlida l'inserim com a parsejada, de moment com argument de l'opció hi posem ""
                     m_parsedOptions.insert(parameter, "");
@@ -75,8 +78,8 @@ bool ApplicationCommandLineOptions::parse()
             }
             else
             {
-                /*Si l'últim paràmetre parsejat era una opció que se li havia de passar obligatòriament un argument ex "-accessionnumber 12345"
-                 *i no se li ha especificat cap argument ex: "-accessionnumber -studyUID" guardem l'error i parem.*/
+                // Si l'últim paràmetre parsejat era una opció que se li havia de passar obligatòriament un argument ex "-accessionnumber 12345"
+                // i no se li ha especificat cap argument ex: "-accessionnumber -studyUID" guardem l'error i parem.
                 m_parserErrorMessage += lastOption.name + QObject::tr(" option requires an argument") + "\n";
             }
         }
@@ -154,7 +157,8 @@ QString ApplicationCommandLineOptions::getOptionsDescription()
 
 bool ApplicationCommandLineOptions::isAnOption(QString optionName)
 {
-    return optionName.startsWith(optionSelectorCharacter); //Les opcions sempre comencen "-"
+    // Les opcions sempre comencen "-"
+    return optionName.startsWith(optionSelectorCharacter);
 }
 
 bool ApplicationCommandLineOptions::isAnArgument(QString argument)

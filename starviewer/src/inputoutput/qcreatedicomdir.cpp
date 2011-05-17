@@ -58,7 +58,8 @@ void QCreateDicomdir::initializeControls()
     Settings settings;
     settings.restoreColumnsWidths(InputOutputSettings::CreateDICOMDIRStudyListColumnsWidth, m_dicomdirStudiesList);
 
-    m_dicomdirStudiesList->setColumnHidden(7, true);//Conte l'UID de l'estudi
+    // Conte l'UID de l'estudi
+    m_dicomdirStudiesList->setColumnHidden(7, true);
 
     if (!settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString().isEmpty())
     {
@@ -150,7 +151,8 @@ void QCreateDicomdir::showDICOMDIRSize()
     double sizeInMb;
     Settings settings;
 
-    sizeInMb = m_dicomdirSizeBytes / (1024.0 * 1024);//passem a Mb
+    // Passem a Mb
+    sizeInMb = m_dicomdirSizeBytes / (1024.0 * 1024);
     sizeText.setNum(sizeInMb, 'f', 0);
 
     //Si les imatges s'han de convertir a LittleEndian obtenim el tamany que ocuparà l'estudi de manera aproximada
@@ -305,7 +307,8 @@ void QCreateDicomdir::createDicomdir()
                 createDicomdirOnHardDiskOrFlashMemories();
                 break;
         case CreateDicomdir::DvdRom:
-        case CreateDicomdir::CdRom: // Cd, si s'ha creat bé, executem el programa per gravar el dicomdir a cd's
+        case CreateDicomdir::CdRom:
+                // Cd, si s'ha creat bé, executem el programa per gravar el dicomdir a cd's
                 Status state = createDicomdirOnCdOrDvd();
                 // Error 4001 és el cas en que alguna imatge de l'estudi no compleix amb l'estàndard dicom tot i així el deixem gravar
                 if (state.good() || (!state.good() && state.code() == 4001))
@@ -327,7 +330,8 @@ Status QCreateDicomdir::createDicomdirOnCdOrDvd()
 
     INFO_LOG("Iniciant la creació del DICOMDIR en cd-dvd al directori temporal " + dicomdirPath);
 
-    if (!temporaryDirPath.mkpath(dicomdirPath)) // Creem el directori temporal
+    // Creem el directori temporal
+    if (!temporaryDirPath.mkpath(dicomdirPath))
     {
         QMessageBox::critical(this, ApplicationNameString, tr("Can't create the temporary directory to create DICOMDIR. Please check users permission."));
         ERROR_LOG("Error al crear directori " + dicomdirPath);
@@ -355,8 +359,8 @@ void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
 
     INFO_LOG ("Iniciant la creació del DICOMDIR en discdur o usb al directori " + dicomdirPath);
 
-    /*TODO:El codi de comprova si el directori és un DICOMDIR hauria d'estar a una DICOMDIRManager, la UI no ha de saber
-      quins elements componen un DICOMDIR*/
+    // TODO:El codi de comprova si el directori és un DICOMDIR hauria d'estar a una DICOMDIRManager, la UI no ha de saber
+    // quins elements componen un DICOMDIR
     if (dicomdirPathIsADicomdir(dicomdirPath))
     {
         switch (QMessageBox::question(this,
@@ -364,12 +368,14 @@ void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
                 tr("The directory contains a DICOMDIR. Do you want to overwrite and delete all the files in the directory?"),
                 tr("&Yes"), tr("&No"), 0, 1))
         {
-            case 0: // Si vol sobreescriure, esborrem el contingut del directori
+            case 0:
+                // Si vol sobreescriure, esborrem el contingut del directori
                 delDirectory.deleteDirectory(dicomdirPath, false);
                 break;
             case 1:
                 INFO_LOG("El directori no està buit, i l'usuari no dona permís per esborrar el seu contingut");
-                return; // No fem res, l'usuari no vol sobreescriure el directori, cancel·lem l'operacio i tornem el control a l'usuari
+                // No fem res, l'usuari no vol sobreescriure el directori, cancel·lem l'operacio i tornem el control a l'usuari
+                return;
                 break;
         }
     }
@@ -380,8 +386,10 @@ void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
         return;
     }
     else
-    {   // El directori no és un dicomdir
-        if (!directoryDicomdirPath.exists()) // Si el directori no existiex, preguntem si el vol crear
+    {   
+        // El directori no és un dicomdir
+        // Si el directori no existiex, preguntem si el vol crear
+        if (!directoryDicomdirPath.exists())
         {
                 switch (QMessageBox::question(this,
                         tr("Create directory?"),
@@ -397,7 +405,8 @@ void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
                         break;
                     case 1:
                         INFO_LOG("El directori especificat per l'usuari no existeix, i no el vol crear per tant cancel·lem la creació del DICOMDIR");
-                        return; // Cancel·lem;
+                        // Cancel·lem;
+                        return;
                         break;
                 }
         }
@@ -417,7 +426,8 @@ Status QCreateDicomdir::startCreateDicomdir(QString dicomdirPath)
 
     convertToDicomdir.setConvertDicomdirImagesToLittleEndian(settings.getValue(InputOutputSettings::ConvertDICOMDIRImagesToLittleEndianKey).toBool());
 
-    if (!enoughFreeSpace(dicomdirPath))// Comprovem si hi ha suficient espai lliure al disc dur
+    // Comprovem si hi ha suficient espai lliure al disc dur
+    if (!enoughFreeSpace(dicomdirPath))
     {
         QMessageBox::information(this, ApplicationNameString, tr("Not enough free space to create DICOMDIR. Please free space."));
         ERROR_LOG("Error al crear el DICOMDIR, no hi ha suficient espai al disc ERROR : " + state.text());
@@ -427,7 +437,8 @@ Status QCreateDicomdir::startCreateDicomdir(QString dicomdirPath)
     QList<QTreeWidgetItem*> dicomdirStudiesList(m_dicomdirStudiesList ->findItems("*", Qt::MatchWildcard, 0));
     QTreeWidgetItem *item;
 
-    if (dicomdirStudiesList.count() == 0) // Comprovem que hi hagi estudis seleccionats per crear dicomdir
+    // Comprovem que hi hagi estudis seleccionats per crear dicomdir
+    if (dicomdirStudiesList.count() == 0)
     {
         QMessageBox::information(this, ApplicationNameString, tr("Please, first select the studies you want to create a DICOMDIR."));
         return state.setStatus("No study selected to create the DICOMDIR", false, 3001);
@@ -438,7 +449,8 @@ Status QCreateDicomdir::startCreateDicomdir(QString dicomdirPath)
     for (int i = 0; i < dicomdirStudiesList.count(); i++)
     {
         item = dicomdirStudiesList.at(i);
-        convertToDicomdir.addStudy(item->text(7)); // Indiquem a la classe convertToDicomdir, quins estudis s'ha de convertir a dicomdir, passant el UID de l'estudi
+        // Indiquem a la classe convertToDicomdir, quins estudis s'ha de convertir a dicomdir, passant el UID de l'estudi
+        convertToDicomdir.addStudy(item->text(7));
         INFO_LOG("L'estudi " + item->text(7) + " s'afegirà al DICOMDIR ");
     }
 
@@ -455,7 +467,8 @@ Status QCreateDicomdir::startCreateDicomdir(QString dicomdirPath)
 
         switch (state.code())
         {
-            case 4001: // Alguna de les imatges no compleix l'estandard dicom però es pot continuar endavant
+            case 4001:
+                // Alguna de les imatges no compleix l'estandard dicom però es pot continuar endavant
                 QMessageBox::information(this, ApplicationNameString, tr("Some images are not 100 % DICOM compliant. It could be possible that some viewers have problems to visualize them."));
                 break;
             case 4002:
@@ -503,21 +516,25 @@ void QCreateDicomdir::examineDicomdirPath()
     QString initialDirectory;
     QDir dicomdirPath;
 
-    if (!m_lineEditDicomdirPath->text().isEmpty())//Si hi ha entrat un directori
+    // Si hi ha entrat un directori
+    if (!m_lineEditDicomdirPath->text().isEmpty())
     {
-        if (dicomdirPath.exists(m_lineEditDicomdirPath->text()))//si el directori existeix, serà el directori inicial al obrir
+        if (dicomdirPath.exists(m_lineEditDicomdirPath->text()))
         {
+            // Si el directori existeix, serà el directori inicial al obrir
             initialDirectory = m_lineEditDicomdirPath->text();
-        }// Si no existeix directori entrat el directori inicial serà el home
+        }
         else
         {
+            // Si no existeix directori entrat el directori inicial serà el home
             initialDirectory = QDir::homePath();
         }
     }
     else
     {
-        if (m_lastDicomdirDirectory.isEmpty())//si no tenim last directory anem al directori home
+        if (m_lastDicomdirDirectory.isEmpty())
         {
+            // Si no tenim last directory anem al directori home
             initialDirectory = QDir::homePath();
         }
         else
@@ -556,7 +573,8 @@ void QCreateDicomdir::removeSelectedStudy()
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
         foreach (QTreeWidgetItem *selectedStudy, m_dicomdirStudiesList->selectedItems())
         {
-            m_dicomdirSizeBytes -= getStudySizeInBytes(settings.getValue(InputOutputSettings::ConvertDICOMDIRImagesToLittleEndianKey).toBool(), selectedStudy->text(7));//La columna 7 de m_dicomdirStudiesList conté Study Instance UID
+            // La columna 7 de m_dicomdirStudiesList conté Study Instance UID
+            m_dicomdirSizeBytes -= getStudySizeInBytes(settings.getValue(InputOutputSettings::ConvertDICOMDIRImagesToLittleEndianKey).toBool(), selectedStudy->text(7));
 
             delete selectedStudy;
         }
@@ -729,7 +747,8 @@ bool QCreateDicomdir::dicomdirPathIsEmpty(QString dicomdirPath)
 {
     QDir dir(dicomdirPath);
 
-    return dir.entryList(QDir::AllEntries | QDir::NoDotAndDotDot).count() == 0;//llista de fitxers del directori
+    // Llista de fitxers del directori
+    return dir.entryList(QDir::AllEntries | QDir::NoDotAndDotDot).count() == 0;
 }
 
 bool QCreateDicomdir::dicomdirPathIsADicomdir(QString dicomdirPath)
@@ -777,9 +796,9 @@ void QCreateDicomdir::deviceChanged(int index)
     m_currentDevice = (CreateDicomdir::recordDeviceDicomDir) index;
 
     updateAvailableSpaceToRecord();
-    /*Starviewer donoa la possibilitat de copiar al contingut d'una carpeta als DICOMDIR que es generen^,
-     Cridem aquest mètode perquè en funció del dispositu potser que es copïi o no la carpeta al DICOMDIR per tant s'ha d'actualitzar
-     la mida del DICOMDIR*/
+    // Starviewer donoa la possibilitat de copiar al contingut d'una carpeta als DICOMDIR que es generen^,
+    // Cridem aquest mètode perquè en funció del dispositu potser que es copïi o no la carpeta al DICOMDIR per tant s'ha d'actualitzar
+    // la mida del DICOMDIR
     updateDICOMDIRSizeWithFolderToCopyToDICOMDIRSize();
 
     switch (m_currentDevice)
@@ -803,7 +822,8 @@ void QCreateDicomdir::deviceChanged(int index)
                 //La configuració de l'aplicació per gravar cd/dvd és vàlida
                 maximumDeviceCapacity = m_currentDevice == CreateDicomdir::CdRom ? CDRomSizeMb : DVDRomSizeMb;
 
-                m_stackedWidget->setCurrentIndex(0);//Indiquem que es mostri la barra de progrés
+                // Indiquem que es mostri la barra de progrés
+                m_stackedWidget->setCurrentIndex(0);
 
                 m_progressBarOcupat->setMaximum(maximumDeviceCapacity);
 
@@ -826,7 +846,8 @@ void QCreateDicomdir::deviceChanged(int index)
             break;
     }
 
-    showDICOMDIRSize();//El cridem per refrescar la barra de progrés
+    // El cridem per refrescar la barra de progrés
+    showDICOMDIRSize();
 }
 
 bool QCreateDicomdir::checkDICOMDIRBurningApplicationConfiguration()
@@ -847,7 +868,8 @@ quint64 QCreateDicomdir::getStudySizeInBytes(bool transferSyntaxInLittleEndian, 
 
         imageMask.setStudyInstanceUID(studyInstanceUID);
 
-        QList<Image*> imagesOfStudy = localDatabaseManager.queryImage(imageMask);//Agafem les imatges de l'estudi per fer l'estimació del que ocuparà el dicomdir
+        // Agafem les imatges de l'estudi per fer l'estimació del que ocuparà el dicomdir
+        QList<Image*> imagesOfStudy = localDatabaseManager.queryImage(imageMask);
 
         foreach (Image *image, imagesOfStudy)
         {
@@ -864,10 +886,10 @@ quint64 QCreateDicomdir::getStudySizeInBytes(bool transferSyntaxInLittleEndian, 
 
 quint64 QCreateDicomdir::getImageSizeInBytesInLittleEndianTransferSyntax(Image *image)
 {
-    /*Per calcular la mida que ocupa el pixel Data un estudi en LittleEndian és
-        size = (bits-allocated / 8) * rows * columns * samples-per-pixel;
-        size += size % 2;
-      Llavors hem d'afegir la capçalera => dicom header size */
+    // Per calcular la mida que ocupa el pixel Data un estudi en LittleEndian és
+    //  size = (bits-allocated / 8) * rows * columns * samples-per-pixel;
+    //  size += size % 2;
+    // Llavors hem d'afegir la capçalera => dicom header size
 
     quint64 imageSizeInBytesInLittleEndianTransferSyntax = 0;
 
@@ -943,8 +965,8 @@ void QCreateDicomdir::updateDICOMDIRSizeWithFolderToCopyToDICOMDIRSize()
     if (haveToCopyFolderContentToDICOMDIR() && dicomdirStudies.count() > 0 &&
         !m_folderToCopyToDICOMDIRSizeAddedToDICOMDIRSize)
     {
-        /*Si hem de copiar el contingut de la carpeta al DICOMDIR, tenim un estudi o més i no l'havíem tingut en compte
-          la mida de la carpeta a copiar en el tamany del DICOMDIR, li afegim*/
+        // Si hem de copiar el contingut de la carpeta al DICOMDIR, tenim un estudi o més i no l'havíem tingut en compte
+        // la mida de la carpeta a copiar en el tamany del DICOMDIR, li afegim
         m_dicomdirSizeBytes += getFolderToCopyToDICOMDIRSizeInBytes();
         m_folderToCopyToDICOMDIRSizeAddedToDICOMDIRSize = true;
     }
@@ -952,8 +974,8 @@ void QCreateDicomdir::updateDICOMDIRSizeWithFolderToCopyToDICOMDIRSize()
     if (!haveToCopyFolderContentToDICOMDIR() && dicomdirStudies.count() > 0 &&
         m_folderToCopyToDICOMDIRSizeAddedToDICOMDIRSize)
     {
-        /*Si no hem de copiar el contingut de la carpeta al DICOMDIR, tenim un estudi o més i l'havíem tingut en compte
-          la mida de la carpeta a copiar en el tamany del DICOMDIR, li restem*/
+        // Si no hem de copiar el contingut de la carpeta al DICOMDIR, tenim un estudi o més i l'havíem tingut en compte
+        // la mida de la carpeta a copiar en el tamany del DICOMDIR, li restem
 
         m_dicomdirSizeBytes -= getFolderToCopyToDICOMDIRSizeInBytes();
         m_folderToCopyToDICOMDIRSizeAddedToDICOMDIRSize = false;

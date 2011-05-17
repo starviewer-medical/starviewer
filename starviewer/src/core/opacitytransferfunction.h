@@ -37,10 +37,11 @@ public:
 private:
 
     /// Funció de transferència d'opacitat en format VTK.
-    mutable vtkPiecewiseFunction *m_vtkOpacityTransferFunction; // s'ha de guardar per poder fer el Delete() més tard
+    // S'ha de guardar per poder fer el Delete() més tard
+    mutable vtkPiecewiseFunction *m_vtkOpacityTransferFunction;
 
 };
 
-} // namespace udg
+} // End namespace udg
 
 #endif // OPACITYTRANSFERFUNCTION_H

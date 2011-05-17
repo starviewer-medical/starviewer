@@ -9,11 +9,16 @@
 namespace udg {
 
 /// Definició de constants
-const double MathTools::NumberEBase2Logarithm = 1.4426950408889634074; // log_2 e
-const long double MathTools::ReversePiNumberLong = 0.3183098861837906715377675267450287L; // 1/pi
-const double MathTools::PiNumber = 3.14159265358979323846; // pi
-const long double MathTools::PiNumberLong = 3.14159265358979323846; // pi
-const long double MathTools::PiNumberDivBy2Long = 1.5707963267948966192313216916397514L; // pi/2
+// log_2 e
+const double MathTools::NumberEBase2Logarithm = 1.4426950408889634074;
+// 1/pi
+const long double MathTools::ReversePiNumberLong = 0.3183098861837906715377675267450287L;
+// pi
+const double MathTools::PiNumber = 3.14159265358979323846;
+// pi
+const long double MathTools::PiNumberLong = 3.14159265358979323846;
+// pi/2
+const long double MathTools::PiNumberDivBy2Long = 1.5707963267948966192313216916397514L;
 const double MathTools::Epsilon = 1E-9;
 const double MathTools::DegreesToRadiansAsDouble = 0.017453292519943295;
 const double MathTools::RadiansToDegreesAsDouble = 57.29577951308232;
@@ -58,7 +63,6 @@ int MathTools::planeIntersection(double p[3], double n[3], double q[3], double m
     {
         return 0;
     }
-    //
     // Solució extreta de http://vis.eng.uci.edu/courses/eecs104/current/GraphicsMath.pdf, pàg. 64
     // pla1 definit per (p,n); p: punt del pla, p.ex. origen; n: normal
     // pla2 definit per (q,m); q: punt del pla, p.ex. origen; m: normal
@@ -74,7 +78,7 @@ int MathTools::planeIntersection(double p[3], double n[3], double q[3], double m
     // t = Cross(n,m)
     // u = Cross(n,t)
     // r = p + Dot(p-q)*u / Dot(u,m)
-    //
+    
     double u[3];
     MathTools::crossProduct(n, m, t);
     MathTools::crossProduct(n, t, u);
@@ -100,7 +104,7 @@ int MathTools::planeIntersection(double p[3], double n[3], double q[3], double m
 
 int MathTools::planeIntersection(double p[3], double n[3], double q[3], double m[3], double r[3], double t[3], double intersectionPoint[3])
 {
-    //
+    
     // Solució extreta de http://vis.eng.uci.edu/courses/eecs104/current/GraphicsMath.pdf, pàg. 65
     // pla1 definit per (p,n); p: punt del pla, p.ex. origen, n: normal del pla
     // pla2 definit per (q,m);
@@ -128,7 +132,7 @@ int MathTools::planeIntersection(double p[3], double n[3], double q[3], double m
     // Li donem una recta definida per dos punts, i el pla definit per la normal i un punt. T és la coordenada paramètrica al llarg de la recta i el punt de la intersecció queda a intersectPoint
     if (vtkPlane::IntersectWithLine(point, point2, t, r, tt, intersectionPoint) == 0)
     {
-        // si retorna 0 és que o bé línia i pla no intersecten o són paralels entre sí
+        // Si retorna 0 és que o bé línia i pla no intersecten o són paralels entre sí
         if (tt == MathTools::DoubleMaximumValue)
         {
             DEBUG_LOG(QString("No hi ha hagut intersecció! Valor coord paramètrica: %1").arg(tt));
@@ -310,7 +314,8 @@ double* MathTools::infiniteLinesIntersection(double *p1, double *p2, double *p3,
             return intersection;
         }
     }
-    else // Skew Lines
+    // Skew Lines
+    else
     {
         state = SkewIntersection;
         return intersection;
@@ -348,4 +353,4 @@ bool MathTools::isNaN(double x)
     return x != x;
 }
 
-}; // end namespace udg
+}; // End namespace udg

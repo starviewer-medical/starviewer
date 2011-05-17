@@ -1,7 +1,8 @@
 #include <QDir>
 #include <QApplication>
 
-#include "../core/starviewerapplication.h"// definicions globals d'aplicació
+// Definicions globals d'aplicació
+#include "../core/starviewerapplication.h"
 #include "../core/logging.h"
 #include <QProcess>
 
@@ -37,11 +38,12 @@ void printHelp()
 QString getStarviewerExecutableFilePath()
 {
     #ifdef _WIN32
-        /*En windows per poder executar l'starviewer hem de tenir en compte que si està en algun directori que conte espais
-         *com el directori C:\Program Files\Starviewer\starviewer.exe, hem de posar el path entre cometes
-         * per a que no ho interpreti com a paràmetres, per exemple "C:\Program Files\Starviewer\starviewer.exe" */
+        // En windows per poder executar l'starviewer hem de tenir en compte que si està en algun directori que conte espais
+        // com el directori C:\Program Files\Starviewer\starviewer.exe, hem de posar el path entre cometes
+        // per a que no ho interpreti com a paràmetres, per exemple "C:\Program Files\Starviewer\starviewer.exe"
 
-        return "\"" + QCoreApplication::applicationDirPath() + "/starviewer.exe" + "\""; //afegim les cometes per si algun dels directori conté espai
+        // Afegim les cometes per si algun dels directori conté espai
+        return "\"" + QCoreApplication::applicationDirPath() + "/starviewer.exe" + "\"";
     #else
         return QCoreApplication::applicationDirPath() + "/starviewer";
     #endif
@@ -53,7 +55,7 @@ void retrieveStudy(QString accessionNumber)
     QProcess process;
     QString starviewerCommandLine = " -accessionnumber " + accessionNumber;
 
-    /*executem una instància del Starviewer utiltizant la opció de línia de comandes -accessionnumber "valor del accessio number"*/
+    // executem una instància del Starviewer utiltizant la opció de línia de comandes -accessionnumber "valor del accessio number"
 
     INFO_LOG("Starviewer_sapwrapper::S'iniciara nova instancia del Starviewer per demanar descarrega de l'estudi amb accession number" +  accessionNumber);
     process.startDetached(getStarviewerExecutableFilePath() + starviewerCommandLine);

@@ -276,11 +276,13 @@ Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
     LocalDatabaseImageDAL imageDAL(&dbConnect);
 
     // Busquem les imatges per cada sèrie
-    maskImagesToRetrieve.setStudyInstanceUID(maskToRetrieve.getStudyInstanceUID());//estudi del que s'han de cercar les imatges
+    // Estudi del que s'han de cercar les imatges
+    maskImagesToRetrieve.setStudyInstanceUID(maskToRetrieve.getStudyInstanceUID());
 
     foreach (Series *series, seriesList)
     {
-        maskImagesToRetrieve.setSeriesInstanceUID(series->getInstanceUID());//específiquem de quina sèrie de l'estudi hem de buscar les imatges
+        // Específiquem de quina sèrie de l'estudi hem de buscar les imatges
+        maskImagesToRetrieve.setSeriesInstanceUID(series->getInstanceUID());
 
         QList<Image*> images = imageDAL.query(maskImagesToRetrieve);
         if (imageDAL.getLastError() != SQLITE_OK)

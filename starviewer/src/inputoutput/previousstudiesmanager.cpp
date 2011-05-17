@@ -204,8 +204,8 @@ void PreviousStudiesManager::mergeFoundStudiesInQuery(QueryPacsJob *queryPACSJob
         {
             if (!isStudyInMergedStudyList(study) && !isStudyToFindPrevious(study))
             {
-                /*Si l'estudi no està a llista ja d'estudis afegits i no és el mateix estudi pel qua ens han demanat el
-                 *previ l'afegim*/
+                // Si l'estudi no està a llista ja d'estudis afegits i no és el mateix estudi pel qua ens han demanat el
+                // previ l'afegim
                 m_mergedStudyList.append(study);
 
                 m_mergedHashPacsIDOfStudyInstanceUID[study->getInstanceUID()] = queryPACSJob->getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()];
@@ -218,10 +218,10 @@ void PreviousStudiesManager::errorQueringPACS(QueryPacsJob *queryPACSJob)
 {
     if (queryPACSJob->getStatus() != PACSRequestStatus::QueryOk && queryPACSJob->getStatus() != PACSRequestStatus::QueryCancelled)
     {
-        /*Com que fem dos cerques al mateix pacs si una falla, l'altra segurament també fallarà per evitar enviar
-          dos signals d'error si les dos fallen, ja que per des de fora ha de ser transparent el número de consultes
-          que es fa al PACS, i han de rebre un sol error comprovem si tenim l'ID del PACS a la llista de signals
-          d'errors en PACS emesos*/
+        // Com que fem dos cerques al mateix pacs si una falla, l'altra segurament també fallarà per evitar enviar
+        // dos signals d'error si les dos fallen, ja que per des de fora ha de ser transparent el número de consultes
+        // que es fa al PACS, i han de rebre un sol error comprovem si tenim l'ID del PACS a la llista de signals
+        // d'errors en PACS emesos
         if (!m_pacsDeviceIDErrorEmited.contains(queryPACSJob->getPacsDevice().getID()))
         {
             m_pacsDeviceIDErrorEmited.append(queryPACSJob->getPacsDevice().getID());
@@ -232,8 +232,8 @@ void PreviousStudiesManager::errorQueringPACS(QueryPacsJob *queryPACSJob)
 
 void PreviousStudiesManager::queryFinished()
 {
-    /*Quan totes les query han acabat és quant fem l'emit amb els estudis previs trobats. No podem emetre els resultats que anem rebent,
-      perquè hem de fer un merge del resultats rebuts, per no tenir duplicats (Estudis del matiex pacient que estiguin a més d'un PACS)*/
+    // Quan totes les query han acabat és quant fem l'emit amb els estudis previs trobats. No podem emetre els resultats que anem rebent,
+    // perquè hem de fer un merge del resultats rebuts, per no tenir duplicats (Estudis del matiex pacient que estiguin a més d'un PACS)
     emit queryPreviousStudiesFinished(m_mergedStudyList, m_mergedHashPacsIDOfStudyInstanceUID);
 }
 

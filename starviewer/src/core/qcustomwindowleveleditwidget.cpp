@@ -99,7 +99,7 @@ void QCustomWindowLevelEditWidget::removeWindowLevel()
                 }
                 else
                 {
-                    //Només incrementem el contador quan no l'eliminem perquè els indexs es redueixen.
+                    // Només incrementem el contador quan no l'eliminem perquè els indexs es redueixen.
                     i++;
                     ++iterator;
                 }

@@ -48,9 +48,8 @@ private slots:
     /// Slot que s'utilitza quant es fa algun canvi a la configuració, per activar els buttons apply
     void enableApplyButtons();
 
-    /** Si el port que s'indica per les connexions entrants del Pacs canvia, comprovem si està en ús per un altra aplicació que no sigui
-     *  l'Starviewer, si està en ús es mostrar un warning al cantó del TextBox
-     */
+    /// Si el port que s'indica per les connexions entrants del Pacs canvia, comprovem si està en ús per un altra aplicació que no sigui
+    ///  l'Starviewer, si està en ús es mostrar un warning al cantó del TextBox
     void checkIncomingConnectionsPortNotInUse();
 
     ///Slot que s'activa quan es prem els radioButton per indica si està disponible en el PACS el servei de Query/Retrieve
@@ -59,8 +58,8 @@ private slots:
     ///Slot que s'activa quan es prem els radioButton per indica si està disponible en el PACS el servei de Store
     void storeServiceEnabledChanged();
 
-    /**Si s'ha indicat que el servei d'store està permés i aquest no té el port configurat al editar el valor del port de Q/R
-       *li donem per defecte el valor d'aquest*/
+    /// Si s'ha indicat que el servei d'store està permés i aquest no té el port configurat al editar el valor del port de Q/R
+    /// li donem per defecte el valor d'aquest
     void m_textQueryRetrieveServicePortChanged();
 
 private:
@@ -77,12 +76,11 @@ private:
     ///Valida que tinguis les dades per fer un echo invocant el mètode validateBasicPacsDeviceToEcho() i a més comprova que la institució no estigui buida
     bool validatePacsDeviceToSave();
 
-    /** Valida que els canvis de la configuració siguin correctes
-     *  Port local entre 0 i 65535
-     *  Numero màxim de connexions 15
-     *  Path de la base de dades i directori dicom's existeix
-     *  @return indica si els canvis son correctes
-     */
+    /// Valida que els canvis de la configuració siguin correctes
+    ///  Port local entre 0 i 65535
+    ///  Numero màxim de connexions 15
+    /// Path de la base de dades i directori dicom's existeix
+    ///  @return indica si els canvis son correctes
     bool validateChanges();
 
     /// Emplena el ListView amb les dades dels PACS que tenim guardades a la bd
@@ -107,8 +105,10 @@ private:
     PacsDevice getPacsDeviceFromControls();
 
 private:
-    QString m_selectedPacsID; /// Conté el ID del pacs seleccionat en aquell moment
-    bool m_configurationChanged; ///Indica si la configuració ha canviat
+    /// Conté el ID del pacs seleccionat en aquell moment
+    QString m_selectedPacsID;
+    ///Indica si la configuració ha canviat
+    bool m_configurationChanged;
 };
 
 };// end namespace udg

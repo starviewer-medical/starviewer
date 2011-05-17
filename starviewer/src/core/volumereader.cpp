@@ -161,7 +161,8 @@ QStringList VolumeReader::getFilesToRead(Volume *volume) const
     QStringList fileList;
     foreach (Image *image, volume->getImages())
     {
-        if (!fileList.contains(image->getPath())) // Evitem afegir més vegades l'arxiu si aquest és multiframe
+        // Evitem afegir més vegades l'arxiu si aquest és multiframe
+        if (!fileList.contains(image->getPath()))
         {
             fileList << image->getPath();
         }

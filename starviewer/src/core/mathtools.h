@@ -121,6 +121,6 @@ static bool isNaN(double x);
 
 };
 
-} // end namespace udg
+} // End namespace udg
 
 #endif

@@ -3,7 +3,7 @@
 #include "drawerprimitive.h"
 #include "logging.h"
 #include "mathtools.h"
-// vtk
+// Vtk
 #include <vtkRenderer.h>
 #include <QColor>
 

@@ -25,6 +25,6 @@ private:
     QMap<QString, Settings::AccessLevel> m_accessLevelTable;
 };
 
-} // end namespace udg
+} // End namespace udg
 
 #endif

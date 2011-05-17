@@ -43,11 +43,10 @@ public:
     ///Consulta els estudis al dicomdir obert que compleixin la màscara de cerca
     void queryStudy(DicomMask queryMask);
 
-    /**Li passem un punte a la interfície que crea dicomdir, per a que s'hi pugui comunicar-se per preguntar
-     * si l'estudi abans de ser esborrat està a llista d'estudis per crear un nou dicomdir, o per indicar-li
-     * que s'ha afegit demanat afegir un nou estudi a llista d'estudis per crear dicomdir
-     */
-    //TODO s'hauria buscar una manera més elegant de comunicar les dos classes, fer un singletton de QCreateDicomdir ?
+    /// Li passem un punte a la interfície que crea dicomdir, per a que s'hi pugui comunicar-se per preguntar
+    /// si l'estudi abans de ser esborrat està a llista d'estudis per crear un nou dicomdir, o per indicar-li
+    /// que s'ha afegit demanat afegir un nou estudi a llista d'estudis per crear dicomdir
+    /// TODO s'hauria buscar una manera més elegant de comunicar les dos classes, fer un singletton de QCreateDicomdir ?
     void setQCreateDicomdir(QCreateDicomdir *qcreateDicomdir);
 
     ///Neteja els resultats que es mostren de la cerca
@@ -132,8 +131,8 @@ private slots:
     ///Slot que s'activa quan un SendDICOMFilesToPACSJob acaba
     void sendDICOMFilesToPACSJobFinished(PACSJob *);
 
-    /*Cada vegada que encuem un nou Job comprovem si és un RetrieveDICOMFileFromPACSJob i si és així connectem amb el Signal StudyFromCacheWillBeDeleted
-      per si s'esborren estudis de la caché poder-los treure de la QStudyTreeWidget*/
+    /// Cada vegada que encuem un nou Job comprovem si és un RetrieveDICOMFileFromPACSJob i si és així connectem amb el Signal StudyFromCacheWillBeDeleted
+    /// per si s'esborren estudis de la caché poder-los treure de la QStudyTreeWidget
     void newPACSJobEnqueued(PACSJob *);
 
 private:

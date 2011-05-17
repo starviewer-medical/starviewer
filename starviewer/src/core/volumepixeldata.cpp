@@ -81,7 +81,8 @@ bool VolumePixelData::computeCoordinateIndex(const double coordinate[3], int ind
     for (int i = 0; i < 3; i++)
     {
         index[i] = qRound((coordinate[i] - origin[i]) / spacing[i]);
-        inside = inside && index[i] >= extent[2 * i] && index[i] <= extent[2 * i + 1];    // TODO És sempre correcte això?
+        // TODO És sempre correcte això?
+        inside = inside && index[i] >= extent[2 * i] && index[i] <= extent[2 * i + 1];
     }
 
     return inside;

@@ -41,8 +41,8 @@ void ConvertToDicomdir::setAnonymizeDICOMDIR(bool anonymizeDICOMDIR, QString pat
 
 void ConvertToDicomdir::addStudy(const QString &studyUID)
 {
-    /*Els estudis s'han d'agrupar per pacient, el que fem és afegir-los a llista d'estudis per convertir a
-     dicomdir ja ordenats per pacient*/
+    // Els estudis s'han d'agrupar per pacient, el que fem és afegir-los a llista d'estudis per convertir a
+    // dicomdir ja ordenats per pacient
     StudyToConvert studyToConvert;
     int index = 0;
     bool stop = false;
@@ -68,9 +68,11 @@ void ConvertToDicomdir::addStudy(const QString &studyUID)
 
     delete patient;
 
-    while (index < m_studiesToConvert.count() && !stop)  //busquem la posició on s'ha d'inserir l'estudi a llista d'estudis per convertir a dicomdir, ordenant per id de pacient
+    //busquem la posició on s'ha d'inserir l'estudi a llista d'estudis per convertir a dicomdir, ordenant per id de pacient
+    while (index < m_studiesToConvert.count() && !stop)
     {
-        if (studyToConvert.patientId < m_studiesToConvert.at(index).patientId) //comparem amb els altres estudis de la llista, fins trobar el seu llloc corresponentm
+        //comparem amb els altres estudis de la llista, fins trobar el seu llloc corresponentm
+        if (studyToConvert.patientId < m_studiesToConvert.at(index).patientId)
         {
             stop = true;
         }
@@ -80,22 +82,24 @@ void ConvertToDicomdir::addStudy(const QString &studyUID)
         }
     }
 
-    if (stop) //una vegada hem trobat la posició on ha d'anar l'inserim
+    // Una vegada hem trobat la posició on ha d'anar l'inserim
+    if (stop)
     {
         m_studiesToConvert.insert(index, studyToConvert);
     }
     else
     {
-        m_studiesToConvert.push_back(studyToConvert);//en aquest cas val al final
+        // En aquest cas val al final
+        m_studiesToConvert.push_back(studyToConvert);
     }
 }
 
-/*TODO:Si la creació del DICOMDIR Falla aquest mètode esborra el contingut del directori on s'havia de crear el DICOMDIR, al fer això
-       la classe abans de crear el DICOMDIR hauria de comprovar que el directori està buit, perquè sinó podríem eliminar contingut del usuari.
-       Ara aquesta comprovació es fa a la QCreateDicomdir i s'hauria de fer aquí*/
+// TODO:Si la creació del DICOMDIR Falla aquest mètode esborra el contingut del directori on s'havia de crear el DICOMDIR, al fer això
+//      la classe abans de crear el DICOMDIR hauria de comprovar que el directori està buit, perquè sinó podríem eliminar contingut del usuari.
+//      Ara aquesta comprovació es fa a la QCreateDicomdir i s'hauria de fer aquí
 Status ConvertToDicomdir::convert(const QString &dicomdirPath, CreateDicomdir::recordDeviceDicomDir selectedDevice, bool copyFolderContent)
 {
-    /* Primer copiem els estudis al directori desti, i posteriorment convertim el directori en un dicomdir*/
+    // Primer copiem els estudis al directori desti, i posteriorment convertim el directori en un dicomdir
     Status state;
     int totalNumberOfItems = 0;
 
@@ -180,16 +184,17 @@ Status ConvertToDicomdir::convert(const QString &dicomdirPath, CreateDicomdir::r
     //una vegada copiada les imatges les creem
     state = createDicomdir(m_dicomDirPath, selectedDevice);
 
-    if (!state.good() && state.code() != 4001)// l'error 4001 és que les imatges no compleixen l'estàndard al 100, però el dicomdir es pot utilitzar
+    if (!state.good() && state.code() != 4001)
     {
+        // L'error 4001 és que les imatges no compleixen l'estàndard al 100, però el dicomdir es pot utilitzar
         DeleteDirectory().deleteDirectory(m_dicomDirPath, false);
     }
     else
     {
         if (copyFolderContent)
         {
-            /*Copiar el contingut del directory s'ha de fer una vegada s'hagi creat el DICOMDIR, perquè si dcmtk detecta al directori on s'ha de crear
-              el DICOMDIR que hi ha fitxers no DICOM fallarà.*/
+            // Copiar el contingut del directory s'ha de fer una vegada s'hagi creat el DICOMDIR, perquè si dcmtk detecta al directori on s'ha de crear
+            // el DICOMDIR que hi ha fitxers no DICOM fallarà.
 
             if (!copyFolderContentToDICOMDIR())
             {
@@ -225,17 +230,19 @@ Status ConvertToDicomdir::createDicomdir(const QString &dicomdirPath, CreateDico
     CreateDicomdir createDicomdir;
     Status state, stateNotDicomConformance;
 
-    /*El DICOM indica per cada profile les imatges han de ser d'uns determinats transfer syntax, per exemple per STD-GEN-CD han de ser Explicit
-     *Little Endian per STD-GEN-DVD-JPEG poden ser Explicit Little Endian i suporten ademés alguns transfer syntax JPEG lossy i lossless. El que tenen
-     *en comú tots els profiles és que suporten Explicit Little Endian, per això si no convertim els imatges a Little Endian abans de generar el DICOMDIR
-     *ens podem trobar que contingui alguna imatge amb alguna transfer syntax, que segons la normativa dicom no sigui acceptada per aquest profile, per això
-     *indiquem que no es comprovi la transfer syntax.
-     ATENCIÓ si deshabilitem la comprovació de la transfer syntax podem tenir DICOMDIR que no siguin DICOM conformance*/
+    // El DICOM indica per cada profile les imatges han de ser d'uns determinats transfer syntax, per exemple per STD-GEN-CD han de ser Explicit
+    // Little Endian per STD-GEN-DVD-JPEG poden ser Explicit Little Endian i suporten ademés alguns transfer syntax JPEG lossy i lossless. El que tenen
+    // en comú tots els profiles és que suporten Explicit Little Endian, per això si no convertim els imatges a Little Endian abans de generar el DICOMDIR
+    // ens podem trobar que contingui alguna imatge amb alguna transfer syntax, que segons la normativa dicom no sigui acceptada per aquest profile, per això
+    // indiquem que no es comprovi la transfer syntax.
+    // TENCIÓ si deshabilitem la comprovació de la transfer syntax podem tenir DICOMDIR que no siguin DICOM conformance
     createDicomdir.setCheckTransferSyntax(getConvertDicomdirImagesToLittleEndian());
 
     createDicomdir.setDevice(selectedDevice);
-    state = createDicomdir.create(dicomdirPath);//invoquem el mètode per convertir el directori destí Dicomdir on ja s'han copiat les imatges en un dicomdir
-    if (!state.good())//ha fallat crear el dicomdir, ara intentem crear-lo en mode no estricte
+    // Invoquem el mètode per convertir el directori destí Dicomdir on ja s'han copiat les imatges en un dicomdir
+    state = createDicomdir.create(dicomdirPath);
+    // Ha fallat crear el dicomdir, ara intentem crear-lo en mode no estricte
+    if (!state.good())
     {
         WARN_LOG("Algunes de les imatges no compleixen l'estandard DICOM al 100% es provara de crear el DICOMDIR sense el mode estricte");
         createDicomdir.setStrictMode(false);
@@ -316,7 +323,8 @@ Status ConvertToDicomdir::copyStudiesToDicomdirPath(QList<Study*> studyList)
             patientDir.mkpath(m_dicomdirPatientPath);
             m_patient++;
             m_study = 0;
-            m_patientDirectories.push_back(m_dicomdirPatientPath);//creem una llista amb els directoris creats, per si es produeix algun error esborrar-los
+            // Creem una llista amb els directoris creats, per si es produeix algun error esborrar-los
+            m_patientDirectories.push_back(m_dicomdirPatientPath);
         }
 
         state = copyStudyToDicomdirPath(study);
@@ -334,7 +342,7 @@ Status ConvertToDicomdir::copyStudiesToDicomdirPath(QList<Study*> studyList)
 
 Status ConvertToDicomdir::copyStudyToDicomdirPath(Study *study)
 {
-    /*Creem el directori de l'estudi on es mourà un estudi seleccionat per convertir a dicomdir*/
+    // Creem el directori de l'estudi on es mourà un estudi seleccionat per convertir a dicomdir
     QDir studyDir;
     QChar fillChar = '0';
     QString studyName = QString("/STU%1").arg(m_study, 5, 10, fillChar);
@@ -347,7 +355,8 @@ Status ConvertToDicomdir::copyStudyToDicomdirPath(Study *study)
     m_dicomDirStudyPath = m_dicomdirPatientPath + studyName;
     studyDir.mkdir(m_dicomDirStudyPath);
 
-    foreach (Series *series, study->getSeries()) //per cada sèrie de l'estudi, creem el directori de la sèrie
+    // Per cada sèrie de l'estudi, creem el directori de la sèrie
+    foreach (Series *series, study->getSeries())
     {
         if (series->getNumberOfItems() > 0)
         {
@@ -451,7 +460,8 @@ Status ConvertToDicomdir::copyImageToDicomdirPath(Image *image)
         }
     }
 
-    m_progress->setValue(m_progress->value() + 1); // la barra de progrés avança
+    // La barra de progrés avança
+    m_progress->setValue(m_progress->value() + 1);
     m_progress->repaint();
 
     return state;
@@ -466,8 +476,8 @@ void ConvertToDicomdir::createReadmeTxt()
     if (file.exists())
     {
         INFO_LOG("Ja s'ha trobat un fitxer readme.txt al DICOMDIR provinent del contingut de la carpeta a copiar");
-        /*Si el fitxer ja existeix vol dir que l'hem copiat del contingut la carpeta que s'ha copiar al crear un DICOMDIR
-          en aquest cas mantenim el Readme.txt existent i no generem el nostre*/
+        // Si el fitxer ja existeix vol dir que l'hem copiat del contingut la carpeta que s'ha copiar al crear un DICOMDIR
+        // en aquest cas mantenim el Readme.txt existent i no generem el nostre
         return;
     }
 

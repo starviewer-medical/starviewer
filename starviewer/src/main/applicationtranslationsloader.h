@@ -29,6 +29,6 @@ private:
     QApplication *m_application;
 };
 
-} // end namespace
+} // End namespace
 
 #endif

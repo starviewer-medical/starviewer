@@ -122,12 +122,12 @@ private:
     /// De moment podrà tenir 4 tipus: escriure, esborrar, esborrar regió i esborrar llesca, per defecte escriure
     int m_editorState;
 
-    ///Mida de la tool
+    /// Mida de la tool
     int m_editorSize;
 
     vtkActor *m_squareActor;
 
-    //\TODO:Aquesta variable no caldria, ja que hauria d'estar només al ToolData
+    // \TODO:Aquesta variable no caldria, ja que hauria d'estar només al ToolData
     int m_volumeCont;
     EditorToolData* m_myData;
     int m_insideValue;

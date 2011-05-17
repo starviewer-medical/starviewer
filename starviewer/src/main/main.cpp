@@ -4,7 +4,7 @@
 #include "statswatcher.h"
 #include "extensions.h"
 #include "extensionmediatorfactory.h"
-// definicions globals d'aplicació
+// Definicions globals d'aplicació
 #include "starviewerapplication.h"
 // Necessaris per suportar la decodificació de jpeg i RLE
 #include <djdecode.h>
@@ -35,11 +35,11 @@ typedef udg::SingletonPointer<udg::StarviewerApplicationCommandLine> StarviewerS
 
 void configureLogging()
 {
-    // primer comprovem que existeixi el direcotori ~/.starviewer/log/ on guradarem els logs
+    // Primer comprovem que existeixi el direcotori ~/.starviewer/log/ on guradarem els logs
     QDir logDir = udg::UserLogsPath;
     if (!logDir.exists())
     {
-        // creem el directori
+        // Creem el directori
         logDir.mkpath(udg::UserLogsPath);
     }
     // TODO donem per fet que l'arxiu es diu així i es troba a la localització que indiquem. S'hauria de fer una mica més flexible o genèric;
@@ -62,7 +62,7 @@ void configureLogging()
 void initializeTranslations(QApplication &app)
 {
     udg::ApplicationTranslationsLoader translationsLoader(&app);
-    // li indiquem la locale corresponent
+    // Li indiquem la locale corresponent
     QLocale defaultLocale = translationsLoader.getDefaultLocale();
     QLocale::setDefault(defaultLocale);
 
@@ -120,9 +120,9 @@ void sendToFirstStarviewerInstanceCommandLineOptions(QtSingleApplication &app)
 
 int main(int argc, char *argv[])
 {
-    /*Utilitzem QtSingleApplication en lloc de QtApplication, ja que ens permet tenir executant sempre una sola instància d'Starviewer, si l'usuari executa
-      una nova instància d'Starviewer aquesta ho detecta i envia la línia de comandes amb que l'usuari ha executat la nova instància principal.
-     */
+    // Utilitzem QtSingleApplication en lloc de QtApplication, ja que ens permet tenir executant sempre una sola instància d'Starviewer, si l'usuari executa
+    // una nova instància d'Starviewer aquesta ho detecta i envia la línia de comandes amb que l'usuari ha executat la nova instància principal.
+    
     QtSingleApplication app(argc, argv);
 
     QPixmap splashPixmap;
@@ -153,10 +153,10 @@ int main(int argc, char *argv[])
     Q_UNUSED(crashHandler);
 #endif
 
-    //TODO tot aquest proces inicial de "setups" hauria d'anar encapsulat en
+    // TODO tot aquest proces inicial de "setups" hauria d'anar encapsulat en
     // una classe dedicada a tal efecte
 
-    // ajustem el codec per els strings pelats (no QString,sinó "bla bla bla").
+    // Ajustem el codec per els strings pelats (no QString,sinó "bla bla bla").
     // Amb aquesta crida escollirà el codec més apropiat segons el sistema. En aquest cas ens agafarà utf-8 (Mandriva 2007)
     QTextCodec::setCodecForCStrings(QTextCodec::codecForLocale());
 
@@ -196,8 +196,8 @@ int main(int argc, char *argv[])
 
     if (commandLineArgumentsList.count() > 1)
     {
-        /*Només parsegem els arguments de línia de comandes per saber si són correctes, ens esperem més endavant a que tot estigui carregat per
-         *processar-los, si els arguments no són correctes mostre QMessagebox si hi ha una altra instància d'Starviewer finalitzem aquí.*/
+        // Només parsegem els arguments de línia de comandes per saber si són correctes, ens esperem més endavant a que tot estigui carregat per
+        // processar-los, si els arguments no són correctes mostre QMessagebox si hi ha una altra instància d'Starviewer finalitzem aquí.
         QString errorInvalidCommanLineArguments;
         if (!StarviewerSingleApplicationCommandLineSingleton::instance()->parse(commandLineArgumentsList, errorInvalidCommanLineArguments))
         {
@@ -211,7 +211,8 @@ int main(int argc, char *argv[])
 
             ERROR_LOG("Arguments de linia de comandes invalids, error : " + errorInvalidCommanLineArguments);
 
-            if (app.isRunning()) //Si ja hi ha una altra instància execuntat-se donem el missatge d'error i tanquem Starviewer
+            //Si ja hi ha una altra instància execuntat-se donem el missatge d'error i tanquem Starviewer
+            if (app.isRunning())
             {
                 return 0;
             }
@@ -243,8 +244,8 @@ int main(int argc, char *argv[])
                          &app, SLOT(quit()));
         splash.close();
 
-        /*S'ha esperat a tenir-ho tot carregat per processar els aguments rebuts per línia de comandes, d'aquesta manera per exemoke si en llança algun QMessageBox,
-          ja es llança mostrant-se la MainWindow.*/
+        // S'ha esperat a tenir-ho tot carregat per processar els aguments rebuts per línia de comandes, d'aquesta manera per exemoke si en llança algun QMessageBox,
+        // ja es llança mostrant-se la MainWindow.
         if (commandLineArgumentsList.count() > 1)
         {
             QString errorInvalidCommanLineArguments;

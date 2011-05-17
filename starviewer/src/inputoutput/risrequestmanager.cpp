@@ -56,9 +56,9 @@ void RISRequestManager::createConnections()
 {
     connect(m_listenRISRequests, SIGNAL(requestRetrieveStudy(DicomMask)), SLOT(processRISRequest(DicomMask)));
     connect(m_listenRISRequests, SIGNAL(errorListening(ListenRISRequests::ListenRISRequestsError)), SLOT(showListenRISRequestsError(ListenRISRequests::ListenRISRequestsError)));
-    /**Hem d'indica a la classe ListenRISRequests que pot començar a escoltar/parar peticions a través d'un signal, perquè si ho fèssim invocant el mètode listen()
-       o stopListen directament aquest seria executat pel thread que l'invoca i podria fer petar l'aplicaciño, en canvi amb un signal aquest és atés pel thread
-       al que pertany ListenRISRequests*/
+    // Hem d'indica a la classe ListenRISRequests que pot començar a escoltar/parar peticions a través d'un signal, perquè si ho fèssim invocant el mètode listen()
+    // o stopListen directament aquest seria executat pel thread que l'invoca i podria fer petar l'aplicaciño, en canvi amb un signal aquest és atés pel thread
+    // al que pertany ListenRISRequests
     connect(this, SIGNAL(listenRISRequests()), m_listenRISRequests, SLOT(listen()));
     connect(this, SIGNAL(stopListenRISRequests()), m_listenRISRequests, SLOT(stopListen()));
 }
@@ -316,8 +316,8 @@ void RISRequestManager::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacsJob)
             emit loadStudyRetrievedFromRISRequest(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getInstanceUID());
         }
 
-        /*Com que l'objecte és un punter altres classes poden haver capturat el Signal per això li fem un deleteLater() en comptes d'un delete, per evitar
-          que quan responguin al signal es trobin que l'objecte ja no existeix. L'objecte serà destruït per Qt quan es retorni el eventLoop*/
+        // Com que l'objecte és un punter altres classes poden haver capturat el Signal per això li fem un deleteLater() en comptes d'un delete, per evitar
+        // que quan responguin al signal es trobin que l'objecte ja no existeix. L'objecte serà destruït per Qt quan es retorni el eventLoop
         retrieveDICOMFilesFromPACSJob->deleteLater();
     }
 }

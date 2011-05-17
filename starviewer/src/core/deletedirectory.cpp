@@ -43,7 +43,8 @@ bool DeleteDirectory::isDirectoryEmpty(const QString &path)
 bool DeleteDirectory::removeDirectory(const QDir &dir, bool deleteRootDirectory)
 {
     bool ok = true;
-    if (dir.exists())//QDir::NoDotAndDotDot
+    // QDir::NoDotAndDotDot
+    if (dir.exists())
     {
         QFileInfoList entries = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files);
         int count = entries.size();

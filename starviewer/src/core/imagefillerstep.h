@@ -48,7 +48,7 @@ private:
     void saveThumbnail(DICOMTagReader *dicomReader);
 
     /// Omple la informació comú a totes les imatges.
-    /// image i dicomReader han de ser objectes vàlids.
+    /// Image i dicomReader han de ser objectes vàlids.
     bool fillCommonImageInformation(Image *image, DICOMTagReader *dicomReader);
 
     /// Omple l'image donat amb la informació dels functional groups continguts en l'ítem proporcionat

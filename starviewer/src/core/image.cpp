@@ -404,7 +404,8 @@ QString Image::getFormattedImageTime() const
         QStringList split = formattedTime.split(".");
         QTime convertedTime = QTime::fromString(split[0], "hhmmss");
 
-        if (split.size() == 2) // Té fracció al final
+        // Té fracció al final
+        if (split.size() == 2)
         {
             // Trunquem a milisegons i no a milionèssimes de segons
             convertedTime = convertedTime.addMSecs(split[1].leftJustified(3, '0', true).toInt());

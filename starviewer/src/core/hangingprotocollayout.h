@@ -30,7 +30,7 @@ public:
     QList<QString> getDisplayEnvironmentSpatialPositionList() const;
 
 private:
-    ///Hanging Protocol Environment Module Attributes
+    /// Hanging Protocol Environment Module Attributes
     /// Nombre de pantalles
     int m_numberOfScreens;
     /// Llista de píxels en vertical

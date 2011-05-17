@@ -24,7 +24,7 @@ public:
     void setOutValue (double val);
     void update();
     void setInput(Volume * input);
-    //Volume * getOutput();
+    // Volume * getOutput();
 
 protected:
     vtkImageThreshold * imageThreshold;

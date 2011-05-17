@@ -18,7 +18,7 @@ public:
 
     ~PolylineTemporalROITool();
 
-    //Declaració de tipus
+    // Declaració de tipus
     //typedef PolylineTemporalROIToolData::TemporalImageType TemporalImageType;
     typedef itk::Image<double, 4> TemporalImageType;
 
@@ -30,18 +30,18 @@ public:
 
 private slots:
 
-    /// metode que es crida quan s'acaba de definir la roi
+    /// Metode que es crida quan s'acaba de definir la roi
     void start();
 
 private:
 
-    // metode que converteix el volum de l'input (que té fases) en imatge itk temporal
+    // Metode que converteix el volum de l'input (que té fases) en imatge itk temporal
     void convertInputImageToTemporalImage();
 
-    /// metode per calcular la mitjana temporal de la regio del polyline
+    /// Metode per calcular la mitjana temporal de la regio del polyline
     double computeTemporalMean();
 
-    /// metode que retorna la serie temporal de mida size en una determinada coordenada
+    /// Metode que retorna la serie temporal de mida size en una determinada coordenada
     QVector<double> getGraySerie(double *coords, int size);
 
 private:

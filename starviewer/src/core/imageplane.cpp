@@ -243,15 +243,16 @@ QList<QVector<double> > ImagePlane::getBounds(int location)
     double factor = 0.0;
     switch(location)
     {
-    case 0: // central
+    // Central
+    case 0:
         factor = 0.0;
     break;
-
-    case 1: // upper
+    // Upper
+    case 1:
         factor = m_thickness * 0.5;
     break;
-
-    case 2: // lower
+    // Lower
+    case 2:
         factor = -m_thickness * 0.5;
     break;
     }
@@ -336,8 +337,9 @@ int ImagePlane::getIntersections(ImagePlane *planeToIntersect, double firstInter
         numberOfIntersections++;
     }
 
-    if(numberOfIntersections == 0) // provar amb la segona "paral·lela" (Y)
+    if(numberOfIntersections == 0)
     {
+        // Provar amb la segona "paral·lela" (Y)
         if(vtkPlane::IntersectWithLine((double*)trhc.data(), (double*)brhc.data(), localizerNormalVector, localizerOrigin, t, firstIntersectionPoint))
         {
             numberOfIntersections++;
@@ -380,7 +382,8 @@ void ImagePlane::setCenter(double center[3])
 {
     if (m_center[0] == center[0] && m_center[1] == center[1] && m_center[2] == center[2])
     {
-        return; //no change
+        // No change
+        return;
     }
     else
     {

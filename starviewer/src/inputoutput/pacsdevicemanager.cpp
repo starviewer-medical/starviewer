@@ -190,9 +190,9 @@ PacsDevice PacsDeviceManager::keyValueMapToPacsDevice(const Settings::KeyValueMa
     pacsDevice.setAddress(item.value("PacsHostname").toString());
     pacsDevice.setDescription(item.value("Description").toString());
 
-    /*A partir d'Starviewer 0.9 s'ofereix la possibilitat d'enviar imatges a PACS, aquest canvi implicar que s'ha de poder indicar
-      a quin port del PACS s'han d'enviar les imatges per guardar-les, per mantenir la comptabilitat amb PACS que han estat guardats al
-      settings amb versions anteriors s'executa el codi que hi ha a continuació*/
+    // A partir d'Starviewer 0.9 s'ofereix la possibilitat d'enviar imatges a PACS, aquest canvi implicar que s'ha de poder indicar
+    // a quin port del PACS s'han d'enviar les imatges per guardar-les, per mantenir la comptabilitat amb PACS que han estat guardats al
+    // settings amb versions anteriors s'executa el codi que hi ha a continuació
 
     if (!item.contains("QueryRetrieveServiceEnabled"))
     {
@@ -212,8 +212,8 @@ PacsDevice PacsDeviceManager::keyValueMapToPacsDevice(const Settings::KeyValueMa
 
     if (!item.contains("StoreServiceEnabled"))
     {
-        /*Si no està guardat als settings si està activat el servei de Store Query/Retrieve per defecte li indique, que està activat i li
-          donem el mateix port que el servei de Query/Retrieve*/
+        // Si no està guardat als settings si està activat el servei de Store Query/Retrieve per defecte li indique, que està activat i li
+        // donem el mateix port que el servei de Query/Retrieve
         pacsDevice.setStoreServiceEnabled(true);
         pacsDevice.setStoreServicePort(item.value("PacsPort").toInt());
     }

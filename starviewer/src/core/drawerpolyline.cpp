@@ -1,13 +1,13 @@
 #include "drawerpolyline.h"
 #include "logging.h"
 #include "mathtools.h"
-// vtk
+// Vtk
 #include <vtkPolyData.h>
 #include <vtkCellArray.h>
 #include <vtkActor2D.h>
 #include <vtkPolyDataMapper2D.h>
 #include <vtkProperty2D.h>
-// qt
+// Qt
 #include <QVector>
 
 namespace udg {

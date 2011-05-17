@@ -151,7 +151,8 @@ HangingProtocolImageSet::Restriction HangingProtocolXMLReader::readRestriction(Q
         }
         else
         {
-            reader->skipCurrentElement(); // Saltem l'element perquè no és conegut.
+            // Saltem l'element perquè no és conegut.
+            reader->skipCurrentElement();
         }
 
     }
@@ -191,7 +192,8 @@ HangingProtocolImageSet* HangingProtocolXMLReader::readImageSet(QXmlStreamReader
         }
         else
         {
-            reader->skipCurrentElement(); // Saltem l'element perquè no és conegut.
+            // Saltem l'element perquè no és conegut.
+            reader->skipCurrentElement();
         }
     }
     return imageSet;
@@ -265,7 +267,8 @@ HangingProtocolDisplaySet* HangingProtocolXMLReader::readDisplaySet(QXmlStreamRe
         }
         else
         {
-            reader->skipCurrentElement(); // Saltem l'element perquè no és conegut.
+            // Saltem l'element perquè no és conegut.
+            reader->skipCurrentElement();
         }
     }
     return displaySet;

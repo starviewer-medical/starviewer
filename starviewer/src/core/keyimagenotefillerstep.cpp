@@ -25,7 +25,7 @@ void KeyImageNoteFillerStep::processKeyImageNote()
 //     ok = dicomReader.setFile(keyImageNote->getPath());
     if (ok)
     {
-        //TODO per implementar
+        // TODO per implementar
         DEBUG_LOG("Pendent d'implementació!");
     }
 //     else

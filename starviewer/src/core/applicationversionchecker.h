@@ -119,6 +119,6 @@ private:
     bool m_dontCheckNewVersionsOnline;
 };
 
-} // end namespace udg
+} // End namespace udg
 
 #endif //UDGAPPLICATIONVERSIONCHECKER_H

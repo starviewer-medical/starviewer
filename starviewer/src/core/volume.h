@@ -179,6 +179,6 @@ private:
     int m_numberOfSlicesPerPhase;
 };
 
-}  // end namespace udg
+}  // End namespace udg
 
 #endif

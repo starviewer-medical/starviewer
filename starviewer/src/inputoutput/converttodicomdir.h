@@ -35,72 +35,64 @@ public:
     ///TODO: Repassar al fer refactoring de la classe si és la millor manera de passar el nom de pacientAnonimitzat
     void setAnonymizeDICOMDIR(bool anonymizeDICOMDIR, QString patientNameAnonymized = "");
 
-    /** Afegeix un estudi a la llista per convertir-se a dicomsdir. Quan afageix l'estudi, l'afageix a la llista ordenats per pacient. Ja que els dicomdir s'han d'agrupar primerament per pacients
-     * @param studyUID UID de l'estudi a convertir a dicomdir
-     */
+    /// Afegeix un estudi a la llista per convertir-se a dicomsdir. Quan afageix l'estudi, l'afageix a la llista ordenats per pacient. Ja que els dicomdir s'han d'agrupar primerament per pacients
+    /// @param studyUID UID de l'estudi a convertir a dicomdir
     void addStudy (const QString &studyUID);
 
-    /** Converteix a DICOMDIR en el path especificat els estudis que hi ha a la llista. ATENCIÓ!!! Si al crear el DICOMDIR falla s'esborrar el contingut de la carpeta
-     *  destí. La carpeta destí ha d'estar buida sinó la creació del DICOMDIR fallà i esborrarà tot el contingut del a carperta destí.
-     * @param dicomdirPath directori on es guardarà el dicomdir
-     * @param indica si s'ha de copiar el contingut del directori guardat al settings InputOutputSettings::DICOMDIRFolderPathToCopy al DICOMDIR
-     * @return Indica l'estat en què finalitza el mètode
-     */
+    /// Converteix a DICOMDIR en el path especificat els estudis que hi ha a la llista. ATENCIÓ!!! Si al crear el DICOMDIR falla s'esborrar el contingut de la carpeta
+    /// destí. La carpeta destí ha d'estar buida sinó la creació del DICOMDIR fallà i esborrarà tot el contingut del a carperta destí.
+    /// @param dicomdirPath directori on es guardarà el dicomdir
+    /// @param indica si s'ha de copiar el contingut del directori guardat al settings InputOutputSettings::DICOMDIRFolderPathToCopy al DICOMDIR
+    /// @return Indica l'estat en què finalitza el mètode
     //TODO:La comprovació de que la carpeta destí estigui buida es fa a QCreateDicomdir s'hauria de traslladar en aquesta classe
     Status convert(const QString &dicomdirPath, CreateDicomdir::recordDeviceDicomDir selectedDevice, bool copyFolderContent);
 
-    /** Crea un fitxer README.TXT, amb informació sobre quina institució ha generat el dicomdir per quan es grava en un cd o dvd en el path que se li especifiqui.
-      * En el cas que el txt es vulgui afegir en el mateix directori arrel on hi ha el dicomdir s'haura de fer després d'haver convertir el directori en un dicomdir, si es fes abans el mètode de convertir el directori a dicomdir fallaria, perquè no sabia com tractar el README.txt
-      */
+    /// Crea un fitxer README.TXT, amb informació sobre quina institució ha generat el dicomdir per quan es grava en un cd o dvd en el path que se li especifiqui.
+    /// En el cas que el txt es vulgui afegir en el mateix directori arrel on hi ha el dicomdir s'haura de fer després d'haver convertir el directori en un dicomdir, si es fes abans el mètode de convertir el directori a dicomdir fallaria, perquè no sabia com tractar el README.txt
     void createReadmeTxt();
 
-    /** Especifica/Retorna si les imatges amb les que crearan el dicomdir s'han de convertir a LittleEndian o han de mantenir
-      * la transfer syntax original, si no s'especifica per defecte les imatges mantenen la seva Transfer Syntax original*/
+    /// Especifica/Retorna si les imatges amb les que crearan el dicomdir s'han de convertir a LittleEndian o han de mantenir
+    /// la transfer syntax original, si no s'especifica per defecte les imatges mantenen la seva Transfer Syntax original
     void setConvertDicomdirImagesToLittleEndian(bool convertDicomdirImagesToLittleEndian);
     bool getConvertDicomdirImagesToLittleEndian();
 
-    /**Starviewer pot copiar el contingut d'un directori especificat per l'usuari al DICOMDIR que es crea. Aquest directori ha de complir
-       un requeriment: que no contingui cap fitxer ni carpeta que s'anomeni DICOMDIR o DICOM.
-       Aquest mètode ens comprova que es compleixi aquest requeriment.*/
+    /// Starviewer pot copiar el contingut d'un directori especificat per l'usuari al DICOMDIR que es crea. Aquest directori ha de complir
+    /// un requeriment: que no contingui cap fitxer ni carpeta que s'anomeni DICOMDIR o DICOM.
+    /// Aquest mètode ens comprova que es compleixi aquest requeriment.
     bool AreValidRequirementsOfFolderContentToCopyToDICOMDIR(QString path);
 
 private:
-    /** Estructura que conté la informació d'un estudi a convertir a dicomdir.
-      * És necessari guardar el Patient ID perquè segons la normativa de l'IHE,
-      * els estudis s'han d'agrupar per id de pacient
-      */
+    /// Estructura que conté la informació d'un estudi a convertir a dicomdir.
+    /// És necessari guardar el Patient ID perquè segons la normativa de l'IHE,
+    /// els estudis s'han d'agrupar per id de pacient
     struct StudyToConvert
         {
             QString patientId;
             QString studyUID;
         };
 
-    /** Crea un dicomdir, al directori especificat
-     * @param dicomdirPath lloc a crear el dicomdir
-     * @param selectedDevice dispositiu on es crearà el dicomdir
-     * @return  estat del mètode
-     */
+    /// Crea un dicomdir, al directori especificat
+    /// @param dicomdirPath lloc a crear el dicomdir
+    /// @param selectedDevice dispositiu on es crearà el dicomdir
+    /// @return  estat del mètode
     Status createDicomdir(const QString &dicomdirPath, CreateDicomdir::recordDeviceDicomDir selectedDevice);
 
     /// Copia els estudis seleccionats per passar a dicomdir, al directori desti
     Status copyStudiesToDicomdirPath(QList<Study*> studyList);
 
-    /** Converteix un estudi al format littleendian, i la copia al directori dicomdir
-     * @param studyUID Uid de l'estudi a convertir
-     * @return Indica l'estat en què finalitza el mètode
-     */
+    /// Converteix un estudi al format littleendian, i la copia al directori dicomdir
+    /// @param studyUID Uid de l'estudi a convertir
+    /// @return Indica l'estat en què finalitza el mètode
     Status copyStudyToDicomdirPath(Study *study);
 
-    /** Converteix una sèrie al format littleendian, i la copia al directori dicomdir
-     * @param series
-     * @return Indica l'estat en què finalitza el mètode
-     */
+    /// Converteix una sèrie al format littleendian, i la copia al directori dicomdir
+    /// @param series
+    /// @return Indica l'estat en què finalitza el mètode
     Status copySeriesToDicomdirPath(Series *series);
 
-    /** Converteix una imatge al format littleendian, i la copia al directori dicomdir
-     * @param image
-     * @return Indica l'estat en què finalitza el mètode
-     */
+    /// Converteix una imatge al format littleendian, i la copia al directori dicomdir
+    /// @param image
+    /// @return Indica l'estat en què finalitza el mètode
     Status copyImageToDicomdirPath(Image *image);
 
     ///Starviewer té l'opció de copiar el contingut d'una carpeta al DICOMDIR. Aquest mètode copia el contingut de la carpeta al DICOMDIR

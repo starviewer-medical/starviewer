@@ -40,8 +40,8 @@ private slots:
     void cancel();
     ///Slot que s'executa al prèmer el botó accept
     void accept();
-    /**Slot que s'activa quan MagnificationType canvia de valor, aquest slot activa/desactiva SmoothingType en funcio del valor de MagnificationType.
-      *SmoothingType només pot estar activat segons la normativa DICOM quan MagnificationType té com a valor "CUBIC"*/
+    /// Slot que s'activa quan MagnificationType canvia de valor, aquest slot activa/desactiva SmoothingType en funcio del valor de MagnificationType.
+    /// SmoothingType només pot estar activat segons la normativa DICOM quan MagnificationType té com a valor "CUBIC"
     void m_magnitifacationTypeComboBoxIndexChanged(const QString &magnificationTypecomboBoxValue);
     ///El radioButton per indicar si la impressora suporta anotacions ha canviat el seu valor. En funció de si suporta anotacions el camp Annotation Display
     ///Format ID és editable.
@@ -67,10 +67,10 @@ private:
     // Es guarda la informació avançada de la impressió de l'interfície a un objecte DicomPrinter (/p printer és la impressora on es guarden les dades).
     void getAdvancedSettingsFromControls(DicomPrinter& printer);
 
-    /**Retorna la impressora seleccionada, si no tenim cap impressora seleccionada retorna l'objecte amb les propietats buides.
-      * Aquest mètode retorna la informació de la impressora com està guardada, si seleccionem una impressora, en modifiquem les dades a través
-      * d'aquesta d'interfície i cridem aquest mètode retornarà les dades tal com les teniem guardades al settings, no retornarà les dades modificada a la
-      * interfície si no s'han aplicat els canvis i guardats al settings*/
+    /// Retorna la impressora seleccionada, si no tenim cap impressora seleccionada retorna l'objecte amb les propietats buides.
+    /// Aquest mètode retorna la informació de la impressora com està guardada, si seleccionem una impressora, en modifiquem les dades a través
+    /// d'aquesta d'interfície i cridem aquest mètode retornarà les dades tal com les teniem guardades al settings, no retornarà les dades modificada a la
+    /// interfície si no s'han aplicat els canvis i guardats al settings
     DicomPrinter getSelectedDicomPrinter();
 
     /// Selecciona l'impressora de la llista que tingui l'id corresponent

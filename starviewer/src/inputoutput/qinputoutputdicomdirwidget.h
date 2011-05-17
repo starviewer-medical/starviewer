@@ -77,7 +77,8 @@ private slots:
 private:
     QMenu m_contextMenuQStudyTreeWidget;
 
-    DICOMDIRReader m_readDicomdir; // conté la informació del dicomdir obert en aquests instants
+    /// Conté la informació del dicomdir obert en aquests instants
+    DICOMDIRReader m_readDicomdir;
     StatsWatcher *m_statsWatcher;
 };
 

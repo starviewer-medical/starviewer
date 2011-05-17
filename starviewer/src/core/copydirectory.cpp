@@ -29,7 +29,7 @@ bool CopyDirectory::copyDirectory(const QString &sourceDirectoryPath, const QStr
         }
     }
 
-    //Copiem els fitxers del directori
+    // Copiem els fitxers del directori
     files = sourceDirectory.entryList(QDir::Files);
     for (int i = 0; i < files.count(); i++)
     {
@@ -43,7 +43,7 @@ bool CopyDirectory::copyDirectory(const QString &sourceDirectoryPath, const QStr
         }
     }
 
-    //Copiem els subdirectoris
+    // Copiem els subdirectoris
     directories = sourceDirectory.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
     for (int i = 0; i < directories.count(); i++)
     {

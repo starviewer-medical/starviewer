@@ -82,7 +82,8 @@ void ExtensionHandler::request(int who)
             connect(QueryScreenSingleton::instance(), SIGNAL(selectedPatients(QList<Patient*>, bool)), SLOT(processInput(QList<Patient*>, bool)));
             break;
 
-        case 10: // Mostrar local
+        case 10:
+            // Mostrar local
             // HACK degut a que la QueryScreen és un singleton, això provoca efectes colaterals quan teníem
             // dues finestres (mirar ticket #542). Fem aquest petit hack perquè això no passi.
             // Queda pendent resoldre-ho de la forma adequada
@@ -148,8 +149,9 @@ bool ExtensionHandler::request(const QString &who)
             DEBUG_LOG("Error carregant " + who);
         }
     }
-    else // sinó mostrem l'extensió ja existent
+    else
     {
+        // Sinó mostrem l'extensió ja existent
         m_mainApp->getExtensionWorkspace()->setCurrentIndex(extensionIndex);
     }
 
@@ -301,7 +303,8 @@ void ExtensionHandler::processInput(QList<Patient*> patientsList, bool loadOnly)
     {
         generatePatientVolumes(patient, QString());
         this->addPatientToWindow(patient, canReplaceActualPatient, loadOnly);
-        canReplaceActualPatient = false; //Un cop carregat un pacient, ja no el podem reemplaçar
+        // Un cop carregat un pacient, ja no el podem reemplaçar
+        canReplaceActualPatient = false;
     }
 }
 
@@ -393,8 +396,9 @@ void ExtensionHandler::addPatientToWindow(Patient *patient, bool canReplaceActua
             }
         }
     }
-    else //Són diferents o no sabem diferenciar
+    else
     {
+        // Són diferents o no sabem diferenciar
         if (!loadOnly)
         {
             if (canReplaceActualPatient)

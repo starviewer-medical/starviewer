@@ -41,18 +41,14 @@ public:
     /// Elimina els settings de key i totes les sub-settings que hi hagi per sota de la clau
     void remove(const QString &key);
 
-    //
     // Mètodes per la manipulació de llistes de Settings
-    //
 
     // També existeix el tipus QSettings::SettingsMap que és QMap<QString, QVariant>
     // TODO podríem fer typedef QSettings::SettingsMap en comptes d'això
     typedef QMap<QString, QVariant> KeyValueMapType;
     typedef QList<KeyValueMapType> SettingListType;
 
-    //
     // Obtenció d'informació de llistes de settings
-    //
 
     /// Ens retorna l'i-éssim (index) conjunt de valors de la llista amb clau "key"
     KeyValueMapType getListItem(const QString &key, int index);
@@ -60,9 +56,7 @@ public:
     /// Ens retorna tota la llista de settings que hi hagi sota key
     SettingListType getList(const QString &key);
 
-    //
     // Modificació de llistes de conjunts de valors
-    //
 
     /// Afegeix a la llista amb clau "key" un conjunt de valors
     void addListItem(const QString &key, const KeyValueMapType &item);
@@ -78,9 +72,7 @@ public:
     /// sobre-escrits per la llista proporcionada
     void setList(const QString &key, const SettingListType &list);
 
-    //
     // Mètodes per facilitar el guardar i/o restaurar la geometria de certs widgets
-    //
 
     /// Guarda/Restaura els amples de columna del widget dins de la clau donada.
     /// Sota la clau donada es guardaran els amples de cada columna amb nom columnWidthX on X serà el nombre de columna
@@ -112,7 +104,7 @@ private:
     /// Objectes QSettings amb el que manipularem les configuracions
     QMap<int, QSettings *> m_qsettingsObjectsMap;
 };
-} // end namespace udg
+} // End namespace udg
 Q_DECLARE_OPERATORS_FOR_FLAGS(udg::Settings::Properties)
 
 #endif

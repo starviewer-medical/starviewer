@@ -138,4 +138,4 @@ ColorTransferFunction ColorTransferFunction::fromVariant(const QVariant &variant
     return colorTransferFunction;
 }
 
-} // namespace udg
+} // End namespace udg

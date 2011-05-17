@@ -28,11 +28,9 @@ signals:
     void selectedFiles(QStringList);
 
 private:
-    /**
-     * Ens retorna la llista d'arxius DICOM agrupables en series d'un directori
-     * @param directory Nom del directori on es troben els arxius
-     * @return La llista de noms de fitxers ordenada
-     */
+    /// Ens retorna la llista d'arxius DICOM agrupables en series d'un directori
+    /// @param directory Nom del directori on es troben els arxius
+    /// @return La llista de noms de fitxers ordenada
     QStringList generateFilenames(const QString &dirPath);
 
     /// Donat un path arrel, escaneja tots els subdirectoris recursivament i ens els retorna en una llista incloent el path arrel

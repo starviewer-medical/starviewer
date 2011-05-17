@@ -1,7 +1,8 @@
 #include "querypacs.h"
 
 #include <dimse.h>
-#include <dcdeftag.h> //provide the information for the tags
+// Provide the information for the tags
+#include <dcdeftag.h>
 #include <ofcond.h>
 #include <diutil.h>
 
@@ -36,12 +37,11 @@ void QueryPacs::foundMatchCallback(void *callbackData, T_DIMSE_C_FindRQ *request
 
     if (queryPacsCaller->m_cancelQuery)
     {
-        /*Hem de comprovar si ja haviem demanat cancel·lar la Query. És degut a que tot i que demanem cancel·lar la query actual
-          el PACS ens envia els dataset que havia posat a la pila de la xarxa just abans de rebre el cancel·lar la query, per tant
-         pot ser que tot i havent demanat cancel·lar la query rebem algun resultat més, per això comprovem si ja havíem demanat
-         cancel·lar la query per no tornar-la  demanar, quan rebem aquests resultats que ja s'havien posat a la pila de la xarxa.
-        http://forum.dcmtk.org/viewtopic.php?t=2143
-        */
+        // Hem de comprovar si ja haviem demanat cancel·lar la Query. És degut a que tot i que demanem cancel·lar la query actual
+        // el PACS ens envia els dataset que havia posat a la pila de la xarxa just abans de rebre el cancel·lar la query, per tant
+        // pot ser que tot i havent demanat cancel·lar la query rebem algun resultat més, per això comprovem si ja havíem demanat
+        // cancel·lar la query per no tornar-la  demanar, quan rebem aquests resultats que ja s'havien posat a la pila de la xarxa.
+        // http://forum.dcmtk.org/viewtopic.php?t=2143
         if (!queryPacsCaller->m_cancelRequestSent)
         {
             queryPacsCaller->cancelQuery(request);
@@ -87,7 +87,7 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::query()
         return PACSRequestStatus::QueryCanNotConnectToPACS;
     }
 
-    /* figure out which of the accepted presentation contexts should be used */
+    // figure out which of the accepted presentation contexts should be used
     m_presId = ASC_findAcceptedPresentationContextID(m_pacsConnection->getConnection(), FindStudyAbstractSyntax);
     if (m_presId == 0)
     {
@@ -95,13 +95,13 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::query()
         return PACSRequestStatus::QueryFailedOrRefused;
     }
 
-    /* prepare the transmission of data */
+    // prepare the transmission of data
     bzero((char*) &findRequest, sizeof(findRequest));
     findRequest.MessageID = m_pacsConnection->getConnection()->nextMsgID;
     strcpy(findRequest.AffectedSOPClassUID, FindStudyAbstractSyntax);
     findRequest.DataSetType = DIMSE_DATASET_PRESENT;
 
-    /* finally conduct transmission of data */
+    // finally conduct transmission of data
     OFCondition condition = DIMSE_findUser(m_pacsConnection->getConnection(), m_presId, &findRequest, m_mask, foundMatchCallback, this, DIMSE_NONBLOCKING,
                                            Settings().getValue(InputOutputSettings::PACSConnectionTimeout).toInt(), &findResponse, &statusDetail);
 
@@ -114,7 +114,7 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::query()
 
     PACSRequestStatus::QueryRequestStatus queryRequestStatus = processResponseStatusFromFindUser(&findResponse, statusDetail);
 
-    /* dump status detail information if there is some */
+    // dump status detail information if there is some
     if (statusDetail != NULL)
     {
         delete statusDetail;
@@ -135,8 +135,8 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::query(DicomMask mask)
 
 void QueryPacs::cancelQuery()
 {
-    /*Indiquem que s'ha de cancel·lar la query, el mètode foundMatchCallback, comprova el flag cada vegada que rep un resultat DICOM
-     *que compleix amb la màscara de cerca*/
+    // Indiquem que s'ha de cancel·lar la query, el mètode foundMatchCallback, comprova el flag cada vegada que rep un resultat DICOM
+    // que compleix amb la màscara de cerca
     m_cancelQuery = true;
 }
 
@@ -166,7 +166,8 @@ void QueryPacs::addPatientStudy(DICOMTagReader *dicomTagReader)
 
         patient->addStudy(study);
         m_patientStudyList.append(patient);
-        m_hashPacsIDOfStudyInstanceUID[study->getInstanceUID()] = m_pacsDevice.getID();//Afegim a la taula de QHash de quin pacs és l'estudi
+        // Afegim a la taula de QHash de quin pacs és l'estudi
+        m_hashPacsIDOfStudyInstanceUID[study->getInstanceUID()] = m_pacsDevice.getID();
     }
 }
 
@@ -216,13 +217,15 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::processResponseStatusFromFindUs
         return PACSRequestStatus::QueryOk;
     }
 
-    QList<DcmTagKey> relatedFieldsList;// Llista de camps relacionats amb l'error que poden contenir informació adicional
+    // Llista de camps relacionats amb l'error que poden contenir informació adicional
+    QList<DcmTagKey> relatedFieldsList;
     QString messageErrorLog = "No s'ha pogut fer la cerca, descripció error rebuda: ";
     PACSRequestStatus::QueryRequestStatus queryRequestStatus;
 
     switch (findResponse->DimseStatus)
     {
-        case STATUS_FIND_Refused_OutOfResources: // 0xa700
+        case STATUS_FIND_Refused_OutOfResources:
+            // 0xa700
             // Refused: Out of Resources
             // Related Fields DCM_ErrorComment (0000,0902)
             relatedFieldsList << DCM_ErrorComment;
@@ -231,8 +234,10 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::processResponseStatusFromFindUs
             queryRequestStatus = PACSRequestStatus::QueryFailedOrRefused;
             break;
 
-        case STATUS_FIND_Failed_IdentifierDoesNotMatchSOPClass: // 0xa900
-        case STATUS_FIND_Failed_UnableToProcess: //0xc000
+        case STATUS_FIND_Failed_IdentifierDoesNotMatchSOPClass:
+            // 0xa900
+        case STATUS_FIND_Failed_UnableToProcess:
+            // 0xc000
             // Identifier does not match SOP Class or Unable To Process
             // Related fields DCM_OffendingElement (0000,0901) DCM_ErrorComment (0000,0902)
             relatedFieldsList << DCM_OffendingElement << DCM_ErrorComment;

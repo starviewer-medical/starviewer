@@ -424,11 +424,12 @@ void DicomPrinter::getDefaultFilmLayoutColumnsRows(int &columns, int &rows)
 {
     QStringList splittedFilmLayout;
     QString filmLayout = getDefaultFilmLayout();
-    /*Comprovem amb expresions regulars que sigui un film layout correcte tenir en compte que en c++ per indicar '\' hem d'escriure '\\'
-      en el cas com és aquest que l'expresiò regular conté un '\', en expresió regular s'escriu '\\', i en codi ho hem d'escriur com '\\\\' */
+    // Comprovem amb expresions regulars que sigui un film layout correcte tenir en compte que en c++ per indicar '\' hem d'escriure '\\'
+    // en el cas com és aquest que l'expresiò regular conté un '\', en expresió regular s'escriu '\\', i en codi ho hem d'escriur com '\\\\'
 
-    if (filmLayout.contains(QRegExp("STANDARD\\\\\\d,\\d", Qt::CaseInsensitive))) //STANDARD\C,R
+    if (filmLayout.contains(QRegExp("STANDARD\\\\\\d,\\d", Qt::CaseInsensitive)))
     {
+        //STANDARD\C,R
         filmLayout.remove("STANDARD\\");
         splittedFilmLayout = filmLayout.split(",");
 

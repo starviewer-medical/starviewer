@@ -10,7 +10,7 @@ QThickSlabWidget::QThickSlabWidget(QWidget *parent)
  : QWidget(parent), m_currentViewer(0)
 {
     setupUi(this);
-    // omplim el combo amb els valors que volem
+    // Omplim el combo amb els valors que volem
     m_projectionModeComboBox->clear();
     QStringList items;
     items << tr("Disabled") << tr("MIP") << tr("MinIP") << tr("Average");
@@ -36,21 +36,22 @@ void QThickSlabWidget::link(Q2DViewer *viewer)
     if (!m_currentViewer)
     {
         m_currentViewer = viewer;
-        // si no teníem cap viewer fins ara creem les connexions necessàries
+        // Si no teníem cap viewer fins ara creem les connexions necessàries
         connect(m_projectionModeComboBox, SIGNAL(currentIndexChanged(int)), SLOT(applyProjectionMode(int)));
         connect(m_slabThicknessSlider, SIGNAL(valueChanged(int)), SLOT(updateThicknessLabel(int)));
         connect(m_maximumThicknessCheckBox, SIGNAL(toggled(bool)), this, SLOT(enableVolumeMode(bool)));
     }
     else
     {
-        // primer deslinkem qualsevol altre viewer que tinguéssim linkat anteriorment
+        // Primer deslinkem qualsevol altre viewer que tinguéssim linkat anteriorment
         disconnectSignalsAndSlots();
     }
-    // posem a punt el widget d'acord amb les dades del viewer
+    // Posem a punt el widget d'acord amb les dades del viewer
     m_currentViewer = viewer;
-    // aquests seran els valors per defecte si el thickslab no està activat
+    // Aquests seran els valors per defecte si el thickslab no està activat
     int slabThickness = 2, projectionMode = 0;
-    if (m_currentViewer->isThickSlabActive()) // llavors cal reflexar els valors adequats
+    // Llavors cal reflexar els valors adequats
+    if (m_currentViewer->isThickSlabActive())
     {
         slabThickness = m_currentViewer->getSlabThickness();
         projectionMode = m_currentViewer->getSlabProjectionMode() + 1;
@@ -59,7 +60,7 @@ void QThickSlabWidget::link(Q2DViewer *viewer)
     m_slabThicknessSlider->setValue(slabThickness);
     m_projectionModeComboBox->setCurrentIndex(projectionMode);
 
-    // creem els vincles
+    // Creem els vincles
     connect(m_currentViewer, SIGNAL(volumeChanged(Volume *)), SLOT(reset()));
     connect(m_currentViewer, SIGNAL(viewChanged(int)), SLOT(onViewChanged()));
     connect(m_slabThicknessSlider, SIGNAL(valueChanged(int)), SLOT(applyThickSlab()));
@@ -100,7 +101,7 @@ void QThickSlabWidget::applyProjectionMode(int comboItem)
     QString projectionType = m_projectionModeComboBox->itemText(comboItem);
     if (projectionType == tr("Disabled"))
     {
-        // desconnectem qualsevol possible connexió
+        // Desconnectem qualsevol possible connexió
         disconnect(m_slabThicknessSlider, SIGNAL(valueChanged(int)), this, SLOT(applyThickSlab()));
         disconnect(m_slabThicknessSlider, SIGNAL(sliderPressed ()), this, SLOT(turnOnDelayedUpdate()));
         disconnect(m_slabThicknessSlider, SIGNAL(sliderReleased ()), this, SLOT(onSliderReleased()));
@@ -109,7 +110,7 @@ void QThickSlabWidget::applyProjectionMode(int comboItem)
         m_slabThicknessSlider->setEnabled(false);
         m_slabThicknessLabel->setEnabled(false);
         m_maximumThicknessCheckBox->setEnabled(false);
-        // restaurem manualment els valors per defecte
+        // Restaurem manualment els valors per defecte
         m_slabThicknessSlider->setValue(2);
         updateThicknessLabel(2);
     }
@@ -128,9 +129,9 @@ void QThickSlabWidget::applyProjectionMode(int comboItem)
             m_slabThicknessLabel->setEnabled(false);
         }
 
-        // fem que si avancem d'un en un el valor d'slab (amb teclat o amb la roda del ratolí)
+        // Fem que si avancem d'un en un el valor d'slab (amb teclat o amb la roda del ratolí)
         // s'actualitzi amb el signal valueChanged()
-        // si el valor es canvia arrossegant l'slider, canviem el comportament i no apliquem el nou
+        // Si el valor es canvia arrossegant l'slider, canviem el comportament i no apliquem el nou
         // valor de thickness fins que no fem el release
         // Ho fem així, ja que al arrossegar es van enviant senyals de valueChanged i això feia que
         // la resposta de l'interfície fos una mica lenta, ja que calcular el nou slab és costós

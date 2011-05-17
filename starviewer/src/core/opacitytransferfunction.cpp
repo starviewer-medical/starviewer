@@ -103,4 +103,4 @@ OpacityTransferFunction OpacityTransferFunction::fromVariant(const QVariant &var
     return opacityTransferFunction;
 }
 
-} // namespace udg
+} // End namespace udg

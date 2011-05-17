@@ -43,24 +43,20 @@ public:
     ///Insereix el pacient al QStudyTreeWiget
     void insertPatient(Patient *patient);
 
-    /** Insereix un llista de sèries a l'estudi seleccionat actualment
-     * @param seriesList series afegir
-     */
+    /// Insereix un llista de sèries a l'estudi seleccionat actualment
+    /// @param seriesList series afegir
     void insertSeriesList(QString studyIstanceUID, QList<Series*> seriesList);
 
-    /** Insereix una llista d'imatges a la sèrie seleccionada actualment
-     * @param imageList llista d'imatges afegir a la sèrie
-     */
+    /// Insereix una llista d'imatges a la sèrie seleccionada actualment
+    /// @param imageList llista d'imatges afegir a la sèrie
     void insertImageList(QString studyInstanceUID, QString seriesInstanceUID, QList<Image*> imageList);
 
-    /** removes study from the list
-     * @param esbora l'estudi amb StudyUID de la llista
-     */
+    /// removes study from the list
+    /// @param esbora l'estudi amb StudyUID de la llista
     void removeStudy(QString StudyInstanceUIDToRemove);
 
-    /** Esborra la sèrie del QStudyTreeWidget, si és l'única sèrie de l'estudi també esborra l'estudi, no té sentit tenir una estudi sense
-     *  series al TreeWidget
-     */
+    /// Esborra la sèrie del QStudyTreeWidget, si és l'única sèrie de l'estudi també esborra l'estudi, no té sentit tenir una estudi sense
+    ///  series al TreeWidget
     void removeSeries(const QString &studyInstanceUIDToRemove, const QString &seriesInstanceUIDToRemove);
 
     ///Indica/Retorna la columna i direcció per la que s'ordena llista
@@ -68,9 +64,8 @@ public:
     QStudyTreeWidget::ColumnIndex getSortColumn();
     Qt::SortOrder getSortOrderColumn();
 
-    /** Retorna el UID Study de l'estudi seleccionat
-     * @return UID de l'estudi seleccionat
-     */
+    /// Retorna el UID Study de l'estudi seleccionat
+    /// @return UID de l'estudi seleccionat
     QString getCurrentStudyUID();
 
     ///Retorna una llista amb l'UID del estudis seleccionats
@@ -82,14 +77,12 @@ public:
     ///Retorna l'estudi que tingui el studyInstanceUID passat per paràmetre
     Study* getStudy(QString studyInstanceUID);
 
-    /** Retorna el UID de la sèrie seleccionada, si en aquell moment no hi ha cap sèrie seleccionada, retorna un QString buit
-     *  @return UID de la sèrie seleccionat
-     */
+    /// Retorna el UID de la sèrie seleccionada, si en aquell moment no hi ha cap sèrie seleccionada, retorna un QString buit
+    ///  @return UID de la sèrie seleccionat
     QString getCurrentSeriesUID();
 
-        /** Retorna el UID de la imatge seleccionada, si en aquell moment no hi ha cap imatge seleccionada, retorna un QString buit
-     *  @return UID de la imatge seleccionada
-     */
+     /// Retorna el UID de la imatge seleccionada, si en aquell moment no hi ha cap imatge seleccionada, retorna un QString buit
+     /// @return UID de la imatge seleccionada
     QString getCurrentImageUID();
 
     ///ordena descendentment per la columna seleccionada
@@ -109,9 +102,8 @@ public:
     QStudyTreeWidget::ItemTreeLevels getMaximumExpandTreeItemsLevel();
 
 protected:
-    /** Mostra el menu contextual
-     *  @param Dades de l'event sol·licitat
-     */
+    /// Mostra el menu contextual
+    /// @param Dades de l'event sol·licitat
     void contextMenuEvent(QContextMenuEvent *event);
 
 signals :
@@ -143,9 +135,8 @@ signals :
     void notCurrentItemSelected();
 
 public slots:
-    /** Indique que ens marqui la sèrie amb el uid passat per paràmetre com a seleccionada
-     * @param SeriesUID Uid de la serie seleccionada en QSeriesListWidget
-     */
+    /// Indique que ens marqui la sèrie amb el uid passat per paràmetre com a seleccionada
+    /// @param SeriesUID Uid de la serie seleccionada en QSeriesListWidget
     void setCurrentSeries(QString seriesUID);
 
     /// Neteja el TreeView
@@ -168,19 +159,17 @@ private:
     /// crea les connexions dels signals i slots
     void createConnections();
 
-    /** formata l'edat per mostrar per pantalla
-     * @param edat
-     */
+    /// formata l'edat per mostrar per pantalla
+    /// @param edat
     QString formatAge(const QString);
 
     ///Formata la data i hora passada a ISO 8601 extended (YYYY-MM-DD HH:MM:SS) Amb aquest format de data es pot ordenar els estudis per data/hora
     ///Si l'hora no té valor només retorna la data, i si ni Data i Hora tenen valor retorna string buit
     QString formatDateTime(const QDate &date, const QTime &time);
 
-    /** Retorna l'objecte TreeWidgetItem, que pertany a un estudi cercem, per studUID i PACS, ja que
-     * un mateix estudi pot estar a més d'un PACS
-     * @param studyUID uid de l'estudi a cercar
-     */
+    /// Retorna l'objecte TreeWidgetItem, que pertany a un estudi cercem, per studUID i PACS, ja que
+    /// un mateix estudi pot estar a més d'un PACS
+    /// @param studyUID uid de l'estudi a cercar
     QTreeWidgetItem* getStudyQTreeWidgetItem(QString studyUID);
 
     ///Retorna l'Objecte QTtreeWidgeItem que és de l'estudi i series
@@ -199,9 +188,8 @@ private:
     ///Afegeix espais a l'esquerre del text fins arribar l'allargada passada per paràmetre
     QString paddingLeft(QString text, int length);
 
-    /**Dona una sèrie emplena un QTreeWidgetItem en format sèrie
-     *@param informació de la serie
-     */
+    /// Dona una sèrie emplena un QTreeWidgetItem en format sèrie
+    /// @param informació de la serie
     QTreeWidgetItem* fillSeries(Series *serie);
 
     ///Retorna llista QTreeWidgetItem resultant dels estudis que té el pacient

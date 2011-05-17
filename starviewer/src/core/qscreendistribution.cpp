@@ -228,4 +228,4 @@ void QScreenDistribution::computeSizesAndPositions()
     m_screenNumberPixelSize = (minimumScreenHeight - 15 < MaximumScreenNumberPixelSize)? minimumScreenHeight - 15: MaximumScreenNumberPixelSize;
 }
 
-} // end namespace udg
+} // End namespace udg

@@ -29,12 +29,12 @@ Volume* VolumeRepository::getVolume(Identifier id)
 
 void VolumeRepository::deleteVolume(Identifier id)
 {
-    // l'obtenim
+    // L'obtenim
     Volume *volume = this->getVolume(id);
-    // el treiem de la llista
+    // El treiem de la llista
     this->removeItem(id);
 
-    // i l'eliminem
+    // I l'eliminem
     AsynchronousVolumeReader volumeReader;
     volumeReader.cancelLoadingAndDeleteVolume(volume);
 

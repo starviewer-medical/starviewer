@@ -190,8 +190,9 @@ void Q2DViewerExtension::setInput(Volume *input)
     QList<HangingProtocol*> hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient);
     QApplication::restoreOverrideCursor();
 
-    if (hangingCandidates.size() == 0) // No hi ha hanging protocols
+    if (hangingCandidates.size() == 0)
     {
+        // No hi ha hanging protocols
         Q2DViewerWidget *viewerWidget = m_workingArea->addViewer("0.0\\1.0\\1.0\\0.0");
         viewerWidget->setInputAsynchronously(m_mainVolume);
     }
@@ -662,7 +663,8 @@ void Q2DViewerExtension::searchPreviousStudiesOfMostRecentStudy()
 {
     Study *recentStudy = NULL;
 
-    if (m_mainVolume) // Només busquem si hi ha el volum principal
+    // Només busquem si hi ha el volum principal
+    if (m_mainVolume)
     {
         foreach (Study *study, m_mainVolume->getPatient()->getStudies())
         {

@@ -25,8 +25,8 @@ public:
 
 private:
 
-    /*TODO: Potser que daria més entés no guardar les variables com a membre i desdle mètode printSpool passar-la al mètode que
-     *que les necessiti. Per exemple printSCUCreateBasicFilmSession necessita DicomPrintJob*/
+    /// TODO: Potser que daria més entés no guardar les variables com a membre i desdle mètode printSpool passar-la al mètode que
+    /// que les necessiti. Per exemple printSCUCreateBasicFilmSession necessita DicomPrintJob
     DicomPrinter m_dicomPrinter;
     DicomPrintJob m_dicomPrintJob;
 

@@ -88,12 +88,18 @@ void ROITool::computeStatisticsData()
     switch (currentView)
     {
         case Q2DViewer::Axial:
-            sweepLineBeginPoint[0] = bounds[0]; // xmin
-            sweepLineBeginPoint[1] = bounds[2]; // ymin
-            sweepLineBeginPoint[2] = bounds[4]; // zmin
-            sweepLineEndPoint[0] = bounds[1]; // xmax
-            sweepLineEndPoint[1] = bounds[2]; // ymin
-            sweepLineEndPoint[2] = bounds[4]; // zmin
+            // xmin
+            sweepLineBeginPoint[0] = bounds[0];
+            // ymin
+            sweepLineBeginPoint[1] = bounds[2];
+            // zmin
+            sweepLineBeginPoint[2] = bounds[4];
+            // xmax
+            sweepLineEndPoint[0] = bounds[1];
+            // ymin
+            sweepLineEndPoint[1] = bounds[2];
+            // zmin
+            sweepLineEndPoint[2] = bounds[4];
 
             sweepLineCoordinateIndex = 1;
             intersectionCoordinateIndex = 0;
@@ -104,12 +110,18 @@ void ROITool::computeStatisticsData()
             break;
 
         case Q2DViewer::Sagital:
-            sweepLineBeginPoint[0] = bounds[0]; // xmin
-            sweepLineBeginPoint[1] = bounds[2]; // ymin
-            sweepLineBeginPoint[2] = bounds[4]; // zmin
-            sweepLineEndPoint[0] = bounds[0]; // xmin
-            sweepLineEndPoint[1] = bounds[2]; // ymin
-            sweepLineEndPoint[2] = bounds[5]; // zmax
+            // xmin
+            sweepLineBeginPoint[0] = bounds[0];
+            // ymin
+            sweepLineBeginPoint[1] = bounds[2];
+            // zmin
+            sweepLineBeginPoint[2] = bounds[4];
+            // xmin
+            sweepLineEndPoint[0] = bounds[0];
+            // ymin
+            sweepLineEndPoint[1] = bounds[2];
+            // zmax
+            sweepLineEndPoint[2] = bounds[5];
 
             sweepLineCoordinateIndex = 1;
             intersectionCoordinateIndex = 2;
@@ -120,12 +132,18 @@ void ROITool::computeStatisticsData()
             break;
 
         case Q2DViewer::Coronal:
-            sweepLineBeginPoint[0] = bounds[0]; // xmin
-            sweepLineBeginPoint[1] = bounds[2]; // ymin
-            sweepLineBeginPoint[2] = bounds[4]; // zmin
-            sweepLineEndPoint[0] = bounds[1]; // xmax
-            sweepLineEndPoint[1] = bounds[2]; // ymin
-            sweepLineEndPoint[2] = bounds[4]; // zmin
+            // xmin
+            sweepLineBeginPoint[0] = bounds[0];
+            // ymin
+            sweepLineBeginPoint[1] = bounds[2];
+            // zmin
+            sweepLineBeginPoint[2] = bounds[4];
+            // xmax
+            sweepLineEndPoint[0] = bounds[1];
+            // ymin
+            sweepLineEndPoint[1] = bounds[2];
+            // zmin
+            sweepLineEndPoint[2] = bounds[4];
 
             sweepLineCoordinateIndex = 2;
             intersectionCoordinateIndex = 0;
@@ -219,7 +237,8 @@ void ROITool::computeStatisticsData()
                         firstIntersection[intersectionCoordinateIndex] += horizontalSpacingIncrement;
                     }
                 }
-                else // I de dreta cap a esquerra
+                // I de dreta cap a esquerra
+                else
                 {
                     while (firstIntersection[intersectionCoordinateIndex] >= secondIntersection[intersectionCoordinateIndex])
                     {

@@ -15,8 +15,10 @@
 #include <QTimer>
 // vtk
 #include <vtkImageData.h>
-#include <vtkRenderWindow.h>            // actualització ràpida
-#include <vtkRenderWindowInteractor.h>  // actualització ràpida
+// Actualització ràpida
+#include <vtkRenderWindow.h>
+// Actualització ràpida
+#include <vtkRenderWindowInteractor.h>
 
 namespace udg {
 
@@ -29,7 +31,8 @@ Q3DViewerExtension::Q3DViewerExtension(QWidget *parent)
     // creem el temporitzador (s'ha de fer abans del createConnections())
     m_timer = new QTimer(this);
     m_timer->setSingleShot(true);
-    m_timer->setInterval(1000);   /// \todo Poso 1000 ms arbitràriament.
+    /// \todo Poso 1000 ms arbitràriament.
+    m_timer->setInterval(1000);
 
     initializeTools();
     loadClutPresets();
@@ -106,7 +109,8 @@ void Q3DViewerExtension::loadClutPresets()
     }
     if (!m_clutsDir.isReadable())
     {
-        return; // no es pot accedir al directori
+        // No es pot accedir al directori
+        return;
     }
 
     QStringList nameFilters;
@@ -393,8 +397,9 @@ void Q3DViewerExtension::computeOrCancelObscurance()
 {
     this->setCursor(QCursor(Qt::WaitCursor));
 
-    if (!m_computingObscurance)   // no s'estan calculant -> comencem
+    if (!m_computingObscurance)
     {
+        // No s'estan calculant -> comencem
         m_computingObscurance = true;
 
         enableObscuranceRendering(false);
@@ -410,8 +415,9 @@ void Q3DViewerExtension::computeOrCancelObscurance()
             default: ERROR_LOG(QString("Valor inesperat per a la qualitat de les obscurances: %1").arg(m_obscuranceQualityComboBox->currentIndex()));
         }
     }
-    else    // s'estan calculant -> aturem-ho
+    else
     {
+        // S'estan calculant -> aturem-ho
         m_computingObscurance = false;
 
         m_obscuranceComputeCancelPushButton->setText(tr("Compute"));
@@ -437,7 +443,8 @@ void Q3DViewerExtension::endComputeObscurance()
     m_computingObscurance = false;
     m_obscuranceComputeCancelPushButton->setText(tr("Compute"));
     enableObscuranceRendering(true);
-    m_obscuranceCheckBox->setChecked(true);   // les activem automàticament quan acaba el càlcul
+    // Les activem automàticament quan acaba el càlcul
+    m_obscuranceCheckBox->setChecked(true);
 }
 
 void Q3DViewerExtension::enableObscuranceRendering(bool on)
@@ -523,14 +530,16 @@ void Q3DViewerExtension::applyEditorClut()
 
 void Q3DViewerExtension::toggleClutEditor()
 {
-    if (m_editorSplitter->sizes()[1] == 0)    // show
+    if (m_editorSplitter->sizes()[1] == 0)
     {
+        // Show
         m_editorSplitter->setSizes(QList<int>() << 1 << 1);
         m_gradientEditor->setTransferFunction(m_currentClut);
         m_editorByValues->setTransferFunction(m_currentClut);
     }
-    else    // hide
+    else
     {
+        // Hide
         hideClutEditor();
     }
 }
@@ -592,16 +601,19 @@ void Q3DViewerExtension::applyRenderingStyle(const QModelIndex &index)
 
                 if (renderingStyle.obscurance)
                 {
-                    if (!m_computingObscurance)   // si s'estan calculant no toquem res
+                    // Si s'estan calculant no toquem res
+                    if (!m_computingObscurance)
                     {
                         /// \todo fer una comprovació més ben feta (amb un booleà)
-                        if (!m_obscuranceCheckBox->isVisible()) // si no hi ha obscurances calcular-les
+                        if (!m_obscuranceCheckBox->isVisible())
                         {
+                            // Si no hi ha obscurances calcular-les
                             m_obscuranceQualityComboBox->setCurrentIndex(static_cast<int>(renderingStyle.obscuranceQuality));
                             m_obscuranceComputeCancelPushButton->click();
                         }
-                        else // altrament aplicar-les i ja està
+                        else
                         {
+                            // Altrament aplicar-les i ja està
                             m_obscuranceCheckBox->setChecked(true);
                         }
                     }
@@ -649,37 +661,45 @@ void Q3DViewerExtension::updateUiForRenderingMethod(int index)
 
     switch (index)
     {
-        case 0: // ray casting
+        case 0:
+            // Ray casting
             m_shadingOptionsWidget->show();
             m_contourOptionsWidget->show();
             break;
 
-        case 1: // ray casting + obscurances
+        case 1:
+            // Ray casting + obscurances
             m_shadingOptionsWidget->show();
             m_contourOptionsWidget->show();
             m_obscuranceOptionsWidget->show();
             break;
 
-        case 2: // GPU ray casting
+        case 2:
+            // GPU ray casting
             m_shadingOptionsWidget->show();
             break;
 
-        case 3: // mip
+        case 3:
+            // Mip
             break;
 
-        case 4: // textures 3d
+        case 4:
+            // Textures 3d
             m_shadingOptionsWidget->show();
             break;
 
-        case 5: // textures 2d
+        case 5:
+            // Textures 2d
             m_shadingOptionsWidget->show();
             break;
 
-        case 6: // isosuperfícies
+        case 6:
+            // Isosuperfícies
             m_isosurfaceOptionsWidget->show();
             break;
 
-        case 7: // contouring
+        case 7:
+            // Contouring
             break;
     }
 }
@@ -717,7 +737,8 @@ void Q3DViewerExtension::updateView(bool fast)
             break;
 
         case 6:
-            m_3DView->setIsoValue(m_isoValueSpinBox->value());    // necessari per la primera vegada
+            // Necessari per la primera vegada
+            m_3DView->setIsoValue(m_isoValueSpinBox->value());
             m_3DView->setRenderFunctionToIsoSurface();
             break;
 
@@ -737,7 +758,8 @@ void Q3DViewerExtension::updateView(bool fast)
 
     if (fast)
     {
-        m_timer->start();   /// \todo Ara ho fem abans del render. Caldria comprovar en sistemes lents si és millor abans o després.
+        /// \todo Ara ho fem abans del render. Caldria comprovar en sistemes lents si és millor abans o després.
+        m_timer->start();
         m_3DView->getRenderWindow()->SetDesiredUpdateRate(m_3DView->getInteractor()->GetDesiredUpdateRate());
     }
 

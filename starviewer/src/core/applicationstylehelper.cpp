@@ -17,22 +17,25 @@ ApplicationStyleHelper::ApplicationStyleHelper()
 
 void ApplicationStyleHelper::recomputeStyleToScreenOfWidget(QWidget *widget)
 {
-    //Per calcular l'style, calculem un factor d'escala a partir de la resolució de la pantalla a on s'està executant
-    //el widget que ens passen. Aquest factor serà el que ens servirà per variar el tamany de les diferents fonts, etc.
+    // Per calcular l'style, calculem un factor d'escala a partir de la resolució de la pantalla a on s'està executant
+    // el widget que ens passen. Aquest factor serà el que ens servirà per variar el tamany de les diferents fonts, etc.
     QDesktopWidget *desktop = QApplication::desktop();
     const QRect screen = desktop->screenGeometry(widget);
 
     if ((screen.width() * screen.height()) >= (5 * 1024 * 1024))
     {
-        m_scaleFactor = 1.72; // Surt de fer 24/14 on 24 és el tamany de lletra desitjat i 14 és el "per defecte"
+        // Surt de fer 24/14 on 24 és el tamany de lletra desitjat i 14 és el "per defecte"
+        m_scaleFactor = 1.72;
     }
     else if ((screen.width() * screen.height()) >= (3 * 1024 * 1024))
     {
-        m_scaleFactor = 1.22; // Surt de fer 17/14
+        // Surt de fer 17/14
+        m_scaleFactor = 1.22;
     }
     else
     {
-        m_scaleFactor = 1.0; // Surt de fer 14/14
+        // Surt de fer 14/14
+        m_scaleFactor = 1.0;
     }
 }
 
@@ -70,4 +73,4 @@ int ApplicationStyleHelper::getScaledFontSize(double defaultFontSize, const QStr
     return MathTools::roundToNearestInteger(fontSize);
 }
 
-} // Ens namespace udg
+} // End namespace udg

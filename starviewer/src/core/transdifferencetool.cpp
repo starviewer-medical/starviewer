@@ -20,7 +20,7 @@ TransDifferenceTool::TransDifferenceTool(QViewer *viewer, QObject *parent)
 
     //DEBUG_LOG("Tool creada");
 
-    // ens assegurem que desde la creació tenim un viewer vàlid
+    // Ens assegurem que desde la creació tenim un viewer vàlid
     Q_ASSERT(m_viewer);
     m_2DViewer = qobject_cast<Q2DViewer*>(viewer);
     if (!m_2DViewer)
@@ -64,23 +64,31 @@ void TransDifferenceTool::handleEvent(unsigned long eventID)
             int key = m_viewer->getInteractor()->GetKeyCode();
             switch (key)
             {
-            case 114: // 'R'
-            case 82: // 'r'
+            // 'R'
+            case 114:
+            // 'r'
+            case 82:
                 this->increaseSingleDifferenceImage(0, -1);
                 m_myData->increaseSliceTranslationY(m_2DViewer->getCurrentSlice(), -1);
             break;
-            case 99: // 'C'
-            case 67: // 'c'
+            // 'C'
+            case 99:
+            // 'c'
+            case 67:
                 this->increaseSingleDifferenceImage(0, 1);
                 m_myData->increaseSliceTranslationY(m_2DViewer->getCurrentSlice(), 1);
             break;
-            case 102: // 'F'
-            case 70:  // 'f'
+            // 'F'
+            case 102:
+            // 'f'
+            case 70:
                 this->increaseSingleDifferenceImage(1, 0);
                 m_myData->increaseSliceTranslationX(m_2DViewer->getCurrentSlice(), 1);
             break;
-            case 100: // 'D'
-            case 68:  // 'd'
+            // 'D'
+            case 100:
+            // 'd'
+            case 68:
                 this->increaseSingleDifferenceImage(-1, 0);
                 m_myData->increaseSliceTranslationX(m_2DViewer->getCurrentSlice(), -1);
             break;
@@ -100,10 +108,10 @@ ToolData *TransDifferenceTool::getToolData() const
 
 void TransDifferenceTool::setToolData(ToolData *data)
 {
-    //Fem aquesta comparació perquè a vegades ens passa la data que ja tenim a m_myData
+    // Fem aquesta comparació perquè a vegades ens passa la data que ja tenim a m_myData
     if (m_myData != data)
     {
-        // creem de nou les dades
+        // Creem de nou les dades
         m_toolData = data;
         m_myData = qobject_cast<TransDifferenceToolData*>(data);
     }
@@ -119,7 +127,7 @@ void TransDifferenceTool::startTransDifference()
 
 void TransDifferenceTool::doTransDifference()
 {
-    //TODO: canviar imatge
+    // TODO: canviar imatge
     m_viewer->setCursor(QCursor(QPixmap(":/images/moveDifference.png")));
 
     int currentPosition[2];
@@ -131,7 +139,8 @@ void TransDifferenceTool::doTransDifference()
 
     this->increaseSingleDifferenceImage(m_dx, m_dy);
 
-    m_viewer->render(); // necessari perquè es torni a renderitzar a alta resolució en el 3D
+    // Necessari perquè es torni a renderitzar a alta resolució en el 3D
+    m_viewer->render();
 }
 
 void TransDifferenceTool::endTransDifference()
@@ -141,7 +150,8 @@ void TransDifferenceTool::endTransDifference()
     m_state = None;
     m_myData->increaseSliceTranslationX(m_2DViewer->getCurrentSlice(), m_dx);
     m_myData->increaseSliceTranslationY(m_2DViewer->getCurrentSlice(), m_dy);
-    m_viewer->render(); // necessari perquè es torni a renderitzar a alta resolució en el 3D
+    // Necessari perquè es torni a renderitzar a alta resolució en el 3D
+    m_viewer->render();
 }
 
 void TransDifferenceTool::initializeDifferenceImage()
@@ -152,8 +162,8 @@ void TransDifferenceTool::initializeDifferenceImage()
         return;
     }
 
-    //Actualitzem el vector de translacions (inicialitzem a 0)
-    //Potser caldria aplicar les mateixes translacions que ja hi ha?
+    // Actualitzem el vector de translacions (inicialitzem a 0)
+    // Potser caldria aplicar les mateixes translacions que ja hi ha?
     //m_sliceTranslations = QVector<QPair<int,int > >(mainVolume->getDimensions()[2],QPair<int,int>(0,0));
 
     Volume *mainVolume = m_myData->getInputVolume();
@@ -162,16 +172,16 @@ void TransDifferenceTool::initializeDifferenceImage()
     int ext[6];
     mainVolume->getWholeExtent(ext);
 
-    //Si no hi ha volume diferència
+    // Si no hi ha volume diferència
     if (differenceVolume == 0)
     {
-        //Allocating memory for the output image
+        // Allocating memory for the output image
         vtkImageData *imdif = vtkImageData::New();
         //imdif->CopyInformation(m_mainVolume->getVtkData());
         imdif->CopyTypeSpecificInformation(mainVolume->getVtkData());
         imdif->SetExtent(ext);
 
-        //Converting the VTK data to volume
+        // Converting the VTK data to volume
         differenceVolume = new Volume();
         differenceVolume->setImages(mainVolume->getImages());
         differenceVolume->setData(imdif);
@@ -219,18 +229,18 @@ void TransDifferenceTool::setSingleDifferenceImage(int dx, int dy)
 
 void TransDifferenceTool::computeSingleDifferenceImage(int dx, int dy, int slice)
 {
-    //\TODO: Fer-ho amb un filtre
+    // \TODO: Fer-ho amb un filtre
 
-    //Simplifiquem dient que la translació només pot ser per múltiples del píxel
-    //Pintem la diferència al volume a la llesca "slice"
-    //ho fem amb vtk pq és més ràpid
+    // Simplifiquem dient que la translació només pot ser per múltiples del píxel
+    // Pintem la diferència al volume a la llesca "slice"
+    // Ho fem amb vtk pq és més ràpid
     Volume::VoxelType *valueRef, *valueMov, *valueDif;
     int indexRef[3];
     int indexMov[3];
     int indexDif[3];
 
     int currentSlice;
-    //Si no ens han posat slice agafem la que està el visor
+    // Si no ens han posat slice agafem la que està el visor
     if (slice == -1)
     {
         currentSlice = m_2DViewer->getCurrentSlice();
@@ -243,11 +253,11 @@ void TransDifferenceTool::computeSingleDifferenceImage(int dx, int dy, int slice
     Volume *mainVolume = m_myData->getInputVolume();
     Volume *differenceVolume = m_myData->getDifferenceVolume();
 
-    //les translacions són les que ja hi havia a la llesca més el que ens hem mogut amb el cursor
+    // Les translacions són les que ja hi havia a la llesca més el que ens hem mogut amb el cursor
     int tx = dx;
     int ty = dy;
 
-    //Restem 1 al reference slice perquè aquest considera la primera llesca com la 1
+    // Restem 1 al reference slice perquè aquest considera la primera llesca com la 1
     indexRef[2] = m_myData->getReferenceSlice() - 1;
     indexMov[2] = currentSlice;
     indexDif[2] = currentSlice;
@@ -268,7 +278,7 @@ void TransDifferenceTool::computeSingleDifferenceImage(int dx, int dy, int slice
     {
         indexRef[0] = imin;
         indexMov[0] = imin - tx;
-        //l'index de la diferència el posem a 0 perquè assignem valors a tota la fila
+        // L'index de la diferència el posem a 0 perquè assignem valors a tota la fila
         indexDif[0] = 0;
         for (j = jmin; j < jmax; j++)
         {
@@ -297,9 +307,9 @@ void TransDifferenceTool::computeSingleDifferenceImage(int dx, int dy, int slice
             }
         }
     }
-    //Posem 0 a les files que no hem fet perquè es visualitzi més bonic
+    // Posem 0 a les files que no hem fet perquè es visualitzi més bonic
     indexDif[0] = 0;
-    //Per evitar que se'ns en vagi de rang
+    // Per evitar que se'ns en vagi de rang
     if (jmin > size[1])
     {
         jmin = size[1];
@@ -330,7 +340,7 @@ void TransDifferenceTool::computeSingleDifferenceImage(int dx, int dy, int slice
         }
     }
 
-    //Això ho fem perquè ens refresqui la imatge diferència que hem modificat
+    // Això ho fem perquè ens refresqui la imatge diferència que hem modificat
     if (slice == -1)
     {
         // HACK Així obliguem a que es torni a executar el pipeline en el viewer i es renderitzi la nova imatge calculada

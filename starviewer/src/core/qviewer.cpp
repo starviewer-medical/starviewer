@@ -4,7 +4,8 @@
 #include "image.h"
 #include "toolproxy.h"
 #include "patientbrowsermenu.h"
-#include "windowlevelpresetstooldata.h" // Per poder afegir i modificar els presets que visualitzem
+// Per poder afegir i modificar els presets que visualitzem
+#include "windowlevelpresetstooldata.h"
 #include "transferfunction.h"
 #include "qviewerworkinprogresswidget.h"
 
@@ -374,7 +375,8 @@ bool QViewer::record(const QString &baseName, RecordFileFormatType format)
     {
         vtkGenericMovieWriter *videoWriter;
         QString fileExtension;
-        switch (format) // TODO de moment només suportem MPEG2
+        // TODO de moment només suportem MPEG2
+        switch (format)
         {
             case MPEG2:
                 videoWriter = vtkMPEG2Writer::New();
@@ -398,7 +400,8 @@ bool QViewer::record(const QString &baseName, RecordFileFormatType format)
         {
             videoWriter->SetInput(m_grabList.at(i));
 
-            for (int j = 0; j < 3; j++) // TODO Perquè un loop de 3?
+            // TODO Perquè un loop de 3?
+            for (int j = 0; j < 3; j++)
             {
                 videoWriter->Write();
             }
@@ -705,19 +708,22 @@ void QViewer::setCameraOrientation(int orientation)
         {
             case Axial:
                 camera->SetFocalPoint(0, 0, 0);
-                camera->SetPosition(0, 0, -1); // -1 if medical ?
+                // -1 if medical ?
+                camera->SetPosition(0, 0, -1);
                 camera->SetViewUp(0, -1, 0);
                 break;
 
             case Coronal:
                 camera->SetFocalPoint(0, 0, 0);
-                camera->SetPosition(0, -1, 0); // 1 if medical ?
+                // 1 if medical ?
+                camera->SetPosition(0, -1, 0);
                 camera->SetViewUp(0, 0, 1);
                 break;
 
             case Sagital:
                 camera->SetFocalPoint(0, 0, 0);
-                camera->SetPosition(1, 0, 0); // -1 if medical ?
+                // -1 if medical ?
+                camera->SetPosition(1, 0, 0);
                 camera->SetViewUp(0, 0, 1);
                 break;
         }
@@ -843,4 +849,4 @@ void QViewer::setWindowLevelPreset(const QString &preset)
     }
 }
 
-};  // end namespace udg
+};  // End namespace udg

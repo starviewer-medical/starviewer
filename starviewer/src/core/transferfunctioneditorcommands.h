@@ -135,6 +135,6 @@ private:
     double m_opacity;
 };
 
-} // namespace udg
+} // End namespace udg
 
 #endif // TRANSFERFUNCTIONEDITORCOMMANDS_H

@@ -4,7 +4,7 @@
 #include "drawer.h"
 #include "drawerpolygon.h"
 #include "mathtools.h"
-// vtk
+// Vtk
 #include <vtkCommand.h>
 
 namespace udg {

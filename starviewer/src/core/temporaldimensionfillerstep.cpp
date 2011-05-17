@@ -40,7 +40,7 @@ bool TemporalDimensionFillerStep::fillIndividually()
     VolumeInfo *volumeInfo;
     bool volumeInfoInitialized = false;
 
-    //Obtenim el VolumeInfo. Si no existeix en generem un de nou i l'afegim a l'estructura.
+    // Obtenim el VolumeInfo. Si no existeix en generem un de nou i l'afegim a l'estructura.
     if (TemporalDimensionInternalInfo.contains(m_input->getCurrentSeries()))
     {
         QHash<int, VolumeInfo*> *volumeHash = TemporalDimensionInternalInfo.value(m_input->getCurrentSeries());
@@ -72,7 +72,7 @@ bool TemporalDimensionFillerStep::fillIndividually()
         TemporalDimensionInternalInfo.insert(m_input->getCurrentSeries(), volumeHash);
     }
 
-    //Si el VolumeInfo és nou, l'inicialitzem.
+    // Si el VolumeInfo és nou, l'inicialitzem.
     if (!volumeInfoInitialized)
     {
         volumeInfo->numberOfPhases = 1;
@@ -82,7 +82,7 @@ bool TemporalDimensionFillerStep::fillIndividually()
         volumeInfo->firstAcquisitionNumber = m_input->getDICOMFile()->getValueAttributeAsQString(DICOMAcquisitionNumber);
         volumeInfo->multipleAcquisitionNumber = false;
 
-        // en el cas del CT ens interessa saber si és localizer
+        // En el cas del CT ens interessa saber si és localizer
         // \TODO Ara estem considerant que un volume serà localizer si la primera imatge ho és, però res ens indica que els localizers no puguin està barretjats amb la resta.
         if (m_input->getCurrentSeries()->getModality() == "CT")
         {

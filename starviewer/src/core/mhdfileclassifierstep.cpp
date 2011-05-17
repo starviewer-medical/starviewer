@@ -8,8 +8,10 @@
 #include <QDateTime>
 #include <QFileInfo>
 
-#include <metaCommand.h> // fer servir la llibreria metaIO de les itk
-#include <vtkMetaImageReader.h> // fer servir el reader de vtk
+// Fer servir la llibreria metaIO de les itk
+#include <metaCommand.h>
+// Fer servir el reader de vtk
+#include <vtkMetaImageReader.h>
 
 namespace udg {
 
@@ -28,27 +30,34 @@ bool MHDFileClassifierStep::fillIndividually()
 
     QString file = m_input->getFile();
 
-    // primer comprovem si l'arxiu es pot processar
+    // Primer comprovem si l'arxiu es pot processar
     vtkMetaImageReader *mhdReader = vtkMetaImageReader::New();
     switch (mhdReader->CanReadFile(qPrintable(file)))
     {
-        case 0: // no és un arxiu mhd :(
+        // No és un arxiu mhd :(
+        case 0:
             DEBUG_LOG(file + " no es pot llegir com arxiu mhd vàlid amb vtkMetaImageReader");
             mhdReader->Delete();
             return false;
-        case 1: // I think I can read the file but I cannot prove it
+
+        // I think I can read the file but I cannot prove it
+        case 1:
             DEBUG_LOG("vtkMetaImageReader creu que pot llegir l'arxiu " + file + " però no pot provar-ho de totes totes");
             break;
-        case 2: // I definitely can read the file
+
+        // I definitely can read the file
+        case 2:
             DEBUG_LOG("vtkMetaImageReader assegura que pot llegir l'arxiu " + file);
             break;
-        case 3: // I can read the file and I have validated that I am the correct reader for this file
+
+        // I can read the file and I have validated that I am the correct reader for this file
+        case 3:
             DEBUG_LOG("vtkMetaImageReader assegura que pot llegir l'arxiu " + file + " i que a més ha validat ser el reader adequat per llegir l'arxiu");
             break;
     }
     mhdReader->Delete();
 
-    // abans de res comprovar que l'arxiu no estigui ja classificat
+    // Abans de res comprovar que l'arxiu no estigui ja classificat
     // comprovem primer que l'arxiu no estigui ja dins de l'estructura, el qual vol dir que ja l'han classificat
     bool found = false;
     unsigned int i = 0;
@@ -62,13 +71,13 @@ bool MHDFileClassifierStep::fillIndividually()
         return true;
     }
 
-    //TODO faltaria comprovar si tenim algun pacient igual o no? i assignar al mateix estudi o algo semblant? En certa manera si sempre assignem la mateixa informació, posteriorment els pacients que anem creant, ja es fusionaran ells mateixos. Els id's que han de ser diferents haurien de ser els de les series
+    // TODO faltaria comprovar si tenim algun pacient igual o no? i assignar al mateix estudi o algo semblant? En certa manera si sempre assignem la mateixa informació, posteriorment els pacients que anem creant, ja es fusionaran ells mateixos. Els id's que han de ser diferents haurien de ser els de les series
 
     Patient *patient;
     Study *study;
     if (m_input->getNumberOfPatients() == 0)
     {
-        // creem el pacient
+        // Creem el pacient
         patient = new Patient;
 
         patient->setFullName("MHD File ");
@@ -76,7 +85,7 @@ bool MHDFileClassifierStep::fillIndividually()
 
         m_input->addPatient(patient);
 
-        // creem l'estudi
+        // Creem l'estudi
         study = new Study;
         study->setInstanceUID("MHDStudy-#123456#");
         study->setDate(QDate::currentDate());
@@ -91,12 +100,14 @@ bool MHDFileClassifierStep::fillIndividually()
         study = patient->getStudies().first();
     }
 
-    // creem la serie
+    // Creem la serie
     Series *series = new Series;
     static int seriesUID = 123456;
     static int seriesNumber = 0;
     series->setInstanceUID(QString("MHDSeries-#%1#").arg(seriesUID++));
-    series->setModality("OT"); // TODO de moment li diem OTHER, però si l'mhd té aquesta info, li donarem de l'mhd
+    
+    // TODO de moment li diem OTHER, però si l'mhd té aquesta info, li donarem de l'mhd
+    series->setModality("OT");
     series->setSeriesNumber(QString::number(seriesNumber+=101));
     series->setDate(QDate::currentDate());
     series->setTime(QTime::currentTime());
@@ -105,7 +116,7 @@ bool MHDFileClassifierStep::fillIndividually()
     series->setDescription(fileInfo.fileName());
     study->addSeries(series);
 
-    // aquí fem el pas de l'image filler step: creem la imatge
+    // Aquí fem el pas de l'image filler step: creem la imatge
     Image *image = new Image;
     image->setPath(file);
     static int mhdSOPIntanceUID = 0;

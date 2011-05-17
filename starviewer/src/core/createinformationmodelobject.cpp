@@ -38,8 +38,8 @@ Study* CreateInformationModelObject::createStudy(DICOMTagReader *dicomTagReader)
     study->setWeight(dicomTagReader->getValueAttributeAsQString(DICOMPatientsWeight).toDouble());
     study->setReferringPhysiciansName(dicomTagReader->getValueAttributeAsQString(DICOMReferringPhysiciansName));
 
-    //Afegim la modalitat de l'estudi
-    //Tenir en compte si aquest objecte s'utilitza per fer el dicomclassifierfillerstep que ells omplen la modalitat a partir de les series
+    // Afegim la modalitat de l'estudi
+    // Tenir en compte si aquest objecte s'utilitza per fer el dicomclassifierfillerstep que ells omplen la modalitat a partir de les series
     studyModalities = dicomTagReader->getValueAttributeAsQString(DICOMModalitiesInStudy);
 
     foreach (QString modality, studyModalities.split("\\"))
@@ -93,4 +93,4 @@ Image* CreateInformationModelObject::createImage(DICOMTagReader *dicomTagReader)
     return image;
 }
 
-}; //end udg namespace
+}; // End udg namespace

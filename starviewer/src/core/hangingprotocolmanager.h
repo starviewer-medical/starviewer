@@ -92,8 +92,10 @@ private:
     /// Hem de guardar tota la informació perquè només sabem que és un previ i fins que s'hagi descarregat no podem saber quines series i imatges te
     struct StructPreviousStudyDownloading
     {
-        Q2DViewerWidget *widgetToDisplay; /// Widget a on s'ha de mostrar la informacio
-        HangingProtocolDisplaySet *displaySet; /// Guardem el display set per poder escollir l'orientacio (útil en mamo) i si cal una eina també
+        /// Widget a on s'ha de mostrar la informacio
+        Q2DViewerWidget *widgetToDisplay;
+        /// Guardem el display set per poder escollir l'orientacio (útil en mamo) i si cal una eina també
+        HangingProtocolDisplaySet *displaySet;
     };
 
     QMultiHash<QString, StructPreviousStudyDownloading*> *m_studiesDownloading;

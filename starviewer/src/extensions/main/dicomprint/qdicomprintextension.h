@@ -95,9 +95,9 @@ private:
     DicomPrintPage fillDicomPrintPagePrintSettings(DicomPrinter dicomPrinter);
 
     ///Mostra per pantalla els errors que s'han produït alhora d'imprimir
-    /*Degut a només podem tenir una pàgina per FilmSession degut a limitacions de dcmtk fa que haguem d'imprimir pàgina per pàgina
-      per això ens podem trobar que la primera pàgina s'imprimeixi bé, i les restants no, per això passem el paràmetre printedSomePage per indica que només
-      algunes de les pàgines han fallat*/
+    /// Degut a només podem tenir una pàgina per FilmSession degut a limitacions de dcmtk fa que haguem d'imprimir pàgina per pàgina
+    /// per això ens podem trobar que la primera pàgina s'imprimeixi bé, i les restants no, per això passem el paràmetre printedSomePage per indica que només
+    /// algunes de les pàgines han fallat
     void showDicomPrintError(DicomPrint::DicomPrintError error, bool printedSomePage);
 
     /// Comprova si se suporta el format de la sèrie i actualitza la interfície segons convingui.

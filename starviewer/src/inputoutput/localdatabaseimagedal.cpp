@@ -122,7 +122,8 @@ Image* LocalDatabaseImageDAL::fillImage(char **reply, int row, int columns)
     image->setPhotometricInterpretation(reply[22 + row * columns]);
     image->setImageType(reply[23 + row * columns]);
     image->setViewPosition(reply[24 + row * columns]);
-    image->setImageLaterality(QChar(reply[25 + row * columns][0]));//ImageLaterality sempre és un Char
+    // ImageLaterality sempre és un Char
+    image->setImageLaterality(QChar(reply[25 + row * columns][0]));
     image->setViewCodeMeaning(reply[26 + row * columns]);
     image->setPhaseNumber(QString(reply[27 + row * columns]).toInt());
     image->setImageTime(reply[28 + row * columns]);
@@ -445,7 +446,8 @@ QString LocalDatabaseImageDAL::getWindowWidthAsQString(Image *newImage)
         windowWidth += value.setNum(newImage->getWindowLevel(index).first, 'g', 10) + "\\";
     }
 
-    return windowWidth.left(windowWidth.length() - 1); //treiem l'últim "\\" afegit
+    // Treiem l'últim "\\" afegit
+    return windowWidth.left(windowWidth.length() - 1);
 }
 
 QString LocalDatabaseImageDAL::getWindowCenterAsQString(Image *newImage)
@@ -457,7 +459,8 @@ QString LocalDatabaseImageDAL::getWindowCenterAsQString(Image *newImage)
         windowCenter += value.setNum(newImage->getWindowLevel(index).second, 'g', 10) + "\\";
     }
 
-    return windowCenter.left(windowCenter.length() - 1); //treiem l'últim "\\" afegit
+    // Treiem l'últim "\\" afegit
+    return windowCenter.left(windowCenter.length() - 1);
 }
 
 QString LocalDatabaseImageDAL::getWindowLevelExplanationAsQString(Image *newImage)
@@ -469,7 +472,8 @@ QString LocalDatabaseImageDAL::getWindowLevelExplanationAsQString(Image *newImag
         windowLevelExplanation += newImage->getWindowLevelExplanation(index) + "\\";
     }
 
-    return windowLevelExplanation.left(windowLevelExplanation.length() - 1); //treiem l'últim "\\" afegit
+    // Treiem l'últim "\\" afegit
+    return windowLevelExplanation.left(windowLevelExplanation.length() - 1);
 }
 
 QStringList LocalDatabaseImageDAL::getWindowLevelExplanationAsQStringList(const QString &explanationList)

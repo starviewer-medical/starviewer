@@ -69,6 +69,6 @@ private:
 
 };
 
-} // namespace udg
+} // End namespace udg
 
 #endif // QTRANSFERFUNCTIONVIEW_H

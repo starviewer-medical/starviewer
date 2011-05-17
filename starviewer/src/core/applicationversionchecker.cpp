@@ -25,20 +25,20 @@ namespace udg {
 ApplicationVersionChecker::ApplicationVersionChecker(QObject *parent)
 : QObject(parent)
 {
-    //per defecte diem que volem comprobar la nova versió, si no es canvia
+    // Per defecte diem que volem comprobar la nova versió, si no es canvia
     m_checkNewVersion = true;
-    // la versio que ens retorna el servidor per defecte es cadena buida
+    // La versio que ens retorna el servidor per defecte es cadena buida
     m_checkedVersion = QString("");
-    //inicialitzem a null m_releaseNotes i m_manager
+    // Inicialitzem a null m_releaseNotes i m_manager
     m_manager = NULL;
     m_releaseNotes = NULL;
 }
 
 ApplicationVersionChecker::~ApplicationVersionChecker()
 {
-    // destruir el manager de connexions
+    // Destruir el manager de connexions
     delete m_manager;
-    // i la finestra de les release notes
+    // I la finestra de les release notes
     delete m_releaseNotes;
 }
 
@@ -49,9 +49,9 @@ void ApplicationVersionChecker::checkReleaseNotes()
     m_somethingToShow = false;
     bool async = false;
 
-    //utilitzar els settings
+    // Utilitzar els settings
     readSettings();
-    // si no hi ha nova versió al server guardem l'actual als settings
+    // Si no hi ha nova versió al server guardem l'actual als settings
     m_checkedVersion = m_lastVersionChecked;
 
     if (isDevelopmentMode())
@@ -62,7 +62,7 @@ void ApplicationVersionChecker::checkReleaseNotes()
 
     if (isNewVersionInstalled())
     {
-        //llegir el contingut dels fitxers HTML de les release notes
+        // Llegir el contingut dels fitxers HTML de les release notes
         QUrl url = createLocalUrl();
         if (checkLocalUrl(url))
         {
@@ -79,9 +79,10 @@ void ApplicationVersionChecker::checkReleaseNotes()
             // Si no existeix el fitxer local de les notes, guardem als settings la versió actual
             // per tal de que no es busquin més (no es trobaran) fins a la pròxima versió
 
-            // el write settings guarda la versió de les notes locals només si m_checkNewVersion és fals
+            // El write settings guarda la versió de les notes locals només si m_checkNewVersion és fals
             m_checkNewVersion = false;
-            writeSettings(); //fem un write settings i no un setCheckFinished per que encara no ha acabat el check
+            // Fem un write settings i no un setCheckFinished per que encara no ha acabat el check
+            writeSettings();
             m_checkNewVersion = true;
         }
     }
@@ -133,7 +134,7 @@ void ApplicationVersionChecker::setCheckVersionInterval(int interval)
 
 void ApplicationVersionChecker::showReleaseNotes()
 {
-    //llegir el contingut dels fitxers HTML de les release notes
+    // Llegir el contingut dels fitxers HTML de les release notes
     QUrl url = createLocalUrl();
     if (checkLocalUrl(url))
     {
@@ -157,7 +158,7 @@ void ApplicationVersionChecker::showReleaseNotes()
 
 QUrl ApplicationVersionChecker::createLocalUrl()
 {
-    //agafar el path del fitxer
+    // Agafar el path del fitxer
     QString defaultPath = qApp->applicationDirPath() + "/releasenotes/";
     // TODO: si en mode desenvolupament no s'han de veure les release notes, això es pot treure.
     if (!QFile::exists(defaultPath))
@@ -184,27 +185,27 @@ QUrl ApplicationVersionChecker::createLocalUrl()
 
 bool ApplicationVersionChecker::checkLocalUrl(const QUrl &url)
 {
-    //comprobar si existeix localment el fitxer
+    // Comprobar si existeix localment el fitxer
     return QFile::exists(QString(url.toString()));
 }
 
 bool ApplicationVersionChecker::checkTimeInterval()
 {
-    // s'utilitzen dues dates, l'actual i la última comprobada
+    // S'utilitzen dues dates, l'actual i la última comprobada
     QDate today = QDate::currentDate();
     QDate lastTime = QDate::fromString(m_lastVersionCheckedDate, QString("yyyyMMdd"));
 
     int i = m_checkVersionInterval;
 
-    //si la data que hi ha guardada a les settings és correcte
+    // Si la data que hi ha guardada a les settings és correcte
     if (lastTime.isValid())
     {
-        // calcular quans dies han passat des de que es va comprobar
+        // Calcular quans dies han passat des de que es va comprobar
         i = lastTime.daysTo(today);
     }
-    //si la data no es correcte llavors i = interval i es tornarà a comprobar
+    // Si la data no es correcte llavors i = interval i es tornarà a comprobar
 
-    // retornar si fa tants dies o més com marca l'interval que no s'ha comprobat
+    // Retornar si fa tants dies o més com marca l'interval que no s'ha comprobat
     return i >= m_checkVersionInterval;
 }
 
@@ -259,8 +260,8 @@ QString ApplicationVersionChecker::createWebServiceUrl()
             QNetworkInterface::InterfaceFlags flags = interface.flags();
             bool flagsOk = flags.testFlag(QNetworkInterface::IsUp) && flags.testFlag(QNetworkInterface::IsRunning) && !flags.testFlag(QNetworkInterface::IsLoopBack);
 
-            //Per si de cas el bluetooth està engegat i foncionant, fer que no l'agafi
-            //Rarament trobarem una connexió de xarxa que vagi a través d'un dispositiu bluetooth
+            // Per si de cas el bluetooth està engegat i foncionant, fer que no l'agafi
+            // Rarament trobarem una connexió de xarxa que vagi a través d'un dispositiu bluetooth
             if (interface.isValid() && flagsOk && !interface.humanReadableName().toLower().contains("bluetooth"))
             {
                 macAdress += interface.hardwareAddress();
@@ -269,7 +270,7 @@ QString ApplicationVersionChecker::createWebServiceUrl()
         }
     }
 
- // En cas que estem a windows, Busquem el groupID
+// En cas que estem a windows, Busquem el groupID
 #ifdef WIN32
     domain = QProcessEnvironment::systemEnvironment().value(QString("USERDOMAIN"), QString(""));
 #endif
@@ -302,10 +303,10 @@ void ApplicationVersionChecker::writeSettings()
     Settings settings;
     if (!m_checkNewVersion)
     {
-        // ja no es mostren més fins la proxima actualització
+        // Ja no es mostren més fins la proxima actualització
         QStringList version = udg::StarviewerVersionString.split(".");
-        // si la versió actual es de debug (això passa quan LastReleaseNotesVersionShown no te valor
-        //i es mostren les release notes per primer cop, podria ser que estiguessim en debug)
+        // Si la versió actual es de debug (això passa quan LastReleaseNotesVersionShown no te valor
+        // i es mostren les release notes per primer cop, podria ser que estiguessim en debug)
         if (version.count() > 3)
         {
             settings.setValue(CoreSettings::LastReleaseNotesVersionShown,
@@ -318,9 +319,9 @@ void ApplicationVersionChecker::writeSettings()
     }
     else
     {
-        //Guardar la data en que hem comprobat la versió
+        // Guardar la data en que hem comprobat la versió
         settings.setValue(CoreSettings::LastVersionCheckedDate, QDate::currentDate().toString(QString("yyyyMMdd")));
-        //Guardar la versió que hem comprobat
+        // Guardar la versió que hem comprobat
         settings.setValue(CoreSettings::LastVersionChecked, m_checkedVersion);
     }
 }
@@ -350,7 +351,7 @@ bool ApplicationVersionChecker::isNewVersionInstalled()
 
     QRegExp regularExpression("^[0-9]+\\.[0-9]+\\.[0-9]+(\\-[a-zA-Z]+[0-9]*)?$", Qt::CaseSensitive);
 
-    // si lastVersionShown no és vàlida (buida o mal formada)
+    // Si lastVersionShown no és vàlida (buida o mal formada)
     if (!regularExpression.exactMatch(m_lastReleaseNotesVersionShown))
     {
         return true;
@@ -361,18 +362,18 @@ bool ApplicationVersionChecker::isNewVersionInstalled()
         return false;
     }
 
-    //comparar la primera component
+    // Comparar la primera component
     if (currentVersion[0].toInt() != lastVersionShown[0].toInt())
     {
         return currentVersion[0].toInt() > lastVersionShown[0].toInt();
     }
-    //Si son igauls, comparar la segona component
+    // Si son iguals, comparar la segona component
     if (currentVersion[1].toInt() != lastVersionShown[1].toInt())
     {
         return currentVersion[1].toInt() > lastVersionShown[1].toInt();
     }
-    //si també són iguals, comparar la tercera
-    //si no tenen subversio (alpha, beta, RC, etc.)
+    // Si també són iguals, comparar la tercera
+    // Si no tenen subversio (alpha, beta, RC, etc.)
     if (!lastVersionShown[2].contains("-") && !currentVersion[2].contains("-"))
     {
         return currentVersion[2].toInt() > lastVersionShown[2].toInt();
@@ -387,12 +388,12 @@ bool ApplicationVersionChecker::compareVersions(const QString &current, const QS
 {
     QStringList currentSplit = current.split("-");
     QStringList lastShownSplit = lastShown.split("-");
-    //comparar la primera component
+    // Comparar la primera component
     if (currentSplit[0].toInt() != lastShownSplit[0].toInt())
     {
         return currentSplit[0].toInt() > lastShownSplit[0].toInt();
     }
-    // si algun té la segona part buida, llavors és major (0.9.1 > 0.9.1-RC1)
+    // Si algun té la segona part buida, llavors és major (0.9.1 > 0.9.1-RC1)
     else if (currentSplit.count() != lastShownSplit.count())
     {
         return currentSplit.count() < lastShownSplit.count();
@@ -402,12 +403,12 @@ bool ApplicationVersionChecker::compareVersions(const QString &current, const QS
     {
         QString currentSplitType = getVersionAttribute(currentSplit[1], "type").toLower();
         QString lastShownSplitType = getVersionAttribute(lastShownSplit[1], "type").toLower();
-        // si no son del mateix tipus, es retorna alfabèticament, es tenen en compte alpha, beta i rc
+        // Si no son del mateix tipus, es retorna alfabèticament, es tenen en compte alpha, beta i rc
         if (currentSplitType != lastShownSplitType)
         {
             return currentSplitType.compare(lastShownSplitType) > 0;
         }
-        // si són iguals, compararem el numero
+        // Si són iguals, compararem el numero
         return getVersionAttribute(currentSplit[1], "number").toInt()
                 > getVersionAttribute(lastShownSplit[1], "number").toInt();
     }
@@ -424,14 +425,14 @@ QString ApplicationVersionChecker::getVersionAttribute(const QString &version, c
         // Si no hi ha numero no passa res, passar una string buida a int retorna 0.
         return QString(version).remove(QRegExp("[a-zA-Z]"));
     }
-    //si no es vol obtenir ni tipus ni numero retornem la string tal qual
+    // Si no es vol obtenir ni tipus ni numero retornem la string tal qual
     return version;
 }
 
 bool ApplicationVersionChecker::isDevelopmentMode()
 {
     QStringList currentVersion = udg::StarviewerVersionString.split(".");
-    // si la versio actual té tres o més parts i conté devel (0.9.1-devel o 0.9.1.devel)
+    // Si la versio actual té tres o més parts i conté devel (0.9.1-devel o 0.9.1.devel)
     if (currentVersion.count() > 3)
     {
         return true;
@@ -448,11 +449,12 @@ bool ApplicationVersionChecker::isDevelopmentMode()
 
 void ApplicationVersionChecker::webServiceReply(QNetworkReply *reply)
 {
-    //desconnectar el manager
+    // Desconnectar el manager
     disconnect(m_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(webServiceReply(QNetworkReply*)));
 
     bool result = reply->error() == QNetworkReply::NoError;
-    if (result) // si no error
+    // Si no error
+    if (result) 
     {
         QString json(reply->readAll());
 
@@ -497,11 +499,12 @@ void ApplicationVersionChecker::webServiceReply(QNetworkReply *reply)
 
 void ApplicationVersionChecker::updateNotesUrlReply(QNetworkReply *reply)
 {
-    //desconnectar el manager
+    // Desconnectar el manager
     disconnect(m_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(updateNotesUrlReply(QNetworkReply*)));
 
     bool result = reply->error() == QNetworkReply::NoError;
-    if (result) // si no error
+    // Si no error
+    if (result)
     {
         if (m_lastVersionChecked != m_checkedVersion)
         {
@@ -537,4 +540,4 @@ void ApplicationVersionChecker::showWhenCheckFinished()
     }
 }
 
-}; // end namespace udg
+}; // End namespace udg

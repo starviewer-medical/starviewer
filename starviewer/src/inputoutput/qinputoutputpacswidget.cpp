@@ -87,7 +87,8 @@ void QInputOutputPacsWidget::createContextMenuQStudyTreeWidget()
     action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/retrieve.png"), tr("&Retrieve"), this, SLOT(retrieveSelectedStudies()), ShortcutManager::getShortcuts(Shortcuts::RetrieveSelectedStudies).first());
     (void) new QShortcut(action->shortcut(), this, SLOT(retrieveSelectedStudies()));
 
-    m_studyTreeWidget->setContextMenu(& m_contextMenuQStudyTreeWidget); //Especifiquem que es el menu del dicomdir
+    // Especifiquem que es el menu del dicomdir
+    m_studyTreeWidget->setContextMenu(& m_contextMenuQStudyTreeWidget);
 }
 
 void QInputOutputPacsWidget::setPacsManager(PacsManager *pacsManager)
@@ -135,9 +136,9 @@ void QInputOutputPacsWidget::cancelCurrentQueriesToPACS()
         m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
     }
 
-    /*Les consultes al PACS poden tarda variis segons a cancel·lar-se, ja que com està documentat hi ha PACS que una vegada un PACS rep l'orde de cancel·lació
-      envien els resultats que havien trobat fins aquell moment i després tanquen la connexió, per fer transparent això a l'usuari, ja que ell no ho notarà en
-      quin moment es cancel·len, ja amaguem el gif indicant que s'ha cancel·lat la consulta, perquè tingui la sensació que s'han cancel·lat immediatament*/
+    // Les consultes al PACS poden tarda variis segons a cancel·lar-se, ja que com està documentat hi ha PACS que una vegada un PACS rep l'orde de cancel·lació
+    // envien els resultats que havien trobat fins aquell moment i després tanquen la connexió, per fer transparent això a l'usuari, ja que ell no ho notarà en
+    // quin moment es cancel·len, ja amaguem el gif indicant que s'ha cancel·lat la consulta, perquè tingui la sensació que s'han cancel·lat immediatament
     setQueryInProgress(false);
 }
 
@@ -334,8 +335,8 @@ void QInputOutputPacsWidget::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacs
             break;
     }
 
-    /*Com que l'objecte és un punter altres classes poden haver capturat el Signal per això li fem un deleteLater() en comptes d'un delete, per evitar
-      que quan responguin al signal es trobin que l'objecte ja no existeix. L'objecte serà destruït per Qt quan es retorni el eventLoop*/
+    // Com que l'objecte és un punter altres classes poden haver capturat el Signal per això li fem un deleteLater() en comptes d'un delete, per evitar
+    // que quan responguin al signal es trobin que l'objecte ja no existeix. L'objecte serà destruït per Qt quan es retorni el eventLoop
     pacsJob->deleteLater();
 }
 
@@ -356,7 +357,8 @@ void QInputOutputPacsWidget::retrieve(QString pacsIDToRetrieve, Study *studyToRe
 
 bool QInputOutputPacsWidget::AreValidQueryParameters(DicomMask *maskToQuery, QList<PacsDevice> pacsToQuery)
 {
-    if (pacsToQuery.isEmpty()) //es comprova que hi hagi pacs seleccionats
+    // Es comprova que hi hagi pacs seleccionats
+    if (pacsToQuery.isEmpty())
     {
         QMessageBox::warning(this, ApplicationNameString, tr("Please select a PACS to query."));
         return false;
@@ -376,7 +378,7 @@ bool QInputOutputPacsWidget::AreValidQueryParameters(DicomMask *maskToQuery, QLi
 
 QString QInputOutputPacsWidget::getPacsIDFromQueriedStudies(QString studyInstanceUID)
 {
-    /*TODO Tenir en compte que podem tenir un studyUID repetit en dos PACS, ara mateix no ho tenim contemplat a la QHash  */
+    // TODO Tenir en compte que podem tenir un studyUID repetit en dos PACS, ara mateix no ho tenim contemplat a la QHash
     if (!m_hashPacsIDOfStudyInstanceUID.contains(studyInstanceUID))
     {
         ERROR_LOG(QString("No s'ha trobat a quin PACS pertany l'estudi %1 a la QHash").arg(studyInstanceUID));

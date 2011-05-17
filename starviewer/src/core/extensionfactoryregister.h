@@ -22,7 +22,7 @@ namespace udg {
 template <class FactoryType>
 class ExtensionFactoryRegister : public GenericSingletonFactoryRegister<QWidget, FactoryType, QString, ExtensionFactory, QWidget> {
 public:
-    ///Mètode
+    /// Mètode
     ExtensionFactoryRegister(const QString &identifier)
         :GenericSingletonFactoryRegister<QWidget, FactoryType, QString, ExtensionFactory, QWidget>(identifier)
     {

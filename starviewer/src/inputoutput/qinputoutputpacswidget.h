@@ -78,9 +78,8 @@ private:
     ///Genera el menú contextual que apareix quan clickem amb el botó dret a sobre d'un item del StudyTreeWidget
     void createContextMenuQStudyTreeWidget();
 
-    /**Comprova que els paràmetres per la cerca siguin correctes, que no es tractir d'un consulta pesada i que ens hagin seleccionat
-     * algun PACS per consultar
-     */
+    /// Comprova que els paràmetres per la cerca siguin correctes, que no es tractir d'un consulta pesada i que ens hagin seleccionat
+    /// algun PACS per consultar
     bool AreValidQueryParameters(DicomMask *maskToQuery, QList<PacsDevice> pacsToQuery);
 
     ///Retorna l'ID del pacs al que pertany l'estudi passat per paràmetre, només té en compte els estudis que s'han consultat a la última query

@@ -156,15 +156,15 @@ public:
     void setFrameNumber(int frameNumber);
     int getFrameNumber() const;
 
-    ///Assignar/Obtenir el número de fase
+    /// Assignar/Obtenir el número de fase
     void setPhaseNumber (int phaseNumber);
     int getPhaseNumber() const;
 
-    ///Assigna/Obtenir el número de volum al qual pertany la imatge dins la sèrie
+    /// Assigna/Obtenir el número de volum al qual pertany la imatge dins la sèrie
     void setVolumeNumberInSeries (int volumeNumberInSeries); 
     int getVolumeNumberInSeries() const;
 
-    ///Assignar/Obtenir el número que ocupa la imatge dins volum
+    /// Assignar/Obtenir el número que ocupa la imatge dins volum
     void setOrderNumberInVolume(int orderNumberInVolume);
     int getOrderNumberInVolume() const;
     
@@ -220,20 +220,20 @@ private:
     /// Orientació de la imatge. Els direction cosines de la primera fila(0,1,2) i de la primera columna(3,4,5) respecte al pacient. Veure C.6.7.2.1.1. (020,0037) Tipus 1. Adicionalment hi guardmem el vector normal del pla (6,7,8)
     double m_imageOrientationPatient[9];
 
-    /// posició de la imatge. Les coordenades x,y,z la cantonada superior esquerre (primer pixel transmés) de la imatge, en mm. Veure C.6.7.2.1.1. (0020,0032) Tipus 1. \TODO aka origen?.
+    /// Posició de la imatge. Les coordenades x,y,z la cantonada superior esquerre (primer pixel transmés) de la imatge, en mm. Veure C.6.7.2.1.1. (0020,0032) Tipus 1. \TODO aka origen?.
     double m_imagePositionPatient[3];
 
-    /// gruix de llesca en mm. (0018,0050) Tipus 2.
+    /// Gruix de llesca en mm. (0018,0050) Tipus 2.
     double m_sliceThickness;
 
     // Image Pixel Module C.6.7.3
     /// Nombre de mostres per pixel en la imatge. Veure C.6.7.3.1.1. (0028,0002) Tipus 1.
     int m_samplesPerPixel;
 
-    /// interpretació fotomètrica (monocrom,color...). Veure C.6.7.3.1.2. (0028,0004) Tipus 1.
+    /// Interpretació fotomètrica (monocrom,color...). Veure C.6.7.3.1.2. (0028,0004) Tipus 1.
     QString m_photometricInterpretation;
 
-    /// files i columnes de la imatge. (0028,0010),(0028,0011) Tipus 1
+    /// Files i columnes de la imatge. (0028,0010),(0028,0011) Tipus 1
     int m_rows;
     int m_columns;
 
@@ -262,7 +262,7 @@ private:
     /// Nombre de frames de la imatge. (0028,0008) Tipus 1
     int m_numberOfFrames;
 
-    //TODO millorar definició
+    // TODO millorar definició
     /** Situació especial de la llesca en mm. (0020,1041)
         SC->tipus 3
         NM->tipus 3
@@ -329,7 +329,7 @@ private:
     /// El path absolut de la imatge
     QString m_path;
 
-    ///Data en que la imatge s'ha descarregat a la base de dades local
+    /// Data en que la imatge s'ha descarregat a la base de dades local
     QDate m_retrievedDate;
     QTime m_retrieveTime;
 

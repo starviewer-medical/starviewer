@@ -74,14 +74,16 @@ private:
     QList<Patient*> m_patientStudyList;
     QList<Series*> m_seriesList;
     QList<Image*> m_imageList;
-    /*TODO m_hashPacsIDOfStudyInstanceUID ara mateix no té gaire sentit perquè per defecte se li posa la ID del PACS el que fem la
-      cerca, però podem tenir el cas que les consultes es facin a un PACS i que aquest ens indiqui que l'estudi es troba guardat en
-      un altre PACS, tenir en compte per aquest cas que passa si tenim dos PACS amb el mateix nom
-     */
-    QHash<QString, QString> m_hashPacsIDOfStudyInstanceUID; //Fa un relació d'StudyInstanceUID amb el pacs al qual pertany
+    // TODO m_hashPacsIDOfStudyInstanceUID ara mateix no té gaire sentit perquè per defecte se li posa la ID del PACS el que fem la
+    // cerca, però podem tenir el cas que les consultes es facin a un PACS i que aquest ens indiqui que l'estudi es troba guardat en
+    // un altre PACS, tenir en compte per aquest cas que passa si tenim dos PACS amb el mateix nom
+    /// Fa un relació d'StudyInstanceUID amb el pacs al qual pertany
+    QHash<QString, QString> m_hashPacsIDOfStudyInstanceUID;
 
-    bool m_cancelQuery;//flag que indica si s'ha de cancel·lar la query actual
-    bool m_cancelRequestSent;//indica si hem demanat la cancel·lació de la consulta actual
+    // Flag que indica si s'ha de cancel·lar la query actual
+    bool m_cancelQuery;
+    // Indica si hem demanat la cancel·lació de la consulta actual
+    bool m_cancelRequestSent;
 };
 };
 #endif

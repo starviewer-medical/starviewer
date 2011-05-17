@@ -5,7 +5,7 @@
 #include "drawerpolygon.h"
 #include "drawerpolyline.h"
 
-// vtk
+// Vtk
 #include <vtkRenderWindowInteractor.h>
 #include <vtkCommand.h>
 
@@ -69,11 +69,12 @@ void PolylineROITool::handlePointAddition()
     {
         switch (m_2DViewer->getInteractor()->GetRepeatCount())
         {
-            case 0: // Single-click o primer click d'un doble click. Afegim un nou punt a la ROI
+            // Single-click o primer click d'un doble click. Afegim un nou punt a la ROI
+            case 0:
                 annotateNewPoint();
                 break;
-
-            case 1: // Doble-click, si tenim més de 2 punts, llavors tanquem la ROI
+            // Doble-click, si tenim més de 2 punts, llavors tanquem la ROI
+            case 1:
                 if (m_mainPolyline->getNumberOfPoints() > 2)
                 {
                     closeForm();
@@ -100,11 +101,13 @@ void PolylineROITool::annotateNewPoint()
     // Afegim el punt de la nova polilínia
     m_mainPolyline->addPoint(pickedPoint);
 
-    if (firstPoint) // L'afegim a l'escena
+    // L'afegim a l'escena
+    if (firstPoint)
     {
         m_2DViewer->getDrawer()->draw(m_mainPolyline, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
     }
-    else // Actualitzem l'estructura interna
+    // Actualitzem l'estructura interna
+    else
     {
         m_mainPolyline->update();
     }

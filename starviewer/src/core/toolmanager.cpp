@@ -2,7 +2,8 @@
 #include "toolregistry.h"
 #include "tooldata.h"
 #include "toolproxy.h"
-#include "toolconfiguration.h" // Pel delete
+// Pel delete
+#include "toolconfiguration.h"
 #include "tool.h"
 #include "qviewer.h"
 #include "logging.h"
@@ -18,7 +19,7 @@ ToolManager::ToolManager(QObject *parent)
  : QObject(parent)
 {
     // TODO De moment ToolRegistry és una classe normal, però si es passa a singleton
-    // el "new" s'haurà de canviar per un ::instance()
+    // El "new" s'haurà de canviar per un ::instance()
     m_toolRegistry = new ToolRegistry(this);
     m_toolsActionSignalMapper = new QSignalMapper(this);
     connect(m_toolsActionSignalMapper, SIGNAL(mapped(const QString &)), SLOT(triggeredToolAction(const QString &)));
@@ -39,7 +40,8 @@ void ToolManager::setViewerTools(QViewer *viewer, const QStringList &toolsList)
     {
         m_toolViewerMap.insert(toolName, pair);
     }
-    refreshConnections(); //TODO Xapussilla, s'hauria de fer amb tractament més bo intern, amb llistes de tools actives
+    // TODO Xapussilla, s'hauria de fer amb tractament més bo intern, amb llistes de tools actives
+    refreshConnections();
 }
 
 void ToolManager::setupRegisteredTools(QViewer *viewer)
@@ -55,7 +57,8 @@ void ToolManager::setViewerTool(QViewer *viewer, const QString &toolName, ToolCo
     pair.first = viewer;
     pair.second = configuration;
     m_toolViewerMap.insert(toolName, pair);
-    refreshConnections(); //TODO Xapussilla, s'hauria de fer amb tractament més bo intern, amb llistes de tools actives
+    // TODO Xapussilla, s'hauria de fer amb tractament més bo intern, amb llistes de tools actives
+    refreshConnections();
 }
 
 void ToolManager::removeViewerTool(QViewer *viewer, const QString &toolName)
@@ -76,12 +79,13 @@ void ToolManager::removeViewerTool(QViewer *viewer, const QString &toolName)
                 // Això vol dir que per un nom de tool, nomé spodem tenir un parell viewer-config
                 // del contrari, ens hauríem de "patejar" tot el map sencer per si tenim la mateixa tool,
                 // pel mateix viewer i amb una configuració diferent
-                if (pair.second) // Eliminem la configuració
+                if (pair.second)
                 {
+                    // Eliminem la configuració
                     delete pair.second;
                 }
-
-                mapIterator.remove(); // Eliminem l'element del mapa
+                // Eliminem l'element del mapa
+                mapIterator.remove();
             }
         }
     }
@@ -130,7 +134,8 @@ QAction* ToolManager::registerActionTool(const QString &actionToolName)
         pair = m_toolRegistry->getActionToolPair(actionToolName);
         m_actionToolRegistry.insert(actionToolName, pair);
     }
-    else // Sinó, l'agafem del nostre map i no tornem a crear l'acció
+    // Sinó, l'agafem del nostre map i no tornem a crear l'acció
+    else
     {
         pair = m_actionToolRegistry.value(actionToolName);
     }
@@ -220,7 +225,8 @@ void ToolManager::activateTool(const QString &toolName)
             // Com que el proxy no té aquesta tool
             // la produim i la posem a punt amb les dades i la configuració
             tool = m_toolRegistry->getTool(toolName, viewer);
-            if (configuration) // Si no tenim cap configuració guardada, no cal fer res, es queda amb la que té per defecte
+            // Si no tenim cap configuració guardada, no cal fer res, es queda amb la que té per defecte
+            if (configuration)
             {
                 tool->setConfiguration(configuration);
             }
@@ -229,14 +235,16 @@ void ToolManager::activateTool(const QString &toolName)
             // Comprovem les dades per si cal donar-n'hi
             if (tool->hasSharedData())
             {
-                if (!data) // No hi són al repositori, les obtindrem de la pròpia tool i les registrarem al repositori
+                // No hi són al repositori, les obtindrem de la pròpia tool i les registrarem al repositori
+                if (!data)
                 {
                     data = tool->getToolData();
                     m_sharedToolDataRepository[toolName] = data;
                 }
                 else
                 {
-                    tool->setToolData(data); // Si ja les hem creat abans, li assignem les de la primera tool creada
+                    // Si ja les hem creat abans, li assignem les de la primera tool creada
+                    tool->setToolData(data);
                 }
             }
         }
@@ -336,7 +344,8 @@ void ToolManager::unregisterViewer(QObject *viewer)
         ViewerToolConfigurationPairType pair = mapIterator.value();
         if (pair.first == viewer)
         {
-            mapIterator.remove(); // Eliminem l'element del map
+            // Eliminem l'element del map
+            mapIterator.remove();
         }
     }
 }

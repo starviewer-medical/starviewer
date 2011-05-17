@@ -107,12 +107,14 @@ T TransferFunctionTemplate<T>::get(double x) const
 
     typename QMap<double, T>::const_iterator lowerBound = m_map.lowerBound(x);
 
-    if (lowerBound == m_map.end())  // > últim
+    // > últim
+    if (lowerBound == m_map.end())
     {
         return (--lowerBound).value();
     }
 
-    if (lowerBound.key() == x || lowerBound == m_map.begin())   // exacte o < primer
+    // Exacte o < primer
+    if (lowerBound.key() == x || lowerBound == m_map.begin())
     {
         return lowerBound.value();
     }
@@ -126,7 +128,8 @@ T TransferFunctionTemplate<T>::get(double x) const
 template <typename T>
 void TransferFunctionTemplate<T>::set(double x, const T &y)
 {
-    //Q_ASSERT(!MathTools::isNaN(x));   // problema amb QTransferFunctionEditorByGradient
+    // Problema amb QTransferFunctionEditorByGradient
+    // Q_ASSERT(!MathTools::isNaN(x));
     m_map[x] = y;
 }
 
@@ -211,7 +214,8 @@ void TransferFunctionTemplate<T>::simplify()
     {
         if (m_map.size() == 1)
         {
-            break;   // cas especial: si només queda un punt no l'hem de treure
+            // Cas especial: si només queda un punt no l'hem de treure
+            break;
         }
         T y = get(x);
         unset(x);
@@ -234,6 +238,6 @@ T TransferFunctionTemplate<T>::linearInterpolation(const T &a, const T &b, doubl
     return a + alpha * (b - a);
 }
 
-} // namespace udg
+} // End namespace udg
 
 #endif // TRANSFERFUNCTIONTEMPLATE_H

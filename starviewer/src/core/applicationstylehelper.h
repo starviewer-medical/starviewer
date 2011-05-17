@@ -44,6 +44,6 @@ private:
     static double m_scaleFactor;
 };
 
-} // Ens namespace udg
+} // End namespace udg
 
 #endif // UDGAPPLICATIONSTYLEHELPER_H

@@ -23,7 +23,7 @@ public:
     {
         m_average += input / m_size;
     }
-    /// \todo si T és float o double no s'hauria de fer el round
+    /// \TODO si T és float o double no s'hauria de fer el round
     inline virtual T getValue() const
     {
         return static_cast<T>(qRound(m_average));

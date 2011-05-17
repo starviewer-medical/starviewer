@@ -18,7 +18,8 @@ public:
     ~QThickSlabWidget();
 
     void setSlabThickness(int thickness);
-    void setProjectionMode(int mode); // TODO int o QString?
+    // TODO int o QString?
+    void setProjectionMode(int mode);
 
     /**
      * Enllacem aquest controlador amb un Q2DViewer. De moment només està previst que
@@ -34,7 +35,8 @@ public:
 
 signals:
     void thicknessChanged(int thickness);
-    void projectionModeChanged(int mode); // TODO enviar int o QString?
+    // TODO enviar int o QString?
+    void projectionModeChanged(int mode);
 
 protected slots:
     /**
@@ -61,7 +63,7 @@ protected slots:
      */
     void reset();
 
-    ///aplica el thick slab segons el valor de l'slider.
+    /// Aplica el thick slab segons el valor de l'slider.
     void applyThickSlab();
 
     /// Mètodes per controlar les connexions de l'slider amb l'actualització de l'slab

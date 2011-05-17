@@ -174,7 +174,8 @@ bool Study::setTime(QString time)
     QStringList split = time.split(".");
     QTime convertedTime = QTime::fromString(split[0], "hhmmss");
 
-    if (split.size() == 2) //té fracció al final
+    // Té fracció al final
+    if (split.size() == 2)
     {
         // Trunquem a milisegons i no a milionèssimes de segons
         convertedTime = convertedTime.addMSecs(split[1].leftJustified(3, '0', true).toInt());

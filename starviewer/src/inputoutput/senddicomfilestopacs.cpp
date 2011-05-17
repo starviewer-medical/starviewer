@@ -78,16 +78,14 @@ void SendDICOMFilesToPACS::initialitzeDICOMFilesCounters(int numberOfDICOMFilesT
     m_numberOfDICOMFilesToSend = numberOfDICOMFilesToSend;
 }
 
-/*
- * This function will read all the information from the given file,
- * figure out a corresponding presentation context which will be used
- * to transmit the information over the network to the SCP, and it
- * will finally initiate the transmission of all data to the SCP.
- *
- * Parameters:
- *   association - [in] The associationiation (network connection to another DICOM application).
- *   filepathToStore - [in] Name of the file which shall be processed.
- */
+// This function will read all the information from the given file,
+// figure out a corresponding presentation context which will be used
+// to transmit the information over the network to the SCP, and it
+// will finally initiate the transmission of all data to the SCP.
+//
+// Parameters:
+//   association - [in] The associationiation (network connection to another DICOM application).
+//   filepathToStore - [in] Name of the file which shall be processed.
 bool SendDICOMFilesToPACS::storeSCU(T_ASC_Association *association, QString filepathToStore)
 {
     DIC_US msgId = association->nextMsgID++;
@@ -101,20 +99,20 @@ bool SendDICOMFilesToPACS::storeSCU(T_ASC_Association *association, QString file
 
     m_lastOFCondition = dcmff.loadFile(qPrintable(QDir::toNativeSeparators(filepathToStore)));
 
-    /* figure out if an error occured while the file was read*/
+    // figure out if an error occured while the file was read
     if (m_lastOFCondition.bad())
     {
         ERROR_LOG("No s'ha pogut obrir el fitxer " + filepathToStore);
         return false;
     }
-    /* figure out which SOP class and SOP instance is encapsulated in the file */
+    // figure out which SOP class and SOP instance is encapsulated in the file
     if (!DU_findSOPClassAndInstanceInDataSet(dcmff.getDataset(), sopClass, sopInstance, OFFalse))
     {
         ERROR_LOG("No s'ha pogut obtenir el SOPClass i SOPInstance del fitxer " + filepathToStore);
         return false;
     }
 
-    /* figure out which of the accepted presentation contexts should be used */
+    // figure out which of the accepted presentation contexts should be used
     DcmXfer filexfer(dcmff.getDataset()->getOriginalXfer());
 
     //Busquem dels presentationContextID que hem establert al connectar quin és el que hem d'utilitzar per transferir aquesta imatge
@@ -149,7 +147,7 @@ bool SendDICOMFilesToPACS::storeSCU(T_ASC_Association *association, QString file
     }
     else
     {
-        /* prepare the transmission of data */
+        // prepare the transmission of data
         bzero((char*)&request, sizeof(request));
         request.MessageID = msgId;
         strcpy(request.AffectedSOPClassUID, sopClass);
@@ -179,15 +177,16 @@ bool SendDICOMFilesToPACS::storeSCU(T_ASC_Association *association, QString file
 
 void SendDICOMFilesToPACS::processResponseFromStoreSCP(T_DIMSE_C_StoreRSP *response, DcmDataset *statusDetail, QString filePathDicomObjectStoredFailed)
 {
-    QList<DcmTagKey> relatedFieldsList;// Llista de camps relacionats amb l'error que poden contenir informació adicional
+    // Llista de camps relacionats amb l'error que poden contenir informació adicional
+    QList<DcmTagKey> relatedFieldsList;
     QString messageErrorLog = "No s'ha pogut enviar el fitxer " + filePathDicomObjectStoredFailed + ", descripció error rebuda";
 
     // A la secció B.2.3, taula B.2-1 podem trobar un descripció dels errors.
     // Per a detalls sobre els "related fields" consultar PS 3.7, Annex C - Status Type Enconding
 
-    /*Tenir en compte també que el significat dels Status és diferent que els de MoveScu.
-            - Failure la imatgen o s'ha pogut pujar
-            - Warning la imatge s'ha pujat, però no condorcada la SOPClass, s'ha fet coerció d'algunes dades...*/
+    // Tenir en compte també que el significat dels Status és diferent que els de MoveScu.
+    //      - Failure la imatgen o s'ha pogut pujar
+    //      - Warning la imatge s'ha pujat, però no condorcada la SOPClass, s'ha fet coerció d'algunes dades...
 
     if (response->DimseStatus == STATUS_Success)
     {
@@ -198,27 +197,34 @@ void SendDICOMFilesToPACS::processResponseFromStoreSCP(T_DIMSE_C_StoreRSP *respo
 
     switch (response->DimseStatus)
     {
-        case STATUS_STORE_Refused_OutOfResources: // 0xA7XX
+        case STATUS_STORE_Refused_OutOfResources:
+            // 0xA7XX
             // Refused: Out of Resources
             // Related Fields DCM_ErrorComment (0000,0902)
             relatedFieldsList << DCM_ErrorComment;
 
             ERROR_LOG(messageErrorLog + QString(DU_cstoreStatusString(response->DimseStatus)));
             break;
-        case STATUS_STORE_Refused_SOPClassNotSupported: //0x0122
-        case STATUS_STORE_Error_DataSetDoesNotMatchSOPClass: //0xA9XX
-        case STATUS_STORE_Error_CannotUnderstand: //0xCXXX
+        case STATUS_STORE_Refused_SOPClassNotSupported:
+            // 0x0122
+        case STATUS_STORE_Error_DataSetDoesNotMatchSOPClass:
+            // 0xA9XX
+        case STATUS_STORE_Error_CannotUnderstand:
+            // 0xCXXX
             //Error: Sop Class Not Supported or Data Set Doest Not Match SOP Class or Can not Understant
             // Related fields DCM_OffendingElement (0000,0901) DCM_ErrorComment (0000,0902)
             relatedFieldsList << DCM_OffendingElement << DCM_ErrorComment;
 
             ERROR_LOG(messageErrorLog + QString(DU_cstoreStatusString(response->DimseStatus)));
             break;
-        /*coersió entre tipus, s'ha convertit un tipus a un altre tipus i es pot haver perdut dades, per exemple passar de decimal a enter, tot i així
-          els fitxers s'han enviat i guardat*/
-        case STATUS_STORE_Warning_CoersionOfDataElements: // 0xB000
-        case STATUS_STORE_Warning_DataSetDoesNotMatchSOPClass: //0xB007
-        case STATUS_STORE_Warning_ElementsDiscarded: //0xB006
+        // coersió entre tipus, s'ha convertit un tipus a un altre tipus i es pot haver perdut dades, per exemple passar de decimal a enter, tot i així
+        // els fitxers s'han enviat i guardat
+        case STATUS_STORE_Warning_CoersionOfDataElements:
+            // 0xB000
+        case STATUS_STORE_Warning_DataSetDoesNotMatchSOPClass:
+            // 0xB007
+        case STATUS_STORE_Warning_ElementsDiscarded:
+            // 0xB006
             // Warning: Coersion Of Data Elements, Data set Dos Not Match SOP Class or Elements Discarded
             // Related fields DCM_OffendingElement (0000,0901) DCM_ErrorComment (0000,0902)
             relatedFieldsList << DCM_OffendingElement << DCM_ErrorComment;
@@ -252,10 +258,10 @@ void SendDICOMFilesToPACS::processResponseFromStoreSCP(T_DIMSE_C_StoreRSP *respo
 
 PACSRequestStatus::SendRequestStatus SendDICOMFilesToPACS::getStatusStoreSCU()
 {
-    /*El tractament d'erros d'StoreSCU és diferent del moveSCU, en moveSCU rebem un status final indicant com ha anat l'operació, mentre que
-      en storeSCU per cada imatge que s'envia és rep un status, com podem tenir al enviar un estudi, status failure, warning, ..., cap a l'usuari
-      només enviarem un error i mostrarem el més crític, per exemple si tenim 5 errors Warning i un de Failure, enviarem error indica que l'enviament
-      d'algunes imatges ha fallat. */
+    // El tractament d'erros d'StoreSCU és diferent del moveSCU, en moveSCU rebem un status final indicant com ha anat l'operació, mentre que
+    // en storeSCU per cada imatge que s'envia és rep un status, com podem tenir al enviar un estudi, status failure, warning, ..., cap a l'usuari
+    // només enviarem un error i mostrarem el més crític, per exemple si tenim 5 errors Warning i un de Failure, enviarem error indica que l'enviament
+    // d'algunes imatges ha fallat.
 
     if (m_abortIsRequested)
     {

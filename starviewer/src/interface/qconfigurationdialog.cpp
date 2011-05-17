@@ -18,7 +18,8 @@ QConfigurationDialog::QConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
     setWindowTitle(tr("%1 Configuration").arg(ApplicationNameString));
     setWindowFlags((this->windowFlags() | Qt::WindowMaximizeButtonHint) ^ Qt::WindowContextHelpButtonHint);
 
-#ifndef STARVIEWER_LITE // no mostrem configuració del PACS
+#ifndef STARVIEWER_LITE
+    // No mostrem configuració del PACS
     QConfigurationScreen *pacsConfigurationScreen = new QConfigurationScreen(this);
     this->addConfigurationWidget(pacsConfigurationScreen, tr("PACS"), AdvancedConfiguration);
     connect(pacsConfigurationScreen, SIGNAL(configurationChanged(const QString &)), this, SIGNAL(configurationChanged(const QString &)));
@@ -31,7 +32,8 @@ QConfigurationDialog::QConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
     connect(localDatabaseScreen, SIGNAL(configurationChanged(const QString &)), this, SIGNAL(configurationChanged(const QString &)));
     connect(m_okButton, SIGNAL(clicked()), localDatabaseScreen, SLOT(applyChanges()));
 
-#ifndef STARVIEWER_LITE // no mostrem configuració del servei que escolta les peticions del RIS
+#ifndef STARVIEWER_LITE
+    // No mostrem configuració del servei que escolta les peticions del RIS
     QListenRisRequestsConfigurationScreen *qListenRisRequestsConfigurationScreen = new QListenRisRequestsConfigurationScreen(this);
     this->addConfigurationWidget(qListenRisRequestsConfigurationScreen, tr("RIS Listener"), AdvancedConfiguration);
     connect(qListenRisRequestsConfigurationScreen, SIGNAL(configurationChanged(const QString &)), this, SIGNAL(configurationChanged(const QString &)));

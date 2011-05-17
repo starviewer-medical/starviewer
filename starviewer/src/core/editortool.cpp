@@ -4,7 +4,7 @@
 #include "q2dviewer.h"
 #include "volume.h"
 
-//vtk
+// Vtk
 #include <vtkCommand.h>
 #include <vtkPoints.h>
 #include <vtkUnstructuredGrid.h>
@@ -27,7 +27,7 @@ EditorTool::EditorTool(QViewer *viewer, QObject *parent)
     m_myData = new EditorToolData;
 
     m_2DViewer = qobject_cast<Q2DViewer*>(viewer);
-    // ens assegurem que desde la creació tenim un viewer vàlid
+    // Ens assegurem que desde la creació tenim un viewer vàlid
     Q_ASSERT(m_2DViewer);
 
     m_2DViewer->setCursor(QCursor(QPixmap(":/images/pencilcursor.png")));
@@ -58,7 +58,7 @@ void EditorTool::initialize()
         }
         else
         {
-            //en cas que siguin iguals
+            // En cas que siguin iguals
             m_insideValue = (int)(range[0] + m_2DViewer->getCurrentColorWindow());
         }
         int ext[6];
@@ -123,11 +123,13 @@ void EditorTool::handleEvent(unsigned long eventID)
         // '-' = key code 45
         switch (key)
         {
-        case 43: // '+'
+        // '+'
+        case 43:
             this->increaseEditorSize();
         break;
 
-        case 45: // '-'
+        // '-'
+        case 45:
             this->decreaseEditorSize();
         break;
         }
@@ -357,7 +359,7 @@ void EditorTool::eraseMask()
 
 void EditorTool::paintMask()
 {
-    //DEBUG_LOG(QString("Màxim = %1 // Mínim = %2").arg(m_outsideValue).arg(m_insideValue));
+    // DEBUG_LOG(QString("Màxim = %1 // Mínim = %2").arg(m_outsideValue).arg(m_insideValue));
     int i, j;
     Volume::VoxelType *value;
     double pos[3];

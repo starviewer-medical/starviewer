@@ -23,10 +23,12 @@ void ApplyHangingProtocolQViewerCommand::execute()
 
     this->applyDisplayTransformations(m_viewerWidget->getViewer(), m_displaySet);
 
-    if (!m_displaySet->getToolActivation().isEmpty()) // Tenim tools activades per defecte des del hanging protocol
+    if (!m_displaySet->getToolActivation().isEmpty())
     {
-        if (m_displaySet->getToolActivation() == "synchronization") // S'activa la tool de sincronització
+        // Tenim tools activades per defecte des del hanging protocol
+        if (m_displaySet->getToolActivation() == "synchronization")
         {
+            // S'activa la tool de sincronització
             m_viewerWidget->enableSynchronization(true);
         }
     }

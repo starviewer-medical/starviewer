@@ -31,15 +31,15 @@ int DicomPrint::print(DicomPrinter printer, DicomPrintJob printJob)
 
     if (getLastError() == Ok)
     {
-        /*Workaround per poder imprimir més d'una còpia d'un printjob. Degut a que ara no podem imprimir més d'una pàgina per connexió amb la impressora, per la
-          limitació de les classes utilitzades de dcmtk que només ens deixen associar un filmBox per filmeSsion, provoca que en el cas que d'un printjob en volem
-          fer més d'una còpia, per exemple amb un tenim un DicomPrintJob amb dos pàgines del qual en volem 3 còpies, primer s'imprimirà 3 vegades la primera pàgina
-          i després sortirà 3 vegades la segona pàgina, per evitar que sortin ordenades així fem aquest workaround, en el qual es repeteix el procés d'enviar cada
-          printjob tantes còpies com ens n'hagin sol·licitat, d'aquesta manera les pàgines sortiran correctament ordenades.
-          */
+        // Workaround per poder imprimir més d'una còpia d'un printjob. Degut a que ara no podem imprimir més d'una pàgina per connexió amb la impressora, per la
+        // limitació de les classes utilitzades de dcmtk que només ens deixen associar un filmBox per filmeSsion, provoca que en el cas que d'un printjob en volem
+        // fer més d'una còpia, per exemple amb un tenim un DicomPrintJob amb dos pàgines del qual en volem 3 còpies, primer s'imprimirà 3 vegades la primera pàgina
+        // i després sortirà 3 vegades la segona pàgina, per evitar que sortin ordenades així fem aquest workaround, en el qual es repeteix el procés d'enviar cada
+        // printjob tantes còpies com ens n'hagin sol·licitat, d'aquesta manera les pàgines sortiran correctament ordenades.
 
         numberOfCopies = printJob.getNumberOfCopies();
-        printJob.setNumberOfCopies(1);//Indiquem que només en volem una còpia
+        // Indiquem que només en volem una còpia
+        printJob.setNumberOfCopies(1);
 
         while (indexNumberOfCopies < numberOfCopies)
         {
@@ -87,8 +87,8 @@ bool DicomPrint::echoPrinter(DicomPrinter printer)
     bool resultTest = false;
     EchoToPACS echoToPACS;
 
-    /*HACK el codi de fer echoSCU espera que li passem un PACS, per això transformem l'objecte printer a PACS per poder fer l'echo i utilitzem
-      les classes de PACS */
+    // HACK el codi de fer echoSCU espera que li passem un PACS, per això transformem l'objecte printer a PACS per poder fer l'echo i utilitzem
+    // les classes de PACS
     pacs.setAETitle(printer.getAETitle());
     pacs.setQueryRetrieveServicePort(printer.getPort());
     pacs.setAddress(printer.getHostname());

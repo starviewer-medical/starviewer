@@ -80,9 +80,8 @@ private:
     void mergeStudyWithReceivedResults(Study *study, QString pacsID);
 
     /// Ens indica si aquell estudi està a la llista d'estudis ja rebuts de previs, per evitar duplicats
-    /* Hem de tenir en compte que com fem la cerca per ID i un altre per Patient Name per obtenir més resultats
-    * potser que en les dos consultes ens retornin el mateix estudi, per tant hem d'evitar duplicats.
-    */
+    /// Hem de tenir en compte que com fem la cerca per ID i un altre per Patient Name per obtenir més resultats
+    /// potser que en les dos consultes ens retornin el mateix estudi, per tant hem d'evitar duplicats.
     bool isStudyInMergedStudyList(Study *study);
 
     /// Ens indica si aquest estudi és el mateix pel qual ens han demanat els previs, per evitar incloure'l a la llista
@@ -122,9 +121,9 @@ private:
     QList<Study*> m_mergedStudyList;
     QHash<QString, QString> m_mergedHashPacsIDOfStudyInstanceUID;
     QString m_studyInstanceUIDToFindPrevious;
-    /*Com fem una consulta dos consultes al mateix PACS si falla una segurament també fallarà la segona per això
-    *en aquesta llista registrarem l'ID dels Pacs pel quals hem emés el signal d'error i si rebem un segon error
-    *com ja el tindrem aquesta llista ja no en farem signal*/
+    /// Com fem una consulta dos consultes al mateix PACS si falla una segurament també fallarà la segona per això
+    /// en aquesta llista registrarem l'ID dels Pacs pel quals hem emés el signal d'error i si rebem un segon error
+    /// com ja el tindrem aquesta llista ja no en farem signal
     QStringList m_pacsDeviceIDErrorEmited;
     ///Hash que ens guarda tots els QueryPACSJob pendent d'executar o que s'estan executant llançats des d'aquesta classe
     QHash<int, QueryPacsJob*> m_queryPACSJobPendingExecuteOrExecuting;

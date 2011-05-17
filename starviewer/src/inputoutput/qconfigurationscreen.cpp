@@ -20,7 +20,8 @@ QConfigurationScreen::QConfigurationScreen(QWidget *parent) : QWidget(parent)
 {
     setupUi(this);
 
-    fillPacsListView(); //emplena el listview amb les dades dels pacs, que tenim configurats
+    // Emplena el listview amb les dades dels pacs, que tenim configurats
+    fillPacsListView();
     loadPacsDefaults();
     loadInstitutionInformation();
     m_buttonApplyPacs->setEnabled(false);
@@ -33,8 +34,10 @@ QConfigurationScreen::QConfigurationScreen(QWidget *parent) : QWidget(parent)
 
     Settings().restoreColumnsWidths(InputOutputSettings::ConfigurationScreenPACSList, m_PacsTreeView);
 
-    m_PacsTreeView->setColumnHidden(0, true); // amaguem la columna amb l'ID del PACS que és irrellevant per l'usuari
-    m_PacsTreeView->sortByColumn(1, Qt::AscendingOrder);//Ordenem per AETitle
+    // Amaguem la columna amb l'ID del PACS que és irrellevant per l'usuari
+    m_PacsTreeView->setColumnHidden(0, true);
+    // Ordenem per AETitle
+    m_PacsTreeView->sortByColumn(1, Qt::AscendingOrder);
 
     checkIncomingConnectionsPortNotInUse();
 }
@@ -153,7 +156,8 @@ void QConfigurationScreen::updateSelectedPACSInformation()
         // només en podem tenir un de seleccionat
         selectedItem = m_PacsTreeView->selectedItems().first();
         // TODO en comptes d'obtenir del manager, potser es podria obtenir la informació directament del tree widget i estalviar aquest pas de "query"
-        PacsDevice selectedPacs = PacsDeviceManager().getPACSDeviceByID(selectedItem->text(0));// selectedItem->text(0) --> ID del pacs seleccionat al TreeWidget
+        // selectedItem->text(0) --> ID del pacs seleccionat al TreeWidget
+        PacsDevice selectedPacs = PacsDeviceManager().getPACSDeviceByID(selectedItem->text(0));
         if (selectedPacs.isEmpty())
         {
             ERROR_LOG("No s'ha trobat cap PACS configurat amb l'ID: " + selectedItem->text(0));
@@ -475,14 +479,16 @@ bool QConfigurationScreen::isIncomingConnectionsPortInUseByAnotherApplication()
 
 void QConfigurationScreen::checkIncomingConnectionsPortNotInUse()
 {
-    m_warningFrameIncomingConnectionsPortInUse->setVisible(isIncomingConnectionsPortInUseByAnotherApplication()); ///Si està en ús el frame que conté el warning es fa visible
+    // Si està en ús el frame que conté el warning es fa visible
+    m_warningFrameIncomingConnectionsPortInUse->setVisible(isIncomingConnectionsPortInUseByAnotherApplication());
 }
 
 void QConfigurationScreen::queryRetrieveServiceEnabledChanged()
 {
     m_textQueryRetrieveServicePort->setEnabled(m_checkBoxQueryRetrieveEnabled->isChecked());
     m_textQueryRetrieveServicePort->setText("");
-    m_checkDefault->setEnabled(m_checkBoxQueryRetrieveEnabled->isChecked());//"Default query PACS" no té sentit que estigui activat si no es pot fer query en el PACS
+    // "Default query PACS" no té sentit que estigui activat si no es pot fer query en el PACS
+    m_checkDefault->setEnabled(m_checkBoxQueryRetrieveEnabled->isChecked());
 
     if (!m_checkBoxQueryRetrieveEnabled->isChecked())
     {
@@ -493,8 +499,8 @@ void QConfigurationScreen::queryRetrieveServiceEnabledChanged()
 void QConfigurationScreen::storeServiceEnabledChanged()
 {
     m_textStoreServicePort->setEnabled(m_checkBoxStoreEnabled->isChecked());
-    /*Si ens indiquen que el servei d'Store està permés li donem el mateix port que del Query/Retrieve, ja que la majoria de
-      PACS utilitzen el mateix port per Q/R que per store*/
+    // Si ens indiquen que el servei d'Store està permés li donem el mateix port que del Query/Retrieve, ja que la majoria de
+    // PACS utilitzen el mateix port per Q/R que per store
     m_textStoreServicePort->setText(m_checkBoxStoreEnabled->isChecked() ? m_textQueryRetrieveServicePort->text() : "");
 }
 

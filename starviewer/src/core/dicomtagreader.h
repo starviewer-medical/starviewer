@@ -26,8 +26,8 @@ class DICOMValueAttribute;
 */
 class DICOMTagReader {
 public:
-    ///Aquest enum indica si hem de retornar el valor per tots els tags quan ens els requereixen, o si pels Tags "Pesats" (PixelData, OverlayData)
-    ///hem de retornar-los sense sel seu valor, estalviant-nos de llegir i carregar-los en memòria
+    /// Aquest enum indica si hem de retornar el valor per tots els tags quan ens els requereixen, o si pels Tags "Pesats" (PixelData, OverlayData)
+    /// hem de retornar-los sense sel seu valor, estalviant-nos de llegir i carregar-los en memòria
     enum ReturnValueOfTags { AllTags, ExcludeHeavyTags };
 
     DICOMTagReader();
@@ -85,13 +85,13 @@ private:
     /// Converteix una seqüència de DCMTK a una seqüència pròpia.
     DICOMSequenceAttribute* convertToDICOMSequenceAttribute(DcmSequenceOfItems *dcmtkSequence, DICOMTagReader::ReturnValueOfTags returnValueOfTags) const;
 
-    ///Converteix un element de de DCMTK a un DICOMValueAttribute propi. Si no s'ha pogut convertir l'element es retorna valor NULL
+    /// Converteix un element de de DCMTK a un DICOMValueAttribute propi. Si no s'ha pogut convertir l'element es retorna valor NULL
     DICOMValueAttribute* convertToDICOMValueAttribute(DcmElement *dcmtkDICOMElement, DICOMTagReader::ReturnValueOfTags returnValueOfTags) const;
 
-    ///Converteix un objecte DcmItem de dcmtk a una llista de DICOMAttribute
+    /// Converteix un objecte DcmItem de dcmtk a una llista de DICOMAttribute
     QList<DICOMAttribute*> convertToDICOMAttributeQList(DcmItem *dcmItem, DICOMTagReader::ReturnValueOfTags returnValueOfTags) const;
 
-    ///Esborra les dades de la últim fitxer carregat. Si no teníem cap fitxer carregat no fa res.
+    /// Esborra les dades de la últim fitxer carregat. Si no teníem cap fitxer carregat no fa res.
     void deleteDataLastLoadedFile();
 
 private:

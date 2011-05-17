@@ -19,11 +19,11 @@ public:
     ~QCustomWindowLevelDialog();
 
 public slots:
-    /// dóna el window level que mostrarà per defecte quan s'obri
+    /// Dóna el window level que mostrarà per defecte quan s'obri
     void setDefaultWindowLevel(double window, double level);
 
 signals:
-    /// envia la senyal del window level escollit
+    /// Envia la senyal del window level escollit
     void windowLevel(double window, double level);
 
 private:

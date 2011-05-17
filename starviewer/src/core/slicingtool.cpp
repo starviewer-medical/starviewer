@@ -4,7 +4,7 @@
 #include "volume.h"
 #include "statswatcher.h"
 
-//vtk
+// Vtk
 #include <vtkCommand.h>
 #include <vtkRenderWindowInteractor.h>
 
@@ -20,17 +20,17 @@ SlicingTool::SlicingTool(QViewer *viewer, QObject *parent)
     m_currentPosition[0] = 0;
     m_currentPosition[1] = 0;
     m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
-    // ens assegurem que desde la creació tenim un viewer vàlid
+    // Ens assegurem que desde la creació tenim un viewer vàlid
     Q_ASSERT(m_2DViewer);
 
-    // cada cop que canvïi l'input cal fer algunes inicialitzacions
+    // Cada cop que canvïi l'input cal fer algunes inicialitzacions
     connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(inputChanged(Volume*)));
     inputChanged(m_2DViewer->getInput());
 }
 
 SlicingTool::~SlicingTool()
 {
-    // estadístiques
+    // Estadístiques
     if (!m_wheelSteps.isEmpty())
     {
         StatsWatcher::log("Slicing Tool: Wheel Record: " + m_wheelSteps);
@@ -50,7 +50,7 @@ void SlicingTool::handleEvent(unsigned long eventID)
     case vtkCommand::LeftButtonPressEvent:
         m_mouseMovement = false;
         this->startSlicing();
-        // estadístiques
+        // Estadístiques
         if (!m_wheelSteps.isEmpty())
         {
             StatsWatcher::log("Slicing Tool: Wheel Record: " + m_wheelSteps);
@@ -66,7 +66,7 @@ void SlicingTool::handleEvent(unsigned long eventID)
     case vtkCommand::LeftButtonReleaseEvent:
         m_mouseMovement = false;
         this->endSlicing();
-        // estadístiques
+        // Estadístiques
         if (!m_scrollSteps.isEmpty())
         {
             StatsWatcher::log("Slicing Tool: Button Scroll Record: " + m_scrollSteps + " ::Over a total of " + QString::number(m_numberOfImages) + " images");
@@ -79,7 +79,7 @@ void SlicingTool::handleEvent(unsigned long eventID)
         m_viewer->setCursor(QCursor(QPixmap(":/images/slicing.png")));
         this->updateIncrement(1);
         m_viewer->setCursor(Qt::ArrowCursor);
-        // estadístiques
+        // Estadístiques
         m_wheelSteps += QString::number(1) + " ";
     break;
 
@@ -88,7 +88,7 @@ void SlicingTool::handleEvent(unsigned long eventID)
         m_viewer->setCursor(QCursor(QPixmap(":/images/slicing.png")));
         this->updateIncrement(-1);
         m_viewer->setCursor(Qt::ArrowCursor);
-        // estadístiques
+        // Estadístiques
         m_wheelSteps += QString::number(-1) + " ";
     break;
 
@@ -129,7 +129,7 @@ void SlicingTool::startSlicing()
 {
     m_state = Slicing;
     m_2DViewer->getEventPosition(m_startPosition);
-    // calculem el nombre d'imatges que manipulem
+    // Calculem el nombre d'imatges que manipulem
     computeImagesForScrollMode();
     m_screenSize = m_2DViewer->getRenderWindowSize();
 }
@@ -142,7 +142,7 @@ void SlicingTool::doSlicing()
         m_viewer->setCursor(QCursor(QPixmap(":/images/slicing.png")));
         m_currentPosition[1] = m_2DViewer->getEventPositionY();
 
-        // increment normalitzat segons la mida de la finestra i el nombre de llesques
+        // Increment normalitzat segons la mida de la finestra i el nombre de llesques
         double increase = (1.75 * (m_currentPosition[1] - m_startPosition[1]) / (double)m_screenSize[1]) * m_numberOfImages;
         m_startPosition[1] = m_currentPosition[1];
 
@@ -161,7 +161,7 @@ void SlicingTool::doSlicing()
             }
         }
         this->updateIncrement(value);
-        // estadístiques
+        // Estadístiques
         m_scrollSteps += QString::number(value) + " ";
     }
 }
@@ -217,12 +217,13 @@ void SlicingTool::switchSlicingMode()
 
 void SlicingTool::updateIncrement(int increment)
 {
-    // si mantenim control apretat sempe mourem fases independentment de l'slicing mode
+    // Si mantenim control apretat sempe mourem fases independentment de l'slicing mode
     if (m_forcePhaseMode)
     {
         m_2DViewer->setPhase(m_2DViewer->getCurrentPhase() + increment);
     }
-    else // altrament continuem amb el comportament habitual
+    // Altrament continuem amb el comportament habitual
+    else
     {
         switch (m_slicingMode)
         {
@@ -258,7 +259,7 @@ void SlicingTool::computeImagesForScrollMode()
 
 void SlicingTool::chooseBestDefaultScrollMode(Volume *input)
 {
-    // per defecte sempre serà aquest excepte quan només tenim 1 imatge i tenim fases
+    // Per defecte sempre serà aquest excepte quan només tenim 1 imatge i tenim fases
     m_slicingMode = SliceMode;
     if (input)
     {

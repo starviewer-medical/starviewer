@@ -9,7 +9,7 @@ namespace udg {
 
 template <class T> class MaximumAccumulator : public Accumulator<T> {
 public:
-    MaximumAccumulator(unsigned long /*size*/) : Accumulator<T>() {}
+    MaximumAccumulator(unsigned long size) : Accumulator<T>() {}
     virtual ~MaximumAccumulator() {}
 
     inline virtual void initialize()

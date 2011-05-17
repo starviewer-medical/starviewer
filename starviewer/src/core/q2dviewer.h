@@ -6,7 +6,7 @@
 #include <QPointer>
 
 // Fordward declarations
-// vtk
+// Vtk
 class vtkPropPicker;
 class vtkTextActor;
 class vtkCornerAnnotation;
@@ -15,7 +15,8 @@ class vtkImageBlend;
 class vtkImageActor;
 class vtkImageData;
 // Grayscale pipeline
-class vtkImageMapToWindowLevelColors2; // Permet aplicar window/level amb imatges a color
+// Permet aplicar window/level amb imatges a color
+class vtkImageMapToWindowLevelColors2; 
 // Thick Slab
 class vtkProjectionImageFilter;
 
@@ -400,7 +401,7 @@ private:
     /// per defecte activat, actualitzarem el WW/WL perquè per cada imatge es mostri el seu.
     void updateDefaultPreset();
 
-    ///Indica si el volum del visor s'està carregant assíncronament
+    /// Indica si el volum del visor s'està carregant assíncronament
     bool isVolumeLoadingAsynchronously();
 
 private slots:

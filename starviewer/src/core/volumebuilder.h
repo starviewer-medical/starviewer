@@ -32,6 +32,6 @@ protected:
     QString m_seriesDescription;
 };
 
-};  // end namespace udg
+};  // End namespace udg
 
 #endif // VOLUMEBUILDER_H

@@ -1,10 +1,12 @@
 #include "inputoutputsettings.h"
 #include "settingsregistry.h"
 
-#include <QHostInfo> // Pel "localhostName"
+// Pel "localhostName"
+#include <QHostInfo>
 #include <QDesktopServices>
 
-#include "starviewerapplication.h" // Pel UserDataRootPath
+// Pel UserDataRootPath
+#include "starviewerapplication.h"
 #include "qstudytreewidget.h"
 #include "qoperationstatescreen.h"
 
@@ -111,19 +113,22 @@ void InputOutputSettings::init()
     settingsRegistry->addSetting(MaximumPACSConnections, 3);
 
     settingsRegistry->addSetting(ConvertDICOMDIRImagesToLittleEndianKey, false);
-#if defined(Q_OS_WIN) //WINDOWS
+#if defined(Q_OS_WIN)
+    // WINDOWS
     settingsRegistry->addSetting(DICOMDIRBurningApplicationPathKey, QString::fromLocal8Bit(qgetenv("ProgramFiles")) + "\\ImgBurn\\ImgBurn.exe");
     settingsRegistry->addSetting(DICOMDIRBurningApplicationParametersKey, "/MODE write /SRC %1 /EJECT YES /VERIFY NO /CLOSESUCCESS /START");
     settingsRegistry->addSetting(DICOMDIRBurningApplicationCDParametersKey, "");
     settingsRegistry->addSetting(DICOMDIRBurningApplicationDVDParametersKey, "");
     settingsRegistry->addSetting(DICOMDIRBurningApplicationHasDifferentCDDVDParametersKey, false);
-#elif defined(Q_OS_MAC) //MAC
+#elif defined(Q_OS_MAC)
+    // MAC
     settingsRegistry->addSetting(DICOMDIRBurningApplicationPathKey, QDesktopServices::storageLocation(QDesktopServices::ApplicationsLocation) + "/Burn.app/Contents/MacOS/Burn");
     settingsRegistry->addSetting(DICOMDIRBurningApplicationParametersKey, "%1");
     settingsRegistry->addSetting(DICOMDIRBurningApplicationCDParametersKey, "");
     settingsRegistry->addSetting(DICOMDIRBurningApplicationDVDParametersKey, "");
     settingsRegistry->addSetting(DICOMDIRBurningApplicationHasDifferentCDDVDParametersKey, false);
-#else // UNIX
+#else
+    // UNIX
     settingsRegistry->addSetting(DICOMDIRBurningApplicationPathKey, "/usr/bin/k3b");
     settingsRegistry->addSetting(DICOMDIRBurningApplicationParametersKey, "--nosplash %1");
     settingsRegistry->addSetting(DICOMDIRBurningApplicationCDParametersKey, "--nosplash --cdimage %1");

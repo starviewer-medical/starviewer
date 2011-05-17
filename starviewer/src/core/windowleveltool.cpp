@@ -14,7 +14,7 @@ WindowLevelTool::WindowLevelTool(QViewer *viewer, QObject *parent)
 {
     m_state = None;
     m_toolName = "WindowLevelTool";
-    // ens assegurem que desde la creació tenim un viewer vàlid
+    // Ens assegurem que desde la creació tenim un viewer vàlid
     Q_ASSERT(m_viewer);
 }
 
@@ -120,7 +120,8 @@ void WindowLevelTool::endWindowLevel()
     m_viewer->setCursor(Qt::ArrowCursor);
     m_state = None;
     m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate(m_viewer->getInteractor()->GetStillUpdateRate());
-    m_viewer->render(); // necessari perquè es torni a renderitzar a alta resolució en el 3D
+    // Necessari perquè es torni a renderitzar a alta resolució en el 3D
+    m_viewer->render();
 }
 
 }

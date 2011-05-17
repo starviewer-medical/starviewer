@@ -14,11 +14,13 @@ DicomMask ParseXmlRisPIERRequest::parseXml(QString xmlRisPIERRequest)
 {
     DicomMask mask;
 
-    buildBasicDicomMask(&mask);//Construïm la dicomMask indicant quins tags ens ha de retornar el PACS quan li fem la consulta
+    // Construïm la dicomMask indicant quins tags ens ha de retornar el PACS quan li fem la consulta
+    buildBasicDicomMask(&mask);
 
     QXmlStreamReader *xmlReader = new QXmlStreamReader(xmlRisPIERRequest);
 
-    setErrorParsing(true);//Inicialment indiquem error al parsejar, si trobem els valors esperats indicarem que no hi ha error
+    // Inicialment indiquem error al parsejar, si trobem els valors esperats indicarem que no hi ha error
+    setErrorParsing(true);
 
     INFO_LOG("Xml a parsejar: " + xmlRisPIERRequest);
 
@@ -31,7 +33,8 @@ DicomMask ParseXmlRisPIERRequest::parseXml(QString xmlRisPIERRequest)
         return mask;
     }
 
-    xmlReader->readNext();//Anem a llegir el primer element del XML
+    // Anem a llegir el primer element del XML
+    xmlReader->readNext();
 
     while (!xmlReader->atEnd())
     {
@@ -65,13 +68,13 @@ DicomMask ParseXmlRisPIERRequest::parseXml(QString xmlRisPIERRequest)
 
 void ParseXmlRisPIERRequest::parseTagMsg(QXmlStreamReader *xmlReader, DicomMask *mask)
 {
-/*  El Tag Msg té aquest format, té  l'atribut name que indica l'acció, i llavors conté a dintre el tag <Param>, que són
-    paràmetres que ens ajuden a cercar l'estudi pel qual hem de fer l'acció
+    // El Tag Msg té aquest format, té  l'atribut name que indica l'acció, i llavors conté a dintre el tag <Param>, que són
+    // paràmetres que ens ajuden a cercar l'estudi pel qual hem de fer l'acció
 
-    <Msg Name="OpenStudies">
-        <Param Name="AccessionNumber">00239RS00006780</Param>
-    </Msg>
-*/
+    // <Msg Name="OpenStudies">
+    //     <Param Name="AccessionNumber">00239RS00006780</Param>
+    // </Msg>
+
     //Només contemplem un valor per  l'element name "OpenStudies" si en trobem un de diferent avisem
     if (xmlReader->attributes().value("Name").toString().compare("OpenStudies", Qt::CaseInsensitive) != 0)
     {
@@ -80,14 +83,16 @@ void ParseXmlRisPIERRequest::parseTagMsg(QXmlStreamReader *xmlReader, DicomMask 
 
     xmlReader->readNext();
 
-    while (!xmlReader->atEnd()) //Llegim els tags Param que conté el xml
+    // Llegim els tags Param que conté el xml
+    while (!xmlReader->atEnd())
     {
         //Només processem els tags d'obetura els altres elements els ignorem
         if (xmlReader->isStartElement())
         {
             if (xmlReader->name().toString().compare("Param", Qt::CaseInsensitive) == 0)
             {
-                parseTagParam(xmlReader, mask); //parsegem el tag Param
+                // Parsegem el tag Param
+                parseTagParam(xmlReader, mask);
             }
             else
             {
@@ -104,14 +109,14 @@ void ParseXmlRisPIERRequest::parseTagMsg(QXmlStreamReader *xmlReader, DicomMask 
 
 void ParseXmlRisPIERRequest::parseTagParam(QXmlStreamReader *xmlReader, DicomMask *mask)
 {
-/*  El Tag Param té el següent format, conté un atribut anomenat name que indica quin paràmetre de l'estudi és el valor que ens
-    passen
+    // El Tag Param té el següent format, conté un atribut anomenat name que indica quin paràmetre de l'estudi és el valor que ens
+    // passen
 
-    <Param Name="AccessionNumber">00239RS00006780</Param>
-*/
+    // <Param Name="AccessionNumber">00239RS00006780</Param>
 
-    /*Només processem el tipus de paràmetre que ens informa del valor de l'accession number, no cal processar-ne cap més
-      perquè el RIS PIER només envia aquest*/
+
+    // Només processem el tipus de paràmetre que ens informa del valor de l'accession number, no cal processar-ne cap més
+    // perquè el RIS PIER només envia aquest
     if (xmlReader->attributes().value("Name").toString().compare("AccessionNumber", Qt::CaseInsensitive) == 0)
     {
         xmlReader->readNext();
@@ -119,7 +124,8 @@ void ParseXmlRisPIERRequest::parseTagParam(QXmlStreamReader *xmlReader, DicomMas
         {
             INFO_LOG("L'accession number que conté el xml es: " + xmlReader->text().toString());
             mask->setAccessionNumber(xmlReader->text().toString());
-            setErrorParsing(false); //Indiquem que no s'ha produït cap error parsejant perquè hem trobat el paràmetre que esperàvem
+            // Indiquem que no s'ha produït cap error parsejant perquè hem trobat el paràmetre que esperàvem
+            setErrorParsing(false);
         }
     }
     else

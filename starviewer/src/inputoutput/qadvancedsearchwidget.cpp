@@ -46,9 +46,9 @@ void QAdvancedSearchWidget::clear()
 
 DicomMask QAdvancedSearchWidget::buildDicomMask()
 {
-    /*Per fer cerques entre valors consultat el capítol 4 de DICOM punt C.2.2.2.5*/
-    /*Per defecte si passem un valor buit a la màscara,farà una cerca per tots els els valor d'aquella camp*/
-    /*En aquí hem de fer un set a tots els camps que volem cercar */
+    // Per fer cerques entre valors consultat el capítol 4 de DICOM punt C.2.2.2.5
+    // Per defecte si passem un valor buit a la màscara,farà una cerca per tots els els valor d'aquella camp
+    // En aquí hem de fer un set a tots els camps que volem cercar
     DicomMask mask;
 
     mask.setPatientAge("");

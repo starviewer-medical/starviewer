@@ -23,14 +23,12 @@ public:
     ///destructor de la classe
     ~DatabaseConnection();
 
-     /** Establei el path de la base de dades, per defecte, si no s'estableix, el va a buscar a la classe StarviewerSettings
-      * @param path de la base de dades
-      */
+     /// Establei el path de la base de dades, per defecte, si no s'estableix, el va a buscar a la classe StarviewerSettings
+     /// @param path de la base de dades
     void setDatabasePath(const QString &databasePath);
 
-    /** Retorna la connexió a la base de dades
-     * @return connexio a la base de dades, si el punter és nul, és que hi hagut error alhora de connectar, o que el path no és correcte
-     */
+    /// Retorna la connexió a la base de dades
+    // @return connexio a la base de dades, si el punter és nul, és que hi hagut error alhora de connectar, o que el path no és correcte
     sqlite3* getConnection();
 
     ///Retorna l'últim missatge d'error produït a la base de dades
@@ -58,19 +56,18 @@ private:
     ///connecta amb la base de dades segons el path
     void open();
 
-    /// tanca la connexió de la base de dades*/
+    /// tanca la connexió de la base de dades
     void close();
 
-    /** Indica s'esta connectat a la base de dades
-     * @return indica si s'esta connectat a la base de dades
-     */
+    /// Indica s'esta connectat a la base de dades
+    /// @return indica si s'esta connectat a la base de dades
     bool isConnected();
 
 private :
 
     sqlite3 *m_databaseConnection;
-    /*Sqlite només permet una transacció a la vegada amb la mateixa connexió, en un futur tenen previst permetre-ho però ara mateix
-      no per tant per assegurar que no tenim dos transaccions a la vegada implantem aquests semàfor*/
+    /// Sqlite només permet una transacció a la vegada amb la mateixa connexió, en un futur tenen previst permetre-ho però ara mateix
+    /// no per tant per assegurar que no tenim dos transaccions a la vegada implantem aquests semàfor
     QSemaphore *m_transactionLock;
 
     QString m_databasePath;

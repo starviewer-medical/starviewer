@@ -188,8 +188,8 @@ bool DatabaseInstallation::updateDatabaseRevision()
     m_qprogressDialog->setCancelButton(0);
     m_qprogressDialog->setValue(1);
 
-    /*Per aquesta versió degut a que s'ha tornat a reimplementar i a reestructurar tota la base de dades fent importants
-     *canvis, no s'ha fet cap codi per transformar la bd antiga amb la nova, per això es reinstal·la la BD*/
+    // Per aquesta versió degut a que s'ha tornat a reimplementar i a reestructurar tota la base de dades fent importants
+    // canvis, no s'ha fet cap codi per transformar la bd antiga amb la nova, per això es reinstal·la la BD
     status = removeCacheAndReinstallDatabase();
 
     if (!status)
@@ -260,7 +260,8 @@ bool DatabaseInstallation::createDatabaseFile()
 {
     QFile sqlTablesScriptFile(":cache/database.sql");
     QByteArray sqlTablesScript;
-    DatabaseConnection DBConnect;//obrim la bdd
+    // Obrim la bdd
+    DatabaseConnection DBConnect;
     int status;
 
     //Comprovem que existeixi el path on s'ha de crear la base de dades, sinó el crea
@@ -269,13 +270,17 @@ bool DatabaseInstallation::createDatabaseFile()
         return false;
     }
 
-    sqlTablesScriptFile.open(QIODevice::ReadOnly); //obrim el fitxer
+    // Obrim el fitxer
+    sqlTablesScriptFile.open(QIODevice::ReadOnly);
 
-    sqlTablesScript = sqlTablesScriptFile.read(sqlTablesScriptFile.size()); //el llegim
+    // El llegim
+    sqlTablesScript = sqlTablesScriptFile.read(sqlTablesScriptFile.size());
 
-    status = sqlite3_exec(DBConnect.getConnection(), sqlTablesScript.constData(), 0, 0, 0); //creem les taules i els registres
+    // Creem les taules i els registres
+    status = sqlite3_exec(DBConnect.getConnection(), sqlTablesScript.constData(), 0, 0, 0);
 
-    sqlTablesScriptFile.close(); //tanquem el fitxer
+    // Tanquem el fitxer
+    sqlTablesScriptFile.close();
 
     if (status == 0)
     {

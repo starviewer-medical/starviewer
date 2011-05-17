@@ -1,6 +1,7 @@
 #include "status.h"
 
-#include <ofcond.h> //provide the OFcondition structure and his members
+// Provide the OFcondition structure and his members
+#include <ofcond.h>
 
 namespace udg {
 

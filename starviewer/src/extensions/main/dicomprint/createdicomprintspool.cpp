@@ -1,7 +1,8 @@
 #include "createdicomprintspool.h"
 
 #include <dviface.h>
-#include <dvpssp.h>      /* for class DVPSStoredPrint */
+// For class DVPSStoredPrint
+#include <dvpssp.h>
 #include <dvpshlp.h>
 #include <dvpsabl.h>
 
@@ -66,18 +67,19 @@ QString CreateDicomPrintSpool::createPrintSpool(DicomPrinter dicomPrinter, Dicom
 
 void CreateDicomPrintSpool::setBasicFilmBoxAttributes()
 {
-    /*El constructor del DVPStoredPrint se li ha de passar com a paràmetres
-        1r El tag (2010,015E) Illumination de la Basic Film Box
-        2n El tag (2010,0160) Reflected Ambient Light de la Basic Film Box
-        3r AETitle del Starviewer
+    // El constructor del DVPStoredPrint se li ha de passar com a paràmetres
+    //  1r El tag (2010,015E) Illumination de la Basic Film Box
+    //  2n El tag (2010,0160) Reflected Ambient Light de la Basic Film Box
+    //  3r AETitle del Starviewer
 
-        Els dos primer paràmetres només s'utilitzen si la impressora suporta el Presentation Lut, ara mateix no ho soportem (no està implementat) per tant se
-        suposa que aquests valors s'ignoraran. De totes maneres se li ha donat aquests valors per defecte 2000 i 10 respectivament perquè són els que utilitza dcmtk i també
-        s'ha consultat el dicom conformance de les impressores agfa i kodak i també utiltizen aquests valors per defecte.
-     */
+    //  Els dos primer paràmetres només s'utilitzen si la impressora suporta el Presentation Lut, ara mateix no ho soportem (no està implementat) per tant se
+    //  suposa que aquests valors s'ignoraran. De totes maneres se li ha donat aquests valors per defecte 2000 i 10 respectivament perquè són els que utilitza dcmtk i també
+    //  s'ha consultat el dicom conformance de les impressores agfa i kodak i també utiltizen aquests valors per defecte.
+
     //TODO preguntar perquè necessita el Illumination i Reflected Ambient Ligth, preguntar si realement són aquests tags
     m_storedPrint = new DVPSStoredPrint(2000, 10, qPrintable(Settings().getValue(InputOutputSettings::LocalAETitle).toString()));
-    m_storedPrint->setDestination(qPrintable(m_dicomPrinter.getAETitle()));//S'ha d'indicar el AETitle de la impressora
+    // S'ha d'indicar el AETitle de la impressora
+    m_storedPrint->setDestination(qPrintable(m_dicomPrinter.getAETitle()));
     m_storedPrint->setPrinterName(qPrintable(m_dicomPrinter.getAETitle()));
 
     //Indiquem el layout de la placa
@@ -85,15 +87,15 @@ void CreateDicomPrintSpool::setBasicFilmBoxAttributes()
 
     m_storedPrint->setFilmSizeID(qPrintable(m_dicomPrintPage.getFilmSize()));
 
-    /*Interpolació que s'aplicarà si s'ha d'escalar o ampliar la imatge perquè càpiga a la cel·la
-     Aquest tag també es pot especificar a nivell de Image Box, assignant-li una valor diferent per cada imatge.*/
+    // Interpolació que s'aplicarà si s'ha d'escalar o ampliar la imatge perquè càpiga a la cel·la
+    // Aquest tag també es pot especificar a nivell de Image Box, assignant-li una valor diferent per cada imatge.
     m_storedPrint->setMagnificationType(qPrintable(m_dicomPrintPage.getMagnificationType()));
 
     if (m_dicomPrintPage.getMagnificationType().compare("CUBIC") == 0)
     {
-        /*El Smoothing Type, tag 2010,0080 del Basic Film Box, només se li pot donar valor sir el tag Magnification Type 2010,0060 té com a valor 'CUBIC'
-          Especifica el tipus de funció d'interpollació a aplicar.
-          Aquest tag també es pot especificar a nivell de Image Box, assignant-li una valor diferent per cada imatge.*/
+        // El Smoothing Type, tag 2010,0080 del Basic Film Box, només se li pot donar valor sir el tag Magnification Type 2010,0060 té com a valor 'CUBIC'
+        // Especifica el tipus de funció d'interpollació a aplicar.
+        // Aquest tag també es pot especificar a nivell de Image Box, assignant-li una valor diferent per cada imatge.
         m_storedPrint->setSmoothingType(qPrintable(m_dicomPrintPage.getSmoothingType()));
     }
 
@@ -125,27 +127,27 @@ void CreateDicomPrintSpool::setBasicFilmBoxAttributes()
 
     m_storedPrint->setTrim(m_dicomPrintPage.getTrim() ? DVPSH_trim_on : DVPSH_trim_off);
 
-    /*Tag Configuration Information (2010,0150) de Basic Film Box no li donem valor ara mateix, aquest camp permet configurar les impressions
-      amb característiques que no són Dicom Conformance, sinó que són dependents de al impressora.
-      Aquest tag també es pot especificar a nivell de Image Box, assignant-li una valor diferent per cada imatge.*/
+    // Tag Configuration Information (2010,0150) de Basic Film Box no li donem valor ara mateix, aquest camp permet configurar les impressions
+    // amb característiques que no són Dicom Conformance, sinó que són dependents de al impressora.
+    // Aquest tag també es pot especificar a nivell de Image Box, assignant-li una valor diferent per cada imatge.
     m_storedPrint->setConfigurationInformation(qPrintable(m_dicomPrintPage.getConfigurationInformation()));
 
-     /*Tag Requested Resolution ID (2020,0050) de Basic Film Box serveix per especificar amb quina resolució s'han d'imprimir les imatges,
-      té dos valors STANTARD i HIGH.
-      No se li assigna valor, perquè mirant el dicom conformance de varies impressores, la majoria no accepten aquest tag i les que l'accepten
-      només l'accepten amb el valor STANDARD, per tant no s'especifica.
-     */
+    // Tag Requested Resolution ID (2020,0050) de Basic Film Box serveix per especificar amb quina resolució s'han d'imprimir les imatges,
+    // té dos valors STANTARD i HIGH.
+    // No se li assigna valor, perquè mirant el dicom conformance de varies impressores, la majoria no accepten aquest tag i les que l'accepten
+    // només l'accepten amb el valor STANDARD, per tant no s'especifica.
+
     //m_storedPrint->setResolutionID(NULL);
 
-    /* Tag Requested Decimate/Crop Behaviour (2020,0040) de Imagex Box Indica que s'ha de fer si la imatge excedeix el màxim de píxels que suporta la cel·la
-       Hi ha 3 comportaments :
-            - Decimate : Escala la imatge fins que hi càpiga
-            - Crop : El centra de la imatge es posa al centra de la cel·la i tot lo que no hi càpiga no s'imprimeix.
-            - Fail : La impressora ens ha d'indicar que no ha pogut imprimir
+    // Tag Requested Decimate/Crop Behaviour (2020,0040) de Imagex Box Indica que s'ha de fer si la imatge excedeix el màxim de píxels que suporta la cel·la
+    // Hi ha 3 comportaments :
+    //      - Decimate : Escala la imatge fins que hi càpiga
+    //      - Crop : El centra de la imatge es posa al centra de la cel·la i tot lo que no hi càpiga no s'imprimeix.
+    //      - Fail : La impressora ens ha d'indicar que no ha pogut imprimir
 
-       Aquest tag no s'especifica, perquè mirant el dicom conformance de les impressores, per defecte tenen ja establert el comportament més desitjat que és el
-       del decimate, per això de moment no s'especifica, i la impressora es comportarà com estigui definida per defecte.
-     */
+    // Aquest tag no s'especifica, perquè mirant el dicom conformance de les impressores, per defecte tenen ja establert el comportament més desitjat que és el
+    // del decimate, per això de moment no s'especifica, i la impressora es comportarà com estigui definida per defecte.
+
     //m_storedPrint->setRequestedDecimateCropBehaviour(DVPSI_decimate);
 
     INFO_LOG("Emplenats els tags del FilmBox a l'objecte DVPStoredPrint");
@@ -161,21 +163,22 @@ bool CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, const
     OFCondition status;
     bool ok = false;
 
-    /*El constructor del mètode DVPresentationState necessita els següents paràmetres
-        1r - Llista d'objectes que descriuen les característiques de la pantalla tipus objecte DiDisplayFunction, com aquestes imatges no han de ser visualitzades
-             per pantalla li donem valor null, no cal aplicar cap filtre per visualitzar-les
+    // El constructor del mètode DVPresentationState necessita els següents paràmetres
+    // 1r - Llista d'objectes que descriuen les característiques de la pantalla tipus objecte DiDisplayFunction, com aquestes imatges no han de ser visualitzades
+    //      per pantalla li donem valor null, no cal aplicar cap filtre per visualitzar-les
 
-        2n, 3r i 4t, 5è Indiquen la resolució mínima d'impressió H/V i la màxima H/V respectivament, se li donen els valors per defecte de les dcmtk, consultant
-        el DICOM Conformance d'algunes impressores, s'ha vist que imprimint una sola imatge amb format STARDARD\1,1 per tamanys del film grans algunes
-        impressores poden imprimir en una resolució superior de fins 11000, però com que difícilment tindrem casos en els que s'imprimeixin una sola imatge en films
-        grans deixem els valors per defecte de les dcmtk.
+    // 2n, 3r i 4t, 5è Indiquen la resolució mínima d'impressió H/V i la màxima H/V respectivament, se li donen els valors per defecte de les dcmtk, consultant
+    // el DICOM Conformance d'algunes impressores, s'ha vist que imprimint una sola imatge amb format STARDARD\1,1 per tamanys del film grans algunes
+    // impressores poden imprimir en una resolució superior de fins 11000, però com que difícilment tindrem casos en els que s'imprimeixin una sola imatge en films
+    // grans deixem els valors per defecte de les dcmtk.
 
-        6è, 7è - Resolució per la previsualització de la imatge, com que no en farem previsualització deixem els valors standards.*/
+    // 6è, 7è - Resolució per la previsualització de la imatge, com que no en farem previsualització deixem els valors standards.
     m_presentationState = new DVPresentationState(NULL, 1024, 1024, 8192, 8192, 256, 256);
 
     INFO_LOG("Es transformara la imatge " + imageToPrint->getPath() + " per imprimir.");
 
-    status = DVPSHelper::loadFileFormat(qPrintable(imageToPrint->getPath()), imageToPrintDcmFileFormat);//Carreguem la imatge que hem d'imprimor
+    // Carreguem la imatge que hem d'imprimor
+    status = DVPSHelper::loadFileFormat(qPrintable(imageToPrint->getPath()), imageToPrintDcmFileFormat);
     if (status != EC_Normal)
     {
         ERROR_LOG("No s'ha pogut carregar la imatge " + imageToPrint->getPath() + " . Descripcio error: " + QString(status.text()));
@@ -194,8 +197,8 @@ bool CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, const
         return false;
     }
 
-    /*El 2n paràmete del attach image indica, si el presentation state és l'amo de la imatge passada per paràmetre, per poder destruir l'objecte,
-      en aquest cas l'indiquem que no és l'amo, per poder-lo destruir nosaltres.*/
+    // El 2n paràmete del attach image indica, si el presentation state és l'amo de la imatge passada per paràmetre, per poder destruir l'objecte,
+    // en aquest cas l'indiquem que no és l'amo, per poder-lo destruir nosaltres.
     m_presentationState->attachImage(imageToPrintDcmFileFormat, false);
 
     bitmapSize = m_presentationState->getPrintBitmapSize();
@@ -211,7 +214,7 @@ bool CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, const
     pixelAspectRatio = m_presentationState->getPrintBitmapPixelAspectRatio();
     pixelData = new char[bitmapSize];
 
-    /*El 3r paràmetre indica si la imatge s'ha de redenritzar amb el presentation LUT invers*/
+    // El 3r paràmetre indica si la imatge s'ha de redenritzar amb el presentation LUT invers
     status = m_presentationState->getPrintBitmap(pixelData, bitmapSize, false);
     if (status == EC_Normal)
     {
@@ -280,8 +283,8 @@ bool CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
     transformedImageDatasetToPrint->putAndInsertString(DCM_InstanceCreationDate, qPrintable(QDateTime::currentDateTime().toString("yyyyMMdd")));
     transformedImageDatasetToPrint->putAndInsertString(DCM_InstanceCreationTime, qPrintable(QDateTime::currentDateTime().toString("hhmmss")));
 
-    /*Hardcopy Grayscale Image Module
-      El valor d'aquests tags són hard coded obtinguts del mètode saveHardcopyGrayscaleImage de dviface.cxx*/
+    // Hardcopy Grayscale Image Module
+    // El valor d'aquests tags són hard coded obtinguts del mètode saveHardcopyGrayscaleImage de dviface.cxx
     transformedImageDatasetToPrint->putAndInsertString(DCM_PhotometricInterpretation, "MONOCHROME2");
     transformedImageDatasetToPrint->putAndInsertUint16(DCM_SamplesPerPixel, 1);
     transformedImageDatasetToPrint->putAndInsertUint16(DCM_Rows, OFstatic_cast(Uint16, bitmapHeight));
@@ -365,9 +368,9 @@ void CreateDicomPrintSpool::setImageBoxAttributes()
 
     for (size_t i = 0; i < numImages; i++)
     {
-        /*Com atribut del Image Box només especifiquem la polaritat, ja que el Magnification Type (2010,0060), el Smoothing Type (2010,0080) i el Configuration
-          Information (2010,0150) tot i que es poden especificar a nivell de Image Box com aquest tag té el mateix valor per totes les imatges del Film Box,
-          s'especifica a nivell de Film Box, els altres tags del Image Box són emplenats per les dcmtk*/
+        // Com atribut del Image Box només especifiquem la polaritat, ja que el Magnification Type (2010,0060), el Smoothing Type (2010,0080) i el Configuration
+        // Information (2010,0150) tot i que es poden especificar a nivell de Image Box com aquest tag té el mateix valor per totes les imatges del Film Box,
+        // s'especifica a nivell de Film Box, els altres tags del Image Box són emplenats per les dcmtk
 
         if (!m_dicomPrintPage.getPolarity().isEmpty())
         {

@@ -276,7 +276,7 @@ Patient Patient::operator +=(const Patient &patient)
         else
         {
             // És el mateix estudi, però podria ser que tingués sèries noves
-            // obtenim les series actuals
+            // Obtenim les series actuals
             QList<Series*> seriesList = study->getSeries();
             foreach (Series *series, seriesList)
             {
@@ -341,7 +341,7 @@ Patient::PatientsSimilarity Patient::compareTo(const Patient *patient)
     }
 
     // Si passem del condicional anterior és que algun o cap dels noms tenia dades numèriques; pertant fem el tractament normal.
-    // mirem si tractant els caràcters extranys i canviant-los per espais són iguals. En aquest cas ja no cal mirar res més.
+    // Mirem si tractant els caràcters extranys i canviant-los per espais són iguals. En aquest cas ja no cal mirar res més.
     if (nameOfThis == nameOfParameter)
     {
         return SamePatients;
@@ -396,7 +396,7 @@ QList<Patient*> Patient::mergePatients(QList<Patient*> patientsList)
             setIterator.remove();
             // Ara examinem la resta d'elements del conjunt
             // per veure si els podem fusionar
-            // en cas que es puguin fusionar, els eliminarem del conjunt
+            // En cas que es puguin fusionar, els eliminarem del conjunt
             while (setIterator.hasNext())
             {
                 // Comparem per fer la fusió o no amb el proper element
@@ -415,7 +415,7 @@ QList<Patient*> Patient::mergePatients(QList<Patient*> patientsList)
             }
             // Afegim a la llista el pacient ja fusionat si s'escau
             resultingPatientsList << currentPatient;
-            // retornem l'iterador a l'inici per continuar analitzant la resta d'elements del conjunt que quedin
+            // Retornem l'iterador a l'inici per continuar analitzant la resta d'elements del conjunt que quedin
             setIterator.toFront();
         }
     }

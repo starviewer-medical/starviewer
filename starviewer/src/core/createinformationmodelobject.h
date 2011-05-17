@@ -15,20 +15,20 @@ class DICOMTagReader;
 class CreateInformationModelObject{
 
 public:
-    ///Crea un patient a partir d'un DICOMTagReader
+    /// Crea un patient a partir d'un DICOMTagReader
     static Patient* createPatient(DICOMTagReader *dicomTagReader);
 
-    ///Crea un Study a partir d'un DICOMTagReader
+    /// Crea un Study a partir d'un DICOMTagReader
     static Study* createStudy(DICOMTagReader *dicomTagReader);
 
-    ///Crea un Series a partir d'un DICOMTagReader
+    /// Crea un Series a partir d'un DICOMTagReader
     static Series* createSeries(DICOMTagReader *dicomTagReader);
 
-    ///Crea un Image a partir d'un DICOMTagReader
+    /// Crea un Image a partir d'un DICOMTagReader
     static Image* createImage(DICOMTagReader *dicomTagReader);
 
 };
 
-};  //  end  namespace udg
+};  // End namespace udg
 
 #endif

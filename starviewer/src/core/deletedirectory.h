@@ -24,9 +24,9 @@ public:
      */
     bool deleteDirectory(QString directoryPath, bool deleteRootDirectory);
 
-    ///Ens indica si un directori està buit
-    /*TODO:No és el millor lloc per posar aquest mètode, potser s'hauria de fer una classe tipus helper amb mètodes per accedir al sistema de fitxers
-        que ajunti aquesta classe i la CopyDirectory*/
+    /// Ens indica si un directori està buit
+    // TODO:No és el millor lloc per posar aquest mètode, potser s'hauria de fer una classe tipus helper amb mètodes per accedir al sistema de fitxers
+    // que ajunti aquesta classe i la CopyDirectory
     bool isDirectoryEmpty(const QString &directoryPath);
 
 signals:

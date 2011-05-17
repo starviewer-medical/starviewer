@@ -53,9 +53,12 @@ public:
     }
 
 protected:
-    Singleton(){}; // No s'implementa
-    Singleton(const Singleton&){}; // No s'implementa
-    Singleton &operator=(const Singleton&){}; // No s'implementa
+    // No s'implementa
+    Singleton(){};
+    // No s'implementa
+    Singleton(const Singleton&){};
+    // No s'implementa
+    Singleton &operator=(const Singleton&){};
 };
 
 /**
@@ -77,7 +80,8 @@ public:
         if (m_theSinglePointer == NULL)
         {
             QWriteLocker locker(&m_pointerLock);
-            if (m_theSinglePointer == NULL)   //Fem double checking per evitar bloquejos innecessaris
+            // Fem double checking per evitar bloquejos innecessaris
+            if (m_theSinglePointer == NULL)
             {
                 m_theSinglePointer = new T();
                 m_theSinglePointer->connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()), SLOT(deleteLater()));
@@ -87,9 +91,12 @@ public:
     }
 
 protected:
-    SingletonPointer(){}; // No s'implementa
-    SingletonPointer(const SingletonPointer&){}; // No s'implementa
-    SingletonPointer &operator=(const SingletonPointer&){}; // No s'implementa
+    // No s'implementa
+    SingletonPointer(){};
+    // No s'implementa
+    SingletonPointer(const SingletonPointer&){};
+    // No s'implementa
+    SingletonPointer &operator=(const SingletonPointer&){};
 
 private:
     static QReadWriteLock m_pointerLock;

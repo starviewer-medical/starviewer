@@ -102,13 +102,14 @@ void SynchronizeTool::setIncrement(int slice)
     {
         double thickness = m_q2dviewer->getThickness();
         DEBUG_LOG(QString("setIncrement::Thickness = %1").arg(thickness));
-        // si la imatge no conté thickness (0.0), llavors li donem un valor nominal
+        // Si la imatge no conté thickness (0.0), llavors li donem un valor nominal
         if (thickness == 0.0)
         {
             thickness = 1.0;
         }
 
-        double increment = (slice - m_lastSlice) * thickness; // Distancia incrementada
+        // Distancia incrementada
+        double increment = (slice - m_lastSlice) * thickness;
         m_lastSlice = slice;
         disconnect(m_toolData, SIGNAL(sliceChanged()), this, SLOT(applySliceChanges()));
         this->m_toolData->setIncrement(increment);
@@ -160,7 +161,7 @@ void SynchronizeTool::applySliceChanges()
     {
         double thickness = m_q2dviewer->getThickness();
         DEBUG_LOG(QString("applySliceChanges::Thickness = %1").arg(thickness));
-        // si la imatge no conté thickness (0.0), llavors li donem un valor nominal
+        // Si la imatge no conté thickness (0.0), llavors li donem un valor nominal
         if (thickness == 0.0)
         {
             thickness = 1.0;

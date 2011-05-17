@@ -54,11 +54,11 @@ QList<Identifier> Repository<ItemType>::getIdentifiers()
 template<typename ItemType>
 void Repository<ItemType>::cleanUp()
 {
-    //Buida la llista però no elimina els ItemType
+    // Buida la llista però no elimina els ItemType
     m_itemList.clear();
     emit changed();
 }
 
-};  // end namespace udg {
+};  // End namespace udg
 
 #endif

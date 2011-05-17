@@ -1,6 +1,7 @@
 #include "qcustomwindowleveldialog.h"
 #include "logging.h"
-#include "starviewerapplication.h" // Pel UserDataRootPath
+// Pel UserDataRootPath
+#include "starviewerapplication.h"
 #include "windowlevelpresetstooldata.h"
 
 namespace udg {
@@ -30,7 +31,7 @@ void QCustomWindowLevelDialog::createConnections()
 
 void QCustomWindowLevelDialog::confirmWindowLevel()
 {
-    // validar els spin box
+    // Validar els spin box
     if (m_windowSpinBox->value())
     {
         // \TODO implement me!

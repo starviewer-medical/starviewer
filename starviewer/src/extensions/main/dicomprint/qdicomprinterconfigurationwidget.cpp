@@ -23,8 +23,10 @@ QDicomPrinterConfigurationWidget::QDicomPrinterConfigurationWidget()
     refreshPrinterList();
     clearPrinterSettings();
 
-    m_maximumDensitySpinBox->setSpecialValueText(tr("Automatic"));//Afegim valor "" per si no volen especificar densitat
-    m_minimumDensitySpinBox->setSpecialValueText(tr("Automatic"));//Afegim valor "" per si no volen especificar densitat
+    // Afegim valor "" per si no volen especificar densitat
+    m_maximumDensitySpinBox->setSpecialValueText(tr("Automatic"));
+    // Afegim valor "" per si no volen especificar densitat
+    m_minimumDensitySpinBox->setSpecialValueText(tr("Automatic"));
 
     printerSelectionChanged();
 }
@@ -63,9 +65,9 @@ void QDicomPrinterConfigurationWidget::addPrinter()
 {
     m_addPrinterWidget->clearInputs();
     m_addPrinterWidget->setVisible(true);
-    /*TODO:Després d'afegir una impressora s'hauria de fer signal printerSettingsChanged(), ara aprofitem el fet de que quan s'afegeix una impressora
-      com només han d'entrar AETitle, Hostname, port i descripció, llavors s'han d'acabar de complimentar les dades de la impressora per triar els altres settings,
-      fent un modificar, al fer el modificar llavors es fa l'emit del signal printerSettingsChanged()*/
+    // TODO:Després d'afegir una impressora s'hauria de fer signal printerSettingsChanged(), ara aprofitem el fet de que quan s'afegeix una impressora
+    // com només han d'entrar AETitle, Hostname, port i descripció, llavors s'han d'acabar de complimentar les dades de la impressora per triar els altres settings,
+    // fent un modificar, al fer el modificar llavors es fa l'emit del signal printerSettingsChanged()
 }
 
 bool QDicomPrinterConfigurationWidget::modifyPrinter()
@@ -173,7 +175,8 @@ void QDicomPrinterConfigurationWidget::m_magnitifacationTypeComboBoxIndexChanged
     else
     {
         m_smoothingTypeComboBox->setEnabled(false);
-        m_smoothingTypeComboBox->setCurrentIndex(m_smoothingTypeComboBox->findText(""));//Treiem el valor que tenia a smoothingType
+        // Treiem el valor que tenia a smoothingType
+        m_smoothingTypeComboBox->setCurrentIndex(m_smoothingTypeComboBox->findText(""));
     }
 }
 
@@ -364,8 +367,8 @@ DicomPrinter QDicomPrinterConfigurationWidget::getSelectedDicomPrinter()
 
     if (m_listPrintersTreeWidget->selectedItems().count() > 0)
     {
-        /*Seleccionem només la primera impressora seleccionada. El QTreeWidget està configurat com SingleSelection, per tant només es pot seleccionar
-          una impressora a la vegada*/
+        // Seleccionem només la primera impressora seleccionada. El QTreeWidget està configurat com SingleSelection, per tant només es pot seleccionar
+        // una impressora a la vegada
         selectedItem = m_listPrintersTreeWidget->selectedItems().first();
         m_selectedPrinterId = selectedItem->text(0).toInt();
 
@@ -377,9 +380,9 @@ DicomPrinter QDicomPrinterConfigurationWidget::getSelectedDicomPrinter()
 
 void QDicomPrinterConfigurationWidget::cancel()
 {
-    /*Deseleccionem l'impressora si tenim alguna seleccionada i netegem els controls, per si tornen a obrir la interfície de configuració,
-     *com que no es crea i es destrueix cada vegada que es fa un show, es mostraria tal com estava abans de fer el cancel d'aquesta manera
-     sempre la mostrem no té cap impressora seleccionada i els controls no tenen valor, es mostra en el seu estat inicial*/
+    // Deseleccionem l'impressora si tenim alguna seleccionada i netegem els controls, per si tornen a obrir la interfície de configuració,
+    // com que no es crea i es destrueix cada vegada que es fa un show, es mostraria tal com estava abans de fer el cancel d'aquesta manera
+    // sempre la mostrem no té cap impressora seleccionada i els controls no tenen valor, es mostra en el seu estat inicial
     m_listPrintersTreeWidget->clearSelection();
     clearPrinterSettings();
 
@@ -392,8 +395,8 @@ void QDicomPrinterConfigurationWidget::accept()
 
     if (m_listPrintersTreeWidget->selectedItems().count() > 0)
     {
-        /*Si tenim una impressora seleccionada guardem possibles canvis que s'hagin fet, si es produeix algun error guardant els canvis,
-         no tanquem la finestra*/
+        // Si tenim una impressora seleccionada guardem possibles canvis que s'hagin fet, si es produeix algun error guardant els canvis,
+        // no tanquem la finestra
         if (modifyPrinter())
         {
             closeWindow = true;
@@ -406,9 +409,9 @@ void QDicomPrinterConfigurationWidget::accept()
 
     if (closeWindow)
     {
-        /*Deseleccionem l'impressora si tenim alguna seleccionada i netegem els controls, per si tornen a obrir la interfície de configuració,
-         *com que no es crea i es destrueix cada vegada que es fa un show, es mostraria tal com estava abans de fer el cancel d'aquesta manera
-         sempre la mostrem no té cap impressora seleccionada i els controls no tenen valor, es mostra en el seu estat inicial*/
+        // Deseleccionem l'impressora si tenim alguna seleccionada i netegem els controls, per si tornen a obrir la interfície de configuració,
+        // com que no es crea i es destrueix cada vegada que es fa un show, es mostraria tal com estava abans de fer el cancel d'aquesta manera
+        // sempre la mostrem no té cap impressora seleccionada i els controls no tenen valor, es mostra en el seu estat inicial
 
         m_listPrintersTreeWidget->clearSelection();
         clearPrinterSettings();

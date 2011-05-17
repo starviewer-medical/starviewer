@@ -16,7 +16,8 @@ const int ListenRISRequests::TimeOutToReadData = 15000;
 
 ListenRISRequests::ListenRISRequests()
 {
-    qRegisterMetaType<DicomMask>("DicomMask");//Registrem la classe DicomMask per poder-ne fer un signal
+    // Registrem la classe DicomMask per poder-ne fer un signal
+    qRegisterMetaType<DicomMask>("DicomMask");
     qRegisterMetaType<ListenRISRequests::ListenRISRequestsError>("ListenRISRequests::ListenRISRequestsError");
 }
 

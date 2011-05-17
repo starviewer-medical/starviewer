@@ -77,7 +77,7 @@ void QTransferFunctionEditorByValues::setMaximum(unsigned short maximum)
 
 void QTransferFunctionEditorByValues::setTransferFunction(const TransferFunction & transferFunction)
 {
-    // si no hi ha hagut canvis i ens passen una funció igual llavors no cal fer res
+    // Si no hi ha hagut canvis i ens passen una funció igual llavors no cal fer res
     if (!m_changed && m_transferFunction == transferFunction)
     {
         return;
@@ -92,7 +92,7 @@ void QTransferFunctionEditorByValues::setTransferFunction(const TransferFunction
 
     QTransferFunctionIntervalEditor *current =
             m_intervalEditorsWidget->findChild<QTransferFunctionIntervalEditor*>("interval0");
-    // sempre tindrem a punt el següent (per evitar restriccions amb els valors)
+    // Sempre tindrem a punt el següent (per evitar restriccions amb els valors)
     QTransferFunctionIntervalEditor *next = addIntervalAndReturnIt();
 
     QList<double> points = transferFunction.keys();
@@ -104,7 +104,8 @@ void QTransferFunctionEditorByValues::setTransferFunction(const TransferFunction
 
         if (i == 0)
         {
-            current->setIsInterval(false);  // cas especial: primer
+            // Cas especial: primer
+            current->setIsInterval(false);
         }
 
         if (i == 0 || transferFunction.get(x) != current->color())
@@ -114,7 +115,8 @@ void QTransferFunctionEditorByValues::setTransferFunction(const TransferFunction
                 current = next;
                 if (i < points.size() - 1)
                 {
-                    next = addIntervalAndReturnIt();   // si és l'últim no en creem cap més
+                    // Si és l'últim no en creem cap més
+                    next = addIntervalAndReturnIt();
                 }
             }
 
@@ -136,7 +138,8 @@ void QTransferFunctionEditorByValues::setTransferFunction(const TransferFunction
     }
 
     m_changed = true;
-    getTransferFunction();  // actualitzem m_transferFunction
+    // Actualitzem m_transferFunction
+    getTransferFunction();
 }
 
 const TransferFunction & QTransferFunctionEditorByValues::getTransferFunction() const

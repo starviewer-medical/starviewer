@@ -47,7 +47,8 @@ void PatientBrowserMenuExtendedItem::setText(const QString &text)
 
 bool PatientBrowserMenuExtendedItem::event(QEvent *event)
 {
-    if (event->type() == QEvent::Close) // s'ha pulsat l'escape
+    // Si s'ha pulsat l'escape
+    if (event->type() == QEvent::Close)
     {
         emit close();
     }

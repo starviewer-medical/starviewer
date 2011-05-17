@@ -1,5 +1,5 @@
 #include "drawerprimitive.h"
-//vtk
+// Vtk
 #include <vtkCoordinate.h>
 
 namespace udg {

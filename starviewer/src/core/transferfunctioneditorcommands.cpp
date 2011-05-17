@@ -186,4 +186,4 @@ void TransferFunctionEditor::RemoveGradientOpacityPointCommand::undo()
     m_editor->addGradientOpacityPointCommand(m_y, m_opacity);
 }
 
-} // namespace udg
+} // End namespace udg

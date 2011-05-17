@@ -56,4 +56,4 @@ QVariant QColorTransferFunctionGraphicalViewNode::itemChange(GraphicsItemChange 
     }
 }
 
-} // namespace udg
+} // End namespace udg
