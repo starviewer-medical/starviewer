@@ -346,6 +346,8 @@ int Cursor3DTool::getNearestSlice(double projectedPosition[3], double &distance)
                 minimumDistance = currentDistance;
                 minimumSlice = i;
             }
+
+            delete currentPlane;
         }
     }
     distance = minimumDistance;
