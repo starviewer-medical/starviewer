@@ -21,7 +21,7 @@
 #include "vomigammavoxelshader.h"
 #include "vomivoxelshader.h"
 #include "voxelsaliencyvoxelshader.h"
-#include "vtk4DLinearRegressionGradientEstimator.h"
+#include "vtk4dlinearregressiongradientestimator.h"
 #include "vtkVolumeRayCastVoxelShaderCompositeFunction.h"
 #include "whitevoxelshader.h"
 
@@ -181,18 +181,18 @@ void Experimental3DVolume::setGradientEstimator(GradientEstimator gradientEstima
         case FourDLInearRegression1:
             if (!m_4DLinearRegressionGradientEstimator)
             {
-                m_4DLinearRegressionGradientEstimator = vtk4DLinearRegressionGradientEstimator::New();
+                m_4DLinearRegressionGradientEstimator = Vtk4DLinearRegressionGradientEstimator::New();
             }
-            m_4DLinearRegressionGradientEstimator->SetRadius(1);
+            m_4DLinearRegressionGradientEstimator->setRadius(1);
             m_cpuRayCastMapper->SetGradientEstimator(m_4DLinearRegressionGradientEstimator);
             m_4DLinearRegressionGradientEstimator->SetInput(m_alternativeImage ? m_alternativeImage : m_image);
             break;
         case FourDLInearRegression2:
             if (!m_4DLinearRegressionGradientEstimator)
             {
-                m_4DLinearRegressionGradientEstimator = vtk4DLinearRegressionGradientEstimator::New();
+                m_4DLinearRegressionGradientEstimator = Vtk4DLinearRegressionGradientEstimator::New();
             }
-            m_4DLinearRegressionGradientEstimator->SetRadius(2);
+            m_4DLinearRegressionGradientEstimator->setRadius(2);
             m_cpuRayCastMapper->SetGradientEstimator(m_4DLinearRegressionGradientEstimator);
             m_4DLinearRegressionGradientEstimator->SetInput(m_alternativeImage ? m_alternativeImage : m_image);
             break;

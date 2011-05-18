@@ -37,7 +37,7 @@ class VomiCoolWarmVoxelShader;
 class VomiGammaVoxelShader;
 class VomiVoxelShader;
 class VoxelSaliencyVoxelShader;
-class vtk4DLinearRegressionGradientEstimator;
+class Vtk4DLinearRegressionGradientEstimator;
 class vtkVolumeRayCastVoxelShaderCompositeFunction;
 class WhiteVoxelShader;
 class QExperimental3DExtension;
@@ -224,7 +224,7 @@ private:
     /// Estimador de gradient per diferències finites.
     vtkFiniteDifferenceGradientEstimator *m_finiteDifferenceGradientEstimator;
     /// Estimador de gradient per regressió lineal 4D.
-    vtk4DLinearRegressionGradientEstimator *m_4DLinearRegressionGradientEstimator;
+    Vtk4DLinearRegressionGradientEstimator *m_4DLinearRegressionGradientEstimator;
 
 };
 
