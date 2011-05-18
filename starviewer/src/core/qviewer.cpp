@@ -643,7 +643,8 @@ void QViewer::contextMenuRelease()
 
     // Map to global
     QPoint globalPoint = this->mapToGlobal(point);
-    this->contextMenuEvent(new QContextMenuEvent(QContextMenuEvent::Mouse, point, globalPoint));
+    QContextMenuEvent contextMenuEvent(QContextMenuEvent::Mouse, point, globalPoint);
+    this->contextMenuEvent(&contextMenuEvent);
 }
 
 void QViewer::updateWindowLevelData()
