@@ -81,7 +81,7 @@
     <message>
         <location filename="dicomdirimporter.cpp" line="130"/>
         <source>Importing study of </source>
-        <translation>Importando el estudio de</translation>
+        <translation>Importando el estudio de </translation>
     </message>
 </context>
 <context>
