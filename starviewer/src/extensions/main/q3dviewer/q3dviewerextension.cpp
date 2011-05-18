@@ -363,6 +363,7 @@ void Q3DViewerExtension::applyPresetClut(const QString & clutName)
         applyClut(*transferFunction, true);
         this->render();
         //m_3DView->setTransferFunction(transferFunction);
+        delete transferFunction;
     }
     //this->render();
 }
