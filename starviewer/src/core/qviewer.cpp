@@ -411,6 +411,7 @@ bool QViewer::record(const QString &baseName, RecordFileFormatType format)
             //emit recording(progress);
         }
         videoWriter->End();
+        videoWriter->Delete();
         clearGrabbedViews();
         return true;
     }
