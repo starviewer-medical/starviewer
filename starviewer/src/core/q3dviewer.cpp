@@ -181,6 +181,8 @@ Q3DViewer::~Q3DViewer()
     delete m_directIlluminationObscuranceVoxelShader;
     delete m_ambientContourObscuranceVoxelShader;
     delete m_directIlluminationContourObscuranceVoxelShader;
+    delete m_transferFunction;
+    delete m_newTransferFunction;
     // Eliminem tots els elements vtk creats
     if (m_4DLinearRegressionGradientEstimator)
     {
