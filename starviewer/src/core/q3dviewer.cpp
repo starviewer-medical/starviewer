@@ -544,6 +544,7 @@ void Q3DViewer::setInput(Volume *volume)
 
     m_vtkVolume->SetUserMatrix(projectionMatrix);
     delete currentPlane;
+    projectionMatrix->Delete();
 
     m_volumeMapper->SetInput(m_imageData);
     m_gpuRayCastMapper->SetInput(m_imageData);
