@@ -1068,6 +1068,10 @@ void Q3DViewer::renderIsoSurface()
     m_vtkVolume->SetMapper(m_volumeMapper);
     m_volumeMapper->SetVolumeRayCastFunction(m_volumeRayCastIsosurfaceFunction);
 
+    oTFun->Delete();
+    cTFun->Delete();
+    goTFun->Delete();
+
     render();
 }
 
