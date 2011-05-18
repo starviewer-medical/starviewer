@@ -625,7 +625,11 @@ void Q3DViewer::applyCurrentRenderingMethod()
 
 void Q3DViewer::setTransferFunction(TransferFunction *transferFunction)
 {
-    m_transferFunction = transferFunction;
+    if (m_transferFunction != transferFunction)
+    {
+        delete m_transferFunction;
+        m_transferFunction = transferFunction;
+    }
     m_volumeProperty->SetScalarOpacity(m_transferFunction->vtkOpacityTransferFunction());
     m_volumeProperty->SetColor(m_transferFunction->vtkColorTransferFunction());
     m_ambientVoxelShader->setTransferFunction(*m_transferFunction);
@@ -810,10 +814,7 @@ void Q3DViewer::renderRayCasting()
                                                                    gradientShader->GetBlueSpecularShadingTable(m_vtkVolume));
     }
 
-    // No funciona sense fer la còpia
-    TransferFunction *transferFunction = m_transferFunction;
-    setTransferFunction(new TransferFunction(*transferFunction));
-    delete transferFunction;
+    setTransferFunction(m_transferFunction);
 
     render();
 }
@@ -885,10 +886,7 @@ void Q3DViewer::renderRayCastingObscurance()
                                                                    gradientShader->GetBlueSpecularShadingTable(m_vtkVolume));
     }
 
-    // No funciona sense fer la còpia
-    TransferFunction *transferFunction = m_transferFunction;
-    setTransferFunction(new TransferFunction(*transferFunction));
-    delete transferFunction;
+    setTransferFunction(m_transferFunction);
 
     render();
 }
@@ -907,10 +905,7 @@ void Q3DViewer::renderGpuRayCasting()
     m_vtkVolume->SetMapper(m_gpuRayCastMapper);
 
     // TODO Realment cal tornar a assignar la funció de transferència?
-    // No funciona sense fer la còpia
-    TransferFunction *transferFunction = m_transferFunction;
-    setTransferFunction(new TransferFunction(*transferFunction));
-    delete transferFunction;
+    setTransferFunction(m_transferFunction);
 
     render();
 }
@@ -1102,10 +1097,7 @@ void Q3DViewer::renderTexture2D()
     m_vtkVolume->SetMapper(volumeMapper);
     volumeMapper->Delete();
 
-    // No funciona sense fer la còpia
-    TransferFunction *transferFunction = m_transferFunction;
-    setTransferFunction(new TransferFunction(*transferFunction));
-    delete transferFunction;
+    setTransferFunction(m_transferFunction);
 
     render();
 }
@@ -1126,10 +1118,7 @@ void Q3DViewer::renderTexture3D()
     m_vtkVolume->SetMapper(volumeMapper);
     volumeMapper->Delete();
 
-    // No funciona sense fer la còpia
-    TransferFunction *transferFunction = m_transferFunction;
-    setTransferFunction(new TransferFunction(*transferFunction));
-    delete transferFunction;
+    setTransferFunction(m_transferFunction);
 
     render();
 }
@@ -1259,10 +1248,7 @@ void Q3DViewer::computeObscurance(ObscuranceQuality quality)
     m_obscuranceMainThread->start();
 
     // Perquè el DirectIlluminationVoxelShader tingui les noves normals
-    // No funciona sense fer la còpia
-    TransferFunction *transferFunction = m_transferFunction;
-    setTransferFunction(new TransferFunction(*transferFunction));
-    delete transferFunction;
+    setTransferFunction(m_transferFunction);
 
     // Perquè el ContourVoxelShader tingui les noves normals
     setContour(m_contourOn);
