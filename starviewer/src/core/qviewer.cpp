@@ -329,12 +329,12 @@ bool QViewer::saveGrabbedViews(const QString &baseName, FileType extension)
             case DICOM:
                 // TODO A suportar
                 DEBUG_LOG("El format DICOM encara no està suportat per guardar imatges");
-                break;
+                return false;
 
             case META:
                 // TODO A suportar
                 DEBUG_LOG("El format META encara no està suportat per guardar imatges");
-                break;
+                return false;
         }
         int count = m_grabList.count();
         if (count == 1)
@@ -358,6 +358,7 @@ bool QViewer::saveGrabbedViews(const QString &baseName, FileType extension)
                 i++;
             }
         }
+        writer->Delete();
         // Buidem la llista
         m_grabList.clear();
         return true;
