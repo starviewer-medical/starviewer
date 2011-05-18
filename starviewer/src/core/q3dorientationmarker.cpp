@@ -118,10 +118,18 @@ Q3DOrientationMarker::Q3DOrientationMarker(vtkRenderWindowInteractor *interactor
     m_markerWidget->SetViewport(0.0, 0.0, 0.15, 0.3);
     this->setEnabled(true);
     m_markerWidget->InteractiveOn();
+
+    axes->Delete();
+    textProp->Delete();
+    textProp2->Delete();
+    textProp3->Delete();
+    assembly->Delete();
 }
 
 Q3DOrientationMarker::~Q3DOrientationMarker()
 {
+    m_cubeActor->Delete();
+    m_markerWidget->Delete();
 }
 
 void Q3DOrientationMarker::setOrientationText(QString right, QString left, QString posterior, QString anterior, QString superior, QString inferior)
