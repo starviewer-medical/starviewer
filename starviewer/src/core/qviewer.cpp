@@ -97,6 +97,7 @@ QViewer::~QViewer()
     delete m_patientBrowserMenu;
     m_windowToImageFilter->Delete();
     delete m_vtkWidget;
+    m_vtkQtConnections->Delete();
 }
 
 vtkRenderWindowInteractor* QViewer::getInteractor()
