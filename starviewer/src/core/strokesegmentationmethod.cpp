@@ -172,6 +172,7 @@ double StrokeSegmentationMethod::applyMethodVTK()
     DEBUG_LOG(QString("min: %1, mout: %2").arg(m_insideMaskValue).arg(m_outsideMaskValue));
     imageThreshold->Update();
     vtkImageData *imMask = imageThreshold->GetOutput();
+    imageThreshold->Delete();
 
     m_Volume->getVtkData()->GetSpacing(spacing[0], spacing[1], spacing[2]);
     m_Volume->getVtkData()->GetOrigin(origin[0], origin[1], origin[2]);
