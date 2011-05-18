@@ -20,22 +20,22 @@ QViewerCINEController::QViewerCINEController(QObject *parent)
 {
     m_timer = new QBasicTimer();
 
-    m_playAction = new QAction(0);
+    m_playAction = new QAction(this);
 //     m_playAction->setShortcut(tr("Space"));
     m_playAction->setIcon(QIcon(":/images/play.png"));
     m_playAction->setText(tr("Play"));
     connect(m_playAction, SIGNAL(triggered()), SLOT(play()));
 
-    m_recordAction = new QAction(0);
+    m_recordAction = new QAction(this);
     m_recordAction->setIcon(QIcon(":/images/record.png"));
     connect(m_recordAction, SIGNAL(triggered()), SLOT(record()));
 
-    m_boomerangAction = new QAction(0);
+    m_boomerangAction = new QAction(this);
     m_boomerangAction->setIcon(QIcon(":/images/boomerang.png"));
     m_boomerangAction->setCheckable(true);
     connect(m_boomerangAction, SIGNAL(triggered(bool)), SLOT(enableBoomerang(bool)));
 
-    m_loopAction = new QAction(0);
+    m_loopAction = new QAction(this);
     m_loopAction->setIcon(QIcon(":/images/repeat.png"));
     m_loopAction->setCheckable(true);
     connect(m_loopAction, SIGNAL(triggered(bool)), SLOT(enableLoop(bool)));
@@ -43,6 +43,7 @@ QViewerCINEController::QViewerCINEController(QObject *parent)
 
 QViewerCINEController::~QViewerCINEController()
 {
+    delete m_timer;
 }
 
 void QViewerCINEController::setInputViewer(QViewer *viewer)
