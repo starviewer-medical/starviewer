@@ -389,7 +389,7 @@ void ROITool::printData()
     double bounds[6];
     m_roiPolygon->getBounds(bounds);
 
-    double *attachmentPoint = new double[3];
+    double attachmentPoint[3];
     attachmentPoint[0] = (bounds[1] + bounds[0]) / 2.0;
     attachmentPoint[1] = (bounds[3] + bounds[2]) / 2.0;
     attachmentPoint[2] = (bounds[5] + bounds[4]) / 2.0;
