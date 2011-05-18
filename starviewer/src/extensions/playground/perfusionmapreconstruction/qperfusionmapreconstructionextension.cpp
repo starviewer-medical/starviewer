@@ -68,8 +68,7 @@ const double QPerfusionMapReconstructionExtension::TE = 25.0;
 const double QPerfusionMapReconstructionExtension::TR = 1.5;
 
 QPerfusionMapReconstructionExtension::QPerfusionMapReconstructionExtension( QWidget *parent )
- : QWidget( parent ), m_mainVolume(0), m_DSCVolume(0), m_isLeftButtonPressed(false), m_mapCalculator(0), m_aifDrawPoint(0)
-, m_seedToolData(0)
+ : QWidget( parent ), m_mainVolume(0), m_DSCVolume(0), m_isLeftButtonPressed(false), m_seedToolData(0), m_mapCalculator(0), m_aifDrawPoint(0)
 {
     setupUi( this );
     PerfusionMapReconstructionSettings().init();
