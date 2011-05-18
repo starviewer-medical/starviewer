@@ -32,6 +32,7 @@ ShutterFilter::ShutterFilter()
 
 ShutterFilter::~ShutterFilter()
 {
+    clearAllShutters();
 }
 
 void ShutterFilter::setInput(Volume *volume)
@@ -144,9 +145,15 @@ void ShutterFilter::setPresentationStateShutters(const QString &presentationStat
                     extruder->SetVector(0, 0, 1);
                     extruder->SetInput(polyData);
 
+                    clearPolygonalShutter();
+
                     // Creem l'stencil
                     m_polygonalPolyDataStencil = vtkAtamaiPolyDataToImageStencil2::New();
                     m_polygonalPolyDataStencil->SetInput(extruder->GetOutput());
+
+                    points->Delete();
+                    vertexs->Delete();
+                    polyData->Delete();
                     extruder->Delete();
 
                     DEBUG_LOG(QString(msg));
@@ -221,6 +228,8 @@ void ShutterFilter::setPresentationStateShutters(const QString &presentationStat
         {
             DEBUG_LOG(QString("No s'ha pogut carregar el fitxer de presentation state: ") + status.text());
         }
+
+        delete presentationStateHandler;
     }
     else
     {
@@ -266,8 +275,14 @@ void ShutterFilter::setRectangularShutter(double leftVertical, double rightVerti
     extruder->SetVector(0, 0, 1);
     extruder->SetInput(polyData);
 
+    clearRectangularShutter();
+
     m_rectangularPolyDataStencil = vtkPolyDataToImageStencil::New();
     m_rectangularPolyDataStencil->SetInput(extruder->GetOutput());
+
+    points->Delete();
+    vertexs->Delete();
+    polyData->Delete();
     extruder->Delete();
 }
 
@@ -299,8 +314,12 @@ void ShutterFilter::setCircularShutter(double center[2], double radius)
     extruder->SetVector(0, 0, 1);
     extruder->SetInput(circle->GetOutput());
 
+    clearCircularShutter();
+
     m_circularPolyDataStencil = vtkPolyDataToImageStencil::New();
     m_circularPolyDataStencil->SetInput(extruder->GetOutput());
+
+    circle->Delete();
     extruder->Delete();
 }
 
@@ -380,6 +399,9 @@ void ShutterFilter::setBitmapShutter(unsigned char *data, unsigned int vtkNotUse
 //                     std::cout << std::endl;
 //                 }
 //                 std::cout << std::endl;
+
+    bitmapShutter->Delete();
+    bitmapShutterMask->Delete();
 }
 
 void ShutterFilter::clearAllShutters()
@@ -508,14 +530,17 @@ vtkImageData *ShutterFilter::getOutput()
         if (circularStencil)
         {
             output = circularStencil->GetOutput();
+            circularStencil->Delete();
         }
         else if (polygonalStencil)
         {
             output = polygonalStencil->GetOutput();
+            polygonalStencil->Delete();
         }
         else if (rectangularStencil)
         {
             output = rectangularStencil->GetOutput();
+            rectangularStencil->Delete();
         }
 
         if (output)
