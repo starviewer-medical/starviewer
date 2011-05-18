@@ -190,10 +190,7 @@ public slots:
     void setActive(bool active);
 
     /// Elimina totes les captures de pantalla
-    void clearGrabbedViews()
-    {
-        m_grabList.clear();
-    };
+    void clearGrabbedViews();
 
     /// Obté el window/level per defecte. Si no se n'especifica cap amb setDefaultWindowLevel
     /// agafa un window/level que permeti veure correctament el Volum.

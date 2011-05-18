@@ -360,7 +360,7 @@ bool QViewer::saveGrabbedViews(const QString &baseName, FileType extension)
         }
         writer->Delete();
         // Buidem la llista
-        m_grabList.clear();
+        clearGrabbedViews();
         return true;
     }
     else
@@ -424,6 +424,15 @@ bool QViewer::record(const QString &baseName, RecordFileFormatType format)
     Q_UNUSED(format)
     return false;
 #endif
+}
+
+void QViewer::clearGrabbedViews()
+{
+    foreach (vtkImageData *image, m_grabList)
+    {
+        image->Delete();
+    }
+    m_grabList.clear();
 }
 
 void QViewer::render()
