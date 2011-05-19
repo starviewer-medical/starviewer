@@ -535,17 +535,17 @@ vtkImageData *ShutterFilter::getOutput()
         if (circularStencil)
         {
             output = circularStencil->GetOutput();
-            circularStencil->Delete();
+            // La solució bona aquí seria guardar output en un smart pointer (per retornar-lo i oblidar-nos-en) i després fer circularStencil->Delete()
         }
         else if (polygonalStencil)
         {
             output = polygonalStencil->GetOutput();
-            polygonalStencil->Delete();
+            // La solució bona aquí seria guardar output en un smart pointer (per retornar-lo i oblidar-nos-en) i després fer polygonalStencil->Delete()
         }
         else if (rectangularStencil)
         {
             output = rectangularStencil->GetOutput();
-            rectangularStencil->Delete();
+            // La solució bona aquí seria guardar output en un smart pointer (per retornar-lo i oblidar-nos-en) i després fer rectangularStencil->Delete()
         }
 
         if (output)
