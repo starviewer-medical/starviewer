@@ -14,7 +14,7 @@ public:
     /// Constructor de la classe
     QLocalDatabaseConfigurationScreen(QWidget *parent = 0);
 
-    ///Destructor de classe
+    /// Destructor de classe
     ~QLocalDatabaseConfigurationScreen();
 
 public slots:
@@ -35,7 +35,7 @@ private slots:
     /// Esborra tota la caché
     void deleteStudies();
 
-    ///Neteja la cache. Esborra tots els estudis de la caché i reinstal·la la base de dades
+    /// Neteja la cache. Esborra tots els estudis de la caché i reinstal·la la base de dades
     void clearCache();
 
     /// Compacta la base de dades de la cache
@@ -50,11 +50,11 @@ private slots:
     /// Afegeix la '/' al final del path del directori si l'usuari no l'ha escrit
     void cacheImagePathEditingFinish();
 
-    /// crear base de dades
+    /// Crear base de dades
     void createDatabase();
 
 private:
-    ///crea els connects dels signals i slots
+    /// Crea els connects dels signals i slots
     void createConnections();
 
     /// Crea els input validators necessaris pels diferents camps d'edició.

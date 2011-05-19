@@ -48,8 +48,8 @@ void QDicomPrinterConfigurationWidget::printerSelectionChanged()
         m_printerSettingsGroupBox->setEnabled(true);
         m_qdicomPrinterBasicSettingsWidget->setEnabled(true);
         m_advancedSettingsGroupBox->setEnabled(true);
-        //Perquè així comprovi si el AnnotationBox ha d'estar activat si aquest no ha canviat de valor respecte l'anterior impressora seleccionada
-        //TODO: S'hauria d'intentar solventar qeu no fes falta invocar el mètode
+        // Perquè així comprovi si el AnnotationBox ha d'estar activat si aquest no ha canviat de valor respecte l'anterior impressora seleccionada
+        // TODO: S'hauria d'intentar solventar qeu no fes falta invocar el mètode
         m_supportsAnnotationBoxYesRadioButtonToogled();
     }
     else
@@ -85,7 +85,7 @@ bool QDicomPrinterConfigurationWidget::modifyPrinter()
 
             if (!dicomPrinterManager.updatePrinter(m_selectedPrinterId, dicomPrinter))
             {
-                //Si rebem un error és que no ha trobat la impressora amb el ID passat per paràmetre
+                // Si rebem un error és que no ha trobat la impressora amb el ID passat per paràmetre
                 QMessageBox::critical(this, ApplicationNameString, tr("Error can't apply changes to the printer."));
             }
             else
@@ -130,12 +130,12 @@ void QDicomPrinterConfigurationWidget::testPrinter()
 
         if (testIsCorrect)
         {
-            //El test s'ha fet correctament i la impressora ha respós
+            // El test s'ha fet correctament i la impressora ha respós
             QMessageBox::information(this, ApplicationNameString, tr("Test of printer %1 is correct.").arg(selectedDicomPrinter.getAETitle()));
         }
         else
         {
-            //El test ha fallat per algun motiu
+            // El test ha fallat per algun motiu
             QString messageError;
 
             switch (dicomPrint.getLastError())
@@ -168,7 +168,7 @@ void QDicomPrinterConfigurationWidget::showNewPrinterAdded(int printerID)
 
 void QDicomPrinterConfigurationWidget::m_magnitifacationTypeComboBoxIndexChanged(const QString &magnificationTypecomboBoxValue)
 {
-    //Smoothing Type només es pot escollir si el paràmetre de configuració Magnification Type té com a valor cubic
+    // Smoothing Type només es pot escollir si el paràmetre de configuració Magnification Type té com a valor cubic
     if (magnificationTypecomboBoxValue.toUpper() == "CUBIC")
     {
         m_smoothingTypeComboBox->setEnabled(true);
@@ -285,7 +285,7 @@ void QDicomPrinterConfigurationWidget::clearPrinterSettings()
     m_printerHostnameLineEdit->setText("");
     m_printerPortLineEdit->setText("");
 
-    //Basic Settings
+    // Basic Settings
     m_qdicomPrinterBasicSettingsWidget->clear();
 
     // Advanced Settings

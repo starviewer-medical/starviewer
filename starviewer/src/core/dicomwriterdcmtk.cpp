@@ -144,7 +144,7 @@ bool DICOMWriterDCMTK::write()
     m_fileFormat->getDataset()->findAndGetElement(DCM_Columns, element_col);
     element_col->print(std::cout);
 
-    //Guardem la imatge
+    // Guardem la imatge
     OFCondition saveFileCondition = DVPSHelper::saveFileFormat(qPrintable(this->getPath()), m_fileFormat, true);
 
     if (saveFileCondition == EC_Normal)

@@ -55,7 +55,7 @@ signals:
     void newTransferFunction();
 
 private:
-    /// posa a punt les tools que es poden fer servir en l'extensió
+    /// Posa a punt les tools que es poden fer servir en l'extensió
     void initializeTools();
 
     /// Obté la llista de funcions de transferència predefinides.

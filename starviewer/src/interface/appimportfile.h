@@ -37,7 +37,7 @@ private:
     /// Tots els paths retornats, són absoluts
     void scanDirectories(const QString &rootPath, QStringList &dirsList);
 
-    /// llegeix escriu configuracions
+    /// Llegeix escriu configuracions
     void readSettings();
     void writeSettings();
 

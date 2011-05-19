@@ -8,12 +8,12 @@
 #include "screenshottool.h"
 #include "toolproxy.h"
 #include "qexportertool.h"
-// qt
+// Qt
 #include <QAction>
 #include <QFileDialog>
 #include <QStandardItemModel>
 #include <QTimer>
-// vtk
+// Vtk
 #include <vtkImageData.h>
 // Actualització ràpida
 #include <vtkRenderWindow.h>
@@ -28,7 +28,7 @@ Q3DViewerExtension::Q3DViewerExtension(QWidget *parent)
     setupUi(this);
     Q3DViewerExtensionSettings().init();
 
-    // creem el temporitzador (s'ha de fer abans del createConnections())
+    // Creem el temporitzador (s'ha de fer abans del createConnections())
     m_timer = new QTimer(this);
     m_timer->setSingleShot(true);
     /// \todo Poso 1000 ms arbitràriament.
@@ -52,7 +52,7 @@ Q3DViewerExtension::Q3DViewerExtension(QWidget *parent)
 
 Q3DViewerExtension::~Q3DViewerExtension()
 {
-    // el que aquí volem fer és forçar a eliminar primer totes les tools abans de que s'esborri el viewer
+    // El que aquí volem fer és forçar a eliminar primer totes les tools abans de que s'esborri el viewer
     // TODO potser caldria refactoritzar el nom d'aquest mètode o crear-ne un per aquesta tasca
     m_toolManager->disableAllToolsTemporarily();
 }
@@ -60,7 +60,7 @@ Q3DViewerExtension::~Q3DViewerExtension()
 void Q3DViewerExtension::initializeTools()
 {
     m_toolManager = new ToolManager(this);
-    // obtenim les accions de cada tool que volem
+    // Obtenim les accions de cada tool que volem
     m_zoomToolButton->setDefaultAction(m_toolManager->registerTool("ZoomTool"));
     m_rotate3DToolButton->setDefaultAction(m_toolManager->registerTool("Rotate3DTool"));
     m_windowLevelToolButton->setDefaultAction(m_toolManager->registerTool("WindowLevelTool"));
@@ -79,7 +79,7 @@ void Q3DViewerExtension::initializeTools()
     defaultTools << "ZoomTool" << "TranslateTool" << "Rotate3DTool" << "ScreenShotTool";
     m_toolManager->triggerTools(defaultTools);
 
-    // registrem al manager les tools que van amb el viewer principal
+    // Registrem al manager les tools que van amb el viewer principal
     m_toolManager->setupRegisteredTools(m_3DView);
     m_toolManager->enableRegisteredActionTools(m_3DView);
 
@@ -277,19 +277,19 @@ void Q3DViewerExtension::loadRenderingStyles()
 
 void Q3DViewerExtension::createConnections()
 {
-    // actualització del mètode de rendering
+    // Actualització del mètode de rendering
     connect(m_renderingMethodComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateUiForRenderingMethod(int)));
 
-    // shading
+    // Shading
     connect(m_shadingCheckBox, SIGNAL(toggled(bool)), m_specularCheckBox, SLOT(setEnabled(bool)));
     connect(m_specularCheckBox, SIGNAL(toggled(bool)), m_specularPowerLabel, SLOT(setEnabled(bool)));
     connect(m_specularCheckBox, SIGNAL(toggled(bool)), m_specularPowerDoubleSpinBox, SLOT(setEnabled(bool)));
 
-    // contorns
+    // Contorns
     connect(m_contourCheckBox, SIGNAL(toggled(bool)), m_contourThresholdLabel, SLOT(setEnabled(bool)));
     connect(m_contourCheckBox, SIGNAL(toggled(bool)), m_contourThresholdDoubleSpinBox, SLOT(setEnabled(bool)));
 
-    // obscurances
+    // Obscurances
     connect(m_obscuranceComputeCancelPushButton, SIGNAL(clicked()), this, SLOT(computeOrCancelObscurance()));
     connect(m_3DView, SIGNAL(obscuranceProgress(int)), m_obscuranceProgressBar, SLOT(setValue(int)));
     connect(m_3DView, SIGNAL(obscuranceComputed()), this, SLOT(endComputeObscurance()));
@@ -299,7 +299,7 @@ void Q3DViewerExtension::createConnections()
 
     enableAutoUpdate();
 
-    // clut editor
+    // Clut editor
     connect(m_loadClutPushButton, SIGNAL(clicked()), SLOT(loadClut()));
     connect(m_saveClutPushButton, SIGNAL(clicked()), SLOT(saveClut()));
     connect(m_switchEditorPushButton, SIGNAL(clicked()), SLOT(switchEditor()));
@@ -310,18 +310,18 @@ void Q3DViewerExtension::createConnections()
     connect(m_3DView, SIGNAL(transferFunctionChanged ()), SLOT(changeViewerTransferFunction()));
     connect(this, SIGNAL(newTransferFunction ()), m_3DView, SLOT(setNewTransferFunction()));
 
-    // visor 3d
+    // Visor 3d
     connect(m_3DView, SIGNAL(scalarRange(double, double)), SLOT(setScalarRange(double, double)));
 
-    // rendering styles
+    // Rendering styles
     connect(m_renderingStyleListView, SIGNAL(activated(const QModelIndex&)), SLOT(applyRenderingStyle(const QModelIndex&)));
 
     connect(m_editorSplitter, SIGNAL(splitterMoved(int, int)), SLOT(setCustomStyleButtonStateBySplitter()));
 
-    // temporitzador
+    // Temporitzador
     connect(m_timer, SIGNAL(timeout()), SLOT(render()));
 
-    // per mostrar exportació
+    // Per mostrar exportació
     connect(m_screenshotsExporterToolButton, SIGNAL(clicked()), SLOT(showScreenshotsExporterDialog()));
 
 }
@@ -375,7 +375,7 @@ void Q3DViewerExtension::applyClut(const TransferFunction & clut, bool preset)
     m_currentClut = clut;
     if (!preset)
     {
-        // cal fer el disconnect per evitar un bucle infinit
+        // Cal fer el disconnect per evitar un bucle infinit
         disconnect(m_clutPresetsComboBox, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(applyPresetClut(const QString&)));
         m_clutPresetsComboBox->setCurrentIndex(-1);
         connect(m_clutPresetsComboBox, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(applyPresetClut(const QString&)));
@@ -389,7 +389,7 @@ void Q3DViewerExtension::applyClut(const TransferFunction & clut, bool preset)
 
 void Q3DViewerExtension::changeViewerTransferFunction()
 {
-    //Actualitzem l'editor de cluts quan es canvia per la funció pel w/l del visor
+    // Actualitzem l'editor de cluts quan es canvia per la funció pel w/l del visor
     m_gradientEditor->setTransferFunction(*(m_3DView->getTransferFunction()));
     m_editorByValues->setTransferFunction(*(m_3DView->getTransferFunction()));
 }
@@ -776,45 +776,45 @@ void Q3DViewerExtension::updateView(bool fast)
 
 void Q3DViewerExtension::enableAutoUpdate()
 {
-    // actualització del mètode de rendering
+    // Actualització del mètode de rendering
     connect(m_renderingMethodComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateView()));
 
-    // shading
+    // Shading
     connect(m_shadingCheckBox, SIGNAL(toggled(bool)), this, SLOT(updateView()));
     connect(m_specularCheckBox, SIGNAL(toggled(bool)), this, SLOT(updateView()));
     connect(m_specularPowerDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(updateView()));
 
-    // contorns
+    // Contorns
     connect(m_contourCheckBox, SIGNAL(toggled(bool)), this, SLOT(updateView()));
     connect(m_contourThresholdDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(updateView()));
 
-    // obscurances
+    // Obscurances
     connect(m_obscuranceCheckBox, SIGNAL(toggled(bool)), this, SLOT(updateView()));
     connect(m_obscuranceFactorDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(updateView()));
 
-    // isosuperfícies
+    // Isosuperfícies
     connect(m_isoValueSpinBox, SIGNAL(valueChanged(int)), this, SLOT(updateView()));
 }
 
 void Q3DViewerExtension::disableAutoUpdate()
 {
-    // actualització del mètode de rendering
+    // Actualització del mètode de rendering
     disconnect(m_renderingMethodComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateView()));
 
-    // shading
+    // Shading
     disconnect(m_shadingCheckBox, SIGNAL(toggled(bool)), this, SLOT(updateView()));
     disconnect(m_specularCheckBox, SIGNAL(toggled(bool)), this, SLOT(updateView()));
     disconnect(m_specularPowerDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(updateView()));
 
-    // contorns
+    // Contorns
     disconnect(m_contourCheckBox, SIGNAL(toggled(bool)), this, SLOT(updateView()));
     disconnect(m_contourThresholdDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(updateView()));
 
-    // obscurances
+    // Obscurances
     disconnect(m_obscuranceCheckBox, SIGNAL(toggled(bool)), this, SLOT(updateView()));
     disconnect(m_obscuranceFactorDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(updateView()));
 
-    // isosuperfícies
+    // Isosuperfícies
     disconnect(m_isoValueSpinBox, SIGNAL(valueChanged(int)), this, SLOT(updateView()));
 }
 

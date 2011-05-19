@@ -50,7 +50,7 @@ bool ApplicationCommandLineOptions::parse()
     // Treiem el primer string que és el nom de l'aplicació
     argumentList.removeFirst();
 
-    //Mentre hi hagi arguments per processar o no s'hagi produït un error parsegem els arguments
+    // Mentre hi hagi arguments per processar o no s'hagi produït un error parsegem els arguments
     while (!argumentList.isEmpty() && m_parserErrorMessage.isEmpty())
     {
         parameter = argumentList.takeFirst();
@@ -64,7 +64,7 @@ bool ApplicationCommandLineOptions::parse()
                 // Comprovem si és una opció vàlida
                 if (m_commandLineOptions.contains(parameter))
                 {
-                    //Si és una opció que ens han especificat com a vàlida l'inserim com a parsejada, de moment com argument de l'opció hi posem ""
+                    // Si és una opció que ens han especificat com a vàlida l'inserim com a parsejada, de moment com argument de l'opció hi posem ""
                     m_parsedOptions.insert(parameter, "");
 
                     lastParameterWasAnOption = true;
@@ -85,10 +85,10 @@ bool ApplicationCommandLineOptions::parse()
         }
         else
         {
-            //és un argument
+            // És un argument
             if (lastParameterWasAnOption)
             {
-                //Si tenim un argument i l'últim paràmetre era un opció, vol dir aquest paràmetre és un argument
+                // Si tenim un argument i l'últim paràmetre era un opció, vol dir aquest paràmetre és un argument
                 m_parsedOptions[lastOption.name] = parameter;
             }
             else

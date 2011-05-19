@@ -22,7 +22,7 @@ bool EchoToPACS::echo(PacsDevice pacsDevice)
     {
         // Generate next message ID
         DIC_US id = pacsConnection.getConnection()->nextMsgID++;
-        //Segons el PS 3.7 apartat 9.1.5.1.4 de DICOM l'status només pot ser 0x0000 si s'ha aconseguit connectar, sinó no hauria de tenir valor
+        // Segons el PS 3.7 apartat 9.1.5.1.4 de DICOM l'status només pot ser 0x0000 si s'ha aconseguit connectar, sinó no hauria de tenir valor
         DIC_US status;
         DcmDataset *dcmDataset = NULL;
 

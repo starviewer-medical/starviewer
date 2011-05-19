@@ -14,10 +14,10 @@ class Volume;
 class ToolManager;
 class ToolConfiguration;
 class HangingProtocol;
-//Estructura pacient
+// Estructura pacient
 class Patient;
 class Study;
-//Visualitzador
+// Visualitzador
 class Q2DViewerWidget;
 class Q2DViewer;
 // Menus

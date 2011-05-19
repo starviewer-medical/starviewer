@@ -64,7 +64,7 @@ QList<Image*> LocalDatabaseImageDAL::query(const DicomMask &imageMask)
         return imageList;
     }
 
-    //index = 1 ignorem les capçaleres
+    // index = 1 ignorem les capçaleres
     for (int index = 1; index <= rows; index++)
     {
         imageList.append(fillImage(reply, index, columns));
@@ -132,7 +132,7 @@ Image* LocalDatabaseImageDAL::fillImage(char **reply, int row, int columns)
     image->setRetrievedDate(QDate().fromString(reply[31 + row * columns], "yyyyMMdd"));
     image->setRetrievedTime(QTime().fromString(reply[32 + row * columns], "hhmmss"));
 
-    //TODO argghh!!! Això només hauria d'estar en un únic lloc, no aquí i en retrieveimages.cpp
+    // TODO argghh!!! Això només hauria d'estar en un únic lloc, no aquí i en retrieveimages.cpp
     image->setPath(LocalDatabaseManager::getCachePath() + reply[2 + row * columns] + "/" + reply[3 + row * columns] + "/" + reply[0 + row * columns]);
 
     return image;

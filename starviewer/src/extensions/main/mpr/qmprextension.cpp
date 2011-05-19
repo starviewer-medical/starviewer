@@ -571,7 +571,7 @@ void QMPRExtension::rotateAxialViewAxisActor()
     double clickedWorldPoint[3];
     m_axial2DView->getEventWorldCoordinate(clickedWorldPoint);
 
-    // vectors des del centre del picked plane a m_initialPick i clickedWorldPoint
+    // Vectors des del centre del picked plane a m_initialPick i clickedWorldPoint
     double vec1[3], vec2[3];
 
     vec1[0] = m_initialPickX - m_pickedActorPlaneSource->GetCenter()[0];
@@ -585,18 +585,18 @@ void QMPRExtension::rotateAxialViewAxisActor()
     m_initialPickX = clickedWorldPoint[0];
     m_initialPickY = clickedWorldPoint[1];
 
-    // angle de gir en graus
+    // Angle de gir en graus
     double angle = MathTools::angleInDegrees(vec1, vec2);
 
-    // direcció de l'eix de rotació
+    // Direcció de l'eix de rotació
     double direction[3];
     MathTools::crossProduct(vec1, vec2, direction);
 
-    // eix de rotació en coordenades de món
+    // Eix de rotació en coordenades de món
     double axis[3];
     m_axialPlaneSource->GetNormal(axis);
 
-    // calculem el producte escalar per saber el sentit de l'eix (i per tant del gir)
+    // Calculem el producte escalar per saber el sentit de l'eix (i per tant del gir)
     double dot = MathTools::dotProduct(direction, axis);
     axis[0] *= dot;
     axis[1] *= dot;
@@ -675,14 +675,14 @@ void QMPRExtension::rotateSagitalViewAxisActor()
     double clickedWorldPoint[3];
     m_sagital2DView->getEventWorldCoordinate(clickedWorldPoint);
 
-    // transformació de coordenades de món a coordenades de sagital
+    // Transformació de coordenades de món a coordenades de sagital
     vtkTransform *transform = getWorldToSagitalTransform();
 
-    // centre del picked plane (coordenades de sagital)
+    // Centre del picked plane (coordenades de sagital)
     double pickedPlaneCenter[3];
     transform->TransformPoint(m_pickedActorPlaneSource->GetCenter(), pickedPlaneCenter);
 
-    // vectors des del centre del picked plane (sempre és el coronal) a m_initialPick i clickedWorldPoint (coordenades de sagital)
+    // Vectors des del centre del picked plane (sempre és el coronal) a m_initialPick i clickedWorldPoint (coordenades de sagital)
     double vec1[3], vec2[3];
 
     vec1[0] = m_initialPickX - pickedPlaneCenter[0];
@@ -696,25 +696,25 @@ void QMPRExtension::rotateSagitalViewAxisActor()
     m_initialPickX = clickedWorldPoint[0];
     m_initialPickY = clickedWorldPoint[1];
 
-    // angle de gir en graus
+    // Angle de gir en graus
     double angle = MathTools::angleInDegrees(vec1, vec2);
 
-    // direcció de l'eix de rotació (coordenades de sagital)
+    // Direcció de l'eix de rotació (coordenades de sagital)
     double direction[3];
     MathTools::crossProduct(vec1, vec2, direction);
     // Transformació de coordenades de sagital a coordenades de món
     transform->Inverse();
     transform->TransformVector(direction, direction);
-    // ara direction és la direcció de l'eix de rotació en coordenades de món
+    // Ara direction és la direcció de l'eix de rotació en coordenades de món
 
-    // ja no hem de fer més transformacions; destruïm transform
+    // Ja no hem de fer més transformacions; destruïm transform
     transform->Delete();
 
-    // eix de rotació en coordenades de món
+    // Eix de rotació en coordenades de món
     double axis[3];
     m_sagitalPlaneSource->GetNormal(axis);
 
-    // calculem el producte escalar per saber el sentit de l'eix (i per tant del gir)
+    // Calculem el producte escalar per saber el sentit de l'eix (i per tant del gir)
     double dot = MathTools::dotProduct(direction, axis);
     axis[0] *= dot;
     axis[1] *= dot;
@@ -762,20 +762,20 @@ void QMPRExtension::pushSagitalViewCoronalAxisActor()
     double clickedWorldPoint[3];
     m_sagital2DView->getEventWorldCoordinate(clickedWorldPoint);
 
-    // translació del pla coronal (coordenades de sagital)
+    // Translació del pla coronal (coordenades de sagital)
     double translation[3];
     translation[0] = clickedWorldPoint[0] - m_initialPickX;
     translation[1] = clickedWorldPoint[1] - m_initialPickY;
     translation[2] = 0.0;
 
-    // transformació de coordenades de sagital a coordenades de món
+    // Transformació de coordenades de sagital a coordenades de món
     vtkTransform *sagitalToWorldTransform = getWorldToSagitalTransform();
     sagitalToWorldTransform->Inverse();
 
     sagitalToWorldTransform->TransformVector(translation, translation);
-    // ara translation és la translació del pla coronal en coordenades de món
+    // Ara translation és la translació del pla coronal en coordenades de món
 
-    // ja no hem de fer més transformacions; destruïm sagitalToWorldTransform
+    // Ja no hem de fer més transformacions; destruïm sagitalToWorldTransform
     sagitalToWorldTransform->Delete();
 
     m_pickedActorPlaneSource->Push(MathTools::dotProduct(translation, m_pickedActorPlaneSource->GetNormal()));

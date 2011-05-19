@@ -23,7 +23,7 @@ WindowLevelPresetsToolData::WindowLevelPresetsToolData(QObject *parent)
     // 100-200
     addPreset(tr("Angiography"), 500, 100, StandardPresets);
 
-    //100-1500:window!
+    // 100-1500:window!
     addPreset(tr("Osteoporosis"), 1000, 300, StandardPresets);
     addPreset(tr("Emphysema"), 800, -800, StandardPresets);
     addPreset(tr("Petrous Bone"), 4000, 700, StandardPresets);

@@ -357,7 +357,7 @@ void Q3DViewer::setWindowLevel(double window , double level)
 void Q3DViewer::resetView(CameraOrientationType view)
 {
     m_currentOrientation = view;
-    //TODO replantejar si necessitem aquest mètode i el substituïm per aquest mateix
+    // TODO replantejar si necessitem aquest mètode i el substituïm per aquest mateix
     resetOrientation();
 }
 
@@ -927,12 +927,12 @@ void Q3DViewer::renderMIP3D()
     // Quan fem MIP3D deixarem disable per defecte ja que la orientació no la sabem ben bé quina és ja que el pla de tall pot ser arbitrari \TODO no sempre un
     // mip serà sobre un pla mpr, llavors tampoc és del tot correcte decidir això aquí
 //         m_orientationMarker->disable();
-    //================================================================================================
+    // ================================================================================================
     // Create a transfer function mapping scalar value to opacity
     // assignem una rampa d'opacitat total per valors alts i nula per valors petits
     // després en l'escala de grisos donem un  valor de gris constant (blanc)
 
-    //\TODO Les funcions de transferència no es definiran "a pelo" aquí mai més. Això és cosa de la classe TransferFunction
+    // \TODO Les funcions de transferència no es definiran "a pelo" aquí mai més. Això és cosa de la classe TransferFunction
 
     // Creem la funció de transferència de l'opacitat
 //     m_transferFunction->addPointToOpacity(20, .0);

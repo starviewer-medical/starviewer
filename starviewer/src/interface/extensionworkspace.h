@@ -20,7 +20,7 @@ public:
 
     /// Afegeix una nova aplicació
     /// Li indiquem el widget, títol visible per l'usuari i nom intern de l'aplicació
-    //\TODO: paràmetre de recursos?, afegir un id d'aplicació per poder-la referenciar, afegir una label/nom, +altres possibles paràmetres
+    // \TODO: paràmetre de recursos?, afegir un id d'aplicació per poder-la referenciar, afegir una label/nom, +altres possibles paràmetres
     void addApplication(QWidget *application, QString caption, const QString &extensionIdentifier);
 
     /// Treu una aplicació de l'espai de mini-aplicacions i l'elimina de memòria

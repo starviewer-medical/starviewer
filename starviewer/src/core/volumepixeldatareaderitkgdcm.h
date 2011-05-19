@@ -10,7 +10,7 @@
 #include <itkGDCMImageIO.h>
 // Per notificar el progrés de lectura
 #include "itkQtAdaptor.h"
-//Converts an ITK image into a VTK image and plugs a itk data pipeline to a VTK datapipeline.
+// Converts an ITK image into a VTK image and plugs a itk data pipeline to a VTK datapipeline.
 #include "itkImageToVTKImageFilter.h"
 
 namespace udg {

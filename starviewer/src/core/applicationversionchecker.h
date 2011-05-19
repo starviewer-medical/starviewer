@@ -121,4 +121,4 @@ private:
 
 } // End namespace udg
 
-#endif //UDGAPPLICATIONVERSIONCHECKER_H
+#endif // UDGAPPLICATIONVERSIONCHECKER_H

@@ -15,10 +15,10 @@ public:
 
     EchoToPACS();
 
-    ///Fa un echo al PACS passat per paràmetre
+    /// Fa un echo al PACS passat per paràmetre
     bool echo(PacsDevice pacsDevice);
 
-    ///Retorna l'estat de l'últim echo fet a un PACS
+    /// Retorna l'estat de l'últim echo fet a un PACS
     EchoToPACS::EchoRequestStatus getLastError();
 
 private:

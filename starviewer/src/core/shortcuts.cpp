@@ -99,7 +99,7 @@ void Shortcuts::init()
     settingsRegistry->addSetting(MagicTool, shortcutsList);
 
     shortcutsList.clear();
-    //\TODO
+    // \TODO
     shortcutsList.append(QString(""));
     settingsRegistry->addSetting(ScreenShotTool, shortcutsList);
 
@@ -124,7 +124,7 @@ void Shortcuts::init()
     settingsRegistry->addSetting(VoxelInformationTool, shortcutsList);
 
     shortcutsList.clear();
-    //\TODO
+    // \TODO
     shortcutsList.append(QString(""));
     settingsRegistry->addSetting(SynchronizeTool, shortcutsList);
 
@@ -141,12 +141,12 @@ void Shortcuts::init()
     settingsRegistry->addSetting(AngleTool, shortcutsList);
 
     shortcutsList.clear();
-    //\TODO
+    // \TODO
     shortcutsList.append(QString("Shift+A"));
     settingsRegistry->addSetting(NonClosedAngleTool, shortcutsList);
 
     shortcutsList.clear();
-    //\TODO
+    // \TODO
     shortcutsList.append(QString("N"));
     settingsRegistry->addSetting(EditorTool, shortcutsList);
 
@@ -163,17 +163,17 @@ void Shortcuts::init()
     settingsRegistry->addSetting(InvertWindowLevelTool, shortcutsList);
 
     shortcutsList.clear();
-    //\TODO
+    // \TODO
     shortcutsList.append(QString("Ctrl+1"));
     settingsRegistry->addSetting(AxialViewTool, shortcutsList);
 
     shortcutsList.clear();
-    //\TODO
+    // \TODO
     shortcutsList.append(QString("Ctrl+2"));
     settingsRegistry->addSetting(SagitalViewTool, shortcutsList);
 
     shortcutsList.clear();
-    //\TODO
+    // \TODO
     shortcutsList.append(QString("Ctrl+3"));
     settingsRegistry->addSetting(CoronalViewTool, shortcutsList);
 
@@ -198,7 +198,7 @@ void Shortcuts::init()
     settingsRegistry->addSetting(ClearCurrentViewAnnotationsTool, shortcutsList);
 
     shortcutsList.clear();
-    //\TODO
+    // \TODO
     shortcutsList.append(QString(""));
     settingsRegistry->addSetting(TransDifferenceTool, shortcutsList);
 
@@ -235,7 +235,7 @@ void Shortcuts::init()
     settingsRegistry->addSetting(OpenExams, shortcutsList);
 
     shortcutsList.clear();
-    //\TODO
+    // \TODO
     shortcutsList.append(QString(""));
     settingsRegistry->addSetting(Preferences, shortcutsList);
 

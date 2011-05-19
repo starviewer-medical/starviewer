@@ -53,7 +53,7 @@ void PreviousStudiesManager::makeAsynchronousStudiesQuery(Patient *patient, QDat
 
     if (pacsDeviceListToQuery.count() == 0)
     {
-        //Sinó hi ha cap PACS pel qual cercar per defecte fem l'emit del queryFinished
+        // Sinó hi ha cap PACS pel qual cercar per defecte fem l'emit del queryFinished
         queryFinished();
         return;
     }
@@ -76,7 +76,7 @@ void PreviousStudiesManager::makeAsynchronousStudiesQuery(Patient *patient, QDat
 
     if (queryDicomMasksList.count() == 0)
     {
-        //Sinó hi ha cap cconsulta a fer donem la cerca per finalitzada
+        // Sinó hi ha cap cconsulta a fer donem la cerca per finalitzada
         queryFinished();
     }
     else
@@ -105,7 +105,7 @@ void PreviousStudiesManager::initializeQuery()
 {
     cancelCurrentQuery();
 
-    ///Fem neteja de consultes anteriors
+    /// Fem neteja de consultes anteriors
     m_mergedHashPacsIDOfStudyInstanceUID.clear();
     m_mergedStudyList.clear();
     m_pacsDeviceIDErrorEmited.clear();
@@ -138,7 +138,7 @@ bool PreviousStudiesManager::isExecutingQueries()
 
 void PreviousStudiesManager::queryPACSJobCancelled(PACSJob *pacsJob)
 {
-    //Aquest slot també serveix per si alguna altre classe ens cancel·la un PACSJob nostre per a que ens n'assabentem
+    // Aquest slot també serveix per si alguna altre classe ens cancel·la un PACSJob nostre per a que ens n'assabentem
     QueryPacsJob *queryPACSJob = qobject_cast<QueryPacsJob*>(pacsJob);
 
     if (queryPACSJob == NULL)
@@ -149,7 +149,7 @@ void PreviousStudiesManager::queryPACSJobCancelled(PACSJob *pacsJob)
     {
         m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
 
-        //Fem un deleteLater per si algú més ha capturat el signal de PACSJobFinished per aquest aquest job no es trobi l'objecte destruït
+        // Fem un deleteLater per si algú més ha capturat el signal de PACSJobFinished per aquest aquest job no es trobi l'objecte destruït
         queryPACSJob->deleteLater();
 
         if (m_queryPACSJobPendingExecuteOrExecuting.isEmpty())
@@ -180,7 +180,7 @@ void PreviousStudiesManager::queryPACSJobFinished(PACSJob *pacsJob)
 
         m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
 
-        //Fem un deleteLater per si algú més ha capturat el signal de PACSJobFinished per aquest aquest job no es trobi l'objecte destruït
+        // Fem un deleteLater per si algú més ha capturat el signal de PACSJobFinished per aquest aquest job no es trobi l'objecte destruït
         queryPACSJob->deleteLater();
 
         if (m_queryPACSJobPendingExecuteOrExecuting.isEmpty())
@@ -194,7 +194,7 @@ void PreviousStudiesManager::mergeFoundStudiesInQuery(QueryPacsJob *queryPACSJob
 {
     if (queryPACSJob->getQueryLevel() != QueryPacsJob::study)
     {
-        ///Si la consulta no era d'estudis no ens interessa, només cerquem estudis
+        /// Si la consulta no era d'estudis no ens interessa, només cerquem estudis
         return;
     }
 
@@ -262,7 +262,7 @@ DicomMask PreviousStudiesManager::getBasicDicomMask()
 {
     DicomMask dicomMask;
 
-    ///Definim els camps que la consulta ha de retornar
+    /// Definim els camps que la consulta ha de retornar
     dicomMask.setPatientName("");
     dicomMask.setPatientId("");
     dicomMask.setStudyId("");

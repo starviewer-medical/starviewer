@@ -34,10 +34,10 @@ public slots:
 
 private:
 
-    ///Es creen els connexions de la interfície
+    /// Es creen els connexions de la interfície
     void createConnections();
 
-    ///Configurem InputValidator per alguns dels QLineEdit
+    /// Configurem InputValidator per alguns dels QLineEdit
     void configureInputValidator();
 
     /// Comprova la validesa dels paràmetres entrats. Retorna false si hi ha algun paràmetre erroni.

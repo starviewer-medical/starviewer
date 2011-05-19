@@ -19,7 +19,7 @@ public:
 
     DicomMask();
 
-    ///Indiquem el Patient name pel qual filtrar
+    /// Indiquem el Patient name pel qual filtrar
     void setPatientName(const QString &patientName);
 
     /// Aquest mètode especifica la data de naixement del pacient amb la que s'han de cercar els estudis. El format és DDMMYYYY
@@ -37,7 +37,7 @@ public:
     /// @return state of the method
     void setPatientSex(const QString &patientSex);
 
-    ///Indiquem el patient Id pel qual filtrar
+    /// Indiquem el patient Id pel qual filtrar
     void setPatientId(const QString &patientId);
 
     /// This action especified that in the search we want the Patient's Age
@@ -142,7 +142,7 @@ public:
     /// @return   accession number de l'estudi
     QString getAccessionNumber() const;
 
-    /// retorna el ReferringPhysiciansName
+    /// Retorna el ReferringPhysiciansName
     /// @return ReferringPhysiciansName
     QString getReferringPhysiciansName() const;
 
@@ -235,23 +235,23 @@ public:
     /// @return SeriesUID
     QString getSeriesInstanceUID() const;
 
-    /// retorna el Requested procedures ID
+    /// Retorna el Requested procedures ID
     /// @return requesta procedure ID
     QString getRequestedProcedureID() const;
 
-    /// retorna el scheduled procedure step ID
+    /// Retorna el scheduled procedure step ID
     /// @return scheduled procedure step ID
     QString getScheduledProcedureStepID() const;
 
-    /// retorna el Perfomed Procedure Step Start date
+    /// Retorna el Perfomed Procedure Step Start date
     /// @return Perfomed Procedure Step Start date
     QString getPPSStartDate() const;
 
-    /// retorna el Perfomed Procedure Step Start Time
+    /// Retorna el Perfomed Procedure Step Start Time
     /// @return Perfomed Procedure Step Start Time
     QString getPPSStartTime() const;
 
-    /// set the StudyId of the images
+    /// Set the StudyId of the images
     /// @param   Study instance UID the study to search. If this parameter is null it's supose that any mask is applied at this field
     /// @return The state of the action
     void setImageNumber(const QString &imageNumber);
@@ -265,7 +265,7 @@ public:
     /// @return número d'imatge
     QString getImageNumber() const;
 
-    /// retorna el SOPInstance UID de l'imatge
+    /// Retorna el SOPInstance UID de l'imatge
     /// @return SOPInstance UID de l'imatge
     QString getSOPInstanceUID() const;
 
@@ -318,9 +318,9 @@ private:
     QString m_SOPInstanceUID;
     QString m_imageNumber;
 
-    ///Retorna el nivell de QueryRetrieve, en funció dels camps de la màscara que ens han introduït
+    /// Retorna el nivell de QueryRetrieve, en funció dels camps de la màscara que ens han introduït
     QString getQueryRetrieveLevel();
 };
 
-} //end namespace
+} // End namespace
 #endif

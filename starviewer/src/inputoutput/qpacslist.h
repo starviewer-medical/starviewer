@@ -18,23 +18,23 @@ class QPacsList : public QWidget, private Ui::QPacsListBase {
 Q_OBJECT
 public:
 
-    ///Constructor de la classe
+    /// Constructor de la classe
     QPacsList(QWidget *parent = 0);
 
     /// Retorna els pacs seleccionats per l'usuari
     QList<PacsDevice> getSelectedPacs();
 
-    ///Neteja els elements seleccionats de la llista
+    /// Neteja els elements seleccionats de la llista
     void clearSelection();
 
-    ///Destructor de la classe
+    /// Destructor de la classe
     ~QPacsList();
 
-    ///Especifica/Retorna per quin Filtre es filtren els PACS mostrats, per defecte si no s'especifica no es filtra.
+    /// Especifica/Retorna per quin Filtre es filtren els PACS mostrats, per defecte si no s'especifica no es filtra.
     void setFilterPACSByService(PacsDeviceManager::FilterPACSByService);
     PacsDeviceManager::FilterPACSByService getFilterPACSByService();
 
-    ///Especifica/Retorna si els PACS que estan marcats com a PACS per cercar per defecte s'han de mostrar ressaltats. Per defecte s'hi mostren
+    /// Especifica/Retorna si els PACS que estan marcats com a PACS per cercar per defecte s'han de mostrar ressaltats. Per defecte s'hi mostren
     void setShowQueryPacsDefaultHighlighted(bool showHighlighted);
     bool getShowQueryPacsDefaultHighlighted();
 

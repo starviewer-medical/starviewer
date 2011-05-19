@@ -70,7 +70,7 @@ private:
     void getAxialXVector(double x[3]);
     void getAxialYVector(double y[3]);
 
-    ///Inicialitza les tools que tindrà l'extensió
+    /// Inicialitza les tools que tindrà l'extensió
     void initializeTools();
 
     /// Actualitza valors dels plans i del reslice final

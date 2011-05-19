@@ -102,10 +102,10 @@ QList<PacsDevice> PacsDeviceManager::getPACSList(FilterPACSByService filter, boo
     {
         PacsDevice pacs;
         pacs = keyValueMapToPacsDevice(item);
-        // depenent del paràmetre "onlyDefault" afegirem o no els pacs
+        // Depenent del paràmetre "onlyDefault" afegirem o no els pacs
         if ((onlyDefault && pacs.isDefault()) || !onlyDefault)
         {
-            //Filtrem per servei si ens ho han demanat
+            // Filtrem per servei si ens ho han demanat
             if (filter == PacsDeviceManager::AllPacs ||
                 (filter == PacsDeviceManager::PacsWithQueryRetrieveServiceEnabled && pacs.isQueryRetrieveServiceEnabled()) ||
                 (filter == PacsDeviceManager::PacsWithStoreServiceEnabled && pacs.isStoreServiceEnabled()))
@@ -196,7 +196,7 @@ PacsDevice PacsDeviceManager::keyValueMapToPacsDevice(const Settings::KeyValueMa
 
     if (!item.contains("QueryRetrieveServiceEnabled"))
     {
-        //Si no està guardat als settings si està activat el servei de Query/Retrieve per defecte li indiquem que està activat
+        // Si no està guardat als settings si està activat el servei de Query/Retrieve per defecte li indiquem que està activat
         pacsDevice.setQueryRetrieveServiceEnabled(true);
         pacsDevice.setQueryRetrieveServicePort(item.value("PacsPort").toInt());
     }

@@ -64,15 +64,15 @@ public:
     void setID(const QString &id);
     QString getID() const;
 
-    ///Assigna/Retorna si podem fer consultes/descarregues al PACS
+    /// Assigna/Retorna si podem fer consultes/descarregues al PACS
     void setQueryRetrieveServiceEnabled(bool isQueryRetrieveServiceEnabled);
     bool isQueryRetrieveServiceEnabled() const;
 
-    ///Assigna/Retorna si podem enviar imatges al PACS
+    /// Assigna/Retorna si podem enviar imatges al PACS
     void setStoreServiceEnabled(bool isStoreServiceEnabled);
     bool isStoreServiceEnabled() const;
 
-    ///Assigna/Retorna el port pel qual hem d'enviar imatges al PACS
+    /// Assigna/Retorna el port pel qual hem d'enviar imatges al PACS
     void setStoreServicePort(int storeServicePort);
     int getStoreServicePort() const;
 

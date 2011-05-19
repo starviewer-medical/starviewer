@@ -51,7 +51,7 @@ int LocalDatabaseUtilDAL::getDatabaseRevision()
         
         if (databaseReplyIsAnIntegerValue)
         {
-            //El número de revisió ha de tenir format numèric, sinó s'ha produït un error.
+            // El número de revisió ha de tenir format numèric, sinó s'ha produït un error.
             return revisionDatabaseAsInt;
         }
         else
@@ -61,7 +61,7 @@ int LocalDatabaseUtilDAL::getDatabaseRevision()
     }
     else
     {
-        //si no trobem la fila amb la revisió de la base de dades retornem -1
+        // Si no trobem la fila amb la revisió de la base de dades retornem -1
         return -1;
     }
 }

@@ -19,13 +19,13 @@ public:
     QBasicSearchWidget(QWidget *parent = 0);
     ~QBasicSearchWidget();
 
-    ///neteja els camps de la cerca bàsica
+    /// Neteja els camps de la cerca bàsica
     void clear();
 
-    ///Activa o desactiva poder escollir la modalitat de serie al fer la cerca
+    /// Activa o desactiva poder escollir la modalitat de serie al fer la cerca
     void setEnabledSeriesModality(bool enabled);
 
-    ///Construeix la màscara de cerca
+    /// Construeix la màscara de cerca
     DicomMask buildDicomMask();
 
     /// Ens marca les flags de cerca per data per defecte
@@ -42,24 +42,24 @@ private slots :
     void checkToDate(QDate date);
 
 private:
-    ///Crea les connexions entre signals i slots
+    /// Crea les connexions entre signals i slots
     void createConnections();
 
-    ///Inicialitza els valors de la QBasicSearchWidget
+    /// Inicialitza els valors de la QBasicSearchWidget
     void initialize();
 
-    /// construeix la màscara de les dates
+    /// Construeix la màscara de les dates
     QString getStudyDatesStringMask();
 
-    ///Neteja el paràmetre de cerca de modalitat de serie
+    /// Neteja el paràmetre de cerca de modalitat de serie
     void clearSeriesModality();
 
-    ///S'executa quan es mostra el widget, fa que la primera vegada que es mostri es doni el focus al lineEdit PatientName
+    /// S'executa quan es mostra el widget, fa que la primera vegada que es mostri es doni el focus al lineEdit PatientName
     void showEvent(QShowEvent *event);
 
 private:
 
-    ///Indica si s'ha mostra el widget
+    /// Indica si s'ha mostra el widget
     bool m_widgetHasBeenShowed;
 };
 

@@ -21,7 +21,7 @@ int LocalDatabaseBaseDAL::getLastError()
 
 void LocalDatabaseBaseDAL::logError(const QString &sqlSentence)
 {
-    //Ingnorem l'error de clau duplicada
+    // Ingnorem l'error de clau duplicada
     if (getLastError() != SQLITE_CONSTRAINT)
     {
         ERROR_LOG("S'ha produit l'error: " + QString().setNum(getLastError()) + ", " + m_dbConnection->getLastErrorMessage() +

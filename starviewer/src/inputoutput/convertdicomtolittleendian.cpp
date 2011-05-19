@@ -36,7 +36,7 @@ Status ConvertDicomToLittleEndian::convert(QString inputFile, QString outputFile
     DcmDataset *dataset = fileformat.getDataset();
     OFCondition error;
     Status state;
-    //Transfer Syntax del fitxer d'entrada
+    // Transfer Syntax del fitxer d'entrada
     E_TransferSyntax opt_ixfer = EXS_Unknown;
     E_FileReadMode opt_readMode = ERM_autoDetect;
     E_TransferSyntax opt_oxfer = EXS_LittleEndianExplicit;

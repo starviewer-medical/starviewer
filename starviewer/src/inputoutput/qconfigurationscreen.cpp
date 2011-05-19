@@ -49,13 +49,13 @@ QConfigurationScreen::~QConfigurationScreen()
 
 void QConfigurationScreen::createConnections()
 {
-    //connecta el boto aplicar del Pacs amb l'slot apply
+    // Connecta el boto aplicar del Pacs amb l'slot apply
     connect(m_buttonApplyPacs, SIGNAL(clicked()), SLOT(applyChanges()));
 
     connect(m_textAETitleMachine, SIGNAL(textChanged(const QString &)), SLOT(enableApplyButtons()));
     connect(m_textTimeout, SIGNAL(textChanged(const QString &)), SLOT(enableApplyButtons()));
     connect(m_textLocalPort, SIGNAL(textChanged(const QString &)), SLOT(enableApplyButtons()));
-    //En el moment en que ens editen el textBox si apareixia el missatge de port en ús el fem invisible
+    // En el moment en que ens editen el textBox si apareixia el missatge de port en ús el fem invisible
     connect(m_textLocalPort, SIGNAL(textChanged(const QString &)), SLOT(checkIncomingConnectionsPortNotInUse()));
     connect(m_textMaxConnections, SIGNAL(textChanged(const QString &)), SLOT(enableApplyButtons()));
     connect(m_textInstitutionName, SIGNAL(textChanged(const QString &)), SLOT(enableApplyButtons()));
@@ -71,7 +71,7 @@ void QConfigurationScreen::createConnections()
 
     connect(m_textQueryRetrieveServicePort, SIGNAL(editingFinished()), SLOT(m_textQueryRetrieveServicePortChanged()));
 
-    //manteniment PACS
+    // Manteniment PACS
     connect(m_buttonAddPacs, SIGNAL(clicked()), SLOT(addPacs()));
     connect(m_buttonDeletePacs, SIGNAL(clicked()), SLOT(deletePacs()));
     connect(m_buttonUpdatePacs, SIGNAL(clicked()), SLOT(updatePacs()));
@@ -153,7 +153,7 @@ void QConfigurationScreen::updateSelectedPACSInformation()
     QTreeWidgetItem *selectedItem = 0;
     if (!m_PacsTreeView->selectedItems().isEmpty())
     {
-        // només en podem tenir un de seleccionat
+        // Només en podem tenir un de seleccionat
         selectedItem = m_PacsTreeView->selectedItems().first();
         // TODO en comptes d'obtenir del manager, potser es podria obtenir la informació directament del tree widget i estalviar aquest pas de "query"
         // selectedItem->text(0) --> ID del pacs seleccionat al TreeWidget
@@ -166,7 +166,7 @@ void QConfigurationScreen::updateSelectedPACSInformation()
         }
         else
         {
-            //emplenem els textos
+            // Emplenem els textos
             m_textAETitle->setText(selectedPacs.getAETitle());
             m_textAddress->setText(selectedPacs.getAddress());
             m_textInstitution->setText(selectedPacs.getInstitution());
@@ -181,7 +181,7 @@ void QConfigurationScreen::updateSelectedPACSInformation()
             m_textStoreServicePort->setText(selectedPacs.isStoreServiceEnabled() ? QString().setNum(selectedPacs.getStoreServicePort()) : "");
             m_textStoreServicePort->setEnabled(selectedPacs.isStoreServiceEnabled());
         }
-        // indiquem quin és l'ID del PACS seleccionat
+        // Indiquem quin és l'ID del PACS seleccionat
         m_selectedPacsID = selectedPacs.getID();
     }
     else
@@ -255,7 +255,7 @@ void QConfigurationScreen::test()
     {
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-        //Agafem les dades del PACS que estan el textbox per testejar
+        // Agafem les dades del PACS que estan el textbox per testejar
         PacsDevice pacsDevice = getPacsDeviceFromControls();
         EchoToPACS echoToPACS;
 
@@ -280,7 +280,7 @@ void QConfigurationScreen::test()
                     message = tr("PACS \"%1\" doesn't respond.\nBe sure that the IP and AETitle of It are correct.").arg(pacsDevice.getAETitle());
                     break;
                 default:
-                    //No hauria de passar mai
+                    // No hauria de passar mai
                     message = tr("PACS \"%1\" doesn't respond as expected, and unknown error has produced.").arg(pacsDevice.getAETitle());
                     break;
             }
@@ -329,7 +329,7 @@ bool QConfigurationScreen::validatePacsDeviceToSave()
 {
     if (validatePacsDeviceToEcho())
     {
-        //la institució no pot estar en blanc
+        // La institució no pot estar en blanc
         if (m_textInstitution->text().length() == 0)
         {
             QMessageBox::warning(this, ApplicationNameString, tr("Institution field can't be empty."));
@@ -475,7 +475,7 @@ void QConfigurationScreen::enableApplyButtons()
 
 bool QConfigurationScreen::isIncomingConnectionsPortInUseByAnotherApplication()
 {
-    //Comprovem que el port estigui o no en ús i que en el cas que estigui en ús, no sigui utilitzat per l'Starviewer
+    // Comprovem que el port estigui o no en ús i que en el cas que estigui en ús, no sigui utilitzat per l'Starviewer
     return Utils::isPortInUse(m_textLocalPort->text().toInt()) && !LocalDatabaseManager().isStudyRetrieving();
 }
 
@@ -512,7 +512,7 @@ void QConfigurationScreen::m_textQueryRetrieveServicePortChanged()
     {
         if (m_checkBoxStoreEnabled->isChecked() && m_textStoreServicePort->text().isEmpty())
         {
-            //Si s'ha indicat que el servei d'store està permés i aquest no té el port configurat li donem per defecte el valor del port de Q/R
+            // Si s'ha indicat que el servei d'store està permés i aquest no té el port configurat li donem per defecte el valor del port de Q/R
             m_textStoreServicePort->setText(m_textQueryRetrieveServicePort->text());
         }
     }

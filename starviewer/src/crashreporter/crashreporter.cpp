@@ -8,11 +8,11 @@
 
 void configureLogging()
 {
-    // primer comprovem que existeixi el direcotori ~/.starviewer/log/ on guradarem els logs
+    // Primer comprovem que existeixi el direcotori ~/.starviewer/log/ on guradarem els logs
     QDir logDir = udg::UserLogsPath;
     if (!logDir.exists())
     {
-        // creem el directori
+        // Creem el directori
         logDir.mkpath(udg::UserLogsPath);
     }
     // TODO donem per fet que l'arxiu es diu així i es troba a la localització que indiquem. S'hauria de fer una mica més flexible o genèric;
@@ -30,7 +30,7 @@ void configureLogging()
 void initializeTranslations(QApplication &app)
 {
     udg::ApplicationTranslationsLoader translationsLoader(&app);
-    // li indiquem la locale corresponent
+    // Li indiquem la locale corresponent
     QLocale defaultLocale = translationsLoader.getDefaultLocale();
     QLocale::setDefault(defaultLocale);
 

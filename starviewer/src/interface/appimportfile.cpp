@@ -2,11 +2,11 @@
 
 #include "interfacesettings.h"
 #include "starviewerapplication.h"
-// qt
+// Qt
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QMessageBox>
-// recursos
+// Recursos
 #include "logging.h"
 
 namespace udg {
@@ -14,7 +14,7 @@ namespace udg {
 AppImportFile::AppImportFile(QObject *parent)
  : QObject(parent)
 {
-    //TODO: De moment es desactiven els warnings en release perquè no apareixi la finestra vtkOutputWindow
+    // TODO: De moment es desactiven els warnings en release perquè no apareixi la finestra vtkOutputWindow
     //      però la solució bona passa per evitar els warnings o bé redirigir-los a un fitxer.
 #ifdef QT_NO_DEBUG
     itk::Object::GlobalWarningDisplayOff();
@@ -64,14 +64,14 @@ void AppImportFile::openDirectory(bool recursively)
         m_workingDicomDirectory = directoryName;
         writeSettings();
 
-        // llista on guardarem tots els arxius compatibles que hi ha als directoris
+        // Llista on guardarem tots els arxius compatibles que hi ha als directoris
         QStringList filenames;
         if (recursively)
         {
-            // explorem recursivament tots els directoris
+            // Explorem recursivament tots els directoris
             QStringList dirList;
             scanDirectories(directoryName, dirList);
-            // per cada directori, obtenim els arxius que podem tractar
+            // Per cada directori, obtenim els arxius que podem tractar
             foreach (QString dirName, dirList)
             {
                 filenames << generateFilenames(dirName);
@@ -115,13 +115,13 @@ void AppImportFile::scanDirectories(const QString &rootPath, QStringList &dirsLi
     QDir rootDir(rootPath);
     if (rootDir.exists())
     {
-        // afegim el directori actual a la llista
+        // Afegim el directori actual a la llista
         dirsList << rootPath;
-        // busquem si tenim més directoris
+        // Busquem si tenim més directoris
         QStringList subdirs = rootDir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
         if (!subdirs.isEmpty())
         {
-            // per cada subdirectori escanejem recursivament
+            // Per cada subdirectori escanejem recursivament
             foreach (QString subDir, subdirs)
             {
                 scanDirectories(rootPath + "/" + subDir, dirsList);

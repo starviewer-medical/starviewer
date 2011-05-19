@@ -25,7 +25,7 @@ void PresentationStateFillerStep::processPresentationState()
 //     ok = dicomReader.setFile(presentationState->getPath());
     if (ok)
     {
-        //TODO per implementar
+        // TODO per implementar
         DEBUG_LOG("Pendent d'implementació!");
     }
 //     else

@@ -25,7 +25,7 @@ RISRequestManager::RISRequestManager(PacsManager *pacsManager)
 
 RISRequestManager::~RISRequestManager()
 {
-    //Com que la classe que escolta les peticions del RIS s'executa en un thread li emetem un signal indicant-li que s'ha de parar.
+    // Com que la classe que escolta les peticions del RIS s'executa en un thread li emetem un signal indicant-li que s'ha de parar.
     emit stopListenRISRequests();
 
     m_listenRISRequestsQThread->exit();
@@ -42,8 +42,8 @@ void RISRequestManager::initialize()
     m_listenRISRequestsQThread = new QThread();
     m_listenRISRequests = new ListenRISRequests();
 
-    //La classe ListenRISRequests necessita el seu propi thread perquè sempre està executant-se esperant noves peticions, si l'executes el thread principal
-    //Starviewer quedaria congelada només escoltant peticions del RIS
+    // La classe ListenRISRequests necessita el seu propi thread perquè sempre està executant-se esperant noves peticions, si l'executes el thread principal
+    // Starviewer quedaria congelada només escoltant peticions del RIS
     m_listenRISRequests->moveToThread(m_listenRISRequestsQThread);
     m_listenRISRequestsQThread->start();
 
@@ -74,11 +74,11 @@ void RISRequestManager::listen()
 void RISRequestManager::processRISRequest(DicomMask dicomMaskRISRequest)
 {
     INFO_LOG("Encuem sol·licitud de descàrrega d'un estudi del RIS amb accession number " + dicomMaskRISRequest.getAccessionNumber());
-    //Per anar atenent les descàrregues a mesura que ens arriben encuem les peticions, només fem una cerca al PACS a la vegada, una
-    //vegada hem trobat l'estudi en algun PACS, es posa a descarregar i s'aten una altra petició
+    // Per anar atenent les descàrregues a mesura que ens arriben encuem les peticions, només fem una cerca al PACS a la vegada, una
+    // vegada hem trobat l'estudi en algun PACS, es posa a descarregar i s'aten una altra petició
     m_queueRISRequests.enqueue(dicomMaskRISRequest);
 
-    //Si tenim més d'un element ja hi ha un altre consulta d'un RIS Executant-se per tant no fem res
+    // Si tenim més d'un element ja hi ha un altre consulta d'un RIS Executant-se per tant no fem res
     if (m_queueRISRequests.count() == 1)
     {
         queryPACSRISStudyRequest(m_queueRISRequests.head());
@@ -88,9 +88,9 @@ void RISRequestManager::processRISRequest(DicomMask dicomMaskRISRequest)
 void RISRequestManager::queryPACSRISStudyRequest(DicomMask maskRISRequest)
 {
     INFO_LOG("Comencem a cercar l'estudi sol·licitat pel RIS amb accession number " + maskRISRequest.getAccessionNumber());
-    //Al iniciar una nova consulta netegem la llista UID d'estudis demanats per descarregar i pendents de descarregar
-    //TODO:Si ens arriba una altre petició del RIS mentre encara descarreguem l'anterior petició no es farà seguiment de la descarrega actual, sinó de la
-    //última que ha arribat
+    // Al iniciar una nova consulta netegem la llista UID d'estudis demanats per descarregar i pendents de descarregar
+    // TODO:Si ens arriba una altre petició del RIS mentre encara descarreguem l'anterior petició no es farà seguiment de la descarrega actual, sinó de la
+    // última que ha arribat
     m_studiesInstancesUIDRequestedToRetrieve.clear();
 
     // TODO Ara mateix cal que nosaltres mateixos fem aquesta comprovació però potser seria interessant que el mètode PACSDevicemanager::queryStudy()
@@ -149,7 +149,7 @@ void RISRequestManager::queryPACSJobFinished(PACSJob *pacsJob)
 
         m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
 
-        //Fem un deleteLater per si algú més ha capturat el signal de PACSJobFinished per aquest aquest job no es trobi l'objecte destruït
+        // Fem un deleteLater per si algú més ha capturat el signal de PACSJobFinished per aquest aquest job no es trobi l'objecte destruït
         queryPACSJob->deleteLater();
 
         if (m_queryPACSJobPendingExecuteOrExecuting.isEmpty())
@@ -161,7 +161,7 @@ void RISRequestManager::queryPACSJobFinished(PACSJob *pacsJob)
 
 void RISRequestManager::queryPACSJobCancelled(PACSJob *pacsJob)
 {
-    //Aquest slot també serveix per si alguna altre classe ens cancel·la un PACSJob nostre per a que ens n'assabentem
+    // Aquest slot també serveix per si alguna altre classe ens cancel·la un PACSJob nostre per a que ens n'assabentem
 
     QueryPacsJob *queryPACSJob = qobject_cast<QueryPacsJob*>(pacsJob);
 
@@ -173,7 +173,7 @@ void RISRequestManager::queryPACSJobCancelled(PACSJob *pacsJob)
     {
         m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
 
-        //Fem un deleteLater per si algú més ha capturat el signal de PACSJobFinished per aquest aquest job no es trobi l'objecte destruït
+        // Fem un deleteLater per si algú més ha capturat el signal de PACSJobFinished per aquest aquest job no es trobi l'objecte destruït
         queryPACSJob->deleteLater();
 
         if (m_queryPACSJobPendingExecuteOrExecuting.isEmpty())
@@ -192,7 +192,7 @@ void RISRequestManager::queryRequestRISFinished()
     if (m_studiesInstancesUIDRequestedToRetrieve.count() == 0)
     {
         INFO_LOG("No s'ha trobat cap estudi sol·licitat pel RIS amb l'accession number " + dicomMaskRISRequest.getAccessionNumber());
-        //Si no hem trobat cap estudi que coincideix llancem MessageBox
+        // Si no hem trobat cap estudi que coincideix llancem MessageBox
         QString message = tr("%2 can't execute the RIS request, because hasn't found the Study with accession number %1 in the default PACS.")
                         .arg(dicomMaskRISRequest.getAccessionNumber(), ApplicationNameString);
 
@@ -203,7 +203,7 @@ void RISRequestManager::queryRequestRISFinished()
     if (m_queueRISRequests.count() > 0)
     {
         INFO_LOG("Hi ha més sol·licituts de RIS pendent d'executar");
-        //Tenim altres sol·licituds del RIS per descarregar, les processem
+        // Tenim altres sol·licituds del RIS per descarregar, les processem
         queryPACSRISStudyRequest(m_queueRISRequests.head());
     }
 }
@@ -228,17 +228,17 @@ void RISRequestManager::retrieveFoundStudiesFromPACS(QueryPacsJob *queryPACSJob)
                 INFO_LOG(QString("S'ha trobat estudi que compleix criteri de cerca del RIS. Estudi UID %1, PacsId %2")
                             .arg(study->getInstanceUID(), queryPACSJob->getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()]));
 
-                //Descarreguem l'estudi trobat
+                // Descarreguem l'estudi trobat
                 RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = 
                     retrieveStudy(queryPACSJob->getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()], study);
 
                 if (Settings().getValue(InputOutputSettings::RISRequestViewOnceRetrieved).toBool())
                 {
-                    //TODO: Això és una mica lleig haver de controlar des d'aquí que fe amb l'estudi una vegada descarregat, no es podria posar com a
-                    //propietat al Job, i centralitzar-ho a un responsable que fos l'encarregat de fer l'acció pertinent
+                    // TODO: Això és una mica lleig haver de controlar des d'aquí que fe amb l'estudi una vegada descarregat, no es podria posar com a
+                    // propietat al Job, i centralitzar-ho a un responsable que fos l'encarregat de fer l'acció pertinent
                     if (m_studiesInstancesUIDRequestedToRetrieve.count() == 0)
                     {
-                        //El primer estudi que descarreguem trobat d'una petició del RIS fem un retrieve&view, pels altres serà un retrieve&Load
+                        // El primer estudi que descarreguem trobat d'una petició del RIS fem un retrieve&view, pels altres serà un retrieve&Load
                         m_pacsJobIDToViewWhenFinished.append(retrieveDICOMFilesFromPACSJob->getPACSJobID());
                     }
                     else
@@ -293,7 +293,7 @@ void RISRequestManager::retrieveDICOMFilesFromPACSJobCancelled(PACSJob *pacsJob)
     }
 }
 
-///Slot que s'activa quan un job de descarrega d'una petició del RIS ha finalitzat
+/// Slot que s'activa quan un job de descarrega d'una petició del RIS ha finalitzat
 void RISRequestManager::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacsJob)
 {
     RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = qobject_cast<RetrieveDICOMFilesFromPACSJob*>(pacsJob);

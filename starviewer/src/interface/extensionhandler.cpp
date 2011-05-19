@@ -1,11 +1,11 @@
 #include "extensionhandler.h"
 
-// qt
+// Qt
 #include <QFileInfo>
 #include <QDir>
 #include <QProgressDialog>
 #include <QMessageBox>
-// recursos
+// Recursos
 #include "logging.h"
 #include "extensionworkspace.h"
 #include "qapplicationmainwindow.h"
@@ -32,8 +32,8 @@ ExtensionHandler::ExtensionHandler(QApplicationMainWindow *mainApp, QObject *par
 
     createConnections();
 
-    //TODO:xapussa per a que l'starviewer escolti les peticions del RIS, com que tot el codi d'escoltar les peticions del ris està a la
-    //queryscreen l'hem d'instanciar ja a l'inici perquè ja escolti les peticions
+    // TODO:xapussa per a que l'starviewer escolti les peticions del RIS, com que tot el codi d'escoltar les peticions del ris està a la
+    // queryscreen l'hem d'instanciar ja a l'inici perquè ja escolti les peticions
     QueryScreenSingleton::instance();
     connect(QueryScreenSingleton::instance(), SIGNAL(selectedPatients(QList<Patient*>, bool)), SLOT(processInput(QList<Patient*>, bool)));
 }
@@ -43,8 +43,8 @@ ExtensionHandler::~ExtensionHandler()
     // Si és la última finestra oberta, hem de tancar la queryscreen
     if (m_mainApp->getCountQApplicationMainWindow() == 1)
     {
-        //TODO:Xapussa invoquem el close() de la QueryScreen que tanca totes les finestres dependent de la QueryScreen perquè s'emeti el signal
-        //lasWindowClosed al qual responem des de la main fent un quit, no podríem fer un quit directament des d'aquí?
+        // TODO:Xapussa invoquem el close() de la QueryScreen que tanca totes les finestres dependent de la QueryScreen perquè s'emeti el signal
+        // lasWindowClosed al qual responem des de la main fent un quit, no podríem fer un quit directament des d'aquí?
         QueryScreenSingleton::instance()->close();
     }
 }
@@ -222,7 +222,7 @@ void ExtensionHandler::processInput(const QStringList &inputFiles)
 
         bool error = true;
 
-        // marquem les series seleccionades
+        // Marquem les series seleccionades
         QList<Study*> studyList = patientsList.at(i)->getStudies();
         if (!studyList.isEmpty())
         {
@@ -377,7 +377,7 @@ void ExtensionHandler::addPatientToWindow(Patient *patient, bool canReplaceActua
         *(m_mainApp->getCurrentPatient()) += *patient;
         DEBUG_LOG("Ja teníem dades d'aquest pacient. Fusionem informació");
 
-        //mirem si hi ha alguna extensió oberta, sinó obrim la de per defecte
+        // Mirem si hi ha alguna extensió oberta, sinó obrim la de per defecte
         if (m_mainApp->getExtensionWorkspace()->count() == 0)
         {
             openDefaultExtension();

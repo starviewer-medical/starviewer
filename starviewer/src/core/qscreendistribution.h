@@ -60,4 +60,4 @@ private:
 
 } // End namespace udg
 
-#endif //UDGQSCREENDISTRIBUTION_H
+#endif // UDGQSCREENDISTRIBUTION_H

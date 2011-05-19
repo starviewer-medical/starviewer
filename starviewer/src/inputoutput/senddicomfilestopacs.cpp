@@ -31,7 +31,7 @@ PacsDevice SendDICOMFilesToPACS::getPacs()
 PACSRequestStatus::SendRequestStatus SendDICOMFilesToPACS::send(QList<Image*> imageListToSend)
 {
     PACSConnection pacsConnection(m_pacs);
-    //TODO: S'hauria de comprovar que es tracti d'un PACS amb el servei d'store configurat
+    // TODO: S'hauria de comprovar que es tracti d'un PACS amb el servei d'store configurat
     if (!pacsConnection.connectToPACS(PACSConnection::SendDICOMFiles))
     {
         ERROR_LOG(" S'ha produit un error al intentar connectar al PACS per fer un send. AETitle: " + m_pacs.getAETitle());
@@ -54,7 +54,7 @@ PACSRequestStatus::SendRequestStatus SendDICOMFilesToPACS::send(QList<Image*> im
         }
         else if (m_lastOFCondition == DIMSE_SENDFAILED)
         {
-            //Si se'ns retorna un OFCondition == DIMSE_SENDFAILED, indica que s'ha perdut la connexió amb el PACS
+            // Si se'ns retorna un OFCondition == DIMSE_SENDFAILED, indica que s'ha perdut la connexió amb el PACS
             break;
         }
     }
@@ -72,7 +72,7 @@ void SendDICOMFilesToPACS::requestCancel()
 
 void SendDICOMFilesToPACS::initialitzeDICOMFilesCounters(int numberOfDICOMFilesToSend)
 {
-    //Inicialitzem els comptadors
+    // Inicialitzem els comptadors
     m_numberOfDICOMFilesSentSuccessfully = 0;
     m_numberOfDICOMFilesSentWithWarning = 0;
     m_numberOfDICOMFilesToSend = numberOfDICOMFilesToSend;
@@ -99,23 +99,23 @@ bool SendDICOMFilesToPACS::storeSCU(T_ASC_Association *association, QString file
 
     m_lastOFCondition = dcmff.loadFile(qPrintable(QDir::toNativeSeparators(filepathToStore)));
 
-    // figure out if an error occured while the file was read
+    // Figure out if an error occured while the file was read
     if (m_lastOFCondition.bad())
     {
         ERROR_LOG("No s'ha pogut obrir el fitxer " + filepathToStore);
         return false;
     }
-    // figure out which SOP class and SOP instance is encapsulated in the file
+    // Figure out which SOP class and SOP instance is encapsulated in the file
     if (!DU_findSOPClassAndInstanceInDataSet(dcmff.getDataset(), sopClass, sopInstance, OFFalse))
     {
         ERROR_LOG("No s'ha pogut obtenir el SOPClass i SOPInstance del fitxer " + filepathToStore);
         return false;
     }
 
-    // figure out which of the accepted presentation contexts should be used
+    // Figure out which of the accepted presentation contexts should be used
     DcmXfer filexfer(dcmff.getDataset()->getOriginalXfer());
 
-    //Busquem dels presentationContextID que hem establert al connectar quin és el que hem d'utilitzar per transferir aquesta imatge
+    // Busquem dels presentationContextID que hem establert al connectar quin és el que hem d'utilitzar per transferir aquesta imatge
     if (filexfer.getXfer() != EXS_Unknown)
     {
         presentationContextID = ASC_findAcceptedPresentationContextID(association, sopClass, filexfer.getXferID());
@@ -127,7 +127,7 @@ bool SendDICOMFilesToPACS::storeSCU(T_ASC_Association *association, QString file
 
     if (presentationContextID == 0)
     {
-        //No hem trobat cap presentation context vàlid dels que hem configuarat a la connexió pacsserver.cpp
+        // No hem trobat cap presentation context vàlid dels que hem configuarat a la connexió pacsserver.cpp
         const char *modalityName = dcmSOPClassUIDToModality(sopClass);
 
         if (!modalityName)
@@ -147,7 +147,7 @@ bool SendDICOMFilesToPACS::storeSCU(T_ASC_Association *association, QString file
     }
     else
     {
-        // prepare the transmission of data
+        // Prepare the transmission of data
         bzero((char*)&request, sizeof(request));
         request.MessageID = msgId;
         strcpy(request.AffectedSOPClassUID, sopClass);
@@ -191,7 +191,7 @@ void SendDICOMFilesToPACS::processResponseFromStoreSCP(T_DIMSE_C_StoreRSP *respo
 
     if (response->DimseStatus == STATUS_Success)
     {
-        //La imatge s'ha enviat correctament
+        // La imatge s'ha enviat correctament
         m_numberOfDICOMFilesSentSuccessfully++;
         return;
     }
@@ -212,13 +212,13 @@ void SendDICOMFilesToPACS::processResponseFromStoreSCP(T_DIMSE_C_StoreRSP *respo
             // 0xA9XX
         case STATUS_STORE_Error_CannotUnderstand:
             // 0xCXXX
-            //Error: Sop Class Not Supported or Data Set Doest Not Match SOP Class or Can not Understant
+            // Error: Sop Class Not Supported or Data Set Doest Not Match SOP Class or Can not Understant
             // Related fields DCM_OffendingElement (0000,0901) DCM_ErrorComment (0000,0902)
             relatedFieldsList << DCM_OffendingElement << DCM_ErrorComment;
 
             ERROR_LOG(messageErrorLog + QString(DU_cstoreStatusString(response->DimseStatus)));
             break;
-        // coersió entre tipus, s'ha convertit un tipus a un altre tipus i es pot haver perdut dades, per exemple passar de decimal a enter, tot i així
+        // Coersió entre tipus, s'ha convertit un tipus a un altre tipus i es pot haver perdut dades, per exemple passar de decimal a enter, tot i així
         // els fitxers s'han enviat i guardat
         case STATUS_STORE_Warning_CoersionOfDataElements:
             // 0xB000
@@ -276,20 +276,20 @@ PACSRequestStatus::SendRequestStatus SendDICOMFilesToPACS::getStatusStoreSCU()
     }
     else if (getNumberOfDICOMFilesSentSuccesfully() == 0)
     {
-        //No hem guardat cap imatge (Failure Status)
+        // No hem guardat cap imatge (Failure Status)
         ERROR_LOG("Ha fallat l'enviament de tots els fitxers al PACS");
         return PACSRequestStatus::SendAllDICOMFilesFailed;
     }
     else if (getNumberOfDICOMFilesSentFailed() > 0)
     {
-        //No s'han pogut guardar els fitxers
+        // No s'han pogut guardar els fitxers
         ERROR_LOG(QString("L'enviament al PACS de %1 de %2 fitxers ha fallat")
                      .arg(QString().setNum(getNumberOfDICOMFilesSentFailed()), QString().setNum(m_numberOfDICOMFilesToSend)));
         return PACSRequestStatus::SendSomeDICOMFilesFailed;
     }
     else if (getNumberOfDICOMFilesSentWarning() > 0)
     {
-        //Alguna imatge s'ha guardat amb l'Status de warning (Normalment significa que el PACS ha modificat les dades del fitxer DICOM enviat)
+        // Alguna imatge s'ha guardat amb l'Status de warning (Normalment significa que el PACS ha modificat les dades del fitxer DICOM enviat)
         WARN_LOG(QString("En l'enviament de %1 de %2 fitxers s'ha rebut un warning")
                     .arg(QString().setNum(getNumberOfDICOMFilesSentWarning()), QString().setNum(m_numberOfDICOMFilesToSend)));
         return PACSRequestStatus::SendWarningForSomeImages;

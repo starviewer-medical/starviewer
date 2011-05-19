@@ -52,7 +52,7 @@ Study* RetrieveDICOMFilesFromPACSJob::getStudyToRetrieveDICOMFiles()
 void RetrieveDICOMFilesFromPACSJob::run()
 {
     Settings settings;
-    //TODO: És aquest el lloc per aquest missatge ? no seria potser millor fer-ho a RetrieveDICOMFilesFromPACS
+    // TODO: És aquest el lloc per aquest missatge ? no seria potser millor fer-ho a RetrieveDICOMFilesFromPACS
     INFO_LOG(QString("Iniciant descarrega del PACS %1, IP: %2, Port: %3, AETitle Local: %4 Port local: %5, "
                      "l'estudi UID: %6, series UID: %7, SOP Instance UID:%8")
         .arg(getPacsDevice().getAETitle(), getPacsDevice().getAddress(), QString::number(getPacsDevice().getQueryRetrieveServicePort()))
@@ -88,14 +88,14 @@ void RetrieveDICOMFilesFromPACSJob::run()
         // no s'atendria fins que la interfície estigui lliure, provocant comportaments incorrectes
         connect(m_retrieveDICOMFilesFromPACS, SIGNAL(DICOMFileRetrieved(DICOMTagReader*, int)), this, SLOT(DICOMFileRetrieved(DICOMTagReader*, int)),
                 Qt::DirectConnection);
-        //Connectem amb els signals del patientFiller per processar els fitxers descarregats
+        // Connectem amb els signals del patientFiller per processar els fitxers descarregats
         connect(this, SIGNAL(DICOMTagReaderReadyForProcess(DICOMTagReader *)), &patientFiller, SLOT(processDICOMFile(DICOMTagReader *)));
         connect(this, SIGNAL(DICOMFilesRetrieveFinished()), &patientFiller, SLOT(finishDICOMFilesProcess()));
         // Connexió entre el processat dels fitxers DICOM i l'inserció al a BD, és important que aquest signal sigui un Qt:DirectConnection perquè així el
         // el processa els thread dels fillers, d'aquesta manera el thread de descarrega que està esperant a fillersThread.wait() quan surt
         // d'aquí perquè els fillers ja han acabat ja s'ha inserit el pacient a la base de dades.
         connect(&patientFiller, SIGNAL(patientProcessed(Patient *)), &localDatabaseManager, SLOT(save(Patient *)), Qt::DirectConnection);
-        //Connexions per finalitzar els threads
+        // Connexions per finalitzar els threads
         connect(&patientFiller, SIGNAL(patientProcessed(Patient *)), &fillersThread, SLOT(quit()), Qt::DirectConnection);
 
         localDatabaseManager.setStudyRetrieving(m_dicomMaskToRetrieve.getStudyInstanceUID());
@@ -115,14 +115,14 @@ void RetrieveDICOMFilesFromPACSJob::run()
             emit DICOMSeriesRetrieved(this, m_numberOfSeriesRetrieved);
             emit DICOMFilesRetrieveFinished();
 
-            //Esperem que el processat i l'insersió a la base de dades acabin
+            // Esperem que el processat i l'insersió a la base de dades acabin
             fillersThread.wait();
 
             if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
             {
                 if (localDatabaseManager.getLastError() == LocalDatabaseManager::PatientInconsistent)
                 {
-                    //No s'ha pogut inserir el patient, perquè patientfiller no ha pogut emplenar l'informació de patient correctament
+                    // No s'ha pogut inserir el patient, perquè patientfiller no ha pogut emplenar l'informació de patient correctament
                     m_retrieveRequestStatus = PACSRequestStatus::RetrievePatientInconsistent;
                 }
                 else

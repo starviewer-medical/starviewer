@@ -143,7 +143,7 @@ void QPreviousStudiesWidget::initializeTree()
     m_previousStudiesTree->setUniformRowHeights(true);
     m_previousStudiesTree->setSortingEnabled(true);
 
-    //Ordenem  els estudis per data i hora
+    // Ordenem  els estudis per data i hora
     m_previousStudiesTree->sortItems(Date, Qt::DescendingOrder);
 
     // El farem visible quan rebem la llista d'estudis previs
@@ -169,7 +169,7 @@ void QPreviousStudiesWidget::insertStudyToTree(Study *study, QString pacsID)
 {
     QTreeWidgetItem *item = new QTreeWidgetItem();
 
-    //Afegim l'item al widget
+    // Afegim l'item al widget
     m_previousStudiesTree->addTopLevelItem(item);
 
     item->setFlags(Qt::ItemIsEnabled);
@@ -259,7 +259,7 @@ void QPreviousStudiesWidget::studyRetrieveStarted(QString studyInstanceUID)
 {
     StudyInfo *studyInfo = m_infomationPerStudy[studyInstanceUID];
 
-    //Comprovem que el signal capturat de QueryScreen sigui nostre
+    // Comprovem que el signal capturat de QueryScreen sigui nostre
     if (studyInfo != NULL)
     {
         if (studyInfo->status == Pending)
@@ -273,7 +273,7 @@ void QPreviousStudiesWidget::studyRetrieveFinished(QString studyInstanceUID)
 {
     StudyInfo *studyInfo = m_infomationPerStudy[studyInstanceUID];
 
-    //Comprovem que el signal capturat de QueryScreen sigui nostre
+    // Comprovem que el signal capturat de QueryScreen sigui nostre
     if (studyInfo != NULL)
     {
         if (studyInfo->status == Downloading)
@@ -291,7 +291,7 @@ void QPreviousStudiesWidget::studyRetrieveFailed(QString studyInstanceUID)
 {
     StudyInfo *studyInfo = m_infomationPerStudy[studyInstanceUID];
 
-    //Comprovem que el signal capturat de QueryScreen sigui nostre
+    // Comprovem que el signal capturat de QueryScreen sigui nostre
     if (studyInfo != NULL)
     {
         if (studyInfo->status == Downloading)

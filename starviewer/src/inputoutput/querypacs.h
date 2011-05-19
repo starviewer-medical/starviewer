@@ -27,44 +27,44 @@ class PACSConnection;
 
 class QueryPacs {
 public:
-    ///Constructor de la classe
+    /// Constructor de la classe
     QueryPacs(PacsDevice pacsDevice);
 
-    ///Cerca els estudis que compleixin la màscara passada
+    /// Cerca els estudis que compleixin la màscara passada
     PACSRequestStatus::QueryRequestStatus query(DicomMask mask);
 
-    ///Indiquem que la consulta actual s'ha de cancel·lar.
-    ///La cancel·lació de la query no es fa immediatament quan s'invoca el mètode, aquest mètode actualitza un flag, que cada vegada
-    ///que rebem un element DICOM que compleix la màscara es comprova, si el flag indica que s'ha demanat cancel·lar llavors es
-    ///cancel·la la query
+    /// Indiquem que la consulta actual s'ha de cancel·lar.
+    /// La cancel·lació de la query no es fa immediatament quan s'invoca el mètode, aquest mètode actualitza un flag, que cada vegada
+    /// que rebem un element DICOM que compleix la màscara es comprova, si el flag indica que s'ha demanat cancel·lar llavors es
+    /// cancel·la la query
     void cancelQuery();
 
     QList<Patient*> getQueryResultsAsPatientStudyList();
     QList<Series*> getQueryResultsAsSeriesList();
     QList<Image*> getQueryResultsAsImageList();
 
-    ///Retorna un Hashtable que indica per l'UID de l'estudi a quin PACS pertany l'estudi
+    /// Retorna un Hashtable que indica per l'UID de l'estudi a quin PACS pertany l'estudi
     QHash<QString, QString> getHashTablePacsIDOfStudyInstanceUID();
 
 private:
-    ///fa el query al pacs
+    /// Fa el query al pacs
     PACSRequestStatus::QueryRequestStatus query();
 
     /// Aquest és un mètode que és cridat en callback per les dcmtk, per cada objecte dicom que es trobi en el PACS que compleix la query dcmtk el crida.
     /// Aquest mètode ens insereix la llista d'estudis, sèries o imatges l'objecte dicom trobat en funció del nivell del que sigui l'objecte.
     static void foundMatchCallback(void *callbackData, T_DIMSE_C_FindRQ *request, int responseCount, T_DIMSE_C_FindRSP *rsp, DcmDataset *responseIdentifiers);
 
-    ///Cancel·la la consulta actual
+    /// Cancel·la la consulta actual
     void cancelQuery(T_DIMSE_C_FindRQ *request);
 
-    ///Afegeix l'objecte a la llista d'estudis si no hi existeix
+    /// Afegeix l'objecte a la llista d'estudis si no hi existeix
     void addPatientStudy(DICOMTagReader *dicomTagReader);
-    ///afegeix l'objecte dicom a la llista de sèries si no hi existeix
+    /// Afegeix l'objecte dicom a la llista de sèries si no hi existeix
     void addSeries(DICOMTagReader *dicomTagReader);
-    ///afegeix l'objecte dicom a la llista d'imatges si no hi existeix
+    /// Afegeix l'objecte dicom a la llista d'imatges si no hi existeix
     void addImage(DICOMTagReader *dicomTagReader);
 
-    ///Converteix la respota rebuda per partl del PACS a QueryRequestStatus i  en cas d'error processa la resposta i grava l'error al log
+    /// Converteix la respota rebuda per partl del PACS a QueryRequestStatus i  en cas d'error processa la resposta i grava l'error al log
     PACSRequestStatus::QueryRequestStatus processResponseStatusFromFindUser(T_DIMSE_C_FindRSP *findResponse, DcmDataset *statusDetail);
 
 private:

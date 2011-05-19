@@ -56,4 +56,4 @@ private:
 
 } // End namespace udg
 
-#endif //UDGDYNAMICMATRIX_H
+#endif // UDGDYNAMICMATRIX_H

@@ -13,7 +13,7 @@ QSeriesListWidget::QSeriesListWidget(QWidget *parent)
     setupUi(this);
     QSize size;
 
-    //Definim la mida de la imatge que mostrem
+    // Definim la mida de la imatge que mostrem
     size.setHeight(scaledSeriesSizeY);
     size.setWidth(scaledSeriesSizeX);
     m_seriesListWidget->setIconSize(size);
@@ -37,8 +37,9 @@ void QSeriesListWidget::insertSeries(QString studyInstanceUID, Series *series)
     QString statusTip;
 
     text = tr(" Series ") + series->getSeriesNumber();
+    // Si hi ha descripció la inserim
     if (series->getProtocolName().length() > 0)
-    {//si hi ha descripció la inserim
+    {
         text += " " + series->getProtocolName();
     }
     text +="\n";
@@ -78,14 +79,15 @@ void QSeriesListWidget::insertSeries(QString studyInstanceUID, Series *series)
     // Guardem per la sèrie a quin estudi pertany
     m_HashSeriesStudy[series->getInstanceUID()] = studyInstanceUID;
 
-    //TODO s'hauria de millorar el sistema d'ordenació de les sèries
-    //Comprovem la posició que hem d'inserir la sèrie, si és un DICOM Non-Image (no és una imatge) val final, sinó va després de la última imatge inserida
+    // TODO s'hauria de millorar el sistema d'ordenació de les sèries
+    // Comprovem la posició que hem d'inserir la sèrie, si és un DICOM Non-Image (no és una imatge) val final, sinó va després de la última imatge inserida
     if (m_nonDicomImageSeriesList.contains(series->getModality()))
     {
         m_seriesListWidget->addItem(item);
     }
     else
-    {//és una imatge
+    {
+        // És una imatge
         m_lastInsertedImageRow++;
         m_seriesListWidget->insertItem(m_lastInsertedImageRow, item);
     }

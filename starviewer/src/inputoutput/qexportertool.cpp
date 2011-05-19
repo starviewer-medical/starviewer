@@ -104,7 +104,7 @@ void QExporterTool::initialize()
         }
     }
 
-    //Tenim el botó de capturar la image actual clicat
+    // Tenim el botó de capturar la image actual clicat
     this->currentImageRadioButtonClicked();
 
 }
@@ -145,7 +145,7 @@ void QExporterTool::generateAndStoreNewSeries()
 
     if (m_currentImageRadioButton->isChecked())
     {
-        //Capturem la vista
+        // Capturem la vista
         builder->addCapture(this->captureCurrentView());
     }
     else if (m_allImagesRadioButton->isChecked())
@@ -168,11 +168,11 @@ void QExporterTool::generateAndStoreNewSeries()
             {
                 viewer2D->setPhase(j);
 
-                //Capturem la vista
+                // Capturem la vista
                 builder->addCapture(this->captureCurrentView());
             }
         }
-        // restaurem
+        // Restaurem
         viewer2D->setSlice(currentSlice);
         viewer2D->setPhase(currentPhase);
 
@@ -189,10 +189,10 @@ void QExporterTool::generateAndStoreNewSeries()
         {
             viewer2D->setSlice(i);
 
-            //Capturem la vista
+            // Capturem la vista
             builder->addCapture(this->captureCurrentView());
         }
-        // restaurem
+        // Restaurem
         viewer2D->setSlice(currentSlice);
     }
     else if (m_phasesOfCurrentImageRadioButton->isChecked())
@@ -207,11 +207,11 @@ void QExporterTool::generateAndStoreNewSeries()
         {
             viewer2D->setPhase(i);
 
-            //Capturem la vista
+            // Capturem la vista
             builder->addCapture(this->captureCurrentView());
         }
 
-        // restaurem
+        // Restaurem
         viewer2D->setPhase(currentPhase);
     }
     else
@@ -381,13 +381,13 @@ void QExporterTool::generate2DPreview(int slice, int phase)
 
     m_viewer->getRenderWindow()->OffScreenRenderingOn();
 
-    //Assignem la llesca i la fase
+    // Assignem la llesca i la fase
     viewer2D->setSlice(slice);
     viewer2D->setPhase(phase);
 
     generatePreview();
 
-    // restaurem
+    // Restaurem
     viewer2D->setSlice(currentSlice);
     viewer2D->setPhase(currentPhase);
 

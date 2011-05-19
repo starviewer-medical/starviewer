@@ -25,7 +25,7 @@ QString CreateDicomPrintSpool::createPrintSpool(DicomPrinter dicomPrinter, Dicom
     bool ok = false;
 
     m_lastError = CreateDicomPrintSpool::Ok;
-    //TODO: S'ha de fer aquí ? Comprovem si existeix el directori on s'ha de generar l'spool
+    // TODO: S'ha de fer aquí ? Comprovem si existeix el directori on s'ha de generar l'spool
     if (!spoolDir.exists(spoolDirectoryPath))
     {
         INFO_LOG("Es crearà el directori d'spool " + spoolDirectoryPath);
@@ -76,13 +76,13 @@ void CreateDicomPrintSpool::setBasicFilmBoxAttributes()
     //  suposa que aquests valors s'ignoraran. De totes maneres se li ha donat aquests valors per defecte 2000 i 10 respectivament perquè són els que utilitza
     // dcmtk i també s'ha consultat el dicom conformance de les impressores agfa i kodak i també utiltizen aquests valors per defecte.
 
-    //TODO preguntar perquè necessita el Illumination i Reflected Ambient Ligth, preguntar si realement són aquests tags
+    // TODO preguntar perquè necessita el Illumination i Reflected Ambient Ligth, preguntar si realement són aquests tags
     m_storedPrint = new DVPSStoredPrint(2000, 10, qPrintable(Settings().getValue(InputOutputSettings::LocalAETitle).toString()));
     // S'ha d'indicar el AETitle de la impressora
     m_storedPrint->setDestination(qPrintable(m_dicomPrinter.getAETitle()));
     m_storedPrint->setPrinterName(qPrintable(m_dicomPrinter.getAETitle()));
 
-    //Indiquem el layout de la placa
+    // Indiquem el layout de la placa
     m_storedPrint->setImageDisplayFormat(m_dicomPrintPage.getFilmLayoutColumns(), m_dicomPrintPage.getFilmLayoutRows());
 
     m_storedPrint->setFilmSizeID(qPrintable(m_dicomPrintPage.getFilmSize()));
@@ -99,20 +99,20 @@ void CreateDicomPrintSpool::setBasicFilmBoxAttributes()
         m_storedPrint->setSmoothingType(qPrintable(m_dicomPrintPage.getSmoothingType()));
     }
 
-    //Densitat del marc que separa les imatges
+    // Densitat del marc que separa les imatges
     m_storedPrint->setBorderDensity(qPrintable(m_dicomPrintPage.getBorderDensity()));
-    //Densitat de les cel·les buides
+    // Densitat de les cel·les buides
     m_storedPrint->setEmtpyImageDensity(qPrintable(m_dicomPrintPage.getEmptyImageDensity()));
 
     if (m_dicomPrintPage.getMinDensity() != 0)
     {
-        //Si la densitat és 0, vol dir que no ens l'han especificat per tant no l'enviem
+        // Si la densitat és 0, vol dir que no ens l'han especificat per tant no l'enviem
         m_storedPrint->setMinDensity(qPrintable(QString().setNum(m_dicomPrintPage.getMinDensity())));
     }
 
     if (m_dicomPrintPage.getMaxDensity() != 0)
     {
-        //Si la densitat és 0, vol dir que no ens l'han especificat per tant no l'enviem
+        // Si la densitat és 0, vol dir que no ens l'han especificat per tant no l'enviem
         m_storedPrint->setMaxDensity(qPrintable(QString().setNum(m_dicomPrintPage.getMaxDensity())));
     }
 
@@ -188,7 +188,7 @@ bool CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, const
 
     imageToPrintDataset = imageToPrintDcmFileFormat->getDataset();
 
-    //Traspassem la informació del mòdul de pacient i imatge entre d'altres al presentation state
+    // Traspassem la informació del mòdul de pacient i imatge entre d'altres al presentation state
     status = m_presentationState->createFromImage(*imageToPrintDataset);
     if (status != EC_Normal)
     {
@@ -218,7 +218,7 @@ bool CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, const
     status = m_presentationState->getPrintBitmap(pixelData, bitmapSize, false);
     if (status == EC_Normal)
     {
-        //Guardem la imatge a disc
+        // Guardem la imatge a disc
         ok = createHardcopyGrayscaleImage(imageToPrint, pixelData, bitmapWidth, bitmapHeight, pixelAspectRatio, spoolDirectoryPath);
     }
     else
@@ -227,7 +227,7 @@ bool CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, const
         m_lastError = CreateDicomPrintSpool::ErrorCreatingImageSpool;
     }
 
-    //No fem delete del imageToPrintDataset perquè és un punter que apunta al Dataset de l'objecte imageToPrintDcmFileFormat del qual ja fem un delete
+    // No fem delete del imageToPrintDataset perquè és un punter que apunta al Dataset de l'objecte imageToPrintDcmFileFormat del qual ja fem un delete
     delete m_presentationState;
     delete pixelData;
     delete imageToPrintDcmFileFormat;
@@ -246,7 +246,7 @@ bool CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
     OFCondition status;
     bool ok = false;
 
-    //write patient module
+    // Write patient module
     status = m_presentationState->writeHardcopyImageAttributes(*transformedImageDatasetToPrint);
     if (status != EC_Normal)
     {
@@ -255,7 +255,7 @@ bool CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
         return false;
     }
 
-    //write general study and general series module
+    // Write general study and general series module
     status = m_storedPrint->writeHardcopyImageAttributes(*transformedImageDatasetToPrint);
     if (status != EC_Normal)
     {
@@ -268,19 +268,19 @@ bool CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
     transformedImageDatasetToPrint->putAndInsertString(DCM_HardcopyDeviceManufacturer, qPrintable(ApplicationNameString), true);
     transformedImageDatasetToPrint->putAndInsertString(DCM_HardcopyDeviceSoftwareVersion, qPrintable(StarviewerVersionString), true);
 
-    //General Image Module
+    // General Image Module
     transformedImageDatasetToPrint->putAndInsertString(DCM_InstanceNumber, qPrintable(imageToPrint->getInstanceNumber()));
     transformedImageDatasetToPrint->putAndInsertString(DCM_PatientOrientation, qPrintable(imageToPrint->getPatientOrientation()));
     transformedImageDatasetToPrint->putAndInsertString(DCM_ImageType, "DERIVED\\SECONDARY", true);
     transformedImageDatasetToPrint->putAndInsertString(DCM_DerivationDescription, "Hardcopy rendered using Presentation State");
 
-    //SOP Common Module
+    // SOP Common Module
     transformedImageDatasetToPrint->putAndInsertString(DCM_SOPClassUID, UID_HardcopyGrayscaleImageStorage);
 
     dcmGenerateUniqueIdentifier(InstanceUIDOfTransformedImage);
     transformedImageDatasetToPrint->putAndInsertString(DCM_SOPInstanceUID, InstanceUIDOfTransformedImage);
 
-    //Instance Creation Modukle
+    // Instance Creation Modukle
     transformedImageDatasetToPrint->putAndInsertString(DCM_InstanceCreationDate, qPrintable(QDateTime::currentDateTime().toString("yyyyMMdd")));
     transformedImageDatasetToPrint->putAndInsertString(DCM_InstanceCreationTime, qPrintable(QDateTime::currentDateTime().toString("hhmmss")));
 
@@ -313,7 +313,7 @@ bool CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
 
         if (m_presentationState->getPresentationLUT() == DVPSP_table)
         {
-            //En principi no treballem amb presentation LUT, per tant aquest codi crec que no s'hauria d'executar mai
+            // En principi no treballem amb presentation LUT, per tant aquest codi crec que no s'hauria d'executar mai
             INFO_LOG("Gravem presentation LUT");
             status = m_presentationState->writePresentationLUTforPrint(*transformedImageDatasetToPrint);
             if (status != EC_Normal)
@@ -322,9 +322,9 @@ bool CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
             }
         }
 
-        //TODO:S'hauria de fer a un altre lloc aquest càlcul perquè també s'utilitza a PrintDicomSpool
+        // TODO:S'hauria de fer a un altre lloc aquest càlcul perquè també s'utilitza a PrintDicomSpool
         transformedImagePath = QDir::toNativeSeparators(spoolDirectoryPath) + QDir::separator() + InstanceUIDOfTransformedImage + ".dcm";
-        //Guardem la imatge transformada
+        // Guardem la imatge transformada
         status = DVPSHelper::saveFileFormat(qPrintable(transformedImagePath), transformedImageToPrint, true);
 
         if (status == EC_Normal)
@@ -332,7 +332,7 @@ bool CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
             INFO_LOG("Creada imatge per imprimir al path " + transformedImagePath);
 
             m_presentationState->getPrintBitmapRequestedImageSize(requestedImageSizeAsOFString);
-            //Afegim la imatge al Image Box
+            // Afegim la imatge al Image Box
             status = m_storedPrint->addImageBox(qPrintable(Settings().getValue(InputOutputSettings::LocalAETitle).toString()), InstanceUIDOfTransformedImage,
                                                 requestedImageSizeAsOFString.c_str(), NULL, m_presentationState->getPresentationLUTData(),
                                                 m_presentationState->isMonochrome1Image());
@@ -391,10 +391,10 @@ void CreateDicomPrintSpool::createAnnotationBoxes()
     {
         foreach (int position, m_dicomPrintPage.getPageAnnotations().keys())
         {
-            //Es genera un UID inventat per cada AnnotationBox, quan des de la classe PrintDICOMSpoool creem un FilmBox a la impressora aquesta
-            //com a resposta ens retorna els UID's amb el qual hem d'enviar cada un dels Annotation Box. Això ho fa transparentment DVPSStoredPrint
-            //al invocar el mètode printSCUcreateBasicFilmSession i assignar a cada AnnotationBox un UID vàlid. Si s'envien AnnotationBox amb un
-            //UID que no ens ha indicat la impressora les anotacions s'ignoren
+            // Es genera un UID inventat per cada AnnotationBox, quan des de la classe PrintDICOMSpoool creem un FilmBox a la impressora aquesta
+            // com a resposta ens retorna els UID's amb el qual hem d'enviar cada un dels Annotation Box. Això ho fa transparentment DVPSStoredPrint
+            // al invocar el mètode printSCUcreateBasicFilmSession i assignar a cada AnnotationBox un UID vàlid. Si s'envien AnnotationBox amb un
+            // UID que no ens ha indicat la impressora les anotacions s'ignoren
             char newuid[70];
             dcmGenerateUniqueIdentifier(newuid);
             m_annotationBoxes->addAnnotationBox(newuid, qPrintable(m_dicomPrintPage.getPageAnnotations().value(position)), position);
@@ -415,7 +415,7 @@ QString CreateDicomPrintSpool::createStoredPrintDcmtkFile(const QString &spoolDi
 
     m_storedPrint->write(*dataset, false, OFTrue, OFFalse, OFTrue);
 
-    //Si tenim anotacions les enviem
+    // Si tenim anotacions les enviem
     if (m_annotationBoxes->size() > 0)
     {
         INFO_LOG("Hi ha anotacions per imprimir al FilmSession, creem les AnnotationBox");
@@ -431,12 +431,12 @@ QString CreateDicomPrintSpool::createStoredPrintDcmtkFile(const QString &spoolDi
 
         if (sequenceFilmBox)
         {
-            //L'annotation Display Format només té sentit enviar-lo si tenim anotacions. Aquest camp serveix per indicar com volem que apareguin les anotacions
-            //En Kodak, Fujifilm, Agfa,... si no especifiquem aquest tag al crear el BasicFilmBox la impressora no ens retorna els UID's amb les quals hem
-            //d'enviar els Annotation Box. Per exemple per a Agfa ha de tenir el valor 'ANNOTATION' si no no ens retorna com a resposta els UID's amb els quals
-            //s'han d'envies els Annotation box (DICOM Conformance de la dryStar 5500 pàgina 26
-            //http://www.agfa.com/he/france/fr/binaries/000737_Drystar_5500_1.8%2C_2.0_%2C3.x_and_4.0_tcm224-21750.pdf) altres impressores com Kodak
-            //aquest tag pog agafar diversos valors http://www.carestreamhealth.com/dv6800_dicom_9F2965.pdf
+            // L'annotation Display Format només té sentit enviar-lo si tenim anotacions. Aquest camp serveix per indicar com volem que apareguin les anotacions
+            // En Kodak, Fujifilm, Agfa,... si no especifiquem aquest tag al crear el BasicFilmBox la impressora no ens retorna els UID's amb les quals hem
+            // d'enviar els Annotation Box. Per exemple per a Agfa ha de tenir el valor 'ANNOTATION' si no no ens retorna com a resposta els UID's amb els quals
+            // s'han d'envies els Annotation box (DICOM Conformance de la dryStar 5500 pàgina 26
+            // http://www.agfa.com/he/france/fr/binaries/000737_Drystar_5500_1.8%2C_2.0_%2C3.x_and_4.0_tcm224-21750.pdf) altres impressores com Kodak
+            // aquest tag pog agafar diversos valors http://www.carestreamhealth.com/dv6800_dicom_9F2965.pdf
             sequenceFilmBox->putAndInsertString(DCM_AnnotationDisplayFormatID, qPrintable(m_annotationDisplayFormatIDTagValue), true);
         }
     }

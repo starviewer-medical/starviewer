@@ -16,7 +16,7 @@ class QStarviewerSAPWrapper {
 
 public:
 
-    ///Envia via Tcp/IP una petició de descarrega de l'estudi amb l'accession number passat per paràmetre al Starviewer de la màquina local
+    /// Envia via Tcp/IP una petició de descarrega de l'estudi amb l'accession number passat per paràmetre al Starviewer de la màquina local
     void sendRequestToLocalStarviewer(QString accessionNumber);
 
 private :
@@ -25,13 +25,13 @@ private :
     /// number passat per paràmetre
     QString getXmlPier(QString accessionNumber);
 
-    ///Imprimeix per pantalla i loggeja error al connectar
+    /// Imprimeix per pantalla i loggeja error al connectar
     void errorConnecting(int port, QString errorDescription);
 
-    ///Imprimeix per pantalla i loggeja error al enviar la petició per la connexió Tcp/Ip
+    /// Imprimeix per pantalla i loggeja error al enviar la petició per la connexió Tcp/Ip
     void errorWriting(QString errorDescription);
 
-    ///Imprimeix per pantalla i loggeja error al tancar connexió
+    /// Imprimeix per pantalla i loggeja error al tancar connexió
     void errorClosing(QString errorDescription);
 };
 };

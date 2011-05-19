@@ -19,7 +19,7 @@
 
 namespace udg {
 
-//Constant que contindrà quin Abanstract Syntax de Find utilitzem entre els diversos que hi ha utilitzem
+// Constant que contindrà quin Abanstract Syntax de Find utilitzem entre els diversos que hi ha utilitzem
 static const char *FindStudyAbstractSyntax = UID_FINDStudyRootQueryRetrieveInformationModel;
 
 QueryPacs::QueryPacs(PacsDevice pacsDevice)
@@ -55,18 +55,18 @@ void QueryPacs::foundMatchCallback(void *callbackData, T_DIMSE_C_FindRQ *request
 
         if (queryRetrieveLevel == "STUDY")
         {
-            //en el cas que l'objecte que cercàvem fos un estudi
+            // En el cas que l'objecte que cercàvem fos un estudi
             queryPacsCaller->addPatientStudy(dicomTagReader);
         }
         else if (queryRetrieveLevel == "SERIES")
         {
-            //si la query retorna un objecte sèrie
+            // Si la query retorna un objecte sèrie
             queryPacsCaller->addPatientStudy(dicomTagReader);
             queryPacsCaller->addSeries(dicomTagReader);
         }
         else if (queryRetrieveLevel == "IMAGE")
         {
-            // si la query retorna un objecte imatge
+            // Si la query retorna un objecte imatge
             queryPacsCaller->addPatientStudy(dicomTagReader);
             queryPacsCaller->addSeries(dicomTagReader);
             queryPacsCaller->addImage(dicomTagReader);
@@ -87,7 +87,7 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::query()
         return PACSRequestStatus::QueryCanNotConnectToPACS;
     }
 
-    // figure out which of the accepted presentation contexts should be used
+    // Figure out which of the accepted presentation contexts should be used
     m_presId = ASC_findAcceptedPresentationContextID(m_pacsConnection->getConnection(), FindStudyAbstractSyntax);
     if (m_presId == 0)
     {
@@ -95,13 +95,13 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::query()
         return PACSRequestStatus::QueryFailedOrRefused;
     }
 
-    // prepare the transmission of data
+    // Prepare the transmission of data
     bzero((char*) &findRequest, sizeof(findRequest));
     findRequest.MessageID = m_pacsConnection->getConnection()->nextMsgID;
     strcpy(findRequest.AffectedSOPClassUID, FindStudyAbstractSyntax);
     findRequest.DataSetType = DIMSE_DATASET_PRESENT;
 
-    // finally conduct transmission of data
+    // Finally conduct transmission of data
     OFCondition condition = DIMSE_findUser(m_pacsConnection->getConnection(), m_presId, &findRequest, m_mask, foundMatchCallback, this, DIMSE_NONBLOCKING,
                                            Settings().getValue(InputOutputSettings::PACSConnectionTimeout).toInt(), &findResponse, &statusDetail);
 
@@ -114,7 +114,7 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::query()
 
     PACSRequestStatus::QueryRequestStatus queryRequestStatus = processResponseStatusFromFindUser(&findResponse, statusDetail);
 
-    // dump status detail information if there is some
+    // Dump status detail information if there is some
     if (statusDetail != NULL)
     {
         delete statusDetail;
@@ -144,14 +144,14 @@ void QueryPacs::cancelQuery(T_DIMSE_C_FindRQ *request)
 {
     INFO_LOG(QString("Demanem cancel.lar al PACS %1 l'actual query").arg(m_pacsDevice.getAETitle()));
 
-    //Tots els PACS està obligats pel DICOM Conformance a implementar la cancel·lació
+    // Tots els PACS està obligats pel DICOM Conformance a implementar la cancel·lació
     OFCondition cond = DIMSE_sendCancelRequest(m_pacsConnection->getConnection(), m_presId, request->MessageID);
     if (cond.bad())
     {
         ERROR_LOG("S'ha produit el seguent error al cancel.lar la query: " + QString(cond.text()));
         INFO_LOG(QString("Aborto la connexio amb el PACS %1").arg(m_pacsDevice.getAETitle()));
 
-        //Si hi hagut un error demanant el cancel·lar, abortem l'associació, d'aquesta manera segur que cancel·lem la query
+        // Si hi hagut un error demanant el cancel·lar, abortem l'associació, d'aquesta manera segur que cancel·lem la query
         ASC_abortAssociation(m_pacsConnection->getConnection());
     }
 }
@@ -175,8 +175,8 @@ void QueryPacs::addSeries(DICOMTagReader *dicomTagReader)
 {
     Series *series = CreateInformationModelObject::createSeries(dicomTagReader);
 
-    //TODO: Si ens fan una cerca a nivell d'imatge inserirem la mateixa serie tantes vegades com images tenim, s'hauria de comprovar si ja conté
-    //la sèrie la llista abans d'afegir-la
+    // TODO: Si ens fan una cerca a nivell d'imatge inserirem la mateixa serie tantes vegades com images tenim, s'hauria de comprovar si ja conté
+    // la sèrie la llista abans d'afegir-la
     m_seriesList.append(series);
 }
 

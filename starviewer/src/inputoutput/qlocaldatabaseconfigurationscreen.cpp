@@ -36,19 +36,19 @@ QLocalDatabaseConfigurationScreen::~QLocalDatabaseConfigurationScreen()
 
 void QLocalDatabaseConfigurationScreen::createConnections()
 {
-    //connecta el boto examinar de la cache amb el dialog per escollir el path de la base de dades
+    // Connecta el boto examinar de la cache amb el dialog per escollir el path de la base de dades
     connect(m_buttonExaminateDataBase, SIGNAL(clicked()), SLOT(examinateDataBaseRoot()));
 
-    //connecta el boto examinar de la cache amb el dialog per escollir el path de la base de dades
+    // Connecta el boto examinar de la cache amb el dialog per escollir el path de la base de dades
     connect(m_buttonExaminateCacheImage, SIGNAL(clicked()), SLOT(examinateCacheImagePath()));
 
-    //connecta el boto aplicar de la cache amb l'slot apply
+    // Connecta el boto aplicar de la cache amb l'slot apply
     connect(m_buttonApplyCache, SIGNAL(clicked()), SLOT(applyChanges()));
 
-    //connecta el boto aplicar de l'informació de l'institució amb l'slot apply
+    // Connecta el boto aplicar de l'informació de l'institució amb l'slot apply
     connect(m_buttonCreateDatabase, SIGNAL(clicked()), SLOT(createDatabase()));
 
-    //activen el boto apply quant canvia el seu valor
+    // Activen el boto apply quant canvia el seu valor
     connect(m_textDatabaseRoot, SIGNAL(textChanged(const QString &)), SLOT(enableApplyButtons()));
     connect(m_textCacheImagePath, SIGNAL(textChanged(const QString &)), SLOT(enableApplyButtons()));
     connect(m_textMinimumSpaceRequiredToRetrieve, SIGNAL(textChanged(const QString &)), SLOT(enableApplyButtons()));
@@ -58,11 +58,11 @@ void QLocalDatabaseConfigurationScreen::createConnections()
     connect(m_checkBoxDeletedOldStudies, SIGNAL(toggled(bool)), SLOT(enableApplyButtons()));
     connect(m_checkBoxDeleteStudiesIfNotEnoughFreeSpaceAvailable, SIGNAL(toggled(bool)), SLOT(enableApplyButtons()));
 
-    //mateniment base de dades
+    // Mateniment base de dades
     connect(m_buttonDeleteStudies, SIGNAL(clicked()), SLOT(deleteStudies()));
     connect(m_buttonCompactDatabase, SIGNAL(clicked()), SLOT(compactCache()));
 
-    //afegeix la / al final del Path de la cache d'imatges
+    // Afegeix la / al final del Path de la cache d'imatges
     connect(m_textCacheImagePath, SIGNAL(editingFinished()), SLOT(cacheImagePathEditingFinish()));
 }
 
@@ -240,7 +240,7 @@ void QLocalDatabaseConfigurationScreen::applyChangesCache()
 {
     Settings settings;
 
-    //Aquest els guardem sempre
+    // Aquest els guardem sempre
     settings.setValue(InputOutputSettings::CachePath, m_textCacheImagePath->text());
     settings.setValue(InputOutputSettings::DatabaseAbsoluteFilePath, m_textDatabaseRoot->text());
 

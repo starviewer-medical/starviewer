@@ -7,7 +7,7 @@
 #include "series.h"
 #include "image.h"
 #include "createinformationmodelobject.h"
-//Per el process events, TODO Treure i fer amb threads.
+// Per el process events, TODO Treure i fer amb threads.
 #include <QApplication>
 
 namespace udg {

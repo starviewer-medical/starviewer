@@ -67,7 +67,7 @@ bool QListenRisRequestsConfigurationScreen::applyChanges()
         if (m_textPortListenRisRequests->isModified() || m_checkBoxListenRisRequests->isChecked() != 
             settings.getValue(InputOutputSettings::ListenToRISRequests).toBool())
         {
-            //S'ha de reiniciar en cas que iniciem/parem d'escoltar el port del RIS o canviem el port
+            // S'ha de reiniciar en cas que iniciem/parem d'escoltar el port del RIS o canviem el port
             QMessageBox::warning(this, ApplicationNameString, tr("The application has to be restarted to apply the changes."));
         }
 

@@ -61,7 +61,7 @@ QList<Series*> LocalDatabaseSeriesDAL::query(const DicomMask &seriesMask)
         return seriesList;
     }
 
-    //index = 1 ignorem les capçaleres
+    // index = 1 ignorem les capçaleres
     for (int index = 1; index <= rows; index++)
     {
         seriesList.append(fillSeries(reply, index, columns));

@@ -213,7 +213,7 @@ int main(int argc, char *argv[])
 
             ERROR_LOG("Arguments de linia de comandes invalids, error : " + errorInvalidCommanLineArguments);
 
-            //Si ja hi ha una altra instància execuntat-se donem el missatge d'error i tanquem Starviewer
+            // Si ja hi ha una altra instància execuntat-se donem el missatge d'error i tanquem Starviewer
             if (app.isRunning())
             {
                 return 0;
@@ -224,7 +224,7 @@ int main(int argc, char *argv[])
     int returnValue;
     if (app.isRunning())
     {
-        //Hi ha una altra instància del Starviewer executant-se
+        // Hi ha una altra instància del Starviewer executant-se
         INFO_LOG("Hi ha una altra instancia de l'starviewer executant-se. S'enviaran els arguments de la linia de comandes a la instancia principal.");
 
         sendToFirstStarviewerInstanceCommandLineOptions(app);
@@ -233,9 +233,9 @@ int main(int argc, char *argv[])
     }
     else
     {
-        //Instància principal, no n'hi ha cap més executant-se
+        // Instància principal, no n'hi ha cap més executant-se
         udg::QApplicationMainWindow *mainWin = new udg::QApplicationMainWindow;
-        //Fem el connect per rebre els arguments de les altres instàncies
+        // Fem el connect per rebre els arguments de les altres instàncies
         QObject::connect(&app, SIGNAL(messageReceived(QString)), StarviewerSingleApplicationCommandLineSingleton::instance(), SLOT(parseAndRun(QString)));
 
         INFO_LOG("Creada finestra principal");

@@ -7,44 +7,44 @@
 
 namespace udg {
 
-///Classe que mostra i permet especificar els paràmetres bàsics de configuració d'una impressora dicom;
+/// Classe que mostra i permet especificar els paràmetres bàsics de configuració d'una impressora dicom;
 class QDicomPrinterBasicSettingsWidget : public QWidget, private::Ui::QDicomPrinterBasicSettingsWidgetBase {
 Q_OBJECT
 
 public:
     QDicomPrinterBasicSettingsWidget(QWidget *parent = 0);
 
-    ///Retorna/Mostra els basic printer settings
+    /// Retorna/Mostra els basic printer settings
     void getDicomPrinterBasicSettings(DicomPrinter &dicomPrinter);
     void setDicomPrinterBasicSettings(DicomPrinter &dicomPrinter);
 
-    ///Neteja els controls
+    /// Neteja els controls
     void clear();
 
 signals:
 
-    ///signal que s'emet quan es canvia algun dels settings d'una impressora
+    /// Signal que s'emet quan es canvia algun dels settings d'una impressora
     void basicDicomPrinterSettingChanged();
 
 private slots:
 
-    ///Slot que emet signal indicant que algunes de les propietats de la impressora DICOM ha canviat
+    /// Slot que emet signal indicant que algunes de les propietats de la impressora DICOM ha canviat
     void settingChanged();
 
 private :
 
     void createConnections();
 
-    ///Emplena DicomPrinter amb les dades del GroupBox Film Settings
+    /// Emplena DicomPrinter amb les dades del GroupBox Film Settings
     void getFilmSettings(DicomPrinter &dicomPrinter);
 
-    ///Emplena DicomPrinter amb les dades del GroupBox Print Settings
+    /// Emplena DicomPrinter amb les dades del GroupBox Print Settings
     void getPrintSettings(DicomPrinter &dicomPrinter);
 
-    ///Mostra els paràmetres de Film Settings
+    /// Mostra els paràmetres de Film Settings
     void setFilmSettings(DicomPrinter &dicomPrinter);
 
-    ///Mostra els paràmetres del Print Settings
+    /// Mostra els paràmetres del Print Settings
     void setPrintSettings(DicomPrinter &dicomPrinter);
 };
 } // end namespace udg.

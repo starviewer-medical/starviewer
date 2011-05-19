@@ -42,7 +42,7 @@ public:
     /// fer just després d'haver rebut una imatge.
     void requestCancel();
 
-    ///Retorna el número d'imatges descarregades
+    /// Retorna el número d'imatges descarregades
     int getNumberOfDICOMFilesRetrieved();
 
 signals:

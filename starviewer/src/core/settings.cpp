@@ -44,7 +44,7 @@ QVariant Settings::getValue(const QString &key) const
         value = SettingsRegistry::instance()->getDefaultValue(key);
     }
 
-    // obtenir les propietats del setting
+    // Obtenir les propietats del setting
     // TODO de moment només tractem "Parseable"
     // si és Parseable, mirem de parsejar el valor, altrament el retornem tal qual
     Settings::Properties properties = SettingsRegistry::instance()->getProperties(key);

@@ -62,7 +62,7 @@ int ApplicationStyleHelper::getScaledFontSize(double defaultFontSize, const QStr
 {
     double fontSize = defaultFontSize * m_scaleFactor;
 
-    //TODO de moment es deixa un "backdoor" per poder especificar un text arbitrari a partir de configuració
+    // TODO de moment es deixa un "backdoor" per poder especificar un text arbitrari a partir de configuració
     // caldrà treure'l un cop comprovat que no hi ha problemes
     Settings settings;
     if (settings.contains(settingsBackdoorKey))

@@ -20,23 +20,23 @@ class DICOMTagReader;
 class RetrieveDICOMFilesFromPACSJob : public PACSJob {
 Q_OBJECT
 public:
-    ///Definim la prioritat del Job, aquesta prioritat ens definirà l'ordre d'execució en la cua
+    /// Definim la prioritat del Job, aquesta prioritat ens definirà l'ordre d'execució en la cua
     enum RetrievePriorityJob { Low = 0, Medium = 2, High = 3 };
 
-    ///Constructor/Destructor de la classe
+    /// Constructor/Destructor de la classe
     RetrieveDICOMFilesFromPACSJob(PacsDevice pacsDevice, Study *studyToRetrieveDICOMFiles, DicomMask dicomMaskToRetrieve, RetrievePriorityJob);
     ~RetrieveDICOMFilesFromPACSJob();
 
-    ///Retorna el tipus de PACSJob que és l'objecte
+    /// Retorna el tipus de PACSJob que és l'objecte
     PACSJob::PACSJobType getPACSJobType();
 
-    ///Retorna l'estudi del qual s'han de descarregar els fitxers
+    /// Retorna l'estudi del qual s'han de descarregar els fitxers
     Study* getStudyToRetrieveDICOMFiles();
 
-    ///Codi que executarà el job
+    /// Codi que executarà el job
     void run();
 
-    ///Retorna l'Status del Job
+    /// Retorna l'Status del Job
     PACSRequestStatus::RetrieveRequestStatus getStatus();
 
     /// Retorna l'Status descrit en un QString , aquest QString està pensat per ser mostrat en QMessageBox per informar a l'usuari de l'estat que ha retornat
@@ -45,13 +45,13 @@ public:
 
 signals:
 
-    ///Signal que s'emet quan s'ha descarregat un fitxer
+    /// Signal que s'emet quan s'ha descarregat un fitxer
     void DICOMFileRetrieved(PACSJob *pacsJob, int numberOfImagesRetrieved);
 
-    ///Signal que s'emet quan s'ha descarregat una sèrie
+    /// Signal que s'emet quan s'ha descarregat una sèrie
     void DICOMSeriesRetrieved(PACSJob *pacsJob, int numberOfSeriesRetrieved);
 
-    ///Signal que s'emet quan el DICOMTagReader està a punt per ser processats. Aquest signal és d'ús intern
+    /// Signal que s'emet quan el DICOMTagReader està a punt per ser processats. Aquest signal és d'ús intern
     void DICOMTagReaderReadyForProcess(DICOMTagReader *dicomTagReader);
 
     /// Signal que indica que la descàrrega de fitxers DICOM ha finalitzat. Aquest signal es fa quan la descarrega de fitxers DICOM ha acabat però encara
@@ -66,28 +66,28 @@ signals:
 
 private slots:
 
-    ///Slot que s'activa quan s'ha descarregat una imatge, respón al signal DICOMFileRetrieved de RetrieveDICOMFilesFromPACS
+    /// Slot que s'activa quan s'ha descarregat una imatge, respón al signal DICOMFileRetrieved de RetrieveDICOMFilesFromPACS
     void DICOMFileRetrieved(DICOMTagReader *dicomTagReader, int numberOfImagesRetrieved);
 
 private:
 
-    ///Indica la prioritat del job
-    //Sobreescribim el mètode priority de la classe ThreadWeaver::Job
+    /// Indica la prioritat del job
+    // Sobreescribim el mètode priority de la classe ThreadWeaver::Job
     int priority() const;
 
-    ///Mètode que ens indica si hi ha espai disponible per descarregar estudis
+    /// Mètode que ens indica si hi ha espai disponible per descarregar estudis
     PACSRequestStatus::RetrieveRequestStatus thereIsAvailableSpaceOnHardDisk();
 
-    ///Indica si l'estudi amb l'UID passat peràmetre ja existeix a la base de dades
+    /// Indica si l'estudi amb l'UID passat peràmetre ja existeix a la base de dades
     bool existStudyInLocalDatabase(QString studyInstanceUID);
 
-    ///Esborra els fitxers descarregats de la caché si l'estudi no existeix a la base de dades
+    /// Esborra els fitxers descarregats de la caché si l'estudi no existeix a la base de dades
     /// Aquest mètode està pensat en casos que la descàrrega falla i volem esborrar els fitxers descarregats, només s'esborran si l'estudi no està inserit
     /// a la bd, si l'estudi està inserit no l'esborrem, perquè part dels fitxers descarregats ja podien estar inserit a la base de dades per una anterior
     /// descàrrega
     void deleteRetrievedDICOMFilesIfStudyNotExistInDatabase();
 
-    ///Demana que es cancel·li la descarrega del job
+    /// Demana que es cancel·li la descarrega del job
     void requestCancelJob();
 
 private:

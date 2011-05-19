@@ -16,7 +16,7 @@ public:
 
     QWidgetSelectPacsToStoreDicomImage(QWidget *parent = 0);
 
-    ///Retorna la llista de PACS Seleccionats
+    /// Retorna la llista de PACS Seleccionats
     QList<PacsDevice> getSelectedPacsToStoreDicomImages();
 
 protected :
@@ -25,12 +25,12 @@ protected :
 
 signals:
 
-    ///Es llança signal indicant que s'ha de guardar al pacs passat per paràmetr les imatges de l'estudi indicat que compleixin la DicomMask.
+    /// Es llança signal indicant que s'ha de guardar al pacs passat per paràmetr les imatges de l'estudi indicat que compleixin la DicomMask.
     void selectedPacsToStore();
 
 private slots:
 
-    ///Slot que respón quan fan click al botó Store, fa signal indicant que ja han seleccionat els PACS
+    /// Slot que respón quan fan click al botó Store, fa signal indicant que ja han seleccionat els PACS
     void storeImagesToSelectedPacs();
 
 private :

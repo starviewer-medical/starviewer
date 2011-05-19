@@ -107,7 +107,7 @@ void ViewersLayout::addRows(int rows)
         }
         m_visibleRows += 1;
         m_totalRows += 1;
-        //Afegim tants widgets com columnes
+        // Afegim tants widgets com columnes
         for (int column = 0; column < m_totalColumns; ++column)
         {
             // Si tenim visors creats anteriorment amb geometries,

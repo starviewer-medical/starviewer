@@ -14,7 +14,7 @@ public:
     /// Constructor de la classe
     QListenRisRequestsConfigurationScreen(QWidget *parent = 0);
 
-    ///Destructor de classe
+    /// Destructor de classe
     ~QListenRisRequestsConfigurationScreen();
 
 public slots:
@@ -31,16 +31,16 @@ private slots:
     void enableApplyButtons();
 
 private:
-    ///crea els connects dels signals i slots
+    /// Crea els connects dels signals i slots
     void createConnections();
 
-    ///Carrega la configuració actual del RIS
+    /// Carrega la configuració actual del RIS
     void loadRisConfiguration();
 
-    ///Configura la màscara del textbox
+    /// Configura la màscara del textbox
     void configureInputValidator();
 
-    ///Crea els input validators necessaris pels diferents camps d'edició.
+    /// Crea els input validators necessaris pels diferents camps d'edició.
     bool validateChanges();
 
 };

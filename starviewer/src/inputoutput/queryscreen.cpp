@@ -144,7 +144,7 @@ void QueryScreen::createConnections()
     connect(m_pacsManager, SIGNAL(newPACSJobEnqueued(PACSJob *)), SLOT(newPACSJobEnqueued(PACSJob*)));
     if (m_risRequestManager != NULL)
     {
-        //Potser que no tinguem activat escoltar peticions del RIS
+        // Potser que no tinguem activat escoltar peticions del RIS
         connect(m_risRequestManager, SIGNAL(viewStudyRetrievedFromRISRequest(QString)), SLOT(viewRetrievedStudyFromPacs(QString)));
         connect(m_risRequestManager, SIGNAL(loadStudyRetrievedFromRISRequest(QString)), SLOT(loadRetrievedStudyFromPacs(QString)));
     }

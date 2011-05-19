@@ -265,7 +265,7 @@ void NonClosedAngleTool::computeAngle()
     {
         text->setText(tr("0.0 degrees"));
     }
-    //Won't occur
+    // Won't occur
     else if (state == MathTools::SkewIntersection)
     {
         text->setText(tr("Skew lines."));

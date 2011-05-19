@@ -11,9 +11,9 @@ ApplicationCommandLineOptions StarviewerApplicationCommandLine::getStarviewerApp
 {
     ApplicationCommandLineOptions starviewerCommandLineOptions;
 
-    //Configurem les opcions que Starviewer accepta des de línia de comandes
+    // Configurem les opcions que Starviewer accepta des de línia de comandes
     #ifndef STARVIEWER_LITE
-    //Opció no disponible Starviewer Lite
+    // Opció no disponible Starviewer Lite
     starviewerCommandLineOptions.addOption(accessionNumberOption, true,
                                            QObject::tr("Retrieve the study with the accession number from the query default PACS."));
     #endif

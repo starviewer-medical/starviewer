@@ -60,7 +60,7 @@ QList<Study*> LocalDatabaseStudyDAL::queryOrderByLastAccessDate(const DicomMask 
         return studyList;
     }
 
-    //index = 1 ignorem les capçaleres
+    // index = 1 ignorem les capçaleres
     for (int index = 1; index <= rows; index++)
     {
         studyList.append(fillStudy(reply, index, columns));
@@ -87,7 +87,7 @@ QList<Study*> LocalDatabaseStudyDAL::query(const DicomMask &studyMask, QDate las
         return studyList;
     }
 
-    //index = 1 ignorem les capçaleres
+    // index = 1 ignorem les capçaleres
     for (int index = 1; index <= rows; index++)
     {
         studyList.append(fillStudy(reply, index, columns));
@@ -113,7 +113,7 @@ QList<Patient*> LocalDatabaseStudyDAL::queryPatientStudy(const DicomMask &patien
         return patientList;
     }
 
-    //index = 1 ignorem les capçaleres
+    // index = 1 ignorem les capçaleres
     for (int index = 1; index <= rows; index++)
     {
         Patient *patient = fillPatient(reply, index, columns);
@@ -145,7 +145,7 @@ qlonglong LocalDatabaseStudyDAL::getPatientIDFromStudyInstanceUID(const QString 
         // A la row 0 hi ha el header
         if (rows >= 1)
         {
-            //Si cerquem per UID només podem tenir un resultat, ja que UID és camp clau al a taula Study
+            // Si cerquem per UID només podem tenir un resultat, ja que UID és camp clau al a taula Study
             patientID = QString(reply[1]).toLongLong();
         }
     }
@@ -174,7 +174,7 @@ Study* LocalDatabaseStudyDAL::fillStudy(char **reply, int row, int columns)
     study->setRetrievedDate(QDate().fromString(reply[13 + row * columns], "yyyyMMdd"));
     study->setRetrievedTime(QTime().fromString(reply[14 + row * columns], "hhmmss"));
 
-    //Afegim la modalitat que estan separades per "/"
+    // Afegim la modalitat que estan separades per "/"
     modalities = QString(reply[6 + row * columns]).split("/");
     foreach (QString modality, modalities)
     {
@@ -272,7 +272,7 @@ QString LocalDatabaseStudyDAL::buildSqlSelectStudyPatient(const DicomMask &study
                             .arg(DatabaseConnection::formatTextToValidSQLSyntax(studyMaskToSelect.getPatientName().replace("*", "")));
     }
 
-    //Si filtrem per data
+    // Si filtrem per data
     if (studyMaskToSelect.getStudyDate().length() == 8)
     {
         whereSentence += QString(" and Date = '%1'").arg(studyMaskToSelect.getStudyDate());

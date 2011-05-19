@@ -27,7 +27,7 @@ public:
     /// @return retorna l'estat de la connexió
     bool connectToPACS(PACSServiceToRequest pacsServiceToRequest);
 
-    /// retorna els paràmetres del PACS
+    /// Retorna els paràmetres del PACS
     /// @return paràmetres del Pacs
     PacsDevice getPacs();
 
@@ -74,23 +74,23 @@ private:
     /// @return estat del mètode
     OFCondition addPresentationContext(int presentationContextId, const QString &abstractSyntax, QList<const char*> transferSyntaxList);
 
-    ///Aquest mètode inicialitza l'objecte AssociationNetwork en funció de la modalitat amb els paràmetres del PACS, aquest mètode no obre la connexió
-    ///simplement inicialitza l'objecte amb les dades necessàries per poder obrir connexió, qui obra la connexió és al invocar el mètode
-    ///de dcmtk ASC_requestAssociation dins del mètode connect connect();
+    /// Aquest mètode inicialitza l'objecte AssociationNetwork en funció de la modalitat amb els paràmetres del PACS, aquest mètode no obre la connexió
+    /// simplement inicialitza l'objecte amb les dades necessàries per poder obrir connexió, qui obra la connexió és al invocar el mètode
+    /// de dcmtk ASC_requestAssociation dins del mètode connect connect();
     T_ASC_Network* initializeAssociationNetwork(PACSServiceToRequest modality);
 
-    ///Omple l'array passada per paràmetres amb la transfer syntax a utilitzar per les connexions per fer FIND o Move
+    /// Omple l'array passada per paràmetres amb la transfer syntax a utilitzar per les connexions per fer FIND o Move
     void getTransferSyntaxForFindOrMoveConnection(const char *transferSyntaxes[3]);
 
 private:
 
     PacsDevice m_pacs;
-    //network struct, contains DICOM upper layer FSM etc. A nivell DICOM no és res és un objecte propi de DCMTK, conté paràmetres de la connexió i en el cas
-    //descàrrega d'imatges se li indica per quin port escoltem les peticions DICOM.
+    // network struct, contains DICOM upper layer FSM etc. A nivell DICOM no és res és un objecte propi de DCMTK, conté paràmetres de la connexió i en el cas
+    // descàrrega d'imatges se li indica per quin port escoltem les peticions DICOM.
     T_ASC_Network *m_associationNetwork;
-    //Defineix els paràmetres de l'associació que s'utilitzarà per la comunicació entre Starviewer i el PACS, conté adreça del PACS, tipus de connexió,....
+    // Defineix els paràmetres de l'associació que s'utilitzarà per la comunicació entre Starviewer i el PACS, conté adreça del PACS, tipus de connexió,....
     T_ASC_Parameters *m_associationParameters;
-    //L'associació és el canal de comunicació que s'utilitza per l'intercanvi d'informació entre dispositius DICOM (és la connexió amb el PACS)
+    // L'associació és el canal de comunicació que s'utilitza per l'intercanvi d'informació entre dispositius DICOM (és la connexió amb el PACS)
     T_ASC_Association *m_dicomAssociation;
 };
 };

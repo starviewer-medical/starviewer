@@ -33,4 +33,4 @@ protected:
 
 } // End namespace udg
 
-#endif //UDGQRELEASENOTES_H
+#endif // UDGQRELEASENOTES_H

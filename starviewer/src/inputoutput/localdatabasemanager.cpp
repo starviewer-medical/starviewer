@@ -305,7 +305,7 @@ Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
         return new Patient();
     }
 
-    //Actulitzem la última data d'acces de l'estudi
+    // Actulitzem la última data d'acces de l'estudi
     Study *retrievedStudy = retrievedPatient->getStudy(maskToRetrieve.getStudyInstanceUID());
     studyDAL.update(retrievedStudy, QDate::currentDate());
     setLastError(studyDAL.getLastError());
@@ -346,7 +346,7 @@ void LocalDatabaseManager::deleteSeries(const QString &studyInstanceUID, const Q
 
         if (querySeries(studyMask).count() == 1)
         {
-            //Si només té una sèrie esborrem tot l'estudi
+            // Si només té una sèrie esborrem tot l'estudi
             INFO_LOG("L'estudi de la serie a esborrar nomes te aquesta serie, per tant s'esborrara l'estudi sencer.");
             deleteStudy(studyInstanceUID);
         }
@@ -373,7 +373,7 @@ void LocalDatabaseManager::deleteSeries(const QString &studyInstanceUID, const Q
 
 void LocalDatabaseManager::deleteOldStudies()
 {
-    //Comprovem si tenim activada la opció d'esborra estudis vells, sino es així no fem res
+    // Comprovem si tenim activada la opció d'esborra estudis vells, sino es així no fem res
     if (Settings().getValue(InputOutputSettings::DeleteLeastRecentlyUsedStudiesInDaysCriteria).toBool())
     {
         DatabaseConnection dbConnect;
@@ -404,7 +404,7 @@ void LocalDatabaseManager::deleteOldStudies()
                 break;
             }
 
-            //esborrem el punter a study
+            // Esborrem el punter a study
             delete study;
         }
     }
@@ -463,7 +463,7 @@ bool LocalDatabaseManager::thereIsAvailableSpaceOnHardDisk()
                 return false;
             }
 
-            //Tornem a consultar l'espai lliure
+            // Tornem a consultar l'espai lliure
             if (hardDiskInformation.getNumberOfFreeMBytes(LocalDatabaseManager::getCachePath()) < minimumSpaceRequired)
             {
                 INFO_LOG("No hi ha suficient espai lliure per descarregar (" + QString().setNum(freeSpaceInHardDisk) + " Mb)");
@@ -652,7 +652,7 @@ int LocalDatabaseManager::savePatientOfStudy(DatabaseConnection *dbConnect, Stud
 
     if (patientID == -1)
     {
-        //si no existeix l'inserim a la BD
+        // Si no existeix l'inserim a la BD
         patientDAL.insert(study->getParentPatient());
     }
     else
@@ -722,7 +722,7 @@ int LocalDatabaseManager::deleteStudyStructureFromDatabase(DatabaseConnection *d
         return status;
     }
 
-    //esborrem tots els estudis
+    // Esborrem tots els estudis
     status = deleteStudyFromDatabase(dbConnect, maskToDelete);
     if (status != SQLITE_OK)
     {
@@ -741,14 +741,14 @@ int LocalDatabaseManager::deleteSeriesStructureFromDatabase(DatabaseConnection *
     maskToDelete.setStudyInstanceUID(studyInstanceUIDToDelete);
     maskToDelete.setSeriesInstanceUID(seriesIntanceUIDToDelete);
 
-    //esborrem totes les series
+    // Esborrem totes les series
     status = deleteSeriesFromDatabase(dbConnect, maskToDelete);
     if (status != SQLITE_OK)
     {
         return status;
     }
 
-    //esborrem totes les imatges
+    // Esborrem totes les imatges
     return deleteImageFromDatabase(dbConnect, maskToDelete);
 }
 
@@ -784,7 +784,7 @@ int LocalDatabaseManager::deletePatientOfStudyFromDatabase(DatabaseConnection *d
 {
     LocalDatabaseStudyDAL localDatabaseStudyDAL(dbConnect);
 
-    //Busquem el ID de pacient
+    // Busquem el ID de pacient
     qlonglong patientID = localDatabaseStudyDAL.getPatientIDFromStudyInstanceUID(maskToDelete.getStudyInstanceUID());
 
     if (localDatabaseStudyDAL.getLastError() != SQLITE_OK)
@@ -938,7 +938,7 @@ void LocalDatabaseManager::loadSeriesThumbnail(QString studyInstanceUID, QList<S
 
 void LocalDatabaseManager::setLastError(int sqliteLastError)
 {
-    //Es tradueixen els errors de Sqlite a errors nostres, per consulta codi d'errors Sqlite http://www.sqlite.org/c3ref/c_abort.html
+    // Es tradueixen els errors de Sqlite a errors nostres, per consulta codi d'errors Sqlite http://www.sqlite.org/c3ref/c_abort.html
     if (sqliteLastError == SQLITE_OK)
     {
         m_lastError = Ok;

@@ -90,7 +90,7 @@ void PrintDicomSpool::printStoredPrintDcmtkContent(DVPSPrintMessageHandler &prin
         ERROR_LOG(QString("No s'ha pogut obtenir els settings de la impressora, descripcio error: %1").arg(result.text()));
     }
 
-    //Abans de fer un acció amb la impressora comprovem si la última ha anat bé amb EC_NORMAL=result, si ha fallat totes les accions restants no s'executaran
+    // Abans de fer un acció amb la impressora comprovem si la última ha anat bé amb EC_NORMAL=result, si ha fallat totes les accions restants no s'executaran
     if (EC_Normal == result)
     {
         DcmDataset basicFilmSessionDataset = getAttributesBasicFilmSession();
@@ -99,7 +99,7 @@ void PrintDicomSpool::printStoredPrintDcmtkContent(DVPSPrintMessageHandler &prin
 
         if (EC_Normal != result)
         {
-            //Si no s'ha pogut crear el FilmSession possiblement la impressora no ens ha acceptat algun dels paràmetres de configuració del FilmSession
+            // Si no s'ha pogut crear el FilmSession possiblement la impressora no ens ha acceptat algun dels paràmetres de configuració del FilmSession
             ERROR_LOG(QString("No s'ha pogut crear el Basic FilmSession. %1").arg(result.text()));
             m_lastError = PrintDicomSpool::ErrorCreatingFilmSession;
         }
@@ -125,7 +125,7 @@ void PrintDicomSpool::printStoredPrintDcmtkContent(DVPSPrintMessageHandler &prin
 
     if (EC_Normal == result)
     {
-        //Crea i envia els AnnotationBox
+        // Crea i envia els AnnotationBox
         result = createAndSendFilmBoxAnnotations(printerConnection, storedPrintDcmtk);
     }
 
@@ -142,7 +142,7 @@ void PrintDicomSpool::printStoredPrintDcmtkContent(DVPSPrintMessageHandler &prin
         }
     }
 
-    //Donem ordre d'imprimir el BasicFilmBox, no cal donar ordre d'imprimir el FilmSession amb el BasicFilmBox n'hi ha suficent
+    // Donem ordre d'imprimir el BasicFilmBox, no cal donar ordre d'imprimir el FilmSession amb el BasicFilmBox n'hi ha suficent
     if (EC_Normal == result)
     {
         INFO_LOG("S'ha enviat correctament totes les imatges a la impressora");
@@ -220,7 +220,7 @@ OFCondition PrintDicomSpool::createAndSendBasicGrayscaleImageBox(DVPSPrintMessag
     QString imageToPrintPath;
     bool isImageMonochrome1;
 
-    //Busquem el studyUID, seriesUID i instaceUID de la imatge a imprimir
+    // Busquem el studyUID, seriesUID i instaceUID de la imatge a imprimir
     result = storedPrintDcmtk->getImageReference(imageNumber, studyUID, seriesUID, instanceUID);
 
     if (result != EC_Normal || !studyUID || !seriesUID || !instanceUID)
@@ -232,7 +232,7 @@ OFCondition PrintDicomSpool::createAndSendBasicGrayscaleImageBox(DVPSPrintMessag
     }
     else
     {
-        //TODO:S'hauria de fer a un altre lloc el càlcul del path de la imatge perquè també s'utilitza a CreateDicomPrintSpool
+        // TODO:S'hauria de fer a un altre lloc el càlcul del path de la imatge perquè també s'utilitza a CreateDicomPrintSpool
         imageToPrintPath = QDir::toNativeSeparators(spoolDirectoryPath + QDir::separator() + instanceUID + ".dcm");
         imageToPrint = new DicomImage(qPrintable(imageToPrintPath));
 
@@ -240,7 +240,7 @@ OFCondition PrintDicomSpool::createAndSendBasicGrayscaleImageBox(DVPSPrintMessag
         {
             isImageMonochrome1 = imageToPrint->getPhotometricInterpretation() == EPI_Monochrome1;
 
-            //Enviem la imatge
+            // Enviem la imatge
             result = storedPrintDcmtk->printSCUsetBasicImageBox(printerConnection, imageNumber, *imageToPrint, isImageMonochrome1);
             if (EC_Normal != result)
             {
@@ -259,7 +259,7 @@ OFCondition PrintDicomSpool::createAndSendBasicGrayscaleImageBox(DVPSPrintMessag
             m_lastError = PrintDicomSpool::ErrorLoadingImageToPrint;
         }
 
-        //No s'ha de fer el delete del studyUID, seriesUID i instanceUID perquè són un punter a informació del storedPrint
+        // No s'ha de fer el delete del studyUID, seriesUID i instanceUID perquè són un punter a informació del storedPrint
         delete imageToPrint;
 
         return result;
@@ -272,7 +272,7 @@ OFCondition PrintDicomSpool::createAndSendFilmBoxAnnotations(DVPSPrintMessageHan
 
     INFO_LOG(QString("S'enviaran %1 Annotation Box a la impressora").arg(storedPrintDcmtk->getNumberOfAnnotations()));
 
-    ///Enviem totes les anotacions que tinguem de la film box
+    /// Enviem totes les anotacions que tinguem de la film box
     for (size_t currentAnnotation = 0; currentAnnotation < storedPrintDcmtk->getNumberOfAnnotations(); currentAnnotation++)
     {
         if (EC_Normal == result)
