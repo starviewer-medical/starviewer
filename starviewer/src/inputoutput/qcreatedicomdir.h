@@ -51,7 +51,7 @@ protected:
 
 private:
 
-    ///Inicialitza els controls de la interfície
+    /// Inicialitza els controls de la interfície
     void initializeControls();
 
     /// Crea les connexions de signals i slots de la interfície
@@ -118,11 +118,11 @@ private slots:
     /// Slot que s'activa quan s'ha acabat de generar la imatge del DICOMDIR i per tant es pot executar el programa de gravació
     void openBurningApplication(bool createIsoResult);
 
-    ///Slot que s'activa quan es canvia el valor d'alguns dels checkbox que indiquen si s'ha de copiar el contingut de la carpeta auxiliar al DICOMDIR
-    ///Actualitza el tamany del DICOMDIR en funció de si s'ha de copiar o no la carpeta auxiliar al DICOMDIR
+    /// Slot que s'activa quan es canvia el valor d'alguns dels checkbox que indiquen si s'ha de copiar el contingut de la carpeta auxiliar al DICOMDIR
+    /// Actualitza el tamany del DICOMDIR en funció de si s'ha de copiar o no la carpeta auxiliar al DICOMDIR
     void copyContentFolderToDICOMDIRCheckBoxsStateChanged();
 
-    ///Amaga/Ensenya el frame per introduir el nom del pacient anonimitzat
+    /// Amaga/Ensenya el frame per introduir el nom del pacient anonimitzat
     void m_anonymizeDICOMDIRCheckBoxToggled(bool checked);
 
 private:
@@ -145,7 +145,7 @@ private:
     /// Menu contextual
     QMenu m_contextMenu;
 
-    ///Agrupa les accions dels dispositius on gravarem el DICOMDIR
+    /// Agrupa les accions dels dispositius on gravarem el DICOMDIR
     QActionGroup *m_devicesActionGroup;
 
     /// Mapejador d'accions
@@ -188,10 +188,10 @@ private:
     /// Retorna el que ocuparà la imatge passada per paràmetre en transfer syntax Little Endian, la mida que retorna és un càlcul aproximat del que ocuparà
     quint64 getImageSizeInBytesInLittleEndianTransferSyntax(Image *image);
 
-    ///Retorna el path temporal on poder crear el DICOMDIR
+    /// Retorna el path temporal on poder crear el DICOMDIR
     QString getTemporaryDICOMDIRPath();
 
-    ///Retorna la mida del visor de la carpeta a copiar al DICOMDIR, si no tenim cap carpeta configurada al Settings, retorna 0
+    /// Retorna la mida del visor de la carpeta a copiar al DICOMDIR, si no tenim cap carpeta configurada al Settings, retorna 0
     quint64 getFolderToCopyToDICOMDIRSizeInBytes();
 
     /// Starviewer té l'opció de copiar el contingut d'una carpeta al DICOMDIR. Aquest mètode indica si aquesta carpeta

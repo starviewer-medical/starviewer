@@ -121,7 +121,7 @@ QString PacsDevice::getID() const
     return m_id;
 }
 
-///Assigna/Retorna si podem fer consultes/descarregues al PACS
+/// Assigna/Retorna si podem fer consultes/descarregues al PACS
 void PacsDevice::setQueryRetrieveServiceEnabled(bool isQueryRetrieveServiceEnabled)
 {
     m_isQueryRetrieveServiceEnabled = isQueryRetrieveServiceEnabled;

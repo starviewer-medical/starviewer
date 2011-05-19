@@ -100,7 +100,7 @@ bool QDICOMDIRConfigurationScreen::validateChanges()
 
     if (m_checkBoxCopyFolderContentToDICOMDIRCdDvd->isChecked() || m_checkBoxCopyFolderContentToDICOMDIRUsbHardDisk->isChecked())
     {
-        //Si ens han indiquen que s'ha de copiar el contingut del DICOMDIR en algun dispostiu és obligatori indicar el Path
+        // Si ens han indiquen que s'ha de copiar el contingut del DICOMDIR en algun dispostiu és obligatori indicar el Path
         if (m_textDICOMDIRFolderPathToCopy->text().isEmpty())
         {
             QMessageBox::warning(this, ApplicationNameString, tr("You have to indicate the path of folder to copy to DICOMDIR."));
@@ -117,7 +117,7 @@ bool QDICOMDIRConfigurationScreen::validateChanges()
             return false;
         }
         else if (!ConvertToDicomdir().AreValidRequirementsOfFolderContentToCopyToDICOMDIR(m_textDICOMDIRFolderPathToCopy->text()))
-        {//Comprovem que el directori no tingui cap item que es digui DICOM o DICOMDIR
+        {// Comprovem que el directori no tingui cap item que es digui DICOM o DICOMDIR
             QMessageBox::warning(this, ApplicationNameString, tr("Invalid content of the folder to copy to DICOMDIR, this folder can't contains any item "
                                                                  "called DICOM or DICOMDIR."));
             return false;

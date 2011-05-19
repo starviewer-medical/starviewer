@@ -6,15 +6,15 @@
 #include "../core/logging.h"
 #include <QProcess>
 
-/// configurem el logging
+/// Configurem el logging
 // \TODO Còpia exacta del main.cpp de l'starviewer. Caldria refactoritzar-ho.
 void configureLogging()
 {
-    // primer comprovem que existeixi el direcotori ~/.starviewer/log/ on guradarem els logs
+    // Primer comprovem que existeixi el direcotori ~/.starviewer/log/ on guradarem els logs
     QDir logDir = udg::UserLogsPath;
     if (!logDir.exists())
     {
-        // creem el directori
+        // Creem el directori
         logDir.mkpath(udg::UserLogsPath);
     }
     // TODO donem per fet que l'arxiu es diu així i es troba a la localització que indiquem. S'hauria de fer una mica més flexible o genèric;
@@ -28,7 +28,7 @@ void configureLogging()
     DEBUG_LOG("Arxiu de configuració del log: " + configurationFile);
 }
 
-///Imprimim l'ajuda del programa
+/// Imprimim l'ajuda del programa
 void printHelp()
 {
     printf("Invalid arguments: you must specify one parameter, the accession number of the study to retrieve.\n\n");
@@ -49,13 +49,13 @@ QString getStarviewerExecutableFilePath()
     #endif
 }
 
-///Engega un starviewer passant-li per comandes de línia el accessionNumber del estudi a descarragar
+/// Engega un starviewer passant-li per comandes de línia el accessionNumber del estudi a descarragar
 void retrieveStudy(QString accessionNumber)
 {
     QProcess process;
     QString starviewerCommandLine = " -accessionnumber " + accessionNumber;
 
-    // executem una instància del Starviewer utiltizant la opció de línia de comandes -accessionnumber "valor del accessio number"
+    // Executem una instància del Starviewer utiltizant la opció de línia de comandes -accessionnumber "valor del accessio number"
 
     INFO_LOG("Starviewer_sapwrapper::S'iniciara nova instancia del Starviewer per demanar descarrega de l'estudi amb accession number" +  accessionNumber);
     process.startDetached(getStarviewerExecutableFilePath() + starviewerCommandLine);
@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
 
     if (parametersList.count() == 2)
     {
-        //Hem d'agafar el segon paràmetre perquè el primer és el nom del programa
+        // Hem d'agafar el segon paràmetre perquè el primer és el nom del programa
         retrieveStudy(parametersList.at(1));
     }
     else

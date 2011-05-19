@@ -25,7 +25,7 @@ public:
 
     ~TableMenu();
 
-    /// inicialitza la taula amb un únic element no seleccionat
+    /// Inicialitza la taula amb un únic element no seleccionat
     void initializeTable();
 
     /// Buida tots els elements de la taula

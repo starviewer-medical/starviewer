@@ -40,13 +40,13 @@ public:
     /// Retorna el destí de la impressió. (Aquest vindrà definit per les capacitats de la impressora).
     QString getFilmDestination() const;
 
-    ///Especifica les PrintPage del PrintJob
+    /// Especifica les PrintPage del PrintJob
     void setDicomPrintPages(QList<DicomPrintPage> dicomPrintPages);
 
-    ///Retorna les PrintPage del PrintJob
+    /// Retorna les PrintPage del PrintJob
     QList<DicomPrintPage> getDicomPrintPages();
 
-    ///Especifica/retorna el número de pàgines que s'han d'implementar del JOB
+    /// Especifica/retorna el número de pàgines que s'han d'implementar del JOB
     void setNumberOfCopies(int numberOfCopies);
     int getNumberOfCopies();
 

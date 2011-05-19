@@ -34,21 +34,21 @@ public:
     /// @return indica si el directori existeix
     bool existsDatabaseFile();
 
-    ///Esborra la base de dades actual i torna a crear-ne una de nova
+    /// Esborra la base de dades actual i torna a crear-ne una de nova
     bool reinstallDatabase();
 
     /// Reinstal·lar la base de dades i esborra les imatges descarregades o importades a la base de dades local. Mostra un QProgressDialog mentre es neteja
     /// la cache.
     bool removeCacheAndReinstallDatabase();
 
-    ///Aplica els canvis a fets a la última revisió de la base de dades a la base de dades locals
+    /// Aplica els canvis a fets a la última revisió de la base de dades a la base de dades locals
     bool updateDatabaseRevision();
 
     /// Retorna els errors que s'han trobat
     QString getErrorMessage();
 
 private slots:
-    ///Fa avançar la barra de progrés
+    /// Fa avançar la barra de progrés
     void setValueProgressBar();
 
 private:
@@ -56,10 +56,10 @@ private:
     /// @return indicat si el directori existeix o no
     bool checkLocalImagePath();
 
-    ///Comprova que existeix el path de la base de dades i sinó existeix el crea
+    /// Comprova que existeix el path de la base de dades i sinó existeix el crea
     bool checkDatabasePath();
 
-    ///Comprova si la revisió de la base de dades és la necessària per l'actual compilació de l'starviewer i sinó l'intenta actualitzar
+    /// Comprova si la revisió de la base de dades és la necessària per l'actual compilació de l'starviewer i sinó l'intenta actualitzar
     bool checkDatabaseRevision();
 
     /// Retorna cert si tenim permisos d'escriptura a la base de dades, fals altrament
@@ -85,6 +85,6 @@ private:
     QString m_errorMessage;
 };
 
-}//end namespace udg
+} // End namespace udg
 
 #endif

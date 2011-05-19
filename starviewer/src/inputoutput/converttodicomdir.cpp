@@ -68,10 +68,10 @@ void ConvertToDicomdir::addStudy(const QString &studyUID)
 
     delete patient;
 
-    //busquem la posició on s'ha d'inserir l'estudi a llista d'estudis per convertir a dicomdir, ordenant per id de pacient
+    // Busquem la posició on s'ha d'inserir l'estudi a llista d'estudis per convertir a dicomdir, ordenant per id de pacient
     while (index < m_studiesToConvert.count() && !stop)
     {
-        //comparem amb els altres estudis de la llista, fins trobar el seu llloc corresponentm
+        // Comparem amb els altres estudis de la llista, fins trobar el seu llloc corresponentm
         if (studyToConvert.patientId < m_studiesToConvert.at(index).patientId)
         {
             stop = true;
@@ -174,7 +174,7 @@ Status ConvertToDicomdir::convert(const QString &dicomdirPath, CreateDicomdir::r
         m_DICOMAnonymizer = NULL;
     }
 
-    //copiem les imatges dels estudis seleccionats al directori desti
+    // Copiem les imatges dels estudis seleccionats al directori desti
     state = copyStudiesToDicomdirPath(studyList);
 
     if (!state.good())
@@ -183,7 +183,7 @@ Status ConvertToDicomdir::convert(const QString &dicomdirPath, CreateDicomdir::r
         DeleteDirectory().deleteDirectory(m_dicomDirPath, false);
         return state;
     }
-    //una vegada copiada les imatges les creem
+    // Una vegada copiada les imatges les creem
     state = createDicomdir(m_dicomDirPath, selectedDevice);
 
     if (!state.good() && state.code() != 4001)
@@ -255,7 +255,7 @@ Status ConvertToDicomdir::createDicomdir(const QString &dicomdirPath, CreateDico
         }
     }
 
-    //Hem assignat com a valor de progressbar Numero Imatges +1, el +1 és el pas de convertir els fitxers a dicomdir
+    // Hem assignat com a valor de progressbar Numero Imatges +1, el +1 és el pas de convertir els fitxers a dicomdir
     m_progress->setValue(m_progress->value() + 1);
 
     return state;
@@ -301,7 +301,7 @@ Status ConvertToDicomdir::copyStudiesToDicomdirPath(QList<Study*> studyList)
 
     m_patient = 0;
 
-    //agrupem estudis1 per pacient, com que tenim la llista ordenada per patientId
+    // Agrupem estudis1 per pacient, com que tenim la llista ordenada per patientId
     while (!m_studiesToConvert.isEmpty())
     {
         studyToConvert = m_studiesToConvert.takeFirst();
@@ -318,7 +318,7 @@ Status ConvertToDicomdir::copyStudiesToDicomdirPath(QList<Study*> studyList)
             break;
         }
 
-        //si el pacient es diferent creem un nou directori PAtient
+        // Si el pacient es diferent creem un nou directori PAtient
         if (m_OldPatientId != studyToConvert.patientId)
         {
             patientNameDir = QString("/PAT%1").arg(m_patient, 5, 10, fillChar);
@@ -354,7 +354,7 @@ Status ConvertToDicomdir::copyStudyToDicomdirPath(Study *study)
     m_study++;
     m_series = 0;
 
-    //Creem el directori on es guardar l'estudi en format DicomDir
+    // Creem el directori on es guardar l'estudi en format DicomDir
     m_dicomDirStudyPath = m_dicomdirPatientPath + studyName;
     studyDir.mkdir(m_dicomDirStudyPath);
 
@@ -379,13 +379,13 @@ Status ConvertToDicomdir::copySeriesToDicomdirPath(Series *series)
 {
     QDir seriesDir;
     QChar fillChar = '0';
-    //creem el nom del directori de la sèrie, el format és SERXXXXX, on XXXXX és el numero de sèrie dins l'estudi
+    // Creem el nom del directori de la sèrie, el format és SERXXXXX, on XXXXX és el numero de sèrie dins l'estudi
     QString seriesName = QString("/SER%1").arg(m_series, 5, 10, fillChar);
     Status state;
 
     m_series++;
     m_image = 0;
-    //Creem el directori on es guardarà la sèrie en format DicomDir
+    // Creem el directori on es guardarà la sèrie en format DicomDir
     m_dicomDirSeriesPath = m_dicomDirStudyPath + seriesName;
     seriesDir.mkdir(m_dicomDirSeriesPath);
 
@@ -411,14 +411,14 @@ Status ConvertToDicomdir::copySeriesToDicomdirPath(Series *series)
 
 Status ConvertToDicomdir::copyImageToDicomdirPath(Image *image)
 {
-    //creem el nom del fitxer de l'imatge, el format és IMGXXXXX, on XXXXX és el numero d'imatge dins la sèrie
+    // Creem el nom del fitxer de l'imatge, el format és IMGXXXXX, on XXXXX és el numero d'imatge dins la sèrie
     QString imageOutputPath = m_dicomDirSeriesPath + QString("/IMG%1").arg(m_image, 5, 10, QChar('0'));
     Status state;
     m_image++;
 
     if (getConvertDicomdirImagesToLittleEndian())
     {
-        //convertim la imatge a littleEndian, demanat per la normativa DICOM i la guardem al directori desti
+        // Convertim la imatge a littleEndian, demanat per la normativa DICOM i la guardem al directori desti
         state = ConvertDicomToLittleEndian().convert(image->getPath(), imageOutputPath);
 
         if (m_anonymizeDICOMDIR && state.good())
@@ -435,9 +435,9 @@ Status ConvertToDicomdir::copyImageToDicomdirPath(Image *image)
     }
     else
     {
-        //Si hem d'anonimitzar el fitxer el que fem és que en comptes de copiar-lo i llavors anonimitzar-lo, és  indicar-li al mètode d'anonimitzar
-        //que guardi el fitxer en el lloc on s'hauria hagut de copiar per crear el DICOMDIR, d'aquesta manera la creació de DICOMDIR per imatges
-        //que no s'han de convertir a LittleEndian és més ràpid.
+        // Si hem d'anonimitzar el fitxer el que fem és que en comptes de copiar-lo i llavors anonimitzar-lo, és  indicar-li al mètode d'anonimitzar
+        // que guardi el fitxer en el lloc on s'hauria hagut de copiar per crear el DICOMDIR, d'aquesta manera la creació de DICOMDIR per imatges
+        // que no s'han de convertir a LittleEndian és més ràpid.
         if (m_anonymizeDICOMDIR)
         {
             if (m_DICOMAnonymizer->anonymizeDICOMFile(image->getPath(), imageOutputPath))
@@ -529,7 +529,7 @@ void ConvertToDicomdir::createReadmeTxt()
 
 bool ConvertToDicomdir::copyFolderContentToDICOMDIR()
 {
-    //TODO:Aquest tall de codi s'hauria de copiar a una Manager de DICOMDIR no hauria d'estar aquí a la UI
+    // TODO:Aquest tall de codi s'hauria de copiar a una Manager de DICOMDIR no hauria d'estar aquí a la UI
     QString folderToCopyPath = Settings().getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString();
     bool ok = true;
 

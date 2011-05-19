@@ -21,7 +21,7 @@
 
 namespace udg {
 
-//Constant que contindrà quin Abanstract Syntax de Move utilitzem entre els diversos que hi ha utilitzem
+// Constant que contindrà quin Abanstract Syntax de Move utilitzem entre els diversos que hi ha utilitzem
 static const char *MoveAbstractSyntax = UID_MOVEStudyRootQueryRetrieveInformationModel;
 
 RetrieveDICOMFilesFromPACS::RetrieveDICOMFilesFromPACS(PacsDevice pacs)
@@ -188,7 +188,7 @@ void RetrieveDICOMFilesFromPACS::storeSCPCallback(void *callbackData, T_DIMSE_St
                     }
                 }
 
-                //TODO:Té processar el fitxer si ha fallat alguna de les anteriors comprovacions ?
+                // TODO:Té processar el fitxer si ha fallat alguna de les anteriors comprovacions ?
                 retrieveDICOMFilesFromPACS->m_numberOfImagesRetrieved++;
                 DICOMTagReader *dicomTagReader = new DICOMTagReader(dicomFileAbsolutePath, storeSCPCallbackData->dcmFileFormat->getAndRemoveDataset());
                 emit retrieveDICOMFilesFromPACS->DICOMFileRetrieved(dicomTagReader, retrieveDICOMFilesFromPACS->m_numberOfImagesRetrieved);
@@ -483,7 +483,7 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResp
             break;
 
         case STATUS_MOVE_Failed_IdentifierDoesNotMatchSOPClass:
-            //0xa900
+            // 0xa900
         case STATUS_MOVE_Failed_UnableToProcess:
             // 0xc000
             // Unable to Process or Identifier does not match SOP Class

@@ -43,4 +43,4 @@ bool MPRExtensionMediator::initializeExtension(QWidget *extension, const Extensi
     return true;
 }
 
-} //udg namespace
+} // End udg namespace

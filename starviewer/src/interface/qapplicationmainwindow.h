@@ -29,7 +29,7 @@ class ApplicationVersionChecker;
 class QApplicationMainWindow : public QMainWindow {
 Q_OBJECT
 public:
-    ///El constructor del Mainwindow. Aquí es crea tot l'esquelet de l'interfície: Menús, Barres d'eines, toolbox, working area, etc..
+    /// El constructor del Mainwindow. Aquí es crea tot l'esquelet de l'interfície: Menús, Barres d'eines, toolbox, working area, etc..
     QApplicationMainWindow(QWidget *parent = 0);
 
     ~QApplicationMainWindow();
@@ -119,10 +119,10 @@ private slots:
     /// Crea una nova finestra i l'obre.
     void openBlankWindow();
 
-    /// mostra el formulari d'about
+    /// Mostra el formulari d'about
     void about();
 
-    /// canvia a l'idioma indicat
+    /// Canvia a l'idioma indicat
     void switchToLanguage(QString locale);
 
     /// Maximitza a tantes pantalles com es pugui

@@ -3,7 +3,7 @@
 
 // Stl
 #include <vector>
-//Qt
+// Qt
 #include <QString>
 
 class vtkImageData;

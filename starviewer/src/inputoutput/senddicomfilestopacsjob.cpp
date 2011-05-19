@@ -55,7 +55,7 @@ void SendDICOMFilesToPACSJob::run()
         if (m_sendRequestStatus == PACSRequestStatus::SendOk || m_sendRequestStatus == PACSRequestStatus::SendSomeDICOMFilesFailed ||
             m_sendRequestStatus == PACSRequestStatus::SendWarningForSomeImages)
         {
-            ///Si s'han envait imatges indiquem que s'ha enviat la última sèrie
+            /// Si s'han envait imatges indiquem que s'ha enviat la última sèrie
             m_numberOfSeriesSent++;
             emit DICOMSeriesSent(this, m_numberOfSeriesSent);
         }

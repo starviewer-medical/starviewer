@@ -19,7 +19,7 @@ public:
     ~PolylineTemporalROITool();
 
     // Declaració de tipus
-    //typedef PolylineTemporalROIToolData::TemporalImageType TemporalImageType;
+    // typedef PolylineTemporalROIToolData::TemporalImageType TemporalImageType;
     typedef itk::Image<double, 4> TemporalImageType;
 
     /// Retorna les dades pròpies de la seed

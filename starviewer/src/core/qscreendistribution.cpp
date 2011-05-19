@@ -140,7 +140,7 @@ void QScreenDistribution::paintEvent(QPaintEvent *event)
             painter.setPen(pen);
         }
 
-        //Pintar el numero
+        // Pintar el numero
         painter.drawText(m_screens.at(i), Qt::AlignCenter, QString::number(i + 1));
     }
     event->accept();

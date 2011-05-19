@@ -183,7 +183,7 @@ void computeGradients(udg::Vtk4DLinearRegressionGradientEstimator *estimator, T 
                                 // v = 0
                                 continue;
                             }
-                            // valor del vòxel (no pot ser 0 perquè ja hem fet les comprovacions abans)
+                            // Valor del vòxel (no pot ser 0 perquè ja hem fet les comprovacions abans)
                             float v = *(dPtrPixxStepPiyyStep + iz * zStep);
                             //float v = dPtr[maskOffset[im]];   // d'aquesta manera va més lent (???)
                             // w[im] = distància euclidiana

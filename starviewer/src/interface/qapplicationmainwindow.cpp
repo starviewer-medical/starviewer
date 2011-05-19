@@ -25,7 +25,7 @@
 #include "volumerepository.h"
 #include "applicationstylehelper.h"
 
-// amb starviewer lite no hi haurà hanging protocols, per tant no els carregarem
+// Amb starviewer lite no hi haurà hanging protocols, per tant no els carregarem
 #ifndef STARVIEWER_LITE
 #include "hangingprotocolsloader.h"
 #include "customwindowlevelsloader.h"
@@ -44,7 +44,7 @@
 #include <QPair>
 #include <QWidgetAction>
 #include <QShortcut>
-//Shortucts
+// Shortucts
 #include "shortcuts.h"
 #include "shortcutmanager.h"
 
@@ -98,11 +98,11 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
 
     // Llegim les configuracions de l'aplicació, estat de la finestra, posicio,etc
     readSettings();
-    // icona de l'aplicació
+    // Icona de l'aplicació
     this->setWindowIcon(QIcon(":/images/starviewer.png"));
     this->setWindowTitle(ApplicationNameString);
 
-// amb starviewer lite no hi haurà hanging protocols, per tant no els carregarem
+// Amb starviewer lite no hi haurà hanging protocols, per tant no els carregarem
 #ifndef STARVIEWER_LITE
     // Càrrega dels repositoris que necessitem tenir carregats durant tota l'aplicació
     // Només carregarem un cop per sessió/instància d'starviewer
@@ -119,7 +119,7 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
     }
 #endif
 
-    // creem el progress dialog que notificarà la càrrega de volums
+    // Creem el progress dialog que notificarà la càrrega de volums
     m_progressDialog = new QProgressDialog(this);
     m_progressDialog->setModal(true);
     m_progressDialog->setRange(0, 100);
@@ -368,9 +368,9 @@ void QApplicationMainWindow::createMenus()
     m_fileMenu->addAction(m_exitAction);
 
 #ifdef STARVIEWER_LITE
-    //no afegim els menús de visualització
+    // No afegim els menús de visualització
 #else
-    // accions relacionades amb la visualització
+    // Accions relacionades amb la visualització
     m_visualizationMenu = menuBar()->addMenu(tr("&Visualization"));
 
     foreach (QAction *action, m_actionsList)
@@ -393,7 +393,7 @@ void QApplicationMainWindow::createMenus()
 
     menuBar()->addSeparator();
 
-    // menú d'ajuda i suport
+    // Menú d'ajuda i suport
     m_helpMenu = menuBar()->addMenu(tr("&Help"));
     m_helpMenu->addAction(m_openUserGuideAction);
     m_helpMenu->addAction(m_openQuickStartGuideAction);
@@ -448,7 +448,7 @@ QAction* QApplicationMainWindow::createLanguageAction(const QString &language, c
 
 void QApplicationMainWindow::killBill()
 {
-    // eliminem totes les extensions
+    // Eliminem totes les extensions
     this->getExtensionWorkspace()->killThemAll();
     // TODO descarregar tots els volums que tingui el pacient en aquesta finestra
     // quan ens destruim alliberem tots els volums que hi hagi a memòria
@@ -499,7 +499,7 @@ void QApplicationMainWindow::setPatient(Patient *patient)
 
     if (this->getCurrentPatient())
     {
-        // primer ens carreguem el pacient
+        // Primer ens carreguem el pacient
         this->killBill();
         delete m_patient;
         m_patient = NULL;
@@ -669,7 +669,7 @@ void QApplicationMainWindow::newCommandLineOptionsToRun()
 {
     QPair<StarviewerApplicationCommandLine::StarviewerCommandLineOption, QString> optionValue;
 
-    //Mentre quedin opcions per processar
+    // Mentre quedin opcions per processar
     while (StarviewerSingleApplicationCommandLineSingleton::instance()->takeOptionToRun(optionValue))
     {
         switch (optionValue.first)
@@ -698,7 +698,7 @@ void QApplicationMainWindow::sendRequestRetrieveStudyWithAccessionNumberToLocalS
     }
     else
     {
-        //TODO:S'hauria de fer un missatge més genèric
+        // TODO:S'hauria de fer un missatge més genèric
         QMessageBox::information(this, ApplicationNameString, 
                                  tr("Please activate \"Listen RIS Request\" option in %1 configuration to retrieve studies from SAP.")
                                .arg(ApplicationNameString));

@@ -75,14 +75,14 @@ public:
     static const QString DICOMDIRBurningApplicationHasDifferentCDDVDParametersKey;
     /// CheckBox per saber si cal convertir les imatges del DICOMDIR a little endian
     static const QString ConvertDICOMDIRImagesToLittleEndianKey;
-    ///Path del directori del que s'ha de copiar el visor DICOMDIR
+    /// Path del directori del que s'ha de copiar el visor DICOMDIR
     static const QString DICOMDIRFolderPathToCopy;
     /// Checkbox per saber si cal copiar el contingut del directori que apunta el setting DICOMDIRFolderPathToCopy als CD/DVD DICOMDIR
     static const QString CopyFolderContentToDICOMDIROnCDOrDVD;
     /// Checkbox per saber si cal copiar el contingut del directori que apunta el setting DICOMDIRFolderPathToCopy als Usb/HardDisk DICOMDIR
     static const QString CopyFolderContentToDICOMDIROnUSBOrHardDisk;
 
-    //Informació Institució
+    // Informació Institució
     static const QString InstitutionName;
     static const QString InstitutionTown;
     static const QString InstitutionAddress;
@@ -91,11 +91,11 @@ public:
     static const QString InstitutionPhoneNumber;
     static const QString InstitutionEmail;
 
-    //Columna i ordre d'ordenació de la QOperationStateScreen
+    // Columna i ordre d'ordenació de la QOperationStateScreen
     static const QString OperationStateListSortByColumn;
     static const QString OperationStateListSortOrder;
 
-    //Boolea per saber si s'ha de cercar previes a partir del nom del pacient.
+    // Boolea per saber si s'ha de cercar previes a partir del nom del pacient.
     static const QString SearchRelatedStudiesByName;
 };
 

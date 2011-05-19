@@ -61,7 +61,7 @@ void DicomPrinterManager::setAllPrintersAsNoDefaultPrinter()
     Settings settings;
     QList<DicomPrinter> dicomPrinterList = getDicomPrinterList();
 
-    //Totes les impressores guardares les posem a false
+    // Totes les impressores guardares les posem a false
     foreach (DicomPrinter dicomPrinter, dicomPrinterList)
     {
         dicomPrinter.setIsDefault(false);
@@ -116,7 +116,7 @@ QList<DicomPrinter> DicomPrinterManager::getDicomPrinterList()
     return dicomPrintersList;
 }
 
-//TODO: Ara mateix et retorna valors per defecte ja que no es comunica amb la impressora. Falta realitza la implementació per obtenir les dades
+// TODO: Ara mateix et retorna valors per defecte ja que no es comunica amb la impressora. Falta realitza la implementació per obtenir les dades
 // directament de la impressora.
 DicomPrinter DicomPrinterManager::getDefaultAvailableParametersValuesDICOMPrinters()
 {
@@ -256,7 +256,7 @@ QStringList DicomPrinterManager::getAvailableFilmOrientationValues()
 
 QStringList DicomPrinterManager::getAvailableMagnificationTypeValues()
 {
-    //Atenció si es canvien els valors de Magnification Type, perquè Smoothing Type només es pot configurar si MagnificationType té com a valor "CUBINC"
+    // Atenció si es canvien els valors de Magnification Type, perquè Smoothing Type només es pot configurar si MagnificationType té com a valor "CUBINC"
     QStringList magnificationTypeValuesTemp;
     magnificationTypeValuesTemp << "" << "REPLICATE" << "BILINEAR" << "CUBIC" << "NONE";
     return magnificationTypeValuesTemp;
@@ -303,7 +303,7 @@ QStringList DicomPrinterManager::getAvailableFilmDestinationValues()
 
 QStringList DicomPrinterManager::getAvailableSmoothingTypeValues()
 {
-    //Només es pot configurar si Magnification Type té com a Valor "CUBIC"
+    // Només es pot configurar si Magnification Type té com a Valor "CUBIC"
     QStringList smoothingTypeValuesTemp;
     smoothingTypeValuesTemp << "" << "MEDIUM" << "SHARP" << "SMOOTH";
     return smoothingTypeValuesTemp;

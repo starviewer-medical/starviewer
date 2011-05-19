@@ -105,7 +105,7 @@ double StrokeSegmentationMethod::applyMethod()
     incaster->SetInput(m_Volume->getItkData());
     //smoothing->SetInput(incaster->GetOutput());
     //connectedThreshold->SetInput(smoothing->GetOutput());
-    //Comentem aquesta línia per fer el filtratge
+    // Comentem aquesta línia per fer el filtratge
     connectedThreshold->SetInput(incaster->GetOutput());
     outcaster->SetInput(connectedThreshold->GetOutput());
 
@@ -707,8 +707,8 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume *lesionMask)
     std::cout << *(covarianceAlgorithm->GetOutput()) << std::endl;
 
     // Cas Comas Pey!!!!!!
-    //mean = 30;
-    //variance = 50;
+    // mean = 30;
+    // variance = 50;
     // !!!!!!!!!!!!!!!!!!!!!
 
     m_mean = mean;
@@ -1061,9 +1061,9 @@ double StrokeSegmentationMethod::applyMethodEdema2(Volume *lesionMask)
     //double mean = (*covarianceAlgorithm->GetMean())[0];
     //double variance = (*covarianceAlgorithm->GetOutput())[0][0];
 
-    //Cas Comas Pey!!!!!!
-    //mean = 30;
-    //variance = 50;
+    // Cas Comas Pey!!!!!!
+    // mean = 30;
+    // variance = 50;
     // !!!!!!!!!!!!!!!!!!!!!
 
     m_mean = mean;
@@ -1230,7 +1230,7 @@ double StrokeSegmentationMethod::erfc(double x)
     // Compute the complementary error function erfc(x).
     // Erfc(x) = (2/sqrt(pi)) Integral(exp(-t^2))dt between x and infinity
     //
-    //--- Nve 14-nov-1998 UU-SAP Utrecht
+    // --- Nve 14-nov-1998 UU-SAP Utrecht
     // The parameters of the Chebyshev fit
     const double a1 = -1.26551223, a2 = 1.00002368,
     a3 =  0.37409196,   a4 = 0.09678418,
@@ -1277,7 +1277,7 @@ double StrokeSegmentationMethod::applyVentriclesMethod()
     VolumeCalcFilterType::Pointer volumeCalc= VolumeCalcFilterType::New();
 
     incaster->SetInput(m_Volume->getItkData());
-    //Comentem aquesta l�ia per fer el filtratge
+    // Comentem aquesta línia per fer el filtratge
     connectedThreshold->SetInput(incaster->GetOutput());
     outcaster->SetInput(connectedThreshold->GetOutput());
     volumeCalc->SetInput(outcaster->GetOutput());

@@ -46,14 +46,14 @@ int DicomPrint::print(DicomPrinter printer, DicomPrintJob printJob)
         while (indexNumberOfCopies < numberOfCopies)
         {
             INFO_LOG("Envio a imprimir la copia " + QString().setNum(indexNumberOfCopies + 1) + "/" + QString().setNum(numberOfCopies));
-            //Enviem a imprimir cada pàgina
+            // Enviem a imprimir cada pàgina
             foreach (QString dcmtkStoredPrintPathFile, dcmtkStoredPrintPathFileList)
             {
                 INFO_LOG("Envio FilmSession a imprimir");
                 printDicomSpool.printBasicGrayscale(printer, printJob, dcmtkStoredPrintPathFile, getSpoolDirectory());
                 if (printDicomSpool.getLastError() != PrintDicomSpool::Ok)
                 {
-                    //Si hi ha error parem
+                    // Si hi ha error parem
                     break;
                 }
 
@@ -62,7 +62,7 @@ int DicomPrint::print(DicomPrinter printer, DicomPrintJob printJob)
 
             if (printDicomSpool.getLastError() != PrintDicomSpool::Ok)
             {
-                //Si hi ha error parem
+                // Si hi ha error parem
                 break;
             }
 
@@ -121,7 +121,7 @@ QStringList DicomPrint::createDicomPrintSpool(DicomPrinter printer, DicomPrintJo
     QString storedDcmtkFilePath;
     QStringList dcmtkStoredPrintPathFileList;
 
-    //Per cada pàgina que tenim generem el fitxer storedPrint de dcmtk, cada fitxer és un FilmBox (una placa)
+    // Per cada pàgina que tenim generem el fitxer storedPrint de dcmtk, cada fitxer és un FilmBox (una placa)
     foreach (DicomPrintPage dicomPrintPage, printJob.getDicomPrintPages())
     {
         QString storedPrintPathFile;
@@ -142,7 +142,7 @@ QStringList DicomPrint::createDicomPrintSpool(DicomPrinter printer, DicomPrintJo
 
     if (dicomPrintSpool.getLastError() != CreateDicomPrintSpool::Ok)
     {
-        //Si hi ha error no enviem a imprimir cap imatge, netegem la llista de fitxer StoredPrint
+        // Si hi ha error no enviem a imprimir cap imatge, netegem la llista de fitxer StoredPrint
         dcmtkStoredPrintPathFileList.clear();
     }
 
@@ -214,7 +214,7 @@ DicomPrint::DicomPrintError DicomPrint::printDicomSpoolErrorToDicomPrintError(Pr
 
 QString DicomPrint::getSpoolDirectory()
 {
-    //Creem Spool al directori tempora del S.O.
+    // Creem Spool al directori tempora del S.O.
     return QDesktopServices::storageLocation(QDesktopServices::TempLocation) + QDir::separator() + "DICOMSpool";
 }
 

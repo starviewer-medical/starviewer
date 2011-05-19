@@ -23,7 +23,7 @@ QInputOutputLocalDatabaseWidget::QInputOutputLocalDatabaseWidget(QWidget *parent
 {
     setupUi(this);
 
-    //esborrem els estudis vells de la cache
+    // Esborrem els estudis vells de la cache
     deleteOldStudies();
     createContextMenuQStudyTreeWidget();
 
@@ -52,7 +52,7 @@ QInputOutputLocalDatabaseWidget::~QInputOutputLocalDatabaseWidget()
     Settings settings;
     settings.saveColumnsWidths(InputOutputSettings::LocalDatabaseStudyList, m_studyTreeWidget->getQTreeWidget());
 
-    //Guardem per quin columna està ordenada la llista d'estudis i en quin ordre
+    // Guardem per quin columna està ordenada la llista d'estudis i en quin ordre
     settings.setValue(InputOutputSettings::LocalDatabaseStudyListSortByColumn, m_studyTreeWidget->getSortColumn());
     settings.setValue(InputOutputSettings::LocalDatabaseStudyListSortOrder, m_studyTreeWidget->getSortOrderColumn());
 
@@ -73,13 +73,13 @@ void QInputOutputLocalDatabaseWidget::createConnections()
     connect(m_seriesListWidget, SIGNAL(viewSeriesIcon()), SLOT(viewFromQSeriesListWidget()));
     connect(m_studyTreeWidget, SIGNAL(currentStudyChanged()), SLOT(setSeriesToSeriesListWidget()));
     connect(m_studyTreeWidget, SIGNAL(currentSeriesChanged(QString)), m_seriesListWidget, SLOT(setCurrentSeries(QString)));
-    //Si passem de tenir un element seleccionat a no tenir-ne li diem al seriesListWidget que no mostri cap previsualització
+    // Si passem de tenir un element seleccionat a no tenir-ne li diem al seriesListWidget que no mostri cap previsualització
     connect(m_studyTreeWidget, SIGNAL(notCurrentItemSelected()), m_seriesListWidget, SLOT(clear()));
 
-    //Connecta amb el signal que indica que ha finalitza el thread d'esborrar els estudis vells
+    // Connecta amb el signal que indica que ha finalitza el thread d'esborrar els estudis vells
     connect(&m_qdeleteOldStudiesThread, SIGNAL(finished()), SLOT(deleteOldStudiesThreadFinished()));
 
-    ///Si movem el QSplitter capturem el signal per guardar la seva posició
+    /// Si movem el QSplitter capturem el signal per guardar la seva posició
     connect(m_StudyTreeSeriesListQSplitter, SIGNAL(splitterMoved (int, int)), SLOT(qSplitterPositionChanged()));
     connect(m_qwidgetSelectPacsToStoreDicomImage, SIGNAL(selectedPacsToStore()), SLOT(sendSelectedStudiesToSelectedPacs()));
 }
@@ -109,7 +109,7 @@ void QInputOutputLocalDatabaseWidget::createContextMenuQStudyTreeWidget()
     m_studyTreeWidget->setContextMenu(&m_contextMenuQStudyTreeWidget);
 }
 
-//TODO s'hauria buscar una manera més elegant de comunicar les dos classes, fer un singletton de QCreateDicomdir ?
+// TODO s'hauria buscar una manera més elegant de comunicar les dos classes, fer un singletton de QCreateDicomdir ?
 void QInputOutputLocalDatabaseWidget::setQCreateDicomdir(QCreateDicomdir *qcreateDicomdir)
 {
     m_qcreateDicomdir = qcreateDicomdir;
@@ -198,7 +198,7 @@ void QInputOutputLocalDatabaseWidget::expandSeriesOfStudy(QString studyInstanceU
 
     INFO_LOG("Cerca de sèries a la font cache de l'estudi " + studyInstanceUID);
 
-    //preparem la mascara i cerquem les series a la cache
+    // Preparem la mascara i cerquem les series a la cache
     mask.setStudyInstanceUID(studyInstanceUID);
     seriesList = localDatabaseManager.querySeries(mask);
 
@@ -256,7 +256,7 @@ void QInputOutputLocalDatabaseWidget::setSeriesToSeriesListWidget()
 
     INFO_LOG("Cerca de sèries a la cache de l'estudi " + studyInstanceUID);
 
-    //preparem la mascara i cerquem les series a la cache
+    // Preparem la mascara i cerquem les series a la cache
     mask.setStudyInstanceUID(studyInstanceUID);
 
     seriesList = localDatabaseManager.querySeries(mask);

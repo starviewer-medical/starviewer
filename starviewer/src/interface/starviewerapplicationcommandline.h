@@ -26,10 +26,10 @@ class StarviewerApplicationCommandLine : public QObject {
 Q_OBJECT
 public:
 
-    //Aquí definim les possibles opcions que ens poden demanar des de línia de comandes
+    // Aquí definim les possibles opcions que ens poden demanar des de línia de comandes
     enum StarviewerCommandLineOption { openBlankWindow, retrieveStudyFromAccessioNumber };
 
-    ///Retorna el ApplicationCommandLineOptions amb els arguments vàlids que accepta Starviewer per línia de comandes
+    /// Retorna el ApplicationCommandLineOptions amb els arguments vàlids que accepta Starviewer per línia de comandes
     static ApplicationCommandLineOptions getStarviewerApplicationCommandLineOptions();
 
     /// Parseja una llista d'arguments, retorna boolea indicant si els arugments de la llista sòn valids d'acord amb els paràmetres
@@ -55,7 +55,7 @@ public:
 
 signals:
 
-    ///Signal que s'emet per indicar que hem rebut nous arguments des de línia de comandes que s'han d'executar
+    /// Signal que s'emet per indicar que hem rebut nous arguments des de línia de comandes que s'han d'executar
     void newOptionsToRun();
 
 public slots:
@@ -68,13 +68,13 @@ private:
 
     static const QString accessionNumberOption;
 
-    //Guardem l'opció (argument de comanda de línies) amb el seu valor
+    // Guardem l'opció (argument de comanda de línies) amb el seu valor
     QList<QPair<StarviewerCommandLineOption, QString> > m_commandLineOptionListToProcess;
 
-    //QMutex per assegurar que dos processos accedeixin a la m_commandLineOptionListToProcess amb operacions d'escriptura
+    // QMutex per assegurar que dos processos accedeixin a la m_commandLineOptionListToProcess amb operacions d'escriptura
     QMutex m_mutexCommandLineOptionListToProcess;
 
-    ///Afegeix a la llista m_commandLineOptionListToProcess, una opció amb el seu valor, com a pendent d'executar
+    /// Afegeix a la llista m_commandLineOptionListToProcess, una opció amb el seu valor, com a pendent d'executar
     void AddOptionToCommandLineOptionListToProcess(QPair<StarviewerApplicationCommandLine::StarviewerCommandLineOption, QString> optionValue);
 };
 

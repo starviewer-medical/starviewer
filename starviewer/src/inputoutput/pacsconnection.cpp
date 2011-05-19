@@ -65,7 +65,7 @@ OFCondition PACSConnection::configureStore()
     // to BigEndianTransferSyntax. Some SCP implementations will just select the first transfer syntax they support (this is not part of the standard) so
     // organise the proposed transfer syntaxes to take advantage of such behaviour.
 
-    ///Indiquem que con Transfer syntax preferida volem utilitzar JpegLossless
+    /// Indiquem que con Transfer syntax preferida volem utilitzar JpegLossless
     const char *preferredTransferSyntax = UID_JPEGProcess14SV1TransferSyntax;
 
     QList<const char*> fallbackSyntaxes;
@@ -91,7 +91,7 @@ OFCondition PACSConnection::configureStore()
     QList<QString> sopClasses;
     for (int i = 0; i < numberOfDcmShortSCUStorageSOPClassUIDs; i++)
     {
-        // comprovem que no hi hagi que cap SOPClas duplicada
+        // Comprovem que no hi hagi que cap SOPClas duplicada
         if (!sopClasses.contains(QString(dcmShortSCUStorageSOPClassUIDs[i])))
         {
             sopClasses.append(QString(dcmShortSCUStorageSOPClassUIDs[i]));
@@ -114,7 +114,7 @@ OFCondition PACSConnection::configureStore()
             return ASC_BADPRESENTATIONCONTEXTID;
         }
 
-        // sop class with preferred transfer syntax
+        // Sop class with preferred transfer syntax
         condition = ASC_addPresentationContext(m_associationParameters, presentationContextID, qPrintable(sopClass), &preferredTransferSyntax, 1,
                                                ASC_SC_ROLE_DEFAULT);
         // Only odd presentation context id's
@@ -131,7 +131,7 @@ OFCondition PACSConnection::configureStore()
                 return ASC_BADPRESENTATIONCONTEXTID;
             }
 
-            // sop class with fallback transfer syntax
+            // Sop class with fallback transfer syntax
             condition = addPresentationContext(presentationContextID, sopClass, fallbackSyntaxes);
             // Only odd presentation context id's
             presentationContextID += 2;
@@ -147,7 +147,7 @@ OFCondition PACSConnection::configureStore()
 
 OFCondition PACSConnection::addPresentationContext(int presentationContextId, const QString &abstractSyntax, QList<const char*> transferSyntaxList)
 {
-    //create an array of supported/possible transfer syntaxes
+    // Create an array of supported/possible transfer syntaxes
     const char **transferSyntaxes = new const char*[transferSyntaxList.size()];
     int transferSyntaxCount = 0;
 
@@ -165,10 +165,10 @@ OFCondition PACSConnection::addPresentationContext(int presentationContextId, co
 
 bool PACSConnection::connectToPACS(PACSServiceToRequest pacsServiceToRequest)
 {
-    //Hi ha invocacions de mètodes de dcmtk que no se'ls hi comprova el condition que retornen, perquè se'ls hi ha mirat el codi i sempre retornen EC_NORMAL
+    // Hi ha invocacions de mètodes de dcmtk que no se'ls hi comprova el condition que retornen, perquè se'ls hi ha mirat el codi i sempre retornen EC_NORMAL
     Settings settings;
 
-    //create the parameters of the connection
+    // Create the parameters of the connection
     OFCondition condition = ASC_createAssociationParameters(&m_associationParameters, ASC_DEFAULTMAXPDU);
     if (!condition.good())
     {
@@ -176,17 +176,17 @@ bool PACSConnection::connectToPACS(PACSServiceToRequest pacsServiceToRequest)
         return false;
     }
 
-    // set calling and called AE titles
+    // Set calling and called AE titles
     ASC_setAPTitles(m_associationParameters, qPrintable(settings.getValue(InputOutputSettings::LocalAETitle).toString()), qPrintable(m_pacs.getAETitle()),
                     NULL);
 
-    //defineix el nivell de seguretat de la connexió en aquest cas diem que no utilitzem cap nivell de seguretat
+    // Defineix el nivell de seguretat de la connexió en aquest cas diem que no utilitzem cap nivell de seguretat
     ASC_setTransportLayerType(m_associationParameters, OFFalse);
 
     ASC_setPresentationAddresses(m_associationParameters, qPrintable(QHostInfo::localHostName()),
         qPrintable(constructPacsServerAddress(pacsServiceToRequest, m_pacs)));
 
-    //Especifiquem el timeout de connexió, si amb aquest temps no rebem resposta donem error per time out
+    // Especifiquem el timeout de connexió, si amb aquest temps no rebem resposta donem error per time out
     dcmConnectionTimeout.set(settings.getValue(InputOutputSettings::PACSConnectionTimeout).toInt());
 
     switch (pacsServiceToRequest)
@@ -212,7 +212,7 @@ bool PACSConnection::connectToPACS(PACSServiceToRequest pacsServiceToRequest)
         return false;
     }
 
-    //Inicialitzem l'objecte network però la connexió no s'obre fins a l'invocacació del mètode ASC_requestAssociation
+    // Inicialitzem l'objecte network però la connexió no s'obre fins a l'invocacació del mètode ASC_requestAssociation
     m_associationNetwork = initializeAssociationNetwork(pacsServiceToRequest);
 
     if (m_associationNetwork == NULL)
@@ -222,7 +222,7 @@ bool PACSConnection::connectToPACS(PACSServiceToRequest pacsServiceToRequest)
         return false;
     }
 
-    //Intentem connectar
+    // Intentem connectar
     condition = ASC_requestAssociation(m_associationNetwork, m_associationParameters, &m_dicomAssociation);
 
     if (condition.good())
@@ -277,7 +277,7 @@ void PACSConnection::disconnect()
 
 QString PACSConnection::constructPacsServerAddress(PACSServiceToRequest pacsServiceToRequest, PacsDevice pacsDevice)
 {
-    //The format is "server:port"
+    // The format is "server:port"
     QString pacsServerAddress = pacsDevice.getAddress() + ":";
 
     switch (pacsServiceToRequest)
@@ -315,7 +315,7 @@ QString PACSConnection::constructPacsServerAddress(PACSServiceToRequest pacsServ
 T_ASC_Network* PACSConnection::initializeAssociationNetwork(PACSServiceToRequest pacsServiceToRequest)
 {
     Settings settings;
-    //Si no es tracta d'una descarrega indiquem port 0
+    // Si no es tracta d'una descarrega indiquem port 0
     int networkPort = pacsServiceToRequest == RetrieveDICOMFiles ? settings.getValue(InputOutputSettings::IncomingDICOMConnectionsPort).toInt() : 0;
     int timeout = settings.getValue(InputOutputSettings::PACSConnectionTimeout).toInt();
     T_ASC_NetworkRole networkRole = pacsServiceToRequest == RetrieveDICOMFiles ? NET_ACCEPTORREQUESTOR : NET_REQUESTOR;
@@ -341,13 +341,13 @@ void PACSConnection::getTransferSyntaxForFindOrMoveConnection(const char *transf
     // gLocalByteOrder is defined in dcxfer.h
     if (gLocalByteOrder == EBO_LittleEndian)
     {
-        // we are on a little endian machine
+        // We are on a little endian machine
         transferSyntaxes[0] = UID_LittleEndianExplicitTransferSyntax;
         transferSyntaxes[1] = UID_BigEndianExplicitTransferSyntax;
     }
     else
     {
-        // we are on a big endian machine
+        // We are on a big endian machine
         transferSyntaxes[0] = UID_BigEndianExplicitTransferSyntax;
         transferSyntaxes[1] = UID_LittleEndianExplicitTransferSyntax;
     }

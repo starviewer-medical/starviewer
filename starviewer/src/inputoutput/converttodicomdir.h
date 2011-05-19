@@ -6,12 +6,12 @@
 
 #include "createdicomdir.h"
 
-// fordward declarations
+// Fordward declarations
 class QProgressDialog;
 
 namespace udg {
 
-// fordward declarations
+// Fordward declarations
 class Status;
 class Study;
 class Series;
@@ -30,9 +30,9 @@ Q_OBJECT
 public:
     ConvertToDicomdir();
 
-    ///Ens permet indicar que volem anonimitzar l'estudi DICOMDIR, i en el cas que l'anonimitzem se li pot indicar quin nom de pacient que han de tenir els
-    ///estudis anonimitzats. Si s'indica que no es vol anonimitzar l'estudi i es passar un valor al segon paràmetre aquest s'ignorarà.
-    ///TODO: Repassar al fer refactoring de la classe si és la millor manera de passar el nom de pacientAnonimitzat
+    /// Ens permet indicar que volem anonimitzar l'estudi DICOMDIR, i en el cas que l'anonimitzem se li pot indicar quin nom de pacient que han de tenir els
+    /// estudis anonimitzats. Si s'indica que no es vol anonimitzar l'estudi i es passar un valor al segon paràmetre aquest s'ignorarà.
+    /// TODO: Repassar al fer refactoring de la classe si és la millor manera de passar el nom de pacientAnonimitzat
     void setAnonymizeDICOMDIR(bool anonymizeDICOMDIR, QString patientNameAnonymized = "");
 
     /// Afegeix un estudi a la llista per convertir-se a dicomsdir. Quan afageix l'estudi, l'afageix a la llista ordenats per pacient. Ja que els dicomdir
@@ -45,7 +45,7 @@ public:
     /// @param dicomdirPath directori on es guardarà el dicomdir
     /// @param indica si s'ha de copiar el contingut del directori guardat al settings InputOutputSettings::DICOMDIRFolderPathToCopy al DICOMDIR
     /// @return Indica l'estat en què finalitza el mètode
-    //TODO:La comprovació de que la carpeta destí estigui buida es fa a QCreateDicomdir s'hauria de traslladar en aquesta classe
+    // TODO:La comprovació de que la carpeta destí estigui buida es fa a QCreateDicomdir s'hauria de traslladar en aquesta classe
     Status convert(const QString &dicomdirPath, CreateDicomdir::recordDeviceDicomDir selectedDevice, bool copyFolderContent);
 
     /// Crea un fitxer README.TXT, amb informació sobre quina institució ha generat el dicomdir per quan es grava en un cd o dvd en el path que se
@@ -97,7 +97,7 @@ private:
     /// @return Indica l'estat en què finalitza el mètode
     Status copyImageToDicomdirPath(Image *image);
 
-    ///Starviewer té l'opció de copiar el contingut d'una carpeta al DICOMDIR. Aquest mètode copia el contingut de la carpeta al DICOMDIR
+    /// Starviewer té l'opció de copiar el contingut d'una carpeta al DICOMDIR. Aquest mètode copia el contingut de la carpeta al DICOMDIR
     bool copyFolderContentToDICOMDIR();
 
 private:
@@ -118,7 +118,7 @@ private:
     int m_series;
     int m_image;
 
-    ///És necessari crear-la global per mantenir la consistència dels UID dels fitxers DICOM
+    /// És necessari crear-la global per mantenir la consistència dels UID dels fitxers DICOM
     DICOMAnonymizer *m_DICOMAnonymizer;
     bool m_anonymizeDICOMDIR;
     QString m_patientNameAnonymized;

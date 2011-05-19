@@ -90,7 +90,7 @@ void QCrashReporter::restartButtonClickedSlot()
     // com el directori C:\Program Files\Starviewer\starviewer.exe, hem de posar el path entre cometes
     // per a que no ho interpreti com a paràmetres, per exemple "C:\Program Files\Starviewer\starviewer.exe"
 
-    //afegim les cometes per si algun dels directori conté espai
+    // Afegim les cometes per si algun dels directori conté espai
      starviewerPath = "\"" + starviewerPath + "\"";
 #endif
 

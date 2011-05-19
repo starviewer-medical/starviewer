@@ -25,7 +25,7 @@ public:
                                  RetrievePatientInconsistent, RetrieveDestinationAETileUnknown, RetrieveIncomingDICOMConnectionsPortInUse,
                                  RetrieveFailureOrRefused, RetrieveSomeDICOMFilesFailed, RetrieveCancelled, RetrieveUnknowStatus };
 
-    ///Errors que es poden produir al fer Queries al PACS
+    /// Errors que es poden produir al fer Queries al PACS
     enum QueryRequestStatus { QueryOk, QueryCanNotConnectToPACS, QueryFailedOrRefused, QueryCancelled, QueryUnknowStatus };
 
 };

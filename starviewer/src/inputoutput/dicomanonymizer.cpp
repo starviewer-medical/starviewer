@@ -30,7 +30,7 @@ DICOMAnonymizer::~DICOMAnonymizer()
 
 void DICOMAnonymizer::setPatientNameAnonymized(const QString &patientNameAnonymized)
 {
-    //Segons el DICOM un tag de tipus PN (PersonName) no pot tenir més de 64 caràcters
+    // Segons el DICOM un tag de tipus PN (PersonName) no pot tenir més de 64 caràcters
     m_patientNameAnonymized = patientNameAnonymized.left(64);
 }
 
@@ -74,11 +74,11 @@ void DICOMAnonymizer::initializeGDCM()
     m_gdcmAnonymizer = new gdcm::gdcmAnonymizerStarviewer();
     gdcm::Global *gdcmGlobalInstance = &gdcm::Global::GetInstance();
 
-    //Indiquem el directori on pot trobar el fitxer part3.xml que és un diccionari DICOM.
-    //TODO: On posem el fitxer part3.xml
+    // Indiquem el directori on pot trobar el fitxer part3.xml que és un diccionari DICOM.
+    // TODO: On posem el fitxer part3.xml
     gdcmGlobalInstance->Prepend(qPrintable(QCoreApplication::applicationDirPath()));
 
-    //Carrega el fitxer part3.xml
+    // Carrega el fitxer part3.xml
     if (!gdcmGlobalInstance->LoadResourcesFiles())
     {
         ERROR_LOG("No s'ha trobat el fitxer part3.xml a " + QCoreApplication::applicationDirPath());
@@ -86,7 +86,7 @@ void DICOMAnonymizer::initializeGDCM()
 
     const gdcm::Defs &defs = gdcmGlobalInstance->GetDefs();
     (void)defs;
-    //TODO:utilitzem el UID de dcmtk hauríem de tenir el nostre propi això també passa a VolumeBuilderFromCaptures
+    // TODO:utilitzem el UID de dcmtk hauríem de tenir el nostre propi això també passa a VolumeBuilderFromCaptures
     if (!gdcm::UIDGenerator::IsValid(SITE_UID_ROOT))
     {
         ERROR_LOG(QString("No es pot anonimitzar els fitxers DICOM perquè el UID arrel per crear els nous fitxers no es valid %1").arg(SITE_UID_ROOT));
@@ -175,7 +175,7 @@ bool DICOMAnonymizer::anonymizeDICOMFile(const QString &inputPathFile, const QSt
         }
     }
 
-    //Regenerem la capçalera DICOM amb el nou SOP Instance UID
+    // Regenerem la capçalera DICOM amb el nou SOP Instance UID
     gdcm::FileMetaInformation gdcmFileMetaInformation = gdcmFile.GetHeader();
     gdcmFileMetaInformation.Clear();
 

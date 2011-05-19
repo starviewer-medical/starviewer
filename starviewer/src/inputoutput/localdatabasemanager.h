@@ -140,11 +140,11 @@ private:
     /// Guarda la imatge a la base de dades, si ja existeix li actualitza la informació
     int saveImage(DatabaseConnection *dbConnect, Image *imageToSave);
 
-    ///Esborra a base la jerarquia pacient/estudi/series/imatge de l'estudi passat per paràmetre, si es passar un valor buit no esborra res.
+    /// Esborra a base la jerarquia pacient/estudi/series/imatge de l'estudi passat per paràmetre, si es passar un valor buit no esborra res.
     int deleteStudyStructureFromDatabase(DatabaseConnection *dbConnect, const QString &studyInstanceUIDToDelete);
 
-    ///Esborra a base la jerarquia /series/imatge de l'estudi passat per paràmetre. Si només es passa el studyInstaceUIDToDelete esborra totes
-    ///les sèries d'aquell estudi.
+    /// Esborra a base la jerarquia /series/imatge de l'estudi passat per paràmetre. Si només es passa el studyInstaceUIDToDelete esborra totes
+    /// les sèries d'aquell estudi.
     int deleteSeriesStructureFromDatabase(DatabaseConnection *dbConnect, const QString &studyInstanceUIDToDelete, const QString &seriesIntanceUID);
 
     /// Esborra el pacient que compleixi amb la màscara a esborrar.

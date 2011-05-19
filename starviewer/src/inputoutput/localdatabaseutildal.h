@@ -15,15 +15,15 @@ public:
 
     LocalDatabaseUtilDAL(DatabaseConnection *dbConnection);
 
-    ///Compacta la BD
+    /// Compacta la BD
     void compact();
 
-    ///retorna la revisió de la BD a la que està connectada, si no troba a quina revisió pertany retorna -1
+    /// Retorna la revisió de la BD a la que està connectada, si no troba a quina revisió pertany retorna -1
     int getDatabaseRevision();
 
 private :
 
-    ///Ens retorna un string amb el select a executar per retorna la revisió de la base de dades sobre la qual estem connectats
+    /// Ens retorna un string amb el select a executar per retorna la revisió de la base de dades sobre la qual estem connectats
     QString buildSqlGetDatabaseRevision();
 };
 }

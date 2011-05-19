@@ -22,6 +22,6 @@ public:
 
 static InstallExtension<QMPRExtension, MPRExtensionMediator> registerMPRExtension;
 
-} //udg namespace
+} // End udg namespace
 
 #endif

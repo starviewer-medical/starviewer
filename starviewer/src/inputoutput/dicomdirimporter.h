@@ -28,14 +28,14 @@ public:
     enum DICOMDIRImporterError { Ok, DatabaseError, NoEnoughSpace, ErrorFreeingSpace, ErrorCopyingFiles, PatientInconsistent,
                                  ErrorOpeningDicomdir, DicomdirInconsistent };
 
-    ///Importa les dades del dicomdir que es trova a dicomdirPath que pertanyen a l'study amb UID studyUID
+    /// Importa les dades del dicomdir que es trova a dicomdirPath que pertanyen a l'study amb UID studyUID
     void import(QString dicomdirPath, QString studyUID, QString seriesUID, QString imageUID);
 
-    ///Retorna l'últim error produït al importar el dicomdir
+    /// Retorna l'últim error produït al importar el dicomdir
     DICOMDIRImporterError getLastError();
 
 signals:
-    ///Senyal que ens indica que s'ha importat una imatge a disc. Quan s'emet aquest senyal encara no s'ha guardat a la bd.
+    /// Senyal que ens indica que s'ha importat una imatge a disc. Quan s'emet aquest senyal encara no s'ha guardat a la bd.
     void imageImportedToDisk(DICOMTagReader *dicomTagReader);
 
     void importFinished();
@@ -46,7 +46,7 @@ private:
     DICOMDIRImporterError m_lastError;
     QProgressDialog *m_qprogressDialog;
 
-    ///crea les connexions necessàries per importar dicomdir
+    /// Crea les connexions necessàries per importar dicomdir
     void createConnections(PatientFiller *patientFiller, LocalDatabaseManager *localDatabaseManager, QThread *fillersThread);
 
     void importStudy(QString studyUID, QString seriesUID, QString sopInstanceUID);
@@ -55,10 +55,10 @@ private:
 
     void importImage(Image *imageToImport, QString pathToImportImage);
 
-    ///S'esborra de la caché les imatges que s'han importat en local d'un estudi que ha fallat la importació
+    /// S'esborra de la caché les imatges que s'han importat en local d'un estudi que ha fallat la importació
     void deleteFailedImportedStudy(QString studyInstanceUID);
 
-    ///Copia al disc dur una imatge del dicomdir
+    /// Copia al disc dur una imatge del dicomdir
     bool copyDicomdirImageToLocal(QString dicomdirImagePath, QString localImagePath);
 
     /// Ens retorna el path de la imatge a importar, hem de tenir en compte que en funció del sistema de fitxers el nom del fitxer pot està en majúscules

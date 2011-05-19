@@ -26,7 +26,7 @@ void DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString se
     PatientFiller patientFiller;
     QThread fillersThread;
 
-    //Comprovem si hi ha suficient espai lliure per importar l'estudi
+    // Comprovem si hi ha suficient espai lliure per importar l'estudi
     if (!localDatabaseManager.thereIsAvailableSpaceOnHardDisk())
     {
         if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
@@ -41,7 +41,7 @@ void DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString se
         return;
     }
 
-    //obrim el dicomdir
+    // Obrim el dicomdir
     Status state = m_readDicomdir.open(QDir::toNativeSeparators(dicomdirPath));
 
     if (!state.good())
@@ -58,7 +58,7 @@ void DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString se
 
     patientFiller.moveToThread(&fillersThread);
 
-    //Creem les connexions necessàries per importar dicomdirs
+    // Creem les connexions necessàries per importar dicomdirs
     createConnections(&patientFiller, &localDatabaseManager, &fillersThread);
 
     fillersThread.start();
@@ -74,10 +74,10 @@ void DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString se
         emit importAborted();
     }
 
-    //Esperem que el processat i l'insersió a la base de dades acabin
+    // Esperem que el processat i l'insersió a la base de dades acabin
     fillersThread.wait();
 
-    //Comprovem que s'hagi importat correctament el nou estudi
+    // Comprovem que s'hagi importat correctament el nou estudi
     if (getLastError() != Ok)
     {
         // Si hi hagut un error borrem els fitxers importats de l'estudi de la cache local
@@ -85,7 +85,7 @@ void DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString se
     }
     else
     {
-        //Comprovem que s'hagi inserit correctament el nou estudi a la base de dades
+        // Comprovem que s'hagi inserit correctament el nou estudi a la base de dades
         if (localDatabaseManager.getLastError() == LocalDatabaseManager::Ok)
         {
             INFO_LOG("Estudi " + studyUID + " importat");
@@ -95,7 +95,7 @@ void DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString se
         {
             if (localDatabaseManager.getLastError() == LocalDatabaseManager::PatientInconsistent)
             {
-                //No s'ha pogut inserir el patient, perquè patientfiller no ha pogut emplenar l'informació de patient correctament
+                // No s'ha pogut inserir el patient, perquè patientfiller no ha pogut emplenar l'informació de patient correctament
                 m_lastError = PatientInconsistent;
             }
             else
@@ -195,13 +195,13 @@ void DICOMDIRImporter::importImage(Image *image, QString pathToImportImage)
 
     if (!copyDicomdirImageToLocal(dicomdirImagePath, cacheImagePath))
     {
-        //No s'ha pogut copiar comprovem, si és que el fitxer ja existeix
+        // No s'ha pogut copiar comprovem, si és que el fitxer ja existeix
         if (QFile::exists(cacheImagePath))
         {
-            //El fitxer ja existeix l'itentem esborrar
+            // El fitxer ja existeix l'itentem esborrar
             if (QFile::remove(cacheImagePath))
             {
-                //Hem esborrar el fitxer que ja existia, ara l'intentem copiar
+                // Hem esborrar el fitxer que ja existia, ara l'intentem copiar
                 if (!copyDicomdirImageToLocal(dicomdirImagePath, cacheImagePath))
                 {
                     ERROR_LOG("El fitxer: <" + dicomdirImagePath + "> no s'ha pogut copiar a <" + cacheImagePath +
@@ -229,7 +229,7 @@ bool DICOMDIRImporter::copyDicomdirImageToLocal(QString dicomdirImagePath, QStri
 {
     if (QFile::copy(dicomdirImagePath, localImagePath))
     {
-        // donem permisos per si l'arxiu encara és read only al provenir d'un CD
+        // Donem permisos per si l'arxiu encara és read only al provenir d'un CD
         if (!QFile::setPermissions(localImagePath, QFile::WriteOwner | QFile::ReadOwner | QFile::ReadGroup | QFile::ReadOther))
         {
                 WARN_LOG("No hem pogut canviar els permisos de lectura/escriptura pel fitxer importat [" + localImagePath + "]");
@@ -272,7 +272,7 @@ QString DICOMDIRImporter::getDicomdirImagePath(Image *image)
 
 void DICOMDIRImporter::createConnections(PatientFiller *patientFiller, LocalDatabaseManager *localDatabaseManager, QThread *fillersThread)
 {
-    //Connexions entre la descarrega i el processat dels fitxers
+    // Connexions entre la descarrega i el processat dels fitxers
     connect(this, SIGNAL(imageImportedToDisk(DICOMTagReader*)), patientFiller, SLOT(processDICOMFile(DICOMTagReader*)));
     connect(this, SIGNAL(importFinished()), patientFiller, SLOT(finishDICOMFilesProcess()));
 
@@ -281,10 +281,10 @@ void DICOMDIRImporter::createConnections(PatientFiller *patientFiller, LocalData
     // perquè els thread dels fillers ja ha finalitzat, ja  s'ha inserit el pacient a la base de dades.
     connect(patientFiller, SIGNAL(patientProcessed(Patient*)), localDatabaseManager, SLOT(save(Patient*)), Qt::DirectConnection);
 
-    //Connexions per finalitzar els threads
+    // Connexions per finalitzar els threads
     connect(patientFiller, SIGNAL(patientProcessed(Patient*)), fillersThread, SLOT(quit()), Qt::DirectConnection);
 
-    //Connexions d'abortament
+    // Connexions d'abortament
     connect(this, SIGNAL(importAborted()), fillersThread, SLOT(quit()), Qt::DirectConnection);
 }
 

@@ -429,7 +429,7 @@ void DicomPrinter::getDefaultFilmLayoutColumnsRows(int &columns, int &rows)
 
     if (filmLayout.contains(QRegExp("STANDARD\\\\\\d,\\d", Qt::CaseInsensitive)))
     {
-        //STANDARD\C,R
+        // STANDARD\C,R
         filmLayout.remove("STANDARD\\");
         splittedFilmLayout = filmLayout.split(",");
 

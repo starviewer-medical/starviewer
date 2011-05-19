@@ -16,7 +16,7 @@ namespace udg {
 QueryPacsJob::QueryPacsJob(PacsDevice pacsDevice, DicomMask mask, QueryLevel queryLevel)
  : PACSJob(pacsDevice)
 {
-    //creem l'objecte fer la query
+    // Creem l'objecte fer la query
     m_queryPacs = new QueryPacs(pacsDevice);
     m_mask = mask;
     m_queryLevel = queryLevel;
@@ -35,7 +35,7 @@ void QueryPacsJob::run()
         getPacsDevice().getAETitle() + "; PACS Adr= " + getPacsDevice().getAddress() + "; PACS Port= " +
         QString().setNum(getPacsDevice().getQueryRetrieveServicePort()) + ";");
 
-    //busquem els estudis
+    // Busquem els estudis
     m_queryRequestStatus = m_queryPacs->query(m_mask);
 
     INFO_LOG (QString("Consulta al PACS %1 finalitzada").arg(getPacsDevice().getAETitle()));

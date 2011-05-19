@@ -292,7 +292,7 @@ DcmDataset* DicomMask::getDicomMask()
 {
     DcmDataset *maskDcmDataset = new DcmDataset();
 
-    //Especifiquem que per defecte l'Specific character set utilitzat per fer les consultes cap al PACS serà ISO_IR 100, és a dir Latin 1, ja que els PACS
+    // Especifiquem que per defecte l'Specific character set utilitzat per fer les consultes cap al PACS serà ISO_IR 100, és a dir Latin 1, ja que els PACS
     // que utilitza l'IDI utilitzen aquesta codificació (és el que suporta dcm4chee), a més amb Latin1 és la codificació que utilitzen
     // la majoria de països europeus. Per dubtes consultar C.12.1.1.2 on s'especifiquen quins Specific characters set, també és important
     // consultar el conformance statement del PACS contra el que consultem per saber quin Specific character set suporta. Com que el character set és Latin1
@@ -710,7 +710,7 @@ QString DicomMask::getFilledMaskFields() const
     {
         maskFields += "Study_ID=[#*#] ";
     }
-    // en el cas de la data fem un tractament especial per fer-ho més llegible i amb més informació
+    // En el cas de la data fem un tractament especial per fer-ho més llegible i amb més informació
     if (!QString(m_studyDate).remove("*").isEmpty())
     {
         QDate date;
@@ -719,7 +719,7 @@ QString DicomMask::getFilledMaskFields() const
         QStringList formattedDates;
         maskFields += "Study_Date=[";
 
-        // si tenim un rang de dates estaran separades per el guió "-"
+        // Si tenim un rang de dates estaran separades per el guió "-"
         // TODO encara no sabem traduir si el rang és només "desde" o "fins" una data
         // per exemple [20090512-] (desde), [-20090611] (fins), i ens ho mostrarà com una data única
         QStringList datesList = m_studyDate.split("-", QString::SkipEmptyParts);

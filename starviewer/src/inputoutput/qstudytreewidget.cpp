@@ -17,10 +17,10 @@ QStudyTreeWidget::QStudyTreeWidget(QWidget *parent)
     setupUi(this);
 
     m_studyTreeView->setColumnHidden(Type, true);
-    //Amaguem la columna Hora, ja que ara es mostra la data i hora en un mateix columna per poder ordenar per data i hora els estudis
+    // Amaguem la columna Hora, ja que ara es mostra la data i hora en un mateix columna per poder ordenar per data i hora els estudis
     m_studyTreeView->setColumnHidden(Time, true);
 
-    //carreguem les imatges que es mostren el QStudyTreeWidget
+    // Carreguem les imatges que es mostren el QStudyTreeWidget
     m_openFolder = QIcon(":/images/folderopen.png");
     m_closeFolder = QIcon(":/images/folderclose.png");
     m_iconSeries = QIcon(":/images/series.png");
@@ -29,7 +29,7 @@ QStudyTreeWidget::QStudyTreeWidget(QWidget *parent)
 
     m_studyTreeView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
-    //Indiquem que el nivell màxim que per defecte es pot expedir l'arbre Study/Series/Image és fins a nivell d'Image
+    // Indiquem que el nivell màxim que per defecte es pot expedir l'arbre Study/Series/Image és fins a nivell d'Image
     m_maximumExpandTreeItemsLevel = ImageLevel;
 }
 
@@ -109,7 +109,7 @@ void QStudyTreeWidget::insertPatient(Patient *patient)
     {
         if (getStudyQTreeWidgetItem(patient->getStudies().at(0)->getInstanceUID()) != NULL)
         {
-            //si l'estudi ja hi existeix a StudyTreeView l'esborrem
+            // Si l'estudi ja hi existeix a StudyTreeView l'esborrem
             removeStudy(patient->getStudies().at(0)->getInstanceUID());
         }
 
@@ -132,7 +132,7 @@ QList<QTreeWidgetItem*> QStudyTreeWidget::fillPatient(Patient *patient)
         item->setText(PatientAge, formatAge(studyToInsert->getPatientAge()));
         item->setText(Modality, studyToInsert->getModalitiesAsSingleString());
         item->setText(Description, studyToInsert->getDescription());
-        //TODO:No hauria de ser l'estudi que tornés la data formatada? Problema necessitem que la data estigui en format yyyy/mm/dd per poder ordenar per data
+        // TODO:No hauria de ser l'estudi que tornés la data formatada? Problema necessitem que la data estigui en format yyyy/mm/dd per poder ordenar per data
         item->setText(Date, formatDateTime(studyToInsert->getDate(), studyToInsert->getTime()));
         item->setText(StudyID, tr("Study %1").arg(studyToInsert->getID()));
         item->setText(Institution, studyToInsert->getInstitutionName());
@@ -142,10 +142,10 @@ QList<QTreeWidgetItem*> QStudyTreeWidget::fillPatient(Patient *patient)
         item->setText(Type, "STUDY");
         item->setText(RefPhysName, studyToInsert->getReferringPhysiciansName());
 
-        //Comprovem si el TreeItem s'ha d'expandir en funció del nivell màxim que ens han indicat que ens podem expandir
+        // Comprovem si el TreeItem s'ha d'expandir en funció del nivell màxim que ens han indicat que ens podem expandir
         if (m_maximumExpandTreeItemsLevel > StudyLevel)
         {
-            // degut que per cada item estudi tenim items fills que són series, i que consultar les series per cada estudi és
+            // Degut que per cada item estudi tenim items fills que són series, i que consultar les series per cada estudi és
             // una operació costosa (per exemple quan es consulta al pacs) només inserirem les sèries per a que les pugui
             // consultar l'usuari quan es facin un expand d'estudi, però per a que apareixi el botó "+" de desplegar l'estudi inserim un item en blanc
             QTreeWidgetItem *expandableItem = new QTreeWidgetItem();
@@ -155,7 +155,7 @@ QList<QTreeWidgetItem*> QStudyTreeWidget::fillPatient(Patient *patient)
         }
         qtreeWidgetItemList.append(item);
 
-        //Inserim l'estudi a la llista d'estudis
+        // Inserim l'estudi a la llista d'estudis
         m_insertedStudyList.append(studyToInsert);
     }
 
@@ -179,7 +179,7 @@ QTreeWidgetItem* QStudyTreeWidget::fillSeries(Series *series)
     QTreeWidgetItem *seriesItem = new QTreeWidgetItem();
 
     seriesItem->setIcon(ObjectName, m_iconSeries);
-    //Li fem un padding per poder ordenar la columna, ja que s'ordena per String
+    // Li fem un padding per poder ordenar la columna, ja que s'ordena per String
     seriesItem->setText(ObjectName, tr("Series %1").arg(paddingLeft(series->getSeriesNumber(), 4)));
     seriesItem->setText(Modality, series->getModality());
 
@@ -197,10 +197,10 @@ QTreeWidgetItem* QStudyTreeWidget::fillSeries(Series *series)
     seriesItem->setText(ReqProcID, series->getRequestedProcedureID());
     seriesItem->setText(SchedProcStep, series->getScheduledProcedureStepID());
 
-    //Comprovem si el TreeItem s'ha d'expandir en funció del nivell màxim que ens han indicat que ens podem expandir
+    // Comprovem si el TreeItem s'ha d'expandir en funció del nivell màxim que ens han indicat que ens podem expandir
     if (m_maximumExpandTreeItemsLevel > SeriesLevel)
     {
-        // degut que per cada item serie tenim items fills que són imatges, i que consultar les imatges per cada sèrie és
+        // Degut que per cada item serie tenim items fills que són imatges, i que consultar les imatges per cada sèrie és
         // una operació costosa (per exemple quan es consulta al pacs) només inserirem les sèries per a que les pugui
         // consultar l'usuari quan es facin un expand de la sèrie, però per a que apareixi el botó "+" de desplegar la sèrie inserim un item en blanc
         QTreeWidgetItem *expandableItem = new QTreeWidgetItem();
@@ -230,7 +230,7 @@ void QStudyTreeWidget::insertImageList(QString studyInstanceUID, QString seriesI
             // Indiquem que es tracta d'una imatge
             qTreeWidgetItemImageList.append(newImageItem);
         }
-        //Afegim la llista d'imatges
+        // Afegim la llista d'imatges
         seriesItem->addChildren(qTreeWidgetItemImageList);
     }
     else
@@ -255,8 +255,9 @@ QString QStudyTreeWidget::formatAge(const QString age)
 
     if (text.length() > 0)
     {
+        // Treiem el 0 de davant els anys, el PACS envia per ex: 047Y nosaltes tornem 47Y
         if (text.at(0) == '0')
-        {//treiem el 0 de davant els anys, el PACS envia per ex: 047Y nosaltes tornem 47Y
+        {
             text.replace(0, 1, " ");
         }
     }
@@ -283,7 +284,7 @@ QString QStudyTreeWidget::formatDateTime(const QDate &date, const QTime &time)
 void QStudyTreeWidget::clear()
 {
     m_studyTreeView->clear();
-    //Reinicialitzem variables
+    // Reinicialitzem variables
     m_oldCurrentStudyUID = "";
     m_oldCurrentSeriesUID = "";
 
@@ -375,7 +376,7 @@ QList<Study*> QStudyTreeWidget::getSelectedStudies()
     QStringList selectedStudiesUID = getSelectedStudiesUID();
     QList<Study*> selectedStudies;
 
-   //Busquem pels estudis UID seleccionats
+    // Busquem pels estudis UID seleccionats
     foreach (Study *studyInserted, m_insertedStudyList)
     {
         if (selectedStudiesUID.contains(studyInserted->getInstanceUID()))
@@ -391,7 +392,7 @@ Study* QStudyTreeWidget::getStudy(QString studyInstanceUID)
 {
     Study *study = NULL;
 
-   //Busquem pels estudis UID seleccionats
+    // Busquem pels estudis UID seleccionats
     foreach (Study *studyInserted, m_insertedStudyList)
     {
         if (studyInserted->getInstanceUID() == studyInstanceUID)
@@ -432,7 +433,7 @@ QTreeWidgetItem* QStudyTreeWidget::getStudyQTreeWidgetItem(QString studyUID)
     // Busquem l'estudi a la que pertany la sèrie
     QList<QTreeWidgetItem*> qStudyList(m_studyTreeView->findItems(studyUID, Qt::MatchExactly, UID));
 
-    //TODO d'aquesta manera podríem tenir problemes si tenim un StudyUID duplicat
+    // TODO d'aquesta manera podríem tenir problemes si tenim un StudyUID duplicat
     if (qStudyList.count() > 0)
     {
         return qStudyList.at(0);
@@ -533,10 +534,10 @@ void QStudyTreeWidget::removeSeries(const QString &studyInstanceUID, const QStri
 
 void QStudyTreeWidget::setCurrentSeries(QString seriesUID)
 {
-    //busquem l'estudi a la que pertany la sèrie
+    // Busquem l'estudi a la que pertany la sèrie
     QList<QTreeWidgetItem*> qStudyList(m_studyTreeView->findItems(seriesUID, Qt::MatchRecursive, UID));
 
-    //Només hauria de trobar una sèrie amb el mateix UID, sinó tindrem una inconsistència de DICOM, el series UID ha de ser únic
+    // Només hauria de trobar una sèrie amb el mateix UID, sinó tindrem una inconsistència de DICOM, el series UID ha de ser únic
     if (qStudyList.count() > 0)
     {
         m_studyTreeView->setCurrentItem (qStudyList.at(0));
@@ -545,7 +546,7 @@ void QStudyTreeWidget::setCurrentSeries(QString seriesUID)
 
 void QStudyTreeWidget::sort()
 {
-    //Ordenem per la columna seleccionada
+    // Ordenem per la columna seleccionada
     m_studyTreeView->sortItems(m_studyTreeView->sortColumn(), Qt::AscendingOrder);
 }
 
@@ -636,10 +637,10 @@ void QStudyTreeWidget::itemCollapsed(QTreeWidgetItem *itemCollapsed)
     // que es faci això, per aquest motiu en cas d'un signal de collapse o expand, el que fem és comprovar si per aquell item s'acaba
     // de fer doble click, si és així anul·lem l'acció de col·lapsar o expandir
 
-    // si l'item col·lapsat no se li acaba de fer un doble click
+    // Si l'item col·lapsat no se li acaba de fer un doble click
     if (m_doubleClickedItemUID != itemCollapsed->text(UID))
     {
-        //Si és una estudi està collapsed, canviem la icona per la carpeta tancada
+        // Si és una estudi està collapsed, canviem la icona per la carpeta tancada
         if (isItemStudy(itemCollapsed))
         {
             itemCollapsed->setIcon(ObjectName, m_closeFolder);
@@ -659,7 +660,7 @@ void QStudyTreeWidget::itemCollapsed(QTreeWidgetItem *itemCollapsed)
 
 void QStudyTreeWidget::doubleClicked(QTreeWidgetItem *item, int)
 {
-    //al fer doblec click al QTreeWidget ja expandeix o amaga automàticament l'objecte
+    // Al fer doblec click al QTreeWidget ja expandeix o amaga automàticament l'objecte
     if (item == NULL)
     {
         return;

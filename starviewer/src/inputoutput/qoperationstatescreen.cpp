@@ -32,8 +32,8 @@ QOperationStateScreen::QOperationStateScreen(QWidget *parent)
 
     // Conte el PACSJobID
     m_treeRetrieveStudy->setColumnHidden(QOperationStateScreen::PACSJobID, true);
-    //Aquesta columna mostrava en quina hora s'havia sol·licitat l'estudi, ara l'hora es fusiona conjuntament amb la data per això amaguem aquesta columna
-    //que no la podrem eliminar fins que s'hagi resolt el ticket #1401
+    // Aquesta columna mostrava en quina hora s'havia sol·licitat l'estudi, ara l'hora es fusiona conjuntament amb la data per això amaguem aquesta columna
+    // que no la podrem eliminar fins que s'hagi resolt el ticket #1401
     m_treeRetrieveStudy->setColumnHidden(QOperationStateScreen::Started, true);
 }
 
@@ -41,7 +41,7 @@ QOperationStateScreen::~QOperationStateScreen()
 {
     Settings settings;
 
-    //Guardem per quin columna està ordenada la llista d'estudis i en quin ordre
+    // Guardem per quin columna està ordenada la llista d'estudis i en quin ordre
     settings.setValue(InputOutputSettings::OperationStateListSortByColumn, m_treeRetrieveStudy->header()->sortIndicatorSection());
     settings.setValue(InputOutputSettings::OperationStateListSortOrder, m_treeRetrieveStudy->header()->sortIndicatorOrder());
 }
@@ -63,7 +63,7 @@ void QOperationStateScreen::createConnections()
 
 void QOperationStateScreen::newPACSJobEnqueued(PACSJob *pacsJob)
 {
-    //Els altres tipus de PACSJob no es interessen
+    // Els altres tipus de PACSJob no es interessen
     if (pacsJob->getPACSJobType() == PACSJob::SendDICOMFilesToPACSJobType || pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType)
     {
         m_PACSJobPendingToFinish.insert(pacsJob->getPACSJobID(), pacsJob);
@@ -149,13 +149,13 @@ void QOperationStateScreen::DICOMSeriesCommit(PACSJob *pacsJob, int numberOfSeri
 
 void QOperationStateScreen::clearList()
 {
-    // seleccionem els elements que volem esborrar
+    // Seleccionem els elements que volem esborrar
     QList<QTreeWidgetItem*> clearableItems;
     clearableItems = m_treeRetrieveStudy->findItems(tr("RETRIEVED"), Qt::MatchExactly, QOperationStateScreen::Status);
     clearableItems += m_treeRetrieveStudy->findItems(tr("SENT"), Qt::MatchExactly, QOperationStateScreen::Status);
     clearableItems += m_treeRetrieveStudy->findItems(tr("ERROR"), Qt::MatchExactly, QOperationStateScreen::Status);
     clearableItems += m_treeRetrieveStudy->findItems(tr("CANCELLED"), Qt::MatchExactly, QOperationStateScreen::Status);
-    // els eliminem de la llista
+    // Els eliminem de la llista
     foreach (QTreeWidgetItem *itemToClear, clearableItems)
     {
         m_treeRetrieveStudy->invisibleRootItem()->takeChild(m_treeRetrieveStudy->invisibleRootItem()->indexOfChild(itemToClear));

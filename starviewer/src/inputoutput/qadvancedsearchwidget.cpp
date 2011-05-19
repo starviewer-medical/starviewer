@@ -23,7 +23,7 @@ void QAdvancedSearchWidget::createConnections()
 
 void QAdvancedSearchWidget::clear()
 {
-    //camps estudi
+    // Camps estudi
     m_studyIDText->clear();
     m_studyUIDText->clear();
     m_accessionNumberText->clear();
@@ -31,7 +31,7 @@ void QAdvancedSearchWidget::clear()
     m_studyModalityText->clear();
     m_studyTimeText->clear();
 
-    //camps sèries
+    // Camps sèries
     m_seriesUIDText->clear();
     m_requestedProcedureIDText->clear();
     m_scheduledProcedureStepIDText->clear();
@@ -39,7 +39,7 @@ void QAdvancedSearchWidget::clear()
     m_PPStartTimeText->clear();
     m_seriesNumberText->clear();
 
-    //camps imatge
+    // Camps imatge
     m_SOPInstanceUIDText->clear();
     m_instanceNumberText->clear();
 }
@@ -65,7 +65,7 @@ DicomMask QAdvancedSearchWidget::buildDicomMask()
     mask.setAccessionNumber(m_accessionNumberText->text());
     mask.setReferringPhysiciansName(m_referringPhysiciansNameText->text());
 
-    //si hem de filtrar per un camp a nivell d'imatge o serie activem els filtres de serie
+    // Si hem de filtrar per un camp a nivell d'imatge o serie activem els filtres de serie
     if (!m_seriesUIDText->text().isEmpty() || !m_scheduledProcedureStepIDText->text().isEmpty() ||
         !m_requestedProcedureIDText->text().isEmpty() ||
         !m_SOPInstanceUIDText->text().isEmpty() || !m_instanceNumberText->text().isEmpty() ||

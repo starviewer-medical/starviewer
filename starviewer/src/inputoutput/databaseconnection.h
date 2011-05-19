@@ -20,7 +20,7 @@ public:
     /// Constructor de la classe
     DatabaseConnection();
 
-    ///destructor de la classe
+    /// Destructor de la classe
     ~DatabaseConnection();
 
      /// Establei el path de la base de dades, per defecte, si no s'estableix, el va a buscar a la classe StarviewerSettings
@@ -31,16 +31,16 @@ public:
     // @return connexio a la base de dades, si el punter és nul, és que hi hagut error alhora de connectar, o que el path no és correcte
     sqlite3* getConnection();
 
-    ///Retorna l'últim missatge d'error produït a la base de dades
+    /// Retorna l'últim missatge d'error produït a la base de dades
     QString getLastErrorMessage();
 
-    ///Retorna l'últim codi d'error produït a la base de dades
+    /// Retorna l'últim codi d'error produït a la base de dades
     int getLastErrorCode();
 
-    ///Comença/finalitza/Fa rollback una transacció a la base de dades. Només pot haver una transacció a la vegada amb
-    ///la mateixa connexió, per això aquests mètodes tenen implantat un semàfor, qeu control l'accés a les transaccions. Si es fa una transacció
-    ///i no s'arriba mai a invocar endTransaction() quan es tanqui la connexió amb la base de dades sqlite automàticament fa un rollback dels canvis.
-    //TODO: S'hauria de repassar l'ubicació ja que no semblaria gaire correcte com a responsabilitat de la connexió. Quan es faci refactoring...
+    /// Comença/finalitza/Fa rollback una transacció a la base de dades. Només pot haver una transacció a la vegada amb
+    /// la mateixa connexió, per això aquests mètodes tenen implantat un semàfor, qeu control l'accés a les transaccions. Si es fa una transacció
+    /// i no s'arriba mai a invocar endTransaction() quan es tanqui la connexió amb la base de dades sqlite automàticament fa un rollback dels canvis.
+    // TODO: S'hauria de repassar l'ubicació ja que no semblaria gaire correcte com a responsabilitat de la connexió. Quan es faci refactoring...
     void beginTransaction();
     void commitTransaction();
     void rollbackTransaction();
@@ -49,14 +49,14 @@ public:
     /// que l'execució d'una comanda SQL sigui incorrecta
     static QString formatTextToValidSQLSyntax(QString string);
 
-    ///Formata un qchar perquè no contingui caràcters estranys o Nulls que pugin fer que la sentència sql sigui incorrecte
+    /// Formata un qchar perquè no contingui caràcters estranys o Nulls que pugin fer que la sentència sql sigui incorrecte
     static QString formatTextToValidSQLSyntax(QChar qchar);
 
 private:
-    ///connecta amb la base de dades segons el path
+    /// Connecta amb la base de dades segons el path
     void open();
 
-    /// tanca la connexió de la base de dades
+    /// Tanca la connexió de la base de dades
     void close();
 
     /// Indica s'esta connectat a la base de dades
@@ -72,6 +72,6 @@ private :
 
     QString m_databasePath;
 };
-};//end namespace
+}; // End namespace
 
 #endif

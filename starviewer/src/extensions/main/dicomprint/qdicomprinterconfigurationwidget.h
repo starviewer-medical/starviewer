@@ -20,7 +20,7 @@ public:
 
 signals:
 
-    ///signal que s'emet quan s'afegeix/esborra/modifica impressora
+    /// Signal que s'emet quan s'afegeix/esborra/modifica impressora
     void printerSettingsChanged();
 
 private slots:
@@ -36,21 +36,21 @@ private slots:
     void testPrinter();
     // Després d'afegir una impressora actualitza la llista d'impressores i et mostra la informació de la última. S'executa amb el Signal newPrinterAddedSignal
     void showNewPrinterAdded(int printerID);
-    ///Slot que s'executa al prèmer el botó cancel
+    /// Slot que s'executa al prèmer el botó cancel
     void cancel();
-    ///Slot que s'executa al prèmer el botó accept
+    /// Slot que s'executa al prèmer el botó accept
     void accept();
     /// Slot que s'activa quan MagnificationType canvia de valor, aquest slot activa/desactiva SmoothingType en funcio del valor de MagnificationType.
     /// SmoothingType només pot estar activat segons la normativa DICOM quan MagnificationType té com a valor "CUBIC"
     void m_magnitifacationTypeComboBoxIndexChanged(const QString &magnificationTypecomboBoxValue);
-    ///El radioButton per indicar si la impressora suporta anotacions ha canviat el seu valor. En funció de si suporta anotacions el camp Annotation Display
-    ///Format ID és editable.
+    /// El radioButton per indicar si la impressora suporta anotacions ha canviat el seu valor. En funció de si suporta anotacions el camp Annotation Display
+    /// Format ID és editable.
     void m_supportsAnnotationBoxYesRadioButtonToogled();
 
 private:
-    ///Crea InputValidators pels LineEdit que només accepten valors numèrics
+    /// Crea InputValidators pels LineEdit que només accepten valors numèrics
     void configureInputValidator();
-    ///Crea les connexions
+    /// Crea les connexions
     void createConnections();
     // Actualitza la llista d'impressores entrades al sistema.
     void refreshPrinterList();

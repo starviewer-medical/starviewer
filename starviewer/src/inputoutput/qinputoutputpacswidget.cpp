@@ -41,7 +41,7 @@ QInputOutputPacsWidget::QInputOutputPacsWidget(QWidget *parent) : QWidget(parent
     m_statsWatcher->addClicksCounter(m_retrievAndViewButton);
     m_statsWatcher->addClicksCounter(m_retrieveButton);
 
-    //Preparem el QMovie per indicar quan s'estan fent consultes al PACS
+    // Preparem el QMovie per indicar quan s'estan fent consultes al PACS
     QMovie *operationAnimation = new QMovie(this);
     operationAnimation->setFileName(":/images/loader.gif");
     m_queryAnimationLabel->setMovie(operationAnimation);
@@ -57,7 +57,7 @@ QInputOutputPacsWidget::~QInputOutputPacsWidget()
     Settings settings;
     settings.saveColumnsWidths(InputOutputSettings::PACSStudyListColumnsWidth, m_studyTreeWidget->getQTreeWidget());
 
-    //Guardem per quin columna està ordenada la llista d'estudis i en quin ordre
+    // Guardem per quin columna està ordenada la llista d'estudis i en quin ordre
     settings.setValue(InputOutputSettings::PACSStudyListSortByColumn, m_studyTreeWidget->getSortColumn());
     settings.setValue(InputOutputSettings::PACSStudyListSortOrder, m_studyTreeWidget->getSortOrderColumn());
 }
@@ -147,7 +147,7 @@ void QInputOutputPacsWidget::cancelCurrentQueriesToPACS()
 
 void QInputOutputPacsWidget::queryPACSJobCancelled(PACSJob *pacsJob)
 {
-    //Aquest slot també serveix per si alguna altre classe ens cancel·la un PACSJob nostre, d'aquesta manera ens n'assabentem
+    // Aquest slot també serveix per si alguna altre classe ens cancel·la un PACSJob nostre, d'aquesta manera ens n'assabentem
     QueryPacsJob *queryPACSJob = qobject_cast<QueryPacsJob*>(pacsJob);
 
     if (queryPACSJob == NULL)
@@ -159,7 +159,7 @@ void QInputOutputPacsWidget::queryPACSJobCancelled(PACSJob *pacsJob)
         m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
         setQueryInProgress(!m_queryPACSJobPendingExecuteOrExecuting.isEmpty());
 
-        //Fem un deleteLater per si algú més ha capturat el signal de PACSJobFinished per aquest aquest job no es trobi l'objecte destruït
+        // Fem un deleteLater per si algú més ha capturat el signal de PACSJobFinished per aquest aquest job no es trobi l'objecte destruït
         queryPACSJob->deleteLater();
     }
 }
@@ -186,7 +186,7 @@ void QInputOutputPacsWidget::queryPACSJobFinished(PACSJob *pacsJob)
         m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
         setQueryInProgress(!m_queryPACSJobPendingExecuteOrExecuting.isEmpty());
 
-        //Fem un deleteLater per si algú més ha capturat el signal de PACSJobFinished per aquest aquest job no es trobi l'objecte destruït
+        // Fem un deleteLater per si algú més ha capturat el signal de PACSJobFinished per aquest aquest job no es trobi l'objecte destruït
         queryPACSJob->deleteLater();
     }
 }

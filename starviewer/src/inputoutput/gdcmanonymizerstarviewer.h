@@ -97,7 +97,7 @@ public:
     //bool Empty(PrivateTag const &t);
     //bool Empty(TagPath const &t);
 
-    /// remove a tag (even a SQ can be removed)
+    /// Remove a tag (even a SQ can be removed)
     bool Remove(Tag const &t);
     //bool Remove(PrivateTag const &t);
     //bool Remove(TagPath const &t);
@@ -106,7 +106,7 @@ public:
     /// WARNING: this function can only execute if tag is a VRASCII
     bool Replace(Tag const &t, const char *value);
 
-    /// when the value contains \0, it is a good idea to specify the length. This function
+    /// When the value contains \0, it is a good idea to specify the length. This function
     /// is required when dealing with VRBINARY tag
     bool Replace(Tag const &t, const char *value, VL const & vl);
     //bool Replace(PrivateTag const &t, const char *value, VL const & vl);
@@ -135,7 +135,7 @@ public:
     /// NOT THREAD SAFE
     bool BasicApplicationLevelConfidentialityProfile(bool deidentify = true);
 
-    /// for wrapped language: instanciate a reference counted object
+    /// For wrapped language: instanciate a reference counted object
     static SmartPointer<gdcmAnonymizerStarviewer> New() { return new gdcmAnonymizerStarviewer; }
 
     /// Return the list of Tag that will be considered when anonymizing a DICOM file.

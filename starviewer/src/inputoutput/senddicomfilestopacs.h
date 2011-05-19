@@ -22,7 +22,7 @@ Q_OBJECT
 public:
     SendDICOMFilesToPACS(PacsDevice pacsDevice);
 
-    ///Retorna el PACS que s'ha passat al constructor i amb el qual es fa el send de fitxers DICOM
+    /// Retorna el PACS que s'ha passat al constructor i amb el qual es fa el send de fitxers DICOM
     PacsDevice getPacs();
 
     /// Guarda les imatges que s'especifiquen a la llista en el pacs establert per la connexió
@@ -34,10 +34,10 @@ public:
     /// imatge que s'estava enviant al moment de demananr la cancel·lació
     void requestCancel();
 
-    ///Retorna el número d'imatges enviades correctament
+    /// Retorna el número d'imatges enviades correctament
     int getNumberOfDICOMFilesSentSuccesfully();
 
-    ///Retorna el número d'imatges que l'enviament ha fallat
+    /// Retorna el número d'imatges que l'enviament ha fallat
     int getNumberOfDICOMFilesSentFailed();
 
     /// Retorna el número d'imatges que s'ha enviat però han donat warning, pot donar warning per exemple en el cas que el PACS modifiqui alguna dada de
@@ -45,25 +45,25 @@ public:
     int getNumberOfDICOMFilesSentWarning();
 
 signals:
-   ///Sinal que indica que s'ha fet l'enviament de la imatge passada per paràmetre al PACS, i el número d'imatges que es porten enviades
+   /// Sinal que indica que s'ha fet l'enviament de la imatge passada per paràmetre al PACS, i el número d'imatges que es porten enviades
     void DICOMFileSent(Image *image, int numberOfDICOMFilesSent);
 
 private :
 
-    ///Inicialitze els comptadors d'imatges per controlar quantes han fallat/s'han enviat....
+    /// Inicialitze els comptadors d'imatges per controlar quantes han fallat/s'han enviat....
     void initialitzeDICOMFilesCounters(int numberOfDICOMFilesToSend);
 
-    ///Processa un resposta del Store SCP que no ha tingut l'Status Successfull
+    /// Processa un resposta del Store SCP que no ha tingut l'Status Successfull
     void processResponseFromStoreSCP(T_DIMSE_C_StoreRSP *response, DcmDataset *statusDetail, QString filePathDicomObjectStoredFailed);
 
-    ///Envia una image al PACS amb l'associació passada per paràmetre, retorna si la imatge s'ha enviat correctament
+    /// Envia una image al PACS amb l'associació passada per paràmetre, retorna si la imatge s'ha enviat correctament
     bool storeSCU(T_ASC_Association *association, QString filePathToStore);
 
-    ///Retorna un Status indicant com ha finalitzat l'operació C-Store
+    /// Retorna un Status indicant com ha finalitzat l'operació C-Store
     PACSRequestStatus::SendRequestStatus getStatusStoreSCU();
 
 private:
-    //Indica números d'imatges enviades correctament/Imatges enviades però que ha retorna warning/Total d'imatges que s'ha enviat
+    // Indica números d'imatges enviades correctament/Imatges enviades però que ha retorna warning/Total d'imatges que s'ha enviat
     int m_numberOfDICOMFilesSentSuccessfully, m_numberOfDICOMFilesSentWithWarning, m_numberOfDICOMFilesToSend;
     PacsDevice m_pacs;
     bool m_abortIsRequested;

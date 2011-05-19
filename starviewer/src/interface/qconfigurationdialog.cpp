@@ -26,7 +26,7 @@ QConfigurationDialog::QConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
     connect(m_okButton, SIGNAL(clicked()), pacsConfigurationScreen, SLOT(applyChanges()));
 #endif
 
-    // configuracions de la base de dades local
+    // Configuracions de la base de dades local
     QLocalDatabaseConfigurationScreen *localDatabaseScreen = new QLocalDatabaseConfigurationScreen(this);
     this->addConfigurationWidget(localDatabaseScreen, tr("Local Database"), AdvancedConfiguration);
     connect(localDatabaseScreen, SIGNAL(configurationChanged(const QString &)), this, SIGNAL(configurationChanged(const QString &)));
@@ -40,7 +40,7 @@ QConfigurationDialog::QConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
     connect(m_okButton, SIGNAL(clicked()), qListenRisRequestsConfigurationScreen, SLOT(applyChanges()));
 #endif
 
-    // configuració del programa de gravació
+    // Configuració del programa de gravació
     QDICOMDIRConfigurationScreen *dicomdirScreen = new QDICOMDIRConfigurationScreen(this);
     this->addConfigurationWidget(dicomdirScreen, tr("DICOMDIR"), AdvancedConfiguration);
     connect(m_okButton, SIGNAL(clicked()), dicomdirScreen, SLOT(applyChanges()));

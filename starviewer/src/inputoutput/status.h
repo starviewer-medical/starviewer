@@ -30,7 +30,7 @@ public :
     /// @return text descriptiu de l'exit o l'error de la crida
     QString text() const;
 
-    /// per contruir l'objecte status
+    /// Per contruir l'objecte status
     /// @param OFCodition resultant d'una crida
     /// @return retorna l'objecte status
     Status setStatus(const OFCondition);

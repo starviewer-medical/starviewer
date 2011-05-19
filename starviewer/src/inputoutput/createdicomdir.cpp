@@ -40,7 +40,7 @@ CreateDicomdir::~CreateDicomdir()
 
 void CreateDicomdir::setDevice(recordDeviceDicomDir deviceToCreateDicomdir)
 {
-    //indiquem que el propòsit d'aquest dicomdir
+    // Indiquem que el propòsit d'aquest dicomdir
     switch (deviceToCreateDicomdir)
     {
         case recordDeviceDicomDir(HardDisk):
@@ -120,7 +120,7 @@ Status CreateDicomdir::create(QString dicomdirPath)
     // al directori dicomdir destí
     OFStandard::searchDirectoryRecursively("", fileNames, opt_pattern, qPrintable(QDir::toNativeSeparators(dicomdirPath)));
 
-    //comprovem que el directori no estigui buit
+    // Comprovem que el directori no estigui buit
     if (fileNames.empty())
     {
         ERROR_LOG ("El directori origen està buit");
@@ -128,7 +128,7 @@ Status CreateDicomdir::create(QString dicomdirPath)
         return state;
     }
 
-    //creem el dicomdir
+    // Creem el dicomdir
     result = m_ddir.createNewDicomDir(m_optProfile, qPrintable(QDir::toNativeSeparators(outputDirectory)), opt_fileset);
 
     if (!result.good())
@@ -138,17 +138,17 @@ Status CreateDicomdir::create(QString dicomdirPath)
         return state;
     }
 
-    // set fileset descriptor and character set
+    // Set fileset descriptor and character set
     result = m_ddir.setFilesetDescriptor(opt_descriptor, opt_charset);
     if (result.good())
     {
         OFListIterator(OFString) iter = fileNames.begin();
         OFListIterator(OFString) last = fileNames.end();
 
-        //iterem sobre la llista de fitxer i els afegim al dicomdir
+        // Iterem sobre la llista de fitxer i els afegim al dicomdir
         while ((iter != last) && result.good())
         {
-            //afegim els fitxers al dicomdir
+            // Afegim els fitxers al dicomdir
             result = m_ddir.addDicomFile(qPrintable(QString((*iter).c_str()).toUpper()), qPrintable(QDir::toNativeSeparators (dicomdirPath)));
             if (result.good())
             {

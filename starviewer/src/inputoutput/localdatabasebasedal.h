@@ -15,11 +15,11 @@ class LocalDatabaseBaseDAL {
 public:
     LocalDatabaseBaseDAL(DatabaseConnection *dbConnection);
 
-    ///Retorna l'últim error produït
+    /// Retorna l'últim error produït
     int getLastError();
 
 protected:
-    ///Ens fa un ErrorLog d'una sentència sql. No es té en compte l'error és SQL_CONSTRAINT (clau duplicada)
+    /// Ens fa un ErrorLog d'una sentència sql. No es té en compte l'error és SQL_CONSTRAINT (clau duplicada)
     void logError(const QString &sqlSentence);
 
 protected:

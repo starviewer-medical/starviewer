@@ -135,9 +135,9 @@ CrashHandler::CrashHandler()
 #else
     exceptionHandler = new google_breakpad::ExceptionHandler(dumpsDir.absolutePath().toStdWString(), 0, launchCrashReporter, this,
                                                              google_breakpad::ExceptionHandler::HANDLER_ALL);
-#endif //WIN32
+#endif // WIN32
 
-#endif //NO_CRASH_REPORTER
+#endif // NO_CRASH_REPORTER
 }
 
 void CrashHandler::setCrashReporterPath(const char *path)

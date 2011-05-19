@@ -18,19 +18,19 @@ public:
     QAdvancedSearchWidget(QWidget *parent = 0);
     ~QAdvancedSearchWidget();
 
-    ///neteja els camps de la cerca bàsica
+    /// Neteja els camps de la cerca bàsica
     void clear();
-    ///Construeix la màscara de cerca
+    /// Construeix la màscara de cerca
     DicomMask buildDicomMask();
 
 private slots:
 
-    ///Posa un * al tab el qual pertany el lineedit que se li ha donat valor, per a que l'usuari sàpiga quin tabs ha posat valors de cerca
+    /// Posa un * al tab el qual pertany el lineedit que se li ha donat valor, per a que l'usuari sàpiga quin tabs ha posat valors de cerca
     void updateAdvancedSearchModifiedStatus();
 
 private:
 
-    ///Crea les connexions entre signals i slots
+    /// Crea les connexions entre signals i slots
     void createConnections();
 };
 

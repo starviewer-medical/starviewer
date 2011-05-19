@@ -15,7 +15,7 @@ public:
     /// Constructor de la classe
     QConfigurationScreen(QWidget *parent = 0);
 
-    ///Destructor de classe
+    /// Destructor de classe
     ~QConfigurationScreen();
 
 public slots:
@@ -52,10 +52,10 @@ private slots:
     ///  l'Starviewer, si està en ús es mostrar un warning al cantó del TextBox
     void checkIncomingConnectionsPortNotInUse();
 
-    ///Slot que s'activa quan es prem els radioButton per indica si està disponible en el PACS el servei de Query/Retrieve
+    /// Slot que s'activa quan es prem els radioButton per indica si està disponible en el PACS el servei de Query/Retrieve
     void queryRetrieveServiceEnabledChanged();
 
-    ///Slot que s'activa quan es prem els radioButton per indica si està disponible en el PACS el servei de Store
+    /// Slot que s'activa quan es prem els radioButton per indica si està disponible en el PACS el servei de Store
     void storeServiceEnabledChanged();
 
     /// Si s'ha indicat que el servei d'store està permés i aquest no té el port configurat al editar el valor del port de Q/R
@@ -63,17 +63,17 @@ private slots:
     void m_textQueryRetrieveServicePortChanged();
 
 private:
-    ///crea els connects dels signals i slots
+    /// Crea els connects dels signals i slots
     void createConnections();
 
     /// Crea els input validators necessaris pels diferents camps d'edició.
     void configureInputValidator();
 
-    ///Comprova que ens hagin entrat les dades bàsiques per poguer fer un echo a un PACS.
-    ///Aquestes dades són: que tingui AETitle, que tingui adreça, que tingui un servei activat i un port entre 0 i 65535
+    /// Comprova que ens hagin entrat les dades bàsiques per poguer fer un echo a un PACS.
+    /// Aquestes dades són: que tingui AETitle, que tingui adreça, que tingui un servei activat i un port entre 0 i 65535
     bool validatePacsDeviceToEcho();
 
-    ///Valida que tinguis les dades per fer un echo invocant el mètode validateBasicPacsDeviceToEcho() i a més comprova que la institució no estigui buida
+    /// Valida que tinguis les dades per fer un echo invocant el mètode validateBasicPacsDeviceToEcho() i a més comprova que la institució no estigui buida
     bool validatePacsDeviceToSave();
 
     /// Valida que els canvis de la configuració siguin correctes
@@ -89,25 +89,25 @@ private:
     /// Emplena els textboxs amb les dades del PACS
     void loadPacsDefaults();
 
-    ///Emplena els textbox amb la informació de la Institució
+    /// Emplena els textbox amb la informació de la Institució
     void loadInstitutionInformation();
 
     /// Guarda els canvis a la configuració dels paràmetres del PACS
     void applyChangesPacs();
 
-    ///Guarda els canvis fets a la informació de la institució
+    /// Guarda els canvis fets a la informació de la institució
     void applyChangesInstitutionInformation();
 
-    ///Indica si el port per Connexions Entrans del PACS és utilitzat per una altra aplicació
+    /// Indica si el port per Connexions Entrans del PACS és utilitzat per una altra aplicació
     bool isIncomingConnectionsPortInUseByAnotherApplication();
 
-    ///A partir dels controls de la interfície retorna emplenat un objecte PacsDevice.
+    /// A partir dels controls de la interfície retorna emplenat un objecte PacsDevice.
     PacsDevice getPacsDeviceFromControls();
 
 private:
     /// Conté el ID del pacs seleccionat en aquell moment
     QString m_selectedPacsID;
-    ///Indica si la configuració ha canviat
+    /// Indica si la configuració ha canviat
     bool m_configurationChanged;
 };
 

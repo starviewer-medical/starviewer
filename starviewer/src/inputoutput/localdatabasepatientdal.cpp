@@ -67,7 +67,7 @@ QList<Patient*> LocalDatabasePatientDAL::query(const DicomMask &patientMask)
         return patientList;
     }
 
-    //index = 1 ignorem les capçaleres
+    // index = 1 ignorem les capçaleres
     for (int index = 1; index <= rows; index++)
     {
         patientList.append(fillPatient(reply, index, columns));

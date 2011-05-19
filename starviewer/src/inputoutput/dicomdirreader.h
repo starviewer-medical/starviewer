@@ -70,7 +70,7 @@ private :
     QString m_dicomdirAbsolutePath, m_dicomdirFileName;
     bool m_dicomFilesInLowerCase;
 
-    ///Comprova que un pacient compleixi amb la màscara (comprova que compleixi el  Patient Name i Patient ID)
+    /// Comprova que un pacient compleixi amb la màscara (comprova que compleixi el  Patient Name i Patient ID)
     bool matchPatientToDicomMask(Patient *patient, DicomMask *mask);
 
     /// Comprova si un estudi compleix la màscara, pels camps StudyUID, StudyDate
@@ -91,16 +91,16 @@ private :
     /// En aquest cas fem wildcard matching
     bool matchDicomMaskToPatientName(DicomMask *mask, Patient *patient);
 
-    ///A partir d'un DcmDirectoryRecord retorna les dades d'un Pacient
+    /// A partir d'un DcmDirectoryRecord retorna les dades d'un Pacient
     Patient* fillPatient(DcmDirectoryRecord *dcmDirectoryRecordPatient);
 
-    ///A partir d'un DcmDirectoryRecord retorna les dades d'un Study
+    /// A partir d'un DcmDirectoryRecord retorna les dades d'un Study
     Study* fillStudy(DcmDirectoryRecord *dcmDirectoryRecordStudy);
 
-    ///A partir d'un DcmDirectoryRecord retorna les dades d'un Series
+    /// A partir d'un DcmDirectoryRecord retorna les dades d'un Series
     Series* fillSeries(DcmDirectoryRecord *dcmDirectoryRecordSeries);
 
-    ///A partir d'un DcmDirectoryRecord retorna les dades d'un Image
+    /// A partir d'un DcmDirectoryRecord retorna les dades d'un Image
     Image* fillImage(DcmDirectoryRecord *dcmDirectoryRecordImage);
 
     /// Canvia les '\' per '/'. Això es degut a que les dcmtk retornen el path de la imatge en format Windows amb els directoris separats per '\'. En el cas

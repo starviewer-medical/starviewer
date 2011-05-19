@@ -26,7 +26,7 @@ DicomMask ParseXmlRisPIERRequest::parseXml(QString xmlRisPIERRequest)
 
     xmlReader->readNext();
 
-    //Comprovem que sigui un document xml, esperem tag tipus  <?xml version="1.0" encoding="UTF-8"?>
+    // Comprovem que sigui un document xml, esperem tag tipus  <?xml version="1.0" encoding="UTF-8"?>
     if (!xmlReader->isStartDocument())
     {
         ERROR_LOG("Sembla que no es tracta d'un document Xml");
@@ -38,10 +38,10 @@ DicomMask ParseXmlRisPIERRequest::parseXml(QString xmlRisPIERRequest)
 
     while (!xmlReader->atEnd())
     {
-        //Només processarem tags d'obertura, els altres elements els ignorem
+        // Només processarem tags d'obertura, els altres elements els ignorem
         if (xmlReader->isStartElement())
         {
-            //Hem trobat el començament d'un tag, nosaltres només parsegem el tag <msg>
+            // Hem trobat el començament d'un tag, nosaltres només parsegem el tag <msg>
             if (xmlReader->name().toString().compare("Msg", Qt::CaseInsensitive) == 0)
             {
                 parseTagMsg(xmlReader, &mask);
@@ -75,7 +75,7 @@ void ParseXmlRisPIERRequest::parseTagMsg(QXmlStreamReader *xmlReader, DicomMask 
     //     <Param Name="AccessionNumber">00239RS00006780</Param>
     // </Msg>
 
-    //Només contemplem un valor per  l'element name "OpenStudies" si en trobem un de diferent avisem
+    // Només contemplem un valor per  l'element name "OpenStudies" si en trobem un de diferent avisem
     if (xmlReader->attributes().value("Name").toString().compare("OpenStudies", Qt::CaseInsensitive) != 0)
     {
         ERROR_LOG("Es demana una acció no contemplada " + xmlReader->attributes().value("Name").toString());
@@ -86,7 +86,7 @@ void ParseXmlRisPIERRequest::parseTagMsg(QXmlStreamReader *xmlReader, DicomMask 
     // Llegim els tags Param que conté el xml
     while (!xmlReader->atEnd())
     {
-        //Només processem els tags d'obetura els altres elements els ignorem
+        // Només processem els tags d'obetura els altres elements els ignorem
         if (xmlReader->isStartElement())
         {
             if (xmlReader->name().toString().compare("Param", Qt::CaseInsensitive) == 0)

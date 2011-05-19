@@ -23,17 +23,17 @@ public:
 
 public slots:
 
-    ///Inicia l'escolta de peticions del RIS a través del port que s'ha establet a la configuració
+    /// Inicia l'escolta de peticions del RIS a través del port que s'ha establet a la configuració
     void listen();
 
-    ///Slot que fa que es parin d'escoltar peticions
+    /// Slot que fa que es parin d'escoltar peticions
     void stopListen();
 
 signals:
-    ///Signal que indica que s'ha fet una petició per descarregar un estudi
+    /// Signal que indica que s'ha fet una petició per descarregar un estudi
     void requestRetrieveStudy(DicomMask mask);
 
-    ///Signal que s'emet indicant que s'ha produït un error escoltant peticions al RIS
+    /// Signal que s'emet indicant que s'ha produït un error escoltant peticions al RIS
     void errorListening(ListenRISRequests::ListenRISRequestsError);
 
 private slots:
@@ -42,10 +42,10 @@ private slots:
 
 private :
 
-    ///Processa la petició rebuda del RIS
+    /// Processa la petició rebuda del RIS
     void processRequest(QString risRequestData);
 
-    //Fa un signal del mètode error indicant el tipus d'error que s'ha produït
+    // Fa un signal del mètode error indicant el tipus d'error que s'ha produït
     void networkError(QTcpServer *tcpRISServer);
 
 private:

@@ -71,7 +71,7 @@ void ListenRISRequests::newRISRequest()
 
 void ListenRISRequests::processRequest(QString risRequestData)
 {
-    //com ara mateix només rebrem peticions del RIS PIER del IDI, no cal esbrinar quin tipus de petició és per defecte entenem que és petició del RIS PIER
+    // Com ara mateix només rebrem peticions del RIS PIER del IDI, no cal esbrinar quin tipus de petició és per defecte entenem que és petició del RIS PIER
     INFO_LOG("S'intencarà processar la petició rebuda com a Xml");
 
     ParseXmlRisPIERRequest parseXml;

@@ -18,7 +18,7 @@ bool Utils::isPortInUse(int port)
     {
         tcpServer.close();
     }
-    //No s'hauria de donar un error diferent a aquest, de totes maneres per seguretat el loggagem
+    // No s'hauria de donar un error diferent a aquest, de totes maneres per seguretat el loggagem
     else if (tcpServer.serverError() != QAbstractSocket::AddressInUseError)
     {
         ERROR_LOG("No s'ha pogut comprovat correctament si el port " + QString().setNum(port) + " està en ús, per error: " + tcpServer.errorString());
@@ -45,4 +45,4 @@ QString Utils::generateUID(const QString &prefix)
     return QString(uid);
 }
 
-}; //end udg namespace
+}; // End udg namespace

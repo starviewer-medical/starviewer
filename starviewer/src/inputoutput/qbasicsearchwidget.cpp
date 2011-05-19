@@ -30,7 +30,7 @@ void QBasicSearchWidget::initialize()
 {
     m_fromStudyDate->setDate(QDate::currentDate());
     m_toStudyDate->setDate(QDate::currentDate());
-    //Indiquem que les setmanes del calendari que apareixen per escollir la data comencin el dilluns
+    // Indiquem que les setmanes del calendari que apareixen per escollir la data comencin el dilluns
     m_fromStudyDate->calendarWidget()->setFirstDayOfWeek(Qt::Monday);
     m_toStudyDate->calendarWidget()->setFirstDayOfWeek(Qt::Monday);
 
@@ -83,7 +83,7 @@ DicomMask QBasicSearchWidget::buildDicomMask()
 
     // Per més informació consultar el PS 3.4 C.2.2.2
 
-    //S'afegeix '*' al patientId i patientName automàticament
+    // S'afegeix '*' al patientId i patientName automàticament
     QString patientID = m_patientIDText->text();
     if (!patientID.isEmpty())
     {
@@ -114,7 +114,7 @@ DicomMask QBasicSearchWidget::buildDicomMask()
 
     mask.setStudyDate(getStudyDatesStringMask());
 
-    //si hem de filtrar per un camp a nivell d'imatge o serie activem els filtres de serie
+    // Si hem de filtrar per un camp a nivell d'imatge o serie activem els filtres de serie
     if (!m_checkAll->isChecked())
     {
         mask.setSeriesDate("");
@@ -254,12 +254,12 @@ QString QBasicSearchWidget::getStudyDatesStringMask()
         {
             if (m_fromDateCheck->isChecked())
             {
-                // indiquem que volem buscar tots els estudis d'aquella data en endavant
+                // Indiquem que volem buscar tots els estudis d'aquella data en endavant
                 date = m_fromStudyDate->date().toString("yyyyMMdd") + "-";
             }
             else if (m_toDateCheck->isChecked())
             {
-                //indiquem que volem buscar tots els estudis que no superin aquesta data
+                // Indiquem que volem buscar tots els estudis que no superin aquesta data
                 date = "-" + m_toStudyDate->date().toString("yyyyMMdd");
             }
         }

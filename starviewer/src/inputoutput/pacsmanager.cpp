@@ -12,7 +12,7 @@
 
 namespace udg {
 
-///Classe utilitza per adormir el Thread al mètode waitForAllPACSJobsFinished, m'entre s'espera que hagin finalitzat totes les operacions.
+/// Classe utilitza per adormir el Thread al mètode waitForAllPACSJobsFinished, m'entre s'espera que hagin finalitzat totes les operacions.
 class Sleeper : public QThread {
 public:
     static void msleep(unsigned long msecs)
@@ -33,7 +33,7 @@ PacsManager::PacsManager()
     m_sendDICOMFilesToPACSWeaver->setMaximumNumberOfThreads(settings.getValue(InputOutputSettings::MaximumPACSConnections).toInt());
 
     m_retrieveDICOMFilesFromPACSWeaver = new ThreadWeaver::Weaver();
-    //Només podem descarregar un estudi a la vegada del PACS, per això com a número màxim de threads especifiquem 1
+    // Només podem descarregar un estudi a la vegada del PACS, per això com a número màxim de threads especifiquem 1
     m_retrieveDICOMFilesFromPACSWeaver ->setMaximumNumberOfThreads(1);
 }
 
@@ -58,7 +58,7 @@ void PacsManager::enqueuePACSJob(PACSJob *pacsJob)
     emit newPACSJobEnqueued(pacsJob);
 }
 
-//TODO: S'hauria de convertir al plural
+// TODO: S'hauria de convertir al plural
 bool PacsManager::isExecutingPACSJob()
 {
     return !m_sendDICOMFilesToPACSWeaver->isIdle() || !m_retrieveDICOMFilesFromPACSWeaver->isIdle() || !m_queryWeaver->isIdle();
@@ -110,7 +110,7 @@ void PacsManager::requestCancelPACSJob(PACSJob *pacsJob)
 
     if (pacsJobIsExecuting)
     {
-        //Si no l'hem pogut desencuar vol dir que s'està executant demanem abortar el job
+        // Si no l'hem pogut desencuar vol dir que s'està executant demanem abortar el job
         pacsJob->requestAbort();
     }
 }
@@ -143,4 +143,4 @@ bool PacsManager::waitForAllPACSJobsFinished(int msec)
     return !isExecutingPACSJob();
 }
 
-}; //end udg namespace
+}; // End udg namespace

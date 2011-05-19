@@ -29,7 +29,7 @@ bool DatabaseInstallation::checkStarviewerDatabase()
     m_errorMessage = "";
     bool isCorrect;
 
-    //Comprovem que existeix el path on s'importen les imatges, sinó existeix l'intentarà crear
+    // Comprovem que existeix el path on s'importen les imatges, sinó existeix l'intentarà crear
     isCorrect = checkLocalImagePath();
 
     if (!existsDatabaseFile())
@@ -43,7 +43,7 @@ bool DatabaseInstallation::checkStarviewerDatabase()
     }
     else
     {
-        // comprovar que tenim permisos d'escriptura a la BDD
+        // Comprovar que tenim permisos d'escriptura a la BDD
         if (!isDatabaseFileWritable())
         {
             // TODO què fem? cal retornar fals? Avisar a l'usuari?
@@ -84,7 +84,7 @@ bool DatabaseInstallation::checkLocalImagePath()
     }
     else
     {
-        // comprovar que tenim permisos d'escriptura al directori local d'imatges
+        // Comprovar que tenim permisos d'escriptura al directori local d'imatges
         QFileInfo imagePathInfo(LocalDatabaseManager::getCachePath());
         if (!imagePathInfo.isWritable())
         {
@@ -141,7 +141,7 @@ bool DatabaseInstallation::isDatabaseFileWritable()
 
 bool DatabaseInstallation::reinstallDatabase()
 {
-    //si existeix l'esborrem la base de dades
+    // Si existeix l'esborrem la base de dades
     if (existsDatabaseFile())
     {
         if (!QFile().remove(LocalDatabaseManager::getDatabaseFilePath()))
@@ -167,7 +167,7 @@ bool DatabaseInstallation::removeCacheAndReinstallDatabase()
 
     if (m_qprogressDialog == NULL)
     {
-        //Si nó existeix creem barra de progrés per donar feedback
+        // Si nó existeix creem barra de progrés per donar feedback
         m_qprogressDialog = new QProgressDialog(tr ("Reinstalling database"), "", 0, 0);
         m_qprogressDialog->setCancelButton(0);
         m_qprogressDialog->setValue(1);
@@ -189,7 +189,7 @@ bool DatabaseInstallation::updateDatabaseRevision()
 {
     bool status;
 
-    //Creem barra de progrés per donar feedback
+    // Creem barra de progrés per donar feedback
     m_qprogressDialog = new QProgressDialog(tr ("Updating database"), "", 0, 0);
     m_qprogressDialog->setCancelButton(0);
     m_qprogressDialog->setValue(1);
@@ -270,7 +270,7 @@ bool DatabaseInstallation::createDatabaseFile()
     DatabaseConnection DBConnect;
     int status;
 
-    //Comprovem que existeixi el path on s'ha de crear la base de dades, sinó el crea
+    // Comprovem que existeixi el path on s'ha de crear la base de dades, sinó el crea
     if (!checkDatabasePath())
     {
         return false;

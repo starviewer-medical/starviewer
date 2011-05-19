@@ -45,16 +45,16 @@ QPopUpRISRequestsScreen::QPopUpRISRequestsScreen(QWidget *parent)
     // caldria refer el diàleg i vigilar el tema de com es fa per situar-lo, etc. perquè ara mateix és una mica "hack".
     this->layout()->setSizeConstraint(QLayout::SetFixedSize);
 
-    //Posem EventFilter al Widget i al GroupBox perquè si fan click en qualsevol zona del widget aquest s'amagui. L'objectiu és que si
-    //el Popup es posa en una zona on molesta l'usuari fent-hi click el pugui amagar.
+    // Posem EventFilter al Widget i al GroupBox perquè si fan click en qualsevol zona del widget aquest s'amagui. L'objectiu és que si
+    // el Popup es posa en una zona on molesta l'usuari fent-hi click el pugui amagar.
     this->installEventFilter(this);
     m_groupBox->installEventFilter(this);
 }
 
 void QPopUpRISRequestsScreen::queryStudiesByAccessionNumberStarted()
 {
-    //Si arriba una altra petició mentre hi ha activat el timer per amagar el PopUp o s'està amagant, hem de fer que aquest no s'amagui per
-    //mostrar la nova petició
+    // Si arriba una altra petició mentre hi ha activat el timer per amagar el PopUp o s'està amagant, hem de fer que aquest no s'amagui per
+    // mostrar la nova petició
     m_qTimerToHidePopUp->stop();
     m_hidePopUpAnimation.stop();
 
@@ -72,7 +72,7 @@ void QPopUpRISRequestsScreen::addStudyToRetrieveByAccessionNumber(RetrieveDICOMF
 {
     if (m_pacsJobIDOfStudiesToRetrieve.count() == 0)
     {
-        //Si és el primer estudi indiquem que comencem a descarregar i indiquem el nom del pacient
+        // Si és el primer estudi indiquem que comencem a descarregar i indiquem el nom del pacient
         m_operationDescription->setText(tr("Retrieving study"));
         showPatientNameOfRetrievingStudies(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getParentPatient());
     }
@@ -105,8 +105,8 @@ void QPopUpRISRequestsScreen::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pac
 
         if (m_pacsJobIDOfStudiesToRetrieve.contains(retrieveDICOMFilesFromPACSJob->getPACSJobID()))
         {
-            //Si no està a la llista de PACSJob per descarregar vol dir que és d'una altra petició de RIS que ha estat matxacada per l'actual
-            //Com que el QPopUpRisRequestScreen només segueix l'última petició del RIS les ignorem
+            // Si no està a la llista de PACSJob per descarregar vol dir que és d'una altra petició de RIS que ha estat matxacada per l'actual
+            // Com que el QPopUpRisRequestScreen només segueix l'última petició del RIS les ignorem
             if (retrieveDICOMFilesFromPACSJob->getStatus() == PACSRequestStatus::RetrieveOk ||
                 retrieveDICOMFilesFromPACSJob->getStatus() == PACSRequestStatus::RetrieveSomeDICOMFilesFailed)
             {
@@ -132,11 +132,11 @@ void QPopUpRISRequestsScreen::retrieveDICOMFilesFromPACSJobCancelledOrFailed(PAC
     }
     else
     {
-        //Si ha fallat o s'ha cancel·lat la descarrega l'estudi el treiem de la llista d'estudis a descarregar
+        // Si ha fallat o s'ha cancel·lat la descarrega l'estudi el treiem de la llista d'estudis a descarregar
         if (m_pacsJobIDOfStudiesToRetrieve.removeOne(retrieveDICOMFilesFromPACSJob->getPACSJobID()))
         {
-            //Si no està a la llista de PACSJob per descarregar vol dir que és d'una altra petició de RIS que ha estat matxacada per l'actual
-            //Com que el QPopUpRisRequestScreen només segueix l'última petició del RIS les ignorem
+            // Si no està a la llista de PACSJob per descarregar vol dir que és d'una altra petició de RIS que ha estat matxacada per l'actual
+            // Com que el QPopUpRisRequestScreen només segueix l'última petició del RIS les ignorem
             refreshScreenRetrieveStatus();
         }
     }
@@ -189,8 +189,8 @@ void QPopUpRISRequestsScreen::showPatientNameOfRetrievingStudies(Patient *patien
 
 void QPopUpRISRequestsScreen::showEvent(QShowEvent *)
 {
-    //Es situa el PopUp al centre de la pantalla on està la mainWindow del Starviewer
-    //TODO Ara s'està agafant la geometria de manera "xapussilla" dels settings d'interface, caldria solucionar-ho i fer-ho diferent
+    // Es situa el PopUp al centre de la pantalla on està la mainWindow del Starviewer
+    // TODO Ara s'està agafant la geometria de manera "xapussilla" dels settings d'interface, caldria solucionar-ho i fer-ho diferent
     Settings settings;
     QWidget fakeMainWindow;
 
@@ -211,8 +211,8 @@ bool QPopUpRISRequestsScreen::eventFilter(QObject *, QEvent *event)
 {
     if (event->type() == QEvent::MouseButtonPress)
     {
-        //Parem els rellotges perquè no saltin les animacions amb el PopUp amagat, sinó ens podríem trobar que si rebem una altra petició
-        //aparegués el PopUp movent-se
+        // Parem els rellotges perquè no saltin les animacions amb el PopUp amagat, sinó ens podríem trobar que si rebem una altra petició
+        // aparegués el PopUp movent-se
         m_qTimerToHidePopUp->stop();
         m_qTimerToMovePopUpToBottomRight->stop();
 

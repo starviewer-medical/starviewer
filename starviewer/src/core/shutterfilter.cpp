@@ -112,7 +112,7 @@ void ShutterFilter::setPresentationStateShutters(const QString &presentationStat
                     int vertices = presentationStateHandler->getNumberOfPolyShutterVertices();
                     QString msg = "Hi ha POLYGONAL shutter al presentation state, #de punts:";
                     msg += QString("%1 amb coordenades: ").arg(vertices);
-                    //\TODO caldria passar això al mètode propi de la classe?
+                    // \TODO caldria passar això al mètode propi de la classe?
                     // Creem els punts
                     vtkPoints *points = vtkPoints::New();
                     vtkCellArray *vertexs = vtkCellArray::New();

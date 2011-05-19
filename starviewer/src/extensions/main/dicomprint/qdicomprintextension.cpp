@@ -56,11 +56,11 @@ void QDicomPrintExtension::createConnections()
     connect(m_qDicomPrinterConfigurationWidgetProof, SIGNAL(printerSettingsChanged()), SLOT(fillSelectedDicomPrinterComboBox()));
     connect(m_selectionImageRadioButton, SIGNAL(clicked()), SLOT(imageSelectionModeChanged()));
     connect(m_currentImageRadioButton, SIGNAL(clicked()), SLOT(imageSelectionModeChanged()));
-    //Sliders quan canvia de valor
+    // Sliders quan canvia de valor
     connect(m_intervalImagesSlider, SIGNAL(valueChanged(int)), SLOT(m_intervalImagesSliderValueChanged(int)));
     connect(m_fromImageSlider, SIGNAL(valueChanged(int)), SLOT(m_fromImageSliderValueChanged(int)));
     connect(m_toImageSlider, SIGNAL(valueChanged(int)), SLOT(m_toImageSliderValueChanged(int)));
-    //LineEdit canvien de valor
+    // LineEdit canvien de valor
     connect(m_intervalImagesLineEdit, SIGNAL(textEdited (const QString &)), SLOT(m_intervalImagesLineEditTextEdited(const QString &)));
     connect(m_fromImageLineEdit, SIGNAL(textEdited (const QString &)), SLOT(m_fromImageLineEditTextEdited(const QString &)));
     connect(m_toImageLineEdit, SIGNAL(textEdited (const QString &)), SLOT(m_toImageLineEditTextEdited(const QString &)));
@@ -85,9 +85,9 @@ void QDicomPrintExtension::configureInputValidator()
 
 void QDicomPrintExtension::initializeViewerTools()
 {
-    // creem el tool manager
+    // Creem el tool manager
     m_toolManager = new ToolManager(this);
-    // obtenim les accions de cada tool que volem
+    // Obtenim les accions de cada tool que volem
     m_toolManager->registerTool("SlicingTool");
     m_toolManager->registerTool("WindowLevelTool");
     m_toolManager->registerTool("WindowLevelPresetsTool");
@@ -138,7 +138,7 @@ void QDicomPrintExtension::fillSelectedDicomPrinterComboBox()
 
         if (dicomPrinter.getIsDefault())
         {
-            //Si és impressora per defecte la deixem com a impressora seleccionada
+            // Si és impressora per defecte la deixem com a impressora seleccionada
             m_selectedPrinterComboBox->setCurrentIndex(m_selectedPrinterComboBox->findData(dicomPrinter.getID()));
             selectedDicomPrinterChanged(m_selectedPrinterComboBox->findData(dicomPrinter.getID()));
             noDefaultPrinter = false;
@@ -177,13 +177,13 @@ void QDicomPrintExtension::print()
 
     if (dicomPrint.getLastError() != DicomPrint::Ok)
     {
-        //si hem imprés una o més pàgines i hi ha error vol dir que han quedat algunes pàgines per imprimir
+        // Si hem imprés una o més pàgines i hi ha error vol dir que han quedat algunes pàgines per imprimir
         showDicomPrintError(dicomPrint.getLastError(), printedPages > 0);
     }
     else
     {
         m_sentToPrintSuccessfullyFrame->setVisible(true);
-        //Engeguem timer per a que d'aquí 20 segons s'amagui el frame indicant que s'han enviat a imprimir correctament les imatges
+        // Engeguem timer per a que d'aquí 20 segons s'amagui el frame indicant que s'han enviat a imprimir correctament les imatges
         m_qTimer->start(20000);
     }
 }
@@ -222,14 +222,14 @@ QList<DicomPrintPage> QDicomPrintExtension::getDicomPrintPageListToPrint()
         QList<Image*> imagesPageList;
         DicomPrintPage dicomPrintPage = fillDicomPrintPagePrintSettings(dicomPrinter);
 
-        //TODO:No tinc clar que això haig de ser responsabilitat de la Interfície emplenar les anotacions
+        // TODO:No tinc clar que això haig de ser responsabilitat de la Interfície emplenar les anotacions
         if (dicomPrinter.getSupportsAnnotationBox())
         {
             addSeriesInformationAsAnnotationsToDicomPrintPage(&dicomPrintPage, selectedImagesToPrint.at(0)->getParentSeries());
         }
 
         dicomPrintPage.setPageNumber(numberOfPage);
-        //Emplenen una dicomPrintPage amb les imatges en funció del número d'imatges que hi caben
+        // Emplenen una dicomPrintPage amb les imatges en funció del número d'imatges que hi caben
         while (indexOfImagePerPage < numberOfImagesPerPage && !selectedImagesToPrint.isEmpty())
         {
             imagesPageList.append(selectedImagesToPrint.takeFirst());
@@ -282,7 +282,7 @@ int QDicomPrintExtension::getNumberOfPagesToPrint()
     if (numberOfImagesToPrint > 0 && numberOfImagesPerPage > 0)
     {
         numberOfDicomPrintPagesToPrint = numberOfImagesToPrint / numberOfImagesPerPage;
-        //Si tenim residu hem d'incrementar en una el número de pàgines
+        // Si tenim residu hem d'incrementar en una el número de pàgines
         numberOfDicomPrintPagesToPrint += numberOfImagesToPrint % numberOfImagesPerPage > 0 ? 1 : 0;
     }
 
@@ -314,7 +314,7 @@ void QDicomPrintExtension::addSeriesInformationAsAnnotationsToDicomPrintPage(Dic
     QDate dateToPrintInAnnotation;
     QTime timeToPrintInAnnotation;
 
-    //Hi ha estudis com el CT del IDI-Girona que no tenen Data/Hora de sèries, sinó en tenen l'agafem de l'estudi
+    // Hi ha estudis com el CT del IDI-Girona que no tenen Data/Hora de sèries, sinó en tenen l'agafem de l'estudi
     if (seriesToPrint->getDate().isValid())
     {
         dateToPrintInAnnotation = seriesToPrint->getDate();
@@ -326,17 +326,17 @@ void QDicomPrintExtension::addSeriesInformationAsAnnotationsToDicomPrintPage(Dic
         timeToPrintInAnnotation = seriesToPrint->getParentStudy()->getTime();
     }
 
-    //A la primera posicio: posem el nom de la institució que ha generat l'estudi
+    // A la primera posicio: posem el nom de la institució que ha generat l'estudi
     dicomPrintPage->addAnnotation(1, seriesToPrint->getInstitutionName());
-    //A la segona posició: el nom del, edat i sexe pacient
+    // A la segona posició: el nom del, edat i sexe pacient
     dicomPrintPage->addAnnotation(2, seriesToPrint->getParentStudy()->getParentPatient()->getFullName() + " " + 
                                   seriesToPrint->getParentStudy()->getPatientAge() + " " + seriesToPrint->getParentStudy()->getParentPatient()->getSex());
-    ///A la tercera posició: Modalitat seriesi Data/hora (de la sèrie i si no en té de l'estudi)
+    /// A la tercera posició: Modalitat seriesi Data/hora (de la sèrie i si no en té de l'estudi)
     dicomPrintPage->addAnnotation(3, seriesToPrint->getModality() + " " + dateToPrintInAnnotation.toString("dd/MM/yyyy") + " " +
                                   timeToPrintInAnnotation.toString("hh:mm:ss"));
-    ///Quarta posició: Descripció estudi i descripció serie
+    /// Quarta posició: Descripció estudi i descripció serie
     dicomPrintPage->addAnnotation(4, seriesToPrint->getParentStudy()->getDescription() + " - " + seriesToPrint->getDescription());
-    ///Cinquena posició: Patient ID + Acession number (El patientID l'han demanat els metges perquè és amb el camp que poden cercar els pacients en el SAP)
+    /// Cinquena posició: Patient ID + Acession number (El patientID l'han demanat els metges perquè és amb el camp que poden cercar els pacients en el SAP)
     dicomPrintPage->addAnnotation(5, seriesToPrint->getParentStudy()->getParentPatient()->getID() + " " +
                                   seriesToPrint->getParentStudy()->getAccessionNumber());
 }
@@ -500,7 +500,7 @@ DicomPrinter QDicomPrintExtension::getSelectedDicomPrinter()
 
     dicomPrinter = DicomPrinterManager().getPrinterByID(m_selectedPrinterComboBox->itemData(indexOfSelectedDicomPrinter).toInt());
 
-    //sobreescrivim els settings que formen part configuració bàsica de la impressora amb els de control QDicomPrinterBasicSettings
+    // Sobreescrivim els settings que formen part configuració bàsica de la impressora amb els de control QDicomPrinterBasicSettings
     m_qdicomPrinterBasicSettingsWidget->getDicomPrinterBasicSettings(dicomPrinter);
 
     return dicomPrinter;
@@ -606,7 +606,7 @@ void QDicomPrintExtension::updateVolumeSupport()
         {
             m_noSupportedSeriesFrame->setVisible(false);
 
-            //Només activem les opcions si tenim impressores.
+            // Només activem les opcions si tenim impressores.
             if (m_selectedPrinterComboBox->count() > 0)
             {
                 setEnabledPrintControls(true);

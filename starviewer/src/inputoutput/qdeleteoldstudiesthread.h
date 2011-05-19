@@ -18,20 +18,20 @@ public:
     /// Constructor de la classe
     QDeleteOldStudiesThread(QObject *parent = 0);
 
-    ///Esborra els estudis vells engegant un thread
+    /// Esborra els estudis vells engegant un thread
     void deleteOldStudies();
 
-    ///Retorna l'estat de l'operació d'esborrar estudis vells
+    /// Retorna l'estat de l'operació d'esborrar estudis vells
     LocalDatabaseManager::LastError getLastError();
 
 signals:
 
-    ///signal que s'envia quan finalitza l'execució d'aquest thread
+    /// Signal que s'envia quan finalitza l'execució d'aquest thread
     void finished();
 
 private:
 
-    ///Métode que és excutat pel thread creat per Qt, que esborra els estudis vells
+    /// Métode que és excutat pel thread creat per Qt, que esborra els estudis vells
     void run();
 
     LocalDatabaseManager::LastError m_lastError;

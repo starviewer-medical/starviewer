@@ -26,10 +26,10 @@ class ParseXmlRisPIERRequest : QObject {
 Q_OBJECT
 public:
 
-    ///Parseja la cadena de XML i retorna la DicomMask de l'estudi a descarregar
+    /// Parseja la cadena de XML i retorna la DicomMask de l'estudi a descarregar
     DicomMask parseXml(QString xmlRisPierRequest);
 
-    ///Retorna si s'ha produït un error alhora de parsejar el Xml
+    /// Retorna si s'ha produït un error alhora de parsejar el Xml
     bool error();
 
 private :
@@ -40,7 +40,7 @@ private :
     /// Study Id, Study UID, Patient Id, Patient Name i PAtient ID al fer la query a un PACS amb aquesta màscara
     void parseTagMsg(QXmlStreamReader *xmlReader, DicomMask *mask);
 
-    ///parseja el tag Param del Xml i retorna la DicomMask amb el accession number que ens han enviat en el Xml
+    /// Parseja el tag Param del Xml i retorna la DicomMask amb el accession number que ens han enviat en el Xml
     void parseTagParam(QXmlStreamReader *xmlReader, DicomMask *mask);
 
     /// Degut al fet que perquè el Pacs ens retorni un determinar tag, li hem d'enviar aquell tag amb cadena buida quan fem la petició "", en aquest mètode
@@ -48,7 +48,7 @@ private :
     /// PatientName, PatientId, StudyUID, StudyID, els tags més bàsics per tenir informació
     void buildBasicDicomMask(DicomMask *mask);
 
-    ///Indiquem que s'ha produït un error al parsejar el Xml
+    /// Indiquem que s'ha produït un error al parsejar el Xml
     void setErrorParsing(bool errorParsing);
 
 };

@@ -31,7 +31,7 @@ private:
 
     void setImageBoxAttributes();
 
-    ///CRea Annotation Box en funció de les anotacions que ens hagin passat
+    /// Crea Annotation Box en funció de les anotacions que ens hagin passat
     void createAnnotationBoxes();
 
     /// Crea el fitxer de Dcmtk on es guarden els paràmetres amb els quals s'ha de fer la impressió i la estructura de FilmBox, que conté un FilmSession

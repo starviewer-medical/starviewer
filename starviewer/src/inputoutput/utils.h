@@ -13,7 +13,7 @@ Classe que conté utilitats vàries utilitzades per la classe inputoutput
 class Utils {
 
 public:
-    ///Indica si el port passat per paràmetre està en ús
+    /// Indica si el port passat per paràmetre està en ús
     static bool isPortInUse(int port);
 
     static QString generateUID(const QString &prefix = QString());

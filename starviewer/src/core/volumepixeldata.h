@@ -8,7 +8,7 @@
 #include <vtkSmartPointer.h>
 // Els filtres per passar itk<=>vtk: InsightApplications/auxiliary/vtk --> ho tenim a /tools
 
-//Converts an ITK image into a VTK image and plugs a itk data pipeline to a VTK datapipeline.
+// Converts an ITK image into a VTK image and plugs a itk data pipeline to a VTK datapipeline.
 #include "itkImageToVTKImageFilter.h"
 // Converts a VTK image into an ITK image and plugs a vtk data pipeline to an ITK datapipeline.
 #include "itkVTKImageToImageFilter.h"
