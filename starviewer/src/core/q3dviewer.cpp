@@ -78,7 +78,7 @@ Q3DViewer::Q3DViewer(QWidget *parent)
     m_renderFunction = RayCasting;
 
     setDefaultOrientationForCurrentInput();
-    m_orientationMarker = new Q3DOrientationMarker(this->getInteractor());
+    m_orientationMarker = new Q3DOrientationMarker(this->getInteractor(), this);
 
     // Creem el pipeline del volum
     m_vtkVolume = vtkVolume::New();
