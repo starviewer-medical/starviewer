@@ -129,7 +129,8 @@ int MathTools::planeIntersection(double p[3], double n[3], double q[3], double m
     point2[1] = point[1] + vector[1];
     point2[2] = point[2] + vector[2];
 
-    // Li donem una recta definida per dos punts, i el pla definit per la normal i un punt. T és la coordenada paramètrica al llarg de la recta i el punt de la intersecció queda a intersectPoint
+    // Li donem una recta definida per dos punts, i el pla definit per la normal i un punt. T és la coordenada paramètrica al llarg de la recta i el punt
+    // de la intersecció queda a intersectPoint
     if (vtkPlane::IntersectWithLine(point, point2, t, r, tt, intersectionPoint) == 0)
     {
         // Si retorna 0 és que o bé línia i pla no intersecten o són paralels entre sí

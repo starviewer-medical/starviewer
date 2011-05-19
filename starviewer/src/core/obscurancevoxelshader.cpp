@@ -3,7 +3,8 @@
 namespace udg {
 
 ObscuranceVoxelShader::ObscuranceVoxelShader()
- : VoxelShader(), m_data(0), m_maxValue(0), m_ambientColors(0), m_obscurance(0), m_factor(1.0), m_lowFilter(0.0), m_highFilter(1.0), m_additive(false), m_additiveWeight(0.0)
+ : VoxelShader(), m_data(0), m_maxValue(0), m_ambientColors(0), m_obscurance(0), m_factor(1.0), m_lowFilter(0.0), m_highFilter(1.0), m_additive(false),
+ m_additiveWeight(0.0)
 {
 }
 

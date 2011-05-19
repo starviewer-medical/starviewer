@@ -23,7 +23,9 @@ Q3DOrientationMarker::Q3DOrientationMarker(vtkRenderWindowInteractor *interactor
 // Create a composite orientation marker using
 // vtkAnnotatedCubeActor and vtkAxesActor.
 //
-    // \TODO se suposa que aquesta orientació és correcta si estem veient el volum en axial. Caldria mirar el sistema de com posar les etiquetes correctament, automàticament a partir per exemple del tag dicom o deixar-ho en mans de la classe que ho faci servir i proporcionar mètodes d'aquesta classe per posar les etiquetes correctament
+    // \TODO se suposa que aquesta orientació és correcta si estem veient el volum en axial. Caldria mirar el sistema de com posar les etiquetes correctament,
+    // automàticament a partir per exemple del tag dicom o deixar-ho en mans de la classe que ho faci servir i proporcionar mètodes d'aquesta classe per posar
+    // les etiquetes correctament
     m_cubeActor = vtkAnnotatedCubeActor::New();
     this->setOrientationText(Orientation::LeftLabel, Orientation::RightLabel, Orientation::PosteriorLabel, Orientation::AnteriorLabel, Orientation::HeadLabel, 
         Orientation::FeetLabel);

@@ -9,7 +9,8 @@
 #include "transferfunction.h"
 #include "qviewerworkinprogresswidget.h"
 
-// TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de interface, pacs, etc.etc.!!
+// TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de
+// interface, pacs, etc.etc.!!
 #include "../interface/qapplicationmainwindow.h"
 
 // Qt
@@ -530,7 +531,8 @@ void QViewer::scaleToFit3D(double topCorner[3], double bottomCorner[3], double m
     width = fabs(displayTopLeft[0] - displayBottomRight[0]);
     height = fabs(displayTopLeft[1] - displayBottomRight[1]);
 
-    // Ajustem la imatge segons si la finestra és més estreta per ample o per alçada. Si volem que es vegi tota la regió que em escollit, ajustarem per el que sigui més estret, si ajustèssim pel més ample perderiem imatge per l'altre part
+    // Ajustem la imatge segons si la finestra és més estreta per ample o per alçada. Si volem que es vegi tota la regió que em escollit, ajustarem per el que
+    // sigui més estret, si ajustèssim pel més ample perderiem imatge per l'altre part
     int *size = this->getRenderWindowSize();
     if ((width / size[0]) > (height / size[1]))
     {
@@ -706,7 +708,8 @@ void QViewer::updateWindowLevelData()
     double automaticWindowWidth;
     double automaticWindowLevel;
     computeAutomaticWindowLevel(automaticWindowWidth, automaticWindowLevel);
-    m_windowLevelData->addPreset(AutomaticWindowLevelName, automaticWindowWidth * windowWidthSign, automaticWindowLevel, WindowLevelPresetsToolData::AutomaticPreset);
+    m_windowLevelData->addPreset(AutomaticWindowLevelName, automaticWindowWidth * windowWidthSign, automaticWindowLevel,
+                                 WindowLevelPresetsToolData::AutomaticPreset);
     // Si no hi ha window levels definits per defecte activarem l'automàtic
     if (windowLevelCount <= 0)
     {

@@ -25,7 +25,11 @@ CreateDicomdir::CreateDicomdir()
 {
     // Permet gravar al discdur i tb usb's
     m_optProfile = DicomDirInterface::AP_GeneralPurpose;
-    // La normativa dicom indica que el nom dels fitxers de dicomdir han de tenir una longitud de 8 caràcters i han d'estar en majúscules. Linux per a sistemes de fitxer vfat com podrian ser els pendrive i per a nom de fitxers de 8 o menys caràcters sempre mostra els noms en minúscules, independenment de que nosaltres els guardem en majúscules, degut això quan volem crear un dicomdir en un dispositiu vfat es copien els noms de les imatges en minúscules, al generar el dicomdir ens dona problemes, per què es troben imatges en minúscules i DICOM no ho permet. Per solucionar aquests casos hem d'activar de dcmtk enableMapFilenamesMode, que si es troba amb fitxers en minúscules ho ignora i crea el dicomdir.
+    // La normativa dicom indica que el nom dels fitxers de dicomdir han de tenir una longitud de 8 caràcters i han d'estar en majúscules. Linux per a
+    // sistemes de fitxer vfat com podrian ser els pendrive i per a nom de fitxers de 8 o menys caràcters sempre mostra els noms en minúscules, independenment
+    // de que nosaltres els guardem en majúscules, degut això quan volem crear un dicomdir en un dispositiu vfat es copien els noms de les imatges en
+    // minúscules, al generar el dicomdir ens dona problemes, per què es troben imatges en minúscules i DICOM no ho permet. Per solucionar aquests casos
+    // hem d'activar de dcmtk enableMapFilenamesMode, que si es troba amb fitxers en minúscules ho ignora i crea el dicomdir.
     
     m_ddir.enableMapFilenamesMode(OFTrue);
 }
@@ -112,7 +116,8 @@ Status CreateDicomdir::create(QString dicomdirPath)
 
     Status state;
 
-    //busquem el fitxers al dicomdir. Anteriorment a la classe ConvertoToDicomdir s'han d'haver copiat els fitxers dels estudis seleccionats, al directori dicomdir destí
+    // Busquem el fitxers al dicomdir. Anteriorment a la classe ConvertoToDicomdir s'han d'haver copiat els fitxers dels estudis seleccionats,
+    // al directori dicomdir destí
     OFStandard::searchDirectoryRecursively("", fileNames, opt_pattern, qPrintable(QDir::toNativeSeparators(dicomdirPath)));
 
     //comprovem que el directori no estigui buit

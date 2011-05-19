@@ -93,7 +93,8 @@ void HangingProtocolImageSet::show()
     for (int i = 0; i < m_listOfRestrictions.size(); i ++)
     {
         HangingProtocolImageSet::Restriction restriction = m_listOfRestrictions.value(i);
-        DEBUG_LOG(QString("        Usage flag: %1\n        Selector attribute: %2\n        Value representation: %3\n        selectorValueNumber: %4\n").arg(restriction.usageFlag).arg(restriction.selectorAttribute).arg(restriction.valueRepresentation).arg(restriction.selectorValueNumber));
+        DEBUG_LOG(QString("        Usage flag: %1\n        Selector attribute: %2\n        Value representation: %3\n        selectorValueNumber: %4\n").arg(
+                  restriction.usageFlag).arg(restriction.selectorAttribute).arg(restriction.valueRepresentation).arg(restriction.selectorValueNumber));
     }
 }
 

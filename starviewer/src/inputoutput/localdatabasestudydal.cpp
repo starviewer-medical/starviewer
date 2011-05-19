@@ -197,7 +197,8 @@ Patient* LocalDatabaseStudyDAL::fillPatient(char **reply, int row, int columns)
     return patient;
 }
 
-//TODO: Si només acceptem com a paràmatre de filtrar de la DICOMMask l'studyInstanceUID el que s'hauria de fer és directament passar un QString amb StudyInstanceUID
+// TODO: Si només acceptem com a paràmatre de filtrar de la DICOMMask l'studyInstanceUID el que s'hauria de fer és directament passar un QString amb
+// StudyInstanceUID
 QString LocalDatabaseStudyDAL::buildSqlSelect(const DicomMask &studyMaskToSelect, const QDate &lastAccessDateMinor, const QDate &lastAccessDateEqualOrMajor)
 {
     QString selectSentence, whereSentence;
@@ -243,7 +244,8 @@ QString LocalDatabaseStudyDAL::buildSqlSelect(const DicomMask &studyMaskToSelect
     return selectSentence + whereSentence;
 }
 
-QString LocalDatabaseStudyDAL::buildSqlSelectStudyPatient(const DicomMask &studyMaskToSelect, const QDate &lastAccessDateMinor, const QDate &lastAccessDateEqualOrMajor)
+QString LocalDatabaseStudyDAL::buildSqlSelectStudyPatient(const DicomMask &studyMaskToSelect, const QDate &lastAccessDateMinor,
+                                                          const QDate &lastAccessDateEqualOrMajor)
 {
     QString selectSentence, whereSentence, orderBySentence;
 
@@ -261,11 +263,13 @@ QString LocalDatabaseStudyDAL::buildSqlSelectStudyPatient(const DicomMask &study
 
     if (!studyMaskToSelect.getPatientId().isEmpty() && studyMaskToSelect.getPatientId() != "*")
     {
-        whereSentence += QString(" and Patient.DICOMPatientID like '%%1%' ").arg(DatabaseConnection::formatTextToValidSQLSyntax(studyMaskToSelect.getPatientId().replace("*", "")));
+        whereSentence += QString(" and Patient.DICOMPatientID like '%%1%' ")
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(studyMaskToSelect.getPatientId().replace("*", "")));
     }
     if (!studyMaskToSelect.getPatientName().isEmpty() && studyMaskToSelect.getPatientName() != "*")
     {
-        whereSentence += QString(" and Patient.Name like '%%1%' ").arg(DatabaseConnection::formatTextToValidSQLSyntax(studyMaskToSelect.getPatientName().replace("*", "")));
+        whereSentence += QString(" and Patient.Name like '%%1%' ")
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(studyMaskToSelect.getPatientName().replace("*", "")));
     }
 
     //Si filtrem per data
@@ -286,7 +290,8 @@ QString LocalDatabaseStudyDAL::buildSqlSelectStudyPatient(const DicomMask &study
     }
     else if (studyMaskToSelect.getStudyDate().length() == 17)
     {
-        whereSentence += QString(" and Date between '%1' and '%2'").arg(studyMaskToSelect.getStudyDate().mid(0, 8)).arg(studyMaskToSelect.getStudyDate().mid(9, 8));
+        whereSentence += QString(" and Date between '%1' and '%2'").arg(studyMaskToSelect.getStudyDate().mid(0, 8))
+                            .arg(studyMaskToSelect.getStudyDate().mid(9, 8));
     }
 
     if (lastAccessDateMinor.isValid())
@@ -382,7 +387,8 @@ QString LocalDatabaseStudyDAL::buildSqlUpdate(Study *studyToUpdate, const QDate 
     return updateSentence;
 }
 
-//TODO: Si només acceptem com a paràmtre per eliminar de la DICOMMask l'studyInstanceUID el que s'hauria de fer és directament passar un QString amb StudyInstanceUID
+// TODO: Si només acceptem com a paràmtre per eliminar de la DICOMMask l'studyInstanceUID el que s'hauria de fer és directament passar un QString amb
+// StudyInstanceUID
 QString LocalDatabaseStudyDAL::buildSqlDelete(const DicomMask &studyMaskToDelete)
 {
     QString deleteSentence, whereSentence = "";

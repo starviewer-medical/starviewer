@@ -79,7 +79,8 @@ void MagicTool::startMagicRegion()
     {
         if (m_2DViewer->getView() != Q2DViewer::Axial)
         {
-            QMessageBox::warning(m_2DViewer->parentWidget(), tr("Error"), tr("This tool can only be used in the acquisition direction. Sorry for the inconvinience."));
+            QMessageBox::warning(m_2DViewer->parentWidget(), tr("Error"),
+                                 tr("This tool can only be used in the acquisition direction. Sorry for the inconvinience."));
         }
         else
         {

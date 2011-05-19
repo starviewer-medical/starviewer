@@ -232,7 +232,8 @@ QStringList DicomPrinterManager::getAvailableMediumTypeValues()
 QStringList DicomPrinterManager::getAvailableFilmSizeValues()
 {
     QStringList filmSizeValuesTemp;
-    filmSizeValuesTemp << "" << "8INX10IN" << "8_5INX11IN" << "10INX12IN" << "10INX14IN" << "11INX14IN" << "11INX17IN" << "14INX14IN" << "14INX17IN" << "24CMX24CM" << "24CMX30CM" << "A4" << "A3";
+    filmSizeValuesTemp << "" << "8INX10IN" << "8_5INX11IN" << "10INX12IN" << "10INX14IN" << "11INX14IN" << "11INX17IN" << "14INX14IN" << "14INX17IN" << 
+                          "24CMX24CM" << "24CMX30CM" << "A4" << "A3";
     return filmSizeValuesTemp;
 }
 

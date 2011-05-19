@@ -40,7 +40,8 @@ QStudyTreeWidget::~QStudyTreeWidget()
 void QStudyTreeWidget::createConnections()
 {
     connect(m_studyTreeView, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), SLOT(doubleClicked(QTreeWidgetItem *, int)));
-    connect(m_studyTreeView, SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)), SLOT (currentItemChanged (QTreeWidgetItem *, QTreeWidgetItem *)));
+    connect(m_studyTreeView, SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)),
+            SLOT (currentItemChanged (QTreeWidgetItem *, QTreeWidgetItem *)));
     connect(m_studyTreeView, SIGNAL(itemExpanded(QTreeWidgetItem *)), SLOT (itemExpanded(QTreeWidgetItem *)));
     connect(m_studyTreeView, SIGNAL(itemCollapsed(QTreeWidgetItem *)), SLOT (itemCollapsed(QTreeWidgetItem *)));
 }
@@ -678,7 +679,8 @@ void QStudyTreeWidget::doubleClicked(QTreeWidgetItem *item, int)
     }
 
     // Pel comportament del tree widget quan es fa un un doble click es col·lapsa o expandeix l'item en funció del seu estat, com que
-    // nosaltres pel doble click no volem que s'expendeixi o es col·lapsi, guardem per quin element s'ha fet el doble click, per anul·laro quan es detecti un signal d'expand o collapse item
+    // nosaltres pel doble click no volem que s'expendeixi o es col·lapsi, guardem per quin element s'ha fet el doble click, per anul·laro quan es detecti
+    // un signal d'expand o collapse item
     m_doubleClickedItemUID = item->text(UID);
 }
 

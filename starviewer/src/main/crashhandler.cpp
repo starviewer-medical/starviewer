@@ -133,7 +133,8 @@ CrashHandler::CrashHandler()
 #ifndef WIN32
     exceptionHandler = new google_breakpad::ExceptionHandler(dumpsDir.absolutePath().toStdString(), 0, launchCrashReporter, this, true);
 #else
-    exceptionHandler = new google_breakpad::ExceptionHandler(dumpsDir.absolutePath().toStdWString(), 0, launchCrashReporter, this, google_breakpad::ExceptionHandler::HANDLER_ALL);
+    exceptionHandler = new google_breakpad::ExceptionHandler(dumpsDir.absolutePath().toStdWString(), 0, launchCrashReporter, this,
+                                                             google_breakpad::ExceptionHandler::HANDLER_ALL);
 #endif //WIN32
 
 #endif //NO_CRASH_REPORTER

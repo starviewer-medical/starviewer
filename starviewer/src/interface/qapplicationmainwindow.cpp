@@ -82,7 +82,8 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
     if (!databaseInstallation.checkStarviewerDatabase())
     {
         QString errorMessage = databaseInstallation.getErrorMessage();
-        QMessageBox::critical(0, ApplicationNameString, tr("There have been some errors:\n").append(errorMessage).append(tr("\n\nYou can resolve this error by Tools>Configuration>Local Database menu.")));
+        QMessageBox::critical(0, ApplicationNameString, tr("There have been some errors:\n").append(errorMessage)
+                                                    .append(tr("\n\nYou can resolve this error by Tools>Configuration>Local Database menu.")));
     }
 
     m_extensionHandler = new ExtensionHandler(this);
@@ -698,7 +699,9 @@ void QApplicationMainWindow::sendRequestRetrieveStudyWithAccessionNumberToLocalS
     else
     {
         //TODO:S'hauria de fer un missatge més genèric
-        QMessageBox::information(this, ApplicationNameString, tr("Please activate \"Listen RIS Request\" option in %1 configuration to retrieve studies from SAP.").arg(ApplicationNameString));
+        QMessageBox::information(this, ApplicationNameString, 
+                                 tr("Please activate \"Listen RIS Request\" option in %1 configuration to retrieve studies from SAP.")
+                               .arg(ApplicationNameString));
     }
 }
 

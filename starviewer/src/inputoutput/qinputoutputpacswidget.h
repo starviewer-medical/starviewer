@@ -115,10 +115,12 @@ private slots:
     /// que s'han de visualitzar immediatament un cop descarregats
     void retrieveAndViewSelectedStudies();
 
-    ///Cancel·la els QueryPACSJob que s'han llançat des d'aquesta classe i que encara no han finalitzat (cancel·la els que s'estan executant i els pendents d'executar)
-    ///La idea és donar mètode que es pugui invocar per cancel·lar les consultes actuals, per exemple s'ha llançat una consulta a 3 PACS
-    ///per cercar tots els estudis amb ID 1, si l'usuari canvia la consulta i diu que ara vol tots els estudis amb ID 2, no cal seguir endavant amb l'anterior consulta
-    ///doncs aquest mètode està pensat per aquests casos per poder cancel·lar les consultes actuals llançades des d'aquesta classe que s'estan realitzant.
+    /// Cancel·la els QueryPACSJob que s'han llançat des d'aquesta classe i que encara no han finalitzat (cancel·la els que s'estan executant i els pendents
+    /// d'executar).
+    /// La idea és donar mètode que es pugui invocar per cancel·lar les consultes actuals, per exemple s'ha llançat una consulta a 3 PACS
+    /// per cercar tots els estudis amb ID 1, si l'usuari canvia la consulta i diu que ara vol tots els estudis amb ID 2, no cal seguir endavant amb
+    /// l'anterior consulta doncs aquest mètode està pensat per aquests casos per poder cancel·lar les consultes actuals llançades des d'aquesta classe
+    /// que s'estan realitzant.
     void cancelCurrentQueriesToPACS();
 
     ///Fa signal de studyRetrieveStarted, Important!!! aquest mètode una vegada cada Tool utiltizi la PacsManager ha de desapareixer

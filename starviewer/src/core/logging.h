@@ -26,7 +26,8 @@
         log4cxx::PropertyConfigurator::configure(file); \
     } else (void)0
 
-/// Macro per a missatges de debug. \TODO de moment fem servir aquesta variable de qmake i funciona bé, però podria ser més adequat troba la forma d'afegir una variable pròpia, com per exemple DEBUG
+/// Macro per a missatges de debug. \TODO de moment fem servir aquesta variable de qmake i funciona bé, però podria ser més adequat troba la forma d'afegir
+/// una variable pròpia, com per exemple DEBUG
 #ifdef QT_NO_DEBUG
 #define DEBUG_LOG(msg) (void)0
 #else

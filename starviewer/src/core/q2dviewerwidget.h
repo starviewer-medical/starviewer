@@ -13,8 +13,8 @@ class StatsWatcher;
 class QViewerCommand;
 
 /**
-    Aquesta classe és la interfície genèrica d'un Q2DViewer juntament amb el seu slider i spinbox corresponent. Conté el mètode per posar un input així com els mètodes per modificar el valor de l'slider i l'spinbox.
-
+    Aquesta classe és la interfície genèrica d'un Q2DViewer juntament amb el seu slider i spinbox corresponent. Conté el mètode per posar un input així
+    com els mètodes per modificar el valor de l'slider i l'spinbox.
  */
 class Q2DViewerWidget : public QFrame, private Ui::Q2DViewerWidgetBase {
 Q_OBJECT

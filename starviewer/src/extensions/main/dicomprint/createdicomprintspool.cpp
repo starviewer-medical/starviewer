@@ -73,8 +73,8 @@ void CreateDicomPrintSpool::setBasicFilmBoxAttributes()
     //  3r AETitle del Starviewer
 
     //  Els dos primer paràmetres només s'utilitzen si la impressora suporta el Presentation Lut, ara mateix no ho soportem (no està implementat) per tant se
-    //  suposa que aquests valors s'ignoraran. De totes maneres se li ha donat aquests valors per defecte 2000 i 10 respectivament perquè són els que utilitza dcmtk i també
-    //  s'ha consultat el dicom conformance de les impressores agfa i kodak i també utiltizen aquests valors per defecte.
+    //  suposa que aquests valors s'ignoraran. De totes maneres se li ha donat aquests valors per defecte 2000 i 10 respectivament perquè són els que utilitza
+    // dcmtk i també s'ha consultat el dicom conformance de les impressores agfa i kodak i també utiltizen aquests valors per defecte.
 
     //TODO preguntar perquè necessita el Illumination i Reflected Ambient Ligth, preguntar si realement són aquests tags
     m_storedPrint = new DVPSStoredPrint(2000, 10, qPrintable(Settings().getValue(InputOutputSettings::LocalAETitle).toString()));
@@ -164,13 +164,13 @@ bool CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, const
     bool ok = false;
 
     // El constructor del mètode DVPresentationState necessita els següents paràmetres
-    // 1r - Llista d'objectes que descriuen les característiques de la pantalla tipus objecte DiDisplayFunction, com aquestes imatges no han de ser visualitzades
-    //      per pantalla li donem valor null, no cal aplicar cap filtre per visualitzar-les
+    // 1r - Llista d'objectes que descriuen les característiques de la pantalla tipus objecte DiDisplayFunction, com aquestes imatges no han de ser
+    // visualitzades per pantalla li donem valor null, no cal aplicar cap filtre per visualitzar-les
 
     // 2n, 3r i 4t, 5è Indiquen la resolució mínima d'impressió H/V i la màxima H/V respectivament, se li donen els valors per defecte de les dcmtk, consultant
     // el DICOM Conformance d'algunes impressores, s'ha vist que imprimint una sola imatge amb format STARDARD\1,1 per tamanys del film grans algunes
-    // impressores poden imprimir en una resolució superior de fins 11000, però com que difícilment tindrem casos en els que s'imprimeixin una sola imatge en films
-    // grans deixem els valors per defecte de les dcmtk.
+    // impressores poden imprimir en una resolució superior de fins 11000, però com que difícilment tindrem casos en els que s'imprimeixin una sola imatge en
+    // films grans deixem els valors per defecte de les dcmtk.
 
     // 6è, 7è - Resolució per la previsualització de la imatge, com que no en farem previsualització deixem els valors standards.
     m_presentationState = new DVPresentationState(NULL, 1024, 1024, 8192, 8192, 256, 256);
@@ -235,7 +235,8 @@ bool CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, const
     return ok;
 }
 
-bool CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, const char *pixelData, unsigned long bitmapWidth, unsigned long bitmapHeight, double pixelAspectRatio, const QString &spoolDirectoryPath)
+bool CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, const char *pixelData, unsigned long bitmapWidth, unsigned long bitmapHeight,
+                                                         double pixelAspectRatio, const QString &spoolDirectoryPath)
 {
     char InstanceUIDOfTransformedImage[70];
     OFString requestedImageSizeAsOFString;
@@ -332,8 +333,9 @@ bool CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
 
             m_presentationState->getPrintBitmapRequestedImageSize(requestedImageSizeAsOFString);
             //Afegim la imatge al Image Box
-            status = m_storedPrint->addImageBox(qPrintable(Settings().getValue(InputOutputSettings::LocalAETitle).toString()), InstanceUIDOfTransformedImage, requestedImageSizeAsOFString.c_str(), NULL,
-                                       m_presentationState->getPresentationLUTData(), m_presentationState->isMonochrome1Image());
+            status = m_storedPrint->addImageBox(qPrintable(Settings().getValue(InputOutputSettings::LocalAETitle).toString()), InstanceUIDOfTransformedImage,
+                                                requestedImageSizeAsOFString.c_str(), NULL, m_presentationState->getPresentationLUTData(),
+                                                m_presentationState->isMonochrome1Image());
 
             if (status != EC_Normal)
             {
@@ -368,9 +370,9 @@ void CreateDicomPrintSpool::setImageBoxAttributes()
 
     for (size_t i = 0; i < numImages; i++)
     {
-        // Com atribut del Image Box només especifiquem la polaritat, ja que el Magnification Type (2010,0060), el Smoothing Type (2010,0080) i el Configuration
-        // Information (2010,0150) tot i que es poden especificar a nivell de Image Box com aquest tag té el mateix valor per totes les imatges del Film Box,
-        // s'especifica a nivell de Film Box, els altres tags del Image Box són emplenats per les dcmtk
+        // Com atribut del Image Box només especifiquem la polaritat, ja que el Magnification Type (2010,0060), el Smoothing Type (2010,0080)
+        // i el Configuration Information (2010,0150) tot i que es poden especificar a nivell de Image Box com aquest tag té el mateix valor per totes
+        // les imatges del Film Box, s'especifica a nivell de Film Box, els altres tags del Image Box són emplenats per les dcmtk
 
         if (!m_dicomPrintPage.getPolarity().isEmpty())
         {
@@ -417,11 +419,11 @@ QString CreateDicomPrintSpool::createStoredPrintDcmtkFile(const QString &spoolDi
     if (m_annotationBoxes->size() > 0)
     {
         INFO_LOG("Hi ha anotacions per imprimir al FilmSession, creem les AnnotationBox");
-        //HACK: DVPSStoredPrint només permet afegir una anotació al FilmBox a través del mètode setSingleAnnotation, com que la majoria de DICOMPrinters
-        //permeten fins a 6 anotacions ens interessa evitar aquesta limitació. El que hem fet és guardar en la mateixa estructura que DVPSStoredPrint les anotacions
-        //DVPSAnnotationContent_PList i llavors en el dataSet on gravem les dades de l'impressió de l'objecte m_storedPrint també hi gravem
-        //les dades de les anotacions, d'aquesta manera podem tenir més d'una anotació en un FilmBox.
-        //Quan des de PrintDICOMSpool es llegeix el dataset que hem generat en aquesta classe es troba que té més d'una anotació i les envia totes a imprimir.
+        // HACK: DVPSStoredPrint només permet afegir una anotació al FilmBox a través del mètode setSingleAnnotation, com que la majoria de DICOMPrinters
+        // permeten fins a 6 anotacions ens interessa evitar aquesta limitació. El que hem fet és guardar en la mateixa estructura que DVPSStoredPrint les
+        // anotacions DVPSAnnotationContent_PList i llavors en el dataSet on gravem les dades de l'impressió de l'objecte m_storedPrint també hi gravem
+        // les dades de les anotacions, d'aquesta manera podem tenir més d'una anotació en un FilmBox.
+        // Quan des de PrintDICOMSpool es llegeix el dataset que hem generat en aquesta classe es troba que té més d'una anotació i les envia totes a imprimir.
         m_annotationBoxes->write(*dataset);
 
         DcmItem *sequenceFilmBox = NULL;

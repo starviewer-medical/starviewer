@@ -30,8 +30,8 @@ public:
     /// @return indica estat del mètode
     PACSRequestStatus::SendRequestStatus send(QList<Image*> imageListToSend);
 
-    ///Demanem cancel·lar l'enviament d'imatges. La cancel·lació de les imatges és assíncrona no es duu a terme fins que ha finalitzat l'enviament de la imatge que
-    ///s'estava enviant al moment de demananr la cancel·lació
+    /// Demanem cancel·lar l'enviament d'imatges. La cancel·lació de les imatges és assíncrona no es duu a terme fins que ha finalitzat l'enviament de la
+    /// imatge que s'estava enviant al moment de demananr la cancel·lació
     void requestCancel();
 
     ///Retorna el número d'imatges enviades correctament
@@ -40,7 +40,8 @@ public:
     ///Retorna el número d'imatges que l'enviament ha fallat
     int getNumberOfDICOMFilesSentFailed();
 
-    ///Retorna el número d'imatges que s'ha enviat però han donat warning, pot donar warning per exemple en el cas que el PACS modifiqui alguna dada de la imatge
+    /// Retorna el número d'imatges que s'ha enviat però han donat warning, pot donar warning per exemple en el cas que el PACS modifiqui alguna dada de
+    /// la imatge
     int getNumberOfDICOMFilesSentWarning();
 
 signals:

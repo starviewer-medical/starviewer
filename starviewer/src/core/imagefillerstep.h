@@ -12,7 +12,8 @@ class DICOMTagReader;
 class DICOMSequenceItem;
 
 /**
-    Mòdul que s'encarrega d'omplir la informació general d'objectes DICOM que són imatges. Un dels seus requisits és que es tingui l'etiqueta de DICOMClassified i que la Series a tractar sigui d'imatges
+    Mòdul que s'encarrega d'omplir la informació general d'objectes DICOM que són imatges. Un dels seus requisits és que es tingui l'etiqueta de
+    DICOMClassified i que la Series a tractar sigui d'imatges
 
 */
 class ImageFillerStep : public PatientFillerStep {

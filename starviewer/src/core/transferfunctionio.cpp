@@ -183,7 +183,8 @@ TransferFunction* TransferFunctionIO::fromXmlFile(QFile &file)
         for (uint i = 0; i < gradientOpacityPoints.length(); i++)
         {
             QDomElement gradientOpacityPointElement = gradientOpacityPoints.item(i).toElement();
-            transferFunction->setGradientOpacity(gradientOpacityPointElement.attribute("gradient").toDouble(), gradientOpacityPointElement.attribute("a").toDouble());
+            transferFunction->setGradientOpacity(gradientOpacityPointElement.attribute("gradient").toDouble(),
+                                                 gradientOpacityPointElement.attribute("a").toDouble());
         }
     }
 

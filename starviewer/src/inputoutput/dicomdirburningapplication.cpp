@@ -83,10 +83,12 @@ bool DICOMDIRBurningApplication::burnIsoImageFile()
         switch (m_currentDevice)
         {
             case CreateDicomdir::CdRom:
-                processParameters << (settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationCDParametersKey)).toString().arg(QDir::toNativeSeparators(m_isoPath)).split(" ");
+                processParameters << (settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationCDParametersKey)).toString()
+                                     .arg(QDir::toNativeSeparators(m_isoPath)).split(" ");
                 break;
             case CreateDicomdir::DvdRom:
-                processParameters << (settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationDVDParametersKey)).toString().arg(QDir::toNativeSeparators(m_isoPath)).split(" ");
+                processParameters << (settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationDVDParametersKey)).toString()
+                                     .arg(QDir::toNativeSeparators(m_isoPath)).split(" ");
                 break;
             default:
                 break;
@@ -94,7 +96,8 @@ bool DICOMDIRBurningApplication::burnIsoImageFile()
     }
     else
     {
-        processParameters << (settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationParametersKey)).toString().arg(QDir::toNativeSeparators(m_isoPath)).split(" ");
+        processParameters << (settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationParametersKey)).toString()
+                             .arg(QDir::toNativeSeparators(m_isoPath)).split(" ");
     }
 
     process.start(burningApplicationPath, processParameters);
@@ -105,7 +108,8 @@ bool DICOMDIRBurningApplication::burnIsoImageFile()
         m_lastErrorDescription = QObject::tr("An error occurred during the ISO image file burn process.");
         m_lastError = InternalError;
 
-        ERROR_LOG("Error al gravar la imatge ISO amb comanda: " + burningApplicationPath + "; Amb paràmetres: " + processParameters.join(" ") + "; Exit code qprocess: " + process.exitCode());
+        ERROR_LOG("Error al gravar la imatge ISO amb comanda: " + burningApplicationPath + "; Amb paràmetres: " + processParameters.join(" ") +
+                  "; Exit code qprocess: " + process.exitCode());
         return false;
     }
     return true;

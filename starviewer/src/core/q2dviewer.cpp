@@ -1334,7 +1334,8 @@ ImagePlane* Q2DViewer::getImagePlane(int sliceNumber, int phaseNumber, bool vtkR
                         imagePlane->setColumns(dimensions[1]);
 
                         // TODO Falta esbrinar si l'origen que estem donant es bo o no
-                        imagePlane->setOrigin(origin[0] + sliceNumber*directionCosines[0]*spacing[0], origin[1] + sliceNumber*directionCosines[1]*spacing[0], origin[2] + sliceNumber*directionCosines[2]*spacing[0]);
+                        imagePlane->setOrigin(origin[0] + sliceNumber*directionCosines[0]*spacing[0], origin[1] + sliceNumber*directionCosines[1]*spacing[0],
+                                              origin[2] + sliceNumber*directionCosines[2]*spacing[0]);
                     }
                 }
                 break;
@@ -1369,7 +1370,8 @@ ImagePlane* Q2DViewer::getImagePlane(int sliceNumber, int phaseNumber, bool vtkR
                         imagePlane->setColumns(dimensions[0]);
 
                         // TODO Falta esbrinar si l'origen que estem donant es bo o no
-                        imagePlane->setOrigin(origin[0] + directionCosines[3]*sliceNumber*spacing[1], origin[1] + directionCosines[4]*sliceNumber*spacing[1], origin[2] + directionCosines[5]*sliceNumber*spacing[1]);
+                        imagePlane->setOrigin(origin[0] + directionCosines[3]*sliceNumber*spacing[1], origin[1] + directionCosines[4]*sliceNumber*spacing[1],
+                                              origin[2] + directionCosines[5]*sliceNumber*spacing[1]);
                     }
                 }
                 break;
@@ -1572,7 +1574,9 @@ void Q2DViewer::updatePatientAnnotationInformation()
             seriesTime = "--:--";
         }
 
-        m_upperRightText = tr("%1\n%2\n%3 %4 %5\nAcc:%6\n%7\n%8").arg(series->getInstitutionName()).arg(patient->getFullName()).arg(study->getPatientAge()).arg(patient->getSex()).arg(patient->getID()).arg(study->getAccessionNumber()).arg(study->getDateAsString()).arg(seriesTime);
+        m_upperRightText = tr("%1\n%2\n%3 %4 %5\nAcc:%6\n%7\n%8").arg(series->getInstitutionName()).arg(patient->getFullName())
+                         .arg(study->getPatientAge()).arg(patient->getSex()).arg(patient->getID()).arg(study->getAccessionNumber())
+                         .arg(study->getDateAsString()).arg(seriesTime);
 
         if (series->getModality() == "MG")
         {
@@ -1802,7 +1806,8 @@ void Q2DViewer::updateSliceAnnotation(int currentSlice, int maxSlice, int curren
             if (m_slabThickness > 1)
             {
                 // TODO Potser hauríem de tenir una variable "slabRange"
-                lowerLeftText += tr("Slice: %1-%2/%3 Phase: %4/%5").arg(currentSlice).arg(currentSlice + m_slabThickness-1).arg(maxSlice).arg(currentPhase).arg(maxPhase);
+                lowerLeftText += tr("Slice: %1-%2/%3 Phase: %4/%5").arg(currentSlice).arg(currentSlice + m_slabThickness-1)
+                               .arg(maxSlice).arg(currentPhase).arg(maxPhase);
             }
             else
             {
@@ -1868,7 +1873,8 @@ void Q2DViewer::updateDisplayExtent()
     int imageActorExtent[6];
     m_mainVolume->getWholeExtent(imageActorExtent);
     imageActorExtent[zIndex * 2] = imageActorExtent[zIndex * 2 + 1] = sliceValue;
-    m_imageActor->SetDisplayExtent(imageActorExtent[0], imageActorExtent[1], imageActorExtent[2], imageActorExtent[3], imageActorExtent[4], imageActorExtent[5]);
+    m_imageActor->SetDisplayExtent(imageActorExtent[0], imageActorExtent[1], imageActorExtent[2], imageActorExtent[3],
+                                   imageActorExtent[4], imageActorExtent[5]);
 
     // TODO Si separem els renderers potser caldria aplicar-ho a cada renderer?
     getRenderer()->ResetCameraClippingRange();
@@ -1903,7 +1909,9 @@ void Q2DViewer::buildWindowLevelPipeline()
     double range[2];
     m_mainVolume->getScalarRange(range);
     DEBUG_LOG("*** Grayscale Transform Pipeline Begin ***");
-    DEBUG_LOG(QString("Image Information: Bits Allocated: %1, Bits Stored: %2, Pixel Range %3 to %4, SIGNED?Pixel Representation: %5, Photometric interpretation: %6").arg(m_mainVolume->getImage(0)->getBitsAllocated()).arg(m_mainVolume->getImage(0)->getBitsStored()).arg(range[0]).arg(range[1]).arg(m_mainVolume->getImage(0)->getPixelRepresentation()).arg(m_mainVolume->getImage(0)->getPhotometricInterpretation()));
+    DEBUG_LOG(QString("Image Information: Bits Allocated: %1, Bits Stored: %2, Pixel Range %3 to %4, SIGNED?Pixel Representation: %5, Photometric interpretation: %6")
+                 .arg(m_mainVolume->getImage(0)->getBitsAllocated()).arg(m_mainVolume->getImage(0)->getBitsStored()).arg(range[0]).arg(range[1])
+                 .arg(m_mainVolume->getImage(0)->getPixelRepresentation()).arg(m_mainVolume->getImage(0)->getPhotometricInterpretation()));
     // Fins que no implementem Presentation states aquest serà el cas que sempre s'executarà el 100% dels casos
     if (isThickSlabActive())
     {

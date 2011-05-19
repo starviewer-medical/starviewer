@@ -19,7 +19,8 @@ bool ObscuranceMainThread::hasColor(Variant variant)
     return variant >= OpacityColorBleeding;
 }
 
-ObscuranceMainThread::ObscuranceMainThread(int numberOfDirections, double maximumDistance, Function function, Variant variant, bool doublePrecision, QObject *parent)
+ObscuranceMainThread::ObscuranceMainThread(int numberOfDirections, double maximumDistance, Function function, Variant variant,
+                                           bool doublePrecision, QObject *parent)
  : QThread(parent),
    m_numberOfDirections(numberOfDirections), m_maximumDistance(maximumDistance), m_function(function), m_variant(variant),
    m_doublePrecision(doublePrecision),

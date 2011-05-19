@@ -25,17 +25,19 @@ int DicomPrint::print(DicomPrinter printer, DicomPrintJob printJob)
 
     m_lastError = Ok;
 
-    INFO_LOG("Han demanat imprimir imatges DICOM a la impresssora " + printer.getAETitle() + ", IP: " + printer.getHostname() + ", port: " + QString().setNum(printer.getPort()));
+    INFO_LOG("Han demanat imprimir imatges DICOM a la impresssora " + printer.getAETitle() + ", IP: " + printer.getHostname() + ", port: " + 
+             QString().setNum(printer.getPort()));
 
     dcmtkStoredPrintPathFileList = createDicomPrintSpool(printer, printJob);
 
     if (getLastError() == Ok)
     {
-        // Workaround per poder imprimir més d'una còpia d'un printjob. Degut a que ara no podem imprimir més d'una pàgina per connexió amb la impressora, per la
-        // limitació de les classes utilitzades de dcmtk que només ens deixen associar un filmBox per filmeSsion, provoca que en el cas que d'un printjob en volem
-        // fer més d'una còpia, per exemple amb un tenim un DicomPrintJob amb dos pàgines del qual en volem 3 còpies, primer s'imprimirà 3 vegades la primera pàgina
-        // i després sortirà 3 vegades la segona pàgina, per evitar que sortin ordenades així fem aquest workaround, en el qual es repeteix el procés d'enviar cada
-        // printjob tantes còpies com ens n'hagin sol·licitat, d'aquesta manera les pàgines sortiran correctament ordenades.
+        // Workaround per poder imprimir més d'una còpia d'un printjob. Degut a que ara no podem imprimir més d'una pàgina per connexió amb la impressora,
+        // per la limitació de les classes utilitzades de dcmtk que només ens deixen associar un filmBox per filmeSsion, provoca que en el cas que d'un
+        // printjob en volem fer més d'una còpia, per exemple amb un tenim un DicomPrintJob amb dos pàgines del qual en volem 3 còpies, primer s'imprimirà
+        // 3 vegades la primera pàgina i després sortirà 3 vegades la segona pàgina, per evitar que sortin ordenades així fem aquest workaround, en el qual
+        // es repeteix el procés d'enviar cada printjob tantes còpies com ens n'hagin sol·licitat, d'aquesta manera les pàgines sortiran correctament
+        // ordenades.
 
         numberOfCopies = printJob.getNumberOfCopies();
         // Indiquem que només en volem una còpia
@@ -123,7 +125,8 @@ QStringList DicomPrint::createDicomPrintSpool(DicomPrinter printer, DicomPrintJo
     foreach (DicomPrintPage dicomPrintPage, printJob.getDicomPrintPages())
     {
         QString storedPrintPathFile;
-        INFO_LOG("Creo les " + QString().setNum(dicomPrintPage.getImagesToPrint().count()) + " imatges de la pagina " + QString().setNum(dicomPrintPage.getPageNumber()));
+        INFO_LOG("Creo les " + QString().setNum(dicomPrintPage.getImagesToPrint().count()) + " imatges de la pagina " +
+                 QString().setNum(dicomPrintPage.getPageNumber()));
 
         storedPrintPathFile = dicomPrintSpool.createPrintSpool(printer, dicomPrintPage, getSpoolDirectory());
 
@@ -153,7 +156,8 @@ DicomPrint::DicomPrintError DicomPrint::getLastError()
     return m_lastError;
 }
 
-DicomPrint::DicomPrintError DicomPrint::createDicomPrintSpoolErrorToDicomPrintError(CreateDicomPrintSpool::CreateDicomPrintSpoolError createDicomPrintSpoolError)
+DicomPrint::DicomPrintError DicomPrint::createDicomPrintSpoolErrorToDicomPrintError(
+                                CreateDicomPrintSpool::CreateDicomPrintSpoolError createDicomPrintSpoolError)
 {
     DicomPrint::DicomPrintError error;
 

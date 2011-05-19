@@ -107,7 +107,8 @@ private slots:
     ///Esborra de la base de dades els estudis seleccionats en el QStudyTreeWidgetView
     void deleteSelectedItemsFromLocalDatabase();
 
-    ///Slot que es dispara quan ha finalitzat el thread que esborrar els estudis vells, aquest slot comprova que no s'hagi produït cap error esborrant els estudis vells
+    /// Slot que es dispara quan ha finalitzat el thread que esborrar els estudis vells, aquest slot comprova que no s'hagi produït cap error esborrant
+    /// els estudis vells
     void deleteOldStudiesThreadFinished();
 
     ///Afegeix els estudis seleccionats a la llista d'estudis a convertir a dicomdir

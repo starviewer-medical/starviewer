@@ -60,7 +60,8 @@ QList<Image*> ImageFillerStep::processDICOMFile(DICOMTagReader *dicomReader)
     {
         // Comprovem si la imatge és enhanced o no per tal de cridar el mètode específic més adient
         QString sopClassUID = dicomReader->getValueAttributeAsQString(DICOMSOPClassUID);
-        if (sopClassUID == UIDEnhancedCTImageStorage || sopClassUID == UIDEnhancedMRImageStorage || sopClassUID == UIDEnhancedXAImageStorage || sopClassUID == UIDEnhancedXRFImageStorage)
+        if (sopClassUID == UIDEnhancedCTImageStorage || sopClassUID == UIDEnhancedMRImageStorage || sopClassUID == UIDEnhancedXAImageStorage ||
+            sopClassUID == UIDEnhancedXRFImageStorage)
         {
             generatedImages = processEnhancedDICOMFile(dicomReader);
         }
@@ -104,7 +105,8 @@ QList<Image*> ImageFillerStep::processDICOMFile(DICOMTagReader *dicomReader)
                                 // HACK Si és la segona imatge de mida diferent, cal generar el propi thumbnail de la imatge anterior
                                 if (volumeNumber == 101)
                                 {
-                                    QString path = QString("%1/thumbnail%2.png").arg(QFileInfo(lastProcessedImage->getPath()).absolutePath()).arg(lastProcessedImage->getVolumeNumberInSeries());
+                                    QString path = QString("%1/thumbnail%2.png").arg(QFileInfo(lastProcessedImage->getPath()).absolutePath()).arg(
+                                                           lastProcessedImage->getVolumeNumberInSeries());
                                     lastProcessedImage->getThumbnail().save(path, "PNG");
                                 }
                                 saveThumbnail(dicomReader);
@@ -226,7 +228,8 @@ bool ImageFillerStep::processImage(Image *image, DICOMTagReader *dicomReader)
     Q_ASSERT(image);
     Q_ASSERT(dicomReader);
 
-    // Comprovem si l'arxiu és una imatge, per això caldrà que existeixi el tag PixelData->TODO es podria eliminar perquè ja ho comprovem abans! Falta fer la comprovació quan llegim fitxer a fitxer
+    // Comprovem si l'arxiu és una imatge, per això caldrà que existeixi el tag PixelData->TODO es podria eliminar perquè ja ho comprovem abans! Falta fer la
+    // comprovació quan llegim fitxer a fitxer
     bool ok = dicomReader->tagExists(DICOMPixelData);
     if (ok)
     {
@@ -394,7 +397,8 @@ QList<Image*> ImageFillerStep::processEnhancedDICOMFile(DICOMTagReader *dicomRea
     Q_ASSERT(dicomReader);
 
     QList<Image*> generatedImages;
-    // Comprovem si l'arxiu és una imatge, per això caldrà que existeixi el tag PixelData->TODO es podria eliminar perquè ja ho comprovem abans! Falta fer la comprovació quan llegim fitxer a fitxer
+    // Comprovem si l'arxiu és una imatge, per això caldrà que existeixi el tag PixelData->TODO es podria eliminar perquè ja ho comprovem abans! Falta fer la
+    // comprovació quan llegim fitxer a fitxer
     if (dicomReader->tagExists(DICOMPixelData))
     {
         int numberOfFrames = dicomReader->getValueAttributeAsQString(DICOMNumberOfFrames).toInt();

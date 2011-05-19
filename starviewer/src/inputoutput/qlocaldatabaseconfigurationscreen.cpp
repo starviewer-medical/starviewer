@@ -85,7 +85,8 @@ void QLocalDatabaseConfigurationScreen::loadCacheDefaults()
     m_textSpaceToFreeIfNotEnoughSpaceAvailable->setText(QString().setNum(settings.getValue(InputOutputSettings::MinimumGigaBytesToFreeIfCacheIsFull).toInt()));
     m_textMinimumSpaceRequiredToRetrieve->setText(QString().setNum(settings.getValue(InputOutputSettings::MinimumFreeGigaBytesForCache).toUInt()));
     m_textSpaceToFreeIfNotEnoughSpaceAvailable->setEnabled(settings.getValue(InputOutputSettings::DeleteLeastRecentlyUsedStudiesNoFreeSpaceCriteria).toBool());
-    m_checkBoxDeleteStudiesIfNotEnoughFreeSpaceAvailable->setChecked(settings.getValue(InputOutputSettings::DeleteLeastRecentlyUsedStudiesNoFreeSpaceCriteria).toBool());
+    m_checkBoxDeleteStudiesIfNotEnoughFreeSpaceAvailable->
+        setChecked(settings.getValue(InputOutputSettings::DeleteLeastRecentlyUsedStudiesNoFreeSpaceCriteria).toBool());
     m_checkBoxDeletedOldStudies->setChecked(settings.getValue(InputOutputSettings::DeleteLeastRecentlyUsedStudiesInDaysCriteria).toBool());
     m_textMaximumDaysNotViewed->setEnabled(settings.getValue(InputOutputSettings::DeleteLeastRecentlyUsedStudiesInDaysCriteria).toBool());
 }
@@ -118,7 +119,8 @@ bool QLocalDatabaseConfigurationScreen::validateChanges()
                 case 0:
                     if (!dir.mkpath(m_textCacheImagePath->text()))
                     {
-                        QMessageBox::critical(this, ApplicationNameString, tr("%1 can't create the directory. Please check users permission.").arg(ApplicationNameString));
+                        QMessageBox::critical(this, ApplicationNameString, tr("%1 can't create the directory. Please check users permission.")
+                                                                         .arg(ApplicationNameString));
                         return false;
                     }
                     else
@@ -174,7 +176,8 @@ bool QLocalDatabaseConfigurationScreen::applyChanges()
     {
         applyChangesCache();
 
-        // Només s'ha de reiniciar en el cas que que s'hagi canviat el path de la base de dades, per una ja existent. En el cas que la base de dades no existeixi, a l'usuari al fer click al botó crear base de dades, ja se li haurà informat que s'havia de reiniciar l'aplicació
+        // Només s'ha de reiniciar en el cas que que s'hagi canviat el path de la base de dades, per una ja existent. En el cas que la base de dades
+        // no existeixi, a l'usuari al fer click al botó crear base de dades, ja se li haurà informat que s'havia de reiniciar l'aplicació
         if (m_textDatabaseRoot->isModified() && m_createDatabase == false)
         {
             QMessageBox::warning(this, ApplicationNameString, tr("The application has to be restarted to apply the changes."));
@@ -205,7 +208,8 @@ void QLocalDatabaseConfigurationScreen::configurationChangedDatabaseRoot()
 
 void QLocalDatabaseConfigurationScreen::examinateDataBaseRoot()
 {
-    //a la pàgina de QT indica que en el cas que nomes deixem seleccionar un fitxer, agafar el primer element de la llista i punt, no hi ha cap mètode que te retornin directament el fitxer selccionat
+    // A la pàgina de QT indica que en el cas que nomes deixem seleccionar un fitxer, agafar el primer element de la llista i punt, no hi ha cap mètode que
+    // te retornin directament el fitxer selccionat
     QFileDialog *dialog = new QFileDialog(0, QFileDialog::tr("Open"), "./", ApplicationNameString + " Database (*.sdb)");
     dialog->setFileMode(QFileDialog::ExistingFile);
 
@@ -260,12 +264,14 @@ void QLocalDatabaseConfigurationScreen::applyChangesCache()
 
     if (m_textSpaceToFreeIfNotEnoughSpaceAvailable->isModified())
     {
-        INFO_LOG("Es modificarà el Gbytes a alliberar quan no hi ha suficent espai per descarregar nous estudis" + m_textSpaceToFreeIfNotEnoughSpaceAvailable->text());
+        INFO_LOG("Es modificarà el Gbytes a alliberar quan no hi ha suficent espai per descarregar nous estudis" +
+                 m_textSpaceToFreeIfNotEnoughSpaceAvailable->text());
         settings.setValue(InputOutputSettings::MinimumGigaBytesToFreeIfCacheIsFull, m_textSpaceToFreeIfNotEnoughSpaceAvailable->text().toUInt());
     }
 
     settings.setValue(InputOutputSettings::DeleteLeastRecentlyUsedStudiesInDaysCriteria, m_checkBoxDeletedOldStudies->isChecked());
-    settings.setValue(InputOutputSettings::DeleteLeastRecentlyUsedStudiesNoFreeSpaceCriteria, m_checkBoxDeleteStudiesIfNotEnoughFreeSpaceAvailable->isChecked());
+    settings.setValue(InputOutputSettings::DeleteLeastRecentlyUsedStudiesNoFreeSpaceCriteria,
+                      m_checkBoxDeleteStudiesIfNotEnoughFreeSpaceAvailable->isChecked());
 
     m_buttonApplyCache->setEnabled(false);
 }
@@ -309,8 +315,10 @@ void QLocalDatabaseConfigurationScreen::clearCache()
     }
     if (!successReinstallingDatabase)
     {
-        QMessageBox::critical(this, ApplicationNameString, tr("An error has occurred deleting studies from database, be sure you have write permissions on database directory. ") +
-            tr("\n\nClose all %1 windows and try again.").arg(ApplicationNameString) + tr("If the problem persists contact with an administrator."));
+        QMessageBox::critical(this, ApplicationNameString, tr("An error has occurred deleting studies from database, be sure you have write "
+                                                              "permissions on database directory. ") +
+                                                           tr("\n\nClose all %1 windows and try again.").arg(ApplicationNameString) + 
+                                                           tr("If the problem persists contact with an administrator."));
     }
 }
 
@@ -357,7 +365,8 @@ void QLocalDatabaseConfigurationScreen::createDatabase()
     {
         if (databaseFile.exists(m_textDatabaseRoot->text()))
         {
-            QMessageBox::warning(this, ApplicationNameString, tr ("%1 can't create the database because a database with the same name exists in the directory.").arg(ApplicationNameString));
+            QMessageBox::warning(this, ApplicationNameString, tr("%1 can't create the database because a database with the same name exists in the directory.")
+                                                            .arg(ApplicationNameString));
         }
         else
         {

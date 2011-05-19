@@ -77,7 +77,8 @@ public slots:
     void orientationMarkerOn();
     void orientationMarkerOff();
 
-    /// Chapussa per agafar els events dels image plane widgets i enviar una senya conforme han canviat \TODO mirar si es pot millorar un mètode en comptes de fer això
+    /// Chapussa per agafar els events dels image plane widgets i enviar una senya conforme han canviat \TODO mirar si es pot millorar
+    /// un mètode en comptes de fer això
     void planeInteraction();
 
 protected:

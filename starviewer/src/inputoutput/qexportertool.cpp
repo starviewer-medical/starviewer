@@ -115,7 +115,8 @@ void QExporterTool::generateAndStoreNewSeries()
     {
         DEBUG_LOG("No hi ha prou memòria per generar el nou volum.");
         WARN_LOG("No hi ha prou memòria per generar el nou volum.");
-        QMessageBox::warning(this, tr("No enough memory"), tr("The new volume cannot be generated because there is not enough memory. Please, select less slices or reduce the window size."));
+        QMessageBox::warning(this, tr("No enough memory"), tr("The new volume cannot be generated because there is not enough memory. Please, select "
+                                                              "less slices or reduce the window size."));
         return;
     }
 
@@ -233,7 +234,8 @@ void QExporterTool::generateAndStoreNewSeries()
 
     Settings settings;
 
-    QString dirPath = settings.getValue(InputOutputSettings::CachePath).toString() + "/" + generetedVolume->getStudy()->getInstanceUID() + "/" + generetedVolume->getImage(0)->getParentSeries()->getInstanceUID();
+    QString dirPath = settings.getValue(InputOutputSettings::CachePath).toString() + "/" + generetedVolume->getStudy()->getInstanceUID() + "/" +
+                      generetedVolume->getImage(0)->getParentSeries()->getInstanceUID();
     generator.setDirPath(dirPath);
     generator.setInput(generetedVolume);
 
@@ -460,13 +462,15 @@ bool QExporterTool::canAllocateEnoughMemory(int numberOfScreenshots)
     unsigned long long int imageSize = windowSize[0] * windowSize[1];
     unsigned long long int amountOfMemoryInBytes = imageSize * byteSize * numberOfScreenshots;
     DEBUG_LOG(QString("Window size: %1x%2 -- #Screenshots: %3 -- byteSize: %4").arg(windowSize[0]).arg(windowSize[1]).arg(numberOfScreenshots).arg(byteSize));
-    DEBUG_LOG(QString("Simple secondary capture volume size: %1 bytes / %2 KBytes / %3 MBytes / %4 GBytes ").arg(amountOfMemoryInBytes).arg(amountOfMemoryInBytes / 1024).arg(amountOfMemoryInBytes / (1024.0 * 1024)).arg(amountOfMemoryInBytes / (1024.0 * 1024 * 1024)));
+    DEBUG_LOG(QString("Simple secondary capture volume size: %1 bytes / %2 KBytes / %3 MBytes / %4 GBytes ").arg(amountOfMemoryInBytes)
+                 .arg(amountOfMemoryInBytes / 1024).arg(amountOfMemoryInBytes / (1024.0 * 1024)).arg(amountOfMemoryInBytes / (1024.0 * 1024 * 1024)));
     // TODO Com a mida màxima s'agafa el doble del que ocuparà el volum ja que el vtkImageAppend allotja memòria per generar l'output.
     // Hi afegim 100MB de cortesia.
     unsigned int extraMemory = 1024 * 1024 * 100;
     amountOfMemoryInBytes += amountOfMemoryInBytes + extraMemory;
 
-    DEBUG_LOG(QString("Total amount of memory needed (volume*2 + 100 MBytes): %1 bytes / %2 KBytes / %3 MBytes / %4 GBytes ").arg(amountOfMemoryInBytes).arg(amountOfMemoryInBytes / 1024).arg(amountOfMemoryInBytes / (1024.0 * 1024)).arg(amountOfMemoryInBytes / (1024.0 * 1024 * 1024)));
+    DEBUG_LOG(QString("Total amount of memory needed (volume*2 + 100 MBytes): %1 bytes / %2 KBytes / %3 MBytes / %4 GBytes ").arg(amountOfMemoryInBytes)
+                 .arg(amountOfMemoryInBytes / 1024).arg(amountOfMemoryInBytes / (1024.0 * 1024)).arg(amountOfMemoryInBytes / (1024.0 * 1024 * 1024)));
 
     char *p = 0;
     try

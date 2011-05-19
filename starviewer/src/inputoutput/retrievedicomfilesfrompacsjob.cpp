@@ -21,7 +21,8 @@
 
 namespace udg {
 
-RetrieveDICOMFilesFromPACSJob::RetrieveDICOMFilesFromPACSJob(PacsDevice pacsDevice, Study *studyToRetrieveDICOMFiles, DicomMask dicomMaskToRetrieve, RetrievePriorityJob retrievePriorityJob)
+RetrieveDICOMFilesFromPACSJob::RetrieveDICOMFilesFromPACSJob(PacsDevice pacsDevice, Study *studyToRetrieveDICOMFiles, DicomMask dicomMaskToRetrieve,
+                                                             RetrievePriorityJob retrievePriorityJob)
  : PACSJob(pacsDevice)
 {
     Q_ASSERT(studyToRetrieveDICOMFiles);
@@ -52,7 +53,8 @@ void RetrieveDICOMFilesFromPACSJob::run()
 {
     Settings settings;
     //TODO: És aquest el lloc per aquest missatge ? no seria potser millor fer-ho a RetrieveDICOMFilesFromPACS
-    INFO_LOG(QString("Iniciant descarrega del PACS %1, IP: %2, Port: %3, AETitle Local: %4 Port local: %5, l'estudi UID: %6, series UID: %7, SOP Instance UID:%8")
+    INFO_LOG(QString("Iniciant descarrega del PACS %1, IP: %2, Port: %3, AETitle Local: %4 Port local: %5, "
+                     "l'estudi UID: %6, series UID: %7, SOP Instance UID:%8")
         .arg(getPacsDevice().getAETitle(), getPacsDevice().getAddress(), QString::number(getPacsDevice().getQueryRetrieveServicePort()))
         .arg(settings.getValue(InputOutputSettings::LocalAETitle).toString(), settings.getValue(InputOutputSettings::IncomingDICOMConnectionsPort).toString())
         .arg(m_dicomMaskToRetrieve.getStudyInstanceUID(), m_dicomMaskToRetrieve.getSeriesInstanceUID(), m_dicomMaskToRetrieve.getSOPInstanceUID()));
@@ -84,7 +86,8 @@ void RetrieveDICOMFilesFromPACSJob::run()
 
         // S'ha d'especificar com a DirectConnection, perquè sinó aquest signal l'aten qui ha creat el Job, que és la interfície, per tant
         // no s'atendria fins que la interfície estigui lliure, provocant comportaments incorrectes
-        connect(m_retrieveDICOMFilesFromPACS, SIGNAL(DICOMFileRetrieved(DICOMTagReader*, int)), this, SLOT(DICOMFileRetrieved(DICOMTagReader*, int)), Qt::DirectConnection);
+        connect(m_retrieveDICOMFilesFromPACS, SIGNAL(DICOMFileRetrieved(DICOMTagReader*, int)), this, SLOT(DICOMFileRetrieved(DICOMTagReader*, int)),
+                Qt::DirectConnection);
         //Connectem amb els signals del patientFiller per processar els fitxers descarregats
         connect(this, SIGNAL(DICOMTagReaderReadyForProcess(DICOMTagReader *)), &patientFiller, SLOT(processDICOMFile(DICOMTagReader *)));
         connect(this, SIGNAL(DICOMFilesRetrieveFinished()), &patientFiller, SLOT(finishDICOMFilesProcess()));
@@ -103,8 +106,9 @@ void RetrieveDICOMFilesFromPACSJob::run()
         if ((m_retrieveRequestStatus == PACSRequestStatus::RetrieveOk || m_retrieveRequestStatus == PACSRequestStatus::RetrieveSomeDICOMFilesFailed) &&
             !this->isAbortRequested())
         {
-            INFO_LOG(QString("Ha finalitzat la descarrega de l'estudi %1 del PACS %2, s'han descarregat %3 fitxers").
-                arg(m_dicomMaskToRetrieve.getStudyInstanceUID(), getPacsDevice().getAETitle()).arg(m_retrieveDICOMFilesFromPACS->getNumberOfDICOMFilesRetrieved()));
+            INFO_LOG(QString("Ha finalitzat la descarrega de l'estudi %1 del PACS %2, s'han descarregat %3 fitxers")
+                .arg(m_dicomMaskToRetrieve.getStudyInstanceUID(), getPacsDevice().getAETitle())
+                .arg(m_retrieveDICOMFilesFromPACS->getNumberOfDICOMFilesRetrieved()));
 
             m_numberOfSeriesRetrieved++;
             // Indiquem que s'ha descarregat la última sèrie
@@ -132,8 +136,8 @@ void RetrieveDICOMFilesFromPACSJob::run()
             fillersThread.quit();
             // Esperem que el thread acabi, ja que pel que s'interpreta de la documentació, sembla que el quit del thread no es fa fins que aquest retorna
             // al eventLoop, això provoca per exemple en els casos que ens han cancel·lat la descàrrega d'un estudi, si no esperem al thread que estigui mort
-            // poguem esborrar imatges que els fillers estan processant en aquell moment mentre encara s'estan executant i peti l'Starviewer, perquè no s'ha atés el
-            // Slot quit del thread, per això esperem que aquest estigui mort a esborrar les imatges descarregades.
+            // poguem esborrar imatges que els fillers estan processant en aquell moment mentre encara s'estan executant i peti l'Starviewer, perquè
+            // no s'ha atés el Slot quit del thread, per això esperem que aquest estigui mort a esborrar les imatges descarregades.
             fillersThread.wait();
             deleteRetrievedDICOMFilesIfStudyNotExistInDatabase();
         }
@@ -144,8 +148,9 @@ void RetrieveDICOMFilesFromPACSJob::run()
 
 void RetrieveDICOMFilesFromPACSJob::requestCancelJob()
 {
-    INFO_LOG(QString("S'ha demanat la cancel.lacio del Job de descarrega d'imatges de l'estudi %1 del PACS %2").arg(getStudyToRetrieveDICOMFiles()->getInstanceUID(),
-        getPacsDevice().getAETitle()));
+    INFO_LOG(QString("S'ha demanat la cancel.lacio del Job de descarrega d'imatges de l'estudi %1 del PACS %2")
+                .arg(getStudyToRetrieveDICOMFiles()->getInstanceUID(),
+             getPacsDevice().getAETitle()));
     m_retrieveDICOMFilesFromPACS->requestCancel();
 }
 
@@ -240,8 +245,8 @@ bool RetrieveDICOMFilesFromPACSJob::existStudyInLocalDatabase(QString studyInsta
     return localDatabaseManager.queryStudy(dicomMask).count() > 0;
 }
 
-// TODO:Centralitzem la contrucció dels missatges d'error perquè a totes les interfícies en puguin utilitzar un, i no calgui tenir el tractament d'errors duplicat
-//      ni traduccions, però és el millor lloc aquí posar aquest codi?
+// TODO:Centralitzem la contrucció dels missatges d'error perquè a totes les interfícies en puguin utilitzar un, i no calgui tenir el tractament d'errors
+// duplicat ni traduccions, però és el millor lloc aquí posar aquest codi?
 QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
 {
     QString message;
@@ -270,8 +275,9 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
                 HardDiskInformation hardDiskInformation;
                 quint64 freeSpaceInHardDisk = hardDiskInformation.getNumberOfFreeMBytes(LocalDatabaseManager::getCachePath());
                 quint64 minimumSpaceRequired = quint64(settings.getValue(InputOutputSettings::MinimumFreeGigaBytesForCache).toULongLong() * 1024);
-                message = tr("There is not enough space to retrieve images of study %1 from patient %2, please free space or change your Local Database settings.").arg(
-                    studyID, patientName);
+                message = tr("There is not enough space to retrieve images of study %1 from patient %2, please free space or change your Local "
+                             "Database settings.")
+                        .arg(studyID, patientName);
                 message += tr("\n\n- Available space in Disk: %1 MB.").arg(freeSpaceInHardDisk);
                 message += tr("\n- Minimum space required in Disk to retrieve studies: %1 MB.").arg(minimumSpaceRequired);
             }
@@ -304,10 +310,12 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
         case PACSRequestStatus::RetrieveFailureOrRefused:
             message = tr("Images from study %1 of patient %2 can't be retrieved due to an error of PACS %3.\n\n")
                 .arg(studyID, patientName, pacsAETitle);
-            message += tr("The cause of the error can be that the requested images are corrupted or the incoming connections port in PACS configuration is not correct.");
+            message += tr("The cause of the error can be that the requested images are corrupted or the incoming connections port in PACS configuration "
+                          "is not correct.");
             break;
         case PACSRequestStatus::RetrieveIncomingDICOMConnectionsPortInUse:
-            message = tr("Images from study %1 of patient %2 can't be retrieved because port %3 for incoming connections from PACS is already in use by another application.")
+            message = tr("Images from study %1 of patient %2 can't be retrieved because port %3 for incoming connections from PACS is already in use "
+                         "by another application.")
                 .arg(studyID, patientName, settings.getValue(InputOutputSettings::IncomingDICOMConnectionsPort).toString());
             break;
         case PACSRequestStatus::RetrieveSomeDICOMFilesFailed:

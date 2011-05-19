@@ -64,8 +64,8 @@ void SendDICOMFilesToPACSJob::run()
 
 void SendDICOMFilesToPACSJob::requestCancelJob()
 {
-    INFO_LOG(QString("S'ha demanat la cancel.lacio del Job d'enviament d'imatges de l'estudi %1 al PACS %2").arg(getStudyOfDICOMFilesToSend()->getInstanceUID(),
-        getPacsDevice().getAETitle()));
+    INFO_LOG(QString("S'ha demanat la cancel.lacio del Job d'enviament d'imatges de l'estudi %1 al PACS %2")
+                .arg(getStudyOfDICOMFilesToSend()->getInstanceUID(), getPacsDevice().getAETitle()));
     m_sendDICOMFilesToPACS->requestCancel();
 }
 
@@ -74,8 +74,8 @@ PACSRequestStatus::SendRequestStatus SendDICOMFilesToPACSJob::getStatus()
     return m_sendRequestStatus;
 }
 
-// TODO:Centralitzem la contrucció dels missatges d'error perquè a totes les interfícies en puguin utilitzar un, i no calgui tenir el tractament d'errors duplicat
-//      ni traduccions, però és el millor lloc aquí posar aquest codi?
+// TODO:Centralitzem la contrucció dels missatges d'error perquè a totes les interfícies en puguin utilitzar un, i no calgui tenir el tractament d'errors
+// duplicat ni traduccions, però és el millor lloc aquí posar aquest codi?
 QString SendDICOMFilesToPACSJob::getStatusDescription()
 {
     QString message;

@@ -82,7 +82,8 @@ void IsoImageFileCreator::startCreateIsoImageFile()
         // Es comprova que el directori on es vol guardar el fitxer de imatge ISO existeixi
         if (!outputIsoImageFilePathInfo.dir().exists())
         {
-            m_lastErrorDescription = QObject::tr("The directory \"%1\" where you want to save ISO image file doesn't exist.").arg(QDir::toNativeSeparators(outputIsoImageFilePathInfo.absolutePath()));
+            m_lastErrorDescription = QObject::tr("The directory \"%1\" where you want to save ISO image file doesn't exist.")
+                                                .arg(QDir::toNativeSeparators(outputIsoImageFilePathInfo.absolutePath()));
             m_lastError = OutputPathNotFound;
             emit finishedCreateIsoImageFile(false);
         }
@@ -92,7 +93,8 @@ void IsoImageFileCreator::startCreateIsoImageFile()
             // Es a dir, es comproven els permisos del directori.
             if (!outputIsoImageDirPathInfo.isWritable())
             {
-                m_lastErrorDescription = QObject::tr("You don't have permissions to write in the output ISO image directory \"%1\".").arg(QDir::toNativeSeparators(outputIsoImageFilePathInfo.absolutePath()));
+                m_lastErrorDescription = QObject::tr("You don't have permissions to write in the output ISO image directory \"%1\".")
+                                                    .arg(QDir::toNativeSeparators(outputIsoImageFilePathInfo.absolutePath()));
                 m_lastError = OutputDirPathAccessDenied;
                 emit finishedCreateIsoImageFile(false);
             }
@@ -102,7 +104,8 @@ void IsoImageFileCreator::startCreateIsoImageFile()
                 // Es a dir, es comproven els permisos del fitxer
                 if (QFile::exists(outputIsoImageFilePathInfo.absoluteFilePath()) && !outputIsoImageFilePathInfo.isWritable())
                 {
-                    m_lastErrorDescription = QObject::tr("You don't have permissions to write in the output ISO image directory \"%1\".").arg(QDir::toNativeSeparators(outputIsoImageFilePathInfo.absolutePath()));
+                    m_lastErrorDescription = QObject::tr("You don't have permissions to write in the output ISO image directory \"%1\".")
+                                                        .arg(QDir::toNativeSeparators(outputIsoImageFilePathInfo.absolutePath()));
                     m_lastError = OutputFilePathAccessDenied;
                     emit finishedCreateIsoImageFile(false);
                 }

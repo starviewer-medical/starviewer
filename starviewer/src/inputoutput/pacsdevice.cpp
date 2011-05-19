@@ -218,7 +218,8 @@ QStringList PacsDevice::getDefaultPACSKeyNamesList() const
         }
         else
         {
-            INFO_LOG("No hi ha PACS per defecte definits en el nou format. Els obtenim del format antic i els migrem al nou format. Són aquests: " + pacsList.join("//") + "//");
+            INFO_LOG("No hi ha PACS per defecte definits en el nou format. Els obtenim del format antic i els migrem al nou format. Són aquests: " +
+                     pacsList.join("//") + "//");
             Settings settings;
             settings.setValue(InputOutputSettings::DefaultPACSListToQuery, pacsList.join("//") + "//");
         }

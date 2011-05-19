@@ -73,8 +73,8 @@ DicomMask QBasicSearchWidget::buildDicomMask()
     mask.setPatientBirth("");
 
     // Per PatientId i PatientName si el lineEdit és buit es fa un Universal Matching. Universal Matching és quan indiquem que cerquem per un tag de dicom però
-    // no li donem valor, en aquest cas la normativa DICOM indica que el SCP ha de fer match per tots els objectes DICOM, el universal matching és un mecanisme per
-    // indicar al fer c-find, d'aquell tag ens n'ha de retornar el valor que té tots els objecte DICOM que compleixen la cerca. La normativa
+    // no li donem valor, en aquest cas la normativa DICOM indica que el SCP ha de fer match per tots els objectes DICOM, el universal matching és un mecanisme
+    // per indicar al fer c-find, d'aquell tag ens n'ha de retornar el valor que té tots els objecte DICOM que compleixen la cerca. La normativa
     // DICOM indica que fer una wildcard amb '*' és el mateix que fer Universal Matching. Nosaltres hem optat per fer Universal matching perquè hi ha algun scp
     // que si li passem un asterisc sol '*' al fer la cerca no es comportant correctament, per exemple retorna cap resultat.
 
@@ -305,8 +305,8 @@ void QBasicSearchWidget::showEvent(QShowEvent *event)
 
     if (!m_widgetHasBeenShowed)
     {
-        // La primera vegada que mostrem el widget donem focus al patientName. Tot i que en teoria el TabOrder està ben definit pels controls del widget això es fa
-        // per si mai ens equivoquem i s'altera el TabOrder de manera incorrecte. Com és un Widget molt utilitzat ens interessa assegurar-nos que sempre
+        // La primera vegada que mostrem el widget donem focus al patientName. Tot i que en teoria el TabOrder està ben definit pels controls del widget això
+        // es fa per si mai ens equivoquem i s'altera el TabOrder de manera incorrecte. Com és un Widget molt utilitzat ens interessa assegurar-nos que sempre
         // en primer lloc està enfocant al PatientName, ja que és pel camp que més cerquen.
         m_patientNameText->setFocus();
         m_widgetHasBeenShowed = true;

@@ -23,14 +23,14 @@ public:
     ///Constructor de la classe
     PacsManager();
 
-    ///La PacsManager no té constructor implementat degut a que fer un delete dels ThreadWeaver implica que l'objecte ThreadWeaver no es destruirà fins que
-    ///hagi acabat l'execució dels jobs que està executant en aquell moment, i fins i tot sol·licitant un requestAbort dels jobs que s'executen podríem tenir
-    ///problemes. Imaginem el cas en que fem una consulta al PACS i ens indiquen que volen tancar Starviewer, tot i que es faci un requestAbort pot ser que el job
-    ///tardi uns segons a cancel·lar-se pq el PACS envia els resultats que tenia a punt a per enviar en el moment de la cancel·lació, o un cas pitjor que el
-    ///PACS no té implementada la cancel·lació, això vol dir que Starviewer no es tancaria fins que s'acabés la consulta el PACS, si és una consulta llarga
-    ///pot durar segons. Un altre cas és el bug de dcmtk que fa que si el PACS deixa de respondre mentre ens envia fitxers, dcmtk mai saltarà per timeout
-    ///això obliga a l'usuari quan passa a haver de tancar i tornar a obrir Starviewer, però si fèssim delete del thread de descàrregues com que aquest
-    ///thread no acabaria mai Starviewer no es tancaria i pel QtSingleApplication l'usuari no podria tornar a obrir l'aplicació.
+    /// La PacsManager no té constructor implementat degut a que fer un delete dels ThreadWeaver implica que l'objecte ThreadWeaver no es destruirà fins que
+    /// hagi acabat l'execució dels jobs que està executant en aquell moment, i fins i tot sol·licitant un requestAbort dels jobs que s'executen podríem tenir
+    /// problemes. Imaginem el cas en que fem una consulta al PACS i ens indiquen que volen tancar Starviewer, tot i que es faci un requestAbort pot ser que el
+    /// job tardi uns segons a cancel·lar-se pq el PACS envia els resultats que tenia a punt a per enviar en el moment de la cancel·lació, o un cas pitjor que
+    /// el PACS no té implementada la cancel·lació, això vol dir que Starviewer no es tancaria fins que s'acabés la consulta el PACS, si és una consulta llarga
+    /// pot durar segons. Un altre cas és el bug de dcmtk que fa que si el PACS deixa de respondre mentre ens envia fitxers, dcmtk mai saltarà per timeout
+    /// això obliga a l'usuari quan passa a haver de tancar i tornar a obrir Starviewer, però si fèssim delete del thread de descàrregues com que aquest
+    /// thread no acabaria mai Starviewer no es tancaria i pel QtSingleApplication l'usuari no podria tornar a obrir l'aplicació.
     //~PacsManager();
 
     ///Encua un PACSJob per a que es processi

@@ -50,7 +50,8 @@ OFCondition PACSConnection::configureMove()
 
     getTransferSyntaxForFindOrMoveConnection(transferSyntaxes);
 
-    return ASC_addPresentationContext(m_associationParameters, associationPresentationContextID, UID_MOVEStudyRootQueryRetrieveInformationModel, transferSyntaxes, 3 /*number of TransferSyntaxes*/);
+    return ASC_addPresentationContext(m_associationParameters, associationPresentationContextID, UID_MOVEStudyRootQueryRetrieveInformationModel,
+                                      transferSyntaxes, 3 /*number of TransferSyntaxes*/);
 }
 
 // TODO Estudiar si el millor transferSyntax per defecte és UID_LittleEndianExplicitTransferSyntax o com els cas del move és el JPegLossLess
@@ -114,7 +115,8 @@ OFCondition PACSConnection::configureStore()
         }
 
         // sop class with preferred transfer syntax
-        condition = ASC_addPresentationContext(m_associationParameters, presentationContextID, qPrintable(sopClass), &preferredTransferSyntax, 1, ASC_SC_ROLE_DEFAULT);
+        condition = ASC_addPresentationContext(m_associationParameters, presentationContextID, qPrintable(sopClass), &preferredTransferSyntax, 1,
+                                               ASC_SC_ROLE_DEFAULT);
         // Only odd presentation context id's
         presentationContextID += 2;
         if (!condition.good())
@@ -175,7 +177,8 @@ bool PACSConnection::connectToPACS(PACSServiceToRequest pacsServiceToRequest)
     }
 
     // set calling and called AE titles
-    ASC_setAPTitles(m_associationParameters, qPrintable(settings.getValue(InputOutputSettings::LocalAETitle).toString()), qPrintable(m_pacs.getAETitle()), NULL);
+    ASC_setAPTitles(m_associationParameters, qPrintable(settings.getValue(InputOutputSettings::LocalAETitle).toString()), qPrintable(m_pacs.getAETitle()),
+                    NULL);
 
     //defineix el nivell de seguretat de la connexió en aquest cas diem que no utilitzem cap nivell de seguretat
     ASC_setTransportLayerType(m_associationParameters, OFFalse);

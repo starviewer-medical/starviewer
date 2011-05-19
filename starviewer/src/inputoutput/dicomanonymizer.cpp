@@ -205,7 +205,8 @@ QString DICOMAnonymizer::getAnonymizedStudyID(const QString &originalStudyInstan
 {
     if (!m_hashOriginalStudyInstanceUIDToAnonimyzedStudyID.contains(originalStudyInstanceUID))
     {
-        m_hashOriginalStudyInstanceUIDToAnonimyzedStudyID.insert(originalStudyInstanceUID, QString::number(m_hashOriginalStudyInstanceUIDToAnonimyzedStudyID.count() + 1));
+        m_hashOriginalStudyInstanceUIDToAnonimyzedStudyID.insert(originalStudyInstanceUID,
+                                                                 QString::number(m_hashOriginalStudyInstanceUIDToAnonimyzedStudyID.count() + 1));
     }
 
     return m_hashOriginalStudyInstanceUIDToAnonimyzedStudyID.value(originalStudyInstanceUID);

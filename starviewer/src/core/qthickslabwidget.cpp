@@ -154,8 +154,10 @@ void QThickSlabWidget::applyProjectionMode(int comboItem)
             projectionModeID = 2;
         }
 
-        // TODO per a donar sensació d'espera, canviem el cursor abans d'aplicar el thickslab i el restaurem quan s'acaba el procés. S'hauria de fer de manera més centralizada per tal de que si es crida des de qualsevol lloc, es facin aquestes accions sobre el cursor, és a dir, que no calgui programar això en cada lloc on s'apliqui thickslab.
-        // al canviar de mode de projecció haurem de recalcular
+        // TODO per a donar sensació d'espera, canviem el cursor abans d'aplicar el thickslab i el restaurem quan s'acaba el procés. S'hauria de fer de manera
+        // més centralizada per tal de que si es crida des de qualsevol lloc, es facin aquestes accions sobre el cursor, és a dir, que no calgui programar això
+        // en cada lloc on s'apliqui thickslab.
+        // Al canviar de mode de projecció haurem de recalcular
         QApplication::setOverrideCursor(Qt::WaitCursor);
         m_currentViewer->setSlabProjectionMode(projectionModeID);
         if (m_maximumThicknessCheckBox->isChecked())
@@ -180,7 +182,9 @@ void QThickSlabWidget::applyProjectionMode(int comboItem)
 
 void QThickSlabWidget::applyThickSlab()
 {
-    // TODO per a donar sensació d'espera, canviem el cursor abans d'aplicar el thickslab i el restaurem quan s'acaba el procés. S'hauria de fer de manera més centralizada per tal de que si es crida des de qualsevol lloc, es facin aquestes accions sobre el cursor, és a dir, que no calgui programar això en cada lloc on s'apliqui thickslab.
+    // TODO per a donar sensació d'espera, canviem el cursor abans d'aplicar el thickslab i el restaurem quan s'acaba el procés. S'hauria de fer de manera més
+    // centralizada per tal de que si es crida des de qualsevol lloc, es facin aquestes accions sobre el cursor, és a dir, que no calgui programar això en cada
+    // lloc on s'apliqui thickslab.
     QApplication::setOverrideCursor(Qt::WaitCursor);
     m_currentViewer->setSlabThickness(m_slabThicknessSlider->value());
     QApplication::restoreOverrideCursor();

@@ -41,7 +41,8 @@ private:
     /// Polilínia principal: és la polilínia que ens marca la forma que hem anat editant.
     QPointer<DrawerPolyline> m_mainPolyline;
 
-    /// Polilínia de tancament: es la polilínia que ens simula com quedaria la polilínia principal si es tanques, es a dir, uneix l'últim punt anotat i el primer punt de la polilínia.
+    /// Polilínia de tancament: es la polilínia que ens simula com quedaria la polilínia principal si es tanques, es a dir, uneix l'últim punt anotat
+    /// i el primer punt de la polilínia.
     QPointer<DrawerPolyline> m_closingPolyline;
 };
 

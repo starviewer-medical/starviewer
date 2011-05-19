@@ -26,7 +26,8 @@ private:
 
     void setBasicFilmBoxAttributes();
 
-    bool createHardcopyGrayscaleImage(Image *imageToPrint, const char *pixelData, unsigned long bitmapWidth, unsigned long bitmapHeight, double pixelAspectRatio, const QString &spoolDirectoryPath);
+    bool createHardcopyGrayscaleImage(Image *imageToPrint, const char *pixelData, unsigned long bitmapWidth, unsigned long bitmapHeight, 
+                                      double pixelAspectRatio, const QString &spoolDirectoryPath);
 
     void setImageBoxAttributes();
 

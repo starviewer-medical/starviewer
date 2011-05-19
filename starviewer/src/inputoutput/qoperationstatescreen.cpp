@@ -24,7 +24,9 @@ QOperationStateScreen::QOperationStateScreen(QWidget *parent)
     Settings settings;
     settings.restoreColumnsWidths(InputOutputSettings::OperationStateColumnsWidth, m_treeRetrieveStudy);
 
-    QOperationStateScreen::ColumnIndex sortByColumn = (QOperationStateScreen::ColumnIndex) settings.getValue(InputOutputSettings::OperationStateListSortByColumn).toInt();
+    QOperationStateScreen::ColumnIndex sortByColumn = (QOperationStateScreen::ColumnIndex)
+        settings.getValue(InputOutputSettings::OperationStateListSortByColumn).toInt();
+
     Qt::SortOrder sortOrderColumn = (Qt::SortOrder) settings.getValue(InputOutputSettings::OperationStateListSortOrder).toInt();
     m_treeRetrieveStudy->sortItems(sortByColumn, sortOrderColumn);
 
@@ -79,8 +81,10 @@ void QOperationStateScreen::newPACSJobEnqueued(PACSJob *pacsJob)
                 break;
             case PACSJob::RetrieveDICOMFilesFromPACSJobType:
                 insertNewPACSJob(pacsJob);
-                connect(dynamic_cast<RetrieveDICOMFilesFromPACSJob*> (pacsJob), SIGNAL(DICOMFileRetrieved(PACSJob*, int)), SLOT(DICOMFileCommit(PACSJob *, int)));
-                connect(dynamic_cast<RetrieveDICOMFilesFromPACSJob*> (pacsJob), SIGNAL(DICOMSeriesRetrieved(PACSJob*, int)), SLOT(DICOMSeriesCommit(PACSJob *, int)));
+                connect(dynamic_cast<RetrieveDICOMFilesFromPACSJob*> (pacsJob), SIGNAL(DICOMFileRetrieved(PACSJob*, int)),
+                        SLOT(DICOMFileCommit(PACSJob *, int)));
+                connect(dynamic_cast<RetrieveDICOMFilesFromPACSJob*> (pacsJob), SIGNAL(DICOMSeriesRetrieved(PACSJob*, int)),
+                        SLOT(DICOMSeriesCommit(PACSJob *, int)));
                 break;
             default:
                 break;
@@ -94,7 +98,8 @@ void QOperationStateScreen::PACSJobStarted(PACSJob *pacsJob)
 
     if (qtreeWidgetItem != NULL)
     {
-        qtreeWidgetItem->setText(QOperationStateScreen::Status, pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType ? tr("RETRIEVING") : tr("SENDING"));
+        qtreeWidgetItem->setText(QOperationStateScreen::Status, pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType ? tr("RETRIEVING")
+            : tr("SENDING"));
     }
 }
 
@@ -271,7 +276,8 @@ void QOperationStateScreen::closeEvent(QCloseEvent *ce)
 QTreeWidgetItem* QOperationStateScreen::getQTreeWidgetItemByPACSJobId(int pacsJobID)
 {
     QTreeWidgetItem *qtreeWidgetItem = NULL;
-    QList<QTreeWidgetItem*> qTreeWidgetPacsJobItems = m_treeRetrieveStudy->findItems(QString().setNum(pacsJobID), Qt::MatchExactly, QOperationStateScreen::PACSJobID);
+    QList<QTreeWidgetItem*> qTreeWidgetPacsJobItems = m_treeRetrieveStudy->findItems(QString().setNum(pacsJobID), Qt::MatchExactly,
+                                                                                     QOperationStateScreen::PACSJobID);
 
     if (!qTreeWidgetPacsJobItems.isEmpty())
     {

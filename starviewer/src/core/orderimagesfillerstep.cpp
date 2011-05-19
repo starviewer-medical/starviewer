@@ -69,7 +69,8 @@ bool OrderImagesFillerStep::fillIndividually()
         }
         else
         {
-            DEBUG_LOG(QString("Llista nul·la pel volum %1 de la serie %2. En creem una de nova.").arg(m_input->getCurrentVolumeNumber()).arg(m_input->getCurrentSeries()->getInstanceUID()));
+            DEBUG_LOG(QString("Llista nul·la pel volum %1 de la serie %2. En creem una de nova.").arg(m_input->getCurrentVolumeNumber()).arg(
+                      m_input->getCurrentSeries()->getInstanceUID()));
 
             m_orderedImageSet = new QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*>();
             volumesInSeries->insert(m_input->getCurrentVolumeNumber(), m_orderedImageSet);
@@ -138,7 +139,8 @@ void OrderImagesFillerStep::processImage(Image *image)
     double planeNormalVector[3];
     image->getImagePlaneNormal(planeNormalVector);
     // El passem a string que ens serà més fàcil de comparar,perquè així és com es guarda a l'estructura d'ordenació
-    QString planeNormalString = QString("%1\\%2\\%3").arg(planeNormalVector[0], 0, 'f', 5).arg(planeNormalVector[1], 0, 'f', 5).arg(planeNormalVector[2], 0, 'f', 5);
+    QString planeNormalString = QString("%1\\%2\\%3").arg(planeNormalVector[0], 0, 'f', 5).arg(planeNormalVector[1], 0, 'f', 5)
+                                   .arg(planeNormalVector[2], 0, 'f', 5);
 
     QMap<double, QMap<unsigned long, Image*>*> *imagePositionSet;
     QMap<unsigned long, Image*> *instanceNumberSet;
@@ -215,7 +217,8 @@ void OrderImagesFillerStep::processImage(Image *image)
         {
             // Hi ha series on les imatges comparteixen el mateix instance number.
             // Per evitar el problema es fa un insertMulti.
-            imagePositionSet->value(distance)->insertMulti(QString("%1%2%3").arg(image->getInstanceNumber()).arg("0").arg(image->getFrameNumber()).toULong(), image);
+            imagePositionSet->value(distance)->insertMulti(QString("%1%2%3").arg(image->getInstanceNumber()).arg("0")
+                                                              .arg(image->getFrameNumber()).toULong(), image);
         }
         else
         {
@@ -244,8 +247,10 @@ void OrderImagesFillerStep::setOrderedImagesIntoSeries(Series *series)
         // Multiple acquisition number
         if (m_acquisitionNumberEvaluation[series][currentVolumeNumber]->second)
         {
-            DEBUG_LOG(QString("No totes les imatges tenen el mateix AcquisitionNumber. Ordenem el volume %1 de la serie %2 per Instance Number").arg(currentVolumeNumber).arg(series->getInstanceUID()));
-            INFO_LOG(QString("No totes les imatges tenen el mateix AcquisitionNumber. Ordenem el volume %1 de la serie %2 per Instance Number").arg(currentVolumeNumber).arg(series->getInstanceUID()));
+            DEBUG_LOG(QString("No totes les imatges tenen el mateix AcquisitionNumber. Ordenem el volume %1 de la serie %2 per Instance Number").arg(
+                      currentVolumeNumber).arg(series->getInstanceUID()));
+            INFO_LOG(QString("No totes les imatges tenen el mateix AcquisitionNumber. Ordenem el volume %1 de la serie %2 per Instance Number").arg(
+                     currentVolumeNumber).arg(series->getInstanceUID()));
             m_orderedImageSet = volumesInSeries->take(currentVolumeNumber);
             QMap<unsigned long, Image*> sortedImagesByInstanceNumber;
 

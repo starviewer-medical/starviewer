@@ -62,7 +62,8 @@ QList<HangingProtocol*> HangingProtocolManager::searchHangingProtocols(Patient *
     return searchHangingProtocols(patient, previousStudies, originOfPreviousStudies);
 }
 
-QList<HangingProtocol*> HangingProtocolManager::searchHangingProtocols(Patient *patient, const QList<Study *> &previousStudies, const QHash<QString, QString> &originOfPreviousStudies)
+QList<HangingProtocol*> HangingProtocolManager::searchHangingProtocols(Patient *patient, const QList<Study *> &previousStudies,
+                                                                       const QHash<QString, QString> &originOfPreviousStudies)
 {
     QList<HangingProtocol*> outputHangingProtocolList;
 
@@ -123,7 +124,8 @@ QList<HangingProtocol*> HangingProtocolManager::searchHangingProtocols(Patient *
     return outputHangingProtocolList;
 }
 
-int HangingProtocolManager::setInputToHangingProtocolImageSets(HangingProtocol *hangingProtocol, const QList<Series*> &inputSeries, const QList<Study*> &previousStudies, const QHash<QString, QString> &originOfPreviousStudies)
+int HangingProtocolManager::setInputToHangingProtocolImageSets(HangingProtocol *hangingProtocol, const QList<Series*> &inputSeries,
+                                                               const QList<Study*> &previousStudies, const QHash<QString, QString> &originOfPreviousStudies)
 {
     int numberOfFilledImageSets = 0;
     // Còpia de les sèries perquè es van eliminant de la llista al ser assignades

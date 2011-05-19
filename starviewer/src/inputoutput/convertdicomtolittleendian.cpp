@@ -69,11 +69,13 @@ Status ConvertDicomToLittleEndian::convert(QString inputFile, QString outputFile
         return state;
     }
 
-    error = fileformat.saveFile(qPrintable(QDir::toNativeSeparators(outputFile)), opt_oxfer, opt_oenctype, opt_oglenc, opt_opadenc, OFstatic_cast(Uint32, opt_filepad), OFstatic_cast(Uint32, opt_itempad), opt_oDataset);
+    error = fileformat.saveFile(qPrintable(QDir::toNativeSeparators(outputFile)), opt_oxfer, opt_oenctype, opt_oglenc, opt_opadenc,
+                                OFstatic_cast(Uint32, opt_filepad), OFstatic_cast(Uint32, opt_itempad), opt_oDataset);
 
     if (!error.good())
     {
-        ERROR_LOG(QString("S'ha produit un error al intentar gravar la imatge %1 convertida a LittleEndian al path %2, descripcio error: %3").arg(inputFile, outputFile, error.text()));
+        ERROR_LOG(QString("S'ha produit un error al intentar gravar la imatge %1 convertida a LittleEndian al path %2, descripcio error: %3")
+                     .arg(inputFile, outputFile, error.text()));
     }
 
     return state.setStatus(error);

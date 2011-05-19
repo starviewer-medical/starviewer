@@ -38,7 +38,8 @@ TransferFunction::TransferFunction(vtkLookupTable *lookupTable)
 
 bool TransferFunction::operator ==(const TransferFunction &transferFunction) const
 {
-    return m_color == transferFunction.m_color && m_scalarOpacity == transferFunction.m_scalarOpacity && m_gradientOpacity == transferFunction.m_gradientOpacity;
+    return m_color == transferFunction.m_color && m_scalarOpacity == transferFunction.m_scalarOpacity &&
+                      m_gradientOpacity == transferFunction.m_gradientOpacity;
 }
 
 const QString& TransferFunction::name() const

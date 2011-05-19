@@ -109,7 +109,8 @@ void HangingProtocolDisplaySet::show()
         imagSetIdentifier = m_imageSet->getIdentifier();
     }
 
-    DEBUG_LOG(QString("    Identifier %1\n    Description:%2\n    ImageSetNumber: %3\n    Position: %4\n").arg(m_identifier).arg(m_description).arg(imagSetIdentifier).arg(m_position));
+    DEBUG_LOG(QString("    Identifier %1\n    Description:%2\n    ImageSetNumber: %3\n    Position: %4\n").arg(m_identifier).arg(m_description).arg(
+              imagSetIdentifier).arg(m_position));
 }
 
 void HangingProtocolDisplaySet::setSlice(int sliceNumber)

@@ -16,9 +16,11 @@ namespace udg {
 Filtre per aplicar diversos tipus de shutter a les imatges. Segueix el que es deineix a l'estàndar DICOM.
 Poden haver-hi fins a tres shutters superposats (Cercle, Rectangular i Poligonal). També es poden aplicar bitmap shutters que hi ha en els overlays.
 
-La manera d'operar és senzilla, primer es dóna un input (\code vtkImageData). Després definim els diferents shutters (SetRectangular/Circular/PolygonalShutter()) i finalment obtenim el resultat amb \code getOutput().
+La manera d'operar és senzilla, primer es dóna un input (\code vtkImageData). Després definim els diferents shutters
+(SetRectangular/Circular/PolygonalShutter()) i finalment obtenim el resultat amb \code getOutput().
 
-Cada cop que donem un input s'esborren els shutters definits. També podem esborrar tots els shutters definits amb \code clearAllShutters() o un de concret amb els mètodes més específics clearRectangular/Circular/PolygonalShutter()
+Cada cop que donem un input s'esborren els shutters definits. També podem esborrar tots els shutters definits amb \code clearAllShutters()
+o un de concret amb els mètodes més específics clearRectangular/Circular/PolygonalShutter()
 
 De manera alternativa podem fer que s'apliquin els shutters que hi hagi en un presentation state amb \CODE setPresentationStateShutter()
 
@@ -33,7 +35,9 @@ class Volume;
 
 class ShutterFilter{
 public:
-    /// \TODO Queda pendent determinar correctament l'extrusió. Per una part, la coordenada Z dels punts que formen els polígons de l'extrusió hauria d'estar una llesca més per sota de l'origen i l'scale factor de l'extrusion hauria d'assegurar que el polígon atravessarà totes les llesques del volum
+    /// \TODO Queda pendent determinar correctament l'extrusió. Per una part, la coordenada Z dels punts que formen els polígons de l'extrusió
+    /// hauria d'estar una llesca més per sota de l'origen i l'scale factor de l'extrusion hauria d'assegurar que el polígon atravessarà totes 
+    /// les llesques del volum
     ShutterFilter();
 
     ~ShutterFilter();

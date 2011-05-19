@@ -258,7 +258,8 @@ QString ApplicationVersionChecker::createWebServiceUrl()
             QNetworkInterface interface = QNetworkInterface::allInterfaces()[index++];
 
             QNetworkInterface::InterfaceFlags flags = interface.flags();
-            bool flagsOk = flags.testFlag(QNetworkInterface::IsUp) && flags.testFlag(QNetworkInterface::IsRunning) && !flags.testFlag(QNetworkInterface::IsLoopBack);
+            bool flagsOk = flags.testFlag(QNetworkInterface::IsUp) && flags.testFlag(QNetworkInterface::IsRunning) &&
+                           !flags.testFlag(QNetworkInterface::IsLoopBack);
 
             // Per si de cas el bluetooth està engegat i foncionant, fer que no l'agafi
             // Rarament trobarem una connexió de xarxa que vagi a través d'un dispositiu bluetooth
@@ -278,7 +279,8 @@ QString ApplicationVersionChecker::createWebServiceUrl()
     QString machineID = encryptBase64Url(macAdress);
     QString groupID = encryptBase64Url(domain);
 
-    return QString("http://starviewer.udg.edu/checknewversion/?currentVersion=%1&machineID=%2&groupID=%3").arg(StarviewerVersionString).arg(machineID).arg(groupID);
+    return QString("http://starviewer.udg.edu/checknewversion/?currentVersion=%1&machineID=%2&groupID=%3")
+              .arg(StarviewerVersionString).arg(machineID).arg(groupID);
 }
 
 QString ApplicationVersionChecker::encryptBase64Url(const QString &url)
@@ -467,7 +469,8 @@ void ApplicationVersionChecker::webServiceReply(QNetworkReply *reply)
 
         if (scriptValue.property("error").isObject())
         {
-            ERROR_LOG(QString("Error llegint la resposta del servidor (error en el json) ") + scriptValue.property("error").property("code").toString() + QString(": ") + scriptValue.property("error").property("message").toString());
+            ERROR_LOG(QString("Error llegint la resposta del servidor (error en el json) ") + scriptValue.property("error").property("code").toString() +
+                               QString(": ") + scriptValue.property("error").property("message").toString());
             setCheckFinished();
         }
         else
@@ -491,7 +494,8 @@ void ApplicationVersionChecker::webServiceReply(QNetworkReply *reply)
     }
     else
     {
-        ERROR_LOG(QString("Error buscant noves versions al server. La resposta del webservice és del tipus ") + QString::number(reply->error()) + QString(": ") + reply->errorString());
+        ERROR_LOG(QString("Error buscant noves versions al server. La resposta del webservice és del tipus ") +
+                  QString::number(reply->error()) + QString(": ") + reply->errorString());
         setCheckFinished();
     }
     reply->deleteLater();
@@ -526,7 +530,8 @@ void ApplicationVersionChecker::updateNotesUrlReply(QNetworkReply *reply)
     }
     else
     {
-        ERROR_LOG(QString("Error en rebre les notes de la versio %1, tipus ").arg(m_checkedVersion) + QString::number(reply->error()) + QString(": ") + reply->errorString());
+        ERROR_LOG(QString("Error en rebre les notes de la versio %1, tipus ").arg(m_checkedVersion) + QString::number(reply->error())+
+                  QString(": ") + reply->errorString());
     }
     reply->deleteLater();
     setCheckFinished();

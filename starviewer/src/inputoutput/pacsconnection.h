@@ -44,7 +44,8 @@ public:
 
 private:
 
-    /// Aquesta funció és privada. És utilitzada per especificar en el PACS, que una de les possibles operacions que volem fer amb ell és un echo. Per defecte en qualsevol modalitat de connexió podrem fer un echo
+    /// Aquesta funció és privada. És utilitzada per especificar en el PACS, que una de les possibles operacions que volem fer amb ell és un echo. Per defecte
+    /// en qualsevol modalitat de connexió podrem fer un echo
     /// @return retorna l'estat de la configuració
     OFCondition configureEcho();
 
@@ -52,7 +53,8 @@ private:
     /// @return retorna l'estat de la configuració
     OFCondition configureFind();
 
-    /// Aquesta funció privada permet configurar la connexió per a descarregar imatges al ordinador local. IMPORTANT!!! Abans de connectar s'ha d'invocar la funció setLocalhostPort
+    /// Aquesta funció privada permet configurar la connexió per a descarregar imatges al ordinador local. IMPORTANT!!! Abans de connectar s'ha d'invocar
+    /// la funció setLocalhostPort
     /// @return retorna l'estat de la configuracióDUL_PRESENTATIONCONTEXTID
     OFCondition configureMove();
 

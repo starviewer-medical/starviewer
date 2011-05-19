@@ -47,7 +47,8 @@ public:
 
 signals:
 
-    /// Signal que s'emet al finalitzar el procés de generació del fitxer d'imatge ISO. Té un booleà per indicar si el procés ha finalitzat correcta o incorrectament
+    /// Signal que s'emet al finalitzar el procés de generació del fitxer d'imatge ISO. Té un booleà per indicar si el procés ha finalitzat correcta o
+    /// incorrectament
     void finishedCreateIsoImageFile(bool result);
 
 private slots:

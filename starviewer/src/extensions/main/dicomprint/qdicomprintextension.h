@@ -36,7 +36,8 @@ private slots:
     void selectedDicomPrinterChanged(int indexOfSelectedDicomPrinter);
     ///Omple el combobox amb les impressores i mostra com a seleccionada la que esta marca com a impressora per defecte
     void fillSelectedDicomPrinterComboBox();
-    ///activa/desactiva el fram que conté poder escollir el interval i des de quina imatge fins quina imprimir en funció del mode de selecció d'imatges escollit
+    /// Activa/desactiva el fram que conté poder escollir el interval i des de quina imatge fins quina imprimir en funció del mode de selecció
+    /// d'imatges escollit
     void imageSelectionModeChanged();
     ///Slot que s'executa quan canviem de valor a través del Slider l'interval d'imatges a imprimir
     void m_intervalImagesSliderValueChanged(int value);

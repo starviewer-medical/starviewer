@@ -310,7 +310,8 @@ double DrawerPolygon::computeArea(int view, double *spacing)
             j = 0;
         }
 
-        area += (m_pointsList.at(i)[xIndex] + m_pointsList.at(j)[xIndex]) * volumeSpacing[xIndex] * (m_pointsList.at(i)[yIndex] - m_pointsList.at(j)[yIndex]) * volumeSpacing[yIndex];
+        area += (m_pointsList.at(i)[xIndex] + m_pointsList.at(j)[xIndex]) * volumeSpacing[xIndex] * (m_pointsList.at(i)[yIndex] - m_pointsList.at(j)[yIndex]) *
+                 volumeSpacing[yIndex];
     }
 
     // En el cas de que l'àrea de la polilínia ens doni negativa, vol dir que hem anotat els punts en sentit antihorari,

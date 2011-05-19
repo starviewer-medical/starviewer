@@ -18,7 +18,8 @@
 
 namespace udg {
 
-void PrintDicomSpool::printBasicGrayscale(DicomPrinter dicomPrinter, DicomPrintJob dicomPrintJob, const QString &storedPrintDcmtkFilePath, const QString &spoolDirectoryPath)
+void PrintDicomSpool::printBasicGrayscale(DicomPrinter dicomPrinter, DicomPrintJob dicomPrintJob, const QString &storedPrintDcmtkFilePath,
+                                          const QString &spoolDirectoryPath)
 {
     DVPSPrintMessageHandler printerConnection;
     OFCondition result;
@@ -39,9 +40,10 @@ void PrintDicomSpool::printBasicGrayscale(DicomPrinter dicomPrinter, DicomPrintJ
     //     tot i que indicar en el seu conformance que suportaven transfer syntax explicit, alhora de la veritat tenien problemes, per això
     //     existeix un paràmetre per indicar només de comunicar-se amb Implicit, com que de moment no ens hem de comunicar amb dispositius vells
     //     i tots els moderns suporten Explicit indiquem false
-    result = printerConnection.negotiateAssociation(NULL, qPrintable(Settings().getValue(InputOutputSettings::LocalAETitle).toString()), qPrintable(m_dicomPrinter.getAETitle()),
-                                                    qPrintable(m_dicomPrinter.getHostname()), m_dicomPrinter.getPort(), ASC_DEFAULTMAXPDU,
-                                                    printerSupportsPresentationLUTSOPClass, printerSupportsAnnotationSOPClass, transferSyntaxImplicit);
+    result = printerConnection.negotiateAssociation(NULL, qPrintable(Settings().getValue(InputOutputSettings::LocalAETitle).toString()), 
+                                                    qPrintable(m_dicomPrinter.getAETitle()), qPrintable(m_dicomPrinter.getHostname()), 
+                                                    m_dicomPrinter.getPort(), ASC_DEFAULTMAXPDU, printerSupportsPresentationLUTSOPClass,
+                                                    printerSupportsAnnotationSOPClass, transferSyntaxImplicit);
 
     if (result.bad())
     {
@@ -63,15 +65,16 @@ void PrintDicomSpool::printBasicGrayscale(DicomPrinter dicomPrinter, DicomPrintJ
 
 }
 
-void PrintDicomSpool::printStoredPrintDcmtkContent(DVPSPrintMessageHandler &printerConnection, const QString storedPrintDcmtkFilePath, const QString &spoolDirectoryPath)
+void PrintDicomSpool::printStoredPrintDcmtkContent(DVPSPrintMessageHandler &printerConnection, const QString storedPrintDcmtkFilePath,
+                                                   const QString &spoolDirectoryPath)
 {
     OFCondition result;
     DVPSStoredPrint *storedPrintDcmtk = loadStoredPrintFileDcmtk(storedPrintDcmtkFilePath);
     // Aquesta variable indica si els Attibutes de PLUT que són Illumination (2010,015E) i (2010,0160) s'han d'afegir al BasicFilmSession o al BasicFilmBox
     // Nosaltres indiquem que els afegim al BasicFilmBox perquè si mirem la documentació DICOM, tot i que dcmtk ho suporta aquests dos tags no apareixen com
     // a atributs possibles d'un BasicFilmBox.
-    // De totes maneres si mirem el codi de les dcmtk on passem aquesta variable, aquesta no té cap afecte, perquè com no soportem les PresentatioLUTSOP el valor
-    // que conté la variable s'ignora i aquestes dos tags no s'envien
+    // De totes maneres si mirem el codi de les dcmtk on passem aquesta variable, aquesta no té cap afecte, perquè com no soportem les PresentatioLUTSOP
+    // el valor que conté la variable s'ignora i aquestes dos tags no s'envien
     bool addPLUTAttributesInBasicFilmSession = false;
 
     if (!storedPrintDcmtk)
@@ -208,7 +211,8 @@ DcmDataset PrintDicomSpool::getAttributesBasicFilmSession()
     return datasetBasicFilmSession;
 }
 
-OFCondition PrintDicomSpool::createAndSendBasicGrayscaleImageBox(DVPSPrintMessageHandler& printerConnection, DVPSStoredPrint *storedPrintDcmtk, size_t imageNumber, const QString &spoolDirectoryPath)
+OFCondition PrintDicomSpool::createAndSendBasicGrayscaleImageBox(DVPSPrintMessageHandler& printerConnection, DVPSStoredPrint *storedPrintDcmtk,
+                                                                 size_t imageNumber, const QString &spoolDirectoryPath)
 {
     OFCondition result;
     const char *studyUID = NULL, *seriesUID = NULL, *instanceUID = NULL;
@@ -275,7 +279,8 @@ OFCondition PrintDicomSpool::createAndSendFilmBoxAnnotations(DVPSPrintMessageHan
         {
             if (EC_Normal != (result = storedPrintDcmtk->printSCUsetBasicAnnotationBox(printConnection, currentAnnotation)))
             {
-                INFO_LOG(QString("spooler: printer communication failed, unable to transmit basic annotation box %1. Error %2 ").arg(currentAnnotation).arg(result.text()));
+                INFO_LOG(QString("spooler: printer communication failed, unable to transmit basic annotation box %1. Error %2 ")
+                            .arg(currentAnnotation).arg(result.text()));
             }
         }
     }
@@ -290,9 +295,9 @@ DVPSStoredPrint* PrintDicomSpool::loadStoredPrintFileDcmtk(const QString &pathSt
     //  2n El tag (2010,0160) Reflected Ambient Light de la Basic Film Box
     //  3r AETitle del Starviewer
 
-    //  Els dos primer paràmetres només s'utilitzen si la impressora suporta el Presentation Lut, ara mateix no ho soportem (no està implementat) per tant se
-    //  suposa que aquests valors s'ignoraran. De totes maneres se li ha donat aquests valors per defecte 2000 i 10 respectivament perquè són els que utilitza dcmtk i també
-    //  s'ha consultat el dicom conformance de les impressores agfa i kodak i també utiltizen aquests valors per defecte.
+    // Els dos primer paràmetres només s'utilitzen si la impressora suporta el Presentation Lut, ara mateix no ho soportem (no està implementat) per tant se
+    // suposa que aquests valors s'ignoraran. De totes maneres se li ha donat aquests valors per defecte 2000 i 10 respectivament perquè són els que utilitza
+    // dcmtk i també s'ha consultat el dicom conformance de les impressores agfa i kodak i també utiltizen aquests valors per defecte.
     DVPSStoredPrint *storedPrint = new DVPSStoredPrint(2000, 10, qPrintable(Settings().getValue(InputOutputSettings::LocalAETitle).toString()));
     DcmFileFormat *storedPrintDcmtkFile = NULL;
     DcmDataset *datasetStoredPrintDcmtkFile = NULL;
