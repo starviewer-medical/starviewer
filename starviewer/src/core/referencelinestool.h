@@ -72,7 +72,8 @@ private:
      * @param secondIntersectionPoint[] segon punt d'intersecció trobat (si n'hi ha)
      * @return el nombre d'interseccions trobades
      */
-    int getIntersections(QVector<double> tlhc, QVector<double> trhc, QVector<double> brhc, QVector<double> blhc, ImagePlane *localizerPlane, double firstIntersectionPoint[3], double secondIntersectionPoint[3]);
+    int getIntersections(QVector<double> tlhc, QVector<double> trhc, QVector<double> brhc, QVector<double> blhc, ImagePlane *localizerPlane,
+                         double firstIntersectionPoint[3], double secondIntersectionPoint[3]);
 
     /// Ens crea una DrawerLine, ja sigui de les principals o de background
     DrawerLine* createNewLine(bool isBackgroundLine = false);

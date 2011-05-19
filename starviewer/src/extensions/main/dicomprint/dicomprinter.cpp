@@ -441,7 +441,8 @@ void DicomPrinter::getDefaultFilmLayoutColumnsRows(int &columns, int &rows)
         columns = -1;
         rows = -1;
     }
-    //TODO: falten per implementar obtenir el número de columnes i files pels altres Layouts que també contempla el DICOM (PS 3.3 pàg 918 Tag Image Display Format)
+    // TODO: falten per implementar obtenir el número de columnes i files pels altres Layouts que també contempla el DICOM
+    // (PS 3.3 pàg 918 Tag Image Display Format)
 }
 
 }

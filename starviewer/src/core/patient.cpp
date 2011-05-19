@@ -222,7 +222,8 @@ void Patient::patientFusionLogMessage(const Patient &patient)
             break;
 
         case IndeterminableSimilarity:
-            INFO_LOG("Fusionem dos pacients amb similitut indeterminable: >>" + m_patientID + ":" + m_fullName + " >>" + patient.m_patientID + ":" + patient.m_fullName);
+            INFO_LOG("Fusionem dos pacients amb similitut indeterminable: >>" + m_patientID + ":" + m_fullName +
+                     " >>" + patient.m_patientID + ":" + patient.m_fullName);
             break;
 
         case DifferentPatients:

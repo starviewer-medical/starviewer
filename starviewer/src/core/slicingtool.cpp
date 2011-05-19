@@ -11,7 +11,8 @@
 namespace udg {
 
 SlicingTool::SlicingTool(QViewer *viewer, QObject *parent)
- : Tool(viewer, parent), m_slicingMode(SliceMode), m_mouseMovement(false), m_numberOfImages(1), m_screenSize(0), m_inputHasPhases(false), m_forcePhaseMode(false)
+ : Tool(viewer, parent), m_slicingMode(SliceMode), m_mouseMovement(false), m_numberOfImages(1),
+   m_screenSize(0), m_inputHasPhases(false), m_forcePhaseMode(false)
 {
     m_state = None;
     m_toolName = "SlicingTool";

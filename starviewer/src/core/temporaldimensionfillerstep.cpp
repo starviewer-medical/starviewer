@@ -83,7 +83,8 @@ bool TemporalDimensionFillerStep::fillIndividually()
         volumeInfo->multipleAcquisitionNumber = false;
 
         // En el cas del CT ens interessa saber si és localizer
-        // \TODO Ara estem considerant que un volume serà localizer si la primera imatge ho és, però res ens indica que els localizers no puguin està barretjats amb la resta.
+        // \TODO Ara estem considerant que un volume serà localizer si la primera imatge ho és, però res ens indica que els localizers no puguin està barretjats
+        // amb la resta.
         if (m_input->getCurrentSeries()->getModality() == "CT")
         {
             Image *currentImage = m_input->getCurrentImages().at(0);
@@ -101,7 +102,9 @@ bool TemporalDimensionFillerStep::fillIndividually()
             {
                 // TODO aquesta comprovació s'ha afegit perquè hem trobat un cas en que aquestes dades apareixen incoherents
                 // tot i així, lo seu seria disposar d'alguna eina que comprovés si les dades són consistents o no.
-                DEBUG_LOG("ERROR: Inconsistència DICOM: La imatge " + currentImage->getSOPInstanceUID() + " de la serie " + m_input->getCurrentSeries()->getInstanceUID() + " té el camp ImageType que és tipus 1, amb un nombre incorrecte d'elements: Valor del camp:: [" + value + "]");
+                DEBUG_LOG("ERROR: Inconsistència DICOM: La imatge " + currentImage->getSOPInstanceUID() + " de la serie " +
+                          m_input->getCurrentSeries()->getInstanceUID() +
+                          " té el camp ImageType que és tipus 1, amb un nombre incorrecte d'elements: Valor del camp:: [" + value + "]");
             }
         }
     }
@@ -167,8 +170,10 @@ void TemporalDimensionFillerStep::postProcessing()
                     if (volumeInfo->multipleAcquisitionNumber)
                     {
                         numberOfPhases = 1;
-                        DEBUG_LOG(QString("No totes les imatges tenen el mateix AcquisitionNumber. Considerem que el volume %1 de la sèrie %2 no és dinàmic.").arg(currentVolume).arg(key->getInstanceUID()));
-                        INFO_LOG(QString("No totes les imatges tenen el mateix AcquisitionNumber. Considerem que el volume %1 de la sèrie %2 no és dinàmic.").arg(currentVolume).arg(key->getInstanceUID()));
+                        DEBUG_LOG(QString("No totes les imatges tenen el mateix AcquisitionNumber. Considerem que el volume %1 de la sèrie %2 no és dinàmic.")
+                                     .arg(currentVolume).arg(key->getInstanceUID()));
+                        INFO_LOG(QString("No totes les imatges tenen el mateix AcquisitionNumber. Considerem que el volume %1 de la sèrie %2 no és dinàmic.")
+                                    .arg(currentVolume).arg(key->getInstanceUID()));
                     }
                     else
                     {
@@ -184,8 +189,10 @@ void TemporalDimensionFillerStep::postProcessing()
                 {
                     numberOfPhases = 1;
 
-                    ERROR_LOG(QString("El volume %1 de la sèrie %2 no ha estat processat! Considerem que no és dinàmic").arg(currentVolume).arg(key->getInstanceUID()));
-                    DEBUG_LOG(QString("El volume %1 de la sèrie %2 no ha estat processat! Considerem que no és dinàmic").arg(currentVolume).arg(key->getInstanceUID()));
+                    ERROR_LOG(QString("El volume %1 de la sèrie %2 no ha estat processat! Considerem que no és dinàmic")
+                                 .arg(currentVolume).arg(key->getInstanceUID()));
+                    DEBUG_LOG(QString("El volume %1 de la sèrie %2 no ha estat processat! Considerem que no és dinàmic")
+                                 .arg(currentVolume).arg(key->getInstanceUID()));
                 }
 
                 currentPhase = 0;

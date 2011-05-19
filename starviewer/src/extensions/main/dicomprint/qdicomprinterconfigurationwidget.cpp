@@ -66,8 +66,8 @@ void QDicomPrinterConfigurationWidget::addPrinter()
     m_addPrinterWidget->clearInputs();
     m_addPrinterWidget->setVisible(true);
     // TODO:Després d'afegir una impressora s'hauria de fer signal printerSettingsChanged(), ara aprofitem el fet de que quan s'afegeix una impressora
-    // com només han d'entrar AETitle, Hostname, port i descripció, llavors s'han d'acabar de complimentar les dades de la impressora per triar els altres settings,
-    // fent un modificar, al fer el modificar llavors es fa l'emit del signal printerSettingsChanged()
+    // com només han d'entrar AETitle, Hostname, port i descripció, llavors s'han d'acabar de complimentar les dades de la impressora per triar els
+    // altres settings, fent un modificar, al fer el modificar llavors es fa l'emit del signal printerSettingsChanged()
 }
 
 bool QDicomPrinterConfigurationWidget::modifyPrinter()
@@ -141,7 +141,8 @@ void QDicomPrinterConfigurationWidget::testPrinter()
             switch (dicomPrint.getLastError())
             {
                 case DicomPrint::NotRespondedAsExpected:
-                    messageError = tr("Printer %1 doesn't respond correctly.\nBe sure that hostname and AETitle are correct.").arg(selectedDicomPrinter.getAETitle());
+                    messageError = tr("Printer %1 doesn't respond correctly.\nBe sure that hostname and AETitle are correct.")
+                                 .arg(selectedDicomPrinter.getAETitle());
                     break;
                 case DicomPrint::CanNotConnectToDicomPrinter:
                 default:

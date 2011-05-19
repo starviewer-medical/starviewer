@@ -204,19 +204,22 @@ void DICOMDIRImporter::importImage(Image *image, QString pathToImportImage)
                 //Hem esborrar el fitxer que ja existia, ara l'intentem copiar
                 if (!copyDicomdirImageToLocal(dicomdirImagePath, cacheImagePath))
                 {
-                    ERROR_LOG("El fitxer: <" + dicomdirImagePath + "> no s'ha pogut copiar a <" + cacheImagePath + ">, el fitxer ja existia al destí, s'ha esborrat amb èxit, però alhora de copiar-lo ha fallat l'operació");
+                    ERROR_LOG("El fitxer: <" + dicomdirImagePath + "> no s'ha pogut copiar a <" + cacheImagePath +
+                              ">, el fitxer ja existia al destí, s'ha esborrat amb èxit, però alhora de copiar-lo ha fallat l'operació");
                     m_lastError = ErrorCopyingFiles;
                 }
             }
             else
             {
-                ERROR_LOG("El fitxer: <" + dicomdirImagePath + "> no s'ha pogut copiar a <" + cacheImagePath + ">, ja que el fitxer ja existeix al destí, s'ha intentat esborrar el fitxer local però ha fallat, podria ser que no tinguis permisos d'escriptura al direcctori destí");
+                ERROR_LOG("El fitxer: <" + dicomdirImagePath + "> no s'ha pogut copiar a <" + cacheImagePath + ">, ja que el fitxer ja existeix al destí, " +
+                          "s'ha intentat esborrar el fitxer local però ha fallat, podria ser que no tinguis permisos d'escriptura al direcctori destí");
                 m_lastError = ErrorCopyingFiles;
             }
         }
         else
         {
-            ERROR_LOG("El fitxer: <" + dicomdirImagePath + "> no s'ha pogut copiar a <" + cacheImagePath + ">, podria ser que no tinguis permisos en el directori destí");
+            ERROR_LOG("El fitxer: <" + dicomdirImagePath + "> no s'ha pogut copiar a <" + cacheImagePath +
+                      ">, podria ser que no tinguis permisos en el directori destí");
             m_lastError = ErrorCopyingFiles;
         }
     }

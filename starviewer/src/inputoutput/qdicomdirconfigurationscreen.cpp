@@ -118,7 +118,8 @@ bool QDICOMDIRConfigurationScreen::validateChanges()
         }
         else if (!ConvertToDicomdir().AreValidRequirementsOfFolderContentToCopyToDICOMDIR(m_textDICOMDIRFolderPathToCopy->text()))
         {//Comprovem que el directori no tingui cap item que es digui DICOM o DICOMDIR
-            QMessageBox::warning(this, ApplicationNameString, tr("Invalid content of the folder to copy to DICOMDIR, this folder can't contains any item called DICOM or DICOMDIR."));
+            QMessageBox::warning(this, ApplicationNameString, tr("Invalid content of the folder to copy to DICOMDIR, this folder can't contains any item "
+                                                                 "called DICOM or DICOMDIR."));
             return false;
         }
     }
@@ -143,8 +144,10 @@ void QDICOMDIRConfigurationScreen::examinateDICOMDIRBurningApplicationPath()
 {
     Settings settings;
 
-    // A la pàgina de QT indica que en el cas que nomes deixem seleccionar un fitxer, agafar el primer element de la llista i punt, no hi ha cap mètode que te retornin directament el fitxer selccionat
-    QFileDialog *dialog = new QFileDialog(0, QFileDialog::tr("Open"), settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationPathKey).toString(), "");
+    // A la pàgina de QT indica que en el cas que nomes deixem seleccionar un fitxer, agafar el primer element de la llista i punt, no hi ha cap mètode que
+    // te retornin directament el fitxer selccionat
+    QFileDialog *dialog = new QFileDialog(0, QFileDialog::tr("Open"), 
+                                          settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationPathKey).toString(), "");
     dialog->setFileMode(QFileDialog::ExistingFile);
 
     if (dialog->exec() == QDialog::Accepted)
@@ -157,7 +160,8 @@ void QDICOMDIRConfigurationScreen::examinateDICOMDIRBurningApplicationPath()
             if (infoBurningApplicationFile.isBundle())
             {
                 // El path es treu una mica a lo "bruto". Per fer-ho bé s'hauria de llegir el Bundle i extreure'n
-                // la localització de l'executable (CFBundleExecutable): http://developer.apple.com/documentation/CoreFoundation/Conceptual/CFBundles/BundleTypes/BundleTypes.html
+                // la localització de l'executable (CFBundleExecutable): 
+                // http://developer.apple.com/documentation/CoreFoundation/Conceptual/CFBundles/BundleTypes/BundleTypes.html
                 burningApplicationPath = burningApplicationPath + "/Contents/MacOS/" + infoBurningApplicationFile.bundleName();
             }
 

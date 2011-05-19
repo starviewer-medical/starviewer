@@ -62,7 +62,8 @@ public:
     enum AlignPosition { AlignCenter, AlignRight, AlignLeft };
 
     /// Aquests flags els farem servir per decidir quines anotacions seran visibles i quines no
-    enum AnnotationFlag { NoAnnotation = 0x0, WindowInformationAnnotation = 0x1, PatientOrientationAnnotation = 0x2, SliceAnnotation = 0x8, PatientInformationAnnotation = 0x10, AcquisitionInformationAnnotation = 0x20, AllAnnotation = 0x7F };
+    enum AnnotationFlag { NoAnnotation = 0x0, WindowInformationAnnotation = 0x1, PatientOrientationAnnotation = 0x2, SliceAnnotation = 0x8,
+                          PatientInformationAnnotation = 0x10, AcquisitionInformationAnnotation = 0x20, AllAnnotation = 0x7F };
     Q_DECLARE_FLAGS(AnnotationFlags, AnnotationFlag)
 
     Q2DViewer(QWidget *parent = 0);

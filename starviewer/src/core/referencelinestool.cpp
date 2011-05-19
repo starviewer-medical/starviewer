@@ -162,7 +162,8 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
             QList<QVector<double> > upperPlaneBounds = referencePlane->getUpperBounds();
             double firstIntersectionPoint[3], secondIntersectionPoint[3];
 
-            int numberOfIntersections = this->getIntersections(upperPlaneBounds.at(0), upperPlaneBounds.at(1), upperPlaneBounds.at(2), upperPlaneBounds.at(3), localizerPlane, firstIntersectionPoint, secondIntersectionPoint);
+            int numberOfIntersections = this->getIntersections(upperPlaneBounds.at(0), upperPlaneBounds.at(1), upperPlaneBounds.at(2), upperPlaneBounds.at(3),
+                                                               localizerPlane, firstIntersectionPoint, secondIntersectionPoint);
             if (numberOfIntersections > 0)
             {
                 m_2DViewer->projectDICOMPointToCurrentDisplayedImage(firstIntersectionPoint, firstIntersectionPoint);
@@ -184,7 +185,8 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
             }
 
             QList<QVector<double> > lowerPlaneBounds = referencePlane->getLowerBounds();
-            numberOfIntersections = this->getIntersections(lowerPlaneBounds.at(0), lowerPlaneBounds.at(1), lowerPlaneBounds.at(2), lowerPlaneBounds.at(3), localizerPlane, firstIntersectionPoint, secondIntersectionPoint);
+            numberOfIntersections = this->getIntersections(lowerPlaneBounds.at(0), lowerPlaneBounds.at(1), lowerPlaneBounds.at(2), lowerPlaneBounds.at(3),
+                                                           localizerPlane, firstIntersectionPoint, secondIntersectionPoint);
 
             // Un cop tenim les interseccions nomes cal projectar-les i pintar la linia
             if (numberOfIntersections > 0)
@@ -216,7 +218,8 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
             QList<QVector<double> > planeBounds = referencePlane->getCentralBounds();
             double firstIntersectionPoint[3], secondIntersectionPoint[3];
 
-            int numberOfIntersections = this->getIntersections(planeBounds.at(0), planeBounds.at(1), planeBounds.at(2), planeBounds.at(3), localizerPlane, firstIntersectionPoint, secondIntersectionPoint);
+            int numberOfIntersections = this->getIntersections(planeBounds.at(0), planeBounds.at(1), planeBounds.at(2), planeBounds.at(3), localizerPlane,
+                                                               firstIntersectionPoint, secondIntersectionPoint);
             if (numberOfIntersections > 0)
             {
                 m_2DViewer->projectDICOMPointToCurrentDisplayedImage(firstIntersectionPoint, firstIntersectionPoint);
@@ -262,7 +265,8 @@ void ReferenceLinesTool::projectPlane(ImagePlane *planeToProject)
     m_2DViewer->getDrawer()->showGroup("ReferenceLines");
 }
 
-int ReferenceLinesTool::getIntersections(QVector<double> tlhc, QVector<double> trhc, QVector<double> brhc, QVector<double> blhc, ImagePlane *localizerPlane, double firstIntersectionPoint[3], double secondIntersectionPoint[3])
+int ReferenceLinesTool::getIntersections(QVector<double> tlhc, QVector<double> trhc, QVector<double> brhc, QVector<double> blhc, ImagePlane *localizerPlane,
+                                         double firstIntersectionPoint[3], double secondIntersectionPoint[3])
 {
     double t;
     int numberOfIntersections = 0;

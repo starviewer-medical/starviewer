@@ -33,7 +33,8 @@ LocalDatabaseManager::LocalDatabaseManager()
     {
         if (!LocalDatabaseManager::LastAccessDateSelectedStudies.isValid())
         {
-            LocalDatabaseManager::LastAccessDateSelectedStudies = QDate::currentDate().addDays(-settings.getValue(InputOutputSettings::MinimumDaysUnusedToDeleteStudy).toInt());
+            LocalDatabaseManager::LastAccessDateSelectedStudies = 
+                QDate::currentDate().addDays(-settings.getValue(InputOutputSettings::MinimumDaysUnusedToDeleteStudy).toInt());
         }
     }
     else
@@ -378,7 +379,8 @@ void LocalDatabaseManager::deleteOldStudies()
         DatabaseConnection dbConnect;
         LocalDatabaseStudyDAL studyDAL(&dbConnect);
 
-        INFO_LOG("S'esborraran els estudis vells no visualitzats des del dia " + LocalDatabaseManager::LastAccessDateSelectedStudies.addDays(-1).toString("dd/MM/yyyy"));
+        INFO_LOG("S'esborraran els estudis vells no visualitzats des del dia " + LocalDatabaseManager::LastAccessDateSelectedStudies.addDays(-1)
+                 .toString("dd/MM/yyyy"));
 
         QList<Study*> studyListToDelete = studyDAL.query(DicomMask(), LocalDatabaseManager::LastAccessDateSelectedStudies);
 
@@ -435,19 +437,23 @@ bool LocalDatabaseManager::thereIsAvailableSpaceOnHardDisk()
     quint64 freeSpaceInHardDisk = hardDiskInformation.getNumberOfFreeMBytes(LocalDatabaseManager::getCachePath());
     quint64 minimumSpaceRequired = quint64(settings.getValue(InputOutputSettings::MinimumFreeGigaBytesForCache).toULongLong() * 1024);
     quint64 MbytesToFree;
-    quint64 MbytesToEraseWhereNotEnoughSpaceAvailableInHardDisk = settings.getValue(InputOutputSettings::MinimumGigaBytesToFreeIfCacheIsFull).toULongLong() * 1024;
+    quint64 MbytesToEraseWhereNotEnoughSpaceAvailableInHardDisk =
+        settings.getValue(InputOutputSettings::MinimumGigaBytesToFreeIfCacheIsFull).toULongLong() * 1024;
 
     m_lastError = Ok;
 
     if (freeSpaceInHardDisk < minimumSpaceRequired)
     {
-        INFO_LOG(QString("No hi ha suficient espai lliure per descarregar fitxers. Espai lliure: %1 Mb, espai minim necessari: %2 Mb").arg(QString::number(freeSpaceInHardDisk), QString::number(minimumSpaceRequired)));
+        INFO_LOG(QString("No hi ha suficient espai lliure per descarregar fitxers. Espai lliure: %1 Mb, espai minim necessari: %2 Mb")
+                    .arg(QString::number(freeSpaceInHardDisk), QString::number(minimumSpaceRequired)));
 
         if (settings.getValue(InputOutputSettings::DeleteLeastRecentlyUsedStudiesNoFreeSpaceCriteria).toBool())
         {
             INFO_LOG("s'intentara esborrar estudis vells per alliberar suficient espai");
 
-            //No hi ha suficient espai indiquem quina és la quantitat de Mb d'estudis vells que intentem alliberar. Aquest és el número de Mbytes fins arribar l'espai míninm necessari (minimumSpaceRequired - freeSpaceInHardDisk), més una quantitat fixa, per assegurar que disposem de prou espai per descarregar estudis grans, i no haver d'estar en cada descarrega alliberant espai
+            // No hi ha suficient espai indiquem quina és la quantitat de Mb d'estudis vells que intentem alliberar. Aquest és el número de Mbytes fins arribar
+            // l'espai míninm necessari (minimumSpaceRequired - freeSpaceInHardDisk), més una quantitat fixa, per assegurar que disposem de prou espai per
+            // descarregar estudis grans, i no haver d'estar en cada descarrega alliberant espai
             MbytesToFree = (minimumSpaceRequired - freeSpaceInHardDisk) + MbytesToEraseWhereNotEnoughSpaceAvailableInHardDisk;
 
             freeSpaceDeletingStudies(MbytesToFree);
@@ -514,10 +520,11 @@ void LocalDatabaseManager::checkNoStudiesRetrieving()
         Settings settings;
         QString studyNotFullRetrieved = settings.getValue(InputOutputSettings::RetrievingStudy).toString();
 
-        INFO_LOG("L'estudi " + studyNotFullRetrieved + " s'estava descarregant al tancar-se la ultima execucio de l'Starviewer, per mantenir la integritat s'esborraran les imatges que se n'havien descarregat fins al moment");
+        INFO_LOG("L'estudi " + studyNotFullRetrieved + " s'estava descarregant al tancar-se la ultima execucio de l'Starviewer, per mantenir la " +
+                 "integritat s'esborraran les imatges que se n'havien descarregat fins al moment");
 
-        // Es pot donar el cas que s'hagués arribat a inserir l'estudi i just abans d'indicar que la descàrrega de l'estudi havia finalitzat a través del mètode
-        // setStudyRetrieveFinished, s'hagués tancat l'starviewer per tant el mètode el detectaria que l'estudi estés a mig descarregar quan realment
+        // Es pot donar el cas que s'hagués arribat a inserir l'estudi i just abans d'indicar que la descàrrega de l'estudi havia finalitzat a través del
+        // mètode setStudyRetrieveFinished, s'hagués tancat l'starviewer per tant el mètode el detectaria que l'estudi estés a mig descarregar quan realment
         // està descarregat, per això comprovem si l'estudi existeix i si és el cas l'esborrem per deixar la base de dades en un estat consistent
         DicomMask studyMask;
         studyMask.setStudyInstanceUID(studyNotFullRetrieved);
@@ -725,7 +732,8 @@ int LocalDatabaseManager::deleteStudyStructureFromDatabase(DatabaseConnection *d
     return deleteSeriesStructureFromDatabase(dbConnect, studyInstanceUIDToDelete, "");
 }
 
-int LocalDatabaseManager::deleteSeriesStructureFromDatabase(DatabaseConnection *dbConnect, const QString &studyInstanceUIDToDelete, const QString &seriesIntanceUIDToDelete)
+int LocalDatabaseManager::deleteSeriesStructureFromDatabase(DatabaseConnection *dbConnect, const QString &studyInstanceUIDToDelete,
+                                                            const QString &seriesIntanceUIDToDelete)
 {
     DicomMask maskToDelete;
     int status;
@@ -943,7 +951,8 @@ void LocalDatabaseManager::setLastError(int sqliteLastError)
     {
         m_lastError = DatabaseLocked;
     }
-    else if (sqliteLastError == SQLITE_CORRUPT || sqliteLastError == SQLITE_EMPTY || sqliteLastError == SQLITE_SCHEMA || sqliteLastError == SQLITE_MISMATCH || sqliteLastError == SQLITE_NOTADB)
+    else if (sqliteLastError == SQLITE_CORRUPT || sqliteLastError == SQLITE_EMPTY || sqliteLastError == SQLITE_SCHEMA || sqliteLastError == SQLITE_MISMATCH
+             || sqliteLastError == SQLITE_NOTADB)
     {
         m_lastError = DatabaseCorrupted;
     }

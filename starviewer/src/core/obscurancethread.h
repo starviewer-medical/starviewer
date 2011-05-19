@@ -32,9 +32,11 @@ public:
     /// Assigna l'estimador del gradient, d'on es treuran les normals.
     void setGradientEstimator(vtkEncodedGradientEstimator *gradientEstimator);
     void setData(const ushort *data, int dataSize, const int dimensions[3], const int increments[3]);
-    void setObscuranceParameters(double obscuranceMaximumDistance, ObscuranceMainThread::Function obscuranceFunction, ObscuranceMainThread::Variant obscuranceVariant, Obscurance *obscurance);
+    void setObscuranceParameters(double obscuranceMaximumDistance, ObscuranceMainThread::Function obscuranceFunction,
+                                 ObscuranceMainThread::Variant obscuranceVariant, Obscurance *obscurance);
     void setSaliency(const double *saliency, double fxSaliencyA, double fxSaliencyB, double fxSaliencyLow, double fxSaliencyHigh);
-    void setPerDirectionParameters(const Vector3 & direction, const Vector3 & forward, const int xyz[3], const int sXYZ[3], const QVector<Vector3> & lineStarts, qptrdiff startDelta);
+    void setPerDirectionParameters(const Vector3 & direction, const Vector3 & forward, const int xyz[3], const int sXYZ[3],
+                                   const QVector<Vector3> & lineStarts, qptrdiff startDelta);
 
 protected:
 

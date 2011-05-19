@@ -177,7 +177,8 @@ DICOMSequenceAttribute* DICOMTagReader::getSequenceAttribute(const DICOMTag &seq
     return NULL;
 }
 
-DICOMSequenceAttribute* DICOMTagReader::convertToDICOMSequenceAttribute(DcmSequenceOfItems *dcmtkSequence, DICOMTagReader::ReturnValueOfTags returnValueOfTags) const
+DICOMSequenceAttribute* DICOMTagReader::convertToDICOMSequenceAttribute(DcmSequenceOfItems *dcmtkSequence,
+                                                                        DICOMTagReader::ReturnValueOfTags returnValueOfTags) const
 {
     DICOMSequenceAttribute *sequenceAttribute = new DICOMSequenceAttribute();
 
@@ -229,7 +230,8 @@ DICOMValueAttribute* DICOMTagReader::convertToDICOMValueAttribute(DcmElement *dc
         else if (QString(status.text()) != "Tag Not Found")
         {
             dicomValueAttribute->setValue(QString("Unreadable tag value: %1").arg(status.text()));
-            INFO_LOG(QString("S'ha produit el seguent problema a l'intentar obtenir el tag %1 :: %2").arg(dcmtkDICOMElement->getTag().toString().c_str()).arg(status.text()));
+            INFO_LOG(QString("S'ha produit el seguent problema a l'intentar obtenir el tag %1 :: %2")
+                        .arg(dcmtkDICOMElement->getTag().toString().c_str()).arg(status.text()));
         }
     }
 
@@ -248,7 +250,8 @@ QList<DICOMAttribute*> DICOMTagReader::convertToDICOMAttributeQList(DcmItem *dcm
         // Es tracta d'una seqüència
         if (!currentElement->isLeaf())
         {
-            DICOMSequenceAttribute *dicomSequenceAttribute = convertToDICOMSequenceAttribute(OFstatic_cast(DcmSequenceOfItems*, currentElement), returnValueOfTags);
+            DICOMSequenceAttribute *dicomSequenceAttribute = convertToDICOMSequenceAttribute(OFstatic_cast(DcmSequenceOfItems*, currentElement),
+                                                                                             returnValueOfTags);
             attributeList.append(dicomSequenceAttribute);
         }
         else

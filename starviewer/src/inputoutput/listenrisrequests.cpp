@@ -87,7 +87,8 @@ void ListenRISRequests::processRequest(QString risRequestData)
 
 void ListenRISRequests::networkError(QTcpServer *tcpServer)
 {
-    ERROR_LOG("No es poden escoltar les peticions del RIS pel port " + QString().setNum(Settings().getValue(InputOutputSettings::RISRequestsPort).toUInt()) + ", error " + tcpServer->errorString());
+    ERROR_LOG("No es poden escoltar les peticions del RIS pel port " + QString().setNum(Settings().getValue(InputOutputSettings::RISRequestsPort).toUInt()) +
+              ", error " + tcpServer->errorString());
 
     switch (tcpServer->serverError())
     {

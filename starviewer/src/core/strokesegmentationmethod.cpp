@@ -194,7 +194,8 @@ void StrokeSegmentationMethod::applyMethodVTKRecursive(vtkImageData* imMask, int
 {
     Volume::VoxelType *value;
     Volume::VoxelType *maskValue;
-    if ((a >= m_Volume->getWholeExtent()[0]) && (a <= m_Volume->getWholeExtent()[1]) && (b >= m_Volume->getWholeExtent()[2]) && (b <= m_Volume->getWholeExtent()[3]) && (c >= m_Volume->getWholeExtent()[4]) && (c <= m_Volume->getWholeExtent()[5]))
+    if ((a >= m_Volume->getWholeExtent()[0]) && (a <= m_Volume->getWholeExtent()[1]) && (b >= m_Volume->getWholeExtent()[2]) && (b <=
+        m_Volume->getWholeExtent()[3]) && (c >= m_Volume->getWholeExtent()[4]) && (c <= m_Volume->getWholeExtent()[5]))
     {
         value = m_Volume->getScalarPointer(a, b, c);
         maskValue = (Volume::VoxelType*)imMask->GetScalarPointer(a, b, c);
@@ -267,8 +268,10 @@ double StrokeSegmentationMethod::applyCleanSkullMethod()
     t7 = clock();
     resampleFilter->Update();
     t8 = clock();
-    std::cout << "resampleVolumeOriginal: [" << origin[0] << "," << origin[1] << "," << origin[2] << "] ,[" << spacing[0] << "," << spacing[1] << "," << spacing[2] << "] ," << size << std::endl;
-    std::cout << "resampleVolumeNew: [" << neworigin[0] << "," << neworigin[1] << "," << neworigin[2] << "] ,[" << newspacing[0] << "," << newspacing[1] << "," << newspacing[2] << "] ," << newsize << std::endl;
+    std::cout << "resampleVolumeOriginal: [" << origin[0] << "," << origin[1] << "," << origin[2] << "] ,[" << spacing[0] << "," << spacing[1] << "," <<
+                 spacing[2] << "] ," << size << std::endl;
+    std::cout << "resampleVolumeNew: [" << neworigin[0] << "," << neworigin[1] << "," << neworigin[2] << "] ,[" << newspacing[0] << "," << newspacing[1] <<
+                 "," << newspacing[2] << "] ," << newsize << std::endl;
 
   ErodeFilterType::Pointer binaryErode = ErodeFilterType::New();
   DilateFilterType::Pointer binaryDilate = DilateFilterType::New();
@@ -346,8 +349,10 @@ double StrokeSegmentationMethod::applyCleanSkullMethod()
     t5=clock();
     resample2Filter->Update();
     t6=clock();
-    std::cout << "resampleVolumeOriginal: [" << origin[0] << "," << origin[1] << "," << origin[2] << "] ,[" << spacing[0] << "," << spacing[1] << "," << spacing[2] << "] ," << size << std::endl;
-    std::cout << "resampleVolumeNew: [" << neworigin[0] << "," << neworigin[1] << "," << neworigin[2] << "] ,[" << newspacing[0] << "," << newspacing[1] << "," << newspacing[2] << "] ," << newsize << std::endl;
+    std::cout << "resampleVolumeOriginal: [" << origin[0] << "," << origin[1] << "," << origin[2] << "] ,[" << spacing[0] << "," << spacing[1] << "," <<
+                 spacing[2] << "] ," << size << std::endl;
+    std::cout << "resampleVolumeNew: [" << neworigin[0] << "," << neworigin[1] << "," << neworigin[2] << "] ,[" << newspacing[0] << "," << newspacing[1] <<
+                 "," << newspacing[2] << "] ," << newsize << std::endl;
 
     Volume::ItkImageType::Pointer maskAux = Volume::ItkImageType::New();
     maskAux->SetSpacing(m_Mask->getItkData()->GetSpacing());
@@ -595,8 +600,10 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume *lesionMask)
     resampleFilter->SetInput(m_Volume->getItkData());
     t2 = clock();
     resampleFilter->Update();
-    std::cout << "resampleVolumeOriginal: [" << origin[0] << "," << origin[1] << "," << origin[2] << "] ,[" << spacing[0] << "," << spacing[1] << "," << spacing[2] << "] ," << size << std::endl;
-    std::cout << "resampleVolumeNew: [" << neworigin[0] << "," << neworigin[1] << "," << neworigin[2] << "] ,[" << newspacing[0] << "," << newspacing[1] << "," << newspacing[2] << "] ," << newsize << std::endl;
+    std::cout << "resampleVolumeOriginal: [" << origin[0] << "," << origin[1] << "," << origin[2] << "] ,[" << spacing[0] << "," << spacing[1] << "," <<
+                  spacing[2] << "] ," << size << std::endl;
+    std::cout << "resampleVolumeNew: [" << neworigin[0] << "," << neworigin[1] << "," << neworigin[2] << "] ,[" << newspacing[0] << "," << newspacing[1] <<
+                 "," << newspacing[2] << "] ," << newsize << std::endl;
 
     // Resamplagem la màscara per tal de que tingui un vòxel isomètric (el mètode ho requereix)
     ResampleFilterType::Pointer resampleMaskFilter = ResampleFilterType::New();
@@ -640,8 +647,10 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume *lesionMask)
     resampleMaskFilter->Update();
     t3 = clock();
 
-    std::cout << "resampleMaskOriginal: [" << origin[0] << "," << origin[1] << "," << origin[2] << "] ,[" << spacing[0] << "," << spacing[1] << "," << spacing[2] << "] ," << size << std::endl;
-    std::cout << "resampleMaskNew: [" << neworigin[0] << "," << neworigin[1] << "," << neworigin[2] << "] ,[" << newspacing[0] << "," << newspacing[1] << "," << newspacing[2] << "] ," << newsize << std::endl;
+    std::cout << "resampleMaskOriginal: [" << origin[0] << "," << origin[1] << "," << origin[2] << "] ,[" << spacing[0] << "," << spacing[1] << "," <<
+                  spacing[2] << "] ," << size << std::endl;
+    std::cout << "resampleMaskNew: [" << neworigin[0] << "," << neworigin[1] << "," << neworigin[2] << "] ,[" << newspacing[0] << "," << newspacing[1] <<
+                 "," << newspacing[2] << "] ," << newsize << std::endl;
 
     // Fi resample
 
@@ -847,7 +856,8 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume *lesionMask)
     thresholder2->Update();
 
 /*
-    std::cout << "resample: [" << origin[0] << "," << origin[1] << "," << origin[2] << "] ,[" << spacing[0] << "," << spacing[1] << "," << spacing[2] << "] ," << size << std::endl;
+    std::cout << "resample: [" << origin[0] << "," << origin[1] << "," << origin[2] << "] ,[" << spacing[0] << "," << spacing[1] << "," << spacing[2] << "] ,"
+    // << size << std::endl;
 
     //Fem la mediana per tal d'"arrodonir" el resultat (així no queda voxelat)
     DilateFilterType::Pointer binaryDilate2 = DilateFilterType::New();
@@ -942,8 +952,10 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume *lesionMask)
     }
 
     lesionMask->getVtkData()->Update();
-    std::cout << "Lesion: " << lesionMask->getItkData()->GetOrigin() << " ," << lesionMask->getItkData()->GetSpacing() << " ," << lesionMask->getItkData()->GetBufferedRegion().GetSize() << std::endl;
-    std::cout << "Volume: " << m_Volume->getItkData()->GetOrigin() << " ," << m_Volume->getItkData()->GetSpacing() << " ," << m_Volume->getItkData()->GetBufferedRegion().GetSize() << std::endl;
+    std::cout << "Lesion: " << lesionMask->getItkData()->GetOrigin() << " ," << lesionMask->getItkData()->GetSpacing() << " ," <<
+                 lesionMask->getItkData()->GetBufferedRegion().GetSize() << std::endl;
+    std::cout << "Volume: " << m_Volume->getItkData()->GetOrigin() << " ," << m_Volume->getItkData()->GetSpacing() << " ," <<
+                 m_Volume->getItkData()->GetBufferedRegion().GetSize() << std::endl;
 
     std::cout << "End method!!" << std::endl;
 

@@ -31,7 +31,9 @@ QInputOutputLocalDatabaseWidget::QInputOutputLocalDatabaseWidget(QWidget *parent
     settings.restoreColumnsWidths(InputOutputSettings::LocalDatabaseStudyList, m_studyTreeWidget->getQTreeWidget());
     settings.restoreGeometry(InputOutputSettings::LocalDatabaseSplitterState, m_StudyTreeSeriesListQSplitter);
 
-    QStudyTreeWidget::ColumnIndex sortByColumn = (QStudyTreeWidget::ColumnIndex) settings.getValue(InputOutputSettings::LocalDatabaseStudyListSortByColumn).toInt();
+    QStudyTreeWidget::ColumnIndex sortByColumn = (QStudyTreeWidget::ColumnIndex) 
+        settings.getValue(InputOutputSettings::LocalDatabaseStudyListSortByColumn).toInt();
+
     Qt::SortOrder sortOrderColumn = (Qt::SortOrder) settings.getValue(InputOutputSettings::LocalDatabaseStudyListSortOrder).toInt();
     m_studyTreeWidget->setSortByColumn (sortByColumn, sortOrderColumn);
 
@@ -86,17 +88,21 @@ void QInputOutputLocalDatabaseWidget::createContextMenuQStudyTreeWidget()
 {
     QAction *action;
 
-    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/view.png"), tr("&View"), this, SLOT(viewFromQStudyTreeWidget()), ShortcutManager::getShortcuts(Shortcuts::ViewSelectedStudies).first());
+    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/view.png"), tr("&View"), this, SLOT(viewFromQStudyTreeWidget()),
+                                                     ShortcutManager::getShortcuts(Shortcuts::ViewSelectedStudies).first());
     (void) new QShortcut(action->shortcut(), this, SLOT(viewFromQStudyTreeWidget()));
 
-    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/databaseRemove.png"), tr("&Delete"), this, SLOT(deleteSelectedItemsFromLocalDatabase()), ShortcutManager::getShortcuts(Shortcuts::DeleteSelectedLocalDatabaseStudies).first());
+    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/databaseRemove.png"), tr("&Delete"), this, SLOT(deleteSelectedItemsFromLocalDatabase()),
+                                                     ShortcutManager::getShortcuts(Shortcuts::DeleteSelectedLocalDatabaseStudies).first());
     (void) new QShortcut(action->shortcut(), this, SLOT(deleteSelectedItemsFromLocalDatabase()));
 
 #ifndef STARVIEWER_LITE
-    action = m_contextMenuQStudyTreeWidget.addAction(tr("Send to DICOMDIR List"), this, SLOT(addSelectedStudiesToCreateDicomdirList()), ShortcutManager::getShortcuts(Shortcuts::SendSelectedStudiesToDICOMDIRList).first());
+    action = m_contextMenuQStudyTreeWidget.addAction(tr("Send to DICOMDIR List"), this, SLOT(addSelectedStudiesToCreateDicomdirList()),
+                                                     ShortcutManager::getShortcuts(Shortcuts::SendSelectedStudiesToDICOMDIRList).first());
     (void) new QShortcut(action->shortcut(), this, SLOT(addSelectedStudiesToCreateDicomdirList()));
 
-    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/store.png"), tr("Send to PACS"), this, SLOT(selectedStudiesStoreToPacs()), ShortcutManager::getShortcuts(Shortcuts::StoreSelectedStudiesToPACS).first());
+    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/store.png"), tr("Send to PACS"), this, SLOT(selectedStudiesStoreToPacs()),
+                                                     ShortcutManager::getShortcuts(Shortcuts::StoreSelectedStudiesToPACS).first());
     (void) new QShortcut(action->shortcut(), this, SLOT(selectedStudiesStoreToPacs()));
 #endif
     // Especifiquem que és el menú per la cache
@@ -300,7 +306,8 @@ void QInputOutputLocalDatabaseWidget::deleteSelectedItemsFromLocalDatabase()
                         // TODO:Hauriem de mostar el Series ID en lloc del Series UID
                         warningMessage = tr("The series with UID %1 of study %2 patient %3 is in use by the DICOMDIR List. If you want to delete "
                                             "this series you should remove the study from the DICOMDIR List first.")
-                                         .arg(dicomMaskToDelete.getSeriesInstanceUID(), studyToDelete->getID(), studyToDelete->getParentPatient()->getFullName());
+                                         .arg(dicomMaskToDelete.getSeriesInstanceUID(), studyToDelete->getID(),
+                                              studyToDelete->getParentPatient()->getFullName());
                     }
 
                     QMessageBox::warning(this, ApplicationNameString, warningMessage);
@@ -309,7 +316,8 @@ void QInputOutputLocalDatabaseWidget::deleteSelectedItemsFromLocalDatabase()
                 {
                     if (!dicomMaskToDelete.getSeriesInstanceUID().isEmpty())
                     {
-                        INFO_LOG(QString("L'usuari ha indicat que vol esborrar de la cache la serie %1 de l'estudi %2").arg(dicomMaskToDelete.getSeriesInstanceUID(), dicomMaskToDelete.getStudyInstanceUID()));
+                        INFO_LOG(QString("L'usuari ha indicat que vol esborrar de la cache la serie %1 de l'estudi %2")
+                                    .arg(dicomMaskToDelete.getSeriesInstanceUID(), dicomMaskToDelete.getStudyInstanceUID()));
                         localDatabaseManager.deleteSeries(dicomMaskToDelete.getStudyInstanceUID(), dicomMaskToDelete.getSeriesInstanceUID());
 
                         m_seriesListWidget->removeSeries(dicomMaskToDelete.getSeriesInstanceUID());
@@ -352,7 +360,8 @@ void QInputOutputLocalDatabaseWidget::view(QStringList selectedStudiesInstanceUI
     }
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    //TODO: S'hauria de millorar el mètode ja que per la seva estructura lo d'obrir l'estudi per la sèrie que ens tinguin seleccionada només ho farà per un estudi ja que aquest mètode només se li passa per paràmetre una sèrie per defecte
+    // TODO: S'hauria de millorar el mètode ja que per la seva estructura lo d'obrir l'estudi per la sèrie que ens tinguin seleccionada només ho farà per un
+    // estudi ja que aquest mètode només se li passa per paràmetre una sèrie per defecte
     foreach (QString studyInstanceUIDSelected, selectedStudiesInstanceUID)
     {
         LocalDatabaseManager localDatabaseManager;
@@ -553,7 +562,8 @@ void QInputOutputLocalDatabaseWidget::newPACSJobEnqueued(PACSJob *pacsJob)
     //       CacheManager aquest mètode HA DE DESAPAREIXER, quan es tregui aquest mètode recordar a treure l'include a "retrievedicomfilesfrompacsjob.h"
     if (pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType)
     {
-        connect(dynamic_cast<RetrieveDICOMFilesFromPACSJob*> (pacsJob), SIGNAL(studyFromCacheWillBeDeleted(QString)), SLOT(removeStudyFromQStudyTreeWidget(QString)));
+        connect(dynamic_cast<RetrieveDICOMFilesFromPACSJob*> (pacsJob), SIGNAL(studyFromCacheWillBeDeleted(QString)),
+                SLOT(removeStudyFromQStudyTreeWidget(QString)));
     }
 }
 

@@ -62,7 +62,8 @@ const QString InputOutputSettings::DICOMDIRBurningApplicationPathKey(DICOMDIRBas
 const QString InputOutputSettings::DICOMDIRBurningApplicationParametersKey(DICOMDIRBaseKey + "DICOMDIRBurningApplicationParameters");
 const QString InputOutputSettings::DICOMDIRBurningApplicationCDParametersKey(DICOMDIRBaseKey + "DICOMDIRBurningApplicationCDParameters");
 const QString InputOutputSettings::DICOMDIRBurningApplicationDVDParametersKey(DICOMDIRBaseKey + "DICOMDIRBurningApplicationDVDParameters");
-const QString InputOutputSettings::DICOMDIRBurningApplicationHasDifferentCDDVDParametersKey(DICOMDIRBaseKey + "DICOMDIRBurningApplicationHasDifferentCDDVDParameters");
+const QString InputOutputSettings::DICOMDIRBurningApplicationHasDifferentCDDVDParametersKey(DICOMDIRBaseKey + 
+                                                                                            "DICOMDIRBurningApplicationHasDifferentCDDVDParameters");
 const QString InputOutputSettings::ConvertDICOMDIRImagesToLittleEndianKey(DICOMDIRBaseKey + "ConvertDICOMDIRImagesToLittleEndian");
 const QString InputOutputSettings::DICOMDIRFolderPathToCopy(DICOMDIRBaseKey + "DICOMDIRFolderPathToCopy");
 const QString InputOutputSettings::CopyFolderContentToDICOMDIROnCDOrDVD(DICOMDIRBaseKey + "CopyFolderContentToDICOMDIRCdDvd");
@@ -122,7 +123,8 @@ void InputOutputSettings::init()
     settingsRegistry->addSetting(DICOMDIRBurningApplicationHasDifferentCDDVDParametersKey, false);
 #elif defined(Q_OS_MAC)
     // MAC
-    settingsRegistry->addSetting(DICOMDIRBurningApplicationPathKey, QDesktopServices::storageLocation(QDesktopServices::ApplicationsLocation) + "/Burn.app/Contents/MacOS/Burn");
+    settingsRegistry->addSetting(DICOMDIRBurningApplicationPathKey, QDesktopServices::storageLocation(QDesktopServices::ApplicationsLocation) +
+                                 "/Burn.app/Contents/MacOS/Burn");
     settingsRegistry->addSetting(DICOMDIRBurningApplicationParametersKey, "%1");
     settingsRegistry->addSetting(DICOMDIRBurningApplicationCDParametersKey, "");
     settingsRegistry->addSetting(DICOMDIRBurningApplicationDVDParametersKey, "");

@@ -5,7 +5,8 @@
 
 namespace udg {
 
-PatientFillerInput::PatientFillerInput(): m_dicomFile(0), m_currentSeries(0), m_currentVolumeNumber(0), m_currentMultiframeVolumeNumber(1), m_currentSingleFrameVolumeNumber(100)
+PatientFillerInput::PatientFillerInput(): m_dicomFile(0), m_currentSeries(0), m_currentVolumeNumber(0), m_currentMultiframeVolumeNumber(1),
+m_currentSingleFrameVolumeNumber(100)
 {
 }
 

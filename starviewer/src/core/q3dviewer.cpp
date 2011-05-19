@@ -139,7 +139,8 @@ Q3DViewer::Q3DViewer(QWidget *parent)
     m_volumeRayCastAmbientContourObscuranceFunction = vtkVolumeRayCastSingleVoxelShaderCompositeFunction<AmbientContourObscuranceVoxelShader>::New();
     m_volumeRayCastAmbientContourObscuranceFunction->SetCompositeMethodToClassifyFirst();
     m_volumeRayCastAmbientContourObscuranceFunction->SetVoxelShader(m_ambientContourObscuranceVoxelShader);
-    m_volumeRayCastDirectIlluminationContourObscuranceFunction = vtkVolumeRayCastSingleVoxelShaderCompositeFunction<DirectIlluminationContourObscuranceVoxelShader>::New();
+    m_volumeRayCastDirectIlluminationContourObscuranceFunction = 
+        vtkVolumeRayCastSingleVoxelShaderCompositeFunction<DirectIlluminationContourObscuranceVoxelShader>::New();
     m_volumeRayCastDirectIlluminationContourObscuranceFunction->SetCompositeMethodToClassifyFirst();
     m_volumeRayCastDirectIlluminationContourObscuranceFunction->SetVoxelShader(m_directIlluminationContourObscuranceVoxelShader);
     m_volumeRayCastIsosurfaceFunction = vtkVolumeRayCastIsosurfaceFunction::New();
@@ -656,7 +657,8 @@ void Q3DViewer::setTransferFunction(TransferFunction *transferFunction)
         catch (std::bad_alloc &e)
         {
             ERROR_LOG(QString("Excepció al voler aplicar shading en el volum: ") + e.what());
-            QMessageBox::warning(this, tr("Can't apply rendering style"), tr("The system hasn't enough memory to apply properly this rendering style with this volume.\nShading will be disabled, it won't render as expected."));
+            QMessageBox::warning(this, tr("Can't apply rendering style"), tr("The system hasn't enough memory to apply properly this rendering style "
+                                          "with this volume.\nShading will be disabled, it won't render as expected."));
             m_canEnableShading = false;
             this->setShading(false);
             // TODO Comprovar si seria suficient amb un render()
@@ -767,7 +769,8 @@ bool Q3DViewer::rescale(Volume *volume)
     catch (std::exception &e)
     {
         ERROR_LOG(QString("Excepció al voler fer rescale(): ") + e.what());
-        QMessageBox::warning(this, tr("Volume too large"), tr("Current volume is too large. Please select another volume or close other extensions and try again."));
+        QMessageBox::warning(this, tr("Volume too large"),
+                             tr("Current volume is too large. Please select another volume or close other extensions and try again."));
         // Mantenim tots els atributs de la classe tal com estaven, per rebutjar el volum netament
         rescaler->Delete();
         return false;
@@ -921,7 +924,8 @@ void Q3DViewer::renderMIP3D()
         m_renderer->AddViewProp(m_vtkVolume);
     }
 
-    // Quan fem MIP3D deixarem disable per defecte ja que la orientació no la sabem ben bé quina és ja que el pla de tall pot ser arbitrari \TODO no sempre un mip serà sobre un pla mpr, llavors tampoc és del tot correcte decidir això aquí
+    // Quan fem MIP3D deixarem disable per defecte ja que la orientació no la sabem ben bé quina és ja que el pla de tall pot ser arbitrari \TODO no sempre un
+    // mip serà sobre un pla mpr, llavors tampoc és del tot correcte decidir això aquí
 //         m_orientationMarker->disable();
     //================================================================================================
     // Create a transfer function mapping scalar value to opacity
@@ -1330,7 +1334,8 @@ bool Q3DViewer::checkInputVolume(Volume *volume)
     {
         DEBUG_LOG("No hi ha prou memòria per veure el volum actual en 3D.");
         WARN_LOG("No hi ha prou memòria per veure el volum actual en 3D.");
-        QMessageBox::warning(this, tr("Volume too large"), tr("Current volume is too large. Please select another volume or close other extensions and try again."));
+        QMessageBox::warning(this, tr("Volume too large"),
+                             tr("Current volume is too large. Please select another volume or close other extensions and try again."));
         return false;
     }
 

@@ -57,7 +57,8 @@ void ObscuranceThread::setSaliency(const double * saliency, double fxSaliencyA, 
     m_fxSaliencyHigh = fxSaliencyHigh;
 }
 
-void ObscuranceThread::setPerDirectionParameters(const Vector3 & direction, const Vector3 & forward, const int xyz[3], const int sXYZ[3], const QVector<Vector3> & lineStarts, qptrdiff startDelta)
+void ObscuranceThread::setPerDirectionParameters(const Vector3 & direction, const Vector3 & forward, const int xyz[3], const int sXYZ[3],
+                                                 const QVector<Vector3> & lineStarts, qptrdiff startDelta)
 {
     m_direction = direction;
     m_forward = forward;

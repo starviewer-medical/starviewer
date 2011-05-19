@@ -9,11 +9,12 @@ class vtkLookupTable;
 namespace udg {
 
 /**
-    Representa una funció de transferència f: (X,Y) -> (C,O), on X és el conjunt de valors de propietat (reals), Y el conjunt de magnituds del gradient (reals positius),
-    C el conjunt de colors (QColors) i O el conjunt d'opacitats (reals en el rang [0,1]).
+    Representa una funció de transferència f: (X,Y) -> (C,O), on X és el conjunt de valors de propietat (reals), Y el conjunt de magnituds del gradient
+    (reals positius), C el conjunt de colors (QColors) i O el conjunt d'opacitats (reals en el rang [0,1]).
     En realitat consisteix en una funció de transferència de color fc: X -> C, una d'opacitat escalar fo: X -> O, i una d'opacitat del gradient fg: Y -> O.
     Hi ha uns quants punts definits explícitament i la resta s'obtenen per interpolació lineal o extrapolació del veí més proper.
-    Es pot treballar amb el color, l'opacitat escalar i l'opacitat del gradient per separat (opció recomanada) o bé junts. La funció de transferència també té un nom.
+    Es pot treballar amb el color, l'opacitat escalar i l'opacitat del gradient per separat (opció recomanada) o bé junts. La funció de transferència
+    també té un nom.
  */
 class TransferFunction {
 
@@ -32,7 +33,8 @@ public:
     void setName(const QString &name);
 
     /// Retorna la parella de color i opacitat corresponent al valor de propietat x. No té en compte l'opacitat del gradient.
-    /// \note L'opacitat queda encapsulada al canal alfa del QColor i amb això perd precisió. Per evitar això es recomana accedir al color i l'opacitat per separat.
+    /// \note L'opacitat queda encapsulada al canal alfa del QColor i amb això perd precisió. Per evitar això es recomana accedir
+    /// al color i l'opacitat per separat.
     QColor get(double x) const;
     /// Retorna el color corresponent al valor de propietat x.
     QColor getColor(double x) const;
@@ -106,7 +108,8 @@ public:
     const QList<double>& keys() const;
     /// Retorna la llista de valors de propietat x dels punts de color (x,c) i opacitat escalar (x,o) definits explícitament dins de l'interval [begin, end].
     QList<double> keys(double begin, double end) const;
-    /// Retorna la llista de valors de propietat x dels punts de color (x,c) i opacitat escalar (x,o) definits explícitament dins de l'interval [x-distance, x+distance].
+    /// Retorna la llista de valors de propietat x dels punts de color (x,c) i opacitat escalar (x,o) definits explícitament dins de l'interval
+    /// [x-distance, x+distance].
     QList<double> keysNear(double x, double distance) const;
     /// Retorna la llista de valors de propietat x de tots els punts de color (x,c) definits explícitament.
     QList<double> colorKeys() const;
@@ -127,7 +130,8 @@ public:
     /// Retorna una versió simplificada i equivalent de la funció esborrant els punts de color (x,c), d'opacitat escalar (x,o) i d'opacitat del gradient (y,o)
     /// que es poden obtenir per interpolació o extrapolació.
     TransferFunction simplify() const;
-    /// Retorna una versió equivalent de la funció on tots els punts x definits explícitament són ho són per al color i l'opacitat escalar, és a dir, tots són (x,(c,o)).
+    /// Retorna una versió equivalent de la funció on tots els punts x definits explícitament són ho són per al color i l'opacitat escalar,
+    /// és a dir, tots són (x,(c,o)).
     /// La funció de transferència d'opacitat del gradient es copia directament.
     TransferFunction normalize() const;
 

@@ -59,7 +59,8 @@ void ShutterFilter::setPresentationStateShutters(const QString &presentationStat
                 double spacing[3];
                 m_inputData->getOrigin(origin);
                 m_inputData->getSpacing(spacing);
-                // Càlcul d'un background adequat amb el rang de dades. Els valors de background poden anar de 0 o 65535 i el rang de dades pot ser qualsevol altre, com per exemple 127..255;
+                // Càlcul d'un background adequat amb el rang de dades. Els valors de background poden anar de 0 o 65535 i el rang de dades pot ser qualsevol
+                // altre, com per exemple 127..255;
                 double range[2];
                 int backValue = presentationStateHandler->getShutterPresentationValue();
                 m_inputData->getScalarRange(range);
@@ -96,7 +97,8 @@ void ShutterFilter::setPresentationStateShutters(const QString &presentationStat
                         origin[0] + (presentationStateHandler->getCenterOfCircularShutter_x() - 1) * spacing[0],
                         origin[1] + (presentationStateHandler->getCenterOfCircularShutter_y() - 1) * spacing[1]
                     };
-                    // Radius of the cicular shutter with to respect to pixels in the image given as a number of pixels along the row direction-> per tant cal calcular bé quan mesura respecte les coordenades de món
+                    // Radius of the cicular shutter with to respect to pixels in the image given as a number of pixels along the row direction-> per tant cal
+                    // calcular bé quan mesura respecte les coordenades de món
                     double radius = (origin[0] + (presentationStateHandler->getRadiusOfCircularShutter() - 1) * spacing[0]) - origin[0];
                     this->setCircularShutter(center, radius);
                 }
@@ -188,7 +190,8 @@ void ShutterFilter::setPresentationStateShutters(const QString &presentationStat
 
                             OFCondition status;
                             status = presentationStateHandler->activateOverlayAsBitmapShutter(overlayIndex);
-                            // The overlay must not be activated on a graphic layer (i.e. getOverlayInPresentationStateActivationLayer(idx) != DVPS_IDX_NONE, otherwise this method fails.
+                            // The overlay must not be activated on a graphic layer (i.e. getOverlayInPresentationStateActivationLayer(idx) != DVPS_IDX_NONE,
+                            // otherwise this method fails.
                             //     idx  index of the overlay, must be < getNumberOfOverlaysInPresentationState().
                             DEBUG_LOG(QString("STATUS quo: ") + status.text());
 
@@ -245,7 +248,8 @@ void ShutterFilter::setRectangularShutter(double leftVertical, double rightVerti
     m_inputData->getOrigin(origin);
 
     vtkPoints *points = vtkPoints::New();
-    // \TODO tenim un petit problema quan la coordenada x és 0 (potser és quan coincideix amb l'origen 0) Deu ser degut a un bug del filtre d'stencil. Per evitar això fem que si coincideix l'origen x, li fem un petit increment perquè funcioni el retallat
+    // \TODO tenim un petit problema quan la coordenada x és 0 (potser és quan coincideix amb l'origen 0) Deu ser degut a un bug del filtre d'stencil. Per
+    // evitar això fem que si coincideix l'origen x, li fem un petit increment perquè funcioni el retallat
     if (leftVertical == origin[0])
     {
         leftVertical += 0.001;
@@ -329,7 +333,8 @@ void ShutterFilter::setBitmapShutter(vtkImageData *vtkNotUsed(bitmap))
     DEBUG_LOG("Mètode no implementat");
 }
 
-void ShutterFilter::setBitmapShutter(unsigned char *data, unsigned int vtkNotUsed(width), unsigned int vtkNotUsed(height), unsigned int vtkNotUsed(left), unsigned int vtkNotUsed(top), unsigned int vtkNotUsed(foreground))
+void ShutterFilter::setBitmapShutter(unsigned char *data, unsigned int vtkNotUsed(width), unsigned int vtkNotUsed(height), unsigned int vtkNotUsed(left),
+                                     unsigned int vtkNotUsed(top), unsigned int vtkNotUsed(foreground))
 {
     // Creem la màscara que farà de bitmap shutter
     // Coses a tenir en compte

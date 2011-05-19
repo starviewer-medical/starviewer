@@ -174,7 +174,8 @@ void QConfigurationScreen::updateSelectedPACSInformation()
             m_textDescription->setText(selectedPacs.getDescription());
             m_checkDefault->setChecked(selectedPacs.isDefault());
             m_checkBoxQueryRetrieveEnabled->setChecked(selectedPacs.isQueryRetrieveServiceEnabled());
-            m_textQueryRetrieveServicePort->setText(selectedPacs.isQueryRetrieveServiceEnabled() ? QString().setNum(selectedPacs.getQueryRetrieveServicePort()) : "");
+            m_textQueryRetrieveServicePort->setText(selectedPacs.isQueryRetrieveServiceEnabled() ? 
+                                                    QString().setNum(selectedPacs.getQueryRetrieveServicePort()) : "");
             m_textQueryRetrieveServicePort->setEnabled(selectedPacs.isQueryRetrieveServiceEnabled());
             m_checkBoxStoreEnabled->setChecked(selectedPacs.isStoreServiceEnabled());
             m_textStoreServicePort->setText(selectedPacs.isStoreServiceEnabled() ? QString().setNum(selectedPacs.getStoreServicePort()) : "");
@@ -372,8 +373,9 @@ bool QConfigurationScreen::applyChanges()
     {
         if (isIncomingConnectionsPortInUseByAnotherApplication() && m_textLocalPort->isModified())
         {
-            QMessageBox::StandardButton response = QMessageBox::question(this, ApplicationNameString, tr("The port %1 for incoming connections is in use by another application. Are you sure you want to apply the changes?").arg(m_textLocalPort->text()),
-                                                                       QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+            QMessageBox::StandardButton response = QMessageBox::question(this, ApplicationNameString,
+                tr("The port %1 for incoming connections is in use by another application. Are you sure you want to apply the changes?")
+                  .arg(m_textLocalPort->text()), QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
 
             if (response == QMessageBox::No)
             {

@@ -35,7 +35,8 @@ Status DICOMDIRReader::open(const QString &dicomdirFilePath)
 {
     Status state;
 
-    //no existeix cap comanda per tancar un dicomdir, quan en volem obrir un de nou, l'única manera d'obrir un nou dicomdir, és a través del construtor de DcmDicomDir, passant el path per paràmetre, per això si ja existia un Dicomdir ober, fem un delete, per tancar-lo
+    // No existeix cap comanda per tancar un dicomdir, quan en volem obrir un de nou, l'única manera d'obrir un nou dicomdir, és a través del construtor de
+    // DcmDicomDir, passant el path per paràmetre, per això si ja existia un Dicomdir ober, fem un delete, per tancar-lo
     if (m_dicomdir != NULL)
     {
         delete m_dicomdir;
@@ -70,7 +71,9 @@ Status DICOMDIRReader::open(const QString &dicomdirFilePath)
     return state.setStatus(m_dicomdir->error());
 }
 
-//El dicomdir segueix una estructura d'abre on tenim n pacients, que tenen n estudis, que conté n series, i que conté n imatges, per llegir la informació hem d'accedir a través d'aquesta estructura d'arbre, primer llegim el primer pacient, amb el primer pacient, podem accedir el segon nivell de l'arbre, els estudis del pacient, i anar fent així fins arribar al nivell de baix de tot, les imatges,
+// El dicomdir segueix una estructura d'abre on tenim n pacients, que tenen n estudis, que conté n series, i que conté n imatges, per llegir la informació
+// hem d'accedir a través d'aquesta estructura d'arbre, primer llegim el primer pacient, amb el primer pacient, podem accedir el segon nivell de l'arbre, els
+// estudis del pacient, i anar fent així fins arribar al nivell de baix de tot, les imatges,
 Status DICOMDIRReader::readStudies(QList<Patient*> &outResultsStudyList, DicomMask studyMask)
 {
     Status state;
@@ -138,7 +141,8 @@ Status DICOMDIRReader::readStudies(QList<Patient*> &outResultsStudyList, DicomMa
     return state.setStatus(m_dicomdir->error());
 }
 
-//Per trobar les sèries d'une estudi haurem de recorre tots els estudis dels pacients, que hi hagi en el dicomdir, fins que obtinguem l'estudi amb el UID sol·licitat una vegada found, podrem accedir a la seva informacio de la sèrie
+// Per trobar les sèries d'une estudi haurem de recorre tots els estudis dels pacients, que hi hagi en el dicomdir, fins que obtinguem l'estudi amb el UID
+// sol·licitat una vegada found, podrem accedir a la seva informacio de la sèrie
 Status DICOMDIRReader::readSeries(const QString &studyUID, const QString &seriesUID, QList<Series*> &outResultsSeriesList)
 {
     Status state;
@@ -376,7 +380,8 @@ QStringList DICOMDIRReader::getFiles(const QString &studyUID)
             while (imageRecord != NULL)
             {
                 OFString text;
-                //Path de la imatge ens retorna el path relatiu respecte el dicomdir DirectoriEstudi/DirectoriSeries/NomImatge. Atencio retorna els directoris separats per '\' (format windows)
+                // Path de la imatge ens retorna el path relatiu respecte el dicomdir DirectoriEstudi/DirectoriSeries/NomImatge. Atencio retorna els directoris
+                // separats per '\' (format windows)
                 // Obtenim el path relatiu de la imatge
                 imageRecord->findAndGetOFStringArray(DCM_ReferencedFileID, text);
 
@@ -608,7 +613,8 @@ Image* DICOMDIRReader::fillImage(DcmDirectoryRecord *dcmDirectoryRecordImage)
     dcmDirectoryRecordImage->findAndGetOFStringArray(DCM_InstanceNumber, tagValue);
     image->setInstanceNumber(tagValue.c_str());
 
-    //Path de la imatge ens retorna el path relatiu respecte el dicomdir DirectoriEstudi/DirectoriSeries/NomImatge. Atencio retorna els directoris separats per '/', per linux s'ha de transformar a '\'
+    // Path de la imatge ens retorna el path relatiu respecte el dicomdir DirectoriEstudi/DirectoriSeries/NomImatge. Atencio retorna els directoris separats
+    // per '/', per linux s'ha de transformar a '\'
     // Obtenim el path relatiu de la imatge
     dcmDirectoryRecordImage->findAndGetOFStringArray(DCM_ReferencedFileID, tagValue);
     image->setPath(m_dicomdirAbsolutePath + "/" + buildImageRelativePath(tagValue.c_str()));

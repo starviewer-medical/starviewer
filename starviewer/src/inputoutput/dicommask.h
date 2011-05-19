@@ -7,7 +7,8 @@
 class DcmDataset;
 
 /** Aquesta classe construeix una màscara per la cerca d'estudis.
-   *Cada camp que volem que la cerca ens retorni li hem de fer el set, sinó retornarà valor null per aquell camp. Per tots els camps podem passar, cadena buida que significa que buscarà tots els valors d'aquell camp, o passar-li un valor en concret, on només retornarà els compleixin aquell criteri.
+  * Cada camp que volem que la cerca ens retorni li hem de fer el set, sinó retornarà valor null per aquell camp. Per tots els camps podem passar,
+  * cadena buida que significa que buscarà tots els valors d'aquell camp, o passar-li un valor en concret, on només retornarà els compleixin aquell criteri.
  */
 namespace udg {
 
@@ -272,7 +273,8 @@ public:
 
     bool operator ==(const DicomMask &mask);
 
-    ///Defineix l'operador suma dos màscares, en el cas que el this i la màscara passada per paràmetre tinguin un valor de filtratge per una determinada propietat, no es cercarà pels dos valors,sinó només pel de la màscara this
+    /// Defineix l'operador suma dos màscares, en el cas que el this i la màscara passada per paràmetre tinguin un valor de filtratge per una determinada
+    /// propietat, no es cercarà pels dos valors,sinó només pel de la màscara this
     DicomMask operator +(const DicomMask &mask);
 
     /// Mètode de conveniència que ens retorna un string indicant els camps

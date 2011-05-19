@@ -35,20 +35,22 @@ public:
     ///TODO: Repassar al fer refactoring de la classe si és la millor manera de passar el nom de pacientAnonimitzat
     void setAnonymizeDICOMDIR(bool anonymizeDICOMDIR, QString patientNameAnonymized = "");
 
-    /// Afegeix un estudi a la llista per convertir-se a dicomsdir. Quan afageix l'estudi, l'afageix a la llista ordenats per pacient. Ja que els dicomdir s'han d'agrupar primerament per pacients
+    /// Afegeix un estudi a la llista per convertir-se a dicomsdir. Quan afageix l'estudi, l'afageix a la llista ordenats per pacient. Ja que els dicomdir
+    /// s'han d'agrupar primerament per pacients
     /// @param studyUID UID de l'estudi a convertir a dicomdir
     void addStudy (const QString &studyUID);
 
-    /// Converteix a DICOMDIR en el path especificat els estudis que hi ha a la llista. ATENCIÓ!!! Si al crear el DICOMDIR falla s'esborrar el contingut de la carpeta
-    /// destí. La carpeta destí ha d'estar buida sinó la creació del DICOMDIR fallà i esborrarà tot el contingut del a carperta destí.
+    /// Converteix a DICOMDIR en el path especificat els estudis que hi ha a la llista. ATENCIÓ!!! Si al crear el DICOMDIR falla s'esborrar el contingut
+    /// de la carpeta destí. La carpeta destí ha d'estar buida sinó la creació del DICOMDIR fallà i esborrarà tot el contingut del a carperta destí.
     /// @param dicomdirPath directori on es guardarà el dicomdir
     /// @param indica si s'ha de copiar el contingut del directori guardat al settings InputOutputSettings::DICOMDIRFolderPathToCopy al DICOMDIR
     /// @return Indica l'estat en què finalitza el mètode
     //TODO:La comprovació de que la carpeta destí estigui buida es fa a QCreateDicomdir s'hauria de traslladar en aquesta classe
     Status convert(const QString &dicomdirPath, CreateDicomdir::recordDeviceDicomDir selectedDevice, bool copyFolderContent);
 
-    /// Crea un fitxer README.TXT, amb informació sobre quina institució ha generat el dicomdir per quan es grava en un cd o dvd en el path que se li especifiqui.
-    /// En el cas que el txt es vulgui afegir en el mateix directori arrel on hi ha el dicomdir s'haura de fer després d'haver convertir el directori en un dicomdir, si es fes abans el mètode de convertir el directori a dicomdir fallaria, perquè no sabia com tractar el README.txt
+    /// Crea un fitxer README.TXT, amb informació sobre quina institució ha generat el dicomdir per quan es grava en un cd o dvd en el path que se
+    /// li especifiqui. En el cas que el txt es vulgui afegir en el mateix directori arrel on hi ha el dicomdir s'haura de fer després d'haver convertir
+    /// el directori en un dicomdir, si es fes abans el mètode de convertir el directori a dicomdir fallaria, perquè no sabia com tractar el README.txt
     void createReadmeTxt();
 
     /// Especifica/Retorna si les imatges amb les que crearan el dicomdir s'han de convertir a LittleEndian o han de mantenir

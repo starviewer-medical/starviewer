@@ -16,7 +16,8 @@ QColor TransferFunctionTemplate<QColor>::linearInterpolation(const QColor &a, co
 
 /**
     Representa una funció de transferència de color f: X -> C, on X és el conjunt de valors de propietat (reals) i C el conjunt de colors (QColors).
-    Aquesta funció té uns quants punts definits explícitament i la resta s'obtenen per interpolació lineal o extrapolació del veí més proper. La funció de transferència també té un nom.
+    Aquesta funció té uns quants punts definits explícitament i la resta s'obtenen per interpolació lineal o extrapolació del veí més proper.
+    La funció de transferència també té un nom.
  */
 class ColorTransferFunction : public TransferFunctionTemplate<QColor> {
 

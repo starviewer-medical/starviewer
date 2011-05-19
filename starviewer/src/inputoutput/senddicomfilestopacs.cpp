@@ -155,9 +155,10 @@ bool SendDICOMFilesToPACS::storeSCU(T_ASC_Association *association, QString file
         request.DataSetType = DIMSE_DATASET_PRESENT;
         request.Priority = DIMSE_PRIORITY_LOW;
 
-        m_lastOFCondition = DIMSE_storeUser(association, presentationContextID, &request, NULL /*imageFileName*/, dcmff.getDataset(), NULL /*progressCallback*/,
-            NULL /*callbackData */, DIMSE_NONBLOCKING, Settings().getValue(InputOutputSettings::PACSConnectionTimeout).toInt(), &response, &statusDetail, NULL /*check for cancel parameters*/,
-            DU_fileSize(qPrintable(filepathToStore)));
+        m_lastOFCondition = DIMSE_storeUser(association, presentationContextID, &request, NULL /*imageFileName*/, dcmff.getDataset(),
+                                            NULL /*progressCallback*/, NULL /*callbackData */, DIMSE_NONBLOCKING,
+                                            Settings().getValue(InputOutputSettings::PACSConnectionTimeout).toInt(), &response, &statusDetail,
+                                            NULL /*check for cancel parameters*/, DU_fileSize(qPrintable(filepathToStore)));
 
         if (m_lastOFCondition.bad())
         {
@@ -282,13 +283,15 @@ PACSRequestStatus::SendRequestStatus SendDICOMFilesToPACS::getStatusStoreSCU()
     else if (getNumberOfDICOMFilesSentFailed() > 0)
     {
         //No s'han pogut guardar els fitxers
-        ERROR_LOG(QString("L'enviament al PACS de %1 de %2 fitxers ha fallat").arg(QString().setNum(getNumberOfDICOMFilesSentFailed()), QString().setNum(m_numberOfDICOMFilesToSend)));
+        ERROR_LOG(QString("L'enviament al PACS de %1 de %2 fitxers ha fallat")
+                     .arg(QString().setNum(getNumberOfDICOMFilesSentFailed()), QString().setNum(m_numberOfDICOMFilesToSend)));
         return PACSRequestStatus::SendSomeDICOMFilesFailed;
     }
     else if (getNumberOfDICOMFilesSentWarning() > 0)
     {
         //Alguna imatge s'ha guardat amb l'Status de warning (Normalment significa que el PACS ha modificat les dades del fitxer DICOM enviat)
-        WARN_LOG(QString("En l'enviament de %1 de %2 fitxers s'ha rebut un warning").arg(QString().setNum(getNumberOfDICOMFilesSentWarning()), QString().setNum(m_numberOfDICOMFilesToSend)));
+        WARN_LOG(QString("En l'enviament de %1 de %2 fitxers s'ha rebut un warning")
+                    .arg(QString().setNum(getNumberOfDICOMFilesSentWarning()), QString().setNum(m_numberOfDICOMFilesToSend)));
         return PACSRequestStatus::SendWarningForSomeImages;
     }
 

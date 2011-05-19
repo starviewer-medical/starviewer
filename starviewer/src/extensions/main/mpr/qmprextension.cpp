@@ -162,7 +162,8 @@ void QMPRExtension::init()
     m_pickedActorReslice = 0;
     m_mipViewer = 0;
 
-    m_extensionToolsList << "ZoomTool" << "SlicingTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" << "DistanceTool" << "PolylineROITool" << "OvalROITool" << "EraserTool";
+    m_extensionToolsList << "ZoomTool" << "SlicingTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool"
+                         << "DistanceTool" << "PolylineROITool" << "OvalROITool" << "EraserTool";
 }
 
 void QMPRExtension::createActions()
@@ -210,7 +211,8 @@ void QMPRExtension::initializeTools()
 
     // Definim els grups exclusius
     QStringList leftButtonExclusiveTools;
-    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "DistanceTool" << "PolylineROITool" << "OvalROITool" << "EraserTool" << "AngleTool" << "NonClosedAngleTool";
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "DistanceTool" << "PolylineROITool" << "OvalROITool" << "EraserTool" << "AngleTool"
+                             << "NonClosedAngleTool";
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
 
     QStringList middleButtonExclusiveTools;
@@ -354,7 +356,8 @@ void QMPRExtension::showScreenshotsExporterDialog()
 
 void QMPRExtension::showViewerInformation(bool show)
 {
-    m_axial2DView->enableAnnotation(Q2DViewer::WindowInformationAnnotation | Q2DViewer::PatientOrientationAnnotation | Q2DViewer::SliceAnnotation | Q2DViewer::PatientInformationAnnotation | Q2DViewer::AcquisitionInformationAnnotation, show);
+    m_axial2DView->enableAnnotation(Q2DViewer::WindowInformationAnnotation | Q2DViewer::PatientOrientationAnnotation | Q2DViewer::SliceAnnotation |
+                                    Q2DViewer::PatientInformationAnnotation | Q2DViewer::AcquisitionInformationAnnotation, show);
     m_sagital2DView->enableAnnotation(Q2DViewer::WindowInformationAnnotation | Q2DViewer::AcquisitionInformationAnnotation, show);
     m_coronal2DView->enableAnnotation(Q2DViewer::WindowInformationAnnotation | Q2DViewer::AcquisitionInformationAnnotation, show);
 }
@@ -926,7 +929,8 @@ void QMPRExtension::setInput(Volume *input)
     m_volume->getWholeExtent(extent);
     m_axialSlider->setMaximum(extent[5]);
 
-    double maxThickSlab = sqrt((m_axialSpacing[0] * extent[1]) * (m_axialSpacing[0] * extent[1]) + (m_axialSpacing[1] * extent[3]) * (m_axialSpacing[1] * extent[3]) + (m_axialSpacing[2] * extent[5]) * (m_axialSpacing[2] * extent[5]));
+    double maxThickSlab = sqrt((m_axialSpacing[0] * extent[1]) * (m_axialSpacing[0] * extent[1]) + (m_axialSpacing[1] * extent[3]) *
+                               (m_axialSpacing[1] * extent[3]) + (m_axialSpacing[2] * extent[5]) * (m_axialSpacing[2] * extent[5]));
     m_thickSlabSlider->setMaximum((int) maxThickSlab);
     m_thickSlabSpinBox->setMaximum(maxThickSlab);
 
@@ -960,9 +964,11 @@ void QMPRExtension::initOrientation()
 {
     // IMPORTANT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-    // Ara li donem a cada pla unes dimensions, extent, espaiat, etc d'acord com si aquests plans haguessin de ser ortogonals,però segons el pla de tall serà d'una manera o altre
+    // Ara li donem a cada pla unes dimensions, extent, espaiat, etc d'acord com si aquests plans haguessin de ser ortogonals,però segons el pla de tall
+    // serà d'una manera o altre
     // La vista axial mantindrà els espaiats i extents originals
-    // La vista sagital, com que únicament es podrà rotar sobre l'eix Y, mantindrà l'extent de la seva X igual que l'extent Y original. Els altres s'hauran d'adaptar a les distàncies corresponents a les diagonals zmax-xmax
+    // La vista sagital, com que únicament es podrà rotar sobre l'eix Y, mantindrà l'extent de la seva X igual que l'extent Y original. Els altres
+    // s'hauran d'adaptar a les distàncies corresponents a les diagonals zmax-xmax
     // En la vista coronal, com que pot tenir qualsevol orientacio tindrà que adaptar els seus extents als màxims
 
     int extent[6];
@@ -1010,7 +1016,8 @@ void QMPRExtension::initOrientation()
 
     // YZ, x-normal : vista sagital
     // Estem ajustant la mida del pla a les dimensions d'aquesta orientació
-    // La mida de la Y inicial, que serà una combinació d'X i Y durant l'execució, ha de ser la diagonal del pla XY. Ampliarem la meitat a cada banda sobre la mida d'Y.
+    // La mida de la Y inicial, que serà una combinació d'X i Y durant l'execució, ha de ser la diagonal del pla XY. Ampliarem la meitat a cada banda
+    // sobre la mida d'Y.
     // Atenció: estem assumint que xbounds[0] = 0. La forma correcta seria (xbounds[1] - xbounds[0] (+1?)). El mateix per y.
     double xyDiagonal = sqrt(volumeSize[0] * volumeSize[0] + volumeSize[1] * volumeSize[1]);
     double halfDeltaY = (xyDiagonal - volumeSize[1]) * 0.5;
@@ -1034,7 +1041,8 @@ void QMPRExtension::initOrientation()
 
     // ZX, y-normal : vista coronal
     // ídem anterior
-    // La mida de la X i la Z inicials, que seran una combinació d'X, Y i Z durant l'execució, ha de ser la diagonal del volum. Ampliarem la meitat a cada banda sobre la mida dels eixos X i Z.
+    // La mida de la X i la Z inicials, que seran una combinació d'X, Y i Z durant l'execució, ha de ser la diagonal del volum. Ampliarem la meitat a
+    // cada banda sobre la mida dels eixos X i Z.
     // Atenció: estem assumint que xbounds[0] = 0. La forma correcta seria (xbounds[1] - xbounds[0] (+1?)). El mateix per y i z.
     double diagonal = sqrt(volumeSize[0] * volumeSize[0] + volumeSize[1] * volumeSize[1] + volumeSize[2] * volumeSize[2]);
     double halfDeltaX = (diagonal - volumeSize[0]) * 0.5;
@@ -1044,7 +1052,8 @@ void QMPRExtension::initOrientation()
     m_coronalPlaneSource->SetPoint2(xbounds[0] - halfDeltaX, ybounds[0], zbounds[0] - halfDeltaZ);
     m_coronalPlaneSource->Push(0.5 * volumeSize[1]);
     // Calculem els extents del coronal
-    double coronalExtentLength = sqrt(static_cast<double>(extentLength[0] * extentLength[0] + extentLength[1] * extentLength[1] + extentLength[2] * extentLength[2]));
+    double coronalExtentLength = sqrt(static_cast<double>(extentLength[0] * extentLength[0] + extentLength[1] * extentLength[1] + extentLength[2] *
+                                                          extentLength[2]));
     // coronalExtentLength *= 2.0; // potser caldria doblar l'extent per assegurar que no es perdi detall (Nyquist)
     m_coronalExtentLength[0] = 1;
     while (m_coronalExtentLength[0] < coronalExtentLength)
@@ -1204,7 +1213,8 @@ void QMPRExtension::updateControls()
     const double Length = 2000.0;
 
     // Projecció sagital sobre axial i viceversa
-    MathTools::planeIntersection(m_axialPlaneSource->GetOrigin(), m_axialPlaneSource->GetNormal(), m_sagitalPlaneSource->GetOrigin(), m_sagitalPlaneSource->GetNormal(), r, t);
+    MathTools::planeIntersection(m_axialPlaneSource->GetOrigin(), m_axialPlaneSource->GetNormal(), m_sagitalPlaneSource->GetOrigin(),
+                                 m_sagitalPlaneSource->GetNormal(), r, t);
     // Normalitzem t per que sempre tinguem la mateixa llargada (1)
     MathTools::normalize(t);
 
@@ -1226,7 +1236,8 @@ void QMPRExtension::updateControls()
 
     // Projecció coronal sobre sagital
 
-    MathTools::planeIntersection(m_coronalPlaneSource->GetOrigin(), m_coronalPlaneSource->GetNormal(), m_sagitalPlaneSource->GetOrigin(), m_sagitalPlaneSource->GetNormal(), r, t);
+    MathTools::planeIntersection(m_coronalPlaneSource->GetOrigin(), m_coronalPlaneSource->GetNormal(), m_sagitalPlaneSource->GetOrigin(),
+                                 m_sagitalPlaneSource->GetNormal(), r, t);
     // Normalitzem t per que sempre tinguem la mateixa llargada (1)
     MathTools::normalize(t);
 
@@ -1244,7 +1255,8 @@ void QMPRExtension::updateControls()
     m_coronalOverSagitalIntersectionAxis->SetPosition2(position2[0], position2[1]);
 
     // Projecció thick slab sobre sagital
-    MathTools::planeIntersection(m_thickSlabPlaneSource->GetOrigin(), m_thickSlabPlaneSource->GetNormal(), m_sagitalPlaneSource->GetOrigin(), m_sagitalPlaneSource->GetNormal(), r, t);
+    MathTools::planeIntersection(m_thickSlabPlaneSource->GetOrigin(), m_thickSlabPlaneSource->GetNormal(), m_sagitalPlaneSource->GetOrigin(),
+                                 m_sagitalPlaneSource->GetNormal(), r, t);
     // Normalitzem t per que sempre tinguem la mateixa llargada (1)
     MathTools::normalize(t);
 
@@ -1262,7 +1274,8 @@ void QMPRExtension::updateControls()
     m_thickSlabOverSagitalActor->SetPosition2(position2[0], position2[1]);
 
     // Projecció coronal sobre axial
-    MathTools::planeIntersection(m_coronalPlaneSource->GetOrigin(), m_coronalPlaneSource->GetNormal(), m_axialPlaneSource->GetOrigin(), m_axialPlaneSource->GetNormal(), r, t);
+    MathTools::planeIntersection(m_coronalPlaneSource->GetOrigin(), m_coronalPlaneSource->GetNormal(), m_axialPlaneSource->GetOrigin(),
+                                 m_axialPlaneSource->GetNormal(), r, t);
     // Normalitzem t per que sempre tinguem la mateixa llargada (1)
     MathTools::normalize(t);
 
@@ -1278,7 +1291,8 @@ void QMPRExtension::updateControls()
     m_coronalOverAxialIntersectionAxis->SetPosition2(position2[0], position2[1]);
 
     // Projecció thick slab sobre axial
-    MathTools::planeIntersection(m_thickSlabPlaneSource->GetOrigin(), m_thickSlabPlaneSource->GetNormal(), m_axialPlaneSource->GetOrigin(), m_axialPlaneSource->GetNormal(), r, t);
+    MathTools::planeIntersection(m_thickSlabPlaneSource->GetOrigin(), m_thickSlabPlaneSource->GetNormal(), m_axialPlaneSource->GetOrigin(),
+                                 m_axialPlaneSource->GetNormal(), r, t);
     // Normalitzem t per que sempre tinguem la mateixa llargada (1)
     MathTools::normalize(t);
 
@@ -1331,7 +1345,8 @@ void QMPRExtension::updateControls()
 
 void QMPRExtension::updateIntersectionPoint()
 {
-    MathTools::planeIntersection(m_coronalPlaneSource->GetOrigin(), m_coronalPlaneSource->GetNormal(), m_sagitalPlaneSource->GetOrigin(), m_sagitalPlaneSource->GetNormal(), m_axialPlaneSource->GetOrigin(), m_axialPlaneSource->GetNormal(), m_intersectionPoint);
+    MathTools::planeIntersection(m_coronalPlaneSource->GetOrigin(), m_coronalPlaneSource->GetNormal(), m_sagitalPlaneSource->GetOrigin(),
+                                 m_sagitalPlaneSource->GetNormal(), m_axialPlaneSource->GetOrigin(), m_axialPlaneSource->GetNormal(), m_intersectionPoint);
 }
 
 void QMPRExtension::updatePlanes()
@@ -1461,7 +1476,8 @@ void QMPRExtension::updatePlane(vtkPlaneSource *planeSource, vtkImageReslice *re
 
     reslice->SetOutputSpacing(planeSizeX / extentLength[0], planeSizeY / extentLength[1], 1.0);
     reslice->SetOutputOrigin(0.0, 0.0, 0.0);
-    // TODO Li passem thickSlab que és double però això només accepta int's! Buscar si aquesta és la manera adequada. Potsre si volem fer servir doubles ho hauríem de combinar amb l'outputSpacing
+    // TODO Li passem thickSlab que és double però això només accepta int's! Buscar si aquesta és la manera adequada. Potsre si volem fer servir doubles
+    // ho hauríem de combinar amb l'outputSpacing
     // Obtenim una única llesca
     reslice->SetOutputExtent(0, extentLength[0] - 1, 0, extentLength[1] - 1, 0, static_cast<int>(m_thickSlab));
     reslice->Update();

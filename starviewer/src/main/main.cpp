@@ -201,11 +201,13 @@ int main(int argc, char *argv[])
         QString errorInvalidCommanLineArguments;
         if (!StarviewerSingleApplicationCommandLineSingleton::instance()->parse(commandLineArgumentsList, errorInvalidCommanLineArguments))
         {
-            QString invalidCommandLine = QObject::tr("There were errors invoking %1 from the command line with the following call:\n\n%2").arg(udg::ApplicationNameString).arg(commandLineCall) + "\n\n";
+            QString invalidCommandLine = QObject::tr("There were errors invoking %1 from the command line with the following call:\n\n%2")
+                                                     .arg(udg::ApplicationNameString).arg(commandLineCall) + "\n\n";
             invalidCommandLine += QObject::tr("Detected errors: ") + errorInvalidCommanLineArguments + "\n";
             invalidCommandLine += QObject::tr("usage: %1 [options]").arg(udg::ApplicationNameString) + "\n\n";
             invalidCommandLine += QObject::tr("Options:") + "\n";
-            invalidCommandLine += StarviewerSingleApplicationCommandLineSingleton::instance()->getStarviewerApplicationCommandLineOptions().getOptionsDescription();
+            invalidCommandLine += StarviewerSingleApplicationCommandLineSingleton::instance()->getStarviewerApplicationCommandLineOptions()
+                                  .getOptionsDescription();
 
             QMessageBox::warning(NULL, udg::ApplicationNameString, invalidCommandLine);
 
@@ -244,8 +246,8 @@ int main(int argc, char *argv[])
                          &app, SLOT(quit()));
         splash.close();
 
-        // S'ha esperat a tenir-ho tot carregat per processar els aguments rebuts per línia de comandes, d'aquesta manera per exemoke si en llança algun QMessageBox,
-        // ja es llança mostrant-se la MainWindow.
+        // S'ha esperat a tenir-ho tot carregat per processar els aguments rebuts per línia de comandes, d'aquesta manera per exemoke si en llança algun 
+        // QMessageBox, ja es llança mostrant-se la MainWindow.
         if (commandLineArgumentsList.count() > 1)
         {
             QString errorInvalidCommanLineArguments;

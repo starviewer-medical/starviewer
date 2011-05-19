@@ -17,7 +17,8 @@ void QStarviewerSAPWrapper::sendRequestToLocalStarviewer(QString accessionNumber
     // Port pel que Starviewer espera peticions del RIS
     int starviewerRisPort = settings.getValue(InputOutputSettings::RISRequestsPort).toInt();
 
-    INFO_LOG(QString("QStarviewerSAPWrapper::Demanare a l'Starviewer local pel port %1 la descarrega de l'estudi amb accession number %2").arg(QString().setNum(starviewerRisPort), accessionNumber));
+    INFO_LOG(QString("QStarviewerSAPWrapper::Demanare a l'Starviewer local pel port %1 la descarrega de l'estudi amb accession number %2")
+                .arg(QString().setNum(starviewerRisPort), accessionNumber));
 
     // Connectem contra el localhost
     tcpSocket.connectToHost(locaHostAddress, starviewerRisPort);
@@ -71,9 +72,11 @@ QString QStarviewerSAPWrapper::getXmlPier(QString accessionNumber)
 
 void QStarviewerSAPWrapper::errorConnecting(int starviewerRisPort, QString errorDescription)
 {
-    QString messageError = QString("Can't connect with Starviewer on port %1, be sure that Starviewer is running. Error description: %2.\n").arg(QString().setNum(starviewerRisPort), errorDescription);
+    QString messageError = QString("Can't connect with Starviewer on port %1, be sure that Starviewer is running. Error description: %2.\n")
+                              .arg(QString().setNum(starviewerRisPort), errorDescription);
 
-    ERROR_LOG(QString("QStarviewerSAPWrapper::No s'ha pogut connectar amb l'Starviewer pel port %1, descripcio error: %2").arg(QString().setNum(starviewerRisPort), errorDescription));
+    ERROR_LOG(QString("QStarviewerSAPWrapper::No s'ha pogut connectar amb l'Starviewer pel port %1, descripcio error: %2")
+                 .arg(QString().setNum(starviewerRisPort), errorDescription));
 }
 
 void QStarviewerSAPWrapper::errorWriting(QString errorDescription)

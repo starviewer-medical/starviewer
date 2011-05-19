@@ -23,15 +23,15 @@
 
 /** ATENCIÓ!!!!!!!!!!!!!!!!!!!!!!!!!!
     AQUESTA CLASSE ÉS UNA MODIFICACIÓ de la classe de Gdcm Anonymizer, que podrem trobar al fitxer gdcmAnonymizer. Anonymizer és una classe que ens permet
-    anonimitzar un fitxer DICOM i guardar els valors dels tags originals encriptats en el propi DICOM utilitzant OpenSSL, el problema és que les GDCM amb les que
-    treballem ara no estan compilades amb OpenSSL i la classe no funcionaria.
+    anonimitzar un fitxer DICOM i guardar els valors dels tags originals encriptats en el propi DICOM utilitzant OpenSSL, el problema és que les GDCM amb les
+    que treballem ara no estan compilades amb OpenSSL i la classe no funcionaria.
 
     Com en aquestes altures de desenvolupament de la release no considerem que sigui gaire oportu crear un nou sdk amb les GDCM compilades amb openSSL
     i la part d'encriptar els tags amb el seu valor original no ens interessa, el que hem decidit és modificar aquesta classe treien tota la part d'encriptació
     ,d'aquesta manera podrem anonimitzar DICOM utilitzant aquesta classe modificada.
 
-    En la proxima release ja tindrem les GDCM compilades amb OpenSSL i podrem prescindir d'aquesta classe. D'aquesta manera les altres nostres classes que utilitzen
-    aquesta classe simplement hauran de fer referència a la classe de gdcm i ja funcionarà l'anonimització*/
+    En la proxima release ja tindrem les GDCM compilades amb OpenSSL i podrem prescindir d'aquesta classe. D'aquesta manera les altres nostres classes que
+    utilitzen aquesta classe simplement hauran de fer referència a la classe de gdcm i ja funcionarà l'anonimització*/
 
 //Utilitzem el namespace de gdcm així quan substituim aquesta classe per la original de gdcm només haurem de canviar el nom de la classe
 namespace gdcm

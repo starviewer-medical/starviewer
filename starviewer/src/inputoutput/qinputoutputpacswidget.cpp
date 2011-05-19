@@ -81,10 +81,13 @@ void QInputOutputPacsWidget::createContextMenuQStudyTreeWidget()
 {
     QAction *action;
 
-    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/retrieveAndView.png"), tr("Retrieve && &View"), this, SLOT(retrieveAndViewSelectedStudies()), ShortcutManager::getShortcuts(Shortcuts::RetrieveAndViewSelectedStudies).first());
+    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/retrieveAndView.png"), tr("Retrieve && &View"), this,
+                                                     SLOT(retrieveAndViewSelectedStudies()),
+                                                     ShortcutManager::getShortcuts(Shortcuts::RetrieveAndViewSelectedStudies).first());
     (void) new QShortcut(action->shortcut(), this, SLOT(retrieveAndViewSelectedStudies()));
 
-    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/retrieve.png"), tr("&Retrieve"), this, SLOT(retrieveSelectedStudies()), ShortcutManager::getShortcuts(Shortcuts::RetrieveSelectedStudies).first());
+    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/retrieve.png"), tr("&Retrieve"), this, SLOT(retrieveSelectedStudies()),
+                                                     ShortcutManager::getShortcuts(Shortcuts::RetrieveSelectedStudies).first());
     (void) new QShortcut(action->shortcut(), this, SLOT(retrieveSelectedStudies()));
 
     // Especifiquem que es el menu del dicomdir
@@ -265,7 +268,8 @@ void QInputOutputPacsWidget::expandImagesOfSeries(QString studyInstanceUID, QStr
 
     INFO_LOG("Cercant informacio de les imatges de la serie" + seriesInstanceUID + " de l'estudi" + studyInstanceUID + " del PACS " + pacsDescription);
 
-    enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, buildImageDicomMask(studyInstanceUID, seriesInstanceUID), QueryPacsJob::image));
+    enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, buildImageDicomMask(studyInstanceUID, seriesInstanceUID),
+                                                                       QueryPacsJob::image));
 }
 
 void QInputOutputPacsWidget::retrieveSelectedStudies()
@@ -340,10 +344,12 @@ void QInputOutputPacsWidget::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacs
     pacsJob->deleteLater();
 }
 
-void QInputOutputPacsWidget::retrieve(QString pacsIDToRetrieve, Study *studyToRetrieve, DicomMask maskStudyToRetrieve, ActionsAfterRetrieve actionsAfterRetrieve)
+void QInputOutputPacsWidget::retrieve(QString pacsIDToRetrieve, Study *studyToRetrieve, DicomMask maskStudyToRetrieve,
+                                      ActionsAfterRetrieve actionsAfterRetrieve)
 {
     PacsDevice pacsDevice = PacsDeviceManager().getPACSDeviceByID(pacsIDToRetrieve);
-    RetrieveDICOMFilesFromPACSJob::RetrievePriorityJob retrievePriorityJob = actionsAfterRetrieve == View ? RetrieveDICOMFilesFromPACSJob::High : RetrieveDICOMFilesFromPACSJob::Medium;
+    RetrieveDICOMFilesFromPACSJob::RetrievePriorityJob retrievePriorityJob = actionsAfterRetrieve == View ? RetrieveDICOMFilesFromPACSJob::High
+        : RetrieveDICOMFilesFromPACSJob::Medium;
 
     RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = new RetrieveDICOMFilesFromPACSJob(pacsDevice, studyToRetrieve, maskStudyToRetrieve,
         retrievePriorityJob);
@@ -367,7 +373,8 @@ bool QInputOutputPacsWidget::AreValidQueryParameters(DicomMask *maskToQuery, QLi
     if (maskToQuery->isEmpty())
     {
         QMessageBox::StandardButton response;
-        response = QMessageBox::question(this, ApplicationNameString, tr("No search fields were filled.") + "\n" + tr("The query can take a long time.\nDo you want continue?"), QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+        response = QMessageBox::question(this, ApplicationNameString, tr("No search fields were filled.") + "\n" + 
+            tr("The query can take a long time.\nDo you want continue?"), QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
         return (response == QMessageBox::Yes);
     }
     else

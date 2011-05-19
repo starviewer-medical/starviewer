@@ -22,7 +22,8 @@ class Volume;
 /**
     Extensió encarregada de fer l'MPR 2D
 
-    TODO Afegir l'interacció de l'usuari. Per rotar i traslladar els plans podem seguir com a model el que fan els mètodes vtkImagePlaneWidget::Spin() i vtkImagePlaneWidget::Translate()
+    TODO Afegir l'interacció de l'usuari. Per rotar i traslladar els plans podem seguir com a model el que fan els mètodes vtkImagePlaneWidget::Spin()
+    i vtkImagePlaneWidget::Translate()
 */
 class QMPRExtension : public QWidget, private ::Ui::QMPRExtensionBase {
 Q_OBJECT
@@ -51,7 +52,8 @@ public slots:
     void switchToMIPLayout(bool isMIPChecked);
 
 signals:
-    /// Notificació del canvi de direcció de cadascun dels eixos que podem manipular. Aquests senyals haurien de ser enviats quan canviem la direcció a través dels controls (línies blaves i vermella)
+    /// Notificació del canvi de direcció de cadascun dels eixos que podem manipular. Aquests senyals haurien de ser enviats quan canviem la direcció a
+    /// través dels controls (línies blaves i vermella)
     void coronalXAxisChanged(double x1, double x2, double x3);
     void coronalZAxisChanged(double z1, double z2, double z3);
     void sagitalYAxisChanged(double y1, double y2, double y3);
@@ -172,8 +174,10 @@ private:
     /// El volum al que se li practica l'MPR
     Volume *m_volume;
 
-    /// Els actors que representen els eixos que podrem modificar. Línia vermella, blava (axial), blava (sagital) respectivament i el thickSlab (línies puntejades blaves en vista axial i sagital).
-    vtkAxisActor2D *m_sagitalOverAxialAxisActor, *m_axialOverSagitalIntersectionAxis, *m_coronalOverAxialIntersectionAxis, *m_coronalOverSagitalIntersectionAxis, *m_thickSlabOverAxialActor, *m_thickSlabOverSagitalActor;
+    /// Els actors que representen els eixos que podrem modificar. Línia vermella, blava (axial), blava (sagital) respectivament i el thickSlab
+    /// (línies puntejades blaves en vista axial i sagital).
+    vtkAxisActor2D *m_sagitalOverAxialAxisActor, *m_axialOverSagitalIntersectionAxis, *m_coronalOverAxialIntersectionAxis,
+                   *m_coronalOverSagitalIntersectionAxis, *m_thickSlabOverAxialActor, *m_thickSlabOverSagitalActor;
 
     /// Drawer points per pintar els centres dels plans a les vistes.
     DrawerPoint *m_axialViewSagitalCenterDrawerPoint;

@@ -83,7 +83,8 @@ QVariant QOpacityTransferFunctionGraphicalViewNode::itemChange(GraphicsItemChang
     }
 }
 
-void QOpacityTransferFunctionGraphicalViewNode::fixLines(QOpacityTransferFunctionGraphicalViewNode *leftNode, QOpacityTransferFunctionGraphicalViewNode *rightNode)
+void QOpacityTransferFunctionGraphicalViewNode::fixLines(QOpacityTransferFunctionGraphicalViewNode *leftNode,
+                                                         QOpacityTransferFunctionGraphicalViewNode *rightNode)
 {
     Q_ASSERT(leftNode->x() < rightNode->x());
     Q_ASSERT(leftNode->leftLine() == rightNode->rightLine());

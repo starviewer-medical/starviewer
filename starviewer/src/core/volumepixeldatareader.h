@@ -17,7 +17,8 @@ class VolumePixelDataReader : public QObject {
 Q_OBJECT
 public:
     /// Tipus d'error que podem tenir al llegir
-    enum PixelDataReadError { NoError = 1, SizeMismatch, InvalidFileName, MissingFile, OutOfMemory, ZeroSpacingNotAllowed, CannotReadFile, ReadAborted, UnknownError };
+    enum PixelDataReadError { NoError = 1, SizeMismatch, InvalidFileName, MissingFile, OutOfMemory,
+                              ZeroSpacingNotAllowed, CannotReadFile, ReadAborted, UnknownError };
 
     VolumePixelDataReader(QObject *parent = 0);
     ~VolumePixelDataReader();

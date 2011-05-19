@@ -175,8 +175,10 @@ void ROITool::computeStatisticsData()
         intersectedSegmentsIndexList.clear();
         for (int i = 0; i < numberOfSegments; ++i)
         {
-            if ((sweepLineBeginPoint[sweepLineCoordinateIndex] <= segmentsStartPoints.at(i)[sweepLineCoordinateIndex] && sweepLineBeginPoint[sweepLineCoordinateIndex] >= segmentsEndPoints.at(i)[sweepLineCoordinateIndex])
-            || (sweepLineBeginPoint[sweepLineCoordinateIndex] >= segmentsStartPoints.at(i)[sweepLineCoordinateIndex] && sweepLineBeginPoint[sweepLineCoordinateIndex] <= segmentsEndPoints.at(i)[sweepLineCoordinateIndex]))
+            if ((sweepLineBeginPoint[sweepLineCoordinateIndex] <= segmentsStartPoints.at(i)[sweepLineCoordinateIndex] &&
+                sweepLineBeginPoint[sweepLineCoordinateIndex] >= segmentsEndPoints.at(i)[sweepLineCoordinateIndex])
+            || (sweepLineBeginPoint[sweepLineCoordinateIndex] >= segmentsStartPoints.at(i)[sweepLineCoordinateIndex] &&
+                sweepLineBeginPoint[sweepLineCoordinateIndex] <= segmentsEndPoints.at(i)[sweepLineCoordinateIndex]))
             {
                 intersectedSegmentsIndexList << i;
             }
@@ -185,7 +187,9 @@ void ROITool::computeStatisticsData()
         // Obtenim les interseccions entre tots els segments de la ROI i la línia d'escombrat actual
         foreach (int segmentIndex, intersectedSegmentsIndexList)
         {
-            double *foundPoint = MathTools::infiniteLinesIntersection((double*)segmentsStartPoints.at(segmentIndex), (double*)segmentsEndPoints.at(segmentIndex), sweepLineBeginPoint, sweepLineEndPoint, intersectionState);
+            double *foundPoint = MathTools::infiniteLinesIntersection((double*)segmentsStartPoints.at(segmentIndex),
+                                                                      (double*)segmentsEndPoints.at(segmentIndex),
+                                                                      sweepLineBeginPoint, sweepLineEndPoint, intersectionState);
             if (intersectionState == MathTools::LinesIntersect)
             {
                 // Cal ordenar les interseccions en la direcció horitzontal per tal que el recompte de píxels es faci correctament

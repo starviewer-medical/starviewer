@@ -10,7 +10,8 @@ class DICOMValueAttribute;
 class DICOMSequenceAttribute;
 class DICOMTag;
 
-/** Classe encarregada de representar els Items de les seqüències de l'estàndard DICOM. Per treballar amb seqüències s'ha de fer ús de la classe \c DICOMSequenceAttribute.
+/** Classe encarregada de representar els Items de les seqüències de l'estàndard DICOM. Per treballar amb seqüències s'ha de fer ús de la classe
+    \c DICOMSequenceAttribute.
   */
 class DICOMSequenceItem {
 

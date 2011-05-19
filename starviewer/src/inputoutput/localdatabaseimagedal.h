@@ -19,8 +19,10 @@ public:
 
     LocalDatabaseImageDAL(DatabaseConnection *dbConnection);
 
-    /// Insereix la informació d'una imatge a la caché, actualitzamt l'espai ocupat de la pool, com s'ha de fer un insert i un update aquests dos operacions es fan dins el marc d'una transaccio, per mantenir coherent l'espai de la pool ocupat. Per això tot i que accedim a dos taules, al haver-se de fer dins el marc d'una transacció, necessitem fer-les
-    /// dins el mateix mètode. Ja que sinó ens podríem trobar que altres operacions entressin entre insertar la imatge i updatar la pool i quedessin incloses dins la tx
+    /// Insereix la informació d'una imatge a la caché, actualitzamt l'espai ocupat de la pool, com s'ha de fer un insert i un update aquests dos operacion
+    /// es fan dins el marc d'una transaccio, per mantenir coherent l'espai de la pool ocupat. Per això tot i que accedim a dos taules, al haver-se de fer
+    /// dins el marc d'una transacció, necessitem fer-les dins el mateix mètode. Ja que sinó ens podríem trobar que altres operacions entressin entre insertar
+    /// la imatge i updatar la pool i quedessin incloses dins la tx
     /// @param dades de la imatge
     /// @return retorna estat del mètode
     void insert(Image *newImage);
@@ -49,7 +51,8 @@ private :
     ///Genera la sentència sql per fer selectes d'imatges, de la màscara només té en compte per construir la sentència el StudyUID, SeriesUID i SOPInstanceUID
     QString buildSqlSelect(const DicomMask &imageMaskToSelect);
 
-    ///Genera la sentència sql per comptar número d'imatges, de la màscara només té en compte per construir la sentència el StudyUID, SeriesUID i SOPInstanceUID
+    /// Genera la sentència sql per comptar número d'imatges, de la màscara només té en compte per construir la sentència el StudyUID, SeriesUID i
+    /// SOPInstanceUID
     QString buildSqlSelectCountImages(const DicomMask &imageMaskToSelect);
 
     ///Genera la sentència sql per inserir la nova imatge a la base de dades

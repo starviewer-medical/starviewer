@@ -65,10 +65,12 @@ void QInputOutputDicomdirWidget::createContextMenuQStudyTreeWidget()
 {
     QAction *action;
 
-    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/view.png"), tr("&View"), this, SLOT(view()), ShortcutManager::getShortcuts(Shortcuts::ViewSelectedStudies).first());
+    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/view.png"), tr("&View"), this, SLOT(view()),
+                                                     ShortcutManager::getShortcuts(Shortcuts::ViewSelectedStudies).first());
     (void) new QShortcut(action->shortcut(), this, SLOT(view()));
 
-    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/retrieve.png"), tr("&Import"), this, SLOT(retrieveSelectedStudies()), ShortcutManager::getShortcuts(Shortcuts::ImportToLocalDatabaseSelectedDICOMDIRStudies).first());
+    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/retrieve.png"), tr("&Import"), this, SLOT(retrieveSelectedStudies()),
+                                                     ShortcutManager::getShortcuts(Shortcuts::ImportToLocalDatabaseSelectedDICOMDIRStudies).first());
     (void) new QShortcut(action->shortcut(), this, SLOT(retrieveSelectedStudies()));
 
     // Especifiquem que es el menu del dicomdir
@@ -82,7 +84,8 @@ bool QInputOutputDicomdirWidget::openDicomdir()
     Status state;
     bool ok = false;
     // L'asterisc abans de DICOMDIR i dicomdir hi és per compatibilitat amb Mac.
-    dicomdirPath = QFileDialog::getOpenFileName(0, QFileDialog::tr("Open"), settings.getValue(InputOutputSettings::LastOpenedDICOMDIRPath).toString(), "DICOMDIR (*DICOMDIR *dicomdir)");
+    dicomdirPath = QFileDialog::getOpenFileName(0, QFileDialog::tr("Open"), settings.getValue(InputOutputSettings::LastOpenedDICOMDIRPath).toString(),
+                                                "DICOMDIR (*DICOMDIR *dicomdir)");
 
     //Si és buit no ens han seleccionat cap fitxer
     if (!dicomdirPath.isEmpty())
@@ -242,7 +245,8 @@ void QInputOutputDicomdirWidget::view()
     }
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    //TODO: S'hauria de millorar el mètode ja que per la seva estructura lo d'obrir l'estudi per la sèrie que ens tinguin seleccionada només ho farà per un estudi ja que aquest mètode només se li passa per paràmetre una sèrie per defecte
+    // TODO: S'hauria de millorar el mètode ja que per la seva estructura lo d'obrir l'estudi per la sèrie que ens tinguin seleccionada només ho farà per un
+    // estudi ja que aquest mètode només se li passa per paràmetre una sèrie per defecte
     foreach (QString studyInstanceUIDSelected, selectedStudiesInstanceUID)
     {
         patientToProcessMask.setStudyInstanceUID(studyInstanceUIDSelected);
@@ -287,7 +291,8 @@ void QInputOutputDicomdirWidget::showDICOMDIRImporterError(QString studyInstance
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
         case DICOMDIRImporter::ErrorCopyingFiles:
-            message = tr("Some files of study with UID %2 could not be imported. Be sure that you have write permissions on the %1 cache directory.").arg(ApplicationNameString, studyInstanceUID);
+            message = tr("Some files of study with UID %2 could not be imported. Be sure that you have write permissions on the %1 cache directory.")
+                    .arg(ApplicationNameString, studyInstanceUID);
             message += tr("\n\nIf the problem persists contact with an administrator.");
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
@@ -299,7 +304,8 @@ void QInputOutputDicomdirWidget::showDICOMDIRImporterError(QString studyInstance
                 quint64 minimumFreeSpaceRequired = quint64(settings.getValue(InputOutputSettings::MinimumFreeGigaBytesForCache).toULongLong() * 1024);
                 message = tr("The study can't be imported because there isn't enough space.");
                 message += "\n";
-                message += tr("Try to free hard disk space, delete local studies or change in %1 configuration the size of reserved disk space for system to be able to import the study.").arg(ApplicationNameString);
+                message += tr("Try to free hard disk space, delete local studies or change in %1 configuration the size of reserved disk space for "
+                              "system to be able to import the study.").arg(ApplicationNameString);
                 message += "\n\n";
                 message += tr("Current location resources:");
                 message += "\n";
@@ -323,7 +329,8 @@ void QInputOutputDicomdirWidget::showDICOMDIRImporterError(QString studyInstance
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
         case DICOMDIRImporter::PatientInconsistent:
-            message = tr("The study with UID %2 can't be imported, because %1 has not been capable of read correctly DICOM information of the study.").arg(ApplicationNameString, studyInstanceUID);
+            message = tr("The study with UID %2 can't be imported, because %1 has not been capable of read correctly DICOM information of the study.")
+                    .arg(ApplicationNameString, studyInstanceUID);
             message += tr("\n\nThe study may be corrupted, if It is not corrupted please contact with %1 team.").arg(ApplicationNameString);
             QMessageBox::critical(this, ApplicationNameString, message);
             break;

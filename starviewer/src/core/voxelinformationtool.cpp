@@ -133,7 +133,8 @@ QString VoxelInformationTool::computeVoxelValue(double worldCoordinate[3])
     return valueString;
 }
 
-void VoxelInformationTool::computeCaptionAttachmentPointAndTextAlignment(double attachmentPoint[3], QString &horizontalJustification, QString &verticalJustification)
+void VoxelInformationTool::computeCaptionAttachmentPointAndTextAlignment(double attachmentPoint[3], QString &horizontalJustification,
+                                                                         QString &verticalJustification)
 {
     // Per defecte alinearem el texte a la dreta i el més amunt possible
     horizontalJustification = "Right";

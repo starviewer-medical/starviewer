@@ -21,7 +21,8 @@ public:
     CreateDicomdir();
     ~CreateDicomdir();
 
-    /// Especifica a quin dispositiu crearem el dicomdir. És important especificar el dispositiu correctament, sinó ens podem trobar, que no ens crei correctament el dicomdir
+    /// Especifica a quin dispositiu crearem el dicomdir. És important especificar el dispositiu correctament, sinó ens podem trobar, que no ens crei
+    /// correctament el dicomdir.
     /// @param deviceToCreateDicomdir Dispositiu on crearem el dicomdir (harddisk,cdDvd,usb)
     void setDevice(recordDeviceDicomDir deviceToCreateDicomdir);
 

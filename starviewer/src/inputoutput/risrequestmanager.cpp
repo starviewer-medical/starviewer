@@ -55,10 +55,11 @@ void RISRequestManager::initialize()
 void RISRequestManager::createConnections()
 {
     connect(m_listenRISRequests, SIGNAL(requestRetrieveStudy(DicomMask)), SLOT(processRISRequest(DicomMask)));
-    connect(m_listenRISRequests, SIGNAL(errorListening(ListenRISRequests::ListenRISRequestsError)), SLOT(showListenRISRequestsError(ListenRISRequests::ListenRISRequestsError)));
-    // Hem d'indica a la classe ListenRISRequests que pot començar a escoltar/parar peticions a través d'un signal, perquè si ho fèssim invocant el mètode listen()
-    // o stopListen directament aquest seria executat pel thread que l'invoca i podria fer petar l'aplicaciño, en canvi amb un signal aquest és atés pel thread
-    // al que pertany ListenRISRequests
+    connect(m_listenRISRequests, SIGNAL(errorListening(ListenRISRequests::ListenRISRequestsError)),
+            SLOT(showListenRISRequestsError(ListenRISRequests::ListenRISRequestsError)));
+    // Hem d'indica a la classe ListenRISRequests que pot començar a escoltar/parar peticions a través d'un signal, perquè si ho fèssim invocant el mètode
+    // listen() o stopListen directament aquest seria executat pel thread que l'invoca i podria fer petar l'aplicaciño, en canvi amb un signal aquest és
+    // atés pel thread al que pertany ListenRISRequests
     connect(this, SIGNAL(listenRISRequests()), m_listenRISRequests, SLOT(listen()));
     connect(this, SIGNAL(stopListenRISRequests()), m_listenRISRequests, SLOT(stopListen()));
 }
@@ -98,7 +99,8 @@ void RISRequestManager::queryPACSRISStudyRequest(DicomMask maskRISRequest)
     QList<PacsDevice> queryablePACS = PacsDeviceManager().getPACSList(PacsDeviceManager::PacsWithQueryRetrieveServiceEnabled, true);
     if (queryablePACS.isEmpty())
     {
-        QMessageBox::information(0, ApplicationNameString, tr("A RIS request has been received, but It could not be performed because there are not configured default PACS to query.") + "\n\n" + tr("Please, check your PACS settings."));
+        QMessageBox::information(0, ApplicationNameString, tr("A RIS request has been received, but It could not be performed because there are not "
+                                                              "configured default PACS to query.") + "\n\n" + tr("Please, check your PACS settings."));
         INFO_LOG("No s'ha pogut processar la peticio del RIS perque no hi ha PACS configurats per cercar per defecte");
         m_queueRISRequests.dequeue();
         return;
@@ -140,7 +142,8 @@ void RISRequestManager::queryPACSJobFinished(PACSJob *pacsJob)
         }
         else if (queryPACSJob->getStatus() != PACSRequestStatus::QueryCancelled)
         {
-            ERROR_LOG(QString("S'ha produit un error al cercar estudis al PACS %1 per la sol.licitud del RIS").arg(queryPACSJob->getPacsDevice().getAETitle()));
+            ERROR_LOG(QString("S'ha produit un error al cercar estudis al PACS %1 per la sol.licitud del RIS")
+                         .arg(queryPACSJob->getPacsDevice().getAETitle()));
             errorQueryingStudy(queryPACSJob);
         }
 
@@ -190,7 +193,8 @@ void RISRequestManager::queryRequestRISFinished()
     {
         INFO_LOG("No s'ha trobat cap estudi sol·licitat pel RIS amb l'accession number " + dicomMaskRISRequest.getAccessionNumber());
         //Si no hem trobat cap estudi que coincideix llancem MessageBox
-        QString message = tr("%2 can't execute the RIS request, because hasn't found the Study with accession number %1 in the default PACS.").arg(dicomMaskRISRequest.getAccessionNumber(), ApplicationNameString);
+        QString message = tr("%2 can't execute the RIS request, because hasn't found the Study with accession number %1 in the default PACS.")
+                        .arg(dicomMaskRISRequest.getAccessionNumber(), ApplicationNameString);
 
         m_qpopUpRISRequestsScreen->showNotStudiesFoundMessage();
         QMessageBox::information(NULL, ApplicationNameString, message);
@@ -221,10 +225,12 @@ void RISRequestManager::retrieveFoundStudiesFromPACS(QueryPacsJob *queryPACSJob)
         {
             if (!m_studiesInstancesUIDRequestedToRetrieve.contains(study->getInstanceUID()))
             {
-                INFO_LOG(QString("S'ha trobat estudi que compleix criteri de cerca del RIS. Estudi UID %1, PacsId %2").arg(study->getInstanceUID(), queryPACSJob->getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()]));
+                INFO_LOG(QString("S'ha trobat estudi que compleix criteri de cerca del RIS. Estudi UID %1, PacsId %2")
+                            .arg(study->getInstanceUID(), queryPACSJob->getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()]));
 
                 //Descarreguem l'estudi trobat
-                RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = retrieveStudy(queryPACSJob->getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()], study);
+                RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = 
+                    retrieveStudy(queryPACSJob->getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()], study);
 
                 if (Settings().getValue(InputOutputSettings::RISRequestViewOnceRetrieved).toBool())
                 {
@@ -245,7 +251,9 @@ void RISRequestManager::retrieveFoundStudiesFromPACS(QueryPacsJob *queryPACSJob)
             }
             else
             {
-                WARN_LOG(QString("S'ha trobat l'estudi UID %1 del PACS Id %2 que coincidieix amb els parametres del cerca del RIS, pero ja s'ha demanat descarregar-lo d'un altre PACS.").arg(study->getInstanceUID(), queryPACSJob->getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()]));
+                WARN_LOG(QString("S'ha trobat l'estudi UID %1 del PACS Id %2 que coincidieix amb els parametres del cerca del RIS, pero ja s'ha demanat "
+                                 "descarregar-lo d'un altre PACS.")
+                            .arg(study->getInstanceUID(), queryPACSJob->getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()]));
             }
         }
     }
@@ -257,7 +265,9 @@ RetrieveDICOMFilesFromPACSJob* RISRequestManager::retrieveStudy(QString pacsIDTo
     DicomMask studyToRetrieveDICOMMask;
     studyToRetrieveDICOMMask.setStudyInstanceUID(study->getInstanceUID());
 
-    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = new RetrieveDICOMFilesFromPACSJob(pacsDevice, study, studyToRetrieveDICOMMask, RetrieveDICOMFilesFromPACSJob::Medium);
+    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = new RetrieveDICOMFilesFromPACSJob(pacsDevice, study, studyToRetrieveDICOMMask,
+                                                                                                     RetrieveDICOMFilesFromPACSJob::Medium);
+
     m_qpopUpRISRequestsScreen->addStudyToRetrieveByAccessionNumber(retrieveDICOMFilesFromPACSJob);
     connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobFinished(PACSJob *)));
     connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobCancelled(PACSJob *)));

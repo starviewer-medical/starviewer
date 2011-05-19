@@ -26,14 +26,18 @@ public:
     ///Esborra els estudis que compleixen amb els criteris de la màscara de cerca, només té en compte l'StudyUID
     void del(const DicomMask &studyMaskToDelete);
 
-    ///Cerca les estudis que compleixen amb els criteris de la màscara de cerca, només té en compte l'StudyUID, retorna els estudis ordenats per LastAccessDate de manera creixent
-    QList<Study*> queryOrderByLastAccessDate(const DicomMask &studyMaskToQuery, QDate lastAccessDateMinor = QDate(), QDate lastAccessDateEqualOrMajor = QDate());
+    /// Cerca les estudis que compleixen amb els criteris de la màscara de cerca, només té en compte l'StudyUID, retorna els estudis ordenats per
+    /// LastAccessDate de manera creixent
+    QList<Study*> queryOrderByLastAccessDate(const DicomMask &studyMaskToQuery, QDate lastAccessDateMinor = QDate(),
+                                             QDate lastAccessDateEqualOrMajor = QDate());
 
     ///Cerca les estudis que compleixen amb els criteris de la màscara de cerca, només té en compte l'StudyUID
     QList<Study*> query(const DicomMask &studyMaskToQuery, QDate lastAccessDateMinor = QDate(), QDate lastAccessDateEqualOrMajor = QDate());
 
-    ///Ens retorna els pacients que tenen estudis que compleixen amb els criteris de la màscara. Té en compte el patientID, patient name, data de l'estudi i l'study instance UID
-    QList<Patient*> queryPatientStudy(const DicomMask &patientStudyMaskToQuery, QDate lastAccessDateMinor = QDate(), QDate lastAccessDateEqualOrMajor = QDate());
+    /// Ens retorna els pacients que tenen estudis que compleixen amb els criteris de la màscara. Té en compte el patientID, patient name, data de l'estudi
+    /// i l'study instance UID
+    QList<Patient*> queryPatientStudy(const DicomMask &patientStudyMaskToQuery, QDate lastAccessDateMinor = QDate(),
+                                      QDate lastAccessDateEqualOrMajor = QDate());
 
     ///Retorna el ID amb que Starviewer indentifica un pacient (aquest és diferent del Patient ID de DICOM) a partir de l'UID d'un estudi, si no troba l'estudi
     ///retorna -1
@@ -47,7 +51,8 @@ private :
     ///Construeix la sentència updata l'estudi
     QString buildSqlUpdate(Study *studyToUpdate, const QDate &lastAccessDate);
 
-    ///Construeix la setència per fer select d'estudis a partir de la màscara, només té en compte el StudyUID i els estudis que tinguin un LastAccessDate menor que el de la màscara
+    /// Construeix la setència per fer select d'estudis a partir de la màscara, només té en compte el StudyUID i els estudis que tinguin un LastAccessDate
+    /// menor que el de la màscara
     QString buildSqlSelect(const DicomMask &studyMaskToSelect, const QDate &lastAccessDateMinor, const QDate &lastAccessDateEqualOrMajor);
 
     ///Construeix la setència per esborrar l'estudi a partir de la màscara, només té en compte el StudyUID

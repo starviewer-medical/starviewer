@@ -14,7 +14,8 @@ ApplicationCommandLineOptions StarviewerApplicationCommandLine::getStarviewerApp
     //Configurem les opcions que Starviewer accepta des de línia de comandes
     #ifndef STARVIEWER_LITE
     //Opció no disponible Starviewer Lite
-    starviewerCommandLineOptions.addOption(accessionNumberOption, true, QObject::tr("Retrieve the study with the accession number from the query default PACS."));
+    starviewerCommandLineOptions.addOption(accessionNumberOption, true,
+                                           QObject::tr("Retrieve the study with the accession number from the query default PACS."));
     #endif
 
     return starviewerCommandLineOptions;
@@ -74,7 +75,9 @@ bool StarviewerApplicationCommandLine::parseAndRun(QStringList arguments, QStrin
         {
             if (commandLineOptions.isSet(accessionNumberOption))
             {
-                QPair<StarviewerCommandLineOption, QString> commandLineOptionValue(retrieveStudyFromAccessioNumber, commandLineOptions.getOptionArgument(accessionNumberOption));
+                QPair<StarviewerCommandLineOption, QString> 
+                    commandLineOptionValue(retrieveStudyFromAccessioNumber, commandLineOptions.getOptionArgument(accessionNumberOption));
+
                 AddOptionToCommandLineOptionListToProcess(commandLineOptionValue);
             }
         }
@@ -107,7 +110,8 @@ bool StarviewerApplicationCommandLine::takeOptionToRun(QPair<StarviewerApplicati
     return optionValueTaken;
 }
 
-void StarviewerApplicationCommandLine::AddOptionToCommandLineOptionListToProcess(QPair<StarviewerApplicationCommandLine::StarviewerCommandLineOption, QString> optionValue)
+void StarviewerApplicationCommandLine::AddOptionToCommandLineOptionListToProcess(QPair<StarviewerApplicationCommandLine::StarviewerCommandLineOption,
+                                                                                 QString> optionValue)
 {
     m_mutexCommandLineOptionListToProcess.lock();
     m_commandLineOptionListToProcess.append(optionValue);

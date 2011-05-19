@@ -246,7 +246,8 @@ void Q2DViewerExtension::searchPreviousStudiesWithHangingProtocols()
     m_previousStudiesManager = new PreviousStudiesManager();
 
     // 3.- Es connecta el signal per quan acabi
-    connect(m_previousStudiesManager, SIGNAL(queryPreviousStudiesFinished(QList<Study*>, QHash<QString, QString>)), SLOT(addPreviousHangingProtocols(QList<Study*>, QHash<QString, QString>)));
+    connect(m_previousStudiesManager, SIGNAL(queryPreviousStudiesFinished(QList<Study*>, QHash<QString, QString>)),
+            SLOT(addPreviousHangingProtocols(QList<Study*>, QHash<QString, QString>)));
 
     // 4.- Es busquen els previs
     if (m_mainVolume)
@@ -262,7 +263,8 @@ void Q2DViewerExtension::searchPreviousStudiesWithHangingProtocols()
 
 void Q2DViewerExtension::addPreviousHangingProtocols(QList<Study*> studies, QHash<QString, QString> qhash)
 {
-    disconnect(m_previousStudiesManager, SIGNAL(queryPreviousStudiesFinished(QList<Study*>, QHash<QString, QString>)), this, SLOT(addPreviousHangingProtocols(QList<Study*>, QHash<QString, QString>)));
+    disconnect(m_previousStudiesManager, SIGNAL(queryPreviousStudiesFinished(QList<Study*>, QHash<QString, QString>)), this,
+               SLOT(addPreviousHangingProtocols(QList<Study*>, QHash<QString, QString>)));
 
     QList<HangingProtocol*> hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient, studies, qhash);
     m_predefinedSeriesGrid->setHangingItems(hangingCandidates);
@@ -327,7 +329,8 @@ void Q2DViewerExtension::setPatient(Patient *patient)
     Study *study = m_patient->getStudies().first();
     if (study)
     {
-        if (study->getModalities().contains("MG") || study->getModalities().contains("CR") || study->getModalities().contains("RF") || study->getModalities().contains("OP"))
+        if (study->getModalities().contains("MG") || study->getModalities().contains("CR") || study->getModalities().contains("RF") ||
+            study->getModalities().contains("OP"))
         {
             m_slicingToolButton->defaultAction()->toggle();
             m_zoomToolButton->defaultAction()->trigger();
@@ -398,7 +401,8 @@ void Q2DViewerExtension::initializeTools()
 #ifdef STARVIEWER_LITE
     leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "DistanceTool" << "EraserTool";
 #else
-    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineROITool" << "DistanceTool" << "EraserTool" << "AngleTool" << "NonClosedAngleTool" << "Cursor3DTool" << "OvalROITool";
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineROITool" << "DistanceTool" << "EraserTool" << "AngleTool" << "NonClosedAngleTool"
+                             << "Cursor3DTool" << "OvalROITool";
 #endif
 
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
@@ -461,7 +465,9 @@ void Q2DViewerExtension::activateNewViewer(Q2DViewerWidget *newViewerWidget)
      // I si cal, activem les annotacions
     if (m_viewerInformationToolButton->isChecked())
     {
-        newViewerWidget->getViewer()->enableAnnotation(Q2DViewer::WindowInformationAnnotation | Q2DViewer::PatientOrientationAnnotation | Q2DViewer::SliceAnnotation | Q2DViewer::PatientInformationAnnotation | Q2DViewer::AcquisitionInformationAnnotation, true);
+        newViewerWidget->getViewer()->enableAnnotation(Q2DViewer::WindowInformationAnnotation | Q2DViewer::PatientOrientationAnnotation |
+                                                       Q2DViewer::SliceAnnotation | Q2DViewer::PatientInformationAnnotation |
+                                                       Q2DViewer::AcquisitionInformationAnnotation, true);
     }
 
     // Afegim l'eina de sincronització pel nou viewer
@@ -551,7 +557,11 @@ void Q2DViewerExtension::showViewerInformation(bool show)
 
     for (int viewerNumber = 0; viewerNumber < numberOfViewers; ++viewerNumber)
     {
-        m_workingArea->getViewerWidget(viewerNumber)->getViewer()->enableAnnotation(Q2DViewer::WindowInformationAnnotation | Q2DViewer::PatientOrientationAnnotation | Q2DViewer::SliceAnnotation | Q2DViewer::PatientInformationAnnotation | Q2DViewer::AcquisitionInformationAnnotation, show);
+        m_workingArea->getViewerWidget(viewerNumber)->getViewer()->enableAnnotation(Q2DViewer::WindowInformationAnnotation |
+                                                                                    Q2DViewer::PatientOrientationAnnotation |
+                                                                                    Q2DViewer::SliceAnnotation |
+                                                                                    Q2DViewer::PatientInformationAnnotation |
+                                                                                    Q2DViewer::AcquisitionInformationAnnotation, show);
     }
 }
 

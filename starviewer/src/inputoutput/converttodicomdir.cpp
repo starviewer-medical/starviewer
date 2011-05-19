@@ -108,7 +108,8 @@ Status ConvertToDicomdir::convert(const QString &dicomdirPath, CreateDicomdir::r
     QString pathFolderContentToCopyToDICOMDIR = Settings().getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString();
     if (copyFolderContent && !AreValidRequirementsOfFolderContentToCopyToDICOMDIR(pathFolderContentToCopyToDICOMDIR))
     {
-        ERROR_LOG(QString("No es pot crear el DICOMDIR perquè el path %1 conte un element amb el nom DICOM o DICOMDIR").arg(pathFolderContentToCopyToDICOMDIR));
+        ERROR_LOG(QString("No es pot crear el DICOMDIR perquè el path %1 conte un element amb el nom DICOM o DICOMDIR")
+                     .arg(pathFolderContentToCopyToDICOMDIR));
         state.setStatus("", false, 4003);
         return state;
     }
@@ -152,7 +153,8 @@ Status ConvertToDicomdir::convert(const QString &dicomdirPath, CreateDicomdir::r
         return state;
     }
 
-    //sumem una imatge més per evitar que arribi el 100 % la progress bar, i així s'esperi a que es crei el dicomdir, que es fa quan s'invoca createDicomdir.Create()
+    // Sumem una imatge més per evitar que arribi el 100 % la progress bar, i així s'esperi a que es crei el dicomdir, que es fa quan s'invoca 
+    // createDicomdir.Create()
     m_progress = new QProgressDialog(tr("Creating DICOMDIR..."), "", 0, totalNumberOfItems + 1);
     m_progress->setMinimumDuration(0);
     m_progress->setCancelButton(0);
@@ -311,7 +313,8 @@ Status ConvertToDicomdir::copyStudiesToDicomdirPath(QList<Study*> studyList)
 
         if (study->getInstanceUID() != studyToConvert.studyUID)
         {
-            state.setStatus("La xapussa del copyStudiesToDicomdirPath no funciona, hi ha ordre diferent entre la llista studyList i m_studiesToConvert", false, -1);
+            state.setStatus("La xapussa del copyStudiesToDicomdirPath no funciona, hi ha ordre diferent entre la llista studyList i m_studiesToConvert",
+                            false, -1);
             break;
         }
 

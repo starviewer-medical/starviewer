@@ -209,13 +209,15 @@ bool ThumbnailCreator::isSuitableForThumbnailCreation(DICOMTagReader *reader) co
     // descartem la creació del thumbnail i en creem un de "neutre" indicant que no s'ha pogut crear aquest
     // En quant siguem capaços de tornar a llegir aquestes imatges sense problema, aquesta comprovació desapareixerà
     QList<DICOMTag> tags;
-    tags << DICOMOverlayRows << DICOMOverlayColumns << DICOMOverlayType << DICOMOverlayOrigin << DICOMOverlayBitsAllocated << DICOMOverlayBitPosition << DICOMOverlayData;
+    tags << DICOMOverlayRows << DICOMOverlayColumns << DICOMOverlayType << DICOMOverlayOrigin << DICOMOverlayBitsAllocated << DICOMOverlayBitPosition <<
+            DICOMOverlayData;
     foreach (DICOMTag tag, tags)
     {
         if (reader->tagExists(tag))
         {
             suitable = false;
-            DEBUG_LOG(QString("Found Tag: %1,%2. Overlay restriction applied. Preview image won't be available.").arg(tag.getGroup(),0,16).arg(tag.getElement(),0,16));
+            DEBUG_LOG(QString("Found Tag: %1,%2. Overlay restriction applied. Preview image won't be available.").arg(tag.getGroup(), 0, 16).arg(
+                      tag.getElement(), 0, 16));
         }
     }
 

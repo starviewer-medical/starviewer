@@ -10,10 +10,13 @@
 namespace udg {
 
 /**
-    Representa una funció de transferència bàsica f: X -> Y, on X és un conjunt de valors reals (valors de propietat o magnitud del gradient) i Y un conjunt de valors de tipus T.
-    Aquesta funció té uns quants punts definits explícitament i la resta s'obtenen per interpolació lineal o extrapolació del veí més proper. La funció de transferència també té un nom.
+    Representa una funció de transferència bàsica f: X -> Y, on X és un conjunt de valors reals (valors de propietat o magnitud del gradient)
+    i Y un conjunt de valors de tipus T.
+    Aquesta funció té uns quants punts definits explícitament i la resta s'obtenen per interpolació lineal o extrapolació del veí més proper.
+    La funció de transferència també té un nom.
 
-    Aquesta template té el constructor protegit, de manera que no es pot instanciar directament, sinó que se n'ha de fer una subclasse per cada tipus T que es vulgui.
+    Aquesta template té el constructor protegit, de manera que no es pot instanciar directament, sinó que se n'ha de fer una subclasse per
+    cada tipus T que es vulgui.
  */
 template <typename T>
 class TransferFunctionTemplate {

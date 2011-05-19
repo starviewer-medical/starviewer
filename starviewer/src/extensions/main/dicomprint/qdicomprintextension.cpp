@@ -18,7 +18,8 @@
 #include "starviewerapplication.h"
 #include "toolmanager.h"
 
-//TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de interface, pacs, etc.etc.!!
+// TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències
+// de interface, pacs, etc.etc.!!
 #include "../interface/qapplicationmainwindow.h"
 
 namespace udg {
@@ -42,12 +43,14 @@ QDicomPrintExtension::QDicomPrintExtension(QWidget *parent)
     initializeViewerTools();
     // Posem a punt les annotacions que volem veure al viewer
     m_2DView->removeAnnotation(Q2DViewer::AllAnnotation);
-    m_2DView->enableAnnotation(Q2DViewer::WindowInformationAnnotation | Q2DViewer::PatientOrientationAnnotation | Q2DViewer::SliceAnnotation | Q2DViewer::PatientInformationAnnotation | Q2DViewer::AcquisitionInformationAnnotation, true);
+    m_2DView->enableAnnotation(Q2DViewer::WindowInformationAnnotation | Q2DViewer::PatientOrientationAnnotation | Q2DViewer::SliceAnnotation |
+                               Q2DViewer::PatientInformationAnnotation | Q2DViewer::AcquisitionInformationAnnotation, true);
 }
 
 void QDicomPrintExtension::createConnections()
 {
-    //TODO: no cal invocar un mètode per mostrar la configuració d'una impressora el mètode show dels widgets ja és un slot, llavors el mètode configurationPrinter() es pot esborrar 
+    // TODO: no cal invocar un mètode per mostrar la configuració d'una impressora el mètode show dels widgets ja és un slot, llavors el mètode
+    // configurationPrinter() es pot esborrar 
     connect(m_configurationPrinterToolButton, SIGNAL(clicked()), m_qDicomPrinterConfigurationWidgetProof, SLOT(show()));
     connect(m_selectedPrinterComboBox, SIGNAL(currentIndexChanged(int)), SLOT(selectedDicomPrinterChanged(int)));
     connect(m_qDicomPrinterConfigurationWidgetProof, SIGNAL(printerSettingsChanged()), SLOT(fillSelectedDicomPrinterComboBox()));
@@ -326,14 +329,16 @@ void QDicomPrintExtension::addSeriesInformationAsAnnotationsToDicomPrintPage(Dic
     //A la primera posicio: posem el nom de la institució que ha generat l'estudi
     dicomPrintPage->addAnnotation(1, seriesToPrint->getInstitutionName());
     //A la segona posició: el nom del, edat i sexe pacient
-    dicomPrintPage->addAnnotation(2, seriesToPrint->getParentStudy()->getParentPatient()->getFullName() + " " + seriesToPrint->getParentStudy()->getPatientAge() +
-        + " " + seriesToPrint->getParentStudy()->getParentPatient()->getSex());
+    dicomPrintPage->addAnnotation(2, seriesToPrint->getParentStudy()->getParentPatient()->getFullName() + " " + 
+                                  seriesToPrint->getParentStudy()->getPatientAge() + " " + seriesToPrint->getParentStudy()->getParentPatient()->getSex());
     ///A la tercera posició: Modalitat seriesi Data/hora (de la sèrie i si no en té de l'estudi)
-    dicomPrintPage->addAnnotation(3, seriesToPrint->getModality() + " " + dateToPrintInAnnotation.toString("dd/MM/yyyy") + " " + timeToPrintInAnnotation.toString("hh:mm:ss"));
+    dicomPrintPage->addAnnotation(3, seriesToPrint->getModality() + " " + dateToPrintInAnnotation.toString("dd/MM/yyyy") + " " +
+                                  timeToPrintInAnnotation.toString("hh:mm:ss"));
     ///Quarta posició: Descripció estudi i descripció serie
     dicomPrintPage->addAnnotation(4, seriesToPrint->getParentStudy()->getDescription() + " - " + seriesToPrint->getDescription());
     ///Cinquena posició: Patient ID + Acession number (El patientID l'han demanat els metges perquè és amb el camp que poden cercar els pacients en el SAP)
-    dicomPrintPage->addAnnotation(5, seriesToPrint->getParentStudy()->getParentPatient()->getID() + " " + seriesToPrint->getParentStudy()->getAccessionNumber());
+    dicomPrintPage->addAnnotation(5, seriesToPrint->getParentStudy()->getParentPatient()->getID() + " " +
+                                  seriesToPrint->getParentStudy()->getAccessionNumber());
 }
 
 void QDicomPrintExtension::selectedDicomPrinterChanged(int indexOfSelectedDicomPrinter)

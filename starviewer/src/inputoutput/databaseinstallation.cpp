@@ -47,8 +47,10 @@ bool DatabaseInstallation::checkStarviewerDatabase()
         if (!isDatabaseFileWritable())
         {
             // TODO què fem? cal retornar fals? Avisar a l'usuari?
-            ERROR_LOG("L'arxiu de base de dades [" + LocalDatabaseManager::getDatabaseFilePath() + "] no es pot obrir amb permisos d'escriptura, no podrem guardar estudis nous ni modificar els ja existents.");
-            m_errorMessage.append(tr("\nYou don't have write permissions on %1 database, you couldn't retrieve or import new studies.").arg(ApplicationNameString));
+            ERROR_LOG("L'arxiu de base de dades [" + LocalDatabaseManager::getDatabaseFilePath() + "] no es pot obrir amb permisos d'escriptura, " +
+                      "no podrem guardar estudis nous ni modificar els ja existents.");
+            m_errorMessage.append(tr("\nYou don't have write permissions on %1 database, you couldn't retrieve or import new studies.")
+                                    .arg(ApplicationNameString));
         }
 
         isCorrect = checkDatabaseRevision();
@@ -64,7 +66,8 @@ bool DatabaseInstallation::checkStarviewerDatabase()
     }
 
     INFO_LOG("Estat de la base de dades correcte ");
-    INFO_LOG("Base de dades utilitzada : " + LocalDatabaseManager::getDatabaseFilePath() + " revisio " + QString().setNum(localDatabaseManager.getDatabaseRevision()));
+    INFO_LOG("Base de dades utilitzada : " + LocalDatabaseManager::getDatabaseFilePath() + " revisio " + 
+             QString().setNum(localDatabaseManager.getDatabaseRevision()));
     return true;
 }
 
@@ -117,7 +120,9 @@ bool DatabaseInstallation::checkDatabaseRevision()
 
     if (localDatabaseManager.getDatabaseRevision() != StarviewerDatabaseRevisionRequired)
     {
-        INFO_LOG("La revisio actual de la base de dades es " + QString().setNum(localDatabaseManager.getDatabaseRevision()) + " per aquesta versio d'" + ApplicationNameString + " és necessaria la " + QString().setNum(StarviewerDatabaseRevisionRequired) + ", es procedira a actualitzar la base de dades");
+        INFO_LOG("La revisio actual de la base de dades es " + QString().setNum(localDatabaseManager.getDatabaseRevision()) + " per aquesta versio d'" +
+                 ApplicationNameString + " és necessaria la " + QString().setNum(StarviewerDatabaseRevisionRequired) +
+                 ", es procedira a actualitzar la base de dades");
 
         return updateDatabaseRevision();
     }
@@ -169,7 +174,8 @@ bool DatabaseInstallation::removeCacheAndReinstallDatabase()
         m_qprogressDialog->setModal(true);
     }
 
-    //Esborrem les imatges que tenim a la base de dades local, al reinstal·lar la bd ja no té sentit mantenir-les, i per cada directori esborrat movem la barra de progrés
+    // Esborrem les imatges que tenim a la base de dades local, al reinstal·lar la bd ja no té sentit mantenir-les, i per cada directori esborrat movem
+    // la barra de progrés
     connect(deleteDirectory, SIGNAL(directoryDeleted()), this, SLOT(setValueProgressBar()));
     deleteDirectory->deleteDirectory(LocalDatabaseManager::getCachePath(), false);
     delete deleteDirectory;

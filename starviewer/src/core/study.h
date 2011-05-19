@@ -154,7 +154,8 @@ private:
     /// Descripció de l'estudi generada per la institució. (0008,1030) Tipus 3
     QString m_description;
 
-    /// Informació del pacient, relacionada únicament amb aquest estudi. Aquesta és la informació que podem tenir d'un pacient en el moment en el que se li va fer l'estudi. C.7.2.2 Patient Study Module - PS 3.3.
+    /// Informació del pacient, relacionada únicament amb aquest estudi. Aquesta és la informació que podem tenir d'un pacient en el moment en el que
+    /// se li va fer l'estudi. C.7.2.2 Patient Study Module - PS 3.3.
 
     /// Edat del pacient. (0010,1010) Tipus 3
     QString m_age;

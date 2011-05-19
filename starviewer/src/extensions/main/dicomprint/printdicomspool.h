@@ -17,9 +17,11 @@ namespace udg {
 class PrintDicomSpool {
 public:
 
-    enum PrintDicomSpoolError { CanNotConnectToDICOMPrinter, ErrorCreatingFilmSession, ErrorCreatingFilmbox, ErrorCreatingImageBox, ErrorLoadingImageToPrint, Ok };
+    enum PrintDicomSpoolError { CanNotConnectToDICOMPrinter, ErrorCreatingFilmSession, ErrorCreatingFilmbox, ErrorCreatingImageBox,
+                                ErrorLoadingImageToPrint, Ok };
 
-    void printBasicGrayscale(DicomPrinter dicomPrinter, DicomPrintJob dicomPrintjob, const QString &storedPrintDcmtkFilePath, const QString &spoolDirectoryPath);
+    void printBasicGrayscale(DicomPrinter dicomPrinter, DicomPrintJob dicomPrintjob, const QString &storedPrintDcmtkFilePath,
+                             const QString &spoolDirectoryPath);
 
     PrintDicomSpool::PrintDicomSpoolError getLastError();
 
@@ -38,7 +40,8 @@ private:
     DcmDataset getAttributesBasicFilmSession();
 
     ///Una vegada creada la FilmSession i FilmBox aquest mètode ens permet enviar una imatge a imprimir cap a la impressora
-    OFCondition createAndSendBasicGrayscaleImageBox(DVPSPrintMessageHandler& printConnection, DVPSStoredPrint *storedPrintDcmtk, size_t imageNumber, const QString &spoolDirectoryPath);
+    OFCondition createAndSendBasicGrayscaleImageBox(DVPSPrintMessageHandler& printConnection, DVPSStoredPrint *storedPrintDcmtk, size_t imageNumber,
+                                                    const QString &spoolDirectoryPath);
 
     ///Crea i envia les anotacions pel filmBox
     OFCondition createAndSendFilmBoxAnnotations(DVPSPrintMessageHandler& printConnection, DVPSStoredPrint *storedPrintDcmtk);

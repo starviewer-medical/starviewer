@@ -17,7 +17,8 @@ class Image;
 class Status;
 
 /** Aquesta classe permet llegir un dicomdir i consultar-ne els seus elements.
-  * Accedint a través de l'estructura d'arbres que representen els dicomdir Pacient/Estudi/Series/Imatges, accedim a la informació el Dicomdir per a realitzar cerques.
+  * Accedint a través de l'estructura d'arbres que representen els dicomdir Pacient/Estudi/Series/Imatges, accedim a la informació el Dicomdir per a
+  * realitzar cerques.
 */
 class DICOMDIRReader {
 public:
@@ -75,16 +76,19 @@ private :
     /// Comprova si un estudi compleix la màscara, pels camps StudyUID, StudyDate
     bool matchStudyToDicomMask(Study *study, DicomMask *mask);
 
-    /// Comprova que els dos StudyUID el de la màscara i el de l'estudi facin matching. Si l'estudi UID de la màscara està buit, per defecte retorna cert. En aquest cas fem wildcard matching
+    /// Comprova que els dos StudyUID el de la màscara i el de l'estudi facin matching. Si l'estudi UID de la màscara està buit, per defecte retorna cert.
+    /// En aquest cas fem wildcard matching
     bool matchDicomMaskToStudyUID(DicomMask *mask, Study *study);
 
-    /// Comprova que els dos PatientId el de la màscara i el de l'estudi facin matching. Si el Patient Id de la màscara està buit, per defecte retorna cert. En aquest cas fem wildcard matching
+    /// Comprova que els dos PatientId el de la màscara i el de l'estudi facin matching. Si el Patient Id de la màscara està buit, per defecte retorna cert.
+    /// En aquest cas fem wildcard matching
     bool matchDicomMaskToPatientId(DicomMask *mask, Patient *patient);
 
     /// Comprova que la data de la màscara i la de l'estudi facin matching. Si la studyMaskDate és buida retorna cert per defecte
     bool matchDicomMaskToStudyDate(DicomMask *mask, Study *study);
 
-    /// Comprova que el nom del pacient de la màscara i el de l'estudi facin matching. Si la studyMaskPatientName és buida retorna cert per defecte. En aquest cas fem wildcard matching
+    /// Comprova que el nom del pacient de la màscara i el de l'estudi facin matching. Si la studyMaskPatientName és buida retorna cert per defecte.
+    /// En aquest cas fem wildcard matching
     bool matchDicomMaskToPatientName(DicomMask *mask, Patient *patient);
 
     ///A partir d'un DcmDirectoryRecord retorna les dades d'un Pacient
@@ -99,13 +103,15 @@ private :
     ///A partir d'un DcmDirectoryRecord retorna les dades d'un Image
     Image* fillImage(DcmDirectoryRecord *dcmDirectoryRecordImage);
 
-    /// canvia les '\' per '/'. Això es degut a que les dcmtk retornen el path de la imatge en format Windows amb els directoris separats per '\'. En el cas de linux les hem de passar a '/'
+    /// Canvia les '\' per '/'. Això es degut a que les dcmtk retornen el path de la imatge en format Windows amb els directoris separats per '\'. En el cas
+    /// de linux les hem de passar a '/'
     /// TODO aquest mètode es pot substituir per QDir::toNativeSeparators() o similar que retornarà els separadors adequats al sistema
     /// @param original path original
     /// @return path amb '/'
     QString backSlashToSlash(const QString &original);
 
-    /// Ens construeix el Path relatiu d'una imatge, posa les '/' correctament i posa en minúscules o majúscules el nom del fitxer en funció de si el dicomdir conté els fitxers en minúscula o majúscula
+    /// Ens construeix el Path relatiu d'una imatge, posa les '/' correctament i posa en minúscules o majúscules el nom del fitxer en funció de si el dicomdir
+    /// conté els fitxers en minúscula o majúscula
     QString buildImageRelativePath(const QString &relativePath);
 };
 

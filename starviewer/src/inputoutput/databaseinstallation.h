@@ -6,7 +6,8 @@
 
 namespace udg {
 
-/** Aquesta classe comprova que els directoris i la base de dades de la cache estiguin correctament creats si no es aquest el cas, els crea, per a que l'aplicacio pugui funcionar correctament
+/** Aquesta classe comprova que els directoris i la base de dades de la cache estiguin correctament creats si no es aquest el cas, els crea, per a que
+  * l'aplicacio pugui funcionar correctament
  */
 class DatabaseInstallation : public QObject {
 Q_OBJECT
@@ -36,7 +37,8 @@ public:
     ///Esborra la base de dades actual i torna a crear-ne una de nova
     bool reinstallDatabase();
 
-    ///reinstal·lar la base de dades i esborra les imatges descarregades o importades a la base de dades local. Mostra un QProgressDialog mentre es neteja la cache.
+    /// Reinstal·lar la base de dades i esborra les imatges descarregades o importades a la base de dades local. Mostra un QProgressDialog mentre es neteja
+    /// la cache.
     bool removeCacheAndReinstallDatabase();
 
     ///Aplica els canvis a fets a la última revisió de la base de dades a la base de dades locals

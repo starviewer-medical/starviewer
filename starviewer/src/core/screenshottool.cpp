@@ -87,10 +87,12 @@ void ScreenShotTool::screenShot(bool singleShot)
     }
     else
     {
-        QMessageBox::information(0, tr("Information"), tr("You're going to save several screenshots at one time.\nIt's recommended you save them in an empty folder."));
+        QMessageBox::information(0, tr("Information"),
+                                 tr("You're going to save several screenshots at one time.\nIt's recommended you save them in an empty folder."));
         caption = tr("Save multiple screenshots as...");
     }
-    QString filename = QFileDialog::getSaveFileName(0, caption, m_lastScreenShotPath + "/" + compoundSelectedName(), m_fileExtensionFilters, &m_lastScreenShotExtensionFilter);
+    QString filename = QFileDialog::getSaveFileName(0, caption, m_lastScreenShotPath + "/" + compoundSelectedName(), m_fileExtensionFilters,
+                                                    &m_lastScreenShotExtensionFilter);
 
     if (!filename.isEmpty())
     {

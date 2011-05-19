@@ -66,12 +66,14 @@ OFCondition RetrieveDICOMFilesFromPACS::acceptSubAssociation(T_ASC_Network *asso
 #endif
 
         // Accept the Verification SOP Class if presented
-        condition = ASC_acceptContextsWithPreferredTransferSyntaxes((*association)->params, knownAbstractSyntaxes, DIM_OF(knownAbstractSyntaxes), transferSyntaxes, numTransferSyntaxes);
+        condition = ASC_acceptContextsWithPreferredTransferSyntaxes((*association)->params, knownAbstractSyntaxes, DIM_OF(knownAbstractSyntaxes),
+                                                                    transferSyntaxes, numTransferSyntaxes);
 
         if (condition.good())
         {
             // The array of Storage SOP Class UIDs comes from dcuid.h
-            condition = ASC_acceptContextsWithPreferredTransferSyntaxes((*association)->params, dcmAllStorageSOPClassUIDs, numberOfAllDcmStorageSOPClassUIDs, transferSyntaxes, numTransferSyntaxes);
+            condition = ASC_acceptContextsWithPreferredTransferSyntaxes((*association)->params, dcmAllStorageSOPClassUIDs, numberOfAllDcmStorageSOPClassUIDs,
+                                                                        transferSyntaxes, numTransferSyntaxes);
         }
     }
 
@@ -114,7 +116,8 @@ void RetrieveDICOMFilesFromPACS::moveCallback(void *callbackData, T_DIMSE_C_Move
     //}
 }
 
-OFCondition RetrieveDICOMFilesFromPACS::echoSCP(T_ASC_Association *association, T_DIMSE_Message *dimseMessage, T_ASC_PresentationContextID presentationContextID)
+OFCondition RetrieveDICOMFilesFromPACS::echoSCP(T_ASC_Association *association, T_DIMSE_Message *dimseMessage,
+                                                T_ASC_PresentationContextID presentationContextID)
 {
     // The echo succeeded
     OFCondition condition = DIMSE_sendEchoResponse(association, presentationContextID, &dimseMessage->msg.CEchoRQ, STATUS_Success, NULL);
@@ -126,7 +129,8 @@ OFCondition RetrieveDICOMFilesFromPACS::echoSCP(T_ASC_Association *association, 
     return condition;
 }
 
-void RetrieveDICOMFilesFromPACS::storeSCPCallback(void *callbackData, T_DIMSE_StoreProgress *progress, T_DIMSE_C_StoreRQ *storeRequest, char *imageFileName, DcmDataset **imageDataSet, T_DIMSE_C_StoreRSP *storeResponse, DcmDataset **statusDetail)
+void RetrieveDICOMFilesFromPACS::storeSCPCallback(void *callbackData, T_DIMSE_StoreProgress *progress, T_DIMSE_C_StoreRQ *storeRequest, char *imageFileName,
+                                                  DcmDataset **imageDataSet, T_DIMSE_C_StoreRSP *storeResponse, DcmDataset **statusDetail)
 {
     // Paràmetres d'entrada: callbackData, progress, storeRequest, imageFileName, imageDataSet
     // Paràmetres de sortida: storeResponse, statusDetail
@@ -202,7 +206,8 @@ OFCondition RetrieveDICOMFilesFromPACS::save(DcmFileFormat *fileRetrieved, QStri
     Uint32 filePadding = 0, itemPadding = 0;
     E_TransferSyntax transferSyntaxFile = fileRetrieved->getDataset()->getOriginalXfer();
 
-    return fileRetrieved->saveFile(qPrintable(QDir::toNativeSeparators(dicomFileAbsolutePath)), transferSyntaxFile, sequenceType, groupLength, paddingType, filePadding, itemPadding, !useMetaheader);
+    return fileRetrieved->saveFile(qPrintable(QDir::toNativeSeparators(dicomFileAbsolutePath)), transferSyntaxFile, sequenceType, groupLength, paddingType,
+                                   filePadding, itemPadding, !useMetaheader);
 }
 
 OFCondition RetrieveDICOMFilesFromPACS::storeSCP(T_ASC_Association *association, T_DIMSE_Message *msg, T_ASC_PresentationContextID presentationContextID)
@@ -217,7 +222,8 @@ OFCondition RetrieveDICOMFilesFromPACS::storeSCP(T_ASC_Association *association,
     storeSCPCallbackData.retrieveDICOMFilesFromPACS = this;
     storeSCPCallbackData.fileName = storeRequest->AffectedSOPInstanceUID;
 
-    OFCondition condition = DIMSE_storeProvider(association, presentationContextID, storeRequest, NULL, useMetaheader, &retrievedDataset, storeSCPCallback, (void*) &storeSCPCallbackData, DIMSE_BLOCKING, 0);
+    OFCondition condition = DIMSE_storeProvider(association, presentationContextID, storeRequest, NULL, useMetaheader, &retrievedDataset, storeSCPCallback,
+                                                (void*) &storeSCPCallbackData, DIMSE_BLOCKING, 0);
 
     if (condition.bad())
     {
@@ -373,11 +379,14 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::retrieve(Di
     T_DIMSE_C_MoveRQ moveRequest = getConfiguredMoveRequest(association);
     ASC_getAPTitles(association->params, moveRequest.MoveDestination, NULL, NULL);
 
-    OFCondition condition = DIMSE_moveUser(association, presentationContextID, &moveRequest, dicomMask.getDicomMask(), moveCallback, &moveSCPCallbackData, DIMSE_BLOCKING, 0, m_pacsConnection->getNetwork(), subOperationCallback, this, &moveResponse, &statusDetail, NULL /*responseIdentifiers*/);
+    OFCondition condition = DIMSE_moveUser(association, presentationContextID, &moveRequest, dicomMask.getDicomMask(), moveCallback, &moveSCPCallbackData,
+                                           DIMSE_BLOCKING, 0, m_pacsConnection->getNetwork(), subOperationCallback, this, &moveResponse, &statusDetail,
+                                           NULL /*responseIdentifiers*/);
 
     if (condition.bad())
     {
-        ERROR_LOG(QString("El metode descarrega no ha finalitzat correctament. Codi error: %1, descripcio error: %2").arg(condition.code()).arg(condition.text()));
+        ERROR_LOG(QString("El metode descarrega no ha finalitzat correctament. Codi error: %1, descripcio error: %2").arg(condition.code())
+                     .arg(condition.text()));
     }
 
     m_pacsConnection->disconnect();
@@ -417,7 +426,8 @@ T_DIMSE_C_MoveRQ RetrieveDICOMFilesFromPACS::getConfiguredMoveRequest(T_ASC_Asso
     return moveRequest;
 }
 
-PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResponseStatusFromMoveSCP(T_DIMSE_C_MoveRSP *moveResponse, DcmDataset *statusDetail)
+PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResponseStatusFromMoveSCP(T_DIMSE_C_MoveRSP *moveResponse,
+                                                                                                      DcmDataset *statusDetail)
 {
     // Llista de camps relacionats amb l'error que poden contenir informació adicional
     QList<DcmTagKey> relatedFieldsList;
@@ -487,7 +497,8 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResp
         case STATUS_MOVE_Warning_SubOperationsCompleteOneOrMoreFailures:
             // 0xb000
             // Sub-operations Complete – One or more Failures
-            // Related fields DCM_NumberOfRemainingSuboperations (0000,1020), DCM_NumberOfFailedSuboperations (0000,1022), DCM_NumberOfWarningSuboperations (0000,1023)
+            // Related fields DCM_NumberOfRemainingSuboperations (0000,1020), DCM_NumberOfFailedSuboperations (0000,1022),
+            // DCM_NumberOfWarningSuboperations (0000,1023)
             relatedFieldsList << DCM_NumberOfRemainingSuboperations << DCM_NumberOfFailedSuboperations << DCM_NumberOfWarningSuboperations;
 
             WARN_LOG("Error no s'ha pogut descarregar tot l'estudi. Descripcio rebuda: " + QString(DU_cmoveStatusString(moveResponse->DimseStatus)));

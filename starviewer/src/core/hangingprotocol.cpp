@@ -220,7 +220,8 @@ HangingProtocolDisplaySet* HangingProtocol::getDisplaySet(int identifier) const
 
 void HangingProtocol::show()
 {
-    DEBUG_LOG(QString("\n---- HANGING PROTOCOL ----\n Name: %1\nDescription: %2\nLevel: %3\nCreator: %4\nDate: %5\n").arg(m_name).arg(m_description).arg(m_level).arg(m_creator).arg(m_dateTime));
+    DEBUG_LOG(QString("\n---- HANGING PROTOCOL ----\n Name: %1\nDescription: %2\nLevel: %3\nCreator: %4\nDate: %5\n").arg(m_name).arg(
+              m_description).arg(m_level).arg(m_creator).arg(m_dateTime));
 
     DEBUG_LOG("List of protocols: \n");
     for (int i = 0; i < m_mask->getProtocolList().size(); i++)
@@ -282,7 +283,8 @@ bool HangingProtocol::isBetterThan(HangingProtocol *hangingToCompare)
 
     if (this->countFilledDisplaySets() == hangingToCompare->countFilledDisplaySets())
     {
-        if (this->countFilledDisplaySets() / (double)this->getNumberOfDisplaySets() == hangingToCompare->countFilledDisplaySets() / (double)hangingToCompare->getNumberOfDisplaySets())
+        if (this->countFilledDisplaySets() / (double)this->getNumberOfDisplaySets() == hangingToCompare->countFilledDisplaySets() /
+           (double)hangingToCompare->getNumberOfDisplaySets())
         {
             if (this->getNumberOfImageSets() != hangingToCompare->getNumberOfImageSets())
             {
@@ -291,7 +293,8 @@ bool HangingProtocol::isBetterThan(HangingProtocol *hangingToCompare)
         }
         else
         {
-            return this->countFilledDisplaySets() / (double)this->getNumberOfDisplaySets() > hangingToCompare->countFilledDisplaySets() / (double)hangingToCompare->getNumberOfDisplaySets();
+            return this->countFilledDisplaySets() / (double)this->getNumberOfDisplaySets() > hangingToCompare->countFilledDisplaySets() /
+                   (double)hangingToCompare->getNumberOfDisplaySets();
         }
     }
     else

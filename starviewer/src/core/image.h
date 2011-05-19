@@ -206,10 +206,12 @@ private:
     /// Nombre que identifica la imatge. (0020,0013) Tipus 2
     QString m_instanceNumber;
 
-    /// Direcció de les files i columnes de la imatge (LR/AP/SI). Requerit si la imatge no requereix Image Orientation(Patient)(0020,0037) i Image Position(Patient)(0020,0032). Veure C.6.7.1.1.1. (0020,0020) Tipus 2C.
+    /// Direcció de les files i columnes de la imatge (LR/AP/SI). Requerit si la imatge no requereix Image Orientation(Patient)(0020,0037) i
+    /// Image Position(Patient)(0020,0032). Veure C.6.7.1.1.1. (0020,0020) Tipus 2C.
     QString m_patientOrientation;
 
-    // TODO Referenced Image Sequence (0008,1140) Tipus 3. Seqüència que referència altres imatges significativament relacionades amb aquestes, com un post-localizer per CT.
+    // TODO Referenced Image Sequence (0008,1140) Tipus 3. Seqüència que referència altres imatges significativament relacionades amb aquestes,
+    // com un post-localizer per CT.
 
     // TODO Icon Image Sequence (0088,0200) Tipus 3. La següent imatge d'icona és representativa d'aquesta imatge. veure C.7.6.1.1.6
 
@@ -217,10 +219,12 @@ private:
     /// Distància física entre el centre de cada píxel (row,column) en mm. Veure 10.7.1.3. (0028,0030) Tipus 1
     double m_pixelSpacing[2];
 
-    /// Orientació de la imatge. Els direction cosines de la primera fila(0,1,2) i de la primera columna(3,4,5) respecte al pacient. Veure C.6.7.2.1.1. (020,0037) Tipus 1. Adicionalment hi guardmem el vector normal del pla (6,7,8)
+    /// Orientació de la imatge. Els direction cosines de la primera fila(0,1,2) i de la primera columna(3,4,5) respecte al pacient.
+    /// Veure C.6.7.2.1.1. (020,0037) Tipus 1. Adicionalment hi guardmem el vector normal del pla (6,7,8)
     double m_imageOrientationPatient[9];
 
-    /// Posició de la imatge. Les coordenades x,y,z la cantonada superior esquerre (primer pixel transmés) de la imatge, en mm. Veure C.6.7.2.1.1. (0020,0032) Tipus 1. \TODO aka origen?.
+    /// Posició de la imatge. Les coordenades x,y,z la cantonada superior esquerre (primer pixel transmés) de la imatge, en mm.
+    /// Veure C.6.7.2.1.1. (0020,0032) Tipus 1. \TODO aka origen?.
     double m_imagePositionPatient[3];
 
     /// Gruix de llesca en mm. (0018,0050) Tipus 2.

@@ -21,7 +21,8 @@ public:
 
 private :
 
-    ///Donant l'accession number retorna un xml que l'Starviewer una vegada l'ha rebut és capaç de descarregar de forma automàtica l'estudi amb l'accession number passat per paràmetre
+    /// Donant l'accession number retorna un xml que l'Starviewer una vegada l'ha rebut és capaç de descarregar de forma automàtica l'estudi amb l'accession
+    /// number passat per paràmetre
     QString getXmlPier(QString accessionNumber);
 
     ///Imprimeix per pantalla i loggeja error al connectar
