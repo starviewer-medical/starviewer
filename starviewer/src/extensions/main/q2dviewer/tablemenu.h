@@ -11,13 +11,12 @@ class QMouseEvent;
 
 namespace udg {
 
-/**
-Classe per implementar el menu per seleccionar els grids com si es crees una taula.
-*/
-
 // FWD declarations
 class ItemMenu;
 
+/**
+    Classe per implementar el menu per seleccionar els grids com si es crees una taula.
+  */
 class TableMenu : public QWidget {
 Q_OBJECT
 public:
@@ -32,7 +31,6 @@ public:
     void dropTable();
 
 public slots:
-
     /// Mètode que cada vegada que el mouse es situi sobre items comprova si cal afegir files o columnes
     void verifySelected(ItemMenu *selected);
 
@@ -40,12 +38,10 @@ public slots:
     void emitSelected(ItemMenu *selected);
 
 signals:
-
     /// Emet que s'ha escollit un grid
     void selectedGrid(int, int);
 
 protected:
-
     /// Sobrecàrrega del mètode que tracta tots els events
     bool event(QEvent *event);
 
@@ -53,7 +49,6 @@ protected:
     void mouseMoveEvent (QMouseEvent *event);
 
 private:
-
     /// Afegir una columna a la taula
     void addColumn();
 
@@ -61,7 +56,6 @@ private:
     void addRow();
 
 private:
-
     /// Nombre de columnes actuals
     int m_columns;
 

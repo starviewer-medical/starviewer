@@ -10,7 +10,7 @@ class DrawerPolygon;
 
 /**
     Tool per crear ROIs amb una forma lliure determinada per un polígon irregular.
-*/
+  */
 class PolylineROITool : public ROITool {
 Q_OBJECT
 public:

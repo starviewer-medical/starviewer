@@ -16,11 +16,10 @@ using namespace ThreadWeaver;
 
     Aquesta classe hereda de ThreadWeaver::Job per així tenir automàticament la gestió de les cues que implementa, i permetre que les operacions
     amb el PACS s'executin en un thread independent.
-*/
+  */
 class PACSJob : public Job {
 Q_OBJECT
 public:
-
     enum PACSJobType { SendDICOMFilesToPACSJobType, RetrieveDICOMFilesFromPACSJobType, QueryPACS };
 
     /// Constructor de la classe
@@ -58,7 +57,6 @@ signals:
     void PACSJobCancelled(PACSJob *);
 
 private slots:
-
     /// Slot que s'activa quan el job actual de ThreadWeaver comença a executar-se
     void threadWeaverJobStarted();
 
@@ -66,12 +64,10 @@ private slots:
     void threadWeaverJobDone();
 
 private:
-
     /// Mètode que han de reimplementar les classes filles per cancel·lar l'execució del job actual
     virtual void requestCancelJob() = 0;
 
-private :
-
+private:
     static int m_jobIDCounter;
     int m_jobID;
     PacsDevice m_pacsDevice;

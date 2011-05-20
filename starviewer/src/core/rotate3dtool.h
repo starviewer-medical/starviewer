@@ -11,7 +11,7 @@ class QViewer;
 
 /**
     Eina per rotacions tridimensionals (pensat per visors 3D)
-*/
+  */
 class Rotate3DTool : public Tool {
 Q_OBJECT
 public:

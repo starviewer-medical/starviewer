@@ -8,8 +8,8 @@ namespace udg {
 class DicomPrinter;
 
 /**
-  * Classe que ens permet afegir una nova impressora Dicom al Sistema
-**/
+    Classe que ens permet afegir una nova impressora Dicom al Sistema
+  */
 class QDicomAddPrinterWidget : public QWidget, private::Ui::QDicomAddPrinterWidgetBase {
 Q_OBJECT
 
@@ -20,12 +20,10 @@ public:
     void clearInputs();
 
 signals:
-
     /// Signal que es llança quan una impressora s'ha afegit al sistema.
     void newPrinterAddedSignal(int);
 
 public slots:
-
     /// Posa operatiu el boto d'afegir impressora quan tots els paràmetres estan entrats.
     void enableAddButton();
 
@@ -33,7 +31,6 @@ public slots:
     void addPrinter();
 
 private:
-
     /// Es creen els connexions de la interfície
     void createConnections();
 

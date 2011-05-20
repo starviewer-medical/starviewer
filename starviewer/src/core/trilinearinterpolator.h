@@ -8,12 +8,11 @@
 namespace udg {
 
 /**
- * Classe que implementa una interpolació trilineal genèrica.
- */
+    Classe que implementa una interpolació trilineal genèrica.
+  */
 class TrilinearInterpolator {
 
 public:
-
     TrilinearInterpolator();
     ~TrilinearInterpolator();
 
@@ -32,7 +31,6 @@ public:
     template <class TOutput, class TInput> static TOutput interpolate(const TInput *values, const int offsets[], const double weights[]);
 
 private:
-
     int m_increments[8];
 
 };

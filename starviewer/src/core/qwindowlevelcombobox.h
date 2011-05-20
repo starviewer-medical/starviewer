@@ -11,7 +11,7 @@ class WindowLevelPresetsToolData;
 
 /**
     Combo box personalitzat per a escollir valors de window level predeterminats i personalitzats
-*/
+  */
 class QWindowLevelComboBox : public QComboBox {
 Q_OBJECT
 public:

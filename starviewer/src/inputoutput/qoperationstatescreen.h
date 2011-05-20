@@ -31,13 +31,12 @@ public:
     /// Estableix instància de PacsManager que s'encarrega de fer les peticions als PACS
     void setPacsManager(PacsManager *pacsManager);
 
-protected :
+protected:
     /// Event que s'activa al tancar al rebren un event de tancament
     /// @param event de tancament
     void closeEvent(QCloseEvent *ce);
 
 private slots:
-
     /// Slot que s'activa quan s'ha encuat un nou PACSJob insereix al QTreeWidget la informació del nou job i la posa com a Pedent de realitzar
     void newPACSJobEnqueued(PACSJob *);
 

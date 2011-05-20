@@ -109,7 +109,6 @@ public:
     double getWindowCenter();
 
 private:
-
     /// Identificador de la seqüència
     int m_identifier;
 

@@ -11,7 +11,7 @@ class QViewer;
 
 /**
     Classe base per a totes les tools
-*/
+  */
 class Tool : public QObject {
 Q_OBJECT
 public:

@@ -178,7 +178,7 @@ void QViewer::eventHandler(vtkObject *object, unsigned long vtkEvent, void *clie
     Q_UNUSED(callData);
     Q_UNUSED(command);
 
-    // Quan la finestra sigui "seleccionada" s'emetrà un senyal indicant-ho. Entenem seleccionada quan s'ha clicat o mogut la rodeta per sobre del visor. 
+    // Quan la finestra sigui "seleccionada" s'emetrà un senyal indicant-ho. Entenem seleccionada quan s'ha clicat o mogut la rodeta per sobre del visor.
     // TODO Ara resulta ineficient perquè un cop seleccionat no caldria re-enviar aquesta senyal. Cal millorar el sistema
     switch (vtkEvent)
     {
@@ -255,7 +255,7 @@ void QViewer::getLastEventWorldCoordinate(double worldCoordinate[3])
 void QViewer::getRecentEventWorldCoordinate(double worldCoordinate[3], bool current)
 {
     int position[2];
-    
+
     if (current)
     {
         this->getEventPosition(position);
@@ -264,7 +264,7 @@ void QViewer::getRecentEventWorldCoordinate(double worldCoordinate[3], bool curr
     {
         this->getLastEventPosition(position);
     }
-    
+
     double computedCoordinate[4];
     this->computeDisplayToWorld(position[0], position[1], 0, computedCoordinate);
     worldCoordinate[0] = computedCoordinate[0];
@@ -274,7 +274,7 @@ void QViewer::getRecentEventWorldCoordinate(double worldCoordinate[3], bool curr
 
 void QViewer::setupInteraction()
 {
-    Q_ASSERT(m_renderer);  
+    Q_ASSERT(m_renderer);
 
     // TODO Fer això aquí? o fer-ho en el tool manager?
     this->getInteractor()->RemoveObservers(vtkCommand::LeftButtonPressEvent);
@@ -347,7 +347,7 @@ bool QViewer::saveGrabbedViews(const QString &baseName, FileType extension)
         }
         else if (count > 1)
         {
-            // Tenim més d'una imatge, per tant li afegim 
+            // Tenim més d'una imatge, per tant li afegim
             // un índex adicional per cada imatge automàticament
             int i = 0;
             int padding = QString::number(count).size();
@@ -389,7 +389,7 @@ bool QViewer::record(const QString &baseName, RecordFileFormatType format)
 
         int count = m_grabList.count();
         // TODO fer alguna cosa especial si només hi ha una sola imatge????
-        
+
         vtkImageData *data = m_grabList.at(0);
 
         videoWriter->SetFileName(qPrintable(baseName + fileExtension));
@@ -494,7 +494,7 @@ void QViewer::pan(double motionVector[3])
         DEBUG_LOG("No hi ha càmera");
         return;
     }
-    
+
     double viewFocus[4], viewPoint[3];
     camera->GetFocalPoint(viewFocus);
     camera->GetPosition(viewPoint);
@@ -703,7 +703,7 @@ void QViewer::updateWindowLevelData()
             }
         }
     }
-    
+
     // Calculem un window level automàtic que sempre posarem disponible a l'usuari
     double automaticWindowWidth;
     double automaticWindowLevel;
@@ -852,10 +852,10 @@ void QViewer::initializeWorkInProgressByViewerStatus(ViewerStatus status)
 }
 
 void QViewer::setInputAndRender(Volume *volume)
-{ 
-    this->setInput(volume); 
-    this->render(); 
-} 
+{
+    this->setInput(volume);
+    this->render();
+}
 
 void QViewer::setWindowLevelPreset(const QString &preset)
 {

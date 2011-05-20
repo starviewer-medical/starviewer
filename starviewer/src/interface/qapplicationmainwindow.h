@@ -107,7 +107,6 @@ private:
     void computeDefaultToolTextSize();
 
 private slots:
-
     // Mètode genèric que s'assabenta del progrés de càrrega d'un volum i el notifica d'alguna manera en l'interfície
     // com per exemple un QProgressDialog o en un label
     // @param progress valor del progrés de càrrega

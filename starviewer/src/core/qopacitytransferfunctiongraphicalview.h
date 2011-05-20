@@ -10,13 +10,11 @@ class QOpacityTransferFunctionGraphicalViewNode;
 
 /**
     Vista gràfica d'una funció de transferència d'opacitat.
- */
+  */
 class QOpacityTransferFunctionGraphicalView : public QGraphicsView {
-
-    Q_OBJECT
+Q_OBJECT
 
 public:
-
     /// Constructor.
     explicit QOpacityTransferFunctionGraphicalView(QWidget *parent = 0);
 
@@ -24,7 +22,6 @@ public:
     void setOpacityTransferFunction(const OpacityTransferFunction &opacityTransferFunction);
 
 signals:
-
     /// S'emet quan s'afegeix un node.
     void nodeAdded(double x, double opacity);
     /// S'emet quan s'esborra un node.
@@ -37,7 +34,6 @@ signals:
     //void nodeChangedOpacity(double x, double opacity);
 
 protected:
-
     ///@{
     /// Gestió d'esdeveniments. \todo Explicar una mica què fem a cadascun.
     virtual void mousePressEvent(QMouseEvent *event);
@@ -48,7 +44,6 @@ protected:
     ///@}
 
 private:
-
     /// Estat que ens indica que estem fent entre el mouse press i el mouse release.
     enum State { Ready, Adding, Removing };
 
@@ -68,7 +63,6 @@ private:
     //void changeNodeOpacity(double x);
 
 private:
-
     /// Estat actual.
     State m_state;
 

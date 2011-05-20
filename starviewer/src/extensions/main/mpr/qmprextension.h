@@ -24,7 +24,7 @@ class Volume;
 
     TODO Afegir l'interacció de l'usuari. Per rotar i traslladar els plans podem seguir com a model el que fan els mètodes vtkImagePlaneWidget::Spin()
     i vtkImagePlaneWidget::Translate()
-*/
+  */
 class QMPRExtension : public QWidget, private ::Ui::QMPRExtensionBase {
 Q_OBJECT
 public:

@@ -9,14 +9,14 @@
 
 namespace udg {
 
-/**
-    Job que s'encarrega de descarregar fitxers del PACS.
-*/
 class Study;
 class RetrieveDICOMFilesFromPACS;
 class PacsDevice;
 class DICOMTagReader;
 
+/**
+    Job que s'encarrega de descarregar fitxers del PACS.
+  */
 class RetrieveDICOMFilesFromPACSJob : public PACSJob {
 Q_OBJECT
 public:
@@ -44,7 +44,6 @@ public:
     QString getStatusDescription();
 
 signals:
-
     /// Signal que s'emet quan s'ha descarregat un fitxer
     void DICOMFileRetrieved(PACSJob *pacsJob, int numberOfImagesRetrieved);
 
@@ -65,12 +64,10 @@ signals:
     void studyFromCacheWillBeDeleted(const QString &studyInstanceUID);
 
 private slots:
-
     /// Slot que s'activa quan s'ha descarregat una imatge, respón al signal DICOMFileRetrieved de RetrieveDICOMFilesFromPACS
     void DICOMFileRetrieved(DICOMTagReader *dicomTagReader, int numberOfImagesRetrieved);
 
 private:
-
     /// Indica la prioritat del job
     // Sobreescribim el mètode priority de la classe ThreadWeaver::Job
     int priority() const;
@@ -91,7 +88,6 @@ private:
     void requestCancelJob();
 
 private:
-
     RetrieveDICOMFilesFromPACS *m_retrieveDICOMFilesFromPACS;
     Study *m_studyToRetrieveDICOMFiles;
     DicomMask m_dicomMaskToRetrieve;

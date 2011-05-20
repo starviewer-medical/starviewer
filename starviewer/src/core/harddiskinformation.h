@@ -6,11 +6,11 @@
 namespace udg {
 
 /**
-Classe que ens permet obtenir informació sobre un disc dur. Més concretament ens permet obtenir els Byte, MB, GB d'una partició i quins d'aquests són lliures.
-Cal tenir present que quan es vol saber l'espai lliure d'un disc dur s'ha d'especificar de quina partició. En windows s'hauria d'especificar la
-unitat (c:, d:, ...) i un directori i en linux s'ha d'especificar la ruta sensera del directori per saber la partició. Actualment aquesta classe només suporta
-els sistemes operatius basats en Unix (Linux, Mac OS X ...).
-*/
+    Classe que ens permet obtenir informació sobre un disc dur. Més concretament ens permet obtenir els Byte, MB, GB d'una partició i quins d'aquests són lliures.
+    Cal tenir present que quan es vol saber l'espai lliure d'un disc dur s'ha d'especificar de quina partició. En windows s'hauria d'especificar la
+    unitat (c:, d:, ...) i un directori i en linux s'ha d'especificar la ruta sensera del directori per saber la partició. Actualment aquesta classe només suporta
+    els sistemes operatius basats en Unix (Linux, Mac OS X ...).
+  */
 class HardDiskInformation{
 public:
     /**

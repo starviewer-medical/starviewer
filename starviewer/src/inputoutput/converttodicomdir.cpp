@@ -153,7 +153,7 @@ Status ConvertToDicomdir::convert(const QString &dicomdirPath, CreateDicomdir::r
         return state;
     }
 
-    // Sumem una imatge més per evitar que arribi el 100 % la progress bar, i així s'esperi a que es crei el dicomdir, que es fa quan s'invoca 
+    // Sumem una imatge més per evitar que arribi el 100 % la progress bar, i així s'esperi a que es crei el dicomdir, que es fa quan s'invoca
     // createDicomdir.Create()
     m_progress = new QProgressDialog(tr("Creating DICOMDIR..."), "", 0, totalNumberOfItems + 1);
     m_progress->setMinimumDuration(0);

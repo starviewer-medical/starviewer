@@ -461,7 +461,7 @@ void TransferFunction::updateKeys() const
 
     for (int i = 0; i < m_keys.size() - 1; i++)
     {
-        if (m_keys.at(i) == m_keys.at(i+1))
+        if (m_keys.at(i) == m_keys.at(i + 1))
         {
             m_keys.removeAt(i + 1);
         }

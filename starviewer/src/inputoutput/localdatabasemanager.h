@@ -18,8 +18,7 @@ class DatabaseConnection;
 
 /**
     Manager de la base de dades local, permet interactuar amb tots els objectes de la base de dades
-*/
-
+  */
 class LocalDatabaseManager : public QObject {
 Q_OBJECT
 public:

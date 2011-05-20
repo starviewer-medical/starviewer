@@ -39,8 +39,8 @@ bool launchCrashReporter(const char *dumpDirPath, const char *minidumpId, void *
         // Fork failed
         return false;
     }
-    if (pid == 0) 
-    { 
+    if (pid == 0)
+    {
         // We are the fork
         execl(static_cast<CrashHandler*>(crashHandler)->getCrashReporterPath(),
               static_cast<CrashHandler*>(crashHandler)->getCrashReporterPath(),

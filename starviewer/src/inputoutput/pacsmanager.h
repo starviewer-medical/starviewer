@@ -14,12 +14,12 @@ namespace udg {
 
 class DicomMask;
 
-/** Classe manager que ens permet comunicar-nos amb el PACS
-*/
+/**
+    Classe manager que ens permet comunicar-nos amb el PACS
+  */
 class PacsManager : public QObject {
 Q_OBJECT
 public:
-
     /// Constructor de la classe
     PacsManager();
 
@@ -57,7 +57,6 @@ public:
     bool waitForAllPACSJobsFinished(int msec = INT_MAX);
 
 signals:
-
     /// Signal que s'emet per indicar que s'ha encuat un nou PACSJob
     void newPACSJobEnqueued(PACSJob *pacsJob);
 
@@ -65,7 +64,6 @@ signals:
     void requestedCancelPACSJob(PACSJob *pacsJob);
 
 private:
-
     ThreadWeaver::Weaver *m_queryWeaver;
     ThreadWeaver::Weaver *m_sendDICOMFilesToPACSWeaver;
     ThreadWeaver::Weaver *m_retrieveDICOMFilesFromPACSWeaver;

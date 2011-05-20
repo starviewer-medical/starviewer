@@ -9,12 +9,11 @@ namespace udg {
 class TrilinearInterpolator;
 
 /**
- * Aquesta classe implementa els mètodes per retornar el color d'un vòxel. El mètode shade ha de ser implementat per les classes filles.
- */
+    Aquesta classe implementa els mètodes per retornar el color d'un vòxel. El mètode shade ha de ser implementat per les classes filles.
+  */
 class VoxelShader {
 
 public:
-
     VoxelShader();
     virtual ~VoxelShader();
 

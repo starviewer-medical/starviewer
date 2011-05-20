@@ -13,9 +13,9 @@ class Series;
 class Image;
 
 /**
-Mòdul que s'encarrega d'ordenar correctament les imatges de les sèries. Un dels seus requisits és que es tingui l'etiqueta de DICOMClassified,
-la ImageFillerStep i el TemporalDimensionFillerStep.
-*/
+    Mòdul que s'encarrega d'ordenar correctament les imatges de les sèries. Un dels seus requisits és que es tingui l'etiqueta de DICOMClassified,
+    la ImageFillerStep i el TemporalDimensionFillerStep.
+  */
 class OrderImagesFillerStep : public PatientFillerStep {
 public:
     OrderImagesFillerStep();

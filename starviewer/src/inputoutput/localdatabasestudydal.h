@@ -10,11 +10,11 @@ namespace udg {
 
 class DicomMask;
 
-/** Aquesta classe s'encarrega de dur a terme les operacions relacionades amb l'objecte estudi de la cache de l'aplicació.
-*/
+/**
+    Aquesta classe s'encarrega de dur a terme les operacions relacionades amb l'objecte estudi de la cache de l'aplicació.
+  */
 class LocalDatabaseStudyDAL : public LocalDatabaseBaseDAL {
 public:
-
     LocalDatabaseStudyDAL(DatabaseConnection *dbConnection);
 
     /// Insereix el nou estudi, i insereix com LastAccessDate la data actual
@@ -43,8 +43,7 @@ public:
     /// retorna -1
     qlonglong getPatientIDFromStudyInstanceUID(const QString &studyInstanceUID);
 
-private :
-
+private:
     /// Construeix la sentència sql per inserir el nou estudi
     QString buildSqlInsert(Study *newStudy, const QDate &lastAcessDate);
 

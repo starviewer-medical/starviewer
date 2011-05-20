@@ -10,10 +10,8 @@ class vtkPolyDataMapper2D;
 namespace udg {
 
 /**
- *
- *  Primitiva de línia per al Drawer
- *
- */
+    Primitiva de línia per al Drawer
+  */
 class DrawerLine : public DrawerPrimitive {
 Q_OBJECT
 public:

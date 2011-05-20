@@ -23,7 +23,6 @@ public:
     HangingProtocol* readFile(const QString &path);
 
 private:
-
     /// Llegeix una restriccio
     HangingProtocolImageSet::Restriction readRestriction(QXmlStreamReader *reader);
 

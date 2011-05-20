@@ -15,7 +15,7 @@ class PatientBrowserMenuList;
 /**
     Widget en forma de menú que desplega la informació del pacient que li donem
     d'entrada de forma que poguem navegar pels seus estudis i corresponents volums
-*/
+  */
 class PatientBrowserMenu : public QWidget {
 Q_OBJECT
 public:

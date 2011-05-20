@@ -4,7 +4,7 @@
 #include "qcrashreporter.h"
 #include "logging.h"
 
-// Programa principal per executar l'aplicació de crash report 
+// Programa principal per executar l'aplicació de crash report
 
 void configureLogging()
 {

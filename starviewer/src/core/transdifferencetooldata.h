@@ -12,7 +12,7 @@ class Volume;
 
 /**
     Classe per guardar les dades de la tool de diferència amb translació.
-*/
+  */
 class TransDifferenceToolData : public ToolData {
 Q_OBJECT
 public:
@@ -96,7 +96,6 @@ public:
     }
 
 public slots:
-
 signals:
     /// Envia el desplaçament que s'ha fet des de la posició d'origen
     void actualDisplacement(int, int);

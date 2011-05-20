@@ -11,12 +11,11 @@ namespace udg {
 
 class DicomMask;
 
-/** Aquesta classe conté els mètodes per operar amb l'objecte image en la caché de l'aplicació
-*/
-
+/**
+    Aquesta classe conté els mètodes per operar amb l'objecte image en la caché de l'aplicació
+  */
 class LocalDatabaseImageDAL : public LocalDatabaseBaseDAL {
 public:
-
     LocalDatabaseImageDAL(DatabaseConnection *dbConnection);
 
     /// Insereix la informació d'una imatge a la caché, actualitzamt l'espai ocupat de la pool, com s'ha de fer un insert i un update aquests dos operacion
@@ -39,8 +38,7 @@ public:
     /// Compta les imatges que compleixin el filtre de la màscara, només es té en compte l'StudyUID, SeriesUID i SOPInstanceUID
     int count(const DicomMask &imageMaskToCount);
 
-private :
-
+private:
     double m_imageOrientationPatient[6];
     double m_pixelSpacing[2];
     double m_patientPosition[3];

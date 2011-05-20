@@ -11,14 +11,12 @@ class Q2DViewer;
 class DrawerPolygon;
 
 /**
-*
-*   Tool pare per totes aquelles tools destinades a crear ROIs.
-*   S'encarrega de proporcionar els mètodes necessaris per calcular
-*   les dades estadístiques relacionades amb la ROI (àrea, mitjana, desviació estàndar).
-*   La gestió dels events i de com es dibuixa la forma de la ROI queda delegada en les
-*   tools filles. La forma final de la tool ha de quedar dibuixada amb el membre m_roiPolygon.
-*
-*/
+    Tool pare per totes aquelles tools destinades a crear ROIs.
+    S'encarrega de proporcionar els mètodes necessaris per calcular
+    les dades estadístiques relacionades amb la ROI (àrea, mitjana, desviació estàndar).
+    La gestió dels events i de com es dibuixa la forma de la ROI queda delegada en les
+    tools filles. La forma final de la tool ha de quedar dibuixada amb el membre m_roiPolygon.
+  */
 class ROITool : public Tool {
 Q_OBJECT
 public:

@@ -8,10 +8,8 @@ class vtkCaptionActor2D;
 namespace udg {
 
 /**
- *
- *  Primitiva de text per al Drawer
- *
- */
+    Primitiva de text per al Drawer
+  */
 class DrawerText : public DrawerPrimitive {
 Q_OBJECT
 public:

@@ -84,7 +84,7 @@ Volume* VolumeBuilderFromCaptures::build()
     dcmGenerateUniqueIdentifier(seriesUid, SITE_SERIES_UID_ROOT);
     newSeries->setInstanceUID(QString(seriesUid));
     // \TODO Quin criteri volem seguir per donar nous noms?
-    newSeries->setSeriesNumber(QString("0000")+QString::number(m_parentStudy->getSeries().count()));
+    newSeries->setSeriesNumber(QString("0000") + QString::number(m_parentStudy->getSeries().count()));
     newSeries->setDescription(this->getSeriesDescription());
 
     // Assignem la sèrie a l'estudi al qual partenyia l'inputVolume.
@@ -194,7 +194,7 @@ Volume* VolumeBuilderFromCaptures::build()
         currentImage->setBitsStored(bitsStored);
         currentImage->setHighBit(highBit);
         currentImage->setColumns(columns);
-        currentImage->setInstanceNumber(QString::number(i+1));
+        currentImage->setInstanceNumber(QString::number(i + 1));
         currentImage->setPhotometricInterpretation(photometricInterpretation);
         currentImage->setPixelRepresentation(pixelRepresentation);
         currentImage->setPixelSpacing(spacing[0], spacing[1]);

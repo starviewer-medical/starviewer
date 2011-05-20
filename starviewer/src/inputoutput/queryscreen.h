@@ -16,7 +16,7 @@ class PacsManager;
 
 /**
     Aquesta classe crea la interfície princial de cerca, i connecta amb el PACS i la bd dades local per donar els resultats finals
-*/
+  */
 class QueryScreen : public QDialog, private Ui::QueryScreenBase {
 Q_OBJECT
 public:
@@ -77,7 +77,7 @@ signals:
     /// Indica que ha comença la descarrega d'un estudi sol·licitat a través del mètode public retrieveStudy
     void studyRetrieveStarted(QString studyInstanceUID);
 
-protected :
+protected:
     ///  Event que s'activa al tancar al rebren un event de tancament
     ///  @param event de tancament
     void closeEvent(QCloseEvent *event);

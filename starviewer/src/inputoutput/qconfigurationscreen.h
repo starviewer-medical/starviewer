@@ -7,8 +7,9 @@ namespace udg {
 
 class PacsDevice;
 
-/** Interfície que permet configurar els paràmetres del PACS
-*/
+/**
+    Interfície que permet configurar els paràmetres del PACS
+  */
 class QConfigurationScreen : public QWidget, private Ui::QConfigurationScreenBase {
 Q_OBJECT
 public:

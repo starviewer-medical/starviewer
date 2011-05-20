@@ -968,7 +968,7 @@ void ObscuranceThread::runOpacitySmoothColorBleeding()
                     const float *uGradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[uIndex]);
                     const double distance = (rv - ru).length();
                     // ru és tapat -> calculem el color bleeding
-                    if (smoothBlocking(rv, ru, distance, uGradient)) 
+                    if (smoothBlocking(rv, ru, distance, uGradient))
                     {
                         const Vector3 uNormal(uGradient[0], uGradient[1], uGradient[2]);
                         const double cos = uNormal * m_direction;

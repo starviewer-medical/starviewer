@@ -10,8 +10,8 @@ class Image;
 class DICOMTagReader;
 
 /**
- * Converteix Objects Dataset de dcmtk a objectes d'Starvieweer
- */
+    Converteix Objects Dataset de dcmtk a objectes d'Starvieweer
+  */
 class CreateInformationModelObject{
 
 public:

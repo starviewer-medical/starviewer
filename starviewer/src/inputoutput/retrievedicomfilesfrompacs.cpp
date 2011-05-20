@@ -140,7 +140,7 @@ void RetrieveDICOMFilesFromPACS::storeSCPCallback(void *callbackData, T_DIMSE_St
     if (progress->state == DIMSE_StoreEnd)
     {
         // No status detail
-        *statusDetail = NULL; 
+        *statusDetail = NULL;
 
         if ((imageDataSet) && (*imageDataSet))
         {

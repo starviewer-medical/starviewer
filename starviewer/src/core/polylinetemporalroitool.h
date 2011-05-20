@@ -9,8 +9,8 @@ namespace udg {
 class PolylineTemporalROIToolData;
 
 /**
-Tool per dibuixar ROIS polilinies i calcular mitjanes de series temporals
-*/
+    Tool per dibuixar ROIS polilinies i calcular mitjanes de series temporals
+  */
 class PolylineTemporalROITool : public PolylineROITool {
 Q_OBJECT
 public:
@@ -29,12 +29,10 @@ public:
     void setToolData(ToolData *data);
 
 private slots:
-
     /// Metode que es crida quan s'acaba de definir la roi
     void start();
 
 private:
-
     // Metode que converteix el volum de l'input (que té fases) en imatge itk temporal
     void convertInputImageToTemporalImage();
 
@@ -45,7 +43,6 @@ private:
     QVector<double> getGraySerie(double *coords, int size);
 
 private:
-
     /// Dades específiques de la tool
     PolylineTemporalROIToolData *m_myData;
 };

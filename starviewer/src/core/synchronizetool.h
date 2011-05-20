@@ -10,7 +10,7 @@ class SynchronizeToolData;
 
 /**
     Tool de sincronització entre visualitzadors.
-*/
+  */
 class SynchronizeTool : public Tool {
 Q_OBJECT
 public:

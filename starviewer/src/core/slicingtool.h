@@ -10,7 +10,7 @@ class Volume;
 
 /**
     Tool que serveix per fer slicing en un visor 2D
-*/
+  */
 class SlicingTool : public Tool {
 Q_OBJECT
 public:

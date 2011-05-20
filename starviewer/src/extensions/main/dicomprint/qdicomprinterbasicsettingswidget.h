@@ -22,17 +22,14 @@ public:
     void clear();
 
 signals:
-
     /// Signal que s'emet quan es canvia algun dels settings d'una impressora
     void basicDicomPrinterSettingChanged();
 
 private slots:
-
     /// Slot que emet signal indicant que algunes de les propietats de la impressora DICOM ha canviat
     void settingChanged();
 
-private :
-
+private:
     void createConnections();
 
     /// Emplena DicomPrinter amb les dades del GroupBox Film Settings

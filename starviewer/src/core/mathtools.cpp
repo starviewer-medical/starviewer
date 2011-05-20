@@ -49,7 +49,7 @@ double MathTools::logTwo(const double x, const bool zero)
 
 double MathTools::angleInRadians(double vec1[3], double vec2[3])
 {
-    return acos(MathTools::dotProduct(vec1, vec2) / (vtkMath::Norm(vec1)*vtkMath::Norm(vec2)));
+    return acos(MathTools::dotProduct(vec1, vec2) / (vtkMath::Norm(vec1) * vtkMath::Norm(vec2)));
 }
 
 double MathTools::angleInDegrees(double vec1[3], double vec2[3])
@@ -78,7 +78,7 @@ int MathTools::planeIntersection(double p[3], double n[3], double q[3], double m
     // t = Cross(n,m)
     // u = Cross(n,t)
     // r = p + Dot(p-q)*u / Dot(u,m)
-    
+
     double u[3];
     MathTools::crossProduct(n, m, t);
     MathTools::crossProduct(n, t, u);
@@ -104,7 +104,7 @@ int MathTools::planeIntersection(double p[3], double n[3], double q[3], double m
 
 int MathTools::planeIntersection(double p[3], double n[3], double q[3], double m[3], double r[3], double t[3], double intersectionPoint[3])
 {
-    
+
     // Solució extreta de http://vis.eng.uci.edu/courses/eecs104/current/GraphicsMath.pdf, pàg. 65
     // pla1 definit per (p,n); p: punt del pla, p.ex. origen, n: normal del pla
     // pla2 definit per (q,m);

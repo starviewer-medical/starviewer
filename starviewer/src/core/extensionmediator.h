@@ -10,16 +10,16 @@ namespace udg{
 class ExtensionContext;
 
 /**
-Classe abstracta que fa de pont entre l'starviewer i una extensió. D'aquesta classe hauran d'heredar tots
-els mediators de les diferents extensions. Hi ha d'haver un mediator per cada extensió.
-La vida d'un ExtensionMediator és la mateixa que la de la seva extensió. Per això queda lligada a ell
-mitjançants un parentiu.
-S'instancia un objecte Mediator per cada objecte Extension.
-Classe "mare" de l'Extensió. És l'única que enten a l'Extensió i sap on es troba, com tractar-la... Alhora
-"totes les mares són iguals". I els fills no coneixen a les mares.
+    Classe abstracta que fa de pont entre l'starviewer i una extensió. D'aquesta classe hauran d'heredar tots
+    els mediators de les diferents extensions. Hi ha d'haver un mediator per cada extensió.
+    La vida d'un ExtensionMediator és la mateixa que la de la seva extensió. Per això queda lligada a ell
+    mitjançants un parentiu.
+    S'instancia un objecte Mediator per cada objecte Extension.
+    Classe "mare" de l'Extensió. És l'única que enten a l'Extensió i sap on es troba, com tractar-la... Alhora
+    "totes les mares són iguals". I els fills no coneixen a les mares.
 
-\TODO Cal revisar tot aquest esquema. Ara és temporal per poder separar en directoris a l'espera del "Nou Disseny(tm)"
-*/
+    \TODO Cal revisar tot aquest esquema. Ara és temporal per poder separar en directoris a l'espera del "Nou Disseny(tm)"
+  */
 class ExtensionMediator : public QObject {
 Q_OBJECT
 public:

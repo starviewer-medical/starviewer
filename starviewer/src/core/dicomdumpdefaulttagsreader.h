@@ -15,8 +15,7 @@ class DICOMDumpDefaultTagsRestriction;
     Classe encarregada de llegir els fitxers XML que contenen la llista de Default Tags
     que s'han de mostrar en el DICOMDump.
     També és l'encarregada de crear els diferent objectes DICOMDumpDefaultTags.
-*/
-
+  */
 class DICOMDumpDefaultTagsReader {
 
 public:

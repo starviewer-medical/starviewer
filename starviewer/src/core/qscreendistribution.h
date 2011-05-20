@@ -10,11 +10,12 @@ class QMouseEvent;
 
 namespace udg {
 
-/** Classe que mostra les pantalles (o monitors) disponibles en una petita finestra (QDialog)
+/**
+    Classe que mostra les pantalles (o monitors) disponibles en una petita finestra (QDialog)
     i deixa seleccionar a quin es vol moure la finestra principal.
     Retorna l'identificador de la pantalla, i és fora d'aquesta que s'ha de fer les operacions
     de moure o no la pantalla.
-*/
+  */
 class QScreenDistribution : public QWidget {
 Q_OBJECT
 

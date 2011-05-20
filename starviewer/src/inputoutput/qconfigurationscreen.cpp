@@ -174,7 +174,7 @@ void QConfigurationScreen::updateSelectedPACSInformation()
             m_textDescription->setText(selectedPacs.getDescription());
             m_checkDefault->setChecked(selectedPacs.isDefault());
             m_checkBoxQueryRetrieveEnabled->setChecked(selectedPacs.isQueryRetrieveServiceEnabled());
-            m_textQueryRetrieveServicePort->setText(selectedPacs.isQueryRetrieveServiceEnabled() ? 
+            m_textQueryRetrieveServicePort->setText(selectedPacs.isQueryRetrieveServiceEnabled() ?
                                                     QString().setNum(selectedPacs.getQueryRetrieveServicePort()) : "");
             m_textQueryRetrieveServicePort->setEnabled(selectedPacs.isQueryRetrieveServiceEnabled());
             m_checkBoxStoreEnabled->setChecked(selectedPacs.isStoreServiceEnabled());

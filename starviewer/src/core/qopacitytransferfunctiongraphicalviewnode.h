@@ -9,11 +9,10 @@ class QOpacityTransferFunctionGraphicalViewLine;
 
 /**
     Node de la vista de funcions de transferència d'opacitat. Guarda l'opacitat i la x inicial d'un moviment.
- */
+  */
 class QOpacityTransferFunctionGraphicalViewNode : public QGraphicsEllipseItem {
 
 public:
-
     /// Mida del node.
     static const double Size;
 
@@ -35,17 +34,14 @@ public:
     void setRightLine(QOpacityTransferFunctionGraphicalViewLine *rightLine);
 
 protected:
-
     /// Gestió de les interaccions de l'usuari amb el node.
     virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
 private:
-
     /// Arregla les línies connectades amb els nodes donats quan aquests s'han intercanviat els costats.
     static void fixLines(QOpacityTransferFunctionGraphicalViewNode *leftNode, QOpacityTransferFunctionGraphicalViewNode *rightNode);
 
 private:
-
     /// x vella.
     double m_oldX;
     /// Línia de l'esquerra.

@@ -48,7 +48,7 @@ int LocalDatabaseUtilDAL::getDatabaseRevision()
 
         bool databaseReplyIsAnIntegerValue = false;
         int revisionDatabaseAsInt = revisionDatabaseAsQString.toInt(&databaseReplyIsAnIntegerValue);
-        
+
         if (databaseReplyIsAnIntegerValue)
         {
             // El número de revisió ha de tenir format numèric, sinó s'ha produït un error.

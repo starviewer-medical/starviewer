@@ -18,15 +18,15 @@ class Series;
 class Image;
 class DicomMask;
 
-/** Aquesta classe  mostrar estudis i sèries d'una manera organitzada i fàcilment.
-  * Aquesta classe és una modificació de la QTreeWidget que s'ha adaptat per poder visualitzar la informació
-  * de la cerca d'estudis, permetent consultar les series d'aquell estudi.
-  * Aquesta classe es sincronitza amb la informació mostrada a QSeriesListWidget
+/**
+    Aquesta classe  mostrar estudis i sèries d'una manera organitzada i fàcilment.
+    Aquesta classe és una modificació de la QTreeWidget que s'ha adaptat per poder visualitzar la informació
+    de la cerca d'estudis, permetent consultar les series d'aquell estudi.
+    Aquesta classe es sincronitza amb la informació mostrada a QSeriesListWidget
   */
 class QStudyTreeWidget : public QWidget, private Ui::QStudyTreeWidgetBase {
 Q_OBJECT
 public:
-
     enum ItemTreeLevels { StudyLevel = 0, SeriesLevel = 1, ImageLevel = 2 };
 
     // Object Name s'utilitza per guardar El NomPacient, Serie + Identificador Sèrie i Imatge + Identificador Image
@@ -106,7 +106,7 @@ protected:
     /// @param Dades de l'event sol·licitat
     void contextMenuEvent(QContextMenuEvent *event);
 
-signals :
+signals:
     /// Signal cada vegada que seleccionem un estudi diferent
     void currentStudyChanged();
 

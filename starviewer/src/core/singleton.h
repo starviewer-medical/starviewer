@@ -39,12 +39,11 @@ namespace udg {
     Cal declarar a Singleton<OnlyOne> com a friend perquè sinó ens veuríem obligats a declarar constructor i destructor
     públics, trencant així la filosofia d'un Singleton.
     \todo Fer-la thread-safe.
-*/
+  */
 template <typename T>
 class Singleton{
 
 public:
-
     /// Ens serveix per accedir a l'única instància de la classe T
     static T* instance()
     {

@@ -66,7 +66,7 @@ bool DatabaseInstallation::checkStarviewerDatabase()
     }
 
     INFO_LOG("Estat de la base de dades correcte ");
-    INFO_LOG("Base de dades utilitzada : " + LocalDatabaseManager::getDatabaseFilePath() + " revisio " + 
+    INFO_LOG("Base de dades utilitzada : " + LocalDatabaseManager::getDatabaseFilePath() + " revisio " +
              QString().setNum(localDatabaseManager.getDatabaseRevision()));
     return true;
 }

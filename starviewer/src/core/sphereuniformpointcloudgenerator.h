@@ -8,18 +8,17 @@
 namespace udg {
 
 /**
- * Aquesta classe genera un núvol de punts distribuïts uniformement sobre la
- * superfície d'una esfera mitjançant la subdivisió recursiva de les cares,
- * començant amb un icosaedre.
- *
- * Es pot decidir el radi de l'esfera i fins a quin nivell es subdivideix.
- *
- * \author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.edu>
- */
+    Aquesta classe genera un núvol de punts distribuïts uniformement sobre la
+    superfície d'una esfera mitjançant la subdivisió recursiva de les cares,
+    començant amb un icosaedre.
+
+    Es pot decidir el radi de l'esfera i fins a quin nivell es subdivideix.
+
+    \author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.edu>
+  */
 class SphereUniformPointCloudGenerator {
 
 public:
-
     /**
      * Crea l'objecte i inicialitza els paràmetres, però no genera els punts.
      *
@@ -40,7 +39,6 @@ public:
     QVector<QVector<int> > getNeighbours() const;
 
 private:
-
     typedef QVector<unsigned short> FaceList;
 
     /// Radi de l'esfera.

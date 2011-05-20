@@ -203,7 +203,8 @@ QString ScreenShotTool::compoundSelectedName()
             {
                 i--;
                 lastChar = m_lastScreenShotFileName[i];
-            }while (i > 0 && lastChar.isNumber());
+            }
+            while (i > 0 && lastChar.isNumber());
 
             bool ok;
             int sufix = m_lastScreenShotFileName.right(m_lastScreenShotFileName.length() - (i + 1)).toInt(&ok, 10);

@@ -231,7 +231,7 @@ QOpacityTransferFunctionGraphicalViewNode* QOpacityTransferFunctionGraphicalView
     // (ll)
     QOpacityTransferFunctionGraphicalViewLine *leftLine = 0;
     // (rl)
-    QOpacityTransferFunctionGraphicalViewLine *rightLine = 0;    
+    QOpacityTransferFunctionGraphicalViewLine *rightLine = 0;
     if (leftNode && rightNode)
     {
         // ?-(ln)--ll--(rn)-? ==> ?-(ln)--ll--(n*)--rl*--(rn)-?

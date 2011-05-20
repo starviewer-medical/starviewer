@@ -7,27 +7,26 @@
 namespace udg {
 
 /**
-Identificador que es fa servir en llocs on es necessita un identificador que l'usuari podrà veure per pantalla. Aquest té una part fixa, invariable, que és la
-que realment es fa servir com a identificador, internament. També té una part que serveix per poder-la mostrar a l'interfície i que es pugui traduir.
-Per exemple, els noms de les Extensions.
+    Identificador que es fa servir en llocs on es necessita un identificador que l'usuari podrà veure per pantalla. Aquest té una part fixa, invariable, que és la
+    que realment es fa servir com a identificador, internament. També té una part que serveix per poder-la mostrar a l'interfície i que es pugui traduir.
+    Per exemple, els noms de les Extensions.
 
-No té "setters" expressament.
-Exemple d'assignacions i creació d'id's nuls:
-@code
-DisplayableID id(QString::null);
+    No té "setters" expressament.
+    Exemple d'assignacions i creació d'id's nuls:
+    @code
+    DisplayableID id(QString::null);
 
-DisplayableID id2("test", tr("test"));
+    DisplayableID id2("test", tr("test"));
 
-id = DisplayableID("nouValor",tr("nouValor"));
+    id = DisplayableID("nouValor",tr("nouValor"));
 
-id = id2;
-@endcode
-*/
+    id = id2;
+    @endcode
 
+  */
 class DisplayableID {
 
 public:
-
     DisplayableID(const QString & id, const QString & name = QString::null);
 
     ~DisplayableID();
@@ -47,7 +46,6 @@ public:
     friend inline bool operator>(const DisplayableID &, const DisplayableID &);
 
 private:
-
     QString m_id;
     QString m_name;
 

@@ -7,12 +7,11 @@
 namespace udg {
 
 /**
-Mini-aplicació encarregada de permetre carregar un model des del sistema de fitxers al repositori de volums
-*/
+    Mini-aplicació encarregada de permetre carregar un model des del sistema de fitxers al repositori de volums
+  */
 class AppImportFile : public QObject {
 Q_OBJECT
 public:
-
     AppImportFile(QObject *parent = 0);
     ~AppImportFile();
 

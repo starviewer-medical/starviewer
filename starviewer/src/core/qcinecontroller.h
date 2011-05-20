@@ -8,8 +8,8 @@ namespace udg {
 class QViewerCINEController;
 class QViewer;
 /**
-Widget per controlar el CINE en els QViewer
-*/
+    Widget per controlar el CINE en els QViewer
+  */
 class QCINEController : public QWidget, private Ui::QCINEControllerBase {
 Q_OBJECT
 public:

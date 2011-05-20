@@ -8,12 +8,11 @@
 
 namespace udg {
 
-/**
-   Classe que ens representa el Mappeig d'un fitxer que conté la llista de DefaulTags utilitzat pel DICOMDump
-*/
-
 class DICOMTag;
 
+/**
+    Classe que ens representa el Mappeig d'un fitxer que conté la llista de DefaulTags utilitzat pel DICOMDump
+  */
 class DICOMDumpDefaultTags {
 
 public:

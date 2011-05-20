@@ -5,8 +5,9 @@
 
 namespace udg {
 
-/** Widget en el que es configuren els paràmetres de la Base de Dades local
-*/
+/**
+    Widget en el que es configuren els paràmetres de la Base de Dades local
+  */
 class QLocalDatabaseConfigurationScreen : public QWidget, private Ui::QLocalDatabaseConfigurationScreenBase {
 Q_OBJECT
 

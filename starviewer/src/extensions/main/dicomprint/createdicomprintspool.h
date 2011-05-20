@@ -13,7 +13,6 @@ class Image;
 
 class CreateDicomPrintSpool {
 public:
-
     enum CreateDicomPrintSpoolError { ErrorLoadingImageToPrint, ErrorCreatingImageSpool, Ok };
 
     QString createPrintSpool(DicomPrinter dicomPrinter, DicomPrintPage dicomPrintPage, const QString &spoolDirectoryPath);
@@ -21,12 +20,11 @@ public:
     CreateDicomPrintSpool::CreateDicomPrintSpoolError getLastError();
 
 private:
-
     bool transformImageForPrinting(Image *image, const QString &spoolDirectoryPath);
 
     void setBasicFilmBoxAttributes();
 
-    bool createHardcopyGrayscaleImage(Image *imageToPrint, const char *pixelData, unsigned long bitmapWidth, unsigned long bitmapHeight, 
+    bool createHardcopyGrayscaleImage(Image *imageToPrint, const char *pixelData, unsigned long bitmapWidth, unsigned long bitmapHeight,
                                       double pixelAspectRatio, const QString &spoolDirectoryPath);
 
     void setImageBoxAttributes();

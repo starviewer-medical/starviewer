@@ -11,13 +11,12 @@ namespace udg {
 class Status;
 class PacsDevice;
 
-/** Interfície que mostra els PACS els quals es pot connectar l'aplicació, permet seleccionar quins es vol connectar l'usuari
-*/
-
+/**
+    Interfície que mostra els PACS els quals es pot connectar l'aplicació, permet seleccionar quins es vol connectar l'usuari
+  */
 class QPacsList : public QWidget, private Ui::QPacsListBase {
 Q_OBJECT
 public:
-
     /// Constructor de la classe
     QPacsList(QWidget *parent = 0);
 
@@ -48,7 +47,6 @@ private slots:
     void setDefaultPACS(QTreeWidgetItem *item);
 
 private:
-
     PacsDeviceManager::FilterPACSByService m_filterPacsByService;
     bool m_showQueryPacsDefaultHighlighted;
 };

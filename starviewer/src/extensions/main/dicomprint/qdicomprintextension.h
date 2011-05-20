@@ -24,14 +24,12 @@ public:
     QDicomPrintExtension(QWidget *parent = 0);
 
 public slots:
-
     /// Li assigna el volum que s'ha d'imprimir
     void setInput(Volume *input);
     /// Actualitzem tots els elements que estan lligats al Volume que estem visualitzant.
     void updateInput();
 
 private slots:
-
     // Actualitza la informació que mostrem de la impressora
     void selectedDicomPrinterChanged(int indexOfSelectedDicomPrinter);
     /// Omple el combobox amb les impressores i mostra com a seleccionada la que esta marca com a impressora per defecte
@@ -61,7 +59,6 @@ private slots:
     void timeoutTimer();
 
 private:
-
     /// Crea les connexions
     void createConnections();
 

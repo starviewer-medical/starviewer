@@ -15,14 +15,12 @@ class TransferFunctionEditor;
     Permet desfer i refer els canvis, carregar i desar funcions, té una llista de funcions recents, etc.
     Té una modalitat gràfica i una de taula. Es pot crear amb només un subconjunt de les característiques, si no es volen les altres.
     Per exemple, es pot tenir un editor només gràfic i només per opacitats scalars, sense res més.
- */
+  */
 class QTransferFunctionEditor2 : public QWidget, private ::Ui::QTransferFunctionEditor2Base {
-
-    Q_OBJECT
-    Q_ENUMS(View)
+Q_OBJECT
+Q_ENUMS(View)
 
 public:
-
     /// Característiques de l'editor.
     enum Feature {
         Name = 0x01,
@@ -40,7 +38,6 @@ public:
     enum View { Graphical, Table, Both };
 
 public:
-
     /// Crea l'editor amb totes les característiques i tots els tipus de vistes.
     explicit QTransferFunctionEditor2(QWidget *parent = 0);
     /// Crea l'editor amb les característiques i les vistes passades per paràmetre.
@@ -52,12 +49,10 @@ public:
     void setTransferFunction(const TransferFunction &transferFunction);
 
 signals:
-
     /// S'emet quan canvia la funció de transferència.
     void transferFunctionChanged(const TransferFunction &transferFunction);
 
 private:
-
     Q_DISABLE_COPY(QTransferFunctionEditor2)
 
     /// Inicialitza l'editor amb els paràmetres donats.
@@ -66,12 +61,10 @@ private:
     void makeConnections();
 
 private slots:
-
     /// Emet el signal transferFunctionChanged(TransferFunction).
     void emitTransferFunctionChanged();
 
 private:
-
     /// L'autèntic editor.
     TransferFunctionEditor *m_editor;
     /// Vista de la funció de transferència.

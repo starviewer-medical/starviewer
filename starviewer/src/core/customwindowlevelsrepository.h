@@ -7,14 +7,12 @@
 namespace udg {
 
 /**
-   Classe que implementa un Repositori de CustomWindowLevels.
-   Aquesta classe és una implementació de la classe Repository
-*/
-
+    Classe que implementa un Repositori de CustomWindowLevels.
+    Aquesta classe és una implementació de la classe Repository
+  */
 class CustomWindowLevelsRepository : public Repository<CustomWindowLevel> {
 
 public:
-
     /// Ens retorna l'única instància del repositori (Patró Singleton)
     static CustomWindowLevelsRepository* getRepository()
     {
@@ -25,7 +23,6 @@ public:
     ~CustomWindowLevelsRepository();
 
 private:
-
     // Constructor private pq només es puguin definir objectes a través del patro Singleton
     CustomWindowLevelsRepository();
 };

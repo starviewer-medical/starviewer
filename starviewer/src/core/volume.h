@@ -24,7 +24,7 @@ class Patient;
     Es pot inicialitzar amb dades de tipus itk o vtk amb el mètode \c setData() .
     Per raons d'eficiència, com que el programa principalment el que farà serà visualitzar es retindran les dades en format natiu vtk.
     Només es convertiran a itk quan es demanin explícitament.
-*/
+  */
 class Volume : public QObject {
 Q_OBJECT
 public:

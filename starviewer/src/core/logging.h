@@ -3,7 +3,7 @@
 
 #include <QString>
 // Per posar la variable d'entorn
-#include <cstdlib> 
+#include <cstdlib>
 /*!
     Aquest arxiu conté totes les macros per a fer logs en l'aplicació.
 */

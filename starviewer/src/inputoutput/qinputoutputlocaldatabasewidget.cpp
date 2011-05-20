@@ -31,7 +31,7 @@ QInputOutputLocalDatabaseWidget::QInputOutputLocalDatabaseWidget(QWidget *parent
     settings.restoreColumnsWidths(InputOutputSettings::LocalDatabaseStudyList, m_studyTreeWidget->getQTreeWidget());
     settings.restoreGeometry(InputOutputSettings::LocalDatabaseSplitterState, m_StudyTreeSeriesListQSplitter);
 
-    QStudyTreeWidget::ColumnIndex sortByColumn = (QStudyTreeWidget::ColumnIndex) 
+    QStudyTreeWidget::ColumnIndex sortByColumn = (QStudyTreeWidget::ColumnIndex)
         settings.getValue(InputOutputSettings::LocalDatabaseStudyListSortByColumn).toInt();
 
     Qt::SortOrder sortOrderColumn = (Qt::SortOrder) settings.getValue(InputOutputSettings::LocalDatabaseStudyListSortOrder).toInt();
@@ -302,7 +302,7 @@ void QInputOutputLocalDatabaseWidget::deleteSelectedItemsFromLocalDatabase()
                                          .arg(studyToDelete->getID(), studyToDelete->getParentPatient()->getFullName());
                     }
                     else
-                    {   
+                    {
                         // TODO:Hauriem de mostar el Series ID en lloc del Series UID
                         warningMessage = tr("The series with UID %1 of study %2 patient %3 is in use by the DICOMDIR List. If you want to delete "
                                             "this series you should remove the study from the DICOMDIR List first.")

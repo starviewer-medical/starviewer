@@ -10,8 +10,9 @@ namespace udg {
 
 class DicomMask;
 
-/** Classe de cerca bàsica d'elemens
-*/
+/**
+    Classe de cerca bàsica d'elemens
+  */
 class QAdvancedSearchWidget : public QWidget, private Ui::QAdvancedSearchWidgetBase {
 Q_OBJECT
 public:
@@ -24,12 +25,10 @@ public:
     DicomMask buildDicomMask();
 
 private slots:
-
     /// Posa un * al tab el qual pertany el lineedit que se li ha donat valor, per a que l'usuari sàpiga quin tabs ha posat valors de cerca
     void updateAdvancedSearchModifiedStatus();
 
 private:
-
     /// Crea les connexions entre signals i slots
     void createConnections();
 };

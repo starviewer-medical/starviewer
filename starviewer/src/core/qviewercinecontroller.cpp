@@ -288,7 +288,7 @@ void QViewerCINEController::resetCINEInformation(Volume *input)
         if (phases > 1)
         {
             // Si tenim fases, per defecte treballem sota la temporal
-            setCINEDimension(TemporalDimension); 
+            setCINEDimension(TemporalDimension);
             setVelocity(input->getNumberOfPhases());
         }
         else

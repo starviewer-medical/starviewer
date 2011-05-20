@@ -153,7 +153,7 @@ DrawerPrimitive* EraserTool::getErasablePrimitive(double point[3], int view, int
             nearestPrimitive = 0;
         }
     }
-    
+
     return nearestPrimitive;
 }
 void EraserTool::reset()

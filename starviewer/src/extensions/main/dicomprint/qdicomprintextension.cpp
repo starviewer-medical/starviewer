@@ -50,7 +50,7 @@ QDicomPrintExtension::QDicomPrintExtension(QWidget *parent)
 void QDicomPrintExtension::createConnections()
 {
     // TODO: no cal invocar un mètode per mostrar la configuració d'una impressora el mètode show dels widgets ja és un slot, llavors el mètode
-    // configurationPrinter() es pot esborrar 
+    // configurationPrinter() es pot esborrar
     connect(m_configurationPrinterToolButton, SIGNAL(clicked()), m_qDicomPrinterConfigurationWidgetProof, SLOT(show()));
     connect(m_selectedPrinterComboBox, SIGNAL(currentIndexChanged(int)), SLOT(selectedDicomPrinterChanged(int)));
     connect(m_qDicomPrinterConfigurationWidgetProof, SIGNAL(printerSettingsChanged()), SLOT(fillSelectedDicomPrinterComboBox()));
@@ -329,7 +329,7 @@ void QDicomPrintExtension::addSeriesInformationAsAnnotationsToDicomPrintPage(Dic
     // A la primera posicio: posem el nom de la institució que ha generat l'estudi
     dicomPrintPage->addAnnotation(1, seriesToPrint->getInstitutionName());
     // A la segona posició: el nom del, edat i sexe pacient
-    dicomPrintPage->addAnnotation(2, seriesToPrint->getParentStudy()->getParentPatient()->getFullName() + " " + 
+    dicomPrintPage->addAnnotation(2, seriesToPrint->getParentStudy()->getParentPatient()->getFullName() + " " +
                                   seriesToPrint->getParentStudy()->getPatientAge() + " " + seriesToPrint->getParentStudy()->getParentPatient()->getSex());
     /// A la tercera posició: Modalitat seriesi Data/hora (de la sèrie i si no en té de l'estudi)
     dicomPrintPage->addAnnotation(3, seriesToPrint->getModality() + " " + dateToPrintInAnnotation.toString("dd/MM/yyyy") + " " +

@@ -34,7 +34,7 @@ class HangingProtocolManager;
 
 /**
     Extensió que s'executarà  per defecte a l'obrir un model
-*/
+  */
 class Q2DViewerExtension : public QWidget, private Ui::Q2DViewerExtensionBase {
 Q_OBJECT
 public:
@@ -122,7 +122,6 @@ private:
 #endif
 
 private slots:
-
 #ifndef STARVIEWER_LITE
     /// Comprova si el nou volum té fases i per tant hem d'activar/descativar la vista coronal+sagital
     void validePhases();

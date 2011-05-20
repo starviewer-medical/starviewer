@@ -55,8 +55,7 @@ namespace udg {
     Per obtenir els 4 últims dígits, sense padding escriuríem
     %IP.3%[1:]%IP.4%[3:]
     i en aquest cas, per la mateixa adreça IP que l'anterior, el resultat seria "92"
-
-*/
+  */
 class SettingsParser : public Singleton<SettingsParser> {
 public:
     /// Donada una string la parseja i ens retorna el resultat

@@ -8,14 +8,14 @@ class QMovie;
 namespace udg {
 
 /**
-  Classe que s'encarrega d'indicar i calcular diferents estils i configuracions de la interficie de l'aplicació, com per exemple
-  tamanys de lletra, colors, etc.
+    Classe que s'encarrega d'indicar i calcular diferents estils i configuracions de la interficie de l'aplicació, com per exemple
+    tamanys de lletra, colors, etc.
 
-  Per poder cridar els seu mètodes que ens retornin els diferents valors cal cridar, prèviament, a recomputeStyleToScreenOfWidget(widget)
-  passant-li un widget que es trobi en la pantalla on volem que l'style s'apliqui.
+    Per poder cridar els seu mètodes que ens retornin els diferents valors cal cridar, prèviament, a recomputeStyleToScreenOfWidget(widget)
+    passant-li un widget que es trobi en la pantalla on volem que l'style s'apliqui.
 
-  D'aquesta manera els diferents tamanys i estils s'adaptaran a la resolució i característiques d'aquella pantalla. Si no es fa, per defecte,
-  retornarà valors vàlids per una pantalla "normal" (on normal = de resolució no més gran d'1 Mpx)
+    D'aquesta manera els diferents tamanys i estils s'adaptaran a la resolució i característiques d'aquella pantalla. Si no es fa, per defecte,
+    retornarà valors vàlids per una pantalla "normal" (on normal = de resolució no més gran d'1 Mpx)
   */
 
 class ApplicationStyleHelper {

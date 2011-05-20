@@ -15,7 +15,7 @@
 // Include's vtk
 
 // Pel setAutomaticImageCacheEnabled
-#include <QVTKWidget.h> 
+#include <QVTKWidget.h>
 #include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
 // Rendering 3D
@@ -139,7 +139,7 @@ Q3DViewer::Q3DViewer(QWidget *parent)
     m_volumeRayCastAmbientContourObscuranceFunction = vtkVolumeRayCastSingleVoxelShaderCompositeFunction<AmbientContourObscuranceVoxelShader>::New();
     m_volumeRayCastAmbientContourObscuranceFunction->SetCompositeMethodToClassifyFirst();
     m_volumeRayCastAmbientContourObscuranceFunction->SetVoxelShader(m_ambientContourObscuranceVoxelShader);
-    m_volumeRayCastDirectIlluminationContourObscuranceFunction = 
+    m_volumeRayCastDirectIlluminationContourObscuranceFunction =
         vtkVolumeRayCastSingleVoxelShaderCompositeFunction<DirectIlluminationContourObscuranceVoxelShader>::New();
     m_volumeRayCastDirectIlluminationContourObscuranceFunction->SetCompositeMethodToClassifyFirst();
     m_volumeRayCastDirectIlluminationContourObscuranceFunction->SetVoxelShader(m_directIlluminationContourObscuranceVoxelShader);
@@ -201,7 +201,7 @@ Q3DViewer::~Q3DViewer()
     {
         m_volumeProperty->Delete();
     }
-    if (m_volumeMapper) 
+    if (m_volumeMapper)
     {
         m_volumeMapper->Delete();
     }
@@ -508,25 +508,25 @@ void Q3DViewer::setInput(Volume *volume)
     {
         int row;
 
-        if (currentPlaneRowVector[0]>currentPlaneRowVector[1] || currentPlaneRowVector[0]>currentPlaneRowVector[2])
+        if (currentPlaneRowVector[0] > currentPlaneRowVector[1] || currentPlaneRowVector[0] > currentPlaneRowVector[2])
         {
             //Row = les X -> Column = les Y
             for (row = 0; row < 3; row++)
             {
-                projectionMatrix->SetElement(row,0, (currentPlaneRowVector[ row ]));
-                projectionMatrix->SetElement(row,1, (currentPlaneColumnVector[ row ]));
+                projectionMatrix->SetElement(row, 0, (currentPlaneRowVector[row]));
+                projectionMatrix->SetElement(row, 1, (currentPlaneColumnVector[row]));
             }
         }
         else
         {
-            if (currentPlaneRowVector[1]>currentPlaneRowVector[2])
+            if (currentPlaneRowVector[1] > currentPlaneRowVector[2])
             {
                 //Row = les Y -> Column = les Z
                 int row;
                 for (row = 0; row < 3; row++)
                 {
-                    projectionMatrix->SetElement(row,1, (currentPlaneRowVector[ row ]));
-                    projectionMatrix->SetElement(row,2, (currentPlaneColumnVector[ row ]));
+                    projectionMatrix->SetElement(row, 1, (currentPlaneRowVector[row]));
+                    projectionMatrix->SetElement(row, 2, (currentPlaneColumnVector[row]));
                 }
             }
             else
@@ -535,8 +535,8 @@ void Q3DViewer::setInput(Volume *volume)
                 int row;
                 for (row = 0; row < 3; row++)
                 {
-                    projectionMatrix->SetElement(row,2, (currentPlaneRowVector[ row ]));
-                    projectionMatrix->SetElement(row,0, (currentPlaneColumnVector[ row ]));
+                    projectionMatrix->SetElement(row, 2, (currentPlaneRowVector[row]));
+                    projectionMatrix->SetElement(row, 0, (currentPlaneColumnVector[row]));
                 }
             }
         }
@@ -662,7 +662,7 @@ void Q3DViewer::setTransferFunction(TransferFunction *transferFunction)
             m_canEnableShading = false;
             this->setShading(false);
             // TODO Comprovar si seria suficient amb un render()
-            this->applyCurrentRenderingMethod(); 
+            this->applyCurrentRenderingMethod();
         }
     }
 }
@@ -944,7 +944,7 @@ void Q3DViewer::renderMIP3D()
     // Creem la funció de transferència de colors
     // Create a transfer function mapping scalar value to color (grey)
     vtkPiecewiseFunction *grayTransferFunction = vtkPiecewiseFunction::New();
-    grayTransferFunction->AddSegment(0 , 0.0 , m_range , 1.0);
+    grayTransferFunction->AddSegment(0, 0.0, m_range, 1.0);
 
 //     m_volumeProperty->SetScalarOpacity(m_transferFunction->getOpacityTransferFunction());
     m_volumeProperty->SetScalarOpacity(mipTransferFunction.vtkOpacityTransferFunction());
@@ -1007,7 +1007,7 @@ void Q3DViewer::renderContouring()
 
         vtkActor *actor = vtkActor::New();
         actor->SetMapper(polyDataMapper);
-        actor->GetProperty()->SetColor(1,0.8,0.81);
+        actor->GetProperty()->SetColor(1, 0.8, 0.81);
 
         m_renderer->RemoveViewProp(m_vtkVolume);
         m_renderer->AddViewProp(actor);

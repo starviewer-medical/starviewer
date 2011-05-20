@@ -17,12 +17,11 @@ namespace udg {
 
     Aquesta template té el constructor protegit, de manera que no es pot instanciar directament, sinó que se n'ha de fer una subclasse per
     cada tipus T que es vulgui.
- */
+  */
 template <typename T>
 class TransferFunctionTemplate {
 
 public:
-
     /// Retorna cert si els noms i les funcions són iguals.
     /// \note Les funcions poden ser diferents però equivalents. Són equivalents si un cop simplificades són iguals.
     bool operator ==(const TransferFunctionTemplate<T> &transferFunction) const;
@@ -54,19 +53,16 @@ public:
     void simplify();
 
 protected:
-
     /// Crea una funció de transferència buida, sense cap punt i sense nom.
     TransferFunctionTemplate();
 
 protected:
-
     /// Nom de la funció de transferència.
     QString m_name;
     /// Mapa amb els punts (x,y) definits explícitament.
     QMap<double, T> m_map;
 
 private:
-
     /// Retorna la interpolació lineal entre a i b avaluant "a + alpha * (b - a)", que és equivalent a "a * (1 - alpha) + b * alpha".
     static T linearInterpolation(const T &a, const T &b, double alpha);
 

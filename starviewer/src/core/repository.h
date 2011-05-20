@@ -10,7 +10,6 @@ namespace udg {
 template< typename ItemType >
 class Repository : public RepositoryBase {
 public:
-
     /// Constructor per defecte
     Repository() : RepositoryBase()
     {
@@ -45,7 +44,6 @@ public:
     void cleanUp();
 
 private:
-
     typedef QHash<Identifier, ItemType*> ItemListType;
     typedef typename ItemListType::const_iterator ItemListIteratorType;
 

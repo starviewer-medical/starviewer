@@ -10,11 +10,11 @@ namespace udg {
 
 class DicomMask;
 
-/** Aquesta classe s'encarrega de dur a terme les operacions relacionades amb l'objecte estudi de la cache de l'aplicació.
-*/
+/**
+    Aquesta classe s'encarrega de dur a terme les operacions relacionades amb l'objecte estudi de la cache de l'aplicació.
+  */
 class LocalDatabasePatientDAL : public LocalDatabaseBaseDAL {
 public:
-
     LocalDatabasePatientDAL(DatabaseConnection *dbConnection);
 
     /// Insereix el nou pacient, i emplena el camp DatabaseID de Patient amb el ID de Pacient de la BD.
@@ -28,8 +28,8 @@ public:
 
     /// Cerca els pacients que compleixen amb els criteris de la màscara de cerca, només té en compte el Patient Id
     QList<Patient*> query(const DicomMask &patientMaskToQuery);
-private :
 
+private:
     /// Construeix la sentència sql per inserir el nou pacient
     QString buildSqlInsert(Patient *newPatient);
 

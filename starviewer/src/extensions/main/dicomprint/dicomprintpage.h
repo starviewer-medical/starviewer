@@ -4,17 +4,15 @@
 #include <QString>
 #include <QMap>
 
-/**
-* Implementació per la Interfície DicomPrintPage que defineix una pàgina amb imatges per imprimir en impressores Dicom en DCMTK.
-*/
-
 namespace udg {
 
 class Image;
 
+/**
+    Implementació per la Interfície DicomPrintPage que defineix una pàgina amb imatges per imprimir en impressores Dicom en DCMTK.
+  */
 class DicomPrintPage {
 public:
-
     /// Especifica/Retorna la mida sobre de la placa sobre el que s'imprimirà
     void setFilmSize(const QString &filmSize);
     QString getFilmSize() const;
@@ -86,7 +84,6 @@ public:
     QList<Image*> getImagesToPrint();
 
 private:
-
     QString m_filmSize;
     QString m_filmLayout;
     QString m_filmOrientation;

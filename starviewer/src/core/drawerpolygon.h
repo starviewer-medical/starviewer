@@ -12,10 +12,8 @@ class vtkPolyDataMapper2D;
 namespace udg {
 
 /**
- *
- *  Primitiva de polígon per al Drawer
- *
- */
+    Primitiva de polígon per al Drawer
+  */
 class DrawerPolygon : public DrawerPrimitive {
 Q_OBJECT
 public:

@@ -238,7 +238,7 @@ void TransferFunctionEditor::moveAndChangeScalarOpacityPoints(const QList< QPair
     {
         return;
     }
-    
+
     // Recorrem els moviments per apuntar els punts que hem d'esborrar i els que hem d'afegir
     QList<double> removes;
     removes.reserve(moves.size());
@@ -345,7 +345,7 @@ void TransferFunctionEditor::moveAndChangeGradientOpacityPoints(const QList< QPa
     {
         return;
     }
-    
+
     // Recorrem els moviments per apuntar els punts que hem d'esborrar i els que hem d'afegir
     QList<double> removes;
     removes.reserve(moves.size());

@@ -14,7 +14,7 @@ class QViewer;
 
 /**
     Registre de Tools i elements associats
-*/
+  */
 class ToolRegistry : public QObject {
 Q_OBJECT
 public:

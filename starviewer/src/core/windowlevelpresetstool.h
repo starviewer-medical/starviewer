@@ -13,7 +13,7 @@ class WindowLevelPresetsToolData;
 
 /**
     Tool per canviar window levels predefinits
-*/
+  */
 class WindowLevelPresetsTool : public Tool {
 Q_OBJECT
 public:

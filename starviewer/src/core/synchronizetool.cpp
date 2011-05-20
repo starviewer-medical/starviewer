@@ -171,7 +171,7 @@ void SynchronizeTool::applySliceChanges()
         int slices = qRound(sliceIncrement);
         m_roundLostThickness = sliceIncrement - slices;
         disconnect(m_viewer, SIGNAL(sliceChanged(int)), this, SLOT(setIncrement(int)));
-        m_q2dviewer->setSlice(m_lastSlice+slices);
+        m_q2dviewer->setSlice(m_lastSlice + slices);
         m_lastSlice += slices;
         connect(m_viewer, SIGNAL(sliceChanged(int)), SLOT(setIncrement(int)));
     }

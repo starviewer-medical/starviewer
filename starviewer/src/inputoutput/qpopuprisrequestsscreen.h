@@ -7,19 +7,18 @@
 
 class QTimer;
 
-/** Classe que mostra un PopUp indicant que s'ha rebut una petició del RIS per descarregar un estudi
-*/
-
 namespace udg {
 
 class PACSJob;
 class RetrieveDICOMFilesFromPACSJob;
 class Patient;
 
+/**
+    Classe que mostra un PopUp indicant que s'ha rebut una petició del RIS per descarregar un estudi
+  */
 class QPopUpRISRequestsScreen : public QDialog, private Ui::QPopUpRISRequestsScreenBase {
 Q_OBJECT
 public:
-
     /// Constructor
     QPopUpRISRequestsScreen(QWidget *parent = 0);
 
@@ -39,15 +38,13 @@ public:
     void showRetrieveFinished();
 
 protected:
-
     /// Quan es fa un show al popup s'activa un timer, que passat un temps amaga automàticament el PopUp
     void showEvent(QShowEvent *);
 
     /// Si es rep un event de fer click sobre el PopUp aquest s'amaga
     bool eventFilter(QObject *obj, QEvent *event);
 
-private slots :
-
+private slots:
     /// Slot que amaga el PopUp sempre i quan no s'estigui processant cap petició del RIS
     void hidePopUp();
     void hidePopUpSmoothly();
@@ -62,7 +59,6 @@ private slots :
     void retrieveDICOMFilesFromPACSJobCancelledOrFailed(PACSJob *pacsJob);
 
 private:
-
     /// Mostra per pantalla el nom del pacient pel qual s'ha rebut la petició de descarregar estudis.
     void showPatientNameOfRetrievingStudies(Patient *patient);
 
@@ -70,7 +66,6 @@ private:
     void refreshScreenRetrieveStatus();
 
 private:
-
     QTimer *m_qTimerToHidePopUp;
     QTimer *m_qTimerToMovePopUpToBottomRight;
     static const int msTimeOutToHidePopUp;

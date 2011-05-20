@@ -9,9 +9,8 @@ class DicomPrinter;
 class QDicomAddPrinterWidget;
 
 /**
- * Implementació de la interfície QPrinterConfigurationWidget per impressió d'imatge DICOM en DCMTK.
+   Implementació de la interfície QPrinterConfigurationWidget per impressió d'imatge DICOM en DCMTK.
  */
-
 class QDicomPrinterConfigurationWidget : public QWidget, private::Ui::QDicomPrinterConfigurationWidgetBase {
 Q_OBJECT
 
@@ -19,7 +18,6 @@ public:
     QDicomPrinterConfigurationWidget();
 
 signals:
-
     /// Signal que s'emet quan s'afegeix/esborra/modifica impressora
     void printerSettingsChanged();
 

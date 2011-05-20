@@ -7,7 +7,7 @@ namespace udg {
 
 /**
     Eina per moure la posició de la càmera en escena d'un viewer
-*/
+  */
 class TranslateTool : public Tool {
 Q_OBJECT
 public:

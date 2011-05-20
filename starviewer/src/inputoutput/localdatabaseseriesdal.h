@@ -11,8 +11,9 @@ namespace udg {
 class DicomMask;
 class Series;
 
-/** Classe que conté els mètodes d'accés a la Taula series
-*/
+/**
+    Classe que conté els mètodes d'accés a la Taula series
+  */
 class LocalDatabaseSeriesDAL : public LocalDatabaseBaseDAL {
 public:
     LocalDatabaseSeriesDAL(DatabaseConnection *dbConnection);
@@ -30,7 +31,6 @@ public:
     QList<Series*> query(const DicomMask &seriesMaskToQuery);
 
 private:
-
     /// Construeix la sentència sql per inserir la nova sèrie
     QString buildSqlInsert(Series *newSeries);
 

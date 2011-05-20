@@ -24,7 +24,7 @@ public:
     void setName(const QString &name);
 
     /// Definició dels diferents nivells que pot tenir un Hanging Protocol
-    enum HangingProtocolLevel {Manufacturer, Site, UserGroup, SingleUser};
+    enum HangingProtocolLevel { Manufacturer, Site, UserGroup, SingleUser };
 
     /// Obtenir el layout
     HangingProtocolLayout* getHangingProtocolLayout();
@@ -111,7 +111,6 @@ public:
     double getPriority();
 
 private:
-
     /// Retorna el número de ImageSets que tenen una sèrie assignada
     int countFilledImageSets() const;
 
@@ -119,7 +118,6 @@ private:
     int countFilledDisplaySets() const;
 
 private:
-
     /// Identificador
     int m_identifier;
 

@@ -10,8 +10,9 @@ namespace udg {
 
 class DicomMask;
 
-/** Classe de cerca bàsica d'elemens
-*/
+/**
+    Classe de cerca bàsica d'elemens
+  */
 class QBasicSearchWidget : public QWidget, private Ui::QBasicSearchWidgetBase {
 Q_OBJECT
 public:
@@ -31,7 +32,7 @@ public:
     /// Ens marca les flags de cerca per data per defecte
     void setDefaultDate(DefaultDateFlags flag);
 
-private slots :
+private slots:
     /// Slot que s'activa quan s'ha editat el m_textOtherModality, en cas que el text sigui <> "" deselecciona totes les modalitats,
     /// i en cas que sigui = "" selecciona la modalitat checkAll
     void textOtherModalityEdited();
@@ -58,7 +59,6 @@ private:
     void showEvent(QShowEvent *event);
 
 private:
-
     /// Indica si s'ha mostra el widget
     bool m_widgetHasBeenShowed;
 };

@@ -11,7 +11,7 @@ class DrawerCrossHair;
 
 /**
     Implementació de la tool del cursor 3D.
-*/
+  */
 class Cursor3DTool : public Tool {
 Q_OBJECT
 public:

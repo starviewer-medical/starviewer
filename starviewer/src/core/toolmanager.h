@@ -19,7 +19,7 @@ class ToolData;
 /**
     Classe que gestiona les Tools que usualment tindrem en una extensió, associades a un o més visualitzadors.
     Aquesta s'encarrega de determinar les tools i les configuracions que suporten els visualitzadors que hi configurem
-*/
+  */
 class ToolManager : public QObject {
 Q_OBJECT
 public:

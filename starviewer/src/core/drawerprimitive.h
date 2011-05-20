@@ -10,13 +10,11 @@ class vtkCoordinate;
 namespace udg {
 
 /**
- *
- *  Classe base de les primitives que pintarà la classe Drawer
- *
- *  Defineix les propietats que poden tenir les primitives i els mètodes
- *  per obtenir aquesta primitiva en diferents formats (vtk, opengl, etc)
- *
- */
+    Classe base de les primitives que pintarà la classe Drawer
+
+    Defineix les propietats que poden tenir les primitives i els mètodes
+    per obtenir aquesta primitiva en diferents formats (vtk, opengl, etc)
+  */
 class DrawerPrimitive : public QObject {
 Q_OBJECT
 public:
@@ -185,7 +183,7 @@ protected:
 private:
     /// Portarà el control de reference count (sucedani d'smart pointer(TM))
     int m_referenceCount;
-    
+
     /// Guarda un punter a l'objecte vtkCoordinate que retorna el mètode getVtkCoordinateObject() per poder-lo destruir després.
     vtkCoordinate *m_coordinate;
 

@@ -127,7 +127,7 @@ DicomMask QBasicSearchWidget::buildDicomMask()
         mask.setPPStartTime("");
 
         if (m_buttonGroupModality->isEnabled())
-        { 
+        {
             // Es crea una sentencia per poder fer un in
             if (m_checkCT->isChecked())
             {

@@ -17,18 +17,19 @@ class PacsManager;
 class PACSJob;
 class QueryPacsJob;
 
-/**Aquesta classe donat un Study demana els estudis previs en els PACS configurats per defecte, degut a que
-  *ara actualment en el PACS tenim el mateix pacients amb PatientID diferents, també a part de cercar estudis
-  *que coincideixin amb el PatientID també es farà una altre cerca per Patient Name.
+/**
+    Aquesta classe donat un Study demana els estudis previs en els PACS configurats per defecte, degut a que
+    ara actualment en el PACS tenim el mateix pacients amb PatientID diferents, també a part de cercar estudis
+    que coincideixin amb el PatientID també es farà una altre cerca per Patient Name.
   */
-/*TODO: En teoria amb la implantació del SAP els problemes de que un Pacient té diversos Patient ID o que té el nom
-  *escrit de maneres diferents haurien de desapareixer, per tant d'aquí un temps quan la majoria d'estudis del PACS
-  *ja s'hagin fet a través del SAP i constatem que el Patient ID pel mateix pacient sempre és el mateix,
-  *la cerca per nom de pacient podria desapareixer*/
+/* TODO: En teoria amb la implantació del SAP els problemes de que un Pacient té diversos Patient ID o que té el nom
+   escrit de maneres diferents haurien de desapareixer, per tant d'aquí un temps quan la majoria d'estudis del PACS
+   ja s'hagin fet a través del SAP i constatem que el Patient ID pel mateix pacient sempre és el mateix,
+   la cerca per nom de pacient podria desapareixer
+ */
 class PreviousStudiesManager : public QObject {
 Q_OBJECT
 public:
-
     PreviousStudiesManager();
     ~PreviousStudiesManager();
 
@@ -50,7 +51,6 @@ public:
     void downloadStudy(Study *study, QString pacs);
 
 signals:
-
     /// Signal que s'emet quan ha finalitzat la consulta d'estudis previs
     void queryPreviousStudiesFinished(QList<Study*>, QHash<QString, QString> hashPacsIDOfStudyInstanceUID);
 
@@ -64,7 +64,6 @@ signals:
     void errorDownloadingPreviousStudy(QString studyUID);
 
 private:
-
     /// Realitza una consulta dels estudis del pacient "patient" als PACS marcats per defecte.
     /// Si s'especifica una data "until" només cercarà els estudis fins la data especificada (aquesta inclosa).
     /// Si no es passa cap data per paràmetre cercarà tots els estudis, independentment de la data.
@@ -108,7 +107,6 @@ private:
     void queryFinished();
 
 private slots:
-
     /// Slot que s'activa quan finalitza un job de consulta al PACS
     void queryPACSJobFinished(PACSJob *pacsJob);
 
@@ -116,7 +114,6 @@ private slots:
     void queryPACSJobCancelled(PACSJob *pacsJob);
 
 private:
-
     PacsManager *m_pacsManager;
     QList<Study*> m_mergedStudyList;
     QHash<QString, QString> m_mergedHashPacsIDOfStudyInstanceUID;

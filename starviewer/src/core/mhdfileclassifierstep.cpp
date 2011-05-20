@@ -106,10 +106,10 @@ bool MHDFileClassifierStep::fillIndividually()
     static int seriesUID = 123456;
     static int seriesNumber = 0;
     series->setInstanceUID(QString("MHDSeries-#%1#").arg(seriesUID++));
-    
+
     // TODO de moment li diem OTHER, però si l'mhd té aquesta info, li donarem de l'mhd
     series->setModality("OT");
-    series->setSeriesNumber(QString::number(seriesNumber+=101));
+    series->setSeriesNumber(QString::number(seriesNumber += 101));
     series->setDate(QDate::currentDate());
     series->setTime(QTime::currentTime());
 

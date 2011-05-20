@@ -30,7 +30,7 @@ class DrawerLine;
 
     Quan es canvïi l'input del visor, les annotacions fetes fins aquell moment s'esborraran.
     Quan es desactivi l'eina, les annotacions fetes fins aquell moment es mantindran.
-*/
+  */
 class DistanceTool : public Tool {
 Q_OBJECT
 public:

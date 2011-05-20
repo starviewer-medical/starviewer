@@ -48,8 +48,7 @@ signals:
    /// Sinal que indica que s'ha fet l'enviament de la imatge passada per paràmetre al PACS, i el número d'imatges que es porten enviades
     void DICOMFileSent(Image *image, int numberOfDICOMFilesSent);
 
-private :
-
+private:
     /// Inicialitze els comptadors d'imatges per controlar quantes han fallat/s'han enviat....
     void initialitzeDICOMFilesCounters(int numberOfDICOMFilesToSend);
 

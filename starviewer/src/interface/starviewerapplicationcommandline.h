@@ -11,21 +11,21 @@ namespace udg {
 
 class ApplicationCommandLineOptions;
 
-/** Aquesta classe configura un objecte ApplicationCommandLineOptions amb les opcions per línia de comandes vàlides
- * per starviewer, d'aquesta manera tenim centralitzat en un sol lloc la configuració dels paràmetres acceptats per Starviewer
- * Aquesta classe pot ser utilitza tant per parsejar paràmetres entrats per línia de comandes a la mateixa instància o paràmetres
- * rebuts des d'altres instàncies d'Starviewer a través de QtSingleApplication
+/**
+    Aquesta classe configura un objecte ApplicationCommandLineOptions amb les opcions per línia de comandes vàlides
+    per starviewer, d'aquesta manera tenim centralitzat en un sol lloc la configuració dels paràmetres acceptats per Starviewer
+    Aquesta classe pot ser utilitza tant per parsejar paràmetres entrats per línia de comandes a la mateixa instància o paràmetres
+    rebuts des d'altres instàncies d'Starviewer a través de QtSingleApplication
 
- * Ara Starviewer mateix accepta aquestes opcions:
- *
- *  -accessionnumber valorAccessionNumber : Cerca l'estudi amb el valor d'accession number especificat als PACS marcats per cercar per
+    Ara Starviewer mateix accepta aquestes opcions:
+
+    -accessionnumber valorAccessionNumber : Cerca l'estudi amb el valor d'accession number especificat als PACS marcats per cercar per
                                             defecte i si el troba el descarrega.
- * (blanc)                                : Si s'executa una instància d'starviewer sense cap paràmetre s'obre starviewer amb una finestra en blanc.
- */
+    (blanc)                                : Si s'executa una instància d'starviewer sense cap paràmetre s'obre starviewer amb una finestra en blanc.
+  */
 class StarviewerApplicationCommandLine : public QObject {
 Q_OBJECT
 public:
-
     // Aquí definim les possibles opcions que ens poden demanar des de línia de comandes
     enum StarviewerCommandLineOption { openBlankWindow, retrieveStudyFromAccessioNumber };
 
@@ -54,18 +54,15 @@ public:
     bool takeOptionToRun(QPair<StarviewerApplicationCommandLine::StarviewerCommandLineOption, QString> &optionValue);
 
 signals:
-
     /// Signal que s'emet per indicar que hem rebut nous arguments des de línia de comandes que s'han d'executar
     void newOptionsToRun();
 
 public slots:
-
     /// Slot que passant la llista d'arguments de la línia de comandes com a QString separat per ";" els parseja, i llança signal
     /// per indicar que hi ha arguments pendents d'executar. Si alguna de les opcions no és vàlida no executa res i retorna fals
     bool parseAndRun(const QString &argumentsListAsQString);
 
 private:
-
     static const QString accessionNumberOption;
 
     // Guardem l'opció (argument de comanda de línies) amb el seu valor

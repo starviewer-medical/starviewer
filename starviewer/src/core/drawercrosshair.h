@@ -10,10 +10,8 @@ class vtkPropAssembly;
 namespace udg {
 
 /**
- *
- *  Primitiva que dibuixa un "Crosshair", és a dir, una creueta per situar un punt.
- *
- */
+    Primitiva que dibuixa un "Crosshair", és a dir, una creueta per situar un punt.
+  */
 class DrawerCrossHair : public DrawerPrimitive {
 Q_OBJECT
 public:

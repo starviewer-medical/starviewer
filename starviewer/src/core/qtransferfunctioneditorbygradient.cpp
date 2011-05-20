@@ -120,11 +120,11 @@ void QTransferFunctionEditorByGradient::pointsUpdated()
 
     qSort(points.begin(), points.end(), x_less_than);
 
-    for (int i=0; i<points.size(); ++i)
+    for (int i = 0; i < points.size(); ++i)
     {
         double x = int(points.at(i).x());
         // Si no és l'últim punt i és a la mateixa x que el següent
-        if (i < points.size() - 1 && x == points.at(i+1).x())
+        if (i < points.size() - 1 && x == points.at(i + 1).x())
         {
             // No es fa res per aquest punt
             continue;
@@ -165,7 +165,7 @@ void QTransferFunctionEditorByGradient::setGradientStops(const QGradientStops &s
     double h_blue = m_blue_shade->height();
     double h_alpha = m_alpha_shade->height();
 
-    for (int i=0; i<stops.size(); ++i)
+    for (int i = 0; i < stops.size(); ++i)
     {
         double pos = stops.at(i).first;
         QRgb color = stops.at(i).second.rgba();

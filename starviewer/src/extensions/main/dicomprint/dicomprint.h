@@ -4,18 +4,16 @@
 #include "createdicomprintspool.h"
 #include "printdicomspool.h"
 
-/**
-* Imprimeix en una impressora dicom un DicomPrintJob
-*/
-
 namespace udg {
 
 class DicomPrinter;
 class DicomPrintJob;
 
+/**
+    Imprimeix en una impressora dicom un DicomPrintJob
+  */
 class DicomPrint {
 public:
-
     enum DicomPrintError { CanNotConnectToDicomPrinter, ErrorSendingDicomPrintJob, ErrorLoadingImagesToPrint, ErrorCreatingPrintSpool, UnknowError, Ok,
                            NotRespondedAsExpected };
 
@@ -29,7 +27,6 @@ public:
     DicomPrint::DicomPrintError getLastError();
 
 private:
-
     DicomPrintError m_lastError;
 
     QStringList createDicomPrintSpool(DicomPrinter, DicomPrintJob printJob);

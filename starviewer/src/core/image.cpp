@@ -455,12 +455,12 @@ QPixmap Image::getThumbnail(bool getFromCache, int resolution)
         {
             // Primer provem de trobar el thumbnail amb número de volum i després sense número de volum
             // Si no trobem cap fitxer, l'haurem de crear de nou
-            
+
             // Obtenim el directori base on es pot trobar el thumbnail
             QString thumbnailPath = QFileInfo(getPath()).absolutePath();
             // Path absolut de l'arxiu de thumbnail
             QString thumbnailFilePath = QString("%1/thumbnail%2.png").arg(thumbnailPath).arg(getVolumeNumberInSeries());
-            
+
             QFileInfo thumbnailFile(thumbnailFilePath);
             if (thumbnailFile.exists())
             {
@@ -490,7 +490,7 @@ QPixmap Image::getThumbnail(bool getFromCache, int resolution)
 QString Image::getProjectionLabelFromPlaneOrientation(const QString &orientation)
 {
     QString label;
-    
+
     QStringList axisList = orientation.split("\\");
     // Comprovem si tenim les annotacions esperades
     if (axisList.count() >= 2)
@@ -500,32 +500,32 @@ QString Image::getProjectionLabelFromPlaneOrientation(const QString &orientation
 
         if (!rowAxis.isEmpty() && !columnAxis.isEmpty())
         {
-            if ((rowAxis.startsWith(Orientation::RightLabel) || rowAxis.startsWith(Orientation::LeftLabel)) && 
+            if ((rowAxis.startsWith(Orientation::RightLabel) || rowAxis.startsWith(Orientation::LeftLabel)) &&
                 (columnAxis.startsWith(Orientation::AnteriorLabel) || columnAxis.startsWith(Orientation::PosteriorLabel)))
             {
                 label = Orientation::getPlaneOrientationLabel(Orientation::Axial);
             }
-            else if ((columnAxis.startsWith(Orientation::RightLabel) || columnAxis.startsWith(Orientation::LeftLabel)) && 
+            else if ((columnAxis.startsWith(Orientation::RightLabel) || columnAxis.startsWith(Orientation::LeftLabel)) &&
                 (rowAxis.startsWith(Orientation::AnteriorLabel) || rowAxis.startsWith(Orientation::PosteriorLabel)))
             {
                 label = Orientation::getPlaneOrientationLabel(Orientation::Axial);
             }
-            else if ((rowAxis.startsWith(Orientation::RightLabel) || rowAxis.startsWith(Orientation::LeftLabel)) && 
+            else if ((rowAxis.startsWith(Orientation::RightLabel) || rowAxis.startsWith(Orientation::LeftLabel)) &&
                 (columnAxis.startsWith(Orientation::HeadLabel) || columnAxis.startsWith(Orientation::FeetLabel)))
             {
                 label = Orientation::getPlaneOrientationLabel(Orientation::Coronal);
             }
-            else if ((columnAxis.startsWith(Orientation::RightLabel) || columnAxis.startsWith(Orientation::LeftLabel)) && 
+            else if ((columnAxis.startsWith(Orientation::RightLabel) || columnAxis.startsWith(Orientation::LeftLabel)) &&
                 (rowAxis.startsWith(Orientation::HeadLabel) || rowAxis.startsWith(Orientation::FeetLabel)))
             {
                 label = Orientation::getPlaneOrientationLabel(Orientation::Coronal);
             }
-            else if ((rowAxis.startsWith(Orientation::AnteriorLabel) || rowAxis.startsWith(Orientation::PosteriorLabel)) && 
+            else if ((rowAxis.startsWith(Orientation::AnteriorLabel) || rowAxis.startsWith(Orientation::PosteriorLabel)) &&
                 (columnAxis.startsWith(Orientation::HeadLabel) || columnAxis.startsWith(Orientation::FeetLabel)))
             {
                 label = Orientation::getPlaneOrientationLabel(Orientation::Sagittal);
             }
-            else if ((columnAxis.startsWith(Orientation::AnteriorLabel) || columnAxis.startsWith(Orientation::PosteriorLabel)) && 
+            else if ((columnAxis.startsWith(Orientation::AnteriorLabel) || columnAxis.startsWith(Orientation::PosteriorLabel)) &&
                 (rowAxis.startsWith(Orientation::HeadLabel) || rowAxis.startsWith(Orientation::FeetLabel)))
             {
                 label = Orientation::getPlaneOrientationLabel(Orientation::Sagittal);

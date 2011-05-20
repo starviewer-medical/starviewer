@@ -20,8 +20,8 @@ class Patient;
 class StatsWatcher;
 
 /**
- * Widget en el que controla les operacions d'entrada/sortida d'un dicomdir
- */
+    Widget en el que controla les operacions d'entrada/sortida d'un dicomdir
+  */
 class QInputOutputDicomdirWidget : public QWidget, private Ui::QInputOutputDicomdirWidgetBase {
 Q_OBJECT
 

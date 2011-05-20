@@ -12,7 +12,7 @@ class DrawerText;
 
 /**
     Tool per calcular angles
-*/
+  */
 class AngleTool : public Tool {
 Q_OBJECT
 public:

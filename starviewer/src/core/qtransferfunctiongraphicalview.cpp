@@ -96,13 +96,13 @@ void QTransferFunctionGraphicalView::enableEditingConnections()
         return;
     }
 
-    connect(m_colorView, SIGNAL(nodeAdded(double,QColor)), m_editor, SLOT(addColorPoint(double,QColor)));
+    connect(m_colorView, SIGNAL(nodeAdded(double, QColor)), m_editor, SLOT(addColorPoint(double, QColor)));
     connect(m_colorView, SIGNAL(nodeRemoved(double)),m_editor, SLOT(removeColorPoint(double)));
-    connect(m_colorView, SIGNAL(nodeMoved(double,double)), m_editor, SLOT(moveColorPoint(double,double)));
-    connect(m_colorView, SIGNAL(nodesMoved(QList<double>,double)), m_editor, SLOT(moveColorPoints(QList<double>,double)));
-    connect(m_colorView, SIGNAL(nodeChangedColor(double,QColor)), m_editor, SLOT(changeColorPoint(double,QColor)));
+    connect(m_colorView, SIGNAL(nodeMoved(double, double)), m_editor, SLOT(moveColorPoint(double, double)));
+    connect(m_colorView, SIGNAL(nodesMoved(QList<double>, double)), m_editor, SLOT(moveColorPoints(QList<double>, double)));
+    connect(m_colorView, SIGNAL(nodeChangedColor(double, QColor)), m_editor, SLOT(changeColorPoint(double, QColor)));
 
-    connect(m_scalarOpacityView, SIGNAL(nodeAdded(double,double)), m_editor, SLOT(addScalarOpacityPoint(double,double)));
+    connect(m_scalarOpacityView, SIGNAL(nodeAdded(double, double)), m_editor, SLOT(addScalarOpacityPoint(double, double)));
     connect(m_scalarOpacityView, SIGNAL(nodeRemoved(double)), m_editor, SLOT(removeScalarOpacityPoint(double)));
 
     m_editingConnectionsEnabled = true;
@@ -115,13 +115,13 @@ void QTransferFunctionGraphicalView::disableEditingConnections()
         return;
     }
 
-    disconnect(m_colorView, SIGNAL(nodeAdded(double,QColor)), m_editor, SLOT(addColorPoint(double,QColor)));
+    disconnect(m_colorView, SIGNAL(nodeAdded(double, QColor)), m_editor, SLOT(addColorPoint(double, QColor)));
     disconnect(m_colorView, SIGNAL(nodeRemoved(double)), m_editor, SLOT(removeColorPoint(double)));
-    disconnect(m_colorView, SIGNAL(nodeMoved(double,double)), m_editor, SLOT(moveColorPoint(double,double)));
-    disconnect(m_colorView, SIGNAL(nodesMoved(QList<double>,double)), m_editor, SLOT(moveColorPoints(QList<double>,double)));
-    disconnect(m_colorView, SIGNAL(nodeChangedColor(double,QColor)), m_editor, SLOT(changeColorPoint(double,QColor)));
+    disconnect(m_colorView, SIGNAL(nodeMoved(double, double)), m_editor, SLOT(moveColorPoint(double, double)));
+    disconnect(m_colorView, SIGNAL(nodesMoved(QList<double>, double)), m_editor, SLOT(moveColorPoints(QList<double>, double)));
+    disconnect(m_colorView, SIGNAL(nodeChangedColor(double, QColor)), m_editor, SLOT(changeColorPoint(double, QColor)));
 
-    disconnect(m_scalarOpacityView, SIGNAL(nodeAdded(double,double)), m_editor, SLOT(addScalarOpacityPoint(double,double)));
+    disconnect(m_scalarOpacityView, SIGNAL(nodeAdded(double, double)), m_editor, SLOT(addScalarOpacityPoint(double, double)));
     disconnect(m_scalarOpacityView, SIGNAL(nodeRemoved(double)), m_editor, SLOT(removeScalarOpacityPoint(double)));
 
     m_editingConnectionsEnabled = false;

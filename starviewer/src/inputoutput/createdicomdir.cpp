@@ -30,7 +30,7 @@ CreateDicomdir::CreateDicomdir()
     // de que nosaltres els guardem en majúscules, degut això quan volem crear un dicomdir en un dispositiu vfat es copien els noms de les imatges en
     // minúscules, al generar el dicomdir ens dona problemes, per què es troben imatges en minúscules i DICOM no ho permet. Per solucionar aquests casos
     // hem d'activar de dcmtk enableMapFilenamesMode, que si es troba amb fitxers en minúscules ho ignora i crea el dicomdir.
-    
+
     m_ddir.enableMapFilenamesMode(OFTrue);
 }
 
@@ -105,7 +105,7 @@ Status CreateDicomdir::create(QString dicomdirPath)
     // Nom del fitxer dicomDir
     QString outputDirectory = dicomdirPath + "/DICOMDIR";
     // Create list of input files
-    OFList<OFString> fileNames; 
+    OFList<OFString> fileNames;
     const char *opt_pattern = NULL;
     const char *opt_fileset = DEFAULT_FILESETID;
     const char *opt_descriptor = NULL;

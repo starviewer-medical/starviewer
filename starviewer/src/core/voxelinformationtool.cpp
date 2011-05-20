@@ -51,7 +51,7 @@ void VoxelInformationTool::handleEvent(unsigned long eventID)
             m_caption->update();
             m_2DViewer->render();
             break;
-        
+
         default:
             break;
     }
@@ -77,7 +77,7 @@ void VoxelInformationTool::updateCaption()
     {
         return;
     }
-    
+
     double xyz[3];
     if (m_2DViewer->getCurrentCursorImageCoordinate(xyz))
     {
@@ -145,11 +145,11 @@ void VoxelInformationTool::computeCaptionAttachmentPointAndTextAlignment(double 
     int *viewportSize = m_2DViewer->getRenderWindowSize();
     int cursorPosition[2];
     m_2DViewer->getEventPosition(cursorPosition);
-    
+
     // Aquestes seran les coordenades que ajustarem per col·locar el caption
     double adjustedXCursorPosition = cursorPosition[0];
     double adjustedYCursorPosition = cursorPosition[1];
-    
+
     bool insideMargins = true;
     // Estem quasi a dalt de tot?
     if (cursorPosition[1] > viewportSize[1] - marginPixels)
@@ -161,7 +161,7 @@ void VoxelInformationTool::computeCaptionAttachmentPointAndTextAlignment(double 
 
     // Estem quasi abaix del tot?
     if (cursorPosition[1] < marginPixels)
-    {        
+    {
         adjustedYCursorPosition = marginPixels;
         verticalJustification = "Top";
         insideMargins = false;
@@ -189,7 +189,7 @@ void VoxelInformationTool::computeCaptionAttachmentPointAndTextAlignment(double 
         adjustedYCursorPosition += 5;
     }
 
-    // I finalment transformem la coordenada de viewport en coordenada de món    
+    // I finalment transformem la coordenada de viewport en coordenada de món
     double dummy[4];
     m_2DViewer->computeDisplayToWorld(adjustedXCursorPosition, adjustedYCursorPosition, 0.0, dummy);
     attachmentPoint[0] = dummy[0];

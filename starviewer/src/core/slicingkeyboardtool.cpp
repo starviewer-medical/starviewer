@@ -132,7 +132,7 @@ void SlicingKeyboardTool::handleEvent(unsigned long eventID)
                 }
                 else if (keySymbol == "minus")
                 {
-                    m_2DViewer->setSlice(m_2DViewer->getCurrentSlice() -1);
+                    m_2DViewer->setSlice(m_2DViewer->getCurrentSlice() - 1);
                 }
             }
         }

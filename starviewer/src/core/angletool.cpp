@@ -177,11 +177,11 @@ void AngleTool::drawCircle()
     int zIndex = Q2DViewer::getZIndexForView(view);
     if (pv[zIndex] > 0)
     {
-        finalAngle = int(m_currentAngle-m_initialDegreeArc);
+        finalAngle = int(m_currentAngle - m_initialDegreeArc);
     }
-    if ((initialAngle-finalAngle) > 180)
+    if ((initialAngle - finalAngle) > 180)
     {
-        initialAngle = int(m_currentAngle-m_initialDegreeArc);
+        initialAngle = int(m_currentAngle - m_initialDegreeArc);
         finalAngle = -m_initialDegreeArc;
     }
 
@@ -191,7 +191,7 @@ void AngleTool::drawCircle()
     {
         degreesIncrease = i * 1.0 * MathTools::DegreesToRadiansAsDouble;
         double newPoint[3];
-        
+
             // TODO Aquí hauríem de fer alguna cosa d'aquest estil, però si ho fem així,
             // no se'ns dibuixa l'arc de circumferència que ens esperem sobre la vista coronal.
             // Potser és degut a com obtenim els punts o per una altra causa. Caldria mirar-ho
@@ -199,7 +199,7 @@ void AngleTool::drawCircle()
             // newPoint[xIndex] = cos(degreesIncrease)*radius + circleCentre[xIndex];
             // newPoint[yIndex] = sin(degreesIncrease)*radius + circleCentre[yIndex];
             // newPoint[zIndex] = 0.0;
-       
+
         switch (view)
         {
             case QViewer::AxialPlane:
@@ -372,7 +372,7 @@ void AngleTool::placeText(DrawerText *angleText)
             }
             // Tornem a coordenades de món
             m_2DViewer->computeDisplayToWorld(p2InDisplay[0], p2InDisplay[1], p2InDisplay[2], position);
-            
+
             // Ara position és l'attachment point que volem
             angleText->setAttachmentPoint(position);
         }

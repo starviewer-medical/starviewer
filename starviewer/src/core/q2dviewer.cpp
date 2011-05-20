@@ -285,7 +285,7 @@ QVector<QString> Q2DViewer::getCurrentDisplayedImageOrientationLabels() const
             // A dalt
             labelsVector[(1 + index) % 4] = list.at(2);
             // A baix
-            labelsVector[(3 + index) % 4] = this->getOppositeOrientationLabel(list.at(2)); 
+            labelsVector[(3 + index) % 4] = this->getOppositeOrientationLabel(list.at(2));
         }
         if (m_isImageFlipped)
         {
@@ -791,7 +791,7 @@ void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVo
     m_maxSliceValue = this->getMaximumSlice();
 
     // Això es fa per destruir el blender en cas que ja hi hagi algun input i es vulgui canviar
-    if (m_blender !=0)
+    if (m_blender != 0)
     {
         m_blender->Delete();
         m_blender = 0;
@@ -916,33 +916,33 @@ void Q2DViewer::updateCamera()
             case Axial:
                 if (m_isImageFlipped)
                 {
-                    roll = m_rotateFactor*90. + 180.;
+                    roll = m_rotateFactor * 90. + 180.;
                 }
                 else
                 {
-                    roll = -m_rotateFactor*90. + 180.;
+                    roll = -m_rotateFactor * 90. + 180.;
                 }
                 break;
 
             case Sagital:
                 if (m_isImageFlipped)
                 {
-                    roll = m_rotateFactor*90. -90.;
+                    roll = m_rotateFactor * 90. - 90.;
                 }
                 else
                 {
-                    roll = -m_rotateFactor*90. - 90.;
+                    roll = -m_rotateFactor * 90. - 90.;
                 }
                 break;
 
             case Coronal:
                 if (m_isImageFlipped)
                 {
-                    roll = m_rotateFactor*90.;
+                    roll = m_rotateFactor * 90.;
                 }
                 else
                 {
-                    roll = -m_rotateFactor*90.;
+                    roll = -m_rotateFactor * 90.;
                 }
                 break;
         }
@@ -1002,8 +1002,8 @@ void Q2DViewer::resetCamera()
         Q_ASSERT(camera);
 
         int initialSliceIndex = 0;
-        double cameraViewUp[3] = {0.0, 0.0, 0.0};
-        double cameraPosition[3] = {0.0, 0.0, 0.0};
+        double cameraViewUp[3] = { 0.0, 0.0, 0.0 };
+        double cameraPosition[3] = { 0.0, 0.0, 0.0 };
         double cameraRoll = 0.0;
         double cameraAzimuth = 0.0;
         QString position;
@@ -1091,7 +1091,7 @@ void Q2DViewer::resetCamera()
         updateDisplayExtent();
 
         // Aquesta línia és de més a més (adicional al codi de setSlice()!)
-        getRenderer()->ResetCamera(); 
+        getRenderer()->ResetCamera();
         updateAnnotationsInformation(Q2DViewer::SliceAnnotation | Q2DViewer::WindowInformationAnnotation);
         mapOrientationStringToAnnotation();
 
@@ -1334,8 +1334,9 @@ ImagePlane* Q2DViewer::getImagePlane(int sliceNumber, int phaseNumber, bool vtkR
                         imagePlane->setColumns(dimensions[1]);
 
                         // TODO Falta esbrinar si l'origen que estem donant es bo o no
-                        imagePlane->setOrigin(origin[0] + sliceNumber*directionCosines[0]*spacing[0], origin[1] + sliceNumber*directionCosines[1]*spacing[0],
-                                              origin[2] + sliceNumber*directionCosines[2]*spacing[0]);
+                        imagePlane->setOrigin(origin[0] + sliceNumber * directionCosines[0] * spacing[0],
+                                              origin[1] + sliceNumber * directionCosines[1] * spacing[0],
+                                              origin[2] + sliceNumber * directionCosines[2] * spacing[0]);
                     }
                 }
                 break;
@@ -1370,8 +1371,9 @@ ImagePlane* Q2DViewer::getImagePlane(int sliceNumber, int phaseNumber, bool vtkR
                         imagePlane->setColumns(dimensions[0]);
 
                         // TODO Falta esbrinar si l'origen que estem donant es bo o no
-                        imagePlane->setOrigin(origin[0] + directionCosines[3]*sliceNumber*spacing[1], origin[1] + directionCosines[4]*sliceNumber*spacing[1],
-                                              origin[2] + directionCosines[5]*sliceNumber*spacing[1]);
+                        imagePlane->setOrigin(origin[0] + directionCosines[3] * sliceNumber * spacing[1],
+                                              origin[1] + directionCosines[4] * sliceNumber * spacing[1],
+                                              origin[2] + directionCosines[5] * sliceNumber * spacing[1]);
                     }
                 }
                 break;
@@ -1416,7 +1418,7 @@ void Q2DViewer::projectDICOMPointToCurrentDisplayedImage(const double pointToPro
         // Un cop tenim la matriu podem fer la projeccio
         // necessitem el punt en coordenades homogenies
         double homogeneousPointToProject[4], homogeneousProjectedPoint[4];
-        for (int i=0; i<3; i++)
+        for (int i = 0; i < 3; i++)
         {
             // Desplacem el punt a l'origen del pla
             homogeneousPointToProject[i] = pointToProject[i] - currentPlaneOrigin[i];
@@ -1729,7 +1731,7 @@ void Q2DViewer::updateSliceAnnotationInformation()
         }
     }
 
-    int value = m_currentSlice*m_numberOfPhases + m_currentPhase;
+    int value = m_currentSlice * m_numberOfPhases + m_currentPhase;
     if (m_numberOfPhases > 1)
     {
         this->updateSliceAnnotation((value/m_numberOfPhases) + 1, m_maxSliceValue + 1, m_currentPhase + 1, m_numberOfPhases);
@@ -1789,7 +1791,7 @@ void Q2DViewer::updateSliceAnnotation(int currentSlice, int maxSlice, int curren
                     {
                         // TODO Necessitaríem funcions de més alt nivell per obtenir la imatge consecutiva d'acord amb els paràmetres
                         // de thicknes, fases, etc
-                        Image *secondImage = m_mainVolume->getImage(m_currentSlice + m_slabThickness-1, m_currentPhase);
+                        Image *secondImage = m_mainVolume->getImage(m_currentSlice + m_slabThickness - 1, m_currentPhase);
                         if (secondImage)
                         {
                             lowerLeftText += tr("-%1").arg(secondImage->getSliceLocation().toDouble(), 0, 'f', 2);
@@ -1806,7 +1808,7 @@ void Q2DViewer::updateSliceAnnotation(int currentSlice, int maxSlice, int curren
             if (m_slabThickness > 1)
             {
                 // TODO Potser hauríem de tenir una variable "slabRange"
-                lowerLeftText += tr("Slice: %1-%2/%3 Phase: %4/%5").arg(currentSlice).arg(currentSlice + m_slabThickness-1)
+                lowerLeftText += tr("Slice: %1-%2/%3 Phase: %4/%5").arg(currentSlice).arg(currentSlice + m_slabThickness - 1)
                                .arg(maxSlice).arg(currentPhase).arg(maxPhase);
             }
             else
@@ -1815,7 +1817,7 @@ void Q2DViewer::updateSliceAnnotation(int currentSlice, int maxSlice, int curren
             }
         }
         // Només llesques
-        else 
+        else
         {
             if (m_slabThickness > 1)
             {
@@ -2207,20 +2209,20 @@ void Q2DViewer::alignLeft()
             // Si la imatge està rotada o flipada, s'agafa l'altre punt
             if (m_isImageFlipped || (m_rotateFactor == 2))
             {
-                motionVector[0]=bounds[1]-viewerLeft[0];
+                motionVector[0] = bounds[1] - viewerLeft[0];
             }
             else
             {
-                motionVector[0]=bounds[0]-viewerLeft[0];
+                motionVector[0] = bounds[0] - viewerLeft[0];
             }
             break;
 
         case Sagital:
-            motionVector[1]=bounds[2]-viewerLeft[1];
+            motionVector[1] = bounds[2] - viewerLeft[1];
             break;
 
         case Coronal:
-            motionVector[0]=bounds[0]-viewerLeft[0];
+            motionVector[0] = bounds[0] - viewerLeft[0];
             break;
     }
 

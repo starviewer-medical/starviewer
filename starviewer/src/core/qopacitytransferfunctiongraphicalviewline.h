@@ -9,11 +9,10 @@ class QOpacityTransferFunctionGraphicalViewNode;
 
 /**
     Línia de la vista de funcions de transferència d'opacitat.
- */
+  */
 class QOpacityTransferFunctionGraphicalViewLine : public QGraphicsLineItem {
 
 public:
-
     /// Constructor.
     QOpacityTransferFunctionGraphicalViewLine();
 
@@ -30,7 +29,6 @@ public:
     void update();
 
 private:
-
     /// Node de l'esquerra.
     QOpacityTransferFunctionGraphicalViewNode *m_leftNode;
     /// Node de la dreta

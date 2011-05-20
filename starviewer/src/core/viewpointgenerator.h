@@ -8,12 +8,11 @@
 namespace udg {
 
 /**
- * Un generador de punts de vista distribuïts uniformement o quasi-uniforme.
- */
+    Un generador de punts de vista distribuïts uniformement o quasi-uniforme.
+  */
 class ViewpointGenerator {
 
 public:
-
     /// Retorna un vector cap amunt per al punt de vista passat.
     static Vector3 up(const Vector3 &viewpoint);
 
@@ -41,7 +40,6 @@ public:
     QVector<int> neighbours(int i) const;
 
 private:
-
     QVector<Vector3> m_viewpoints;
     QVector<QVector<int> > m_neighbours;
 

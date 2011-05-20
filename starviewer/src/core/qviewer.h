@@ -29,7 +29,7 @@ class QViewerWorkInProgressWidget;
 
 /**
     Classe base per a totes les finestres de visualització
- */
+  */
 class QViewer : public QWidget {
 Q_OBJECT
 public:
@@ -93,7 +93,7 @@ public:
     /// Ens retorna el ToolProxy del viewer
     ToolProxy* getToolProxy() const;
 
-    /// Passa coordenades de display a coordenades de món i viceversa 
+    /// Passa coordenades de display a coordenades de món i viceversa
     void computeDisplayToWorld(double x, double y, double z, double worldPoint[4]);
     void computeWorldToDisplay(double x, double y, double z, double displayPoint[3]);
 
@@ -114,7 +114,7 @@ public:
         return m_grabList.size();
     }
 
-    /// Grava en format de vídeo els frames que s'hagin capturat amb grabCurrentView. 
+    /// Grava en format de vídeo els frames que s'hagin capturat amb grabCurrentView.
     /// Un cop gravat, esborra la llista de frames.
     /// TODO de moment només accepta format MPEG
     bool record(const QString &baseName, RecordFileFormatType format = MPEG2);
@@ -133,7 +133,7 @@ public:
 
     /**
      * Fem un zoom del requadre definit pels paràmetres topCorner i bottomCorner en coordenades de món
-     * perquè s'ajusti a la mida de la finestra. 
+     * perquè s'ajusti a la mida de la finestra.
      * La determinació sobre quina coordenada es considera "superior" o "inferior" és relativa segons el punt de vista,
      * el realment important és que aquestes coordenades siguin dos vèrtexs oposats dins del requadre que es vol definir
      * @param topCorner Coordenada superior
@@ -156,7 +156,7 @@ public:
     void setWindowLevelData(WindowLevelPresetsToolData *windowLevelData);
 
     /// Habilita/deshabilita que els renderings es facin efectius
-    /// Útil en els casos en que necessitem fer diverses operacions de 
+    /// Útil en els casos en que necessitem fer diverses operacions de
     /// visualització però no volem que aquestes es facin efectives fins que no ho indiquem
     void enableRendering(bool enable);
 
@@ -269,7 +269,7 @@ protected:
     /**
      * Ens dóna la coordenada de món de l'últim (o previ a aquest) event capturat
      * @param worldCoordinate Variable on es retornarà la coordenada
-     * @param current Si true, ens dóna la coordenada de l'event més recent, 
+     * @param current Si true, ens dóna la coordenada de l'event més recent,
      * si fals, ens dóna la coordenada anterior a l'event més recent
      */
     void getRecentEventWorldCoordinate(double worldCoordinate[3], bool current);
@@ -280,7 +280,7 @@ protected:
     /// Si no tenim input el resultat és indefinit
     void computeAutomaticWindowLevel(double &windowWidth, double &windowLevel);
 
-private slots: 
+private slots:
     /// Slot que s'utilitza quan s'ha seleccionat una sèrie amb el PatientBrowserMenu
     /// Mètode que especifica un input seguit d'una crida al mètode render()
     /// TODO: Convertit en virtual per tal de poder ser reimplementat per Q2DViewer per càrrega asíncrona
@@ -329,7 +329,7 @@ protected:
 
     /// Funció de transferència
     TransferFunction *m_transferFunction;
-    
+
     /// Indica si hem de fer l'acció de renderitzar o no
     bool m_isRenderingEnabled;
 

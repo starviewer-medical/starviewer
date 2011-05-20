@@ -8,23 +8,19 @@ namespace udg {
 
 /**
     Vista gràfica d'una funció de transferència.
- */
+  */
 class QTransferFunctionGraphicalView : public QTransferFunctionView, private Ui::QTransferFunctionGraphicalViewBase {
-
-    Q_OBJECT
+Q_OBJECT
 
 public:
-
     /// Crea la vista, que treballarà amb l'editor donat.
     explicit QTransferFunctionGraphicalView(TransferFunctionEditor *editor, QWidget *parent = 0);
 
 protected:
-
     /// Fa les connexions pertinents de signals i slots.
     virtual void makeConnections();
 
 protected slots:
-
     /// Assigna la funció de transferència.
     virtual void setTransferFunction(const TransferFunction &transferFunction);
 
@@ -53,7 +49,6 @@ protected slots:
 //    virtual void removeGradientOpacityPoint(double y);
 
 private:
-
     Q_DISABLE_COPY(QTransferFunctionGraphicalView)
 
     /// Habilita les connexions de la vista cap a l'editor.
@@ -62,7 +57,6 @@ private:
     void disableEditingConnections();
 
 private:
-
     /// Indica si les connexions de la vista cap a l'editor estan habilitades o no.
     bool m_editingConnectionsEnabled;
 

@@ -8,9 +8,9 @@
 
 namespace udg {
 
-/** Classe encarregada d'esborrar en un thread els estudis vells
-*/
-
+/**
+    Classe encarregada d'esborrar en un thread els estudis vells
+  */
 class QDeleteOldStudiesThread : public QThread {
 Q_OBJECT
 
@@ -25,12 +25,10 @@ public:
     LocalDatabaseManager::LastError getLastError();
 
 signals:
-
     /// Signal que s'envia quan finalitza l'execució d'aquest thread
     void finished();
 
 private:
-
     /// Métode que és excutat pel thread creat per Qt, que esborra els estudis vells
     void run();
 

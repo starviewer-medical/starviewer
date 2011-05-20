@@ -12,7 +12,8 @@ namespace udg {
 
     class QReleaseNotes;
 
-/** Aquesta classe comprovarà si s'han de mostrar les notes d'una versió instalada. En cas que no s'hagin de mostrar
+/** 
+    Aquesta classe comprovarà si s'han de mostrar les notes d'una versió instalada. En cas que no s'hagin de mostrar
     buscarà si hi ha una nova versió disponible. Les notes es mostraran a través de la classe QReleaseNotes.
     Funciona de manera asíncrona, quan es crida el mètode check checkReleaseNotes es fan les comprobacions. Amb el mètode
     showIfCorrect es mostra si hi ha algo a mostrar. Si no ha acabat de fer les crides asíncrones, quan acabi mostrarà el

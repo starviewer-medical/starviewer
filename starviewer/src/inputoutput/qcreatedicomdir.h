@@ -16,7 +16,7 @@ class Status;
 class Image;
 class IsoImageFileCreator;
 
-class QCreateDicomdir : public QDialog , private Ui::QCreateDicomdirBase {
+class QCreateDicomdir : public QDialog, private Ui::QCreateDicomdirBase {
 Q_OBJECT
 public:
     QCreateDicomdir(QWidget *parent = 0);
@@ -50,7 +50,6 @@ protected:
     void closeEvent(QCloseEvent *ce);
 
 private:
-
     /// Inicialitza els controls de la interfície
     void initializeControls();
 

@@ -28,7 +28,7 @@ class PACSConnection;
 
 /**
     Aquesta classe s'encarrega d'interactuars amb els PACS, responent als serveis move i store
- */
+  */
 class RetrieveDICOMFilesFromPACS : public QObject {
 Q_OBJECT
 public:
@@ -86,7 +86,6 @@ private:
     static void subOperationCallback(void *subOperationCallbackData, T_ASC_Network *associationNetwork, T_ASC_Association **subAssociation);
 
 private:
-
     struct StoreSCPCallbackData
     {
         DcmFileFormat *dcmFileFormat;

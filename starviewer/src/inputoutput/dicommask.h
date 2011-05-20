@@ -6,17 +6,17 @@
 
 class DcmDataset;
 
-/** Aquesta classe construeix una màscara per la cerca d'estudis.
-  * Cada camp que volem que la cerca ens retorni li hem de fer el set, sinó retornarà valor null per aquell camp. Per tots els camps podem passar,
-  * cadena buida que significa que buscarà tots els valors d'aquell camp, o passar-li un valor en concret, on només retornarà els compleixin aquell criteri.
- */
+/**
+    Aquesta classe construeix una màscara per la cerca d'estudis.
+    Cada camp que volem que la cerca ens retorni li hem de fer el set, sinó retornarà valor null per aquell camp. Per tots els camps podem passar,
+    cadena buida que significa que buscarà tots els valors d'aquell camp, o passar-li un valor en concret, on només retornarà els compleixin aquell criteri.
+  */
 namespace udg {
 
 class Status;
 
 class DicomMask {
 public:
-
     DicomMask();
 
     /// Indiquem el Patient name pel qual filtrar
@@ -290,7 +290,6 @@ public:
     bool isEmpty();
 
 private:
-
     QString m_patientId;
     QString m_patientName;
     QString m_patientBirth;

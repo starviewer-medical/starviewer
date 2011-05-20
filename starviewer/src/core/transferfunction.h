@@ -15,11 +15,10 @@ namespace udg {
     Hi ha uns quants punts definits explícitament i la resta s'obtenen per interpolació lineal o extrapolació del veí més proper.
     Es pot treballar amb el color, l'opacitat escalar i l'opacitat del gradient per separat (opció recomanada) o bé junts. La funció de transferència
     també té un nom.
- */
+  */
 class TransferFunction {
 
 public:
-
     /// Construeix una funció de transferència buida, sense cap punt i sense nom.
     TransferFunction();
     /// Construeix una funció de transferència a partir d'un objecte vtkLookupTable.
@@ -173,12 +172,10 @@ public:
     static TransferFunction fromVariant(const QVariant &variant);
 
 private:
-
     /// Actualitza m_keys si hi ha hagut canvis a la funció.
     void updateKeys() const;
 
 private:
-
     /// Funció de transferència de color.
     ColorTransferFunction m_color;
     /// Funció de transferència d'opacitat escalar.

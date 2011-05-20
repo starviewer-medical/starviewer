@@ -8,17 +8,16 @@ namespace udg {
 class TransferFunction;
 
 /**
- * Classe base per a qualsevol editor de funcions de transferència.
- *
- * Declara mètodes per assignar i obtenir la funció de transferència.
- *
- * \author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.edu>
- */
+    Classe base per a qualsevol editor de funcions de transferència.
+
+    Declara mètodes per assignar i obtenir la funció de transferència.
+
+    \author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.edu>
+  */
 class QTransferFunctionEditor : public QWidget {
-    Q_OBJECT
+Q_OBJECT
 
 public:
-
     QTransferFunctionEditor(QWidget *parent = 0);
     virtual ~QTransferFunctionEditor();
 
@@ -33,7 +32,6 @@ public:
     virtual const TransferFunction & getTransferFunction() const = 0;
 
 protected:
-
     /// Valor de propietat màxim mapat per aquest editor.
     unsigned short m_maximum;
 

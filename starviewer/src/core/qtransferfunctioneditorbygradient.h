@@ -34,24 +34,23 @@ namespace udg {
 class ShadeWidget;
 
 /**
- * Editor de funcions de transferència basat en gràfiques.
- *
- * L'usuari pot modificar 4 gràfiques (una per cada component RGBA)
- * independentment. L'eix X representa els valors de propietat i l'eix Y la
- * intensitat del component. L'usuari ha d'introduir els punts que defineixen la
- * funció de transferència.
- *
- * Un clic amb el botó esquerre crea un punt nou. Un clic amb el botó dret sobre
- * un punt l'esborra. Els punts existents es poden arrossegar mantenint premut
- * el botó esquerre per modificar-los.
- *
- * \author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.edu>
- */
+    Editor de funcions de transferència basat en gràfiques.
+
+    L'usuari pot modificar 4 gràfiques (una per cada component RGBA)
+    independentment. L'eix X representa els valors de propietat i l'eix Y la
+    intensitat del component. L'usuari ha d'introduir els punts que defineixen la
+    funció de transferència.
+
+    Un clic amb el botó esquerre crea un punt nou. Un clic amb el botó dret sobre
+    un punt l'esborra. Els punts existents es poden arrossegar mantenint premut
+    el botó esquerre per modificar-los.
+
+    \author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.edu>
+  */
 class QTransferFunctionEditorByGradient : public QTransferFunctionEditor {
-    Q_OBJECT
+Q_OBJECT
 
 public:
-
     QTransferFunctionEditorByGradient(QWidget *parent = 0);
     virtual ~QTransferFunctionEditorByGradient();
 
@@ -69,7 +68,6 @@ signals:
     void gradientStopsChanged(const QGradientStops &stops);
 
 private slots:
-
     void setTransferFunction(const QGradientStops & stops);
     void setTransferFunctionName(const QString & name);
 

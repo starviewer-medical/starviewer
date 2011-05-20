@@ -10,11 +10,10 @@ class Volume;
 
 /**
     Tool per la sincronització de llesques a partir de teclat
-*/
+  */
 class SlicingKeyboardTool : public Tool {
 Q_OBJECT
 public:
-
     SlicingKeyboardTool(QViewer *viewer, QObject *parent = 0);
     ~SlicingKeyboardTool();
 

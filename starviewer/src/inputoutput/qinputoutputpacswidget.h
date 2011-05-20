@@ -26,8 +26,8 @@ class PACSJob;
 class QueryPacsJob;
 
 /**
- * Widget en el que controla les operacions d'entrada/sortida del PACS
- */
+    Widget en el que controla les operacions d'entrada/sortida del PACS
+  */
 class QInputOutputPacsWidget : public QWidget, private Ui::QInputOutputPacsWidgetBase {
 Q_OBJECT
 public:
@@ -71,7 +71,6 @@ signals:
     void studyRetrieveFinished(QString studyInstanceUID);
 
 private:
-
     /// Crea les connexions entre signals i slots
     void createConnections();
 

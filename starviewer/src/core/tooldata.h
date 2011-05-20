@@ -7,7 +7,7 @@ namespace udg {
 
 /**
     Classe genèrica per a les dades d'un tool
-*/
+  */
 class ToolData : public QObject {
 Q_OBJECT
 public:

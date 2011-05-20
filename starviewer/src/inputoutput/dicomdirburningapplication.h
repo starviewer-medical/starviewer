@@ -8,12 +8,12 @@
 
 namespace udg {
 
-/** Crea un arxiu d'imatge ISO a partir d'un directori o fitxer.
-*/
+/**
+    Crea un arxiu d'imatge ISO a partir d'un directori o fitxer.
+  */
 class DICOMDIRBurningApplication {
 
 public:
-
     enum DICOMDIRBurningApplicationError { IsoPathNotFound, BurnApplicationPathNotFound, InternalError };
 
     DICOMDIRBurningApplication();
@@ -43,7 +43,6 @@ public:
     bool burnIsoImageFile();
 
 private:
-
     /// Path del fitxer iso que es vol gravar en CD o DVD
     QString m_isoPath;
 

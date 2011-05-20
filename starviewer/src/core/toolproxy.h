@@ -21,7 +21,7 @@ class ToolData;
         - Passa els events rebuts a totes les tools actives
         - Està associat a un viewer com atribut d'aquest
         - Guarda el nom de cadascuna de les tools
-*/
+  */
 class ToolProxy : public QObject {
 Q_OBJECT
 public:

@@ -4,13 +4,13 @@
 
 namespace udg {
 
-/** Classe que s'encarrega de fer un echoSCU a un PACS */
-
 class PacsDevice;
 
+/** 
+    Classe que s'encarrega de fer un echoSCU a un PACS 
+  */
 class EchoToPACS {
 public:
-
     enum EchoRequestStatus { EchoOk, EchoCanNotConnectToPACS, EchoFailed };
 
     EchoToPACS();
@@ -22,7 +22,6 @@ public:
     EchoToPACS::EchoRequestStatus getLastError();
 
 private:
-
     EchoToPACS::EchoRequestStatus m_lastError;
 
 };

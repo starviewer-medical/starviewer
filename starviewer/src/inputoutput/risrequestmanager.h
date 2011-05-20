@@ -22,12 +22,12 @@ class QueryPacsJob;
 class PACSJob;
 class RetrieveDICOMFilesFromPACSJob;
 
-/** Classe manager que ens permet rebre peticions del RIS i processar-les
-*/
+/**
+    Classe manager que ens permet rebre peticions del RIS i processar-les
+  */
 class RISRequestManager : public QObject {
 Q_OBJECT
 public:
-
     RISRequestManager(PacsManager *pacsManager);
     /// Destructor de la classe
     ~RISRequestManager();
@@ -36,7 +36,6 @@ public:
     void listen();
 
 signals:
-
     /// Signal que s'emet per indicar que ja es pot començar a escoltar peticions a través de la classe ListenRISRequests que s'executa en un altre Thread
     void listenRISRequests();
 
@@ -50,7 +49,6 @@ signals:
     void loadStudyRetrievedFromRISRequest(QString studyInstanceUID);
 
 private slots:
-
     /// Processa una petició del RIS per descarregar l'estudi que compleixi la màscara de cerca
     void processRISRequest(DicomMask mask);
 
@@ -70,7 +68,6 @@ private slots:
     void showListenRISRequestsError(ListenRISRequests::ListenRISRequestsError error);
 
 private:
-
     /// Inicialitza les variables globals per escoltar i executar peticions del RIS.
     /// No inicialitzem al construtor perquè si no ens indiquen que hem d'escoltar no cal, inicialitzar les variables i ocupar memòria
     void initialize();
@@ -98,7 +95,6 @@ private:
     RetrieveDICOMFilesFromPACSJob* retrieveStudy(QString pacsIDToRetrieve, Study *study);
 
 private:
-
     /// No podem executar diverses peticions de RIS a la vegada, per això creem aquesta cua, que ens permetrà en el cas que se'ns
     /// demani una petició, quan ja n'hi hagi un altre executant, encuar la sol·licitud i esperar a llançar-la que l'actual hagi finalitzat.
     /// El motiu de que no podem executar més d'una sol·licitud a la vegada, és degut a la naturalesa assíncrona del PacsManager,

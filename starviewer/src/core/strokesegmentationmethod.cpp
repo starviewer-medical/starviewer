@@ -131,7 +131,7 @@ double StrokeSegmentationMethod::applyMethod()
     DEBUG_LOG(QString("Histogram parameters: %1,%2").arg(m_lowerThreshold).arg(m_upperThreshold));
 
     typedef itk::VolumeCalculatorImageFilter<Volume::ItkImageType> VolumeCalcFilterType;
-    VolumeCalcFilterType::Pointer volumeCalc= VolumeCalcFilterType::New();
+    VolumeCalcFilterType::Pointer volumeCalc = VolumeCalcFilterType::New();
     volumeCalc->SetInput(outcaster->GetOutput());
     volumeCalc->SetInsideValue(m_insideMaskValue);
 
@@ -201,14 +201,14 @@ void StrokeSegmentationMethod::applyMethodVTKRecursive(vtkImageData* imMask, int
         maskValue = (Volume::VoxelType*)imMask->GetScalarPointer(a, b, c);
         if ((*maskValue) == m_insideMaskValue - 100)
         {
-            (*maskValue)= m_insideMaskValue;
+            (*maskValue) = m_insideMaskValue;
             m_cont++;
             applyMethodVTKRecursive(imMask, a, b, c + 1, prof + 1);
             applyMethodVTKRecursive(imMask, a, b, c - 1, prof + 1);
             applyMethodVTKRecursive(imMask, a + 1, b, c, prof + 1);
             applyMethodVTKRecursive(imMask, a - 1, b, c, prof + 1);
-            applyMethodVTKRecursive(imMask, a, b+1, c, prof + 1);
-            applyMethodVTKRecursive(imMask, a, b-1, c, prof + 1);
+            applyMethodVTKRecursive(imMask, a, b + 1, c, prof + 1);
+            applyMethodVTKRecursive(imMask, a, b - 1, c, prof + 1);
         }
     }
 }
@@ -346,9 +346,9 @@ double StrokeSegmentationMethod::applyCleanSkullMethod()
     size = m_Mask->getItkData()->GetBufferedRegion().GetSize();
     resample2Filter->SetSize(size);
     resample2Filter->SetInput(binaryDilate->GetOutput());
-    t5=clock();
+    t5 = clock();
     resample2Filter->Update();
-    t6=clock();
+    t6 = clock();
     std::cout << "resampleVolumeOriginal: [" << origin[0] << "," << origin[1] << "," << origin[2] << "] ,[" << spacing[0] << "," << spacing[1] << "," <<
                  spacing[2] << "] ," << size << std::endl;
     std::cout << "resampleVolumeNew: [" << neworigin[0] << "," << neworigin[1] << "," << neworigin[2] << "] ,[" << newspacing[0] << "," << newspacing[1] <<
@@ -377,7 +377,7 @@ double StrokeSegmentationMethod::applyCleanSkullMethod()
         ++auxIt;
         ++maskIt;
     }
-  t3=clock();
+    t3 = clock();
 
     typedef itk::ConnectedThresholdImageFilter<Volume::ItkImageType, Volume::ItkImageType> ConnectedFilterType;
 
@@ -398,7 +398,7 @@ double StrokeSegmentationMethod::applyCleanSkullMethod()
     connectedThreshold->SetSeed(seedIndex);
 
     typedef itk::VolumeCalculatorImageFilter<Volume::ItkImageType> VolumeCalcFilterType;
-    VolumeCalcFilterType::Pointer volumeCalc= VolumeCalcFilterType::New();
+    VolumeCalcFilterType::Pointer volumeCalc = VolumeCalcFilterType::New();
     volumeCalc->SetInput(connectedThreshold->GetOutput());
     //volumeCalc->SetInput(resample2Filter->GetOutput());
     volumeCalc->SetInsideValue(m_insideMaskValue);
@@ -615,11 +615,11 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume *lesionMask)
     // Fem el vòxel isomètric
     m_Mask->getSpacing(spacing);
     // Pixel spacing in millimeters along X
-    newspacing[0] = isometricSize*spacing[0];
+    newspacing[0] = isometricSize * spacing[0];
     // Pixel spacing in millimeters along Y
-    newspacing[1] = isometricSize*spacing[0];
+    newspacing[1] = isometricSize * spacing[0];
     // Pixel spacing in millimeters along Z
-    newspacing[2] = isometricSize*spacing[0];
+    newspacing[2] = isometricSize * spacing[0];
 
     resampleMaskFilter->SetOutputSpacing(newspacing);
 
@@ -1274,7 +1274,7 @@ double StrokeSegmentationMethod::applyVentriclesMethod()
     InputCastingFilterType::Pointer incaster = InputCastingFilterType::New();
     OutputCastingFilterType::Pointer outcaster = OutputCastingFilterType::New();
     ConnectedFilterType::Pointer connectedThreshold = ConnectedFilterType::New();
-    VolumeCalcFilterType::Pointer volumeCalc= VolumeCalcFilterType::New();
+    VolumeCalcFilterType::Pointer volumeCalc = VolumeCalcFilterType::New();
 
     incaster->SetInput(m_Volume->getItkData());
     // Comentem aquesta línia per fer el filtratge

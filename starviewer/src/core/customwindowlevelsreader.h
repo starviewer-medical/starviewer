@@ -13,8 +13,7 @@ class CustomWindowLevel;
 /**
     Classe encarregada de llegir els fitxers XML que contenen la llista de custom window levels.
     També és l'encarregada de crear els diferent objectes CustomWindowLevel.
-*/
-
+  */
 class CustomWindowLevelsReader {
 
 public:

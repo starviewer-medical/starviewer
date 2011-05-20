@@ -14,12 +14,10 @@ namespace udg {
     Tot i això, aquesta classe s'hauria d'heredar i només fer servir les heredades d'aquesta. Com a exemple es té ExtensionFactoryRegister.
     Així doncs, aquesta classe queda només reservada per quan es vulgui implementar un nou factory i no per utilitzar-la directament en el
     registre de factory's.
-*/
-
+  */
 template <class AncestorType, class BaseClass, typename ClassIdentifier, class SingletonRegistry, class ParentType = QObject>
 class GenericSingletonFactoryRegister {
 public:
-
     /**
      * Mètode constructor que ens serveix per registrar una classe amb un id concret en un Factory.
      * @param id Identificador de la classe que es vol registrar

@@ -9,8 +9,8 @@ class PatientFillerInput;
 class Series;
 
 /**
-Classe pare dels mòduls que omplen parts específiques de l'estructura Patient
-*/
+    Classe pare dels mòduls que omplen parts específiques de l'estructura Patient
+  */
 class PatientFillerStep{
 public:
     /// Flags que defineixen les diferents prioritats que poden tenir els Steps

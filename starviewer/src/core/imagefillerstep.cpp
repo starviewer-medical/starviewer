@@ -932,8 +932,8 @@ QString ImageFillerStep::makePatientOrientationFromImageOrientationPatient(const
     for (int i = 0; i < 3; i++)
     {
         dirCosinesX[i] = imageOrientationPatient[i];
-        dirCosinesY[i] = imageOrientationPatient[3+i];
-        dirCosinesZ[i] = imageOrientationPatient[6+i];
+        dirCosinesY[i] = imageOrientationPatient[3 + i];
+        dirCosinesZ[i] = imageOrientationPatient[6 + i];
     }
     QString patientOrientationString;
     patientOrientationString = this->mapDirectionCosinesToOrientationString(dirCosinesX);

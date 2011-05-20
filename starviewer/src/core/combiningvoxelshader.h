@@ -8,17 +8,16 @@
 namespace udg {
 
 /**
- * És un voxel shader que en combina dos.
- *
- * Els voxel shaders combinats han d'implementar els mètodes nvShade. La recomanació és que implementin la funcionalitat als nvShade (per a poder ser combinats)
- * com a inline i no virtuals, i des dels shade (virtuals, i poden ser inline o no, i són necessaris per complir amb l'especificació de VoxelShader) cridin els
- * nvShade, tal com fa aquesta mateixa classe.
- */
+    És un voxel shader que en combina dos.
+
+    Els voxel shaders combinats han d'implementar els mètodes nvShade. La recomanació és que implementin la funcionalitat als nvShade (per a poder ser combinats)
+    com a inline i no virtuals, i des dels shade (virtuals, i poden ser inline o no, i són necessaris per complir amb l'especificació de VoxelShader) cridin els
+    nvShade, tal com fa aquesta mateixa classe.
+  */
 template <class VS1, class VS2>
 class CombiningVoxelShader : public VoxelShader {
 
 public:
-
     CombiningVoxelShader();
     virtual ~CombiningVoxelShader();
 
@@ -39,7 +38,6 @@ public:
     virtual QString toString() const;
 
 private:
-
     VS1 *m_voxelShader1;
     VS2 *m_voxelShader2;
 

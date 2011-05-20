@@ -46,13 +46,13 @@ EditorTool::~EditorTool()
 
 void EditorTool::initialize()
 {
-    if (m_2DViewer->getOverlayInput()!=0)
+    if (m_2DViewer->getOverlayInput() != 0)
     {
         double range[2];
         m_2DViewer->getOverlayInput()->getScalarRange(range);
 
         m_outsideValue = (int)range[0];
-        if ((int)range[0]!=(int)range[1])
+        if ((int)range[0] != (int)range[1])
         {
             m_insideValue = (int)range[1];
         }
@@ -280,8 +280,8 @@ void EditorTool::setPaintCursor()
         double spacing[3];
         m_2DViewer->getInput()->getSpacing(spacing);
         double sizeView[2];
-        sizeView[0]=(double)(size + 0.5) * spacing[0];
-        sizeView[1]=(double)(size + 0.5) * spacing[1];
+        sizeView[0] = (double)(size + 0.5) * spacing[0];
+        sizeView[1] = (double)(size + 0.5) * spacing[1];
 
         points->SetPoint(0, pos[0] - sizeView[0], pos[1] - sizeView[1], pos[2] - 1);
         points->SetPoint(1, pos[0] + sizeView[0], pos[1] - sizeView[1], pos[2] - 1);

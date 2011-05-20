@@ -38,7 +38,7 @@ public:
     Q3DMPRViewer *m_viewer;
     virtual void Execute(vtkObject *vtkNotUsed(caller), unsigned long event, void *vtkNotUsed(callData))
     {
-        static double lastWindowLevel[2] = {0., 0.};
+        static double lastWindowLevel[2] = { 0., 0. };
         if (m_viewer)
         {
             switch (event)
@@ -145,8 +145,8 @@ void Q3DMPRViewer::initializePlanes()
     m_coronalImagePlaneWidget = vtkImagePlaneWidget::New();
     // Els 3 widgets s'utilizen per visualizar el model
     // (mostra imatges en 2D amb 3 orientacions diferents)
-    
-    // Pla AXIAL    
+
+    // Pla AXIAL
     m_axialImagePlaneWidget->DisplayTextOn();
     m_axialImagePlaneWidget->SetPicker(picker);
     m_axialImagePlaneWidget->RestrictPlaneToVolumeOn();
@@ -155,7 +155,7 @@ void Q3DMPRViewer::initializePlanes()
     m_axialImagePlaneWidget->SetTexturePlaneProperty(ipwProp);
     m_axialImagePlaneWidget->TextureInterpolateOn();
     m_axialImagePlaneWidget->SetResliceInterpolateToCubic();
-    
+
     // Pla SAGITAL
     m_sagitalImagePlaneWidget->DisplayTextOn();
     m_sagitalImagePlaneWidget->SetPicker(picker);
@@ -166,7 +166,7 @@ void Q3DMPRViewer::initializePlanes()
     m_sagitalImagePlaneWidget->TextureInterpolateOn();
     m_sagitalImagePlaneWidget->SetLookupTable(m_axialImagePlaneWidget->GetLookupTable());
     m_sagitalImagePlaneWidget->SetResliceInterpolateToCubic();
-    
+
     // Pla CORONAL
     m_coronalImagePlaneWidget->DisplayTextOn();
     m_coronalImagePlaneWidget->SetPicker(picker);
@@ -179,7 +179,7 @@ void Q3DMPRViewer::initializePlanes()
 
     picker->Delete();
     ipwProp->Delete();
-    
+
     // INTERACCIÓ
     m_axialImagePlaneWidget->SetInteractor(getInteractor());
     m_sagitalImagePlaneWidget->SetInteractor(getInteractor());
