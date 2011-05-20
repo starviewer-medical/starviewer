@@ -8,10 +8,10 @@ class QApplication;
 namespace udg {
 
 /**
-   Classe encarregada de carregar les diferents traduccions d'una aplicació.
-   De la part d'internacionalització de l'aplicació s'encarrega de carregar les traduccions. També té paràmetres
-   per saber quina és la traducció correcta que s'ha d'aplicar.
-*/
+    Classe encarregada de carregar les diferents traduccions d'una aplicació.
+    De la part d'internacionalització de l'aplicació s'encarrega de carregar les traduccions. També té paràmetres
+    per saber quina és la traducció correcta que s'ha d'aplicar.
+  */
 class ApplicationTranslationsLoader {
 public:
     /// Constructor de la classe. Cal passar-li l'aplicació a la que volem que es carreguin les traduccions.

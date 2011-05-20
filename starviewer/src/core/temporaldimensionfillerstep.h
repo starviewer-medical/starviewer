@@ -10,8 +10,8 @@ class Series;
 class Image;
 
 /**
-Mòdul que s'encarrega d'identificar les sèries dinàmiques. Un dels seus requisits és que es tingui l'etiqueta de DICOMClassified i la ImageFillerStep
-*/
+    Mòdul que s'encarrega d'identificar les sèries dinàmiques. Un dels seus requisits és que es tingui l'etiqueta de DICOMClassified i la ImageFillerStep
+  */
 class TemporalDimensionFillerStep : public PatientFillerStep {
 public:
     TemporalDimensionFillerStep();
@@ -22,13 +22,12 @@ public:
 
     void postProcessing();
 
-    QString name() 
+    QString name()
     {
         return "TemporalDimensionFillerStep";
     }
 
 private:
-
     struct VolumeInfo
     {
         int numberOfPhases;

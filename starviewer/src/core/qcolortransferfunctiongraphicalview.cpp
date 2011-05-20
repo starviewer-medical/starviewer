@@ -54,7 +54,7 @@ void QColorTransferFunctionGraphicalView::requestBackgroundUpdate()
 void QColorTransferFunctionGraphicalView::mousePressEvent(QMouseEvent *event)
 {
     QGraphicsView::mousePressEvent(event);
-    
+
     if (event->button() == Qt::LeftButton)
     {
         if (scene()->selectedItems().isEmpty())
@@ -110,7 +110,7 @@ void QColorTransferFunctionGraphicalView::wheelEvent(QWheelEvent *event)
     double antiScale = 1.0 / m_zoom;
 
     QList<QGraphicsItem*> nodes = scene()->items();
-    
+
     foreach (QGraphicsItem *node, nodes)
     {
         // Si només fem servir escalats es pot fer així, sinó es pot afegir un segon paràmetre a setTransform
@@ -139,7 +139,7 @@ void QColorTransferFunctionGraphicalView::updateBackground()
 void QColorTransferFunctionGraphicalView::addNode(double x)
 {
     QColor color = QColorDialog::getColor(Qt::black, this);
-    
+
     if (color.isValid())
     {
         QColorTransferFunctionGraphicalViewNode *node = new QColorTransferFunctionGraphicalViewNode(this);
@@ -147,7 +147,7 @@ void QColorTransferFunctionGraphicalView::addNode(double x)
         node->setToolTip(QString("%1").arg(x));
         node->setColor(color);
         // Si només fem servir escalats es pot fer així, sinó es pot afegir un segon paràmetre a setTransform
-        node->setTransform(QTransform::fromScale(1.0 / m_zoom, 1.0));   
+        node->setTransform(QTransform::fromScale(1.0 / m_zoom, 1.0));
         scene()->addItem(node);
         updateBackground();
         emit nodeAdded(x, color);
@@ -158,7 +158,7 @@ void QColorTransferFunctionGraphicalView::removeNode(double x)
 {
     // TODO: es podria refinar agafant tots els que siguin aquí i triant el més proper a x
     QGraphicsItem *item = scene()->itemAt(x, 0.0);
-    
+
     if (item)
     {
         x = item->x();
@@ -192,7 +192,7 @@ void QColorTransferFunctionGraphicalView::endMoveNodes()
         QColorTransferFunctionGraphicalViewNode *node = dynamic_cast<QColorTransferFunctionGraphicalViewNode*>(item);
         // Restaurem el Z-value predeterminat
         node->setZValue(0.0);
-        
+
         if (node->x() != node->oldX())
         {
             origins.append(node->oldX());

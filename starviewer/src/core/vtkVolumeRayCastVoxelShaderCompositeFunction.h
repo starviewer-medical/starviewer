@@ -11,12 +11,11 @@ class TrilinearInterpolator;
 class VoxelShader;
 
 /**
- * Classe que fa un ray casting permetent aplicar un voxel shader per decidir el color de cada vòxel.
- */
+    Classe que fa un ray casting permetent aplicar un voxel shader per decidir el color de cada vòxel.
+  */
 class vtkVolumeRayCastVoxelShaderCompositeFunction : public vtkVolumeRayCastFunction {
 
 public:
-
     enum CompositeMethod { ClassifyInterpolate, InterpolateClassify };
 
     static vtkVolumeRayCastVoxelShaderCompositeFunction* New();
@@ -43,7 +42,6 @@ public:
     void RemoveAllVoxelShaders();
 
 protected:
-
     vtkVolumeRayCastVoxelShaderCompositeFunction();
     ~vtkVolumeRayCastVoxelShaderCompositeFunction();
 
@@ -56,7 +54,6 @@ protected:
     TrilinearInterpolator *m_interpolator;
 
 private:
-
     /// Opacitat mínima que ha de restar per continuar el ray casting.
     static const float MINIMUM_REMAINING_OPACITY;
 

@@ -24,9 +24,7 @@
 #include "shadewidget.h"
 #include "hoverpoints.h"
 
-
 namespace udg {
-
 
 ShadeWidget::ShadeWidget(QWidget *parent)
     : QWidget(parent), m_shade_type(BlackShade), m_alpha_gradient(QLinearGradient(0, 0, 0, 0))
@@ -50,8 +48,6 @@ ShadeWidget::ShadeWidget(QWidget *parent)
 
     connect(m_hoverPoints, SIGNAL(pointsChanged(const QPolygonF &)), this, SIGNAL(colorsChanged()));
 }
-
-
 
 ShadeWidget::ShadeWidget(ShadeType type, QWidget *parent)
     : QWidget(parent), m_shade_type(type), m_alpha_gradient(QLinearGradient(0, 0, 0, 0))
@@ -95,7 +91,6 @@ std::cout<<"right: "<<HoverPoints::LockToRight<<std::endl;*/
     connect(m_hoverPoints, SIGNAL(pointsChanged(const QPolygonF &)), this, SIGNAL(colorsChanged()));
 }
 
-
 QPolygonF ShadeWidget::points() const
 {
     return m_hoverPoints->points();
@@ -107,17 +102,16 @@ void ShadeWidget::setPoints(QPolygonF p)
     update();
 }
 
-
 uint ShadeWidget::colorAt(int x)
 {
     generateShade();
 
     QPolygonF pts = m_hoverPoints->points();
-    for (int i=1; i < pts.size(); ++i)
+    for (int i = 1; i < pts.size(); ++i)
     {
-        if (pts.at(i-1).x() <= x && pts.at(i).x() >= x)
+        if (pts.at(i - 1).x() <= x && pts.at(i).x() >= x)
         {
-            QLineF l(pts.at(i-1), pts.at(i));
+            QLineF l(pts.at(i - 1), pts.at(i));
             l.setLength(l.length() * ((x - l.x1()) / l.dx()));
             return m_shade.pixel(qRound(qMin(l.x2(), (qreal(m_shade.width() - 1)))),
                                  qRound(qMin(l.y2(), qreal(m_shade.height() - 1))));
@@ -127,14 +121,13 @@ uint ShadeWidget::colorAt(int x)
     return 0;
 }
 
-
 void ShadeWidget::setGradientStops(const QGradientStops &stops)
 {
     if (m_shade_type == ARGBShade)
     {
         m_alpha_gradient = QLinearGradient(0, 0, width(), 0);
 
-        for (int i=0; i<stops.size(); ++i)
+        for (int i = 0; i < stops.size(); ++i)
         {
             QColor c = stops.at(i).second;
             m_alpha_gradient.setColorAt(stops.at(i).first, QColor(c.red(), c.green(), c.blue()));
@@ -146,7 +139,6 @@ void ShadeWidget::setGradientStops(const QGradientStops &stops)
     }
 }
 
-
 void ShadeWidget::paintEvent(QPaintEvent *)
 {
     generateShade();
@@ -157,7 +149,6 @@ void ShadeWidget::paintEvent(QPaintEvent *)
     p.setPen(QColor(146, 146, 146));
     p.drawRect(0, 0, width() - 1, height() - 1);
 }
-
 
 void ShadeWidget::generateShade()
 {
@@ -208,6 +199,5 @@ void ShadeWidget::generateShade()
         }
     }
 }
-
 
 }

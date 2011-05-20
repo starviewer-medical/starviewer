@@ -13,14 +13,12 @@ class vtkVolume;
 namespace udg {
 
 /**
- * Thread principal per al càlcul d'obscurances. Controla els altres threads.
- */
+    Thread principal per al càlcul d'obscurances. Controla els altres threads.
+  */
 class ObscuranceMainThread : public QThread {
-
-    Q_OBJECT
+Q_OBJECT
 
 public:
-
     /// Estructura que guarda les coordenades d'un vòxel.
     struct Voxel { int x, y, z; };
     /// Funcions d'obscurances.
@@ -41,25 +39,20 @@ public:
     Obscurance* getObscurance() const;
 
 public slots:
-
     void stop();
 
 signals:
-
     void progress(int percent);
     void computed();
 
 protected:
-
     virtual void run();
 
 private:
-
     static void getLineStarts(QVector<Vector3> &lineStarts, int dimX, int dimY, int dimZ, const Vector3 &forward);
     QVector<Vector3> getDirections() const;
 
 private:
-
     int m_numberOfDirections;
     double m_maximumDistance;
     Function m_function;

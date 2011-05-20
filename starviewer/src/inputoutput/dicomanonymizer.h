@@ -1,15 +1,6 @@
 #ifndef UDGDICOMANONYMIZER_H
 #define UDGDICOMANONYMIZER_H
 
-/**
-  * Aquesta classe permet anonimitzar fitxers DICOM seguint les normes descrites pel Basic Application Level Confidentiality Profile de DICOM
-  * que podem trobar al annex E del PS 3.15, mantenint la consistència en tags com Frame Of Reference o Image Of Reference, Study Instance UID,
-  * Series Instance UID, ... després de ser anonimitzats. Per defecte també treu els tags privats de les imatges ja que aquests poden contenir
-  * informació sensible del pacient, ens aconsellen que els treiem a http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/fb89f7f5d120db44
-  *
-  * Ens permet anonimitzar fitxers sols o tots els fitxers dins i subdirectoris del directori especificat.
-  */
-
 #include <QHash>
 
 #include "gdcmanonymizerstarviewer.h"
@@ -18,10 +9,17 @@ class QString;
 
 namespace udg {
 
+/**
+    Aquesta classe permet anonimitzar fitxers DICOM seguint les normes descrites pel Basic Application Level Confidentiality Profile de DICOM
+    que podem trobar al annex E del PS 3.15, mantenint la consistència en tags com Frame Of Reference o Image Of Reference, Study Instance UID,
+    Series Instance UID, ... després de ser anonimitzats. Per defecte també treu els tags privats de les imatges ja que aquests poden contenir
+    informació sensible del pacient, ens aconsellen que els treiem a http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/fb89f7f5d120db44
+
+    Ens permet anonimitzar fitxers sols o tots els fitxers dins i subdirectoris del directori especificat.
+  */
 class DICOMAnonymizer {
 
 public:
-
     DICOMAnonymizer();
     ~DICOMAnonymizer();
 
@@ -58,7 +56,6 @@ public:
     bool getRemovePrivateTags();
 
 private:
-
     /// Inicialitza les variables de gdcm necessàries per anonimitzar
     void initializeGDCM();
 
@@ -74,7 +71,6 @@ private:
     QString readTagValue(gdcm::File *gdcmFile, gdcm::Tag) const;
 
 private:
-
     QString m_patientNameAnonymized;
     bool m_replacePatientIDInsteadOfRemove;
     bool m_replaceStudyIDInsteadOfRemove;

@@ -229,7 +229,7 @@ void RISRequestManager::retrieveFoundStudiesFromPACS(QueryPacsJob *queryPACSJob)
                             .arg(study->getInstanceUID(), queryPACSJob->getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()]));
 
                 // Descarreguem l'estudi trobat
-                RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = 
+                RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob =
                     retrieveStudy(queryPACSJob->getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()], study);
 
                 if (Settings().getValue(InputOutputSettings::RISRequestViewOnceRetrieved).toBool())

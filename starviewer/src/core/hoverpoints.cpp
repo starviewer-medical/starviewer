@@ -28,7 +28,6 @@
 
 namespace udg {
 
-
 HoverPoints::HoverPoints(QWidget *widget, PointShape shape)
     : QObject(widget)
 {
@@ -49,10 +48,8 @@ HoverPoints::HoverPoints(QWidget *widget, PointShape shape)
     connect(this, SIGNAL(pointsChanged(const QPolygonF &)),
             m_widget, SLOT(update()));
 
-
     m_width = m_height = -1;
 }
-
 
 void HoverPoints::setEnabled(bool enabled)
 {
@@ -63,12 +60,11 @@ void HoverPoints::setEnabled(bool enabled)
     }
 }
 
-
 bool HoverPoints::eventFilter(QObject *object, QEvent *event)
 {
-    if (object == m_widget && m_enabled) 
+    if (object == m_widget && m_enabled)
     {
-        switch (event->type()) 
+        switch (event->type())
         {
 
         case QEvent::MouseButtonPress:
@@ -235,7 +231,6 @@ bool HoverPoints::eventFilter(QObject *object, QEvent *event)
     return false;
 }
 
-
 void HoverPoints::paintPoints()
 {
     QPainter p(m_widget);
@@ -334,7 +329,6 @@ void HoverPoints::setPoints(const QPolygonF &points)
     }
 }
 
-
 void HoverPoints::movePoint(int index, const QPointF &point, bool emitUpdate)
 {
     m_points[index] = bound_point(point, boundingRect(), m_locks.at(index));
@@ -344,12 +338,10 @@ void HoverPoints::movePoint(int index, const QPointF &point, bool emitUpdate)
     }
 }
 
-
 inline static bool x_less_than(const QPointF &p1, const QPointF &p2)
 {
     return p1.x() < p2.x();
 }
-
 
 inline static bool y_less_than(const QPointF &p1, const QPointF &p2)
 {
@@ -401,6 +393,5 @@ void HoverPoints::firePointChange()
 
     emit pointsChanged(m_points);
 }
-
 
 }

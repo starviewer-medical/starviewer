@@ -16,7 +16,7 @@ class DrawerLine;
 
 /**
     Tool per aplicar reference lines
-*/
+  */
 class ReferenceLinesTool : public Tool {
 Q_OBJECT
 public:

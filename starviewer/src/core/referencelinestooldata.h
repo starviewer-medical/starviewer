@@ -9,7 +9,7 @@ class ImagePlane;
 
 /**
     Dades corresponents a la Tool de reference lines
-*/
+  */
 class ReferenceLinesToolData : public ToolData {
 Q_OBJECT
 public:

@@ -36,7 +36,7 @@ DrawerPolyline::~DrawerPolyline()
     {
         m_vtkCellArray->Delete();
     }
-    
+
     if (m_vtkActor)
     {
         m_vtkActor->Delete();
@@ -205,7 +205,7 @@ double DrawerPolyline::getDistanceToPoint(double *point3D, double closestPoint[3
 
     if (!m_pointsList.isEmpty())
     {
-        // Recorrem tots els punts de la polilínia calculant la distància a cadascun dels 
+        // Recorrem tots els punts de la polilínia calculant la distància a cadascun dels
         // segments que uneixen cada vèrtex
         double distance;
         double localClosestPoint[3];

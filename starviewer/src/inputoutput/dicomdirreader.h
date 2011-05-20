@@ -16,13 +16,13 @@ class Series;
 class Image;
 class Status;
 
-/** Aquesta classe permet llegir un dicomdir i consultar-ne els seus elements.
-  * Accedint a través de l'estructura d'arbres que representen els dicomdir Pacient/Estudi/Series/Imatges, accedim a la informació el Dicomdir per a
-  * realitzar cerques.
-*/
+/**
+    Aquesta classe permet llegir un dicomdir i consultar-ne els seus elements.
+    Accedint a través de l'estructura d'arbres que representen els dicomdir Pacient/Estudi/Series/Imatges, accedim a la informació el Dicomdir per a
+    realitzar cerques.
+  */
 class DICOMDIRReader {
 public:
-
     DICOMDIRReader();
     ~DICOMDIRReader();
 
@@ -41,13 +41,13 @@ public:
     /// @param studyUID UID de l'estudi del qual es vol consultar les sèries
     /// @param outResultsSeriesList llista amb les sèries que conté l'estudi
     /// @return estat del mètode
-    Status readSeries (const QString &studyUID, const QString &seriesUID , QList<Series*> &outResultsSeriesList);
+    Status readSeries (const QString &studyUID, const QString &seriesUID, QList<Series*> &outResultsSeriesList);
 
     /// Retorna la llista d'imatges que conté un estudi
     /// @param seriesUID UID de la serie que volem obtenir les imatges
     /// @param imageList Llistat de les imatges que conté
     /// @return estat del mètode
-    Status readImages(const QString &seriesUID, const QString &sopInstanceUID , QList<Image*> &outResultsImageList);
+    Status readImages(const QString &seriesUID, const QString &sopInstanceUID, QList<Image*> &outResultsImageList);
 
     /// Retorna el path del dicomdir
     /// @return path del dicomdir
@@ -64,8 +64,7 @@ public:
     /// En la màscara només es té en compte el StudyInstanceUID.
     Patient* retrieve(DicomMask maskToRetrieve);
 
-private :
-
+private:
     DcmDicomDir *m_dicomdir;
     QString m_dicomdirAbsolutePath, m_dicomdirFileName;
     bool m_dicomFilesInLowerCase;

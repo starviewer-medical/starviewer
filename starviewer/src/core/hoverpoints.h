@@ -29,7 +29,7 @@
 namespace udg {
 
 class HoverPoints : public QObject {
-    Q_OBJECT
+Q_OBJECT
 public:
     enum PointShape {
         CircleShape,

@@ -12,7 +12,6 @@ class HangingProtocolsRepository : public Repository<HangingProtocol> {
 Q_OBJECT
 
 public:
-
      /// Ens retorna l'única instància del repositori
     static HangingProtocolsRepository* getRepository()
     {
@@ -23,7 +22,6 @@ public:
     ~HangingProtocolsRepository();
 
 private:
-
     HangingProtocolsRepository();
 
 };

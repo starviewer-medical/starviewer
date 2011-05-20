@@ -9,7 +9,7 @@ class ImagePlane;
 
 /**
     Classe que guarda les dades compartides per la tool de cursor 3D.
-*/
+  */
 class Cursor3DToolData : public ToolData {
 Q_OBJECT
 public:

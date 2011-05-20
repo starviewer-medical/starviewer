@@ -393,7 +393,7 @@ void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
         return;
     }
     else
-    {   
+    {
         // El directori no és un dicomdir
         // Si el directori no existiex, preguntem si el vol crear
         if (!directoryDicomdirPath.exists())
@@ -720,7 +720,7 @@ void QCreateDicomdir::showProcessErrorMessage(const QProcess &process, QString n
             default:
                 break;
     }
-    QMessageBox::critical(this, tr("DICOMDIR creation failure"), tr("There was an error during the creation of the DICOMDIR.") + "\n\n" + errorMessage + 
+    QMessageBox::critical(this, tr("DICOMDIR creation failure"), tr("There was an error during the creation of the DICOMDIR.") + "\n\n" + errorMessage +
                                    "\n\n" + tr("Please, contact your system administrator to solve this problem."));
 
 }

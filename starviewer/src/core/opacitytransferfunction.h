@@ -13,11 +13,10 @@ namespace udg {
     conjunt d'opacitats (reals en el rang [0,1]).
     Aquesta funció té uns quants punts definits explícitament i la resta s'obtenen per interpolació lineal o extrapolació del veí més proper.
     La funció de transferència també té un nom.
- */
+  */
 class OpacityTransferFunction : public TransferFunctionTemplate<double> {
 
 public:
-
     /// Crea una funció de transferència buida, sense cap punt i sense nom.
     OpacityTransferFunction();
     OpacityTransferFunction(const OpacityTransferFunction &opacityTransferFunction);
@@ -37,7 +36,6 @@ public:
     static OpacityTransferFunction fromVariant(const QVariant &variant);
 
 private:
-
     /// Funció de transferència d'opacitat en format VTK.
     // S'ha de guardar per poder fer el Delete() més tard
     mutable vtkPiecewiseFunction *m_vtkOpacityTransferFunction;

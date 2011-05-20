@@ -13,7 +13,6 @@ namespace udg {
 class ExtensionWorkspace : public QTabWidget {
 Q_OBJECT
 public:
-
     ExtensionWorkspace(QWidget *parent = 0);
 
     ~ExtensionWorkspace();

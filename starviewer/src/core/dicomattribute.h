@@ -7,7 +7,8 @@ namespace udg {
 
 class DICOMTag;
 
-/** Classe pare encarregada de representar atributs DICOM.
+/**
+    Classe pare encarregada de representar atributs DICOM.
   */
 class DICOMAttribute {
 

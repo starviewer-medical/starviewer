@@ -14,7 +14,7 @@ class Series;
 
 /**
     Classe que encapsula les propietats d'una imatge d'una sèrie de la classe Series
-*/
+  */
 class Image : public QObject {
 Q_OBJECT
 public:
@@ -61,9 +61,9 @@ public:
     /// Assignar/Obtenir la posició de la imatge.
     void setImagePositionPatient(double position[3]);
     const double* getImagePositionPatient() const;
-	
-    /// Mètode per obtenir la normal del pla de la imatge. 
-    /// Equivalent a demanar getImagePostionPatient() i quedar-nos 
+
+    /// Mètode per obtenir la normal del pla de la imatge.
+    /// Equivalent a demanar getImagePostionPatient() i quedar-nos
     /// amb els tres últims valors (índexs 6,7,8)
     void getImagePlaneNormal(double normal[3]);
 
@@ -139,7 +139,7 @@ public:
     /// Assignar/Obtenir la descripció del tipus d'imatge
     void setImageType(const QString &imageType);
     QString getImageType() const;
-    
+
     /// Assignar/Obtenir la viewPosition
     void setViewPosition(const QString &viewPosition);
     QString getViewPosition() const;
@@ -151,7 +151,7 @@ public:
     /// Assignar/Obtenir la descripció del View Code. De moment només s'aplicarà per imatges de mammografia.
     void setViewCodeMeaning(const QString &viewCodeMeaning);
     QString getViewCodeMeaning() const;
-    
+
     /// Assignar/Obtenir el número de frame
     void setFrameNumber(int frameNumber);
     int getFrameNumber() const;
@@ -161,26 +161,26 @@ public:
     int getPhaseNumber() const;
 
     /// Assigna/Obtenir el número de volum al qual pertany la imatge dins la sèrie
-    void setVolumeNumberInSeries (int volumeNumberInSeries); 
+    void setVolumeNumberInSeries (int volumeNumberInSeries);
     int getVolumeNumberInSeries() const;
 
     /// Assignar/Obtenir el número que ocupa la imatge dins volum
     void setOrderNumberInVolume(int orderNumberInVolume);
     int getOrderNumberInVolume() const;
-    
+
     /// Assignar/Obtenir el Content Time (moment de creació de les dades)
     void setImageTime(const QString &imageTime);
     QString getImageTime() const;
 
     /// Ens retorna la hora en format hh:mm:ss en que va començar la creació de la imatge
     QString getFormattedImageTime() const;
-    
+
     /// Ens retorna la clau que identifica la imatge
     QString getKeyIdentifier() const;
 
     /**
      * El mètode ens retorna el thumbnail de la imatge. Es crearà el primer cop que es demani
-     * @param getFromCache Si és cert intentarà carregar el thumbnail si es troba creat a la cache. 
+     * @param getFromCache Si és cert intentarà carregar el thumbnail si es troba creat a la cache.
      *                     Altrament, simplement comprobarà que no estigui creat a memòria i prou
      * @param resolution La resolució amb la que volem el thumbnail
      * @return Un QPixmap amb el thumbnail
@@ -278,7 +278,7 @@ private:
     /// Es troba al mòdul General Image C.7.6.1 i als mòduls Enhanced MR/CT/XA/XRF Image (C.8.13.1/C.8.15.2/C.8.19.2)
     /// En el cas d'imatges Enhanced CT/MR l'omplirem amb el valor FrameType contingut al functional group CT/MR Image Frame Type
     QString m_imageType;
-    
+
     /**
         Vista radiogràfica associada a Patient Position. El trobem als mòduls CR Series (C.8.1.1) i DX Positioning (C.8.11.5)
         Valors definits:
@@ -292,7 +292,7 @@ private:
         LLO = Left Lateral Oblique
     */
     QString m_viewPosition;
-    
+
     /**
         Lateralitat de la possiblement aparellada part del cos examinada.
         El trobem als mòduls DX Anatomy (C.8.11.2), Mammography Image (C.8.11.7), Intra-oral Image (C.8.11.9) i Ocular Region Imaged (C.8.17.5)
@@ -304,17 +304,17 @@ private:
         B = both left and right
     */
     QChar m_imageLaterality;
-    
+
     /**
-        Descripció del tipus de vista de la imatge. El seu ús l'aplicarem bàsicament pels casos de mammografia definits a 
+        Descripció del tipus de vista de la imatge. El seu ús l'aplicarem bàsicament pels casos de mammografia definits a
         PS 3.16 - Context ID 4014 (cranio-caudal, medio-lateral oblique, etc...) però podríem extendre el seu ús a d'altres tipus d'imatge
         que també fan ús d'aquest tag per guardar aquest tipus d'informació amb altres possibles valors específics.
     */
     QString m_viewCodeMeaning;
-    
+
     /// Número de frame
     int m_frameNumber;
-    
+
     /// Número de fase de la imatge
     int m_phaseNumber;
 
@@ -326,7 +326,7 @@ private:
 
     /// Moment en el que es va crear el pixel data
     QString m_imageTime;
-    
+
     // TODO C.7.6.5 CINE MODULE: Multi-frame Cine Image
     /// Atributs NO-DICOM
 

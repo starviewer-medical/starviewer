@@ -32,7 +32,7 @@ void DatabaseConnection::open()
     // de dades, per tant no es pot fer cap consulta. Indicant el busy_timeout a 10000 ms el que fem, és que si tenim una
     // setència contra sqlite que es troba la bd o una taula bloquejada, va fent intents cada x temps per mirar si continua
     // bloqueja fins a 15000ms una vegada passat aquest temps dona errora de taula o base de dades bloquejada
-    
+
     sqlite3_busy_timeout(m_databaseConnection, 15000);
 }
 

@@ -10,19 +10,17 @@ class QTcpServer;
 
 namespace udg {
 
-/** Classe que s'encarrega d'escolta per un port especificat a la configuració peticions d'un RIS i atendre les peticions d'aquests
-*/
-
+/**
+    Classe que s'encarrega d'escolta per un port especificat a la configuració peticions d'un RIS i atendre les peticions d'aquests
+  */
 class ListenRISRequests : public QObject {
 Q_OBJECT
 public:
-
     enum ListenRISRequestsError { RisPortInUse, UnknownNetworkError };
 
     ListenRISRequests();
 
 public slots:
-
     /// Inicia l'escolta de peticions del RIS a través del port que s'ha establet a la configuració
     void listen();
 
@@ -37,11 +35,9 @@ signals:
     void errorListening(ListenRISRequests::ListenRISRequestsError);
 
 private slots:
-
     void newRISRequest();
 
-private :
-
+private:
     /// Processa la petició rebuda del RIS
     void processRequest(QString risRequestData);
 

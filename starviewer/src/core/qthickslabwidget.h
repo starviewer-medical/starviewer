@@ -8,8 +8,8 @@ namespace udg {
 class Q2DViewer;
 
 /**
-Widget per controlar el Thick Slab d'un Q2DViewer
-*/
+    Widget per controlar el Thick Slab d'un Q2DViewer
+  */
 class QThickSlabWidget : public QWidget, private Ui::QThickSlabWidgetBase {
 Q_OBJECT
 public:

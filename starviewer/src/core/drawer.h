@@ -11,7 +11,7 @@ class DrawerPrimitive;
 
 /**
     Classe encarregada de pintar els objectes de primitiva gràfica en el viewer assignat
-*/
+  */
 class Drawer : public QObject {
 Q_OBJECT
 public:

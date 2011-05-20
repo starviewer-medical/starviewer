@@ -18,7 +18,7 @@ namespace udg {
     ExtensionFactoryRegister<ExtensionName> registerAs("Extension Identifier");
     @endcode
     Amb aquesta simple línia de codi ja tenim registrada la nostra extensió en el factory.
-*/
+  */
 template <class FactoryType>
 class ExtensionFactoryRegister : public GenericSingletonFactoryRegister<QWidget, FactoryType, QString, ExtensionFactory, QWidget> {
 public:

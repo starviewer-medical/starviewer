@@ -75,7 +75,7 @@ bool StarviewerApplicationCommandLine::parseAndRun(QStringList arguments, QStrin
         {
             if (commandLineOptions.isSet(accessionNumberOption))
             {
-                QPair<StarviewerCommandLineOption, QString> 
+                QPair<StarviewerCommandLineOption, QString>
                     commandLineOptionValue(retrieveStudyFromAccessioNumber, commandLineOptions.getOptionArgument(accessionNumberOption));
 
                 AddOptionToCommandLineOptionListToProcess(commandLineOptionValue);

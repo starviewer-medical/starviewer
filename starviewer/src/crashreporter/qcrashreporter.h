@@ -6,8 +6,9 @@
 
 namespace udg {
 
-/** Aquesta classe és l'encarregada de fer tota la gestió del crash reporter. Bàsicament el que fa és informar a l'usuari que l'aplicació ha petat,
-  * permet veure la trama del problema i enviar la informació a l'equip de desenvolupament si ho creu oportú.
+/** 
+    Aquesta classe és l'encarregada de fer tota la gestió del crash reporter. Bàsicament el que fa és informar a l'usuari que l'aplicació ha petat,
+    permet veure la trama del problema i enviar la informació a l'equip de desenvolupament si ho creu oportú.
   */
 class QCrashReporter : public QWidget, Ui::QCrashReporterBase {
 Q_OBJECT

@@ -6,12 +6,11 @@
 namespace udg {
 
 /**
- * Color amb les components representades en coma flotant.
- */
+    Color amb les components representades en coma flotant.
+  */
 class HdrColor {
 
 public:
-
     /// Crea un color (0, 0, 0, 0).
     HdrColor();
     /// Crea un color amb els paràmetres desitjats.

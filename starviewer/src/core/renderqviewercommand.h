@@ -8,11 +8,10 @@ namespace udg {
 class Q2DViewer;
 
 /**
-  Command de Q2Viewer que realitza un render() del viewer.
+    Command de Q2Viewer que realitza un render() del viewer.
   */
-
 class RenderQViewerCommand : public QViewerCommand {
-    Q_OBJECT
+Q_OBJECT
 public:
     RenderQViewerCommand(Q2DViewer *viewer, QObject *parent = 0);
 

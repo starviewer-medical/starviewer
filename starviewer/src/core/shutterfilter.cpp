@@ -516,7 +516,7 @@ vtkImageData *ShutterFilter::getOutput()
                 circularStencil->SetInput(polygonalStencil->GetOutput());
             }
             // Sinó mire si n'hi de rectamgular per concatenar
-            else if (rectangularStencil) 
+            else if (rectangularStencil)
             {
                 circularStencil->SetInput(rectangularStencil->GetOutput());
             }

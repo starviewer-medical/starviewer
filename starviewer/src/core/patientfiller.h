@@ -26,7 +26,7 @@ class DICOMTagReader;
     No es poden utilitzar els dos mètodes de processament alhora en el mateix fitxer.
 
     TODO De moment hi ha la limitiació de que es pressuposa que totes les imatges que se li passen són del mateix pacient.
-*/
+  */
 class PatientFiller : public QObject {
 Q_OBJECT
 public:

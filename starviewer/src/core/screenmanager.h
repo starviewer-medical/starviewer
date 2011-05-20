@@ -9,7 +9,8 @@ class QRect;
 
 namespace udg {
 
-/** Aquesta classe s'utilitza per dues funcionalitats principals, maximitzar una finestra quan hi ha múltiples pantalles,
+/**
+    Aquesta classe s'utilitza per dues funcionalitats principals, maximitzar una finestra quan hi ha múltiples pantalles,
     i moure una finestra d'una pantalla a una altra.
     El seu funcionament bàsic és a través dels mètodes maximize i moveToDesktop, als que se li passa la finestra a tractar.
   */

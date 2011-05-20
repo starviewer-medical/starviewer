@@ -16,7 +16,7 @@ class vtkImageActor;
 class vtkImageData;
 // Grayscale pipeline
 // Permet aplicar window/level amb imatges a color
-class vtkImageMapToWindowLevelColors2; 
+class vtkImageMapToWindowLevelColors2;
 // Thick Slab
 class vtkProjectionImageFilter;
 
@@ -32,7 +32,6 @@ class VolumeReaderJob;
 class QViewerCommand;
 
 /**
-
     Classe base per als visualitzadors 2D.
 
     El mode d'operació habitual serà el de visualitar un sol volum.
@@ -51,7 +50,7 @@ class QViewerCommand;
     Podem escollir quines annotacions textuals i de referència apareixeran en la vista 2D a través dels flags "AnnotationFlags" definits com enums.
     Aquests flags es poden passar en el constructor o els podem modificar a través dels mètodes \c addAnnotation() o \c removeAnnotation()
     que faran visible o invisible l'anotació indicada. Per defecte el flag és \c AllAnnotation i per tant es veuen totes les anotacions per defecte.
-*/
+  */
 class Q2DViewer : public QViewer {
 Q_OBJECT
 public:

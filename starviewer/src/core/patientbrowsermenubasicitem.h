@@ -6,8 +6,8 @@
 namespace udg {
 
 /**
-Widget per utilitzar com a item de menú. Pot representar diversos objectes i te la funcionalitat de canviar l'aparença al situar-se el mouse sobre l'element.
-*/
+    Widget per utilitzar com a item de menú. Pot representar diversos objectes i te la funcionalitat de canviar l'aparença al situar-se el mouse sobre l'element.
+  */
 class PatientBrowserMenuBasicItem : public QLabel {
 Q_OBJECT
 public:

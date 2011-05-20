@@ -77,7 +77,7 @@ QString SettingsParser::parse(const QString &stringToParse)
             if (maskRegExp.indexIn(capturedMask) != -1)
             {
                 // Nombre de caràcters a truncar
-                truncate = maskRegExp.cap(1).toInt(); 
+                truncate = maskRegExp.cap(1).toInt();
                 // Trunquem
                 maskedString = QString(m_parseableStringsTable.value(keyToReplace)).right(truncate);
                 // Si hi ha caràcter de padding, tractem de fer el padding

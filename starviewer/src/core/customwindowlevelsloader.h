@@ -7,9 +7,8 @@
 namespace udg {
 
 /**
-   Classe encarregada de recuperar els arxius XML que contenen la informació referent als custom window levels
-*/
-
+    Classe encarregada de recuperar els arxius XML que contenen la informació referent als custom window levels
+  */
 class CustomWindowLevelsLoader {
 
 public:

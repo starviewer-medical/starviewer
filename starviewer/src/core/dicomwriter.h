@@ -9,16 +9,13 @@ class DICOMValueAttribute;
 class DICOMSequenceAttribute;
 
 /**
-
-Interfície per l'escriptura de fitxers DICOM.
-El mètode \sa newInstance és l'encarregat de crear una instància de les classes d'implementació que es decideix
-tenint en compte un parametre de configuració.
-
-*/
+    Interfície per l'escriptura de fitxers DICOM.
+    El mètode \sa newInstance és l'encarregat de crear una instància de les classes d'implementació que es decideix
+    tenint en compte un parametre de configuració.
+  */
 class DICOMWriter {
 
 public:
-
     virtual ~DICOMWriter();
 
     /// Crea una nova instància d'alguna de les classes que implementa la interfície

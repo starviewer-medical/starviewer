@@ -9,8 +9,8 @@ class Patient;
 class Volume;
 
 /**
-Contexte on s'executa una extensió. Permet accedir a informació que pot ser útil a l'extensió com l'objecte Patient, la finestra on s'executa, els "readers"..
-*/
+    Contexte on s'executa una extensió. Permet accedir a informació que pot ser útil a l'extensió com l'objecte Patient, la finestra on s'executa, els "readers"..
+  */
 class ExtensionContext{
 public:
     ExtensionContext();

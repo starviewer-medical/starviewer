@@ -9,12 +9,11 @@
 namespace udg {
 
 /**
- * És un voxel shader que pinta el volum amb il·luminació ambient.
- */
+    És un voxel shader que pinta el volum amb il·luminació ambient.
+  */
 class AmbientVoxelShader : public VoxelShader {
 
 public:
-
     AmbientVoxelShader();
     virtual ~AmbientVoxelShader();
 
@@ -37,7 +36,6 @@ public:
     virtual QString toString() const;
 
 protected:
-
     /// Omple la taula de colors ambient.
     void precomputeAmbientColors();
 

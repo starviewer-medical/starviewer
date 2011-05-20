@@ -11,7 +11,7 @@ namespace udg {
     @code
     InstallExtension<3DMPRExtension, 3DMPRExtensionMediator> registerMe;
     @endcode
-*/
+  */
 template <class Extension, class Mediator>
 class InstallExtension {
 public:

@@ -27,12 +27,10 @@ namespace udg {
     ...
     Volume* m_volume = m_volumeRepository->getVolume(id);
     \endcode
-*/
-
+  */
 class VolumeRepository : public Repository<Volume> {
 Q_OBJECT
 public:
-
     /// Afegeix un volum al repositori.
     /// Ens retorna l'id del volum afegit per poder-lo obtenir més endavant.
     Identifier addVolume(Volume *model);

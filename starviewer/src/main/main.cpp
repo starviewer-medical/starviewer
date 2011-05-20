@@ -122,7 +122,7 @@ int main(int argc, char *argv[])
 {
     // Utilitzem QtSingleApplication en lloc de QtApplication, ja que ens permet tenir executant sempre una sola instància d'Starviewer, si l'usuari executa
     // una nova instància d'Starviewer aquesta ho detecta i envia la línia de comandes amb que l'usuari ha executat la nova instància principal.
-    
+
     QtSingleApplication app(argc, argv);
 
     QPixmap splashPixmap;
@@ -246,7 +246,7 @@ int main(int argc, char *argv[])
                          &app, SLOT(quit()));
         splash.close();
 
-        // S'ha esperat a tenir-ho tot carregat per processar els aguments rebuts per línia de comandes, d'aquesta manera per exemoke si en llança algun 
+        // S'ha esperat a tenir-ho tot carregat per processar els aguments rebuts per línia de comandes, d'aquesta manera per exemoke si en llança algun
         // QMessageBox, ja es llança mostrant-se la MainWindow.
         if (commandLineArgumentsList.count() > 1)
         {

@@ -18,10 +18,9 @@ class vtkImageData;
 namespace udg {
 
 /**
-  Classe que té com a responsabilitat mantenir el pixel data d'un Volume.
-  El pixel data d'un volume és el lloc de memòria on es guarden els diferents valors de voxel d'un Volume.
+    Classe que té com a responsabilitat mantenir el pixel data d'un Volume.
+    El pixel data d'un volume és el lloc de memòria on es guarden els diferents valors de voxel d'un Volume.
   */
-
 class VolumePixelData : public QObject {
 Q_OBJECT
 public:

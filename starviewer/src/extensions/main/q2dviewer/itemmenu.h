@@ -10,10 +10,9 @@ class QEvent;
 namespace udg {
 
 /**
-Item de menu. Envia un senyal quan esta activat i quan és seleccinat. Així com canvia de color al estar activat. Pot guardar informació del tipus QVariant.
-També es pot escollir el comportament del canvi de color.
-*/
-
+    Item de menu. Envia un senyal quan esta activat i quan és seleccinat. Així com canvia de color al estar activat. Pot guardar informació del tipus QVariant.
+    També es pot escollir el comportament del canvi de color.
+  */
 class ItemMenu : public QFrame {
 Q_OBJECT
 public:
@@ -34,7 +33,6 @@ public:
     void setSelected(bool option);
 
 signals:
-
     /// Signal que s'emet al entrar el mouse al widget
     void isActive(ItemMenu *);
 
@@ -42,12 +40,10 @@ signals:
     void isSelected(ItemMenu *);
 
 protected:
-
     /// Sobrecàrrega del mètode que tracta tots els events
     bool event(QEvent *event);
 
 protected:
-
     /// Dades que pot guardar el widget
     QString m_data;
 

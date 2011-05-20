@@ -19,7 +19,7 @@ class Study;
 
     La classe conté tot tipu d'informació relacionada amb la sèrie d'un pacient. Una sèrie pot equivaler a un o més volums,
     per tant tindrem la llista de Volums corresponents a la sèrie.
-*/
+  */
 class Series : public QObject {
 Q_OBJECT
 public:

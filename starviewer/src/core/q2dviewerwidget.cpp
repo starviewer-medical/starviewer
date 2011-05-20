@@ -195,7 +195,7 @@ void Q2DViewerWidget::updateSlider()
 
 void Q2DViewerWidget::resetSliderRangeAndValue()
 {
-    m_slider->setMaximum(m_2DView->getMaximumSlice() - m_2DView->getSlabThickness()+ 1);
+    m_slider->setMaximum(m_2DView->getMaximumSlice() - m_2DView->getSlabThickness() + 1);
     m_slider->setValue(m_2DView->getCurrentSlice());
 }
 

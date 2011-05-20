@@ -16,7 +16,7 @@ class Q3DViewer;
     Tool que permet manipular els plans de tall en un visor 3D
     Mostra un widget que permet rotar, traslladar i manipular els plans de
     la bounding box del volum del visor 3D
-*/
+  */
 class ClippingPlanesTool : public Tool {
 Q_OBJECT
 public:

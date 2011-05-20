@@ -68,7 +68,6 @@ private slots:
     void studyRetrieveFailed(QString studyInstanceUID);
 
 private:
-
     /// Enumeració creada per tal de saber si els signals que emet QueryScreen pertanyen a alguna de les peticions d'aquesta classe
     enum Status { Initialized, Pending, Downloading, Finished, Failed };
     enum Columns { DownloadingStatus = 0, DownloadButton = 1, Modality = 2, Description = 3, Date = 4, Name = 5 };

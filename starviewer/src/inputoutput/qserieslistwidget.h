@@ -8,9 +8,6 @@
 
 namespace udg {
 
-/** Aquesta classe és un widget millorat del ListWidget de QT, fet  modificat per poder mostrar les sèries d'un estudi.
-*/
-
 class Series;
 
 /// Mida de la imatge escalada a l'eix x
@@ -18,6 +15,9 @@ const int scaledSeriesSizeX = 100;
 /// Mida de la imatge escalada a l'eix y
 const int scaledSeriesSizeY = 100;
 
+/**
+    Aquesta classe és un widget millorat del ListWidget de QT, fet  modificat per poder mostrar les sèries d'un estudi.
+  */
 class QSeriesListWidget : public QWidget, private Ui::QSeriesListWidgetBase {
 Q_OBJECT
 public:
@@ -61,7 +61,6 @@ signals:
     void viewSeriesIcon();
 
 private:
-
     /// Guardem per cada sèrie a quin estudi pertany
     QHash<QString, QString> m_HashSeriesStudy;
     /// Modalitats de sèries que no són images, com (KO, PR, SR)

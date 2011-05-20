@@ -12,12 +12,11 @@ class vtkEncodedGradientEstimator;
 namespace udg {
 
 /**
- * És un voxel shader que pinta un contorn negre en funció d'un paràmetre.
- */
+    És un voxel shader que pinta un contorn negre en funció d'un paràmetre.
+  */
 class ContourVoxelShader : public VoxelShader {
 
 public:
-
     ContourVoxelShader();
     virtual ~ContourVoxelShader();
 
@@ -40,7 +39,6 @@ public:
     virtual QString toString() const;
 
 protected:
-
     unsigned short *m_encodedNormals;
     vtkDirectionEncoder *m_directionEncoder;
     double m_threshold;

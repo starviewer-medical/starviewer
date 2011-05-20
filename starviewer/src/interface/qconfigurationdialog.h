@@ -10,7 +10,7 @@ namespace udg {
 
 /**
     Classe que implementa el diàleg de configuració de l'aplicació.
-*/
+  */
 class QConfigurationDialog : public QDialog, private ::Ui::QConfigurationDialogBase {
 Q_OBJECT
 public:

@@ -10,13 +10,13 @@ namespace udg {
 
 class Status;
 
-/** Classe que proporciona la connexió a la base dades. Utilitzant aquesta classe no cal preocupar-se d'obrir o tancar la connexió a la BD, ja que es fa
-  * automàticament per aquest classe, quan s'invoca el mètode getConnection() si no hi ha cap connexió oberta l'obre i quan es destrueix l'objecte es tanca
-  *la connexió (és important recordar que cal sempre DESTRUIR l'objecte DatabaseConnection perquè sinó no es tancarà la connexió.
+/** 
+    Classe que proporciona la connexió a la base dades. Utilitzant aquesta classe no cal preocupar-se d'obrir o tancar la connexió a la BD, ja que es fa
+    automàticament per aquest classe, quan s'invoca el mètode getConnection() si no hi ha cap connexió oberta l'obre i quan es destrueix l'objecte es tanca
+    la connexió (és important recordar que cal sempre DESTRUIR l'objecte DatabaseConnection perquè sinó no es tancarà la connexió.
   */
 class DatabaseConnection {
 public:
-
     /// Constructor de la classe
     DatabaseConnection();
 
@@ -63,8 +63,7 @@ private:
     /// @return indica si s'esta connectat a la base de dades
     bool isConnected();
 
-private :
-
+private:
     sqlite3 *m_databaseConnection;
     /// Sqlite només permet una transacció a la vegada amb la mateixa connexió, en un futur tenen previst permetre-ho però ara mateix
     /// no per tant per assegurar que no tenim dos transaccions a la vegada implantem aquests semàfor

@@ -9,15 +9,14 @@
 namespace udg {
 
 /**
- * Vector de dimensió 3.
- *
- * Inclou tots els mètodes per treballar amb vectors 3D amb components reals.
- */
+    Vector de dimensió 3.
+
+    Inclou tots els mètodes per treballar amb vectors 3D amb components reals.
+  */
 template <class T>
 class TVector3 {
 
 public:
-
     /// Retorna el producte escalar dels vectors.
     static T dot(const TVector3<T> &v1, const TVector3<T> &v2);
     /// Retorna el producte vectorial dels vectors.
@@ -59,11 +58,11 @@ public:
     /// Resta els vectors, assigna el resultat sobre l'actual i el retorna per referència.
     TVector3<T>& operator -=(const TVector3<T> &v);
     /// Retorna el producte escalar dels vectors.
-    
+
     // Producte escalar
     T operator *(const TVector3<T> &v) const;
     /// Retorna el producte vectorial dels vectors.
-    
+
     // Producte vectorial
     TVector3<T> operator ^(const TVector3<T> &v) const;
 
@@ -95,7 +94,6 @@ public:
     friend QDataStream& operator <<(QDataStream &out, const TVector3<C> &v);
 
 public:
-
     /// Components del vector.
     T x, y, z;
 

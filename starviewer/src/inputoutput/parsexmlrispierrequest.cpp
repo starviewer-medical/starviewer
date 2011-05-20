@@ -114,7 +114,6 @@ void ParseXmlRisPIERRequest::parseTagParam(QXmlStreamReader *xmlReader, DicomMas
 
     // <Param Name="AccessionNumber">00239RS00006780</Param>
 
-
     // Només processem el tipus de paràmetre que ens informa del valor de l'accession number, no cal processar-ne cap més
     // perquè el RIS PIER només envia aquest
     if (xmlReader->attributes().value("Name").toString().compare("AccessionNumber", Qt::CaseInsensitive) == 0)

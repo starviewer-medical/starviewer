@@ -12,10 +12,8 @@ class vtkPolyDataMapper;
 namespace udg {
 
 /**
- *
- *  Primitiva de punt
- *
- */
+    Primitiva de punt
+  */
 class DrawerPoint : public DrawerPrimitive {
 Q_OBJECT
 public:

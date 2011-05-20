@@ -135,7 +135,7 @@ int WindowLevelPresetsToolData::getFileDefinedPresetIndex(const QString &preset)
 
 void WindowLevelPresetsToolData::setCustomWindowLevel(double window, double level)
 {
-    WindowLevelStruct data = {window, level, CustomPreset};
+    WindowLevelStruct data = { window, level, CustomPreset };
     m_presets.insert(tr("Custom"), data);
     emit currentWindowLevel(window, level);
     emit presetChanged(tr("Custom"));

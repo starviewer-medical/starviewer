@@ -40,8 +40,8 @@ void PrintDicomSpool::printBasicGrayscale(DicomPrinter dicomPrinter, DicomPrintJ
     //     tot i que indicar en el seu conformance que suportaven transfer syntax explicit, alhora de la veritat tenien problemes, per això
     //     existeix un paràmetre per indicar només de comunicar-se amb Implicit, com que de moment no ens hem de comunicar amb dispositius vells
     //     i tots els moderns suporten Explicit indiquem false
-    result = printerConnection.negotiateAssociation(NULL, qPrintable(Settings().getValue(InputOutputSettings::LocalAETitle).toString()), 
-                                                    qPrintable(m_dicomPrinter.getAETitle()), qPrintable(m_dicomPrinter.getHostname()), 
+    result = printerConnection.negotiateAssociation(NULL, qPrintable(Settings().getValue(InputOutputSettings::LocalAETitle).toString()),
+                                                    qPrintable(m_dicomPrinter.getAETitle()), qPrintable(m_dicomPrinter.getHostname()),
                                                     m_dicomPrinter.getPort(), ASC_DEFAULTMAXPDU, printerSupportsPresentationLUTSOPClass,
                                                     printerSupportsAnnotationSOPClass, transferSyntaxImplicit);
 

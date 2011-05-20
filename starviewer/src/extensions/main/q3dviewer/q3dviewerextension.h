@@ -24,7 +24,6 @@ class ToolManager;
 class Q3DViewerExtension : public QWidget, private ::Ui::Q3DViewerExtensionBase {
 Q_OBJECT
 public:
-
     Q3DViewerExtension(QWidget *parent = 0);
     virtual ~Q3DViewerExtension();
 
@@ -32,7 +31,6 @@ public:
     void setInput(Volume *input);
 
 public slots:
-
     /// Aplica una funció de transferència predefinida a la visualització.
     void applyPresetClut(const QString & clutName);
 
@@ -51,7 +49,6 @@ public slots:
     void updateView(bool fast = true);
 
 signals:
-
     void newTransferFunction();
 
 private:
@@ -75,7 +72,6 @@ private:
     void disableAutoUpdate();
 
 private slots:
-
     void render();
     void autoCancelObscurance();
     void loadClut();

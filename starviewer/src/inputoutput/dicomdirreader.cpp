@@ -133,7 +133,7 @@ Status DICOMDIRReader::readStudies(QList<Patient*> &outResultsStudyList, DicomMa
         {
             delete patient;
         }
-        
+
         // Accedim al següent pacient del dicomdir
         patientRecord = root->nextSub(patientRecord);
     }
@@ -474,7 +474,7 @@ bool DICOMDIRReader::matchDicomMaskToStudyDate(DicomMask *mask, Study *study)
     QString maskStudyDate = mask->getStudyDate(), studyDate = study->getDate().toString("yyyyMMdd");
 
     if (maskStudyDate.length() > 0)
-    { 
+    {
         // Si hi ha màscara de data
         // la màscara de la data per DICOM segueix els formats :
         //  -  "YYYYMMDD-YYYYMMDD", per indicar un rang de dades

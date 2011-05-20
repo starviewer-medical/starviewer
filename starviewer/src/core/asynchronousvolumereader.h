@@ -15,14 +15,14 @@ class VolumeReaderJob;
 class Volume;
 
 /**
-  Classe que permet llegir el pixel data d'un volume asíncronament.
-  Tal i com està ara, necessita que aquesta es mantingui "viva" fins que el job de càrrega retorni
-  com a finalitzat. Si es destrueix l'objecte abans, el comportament pot ser indefinit.
-  Aquesta classe no es pot cridar de forma concurrent des de diferents threads.
+    Classe que permet llegir el pixel data d'un volume asíncronament.
+    Tal i com està ara, necessita que aquesta es mantingui "viva" fins que el job de càrrega retorni
+    com a finalitzat. Si es destrueix l'objecte abans, el comportament pot ser indefinit.
+    Aquesta classe no es pot cridar de forma concurrent des de diferents threads.
   */
 
 class AsynchronousVolumeReader : public QObject {
-    Q_OBJECT
+Q_OBJECT
 public:
     explicit AsynchronousVolumeReader(QObject *parent = 0);
 

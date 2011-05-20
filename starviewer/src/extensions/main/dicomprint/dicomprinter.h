@@ -5,15 +5,13 @@
 #include <QStringList>
 #include <QList>
 
-/**
-  * Implementació de la interfície Printer per una impressora del tipus Dicom
-  */
-
 namespace udg {
 
+/**
+    Implementació de la interfície Printer per una impressora del tipus Dicom
+  */
 class DicomPrinter {
 public:
-
     DicomPrinter();
 
     /// Afegeix l'ID de l'impressora
@@ -254,13 +252,11 @@ public:
     bool getIsDefault() const;
 
 private:
-
     /// Mètode que retorna el número de columnes i files del layout, s'implementa en un sol mètode per no tenir codi duplicat
     /// si s'implementés un mètode per obtenir el número de columnes i una altre per obtenir el número de files
     void getDefaultFilmLayoutColumnsRows(int &colums, int &rows);
 
 private:
-
     QString m_name;
     QString m_type;
     QString m_description;

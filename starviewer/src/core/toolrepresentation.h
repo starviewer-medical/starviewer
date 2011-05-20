@@ -10,8 +10,8 @@ class DrawerPrimitive;
 class Drawer;
 
 /**
-Classe contenidor de ToolRepresentation
-*/
+    Classe contenidor de ToolRepresentation
+  */
 class ToolRepresentation : public QObject {
 Q_OBJECT
 public:

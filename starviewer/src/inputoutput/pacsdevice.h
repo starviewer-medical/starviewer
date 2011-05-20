@@ -6,28 +6,27 @@
 namespace udg {
 
 /**
- * Classe que encapsula els paràmetres necessaris per definir un servidor PACS al qual connectar-nos
- * Aquests paràmetres són:
- *
- * Dades de connexió (imprescindibles)
- *      - AETitle del PACS
- *      - IP del servidor PACS
- *      - Port de connexió del PACS
- *
- * Dades Descriptives (opcionals)
- *      - Institució a la que pertany el PACS
- *      - Descripció del PACS
- *      - Ubicació del PACS
- *
- * Altres dades
- *      - AETitle de la màquina local
- *      - Nombre màxim de connexions simultànies
- *      - Timeout de la connexió
- *      - Port Local de Query/Retrieve
- * TODO aquestes dades s'haurien de reubicar en un lloc més adient ja que són
- * les mateixes per a qualsevol connexió amb un PACS i per tant no haurien de formar part d'aquesta classe
- *
- */
+    Classe que encapsula els paràmetres necessaris per definir un servidor PACS al qual connectar-nos
+    Aquests paràmetres són:
+
+    Dades de connexió (imprescindibles)
+       - AETitle del PACS
+       - IP del servidor PACS
+       - Port de connexió del PACS
+
+    Dades Descriptives (opcionals)
+       - Institució a la que pertany el PACS
+       - Descripció del PACS
+       - Ubicació del PACS
+
+    Altres dades
+       - AETitle de la màquina local
+       - Nombre màxim de connexions simultànies
+       - Timeout de la connexió
+       - Port Local de Query/Retrieve
+    TODO aquestes dades s'haurien de reubicar en un lloc més adient ja que són
+    les mateixes per a qualsevol connexió amb un PACS i per tant no haurien de formar part d'aquesta classe
+  */
 class PacsDevice {
 public:
     PacsDevice();

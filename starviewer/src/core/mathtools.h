@@ -4,12 +4,10 @@
 namespace udg{
 
 /**
- *
- *  Aquesta classe és un recull de funcions matemàtiques de caràcter general.
- *  Inclou la declaració de constants (Pi, Nombre E, ...), operacions aritmètiques,
- *  operacions amb vectors, etc.
- *
- */
+    Aquesta classe és un recull de funcions matemàtiques de caràcter general.
+    Inclou la declaració de constants (Pi, Nombre E, ...), operacions aritmètiques,
+    operacions amb vectors, etc.
+  */
 class MathTools {
 public:
     enum IntersectionResults { ParallelLines, SkewIntersection, LinesIntersect };

@@ -31,7 +31,7 @@ WindowLevelPresetsTool::WindowLevelPresetsTool(QViewer *viewer, QObject *parent)
     m_characterIndexMap.insert('0', 9);
     // TODO això ara "va bé" en un teclat estàndard espanyol, però si el layout és per exemple anglès
     // té molts números per no funcionar (és a dir, les tecles estaran repartides per altres parts del teclat)
-    
+
     // Shift + 1
     m_characterIndexMap.insert(33, 10);
     // Shift + 2

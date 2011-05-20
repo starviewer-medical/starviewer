@@ -281,7 +281,7 @@ DynamicMatrix ScreenManager::computeScreenMatrix(QWidget *window)
         QList<int> topRow;
         int index = indexLeft;
         // Si hem de mirar la fila de sobre true altrament false
-        bool rowFound = keepLookingUp; 
+        bool rowFound = keepLookingUp;
         while (keepLookingUp && index <= indexRight)
         {
             bool found = false;

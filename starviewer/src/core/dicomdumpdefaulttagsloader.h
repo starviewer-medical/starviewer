@@ -7,10 +7,9 @@
 namespace udg {
 
 /**
-   Classe encarregada de recuperar els arxius XML que contenen la informació referent als Default Tags que s'han
-   d'utilitzar pel DICOMDump.
-*/
-
+    Classe encarregada de recuperar els arxius XML que contenen la informació referent als Default Tags que s'han
+    d'utilitzar pel DICOMDump.
+  */
 class DICOMDumpDefaultTagsLoader {
 
 public:

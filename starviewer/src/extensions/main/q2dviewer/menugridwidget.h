@@ -11,14 +11,13 @@ class QLabel;
 
 namespace udg {
 
-/**
-    Classe que representa el menu desplegable per seleccionar el grid, amb opcions de grids predefinides.
-*/
-
 // FWD declarations
 class ItemMenu;
 class HangingProtocol;
 
+/**
+    Classe que representa el menu desplegable per seleccionar el grid, amb opcions de grids predefinides.
+  */
 class MenuGridWidget : public QWidget {
 Q_OBJECT
 public:

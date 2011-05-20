@@ -12,7 +12,7 @@ class VolumePixelData;
     Aquesta classe únicament actuarà d'interfície pels diferents possibles motors de lectura
     que podem tenir (itk, gdcm, dcmtk, etc).
     Les dades es retornaran en format vtkImageData.
- */
+  */
 class VolumePixelDataReader : public QObject {
 Q_OBJECT
 public:

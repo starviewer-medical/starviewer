@@ -143,7 +143,7 @@ double PolylineTemporalROITool::computeTemporalMean()
     int currentView = m_2DViewer->getView();
 
     // El nombre de segments és el mateix que el nombre de punts del polígon
-    int numberOfSegments = m_roiPolygon->getNumberOfPoints()-1;
+    int numberOfSegments = m_roiPolygon->getNumberOfPoints() - 1;
 
     // Taula de punters a vtkLine per a representar cadascun dels segments del polígon
     QVector<vtkLine*> segments;
@@ -156,7 +156,7 @@ double PolylineTemporalROITool::computeTemporalMean()
         line->GetPoints()->SetNumberOfPoints(2);
 
         const double *p1 = m_roiPolygon->getVertix(i);
-        const double *p2 = m_roiPolygon->getVertix(i+1);
+        const double *p2 = m_roiPolygon->getVertix(i + 1);
 
         line->GetPoints()->InsertPoint(0, p1);
         line->GetPoints()->InsertPoint(1, p2);
@@ -258,9 +258,9 @@ double PolylineTemporalROITool::computeTemporalMean()
             }
         }
 
-        if ((intersectionList.count() % 2)==0)
+        if ((intersectionList.count() % 2) == 0)
         {
-            int limit = intersectionList.count()/2;
+            int limit = intersectionList.count() / 2;
             for (i = 0; i < limit; i++)
             {
                 initialPosition = i * 2;
@@ -277,7 +277,7 @@ double PolylineTemporalROITool::computeTemporalMean()
                     while (firstIntersection[intersectionIndex] <= secondIntersection[intersectionIndex])
                     {
                         aux = this->getGraySerie(firstIntersection, temporalSize);
-                        for (j=0;j<temporalSize;j++)
+                        for (j = 0; j < temporalSize; j++)
                         {
                             mean[j] += aux[j];
                         }
@@ -286,12 +286,12 @@ double PolylineTemporalROITool::computeTemporalMean()
                     }
                 }
                 // De dreta cap a esquerra
-                else 
+                else
                 {
                     while (firstIntersection[intersectionIndex] >= secondIntersection[intersectionIndex])
                     {
                         aux = this->getGraySerie(firstIntersection, temporalSize);
-                        for (j=0;j<temporalSize;j++)
+                        for (j = 0; j < temporalSize; j++)
                         {
                             mean[j] += aux[j];
                         }
@@ -319,7 +319,7 @@ double PolylineTemporalROITool::computeTemporalMean()
 
     // std::cout<<"Num of voxels:"<<numberOfVoxels<<std::endl;
 
-    for (j=0;j<temporalSize;j++)
+    for (j = 0; j < temporalSize; j++)
     {
         mean[j] /= numberOfVoxels;
         // std::cout<<"i: "<<j<<": "<<mean[j]<<std::endl;
@@ -346,14 +346,14 @@ QVector<double> PolylineTemporalROITool::getGraySerie(double *coords, int size)
     int i;
 
     Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
-    index[xIndex+1] = (int)((coords[xIndex] - origin[xIndex])/spacing[xIndex]);
-    index[yIndex+1] = (int)((coords[yIndex] - origin[yIndex])/spacing[yIndex]);
-    index[zIndex+1] = m_2DViewer->getCurrentSlice();
+    index[xIndex + 1] = (int)((coords[xIndex] - origin[xIndex])/spacing[xIndex]);
+    index[yIndex + 1] = (int)((coords[yIndex] - origin[yIndex])/spacing[yIndex]);
+    index[zIndex + 1] = m_2DViewer->getCurrentSlice();
 
-    for (i=0;i<size;i++)
+    for (i = 0; i < size; i++)
     {
-        index[0]=i;
-        v[i]= m_myData->getTemporalImage()->GetPixel(index);
+        index[0] = i;
+        v[i] = m_myData->getTemporalImage()->GetPixel(index);
     }
     return v;
 }

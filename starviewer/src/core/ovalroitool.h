@@ -9,7 +9,7 @@ class Q2DViewer;
 
 /**
     Tool per calcular l'àrea i la mitjana de grisos d'un òval
-*/
+  */
 class OvalROITool : public ROITool {
 Q_OBJECT
 public:

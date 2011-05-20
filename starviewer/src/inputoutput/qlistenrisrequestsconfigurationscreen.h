@@ -5,8 +5,9 @@
 
 namespace udg {
 
-/** Widget en el que es configuren els paràmetres de la Base de Dades local
-*/
+/**
+    Widget en el que es configuren els paràmetres de la Base de Dades local
+  */
 class QListenRisRequestsConfigurationScreen : public QWidget, private Ui::QListenRisRequestsConfigurationScreenBase {
 Q_OBJECT
 
@@ -26,7 +27,6 @@ signals:
     void configurationChanged(const QString& configuration);
 
 private slots:
-
     /// Slot que s'utilitza quant es fa algun canvi a la configuració, per activar els buttons apply
     void enableApplyButtons();
 

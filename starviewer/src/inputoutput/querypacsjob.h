@@ -18,13 +18,12 @@ class Series;
 class Image;
 class QueryPacs;
 
-/** Classe que cercar estudis en un dispositiu pacs, creant un nou job utilitzant les threadweaver
-*/
-
+/**
+    Classe que cercar estudis en un dispositiu pacs, creant un nou job utilitzant les threadweaver
+  */
 class QueryPacsJob : public PACSJob {
-    Q_OBJECT
+Q_OBJECT
 public:
-
     /// Indica a quin nivell fem la query
     enum QueryLevel { study, series, image };
 
@@ -62,16 +61,14 @@ public:
     /// Retorna una descripció de l'estat retornat per la consulta al PACS
     QString getStatusDescription();
 
-private :
-
+private:
     /// Demana que es cancel·li la consulta del job
     void requestCancelJob();
 
     /// Retorna el Query Level com a QString per poder generar els missatges d'error
     QString getQueryLevelAsQString();
 
-private :
-
+private:
     DicomMask m_mask;
     QueryPacs *m_queryPacs;
     QueryLevel m_queryLevel;

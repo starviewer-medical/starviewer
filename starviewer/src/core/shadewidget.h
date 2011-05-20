@@ -24,18 +24,14 @@
 #ifndef UDGSHADEWIDGET_H
 #define UDGSHADEWIDGET_H
 
-
 #include <QtGui>
-
 
 namespace udg {
 
-
 class HoverPoints;
 
-
 class ShadeWidget : public QWidget {
-    Q_OBJECT
+Q_OBJECT
 public:
     enum ShadeType {
         RedShade,
@@ -78,8 +74,6 @@ private:
     QLinearGradient m_alpha_gradient;
 };
 
-
 }
-
 
 #endif

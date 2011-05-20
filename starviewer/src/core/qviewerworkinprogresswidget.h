@@ -8,14 +8,14 @@ class QMovie;
 namespace udg {
 
 /**
-  Widget que s'encarrega de visualitzar el progrés d'alguna tasca que hi pugui haver en un QViewer.
-  Per exemple, el progrés de la càrrega d'un volum asíncrona, descàrrega de prèvies...
-  En el cas que alguna d'aquestes tasques doni error, dona l'opció de mostrar aquests errors en el mateix
-  widget.
+    Widget que s'encarrega de visualitzar el progrés d'alguna tasca que hi pugui haver en un QViewer.
+    Per exemple, el progrés de la càrrega d'un volum asíncrona, descàrrega de prèvies...
+    En el cas que alguna d'aquestes tasques doni error, dona l'opció de mostrar aquests errors en el mateix
+    widget.
   */
 
 class QViewerWorkInProgressWidget : public QWidget, private Ui::QViewerWorkInProgressWidget {
-    Q_OBJECT
+Q_OBJECT
 public:
     explicit QViewerWorkInProgressWidget(QWidget *parent = 0);
 

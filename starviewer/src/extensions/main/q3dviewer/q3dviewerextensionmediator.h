@@ -8,12 +8,11 @@
 namespace udg {
 
 /**
- * \author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.edu>
- */
+    \author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.edu>
+  */
 class Q3DViewerExtensionMediator : public ExtensionMediator {
-    Q_OBJECT
+Q_OBJECT
 public:
-
     Q3DViewerExtensionMediator(QObject *parent = 0);
     ~Q3DViewerExtensionMediator();
 

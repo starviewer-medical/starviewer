@@ -369,7 +369,7 @@ QPair<QAction*, QString> ToolRegistry::getActionToolPair(const QString &actionTo
     QString slot;
     QString statusTip;
     QString toolTip;
-    
+
     if (actionToolName == "RestoreActionTool")
     {
         action->setText(tr("Restore"));

@@ -317,7 +317,7 @@ void QLocalDatabaseConfigurationScreen::clearCache()
     {
         QMessageBox::critical(this, ApplicationNameString, tr("An error has occurred deleting studies from database, be sure you have write "
                                                               "permissions on database directory. ") +
-                                                           tr("\n\nClose all %1 windows and try again.").arg(ApplicationNameString) + 
+                                                           tr("\n\nClose all %1 windows and try again.").arg(ApplicationNameString) +
                                                            tr("If the problem persists contact with an administrator."));
     }
 }

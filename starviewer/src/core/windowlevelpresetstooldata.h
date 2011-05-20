@@ -23,7 +23,7 @@ namespace udg {
     La descripció serà tractada com a camp clau, per tant no hi poden haver dos presets amb el mateix nom.
 
     Per poder fer una diferenciació de la procedència de cada valor, es poden crear certs grups com ja s'ha anomenat abans.
-*/
+  */
 class WindowLevelPresetsToolData : public ToolData {
 Q_OBJECT
 public:
@@ -31,7 +31,7 @@ public:
     ~WindowLevelPresetsToolData();
 
     /// Etiquetes per cada agrupació de presets
-    enum GroupsLabel{AutomaticPreset, FileDefined, StandardPresets, UserDefined, CustomPreset, Other};
+    enum GroupsLabel { AutomaticPreset, FileDefined, StandardPresets, UserDefined, CustomPreset, Other };
 
     /**
      * Afegeix un nou preset. Si la operació es fa amb èxit s'emet un senyal donant la informació del preset.

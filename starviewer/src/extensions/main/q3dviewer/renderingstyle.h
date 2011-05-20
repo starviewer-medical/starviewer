@@ -6,12 +6,11 @@
 namespace udg {
 
 /**
- * Classe que encapsula tots els paràmetres de rendering.
- */
+    Classe que encapsula tots els paràmetres de rendering.
+  */
 class RenderingStyle {
 
 public:
-
     enum Method { RayCasting, Texture3D, Texture2D, MIP, IsoSurface, Contouring };
     enum ObscuranceQuality { Low, Medium, High };
 

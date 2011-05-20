@@ -13,7 +13,7 @@ class EditorToolData;
 
 /**
     Tool que serveix per editar el volum sobreposat en un visor 2D
-*/
+  */
 class EditorTool : public Tool {
 Q_OBJECT
 public:

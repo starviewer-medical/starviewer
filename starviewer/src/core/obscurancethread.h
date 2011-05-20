@@ -16,16 +16,14 @@ namespace udg {
 class Obscurance;
 
 /**
- * Thread que implementa els mètodes de càlcul d'obscurances.
- *
- * \author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.edu>
-*/
-class ObscuranceThread : public QThread {
+    Thread que implementa els mètodes de càlcul d'obscurances.
 
-    Q_OBJECT
+    \author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.edu>
+  */
+class ObscuranceThread : public QThread {
+Q_OBJECT
 
 public:
-
     ObscuranceThread(int id, int numberOfThreads, const TransferFunction & transferFunction, QObject *parent = 0);
     virtual ~ObscuranceThread();
 
@@ -39,11 +37,9 @@ public:
                                    const QVector<Vector3> & lineStarts, qptrdiff startDelta);
 
 protected:
-
     virtual void run();
 
 private:
-
     typedef ObscuranceMainThread::Voxel Voxel;
     typedef ObscuranceMainThread::Function Function;
     typedef ObscuranceMainThread::Variant Variant;

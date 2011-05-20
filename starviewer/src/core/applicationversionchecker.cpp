@@ -312,7 +312,7 @@ void ApplicationVersionChecker::writeSettings()
         if (version.count() > 3)
         {
             settings.setValue(CoreSettings::LastReleaseNotesVersionShown,
-                              version[0]+ "." + version[1] + "." + version[2]);
+                              version[0] + "." + version[1] + "." + version[2]);
         }
         else
         {
@@ -456,7 +456,7 @@ void ApplicationVersionChecker::webServiceReply(QNetworkReply *reply)
 
     bool result = reply->error() == QNetworkReply::NoError;
     // Si no error
-    if (result) 
+    if (result)
     {
         QString json(reply->readAll());
 

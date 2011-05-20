@@ -10,12 +10,11 @@
 namespace udg {
 
 /**
- * Voxel shader que aplica obscurances.
- */
+    Voxel shader que aplica obscurances.
+  */
 class ObscuranceVoxelShader : public VoxelShader {
 
 public:
-
     ObscuranceVoxelShader();
     virtual ~ObscuranceVoxelShader();
 
@@ -45,7 +44,6 @@ public:
     virtual QString toString() const;
 
 protected:
-
     /// Omple la taula d'opacitats.
     void precomputeAmbientColors();
 

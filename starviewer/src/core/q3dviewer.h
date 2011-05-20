@@ -30,8 +30,8 @@ class Obscurance;
 class ContourVoxelShader;
 
 /**
-Classe base per als visualitzadors 3D
-*/
+    Classe base per als visualitzadors 3D
+  */
 class Q3DViewer : public QViewer{
 Q_OBJECT
 public:

@@ -373,7 +373,7 @@ bool QInputOutputPacsWidget::AreValidQueryParameters(DicomMask *maskToQuery, QLi
     if (maskToQuery->isEmpty())
     {
         QMessageBox::StandardButton response;
-        response = QMessageBox::question(this, ApplicationNameString, tr("No search fields were filled.") + "\n" + 
+        response = QMessageBox::question(this, ApplicationNameString, tr("No search fields were filled.") + "\n" +
             tr("The query can take a long time.\nDo you want continue?"), QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
         return (response == QMessageBox::Yes);
     }

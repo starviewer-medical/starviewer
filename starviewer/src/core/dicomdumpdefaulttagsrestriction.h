@@ -8,8 +8,7 @@ namespace udg {
 
 /**
     Classe que ens implementa una restricció dels DefaultTags utilitzat en el DICOMDump
-*/
-
+  */
 class DICOMDumpDefaultTagsRestriction {
 
 public:

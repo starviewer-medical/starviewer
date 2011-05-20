@@ -62,7 +62,7 @@ const QString InputOutputSettings::DICOMDIRBurningApplicationPathKey(DICOMDIRBas
 const QString InputOutputSettings::DICOMDIRBurningApplicationParametersKey(DICOMDIRBaseKey + "DICOMDIRBurningApplicationParameters");
 const QString InputOutputSettings::DICOMDIRBurningApplicationCDParametersKey(DICOMDIRBaseKey + "DICOMDIRBurningApplicationCDParameters");
 const QString InputOutputSettings::DICOMDIRBurningApplicationDVDParametersKey(DICOMDIRBaseKey + "DICOMDIRBurningApplicationDVDParameters");
-const QString InputOutputSettings::DICOMDIRBurningApplicationHasDifferentCDDVDParametersKey(DICOMDIRBaseKey + 
+const QString InputOutputSettings::DICOMDIRBurningApplicationHasDifferentCDDVDParametersKey(DICOMDIRBaseKey +
                                                                                             "DICOMDIRBurningApplicationHasDifferentCDDVDParameters");
 const QString InputOutputSettings::ConvertDICOMDIRImagesToLittleEndianKey(DICOMDIRBaseKey + "ConvertDICOMDIRImagesToLittleEndian");
 const QString InputOutputSettings::DICOMDIRFolderPathToCopy(DICOMDIRBaseKey + "DICOMDIRFolderPathToCopy");

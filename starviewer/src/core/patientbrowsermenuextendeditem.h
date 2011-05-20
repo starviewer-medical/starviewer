@@ -7,8 +7,8 @@
 namespace udg {
 
 /**
-Classe per mostrar la informació addicional referent a una serie d'un estudi d'un pacient.
-*/
+    Classe per mostrar la informació addicional referent a una serie d'un estudi d'un pacient.
+  */
 class PatientBrowserMenuExtendedItem : public QFrame {
 Q_OBJECT
 public:

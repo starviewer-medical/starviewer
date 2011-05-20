@@ -7,8 +7,7 @@ namespace udg {
 
 /**
     Encapsula un identificador numèric.
-*/
-
+  */
 class Identifier {
 public:
     /// Constructor

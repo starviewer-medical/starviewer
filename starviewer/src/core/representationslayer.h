@@ -12,8 +12,8 @@ namespace udg {
 class Q2DViewer;
 
 /**
-Classe contenidor de ToolRepresentation
-*/
+    Classe contenidor de ToolRepresentation
+  */
 class RepresentationsLayer : public QObject {
 Q_OBJECT
 public:

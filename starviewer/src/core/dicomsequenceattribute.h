@@ -11,7 +11,8 @@ namespace udg {
 
 class DICOMSequenceItem;
 
-/** Classe heredada de \class DICOMAttribute encarregada de representar el atributs DICOM de tipus seqüència. La seva utilització va molt lligada amb
+/** 
+    Classe heredada de \class DICOMAttribute encarregada de representar el atributs DICOM de tipus seqüència. La seva utilització va molt lligada amb
     \class DICOMSequenceItem.
   */
 class DICOMSequenceAttribute : public DICOMAttribute {

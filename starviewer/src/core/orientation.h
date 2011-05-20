@@ -5,7 +5,7 @@ namespace udg {
 /**
     Classe amb la que encapsularem els diferents tipus d'orientacions que podem
     manegar com poden ser els plans d'adquisició o la orienatació del pacient
- */
+  */
 class Orientation {
 public:
     /// Tipus d'orientacions del pla

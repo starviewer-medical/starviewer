@@ -16,7 +16,7 @@ PolylineTemporalROIToolData::~PolylineTemporalROIToolData()
 
 void PolylineTemporalROIToolData::setMeanVector(QVector<double> m)
 {
-    m_mean=m;
+    m_mean = m;
     emit dataChanged();
 }
 

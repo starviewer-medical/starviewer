@@ -8,13 +8,12 @@
 namespace udg {
 
 /**
-  * Aquesta classe gestiona els servidors PACS configurats per l'aplicació. Permet afegir, eliminar, modificar i consultar
-  * les dades dels PACS configurats, que es guardaran com a Settings de l'aplicació.
+    Aquesta classe gestiona els servidors PACS configurats per l'aplicació. Permet afegir, eliminar, modificar i consultar
+    les dades dels PACS configurats, que es guardaran com a Settings de l'aplicació.
   */
 class PacsDeviceManager {
 
 public:
-
     enum FilterPACSByService { AllPacs, PacsWithQueryRetrieveServiceEnabled, PacsWithStoreServiceEnabled };
 
     PacsDeviceManager();

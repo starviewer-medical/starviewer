@@ -9,7 +9,7 @@ class Q2DViewer;
 
 /**
     Classe per guardar les dades de la tool de sincronització.
-*/
+  */
 class SynchronizeToolData : public ToolData {
 Q_OBJECT
 public:

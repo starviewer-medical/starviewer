@@ -12,25 +12,21 @@ class TransferFunctionEditor;
 
 /**
     Classe base per a totes les vistes de funcions de transferència.
- */
+  */
 class QTransferFunctionView : public QWidget {
-
-    Q_OBJECT
+Q_OBJECT
 
 public:
-
     /// Crea la vista, que treballarà amb l'editor donat.
     explicit QTransferFunctionView(TransferFunctionEditor *editor, QWidget *parent = 0);
     /// Destructor.
     virtual ~QTransferFunctionView();
 
 protected:
-
     /// Fa les connexions pertinents de signals i slots.
     virtual void makeConnections();
 
 protected slots:
-
     /// Assigna la funció de transferència.
     virtual void setTransferFunction(const TransferFunction &transferFunction) = 0;
 
@@ -59,12 +55,10 @@ protected slots:
 //    virtual void removeGradientOpacityPoint(double y) = 0;
 
 protected:
-
     /// L'editor.
     TransferFunctionEditor *m_editor;
 
 private:
-
     Q_DISABLE_COPY(QTransferFunctionView)
 
 };

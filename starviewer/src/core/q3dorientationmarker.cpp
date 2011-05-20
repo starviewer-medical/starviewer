@@ -27,7 +27,7 @@ Q3DOrientationMarker::Q3DOrientationMarker(vtkRenderWindowInteractor *interactor
     // automàticament a partir per exemple del tag dicom o deixar-ho en mans de la classe que ho faci servir i proporcionar mètodes d'aquesta classe per posar
     // les etiquetes correctament
     m_cubeActor = vtkAnnotatedCubeActor::New();
-    this->setOrientationText(Orientation::LeftLabel, Orientation::RightLabel, Orientation::PosteriorLabel, Orientation::AnteriorLabel, Orientation::HeadLabel, 
+    this->setOrientationText(Orientation::LeftLabel, Orientation::RightLabel, Orientation::PosteriorLabel, Orientation::AnteriorLabel, Orientation::HeadLabel,
         Orientation::FeetLabel);
 //     m_cubeActor->SetXPlusFaceText("L");
 //     m_cubeActor->SetXMinusFaceText("R");

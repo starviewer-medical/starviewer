@@ -9,8 +9,8 @@ namespace udg {
 class WindowLevelPresetsToolData;
 
 /**
-Diàleg per escollir manualment els ajustaments pel window level
-*/
+    Diàleg per escollir manualment els ajustaments pel window level
+  */
 class QCustomWindowLevelDialog : public QDialog, private Ui::QCustomWindowLevelDialogBase {
 Q_OBJECT
 public:

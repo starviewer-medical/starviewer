@@ -15,7 +15,7 @@ class QViewer;
     Classe encarregada de generar noves sèries a partir del que es captura per pantalla. Les series generades es poden guardar
     només a la base de dades local o poden ser enviades també al PACS seleccionat a través del widget.
     Actualment, les sèries que es generen són de tipus Secondary Capture.
-*/
+  */
 class QExporterTool : public QDialog, private Ui::QExporterBase {
 Q_OBJECT
 public:

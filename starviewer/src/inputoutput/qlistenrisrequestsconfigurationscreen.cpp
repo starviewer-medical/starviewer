@@ -64,7 +64,7 @@ bool QListenRisRequestsConfigurationScreen::applyChanges()
 
     if (validateChanges())
     {
-        if (m_textPortListenRisRequests->isModified() || m_checkBoxListenRisRequests->isChecked() != 
+        if (m_textPortListenRisRequests->isModified() || m_checkBoxListenRisRequests->isChecked() !=
             settings.getValue(InputOutputSettings::ListenToRISRequests).toBool())
         {
             // S'ha de reiniciar en cas que iniciem/parem d'escoltar el port del RIS o canviem el port

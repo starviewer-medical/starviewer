@@ -4,8 +4,9 @@
 
 namespace udg {
 
-/** Classe que defineix els Enum amb els errors que ens poden retornar les diferents Job que es comuniquen amb el PACS
-*/
+/**
+    Classe que defineix els Enum amb els errors que ens poden retornar les diferents Job que es comuniquen amb el PACS
+  */
 class PACSRequestStatus {
 
 public:

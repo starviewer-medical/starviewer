@@ -46,8 +46,7 @@ namespace udg {
           no obligar a que els objectes creat heretin de QObject.
     @see GenericSingletonFactoryRegister
     @see ExtensionFactory
-*/
-
+  */
 template <class BaseClass, typename ClassIdentifier, class ParentType = QObject>
 class GenericFactory {
     typedef BaseClass* (*BaseClassCreateFunction)(ParentType*);

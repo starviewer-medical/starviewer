@@ -6,12 +6,11 @@
 namespace udg {
 
 /**
- * Classe que encapsula les obscurances.
- */
+    Classe que encapsula les obscurances.
+  */
 class Obscurance {
 
 public:
-
     Obscurance(unsigned int size, bool color = false, bool doublePrecision = true);
     ~Obscurance();
 
@@ -53,7 +52,6 @@ public:
     bool save(const QString &fileName) const;
 
 private:
-
     /// Mida de les obscurances.
     unsigned int m_size;
     /// Fals si són obscurances i cert si és color bleeding.

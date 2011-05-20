@@ -6,12 +6,11 @@
 namespace udg {
 
 /**
- * És un voxel shader que pinta el volum amb il·luminació directa (ambient, difusa, especular).
- */
+    És un voxel shader que pinta el volum amb il·luminació directa (ambient, difusa, especular).
+  */
 class DirectIlluminationVoxelShader : public AmbientVoxelShader {
 
 public:
-
     DirectIlluminationVoxelShader();
     virtual ~DirectIlluminationVoxelShader();
 
@@ -36,7 +35,6 @@ public:
     virtual QString toString() const;
 
 protected:
-
     const unsigned short *m_encodedNormals;
     const float *m_redDiffuseShadingTable, *m_greenDiffuseShadingTable, *m_blueDiffuseShadingTable;
     const float *m_redSpecularShadingTable, *m_greenSpecularShadingTable, *m_blueSpecularShadingTable;

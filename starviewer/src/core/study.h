@@ -12,7 +12,7 @@ class Patient;
 
 /**
     Classe que encapsula l'estudi d'un pacient
-*/
+  */
 class Study : public QObject {
 Q_OBJECT
 public:

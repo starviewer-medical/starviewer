@@ -699,7 +699,7 @@ void QApplicationMainWindow::sendRequestRetrieveStudyWithAccessionNumberToLocalS
     else
     {
         // TODO:S'hauria de fer un missatge més genèric
-        QMessageBox::information(this, ApplicationNameString, 
+        QMessageBox::information(this, ApplicationNameString,
                                  tr("Please activate \"Listen RIS Request\" option in %1 configuration to retrieve studies from SAP.")
                                .arg(ApplicationNameString));
     }

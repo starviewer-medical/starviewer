@@ -18,7 +18,7 @@ namespace udg {
     L'escriptura d'un setting no es farà efectiva a disc fins que no es destrueixi la instància.
     Aquest mecanisme funciona d'aquesta manera per raons d'eficiència, així podem assignar diversos
     settings alhora sense penalitzar un accés a disc fins que no es destrueixi l'objecte de Settings.
-*/
+  */
 class Settings {
 public:
     enum AccessLevel { UserLevel, SystemLevel };

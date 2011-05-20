@@ -4,23 +4,23 @@
 namespace udg {
 
 /**
- *  Aquesta classe s'encarrega de dir-nos quines operacions de rotació i flip hem d'aplicar
- *  sobre una imatge 2D donades la orientació inicial i la orientació desitjada.
- *
- *  Per fer-ho indicarem la orientació inicial i la desitjada a través dels mètodes setInitialOrientation()
- *  i setDesiredOrientation(). Un cop assignades les orientacions preguntarem les operacions que cal
- *  aplicar sobre la imatge 2D per obtenir la orientació que es desitji.
- *
- *  L'ordre en que s'apliquin les operacions indicades *és únic* i ha de ser estrictament el següent:
- *      1. Aplicar rotacions
- *      2. Aplicar flips
- *
- *  Les etiquetes d'orientació que es proporcionaran seran les corresponents a la part superior i esquerra
- *  de la imatge. Els valors permesos seran R(right), L(left), A(anterior), P(posterior), H(head) i F(feet).
- *
- *  Aquesta classe només contempla operacions possibles dins d'un mateix pla 2D, per tant no ens pot donar
- *  una fòrmula que passi una imatge adquirida en axial a sagital, per exemple.
- */
+    Aquesta classe s'encarrega de dir-nos quines operacions de rotació i flip hem d'aplicar
+    sobre una imatge 2D donades la orientació inicial i la orientació desitjada.
+
+    Per fer-ho indicarem la orientació inicial i la desitjada a través dels mètodes setInitialOrientation()
+    i setDesiredOrientation(). Un cop assignades les orientacions preguntarem les operacions que cal
+    aplicar sobre la imatge 2D per obtenir la orientació que es desitji.
+
+    L'ordre en que s'apliquin les operacions indicades *és únic* i ha de ser estrictament el següent:
+       1. Aplicar rotacions
+       2. Aplicar flips
+
+    Les etiquetes d'orientació que es proporcionaran seran les corresponents a la part superior i esquerra
+    de la imatge. Els valors permesos seran R(right), L(left), A(anterior), P(posterior), H(head) i F(feet).
+
+    Aquesta classe només contempla operacions possibles dins d'un mateix pla 2D, per tant no ens pot donar
+    una fòrmula que passi una imatge adquirida en axial a sagital, per exemple.
+  */
 class ImageOrientationOperationsMapper {
 public:
     ImageOrientationOperationsMapper();

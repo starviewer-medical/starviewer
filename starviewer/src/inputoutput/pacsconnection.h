@@ -9,13 +9,14 @@ struct T_ASC_Association;
 class OFCondition;
 class QString;
 
-/** Aquest classe s'encarrega de configurar la connexió i connectar amb el PACS en funció del servei que li volguem sol·licitar.*/
 namespace udg {
 
+/**
+    Aquest classe s'encarrega de configurar la connexió i connectar amb el PACS en funció del servei que li volguem sol·licitar.
+  */
 class PACSConnection {
 
 public:
-
     enum PACSServiceToRequest { Query, RetrieveDICOMFiles, Echo, SendDICOMFiles };
 
     /// Constuctor de la classe. Se li ha de passar un objecte PacsDevice, amb els paràmetres del pacs correctament especificats
@@ -43,7 +44,6 @@ public:
     void disconnect();
 
 private:
-
     /// Aquesta funció és privada. És utilitzada per especificar en el PACS, que una de les possibles operacions que volem fer amb ell és un echo. Per defecte
     /// en qualsevol modalitat de connexió podrem fer un echo
     /// @return retorna l'estat de la configuració
@@ -83,7 +83,6 @@ private:
     void getTransferSyntaxForFindOrMoveConnection(const char *transferSyntaxes[3]);
 
 private:
-
     PacsDevice m_pacs;
     // network struct, contains DICOM upper layer FSM etc. A nivell DICOM no és res és un objecte propi de DCMTK, conté paràmetres de la connexió i en el cas
     // descàrrega d'imatges se li indica per quin port escoltem les peticions DICOM.

@@ -6,10 +6,9 @@
 namespace udg {
 
 /**
-   Classe per representar un tag DICOM.
-   Un tag està format per enters, el group i l'element. Ex: (0020,0022)
-*/
-
+    Classe per representar un tag DICOM.
+    Un tag està format per enters, el group i l'element. Ex: (0020,0022)
+  */
 class DICOMTag {
 
 public:

@@ -33,7 +33,7 @@ LocalDatabaseManager::LocalDatabaseManager()
     {
         if (!LocalDatabaseManager::LastAccessDateSelectedStudies.isValid())
         {
-            LocalDatabaseManager::LastAccessDateSelectedStudies = 
+            LocalDatabaseManager::LastAccessDateSelectedStudies =
                 QDate::currentDate().addDays(-settings.getValue(InputOutputSettings::MinimumDaysUnusedToDeleteStudy).toInt());
         }
     }

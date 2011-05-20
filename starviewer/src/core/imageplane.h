@@ -8,9 +8,9 @@ namespace udg {
 
 class Image;
 /**
-Classe que defineix un pla d'imatge. El pla consta de vectors de direcció de X i Y, normal, origen, espaiat i nombre de files i columnes per definir un pla
-tancat i finit com és el de la imatge. Està definit en coordenades de món.
-*/
+    Classe que defineix un pla d'imatge. El pla consta de vectors de direcció de X i Y, normal, origen, espaiat i nombre de files i columnes per definir un pla
+    tancat i finit com és el de la imatge. Està definit en coordenades de món.
+  */
 class ImagePlane{
 public:
     ImagePlane();
@@ -111,7 +111,7 @@ public:
      * Valors negatius mouen el pla en la direcció oposada.
      */
     void push(double distance);
-    
+
 private:
     /// Vectors que defineixen el pla
     double m_rowDirectionVector[3], m_columnDirectionVector[3], m_normal[3];

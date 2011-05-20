@@ -15,7 +15,6 @@ template <class VS>
 class vtkVolumeRayCastSingleVoxelShaderCompositeFunction : public vtkVolumeRayCastFunction {
 
 public:
-
     enum CompositeMethod { ClassifyInterpolate, InterpolateClassify };
 
     static vtkVolumeRayCastSingleVoxelShaderCompositeFunction* New();
@@ -37,7 +36,6 @@ public:
     void SetVoxelShader(VS *voxelShader);
 
 protected:
-
     vtkVolumeRayCastSingleVoxelShaderCompositeFunction();
     ~vtkVolumeRayCastSingleVoxelShaderCompositeFunction();
 
@@ -50,7 +48,6 @@ protected:
     TrilinearInterpolator *m_interpolator;
 
 private:
-
     /// Opacitat mínima que ha de restar per continuar el ray casting.
     static const float MINIMUM_REMAINING_OPACITY;
 

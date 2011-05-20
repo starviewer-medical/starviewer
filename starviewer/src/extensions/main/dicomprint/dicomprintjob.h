@@ -9,13 +9,11 @@
 namespace udg {
 
 /**
-* Implementació de la interfície PrintJob per impressores Dicom en DCMTK.
-* Un PrintJob serà un objecte que contindrà la informació necessària per fer la impressió (Prioritat, Pàgines a imprimir...)
-*/
-
+    Implementació de la interfície PrintJob per impressores Dicom en DCMTK.
+    Un PrintJob serà un objecte que contindrà la informació necessària per fer la impressió (Prioritat, Pàgines a imprimir...)
+  */
 class DicomPrintJob {
 public:
-
     /// Afegim la Prioritat que tindrà la impressió (High, Medium, Low)
     void setPrintPriority(const QString& printPriority);
 
@@ -51,7 +49,6 @@ public:
     int getNumberOfCopies();
 
 private:
-
     QString m_printPriority;
     QString m_mediumType;
     QString m_label;

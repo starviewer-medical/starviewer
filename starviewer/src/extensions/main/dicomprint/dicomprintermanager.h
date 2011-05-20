@@ -4,17 +4,15 @@
 #include <QList>
 #include "settings.h"
 
-/**
-* Implementació de la interfície PrinterManager per impressores DICOM en DCMTK.
-* Aquest classe permet Afegir/Modificar/Esborrar les impressores DICOM que tenim guardades al sistema mitjançant Settings.
-*/
-
 namespace udg {
     class DicomPrinter;
 
+/**
+    Implementació de la interfície PrinterManager per impressores DICOM en DCMTK.
+    Aquest classe permet Afegir/Modificar/Esborrar les impressores DICOM que tenim guardades al sistema mitjançant Settings.
+  */
 class DicomPrinterManager {
 public:
-
     /// Afegeix una impressora Dicom (\p printer) al sistema.
     /// Retorna True si s'ha pogut afegir la impressora i False si la impressora ja existeix al sistema.
     /// En cas que s'hagi pogut afegir, s'assigna l'id a la impressora passada per paràmetre.
@@ -41,7 +39,6 @@ public:
     DicomPrinter getDefaultAvailableParametersValuesDICOMPrinters();
 
 private:
-
     /// Retorna un Settings::KeyValueMapType omplert amb les dades de la impressora dicomPrinter.
     Settings::KeyValueMapType dicomPrinterToKeyValueMap(DicomPrinter &dicomPrinter);
 
@@ -98,7 +95,6 @@ private:
     void setAllPrintersAsNoDefaultPrinter();
 
 private:
-
     /// Conté el nom de la secció del Settings on es guarden les dades de la impressora.
     static const QString DicomPrinterListSectionName;
 };

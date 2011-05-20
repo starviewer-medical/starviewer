@@ -280,7 +280,7 @@ void VolumePixelDataReaderITKGDCM::checkZeroSpacingException()
         }
         else if (spacing[2] == 0.0)
         {
-            WARN_LOG("El z-spacing de les dades llegides Ã©s 0. Possiblement la informaciÃ³ corresponent (SliceThikness/SpacingBetweenSlices) estigui dins " 
+            WARN_LOG("El z-spacing de les dades llegides Ã©s 0. Possiblement la informaciÃ³ corresponent (SliceThikness/SpacingBetweenSlices) estigui dins "
                      "de seqÃ¼Ã¨ncies privades. Donem el volum per vÃ lid igualment.");
             DEBUG_LOG("El z-spacing de les dades llegides Ã©s 0. Possiblement la informaciÃ³ corresponent (SliceThikness/SpacingBetweenSlices) estigui dins "
                       "de seqÃ¼Ã¨ncies privades. Donem el volum per vÃ lid igualment.");

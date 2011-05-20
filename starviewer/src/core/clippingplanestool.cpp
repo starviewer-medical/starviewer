@@ -10,7 +10,7 @@
 #include <vtkPlane.h>
 #include <vtkPlaneCollection.h>
 
-namespace udg { 
+namespace udg {
 
 ClippingPlanesTool::ClippingPlanesTool(QViewer *viewer, QObject *parent)
 : Tool(viewer, parent)
@@ -21,14 +21,14 @@ ClippingPlanesTool::ClippingPlanesTool(QViewer *viewer, QObject *parent)
     m_3DViewer = qobject_cast<Q3DViewer *>(viewer);
     if(!m_3DViewer)
     {
-        DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q3DViewer!!!-> ")+ viewer->metaObject()->className());
+        DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q3DViewer!!!-> ") + viewer->metaObject()->className());
     }
 
     // Creem el widget per manipular els plans de tall
     m_boundingBoxClipperWidget = vtkBoxWidget::New();
     m_boundingBoxClipperWidget->SetInteractor(m_3DViewer->getInteractor());
     m_boundingBoxClipperWidget->InsideOutOn();
-    
+
     // Posem a punt la observació dels events del widget
     m_vtkQtConnections = vtkEventQtSlotConnect::New();
     m_vtkQtConnections->Connect(m_boundingBoxClipperWidget, vtkCommand::InteractionEvent, this, SLOT(boundingBoxEventHandler(vtkObject*, unsigned long, void*,
@@ -83,7 +83,7 @@ void ClippingPlanesTool::updateInput()
 {
     m_boundingBoxClipperWidget->Off();
     m_boundingBoxClipperWidget->SetPlaceFactor(1.0);
-    
+
     // Calculem la bounding box del widget
     vtkPlanes *planes = m_3DViewer->getClippingPlanes();
     if(planes)

@@ -8,12 +8,11 @@ namespace udg {
 class Volume;
 
 /**
-Classe base per la generació de nous objectes Volume que contindrà un conjunt d'imatges assignades a una nova sèrie
-i aquesta a un estudi (nou o no depenén del tipus de generador).
+    Classe base per la generació de nous objectes Volume que contindrà un conjunt d'imatges assignades a una nova sèrie
+    i aquesta a un estudi (nou o no depenén del tipus de generador).
 
-Es dóna la possiblitat d'assignar una descripció a la nova sèrie que es generarà (\sa setSeriesDescription()).
-*/
-
+    Es dóna la possiblitat d'assignar una descripció a la nova sèrie que es generarà (\sa setSeriesDescription()).
+  */
 class VolumeBuilder {
 public:
     VolumeBuilder();
@@ -28,7 +27,6 @@ public:
     QString getSeriesDescription() const;
 
 protected:
-
     QString m_seriesDescription;
 };
 

@@ -10,8 +10,8 @@ class DcmFileFormat;
 namespace udg {
 
 /**
-Genera fitxers DICOM utilitzant la llibreria dcmtk.
-*/
+    Genera fitxers DICOM utilitzant la llibreria dcmtk.
+  */
 class DICOMWriterDCMTK : public DICOMWriter {
 
 public:
@@ -29,7 +29,6 @@ public:
     virtual bool write();
 
 private:
-
     /// Genera els elements d'una seqüència
     DcmSequenceOfItems *generateDcmSequenceOfItems(DICOMSequenceAttribute * sequenceAttribute);
 

@@ -25,7 +25,7 @@ int DicomPrint::print(DicomPrinter printer, DicomPrintJob printJob)
 
     m_lastError = Ok;
 
-    INFO_LOG("Han demanat imprimir imatges DICOM a la impresssora " + printer.getAETitle() + ", IP: " + printer.getHostname() + ", port: " + 
+    INFO_LOG("Han demanat imprimir imatges DICOM a la impresssora " + printer.getAETitle() + ", IP: " + printer.getHostname() + ", port: " +
              QString().setNum(printer.getPort()));
 
     dcmtkStoredPrintPathFileList = createDicomPrintSpool(printer, printJob);

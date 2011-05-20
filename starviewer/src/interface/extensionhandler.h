@@ -14,8 +14,8 @@ namespace udg {
 class QApplicationMainWindow;
 
 /**
-Gestor de mini-aplicacions i serveis de l'aplicació principal
-*/
+    Gestor de mini-aplicacions i serveis de l'aplicació principal
+  */
 class ExtensionHandler : public QObject {
 Q_OBJECT
 public:

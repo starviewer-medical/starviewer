@@ -9,13 +9,11 @@ class ColorTransferFunction;
 
 /**
     Vista gràfica d'una funció de transferència de color.
- */
+  */
 class QColorTransferFunctionGraphicalView : public QGraphicsView {
-
-    Q_OBJECT
+Q_OBJECT
 
 public:
-
     /// Constructor.
     explicit QColorTransferFunctionGraphicalView(QWidget *parent = 0);
 
@@ -27,7 +25,6 @@ public:
     // void fitInView();    // per ajustar el zoom automàticament
 
 signals:
-
     /// S'emet quan s'afegeix un node.
     void nodeAdded(double x, const QColor &color);
     /// S'emet quan s'esborra un node.
@@ -40,7 +37,6 @@ signals:
     void nodeChangedColor(double x, const QColor &color);
 
 protected:
-
     ///@{
     /// Gestió d'esdeveniments. \todo Explicar una mica què fem a cadascun.
     virtual void mousePressEvent(QMouseEvent *event);
@@ -51,7 +47,6 @@ protected:
     ///@}
 
 private:
-
     Q_DISABLE_COPY(QColorTransferFunctionGraphicalView)
 
     /// Actualitza el gradient del fons.
@@ -68,7 +63,6 @@ private:
     void changeNodeColor(double x);
 
 private:
-
     /// Nivell de zoom actual.
     double m_zoom;
     /// Indica si s'ha d'actualitzar el fons després de moure el ratolí.

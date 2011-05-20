@@ -7,14 +7,12 @@
 namespace udg {
 
 /**
-   Classe que implementa un Repositori de DICOMDumpDefaultTags.
-   Aquesta classe és una implementació de la classe Repository
-*/
-
+    Classe que implementa un Repositori de DICOMDumpDefaultTags.
+    Aquesta classe és una implementació de la classe Repository
+  */
 class DICOMDumpDefaultTagsRepository : public Repository<DICOMDumpDefaultTags> {
 
 public:
-
     /// Ens retorna l'única instància del repositori (Patró Singleton)
     static DICOMDumpDefaultTagsRepository* getRepository()
     {
@@ -25,7 +23,6 @@ public:
     ~DICOMDumpDefaultTagsRepository();
 
 private:
-
     // Constructor private pq només es puguin definir objectes a través del patro Singleton
     DICOMDumpDefaultTagsRepository();
 };

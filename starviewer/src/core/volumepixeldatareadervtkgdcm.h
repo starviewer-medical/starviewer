@@ -11,7 +11,7 @@ namespace udg {
 /**
     Lector de dades d'imatge per Volume.
     Aquest lector fa ús de la interfície vtkGDCM per llegir les dades.
- */
+  */
 class VolumePixelDataReaderVTKGDCM : public VolumePixelDataReader {
 Q_OBJECT
 public:

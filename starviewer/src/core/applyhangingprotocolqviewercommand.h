@@ -10,11 +10,11 @@ class Q2DViewer;
 class HangingProtocolDisplaySet;
 
 /**
-  Command de Q2Viewer que s'encarrega d'aplicar un hangin protocol a un viewer un cop aquest s'ha inicialitzat
+    Command de Q2Viewer que s'encarrega d'aplicar un hangin protocol a un viewer un cop aquest s'ha inicialitzat
   */
 
 class ApplyHangingProtocolQViewerCommand : public QViewerCommand {
-    Q_OBJECT
+Q_OBJECT
 public:
     ApplyHangingProtocolQViewerCommand(Q2DViewerWidget *viewer, HangingProtocolDisplaySet *displaySet, QObject *parent = 0);
 

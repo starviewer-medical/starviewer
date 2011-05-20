@@ -328,7 +328,7 @@ double DrawerPolygon::computeArea(int view, double *spacing)
         }
     }
 
-    return area*0.5;
+    return area * 0.5;
 }
 
 }

@@ -6,7 +6,8 @@
 
 namespace udg {
 
-/** Classe heredada de \class DICOMAttribute encarregada de representar el atributs DICOM de tipus valor.
+/**
+    Classe heredada de \class DICOMAttribute encarregada de representar el atributs DICOM de tipus valor.
   */
 class DICOMValueAttribute : public DICOMAttribute {
 

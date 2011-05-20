@@ -15,13 +15,11 @@ namespace udg {
     Editor de funcions de transferència des del codi (no és un widget). Ofereix algunes comoditats a l'edició de funcions, que no es tenen si es fa "a pèl",
     com per exemple alguns mètodes addicionals (move*), signals i slots, i la possiblitat de desfer i refer els canvis.
     És qui fa realment la "feina bruta" per a QTransferFuncionEditor2.
- */
+  */
 class TransferFunctionEditor : public QObject {
-
-    Q_OBJECT
+Q_OBJECT
 
 public:
-
     /// Constructor.
     explicit TransferFunctionEditor(QObject *parent = 0);
 
@@ -33,7 +31,6 @@ public:
     QUndoStack* undoStack() const;
 
 public slots:
-
     /// Assigna la funció de transferència.
     void setTransferFunction(const TransferFunction &transferFunction);
 
@@ -87,7 +84,6 @@ public slots:
     void undo();
 
 signals:
-
     /// S'emet quan canvia la funció de transferència.
     void transferFunctionChanged(const TransferFunction &transferFunction);
 
@@ -116,7 +112,6 @@ signals:
     void gradientOpacityPointRemoved(double y);
 
 private:
-
     ///@{
     /// Commands per fer les tasques d'edició.
     class SetTransferFunctionCommand;
@@ -150,7 +145,6 @@ private:
     ///@}
 
 private:
-
     /// La funció de transferència.
     TransferFunction m_transferFunction;
     /// Pila de desfer/refer.

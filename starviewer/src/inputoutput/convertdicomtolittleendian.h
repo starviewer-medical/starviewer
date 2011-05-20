@@ -7,11 +7,11 @@ namespace udg {
 
 class Status;
 
-/** Converteix les imatges guardades al format littleEndian, necessari per crear els DicomDir
-*/
+/**
+    Converteix les imatges guardades al format littleEndian, necessari per crear els DicomDir
+  */
 class ConvertDicomToLittleEndian {
 public:
-
     ConvertDicomToLittleEndian();
 
     /// Converteix el fitxer d'entrada dicom a format little endian i el guarda, amb el nom i directori que s'indiqui a outputfile

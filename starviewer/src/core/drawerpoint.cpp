@@ -128,7 +128,7 @@ double DrawerPoint::getDistanceToPoint(double *point3D, double closestPoint[3])
     closestPoint[0] = m_position[0];
     closestPoint[1] = m_position[1];
     closestPoint[2] = m_position[2];
-    
+
     return sqrt((point3D[0] - m_position[0]) * (point3D[0] - m_position[0]) + (point3D[1] - m_position[1]) * (point3D[1] - m_position[1]) +
                 (point3D[2] - m_position[2]) * (point3D[2] - m_position[2]));
 }

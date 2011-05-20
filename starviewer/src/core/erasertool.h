@@ -14,7 +14,7 @@ class DrawerPrimitive;
     Si es fa un clic, busca la primitiva més propera al punt clicat i si està dins d'un llindar l'esborra.
     També es pot clicar en un punt i arrossegar-lo per dibuixar un requadre, esborrant totes les primitives que
     estiguin dins de l'àrea que delimita el requadre dibuixat.
-*/
+  */
 class EraserTool : public Tool {
 Q_OBJECT
 public:
@@ -40,7 +40,7 @@ private:
     /// @param point Coordenada de món a partir de la qual volem determinar si hi ha una primitiva pròxima
     /// @param view Vista actual del model (Axial, Sagital, Coronal)
     /// @param slice Llesca d'on volem obtenir la primitiva
-    /// @return La primitiva que estigui propera al punt determinat, dins d'un llindar determinat. 
+    /// @return La primitiva que estigui propera al punt determinat, dins d'un llindar determinat.
     /// Si el punt no és prou proper segons el llindar o no hi ha primitives en aquella llesca, la primitiva retornada serà nul·la.
     DrawerPrimitive* getErasablePrimitive(double point[3], int view, int slice);
 

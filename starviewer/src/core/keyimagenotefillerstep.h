@@ -9,9 +9,9 @@ class Patient;
 class Series;
 
 /**
-Mòdul que s'encarrega d'omplir la informació d'objectes KIN. Un dels seus prerequisits serà que s'hagi superat el mòdul DICOMFileClassifierFillerStep.
-Les Series a processar han de de ser de modalitat KO.
-*/
+    Mòdul que s'encarrega d'omplir la informació d'objectes KIN. Un dels seus prerequisits serà que s'hagi superat el mòdul DICOMFileClassifierFillerStep.
+    Les Series a processar han de de ser de modalitat KO.
+  */
 class KeyImageNoteFillerStep : public PatientFillerStep {
 public:
     KeyImageNoteFillerStep();

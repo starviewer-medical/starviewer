@@ -27,13 +27,12 @@ class SendDICOMFilesToPACSJob;
 class PacsManager;
 
 /**
- * Widget en el que controla les operacions d'entrada/sortida de la base de dades local
- */
+    Widget en el que controla les operacions d'entrada/sortida de la base de dades local
+  */
 class QInputOutputLocalDatabaseWidget : public QWidget, private Ui::QInputOutputLocalDatabaseWidgetBase {
 Q_OBJECT
 
 public:
-
     QInputOutputLocalDatabaseWidget(QWidget *parent = 0);
     ~QInputOutputLocalDatabaseWidget();
 
@@ -137,7 +136,6 @@ private slots:
     void newPACSJobEnqueued(PACSJob *);
 
 private:
-
     QMenu m_contextMenuQStudyTreeWidget;
     QDeleteOldStudiesThread m_qdeleteOldStudiesThread;
     QCreateDicomdir *m_qcreateDicomdir;

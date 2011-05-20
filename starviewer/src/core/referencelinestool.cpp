@@ -144,7 +144,7 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
     // Primer mirem que siguin plans diferents
     if (*localizerPlane != *referencePlane)
     {
-        
+
         // Projecció de la intersecció dels plans
         /// Llegir http://fixunix.com/dicom/51195-scanogram-lines-mr.html
 

@@ -23,11 +23,10 @@ class PreviousStudiesManager;
 /**
     Classe encarregada de fer la gestió de HP: cercar HP candidats i aplicar HP.
     Degut a que els HP es modifiquen per assignar-los les sèries que s'han de mostrar, es fa una còpia del repositori.
-*/
+  */
 class HangingProtocolManager : public QObject {
 Q_OBJECT
 public:
-
     HangingProtocolManager(QObject *parent = 0);
     ~HangingProtocolManager();
 
@@ -47,7 +46,6 @@ public:
     void cancelHangingProtocolDownloading();
 
 private slots:
-
     /// S'ha descarregat un estudi previ demanat
     void previousStudyDownloaded();
 

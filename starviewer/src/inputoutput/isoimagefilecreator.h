@@ -8,12 +8,12 @@ class QProcess;
 
 namespace udg {
 
-/** Crea un arxiu d'imatge ISO a partir d'un directori o fitxer.
-*/
+/** 
+    Crea un arxiu d'imatge ISO a partir d'un directori o fitxer.
+  */
 class IsoImageFileCreator : public QObject {
 Q_OBJECT
 public:
-
     enum ImageFileCreationError { InputPathNotFound, OutputPathNotFound, OutputDirPathAccessDenied, OutputFilePathAccessDenied, InternalError };
 
     IsoImageFileCreator();
@@ -46,18 +46,15 @@ public:
     void startCreateIsoImageFile();
 
 signals:
-
     /// Signal que s'emet al finalitzar el procés de generació del fitxer d'imatge ISO. Té un booleà per indicar si el procés ha finalitzat correcta o
     /// incorrectament
     void finishedCreateIsoImageFile(bool result);
 
 private slots:
-
     /// Slot que contidrà els últims passos que cal realitzar abans d'emetre el signal finishedCreateIsoImageFile
     void finishCreationProcess(int exitCode);
 
 private:
-
     /// Label de la imatge ISO que es vol crear
     QString m_isoImageLabel;
 

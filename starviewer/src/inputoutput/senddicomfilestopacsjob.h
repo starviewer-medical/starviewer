@@ -9,18 +9,16 @@
 
 namespace udg {
 
-/**
-    Job que s'encarrega d'enviar fitxers del PACS.
-*/
-
 class Study;
 class Image;
 class SendDICOMFilesToPACS;
 
+/**
+    Job que s'encarrega d'enviar fitxers del PACS.
+  */
 class SendDICOMFilesToPACSJob : public PACSJob {
 Q_OBJECT
 public:
-
     /// Atenció, La llista d'imatges ha de contenir l'estructura Pacient, Estudi, Series, Imatges
     SendDICOMFilesToPACSJob(PacsDevice pacsDevice, QList<Image*>);
     ~SendDICOMFilesToPACSJob();
@@ -45,7 +43,6 @@ public:
     Study* getStudyOfDICOMFilesToSend();
 
 signals:
-
     /// Signal que s'emet quan s'enviat una imatge al PACS
     void DICOMFileSent(PACSJob *, int numberOfDICOMFilesSent);
 
@@ -53,17 +50,14 @@ signals:
     void DICOMSeriesSent(PACSJob*, int numberOfSeriesSent);
 
 private:
-
     /// Sol·licita que ens cancel·li el job
     void requestCancelJob();
 
 private slots:
-
     /// Slot que respón al signal de SendDICOMFilesToPACS DICOMFileSent
     void DICOMFileSent(Image *imageSent, int numberOfDICOMFilesSent);
 
 private:
-
     QList<Image*> m_imagesToSend;
     PACSRequestStatus::SendRequestStatus m_sendRequestStatus;
     SendDICOMFilesToPACS *m_sendDICOMFilesToPACS;

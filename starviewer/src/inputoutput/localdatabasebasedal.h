@@ -9,8 +9,9 @@ namespace udg {
 
 class DatabaseConnection;
 
-/** Classe base de les que hereden totes les classes que implementen una DAL per accés a dades
-*/
+/**
+    Classe base de les que hereden totes les classes que implementen una DAL per accés a dades
+  */
 class LocalDatabaseBaseDAL {
 public:
     LocalDatabaseBaseDAL(DatabaseConnection *dbConnection);

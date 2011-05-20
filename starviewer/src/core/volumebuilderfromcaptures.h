@@ -12,23 +12,21 @@ namespace udg {
 class Study;
 
 /**
-Classe encarregada de generar un nou objecte Volume a partir de captures de pantalla representades amb un vtkImageData.
-Per anar afegint captures cal utilitzar el mètode \sa addCapture i l'algorisme està preparat perquè funcioni si els objectes
-vtkImageData conten més d'una llesca. L'única restricció és que tots els inputs han de tenir el mateix extent (exceptuant
-l'eix de les z) i que tots els inputs han de tenir el mateix número de components per cada pixel.
+    Classe encarregada de generar un nou objecte Volume a partir de captures de pantalla representades amb un vtkImageData.
+    Per anar afegint captures cal utilitzar el mètode \sa addCapture i l'algorisme està preparat perquè funcioni si els objectes
+    vtkImageData conten més d'una llesca. L'única restricció és que tots els inputs han de tenir el mateix extent (exceptuant
+    l'eix de les z) i que tots els inputs han de tenir el mateix número de components per cada pixel.
 
-És imprescindible indicar l'estudi al que volem que pertanyi la nova sèrie. També es dóna la possibilitat d'assignar la
-modalitat a la que volem que pertanyi (per defecte 'OT' (Other)) tenint en compte que el SOP Class UID sempre
-serà Secondary Capture Image Storage (PS 3.4 I.4).
+    És imprescindible indicar l'estudi al que volem que pertanyi la nova sèrie. També es dóna la possibilitat d'assignar la
+    modalitat a la que volem que pertanyi (per defecte 'OT' (Other)) tenint en compte que el SOP Class UID sempre
+    serà Secondary Capture Image Storage (PS 3.4 I.4).
 
-IMPORTANT: El Volume generat NOMÉS té el pixel data en memòria representat amb un vtkImageData (o itk). Per tant, els objectes
-Image associat al Volume no estan relacionats amb cap fitxer (path == ""). Si es necessita els fitxers caldria exportar el
-Volume.
-*/
-
+    IMPORTANT: El Volume generat NOMÉS té el pixel data en memòria representat amb un vtkImageData (o itk). Per tant, els objectes
+    Image associat al Volume no estan relacionats amb cap fitxer (path == ""). Si es necessita els fitxers caldria exportar el
+    Volume.
+  */
 class VolumeBuilderFromCaptures : public VolumeBuilder {
 public:
-
     VolumeBuilderFromCaptures();
 
     ~VolumeBuilderFromCaptures();
@@ -58,7 +56,6 @@ public:
     bool setModality(QString modality);
 
 private:
-
     /// Object encarregat de generar el nou vtkImageData
     vtkImageAppend *m_vtkImageAppend;
 

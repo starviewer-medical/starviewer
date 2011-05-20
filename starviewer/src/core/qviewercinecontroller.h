@@ -13,8 +13,8 @@ class Q2DViewer;
 class Volume;
 
 /**
-Controlador de seqüències de CINE acoplable a qualsevol QViewer
-*/
+    Controlador de seqüències de CINE acoplable a qualsevol QViewer
+  */
 class QViewerCINEController : public QObject {
 Q_OBJECT
 public:

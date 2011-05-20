@@ -263,7 +263,7 @@ QList<QVector<double> > ImagePlane::getBounds(int location)
     {
         tlhc << m_origin[i] + m_normal[i] * factor;
         trhc << m_origin[i] + m_rowDirectionVector[i] * this->getRowLength() + m_normal[i] * factor;
-        brhc << m_origin[i] + m_rowDirectionVector[i] * this->getRowLength() + m_columnDirectionVector[i]*this->getColumnLength() + m_normal[i] * factor;
+        brhc << m_origin[i] + m_rowDirectionVector[i] * this->getRowLength() + m_columnDirectionVector[i] * this->getColumnLength() + m_normal[i] * factor;
         blhc << m_origin[i] + m_columnDirectionVector[i] * this->getColumnLength() + m_normal[i] * factor;
     }
     boundsList << tlhc << trhc << brhc << blhc;
@@ -372,8 +372,8 @@ void ImagePlane::getCenter(double center[3])
 void ImagePlane::setCenter(double x, double y, double z)
 {
     double center[3];
-    center[0] = x; 
-    center[1] = y; 
+    center[0] = x;
+    center[1] = y;
     center[2] = z;
     this->setCenter(center);
 }

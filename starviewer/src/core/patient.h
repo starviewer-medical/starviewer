@@ -11,7 +11,7 @@ namespace udg {
 /**
     Classe que representa la unitat central de treball de l'aplicació: el Pacient.
     Guardarà tota la informació relacionada amb aquests (Estudis, Sèries, etc.)
-*/
+  */
 class Patient : public QObject {
 Q_OBJECT
 public:
