@@ -39,62 +39,12 @@ macx {
 # més de 2Gb de memòria per procés. Això serà efectiu en sistemes de 64 bits
 win32-msvc2008:QMAKE_LFLAGS += /LARGEADDRESSAWARE
 
-include(../extensions.inc)
-
-# Funció per afegir una llibreria estàtica com a dependència
-defineReplace(addLibraryDependency) {
-    directoryName = $$1
-    libraryName = $$2
-    exists($$directoryName/$$libraryName) {
-        unix:PRE_TARGETDEPS += $$directoryName/$$libraryName/lib$${libraryName}.a
-        win32:PRE_TARGETDEPS += $$directoryName/$$libraryName/$${libraryName}.lib
-        LIBS += -L$$directoryName/$$libraryName -l$${libraryName}
-        INCLUDEPATH += $$directoryName/$$libraryName
-        DEPENDPATH += $$directoryName/$$libraryName
-    }
-    # Propaguem els canvis a fora de la funció
-    export(PRE_TARGETDEPS)
-    export(LIBS)
-    export(INCLUDEPATH)
-    export(DEPENDPATH)
-
-    return(0)
-}
-
-for(dir, PLAYGROUND_EXTENSIONS) {
-    DUMMY = $$addLibraryDependency(../extensions/playground, $$dir)
-}
-
-for(dir, CONTRIB_EXTENSIONS) {
-    DUMMY = $$addLibraryDependency(../extensions/contrib, $$dir)
-}
-
-for(dir, MAIN_EXTENSIONS) {
-    DUMMY = $$addLibraryDependency(../extensions/main, $$dir)
-}
-
-# Dependències de llibreries core
-DUMMY = $$addLibraryDependency(.., interface)
-DUMMY = $$addLibraryDependency(.., inputoutput)
-DUMMY = $$addLibraryDependency(.., core)
+include(../../sourcelibsdependencies.pri)
 
 # Thirdparty libraries
 DUMMY = $$addLibraryDependency(../thirdparty, breakpad)
 
-win32{
-  LIBS += -ladvapi32 \
-          -lRpcrt4
-}
-
 include(../corelibsconfiguration.inc)
-include(../dcmtk.inc)
-include(../vtk.inc)
-include(../itk.inc)
-include(../gdcm.inc)
-include(../log4cxx.inc)
-include(../cuda.inc)
-include(../compilationtype.inc)
-include(../threadweaver.inc)
 include(../thirdparty/qtsingleapplication/src/qtsingleapplication.pri)
 include(../breakpad.inc)
 
