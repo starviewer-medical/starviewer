@@ -1,1 +1,2 @@
 
+include(samples/samples.pri)
