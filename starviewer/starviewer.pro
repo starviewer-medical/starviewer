@@ -5,8 +5,9 @@
 
 include(src/compilationtype.inc)
 
-SUBDIRS += src 
-TEMPLATE = subdirs 
+SUBDIRS += src tests
+TEMPLATE = subdirs
 CONFIG += warn_on \
           qt \
-          thread 
+          thread \
+          ordered
