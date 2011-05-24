@@ -15,9 +15,9 @@ Accumulator<T>* AccumulatorFactory::getAccumulator(AccumulatorType type, unsigne
     switch (type)
     {
         case Maximum:
-            return new MaximumAccumulator<T>(size);
+            return new MaximumAccumulator<T>();
         case Minimum:
-            return new MinimumAccumulator<T>(size);
+            return new MinimumAccumulator<T>();
         case Average:
             return new AverageAccumulator<T>(size);
         default:
@@ -30,11 +30,11 @@ Accumulator<T>* AccumulatorFactory::getAccumulator(const QString &type, unsigned
 {
     if (type = "Maximum")
     {
-        return new MaximumAccumulator<T>(size);
+        return new MaximumAccumulator<T>();
     }
     else if (type = "Minimum")
     {
-        return new MinimumAccumulator<T>(size);
+        return new MinimumAccumulator<T>();
     }
     else if (type = "Average")
     {
