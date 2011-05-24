@@ -9,7 +9,7 @@ namespace udg {
 
 template <class T> class MinimumAccumulator : public Accumulator<T> {
 public:
-    MinimumAccumulator(unsigned long size) : Accumulator<T>() {}
+    MinimumAccumulator() : Accumulator<T>() {}
     virtual ~MinimumAccumulator() {}
 
     inline virtual void initialize()
