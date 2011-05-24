@@ -128,7 +128,7 @@ void DICOMDIRImporter::importStudy(QString studyUID, QString seriesUID, QString 
     {
         QList<Series*> seriesListToImport;
 
-        m_qprogressDialog->setLabelText(tr("Importing study of ") + patientStudyListToImport.at(0)->getFullName());
+        m_qprogressDialog->setLabelText(tr("Importing study of %1").arg(patientStudyListToImport.at(0)->getFullName()));
 
         m_readDicomdir.readSeries(studyUID, seriesUID, seriesListToImport);
 
