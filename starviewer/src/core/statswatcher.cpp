@@ -109,46 +109,46 @@ void StatsWatcher::registerSliderAction(int action)
     QString statMessage;
     switch (action)
     {
-    case QAbstractSlider::SliderNoAction:
-        statMessage = "No Action";
-        break;
+        case QAbstractSlider::SliderNoAction:
+            statMessage = "No Action";
+            break;
 
-    case QAbstractSlider::SliderSingleStepAdd:
-        statMessage = "+1 Pas";
-        break;
+        case QAbstractSlider::SliderSingleStepAdd:
+            statMessage = "+1 Pas";
+            break;
 
-    case QAbstractSlider::SliderSingleStepSub:
-        statMessage = "-1 Pas";
-        break;
+        case QAbstractSlider::SliderSingleStepSub:
+            statMessage = "-1 Pas";
+            break;
 
-    case QAbstractSlider::SliderPageStepAdd:
-        statMessage = "+1 Page";
-        break;
+        case QAbstractSlider::SliderPageStepAdd:
+            statMessage = "+1 Page";
+            break;
 
-    case QAbstractSlider::SliderPageStepSub:
-        statMessage = "-1 Page";
-        break;
+        case QAbstractSlider::SliderPageStepSub:
+            statMessage = "-1 Page";
+            break;
 
-    case QAbstractSlider::SliderToMinimum:
-        statMessage = "A mínim";
-        break;
+        case QAbstractSlider::SliderToMinimum:
+            statMessage = "A mínim";
+            break;
 
-    case QAbstractSlider::SliderToMaximum:
-        statMessage = "A màxim";
-        break;
+        case QAbstractSlider::SliderToMaximum:
+            statMessage = "A màxim";
+            break;
 
-    case QAbstractSlider::SliderMove:
-        // Només registrem quan s'ha fet un move amb rodeta
-        if (!slider->isSliderDown())
-        {
-            statMessage = "Desplaçar amb rodeta";
-        }
-        break;
+        case QAbstractSlider::SliderMove:
+            // Només registrem quan s'ha fet un move amb rodeta
+            if (!slider->isSliderDown())
+            {
+                statMessage = "Desplaçar amb rodeta";
+            }
+            break;
 
-        // Cas especial. petit hack per connectar amb sliderReleased
-    case 10:
-        statMessage = "Desplaçar clickant";
-        break;
+            // Cas especial. petit hack per connectar amb sliderReleased
+        case 10:
+            statMessage = "Desplaçar clickant";
+            break;
     }
 
     if (!statMessage.isEmpty())

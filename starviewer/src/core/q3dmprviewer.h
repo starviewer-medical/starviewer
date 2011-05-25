@@ -14,7 +14,7 @@ class Q3DOrientationMarker;
 /**
     Visor de Reconstrucció multiplanar 3D
   */
-class Q3DMPRViewer : public QViewer{
+class Q3DMPRViewer : public QViewer {
 Q_OBJECT
 public:
     Q3DMPRViewer(QWidget *parent = 0);

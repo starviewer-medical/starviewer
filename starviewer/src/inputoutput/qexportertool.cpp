@@ -243,7 +243,7 @@ void QExporterTool::generateAndStoreNewSeries()
 
     if (result)
     {
-        DEBUG_LOG ("Fitxers generats correctament");
+        DEBUG_LOG("Fitxers generats correctament");
 
         progress.setLabelText(tr("Inserting into database..."));
         progress.setValue(progress.value() + 1);
@@ -271,7 +271,7 @@ void QExporterTool::generateAndStoreNewSeries()
     }
     else
     {
-        ERROR_LOG (QString("Error al escriure al directori: %1").arg(dirPath));
+        ERROR_LOG(QString("Error al escriure al directori: %1").arg(dirPath));
         QMessageBox::warning(this, tr("Export to DICOM"), tr("The new series has not able to be generated."));
     }
 

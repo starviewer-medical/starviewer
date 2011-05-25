@@ -7,7 +7,7 @@ class OFCondition;
 
 namespace udg {
 
-/** 
+/**
     Aquesta classe proporciona el control d'errors, dels mètodes invocats.
     Aquesta classe, està basada seguin el patró Abstract Factory, el que es tracta és de separar el control d'errors del dctmk, de control
     d'errors que utilitzarem nosaltres en la nostre aplicació, aixi si mai el control d'errors de dcmtk mai canvia, només haurem de modificar aquesta classe

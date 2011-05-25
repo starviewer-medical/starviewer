@@ -123,13 +123,12 @@ void DrawerPolyline::update()
 {
     switch (m_internalRepresentation)
     {
-    case VTKRepresentation:
-        updateVtkProp();
-    break;
+        case VTKRepresentation:
+            updateVtkProp();
+            break;
 
-    case OpenGLRepresentation:
-    break;
-
+        case OpenGLRepresentation:
+            break;
     }
 }
 

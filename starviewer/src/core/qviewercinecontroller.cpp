@@ -16,7 +16,7 @@
 namespace udg {
 
 QViewerCINEController::QViewerCINEController(QObject *parent)
-  : QObject(parent), m_firstSliceInterval(0), m_lastSliceInterval(0), m_nextStep(1), m_velocity(1), m_2DViewer(0), m_playing(false),
+: QObject(parent), m_firstSliceInterval(0), m_lastSliceInterval(0), m_nextStep(1), m_velocity(1), m_2DViewer(0), m_playing(false),
   m_cineDimension(TemporalDimension), m_loopEnabled(false), m_boomerangEnabled(false), m_recordFilename(QDir::homePath() + "/cineMovie")
 {
     m_timer = new QBasicTimer();

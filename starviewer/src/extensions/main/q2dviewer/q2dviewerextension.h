@@ -33,7 +33,7 @@ class HangingProtocolManager;
 #endif
 
 /**
-    Extensió que s'executarà  per defecte a l'obrir un model
+    Extensió que s'executarà per defecte a l'obrir un model
   */
 class Q2DViewerExtension : public QWidget, private Ui::Q2DViewerExtensionBase {
 Q_OBJECT

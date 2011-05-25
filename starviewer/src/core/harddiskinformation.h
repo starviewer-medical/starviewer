@@ -11,7 +11,7 @@ namespace udg {
     unitat (c:, d:, ...) i un directori i en linux s'ha d'especificar la ruta sensera del directori per saber la partició. Actualment aquesta classe només suporta
     els sistemes operatius basats en Unix (Linux, Mac OS X ...).
   */
-class HardDiskInformation{
+class HardDiskInformation {
 public:
     /**
      * Constructor de la classe

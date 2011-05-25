@@ -8,7 +8,7 @@
 #include "image.h"
 #include "dicomtagreader.h"
 
-namespace udg{
+namespace udg {
 
 Patient* CreateInformationModelObject::createPatient(DICOMTagReader *dicomTagReader)
 {

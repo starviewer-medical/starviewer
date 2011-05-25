@@ -6,8 +6,8 @@ namespace udg {
 
 class PacsDevice;
 
-/** 
-    Classe que s'encarrega de fer un echoSCU a un PACS 
+/**
+    Classe que s'encarrega de fer un echoSCU a un PACS
   */
 class EchoToPACS {
 public:

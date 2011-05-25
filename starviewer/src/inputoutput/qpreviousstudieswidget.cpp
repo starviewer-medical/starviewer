@@ -143,7 +143,7 @@ void QPreviousStudiesWidget::initializeTree()
     m_previousStudiesTree->setUniformRowHeights(true);
     m_previousStudiesTree->setSortingEnabled(true);
 
-    // Ordenem  els estudis per data i hora
+    // Ordenem els estudis per data i hora
     m_previousStudiesTree->sortItems(Date, Qt::DescendingOrder);
 
     // El farem visible quan rebem la llista d'estudis previs

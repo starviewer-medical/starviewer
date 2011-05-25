@@ -16,7 +16,7 @@ class DICOMTagReader;
 class PatientFiller;
 class LocalDatabaseManager;
 
-/** 
+/**
     Aquesta classe permet importar un dicomdir a la nostra base de dades.
     Només suporta importar dades d'un sol pacient a cada crida, per tant,
     cal assegurar-se que se li passa un studyUID correcte.

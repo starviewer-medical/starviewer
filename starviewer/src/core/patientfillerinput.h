@@ -14,7 +14,7 @@ class DICOMTagReader;
 /**
     Classe que encapsula els paràmetres d'input que es faran servir a PatientFiller
   */
-class PatientFillerInput{
+class PatientFillerInput {
 public:
     PatientFillerInput();
 

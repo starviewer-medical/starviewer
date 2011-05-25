@@ -9,7 +9,7 @@ namespace udg {
 
 class DicomMask;
 
-/** 
+/**
     Classe que s'encarrega de parsejar el XML que ens envia el RIS PIER (RIS que utilitzen des d'escriptori remot la majoria de
     centres de l'Institut Català de la Salut que fan diagnòstic per la imatge), converteix el XML en una DicomMask per poder
     descarregar l'estudi que ens indiqui el RIS. El format del XML és

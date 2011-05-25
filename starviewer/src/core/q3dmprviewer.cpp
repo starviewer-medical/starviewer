@@ -43,23 +43,22 @@ public:
         {
             switch (event)
             {
-            case vtkCommand::StartInteractionEvent:
-                m_viewer->getCurrentWindowLevel(lastWindowLevel);
-            break;
+                case vtkCommand::StartInteractionEvent:
+                    m_viewer->getCurrentWindowLevel(lastWindowLevel);
+                    break;
 
-            case vtkCommand::EndInteractionEvent:
+                case vtkCommand::EndInteractionEvent:
+                    break;
 
-            break;
-
-            case vtkCommand::InteractionEvent:
-                // Actualitzem únicament si ha canviat el window level
-                double wl[2];
-                m_viewer->getCurrentWindowLevel(wl);
-                if (wl[0] != lastWindowLevel[0] || wl[1] != lastWindowLevel[1])
-                {
-                    m_viewer->getWindowLevelData()->setCustomWindowLevel(wl[0], wl[1]);
-                }
-            break;
+                case vtkCommand::InteractionEvent:
+                    // Actualitzem únicament si ha canviat el window level
+                    double wl[2];
+                    m_viewer->getCurrentWindowLevel(wl);
+                    if (wl[0] != lastWindowLevel[0] || wl[1] != lastWindowLevel[1])
+                    {
+                        m_viewer->getWindowLevelData()->setCustomWindowLevel(wl[0], wl[1]);
+                    }
+                    break;
             }
             m_viewer->planeInteraction();
         }

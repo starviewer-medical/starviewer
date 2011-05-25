@@ -41,7 +41,7 @@ namespace udg {
     \todo Fer-la thread-safe.
   */
 template <typename T>
-class Singleton{
+class Singleton {
 
 public:
     /// Ens serveix per accedir a l'única instància de la classe T
@@ -71,7 +71,7 @@ protected:
     Aquesta implementació sí que és thread-safe.
 */
 template<typename T>
-class SingletonPointer{
+class SingletonPointer {
 
 public:
     static T* instance()

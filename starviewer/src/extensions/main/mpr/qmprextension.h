@@ -232,6 +232,6 @@ private:
     ToolManager *m_toolManager;
 };
 
-};  // End  namespace udg
+};  // End namespace udg
 
 #endif

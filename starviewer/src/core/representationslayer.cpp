@@ -21,22 +21,22 @@ void RepresentationsLayer::addRepresentation(ToolRepresentation *toolRepresentat
 {
     switch (m_currentPlane)
     {
-    case QViewer::AxialPlane:
-        m_axialToolRepresentations.insert(m_currentSlice, toolRepresentation);
-    break;
+        case QViewer::AxialPlane:
+            m_axialToolRepresentations.insert(m_currentSlice, toolRepresentation);
+            break;
 
-    case QViewer::SagitalPlane:
-        m_sagitalToolRepresentations.insert(m_currentSlice, toolRepresentation);
-    break;
+        case QViewer::SagitalPlane:
+            m_sagitalToolRepresentations.insert(m_currentSlice, toolRepresentation);
+            break;
 
-    case QViewer::CoronalPlane:
-        m_coronalToolRepresentations.insert(m_currentSlice, toolRepresentation);
-    break;
+        case QViewer::CoronalPlane:
+            m_coronalToolRepresentations.insert(m_currentSlice, toolRepresentation);
+            break;
 
-    default:
-        DEBUG_LOG("Pla no definit!");
-        return;
-    break;
+        default:
+            DEBUG_LOG("Pla no definit!");
+            return;
+            break;
     }
 }
 
@@ -46,43 +46,43 @@ void RepresentationsLayer::clearViewer()
     QMultiMap<int, ToolRepresentation*>::const_iterator it;
     switch (m_currentPlane)
     {
-    case QViewer::AxialPlane:
-        it = m_axialToolRepresentations.find(m_currentSlice);
-        while(it != m_axialToolRepresentations.end() && it.key() == m_currentSlice)
-        {
-            list << it.value();
-            it++;
-        }
-        // Elimina les primitives del contenidor
-        m_axialToolRepresentations.remove(m_currentSlice);
-    break;
+        case QViewer::AxialPlane:
+            it = m_axialToolRepresentations.find(m_currentSlice);
+            while(it != m_axialToolRepresentations.end() && it.key() == m_currentSlice)
+            {
+                list << it.value();
+                it++;
+            }
+            // Elimina les primitives del contenidor
+            m_axialToolRepresentations.remove(m_currentSlice);
+            break;
 
-    case QViewer::SagitalPlane:
-        it = m_sagitalToolRepresentations.find(m_currentSlice);
-        while(it != m_sagitalToolRepresentations.end() && it.key() == m_currentSlice)
-        {
-            list << it.value();
-            it++;
-        }
-        // Elimina les primitives del contenidor
-        m_sagitalToolRepresentations.remove(m_currentSlice);
-    break;
+        case QViewer::SagitalPlane:
+            it = m_sagitalToolRepresentations.find(m_currentSlice);
+            while(it != m_sagitalToolRepresentations.end() && it.key() == m_currentSlice)
+            {
+                list << it.value();
+                it++;
+            }
+            // Elimina les primitives del contenidor
+            m_sagitalToolRepresentations.remove(m_currentSlice);
+            break;
 
-    case QViewer::CoronalPlane:
-        it = m_coronalToolRepresentations.find(m_currentSlice);
-        while(it != m_coronalToolRepresentations.end() && it.key() == m_currentSlice)
-        {
-            list << it.value();
-            it++;
-        }
-        // Elimina les primitives del contenidor
-        m_coronalToolRepresentations.remove(m_currentSlice);
-    break;
+        case QViewer::CoronalPlane:
+            it = m_coronalToolRepresentations.find(m_currentSlice);
+            while(it != m_coronalToolRepresentations.end() && it.key() == m_currentSlice)
+            {
+                list << it.value();
+                it++;
+            }
+            // Elimina les primitives del contenidor
+            m_coronalToolRepresentations.remove(m_currentSlice);
+            break;
 
-    default:
-        DEBUG_LOG("Pla no definit!");
-        return;
-    break;
+        default:
+            DEBUG_LOG("Pla no definit!");
+            return;
+            break;
     }
 
     foreach(ToolRepresentation *representation, list)

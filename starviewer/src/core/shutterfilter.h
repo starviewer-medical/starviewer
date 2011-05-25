@@ -32,7 +32,7 @@ namespace udg {
   */
 class Volume;
 
-class ShutterFilter{
+class ShutterFilter {
 public:
     /// \TODO Queda pendent determinar correctament l'extrusió. Per una part, la coordenada Z dels punts que formen els polígons de l'extrusió
     /// hauria d'estar una llesca més per sota de l'origen i l'scale factor de l'extrusion hauria d'assegurar que el polígon atravessarà totes

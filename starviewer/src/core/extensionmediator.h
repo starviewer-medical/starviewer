@@ -5,7 +5,7 @@
 #include "displayableid.h"
 #include "identifier.h"
 
-namespace udg{
+namespace udg {
 
 class ExtensionContext;
 

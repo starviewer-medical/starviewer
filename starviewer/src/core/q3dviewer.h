@@ -32,11 +32,11 @@ class ContourVoxelShader;
 /**
     Classe base per als visualitzadors 3D
   */
-class Q3DViewer : public QViewer{
+class Q3DViewer : public QViewer {
 Q_OBJECT
 public:
-    enum RenderFunction{ RayCasting, RayCastingObscurance, GpuRayCasting,
-                         MIP3D, IsoSurface, Texture2D, Texture3D, Contouring };
+    enum RenderFunction { RayCasting, RayCastingObscurance, GpuRayCasting,
+                          MIP3D, IsoSurface, Texture2D, Texture3D, Contouring };
     enum ObscuranceQuality { Low, Medium, High };
 
     Q3DViewer(QWidget *parent = 0);

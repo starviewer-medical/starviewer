@@ -11,7 +11,7 @@ class Series;
 /**
     Classe pare dels mòduls que omplen parts específiques de l'estructura Patient
   */
-class PatientFillerStep{
+class PatientFillerStep {
 public:
     /// Flags que defineixen les diferents prioritats que poden tenir els Steps
     enum PriorityFlags{ LowPriority = 2, NormalPriority = 1, HighPriority = 0 };

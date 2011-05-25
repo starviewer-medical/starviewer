@@ -5,7 +5,7 @@
 #include "settings.h"
 
 namespace udg {
-    class DicomPrinter;
+class DicomPrinter;
 
 /**
     Implementació de la interfície PrinterManager per impressores DICOM en DCMTK.

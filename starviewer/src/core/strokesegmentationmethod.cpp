@@ -94,7 +94,7 @@ double StrokeSegmentationMethod::applyMethod()
     typedef itk::CastImageFilter<Volume::ItkImageType, InternalImageType> InputCastingFilterType;
     typedef itk::CastImageFilter<InternalImageType, Volume::ItkImageType> OutputCastingFilterType;
 
-    typedef itk::CurvatureFlowImageFilter<InternalImageType, InternalImageType>      CurvatureFlowImageFilterType;
+    typedef itk::CurvatureFlowImageFilter<InternalImageType, InternalImageType> CurvatureFlowImageFilterType;
     typedef itk::ConnectedThresholdImageFilter<InternalImageType, InternalImageType> ConnectedFilterType;
 
     InputCastingFilterType::Pointer incaster = InputCastingFilterType::New();
@@ -216,10 +216,10 @@ void StrokeSegmentationMethod::applyMethodVTKRecursive(vtkImageData* imMask, int
 double StrokeSegmentationMethod::applyCleanSkullMethod()
 {
     DEBUG_LOG("Clean Skull!!");
-  typedef itk::BinaryThresholdImageFilter<Volume::ItkImageType, Volume::ItkImageType> ThresholdFilterType;
-  typedef itk::BinaryBallStructuringElement<Volume::ItkPixelType, Volume::VDimension> StructuringElementType;
-  typedef itk::BinaryErodeImageFilter<Volume::ItkImageType, Volume::ItkImageType, StructuringElementType> ErodeFilterType;
-  typedef itk::BinaryDilateImageFilter<Volume::ItkImageType, Volume::ItkImageType, StructuringElementType> DilateFilterType;
+    typedef itk::BinaryThresholdImageFilter<Volume::ItkImageType, Volume::ItkImageType> ThresholdFilterType;
+    typedef itk::BinaryBallStructuringElement<Volume::ItkPixelType, Volume::VDimension> StructuringElementType;
+    typedef itk::BinaryErodeImageFilter<Volume::ItkImageType, Volume::ItkImageType, StructuringElementType> ErodeFilterType;
+    typedef itk::BinaryDilateImageFilter<Volume::ItkImageType, Volume::ItkImageType, StructuringElementType> DilateFilterType;
 
     typedef itk::ResampleImageFilter<Volume::ItkImageType, Volume::ItkImageType> ResampleFilterType;
     typedef itk::AffineTransform<double, 3> TransformType;
@@ -273,62 +273,62 @@ double StrokeSegmentationMethod::applyCleanSkullMethod()
     std::cout << "resampleVolumeNew: [" << neworigin[0] << "," << neworigin[1] << "," << neworigin[2] << "] ,[" << newspacing[0] << "," << newspacing[1] <<
                  "," << newspacing[2] << "] ," << newsize << std::endl;
 
-  ErodeFilterType::Pointer binaryErode = ErodeFilterType::New();
-  DilateFilterType::Pointer binaryDilate = DilateFilterType::New();
-  DilateFilterType::Pointer binaryDilatePre = DilateFilterType::New();
+    ErodeFilterType::Pointer binaryErode = ErodeFilterType::New();
+    DilateFilterType::Pointer binaryDilate = DilateFilterType::New();
+    DilateFilterType::Pointer binaryDilatePre = DilateFilterType::New();
 
-  binaryErode->SetErodeValue(m_insideMaskValue);
-  binaryDilate->SetDilateValue(m_insideMaskValue);
-  binaryDilatePre->SetDilateValue(m_insideMaskValue);
-  binaryErode->SetBackgroundValue(m_outsideMaskValue);
-  binaryDilate->SetBackgroundValue(m_outsideMaskValue);
-  binaryDilatePre->SetBackgroundValue(m_outsideMaskValue);
+    binaryErode->SetErodeValue(m_insideMaskValue);
+    binaryDilate->SetDilateValue(m_insideMaskValue);
+    binaryDilatePre->SetDilateValue(m_insideMaskValue);
+    binaryErode->SetBackgroundValue(m_outsideMaskValue);
+    binaryDilate->SetBackgroundValue(m_outsideMaskValue);
+    binaryDilatePre->SetBackgroundValue(m_outsideMaskValue);
 
-  unsigned long radiusDilatePre[3];
-  radiusDilatePre[0] = 1;
-  radiusDilatePre[1] = 1;
-  radiusDilatePre[2] = 1;
-  StructuringElementType structuringElementDilatePre;
-  // 3x3 structuring element
-  structuringElementDilatePre.SetRadius(radiusDilatePre);
-  structuringElementDilatePre.CreateStructuringElement();
+    unsigned long radiusDilatePre[3];
+    radiusDilatePre[0] = 1;
+    radiusDilatePre[1] = 1;
+    radiusDilatePre[2] = 1;
+    StructuringElementType structuringElementDilatePre;
+    // 3x3 structuring element
+    structuringElementDilatePre.SetRadius(radiusDilatePre);
+    structuringElementDilatePre.CreateStructuringElement();
 
-  binaryDilatePre->SetKernel(structuringElementDilatePre);
+    binaryDilatePre->SetKernel(structuringElementDilatePre);
 
     //binaryDilatePre->SetInput(m_Mask->getItkData());
     binaryDilatePre->SetInput(resampleFilter->GetOutput());
 
-  unsigned long radiusErode[3];
-  radiusErode[0] = 6;
-  radiusErode[1] = 6;
-  radiusErode[2] = 1;
+    unsigned long radiusErode[3];
+    radiusErode[0] = 6;
+    radiusErode[1] = 6;
+    radiusErode[2] = 1;
 
-  StructuringElementType structuringElementErode;
-  // 3x3 structuring element
-  structuringElementErode.SetRadius(radiusErode);
-  structuringElementErode.CreateStructuringElement();
+    StructuringElementType structuringElementErode;
+    // 3x3 structuring element
+    structuringElementErode.SetRadius(radiusErode);
+    structuringElementErode.CreateStructuringElement();
 
-  binaryErode->SetKernel(structuringElementErode);
+    binaryErode->SetKernel(structuringElementErode);
 
-  //binaryErode->SetInput(m_Mask->getItkData());
-  binaryErode->SetInput(binaryDilatePre->GetOutput());
+    //binaryErode->SetInput(m_Mask->getItkData());
+    binaryErode->SetInput(binaryDilatePre->GetOutput());
 
-  unsigned long radiusDilate[3];
-  radiusDilate[0] = 8;
-  radiusDilate[1] = 8;
-  radiusDilate[2] = 2;
-  StructuringElementType structuringElementDilate;
-  // 3x3 structuring element
-  structuringElementDilate.SetRadius(radiusDilate);
-  structuringElementDilate.CreateStructuringElement();
+    unsigned long radiusDilate[3];
+    radiusDilate[0] = 8;
+    radiusDilate[1] = 8;
+    radiusDilate[2] = 2;
+    StructuringElementType structuringElementDilate;
+    // 3x3 structuring element
+    structuringElementDilate.SetRadius(radiusDilate);
+    structuringElementDilate.CreateStructuringElement();
 
-  binaryDilate->SetKernel(structuringElementDilate);
+    binaryDilate->SetKernel(structuringElementDilate);
 
-  binaryDilate->SetInput(binaryErode->GetOutput());
-  t1 = clock();
-  //medianFilter->Update();
-  binaryDilate->Update();
-  t2 = clock();
+    binaryDilate->SetInput(binaryErode->GetOutput());
+    t1 = clock();
+    //medianFilter->Update();
+    binaryDilate->Update();
+    t2 = clock();
 
     // Resamplagem la imatge per tal de que tingui menys vòxels i trigui menys a calcular
     ResampleFilterType::Pointer resample2Filter = ResampleFilterType::New();
@@ -412,7 +412,7 @@ double StrokeSegmentationMethod::applyCleanSkullMethod()
         std::cerr << "Exception caught !" << std::endl;
         std::cerr << excep << std::endl;
     }
-  t4 = clock();
+    t4 = clock();
     std::cout << "Estudi temps:" << std::endl;
     std::cout << "Resample1    : " << (double)(t8 - t7) / 1000000.0 << std::endl;
     std::cout << "Dilate/Erode : " << (double)(t2 - t1) / 1000000.0 << std::endl;
@@ -437,7 +437,7 @@ void StrokeSegmentationMethod::applyFilter(Volume *output)
     typedef itk::CastImageFilter<Volume::ItkImageType, InternalImageType> InputCastingFilterType;
     typedef itk::CastImageFilter<InternalImageType, Volume::ItkImageType> OutputCastingFilterType;
 
-    typedef itk::CurvatureFlowImageFilter<InternalImageType, InternalImageType>      CurvatureFlowImageFilterType;
+    typedef itk::CurvatureFlowImageFilter<InternalImageType, InternalImageType> CurvatureFlowImageFilterType;
     typedef itk::ConnectedThresholdImageFilter<InternalImageType, InternalImageType> ConnectedFilterType;
 
     InputCastingFilterType::Pointer incaster = InputCastingFilterType::New();
@@ -667,7 +667,7 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume *lesionMask)
     mainIt.GoToBegin();
     maskIt.GoToBegin();
 
-    std::vector<unsigned int> hist(m_upperVentriclesThreshold - m_lowerVentriclesThreshold + 1,0);
+    std::vector<unsigned int> hist(m_upperVentriclesThreshold - m_lowerVentriclesThreshold + 1, 0);
     while (!mainIt.IsAtEnd())
     {
         if (mainIt.Value() >= m_lowerVentriclesThreshold && mainIt.Value() < m_upperVentriclesThreshold)
@@ -731,7 +731,7 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume *lesionMask)
 
     FastMarchingFilterType::Pointer fastMarching = FastMarchingFilterType::New();
 
-    typedef itk::ErfcLevelSetImageFilter<InternalImageType, InternalImageType,  Volume::ItkImageType> ErfcLevelSetImageFilterType;
+    typedef itk::ErfcLevelSetImageFilter<InternalImageType, InternalImageType, Volume::ItkImageType> ErfcLevelSetImageFilterType;
     ErfcLevelSetImageFilterType::Pointer erfcSegmentation = ErfcLevelSetImageFilterType::New();
 
     erfcSegmentation->SetPropagationScaling(1.0);
@@ -1160,16 +1160,16 @@ double StrokeSegmentationMethod::applyMethodEdema2(Volume *lesionMask)
 //     volumeCalc->SetInsideValue(m_insideMaskValue);
 
     try
-        {
+    {
         fastMarching->SetOutputSize(m_Volume->getItkData()->GetBufferedRegion().GetSize());
         thresholder->Update();
         //volumeCalc->Update();
-        }
+    }
     catch(itk::ExceptionObject & excep)
-        {
+    {
         std::cerr << "Exception caught !" << std::endl;
         std::cerr << excep << std::endl;
-        }
+    }
     //std::cout << "FI fastMarching!!" << std::endl;
 
     /*std::cout << std::endl;
@@ -1233,10 +1233,10 @@ double StrokeSegmentationMethod::erfc(double x)
     // --- Nve 14-nov-1998 UU-SAP Utrecht
     // The parameters of the Chebyshev fit
     const double a1 = -1.26551223, a2 = 1.00002368,
-    a3 =  0.37409196,   a4 = 0.09678418,
-    a5 = -0.18628806,   a6 = 0.27886807,
-    a7 = -1.13520398,   a8 = 1.48851587,
-    a9 = -0.82215223,  a10 = 0.17087277;
+    a3 =  0.37409196, a4 = 0.09678418,
+    a5 = -0.18628806, a6 = 0.27886807,
+    a7 = -1.13520398, a8 = 1.48851587,
+    a9 = -0.82215223, a10 = 0.17087277;
 
     // The return value
     double v = 1.0;
@@ -1266,10 +1266,10 @@ double StrokeSegmentationMethod::applyVentriclesMethod()
     typedef float InternalPixelType;
     typedef itk::Image<InternalPixelType, 3> InternalImageType;
 
-    typedef itk::CastImageFilter<Volume::ItkImageType, InternalImageType>            InputCastingFilterType;
-    typedef itk::CastImageFilter<InternalImageType, Volume::ItkImageType>            OutputCastingFilterType;
+    typedef itk::CastImageFilter<Volume::ItkImageType, InternalImageType> InputCastingFilterType;
+    typedef itk::CastImageFilter<InternalImageType, Volume::ItkImageType> OutputCastingFilterType;
     typedef itk::ConnectedThresholdImageFilter<InternalImageType, InternalImageType> ConnectedFilterType;
-    typedef itk::VolumeCalculatorImageFilter<Volume::ItkImageType>                   VolumeCalcFilterType;
+    typedef itk::VolumeCalculatorImageFilter<Volume::ItkImageType> VolumeCalcFilterType;
 
     InputCastingFilterType::Pointer incaster = InputCastingFilterType::New();
     OutputCastingFilterType::Pointer outcaster = OutputCastingFilterType::New();
@@ -1334,79 +1334,79 @@ void StrokeSegmentationMethod::applyMethod2()
     typedef itk::SigmoidImageFilter<InternalImageType, InternalImageType> SigmoidFilterType;
     typedef itk::FastMarchingImageFilter<InternalImageType, InternalImageType> FastMarchingFilterType;
 
-  const int timeThreshold = 70;
-  const double sigma = 0.5;
-  const double alpha = -0.3;
-  const double beta = 2.0;
-  const double stoppingTime = 200.0;
+    const int timeThreshold = 70;
+    const double sigma = 0.5;
+    const double alpha = -0.3;
+    const double beta = 2.0;
+    const double stoppingTime = 200.0;
 
-  ThresholdingFilterType::Pointer thresholder = ThresholdingFilterType::New();
-  thresholder->SetLowerThreshold(0.0);
-  thresholder->SetUpperThreshold(timeThreshold);
+    ThresholdingFilterType::Pointer thresholder = ThresholdingFilterType::New();
+    thresholder->SetLowerThreshold(0.0);
+    thresholder->SetUpperThreshold(timeThreshold);
 
-  thresholder->SetOutsideValue(0);
-  thresholder->SetInsideValue(255);
+    thresholder->SetOutsideValue(0);
+    thresholder->SetInsideValue(255);
 
-  CurvatureAnisotropicFilterType::Pointer smoothing = CurvatureAnisotropicFilterType::New();
-  GradientFilterType::Pointer gradientMagnitude = GradientFilterType::New();
-  SigmoidFilterType::Pointer sigmoid = SigmoidFilterType::New();
-  sigmoid->SetOutputMinimum(0.0);
-  sigmoid->SetOutputMaximum(1.0);
-  FastMarchingFilterType::Pointer fastMarching = FastMarchingFilterType::New();
-  InputCastingFilterType::Pointer incaster = InputCastingFilterType::New();
+    CurvatureAnisotropicFilterType::Pointer smoothing = CurvatureAnisotropicFilterType::New();
+    GradientFilterType::Pointer gradientMagnitude = GradientFilterType::New();
+    SigmoidFilterType::Pointer sigmoid = SigmoidFilterType::New();
+    sigmoid->SetOutputMinimum(0.0);
+    sigmoid->SetOutputMaximum(1.0);
+    FastMarchingFilterType::Pointer fastMarching = FastMarchingFilterType::New();
+    InputCastingFilterType::Pointer incaster = InputCastingFilterType::New();
 
-  incaster->SetInput(m_Volume->getItkData());
-  //smoothing->SetInput(incaster->GetOutput());
-  //gradientMagnitude->SetInput(smoothing->GetOutput());
-  gradientMagnitude->SetInput(incaster->GetOutput());
-  sigmoid->SetInput(gradientMagnitude->GetOutput());
-  fastMarching->SetInput(sigmoid->GetOutput());
-  thresholder->SetInput(fastMarching->GetOutput());
+    incaster->SetInput(m_Volume->getItkData());
+    //smoothing->SetInput(incaster->GetOutput());
+    //gradientMagnitude->SetInput(smoothing->GetOutput());
+    gradientMagnitude->SetInput(incaster->GetOutput());
+    sigmoid->SetInput(gradientMagnitude->GetOutput());
+    fastMarching->SetInput(sigmoid->GetOutput());
+    thresholder->SetInput(fastMarching->GetOutput());
 
-  smoothing->SetTimeStep(0.0625);
-  smoothing->SetNumberOfIterations(2);
-  smoothing->SetConductanceParameter(9.0);
+    smoothing->SetTimeStep(0.0625);
+    smoothing->SetNumberOfIterations(2);
+    smoothing->SetConductanceParameter(9.0);
 
-  gradientMagnitude->SetSigma(sigma);
+    gradientMagnitude->SetSigma(sigma);
 
-  sigmoid->SetAlpha(alpha);
-  sigmoid->SetBeta(beta);
+    sigmoid->SetAlpha(alpha);
+    sigmoid->SetBeta(beta);
 
-  typedef FastMarchingFilterType::NodeContainer NodeContainer;
-  typedef FastMarchingFilterType::NodeType NodeType;
-  NodeContainer::Pointer seeds = NodeContainer::New();
+    typedef FastMarchingFilterType::NodeContainer NodeContainer;
+    typedef FastMarchingFilterType::NodeType NodeType;
+    NodeContainer::Pointer seeds = NodeContainer::New();
 
-  InternalImageType::IndexType seedIndex;
-  InternalImageType::PointType seedPoint;
-  seedPoint[0] = m_px;
-  seedPoint[1] = m_py;
-  seedPoint[2] = m_pz;
-  m_Volume->getItkData()->TransformPhysicalPointToIndex(seedPoint, seedIndex);
+    InternalImageType::IndexType seedIndex;
+    InternalImageType::PointType seedPoint;
+    seedPoint[0] = m_px;
+    seedPoint[1] = m_py;
+    seedPoint[2] = m_pz;
+    m_Volume->getItkData()->TransformPhysicalPointToIndex(seedPoint, seedIndex);
 
-  NodeType node;
-  const double seedValue = 0.0;
+    NodeType node;
+    const double seedValue = 0.0;
 
-  node.SetValue(seedValue);
-  node.SetIndex(seedIndex);
+    node.SetValue(seedValue);
+    node.SetIndex(seedIndex);
 
-  seeds->Initialize();
-  seeds->InsertElement(0, node);
+    seeds->Initialize();
+    seeds->InsertElement(0, node);
 
-  fastMarching->SetTrialPoints(seeds);
-  fastMarching->SetOutputSize(m_Volume->getItkData()->GetBufferedRegion().GetSize());
-  fastMarching->SetStoppingValue(stoppingTime);
+    fastMarching->SetTrialPoints(seeds);
+    fastMarching->SetOutputSize(m_Volume->getItkData()->GetBufferedRegion().GetSize());
+    fastMarching->SetStoppingValue(stoppingTime);
 
-  try
+    try
     {
-    thresholder->Update();
+        thresholder->Update();
     }
-  catch(itk::ExceptionObject & excep)
+    catch(itk::ExceptionObject & excep)
     {
-    std::cerr << "Exception caught !" << std::endl;
-    std::cerr << excep << std::endl;
+        std::cerr << "Exception caught !" << std::endl;
+        std::cerr << excep << std::endl;
     }
 
-  std::cout << "Fi process!" << std::endl;
+    std::cout << "Fi process!" << std::endl;
 
    //maskImageOut = thresholder->GetOutput();
 
@@ -1460,7 +1460,7 @@ int StrokeSegmentationMethod::applyMethod3()
     typedef itk::CastImageFilter<Volume::ItkImageType, InternalImageType> InputCastingFilterType;
     typedef itk::CastImageFilter<InternalImageType, Volume::ItkImageType> OutputCastingFilterType;
 
-    typedef itk::CurvatureFlowImageFilter<InternalImageType, InternalImageType>      CurvatureFlowImageFilterType;
+    typedef itk::CurvatureFlowImageFilter<InternalImageType, InternalImageType> CurvatureFlowImageFilterType;
     typedef itk::ConnectedThresholdImageFilter<InternalImageType, InternalImageType> ConnectedFilterType;
 
     typedef itk::BinaryThresholdImageFilter<InternalImageType, Volume::ItkImageType> ThresholdingFilterType;
@@ -1472,7 +1472,7 @@ int StrokeSegmentationMethod::applyMethod3()
 
     ThresholdingFilterType::Pointer thresholder = ThresholdingFilterType::New();
     thresholder->SetLowerThreshold(-1000.0);
-    thresholder->SetUpperThreshold(    0.0);
+    thresholder->SetUpperThreshold(0.0);
     thresholder->SetOutsideValue(m_outsideMaskValue);
     thresholder->SetInsideValue(m_insideMaskValue);
 
@@ -1519,15 +1519,15 @@ int StrokeSegmentationMethod::applyMethod3()
     fastMarching->SetSpeedConstant(1.0);
 
     try
-        {
+    {
         fastMarching->SetOutputSize(m_Volume->getItkData()->GetBufferedRegion().GetSize());
         thresholder->Update();
-        }
+    }
     catch(itk::ExceptionObject & excep)
-        {
+    {
         std::cerr << "Exception caught !" << std::endl;
         std::cerr << excep << std::endl;
-        }
+    }
 
     std::cout << std::endl;
     std::cout << "Max. no. iterations: " << thresholdSegmentation->GetNumberOfIterations() << std::endl;
@@ -1646,14 +1646,14 @@ int StrokeSegmentationMethod::applyMethod4()
     fastMarching->SetOutputSize(m_Volume->getItkData()->GetBufferedRegion().GetSize());
 
     try
-        {
+    {
         thresholder->Update();
-        }
+    }
     catch(itk::ExceptionObject & excep)
-        {
+    {
         std::cerr << "Exception caught !" << std::endl;
         std::cerr << excep << std::endl;
-        }
+    }
     // Software Guide : EndCodeSnippet
 
     // Print out some useful information

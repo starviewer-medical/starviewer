@@ -74,14 +74,30 @@ void ObscuranceThread::run()
 
     switch (m_obscuranceVariant)
     {
-        case ObscuranceMainThread::Density: runDensity(); break;
-        case ObscuranceMainThread::DensitySmooth: runDensitySmooth(); break;
-        case ObscuranceMainThread::Opacity: runOpacity(); break;
-        case ObscuranceMainThread::OpacitySmooth: runOpacitySmooth(); break;
-        case ObscuranceMainThread::OpacitySaliency: runOpacitySaliency(); break;
-        case ObscuranceMainThread::OpacitySmoothSaliency: runOpacitySmoothSaliency(); break;
-        case ObscuranceMainThread::OpacityColorBleeding: runOpacityColorBleeding(); break;
-        case ObscuranceMainThread::OpacitySmoothColorBleeding: runOpacitySmoothColorBleeding(); break;
+        case ObscuranceMainThread::Density:
+            runDensity();
+            break;
+        case ObscuranceMainThread::DensitySmooth:
+            runDensitySmooth();
+            break;
+        case ObscuranceMainThread::Opacity:
+            runOpacity();
+            break;
+        case ObscuranceMainThread::OpacitySmooth:
+            runOpacitySmooth();
+            break;
+        case ObscuranceMainThread::OpacitySaliency:
+            runOpacitySaliency();
+            break;
+        case ObscuranceMainThread::OpacitySmoothSaliency:
+            runOpacitySmoothSaliency();
+            break;
+        case ObscuranceMainThread::OpacityColorBleeding:
+            runOpacityColorBleeding();
+            break;
+        case ObscuranceMainThread::OpacitySmoothColorBleeding:
+            runOpacitySmoothColorBleeding();
+            break;
     }
 }
 
@@ -1066,13 +1082,21 @@ inline double ObscuranceThread::obscurance(double distance) const
 
     switch (m_obscuranceFunction)
     {
-        case ObscuranceMainThread::Constant0: return 0.0;
-        case ObscuranceMainThread::Distance: return distance / m_obscuranceMaximumDistance;
-        case ObscuranceMainThread::SquareRoot: return sqrt(distance / m_obscuranceMaximumDistance);
-        case ObscuranceMainThread::Exponential: return 1.0 - exp(-distance / m_obscuranceMaximumDistance);
-        case ObscuranceMainThread::ExponentialNorm: return (1.0 - exp(-distance / m_obscuranceMaximumDistance)) / EXP_NORM;
-        case ObscuranceMainThread::CubeRoot: return MathTools::cubeRoot(distance / m_obscuranceMaximumDistance);
-        default: Q_ASSERT(false); return 0.0;
+        case ObscuranceMainThread::Constant0:
+            return 0.0;
+        case ObscuranceMainThread::Distance:
+            return distance / m_obscuranceMaximumDistance;
+        case ObscuranceMainThread::SquareRoot:
+            return sqrt(distance / m_obscuranceMaximumDistance);
+        case ObscuranceMainThread::Exponential:
+            return 1.0 - exp(-distance / m_obscuranceMaximumDistance);
+        case ObscuranceMainThread::ExponentialNorm:
+            return (1.0 - exp(-distance / m_obscuranceMaximumDistance)) / EXP_NORM;
+        case ObscuranceMainThread::CubeRoot:
+            return MathTools::cubeRoot(distance / m_obscuranceMaximumDistance);
+        default:
+            Q_ASSERT(false);
+            return 0.0;
     }
 }
 

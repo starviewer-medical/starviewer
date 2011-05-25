@@ -7,7 +7,7 @@
 
 namespace udg {
 
-/** 
+/**
     Aquesta classe s'utilitza per mostrar les release notes, conté un QWebView per tal de mostrar-les com a html.
     Es gestionada per ApplicationVersionChecker.
   */

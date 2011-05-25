@@ -12,7 +12,7 @@ class DICOMTagReader;
 /**
     Converteix Objects Dataset de dcmtk a objectes d'Starvieweer
   */
-class CreateInformationModelObject{
+class CreateInformationModelObject {
 
 public:
     /// Crea un patient a partir d'un DICOMTagReader

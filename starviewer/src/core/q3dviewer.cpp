@@ -276,7 +276,7 @@ double Q3DViewer::getCurrentColorLevel()
     }
 }
 
-void Q3DViewer::setWindowLevel(double window , double level)
+void Q3DViewer::setWindowLevel(double window, double level)
 {
     if (m_mainVolume)
     {
@@ -436,30 +436,30 @@ QString Q3DViewer::getRenderFunctionAsString()
     QString result;
     switch (m_renderFunction)
     {
-    case RayCasting:
-        result = "RayCasting";
-    break;
-    case RayCastingObscurance:
-        result = "RayCastingObscurance";
-    break;
-    case GpuRayCasting:
-        result = "GPU Ray Casting";
-    break;
-    case MIP3D:
-        result = "MIP 3D";
-    break;
-    case IsoSurface:
-        result = "IsoSurface";
-    break;
-    case Texture2D:
-        result = "Texture2D";
-    break;
-    case Texture3D:
-        result = "Texture3D";
-    break;
-    case Contouring:
-        result = "Contouring";
-    break;
+        case RayCasting:
+            result = "RayCasting";
+            break;
+        case RayCastingObscurance:
+            result = "RayCastingObscurance";
+            break;
+        case GpuRayCasting:
+            result = "GPU Ray Casting";
+            break;
+        case MIP3D:
+            result = "MIP 3D";
+            break;
+        case IsoSurface:
+            result = "IsoSurface";
+            break;
+        case Texture2D:
+            result = "Texture2D";
+            break;
+        case Texture3D:
+            result = "Texture3D";
+            break;
+        case Contouring:
+            result = "Contouring";
+            break;
     }
     return result;
 }
@@ -589,30 +589,30 @@ void Q3DViewer::applyCurrentRenderingMethod()
     {
         switch (m_renderFunction)
         {
-        case Contouring:
-            renderContouring();
-        break;
-        case RayCasting:
-            renderRayCasting();
-        break;
-        case RayCastingObscurance:
-            renderRayCastingObscurance();
-        break;
-        case GpuRayCasting:
-            renderGpuRayCasting();
-        break;
-        case MIP3D:
-            renderMIP3D();
-        break;
-        case IsoSurface:
-            renderIsoSurface();
-        break;
-        case Texture2D:
-            renderTexture2D();
-        break;
-        case Texture3D:
-            renderTexture3D();
-        break;
+            case Contouring:
+                renderContouring();
+                break;
+            case RayCasting:
+                renderRayCasting();
+                break;
+            case RayCastingObscurance:
+                renderRayCastingObscurance();
+                break;
+            case GpuRayCasting:
+                renderGpuRayCasting();
+                break;
+            case MIP3D:
+                renderMIP3D();
+                break;
+            case IsoSurface:
+                renderIsoSurface();
+                break;
+            case Texture2D:
+                renderTexture2D();
+                break;
+            case Texture3D:
+                renderTexture3D();
+                break;
         }
 
         if (m_firstRender)
@@ -683,23 +683,23 @@ void Q3DViewer::resetOrientation()
 {
     switch (m_currentOrientation)
     {
-    case Axial:
-        this->resetViewToAxial();
-    break;
+        case Axial:
+            this->resetViewToAxial();
+            break;
 
-    case Sagital:
-        this->resetViewToSagital();
-    break;
+        case Sagital:
+            this->resetViewToSagital();
+            break;
 
-    case Coronal:
-        this->resetViewToCoronal();
-    break;
+        case Coronal:
+            this->resetViewToCoronal();
+            break;
 
-    default:
-        setDefaultOrientationForCurrentInput();
-        DEBUG_LOG("Q3DViewer: m_currentOrientation no és cap de les tres esperades (Axial,Sagital,Coronal). Donem l'orientació per defecte.");
-        this->resetOrientation();
-    break;
+        default:
+            setDefaultOrientationForCurrentInput();
+            DEBUG_LOG("Q3DViewer: m_currentOrientation no és cap de les tres esperades (Axial,Sagital,Coronal). Donem l'orientació per defecte.");
+            this->resetOrientation();
+            break;
     }
 }
 
@@ -1047,17 +1047,17 @@ void Q3DViewer::renderIsoSurface()
 
     // Create a transfer function mapping scalar value to color (color)
     vtkColorTransferFunction *cTFun = vtkColorTransferFunction::New();
-    cTFun->AddRGBPoint(           0.0, 1.0, 0.0, 0.0);
+    cTFun->AddRGBPoint(0.0, 1.0, 0.0, 0.0);
     cTFun->AddRGBPoint(0.25 * m_range, 1.0, 1.0, 0.0);
     cTFun->AddRGBPoint(0.50 * m_range, 0.0, 1.0, 0.0);
     cTFun->AddRGBPoint(0.75 * m_range, 0.0, 1.0, 1.0);
-    cTFun->AddRGBPoint(       m_range, 0.0, 0.0, 1.0);
+    cTFun->AddRGBPoint(m_range, 0.0, 0.0, 1.0);
 
     // Create a transfer function mapping magnitude of gradient to opacity
     vtkPiecewiseFunction *goTFun = vtkPiecewiseFunction::New();
-    goTFun->AddPoint(  0, 0.0);
-    goTFun->AddPoint( 30, 0.0);
-    goTFun->AddPoint( 40, 1.0);
+    goTFun->AddPoint(0, 0.0);
+    goTFun->AddPoint(30, 0.0);
+    goTFun->AddPoint(40, 1.0);
     goTFun->AddPoint(255, 1.0);
 
     m_volumeProperty->ShadeOn();

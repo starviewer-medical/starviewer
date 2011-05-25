@@ -11,7 +11,7 @@ namespace udg {
 // Fordward declarations
 class Volume;
 
-class VtkThresholdFilter : public Filter{
+class VtkThresholdFilter : public Filter {
 
 public:
     VtkThresholdFilter();

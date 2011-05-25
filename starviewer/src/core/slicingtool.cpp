@@ -48,81 +48,81 @@ void SlicingTool::handleEvent(unsigned long eventID)
 
     switch (eventID)
     {
-    case vtkCommand::LeftButtonPressEvent:
-        m_mouseMovement = false;
-        this->startSlicing();
-        // Estadístiques
-        if (!m_wheelSteps.isEmpty())
-        {
-            StatsWatcher::log("Slicing Tool: Wheel Record: " + m_wheelSteps);
-            m_wheelSteps.clear();
-        }
-    break;
+        case vtkCommand::LeftButtonPressEvent:
+            m_mouseMovement = false;
+            this->startSlicing();
+            // Estadístiques
+            if (!m_wheelSteps.isEmpty())
+            {
+                StatsWatcher::log("Slicing Tool: Wheel Record: " + m_wheelSteps);
+                m_wheelSteps.clear();
+            }
+            break;
 
-    case vtkCommand::MouseMoveEvent:
-        m_mouseMovement = true;
-        this->doSlicing();
-    break;
+        case vtkCommand::MouseMoveEvent:
+            m_mouseMovement = true;
+            this->doSlicing();
+            break;
 
-    case vtkCommand::LeftButtonReleaseEvent:
-        m_mouseMovement = false;
-        this->endSlicing();
-        // Estadístiques
-        if (!m_scrollSteps.isEmpty())
-        {
-            StatsWatcher::log("Slicing Tool: Button Scroll Record: " + m_scrollSteps + " ::Over a total of " + QString::number(m_numberOfImages) + " images");
-            m_scrollSteps.clear();
-        }
-    break;
+        case vtkCommand::LeftButtonReleaseEvent:
+            m_mouseMovement = false;
+            this->endSlicing();
+            // Estadístiques
+            if (!m_scrollSteps.isEmpty())
+            {
+                StatsWatcher::log("Slicing Tool: Button Scroll Record: " + m_scrollSteps + " ::Over a total of " + QString::number(m_numberOfImages) + " images");
+                m_scrollSteps.clear();
+            }
+            break;
 
-    case vtkCommand::MouseWheelForwardEvent:
-        m_mouseMovement = false;
-        m_viewer->setCursor(QCursor(QPixmap(":/images/slicing.png")));
-        this->updateIncrement(1);
-        m_viewer->setCursor(Qt::ArrowCursor);
-        // Estadístiques
-        m_wheelSteps += QString::number(1) + " ";
-    break;
+        case vtkCommand::MouseWheelForwardEvent:
+            m_mouseMovement = false;
+            m_viewer->setCursor(QCursor(QPixmap(":/images/slicing.png")));
+            this->updateIncrement(1);
+            m_viewer->setCursor(Qt::ArrowCursor);
+            // Estadístiques
+            m_wheelSteps += QString::number(1) + " ";
+            break;
 
-    case vtkCommand::MouseWheelBackwardEvent:
-        m_mouseMovement = false;
-        m_viewer->setCursor(QCursor(QPixmap(":/images/slicing.png")));
-        this->updateIncrement(-1);
-        m_viewer->setCursor(Qt::ArrowCursor);
-        // Estadístiques
-        m_wheelSteps += QString::number(-1) + " ";
-    break;
+        case vtkCommand::MouseWheelBackwardEvent:
+            m_mouseMovement = false;
+            m_viewer->setCursor(QCursor(QPixmap(":/images/slicing.png")));
+            this->updateIncrement(-1);
+            m_viewer->setCursor(Qt::ArrowCursor);
+            // Estadístiques
+            m_wheelSteps += QString::number(-1) + " ";
+            break;
 
-    case vtkCommand::MiddleButtonPressEvent:
-        m_mouseMovement = false;
-    break;
+        case vtkCommand::MiddleButtonPressEvent:
+            m_mouseMovement = false;
+            break;
 
-    case vtkCommand::MiddleButtonReleaseEvent:
-        // TODO aquest comportament de fer switch es podria eliminar ja que no és gaire usable
-        // de moment es manté perquè ja tenim un conjunt d'usuaris acostumats a aquest comportament
-        if (!m_mouseMovement)
-        {
-            switchSlicingMode();
-        }
-    break;
+        case vtkCommand::MiddleButtonReleaseEvent:
+            // TODO aquest comportament de fer switch es podria eliminar ja que no és gaire usable
+            // de moment es manté perquè ja tenim un conjunt d'usuaris acostumats a aquest comportament
+            if (!m_mouseMovement)
+            {
+                switchSlicingMode();
+            }
+            break;
 
-    case vtkCommand::KeyPressEvent:
-        if (m_viewer->getInteractor()->GetControlKey() && m_inputHasPhases)
-        {
-            m_forcePhaseMode = true;
+        case vtkCommand::KeyPressEvent:
+            if (m_viewer->getInteractor()->GetControlKey() && m_inputHasPhases)
+            {
+                m_forcePhaseMode = true;
+                computeImagesForScrollMode();
+                StatsWatcher::log("FORCE phase mode with Ctrl key");
+            }
+            break;
+
+        case vtkCommand::KeyReleaseEvent:
+            m_forcePhaseMode = false;
             computeImagesForScrollMode();
-            StatsWatcher::log("FORCE phase mode with Ctrl key");
-        }
-        break;
+            StatsWatcher::log("Disable FORCED phase mode releasing Ctrl key");
+            break;
 
-    case vtkCommand::KeyReleaseEvent:
-        m_forcePhaseMode = false;
-        computeImagesForScrollMode();
-        StatsWatcher::log("Disable FORCED phase mode releasing Ctrl key");
-        break;
-
-    default:
-    break;
+        default:
+            break;
     }
 }
 

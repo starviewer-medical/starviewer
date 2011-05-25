@@ -27,20 +27,20 @@ void Rotate3DTool::handleEvent(unsigned long eventID)
 {
     switch (eventID)
     {
-    case vtkCommand::RightButtonPressEvent:
-        this->startRotate3D();
-    break;
+        case vtkCommand::RightButtonPressEvent:
+            this->startRotate3D();
+            break;
 
-    case vtkCommand::MouseMoveEvent:
-        this->doRotate3D();
-    break;
+        case vtkCommand::MouseMoveEvent:
+            this->doRotate3D();
+            break;
 
-    case vtkCommand::RightButtonReleaseEvent:
-        this->endRotate3D();
-    break;
+        case vtkCommand::RightButtonReleaseEvent:
+            this->endRotate3D();
+            break;
 
-    default:
-    break;
+        default:
+            break;
     }
 }
 
@@ -69,13 +69,13 @@ void Rotate3DTool::doRotate3D()
 
     switch (m_state)
     {
-    case Rotating:
-        m_interactorStyle->Rotate();
-    break;
+        case Rotating:
+            m_interactorStyle->Rotate();
+            break;
 
-    case Spinning:
-        m_interactorStyle->Spin();
-    break;
+        case Spinning:
+            m_interactorStyle->Spin();
+            break;
     }
 }
 
@@ -86,13 +86,13 @@ void Rotate3DTool::endRotate3D()
     m_viewer->setCursor(Qt::ArrowCursor);
     switch (m_state)
     {
-    case Rotating:
-        m_interactorStyle->EndRotate();
-    break;
+        case Rotating:
+            m_interactorStyle->EndRotate();
+            break;
 
-    case Spinning:
-        m_interactorStyle->EndSpin();
-    break;
+        case Spinning:
+            m_interactorStyle->EndSpin();
+            break;
     }
     m_state = None;
 }

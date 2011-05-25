@@ -455,7 +455,7 @@ double Q2DViewer::getThickness()
     switch (m_lastView)
     {
         case Axial:
-            {
+        {
                 // HACK Fins que se solucioni de forma consistent el ticket #492
                 if (isThickSlabActive())
                 {
@@ -476,7 +476,7 @@ double Q2DViewer::getThickness()
                         thickness = m_mainVolume->getSpacing()[2];
                     }
                 }
-            }
+        }
             break;
 
         case Sagital:
@@ -1293,89 +1293,89 @@ ImagePlane* Q2DViewer::getImagePlane(int sliceNumber, int phaseNumber, bool vtkR
         {
             // XY
             case Axial:
+            {
+                Image *image = m_mainVolume->getImage(sliceNumber, phaseNumber);
+                if (image)
                 {
-                    Image *image = m_mainVolume->getImage(sliceNumber, phaseNumber);
-                    if (image)
-                    {
-                        imagePlane = new ImagePlane();
-                        imagePlane->fillFromImage(image);
-                    }
+                    imagePlane = new ImagePlane();
+                    imagePlane->fillFromImage(image);
                 }
+            }
                 break;
 
             // YZ TODO Encara no esta comprovat que aquest pla sigui correcte
             case Sagital:
+            {
+                Image *image = m_mainVolume->getImage(0);
+                if (image)
                 {
-                    Image *image = m_mainVolume->getImage(0);
-                    if (image)
+                    imagePlane = new ImagePlane();
+                    const double *directionCosines = image->getImageOrientationPatient();
+
+                    if (vtkReconstructionHack)
                     {
-                        imagePlane = new ImagePlane();
-                        const double *directionCosines = image->getImageOrientationPatient();
-
-                        if (vtkReconstructionHack)
-                        {
-                            // Retornem un fals pla, respecte el món real, però que s'ajusta més al món vtk
-                            imagePlane->setRowDirectionVector(directionCosines[3], directionCosines[4], directionCosines[5]);
-                            imagePlane->setColumnDirectionVector(directionCosines[6], directionCosines[7], directionCosines[8]);
-                        }
-                        else
-                        {
-                            // Això serà lo normal, retornar la autèntica direcció del pla
-                            double columnVector[3];
-                            m_mainVolume->getStackDirection(columnVector, 0);
-
-                            imagePlane->setRowDirectionVector(directionCosines[3], directionCosines[4], directionCosines[5]);
-                            imagePlane->setColumnDirectionVector(columnVector[0], columnVector[1], columnVector[2]);
-                        }
-
-                        imagePlane->setSpacing(spacing[1], spacing[2]);
-                        imagePlane->setThickness(spacing[0]);
-                        imagePlane->setRows(dimensions[2]);
-                        imagePlane->setColumns(dimensions[1]);
-
-                        // TODO Falta esbrinar si l'origen que estem donant es bo o no
-                        imagePlane->setOrigin(origin[0] + sliceNumber * directionCosines[0] * spacing[0],
-                                              origin[1] + sliceNumber * directionCosines[1] * spacing[0],
-                                              origin[2] + sliceNumber * directionCosines[2] * spacing[0]);
+                        // Retornem un fals pla, respecte el món real, però que s'ajusta més al món vtk
+                        imagePlane->setRowDirectionVector(directionCosines[3], directionCosines[4], directionCosines[5]);
+                        imagePlane->setColumnDirectionVector(directionCosines[6], directionCosines[7], directionCosines[8]);
                     }
+                    else
+                    {
+                        // Això serà lo normal, retornar la autèntica direcció del pla
+                        double columnVector[3];
+                        m_mainVolume->getStackDirection(columnVector, 0);
+
+                        imagePlane->setRowDirectionVector(directionCosines[3], directionCosines[4], directionCosines[5]);
+                        imagePlane->setColumnDirectionVector(columnVector[0], columnVector[1], columnVector[2]);
+                    }
+
+                    imagePlane->setSpacing(spacing[1], spacing[2]);
+                    imagePlane->setThickness(spacing[0]);
+                    imagePlane->setRows(dimensions[2]);
+                    imagePlane->setColumns(dimensions[1]);
+
+                    // TODO Falta esbrinar si l'origen que estem donant es bo o no
+                    imagePlane->setOrigin(origin[0] + sliceNumber * directionCosines[0] * spacing[0],
+                                          origin[1] + sliceNumber * directionCosines[1] * spacing[0],
+                                          origin[2] + sliceNumber * directionCosines[2] * spacing[0]);
                 }
+            }
                 break;
 
             // XZ TODO Encara no esta comprovat que aquest pla sigui correcte
             case Coronal:
+            {
+                Image *image = m_mainVolume->getImage(0);
+                if (image)
                 {
-                    Image *image = m_mainVolume->getImage(0);
-                    if (image)
+                    imagePlane = new ImagePlane();
+                    const double *directionCosines = image->getImageOrientationPatient();
+
+                    if (vtkReconstructionHack)
                     {
-                        imagePlane = new ImagePlane();
-                        const double *directionCosines = image->getImageOrientationPatient();
-
-                        if (vtkReconstructionHack)
-                        {
-                            // Retornem un fals pla, respecte el món real, però que s'ajusta més al món vtk
-                            imagePlane->setRowDirectionVector(directionCosines[0], directionCosines[1], directionCosines[2]);
-                            imagePlane->setColumnDirectionVector(directionCosines[6], directionCosines[7], directionCosines[8]);
-                        }
-                        else
-                        {
-                            double columnVector[3];
-                            m_mainVolume->getStackDirection(columnVector, 0);
-
-                            imagePlane->setRowDirectionVector(directionCosines[0], directionCosines[1], directionCosines[2]);
-                            imagePlane->setColumnDirectionVector(columnVector[0], columnVector[1], columnVector[2]);
-                        }
-
-                        imagePlane->setSpacing(spacing[0], spacing[2]);
-                        imagePlane->setThickness(spacing[1]);
-                        imagePlane->setRows(dimensions[2]);
-                        imagePlane->setColumns(dimensions[0]);
-
-                        // TODO Falta esbrinar si l'origen que estem donant es bo o no
-                        imagePlane->setOrigin(origin[0] + directionCosines[3] * sliceNumber * spacing[1],
-                                              origin[1] + directionCosines[4] * sliceNumber * spacing[1],
-                                              origin[2] + directionCosines[5] * sliceNumber * spacing[1]);
+                        // Retornem un fals pla, respecte el món real, però que s'ajusta més al món vtk
+                        imagePlane->setRowDirectionVector(directionCosines[0], directionCosines[1], directionCosines[2]);
+                        imagePlane->setColumnDirectionVector(directionCosines[6], directionCosines[7], directionCosines[8]);
                     }
+                    else
+                    {
+                        double columnVector[3];
+                        m_mainVolume->getStackDirection(columnVector, 0);
+
+                        imagePlane->setRowDirectionVector(directionCosines[0], directionCosines[1], directionCosines[2]);
+                        imagePlane->setColumnDirectionVector(columnVector[0], columnVector[1], columnVector[2]);
+                    }
+
+                    imagePlane->setSpacing(spacing[0], spacing[2]);
+                    imagePlane->setThickness(spacing[1]);
+                    imagePlane->setRows(dimensions[2]);
+                    imagePlane->setColumns(dimensions[0]);
+
+                    // TODO Falta esbrinar si l'origen que estem donant es bo o no
+                    imagePlane->setOrigin(origin[0] + directionCosines[3] * sliceNumber * spacing[1],
+                                          origin[1] + directionCosines[4] * sliceNumber * spacing[1],
+                                          origin[2] + directionCosines[5] * sliceNumber * spacing[1]);
                 }
+            }
                 break;
         }
     }
@@ -2253,20 +2253,20 @@ void Q2DViewer::alignRight()
             // Si la imatge està rotada o flipada, s'agafa l'altre punt
             if (m_isImageFlipped || (m_rotateFactor == 2))
             {
-                motionVector[0] = bounds[0]-viewerRight[0];
+                motionVector[0] = bounds[0] - viewerRight[0];
             }
             else
             {
-                motionVector[0] = bounds[1]-viewerRight[0];
+                motionVector[0] = bounds[1] - viewerRight[0];
             }
             break;
 
         case Sagital:
-            motionVector[1] = bounds[3]-viewerRight[1];
+            motionVector[1] = bounds[3] - viewerRight[1];
             break;
 
         case Coronal:
-            motionVector[0] = bounds[1]-viewerRight[0];
+            motionVector[0] = bounds[1] - viewerRight[0];
             break;
     }
 

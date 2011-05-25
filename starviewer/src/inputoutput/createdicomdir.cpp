@@ -123,7 +123,7 @@ Status CreateDicomdir::create(QString dicomdirPath)
     // Comprovem que el directori no estigui buit
     if (fileNames.empty())
     {
-        ERROR_LOG ("El directori origen està buit");
+        ERROR_LOG("El directori origen està buit");
         state.setStatus(" no input files: the directory is empty ", false, 1301);
         return state;
     }
@@ -133,7 +133,7 @@ Status CreateDicomdir::create(QString dicomdirPath)
 
     if (!result.good())
     {
-        ERROR_LOG ("Error al crear el DICOMDIR. ERROR : " + QString(result.text()));
+        ERROR_LOG("Error al crear el DICOMDIR. ERROR : " + QString(result.text()));
         state.setStatus(result);
         return state;
     }
@@ -149,7 +149,7 @@ Status CreateDicomdir::create(QString dicomdirPath)
         while ((iter != last) && result.good())
         {
             // Afegim els fitxers al dicomdir
-            result = m_ddir.addDicomFile(qPrintable(QString((*iter).c_str()).toUpper()), qPrintable(QDir::toNativeSeparators (dicomdirPath)));
+            result = m_ddir.addDicomFile(qPrintable(QString((*iter).c_str()).toUpper()), qPrintable(QDir::toNativeSeparators(dicomdirPath)));
             if (result.good())
             {
                 iter++;
@@ -164,7 +164,7 @@ Status CreateDicomdir::create(QString dicomdirPath)
         else
         {
             // Escribim el dicomDir
-            result = m_ddir.writeDicomDir (opt_enctype, opt_glenc);
+            result = m_ddir.writeDicomDir(opt_enctype, opt_glenc);
         }
     }
 

@@ -28,20 +28,20 @@ void TranslateTool::handleEvent(unsigned long eventID)
 {
     switch (eventID)
     {
-    case vtkCommand::MiddleButtonPressEvent:
-        this->startTranslate();
-    break;
+        case vtkCommand::MiddleButtonPressEvent:
+            this->startTranslate();
+            break;
 
-    case vtkCommand::MouseMoveEvent:
-        this->doTranslate();
-    break;
+        case vtkCommand::MouseMoveEvent:
+            this->doTranslate();
+            break;
 
-    case vtkCommand::MiddleButtonReleaseEvent:
-        this->endTranslate();
-    break;
+        case vtkCommand::MiddleButtonReleaseEvent:
+            this->endTranslate();
+            break;
 
-    default:
-    break;
+        default:
+            break;
     }
 }
 

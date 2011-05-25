@@ -199,21 +199,21 @@ void QBasicSearchWidget::setDefaultDate(DefaultDateFlags flag)
 {
     switch (flag)
     {
-    case AnyDate:
-        m_anyDateRadioButton->setChecked(true);
-        break;
+        case AnyDate:
+            m_anyDateRadioButton->setChecked(true);
+            break;
 
-    case Today:
-        m_todayRadioButton->setChecked(true);
-        break;
+        case Today:
+            m_todayRadioButton->setChecked(true);
+            break;
 
-    case Yesterday:
-        m_yesterdayRadioButton->setChecked(true);
-        break;
+        case Yesterday:
+            m_yesterdayRadioButton->setChecked(true);
+            break;
 
-    case LastWeek:
-        m_lastWeekRadioButton->setChecked(true);
-        break;
+        case LastWeek:
+            m_lastWeekRadioButton->setChecked(true);
+            break;
     }
 }
 

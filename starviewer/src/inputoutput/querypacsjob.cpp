@@ -38,7 +38,7 @@ void QueryPacsJob::run()
     // Busquem els estudis
     m_queryRequestStatus = m_queryPacs->query(m_mask);
 
-    INFO_LOG (QString("Consulta al PACS %1 finalitzada").arg(getPacsDevice().getAETitle()));
+    INFO_LOG(QString("Consulta al PACS %1 finalitzada").arg(getPacsDevice().getAETitle()));
 }
 
 DicomMask QueryPacsJob::getDicomMask()

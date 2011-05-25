@@ -10,7 +10,7 @@
     #include <sys/statvfs.h>
 #endif // _WIN32
 
-namespace udg{
+namespace udg {
 
 HardDiskInformation::HardDiskInformation()
 {

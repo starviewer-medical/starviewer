@@ -421,21 +421,21 @@ void ShutterFilter::clearShutter(int shutterID)
 {
     switch (shutterID)
     {
-    case CircularShutter:
-        clearCircularShutter();
-    break;
+        case CircularShutter:
+            clearCircularShutter();
+            break;
 
-    case PolygonalShutter:
-        clearPolygonalShutter();
-    break;
+        case PolygonalShutter:
+            clearPolygonalShutter();
+            break;
 
-    case RectangularShutter:
-        clearRectangularShutter();
-    break;
+        case RectangularShutter:
+            clearRectangularShutter();
+            break;
 
-    case BitmapShutter:
-        clearBitmapShutter();
-    break;
+        case BitmapShutter:
+            clearBitmapShutter();
+            break;
     }
 }
 

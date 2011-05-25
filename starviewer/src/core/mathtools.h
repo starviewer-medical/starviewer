@@ -1,7 +1,7 @@
 #ifndef UDGMATHTOOLS_H
 #define UDGMATHTOOLS_H
 
-namespace udg{
+namespace udg {
 
 /**
     Aquesta classe és un recull de funcions matemàtiques de caràcter general.
