@@ -81,6 +81,6 @@ private:
     ExtensionContext m_extensionContext;
 };
 
-};  //  end  namespace udg
+};  // end namespace udg
 
 #endif

@@ -8,7 +8,7 @@ class QString;
 
 namespace udg {
 
-/** 
+/**
     Classe que ens parseja els arguments que ens entren per línia de comandes al executar l'aplicació.
     Els arguments de comandes de línia es composen de dos parts, la primera part s'anomena l'opció que indica quina comanda
     i la segona part s'anomena argument que indica amb quin valor s'ha d'executar la comanda, per exemple per -accessionnumber 1234

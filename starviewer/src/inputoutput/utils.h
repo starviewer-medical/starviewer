@@ -19,6 +19,6 @@ public:
 
 };
 
-};  //  end  namespace udg
+};  // end namespace udg
 
 #endif

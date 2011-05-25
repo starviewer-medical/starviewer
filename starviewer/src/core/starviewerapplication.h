@@ -3,7 +3,7 @@
 
 #include <QDir>
 
-namespace udg{
+namespace udg {
 
 const QString StarviewerVersionString("0.11.0-devel");
 const QString StarviewerBuildID("2011041000");

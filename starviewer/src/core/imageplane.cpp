@@ -243,18 +243,18 @@ QList<QVector<double> > ImagePlane::getBounds(int location)
     double factor = 0.0;
     switch(location)
     {
-    // Central
-    case 0:
-        factor = 0.0;
-    break;
-    // Upper
-    case 1:
-        factor = m_thickness * 0.5;
-    break;
-    // Lower
-    case 2:
-        factor = -m_thickness * 0.5;
-    break;
+        // Central
+        case 0:
+            factor = 0.0;
+            break;
+        // Upper
+        case 1:
+            factor = m_thickness * 0.5;
+            break;
+        // Lower
+        case 2:
+            factor = -m_thickness * 0.5;
+            break;
     }
 
     QList<QVector<double> > boundsList;

@@ -18,4 +18,4 @@ void Q2DViewerSettings::init()
 {
 }
 
-} // end namespace udg 
+} // end namespace udg

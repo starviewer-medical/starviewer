@@ -28,7 +28,7 @@ public:
      */
     void setInputViewer(QViewer *viewer);
 
-    enum CINEDimensionType{ SpatialDimension, TemporalDimension };
+    enum CINEDimensionType { SpatialDimension, TemporalDimension };
     void setCINEDimension(int dimension);
 
     QAction *getPlayAction() const;

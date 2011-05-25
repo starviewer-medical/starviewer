@@ -57,7 +57,7 @@ void retrieveStudy(QString accessionNumber)
 
     // Executem una instància del Starviewer utiltizant la opció de línia de comandes -accessionnumber "valor del accessio number"
 
-    INFO_LOG("Starviewer_sapwrapper::S'iniciara nova instancia del Starviewer per demanar descarrega de l'estudi amb accession number" +  accessionNumber);
+    INFO_LOG("Starviewer_sapwrapper::S'iniciara nova instancia del Starviewer per demanar descarrega de l'estudi amb accession number" + accessionNumber);
     process.startDetached(getStarviewerExecutableFilePath() + starviewerCommandLine);
 }
 

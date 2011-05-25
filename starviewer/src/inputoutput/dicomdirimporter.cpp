@@ -134,7 +134,7 @@ void DICOMDIRImporter::importStudy(QString studyUID, QString seriesUID, QString 
 
         if (seriesListToImport.isEmpty())
         {
-            ERROR_LOG ("No s'han trobat series per l'estudi");
+            ERROR_LOG("No s'han trobat series per l'estudi");
             m_lastError = DicomdirInconsistent;
             return;
         }
@@ -166,7 +166,7 @@ void DICOMDIRImporter::importSeries(QString studyUID, QString seriesUID, QString
 
     if (imageListToImport.isEmpty())
     {
-        ERROR_LOG ("No s'han trobat imatges per la serie");
+        ERROR_LOG("No s'han trobat imatges per la serie");
         m_lastError = DicomdirInconsistent;
         return;
     }

@@ -26,23 +26,23 @@ void WindowLevelTool::handleEvent(unsigned long eventID)
 {
     switch (eventID)
     {
-    case vtkCommand::RightButtonPressEvent:
-        this->startWindowLevel();
-    break;
+        case vtkCommand::RightButtonPressEvent:
+            this->startWindowLevel();
+            break;
 
-    case vtkCommand::MouseMoveEvent:
-        if (m_state == WindowLevelling)
-        {
-            this->doWindowLevel();
-        }
-    break;
+        case vtkCommand::MouseMoveEvent:
+            if (m_state == WindowLevelling)
+            {
+                this->doWindowLevel();
+            }
+            break;
 
-    case vtkCommand::RightButtonReleaseEvent:
-        this->endWindowLevel();
-    break;
+        case vtkCommand::RightButtonReleaseEvent:
+            this->endWindowLevel();
+            break;
 
-    default:
-    break;
+        default:
+            break;
     }
 }
 

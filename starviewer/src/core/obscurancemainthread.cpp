@@ -156,9 +156,15 @@ void ObscuranceMainThread::run()
         Vector3 forward;
         switch (dominant)
         {
-            case 0: forward = Vector3(direction.x, direction.y, direction.z); break;
-            case 1: forward = Vector3(direction.y, direction.z, direction.x); break;
-            case 2: forward = Vector3(direction.z, direction.x, direction.y); break;
+            case 0:
+                forward = Vector3(direction.x, direction.y, direction.z);
+                break;
+            case 1:
+                forward = Vector3(direction.y, direction.z, direction.x);
+                break;
+            case 2: 
+                forward = Vector3(direction.z, direction.x, direction.y);
+                break;
         }
         // La direcció x passa a ser 1 o -1
         forward /= qAbs(forward.x);
@@ -305,11 +311,21 @@ QVector<Vector3> ObscuranceMainThread::getDirections() const
         switch (m_numberOfDirections)
         {
             default:
-            case -4: viewpointGenerator.setToUniform4(); break;
-            case -6: viewpointGenerator.setToUniform6(); break;
-            case -8: viewpointGenerator.setToUniform8(); break;
-            case -12: viewpointGenerator.setToUniform12(); break;
-            case -20: viewpointGenerator.setToUniform20(); break;
+            case -4:
+                viewpointGenerator.setToUniform4();
+                break;
+            case -6:
+                viewpointGenerator.setToUniform6();
+                break;
+            case -8:
+                viewpointGenerator.setToUniform8();
+               break;
+            case -12:
+                viewpointGenerator.setToUniform12();
+                break;
+            case -20:
+                viewpointGenerator.setToUniform20();
+                break;
         }
     }
 

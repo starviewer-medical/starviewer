@@ -95,26 +95,26 @@ void EditorTool::handleEvent(unsigned long eventID)
             m_isLeftButtonPressed = true;
             this->setEditorPoint();
         }
-    break;
+        break;
 
     case vtkCommand::MouseMoveEvent:
         if (m_2DViewer->getInput() != 0)
         {
             this->setPaintCursor();
         }
-    break;
+        break;
 
     case vtkCommand::LeftButtonReleaseEvent:
         m_isLeftButtonPressed = false;
-    break;
+        break;
 
     case vtkCommand::MouseWheelForwardEvent:
         this->increaseState();
-    break;
+        break;
 
     case vtkCommand::MouseWheelBackwardEvent:
         this->decreaseState();
-    break;
+        break;
 
     case vtkCommand::KeyPressEvent:
     {
@@ -123,21 +123,21 @@ void EditorTool::handleEvent(unsigned long eventID)
         // '-' = key code 45
         switch (key)
         {
-        // '+'
-        case 43:
-            this->increaseEditorSize();
-        break;
+            // '+'
+            case 43:
+                this->increaseEditorSize();
+                break;
 
-        // '-'
-        case 45:
-            this->decreaseEditorSize();
-        break;
+            // '-'
+            case 45:
+                this->decreaseEditorSize();
+                break;
         }
     }
-    break;
+        break;
 
     default:
-    break;
+        break;
     }
 }
 
@@ -145,31 +145,31 @@ void EditorTool::increaseState()
 {
     switch (m_editorState)
     {
-    case Paint:
-        m_editorState = Erase;
-        m_2DViewer->setCursor(QCursor(QPixmap(":/images/erasercursor.png")));
-    break;
+        case Paint:
+            m_editorState = Erase;
+            m_2DViewer->setCursor(QCursor(QPixmap(":/images/erasercursor.png")));
+            break;
 
-    case Erase:
-        m_editorState = EraseRegion;
-        m_2DViewer->setCursor(QCursor(QPixmap(":/images/eraseregioncursor.png")));
-        m_squareActor->VisibilityOff();
-        m_2DViewer->render();
-    break;
+        case Erase:
+            m_editorState = EraseRegion;
+            m_2DViewer->setCursor(QCursor(QPixmap(":/images/eraseregioncursor.png")));
+            m_squareActor->VisibilityOff();
+            m_2DViewer->render();
+            break;
 
-    case EraseRegion:
-        m_editorState = EraseSlice;
-        m_2DViewer->setCursor(QCursor(QPixmap(":/images/slicecursor.png")));
-    break;
+        case EraseRegion:
+            m_editorState = EraseSlice;
+            m_2DViewer->setCursor(QCursor(QPixmap(":/images/slicecursor.png")));
+            break;
 
-    case EraseSlice:
-        m_editorState = Paint;
-        m_2DViewer->setCursor(QCursor(QPixmap(":/images/pencilcursor.png")));
-        this->setPaintCursor();
-    break;
+        case EraseSlice:
+            m_editorState = Paint;
+            m_2DViewer->setCursor(QCursor(QPixmap(":/images/pencilcursor.png")));
+            this->setPaintCursor();
+            break;
 
-    default:
-    break;
+        default:
+            break;
     }
 }
 
@@ -177,31 +177,31 @@ void EditorTool::decreaseState()
 {
     switch (m_editorState)
     {
-    case EraseRegion:
-        m_editorState = Erase;
-        m_2DViewer->setCursor(QCursor(QPixmap(":/images/erasercursor.png")));
-        this->setPaintCursor();
-    break;
+        case EraseRegion:
+            m_editorState = Erase;
+            m_2DViewer->setCursor(QCursor(QPixmap(":/images/erasercursor.png")));
+            this->setPaintCursor();
+            break;
 
-    case EraseSlice:
-        m_editorState = EraseRegion;
-        m_2DViewer->setCursor(QCursor(QPixmap(":/images/eraseregioncursor.png")));
-    break;
+        case EraseSlice:
+            m_editorState = EraseRegion;
+            m_2DViewer->setCursor(QCursor(QPixmap(":/images/eraseregioncursor.png")));
+            break;
 
-    case Paint:
-        m_editorState = EraseSlice;
-        m_2DViewer->setCursor(QCursor(QPixmap(":/images/slicecursor.png")));
-        m_squareActor->VisibilityOff();
-        m_2DViewer->render();
-    break;
+        case Paint:
+            m_editorState = EraseSlice;
+            m_2DViewer->setCursor(QCursor(QPixmap(":/images/slicecursor.png")));
+            m_squareActor->VisibilityOff();
+            m_2DViewer->render();
+            break;
 
-    case Erase:
-        m_editorState = Paint;
-        m_2DViewer->setCursor(QCursor(QPixmap(":/images/pencilcursor.png")));
-    break;
+        case Erase:
+            m_editorState = Paint;
+            m_2DViewer->setCursor(QCursor(QPixmap(":/images/pencilcursor.png")));
+            break;
 
-    default:
-    break;
+        default:
+            break;
     }
 
 }

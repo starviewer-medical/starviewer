@@ -5,7 +5,7 @@
 
 namespace udg {
 
-class StrokeSegmentationMethod{
+class StrokeSegmentationMethod {
 
 public:
     StrokeSegmentationMethod();
@@ -57,68 +57,68 @@ public:
         m_Mask = vol;
     }
 
-    void setSeedPosition (double x, double y, double z);
+    void setSeedPosition(double x, double y, double z);
 
-    void setHistogramLowerLevel (int x);
+    void setHistogramLowerLevel(int x);
 
-    void setHistogramUpperLevel (int x);
+    void setHistogramUpperLevel(int x);
 
-    void setInsideMaskValue (int x)
+    void setInsideMaskValue(int x)
     {
         m_insideMaskValue = x;
     };
 
-    void setOutsideMaskValue (int x)
+    void setOutsideMaskValue(int x)
     {
         m_outsideMaskValue = x;
     };
 
-    void setInitialDistance (double x)
+    void setInitialDistance(double x)
     {
         m_initialDistance = x;
     };
 
-    void setTimeThreshold (int x)
+    void setTimeThreshold(int x)
     {
         m_timeThreshold = x;
     };
 
-    void setStoppingTime (double x)
+    void setStoppingTime(double x)
     {
         m_stoppingTime = x;
     };
 
-    void setMultiplier (double x)
+    void setMultiplier(double x)
     {
         m_multiplier = x;
     };
 
-    void setMean (double x)
+    void setMean(double x)
     {
         m_mean = x;
     };
 
-    void setVariance (double x)
+    void setVariance(double x)
     {
         m_variance = x;
     };
 
-    void setConstant (double x)
+    void setConstant(double x)
     {
         m_constant = x;
     };
 
-    void setAlpha (double x)
+    void setAlpha(double x)
     {
         m_alpha = x;
     };
 
-    void setLowerVentriclesThreshold (int x)
+    void setLowerVentriclesThreshold(int x)
     {
         m_lowerVentriclesThreshold = x;
     };
 
-    void setUpperVentriclesThreshold (int x)
+    void setUpperVentriclesThreshold(int x)
     {
         m_upperVentriclesThreshold = x;
     };
@@ -127,11 +127,11 @@ private:
     /// Volum que volem segmentar
     Volume *m_Volume;
 
-    /// Volum on guardarem el resultat de la segmetnaci�que volem segmentar
+    /// Volum on guardarem el resultat de la segmetnació que volem segmentar
     Volume *m_Mask;
     Volume *m_filteredInputImage;
 
-    /// Posici�de la llavor
+    /// Posició de la llavor
     double m_px, m_py, m_pz;
 
     /// Llindars de l'histograma
@@ -140,17 +140,17 @@ private:
     /// Llindars de l'histograma
     int m_lowerVentriclesThreshold, m_upperVentriclesThreshold;
 
-    /// Valors interns i externs de la m�cara
+    /// Valors interns i externs de la màscara
     int m_insideMaskValue, m_outsideMaskValue;
 
-    /// Valors interns i externs de la m�cara
+    /// Valors interns i externs de la màscara
     double m_volume;
-    int    m_cont;
-    int    m_edemaCont;
+    int m_cont;
+    int m_edemaCont;
 
     /// Valors mètode edema
     double m_initialDistance;
-    int  m_timeThreshold;
+    int m_timeThreshold;
     double m_stoppingTime;
     double m_multiplier;
     double m_mean;
@@ -158,7 +158,7 @@ private:
     double m_constant;
     double m_alpha;
 
-    /// Retorna quants voxels != de 0 hi ha a la m�cara
+    /// Retorna quants voxels != de 0 hi ha a la màscara
     int computeSizeMask();
 
 };

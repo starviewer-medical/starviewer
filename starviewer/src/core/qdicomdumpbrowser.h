@@ -12,7 +12,7 @@ class DICOMValueAttribute;
 class DICOMSequenceAttribute;
 class DICOMDumpDefaultTags;
 
-/** 
+/**
     Aquest classe és l'encarregada de realitzar el dicomdump de la imatge que s'està visualizant per part de l'usuari.
     Totes les imatges tenen una sèrie de tags que es descodifiquen en aquesta classe i es visualitzen en forma d'arbre mitjançant un QTreeWidget
   */

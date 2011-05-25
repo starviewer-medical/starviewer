@@ -25,7 +25,6 @@
 
 #define printf
 
-
 namespace udg {
 
 HoverPoints::HoverPoints(QWidget *widget, PointShape shape)
@@ -66,8 +65,7 @@ bool HoverPoints::eventFilter(QObject *object, QEvent *event)
     {
         switch (event->type())
         {
-
-        case QEvent::MouseButtonPress:
+            case QEvent::MouseButtonPress:
             {
                 QMouseEvent *me = (QMouseEvent *) event;
 
@@ -155,20 +153,20 @@ bool HoverPoints::eventFilter(QObject *object, QEvent *event)
                 }
 
             }
-            break;
+                break;
 
-        case QEvent::MouseButtonRelease:
-            m_currentIndex = -1;
-            break;
+            case QEvent::MouseButtonRelease:
+                m_currentIndex = -1;
+                break;
 
-        case QEvent::MouseMove:
-            if (m_currentIndex >= 0)
-            {
-                movePoint(m_currentIndex, ((QMouseEvent *)event)->pos());
-            }
-            break;
+            case QEvent::MouseMove:
+                if (m_currentIndex >= 0)
+                {
+                    movePoint(m_currentIndex, ((QMouseEvent *)event)->pos());
+                }
+                break;
 
-        case QEvent::Resize:
+            case QEvent::Resize:
             {
                 if (m_widget->isVisible())
                 {
@@ -189,7 +187,7 @@ bool HoverPoints::eventFilter(QObject *object, QEvent *event)
                 break;
             }
 
-        case QEvent::Show:
+            case QEvent::Show:
             {
                 if (m_width != m_widget->width() || m_height != m_widget->height())
                 {
@@ -214,7 +212,7 @@ bool HoverPoints::eventFilter(QObject *object, QEvent *event)
                 break;
             }
 
-        case QEvent::Paint:
+            case QEvent::Paint:
             {
                 QWidget *that_widget = m_widget;
                 m_widget = 0;
@@ -223,8 +221,8 @@ bool HoverPoints::eventFilter(QObject *object, QEvent *event)
                 paintPoints();
                 return true;
             }
-        default:
-            break;
+            default:
+                break;
         }
     }
 

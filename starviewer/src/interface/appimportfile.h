@@ -51,6 +51,6 @@ private:
     QString m_lastExtension;
 };
 
-};  //  end  namespace udg
+};  // end namespace udg
 
 #endif

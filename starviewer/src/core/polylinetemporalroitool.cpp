@@ -172,62 +172,62 @@ double PolylineTemporalROITool::computeTemporalMean()
     int intersectionIndex;
     switch (currentView)
     {
-    case Q2DViewer::Axial:
-        // xmin
-        rayP1[0] = bounds[0];
-        // y
-        rayP1[1] = bounds[2];
-        // z
-        rayP1[2] = bounds[4];
-        // xmax
-        rayP2[0] = bounds[1];
-        // y
-        rayP2[1] = bounds[2];
-        // z
-        rayP2[2] = bounds[4];
+        case Q2DViewer::Axial:
+            // xmin
+            rayP1[0] = bounds[0];
+            // y
+            rayP1[1] = bounds[2];
+            // z
+            rayP1[2] = bounds[4];
+            // xmax
+            rayP2[0] = bounds[1];
+            // y
+            rayP2[1] = bounds[2];
+            // z
+            rayP2[2] = bounds[4];
 
-        rayPointIndex = 1;
-        intersectionIndex = 0;
-        verticalLimit = bounds[3];
-    break;
+            rayPointIndex = 1;
+            intersectionIndex = 0;
+            verticalLimit = bounds[3];
+            break;
 
-    case Q2DViewer::Sagital:
-        // xmin
-        rayP1[0] = bounds[0];
-        // ymin
-        rayP1[1] = bounds[2];
-        // zmin
-        rayP1[2] = bounds[4];
-        // xmin
-        rayP2[0] = bounds[0];
-        // ymin
-        rayP2[1] = bounds[2];
-        // zmax
-        rayP2[2] = bounds[5];
+        case Q2DViewer::Sagital:
+            // xmin
+            rayP1[0] = bounds[0];
+            // ymin
+            rayP1[1] = bounds[2];
+            // zmin
+            rayP1[2] = bounds[4];
+            // xmin
+            rayP2[0] = bounds[0];
+            // ymin
+            rayP2[1] = bounds[2];
+            // zmax
+            rayP2[2] = bounds[5];
 
-        rayPointIndex = 1;
-        intersectionIndex = 2;
-        verticalLimit = bounds[3];
-    break;
+            rayPointIndex = 1;
+            intersectionIndex = 2;
+            verticalLimit = bounds[3];
+            break;
 
-    case Q2DViewer::Coronal:
-        // xmin
-        rayP1[0] = bounds[0];
-        // ymin
-        rayP1[1] = bounds[2];
-        // zmin
-        rayP1[2] = bounds[4];
-        // xmax
-        rayP2[0] = bounds[1];
-        // ymin
-        rayP2[1] = bounds[2];
-        // zmin
-        rayP2[2] = bounds[4];
+        case Q2DViewer::Coronal:
+            // xmin
+            rayP1[0] = bounds[0];
+            // ymin
+            rayP1[1] = bounds[2];
+            // zmin
+            rayP1[2] = bounds[4];
+            // xmax
+            rayP2[0] = bounds[1];
+            // ymin
+            rayP2[1] = bounds[2];
+            // zmin
+            rayP2[2] = bounds[4];
 
-        rayPointIndex = 2;
-        intersectionIndex = 0;
-        verticalLimit = bounds[5];
-    break;
+            rayPointIndex = 2;
+            intersectionIndex = 0;
+            verticalLimit = bounds[5];
+            break;
     }
 
     while (rayP1[rayPointIndex] <= verticalLimit)

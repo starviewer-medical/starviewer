@@ -364,7 +364,7 @@ void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
         return;
     }
 
-    INFO_LOG ("Iniciant la creació del DICOMDIR en discdur o usb al directori " + dicomdirPath);
+    INFO_LOG("Iniciant la creació del DICOMDIR en discdur o usb al directori " + dicomdirPath);
 
     // TODO:El codi de comprova si el directori és un DICOMDIR hauria d'estar a una DICOMDIRManager, la UI no ha de saber
     // quins elements componen un DICOMDIR

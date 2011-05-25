@@ -325,7 +325,7 @@ Patient* Q2DViewerExtension::getPatient() const
 void Q2DViewerExtension::setPatient(Patient *patient)
 {
     m_patient = patient;
-    // Ara és super txapussa i només mirarà  el primer estudi
+    // Ara és super txapussa i només mirarà el primer estudi
     Study *study = m_patient->getStudies().first();
     if (study)
     {

@@ -57,11 +57,11 @@ void NonClosedAngleTool::handleEvent(long unsigned eventID)
     {
         case vtkCommand::LeftButtonPressEvent:
             handlePointAddition();
-        break;
+            break;
 
         case vtkCommand::MouseMoveEvent:
             handleLineDrawing();
-        break;
+            break;
     }
 }
 

@@ -53,6 +53,6 @@ private:
     QMap<QWidget *, QString> m_activeExtensions;
 };
 
-};  //  end  namespace udg
+};  // end namespace udg
 
 #endif

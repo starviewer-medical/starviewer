@@ -1486,7 +1486,7 @@ void QMPRExtension::updatePlane(vtkPlaneSource *planeSource, vtkImageReslice *re
 void QMPRExtension::getSagitalXVector(double x[3])
 {
     double *p1 = m_sagitalPlaneSource->GetPoint1();
-    double *o  = m_sagitalPlaneSource->GetOrigin();
+    double *o = m_sagitalPlaneSource->GetOrigin();
     x[0] = p1[0] - o[0];
     x[1] = p1[1] - o[1];
     x[2] = p1[2] - o[2];
@@ -1495,7 +1495,7 @@ void QMPRExtension::getSagitalXVector(double x[3])
 void QMPRExtension::getSagitalYVector(double y[3])
 {
     double *p1 = m_sagitalPlaneSource->GetPoint2();
-    double *o  = m_sagitalPlaneSource->GetOrigin();
+    double *o = m_sagitalPlaneSource->GetOrigin();
     y[0] = p1[0] - o[0];
     y[1] = p1[1] - o[1];
     y[2] = p1[2] - o[2];
@@ -1504,7 +1504,7 @@ void QMPRExtension::getSagitalYVector(double y[3])
 void QMPRExtension::getCoronalXVector(double x[3])
 {
     double *p1 = m_coronalPlaneSource->GetPoint1();
-    double *o  = m_coronalPlaneSource->GetOrigin();
+    double *o = m_coronalPlaneSource->GetOrigin();
     x[0] = p1[0] - o[0];
     x[1] = p1[1] - o[1];
     x[2] = p1[2] - o[2];
@@ -1513,7 +1513,7 @@ void QMPRExtension::getCoronalXVector(double x[3])
 void QMPRExtension::getAxialXVector(double x[3])
 {
     double *p1 = m_axialPlaneSource->GetPoint1();
-    double *o  = m_axialPlaneSource->GetOrigin();
+    double *o = m_axialPlaneSource->GetOrigin();
     x[0] = p1[0] - o[0];
     x[1] = p1[1] - o[1];
     x[2] = p1[2] - o[2];
@@ -1522,7 +1522,7 @@ void QMPRExtension::getAxialXVector(double x[3])
 void QMPRExtension::getAxialYVector(double y[3])
 {
     double *p2 = m_axialPlaneSource->GetPoint2();
-    double *o  = m_axialPlaneSource->GetOrigin();
+    double *o = m_axialPlaneSource->GetOrigin();
     y[0] = p2[0] - o[0];
     y[1] = p2[1] - o[1];
     y[2] = p2[2] - o[2];
@@ -1530,7 +1530,7 @@ void QMPRExtension::getAxialYVector(double y[3])
 void QMPRExtension::getCoronalYVector(double y[3])
 {
     double *p1 = m_coronalPlaneSource->GetPoint2();
-    double *o  = m_coronalPlaneSource->GetOrigin();
+    double *o = m_coronalPlaneSource->GetOrigin();
     y[0] = p1[0] - o[0];
     y[1] = p1[1] - o[1];
     y[2] = p1[2] - o[2];

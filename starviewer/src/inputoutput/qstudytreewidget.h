@@ -19,7 +19,7 @@ class Image;
 class DicomMask;
 
 /**
-    Aquesta classe  mostrar estudis i sèries d'una manera organitzada i fàcilment.
+    Aquesta classe mostrar estudis i sèries d'una manera organitzada i fàcilment.
     Aquesta classe és una modificació de la QTreeWidget que s'ha adaptat per poder visualitzar la informació
     de la cerca d'estudis, permetent consultar les series d'aquell estudi.
     Aquesta classe es sincronitza amb la informació mostrada a QSeriesListWidget

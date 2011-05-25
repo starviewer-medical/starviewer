@@ -37,67 +37,67 @@ void TransDifferenceTool::handleEvent(unsigned long eventID)
 {
     switch (eventID)
     {
-    case vtkCommand::LeftButtonPressEvent:
-        if (m_myData->getInputVolume() != 0 && m_myData->getDifferenceVolume() != 0)
-        {
-            this->startTransDifference();
-        }
-    break;
-
-    case vtkCommand::MouseMoveEvent:
-        if (m_state == Moving && m_myData->getInputVolume() != 0 && m_myData->getDifferenceVolume() != 0)
-        {
-            this->doTransDifference();
-        }
-    break;
-
-    case vtkCommand::LeftButtonReleaseEvent:
-        if (m_myData->getInputVolume() != 0 && m_myData->getDifferenceVolume() != 0)
-        {
-            this->endTransDifference();
-        }
-    break;
-    case vtkCommand::KeyPressEvent:
-    {
-        if (m_myData->getInputVolume() != 0 && m_myData->getDifferenceVolume() != 0)
-        {
-            int key = m_viewer->getInteractor()->GetKeyCode();
-            switch (key)
+        case vtkCommand::LeftButtonPressEvent:
+            if (m_myData->getInputVolume() != 0 && m_myData->getDifferenceVolume() != 0)
             {
-            // 'R'
-            case 114:
-            // 'r'
-            case 82:
-                this->increaseSingleDifferenceImage(0, -1);
-                m_myData->increaseSliceTranslationY(m_2DViewer->getCurrentSlice(), -1);
+                this->startTransDifference();
+            }
             break;
-            // 'C'
-            case 99:
-            // 'c'
-            case 67:
-                this->increaseSingleDifferenceImage(0, 1);
-                m_myData->increaseSliceTranslationY(m_2DViewer->getCurrentSlice(), 1);
+
+        case vtkCommand::MouseMoveEvent:
+            if (m_state == Moving && m_myData->getInputVolume() != 0 && m_myData->getDifferenceVolume() != 0)
+            {
+                this->doTransDifference();
+            }
             break;
-            // 'F'
-            case 102:
-            // 'f'
-            case 70:
-                this->increaseSingleDifferenceImage(1, 0);
-                m_myData->increaseSliceTranslationX(m_2DViewer->getCurrentSlice(), 1);
+
+        case vtkCommand::LeftButtonReleaseEvent:
+            if (m_myData->getInputVolume() != 0 && m_myData->getDifferenceVolume() != 0)
+            {
+                this->endTransDifference();
+            }
             break;
-            // 'D'
-            case 100:
-            // 'd'
-            case 68:
-                this->increaseSingleDifferenceImage(-1, 0);
-                m_myData->increaseSliceTranslationX(m_2DViewer->getCurrentSlice(), -1);
-            break;
+        case vtkCommand::KeyPressEvent:
+        {
+            if (m_myData->getInputVolume() != 0 && m_myData->getDifferenceVolume() != 0)
+            {
+                int key = m_viewer->getInteractor()->GetKeyCode();
+                switch (key)
+                {
+                    // 'R'
+                    case 114:
+                    // 'r'
+                    case 82:
+                        this->increaseSingleDifferenceImage(0, -1);
+                        m_myData->increaseSliceTranslationY(m_2DViewer->getCurrentSlice(), -1);
+                        break;
+                    // 'C'
+                    case 99:
+                    // 'c'
+                    case 67:
+                        this->increaseSingleDifferenceImage(0, 1);
+                        m_myData->increaseSliceTranslationY(m_2DViewer->getCurrentSlice(), 1);
+                        break;
+                    // 'F'
+                    case 102:
+                    // 'f'
+                    case 70:
+                        this->increaseSingleDifferenceImage(1, 0);
+                        m_myData->increaseSliceTranslationX(m_2DViewer->getCurrentSlice(), 1);
+                        break;
+                    // 'D'
+                    case 100:
+                    // 'd'
+                    case 68:
+                        this->increaseSingleDifferenceImage(-1, 0);
+                        m_myData->increaseSliceTranslationX(m_2DViewer->getCurrentSlice(), -1);
+                        break;
+                }
             }
         }
-    }
-    break;
-    default:
-    break;
+            break;
+        default:
+            break;
     }
 }
 

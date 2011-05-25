@@ -15,8 +15,8 @@
 
 namespace udg {
 
-static const double  MagicSize = 3.0;
-static const double  MagicFactor = 1.0;
+static const double MagicSize = 3.0;
+static const double MagicFactor = 1.0;
 
 MagicTool::MagicTool(QViewer *viewer, QObject *parent)
 : ROITool(viewer, parent)
@@ -59,17 +59,17 @@ void MagicTool::handleEvent(unsigned long eventID)
 {
     switch (eventID)
     {
-    case vtkCommand::LeftButtonPressEvent:
-        startMagicRegion();
-        break;
-    case vtkCommand::LeftButtonReleaseEvent:
-        closeForm();
-        break;
-    case vtkCommand::MouseMoveEvent:
-        modifyMagicFactor();
-        break;
-    default:
-        break;
+        case vtkCommand::LeftButtonPressEvent:
+            startMagicRegion();
+            break;
+        case vtkCommand::LeftButtonReleaseEvent:
+            closeForm();
+            break;
+        case vtkCommand::MouseMoveEvent:
+            modifyMagicFactor();
+            break;
+        default:
+            break;
     }
 }
 
@@ -359,40 +359,40 @@ void MagicTool::getNextIndex(int direction, int x1, int y1, int &x2, int &y2)
 {
     switch (direction)
     {
-    case 0:
-        x2 = x1 - 1;
-        y2 = y1 - 1;
-        break;
-    case 1:
-        x2 = x1;
-        y2 = y1 - 1;
-        break;
-    case 2:
-        x2 = x1 + 1;
-        y2 = y1 - 1;
-        break;
-    case 3:
-        x2 = x1 + 1;
-        y2 = y1;
-        break;
-    case 4:
-        x2 = x1 + 1;
-        y2 = y1 + 1;
-        break;
-    case 5:
-        x2 = x1;
-        y2 = y1 + 1;
-        break;
-    case 6:
-        x2 = x1 - 1;
-        y2 = y1 + 1;
-        break;
-    case 7:
-        x2 = x1 - 1;
-        y2 = y1;
-        break;
-    default:
-        DEBUG_LOG("ERROR: This direction doesn't exist");
+        case 0:
+            x2 = x1 - 1;
+            y2 = y1 - 1;
+            break;
+        case 1:
+            x2 = x1;
+            y2 = y1 - 1;
+            break;
+        case 2:
+            x2 = x1 + 1;
+            y2 = y1 - 1;
+            break;
+        case 3:
+            x2 = x1 + 1;
+            y2 = y1;
+            break;
+        case 4:
+            x2 = x1 + 1;
+            y2 = y1 + 1;
+            break;
+        case 5:
+            x2 = x1;
+            y2 = y1 + 1;
+            break;
+        case 6:
+            x2 = x1 - 1;
+            y2 = y1 + 1;
+            break;
+        case 7:
+            x2 = x1 - 1;
+            y2 = y1;
+            break;
+        default:
+            DEBUG_LOG("ERROR: This direction doesn't exist");
     }
 
 }
@@ -417,24 +417,24 @@ void MagicTool::addPoint(int direction, int x1, int y1, double z1)
 
     switch (direction)
     {
-    case 1:
-        point[0] = x1 * spacing[0] + origin[0];
-        point[1] = (y1 - 0.5) * spacing[1] + origin[1];
-        break;
-    case 3:
-        point[0] = (x1 + 0.5) * spacing[0] + origin[0];
-        point[1] = y1 * spacing[1] + origin[1];
-        break;
-    case 5:
-        point[0] = x1 * spacing[0] + origin[0];
-        point[1] = (y1 + 0.5) * spacing[1] + origin[1];
-        break;
-    case 7:
-        point[0] = (x1 - 0.5) * spacing[0] + origin[0];
-        point[1] = y1 * spacing[1] + origin[1];
-        break;
-    default:
-        DEBUG_LOG("ERROR: This direction doesn't exist");
+        case 1:
+            point[0] = x1 * spacing[0] + origin[0];
+            point[1] = (y1 - 0.5) * spacing[1] + origin[1];
+            break;
+        case 3:
+            point[0] = (x1 + 0.5) * spacing[0] + origin[0];
+            point[1] = y1 * spacing[1] + origin[1];
+            break;
+        case 5:
+            point[0] = x1 * spacing[0] + origin[0];
+            point[1] = (y1 + 0.5) * spacing[1] + origin[1];
+            break;
+        case 7:
+            point[0] = (x1 - 0.5) * spacing[0] + origin[0];
+            point[1] = y1 * spacing[1] + origin[1];
+            break;
+        default:
+            DEBUG_LOG("ERROR: This direction doesn't exist");
     }
     point[2] = z1 * spacing[2] + origin[2];
 

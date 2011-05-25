@@ -8,7 +8,7 @@ class QProcess;
 
 namespace udg {
 
-/** 
+/**
     Crea un arxiu d'imatge ISO a partir d'un directori o fitxer.
   */
 class IsoImageFileCreator : public QObject {

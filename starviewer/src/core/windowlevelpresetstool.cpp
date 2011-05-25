@@ -65,12 +65,12 @@ void WindowLevelPresetsTool::handleEvent(unsigned long eventID)
 {
     switch (eventID)
     {
-    case vtkCommand::KeyPressEvent:
-        applyPreset(m_viewer->getInteractor()->GetKeyCode());
-    break;
+        case vtkCommand::KeyPressEvent:
+            applyPreset(m_viewer->getInteractor()->GetKeyCode());
+            break;
 
-    default:
-    break;
+        default:
+            break;
     }
 }
 

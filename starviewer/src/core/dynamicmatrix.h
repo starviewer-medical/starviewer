@@ -7,7 +7,7 @@ class QPoint;
 
 namespace udg {
 
-/** 
+/**
     Aquesta classe representa una matriu dinàmica d'enters, la qual permet afegir i obtenir valors sense tenir en compte
     passar-se de rang. Està feta a partir d'una llista de llistes d'enters i dos punters, un per les files i un per
     les columnes, que indiquen a quina fila o columna es troba el 0.

@@ -38,20 +38,20 @@ void SeedTool::handleEvent(unsigned long eventID)
 {
     switch (eventID)
     {
-    case vtkCommand::LeftButtonPressEvent:
-        setSeed();
-    break;
+        case vtkCommand::LeftButtonPressEvent:
+            setSeed();
+            break;
 
-    case vtkCommand::MouseMoveEvent:
-        doSeeding();
-    break;
+        case vtkCommand::MouseMoveEvent:
+            doSeeding();
+            break;
 
-    case vtkCommand::LeftButtonReleaseEvent:
-        endSeeding();
-    break;
+        case vtkCommand::LeftButtonReleaseEvent:
+            endSeeding();
+            break;
 
-    default:
-    break;
+        default:
+            break;
     }
 }
 
