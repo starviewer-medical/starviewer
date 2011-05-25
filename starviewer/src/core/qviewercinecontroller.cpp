@@ -61,7 +61,7 @@ void QViewerCINEController::setInputViewer(QViewer *viewer)
         return;
     }
 
-    connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(resetCINEInformation(Volume*)));
+    connect(m_2DViewer, SIGNAL(volumeChanged(Volume *)), SLOT(resetCINEInformation(Volume *)));
     connect(m_2DViewer, SIGNAL(slabThicknessChanged(int)), SLOT(updateThickness(int)));
 
     resetCINEInformation(m_2DViewer->getInput());

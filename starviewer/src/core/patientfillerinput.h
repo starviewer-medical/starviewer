@@ -24,13 +24,13 @@ public:
     void addPatient(Patient *patient);
 
     /// Obté un pacient de la llista indexat. Si l'índex supera el nombre de membres de la llista es retorna NUL
-    Patient *getPatient(int index = 0);
+    Patient* getPatient(int index = 0);
 
     /// Obté un pacient identificat pel seu nom
-    Patient *getPatientByName(QString name);
+    Patient* getPatientByName(QString name);
 
     /// Obté un pacient identificat pel seu ID
-    Patient *getPatientByID(QString id);
+    Patient* getPatientByID(QString id);
 
     /// Retorna el nombre de pacients que tenim a la llista
     unsigned int getNumberOfPatients();
@@ -61,15 +61,15 @@ public:
     /// anteriorment fent que no es pugui utilitzar més: es pren el control absolut de l'objecte.
     /// Per objectes no dicom, cal utilitzar set/getFile(QString)
     void setDICOMFile(DICOMTagReader *dicomTagReader);
-    DICOMTagReader *getDICOMFile();
+    DICOMTagReader* getDICOMFile();
 
     /// Assignar/Obtenir la llista d'imatges que s'han de processar.
-    void setCurrentImages(const QList<Image *> &images);
+    void setCurrentImages(const QList<Image*> &images);
     QList<Image*> getCurrentImages();
 
     /// Afegir / Obtenir la sèrie del fitxer que s'ha de processar.
     void setCurrentSeries(Series *series);
-    Series *getCurrentSeries();
+    Series* getCurrentSeries();
 
     /// Reinicialitza el número de volum (multiframe) actual
     void resetCurrentMultiframeVolumeNumber();

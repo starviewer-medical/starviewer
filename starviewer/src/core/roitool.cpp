@@ -187,8 +187,8 @@ void ROITool::computeStatisticsData()
         // Obtenim les interseccions entre tots els segments de la ROI i la línia d'escombrat actual
         foreach (int segmentIndex, intersectedSegmentsIndexList)
         {
-            double *foundPoint = MathTools::infiniteLinesIntersection((double*)segmentsStartPoints.at(segmentIndex),
-                                                                      (double*)segmentsEndPoints.at(segmentIndex),
+            double *foundPoint = MathTools::infiniteLinesIntersection((double *)segmentsStartPoints.at(segmentIndex),
+                                                                      (double *)segmentsEndPoints.at(segmentIndex),
                                                                       sweepLineBeginPoint, sweepLineEndPoint, intersectionState);
             if (intersectionState == MathTools::LinesIntersect)
             {

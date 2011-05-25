@@ -273,16 +273,16 @@ QString DICOMDIRImporter::getDicomdirImagePath(Image *image)
 void DICOMDIRImporter::createConnections(PatientFiller *patientFiller, LocalDatabaseManager *localDatabaseManager, QThread *fillersThread)
 {
     // Connexions entre la descarrega i el processat dels fitxers
-    connect(this, SIGNAL(imageImportedToDisk(DICOMTagReader*)), patientFiller, SLOT(processDICOMFile(DICOMTagReader*)));
+    connect(this, SIGNAL(imageImportedToDisk(DICOMTagReader *)), patientFiller, SLOT(processDICOMFile(DICOMTagReader *)));
     connect(this, SIGNAL(importFinished()), patientFiller, SLOT(finishDICOMFilesProcess()));
 
     // Connexió entre el processat dels fitxers DICOM i l'inserció al a BD, és important que aquest signal sigui un Qt:DirectConnection perquè així el
     // el processa els thread dels fillers, d'aquesta manera el thread de descarrega que està esperant a fillersThread.wait() quan en surt
     // perquè els thread dels fillers ja ha finalitzat, ja  s'ha inserit el pacient a la base de dades.
-    connect(patientFiller, SIGNAL(patientProcessed(Patient*)), localDatabaseManager, SLOT(save(Patient*)), Qt::DirectConnection);
+    connect(patientFiller, SIGNAL(patientProcessed(Patient *)), localDatabaseManager, SLOT(save(Patient *)), Qt::DirectConnection);
 
     // Connexions per finalitzar els threads
-    connect(patientFiller, SIGNAL(patientProcessed(Patient*)), fillersThread, SLOT(quit()), Qt::DirectConnection);
+    connect(patientFiller, SIGNAL(patientProcessed(Patient *)), fillersThread, SLOT(quit()), Qt::DirectConnection);
 
     // Connexions d'abortament
     connect(this, SIGNAL(importAborted()), fillersThread, SLOT(quit()), Qt::DirectConnection);

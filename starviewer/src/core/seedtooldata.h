@@ -20,9 +20,9 @@ public:
 
     QVector<double> getSeedPosition();
     DrawerPoint* getPoint();
-    void setPoint(DrawerPoint* p = NULL);
+    void setPoint(DrawerPoint *p = NULL);
     Volume* getVolume();
-    void setVolume(Volume* vol);
+    void setVolume(Volume *vol);
 
 private:
     /// Hi guardem la posició de la llavor

@@ -36,7 +36,7 @@ public:
     Identifier addVolume(Volume *model);
 
     /// Ens retorna un volum del repositori amb l'identificador que especifiquem.
-    Volume *getVolume(Identifier id);
+    Volume* getVolume(Identifier id);
 
     /// Esborra un Volume de memòria i el treu del repositori
     void deleteVolume(Identifier id);

@@ -37,7 +37,7 @@ DICOMDumpDefaultTags* DICOMDumpDefaultTagsReader::readFile(const QString &path)
         return NULL;
     }
 
-    DICOMDumpDefaultTags* dicomDumpDefaultTag = new DICOMDumpDefaultTags();
+    DICOMDumpDefaultTags *dicomDumpDefaultTag = new DICOMDumpDefaultTags();
 
     QXmlStreamReader reader(&file);
     if (reader.readNextStartElement())

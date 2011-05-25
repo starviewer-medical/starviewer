@@ -74,7 +74,7 @@ public:
      * @param parent QObject pare de l'objecte que es crearà.
      * @return Retorna l'objecte convertit a la classe base BaseClass. En cas que no trobi l'objecte o error retornarà NULL.
      */
-    BaseClass* create(const ClassIdentifier &className, ParentType* parent = 0) const
+    BaseClass* create(const ClassIdentifier &className, ParentType *parent = 0) const
     {
         BaseClass *theObject = NULL;
 

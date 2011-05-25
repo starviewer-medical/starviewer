@@ -54,7 +54,7 @@
 class vtkProjectionImageFilter : public vtkThreadedImageAlgorithm
 {
 public:
-    static vtkProjectionImageFilter *New();
+    static vtkProjectionImageFilter* New();
     vtkTypeRevisionMacro(vtkProjectionImageFilter,vtkThreadedImageAlgorithm);
     void PrintSelf(ostream& os, vtkIndent indent);
 

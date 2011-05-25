@@ -31,7 +31,7 @@ namespace udg {
 
 class PlanesInteractionCallback : public vtkCommand {
 public:
-    static PlanesInteractionCallback *New()
+    static PlanesInteractionCallback* New()
     {
         return new PlanesInteractionCallback;
     }

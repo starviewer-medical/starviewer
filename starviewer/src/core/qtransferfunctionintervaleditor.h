@@ -36,9 +36,9 @@ Q_OBJECT
 
 public:
     /// Construeix l'interval amb un màxim de 255.
-    QTransferFunctionIntervalEditor(QWidget * parent = 0);
+    QTransferFunctionIntervalEditor(QWidget *parent = 0);
     /// Construeix l'interval amb un màxim de \a maximum.
-    QTransferFunctionIntervalEditor(int maximum, QWidget * parent = 0);
+    QTransferFunctionIntervalEditor(int maximum, QWidget *parent = 0);
     virtual ~QTransferFunctionIntervalEditor();
 
     /// Retorna el màxim de l'interval.
@@ -68,7 +68,7 @@ public:
     /// Assigna el color RGBA de l'interval.
     void setColor(QColor color);
     /// Retorna el color RGBA de l'interval.
-    const QColor & color() const;
+    const QColor& color() const;
 
 public slots:
     /// Assigna la propietat isInterval.
@@ -84,7 +84,7 @@ signals:
     /// S'emet quan canvia el final de l'interval.
     void endChanged(int end);
     /// S'emet quan canvia el color RGBA de l'interval.
-    void colorChanged(const QColor & color);
+    void colorChanged(const QColor &color);
 
 private:
     /// Fa els ajustos necessaris perquè l'interval sigui primer i últim alhora.

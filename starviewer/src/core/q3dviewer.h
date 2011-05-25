@@ -61,7 +61,7 @@ public:
     /// Determina la bounding box que definex els plans de tall del volum
     void setClippingPlanes(vtkPlanes *clippingPlanes);
     /// Obté els plans de tall que s'han definit sobre el volum
-    vtkPlanes *getClippingPlanes() const;
+    vtkPlanes* getClippingPlanes() const;
 
     /// Retorna els bounds del vtkVolume.
     void getVolumeBounds(double bounds[6]) const;

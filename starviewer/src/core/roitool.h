@@ -56,7 +56,7 @@ private:
     /// Crea una còpia de m_roiPolygon, amb la diferència que aquesta tindrà el mateix valor de profunditat que la llesca actual
     /// Això ho necessitarem a l'hora de calcular els valors de vòxel, ja que la coordenada de profunditat de les annotacions
     /// és diferent a les llesques en sí, ja que estan en dos plans lleugerament separats
-    DrawerPolygon *createProjectedROIPolygon();
+    DrawerPolygon* createProjectedROIPolygon();
 
 private:
     /// Llista amb els valors de gris per calcular la mitjana i la desviació estàndard i altres dades estadístiques si cal.

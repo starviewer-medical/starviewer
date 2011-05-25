@@ -241,7 +241,7 @@ void DrawerPolyline::getBounds(double bounds[6])
     }
 }
 
-QList<double *> DrawerPolyline::getPointsList()
+QList<double*> DrawerPolyline::getPointsList()
 {
     return m_pointsList;
 }

@@ -31,10 +31,10 @@ public:
     enum CINEDimensionType { SpatialDimension, TemporalDimension };
     void setCINEDimension(int dimension);
 
-    QAction *getPlayAction() const;
-    QAction *getRecordAction() const;
-    QAction *getLoopAction() const;
-    QAction *getBoomerangAction() const;
+    QAction* getPlayAction() const;
+    QAction* getRecordAction() const;
+    QAction* getLoopAction() const;
+    QAction* getBoomerangAction() const;
 
     /**
      * Li donem el path absolut de l'arxiu on es gravarà el vídeo

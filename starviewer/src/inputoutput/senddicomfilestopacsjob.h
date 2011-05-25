@@ -47,7 +47,7 @@ signals:
     void DICOMFileSent(PACSJob *, int numberOfDICOMFilesSent);
 
     /// Signal que s'emet quan s'ha enviat un serie completa al PACS
-    void DICOMSeriesSent(PACSJob*, int numberOfSeriesSent);
+    void DICOMSeriesSent(PACSJob *, int numberOfSeriesSent);
 
 private:
     /// Sol·licita que ens cancel·li el job

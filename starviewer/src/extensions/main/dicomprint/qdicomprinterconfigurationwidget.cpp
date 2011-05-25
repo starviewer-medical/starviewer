@@ -221,7 +221,7 @@ void QDicomPrinterConfigurationWidget::refreshPrinterList()
 
     foreach (DicomPrinter dicomPrinter, dicomPrintersList)
     {
-        QTreeWidgetItem* item = new QTreeWidgetItem(m_listPrintersTreeWidget);
+        QTreeWidgetItem *item = new QTreeWidgetItem(m_listPrintersTreeWidget);
 
         item->setText(0, QString::number(m_listPrintersTreeWidget->topLevelItemCount() - 1));
         item->setText(1, dicomPrinter.getAETitle());
@@ -303,7 +303,7 @@ void QDicomPrinterConfigurationWidget::clearPrinterSettings()
     m_printerDefaultPrinterCheckBox->setChecked(false);
 }
 
-void QDicomPrinterConfigurationWidget::setPrinterSettingsToControls(DicomPrinter& printer)
+void QDicomPrinterConfigurationWidget::setPrinterSettingsToControls(DicomPrinter &printer)
 {
     m_printerAetitleLineEdit->setText(printer.getAETitle());
     m_printerDescriptionLineEdit->setText(printer.getDescription());
@@ -312,7 +312,7 @@ void QDicomPrinterConfigurationWidget::setPrinterSettingsToControls(DicomPrinter
     m_printerDefaultPrinterCheckBox->setChecked(printer.getIsDefault());
 }
 
-void QDicomPrinterConfigurationWidget::getPrinterSettingsFromControls(DicomPrinter& printer)
+void QDicomPrinterConfigurationWidget::getPrinterSettingsFromControls(DicomPrinter &printer)
 {
     printer.setAETitle(m_printerAetitleLineEdit->text());
     printer.setDescription(m_printerDescriptionLineEdit->text());
@@ -321,7 +321,7 @@ void QDicomPrinterConfigurationWidget::getPrinterSettingsFromControls(DicomPrint
     printer.setIsDefault(m_printerDefaultPrinterCheckBox->isChecked());
 }
 
-void QDicomPrinterConfigurationWidget::setAdvancedSettingsToControls(DicomPrinter& printer)
+void QDicomPrinterConfigurationWidget::setAdvancedSettingsToControls(DicomPrinter &printer)
 {
     m_magnifactionTypeComboBox->addItems(printer.getAvailableMagnificationTypeValues());
     m_magnifactionTypeComboBox->setCurrentIndex(m_magnifactionTypeComboBox->findText(printer.getDefaultMagnificationType()));
@@ -345,7 +345,7 @@ void QDicomPrinterConfigurationWidget::setAdvancedSettingsToControls(DicomPrinte
     m_configurationInformationLineEdit->setText(printer.getDefaultConfigurationInformation());
 }
 
-void QDicomPrinterConfigurationWidget::getAdvancedSettingsFromControls(DicomPrinter& printer)
+void QDicomPrinterConfigurationWidget::getAdvancedSettingsFromControls(DicomPrinter &printer)
 {
     printer.setDefaultMagnificationType(m_magnifactionTypeComboBox->currentText());
     printer.setDefaultSmoothingType(m_smoothingTypeComboBox->currentText());

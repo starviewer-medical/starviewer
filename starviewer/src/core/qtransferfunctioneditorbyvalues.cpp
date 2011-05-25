@@ -32,7 +32,7 @@ QTransferFunctionEditorByValues::QTransferFunctionEditorByValues(QWidget *parent
 
     // Creem el primer interval
 
-    QTransferFunctionIntervalEditor * first = new QTransferFunctionIntervalEditor(m_intervalEditorsWidget);
+    QTransferFunctionIntervalEditor *first = new QTransferFunctionIntervalEditor(m_intervalEditorsWidget);
     first->setIsFirst(true);
     first->setIsLast(true);
     first->setObjectName("interval0");
@@ -40,7 +40,7 @@ QTransferFunctionEditorByValues::QTransferFunctionEditorByValues(QWidget *parent
 
     connect(first, SIGNAL(startChanged(int)), SLOT(markAsChanged()));
     connect(first, SIGNAL(endChanged(int)), SLOT(markAsChanged()));
-    connect(first, SIGNAL(colorChanged(const QColor&)), SLOT(markAsChanged()));
+    connect(first, SIGNAL(colorChanged(const QColor &)), SLOT(markAsChanged()));
 
     // Mida mínima de la scroll area
     QStyle *style = scrollArea->style();
@@ -53,7 +53,7 @@ QTransferFunctionEditorByValues::QTransferFunctionEditorByValues(QWidget *parent
 
     connect(m_addPushButton, SIGNAL(clicked()), SLOT(addInterval()));
     connect(m_removePushButton, SIGNAL(clicked()), SLOT(removeInterval()));
-    connect(m_nameLineEdit, SIGNAL(textChanged(const QString&)), SLOT(markAsChanged()));
+    connect(m_nameLineEdit, SIGNAL(textChanged(const QString &)), SLOT(markAsChanged()));
 }
 
 QTransferFunctionEditorByValues::~QTransferFunctionEditorByValues()
@@ -64,7 +64,7 @@ void QTransferFunctionEditorByValues::setMaximum(unsigned short maximum)
 {
     QTransferFunctionEditor::setMaximum(maximum);
 
-    QList<QTransferFunctionIntervalEditor *> intervalList =
+    QList<QTransferFunctionIntervalEditor*> intervalList =
         m_intervalEditorsWidget->findChildren<QTransferFunctionIntervalEditor*>();
     QTransferFunctionIntervalEditor *interval;
     foreach (interval, intervalList)
@@ -75,7 +75,7 @@ void QTransferFunctionEditorByValues::setMaximum(unsigned short maximum)
     m_changed = true;
 }
 
-void QTransferFunctionEditorByValues::setTransferFunction(const TransferFunction & transferFunction)
+void QTransferFunctionEditorByValues::setTransferFunction(const TransferFunction &transferFunction)
 {
     // Si no hi ha hagut canvis i ens passen una funció igual llavors no cal fer res
     if (!m_changed && m_transferFunction == transferFunction)
@@ -142,7 +142,7 @@ void QTransferFunctionEditorByValues::setTransferFunction(const TransferFunction
     getTransferFunction();
 }
 
-const TransferFunction & QTransferFunctionEditorByValues::getTransferFunction() const
+const TransferFunction& QTransferFunctionEditorByValues::getTransferFunction() const
 {
     if (m_changed)
     {
@@ -196,7 +196,7 @@ void QTransferFunctionEditorByValues::removeInterval()
     markAsChanged();
 }
 
-QTransferFunctionIntervalEditor * QTransferFunctionEditorByValues::addIntervalAndReturnIt()
+QTransferFunctionIntervalEditor *QTransferFunctionEditorByValues::addIntervalAndReturnIt()
 {
     if (m_numberOfIntervals == m_maximum + 1u)
     {
@@ -215,7 +215,7 @@ QTransferFunctionIntervalEditor * QTransferFunctionEditorByValues::addIntervalAn
 
     connect(afterLast, SIGNAL(startChanged(int)), SLOT(markAsChanged()));
     connect(afterLast, SIGNAL(endChanged(int)), SLOT(markAsChanged()));
-    connect(afterLast, SIGNAL(colorChanged(const QColor&)), SLOT(markAsChanged()));
+    connect(afterLast, SIGNAL(colorChanged(const QColor &)), SLOT(markAsChanged()));
 
     last->setIsLast(false);
 

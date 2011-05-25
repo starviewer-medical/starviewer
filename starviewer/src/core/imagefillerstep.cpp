@@ -682,7 +682,7 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
         if (objectThicknessSequence)
         {
             // Segons DICOM només es permet que contingui un sol ítem
-            QList<DICOMSequenceItem *> objectThicknessItems = objectThicknessSequence->getItems();
+            QList<DICOMSequenceItem*> objectThicknessItems = objectThicknessSequence->getItems();
             if (!objectThicknessItems.empty())
             {
                 DICOMSequenceItem *item = objectThicknessItems.at(0);

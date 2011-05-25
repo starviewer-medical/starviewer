@@ -328,11 +328,11 @@ int ImagePlane::getIntersections(ImagePlane *planeToIntersect, double firstInter
     QVector<double> blhc = upperPlaneBounds.at(3);
 
     // Primera "paral·lela" (X)
-    if(vtkPlane::IntersectWithLine((double*)tlhc.data(), (double*)trhc.data(), localizerNormalVector, localizerOrigin, t, firstIntersectionPoint))
+    if(vtkPlane::IntersectWithLine((double *)tlhc.data(), (double *)trhc.data(), localizerNormalVector, localizerOrigin, t, firstIntersectionPoint))
     {
         numberOfIntersections++;
     }
-    if(vtkPlane::IntersectWithLine((double*)brhc.data(), (double*)blhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint))
+    if(vtkPlane::IntersectWithLine((double *)brhc.data(), (double *)blhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint))
     {
         numberOfIntersections++;
     }
@@ -340,12 +340,12 @@ int ImagePlane::getIntersections(ImagePlane *planeToIntersect, double firstInter
     if(numberOfIntersections == 0)
     {
         // Provar amb la segona "paral·lela" (Y)
-        if(vtkPlane::IntersectWithLine((double*)trhc.data(), (double*)brhc.data(), localizerNormalVector, localizerOrigin, t, firstIntersectionPoint))
+        if(vtkPlane::IntersectWithLine((double *)trhc.data(), (double *)brhc.data(), localizerNormalVector, localizerOrigin, t, firstIntersectionPoint))
         {
             numberOfIntersections++;
         }
 
-        if(vtkPlane::IntersectWithLine((double*)blhc.data(), (double*)tlhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint))
+        if(vtkPlane::IntersectWithLine((double *)blhc.data(), (double *)tlhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint))
         {
             numberOfIntersections++;
         }

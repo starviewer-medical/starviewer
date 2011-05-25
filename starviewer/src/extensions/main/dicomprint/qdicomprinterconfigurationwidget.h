@@ -57,13 +57,13 @@ private:
     // Neteja els valors de la interífice.
     void clearPrinterSettings();
     // Es mostra la informació bàsica de la impressora per pantalla (/p printer és la impressora que conté la informació a mostrar)
-    void setPrinterSettingsToControls(DicomPrinter& printer);
+    void setPrinterSettingsToControls(DicomPrinter &printer);
     // Es guarda la informació bàsica de la impressora de l'interfície a un objecte DicomPrinter (/p printer és la impressora on es guarden les dades).
-    void getPrinterSettingsFromControls(DicomPrinter& printer);
+    void getPrinterSettingsFromControls(DicomPrinter &printer);
     // Es mostra la informació avançada de la impressió per pantalla (/p printer és la impressora que conté la informació a mostrar)
-    void setAdvancedSettingsToControls(DicomPrinter& printer);
+    void setAdvancedSettingsToControls(DicomPrinter &printer);
     // Es guarda la informació avançada de la impressió de l'interfície a un objecte DicomPrinter (/p printer és la impressora on es guarden les dades).
-    void getAdvancedSettingsFromControls(DicomPrinter& printer);
+    void getAdvancedSettingsFromControls(DicomPrinter &printer);
 
     /// Retorna la impressora seleccionada, si no tenim cap impressora seleccionada retorna l'objecte amb les propietats buides.
     /// Aquest mètode retorna la informació de la impressora com està guardada, si seleccionem una impressora, en modifiquem les dades a través

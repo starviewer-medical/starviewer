@@ -24,7 +24,7 @@ class ObscuranceThread : public QThread {
 Q_OBJECT
 
 public:
-    ObscuranceThread(int id, int numberOfThreads, const TransferFunction & transferFunction, QObject *parent = 0);
+    ObscuranceThread(int id, int numberOfThreads, const TransferFunction &transferFunction, QObject *parent = 0);
     virtual ~ObscuranceThread();
 
     /// Assigna l'estimador del gradient, d'on es treuran les normals.
@@ -33,8 +33,8 @@ public:
     void setObscuranceParameters(double obscuranceMaximumDistance, ObscuranceMainThread::Function obscuranceFunction,
                                  ObscuranceMainThread::Variant obscuranceVariant, Obscurance *obscurance);
     void setSaliency(const double *saliency, double fxSaliencyA, double fxSaliencyB, double fxSaliencyLow, double fxSaliencyHigh);
-    void setPerDirectionParameters(const Vector3 & direction, const Vector3 & forward, const int xyz[3], const int sXYZ[3],
-                                   const QVector<Vector3> & lineStarts, qptrdiff startDelta);
+    void setPerDirectionParameters(const Vector3 &direction, const Vector3 &forward, const int xyz[3], const int sXYZ[3],
+                                   const QVector<Vector3> &lineStarts, qptrdiff startDelta);
 
 protected:
     virtual void run();
@@ -56,7 +56,7 @@ private:
     bool smoothBlocking(const Vector3 &blocking, const Vector3 &blocked, double distance, const float *blockedGradient) const;
 
     int m_id, m_numberOfThreads;
-    const TransferFunction & m_transferFunction;
+    const TransferFunction &m_transferFunction;
     vtkDirectionEncoder *m_directionEncoder;
     const ushort *m_encodedNormals;
     const ushort *m_data;

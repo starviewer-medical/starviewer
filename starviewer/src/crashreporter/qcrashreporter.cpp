@@ -10,7 +10,7 @@
 
 namespace udg {
 
-QCrashReporter::QCrashReporter(const QStringList& args, QWidget *parent)
+QCrashReporter::QCrashReporter(const QStringList &args, QWidget *parent)
     : QWidget(parent)
 {
     setWindowIcon(QIcon(":/images/starviewer.png"));

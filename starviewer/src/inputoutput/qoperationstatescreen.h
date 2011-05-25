@@ -65,7 +65,7 @@ private slots:
     void cancelSelectedRequests();
 
     /// Slot que s'activa quan rebem SIGNAL que s'ha demanat cancel·lar un Job
-    void requestedCancelPACSJob(PACSJob*);
+    void requestedCancelPACSJob(PACSJob *);
 
 private:
     QString m_currentProcessingStudyUID;

@@ -55,9 +55,9 @@ protected:
     // No s'implementa
     Singleton(){};
     // No s'implementa
-    Singleton(const Singleton&){};
+    Singleton(const Singleton& ){};
     // No s'implementa
-    Singleton &operator=(const Singleton&){};
+    Singleton &operator=(const Singleton &){};
 };
 
 /**
@@ -93,9 +93,9 @@ protected:
     // No s'implementa
     SingletonPointer(){};
     // No s'implementa
-    SingletonPointer(const SingletonPointer&){};
+    SingletonPointer(const SingletonPointer &){};
     // No s'implementa
-    SingletonPointer &operator=(const SingletonPointer&){};
+    SingletonPointer &operator=(const SingletonPointer &){};
 
 private:
     static QReadWriteLock m_pointerLock;

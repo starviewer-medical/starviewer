@@ -18,7 +18,7 @@ ClippingPlanesTool::ClippingPlanesTool(QViewer *viewer, QObject *parent)
     m_toolName = "ClippingPlanesTool";
     m_hasSharedData = false;
 
-    m_3DViewer = qobject_cast<Q3DViewer *>(viewer);
+    m_3DViewer = qobject_cast<Q3DViewer*>(viewer);
     if(!m_3DViewer)
     {
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q3DViewer!!!-> ") + viewer->metaObject()->className());
@@ -31,14 +31,14 @@ ClippingPlanesTool::ClippingPlanesTool(QViewer *viewer, QObject *parent)
 
     // Posem a punt la observació dels events del widget
     m_vtkQtConnections = vtkEventQtSlotConnect::New();
-    m_vtkQtConnections->Connect(m_boundingBoxClipperWidget, vtkCommand::InteractionEvent, this, SLOT(boundingBoxEventHandler(vtkObject*, unsigned long, void*,
-                                                                                                                             void*, vtkCommand*)));
+    m_vtkQtConnections->Connect(m_boundingBoxClipperWidget, vtkCommand::InteractionEvent, this, SLOT(boundingBoxEventHandler(vtkObject *, unsigned long, void *,
+                                                                                                                             void *, vtkCommand *)));
 
     if(m_3DViewer->getInput())
     {
         updateInput();
     }
-    connect(m_3DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(updateInput()));
+    connect(m_3DViewer, SIGNAL(volumeChanged(Volume *)), SLOT(updateInput()));
 }
 
 ClippingPlanesTool::~ClippingPlanesTool()

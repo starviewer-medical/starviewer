@@ -211,7 +211,7 @@ DcmDataset PrintDicomSpool::getAttributesBasicFilmSession()
     return datasetBasicFilmSession;
 }
 
-OFCondition PrintDicomSpool::createAndSendBasicGrayscaleImageBox(DVPSPrintMessageHandler& printerConnection, DVPSStoredPrint *storedPrintDcmtk,
+OFCondition PrintDicomSpool::createAndSendBasicGrayscaleImageBox(DVPSPrintMessageHandler &printerConnection, DVPSStoredPrint *storedPrintDcmtk,
                                                                  size_t imageNumber, const QString &spoolDirectoryPath)
 {
     OFCondition result;
@@ -266,7 +266,7 @@ OFCondition PrintDicomSpool::createAndSendBasicGrayscaleImageBox(DVPSPrintMessag
     }
 }
 
-OFCondition PrintDicomSpool::createAndSendFilmBoxAnnotations(DVPSPrintMessageHandler& printConnection, DVPSStoredPrint *storedPrintDcmtk)
+OFCondition PrintDicomSpool::createAndSendFilmBoxAnnotations(DVPSPrintMessageHandler &printConnection, DVPSStoredPrint *storedPrintDcmtk)
 {
     OFCondition result;
 

@@ -152,7 +152,7 @@ int Patient::getNumberOfStudies()
     return m_studiesSet.size();
 }
 
-QList<Study *> Patient::getStudies() const
+QList<Study*> Patient::getStudies() const
 {
     return m_studiesSet;
 }
@@ -202,7 +202,7 @@ bool Patient::hasFile(const QString &filename)
     return false;
 }
 
-Patient & Patient::operator =(const Patient &patient)
+Patient& Patient::operator =(const Patient &patient)
 {
     m_fullName = patient.m_fullName;
     m_patientID = patient.m_patientID;

@@ -35,9 +35,9 @@ public:
     virtual void setMaximum(unsigned short maximum);
 
     /// Assigna una funció de transferència a l'editor.
-    virtual void setTransferFunction(const TransferFunction & transferFunction);
+    virtual void setTransferFunction(const TransferFunction &transferFunction);
     /// Retorna la funció de transferència de l'editor.
-    virtual const TransferFunction & getTransferFunction() const;
+    virtual const TransferFunction& getTransferFunction() const;
 
 public slots:
     /// Afegeix un interval a l'editor (al final). Si ja n'hi ha el màxim no fa res.
@@ -47,7 +47,7 @@ public slots:
 
 private:
     /// Afegeix un interval al final i el retorna. Si ja n'hi ha el màxim no fa res.
-    QTransferFunctionIntervalEditor *addIntervalAndReturnIt();
+    QTransferFunctionIntervalEditor* addIntervalAndReturnIt();
 
 private slots:
     /// Posa m_changed a cert.

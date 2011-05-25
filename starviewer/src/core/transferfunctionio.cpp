@@ -19,7 +19,7 @@ TransferFunctionIO::~TransferFunctionIO()
 {
 }
 
-TransferFunction * TransferFunctionIO::fromFile(QFile & file)
+TransferFunction* TransferFunctionIO::fromFile(QFile &file)
 {
     if (!file.open(QFile::ReadOnly | QFile::Text))
     {
@@ -96,7 +96,7 @@ TransferFunction * TransferFunctionIO::fromFile(QFile & file)
     return transferFunction;
 }
 
-TransferFunction* TransferFunctionIO::fromFile(const QString & fileName)
+TransferFunction* TransferFunctionIO::fromFile(const QString &fileName)
 {
     QFile file(fileName);
     return fromFile(file);
@@ -197,7 +197,7 @@ TransferFunction* TransferFunctionIO::fromXmlFile(const QString &fileName)
     return fromXmlFile(file);
 }
 
-void TransferFunctionIO::toFile(QFile & file, const TransferFunction & transferFunction)
+void TransferFunctionIO::toFile(QFile &file, const TransferFunction &transferFunction)
 {
     if (!file.open(QFile::WriteOnly | QFile::Truncate | QFile::Text))
     {
@@ -233,7 +233,7 @@ void TransferFunctionIO::toFile(QFile & file, const TransferFunction & transferF
     file.close();
 }
 
-void TransferFunctionIO::toFile(const QString & fileName, const TransferFunction & transferFunction)
+void TransferFunctionIO::toFile(const QString &fileName, const TransferFunction &transferFunction)
 {
     QFile file(fileName);
     toFile(file, transferFunction);

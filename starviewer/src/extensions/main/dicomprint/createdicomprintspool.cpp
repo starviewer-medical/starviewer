@@ -307,8 +307,8 @@ bool CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
 
     if (pxData)
     {
-        void *pixelDataAsVoid = OFconst_cast(char*, pixelData);
-        pxData->putUint16Array(OFstatic_cast(Uint16*, pixelDataAsVoid), OFstatic_cast(unsigned long, bitmapWidth * bitmapHeight));
+        void *pixelDataAsVoid = OFconst_cast(char *, pixelData);
+        pxData->putUint16Array(OFstatic_cast(Uint16 *, pixelDataAsVoid), OFstatic_cast(unsigned long, bitmapWidth * bitmapHeight));
         transformedImageDatasetToPrint->insert(pxData, OFTrue);
 
         if (m_presentationState->getPresentationLUT() == DVPSP_table)

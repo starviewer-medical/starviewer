@@ -37,7 +37,7 @@ public slots:
 
     /// Obtenim el contexte de l'extensió
     /// @return El contexte de l'extensió, es pot modificar
-    ExtensionContext &getContext();
+    ExtensionContext& getContext();
 
     /// Actualitza la configuració que se li indica
     // TODO Semi-xapussa per resoldre el problema de comunicació entre el queryscreen i la seva configuració. Cal fer un disseny de tot això.

@@ -214,7 +214,7 @@ void ApplicationVersionChecker::checkVersionOnServer()
     QUrl url(createWebServiceUrl());
     m_manager = new QNetworkAccessManager(this);
     setProxy(url);
-    connect(m_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(webServiceReply(QNetworkReply*)));
+    connect(m_manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(webServiceReply(QNetworkReply *)));
     m_manager->get(QNetworkRequest(url));
 }
 
@@ -452,7 +452,7 @@ bool ApplicationVersionChecker::isDevelopmentMode()
 void ApplicationVersionChecker::webServiceReply(QNetworkReply *reply)
 {
     // Desconnectar el manager
-    disconnect(m_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(webServiceReply(QNetworkReply*)));
+    disconnect(m_manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(webServiceReply(QNetworkReply *)));
 
     bool result = reply->error() == QNetworkReply::NoError;
     // Si no error
@@ -480,7 +480,7 @@ void ApplicationVersionChecker::webServiceReply(QNetworkReply *reply)
                 m_checkedVersion = scriptValue.property("version").toString();
                 releaseNotesURL = scriptValue.property("releaseNotesURL").toString();
 
-                connect(m_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(updateNotesUrlReply(QNetworkReply*)));
+                connect(m_manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(updateNotesUrlReply(QNetworkReply *)));
                 m_manager->get(QNetworkRequest(QUrl(releaseNotesURL)));
 
                 INFO_LOG(QString("S'ha trobat una nova versió en el servidor, %1.").arg(m_checkedVersion));
@@ -504,7 +504,7 @@ void ApplicationVersionChecker::webServiceReply(QNetworkReply *reply)
 void ApplicationVersionChecker::updateNotesUrlReply(QNetworkReply *reply)
 {
     // Desconnectar el manager
-    disconnect(m_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(updateNotesUrlReply(QNetworkReply*)));
+    disconnect(m_manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(updateNotesUrlReply(QNetworkReply *)));
 
     bool result = reply->error() == QNetworkReply::NoError;
     // Si no error

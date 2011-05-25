@@ -105,13 +105,13 @@ Identifier& Identifier::operator =(const int id)
     return *this;
 }
 
-Identifier& Identifier::operator =(const Identifier & id)
+Identifier& Identifier::operator =(const Identifier &id)
 {
     m_id = id.m_id;
     return *this;
 }
 
-Identifier Identifier::operator +(const Identifier & id)
+Identifier Identifier::operator +(const Identifier &id)
 {
     Identifier result;
     result.m_id = m_id + id.m_id;
@@ -125,7 +125,7 @@ Identifier Identifier::operator +(const int id)
     return result;
 }
 
-Identifier Identifier::operator +=(const Identifier & id)
+Identifier Identifier::operator +=(const Identifier &id)
 {
     m_id += id.m_id;
     return *this;
@@ -137,7 +137,7 @@ Identifier Identifier::operator +=(const int id)
     return *this;
 }
 
-Identifier Identifier::operator -(const Identifier & id)
+Identifier Identifier::operator -(const Identifier &id)
 {
     Identifier result;
     result.m_id = m_id - id.m_id;
@@ -151,7 +151,7 @@ Identifier Identifier::operator -(const int id)
     return result;
 }
 
-Identifier Identifier::operator -=(const Identifier & id)
+Identifier Identifier::operator -=(const Identifier &id)
 {
     m_id -= id.m_id;
     return *this;

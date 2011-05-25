@@ -175,7 +175,7 @@ Volume* Volume::getPhaseVolume(int index)
 
 QList<Image*> Volume::getPhaseImages(int index)
 {
-    QList<Image *> phaseImages;
+    QList<Image*> phaseImages;
     if (index >= 0 && index < m_numberOfPhases)
     {
         // Obtenim el nombre d'imatges per fase

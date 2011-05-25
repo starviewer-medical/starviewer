@@ -27,9 +27,9 @@ public:
     virtual void setMaximum(unsigned short maximum);
 
     /// Assigna una funció de transferència a l'editor.
-    virtual void setTransferFunction(const TransferFunction & transferFunction) = 0;
+    virtual void setTransferFunction(const TransferFunction &transferFunction) = 0;
     /// Retorna la funció de transferència de l'editor.
-    virtual const TransferFunction & getTransferFunction() const = 0;
+    virtual const TransferFunction& getTransferFunction() const = 0;
 
 protected:
     /// Valor de propietat màxim mapat per aquest editor.

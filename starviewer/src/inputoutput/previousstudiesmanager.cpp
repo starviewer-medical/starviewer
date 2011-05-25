@@ -113,8 +113,8 @@ void PreviousStudiesManager::initializeQuery()
 
 void PreviousStudiesManager::enqueueQueryPACSJobToPACSManagerAndConnectSignals(QueryPacsJob *queryPACSJob)
 {
-    connect(queryPACSJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(queryPACSJobFinished(PACSJob*)));
-    connect(queryPACSJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(queryPACSJobCancelled(PACSJob*)));
+    connect(queryPACSJob, SIGNAL(PACSJobFinished(PACSJob *)), SLOT(queryPACSJobFinished(PACSJob *)));
+    connect(queryPACSJob, SIGNAL(PACSJobCancelled(PACSJob *)), SLOT(queryPACSJobCancelled(PACSJob *)));
 
     m_pacsManager->enqueuePACSJob(queryPACSJob);
     m_queryPACSJobPendingExecuteOrExecuting.insert(queryPACSJob->getPACSJobID(), queryPACSJob);
@@ -282,7 +282,7 @@ QString PreviousStudiesManager::getPreviousStudyDateMask(QDate studyDate)
 
 void PreviousStudiesManager::downloadStudy(Study *study, QString pacs)
 {
-    QueryScreen* queryScreen = SingletonPointer<QueryScreen>::instance();
+    QueryScreen *queryScreen = SingletonPointer<QueryScreen>::instance();
     queryScreen->retrieveStudy(QInputOutputPacsWidget::Load, pacs, study);
     connect(queryScreen, SIGNAL(studyRetrieveFailed(QString)), SIGNAL(errorDownloadingPreviousStudy(QString)));
 }

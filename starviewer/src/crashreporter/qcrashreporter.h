@@ -14,7 +14,7 @@ class QCrashReporter : public QWidget, Ui::QCrashReporterBase {
 Q_OBJECT
 
 public:
-    QCrashReporter(const QStringList& argv, QWidget *parent = 0);
+    QCrashReporter(const QStringList &argv, QWidget *parent = 0);
 
 public Q_SLOTS:
     void quitButtonClickedSlot();

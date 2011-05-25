@@ -216,7 +216,7 @@ void QApplicationMainWindow::createActions()
     QList<QString> extensionsMediatorNames = ExtensionMediatorFactory::instance()->getFactoryNamesList();
     foreach (QString name, extensionsMediatorNames)
     {
-        ExtensionMediator* mediator = ExtensionMediatorFactory::instance()->create(name);
+        ExtensionMediator *mediator = ExtensionMediatorFactory::instance()->create(name);
 
         if (mediator)
         {
@@ -346,7 +346,7 @@ void QApplicationMainWindow::moveToNextDesktop()
 void QApplicationMainWindow::showConfigurationDialog()
 {
     QConfigurationDialog configurationDialog;
-    connect(&configurationDialog, SIGNAL(configurationChanged(const QString&)), m_extensionHandler, SLOT(updateConfiguration(const QString&)));
+    connect(&configurationDialog, SIGNAL(configurationChanged(const QString &)), m_extensionHandler, SLOT(updateConfiguration(const QString &)));
     configurationDialog.exec();
 }
 
@@ -413,7 +413,7 @@ void QApplicationMainWindow::createLanguageMenu()
     languages.insert("es_ES", tr("Spanish"));
     languages.insert("en_GB", tr("English"));
 
-    QSignalMapper* signalMapper = new QSignalMapper(this);
+    QSignalMapper *signalMapper = new QSignalMapper(this);
     connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(switchToLanguage(QString)));
 
     QActionGroup *actionGroup = new QActionGroup(this);

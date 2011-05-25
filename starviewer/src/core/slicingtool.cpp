@@ -25,7 +25,7 @@ SlicingTool::SlicingTool(QViewer *viewer, QObject *parent)
     Q_ASSERT(m_2DViewer);
 
     // Cada cop que canvïi l'input cal fer algunes inicialitzacions
-    connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(inputChanged(Volume*)));
+    connect(m_2DViewer, SIGNAL(volumeChanged(Volume *)), SLOT(inputChanged(Volume *)));
     inputChanged(m_2DViewer->getInput());
 }
 

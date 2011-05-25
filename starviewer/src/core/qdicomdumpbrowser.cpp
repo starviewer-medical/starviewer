@@ -274,7 +274,7 @@ DICOMDumpDefaultTags* QDICOMDumpBrowser::getDICOMDumpDefaultTags(const DICOMTagR
 {
     QString uidReference = dicomReader.getValueAttributeAsQString(DICOMSOPClassUID);
 
-    DICOMDumpDefaultTags* candidate = NULL;
+    DICOMDumpDefaultTags *candidate = NULL;
     QList<DICOMDumpDefaultTags*> possiblesCandidatesList = DICOMDumpDefaultTagsRepository::getRepository()->getItems();
 
     foreach (DICOMDumpDefaultTags* possibleCandidate, possiblesCandidatesList)

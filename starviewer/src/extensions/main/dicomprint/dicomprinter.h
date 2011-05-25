@@ -21,31 +21,31 @@ public:
     int getID();
 
     /// Afegeix el nom de la impressora.
-    void setName(const QString& name);
+    void setName(const QString &name);
 
     /// Retorna el nom de la impressora.
     QString getName() const;
 
     /// Afegeix el tipus de la impressora.
-    void setType(const QString& type);
+    void setType(const QString &type);
 
     /// Retorna el tipus de la impressora.
     QString getType() const;
 
     /// Afegeix la descripció de la impressora.
-    void setDescription(const QString& description);
+    void setDescription(const QString &description);
 
     /// Retorna la descripció de la impressora.
     QString getDescription() const;
 
     /// Afageix el AETitle de la impressora
-    void setAETitle(const QString& aeTitle);
+    void setAETitle(const QString &aeTitle);
 
     /// Retorna el AETitle de la impressora
     QString getAETitle() const;
 
     /// Afegeix el HostName (IP) de la impressora.
-    void setHostname(const QString& hostname);
+    void setHostname(const QString &hostname);
 
     /// Retorna el AETitle de la impressora
     QString getHostname() const;
@@ -57,7 +57,7 @@ public:
     int getPort();
 
     /// Especifica el valor per defecte del MediumType
-    void setDefaultMediumType(const QString& mediumType);
+    void setDefaultMediumType(const QString &mediumType);
 
     /// Retorna el valor per defecte del MediumType
     QString getDefaultMediumType() const;
@@ -69,7 +69,7 @@ public:
     QStringList getAvailableMediumTypeValues();
 
     /// Especifica el valor per defecte del FilmSize
-    void setDefaultFilmSize(const QString& filmSize);
+    void setDefaultFilmSize(const QString &filmSize);
 
     /// Retorna el valor per defecte del FilmSize
     QString getDefaultFilmSize() const;
@@ -81,7 +81,7 @@ public:
     QStringList getAvailableFilmSizeValues();
 
      /// Especifica el valor per defecte del FilmLayout
-    void setDefaultFilmLayout(const QString& filmLayout);
+    void setDefaultFilmLayout(const QString &filmLayout);
 
     /// Retorna el valor per defecte del FilmLayout
     QString getDefaultFilmLayout() const;
@@ -111,7 +111,7 @@ public:
     QStringList getAvailableFilmOrientationValues();
 
     /// Afegeix el Magnification Type per defecte a la impressora
-    void setDefaultMagnificationType(const QString& magnificationType);
+    void setDefaultMagnificationType(const QString &magnificationType);
 
     /// Retorna el Magnification Type per defecte a la impressora
     QString getDefaultMagnificationType() const;
@@ -207,7 +207,7 @@ public:
     QStringList getAvailableSmoothingTypeValues();
 
     /// Especifica la prioritat per defecte dels jobs que s'imprimeixin amb aquesta impressora
-    void setDefaultPrintPriority(const QString& priority);
+    void setDefaultPrintPriority(const QString &priority);
 
     /// Retorna la prioritat per defecte dels jobs que s'imprimeixin amb aquesta impressora
     QString getDefaultPrintPriority() const;
@@ -219,7 +219,7 @@ public:
     QStringList getAvailablePrintPriorityValues();
 
     /// Especifica la polaritat per defecte de l'impressora
-    void setDefaultPolarity(const QString& polarity);
+    void setDefaultPolarity(const QString &polarity);
 
     /// Retorna la polaritat per defecte de l'impressora
     QString getDefaultPolarity() const;

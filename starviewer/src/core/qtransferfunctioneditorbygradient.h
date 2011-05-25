@@ -55,9 +55,9 @@ public:
     virtual ~QTransferFunctionEditorByGradient();
 
     /// Assigna una funció de transferència a l'editor.
-    virtual void setTransferFunction(const TransferFunction & transferFunction);
+    virtual void setTransferFunction(const TransferFunction &transferFunction);
     /// Retorna la funció de transferència de l'editor.
-    virtual const TransferFunction & getTransferFunction() const;
+    virtual const TransferFunction& getTransferFunction() const;
 
     void setGradientStops(const QGradientStops &stops);
 
@@ -68,8 +68,8 @@ signals:
     void gradientStopsChanged(const QGradientStops &stops);
 
 private slots:
-    void setTransferFunction(const QGradientStops & stops);
-    void setTransferFunctionName(const QString & name);
+    void setTransferFunction(const QGradientStops &stops);
+    void setTransferFunctionName(const QString &name);
 
 private:
     QLineEdit *m_nameLineEdit;

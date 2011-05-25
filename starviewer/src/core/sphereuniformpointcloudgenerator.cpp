@@ -178,14 +178,14 @@ void SphereUniformPointCloudGenerator::createIcosahedronFaces()
     m_faces.append(11); m_faces.append( 2); m_faces.append( 7);
 }
 
-inline bool equal(const Vector3 & v1, const Vector3 & v2, float error)
+inline bool equal(const Vector3 &v1, const Vector3 &v2, float error)
 {
     Vector3 v = v1 - v2;
 
     return (fabs(v.x) <= error && fabs(v.y) <= error && fabs(v.z) <= error);
 }
 
-bool SphereUniformPointCloudGenerator::findSphereCloudVertex(const Vector3 & v, unsigned short & position) const
+bool SphereUniformPointCloudGenerator::findSphereCloudVertex(const Vector3 &v, unsigned short &position) const
 {
     unsigned short i = 0;
     bool trobat = false;
@@ -207,7 +207,7 @@ bool SphereUniformPointCloudGenerator::findSphereCloudVertex(const Vector3 & v, 
     return trobat;
 }
 
-void SphereUniformPointCloudGenerator::createSphereCloudTriangle(const Vector3 & v1, const Vector3 & v2, const Vector3 & v3)
+void SphereUniformPointCloudGenerator::createSphereCloudTriangle(const Vector3 &v1, const Vector3 &v2, const Vector3 &v3)
 {
     unsigned short pos;
 
@@ -291,7 +291,7 @@ void SphereUniformPointCloudGenerator::createGeographicVertices()
 
     for (unsigned short i = 0; i < m_vertices.size(); i++)
     {
-        const Vector3 & v = m_vertices[i];
+        const Vector3 &v = m_vertices[i];
         Vector3 gv;
         gv.x = v.length();
         // Latitud
