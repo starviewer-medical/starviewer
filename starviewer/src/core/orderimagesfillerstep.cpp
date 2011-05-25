@@ -231,7 +231,7 @@ void OrderImagesFillerStep::processImage(Image *image)
 
 void OrderImagesFillerStep::setOrderedImagesIntoSeries(Series *series)
 {
-    QList<Image *> imageSet;
+    QList<Image*> imageSet;
     QMap<unsigned long, Image*> *instanceNumberSet;
     QMap<double, QMap<unsigned long, Image*>*> *imagePositionSet;
     QMap<double, QMap<double, QMap<unsigned long, Image*>*>*> lastOrderedImageSet;

@@ -41,7 +41,7 @@ private:
     bool validateInputSettings();
 
     /// Agafa les dades introduides per l'usuari i les afegeix a un DicomPrinter.
-    void getPrinterSettingsFromControls(DicomPrinter& printer);
+    void getPrinterSettingsFromControls(DicomPrinter &printer);
 };
 };
 #endif

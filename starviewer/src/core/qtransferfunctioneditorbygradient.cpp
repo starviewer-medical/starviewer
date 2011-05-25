@@ -32,18 +32,18 @@
 
 namespace udg {
 
-QTransferFunctionEditorByGradient::QTransferFunctionEditorByGradient(QWidget * parent)
+QTransferFunctionEditorByGradient::QTransferFunctionEditorByGradient(QWidget *parent)
     : QTransferFunctionEditor(parent)
 {
     QVBoxLayout *vbox = new QVBoxLayout(this);
     vbox->setSpacing(1);
     vbox->setMargin(1);
 
-    QHBoxLayout * hbox = new QHBoxLayout();
+    QHBoxLayout *hbox = new QHBoxLayout();
     hbox->setSpacing(6);
     hbox->setMargin(0);
 
-    QLabel * nameLabel = new QLabel(tr("Name"), this);
+    QLabel *nameLabel = new QLabel(tr("Name"), this);
     m_nameLineEdit = new QLineEdit(this);
 
     hbox->addWidget(nameLabel);
@@ -60,20 +60,20 @@ QTransferFunctionEditorByGradient::QTransferFunctionEditorByGradient(QWidget * p
     vbox->addWidget(m_blue_shade);
     vbox->addWidget(m_alpha_shade);
 
-    connect(m_nameLineEdit, SIGNAL(textChanged(const QString&)), SLOT(setTransferFunctionName(const QString&)));
+    connect(m_nameLineEdit, SIGNAL(textChanged(const QString &)), SLOT(setTransferFunctionName(const QString &)));
     connect(m_red_shade, SIGNAL(colorsChanged()), SLOT(pointsUpdated()));
     connect(m_green_shade, SIGNAL(colorsChanged()), SLOT(pointsUpdated()));
     connect(m_blue_shade, SIGNAL(colorsChanged()), SLOT(pointsUpdated()));
     connect(m_alpha_shade, SIGNAL(colorsChanged()), SLOT(pointsUpdated()));
 
-    connect(this, SIGNAL(gradientStopsChanged(const QGradientStops&)), SLOT(setTransferFunction(const QGradientStops&)));
+    connect(this, SIGNAL(gradientStopsChanged(const QGradientStops &)), SLOT(setTransferFunction(const QGradientStops &)));
 }
 
 QTransferFunctionEditorByGradient::~ QTransferFunctionEditorByGradient()
 {
 }
 
-void QTransferFunctionEditorByGradient::setTransferFunction(const TransferFunction & transferFunction)
+void QTransferFunctionEditorByGradient::setTransferFunction(const TransferFunction &transferFunction)
 {
     if (m_transferFunction == transferFunction)
     {
@@ -95,7 +95,7 @@ void QTransferFunctionEditorByGradient::setTransferFunction(const TransferFuncti
     pointsUpdated();
 }
 
-const TransferFunction & QTransferFunctionEditorByGradient::getTransferFunction() const
+const TransferFunction &QTransferFunctionEditorByGradient::getTransferFunction() const
 {
     return m_transferFunction;
 }
@@ -181,7 +181,7 @@ void QTransferFunctionEditorByGradient::setGradientStops(const QGradientStops &s
     set_shade_points(pts_alpha, m_alpha_shade);
 }
 
-void QTransferFunctionEditorByGradient::setTransferFunction(const QGradientStops & stops)
+void QTransferFunctionEditorByGradient::setTransferFunction(const QGradientStops &stops)
 {
     m_transferFunction.clear();
 
@@ -191,7 +191,7 @@ void QTransferFunctionEditorByGradient::setTransferFunction(const QGradientStops
     }
 }
 
-void QTransferFunctionEditorByGradient::setTransferFunctionName(const QString & name)
+void QTransferFunctionEditorByGradient::setTransferFunctionName(const QString &name)
 {
     m_transferFunction.setName(name);
 }

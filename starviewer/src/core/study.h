@@ -100,7 +100,7 @@ public:
     void removeSeries(QString uid);
 
     /// Obté la sèrie amb l'UID donat. NUL si no hi és
-    Series *getSeries(QString uid);
+    Series* getSeries(QString uid);
 
     /// Ens diu si existeix una serie amb aquest uid a la llista
     /// @param uid l'uid que busquem

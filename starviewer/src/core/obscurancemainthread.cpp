@@ -85,7 +85,7 @@ void ObscuranceMainThread::run()
     // Creem els threads
     /// \todo QThread::idealThreadCount() amb Qt >= 4.3
     int numberOfThreads = vtkMultiThreader::GetGlobalDefaultNumberOfThreads();
-    QVector<ObscuranceThread *> threads(numberOfThreads);
+    QVector<ObscuranceThread*> threads(numberOfThreads);
 
     // Variables necessàries
     vtkImageData *image = mapper->GetInput();

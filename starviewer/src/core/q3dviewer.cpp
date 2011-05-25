@@ -491,7 +491,7 @@ void Q3DViewer::setInput(Volume *volume)
 
     // Aquí corretgim el fet que no s'hagi adquirit la imatge en un espai ortogonal
     // \TODO: caldria fer el mateix amb el vtkImageActor del q2Dviewer (veure tiquet #702)
-    ImagePlane * currentPlane = new ImagePlane();
+    ImagePlane *currentPlane = new ImagePlane();
     // Sempre penem la primera llesca suposem que és constant
     Image *imageReference = m_mainVolume->getImage(0);
     currentPlane->fillFromImage(imageReference);
@@ -954,7 +954,7 @@ void Q3DViewer::renderMIP3D()
     grayTransferFunction->Delete();
 
     // Creem la funció del raig MIP, en aquest cas maximitzem l'opacitat, si fos Scalar value, ho faria pel valor
-    vtkVolumeRayCastMIPFunction* mipFunction = vtkVolumeRayCastMIPFunction::New();
+    vtkVolumeRayCastMIPFunction *mipFunction = vtkVolumeRayCastMIPFunction::New();
     mipFunction->SetMaximizeMethodToOpacity();
 
 //         vtkFiniteDifferenceGradientEstimator *gradientEstimator = vtkFiniteDifferenceGradientEstimator::New();

@@ -84,7 +84,7 @@ int VolumePixelDataReaderITKGDCM::readMultipleFiles(const QStringList &filenames
     {
         errorCode = ReadAborted;
     }
-    catch (itk::ExceptionObject & e)
+    catch (itk::ExceptionObject &e)
     {
         WARN_LOG(QString("Excepció llegint els arxius del directori [%1] Descripció: [%2]").arg(QFileInfo(filenames.at(0)).dir().path())
                     .arg(e.GetDescription()));
@@ -138,7 +138,7 @@ int VolumePixelDataReaderITKGDCM::readSingleFile(const QString &fileName)
     {
         errorCode = ReadAborted;
     }
-    catch (itk::ExceptionObject & e)
+    catch (itk::ExceptionObject &e)
     {
         WARN_LOG(QString("ExcepciÃ³ llegint l'arxiu [%1] DescripciÃ³: [%2]").arg(fileName).arg(e.GetDescription()));
         DEBUG_LOG(QString("ExcepciÃ³ llegint l'arxiu [%1] DescripciÃ³: [%2]").arg(fileName).arg(e.GetDescription()));
@@ -201,7 +201,7 @@ void VolumePixelDataReaderITKGDCM::readDifferentSizeImagesIntoOneVolume(const QS
         {
             reader->UpdateLargestPossibleRegion();
         }
-        catch (itk::ExceptionObject & e)
+        catch (itk::ExceptionObject &e)
         {
             WARN_LOG(QString("Excepció llegint els arxius del directori [%1] Descripció: [%2]").arg(QFileInfo(filenames.at(0)).dir().path())
                         .arg(e.GetDescription()));

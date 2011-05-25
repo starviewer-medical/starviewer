@@ -146,7 +146,7 @@ void RetrieveDICOMFilesFromPACS::storeSCPCallback(void *callbackData, T_DIMSE_St
         {
             DIC_UI sopClass, sopInstance;
             OFBool correctUIDPadding = OFFalse;
-            StoreSCPCallbackData *storeSCPCallbackData = (StoreSCPCallbackData*) callbackData;
+            StoreSCPCallbackData *storeSCPCallbackData = (StoreSCPCallbackData *) callbackData;
             RetrieveDICOMFilesFromPACS *retrieveDICOMFilesFromPACS = storeSCPCallbackData->retrieveDICOMFilesFromPACS;
             QString dicomFileAbsolutePath = retrieveDICOMFilesFromPACS->getAbsoluteFilePathCompositeInstance(*imageDataSet, storeSCPCallbackData->fileName);
 
@@ -223,7 +223,7 @@ OFCondition RetrieveDICOMFilesFromPACS::storeSCP(T_ASC_Association *association,
     storeSCPCallbackData.fileName = storeRequest->AffectedSOPInstanceUID;
 
     OFCondition condition = DIMSE_storeProvider(association, presentationContextID, storeRequest, NULL, useMetaheader, &retrievedDataset, storeSCPCallback,
-                                                (void*) &storeSCPCallbackData, DIMSE_BLOCKING, 0);
+                                                (void *) &storeSCPCallbackData, DIMSE_BLOCKING, 0);
 
     if (condition.bad())
     {
@@ -318,7 +318,7 @@ OFCondition RetrieveDICOMFilesFromPACS::subOperationSCP(T_ASC_Association **subA
 
 void RetrieveDICOMFilesFromPACS::subOperationCallback(void *subOperationCallbackData, T_ASC_Network *associationNetwork, T_ASC_Association **subAssociation)
 {
-    RetrieveDICOMFilesFromPACS *retrieveDICOMFilesFromPACS = (RetrieveDICOMFilesFromPACS*) subOperationCallbackData;
+    RetrieveDICOMFilesFromPACS *retrieveDICOMFilesFromPACS = (RetrieveDICOMFilesFromPACS *) subOperationCallbackData;
     if (associationNetwork == NULL)
     {
         // Help no net !

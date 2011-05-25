@@ -98,11 +98,11 @@ private:
 
     /// Ens retorna l'objecte adient de settings (usuari o sistema)
     /// segons com estigui configurada la clau en qüestió
-    QSettings *getSettingsObject(const QString &key);
+    QSettings* getSettingsObject(const QString &key);
 
 private:
     /// Objectes QSettings amb el que manipularem les configuracions
-    QMap<int, QSettings *> m_qsettingsObjectsMap;
+    QMap<int, QSettings*> m_qsettingsObjectsMap;
 };
 } // End namespace udg
 Q_DECLARE_OPERATORS_FOR_FLAGS(udg::Settings::Properties)

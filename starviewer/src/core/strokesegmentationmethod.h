@@ -14,14 +14,14 @@ public:
 
     double applyMethod();
     double applyMethodVTK();
-    void applyMethodVTKRecursive(vtkImageData* imMask, int a, int b, int c, int prof);
+    void applyMethodVTKRecursive(vtkImageData *imMask, int a, int b, int c, int prof);
 
     /// Neteja els casos propers al crani
     double applyCleanSkullMethod();
 
     void applyFilter(Volume *output);
 
-    void computeSpeedMap(itk::Image<float, 3>* speedMap);
+    void computeSpeedMap(itk::Image<float, 3> *speedMap);
 
     double erfc(double x);
 

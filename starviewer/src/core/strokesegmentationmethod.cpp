@@ -140,7 +140,7 @@ double StrokeSegmentationMethod::applyMethod()
         //outcaster->Update();
         volumeCalc->Update();
     }
-    catch(itk::ExceptionObject & excep)
+    catch(itk::ExceptionObject &excep)
     {
         std::cerr << "Exception caught !" << std::endl;
         std::cerr << excep << std::endl;
@@ -198,7 +198,7 @@ void StrokeSegmentationMethod::applyMethodVTKRecursive(vtkImageData* imMask, int
         m_Volume->getWholeExtent()[3]) && (c >= m_Volume->getWholeExtent()[4]) && (c <= m_Volume->getWholeExtent()[5]))
     {
         value = m_Volume->getScalarPointer(a, b, c);
-        maskValue = (Volume::VoxelType*)imMask->GetScalarPointer(a, b, c);
+        maskValue = (Volume::VoxelType *)imMask->GetScalarPointer(a, b, c);
         if ((*maskValue) == m_insideMaskValue - 100)
         {
             (*maskValue) = m_insideMaskValue;
@@ -407,7 +407,7 @@ double StrokeSegmentationMethod::applyCleanSkullMethod()
     {
         volumeCalc->Update();
     }
-    catch(itk::ExceptionObject & excep)
+    catch(itk::ExceptionObject &excep)
     {
         std::cerr << "Exception caught !" << std::endl;
         std::cerr << excep << std::endl;
@@ -455,7 +455,7 @@ void StrokeSegmentationMethod::applyFilter(Volume *output)
     {
         outcaster->Update();
     }
-    catch(itk::ExceptionObject & excep)
+    catch(itk::ExceptionObject &excep)
     {
         std::cerr << "Exception caught !" << std::endl;
         std::cerr << excep << std::endl;
@@ -797,7 +797,7 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume *lesionMask)
         fastMarching->SetOutputSize(resampleMaskFilter->GetOutput()->GetBufferedRegion().GetSize());
         thresholder->Update();
     }
-    catch(itk::ExceptionObject & excep)
+    catch(itk::ExceptionObject &excep)
     {
         std::cerr << "Exception caught !" << std::endl;
         std::cerr << excep << std::endl;
@@ -1165,7 +1165,7 @@ double StrokeSegmentationMethod::applyMethodEdema2(Volume *lesionMask)
         thresholder->Update();
         //volumeCalc->Update();
     }
-    catch(itk::ExceptionObject & excep)
+    catch(itk::ExceptionObject &excep)
     {
         std::cerr << "Exception caught !" << std::endl;
         std::cerr << excep << std::endl;
@@ -1304,7 +1304,7 @@ double StrokeSegmentationMethod::applyVentriclesMethod()
     {
         volumeCalc->Update();
     }
-    catch(itk::ExceptionObject & excep)
+    catch(itk::ExceptionObject &excep)
     {
         std::cerr << "Exception caught !" << std::endl;
         std::cerr << excep << std::endl;
@@ -1400,7 +1400,7 @@ void StrokeSegmentationMethod::applyMethod2()
     {
         thresholder->Update();
     }
-    catch(itk::ExceptionObject & excep)
+    catch(itk::ExceptionObject &excep)
     {
         std::cerr << "Exception caught !" << std::endl;
         std::cerr << excep << std::endl;
@@ -1523,7 +1523,7 @@ int StrokeSegmentationMethod::applyMethod3()
         fastMarching->SetOutputSize(m_Volume->getItkData()->GetBufferedRegion().GetSize());
         thresholder->Update();
     }
-    catch(itk::ExceptionObject & excep)
+    catch(itk::ExceptionObject &excep)
     {
         std::cerr << "Exception caught !" << std::endl;
         std::cerr << excep << std::endl;
@@ -1649,7 +1649,7 @@ int StrokeSegmentationMethod::applyMethod4()
     {
         thresholder->Update();
     }
-    catch(itk::ExceptionObject & excep)
+    catch(itk::ExceptionObject &excep)
     {
         std::cerr << "Exception caught !" << std::endl;
         std::cerr << excep << std::endl;

@@ -31,7 +31,7 @@ public slots:
 
 signals:
     /// Senyal que notifica el volum corresponent a l'ítem escollit
-    void selectedVolume(Volume*);
+    void selectedVolume(Volume *);
 
 private slots:
     /// Actualitza les vistes relacionades amb l'ítem actiu (aquell pel qual passa el ratolí per sobre)

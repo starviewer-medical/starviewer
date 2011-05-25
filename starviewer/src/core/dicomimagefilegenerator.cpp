@@ -56,7 +56,7 @@ bool DICOMImageFileGenerator::generateSecondaryCaptureDICOMFiles()
 
     int *dimensions = data->GetDimensions();
     int bytesPerImage = data->GetScalarSize() * data->GetNumberOfScalarComponents() * dimensions[0] * dimensions[1];
-    const char* scalarPointer = static_cast<const char*>(data->GetScalarPointer());
+    const char *scalarPointer = static_cast<const char*>(data->GetScalarPointer());
     int i = 1;
 
     DICOMWriter *writer;

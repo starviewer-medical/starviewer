@@ -55,7 +55,7 @@ void SeedTool::handleEvent(unsigned long eventID)
     }
 }
 
-void SeedTool::setToolData(ToolData * data)
+void SeedTool::setToolData(ToolData *data)
 {
     // Fem aquesta comparació perquè a vegades ens passa la data que ja tenim a m_myData
     if (m_myData != data)

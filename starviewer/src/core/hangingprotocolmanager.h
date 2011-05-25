@@ -69,7 +69,7 @@ private:
     bool isValidSerie(Series *serie, HangingProtocolImageSet *imageSet);
 
     /// Ordena els estudis per data per tal que els hanging protocols els tingui ordenats.
-    QList<Study *> sortStudiesByDate(const QList<Study*> &studies);
+    QList<Study*> sortStudiesByDate(const QList<Study*> &studies);
 
     /// Mètode encarregat d'assignar l'input al viewer a partir de les especificacions del displaySet+imageSet.
     void setInputToViewer(Q2DViewerWidget *viewerWidget, Series *series, HangingProtocolDisplaySet *displaySet);

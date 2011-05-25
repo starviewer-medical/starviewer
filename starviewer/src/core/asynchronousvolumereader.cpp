@@ -28,7 +28,7 @@ VolumeReaderJob* AsynchronousVolumeReader::read(Volume *volume)
     }
 
     VolumeReaderJob *volumeReaderJob = new VolumeReaderJob(volume);
-    connect(volumeReaderJob, SIGNAL(done(ThreadWeaver::Job*)), SLOT(unmarkVolumeFromJobAsLoading(ThreadWeaver::Job*)));
+    connect(volumeReaderJob, SIGNAL(done(ThreadWeaver::Job *)), SLOT(unmarkVolumeFromJobAsLoading(ThreadWeaver::Job *)));
 
     this->markVolumeAsLoadingByJob(volume, volumeReaderJob);
 
@@ -39,7 +39,7 @@ VolumeReaderJob* AsynchronousVolumeReader::read(Volume *volume)
     return volumeReaderJob;
 }
 
-void AsynchronousVolumeReader::unmarkVolumeFromJobAsLoading(ThreadWeaver::Job* job)
+void AsynchronousVolumeReader::unmarkVolumeFromJobAsLoading(ThreadWeaver::Job *job)
 {
     // TODO Aquí és el lloc més correcte per desmarcar el volume?? Així tenim el problema de que no podem destruïr aquest objecte
     // fins que s'ha finalitzat el job, si no, no es marcaria mai com a carregat. Si no es fa aquí, hem de tenir en compte
@@ -70,7 +70,7 @@ void AsynchronousVolumeReader::cancelLoadingAndDeleteVolume(Volume *volume)
         else
         {
             DEBUG_LOG(QString("Volume %1 cannot be dequeued, requesting abort and delete").arg(volume->getIdentifier().getValue()));
-            connect(job, SIGNAL(done(ThreadWeaver::Job*)), volume, SLOT(deleteLater()));
+            connect(job, SIGNAL(done(ThreadWeaver::Job *)), volume, SLOT(deleteLater()));
             job->requestAbort();
         }
     }

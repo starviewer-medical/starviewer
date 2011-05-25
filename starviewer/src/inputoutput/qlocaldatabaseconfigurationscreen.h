@@ -24,7 +24,7 @@ public slots:
 
 signals:
     /// Signal que s'emet cada vegada que hi ha un canvi a la configuració que pot afectar al queryscreen
-    void configurationChanged(const QString& configuration);
+    void configurationChanged(const QString &configuration);
 
 private slots:
     /// Mostra un QDialog per especificar on es troba la base de dades de la caché

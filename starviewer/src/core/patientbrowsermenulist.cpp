@@ -110,7 +110,7 @@ QString PatientBrowserMenuList::getMarkedItem() const
     return m_markedItem;
 }
 
-bool PatientBrowserMenuList::event(QEvent * event)
+bool PatientBrowserMenuList::event(QEvent *event)
 {
     // Si s'ha pulsat l'escape
     if (event->type() == QEvent::Close)

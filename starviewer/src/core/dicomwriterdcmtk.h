@@ -30,7 +30,7 @@ public:
 
 private:
     /// Genera els elements d'una seqüència
-    DcmSequenceOfItems *generateDcmSequenceOfItems(DICOMSequenceAttribute * sequenceAttribute);
+    DcmSequenceOfItems* generateDcmSequenceOfItems(DICOMSequenceAttribute *sequenceAttribute);
 
 private:
     DcmFileFormat *m_fileFormat;

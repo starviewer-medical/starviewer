@@ -33,7 +33,7 @@ void QueryPacs::foundMatchCallback(void *callbackData, T_DIMSE_C_FindRQ *request
     Q_UNUSED(rsp);
     Q_UNUSED(responseCount);
 
-    QueryPacs *queryPacsCaller = (QueryPacs*)callbackData;
+    QueryPacs *queryPacsCaller = (QueryPacs *)callbackData;
 
     if (queryPacsCaller->m_cancelQuery)
     {
@@ -96,7 +96,7 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::query()
     }
 
     // Prepare the transmission of data
-    bzero((char*) &findRequest, sizeof(findRequest));
+    bzero((char *) &findRequest, sizeof(findRequest));
     findRequest.MessageID = m_pacsConnection->getConnection()->nextMsgID;
     strcpy(findRequest.AffectedSOPClassUID, FindStudyAbstractSyntax);
     findRequest.DataSetType = DIMSE_DATASET_PRESENT;

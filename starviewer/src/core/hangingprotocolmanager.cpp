@@ -62,7 +62,7 @@ QList<HangingProtocol*> HangingProtocolManager::searchHangingProtocols(Patient *
     return searchHangingProtocols(patient, previousStudies, originOfPreviousStudies);
 }
 
-QList<HangingProtocol*> HangingProtocolManager::searchHangingProtocols(Patient *patient, const QList<Study *> &previousStudies,
+QList<HangingProtocol*> HangingProtocolManager::searchHangingProtocols(Patient *patient, const QList<Study*> &previousStudies,
                                                                        const QHash<QString, QString> &originOfPreviousStudies)
 {
     QList<HangingProtocol*> outputHangingProtocolList;
@@ -182,7 +182,7 @@ int HangingProtocolManager::setInputToHangingProtocolImageSets(HangingProtocol *
     return numberOfFilledImageSets;
 }
 
-void HangingProtocolManager::setBestHangingProtocol(Patient *patient, const QList<HangingProtocol *> &hangingProtocolList, ViewersLayout *layout)
+void HangingProtocolManager::setBestHangingProtocol(Patient *patient, const QList<HangingProtocol*> &hangingProtocolList, ViewersLayout *layout)
 {
     HangingProtocol *bestHangingProtocol = NULL;
     foreach (HangingProtocol *hangingProtocol, hangingProtocolList)
@@ -634,7 +634,7 @@ void HangingProtocolManager::errorDowlonadingPreviousStudies(const QString &stud
     }
 }
 
-QList<Study*> HangingProtocolManager::sortStudiesByDate(const QList<Study *> &studies)
+QList<Study*> HangingProtocolManager::sortStudiesByDate(const QList<Study*> &studies)
 {
     QMultiMap<long, Study*> sortedStudiesByDate;
 

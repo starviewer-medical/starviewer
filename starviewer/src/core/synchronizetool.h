@@ -26,7 +26,7 @@ public:
     virtual void setToolData(ToolData *data);
 
     /// Per obtenir les dades (per compartir)
-    virtual ToolData *getToolData() const;
+    virtual ToolData* getToolData() const;
 
     /// Habilita o deshabilita la tool
     /// En estat habilitat, rebrà els signals de sincronització

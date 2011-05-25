@@ -60,9 +60,9 @@ private:
     /// Crea les cares d'un icosaedre (nivell 0).
     void createIcosahedronFaces();
     /// Busca si un vèrtex concret ja existeix, i si existeix en quina posició es troba.
-    bool findSphereCloudVertex(const Vector3 & v, unsigned short & position) const;
+    bool findSphereCloudVertex(const Vector3 &v, unsigned short &position) const;
     /// Crea una nova cara amb 3 vèrtexs al núvol de punts.
-    void createSphereCloudTriangle(const Vector3 & v1, const Vector3 & v2, const Vector3 & v3);
+    void createSphereCloudTriangle(const Vector3 &v1, const Vector3 &v2, const Vector3 &v3);
     /// Subdivideix el núvol de punts recursivament fins la profunditat depth.
     void subdivide(Vector3 v1, Vector3 v2, Vector3 v3, unsigned short depth);
     /// Genera els punts amb coordenades geogràfiques a partir dels cartesians.

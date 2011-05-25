@@ -27,7 +27,7 @@ namespace udg {
 class DisplayableID {
 
 public:
-    DisplayableID(const QString & id, const QString & name = QString::null);
+    DisplayableID(const QString &id, const QString &name = QString::null);
 
     ~DisplayableID();
 

@@ -237,7 +237,7 @@ void QConfigurationScreen::fillPacsListView()
 
     foreach (PacsDevice pacs, pacsList)
     {
-        QTreeWidgetItem* item = new QTreeWidgetItem(m_PacsTreeView);
+        QTreeWidgetItem *item = new QTreeWidgetItem(m_PacsTreeView);
 
         item->setText(0, pacs.getID());
         item->setText(1, pacs.getAETitle());

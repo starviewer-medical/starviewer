@@ -171,7 +171,7 @@ DICOMTagReader* PatientFillerInput::getDICOMFile()
     return m_dicomFile;
 }
 
-void PatientFillerInput::setCurrentImages(const QList<Image *> &images)
+void PatientFillerInput::setCurrentImages(const QList<Image*> &images)
 {
     m_currentImages = images;
 }

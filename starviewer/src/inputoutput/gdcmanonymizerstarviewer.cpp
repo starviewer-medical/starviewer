@@ -115,7 +115,7 @@ bool gdcmAnonymizerStarviewer::Replace(Tag const &t, const char *value)
     return Replace(t, value, len);
 }
 
-bool gdcmAnonymizerStarviewer::Replace(Tag const &t, const char *value, VL const & vl)
+bool gdcmAnonymizerStarviewer::Replace(Tag const &t, const char *value, VL const &vl)
 {
     if (t.GetGroup() < 0x0008) return false;
     static const Global &g = GlobalInstance;
@@ -616,7 +616,7 @@ bool gdcmAnonymizerStarviewer::CanEmptyTag(Tag const &tag, const IOD &iod) const
     return !b;
 }
 
-bool gdcmAnonymizerStarviewer::BALCPProtect(DataSet &ds, Tag const & tag, IOD const & iod)
+bool gdcmAnonymizerStarviewer::BALCPProtect(DataSet &ds, Tag const &tag, IOD const &iod)
 {
     // \precondition
     assert(ds.FindDataElement(tag));
@@ -707,7 +707,7 @@ bool gdcmAnonymizerStarviewer::BALCPProtect(DataSet &ds, Tag const & tag, IOD co
     return true;
 }
 
-void gdcmAnonymizerStarviewer::RecurseDataSet(DataSet & ds)
+void gdcmAnonymizerStarviewer::RecurseDataSet(DataSet &ds)
 {
     if (ds.IsEmpty()) return;
 

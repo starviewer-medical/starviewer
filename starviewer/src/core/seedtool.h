@@ -23,10 +23,10 @@ public:
     void handleEvent(long unsigned eventID);
 
     /// Retorna les dades pròpies de la seed
-    ToolData *getToolData() const;
+    ToolData* getToolData() const;
 
     /// Assigna les dades pròpies de la seed (persistent data)
-    void setToolData(ToolData * data);
+    void setToolData(ToolData *data);
 
     /// Posem la llavor i li passem la posició i la llesca: útil per fer-ho per codi
     void setSeed(QVector<double> seedPosition, int slice);

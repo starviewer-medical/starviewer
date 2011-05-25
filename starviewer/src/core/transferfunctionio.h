@@ -34,9 +34,9 @@ class TransferFunctionIO {
 
 public:
     /// Retorna la funció de transferència llegida des del fitxer \a file. Retorna nul si no es pot llegir el fitxer.
-    static TransferFunction* fromFile(QFile & file);
+    static TransferFunction* fromFile(QFile &file);
     /// Retorna la funció de transferència llegida des del fitxer anomenat \a fileName. Retorna nul si no es pot llegir el fitxer.
-    static TransferFunction* fromFile(const QString & fileName);
+    static TransferFunction* fromFile(const QString &fileName);
 
     /// Retorna la funció de transferència llegida des del fitxer XML \a file. Retorna nul si no es pot llegir el fitxer.
     static TransferFunction* fromXmlFile(QFile &file);
@@ -44,9 +44,9 @@ public:
     static TransferFunction* fromXmlFile(const QString &fileName);
 
     /// Escriu la funció de transferència \a transferFunction al fitxer \a file.
-    static void toFile(QFile & file, const TransferFunction & transferFunction);
+    static void toFile(QFile &file, const TransferFunction &transferFunction);
     /// Escriu la funció de transferència \a transferFunction al fitxer anomentat \a fileName.
-    static void toFile(const QString & fileName, const TransferFunction & transferFunction);
+    static void toFile(const QString &fileName, const TransferFunction &transferFunction);
 
     /// Escriu la funció de transferència \a transferFunction al fitxer XML \a file.
     static void toXmlFile(QFile &file, const TransferFunction &transferFunction);

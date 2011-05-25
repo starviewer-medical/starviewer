@@ -52,14 +52,14 @@ void QCustomWindowLevelEditWidget::loadCustomWindowLevelPresets()
 
 void QCustomWindowLevelEditWidget::addNewWindowLevel()
 {
-    QTreeWidgetItem* item = addWindowLevelItem("", m_defaultWindowWidth, m_defaultWindowLevel);
+    QTreeWidgetItem *item = addWindowLevelItem("", m_defaultWindowWidth, m_defaultWindowLevel);
     m_customWindowLevelTreeWidget->editItem(item, 2);
     m_customWindowLevelTreeWidget->scrollToItem(item);
 }
 
 QTreeWidgetItem* QCustomWindowLevelEditWidget::addWindowLevelItem(const QString &description, double width, double level)
 {
-    QTreeWidgetItem* item = new QTreeWidgetItem(m_customWindowLevelTreeWidget);
+    QTreeWidgetItem *item = new QTreeWidgetItem(m_customWindowLevelTreeWidget);
     item->setFlags(Qt::ItemIsEditable | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
 
     QDoubleSpinBox *widthSpinBox = new QDoubleSpinBox(this);

@@ -83,7 +83,7 @@ public:
     }
 
     /// Obtenim les dades d'input després d'aplicar els shutters definits
-    vtkImageData *getOutput();
+    vtkImageData* getOutput();
 
 private:
     /// Stencils per retallar les imatges

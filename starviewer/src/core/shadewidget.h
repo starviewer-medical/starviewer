@@ -55,7 +55,7 @@ public:
     QPolygonF points() const;
     void setPoints(QPolygonF p);
 
-    HoverPoints *hoverPoints() const
+    HoverPoints* hoverPoints() const
     {
         return m_hoverPoints;
     }

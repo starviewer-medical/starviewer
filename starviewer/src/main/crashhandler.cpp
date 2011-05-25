@@ -46,7 +46,7 @@ bool launchCrashReporter(const char *dumpDirPath, const char *minidumpId, void *
               static_cast<CrashHandler*>(crashHandler)->getCrashReporterPath(),
               dumpDirPath,
               minidumpId,
-              (char*) 0);
+              (char *) 0);
         // execl replaces this process, so no more code will be executed
         // unless it failed. If it failed, then we should return false.
         return false;
@@ -68,11 +68,11 @@ static bool launchCrashReporter(const wchar_t *dumpDirPath, const wchar_t *minid
     // DON'T USE THE HEAP!!!
     // So crashHandler indeed means, no QStrings, no qDebug(), no QAnything, seriously!
 
-    const char *crashReporterPath = static_cast<CrashHandler*>(crashHandler)->getCrashReporterPath();
+    const char *crashReporterPath = static_cast<CrashHandler *>(crashHandler)->getCrashReporterPath();
 
     // Convert crashReporterPath to widechars, which sadly means the product name must be Latin1
     wchar_t crashReporterPathWchar[256];
-    char *out = (char*)crashReporterPathWchar;
+    char *out = (char *)crashReporterPathWchar;
     const char *in = crashReporterPath - 1;
     do
     {

@@ -78,7 +78,7 @@ public:
     QList<Study*> getStudies() const;
 
     /// Mètode ràpid per trobar si hi ha una series amb el uid donat. Retorna nul si aquesta no existeix
-    Series *getSeries(const QString &uid);
+    Series* getSeries(const QString &uid);
 
     /// Ens retorna una llista amb les sèries que estiguin seleccionades
     QList<Series*> getSelectedSeries();

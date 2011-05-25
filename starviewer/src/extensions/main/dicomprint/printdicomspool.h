@@ -38,11 +38,11 @@ private:
     DcmDataset getAttributesBasicFilmSession();
 
     /// Una vegada creada la FilmSession i FilmBox aquest mètode ens permet enviar una imatge a imprimir cap a la impressora
-    OFCondition createAndSendBasicGrayscaleImageBox(DVPSPrintMessageHandler& printConnection, DVPSStoredPrint *storedPrintDcmtk, size_t imageNumber,
+    OFCondition createAndSendBasicGrayscaleImageBox(DVPSPrintMessageHandler &printConnection, DVPSStoredPrint *storedPrintDcmtk, size_t imageNumber,
                                                     const QString &spoolDirectoryPath);
 
     /// Crea i envia les anotacions pel filmBox
-    OFCondition createAndSendFilmBoxAnnotations(DVPSPrintMessageHandler& printConnection, DVPSStoredPrint *storedPrintDcmtk);
+    OFCondition createAndSendFilmBoxAnnotations(DVPSPrintMessageHandler &printConnection, DVPSStoredPrint *storedPrintDcmtk);
 
     PrintDicomSpoolError m_lastError;
 };

@@ -21,23 +21,23 @@ public:
     ~Q3DMPRViewer();
 
     /// Retorna el volum transformat segons el reslice de cada vista
-    Volume *getAxialResliceOutput();
-    Volume *getSagitalResliceOutput();
-    Volume *getCoronalResliceOutput();
+    Volume* getAxialResliceOutput();
+    Volume* getSagitalResliceOutput();
+    Volume* getCoronalResliceOutput();
 
     /// Mètodes per obtenir les coordenades que defineixen els plans
-    double *getAxialPlaneOrigin();
-    double *getAxialPlaneNormal();
+    double* getAxialPlaneOrigin();
+    double* getAxialPlaneNormal();
     void getAxialPlaneOrigin(double origin[3]);
     void getAxialPlaneNormal(double normal[3]);
 
-    double *getSagitalPlaneOrigin();
-    double *getSagitalPlaneNormal();
+    double* getSagitalPlaneOrigin();
+    double* getSagitalPlaneNormal();
     void getSagitalPlaneOrigin(double origin[3]);
     void getSagitalPlaneNormal(double normal[3]);
 
-    double *getCoronalPlaneOrigin();
-    double *getCoronalPlaneNormal();
+    double* getCoronalPlaneOrigin();
+    double* getCoronalPlaneNormal();
     void getCoronalPlaneOrigin(double origin[3]);
     void getCoronalPlaneNormal(double normal[3]);
 

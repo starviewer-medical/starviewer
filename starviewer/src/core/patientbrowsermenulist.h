@@ -50,10 +50,10 @@ private:
     QString m_markedItem;
 
     /// Creem un widget amb la informació bàsica d'un ítem
-    PatientBrowserMenuBasicItem *createBasicItem(const QString &label, const QString &identifier);
+    PatientBrowserMenuBasicItem* createBasicItem(const QString &label, const QString &identifier);
 
     /// Llista dels items de les series que formen la llista
-    QList<PatientBrowserMenuBasicItem *> m_itemsList;
+    QList<PatientBrowserMenuBasicItem*> m_itemsList;
 
     /// Layout on colocarem els elements
     QVBoxLayout *m_verticalLayout;

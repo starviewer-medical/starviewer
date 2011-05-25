@@ -39,7 +39,7 @@ void VolumePixelData::setData(ItkImageTypePointer itkImage)
     {
         m_itkToVtkFilter->Update();
     }
-    catch (itk::ExceptionObject & excep)
+    catch (itk::ExceptionObject &excep)
     {
         WARN_LOG(QString("Excepció en el filtre itkToVtk :: Volume::setData(ItkImageTypePointer itkImage) -> ") + excep.GetDescription());
     }

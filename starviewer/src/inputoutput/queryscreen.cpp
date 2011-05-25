@@ -141,7 +141,7 @@ void QueryScreen::createConnections()
 #ifndef STARVIEWER_LITE
     connect(m_operationListToolButton, SIGNAL(clicked()), SLOT(showOperationStateScreen()));
     connect(m_showPACSNodesToolButton, SIGNAL(toggled(bool)), m_PACSNodes, SLOT(setVisible(bool)));
-    connect(m_pacsManager, SIGNAL(newPACSJobEnqueued(PACSJob *)), SLOT(newPACSJobEnqueued(PACSJob*)));
+    connect(m_pacsManager, SIGNAL(newPACSJobEnqueued(PACSJob *)), SLOT(newPACSJobEnqueued(PACSJob *)));
     if (m_risRequestManager != NULL)
     {
         // Potser que no tinguem activat escoltar peticions del RIS
@@ -468,8 +468,8 @@ void QueryScreen::newPACSJobEnqueued(PACSJob *pacsJob)
     {
         m_operationAnimation->show();
         m_labelOperation->show();
-        connect(pacsJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(pacsJobFinishedOrCancelled(PACSJob*)));
-        connect(pacsJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(pacsJobFinishedOrCancelled(PACSJob*)));
+        connect(pacsJob, SIGNAL(PACSJobFinished(PACSJob *)), SLOT(pacsJobFinishedOrCancelled(PACSJob *)));
+        connect(pacsJob, SIGNAL(PACSJobCancelled(PACSJob *)), SLOT(pacsJobFinishedOrCancelled(PACSJob *)));
 
         // Indiquem que tenim un PACSJob més pendent de finalitzar
         m_PACSJobsPendingToFinish++;

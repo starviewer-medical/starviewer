@@ -2,7 +2,7 @@
 
 namespace udg {
 
-DisplayableID::DisplayableID(const QString & id, const QString & name) : m_id(id), m_name(name)
+DisplayableID::DisplayableID(const QString &id, const QString &name) : m_id(id), m_name(name)
 {
 }
 

@@ -79,7 +79,7 @@ void QDicomAddPrinterWidget::addPrinter()
     }
 }
 
-void QDicomAddPrinterWidget::getPrinterSettingsFromControls(DicomPrinter& printer)
+void QDicomAddPrinterWidget::getPrinterSettingsFromControls(DicomPrinter &printer)
 {
     printer.setAETitle(m_printerAetitleLineEdit->text());
     printer.setHostname(m_printerHostnameLineEdit->text());

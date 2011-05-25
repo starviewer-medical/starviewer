@@ -108,7 +108,7 @@ public:
 
     /// When the value contains \0, it is a good idea to specify the length. This function
     /// is required when dealing with VRBINARY tag
-    bool Replace(Tag const &t, const char *value, VL const & vl);
+    bool Replace(Tag const &t, const char *value, VL const &vl);
     //bool Replace(PrivateTag const &t, const char *value, VL const & vl);
     //bool Replace(TagPath const &t, const char *value, VL const & vl);
 
@@ -125,9 +125,9 @@ public:
     // bool Remove(PRIVATE_TAGS | GROUP_LENGTH | RETIRED);
 
     /// Set/Get File
-    void SetFile(const File& f) { F = f; }
+    void SetFile(const File &f) { F = f; }
     //const File &GetFile() const { return *F; }
-    File &GetFile() { return *F; }
+    File& GetFile() { return *F; }
 
     /// PS 3.15 / E.1.1 De-Identifier
     /// An Application may claim conformance to the Basic Application Level Confidentiality Profile as a deidentifier
@@ -143,9 +143,9 @@ public:
 
 protected:
     // Internal function used to either empty a tag or set it's value to a dummy value (Type 1 vs Type 2)
-    bool BALCPProtect(DataSet &ds, Tag const & tag, const IOD &iod);
+    bool BALCPProtect(DataSet &ds, Tag const &tag, const IOD &iod);
     bool CanEmptyTag(Tag const &tag, const IOD &iod) const;
-    void RecurseDataSet(DataSet & ds);
+    void RecurseDataSet(DataSet &ds);
 
 private:
     bool BasicApplicationLevelConfidentialityProfile1();

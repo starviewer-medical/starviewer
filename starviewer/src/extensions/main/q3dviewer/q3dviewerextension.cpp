@@ -96,7 +96,7 @@ void Q3DViewerExtension::loadClutPresets()
 {
     DEBUG_LOG("loadClutPresets()");
 
-    disconnect(m_clutPresetsComboBox, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(applyPresetClut(const QString&)));
+    disconnect(m_clutPresetsComboBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(applyPresetClut(const QString &)));
 
     m_clutPresetsComboBox->clear();
 
@@ -118,7 +118,7 @@ void Q3DViewerExtension::loadClutPresets()
 
     QStringList clutList = m_clutsDir.entryList(nameFilters);
 
-    foreach (const QString & clutName, clutList)
+    foreach (const QString &clutName, clutList)
     {
         TransferFunction *transferFunction = TransferFunctionIO::fromFile(m_clutsDir.absoluteFilePath(clutName));
         if (transferFunction)
@@ -131,7 +131,7 @@ void Q3DViewerExtension::loadClutPresets()
     m_clutPresetsComboBox->addItems(m_clutNameToFileName.keys());
     m_clutPresetsComboBox->setCurrentIndex(-1);
 
-    connect(m_clutPresetsComboBox, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(applyPresetClut(const QString&)));
+    connect(m_clutPresetsComboBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(applyPresetClut(const QString &)));
 }
 
 void Q3DViewerExtension::loadRenderingStyles()
@@ -314,7 +314,7 @@ void Q3DViewerExtension::createConnections()
     connect(m_3DView, SIGNAL(scalarRange(double, double)), SLOT(setScalarRange(double, double)));
 
     // Rendering styles
-    connect(m_renderingStyleListView, SIGNAL(activated(const QModelIndex&)), SLOT(applyRenderingStyle(const QModelIndex&)));
+    connect(m_renderingStyleListView, SIGNAL(activated(const QModelIndex &)), SLOT(applyRenderingStyle(const QModelIndex &)));
 
     connect(m_editorSplitter, SIGNAL(splitterMoved(int, int)), SLOT(setCustomStyleButtonStateBySplitter()));
 
@@ -351,11 +351,11 @@ void Q3DViewerExtension::setScalarRange(double min, double max)
     }
 }
 
-void Q3DViewerExtension::applyPresetClut(const QString & clutName)
+void Q3DViewerExtension::applyPresetClut(const QString &clutName)
 {
     DEBUG_LOG("applyPresetClut()");
 
-    const QString & fileName = m_clutNameToFileName[clutName];
+    const QString &fileName = m_clutNameToFileName[clutName];
     TransferFunction *transferFunction = TransferFunctionIO::fromFile(m_clutsDir.absoluteFilePath(QDir::toNativeSeparators(fileName)));
     if (transferFunction)
     {
@@ -368,7 +368,7 @@ void Q3DViewerExtension::applyPresetClut(const QString & clutName)
     //this->render();
 }
 
-void Q3DViewerExtension::applyClut(const TransferFunction & clut, bool preset)
+void Q3DViewerExtension::applyClut(const TransferFunction &clut, bool preset)
 {
     DEBUG_LOG("applyClut()");
 
@@ -376,9 +376,9 @@ void Q3DViewerExtension::applyClut(const TransferFunction & clut, bool preset)
     if (!preset)
     {
         // Cal fer el disconnect per evitar un bucle infinit
-        disconnect(m_clutPresetsComboBox, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(applyPresetClut(const QString&)));
+        disconnect(m_clutPresetsComboBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(applyPresetClut(const QString &)));
         m_clutPresetsComboBox->setCurrentIndex(-1);
-        connect(m_clutPresetsComboBox, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(applyPresetClut(const QString&)));
+        connect(m_clutPresetsComboBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(applyPresetClut(const QString &)));
     }
     m_gradientEditor->setTransferFunction(m_currentClut);
     m_editorByValues->setTransferFunction(m_currentClut);
@@ -523,7 +523,7 @@ void Q3DViewerExtension::saveClut()
 void Q3DViewerExtension::switchEditor()
 {
     QTransferFunctionEditor *currentEditor = qobject_cast<QTransferFunctionEditor*>(m_editorsStackedWidget->currentWidget());
-    const TransferFunction & currentTransferFunction = currentEditor->getTransferFunction();
+    const TransferFunction &currentTransferFunction = currentEditor->getTransferFunction();
     m_editorsStackedWidget->setCurrentIndex(1 - m_editorsStackedWidget->currentIndex());
     currentEditor = qobject_cast<QTransferFunctionEditor*>(m_editorsStackedWidget->currentWidget());
     currentEditor->setTransferFunction(currentTransferFunction);

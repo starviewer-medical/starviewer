@@ -20,7 +20,7 @@ public:
     void handleEvent(unsigned long eventID);
 
     /// Retorna les dades pròpies de la seed
-    ToolData *getToolData() const;
+    ToolData* getToolData() const;
 
     /// Assigna les dades pròpies de la seed (persistent data)
     void setToolData(ToolData *data);

@@ -184,7 +184,7 @@ VolumeReader::PixelDataReaderType VolumeReader::getSuitableReader(Volume *volume
 
     int firstImageRows = 0;
     int firstImageColumns = 0;
-    QList<Image *> imageSet = volume->getImages();
+    QList<Image*> imageSet = volume->getImages();
     if (!imageSet.empty())
     {
         firstImageRows = imageSet.first()->getRows();

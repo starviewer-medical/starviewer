@@ -2,7 +2,7 @@
 
 namespace udg {
 
-QColorSpinBox::QColorSpinBox(QWidget * parent)
+QColorSpinBox::QColorSpinBox(QWidget *parent)
     : QSpinBox(parent)
 {
     m_settingColor = false;
@@ -17,12 +17,12 @@ QColorSpinBox::~QColorSpinBox()
 {
 }
 
-const QColor & QColorSpinBox::getColor() const
+const QColor& QColorSpinBox::getColor() const
 {
     return m_color;
 }
 
-void QColorSpinBox::setColor(const QColor & color)
+void QColorSpinBox::setColor(const QColor &color)
 {
     m_settingColor = true;
     m_color = color;

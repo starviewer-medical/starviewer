@@ -32,10 +32,10 @@ public:
 
 public slots:
     /// Aplica una funció de transferència predefinida a la visualització.
-    void applyPresetClut(const QString & clutName);
+    void applyPresetClut(const QString &clutName);
 
     /// Aplica la funció de transferència passada a la visualització.
-    void applyClut(const TransferFunction & clut, bool preset = false);
+    void applyClut(const TransferFunction &clut, bool preset = false);
 
     /// Comença a calcular les obscurances, i si ja s'estan calculant ho cancel·la.
     void computeOrCancelObscurance();

@@ -41,7 +41,7 @@ ReferenceLinesTool::ReferenceLinesTool(QViewer *viewer, QObject *parent)
     refreshReferenceViewerData();
 
     // Cada cop que el viewer canvïi d'input, hem d'actualitzar el frame of reference
-    connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(refreshReferenceViewerData()));
+    connect(m_2DViewer, SIGNAL(volumeChanged(Volume *)), SLOT(refreshReferenceViewerData()));
     // Cada cop que el viewer canvïi de llesca, hem d'actualitzar el pla de projecció
     connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(updateImagePlane()));
     // Cada cop que canvii l'slab thickness haurem d'actualitzar els plans a projectar
@@ -252,10 +252,10 @@ void ReferenceLinesTool::projectPlane(ImagePlane *planeToProject)
     QList<QVector<double> > planeBounds = planeToProject->getCentralBounds();
     double projectedVertix1[3], projectedVertix2[3], projectedVertix3[3], projectedVertix4[3];
 
-    m_2DViewer->projectDICOMPointToCurrentDisplayedImage((double*)planeBounds.at(0).data(), projectedVertix1);
-    m_2DViewer->projectDICOMPointToCurrentDisplayedImage((double*)planeBounds.at(1).data(), projectedVertix2);
-    m_2DViewer->projectDICOMPointToCurrentDisplayedImage((double*)planeBounds.at(2).data(), projectedVertix3);
-    m_2DViewer->projectDICOMPointToCurrentDisplayedImage((double*)planeBounds.at(3).data(), projectedVertix4);
+    m_2DViewer->projectDICOMPointToCurrentDisplayedImage((double *)planeBounds.at(0).data(), projectedVertix1);
+    m_2DViewer->projectDICOMPointToCurrentDisplayedImage((double *)planeBounds.at(1).data(), projectedVertix2);
+    m_2DViewer->projectDICOMPointToCurrentDisplayedImage((double *)planeBounds.at(2).data(), projectedVertix3);
+    m_2DViewer->projectDICOMPointToCurrentDisplayedImage((double *)planeBounds.at(3).data(), projectedVertix4);
 
     // Donem els punts al poligon a dibuixar
     m_projectedReferencePlane->setVertix(0, projectedVertix1);
@@ -275,11 +275,11 @@ int ReferenceLinesTool::getIntersections(QVector<double> tlhc, QVector<double> t
     localizerPlane->getOrigin(localizerOrigin);
 
     // Primera "paral·lela"
-    if (vtkPlane::IntersectWithLine((double*)tlhc.data(), (double*)trhc.data(), localizerNormalVector, localizerOrigin, t, firstIntersectionPoint))
+    if (vtkPlane::IntersectWithLine((double *)tlhc.data(), (double *)trhc.data(), localizerNormalVector, localizerOrigin, t, firstIntersectionPoint))
     {
         numberOfIntersections++;
     }
-    if (vtkPlane::IntersectWithLine((double*)brhc.data(), (double*)blhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint))
+    if (vtkPlane::IntersectWithLine((double *)brhc.data(), (double *)blhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint))
     {
         numberOfIntersections++;
     }
@@ -292,7 +292,7 @@ int ReferenceLinesTool::getIntersections(QVector<double> tlhc, QVector<double> t
             numberOfIntersections++;
         }
 
-        if (vtkPlane::IntersectWithLine((double*)blhc.data(), (double*)tlhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint))
+        if (vtkPlane::IntersectWithLine((double *)blhc.data(), (double *)tlhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint))
         {
             numberOfIntersections++;
         }
