@@ -25,13 +25,7 @@ defineTest(addSubdirs) {
     export (SUBDIRS)
 }
 
-# Fake subdirs per KDevelop
-SUBDIRS = core inputoutput interface extensions main crashreporter starviewersapwrapper thirdparty
-for(DIR, SUBDIRS){
- SUBDIRS -= $$DIR
-}
-
-# Afegim els subdirs reals
+# Afegim els subdirs a compilar amb les seves dependències
 addSubdirs(thirdparty)
 addSubdirs(core)
 addSubdirs(inputoutput, core)
