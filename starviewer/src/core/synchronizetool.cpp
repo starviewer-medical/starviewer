@@ -100,7 +100,7 @@ void SynchronizeTool::setIncrement(int slice)
 
     if (configuration && configuration->getValue("Slicing").toBool())
     {
-        double currentSpacingBetweenSlices = m_q2dviewer->getThickness();
+        double currentSpacingBetweenSlices = m_q2dviewer->getCurrentSpacingBetweenSlices();
         DEBUG_LOG(QString("setIncrement::currentSpacingBetweenSlices = %1").arg(currentSpacingBetweenSlices));
         // Si la imatge no té espai entre llesques (0.0), llavors li donem un valor nominal
         if (currentSpacingBetweenSlices == 0.0)
@@ -159,7 +159,7 @@ void SynchronizeTool::applySliceChanges()
 
     if (configuration && configuration->getValue("Slicing").toBool())
     {
-        double currentSpacingBetweenSlices = m_q2dviewer->getThickness();
+        double currentSpacingBetweenSlices = m_q2dviewer->getCurrentSpacingBetweenSlices();
         DEBUG_LOG(QString("applySliceChanges::currentSpacingBetweenSlices = %1").arg(currentSpacingBetweenSlices));
         // Si la imatge no té espai entre llesques (0.0), llavors li donem un valor nominal
         if (currentSpacingBetweenSlices == 0.0)
