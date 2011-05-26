@@ -2412,4 +2412,24 @@ void Q2DViewer::updateDefaultPreset()
     }
 }
 
+double Q2DViewer::getCurrentSpacingBetweenSlices()
+{
+    double currentSpacingBetweenSlices;
+    switch (m_lastView)
+    {
+        case Axial:
+            currentSpacingBetweenSlices = m_mainVolume->getSpacing()[2] * m_slabThickness;
+            break;
+
+        case Sagital:
+            currentSpacingBetweenSlices = m_mainVolume->getSpacing()[0] * m_slabThickness;
+            break;
+
+        case Coronal:
+            currentSpacingBetweenSlices = m_mainVolume->getSpacing()[1] * m_slabThickness;
+            break;
+    }
+
+    return currentSpacingBetweenSlices;
+}
 };  // End namespace udg
