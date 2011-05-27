@@ -61,8 +61,8 @@ QCrashReporter::QCrashReporter(const QStringList &args, QWidget *parent)
 
     // En cas que estem a windows, afegim com a info del host el domini de l'usuari.
 #ifdef WIN32
-    char *userDomain = getenv ("USERDOMAIN");
-    if (userDomain != NULL)
+    QString userDomain = QProcessEnvironment::systemEnvironment().value(QString("USERDOMAIN"), QString(""));
+    if (!userDomain.isEmpty())
     {
         hostInformation += QString("\n%1: %2").arg(tr("User Domain")).arg(userDomain);
     }
