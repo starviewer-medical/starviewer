@@ -113,10 +113,10 @@ void MagicTool::modifyMagicFactor()
 {
     if (m_roiPolygon)
     {
-        int dy = 0.1 * (m_viewer->getEventPositionY() - m_viewer->getLastEventPositionY());
-        if (m_magicFactor - dy > 0.0)
+        int displacementY = 0.1 * (m_viewer->getEventPositionY() - m_viewer->getLastEventPositionY());
+        if (m_magicFactor - displacementY > 0.0)
         {
-            m_magicFactor -= dy;
+            m_magicFactor -= displacementY;
         }
         this->generateRegion();
     }
@@ -141,13 +141,13 @@ void MagicTool::computeLevelRange()
     m_2DViewer->getInput()->getPixelData()->computeCoordinateIndex(m_pickedPosition, index);
 
     // Calculem la desviació estàndard dins la finestra que ens marca la magic size
-    double stdv = getStandardDeviation(index[0], index[1], index[2]);
+    double standardDeviation = getStandardDeviation(index[0], index[1], index[2]);
 
     // Calculem els llindars com el valor en el pixel +/- la desviació estàndard * magic factor
     QVector<double> voxelValue;
     m_2DViewer->getInput()->getVoxelValue(m_pickedPosition, voxelValue);
-    m_lowerLevel = voxelValue.at(0) - m_magicFactor * stdv;
-    m_upperLevel = voxelValue.at(0) + m_magicFactor * stdv;
+    m_lowerLevel = voxelValue.at(0) - m_magicFactor * standardDeviation;
+    m_upperLevel = voxelValue.at(0) + m_magicFactor * standardDeviation;
 
 }
 
@@ -169,14 +169,14 @@ void MagicTool::computeRegionMask()
     // Busquem el voxel inicial
     int index[3];
     m_2DViewer->getInput()->getPixelData()->computeCoordinateIndex(m_pickedPosition, index);
-    int a = index[0];
-    int b = index[1];
-    int c = index[2];
+    int x = index[0];
+    int y = index[1];
+    int z = index[2];
     // \TODO S'hauria de fer servir VolumePixelData::getVoxelValue o similar
-    double value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(a, b, c, 0);
+    double value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(x, y, z, 0);
     if ((value >= m_lowerLevel) && (value <= m_upperLevel))
     {
-        m_mask[b * ext[1] + a] = true;
+        m_mask[y * ext[1] + x] = true;
     }
     else
     {
@@ -187,21 +187,21 @@ void MagicTool::computeRegionMask()
     QVector<int> movements;
     // First movement \TODO Codi duplicat amb main loop
     int i = 0;
-    bool trobat = false;
-    while (i < 4 && !trobat)
+    bool located = false;
+    while (i < 4 && !located)
     {
-        this->doMovement(a, b, i);
+        this->doMovement(x, y, i);
         // \TODO S'hauria de fer servir VolumePixelData::getVoxelValue o similar
-        value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(a, b, c, 0);
+        value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(x, y, z, 0);
         if ((value >= m_lowerLevel) && (value <= m_upperLevel))
         {
-            m_mask[b * ext[1] + a] = true;
-            trobat = true;
+            m_mask[y * ext[1] + x] = true;
+            located = true;
             movements.push_back(i);
         }
-        if (!trobat)
+        if (!located)
         {
-            this->undoMovement(a, b, i);
+            this->undoMovement(x, y, i);
         }
         ++i;
     }
@@ -210,31 +210,31 @@ void MagicTool::computeRegionMask()
     i = 0;
     while (movements.size() > 0)
     {
-        trobat = false;
-        while (i < 4 && !trobat)
+        located = false;
+        while (i < 4 && !located)
         {
-            this->doMovement(a, b, i);
-            if ((a > ext[0]) && (a < ext[1]) && (b > ext[2]) && (b < ext[3]))
+            this->doMovement(x, y, i);
+            if ((x > ext[0]) && (x < ext[1]) && (y > ext[2]) && (y < ext[3]))
             {
                 // \TODO S'hauria de fer servir VolumePixelData::getVoxelValue o similar
-                value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(a, b, c, 0);
-                if ((value >= m_lowerLevel) && (value <= m_upperLevel) && (!m_mask[b * ext[1] + a]))
+                value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(x, y, z, 0);
+                if ((value >= m_lowerLevel) && (value <= m_upperLevel) && (!m_mask[y * ext[1] + x]))
                 {
-                    m_mask[b * ext[1] + a] = true;
-                    trobat = true;
+                    m_mask[y * ext[1] + x] = true;
+                    located = true;
                     movements.push_back(i);
                     i = 0;
                 }
             }
-            if (!trobat)
+            if (!located)
             {
-                this->undoMovement(a, b, i);
+                this->undoMovement(x, y, i);
                 ++i;
             }
         }
-        if (!trobat)
+        if (!located)
         {
-            this->undoMovement(a, b, movements.back());
+            this->undoMovement(x, y, movements.back());
             i = movements.back();
             ++i;
             movements.pop_back();
@@ -242,46 +242,46 @@ void MagicTool::computeRegionMask()
     }
 }
 
-void MagicTool::doMovement(int &a, int &b, int movement)
+void MagicTool::doMovement(int &x, int &y, int movement)
 {
     switch (movement)
     {
         // Up
         case 0:
-            a++;
+            x++;
             break;
         // Down
         case 1:
-            a--;
+            x--;
             break;
         case 2:
-            b++;
+            y++;
             break;
         case 3:
-            b--;
+            y--;
             break;
         default:
             DEBUG_LOG("Invalid movement");
     }
 }
 
-void MagicTool::undoMovement(int &a, int &b, int movement)
+void MagicTool::undoMovement(int &x, int &y, int movement)
 {
     switch (movement)
     {
         // Up
         case 0:
-            a--;
+            x--;
             break;
         // Down
         case 1:
-            a++;
+            x++;
             break;
         case 2:
-            b--;
+            y--;
             break;
         case 3:
-            b++;
+            y++;
             break;
         default:
             DEBUG_LOG("Invalid movement");
@@ -297,15 +297,15 @@ void MagicTool::computePolygon()
     int j;
 
     // Busquem el primer punt
-    bool trobat = false;
-    while ((i <= ext[1]) && !trobat)
+    bool located = false;
+    while ((i <= ext[1]) && !located)
     {
         j = ext[2];
-        while ((j <= ext[3]) && !trobat)
+        while ((j <= ext[3]) && !located)
         {
             if (m_mask[j * ext[1] + i])
             {
-                trobat = true;
+                located = true;
             }
             ++j;
         }
@@ -398,8 +398,8 @@ void MagicTool::getNextIndex(int direction, int x1, int y1, int &x2, int &y2)
 }
 int MagicTool::getNextDirection(int direction)
 {
-    int a = direction + 1;
-    return (a == 8)? 0: a;
+    int nextDirection = direction + 1;
+    return (nextDirection == 8)? 0: nextDirection;
 }
 
 int MagicTool::getInverseDirection(int direction)
@@ -448,17 +448,17 @@ bool MagicTool::isLoopReached()
     return ((qAbs(firstVertix[0] - lastVertix[0]) < 0.0001) && (qAbs(firstVertix[1] - lastVertix[1]) < 0.0001));
 }
 
-double MagicTool::getStandardDeviation(int a, int b, int c)
+double MagicTool::getStandardDeviation(int x, int y, int z)
 {
     int ext[6];
     m_2DViewer->getInput()->getWholeExtent(ext);
-    int minX = qMax(a - m_magicSize, ext[0]);
-    int maxX = qMin(a + m_magicSize, ext[1]);
-    int minY = qMax(b - m_magicSize, ext[2]);
-    int maxY = qMin(b + m_magicSize, ext[3]);
+    int minX = qMax(x - m_magicSize, ext[0]);
+    int maxX = qMin(x + m_magicSize, ext[1]);
+    int minY = qMax(y - m_magicSize, ext[2]);
+    int maxY = qMin(y + m_magicSize, ext[3]);
 
     int index[3];
-    index[2] = c;
+    index[2] = z;
 
     // Calculem la mitjana
     double mean = 0.0;
