@@ -6,6 +6,8 @@
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QMessageBox>
+// itk
+#include <itkObject.h> //Necessari per desactivar els warnings en release
 // Recursos
 #include "logging.h"
 
