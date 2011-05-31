@@ -56,18 +56,6 @@ void Image::setImageOrientationPatient(double orientation[6])
     memcpy(&m_imageOrientationPatient[6], normal, 3 * sizeof(double));
 }
 
-void Image::setImageOrientationPatient(double xVector[3], double yVector[3])
-{
-    memcpy(m_imageOrientationPatient, xVector, 3 * sizeof(double));
-    memcpy(&m_imageOrientationPatient[3], yVector, 3 * sizeof(double));
-
-    // Calculem la Z
-    double normal[3];
-    MathTools::crossProduct(xVector, yVector, normal);
-
-    memcpy(&m_imageOrientationPatient[6], normal, 3 * sizeof(double));
-}
-
 const double* Image::getImageOrientationPatient() const
 {
     return m_imageOrientationPatient;
