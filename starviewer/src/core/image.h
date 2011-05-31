@@ -36,7 +36,6 @@ public:
      * @param orientation[] Els valors dels vectors que defineixen el pla d'imatge.
      */
     void setImageOrientationPatient(double orientation[6]);
-    void setImageOrientationPatient(double xVector[3], double yVector[3]);
     const double* getImageOrientationPatient() const;
 
     /// Assignar/Obtenir l'string d'orientació del pacient
