@@ -83,11 +83,6 @@ QString Image::getPatientOrientation() const
     return m_patientOrientation;
 }
 
-QString Image::getOrientationLabel()
-{
-    return getProjectionLabelFromPlaneOrientation(m_patientOrientation);
-}
-
 void Image::setPixelSpacing(double x, double y)
 {
     m_pixelSpacing[0] = x;

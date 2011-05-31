@@ -43,13 +43,6 @@ public:
     void setPatientOrientation(const QString &orientation);
     QString getPatientOrientation() const;
 
-     /**
-     * A partir dels eixos de la imatge, ens diu en un string quina és
-     * la orientació de la imatge
-     * @return Els valors podran ser AXIAL, SAGITAL, CORONAL, OBLIQUE o N/A (not available)
-     */
-    QString getOrientationLabel();
-
     /// Assignar/Obtenir l'espaiat dels pixels
     void setPixelSpacing(double x, double y);
     const double* getPixelSpacing() const;
