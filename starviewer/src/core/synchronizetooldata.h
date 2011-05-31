@@ -19,6 +19,9 @@ public:
     /// Obtenir l'increment de llesca
     double getIncrement();
 
+    /// Obtenir la vista que s'ha incrementat
+    QString getIncrementView();
+
     /// Obtenir el valor del window level
     double getWindow();
     double getLevel();
@@ -31,7 +34,7 @@ public:
 
 public slots:
     /// Per canviar les dades de sincronitzacio de llesques
-    void setIncrement(double value);
+    void setIncrement(double value, QString view);
 
     /// Per canviar les dades de sincronitzacio del window level
     void setWindowLevel(double window, double level);
@@ -58,6 +61,9 @@ signals:
 private:
     /// Dades per la sincronització de l'slicing. Distància recorreguda
     double m_increment;
+
+    /// Vista on ha de tenir efecte l'increment
+    QString m_incrementView;
 
     /// Dades per la sincronització del window level
     double m_window;

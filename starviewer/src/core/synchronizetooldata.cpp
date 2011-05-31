@@ -8,6 +8,7 @@ SynchronizeToolData::SynchronizeToolData()
  : ToolData()
 {
     m_increment = 0;
+    m_incrementView = Q2DViewer::Axial;
     m_level = 0;
     m_window = 0;
     m_zoomFactor = 0;
@@ -20,9 +21,10 @@ SynchronizeToolData::~SynchronizeToolData()
 {
 }
 
-void SynchronizeToolData::setIncrement(double value)
+void SynchronizeToolData::setIncrement(double value, QString view)
 {
     m_increment = value;
+    m_incrementView = view;
     emit(sliceChanged());
 }
 
@@ -30,6 +32,12 @@ double SynchronizeToolData::getIncrement()
 {
     return m_increment;
 }
+
+QString SynchronizeToolData::getIncrementView()
+{
+    return m_incrementView;
+}
+
 
 void SynchronizeToolData::setWindowLevel(double window, double level)
 {

@@ -67,6 +67,9 @@ private:
     /// Llesca anterior per saber l'increment
     int m_lastSlice;
 
+    /// Vista anterior per saber si s'ha de calcular l'increment
+    QString m_lastView;
+
     /// Thickness perdut per arrodoniment
     double m_roundLostSpacingBetweenSlices;
 
