@@ -8,16 +8,16 @@
 
 namespace AutoTest
 {
-    typedef QList<QObject*> TestList;
+typedef QList<QObject*> TestList;
 
-    inline TestList& testList()
-    {
+inline TestList& testList()
+{
 	static TestList list;
 	return list;
-    }
+}
 
-    inline bool findObject(QObject* object)
-    {
+inline bool findObject(QObject* object)
+{
 	TestList& list = testList();
 	if (list.contains(object))
 	{
@@ -27,23 +27,23 @@ namespace AutoTest
 	{
 	    if (test->objectName() == object->objectName())
 	    {
-		return true;
+            return true;
 	    }
 	}
 	return false;
-    }
+}
 
-    inline void addTest(QObject* object)
-    {
+inline void addTest(QObject* object)
+{
 	TestList& list = testList();
 	if (!findObject(object))
 	{
 	    list.append(object);
 	}
-    }
+}
 
-    inline int run(int argc, char *argv[])
-    {
+inline int run(int argc, char *argv[])
+{
 	int ret = 0;
 
 	foreach (QObject* test, testList())
@@ -52,7 +52,7 @@ namespace AutoTest
 	}
 
 	return ret;
-    }
+}
 }
 
 template <class T>
@@ -63,17 +63,17 @@ public:
 
     Test(const QString& name) : child(new T)
     {
-	child->setObjectName(name);
-	AutoTest::addTest(child.data());
+        child->setObjectName(name);
+        AutoTest::addTest(child.data());
     }
 };
 
 #define DECLARE_TEST(className) static Test<className> t(#className);
 
 #define TEST_MAIN \
-    int main(int argc, char *argv[]) \
-    { \
-      return AutoTest::run(argc, argv); \
-  }
+int main(int argc, char *argv[]) \
+{ \
+    return AutoTest::run(argc, argv); \
+}
 
 #endif // AUTOTEST_H
