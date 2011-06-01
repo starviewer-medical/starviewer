@@ -33,6 +33,8 @@ TEMPLATE = lib
 
 DESTDIR = ./
 
+CONFIG += staticlib
+
 include(../corelibsconfiguration.inc)
 include(../vtk.inc)
 include(../itk.inc)
