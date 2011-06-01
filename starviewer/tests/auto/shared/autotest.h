@@ -73,6 +73,7 @@ public:
 #define TEST_MAIN \
 int main(int argc, char *argv[]) \
 { \
+    QApplication app(argc, argv); \
     return AutoTest::run(argc, argv); \
 }
 
