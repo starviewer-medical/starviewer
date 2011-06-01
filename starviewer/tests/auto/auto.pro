@@ -12,6 +12,8 @@ SOURCES += autotests.cpp
 
 QT += testlib
 
+QT += xml opengl network webkit script xmlpatterns gui
+
 OBJECTS_DIR = ../../tmp/obj
 UI_DIR = ../../tmp/ui
 MOC_DIR = ../../tmp/moc
