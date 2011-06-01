@@ -31,3 +31,8 @@ src/main/Info.plist
 *.vcproj
 *vcproj.*.*.user
 *.ncb
+
+# Testing outputs
+tests/auto/*.log
+tests/auto/autotests
+tests/auto/autotests.exe
