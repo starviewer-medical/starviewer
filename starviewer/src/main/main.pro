@@ -48,8 +48,6 @@ include(../corelibsconfiguration.inc)
 include(../thirdparty/qtsingleapplication/src/qtsingleapplication.pri)
 include(../breakpad.inc)
 
-CONFIG -= staticlib
-
 include(installextensions.inc)
 
 QT += xml opengl network webkit script xmlpatterns

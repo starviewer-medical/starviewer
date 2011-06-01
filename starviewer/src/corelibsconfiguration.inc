@@ -2,7 +2,6 @@
 
 CONFIG += warn_on \
           thread \
-          staticlib \
           qt \
           stl
           

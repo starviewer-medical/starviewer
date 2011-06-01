@@ -146,6 +146,7 @@ INCLUDEPATH += ../core
 DEPENDPATH += ../core
 TEMPLATE = lib
 DESTDIR = ./
+CONFIG += staticlib
 include(../corelibsconfiguration.inc)
 include(../vtk.inc)
 include(../gdcm.inc)

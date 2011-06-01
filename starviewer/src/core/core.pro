@@ -452,6 +452,7 @@ SOURCES += extensionmediator.cpp \
     qopacitytransferfunctiongraphicalviewline.cpp
 TEMPLATE = lib
 DESTDIR = ./
+CONFIG += staticlib
 include(../corelibsconfiguration.inc)
 include(../itk.inc)
 include(../gdcm.inc)
