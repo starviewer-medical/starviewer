@@ -63,14 +63,14 @@ DicomMask QBasicSearchWidget::buildDicomMask()
 
     mask.setStudyId("");
     mask.setStudyDescription("");
-    mask.setStudyTime("");
+    mask.setStudyTime(QTime(), QTime());
     mask.setStudyInstanceUID("");
     mask.setStudyModality("");
     mask.setPatientAge("");
     mask.setAccessionNumber("");
     mask.setReferringPhysiciansName("");
     mask.setPatientSex("");
-    mask.setPatientBirth("");
+    mask.setPatientBirth(QDate(), QDate());
 
     // Per PatientId i PatientName si el lineEdit és buit es fa un Universal Matching. Universal Matching és quan indiquem que cerquem per un tag de dicom però
     // no li donem valor, en aquest cas la normativa DICOM indica que el SCP ha de fer match per tots els objectes DICOM, el universal matching és un mecanisme
@@ -112,19 +112,19 @@ DicomMask QBasicSearchWidget::buildDicomMask()
     }
     mask.setPatientName(patientName);
 
-    mask.setStudyDate(getStudyDatesStringMask());
+    setStudyDateToDICOMMask(&mask);
 
     // Si hem de filtrar per un camp a nivell d'imatge o serie activem els filtres de serie
     if (!m_checkAll->isChecked())
     {
-        mask.setSeriesDate("");
-        mask.setSeriesTime("");
+        mask.setSeriesDate(QDate(), QDate());
+        mask.setSeriesTime(QTime(), QTime());
         mask.setSeriesModality("");
         mask.setSeriesNumber("");
         mask.setSeriesInstanceUID("");
         mask.setRequestAttributeSequence("", "");
-        mask.setPPSStartDate("");
-        mask.setPPStartTime("");
+        mask.setPPSStartDate(QDate(), QDate());
+        mask.setPPStartTime(QTime(), QTime());
 
         if (m_buttonGroupModality->isEnabled())
         {
@@ -217,56 +217,44 @@ void QBasicSearchWidget::setDefaultDate(DefaultDateFlags flag)
     }
 }
 
-QString QBasicSearchWidget::getStudyDatesStringMask()
+void QBasicSearchWidget::setStudyDateToDICOMMask(DicomMask *mask)
 {
     if (m_anyDateRadioButton->isChecked())
     {
-        return "";
+        mask->setStudyDate(QDate(), QDate());
     }
     else if (m_todayRadioButton->isChecked())
     {
-        return QDate::currentDate().toString("yyyyMMdd");
+        mask->setStudyDate(QDate::currentDate(), QDate::currentDate());
     }
     else if (m_yesterdayRadioButton->isChecked())
     {
-        return QDate::currentDate().addDays(-1).toString("yyyyMMdd");
+        return mask->setStudyDate(QDate::currentDate().addDays(-1), QDate::currentDate().addDays(-1));
     }
     else if (m_lastWeekRadioButton->isChecked())
     {
-        return QDate::currentDate().addDays(-7).toString("yyyyMMdd") + "-" + QDate::currentDate().toString("yyyyMMdd");
+        return mask->setStudyDate(QDate::currentDate().addDays(-7), QDate::currentDate());
     }
     else if (m_customDateRadioButton->isChecked())
     {
-        QString date;
-
         if (m_fromDateCheck->isChecked() && m_toDateCheck->isChecked())
         {
-            if (m_fromStudyDate->date() == m_toStudyDate->date())
-            {
-                date = m_fromStudyDate->date().toString("yyyyMMdd");
-            }
-            else
-            {
-                date = m_fromStudyDate->date().toString("yyyyMMdd") + "-" + m_toStudyDate->date().toString("yyyyMMdd");
-            }
+            mask->setStudyDate(m_fromStudyDate->date(), m_toStudyDate->date());
         }
         else
         {
             if (m_fromDateCheck->isChecked())
             {
                 // Indiquem que volem buscar tots els estudis d'aquella data en endavant
-                date = m_fromStudyDate->date().toString("yyyyMMdd") + "-";
+                mask->setStudyDate(m_fromStudyDate->date(), QDate());
             }
             else if (m_toDateCheck->isChecked())
             {
                 // Indiquem que volem buscar tots els estudis que no superin aquesta data
-                date = "-" + m_toStudyDate->date().toString("yyyyMMdd");
+                mask->setStudyDate(QDate(), m_toStudyDate->date());
             }
         }
-
-        return date;
     }
-    return "";
 }
 
 void QBasicSearchWidget::textOtherModalityEdited()

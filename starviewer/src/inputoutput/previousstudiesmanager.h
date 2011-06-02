@@ -86,9 +86,6 @@ private:
     /// Ens indica si aquest estudi és el mateix pel qual ens han demanat els previs, per evitar incloure'l a la llista
     bool isStudyToFindPrevious(Study *study);
 
-    /// Donada una data la transforma a una màscara per cercar estudis previs a aquell
-    QString getPreviousStudyDateMask(QDate studyDate);
-
     /// Inicialitza les variables per realitzar una nova consulta
     void initializeQuery();
 

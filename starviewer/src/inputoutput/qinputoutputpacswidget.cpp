@@ -404,13 +404,13 @@ DicomMask QInputOutputPacsWidget::buildSeriesDicomMask(QString studyInstanceUID)
     DicomMask mask;
 
     mask.setStudyInstanceUID(studyInstanceUID);
-    mask.setSeriesDate("");
-    mask.setSeriesTime("");
+    mask.setSeriesDate(QDate(), QDate());
+    mask.setSeriesTime(QTime(), QTime());
     mask.setSeriesModality("");
     mask.setSeriesNumber("");
     mask.setSeriesInstanceUID("");
-    mask.setPPSStartDate("");
-    mask.setPPStartTime("");
+    mask.setPPSStartDate(QDate(), QDate());
+    mask.setPPStartTime(QTime(), QTime());
     mask.setRequestAttributeSequence("", "");
 
     return mask;

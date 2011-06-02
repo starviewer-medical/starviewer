@@ -225,7 +225,7 @@ DcmDataset* QueryPacs::ConvertDICOMMaskToDcmDataset(DicomMask dicomMask)
     //Afegim els tags d'estudi
     AddTagToDcmDatsetAsString(maskDcmDataset, DCM_PatientID, dicomMask.getPatientId());
     AddTagToDcmDatsetAsString(maskDcmDataset, DCM_PatientsName, dicomMask.getPatientName());
-    AddTagToDcmDatsetAsString(maskDcmDataset, DCM_PatientsBirthDate, dicomMask.getPatientBirth());
+    AddTagToDcmDatsetAsString(maskDcmDataset, DCM_PatientsBirthDate, dicomMask.getPatientBirthRangeAsDICOMFormat());
     AddTagToDcmDatsetAsString(maskDcmDataset, DCM_PatientsSex, dicomMask.getPatientSex());
     AddTagToDcmDatsetAsString(maskDcmDataset, DCM_PatientsAge, dicomMask.getPatientAge());
 
@@ -234,19 +234,19 @@ DcmDataset* QueryPacs::ConvertDICOMMaskToDcmDataset(DicomMask dicomMask)
     AddTagToDcmDatsetAsString(maskDcmDataset, DCM_StudyID, dicomMask.getStudyId());
     AddTagToDcmDatsetAsString(maskDcmDataset, DCM_StudyDescription, dicomMask.getStudyDescription());
     AddTagToDcmDatsetAsString(maskDcmDataset, DCM_ModalitiesInStudy, dicomMask.getStudyModality());
-    AddTagToDcmDatsetAsString(maskDcmDataset, DCM_StudyDate, dicomMask.getStudyDate());
-    AddTagToDcmDatsetAsString(maskDcmDataset, DCM_StudyTime, dicomMask.getStudyTime());
+    AddTagToDcmDatsetAsString(maskDcmDataset, DCM_StudyDate, dicomMask.getStudyDateRangeAsDICOMFormat());
+    AddTagToDcmDatsetAsString(maskDcmDataset, DCM_StudyTime, dicomMask.getStudyTimeRangeAsDICOMFormat());
     AddTagToDcmDatsetAsString(maskDcmDataset, DCM_AccessionNumber, dicomMask.getAccessionNumber());
     AddTagToDcmDatsetAsString(maskDcmDataset, DCM_ReferringPhysiciansName, dicomMask.getReferringPhysiciansName());
     AddTagToDcmDatsetAsString(maskDcmDataset, DCM_SeriesNumber, dicomMask.getSeriesNumber());
-    AddTagToDcmDatsetAsString(maskDcmDataset, DCM_SeriesDate, dicomMask.getSeriesDate());
+    AddTagToDcmDatsetAsString(maskDcmDataset, DCM_SeriesDate, dicomMask.getSeriesDateRangeAsDICOMFormat());
     AddTagToDcmDatsetAsString(maskDcmDataset, DCM_Modality, dicomMask.getSeriesModality());
-    AddTagToDcmDatsetAsString(maskDcmDataset, DCM_SeriesTime, dicomMask.getSeriesTime());
+    AddTagToDcmDatsetAsString(maskDcmDataset, DCM_SeriesTime, dicomMask.getSeriesTimeRangeAsDICOMFormat());
     AddTagToDcmDatsetAsString(maskDcmDataset, DCM_SeriesDescription, dicomMask.getSeriesDescription());
     AddTagToDcmDatsetAsString(maskDcmDataset, DCM_ProtocolName, dicomMask.getSeriesProtocolName());
     AddTagToDcmDatsetAsString(maskDcmDataset, DCM_SeriesInstanceUID, dicomMask.getSeriesInstanceUID());
-    AddTagToDcmDatsetAsString(maskDcmDataset, DCM_PerformedProcedureStepStartDate, dicomMask.getPPSStartDate());
-    AddTagToDcmDatsetAsString(maskDcmDataset, DCM_PerformedProcedureStepStartTime, dicomMask.getPPSStartTime());
+    AddTagToDcmDatsetAsString(maskDcmDataset, DCM_PerformedProcedureStepStartDate, dicomMask.getPPSStartDateAsRangeDICOMFormat());
+    AddTagToDcmDatsetAsString(maskDcmDataset, DCM_PerformedProcedureStepStartTime, dicomMask.getPPSStartTimeAsRangeDICOMFormat());
 
     if (!dicomMask.getRequestedProcedureID().isNull() || !dicomMask.getScheduledProcedureStepID().isNull())
     {
@@ -279,10 +279,10 @@ void QueryPacs::AddTagToDcmDatsetAsString(DcmDataset *dcmDataset, DcmTagKey dcmT
 QString QueryPacs::getQueryLevelFromDICOMMask(DicomMask dicomMask)
 {
     bool isImageLevel = !dicomMask.getSOPInstanceUID().isNull() || !dicomMask.getImageNumber().isNull();
-    bool isSeriesLevel = !dicomMask.getSeriesDescription().isNull() || !dicomMask.getSeriesDate().isNull() || !dicomMask.getSeriesModality().isNull() ||
-                         !dicomMask.getSeriesNumber().isNull() || !dicomMask.getSeriesProtocolName().isNull() || !dicomMask.getSeriesTime().isNull() ||
+    bool isSeriesLevel = !dicomMask.getSeriesDescription().isNull() || !dicomMask.getSeriesDateRangeAsDICOMFormat().isNull() || !dicomMask.getSeriesModality().isNull() ||
+                         !dicomMask.getSeriesNumber().isNull() || !dicomMask.getSeriesProtocolName().isNull() || !dicomMask.getSeriesTimeRangeAsDICOMFormat().isNull() ||
                          !dicomMask.getSeriesInstanceUID().isNull() || !dicomMask.getRequestedProcedureID().isNull() || !dicomMask.getScheduledProcedureStepID().isNull() ||
-                         !dicomMask.getPPSStartDate().isNull() || !dicomMask.getPPSStartTime().isNull();
+                         !dicomMask.getPPSStartDateAsRangeDICOMFormat().isNull() || !dicomMask.getPPSStartTimeAsRangeDICOMFormat().isNull();
 
     if (isImageLevel)
     {

@@ -273,25 +273,14 @@ QString LocalDatabaseStudyDAL::buildSqlSelectStudyPatient(const DicomMask &study
     }
 
     // Si filtrem per data
-    if (studyMaskToSelect.getStudyDate().length() == 8)
+    if (studyMaskToSelect.getStudyDateMinimum().isValid())
     {
-        whereSentence += QString(" and Date = '%1'").arg(studyMaskToSelect.getStudyDate());
+        whereSentence += QString(" and Date >= '%1'").arg(studyMaskToSelect.getStudyDateMinimum().toString("yyyyMMdd"));
     }
-    else if (studyMaskToSelect.getStudyDate().length() == 9)
+
+    if (studyMaskToSelect.getStudyDateMaximum().isValid())
     {
-        if (studyMaskToSelect.getStudyDate().at(0) == '-')
-        {
-            whereSentence += QString(" and Date <= '%1'").arg(studyMaskToSelect.getStudyDate().mid(1, 8));
-        }
-        else if (studyMaskToSelect.getStudyDate().at(8) == '-')
-        {
-            whereSentence += QString(" and Date >= '%1'").arg(studyMaskToSelect.getStudyDate().mid(0, 8));
-        }
-    }
-    else if (studyMaskToSelect.getStudyDate().length() == 17)
-    {
-        whereSentence += QString(" and Date between '%1' and '%2'").arg(studyMaskToSelect.getStudyDate().mid(0, 8))
-                            .arg(studyMaskToSelect.getStudyDate().mid(9, 8));
+        whereSentence += QString(" and Date <= '%1'").arg(studyMaskToSelect.getStudyDateMaximum().toString("yyyyMMdd"));
     }
 
     if (lastAccessDateMinor.isValid())

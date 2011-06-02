@@ -84,10 +84,9 @@ void PreviousStudiesManager::makeAsynchronousStudiesQuery(Patient *patient, QDat
         // Si ens diuen que volen els study's fins una data, hem de marcar aquesta data en els dicomMasks
         if (untilDate.isValid())
         {
-            QString untilDateAsMaskFormat = getPreviousStudyDateMask(untilDate);
             foreach (DicomMask dicomMask, queryDicomMasksList)
             {
-                dicomMask.setStudyDate(untilDateAsMaskFormat);
+                dicomMask.setStudyDate(QDate(), untilDate);
             }
         }
 
@@ -268,16 +267,11 @@ DicomMask PreviousStudiesManager::getBasicDicomMask()
     dicomMask.setStudyId("");
     dicomMask.setStudyDescription("");
     dicomMask.setStudyModality("");
-    dicomMask.setStudyDate("");
-    dicomMask.setStudyTime("");
+    dicomMask.setStudyDate(QDate(), QDate());
+    dicomMask.setStudyTime(QTime(), QTime());
     dicomMask.setStudyInstanceUID("");
 
     return dicomMask;
-}
-
-QString PreviousStudiesManager::getPreviousStudyDateMask(QDate studyDate)
-{
-    return "-" + studyDate.toString("yyyyMMdd");
 }
 
 void PreviousStudiesManager::downloadStudy(Study *study, QString pacs)
