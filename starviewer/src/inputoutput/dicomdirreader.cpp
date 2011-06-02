@@ -471,45 +471,17 @@ bool DICOMDIRReader::matchDicomMaskToPatientId(DicomMask *mask, Patient *patient
 
 bool DICOMDIRReader::matchDicomMaskToStudyDate(DicomMask *mask, Study *study)
 {
-    QString maskStudyDate = mask->getStudyDate(), studyDate = study->getDate().toString("yyyyMMdd");
-
-    if (maskStudyDate.length() > 0)
+    if (mask->getStudyDateMinimum().isValid() && mask->getStudyDateMaximum().isValid())
     {
-        // Si hi ha màscara de data
-        // la màscara de la data per DICOM segueix els formats :
-        //  -  "YYYYMMDD-YYYYMMDD", per indicar un rang de dades
-        //  - "-YYYYMMDD" per buscar estudis amb la data més petita o igual
-        //  - "YYYYMMDD-" per buscar estudis amb la data més gran o igual
-        //  - "YYYYMMDD" per buscar estudis d'aquella data
-        // Hurem de mirar quin d'aquest formats és la nostre màscara
-
-        if (maskStudyDate.length() == 8)
-        {
-            // Cas YYYYMMDDD
-            return maskStudyDate == studyDate;
-        }
-        else if (maskStudyDate.length() == 9)
-        {
-            if (maskStudyDate.at(0) == '-')
-            {
-                // Cas -YYYYMMDD
-                return maskStudyDate.mid(1, 8) >= studyDate;
-            }
-            else if (maskStudyDate.at(8) == '-')
-            {
-                // Cas YYYYMMDD-
-                return maskStudyDate.mid(0, 8) <= studyDate;
-            }
-        }
-        else if (maskStudyDate.length() == 17)
-        {
-            // Cas YYYYMMDD-YYYYMMDD
-            return maskStudyDate.mid(0, 8) <= studyDate && maskStudyDate.mid(9, 8) >= studyDate;
-        }
-        else
-        {
-            return false;
-        }
+        return mask->getStudyDateMinimum() <= study->getDate() && mask->getStudyDateMaximum() >= study->getDate();
+    }
+    else if (mask->getStudyDateMinimum().isValid())
+    {
+        return mask->getStudyDateMinimum() <= study->getDate();
+    }
+    else if (mask->getStudyDateMaximum().isValid())
+    {
+        return mask->getStudyDateMaximum() >= study->getDate();
     }
 
     return true;

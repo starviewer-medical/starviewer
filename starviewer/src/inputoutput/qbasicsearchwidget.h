@@ -50,7 +50,7 @@ private:
     void initialize();
 
     /// Construeix la màscara de les dates
-    QString getStudyDatesStringMask();
+    void setStudyDateToDICOMMask(DicomMask *mask);
 
     /// Neteja el paràmetre de cerca de modalitat de serie
     void clearSeriesModality();

@@ -28,6 +28,8 @@ public:
     enum QueryLevel { study, series, image };
 
     /// Constructor/Desctructor de la classe
+    ///A la DICOMMask per cada camp que volem que el PACS ens retorni li hem d'haver fet el set amb un string empty per strings o Null per dates i hores, sinó la consulta el PACS
+    ///no retornarà la informació d'aquest camp per l'estudi/sèrie/imatge, ja que al PACS no retorna tots els camps sinó només els que se li sol·liciten
     QueryPacsJob(PacsDevice parameters, DicomMask mask, QueryLevel queryLevel);
     ~QueryPacsJob();
 
