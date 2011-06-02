@@ -261,10 +261,10 @@ QString LocalDatabaseStudyDAL::buildSqlSelectStudyPatient(const DicomMask &study
         whereSentence += QString(" and InstanceUID = '%1' ").arg(DatabaseConnection::formatTextToValidSQLSyntax(studyMaskToSelect.getStudyInstanceUID()));
     }
 
-    if (!studyMaskToSelect.getPatientId().isEmpty() && studyMaskToSelect.getPatientId() != "*")
+    if (!studyMaskToSelect.getPatientID().isEmpty() && studyMaskToSelect.getPatientID() != "*")
     {
         whereSentence += QString(" and Patient.DICOMPatientID like '%%1%' ")
-                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(studyMaskToSelect.getPatientId().replace("*", "")));
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(studyMaskToSelect.getPatientID().replace("*", "")));
     }
     if (!studyMaskToSelect.getPatientName().isEmpty() && studyMaskToSelect.getPatientName() != "*")
     {

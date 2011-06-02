@@ -61,7 +61,7 @@ DicomMask QBasicSearchWidget::buildDicomMask()
     DicomMask mask;
     QString modalityMask;
 
-    mask.setStudyId("");
+    mask.setStudyID("");
     mask.setStudyDescription("");
     mask.setStudyTime(QTime(), QTime());
     mask.setStudyInstanceUID("");
@@ -96,7 +96,7 @@ DicomMask QBasicSearchWidget::buildDicomMask()
             patientID = patientID + "*";
         }
     }
-    mask.setPatientId(patientID);
+    mask.setPatientID(patientID);
 
     QString patientName = m_patientNameText->text();
     if (!patientName.isEmpty())

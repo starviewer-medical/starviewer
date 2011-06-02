@@ -16,9 +16,9 @@ DicomMask::DicomMask()
 
 /************************* PATIENT  *********************************************************************/
 
-void DicomMask::setPatientId(const QString &patientId)
+void DicomMask::setPatientID(const QString &patientID)
 {
-    m_patientId = patientId;
+    m_patientID = patientID;
 }
 
 void DicomMask::setPatientName(const QString &patientName)
@@ -52,9 +52,9 @@ void DicomMask::setPatientAge(const QString &patientAge)
     m_patientAge = patientAge;
 }
 
-QString DicomMask::getPatientId() const
+QString DicomMask::getPatientID() const
 {
-    return m_patientId;
+    return m_patientID;
 }
 
 QString DicomMask::getPatientName() const
@@ -89,9 +89,9 @@ QString DicomMask::getPatientAge() const
 
 /****************************************** STUDY *****************************************************/
 
-void DicomMask::setStudyId(const QString &studyId)
+void DicomMask::setStudyID(const QString &studyID)
 {
-    m_studyId = studyId;
+    m_studyID = studyID;
 }
 
 void DicomMask::setStudyDate(const QDate &minimumDate, const QDate &maximumDate)
@@ -158,9 +158,9 @@ QString DicomMask::getStudyInstanceUID() const
     return m_studyInstanceUID;
 }
 
-QString DicomMask::getStudyId() const
+QString DicomMask::getStudyID() const
 {
-    return m_studyId;
+    return m_studyID;
 }
 
 QDate DicomMask::getStudyDateMinimum() const
@@ -432,13 +432,13 @@ QString DicomMask::getSOPInstanceUID() const
 bool DicomMask::operator ==(const DicomMask &mask)
 {
     if (   getStudyInstanceUID() == mask.getStudyInstanceUID()
-        && getPatientId() == mask.getPatientId()
+        && getPatientID() == mask.getPatientID()
         && getPatientName() == mask.getPatientName()
         && getPatientBirthMinimum() == mask.getPatientBirthMinimum()
         && getPatientBirthMaximum() == mask.getPatientBirthMaximum()
         && getPatientAge() == mask.getPatientAge()
         && getPatientSex() == mask.getPatientSex()
-        && getStudyId() == mask.getStudyId()
+        && getStudyID() == mask.getStudyID()
         && getStudyDateMaximum() == mask.getStudyDateMaximum()
         && getStudyDateMinimum() == mask.getStudyDateMinimum()
         && getStudyDescription() == mask.getStudyDescription()
@@ -488,9 +488,9 @@ DicomMask DicomMask::operator +(const DicomMask &mask)
     {
         returnDicomMask.setPatientBirth(mask.getPatientBirthMinimum(), mask.getPatientBirthMaximum());
     }
-    if (!mask.getPatientId().isNull() && getPatientId().isEmpty())
+    if (!mask.getPatientID().isNull() && getPatientID().isEmpty())
     {
-        returnDicomMask.setPatientId(mask.getPatientId());
+        returnDicomMask.setPatientID(mask.getPatientID());
     }
     if (!mask.getPatientName().isNull() && getPatientName().isEmpty())
     {
@@ -500,9 +500,9 @@ DicomMask DicomMask::operator +(const DicomMask &mask)
     {
         returnDicomMask.setPatientSex(mask.getPatientSex());
     }
-    if (!mask.getStudyId().isNull() && getStudyId().isEmpty())
+    if (!mask.getStudyID().isNull() && getStudyID().isEmpty())
     {
-        returnDicomMask.setStudyId(mask.getStudyId());
+        returnDicomMask.setStudyID(mask.getStudyID());
     }
     if (!mask.getStudyDateRangeAsDICOMFormat().isNull() && getStudyDateRangeAsDICOMFormat().isEmpty())
     {
@@ -590,8 +590,8 @@ DicomMask DicomMask::operator +(const DicomMask &mask)
 
 bool DicomMask::isEmpty()
 {
-    bool empty = m_patientId.isEmpty() && m_patientName.isEmpty() && m_patientBirthMinimum.isEmpty() && m_patientBirthMaximum.isEmpty() && m_patientSex.isEmpty() &&
-                 m_patientAge.isEmpty() && m_studyId.isEmpty() && m_studyDateMinimum.isEmpty() && m_studyDateMaximum.isEmpty() && m_studyTimeMinimum.isEmpty() &&
+    bool empty = m_patientID.isEmpty() && m_patientName.isEmpty() && m_patientBirthMinimum.isEmpty() && m_patientBirthMaximum.isEmpty() && m_patientSex.isEmpty() &&
+                 m_patientAge.isEmpty() && m_studyID.isEmpty() && m_studyDateMinimum.isEmpty() && m_studyDateMaximum.isEmpty() && m_studyTimeMinimum.isEmpty() &&
                  m_studyTimeMaximum.isEmpty() && m_studyDescription.isEmpty() && m_studyModality.isEmpty() && m_studyInstanceUID.isEmpty() && 
                  m_accessionNumber.isEmpty() && m_referringPhysiciansName.isEmpty() && m_seriesNumber.isEmpty() && m_seriesDateMinimum.isEmpty() && 
                  m_seriesDateMaximum.isEmpty() && m_seriesTimeMinimum.isEmpty() && m_seriesTimeMaximum.isEmpty() && m_seriesModality.isEmpty() && 
@@ -606,7 +606,7 @@ QString DicomMask::getFilledMaskFields() const
 {
     QString maskFields;
 
-    if (!QString(m_patientId).remove("*").isEmpty())
+    if (!QString(m_patientID).remove("*").isEmpty())
     {
         maskFields += "Patient_ID=[#*#] ";
     }
@@ -626,7 +626,7 @@ QString DicomMask::getFilledMaskFields() const
     {
         maskFields += "Patient_Age=[" + m_patientAge + "] ";
     }
-    if (!QString(m_studyId).remove("*").isEmpty())
+    if (!QString(m_studyID).remove("*").isEmpty())
     {
         maskFields += "Study_ID=[#*#] ";
     }

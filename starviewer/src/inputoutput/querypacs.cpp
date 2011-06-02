@@ -223,7 +223,7 @@ DcmDataset* QueryPacs::ConvertDICOMMaskToDcmDataset(DicomMask dicomMask)
     AddTagToDcmDatsetAsString(maskDcmDataset, DCM_QueryRetrieveLevel, getQueryLevelFromDICOMMask(dicomMask));
 
     //Afegim els tags d'estudi
-    AddTagToDcmDatsetAsString(maskDcmDataset, DCM_PatientID, dicomMask.getPatientId());
+    AddTagToDcmDatsetAsString(maskDcmDataset, DCM_PatientID, dicomMask.getPatientID());
     AddTagToDcmDatsetAsString(maskDcmDataset, DCM_PatientsName, dicomMask.getPatientName());
     AddTagToDcmDatsetAsString(maskDcmDataset, DCM_PatientsBirthDate, dicomMask.getPatientBirthRangeAsDICOMFormat());
     AddTagToDcmDatsetAsString(maskDcmDataset, DCM_PatientsSex, dicomMask.getPatientSex());
@@ -231,7 +231,7 @@ DcmDataset* QueryPacs::ConvertDICOMMaskToDcmDataset(DicomMask dicomMask)
 
     //Afegim els tags de sèrie
     AddTagToDcmDatsetAsString(maskDcmDataset, DCM_StudyInstanceUID, dicomMask.getStudyInstanceUID());
-    AddTagToDcmDatsetAsString(maskDcmDataset, DCM_StudyID, dicomMask.getStudyId());
+    AddTagToDcmDatsetAsString(maskDcmDataset, DCM_StudyID, dicomMask.getStudyID());
     AddTagToDcmDatsetAsString(maskDcmDataset, DCM_StudyDescription, dicomMask.getStudyDescription());
     AddTagToDcmDatsetAsString(maskDcmDataset, DCM_ModalitiesInStudy, dicomMask.getStudyModality());
     AddTagToDcmDatsetAsString(maskDcmDataset, DCM_StudyDate, dicomMask.getStudyDateRangeAsDICOMFormat());

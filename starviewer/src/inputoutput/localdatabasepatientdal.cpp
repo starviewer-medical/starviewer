@@ -98,9 +98,9 @@ QString LocalDatabasePatientDAL::buildSqlSelect(const DicomMask &patientMaskToSe
     selectSentence = "Select ID, DICOMPatientID, Name, Birthdate, Sex "
                        "From Patient ";
 
-    if (!patientMaskToSelect.getPatientId().isEmpty())
+    if (!patientMaskToSelect.getPatientID().isEmpty())
     {
-        whereSentence = QString(" Where DICOMPatientID = '%1' ").arg(DatabaseConnection::formatTextToValidSQLSyntax(patientMaskToSelect.getPatientId()));
+        whereSentence = QString(" Where DICOMPatientID = '%1' ").arg(DatabaseConnection::formatTextToValidSQLSyntax(patientMaskToSelect.getPatientID()));
     }
 
     return selectSentence + whereSentence;

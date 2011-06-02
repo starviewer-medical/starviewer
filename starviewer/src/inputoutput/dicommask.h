@@ -31,7 +31,7 @@ public:
     void setPatientSex(const QString &patientSex);
 
     /// Indiquem el patient Id pel qual filtrar
-    void setPatientId(const QString &patientId);
+    void setPatientID(const QString &patientID);
 
     /// This action especified that in the search we want the Patient's Age
     /// @param  Patient's age of the patient to search.
@@ -41,7 +41,7 @@ public:
     /// This action especified that in the search we want the Study's Id
     /// @param  Study's Id of the study to search.
     /// @return state of the method
-    void setStudyId(const QString &studyId);
+    void setStudyID(const QString &studyID);
 
     ///Indiquem entre quines dates volem filtrar els estudis. Si els dos paràmetres són Nulls es busquen tots els estudis, si per exemple minimumDate és null
     ///i a maximumDate se li passa valor buscarà els estudis fets abans o el mateix dia de la data indicada a maximumDate
@@ -82,7 +82,7 @@ public:
     QString getStudyInstanceUID() const;
 
     /// Retorna el Id del pacient a filtrar
-    QString getPatientId() const;
+    QString getPatientID() const;
 
     /// Retorna el nom del pacient a filtrar
     QString getPatientName() const;
@@ -102,7 +102,7 @@ public:
 
     /// Retorna Id de l'estudi
     /// @return   ID de l'estudi
-    QString getStudyId() const;
+    QString getStudyID() const;
 
     /// Retorna rang de dates en que s'han de buscar els estudis. Es retorna en format String per quan es fan cerques al PACS si és null significa que no hem 
     /// demanar al PACS que retorni aquell camp, si és buit significa que l'ha de retorna 
@@ -284,13 +284,13 @@ private:
     //ja que QString té 3 estats null (camp no sol·licitat), empty (s'ha de tornar aquell camp per tots els estudis que compleixin la cerca), 
     //valor s'han de tornar els estudis que tinguin aquell valor.
 
-    QString m_patientId;
+    QString m_patientID;
     QString m_patientName;
     QString m_patientBirthMinimum;
     QString m_patientBirthMaximum;
     QString m_patientSex;
     QString m_patientAge;
-    QString m_studyId;
+    QString m_studyID;
     QString m_studyDateMinimum;
     QString m_studyDateMaximum;
     QString m_studyTimeMinimum;
