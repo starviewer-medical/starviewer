@@ -4,9 +4,11 @@
 #include <QList>
 #include <QHash>
 #include <assoc.h>
+#include <dcdeftag.h>
 
 #include "pacsdevice.h"
 #include "pacsrequeststatus.h"
+#include "dicommask.h"
 /// This class helps to interactive with the pacs, allow us to find studies in the pacs setting a search mask. Very important for this class a connection
 /// and a mask search must be setted befoer query Studies
 
@@ -17,7 +19,6 @@ struct T_DIMSE_C_FindRSP;
 
 namespace udg {
 
-class DicomMask;
 class Patient;
 class Study;
 class Series;
@@ -64,12 +65,23 @@ private:
     /// Afegeix l'objecte dicom a la llista d'imatges si no hi existeix
     void addImage(DICOMTagReader *dicomTagReader);
 
+    ///Ens converteix un DICOMMask a un DcmDataset per poder fer la query al PACS
+    DcmDataset* ConvertDICOMMaskToDcmDataset(DicomMask dicomMask);
+
+    ///Ens afegeix el tag amb el seu valor al DcmDataset passat per paràmetre, sempre i quan tagValue no sigui null
+    void AddTagToDcmDatsetAsString(DcmDataset *dcmDataset, DcmTagKey dcmTagKey, QString tagValue);
+
+    ///Quan consultem al PACS li hem d'indicar a quin nivell es vol fer la cerca, en funció dels tags que demanem al PACS, per exemple si al PACS demanem tags de 
+    ///sèrie i estudi li hem d'indicar que la cerca és a nivell de sèrie, si li demanem només tags d'estudi se li ha d'indicar que és a nivell d'estudi. Aquest mètode
+    ///a través de la dicomMask ens indica a quin nivell es fa la cerca
+    QString getQueryLevelFromDICOMMask(DicomMask dicomMask);
+
     /// Converteix la respota rebuda per partl del PACS a QueryRequestStatus i  en cas d'error processa la resposta i grava l'error al log
     PACSRequestStatus::QueryRequestStatus processResponseStatusFromFindUser(T_DIMSE_C_FindRSP *findResponse, DcmDataset *statusDetail);
 
 private:
     T_ASC_PresentationContextID m_presId;
-    DcmDataset *m_mask;
+    DicomMask m_dicomMask;
     PacsDevice m_pacsDevice;
     PACSConnection *m_pacsConnection;
 

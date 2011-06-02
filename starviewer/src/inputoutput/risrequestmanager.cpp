@@ -262,11 +262,8 @@ void RISRequestManager::retrieveFoundStudiesFromPACS(QueryPacsJob *queryPACSJob)
 RetrieveDICOMFilesFromPACSJob* RISRequestManager::retrieveStudy(QString pacsIDToRetrieve, Study *study)
 {
     PacsDevice pacsDevice = PacsDeviceManager().getPACSDeviceByID(pacsIDToRetrieve);
-    DicomMask studyToRetrieveDICOMMask;
-    studyToRetrieveDICOMMask.setStudyInstanceUID(study->getInstanceUID());
 
-    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = new RetrieveDICOMFilesFromPACSJob(pacsDevice, study, studyToRetrieveDICOMMask,
-                                                                                                     RetrieveDICOMFilesFromPACSJob::Medium);
+    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = new RetrieveDICOMFilesFromPACSJob(pacsDevice, RetrieveDICOMFilesFromPACSJob::Medium, study);
 
     m_qpopUpRISRequestsScreen->addStudyToRetrieveByAccessionNumber(retrieveDICOMFilesFromPACSJob);
     connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobFinished(PACSJob *)), SLOT(retrieveDICOMFilesFromPACSJobFinished(PACSJob *)));

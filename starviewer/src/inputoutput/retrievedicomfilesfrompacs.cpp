@@ -9,6 +9,7 @@
 #include <dcdeftag.h>
 
 #include <QDir>
+#include <QString>
 
 #include "status.h"
 #include "logging.h"
@@ -343,7 +344,7 @@ void RetrieveDICOMFilesFromPACS::subOperationCallback(void *subOperationCallback
     }
 }
 
-PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::retrieve(DicomMask dicomMask)
+PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::retrieve(const QString &studyInstanceUID, const QString &seriesInstanceUID, const QString &sopInstanceUID)
 {
     T_ASC_PresentationContextID presentationContextID;
     T_DIMSE_C_MoveRSP moveResponse;
@@ -352,7 +353,7 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::retrieve(Di
     m_pacsConnection = new PACSConnection(m_pacs);
     PACSRequestStatus::RetrieveRequestStatus retrieveRequestStatus;
     MoveSCPCallbackData moveSCPCallbackData;
-
+    DcmDataset *dcmDatasetToRetrieve = getDcmDatasetOfImagesToRetrieve(studyInstanceUID, seriesInstanceUID, sopInstanceUID);
     m_numberOfImagesRetrieved = 0;
 
     // TODO S'hauria de comprovar que es tracti d'un PACS amb el servei de retrieve configurat
@@ -379,7 +380,7 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::retrieve(Di
     T_DIMSE_C_MoveRQ moveRequest = getConfiguredMoveRequest(association);
     ASC_getAPTitles(association->params, moveRequest.MoveDestination, NULL, NULL);
 
-    OFCondition condition = DIMSE_moveUser(association, presentationContextID, &moveRequest, dicomMask.getDicomMask(), moveCallback, &moveSCPCallbackData,
+    OFCondition condition = DIMSE_moveUser(association, presentationContextID, &moveRequest, dcmDatasetToRetrieve, moveCallback, &moveSCPCallbackData,
                                            DIMSE_BLOCKING, 0, m_pacsConnection->getNetwork(), subOperationCallback, this, &moveResponse, &statusDetail,
                                            NULL /*responseIdentifiers*/);
 
@@ -398,6 +399,8 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::retrieve(Di
     {
         delete statusDetail;
     }
+
+    delete dcmDatasetToRetrieve;
 
     return retrieveRequestStatus;
 }
@@ -426,8 +429,46 @@ T_DIMSE_C_MoveRQ RetrieveDICOMFilesFromPACS::getConfiguredMoveRequest(T_ASC_Asso
     return moveRequest;
 }
 
+DcmDataset* RetrieveDICOMFilesFromPACS::getDcmDatasetOfImagesToRetrieve(const QString &studyInstanceUID, const QString &seriesInstanceUID, const QString &sopInstanceUID)
+{
+    DcmDataset *dcmDatasetToRetrieve = new DcmDataset();
+    QString retrieveLevel = "STUDY";
+
+    DcmElement *elemSpecificCharacterSet = newDicomElement(DCM_SpecificCharacterSet);
+    // ISO_IR 100 és Latin1
+    elemSpecificCharacterSet->putString("ISO_IR 100");
+    dcmDatasetToRetrieve->insert(elemSpecificCharacterSet, OFTrue);
+
+    DcmElement *elem = newDicomElement(DCM_StudyInstanceUID);
+    elem->putString(qPrintable(studyInstanceUID));
+    dcmDatasetToRetrieve->insert(elem, OFTrue);
+
+    if (!seriesInstanceUID.isEmpty())
+    {
+        DcmElement *elem = newDicomElement(DCM_SeriesInstanceUID);
+        elem->putString(qPrintable(seriesInstanceUID));
+        dcmDatasetToRetrieve->insert(elem, OFTrue);
+        retrieveLevel = "SERIES";
+    }
+
+    if (!sopInstanceUID.isEmpty())
+    {
+        DcmElement *elem = newDicomElement(DCM_SOPInstanceUID);
+        elem->putString(qPrintable(sopInstanceUID));
+        dcmDatasetToRetrieve->insert(elem, OFTrue);
+        retrieveLevel = "IMAGE";
+    }
+
+    // Especifiquem a quin nivell es fa el QueryRetrieve
+    DcmElement *elemQueryRetrieveLevel = newDicomElement(DCM_QueryRetrieveLevel);
+    elemQueryRetrieveLevel->putString(qPrintable(retrieveLevel));
+    dcmDatasetToRetrieve->insert(elemQueryRetrieveLevel, OFTrue);
+
+    return dcmDatasetToRetrieve;
+}
+
 PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResponseStatusFromMoveSCP(T_DIMSE_C_MoveRSP *moveResponse,
-                                                                                                      DcmDataset *statusDetail)
+    DcmDataset *statusDetail)
 {
     // Llista de camps relacionats amb l'error que poden contenir informació adicional
     QList<DcmTagKey> relatedFieldsList;
