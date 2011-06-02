@@ -48,7 +48,7 @@ public:
     void clear();
 
     /// Descarrega una estudi del pacs
-    void retrieve(QString pacsIdToRetrieve, Study *studyToRetrieve, DicomMask maskStudyToRetrieve, ActionsAfterRetrieve actionAfterRetrieve);
+    void retrieve(QString pacsIdToRetrieve, ActionsAfterRetrieve actionAfterRetrieve, Study *studyToRetrieve, const QString &seriesInstanceUIDToRetrieve = "", const QString &sopInstanceUIDToRetrieve = "");
 
 signals:
     /// Signal que s'emet per indicar que es netegin els camps de cerca

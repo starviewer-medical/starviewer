@@ -283,7 +283,8 @@ void QInputOutputPacsWidget::retrieveSelectedStudies()
 
     foreach (DicomMask dicomMask, m_studyTreeWidget->getDicomMaskOfSelectedItems())
     {
-        retrieve(getPacsIDFromQueriedStudies(dicomMask.getStudyInstanceUID()), m_studyTreeWidget->getStudy(dicomMask.getStudyInstanceUID()), dicomMask, None);
+        retrieve(getPacsIDFromQueriedStudies(dicomMask.getStudyInstanceUID()), None, m_studyTreeWidget->getStudy(dicomMask.getStudyInstanceUID()), 
+            dicomMask.getSeriesInstanceUID(), dicomMask.getSOPInstanceUID());
     }
 }
 
@@ -298,7 +299,8 @@ void QInputOutputPacsWidget::retrieveAndViewSelectedStudies()
 
     foreach (DicomMask dicomMask, m_studyTreeWidget->getDicomMaskOfSelectedItems())
     {
-        retrieve(getPacsIDFromQueriedStudies(dicomMask.getStudyInstanceUID()), m_studyTreeWidget->getStudy(dicomMask.getStudyInstanceUID()), dicomMask, View);
+        retrieve(getPacsIDFromQueriedStudies(dicomMask.getStudyInstanceUID()), View, m_studyTreeWidget->getStudy(dicomMask.getStudyInstanceUID()), 
+            dicomMask.getSeriesInstanceUID(), dicomMask.getSOPInstanceUID());
     }
 }
 
@@ -344,21 +346,21 @@ void QInputOutputPacsWidget::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacs
     pacsJob->deleteLater();
 }
 
-void QInputOutputPacsWidget::retrieve(QString pacsIDToRetrieve, Study *studyToRetrieve, DicomMask maskStudyToRetrieve,
-                                      ActionsAfterRetrieve actionsAfterRetrieve)
+void QInputOutputPacsWidget::retrieve(QString pacsIDToRetrieve, ActionsAfterRetrieve actionAfterRetrieve, Study *studyToRetrieve,
+    const QString &seriesInstanceUIDToRetrieve, const QString &sopInstanceUIDToRetrieve)
 {
     PacsDevice pacsDevice = PacsDeviceManager().getPACSDeviceByID(pacsIDToRetrieve);
-    RetrieveDICOMFilesFromPACSJob::RetrievePriorityJob retrievePriorityJob = actionsAfterRetrieve == View ? RetrieveDICOMFilesFromPACSJob::High
+    RetrieveDICOMFilesFromPACSJob::RetrievePriorityJob retrievePriorityJob = actionAfterRetrieve == View ? RetrieveDICOMFilesFromPACSJob::High
         : RetrieveDICOMFilesFromPACSJob::Medium;
 
-    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = new RetrieveDICOMFilesFromPACSJob(pacsDevice, studyToRetrieve, maskStudyToRetrieve,
-        retrievePriorityJob);
+    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = new RetrieveDICOMFilesFromPACSJob(pacsDevice, retrievePriorityJob, studyToRetrieve,
+        seriesInstanceUIDToRetrieve, sopInstanceUIDToRetrieve);
 
     m_pacsManager->enqueuePACSJob(retrieveDICOMFilesFromPACSJob);
     connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobStarted(PACSJob *)), SLOT(retrieveDICOMFilesFromPACSJobStarted(PACSJob *)));
     connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobFinished(PACSJob *)), SLOT(retrieveDICOMFilesFromPACSJobFinished(PACSJob *)));
 
-    m_actionsWhenRetrieveJobFinished.insert(retrieveDICOMFilesFromPACSJob->getPACSJobID(), actionsAfterRetrieve);
+    m_actionsWhenRetrieveJobFinished.insert(retrieveDICOMFilesFromPACSJob->getPACSJobID(), actionAfterRetrieve);
 }
 
 bool QInputOutputPacsWidget::AreValidQueryParameters(DicomMask *maskToQuery, QList<PacsDevice> pacsToQuery)

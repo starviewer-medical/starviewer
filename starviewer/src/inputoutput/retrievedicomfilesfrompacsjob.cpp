@@ -21,16 +21,16 @@
 
 namespace udg {
 
-RetrieveDICOMFilesFromPACSJob::RetrieveDICOMFilesFromPACSJob(PacsDevice pacsDevice, Study *studyToRetrieveDICOMFiles, DicomMask dicomMaskToRetrieve,
-                                                             RetrievePriorityJob retrievePriorityJob)
- : PACSJob(pacsDevice)
+RetrieveDICOMFilesFromPACSJob::RetrieveDICOMFilesFromPACSJob(PacsDevice pacsDevice, RetrievePriorityJob retrievePriorityJob, Study *studyToRetrieveDICOMFiles, 
+    const QString &seriesInstanceUIDToRetrieve, const QString &sopInstanceUIDToRetrieve) : PACSJob(pacsDevice)
 {
     Q_ASSERT(studyToRetrieveDICOMFiles);
     Q_ASSERT(studyToRetrieveDICOMFiles->getParentPatient());
 
     m_retrieveDICOMFilesFromPACS = new RetrieveDICOMFilesFromPACS(getPacsDevice());
     m_studyToRetrieveDICOMFiles = studyToRetrieveDICOMFiles;
-    m_dicomMaskToRetrieve = dicomMaskToRetrieve;
+    m_seriesInstanceUIDToRetrieve = seriesInstanceUIDToRetrieve;
+    m_SOPInstanceUIDToRetrieve = sopInstanceUIDToRetrieve;
     m_retrievePriorityJob = retrievePriorityJob;
 }
 
@@ -57,7 +57,7 @@ void RetrieveDICOMFilesFromPACSJob::run()
                      "l'estudi UID: %6, series UID: %7, SOP Instance UID:%8")
         .arg(getPacsDevice().getAETitle(), getPacsDevice().getAddress(), QString::number(getPacsDevice().getQueryRetrieveServicePort()))
         .arg(settings.getValue(InputOutputSettings::LocalAETitle).toString(), settings.getValue(InputOutputSettings::IncomingDICOMConnectionsPort).toString())
-        .arg(m_dicomMaskToRetrieve.getStudyInstanceUID(), m_dicomMaskToRetrieve.getSeriesInstanceUID(), m_dicomMaskToRetrieve.getSOPInstanceUID()));
+        .arg(m_studyToRetrieveDICOMFiles->getInstanceUID(), m_seriesInstanceUIDToRetrieve, m_SOPInstanceUIDToRetrieve));
 
     m_numberOfSeriesRetrieved = 0;
     m_lastImageSeriesInstanceUID = "";
@@ -98,16 +98,17 @@ void RetrieveDICOMFilesFromPACSJob::run()
         // Connexions per finalitzar els threads
         connect(&patientFiller, SIGNAL(patientProcessed(Patient *)), &fillersThread, SLOT(quit()), Qt::DirectConnection);
 
-        localDatabaseManager.setStudyRetrieving(m_dicomMaskToRetrieve.getStudyInstanceUID());
+        localDatabaseManager.setStudyRetrieving(m_studyToRetrieveDICOMFiles->getInstanceUID());
         fillersThread.start();
 
-        m_retrieveRequestStatus = m_retrieveDICOMFilesFromPACS->retrieve(m_dicomMaskToRetrieve);
+        m_retrieveRequestStatus = m_retrieveDICOMFilesFromPACS->retrieve(m_studyToRetrieveDICOMFiles->getInstanceUID(), m_seriesInstanceUIDToRetrieve,
+            m_SOPInstanceUIDToRetrieve);
 
         if ((m_retrieveRequestStatus == PACSRequestStatus::RetrieveOk || m_retrieveRequestStatus == PACSRequestStatus::RetrieveSomeDICOMFilesFailed) &&
             !this->isAbortRequested())
         {
             INFO_LOG(QString("Ha finalitzat la descarrega de l'estudi %1 del PACS %2, s'han descarregat %3 fitxers")
-                .arg(m_dicomMaskToRetrieve.getStudyInstanceUID(), getPacsDevice().getAETitle())
+                .arg(m_studyToRetrieveDICOMFiles->getInstanceUID(), getPacsDevice().getAETitle())
                 .arg(m_retrieveDICOMFilesFromPACS->getNumberOfDICOMFilesRetrieved()));
 
             m_numberOfSeriesRetrieved++;
@@ -221,17 +222,17 @@ void RetrieveDICOMFilesFromPACSJob::deleteRetrievedDICOMFilesIfStudyNotExistInDa
 {
     // Comprovem si l'estudi està inserit a la base de dades, si és així vol dir que anteriorment s'havia descarregat un part o tot l'estudi,
     // com que ja tenim altres elements d'aquest estudi inserits a la base de dades no esborrem el directori de l'estudi
-    if (!existStudyInLocalDatabase(m_dicomMaskToRetrieve.getStudyInstanceUID()))
+    if (!existStudyInLocalDatabase(m_studyToRetrieveDICOMFiles->getInstanceUID()))
     {
         // Si l'estudi no existeix a la base de dades esborrem el contingut del directori, en principi segons la normativa DICO; si rebem un status de
         // tipus error per part de MoveSCP indicaria s'ha pogut descarregar cap objecte dicom amb èxit
 
-        INFO_LOG("L'estudi " + m_dicomMaskToRetrieve.getStudyInstanceUID() + " no existeix a la base de de dades, esborrem el contingut del seu directori.");
-        DeleteDirectory().deleteDirectory(LocalDatabaseManager().getStudyPath(m_dicomMaskToRetrieve.getStudyInstanceUID()), true);
+        INFO_LOG("L'estudi " + m_studyToRetrieveDICOMFiles->getInstanceUID() + " no existeix a la base de de dades, esborrem el contingut del seu directori.");
+        DeleteDirectory().deleteDirectory(LocalDatabaseManager().getStudyPath(m_studyToRetrieveDICOMFiles->getInstanceUID()), true);
     }
     else
     {
-        INFO_LOG("L'estudi " + m_dicomMaskToRetrieve.getStudyInstanceUID() + " existeix a la base de dades, no esborrem el contingut del seu directori.");
+        INFO_LOG("L'estudi " + m_studyToRetrieveDICOMFiles->getInstanceUID() + " existeix a la base de dades, no esborrem el contingut del seu directori.");
     }
 }
 

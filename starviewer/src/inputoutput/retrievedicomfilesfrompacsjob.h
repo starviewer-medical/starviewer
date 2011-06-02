@@ -23,8 +23,10 @@ public:
     /// Definim la prioritat del Job, aquesta prioritat ens definirà l'ordre d'execució en la cua
     enum RetrievePriorityJob { Low = 0, Medium = 2, High = 3 };
 
-    /// Constructor/Destructor de la classe
-    RetrieveDICOMFilesFromPACSJob(PacsDevice pacsDevice, Study *studyToRetrieveDICOMFiles, DicomMask dicomMaskToRetrieve, RetrievePriorityJob);
+    /// Constructor/Destructor de la classe. Si seriesInstanceUID està buit descarregarà tot l'estudi, si té valor només aquella sèrie, i si també especifiquem el SOPInstanceUID
+    //només descarregarà la imatge amb el SOPInstanceUID de la sèrie especificada, de l'estudi especificat
+    RetrieveDICOMFilesFromPACSJob(PacsDevice pacsDevice, RetrievePriorityJob, Study *studyToRetrieveDICOMFiles, const QString &seriesInstanceUID = "" , 
+        const QString &sopInstanceUID = "");
     ~RetrieveDICOMFilesFromPACSJob();
 
     /// Retorna el tipus de PACSJob que és l'objecte
@@ -90,7 +92,8 @@ private:
 private:
     RetrieveDICOMFilesFromPACS *m_retrieveDICOMFilesFromPACS;
     Study *m_studyToRetrieveDICOMFiles;
-    DicomMask m_dicomMaskToRetrieve;
+    QString m_seriesInstanceUIDToRetrieve;
+    QString m_SOPInstanceUIDToRetrieve;
     PACSRequestStatus::RetrieveRequestStatus m_retrieveRequestStatus;
     RetrievePriorityJob m_retrievePriorityJob;
     QList<QString> m_retrievedSeriesInstanceUID;

@@ -35,7 +35,7 @@ public:
     RetrieveDICOMFilesFromPACS(PacsDevice pacs);
 
     /// Starts the download
-    PACSRequestStatus::RetrieveRequestStatus retrieve(DicomMask dicomMask);
+    PACSRequestStatus::RetrieveRequestStatus retrieve(const QString &studyInstanceUID, const QString &seriesInstanceUID = "", const QString &sopInstanceUID = "");
 
     /// Cancel·la la descàrrega. La cancel·lació de la descàrrega és assíncrona, quan l'estudi s'ha cancel·lat es retorna l'Status RetrieveCancelled
     /// El motiu de que sigui assíncron és perquè mentre s'està processant la descàrrega d'una imatge no es pot cancel·lar la descàrrega, només es pot
@@ -68,6 +68,9 @@ private:
     /// Retorna el nom del fitxer amb que s'ha de guardar l'objecte descarregat, composa el path on s'ha de guardar més el nom del fitxer.
     /// Si el path on s'ha de guardar la imatge no existeix, el crea
     QString getAbsoluteFilePathCompositeInstance(DcmDataset *imageDataset, QString fileName);
+
+    ///Retorna el DcmDataset amb les dades de l'estudi sol·licitat per descarregar
+    DcmDataset* getDcmDatasetOfImagesToRetrieve(const QString &studyInstanceUID, const QString &seriesInstanceUID, const QString &sopInstanceUID);
 
     /// Configura l'objecte MoveRequest per la descàrrega de fitxers DICOM
     T_DIMSE_C_MoveRQ getConfiguredMoveRequest(T_ASC_Association *association);

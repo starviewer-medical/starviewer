@@ -269,8 +269,6 @@ public:
     /// @return SOPInstance UID de l'imatge
     QString getSOPInstanceUID() const;
 
-    DcmDataset* getDicomMask();
-
     bool operator ==(const DicomMask &mask);
 
     /// Defineix l'operador suma dos màscares, en el cas que el this i la màscara passada per paràmetre tinguin un valor de filtratge per una determinada
@@ -316,9 +314,6 @@ private:
     QString m_PPSStartTime;
     QString m_SOPInstanceUID;
     QString m_imageNumber;
-
-    /// Retorna el nivell de QueryRetrieve, en funció dels camps de la màscara que ens han introduït
-    QString getQueryRetrieveLevel();
 };
 
 } // End namespace

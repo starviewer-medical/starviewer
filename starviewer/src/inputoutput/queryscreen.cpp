@@ -418,17 +418,13 @@ void QueryScreen::writeSettings()
 
 void QueryScreen::retrieveStudy(QInputOutputPacsWidget::ActionsAfterRetrieve actionAfterRetrieve, QString pacsID, Study *study)
 {
-    DicomMask maskStudyToRetrieve;
-
-    maskStudyToRetrieve.setStudyInstanceUID(study->getInstanceUID());
-
     // QueryScreen rep un signal cada vegada que qualsevol estudis en el procés de descàrrega canvia d'estat,
     // en principi només ha de reemetre aquests signals cap a fora quan és un signal que afecta un estudi
     // sol·licitat a través d'aquest mètode públic, per això mantenim aquesta llista que ens indica els estudis
     // pendents de descarregar sol·licitats a partir d'aquest mètode
     m_studyRequestedToRetrieveFromPublicMethod.append(study->getInstanceUID());
 
-    m_qInputOutputPacsWidget->retrieve(pacsID, study, maskStudyToRetrieve, actionAfterRetrieve);
+    m_qInputOutputPacsWidget->retrieve(pacsID, actionAfterRetrieve, study);
 }
 
 void QueryScreen::studyRetrieveFailedSlot(QString studyInstanceUID)
