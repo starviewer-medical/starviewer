@@ -457,9 +457,9 @@ bool DICOMDIRReader::matchDicomMaskToStudyUID(DicomMask *mask, Study *study)
 bool DICOMDIRReader::matchDicomMaskToPatientId(DicomMask *mask, Patient *patient)
 {
     // Si la màscara és buida rebem  '', si té valor es rep *ID_PACIENT*
-    if (mask->getPatientId().length() > 1)
+    if (mask->getPatientID().length() > 1)
     {
-        QString clearedMaskPatientID = mask->getPatientId().remove("*");
+        QString clearedMaskPatientID = mask->getPatientID().remove("*");
 
         return patient->getID().contains(clearedMaskPatientID, Qt::CaseInsensitive);
     }

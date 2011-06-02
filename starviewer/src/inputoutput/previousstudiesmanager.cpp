@@ -63,7 +63,7 @@ void PreviousStudiesManager::makeAsynchronousStudiesQuery(Patient *patient, QDat
     if (!patient->getID().isEmpty())
     {
         DicomMask maskQueryByID = getBasicDicomMask();
-        maskQueryByID.setPatientId(patient->getID());
+        maskQueryByID.setPatientID(patient->getID());
         queryDicomMasksList << maskQueryByID;
     }
 
@@ -263,8 +263,8 @@ DicomMask PreviousStudiesManager::getBasicDicomMask()
 
     /// Definim els camps que la consulta ha de retornar
     dicomMask.setPatientName("");
-    dicomMask.setPatientId("");
-    dicomMask.setStudyId("");
+    dicomMask.setPatientID("");
+    dicomMask.setStudyID("");
     dicomMask.setStudyDescription("");
     dicomMask.setStudyModality("");
     dicomMask.setStudyDate(QDate(), QDate());

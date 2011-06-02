@@ -54,10 +54,10 @@ DicomMask QAdvancedSearchWidget::buildDicomMask()
     mask.setPatientAge("");
     mask.setPatientSex("");
     mask.setPatientBirth(QDate(), QDate());
-    mask.setPatientId("");
+    mask.setPatientID("");
     mask.setPatientName("");
 
-    mask.setStudyId(m_studyIDText->text());
+    mask.setStudyID(m_studyIDText->text());
     mask.setStudyDescription("");
     mask.setStudyInstanceUID(m_studyUIDText->text());
     mask.setStudyModality(m_studyModalityText->text());
