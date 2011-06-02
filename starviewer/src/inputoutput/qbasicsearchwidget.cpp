@@ -157,9 +157,9 @@ DicomMask QBasicSearchWidget::buildDicomMask()
             {
                 mask.setSeriesModality("NM");
             }
-            else if (m_checkDT->isChecked())
+            else if (m_checkOP->isChecked())
             {
-                mask.setSeriesModality("DT");
+                mask.setSeriesModality("OP");
             }
             else if (m_checkPT->isChecked())
             {

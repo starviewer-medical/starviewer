@@ -489,12 +489,12 @@
              </widget>
             </item>
             <item row="2" column="2">
-             <widget class="QCheckBox" name="m_checkDT">
+             <widget class="QCheckBox" name="m_checkOP">
               <property name="toolTip">
-               <string> Dental Technician</string>
+               <string>Ophthalmic Photography</string>
               </property>
               <property name="text">
-               <string>DT</string>
+               <string>OP</string>
               </property>
               <property name="autoExclusive">
                <bool>true</bool>
