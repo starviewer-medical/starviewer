@@ -175,7 +175,7 @@ bool CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, const
     // 6è, 7è - Resolució per la previsualització de la imatge, com que no en farem previsualització deixem els valors standards.
     m_presentationState = new DVPresentationState(NULL, 1024, 1024, 8192, 8192, 256, 256);
 
-    INFO_LOG("Es transformara la imatge " + imageToPrint->getPath() + " per imprimir.");
+    INFO_LOG(QString("Es transformara la imatge %1 frame %2 per imprimir.").arg(imageToPrint->getPath()).arg(imageToPrint->getFrameNumber()));
 
     // Carreguem la imatge que hem d'imprimor
     status = DVPSHelper::loadFileFormat(qPrintable(imageToPrint->getPath()), imageToPrintDcmFileFormat);
@@ -201,6 +201,12 @@ bool CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, const
     // en aquest cas l'indiquem que no és l'amo, per poder-lo destruir nosaltres.
     m_presentationState->attachImage(imageToPrintDcmFileFormat, false);
 
+    if (imageToPrint->getFrameNumber() != 0)
+    {
+        //Si no és el primer frame el seleccionem. El número de Frame per dcmtk sempre comença a partir del 1 mentre per nosaltres comença a partir del 0,
+        //per això sumem més 1
+        m_presentationState->selectImageFrameNumber(imageToPrint->getFrameNumber() + 1);
+    }
     bitmapSize = m_presentationState->getPrintBitmapSize();
 
     status = m_presentationState->getPrintBitmapWidthHeight(bitmapWidth, bitmapHeight);

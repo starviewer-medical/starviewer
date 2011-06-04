@@ -568,49 +568,23 @@ void QDicomPrintExtension::showDicomPrintError(DicomPrint::DicomPrintError error
 
 void QDicomPrintExtension::updateVolumeSupport()
 {
-    bool isNotSupported = false;
-
     // Comprovem si té color.
     QString pi = m_2DView->getInput()->getImage(0)->getPhotometricInterpretation();
     if (pi != "MONOCHROME1" && pi != "MONOCHROME2")
     {
         m_noSupportedSeriesMissage->setText(tr("This series cannot be printed because color is not supported."));
-        isNotSupported = true;
-    }
-    // Comprovem si és multi-frame
-    // Si les imatges tenen el mateix path, és que són multi-frame
-    // TODO això no deixa de ser un hack temporal. Quan millorem el disseny tindrem millors mètodes per esbrinar això.
-    QList<Image*> imageList = m_2DView->getInput()->getImages();
-    if (imageList.count() > 1)
-    {
-        // Comprovant la primera i segona imatges n'hi ha prou
-        if (imageList.at(0)->getPath() == imageList.at(1)->getPath())
-        {
-            m_noSupportedSeriesMissage->setText(tr("This series cannot be printed because multi-frame images are not supported."));
-            isNotSupported = true;
-        }
-    }
+        m_noSupportedSeriesFrame->setVisible(true);
 
-    if (isNotSupported)
-    {
-        if (!m_noSupportedSeriesFrame->isVisible())
-        {
-            m_noSupportedSeriesFrame->setVisible(true);
-
-            setEnabledPrintControls(false);
-        }
+        setEnabledPrintControls(false);
     }
     else
     {
-        if (m_noSupportedSeriesFrame->isVisible())
-        {
-            m_noSupportedSeriesFrame->setVisible(false);
+        m_noSupportedSeriesFrame->setVisible(false);
 
-            // Només activem les opcions si tenim impressores.
-            if (m_selectedPrinterComboBox->count() > 0)
-            {
-                setEnabledPrintControls(true);
-            }
+        // Només activem les opcions si tenim impressores.
+        if (m_selectedPrinterComboBox->count() > 0)
+        {
+            setEnabledPrintControls(true);
         }
     }
 }
