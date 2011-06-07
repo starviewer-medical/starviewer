@@ -66,10 +66,10 @@ private:
     void addImage(DICOMTagReader *dicomTagReader);
 
     ///Ens converteix un DICOMMask a un DcmDataset per poder fer la query al PACS
-    DcmDataset* ConvertDICOMMaskToDcmDataset(DicomMask dicomMask);
+    DcmDataset* convertDICOMMaskToDcmDataset(DicomMask dicomMask);
 
     ///Ens afegeix el tag amb el seu valor al DcmDataset passat per paràmetre, sempre i quan tagValue no sigui null
-    void AddTagToDcmDatsetAsString(DcmDataset *dcmDataset, DcmTagKey dcmTagKey, QString tagValue);
+    void addTagToDcmDatsetAsString(DcmDataset *dcmDataset, DcmTagKey dcmTagKey, QString tagValue);
 
     ///Quan consultem al PACS li hem d'indicar a quin nivell es vol fer la cerca, en funció dels tags que demanem al PACS, per exemple si al PACS demanem tags de 
     ///sèrie i estudi li hem d'indicar que la cerca és a nivell de sèrie, si li demanem només tags d'estudi se li ha d'indicar que és a nivell d'estudi. Aquest mètode
