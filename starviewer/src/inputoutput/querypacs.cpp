@@ -124,7 +124,7 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::query()
     return queryRequestStatus;
 }
 
-PACSRequestStatus::QueryRequestStatus QueryPacs::query(DicomMask mask)
+PACSRequestStatus::QueryRequestStatus QueryPacs::query(const DicomMask &mask)
 {
     m_cancelQuery = false;
     m_cancelRequestSent = false;
@@ -208,7 +208,7 @@ QHash<QString, QString> QueryPacs::getHashTablePacsIDOfStudyInstanceUID()
     return m_hashPacsIDOfStudyInstanceUID;
 }
 
-DcmDataset* QueryPacs::convertDICOMMaskToDcmDataset(DicomMask dicomMask)
+DcmDataset* QueryPacs::convertDICOMMaskToDcmDataset(const DicomMask &dicomMask)
 {
     DcmDataset *maskDcmDataset = new DcmDataset();
 
@@ -266,7 +266,7 @@ DcmDataset* QueryPacs::convertDICOMMaskToDcmDataset(DicomMask dicomMask)
     return maskDcmDataset;
 }
 
-void QueryPacs::addTagToDcmDatasetAsString(DcmDataset *dcmDataset, DcmTagKey dcmTagKey, QString tagValue)
+void QueryPacs::addTagToDcmDatasetAsString(DcmDataset *dcmDataset, const DcmTagKey &dcmTagKey, const QString &tagValue)
 {
     if (!tagValue.isNull())
     {
@@ -276,7 +276,7 @@ void QueryPacs::addTagToDcmDatasetAsString(DcmDataset *dcmDataset, DcmTagKey dcm
     }
 }
 
-QString QueryPacs::getQueryLevelFromDICOMMask(DicomMask dicomMask)
+QString QueryPacs::getQueryLevelFromDICOMMask(const DicomMask &dicomMask) const
 {
     bool isImageLevel = !dicomMask.getSOPInstanceUID().isNull() || !dicomMask.getImageNumber().isNull();
     bool isSeriesLevel = !dicomMask.getSeriesDescription().isNull() || !dicomMask.getSeriesDateRangeAsDICOMFormat().isNull() || !dicomMask.getSeriesModality().isNull() ||
