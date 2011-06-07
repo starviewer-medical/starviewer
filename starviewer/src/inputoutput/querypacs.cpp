@@ -217,36 +217,36 @@ DcmDataset* QueryPacs::convertDICOMMaskToDcmDataset(DicomMask dicomMask)
     // la majoria de països europeus. Per dubtes consultar C.12.1.1.2 on s'especifiquen quins Specific characters set, també és important
     // consultar el conformance statement del PACS contra el que consultem per saber quin Specific character set suporta. Com que el character set és Latin1
     // haurem de transformar tots el tags dicom que siguin string (SH, LO, ST, PN, LT, UT) a Latin1
-    addTagToDcmDatsetAsString(maskDcmDataset, DCM_SpecificCharacterSet, "ISO_IR 100");
+    addTagToDcmDatasetAsString(maskDcmDataset, DCM_SpecificCharacterSet, "ISO_IR 100");
 
     // Especifiquem a quin nivell es fa el QueryRetrieve
-    addTagToDcmDatsetAsString(maskDcmDataset, DCM_QueryRetrieveLevel, getQueryLevelFromDICOMMask(dicomMask));
+    addTagToDcmDatasetAsString(maskDcmDataset, DCM_QueryRetrieveLevel, getQueryLevelFromDICOMMask(dicomMask));
 
     //Afegim els tags d'estudi
-    addTagToDcmDatsetAsString(maskDcmDataset, DCM_PatientID, dicomMask.getPatientID());
-    addTagToDcmDatsetAsString(maskDcmDataset, DCM_PatientsName, dicomMask.getPatientName());
-    addTagToDcmDatsetAsString(maskDcmDataset, DCM_PatientsBirthDate, dicomMask.getPatientBirthRangeAsDICOMFormat());
-    addTagToDcmDatsetAsString(maskDcmDataset, DCM_PatientsSex, dicomMask.getPatientSex());
-    addTagToDcmDatsetAsString(maskDcmDataset, DCM_PatientsAge, dicomMask.getPatientAge());
+    addTagToDcmDatasetAsString(maskDcmDataset, DCM_PatientID, dicomMask.getPatientID());
+    addTagToDcmDatasetAsString(maskDcmDataset, DCM_PatientsName, dicomMask.getPatientName());
+    addTagToDcmDatasetAsString(maskDcmDataset, DCM_PatientsBirthDate, dicomMask.getPatientBirthRangeAsDICOMFormat());
+    addTagToDcmDatasetAsString(maskDcmDataset, DCM_PatientsSex, dicomMask.getPatientSex());
+    addTagToDcmDatasetAsString(maskDcmDataset, DCM_PatientsAge, dicomMask.getPatientAge());
 
     //Afegim els tags de sèrie
-    addTagToDcmDatsetAsString(maskDcmDataset, DCM_StudyInstanceUID, dicomMask.getStudyInstanceUID());
-    addTagToDcmDatsetAsString(maskDcmDataset, DCM_StudyID, dicomMask.getStudyID());
-    addTagToDcmDatsetAsString(maskDcmDataset, DCM_StudyDescription, dicomMask.getStudyDescription());
-    addTagToDcmDatsetAsString(maskDcmDataset, DCM_ModalitiesInStudy, dicomMask.getStudyModality());
-    addTagToDcmDatsetAsString(maskDcmDataset, DCM_StudyDate, dicomMask.getStudyDateRangeAsDICOMFormat());
-    addTagToDcmDatsetAsString(maskDcmDataset, DCM_StudyTime, dicomMask.getStudyTimeRangeAsDICOMFormat());
-    addTagToDcmDatsetAsString(maskDcmDataset, DCM_AccessionNumber, dicomMask.getAccessionNumber());
-    addTagToDcmDatsetAsString(maskDcmDataset, DCM_ReferringPhysiciansName, dicomMask.getReferringPhysiciansName());
-    addTagToDcmDatsetAsString(maskDcmDataset, DCM_SeriesNumber, dicomMask.getSeriesNumber());
-    addTagToDcmDatsetAsString(maskDcmDataset, DCM_SeriesDate, dicomMask.getSeriesDateRangeAsDICOMFormat());
-    addTagToDcmDatsetAsString(maskDcmDataset, DCM_Modality, dicomMask.getSeriesModality());
-    addTagToDcmDatsetAsString(maskDcmDataset, DCM_SeriesTime, dicomMask.getSeriesTimeRangeAsDICOMFormat());
-    addTagToDcmDatsetAsString(maskDcmDataset, DCM_SeriesDescription, dicomMask.getSeriesDescription());
-    addTagToDcmDatsetAsString(maskDcmDataset, DCM_ProtocolName, dicomMask.getSeriesProtocolName());
-    addTagToDcmDatsetAsString(maskDcmDataset, DCM_SeriesInstanceUID, dicomMask.getSeriesInstanceUID());
-    addTagToDcmDatsetAsString(maskDcmDataset, DCM_PerformedProcedureStepStartDate, dicomMask.getPPSStartDateAsRangeDICOMFormat());
-    addTagToDcmDatsetAsString(maskDcmDataset, DCM_PerformedProcedureStepStartTime, dicomMask.getPPSStartTimeAsRangeDICOMFormat());
+    addTagToDcmDatasetAsString(maskDcmDataset, DCM_StudyInstanceUID, dicomMask.getStudyInstanceUID());
+    addTagToDcmDatasetAsString(maskDcmDataset, DCM_StudyID, dicomMask.getStudyID());
+    addTagToDcmDatasetAsString(maskDcmDataset, DCM_StudyDescription, dicomMask.getStudyDescription());
+    addTagToDcmDatasetAsString(maskDcmDataset, DCM_ModalitiesInStudy, dicomMask.getStudyModality());
+    addTagToDcmDatasetAsString(maskDcmDataset, DCM_StudyDate, dicomMask.getStudyDateRangeAsDICOMFormat());
+    addTagToDcmDatasetAsString(maskDcmDataset, DCM_StudyTime, dicomMask.getStudyTimeRangeAsDICOMFormat());
+    addTagToDcmDatasetAsString(maskDcmDataset, DCM_AccessionNumber, dicomMask.getAccessionNumber());
+    addTagToDcmDatasetAsString(maskDcmDataset, DCM_ReferringPhysiciansName, dicomMask.getReferringPhysiciansName());
+    addTagToDcmDatasetAsString(maskDcmDataset, DCM_SeriesNumber, dicomMask.getSeriesNumber());
+    addTagToDcmDatasetAsString(maskDcmDataset, DCM_SeriesDate, dicomMask.getSeriesDateRangeAsDICOMFormat());
+    addTagToDcmDatasetAsString(maskDcmDataset, DCM_Modality, dicomMask.getSeriesModality());
+    addTagToDcmDatasetAsString(maskDcmDataset, DCM_SeriesTime, dicomMask.getSeriesTimeRangeAsDICOMFormat());
+    addTagToDcmDatasetAsString(maskDcmDataset, DCM_SeriesDescription, dicomMask.getSeriesDescription());
+    addTagToDcmDatasetAsString(maskDcmDataset, DCM_ProtocolName, dicomMask.getSeriesProtocolName());
+    addTagToDcmDatasetAsString(maskDcmDataset, DCM_SeriesInstanceUID, dicomMask.getSeriesInstanceUID());
+    addTagToDcmDatasetAsString(maskDcmDataset, DCM_PerformedProcedureStepStartDate, dicomMask.getPPSStartDateAsRangeDICOMFormat());
+    addTagToDcmDatasetAsString(maskDcmDataset, DCM_PerformedProcedureStepStartTime, dicomMask.getPPSStartTimeAsRangeDICOMFormat());
 
     if (!dicomMask.getRequestedProcedureID().isNull() || !dicomMask.getScheduledProcedureStepID().isNull())
     {
@@ -260,13 +260,13 @@ DcmDataset* QueryPacs::convertDICOMMaskToDcmDataset(DicomMask dicomMask)
     }
 
     //Afegim els tags d'imatges    
-    addTagToDcmDatsetAsString(maskDcmDataset, DCM_SOPInstanceUID, dicomMask.getSOPInstanceUID());
-    addTagToDcmDatsetAsString(maskDcmDataset, DCM_InstanceNumber, dicomMask.getImageNumber());
+    addTagToDcmDatasetAsString(maskDcmDataset, DCM_SOPInstanceUID, dicomMask.getSOPInstanceUID());
+    addTagToDcmDatasetAsString(maskDcmDataset, DCM_InstanceNumber, dicomMask.getImageNumber());
 
     return maskDcmDataset;
 }
 
-void QueryPacs::addTagToDcmDatsetAsString(DcmDataset *dcmDataset, DcmTagKey dcmTagKey, QString tagValue)
+void QueryPacs::addTagToDcmDatasetAsString(DcmDataset *dcmDataset, DcmTagKey dcmTagKey, QString tagValue)
 {
     if (!tagValue.isNull())
     {
