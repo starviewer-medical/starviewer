@@ -88,7 +88,7 @@ inline int run()
 
     // Generem els paràmetres argc i argv correctes sense els nostres paràmetres
     int modifiedArgc = arguments.count();
-    char *modifiedArgv[modifiedArgc];
+    char **modifiedArgv = new char*[modifiedArgc];
     int i = 0;
     foreach (const QString &argument, arguments)
     {
@@ -113,6 +113,7 @@ inline int run()
         delete modifiedArgv[i];
     }
 
+    delete modifiedArgv;
     return ret;
 }
 }
