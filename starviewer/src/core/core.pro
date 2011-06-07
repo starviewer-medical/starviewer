@@ -201,6 +201,7 @@ HEADERS += extensionfactory.h \
     dicomfilegenerator.h \
     dicomdictionary.h \
     dicomimagefilegenerator.h \
+    dicomvaluerepresentationconverter.h \
     imageorientationoperationsmapper.h \
     orientation.h \
     imageorientation.h \
@@ -408,6 +409,7 @@ SOURCES += extensionmediator.cpp \
     dicomwriterdcmtk.cpp \
     dicomfilegenerator.cpp \
     dicomimagefilegenerator.cpp \
+    dicomvaluerepresentationconverter.cpp \
     imageorientationoperationsmapper.cpp \
     orientation.cpp \
     imageorientation.cpp \
