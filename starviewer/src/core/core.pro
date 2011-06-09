@@ -246,7 +246,8 @@ HEADERS += extensionfactory.h \
     qcolortransferfunctiongraphicalviewnode.h \
     qopacitytransferfunctiongraphicalview.h \
     qopacitytransferfunctiongraphicalviewnode.h \
-    qopacitytransferfunctiongraphicalviewline.h
+    qopacitytransferfunctiongraphicalviewline.h \
+    machineidentifier.h
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
     mathtools.cpp \
@@ -453,7 +454,8 @@ SOURCES += extensionmediator.cpp \
     qcolortransferfunctiongraphicalviewnode.cpp \
     qopacitytransferfunctiongraphicalview.cpp \
     qopacitytransferfunctiongraphicalviewnode.cpp \
-    qopacitytransferfunctiongraphicalviewline.cpp
+    qopacitytransferfunctiongraphicalviewline.cpp \
+    machineidentifier.cpp
 TEMPLATE = lib
 DESTDIR = ./
 CONFIG += staticlib
