@@ -19,18 +19,15 @@ public:
     ImageOrientation();
     ~ImageOrientation();
     
-    /// Constructor a partir d'un string d'orientació en format DICOM
-    ImageOrientation(const QString &dicomFormattedImageOrientationString);
-    
     /// Constructor a partir de dos vectors 3D
     ImageOrientation(const QVector3D &rowVector, const QVector3D &columnVector);
     
-    /// Assigna la orientació proporcionada en el format estipulat pel DICOM: 6 valors separats per '\'
-    /// Si la cadena no està en el format esperat, es manté el valor que tenia fins aquell moment i es retorna fals, cert altrament.
+    /// Assigna la orientació proporcionada en el format estipulat pel DICOM: 6 valors numèrics separats per '\' o una cadena buida. 
+    /// Si la cadena no està en el format esperat, es re-inicialitzen els valors dels vectors i es retorna fals, cert altrament.
     bool setDICOMFormattedImageOrientation(const QString &imageOrientation);
 
-    /// Ens retorna la orientació en el format estipulat pel DICOM: 6 valors separats per '\'
-    /// En cas que el valor no s'hagi assignat la cadena serà buida.
+    /// Ens retorna la orientació en el format estipulat pel DICOM: 6 valors numèrics separats per '\'
+    /// En cas que no s'hagi introduit cap valor anteriorment, es retornarà una cadena buida
     QString getDICOMFormattedImageOrientation() const;
 
     /// Assigna la orientació a través dels 2 vectors 3D corresponents a les direccions de la fila i de la columna respectivament
@@ -42,27 +39,17 @@ public:
     QVector3D getColumnVector() const;
     QVector3D getNormalVector() const;
 
-    /// Ens diu si conté algun valor o no
-    bool isEmpty() const;
-
-    /// Operador còpia
-    ImageOrientation& operator=(const ImageOrientation &imageOrientation);
-
     /// Operador igualtat
     bool operator==(const ImageOrientation &imageOrientation) const;
 
 private:
-    /// Crea els vectors de doubles (row, column, normal) a partir del valor de l'string d'orientació
-    /// Si l'string és buit, els vectors també ho seran
-    void buildVectorsFromOrientationString();
+    /// Ens retorna la orientació dels dos vectors en una cadena en el format estipulat pel DICOM
+    QString convertToDICOMFormatString(const QVector3D &rowVector, const QVector3D &columnVector) const;
 
-    /// Inicialitza correctament els vectors de doubles que contenen les orientacions
-    void initializeVectors();
+    /// Inicialitza els vectors a (0,0,0)
+    void setVectorValuesToDefault();
 
 private:
-    /// Guarda la orientació en el format estipulat pel DICOM: 6 valors separats per '\'
-    QString m_imageOrientationString;
-
     /// Els 3 vectors de la orientació de la imatge.
     /// Els vectors fila i columna els obtindrem directament a partir de la cadena assignada amb setDICOMFormattedImageOrientation()
     /// El vector normal de la orientació de la imatge es calcularà fent el producte vectorial dels vectors fila i colummna
