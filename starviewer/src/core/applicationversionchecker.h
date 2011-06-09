@@ -64,8 +64,6 @@ private:
 
     /// Genera la url per fer la crida al servidor i obtenir la versió
     QString createWebServiceUrl();
-    /// Codifica en base64 una QByteArray i a més el transforma per que sigui una part d'una url vàlida
-    QString encryptBase64Url(const QString &url);
     /// Assigna el proxy per defecte, si n'hi ha, a un QNetworkAccessManager, si no n'hi ha el busca.
     void setProxy(const QUrl &url);
 
