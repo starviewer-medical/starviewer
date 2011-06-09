@@ -30,9 +30,10 @@ QString MachineIdentifier::getMacAddress()
     // Primer de tot mirar si hi ha interficia de xarxa local
     bool found = false;
     int index = 0;
-    while (!found && index < QNetworkInterface::allInterfaces().count())
+    QList<QNetworkInterface> allInterfaces = QNetworkInterface::allInterfaces();
+    while (!found && index < allInterfaces.count())
     {
-        QNetworkInterface inter = QNetworkInterface::allInterfaces()[index++];
+        QNetworkInterface inter = allInterfaces[index++];
 
         bool isMainInterface = false;
 #ifdef WIN32
@@ -55,9 +56,9 @@ QString MachineIdentifier::getMacAddress()
     {
         found = false;
         index = 0;
-        while (!found && index < QNetworkInterface::allInterfaces().count())
+        while (!found && index < allInterfaces.count())
         {
-            QNetworkInterface interface = QNetworkInterface::allInterfaces()[index++];
+            QNetworkInterface interface = allInterfaces[index++];
 
             QNetworkInterface::InterfaceFlags flags = interface.flags();
             bool flagsOk = flags.testFlag(QNetworkInterface::IsUp) && flags.testFlag(QNetworkInterface::IsRunning) &&
