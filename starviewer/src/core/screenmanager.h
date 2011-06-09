@@ -26,6 +26,9 @@ public:
     void moveToPreviousDesktop(QWidget *window);
     /// Mètode per moure la finestra a la següent pantalla segons l'identificador de pantalla
     void moveToNextDesktop(QWidget *window);
+    ///Restaura la finestra a l'estat d'abans d'estar minimitzada
+    void restoreFromMinimized(QWidget *window);
+
     /// Retrona quantes pantalles hi ha.
     int getNumberOfScreens();
     /// Retorna a quina pantalla està la finestra

@@ -16,6 +16,7 @@
 #include "singleton.h"
 #include "starviewerapplication.h"
 #include "interfacesettings.h"
+#include "screenmanager.h"
 
 // PACS --------------------------------------------
 #include "queryscreen.h"
@@ -284,6 +285,12 @@ void ExtensionHandler::processInput(const QStringList &inputFiles)
 
 void ExtensionHandler::processInput(QList<Patient*> patientsList, bool loadOnly)
 {
+    if (m_mainApp->isMinimized())
+    {
+        //Si la finestra d'Starviewer està minimitzada la tornem al seu estat original al visualitzar l'estudi
+        ScreenManager().restoreFromMinimized(m_mainApp);
+    }
+
     // Si de tots els pacients que es carreguen intentem carregar-ne un d'igual al que ja tenim carregat, el mantenim
     bool canReplaceActualPatient = true;
     if (m_mainApp->getCurrentPatient())

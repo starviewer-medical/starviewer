@@ -221,6 +221,14 @@ void ScreenManager::moveToNextDesktop(QWidget *window)
     moveToDesktop(window, desktopIllBe);
 }
 
+void ScreenManager::restoreFromMinimized(QWidget *window)
+{
+    //WindowState accepta una combinació dels Enums Qt::WindowState, el que fem amb aquest mètode es treure l'estat de minimitzat i li indiquem torna a està activa
+    //Imaginem que teníem la finestra maximitzada, si la minimitzem WindowState tindrà el valor Qt::WindowMinimized | QtWindowMaximized, i aplicant aquest codi treurem l'estat Qt:WindowMinimized
+    //i li afegeix el WindowActive restaurant la finestra al seu estat original
+    window->setWindowState(window->windowState() & ~Qt::WindowMinimized | Qt::WindowActive);
+}
+
 int ScreenManager::getNumberOfScreens()
 {
     return m_applicationDesktop->numScreens();
