@@ -4,6 +4,8 @@
 #include <QList>
 #include <QVector>
 
+#include "imageorientation.h"
+
 namespace udg {
 
 class Image;
@@ -19,11 +21,11 @@ public:
 
     ~ImagePlane();
 
-    void setRowDirectionVector(const double vector[3]);
-    void setRowDirectionVector(double x, double y, double z);
-    void setColumnDirectionVector(const double vector[3]);
-    void setColumnDirectionVector(double x, double y, double z);
+    void setImageOrientation(const ImageOrientation &imageOrientation);
+    ImageOrientation getImageOrientation() const;
 
+    /// TODO Mètodes de transició. Es mantenen en la primera fase de refactoring d'ImageOrientation
+    /// Amb el temps hauríem de prescindir d'aquests i accedir a través dels que ens proporciona ImageOrientation
     void getRowDirectionVector(double vector[3]);
     void getColumnDirectionVector(double vector[3]);
     void getNormalVector(double vector[3]);
@@ -113,8 +115,8 @@ public:
     void push(double distance);
 
 private:
-    /// Vectors que defineixen el pla
-    double m_rowDirectionVector[3], m_columnDirectionVector[3], m_normal[3];
+    /// Orientació del pla imatge
+    ImageOrientation m_imageOrientation;
 
     /// Origen del pla
     double m_origin[3];

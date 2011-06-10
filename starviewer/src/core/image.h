@@ -8,6 +8,8 @@
 #include <QStringList>
 #include <QPixmap>
 
+#include "imageorientation.h"
+
 namespace udg {
 
 class Series;
@@ -35,8 +37,8 @@ public:
      * A partir d'aquests dos vectors, es calcula la normal del pla d'imatge
      * @param orientation[] Els valors dels vectors que defineixen el pla d'imatge.
      */
-    void setImageOrientationPatient(double orientation[6]);
-    const double* getImageOrientationPatient() const;
+    void setImageOrientationPatient(const ImageOrientation &imageOrientation);
+    ImageOrientation getImageOrientationPatient() const;
 
     /// Assignar/Obtenir l'string d'orientació del pacient
     void setPatientOrientation(const QString &orientation);
@@ -53,11 +55,6 @@ public:
     /// Assignar/Obtenir la posició de la imatge.
     void setImagePositionPatient(double position[3]);
     const double* getImagePositionPatient() const;
-
-    /// Mètode per obtenir la normal del pla de la imatge.
-    /// Equivalent a demanar getImagePostionPatient() i quedar-nos
-    /// amb els tres últims valors (índexs 6,7,8)
-    void getImagePlaneNormal(double normal[3]);
 
     /// Assignar/Obtenir els samples per pixel
     void setSamplesPerPixel(int samples);
@@ -211,9 +208,9 @@ private:
     /// Distància física entre el centre de cada píxel (row,column) en mm. Veure 10.7.1.3. (0028,0030) Tipus 1
     double m_pixelSpacing[2];
 
-    /// Orientació de la imatge. Els direction cosines de la primera fila(0,1,2) i de la primera columna(3,4,5) respecte al pacient.
-    /// Veure C.6.7.2.1.1. (020,0037) Tipus 1. Adicionalment hi guardmem el vector normal del pla (6,7,8)
-    double m_imageOrientationPatient[9];
+    /// Vectors d'orientació de la imatge respecte al pacient.
+    /// Veure C.6.7.2.1.1. (020,0037) Tipus 1.
+    ImageOrientation m_imageOrientationPatient;
 
     /// Posició de la imatge. Les coordenades x,y,z la cantonada superior esquerre (primer pixel transmés) de la imatge, en mm.
     /// Veure C.6.7.2.1.1. (0020,0032) Tipus 1. \TODO aka origen?.

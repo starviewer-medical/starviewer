@@ -1309,34 +1309,35 @@ ImagePlane* Q2DViewer::getImagePlane(int sliceNumber, int phaseNumber, bool vtkR
                 Image *image = m_mainVolume->getImage(0);
                 if (image)
                 {
-                    imagePlane = new ImagePlane();
-                    const double *directionCosines = image->getImageOrientationPatient();
-
+                    QVector3D sagittalRowVector = image->getImageOrientationPatient().getColumnVector();
+                    QVector3D sagittalColumnVector;
                     if (vtkReconstructionHack)
                     {
                         // Retornem un fals pla, respecte el món real, però que s'ajusta més al món vtk
-                        imagePlane->setRowDirectionVector(directionCosines[3], directionCosines[4], directionCosines[5]);
-                        imagePlane->setColumnDirectionVector(directionCosines[6], directionCosines[7], directionCosines[8]);
+                        sagittalColumnVector = image->getImageOrientationPatient().getNormalVector();
                     }
                     else
                     {
                         // Això serà lo normal, retornar la autèntica direcció del pla
-                        double columnVector[3];
-                        m_mainVolume->getStackDirection(columnVector, 0);
-
-                        imagePlane->setRowDirectionVector(directionCosines[3], directionCosines[4], directionCosines[5]);
-                        imagePlane->setColumnDirectionVector(columnVector[0], columnVector[1], columnVector[2]);
+                        double sagittalColumnArray[3];
+                        m_mainVolume->getStackDirection(sagittalColumnArray, 0);
+                        sagittalColumnVector.setX(sagittalColumnArray[0]);
+                        sagittalColumnVector.setY(sagittalColumnArray[1]);
+                        sagittalColumnVector.setZ(sagittalColumnArray[2]);
                     }
 
+                    imagePlane = new ImagePlane();
+                    imagePlane->setImageOrientation(ImageOrientation(sagittalRowVector, sagittalColumnVector));                    
                     imagePlane->setSpacing(spacing[1], spacing[2]);
                     imagePlane->setThickness(spacing[0]);
                     imagePlane->setRows(dimensions[2]);
                     imagePlane->setColumns(dimensions[1]);
 
+                    QVector3D sagittalNormalVector = image->getImageOrientationPatient().getRowVector();
                     // TODO Falta esbrinar si l'origen que estem donant es bo o no
-                    imagePlane->setOrigin(origin[0] + sliceNumber * directionCosines[0] * spacing[0],
-                                          origin[1] + sliceNumber * directionCosines[1] * spacing[0],
-                                          origin[2] + sliceNumber * directionCosines[2] * spacing[0]);
+                    imagePlane->setOrigin(origin[0] + sliceNumber * sagittalNormalVector.x() * spacing[0],
+                                          origin[1] + sliceNumber * sagittalNormalVector.y() * spacing[0],
+                                          origin[2] + sliceNumber * sagittalNormalVector.z() * spacing[0]);
                 }
             }
                 break;
@@ -1347,33 +1348,34 @@ ImagePlane* Q2DViewer::getImagePlane(int sliceNumber, int phaseNumber, bool vtkR
                 Image *image = m_mainVolume->getImage(0);
                 if (image)
                 {
-                    imagePlane = new ImagePlane();
-                    const double *directionCosines = image->getImageOrientationPatient();
-
+                    QVector3D coronalRowVector = image->getImageOrientationPatient().getRowVector();
+                    QVector3D coronalColumnVector;
                     if (vtkReconstructionHack)
                     {
                         // Retornem un fals pla, respecte el món real, però que s'ajusta més al món vtk
-                        imagePlane->setRowDirectionVector(directionCosines[0], directionCosines[1], directionCosines[2]);
-                        imagePlane->setColumnDirectionVector(directionCosines[6], directionCosines[7], directionCosines[8]);
+                        coronalColumnVector = image->getImageOrientationPatient().getNormalVector();
                     }
                     else
                     {
-                        double columnVector[3];
-                        m_mainVolume->getStackDirection(columnVector, 0);
-
-                        imagePlane->setRowDirectionVector(directionCosines[0], directionCosines[1], directionCosines[2]);
-                        imagePlane->setColumnDirectionVector(columnVector[0], columnVector[1], columnVector[2]);
+                        double coronalColumnArray[3];
+                        m_mainVolume->getStackDirection(coronalColumnArray, 0);
+                        coronalColumnVector.setX(coronalColumnArray[0]);
+                        coronalColumnVector.setY(coronalColumnArray[1]);
+                        coronalColumnVector.setZ(coronalColumnArray[2]);
                     }
 
+                    imagePlane = new ImagePlane();
+                    imagePlane->setImageOrientation(ImageOrientation(coronalRowVector, coronalColumnVector));
                     imagePlane->setSpacing(spacing[0], spacing[2]);
                     imagePlane->setThickness(spacing[1]);
                     imagePlane->setRows(dimensions[2]);
                     imagePlane->setColumns(dimensions[0]);
 
+                    QVector3D coronalNormalVector = image->getImageOrientationPatient().getColumnVector();
                     // TODO Falta esbrinar si l'origen que estem donant es bo o no
-                    imagePlane->setOrigin(origin[0] + directionCosines[3] * sliceNumber * spacing[1],
-                                          origin[1] + directionCosines[4] * sliceNumber * spacing[1],
-                                          origin[2] + directionCosines[5] * sliceNumber * spacing[1]);
+                    imagePlane->setOrigin(origin[0] + coronalNormalVector.x() * sliceNumber * spacing[1],
+                                          origin[1] + coronalNormalVector.y() * sliceNumber * spacing[1],
+                                          origin[2] + coronalNormalVector.z() * sliceNumber * spacing[1]);
                 }
             }
                 break;

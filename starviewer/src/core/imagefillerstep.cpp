@@ -285,11 +285,10 @@ bool ImageFillerStep::processImage(Image *image, DICOMTagReader *dicomReader)
         //
         if (dicomReader->tagExists(DICOMImageOrientationPatient))
         {
-            double orientation[6];
             value = dicomReader->getValueAttributeAsQString(DICOMImageOrientationPatient);
-            // Passem l'string llegit a un vector de doubles
-            imageOrientationPatientStringToDoubleVector(value, orientation);
-            image->setImageOrientationPatient(orientation);
+            ImageOrientation imageOrientation;
+            imageOrientation.setDICOMFormattedImageOrientation(value);
+            image->setImageOrientationPatient(imageOrientation);
 
             // Cerquem l'string amb la orientació del pacient
             value = dicomReader->getValueAttributeAsQString(DICOMPatientOrientation);
@@ -297,10 +296,9 @@ bool ImageFillerStep::processImage(Image *image, DICOMTagReader *dicomReader)
             {
                 image->setPatientOrientation(value);
             }
-            // Si no tenim aquest valor, el calculem a partir dels direction cosines
             else
             {
-                // Li passem el vector amb tots els direction cosines (row, column i normal) perquè pugui calcular correctament totes les etiquetes
+                // Si no tenim aquest valor, el calculem a partir de l'ImageOrientationPatient
                 image->setPatientOrientation(makePatientOrientationFromImageOrientationPatient(image->getImageOrientationPatient()));
             }
         }
@@ -583,11 +581,11 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
                 DICOMValueAttribute *dicomValue = item->getValueAttribute(DICOMImageOrientationPatient);
                 if (dicomValue)
                 {
-                    double orientation[6];
-                    imageOrientationPatientStringToDoubleVector(dicomValue->getValueAsQString(), orientation);
-                    image->setImageOrientationPatient(orientation);
-                    // Li passem el vector amb tots els direction cosines (row, column i normal) perquè pugui calcular correctament totes les etiquetes
-                    image->setPatientOrientation(makePatientOrientationFromImageOrientationPatient(image->getImageOrientationPatient()));
+                    ImageOrientation imageOrientation;
+                    imageOrientation.setDICOMFormattedImageOrientation(dicomValue->getValueAsQString());
+                    image->setImageOrientationPatient(imageOrientation);
+                    // Li passem l'ImageOrientation obtingut per crear les etiquetes d'orientació
+                    image->setPatientOrientation(makePatientOrientationFromImageOrientationPatient(imageOrientation));
                 }
             }
         }
@@ -908,56 +906,31 @@ void ImageFillerStep::computePixelSpacing(Image *image, DICOMTagReader *dicomRea
     }
 }
 
-void ImageFillerStep::imageOrientationPatientStringToDoubleVector(const QString &imageOrientationPatientString, double imageOrientationPatient[6])
+QString ImageFillerStep::makePatientOrientationFromImageOrientationPatient(const ImageOrientation &imageOrientation)
 {
-    QStringList list = imageOrientationPatientString.split("\\");
-
-    if (list.size() == 6)
-    {
-        for (int i = 0; i < 6; i++)
-        {
-            imageOrientationPatient[i] = list.at(i).toDouble();
-        }
-    }
-    else
-    {
-        DEBUG_LOG("Image Orientation (Patient) no té els 6 elements esperats. Inconsistència DICOM.");
-        ERROR_LOG("Image Orientation (Patient) no té els 6 elements esperats. Inconsistència DICOM.");
-    }
-}
-
-QString ImageFillerStep::makePatientOrientationFromImageOrientationPatient(const double imageOrientationPatient[9])
-{
-    double dirCosinesX[3], dirCosinesY[3], dirCosinesZ[3];
-    for (int i = 0; i < 3; i++)
-    {
-        dirCosinesX[i] = imageOrientationPatient[i];
-        dirCosinesY[i] = imageOrientationPatient[3 + i];
-        dirCosinesZ[i] = imageOrientationPatient[6 + i];
-    }
     QString patientOrientationString;
-    patientOrientationString = this->mapDirectionCosinesToOrientationString(dirCosinesX);
+    patientOrientationString = this->mapDirectionCosinesToOrientationString(imageOrientation.getRowVector());
     patientOrientationString += "\\";
-    patientOrientationString += this->mapDirectionCosinesToOrientationString(dirCosinesY);
+    patientOrientationString += this->mapDirectionCosinesToOrientationString(imageOrientation.getColumnVector());
     patientOrientationString += "\\";
-    patientOrientationString += this->mapDirectionCosinesToOrientationString(dirCosinesZ);
+    patientOrientationString += this->mapDirectionCosinesToOrientationString(imageOrientation.getNormalVector());
 
     return patientOrientationString;
 }
 
-QString ImageFillerStep::mapDirectionCosinesToOrientationString(double vector[3])
+QString ImageFillerStep::mapDirectionCosinesToOrientationString(const QVector3D &vector)
 {
     char orientation[4];
     char *optr = orientation;
     *optr='\0';
 
-    char orientationX = vector[0] < 0 ? 'R' : 'L';
-    char orientationY = vector[1] < 0 ? 'A' : 'P';
-    char orientationZ = vector[2] < 0 ? 'F' : 'H';
+    char orientationX = vector.x() < 0 ? 'R' : 'L';
+    char orientationY = vector.y() < 0 ? 'A' : 'P';
+    char orientationZ = vector.z() < 0 ? 'F' : 'H';
 
-    double absX = fabs(vector[0]);
-    double absY = fabs(vector[1]);
-    double absZ = fabs(vector[2]);
+    double absX = fabs(vector.x());
+    double absY = fabs(vector.y());
+    double absZ = fabs(vector.z());
 
     for (int i = 0; i < 3; ++i)
     {

@@ -10,23 +10,12 @@ namespace udg {
 ImagePlane::ImagePlane()
  : m_rows(1), m_columns(1), m_thickness(1.0)
 {
-    setRowDirectionVector(1., 0., 0.);
-    setColumnDirectionVector(0., 1., 0.);
+    m_imageOrientation.setRowAndColumnVectors(QVector3D(1., 0., 0.), QVector3D(0., 1., 0.));
 }
 
 ImagePlane::ImagePlane(ImagePlane *imagePlane)
 {
-    m_rowDirectionVector[0] = imagePlane->m_rowDirectionVector[0];
-    m_rowDirectionVector[1] = imagePlane->m_rowDirectionVector[1];
-    m_rowDirectionVector[2] = imagePlane->m_rowDirectionVector[2];
-
-    m_columnDirectionVector[0] = imagePlane->m_columnDirectionVector[0];
-    m_columnDirectionVector[1] = imagePlane->m_columnDirectionVector[1];
-    m_columnDirectionVector[2] = imagePlane->m_columnDirectionVector[2];
-
-    m_normal[0] = imagePlane->m_normal[0];
-    m_normal[1] = imagePlane->m_normal[1];
-    m_normal[2] = imagePlane->m_normal[2];
+    m_imageOrientation = imagePlane->m_imageOrientation;
 
     m_origin[0] = imagePlane->m_origin[0];
     m_origin[1] = imagePlane->m_origin[1];
@@ -48,55 +37,38 @@ ImagePlane::~ImagePlane()
 {
 }
 
-void ImagePlane::setRowDirectionVector(const double vector[3])
+void ImagePlane::setImageOrientation(const ImageOrientation &imageOrientation)
 {
-    setRowDirectionVector(vector[0], vector[1], vector[2]);
+    m_imageOrientation = imageOrientation;
 }
 
-void ImagePlane::setRowDirectionVector(double x, double y, double z)
+ImageOrientation ImagePlane::getImageOrientation() const
 {
-    m_rowDirectionVector[0] = x;
-    m_rowDirectionVector[1] = y;
-    m_rowDirectionVector[2] = z;
-    MathTools::crossProduct(m_rowDirectionVector, m_columnDirectionVector, m_normal);
-    MathTools::normalize(m_normal);
-    updateCenter();
-}
-
-void ImagePlane::setColumnDirectionVector(const double vector[3])
-{
-    setColumnDirectionVector(vector[0], vector[1], vector[2]);
-}
-
-void ImagePlane::setColumnDirectionVector(double x, double y, double z)
-{
-    m_columnDirectionVector[0] = x;
-    m_columnDirectionVector[1] = y;
-    m_columnDirectionVector[2] = z;
-    MathTools::crossProduct(m_rowDirectionVector, m_columnDirectionVector, m_normal);
-    MathTools::normalize(m_normal);
-    updateCenter();
+    return m_imageOrientation;
 }
 
 void ImagePlane::getRowDirectionVector(double vector[3])
 {
-    vector[0] = m_rowDirectionVector[0];
-    vector[1] = m_rowDirectionVector[1];
-    vector[2] = m_rowDirectionVector[2];
+    QVector3D row = m_imageOrientation.getRowVector();
+    vector[0] = row.x();
+    vector[1] = row.y();
+    vector[2] = row.z();
 }
 
 void ImagePlane::getColumnDirectionVector(double vector[3])
 {
-    vector[0] = m_columnDirectionVector[0];
-    vector[1] = m_columnDirectionVector[1];
-    vector[2] = m_columnDirectionVector[2];
+    QVector3D column = m_imageOrientation.getColumnVector();
+    vector[0] = column.x();
+    vector[1] = column.y();
+    vector[2] = column.z();
 }
 
 void ImagePlane::getNormalVector(double vector[3])
 {
-    vector[0] = m_normal[0];
-    vector[1] = m_normal[1];
-    vector[2] = m_normal[2];
+    QVector3D normal = m_imageOrientation.getNormalVector();
+    vector[0] = normal.x();
+    vector[1] = normal.y();
+    vector[2] = normal.z();
 }
 
 void ImagePlane::setOrigin(double origin[3])
@@ -184,10 +156,7 @@ bool ImagePlane::fillFromImage(const Image *image)
 {
     if(image)
     {
-        const double *dirCosines = image->getImageOrientationPatient();
-
-        this->setRowDirectionVector(dirCosines[0], dirCosines[1], dirCosines[2]);
-        this->setColumnDirectionVector(dirCosines[3], dirCosines[4], dirCosines[5]);
+        this->setImageOrientation(image->getImageOrientationPatient());
         this->setSpacing(image->getPixelSpacing()[0], image->getPixelSpacing()[1]);
         this->setThickness(image->getSliceThickness());
         this->setRows(image->getRows());
@@ -206,15 +175,7 @@ bool ImagePlane::fillFromImage(const Image *image)
 
 bool ImagePlane::operator ==(const ImagePlane &imagePlane)
 {
-    if(m_rowDirectionVector[0] == imagePlane.m_rowDirectionVector[0] &&
-        m_rowDirectionVector[1] == imagePlane.m_rowDirectionVector[1] &&
-        m_rowDirectionVector[2] == imagePlane.m_rowDirectionVector[2] &&
-        m_columnDirectionVector[0] == imagePlane.m_columnDirectionVector[0] &&
-        m_columnDirectionVector[1] == imagePlane.m_columnDirectionVector[1] &&
-        m_columnDirectionVector[2] == imagePlane.m_columnDirectionVector[2] &&
-        m_normal[0] == imagePlane.m_normal[0] &&
-        m_normal[1] == imagePlane.m_normal[1] &&
-        m_normal[2] == imagePlane.m_normal[2] &&
+    if(m_imageOrientation == imagePlane.m_imageOrientation &&
         m_origin[0] == imagePlane.m_origin[0] &&
         m_origin[1] == imagePlane.m_origin[1] &&
         m_origin[2] == imagePlane.m_origin[2] &&
@@ -259,12 +220,20 @@ QList<QVector<double> > ImagePlane::getBounds(int location)
 
     QList<QVector<double> > boundsList;
     QVector<double> tlhc, trhc, brhc, blhc;
+
+    double rowVector[3];
+    double columnVector[3];
+    double normalVector[3];
+    this->getRowDirectionVector(rowVector);
+    this->getColumnDirectionVector(columnVector);
+    this->getNormalVector(normalVector);
+    
     for(int i = 0; i < 3; i++)
     {
-        tlhc << m_origin[i] + m_normal[i] * factor;
-        trhc << m_origin[i] + m_rowDirectionVector[i] * this->getRowLength() + m_normal[i] * factor;
-        brhc << m_origin[i] + m_rowDirectionVector[i] * this->getRowLength() + m_columnDirectionVector[i] * this->getColumnLength() + m_normal[i] * factor;
-        blhc << m_origin[i] + m_columnDirectionVector[i] * this->getColumnLength() + m_normal[i] * factor;
+        tlhc << m_origin[i] + normalVector[i] * factor;
+        trhc << m_origin[i] + rowVector[i] * this->getRowLength() + normalVector[i] * factor;
+        brhc << m_origin[i] + rowVector[i] * this->getRowLength() + columnVector[i] * this->getColumnLength() + normalVector[i] * factor;
+        blhc << m_origin[i] + columnVector[i] * this->getColumnLength() + normalVector[i] * factor;
     }
     boundsList << tlhc << trhc << brhc << blhc;
     return boundsList;
@@ -291,9 +260,12 @@ QString ImagePlane::toString(bool verbose)
 
     result = QString("Origin: %1, %2, %3").arg(m_origin[0]).arg(m_origin[1]).arg(m_origin[2]);
     result += QString("\nRows: %1  Columns: %2").arg(m_rows).arg(m_columns);
-    result += QString("\nRow Vector: %1, %2, %3").arg(m_rowDirectionVector[0]).arg(m_rowDirectionVector[1]).arg(m_rowDirectionVector[2]);
-    result += QString("\nColumn Vector: %1, %2, %3").arg(m_columnDirectionVector[0]).arg(m_columnDirectionVector[1]).arg(m_columnDirectionVector[2]);
-    result += QString("\nNormal Vector: %1, %2, %3").arg(m_normal[0]).arg(m_normal[1]).arg(m_normal[2]);
+    QVector3D rowVector = m_imageOrientation.getRowVector();
+    result += QString("\nRow Vector: %1, %2, %3").arg(rowVector.x()).arg(rowVector.y()).arg(rowVector.z());
+    QVector3D columnVector = m_imageOrientation.getColumnVector();
+    result += QString("\nColumn Vector: %1, %2, %3").arg(columnVector.x()).arg(columnVector.y()).arg(columnVector.z());
+    QVector3D normalVector = m_imageOrientation.getNormalVector();
+    result += QString("\nNormal Vector: %1, %2, %3").arg(normalVector.x()).arg(normalVector.y()).arg(normalVector.z());
     result += QString("\nCenter: %1, %2, %3").arg(m_center[0]).arg(m_center[1]).arg(m_center[2]);
     result += QString("\nSpacing: %1, %2").arg(m_spacing[0]).arg(m_spacing[1]);
     result += QString("\nThickness: %1").arg(m_thickness);
@@ -356,9 +328,14 @@ int ImagePlane::getIntersections(ImagePlane *planeToIntersect, double firstInter
 
 void ImagePlane::updateCenter()
 {
+    double rowVector[3];
+    double columnVector[3];
+    this->getRowDirectionVector(rowVector);
+    this->getColumnDirectionVector(columnVector);
+    
     for(int i = 0; i < 3; i++)
     {
-        m_center[i] = m_origin[i] + 0.5 * (m_rowDirectionVector[i] * this->getRowLength() + m_columnDirectionVector[i] * this->getColumnLength());
+        m_center[i] = m_origin[i] + 0.5 * (rowVector[i] * this->getRowLength() + columnVector[i] * this->getColumnLength());
     }
 }
 
@@ -387,10 +364,15 @@ void ImagePlane::setCenter(double center[3])
     }
     else
     {
+        double rowVector[3];
+        double columnVector[3];
+        this->getRowDirectionVector(rowVector);
+        this->getColumnDirectionVector(columnVector);
+        
         for (int i = 0; i < 3; ++i)
         {
             m_center[i] = center[i];
-            m_origin[i] = m_center[i] - 0.5 * (m_rowDirectionVector[i] * this->getRowLength() + m_columnDirectionVector[i] * this->getColumnLength());
+            m_origin[i] = m_center[i] - 0.5 * (rowVector[i] * this->getRowLength() + columnVector[i] * this->getColumnLength());
         }
     }
 }
@@ -402,9 +384,11 @@ void ImagePlane::push(double distance)
         return;
     }
 
+    double normalVector[3];
+    this->getNormalVector(normalVector);
     for (int i = 0; i < 3; ++i)
     {
-        m_origin[i] += distance * this->m_normal[i];
+        m_origin[i] += distance * normalVector[i];
     }
     this->updateCenter();
 }
