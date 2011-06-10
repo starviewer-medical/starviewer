@@ -2,6 +2,7 @@
 
 #include <QNetworkInterface>
 #include <QCryptographicHash>
+#include <QProcessEnvironment>
 
 namespace udg {
 
