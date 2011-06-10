@@ -70,11 +70,6 @@ private:
     /// Retorna el Pixel spacing en format de double
     double* getPixelSpacingAsDouble(const QString &pixelSpacing);
 
-    /// Retorna l'ImageOrientationPatient en format d'string separat per "\\";
-    QString getImageOrientationPatientAsQString(Image *newImage);
-    /// Retorna l'ImageOrientationPatient  en format de double
-    double* getImageOrientationPatientAsDouble(const QString &ImageOrientationPatient);
-
     /// Retorna l'imagePatientPosition en format d'string separat per "\\";
     QString getPatientPositionAsQString(Image *newImage);
     /// Retorna el Patient Position en format double
