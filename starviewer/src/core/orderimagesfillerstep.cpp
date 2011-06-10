@@ -136,11 +136,12 @@ void OrderImagesFillerStep::postProcessing()
 void OrderImagesFillerStep::processImage(Image *image)
 {
     // Obtenim el vector normal del pla, que ens determina també a quin "stack" pertany la imatge
-    double planeNormalVector[3];
-    image->getImagePlaneNormal(planeNormalVector);
+    QVector3D planeNormalVector3D = image->getImageOrientationPatient().getNormalVector();
     // El passem a string que ens serà més fàcil de comparar,perquè així és com es guarda a l'estructura d'ordenació
-    QString planeNormalString = QString("%1\\%2\\%3").arg(planeNormalVector[0], 0, 'f', 5).arg(planeNormalVector[1], 0, 'f', 5)
-                                   .arg(planeNormalVector[2], 0, 'f', 5);
+    QString planeNormalString = QString("%1\\%2\\%3").arg(planeNormalVector3D.x(), 0, 'f', 5).arg(planeNormalVector3D.y(), 0, 'f', 5)
+                                   .arg(planeNormalVector3D.z(), 0, 'f', 5);
+    // Passem el vector 3D a un array de C perquè el necessitem pel MathTools::angleInDegrees()
+    double planeNormalArray[3] = { planeNormalVector3D.x(), planeNormalVector3D.y(), planeNormalVector3D.z() };
 
     QMap<double, QMap<unsigned long, Image*>*> *imagePositionSet;
     QMap<unsigned long, Image*> *instanceNumberSet;
@@ -182,7 +183,7 @@ void OrderImagesFillerStep::processImage(Image *image)
                 normalVector[1] = normalSplitted.at(1).toDouble();
                 normalVector[2] = normalSplitted.at(2).toDouble();
 
-                double angle = MathTools::angleInDegrees(normalVector, planeNormalVector);
+                double angle = MathTools::angleInDegrees(normalVector, planeNormalArray);
                 if (angle < 1.0)
                 {
                     // Si l'angle entre les normals
@@ -334,13 +335,8 @@ double OrderImagesFillerStep::distance(Image *image)
     // Origen del pla
     const double *imagePosition = image->getImagePositionPatient();
     // Normal del pla sobre la qual projectarem l'origen
-    double normal[3];
-    image->getImagePlaneNormal(normal);
-
-    for (int i = 0; i < 3; i++)
-    {
-        distance += normal[i] * imagePosition[i];
-    }
+    QVector3D normalVector = image->getImageOrientationPatient().getNormalVector();
+    distance = normalVector.x() * imagePosition[0] + normalVector.y() * imagePosition[1] + normalVector.z() * imagePosition[2];
 
     return distance;
 }

@@ -17,7 +17,6 @@ Image::Image(QObject *parent)
 {
     m_pixelSpacing[0] = 0.;
     m_pixelSpacing[1] = 0.;
-    memset(m_imageOrientationPatient, 0, 9 * sizeof(double));
     memset(m_imagePositionPatient, 0, 3 * sizeof(double));
 }
 
@@ -45,18 +44,12 @@ QString Image::getInstanceNumber() const
     return m_instanceNumber;
 }
 
-void Image::setImageOrientationPatient(double orientation[6])
+void Image::setImageOrientationPatient(const ImageOrientation &imageOrientation)
 {
-    memcpy(m_imageOrientationPatient, orientation, 6 * sizeof(double));
-
-    // Calculem la Z
-    double normal[3];
-    MathTools::crossProduct(&orientation[0], &orientation[3], normal);
-
-    memcpy(&m_imageOrientationPatient[6], normal, 3 * sizeof(double));
+    m_imageOrientationPatient = imageOrientation;
 }
 
-const double* Image::getImageOrientationPatient() const
+ImageOrientation Image::getImageOrientationPatient() const
 {
     return m_imageOrientationPatient;
 }
@@ -100,13 +93,6 @@ void Image::setImagePositionPatient(double position[3])
 const double* Image::getImagePositionPatient() const
 {
     return m_imagePositionPatient;
-}
-
-void Image::getImagePlaneNormal(double normal[3])
-{
-	normal[0] = m_imageOrientationPatient[6];
-	normal[1] = m_imageOrientationPatient[7];
-	normal[2] = m_imageOrientationPatient[8];
 }
 
 void Image::setSamplesPerPixel(int samples)

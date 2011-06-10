@@ -315,11 +315,10 @@ void Volume::getStackDirection(double direction[3], int stack)
     if (!secondImage)
     {
         DEBUG_LOG("Només hi ha una imatge per stack! Retornem la normal del pla");
-        const double *directionCosines = firstImage->getImageOrientationPatient();
-        for (int i = 0; i < 3; i++)
-        {
-            direction[i] = directionCosines[i + 6];
-        }
+        QVector3D normalVector = firstImage->getImageOrientationPatient().getNormalVector();
+        direction[0] = normalVector.x();
+        direction[1] = normalVector.y();
+        direction[2] = normalVector.z();
     }
     else
     {

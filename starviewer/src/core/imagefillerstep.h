@@ -3,6 +3,8 @@
 
 #include "patientfillerstep.h"
 
+class QVector3D;
+
 namespace udg {
 
 class Patient;
@@ -10,6 +12,7 @@ class Series;
 class Image;
 class DICOMTagReader;
 class DICOMSequenceItem;
+class ImageOrientation;
 
 /**
     Mòdul que s'encarrega d'omplir la informació general d'objectes DICOM que són imatges. Un dels seus requisits és que es tingui l'etiqueta de
@@ -56,12 +59,8 @@ private:
     /// tant amb la Shared Functional Groups Sequence com amb la Per-Frame Functional Groups Sequence
     void fillFunctionalGroupsInformation(Image *image, DICOMSequenceItem *frameItem);
 
-    /// Transforma l'string que obtenim del tag ImageOrientationPatient a un vector de doubles
-    void imageOrientationPatientStringToDoubleVector(const QString &imageOrientationPatientString, double imageOrientationPatient[6]);
-
-    /// Transforma el vector de doubles amb la informació d'ImageOrientationPatient a l'string equivalent a PatientOrientation
-    /// El vector imageOrientationPatient tindrà 3 vectors de 3 dimensions (row, column i normal[producte vectorial dels anteriors])
-    QString makePatientOrientationFromImageOrientationPatient(const double imageOrientationPatient[9]);
+    /// Transforma el la informació d'imageOrientation a l'string equivalent a PatientOrientation
+    QString makePatientOrientationFromImageOrientationPatient(const ImageOrientation &imageOrientation);
 
     /// Calcula el pixel spacing i se l'assigna a l'image donada en cas de que aquest es pugui calcular
     /// @param image Image a la que li assignarem el pixel spacing
@@ -69,7 +68,7 @@ private:
     void computePixelSpacing(Image *image, DICOMTagReader *dicomReader);
 
     /// Helper method per obtenir l'string corresponent a un direction cosines. Donat un vector de direcció determina la seva etiqueta d'orientació R,L,A,P,S,I
-    QString mapDirectionCosinesToOrientationString(double vector[3]);
+    QString mapDirectionCosinesToOrientationString(const QVector3D &vector);
 
     /// Ens diu si les imatges són de mides diferents
     bool areOfDifferentSize(Image *firstImage, Image *secondImage);
