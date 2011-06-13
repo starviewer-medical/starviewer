@@ -33,6 +33,9 @@ void QBasicSearchWidget::initialize()
     m_fromStudyDate->calendarWidget()->setFirstDayOfWeek(Qt::Monday);
     m_toStudyDate->calendarWidget()->setFirstDayOfWeek(Qt::Monday);
 
+    m_fromStudyDate->setDisplayFormat("dd/MM/yyyy");
+    m_toStudyDate->setDisplayFormat("dd/MM/yyyy");
+
     m_widgetHasBeenShowed = false;
 }
 
