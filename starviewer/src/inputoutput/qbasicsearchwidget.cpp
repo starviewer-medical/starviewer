@@ -4,7 +4,6 @@
 #include <QCalendarWidget>
 
 #include "dicommask.h"
-#include "status.h"
 
 namespace udg {
 
