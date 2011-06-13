@@ -1,9 +1,12 @@
 #include "qadvancedsearchwidget.h"
 
+#include <QCalendarWidget>
+
 #include "dicommask.h"
-#include "status.h"
 
 namespace udg {
+
+const QRegExp QAdvancedSearchWidget::regExpGetMemberWidgets("^m_*");
 
 QAdvancedSearchWidget::QAdvancedSearchWidget(QWidget *parent)
  : QWidget(parent)
@@ -11,18 +14,47 @@ QAdvancedSearchWidget::QAdvancedSearchWidget(QWidget *parent)
     setupUi(this);
 
     createConnections();
+    initialize();
+
+    m_patientAge->setValidator(new QIntValidator(0, 199, m_patientAge));
+}
+
+void QAdvancedSearchWidget::initialize()
+{
+    m_fromPatientBirth->setDisplayFormat("dd/MM/yyyy");
+    m_toPatientBirth->setDisplayFormat("dd/MM/yyyy");
+
+    m_fromPatientBirth->calendarWidget()->setFirstDayOfWeek(Qt::Monday);
+    m_toPatientBirth->calendarWidget()->setFirstDayOfWeek(Qt::Monday);
 }
 
 void QAdvancedSearchWidget::createConnections()
 {
-    foreach (QLineEdit *lineEdit, m_qwidgetAdvancedSearch->findChildren<QLineEdit*>())
+    connect(m_fromPatientBirthCheckBox, SIGNAL(toggled(bool)), m_fromPatientBirth, SLOT(setEnabled(bool)));
+    connect(m_toPatientBirthCheckBox, SIGNAL(toggled(bool)), m_toPatientBirth, SLOT(setEnabled(bool)));
+    connect(m_fromPatientBirth, SIGNAL(dateChanged(const QDate &)), SLOT(fromPatientBirthDateChanged()));
+    connect(m_toPatientBirth, SIGNAL(dateChanged(const QDate &)), SLOT(toPatientBirthDateChanged()));
+
+    //Creem connect per saber quan alguns dels controls per filtrar té valor, el findChildren fem que només ens retorni els widgets afegits
+    //per nosaltres a la UI.
+    foreach (QLineEdit *lineEdit, m_qwidgetAdvancedSearch->findChildren<QLineEdit*>(regExpGetMemberWidgets))
     {
         connect(lineEdit, SIGNAL(textChanged(const QString &)), SLOT(updateAdvancedSearchModifiedStatus()));
+    }
+
+    foreach (QCheckBox *checkBox, m_qwidgetAdvancedSearch->findChildren<QCheckBox*>())
+    {
+        connect(checkBox, SIGNAL(toggled(bool)), SLOT(updateAdvancedSearchModifiedStatus()));
     }
 }
 
 void QAdvancedSearchWidget::clear()
 {
+    //Camps pacient
+    m_fromPatientBirthCheckBox->setChecked(false);
+    m_toPatientBirthCheckBox->setChecked(false);
+    m_patientAge->clear();
+    
     // Camps estudi
     m_studyIDText->clear();
     m_studyUIDText->clear();
@@ -51,9 +83,11 @@ DicomMask QAdvancedSearchWidget::buildDicomMask()
     // En aquí hem de fer un set a tots els camps que volem cercar
     DicomMask mask;
 
-    mask.setPatientAge("");
+    //El format de PatientAge de DICOM són 3 dígits + Y Ex: 054Y.  PS3.5 Taula 6.2-1 VR AS
+    mask.setPatientAge(m_patientAge->text().isEmpty() ? "" : m_patientAge->text().rightJustified(3, '0') + "Y");
     mask.setPatientSex("");
-    mask.setPatientBirth(QDate(), QDate());
+    mask.setPatientBirth(m_fromPatientBirthCheckBox->isChecked() ? m_fromPatientBirth->date() : QDate(),
+        m_toPatientBirthCheckBox->isChecked() ? m_toPatientBirth->date() : QDate());
     mask.setPatientID("");
     mask.setPatientName("");
 
@@ -104,20 +138,38 @@ void QAdvancedSearchWidget::updateAdvancedSearchModifiedStatus()
         bool hasModifiedLineEdit = false;
         QWidget *tab = m_qwidgetAdvancedSearch->widget(i);
 
-        foreach (QLineEdit *lineEdit, tab->findChildren<QLineEdit*>())
+        //Filtrem que els Widgets que ens retorna el mètode findChildren siguin Widgets afegits per nosaltres al UI, si no filtrèssim
+        //el mètode findChildren ens retornaria tots els objectes de Qt que composen el tab, per exemple pel tab patient el QDateEdit està format 
+        //per entre altres controls per QLineEdit, això ens pot generar problemes per saber si en aquell tab tenim algun valor per filtrar a les cerques
+        //perquè trobaríem un QLineEdit amb valor
+        foreach (QObject *child, tab->findChildren<QObject*>(QRegExp(regExpGetMemberWidgets)))
         {
-            if (lineEdit->text() != "")
+            if (isQLineEditEnabledAndIsNotEmpty(child) || isQCheckboxAndIsChecked(child))
             {
                 hasModifiedLineEdit = true;
                 break;
             }
         }
+
         QString tabText = m_qwidgetAdvancedSearch->tabText(i).remove(QRegExp("\\*$"));
         if (hasModifiedLineEdit)
         {
             tabText += "*";
         }
         m_qwidgetAdvancedSearch->setTabText(i, tabText);
+    }
+}
+
+void QAdvancedSearchWidget::fromPatientBirthDateChanged()
+{
+    m_toPatientBirth->setDate(m_fromPatientBirth->date());
+}
+
+void QAdvancedSearchWidget::toPatientBirthDateChanged()
+{
+    if (m_fromPatientBirth->date() > m_toPatientBirth->date())
+    {
+        m_fromPatientBirth->setDate(m_toPatientBirth->date());
     }
 }
 
@@ -169,5 +221,29 @@ QPair<QTime, QTime> QAdvancedSearchWidget::getTimeRangeToSearchFromString(QStrin
     return rangeTime;
 }
 
+bool QAdvancedSearchWidget::isQLineEditEnabledAndIsNotEmpty(QObject *qObject)
+{            
+    if (qobject_cast<QLineEdit*>(qObject) != NULL)
+    {
+        QLineEdit *lineEdit = qobject_cast<QLineEdit*>(qObject);
+        return !lineEdit->text().isEmpty() && lineEdit->isEnabled();
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool QAdvancedSearchWidget::isQCheckboxAndIsChecked(QObject *qObject)
+{            
+    if (qobject_cast<QCheckBox*>(qObject) != NULL)
+    {
+        return (qobject_cast<QCheckBox*>(qObject))->isChecked();
+    }
+    else
+    {
+        return false;
+    }
+}
 
 }

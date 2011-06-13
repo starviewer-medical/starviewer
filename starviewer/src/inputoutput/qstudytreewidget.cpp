@@ -19,6 +19,11 @@ QStudyTreeWidget::QStudyTreeWidget(QWidget *parent)
     m_studyTreeView->setColumnHidden(Type, true);
     // Amaguem la columna Hora, ja que ara es mostra la data i hora en un mateix columna per poder ordenar per data i hora els estudis
     m_studyTreeView->setColumnHidden(Time, true);
+    //Hack: Degut a que es guarden als settings l'amplada de les columnes per IndexColumna, si afegim una nova columna, l'hem d'afegir al final no la podem afegir al seu lloc corresponent 
+    //ja que sinó l'amplada de les columnes guardades als settings s'aplicaria malament. Imaginem que tenim les columnes PatientName, StudyID StudyDescription,  si afegim una nova columna al costat
+    //de PatientName en aquesta nova columna se li aplicarà l'amplada que tenia StudyID, a StudyID la de StudyDescription i així successivament, per això el que fem si afegim una nova columna
+    //s'afegeix al final del QTreeWidget i llavors la movem al seu lloc natural
+    m_studyTreeView->header()->moveSection(PatientBirth, PatientAge);
 
     // Carreguem les imatges que es mostren el QStudyTreeWidget
     m_openFolder = QIcon(":/images/folderopen.png");
@@ -129,6 +134,7 @@ QList<QTreeWidgetItem*> QStudyTreeWidget::fillPatient(Patient *patient)
         item->setIcon(ObjectName, m_closeFolder);
         item->setText(ObjectName, patient->getFullName());
         item->setText(PatientID, patient->getID());
+        item->setText(PatientBirth, formatDateTime(patient->getBirthDate(), QTime()));
         item->setText(PatientAge, formatAge(studyToInsert->getPatientAge()));
         item->setText(Modality, studyToInsert->getModalitiesAsSingleString());
         item->setText(Description, studyToInsert->getDescription());
