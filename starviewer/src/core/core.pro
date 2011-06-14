@@ -203,7 +203,8 @@ HEADERS += extensionfactory.h \
     dicomimagefilegenerator.h \
     dicomvaluerepresentationconverter.h \
     imageorientationoperationsmapper.h \
-    orientation.h \
+    anatomicalplane.h \
+    patientorientation.h \
     imageorientation.h \
     copydirectory.h \
     qreleasenotes.h \
@@ -412,7 +413,8 @@ SOURCES += extensionmediator.cpp \
     dicomimagefilegenerator.cpp \
     dicomvaluerepresentationconverter.cpp \
     imageorientationoperationsmapper.cpp \
-    orientation.cpp \
+    anatomicalplane.cpp \
+    patientorientation.cpp \
     imageorientation.cpp \
     copydirectory.cpp \
     qreleasenotes.cpp \

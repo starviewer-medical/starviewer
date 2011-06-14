@@ -1,6 +1,6 @@
 #include "imageorientationoperationsmapper.h"
 
-#include "orientation.h"
+#include "patientorientation.h"
 
 #include <QStringList>
 
@@ -59,14 +59,14 @@ void ImageOrientationOperationsMapper::initializeOrientationTable()
 
     // Mapeig de les operacions per la vista sagital
     // Definim les etiquetes possibles d'orientació
-    const QString AnteriorFeet(Orientation::AnteriorLabel + "\\" + Orientation::FeetLabel);
-    const QString AnteriorHead(Orientation::AnteriorLabel + "\\" + Orientation::HeadLabel);
-    const QString PosteriorFeet(Orientation::PosteriorLabel + "\\" + Orientation::FeetLabel);
-    const QString PosteriorHead(Orientation::PosteriorLabel + "\\" + Orientation::HeadLabel);
-    const QString FeetAnterior(Orientation::FeetLabel + "\\" + Orientation::AnteriorLabel);
-    const QString FeetPosterior(Orientation::FeetLabel + "\\" + Orientation::PosteriorLabel);
-    const QString HeadAnterior(Orientation::HeadLabel + "\\" + Orientation::AnteriorLabel);
-    const QString HeadPosterior(Orientation::HeadLabel + "\\" + Orientation::PosteriorLabel);
+    const QString AnteriorFeet(PatientOrientation::AnteriorLabel + "\\" + PatientOrientation::FeetLabel);
+    const QString AnteriorHead(PatientOrientation::AnteriorLabel + "\\" + PatientOrientation::HeadLabel);
+    const QString PosteriorFeet(PatientOrientation::PosteriorLabel + "\\" + PatientOrientation::FeetLabel);
+    const QString PosteriorHead(PatientOrientation::PosteriorLabel + "\\" + PatientOrientation::HeadLabel);
+    const QString FeetAnterior(PatientOrientation::FeetLabel + "\\" + PatientOrientation::AnteriorLabel);
+    const QString FeetPosterior(PatientOrientation::FeetLabel + "\\" + PatientOrientation::PosteriorLabel);
+    const QString HeadAnterior(PatientOrientation::HeadLabel + "\\" + PatientOrientation::AnteriorLabel);
+    const QString HeadPosterior(PatientOrientation::HeadLabel + "\\" + PatientOrientation::PosteriorLabel);
 
     // Per passar de AF -> AH calen 2 rotacions i 1 flip horitzontal
     m_orientationMappingTable.insert(AnteriorFeet + "-" + AnteriorHead, Rotate180DegreesAndFlip);
@@ -135,14 +135,14 @@ void ImageOrientationOperationsMapper::initializeOrientationTable()
 
     // Mappeig de les operacions per la vista axial
     // Definim les etiquetes possibles d'orientació
-    const QString AnteriorRight(Orientation::AnteriorLabel + "\\" + Orientation::RightLabel);
-    const QString AnteriorLeft(Orientation::AnteriorLabel + "\\" + Orientation::LeftLabel);
-    const QString PosteriorRight(Orientation::PosteriorLabel + "\\" + Orientation::RightLabel);
-    const QString PosteriorLeft(Orientation::PosteriorLabel + "\\" + Orientation::LeftLabel);
-    const QString RightAnterior(Orientation::RightLabel + "\\" + Orientation::AnteriorLabel);
-    const QString RightPosterior(Orientation::RightLabel + "\\" + Orientation::PosteriorLabel);
-    const QString LeftAnterior(Orientation::LeftLabel + "\\" + Orientation::AnteriorLabel);
-    const QString LeftPosterior(Orientation::LeftLabel + "\\" + Orientation::PosteriorLabel);
+    const QString AnteriorRight(PatientOrientation::AnteriorLabel + "\\" + PatientOrientation::RightLabel);
+    const QString AnteriorLeft(PatientOrientation::AnteriorLabel + "\\" + PatientOrientation::LeftLabel);
+    const QString PosteriorRight(PatientOrientation::PosteriorLabel + "\\" + PatientOrientation::RightLabel);
+    const QString PosteriorLeft(PatientOrientation::PosteriorLabel + "\\" + PatientOrientation::LeftLabel);
+    const QString RightAnterior(PatientOrientation::RightLabel + "\\" + PatientOrientation::AnteriorLabel);
+    const QString RightPosterior(PatientOrientation::RightLabel + "\\" + PatientOrientation::PosteriorLabel);
+    const QString LeftAnterior(PatientOrientation::LeftLabel + "\\" + PatientOrientation::AnteriorLabel);
+    const QString LeftPosterior(PatientOrientation::LeftLabel + "\\" + PatientOrientation::PosteriorLabel);
 
     m_orientationMappingTable.insert(AnteriorRight + "-" + AnteriorLeft, Rotate180DegreesAndFlip);
     m_orientationMappingTable.insert(AnteriorRight + "-" + PosteriorRight, Flip);
@@ -250,8 +250,8 @@ QString ImageOrientationOperationsMapper::formatOrientationLabel(const QString &
     QString labelCopy = label;
 
     // Substituim les etiquetes Superior i Inferior pels seus equivalents
-    labelCopy.replace("S", Orientation::HeadLabel);
-    labelCopy.replace("I", Orientation::FeetLabel);
+    labelCopy.replace("S", PatientOrientation::HeadLabel);
+    labelCopy.replace("I", PatientOrientation::FeetLabel);
 
     return labelCopy;
 }
