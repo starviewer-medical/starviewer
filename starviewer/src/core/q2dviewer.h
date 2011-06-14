@@ -349,12 +349,6 @@ private:
     /// Afegeix tots els actors a l'escena
     void addActors();
 
-    /// Helper method, donada una etiqueta d'orientació, ens retorna aquesta etiqueta però amb els valors oposats.
-    /// Per exemple, si l'etiqueta que ens donen és RPI (Right-Posterior,Inferior), el valor retornat seria LAS (Left-Anterior-Superior)
-    /// Les etiquetes vàlides i els seus oposats són les següents:
-    /// R:L (Right-Left), A:P (Anterior-Posterior), S:I (Superior-Inferior), H:F(Head-Feet)
-    static QString getOppositeOrientationLabel(const QString &label);
-
     /// A partir de l'string d'orientació del pacient mapeja les anotacions correctes segons com estem mirant el model.
     /// A això li afecta també si la vista és axial, sagital o coronal
     void mapOrientationStringToAnnotation();
