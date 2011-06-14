@@ -1,17 +1,10 @@
-#include "orientation.h"
+#include "anatomicalplane.h"
 
 #include <QObject>
 
 namespace udg {
 
-const QString Orientation::LeftLabel("L");
-const QString Orientation::RightLabel("R");
-const QString Orientation::PosteriorLabel("P");
-const QString Orientation::AnteriorLabel("A");
-const QString Orientation::HeadLabel("H");
-const QString Orientation::FeetLabel("F");
-
-const QString Orientation::getPlaneOrientationLabel(PlaneOrientationType orientation)
+const QString AnatomicalPlane::getLabel(AnatomicalPlaneType orientation)
 {
     QString label;
 
@@ -40,5 +33,4 @@ const QString Orientation::getPlaneOrientationLabel(PlaneOrientationType orienta
 
     return label;
 }
-
 } // End namespace udg

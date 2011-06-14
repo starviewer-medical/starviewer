@@ -13,7 +13,7 @@
 #include "windowlevelpresetstooldata.h"
 #include "coresettings.h"
 #include "qviewerworkinprogresswidget.h"
-#include "orientation.h"
+#include "patientorientation.h"
 // Thickslab
 #include "vtkProjectionImageFilter.h"
 #include "asynchronousvolumereader.h"
@@ -573,29 +573,29 @@ QString Q2DViewer::getOppositeOrientationLabel(const QString &label)
     QString oppositeLabel;
     while (i < label.size())
     {
-        if (QString(label.at(i)) == Orientation::LeftLabel)
+        if (QString(label.at(i)) == PatientOrientation::LeftLabel)
         {
-            oppositeLabel += Orientation::RightLabel;
+            oppositeLabel += PatientOrientation::RightLabel;
         }
-        else if (QString(label.at(i)) == Orientation::RightLabel)
+        else if (QString(label.at(i)) == PatientOrientation::RightLabel)
         {
-            oppositeLabel += Orientation::LeftLabel;
+            oppositeLabel += PatientOrientation::LeftLabel;
         }
-        else if (QString(label.at(i)) == Orientation::AnteriorLabel)
+        else if (QString(label.at(i)) == PatientOrientation::AnteriorLabel)
         {
-            oppositeLabel += Orientation::PosteriorLabel;
+            oppositeLabel += PatientOrientation::PosteriorLabel;
         }
-        else if (QString(label.at(i)) == Orientation::PosteriorLabel)
+        else if (QString(label.at(i)) == PatientOrientation::PosteriorLabel)
         {
-            oppositeLabel += Orientation::AnteriorLabel;
+            oppositeLabel += PatientOrientation::AnteriorLabel;
         }
-        else if (QString(label.at(i)) == Orientation::HeadLabel)
+        else if (QString(label.at(i)) == PatientOrientation::HeadLabel)
         {
-            oppositeLabel += Orientation::FeetLabel;
+            oppositeLabel += PatientOrientation::FeetLabel;
         }
-        else if (QString(label.at(i)) == Orientation::FeetLabel)
+        else if (QString(label.at(i)) == PatientOrientation::FeetLabel)
         {
-            oppositeLabel += Orientation::HeadLabel;
+            oppositeLabel += PatientOrientation::HeadLabel;
         }
         else
         {
@@ -1695,24 +1695,24 @@ void Q2DViewer::updateSliceAnnotationInformation()
                 QString laterality = image->getImageLaterality();
                 if (projection == "CC" || projection == "XCC" || projection == "XCCL" || projection == "XCCM" || projection == "FB")
                 {
-                    if (laterality == Orientation::LeftLabel)
+                    if (laterality == PatientOrientation::LeftLabel)
                     {
-                        desiredOrientation = Orientation::AnteriorLabel + "\\" + Orientation::RightLabel;
+                        desiredOrientation = PatientOrientation::AnteriorLabel + "\\" + PatientOrientation::RightLabel;
                     }
-                    else if (laterality == Orientation::RightLabel)
+                    else if (laterality == PatientOrientation::RightLabel)
                     {
-                        desiredOrientation = Orientation::PosteriorLabel + "\\" + Orientation::LeftLabel;
+                        desiredOrientation = PatientOrientation::PosteriorLabel + "\\" + PatientOrientation::LeftLabel;
                     }
                 }
                 else if (projection == "MLO" || projection == "ML" || projection == "LM" || projection == "LMO" || projection == "SIO")
                 {
-                    if (laterality == Orientation::LeftLabel)
+                    if (laterality == PatientOrientation::LeftLabel)
                     {
-                        desiredOrientation = Orientation::AnteriorLabel + "\\" + Orientation::FeetLabel;
+                        desiredOrientation = PatientOrientation::AnteriorLabel + "\\" + PatientOrientation::FeetLabel;
                     }
-                    else if (laterality == Orientation::RightLabel)
+                    else if (laterality == PatientOrientation::RightLabel)
                     {
-                        desiredOrientation = Orientation::PosteriorLabel + "\\" + Orientation::FeetLabel;
+                        desiredOrientation = PatientOrientation::PosteriorLabel + "\\" + PatientOrientation::FeetLabel;
                     }
                 }
                 else

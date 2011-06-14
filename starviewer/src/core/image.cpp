@@ -4,7 +4,8 @@
 #include "logging.h"
 #include "thumbnailcreator.h"
 #include "mathtools.h"
-#include "orientation.h"
+#include "patientorientation.h"
+#include "anatomicalplane.h"
 
 #include <QFileInfo>
 
@@ -469,44 +470,44 @@ QString Image::getProjectionLabelFromPlaneOrientation(const QString &orientation
 
         if (!rowAxis.isEmpty() && !columnAxis.isEmpty())
         {
-            if ((rowAxis.startsWith(Orientation::RightLabel) || rowAxis.startsWith(Orientation::LeftLabel)) &&
-                (columnAxis.startsWith(Orientation::AnteriorLabel) || columnAxis.startsWith(Orientation::PosteriorLabel)))
+            if ((rowAxis.startsWith(PatientOrientation::RightLabel) || rowAxis.startsWith(PatientOrientation::LeftLabel)) &&
+                (columnAxis.startsWith(PatientOrientation::AnteriorLabel) || columnAxis.startsWith(PatientOrientation::PosteriorLabel)))
             {
-                label = Orientation::getPlaneOrientationLabel(Orientation::Axial);
+                label = AnatomicalPlane::getLabel(AnatomicalPlane::Axial);
             }
-            else if ((columnAxis.startsWith(Orientation::RightLabel) || columnAxis.startsWith(Orientation::LeftLabel)) &&
-                (rowAxis.startsWith(Orientation::AnteriorLabel) || rowAxis.startsWith(Orientation::PosteriorLabel)))
+            else if ((columnAxis.startsWith(PatientOrientation::RightLabel) || columnAxis.startsWith(PatientOrientation::LeftLabel)) &&
+                (rowAxis.startsWith(PatientOrientation::AnteriorLabel) || rowAxis.startsWith(PatientOrientation::PosteriorLabel)))
             {
-                label = Orientation::getPlaneOrientationLabel(Orientation::Axial);
+                label = AnatomicalPlane::getLabel(AnatomicalPlane::Axial);
             }
-            else if ((rowAxis.startsWith(Orientation::RightLabel) || rowAxis.startsWith(Orientation::LeftLabel)) &&
-                (columnAxis.startsWith(Orientation::HeadLabel) || columnAxis.startsWith(Orientation::FeetLabel)))
+            else if ((rowAxis.startsWith(PatientOrientation::RightLabel) || rowAxis.startsWith(PatientOrientation::LeftLabel)) &&
+                (columnAxis.startsWith(PatientOrientation::HeadLabel) || columnAxis.startsWith(PatientOrientation::FeetLabel)))
             {
-                label = Orientation::getPlaneOrientationLabel(Orientation::Coronal);
+                label = AnatomicalPlane::getLabel(AnatomicalPlane::Coronal);
             }
-            else if ((columnAxis.startsWith(Orientation::RightLabel) || columnAxis.startsWith(Orientation::LeftLabel)) &&
-                (rowAxis.startsWith(Orientation::HeadLabel) || rowAxis.startsWith(Orientation::FeetLabel)))
+            else if ((columnAxis.startsWith(PatientOrientation::RightLabel) || columnAxis.startsWith(PatientOrientation::LeftLabel)) &&
+                (rowAxis.startsWith(PatientOrientation::HeadLabel) || rowAxis.startsWith(PatientOrientation::FeetLabel)))
             {
-                label = Orientation::getPlaneOrientationLabel(Orientation::Coronal);
+                label = AnatomicalPlane::getLabel(AnatomicalPlane::Coronal);
             }
-            else if ((rowAxis.startsWith(Orientation::AnteriorLabel) || rowAxis.startsWith(Orientation::PosteriorLabel)) &&
-                (columnAxis.startsWith(Orientation::HeadLabel) || columnAxis.startsWith(Orientation::FeetLabel)))
+            else if ((rowAxis.startsWith(PatientOrientation::AnteriorLabel) || rowAxis.startsWith(PatientOrientation::PosteriorLabel)) &&
+                (columnAxis.startsWith(PatientOrientation::HeadLabel) || columnAxis.startsWith(PatientOrientation::FeetLabel)))
             {
-                label = Orientation::getPlaneOrientationLabel(Orientation::Sagittal);
+                label = AnatomicalPlane::getLabel(AnatomicalPlane::Sagittal);
             }
-            else if ((columnAxis.startsWith(Orientation::AnteriorLabel) || columnAxis.startsWith(Orientation::PosteriorLabel)) &&
-                (rowAxis.startsWith(Orientation::HeadLabel) || rowAxis.startsWith(Orientation::FeetLabel)))
+            else if ((columnAxis.startsWith(PatientOrientation::AnteriorLabel) || columnAxis.startsWith(PatientOrientation::PosteriorLabel)) &&
+                (rowAxis.startsWith(PatientOrientation::HeadLabel) || rowAxis.startsWith(PatientOrientation::FeetLabel)))
             {
-                label = Orientation::getPlaneOrientationLabel(Orientation::Sagittal);
+                label = AnatomicalPlane::getLabel(AnatomicalPlane::Sagittal);
             }
             else
             {
-                label = Orientation::getPlaneOrientationLabel(Orientation::Oblique);
+                label = AnatomicalPlane::getLabel(AnatomicalPlane::Oblique);
             }
         }
         else
         {
-            label = Orientation::getPlaneOrientationLabel(Orientation::NotAvailable);
+            label = AnatomicalPlane::getLabel(AnatomicalPlane::NotAvailable);
         }
     }
 
