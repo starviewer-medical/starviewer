@@ -245,11 +245,11 @@ QVector<QString> Q2DViewer::getCurrentDisplayedImageOrientationLabels() const
         if (m_lastView == Axial)
         {
             // Esquerra
-            labelsVector[(0 + index) % 4] = this->getOppositeOrientationLabel(list.at(0));
+            labelsVector[(0 + index) % 4] = PatientOrientation::getOppositeOrientationLabel(list.at(0));
             // Dreta
             labelsVector[(2 + index) % 4] = list.at(0);
             // A dalt
-            labelsVector[(1 + index) % 4] = this->getOppositeOrientationLabel(list.at(1));
+            labelsVector[(1 + index) % 4] = PatientOrientation::getOppositeOrientationLabel(list.at(1));
             // A baix
             labelsVector[(3 + index) % 4] = list.at(1);
         }
@@ -262,13 +262,13 @@ QVector<QString> Q2DViewer::getCurrentDisplayedImageOrientationLabels() const
                 index += 2;
             }
             // Esquerra
-            labelsVector[(0 + index) % 4] = this->getOppositeOrientationLabel(list.at(1));
+            labelsVector[(0 + index) % 4] = PatientOrientation::getOppositeOrientationLabel(list.at(1));
             // Dreta
             labelsVector[(2 + index) % 4] = list.at(1);
             // A dalt
             labelsVector[(1 + index) % 4] = list.at(2);
             // A baix
-            labelsVector[(3 + index) % 4] = this->getOppositeOrientationLabel(list.at(2));
+            labelsVector[(3 + index) % 4] = PatientOrientation::getOppositeOrientationLabel(list.at(2));
         }
         else if (m_lastView == Coronal)
         {
@@ -279,13 +279,13 @@ QVector<QString> Q2DViewer::getCurrentDisplayedImageOrientationLabels() const
                 index += 2;
             }
             // Esquerra
-            labelsVector[(0 + index) % 4] = this->getOppositeOrientationLabel(list.at(0));
+            labelsVector[(0 + index) % 4] = PatientOrientation::getOppositeOrientationLabel(list.at(0));
             // Dreta
             labelsVector[(2 + index) % 4] = list.at(0);
             // A dalt
             labelsVector[(1 + index) % 4] = list.at(2);
             // A baix
-            labelsVector[(3 + index) % 4] = this->getOppositeOrientationLabel(list.at(2));
+            labelsVector[(3 + index) % 4] = PatientOrientation::getOppositeOrientationLabel(list.at(2));
         }
         if (m_isImageFlipped)
         {
@@ -565,45 +565,6 @@ void Q2DViewer::addActors()
     vtkCamera *camera = getActiveCamera();
     Q_ASSERT(camera);
     camera->ParallelProjectionOn();
-}
-
-QString Q2DViewer::getOppositeOrientationLabel(const QString &label)
-{
-    int i = 0;
-    QString oppositeLabel;
-    while (i < label.size())
-    {
-        if (QString(label.at(i)) == PatientOrientation::LeftLabel)
-        {
-            oppositeLabel += PatientOrientation::RightLabel;
-        }
-        else if (QString(label.at(i)) == PatientOrientation::RightLabel)
-        {
-            oppositeLabel += PatientOrientation::LeftLabel;
-        }
-        else if (QString(label.at(i)) == PatientOrientation::AnteriorLabel)
-        {
-            oppositeLabel += PatientOrientation::PosteriorLabel;
-        }
-        else if (QString(label.at(i)) == PatientOrientation::PosteriorLabel)
-        {
-            oppositeLabel += PatientOrientation::AnteriorLabel;
-        }
-        else if (QString(label.at(i)) == PatientOrientation::HeadLabel)
-        {
-            oppositeLabel += PatientOrientation::FeetLabel;
-        }
-        else if (QString(label.at(i)) == PatientOrientation::FeetLabel)
-        {
-            oppositeLabel += PatientOrientation::HeadLabel;
-        }
-        else
-        {
-            oppositeLabel += "?";
-        }
-        i++;
-    }
-    return oppositeLabel;
 }
 
 void Q2DViewer::setInput(Volume *volume)
