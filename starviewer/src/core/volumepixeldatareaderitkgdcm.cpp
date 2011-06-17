@@ -19,8 +19,6 @@ VolumePixelDataReaderITKGDCM::VolumePixelDataReaderITKGDCM(QObject *parent)
 
     m_gdcmIO = ImageIOType::New();
 
-    m_itkToVtkFilter = ItkToVtkFilterType::New();
-
     m_progressSignalAdaptor = new itk::QtSignalAdaptor();
     // Connect the adaptor as an observer of a Filter's event
     m_seriesReader->AddObserver(itk::ProgressEvent(), m_progressSignalAdaptor->GetCommand());
