@@ -10,8 +10,6 @@
 #include <itkGDCMImageIO.h>
 // Per notificar el progrés de lectura
 #include "itkQtAdaptor.h"
-// Converts an ITK image into a VTK image and plugs a itk data pipeline to a VTK datapipeline.
-#include "itkImageToVTKImageFilter.h"
 
 namespace udg {
 
@@ -69,16 +67,11 @@ private:
     typedef itk::ImageSeriesReader<Volume::ItkImageType> SeriesReaderType;
     typedef itk::GDCMImageIO ImageIOType;
 
-    typedef itk::ImageToVTKImageFilter<Volume::ItkImageType> ItkToVtkFilterType;
-
     /// El lector de sèries dicom
     SeriesReaderType::Pointer m_seriesReader;
 
     /// Motor de lectura DICOM de gdcm
     ImageIOType::Pointer m_gdcmIO;
-
-    /// Filtre que ens passa d'itk a vtk
-    ItkToVtkFilterType::Pointer m_itkToVtkFilter;
 
     /// TODO membre temporal per la transició al tractament de fases
     int m_numberOfPhases;
