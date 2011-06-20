@@ -20,8 +20,8 @@ private slots:
     void setDICOMFormattedPatientOrientation_ShouldReturnFalseAndSetEmptyOrientationString_data();
     void setDICOMFormattedPatientOrientation_ShouldReturnFalseAndSetEmptyOrientationString();
 
-    void makePatientOrientationFromImageOrientationPatient_ShouldMakeRightPatientOrientation_data();
-    void makePatientOrientationFromImageOrientationPatient_ShouldMakeRightPatientOrientation();
+    void setPatientOrientationFromImageOrientation_ShouldMakeRightPatientOrientation_data();
+    void setPatientOrientationFromImageOrientation_ShouldMakeRightPatientOrientation();
 };
 
 void test_PatientOrientation::getOppositeOrientationLabel_ShouldReturnExpectedValues_data()
@@ -339,7 +339,7 @@ void test_PatientOrientation::setDICOMFormattedPatientOrientation_ShouldReturnFa
     QCOMPARE(patientOrientation.getDICOMFormattedPatientOrientation(), QString(""));
 }
 
-void test_PatientOrientation::makePatientOrientationFromImageOrientationPatient_ShouldMakeRightPatientOrientation_data()
+void test_PatientOrientation::setPatientOrientationFromImageOrientation_ShouldMakeRightPatientOrientation_data()
 {
     QTest::addColumn<QVector3D>("rowVector");
     QTest::addColumn<QVector3D>("columnVector");
@@ -477,7 +477,7 @@ void test_PatientOrientation::makePatientOrientationFromImageOrientationPatient_
         << "P\\FR\\RH";
 }
 
-void test_PatientOrientation::makePatientOrientationFromImageOrientationPatient_ShouldMakeRightPatientOrientation()
+void test_PatientOrientation::setPatientOrientationFromImageOrientation_ShouldMakeRightPatientOrientation()
 {
     QFETCH(QVector3D, rowVector);
     QFETCH(QVector3D, columnVector);
@@ -485,7 +485,7 @@ void test_PatientOrientation::makePatientOrientationFromImageOrientationPatient_
 
     ImageOrientation imageOrientation(rowVector, columnVector);
     PatientOrientation patientOrientation;
-    patientOrientation.makePatientOrientationFromImageOrientationPatient(imageOrientation);
+    patientOrientation.setPatientOrientationFromImageOrientation(imageOrientation);
     
     QCOMPARE(patientOrientation.getDICOMFormattedPatientOrientation(), patientOrientationString);
 }

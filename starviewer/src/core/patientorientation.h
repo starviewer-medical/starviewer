@@ -37,8 +37,8 @@ public:
     /// Retornna la cadena de la orientació de pacient en format DICOM
     QString getDICOMFormattedPatientOrientation() const;
     
-    /// Transforma la informació d'imageOrientation a l'string equivalent a PatientOrientation
-    void makePatientOrientationFromImageOrientationPatient(const ImageOrientation &imageOrientation);
+    /// Assigna la orientació de pacient calculada a partir de l'ImageOrientation
+    void setPatientOrientationFromImageOrientation(const ImageOrientation &imageOrientation);
     
     /// Donada una etiqueta d'orientació, ens retorna aquesta etiqueta però amb els valors oposats.
     /// Per exemple, si l'etiqueta que ens donen és RPF (Right-Posterior,Feet), el valor retornat seria LAH (Left-Anterior-Head)
@@ -52,8 +52,8 @@ private:
     /// Si la cadena és correcta retorna cert, fals altrament
     bool validateDICOMFormattedPatientOrientationString(const QString &string);
 
-    /// Mètode per obtenir l'string corresponent a un direction cosines. Donat un vector de direcció determina la seva etiqueta d'orientació
-    QString mapDirectionCosinesToOrientationString(const QVector3D &vector);
+    /// Donat un vector de direcció ens retorna l'etiqueta d'orientació corresponent
+    QString getOrientationLabelFromDirectionVector(const QVector3D &vector);
 
 private:
     /// La cadena d'orientació de pacient. Es guardarà com en el format DICOM, admetent que sigui buida o contingui 2 o 3 elements.

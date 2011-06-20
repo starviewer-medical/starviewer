@@ -35,14 +35,14 @@ QString PatientOrientation::getDICOMFormattedPatientOrientation() const
     return m_patientOrientationString;
 }
 
-void PatientOrientation::makePatientOrientationFromImageOrientationPatient(const ImageOrientation &imageOrientation)
+void PatientOrientation::setPatientOrientationFromImageOrientation(const ImageOrientation &imageOrientation)
 {
     QString patientOrientationString;
-    patientOrientationString = this->mapDirectionCosinesToOrientationString(imageOrientation.getRowVector());
+    patientOrientationString = this->getOrientationLabelFromDirectionVector(imageOrientation.getRowVector());
     patientOrientationString += DICOMValueRepresentationConverter::ValuesSeparator;
-    patientOrientationString += this->mapDirectionCosinesToOrientationString(imageOrientation.getColumnVector());
+    patientOrientationString += this->getOrientationLabelFromDirectionVector(imageOrientation.getColumnVector());
     patientOrientationString += DICOMValueRepresentationConverter::ValuesSeparator;
-    patientOrientationString += this->mapDirectionCosinesToOrientationString(imageOrientation.getNormalVector());
+    patientOrientationString += this->getOrientationLabelFromDirectionVector(imageOrientation.getNormalVector());
 
     if (!setDICOMFormattedPatientOrientation(patientOrientationString))
     {
@@ -117,7 +117,7 @@ bool PatientOrientation::validateDICOMFormattedPatientOrientationString(const QS
     return validStringExpression.exactMatch(string);
 }
 
-QString PatientOrientation::mapDirectionCosinesToOrientationString(const QVector3D &vector)
+QString PatientOrientation::getOrientationLabelFromDirectionVector(const QVector3D &vector)
 {
     QString orientation;
 
