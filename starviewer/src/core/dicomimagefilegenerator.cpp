@@ -111,7 +111,7 @@ void DICOMImageFileGenerator::fillGeneralImageInfo(DICOMWriter *writer, Image *i
     // Patient Position. Tipus 2C
     DICOMValueAttribute patientOrientation;
     patientOrientation.setTag(DICOMPatientOrientation);
-    patientOrientation.setValue(image->getPatientOrientation());
+    patientOrientation.setValue(image->getPatientOrientation().getDICOMFormattedPatientOrientation());
     writer->addValueAttribute(&patientOrientation);
 
 }

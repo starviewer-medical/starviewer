@@ -55,12 +55,12 @@ ImageOrientation Image::getImageOrientationPatient() const
     return m_imageOrientationPatient;
 }
 
-void Image::setPatientOrientation(const QString &orientation)
+void Image::setPatientOrientation(const PatientOrientation &orientation)
 {
     m_patientOrientation = orientation;
 }
 
-QString Image::getPatientOrientation() const
+PatientOrientation Image::getPatientOrientation() const
 {
     return m_patientOrientation;
 }

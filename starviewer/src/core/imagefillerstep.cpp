@@ -289,19 +289,19 @@ bool ImageFillerStep::processImage(Image *image, DICOMTagReader *dicomReader)
             imageOrientation.setDICOMFormattedImageOrientation(value);
             image->setImageOrientationPatient(imageOrientation);
 
-            // Cerquem l'string amb la orientació del pacient
+            // Orientació de pacient
+            // L'obtenim a partir del tag DICOM si existeix, sinó el calculem a partir d'ImageOrientation
+            PatientOrientation patientOrientation;
             value = dicomReader->getValueAttributeAsQString(DICOMPatientOrientation);
             if (!value.isEmpty())
             {
-                image->setPatientOrientation(value);
+                patientOrientation.setDICOMFormattedPatientOrientation(value);
             }
             else
             {
-                // Si no tenim aquest valor, el calculem a partir de l'ImageOrientationPatient
-                PatientOrientation patientOrientation;
                 patientOrientation.setPatientOrientationFromImageOrientation(image->getImageOrientationPatient());
-                image->setPatientOrientation(patientOrientation.getDICOMFormattedPatientOrientation());
             }
+            image->setPatientOrientation(patientOrientation);
         }
         else
         {
@@ -313,10 +313,10 @@ bool ImageFillerStep::processImage(Image *image, DICOMTagReader *dicomReader)
             // Com que no tenim ImageOrientationPatient no podem generar la informació de Patient Orientation
             // Per tant, anem a buscar el valor del tag PatientOrientation, de tipus 2C
             value = dicomReader->getValueAttributeAsQString(DICOMPatientOrientation);
-            if (!value.isEmpty())
-            {
-                image->setPatientOrientation(value);
-            }
+            
+            PatientOrientation patientOrientation;
+            patientOrientation.setDICOMFormattedPatientOrientation(value);
+            image->setPatientOrientation(patientOrientation);
         }
 
         //
@@ -588,7 +588,7 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
                     // Li passem l'ImageOrientation obtingut per crear les etiquetes d'orientació
                     PatientOrientation patientOrientation;
                     patientOrientation.setPatientOrientationFromImageOrientation(image->getImageOrientationPatient());
-                    image->setPatientOrientation(patientOrientation.getDICOMFormattedPatientOrientation());
+                    image->setPatientOrientation(patientOrientation);
                 }
             }
         }
@@ -722,7 +722,9 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
                 DICOMValueAttribute *dicomValue = item->getValueAttribute(DICOMPatientOrientation);
                 if (dicomValue)
                 {
-                    image->setPatientOrientation(dicomValue->getValueAsQString());
+                    PatientOrientation patientOrientation;
+                    patientOrientation.setDICOMFormattedPatientOrientation(dicomValue->getValueAsQString());
+                    image->setPatientOrientation(patientOrientation);
                 }
                 else
                 {

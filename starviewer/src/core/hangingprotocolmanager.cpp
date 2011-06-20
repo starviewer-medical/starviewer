@@ -523,7 +523,7 @@ bool HangingProtocolManager::isValidImage(Image *image, HangingProtocolImageSet 
         }
         else if (restriction.selectorAttribute == "PatientOrientation")
         {
-            if (!image->getPatientOrientation().contains(restriction.valueRepresentation))
+            if (!image->getPatientOrientation().getDICOMFormattedPatientOrientation().contains(restriction.valueRepresentation))
             {
                 valid = false;
             }
