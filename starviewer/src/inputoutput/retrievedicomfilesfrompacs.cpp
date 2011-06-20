@@ -11,14 +11,12 @@
 #include <QDir>
 #include <QString>
 
-#include "status.h"
-#include "logging.h"
 #include "localdatabasemanager.h"
 #include "dicommask.h"
 #include "logging.h"
 #include "dicomtagreader.h"
 #include "pacsconnection.h"
-#include "pacsrequeststatus.h"
+#include "pacsdevice.h"
 
 namespace udg {
 
@@ -349,7 +347,6 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::retrieve(co
     T_ASC_PresentationContextID presentationContextID;
     T_DIMSE_C_MoveRSP moveResponse;
     DcmDataset *statusDetail = NULL;
-    Status state;
     m_pacsConnection = new PACSConnection(m_pacs);
     PACSRequestStatus::RetrieveRequestStatus retrieveRequestStatus;
     MoveSCPCallbackData moveSCPCallbackData;
