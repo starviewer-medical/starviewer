@@ -46,7 +46,7 @@ void PatientOrientation::makePatientOrientationFromImageOrientationPatient(const
 
     if (!setDICOMFormattedPatientOrientation(patientOrientationString))
     {
-        DEBUG_LOG("makePatientOrientationFromImageOrientationPatient() ha generat una cadena d'orientaciÛ de pacient inv‡lida");
+        DEBUG_LOG("makePatientOrientationFromImageOrientationPatient() ha generat una cadena d'orientaci√≥ de pacient inv√†lida");
     }
 }
 
@@ -91,25 +91,25 @@ QString PatientOrientation::getOppositeOrientationLabel(const QString &label)
 
 bool PatientOrientation::validateDICOMFormattedPatientOrientationString(const QString &string)
 {
-    // Construim l'expressiÛ regular que ens comprova que la cadena est‡ en el format correcte: Cadena buida, o amb 2 o 3 elements.
+    // Construim l'expressi√≥ regular que ens comprova que la cadena est√† en el format correcte: Cadena buida, o amb 2 o 3 elements.
     
-    // Etiquetes v‡lides: RLAPHF
+    // Etiquetes v√†lides: RLAPHF
     QString validOrientationLabels = RightLabel + LeftLabel + AnteriorLabel + PosteriorLabel + HeadLabel + FeetLabel;
     
-    // ExpressiÛ per les etiquetes [RLAPHF]+
+    // Expressi√≥ per les etiquetes [RLAPHF]+
     QString validLabelsExpression = "[" + validOrientationLabels + "]+";
     
-    // ExpressiÛ pels separadors 
-    // Hem de posar dos cops seguits DICOMValueRepresentationConverter::ValuesSeparator, ja que tal com diu la documentaciÛ de QRegExp:
+    // Expressi√≥ pels separadors 
+    // Hem de posar dos cops seguits DICOMValueRepresentationConverter::ValuesSeparator, ja que tal com diu la documentaci√≥ de QRegExp:
     //
     // Note: The C++ compiler transforms backslashes in strings. To include a \ in a regexp, enter it twice, i.e. \\. 
     // To match the backslash character itself, enter it four times, i.e. \\\\.
     //
-    // Llavors cal posar \\\\ perquË l'expressiÛ sigui correcta
+    // Llavors cal posar \\\\ perqu√® l'expressi√≥ sigui correcta
     QString separatorExpression = DICOMValueRepresentationConverter::ValuesSeparator + DICOMValueRepresentationConverter::ValuesSeparator;
     
-    // L'expressiÛ final: ([RLAPHF]+\\\\[RLAPHF]+(\\\\[RLAPHF]+)?)*
-    // …s a dir, 2 o 3 Ìtems amb etiquetes v‡lides separats per \\.
+    // L'expressi√≥ final: ([RLAPHF]+\\\\[RLAPHF]+(\\\\[RLAPHF]+)?)*
+    // √âs a dir, 2 o 3 √≠tems amb etiquetes v√†lides separats per \\.
     QString regExpString = "(" + validLabelsExpression + separatorExpression + validLabelsExpression +
         "(" + separatorExpression + validLabelsExpression + ")?)*";
 
