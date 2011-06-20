@@ -91,7 +91,7 @@ bool PatientOrientation::validateDICOMFormattedPatientOrientationString(const QS
     QString separatorExpression = DICOMValueRepresentationConverter::ValuesSeparator + DICOMValueRepresentationConverter::ValuesSeparator;
     
     // L'expressió final: ([RLAPHF]+\\\\[RLAPHF]+(\\\\[RLAPHF]+)?)*
-    // És a dir, 2 o 3 ítems amb etiquetes vàlides separats per \\ 
+    // És a dir, 2 o 3 ítems amb etiquetes vàlides separats per \\.
     QString regExpString = "(" + validLabelsExpression + separatorExpression + validLabelsExpression +
         "(" + separatorExpression + validLabelsExpression + ")?)*";
 
