@@ -119,13 +119,11 @@ bool PatientOrientation::validateDICOMFormattedPatientOrientationString(const QS
 
 QString PatientOrientation::mapDirectionCosinesToOrientationString(const QVector3D &vector)
 {
-    char orientation[4];
-    char *optr = orientation;
-    *optr = '\0';
+    QString orientation;
 
-    char orientationX = vector.x() < 0 ? 'R' : 'L';
-    char orientationY = vector.y() < 0 ? 'A' : 'P';
-    char orientationZ = vector.z() < 0 ? 'F' : 'H';
+    QString orientationX = vector.x() < 0 ? RightLabel : LeftLabel;
+    QString orientationY = vector.y() < 0 ? AnteriorLabel : PosteriorLabel;
+    QString orientationZ = vector.z() < 0 ? FeetLabel : HeadLabel;
 
     double absX = fabs(vector.x());
     double absY = fabs(vector.y());
@@ -135,26 +133,26 @@ QString PatientOrientation::mapDirectionCosinesToOrientationString(const QVector
     {
         if (absX > .0001 && absX > absY && absX > absZ)
         {
-            *optr++= orientationX;
+            orientation += orientationX;
             absX = 0;
         }
         else if (absY > .0001 && absY > absX && absY > absZ)
         {
-            *optr++= orientationY;
+            orientation += orientationY;
             absY = 0;
         }
         else if (absZ > .0001 && absZ > absX && absZ > absY)
         {
-            *optr++= orientationZ;
+            orientation += orientationZ;
             absZ = 0;
         }
         else
         {
             break;
         }
-        *optr = '\0';
     }
-    return QString(orientation);
+    
+    return orientation;
 }
 
 } // End namespace udg
