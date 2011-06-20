@@ -4,6 +4,7 @@
 #include <QStringList>
 
 #include "patientorientation.h"
+#include "dicomvaluerepresentationconverter.h"
 
 namespace udg {
 
@@ -41,7 +42,7 @@ const QString AnatomicalPlane::getProjectionLabelFromPlaneOrientation(const QStr
 {
     QString label;
 
-    QStringList axisList = orientation.split("\\");
+    QStringList axisList = orientation.split(DICOMValueRepresentationConverter::ValuesSeparator);
     // Comprovem si tenim les annotacions esperades
     if (axisList.count() >= 2)
     {
