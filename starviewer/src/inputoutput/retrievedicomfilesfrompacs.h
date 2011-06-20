@@ -1,7 +1,6 @@
 #ifndef RETRIEVEDICOMFILESFROMPACS_H
 #define RETRIEVEDICOMFILESFROMPACS_H
 
-#include <QString>
 #include <QObject>
 #include <ofcond.h>
 #include <assoc.h>
@@ -21,7 +20,6 @@ class DcmFileFormat;
 
 namespace udg {
 
-class Status;
 class DicomMask;
 class DICOMTagReader;
 class PACSConnection;

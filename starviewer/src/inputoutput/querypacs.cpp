@@ -6,7 +6,6 @@
 #include <dcsequen.h>
 
 #include "pacsconnection.h"
-#include "dicommask.h"
 #include "image.h"
 #include "study.h"
 #include "series.h"
