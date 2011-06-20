@@ -10,8 +10,7 @@
 #include "dicomsequenceitem.h"
 #include "dicomvalueattribute.h"
 #include "thumbnailcreator.h"
-// Pel fabs
-#include <cmath>
+#include "patientorientation.h"
 // Pel process events TODO Treure i fer amb threads.
 #include <QApplication>
 #include <QFileInfo>
@@ -299,7 +298,9 @@ bool ImageFillerStep::processImage(Image *image, DICOMTagReader *dicomReader)
             else
             {
                 // Si no tenim aquest valor, el calculem a partir de l'ImageOrientationPatient
-                image->setPatientOrientation(makePatientOrientationFromImageOrientationPatient(image->getImageOrientationPatient()));
+                PatientOrientation patientOrientation;
+                patientOrientation.makePatientOrientationFromImageOrientationPatient(image->getImageOrientationPatient());
+                image->setPatientOrientation(patientOrientation.getDICOMFormattedPatientOrientation());
             }
         }
         else
@@ -585,7 +586,9 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
                     imageOrientation.setDICOMFormattedImageOrientation(dicomValue->getValueAsQString());
                     image->setImageOrientationPatient(imageOrientation);
                     // Li passem l'ImageOrientation obtingut per crear les etiquetes d'orientació
-                    image->setPatientOrientation(makePatientOrientationFromImageOrientationPatient(imageOrientation));
+                    PatientOrientation patientOrientation;
+                    patientOrientation.makePatientOrientationFromImageOrientationPatient(image->getImageOrientationPatient());
+                    image->setPatientOrientation(patientOrientation.getDICOMFormattedPatientOrientation());
                 }
             }
         }
@@ -904,58 +907,6 @@ void ImageFillerStep::computePixelSpacing(Image *image, DICOMTagReader *dicomRea
             DEBUG_LOG("No s'ha trobat cap valor de pixel spacing definit de forma estàndar esperada. Modalitat de la imatge: [" + modality + "]");
         }
     }
-}
-
-QString ImageFillerStep::makePatientOrientationFromImageOrientationPatient(const ImageOrientation &imageOrientation)
-{
-    QString patientOrientationString;
-    patientOrientationString = this->mapDirectionCosinesToOrientationString(imageOrientation.getRowVector());
-    patientOrientationString += "\\";
-    patientOrientationString += this->mapDirectionCosinesToOrientationString(imageOrientation.getColumnVector());
-    patientOrientationString += "\\";
-    patientOrientationString += this->mapDirectionCosinesToOrientationString(imageOrientation.getNormalVector());
-
-    return patientOrientationString;
-}
-
-QString ImageFillerStep::mapDirectionCosinesToOrientationString(const QVector3D &vector)
-{
-    char orientation[4];
-    char *optr = orientation;
-    *optr='\0';
-
-    char orientationX = vector.x() < 0 ? 'R' : 'L';
-    char orientationY = vector.y() < 0 ? 'A' : 'P';
-    char orientationZ = vector.z() < 0 ? 'F' : 'H';
-
-    double absX = fabs(vector.x());
-    double absY = fabs(vector.y());
-    double absZ = fabs(vector.z());
-
-    for (int i = 0; i < 3; ++i)
-    {
-        if (absX > .0001 && absX > absY && absX > absZ)
-        {
-            *optr++= orientationX;
-            absX = 0;
-        }
-        else if (absY > .0001 && absY > absX && absY > absZ)
-        {
-            *optr++= orientationY;
-            absY = 0;
-        }
-        else if (absZ > .0001 && absZ > absX && absZ > absY)
-        {
-            *optr++= orientationZ;
-            absZ = 0;
-        }
-        else
-        {
-            break;
-        }
-        *optr='\0';
-    }
-    return QString(orientation);
 }
 
 bool ImageFillerStep::areOfDifferentSize(Image *firstImage, Image *secondImage)

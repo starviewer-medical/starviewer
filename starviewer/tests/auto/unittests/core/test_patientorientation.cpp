@@ -1,6 +1,10 @@
 #include "autotest.h"
 #include "patientorientation.h"
 
+#include <QVector3D>
+
+#include "imageorientation.h"
+
 using namespace udg;
 
 class test_PatientOrientation : public QObject {
@@ -15,6 +19,9 @@ private slots:
 
     void setDICOMFormattedPatientOrientation_ShouldReturnFalseAndSetEmptyOrientationString_data();
     void setDICOMFormattedPatientOrientation_ShouldReturnFalseAndSetEmptyOrientationString();
+
+    void makePatientOrientationFromImageOrientationPatient_ShouldMakeRightPatientOrientation_data();
+    void makePatientOrientationFromImageOrientationPatient_ShouldMakeRightPatientOrientation();
 };
 
 void test_PatientOrientation::getOppositeOrientationLabel_ShouldReturnExpectedValues_data()
@@ -330,6 +337,157 @@ void test_PatientOrientation::setDICOMFormattedPatientOrientation_ShouldReturnFa
     PatientOrientation patientOrientation;
     QCOMPARE(patientOrientation.setDICOMFormattedPatientOrientation(orientation), false);
     QCOMPARE(patientOrientation.getDICOMFormattedPatientOrientation(), QString(""));
+}
+
+void test_PatientOrientation::makePatientOrientationFromImageOrientationPatient_ShouldMakeRightPatientOrientation_data()
+{
+    QTest::addColumn<QVector3D>("rowVector");
+    QTest::addColumn<QVector3D>("columnVector");
+    QTest::addColumn<QString>("patientOrientationString");
+
+    QVector3D zeroVector(0, 0, 0);
+    QVector3D xVector(1, 0, 0);
+    QVector3D yVector(0, 1, 0);
+    QVector3D zVector(0, 0, 1);
+    QVector3D xMinusVector(-1, 0, 0);
+    QVector3D yMinusVector(0, -1, 0);
+    QVector3D zMinusVector(0, 0, -1);
+    
+    QTest::newRow("Zero, Zero Vectors")
+        << zeroVector << zeroVector << "";
+    
+    QTest::newRow("Zero, X Vectors")
+        << zeroVector << xVector << "";
+
+    QTest::newRow("X, Zero, Vectors")
+        << xVector << zeroVector << "";
+
+    QTest::newRow("X, Y Vectors")
+        << xVector << yVector << "L\\P\\H";
+
+    QTest::newRow("X, Z Vectors")
+        << xVector << zVector << "L\\H\\A";
+    
+    QTest::newRow("Y, X Vectors")
+        << yVector << xVector << "P\\L\\F";
+
+    QTest::newRow("Y, Z Vectors")
+        << yVector << zVector << "P\\H\\L";
+
+    QTest::newRow("Z, X Vectors")
+        << zVector << xVector << "H\\L\\P";
+
+    QTest::newRow("Z, Y Vectors")
+        << zVector << yVector << "H\\P\\R";
+
+    QTest::newRow("X, -Y Vectors")
+        << xVector << yMinusVector << "L\\A\\F";
+
+    QTest::newRow("-X, -Y Vectors")
+        << xMinusVector << yMinusVector << "R\\A\\H";
+
+    QTest::newRow("-X, Y Vectors")
+        << xMinusVector << yVector << "R\\P\\F";
+    
+    QTest::newRow("X, -Z Vectors")
+        << xVector << zMinusVector << "L\\F\\P";
+
+    QTest::newRow("-X, -Z Vectors")
+        << xMinusVector << zMinusVector << "R\\F\\A";
+
+    QTest::newRow("-X, Z Vectors")
+        << xMinusVector << zVector << "R\\H\\P";
+
+    QTest::newRow("Y, -Z Vectors")
+        << yVector << zMinusVector << "P\\F\\R";
+
+    QTest::newRow("-Y, -Z Vectors")
+        << yMinusVector << zMinusVector << "A\\F\\L";
+
+    QTest::newRow("-Y, Z Vectors")
+        << yMinusVector << zVector << "A\\H\\R";
+
+    QTest::newRow("Y, -X Vectors")
+        << yVector << xMinusVector << "P\\R\\H";
+
+    QTest::newRow("-Y, -X Vectors")
+        << yMinusVector << xMinusVector << "A\\R\\F";
+
+    QTest::newRow("-Y, X Vectors")
+        << yMinusVector << xVector << "A\\L\\H";
+
+    QTest::newRow("Sagittal Lumbar MR example")
+        << QVector3D(-0.0488199964165, 0.99880760908126, 1.7226173612e-11)
+        << QVector3D(0.01777809672057, 0.00086896272841, -0.9998415708541)
+        << "PR\\FLP\\RAF";
+
+    QTest::newRow("Axial Lumbar MR example")
+        << QVector3D(0.99864935874938, 0.04881225898861, 0.01779931783676)
+        << QVector3D(-0.0516529306769, 0.89577716588974, 0.44149202108383)
+        << "LPH\\PHR\\HAL";
+
+    QTest::newRow("Axial Lumbar MR example (2)")
+        << QVector3D(0.99962580204010, -0.0025094528682, 0.02723966166377)
+        << QVector3D(-0.0061289877630, 0.94992113113403, 0.31242957711219)
+        << "LHA\\PHR\\HAR";
+
+    QTest::newRow("Axial Lumbar MR example (3)")
+        << QVector3D(0.99928122758865, 0.00065188325243, 0.03790331259369)
+        << QVector3D(0.00063067907467, 0.99942785501480, -0.0338159352540)
+        << "LHP\\PFL\\HRP";
+
+    QTest::newRow("Axial Brain MR example")
+        << QVector3D(1, 0, 0)
+        << QVector3D(0, 1, 0)
+        << "L\\P\\H";
+    
+    QTest::newRow("Sagittal Brain MR example")
+        << QVector3D(0, 1, 0)
+        << QVector3D(0, 0, -1)
+        << "P\\F\\R";
+    
+    QTest::newRow("Coronal Brain MR example")
+        << QVector3D(1, 0, 0)
+        << QVector3D(0, 0, -1)
+        << "L\\F\\P";
+ 
+    QTest::newRow("Axial Diffusion Brain MR example")
+        << QVector3D(0.99786239862442, 0.06464176625013, -0.0095974076539)
+        << QVector3D(-0.0645796582102, 0.95291411876678, -0.2962839603424)
+        << "LPF\\PFR\\HPR";
+
+    QTest::newRow("Sagittal Diffusion Brain MR example")
+        << QVector3D(-0.0524810999631, 0.98934137821197, -0.1358285695314)
+        << QVector3D(0.00632020272314, -0.1356842368841, -0.9907319545745)
+        << "PFR\\FAL\\RAH";
+
+    QTest::newRow("Coronal Diffusion Brain MR example")
+        << QVector3D(0.99754029512405, 0.06982568651437, -0.0061442572623)
+        << QVector3D(0.00340184569358, -0.1357780992984, -0.9907334446907)
+        << "LPF\\FAL\\PFR";
+
+    QTest::newRow("Axial CT example")
+        << QVector3D(1, 0, 0)
+        << QVector3D(0, 0.956304756, -0.292371705)
+        << "L\\PF\\HP";
+
+    QTest::newRow("Sagittal CT example")
+        << QVector3D(0, 1, 0)
+        << QVector3D(-0.0428148313, 0, -0.999083025)
+        << "P\\FR\\RH";
+}
+
+void test_PatientOrientation::makePatientOrientationFromImageOrientationPatient_ShouldMakeRightPatientOrientation()
+{
+    QFETCH(QVector3D, rowVector);
+    QFETCH(QVector3D, columnVector);
+    QFETCH(QString, patientOrientationString);
+
+    ImageOrientation imageOrientation(rowVector, columnVector);
+    PatientOrientation patientOrientation;
+    patientOrientation.makePatientOrientationFromImageOrientationPatient(imageOrientation);
+    
+    QCOMPARE(patientOrientation.getDICOMFormattedPatientOrientation(), patientOrientationString);
 }
 
 DECLARE_TEST(test_PatientOrientation)

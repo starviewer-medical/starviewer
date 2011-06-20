@@ -1,8 +1,11 @@
 #include "patientorientation.h"
 
 #include <QRegExp>
+#include <cmath>
 
 #include "dicomvaluerepresentationconverter.h"
+#include "imageorientation.h"
+#include "logging.h"
 
 namespace udg {
 
@@ -30,6 +33,21 @@ bool PatientOrientation::setDICOMFormattedPatientOrientation(const QString &pati
 QString PatientOrientation::getDICOMFormattedPatientOrientation() const
 {
     return m_patientOrientationString;
+}
+
+void PatientOrientation::makePatientOrientationFromImageOrientationPatient(const ImageOrientation &imageOrientation)
+{
+    QString patientOrientationString;
+    patientOrientationString = this->mapDirectionCosinesToOrientationString(imageOrientation.getRowVector());
+    patientOrientationString += DICOMValueRepresentationConverter::ValuesSeparator;
+    patientOrientationString += this->mapDirectionCosinesToOrientationString(imageOrientation.getColumnVector());
+    patientOrientationString += DICOMValueRepresentationConverter::ValuesSeparator;
+    patientOrientationString += this->mapDirectionCosinesToOrientationString(imageOrientation.getNormalVector());
+
+    if (!setDICOMFormattedPatientOrientation(patientOrientationString))
+    {
+        DEBUG_LOG("makePatientOrientationFromImageOrientationPatient() ha generat una cadena d'orientació de pacient invàlida");
+    }
 }
 
 QString PatientOrientation::getOppositeOrientationLabel(const QString &label)
@@ -99,8 +117,44 @@ bool PatientOrientation::validateDICOMFormattedPatientOrientationString(const QS
     return validStringExpression.exactMatch(string);
 }
 
+QString PatientOrientation::mapDirectionCosinesToOrientationString(const QVector3D &vector)
+{
+    char orientation[4];
+    char *optr = orientation;
+    *optr = '\0';
 
+    char orientationX = vector.x() < 0 ? 'R' : 'L';
+    char orientationY = vector.y() < 0 ? 'A' : 'P';
+    char orientationZ = vector.z() < 0 ? 'F' : 'H';
 
+    double absX = fabs(vector.x());
+    double absY = fabs(vector.y());
+    double absZ = fabs(vector.z());
 
+    for (int i = 0; i < 3; ++i)
+    {
+        if (absX > .0001 && absX > absY && absX > absZ)
+        {
+            *optr++= orientationX;
+            absX = 0;
+        }
+        else if (absY > .0001 && absY > absX && absY > absZ)
+        {
+            *optr++= orientationY;
+            absY = 0;
+        }
+        else if (absZ > .0001 && absZ > absX && absZ > absY)
+        {
+            *optr++= orientationZ;
+            absZ = 0;
+        }
+        else
+        {
+            break;
+        }
+        *optr = '\0';
+    }
+    return QString(orientation);
+}
 
 } // End namespace udg
