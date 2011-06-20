@@ -9,6 +9,7 @@
 #include <QPixmap>
 
 #include "imageorientation.h"
+#include "patientorientation.h"
 
 namespace udg {
 
@@ -40,9 +41,9 @@ public:
     void setImageOrientationPatient(const ImageOrientation &imageOrientation);
     ImageOrientation getImageOrientationPatient() const;
 
-    /// Assignar/Obtenir l'string d'orientació del pacient
-    void setPatientOrientation(const QString &orientation);
-    QString getPatientOrientation() const;
+    /// Assignar/Obtenir l'orientació del pacient
+    void setPatientOrientation(const PatientOrientation &orientation);
+    PatientOrientation getPatientOrientation() const;
 
     /// Assignar/Obtenir l'espaiat dels pixels
     void setPixelSpacing(double x, double y);
@@ -195,9 +196,9 @@ private:
     /// Nombre que identifica la imatge. (0020,0013) Tipus 2
     QString m_instanceNumber;
 
-    /// Direcció de les files i columnes de la imatge (LR/AP/SI). Requerit si la imatge no requereix Image Orientation(Patient)(0020,0037) i
+    /// Orientació anatòmica de les files i columnes de la imatge (LR/AP/HF). Requerit si la imatge no requereix Image Orientation(Patient)(0020,0037) i
     /// Image Position(Patient)(0020,0032). Veure C.6.7.1.1.1. (0020,0020) Tipus 2C.
-    QString m_patientOrientation;
+    PatientOrientation m_patientOrientation;
 
     // TODO Referenced Image Sequence (0008,1140) Tipus 3. Seqüència que referència altres imatges significativament relacionades amb aquestes,
     // com un post-localizer per CT.

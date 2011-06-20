@@ -202,7 +202,7 @@ QVector<QString> Q2DViewer::getCurrentDisplayedImageOrientationLabels() const
     Image *image = m_mainVolume->getImage(index);
     if (image)
     {
-        orientation = image->getPatientOrientation();
+        orientation = image->getPatientOrientation().getDICOMFormattedPatientOrientation();
         if (orientation.isEmpty())
         {
             return labelsVector;

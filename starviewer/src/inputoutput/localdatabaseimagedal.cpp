@@ -107,7 +107,11 @@ Image* LocalDatabaseImageDAL::fillImage(char **reply, int row, int columns)
     ImageOrientation imageOrientation;
     imageOrientation.setDICOMFormattedImageOrientation((reply[5 + row * columns]));
     image->setImageOrientationPatient(imageOrientation);
-    image->setPatientOrientation(reply[6 + row * columns]);
+    
+    PatientOrientation patientOrientation;
+    patientOrientation.setDICOMFormattedPatientOrientation(reply[6 + row * columns]);
+    image->setPatientOrientation(patientOrientation);
+    
     image->setPixelSpacing(getPixelSpacingAsDouble(reply[7 + row * columns])[0], getPixelSpacingAsDouble(reply[7 + row * columns])[1]);
     image->setSliceThickness(QString(reply[8 + row * columns]).toDouble());
     image->setImagePositionPatient(getPatientPositionAsDouble(reply[9 + row * columns]));
@@ -196,7 +200,7 @@ QString LocalDatabaseImageDAL::buildSqlInsert(Image *newImage)
                             .arg(DatabaseConnection::formatTextToValidSQLSyntax(newImage->getParentSeries()->getInstanceUID()))
                             .arg(DatabaseConnection::formatTextToValidSQLSyntax(newImage->getInstanceNumber()))
                             .arg(DatabaseConnection::formatTextToValidSQLSyntax(newImage->getImageOrientationPatient().getDICOMFormattedImageOrientation()))
-                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(newImage->getPatientOrientation()))
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(newImage->getPatientOrientation().getDICOMFormattedPatientOrientation()))
                             .arg(DatabaseConnection::formatTextToValidSQLSyntax(getPixelSpacingAsQString(newImage)))
                             .arg(newImage->getSliceThickness())
                             .arg(DatabaseConnection::formatTextToValidSQLSyntax(getPatientPositionAsQString(newImage)))
@@ -270,7 +274,7 @@ QString LocalDatabaseImageDAL::buildSqlUpdate(Image *imageToUpdate)
                             .arg(DatabaseConnection::formatTextToValidSQLSyntax(imageToUpdate->getParentSeries()->getInstanceUID()))
                             .arg(DatabaseConnection::formatTextToValidSQLSyntax(imageToUpdate->getInstanceNumber()))
                             .arg(DatabaseConnection::formatTextToValidSQLSyntax(imageToUpdate->getImageOrientationPatient().getDICOMFormattedImageOrientation()))
-                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(imageToUpdate->getPatientOrientation()))
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(imageToUpdate->getPatientOrientation().getDICOMFormattedPatientOrientation()))
                             .arg(DatabaseConnection::formatTextToValidSQLSyntax(getPixelSpacingAsQString(imageToUpdate)))
                             .arg(imageToUpdate->getSliceThickness())
                             .arg(DatabaseConnection::formatTextToValidSQLSyntax(getPatientPositionAsQString(imageToUpdate)))
