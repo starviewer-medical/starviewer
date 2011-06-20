@@ -299,7 +299,7 @@ bool ImageFillerStep::processImage(Image *image, DICOMTagReader *dicomReader)
             {
                 // Si no tenim aquest valor, el calculem a partir de l'ImageOrientationPatient
                 PatientOrientation patientOrientation;
-                patientOrientation.makePatientOrientationFromImageOrientationPatient(image->getImageOrientationPatient());
+                patientOrientation.setPatientOrientationFromImageOrientation(image->getImageOrientationPatient());
                 image->setPatientOrientation(patientOrientation.getDICOMFormattedPatientOrientation());
             }
         }
@@ -587,7 +587,7 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
                     image->setImageOrientationPatient(imageOrientation);
                     // Li passem l'ImageOrientation obtingut per crear les etiquetes d'orientació
                     PatientOrientation patientOrientation;
-                    patientOrientation.makePatientOrientationFromImageOrientationPatient(image->getImageOrientationPatient());
+                    patientOrientation.setPatientOrientationFromImageOrientation(image->getImageOrientationPatient());
                     image->setPatientOrientation(patientOrientation.getDICOMFormattedPatientOrientation());
                 }
             }
