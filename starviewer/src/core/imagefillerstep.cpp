@@ -11,7 +11,7 @@
 #include "dicomvalueattribute.h"
 #include "thumbnailcreator.h"
 #include "patientorientation.h"
-// Pel fabs
+// Pel fabs. Necessari per Mac
 #include <cmath>
 // Pel process events TODO Treure i fer amb threads.
 #include <QApplication>
