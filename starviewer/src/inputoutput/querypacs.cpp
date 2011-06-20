@@ -23,6 +23,7 @@ static const char *FindStudyAbstractSyntax = UID_FINDStudyRootQueryRetrieveInfor
 QueryPacs::QueryPacs(PacsDevice pacsDevice)
 {
     m_pacsDevice = pacsDevice;
+    m_pacsConnection = NULL;
 }
 
 void QueryPacs::foundMatchCallback(void *callbackData, T_DIMSE_C_FindRQ *request, int responseCount, T_DIMSE_C_FindRSP *rsp,
@@ -77,12 +78,11 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::query()
     m_pacsConnection = new PACSConnection(m_pacsDevice);
     T_DIMSE_C_FindRQ findRequest;
     T_DIMSE_C_FindRSP findResponse;
-    DcmDataset *statusDetail = NULL;
-    DcmDataset *dcmDatasetToQuery = convertDICOMMaskToDcmDataset(m_dicomMask);
 
     if (!m_pacsConnection->connectToPACS(PACSConnection::Query))
     {
         ERROR_LOG("S'ha produit un error al intentar connectar al PACS per fer query. AETitle: " + m_pacsDevice.getAETitle());
+        delete m_pacsConnection;
         return PACSRequestStatus::QueryCanNotConnectToPACS;
     }
 
@@ -91,6 +91,7 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::query()
     if (m_presId == 0)
     {
         ERROR_LOG("El PACS no ha acceptat el nivell de cerca d'estudis FINDStudyRootQueryRetrieveInformationModel");
+        delete m_pacsConnection;
         return PACSRequestStatus::QueryFailedOrRefused;
     }
 
@@ -99,6 +100,9 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::query()
     findRequest.MessageID = m_pacsConnection->getConnection()->nextMsgID;
     strcpy(findRequest.AffectedSOPClassUID, FindStudyAbstractSyntax);
     findRequest.DataSetType = DIMSE_DATASET_PRESENT;
+
+    DcmDataset *statusDetail = NULL;
+    DcmDataset *dcmDatasetToQuery = convertDICOMMaskToDcmDataset(m_dicomMask);
 
     // Finally conduct transmission of data
     OFCondition condition = DIMSE_findUser(m_pacsConnection->getConnection(), m_presId, &findRequest, dcmDatasetToQuery, foundMatchCallback, this, DIMSE_NONBLOCKING,
@@ -119,6 +123,7 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::query()
         delete statusDetail;
     }
     delete dcmDatasetToQuery;
+    delete m_pacsConnection;
 
     return queryRequestStatus;
 }
