@@ -15,6 +15,10 @@ namespace udg {
 class PatientOrientation {
 public:
     /// Etiquetes d'orientació
+    /// Si Anatomical Orientation Type (0010,2210) és buit o té el valor de BIPED, 
+    /// aquestes seran les abreviacions designades per les direccions anatòmiques
+    /// Si Anatomical Orientation Type (0010,2210) té el valor de QUADRUPED, es farien servir altres abreviacions (animals)
+    /// TODO De moment només tenim en compte les orientacions de tipus "BIPED". Consultar C.7.6.1.1.1 (PS 3.3) per a més informació
     static const QString LeftLabel;
     static const QString RightLabel;
     static const QString PosteriorLabel;
