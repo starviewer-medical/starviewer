@@ -10,19 +10,19 @@ namespace udg {
 class ImageOrientation;
 
 /**
-    Classe que encapsular‡ l'atribut DICOM Patient Orientation (0020,0020). Per mÈs informaciÛ consultar l'apartat C.7.6.1.1.1 (PS 3.3)
-    En cas que aquest atribut s'assigni directament del contingut de l'arxiu DICOM constar‡ de dues cadenes de texte separades per \\
-    que representen la direcciÛ de les files i columnes de la imatge respecte al pacient. 
-    En cas que l'atribut es calculi a partir de la classe ImageOrientation, a mÈs a mÈs li afegirim una tercera cadena que indicaria 
-    la direcciÛ en que s'apilen les imatges, ˙til per les reconstruccions.
+    Classe que encapsular√† l'atribut DICOM Patient Orientation (0020,0020). Per m√©s informaci√≥ consultar l'apartat C.7.6.1.1.1 (PS 3.3)
+    En cas que aquest atribut s'assigni directament del contingut de l'arxiu DICOM constar√† de dues cadenes de texte separades per \\
+    que representen la direcci√≥ de les files i columnes de la imatge respecte al pacient. 
+    En cas que l'atribut es calculi a partir de la classe ImageOrientation, a m√©s a m√©s li afegirim una tercera cadena que indicaria 
+    la direcci√≥ en que s'apilen les imatges, √∫til per les reconstruccions.
   */
 class PatientOrientation {
 public:
-    /// Etiquetes d'orientaciÛ
-    /// Si Anatomical Orientation Type (0010,2210) Ès buit o tÈ el valor de BIPED, 
-    /// aquestes seran les abreviacions designades per les direccions anatÚmiques
-    /// Si Anatomical Orientation Type (0010,2210) tÈ el valor de QUADRUPED, es farien servir altres abreviacions (animals)
-    /// TODO De moment nomÈs tenim en compte les orientacions de tipus "BIPED". Consultar C.7.6.1.1.1 (PS 3.3) per a mÈs informaciÛ
+    /// Etiquetes d'orientaci√≥
+    /// Si Anatomical Orientation Type (0010,2210) √©s buit o t√© el valor de BIPED, 
+    /// aquestes seran les abreviacions designades per les direccions anat√≤miques
+    /// Si Anatomical Orientation Type (0010,2210) t√© el valor de QUADRUPED, es farien servir altres abreviacions (animals)
+    /// TODO De moment nom√©s tenim en compte les orientacions de tipus "BIPED". Consultar C.7.6.1.1.1 (PS 3.3) per a m√©s informaci√≥
     static const QString LeftLabel;
     static const QString RightLabel;
     static const QString PosteriorLabel;
@@ -30,33 +30,33 @@ public:
     static const QString HeadLabel;
     static const QString FeetLabel;
 
-    /// Assigna la cadena d'orientaciÛ en format DICOM. Si aquesta tÈ alguna inconsistËncia, retornar‡ fals, cert altrament.
-    /// S'accepten cadenes buides, amb 2 i 3 Ìtems separats per \\ i que continguin les etiquetes d'orientaciÛ estipulades pel DICOM
+    /// Assigna la cadena d'orientaci√≥ en format DICOM. Si aquesta t√© alguna inconsist√®ncia, retornar√† fals, cert altrament.
+    /// S'accepten cadenes buides, amb 2 i 3 √≠tems separats per \\ i que continguin les etiquetes d'orientaci√≥ estipulades pel DICOM
     bool setDICOMFormattedPatientOrientation(const QString &patientOrientation);
     
-    /// Retornna la cadena de la orientaciÛ de pacient en format DICOM
+    /// Retornna la cadena de la orientaci√≥ de pacient en format DICOM
     QString getDICOMFormattedPatientOrientation() const;
     
-    /// Transforma la informaciÛ d'imageOrientation a l'string equivalent a PatientOrientation
+    /// Transforma la informaci√≥ d'imageOrientation a l'string equivalent a PatientOrientation
     void makePatientOrientationFromImageOrientationPatient(const ImageOrientation &imageOrientation);
     
-    /// Donada una etiqueta d'orientaciÛ, ens retorna aquesta etiqueta perÚ amb els valors oposats.
-    /// Per exemple, si l'etiqueta que ens donen Ès RPF (Right-Posterior,Feet), el valor retornat seria LAH (Left-Anterior-Head)
-    /// Les etiquetes v‡lides i els seus oposats sÛn les seg¸ents:
+    /// Donada una etiqueta d'orientaci√≥, ens retorna aquesta etiqueta per√≤ amb els valors oposats.
+    /// Per exemple, si l'etiqueta que ens donen √©s RPF (Right-Posterior,Feet), el valor retornat seria LAH (Left-Anterior-Head)
+    /// Les etiquetes v√†lides i els seus oposats s√≥n les seg√ºents:
     /// RightLabel:LeftLabel, AnteriorLabel:PosteriorLabel, HeadLabel:FeetLabel
-    /// Si l'string donada no es correspon amb cap d'aquests valors, el valor transformat ser‡ '?'
+    /// Si l'string donada no es correspon amb cap d'aquests valors, el valor transformat ser√† '?'
     static QString getOppositeOrientationLabel(const QString &label);
 
 private:
-    /// Ens valida una cadena d'orientaciÛ de pacient en format DICOM. Acceptarem cadenes amb 2 o 3 elements o buides.
-    /// Si la cadena Ès correcta retorna cert, fals altrament
+    /// Ens valida una cadena d'orientaci√≥ de pacient en format DICOM. Acceptarem cadenes amb 2 o 3 elements o buides.
+    /// Si la cadena √©s correcta retorna cert, fals altrament
     bool validateDICOMFormattedPatientOrientationString(const QString &string);
 
-    /// MËtode per obtenir l'string corresponent a un direction cosines. Donat un vector de direcciÛ determina la seva etiqueta d'orientaciÛ
+    /// M√®tode per obtenir l'string corresponent a un direction cosines. Donat un vector de direcci√≥ determina la seva etiqueta d'orientaci√≥
     QString mapDirectionCosinesToOrientationString(const QVector3D &vector);
 
 private:
-    /// La cadena d'orientaciÛ de pacient. Es guardar‡ com en el format DICOM, admetent que sigui buida o contingui 2 o 3 elements.
+    /// La cadena d'orientaci√≥ de pacient. Es guardar√† com en el format DICOM, admetent que sigui buida o contingui 2 o 3 elements.
     QString m_patientOrientationString;
 };
 
