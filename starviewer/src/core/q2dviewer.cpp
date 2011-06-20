@@ -14,6 +14,7 @@
 #include "coresettings.h"
 #include "qviewerworkinprogresswidget.h"
 #include "patientorientation.h"
+#include "anatomicalplane.h"
 // Thickslab
 #include "vtkProjectionImageFilter.h"
 #include "asynchronousvolumereader.h"
@@ -302,7 +303,7 @@ QVector<QString> Q2DViewer::getCurrentDisplayedImageOrientationLabels() const
 QString Q2DViewer::getCurrentPlaneProjectionLabel() const
 {
     QVector<QString> labels = this->getCurrentDisplayedImageOrientationLabels();
-    return Image::getProjectionLabelFromPlaneOrientation(labels[0] + "\\" + labels[1]);
+    return AnatomicalPlane::getProjectionLabelFromPlaneOrientation(labels[0] + "\\" + labels[1]);
 }
 
 void Q2DViewer::getXYZIndexesForView(int &x, int &y, int &z, int view)
