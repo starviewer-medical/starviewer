@@ -9,6 +9,12 @@ Q_OBJECT
 private slots:
     void getOppositeOrientationLabel_ShouldReturnExpectedValues_data();
     void getOppositeOrientationLabel_ShouldReturnExpectedValues();
+
+    void setDICOMFormattedPatientOrientation_ShouldReturnTrueAndOrientationStringIsSet_data();
+    void setDICOMFormattedPatientOrientation_ShouldReturnTrueAndOrientationStringIsSet();
+
+    void setDICOMFormattedPatientOrientation_ShouldReturnFalseAndSetEmptyOrientationString_data();
+    void setDICOMFormattedPatientOrientation_ShouldReturnFalseAndSetEmptyOrientationString();
 };
 
 void test_PatientOrientation::getOppositeOrientationLabel_ShouldReturnExpectedValues_data()
@@ -264,6 +270,66 @@ void test_PatientOrientation::getOppositeOrientationLabel_ShouldReturnExpectedVa
     QFETCH(QString, resultingLabel);
 
     QCOMPARE(PatientOrientation::getOppositeOrientationLabel(inputLabel), resultingLabel);
+}
+
+void test_PatientOrientation::setDICOMFormattedPatientOrientation_ShouldReturnTrueAndOrientationStringIsSet_data()
+{
+    QTest::addColumn<QString>("orientation");
+
+    QTest::newRow("Empty string") << "";
+    QTest::newRow("2 items") << "R\\A";
+    QTest::newRow("2 items (multiple chars)") << "RLHFAPRLHFAP\\AAARLHFAPAAARRRRRFFFF";
+    QTest::newRow("3 items") << "R\\A\\F";
+    QTest::newRow("3 items (multiple chars)") << "RRRRLHFAPRRR\\AAAAARLHFAPAAAAA\\FFFFRLHFAPFFFFFF";
+}
+
+void test_PatientOrientation::setDICOMFormattedPatientOrientation_ShouldReturnTrueAndOrientationStringIsSet()
+{
+    QFETCH(QString, orientation);
+
+    PatientOrientation patientOrientation;
+    QCOMPARE(patientOrientation.setDICOMFormattedPatientOrientation(orientation), true);
+    QCOMPARE(patientOrientation.getDICOMFormattedPatientOrientation(), orientation);
+}
+
+void test_PatientOrientation::setDICOMFormattedPatientOrientation_ShouldReturnFalseAndSetEmptyOrientationString_data()
+{
+    QTest::addColumn<QString>("orientation");
+
+    QTest::newRow("1 item") << "R";
+    QTest::newRow("1 item (invalid char)") << "r";
+    QTest::newRow("1 item (multiple valid chars)") << "RLHFAPRLHAAAARLHFA";
+    QTest::newRow("1 item (multiple invalid chars)") << "rlhfaprlhaaaarlhfa";
+    
+    QTest::newRow("2 items (one invalid char)") << "Q\\R";
+    QTest::newRow("2 items (multiple invalid chars)") << "rlhfa67832biusn9QWTY\\aaarlhfa1!paaarrrqqqq826735rrffff";
+    QTest::newRow("2 items (multiple invalid chars mixed with valid chars)") << "rlhfaPRLHFAP\\AAArlhfapaaaRRRqqqq826735RRFFFF";
+    
+    QTest::newRow("3 items (one invalid char)") << "R\\A\\f";
+    QTest::newRow("3 items (multiple invalid chars)") << "rrrrlhfaprrr\\rlhfa67832biusn9QWTY\\aaarlhfa1!paaarrrqqqq826735rrffff";
+    QTest::newRow("3 items (multiple invalid chars mixed with valid chars)") << "rlhfaPRLHFAP\\AAArlhfapaaaRRRqqqq826735RRFFFF\\RLHFAPRLHAAQWSMOXE";
+
+    QTest::newRow("1 sepatator alone") << "\\";
+    QTest::newRow("2 sepatators alone") << "\\\\";
+    QTest::newRow("3 sepatators alone") << "\\\\\\";
+    QTest::newRow("Extra separator at the beginning with 2 valid labels") << "\\A\\R";
+    QTest::newRow("Extra separator at the end with 2 valid labels") << "A\\R\\";
+    QTest::newRow("Extra separators at the beggining and the end with 2 valid labels") << "\\A\\R\\";
+    QTest::newRow("Extra separator at the beginning with 3 valid labels") << "\\A\\R\\F";
+    QTest::newRow("Extra separator at the end with 3 valid labels") << "A\\R\\H\\";
+    QTest::newRow("Extra separators at the beggining and the end with 3 valid labels") << "\\A\\R\\L\\";
+
+    QTest::newRow("4 items (valid chars)") << "R\\A\\F\\H";
+    QTest::newRow("4 items (mixed with valid chars)") << "aR\\Q\\RAHF\\doqndJOEOM=·eH";
+}
+
+void test_PatientOrientation::setDICOMFormattedPatientOrientation_ShouldReturnFalseAndSetEmptyOrientationString()
+{
+    QFETCH(QString, orientation);
+
+    PatientOrientation patientOrientation;
+    QCOMPARE(patientOrientation.setDICOMFormattedPatientOrientation(orientation), false);
+    QCOMPARE(patientOrientation.getDICOMFormattedPatientOrientation(), QString(""));
 }
 
 DECLARE_TEST(test_PatientOrientation)

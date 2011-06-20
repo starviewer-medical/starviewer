@@ -6,7 +6,11 @@
 namespace udg {
 
 /**
-    Classe que encapsularà l'atribut DICOM Patient Orientation (0020,0020)
+    Classe que encapsularà l'atribut DICOM Patient Orientation (0020,0020). Per més informació consultar l'apartat C.7.6.1.1.1 (PS 3.3)
+    En cas que aquest atribut s'assigni directament del contingut de l'arxiu DICOM constarà de dues cadenes de texte separades per \\
+    que representen la direcció de les files i columnes de la imatge respecte al pacient. 
+    En cas que l'atribut es calculi a partir de la classe ImageOrientation, a més a més li afegirim una tercera cadena que indicaria 
+    la direcció en que s'apilen les imatges, útil per les reconstruccions.
   */
 class PatientOrientation {
 public:
@@ -18,12 +22,28 @@ public:
     static const QString HeadLabel;
     static const QString FeetLabel;
 
+    /// Assigna la cadena d'orientació en format DICOM. Si aquesta té alguna inconsistència, retornarà fals, cert altrament.
+    /// S'accepten cadenes buides, amb 2 i 3 ítems separats per \\ i que continguin les etiquetes d'orientació estipulades pel DICOM
+    bool setDICOMFormattedPatientOrientation(const QString &patientOrientation);
+    
+    /// Retornna la cadena de la orientació de pacient en format DICOM
+    QString getDICOMFormattedPatientOrientation() const;
+    
     /// Donada una etiqueta d'orientació, ens retorna aquesta etiqueta però amb els valors oposats.
     /// Per exemple, si l'etiqueta que ens donen és RPF (Right-Posterior,Feet), el valor retornat seria LAH (Left-Anterior-Head)
     /// Les etiquetes vàlides i els seus oposats són les següents:
     /// RightLabel:LeftLabel, AnteriorLabel:PosteriorLabel, HeadLabel:FeetLabel
     /// Si l'string donada no es correspon amb cap d'aquests valors, el valor transformat serà '?'
     static QString getOppositeOrientationLabel(const QString &label);
+
+private:
+    /// Ens valida una cadena d'orientació de pacient en format DICOM. Acceptarem cadenes amb 2 o 3 elements o buides.
+    /// Si la cadena és correcta retorna cert, fals altrament
+    bool validateDICOMFormattedPatientOrientationString(const QString &string);
+
+private:
+    /// La cadena d'orientació de pacient. Es guardarà com en el format DICOM, admetent que sigui buida o contingui 2 o 3 elements.
+    QString m_patientOrientationString;
 };
 
 } // End namespace udg
