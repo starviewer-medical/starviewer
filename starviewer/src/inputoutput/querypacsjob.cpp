@@ -22,6 +22,11 @@ QueryPacsJob::QueryPacsJob(PacsDevice pacsDevice, DicomMask mask, QueryLevel que
     m_queryLevel = queryLevel;
 }
 
+QueryPacsJob::~QueryPacsJob()
+{
+    delete m_queryPacs;
+}
+
 PACSJob::PACSJobType QueryPacsJob::getPACSJobType()
 {
     return PACSJob::QueryPACS;
@@ -73,11 +78,6 @@ QHash<QString, QString> QueryPacsJob::getHashTablePacsIDOfStudyInstanceUID()
 {
     Q_ASSERT (isFinished());
     return m_queryPacs->getHashTablePacsIDOfStudyInstanceUID();
-}
-
-QueryPacsJob::~QueryPacsJob()
-{
-    delete m_queryPacs;
 }
 
 void QueryPacsJob::requestCancelJob()
