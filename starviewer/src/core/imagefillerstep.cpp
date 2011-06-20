@@ -11,6 +11,8 @@
 #include "dicomvalueattribute.h"
 #include "thumbnailcreator.h"
 #include "patientorientation.h"
+// Pel fabs
+#include <cmath>
 // Pel process events TODO Treure i fer amb threads.
 #include <QApplication>
 #include <QFileInfo>
