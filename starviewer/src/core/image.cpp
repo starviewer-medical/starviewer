@@ -4,8 +4,6 @@
 #include "logging.h"
 #include "thumbnailcreator.h"
 #include "mathtools.h"
-#include "patientorientation.h"
-#include "anatomicalplane.h"
 
 #include <QFileInfo>
 
@@ -455,63 +453,6 @@ QPixmap Image::getThumbnail(bool getFromCache, int resolution)
         }
     }
     return m_thumbnail;
-}
-
-QString Image::getProjectionLabelFromPlaneOrientation(const QString &orientation)
-{
-    QString label;
-
-    QStringList axisList = orientation.split("\\");
-    // Comprovem si tenim les annotacions esperades
-    if (axisList.count() >= 2)
-    {
-        QString rowAxis = axisList.at(0).trimmed();
-        QString columnAxis = axisList.at(1).trimmed();
-
-        if (!rowAxis.isEmpty() && !columnAxis.isEmpty())
-        {
-            if ((rowAxis.startsWith(PatientOrientation::RightLabel) || rowAxis.startsWith(PatientOrientation::LeftLabel)) &&
-                (columnAxis.startsWith(PatientOrientation::AnteriorLabel) || columnAxis.startsWith(PatientOrientation::PosteriorLabel)))
-            {
-                label = AnatomicalPlane::getLabel(AnatomicalPlane::Axial);
-            }
-            else if ((columnAxis.startsWith(PatientOrientation::RightLabel) || columnAxis.startsWith(PatientOrientation::LeftLabel)) &&
-                (rowAxis.startsWith(PatientOrientation::AnteriorLabel) || rowAxis.startsWith(PatientOrientation::PosteriorLabel)))
-            {
-                label = AnatomicalPlane::getLabel(AnatomicalPlane::Axial);
-            }
-            else if ((rowAxis.startsWith(PatientOrientation::RightLabel) || rowAxis.startsWith(PatientOrientation::LeftLabel)) &&
-                (columnAxis.startsWith(PatientOrientation::HeadLabel) || columnAxis.startsWith(PatientOrientation::FeetLabel)))
-            {
-                label = AnatomicalPlane::getLabel(AnatomicalPlane::Coronal);
-            }
-            else if ((columnAxis.startsWith(PatientOrientation::RightLabel) || columnAxis.startsWith(PatientOrientation::LeftLabel)) &&
-                (rowAxis.startsWith(PatientOrientation::HeadLabel) || rowAxis.startsWith(PatientOrientation::FeetLabel)))
-            {
-                label = AnatomicalPlane::getLabel(AnatomicalPlane::Coronal);
-            }
-            else if ((rowAxis.startsWith(PatientOrientation::AnteriorLabel) || rowAxis.startsWith(PatientOrientation::PosteriorLabel)) &&
-                (columnAxis.startsWith(PatientOrientation::HeadLabel) || columnAxis.startsWith(PatientOrientation::FeetLabel)))
-            {
-                label = AnatomicalPlane::getLabel(AnatomicalPlane::Sagittal);
-            }
-            else if ((columnAxis.startsWith(PatientOrientation::AnteriorLabel) || columnAxis.startsWith(PatientOrientation::PosteriorLabel)) &&
-                (rowAxis.startsWith(PatientOrientation::HeadLabel) || rowAxis.startsWith(PatientOrientation::FeetLabel)))
-            {
-                label = AnatomicalPlane::getLabel(AnatomicalPlane::Sagittal);
-            }
-            else
-            {
-                label = AnatomicalPlane::getLabel(AnatomicalPlane::Oblique);
-            }
-        }
-        else
-        {
-            label = AnatomicalPlane::getLabel(AnatomicalPlane::NotAvailable);
-        }
-    }
-
-    return label;
 }
 
 QStringList Image::getSupportedModalities()
