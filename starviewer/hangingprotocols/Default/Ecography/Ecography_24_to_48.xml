@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hangingProtocol name="Ecography_24_to_48">
+    <hangingProtocolName>24 to 48</hangingProtocolName>
+    <numberScreens>1</numberScreens>
+    <priority>0</priority>
+    <protocol>US</protocol>
+    <iconType>ECO</iconType>
+    <imageSet identifier="1">
+        <type>image</type>
+        <imageNumberInPatientModality>24</imageNumberInPatientModality>
+    </imageSet>
+    <imageSet identifier="2">
+        <type>image</type>
+        <imageNumberInPatientModality>25</imageNumberInPatientModality>
+    </imageSet>
+    <imageSet identifier="3">
+        <type>image</type>
+        <imageNumberInPatientModality>26</imageNumberInPatientModality>
+    </imageSet>
+    <imageSet identifier="4">
+        <type>image</type>
+        <imageNumberInPatientModality>27</imageNumberInPatientModality>
+    </imageSet>
+    <imageSet identifier="5">
+        <type>image</type>
+        <imageNumberInPatientModality>28</imageNumberInPatientModality>
+    </imageSet>
+    <imageSet identifier="6">
+        <type>image</type>
+        <imageNumberInPatientModality>29</imageNumberInPatientModality>
+    </imageSet>
+    <imageSet identifier="7">
+        <type>image</type>
+        <imageNumberInPatientModality>30</imageNumberInPatientModality>
+    </imageSet>
+    <imageSet identifier="8">
+        <type>image</type>
+        <imageNumberInPatientModality>31</imageNumberInPatientModality>
+    </imageSet>
+    <imageSet identifier="9">
+        <type>image</type>
+        <imageNumberInPatientModality>32</imageNumberInPatientModality>
+    </imageSet>
+    <imageSet identifier="10">
+        <type>image</type>
+        <imageNumberInPatientModality>33</imageNumberInPatientModality>
+    </imageSet>
+    <imageSet identifier="11">
+        <type>image</type>
+        <imageNumberInPatientModality>34</imageNumberInPatientModality>
+    </imageSet>
+    <imageSet identifier="12">
+        <type>image</type>
+        <imageNumberInPatientModality>35</imageNumberInPatientModality>
+    </imageSet>
+    <imageSet identifier="13">
+        <type>image</type>
+        <imageNumberInPatientModality>36</imageNumberInPatientModality>
+    </imageSet>
+    <imageSet identifier="14">
+        <type>image</type>
+        <imageNumberInPatientModality>37</imageNumberInPatientModality>
+    </imageSet>
+    <imageSet identifier="15">
+        <type>image</type>
+        <imageNumberInPatientModality>38</imageNumberInPatientModality>
+    </imageSet>
+    <imageSet identifier="16">
+        <type>image</type>
+        <imageNumberInPatientModality>39</imageNumberInPatientModality>
+    </imageSet>
+    <imageSet identifier="17">
+        <type>image</type>
+        <imageNumberInPatientModality>40</imageNumberInPatientModality>
+    </imageSet>
+    <imageSet identifier="18">
+        <type>image</type>
+        <imageNumberInPatientModality>41</imageNumberInPatientModality>
+    </imageSet>
+    <imageSet identifier="19">
+        <type>image</type>
+        <imageNumberInPatientModality>42</imageNumberInPatientModality>
+    </imageSet>
+    <imageSet identifier="20">
+        <type>image</type>
+        <imageNumberInPatientModality>43</imageNumberInPatientModality>
+    </imageSet>
+    <imageSet identifier="21">
+        <type>image</type>
+        <imageNumberInPatientModality>44</imageNumberInPatientModality>
+    </imageSet>
+    <imageSet identifier="22">
+        <type>image</type>
+        <imageNumberInPatientModality>45</imageNumberInPatientModality>
+    </imageSet>
+    <imageSet identifier="23">
+        <type>image</type>
+        <imageNumberInPatientModality>46</imageNumberInPatientModality>
+    </imageSet>
+    <imageSet identifier="24">
+        <type>image</type>
+        <imageNumberInPatientModality>47</imageNumberInPatientModality>
+    </imageSet>
+    <displaySet identifier="1">
+        <imageSetNumber>1</imageSetNumber>
+        <position>0.0\1.0\0.25\0.82</position>
+        <toolActivation>synchronization</toolActivation>
+    </displaySet>
+    <displaySet identifier="2">
+        <imageSetNumber>2</imageSetNumber>
+        <position>0.25\1.0\0.5\0.82</position>
+        <toolActivation>synchronization</toolActivation>
+    </displaySet>
+    <displaySet identifier="3">
+        <imageSetNumber>3</imageSetNumber>
+        <position>0.5\1.0\0.75\0.82</position>
+        <toolActivation>synchronization</toolActivation>
+    </displaySet>
+    <displaySet identifier="4">
+        <imageSetNumber>4</imageSetNumber>
+        <position>0.75\1.0\1.0\0.82</position>
+        <toolActivation>synchronization</toolActivation>
+    </displaySet>
+    <displaySet identifier="5">
+        <imageSetNumber>5</imageSetNumber>
+        <position>0.0\0.82\0.25\0.66</position>
+        <toolActivation>synchronization</toolActivation>
+    </displaySet>
+    <displaySet identifier="6">
+        <imageSetNumber>6</imageSetNumber>
+        <position>0.25\0.82\0.5\0.66</position>
+        <toolActivation>synchronization</toolActivation>
+    </displaySet>
+    <displaySet identifier="7">
+        <imageSetNumber>7</imageSetNumber>
+        <position>0.5\0.82\0.75\0.66</position>
+        <toolActivation>synchronization</toolActivation>
+    </displaySet>
+    <displaySet identifier="8">
+        <imageSetNumber>8</imageSetNumber>
+        <position>0.75\0.82\1.0\0.66</position>
+        <toolActivation>synchronization</toolActivation>
+    </displaySet>
+    <displaySet identifier="9">
+        <imageSetNumber>9</imageSetNumber>
+        <position>0.0\0.66\0.25\0.5</position>
+        <toolActivation>synchronization</toolActivation>
+    </displaySet>
+    <displaySet identifier="10">
+        <imageSetNumber>10</imageSetNumber>
+        <position>0.25\0.66\0.5\0.5</position>
+        <toolActivation>synchronization</toolActivation>
+    </displaySet>
+    <displaySet identifier="11">
+        <imageSetNumber>11</imageSetNumber>
+        <position>0.5\0.66\0.75\0.5</position>
+        <toolActivation>synchronization</toolActivation>
+    </displaySet>
+    <displaySet identifier="12">
+        <imageSetNumber>12</imageSetNumber>
+        <position>0.75\0.66\1.0\0.5</position>
+        <toolActivation>synchronization</toolActivation>
+    </displaySet>
+    <displaySet identifier="13">
+        <imageSetNumber>13</imageSetNumber>
+        <position>0.0\0.5\0.25\0.33</position>
+        <toolActivation>synchronization</toolActivation>
+    </displaySet>
+    <displaySet identifier="14">
+        <imageSetNumber>14</imageSetNumber>
+        <position>0.25\0.5\0.5\0.33</position>
+        <toolActivation>synchronization</toolActivation>
+    </displaySet>
+    <displaySet identifier="15">
+        <imageSetNumber>15</imageSetNumber>
+        <position>0.5\0.5\0.75\0.33</position>
+        <toolActivation>synchronization</toolActivation>
+    </displaySet>
+    <displaySet identifier="16">
+        <imageSetNumber>16</imageSetNumber>
+        <position>0.75\0.5\1.0\0.33</position>
+        <toolActivation>synchronization</toolActivation>
+    </displaySet>
+    <displaySet identifier="17">
+        <imageSetNumber>17</imageSetNumber>
+        <position>0.0\0.33\0.25\0.16</position>
+        <toolActivation>synchronization</toolActivation>
+    </displaySet>
+    <displaySet identifier="18">
+        <imageSetNumber>18</imageSetNumber>
+        <position>0.25\0.33\0.5\0.16</position>
+        <toolActivation>synchronization</toolActivation>
+    </displaySet>
+    <displaySet identifier="19">
+        <imageSetNumber>19</imageSetNumber>
+        <position>0.5\0.33\0.75\0.16</position>
+        <toolActivation>synchronization</toolActivation>
+    </displaySet>
+    <displaySet identifier="20">
+        <imageSetNumber>20</imageSetNumber>
+        <position>0.75\0.33\1.0\0.16</position>
+        <toolActivation>synchronization</toolActivation>
+    </displaySet>
+    <displaySet identifier="21">
+        <imageSetNumber>21</imageSetNumber>
+        <position>0.0\0.16\0.25\0.0</position>
+        <toolActivation>synchronization</toolActivation>
+    </displaySet>
+    <displaySet identifier="22">
+        <imageSetNumber>22</imageSetNumber>
+        <position>0.25\0.16\0.5\0.0</position>
+        <toolActivation>synchronization</toolActivation>
+    </displaySet>
+    <displaySet identifier="23">
+        <imageSetNumber>23</imageSetNumber>
+        <position>0.5\0.16\0.75\0.0</position>
+        <toolActivation>synchronization</toolActivation>
+    </displaySet>
+    <displaySet identifier="24">
+        <imageSetNumber>24</imageSetNumber>
+        <position>0.75\0.16\1.0\0.0</position>
+        <toolActivation>synchronization</toolActivation>
+    </displaySet>
+</hangingProtocol>
