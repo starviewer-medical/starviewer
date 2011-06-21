@@ -383,26 +383,47 @@ void Q2DViewer::mapOrientationStringToAnnotation()
         m_patientOrientationText[i] = labels.at(i);
     }
 
+    bool textActorShouldBeVisible = m_enabledAnnotations & Q2DViewer::PatientOrientationAnnotation;
     // Text actor -> 0:Esquerra, 1:Abaix, 2:Dreta, 3:A dalt
     // Labels     -> 0:Esquerra, 1:A dalt, 2:Dreta, 3:Abaix
     if (!m_patientOrientationText[0].isEmpty())
     {
         m_patientOrientationTextActor[0]->SetInput(qPrintable(m_patientOrientationText[0]));
+        m_patientOrientationTextActor[0]->SetVisibility(textActorShouldBeVisible);
+    }
+    else
+    {
+        m_patientOrientationTextActor[0]->SetVisibility(false);
     }
 
     if (!m_patientOrientationText[3].isEmpty())
     {
         m_patientOrientationTextActor[1]->SetInput(qPrintable(m_patientOrientationText[3]));
+        m_patientOrientationTextActor[1]->SetVisibility(textActorShouldBeVisible);
+    }
+    else
+    {
+        m_patientOrientationTextActor[1]->SetVisibility(false);
     }
 
     if (!m_patientOrientationText[2].isEmpty())
     {
         m_patientOrientationTextActor[2]->SetInput(qPrintable(m_patientOrientationText[2]));
+        m_patientOrientationTextActor[2]->SetVisibility(textActorShouldBeVisible);
+    }
+    else
+    {
+        m_patientOrientationTextActor[2]->SetVisibility(false);
     }
 
     if (!m_patientOrientationText[1].isEmpty())
     {
         m_patientOrientationTextActor[3]->SetInput(qPrintable(m_patientOrientationText[1]));
+        m_patientOrientationTextActor[3]->SetVisibility(textActorShouldBeVisible);
+    }
+    else
+    {
+        m_patientOrientationTextActor[3]->SetVisibility(false);
     }
 }
 
