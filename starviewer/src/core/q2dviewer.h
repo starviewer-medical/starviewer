@@ -213,6 +213,9 @@ public:
     static int getYIndexForView(int view);
     static int getZIndexForView(int view);
 
+    /// Retorna l'espai que hi ha entre les llesques segons la vista actual i si hi ha el thickness activat
+    double getCurrentSpacingBetweenSlices();
+
 public slots:
     virtual void setInput(Volume *volume);
 

@@ -20,7 +20,7 @@ SynchronizeTool::SynchronizeTool( QViewer *viewer, QObject *parent )
     m_hasSharedData = true;
     m_q2dviewer = dynamic_cast<Q2DViewer*>(viewer);
     m_lastSlice = m_q2dviewer->getCurrentSlice();
-    m_roundLostThickness = 0.0;
+    m_roundLostSpacingBetweenSlices = 0.0;
 
     connect( m_q2dviewer, SIGNAL( volumeChanged(Volume *) ), SLOT(reset()) );
     connect( m_q2dviewer, SIGNAL( viewChanged(int) ), SLOT(reset()) );
@@ -96,13 +96,16 @@ void SynchronizeTool::setIncrement( int slice )
 
     if( configuration && configuration->getValue( "Slicing" ).toBool() )
     {
-        double thickness = m_q2dviewer->getThickness();
-        DEBUG_LOG( QString("setIncrement::Thickness = %1").arg(thickness) );
-        // si la imatge no conté thickness (0.0), llavors li donem un valor nominal
-        if( thickness == 0.0 )
-            thickness = 1.0;
-        
-        double increment = (slice - m_lastSlice)*thickness; // Distancia incrementada
+        double currentSpacingBetweenSlices = m_q2dviewer->getCurrentSpacingBetweenSlices();
+        DEBUG_LOG(QString("setIncrement::currentSpacingBetweenSlices = %1").arg(currentSpacingBetweenSlices));
+        // Si la imatge no té espai entre llesques (0.0), llavors li donem un valor nominal
+        if (currentSpacingBetweenSlices == 0.0)
+        {
+            currentSpacingBetweenSlices = 1.0;
+        }
+
+        // Distancia incrementada
+        double increment = (slice - m_lastSlice) * currentSpacingBetweenSlices;
         m_lastSlice = slice;
         disconnect( m_toolData, SIGNAL(sliceChanged( ) ), this, SLOT( applySliceChanges() ) );
         this->m_toolData->setIncrement( increment );
@@ -152,15 +155,17 @@ void SynchronizeTool::applySliceChanges()
 
     if( configuration && configuration->getValue( "Slicing" ).toBool() )
     {
-        double thickness = m_q2dviewer->getThickness();
-        DEBUG_LOG( QString("applySliceChanges::Thickness = %1").arg(thickness) );
-        // si la imatge no conté thickness (0.0), llavors li donem un valor nominal
-        if( thickness == 0.0 )
-            thickness = 1.0;
+        double currentSpacingBetweenSlices = m_q2dviewer->getCurrentSpacingBetweenSlices();
+        DEBUG_LOG(QString("applySliceChanges::currentSpacingBetweenSlices = %1").arg(currentSpacingBetweenSlices));
+        // Si la imatge no té espai entre llesques (0.0), llavors li donem un valor nominal
+        if (currentSpacingBetweenSlices == 0.0)
+        {
+            currentSpacingBetweenSlices = 1.0;
+        }
         
-        double sliceIncrement = (this->m_toolData->getIncrement()/thickness) + m_roundLostThickness;
+        double sliceIncrement = (this->m_toolData->getIncrement()/currentSpacingBetweenSlices) + m_roundLostSpacingBetweenSlices;
         int slices = qRound( sliceIncrement );
-        m_roundLostThickness = sliceIncrement - slices;
+        m_roundLostSpacingBetweenSlices = sliceIncrement - slices;
         disconnect( m_viewer, SIGNAL(sliceChanged( int ) ), this, SLOT( setIncrement( int ) ) );
         m_q2dviewer->setSlice( m_lastSlice+slices );
         m_lastSlice += slices;
@@ -207,7 +212,7 @@ void SynchronizeTool::applyPanChanges()
 void SynchronizeTool::reset()
 {
     m_lastSlice = m_q2dviewer->getCurrentSlice();
-    m_roundLostThickness = 0.0;
+    m_roundLostSpacingBetweenSlices = 0.0;
 }
 
 void SynchronizeTool::handleEvent( unsigned long eventID )
