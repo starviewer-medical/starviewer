@@ -6,14 +6,37 @@
 #include "volumereaderjob.h"
 #include "volume.h"
 #include "logging.h"
+#include "coresettings.h"
+#include "volumerepository.h"
+#include "image.h"
+#include "series.h"
+
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 namespace udg {
 
 QHash<int, VolumeReaderJob*> AsynchronousVolumeReader::m_volumesLoading;
+ThreadWeaver::ResourceRestrictionPolicy AsynchronousVolumeReader::m_resourceRestrictionPolicy;
 
 AsynchronousVolumeReader::AsynchronousVolumeReader(QObject *parent)
     : QObject(parent)
 {
+}
+
+bool is32BitWindows()
+{
+#if defined(_WIN64)
+    return false;  // 64-bit programs run only on Win64
+#elif defined(_WIN32)
+    // 32-bit programs run on both 32-bit and 64-bit Windows
+    // so must sniff
+    BOOL f64 = false;
+    return !(IsWow64Process(GetCurrentProcess(), &f64) && f64);
+#else
+    return false; // Win64 does not support Win16
+#endif
 }
 
 VolumeReaderJob* AsynchronousVolumeReader::read(Volume *volume)
@@ -28,6 +51,8 @@ VolumeReaderJob* AsynchronousVolumeReader::read(Volume *volume)
     }
 
     VolumeReaderJob *volumeReaderJob = new VolumeReaderJob(volume);
+    assignResourceRestrictionPolicy(volumeReaderJob);
+
     connect(volumeReaderJob, SIGNAL(done(ThreadWeaver::Job *)), SLOT(unmarkVolumeFromJobAsLoading(ThreadWeaver::Job *)));
 
     this->markVolumeAsLoadingByJob(volume, volumeReaderJob);
@@ -37,6 +62,69 @@ VolumeReaderJob* AsynchronousVolumeReader::read(Volume *volume)
     weaver->enqueue(volumeReaderJob);
 
     return volumeReaderJob;
+}
+
+void AsynchronousVolumeReader::assignResourceRestrictionPolicy(VolumeReaderJob *volumeReaderJob)
+{
+    QSettings settings;
+    if (settings.contains(CoreSettings::MaximumNumberOfVolumesLoadingConcurrently))
+    {
+        int maximumNumberOfVolumesLoadingConcurrently = Settings().getValue(CoreSettings::MaximumNumberOfVolumesLoadingConcurrently).toInt();
+        if (maximumNumberOfVolumesLoadingConcurrently > 0)
+        {
+            m_resourceRestrictionPolicy.setCap(maximumNumberOfVolumesLoadingConcurrently);
+            volumeReaderJob->assignQueuePolicy(&m_resourceRestrictionPolicy);
+            INFO_LOG(QString("Limitem a %1 la quantitat de volums carregant-se simultàniament.").arg(m_resourceRestrictionPolicy.cap()));
+        }
+        else
+        {
+            ERROR_LOG("El valor per limitar la quantitat de volums carregant-se simultàniament ha de ser més gran de 0.");
+        }
+    }
+    else if (is32BitWindows())
+    {
+        // Si és 32 bits limitem la concurrència si tenim volums multiframe o que no siguin CT o MR
+        QStringList allowedModalities;
+        allowedModalities << QString("CT") << QString("MR");
+        bool found = false;
+        QListIterator<Volume*> iterator(VolumeRepository::getRepository()->getItems());
+        while (iterator.hasNext() && !found)
+        {
+            Volume *currentVolume = iterator.next();
+            QList<Image*> imageList = currentVolume->getImages();
+            // Mirem si és multiframe
+            if (imageList.count() > 1)
+            {
+                // Comprovant la primera i segona imatges n'hi ha prou
+                if (imageList.at(0)->getPath() == imageList.at(1)->getPath())
+                {
+                    found = true;
+                }
+            }
+            // Mirem si és una modalitat permesa
+            if (imageList.count() > 0)
+            {
+                QString modality = imageList.at(0)->getParentSeries()->getModality();
+                if (!allowedModalities.contains(modality))
+                {
+                    found = true;
+                }
+            }
+        }
+
+        int numberOfVolumesLoadingConcurrently;
+        if (found)
+        {
+            numberOfVolumesLoadingConcurrently = 1;
+            INFO_LOG(QString("Windows 32 bits amb volums que poden requerir molta memòria. Limitem a %1 la quantitat de volums carregant-se simultàniament.").arg(numberOfVolumesLoadingConcurrently));
+        }
+        else
+        {
+            numberOfVolumesLoadingConcurrently = getWeaverInstance()->maximumNumberOfThreads();
+        }
+        m_resourceRestrictionPolicy.setCap(numberOfVolumesLoadingConcurrently);
+        volumeReaderJob->assignQueuePolicy(&m_resourceRestrictionPolicy);
+    }
 }
 
 void AsynchronousVolumeReader::unmarkVolumeFromJobAsLoading(ThreadWeaver::Job *job)
