@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QHash>
 
+#include <threadweaver/ResourceRestrictionPolicy.h>
+
 namespace ThreadWeaver {
 class Job;
 class Weaver;
@@ -55,9 +57,13 @@ private:
     /// Ens retorna el VolumeReaderJob del Volume que se li passi, si aquest té un job assignat que l'està llegint. Si no, retornarà null.
     VolumeReaderJob* getVolumeReaderJob(Volume *volume) const;
 
+    /// Assigna una política restrictiva si tenim el setting MaximumNumberOfVolumesLoadingConcurrently definit o si
+    /// estem a windows 32 bits i hi ha possibilitat d'obrir volums que requereixin molta memòria.
+    void assignResourceRestrictionPolicy(VolumeReaderJob *volumeReaderJob);
 private:
     /// Llista dels volums que s'estan carregant
     static QHash<int, VolumeReaderJob*> m_volumesLoading;
+    static ThreadWeaver::ResourceRestrictionPolicy m_resourceRestrictionPolicy;
 };
 
 } // End namespace udg
