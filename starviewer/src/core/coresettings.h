@@ -75,6 +75,8 @@ public:
 
     /// Indica si es pot realitzar càrrega de volums asíncrona o no
     static const QString AllowAsynchronousVolumeLoading;
+    /// Indica quans volums poden estar-se carregant a la vegada com a màxim.
+    static const QString MaximumNumberOfVolumesLoadingConcurrently;
 
     /// Defineix el nombre màxim d'ítems visibles al desplegar-se el combo de window/levels per defecte.
     /// Si tenim més presets que els que indiqui aquest setting, apareixerà un scroll vertical.

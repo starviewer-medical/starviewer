@@ -64,6 +64,7 @@ const QString CoreSettings::DontCheckNewVersionsOnline("DontCheckNewVersionsOnli
 const QString CoreSettings::MammographyAutoOrientationExceptions("MammographyAutoOrientationExceptions");
 
 const QString CoreSettings::AllowAsynchronousVolumeLoading("AllowAsynchronousVolumeLoading");
+const QString CoreSettings::MaximumNumberOfVolumesLoadingConcurrently("MaximumNumberOfVolumesLoadingConcurrently");
 
 const QString CoreSettings::MaximumNumberOfVisibleWindowLevelComboItems("MaximumNumberOfVisibleWindowLevelComboItems");
 
@@ -96,6 +97,7 @@ void CoreSettings::init()
     settingsRegistry->addSetting(DontCheckNewVersionsOnline, false);
     settingsRegistry->addSetting(MammographyAutoOrientationExceptions, (QStringList() << "BAV" << "BAG" << "estereot"));
     settingsRegistry->addSetting(AllowAsynchronousVolumeLoading, true);
+    settingsRegistry->addSetting(MaximumNumberOfVolumesLoadingConcurrently, 1);
     settingsRegistry->addSetting(MaximumNumberOfVisibleWindowLevelComboItems, 50);
 }
 
