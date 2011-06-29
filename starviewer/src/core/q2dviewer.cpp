@@ -383,7 +383,7 @@ void Q2DViewer::mapOrientationStringToAnnotation()
         m_patientOrientationText[i] = labels.at(i);
     }
 
-    bool textActorShouldBeVisible = m_enabledAnnotations & Q2DViewer::PatientOrientationAnnotation;
+    bool textActorShouldBeVisible = m_enabledAnnotations.testFlag(Q2DViewer::PatientOrientationAnnotation);
     // Text actor -> 0:Esquerra, 1:Abaix, 2:Dreta, 3:A dalt
     // Labels     -> 0:Esquerra, 1:A dalt, 2:Dreta, 3:Abaix
     if (!m_patientOrientationText[0].isEmpty())
