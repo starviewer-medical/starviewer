@@ -14,7 +14,7 @@
         <translation>Previsualización no disponible</translation>
     </message>
     <message>
-        <location filename="coresettings.cpp" line="84"/>
+        <location filename="coresettings.cpp" line="85"/>
         <source>PNG (*.png)</source>
         <translation></translation>
     </message>
@@ -258,39 +258,44 @@
 <context>
     <name>udg::Q2DViewer</name>
     <message>
-        <location filename="q2dviewer.cpp" line="1787"/>
+        <location filename="q2dviewer.cpp" line="1827"/>
         <source>Slice: %1/%2 Phase: %3/%4</source>
         <translation>Corte: %1/%2 Fase: %3/%4</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1799"/>
+        <location filename="q2dviewer.cpp" line="1839"/>
         <source>Slice: %1/%2</source>
         <translation>Corte: %1/%2</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1783"/>
+        <location filename="q2dviewer.cpp" line="1823"/>
         <source>Slice: %1-%2/%3 Phase: %4/%5</source>
         <translation>Corte: %1-%2/%3 Fase: %4/%5</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1795"/>
+        <location filename="q2dviewer.cpp" line="1835"/>
         <source>Slice: %1-%2/%3</source>
         <translation>Corte: %1-%2/%3</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1805"/>
+        <location filename="q2dviewer.cpp" line="1845"/>
         <source> Thickness: %1 mm</source>
         <translation> Grosor: %1 mm</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1519"/>
+        <location filename="q2dviewer.cpp" line="1559"/>
         <source>%1 x %2
 WW: %5 WL: %6</source>
         <translation>%1 x %2
 WW: %5 WL: %6</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1555"/>
+        <location filename="q2dviewer.cpp" line="726"/>
+        <source>There&apos;s not enough memory for the rendering process. Try to close all the opened %1 windows, restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64 bit operating system may solve the problem.</source>
+        <translation>No hay suficiente memoria para el proceso de visualización. Cierre todas las ventanas abiertas de %1, reinicie la aplicación e inténtelo de nuevo. Si el problema persiste, se podría solucionar añadiendo más memoria RAM o cambiando a un sistema de 64 bits.</translation>
+    </message>
+    <message>
+        <location filename="q2dviewer.cpp" line="1595"/>
         <source>%1
 %2
 %3 %4 %5
@@ -305,12 +310,12 @@ Acc:%6
 %8</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1762"/>
+        <location filename="q2dviewer.cpp" line="1802"/>
         <source>Loc: %1</source>
         <translation>Loc: %1</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1770"/>
+        <location filename="q2dviewer.cpp" line="1810"/>
         <source>-%1</source>
         <translation>-%1</translation>
     </message>
@@ -349,34 +354,34 @@ Acc:%6
 <context>
     <name>udg::Q3DViewer</name>
     <message>
-        <location filename="q3dviewer.cpp" line="1213"/>
+        <location filename="q3dviewer.cpp" line="1218"/>
         <source>Not supported volume</source>
         <translation>Volumen no soportado</translation>
     </message>
     <message>
-        <location filename="q3dviewer.cpp" line="1213"/>
+        <location filename="q3dviewer.cpp" line="1218"/>
         <source>Current volume cannot be opened because its format is not supported.</source>
         <translation>El volumen actual no se puede abrir ya que su formato no está soportado.</translation>
     </message>
     <message>
-        <location filename="q3dviewer.cpp" line="687"/>
-        <location filename="q3dviewer.cpp" line="1205"/>
+        <location filename="q3dviewer.cpp" line="692"/>
+        <location filename="q3dviewer.cpp" line="1210"/>
         <source>Volume too large</source>
         <translation>Volumen demasiado grande</translation>
     </message>
     <message>
-        <location filename="q3dviewer.cpp" line="687"/>
-        <location filename="q3dviewer.cpp" line="1205"/>
+        <location filename="q3dviewer.cpp" line="692"/>
+        <location filename="q3dviewer.cpp" line="1210"/>
         <source>Current volume is too large. Please select another volume or close other extensions and try again.</source>
         <translation>El volumen actual es demasiado grande. Por favor, seleccione otro volumen o cierre las aplicaciones abiertas e inténtelo de nuevo.</translation>
     </message>
     <message>
-        <location filename="q3dviewer.cpp" line="582"/>
+        <location filename="q3dviewer.cpp" line="587"/>
         <source>Can&apos;t apply rendering style</source>
         <translation>No se puede aplicar el estilo de visualización</translation>
     </message>
     <message>
-        <location filename="q3dviewer.cpp" line="582"/>
+        <location filename="q3dviewer.cpp" line="587"/>
         <source>The system hasn&apos;t enough memory to apply properly this rendering style with this volume.
 Shading will be disabled, it won&apos;t render as expected.</source>
         <translation>El sistema no tiene suficiente memoria para aplicar este estilo de visualización a este volumen.
@@ -1540,32 +1545,32 @@ Variable de entorno(logFilePath): %2</translation>
 <context>
     <name>udg::QViewer</name>
     <message>
-        <location filename="qviewer.cpp" line="635"/>
+        <location filename="qviewer.cpp" line="641"/>
         <source>Default</source>
         <translation>Por defecto</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="636"/>
+        <location filename="qviewer.cpp" line="642"/>
         <source>Auto</source>
         <translation>Automático</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="813"/>
+        <location filename="qviewer.cpp" line="819"/>
         <source>Downloading related study...</source>
         <translation>Descargando estudio relacionado...</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="819"/>
+        <location filename="qviewer.cpp" line="825"/>
         <source>Error downloading related study</source>
         <translation>Error al descargar estudio relacionado</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="816"/>
+        <location filename="qviewer.cpp" line="822"/>
         <source>Loading data...</source>
         <translation>Cargando los datos...</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="822"/>
+        <location filename="qviewer.cpp" line="828"/>
         <source>Error loading data</source>
         <translatorcomment>No hi faltaria punt a la traducció orginal?</translatorcomment>
         <translation>Error cargando los datos</translation>
