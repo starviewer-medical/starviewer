@@ -401,6 +401,10 @@ private:
     /// Indica si el volum del visor s'està carregant assíncronament
     bool isVolumeLoadingAsynchronously();
 
+    /// Crida els mètodes setNewVolume i executa el command. A més a més es fa un bloc try/catch per capturar
+    /// qualsevol excepció possible durant el procés de rendering per evitar que peti
+    void setNewVolumeAndExecuteCommand(Volume *volume);
+
 private slots:
     /// Actualitza les transformacions de càmera (de moment rotació i flip)
     void updateCamera();
