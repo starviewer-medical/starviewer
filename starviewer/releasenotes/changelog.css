@@ -16,7 +16,7 @@ h1
     vertical-align: middle;
 }
 
-div.majorRelease 
+div.majorRelease, div.minorRelease
 {
     border: 1px;
     border-radius: 5px;
@@ -26,7 +26,7 @@ div.majorRelease
     margin-bottom: 15px;
 }
 
-div.majorRelease .version 
+.version 
 {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
@@ -40,13 +40,13 @@ div.majorRelease .version
     margin-bottom: 10px;
 }
 
-div.majorRelease .version .versionNumber
+.version .versionNumber
 {
     font-weight:bold;
     font-size:15px;
 }
 
-div.majorRelease .version .versionDate
+.version .versionDate
 {
     font-size:12px;
     margin: 0px 10px;
@@ -69,8 +69,6 @@ li
 li:before
 {
     border-radius: 3px;
-    border-style: solid;
-    border-width: 1px;
     color: white;
     font-size: 11px;
     font-weight: bold;
