@@ -75,8 +75,11 @@ private:
     /// Llesca anterior per saber l'increment
     int m_lastSlice;
 
+    /// Thickness de la serie
+    int m_thickness;
+
     /// Thickness perdut per arrodoniment
-    double m_roundLostSpacingBetweenSlices;
+    double m_roundLostThickness;
 
     /// Dades de la tool
     SynchronizeToolData *m_toolData;
