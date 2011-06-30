@@ -15,6 +15,7 @@
 #include "qviewerworkinprogresswidget.h"
 #include "patientorientation.h"
 #include "anatomicalplane.h"
+#include "starviewerapplication.h"
 // Thickslab
 #include "vtkProjectionImageFilter.h"
 #include "asynchronousvolumereader.h"
@@ -25,9 +26,12 @@
 #include <QResizeEvent>
 // Include's bàsics vtk
 #include <vtkRenderer.h>
+#include <vtkRenderWindow.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkCamera.h>
 #include <vtkPropPicker.h>
+#include <QVTKWidget.h>
+#include <vtkWindowToImageFilter.h>
 // Composició d'imatges
 #include <vtkImageBlend.h>
 // Anotacions
@@ -620,8 +624,7 @@ void Q2DViewer::setInputAsynchronously(Volume *volume, QViewerCommand *inputFini
     }
     else
     {
-        this->setNewVolume(volume);
-        this->executeInputFinishedCommand();
+        setNewVolumeAndExecuteCommand(volume);
     }
 }
 
@@ -692,13 +695,50 @@ void Q2DViewer::volumeReaderJobFinished()
 {
     if (m_volumeReaderJob->success())
     {
-        this->setNewVolume(m_volumeReaderJob->getVolume());
-        this->executeInputFinishedCommand();
+        setNewVolumeAndExecuteCommand(m_volumeReaderJob->getVolume());
     }
     else
     {
         this->setViewerStatus(LoadingError);
         m_workInProgressWidget->showError(m_volumeReaderJob->getLastErrorMessageToUser());
+    }
+}
+
+void Q2DViewer::setNewVolumeAndExecuteCommand(Volume *volume)
+{
+    try
+    {
+        this->setNewVolume(volume);
+        this->executeInputFinishedCommand();
+    }
+    catch (...)
+    {
+        // Si tenim algun problema durant el rendering mostrem l'error i reiniciem l'estat del viewer
+        this->setViewerStatus(LoadingError);
+        m_workInProgressWidget->showError(tr("There's not enough memory for the rendering process. Try to close all the opened %1 windows, restart "
+            "the application and try again. If the problem persists, adding more RAM memory or switching to a 64 bit operating system may solve the problem.")
+            .arg(ApplicationNameString));
+        
+        // TODO Cal esborrar oldRenderWindow per evitar memory leaks. Ara mateix si fem Delete() ens peta.
+        vtkRenderWindow *oldRenderWindow = getRenderWindow();
+        vtkSmartPointer<vtkRenderWindow> renderWindow = vtkSmartPointer<vtkRenderWindow>::New();
+        renderWindow->SetInteractor(getInteractor());
+        renderWindow->AddRenderer(getRenderer());
+        oldRenderWindow->RemoveRenderer(getRenderer());
+        oldRenderWindow->SetInteractor(NULL);
+        //Canviem la RenderWindow
+        m_vtkWidget->SetRenderWindow(renderWindow);
+        // Forcem 2x buffer
+        getRenderWindow()->DoubleBufferOn();
+        
+        m_windowToImageFilter->SetInput(getRenderWindow());
+
+        m_windowLevelLUTMapper->Delete();
+        m_windowLevelLUTMapper = vtkImageMapToWindowLevelColors2::New();
+
+        Volume *dummyVolume = this->getDummyVolumeFromVolume(m_mainVolume);
+        dummyVolume->setIdentifier(m_mainVolume->getIdentifier());
+        this->setNewVolume(dummyVolume, false);
     }
 }
 
