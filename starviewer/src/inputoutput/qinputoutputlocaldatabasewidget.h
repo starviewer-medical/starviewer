@@ -100,7 +100,9 @@ private slots:
     void requestedSeriesOfStudy(Study *studyRequestedSeries);
 
     /// Mostra al SeriesListWidget la previsualització de la sèrie seleccionada en aquell moment al QStudyTreeWidget
-    void setSeriesToSeriesListWidget();
+    void setSeriesToSeriesListWidget(Study *study);
+
+    void currentSeriesOfQStudyTreeWidgetChanged(Series *series);
 
     /// Esborra de la base de dades els estudis seleccionats en el QStudyTreeWidgetView
     void deleteSelectedItemsFromLocalDatabase();

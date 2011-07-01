@@ -81,18 +81,6 @@ public:
     /// de la classe que el cridi fer-ne una còpia
     Study* getStudy(const QString &studyInstanceUID, const DICOMSource &dicomSourceOfStudy);
 
-    /// Retorna el UID Study de l'estudi seleccionat
-    /// @return UID de l'estudi seleccionat
-    QString getCurrentStudyUID();
-
-    /// Retorna el UID de la sèrie seleccionada, si en aquell moment no hi ha cap sèrie seleccionada, retorna un QString buit
-    ///  @return UID de la sèrie seleccionat
-    QString getCurrentSeriesUID();
-
-     /// Retorna el UID de la imatge seleccionada, si en aquell moment no hi ha cap imatge seleccionada, retorna un QString buit
-     /// @return UID de la imatge seleccionada
-    QString getCurrentImageUID();
-
     /// Estableix el menú contextual del Widget
     void setContextMenu(QMenu *contextMenu);
 
@@ -113,14 +101,12 @@ public slots:
 
 signals:
     /// Signal cada vegada que seleccionem un estudi diferent
-    void currentStudyChanged();
+    void currentStudyChanged(Study *currentStudy);
 
     /// Signal que s'emete quan canviem de sèrie seleccionada
-    void currentSeriesChanged(const QString &seriesUID);
+    void currentSeriesChanged(Series *currentSeries);
 
-    /// Signal que s'emet quan canviem d'imatge seleccionada
-    void currentImageChanged();
-
+    //TODO:Els signals de DoubleClicked no haurian de retornar l'estudi/series/imatge clickada =
     /// Signal que s'emet quan s'ha fet un doble click a un estudi
     void studyDoubleClicked();
 
@@ -178,6 +164,12 @@ private:
     Series* getSeriesByDICOMItemID(int seriesDICOMItemID);
     Image* getImageByDICOMItemID(int imageDICOMItemID);
 
+    ///Retorna Study/Series/Image a la que pertany un QTreeWidgeITem. Si a getStudyByQTreeWidgetItem li passem un QTreeWidgetItem que és una imatge ens retornarà l'estudi al
+    ///que pertany la imatge,  si getSeriesByQTreeWidgetItem li passem un item que és un Study ens retornarà null
+    Study* getStudyByQTreeWidgetItem(QTreeWidgetItem *qTreeWidgetItem);
+    Series* getSeriesByQTreeWidgetItem(QTreeWidgetItem *qTreeWidgetItem);
+    Image* getImageByQTreeWidgetItem(QTreeWidgetItem *qTreeWidgetItem);
+
     /// Formata l'edat per mostrar per pantalla
     /// @param edat
     QString formatAge(const QString &age) const;
@@ -219,7 +211,8 @@ private:
     QMenu *m_contextMenu;
 
     /// Strings per guardar valors de l'anterior element
-    QString m_oldCurrentStudyUID, m_oldCurrentSeriesUID, m_OldInstitution;
+    Study *m_oldCurrentStudy;
+    Series *m_oldCurrentSeries;
 
     bool m_qTreeWidgetItemHasBeenDoubleClicked;
 
