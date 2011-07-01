@@ -97,6 +97,9 @@ private:
     /// de hash on es guarden tots els QueryPACSJobs demanats per aquesta classe que estant pendents d'executar-se o s'estan executant
     void enqueueQueryPACSJobToPACSManagerAndConnectSignals(QueryPacsJob *queryPacsJob);
 
+    /// Ens copia la informació bàsica de l'estudi i pacient en un nou objecte Study
+    Study* copyBasicStudyInformation(Study *studyToCopy);
+
 private slots:
     /// Mostra les sèries d'un estudi, les consulta al dicomdir i les mostra al tree widget
     void requestedSeriesOfStudy(Study *study);
