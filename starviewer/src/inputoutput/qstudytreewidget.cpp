@@ -70,8 +70,10 @@ QList<QPair<DicomMask, DICOMSource> > QStudyTreeWidget::getDicomMaskOfSelectedIt
         if (isItemStudy(item))
         {
             // És un estudi
-            qpairDicomMaskDICOMSource.first = DicomMask::fromStudy(m_addedStudiesByDICOMItemID[item->text(DICOMItemID).toInt()], ok);
-            qpairDicomMaskDICOMSource.second = m_addedStudiesByDICOMItemID[item->text(DICOMItemID).toInt()]->getDICOMSource();
+            Study *selectedStudy = getStudyByDICOMItemID(item->text(DICOMItemID).toInt());
+
+            qpairDicomMaskDICOMSource.first = DicomMask::fromStudy(selectedStudy, ok);
+            qpairDicomMaskDICOMSource.second = selectedStudy->getDICOMSource();
 
             dicomMaskDICOMSourceList.append(qpairDicomMaskDICOMSource);
         }
@@ -80,8 +82,10 @@ QList<QPair<DicomMask, DICOMSource> > QStudyTreeWidget::getDicomMaskOfSelectedIt
             //Si l'estudi pare no està seleccionat
             if (!item->parent()->isSelected())
             {
-                qpairDicomMaskDICOMSource.first = DicomMask::fromSeries(m_adddSeriesByDICOMItemID[item->text(DICOMItemID).toInt()], ok);
-                qpairDicomMaskDICOMSource.second = m_adddSeriesByDICOMItemID[item->text(DICOMItemID).toInt()]->getDICOMSource();
+                Series *selectedSeries = getSeriesByDICOMItemID(item->text(DICOMItemID).toInt());
+
+                qpairDicomMaskDICOMSource.first = DicomMask::fromSeries(selectedSeries, ok);
+                qpairDicomMaskDICOMSource.second = selectedSeries->getDICOMSource();
 
                 dicomMaskDICOMSourceList.append(qpairDicomMaskDICOMSource);
             }
@@ -91,8 +95,10 @@ QList<QPair<DicomMask, DICOMSource> > QStudyTreeWidget::getDicomMaskOfSelectedIt
             //Si la sèrie pare i l'estudi pare no està seleccionat
             if (!item->parent()->isSelected() && !item->parent()->parent()->isSelected())
             {
-                qpairDicomMaskDICOMSource.first = DicomMask::fromImage(m_addedImagesByDICOMItemID[item->text(DICOMItemID).toInt()], ok);
-                qpairDicomMaskDICOMSource.second = m_addedImagesByDICOMItemID[item->text(DICOMItemID).toInt()]->getDICOMSource();
+                Image *selectedImage = getImageByDICOMItemID(item->text(DICOMItemID).toInt());
+
+                qpairDicomMaskDICOMSource.first = DicomMask::fromImage(selectedImage, ok);
+                qpairDicomMaskDICOMSource.second = selectedImage->getDICOMSource();
 
                 dicomMaskDICOMSourceList.append(qpairDicomMaskDICOMSource);
             }
@@ -122,11 +128,8 @@ void QStudyTreeWidget::insertPatient(Patient *patient)
 {
     if (patient->getNumberOfStudies() > 0)
     {
-        if (getStudyQTreeWidgetItem(patient->getStudies().at(0)->getInstanceUID(), patient->getStudies().at(0)->getDICOMSource()) != NULL)
-        {
-            // Si l'estudi ja hi existeix a StudyTreeView l'esborrem
-            removeStudy(patient->getStudies().at(0)->getInstanceUID(), patient->getStudies().at(0)->getDICOMSource());
-        }
+        // Si l'estudi ja hi existeix a StudyTreeView l'esborrem
+        removeStudy(patient->getStudies().at(0)->getInstanceUID(), patient->getStudies().at(0)->getDICOMSource());
 
         m_studyTreeView->addTopLevelItems(fillPatient(patient));
         m_studyTreeView->clearSelection();
@@ -179,7 +182,7 @@ QList<QTreeWidgetItem*> QStudyTreeWidget::fillPatient(Patient *patient)
     return qtreeWidgetItemList;
 }
 
-void QStudyTreeWidget::insertSeriesList(QString studyInstanceUID, QList<Series*> seriesList)
+void QStudyTreeWidget::insertSeriesList(const QString &studyInstanceUID, QList<Series*> seriesList)
 {
     if (seriesList.count() == 0)
     {
@@ -193,7 +196,7 @@ void QStudyTreeWidget::insertSeriesList(QString studyInstanceUID, QList<Series*>
     {
         qTreeWidgetItemSeriesList.append(fillSeries(series));
         //Afegim a la sèrie quin és l'estudi pare, de manera que quan amb algun mètode retornem la sèrie, la retornem amb la informació completa
-        series->setParentStudy(m_addedStudiesByDICOMItemID[studyItem->text(DICOMItemID).toInt()]);
+        series->setParentStudy(getStudyByDICOMItemID(studyItem->text(DICOMItemID).toInt()));
     }
 
     studyItem->addChildren(qTreeWidgetItemSeriesList);
@@ -239,7 +242,7 @@ QTreeWidgetItem* QStudyTreeWidget::fillSeries(Series *series)
     return seriesItem;
 }
 
-void QStudyTreeWidget::insertImageList(QString studyInstanceUID, QString seriesInstanceUID, QList<Image*> imageList)
+void QStudyTreeWidget::insertImageList(const QString &studyInstanceUID, const QString &seriesInstanceUID, QList<Image*> imageList)
 {
     if (imageList.count() == 0)
     {
@@ -267,7 +270,7 @@ void QStudyTreeWidget::insertImageList(QString studyInstanceUID, QString seriesI
             // Indiquem que es tracta d'una imatge
             qTreeWidgetItemImageList.append(newImageItem);
 
-            image->setParentSeries(m_adddSeriesByDICOMItemID[seriesItem->text(DICOMItemID).toInt()]);
+            image->setParentSeries(getSeriesByDICOMItemID(seriesItem->text(DICOMItemID).toInt()));
         }
         // Afegim la llista d'imatges
         seriesItem->addChildren(qTreeWidgetItemImageList);
@@ -288,7 +291,7 @@ QStudyTreeWidget::ItemTreeLevels QStudyTreeWidget::getMaximumExpandTreeItemsLeve
     return m_maximumExpandTreeItemsLevel;
 }
 
-QString QStudyTreeWidget::formatAge(const QString age)
+QString QStudyTreeWidget::formatAge(const QString &age)
 {
     QString text(age);
 
@@ -382,18 +385,14 @@ QString QStudyTreeWidget::getCurrentStudyUID()
     }
 }
 
-Study* QStudyTreeWidget::getStudy(QString studyInstanceUID, DICOMSource dicomSourceOfStudy)
+Study* QStudyTreeWidget::getStudy(const QString &studyInstanceUID, const DICOMSource &dicomSourceOfStudy)
 {
+    QTreeWidgetItem *studyItem = getStudyQTreeWidgetItem(studyInstanceUID, dicomSourceOfStudy);
     Study *study = NULL;
 
-    // Busquem pels estudis UID seleccionats
-    foreach (Study *studyInserted, m_addedStudiesByDICOMItemID)
+    if (studyItem)
     {
-        if (studyInserted->getInstanceUID() == studyInstanceUID && studyInserted->getDICOMSource() == dicomSourceOfStudy)
-        {
-            study = studyInserted;
-            break;
-        }
+        study = getStudyByDICOMItemID(studyItem->text(DICOMItemID).toInt());
     }
 
     return study;
@@ -422,13 +421,13 @@ QString QStudyTreeWidget::getCurrentSeriesUID()
     }
 }
 
-QTreeWidgetItem* QStudyTreeWidget::getStudyQTreeWidgetItem(QString studyUID, DICOMSource studyDICOMSource)
+QTreeWidgetItem* QStudyTreeWidget::getStudyQTreeWidgetItem(const QString &studyUID, const DICOMSource &studyDICOMSource)
 {
     QList<QTreeWidgetItem*> qTreeWidgetItemsStudy(m_studyTreeView->findItems(studyUID, Qt::MatchExactly, UID));
 
     foreach(QTreeWidgetItem *studyItem, qTreeWidgetItemsStudy)
     {
-        if (isItemStudy(studyItem) && m_addedStudiesByDICOMItemID[studyItem->text(DICOMItemID).toInt()]->getDICOMSource() == studyDICOMSource)
+        if (isItemStudy(studyItem) && getStudyByDICOMItemID(studyItem->text(DICOMItemID).toInt())->getDICOMSource() == studyDICOMSource)
         {
             return studyItem;
         }
@@ -437,7 +436,7 @@ QTreeWidgetItem* QStudyTreeWidget::getStudyQTreeWidgetItem(QString studyUID, DIC
     return NULL;
 }
 
-QTreeWidgetItem* QStudyTreeWidget::getSeriesQTreeWidgetItem(QString studyInstanceUID, QString seriesInstanceUID, DICOMSource seriesDICOMSource)
+QTreeWidgetItem* QStudyTreeWidget::getSeriesQTreeWidgetItem(const QString &studyInstanceUID, const QString &seriesInstanceUID, const DICOMSource &seriesDICOMSource)
 {
     QTreeWidgetItem *studyItem = getStudyQTreeWidgetItem(studyInstanceUID, seriesDICOMSource);
 
@@ -472,18 +471,13 @@ QString QStudyTreeWidget::getCurrentImageUID()
     return result;
 }
 
-void QStudyTreeWidget::removeStudy(QString studyInstanceUIDToRemove, const DICOMSource &dicomSourceStudyToRemove)
+void QStudyTreeWidget::removeStudy(const QString &studyInstanceUIDToRemove, const DICOMSource &dicomSourceStudyToRemove)
 {
-    QList<QTreeWidgetItem*> qStudyList(m_studyTreeView->findItems(studyInstanceUIDToRemove, Qt::MatchExactly, UID));
+    QTreeWidgetItem *studyItem = getStudyQTreeWidgetItem(studyInstanceUIDToRemove, dicomSourceStudyToRemove);
 
-    for (int i = 0; i < qStudyList.count(); i++)
+    if (studyItem)
     {
-        QTreeWidgetItem *item = qStudyList.at(i);
-
-        if (m_addedStudiesByDICOMItemID[item->text(DICOMItemID).toInt()]->getDICOMSource() == dicomSourceStudyToRemove)
-        {
-            delete item;
-        }
+        delete studyItem;
     }
 
     m_studyTreeView->clearSelection();
@@ -492,25 +486,19 @@ void QStudyTreeWidget::removeStudy(QString studyInstanceUIDToRemove, const DICOM
 
 void QStudyTreeWidget::removeSeries(const QString &studyInstanceUID, const QString &seriesInstanceUID, const DICOMSource &dicomSourceSeriesToRemove)
 {
-    foreach (QTreeWidgetItem *studyItem, m_studyTreeView->findItems(studyInstanceUID, Qt::MatchExactly, UID))
-    {
-        for (int index = 0; index < studyItem->childCount(); index++)
-        {
-            if (studyItem->child(index)->text(UID) == seriesInstanceUID &&
-                    m_adddSeriesByDICOMItemID[studyItem->child(index)->text(DICOMItemID).toInt()]->getDICOMSource() == dicomSourceSeriesToRemove)
-            {
-                if (studyItem->childCount() == 1)
-                {
-                    //Si l'estudi només té aquella sèrie ja la podem esborrar
-                    delete studyItem;
-                }
-                else
-                {
-                    delete studyItem->takeChild(index);
-                }
-            }
-        }
+    QTreeWidgetItem *seriesItem = getSeriesQTreeWidgetItem(studyInstanceUID, seriesInstanceUID, dicomSourceSeriesToRemove);
 
+    if (seriesItem)
+    {
+        if (seriesItem->parent()->childCount() == 1)
+        {
+            //Si l'estudi només té aquesta sèrie esborrem tot l'estudi
+            delete seriesItem->parent();
+        }
+        else
+        {
+            delete seriesItem;
+        }
     }
 
     m_studyTreeView->clearSelection();
@@ -598,13 +586,11 @@ void QStudyTreeWidget::itemExpanded(QTreeWidgetItem *itemExpanded)
             // Canviem la icona per la de carpeta oberta quan l'item està expanded
             itemExpanded->setIcon(ObjectName, m_openFolder);
 
-            Study *study = m_addedStudiesByDICOMItemID[itemExpanded->text(DICOMItemID).toInt()];
-            emit (requestedSeriesOfStudy(study));
+            emit (requestedSeriesOfStudy(getStudyByDICOMItemID(itemExpanded->text(DICOMItemID).toInt())));
         }
         else if (isItemSeries(itemExpanded))
         {
-            Series *series = m_adddSeriesByDICOMItemID[itemExpanded->text(DICOMItemID).toInt()];
-            emit (requestedImagesOfSeries(series));
+            emit (requestedImagesOfSeries(getSeriesByDICOMItemID(itemExpanded->text(DICOMItemID).toInt())));
         }
 
         m_doubleClickedItemUID = "";
@@ -712,6 +698,42 @@ void QStudyTreeWidget::initialize()
     m_nextIDICOMItemIDOfStudy = 0;
     m_nextDICOMItemIDOfSeries = 0;
     m_nextDICOMItemIDOfImage = 0;
+}
+
+Study* QStudyTreeWidget::getStudyByDICOMItemID(int studyDICOMItemID)
+{
+    Study *study = NULL;
+
+    if (m_addedStudiesByDICOMItemID.contains(studyDICOMItemID))
+    {
+        study = m_addedStudiesByDICOMItemID[studyDICOMItemID];
+    }
+
+    return study;
+}
+
+Series* QStudyTreeWidget::getSeriesByDICOMItemID(int seriesDICOMItemID)
+{
+    Series *series = NULL;
+
+    if (m_adddSeriesByDICOMItemID.contains(seriesDICOMItemID))
+    {
+        series = m_adddSeriesByDICOMItemID[seriesDICOMItemID];
+    }
+
+    return series;
+}
+
+Image* QStudyTreeWidget::getImageByDICOMItemID(int imageDICOMItemID)
+{
+    Image *image = NULL;
+
+    if (m_addedImagesByDICOMItemID.contains(imageDICOMItemID))
+    {
+        image = m_addedImagesByDICOMItemID[imageDICOMItemID];
+    }
+
+    return image;
 }
 
 };
