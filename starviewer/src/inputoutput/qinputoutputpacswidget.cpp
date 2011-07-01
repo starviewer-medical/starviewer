@@ -3,6 +3,7 @@
 #include <QMessageBox>
 #include <QShortcut>
 #include <QMovie>
+#include <QPair>
 
 #include "inputoutputsettings.h"
 #include "status.h"
@@ -112,7 +113,6 @@ void QInputOutputPacsWidget::queryStudy(DicomMask queryMask, QList<PacsDevice> p
         cancelCurrentQueriesToPACS();
 
         m_studyTreeWidget->clear();
-        m_hashPacsIDOfStudyInstanceUID.clear();
 
         foreach (const PacsDevice &pacsDeviceToQuery, pacsToQueryList)
         {
@@ -196,7 +196,6 @@ void QInputOutputPacsWidget::showQueryPACSJobResults(QueryPacsJob *queryPACSJob)
     if (queryPACSJob->getQueryLevel() == QueryPacsJob::study)
     {
         m_studyTreeWidget->insertPatientList(queryPACSJob->getPatientStudyList());
-        m_hashPacsIDOfStudyInstanceUID = m_hashPacsIDOfStudyInstanceUID.unite(queryPACSJob->getHashTablePacsIDOfStudyInstanceUID());
     }
     else if (queryPACSJob->getQueryLevel() == QueryPacsJob::series)
     {
@@ -293,13 +292,22 @@ void QInputOutputPacsWidget::retrieveSelectedStudies()
         return;
     }
 
-    foreach (DicomMask dicomMask, m_studyTreeWidget->getDicomMaskOfSelectedItems())
+    QList<QPair<DicomMask, DICOMSource> > dicomMaskDICOMSourceList = m_studyTreeWidget->getDicomMaskOfSelectedItems();
+
+    for (int index = 0; index < dicomMaskDICOMSourceList.count(); index++)
     {
-        retrieve(getPacsIDFromQueriedStudies(dicomMask.getStudyInstanceUID()), None, m_studyTreeWidget->getStudy(dicomMask.getStudyInstanceUID()), 
-            dicomMask.getSeriesInstanceUID(), dicomMask.getSOPInstanceUID());
+        if (dicomMaskDICOMSourceList.at(index).second.getRetrievePACS().count() > 0)
+        {
+            DicomMask dicomMaskToRetrieve = dicomMaskDICOMSourceList.at(index).first;
+            PacsDevice pacsDeviceFromRetrieve = dicomMaskDICOMSourceList.at(index).second.getRetrievePACS().at(0); //Agafem el primer PACS
+
+            retrieve(pacsDeviceFromRetrieve.getID(), None, m_studyTreeWidget->getStudy(dicomMaskToRetrieve.getStudyInstanceUID()),
+                dicomMaskToRetrieve.getSeriesInstanceUID(), dicomMaskToRetrieve.getSOPInstanceUID());
+        }
     }
 }
 
+//TODO:Fusiona amb retrieveSelectedStudies
 void QInputOutputPacsWidget::retrieveAndViewSelectedStudies()
 {
     if (m_studyTreeWidget->getSelectedStudiesUID().isEmpty())
@@ -309,10 +317,18 @@ void QInputOutputPacsWidget::retrieveAndViewSelectedStudies()
         return;
     }
 
-    foreach (DicomMask dicomMask, m_studyTreeWidget->getDicomMaskOfSelectedItems())
+    QList<QPair<DicomMask, DICOMSource> > dicomMaskDICOMSourceList = m_studyTreeWidget->getDicomMaskOfSelectedItems();
+
+    for (int index = 0; index < dicomMaskDICOMSourceList.count(); index++)
     {
-        retrieve(getPacsIDFromQueriedStudies(dicomMask.getStudyInstanceUID()), View, m_studyTreeWidget->getStudy(dicomMask.getStudyInstanceUID()), 
-            dicomMask.getSeriesInstanceUID(), dicomMask.getSOPInstanceUID());
+        if (dicomMaskDICOMSourceList.at(index).second.getRetrievePACS().count() > 0)
+        {
+            DicomMask dicomMaskToRetrieve = dicomMaskDICOMSourceList.at(index).first;
+            PacsDevice pacsDeviceFromRetrieve = dicomMaskDICOMSourceList.at(index).second.getRetrievePACS().at(0); //Agafem el primer PACS
+
+            retrieve(pacsDeviceFromRetrieve.getID(), None, m_studyTreeWidget->getStudy(dicomMaskToRetrieve.getStudyInstanceUID()),
+                dicomMaskToRetrieve.getSeriesInstanceUID(), dicomMaskToRetrieve.getSOPInstanceUID());
+        }
     }
 }
 
@@ -394,20 +410,6 @@ bool QInputOutputPacsWidget::AreValidQueryParameters(DicomMask *maskToQuery, QLi
     else
     {
         return true;
-    }
-}
-
-QString QInputOutputPacsWidget::getPacsIDFromQueriedStudies(QString studyInstanceUID)
-{
-    // TODO Tenir en compte que podem tenir un studyUID repetit en dos PACS, ara mateix no ho tenim contemplat a la QHash
-    if (!m_hashPacsIDOfStudyInstanceUID.contains(studyInstanceUID))
-    {
-        ERROR_LOG(QString("No s'ha trobat a quin PACS pertany l'estudi %1 a la QHash").arg(studyInstanceUID));
-        return "";
-    }
-    else
-    {
-        return m_hashPacsIDOfStudyInstanceUID[studyInstanceUID];
     }
 }
 

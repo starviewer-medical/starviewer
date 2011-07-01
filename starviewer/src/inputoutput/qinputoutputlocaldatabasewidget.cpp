@@ -245,9 +245,9 @@ void QInputOutputLocalDatabaseWidget::setSeriesToSeriesListWidget()
 
 void QInputOutputLocalDatabaseWidget::deleteSelectedItemsFromLocalDatabase()
 {
-    QList<DicomMask> selectedDicomMaskToDelete = m_studyTreeWidget->getDicomMaskOfSelectedItems();
+    QList<QPair<DicomMask, DICOMSource> > selectedDicomMaskDICOMSoruceToDelete = m_studyTreeWidget->getDicomMaskOfSelectedItems();
 
-    if (!selectedDicomMaskToDelete.isEmpty())
+    if (!selectedDicomMaskDICOMSoruceToDelete.isEmpty())
     {
         QMessageBox::StandardButton response = QMessageBox::question(this, ApplicationNameString,
                                                                            tr("Are you sure you want to delete the selected Items?"),
@@ -258,8 +258,9 @@ void QInputOutputLocalDatabaseWidget::deleteSelectedItemsFromLocalDatabase()
             QApplication::setOverrideCursor(Qt::BusyCursor);
             LocalDatabaseManager localDatabaseManager;
 
-            foreach (DicomMask dicomMaskToDelete, selectedDicomMaskToDelete)
+            for (int index = 0; index < selectedDicomMaskDICOMSoruceToDelete.count(); index++)
             {
+                DicomMask dicomMaskToDelete = selectedDicomMaskDICOMSoruceToDelete.at(index).first;
                 if (m_qcreateDicomdir->studyExistsInDICOMDIRList(dicomMaskToDelete.getStudyInstanceUID()))
                 {
                     Study *studyToDelete = m_studyTreeWidget->getStudy(dicomMaskToDelete.getStudyInstanceUID());
@@ -469,16 +470,19 @@ void QInputOutputLocalDatabaseWidget::sendSelectedStudiesToSelectedPacs()
 {
     foreach (PacsDevice pacsDevice, m_qwidgetSelectPacsToStoreDicomImage->getSelectedPacsToStoreDicomImages())
     {
-        foreach (DicomMask dicomMask, m_studyTreeWidget->getDicomMaskOfSelectedItems())
+        QList<QPair<DicomMask, DICOMSource> > dicomObjectsToSendToPACS = m_studyTreeWidget->getDicomMaskOfSelectedItems();
+
+        for (int index = 0; index < dicomObjectsToSendToPACS.count(); index++)
         {
+            DicomMask dicomMaskToSend = dicomObjectsToSendToPACS.at(index).first;
             LocalDatabaseManager localDatabaseManager;
-            Patient *patient = localDatabaseManager.retrieve(dicomMask);
+            Patient *patient = localDatabaseManager.retrieve(dicomMaskToSend);
 
             if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
             {
                 ERROR_LOG(QString("Error a la base de dades intentar obtenir els estudis que s'han d'enviar al PACS, Error: %1; StudyUID: %2")
                                   .arg(localDatabaseManager.getLastError())
-                                  .arg(dicomMask.getStudyInstanceUID()));
+                                  .arg(dicomMaskToSend.getStudyInstanceUID()));
 
                 QString message = tr("An error occurred with database, preparing the DICOM files to send to PACS %1. The DICOM files won't be sent.")
                     .arg(pacsDevice.getAETitle());

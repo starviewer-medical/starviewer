@@ -58,39 +58,40 @@ QTreeWidget* QStudyTreeWidget::getQTreeWidget() const
     return m_studyTreeView;
 }
 
-QList<DicomMask> QStudyTreeWidget::getDicomMaskOfSelectedItems()
+QList<QPair<DicomMask, DICOMSource> > QStudyTreeWidget::getDicomMaskOfSelectedItems()
 {
-    QList<DicomMask> dicomMaskList;
-    QList<QTreeWidgetItem*> selectedItems = m_studyTreeView->selectedItems();
+    QList<QPair<DicomMask, DICOMSource> > dicomMaskDICOMSourceList;
 
-    foreach (QTreeWidgetItem *item, selectedItems)
+    foreach (QTreeWidgetItem *item, m_studyTreeView->selectedItems())
     {
-        DicomMask dicomMask;
+        QPair<DicomMask, DICOMSource> qpairDicomMaskDICOMSource;
+        bool ok;
+
         if (isItemStudy(item))
         {
             // És un estudi
-            dicomMask.setStudyInstanceUID(item->text(UID));
+            qpairDicomMaskDICOMSource.first = DicomMask::fromStudy(m_addedStudiesByDICOMItemID[item->text(DICOMItemID).toInt()], ok);
+            qpairDicomMaskDICOMSource.second = m_addedStudiesByDICOMItemID[item->text(DICOMItemID).toInt()]->getDICOMSource();
         }
         else if (isItemSeries(item))
         {
-            dicomMask.setStudyInstanceUID(item->parent()->text(UID));
-            dicomMask.setSeriesInstanceUID(item->text(UID));
+            qpairDicomMaskDICOMSource.first = DicomMask::fromSeries(m_adddSeriesByDICOMItemID[item->text(DICOMItemID).toInt()], ok);
+            qpairDicomMaskDICOMSource.second = m_adddSeriesByDICOMItemID[item->text(DICOMItemID).toInt()]->getDICOMSource();
         }
         else if (isItemImage(item))
         {
-            dicomMask.setStudyInstanceUID(item->parent()->parent()->text(UID));
-            dicomMask.setSeriesInstanceUID(item->parent()->text(UID));
-            dicomMask.setSOPInstanceUID(item->text(UID));
+            qpairDicomMaskDICOMSource.first = DicomMask::fromImage(m_addedImagesByDICOMItemID[item->text(DICOMItemID).toInt()], ok);
+            qpairDicomMaskDICOMSource.second = m_addedImagesByDICOMItemID[item->text(DICOMItemID).toInt()]->getDICOMSource();
         }
         else
         {
             DEBUG_LOG("Texte no esperat: " + item->text(Type));
         }
 
-        dicomMaskList.append(dicomMask);
+        dicomMaskDICOMSourceList.append(qpairDicomMaskDICOMSource);
     }
 
-    return dicomMaskList;
+    return dicomMaskDICOMSourceList;
 }
 
 void QStudyTreeWidget::insertPatientList(QList<Patient*> patientList)
