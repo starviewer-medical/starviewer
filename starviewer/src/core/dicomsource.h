@@ -15,11 +15,11 @@ namespace udg
 class DICOMSource {
 public:
 
-    ///Afegeix/treu ID de PACS d'on podem obtenir l'objecte DICOM. Si el PACS que afegim ja existeix en el DICOMSource no s'hi afegeix
+    ///Afegeix/treu el PACS d'on podem obtenir l'objecte DICOM. Si el PACS que afegim ja existeix en el DICOMSource no s'hi afegeix
     void addRetrievePACS(const PacsDevice &pacsDeviceToAdd);
     void removeRetrievePACS(const PacsDevice &pacsDeviceToRemove);
 
-    ///Retorna els ID del PACS d'on podem descarregar l'objecte DICOM
+    ///Retorna els PACS d'on podem descarregar/consulta l'objecte DICOM
     QList<PacsDevice> getRetrievePACS() const;
 
     //Afegeix el DICOMSource el PACS d'un altre DICOMSource
