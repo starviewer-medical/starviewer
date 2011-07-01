@@ -406,7 +406,7 @@ void QInputOutputLocalDatabaseWidget::viewFromQSeriesListWidget()
 // QInputOutputPacsWidget
 void QInputOutputLocalDatabaseWidget::selectedStudiesStoreToPacs()
 {
-    if (m_studyTreeWidget->getSelectedStudiesUID().count() == 0)
+    if (m_studyTreeWidget->getDicomMaskOfSelectedItems().count() == 0)
     {
         QMessageBox::warning(this, ApplicationNameString, tr("Select at least one item to send to PACS."));
     }
@@ -422,10 +422,11 @@ void QInputOutputLocalDatabaseWidget::addSelectedStudiesToCreateDicomdirList()
     LocalDatabaseManager localDatabaseManager;
     QList<Patient*> patientList;
     QList<Study*> studies;
+    QList<QPair<DicomMask, DICOMSource> > selectedDICOMItemsFromQStudyTreeWidget = m_studyTreeWidget->getDicomMaskOfSelectedItems();
 
-    foreach (QString studyUID, m_studyTreeWidget->getSelectedStudiesUID())
+    for (int index = 0; index < selectedDICOMItemsFromQStudyTreeWidget.count(); index++)
     {
-        studyMask.setStudyInstanceUID(studyUID);
+        studyMask.setStudyInstanceUID(selectedDICOMItemsFromQStudyTreeWidget.at(index).first.getStudyInstanceUID());
         patientList = localDatabaseManager.queryPatientStudy(studyMask);
         if (showDatabaseManagerError(localDatabaseManager.getLastError()))
         {
