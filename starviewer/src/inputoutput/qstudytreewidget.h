@@ -21,10 +21,11 @@ class DICOMSource;
 
 /**
     Aquesta classe mostrar estudis i sèries d'una manera organitzada i fàcilment.
-    Aquesta classe és una modificació de la QTreeWidget que s'ha adaptat per poder visualitzar la informació
-    de la cerca d'estudis, permetent consultar les series d'aquell estudi.
-    Aquesta classe es sincronitza amb la informació mostrada a QSeriesListWidget
-  */
+    Aquesta classe és una modificació de la QTreeWidget que s'ha adaptat per poder visualitzar la informació de la cerca d'estudis/series/imatges.
+    La classe manté la llista d'Study/Series/Image que se l'insereixen, i s'eliminen al invocar el mètode clean de la classe, per tant cal recordar
+    que les classes que n'invoquin mètodes ue retornen punters a Study/Series/Image seran responsables de fer-ne una còpia si necessiten
+    mantenir l'objecte viu una vegada fet un clean.
+*/
 class QStudyTreeWidget : public QWidget, private Ui::QStudyTreeWidgetBase {
 Q_OBJECT
 public:
@@ -37,18 +38,16 @@ public:
 
     QStudyTreeWidget(QWidget *parent = 0);
 
-    /// Mostrar els estudis passats per paràmetres (Els pacients passats per paràmetre ha de contenir només un estudi)
+    /// Mostrar els estudis passats per paràmetres. Si algun dels estudis ja existeix en sobreescriu la informació
     void insertPatientList(QList<Patient*> patientList);
 
-    /// Insereix el pacient al QStudyTreeWiget
+    /// Insereix el pacient al QStudyTreeWiget. Si el pacient amb aquell estudi ja existeix en sobreescriu la informació
     void insertPatient(Patient *patient);
 
-    /// Insereix un llista de sèries a l'estudi seleccionat actualment
-    /// @param seriesList series afegir
+    /// Insereix un llista de sèries a l'estudi seleccionat actualment.
     void insertSeriesList(const QString &studyIstanceUID, QList<Series*> seriesList);
 
     /// Insereix una llista d'imatges a la sèrie seleccionada actualment
-    /// @param imageList llista d'imatges afegir a la sèrie
     void insertImageList(const QString &studyInstanceUID, const QString &seriesInstanceUID, QList<Image*> imageList);
 
     /// Removes study from the list
@@ -95,14 +94,16 @@ public slots:
     /// Indique que ens marqui la sèrie amb el uid passat per paràmetre com a seleccionada
     void setCurrentSeries(const QString &studyInstanceUID, const QString &seriesInstanceUID, const DICOMSource &dicomSource);
 
-    /// Neteja el TreeView
+    /// Neteja el TreeView, i esborra els Study*/Series*/Images* inserits
     void clear();
 
 signals:
-    /// Signal cada vegada que seleccionem un estudi diferent
+    /// Signal cada vegada que seleccionem un estudi diferent. L'Study passat com a paràmetre es destrueix al invocar el mètode clean, d'aquesta classe
+    /// és responsanbilitat de la classe que rep el signal fer-ne una còpia per evitar problemes si ha d'utilitzar l'Study després després que s'hagi fet un clean
     void currentStudyChanged(Study *currentStudy);
 
-    /// Signal que s'emete quan canviem de sèrie seleccionada
+    /// Signal que s'emete quan canviem de sèrie seleccionada. La Serie passada com a paràmetre es destrueix al invocar el mètode clean, d'aquesta classe
+    /// és responsanbilitat de la classe que rep el signal fer-ne una còpia per evitar problemes si ha d'utilitzar l'Study després després que s'hagi fet un clean
     void currentSeriesChanged(Series *currentSeries);
 
     //TODO:Els signals de DoubleClicked no haurian de retornar l'estudi/series/imatge clickada =
@@ -124,62 +125,54 @@ signals:
 
 protected:
     /// Mostra el menu contextual
-    /// @param Dades de l'event sol·licitat
     void contextMenuEvent(QContextMenuEvent *event);
 
 private:
     /// Crea les connexions dels signals i slots
     void createConnections();
 
-    ///Inicialitza les variables necessàries del QWidget
+    /// Inicialitza les variables necessàries del QWidget
     void initialize();
 
-    /// Retorna l'objecte TreeWidgetItem, que pertany a un estudi cercem, per studUID i PACS, ja que
-    /// un mateix estudi pot estar a més d'un PACS
-    /// @param studyUID uid de l'estudi a cercar
+    /// Retorna l'objecte QTreeWidgetItem que mostra a l'estudi que compleix els paràmetres passats
     QTreeWidgetItem* getStudyQTreeWidgetItem(const QString &studyUID, const DICOMSource &studyDICOMSource);
 
     /// Retorna l'Objecte QTtreeWidgeItem que és de l'estudi i series
     QTreeWidgetItem* getSeriesQTreeWidgetItem(const QString &studyUID, const QString &seriesUID, const DICOMSource &seriesDICOMSource);
 
-    /// Ens indica si l'item passat és un estudi
+    /// Ens indica si l'item passat és un Study/Series/Image
     bool isItemStudy(QTreeWidgetItem *);
-
-    /// Ens indica si l'item passat és una sèrie
     bool isItemSeries(QTreeWidgetItem *);
-
-    /// Ens indica si l'item passat és una imatge
     bool isItemImage(QTreeWidgetItem *);
 
     /// Retorna llista QTreeWidgetItem resultant dels estudis que té el pacient
     QList<QTreeWidgetItem*> fillPatient(Patient *);
 
-    /// Dona una sèrie emplena un QTreeWidgetItem en format sèrie
-    /// @param informació de la serie
+    /// Donada una sèrie emplena un QTreeWidgetItem per mostrar la informaciío de la sèrie
     QTreeWidgetItem* fillSeries(Series *serie);
 
-    ///Retorna Study/Series/Image a partir del seu DICOMItemID si no el troba retorna null
+    /// Retorna Study/Series/Image a partir del seu DICOMItemID si no el troba retorna null
     Study* getStudyByDICOMItemID(int studyDICOMItemID);
     Series* getSeriesByDICOMItemID(int seriesDICOMItemID);
     Image* getImageByDICOMItemID(int imageDICOMItemID);
 
-    ///Retorna Study/Series/Image a la que pertany un QTreeWidgeITem. Si a getStudyByQTreeWidgetItem li passem un QTreeWidgetItem que és una imatge ens retornarà l'estudi al
-    ///que pertany la imatge,  si getSeriesByQTreeWidgetItem li passem un item que és un Study ens retornarà null
+    /// Retorna Study/Series/Image a la que pertany un QTreeWidgeITem. Si a getStudyByQTreeWidgetItem li passem un QTreeWidgetItem que és una imatge ens retornarà l'estudi al
+    /// que pertany la imatge,  si getSeriesByQTreeWidgetItem li passem un item que és un Study ens retornarà null
     Study* getStudyByQTreeWidgetItem(QTreeWidgetItem *qTreeWidgetItem);
     Series* getSeriesByQTreeWidgetItem(QTreeWidgetItem *qTreeWidgetItem);
     Image* getImageByQTreeWidgetItem(QTreeWidgetItem *qTreeWidgetItem);
 
     /// Formata l'edat per mostrar per pantalla
-    /// @param edat
     QString formatAge(const QString &age) const;
 
     /// Formata la data i hora passada a ISO 8601 extended (YYYY-MM-DD HH:MM:SS) Amb aquest format de data es pot ordenar els estudis per data/hora
     /// Si l'hora no té valor només retorna la data, i si ni Data i Hora tenen valor retorna string buit
     QString formatDateTime(const QDate &date, const QTime &time) const;
 
-    ///Crea un QTreeWidgetItem buit, per a que aparegui l'icona + per poder desplegar estudi/series amb el mouse
+    /// Crea un QTreeWidgetItem buit, per a que aparegui l'icona + per poder desplegar estudi/series amb el mouse
     QTreeWidgetItem* createDummyQTreeWidgetItem();
 
+    /// Indica si el QTreeWidgetItem és un Dummy utilitzat per poder expandir Estudis/Series quan encara no n'hem consultat els seus elements fills Series/Imatges
     bool isDummyQTreeWidgetItem(QTreeWidgetItem *);
 
 private slots:
