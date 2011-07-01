@@ -61,7 +61,6 @@ QInputOutputLocalDatabaseWidget::~QInputOutputLocalDatabaseWidget()
 void QInputOutputLocalDatabaseWidget::createConnections()
 {
     connect(m_studyTreeWidget, SIGNAL(studyExpanded(QString)), SLOT(expandSeriesOfStudy(QString)));
-    connect(m_studyTreeWidget, SIGNAL(seriesExpanded(QString, QString)), SLOT(expandImagesOfSeries(QString, QString)));
 
     connect(m_studyTreeWidget, SIGNAL(studyDoubleClicked()), SLOT(viewFromQStudyTreeWidget()));
     connect(m_studyTreeWidget, SIGNAL(seriesDoubleClicked()), SLOT(viewFromQStudyTreeWidget()));
@@ -216,34 +215,6 @@ void QInputOutputLocalDatabaseWidget::expandSeriesOfStudy(QString studyInstanceU
     {
         // Inserim la informació de les sèries al estudi
         m_studyTreeWidget->insertSeriesList(studyInstanceUID, seriesList);
-    }
-}
-
-void QInputOutputLocalDatabaseWidget::expandImagesOfSeries(QString studyInstanceUID, QString seriesInstanceUID)
-{
-    LocalDatabaseManager localDatabaseManager;
-    DicomMask mask;
-    QList<Image*> imageList;
-
-    INFO_LOG("Cerca d'imatges a la font cache de l'estudi " + studyInstanceUID + " i serie " + seriesInstanceUID);
-
-    mask.setStudyInstanceUID(studyInstanceUID);
-    mask.setSeriesInstanceUID(seriesInstanceUID);
-    imageList = localDatabaseManager.queryImage(mask);
-
-    if (showDatabaseManagerError(localDatabaseManager.getLastError()))
-    {
-        return;
-    }
-
-    if (imageList.isEmpty())
-    {
-        QMessageBox::information(this, ApplicationNameString, tr("No images match for this study.\n"));
-        return;
-    }
-    else
-    {
-        m_studyTreeWidget->insertImageList(studyInstanceUID, seriesInstanceUID, imageList);
     }
 }
 
@@ -419,7 +390,7 @@ void QInputOutputLocalDatabaseWidget::viewFromQSeriesListWidget()
 // QInputOutputPacsWidget
 void QInputOutputLocalDatabaseWidget::selectedStudiesStoreToPacs()
 {
-    if (m_studyTreeWidget->getSelectedStudies().count() == 0)
+    if (m_studyTreeWidget->getSelectedStudiesUID().count() == 0)
     {
         QMessageBox::warning(this, ApplicationNameString, tr("Select at least one item to send to PACS."));
     }

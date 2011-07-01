@@ -97,9 +97,6 @@ private slots:
     /// Mostra les sèries d'un estudi, les consulta al dicomdir i les mostra al tree widget
     void expandSeriesOfStudy(QString seriesInstanceUID);
 
-    /// Mostra les imatges d'un estudi, les consulta al dicomdir i les mostra al tree widget
-    void expandImagesOfSeries(QString studyIntanceUID, QString seriesInstanceUID);
-
     /// Mostra al SeriesListWidget la previsualització de la sèrie seleccionada en aquell moment al QStudyTreeWidget
     void setSeriesToSeriesListWidget();
 
