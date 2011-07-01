@@ -131,6 +131,30 @@ void QInputOutputPacsWidget::enqueueQueryPACSJobToPACSManagerAndConnectSignals(Q
     setQueryInProgress(true);
 }
 
+Study* QInputOutputPacsWidget::copyBasicStudyInformation(Study *studyToCopy)
+{
+    Study *copiedStudy = new Study();
+    Patient *copiedPatient = new Patient();
+
+    copiedPatient->setID(studyToCopy->getParentPatient()->getID());
+    copiedPatient->setFullName(studyToCopy->getParentPatient()->getFullName());
+
+    copiedStudy->setParentPatient(copiedPatient);
+    copiedStudy->setInstanceUID(studyToCopy->getInstanceUID());
+    copiedStudy->setID(studyToCopy->getID());
+    copiedStudy->setDateTime(studyToCopy->getDateAsString(), studyToCopy->getTimeAsString());
+    copiedStudy->setDescription(studyToCopy->getDescription());
+
+    foreach(QString modality, studyToCopy->getModalities())
+    {
+        copiedStudy->addModality(modality);
+    }
+
+    copiedStudy->setDICOMSource(studyToCopy->getDICOMSource());
+
+    return copiedStudy;
+}
+
 void QInputOutputPacsWidget::cancelCurrentQueriesToPACS()
 {
     foreach (QueryPacsJob *queryPACSJob, m_queryPACSJobPendingExecuteOrExecuting)
@@ -302,7 +326,11 @@ void QInputOutputPacsWidget::retrieveSelectedStudies()
             DICOMSource dicomSourceStudyToRetrieve = dicomMaskDICOMSourceList.at(index).second;
             PacsDevice pacsDeviceFromRetrieve = dicomSourceStudyToRetrieve.getRetrievePACS().at(0); //Agafem el primer PACS
 
-            retrieve(pacsDeviceFromRetrieve.getID(), None, m_studyTreeWidget->getStudy(dicomMaskToRetrieve.getStudyInstanceUID(), dicomSourceStudyToRetrieve),
+            //QStudyTreeWidget manté la llista d'Studys que mostra fins que se l'invoca el mètode clean(), si un usuari mentre es descarrega un estudi ens
+            //fes una altra cerca el mètode clean s'invocaria per netejar els resultats de la última cerca, això faria que el Study passats per punter als jobs
+            //actius ja no existissin fent petar Starviewer quan s'hi accedís a la seva informació. Per això passem una còpia de l'objecte Study obtingut
+            //del QStudyTreeWidget amb la informació bàsica.
+            retrieve(pacsDeviceFromRetrieve.getID(), None, copyBasicStudyInformation(m_studyTreeWidget->getStudy(dicomMaskToRetrieve.getStudyInstanceUID(), dicomSourceStudyToRetrieve)),
                 dicomMaskToRetrieve.getSeriesInstanceUID(), dicomMaskToRetrieve.getSOPInstanceUID());
         }
     }
@@ -328,7 +356,11 @@ void QInputOutputPacsWidget::retrieveAndViewSelectedStudies()
             DICOMSource dicomSourceStudyToRetrieve = dicomMaskDICOMSourceList.at(index).second;
             PacsDevice pacsDeviceFromRetrieve = dicomSourceStudyToRetrieve.getRetrievePACS().at(0); //Agafem el primer PACS
 
-            retrieve(pacsDeviceFromRetrieve.getID(), View, m_studyTreeWidget->getStudy(dicomMaskToRetrieve.getStudyInstanceUID(), dicomSourceStudyToRetrieve),
+            //QStudyTreeWidget manté la llista d'Studys que mostra fins que se l'invoca el mètode clean(), si un usuari mentre es descarrega un estudi ens
+            //fes una altra cerca el mètode clean s'invocaria per netejar els resultats de la última cerca, això faria que el Study passats per punter als jobs
+            //actius ja no existissin fent petar Starviewer quan s'hi accedís a la seva informació. Per això passem una còpia de l'objecte Study obtingut
+            //del QStudyTreeWidget amb la informació bàsica.
+            retrieve(pacsDeviceFromRetrieve.getID(), View, copyBasicStudyInformation(m_studyTreeWidget->getStudy(dicomMaskToRetrieve.getStudyInstanceUID(), dicomSourceStudyToRetrieve)),
                 dicomMaskToRetrieve.getSeriesInstanceUID(), dicomMaskToRetrieve.getSOPInstanceUID());
         }
     }
