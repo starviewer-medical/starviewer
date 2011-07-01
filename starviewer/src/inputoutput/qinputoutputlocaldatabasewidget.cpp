@@ -60,7 +60,7 @@ QInputOutputLocalDatabaseWidget::~QInputOutputLocalDatabaseWidget()
 
 void QInputOutputLocalDatabaseWidget::createConnections()
 {
-    connect(m_studyTreeWidget, SIGNAL(studyExpanded(QString)), SLOT(expandSeriesOfStudy(QString)));
+    connect(m_studyTreeWidget, SIGNAL(requestedSeriesOfStudy(Study*)), SLOT(requestedSeriesOfStudy(Study*)));
 
     connect(m_studyTreeWidget, SIGNAL(studyDoubleClicked()), SLOT(viewFromQStudyTreeWidget()));
     connect(m_studyTreeWidget, SIGNAL(seriesDoubleClicked()), SLOT(viewFromQStudyTreeWidget()));
@@ -189,17 +189,16 @@ void QInputOutputLocalDatabaseWidget::removeStudyFromQStudyTreeWidget(QString st
     m_studyTreeWidget->removeStudy(studyInstanceUID);
 }
 
-void QInputOutputLocalDatabaseWidget::expandSeriesOfStudy(QString studyInstanceUID)
-{
-    QList<Series*> seriesList;
-    LocalDatabaseManager localDatabaseManager;
-    DicomMask mask;
-
-    INFO_LOG("Cerca de sèries a la font cache de l'estudi " + studyInstanceUID);
+void QInputOutputLocalDatabaseWidget::requestedSeriesOfStudy(Study *study)
+{ 
+    INFO_LOG("Cerca de sèries a la font cache de l'estudi " + study->getInstanceUID());
 
     // Preparem la mascara i cerquem les series a la cache
-    mask.setStudyInstanceUID(studyInstanceUID);
-    seriesList = localDatabaseManager.querySeries(mask);
+    DicomMask mask;
+    mask.setStudyInstanceUID(study->getInstanceUID());
+
+    LocalDatabaseManager localDatabaseManager;
+    QList<Series*> seriesList = localDatabaseManager.querySeries(mask);
 
     if (showDatabaseManagerError(localDatabaseManager.getLastError()))
     {
@@ -214,7 +213,7 @@ void QInputOutputLocalDatabaseWidget::expandSeriesOfStudy(QString studyInstanceU
     else
     {
         // Inserim la informació de les sèries al estudi
-        m_studyTreeWidget->insertSeriesList(studyInstanceUID, seriesList);
+        m_studyTreeWidget->insertSeriesList(study->getInstanceUID(), seriesList);
     }
 }
 

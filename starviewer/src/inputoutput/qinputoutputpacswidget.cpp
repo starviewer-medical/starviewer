@@ -64,8 +64,8 @@ QInputOutputPacsWidget::~QInputOutputPacsWidget()
 
 void QInputOutputPacsWidget::createConnections()
 {
-    connect(m_studyTreeWidget, SIGNAL(studyExpanded(QString)), SLOT(expandSeriesOfStudy(QString)));
-    connect(m_studyTreeWidget, SIGNAL(seriesExpanded(QString, QString)), SLOT(expandImagesOfSeries(QString, QString)));
+    connect(m_studyTreeWidget, SIGNAL(requestedSeriesOfStudy(Study*)), SLOT(requestedSeriesOfStudy(Study*)));
+    connect(m_studyTreeWidget, SIGNAL(requestedImagesOfSeries(Series*)), SLOT(requestedImagesOfSeries(Series*)));
 
     connect(m_studyTreeWidget, SIGNAL(studyDoubleClicked()), SLOT(retrieveSelectedStudies()));
     connect(m_studyTreeWidget, SIGNAL(seriesDoubleClicked()), SLOT(retrieveSelectedStudies()));
@@ -251,25 +251,37 @@ void QInputOutputPacsWidget::clear()
     m_studyTreeWidget->clear();
 }
 
-void QInputOutputPacsWidget::expandSeriesOfStudy(QString studyInstanceUID)
+void QInputOutputPacsWidget::requestedSeriesOfStudy(Study *study)
 {
-    PacsDevice pacsDevice = PacsDeviceManager().getPACSDeviceByID(getPacsIDFromQueriedStudies(studyInstanceUID));
+    if (study->getDICOMSource().getRetrievePACS().count() == 0)
+    {
+        ERROR_LOG(QString("No s'ha trobat de quin PACS es l'estudi %1 per obtenir-ne les series").arg(study->getInstanceUID()));
+        return;
+    }
+
+    PacsDevice pacsDevice = study->getDICOMSource().getRetrievePACS().at(0);
     QString pacsDescription = pacsDevice.getAETitle() + " Institució" + pacsDevice.getInstitution() + " IP:" + pacsDevice.getAddress();
 
-    INFO_LOG("Cercant informacio de les series de l'estudi" + studyInstanceUID + " del PACS " + pacsDescription);
+    INFO_LOG("Cercant informacio de les series de l'estudi" + study->getInstanceUID() + " del PACS " + pacsDescription);
 
-    enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, buildSeriesDicomMask(studyInstanceUID), QueryPacsJob::series));
+    enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, buildSeriesDicomMask(study->getInstanceUID()), QueryPacsJob::series));
 }
 
-void QInputOutputPacsWidget::expandImagesOfSeries(QString studyInstanceUID, QString seriesInstanceUID)
+void QInputOutputPacsWidget::requestedImagesOfSeries(Series *series)
 {
-    PacsDevice pacsDevice = PacsDeviceManager().getPACSDeviceByID(getPacsIDFromQueriedStudies(studyInstanceUID));
+    if (series->getDICOMSource().getRetrievePACS().count() == 0)
+    {
+        ERROR_LOG(QString("No s'ha trobat de quin PACS es la serie per obtenir-ne les imatges").arg(series->getInstanceUID()));
+        return;
+    }
+
+    PacsDevice pacsDevice = series->getDICOMSource().getRetrievePACS().at(0);
     QString pacsDescription = pacsDevice.getAETitle() + " Institució" + pacsDevice.getInstitution() + " IP:" + pacsDevice.getAddress();
 
-    INFO_LOG("Cercant informacio de les imatges de la serie" + seriesInstanceUID + " de l'estudi" + studyInstanceUID + " del PACS " + pacsDescription);
+    INFO_LOG("Cercant informacio de les imatges de la serie" + series->getInstanceUID() + " de l'estudi" + series->getParentStudy()->getInstanceUID() + " del PACS " + pacsDescription);
 
-    enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, buildImageDicomMask(studyInstanceUID, seriesInstanceUID),
-                                                                       QueryPacsJob::image));
+    enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, buildImageDicomMask(series->getParentStudy()->getInstanceUID(), series->getInstanceUID()),
+        QueryPacsJob::image));
 }
 
 void QInputOutputPacsWidget::retrieveSelectedStudies()

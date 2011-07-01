@@ -51,8 +51,8 @@ void QInputOutputDicomdirWidget::createConnections()
 {
     connect (m_openDICOMDIRToolButton, SIGNAL(clicked()), SLOT(openDicomdir()));
 
-    connect(m_studyTreeWidget, SIGNAL(studyExpanded(QString)), SLOT(expandSeriesOfStudy(QString)));
-    connect(m_studyTreeWidget, SIGNAL(seriesExpanded(QString, QString)), SLOT(expandImagesOfSeries(QString, QString)));
+    connect(m_studyTreeWidget, SIGNAL(requestedSeriesOfStudy(Study*)), SLOT(requestedSeriesOfStudy(Study*)));
+    connect(m_studyTreeWidget, SIGNAL(requestedImagesOfSeries(Series*)), SLOT(requestedImagesOfSeries(Series*)));
 
     connect(m_studyTreeWidget, SIGNAL(studyDoubleClicked()), SLOT(view()));
     connect(m_studyTreeWidget, SIGNAL(seriesDoubleClicked()), SLOT(view()));
@@ -157,14 +157,14 @@ void QInputOutputDicomdirWidget::clear()
     m_studyTreeWidget->clear();
 }
 
-void QInputOutputDicomdirWidget::expandSeriesOfStudy(QString studyInstanceUID)
+void QInputOutputDicomdirWidget::requestedSeriesOfStudy(Study *study)
 {
     QList<Series*> seriesList;
 
-    INFO_LOG("Cerca de sèries al DICOMDIR de l'estudi " + studyInstanceUID);
+    INFO_LOG("Cerca de sèries al DICOMDIR de l'estudi " + study->getInstanceUID());
 
     // "" pq no busquem cap serie en concret
-    m_readDicomdir.readSeries(studyInstanceUID, "", seriesList);
+    m_readDicomdir.readSeries(study->getInstanceUID(), "", seriesList);
 
     if (seriesList.isEmpty())
     {
@@ -173,17 +173,17 @@ void QInputOutputDicomdirWidget::expandSeriesOfStudy(QString studyInstanceUID)
     else
     {
         // Inserim la informació de la sèrie al llistat
-        m_studyTreeWidget->insertSeriesList(studyInstanceUID, seriesList);
+        m_studyTreeWidget->insertSeriesList(study->getInstanceUID(), seriesList);
     }
 }
 
-void QInputOutputDicomdirWidget::expandImagesOfSeries(QString studyInstanceUID, QString seriesInstanceUID)
+void QInputOutputDicomdirWidget::requestedImagesOfSeries(Series *series)
 {
     QList<Image*> imageList;
 
-    INFO_LOG("Cerca d'imatges al DICOMDIR de l'estudi " + studyInstanceUID + " i serie " + seriesInstanceUID);
+    INFO_LOG("Cerca d'imatges al DICOMDIR de l'estudi " + series->getParentStudy()->getInstanceUID() + " i serie " + series->getInstanceUID());
 
-    m_readDicomdir.readImages(seriesInstanceUID, "", imageList);
+    m_readDicomdir.readImages(series->getInstanceUID(), "", imageList);
 
     if (imageList.isEmpty())
     {
@@ -192,7 +192,7 @@ void QInputOutputDicomdirWidget::expandImagesOfSeries(QString studyInstanceUID, 
     }
     else
     {
-        m_studyTreeWidget->insertImageList(studyInstanceUID, seriesInstanceUID, imageList);
+        m_studyTreeWidget->insertImageList(series->getParentStudy()->getInstanceUID(), series->getInstanceUID(), imageList);
     }
 }
 
