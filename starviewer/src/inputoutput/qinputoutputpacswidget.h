@@ -102,10 +102,10 @@ private:
 
 private slots:
     /// Mostra les sèries d'un estudi, les consulta al dicomdir i les mostra al tree widget
-    void expandSeriesOfStudy(QString seriesInstanceUID);
+    void requestedSeriesOfStudy(Study *study);
 
     /// Mostra les imatges d'un estudi, les consulta al dicomdir i les mostra al tree widget
-    void expandImagesOfSeries(QString studyIntanceUID, QString seriesInstanceUID);
+    void requestedImagesOfSeries(Series *series);
 
     /// Importa cap a la base de dades local els estudis seleccionats
     void retrieveSelectedStudies();

@@ -9,6 +9,7 @@
 #include "pacsdevice.h"
 #include "pacsrequeststatus.h"
 #include "dicommask.h"
+#include "dicomsource.h"
 /// This class helps to interactive with the pacs, allow us to find studies in the pacs setting a search mask. Very important for this class a connection
 /// and a mask search must be setted befoer query Studies
 
@@ -98,6 +99,9 @@ private:
     bool m_cancelQuery;
     // Indica si hem demanat la cancel·lació de la consulta actual
     bool m_cancelRequestSent;
+
+    // Indicarà de quin PACS hem obtingut estudis, sèries, imatges
+    DICOMSource m_resultsDICOMSource;
 };
 };
 #endif

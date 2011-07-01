@@ -86,7 +86,7 @@
      </column>
      <column>
       <property name="text">
-       <string>AETitle</string>
+       <string>DICOMItemID</string>
       </property>
      </column>
      <column>

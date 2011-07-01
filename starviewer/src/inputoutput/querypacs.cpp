@@ -24,6 +24,7 @@ QueryPacs::QueryPacs(PacsDevice pacsDevice)
 {
     m_pacsDevice = pacsDevice;
     m_pacsConnection = NULL;
+    m_resultsDICOMSource.addRetrievePACS(pacsDevice);
 }
 
 void QueryPacs::foundMatchCallback(void *callbackData, T_DIMSE_C_FindRQ *request, int responseCount, T_DIMSE_C_FindRSP *rsp,
@@ -168,6 +169,7 @@ void QueryPacs::addPatientStudy(DICOMTagReader *dicomTagReader)
         Patient *patient = CreateInformationModelObject::createPatient(dicomTagReader);
         Study *study = CreateInformationModelObject::createStudy(dicomTagReader);
         study->setInstitutionName(m_pacsDevice.getInstitution());
+        study->setDICOMSource(m_resultsDICOMSource);
 
         patient->addStudy(study);
         m_patientStudyList.append(patient);
@@ -179,6 +181,7 @@ void QueryPacs::addPatientStudy(DICOMTagReader *dicomTagReader)
 void QueryPacs::addSeries(DICOMTagReader *dicomTagReader)
 {
     Series *series = CreateInformationModelObject::createSeries(dicomTagReader);
+    series->setDICOMSource(m_resultsDICOMSource);
 
     // TODO: Si ens fan una cerca a nivell d'imatge inserirem la mateixa serie tantes vegades com images tenim, s'hauria de comprovar si ja conté
     // la sèrie la llista abans d'afegir-la
@@ -188,6 +191,7 @@ void QueryPacs::addSeries(DICOMTagReader *dicomTagReader)
 void QueryPacs::addImage(DICOMTagReader *dicomTagReader)
 {
     Image *image = CreateInformationModelObject::createImage(dicomTagReader);
+    image->setDICOMSource(m_resultsDICOMSource);
 
     m_imageList.append(image);
 }

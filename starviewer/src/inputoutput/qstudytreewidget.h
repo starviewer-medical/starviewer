@@ -17,6 +17,7 @@ class Patient;
 class Series;
 class Image;
 class DicomMask;
+class DICOMSource;
 
 /**
     Aquesta classe mostrar estudis i sèries d'una manera organitzada i fàcilment.
@@ -31,7 +32,7 @@ public:
 
     // Object Name s'utilitza per guardar El NomPacient, Serie + Identificador Sèrie i Imatge + Identificador Image
     enum ColumnIndex { ObjectName = 0, PatientID = 1, PatientAge = 2, Description = 3, Modality = 4, Date = 5, Time = 6,
-    PACSId = 7, Institution = 8, UID = 9, StudyID = 10, ProtocolName = 11, AccNumber = 12, Type = 13,
+    DICOMItemID = 7, Institution = 8, UID = 9, StudyID = 10, ProtocolName = 11, AccNumber = 12, Type = 13,
     RefPhysName = 14, PPStartDate = 15, PPStartTime = 16, ReqProcID = 17, SchedProcStep = 18, PatientBirth = 19 };
 
     QStudyTreeWidget(QWidget *parent = 0);
@@ -71,10 +72,9 @@ public:
     /// Retorna una llista amb l'UID del estudis seleccionats
     QStringList getSelectedStudiesUID();
 
-    /// Retorna una llista amb els estudis seleccionats
-    QList<Study*> getSelectedStudies();
-
-    /// Retorna l'estudi que tingui el studyInstanceUID passat per paràmetre
+    /// Retorna l'estudi que tingui el studyInstanceUID passat per paràmetre. L'estudi retornat es destruirà quan s'invoqui el mètode
+    /// clean d'aquesta classe, per tant si aquest objecte Study pot ser utilitzat després d'invocar el mètode clean és responsabilitat
+    /// de la classe que el cridi fer-ne una còpia
     Study* getStudy(QString studyInstanceUID);
 
     /// Retorna el UID de la sèrie seleccionada, si en aquell moment no hi ha cap sèrie seleccionada, retorna un QString buit
@@ -116,12 +116,6 @@ signals:
     /// Signal que s'emet quan canviem d'imatge seleccionada
     void currentImageChanged();
 
-    /// Signal que s'emet quan es fa expandir un estudi
-    void studyExpanded(QString studyUID);
-
-    /// Signal que s'emet qua es fa expandir una series
-    void seriesExpanded(QString studyUID, QString seriesUID);
-
     /// Signal que s'emet quan s'ha fet un doble click a un estudi
     void studyDoubleClicked();
 
@@ -133,6 +127,10 @@ signals:
 
     /// Signal que s'emet quan es passa de tenir un item seleccionat a no tenir-ne cap de seleccionat
     void notCurrentItemSelected();
+
+    ///Ens indica quan un usuari ha sol·licitat veure les sèries/imatges d'un estudi/sèrie
+    void requestedSeriesOfStudy(Study *studyRequestedSeries);
+    void requestedImagesOfSeries(Series *seriesRequestedImage);
 
 public slots:
     /// Indique que ens marqui la sèrie amb el uid passat per paràmetre com a seleccionada
@@ -170,10 +168,10 @@ private:
     /// Retorna l'objecte TreeWidgetItem, que pertany a un estudi cercem, per studUID i PACS, ja que
     /// un mateix estudi pot estar a més d'un PACS
     /// @param studyUID uid de l'estudi a cercar
-    QTreeWidgetItem* getStudyQTreeWidgetItem(QString studyUID);
+    QTreeWidgetItem* getStudyQTreeWidgetItem(QString studyUID, DICOMSource studyDICOMSource);
 
     /// Retorna l'Objecte QTtreeWidgeItem que és de l'estudi i series
-    QTreeWidgetItem* getSeriesQTreeWidgetItem(QString studyUID, QString seriesUID);
+    QTreeWidgetItem* getSeriesQTreeWidgetItem(QString studyUID, QString seriesUID, DICOMSource seriesDICOMSource);
 
 private:
     /// Ens indica si l'item passat és un estudi
@@ -195,7 +193,19 @@ private:
     /// Retorna llista QTreeWidgetItem resultant dels estudis que té el pacient
     QList<QTreeWidgetItem*> fillPatient(Patient *);
 
+    ///Inicialitza les variables necessàries del QWidget
+    void initialize();
+
 private:
+    int m_nextIDICOMItemIDOfStudy;
+    int m_nextDICOMItemIDOfSeries;
+    int m_nextDICOMItemIDOfImage;
+
+    QHash<int, Study*> m_addedStudiesByDICOMItemID;
+    QHash<int, Series*> m_adddSeriesByDICOMItemID;
+    QHash<int, Image*> m_addedImagesByDICOMItemID;
+
+
     /// Menu contextual
     QMenu *m_contextMenu;
 
@@ -207,9 +217,7 @@ private:
     /// Icones utilitzades com a root al TreeWidget
     QIcon m_openFolder, m_closeFolder, m_iconSeries;
 
-    QList<Study*> m_insertedStudyList;
-
-    QStudyTreeWidget::ItemTreeLevels m_maximumExpandTreeItemsLevel;
+     QStudyTreeWidget::ItemTreeLevels m_maximumExpandTreeItemsLevel;
 };
 
 }; // end namespace
