@@ -94,7 +94,10 @@ public:
     /// Retorna el QTreeWidget que conté el widget
     QTreeWidget* getQTreeWidget() const;
 
-    /// Per cada element selecciona Study/Series/Imatge retorna la seva DicomMask
+    /// Per cada element seleccionat Study/Series/Imatge retorna la seva DicomMask. Si tenim el cas que tenim seleccionat un estudi, i d'aquest estudi tenim
+    /// seleccionada dos sèries o alguna de les imatges només ens retonarà l'estudi, ja que l'acció que s'hagi de fer sobre els elements seleccionats
+    /// si l'estudi està seleccionant no té sentit que es faci sobre les sèries i les imatges, passa el mateix si tenim seleccionada un sèrie i imatges d'aquesta.
+    /// Per exemple si tenim seleccionat un estudi i dos de les seves sèries i l'usuari indica que vol descarregar-lo no té sentit descarregar l'estudi i llavors les dos sèries
     //Crec que QStudyTreeWidget no hauria de tenir coneixement de que per fer qualsevol acció sobre una font DICOM com DICOMDIR, BD, PACS...  necessita
     //un DICOMMask amb DICOMSource, però ara mateix necessitem aquest mètode ja que retorna ens retorna aglutinat a tots elements seleccionats independentment
     //de que siguin Study, Series, Image en un objecte comú el DICOMMask, sinó les classe que utilitzen aquest QStudyTreeWidget haurien de comprovar quins són els

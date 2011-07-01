@@ -72,23 +72,35 @@ QList<QPair<DicomMask, DICOMSource> > QStudyTreeWidget::getDicomMaskOfSelectedIt
             // És un estudi
             qpairDicomMaskDICOMSource.first = DicomMask::fromStudy(m_addedStudiesByDICOMItemID[item->text(DICOMItemID).toInt()], ok);
             qpairDicomMaskDICOMSource.second = m_addedStudiesByDICOMItemID[item->text(DICOMItemID).toInt()]->getDICOMSource();
+
+            dicomMaskDICOMSourceList.append(qpairDicomMaskDICOMSource);
         }
         else if (isItemSeries(item))
         {
-            qpairDicomMaskDICOMSource.first = DicomMask::fromSeries(m_adddSeriesByDICOMItemID[item->text(DICOMItemID).toInt()], ok);
-            qpairDicomMaskDICOMSource.second = m_adddSeriesByDICOMItemID[item->text(DICOMItemID).toInt()]->getDICOMSource();
+            //Si l'estudi pare no està seleccionat
+            if (!item->parent()->isSelected())
+            {
+                qpairDicomMaskDICOMSource.first = DicomMask::fromSeries(m_adddSeriesByDICOMItemID[item->text(DICOMItemID).toInt()], ok);
+                qpairDicomMaskDICOMSource.second = m_adddSeriesByDICOMItemID[item->text(DICOMItemID).toInt()]->getDICOMSource();
+
+                dicomMaskDICOMSourceList.append(qpairDicomMaskDICOMSource);
+            }
         }
         else if (isItemImage(item))
         {
-            qpairDicomMaskDICOMSource.first = DicomMask::fromImage(m_addedImagesByDICOMItemID[item->text(DICOMItemID).toInt()], ok);
-            qpairDicomMaskDICOMSource.second = m_addedImagesByDICOMItemID[item->text(DICOMItemID).toInt()]->getDICOMSource();
+            //Si la sèrie pare i l'estudi pare no està seleccionat
+            if (!item->parent()->isSelected() && !item->parent()->parent()->isSelected())
+            {
+                qpairDicomMaskDICOMSource.first = DicomMask::fromImage(m_addedImagesByDICOMItemID[item->text(DICOMItemID).toInt()], ok);
+                qpairDicomMaskDICOMSource.second = m_addedImagesByDICOMItemID[item->text(DICOMItemID).toInt()]->getDICOMSource();
+
+                dicomMaskDICOMSourceList.append(qpairDicomMaskDICOMSource);
+            }
         }
         else
         {
             DEBUG_LOG("Texte no esperat: " + item->text(Type));
         }
-
-        dicomMaskDICOMSourceList.append(qpairDicomMaskDICOMSource);
     }
 
     return dicomMaskDICOMSourceList;
