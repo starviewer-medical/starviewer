@@ -348,6 +348,25 @@ QList<Series*> Study::getViewableSeries()
     return result;
 }
 
+void Study::setDICOMSource(const DICOMSource &studyDICOMSource)
+{
+    m_studyDICOMSource = studyDICOMSource;
+}
+
+DICOMSource Study::getDICOMSource() const
+{
+    DICOMSource resultDICOMSource;
+
+    foreach (Series *series, m_seriesSet)
+    {
+        resultDICOMSource.addPACSDeviceFromDICOMSource(series->getDICOMSource());
+    }
+
+    resultDICOMSource.addPACSDeviceFromDICOMSource(m_studyDICOMSource);
+
+    return resultDICOMSource;
+}
+
 QString Study::toString()
 {
     QString result;

@@ -386,6 +386,16 @@ QString Image::getFormattedImageTime() const
     return formattedTime;
 }
 
+void Image::setDICOMSource(const DICOMSource &imageDICOMSource)
+{
+    m_imageDICOMSource = imageDICOMSource;
+}
+
+DICOMSource Image::getDICOMSource() const
+{
+    return m_imageDICOMSource;
+}
+
 QString Image::getKeyIdentifier() const
 {
     return m_SOPInstanceUID + "#" + QString::number(m_frameNumber);

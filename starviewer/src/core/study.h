@@ -5,6 +5,7 @@
 #include <QString>
 #include <QDateTime>
 #include "series.h"
+#include "dicomsource.h"
 
 namespace udg {
 
@@ -119,6 +120,11 @@ public:
     /// Ens retorna la llista de Series que es poden visualitzar en un viewer
     QList<Series*> getViewableSeries();
 
+    ///Retorna un DICOMSource que aglutina els diferents DICOMSource de les sèries que conté l'estudi i el de l'estudi si se n'hi ha assignat un.
+    DICOMSource getDICOMSource() const;
+    ///Indica quina és la font DICOM de la sèrie
+    void setDICOMSource(const DICOMSource &studyDICOMSource);
+
     QString toString();
 
 private:
@@ -181,6 +187,9 @@ private:
 
     /// L'entitat Patient a la qual pertany aquest estudi
     Patient *m_parentPatient;
+
+    ///Conté la font dels objectes DICOM de l'estudi
+    DICOMSource m_studyDICOMSource;
 };
 
 }
