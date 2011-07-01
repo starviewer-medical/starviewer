@@ -237,72 +237,6 @@ Study* QStudyTreeWidget::getStudy(const QString &studyInstanceUID, const DICOMSo
     return study;
 }
 
-QString QStudyTreeWidget::getCurrentStudyUID()
-{
-    if (m_studyTreeView->currentItem() != NULL)
-    {
-        if (isItemStudy(m_studyTreeView->currentItem()))
-        {
-            // És un estudi
-            return m_studyTreeView->currentItem()->text(UID);
-        }
-        else if (isItemSeries(m_studyTreeView->currentItem()))
-        {
-            return m_studyTreeView->currentItem()->parent()->text(UID);
-        }
-        else if (isItemImage(m_studyTreeView->currentItem()))
-        {
-            return m_studyTreeView->currentItem()->parent()->parent()->text(UID);
-        }
-        else
-        {
-            return "";
-        }
-    }
-    else
-    {
-        return "";
-    }
-}
-
-QString QStudyTreeWidget::getCurrentSeriesUID()
-{
-    if (m_studyTreeView->currentItem() != NULL)
-    {
-        if (isItemSeries(m_studyTreeView->currentItem()))
-        {
-            return m_studyTreeView->currentItem()->text(UID);
-        }
-        else if (isItemImage(m_studyTreeView->currentItem()))
-        {
-            return m_studyTreeView->currentItem()->parent()->text(UID);
-        }
-        else
-        {
-            return "";
-        }
-    }
-    else
-    {
-        return "";
-    }
-}
-
-QString QStudyTreeWidget::getCurrentImageUID()
-{
-    QString result;
-
-    if (m_studyTreeView->currentItem() != NULL)
-    {
-        if (isItemImage(m_studyTreeView->currentItem()))
-        {
-            result = m_studyTreeView->currentItem()->text(UID);
-        }
-    }
-
-    return result;
-}
-
 void QStudyTreeWidget::setContextMenu(QMenu *contextMenu)
 {
     m_contextMenu = contextMenu;
@@ -347,9 +281,6 @@ void QStudyTreeWidget::clear()
 {
     m_studyTreeView->clear();
 
-    m_oldCurrentStudyUID = "";
-    m_oldCurrentSeriesUID = "";
-
     qDeleteAll(m_addedImagesByDICOMItemID);
     qDeleteAll(m_adddSeriesByDICOMItemID);
     qDeleteAll(m_addedStudiesByDICOMItemID);
@@ -368,6 +299,8 @@ void QStudyTreeWidget::initialize()
     m_nextDICOMItemIDOfImage = 0;
 
     m_qTreeWidgetItemHasBeenDoubleClicked = false;
+    m_oldCurrentStudy = NULL;
+    m_oldCurrentSeries = NULL;
 }
 
 QTreeWidgetItem* QStudyTreeWidget::getStudyQTreeWidgetItem(const QString &studyUID, const DICOMSource &studyDICOMSource)
@@ -536,6 +469,63 @@ Image* QStudyTreeWidget::getImageByDICOMItemID(int imageDICOMItemID)
     return image;
 }
 
+Study* QStudyTreeWidget::getStudyByQTreeWidgetItem(QTreeWidgetItem *qTreeWidgetItem)
+{
+    Study *study = NULL;
+
+    if (qTreeWidgetItem)
+    {
+        if (isItemStudy(qTreeWidgetItem))
+        {
+            study = getStudyByDICOMItemID(qTreeWidgetItem->text(DICOMItemID).toInt());
+        }
+        else if (isItemSeries(qTreeWidgetItem))
+        {
+            study = getStudyByDICOMItemID(qTreeWidgetItem->parent()->text(DICOMItemID).toInt());
+        }
+        else if (isItemImage(qTreeWidgetItem))
+        {
+            study = getStudyByDICOMItemID(qTreeWidgetItem->parent()->parent()->text(DICOMItemID).toInt());
+        }
+    }
+
+    return study;
+}
+
+Series* QStudyTreeWidget::getSeriesByQTreeWidgetItem(QTreeWidgetItem *qTreeWidgetItem)
+{
+    Series *series = NULL;
+
+    if (qTreeWidgetItem)
+    {
+        if (isItemSeries(qTreeWidgetItem))
+        {
+            series = getSeriesByDICOMItemID(qTreeWidgetItem->text(DICOMItemID).toInt());
+        }
+        else if (isItemImage(qTreeWidgetItem))
+        {
+            series = getSeriesByDICOMItemID(qTreeWidgetItem->parent()->text(DICOMItemID).toInt());
+        }
+    }
+
+    return series;
+}
+
+Image* QStudyTreeWidget::getImageByQTreeWidgetItem(QTreeWidgetItem *qTreeWidgetItem)
+{
+    Image *image = NULL;
+
+    if (qTreeWidgetItem)
+    {
+        if (isItemImage(qTreeWidgetItem))
+        {
+            image = getImageByDICOMItemID(qTreeWidgetItem->text(DICOMItemID).toInt());
+        }
+    }
+
+    return image;
+}
+
 QString QStudyTreeWidget::formatAge(const QString &age) const
 {
     QString text(age);
@@ -568,28 +558,27 @@ QString QStudyTreeWidget::formatDateTime(const QDate &date, const QTime &time) c
     return formatedDateTimeAsQString;
 }
 
-void QStudyTreeWidget::currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *)
+void QStudyTreeWidget::currentItemChanged(QTreeWidgetItem *currentItem, QTreeWidgetItem *)
 {
-    if (current != NULL)
+    if (currentItem)
     {
-        if (getCurrentStudyUID() != m_oldCurrentStudyUID)
+        Study *currentStudy = getStudyByQTreeWidgetItem(currentItem);
+        Series *currentSeries = getSeriesByQTreeWidgetItem(currentItem);
+
+        if (currentStudy != m_oldCurrentStudy)
         {
-            emit(currentStudyChanged());
-            m_oldCurrentStudyUID = getCurrentStudyUID();
+            m_oldCurrentStudy = currentStudy;
+            emit(currentStudyChanged(currentStudy));
         }
 
-        if (getCurrentSeriesUID() != m_oldCurrentSeriesUID)
+        if (currentSeries != m_oldCurrentSeries)
         {
-            m_oldCurrentSeriesUID = getCurrentSeriesUID();
-            emit(currentSeriesChanged(m_oldCurrentSeriesUID));
+            m_oldCurrentSeries = currentSeries;
+            emit(currentSeriesChanged(currentSeries));
         }
-
-        // Sempre que canviem d'element segur que canviem d'imatge
-        emit(currentImageChanged());
     }
     else
     {
-        // Cas en que no hi cap item seleccionat
         emit notCurrentItemSelected();
     }
 }

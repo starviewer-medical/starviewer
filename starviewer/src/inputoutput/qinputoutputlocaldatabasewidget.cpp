@@ -70,8 +70,8 @@ void QInputOutputLocalDatabaseWidget::createConnections()
 
     connect(m_seriesListWidget, SIGNAL(selectedSeriesIcon(QString)), m_studyTreeWidget, SLOT(setCurrentSeries(QString)));
     connect(m_seriesListWidget, SIGNAL(viewSeriesIcon()), SLOT(viewFromQSeriesListWidget()));
-    connect(m_studyTreeWidget, SIGNAL(currentStudyChanged()), SLOT(setSeriesToSeriesListWidget()));
-    connect(m_studyTreeWidget, SIGNAL(currentSeriesChanged(QString)), m_seriesListWidget, SLOT(setCurrentSeries(QString)));
+    connect(m_studyTreeWidget, SIGNAL(currentStudyChanged(Study *)), SLOT(setSeriesToSeriesListWidget(Study *)));
+    connect(m_studyTreeWidget, SIGNAL(currentSeriesChanged(Series *)), SLOT(currentSeriesOfQStudyTreeWidgetChanged(Series *)));
     // Si passem de tenir un element seleccionat a no tenir-ne li diem al seriesListWidget que no mostri cap previsualització
     connect(m_studyTreeWidget, SIGNAL(notCurrentItemSelected()), m_seriesListWidget, SLOT(clear()));
 
@@ -217,29 +217,38 @@ void QInputOutputLocalDatabaseWidget::requestedSeriesOfStudy(Study *study)
     }
 }
 
-void QInputOutputLocalDatabaseWidget::setSeriesToSeriesListWidget()
+void QInputOutputLocalDatabaseWidget::setSeriesToSeriesListWidget(Study *currentStudy)
 {
-    QList<Series*> seriesList;
-    LocalDatabaseManager localDatabaseManager;
+    m_seriesListWidget->clear();
+
+    if (!currentStudy)
+    {
+        return;
+    }
+
+    INFO_LOG("Cerca de sèries a la cache de l'estudi " + currentStudy->getInstanceUID());
+
     DicomMask mask;
-    QString studyInstanceUID = m_studyTreeWidget->getCurrentStudyUID();
+    mask.setStudyInstanceUID(currentStudy->getInstanceUID());
 
-    INFO_LOG("Cerca de sèries a la cache de l'estudi " + studyInstanceUID);
-
-    // Preparem la mascara i cerquem les series a la cache
-    mask.setStudyInstanceUID(studyInstanceUID);
-
-    seriesList = localDatabaseManager.querySeries(mask);
+    LocalDatabaseManager localDatabaseManager;
+    QList<Series*> seriesList = localDatabaseManager.querySeries(mask);
     if (showDatabaseManagerError(localDatabaseManager.getLastError()))
     {
         return;
     }
 
-    m_seriesListWidget->clear();
-
     foreach (Series *series, seriesList)
     {
-        m_seriesListWidget->insertSeries(studyInstanceUID, series);
+        m_seriesListWidget->insertSeries(currentStudy->getInstanceUID(), series);
+    }
+}
+
+void QInputOutputLocalDatabaseWidget::currentSeriesOfQStudyTreeWidgetChanged(Series *series)
+{
+    if (series)
+    {
+        m_seriesListWidget->setCurrentSeries(series->getInstanceUID());
     }
 }
 
