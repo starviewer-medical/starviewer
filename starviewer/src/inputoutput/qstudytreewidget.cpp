@@ -273,7 +273,12 @@ void QStudyTreeWidget::setCurrentSeries(QString seriesUID)
     // Només hauria de trobar una sèrie amb el mateix UID, sinó tindrem una inconsistència de DICOM, el series UID ha de ser únic
     if (qStudyList.count() > 0)
     {
-        m_studyTreeView->setCurrentItem (qStudyList.at(0));
+        QTreeWidgetItem *seriesItem = qStudyList.at(0);
+        if (seriesItem->parent()->isExpanded())
+        {
+            //Comprovem que l'element pare estigui desplegat perquè sinó Qt peta si assignem com a element actual un element no visible
+            m_studyTreeView->setCurrentItem (seriesItem);
+        }
     }
 }
 
