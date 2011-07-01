@@ -7,6 +7,7 @@
 #include <QDateTime>
 #include <QPixmap>
 #include "identifier.h"
+#include "dicomsource.h"
 
 namespace udg {
 
@@ -172,6 +173,11 @@ public:
     void setLaterality(const QChar &laterality);
     QChar getLaterality() const;
 
+    ///Indica quina és la font DICOM de la sèrie
+    void setDICOMSource(const DICOMSource &seriesDICOMSource);
+    ///Retorna un DICOMSource que aglutina els diferents DICOMSource de les imatges que conté la sèrie i el de la sèrie si se n'hi ha assignat un.
+    DICOMSource getDICOMSource() const;
+
     /// Retorna el nombre de volums dels que es composa la sèrie.
     int getNumberOfVolumes();
 
@@ -332,6 +338,9 @@ private:
     QString m_performedProcedureStepStartDate;
     /// Perfomed procedure step start time (0040,0345) Tipus 3
     QString m_performedProcedureStepStartTime;
+
+    ///Indica de quines fonts DICOM s'han obtingut la sèrie i les imatges DICOM
+    DICOMSource m_seriesDICOMSource;
 };
 
 }

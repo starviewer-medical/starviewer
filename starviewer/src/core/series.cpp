@@ -1,5 +1,4 @@
 #include "series.h"
-
 #include "study.h"
 #include "image.h"
 #include "logging.h"
@@ -390,6 +389,25 @@ QChar Series::getLaterality() const
 int Series::getNumberOfVolumes()
 {
     return m_volumesList.size();
+}
+
+void Series::setDICOMSource(const DICOMSource &seriesDICOMSource)
+{
+    m_seriesDICOMSource = seriesDICOMSource;
+}
+
+DICOMSource Series::getDICOMSource() const
+{
+    DICOMSource resultDICOMSource;
+
+    foreach(Image *image, this->getImages())
+    {
+        resultDICOMSource.addPACSDeviceFromDICOMSource(image->getDICOMSource());
+    }
+
+    resultDICOMSource.addPACSDeviceFromDICOMSource(m_seriesDICOMSource);
+
+    return resultDICOMSource;
 }
 
 Volume* Series::getVolume(Identifier id)

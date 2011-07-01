@@ -7,6 +7,7 @@
 #include <QPair>
 #include <QStringList>
 #include <QPixmap>
+#include <dicomsource.h>
 
 #include "imageorientation.h"
 #include "patientorientation.h"
@@ -164,6 +165,10 @@ public:
 
     /// Ens retorna la hora en format hh:mm:ss en que va començar la creació de la imatge
     QString getFormattedImageTime() const;
+
+    /// Assingar/Obtenir el DICOMSource de la imatge. Indica quin és l'origen dels fitxers DICOM que conté la imatge
+    void setDICOMSource(const DICOMSource &imageDICOMSource);
+    DICOMSource getDICOMSource() const;
 
     /// Ens retorna la clau que identifica la imatge
     QString getKeyIdentifier() const;
@@ -327,6 +332,9 @@ private:
 
     /// Cache de la imatge de previsualització
     QPixmap m_thumbnail;
+
+    //Indica quin és l'origen de les imatges DICOM
+    DICOMSource m_imageDICOMSource;
 };
 
 }
