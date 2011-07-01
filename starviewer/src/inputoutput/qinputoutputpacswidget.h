@@ -81,9 +81,6 @@ private:
     /// algun PACS per consultar
     bool AreValidQueryParameters(DicomMask *maskToQuery, QList<PacsDevice> pacsToQuery);
 
-    /// Retorna l'ID del pacs al que pertany l'estudi passat per paràmetre, només té en compte els estudis que s'han consultat a la última query
-    QString getPacsIDFromQueriedStudies(QString studyInstanceUID);
-
     /// Construeix la màscara de cerca per cercar les sèries d'un estudi
     DicomMask buildSeriesDicomMask(QString studyInstanceUID);
 
@@ -136,7 +133,6 @@ private slots:
 
 private:
     QMenu m_contextMenuQStudyTreeWidget;
-    QHash<QString, QString> m_hashPacsIDOfStudyInstanceUID;
     PacsManager *m_pacsManager;
     /// Per cada job de descàrrega guardem quina acció hem de fer quan ha acabat la descàrrega
     QHash<int, ActionsAfterRetrieve> m_actionsWhenRetrieveJobFinished;

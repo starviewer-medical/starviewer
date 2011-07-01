@@ -95,7 +95,11 @@ public:
     QTreeWidget* getQTreeWidget() const;
 
     /// Per cada element selecciona Study/Series/Imatge retorna la seva DicomMask
-    QList<DicomMask> getDicomMaskOfSelectedItems();
+    //Crec que QStudyTreeWidget no hauria de tenir coneixement de que per fer qualsevol acció sobre una font DICOM com DICOMDIR, BD, PACS...  necessita
+    //un DICOMMask amb DICOMSource, però ara mateix necessitem aquest mètode ja que retorna ens retorna aglutinat a tots elements seleccionats independentment
+    //de que siguin Study, Series, Image en un objecte comú el DICOMMask, sinó les classe que utilitzen aquest QStudyTreeWidget haurien de comprovar quins són els
+    //estudis seleccionats, series seleccionades i imatges seleccionades invocant un mètode per cada tipus d'objecte.
+    QList<QPair<DicomMask, DICOMSource> > getDicomMaskOfSelectedItems();
 
     /// Assigna/Obté el nivell màxim fins el que es poden expandir els items que es mostren a QStudyTreeWiget, per defecte s'expandeix fins a nivell d'Image
     void setMaximumExpandTreeItemsLevel(QStudyTreeWidget::ItemTreeLevels maximumExpandTreeItemsLevel);
