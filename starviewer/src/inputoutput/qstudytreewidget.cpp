@@ -492,23 +492,22 @@ void QStudyTreeWidget::removeSeries(const QString &studyInstanceUID, const QStri
 {
     foreach (QTreeWidgetItem *studyItem, m_studyTreeView->findItems(studyInstanceUID, Qt::MatchExactly, UID))
     {
-        bool seriesDeleted = false;
-
         for (int index = 0; index < studyItem->childCount(); index++)
         {
             if (studyItem->child(index)->text(UID) == seriesInstanceUID)
             {
-                delete studyItem->takeChild(index);
-                seriesDeleted = true;
+                if (studyItem->childCount() == 1)
+                {
+                    //Si l'estudi només té aquella sèrie ja la podem esborrar
+                    delete studyItem;
+                }
+                else
+                {
+                    delete studyItem->takeChild(index);
+                }
             }
         }
 
-        if (studyItem->childCount() == 0 && seriesDeleted)
-        {
-            // Si després d'esborrar la sèrie l'estudi no té cap fill esborrem el QTreeWidgeItem estudi, no té sentit tenir un estudi sol
-            // si no té series
-            delete studyItem;
-        }
     }
 
     m_studyTreeView->clearSelection();
