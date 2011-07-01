@@ -104,6 +104,8 @@ private slots:
 
     void currentSeriesOfQStudyTreeWidgetChanged(Series *series);
 
+    void currentSeriesChangedOfQSeriesListWidget(const QString &studyInstanceUID, const QString &seriesInstanceUID);
+
     /// Esborra de la base de dades els estudis seleccionats en el QStudyTreeWidgetView
     void deleteSelectedItemsFromLocalDatabase();
 

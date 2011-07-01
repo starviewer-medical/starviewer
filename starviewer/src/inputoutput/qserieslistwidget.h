@@ -55,7 +55,7 @@ public slots:
 
 signals:
     /// Quan seleccionem una sèrie emeiteix una signal per a que el QStudyTreeWidget, tingui seleccionada la mateixa sèrie
-    void selectedSeriesIcon(QString);
+    void selectedSeriesIcon(const QString studyInstanceUID, const QString seriesInstanceUID);
 
     /// Quan es fa doble click emiteix un signal, perquè la sèrie sigui visualitzada
     void viewSeriesIcon();
