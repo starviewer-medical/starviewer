@@ -68,7 +68,7 @@ void QInputOutputLocalDatabaseWidget::createConnections()
 
     connect(m_viewButton, SIGNAL(clicked()), SLOT(viewFromQStudyTreeWidget()));
 
-    connect(m_seriesListWidget, SIGNAL(selectedSeriesIcon(QString)), m_studyTreeWidget, SLOT(setCurrentSeries(QString)));
+    connect(m_seriesListWidget, SIGNAL(selectedSeriesIcon(QString, QString)), this, SLOT(currentSeriesChangedOfQSeriesListWidget(QString, QString)));
     connect(m_seriesListWidget, SIGNAL(viewSeriesIcon()), SLOT(viewFromQSeriesListWidget()));
     connect(m_studyTreeWidget, SIGNAL(currentStudyChanged(Study *)), SLOT(setSeriesToSeriesListWidget(Study *)));
     connect(m_studyTreeWidget, SIGNAL(currentSeriesChanged(Series *)), SLOT(currentSeriesOfQStudyTreeWidgetChanged(Series *)));
@@ -250,6 +250,11 @@ void QInputOutputLocalDatabaseWidget::currentSeriesOfQStudyTreeWidgetChanged(Ser
     {
         m_seriesListWidget->setCurrentSeries(series->getInstanceUID());
     }
+}
+
+void QInputOutputLocalDatabaseWidget::currentSeriesChangedOfQSeriesListWidget(const QString &studyInstanceUID, const QString &seriesInstanceUID)
+{
+    m_studyTreeWidget->setCurrentSeries(studyInstanceUID, seriesInstanceUID, DICOMSource());
 }
 
 void QInputOutputLocalDatabaseWidget::deleteSelectedItemsFromLocalDatabase()

@@ -93,8 +93,7 @@ public:
 
 public slots:
     /// Indique que ens marqui la sèrie amb el uid passat per paràmetre com a seleccionada
-    /// @param SeriesUID Uid de la serie seleccionada en QSeriesListWidget
-    void setCurrentSeries(QString seriesUID);
+    void setCurrentSeries(const QString &studyInstanceUID, const QString &seriesInstanceUID, const DICOMSource &dicomSource);
 
     /// Neteja el TreeView
     void clear();

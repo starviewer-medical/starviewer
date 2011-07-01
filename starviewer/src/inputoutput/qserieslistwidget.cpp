@@ -144,7 +144,7 @@ void QSeriesListWidget::clicked(QListWidgetItem *item)
 {
     if (item != NULL)
     {
-        emit(selectedSeriesIcon(item->statusTip()));
+        emit(selectedSeriesIcon(getCurrentStudyUID(), item->statusTip()));
     }
 }
 

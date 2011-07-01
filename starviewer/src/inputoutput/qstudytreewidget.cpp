@@ -265,20 +265,19 @@ QStudyTreeWidget::ItemTreeLevels QStudyTreeWidget::getMaximumExpandTreeItemsLeve
     return m_maximumExpandTreeItemsLevel;
 }
 
-void QStudyTreeWidget::setCurrentSeries(QString seriesUID)
+void QStudyTreeWidget::setCurrentSeries(const QString &studyInstanceUID, const QString &seriesInstanceUID, const DICOMSource &dicomSource)
 {
-    // Busquem l'estudi a la que pertany la sèrie
-    QList<QTreeWidgetItem*> qStudyList(m_studyTreeView->findItems(seriesUID, Qt::MatchRecursive, UID));
+    QTreeWidgetItem *seriesItem = getSeriesQTreeWidgetItem(studyInstanceUID, seriesInstanceUID, dicomSource);
 
-    // Només hauria de trobar una sèrie amb el mateix UID, sinó tindrem una inconsistència de DICOM, el series UID ha de ser únic
-    if (qStudyList.count() > 0)
+    if (!seriesItem)
     {
-        QTreeWidgetItem *seriesItem = qStudyList.at(0);
-        if (seriesItem->parent()->isExpanded())
-        {
-            //Comprovem que l'element pare estigui desplegat perquè sinó Qt peta si assignem com a element actual un element no visible
-            m_studyTreeView->setCurrentItem (seriesItem);
-        }
+        return;
+    }
+
+    if (seriesItem->parent()->isExpanded())
+    {
+        //Comprovem que l'element pare estigui desplegat perquè sinó Qt peta si assignem com a element actual un element no visible
+        m_studyTreeView->setCurrentItem (seriesItem);
     }
 }
 
