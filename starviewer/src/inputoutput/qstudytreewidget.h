@@ -46,19 +46,18 @@ public:
 
     /// Insereix un llista de sèries a l'estudi seleccionat actualment
     /// @param seriesList series afegir
-    void insertSeriesList(QString studyIstanceUID, QList<Series*> seriesList);
+    void insertSeriesList(const QString &studyIstanceUID, QList<Series*> seriesList);
 
     /// Insereix una llista d'imatges a la sèrie seleccionada actualment
     /// @param imageList llista d'imatges afegir a la sèrie
-    void insertImageList(QString studyInstanceUID, QString seriesInstanceUID, QList<Image*> imageList);
+    void insertImageList(const QString &studyInstanceUID, const QString &seriesInstanceUID, QList<Image*> imageList);
 
     /// Removes study from the list
-    /// @param esbora l'estudi amb StudyUID de la llista
-    void removeStudy(QString StudyInstanceUIDToRemove);
+    void removeStudy(const QString &studyInstanceUIDToRemove, const DICOMSource &dicomSourceStudyToRemove);
 
     /// Esborra la sèrie del QStudyTreeWidget, si és l'única sèrie de l'estudi també esborra l'estudi, no té sentit tenir una estudi sense
     ///  series al TreeWidget
-    void removeSeries(const QString &studyInstanceUIDToRemove, const QString &seriesInstanceUIDToRemove);
+    void removeSeries(const QString &studyInstanceUIDToRemove, const QString &seriesInstanceUIDToRemove, const DICOMSource &dicomSourceSeriesToRemove);
 
     /// Indica/Retorna la columna i direcció per la que s'ordena llista
     void setSortByColumn(QStudyTreeWidget::ColumnIndex sortColumn, Qt::SortOrder sortOrder);
@@ -69,10 +68,10 @@ public:
     /// @return UID de l'estudi seleccionat
     QString getCurrentStudyUID();
 
-    /// Retorna l'estudi que tingui el studyInstanceUID passat per paràmetre. L'estudi retornat es destruirà quan s'invoqui el mètode
+    /// Retorna l'estudi que tingui el studyInstanceUID i el DICOMSource passat per paràmetre. L'estudi retornat es destruirà quan s'invoqui el mètode
     /// clean d'aquesta classe, per tant si aquest objecte Study pot ser utilitzat després d'invocar el mètode clean és responsabilitat
     /// de la classe que el cridi fer-ne una còpia
-    Study* getStudy(QString studyInstanceUID);
+    Study* getStudy(const QString &studyInstanceUID, const DICOMSource &dicomSourceOfStudy);
 
     /// Retorna el UID de la sèrie seleccionada, si en aquell moment no hi ha cap sèrie seleccionada, retorna un QString buit
     ///  @return UID de la sèrie seleccionat
@@ -163,7 +162,7 @@ private:
 
     /// Formata l'edat per mostrar per pantalla
     /// @param edat
-    QString formatAge(const QString);
+    QString formatAge(const QString &age);
 
     /// Formata la data i hora passada a ISO 8601 extended (YYYY-MM-DD HH:MM:SS) Amb aquest format de data es pot ordenar els estudis per data/hora
     /// Si l'hora no té valor només retorna la data, i si ni Data i Hora tenen valor retorna string buit
@@ -172,10 +171,10 @@ private:
     /// Retorna l'objecte TreeWidgetItem, que pertany a un estudi cercem, per studUID i PACS, ja que
     /// un mateix estudi pot estar a més d'un PACS
     /// @param studyUID uid de l'estudi a cercar
-    QTreeWidgetItem* getStudyQTreeWidgetItem(QString studyUID, DICOMSource studyDICOMSource);
+    QTreeWidgetItem* getStudyQTreeWidgetItem(const QString &studyUID, const DICOMSource &studyDICOMSource);
 
     /// Retorna l'Objecte QTtreeWidgeItem que és de l'estudi i series
-    QTreeWidgetItem* getSeriesQTreeWidgetItem(QString studyUID, QString seriesUID, DICOMSource seriesDICOMSource);
+    QTreeWidgetItem* getSeriesQTreeWidgetItem(const QString &studyUID, const QString &seriesUID, const DICOMSource &seriesDICOMSource);
 
 private:
     /// Ens indica si l'item passat és un estudi
@@ -199,6 +198,11 @@ private:
 
     ///Inicialitza les variables necessàries del QWidget
     void initialize();
+
+    ///Retorna Study/Series/Image a partir del seu DICOMItemID si no el troba retorna null
+    Study* getStudyByDICOMItemID(int studyDICOMItemID);
+    Series* getSeriesByDICOMItemID(int seriesDICOMItemID);
+    Image* getImageByDICOMItemID(int imageDICOMItemID);
 
 private:
     int m_nextIDICOMItemIDOfStudy;
