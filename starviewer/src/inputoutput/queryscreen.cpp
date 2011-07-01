@@ -292,20 +292,14 @@ void QueryScreen::searchStudy()
 
 void QueryScreen::viewRetrievedStudyFromPacs(QString studyInstanceUID)
 {
-    QStringList studyUIDList;
-    studyUIDList << studyInstanceUID;
-
     // Indiquem que volem veure un estudi que està guardat a la base de dades
-    m_qInputOutputLocalDatabaseWidget->view(studyUIDList, "");
+    m_qInputOutputLocalDatabaseWidget->view(studyInstanceUID);
 }
 
 void QueryScreen::loadRetrievedStudyFromPacs(QString studyInstanceUID)
 {
-    QStringList studyUIDList;
-    studyUIDList << studyInstanceUID;
-
     // Indiquem que volem veure un estudi que està guardat a la base de dades
-    m_qInputOutputLocalDatabaseWidget->view(studyUIDList, "", true);
+    m_qInputOutputLocalDatabaseWidget->view(studyInstanceUID, true);
 }
 
 void QueryScreen::sendDicomObjectsToPacs(PacsDevice pacsDevice, QList<Image*> images)

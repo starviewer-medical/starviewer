@@ -318,26 +318,36 @@ void QInputOutputLocalDatabaseWidget::deleteSelectedItemsFromLocalDatabase()
     }
 }
 
-void QInputOutputLocalDatabaseWidget::view(QStringList selectedStudiesInstanceUID, QString selectedSeriesInstanceUID, bool loadOnly)
+void QInputOutputLocalDatabaseWidget::view(QString studyInstanceUID, bool loadOnly)
+{
+    DicomMask studyToView;
+    studyToView.setStudyInstanceUID(studyInstanceUID);
+
+    QList<DicomMask> studiesToView;
+    studiesToView.append(studyToView);
+
+    view(studiesToView, loadOnly);
+}
+
+void QInputOutputLocalDatabaseWidget::view(QList<DicomMask> dicomMaskStudiesToView, bool loadOnly)
 {
     DicomMask patientToProcessMask;
     Patient *patient;
     QList<Patient*> selectedPatientsList;
 
-    if (selectedStudiesInstanceUID.isEmpty())
+    if (dicomMaskStudiesToView.isEmpty())
     {
         QMessageBox::warning(this, ApplicationNameString, tr("Select at least one study to view."));
         return;
     }
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    // TODO: S'hauria de millorar el mètode ja que per la seva estructura lo d'obrir l'estudi per la sèrie que ens tinguin seleccionada només ho farà per un
-    // estudi ja que aquest mètode només se li passa per paràmetre una sèrie per defecte
-    foreach (QString studyInstanceUIDSelected, selectedStudiesInstanceUID)
+
+    foreach (DicomMask dicomMaskStudyToView, dicomMaskStudiesToView)
     {
         LocalDatabaseManager localDatabaseManager;
 
-        patientToProcessMask.setStudyInstanceUID(studyInstanceUIDSelected);
+        patientToProcessMask.setStudyInstanceUID(dicomMaskStudyToView.getStudyInstanceUID());
 
         patient = localDatabaseManager.retrieve(patientToProcessMask);
 
@@ -349,14 +359,12 @@ void QInputOutputLocalDatabaseWidget::view(QStringList selectedStudiesInstanceUI
 
         if (patient)
         {
-            // Marquem la sèrie per defecte
-            // TODO ara sempre posem el mateix UID, per tant de moment només funciona bé del tot quan seleccionem un únic estudi
-            patient->setSelectedSeries(selectedSeriesInstanceUID);
+            patient->setSelectedSeries(dicomMaskStudyToView.getSeriesInstanceUID());
             selectedPatientsList << patient;
         }
         else
         {
-            DEBUG_LOG("No s'ha pogut obtenir l'estudi amb UID " + studyInstanceUIDSelected);
+            DEBUG_LOG("No s'ha pogut obtenir l'estudi amb UID " + dicomMaskStudyToView.getStudyInstanceUID());
         }
     }
 
@@ -371,16 +379,24 @@ void QInputOutputLocalDatabaseWidget::view(QStringList selectedStudiesInstanceUI
 
 void QInputOutputLocalDatabaseWidget::viewFromQStudyTreeWidget()
 {
-    view(m_studyTreeWidget->getSelectedStudiesUID(), m_studyTreeWidget->getCurrentSeriesUID());
+    QList<DicomMask> dicomMaskStudiesToView;
+    QList<QPair<DicomMask, DICOMSource> > selectedDICOMItemsInQStudyTreeWidget = m_studyTreeWidget->getDicomMaskOfSelectedItems();
+
+    for (int index = 0; index < selectedDICOMItemsInQStudyTreeWidget.count(); index++)
+    {
+        dicomMaskStudiesToView.append(selectedDICOMItemsInQStudyTreeWidget.at(index).first);
+    }
+
+    view(dicomMaskStudiesToView);
 }
 
 void QInputOutputLocalDatabaseWidget::viewFromQSeriesListWidget()
 {
-    QStringList selectedStudiesInstanceUID;
+    DicomMask studyToView;
+    studyToView.setStudyInstanceUID(m_seriesListWidget->getCurrentStudyUID());
+    studyToView.setSeriesInstanceUID(m_seriesListWidget->getCurrentSeriesUID());
 
-    // Agafem l'estudi uid de la sèrie seleccionada
-    selectedStudiesInstanceUID << m_seriesListWidget->getCurrentStudyUID();
-    view(selectedStudiesInstanceUID, m_seriesListWidget->getCurrentSeriesUID());
+    view(QList<DicomMask>() << studyToView);
 
     StatsWatcher::log("Obrim estudi seleccionant sèrie desde thumbnail");
 }

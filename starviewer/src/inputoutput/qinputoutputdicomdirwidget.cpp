@@ -241,35 +241,31 @@ void QInputOutputDicomdirWidget::retrieveSelectedStudies()
 
 void QInputOutputDicomdirWidget::view()
 {
-    QStringList selectedStudiesInstanceUID = m_studyTreeWidget->getSelectedStudiesUID();
+    QList<QPair<DicomMask, DICOMSource> > selectedDICOMITems = m_studyTreeWidget->getDicomMaskOfSelectedItems();
     DicomMask patientToProcessMask;
     Patient *patient;
     QList<Patient*> selectedPatientsList;
 
-    if (selectedStudiesInstanceUID.isEmpty())
+    if (selectedDICOMITems.isEmpty())
     {
         QMessageBox::warning(this, ApplicationNameString, tr("Select at least one study to view."));
         return;
     }
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    // TODO: S'hauria de millorar el mètode ja que per la seva estructura lo d'obrir l'estudi per la sèrie que ens tinguin seleccionada només ho farà per un
-    // estudi ja que aquest mètode només se li passa per paràmetre una sèrie per defecte
-    foreach (QString studyInstanceUIDSelected, selectedStudiesInstanceUID)
+    for (int index = 0; index < selectedDICOMITems.count(); index++)
     {
-        patientToProcessMask.setStudyInstanceUID(studyInstanceUIDSelected);
+        patientToProcessMask.setStudyInstanceUID(selectedDICOMITems.at(index).first.getStudyInstanceUID());
         patient = m_readDicomdir.retrieve(patientToProcessMask);
 
         if (patient)
         {
-            // Marquem la sèrie per defecte
-            // TODO ara sempre posem el mateix UID, per tant de moment només funciona bé del tot quan seleccionem un únic estudi
-            patient->setSelectedSeries(m_studyTreeWidget->getCurrentSeriesUID());
+            patient->setSelectedSeries(selectedDICOMITems.at(index).first.getSeriesInstanceUID());
             selectedPatientsList << patient;
         }
         else
         {
-            DEBUG_LOG("No s'ha pogut obtenir l'estudi amb UID " + studyInstanceUIDSelected);
+            DEBUG_LOG("No s'ha pogut obtenir l'estudi amb UID " + selectedDICOMITems.at(index).first.getStudyInstanceUID());
         }
     }
 
