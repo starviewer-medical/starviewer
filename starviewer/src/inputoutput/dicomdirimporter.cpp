@@ -128,7 +128,7 @@ void DICOMDIRImporter::importStudy(QString studyUID, QString seriesUID, QString 
     {
         QList<Series*> seriesListToImport;
 
-        m_qprogressDialog->setLabelText(tr("Importing study of %1").arg(patientStudyListToImport.at(0)->getFullName()));
+        m_qprogressDialog->setLabelText(getDescriptionForQProgressDialog(studyUID, seriesUID, sopInstanceUID));
 
         m_readDicomdir.readSeries(studyUID, seriesUID, seriesListToImport);
 
@@ -300,6 +300,63 @@ void DICOMDIRImporter::deleteFailedImportedStudy(QString studyInstanceUID)
 DICOMDIRImporter::DICOMDIRImporterError DICOMDIRImporter::getLastError()
 {
     return m_lastError;
+}
+
+QString DICOMDIRImporter::getDescriptionForQProgressDialog(QString studyInstanceUID, QString seriesInstanceUID, QString SOPInstanceUID)
+{
+    QList<Patient*> patientToImport;
+    QList<Series*> seriesToImport;
+    QList<Image*> imageToImport;
+    QString description;
+
+    if (!SOPInstanceUID.isEmpty() && !seriesInstanceUID.isEmpty() && studyInstanceUID.isEmpty())
+    {
+        m_readDicomdir.readImages(seriesInstanceUID, SOPInstanceUID, imageToImport);
+    }
+
+    if (!seriesInstanceUID.isEmpty() && !studyInstanceUID.isEmpty())
+    {
+        m_readDicomdir.readSeries(studyInstanceUID, seriesInstanceUID, seriesToImport);
+    }
+
+    if (!studyInstanceUID.isEmpty())
+    {
+        DicomMask dicomMask;
+        dicomMask.setStudyInstanceUID(studyInstanceUID);
+
+        m_readDicomdir.readStudies(patientToImport, dicomMask);
+    }
+
+    if (imageToImport.count() == 1 && seriesToImport.count() == 1 && patientToImport.count() == 1)
+    {
+        description = tr("Importing Image %1 of Series %2 from Study %3, %4").arg(imageToImport.at(0)->getInstanceNumber(), seriesToImport.at(0)->getSeriesNumber(),
+                                                                                  patientToImport.at(0)->getStudies().at(0)->getID());
+    }
+    else if (seriesToImport.count() == 1 && patientToImport.count() == 1)
+    {
+        description = tr("Importing Series %1 of Study %2, %3").arg(seriesToImport.at(0)->getSeriesNumber(), patientToImport.at(0)->getStudies().at(0)->getID(),
+                                                                    patientToImport.at(0)->getFullName());
+    }
+    else if (patientToImport.count() == 1)
+    {
+        description = tr("Importing Study %1, %2").arg(patientToImport.at(0)->getStudies().at(0)->getID(), patientToImport.at(0)->getFullName());
+    }
+    else
+    {
+        //No hauria de passar mai que arribés aquí
+        description = tr("Importing Images from DICOMDIR");
+    }
+
+    qDeleteAll(imageToImport);
+    qDeleteAll(seriesToImport);
+    foreach(Patient *patient, patientToImport)
+    {
+        qDeleteAll(patient->getStudies());
+    }
+
+    qDeleteAll(patientToImport);
+
+    return description;
 }
 
 }
