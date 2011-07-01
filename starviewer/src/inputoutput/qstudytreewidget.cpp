@@ -40,10 +40,6 @@ QStudyTreeWidget::QStudyTreeWidget(QWidget *parent)
     initialize();
 }
 
-QStudyTreeWidget::~QStudyTreeWidget()
-{
-}
-
 void QStudyTreeWidget::createConnections()
 {
     connect(m_studyTreeView, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), SLOT(doubleClicked(QTreeWidgetItem *, int)));
@@ -53,9 +49,120 @@ void QStudyTreeWidget::createConnections()
     connect(m_studyTreeView, SIGNAL(itemCollapsed(QTreeWidgetItem *)), SLOT (itemCollapsed(QTreeWidgetItem *)));
 }
 
-QTreeWidget* QStudyTreeWidget::getQTreeWidget() const
+void QStudyTreeWidget::insertPatientList(QList<Patient*> patientList)
 {
-    return m_studyTreeView;
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+
+    foreach (Patient *patient, patientList)
+    {
+        insertPatient(patient);
+    }
+
+    QApplication::restoreOverrideCursor();
+}
+
+void QStudyTreeWidget::insertPatient(Patient *patient)
+{
+    if (patient->getNumberOfStudies() > 0)
+    {
+        // Si l'estudi ja hi existeix a StudyTreeView l'esborrem
+        removeStudy(patient->getStudies().at(0)->getInstanceUID(), patient->getStudies().at(0)->getDICOMSource());
+
+        m_studyTreeView->addTopLevelItems(fillPatient(patient));
+        m_studyTreeView->clearSelection();
+    }
+}
+
+void QStudyTreeWidget::insertSeriesList(const QString &studyInstanceUID, QList<Series*> seriesList)
+{
+    if (seriesList.count() == 0)
+    {
+        return;
+    }
+
+    QList<QTreeWidgetItem*> qTreeWidgetItemSeriesList;
+    QTreeWidgetItem *studyItem = getStudyQTreeWidgetItem(studyInstanceUID, seriesList.at(0)->getDICOMSource());
+
+    foreach (Series *series, seriesList)
+    {
+        qTreeWidgetItemSeriesList.append(fillSeries(series));
+        //Afegim a la sèrie quin és l'estudi pare, de manera que quan amb algun mètode retornem la sèrie, la retornem amb la informació completa
+        series->setParentStudy(getStudyByDICOMItemID(studyItem->text(DICOMItemID).toInt()));
+    }
+
+    studyItem->addChildren(qTreeWidgetItemSeriesList);
+}
+
+void QStudyTreeWidget::insertImageList(const QString &studyInstanceUID, const QString &seriesInstanceUID, QList<Image*> imageList)
+{
+    if (imageList.count() == 0)
+    {
+        return;
+    }
+
+    QTreeWidgetItem *seriesItem = getSeriesQTreeWidgetItem(studyInstanceUID, seriesInstanceUID, imageList.at(0)->getDICOMSource());
+    if (seriesItem != NULL)
+    {
+        QList<QTreeWidgetItem*> qTreeWidgetItemImageList;
+        QTreeWidgetItem *newImageItem;
+
+        foreach (Image *image, imageList)
+        {
+            m_addedImagesByDICOMItemID[m_nextDICOMItemIDOfImage] = image;
+
+            newImageItem = new QTreeWidgetItem();
+
+            newImageItem->setText(DICOMItemID, QString::number(m_nextDICOMItemIDOfImage++));
+            newImageItem->setIcon(ObjectName, m_iconSeries);
+            // Li fem un padding per poder ordenar la columna, ja que s'ordena per String
+            newImageItem->setText(ObjectName, tr("File %1").arg(image->getInstanceNumber().rightJustified(4, ' ')));
+            newImageItem->setText(UID, image->getSOPInstanceUID());
+            newImageItem->setText(Type, "IMAGE");
+            // Indiquem que es tracta d'una imatge
+            qTreeWidgetItemImageList.append(newImageItem);
+
+            image->setParentSeries(getSeriesByDICOMItemID(seriesItem->text(DICOMItemID).toInt()));
+        }
+        // Afegim la llista d'imatges
+        seriesItem->addChildren(qTreeWidgetItemImageList);
+    }
+    else
+    {
+        DEBUG_LOG("NO S'HA POGUT TROBAR LA SERIE A LA QUE S'HAVIA D'INSERIR LA IMATGE");
+    }
+}
+
+void QStudyTreeWidget::removeStudy(const QString &studyInstanceUIDToRemove, const DICOMSource &dicomSourceStudyToRemove)
+{
+    QTreeWidgetItem *studyItem = getStudyQTreeWidgetItem(studyInstanceUIDToRemove, dicomSourceStudyToRemove);
+
+    if (studyItem)
+    {
+        delete studyItem;
+    }
+
+    m_studyTreeView->clearSelection();
+    //No esborrem l'estudi del HashTable ja s'esborrarà quan netegem la HashTable
+}
+
+void QStudyTreeWidget::removeSeries(const QString &studyInstanceUID, const QString &seriesInstanceUID, const DICOMSource &dicomSourceSeriesToRemove)
+{
+    QTreeWidgetItem *seriesItem = getSeriesQTreeWidgetItem(studyInstanceUID, seriesInstanceUID, dicomSourceSeriesToRemove);
+
+    if (seriesItem)
+    {
+        if (seriesItem->parent()->childCount() == 1)
+        {
+            //Si l'estudi només té aquesta sèrie esborrem tot l'estudi
+            delete seriesItem->parent();
+        }
+        else
+        {
+            delete seriesItem;
+        }
+    }
+
+    m_studyTreeView->clearSelection();
 }
 
 QList<QPair<DicomMask, DICOMSource> > QStudyTreeWidget::getDicomMaskOfSelectedItems()
@@ -112,28 +219,220 @@ QList<QPair<DicomMask, DICOMSource> > QStudyTreeWidget::getDicomMaskOfSelectedIt
     return dicomMaskDICOMSourceList;
 }
 
-void QStudyTreeWidget::insertPatientList(QList<Patient*> patientList)
+void QStudyTreeWidget::setSortByColumn(QStudyTreeWidget::ColumnIndex col, Qt::SortOrder sortOrder)
 {
-    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-
-    foreach (Patient *patient, patientList)
-    {
-        insertPatient(patient);
-    }
-
-    QApplication::restoreOverrideCursor();
+    m_studyTreeView->sortItems(col, sortOrder);
+    m_studyTreeView->clearSelection();
 }
 
-void QStudyTreeWidget::insertPatient(Patient *patient)
+QStudyTreeWidget::ColumnIndex QStudyTreeWidget::getSortColumn()
 {
-    if (patient->getNumberOfStudies() > 0)
-    {
-        // Si l'estudi ja hi existeix a StudyTreeView l'esborrem
-        removeStudy(patient->getStudies().at(0)->getInstanceUID(), patient->getStudies().at(0)->getDICOMSource());
+    return (QStudyTreeWidget::ColumnIndex) m_studyTreeView->header()->sortIndicatorSection();;
+}
 
-        m_studyTreeView->addTopLevelItems(fillPatient(patient));
-        m_studyTreeView->clearSelection();
+Qt::SortOrder QStudyTreeWidget::getSortOrderColumn()
+{
+    return (Qt::SortOrder) m_studyTreeView->header()->sortIndicatorOrder();
+}
+
+void QStudyTreeWidget::sort()
+{
+    // Ordenem per la columna seleccionada
+    m_studyTreeView->sortItems(m_studyTreeView->sortColumn(), Qt::AscendingOrder);
+}
+
+Study* QStudyTreeWidget::getStudy(const QString &studyInstanceUID, const DICOMSource &dicomSourceOfStudy)
+{
+    QTreeWidgetItem *studyItem = getStudyQTreeWidgetItem(studyInstanceUID, dicomSourceOfStudy);
+    Study *study = NULL;
+
+    if (studyItem)
+    {
+        study = getStudyByDICOMItemID(studyItem->text(DICOMItemID).toInt());
     }
+
+    return study;
+}
+
+QString QStudyTreeWidget::getCurrentStudyUID()
+{
+    if (m_studyTreeView->currentItem() != NULL)
+    {
+        if (isItemStudy(m_studyTreeView->currentItem()))
+        {
+            // És un estudi
+            return m_studyTreeView->currentItem()->text(UID);
+        }
+        else if (isItemSeries(m_studyTreeView->currentItem()))
+        {
+            return m_studyTreeView->currentItem()->parent()->text(UID);
+        }
+        else if (isItemImage(m_studyTreeView->currentItem()))
+        {
+            return m_studyTreeView->currentItem()->parent()->parent()->text(UID);
+        }
+        else
+        {
+            return "";
+        }
+    }
+    else
+    {
+        return "";
+    }
+}
+
+QString QStudyTreeWidget::getCurrentSeriesUID()
+{
+    if (m_studyTreeView->currentItem() != NULL)
+    {
+        if (isItemSeries(m_studyTreeView->currentItem()))
+        {
+            return m_studyTreeView->currentItem()->text(UID);
+        }
+        else if (isItemImage(m_studyTreeView->currentItem()))
+        {
+            return m_studyTreeView->currentItem()->parent()->text(UID);
+        }
+        else
+        {
+            return "";
+        }
+    }
+    else
+    {
+        return "";
+    }
+}
+
+QString QStudyTreeWidget::getCurrentImageUID()
+{
+    QString result;
+
+    if (m_studyTreeView->currentItem() != NULL)
+    {
+        if (isItemImage(m_studyTreeView->currentItem()))
+        {
+            result = m_studyTreeView->currentItem()->text(UID);
+        }
+    }
+
+    return result;
+}
+
+void QStudyTreeWidget::setContextMenu(QMenu *contextMenu)
+{
+    m_contextMenu = contextMenu;
+}
+
+void QStudyTreeWidget::contextMenuEvent(QContextMenuEvent *event)
+{
+    if (!m_studyTreeView->selectedItems().isEmpty())
+    {
+        m_contextMenu->exec(event->globalPos());
+    }
+}
+
+QTreeWidget* QStudyTreeWidget::getQTreeWidget() const
+{
+    return m_studyTreeView;
+}
+
+void QStudyTreeWidget::setMaximumExpandTreeItemsLevel(QStudyTreeWidget::ItemTreeLevels maximumExpandTreeItemsLevel)
+{
+    m_maximumExpandTreeItemsLevel = maximumExpandTreeItemsLevel;
+}
+
+QStudyTreeWidget::ItemTreeLevels QStudyTreeWidget::getMaximumExpandTreeItemsLevel()
+{
+    return m_maximumExpandTreeItemsLevel;
+}
+
+void QStudyTreeWidget::setCurrentSeries(QString seriesUID)
+{
+    // Busquem l'estudi a la que pertany la sèrie
+    QList<QTreeWidgetItem*> qStudyList(m_studyTreeView->findItems(seriesUID, Qt::MatchRecursive, UID));
+
+    // Només hauria de trobar una sèrie amb el mateix UID, sinó tindrem una inconsistència de DICOM, el series UID ha de ser únic
+    if (qStudyList.count() > 0)
+    {
+        m_studyTreeView->setCurrentItem (qStudyList.at(0));
+    }
+}
+
+void QStudyTreeWidget::clear()
+{
+    m_studyTreeView->clear();
+
+    m_oldCurrentStudyUID = "";
+    m_oldCurrentSeriesUID = "";
+
+    qDeleteAll(m_addedImagesByDICOMItemID);
+    qDeleteAll(m_adddSeriesByDICOMItemID);
+    qDeleteAll(m_addedStudiesByDICOMItemID);
+
+    m_addedStudiesByDICOMItemID.clear();
+    m_adddSeriesByDICOMItemID.clear();
+    m_addedImagesByDICOMItemID.clear();
+
+    initialize();
+}
+
+void QStudyTreeWidget::initialize()
+{
+    m_nextIDICOMItemIDOfStudy = 0;
+    m_nextDICOMItemIDOfSeries = 0;
+    m_nextDICOMItemIDOfImage = 0;
+}
+
+QTreeWidgetItem* QStudyTreeWidget::getStudyQTreeWidgetItem(const QString &studyUID, const DICOMSource &studyDICOMSource)
+{
+    QList<QTreeWidgetItem*> qTreeWidgetItemsStudy(m_studyTreeView->findItems(studyUID, Qt::MatchExactly, UID));
+
+    foreach(QTreeWidgetItem *studyItem, qTreeWidgetItemsStudy)
+    {
+        if (isItemStudy(studyItem) && getStudyByDICOMItemID(studyItem->text(DICOMItemID).toInt())->getDICOMSource() == studyDICOMSource)
+        {
+            return studyItem;
+        }
+    }
+
+    return NULL;
+}
+
+QTreeWidgetItem* QStudyTreeWidget::getSeriesQTreeWidgetItem(const QString &studyInstanceUID, const QString &seriesInstanceUID, const DICOMSource &seriesDICOMSource)
+{
+    QTreeWidgetItem *studyItem = getStudyQTreeWidgetItem(studyInstanceUID, seriesDICOMSource);
+
+    if (!studyItem)
+    {
+        return NULL;
+    }
+
+    for (int index = 0; index < studyItem->childCount(); index++)
+    {
+        if (studyItem->child(index)->text(UID) == seriesInstanceUID)
+        {
+            return studyItem->child(index);
+        }
+    }
+
+    return NULL;
+}
+
+bool QStudyTreeWidget::isItemStudy(QTreeWidgetItem *item)
+{
+    return item->text(Type) == "STUDY";
+}
+
+bool QStudyTreeWidget::isItemSeries(QTreeWidgetItem *item)
+{
+    return item->text(Type) == "SERIES";
+}
+
+bool QStudyTreeWidget::isItemImage(QTreeWidgetItem *item)
+{
+    return item->text(Type) == "IMAGE";
 }
 
 QList<QTreeWidgetItem*> QStudyTreeWidget::fillPatient(Patient *patient)
@@ -182,26 +481,6 @@ QList<QTreeWidgetItem*> QStudyTreeWidget::fillPatient(Patient *patient)
     return qtreeWidgetItemList;
 }
 
-void QStudyTreeWidget::insertSeriesList(const QString &studyInstanceUID, QList<Series*> seriesList)
-{
-    if (seriesList.count() == 0)
-    {
-        return;
-    }
-
-    QList<QTreeWidgetItem*> qTreeWidgetItemSeriesList;
-    QTreeWidgetItem *studyItem = getStudyQTreeWidgetItem(studyInstanceUID, seriesList.at(0)->getDICOMSource());
-
-    foreach (Series *series, seriesList)
-    {
-        qTreeWidgetItemSeriesList.append(fillSeries(series));
-        //Afegim a la sèrie quin és l'estudi pare, de manera que quan amb algun mètode retornem la sèrie, la retornem amb la informació completa
-        series->setParentStudy(getStudyByDICOMItemID(studyItem->text(DICOMItemID).toInt()));
-    }
-
-    studyItem->addChildren(qTreeWidgetItemSeriesList);
-}
-
 QTreeWidgetItem* QStudyTreeWidget::fillSeries(Series *series)
 {
     m_adddSeriesByDICOMItemID[m_nextDICOMItemIDOfSeries]= series;
@@ -242,53 +521,40 @@ QTreeWidgetItem* QStudyTreeWidget::fillSeries(Series *series)
     return seriesItem;
 }
 
-void QStudyTreeWidget::insertImageList(const QString &studyInstanceUID, const QString &seriesInstanceUID, QList<Image*> imageList)
+Study* QStudyTreeWidget::getStudyByDICOMItemID(int studyDICOMItemID)
 {
-    if (imageList.count() == 0)
+    Study *study = NULL;
+
+    if (m_addedStudiesByDICOMItemID.contains(studyDICOMItemID))
     {
-        return;
+        study = m_addedStudiesByDICOMItemID[studyDICOMItemID];
     }
 
-    QTreeWidgetItem *seriesItem = getSeriesQTreeWidgetItem(studyInstanceUID, seriesInstanceUID, imageList.at(0)->getDICOMSource());
-    if (seriesItem != NULL)
-    {
-        QList<QTreeWidgetItem*> qTreeWidgetItemImageList;
-        QTreeWidgetItem *newImageItem;
-
-        foreach (Image *image, imageList)
-        {
-            m_addedImagesByDICOMItemID[m_nextDICOMItemIDOfImage] = image;
-
-            newImageItem = new QTreeWidgetItem();
-
-            newImageItem->setText(DICOMItemID, QString::number(m_nextDICOMItemIDOfImage++));
-            newImageItem->setIcon(ObjectName, m_iconSeries);
-            // Li fem un padding per poder ordenar la columna, ja que s'ordena per String
-            newImageItem->setText(ObjectName, tr("File %1").arg(image->getInstanceNumber().rightJustified(4, ' ')));
-            newImageItem->setText(UID, image->getSOPInstanceUID());
-            newImageItem->setText(Type, "IMAGE");
-            // Indiquem que es tracta d'una imatge
-            qTreeWidgetItemImageList.append(newImageItem);
-
-            image->setParentSeries(getSeriesByDICOMItemID(seriesItem->text(DICOMItemID).toInt()));
-        }
-        // Afegim la llista d'imatges
-        seriesItem->addChildren(qTreeWidgetItemImageList);
-    }
-    else
-    {
-        DEBUG_LOG("NO S'HA POGUT TROBAR LA SERIE A LA QUE S'HAVIA D'INSERIR LA IMATGE");
-    }
+    return study;
 }
 
-void QStudyTreeWidget::setMaximumExpandTreeItemsLevel(QStudyTreeWidget::ItemTreeLevels maximumExpandTreeItemsLevel)
+Series* QStudyTreeWidget::getSeriesByDICOMItemID(int seriesDICOMItemID)
 {
-    m_maximumExpandTreeItemsLevel = maximumExpandTreeItemsLevel;
+    Series *series = NULL;
+
+    if (m_adddSeriesByDICOMItemID.contains(seriesDICOMItemID))
+    {
+        series = m_adddSeriesByDICOMItemID[seriesDICOMItemID];
+    }
+
+    return series;
 }
 
-QStudyTreeWidget::ItemTreeLevels QStudyTreeWidget::getMaximumExpandTreeItemsLevel()
+Image* QStudyTreeWidget::getImageByDICOMItemID(int imageDICOMItemID)
 {
-    return m_maximumExpandTreeItemsLevel;
+    Image *image = NULL;
+
+    if (m_addedImagesByDICOMItemID.contains(imageDICOMItemID))
+    {
+        image = m_addedImagesByDICOMItemID[imageDICOMItemID];
+    }
+
+    return image;
 }
 
 QString QStudyTreeWidget::formatAge(const QString &age)
@@ -320,218 +586,6 @@ QString QStudyTreeWidget::formatDateTime(const QDate &date, const QTime &time)
     else
     {
         return "";
-    }
-}
-
-void QStudyTreeWidget::clear()
-{
-    m_studyTreeView->clear();
-
-    m_oldCurrentStudyUID = "";
-    m_oldCurrentSeriesUID = "";
-
-    qDeleteAll(m_addedImagesByDICOMItemID);
-    qDeleteAll(m_adddSeriesByDICOMItemID);
-    qDeleteAll(m_addedStudiesByDICOMItemID);
-
-    m_addedStudiesByDICOMItemID.clear();
-    m_adddSeriesByDICOMItemID.clear();
-    m_addedImagesByDICOMItemID.clear();
-
-    initialize();
-}
-
-void QStudyTreeWidget::setSortByColumn(QStudyTreeWidget::ColumnIndex col, Qt::SortOrder sortOrder)
-{
-    m_studyTreeView->sortItems(col, sortOrder);
-    m_studyTreeView->clearSelection();
-}
-
-QStudyTreeWidget::ColumnIndex QStudyTreeWidget::getSortColumn()
-{
-    return (QStudyTreeWidget::ColumnIndex) m_studyTreeView->header()->sortIndicatorSection();;
-}
-
-Qt::SortOrder QStudyTreeWidget::getSortOrderColumn()
-{
-    return (Qt::SortOrder) m_studyTreeView->header()->sortIndicatorOrder();
-}
-
-QString QStudyTreeWidget::getCurrentStudyUID()
-{
-    if (m_studyTreeView->currentItem() != NULL)
-    {
-        if (isItemStudy(m_studyTreeView->currentItem()))
-        {
-            // És un estudi
-            return m_studyTreeView->currentItem()->text(UID);
-        }
-        else if (isItemSeries(m_studyTreeView->currentItem()))
-        {
-            return m_studyTreeView->currentItem()->parent()->text(UID);
-        }
-        else if (isItemImage(m_studyTreeView->currentItem()))
-        {
-            return m_studyTreeView->currentItem()->parent()->parent()->text(UID);
-        }
-        else
-        {
-            return "";
-        }
-    }
-    else
-    {
-        return "";
-    }
-}
-
-Study* QStudyTreeWidget::getStudy(const QString &studyInstanceUID, const DICOMSource &dicomSourceOfStudy)
-{
-    QTreeWidgetItem *studyItem = getStudyQTreeWidgetItem(studyInstanceUID, dicomSourceOfStudy);
-    Study *study = NULL;
-
-    if (studyItem)
-    {
-        study = getStudyByDICOMItemID(studyItem->text(DICOMItemID).toInt());
-    }
-
-    return study;
-}
-
-QString QStudyTreeWidget::getCurrentSeriesUID()
-{
-    if (m_studyTreeView->currentItem() != NULL)
-    {
-        if (isItemSeries(m_studyTreeView->currentItem()))
-        {
-            return m_studyTreeView->currentItem()->text(UID);
-        }
-        else if (isItemImage(m_studyTreeView->currentItem()))
-        {
-            return m_studyTreeView->currentItem()->parent()->text(UID);
-        }
-        else
-        {
-            return "";
-        }
-    }
-    else
-    {
-        return "";
-    }
-}
-
-QTreeWidgetItem* QStudyTreeWidget::getStudyQTreeWidgetItem(const QString &studyUID, const DICOMSource &studyDICOMSource)
-{
-    QList<QTreeWidgetItem*> qTreeWidgetItemsStudy(m_studyTreeView->findItems(studyUID, Qt::MatchExactly, UID));
-
-    foreach(QTreeWidgetItem *studyItem, qTreeWidgetItemsStudy)
-    {
-        if (isItemStudy(studyItem) && getStudyByDICOMItemID(studyItem->text(DICOMItemID).toInt())->getDICOMSource() == studyDICOMSource)
-        {
-            return studyItem;
-        }
-    }
-
-    return NULL;
-}
-
-QTreeWidgetItem* QStudyTreeWidget::getSeriesQTreeWidgetItem(const QString &studyInstanceUID, const QString &seriesInstanceUID, const DICOMSource &seriesDICOMSource)
-{
-    QTreeWidgetItem *studyItem = getStudyQTreeWidgetItem(studyInstanceUID, seriesDICOMSource);
-
-    if (!studyItem)
-    {
-        return NULL;
-    }
-
-    for (int index = 0; index < studyItem->childCount(); index++)
-    {
-        if (studyItem->child(index)->text(UID) == seriesInstanceUID)
-        {
-            return studyItem->child(index);
-        }
-    }
-
-    return NULL;
-}
-
-QString QStudyTreeWidget::getCurrentImageUID()
-{
-    QString result;
-
-    if (m_studyTreeView->currentItem() != NULL)
-    {
-        if (isItemImage(m_studyTreeView->currentItem()))
-        {
-            result = m_studyTreeView->currentItem()->text(UID);
-        }
-    }
-
-    return result;
-}
-
-void QStudyTreeWidget::removeStudy(const QString &studyInstanceUIDToRemove, const DICOMSource &dicomSourceStudyToRemove)
-{
-    QTreeWidgetItem *studyItem = getStudyQTreeWidgetItem(studyInstanceUIDToRemove, dicomSourceStudyToRemove);
-
-    if (studyItem)
-    {
-        delete studyItem;
-    }
-
-    m_studyTreeView->clearSelection();
-    //No esborrem l'estudi del HashTable ja s'esborrarà quan netegem la HashTable
-}
-
-void QStudyTreeWidget::removeSeries(const QString &studyInstanceUID, const QString &seriesInstanceUID, const DICOMSource &dicomSourceSeriesToRemove)
-{
-    QTreeWidgetItem *seriesItem = getSeriesQTreeWidgetItem(studyInstanceUID, seriesInstanceUID, dicomSourceSeriesToRemove);
-
-    if (seriesItem)
-    {
-        if (seriesItem->parent()->childCount() == 1)
-        {
-            //Si l'estudi només té aquesta sèrie esborrem tot l'estudi
-            delete seriesItem->parent();
-        }
-        else
-        {
-            delete seriesItem;
-        }
-    }
-
-    m_studyTreeView->clearSelection();
-}
-
-void QStudyTreeWidget::setCurrentSeries(QString seriesUID)
-{
-    // Busquem l'estudi a la que pertany la sèrie
-    QList<QTreeWidgetItem*> qStudyList(m_studyTreeView->findItems(seriesUID, Qt::MatchRecursive, UID));
-
-    // Només hauria de trobar una sèrie amb el mateix UID, sinó tindrem una inconsistència de DICOM, el series UID ha de ser únic
-    if (qStudyList.count() > 0)
-    {
-        m_studyTreeView->setCurrentItem (qStudyList.at(0));
-    }
-}
-
-void QStudyTreeWidget::sort()
-{
-    // Ordenem per la columna seleccionada
-    m_studyTreeView->sortItems(m_studyTreeView->sortColumn(), Qt::AscendingOrder);
-}
-
-void QStudyTreeWidget::setContextMenu(QMenu *contextMenu)
-{
-    m_contextMenu = contextMenu;
-}
-
-void QStudyTreeWidget::contextMenuEvent(QContextMenuEvent *event)
-{
-    if (!m_studyTreeView->selectedItems().isEmpty())
-    {
-        m_contextMenu->exec(event->globalPos());
     }
 }
 
@@ -658,62 +712,4 @@ void QStudyTreeWidget::doubleClicked(QTreeWidgetItem *item, int)
     m_doubleClickedItemUID = item->text(UID);
 }
 
-bool QStudyTreeWidget::isItemStudy(QTreeWidgetItem *item)
-{
-    return item->text(Type) == "STUDY";
 }
-
-bool QStudyTreeWidget::isItemSeries(QTreeWidgetItem *item)
-{
-    return item->text(Type) == "SERIES";
-}
-
-bool QStudyTreeWidget::isItemImage(QTreeWidgetItem *item)
-{
-    return item->text(Type) == "IMAGE";
-}
-
-void QStudyTreeWidget::initialize()
-{
-    m_nextIDICOMItemIDOfStudy = 0;
-    m_nextDICOMItemIDOfSeries = 0;
-    m_nextDICOMItemIDOfImage = 0;
-}
-
-Study* QStudyTreeWidget::getStudyByDICOMItemID(int studyDICOMItemID)
-{
-    Study *study = NULL;
-
-    if (m_addedStudiesByDICOMItemID.contains(studyDICOMItemID))
-    {
-        study = m_addedStudiesByDICOMItemID[studyDICOMItemID];
-    }
-
-    return study;
-}
-
-Series* QStudyTreeWidget::getSeriesByDICOMItemID(int seriesDICOMItemID)
-{
-    Series *series = NULL;
-
-    if (m_adddSeriesByDICOMItemID.contains(seriesDICOMItemID))
-    {
-        series = m_adddSeriesByDICOMItemID[seriesDICOMItemID];
-    }
-
-    return series;
-}
-
-Image* QStudyTreeWidget::getImageByDICOMItemID(int imageDICOMItemID)
-{
-    Image *image = NULL;
-
-    if (m_addedImagesByDICOMItemID.contains(imageDICOMItemID))
-    {
-        image = m_addedImagesByDICOMItemID[imageDICOMItemID];
-    }
-
-    return image;
-}
-
-};
