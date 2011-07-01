@@ -7,8 +7,8 @@
 #include <QPair>
 #include <QStringList>
 #include <QPixmap>
-#include <dicomsource.h>
 
+#include "dicomsource.h"
 #include "imageorientation.h"
 #include "patientorientation.h"
 
