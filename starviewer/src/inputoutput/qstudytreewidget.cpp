@@ -102,7 +102,6 @@ void QStudyTreeWidget::insertPatientList(QList<Patient*> patientList)
         insertPatient(patient);
     }
 
-
     QApplication::restoreOverrideCursor();
 }
 
@@ -310,13 +309,15 @@ QString QStudyTreeWidget::formatDateTime(const QDate &date, const QTime &time)
 
 void QStudyTreeWidget::clear()
 {
-    //TODO: No s'han de netejar els fills
     m_studyTreeView->clear();
-    // Reinicialitzem variables
+
     m_oldCurrentStudyUID = "";
     m_oldCurrentSeriesUID = "";
 
-    //TODO: Falta esborrar els estudis
+    qDeleteAll(m_addedImagesByDICOMItemID);
+    qDeleteAll(m_adddSeriesByDICOMItemID);
+    qDeleteAll(m_addedStudiesByDICOMItemID);
+
     m_addedStudiesByDICOMItemID.clear();
     m_adddSeriesByDICOMItemID.clear();
     m_addedImagesByDICOMItemID.clear();
