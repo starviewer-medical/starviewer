@@ -1,7 +1,7 @@
 #include "pacsdevice.h"
 
 #include "logging.h"
-#include "inputoutputsettings.h"
+#include "coresettings.h"
 #include <QStringList>
 
 namespace udg {
@@ -83,18 +83,18 @@ void PacsDevice::setDefault(bool isDefault)
         if (!pacsList.contains(keyName))
         {
             Settings settings;
-            QString value = settings.getValue(InputOutputSettings::DefaultPACSListToQuery).toString();
+            QString value = settings.getValue(CoreSettings::DefaultPACSListToQuery).toString();
             value += keyName + "//";
-            settings.setValue(InputOutputSettings::DefaultPACSListToQuery, value);
+            settings.setValue(CoreSettings::DefaultPACSListToQuery, value);
         }
     }
     else
     {
         // Eliminar
         Settings settings;
-        QString value = settings.getValue(InputOutputSettings::DefaultPACSListToQuery).toString();
+        QString value = settings.getValue(CoreSettings::DefaultPACSListToQuery).toString();
         value.remove(keyName + "//");
-        settings.setValue(InputOutputSettings::DefaultPACSListToQuery, value);
+        settings.setValue(CoreSettings::DefaultPACSListToQuery, value);
     }
 }
 
@@ -191,7 +191,7 @@ QString PacsDevice::getKeyName() const
 QStringList PacsDevice::getDefaultPACSKeyNamesList() const
 {
     Settings settings;
-    QString value = settings.getValue(InputOutputSettings::DefaultPACSListToQuery).toString();
+    QString value = settings.getValue(CoreSettings::DefaultPACSListToQuery).toString();
     QStringList pacsList = value.split("//", QString::SkipEmptyParts);
 
     if (pacsList.isEmpty())
@@ -199,7 +199,7 @@ QStringList PacsDevice::getDefaultPACSKeyNamesList() const
         // Migració de dades. Si encara no tenim definits els PACS per defecte en el nou format, obtenim els PACS per defecte
         // del format antic, és a dir, a partir dels elements amb els valors "default" = "S" de la llista de PACS
         // Un cop llegits, els escrivim en el nou format
-        Settings::SettingListType list = settings.getList(InputOutputSettings::PacsListConfigurationSectionName);
+        Settings::SettingListType list = settings.getList(CoreSettings::PacsListConfigurationSectionName);
         foreach (Settings::KeyValueMapType item, list)
         {
             // El camp "default" té aquesta clau
@@ -221,7 +221,7 @@ QStringList PacsDevice::getDefaultPACSKeyNamesList() const
             INFO_LOG("No hi ha PACS per defecte definits en el nou format. Els obtenim del format antic i els migrem al nou format. Són aquests: " +
                      pacsList.join("//") + "//");
             Settings settings;
-            settings.setValue(InputOutputSettings::DefaultPACSListToQuery, pacsList.join("//") + "//");
+            settings.setValue(CoreSettings::DefaultPACSListToQuery, pacsList.join("//") + "//");
         }
     }
 

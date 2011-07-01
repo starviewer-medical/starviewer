@@ -26,10 +26,6 @@ public:
     /// Controlar quin estudi està baixant-se
     static const QString RetrievingStudy;
 
-    /// Conjunt de PACS que tenim seleccionats per defecte per consultar.
-    /// La llista consistirà en un string on cada PACS s'identificarà pel seu camp clau, els quals estaran delimitats per "//"
-    static const QString DefaultPACSListToQuery;
-
     /// Paràmetres del RIS
     static const QString RISRequestsPort;
     static const QString ListenToRISRequests;
@@ -60,6 +56,7 @@ public:
     static const QString MaximumPACSConnections;
 
     /// Llista de PACS
+    //TODO: Clau duplicada a CoreSettings
     static const QString PacsListConfigurationSectionName;
 
     /// Paràmetres de la configuració DICOMDIR

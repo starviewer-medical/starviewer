@@ -8,7 +8,7 @@
 #include "dicomprintjob.h"
 #include "createdicomprintspool.h"
 #include "printdicomspool.h"
-#include "../inputoutput/pacsdevice.h"
+#include "pacsdevice.h"
 #include "../inputoutput/echotopacs.h"
 #include "logging.h"
 #include "deletedirectory.h"
