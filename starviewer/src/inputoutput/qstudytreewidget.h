@@ -180,11 +180,16 @@ private:
 
     /// Formata l'edat per mostrar per pantalla
     /// @param edat
-    QString formatAge(const QString &age);
+    QString formatAge(const QString &age) const;
 
     /// Formata la data i hora passada a ISO 8601 extended (YYYY-MM-DD HH:MM:SS) Amb aquest format de data es pot ordenar els estudis per data/hora
     /// Si l'hora no té valor només retorna la data, i si ni Data i Hora tenen valor retorna string buit
-    QString formatDateTime(const QDate &date, const QTime &time);
+    QString formatDateTime(const QDate &date, const QTime &time) const;
+
+    ///Crea un QTreeWidgetItem buit, per a que aparegui l'icona + per poder desplegar estudi/series amb el mouse
+    QTreeWidgetItem* createDummyQTreeWidgetItem();
+
+    bool isDummyQTreeWidgetItem(QTreeWidgetItem *);
 
 private slots:
     /// Emet signal quan es selecciona un estudi o serie diferent a l'anterior
@@ -200,6 +205,8 @@ private slots:
     void doubleClicked(QTreeWidgetItem *, int);
 
 private:
+    static const QString TypeTextForDummyExpandableItems;
+
     int m_nextIDICOMItemIDOfStudy;
     int m_nextDICOMItemIDOfSeries;
     int m_nextDICOMItemIDOfImage;
@@ -214,7 +221,7 @@ private:
     /// Strings per guardar valors de l'anterior element
     QString m_oldCurrentStudyUID, m_oldCurrentSeriesUID, m_OldInstitution;
 
-    QString m_doubleClickedItemUID;
+    bool m_qTreeWidgetItemHasBeenDoubleClicked;
 
     /// Icones utilitzades com a root al TreeWidget
     QIcon m_openFolder, m_closeFolder, m_iconSeries;
