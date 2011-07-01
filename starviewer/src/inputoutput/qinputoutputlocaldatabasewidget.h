@@ -55,11 +55,13 @@ public:
     void sendDICOMFilesToPACS(PacsDevice pacsDevice, QList<Image*> images);
 
 public slots:
+
     /// Emet signal selectedPatients indicant que s'han seleccionat estudis per ser visualitzats
     /// Afegim un terer paràmetre "loadOnly" que ens indicarà si únicament volem carregar les dades sense necessitat de fer un "view"
     /// Així diferenciem els casos en que volem carregar dades del pacient "en background" (només fusionem dades del pacient i prou,
     /// sense aplicar canvis visibles sobre la interfície) útil pels casos de carregar estudis previs, per exemple.
-    void view(QStringList selectedStudiesInstanceUID, QString selectedSeriesInstanceUID, bool loadOnly = false);
+    void view(QList<DicomMask> dicomMaskStudiesToView, bool loadOnly = false);
+    void view(QString studyInstanceUID, bool loadOnly = false);
 
     /// Afegeix l'estudi amb l'Study Instance UID passat per paràmetre al Widget
     void addStudyToQStudyTreeWidget(QString studyInstanceUID);
