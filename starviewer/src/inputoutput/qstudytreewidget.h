@@ -69,9 +69,6 @@ public:
     /// @return UID de l'estudi seleccionat
     QString getCurrentStudyUID();
 
-    /// Retorna una llista amb l'UID del estudis seleccionats
-    QStringList getSelectedStudiesUID();
-
     /// Retorna l'estudi que tingui el studyInstanceUID passat per paràmetre. L'estudi retornat es destruirà quan s'invoqui el mètode
     /// clean d'aquesta classe, per tant si aquest objecte Study pot ser utilitzat després d'invocar el mètode clean és responsabilitat
     /// de la classe que el cridi fer-ne una còpia
@@ -211,7 +208,6 @@ private:
     QHash<int, Study*> m_addedStudiesByDICOMItemID;
     QHash<int, Series*> m_adddSeriesByDICOMItemID;
     QHash<int, Image*> m_addedImagesByDICOMItemID;
-
 
     /// Menu contextual
     QMenu *m_contextMenu;

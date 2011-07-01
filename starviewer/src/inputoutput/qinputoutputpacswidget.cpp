@@ -285,14 +285,14 @@ void QInputOutputPacsWidget::requestedImagesOfSeries(Series *series)
 
 void QInputOutputPacsWidget::retrieveSelectedStudies()
 {
-    if (m_studyTreeWidget->getSelectedStudiesUID().isEmpty())
+    QList<QPair<DicomMask, DICOMSource> > dicomMaskDICOMSourceList = m_studyTreeWidget->getDicomMaskOfSelectedItems();
+
+    if (dicomMaskDICOMSourceList.isEmpty())
     {
         QApplication::restoreOverrideCursor();
         QMessageBox::warning(this, ApplicationNameString, tr("Select a study to retrieve."));
         return;
     }
-
-    QList<QPair<DicomMask, DICOMSource> > dicomMaskDICOMSourceList = m_studyTreeWidget->getDicomMaskOfSelectedItems();
 
     for (int index = 0; index < dicomMaskDICOMSourceList.count(); index++)
     {
@@ -310,14 +310,14 @@ void QInputOutputPacsWidget::retrieveSelectedStudies()
 //TODO:Fusiona amb retrieveSelectedStudies
 void QInputOutputPacsWidget::retrieveAndViewSelectedStudies()
 {
-    if (m_studyTreeWidget->getSelectedStudiesUID().isEmpty())
+    QList<QPair<DicomMask, DICOMSource> > dicomMaskDICOMSourceList = m_studyTreeWidget->getDicomMaskOfSelectedItems();
+
+    if (dicomMaskDICOMSourceList.isEmpty())
     {
         QApplication::restoreOverrideCursor();
         QMessageBox::warning(this, ApplicationNameString, tr("Select a study to retrieve and view."));
         return;
     }
-
-    QList<QPair<DicomMask, DICOMSource> > dicomMaskDICOMSourceList = m_studyTreeWidget->getDicomMaskOfSelectedItems();
 
     for (int index = 0; index < dicomMaskDICOMSourceList.count(); index++)
     {

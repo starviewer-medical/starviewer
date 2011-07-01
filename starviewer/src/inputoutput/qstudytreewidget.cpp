@@ -382,42 +382,6 @@ QString QStudyTreeWidget::getCurrentStudyUID()
     }
 }
 
-QStringList QStudyTreeWidget::getSelectedStudiesUID()
-{
-    QStringList result;
-    QList<QTreeWidgetItem*> selectedItems = m_studyTreeView->selectedItems();
-    foreach (QTreeWidgetItem *item, selectedItems)
-    {
-        if (isItemStudy(item))
-        {
-            // És un estudi
-            if (!result.contains(item->text(UID)))
-            {
-                result << item->text(UID);
-            }
-        }
-        else if (isItemSeries(item))
-        {
-            if (!result.contains(item->parent()->text(UID)))
-            {
-                result << item->parent()->text(UID);
-            }
-        }
-        else if (isItemImage(item))
-        {
-            if (!result.contains(item->parent()->parent()->text(UID)))
-            {
-                result << item->parent()->parent()->text(UID);
-            }
-        }
-        else
-        {
-            DEBUG_LOG("Texte no esperat: " + item->text(Type));
-        }
-    }
-    return result;
-}
-
 //TODO No té en compte le DICOMSource
 Study* QStudyTreeWidget::getStudy(QString studyInstanceUID)
 {
