@@ -3,6 +3,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QShortcut>
+#include <QPair>
 
 #include "status.h"
 #include "logging.h"
@@ -14,6 +15,7 @@
 #include "harddiskinformation.h"
 #include "localdatabasemanager.h"
 #include "shortcutmanager.h"
+#include "dicomsource.h"
 
 namespace udg {
 
@@ -203,14 +205,19 @@ void QInputOutputDicomdirWidget::retrieveSelectedStudies()
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
     // TODO ara només permetrem importar estudis sencers
-    foreach (QString studyInstanceUID, m_studyTreeWidget->getSelectedStudiesUID())
+
+    QList<QPair<DicomMask, DICOMSource> > dicomMaskDICOMSourceList = m_studyTreeWidget->getDicomMaskOfSelectedItems();
+
+    for (int index = 0; index < dicomMaskDICOMSourceList.count(); index++)
     {
-        importDicom.import(m_readDicomdir.getDicomdirFilePath(), studyInstanceUID, QString(), QString());
+        DicomMask dicomMaskToRetrieve = dicomMaskDICOMSourceList.at(index).first;
+
+        importDicom.import(m_readDicomdir.getDicomdirFilePath(), dicomMaskToRetrieve.getStudyInstanceUID(), QString(), QString());
         if (importDicom.getLastError() != DICOMDIRImporter::Ok)
         {
             // S'ha produït un error
             QApplication::restoreOverrideCursor();
-            showDICOMDIRImporterError(studyInstanceUID, importDicom.getLastError());
+            showDICOMDIRImporterError(dicomMaskToRetrieve.getStudyInstanceUID(), importDicom.getLastError());
             QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
             if (importDicom.getLastError() != DICOMDIRImporter::PatientInconsistent &&
@@ -222,7 +229,7 @@ void QInputOutputDicomdirWidget::retrieveSelectedStudies()
         }
         else
         {
-            emit studyRetrieved(studyInstanceUID);
+            emit studyRetrieved(dicomMaskToRetrieve.getStudyInstanceUID());
         }
     }
 
