@@ -326,7 +326,7 @@ void QInputOutputPacsWidget::retrieveAndViewSelectedStudies()
             DicomMask dicomMaskToRetrieve = dicomMaskDICOMSourceList.at(index).first;
             PacsDevice pacsDeviceFromRetrieve = dicomMaskDICOMSourceList.at(index).second.getRetrievePACS().at(0); //Agafem el primer PACS
 
-            retrieve(pacsDeviceFromRetrieve.getID(), None, m_studyTreeWidget->getStudy(dicomMaskToRetrieve.getStudyInstanceUID()),
+            retrieve(pacsDeviceFromRetrieve.getID(), View, m_studyTreeWidget->getStudy(dicomMaskToRetrieve.getStudyInstanceUID()),
                 dicomMaskToRetrieve.getSeriesInstanceUID(), dicomMaskToRetrieve.getSOPInstanceUID());
         }
     }
