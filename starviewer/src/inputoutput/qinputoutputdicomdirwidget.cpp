@@ -212,7 +212,8 @@ void QInputOutputDicomdirWidget::retrieveSelectedStudies()
     {
         DicomMask dicomMaskToRetrieve = dicomMaskDICOMSourceList.at(index).first;
 
-        importDicom.import(m_readDicomdir.getDicomdirFilePath(), dicomMaskToRetrieve.getStudyInstanceUID(), QString(), QString());
+        importDicom.import(m_readDicomdir.getDicomdirFilePath(), dicomMaskToRetrieve.getStudyInstanceUID(), dicomMaskToRetrieve.getSeriesInstanceUID(),
+                           dicomMaskToRetrieve.getSOPInstanceUID());
         if (importDicom.getLastError() != DICOMDIRImporter::Ok)
         {
             // S'ha produït un error

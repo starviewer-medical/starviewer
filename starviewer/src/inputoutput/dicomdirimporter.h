@@ -65,6 +65,8 @@ private:
     /// o minúscules, aquesta funció s'encarrega de comprovar-ho
     QString getDicomdirImagePath(Image *imageToImport);
 
+    QString getDescriptionForQProgressDialog(QString studyInstanceUID, QString seriesInstanceUID, QString SOPInstanceUID);
+
 };
 
 }
