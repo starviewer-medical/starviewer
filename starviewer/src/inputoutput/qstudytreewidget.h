@@ -186,9 +186,6 @@ private:
     /// Ens indica si l'item passat és una imatge
     bool isItemImage(QTreeWidgetItem *);
 
-    /// Afegeix espais a l'esquerre del text fins arribar l'allargada passada per paràmetre
-    QString paddingLeft(QString text, int length);
-
     /// Dona una sèrie emplena un QTreeWidgetItem en format sèrie
     /// @param informació de la serie
     QTreeWidgetItem* fillSeries(Series *serie);

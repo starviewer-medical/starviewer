@@ -211,7 +211,7 @@ QTreeWidgetItem* QStudyTreeWidget::fillSeries(Series *series)
     seriesItem->setText(DICOMItemID, QString::number(m_nextDICOMItemIDOfSeries++));
     seriesItem->setIcon(ObjectName, m_iconSeries);
     // Li fem un padding per poder ordenar la columna, ja que s'ordena per String
-    seriesItem->setText(ObjectName, tr("Series %1").arg(paddingLeft(series->getSeriesNumber(), 4)));
+    seriesItem->setText(ObjectName, tr("Series %1").arg(series->getSeriesNumber().rightJustified(4, ' ')));
     seriesItem->setText(Modality, series->getModality());
 
     // Treiem els espaics en blanc del davant i darrera
@@ -264,7 +264,7 @@ void QStudyTreeWidget::insertImageList(const QString &studyInstanceUID, const QS
             newImageItem->setText(DICOMItemID, QString::number(m_nextDICOMItemIDOfImage++));
             newImageItem->setIcon(ObjectName, m_iconSeries);
             // Li fem un padding per poder ordenar la columna, ja que s'ordena per String
-            newImageItem->setText(ObjectName, tr("File %1").arg(paddingLeft(image->getInstanceNumber(), 4)));
+            newImageItem->setText(ObjectName, tr("File %1").arg(image->getInstanceNumber().rightJustified(4, ' ')));
             newImageItem->setText(UID, image->getSOPInstanceUID());
             newImageItem->setText(Type, "IMAGE");
             // Indiquem que es tracta d'una imatge
@@ -671,26 +671,6 @@ bool QStudyTreeWidget::isItemSeries(QTreeWidgetItem *item)
 bool QStudyTreeWidget::isItemImage(QTreeWidgetItem *item)
 {
     return item->text(Type) == "IMAGE";
-}
-
-QString QStudyTreeWidget::paddingLeft(QString text, int length)
-{
-    QString paddedText;
-
-    if (text.length() < length)
-    {
-        for (int index = text.length(); index < length; index++)
-        {
-            paddedText += " ";
-        }
-        paddedText += text;
-    }
-    else
-    {
-        paddedText = text;
-    }
-
-    return paddedText;
 }
 
 void QStudyTreeWidget::initialize()
