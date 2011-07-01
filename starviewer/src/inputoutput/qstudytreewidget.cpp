@@ -221,9 +221,7 @@ Qt::SortOrder QStudyTreeWidget::getSortOrderColumn()
 
 void QStudyTreeWidget::sort()
 {
-    // Ordenem per la columna seleccionada
-    //FIXME: Ordena ascendentment? i si l'usuari ha indicat que vol tenir ordenat descendentment?
-    m_studyTreeView->sortItems(m_studyTreeView->sortColumn(), Qt::AscendingOrder);
+    m_studyTreeView->sortItems(m_studyTreeView->sortColumn(), m_studyTreeView->header()->sortIndicatorOrder());
 }
 
 Study* QStudyTreeWidget::getStudy(const QString &studyInstanceUID, const DICOMSource &dicomSourceOfStudy)
