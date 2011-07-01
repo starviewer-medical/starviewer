@@ -5,6 +5,10 @@
 #include <QDate>
 #include <QString>
 
+#include "study.h"
+#include "series.h"
+#include "image.h"
+
 namespace udg {
 
 const QString DicomMask::DateFormatAsString("yyyyMMdd");
@@ -600,6 +604,69 @@ bool DicomMask::isEmpty()
                  m_PPSStartTimeMaximum.isEmpty() && m_SOPInstanceUID.isEmpty() && m_imageNumber.isEmpty();
 
     return empty;
+}
+
+DicomMask DicomMask::fromStudy(Study *study, bool &ok)
+{
+    DicomMask studyMask;
+    ok = false;
+
+    if (!study->getInstanceUID().isEmpty())
+    {
+        studyMask.setStudyInstanceUID(study->getInstanceUID());
+        ok = true;
+    }
+
+    return studyMask;
+}
+
+DicomMask DicomMask::fromSeries(Series *series, bool &ok)
+{
+    DicomMask seriesMask;
+    ok = false;
+
+    if (series->getParentStudy() == NULL)
+    {
+        return seriesMask;
+    }
+
+    if (!series->getInstanceUID().isEmpty() && !series->getParentStudy()->getInstanceUID().isEmpty())
+    {
+        seriesMask.setStudyInstanceUID(series->getParentStudy()->getInstanceUID());
+        seriesMask.setSeriesInstanceUID(series->getInstanceUID());
+        ok = true;
+    }
+
+    return seriesMask;
+}
+
+DicomMask DicomMask::fromImage(Image *image, bool &ok)
+{
+    DicomMask imageMask;
+    ok = false;
+
+    if (image->getParentSeries() == NULL)
+    {
+        return imageMask;
+    }
+
+    if (image->getParentSeries()->getParentStudy() == NULL)
+    {
+        return imageMask;
+    }
+
+    bool allItemsHasInstanceUID = !image->getSOPInstanceUID().isEmpty() && !image->getParentSeries()->getInstanceUID().isEmpty()
+            && !image->getParentSeries()->getParentStudy()->getInstanceUID().isEmpty();
+
+    if (allItemsHasInstanceUID)
+    {
+        imageMask.setStudyInstanceUID(image->getParentSeries()->getParentStudy()->getInstanceUID());
+        imageMask.setSeriesInstanceUID(image->getParentSeries()->getInstanceUID());
+        imageMask.setSOPInstanceUID(image->getSOPInstanceUID());
+        ok = true;
+    }
+
+    return imageMask;
 }
 
 QString DicomMask::getFilledMaskFields() const

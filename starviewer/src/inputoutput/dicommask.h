@@ -14,6 +14,10 @@
   */
 namespace udg {
 
+class Study;
+class Series;
+class Image;
+
 class DicomMask {
 public:
     DicomMask();
@@ -270,6 +274,14 @@ public:
 
     /// Ens diu si la màscara està buida o no
     bool isEmpty();
+
+    ///Mètode que a partir d'un estudi/series/image ens retornen la DICOMMask per descarregar o consultar els fills d'aquell objecte. És important que si hem de construir
+    ///un DICOMMask a partir d'una imatge aquesta inclogui la informació de la sèrie pare i estudi pare per construir, i en el cas de series contingui l'estudi pare, sinó
+    ///el mètode ens retornarà un DicomMask invàlid que no ens servirà per fer descàrregues o consultes. El paràmetre ok indica si s'ha pogut fer correctament la conversió
+    ///de l'objecte a DICOMMask
+    static DicomMask fromStudy(Study *study, bool &ok);
+    static DicomMask fromSeries(Series *series, bool &ok);
+    static DicomMask fromImage(Image *image, bool &ok);
 
 private:
 
