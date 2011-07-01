@@ -242,6 +242,8 @@ void QInputOutputLocalDatabaseWidget::setSeriesToSeriesListWidget(Study *current
     {
         m_seriesListWidget->insertSeries(currentStudy->getInstanceUID(), series);
     }
+
+    qDeleteAll(seriesList);
 }
 
 void QInputOutputLocalDatabaseWidget::currentSeriesOfQStudyTreeWidgetChanged(Series *series)
