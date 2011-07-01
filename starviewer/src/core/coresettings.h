@@ -85,6 +85,13 @@ public:
 
     /// Defineix la geometria de la finestra del DICOMDumpBrowser
     static const QString QDICOMDumpBrowserGeometry;
+
+    /// Conjunt de PACS que tenim seleccionats per defecte per consultar.
+    /// La llista consistirà en un string on cada PACS s'identificarà pel seu camp clau, els quals estaran delimitats per "//"
+    static const QString DefaultPACSListToQuery;
+    //TODO: Aquesta clau està duplicada a InputOutputSettings
+    static const QString PacsListConfigurationSectionName;
+
 };
 
 } // End namespace udg

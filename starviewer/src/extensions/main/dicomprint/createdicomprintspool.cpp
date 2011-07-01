@@ -14,7 +14,7 @@
 #include "image.h"
 #include "logging.h"
 #include "starviewerapplication.h"
-#include "../inputoutput/pacsdevice.h"
+#include "pacsdevice.h"
 #include "../inputoutput/inputoutputsettings.h"
 
 namespace udg {

@@ -23,7 +23,6 @@ const QString InputOutputSettings::MinimumFreeGigaBytesForCache(CacheBase + "min
 const QString InputOutputSettings::MinimumGigaBytesToFreeIfCacheIsFull(CacheBase + "GbytesOfOldStudiesToDeleteIfNotEnoughSapaceAvailable");
 
 const QString InputOutputSettings::RetrievingStudy("/PACS/RetrievingStudy");
-const QString InputOutputSettings::DefaultPACSListToQuery("PACS/defaultPACSListToQuery");
 
 const QString RISBase("PACS/risRequests/");
 const QString InputOutputSettings::ListenToRISRequests(RISBase + "listen");
@@ -55,6 +54,7 @@ const QString InputOutputSettings::LocalAETitle(PACSParametersBase + "AETitle");
 const QString InputOutputSettings::PACSConnectionTimeout(PACSParametersBase + "timeout");
 const QString InputOutputSettings::MaximumPACSConnections(PACSParametersBase + "MaxConnects");
 
+//TODO: Clau duplicada a CoreSettings
 const QString InputOutputSettings::PacsListConfigurationSectionName = "PacsList";
 
 const QString DICOMDIRBaseKey("DICOMDIR/");

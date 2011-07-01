@@ -13,7 +13,7 @@
 
 #include "dicomprintpage.h"
 #include "logging.h"
-#include "../inputoutput/pacsdevice.h"
+#include "pacsdevice.h"
 #include "../inputoutput/inputoutputsettings.h"
 
 namespace udg {
