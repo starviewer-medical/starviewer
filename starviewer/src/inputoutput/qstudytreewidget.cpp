@@ -125,7 +125,7 @@ void QStudyTreeWidget::insertPatient(Patient *patient)
         if (getStudyQTreeWidgetItem(patient->getStudies().at(0)->getInstanceUID(), patient->getStudies().at(0)->getDICOMSource()) != NULL)
         {
             // Si l'estudi ja hi existeix a StudyTreeView l'esborrem
-            removeStudy(patient->getStudies().at(0)->getInstanceUID());
+            removeStudy(patient->getStudies().at(0)->getInstanceUID(), patient->getStudies().at(0)->getDICOMSource());
         }
 
         m_studyTreeView->addTopLevelItems(fillPatient(patient));
@@ -382,15 +382,14 @@ QString QStudyTreeWidget::getCurrentStudyUID()
     }
 }
 
-//TODO No té en compte le DICOMSource
-Study* QStudyTreeWidget::getStudy(QString studyInstanceUID)
+Study* QStudyTreeWidget::getStudy(QString studyInstanceUID, DICOMSource dicomSourceOfStudy)
 {
     Study *study = NULL;
 
     // Busquem pels estudis UID seleccionats
     foreach (Study *studyInserted, m_addedStudiesByDICOMItemID)
     {
-        if (studyInserted->getInstanceUID() == studyInstanceUID)
+        if (studyInserted->getInstanceUID() == studyInstanceUID && studyInserted->getDICOMSource() == dicomSourceOfStudy)
         {
             study = studyInserted;
             break;
@@ -473,28 +472,32 @@ QString QStudyTreeWidget::getCurrentImageUID()
     return result;
 }
 
-void QStudyTreeWidget::removeStudy(QString studyInstanceUIDToRemove)
+void QStudyTreeWidget::removeStudy(QString studyInstanceUIDToRemove, const DICOMSource &dicomSourceStudyToRemove)
 {
     QList<QTreeWidgetItem*> qStudyList(m_studyTreeView->findItems(studyInstanceUIDToRemove, Qt::MatchExactly, UID));
-    QTreeWidgetItem *item;
 
     for (int i = 0; i < qStudyList.count(); i++)
     {
-        item = qStudyList.at(i);
-        delete item;
+        QTreeWidgetItem *item = qStudyList.at(i);
+
+        if (m_addedStudiesByDICOMItemID[item->text(DICOMItemID).toInt()]->getDICOMSource() == dicomSourceStudyToRemove)
+        {
+            delete item;
+        }
     }
 
     m_studyTreeView->clearSelection();
     //No esborrem l'estudi del HashTable ja s'esborrarà quan netegem la HashTable
 }
 
-void QStudyTreeWidget::removeSeries(const QString &studyInstanceUID, const QString &seriesInstanceUID)
+void QStudyTreeWidget::removeSeries(const QString &studyInstanceUID, const QString &seriesInstanceUID, const DICOMSource &dicomSourceSeriesToRemove)
 {
     foreach (QTreeWidgetItem *studyItem, m_studyTreeView->findItems(studyInstanceUID, Qt::MatchExactly, UID))
     {
         for (int index = 0; index < studyItem->childCount(); index++)
         {
-            if (studyItem->child(index)->text(UID) == seriesInstanceUID)
+            if (studyItem->child(index)->text(UID) == seriesInstanceUID &&
+                    m_adddSeriesByDICOMItemID[studyItem->child(index)->text(DICOMItemID).toInt()]->getDICOMSource() == dicomSourceSeriesToRemove)
             {
                 if (studyItem->childCount() == 1)
                 {

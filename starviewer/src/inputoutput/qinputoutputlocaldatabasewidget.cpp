@@ -186,7 +186,7 @@ void QInputOutputLocalDatabaseWidget::addStudyToQStudyTreeWidget(QString studyUI
 
 void QInputOutputLocalDatabaseWidget::removeStudyFromQStudyTreeWidget(QString studyInstanceUID)
 {
-    m_studyTreeWidget->removeStudy(studyInstanceUID);
+    m_studyTreeWidget->removeStudy(studyInstanceUID, DICOMSource());
 }
 
 void QInputOutputLocalDatabaseWidget::requestedSeriesOfStudy(Study *study)
@@ -263,7 +263,7 @@ void QInputOutputLocalDatabaseWidget::deleteSelectedItemsFromLocalDatabase()
                 DicomMask dicomMaskToDelete = selectedDicomMaskDICOMSoruceToDelete.at(index).first;
                 if (m_qcreateDicomdir->studyExistsInDICOMDIRList(dicomMaskToDelete.getStudyInstanceUID()))
                 {
-                    Study *studyToDelete = m_studyTreeWidget->getStudy(dicomMaskToDelete.getStudyInstanceUID());
+                    Study *studyToDelete = m_studyTreeWidget->getStudy(dicomMaskToDelete.getStudyInstanceUID(), DICOMSource());
                     QString warningMessage;
 
                     if (dicomMaskToDelete.getSeriesInstanceUID().isEmpty())
@@ -292,7 +292,7 @@ void QInputOutputLocalDatabaseWidget::deleteSelectedItemsFromLocalDatabase()
                         localDatabaseManager.deleteSeries(dicomMaskToDelete.getStudyInstanceUID(), dicomMaskToDelete.getSeriesInstanceUID());
 
                         m_seriesListWidget->removeSeries(dicomMaskToDelete.getSeriesInstanceUID());
-                        m_studyTreeWidget->removeSeries(dicomMaskToDelete.getStudyInstanceUID(), dicomMaskToDelete.getSeriesInstanceUID());
+                        m_studyTreeWidget->removeSeries(dicomMaskToDelete.getStudyInstanceUID(), dicomMaskToDelete.getSeriesInstanceUID(), DICOMSource());
                     }
                     else
                     {
@@ -300,7 +300,7 @@ void QInputOutputLocalDatabaseWidget::deleteSelectedItemsFromLocalDatabase()
                         localDatabaseManager.deleteStudy(dicomMaskToDelete.getStudyInstanceUID());
 
                         m_seriesListWidget->clear();
-                        m_studyTreeWidget->removeStudy(dicomMaskToDelete.getStudyInstanceUID());
+                        removeStudyFromQStudyTreeWidget(dicomMaskToDelete.getStudyInstanceUID());
                     }
 
                     if (showDatabaseManagerError(localDatabaseManager.getLastError()))

@@ -299,9 +299,10 @@ void QInputOutputPacsWidget::retrieveSelectedStudies()
         if (dicomMaskDICOMSourceList.at(index).second.getRetrievePACS().count() > 0)
         {
             DicomMask dicomMaskToRetrieve = dicomMaskDICOMSourceList.at(index).first;
-            PacsDevice pacsDeviceFromRetrieve = dicomMaskDICOMSourceList.at(index).second.getRetrievePACS().at(0); //Agafem el primer PACS
+            DICOMSource dicomSourceStudyToRetrieve = dicomMaskDICOMSourceList.at(index).second;
+            PacsDevice pacsDeviceFromRetrieve = dicomSourceStudyToRetrieve.getRetrievePACS().at(0); //Agafem el primer PACS
 
-            retrieve(pacsDeviceFromRetrieve.getID(), None, m_studyTreeWidget->getStudy(dicomMaskToRetrieve.getStudyInstanceUID()),
+            retrieve(pacsDeviceFromRetrieve.getID(), None, m_studyTreeWidget->getStudy(dicomMaskToRetrieve.getStudyInstanceUID(), dicomSourceStudyToRetrieve),
                 dicomMaskToRetrieve.getSeriesInstanceUID(), dicomMaskToRetrieve.getSOPInstanceUID());
         }
     }
@@ -324,9 +325,10 @@ void QInputOutputPacsWidget::retrieveAndViewSelectedStudies()
         if (dicomMaskDICOMSourceList.at(index).second.getRetrievePACS().count() > 0)
         {
             DicomMask dicomMaskToRetrieve = dicomMaskDICOMSourceList.at(index).first;
-            PacsDevice pacsDeviceFromRetrieve = dicomMaskDICOMSourceList.at(index).second.getRetrievePACS().at(0); //Agafem el primer PACS
+            DICOMSource dicomSourceStudyToRetrieve = dicomMaskDICOMSourceList.at(index).second;
+            PacsDevice pacsDeviceFromRetrieve = dicomSourceStudyToRetrieve.getRetrievePACS().at(0); //Agafem el primer PACS
 
-            retrieve(pacsDeviceFromRetrieve.getID(), View, m_studyTreeWidget->getStudy(dicomMaskToRetrieve.getStudyInstanceUID()),
+            retrieve(pacsDeviceFromRetrieve.getID(), View, m_studyTreeWidget->getStudy(dicomMaskToRetrieve.getStudyInstanceUID(), dicomSourceStudyToRetrieve),
                 dicomMaskToRetrieve.getSeriesInstanceUID(), dicomMaskToRetrieve.getSOPInstanceUID());
         }
     }
