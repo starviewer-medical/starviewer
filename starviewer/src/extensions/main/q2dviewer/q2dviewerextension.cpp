@@ -261,6 +261,30 @@ void Q2DViewerExtension::searchPreviousStudiesWithHangingProtocols()
     }
 }
 
+void Q2DViewerExtension::setupDefaultLeftButtonTool()
+{
+    if (!m_patient)
+    {
+        return;
+    }
+
+    // Ara és super txapussa i només mirarà el primer estudi
+    Study *study = m_patient->getStudies().first();
+    if (study)
+    {
+        if (study->getModalities().contains("MG") || study->getModalities().contains("CR") || study->getModalities().contains("RF") ||
+            study->getModalities().contains("OP"))
+        {
+            m_slicingToolButton->defaultAction()->toggle();
+            m_zoomToolButton->defaultAction()->trigger();
+        }
+        else
+        {
+            m_slicingToolButton->defaultAction()->trigger();
+        }
+    }
+}
+
 void Q2DViewerExtension::addPreviousHangingProtocols(QList<Study*> studies, QHash<QString, QString> qhash)
 {
     disconnect(m_previousStudiesManager, SIGNAL(queryPreviousStudiesFinished(QList<Study*>, QHash<QString, QString>)), this,
@@ -325,21 +349,7 @@ Patient* Q2DViewerExtension::getPatient() const
 void Q2DViewerExtension::setPatient(Patient *patient)
 {
     m_patient = patient;
-    // Ara és super txapussa i només mirarà el primer estudi
-    Study *study = m_patient->getStudies().first();
-    if (study)
-    {
-        if (study->getModalities().contains("MG") || study->getModalities().contains("CR") || study->getModalities().contains("RF") ||
-            study->getModalities().contains("OP"))
-        {
-            m_slicingToolButton->defaultAction()->toggle();
-            m_zoomToolButton->defaultAction()->trigger();
-        }
-        else
-        {
-            m_slicingToolButton->defaultAction()->trigger();
-        }
-    }
+    setupDefaultLeftButtonTool();
 }
 
 void Q2DViewerExtension::initializeTools()
