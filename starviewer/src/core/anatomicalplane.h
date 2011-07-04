@@ -5,6 +5,8 @@ class QString;
 
 namespace udg {
 
+class PatientOrientation;
+
 /**
     Classe que encapsularà les orientacions anatòmiques del pacient
   */
@@ -16,10 +18,8 @@ public:
     /// Donada una orientació anatòmica, ens retorna la corresponent etiqueta per mostrar a l'interfície
     static const QString getLabel(AnatomicalPlaneType orientation);
 
-    /// Ens diu quin és el pla de projecció d'una imatge segons les etiquetes d'orientació (R/L,A/P,F/H)
-    /// El format serà "direccióFiles\\direccióColumnes"
-    /// Valors: AXIAL, SAGITAL, CORONAL, OBLIQUE o N/A
-    static const QString getProjectionLabelFromPlaneOrientation(const QString &orientation);
+    /// Ens retorna l'etiqueta del pla anatòmic que es correspon amb el PatientOrientation donat
+    static const QString getLabelFromPatientOrientation(const PatientOrientation &orientation);
 };
 
 } // End namespace udg
