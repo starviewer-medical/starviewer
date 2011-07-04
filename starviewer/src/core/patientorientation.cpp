@@ -1,6 +1,7 @@
 #include "patientorientation.h"
 
 #include <QRegExp>
+#include <QStringList>
 #include <cmath>
 
 #include "dicomvaluerepresentationconverter.h"
@@ -48,6 +49,37 @@ void PatientOrientation::setPatientOrientationFromImageOrientation(const ImageOr
     {
         DEBUG_LOG("makePatientOrientationFromImageOrientationPatient() ha generat una cadena d'orientació de pacient invàlida");
     }
+}
+
+QString PatientOrientation::getRowDirectionLabel() const
+{
+    return getNthDirectionLabel(0);
+}
+
+QString PatientOrientation::getColumnDirectionLabel() const
+{
+    return getNthDirectionLabel(1);
+}
+
+QString PatientOrientation::getNormalDirectionLabel() const
+{
+    return getNthDirectionLabel(2);
+}
+
+QString PatientOrientation::getNthDirectionLabel(unsigned int i) const
+{
+    QString label;
+    
+    if (!m_patientOrientationString.isEmpty())
+    {
+        QStringList labelList = m_patientOrientationString.split(DICOMValueRepresentationConverter::ValuesSeparator);
+        if (labelList.size() >= i + 1)
+        {
+            label = labelList.at(i);
+        }
+    }
+
+    return label;
 }
 
 QString PatientOrientation::getOppositeOrientationLabel(const QString &label)

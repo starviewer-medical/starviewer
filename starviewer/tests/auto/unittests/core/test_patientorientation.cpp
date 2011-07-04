@@ -22,6 +22,15 @@ private slots:
 
     void setPatientOrientationFromImageOrientation_ShouldMakeRightPatientOrientation_data();
     void setPatientOrientationFromImageOrientation_ShouldMakeRightPatientOrientation();
+
+    void getRowDirectionLabel_ShouldReturnExpectedValues_data();
+    void getRowDirectionLabel_ShouldReturnExpectedValues();
+
+    void getColumnDirectionLabel_ShouldReturnExpectedValues_data();
+    void getColumnDirectionLabel_ShouldReturnExpectedValues();
+
+    void getNormalDirectionLabel_ShouldReturnExpectedValues_data();
+    void getNormalDirectionLabel_ShouldReturnExpectedValues();
 };
 
 void test_PatientOrientation::getOppositeOrientationLabel_ShouldReturnExpectedValues_data()
@@ -488,6 +497,75 @@ void test_PatientOrientation::setPatientOrientationFromImageOrientation_ShouldMa
     patientOrientation.setPatientOrientationFromImageOrientation(imageOrientation);
     
     QCOMPARE(patientOrientation.getDICOMFormattedPatientOrientation(), patientOrientationString);
+}
+
+void test_PatientOrientation::getRowDirectionLabel_ShouldReturnExpectedValues_data()
+{
+    QTest::addColumn<QString>("orientationString");
+    QTest::addColumn<QString>("expectedLabel");
+
+    QTest::newRow("empty string") << "" << "";
+    QTest::newRow("2 multi-valued items") << "LPF\\HPR" << "LPF";
+    QTest::newRow("2 single valued items") << "P\\H" << "P";
+    QTest::newRow("3 multi-valued items") << "LPF\\PFR\\HPR" << "LPF";
+    QTest::newRow("3 single valued items") << "L\\P\\H" << "L";
+}
+
+void test_PatientOrientation::getRowDirectionLabel_ShouldReturnExpectedValues()
+{
+    QFETCH(QString, orientationString);
+    QFETCH(QString, expectedLabel);
+
+    PatientOrientation patientOrientation;
+    patientOrientation.setDICOMFormattedPatientOrientation(orientationString);
+
+    QCOMPARE(patientOrientation.getRowDirectionLabel(), expectedLabel);
+}
+
+void test_PatientOrientation::getColumnDirectionLabel_ShouldReturnExpectedValues_data()
+{
+    QTest::addColumn<QString>("orientationString");
+    QTest::addColumn<QString>("expectedLabel");
+
+    QTest::newRow("empty string") << "" << "";
+    QTest::newRow("2 multi-valued items") << "LPF\\HPR" << "HPR";
+    QTest::newRow("2 single valued items") << "P\\H" << "H";
+    QTest::newRow("3 multi-valued items") << "LPF\\PFR\\HPR" << "PFR";
+    QTest::newRow("3 single valued items") << "L\\P\\H" << "P";
+}
+
+void test_PatientOrientation::getColumnDirectionLabel_ShouldReturnExpectedValues()
+{
+    QFETCH(QString, orientationString);
+    QFETCH(QString, expectedLabel);
+
+    PatientOrientation patientOrientation;
+    patientOrientation.setDICOMFormattedPatientOrientation(orientationString);
+
+    QCOMPARE(patientOrientation.getColumnDirectionLabel(), expectedLabel);
+}
+
+void test_PatientOrientation::getNormalDirectionLabel_ShouldReturnExpectedValues_data()
+{
+    QTest::addColumn<QString>("orientationString");
+    QTest::addColumn<QString>("expectedLabel");
+
+    QTest::newRow("empty string") << "" << "";
+    QTest::newRow("2 multi-valued items") << "LPF\\HPR" << "";
+    QTest::newRow("2 single valued items") << "P\\H" << "";
+    QTest::newRow("3 multi-valued items") << "LPF\\PFR\\HPR" << "HPR";
+    QTest::newRow("3 single valued items") << "L\\P\\H" << "H";
+}
+
+void test_PatientOrientation::getNormalDirectionLabel_ShouldReturnExpectedValues()
+{
+    QFETCH(QString, orientationString);
+    QFETCH(QString, expectedLabel);
+
+    PatientOrientation patientOrientation;
+    patientOrientation.setDICOMFormattedPatientOrientation(orientationString);
+
+    QCOMPARE(patientOrientation.getNormalDirectionLabel(), expectedLabel);
 }
 
 DECLARE_TEST(test_PatientOrientation)
