@@ -438,7 +438,7 @@ void Q2DViewer::refreshAnnotations()
         return;
     }
 
-    if (m_enabledAnnotations & Q2DViewer::PatientInformationAnnotation)
+    if (m_enabledAnnotations.testFlag(Q2DViewer::PatientInformationAnnotation))
     {
         m_cornerAnnotations->SetText(3, qPrintable(m_upperRightText));
         m_cornerAnnotations->SetText(1, qPrintable(m_lowerRightText.trimmed()));
@@ -449,7 +449,7 @@ void Q2DViewer::refreshAnnotations()
         m_cornerAnnotations->SetText(1, "");
     }
 
-    if (m_enabledAnnotations & Q2DViewer::PatientOrientationAnnotation)
+    if (m_enabledAnnotations.testFlag(Q2DViewer::PatientOrientationAnnotation))
     {
         for (int j = 0; j < 4; j++)
         {
@@ -1560,10 +1560,10 @@ void Q2DViewer::updateAnnotationsInformation(AnnotationFlags annotation)
     }
 
     // Informació que es mostra per cada viewport
-    if (annotation & Q2DViewer::WindowInformationAnnotation)
+    if (annotation.testFlag(Q2DViewer::WindowInformationAnnotation))
     {
         // Informació de la finestra
-        if (m_enabledAnnotations & Q2DViewer::WindowInformationAnnotation)
+        if (m_enabledAnnotations.testFlag(Q2DViewer::WindowInformationAnnotation))
         {
             m_upperLeftText = tr("%1 x %2\nWW: %5 WL: %6")
                 .arg(m_imageSizeInformation[0])
@@ -1578,7 +1578,7 @@ void Q2DViewer::updateAnnotationsInformation(AnnotationFlags annotation)
         m_cornerAnnotations->SetText(2, qPrintable(m_upperLeftText));
     }
 
-    if (annotation & Q2DViewer::SliceAnnotation)
+    if (annotation.testFlag(Q2DViewer::SliceAnnotation))
     {
         this->updateSliceAnnotationInformation();
     }
@@ -1766,7 +1766,7 @@ void Q2DViewer::updateSliceAnnotationInformation()
         this->updateSliceAnnotation(value + 1, m_maxSliceValue + 1);
     }
     // Si aquestes anotacions estan activades, llavors li afegim la informació de la hora de la sèrie i la imatge
-    if (m_enabledAnnotations & Q2DViewer::PatientInformationAnnotation)
+    if (m_enabledAnnotations.testFlag(Q2DViewer::PatientInformationAnnotation))
     {
         // Si la vista és "AXIAL" (és a dir mostrem la imatge en l'adquisició original)
         // i tenim informació de la hora d'adquisició de la imatge, la incloem en la informació mostrada
@@ -1799,7 +1799,7 @@ void Q2DViewer::updateSliceAnnotation(int currentSlice, int maxSlice, int curren
     Q_ASSERT(m_cornerAnnotations);
 
     // Si les anotacions estan habilitades
-    if (m_enabledAnnotations & Q2DViewer::SliceAnnotation)
+    if (m_enabledAnnotations.testFlag(Q2DViewer::SliceAnnotation))
     {
         QString lowerLeftText;
         // TODO Ara només tenim en compte de posar l'slice location si estem en la vista "original"
