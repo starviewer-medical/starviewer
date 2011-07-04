@@ -121,6 +121,9 @@ private:
     void searchPreviousStudiesWithHangingProtocols();
 #endif
 
+    /// Segons les dades del pacient carregat escollirà quina és l'eina del botó esquerre més adient que cal activar per defecte 
+    void setupDefaultLeftButtonTool();
+
 private slots:
 #ifndef STARVIEWER_LITE
     /// Comprova si el nou volum té fases i per tant hem d'activar/descativar la vista coronal+sagital
