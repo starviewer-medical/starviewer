@@ -40,6 +40,11 @@ public:
     /// Assigna la orientació de pacient calculada a partir de l'ImageOrientation
     void setPatientOrientationFromImageOrientation(const ImageOrientation &imageOrientation);
     
+    /// Ens retorna l'etiqueta d'orientació de la direcció de la fila, columna o normal, en cas que aquesta existeixi.
+    QString getRowDirectionLabel() const;
+    QString getColumnDirectionLabel() const;
+    QString getNormalDirectionLabel() const;
+    
     /// Donada una etiqueta d'orientació, ens retorna aquesta etiqueta però amb els valors oposats.
     /// Per exemple, si l'etiqueta que ens donen és RPF (Right-Posterior,Feet), el valor retornat seria LAH (Left-Anterior-Head)
     /// Les etiquetes vàlides i els seus oposats són les següents:
@@ -54,6 +59,10 @@ private:
 
     /// Donat un vector de direcció ens retorna l'etiqueta d'orientació corresponent
     QString getOrientationLabelFromDirectionVector(const QVector3D &vector);
+
+    /// Retorna l'n-éssima etiqueta d'orientació (Fila = 0, Columna = 1, Normal = 2).
+    /// Si donem un índex fora de rang pel nombre d'etiquetes que hi ha, retornarà un string buit.
+    QString PatientOrientation::getNthDirectionLabel(unsigned int i) const;
 
 private:
     /// La cadena d'orientació de pacient. Es guardarà com en el format DICOM, admetent que sigui buida o contingui 2 o 3 elements.
