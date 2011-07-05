@@ -1163,11 +1163,11 @@ void Q2DViewer::setPhase(int value)
     {
         if (value < 0)
         {
-            value = 0;
+            value = m_numberOfPhases - 1;
         }
         else if (value > m_numberOfPhases - 1)
         {
-            value = m_numberOfPhases - 1;
+            value = 0;
         }
 
         m_currentPhase = value;
@@ -2133,11 +2133,11 @@ void Q2DViewer::checkAndUpdateSliceValue(int value)
 {
     if (value < 0)
     {
-        m_currentSlice = 0;
+        m_currentSlice = m_maxSliceValue - m_slabThickness + 1;
     }
     else if (value + m_slabThickness - 1 > m_maxSliceValue)
     {
-        m_currentSlice = m_maxSliceValue - m_slabThickness + 1;
+        m_currentSlice = 0;
     }
     else
     {
