@@ -42,15 +42,13 @@ void test_ImageOrientation::setDICOMFormattedImageOrientation_ShouldModifyVector
 
     QVector3D defaultVectorValues(.0, .0, .0);
 
-    QTest::newRow("six random number values correctly formatted")
-        << "1\\2\\3\\0\\0\\0" << QVector3D(1.0, 2.0, 3.0) << QVector3D(.0, .0, .0) << QVector3D(.0, .0, .0);
+    QTest::newRow("six random number values correctly formatted") << "1\\2\\3\\0\\0\\0" << QVector3D(1.0, 2.0, 3.0) << QVector3D(.0, .0, .0) 
+        << QVector3D(.0, .0, .0);
     
-    QTest::newRow("six random floating point number values correctly formatted")
-        << "1.0\\2.1\\3.\\.0\\.0\\3.5" << QVector3D(1.0, 2.1, 3.0) << QVector3D(.0, .0, 3.5) 
-        << QVector3D::crossProduct(QVector3D(1.0, 2.1, 3.0), QVector3D(.0, .0, 3.5));
+    QTest::newRow("six random floating point number values correctly formatted") << "1.0\\2.1\\3.\\.0\\.0\\3.5" << QVector3D(1.0, 2.1, 3.0) 
+        << QVector3D(.0, .0, 3.5) << QVector3D::crossProduct(QVector3D(1.0, 2.1, 3.0), QVector3D(.0, .0, 3.5));
     
-    QTest::newRow("empty string")
-        << "" << defaultVectorValues << defaultVectorValues << defaultVectorValues;
+    QTest::newRow("empty string") << "" << defaultVectorValues << defaultVectorValues << defaultVectorValues;
 }
 
 void test_ImageOrientation::setDICOMFormattedImageOrientation_ShouldModifyVectorValuesAndReturnTrue()
@@ -77,23 +75,18 @@ void test_ImageOrientation::setDICOMFormattedImageOrientation_ShouldResetVectors
 
     QVector3D defaultVectorValues(.0, .0, .0);
 
-    QTest::newRow("six random string values")
-        << "aaa\\bbbb\\ccc\\dddd\\eeee\\ffff" << defaultVectorValues << defaultVectorValues << defaultVectorValues;
+    QTest::newRow("six random string values") << "aaa\\bbbb\\ccc\\dddd\\eeee\\ffff" << defaultVectorValues << defaultVectorValues << defaultVectorValues;
+    QTest::newRow("six elements with mixed alphanumeric and numeric values") << "aaa\\1\\bbbb\\.2\\cccc\\3.2" << defaultVectorValues << defaultVectorValues 
+        << defaultVectorValues;
     
-    QTest::newRow("six elements with mixed alphanumeric and numeric values")
-        << "aaa\\1\\bbbb\\.2\\cccc\\3.2" << defaultVectorValues << defaultVectorValues << defaultVectorValues;
+    QTest::newRow("six elements with mixed alphanumeric, numeric and empty values") << "aaa\\1\\\\.2\\cccc\\3.2" << defaultVectorValues << defaultVectorValues 
+        << defaultVectorValues;
     
-    QTest::newRow("six elements with mixed alphanumeric, numeric and empty values")
-        << "aaa\\1\\\\.2\\cccc\\3.2" << defaultVectorValues << defaultVectorValues << defaultVectorValues;
+    QTest::newRow("six elements with numeric and empty elements") << "3.0\\1\\\\.2\\4.2\\3.2" << defaultVectorValues << defaultVectorValues 
+        << defaultVectorValues;
     
-    QTest::newRow("six elements with numeric and empty elements")
-        << "3.0\\1\\\\.2\\4.2\\3.2" << defaultVectorValues << defaultVectorValues << defaultVectorValues;
-    
-    QTest::newRow("less than 6 numeric values") 
-        << "1.0\\2.1\\3." << defaultVectorValues << defaultVectorValues << defaultVectorValues;
-    
-    QTest::newRow("more than 6 numeric values") 
-        << "1.0\\1.0\\0.0\\0.0\\1.0\\0.2\\1.2\\1.8" << defaultVectorValues << defaultVectorValues << defaultVectorValues;
+    QTest::newRow("less than 6 numeric values") << "1.0\\2.1\\3." << defaultVectorValues << defaultVectorValues << defaultVectorValues;
+    QTest::newRow("more than 6 numeric values") << "1.0\\1.0\\0.0\\0.0\\1.0\\0.2\\1.2\\1.8" << defaultVectorValues << defaultVectorValues << defaultVectorValues;
 }
 
 void test_ImageOrientation::setDICOMFormattedImageOrientation_ShouldResetVectorsToDefaultValuesAndReturnFalse()
@@ -167,8 +160,7 @@ void test_ImageOrientation::operatorEquality_ShouldReturnTrue_data()
 
     QString orientationString("2\\1\\3\\5.3\\2e-12\\33");
 
-    QTest::newRow("same image orientation contents")
-        << row << column << orientationString;
+    QTest::newRow("same image orientation contents") << row << column << orientationString;
 }
 
 void test_ImageOrientation::operatorEquality_ShouldReturnTrue()
@@ -199,8 +191,7 @@ void test_ImageOrientation::operatorEquality_ShouldReturnFalse_data()
 
     QString orientationString("0\\1\\2\\-6\\49\\0.3");
 
-    QTest::newRow("different image orientation contents")
-        << row << column << orientationString;
+    QTest::newRow("different image orientation contents") << row << column << orientationString;
 }
 
 void test_ImageOrientation::operatorEquality_ShouldReturnFalse()
@@ -232,14 +223,9 @@ void test_ImageOrientation::setupVectorsData()
     QVector3D randomValuedVector(0.1, 2.1, 0.3e15);
     QVector3D randomValuedVector2(-3.875, .1e-3, 450.23);
     
-    QTest::newRow("initialize with empty vectors")
-        << defaultValueVector << defaultValueVector << defaultValueVector << defaultValueVector;
-    
-    QTest::newRow("initialize with zero valued vectors")
-        << zeroVector << zeroVector << zeroVector << zeroVector;
-
-    QTest::newRow("initialize with different valued vectors")
-        << randomValuedVector << randomValuedVector2 << randomValuedVector << randomValuedVector2;
+    QTest::newRow("initialize with empty vectors") << defaultValueVector << defaultValueVector << defaultValueVector << defaultValueVector;
+    QTest::newRow("initialize with zero valued vectors") << zeroVector << zeroVector << zeroVector << zeroVector;
+    QTest::newRow("initialize with different valued vectors") << randomValuedVector << randomValuedVector2 << randomValuedVector << randomValuedVector2;
 }
 
 DECLARE_TEST(test_ImageOrientation)
