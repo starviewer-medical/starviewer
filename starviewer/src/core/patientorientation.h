@@ -30,6 +30,10 @@ public:
     static const QString HeadLabel;
     static const QString FeetLabel;
 
+    /// Assigna les etiquetes d'orientació per cada direcció: fila, columna, normal. L'etiqueta corresponent a la normal és opcional.
+    /// En cas que les etiquetes proporcionades no siguin vàlides, retornarà fals, cert altrament.
+    bool setLabels(const QString &rowDirectionLabel, const QString &columnDirectionLabel, const QString &normalDirectionLabel = QString());
+    
     /// Assigna la cadena d'orientació en format DICOM. Si aquesta té alguna inconsistència, retornarà fals, cert altrament.
     /// S'accepten cadenes buides, amb 2 i 3 ítems separats per \\ i que continguin les etiquetes d'orientació estipulades pel DICOM
     bool setDICOMFormattedPatientOrientation(const QString &patientOrientation);

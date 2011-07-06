@@ -14,6 +14,15 @@ private slots:
     void getOppositeOrientationLabel_ShouldReturnExpectedValues_data();
     void getOppositeOrientationLabel_ShouldReturnExpectedValues();
 
+    void setLabels_ShouldReturnTrueAndOrientationStringIsSet_data();
+    void setLabels_ShouldReturnTrueAndOrientationStringIsSet();
+
+    void setLabels_2ParametersShouldReturnFalseAndSetEmptyOrientationString_data();
+    void setLabels_2ParametersShouldReturnFalseAndSetEmptyOrientationString();
+
+    void setLabels_3ParametersShouldReturnFalseAndSetEmptyOrientationString_data();
+    void setLabels_3ParametersShouldReturnFalseAndSetEmptyOrientationString();
+
     void setDICOMFormattedPatientOrientation_ShouldReturnTrueAndOrientationStringIsSet_data();
     void setDICOMFormattedPatientOrientation_ShouldReturnTrueAndOrientationStringIsSet();
 
@@ -159,6 +168,113 @@ void test_PatientOrientation::getOppositeOrientationLabel_ShouldReturnExpectedVa
     QCOMPARE(PatientOrientation::getOppositeOrientationLabel(inputLabel), resultingLabel);
 }
 
+void test_PatientOrientation::setLabels_ShouldReturnTrueAndOrientationStringIsSet_data()
+{
+    QTest::addColumn<QString>("rowLabel");
+    QTest::addColumn<QString>("columnLabel");
+    QTest::addColumn<QString>("normalLabel");
+
+    QTest::newRow("row and column with value, normal empty") << "R" << "A" << "";
+    QTest::newRow("row and column with value, normal empty (multiple chars)") << "RLHFAPRLHFAP" << "AAARLHFAPAAARRRRRFFFF" << "";
+    QTest::newRow("3 items") << "R" << "A" << "F";
+    QTest::newRow("3 items (multiple chars)") << "RRRRLHFAPRRR" << "AAAAARLHFAPAAAAA" << "FFFFRLHFAPFFFFFF";
+}
+
+void test_PatientOrientation::setLabels_ShouldReturnTrueAndOrientationStringIsSet()
+{
+    QFETCH(QString, rowLabel);
+    QFETCH(QString, columnLabel);
+    QFETCH(QString, normalLabel);
+
+    PatientOrientation patientOrientationInitializedWith3Parameters;
+
+    QCOMPARE(patientOrientationInitializedWith3Parameters.setLabels(rowLabel, columnLabel, normalLabel), true);
+    QCOMPARE(patientOrientationInitializedWith3Parameters.getRowDirectionLabel(), rowLabel);
+    QCOMPARE(patientOrientationInitializedWith3Parameters.getColumnDirectionLabel(), columnLabel);
+    QCOMPARE(patientOrientationInitializedWith3Parameters.getNormalDirectionLabel(), normalLabel);
+
+    PatientOrientation patientOrientationInitializedWith2Parameters;
+
+    QCOMPARE(patientOrientationInitializedWith2Parameters.setLabels(rowLabel, columnLabel), true);
+    QCOMPARE(patientOrientationInitializedWith2Parameters.getRowDirectionLabel(), rowLabel);
+    QCOMPARE(patientOrientationInitializedWith2Parameters.getColumnDirectionLabel(), columnLabel);
+    QCOMPARE(patientOrientationInitializedWith2Parameters.getNormalDirectionLabel(), QString());
+}
+
+void test_PatientOrientation::setLabels_2ParametersShouldReturnFalseAndSetEmptyOrientationString_data()
+{
+    QTest::addColumn<QString>("rowLabel");
+    QTest::addColumn<QString>("columnLabel");
+    
+    QTest::newRow("1 item") << "R" << "";
+    QTest::newRow("1 item (invalid char)") << "r" << "";
+    QTest::newRow("1 item (multiple valid chars)") << "RLHFAPRLHAAAARLHFA" << "";
+    QTest::newRow("1 item (multiple invalid chars)") << "rlhfaprlhaaaarlhfa" << "";
+    
+    QTest::newRow("row label is Empty (others have valid values)") << "" << "A";
+    QTest::newRow("column label is Empty (others have valid values)") << "R" << "";
+    QTest::newRow("2 items (one invalid char)") << "Q" << "R";
+    
+    QTest::newRow("2 items (multiple invalid chars)") << "rlhfa67832biusn9QWTY" << "aaarlhfa1!paaarrrqqqq826735rrffff";
+    QTest::newRow("2 items (multiple invalid chars mixed with valid chars)") << "rlhfaPRLHFAP" << "AAArlhfapaaaRRRqqqq826735RRFFFF";
+}
+
+void test_PatientOrientation::setLabels_2ParametersShouldReturnFalseAndSetEmptyOrientationString()
+{
+    QFETCH(QString, rowLabel);
+    QFETCH(QString, columnLabel);
+
+    PatientOrientation patientOrientationInitializedWith2Parameters;
+
+    QCOMPARE(patientOrientationInitializedWith2Parameters.setLabels(rowLabel, columnLabel), false);
+    QCOMPARE(patientOrientationInitializedWith2Parameters.getRowDirectionLabel(), QString());
+    QCOMPARE(patientOrientationInitializedWith2Parameters.getColumnDirectionLabel(), QString());
+    QCOMPARE(patientOrientationInitializedWith2Parameters.getNormalDirectionLabel(), QString());
+}
+
+void test_PatientOrientation::setLabels_3ParametersShouldReturnFalseAndSetEmptyOrientationString_data()
+{
+    QTest::addColumn<QString>("rowLabel");
+    QTest::addColumn<QString>("columnLabel");
+    QTest::addColumn<QString>("normalLabel");
+    
+    QTest::newRow("1 item") << "R" << "" << "";
+    QTest::newRow("1 item (invalid char)") << "r" << "" << "";
+    QTest::newRow("1 item (multiple valid chars)") << "RLHFAPRLHAAAARLHFA" << "" << "";
+    QTest::newRow("1 item (multiple invalid chars)") << "rlhfaprlhaaaarlhfa" << "" << "";
+    
+    QTest::newRow("row label is Empty (others have valid values)") << "" << "A" << "";
+    QTest::newRow("column label is Empty (others have valid values)") << "R" << "" << "";
+    QTest::newRow("normal label is Empty (row is wrong)") << "Q" << "R" << "";
+    QTest::newRow("normal label is Empty (column is wrong)") << "A" << "W" << "";
+    QTest::newRow("row and column are empty") << "" << "" << "A";
+    
+    QTest::newRow("2 items (multiple invalid chars)(1)") << "rlhfa67832biusn9QWTY" << "aaarlhfa1!paaarrrqqqq826735rrffff" << "";
+    QTest::newRow("2 items (multiple invalid chars)(2)") << "rlhfa67832biusn9QWTY" << "" << "aaarlhfa1!paaarrrqqqq826735rrffff";
+    QTest::newRow("2 items (multiple invalid chars)(3)") << "" << "rlhfa67832biusn9QWTY" << "aaarlhfa1!paaarrrqqqq826735rrffff";
+    QTest::newRow("2 items (multiple invalid chars mixed with valid chars) (1)") << "rlhfaPRLHFAP" << "AAArlhfapaaaRRRqqqq826735RRFFFF" << "";
+    QTest::newRow("2 items (multiple invalid chars mixed with valid chars) (2)") << "rlhfaPRLHFAP" << "" << "AAArlhfapaaaRRRqqqq826735RRFFFF";
+    QTest::newRow("2 items (multiple invalid chars mixed with valid chars) (3)") << "" << "rlhfaPRLHFAP" << "AAArlhfapaaaRRRqqqq826735RRFFFF";
+    
+    QTest::newRow("3 items (one invalid char)") << "R" << "A" << "f";
+    QTest::newRow("3 items (multiple invalid chars)") << "rrrrlhfaprrr" << "rlhfa67832biusn9QWTY" << "aaarlhfa1!paaarrrqqqq826735rrffff";
+    QTest::newRow("3 items (multiple invalid chars mixed with valid chars)") << "rlhfaPRLHFAP" << "AAArlhfapaaaRRRqqqq826735RRFFFF" << "RLHFAPRLHAAQWSMOXE";
+    QTest::newRow("3 empty values") << "" << "" << "";
+}
+
+void test_PatientOrientation::setLabels_3ParametersShouldReturnFalseAndSetEmptyOrientationString()
+{
+    QFETCH(QString, rowLabel);
+    QFETCH(QString, columnLabel);
+    QFETCH(QString, normalLabel);
+
+    PatientOrientation patientOrientationInitializedWith3Parameters;
+
+    QCOMPARE(patientOrientationInitializedWith3Parameters.setLabels(rowLabel, columnLabel, normalLabel), false);
+    QCOMPARE(patientOrientationInitializedWith3Parameters.getRowDirectionLabel(), QString());
+    QCOMPARE(patientOrientationInitializedWith3Parameters.getColumnDirectionLabel(), QString());
+    QCOMPARE(patientOrientationInitializedWith3Parameters.getNormalDirectionLabel(), QString());
+}
 void test_PatientOrientation::setDICOMFormattedPatientOrientation_ShouldReturnTrueAndOrientationStringIsSet_data()
 {
     QTest::addColumn<QString>("orientation");
