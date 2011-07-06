@@ -2322,16 +2322,19 @@ void Q2DViewer::setAlignPosition(AlignPosition alignPosition)
 
 void Q2DViewer::setImageOrientation(const QString &orientation)
 {
+    PatientOrientation initialPatientOrientation;
     QVector<QString> labels = getCurrentDisplayedImageOrientationLabels();
+    initialPatientOrientation.setLabels(labels[2], labels[3]);
+    
+    PatientOrientation desiredPatientOrientation;
     QStringList desiredOrientationList = orientation.split("\\");
-    QString desiredTop, desiredLeft;
     if (desiredOrientationList.count() == 2)
     {
-        desiredTop = desiredOrientationList.at(0);
-        desiredLeft = desiredOrientationList.at(1);
+        desiredPatientOrientation.setLabels(desiredOrientationList.at(0), desiredOrientationList.at(1));
     }
-    m_imageOrientationOperationsMapper->setInitialOrientation(labels[2], labels[3]);
-    m_imageOrientationOperationsMapper->setDesiredOrientation(desiredTop, desiredLeft);
+    
+    m_imageOrientationOperationsMapper->setInitialOrientation(initialPatientOrientation);
+    m_imageOrientationOperationsMapper->setDesiredOrientation(desiredPatientOrientation);
 
     // TODO ara mateix fet així és ineficient ja que es poden cridar fins a dos cops updateCamera() innecessàriament
     // Caldria refactoritzar els mètodes de rotació i flip per aplicar aquests canvis requerint un únic updateCamera()
