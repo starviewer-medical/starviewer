@@ -24,20 +24,11 @@ void test_AnatomicalPlane::getPlaneOrientationLabel_ShouldReturnRightLabel_data(
     QTest::addColumn<AnatomicalPlane::AnatomicalPlaneType>("planeType");
     QTest::addColumn<QString>("planeLabel");
 
-    QTest::newRow("Axial")
-        << AnatomicalPlane::Axial << tr("AXIAL");
-
-    QTest::newRow("Sagittal")
-        << AnatomicalPlane::Sagittal << tr("SAGITTAL");
-
-    QTest::newRow("Coronal")
-        << AnatomicalPlane::Coronal << tr("CORONAL");
-
-    QTest::newRow("Oblique")
-        << AnatomicalPlane::Oblique << tr("OBLIQUE");
-
-    QTest::newRow("NotAvailable")
-        << AnatomicalPlane::NotAvailable << tr("N/A");
+    QTest::newRow("Axial") << AnatomicalPlane::Axial << tr("AXIAL");
+    QTest::newRow("Sagittal") << AnatomicalPlane::Sagittal << tr("SAGITTAL");
+    QTest::newRow("Coronal") << AnatomicalPlane::Coronal << tr("CORONAL");
+    QTest::newRow("Oblique") << AnatomicalPlane::Oblique << tr("OBLIQUE");
+    QTest::newRow("NotAvailable") << AnatomicalPlane::NotAvailable << tr("N/A");
 }
 
 void test_AnatomicalPlane::getPlaneOrientationLabel_ShouldReturnRightLabel()
