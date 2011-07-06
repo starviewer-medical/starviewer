@@ -17,6 +17,18 @@ const QString PatientOrientation::AnteriorLabel("A");
 const QString PatientOrientation::HeadLabel("H");
 const QString PatientOrientation::FeetLabel("F");
 
+bool PatientOrientation::setLabels(const QString &rowDirectionLabel, const QString &columnDirectionLabel, const QString &normalDirectionLabel)
+{
+    QString dicomFormattedString = rowDirectionLabel + DICOMValueRepresentationConverter::ValuesSeparator + columnDirectionLabel;
+
+    if (!normalDirectionLabel.isEmpty())
+    {
+        dicomFormattedString += DICOMValueRepresentationConverter::ValuesSeparator + normalDirectionLabel;
+    }
+    
+    return setDICOMFormattedPatientOrientation(dicomFormattedString);
+}
+
 bool PatientOrientation::setDICOMFormattedPatientOrientation(const QString &patientOrientation)
 {
     if (validateDICOMFormattedPatientOrientationString(patientOrientation))
