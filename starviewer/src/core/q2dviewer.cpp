@@ -308,7 +308,7 @@ QString Q2DViewer::getCurrentPlaneProjectionLabel() const
 {
     QVector<QString> labels = this->getCurrentDisplayedImageOrientationLabels();
     PatientOrientation patientOrienation;
-    patientOrienation.setDICOMFormattedPatientOrientation(labels[0] + "\\" + labels[1]);
+    patientOrienation.setLabels(labels[0], labels[1]);
     
     return AnatomicalPlane::getLabelFromPatientOrientation(patientOrienation);
 }
