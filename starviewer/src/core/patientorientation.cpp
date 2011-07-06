@@ -66,14 +66,14 @@ QString PatientOrientation::getNormalDirectionLabel() const
     return getNthDirectionLabel(2);
 }
 
-QString PatientOrientation::getNthDirectionLabel(unsigned int i) const
+QString PatientOrientation::getNthDirectionLabel(int i) const
 {
     QString label;
     
     if (!m_patientOrientationString.isEmpty())
     {
         QStringList labelList = m_patientOrientationString.split(DICOMValueRepresentationConverter::ValuesSeparator);
-        if (labelList.size() >= i + 1)
+        if (labelList.size() >= i + 1 && i >= 0)
         {
             label = labelList.at(i);
         }
