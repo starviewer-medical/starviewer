@@ -62,7 +62,7 @@ private:
 
     /// Retorna l'n-éssima etiqueta d'orientació (Fila = 0, Columna = 1, Normal = 2).
     /// Si donem un índex fora de rang pel nombre d'etiquetes que hi ha, retornarà un string buit.
-    QString getNthDirectionLabel(unsigned int i) const;
+    QString getNthDirectionLabel(int i) const;
 
 private:
     /// La cadena d'orientació de pacient. Es guardarà com en el format DICOM, admetent que sigui buida o contingui 2 o 3 elements.
