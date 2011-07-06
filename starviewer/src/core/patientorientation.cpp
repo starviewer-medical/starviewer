@@ -50,14 +50,11 @@ QString PatientOrientation::getDICOMFormattedPatientOrientation() const
 
 void PatientOrientation::setPatientOrientationFromImageOrientation(const ImageOrientation &imageOrientation)
 {
-    QString patientOrientationString;
-    patientOrientationString = this->getOrientationLabelFromDirectionVector(imageOrientation.getRowVector());
-    patientOrientationString += DICOMValueRepresentationConverter::ValuesSeparator;
-    patientOrientationString += this->getOrientationLabelFromDirectionVector(imageOrientation.getColumnVector());
-    patientOrientationString += DICOMValueRepresentationConverter::ValuesSeparator;
-    patientOrientationString += this->getOrientationLabelFromDirectionVector(imageOrientation.getNormalVector());
+    QString rowLabel = this->getOrientationLabelFromDirectionVector(imageOrientation.getRowVector());
+    QString columnLabel = this->getOrientationLabelFromDirectionVector(imageOrientation.getColumnVector());
+    QString normalLabel = this->getOrientationLabelFromDirectionVector(imageOrientation.getNormalVector());
 
-    if (!setDICOMFormattedPatientOrientation(patientOrientationString))
+    if (!setLabels(rowLabel, columnLabel, normalLabel))
     {
         DEBUG_LOG("makePatientOrientationFromImageOrientationPatient() ha generat una cadena d'orientació de pacient invàlida");
     }
