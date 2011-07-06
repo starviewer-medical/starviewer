@@ -1,7 +1,5 @@
 #include "imageorientationoperationsmapper.h"
 
-#include "patientorientation.h"
-
 #include <QStringList>
 
 namespace udg {
@@ -16,15 +14,15 @@ ImageOrientationOperationsMapper::~ImageOrientationOperationsMapper()
 {
 }
 
-void ImageOrientationOperationsMapper::setInitialOrientation(const QString &topLabel, const QString &leftLabel)
+void ImageOrientationOperationsMapper::setInitialOrientation(const PatientOrientation &initialOrientation)
 {
-    m_initialOrientation = formatOrientationLabel(topLabel + "\\" + leftLabel);
+    m_initialOrientation = initialOrientation;
     m_hasToUpdateOperations = true;
 }
 
-void ImageOrientationOperationsMapper::setDesiredOrientation(const QString &topLabel, const QString &leftLabel)
+void ImageOrientationOperationsMapper::setDesiredOrientation(const PatientOrientation &desiredOrientation)
 {
-    m_desiredOrientation = formatOrientationLabel(topLabel + "\\" + leftLabel);
+    m_desiredOrientation = desiredOrientation;
     m_hasToUpdateOperations = true;
 }
 
@@ -217,8 +215,13 @@ void ImageOrientationOperationsMapper::updateOperations()
     // com per exemple RA\AL en un tall que sigui oblicu
     // Per evitar això i no fer una llista enorme de transformacions,
     // agafarem només la primera lletra del row i de la columna ja que així ja és suficient
-    QStringList rowColumn = m_initialOrientation.split("\\");
-    QString mapIndex = rowColumn.at(0).left(1) + "\\" + rowColumn.at(1).left(1) + "-" + m_desiredOrientation;
+    QString initialRowLabel = m_initialOrientation.getRowDirectionLabel().left(1);
+    QString initialColumnLabel = m_initialOrientation.getColumnDirectionLabel().left(1);
+
+    QString desiredRowLabel = m_desiredOrientation.getRowDirectionLabel().left(1);
+    QString desiredColumnLabel = m_desiredOrientation.getColumnDirectionLabel().left(1);
+    
+    QString mapIndex = initialRowLabel + "\\" + initialColumnLabel + "-" + desiredRowLabel + "\\" + desiredColumnLabel;
     QString operations = m_orientationMappingTable.value(mapIndex);
 
     if (!operations.isEmpty())
@@ -243,17 +246,6 @@ void ImageOrientationOperationsMapper::updateOperations()
         m_horizontalFlip = false;
     }
     m_hasToUpdateOperations = false;
-}
-
-QString ImageOrientationOperationsMapper::formatOrientationLabel(const QString &label)
-{
-    QString labelCopy = label;
-
-    // Substituim les etiquetes Superior i Inferior pels seus equivalents
-    labelCopy.replace("S", PatientOrientation::HeadLabel);
-    labelCopy.replace("I", PatientOrientation::FeetLabel);
-
-    return labelCopy;
 }
 
 } // End namespace udg

@@ -31,9 +31,15 @@ void test_ImageOrientationOperationsMapper::getNumberOfClockwiseTurnsToApply_Sho
     QFETCH(QString, desiredColumnOrientationLabel);
     QFETCH(int, turns);
 
+    PatientOrientation initialOrientation;
+    initialOrientation.setLabels(initialRowOrientationLabel, initialColumnOrientationLabel);
+    
+    PatientOrientation desiredOrientation;
+    desiredOrientation.setLabels(desiredRowOrientationLabel, desiredColumnOrientationLabel);
+    
     ImageOrientationOperationsMapper mapper;
-    mapper.setInitialOrientation(initialRowOrientationLabel, initialColumnOrientationLabel);
-    mapper.setDesiredOrientation(desiredRowOrientationLabel, desiredColumnOrientationLabel);
+    mapper.setInitialOrientation(initialOrientation);
+    mapper.setDesiredOrientation(desiredOrientation);
 
     QCOMPARE(turns, mapper.getNumberOfClockwiseTurnsToApply());
 }
@@ -51,9 +57,15 @@ void test_ImageOrientationOperationsMapper::requiresHorizontalFlip_ShouldReturnE
     QFETCH(QString, desiredColumnOrientationLabel);
     QFETCH(bool, hasToFlip);
 
+    PatientOrientation initialOrientation;
+    initialOrientation.setLabels(initialRowOrientationLabel, initialColumnOrientationLabel);
+    
+    PatientOrientation desiredOrientation;
+    desiredOrientation.setLabels(desiredRowOrientationLabel, desiredColumnOrientationLabel);
+    
     ImageOrientationOperationsMapper mapper;
-    mapper.setInitialOrientation(initialRowOrientationLabel, initialColumnOrientationLabel);
-    mapper.setDesiredOrientation(desiredRowOrientationLabel, desiredColumnOrientationLabel);
+    mapper.setInitialOrientation(initialOrientation);
+    mapper.setDesiredOrientation(desiredOrientation);
 
     QCOMPARE(hasToFlip, mapper.requiresHorizontalFlip());
 }
