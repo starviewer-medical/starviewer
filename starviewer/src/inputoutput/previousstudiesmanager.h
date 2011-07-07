@@ -57,26 +57,14 @@ signals:
     /// Signal que s'emet per indicar que s'ha produït un error a la consulta d'estudis d'un PACS
     void errorQueryingPreviousStudies(PacsDevice pacs);
 
-    /// Signal que s'emet quan s'ha descarregat un estudi.
-    void previousStudyRetrieved(QString downloadedStudyUID);
-
-    /// Signal que s'emet per indicar que s'ha produït un error durant la descarrega d'un estudi (pot ser previ o no)
-    void errorDownloadingPreviousStudy(QString studyUID);
-
 private:
     /// Realitza una consulta dels estudis del pacient "patient" als PACS marcats per defecte.
     /// Si s'especifica una data "until" només cercarà els estudis fins la data especificada (aquesta inclosa).
     /// Si no es passa cap data per paràmetre cercarà tots els estudis, independentment de la data.
     void makeAsynchronousStudiesQuery(Patient *patient, QDate untilDate = QDate());
 
-    /// Crea les connexions
-    void createConnections();
-
     /// Retorna una màscara de cerca base a partir de les quals es generan les DicomMask per cercar previs
     DicomMask getBasicDicomMask();
-
-    /// Comprova si l'estudi ja l'hem rebut d'un altre PACS si és així no l'afegim, si no l'hem trobat
-    void mergeStudyWithReceivedResults(Study *study, QString pacsID);
 
     /// Ens indica si aquell estudi està a la llista d'estudis ja rebuts de previs, per evitar duplicats
     /// Hem de tenir en compte que com fem la cerca per ID i un altre per Patient Name per obtenir més resultats
