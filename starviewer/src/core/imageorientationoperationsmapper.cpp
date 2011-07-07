@@ -123,10 +123,10 @@ void ImageOrientationOperationsMapper::initializeOrientationTable()
     m_orientationMappingTable.insert(HeadAnterior + "-" + FeetPosterior, Rotate180Degrees);
     m_orientationMappingTable.insert(HeadAnterior + "-" + HeadPosterior, Rotate180DegreesAndFlip);
 
-    m_orientationMappingTable.insert(HeadPosterior + "-" + AnteriorFeet, Rotate90DegreesAndFlip);
+    m_orientationMappingTable.insert(HeadPosterior + "-" + AnteriorFeet, Rotate270DegreesAndFlip);
     m_orientationMappingTable.insert(HeadPosterior + "-" + AnteriorHead, Rotate90Degrees);
     m_orientationMappingTable.insert(HeadPosterior + "-" + PosteriorFeet, Rotate270Degrees);
-    m_orientationMappingTable.insert(HeadPosterior + "-" + PosteriorHead, Rotate270DegreesAndFlip);
+    m_orientationMappingTable.insert(HeadPosterior + "-" + PosteriorHead, Rotate90DegreesAndFlip);
     m_orientationMappingTable.insert(HeadPosterior + "-" + FeetAnterior, Rotate180Degrees);
     m_orientationMappingTable.insert(HeadPosterior + "-" + HeadAnterior, Rotate180DegreesAndFlip);
     m_orientationMappingTable.insert(HeadPosterior + "-" + FeetPosterior, Flip);
