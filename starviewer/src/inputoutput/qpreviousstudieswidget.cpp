@@ -165,7 +165,7 @@ void QPreviousStudiesWidget::initializeLookingForStudiesWidget()
 
 }
 
-void QPreviousStudiesWidget::insertStudyToTree(Study *study, QString pacsID)
+void QPreviousStudiesWidget::insertStudyToTree(Study *study)
 {
     QTreeWidgetItem *item = new QTreeWidgetItem();
 
@@ -194,7 +194,6 @@ void QPreviousStudiesWidget::insertStudyToTree(Study *study, QString pacsID)
     // Guardem informació relacionada amb l'estudi per facilitar la feina
     StudyInfo *relatedStudyInfo = new StudyInfo;
     relatedStudyInfo->item = item;
-    relatedStudyInfo->pacsID = pacsID;
     relatedStudyInfo->study = study;
     relatedStudyInfo->downloadButton = downloadButton;
     relatedStudyInfo->statusIcon = status;
@@ -220,7 +219,11 @@ void QPreviousStudiesWidget::insertStudiesToTree(QList<Study*> studiesList, QHas
     {
         foreach (Study *study, studiesList)
         {
-            insertStudyToTree(study, hashPacsIDOfStudyInstanceUID[study->getInstanceUID()]);
+            if (study->getDICOMSource().getRetrievePACS().count() > 0)
+            {
+                //Sempre hauria de ser més gran de 0
+                insertStudyToTree(study);
+            }
         }
 
         updateList();
@@ -243,7 +246,7 @@ void QPreviousStudiesWidget::retrieveAndLoadStudy(const QString &studyInstanceUI
 
     studyInfo->downloadButton->setEnabled(false);
 
-    m_queryScreen->retrieveStudy(QInputOutputPacsWidget::Load, studyInfo->pacsID, studyInfo->study);
+    m_queryScreen->retrieveStudy(QInputOutputPacsWidget::Load, studyInfo->study->getDICOMSource().getRetrievePACS().at(0).getID() , studyInfo->study);
 
     studyInfo->status = Pending;
 
