@@ -56,12 +56,11 @@ void test_AnatomicalPlane::getLabelFromPatientOrientation_ShouldReturnNotAvailab
 void test_AnatomicalPlane::getLabelFromPatientOrientation_ShouldReturnNotAvailable()
 {
     QFETCH(QString, string);
-    QFETCH(QString, result);
 
     PatientOrientation patientOrientation;
     patientOrientation.setDICOMFormattedPatientOrientation(string);
     
-    QCOMPARE(AnatomicalPlane::getLabelFromPatientOrientation(patientOrientation), result);
+    QCOMPARE(AnatomicalPlane::getLabelFromPatientOrientation(patientOrientation), tr("N/A"));
 }
 
 void test_AnatomicalPlane::getLabelFromPatientOrientation_ShouldReturnConcreteLabel_data()
@@ -114,22 +113,20 @@ void test_AnatomicalPlane::getPlaneTypeFromPatientOrientation_ShouldReturnConcre
 void test_AnatomicalPlane::setupShouldReturnNotAvailableData()
 {
     QTest::addColumn<QString>("string");
-    QTest::addColumn<QString>("result");
 
-    const QString NotAvailableResult = "N/A";
     const QString Separator = "\\";
     const QString AnyCorrectData1 = "A";
     const QString AnyCorrectData2 = "P";
 
-    QTest::newRow("empty") << "" << NotAvailableResult;
-    QTest::newRow("only separator") << Separator << NotAvailableResult;
-    QTest::newRow("more than one separator") << Separator + Separator << NotAvailableResult;
-    QTest::newRow("more than one separator with data") << AnyCorrectData1 + Separator + Separator + AnyCorrectData2 << NotAvailableResult;
-    QTest::newRow("only one data1") << Separator + AnyCorrectData2 << NotAvailableResult;
-    QTest::newRow("only one data2") << AnyCorrectData1 + Separator << NotAvailableResult;
-    QTest::newRow("2 invalid items") << "x\\x" << NotAvailableResult;
-    QTest::newRow("3 invalid items") << "x\\x\\x" << NotAvailableResult;
-    QTest::newRow("3 invalid (multivalued) items") << "asdf\\asdf\\asdf" << NotAvailableResult;
+    QTest::newRow("empty") << "";
+    QTest::newRow("only separator") << Separator;
+    QTest::newRow("more than one separator") << Separator + Separator;
+    QTest::newRow("more than one separator with data") << AnyCorrectData1 + Separator + Separator + AnyCorrectData2;
+    QTest::newRow("only one data1") << Separator + AnyCorrectData2;
+    QTest::newRow("only one data2") << AnyCorrectData1 + Separator;
+    QTest::newRow("2 invalid items") << "x\\x";
+    QTest::newRow("3 invalid items") << "x\\x\\x";
+    QTest::newRow("3 invalid (multivalued) items") << "asdf\\asdf\\asdf";
 }
 
 void test_AnatomicalPlane::setupShouldReturnConcreteLabelData()
