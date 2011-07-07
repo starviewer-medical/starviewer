@@ -128,16 +128,6 @@ Study* HangingProtocolImageSet::getPreviousStudyToDisplay()
     return m_previousStudyToDisplay;
 }
 
-void HangingProtocolImageSet::setPreviousStudyPacs(QString pacs)
-{
-    m_previousStudyPacs = pacs;
-}
-
-QString HangingProtocolImageSet::getPreviousStudyPacs()
-{
-    return m_previousStudyPacs;
-}
-
 void HangingProtocolImageSet::setPreviousImageSetReference(int imageSetNumber)
 {
     m_previousImageSetReference = imageSetNumber;
