@@ -40,7 +40,12 @@ const QString AnatomicalPlane::getLabel(AnatomicalPlaneType orientation)
 
 const QString AnatomicalPlane::getLabelFromPatientOrientation(const PatientOrientation &orientation)
 {
-    QString label;
+    return AnatomicalPlane::getLabel(getPlaneTypeFromPatientOrientation(orientation));
+}
+
+const AnatomicalPlane::AnatomicalPlaneType AnatomicalPlane::getPlaneTypeFromPatientOrientation(const PatientOrientation &orientation)
+{
+    AnatomicalPlaneType planeType;
     QString rowAxis = orientation.getRowDirectionLabel();
     QString columnAxis = orientation.getColumnDirectionLabel();
 
@@ -49,44 +54,44 @@ const QString AnatomicalPlane::getLabelFromPatientOrientation(const PatientOrien
         if ((rowAxis.startsWith(PatientOrientation::RightLabel) || rowAxis.startsWith(PatientOrientation::LeftLabel)) &&
             (columnAxis.startsWith(PatientOrientation::AnteriorLabel) || columnAxis.startsWith(PatientOrientation::PosteriorLabel)))
         {
-            label = AnatomicalPlane::getLabel(AnatomicalPlane::Axial);
+            planeType = AnatomicalPlane::Axial;
         }
         else if ((columnAxis.startsWith(PatientOrientation::RightLabel) || columnAxis.startsWith(PatientOrientation::LeftLabel)) &&
             (rowAxis.startsWith(PatientOrientation::AnteriorLabel) || rowAxis.startsWith(PatientOrientation::PosteriorLabel)))
         {
-            label = AnatomicalPlane::getLabel(AnatomicalPlane::Axial);
+            planeType = AnatomicalPlane::Axial;
         }
         else if ((rowAxis.startsWith(PatientOrientation::RightLabel) || rowAxis.startsWith(PatientOrientation::LeftLabel)) &&
             (columnAxis.startsWith(PatientOrientation::HeadLabel) || columnAxis.startsWith(PatientOrientation::FeetLabel)))
         {
-            label = AnatomicalPlane::getLabel(AnatomicalPlane::Coronal);
+            planeType = AnatomicalPlane::Coronal;
         }
         else if ((columnAxis.startsWith(PatientOrientation::RightLabel) || columnAxis.startsWith(PatientOrientation::LeftLabel)) &&
             (rowAxis.startsWith(PatientOrientation::HeadLabel) || rowAxis.startsWith(PatientOrientation::FeetLabel)))
         {
-            label = AnatomicalPlane::getLabel(AnatomicalPlane::Coronal);
+            planeType = AnatomicalPlane::Coronal;
         }
         else if ((rowAxis.startsWith(PatientOrientation::AnteriorLabel) || rowAxis.startsWith(PatientOrientation::PosteriorLabel)) &&
             (columnAxis.startsWith(PatientOrientation::HeadLabel) || columnAxis.startsWith(PatientOrientation::FeetLabel)))
         {
-            label = AnatomicalPlane::getLabel(AnatomicalPlane::Sagittal);
+            planeType = AnatomicalPlane::Sagittal;
         }
         else if ((columnAxis.startsWith(PatientOrientation::AnteriorLabel) || columnAxis.startsWith(PatientOrientation::PosteriorLabel)) &&
             (rowAxis.startsWith(PatientOrientation::HeadLabel) || rowAxis.startsWith(PatientOrientation::FeetLabel)))
         {
-            label = AnatomicalPlane::getLabel(AnatomicalPlane::Sagittal);
+            planeType = AnatomicalPlane::Sagittal;
         }
         else
         {
-            label = AnatomicalPlane::getLabel(AnatomicalPlane::Oblique);
+            planeType = AnatomicalPlane::Oblique;
         }
     }
     else
     {
-        label = AnatomicalPlane::getLabel(AnatomicalPlane::NotAvailable);
+        planeType = AnatomicalPlane::NotAvailable;
     }
 
-    return label;
+    return planeType;
 }
 
 } // End namespace udg
