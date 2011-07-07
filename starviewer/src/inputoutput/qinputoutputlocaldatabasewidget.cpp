@@ -134,8 +134,7 @@ void QInputOutputLocalDatabaseWidget::queryStudy(DicomMask queryMask)
     StatsWatcher::log("Cerca d'estudis a la base de dades local amb paràmetres: " + queryMask.getFilledMaskFields());
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-    m_studyTreeWidget->clear();
-    m_seriesListWidget->clear();
+    clear();
 
     patientStudyList = localDatabaseManager.queryPatientStudy(queryMask);
 
