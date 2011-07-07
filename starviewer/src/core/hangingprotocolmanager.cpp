@@ -57,13 +57,11 @@ void HangingProtocolManager::copyHangingProtocolRepository()
 QList<HangingProtocol*> HangingProtocolManager::searchHangingProtocols(Patient *patient)
 {
     QList<Study*> previousStudies;
-    QHash<QString, QString> originOfPreviousStudies;
 
-    return searchHangingProtocols(patient, previousStudies, originOfPreviousStudies);
+    return searchHangingProtocols(patient, previousStudies);
 }
 
-QList<HangingProtocol*> HangingProtocolManager::searchHangingProtocols(Patient *patient, const QList<Study*> &previousStudies,
-                                                                       const QHash<QString, QString> &originOfPreviousStudies)
+QList<HangingProtocol*> HangingProtocolManager::searchHangingProtocols(Patient *patient, const QList<Study*> &previousStudies)
 {
     QList<HangingProtocol*> outputHangingProtocolList;
 
@@ -80,7 +78,7 @@ QList<HangingProtocol*> HangingProtocolManager::searchHangingProtocols(Patient *
     {
         if (isModalityCompatible(hangingProtocol, patient))
         {
-            int numberOfFilledImageSets = setInputToHangingProtocolImageSets(hangingProtocol, allSeries, previousStudies, originOfPreviousStudies);
+            int numberOfFilledImageSets = setInputToHangingProtocolImageSets(hangingProtocol, allSeries, previousStudies);
 
             bool isValidHangingProtocol = false;
 
@@ -125,7 +123,7 @@ QList<HangingProtocol*> HangingProtocolManager::searchHangingProtocols(Patient *
 }
 
 int HangingProtocolManager::setInputToHangingProtocolImageSets(HangingProtocol *hangingProtocol, const QList<Series*> &inputSeries,
-                                                               const QList<Study*> &previousStudies, const QHash<QString, QString> &originOfPreviousStudies)
+                                                               const QList<Study*> &previousStudies)
 {
     int numberOfFilledImageSets = 0;
     // Còpia de les sèries perquè es van eliminant de la llista al ser assignades
@@ -172,7 +170,6 @@ int HangingProtocolManager::setInputToHangingProtocolImageSets(HangingProtocol *
                         ++numberOfFilledImageSets;
                         imageSet->setDownloaded(false);
                         imageSet->setPreviousStudyToDisplay(previousStudy);
-                        imageSet->setPreviousStudyPacs(originOfPreviousStudies[previousStudy->getInstanceUID()]);
                     }
                 }
             }
@@ -247,10 +244,12 @@ void HangingProtocolManager::applyHangingProtocol(HangingProtocol *hangingProtoc
             m_studiesDownloading->insert(hangingProtocolImageSet->getPreviousStudyToDisplay()->getInstanceUID(), structPreviousStudyDownloading);
             m_patient = patient;
 
-            if (!isDownloading)
+            if (!isDownloading && hangingProtocolImageSet->getPreviousStudyToDisplay()->getDICOMSource().getRetrievePACS().count() > 0)
             {
+                //En principi sempre hauríem de tenir algun PACS al DICOMSource
                 connect(m_patient, SIGNAL(patientFused()), SLOT(previousStudyDownloaded()));
-                m_previousStudiesManager->downloadStudy(hangingProtocolImageSet->getPreviousStudyToDisplay(), hangingProtocolImageSet->getPreviousStudyPacs());
+                m_previousStudiesManager->downloadStudy(hangingProtocolImageSet->getPreviousStudyToDisplay(),
+                                                        hangingProtocolImageSet->getPreviousStudyToDisplay()->getDICOMSource().getRetrievePACS().at(0).getID());
             }
         }
         else

@@ -58,7 +58,6 @@ HangingProtocol::HangingProtocol(const HangingProtocol *hangingProtocol)
         copiedImageSet->setIsPreviousStudy(imageSet->isPreviousStudy());
         copiedImageSet->setDownloaded(imageSet->isDownloaded());
         copiedImageSet->setPreviousStudyToDisplay(imageSet->getPreviousStudyToDisplay());
-        copiedImageSet->setPreviousStudyPacs(imageSet->getPreviousStudyPacs());
         copiedImageSet->setPreviousImageSetReference(imageSet->getPreviousImageSetReference());
         copiedImageSet->setImageNumberInPatientModality(imageSet->getImageNumberInPatientModality());
         copiedImageSet->setHangingProtocol(this);

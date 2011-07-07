@@ -32,8 +32,7 @@ public:
 
     /// Buscar els hanging protocols disponibles
     QList<HangingProtocol*> searchHangingProtocols(Patient *patient);
-    QList<HangingProtocol*> searchHangingProtocols(Patient *patient, const QList<Study*> &previousStudies,
-                                                   const QHash<QString, QString> &originOfPreviousStudies);
+    QList<HangingProtocol*> searchHangingProtocols(Patient *patient, const QList<Study*> &previousStudies);
 
     /// Aplica un hanging protocol concret, ja sigui via identificador o per instància
     void applyHangingProtocol(int hangingProtocolNumber, ViewersLayout *layout, Patient *patient);
@@ -78,8 +77,7 @@ private:
     Study* searchPreviousStudy(HangingProtocol *protocol, Study *referenceStudy, const QList<Study*> &previousStudies);
 
     /// Assigna una sèrie (i una imatge) vàlida a cada ImageSet. Retorna el número d'ImageSets que tenen input assignat.
-    int setInputToHangingProtocolImageSets(HangingProtocol *hangingProtocol, const QList<Series*> &inputSeries, const QList<Study*> &previousStudies,
-                                           const QHash<QString, QString> &originOfPreviousStudies);
+    int setInputToHangingProtocolImageSets(HangingProtocol *hangingProtocol, const QList<Series*> &inputSeries, const QList<Study*> &previousStudies);
 
     /// Fa una còpia del repositori de HP per poder-los modificar sense que el repositori es vegi afectat.
     void copyHangingProtocolRepository();

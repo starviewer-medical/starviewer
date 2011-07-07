@@ -89,12 +89,6 @@ public:
     /// Obte l'estudi previ a mostrar. Pot estar descarregat o no.
     Study* getPreviousStudyToDisplay();
 
-    /// Guarda el pacs on es troba l'estudi
-    void setPreviousStudyPacs(QString pacs);
-
-    /// Obté el pacs on es troba l'estudi
-    QString getPreviousStudyPacs();
-
     /// Posa l'ImageSet del qual és previ
     void setPreviousImageSetReference(int imageSetNumber);
 
@@ -139,9 +133,6 @@ private:
 
     /// Estudi previ a l'image set, sense descarregar
     Study *m_previousStudyToDisplay;
-
-    /// Pacs origen on es troba l'estdi
-    QString m_previousStudyPacs;
 
     /// Posa l'image set que té de referencia i del qual ha de ser previ
     int m_previousImageSetReference;
