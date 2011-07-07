@@ -17,11 +17,9 @@ namespace udg {
        1. Aplicar rotacions
        2. Aplicar flips
 
-    Les etiquetes d'orientació que es proporcionaran seran les corresponents a la part superior i esquerra
-    de la imatge. Els valors permesos seran R(right), L(left), A(anterior), P(posterior), H(head) i F(feet).
-
     Aquesta classe només contempla operacions possibles dins d'un mateix pla 2D, per tant no ens pot donar
     una fòrmula que passi una imatge adquirida en axial a sagital, per exemple.
+    En aquests casos, getNumberOfClockwiseTurnsToApply() i requiresHorizontalFlip() retornaran 0 i fals respectivament.
   */
 class ImageOrientationOperationsMapper {
 public:
@@ -65,7 +63,7 @@ private:
 
     /// QMap per guardar les operacions de rotació i flip corresponents segons les orientacions donades.
     /// La clau és una QString en la que guardarem la orientació inicial i desitjada en el següent format:
-    /// "initialTopLabel\\initialLeftLabel-desiredTopLabel\\desiredLeftLabel"
+    /// "initialRowDirectionLabel\\initialColumnDirectionLabel-desiredRowDirectionLabel\\desiredColumnDirectionLabel"
     /// El valor de cada clau serà una QString amb el número de rotacions seguida de un valor que indica
     /// si es fa flip o no, separats per una coma, com per exemple "3,false"
     QMap<QString, QString> m_orientationMappingTable;
