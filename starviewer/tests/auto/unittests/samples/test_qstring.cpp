@@ -5,11 +5,11 @@ class test_QString : public QObject {
 Q_OBJECT
 
 private slots:
-    void toUpper_ShouldReturnAnUppercaseCopyOfTheString();
     void toUpper_ShouldReturnAnUppercaseCopyOfTheString_data();
+    void toUpper_ShouldReturnAnUppercaseCopyOfTheString();
 
-    void prepend_ShouldPrependTheFirstStringToTheBeginningOfTheSecondString();
     void prepend_ShouldPrependTheFirstStringToTheBeginningOfTheSecondString_data();
+    void prepend_ShouldPrependTheFirstStringToTheBeginningOfTheSecondString();
 };
 
 void test_QString::toUpper_ShouldReturnAnUppercaseCopyOfTheString()
