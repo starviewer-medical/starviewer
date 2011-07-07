@@ -169,10 +169,10 @@ void test_ImageOrientationOperationsMapper::setupClockWiseAndFlipData()
     QTest::newRow("HA->FP") << "H" << "A" << "F" << "P" << 2 << false;
     QTest::newRow("HA->HP") << "H" << "A" << "H" << "P" << 2 << true;
 
-    QTest::newRow("HP->AF") << "H" << "P" << "A" << "F" << 1 << true;
+    QTest::newRow("HP->AF") << "H" << "P" << "A" << "F" << 3 << true;
     QTest::newRow("HP->AH") << "H" << "P" << "A" << "H" << 1 << false;
     QTest::newRow("HP->PF") << "H" << "P" << "P" << "F" << 3 << false;
-    QTest::newRow("HP->PH") << "H" << "P" << "P" << "H" << 3 << true;
+    QTest::newRow("HP->PH") << "H" << "P" << "P" << "H" << 1 << true;
     QTest::newRow("HP->FA") << "H" << "P" << "F" << "A" << 2 << false;
     QTest::newRow("HP->HA") << "H" << "P" << "H" << "A" << 2 << true;
     QTest::newRow("HP->FP") << "H" << "P" << "F" << "P" << 0 << true;
