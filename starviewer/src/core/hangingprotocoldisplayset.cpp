@@ -56,7 +56,7 @@ void HangingProtocolDisplaySet::setPosition(QString position)
     m_position = position;
 }
 
-void HangingProtocolDisplaySet::setPatientOrientation(QString orientation)
+void HangingProtocolDisplaySet::setPatientOrientation(const PatientOrientation &orientation)
 {
     m_patientOrientation = orientation;
 }
@@ -76,7 +76,7 @@ QString HangingProtocolDisplaySet::getPosition() const
     return m_position;
 }
 
-QString HangingProtocolDisplaySet::getPatientOrientation() const
+PatientOrientation HangingProtocolDisplaySet::getPatientOrientation() const
 {
     return m_patientOrientation;
 }

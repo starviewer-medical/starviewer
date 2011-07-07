@@ -30,6 +30,7 @@ class ImagePlane;
 class ImageOrientationOperationsMapper;
 class VolumeReaderJob;
 class QViewerCommand;
+class PatientOrientation;
 
 /**
     Classe base per als visualitzadors 2D.
@@ -293,7 +294,7 @@ public slots:
     /// Aplica les transformacions 2D necessàries sobre la imatge actual perquè aquesta tingui la orientació indicada
     /// La orientació indicada ha de ser possible de conseguir mitjançant operacions de rotació i flip. En cas que no
     /// existeixin combinacions possibles, no es canviarà la orientació de la imatge
-    void setImageOrientation(const QString &orientation);
+    void setImageOrientation(const PatientOrientation &desiredPatientOrientation);
 
 signals:
     /// Envia la nova llesca en la que ens trobem
