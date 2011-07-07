@@ -100,7 +100,7 @@ void SynchronizeTool::setIncrement(int slice)
 
     if (configuration && configuration->getValue("Slicing").toBool())
     {
-        if (m_lastView.compare(m_q2dviewer->getCurrentPlaneProjectionLabel()) == 0)
+        if (m_lastView.compare(m_q2dviewer->getCurrentAnatomicalPlaneLabel()) == 0)
         {
             double currentSpacingBetweenSlices = m_q2dviewer->getCurrentSpacingBetweenSlices();
             DEBUG_LOG(QString("setIncrement::currentSpacingBetweenSlices = %1").arg(currentSpacingBetweenSlices));
@@ -114,12 +114,12 @@ void SynchronizeTool::setIncrement(int slice)
             double increment = (slice - m_lastSlice) * currentSpacingBetweenSlices;
             m_lastSlice = slice;
             disconnect(m_toolData, SIGNAL(sliceChanged()), this, SLOT(applySliceChanges()));
-            this->m_toolData->setIncrement(increment, m_q2dviewer->getCurrentPlaneProjectionLabel());
+            this->m_toolData->setIncrement(increment, m_q2dviewer->getCurrentAnatomicalPlaneLabel());
             connect(m_toolData, SIGNAL(sliceChanged()), SLOT(applySliceChanges()));
         }
         else // No es posa l'increment però s'actualitza la vista
         {
-            m_lastView = m_q2dviewer->getCurrentPlaneProjectionLabel();
+            m_lastView = m_q2dviewer->getCurrentAnatomicalPlaneLabel();
         }
     }
 }
@@ -166,7 +166,7 @@ void SynchronizeTool::applySliceChanges()
 
     if (configuration && configuration->getValue("Slicing").toBool())
     {
-        if(m_q2dviewer->getCurrentPlaneProjectionLabel().compare(m_toolData->getIncrementView()) == 0)
+        if(m_q2dviewer->getCurrentAnatomicalPlaneLabel().compare(m_toolData->getIncrementView()) == 0)
         {
             double currentSpacingBetweenSlices = m_q2dviewer->getCurrentSpacingBetweenSlices();
             DEBUG_LOG(QString("applySliceChanges::currentSpacingBetweenSlices = %1").arg(currentSpacingBetweenSlices));
@@ -226,7 +226,7 @@ void SynchronizeTool::applyPanChanges()
 void SynchronizeTool::reset()
 {
     m_lastSlice = m_q2dviewer->getCurrentSlice();
-    m_lastView = m_q2dviewer->getCurrentPlaneProjectionLabel();
+    m_lastView = m_q2dviewer->getCurrentAnatomicalPlaneLabel();
     m_roundLostSpacingBetweenSlices = 0.0;
 }
 
