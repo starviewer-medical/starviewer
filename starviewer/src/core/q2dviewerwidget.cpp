@@ -75,7 +75,7 @@ void Q2DViewerWidget::createConnections()
 
 void Q2DViewerWidget::updateProjectionLabel()
 {
-    m_viewText->setText(m_2DView->getCurrentPlaneProjectionLabel());
+    m_viewText->setText(m_2DView->getCurrentAnatomicalPlaneLabel());
 }
 
 void Q2DViewerWidget::setSliderBarWidgetsEnabledFromViewerStatus()

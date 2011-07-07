@@ -197,7 +197,7 @@ public:
 
     /// Ens diu quin és el pla de projecció de la imatge que es veu en aquell moment
     /// Valors: AXIAL, SAGITAL, CORONAL, OBLIQUE o N/A
-    QString getCurrentPlaneProjectionLabel() const;
+    QString getCurrentAnatomicalPlaneLabel() const;
 
     /// Obté els índexs dels eixos de coordenades corresponents a la vista 2D indicada
     /// Aquests índexs indiquen com hem d'indexar una coordenada 3D per obtenir
