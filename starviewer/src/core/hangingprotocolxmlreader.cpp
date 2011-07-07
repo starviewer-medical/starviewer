@@ -3,6 +3,7 @@
 #include "hangingprotocol.h"
 #include "hangingprotocoldisplayset.h"
 #include "logging.h"
+#include "patientorientation.h"
 // Qt's
 #include <QFile>
 #include <QMessageBox>
@@ -227,7 +228,9 @@ HangingProtocolDisplaySet* HangingProtocolXMLReader::readDisplaySet(QXmlStreamRe
         }
         else if (reader->name() == "patientOrientation")
         {
-            displaySet->setPatientOrientation(reader->readElementText());
+            PatientOrientation patientOrientation;
+            patientOrientation.setDICOMFormattedPatientOrientation(reader->readElementText());
+            displaySet->setPatientOrientation(patientOrientation);
         }
         else if (reader->name() == "reconstruction")
         {
