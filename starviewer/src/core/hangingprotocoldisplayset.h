@@ -3,6 +3,8 @@
 
 #include <QObject>
 
+#include "patientorientation.h"
+
 namespace udg {
 
 class HangingProtocol;
@@ -37,7 +39,7 @@ public:
     void setPosition(QString position);
 
     /// Posar la posició del pacient
-    void setPatientOrientation(QString string);
+    void setPatientOrientation(const PatientOrientation &orientation);
 
     /// Posar la reconstruccio (axial, sagital, coronal)
     void setReconstruction(QString reconstruction);
@@ -55,7 +57,7 @@ public:
     QString getPosition() const;
 
     /// Obtenir la posició del pacient
-    QString getPatientOrientation() const;
+    PatientOrientation getPatientOrientation() const;
 
     /// Obtenir la reconstruccio
     QString getReconstruction() const;
@@ -125,7 +127,7 @@ private:
     QString m_position;
 
     /// Orientacio del pacient
-    QString m_patientOrientation;
+    PatientOrientation m_patientOrientation;
 
     /// Reconstruccio
     QString m_reconstruction;

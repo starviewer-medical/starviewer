@@ -1717,28 +1717,28 @@ void Q2DViewer::updateSliceAnnotationInformation()
 
                 // S'han de seguir les recomanacions IHE de presentació d'imatges de Mammografia
                 // IHE Techincal Framework Vol. 2 revision 8.0, apartat 4.16.4.2.2.1.1.2 Image Orientation and Justification
-                QString desiredOrientation;
+                PatientOrientation desiredOrientation;
                 QString laterality = image->getImageLaterality();
                 if (projection == "CC" || projection == "XCC" || projection == "XCCL" || projection == "XCCM" || projection == "FB")
                 {
                     if (laterality == PatientOrientation::LeftLabel)
                     {
-                        desiredOrientation = PatientOrientation::AnteriorLabel + "\\" + PatientOrientation::RightLabel;
+                        desiredOrientation.setLabels(PatientOrientation::AnteriorLabel, PatientOrientation::RightLabel);
                     }
                     else if (laterality == PatientOrientation::RightLabel)
                     {
-                        desiredOrientation = PatientOrientation::PosteriorLabel + "\\" + PatientOrientation::LeftLabel;
+                        desiredOrientation.setLabels(PatientOrientation::PosteriorLabel, PatientOrientation::LeftLabel);
                     }
                 }
                 else if (projection == "MLO" || projection == "ML" || projection == "LM" || projection == "LMO" || projection == "SIO")
                 {
                     if (laterality == PatientOrientation::LeftLabel)
                     {
-                        desiredOrientation = PatientOrientation::AnteriorLabel + "\\" + PatientOrientation::FeetLabel;
+                        desiredOrientation.setLabels(PatientOrientation::AnteriorLabel, PatientOrientation::FeetLabel);
                     }
                     else if (laterality == PatientOrientation::RightLabel)
                     {
-                        desiredOrientation = PatientOrientation::PosteriorLabel + "\\" + PatientOrientation::FeetLabel;
+                        desiredOrientation.setLabels(PatientOrientation::PosteriorLabel, PatientOrientation::FeetLabel);
                     }
                 }
                 else
@@ -2320,18 +2320,11 @@ void Q2DViewer::setAlignPosition(AlignPosition alignPosition)
     }
 }
 
-void Q2DViewer::setImageOrientation(const QString &orientation)
+void Q2DViewer::setImageOrientation(const PatientOrientation &desiredPatientOrientation)
 {
     PatientOrientation initialPatientOrientation;
     QVector<QString> labels = getCurrentDisplayedImageOrientationLabels();
     initialPatientOrientation.setLabels(labels[2], labels[3]);
-    
-    PatientOrientation desiredPatientOrientation;
-    QStringList desiredOrientationList = orientation.split("\\");
-    if (desiredOrientationList.count() == 2)
-    {
-        desiredPatientOrientation.setLabels(desiredOrientationList.at(0), desiredOrientationList.at(1));
-    }
     
     m_imageOrientationOperationsMapper->setInitialOrientation(initialPatientOrientation);
     m_imageOrientationOperationsMapper->setDesiredOrientation(desiredPatientOrientation);
