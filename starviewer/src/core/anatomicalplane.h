@@ -18,8 +18,9 @@ public:
     /// Donada una orientació anatòmica, ens retorna la corresponent etiqueta per mostrar a l'interfície
     static const QString getLabel(AnatomicalPlaneType orientation);
 
-    /// Ens retorna l'etiqueta del pla anatòmic que es correspon amb el PatientOrientation donat
+    /// Ens retorna l'etiqueta/tipus del pla anatòmic que es correspon amb el PatientOrientation donat
     static const QString getLabelFromPatientOrientation(const PatientOrientation &orientation);
+    static const AnatomicalPlaneType getPlaneTypeFromPatientOrientation(const PatientOrientation &orientation);
 };
 
 } // End namespace udg
