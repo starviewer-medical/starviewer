@@ -304,7 +304,7 @@ QVector<QString> Q2DViewer::getCurrentDisplayedImageOrientationLabels() const
     return labelsVector;
 }
 
-QString Q2DViewer::getCurrentPlaneProjectionLabel() const
+QString Q2DViewer::getCurrentAnatomicalPlaneLabel() const
 {
     QVector<QString> labels = this->getCurrentDisplayedImageOrientationLabels();
     PatientOrientation patientOrienation;

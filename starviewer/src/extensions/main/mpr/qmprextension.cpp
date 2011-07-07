@@ -364,7 +364,7 @@ void QMPRExtension::showViewerInformation(bool show)
 
 void QMPRExtension::updateProjectionLabel()
 {
-    m_projectionLabel->setText(m_axial2DView->getCurrentPlaneProjectionLabel());
+    m_projectionLabel->setText(m_axial2DView->getCurrentAnatomicalPlaneLabel());
 }
 
 void QMPRExtension::switchHorizontalLayout()
