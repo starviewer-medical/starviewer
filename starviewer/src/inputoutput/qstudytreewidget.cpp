@@ -87,7 +87,9 @@ void QStudyTreeWidget::insertSeriesList(const QString &studyInstanceUID, QList<S
     foreach (Series *series, seriesList)
     {
         studyItem->addChild(fillSeries(series));
-        //Afegim a la sèrie quin és l'estudi pare, de manera que quan amb algun mètode retornem la sèrie, la retornem amb la informació completa
+        //FIXME: L'objecte Series hereda de QObject, quan se li fa un setParentStudy, com a parent del QObject de Series se li assigna l'objecte study
+        //aquesta assignació falla si series i study han estat creat en threads diferents com podria ser la cerca el PACS. Dos QObjects per ser pare i fill han
+        //de ser del mateix thread
         series->setParentStudy(getStudyByDICOMItemID(studyItem->text(DICOMItemID).toInt()));
     }
 }
@@ -105,6 +107,9 @@ void QStudyTreeWidget::insertImageList(const QString &studyInstanceUID, const QS
     foreach (Image *image, imageList)
     {
         m_addedImagesByDICOMItemID[m_nextDICOMItemIDOfImage] = image;
+        //FIXME: L'objecte Image hereda de QObject, quan se li fa un setParentSeries, com a parent del QObject d'Image se li assigna l'objecte series
+        //aquesta assignació falla si series i image han estat creat en threads diferents com podria ser la cerca el PACS. Dos QObjects per ser pare i fill han
+        //de ser del mateix thread
         image->setParentSeries(getSeriesByDICOMItemID(seriesItem->text(DICOMItemID).toInt()));
 
         QTreeWidgetItem *newImageItem = new QTreeWidgetItem();
@@ -284,10 +289,17 @@ void QStudyTreeWidget::setCurrentSeries(const QString &studyInstanceUID, const Q
 void QStudyTreeWidget::clear()
 {
     m_studyTreeView->clear();
+    QList<Patient*> patientList;
+
+    foreach (Study *study, m_addedStudiesByDICOMItemID)
+    {
+        patientList.append(study->getParentPatient());
+    }
 
     qDeleteAll(m_addedImagesByDICOMItemID);
     qDeleteAll(m_adddSeriesByDICOMItemID);
     qDeleteAll(m_addedStudiesByDICOMItemID);
+    qDeleteAll(patientList);
 
     m_addedStudiesByDICOMItemID.clear();
     m_adddSeriesByDICOMItemID.clear();
