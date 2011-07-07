@@ -85,7 +85,7 @@ void QPreviousStudiesWidget::searchPreviousStudiesOf(Study *study)
 
     initializeSearch();
     m_patient = study->getParentPatient();
-    m_previousStudiesManager->queryPreviousStudies(study);
+    m_previousStudiesManager->queryMergedPreviousStudies(study);
 }
 
 void QPreviousStudiesWidget::searchStudiesOf(Patient *patient)
@@ -94,7 +94,7 @@ void QPreviousStudiesWidget::searchStudiesOf(Patient *patient)
 
     initializeSearch();
     m_patient = patient;
-    m_previousStudiesManager->queryStudies(patient);
+    m_previousStudiesManager->queryMergedStudies(patient);
 }
 
 void QPreviousStudiesWidget::initializeSearch()
@@ -116,7 +116,7 @@ void QPreviousStudiesWidget::initializeSearch()
 
 void QPreviousStudiesWidget::createConnections()
 {
-    connect(m_previousStudiesManager, SIGNAL(queryPreviousStudiesFinished(QList<Study*>, QHash<QString, QString>)), this,
+    connect(m_previousStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>, QHash<QString, QString>)), this,
             SLOT(insertStudiesToTree(QList<Study*>, QHash<QString, QString>)));
     connect(m_signalMapper, SIGNAL(mapped(const QString &)), this, SLOT(retrieveAndLoadStudy(const QString &)));
     connect(m_queryScreen, SIGNAL(studyRetrieveStarted(QString)), this, SLOT(studyRetrieveStarted(QString)));

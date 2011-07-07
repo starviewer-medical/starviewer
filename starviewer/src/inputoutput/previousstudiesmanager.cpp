@@ -27,14 +27,14 @@ PreviousStudiesManager::~PreviousStudiesManager()
     cancelCurrentQuery();
 }
 
-void PreviousStudiesManager::queryStudies(Patient *patient)
+void PreviousStudiesManager::queryMergedStudies(Patient *patient)
 {
     INFO_LOG("Es buscaran els estudis del pacient " + patient->getFullName() + " amb ID " + patient->getID());
 
     this->makeAsynchronousStudiesQuery(patient);
 }
 
-void PreviousStudiesManager::queryPreviousStudies(Study *study)
+void PreviousStudiesManager::queryMergedPreviousStudies(Study *study)
 {
     INFO_LOG("Es buscaran els estudis previs del pacient " + study->getParentPatient()->getFullName() + " amb ID " + study->getParentPatient()->getID() +
     " de l'estudi " + study->getInstanceUID() + " fet a la data " + study->getDate().toString());
@@ -224,7 +224,7 @@ void PreviousStudiesManager::errorQueringPACS(QueryPacsJob *queryPACSJob)
         if (!m_pacsDeviceIDErrorEmited.contains(queryPACSJob->getPacsDevice().getID()))
         {
             m_pacsDeviceIDErrorEmited.append(queryPACSJob->getPacsDevice().getID());
-            emit errorQueryingPreviousStudies(queryPACSJob->getPacsDevice());
+            emit errorQueryingStudies(queryPACSJob->getPacsDevice());
         }
     }
 }
@@ -233,7 +233,7 @@ void PreviousStudiesManager::queryFinished()
 {
     // Quan totes les query han acabat és quant fem l'emit amb els estudis previs trobats. No podem emetre els resultats que anem rebent,
     // perquè hem de fer un merge del resultats rebuts, per no tenir duplicats (Estudis del matiex pacient que estiguin a més d'un PACS)
-    emit queryPreviousStudiesFinished(m_mergedStudyList, m_mergedHashPacsIDOfStudyInstanceUID);
+    emit queryStudiesFinished(m_mergedStudyList, m_mergedHashPacsIDOfStudyInstanceUID);
 }
 
 bool PreviousStudiesManager::isStudyInMergedStudyList(Study *study)

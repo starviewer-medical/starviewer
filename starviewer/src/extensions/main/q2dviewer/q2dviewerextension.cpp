@@ -246,18 +246,18 @@ void Q2DViewerExtension::searchPreviousStudiesWithHangingProtocols()
     m_previousStudiesManager = new PreviousStudiesManager();
 
     // 3.- Es connecta el signal per quan acabi
-    connect(m_previousStudiesManager, SIGNAL(queryPreviousStudiesFinished(QList<Study*>, QHash<QString, QString>)),
+    connect(m_previousStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>, QHash<QString, QString>)),
             SLOT(addPreviousHangingProtocols(QList<Study*>, QHash<QString, QString>)));
 
     // 4.- Es busquen els previs
     if (m_mainVolume)
     {
-        m_previousStudiesManager->queryPreviousStudies(m_mainVolume->getStudy());
+        m_previousStudiesManager->queryMergedPreviousStudies(m_mainVolume->getStudy());
     }
     else
     {
         // En el cas que no tinguéssim un input vàlid, ho farem a partir del pacient actual
-        m_previousStudiesManager->queryPreviousStudies(m_patient->getStudies().first());
+        m_previousStudiesManager->queryMergedPreviousStudies(m_patient->getStudies().first());
     }
 }
 
@@ -287,7 +287,7 @@ void Q2DViewerExtension::setupDefaultLeftButtonTool()
 
 void Q2DViewerExtension::addPreviousHangingProtocols(QList<Study*> studies, QHash<QString, QString> qhash)
 {
-    disconnect(m_previousStudiesManager, SIGNAL(queryPreviousStudiesFinished(QList<Study*>, QHash<QString, QString>)), this,
+    disconnect(m_previousStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>, QHash<QString, QString>)), this,
                SLOT(addPreviousHangingProtocols(QList<Study*>, QHash<QString, QString>)));
 
     QList<HangingProtocol*> hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient, studies, qhash);
