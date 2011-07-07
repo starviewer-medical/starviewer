@@ -8,27 +8,27 @@ class test_AnatomicalPlane : public QObject {
 Q_OBJECT
 
 private slots:
-    void getPlaneOrientationLabel_ShouldReturnRightLabel_data();
-    void getPlaneOrientationLabel_ShouldReturnRightLabel();
+    void getPlaneOrientationLabel_ShouldReturnExpectedLabel_data();
+    void getPlaneOrientationLabel_ShouldReturnExpectedLabel();
 
-    void getLabelFromPatientOrientation_ShouldReturnNAOrEmpty_data();
-    void getLabelFromPatientOrientation_ShouldReturnNAOrEmpty();
-    void getLabelFromPatientOrientation_ShouldReturnConcretLabel_data();
-    void getLabelFromPatientOrientation_ShouldReturnConcretLabel();
+    void getLabelFromPatientOrientation_ShouldReturnNotAvailable_data();
+    void getLabelFromPatientOrientation_ShouldReturnNotAvailable();
+    void getLabelFromPatientOrientation_ShouldReturnConcreteLabel_data();
+    void getLabelFromPatientOrientation_ShouldReturnConcreteLabel();
 
-    void getPlaneTypeFromPatientOrientation_ShouldReturnNAOrEmpty_data();
-    void getPlaneTypeFromPatientOrientation_ShouldReturnNAOrEmpty();
-    void getPlaneTypeFromPatientOrientation_ShouldReturnConcretLabel_data();
-    void getPlaneTypeFromPatientOrientation_ShouldReturnConcretLabel();
+    void getPlaneTypeFromPatientOrientation_ShouldReturnNotAvailable_data();
+    void getPlaneTypeFromPatientOrientation_ShouldReturnNotAvailable();
+    void getPlaneTypeFromPatientOrientation_ShouldReturnConcreteLabel_data();
+    void getPlaneTypeFromPatientOrientation_ShouldReturnConcreteLabel();
 
 private:
-    void setupShouldReturnNAOrEmptyData();
-    void setupShouldReturnConcretLabelData();
+    void setupShouldReturnNotAvailableData();
+    void setupShouldReturnConcreteLabelData();
 };
 
 Q_DECLARE_METATYPE(AnatomicalPlane::AnatomicalPlaneType);
 
-void test_AnatomicalPlane::getPlaneOrientationLabel_ShouldReturnRightLabel_data()
+void test_AnatomicalPlane::getPlaneOrientationLabel_ShouldReturnExpectedLabel_data()
 {
     QTest::addColumn<AnatomicalPlane::AnatomicalPlaneType>("planeType");
     QTest::addColumn<QString>("planeLabel");
@@ -40,7 +40,7 @@ void test_AnatomicalPlane::getPlaneOrientationLabel_ShouldReturnRightLabel_data(
     QTest::newRow("NotAvailable") << AnatomicalPlane::NotAvailable << tr("N/A");
 }
 
-void test_AnatomicalPlane::getPlaneOrientationLabel_ShouldReturnRightLabel()
+void test_AnatomicalPlane::getPlaneOrientationLabel_ShouldReturnExpectedLabel()
 {
     QFETCH(AnatomicalPlane::AnatomicalPlaneType, planeType);
     QFETCH(QString, planeLabel);
@@ -48,12 +48,12 @@ void test_AnatomicalPlane::getPlaneOrientationLabel_ShouldReturnRightLabel()
     QCOMPARE(AnatomicalPlane::getLabel(planeType), planeLabel);
 }
 
-void test_AnatomicalPlane::getLabelFromPatientOrientation_ShouldReturnNAOrEmpty_data()
+void test_AnatomicalPlane::getLabelFromPatientOrientation_ShouldReturnNotAvailable_data()
 {
-    this->setupShouldReturnNAOrEmptyData();
+    this->setupShouldReturnNotAvailableData();
 }
 
-void test_AnatomicalPlane::getLabelFromPatientOrientation_ShouldReturnNAOrEmpty()
+void test_AnatomicalPlane::getLabelFromPatientOrientation_ShouldReturnNotAvailable()
 {
     QFETCH(QString, string);
     QFETCH(QString, result);
@@ -64,12 +64,12 @@ void test_AnatomicalPlane::getLabelFromPatientOrientation_ShouldReturnNAOrEmpty(
     QCOMPARE(AnatomicalPlane::getLabelFromPatientOrientation(patientOrientation), result);
 }
 
-void test_AnatomicalPlane::getLabelFromPatientOrientation_ShouldReturnConcretLabel_data()
+void test_AnatomicalPlane::getLabelFromPatientOrientation_ShouldReturnConcreteLabel_data()
 {
-    this->setupShouldReturnConcretLabelData();
+    this->setupShouldReturnConcreteLabelData();
 }
 
-void test_AnatomicalPlane::getLabelFromPatientOrientation_ShouldReturnConcretLabel()
+void test_AnatomicalPlane::getLabelFromPatientOrientation_ShouldReturnConcreteLabel()
 {
     QFETCH(QString, string);
     QFETCH(QString, labelResult);
@@ -80,12 +80,12 @@ void test_AnatomicalPlane::getLabelFromPatientOrientation_ShouldReturnConcretLab
     QCOMPARE(AnatomicalPlane::getLabelFromPatientOrientation(patientOrientation), labelResult);
 }
 
-void test_AnatomicalPlane::getPlaneTypeFromPatientOrientation_ShouldReturnNAOrEmpty_data()
+void test_AnatomicalPlane::getPlaneTypeFromPatientOrientation_ShouldReturnNotAvailable_data()
 {
-    this->setupShouldReturnNAOrEmptyData();
+    this->setupShouldReturnNotAvailableData();
 }
 
-void test_AnatomicalPlane::getPlaneTypeFromPatientOrientation_ShouldReturnNAOrEmpty()
+void test_AnatomicalPlane::getPlaneTypeFromPatientOrientation_ShouldReturnNotAvailable()
 {
     QFETCH(QString, string);
 
@@ -95,12 +95,12 @@ void test_AnatomicalPlane::getPlaneTypeFromPatientOrientation_ShouldReturnNAOrEm
     QCOMPARE(AnatomicalPlane::getPlaneTypeFromPatientOrientation(patientOrientation), AnatomicalPlane::NotAvailable);
 }
 
-void test_AnatomicalPlane::getPlaneTypeFromPatientOrientation_ShouldReturnConcretLabel_data()
+void test_AnatomicalPlane::getPlaneTypeFromPatientOrientation_ShouldReturnConcreteLabel_data()
 {
-    this->setupShouldReturnConcretLabelData();
+    this->setupShouldReturnConcreteLabelData();
 }
 
-void test_AnatomicalPlane::getPlaneTypeFromPatientOrientation_ShouldReturnConcretLabel()
+void test_AnatomicalPlane::getPlaneTypeFromPatientOrientation_ShouldReturnConcreteLabel()
 {
     QFETCH(QString, string);
     QFETCH(AnatomicalPlane::AnatomicalPlaneType, typeResult);
@@ -111,7 +111,7 @@ void test_AnatomicalPlane::getPlaneTypeFromPatientOrientation_ShouldReturnConcre
     QCOMPARE(AnatomicalPlane::getPlaneTypeFromPatientOrientation(patientOrientation), typeResult);
 }
 
-void test_AnatomicalPlane::setupShouldReturnNAOrEmptyData()
+void test_AnatomicalPlane::setupShouldReturnNotAvailableData()
 {
     QTest::addColumn<QString>("string");
     QTest::addColumn<QString>("result");
@@ -132,7 +132,7 @@ void test_AnatomicalPlane::setupShouldReturnNAOrEmptyData()
     QTest::newRow("3 invalid (multivalued) items") << "asdf\\asdf\\asdf" << NotAvailableResult;
 }
 
-void test_AnatomicalPlane::setupShouldReturnConcretLabelData()
+void test_AnatomicalPlane::setupShouldReturnConcreteLabelData()
 {
     QTest::addColumn<QString>("string");
     QTest::addColumn<QString>("labelResult");
