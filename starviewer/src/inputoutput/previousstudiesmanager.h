@@ -33,13 +33,15 @@ public:
     PreviousStudiesManager();
     ~PreviousStudiesManager();
 
-    /// Fa una consulta d'estudis previs assíncrona als PACS que estiguin marcats per defecte
+    /// Fa una consulta d'estudis previs assíncrona als PACS que estiguin marcats per defecte, si dos del PACS retornen el mateix estudi només es tindrà en compte
+    /// el del primer PACS que ha respós
     /// Si ja s'estigués executant una consulta la cancel·laria i faria la nova consulta
-    void queryPreviousStudies(Study *study);
+    void queryMergedPreviousStudies(Study *study);
 
-    /// Fa una consulta d'estudis del pacient assíncrona als PACS que estiguin marcats per defecte
+    /// Fa una consulta d'estudis del pacient assíncrona als PACS que estiguin marcats per defecte, si dos del PACS retornen el mateix estudi només es tindrà en compte
+    /// el del primer PACS que ha respós
     /// Si ja s'estigués executant una consulta la cancel·laria i faria la nova consulta
-    void queryStudies(Patient *patient);
+    void queryMergedStudies(Patient *patient);
 
     /// Cancel·la les consultes actuals que s'estan executant, i cancel·la les consultes encuades per executar
     void cancelCurrentQuery();
@@ -52,10 +54,10 @@ public:
 
 signals:
     /// Signal que s'emet quan ha finalitzat la consulta d'estudis previs
-    void queryPreviousStudiesFinished(QList<Study*>, QHash<QString, QString> hashPacsIDOfStudyInstanceUID);
+    void queryStudiesFinished(QList<Study*>, QHash<QString, QString> hashPacsIDOfStudyInstanceUID);
 
     /// Signal que s'emet per indicar que s'ha produït un error a la consulta d'estudis d'un PACS
-    void errorQueryingPreviousStudies(PacsDevice pacs);
+    void errorQueryingStudies(PacsDevice pacs);
 
 private:
     /// Realitza una consulta dels estudis del pacient "patient" als PACS marcats per defecte.
