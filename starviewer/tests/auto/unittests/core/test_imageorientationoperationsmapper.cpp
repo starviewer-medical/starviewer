@@ -241,6 +241,71 @@ void test_ImageOrientationOperationsMapper::setupClockWiseAndFlipData()
     QTest::newRow("LP->RA") << "L" << "P" << "R" << "A" << 2 << false;
     QTest::newRow("LP->LA") << "L" << "P" << "L" << "A" << 2 << true;
     QTest::newRow("LP->RP") << "L" << "P" << "R" << "P" << 0 << true;
+
+    // Casos d'orientació coronal
+    QTest::newRow("RF->RH") << "R" << "F" << "R" << "H" << 2 << true;
+    QTest::newRow("RF->LF") << "R" << "F" << "L" << "F" << 0 << true;
+    QTest::newRow("RF->LH") << "R" << "F" << "L" << "H" << 2 << false;
+    QTest::newRow("RF->HR") << "R" << "F" << "H" << "R" << 1 << false;
+    QTest::newRow("RF->FR") << "R" << "F" << "F" << "R" << 1 << true;
+    QTest::newRow("RF->FL") << "R" << "F" << "F" << "L" << 3 << false;
+    QTest::newRow("RF->HL") << "R" << "F" << "H" << "L" << 3 << true;
+
+    QTest::newRow("RH->RF") << "R" << "H" << "R" << "F" << 2 << true;
+    QTest::newRow("RH->LF") << "R" << "H" << "L" << "F" << 2 << false;
+    QTest::newRow("RH->LH") << "R" << "H" << "L" << "H" << 0 << true;
+    QTest::newRow("RH->FR") << "R" << "H" << "F" << "R" << 1 << false;
+    QTest::newRow("RH->HR") << "R" << "H" << "H" << "R" << 1 << true;
+    QTest::newRow("RH->FL") << "R" << "H" << "F" << "L" << 3 << true;
+    QTest::newRow("RH->HL") << "R" << "H" << "H" << "L" << 3 << false;
+
+    QTest::newRow("LF->RF") << "L" << "F" << "R" << "F" << 0 << true;
+    QTest::newRow("LF->RH") << "L" << "F" << "R" << "H" << 2 << false;
+    QTest::newRow("LF->LH") << "L" << "F" << "L" << "H" << 2 << true;
+    QTest::newRow("LF->FR") << "L" << "F" << "F" << "R" << 3 << false;
+    QTest::newRow("LF->HR") << "L" << "F" << "H" << "R" << 3 << true;
+    QTest::newRow("LF->FL") << "L" << "F" << "F" << "L" << 1 << true;
+    QTest::newRow("LF->HL") << "L" << "F" << "H" << "L" << 1 << false;
+
+    QTest::newRow("LH->RF") << "L" << "H" << "R" << "F" << 2 << false;
+    QTest::newRow("LH->RH") << "L" << "H" << "R" << "H" << 0 << true;
+    QTest::newRow("LH->LF") << "L" << "H" << "L" << "F" << 2 << true;
+    QTest::newRow("LH->FR") << "L" << "H" << "F" << "R" << 3 << true;
+    QTest::newRow("LH->HR") << "L" << "H" << "H" << "R" << 3 << false;
+    QTest::newRow("LH->FL") << "L" << "H" << "F" << "L" << 1 << false;
+    QTest::newRow("LH->HL") << "L" << "H" << "H" << "L" << 1 << true;
+
+    QTest::newRow("FR->RF") << "F" << "R" << "R" << "F" << 1 << true;
+    QTest::newRow("FR->RH") << "F" << "R" << "R" << "H" << 3 << false;
+    QTest::newRow("FR->LF") << "F" << "R" << "L" << "F" << 1 << false;
+    QTest::newRow("FR->LH") << "F" << "R" << "L" << "H" << 3 << true;
+    QTest::newRow("FR->HR") << "F" << "R" << "H" << "R" << 0 << true;
+    QTest::newRow("FR->FL") << "F" << "R" << "F" << "L" << 2 << true;
+    QTest::newRow("FR->HL") << "F" << "R" << "H" << "L" << 2 << false;
+
+    QTest::newRow("FL->RF") << "F" << "L" << "R" << "F" << 1 << false;
+    QTest::newRow("FL->RH") << "F" << "L" << "R" << "H" << 3 << true;
+    QTest::newRow("FL->LF") << "F" << "L" << "L" << "F" << 1 << true;
+    QTest::newRow("FL->LH") << "F" << "L" << "L" << "H" << 3 << false;
+    QTest::newRow("FL->FR") << "F" << "L" << "F" << "R" << 2 << true;
+    QTest::newRow("FL->HR") << "F" << "L" << "H" << "R" << 2 << false;
+    QTest::newRow("FL->HL") << "F" << "L" << "H" << "L" << 0 << true;
+
+    QTest::newRow("HR->RF") << "H" << "R" << "R" << "F" << 3 << false;
+    QTest::newRow("HR->RH") << "H" << "R" << "R" << "H" << 1 << true;
+    QTest::newRow("HR->LF") << "H" << "R" << "L" << "F" << 3 << true;
+    QTest::newRow("HR->LH") << "H" << "R" << "L" << "H" << 1 << false;
+    QTest::newRow("HR->FR") << "H" << "R" << "F" << "R" << 0 << true;
+    QTest::newRow("HR->FL") << "H" << "R" << "F" << "L" << 2 << false;
+    QTest::newRow("HR->HL") << "H" << "R" << "H" << "L" << 2 << true;
+
+    QTest::newRow("HL->RF") << "H" << "L" << "R" << "F" << 3 << true;
+    QTest::newRow("HL->RH") << "H" << "L" << "R" << "H" << 1 << false;
+    QTest::newRow("HL->LF") << "H" << "L" << "L" << "F" << 3 << false;
+    QTest::newRow("HL->LH") << "H" << "L" << "L" << "H" << 1 << true;
+    QTest::newRow("HL->FR") << "H" << "L" << "F" << "R" << 2 << false;
+    QTest::newRow("HL->HR") << "H" << "L" << "H" << "R" << 2 << true;
+    QTest::newRow("HL->FL") << "H" << "L" << "F" << "L" << 0 << true;
 }
 
 DECLARE_TEST(test_ImageOrientationOperationsMapper)
