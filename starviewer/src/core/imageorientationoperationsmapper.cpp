@@ -206,7 +206,80 @@ void ImageOrientationOperationsMapper::initializeOrientationTable()
     m_orientationMappingTable.insert(LeftPosterior + "-" + LeftAnterior, Rotate180DegreesAndFlip);
     m_orientationMappingTable.insert(LeftPosterior + "-" + RightPosterior, Flip);
 
-    // TODO Faltarien els mapejos sobre la vista coronal!
+    // Mapeig de les operacions per la vista coronal
+    // Definim les etiquetes possibles d'orientació
+    const QString RightFeet(PatientOrientation::RightLabel + "\\" + PatientOrientation::FeetLabel);
+    const QString RightHead(PatientOrientation::RightLabel + "\\" + PatientOrientation::HeadLabel);
+    const QString LeftFeet(PatientOrientation::LeftLabel + "\\" + PatientOrientation::FeetLabel);
+    const QString LeftHead(PatientOrientation::LeftLabel + "\\" + PatientOrientation::HeadLabel);
+    const QString FeetRight(PatientOrientation::FeetLabel + "\\" + PatientOrientation::RightLabel);
+    const QString FeetLeft(PatientOrientation::FeetLabel + "\\" + PatientOrientation::LeftLabel);
+    const QString HeadRight(PatientOrientation::HeadLabel + "\\" + PatientOrientation::RightLabel);
+    const QString HeadLeft(PatientOrientation::HeadLabel + "\\" + PatientOrientation::LeftLabel);
+    
+    m_orientationMappingTable.insert(RightFeet + "-" + RightHead, Rotate180DegreesAndFlip);
+    m_orientationMappingTable.insert(RightFeet + "-" + LeftFeet, Flip);
+    m_orientationMappingTable.insert(RightFeet + "-" + LeftHead, Rotate180Degrees);
+    m_orientationMappingTable.insert(RightFeet + "-" + HeadRight, Rotate90Degrees);
+    m_orientationMappingTable.insert(RightFeet + "-" + FeetRight, Rotate90DegreesAndFlip);
+    m_orientationMappingTable.insert(RightFeet + "-" + FeetLeft, Rotate270Degrees);
+    m_orientationMappingTable.insert(RightFeet + "-" + HeadLeft, Rotate270DegreesAndFlip);
+
+    m_orientationMappingTable.insert(RightHead + "-" + RightFeet, Rotate180DegreesAndFlip);
+    m_orientationMappingTable.insert(RightHead + "-" + LeftFeet, Rotate180Degrees);
+    m_orientationMappingTable.insert(RightHead + "-" + LeftHead, Flip);
+    m_orientationMappingTable.insert(RightHead + "-" + FeetRight, Rotate90Degrees);
+    m_orientationMappingTable.insert(RightHead + "-" + HeadRight, Rotate90DegreesAndFlip);
+    m_orientationMappingTable.insert(RightHead + "-" + FeetLeft, Rotate270DegreesAndFlip);
+    m_orientationMappingTable.insert(RightHead + "-" + HeadLeft, Rotate270Degrees);
+
+    m_orientationMappingTable.insert(LeftFeet + "-" + RightFeet, Flip);
+    m_orientationMappingTable.insert(LeftFeet + "-" + RightHead, Rotate180Degrees);
+    m_orientationMappingTable.insert(LeftFeet + "-" + LeftHead, Rotate180DegreesAndFlip);
+    m_orientationMappingTable.insert(LeftFeet + "-" + FeetRight, Rotate270Degrees);
+    m_orientationMappingTable.insert(LeftFeet + "-" + HeadRight, Rotate270DegreesAndFlip);
+    m_orientationMappingTable.insert(LeftFeet + "-" + FeetLeft, Rotate90DegreesAndFlip);
+    m_orientationMappingTable.insert(LeftFeet + "-" + HeadLeft, Rotate90Degrees);
+
+    m_orientationMappingTable.insert(LeftHead + "-" + RightFeet, Rotate180Degrees);
+    m_orientationMappingTable.insert(LeftHead + "-" + RightHead, Flip);
+    m_orientationMappingTable.insert(LeftHead + "-" + LeftFeet, Rotate180DegreesAndFlip);
+    m_orientationMappingTable.insert(LeftHead + "-" + FeetRight, Rotate270DegreesAndFlip);
+    m_orientationMappingTable.insert(LeftHead + "-" + HeadRight, Rotate270Degrees);
+    m_orientationMappingTable.insert(LeftHead + "-" + FeetLeft, Rotate90Degrees);
+    m_orientationMappingTable.insert(LeftHead + "-" + HeadLeft, Rotate90DegreesAndFlip);
+
+    m_orientationMappingTable.insert(FeetRight + "-" + RightFeet, Rotate90DegreesAndFlip);
+    m_orientationMappingTable.insert(FeetRight + "-" + RightHead, Rotate270Degrees);
+    m_orientationMappingTable.insert(FeetRight + "-" + LeftFeet, Rotate90Degrees);
+    m_orientationMappingTable.insert(FeetRight + "-" + LeftHead, Rotate270DegreesAndFlip);
+    m_orientationMappingTable.insert(FeetRight + "-" + HeadRight, Flip);
+    m_orientationMappingTable.insert(FeetRight + "-" + FeetLeft, Rotate180DegreesAndFlip);
+    m_orientationMappingTable.insert(FeetRight + "-" + HeadLeft, Rotate180Degrees);
+
+    m_orientationMappingTable.insert(FeetLeft + "-" + RightFeet, Rotate90Degrees);
+    m_orientationMappingTable.insert(FeetLeft + "-" + RightHead, Rotate270DegreesAndFlip);
+    m_orientationMappingTable.insert(FeetLeft + "-" + LeftFeet, Rotate90DegreesAndFlip);
+    m_orientationMappingTable.insert(FeetLeft + "-" + LeftHead, Rotate270Degrees);
+    m_orientationMappingTable.insert(FeetLeft + "-" + FeetRight, Rotate180DegreesAndFlip);
+    m_orientationMappingTable.insert(FeetLeft + "-" + HeadRight, Rotate180Degrees);
+    m_orientationMappingTable.insert(FeetLeft + "-" + HeadLeft, Flip);
+
+    m_orientationMappingTable.insert(HeadRight + "-" + RightFeet, Rotate270Degrees);
+    m_orientationMappingTable.insert(HeadRight + "-" + RightHead, Rotate90DegreesAndFlip);
+    m_orientationMappingTable.insert(HeadRight + "-" + LeftFeet, Rotate270DegreesAndFlip);
+    m_orientationMappingTable.insert(HeadRight + "-" + LeftHead, Rotate90Degrees);
+    m_orientationMappingTable.insert(HeadRight + "-" + FeetRight, Flip);
+    m_orientationMappingTable.insert(HeadRight + "-" + FeetLeft, Rotate180Degrees);
+    m_orientationMappingTable.insert(HeadRight + "-" + HeadLeft, Rotate180DegreesAndFlip);
+
+    m_orientationMappingTable.insert(HeadLeft + "-" + RightFeet, Rotate270DegreesAndFlip);
+    m_orientationMappingTable.insert(HeadLeft + "-" + RightHead, Rotate90Degrees);
+    m_orientationMappingTable.insert(HeadLeft + "-" + LeftFeet, Rotate270Degrees);
+    m_orientationMappingTable.insert(HeadLeft + "-" + LeftHead, Rotate90DegreesAndFlip);
+    m_orientationMappingTable.insert(HeadLeft + "-" + FeetRight, Rotate180Degrees);
+    m_orientationMappingTable.insert(HeadLeft + "-" + HeadRight, Rotate180DegreesAndFlip);
+    m_orientationMappingTable.insert(HeadLeft + "-" + FeetLeft, Flip);
 }
 
 void ImageOrientationOperationsMapper::updateOperations()
