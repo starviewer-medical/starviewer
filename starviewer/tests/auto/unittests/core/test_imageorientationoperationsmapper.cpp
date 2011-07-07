@@ -93,15 +93,23 @@ void test_ImageOrientationOperationsMapper::setupClockWiseAndFlipData()
 
     QTest::newRow("HA->HA") << "H" << "A" << "H" << "A" << 0 << false;
     QTest::newRow("HP->HP") << "H" << "P" << "H" << "P" << 0 << false;
+    QTest::newRow("HR->HR") << "H" << "R" << "H" << "R" << 0 << false;
+    QTest::newRow("HL->HL") << "H" << "L" << "H" << "L" << 0 << false;
 
     QTest::newRow("FA->FA") << "F" << "A" << "F" << "A" << 0 << false;
     QTest::newRow("FP->FP") << "F" << "P" << "F" << "P" << 0 << false;
+    QTest::newRow("FR->FR") << "F" << "R" << "F" << "R" << 0 << false;
+    QTest::newRow("FL->FL") << "F" << "L" << "F" << "L" << 0 << false;
 
     QTest::newRow("RA->RA") << "R" << "A" << "R" << "A" << 0 << false;
     QTest::newRow("RP->RP") << "R" << "P" << "R" << "P" << 0 << false;
+    QTest::newRow("RF->RF") << "R" << "F" << "R" << "F" << 0 << false;
+    QTest::newRow("RH->RH") << "R" << "H" << "R" << "H" << 0 << false;
 
     QTest::newRow("LA->LA") << "L" << "A" << "L" << "A" << 0 << false;
     QTest::newRow("LP->LP") << "L" << "P" << "L" << "P" << 0 << false;
+    QTest::newRow("LF->LF") << "L" << "F" << "L" << "F" << 0 << false;
+    QTest::newRow("LH->LH") << "L" << "H" << "L" << "H" << 0 << false;
     
     // Casos en que hem d'aplicar alguna transformació
     // Casos d'orientació sagital
