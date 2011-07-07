@@ -59,6 +59,9 @@ signals:
     /// Signal que s'emet per indicar que s'ha produït un error a la consulta d'estudis d'un PACS
     void errorQueryingStudies(PacsDevice pacs);
 
+    /// Signal que s'emet per indicar que s'ha produït un error durant la descarrega d'un estudi (pot ser previ o no)
+    void errorDownloadingPreviousStudy(QString studyUID);
+
 private:
     /// Realitza una consulta dels estudis del pacient "patient" als PACS marcats per defecte.
     /// Si s'especifica una data "until" només cercarà els estudis fins la data especificada (aquesta inclosa).
