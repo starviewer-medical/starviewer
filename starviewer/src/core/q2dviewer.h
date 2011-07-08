@@ -469,9 +469,6 @@ private:
     /// Textes adicionals d'anotoació
     vtkTextActor *m_patientOrientationTextActor[4];
 
-    /// Mides (x,y) de la imatge que mostrarem com informació adicional
-    int m_imageSizeInformation[2];
-
     /// Factor de rotació. En sentit de les agulles del rellotge 0: 0º, 1: 90º, 2: 180º, 3: 270º.
     int m_rotateFactor;
 

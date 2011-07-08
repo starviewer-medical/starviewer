@@ -61,9 +61,6 @@ Q2DViewer::Q2DViewer(QWidget *parent)
     m_volumeReaderJob = NULL;
     m_inputFinishedCommand = NULL;
 
-    m_imageSizeInformation[0] = 0;
-    m_imageSizeInformation[1] = 0;
-
     // Filtre de thick slab + grayscale
     m_thickSlabProjectionFilter = vtkProjectionImageFilter::New();
     m_windowLevelLUTMapper = vtkImageMapToWindowLevelColors2::New();
@@ -1043,10 +1040,6 @@ void Q2DViewer::resetCamera()
                 cameraRoll = 180.0;
                 // Indiquem quina és la llesca inicial
                 initialSliceIndex = 0;
-
-                // Obtenim la mida de la matriu de la imatge (files i columnes)
-                m_imageSizeInformation[0] = m_mainVolume->getDimensions()[0];
-                m_imageSizeInformation[1] = m_mainVolume->getDimensions()[1];
                 break;
 
             case Sagital:
@@ -1067,10 +1060,6 @@ void Q2DViewer::resetCamera()
 
                 // Indiquem quina és la llesca inicial
                 initialSliceIndex = m_maxSliceValue/2;
-
-                // Obtenim la mida de la matriu de la imatge (files i columnes)
-                m_imageSizeInformation[0] = m_mainVolume->getDimensions()[1];
-                m_imageSizeInformation[1] = m_mainVolume->getDimensions()[2];
                 break;
 
             case Coronal:
@@ -1092,10 +1081,6 @@ void Q2DViewer::resetCamera()
 
                 // Indiquem quina és la llesca inicial
                 initialSliceIndex = m_maxSliceValue/2;
-
-                // Obtenim la mida de la matriu de la imatge (files i columnes)
-                m_imageSizeInformation[0] = m_mainVolume->getDimensions()[0];
-                m_imageSizeInformation[1] = m_mainVolume->getDimensions()[2];
                 break;
         }
 
@@ -1569,8 +1554,8 @@ void Q2DViewer::updateAnnotationsInformation(AnnotationFlags annotation)
         if (m_enabledAnnotations.testFlag(Q2DViewer::WindowInformationAnnotation))
         {
             m_upperLeftText = tr("%1 x %2\nWW: %5 WL: %6")
-                .arg(m_imageSizeInformation[0])
-                .arg(m_imageSizeInformation[1])
+                .arg(m_mainVolume->getDimensions()[Q2DViewer::getXIndexForView(getView())])
+                .arg(m_mainVolume->getDimensions()[Q2DViewer::getYIndexForView(getView())])
                 .arg(MathTools::roundToNearestInteger(m_windowLevelLUTMapper->GetWindow()))
                 .arg(MathTools::roundToNearestInteger(m_windowLevelLUTMapper->GetLevel()));
         }
