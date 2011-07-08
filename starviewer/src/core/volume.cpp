@@ -361,6 +361,18 @@ void Volume::convertToNeutralVolume()
     m_volumePixelDataLoaded = true;
 }
 
+AnatomicalPlane::AnatomicalPlaneType Volume::getAcquisitionPlane() const
+{
+    if (m_imageSet.isEmpty())
+    {
+        return AnatomicalPlane::NotAvailable;
+    }
+    else
+    {
+        return AnatomicalPlane::getPlaneTypeFromPatientOrientation(m_imageSet.first()->getPatientOrientation());
+    }
+}
+
 bool Volume::fitsIntoMemory()
 {
     if (m_volumePixelDataLoaded)

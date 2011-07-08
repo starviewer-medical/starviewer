@@ -5,4 +5,5 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_machineidentifier.cpp \
            $$PWD/test_patientorientation.cpp \
            $$PWD/test_anatomicalplane.cpp \
-           $$PWD/test_imageorientationoperationsmapper.cpp
+           $$PWD/test_imageorientationoperationsmapper.cpp \
+           $$PWD/test_volume.cpp

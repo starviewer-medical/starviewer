@@ -5,6 +5,7 @@
 
 #include "identifier.h"
 #include "volumepixeldata.h"
+#include "anatomicalplane.h"
 // Qt
 #include <QPixmap>
 #include <QVector>
@@ -149,6 +150,12 @@ public:
     /// TODO Aquest mètode potser s'hauria de transformar en una subclasse de Volume que
     /// únicament creïi aquest tipu de volum
     void convertToNeutralVolume();
+
+    /// Ens retorna el pla d'adquisició del volum
+    /// En el cas que no tinguem imatges retornarà NotAvailable.
+    /// TODO Com que el volum pot estar format per imatges de diferents plans, el pla d'adquisició 
+    /// es calcula en base a la primera imatge i prou
+    AnatomicalPlane::AnatomicalPlaneType getAcquisitionPlane() const;
 
 signals:
     /**
