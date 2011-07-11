@@ -226,11 +226,10 @@ void RISRequestManager::retrieveFoundStudiesFromPACS(QueryPacsJob *queryPACSJob)
             if (!m_studiesInstancesUIDRequestedToRetrieve.contains(study->getInstanceUID()))
             {
                 INFO_LOG(QString("S'ha trobat estudi que compleix criteri de cerca del RIS. Estudi UID %1, PacsId %2")
-                            .arg(study->getInstanceUID(), queryPACSJob->getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()]));
+                         .arg(study->getInstanceUID(), study->getDICOMSource().getRetrievePACS().at(0).getID()));
 
                 // Descarreguem l'estudi trobat
-                RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob =
-                    retrieveStudy(queryPACSJob->getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()], study);
+                RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = retrieveStudy(study);
 
                 if (Settings().getValue(InputOutputSettings::RISRequestViewOnceRetrieved).toBool())
                 {
@@ -253,15 +252,15 @@ void RISRequestManager::retrieveFoundStudiesFromPACS(QueryPacsJob *queryPACSJob)
             {
                 WARN_LOG(QString("S'ha trobat l'estudi UID %1 del PACS Id %2 que coincidieix amb els parametres del cerca del RIS, pero ja s'ha demanat "
                                  "descarregar-lo d'un altre PACS.")
-                            .arg(study->getInstanceUID(), queryPACSJob->getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()]));
+                            .arg(study->getInstanceUID(), study->getDICOMSource().getRetrievePACS().at(0).getID()));
             }
         }
     }
 }
 
-RetrieveDICOMFilesFromPACSJob* RISRequestManager::retrieveStudy(QString pacsIDToRetrieve, Study *study)
+RetrieveDICOMFilesFromPACSJob* RISRequestManager::retrieveStudy(Study *study)
 {
-    PacsDevice pacsDevice = PacsDeviceManager().getPACSDeviceByID(pacsIDToRetrieve);
+    PacsDevice pacsDevice = study->getDICOMSource().getRetrievePACS().at(0);
 
     RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = new RetrieveDICOMFilesFromPACSJob(pacsDevice, RetrieveDICOMFilesFromPACSJob::Medium, study);
 

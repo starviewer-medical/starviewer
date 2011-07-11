@@ -92,7 +92,7 @@ private:
     void retrieveFoundStudiesFromPACS(QueryPacsJob *queryPACSJob);
 
     /// Sol·licita descarregar l'estudi passat utilitzant el PACSManager
-    RetrieveDICOMFilesFromPACSJob* retrieveStudy(QString pacsIDToRetrieve, Study *study);
+    RetrieveDICOMFilesFromPACSJob* retrieveStudy(Study *study);
 
 private:
     /// No podem executar diverses peticions de RIS a la vegada, per això creem aquesta cua, que ens permetrà en el cas que se'ns
