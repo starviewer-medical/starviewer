@@ -441,35 +441,38 @@ int MagicTool::getInverseDirection(int direction)
 }
 
 void MagicTool::addPoint(int direction, int x, int y, double z)
-{
-    double point[3];
+{    
     double origin[3];
     double spacing[3];
     m_2DViewer->getInput()->getSpacing(spacing);
     m_2DViewer->getInput()->getOrigin(origin);
 
+    int xIndex, yIndex, zIndex;
+    Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
+ 
+    double point[3];
     switch (direction)
     {
-        case 1:
-            point[0] = x * spacing[0] + origin[0];
-            point[1] = (y - 0.5) * spacing[1] + origin[1];
+        case Down:
+            point[xIndex] = x * spacing[xIndex] + origin[xIndex];
+            point[yIndex] = (y - 0.5) * spacing[yIndex] + origin[yIndex];
             break;
-        case 3:
-            point[0] = (x + 0.5) * spacing[0] + origin[0];
-            point[1] = y * spacing[1] + origin[1];
+        case Right:
+            point[xIndex] = (x + 0.5) * spacing[xIndex] + origin[xIndex];
+            point[yIndex] = y * spacing[yIndex] + origin[yIndex];
             break;
-        case 5:
-            point[0] = x * spacing[0] + origin[0];
-            point[1] = (y + 0.5) * spacing[1] + origin[1];
+        case Up:
+            point[xIndex] = x * spacing[xIndex] + origin[xIndex];
+            point[yIndex] = (y + 0.5) * spacing[yIndex] + origin[yIndex];
             break;
-        case 7:
-            point[0] = (x - 0.5) * spacing[0] + origin[0];
-            point[1] = y * spacing[1] + origin[1];
+        case Left:
+            point[xIndex] = (x - 0.5) * spacing[xIndex] + origin[xIndex];
+            point[yIndex] = y * spacing[yIndex] + origin[yIndex];
             break;
         default:
             DEBUG_LOG("ERROR: This direction doesn't exist");
     }
-    point[2] = z * spacing[2] + origin[2];
+    point[zIndex] = z * spacing[zIndex] + origin[zIndex];
 
     m_roiPolygon->addVertix(point);
 }
@@ -514,7 +517,7 @@ double MagicTool::getStandardDeviation(int x, int y, int z)
         {
             index[xIndex] = i;
             index[yIndex] = j;
-            value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(index[xIndex], index[yIndex], index[zIndex], 0);
+            value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(index[0], index[1], index[2], 0);
             mean += value;
         }
     }
