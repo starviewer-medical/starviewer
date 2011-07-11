@@ -1,9 +1,6 @@
 #include "dicommask.h"
 
 #include <QStringList>
-#include <QDateTime>
-#include <QDate>
-#include <QString>
 
 #include "study.h"
 #include "series.h"
