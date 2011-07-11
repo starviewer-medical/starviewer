@@ -73,6 +73,21 @@ void MagicTool::handleEvent(unsigned long eventID)
     }
 }
 
+void MagicTool::assignBounds(int &minX, int &minY, int &maxX, int &maxY)
+{
+    int ext[6];
+    m_2DViewer->getInput()->getWholeExtent(ext);
+
+	int xIndex, yIndex, zIndex;
+    Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
+
+    minX = ext[xIndex * 2];
+    maxX = ext[(xIndex * 2) + 1];
+    minY = ext[yIndex * 2];
+    maxY = ext[(yIndex * 2) + 1];
+
+}
+
 void MagicTool::startMagicRegion()
 {
     if (m_2DViewer->getInput())
@@ -140,46 +155,57 @@ void MagicTool::computeLevelRange()
     int index[3];
     m_2DViewer->getInput()->getPixelData()->computeCoordinateIndex(m_pickedPosition, index);
 
-    // Calculem la desviació estàndard dins la finestra que ens marca la magic size
-    double standardDeviation = getStandardDeviation(index[0], index[1], index[2]);
+    int xIndex, yIndex, zIndex;
+    Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
 
+    // Calculem la desviació estàndard dins la finestra que ens marca la magic size
+    double standardDeviation = getStandardDeviation(index[xIndex], index[yIndex], index[zIndex]);
+    
     // Calculem els llindars com el valor en el pixel +/- la desviació estàndard * magic factor
     QVector<double> voxelValue;
     m_2DViewer->getInput()->getVoxelValue(m_pickedPosition, voxelValue);
     m_lowerLevel = voxelValue.at(0) - m_magicFactor * standardDeviation;
     m_upperLevel = voxelValue.at(0) + m_magicFactor * standardDeviation;
-
 }
 
 void MagicTool::computeRegionMask()
 {
-    int ext[6];
-    m_2DViewer->getInput()->getWholeExtent(ext);
+    // Busquem el voxel inicial
+    int index[3];
+    m_2DViewer->getInput()->getPixelData()->computeCoordinateIndex(m_pickedPosition, index);
+    int minX, minY;
+    int maxX, maxY;
+    int x, y, z;
+
+    int xIndex, yIndex, zIndex;
+    Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
+
+    x = index[xIndex];
+    y = index[yIndex];
+    z = index[zIndex];
+
+    this->assignBounds(minX, minY, maxX, maxY);
 
     // Creem la màscara
-    if (ext[0] == 0 && ext[2] == 0)
+    if (minX == 0 && minY == 0)
     {
-        m_mask = QVector<bool>((ext[1] + 1) * (ext[3] + 1), false);
+        m_mask = QVector<bool>((maxX + 1) * (maxY + 1), false);
     }
     else
     {
         DEBUG_LOG("ERROR: extension no comença a 0");
     }
-
-    // Busquem el voxel inicial
-    int index[3];
-    m_2DViewer->getInput()->getPixelData()->computeCoordinateIndex(m_pickedPosition, index);
-    int x = index[0];
-    int y = index[1];
-    int z = index[2];
-    // \TODO S'hauria de fer servir VolumePixelData::getVoxelValue o similar
-    double value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(x, y, z, 0);
+    QVector<double> voxelValue;
+    
+    m_2DViewer->getInput()->getVoxelValue(m_pickedPosition, voxelValue);
+    double value = voxelValue.at(0);
     if ((value >= m_lowerLevel) && (value <= m_upperLevel))
     {
-        m_mask[y * ext[1] + x] = true;
+        m_mask[y * maxX + x] = true;
     }
     else
     {
+        DEBUG_LOG("Ha petat i sortim");
         return;
     }
 
@@ -187,19 +213,20 @@ void MagicTool::computeRegionMask()
     QVector<int> movements;
     // First movement \TODO Codi duplicat amb main loop
     int i = 0;
-    bool located = false;
-    while (i < 4 && !located)
+    bool found = false;
+    while (i < 4 && !found)
     {
         this->doMovement(x, y, i);
         // \TODO S'hauria de fer servir VolumePixelData::getVoxelValue o similar
         value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(x, y, z, 0);
+
         if ((value >= m_lowerLevel) && (value <= m_upperLevel))
         {
-            m_mask[y * ext[1] + x] = true;
-            located = true;
+            m_mask[y * maxX + x] = true;
+            found = true;
             movements.push_back(i);
         }
-        if (!located)
+        if (!found)
         {
             this->undoMovement(x, y, i);
         }
@@ -210,29 +237,30 @@ void MagicTool::computeRegionMask()
     i = 0;
     while (movements.size() > 0)
     {
-        located = false;
-        while (i < 4 && !located)
+        found = false;
+        while (i < 4 && !found)
         {
             this->doMovement(x, y, i);
-            if ((x > ext[0]) && (x < ext[1]) && (y > ext[2]) && (y < ext[3]))
+            if ((x > minX) && (x < maxX) && (y > minY) && (y < maxY))
             {
                 // \TODO S'hauria de fer servir VolumePixelData::getVoxelValue o similar
-                value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(x, y, z, 0);
-                if ((value >= m_lowerLevel) && (value <= m_upperLevel) && (!m_mask[y * ext[1] + x]))
+				value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(x, y, z, 0);
+
+                if ((value >= m_lowerLevel) && (value <= m_upperLevel) && (!m_mask[y * maxX + x]))
                 {
-                    m_mask[y * ext[1] + x] = true;
-                    located = true;
+                    m_mask[y * maxX + x] = true;
+                    found = true;
                     movements.push_back(i);
                     i = 0;
                 }
             }
-            if (!located)
+            if (!found)
             {
                 this->undoMovement(x, y, i);
                 ++i;
             }
         }
-        if (!located)
+        if (!found)
         {
             this->undoMovement(x, y, movements.back());
             i = movements.back();
@@ -246,18 +274,16 @@ void MagicTool::doMovement(int &x, int &y, int movement)
 {
     switch (movement)
     {
-        // Up
-        case 0:
+        case MoveRight:
             x++;
             break;
-        // Down
-        case 1:
+        case MoveLeft:
             x--;
             break;
-        case 2:
+        case MoveUp:
             y++;
             break;
-        case 3:
+        case MoveDown:
             y--;
             break;
         default:
@@ -269,18 +295,16 @@ void MagicTool::undoMovement(int &x, int &y, int movement)
 {
     switch (movement)
     {
-        // Up
-        case 0:
+        case MoveRight:
             x--;
             break;
-        // Down
-        case 1:
+        case MoveLeft:
             x++;
             break;
-        case 2:
+        case MoveUp:
             y--;
             break;
-        case 3:
+        case MoveDown:
             y++;
             break;
         default:
@@ -289,42 +313,51 @@ void MagicTool::undoMovement(int &x, int &y, int movement)
 }
 
 void MagicTool::computePolygon()
-{
-    int ext[6];
-    m_2DViewer->getInput()->getWholeExtent(ext);
+{    
+    int minX;
+    int minY;
+    int maxX;
+    int maxY;
+    
+    this->assignBounds(minX, minY, maxX, maxY);
 
-    int i = ext[0];
+    int i = minX;
     int j;
 
     // Busquem el primer punt
-    bool located = false;
-    while ((i <= ext[1]) && !located)
+    bool found = false;
+    while ((i <= maxX) && !found)
     {
-        j = ext[2];
-        while ((j <= ext[3]) && !located)
+        j = minY;
+        while ((j <= maxY) && !found)
         {
-            if (m_mask[j * ext[1] + i])
+            if (m_mask[j * maxX + i])
             {
-                located = true;
+                found = true;
             }
             ++j;
         }
         ++i;
     }
-    // L'índex és -1 pq els hem incrementat una vegada més
-    int index[3];
-    index[0] = i - 1;
-    index[1] = j - 1;
-    index[2] = m_2DViewer->getCurrentSlice();
 
+    int x;
+    int y;
+    int z;
+
+    // L'índex és -1 pq els hem incrementat una vegada més    
+    x = i - 1;
+    y = j - 1;
+    z = m_2DViewer->getCurrentSlice();
     m_roiPolygon->removeVertices();
 
-    // \TODO Acabar d'entendre això
-    this->addPoint(7, index[0], index[1], index[2]);
-    this->addPoint(1, index[0], index[1], index[2]);
-
-    int nextIndex[3];
-    nextIndex[2] = index[2];
+    // \TODO Afegim el punt 
+    this->addPoint(7, x, y, z);
+    this->addPoint(1, x, y, z);
+    
+    int nextX;
+    int nextY;
+    int nextZ;
+    nextZ = z;
 
     int direction = 0;
 
@@ -332,21 +365,21 @@ void MagicTool::computePolygon()
     bool next = false;
     while (!loop)
     {
-        this->getNextIndex(direction, index[0], index[1], nextIndex[0], nextIndex[1]);
-        next = m_mask[nextIndex[1] * ext[1] + nextIndex[0]];
+        this->getNextIndex(direction, x, y, nextX, nextY);
+        next = m_mask[nextY * maxX + nextX];
         while (!next && !loop)
         {
             if (((direction % 2) != 0) && !next)
             {
-                this->addPoint(direction, index[0], index[1], index[2]);
+                this->addPoint(direction, x, y, z);
                 loop = this->isLoopReached();
             }
             direction = this->getNextDirection(direction);
-            this->getNextIndex(direction, index[0], index[1], nextIndex[0], nextIndex[1]);
-            next = m_mask[nextIndex[1] * ext[1] + nextIndex[0]];
+            this->getNextIndex(direction, x, y, nextX, nextY);
+            next = m_mask[nextY * maxX + nextX];
         }
-        index[0] = nextIndex[0];
-        index[1] = nextIndex[1];
+        x = nextX;
+        y = nextY;
         direction = this->getInverseDirection(direction);
         direction = this->getNextDirection(direction);
     }
@@ -355,47 +388,47 @@ void MagicTool::computePolygon()
     m_hasToComputeStatisticsData = true;
 }
 
-void MagicTool::getNextIndex(int direction, int x1, int y1, int &x2, int &y2)
+void MagicTool::getNextIndex(int direction, int x, int y, int &nextX, int &nextY)
 {
     switch (direction)
     {
-        case 0:
-            x2 = x1 - 1;
-            y2 = y1 - 1;
+        case LeftDown:
+            nextX = x - 1;
+            nextY = y - 1;
             break;
-        case 1:
-            x2 = x1;
-            y2 = y1 - 1;
+        case Down:
+            nextX = x;
+            nextY = y - 1;
             break;
-        case 2:
-            x2 = x1 + 1;
-            y2 = y1 - 1;
+        case RightDown:
+            nextX = x + 1;
+            nextY = y - 1;
             break;
-        case 3:
-            x2 = x1 + 1;
-            y2 = y1;
+        case Right:
+            nextX = x + 1;
+            nextY = y;
             break;
-        case 4:
-            x2 = x1 + 1;
-            y2 = y1 + 1;
+        case RightUp:
+            nextX = x + 1;
+            nextY = y + 1;
             break;
-        case 5:
-            x2 = x1;
-            y2 = y1 + 1;
+        case Up:
+            nextX = x;
+            nextY = y + 1;
             break;
-        case 6:
-            x2 = x1 - 1;
-            y2 = y1 + 1;
+        case LeftUp:
+            nextX = x - 1;
+            nextY = y + 1;
             break;
-        case 7:
-            x2 = x1 - 1;
-            y2 = y1;
+        case Left:
+            nextX = x - 1;
+            nextY = y;
             break;
         default:
             DEBUG_LOG("ERROR: This direction doesn't exist");
     }
-
 }
+
 int MagicTool::getNextDirection(int direction)
 {
     int nextDirection = direction + 1;
@@ -407,7 +440,7 @@ int MagicTool::getInverseDirection(int direction)
     return (direction + 4) % 8;
 }
 
-void MagicTool::addPoint(int direction, int x1, int y1, double z1)
+void MagicTool::addPoint(int direction, int x, int y, double z)
 {
     double point[3];
     double origin[3];
@@ -418,25 +451,25 @@ void MagicTool::addPoint(int direction, int x1, int y1, double z1)
     switch (direction)
     {
         case 1:
-            point[0] = x1 * spacing[0] + origin[0];
-            point[1] = (y1 - 0.5) * spacing[1] + origin[1];
+            point[0] = x * spacing[0] + origin[0];
+            point[1] = (y - 0.5) * spacing[1] + origin[1];
             break;
         case 3:
-            point[0] = (x1 + 0.5) * spacing[0] + origin[0];
-            point[1] = y1 * spacing[1] + origin[1];
+            point[0] = (x + 0.5) * spacing[0] + origin[0];
+            point[1] = y * spacing[1] + origin[1];
             break;
         case 5:
-            point[0] = x1 * spacing[0] + origin[0];
-            point[1] = (y1 + 0.5) * spacing[1] + origin[1];
+            point[0] = x * spacing[0] + origin[0];
+            point[1] = (y + 0.5) * spacing[1] + origin[1];
             break;
         case 7:
-            point[0] = (x1 - 0.5) * spacing[0] + origin[0];
-            point[1] = y1 * spacing[1] + origin[1];
+            point[0] = (x - 0.5) * spacing[0] + origin[0];
+            point[1] = y * spacing[1] + origin[1];
             break;
         default:
             DEBUG_LOG("ERROR: This direction doesn't exist");
     }
-    point[2] = z1 * spacing[2] + origin[2];
+    point[2] = z * spacing[2] + origin[2];
 
     m_roiPolygon->addVertix(point);
 }
@@ -452,27 +485,40 @@ double MagicTool::getStandardDeviation(int x, int y, int z)
 {
     int ext[6];
     m_2DViewer->getInput()->getWholeExtent(ext);
-    int minX = qMax(x - m_magicSize, ext[0]);
-    int maxX = qMin(x + m_magicSize, ext[1]);
-    int minY = qMax(y - m_magicSize, ext[2]);
-    int maxY = qMin(y + m_magicSize, ext[3]);
+
+    int minX;
+    int minY;
+    int maxX;
+    int maxY;
+    
+	this->assignBounds(minX, minY, maxX, maxY);
+
+    minX = qMax(x - m_magicSize, minX);
+    maxX = qMin(x + m_magicSize, maxX);
+    minY = qMax(y - m_magicSize, minY);
+    maxY = qMin(y + m_magicSize, maxY);
+
+	int xIndex, yIndex, zIndex;
+    Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
 
     int index[3];
-    index[2] = z;
+    index[zIndex] = z;
 
     // Calculem la mitjana
     double mean = 0.0;
+    double value;
+
     for (int i = minX; i <= maxX; ++i)
     {
         for (int j = minY; j <= maxY; ++j)
         {
-            index[0] = i;
-            index[1] = j;
-            // \TODO S'hauria de fer servir VolumePixelData::getVoxelValue o similar
-            double value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(index[0], index[1], index[2], 0);
+            index[xIndex] = i;
+            index[yIndex] = j;
+            value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(index[xIndex], index[yIndex], index[zIndex], 0);
             mean += value;
         }
     }
+
     int numberOfSamples = (maxX - minX + 1) * (maxY - minY + 1);
     mean = mean / (double)numberOfSamples;
 
@@ -482,10 +528,9 @@ double MagicTool::getStandardDeviation(int x, int y, int z)
     {
         for (int j = minY; j <= maxY; ++j)
         {
-            index[0] = i;
-            index[1] = j;
-            // \TODO S'hauria de fer servir VolumePixelData::getVoxelValue o similar
-            double value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(index[0], index[1], index[2], 0);
+            index[xIndex] = i;
+            index[yIndex] = j;
+            value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(index[0], index[1], index[2], 0);
             deviation += qPow(value - mean, 2);
         }
     }

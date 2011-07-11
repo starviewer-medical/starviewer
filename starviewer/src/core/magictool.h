@@ -18,6 +18,12 @@ class DrawerPolygon;
 class MagicTool : public ROITool {
 Q_OBJECT
 public:
+
+    // Creixement
+    enum { LeftDown, Down, RightDown, Right, RightUp, Up, LeftUp, Left };
+    // Moviments
+    enum { MoveRight, MoveLeft, MoveUp, MoveDown };
+
     MagicTool(QViewer *viewer, QObject *parent = 0);
     ~MagicTool();
 
@@ -47,15 +53,15 @@ private:
     void computePolygon();
 
     /// Mètodes auxiliar per la generació del polígon
-    void getNextIndex(int direction, int x1, int y1, int &x2, int &y2);
+    void getNextIndex(int direction, int x, int y, int &nextX, int &nextY);
     int getNextDirection(int direction);
     int getInverseDirection(int direction);
-    void addPoint(int direction, int x1, int y1, double z1);
+    void addPoint(int direction, int x, int y, double z);
     bool isLoopReached();
 
     /// Retorna la desviació estàndard dins la regió marcada per la magicSize
     /// @param a, @param b, @param c índex del volum de la màscara que estem mirant
-    double getStandardDeviation(int a, int b, int c);
+    double getStandardDeviation(int x, int y, int z);
 
     /// Comença la generació de la regió màgica
     void startMagicRegion();
@@ -65,6 +71,9 @@ private:
 
     /// Modifica el Magic Factor \sa #m_magicFactor segons el desplaçament del ratolí
     void modifyMagicFactor();
+
+    ///Troba els extrems per cada configuració
+    void assignBounds(int &minX, int &minY, int &maxX, int &maxY);
 
 private slots:
     /// Inicialitza la tool
