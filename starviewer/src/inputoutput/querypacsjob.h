@@ -54,9 +54,6 @@ public:
     /// Retorna la llista d'imatges trobades que compleixen els criteris de cerca
     QList<Image*> getImageList();
 
-    /// Retorna un Hashtable que indica per l'UID de l'estudi a quin PACS pertany l'estudi
-    QHash<QString, QString> getHashTablePacsIDOfStudyInstanceUID();
-
     /// Retorna l'estat de la consulta
     PACSRequestStatus::QueryRequestStatus getStatus();
 
