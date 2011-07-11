@@ -63,17 +63,6 @@ private:
     /// Afegeix l'objecte dicom a la llista d'imatges si no hi existeix
     void addImage(DICOMTagReader *dicomTagReader);
 
-    ///Ens converteix un DICOMMask a un DcmDataset per poder fer la query al PACS
-    DcmDataset* convertDICOMMaskToDcmDataset(const DicomMask &dicomMask);
-
-    ///Ens afegeix el tag amb el seu valor al DcmDataset passat per paràmetre, sempre i quan tagValue no sigui null
-    void addTagToDcmDatasetAsString(DcmDataset *dcmDataset, const DcmTagKey &dcmTagKey, const QString &tagValue);
-
-    ///Quan consultem al PACS li hem d'indicar a quin nivell es vol fer la cerca, en funció dels tags que demanem al PACS, per exemple si al PACS demanem tags de 
-    ///sèrie i estudi li hem d'indicar que la cerca és a nivell de sèrie, si li demanem només tags d'estudi se li ha d'indicar que és a nivell d'estudi. Aquest mètode
-    ///a través de la dicomMask ens indica a quin nivell es fa la cerca
-    QString getQueryLevelFromDICOMMask(const DicomMask &dicomMask) const;
-
     /// Converteix la respota rebuda per partl del PACS a QueryRequestStatus i  en cas d'error processa la resposta i grava l'error al log
     PACSRequestStatus::QueryRequestStatus processResponseStatusFromFindUser(T_DIMSE_C_FindRSP *findResponse, DcmDataset *statusDetail);
 
