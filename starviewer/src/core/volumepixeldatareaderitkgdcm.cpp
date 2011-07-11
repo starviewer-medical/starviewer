@@ -3,7 +3,8 @@
 #include "logging.h"
 #include "dicomtagreader.h"
 #include "volumepixeldata.h"
-
+// GDCM
+#include <gdcmException.h>
 // ITK
 #include <itkTileImageFilter.h>
 // Qt
@@ -95,6 +96,20 @@ int VolumePixelDataReaderITKGDCM::readMultipleFiles(const QStringList &filenames
     {
         errorCode = OutOfMemory;
     }
+    catch (gdcm::Exception &e)
+    {
+        WARN_LOG(QString("ExcepciÃ³ llegint els arxius del directori [%1] DescripciÃ³: [%2]")
+            .arg(QFileInfo(filenames.at(0)).dir().path()).arg(e.GetDescription()));
+        DEBUG_LOG(QString("ExcepciÃ³ llegint els arxius del directori [%1] DescripciÃ³: [%2]")
+            .arg(QFileInfo(filenames.at(0)).dir().path()).arg(e.GetDescription()));
+        errorCode = identifyErrorMessage(QString(e.GetDescription()));;
+    }
+    catch (...)
+    {
+        WARN_LOG(QString("ExcepciÃ³ desconeguda llegint els arxius del directori [%1] DescripciÃ³: [%2]").arg(QFileInfo(filenames.at(0)).dir().path()));
+        DEBUG_LOG(QString("ExcepciÃ³ desconeguda els arxius del directori [%1] DescripciÃ³: [%2]").arg(QFileInfo(filenames.at(0)).dir().path()));
+        errorCode = UnknownError;
+    }
 
     switch (errorCode)
     {
@@ -146,6 +161,18 @@ int VolumePixelDataReaderITKGDCM::readSingleFile(const QString &fileName)
     catch (std::bad_alloc)
     {
         errorCode = OutOfMemory;
+    }
+    catch (gdcm::Exception &e)
+    {
+        WARN_LOG(QString("ExcepciÃ³ llegint l'arxiu [%1] DescripciÃ³: [%2]").arg(fileName).arg(e.GetDescription()));
+        DEBUG_LOG(QString("ExcepciÃ³ llegint l'arxiu [%1] DescripciÃ³: [%2]").arg(fileName).arg(e.GetDescription()));
+        errorCode = identifyErrorMessage(QString(e.GetDescription()));;
+    }
+    catch (...)
+    {
+        WARN_LOG(QString("Excepció desconeguda llegint l'arxiu [%1]").arg(fileName));
+        DEBUG_LOG(QString("Excepció desconeguda llegint l'arxiu [%1]").arg(fileName));
+        errorCode = UnknownError;
     }
 
     switch (errorCode)
@@ -207,6 +234,25 @@ void VolumePixelDataReaderITKGDCM::readDifferentSizeImagesIntoOneVolume(const QS
             // Llegim el missatge d'error per esbrinar de quin error es tracta
             errorCode = identifyErrorMessage(QString(e.GetDescription()));
         }
+        catch (std::bad_alloc)
+        {
+            errorCode = OutOfMemory;
+        }
+        catch (gdcm::Exception &e)
+        {
+            WARN_LOG(QString("ExcepciÃ³ llegint els arxius del directori [%1] DescripciÃ³: [%2]")
+                .arg(QFileInfo(filenames.at(0)).dir().path()).arg(e.GetDescription()));
+            DEBUG_LOG(QString("ExcepciÃ³ llegint els arxius del directori [%1] DescripciÃ³: [%2]")
+                .arg(QFileInfo(filenames.at(0)).dir().path()).arg(e.GetDescription()));
+            errorCode = identifyErrorMessage(QString(e.GetDescription()));;
+        }
+        catch (...)
+        {
+            WARN_LOG(QString("ExcepciÃ³ desconeguda llegint els arxius del directori [%1] DescripciÃ³: [%2]").arg(QFileInfo(filenames.at(0)).dir().path()));
+            DEBUG_LOG(QString("ExcepciÃ³ desconeguda els arxius del directori [%1] DescripciÃ³: [%2]").arg(QFileInfo(filenames.at(0)).dir().path()));
+            errorCode = UnknownError;
+        }
+        
         if (errorCode == NoError)
         {
             itkImage = reader->GetOutput();
@@ -229,7 +275,7 @@ int VolumePixelDataReaderITKGDCM::identifyErrorMessage(const QString &errorMessa
     {
         return SizeMismatch;
     }
-    else if (errorMessage.contains("Failed to allocate memory for image"))
+    else if (errorMessage.contains("Failed to allocate memory for image") || errorMessage.contains("Impossible to allocate") )
     {
         return OutOfMemory;
     }

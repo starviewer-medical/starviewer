@@ -3,6 +3,9 @@
 #include "logging.h"
 #include "volumepixeldata.h"
 
+// GDCM
+#include <gdcmException.h>
+
 #include <vtkGDCMImageReader.h>
 #include <vtkStringArray.h>
 #include <vtkEventQtSlotConnect.h>
@@ -14,6 +17,7 @@
 #include <gdcmPixelFormat.h> // Només per qüestions d'informació de debug
 // Qt
 #include <QStringList>
+#include <QDir>
 
 namespace udg {
 
@@ -84,6 +88,23 @@ int VolumePixelDataReaderVTKGDCM::read(const QStringList &filenames)
     catch (std::bad_alloc)
     {
         errorCode = OutOfMemory;
+    }
+    catch (gdcm::Exception &e)
+    {
+        WARN_LOG(QString("ExcepciÃ³ llegint els arxius del directori [%1] DescripciÃ³: [%2]")
+            .arg(QFileInfo(filenames.at(0)).dir().path()).arg(e.GetDescription()));
+        DEBUG_LOG(QString("ExcepciÃ³ llegint els arxius del directori [%1] DescripciÃ³: [%2]")
+            .arg(QFileInfo(filenames.at(0)).dir().path()).arg(e.GetDescription()));
+        
+        // Identifiquem l'error que es produeix
+        if (QString(e.GetDescription()) == "Impossible to allocate")
+        {
+            errorCode = OutOfMemory;
+        }
+        else
+        {
+            errorCode = UnknownError;
+        }
     }
     catch (...)
     {
