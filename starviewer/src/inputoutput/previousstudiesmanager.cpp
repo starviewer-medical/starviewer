@@ -25,6 +25,7 @@ PreviousStudiesManager::PreviousStudiesManager()
 PreviousStudiesManager::~PreviousStudiesManager()
 {
     cancelCurrentQuery();
+    deleteQueryResults();
 }
 
 void PreviousStudiesManager::queryMergedStudies(Patient *patient)
@@ -105,7 +106,7 @@ void PreviousStudiesManager::initializeQuery()
     cancelCurrentQuery();
 
     /// Fem neteja de consultes anteriors
-    m_mergedStudyList.clear();
+    deleteQueryResults();
     m_pacsDeviceIDErrorEmited.clear();
 }
 
@@ -278,4 +279,18 @@ void PreviousStudiesManager::downloadStudy(Study *study, QString pacs)
     connect(queryScreen, SIGNAL(studyRetrieveFailed(QString)), SIGNAL(errorDownloadingPreviousStudy(QString)));
 }
 
+void PreviousStudiesManager::deleteQueryResults()
+{
+    QList<Patient*> patientsStudy;
+
+    foreach (Study* study, m_mergedStudyList)
+    {
+        patientsStudy.append(study->getParentPatient());
+    }
+
+    qDeleteAll(m_mergedStudyList);
+    qDeleteAll(patientsStudy);
+
+    m_mergedStudyList.clear();
+}
 }

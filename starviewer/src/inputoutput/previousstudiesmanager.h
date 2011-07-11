@@ -53,7 +53,7 @@ public:
     void downloadStudy(Study *study, QString pacs);
 
 signals:
-    /// Signal que s'emet quan ha finalitzat la consulta d'estudis previs
+    /// Signal que s'emet quan ha finalitzat la consulta d'estudis previs. La llista amb els resultats s'esborrarà quan es demani una altra cerca.
     void queryStudiesFinished(QList<Study*>);
 
     /// Signal que s'emet per indicar que s'ha produït un error a la consulta d'estudis d'un PACS
@@ -95,6 +95,9 @@ private:
 
     /// Emet signal indicant la la consulta ha acabat
     void queryFinished();
+
+    /// Esborra els resultats de la cerca
+    void deleteQueryResults();
 
 private slots:
     /// Slot que s'activa quan finalitza un job de consulta al PACS
