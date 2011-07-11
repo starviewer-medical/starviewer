@@ -603,6 +603,29 @@ bool DicomMask::isEmpty()
     return empty;
 }
 
+DicomMask::QueryLevel DicomMask::getQueryLevel() const
+{
+    bool isImageLevel = !getSOPInstanceUID().isNull() || !getImageNumber().isNull();
+    bool isSeriesLevel = !getSeriesDescription().isNull() || !getSeriesDateRangeAsDICOMFormat().isNull() || !getSeriesModality().isNull() ||
+                         !getSeriesNumber().isNull() || !getSeriesProtocolName().isNull() || !getSeriesTimeRangeAsDICOMFormat().isNull() ||
+                         !getSeriesInstanceUID().isNull() || !getRequestedProcedureID().isNull() || !getScheduledProcedureStepID().isNull() ||
+                         !getPPSStartDateAsRangeDICOMFormat().isNull() || !getPPSStartTimeAsRangeDICOMFormat().isNull();
+
+    if (isImageLevel)
+    {
+        return image;
+    }
+    else if (isSeriesLevel)
+    {
+        return series;
+    }
+    else
+    {
+        //Per defecte com a mínim són a nivell d'estudi
+        return study;
+    }
+}
+
 DicomMask DicomMask::fromStudy(Study *study, bool &ok)
 {
     DicomMask studyMask;

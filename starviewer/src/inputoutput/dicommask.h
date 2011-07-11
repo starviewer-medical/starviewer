@@ -20,6 +20,9 @@ class Image;
 
 class DicomMask {
 public:
+    /// Indica a quin nivell fem la query
+    enum QueryLevel { study, series, image };
+
     DicomMask();
 
     /// Indiquem el Patient name pel qual filtrar. Si els dos paràmetres són Nulls es busquen tots els pacients, si per exemple minimumDate és null
@@ -274,6 +277,9 @@ public:
 
     /// Ens diu si la màscara està buida o no
     bool isEmpty();
+
+    ///Ens indica en funció dels paràmetres de la màscara
+    QueryLevel getQueryLevel() const;
 
     ///Mètode que a partir d'un estudi/series/image ens retornen la DICOMMask per descarregar o consultar els fills d'aquell objecte. És important que si hem de construir
     ///un DICOMMask a partir d'una imatge aquesta inclogui la informació de la sèrie pare i estudi pare per construir, i en el cas de series contingui l'estudi pare, sinó

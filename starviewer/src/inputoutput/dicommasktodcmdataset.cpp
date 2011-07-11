@@ -21,7 +21,7 @@ DcmDataset* DicomMaskToDcmDataset::getDicomMaskAsDcmDataset(const DicomMask &dic
     addTagToDcmDatasetAsString(maskDcmDataset, DCM_SpecificCharacterSet, "ISO_IR 100");
 
     // Especifiquem a quin nivell es fa el QueryRetrieve
-    addTagToDcmDatasetAsString(maskDcmDataset, DCM_QueryRetrieveLevel, getQueryLevelFromDICOMMask(dicomMask));
+    addTagToDcmDatasetAsString(maskDcmDataset, DCM_QueryRetrieveLevel, getQueryLevelFromDICOMMaskAsQString(dicomMask));
 
     //Afegim els tags d'estudi
     addTagToDcmDatasetAsString(maskDcmDataset, DCM_PatientID, dicomMask.getPatientID());
@@ -77,27 +77,24 @@ void DicomMaskToDcmDataset::addTagToDcmDatasetAsString(DcmDataset *dcmDataset, c
     }
 }
 
-QString DicomMaskToDcmDataset::getQueryLevelFromDICOMMask(const DicomMask &dicomMask) const
+QString DicomMaskToDcmDataset::getQueryLevelFromDICOMMaskAsQString(const DicomMask &dicomMask) const
 {
-    bool isImageLevel = !dicomMask.getSOPInstanceUID().isNull() || !dicomMask.getImageNumber().isNull();
-    bool isSeriesLevel = !dicomMask.getSeriesDescription().isNull() || !dicomMask.getSeriesDateRangeAsDICOMFormat().isNull() || !dicomMask.getSeriesModality().isNull() ||
-                         !dicomMask.getSeriesNumber().isNull() || !dicomMask.getSeriesProtocolName().isNull() || !dicomMask.getSeriesTimeRangeAsDICOMFormat().isNull() ||
-                         !dicomMask.getSeriesInstanceUID().isNull() || !dicomMask.getRequestedProcedureID().isNull() || !dicomMask.getScheduledProcedureStepID().isNull() ||
-                         !dicomMask.getPPSStartDateAsRangeDICOMFormat().isNull() || !dicomMask.getPPSStartTimeAsRangeDICOMFormat().isNull();
+    QString queryLevel;
 
-    if (isImageLevel)
+    switch (dicomMask.getQueryLevel())
     {
-        return "IMAGE";
+        case DicomMask::study:
+            queryLevel = "STUDY";
+            break;
+        case DicomMask::series:
+            queryLevel = "SERIES";
+            break;
+        case DicomMask::image:
+            queryLevel = "IMAGE";
+            break;
     }
-    else if (isSeriesLevel)
-    {
-        return "SERIES";
-    }
-    else
-    {
-        //Per defecte com a mínim són a nivell d'estudi
-        return "STUDY";
-    }
+
+    return queryLevel;
 }
 
 }
