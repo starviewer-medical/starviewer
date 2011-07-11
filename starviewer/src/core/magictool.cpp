@@ -128,12 +128,12 @@ void MagicTool::modifyMagicFactor()
 {
     if (m_roiPolygon)
     {
-        int displacementY = 0.1 * (m_viewer->getEventPositionY() - m_viewer->getLastEventPositionY());
+        double displacementY = 0.05 * (m_viewer->getEventPositionY() - m_viewer->getLastEventPositionY());
         if (m_magicFactor - displacementY > 0.0)
         {
             m_magicFactor -= displacementY;
-        }
-        this->generateRegion();
+			this->generateRegion();
+        }        
     }
 }
 
