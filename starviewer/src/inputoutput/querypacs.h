@@ -83,6 +83,8 @@ private:
 
     // Indicarà de quin PACS hem obtingut estudis, sèries, imatges
     DICOMSource m_resultsDICOMSource;
+
+    DicomMask::QueryLevel m_queryLevel;
 };
 };
 #endif

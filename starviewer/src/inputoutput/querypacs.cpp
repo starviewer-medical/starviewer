@@ -52,20 +52,19 @@ void QueryPacs::foundMatchCallback(void *callbackData, T_DIMSE_C_FindRQ *request
     else
     {
         DICOMTagReader *dicomTagReader = new DICOMTagReader("", responseIdentifiers);
-        QString queryRetrieveLevel = dicomTagReader->getValueAttributeAsQString(DICOMQueryRetrieveLevel);
 
-        if (queryRetrieveLevel == "STUDY")
+        if (queryPacsCaller->m_queryLevel == DicomMask::study)
         {
             // En el cas que l'objecte que cercàvem fos un estudi
             queryPacsCaller->addPatientStudy(dicomTagReader);
         }
-        else if (queryRetrieveLevel == "SERIES")
+        else if (queryPacsCaller->m_queryLevel == DicomMask::series)
         {
             // Si la query retorna un objecte sèrie
             queryPacsCaller->addPatientStudy(dicomTagReader);
             queryPacsCaller->addSeries(dicomTagReader);
         }
-        else if (queryRetrieveLevel == "IMAGE")
+        else if (queryPacsCaller->m_queryLevel == DicomMask::image)
         {
             // Si la query retorna un objecte imatge
             queryPacsCaller->addPatientStudy(dicomTagReader);
@@ -136,6 +135,7 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::query(const DicomMask &mask)
     m_cancelRequestSent = false;
 
     m_dicomMask = mask;
+    m_queryLevel = mask.getQueryLevel();
 
     return query();
 }
