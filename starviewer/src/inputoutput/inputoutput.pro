@@ -81,7 +81,8 @@ HEADERS += databaseconnection.h \
     retrievedicomfilesfrompacsjob.h \
     echotopacs.h \
     gdcmanonymizerstarviewer.h \
-    dicomanonymizer.h
+    dicomanonymizer.h \
+    dicommasktodcmdataset.h
 SOURCES += databaseconnection.cpp \
     pacsdevicemanager.cpp \
     pacsconnection.cpp \
@@ -139,7 +140,8 @@ SOURCES += databaseconnection.cpp \
     retrievedicomfilesfrompacsjob.cpp \
     echotopacs.cpp \
     gdcmanonymizerstarviewer.cpp \
-        dicomanonymizer.cpp
+    dicomanonymizer.cpp \
+    dicommasktodcmdataset.cpp
 INCLUDEPATH += ../core
 DEPENDPATH += ../core
 TEMPLATE = lib
