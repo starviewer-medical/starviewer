@@ -74,12 +74,6 @@ QList<Image*> QueryPacsJob::getImageList()
     return m_queryPacs->getQueryResultsAsImageList();
 }
 
-QHash<QString, QString> QueryPacsJob::getHashTablePacsIDOfStudyInstanceUID()
-{
-    Q_ASSERT (isFinished());
-    return m_queryPacs->getHashTablePacsIDOfStudyInstanceUID();
-}
-
 void QueryPacsJob::requestCancelJob()
 {
     INFO_LOG(QString("S'ha demanat la cancel.lacio del Job de consulta al PACS %1").arg(getPacsDevice().getAETitle()));

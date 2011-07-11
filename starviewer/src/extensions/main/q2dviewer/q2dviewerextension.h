@@ -149,7 +149,7 @@ private slots:
     void changeToPreviousStudiesDefaultIcon();
 
     /// Mètode que afegeix els hanging protocols amb prèvies
-    void addPreviousHangingProtocols(QList<Study*> studies, QHash<QString, QString> qhash);
+    void addPreviousHangingProtocols(QList<Study*> studies);
 #endif
 
 private:

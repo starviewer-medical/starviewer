@@ -54,7 +54,7 @@ public:
 
 signals:
     /// Signal que s'emet quan ha finalitzat la consulta d'estudis previs
-    void queryStudiesFinished(QList<Study*>, QHash<QString, QString> hashPacsIDOfStudyInstanceUID);
+    void queryStudiesFinished(QList<Study*>);
 
     /// Signal que s'emet per indicar que s'ha produït un error a la consulta d'estudis d'un PACS
     void errorQueryingStudies(PacsDevice pacs);
@@ -106,7 +106,6 @@ private slots:
 private:
     PacsManager *m_pacsManager;
     QList<Study*> m_mergedStudyList;
-    QHash<QString, QString> m_mergedHashPacsIDOfStudyInstanceUID;
     QString m_studyInstanceUIDToFindPrevious;
     /// Com fem una consulta dos consultes al mateix PACS si falla una segurament també fallarà la segona per això
     /// en aquesta llista registrarem l'ID dels Pacs pel quals hem emés el signal d'error i si rebem un segon error

@@ -246,8 +246,7 @@ void Q2DViewerExtension::searchPreviousStudiesWithHangingProtocols()
     m_previousStudiesManager = new PreviousStudiesManager();
 
     // 3.- Es connecta el signal per quan acabi
-    connect(m_previousStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>, QHash<QString, QString>)),
-            SLOT(addPreviousHangingProtocols(QList<Study*>, QHash<QString, QString>)));
+    connect(m_previousStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), SLOT(addPreviousHangingProtocols(QList<Study*>)));
 
     // 4.- Es busquen els previs
     if (m_mainVolume)
@@ -285,10 +284,9 @@ void Q2DViewerExtension::setupDefaultLeftButtonTool()
     }
 }
 
-void Q2DViewerExtension::addPreviousHangingProtocols(QList<Study*> studies, QHash<QString, QString> qhash)
+void Q2DViewerExtension::addPreviousHangingProtocols(QList<Study*> studies)
 {
-    disconnect(m_previousStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>, QHash<QString, QString>)), this,
-               SLOT(addPreviousHangingProtocols(QList<Study*>, QHash<QString, QString>)));
+    disconnect(m_previousStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), this, SLOT(addPreviousHangingProtocols(QList<Study*>)));
 
     QList<HangingProtocol*> hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient, studies);
     m_predefinedSeriesGrid->setHangingItems(hangingCandidates);

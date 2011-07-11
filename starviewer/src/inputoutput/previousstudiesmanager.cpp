@@ -105,7 +105,6 @@ void PreviousStudiesManager::initializeQuery()
     cancelCurrentQuery();
 
     /// Fem neteja de consultes anteriors
-    m_mergedHashPacsIDOfStudyInstanceUID.clear();
     m_mergedStudyList.clear();
     m_pacsDeviceIDErrorEmited.clear();
 }
@@ -206,8 +205,6 @@ void PreviousStudiesManager::mergeFoundStudiesInQuery(QueryPacsJob *queryPACSJob
                 // Si l'estudi no està a llista ja d'estudis afegits i no és el mateix estudi pel qua ens han demanat el
                 // previ l'afegim
                 m_mergedStudyList.append(study);
-
-                m_mergedHashPacsIDOfStudyInstanceUID[study->getInstanceUID()] = queryPACSJob->getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()];
             }
         }
     }
@@ -233,7 +230,7 @@ void PreviousStudiesManager::queryFinished()
 {
     // Quan totes les query han acabat és quant fem l'emit amb els estudis previs trobats. No podem emetre els resultats que anem rebent,
     // perquè hem de fer un merge del resultats rebuts, per no tenir duplicats (Estudis del matiex pacient que estiguin a més d'un PACS)
-    emit queryStudiesFinished(m_mergedStudyList, m_mergedHashPacsIDOfStudyInstanceUID);
+    emit queryStudiesFinished(m_mergedStudyList);
 }
 
 bool PreviousStudiesManager::isStudyInMergedStudyList(Study *study)

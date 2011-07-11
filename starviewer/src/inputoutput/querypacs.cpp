@@ -164,18 +164,13 @@ void QueryPacs::cancelQuery(T_DIMSE_C_FindRQ *request)
 
 void QueryPacs::addPatientStudy(DICOMTagReader *dicomTagReader)
 {
-    if (!m_hashPacsIDOfStudyInstanceUID.contains(dicomTagReader->getValueAttributeAsQString(DICOMStudyInstanceUID)))
-    {
-        Patient *patient = CreateInformationModelObject::createPatient(dicomTagReader);
-        Study *study = CreateInformationModelObject::createStudy(dicomTagReader);
-        study->setInstitutionName(m_pacsDevice.getInstitution());
-        study->setDICOMSource(m_resultsDICOMSource);
+    Patient *patient = CreateInformationModelObject::createPatient(dicomTagReader);
+    Study *study = CreateInformationModelObject::createStudy(dicomTagReader);
+    study->setInstitutionName(m_pacsDevice.getInstitution());
+    study->setDICOMSource(m_resultsDICOMSource);
 
-        patient->addStudy(study);
-        m_patientStudyList.append(patient);
-        // Afegim a la taula de QHash de quin pacs és l'estudi
-        m_hashPacsIDOfStudyInstanceUID[study->getInstanceUID()] = m_pacsDevice.getID();
-    }
+    patient->addStudy(study);
+    m_patientStudyList.append(patient);
 }
 
 void QueryPacs::addSeries(DICOMTagReader *dicomTagReader)
@@ -209,11 +204,6 @@ QList<Series*> QueryPacs::getQueryResultsAsSeriesList()
 QList<Image*> QueryPacs::getQueryResultsAsImageList()
 {
     return m_imageList;
-}
-
-QHash<QString, QString> QueryPacs::getHashTablePacsIDOfStudyInstanceUID()
-{
-    return m_hashPacsIDOfStudyInstanceUID;
 }
 
 DcmDataset* QueryPacs::convertDICOMMaskToDcmDataset(const DicomMask &dicomMask)
