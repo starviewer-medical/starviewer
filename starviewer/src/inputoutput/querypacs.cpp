@@ -61,14 +61,11 @@ void QueryPacs::foundMatchCallback(void *callbackData, T_DIMSE_C_FindRQ *request
         else if (queryPacsCaller->m_queryLevel == DicomMask::series)
         {
             // Si la query retorna un objecte sèrie
-            queryPacsCaller->addPatientStudy(dicomTagReader);
             queryPacsCaller->addSeries(dicomTagReader);
         }
         else if (queryPacsCaller->m_queryLevel == DicomMask::image)
         {
             // Si la query retorna un objecte imatge
-            queryPacsCaller->addPatientStudy(dicomTagReader);
-            queryPacsCaller->addSeries(dicomTagReader);
             queryPacsCaller->addImage(dicomTagReader);
         }
     }

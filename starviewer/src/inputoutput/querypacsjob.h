@@ -43,13 +43,10 @@ public:
     /// Indica a quin nivell es fa la consulta study, series, image
     DicomMask::QueryLevel getQueryLevel();
 
-    /// Retorna la llista d'estudis trobats que compleixen el criteri de cerca
+    /// Retorna els resultats de cerca. Només retornarà els resulats de cerca pel nivell de cerca indicat a la DicomMask, per exemple en una DicomMask
+    /// per cerca sèries només getQueryResultAsSeriesList retornarà resultats, els altres dos mètodes retornaran llistes buides
     QList<Patient*> getPatientStudyList();
-
-    /// Retorna la llista de series trobades que compleixen els criteris de cerca
     QList<Series*> getSeriesList();
-
-    /// Retorna la llista d'imatges trobades que compleixen els criteris de cerca
     QList<Image*> getImageList();
 
     /// Retorna l'estat de la consulta
