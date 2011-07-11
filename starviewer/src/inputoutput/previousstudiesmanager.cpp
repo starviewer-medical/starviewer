@@ -95,7 +95,7 @@ void PreviousStudiesManager::makeAsynchronousStudiesQuery(Patient *patient, QDat
         {
             foreach (DicomMask queryDicomMask, queryDicomMasksList)
             {
-                enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, queryDicomMask, QueryPacsJob::study));
+                enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, queryDicomMask));
             }
         }
     }
@@ -191,7 +191,7 @@ void PreviousStudiesManager::queryPACSJobFinished(PACSJob *pacsJob)
 
 void PreviousStudiesManager::mergeFoundStudiesInQuery(QueryPacsJob *queryPACSJob)
 {
-    if (queryPACSJob->getQueryLevel() != QueryPacsJob::study)
+    if (queryPACSJob->getQueryLevel() != DicomMask::study)
     {
         /// Si la consulta no era d'estudis no ens interessa, només cerquem estudis
         return;

@@ -24,13 +24,11 @@ class QueryPacs;
 class QueryPacsJob : public PACSJob {
 Q_OBJECT
 public:
-    /// Indica a quin nivell fem la query
-    enum QueryLevel { study, series, image };
 
     /// Constructor/Desctructor de la classe
     ///A la DICOMMask per cada camp que volem que el PACS ens retorni li hem d'haver fet el set amb un string empty per strings o Null per dates i hores, sinó la consulta el PACS
     ///no retornarà la informació d'aquest camp per l'estudi/sèrie/imatge, ja que al PACS no retorna tots els camps sinó només els que se li sol·liciten
-    QueryPacsJob(PacsDevice parameters, DicomMask mask, QueryLevel queryLevel);
+    QueryPacsJob(PacsDevice parameters, DicomMask mask);
     ~QueryPacsJob();
 
     /// El codi d'aquest mètode es el que s'executa en un nou thread
@@ -43,7 +41,7 @@ public:
     DicomMask getDicomMask();
 
     /// Indica a quin nivell es fa la consulta study, series, image
-    QueryLevel getQueryLevel();
+    DicomMask::QueryLevel getQueryLevel();
 
     /// Retorna la llista d'estudis trobats que compleixen el criteri de cerca
     QList<Patient*> getPatientStudyList();
@@ -65,12 +63,11 @@ private:
     void requestCancelJob();
 
     /// Retorna el Query Level com a QString per poder generar els missatges d'error
-    QString getQueryLevelAsQString();
+    QString getQueryLevelFromDICOMMaskAsQString();
 
 private:
     DicomMask m_mask;
     QueryPacs *m_queryPacs;
-    QueryLevel m_queryLevel;
 
     PACSRequestStatus::QueryRequestStatus m_queryRequestStatus;
 };
