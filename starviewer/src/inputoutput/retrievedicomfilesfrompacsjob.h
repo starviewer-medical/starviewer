@@ -24,7 +24,8 @@ public:
     enum RetrievePriorityJob { Low = 0, Medium = 2, High = 3 };
 
     /// Constructor/Destructor de la classe. Si seriesInstanceUID està buit descarregarà tot l'estudi, si té valor només aquella sèrie, i si també especifiquem el SOPInstanceUID
-    //només descarregarà la imatge amb el SOPInstanceUID de la sèrie especificada, de l'estudi especificat
+    /// només descarregarà la imatge amb el SOPInstanceUID de la sèrie especificada, de l'estudi especificat. L'Objecte Study que se li passa se'n fa copia, per evitar que si a
+    /// fora destrueixen l'Study quan aquesta classe encara el necessiti peti l'aplicacio
     RetrieveDICOMFilesFromPACSJob(PacsDevice pacsDevice, RetrievePriorityJob, Study *studyToRetrieveDICOMFiles, const QString &seriesInstanceUID = "" , 
         const QString &sopInstanceUID = "");
     ~RetrieveDICOMFilesFromPACSJob();
@@ -32,7 +33,7 @@ public:
     /// Retorna el tipus de PACSJob que és l'objecte
     PACSJob::PACSJobType getPACSJobType();
 
-    /// Retorna l'estudi del qual s'han de descarregar els fitxers
+    /// Retorna l'estudi del qual s'han de descarregar els fitxers. Aquest objecte s'esborra quan es destrueixi el Job
     Study* getStudyToRetrieveDICOMFiles();
 
     /// Codi que executarà el job
@@ -88,6 +89,9 @@ private:
 
     /// Demana que es cancel·li la descarrega del job
     void requestCancelJob();
+
+    /// Copia la informacio basica de l'estudi en un nou objecte Study
+    Study* copyBasicStudyInformation(Study *studyToCopy);
 
 private:
     RetrieveDICOMFilesFromPACS *m_retrieveDICOMFilesFromPACS;

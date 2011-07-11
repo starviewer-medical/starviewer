@@ -28,7 +28,7 @@ RetrieveDICOMFilesFromPACSJob::RetrieveDICOMFilesFromPACSJob(PacsDevice pacsDevi
     Q_ASSERT(studyToRetrieveDICOMFiles->getParentPatient());
 
     m_retrieveDICOMFilesFromPACS = new RetrieveDICOMFilesFromPACS(getPacsDevice());
-    m_studyToRetrieveDICOMFiles = studyToRetrieveDICOMFiles;
+    m_studyToRetrieveDICOMFiles = copyBasicStudyInformation(studyToRetrieveDICOMFiles);
     m_seriesInstanceUIDToRetrieve = seriesInstanceUIDToRetrieve;
     m_SOPInstanceUIDToRetrieve = sopInstanceUIDToRetrieve;
     m_retrievePriorityJob = retrievePriorityJob;
@@ -36,6 +36,7 @@ RetrieveDICOMFilesFromPACSJob::RetrieveDICOMFilesFromPACSJob(PacsDevice pacsDevi
 
 RetrieveDICOMFilesFromPACSJob::~RetrieveDICOMFilesFromPACSJob()
 {
+    delete m_studyToRetrieveDICOMFiles;
     delete m_retrieveDICOMFilesFromPACS;
 }
 
@@ -333,6 +334,30 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
     }
 
     return message;
+}
+
+Study* RetrieveDICOMFilesFromPACSJob::copyBasicStudyInformation(Study *studyToCopy)
+{
+    Study *copiedStudy = new Study();
+    Patient *copiedPatient = new Patient();
+
+    copiedPatient->setID(studyToCopy->getParentPatient()->getID());
+    copiedPatient->setFullName(studyToCopy->getParentPatient()->getFullName());
+
+    copiedStudy->setParentPatient(copiedPatient);
+    copiedStudy->setInstanceUID(studyToCopy->getInstanceUID());
+    copiedStudy->setID(studyToCopy->getID());
+    copiedStudy->setDateTime(studyToCopy->getDateAsString(), studyToCopy->getTimeAsString());
+    copiedStudy->setDescription(studyToCopy->getDescription());
+
+    foreach(QString modality, studyToCopy->getModalities())
+    {
+        copiedStudy->addModality(modality);
+    }
+
+    copiedStudy->setDICOMSource(studyToCopy->getDICOMSource());
+
+    return copiedStudy;
 }
 
 };
