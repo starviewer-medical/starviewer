@@ -78,7 +78,7 @@ void MagicTool::assignBounds(int &minX, int &minY, int &maxX, int &maxY)
     int ext[6];
     m_2DViewer->getInput()->getWholeExtent(ext);
 
-	int xIndex, yIndex, zIndex;
+    int xIndex, yIndex, zIndex;
     Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
 
     minX = ext[xIndex * 2];
@@ -132,8 +132,8 @@ void MagicTool::modifyMagicFactor()
         if (m_magicFactor - displacementY > 0.0)
         {
             m_magicFactor -= displacementY;
-			this->generateRegion();
-        }        
+            this->generateRegion();
+        }
     }
 }
 
@@ -244,7 +244,7 @@ void MagicTool::computeRegionMask()
             if ((x > minX) && (x < maxX) && (y > minY) && (y < maxY))
             {
                 // \TODO S'hauria de fer servir VolumePixelData::getVoxelValue o similar
-				value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(x, y, z, 0);
+                value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(x, y, z, 0);
 
                 if ((value >= m_lowerLevel) && (value <= m_upperLevel) && (!m_mask[y * maxX + x]))
                 {
@@ -494,14 +494,14 @@ double MagicTool::getStandardDeviation(int x, int y, int z)
     int maxX;
     int maxY;
     
-	this->assignBounds(minX, minY, maxX, maxY);
+    this->assignBounds(minX, minY, maxX, maxY);
 
     minX = qMax(x - m_magicSize, minX);
     maxX = qMin(x + m_magicSize, maxX);
     minY = qMax(y - m_magicSize, minY);
     maxY = qMin(y + m_magicSize, maxY);
 
-	int xIndex, yIndex, zIndex;
+    int xIndex, yIndex, zIndex;
     Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
 
     int index[3];
