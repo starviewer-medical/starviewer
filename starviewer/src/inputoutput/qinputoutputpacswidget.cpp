@@ -68,12 +68,12 @@ void QInputOutputPacsWidget::createConnections()
     connect(m_studyTreeWidget, SIGNAL(requestedSeriesOfStudy(Study*)), SLOT(requestedSeriesOfStudy(Study*)));
     connect(m_studyTreeWidget, SIGNAL(requestedImagesOfSeries(Series*)), SLOT(requestedImagesOfSeries(Series*)));
 
-    connect(m_studyTreeWidget, SIGNAL(studyDoubleClicked()), SLOT(retrieveSelectedStudies()));
-    connect(m_studyTreeWidget, SIGNAL(seriesDoubleClicked()), SLOT(retrieveSelectedStudies()));
-    connect(m_studyTreeWidget, SIGNAL(imageDoubleClicked()), SLOT(retrieveSelectedStudies()));
+    connect(m_studyTreeWidget, SIGNAL(studyDoubleClicked()), SLOT(retrieveSelectedItemsFromQStudyTreeWidget()));
+    connect(m_studyTreeWidget, SIGNAL(seriesDoubleClicked()), SLOT(retrieveSelectedItemsFromQStudyTreeWidget()));
+    connect(m_studyTreeWidget, SIGNAL(imageDoubleClicked()), SLOT(retrieveSelectedItemsFromQStudyTreeWidget()));
 
-    connect(m_retrievAndViewButton, SIGNAL(clicked()), SLOT(retrieveAndViewSelectedStudies()));
-    connect(m_retrieveButton, SIGNAL(clicked()), SLOT(retrieveSelectedStudies()));
+    connect(m_retrievAndViewButton, SIGNAL(clicked()), SLOT(retrieveAndViewSelectedItemsFromQStudyTreeWidget()));
+    connect(m_retrieveButton, SIGNAL(clicked()), SLOT(retrieveSelectedItemsFromQStudyTreeWidget()));
 
     connect(m_cancelQueryButton, SIGNAL(clicked()), SLOT(cancelCurrentQueriesToPACS()));
 }
@@ -83,13 +83,13 @@ void QInputOutputPacsWidget::createContextMenuQStudyTreeWidget()
     QAction *action;
 
     action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/retrieveAndView.png"), tr("Retrieve && &View"), this,
-                                                     SLOT(retrieveAndViewSelectedStudies()),
+                                                     SLOT(retrieveAndViewSelectedItemsFromQStudyTreeWidget()),
                                                      ShortcutManager::getShortcuts(Shortcuts::RetrieveAndViewSelectedStudies).first());
-    (void) new QShortcut(action->shortcut(), this, SLOT(retrieveAndViewSelectedStudies()));
+    (void) new QShortcut(action->shortcut(), this, SLOT(retrieveAndViewSelectedItemsFromQStudyTreeWidget()));
 
-    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/retrieve.png"), tr("&Retrieve"), this, SLOT(retrieveSelectedStudies()),
+    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/retrieve.png"), tr("&Retrieve"), this, SLOT(retrieveSelectedItemsFromQStudyTreeWidget()),
                                                      ShortcutManager::getShortcuts(Shortcuts::RetrieveSelectedStudies).first());
-    (void) new QShortcut(action->shortcut(), this, SLOT(retrieveSelectedStudies()));
+    (void) new QShortcut(action->shortcut(), this, SLOT(retrieveSelectedItemsFromQStudyTreeWidget()));
 
     // Especifiquem que es el menu del dicomdir
     m_studyTreeWidget->setContextMenu(& m_contextMenuQStudyTreeWidget);
@@ -283,47 +283,34 @@ void QInputOutputPacsWidget::requestedImagesOfSeries(Series *series)
         QueryPacsJob::image));
 }
 
-void QInputOutputPacsWidget::retrieveSelectedStudies()
+void QInputOutputPacsWidget::retrieveSelectedItemsFromQStudyTreeWidget()
 {
-    QList<QPair<DicomMask, DICOMSource> > dicomMaskDICOMSourceList = m_studyTreeWidget->getDicomMaskOfSelectedItems();
-
-    if (dicomMaskDICOMSourceList.isEmpty())
+    if (m_studyTreeWidget->getDicomMaskOfSelectedItems().isEmpty())
     {
         QApplication::restoreOverrideCursor();
         QMessageBox::warning(this, ApplicationNameString, tr("Select a study to retrieve."));
         return;
     }
 
-    for (int index = 0; index < dicomMaskDICOMSourceList.count(); index++)
-    {
-        if (dicomMaskDICOMSourceList.at(index).second.getRetrievePACS().count() > 0)
-        {
-            DicomMask dicomMaskToRetrieve = dicomMaskDICOMSourceList.at(index).first;
-            DICOMSource dicomSourceStudyToRetrieve = dicomMaskDICOMSourceList.at(index).second;
-            PacsDevice pacsDeviceFromRetrieve = dicomSourceStudyToRetrieve.getRetrievePACS().at(0); //Agafem el primer PACS
-
-            //QStudyTreeWidget manté la llista d'Studys que mostra fins que se l'invoca el mètode clean(), si un usuari mentre es descarrega un estudi ens
-            //fes una altra cerca el mètode clean s'invocaria per netejar els resultats de la última cerca, això faria que el Study passats per punter als jobs
-            //actius ja no existissin fent petar Starviewer quan s'hi accedís a la seva informació. Per això passem una còpia de l'objecte Study obtingut
-            //del QStudyTreeWidget amb la informació bàsica.
-            retrieve(pacsDeviceFromRetrieve.getID(), None, m_studyTreeWidget->getStudy(dicomMaskToRetrieve.getStudyInstanceUID(), dicomSourceStudyToRetrieve),
-                dicomMaskToRetrieve.getSeriesInstanceUID(), dicomMaskToRetrieve.getSOPInstanceUID());
-        }
-    }
+    retrieveSelectedItemsFromQStudyTreeWidget(None);
 }
 
-//TODO:Fusiona amb retrieveSelectedStudies
-void QInputOutputPacsWidget::retrieveAndViewSelectedStudies()
+void QInputOutputPacsWidget::retrieveAndViewSelectedItemsFromQStudyTreeWidget()
 {
-    QList<QPair<DicomMask, DICOMSource> > dicomMaskDICOMSourceList = m_studyTreeWidget->getDicomMaskOfSelectedItems();
-
-    if (dicomMaskDICOMSourceList.isEmpty())
+    if (m_studyTreeWidget->getDicomMaskOfSelectedItems().isEmpty())
     {
         QApplication::restoreOverrideCursor();
         QMessageBox::warning(this, ApplicationNameString, tr("Select a study to retrieve and view."));
         return;
     }
 
+    retrieveSelectedItemsFromQStudyTreeWidget(View);
+}
+
+void QInputOutputPacsWidget::retrieveSelectedItemsFromQStudyTreeWidget(ActionsAfterRetrieve _actionsAfterRetrieve)
+{
+    QList<QPair<DicomMask, DICOMSource> > dicomMaskDICOMSourceList = m_studyTreeWidget->getDicomMaskOfSelectedItems();
+
     for (int index = 0; index < dicomMaskDICOMSourceList.count(); index++)
     {
         if (dicomMaskDICOMSourceList.at(index).second.getRetrievePACS().count() > 0)
@@ -332,11 +319,7 @@ void QInputOutputPacsWidget::retrieveAndViewSelectedStudies()
             DICOMSource dicomSourceStudyToRetrieve = dicomMaskDICOMSourceList.at(index).second;
             PacsDevice pacsDeviceFromRetrieve = dicomSourceStudyToRetrieve.getRetrievePACS().at(0); //Agafem el primer PACS
 
-            //QStudyTreeWidget manté la llista d'Studys que mostra fins que se l'invoca el mètode clean(), si un usuari mentre es descarrega un estudi ens
-            //fes una altra cerca el mètode clean s'invocaria per netejar els resultats de la última cerca, això faria que el Study passats per punter als jobs
-            //actius ja no existissin fent petar Starviewer quan s'hi accedís a la seva informació. Per això passem una còpia de l'objecte Study obtingut
-            //del QStudyTreeWidget amb la informació bàsica.
-            retrieve(pacsDeviceFromRetrieve.getID(), View, m_studyTreeWidget->getStudy(dicomMaskToRetrieve.getStudyInstanceUID(), dicomSourceStudyToRetrieve),
+            retrieve(pacsDeviceFromRetrieve.getID(), _actionsAfterRetrieve, m_studyTreeWidget->getStudy(dicomMaskToRetrieve.getStudyInstanceUID(), dicomSourceStudyToRetrieve),
                 dicomMaskToRetrieve.getSeriesInstanceUID(), dicomMaskToRetrieve.getSOPInstanceUID());
         }
     }

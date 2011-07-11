@@ -105,11 +105,11 @@ private slots:
     void requestedImagesOfSeries(Series *series);
 
     /// Importa cap a la base de dades local els estudis seleccionats
-    void retrieveSelectedStudies();
+    void retrieveSelectedItemsFromQStudyTreeWidget();
 
     /// Importa cap a la base de dades local els estudis seleccionats indicant
     /// que s'han de visualitzar immediatament un cop descarregats
-    void retrieveAndViewSelectedStudies();
+    void retrieveAndViewSelectedItemsFromQStudyTreeWidget();
 
     /// Cancel·la els QueryPACSJob que s'han llançat des d'aquesta classe i que encara no han finalitzat (cancel·la els que s'estan executant i els pendents
     /// d'executar).
@@ -144,6 +144,10 @@ private:
 
     /// Amaga/mostra que hi ha una query en progress i habilitat/deshabilitat el botó de cancel·lar la query actual
     void setQueryInProgress(bool queryInProgress);
+
+    /// Descarrega els estudis seleccionats dels QStudyTreeWidget, i una vegada descarregats por a terme l'acció passada per paràmetre
+    void retrieveSelectedItemsFromQStudyTreeWidget(ActionsAfterRetrieve _actionsAfterRetrieve);
+
 };
 
 };// end namespace udg
