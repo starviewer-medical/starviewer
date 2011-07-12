@@ -906,6 +906,43 @@ void Q2DViewer::resetView(CameraOrientationType view)
     m_lastView = view;
     m_alignPosition = Q2DViewer::AlignCenter;
     resetCamera();
+    
+    if (m_mainVolume)
+    {
+        // En comptes de fer servir sempre this->getMaximumSlice(), actualitzem
+        // Aquest valor quan cal, és a dir, al posar input i al canviar de vista
+        // estalviant-nos crides i crides
+        m_maxSliceValue = this->getMaximumSlice();
+
+        // Reiniciem valors per defecte de la càmera
+        m_rotateFactor = 0;
+        m_applyFlip = false;
+        m_isImageFlipped = false;
+        int initialSliceIndex = 0;
+        if (m_lastView == Sagital || m_lastView == Coronal)
+        {
+            initialSliceIndex = m_maxSliceValue/2;
+        }
+        // Posicionem la imatge
+        // TODO No ho fem amb setSlice() perquè introdueix flickering degut a
+        // l'emit sliceChanged() que provoca un render() a través del Drawer.
+        // Cal veure com evitar aquesta duplicació de codi de setSlice() perquè tot segueixi funcionant igual
+        checkAndUpdateSliceValue(initialSliceIndex);
+        updateDisplayExtent();
+
+        // Aquesta línia és de més a més (adicional al codi de setSlice()!)
+        getRenderer()->ResetCamera();
+        updateAnnotationsInformation(Q2DViewer::SliceAnnotation | Q2DViewer::WindowInformationAnnotation);
+        mapOrientationStringToAnnotation();
+
+        // Ajustem la imatge al viewport
+        fitImageIntoViewport();
+
+        // Hem d'indicar l'slice changed al final per evitar el flickering que abans comentàvem
+        emit sliceChanged(m_currentSlice);
+        render();
+    }
+    
     // Thick Slab, li indiquem la direcció de projecció actual
     m_thickSlabProjectionFilter->SetProjectionDimension(m_lastView);
     emit viewChanged(m_lastView);
@@ -1011,20 +1048,9 @@ void Q2DViewer::resetCamera()
 {
     if (m_mainVolume)
     {
-        // En comptes de fer servir sempre this->getMaximumSlice(), actualitzem
-        // Aquest valor quan cal, és a dir, al posar input i al canviar de vista
-        // estalviant-nos crides i crides
-        m_maxSliceValue = this->getMaximumSlice();
-
-        // Reiniciem valors per defecte de la càmera
-        m_rotateFactor = 0;
-        m_applyFlip = false;
-        m_isImageFlipped = false;
-
         vtkCamera *camera = getActiveCamera();
         Q_ASSERT(camera);
 
-        int initialSliceIndex = 0;
         double cameraViewUp[3] = { 0.0, 0.0, 0.0 };
         double cameraPosition[3] = { 0.0, 0.0, 0.0 };
         double cameraRoll = 0.0;
@@ -1038,8 +1064,6 @@ void Q2DViewer::resetCamera()
                 cameraViewUp[1] = -1.0;
                 cameraPosition[2] = -1.0;
                 cameraRoll = 180.0;
-                // Indiquem quina és la llesca inicial
-                initialSliceIndex = 0;
                 break;
 
             case Sagital:
@@ -1057,9 +1081,6 @@ void Q2DViewer::resetCamera()
                 {
                     cameraRoll = -90.0;
                 }
-
-                // Indiquem quina és la llesca inicial
-                initialSliceIndex = m_maxSliceValue/2;
                 break;
 
             case Coronal:
@@ -1078,9 +1099,6 @@ void Q2DViewer::resetCamera()
                 {
                     cameraRoll = 0.0;
                 }
-
-                // Indiquem quina és la llesca inicial
-                initialSliceIndex = m_maxSliceValue/2;
                 break;
         }
 
@@ -1093,25 +1111,6 @@ void Q2DViewer::resetCamera()
         {
             camera->Azimuth(cameraAzimuth);
         }
-
-        // Posicionem la imatge
-        // TODO No ho fem amb setSlice() perquè introdueix flickering degut a
-        // l'emit sliceChanged() que provoca un render() a través del Drawer.
-        // Cal veure com evitar aquesta duplicació de codi de setSlice() perquè tot segueixi funcionant igual
-        checkAndUpdateSliceValue(initialSliceIndex);
-        updateDisplayExtent();
-
-        // Aquesta línia és de més a més (adicional al codi de setSlice()!)
-        getRenderer()->ResetCamera();
-        updateAnnotationsInformation(Q2DViewer::SliceAnnotation | Q2DViewer::WindowInformationAnnotation);
-        mapOrientationStringToAnnotation();
-
-        // Ajustem la imatge al viewport
-        fitImageIntoViewport();
-
-        // Hem d'indicar l'slice changed al final per evitar el flickering que abans comentàvem
-        emit sliceChanged(m_currentSlice);
-        render();
     }
     else
     {
