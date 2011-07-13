@@ -1867,18 +1867,7 @@ void Q2DViewer::updateDisplayExtent()
     // TODO Potser el càlcul de l'índex de l'imatge l'hauria de fer Volume que
     // és qui coneix com es guarda la informació de la imatge, ja que si canviem la manera
     // de guardar les phases, això ja no ens valdria
-    // Thick slab
-    int sliceValue;
-    if (isThickSlabActive())
-    {
-        // En comptes de currentSlice podria ser m_firstSlabSlice, que és equivalent
-        // Podria ser 0, dependent de l'extent de sortida del filtre
-        sliceValue = m_currentSlice;
-    }
-    else
-    {
-        sliceValue = m_currentSlice * m_numberOfPhases + m_currentPhase;
-    }
+    int sliceValue = getImageDataZIndexForSliceAndPhase(m_currentSlice, m_currentPhase);
 
     // A partir de l'extent del volum, la vista i la llesca en la que ens trobem,
     // calculem l'extent que li correspon a l'actor imatge
@@ -1891,6 +1880,21 @@ void Q2DViewer::updateDisplayExtent()
 
     // TODO Si separem els renderers potser caldria aplicar-ho a cada renderer?
     getRenderer()->ResetCameraClippingRange();
+}
+
+int Q2DViewer::getImageDataZIndexForSliceAndPhase(int slice, int phase)
+{
+    int zIndex;
+    if (isThickSlabActive())
+    {
+        zIndex = slice;
+    }
+    else
+    {
+        zIndex = slice * m_numberOfPhases + phase;
+    }
+
+    return zIndex;
 }
 
 void Q2DViewer::enableAnnotation(AnnotationFlags annotation, bool enable)
