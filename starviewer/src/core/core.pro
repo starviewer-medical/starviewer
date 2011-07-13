@@ -45,6 +45,7 @@ HEADERS += extensionfactory.h \
     repositorybase.h \
     repository.h \
     q2dviewer.h \
+    q3dmprviewer.h \
     q3dviewer.h \
     qviewer.h \
     patient.h \
@@ -265,6 +266,7 @@ SOURCES += extensionmediator.cpp \
     repositorybase.cpp \
     repository.cpp \
     q2dviewer.cpp \
+    q3dmprviewer.cpp \
     q3dviewer.cpp \
     qviewer.cpp \
     patient.cpp \
