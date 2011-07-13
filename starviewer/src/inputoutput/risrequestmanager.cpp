@@ -113,7 +113,7 @@ void RISRequestManager::queryPACSRISStudyRequest(DicomMask maskRISRequest)
 
     foreach (const PacsDevice &pacsDevice, queryablePACS)
     {
-        enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, maskRISRequest));
+        enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, maskRISRequest, QueryPacsJob::study));
     }
 }
 

@@ -116,7 +116,7 @@ void QInputOutputPacsWidget::queryStudy(DicomMask queryMask, QList<PacsDevice> p
 
         foreach (const PacsDevice &pacsDeviceToQuery, pacsToQueryList)
         {
-            enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDeviceToQuery, queryMask));
+            enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDeviceToQuery, queryMask, QueryPacsJob::study));
         }
     }
 }
@@ -193,11 +193,11 @@ void QInputOutputPacsWidget::queryPACSJobFinished(PACSJob *pacsJob)
 
 void QInputOutputPacsWidget::showQueryPACSJobResults(QueryPacsJob *queryPACSJob)
 {
-    if (queryPACSJob->getQueryLevel() == DicomMask::study)
+    if (queryPACSJob->getQueryLevel() == QueryPacsJob::study)
     {
         m_studyTreeWidget->insertPatientList(queryPACSJob->getPatientStudyList());
     }
-    else if (queryPACSJob->getQueryLevel() == DicomMask::series)
+    else if (queryPACSJob->getQueryLevel() == QueryPacsJob::series)
     {
         QList<Series*> seriesList = queryPACSJob->getSeriesList();
         QString studyInstanceUID = queryPACSJob->getDicomMask().getStudyInstanceUID();
@@ -211,7 +211,7 @@ void QInputOutputPacsWidget::showQueryPACSJobResults(QueryPacsJob *queryPACSJob)
             m_studyTreeWidget->insertSeriesList(studyInstanceUID, seriesList);
         }
     }
-    else if (queryPACSJob->getQueryLevel() == DicomMask::image)
+    else if (queryPACSJob->getQueryLevel() == QueryPacsJob::image)
     {
         QList<Image*> imageList = queryPACSJob->getImageList();
         QString studyInstanceUID = queryPACSJob->getDicomMask().getStudyInstanceUID();
@@ -234,11 +234,11 @@ void QInputOutputPacsWidget::showErrorQueringPACS(QueryPacsJob *queryPACSJob)
     {
         switch (queryPACSJob->getQueryLevel())
         {
-            case DicomMask::study:
+            case QueryPacsJob::study:
                 QMessageBox::critical(this, ApplicationNameString, queryPACSJob->getStatusDescription());
                 break;
-            case DicomMask::series:
-            case DicomMask::image:
+            case QueryPacsJob::series:
+            case QueryPacsJob::image:
                 QMessageBox::warning(this, ApplicationNameString, queryPACSJob->getStatusDescription());
                 break;
         }
@@ -263,7 +263,7 @@ void QInputOutputPacsWidget::requestedSeriesOfStudy(Study *study)
 
     INFO_LOG("Cercant informacio de les series de l'estudi" + study->getInstanceUID() + " del PACS " + pacsDescription);
 
-    enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, buildSeriesDicomMask(study->getInstanceUID())));
+    enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, buildSeriesDicomMask(study->getInstanceUID()), QueryPacsJob::series));
 }
 
 void QInputOutputPacsWidget::requestedImagesOfSeries(Series *series)
@@ -279,7 +279,8 @@ void QInputOutputPacsWidget::requestedImagesOfSeries(Series *series)
 
     INFO_LOG("Cercant informacio de les imatges de la serie" + series->getInstanceUID() + " de l'estudi" + series->getParentStudy()->getInstanceUID() + " del PACS " + pacsDescription);
 
-    enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, buildImageDicomMask(series->getParentStudy()->getInstanceUID(), series->getInstanceUID())));
+    enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, buildImageDicomMask(series->getParentStudy()->getInstanceUID(), series->getInstanceUID()),
+        QueryPacsJob::image));
 }
 
 void QInputOutputPacsWidget::retrieveSelectedItemsFromQStudyTreeWidget()

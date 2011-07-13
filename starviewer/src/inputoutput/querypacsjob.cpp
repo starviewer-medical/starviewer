@@ -13,12 +13,13 @@
 
 namespace udg {
 
-QueryPacsJob::QueryPacsJob(PacsDevice pacsDevice, DicomMask mask)
+QueryPacsJob::QueryPacsJob(PacsDevice pacsDevice, DicomMask mask, QueryLevel queryLevel)
  : PACSJob(pacsDevice)
 {
     // Creem l'objecte fer la query
     m_queryPacs = new QueryPacs(pacsDevice);
     m_mask = mask;
+    m_queryLevel = queryLevel;
 }
 
 QueryPacsJob::~QueryPacsJob()
@@ -50,9 +51,9 @@ DicomMask QueryPacsJob::getDicomMask()
     return m_mask;
 }
 
-DicomMask::QueryLevel QueryPacsJob::getQueryLevel()
+QueryPacsJob::QueryLevel QueryPacsJob::getQueryLevel()
 {
-    return m_mask.getQueryLevel();
+    return m_queryLevel;
 }
 
 QList<Patient*> QueryPacsJob::getPatientStudyList()
@@ -94,13 +95,13 @@ QString QueryPacsJob::getStatusDescription()
     switch (getStatus())
     {
         case PACSRequestStatus::QueryOk:
-            message = tr("Query %1 to PACS %2 has been successful.").arg(getQueryLevelFromDICOMMaskAsQString(), pacsAETitle);
+            message = tr("Query %1 to PACS %2 has been successful.").arg(getQueryLevelAsQString(), pacsAETitle);
             break;
         case PACSRequestStatus::QueryCancelled:
-            message = tr("Query %1 to PACS %2 has been cancelled.").arg(getQueryLevelFromDICOMMaskAsQString(), pacsAETitle);
+            message = tr("Query %1 to PACS %2 has been cancelled.").arg(getQueryLevelAsQString(), pacsAETitle);
             break;
         case PACSRequestStatus::QueryCanNotConnectToPACS:
-            message = tr("%1 can't connect to PACS %2 trying to query %3.\n").arg(ApplicationNameString, pacsAETitle, getQueryLevelFromDICOMMaskAsQString());
+            message = tr("%1 can't connect to PACS %2 trying to query %3.\n").arg(ApplicationNameString, pacsAETitle, getQueryLevelAsQString());
             message += tr("\nBe sure that your computer is connected on network and the PACS parameters are correct.");
             message += tr("If the problem persists contact with an administrator.");
             break;
@@ -113,7 +114,7 @@ QString QueryPacsJob::getStatusDescription()
             message += tr("Please contact with PACS administrator to report the issue.");
             break;
         default:
-            message = tr("An unknown error has occurred querying %1 to PACS %2.").arg(getQueryLevelFromDICOMMaskAsQString(), pacsAETitle);
+            message = tr("An unknown error has occurred querying %1 to PACS %2.").arg(getQueryLevelAsQString(), pacsAETitle);
             message += tr("\nIf the problem persists contact with an administrator.");
             break;
     }
@@ -121,15 +122,15 @@ QString QueryPacsJob::getStatusDescription()
     return message;
 }
 
-QString QueryPacsJob::getQueryLevelFromDICOMMaskAsQString()
+QString QueryPacsJob::getQueryLevelAsQString()
 {
-    switch (m_mask.getQueryLevel())
+    switch (m_queryLevel)
     {
-        case DicomMask::study:
+        case study:
             return tr("studies");
-        case DicomMask::series:
+        case series:
             return tr("series");
-        case DicomMask::image:
+        case image:
             return tr("images");
         default:
             return tr("unknown query level");

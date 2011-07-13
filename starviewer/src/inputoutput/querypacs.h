@@ -41,8 +41,6 @@ public:
     /// cancel·la la query
     void cancelQuery();
 
-    /// Retorna els resultats de cerca. Només retornarà els resulats de cerca pel nivell de cerca indicat a la DicomMask, per exemple en una DicomMask
-    /// per cerca sèries només getQueryResultAsSeriesList retornarà resultats, els altres dos mètodes retornaran llistes buides
     QList<Patient*> getQueryResultsAsPatientStudyList();
     QList<Series*> getQueryResultsAsSeriesList();
     QList<Image*> getQueryResultsAsImageList();
@@ -85,8 +83,6 @@ private:
 
     // Indicarà de quin PACS hem obtingut estudis, sèries, imatges
     DICOMSource m_resultsDICOMSource;
-
-    DicomMask::QueryLevel m_queryLevel;
 };
 };
 #endif
