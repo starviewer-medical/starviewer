@@ -904,6 +904,7 @@ void Q2DViewer::resetView(CameraOrientationType view)
     // Important, cal desactivar el thickslab abans de fer m_lastView = view, sinó falla amb l'update extent
     enableThickSlab(false);
     m_lastView = view;
+    updateAnnotationsInformation(Q2DViewer::WindowInformationAnnotation);
     m_alignPosition = Q2DViewer::AlignCenter;
     resetCamera();
     
@@ -918,29 +919,27 @@ void Q2DViewer::resetView(CameraOrientationType view)
         m_rotateFactor = 0;
         m_applyFlip = false;
         m_isImageFlipped = false;
+
+        // Ara adaptem els actors a la nova configuració de la càmara perquè siguin visibles
+        enableRendering(false);
+        // TODO Això s'hauria d'encapsular en un mètode tipu "resetDisplayExtent()"
+        m_currentSlice = 0; // HACK! Necessari perquè s'actualitzi la llesca correctament
+        updateDisplayExtent();
+        getRenderer()->ResetCamera();
+        // Fins aquí seria el mètode "resetDisplayExtent()"
+        
+        // Ajustem la imatge al viewport
+        fitImageIntoViewport();
+        
+        // Calculem la llesca que cal mostrar segons la vista escollida
         int initialSliceIndex = 0;
         if (m_lastView == Sagital || m_lastView == Coronal)
         {
             initialSliceIndex = m_maxSliceValue/2;
         }
-        // Posicionem la imatge
-        // TODO No ho fem amb setSlice() perquè introdueix flickering degut a
-        // l'emit sliceChanged() que provoca un render() a través del Drawer.
-        // Cal veure com evitar aquesta duplicació de codi de setSlice() perquè tot segueixi funcionant igual
-        checkAndUpdateSliceValue(initialSliceIndex);
-        updateDisplayExtent();
-
-        // Aquesta línia és de més a més (adicional al codi de setSlice()!)
-        getRenderer()->ResetCamera();
-        updateAnnotationsInformation(Q2DViewer::SliceAnnotation | Q2DViewer::WindowInformationAnnotation);
-        mapOrientationStringToAnnotation();
-
-        // Ajustem la imatge al viewport
-        fitImageIntoViewport();
-
-        // Hem d'indicar l'slice changed al final per evitar el flickering que abans comentàvem
-        emit sliceChanged(m_currentSlice);
-        render();
+        enableRendering(true);
+        m_currentSlice = -1; // HACK! Necessari perquè s'actualitzi la llesca correctament
+        setSlice(initialSliceIndex);
     }
     
     // Thick Slab, li indiquem la direcció de projecció actual
