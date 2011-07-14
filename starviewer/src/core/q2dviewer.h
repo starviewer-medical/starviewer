@@ -364,7 +364,7 @@ private:
     /// Construeix el pipeline pel tractament de window/level de la imatge
     void buildWindowLevelPipeline();
 
-    /// Re-inicia la càmera en la vista actual. Posa els paràmetres de rotació, zoom, desplaçament, flip, etc. als seus valors inicials
+    /// Re-inicia els paràmetres de la càmera segons la vista actual.
     void resetCamera();
 
     /// Thick slab
