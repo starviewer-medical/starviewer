@@ -173,7 +173,7 @@ void AngleTool::drawCircle()
     double pv[3];
     MathTools::crossProduct(firstSegment, secondSegment, pv);
 
-    int view = m_2DViewer->getView();
+    Q2DViewer::CameraOrientationType view = m_2DViewer->getView();
     int zIndex = Q2DViewer::getZIndexForView(view);
     if (pv[zIndex] > 0)
     {
@@ -312,7 +312,7 @@ void AngleTool::placeText(DrawerText *angleText)
     double *p2 = m_mainPolyline->getPoint(1);
     double *p3 = m_mainPolyline->getPoint(2);
     double position[3];
-    int view = m_2DViewer->getView();
+    Q2DViewer::CameraOrientationType view = m_2DViewer->getView();
     int horizontalCoord = Q2DViewer::getXIndexForView(view);
     int verticalCoord = Q2DViewer::getYIndexForView(view);
 

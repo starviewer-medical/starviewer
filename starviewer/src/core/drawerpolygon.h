@@ -2,6 +2,7 @@
 #define UDGDRAWERPOLYGON_H
 
 #include "drawerprimitive.h"
+#include "q2dviewer.h"
 
 class vtkPolyData;
 class vtkPoints;
@@ -54,7 +55,7 @@ public:
     void getBounds(double [6]);
 
     /// Calcula l'àrea del polígon
-    double computeArea(int view, double *spacing = NULL);
+    double computeArea(Q2DViewer::CameraOrientationType view, double *spacing = NULL);
 
 public slots:
     void update();

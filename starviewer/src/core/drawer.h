@@ -4,9 +4,10 @@
 #include <QObject>
 #include <QMultiMap>
 
+#include "q2dviewer.h"
+
 namespace udg {
 
-class Q2DViewer;
 class DrawerPrimitive;
 
 /**
@@ -52,7 +53,7 @@ public:
     DrawerPrimitive* getNearestPrimitiveToPoint(double point[3], int view, int slice, double closestPoint[3]);
 
     /// Ens esborra les primitives que estiguin dins de la zona delimitada pels punts passats per paràmetre.
-    void erasePrimitivesInsideBounds(double bounds[6], int view, int slice);
+    void erasePrimitivesInsideBounds(double bounds[6], Q2DViewer::CameraOrientationType view, int slice);
 
     /// Ens diu el total de primitives dibuixades en totes les vistes
     int getNumberOfDrawnPrimitives();
@@ -78,7 +79,7 @@ private:
     void show(int plane, int slice);
 
     /// Ens diu si la primitiva donada, que es troba a la vista view, està dins dels bounds indicats
-    bool isPrimitiveInside(DrawerPrimitive *primitive, int view, double bounds[6]);
+    bool isPrimitiveInside(DrawerPrimitive *primitive, Q2DViewer::CameraOrientationType view, double bounds[6]);
 
     /// Esborra la primitiva donada del contenidor de primitives especificat.
     /// Si la troba l'esborra. Retorna cert si la troba, fals altrament.

@@ -1,6 +1,5 @@
 #include "drawerpolygon.h"
 #include "logging.h"
-#include "q2dviewer.h"
 #include "mathtools.h"
 // Vtk
 #include <vtkPolyData.h>
@@ -280,7 +279,7 @@ void DrawerPolygon::getBounds(double bounds[6])
     }
 }
 
-double DrawerPolygon::computeArea(int view, double *spacing)
+double DrawerPolygon::computeArea(Q2DViewer::CameraOrientationType view, double *spacing)
 {
     double volumeSpacing[3];
     if (spacing == NULL)
