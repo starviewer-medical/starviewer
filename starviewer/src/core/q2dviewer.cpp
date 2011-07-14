@@ -1068,31 +1068,29 @@ void Q2DViewer::resetCamera()
     double cameraRoll = 0.0;
     double cameraAzimuth = 0.0;
 
+    // Ajustem els paràmetres de la càmera segons la vista
     switch (m_lastView)
     {
         case Axial:
-            // Paràmetres de la càmera
             cameraViewUp[1] = -1.0;
             cameraPosition[2] = -1.0;
             cameraRoll = 180.0;
             break;
 
         case Sagital:
-            // Paràmetres de la càmera
             cameraViewUp[2] = 1.0;
             cameraPosition[0] = 1.0;
             cameraRoll = -90.0;
             break;
 
         case Coronal:
-            // Paràmetres de la càmera
             cameraViewUp[2] = 1.0;
             cameraPosition[1] = -1.0;
             cameraRoll = 0.0;
             break;
     }
 
-    // Ajustem la càmera
+    // Assignem els valors
     camera->SetFocalPoint(0, 0, 0);
     camera->SetViewUp(cameraViewUp);
     camera->SetPosition(cameraPosition);
