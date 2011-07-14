@@ -256,6 +256,10 @@ void RISRequestManager::retrieveFoundStudiesFromPACS(QueryPacsJob *queryPACSJob)
             }
         }
     }
+
+    //Al esborra els pacients automàticament s'esborren els Study del Patient. Study i Patient hereden de QObject i els objectes Study estan inserits com a fills QObject de Patient.
+    //Això fa que quan eliminem Patient s'esborrin els estudis, perquè tot objecte que heredi de QObject quan es destrueix fa un delete dels seus QObject fills, que en aquest cas seria Study
+    qDeleteAll(queryPACSJob->getPatientStudyList());
 }
 
 RetrieveDICOMFilesFromPACSJob* RISRequestManager::retrieveStudy(Study *study)
