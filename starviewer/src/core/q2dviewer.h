@@ -351,9 +351,8 @@ private:
     /// Afegeix tots els actors a l'escena
     void addActors();
 
-    /// A partir de l'string d'orientació del pacient mapeja les anotacions correctes segons com estem mirant el model.
-    /// A això li afecta també si la vista és axial, sagital o coronal
-    void mapOrientationStringToAnnotation();
+    /// Actualitza les etiquetes d'orientació del pacient segons la vista i orientació actuals de la càmera
+    void updatePatientOrientationAnnotation();
 
     /// Actualitza les característiques dels actors dels viewports
     void updateDisplayExtent();

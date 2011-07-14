@@ -377,7 +377,7 @@ int Q2DViewer::getZIndexForView(CameraOrientationType view)
     }
 }
 
-void Q2DViewer::mapOrientationStringToAnnotation()
+void Q2DViewer::updatePatientOrientationAnnotation()
 {
     // Obtenim els labels que estem veient en aquest moment
     QVector<QString> labels = this->getCurrentDisplayedImageOrientationLabels();
@@ -1052,7 +1052,7 @@ void Q2DViewer::updateCamera()
             m_isImageFlipped = !m_isImageFlipped;
         }
         emit cameraChanged();
-        mapOrientationStringToAnnotation();
+        updatePatientOrientationAnnotation();
     }
     else
     {
@@ -1114,7 +1114,7 @@ void Q2DViewer::setSlice(int value)
         this->updateDisplayExtent();
         updateDefaultPreset();
         updateSliceAnnotationInformation();
-        mapOrientationStringToAnnotation();
+        updatePatientOrientationAnnotation();
         emit sliceChanged(m_currentSlice);
         render();
     }
