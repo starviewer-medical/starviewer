@@ -1066,7 +1066,6 @@ void Q2DViewer::resetCamera()
     double cameraViewUp[3] = { 0.0, 0.0, 0.0 };
     double cameraPosition[3] = { 0.0, 0.0, 0.0 };
     double cameraRoll = 0.0;
-    double cameraAzimuth = 0.0;
 
     // Ajustem els paràmetres de la càmera segons la vista
     switch (m_lastView)
@@ -1095,10 +1094,6 @@ void Q2DViewer::resetCamera()
     camera->SetViewUp(cameraViewUp);
     camera->SetPosition(cameraPosition);
     camera->SetRoll(cameraRoll);
-    if (cameraAzimuth != 0.0)
-    {
-        camera->Azimuth(cameraAzimuth);
-    }
 }
 
 void Q2DViewer::setSlice(int value)
