@@ -902,7 +902,13 @@ void Q2DViewer::resetView(CameraOrientationType view)
     enableThickSlab(false);
     m_lastView = view;
     updateAnnotationsInformation(Q2DViewer::WindowInformationAnnotation);
+    
+    // Reiniciem valors per defecte de la càmera
+    m_rotateFactor = 0;
+    m_applyFlip = false;
+    m_isImageFlipped = false;
     m_alignPosition = Q2DViewer::AlignCenter;
+    
     resetCamera();
     
     if (m_mainVolume)
@@ -911,11 +917,6 @@ void Q2DViewer::resetView(CameraOrientationType view)
         // Aquest valor quan cal, és a dir, al posar input i al canviar de vista
         // estalviant-nos crides i crides
         m_maxSliceValue = this->getMaximumSlice();
-
-        // Reiniciem valors per defecte de la càmera
-        m_rotateFactor = 0;
-        m_applyFlip = false;
-        m_isImageFlipped = false;
 
         // Ara adaptem els actors a la nova configuració de la càmara perquè siguin visibles
         enableRendering(false);
