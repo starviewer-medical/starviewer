@@ -319,62 +319,59 @@ void Q2DViewer::getXYZIndexesForView(int &x, int &y, int &z, CameraOrientationTy
 
 int Q2DViewer::getXIndexForView(CameraOrientationType view)
 {
-    int x;
     switch (view)
     {
         case Q2DViewer::Axial:
-            x = 0;
-            break;
+            return 0;
 
         case Q2DViewer::Sagital:
-            x = 1;
-            break;
+            return 1;
 
         case Q2DViewer::Coronal:
-            x = 0;
-            break;
+            return 0;
+
+        default:
+            DEBUG_LOG(QString("El paràmetre 'view' conté un valor no esperat: %1.").arg(view));
+            return -1;
     }
-    return x;
 }
 
 int Q2DViewer::getYIndexForView(CameraOrientationType view)
 {
-    int y;
     switch (view)
     {
         case Q2DViewer::Axial:
-            y = 1;
-            break;
+            return 1;
 
         case Q2DViewer::Sagital:
-            y = 2;
-            break;
+            return 2;
 
         case Q2DViewer::Coronal:
-            y = 2;
-            break;
+            return 2;
+
+        default:
+            DEBUG_LOG(QString("El paràmetre 'view' conté un valor no esperat: %1.").arg(view));
+            return -1;
     }
-    return y;
 }
 
 int Q2DViewer::getZIndexForView(CameraOrientationType view)
 {
-    int z;
     switch (view)
     {
         case Q2DViewer::Axial:
-            z = 2;
-            break;
+            return 2;
 
         case Q2DViewer::Sagital:
-            z = 0;
-            break;
+            return 0;
 
         case Q2DViewer::Coronal:
-            z = 1;
-            break;
+            return 1;
+
+        default:
+            DEBUG_LOG(QString("El paràmetre 'view' conté un valor no esperat: %1.").arg(view));
+            return -1;
     }
-    return z;
 }
 
 void Q2DViewer::mapOrientationStringToAnnotation()
