@@ -1035,7 +1035,7 @@ void Q2DViewer::updateCamera()
             camera->Azimuth(180);
             switch (this->m_lastView)
             {
-                // HACK Aquest hack esta relacionat amb els de mapOrientationStringToAnnotation()
+                // HACK Aquest hack esta relacionat amb els de getCurrentDisplayedImageOrientationLabels()
                 // és un petit truc perque la imatge quedi orientada correctament. Caldria
                 // veure si en el refactoring podem fer-ho d'una forma millor
                 case Sagital:
