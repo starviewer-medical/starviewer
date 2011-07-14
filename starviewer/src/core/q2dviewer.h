@@ -202,6 +202,7 @@ public:
     /// Obté els índexs dels eixos de coordenades corresponents a la vista 2D indicada
     /// Aquests índexs indiquen com hem d'indexar una coordenada 3D per obtenir
     /// la corresponent projecció sobre la vista 2D sobre la que estem operant
+    /// En cas que el valor de view no sigui un dels esperats, el valor de l'índex serà -1
     static void getXYZIndexesForView(int &x, int &y, int &z, CameraOrientationType view);
     static int getXIndexForView(CameraOrientationType view);
     static int getYIndexForView(CameraOrientationType view);
