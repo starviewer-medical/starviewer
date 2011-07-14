@@ -1060,53 +1060,46 @@ void Q2DViewer::updateCamera()
 
 void Q2DViewer::resetCamera()
 {
-    if (m_mainVolume)
+    vtkCamera *camera = getActiveCamera();
+    Q_ASSERT(camera);
+
+    double cameraViewUp[3] = { 0.0, 0.0, 0.0 };
+    double cameraPosition[3] = { 0.0, 0.0, 0.0 };
+    double cameraRoll = 0.0;
+    double cameraAzimuth = 0.0;
+
+    switch (m_lastView)
     {
-        vtkCamera *camera = getActiveCamera();
-        Q_ASSERT(camera);
+        case Axial:
+            // Paràmetres de la càmera
+            cameraViewUp[1] = -1.0;
+            cameraPosition[2] = -1.0;
+            cameraRoll = 180.0;
+            break;
 
-        double cameraViewUp[3] = { 0.0, 0.0, 0.0 };
-        double cameraPosition[3] = { 0.0, 0.0, 0.0 };
-        double cameraRoll = 0.0;
-        double cameraAzimuth = 0.0;
+        case Sagital:
+            // Paràmetres de la càmera
+            cameraViewUp[2] = 1.0;
+            cameraPosition[0] = 1.0;
+            cameraRoll = -90.0;
+            break;
 
-        switch (m_lastView)
-        {
-            case Axial:
-                // Paràmetres de la càmera
-                cameraViewUp[1] = -1.0;
-                cameraPosition[2] = -1.0;
-                cameraRoll = 180.0;
-                break;
-
-            case Sagital:
-                // Paràmetres de la càmera
-                cameraViewUp[2] = 1.0;
-                cameraPosition[0] = 1.0;
-                cameraRoll = -90.0;
-                break;
-
-            case Coronal:
-                // Paràmetres de la càmera
-                cameraViewUp[2] = 1.0;
-                cameraPosition[1] = -1.0;
-                cameraRoll = 0.0;
-                break;
-        }
-
-        // Ajustem la càmera
-        camera->SetFocalPoint(0, 0, 0);
-        camera->SetViewUp(cameraViewUp);
-        camera->SetPosition(cameraPosition);
-        camera->SetRoll(cameraRoll);
-        if (cameraAzimuth != 0.0)
-        {
-            camera->Azimuth(cameraAzimuth);
-        }
+        case Coronal:
+            // Paràmetres de la càmera
+            cameraViewUp[2] = 1.0;
+            cameraPosition[1] = -1.0;
+            cameraRoll = 0.0;
+            break;
     }
-    else
+
+    // Ajustem la càmera
+    camera->SetFocalPoint(0, 0, 0);
+    camera->SetViewUp(cameraViewUp);
+    camera->SetPosition(cameraPosition);
+    camera->SetRoll(cameraRoll);
+    if (cameraAzimuth != 0.0)
     {
-        DEBUG_LOG("Intentant canviar de vista sense haver donat un input abans...");
+        camera->Azimuth(cameraAzimuth);
     }
 }
 
