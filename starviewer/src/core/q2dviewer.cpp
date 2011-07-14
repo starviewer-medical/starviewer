@@ -918,8 +918,25 @@ void Q2DViewer::resetView(CameraOrientationType view)
         // estalviant-nos crides i crides
         m_maxSliceValue = this->getMaximumSlice();
 
-        // Ara adaptem els actors a la nova configuració de la càmara perquè siguin visibles
         enableRendering(false);
+        // TODO Solució inmediata per afrontar el ticket #355, pero s'hauria de fer d'una manera mes elegant i consistent
+        // TODO Potser la solució més elegant sigui fer servir Q2DViewer::setImageOrientation() en comptes de fer-ho segons 
+        // el valor de patient position, ja que en sagital i coronal, sempre voldrem que la orientació sigui d'una forma determinada
+        QString position = m_mainVolume->getImage(0)->getParentSeries()->getPatientPosition();
+        if (position == "FFP" || position == "HFP")
+        {
+            if (m_lastView == Sagital)
+            {
+                rotateClockWise(2);
+            }
+            else if (m_lastView == Coronal)
+            {
+                verticalFlip();
+            }
+        }    
+        
+        // Ara adaptem els actors a la nova configuració de la càmara perquè siguin visibles
+        
         // TODO Això s'hauria d'encapsular en un mètode tipu "resetDisplayExtent()"
         m_currentSlice = 0; // HACK! Necessari perquè s'actualitzi la llesca correctament
         updateDisplayExtent();
@@ -1052,7 +1069,6 @@ void Q2DViewer::resetCamera()
         double cameraPosition[3] = { 0.0, 0.0, 0.0 };
         double cameraRoll = 0.0;
         double cameraAzimuth = 0.0;
-        QString position;
 
         switch (m_lastView)
         {
@@ -1067,35 +1083,14 @@ void Q2DViewer::resetCamera()
                 // Paràmetres de la càmera
                 cameraViewUp[2] = 1.0;
                 cameraPosition[0] = 1.0;
-                // TODO Solució inmediata per afrontar el ticket #355, pero s'hauria de fer d'una manera mes elegant i consistent
-                position = m_mainVolume->getImage(0)->getParentSeries()->getPatientPosition();
-                if (position == "FFP" || position == "HFP")
-                {
-                    cameraRoll = 90.0;
-                    m_rotateFactor = 2;
-                }
-                else
-                {
-                    cameraRoll = -90.0;
-                }
+                cameraRoll = -90.0;
                 break;
 
             case Coronal:
                 // Paràmetres de la càmera
                 cameraViewUp[2] = 1.0;
                 cameraPosition[1] = -1.0;
-                // TODO Solució inmediata per afrontar el ticket #355, pero s'hauria de fer d'una manera mes elegant i consistent
-                position = m_mainVolume->getImage(0)->getParentSeries()->getPatientPosition();
-                if (position == "FFP" || position == "HFP")
-                {
-                    cameraRoll = 180.0;
-                    cameraAzimuth = 180.0;
-                    m_isImageFlipped = true;
-                }
-                else
-                {
-                    cameraRoll = 0.0;
-                }
+                cameraRoll = 0.0;
                 break;
         }
 
