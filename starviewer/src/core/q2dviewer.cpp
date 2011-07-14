@@ -167,6 +167,7 @@ void Q2DViewer::rotateClockWise(int times)
 
     rotate(times);
     updateCamera();
+    render();
 }
 
 void Q2DViewer::rotateCounterClockWise(int times)
@@ -179,12 +180,14 @@ void Q2DViewer::rotateCounterClockWise(int times)
 
     rotate(-times);
     updateCamera();
+    render();
 }
 
 void Q2DViewer::horizontalFlip()
 {
     m_applyFlip = true;
     updateCamera();
+    render();
 }
 
 void Q2DViewer::verticalFlip()
@@ -1050,7 +1053,6 @@ void Q2DViewer::updateCamera()
         }
         emit cameraChanged();
         mapOrientationStringToAnnotation();
-        this->render();
     }
     else
     {
