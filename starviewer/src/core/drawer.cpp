@@ -1,5 +1,4 @@
 #include "drawer.h"
-#include "q2dviewer.h"
 #include "drawerprimitive.h"
 #include "logging.h"
 #include "mathtools.h"
@@ -369,7 +368,7 @@ DrawerPrimitive* Drawer::getNearestPrimitiveToPoint(double point[3], int view, i
     return nearestPrimitive;
 }
 
-void Drawer::erasePrimitivesInsideBounds(double bounds[6], int view, int slice)
+void Drawer::erasePrimitivesInsideBounds(double bounds[6], Q2DViewer::CameraOrientationType view, int slice)
 {
     QList<DrawerPrimitive*> primitivesList;
 
@@ -400,7 +399,7 @@ void Drawer::erasePrimitivesInsideBounds(double bounds[6], int view, int slice)
     }
 }
 
-bool Drawer::isPrimitiveInside(DrawerPrimitive *primitive, int view, double bounds[6])
+bool Drawer::isPrimitiveInside(DrawerPrimitive *primitive, Q2DViewer::CameraOrientationType view, double bounds[6])
 {
     // Comprovem que els bounds de la primitiva estiguin continguts
     // dins dels que ens han passat per paràmetre

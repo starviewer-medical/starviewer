@@ -202,10 +202,10 @@ public:
     /// Obté els índexs dels eixos de coordenades corresponents a la vista 2D indicada
     /// Aquests índexs indiquen com hem d'indexar una coordenada 3D per obtenir
     /// la corresponent projecció sobre la vista 2D sobre la que estem operant
-    static void getXYZIndexesForView(int &x, int &y, int &z, int view);
-    static int getXIndexForView(int view);
-    static int getYIndexForView(int view);
-    static int getZIndexForView(int view);
+    static void getXYZIndexesForView(int &x, int &y, int &z, CameraOrientationType view);
+    static int getXIndexForView(CameraOrientationType view);
+    static int getYIndexForView(CameraOrientationType view);
+    static int getZIndexForView(CameraOrientationType view);
 
     /// Retorna l'espai que hi ha entre les llesques segons la vista actual i si hi ha el thickness activat
     double getCurrentSpacingBetweenSlices();

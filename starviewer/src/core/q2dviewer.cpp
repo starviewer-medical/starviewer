@@ -310,14 +310,14 @@ QString Q2DViewer::getCurrentAnatomicalPlaneLabel() const
     return AnatomicalPlane::getLabelFromPatientOrientation(patientOrienation);
 }
 
-void Q2DViewer::getXYZIndexesForView(int &x, int &y, int &z, int view)
+void Q2DViewer::getXYZIndexesForView(int &x, int &y, int &z, CameraOrientationType view)
 {
     x = Q2DViewer::getXIndexForView(view);
     y = Q2DViewer::getYIndexForView(view);
     z = Q2DViewer::getZIndexForView(view);
 }
 
-int Q2DViewer::getXIndexForView(int view)
+int Q2DViewer::getXIndexForView(CameraOrientationType view)
 {
     int x;
     switch (view)
@@ -337,7 +337,7 @@ int Q2DViewer::getXIndexForView(int view)
     return x;
 }
 
-int Q2DViewer::getYIndexForView(int view)
+int Q2DViewer::getYIndexForView(CameraOrientationType view)
 {
     int y;
     switch (view)
@@ -357,7 +357,7 @@ int Q2DViewer::getYIndexForView(int view)
     return y;
 }
 
-int Q2DViewer::getZIndexForView(int view)
+int Q2DViewer::getZIndexForView(CameraOrientationType view)
 {
     int z;
     switch (view)
