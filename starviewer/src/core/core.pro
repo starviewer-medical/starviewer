@@ -250,7 +250,8 @@ HEADERS += extensionfactory.h \
     qopacitytransferfunctiongraphicalviewline.h \
     machineidentifier.h \
     dicomsource.h \
-    pacsdevice.h
+    pacsdevice.h \
+    machineinformation.h
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
     mathtools.cpp \
@@ -461,7 +462,8 @@ SOURCES += extensionmediator.cpp \
     qopacitytransferfunctiongraphicalviewline.cpp \
     machineidentifier.cpp \
     dicomsource.cpp \
-    pacsdevice.cpp
+    pacsdevice.cpp \
+    machineinformation.cpp
 TEMPLATE = lib
 DESTDIR = ./
 CONFIG += staticlib
