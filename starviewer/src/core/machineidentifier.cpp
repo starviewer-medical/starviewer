@@ -12,7 +12,7 @@ MachineIdentifier::MachineIdentifier()
 
 QString MachineIdentifier::getMachineID()
 {
-    return encryptBase64Url(getMacAddress());
+    return encryptBase64Url(getMACAddress());
 }
 
 QString MachineIdentifier::getGroupID()
@@ -25,7 +25,7 @@ QString MachineIdentifier::encryptBase64Url(const QString &url)
     return QString(QCryptographicHash::hash(url.toAscii(), QCryptographicHash::Sha1).toBase64().replace("=", "").replace("+", "-").replace("/", "_"));
 }
 
-QString MachineIdentifier::getMacAddress()
+QString MachineIdentifier::getMACAddress()
 {
     QString macAdress;
     // Primer de tot mirar si hi ha interficia de xarxa local

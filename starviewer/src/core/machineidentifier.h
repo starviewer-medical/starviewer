@@ -18,7 +18,7 @@ private:
     /// Codifica en base64 una QByteArray i a més el transforma per que sigui una part d'una url vàlida
     QString encryptBase64Url(const QString &url);
     /// Busca la interfície de xarxa i retorna la seva adreça MAC.
-    virtual QString getMacAddress();
+    virtual QString getMACAddress();
     /// Busca el domini de la màquina.
     virtual QString getDomain();
 
