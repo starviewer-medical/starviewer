@@ -189,11 +189,9 @@ public:
     /// Retorna la informació de la llesca actual del visualitzador
     vtkImageData* getCurrentSlabProjection();
 
-    /// Retorna un vector de 4 strings en el que tenim quatre elements que representen les etiquetes
-    /// indicant on està la dreta/esquerra, cap/peu, davant/darrere del pacient
-    /// El primer element correspon a la esquerra de la imatge, el segon el damunt, el tercer a la dreta i el quart a sota
-    /// Si tenim una imatge axial pura la llista seria R,H,L,F (Right, Head, Left, Feet)
-    QVector<QString> getCurrentDisplayedImageOrientationLabels() const;
+    /// Retorna la orientació de pacient corresponent a la imatge que s'està visualitzant en aquell moment,
+    /// és a dir, tenint en compte rotacions, flips, reconstruccions, etc.
+    PatientOrientation getCurrentDisplayedImagePatientOrientation() const;
 
     /// Ens diu quin és el pla de projecció de la imatge que es veu en aquell moment
     /// Valors: AXIAL, SAGITAL, CORONAL, OBLIQUE o N/A
