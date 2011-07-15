@@ -16,8 +16,8 @@ private slots:
     void getAcquisitionPlane_ShouldReturnExpectedPlane();
 };
 
-Q_DECLARE_METATYPE(AnatomicalPlane::AnatomicalPlaneType);
-Q_DECLARE_METATYPE(QList<Image*>);
+Q_DECLARE_METATYPE(AnatomicalPlane::AnatomicalPlaneType)
+Q_DECLARE_METATYPE(QList<Image*>)
 
 void test_Volume::getAcquisitionPlane_ShouldReturnNotAvailable_data()
 {

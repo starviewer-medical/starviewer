@@ -26,7 +26,7 @@ private:
     void setupShouldReturnConcreteLabelData();
 };
 
-Q_DECLARE_METATYPE(AnatomicalPlane::AnatomicalPlaneType);
+Q_DECLARE_METATYPE(AnatomicalPlane::AnatomicalPlaneType)
 
 void test_AnatomicalPlane::getPlaneOrientationLabel_ShouldReturnExpectedLabel_data()
 {
