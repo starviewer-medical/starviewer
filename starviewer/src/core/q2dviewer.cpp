@@ -120,7 +120,6 @@ void Q2DViewer::createAnnotations()
     m_cornerAnnotations = vtkCornerAnnotation::New();
     m_cornerAnnotations->GetTextProperty()->SetFontFamilyToArial();
     m_cornerAnnotations->GetTextProperty()->ShadowOn();
-    m_cornerAnnotations->GetTextProperty()->SetShadow(1);
 
     // Anotacions de l'orientació del pacient
     createOrientationAnnotations();
@@ -137,7 +136,6 @@ void Q2DViewer::createOrientationAnnotations()
         m_patientOrientationTextActor[i]->GetTextProperty()->BoldOn();
         m_patientOrientationTextActor[i]->GetTextProperty()->SetFontFamilyToArial();
         m_patientOrientationTextActor[i]->GetTextProperty()->ShadowOn();
-        m_patientOrientationTextActor[i]->GetTextProperty()->SetShadow(1);
 
         m_patientOrientationTextActor[i]->GetPositionCoordinate()->SetCoordinateSystemToNormalizedViewport();
         m_patientOrientationTextActor[i]->GetPosition2Coordinate()->SetCoordinateSystemToNormalizedViewport();
