@@ -1,5 +1,8 @@
 #include "autotest.h"
 
+#include <QDate>
+#include <QTime>
+
 #include "dicommask.h"
 #include "study.h"
 #include "series.h"
@@ -14,6 +17,12 @@ class test_DicomMask : public QObject {
 Q_OBJECT
 
 private slots:
+
+    void getStudyDateRangeAsDICOMFormat_data();
+    void getStudyDateRangeAsDICOMFormat();
+
+    void getStudyTimeRangeAsDICOMFormat_data();
+    void getStudyTimeRangeAsDICOMFormat();
 
     void fromStudy_ShouldReturnValidDICOMMask_data();
     void fromStudy_ShouldReturnValidDICOMMask();
@@ -38,6 +47,66 @@ Q_DECLARE_METATYPE(DicomMask)
 Q_DECLARE_METATYPE(Study*)
 Q_DECLARE_METATYPE(Series*)
 Q_DECLARE_METATYPE(Image*)
+
+void test_DicomMask::getStudyDateRangeAsDICOMFormat_data()
+{
+    QTest::addColumn<QDate>("minimumDate");
+    QTest::addColumn<QDate>("maximumDate");
+    QTest::addColumn<QString>("dateRangeAsDICOMFormat");
+
+    QString dateDICOMFormat = "yyyyMMdd";
+    QDate today = QDate::currentDate();
+    QDate oneYearAgo = QDate::currentDate().addYears(-1);
+
+    QTest::newRow("Minimum and maximum date empty") << QDate() << QDate() << "";
+    QTest::newRow("Maximum date empty") << today << QDate() << today.toString(dateDICOMFormat) + "-";
+    QTest::newRow("Minimum date empty") << QDate() << today << "-" + today.toString(dateDICOMFormat);
+    QTest::newRow("Minimum date smaller than maximum date") << oneYearAgo << today << oneYearAgo.toString(dateDICOMFormat) + "-" + today.toString(dateDICOMFormat);
+    QTest::newRow("Minimum and maximum with same date") << today << today << today.toString(dateDICOMFormat);
+    QTest::newRow("Minimum date greater than maximum date") << today << oneYearAgo << today.toString(dateDICOMFormat) + "-" + oneYearAgo.toString(dateDICOMFormat);
+}
+
+void test_DicomMask::getStudyDateRangeAsDICOMFormat()
+{
+    QFETCH(QDate, minimumDate);
+    QFETCH(QDate, maximumDate);
+    QFETCH(QString, dateRangeAsDICOMFormat);
+
+    DicomMask dicomMask;
+    dicomMask.setStudyDate(minimumDate, maximumDate);
+
+    QCOMPARE(dicomMask.getStudyDateRangeAsDICOMFormat(), dateRangeAsDICOMFormat);
+}
+
+void test_DicomMask::getStudyTimeRangeAsDICOMFormat_data()
+{
+    QTest::addColumn<QTime>("minimumTime");
+    QTest::addColumn<QTime>("maximumTime");
+    QTest::addColumn<QString>("timeRangeAsDICOMFormat");
+
+    QString timeDICOMFormat = "HHmmss";
+    QTime now = QTime::currentTime();
+    QTime oneHoureAgo = QTime::currentTime().addSecs(-3600);
+
+    QTest::newRow("Minimum and maximum time empty") << QTime() << QTime() << "";
+    QTest::newRow("Maximum time empty") << now << QTime() << now.toString(timeDICOMFormat) + "-";
+    QTest::newRow("Minimum time empty") << QTime() << now << "-" + now.toString(timeDICOMFormat);
+    QTest::newRow("Minimum time smaller than maximum time") << oneHoureAgo << now << oneHoureAgo.toString(timeDICOMFormat) + "-" + now.toString(timeDICOMFormat);
+    QTest::newRow("Minimum and maximum with same time") << now << now << now.toString(timeDICOMFormat);
+    QTest::newRow("Minimum time greater than maximum time") << now << oneHoureAgo << now.toString(timeDICOMFormat) + "-" + oneHoureAgo.toString(timeDICOMFormat);
+}
+
+void test_DicomMask::getStudyTimeRangeAsDICOMFormat()
+{
+    QFETCH(QTime, minimumTime);
+    QFETCH(QTime, maximumTime);
+    QFETCH(QString, timeRangeAsDICOMFormat);
+
+    DicomMask dicomMask;
+    dicomMask.setStudyTime(minimumTime, maximumTime);
+
+    QCOMPARE(dicomMask.getStudyTimeRangeAsDICOMFormat(), timeRangeAsDICOMFormat);
+}
 
 void test_DicomMask::fromStudy_ShouldReturnValidDICOMMask_data()
 {
