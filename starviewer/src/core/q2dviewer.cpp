@@ -196,121 +196,144 @@ void Q2DViewer::verticalFlip()
     horizontalFlip();
 }
 
-QVector<QString> Q2DViewer::getCurrentDisplayedImageOrientationLabels() const
+PatientOrientation Q2DViewer::getCurrentDisplayedImagePatientOrientation() const
 {
-    // Si no estem a la vista axial (adquisició original) obtindrem les etiquetes a
-    // través de la primera imatge
+    // Si no estem a la vista axial (adquisició original) obtindrem 
+    // la orientació a través de la primera imatge
     int index = (m_lastView == Axial) ? m_currentSlice : 0;
 
-    QVector<QString> labelsVector(4);
-    QString orientation;
+    PatientOrientation originalOrientation;
     Image *image = m_mainVolume->getImage(index);
     if (image)
     {
-        orientation = image->getPatientOrientation().getDICOMFormattedPatientOrientation();
-        if (orientation.isEmpty())
+        originalOrientation = image->getPatientOrientation();
+        if (originalOrientation.getDICOMFormattedPatientOrientation().isEmpty())
         {
-            return labelsVector;
+            return PatientOrientation();
         }
     }
     else
     {
         DEBUG_LOG("L'índex d'imatge actual és incorrecte o no hi ha imatges al volum. Això no hauria de passar en aquest mètode.");
-        return labelsVector;
-    }
-
-    // Tenim les orientacions originals de la imatge en una llista
-    QStringList list = orientation.split("\\");
-
-    bool ok = false;
-    switch (list.size())
-    {
-        case 1:
-            // Afegim dos elements neutres perquè la resta segueixi funcionant bé
-            ok = true;
-            list << "" << "";
-            break;
-
-        case 2:
-            // Afegim un element neutre perque la resta segueixi funcionant be
-            ok = true;
-            list << "";
-            break;
-
-        case 3:
-            ok = true;
-            break;
+        return PatientOrientation();
     }
 
     // Ara caldrà posar, en funció de les rotacions, flips i vista, les etiquetes en l'ordre adequat
-    if (ok)
+    QString rowLabel;
+    QString columnLabel;
+    int absoluteRotateFactor = (4 + m_rotateFactor) % 4;
+
+    if (m_lastView == Axial)
     {
-        int index = 4 + m_rotateFactor;
-        // 0:Esquerra, 1:A dalt, 2:Dreta, 3:Abaix
-        if (m_lastView == Axial)
+        switch (absoluteRotateFactor)
         {
-            // Esquerra
-            labelsVector[(0 + index) % 4] = PatientOrientation::getOppositeOrientationLabel(list.at(0));
-            // Dreta
-            labelsVector[(2 + index) % 4] = list.at(0);
-            // A dalt
-            labelsVector[(1 + index) % 4] = PatientOrientation::getOppositeOrientationLabel(list.at(1));
-            // A baix
-            labelsVector[(3 + index) % 4] = list.at(1);
+            case 0:
+                rowLabel = originalOrientation.getRowDirectionLabel();
+                columnLabel = originalOrientation.getColumnDirectionLabel();
+                break;
+
+            case 1:
+                rowLabel = PatientOrientation::getOppositeOrientationLabel(originalOrientation.getColumnDirectionLabel());
+                columnLabel = originalOrientation.getRowDirectionLabel();
+                break;
+
+            case 2:
+                rowLabel = PatientOrientation::getOppositeOrientationLabel(originalOrientation.getRowDirectionLabel());
+                columnLabel = PatientOrientation::getOppositeOrientationLabel(originalOrientation.getColumnDirectionLabel());
+                break;
+
+            case 3:
+                rowLabel = originalOrientation.getColumnDirectionLabel();
+                columnLabel = PatientOrientation::getOppositeOrientationLabel(originalOrientation.getRowDirectionLabel());
+                break;
         }
-        else if (m_lastView == Sagital)
-        {
-            // HACK FLIP De moment necessitem fer aquest truc. Durant el refactoring caldria
-            // veure si es pot fer d'una manera millor
-            if (m_isImageFlipped)
-            {
-                index += 2;
-            }
-            // Esquerra
-            labelsVector[(0 + index) % 4] = PatientOrientation::getOppositeOrientationLabel(list.at(1));
-            // Dreta
-            labelsVector[(2 + index) % 4] = list.at(1);
-            // A dalt
-            labelsVector[(1 + index) % 4] = list.at(2);
-            // A baix
-            labelsVector[(3 + index) % 4] = PatientOrientation::getOppositeOrientationLabel(list.at(2));
-        }
-        else if (m_lastView == Coronal)
-        {
-            // HACK FLIP De moment necessitem fer aquest truc. Durant el refactoring caldria
-            // veure si es pot fer d'una manera millor
-            if (m_isImageFlipped)
-            {
-                index += 2;
-            }
-            // Esquerra
-            labelsVector[(0 + index) % 4] = PatientOrientation::getOppositeOrientationLabel(list.at(0));
-            // Dreta
-            labelsVector[(2 + index) % 4] = list.at(0);
-            // A dalt
-            labelsVector[(1 + index) % 4] = list.at(2);
-            // A baix
-            labelsVector[(3 + index) % 4] = PatientOrientation::getOppositeOrientationLabel(list.at(2));
-        }
+    }
+    else if (m_lastView == Sagital)
+    {
+        // HACK FLIP De moment necessitem fer aquest truc. Durant el refactoring caldria
+        // veure si es pot fer d'una manera millor
         if (m_isImageFlipped)
         {
-            qSwap(labelsVector[0], labelsVector[2]);
+            absoluteRotateFactor = (absoluteRotateFactor + 2) % 4;
+        }
+        
+        switch (absoluteRotateFactor)
+        {
+            case 0:
+                rowLabel = originalOrientation.getColumnDirectionLabel();
+                 // TODO Tenim la normal "al revés", en realitat hauria de ser el contrari
+                columnLabel = PatientOrientation::getOppositeOrientationLabel(originalOrientation.getNormalDirectionLabel());
+                break;
+
+            case 1:
+                // TODO Tenim la normal "al revés", en realitat hauria de ser el contrari
+                rowLabel = originalOrientation.getNormalDirectionLabel();
+                columnLabel = originalOrientation.getColumnDirectionLabel();
+                break;
+
+            case 2:
+                rowLabel = PatientOrientation::getOppositeOrientationLabel(originalOrientation.getColumnDirectionLabel());
+                // TODO Tenim la normal "al revés", en realitat hauria de ser el contrari
+                columnLabel = originalOrientation.getNormalDirectionLabel();
+                break;
+
+            case 3:
+                // TODO Tenim la normal "al revés", en realitat hauria de ser el contrari
+                rowLabel = PatientOrientation::getOppositeOrientationLabel(originalOrientation.getNormalDirectionLabel());
+                columnLabel = PatientOrientation::getOppositeOrientationLabel(originalOrientation.getColumnDirectionLabel());
+                break;
         }
     }
-    else
+    else if (m_lastView == Coronal)
     {
-        DEBUG_LOG("La imatge actual no conté etiqueta d'orientació vàlida: " + orientation);
+        // HACK FLIP De moment necessitem fer aquest truc. Durant el refactoring caldria
+        // veure si es pot fer d'una manera millor
+        if (m_isImageFlipped)
+        {
+            absoluteRotateFactor = (absoluteRotateFactor + 2) % 4;
+        }
+        switch (absoluteRotateFactor)
+        {
+            case 0:
+                rowLabel = originalOrientation.getRowDirectionLabel();
+                // TODO Tenim la normal "al revés", en realitat hauria de ser el contrari
+                columnLabel = PatientOrientation::getOppositeOrientationLabel(originalOrientation.getNormalDirectionLabel());
+                break;
+
+            case 1:
+                // TODO Tenim la normal "al revés", en realitat hauria de ser el contrari
+                rowLabel = originalOrientation.getNormalDirectionLabel();
+                columnLabel = originalOrientation.getRowDirectionLabel();
+                break;
+
+            case 2:
+                rowLabel = PatientOrientation::getOppositeOrientationLabel(originalOrientation.getRowDirectionLabel());
+                // TODO Tenim la normal "al revés", en realitat hauria de ser el contrari
+                columnLabel = originalOrientation.getNormalDirectionLabel();
+                break;
+
+            case 3:
+                // TODO Tenim la normal "al revés", en realitat hauria de ser el contrari
+                rowLabel = PatientOrientation::getOppositeOrientationLabel(originalOrientation.getNormalDirectionLabel());
+                columnLabel = PatientOrientation::getOppositeOrientationLabel(originalOrientation.getRowDirectionLabel());
+                break;
+        }
     }
-    return labelsVector;
+
+    if (m_isImageFlipped)
+    {
+        rowLabel = PatientOrientation::getOppositeOrientationLabel(rowLabel);
+    }
+    
+    PatientOrientation patientOrientation;
+    patientOrientation.setLabels(rowLabel, columnLabel);
+
+    return patientOrientation;
 }
 
 QString Q2DViewer::getCurrentAnatomicalPlaneLabel() const
 {
-    QVector<QString> labels = this->getCurrentDisplayedImageOrientationLabels();
-    PatientOrientation patientOrienation;
-    patientOrienation.setLabels(labels[0], labels[1]);
-    
-    return AnatomicalPlane::getLabelFromPatientOrientation(patientOrienation);
+    return AnatomicalPlane::getLabelFromPatientOrientation(getCurrentDisplayedImagePatientOrientation());
 }
 
 void Q2DViewer::getXYZIndexesForView(int &x, int &y, int &z, CameraOrientationType view)
@@ -379,55 +402,28 @@ int Q2DViewer::getZIndexForView(CameraOrientationType view)
 
 void Q2DViewer::updatePatientOrientationAnnotation()
 {
-    // Obtenim els labels que estem veient en aquest moment
-    QVector<QString> labels = this->getCurrentDisplayedImageOrientationLabels();
+    // Obtenim l'orientació que estem presentant de la imatge actual
+    PatientOrientation currentPatientOrientation = getCurrentDisplayedImagePatientOrientation();
+
+    // Correspondència d'índexs: 0:Left, 1:Bottom, 2:Right, 3:Top
+    m_patientOrientationText[0] = PatientOrientation::getOppositeOrientationLabel(currentPatientOrientation.getRowDirectionLabel());
+    m_patientOrientationText[1] = currentPatientOrientation.getColumnDirectionLabel();
+    m_patientOrientationText[2] = currentPatientOrientation.getRowDirectionLabel();
+    m_patientOrientationText[3] = PatientOrientation::getOppositeOrientationLabel(currentPatientOrientation.getColumnDirectionLabel());
+    
+    bool textActorShouldBeVisible = m_enabledAnnotations.testFlag(Q2DViewer::PatientOrientationAnnotation);
 
     for (int i = 0; i < 4; ++i)
     {
-        m_patientOrientationText[i] = labels.at(i);
-    }
-
-    bool textActorShouldBeVisible = m_enabledAnnotations.testFlag(Q2DViewer::PatientOrientationAnnotation);
-    // Text actor -> 0:Esquerra, 1:Abaix, 2:Dreta, 3:A dalt
-    // Labels     -> 0:Esquerra, 1:A dalt, 2:Dreta, 3:Abaix
-    if (!m_patientOrientationText[0].isEmpty())
-    {
-        m_patientOrientationTextActor[0]->SetInput(qPrintable(m_patientOrientationText[0]));
-        m_patientOrientationTextActor[0]->SetVisibility(textActorShouldBeVisible);
-    }
-    else
-    {
-        m_patientOrientationTextActor[0]->SetVisibility(false);
-    }
-
-    if (!m_patientOrientationText[3].isEmpty())
-    {
-        m_patientOrientationTextActor[1]->SetInput(qPrintable(m_patientOrientationText[3]));
-        m_patientOrientationTextActor[1]->SetVisibility(textActorShouldBeVisible);
-    }
-    else
-    {
-        m_patientOrientationTextActor[1]->SetVisibility(false);
-    }
-
-    if (!m_patientOrientationText[2].isEmpty())
-    {
-        m_patientOrientationTextActor[2]->SetInput(qPrintable(m_patientOrientationText[2]));
-        m_patientOrientationTextActor[2]->SetVisibility(textActorShouldBeVisible);
-    }
-    else
-    {
-        m_patientOrientationTextActor[2]->SetVisibility(false);
-    }
-
-    if (!m_patientOrientationText[1].isEmpty())
-    {
-        m_patientOrientationTextActor[3]->SetInput(qPrintable(m_patientOrientationText[1]));
-        m_patientOrientationTextActor[3]->SetVisibility(textActorShouldBeVisible);
-    }
-    else
-    {
-        m_patientOrientationTextActor[3]->SetVisibility(false);
+        if (!m_patientOrientationText[i].isEmpty())
+        {
+            m_patientOrientationTextActor[i]->SetInput(qPrintable(m_patientOrientationText[i]));
+            m_patientOrientationTextActor[i]->SetVisibility(textActorShouldBeVisible);
+        }
+        else
+        {
+            m_patientOrientationTextActor[i]->SetVisibility(false);
+        }
     }
 }
 
@@ -2290,11 +2286,7 @@ void Q2DViewer::setAlignPosition(AlignPosition alignPosition)
 
 void Q2DViewer::setImageOrientation(const PatientOrientation &desiredPatientOrientation)
 {
-    PatientOrientation initialPatientOrientation;
-    QVector<QString> labels = getCurrentDisplayedImageOrientationLabels();
-    initialPatientOrientation.setLabels(labels[2], labels[3]);
-    
-    m_imageOrientationOperationsMapper->setInitialOrientation(initialPatientOrientation);
+    m_imageOrientationOperationsMapper->setInitialOrientation(getCurrentDisplayedImagePatientOrientation());
     m_imageOrientationOperationsMapper->setDesiredOrientation(desiredPatientOrientation);
 
     // TODO ara mateix fet així és ineficient ja que es poden cridar fins a dos cops updateCamera() innecessàriament
