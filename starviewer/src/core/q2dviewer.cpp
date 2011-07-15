@@ -217,38 +217,35 @@ PatientOrientation Q2DViewer::getCurrentDisplayedImagePatientOrientation() const
         DEBUG_LOG("L'índex d'imatge actual és incorrecte o no hi ha imatges al volum. Això no hauria de passar en aquest mètode.");
         return PatientOrientation();
     }
+    
+    // Escollim les etiquetes que hem agafar com a referència segons la vista actual
+    QString baseRowLabel;
+    QString baseColumnLabel;
+    switch (m_lastView)
+    {
+        case Axial:
+            baseRowLabel = originalOrientation.getRowDirectionLabel();
+            baseColumnLabel = originalOrientation.getColumnDirectionLabel();
+            break;
 
-    // Ara caldrà posar, en funció de les rotacions, flips i vista, les etiquetes en l'ordre adequat
+        case Sagital:
+            baseRowLabel = originalOrientation.getColumnDirectionLabel();
+             // TODO Tenim la normal "al revés", en realitat hauria de ser el contrari
+            baseColumnLabel = PatientOrientation::getOppositeOrientationLabel(originalOrientation.getNormalDirectionLabel());
+            break;
+
+        case Coronal:
+            baseRowLabel = originalOrientation.getRowDirectionLabel();
+            // TODO Tenim la normal "al revés", en realitat hauria de ser el contrari
+            baseColumnLabel = PatientOrientation::getOppositeOrientationLabel(originalOrientation.getNormalDirectionLabel());
+            break;
+    }
+
+    // Ara caldrà escollir les etiquetes corresponents en funció de les rotacions i flips
     QString rowLabel;
     QString columnLabel;
     int absoluteRotateFactor = (4 + m_rotateFactor) % 4;
-
-    if (m_lastView == Axial)
-    {
-        switch (absoluteRotateFactor)
-        {
-            case 0:
-                rowLabel = originalOrientation.getRowDirectionLabel();
-                columnLabel = originalOrientation.getColumnDirectionLabel();
-                break;
-
-            case 1:
-                rowLabel = PatientOrientation::getOppositeOrientationLabel(originalOrientation.getColumnDirectionLabel());
-                columnLabel = originalOrientation.getRowDirectionLabel();
-                break;
-
-            case 2:
-                rowLabel = PatientOrientation::getOppositeOrientationLabel(originalOrientation.getRowDirectionLabel());
-                columnLabel = PatientOrientation::getOppositeOrientationLabel(originalOrientation.getColumnDirectionLabel());
-                break;
-
-            case 3:
-                rowLabel = originalOrientation.getColumnDirectionLabel();
-                columnLabel = PatientOrientation::getOppositeOrientationLabel(originalOrientation.getRowDirectionLabel());
-                break;
-        }
-    }
-    else if (m_lastView == Sagital)
+    if (m_lastView == Sagital || m_lastView == Coronal)
     {
         // HACK FLIP De moment necessitem fer aquest truc. Durant el refactoring caldria
         // veure si es pot fer d'una manera millor
@@ -256,68 +253,28 @@ PatientOrientation Q2DViewer::getCurrentDisplayedImagePatientOrientation() const
         {
             absoluteRotateFactor = (absoluteRotateFactor + 2) % 4;
         }
-        
-        switch (absoluteRotateFactor)
-        {
-            case 0:
-                rowLabel = originalOrientation.getColumnDirectionLabel();
-                 // TODO Tenim la normal "al revés", en realitat hauria de ser el contrari
-                columnLabel = PatientOrientation::getOppositeOrientationLabel(originalOrientation.getNormalDirectionLabel());
-                break;
-
-            case 1:
-                // TODO Tenim la normal "al revés", en realitat hauria de ser el contrari
-                rowLabel = originalOrientation.getNormalDirectionLabel();
-                columnLabel = originalOrientation.getColumnDirectionLabel();
-                break;
-
-            case 2:
-                rowLabel = PatientOrientation::getOppositeOrientationLabel(originalOrientation.getColumnDirectionLabel());
-                // TODO Tenim la normal "al revés", en realitat hauria de ser el contrari
-                columnLabel = originalOrientation.getNormalDirectionLabel();
-                break;
-
-            case 3:
-                // TODO Tenim la normal "al revés", en realitat hauria de ser el contrari
-                rowLabel = PatientOrientation::getOppositeOrientationLabel(originalOrientation.getNormalDirectionLabel());
-                columnLabel = PatientOrientation::getOppositeOrientationLabel(originalOrientation.getColumnDirectionLabel());
-                break;
-        }
     }
-    else if (m_lastView == Coronal)
+    switch (absoluteRotateFactor)
     {
-        // HACK FLIP De moment necessitem fer aquest truc. Durant el refactoring caldria
-        // veure si es pot fer d'una manera millor
-        if (m_isImageFlipped)
-        {
-            absoluteRotateFactor = (absoluteRotateFactor + 2) % 4;
-        }
-        switch (absoluteRotateFactor)
-        {
-            case 0:
-                rowLabel = originalOrientation.getRowDirectionLabel();
-                // TODO Tenim la normal "al revés", en realitat hauria de ser el contrari
-                columnLabel = PatientOrientation::getOppositeOrientationLabel(originalOrientation.getNormalDirectionLabel());
-                break;
+        case 0:
+            rowLabel = baseRowLabel;
+            columnLabel = baseColumnLabel;
+            break;
 
-            case 1:
-                // TODO Tenim la normal "al revés", en realitat hauria de ser el contrari
-                rowLabel = originalOrientation.getNormalDirectionLabel();
-                columnLabel = originalOrientation.getRowDirectionLabel();
-                break;
+        case 1:
+            rowLabel = PatientOrientation::getOppositeOrientationLabel(baseColumnLabel);
+            columnLabel = baseRowLabel;
+            break;
 
-            case 2:
-                rowLabel = PatientOrientation::getOppositeOrientationLabel(originalOrientation.getRowDirectionLabel());
-                // TODO Tenim la normal "al revés", en realitat hauria de ser el contrari
-                columnLabel = originalOrientation.getNormalDirectionLabel();
-                break;
+        case 2:
+            rowLabel = PatientOrientation::getOppositeOrientationLabel(baseRowLabel);
+            columnLabel = PatientOrientation::getOppositeOrientationLabel(baseColumnLabel);
+            break;
 
-            case 3:
-                // TODO Tenim la normal "al revés", en realitat hauria de ser el contrari
-                rowLabel = PatientOrientation::getOppositeOrientationLabel(originalOrientation.getNormalDirectionLabel());
-                columnLabel = PatientOrientation::getOppositeOrientationLabel(originalOrientation.getRowDirectionLabel());
-                break;
-        }
+        case 3:
+            rowLabel = baseColumnLabel;
+            columnLabel = PatientOrientation::getOppositeOrientationLabel(baseRowLabel);
+            break;
     }
 
     if (m_isImageFlipped)
