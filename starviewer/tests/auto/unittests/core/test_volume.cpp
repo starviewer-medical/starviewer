@@ -38,10 +38,10 @@ void test_Volume::getAcquisitionPlane_ShouldReturnNotAvailable()
 {
     QFETCH(QList<Image*>, imageSet);
 
-    Volume *volume = new Volume(this);
-    volume->setImages(imageSet);
+    Volume volume;
+    volume.setImages(imageSet);
     
-    QCOMPARE(volume->getAcquisitionPlane(), AnatomicalPlane::NotAvailable);
+    QCOMPARE(volume.getAcquisitionPlane(), AnatomicalPlane::NotAvailable);
 }
 
 void test_Volume::getAcquisitionPlane_ShouldReturnExpectedPlane_data()
@@ -179,10 +179,10 @@ void test_Volume::getAcquisitionPlane_ShouldReturnExpectedPlane()
     QFETCH(QList<Image*>, imageSet);
     QFETCH(AnatomicalPlane::AnatomicalPlaneType, expectedResult);
 
-    Volume *volume = new Volume(this);
-    volume->setImages(imageSet);
+    Volume volume;
+    volume.setImages(imageSet);
     
-    QCOMPARE(volume->getAcquisitionPlane(), expectedResult);
+    QCOMPARE(volume.getAcquisitionPlane(), expectedResult);
 }
 
 DECLARE_TEST(test_Volume)
