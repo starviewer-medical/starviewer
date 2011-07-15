@@ -9,7 +9,7 @@ public:
     QString m_domain;
 
 private:
-    virtual QString getMacAddress()
+    virtual QString getMACAddress()
     {
         return m_macAddress;
     }
