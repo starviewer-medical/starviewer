@@ -8,4 +8,5 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_imageorientationoperationsmapper.cpp \
            $$PWD/test_volume.cpp \
            $$PWD/test_q2dviewer.cpp \
-           $$PWD/test_machineinformation.cpp
+           $$PWD/test_machineinformation.cpp \
+           $$PWD/test_opacitytransferfunction.cpp
