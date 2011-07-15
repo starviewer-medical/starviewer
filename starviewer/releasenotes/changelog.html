@@ -48,14 +48,24 @@
         <div class="new">
             <ul>
                 <li>S'afegeix la funcionalitat de recòrrer les imatges del volum de manera cíclica. <span class="ticket">370</span></li>
+                <li>S'afegeix l'opció de cercar per data naixament o edat del pacient a la cerca avançada al PACS. <span class="ticket">1617</span></li>
+                <li>S'afegeix la modalitat OP la llistat de modalitats per cercar.<span class="ticket">1568</span><</li>
             </ul>
         </div>
         <div class="improved">
             <ul>
                 <li>S'afegeixen els tags Exposure, ExposureTime, ExposureTimeInMs i ExposureInmAs en els tags rellevants del volcat DICOM de CT. <span class="ticket">1608</span></li>
+                <li>Es permet importar DICOMDIR a nivell de sèries o imatges.</li>
+                <li>Es restaura la finestra d'Starviewer al seu estat original, si quan s'ha acabat de descarregar un estudi demanat a través del SAP la finestra d'Starviewer està minimitzada<span class="ticket">1658</span></li>
+                <li>Es permet la impressió en de sèries Multiframe<span class="ticket">1094</span></li>
             </ul>
         </div>
         <div class="fixed">
+            <ul>
+                <li>Si al cercar estudis es trobava un mateix estudi en més d'un PACS, no sempre es descarregava del PACS escollit.<span class="ticket">1023</span></li>
+                <li>Es resol problema que provocava el tancament inesperat d'Starviewer en algunes ocasions al eliminar estudis des la pantalla de base de dades local.</li>
+                <li>Es resol error que provocava que els estudis de la base de dades local es reordenessin en ordre ascendent, si al descarregar un nou estudi del PACS els teníem ordenats en ordre descendent.</li>
+            </ul>
         </div>
         <div class="removed">
         </div>
