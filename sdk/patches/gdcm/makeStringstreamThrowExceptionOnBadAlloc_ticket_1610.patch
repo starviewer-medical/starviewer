@@ -1,6 +1,6 @@
 diff -uprN gdcm-2.0.17_original/Source/MediaStorageAndFileFormat/gdcmJPEG2000Codec.cxx gdcm-2.0.17/Source/MediaStorageAndFileFormat/gdcmJPEG2000Codec.cxx
 --- gdcm-2.0.17_original/Source/MediaStorageAndFileFormat/gdcmJPEG2000Codec.cxx	2011-01-25 16:48:14.000000000 +0100
-+++ gdcm-2.0.17/Source/MediaStorageAndFileFormat/gdcmJPEG2000Codec.cxx	2011-06-17 14:22:34.000000000 +0200
++++ gdcm-2.0.17/Source/MediaStorageAndFileFormat/gdcmJPEG2000Codec.cxx	2011-07-21 09:22:49.000000000 +0200
 @@ -310,6 +310,7 @@ bool JPEG2000Codec::Decode(DataElement c
      is.write(buffer, totalLen);
      delete[] buffer;
@@ -11,7 +11,7 @@ diff -uprN gdcm-2.0.17_original/Source/MediaStorageAndFileFormat/gdcmJPEG2000Cod
      out = in;
 diff -uprN gdcm-2.0.17_original/Source/MediaStorageAndFileFormat/gdcmJPEGCodec.cxx gdcm-2.0.17/Source/MediaStorageAndFileFormat/gdcmJPEGCodec.cxx
 --- gdcm-2.0.17_original/Source/MediaStorageAndFileFormat/gdcmJPEGCodec.cxx	2011-01-25 16:48:14.000000000 +0100
-+++ gdcm-2.0.17/Source/MediaStorageAndFileFormat/gdcmJPEGCodec.cxx	2011-06-17 14:21:38.000000000 +0200
++++ gdcm-2.0.17/Source/MediaStorageAndFileFormat/gdcmJPEGCodec.cxx	2011-07-21 09:22:49.000000000 +0200
 @@ -154,6 +154,7 @@ bool JPEGCodec::Decode(DataElement const
    const ByteValue *jpegbv = in.GetByteValue();
    if( !sf && !jpegbv ) return false;
@@ -20,9 +20,17 @@ diff -uprN gdcm-2.0.17_original/Source/MediaStorageAndFileFormat/gdcmJPEGCodec.c
    if( sf )
      {
      //unsigned long pos = 0;
+@@ -339,6 +340,7 @@ bool JPEGCodec::Code(DataElement const &
+ bool JPEGCodec::Decode(std::istream &is, std::ostream &os)
+ {
+   std::stringstream tmpos;
++  tmpos.exceptions( std::ostream::failbit | std::ostream::badbit );
+   if ( !Internal->Decode(is,tmpos) )
+     {
+ #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
 diff -uprN gdcm-2.0.17_original/Source/MediaStorageAndFileFormat/gdcmRAWCodec.cxx gdcm-2.0.17/Source/MediaStorageAndFileFormat/gdcmRAWCodec.cxx
 --- gdcm-2.0.17_original/Source/MediaStorageAndFileFormat/gdcmRAWCodec.cxx	2011-01-25 16:48:14.000000000 +0100
-+++ gdcm-2.0.17/Source/MediaStorageAndFileFormat/gdcmRAWCodec.cxx	2011-06-17 14:21:59.000000000 +0200
++++ gdcm-2.0.17/Source/MediaStorageAndFileFormat/gdcmRAWCodec.cxx	2011-07-21 09:22:49.000000000 +0200
 @@ -98,6 +98,7 @@ bool RAWCodec::DecodeBytes(const char* i
    std::stringstream is;
    is.write(inBytes, inBufferLength);
@@ -31,9 +39,17 @@ diff -uprN gdcm-2.0.17_original/Source/MediaStorageAndFileFormat/gdcmRAWCodec.cx
    bool r = Decode(is, os);
    assert( r );
    if(!r) return false;
+@@ -154,6 +155,7 @@ bool RAWCodec::Decode(DataElement const 
+   std::stringstream is;
+   is.write(bv->GetPointer(), bv->GetLength());
+   std::stringstream os;
++  os.exceptions( std::ostream::failbit | std::ostream::badbit );
+   bool r = Decode(is, os);
+   if(!r) return false;
+   assert( r );
 diff -uprN gdcm-2.0.17_original/Source/MediaStorageAndFileFormat/gdcmRLECodec.cxx gdcm-2.0.17/Source/MediaStorageAndFileFormat/gdcmRLECodec.cxx
 --- gdcm-2.0.17_original/Source/MediaStorageAndFileFormat/gdcmRLECodec.cxx	2011-01-25 16:48:14.000000000 +0100
-+++ gdcm-2.0.17/Source/MediaStorageAndFileFormat/gdcmRLECodec.cxx	2011-06-17 14:23:15.000000000 +0200
++++ gdcm-2.0.17/Source/MediaStorageAndFileFormat/gdcmRLECodec.cxx	2011-07-21 09:22:49.000000000 +0200
 @@ -568,6 +568,7 @@ bool RLECodec::Decode(DataElement const 
      sf->WriteBuffer( is );
      SetLength( len );
@@ -42,14 +58,11 @@ diff -uprN gdcm-2.0.17_original/Source/MediaStorageAndFileFormat/gdcmRLECodec.cx
        bool r = Decode(is, os);
        assert( r == true );
        (void)r; //warning removal
---- gdcm-2.0.17_original/Source/MediaStorageAndFileFormat/gdcmJPEGCodec.cxx	2011-01-25 16:48:14.000000000 +0100
-+++ gdcm-2.0.17/Source/MediaStorageAndFileFormat/gdcmJPEGCodec.cxx	2011-06-22 16:58:41.000000000 +0200
-@@ -339,6 +339,7 @@ bool JPEGCodec::Code(DataElement const &
- bool JPEGCodec::Decode(std::istream &is, std::ostream &os)
- {
-   std::stringstream tmpos;
-+  tmpos.exceptions( std::ostream::failbit | std::ostream::badbit );
-   if ( !Internal->Decode(is,tmpos) )
-     {
- #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
- 
+@@ -600,6 +601,7 @@ bool RLECodec::Decode(DataElement const 
+       is.write(mybuffer, bv.GetLength());
+       delete[] mybuffer;
+       std::stringstream os;
++      os.exceptions( std::ostream::failbit | std::ostream::badbit );
+       SetLength( llen );
+       bool r = Decode(is, os);
+       assert( r == true );
