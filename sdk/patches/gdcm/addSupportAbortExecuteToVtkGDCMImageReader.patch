@@ -1,5 +1,12 @@
-diff -r gdcm-2.0.17_original/Utilities/VTK/vtkGDCMImageReader.cxx gdcm-2.0.17/Utilities/VTK/vtkGDCMImageReader.cxx
-1436c1436
-<     for(int j = dext[4]; j <= dext[5]; ++j)
----
->     for(int j = dext[4]; !this->AbortExecute && j <= dext[5]; ++j)
+diff -uprN gdcm-2.0.17_original/Utilities/VTK/vtkGDCMImageReader.cxx gdcm-2.0.17/Utilities/VTK/vtkGDCMImageReader.cxx
+--- gdcm-2.0.17_original/Utilities/VTK/vtkGDCMImageReader.cxx	2011-01-25 16:48:14.000000000 +0100
++++ gdcm-2.0.17/Utilities/VTK/vtkGDCMImageReader.cxx	2011-07-21 09:15:48.000000000 +0200
+@@ -1433,7 +657,7 @@ int vtkGDCMImageReader::RequestDataCompa
+     // HACK: len is moved out of the loop so that when file > 1 start failing we can still know
+     // the len of the buffer...technically all files should have the same len (not checked for now)
+     unsigned long len = 0;
+-    for(int j = dext[4]; j <= dext[5]; ++j)
++    for(int j = dext[4]; !this->AbortExecute && j <= dext[5]; ++j)
+       {
+       assert( j >= 0 && j <= this->FileNames->GetNumberOfValues() );
+       const char *filename = this->FileNames->GetValue( j );
