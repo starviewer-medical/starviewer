@@ -1,0 +1,31 @@
+diff -uprN gdcm-2.0.17_original/Source/DataStructureAndEncodingDefinition/gdcmReader.cxx gdcm-2.0.17/Source/DataStructureAndEncodingDefinition/gdcmReader.cxx
+--- gdcm-2.0.17_original/Source/DataStructureAndEncodingDefinition/gdcmReader.cxx	2011-01-25 16:48:14.000000000 +0100
++++ gdcm-2.0.17/Source/DataStructureAndEncodingDefinition/gdcmReader.cxx	2011-07-21 09:15:48.000000000 +0200
+@@ -657,11 +657,13 @@ bool Reader::InternalReadCommon(const T_
+     {
+     gdcmDebugMacro( ex.what() );
+     success = false;
++    throw ex;
+     }
+   catch( ... )
+     {
+     gdcmWarningMacro( "Unknown exception" );
+     success = false;
++    throw;
+     }
+
+   //if( success ) assert( Stream->eof() );
+@@ -671,11 +673,13 @@ bool Reader::InternalReadCommon(const T_
+     {
+     gdcmDebugMacro( ex.what() );
+     success = false;
++    throw ex;
+     }
+   catch( ... )
+     {
+     gdcmWarningMacro( "Unknown exception" );
+     success = false;
++    throw;
+     }
+   //  if( !success )
+   //    {
