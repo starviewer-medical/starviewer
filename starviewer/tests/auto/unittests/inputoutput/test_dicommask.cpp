@@ -131,6 +131,8 @@ void test_DicomMask::fromStudy_ShouldReturnValidDICOMMask()
 
     QCOMPARE(DicomMask::fromStudy(inputStudy, ok) == result, true);
     QCOMPARE(ok, true);
+
+    StudyTestHelper::cleanUp(inputStudy);
 }
 
 void test_DicomMask::fromStudy_ShouldReturnInvalidDICOMMask_data()
@@ -148,6 +150,8 @@ void test_DicomMask::fromStudy_ShouldReturnInvalidDICOMMask()
     DicomMask::fromStudy(inputStudy, ok);
 
     QCOMPARE(ok, false);
+
+    StudyTestHelper::cleanUp(inputStudy);
 }
 
 void test_DicomMask::fromSeries_ShouldReturnValidDICOMMask_data()
@@ -173,6 +177,8 @@ void test_DicomMask::fromSeries_ShouldReturnValidDICOMMask()
 
     QCOMPARE(DicomMask::fromSeries(inputSeries, ok) == result, true);
     QCOMPARE(ok, true);
+
+    SeriesTestHelper::cleanUp(inputSeries);
 }
 
 void test_DicomMask::fromSeries_ShouldReturnInvalidDICOMMask_data()
@@ -197,6 +203,8 @@ void test_DicomMask::fromSeries_ShouldReturnInvalidDICOMMask()
     DicomMask::fromSeries(inputSeries, ok);
 
     QCOMPARE(ok, false);
+
+    SeriesTestHelper::cleanUp(inputSeries);
 }
 
 void test_DicomMask::fromImage_ShouldReturnValidDICOMMask_data()
@@ -223,6 +231,8 @@ void test_DicomMask::fromImage_ShouldReturnValidDICOMMask()
 
     QCOMPARE(DicomMask::fromImage(inputImage, ok) == result, true);
     QCOMPARE(ok, true);
+
+    ImageTestHelper::cleanUp(inputImage);
 }
 
 void test_DicomMask::fromImage_ShouldReturnInvalidDICOMMask_data()
@@ -249,6 +259,8 @@ void test_DicomMask::fromImage_ShouldReturnInvalidDICOMMask()
     DicomMask::fromImage(inputImage, ok);
 
     QCOMPARE(ok, false);
+
+    ImageTestHelper::cleanUp(inputImage);
 }
 
 DECLARE_TEST(test_DicomMask)

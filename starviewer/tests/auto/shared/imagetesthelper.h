@@ -15,6 +15,9 @@ class ImageTestHelper
 {
 public:
     static udg::Image* createImageByID(QString SOPInstanceUID);
+
+    /// Elimina els objectes de l'estructura Patient/Study/Series/Image que pertany la serie
+    static void cleanUp(udg::Image *image);
 };
 
 }

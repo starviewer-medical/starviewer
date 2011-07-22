@@ -1,5 +1,6 @@
 #include "imagetesthelper.h"
 
+#include "seriestesthelper.h"
 #include "image.h"
 
 using namespace udg;
@@ -13,6 +14,18 @@ Image* ImageTestHelper::createImageByID(QString SOPInstanceUID)
     testImage->setSOPInstanceUID(SOPInstanceUID);
 
     return testImage;
+}
+
+void ImageTestHelper::cleanUp(Image *image)
+{
+    if (image->getParentSeries() != NULL)
+    {
+        SeriesTestHelper::cleanUp(image->getParentSeries());
+    }
+    else
+    {
+        delete image;
+    }
 }
 
 }
