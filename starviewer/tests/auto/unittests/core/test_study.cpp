@@ -3,8 +3,8 @@
 #include "study.h"
 #include "series.h"
 #include "dicomsource.h"
-#include "studytestutils.h"
-#include "pacsdevicetestutils.h"
+#include "studytesthelper.h"
+#include "pacsdevicetesthelper.h"
 
 
 using namespace udg;
@@ -28,28 +28,28 @@ void test_Study::getDICOMSource_ShouldReturnMergedPACSDeviceList_data()
     QTest::addColumn<DICOMSource>("result");
 
     DICOMSource DICOMSourceWithPACSIDOneAndTwo;
-    DICOMSourceWithPACSIDOneAndTwo.addRetrievePACS(PACSDeviceTestUtils::getTestPACSDevice("1"));
-    DICOMSourceWithPACSIDOneAndTwo.addRetrievePACS(PACSDeviceTestUtils::getTestPACSDevice("2"));
+    DICOMSourceWithPACSIDOneAndTwo.addRetrievePACS(PACSDeviceTestHelper::getTestPACSDevice("1"));
+    DICOMSourceWithPACSIDOneAndTwo.addRetrievePACS(PACSDeviceTestHelper::getTestPACSDevice("2"));
 
     DICOMSource DICOMSourceWithPACSIDOne;
-    DICOMSourceWithPACSIDOne.addRetrievePACS(PACSDeviceTestUtils::getTestPACSDevice("1"));
+    DICOMSourceWithPACSIDOne.addRetrievePACS(PACSDeviceTestHelper::getTestPACSDevice("1"));
 
     DICOMSource DICOMSourceWithPACSIDTwo;
-    DICOMSourceWithPACSIDTwo.addRetrievePACS(PACSDeviceTestUtils::getTestPACSDevice("2"));
+    DICOMSourceWithPACSIDTwo.addRetrievePACS(PACSDeviceTestHelper::getTestPACSDevice("2"));
 
-    Study *studyWithoutDICOMSourceSeriesWith = StudyTestUtils::getTestStudy("1", "1", 2);
+    Study *studyWithoutDICOMSourceSeriesWith = StudyTestHelper::getTestStudy("1", "1", 2);
     studyWithoutDICOMSourceSeriesWith->getSeries().at(0)->setDICOMSource(DICOMSourceWithPACSIDOne);
     studyWithoutDICOMSourceSeriesWith->getSeries().at(1)->setDICOMSource(DICOMSourceWithPACSIDTwo);
 
-    Study *studyAndSeriesWithDICOMSource = StudyTestUtils::getTestStudy("2", "2", 2);
+    Study *studyAndSeriesWithDICOMSource = StudyTestHelper::getTestStudy("2", "2", 2);
     studyAndSeriesWithDICOMSource->setDICOMSource(DICOMSourceWithPACSIDOne);
     studyAndSeriesWithDICOMSource->getSeries().at(0)->setDICOMSource(DICOMSourceWithPACSIDOne);
     studyAndSeriesWithDICOMSource->getSeries().at(1)->setDICOMSource(DICOMSourceWithPACSIDOne);
 
-    Study *studyWithDICOMSourceAndSeriesNot = StudyTestUtils::getTestStudy("3", "3", 2);
+    Study *studyWithDICOMSourceAndSeriesNot = StudyTestHelper::getTestStudy("3", "3", 2);
     studyWithDICOMSourceAndSeriesNot->setDICOMSource(DICOMSourceWithPACSIDTwo);
 
-    Study *studyAndSeriesWithoutDICOMSource = StudyTestUtils::getTestStudy("4", "4", 1);
+    Study *studyAndSeriesWithoutDICOMSource = StudyTestHelper::getTestStudy("4", "4", 1);
 
     QTest::newRow("Study without DICOMSource and series with DICOMSource") << studyWithoutDICOMSourceSeriesWith << DICOMSourceWithPACSIDOneAndTwo;
     QTest::newRow("Study and series with DICOMSource") << studyAndSeriesWithDICOMSource  << DICOMSourceWithPACSIDOne;

@@ -1,5 +1,5 @@
-#ifndef SERIESTESTUTILS_H
-#define SERIESTESTUTILS_H
+#ifndef SERIESTESTHELPER_H
+#define SERIESTESTHELPER_H
 
 #include <QString>
 
@@ -8,7 +8,7 @@ namespace udg {
 class Series;
 
 /// Classe que retorna Series per utilitzar per testing
-class SeriesTestUtils
+class SeriesTestHelper
 {
 public:
     /// Construeix una sèrie amb seriesInstanceUID i seriesNumber passat per paràmetre i hi afageix com a fill el número d'imatges indicades. El SOPInstanceUID de la Imatge
@@ -17,4 +17,4 @@ public:
 };
 
 }
-#endif // SERIESTESTUTILS_H
+#endif // SERIESTESTHELPER_H

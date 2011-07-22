@@ -2,7 +2,7 @@
 
 #include "dicomsource.h"
 #include "pacsdevice.h"
-#include "pacsdevicetestutils.h"
+#include "pacsdevicetesthelper.h"
 
 using namespace udg;
 
@@ -103,12 +103,12 @@ void test_DICOMSource::operatorEqual()
 
 PacsDevice test_DICOMSource::getPACSIDOne()
 {
-    return PACSDeviceTestUtils::getTestPACSDevice("1");
+    return PACSDeviceTestHelper::getTestPACSDevice("1");
 }
 
 PacsDevice test_DICOMSource::getPACSIDTwo()
 {
-    return PACSDeviceTestUtils::getTestPACSDevice("2");
+    return PACSDeviceTestHelper::getTestPACSDevice("2");
 }
 
 DICOMSource test_DICOMSource::getDICOMSourceWithPACSIDOne()

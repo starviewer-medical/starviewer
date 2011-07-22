@@ -1,5 +1,5 @@
-#ifndef STUDYTESTUTILS_H
-#define STUDYTESTUTILS_H
+#ifndef STUDYTESTHELPER_H
+#define STUDYTESTHELPER_H
 
 #include <QString>
 
@@ -8,7 +8,7 @@ namespace udg {
 class Study;
 
 /// Classe que retorna Studies per utilitzar per testing
-class StudyTestUtils
+class StudyTestHelper
 {
 public:
     /// Torna un Study amb les dades passades per paràmetre, i el número de series Indicat.
@@ -17,4 +17,4 @@ public:
 
 }
 
-#endif // STUDYTESTUTILS_H
+#endif // STUDYTESTHELPER_H

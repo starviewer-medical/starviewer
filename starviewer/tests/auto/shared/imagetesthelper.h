@@ -1,5 +1,5 @@
-#ifndef IMAGETESTUTILS_H
-#define IMAGETESTUTILS_H
+#ifndef IMAGETESTHELPER_H
+#define IMAGETESTHELPER_H
 
 #include <QString>
 
@@ -9,7 +9,7 @@ namespace udg
 class Image;
 
 /// Classe que retorna Imatges per utilitzar per testing
-class ImageTestUtils
+class ImageTestHelper
 {
 public:
     static Image* getTestImage(QString instanceNumber, QString SOPInstanceUID);
@@ -17,4 +17,4 @@ public:
 
 }
 
-#endif // IMAGETESTUTILS_H
+#endif // IMAGETESTHELPER_H
