@@ -7,9 +7,9 @@
 #include "study.h"
 #include "series.h"
 #include "image.h"
-#include "studytestutils.h"
-#include "seriestestutils.h"
-#include "imagetestutils.h"
+#include "studytesthelper.h"
+#include "seriestesthelper.h"
+#include "imagetesthelper.h"
 
 using namespace udg;
 
@@ -113,7 +113,7 @@ void test_DicomMask::fromStudy_ShouldReturnValidDICOMMask_data()
     QTest::addColumn<Study*>("inputStudy");
     QTest::addColumn<DicomMask>("result");
 
-    Study *study = StudyTestUtils::getTestStudy("1", "1") ;
+    Study *study = StudyTestHelper::getTestStudy("1") ;
 
     DicomMask studyDicomMask;
     studyDicomMask.setStudyInstanceUID(study->getInstanceUID());
@@ -154,7 +154,7 @@ void test_DicomMask::fromSeries_ShouldReturnValidDICOMMask_data()
     QTest::addColumn<Series*>("inputSeries");
     QTest::addColumn<DicomMask>("result");
 
-    Series *series = StudyTestUtils::getTestStudy("1","1", 1)->getSeries().at(0);
+    Series *series = StudyTestHelper::getTestStudy("1", 1)->getSeries().at(0);
 
     DicomMask seriesDicomMask;
     seriesDicomMask.setStudyInstanceUID(series->getParentStudy()->getInstanceUID());
@@ -178,10 +178,10 @@ void test_DicomMask::fromSeries_ShouldReturnInvalidDICOMMask_data()
 {
     QTest::addColumn<Series*>("inputSeries");
 
-    Series *seriesWithNoInstanceUID = StudyTestUtils::getTestStudy("", "", 1)->getSeries().at(0);
+    Series *seriesWithNoInstanceUID = StudyTestHelper::getTestStudy("", 1)->getSeries().at(0);
     seriesWithNoInstanceUID->setInstanceUID("");
 
-    Series *seriesWithParentStudyWithoutInstanceUID = StudyTestUtils::getTestStudy("", "", 1)->getSeries().at(0);
+    Series *seriesWithParentStudyWithoutInstanceUID = StudyTestHelper::getTestStudy("", 1)->getSeries().at(0);
 
     QTest::newRow("Create DICOMMask from invalid Series with no Study parent") << new Series();
     QTest::newRow("Create DICOMMask from invalid Series without InstanceUID and with Study parent without InstanceUID") << seriesWithNoInstanceUID;
@@ -203,7 +203,7 @@ void test_DicomMask::fromImage_ShouldReturnValidDICOMMask_data()
     QTest::addColumn<Image*>("inputImage");
     QTest::addColumn<DicomMask>("result");
 
-    Image *image = StudyTestUtils::getTestStudy("1", "1", 1, 1)->getSeries().at(0)->getImageByIndex(0);
+    Image *image = StudyTestHelper::getTestStudy("1", 1, 1)->getSeries().at(0)->getImageByIndex(0);
 
     DicomMask imageDicomMask;
     imageDicomMask.setStudyInstanceUID(image->getParentSeries()->getParentStudy()->getInstanceUID());
@@ -228,11 +228,11 @@ void test_DicomMask::fromImage_ShouldReturnInvalidDICOMMask_data()
 {
     QTest::addColumn<Image*>("inputImage");
 
-    Image *imageWithNoInstanceUID = StudyTestUtils::getTestStudy("", "", 1, 1)->getSeries().at(0)->getImageByIndex(0);
+    Image *imageWithNoInstanceUID = StudyTestHelper::getTestStudy("", 1, 1)->getSeries().at(0)->getImageByIndex(0);
     imageWithNoInstanceUID->setSOPInstanceUID("");
     imageWithNoInstanceUID->getParentSeries()->setInstanceUID("");
 
-    Image *imageWithoutSOPInstanceUID = StudyTestUtils::getTestStudy("1", "1", 1, 1)->getSeries().at(0)->getImageByIndex(0);
+    Image *imageWithoutSOPInstanceUID = StudyTestHelper::getTestStudy("1", 1, 1)->getSeries().at(0)->getImageByIndex(0);
     imageWithoutSOPInstanceUID->setSOPInstanceUID("");
 
     QTest::newRow("Create DICOMMask from invalid Image with no Series parent") << new Image();
