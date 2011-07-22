@@ -5,7 +5,7 @@
 
 namespace udg {
 
-Study* StudyTestHelper::getTestStudy(QString instanceUID, int numberOfSeriesToAddToStudy, int numberOfImagesToAddToSeries)
+Study* StudyTestHelper::createStudyByID(QString instanceUID, int numberOfSeriesToAddToStudy, int numberOfImagesToAddToSeries)
 {
     Study *study = new Study();
 
@@ -13,7 +13,7 @@ Study* StudyTestHelper::getTestStudy(QString instanceUID, int numberOfSeriesToAd
 
     for (int index = 0; index < numberOfSeriesToAddToStudy; index++)
     {
-        study->addSeries(SeriesTestHelper::getTestSeries(QString::number(index), numberOfImagesToAddToSeries));
+        study->addSeries(SeriesTestHelper::createSeriesByID(QString::number(index), numberOfImagesToAddToSeries));
     }
 
     return study;

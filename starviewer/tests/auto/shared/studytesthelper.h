@@ -12,7 +12,7 @@ class StudyTestHelper
 {
 public:
     /// Torna un Study amb les dades passades per paràmetre, i el número de series Indicat.
-    static Study* getTestStudy(QString instanceUID, int numberOfSeriesToAddToStudy = 0, int numberOfImagesToAddToSeries = 0);
+    static Study* createStudyByID(QString instanceUID, int numberOfSeriesToAddToStudy = 0, int numberOfImagesToAddToSeries = 0);
 };
 
 }

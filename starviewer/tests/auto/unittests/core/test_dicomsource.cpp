@@ -103,12 +103,12 @@ void test_DICOMSource::operatorEqual()
 
 PacsDevice test_DICOMSource::getPACSIDOne()
 {
-    return PACSDeviceTestHelper::getTestPACSDevice("1");
+    return PACSDeviceTestHelper::createPACSDeviceByID("1");
 }
 
 PacsDevice test_DICOMSource::getPACSIDTwo()
 {
-    return PACSDeviceTestHelper::getTestPACSDevice("2");
+    return PACSDeviceTestHelper::createPACSDeviceByID("2");
 }
 
 DICOMSource test_DICOMSource::getDICOMSourceWithPACSIDOne()

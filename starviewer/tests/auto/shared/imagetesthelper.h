@@ -12,7 +12,7 @@ class Image;
 class ImageTestHelper
 {
 public:
-    static Image* getTestImage(QString SOPInstanceUID);
+    static Image* createImageByID(QString SOPInstanceUID);
 };
 
 }
