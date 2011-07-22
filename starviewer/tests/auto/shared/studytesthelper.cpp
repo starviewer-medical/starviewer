@@ -1,6 +1,7 @@
 #include "studytesthelper.h"
 
 #include "study.h"
+#include "patient.h"
 #include "seriestesthelper.h"
 
 using namespace udg;
@@ -19,6 +20,18 @@ Study* StudyTestHelper::createStudyByID(QString instanceUID, int numberOfSeriesT
     }
 
     return study;
+}
+
+void StudyTestHelper::cleanUp(Study *study)
+{
+    if (study->getParentPatient() != NULL)
+    {
+        delete study->getParentPatient();
+    }
+    else
+    {
+        delete study;
+    }
 }
 
 }

@@ -56,11 +56,6 @@ void test_Study::getDICOMSource_ShouldReturnMergedPACSDeviceList_data()
     QTest::newRow("Study with DICOMSource and series without DICOMSource") << studyWithDICOMSourceAndSeriesNot << DICOMSourceWithPACSIDTwo;
     QTest::newRow("Study and series without DICOMSource") << studyAndSeriesWithoutDICOMSource  << DICOMSource();
 
-    //TODO: Al fer delete peta! esbrinar perquè
-   // delete studyWithoutDICOMSourceSeriesWith;
-    //delete studyAndSeriesWithDICOMSource;
-    //delete studyWithDICOMSourceAndSeriesNot;
-    //delete studyAndSeriesWithoutDICOMSource;
 }
 
 void test_Study::getDICOMSource_ShouldReturnMergedPACSDeviceList()
@@ -69,6 +64,8 @@ void test_Study::getDICOMSource_ShouldReturnMergedPACSDeviceList()
     QFETCH(DICOMSource, result);
 
     QCOMPARE(study->getDICOMSource() == result, true);
+
+    StudyTestHelper::cleanUp(study);
 }
 
 

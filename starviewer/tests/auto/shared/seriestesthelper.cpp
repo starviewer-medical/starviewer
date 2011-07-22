@@ -1,5 +1,6 @@
 #include "seriestesthelper.h"
 
+#include "studytesthelper.h"
 #include "imagetesthelper.h"
 #include "series.h"
 
@@ -19,6 +20,18 @@ Series* SeriesTestHelper::createSeriesByID(QString seriesInstanceUID, int number
     }
 
     return series;
+}
+
+void SeriesTestHelper::cleanUp(Series *series)
+{
+    if (series->getParentStudy() != NULL)
+    {
+        StudyTestHelper::cleanUp(series->getParentStudy());
+    }
+    else
+    {
+        delete series;
+    }
 }
 
 }

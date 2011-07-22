@@ -16,6 +16,9 @@ public:
     /// Construeix una sèrie amb seriesInstanceUID i hi afageix com a fill el número d'imatges indicades. El SOPInstanceUID de la Imatge
     /// serà 1 per la primera imatge, 2 per la segona imatge...
     static udg::Series* createSeriesByID(QString seriesInstanceUID, int numberOfImagesToAddToSeries = 0);
+
+    /// Elimina els objectes de l'estructura Patient/Study/Series/Image que pertany la serie
+    static void cleanUp(udg::Series *series);
 };
 
 }
