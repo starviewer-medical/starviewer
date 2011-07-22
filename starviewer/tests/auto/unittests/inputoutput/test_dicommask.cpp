@@ -12,6 +12,7 @@
 #include "imagetesthelper.h"
 
 using namespace udg;
+using namespace testing;
 
 class test_DicomMask : public QObject {
 Q_OBJECT

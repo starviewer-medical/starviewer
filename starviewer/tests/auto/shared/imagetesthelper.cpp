@@ -2,9 +2,11 @@
 
 #include "image.h"
 
-namespace udg{
+using namespace udg;
 
-Image* udg::ImageTestHelper::createImageByID(QString SOPInstanceUID)
+namespace testing {
+
+Image* ImageTestHelper::createImageByID(QString SOPInstanceUID)
 {
     Image *testImage = new Image();
 
@@ -14,4 +16,3 @@ Image* udg::ImageTestHelper::createImageByID(QString SOPInstanceUID)
 }
 
 }
-

@@ -3,16 +3,18 @@
 
 #include <QString>
 
-namespace udg {
+namespace udg{
+    class Study;
+}
 
-class Study;
+namespace testing {
 
 /// Classe que retorna Studies per utilitzar per testing
 class StudyTestHelper
 {
 public:
     /// Torna un Study amb les dades passades per paràmetre, i el número de series Indicat.
-    static Study* createStudyByID(QString instanceUID, int numberOfSeriesToAddToStudy = 0, int numberOfImagesToAddToSeries = 0);
+    static udg::Study* createStudyByID(QString instanceUID, int numberOfSeriesToAddToStudy = 0, int numberOfImagesToAddToSeries = 0);
 };
 
 }

@@ -7,6 +7,7 @@
 #include "pacsdevicetesthelper.h"
 
 using namespace udg;
+using namespace testing;
 
 class test_Series : public QObject {
 Q_OBJECT
