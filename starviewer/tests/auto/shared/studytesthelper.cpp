@@ -3,7 +3,9 @@
 #include "study.h"
 #include "seriestesthelper.h"
 
-namespace udg {
+using namespace udg;
+
+namespace testing {
 
 Study* StudyTestHelper::createStudyByID(QString instanceUID, int numberOfSeriesToAddToStudy, int numberOfImagesToAddToSeries)
 {

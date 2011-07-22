@@ -3,16 +3,18 @@
 
 #include <QString>
 
-namespace udg
-{
+namespace udg{
+    class Image;
+}
 
-class Image;
+namespace testing
+{
 
 /// Classe que retorna Imatges per utilitzar per testing
 class ImageTestHelper
 {
 public:
-    static Image* createImageByID(QString SOPInstanceUID);
+    static udg::Image* createImageByID(QString SOPInstanceUID);
 };
 
 }

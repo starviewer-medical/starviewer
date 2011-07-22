@@ -4,6 +4,7 @@
 #include "pacsdevice.h"
 #include "pacsdevicetesthelper.h"
 
+using namespace testing;
 using namespace udg;
 
 class test_DICOMSource : public QObject {

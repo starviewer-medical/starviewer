@@ -1,9 +1,11 @@
 #include "seriestesthelper.h"
 
-#include "series.h"
 #include "imagetesthelper.h"
+#include "series.h"
 
-namespace udg {
+using namespace udg;
+
+namespace testing {
 
 Series* SeriesTestHelper::createSeriesByID(QString seriesInstanceUID, int numberOfImages)
 {
