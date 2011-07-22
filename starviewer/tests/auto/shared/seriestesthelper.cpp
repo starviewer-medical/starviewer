@@ -5,7 +5,7 @@
 
 namespace udg {
 
-Series* SeriesTestHelper::getTestSeries(QString seriesInstanceUID, int numberOfImages)
+Series* SeriesTestHelper::createSeriesByID(QString seriesInstanceUID, int numberOfImages)
 {
     Series *series = new Series();
 
@@ -13,7 +13,7 @@ Series* SeriesTestHelper::getTestSeries(QString seriesInstanceUID, int numberOfI
 
     for (int index = 0; index < numberOfImages; index++)
     {
-        series->addImage(ImageTestHelper::getTestImage(QString::number(index)));
+        series->addImage(ImageTestHelper::createImageByID(QString::number(index)));
     }
 
     return series;

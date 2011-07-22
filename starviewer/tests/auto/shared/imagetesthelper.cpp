@@ -4,7 +4,7 @@
 
 namespace udg{
 
-Image* udg::ImageTestHelper::getTestImage(QString SOPInstanceUID)
+Image* udg::ImageTestHelper::createImageByID(QString SOPInstanceUID)
 {
     Image *testImage = new Image();
 

@@ -2,7 +2,7 @@
 
 namespace udg {
 
-PacsDevice PACSDeviceTestHelper::getTestPACSDevice(QString ID)
+PacsDevice PACSDeviceTestHelper::createPACSDeviceByID(QString ID)
 {
     PacsDevice pacsDevice;
 
