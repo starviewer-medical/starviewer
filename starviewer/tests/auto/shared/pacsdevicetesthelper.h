@@ -1,5 +1,5 @@
-#ifndef PACSDEVICETESTUTILS_H
-#define PACSDEVICETESTUTILS_H
+#ifndef PACSDEVICETESTHELPER_H
+#define PACSDEVICETESTHELPER_H
 
 #include <QString>
 #include "pacsdevice.h"
@@ -7,7 +7,7 @@
 namespace udg
 {
 /// Classe que retorna PACSDevice per utilitzar per testing
-class PACSDeviceTestUtils {
+class PACSDeviceTestHelper {
 
 public:
 
@@ -16,4 +16,4 @@ public:
 };
 }
 
-#endif // PACSDEVICETESTUTILS_H
+#endif // PACSDEVICETESTHELPER_H

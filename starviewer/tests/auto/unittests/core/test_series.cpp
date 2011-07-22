@@ -3,8 +3,8 @@
 #include "series.h"
 #include "image.h"
 #include "dicomsource.h"
-#include "seriestestutils.h"
-#include "pacsdevicetestutils.h"
+#include "seriestesthelper.h"
+#include "pacsdevicetesthelper.h"
 
 using namespace udg;
 
@@ -27,28 +27,28 @@ void test_Series::getDICOMSource_ShouldReturnMergedPACSDeviceList_data()
     QTest::addColumn<DICOMSource>("result");
 
     DICOMSource DICOMSourceWithPACSIDOneAndTwo;
-    DICOMSourceWithPACSIDOneAndTwo.addRetrievePACS(PACSDeviceTestUtils::getTestPACSDevice("1"));
-    DICOMSourceWithPACSIDOneAndTwo.addRetrievePACS(PACSDeviceTestUtils::getTestPACSDevice("2"));
+    DICOMSourceWithPACSIDOneAndTwo.addRetrievePACS(PACSDeviceTestHelper::getTestPACSDevice("1"));
+    DICOMSourceWithPACSIDOneAndTwo.addRetrievePACS(PACSDeviceTestHelper::getTestPACSDevice("2"));
 
     DICOMSource DICOMSourceWithPACSIDOne;
-    DICOMSourceWithPACSIDOne.addRetrievePACS(PACSDeviceTestUtils::getTestPACSDevice("1"));
+    DICOMSourceWithPACSIDOne.addRetrievePACS(PACSDeviceTestHelper::getTestPACSDevice("1"));
 
     DICOMSource DICOMSourceWithPACSIDTwo;
-    DICOMSourceWithPACSIDTwo.addRetrievePACS(PACSDeviceTestUtils::getTestPACSDevice("2"));
+    DICOMSourceWithPACSIDTwo.addRetrievePACS(PACSDeviceTestHelper::getTestPACSDevice("2"));
 
-    Series *seriesWithoutDICOMSourceImagesWith = SeriesTestUtils::getTestSeries("1", "1", 2);
+    Series *seriesWithoutDICOMSourceImagesWith = SeriesTestHelper::getTestSeries("1", "1", 2);
     seriesWithoutDICOMSourceImagesWith->getImageByIndex(0)->setDICOMSource(DICOMSourceWithPACSIDOne);
     seriesWithoutDICOMSourceImagesWith->getImageByIndex(1)->setDICOMSource(DICOMSourceWithPACSIDTwo);
 
-    Series *seriesAndImagesWithDICOMSource = SeriesTestUtils::getTestSeries("2", "2", 2);
+    Series *seriesAndImagesWithDICOMSource = SeriesTestHelper::getTestSeries("2", "2", 2);
     seriesAndImagesWithDICOMSource->setDICOMSource(DICOMSourceWithPACSIDOne);
     seriesAndImagesWithDICOMSource->getImageByIndex(0)->setDICOMSource(DICOMSourceWithPACSIDOne);
     seriesAndImagesWithDICOMSource->getImageByIndex(1)->setDICOMSource(DICOMSourceWithPACSIDOne);
 
-    Series *seriesWithDICOMSourceAndImagesNot = SeriesTestUtils::getTestSeries("3", "3", 2);
+    Series *seriesWithDICOMSourceAndImagesNot = SeriesTestHelper::getTestSeries("3", "3", 2);
     seriesWithDICOMSourceAndImagesNot->setDICOMSource(DICOMSourceWithPACSIDTwo);
 
-    Series *seriesAndImageWithOutDICOMSource = SeriesTestUtils::getTestSeries("4", "4", 1);
+    Series *seriesAndImageWithOutDICOMSource = SeriesTestHelper::getTestSeries("4", "4", 1);
 
     QTest::newRow("Series without DICOMSource and image with DICOMSource") << seriesWithoutDICOMSourceImagesWith << DICOMSourceWithPACSIDOneAndTwo;
     QTest::newRow("Series and Images with DICOMSource") << seriesAndImagesWithDICOMSource  << DICOMSourceWithPACSIDOne;

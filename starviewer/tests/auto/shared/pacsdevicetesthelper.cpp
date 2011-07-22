@@ -1,8 +1,8 @@
-#include "pacsdevicetestutils.h"
+#include "pacsdevicetesthelper.h"
 
 namespace udg {
 
-PacsDevice PACSDeviceTestUtils::getTestPACSDevice(QString ID)
+PacsDevice PACSDeviceTestHelper::getTestPACSDevice(QString ID)
 {
     PacsDevice pacsDevice;
 
