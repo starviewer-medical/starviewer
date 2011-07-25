@@ -13,6 +13,9 @@ namespace testing {
 class StudyTestHelper
 {
 public:
+    /// Torna un Study amb UID 1 amb el número de series i imatges en cada sèrie indicat.
+    static udg::Study* createStudy(int numberOfSeriesToAddToStudy = 0, int numberOfImagesToAddToSeries = 0);
+
     /// Torna un Study amb les dades passades per paràmetre, i el número de series Indicat.
     static udg::Study* createStudyByID(QString instanceUID, int numberOfSeriesToAddToStudy = 0, int numberOfImagesToAddToSeries = 0);
 

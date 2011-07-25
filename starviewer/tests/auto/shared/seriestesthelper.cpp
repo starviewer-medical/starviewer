@@ -8,6 +8,11 @@ using namespace udg;
 
 namespace testing {
 
+Series* SeriesTestHelper::createSeries(int numberOfImages)
+{
+    return createSeriesByID("1", numberOfImages);
+}
+
 Series* SeriesTestHelper::createSeriesByID(QString seriesInstanceUID, int numberOfImages)
 {
     Series *series = new Series();

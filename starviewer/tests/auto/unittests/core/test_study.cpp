@@ -37,19 +37,19 @@ void test_Study::getDICOMSource_ShouldReturnMergedPACSDeviceList_data()
     DICOMSource DICOMSourceWithPACSIDTwo;
     DICOMSourceWithPACSIDTwo.addRetrievePACS(PACSDeviceTestHelper::createPACSDeviceByID("2"));
 
-    Study *studyWithoutDICOMSourceSeriesWith = StudyTestHelper::createStudyByID("1", 2);
+    Study *studyWithoutDICOMSourceSeriesWith = StudyTestHelper::createStudy(2);
     studyWithoutDICOMSourceSeriesWith->getSeries().at(0)->setDICOMSource(DICOMSourceWithPACSIDOne);
     studyWithoutDICOMSourceSeriesWith->getSeries().at(1)->setDICOMSource(DICOMSourceWithPACSIDTwo);
 
-    Study *studyAndSeriesWithDICOMSource = StudyTestHelper::createStudyByID("2", 2);
+    Study *studyAndSeriesWithDICOMSource = StudyTestHelper::createStudy(2);
     studyAndSeriesWithDICOMSource->setDICOMSource(DICOMSourceWithPACSIDOne);
     studyAndSeriesWithDICOMSource->getSeries().at(0)->setDICOMSource(DICOMSourceWithPACSIDOne);
     studyAndSeriesWithDICOMSource->getSeries().at(1)->setDICOMSource(DICOMSourceWithPACSIDOne);
 
-    Study *studyWithDICOMSourceAndSeriesNot = StudyTestHelper::createStudyByID("3", 2);
+    Study *studyWithDICOMSourceAndSeriesNot = StudyTestHelper::createStudy(2);
     studyWithDICOMSourceAndSeriesNot->setDICOMSource(DICOMSourceWithPACSIDTwo);
 
-    Study *studyAndSeriesWithoutDICOMSource = StudyTestHelper::createStudyByID("4", 1);
+    Study *studyAndSeriesWithoutDICOMSource = StudyTestHelper::createStudy(1);
 
     QTest::newRow("Study without DICOMSource and series with DICOMSource") << studyWithoutDICOMSourceSeriesWith << DICOMSourceWithPACSIDOneAndTwo;
     QTest::newRow("Study and series with DICOMSource") << studyAndSeriesWithDICOMSource  << DICOMSourceWithPACSIDOne;

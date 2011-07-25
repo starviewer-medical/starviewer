@@ -8,6 +8,11 @@ using namespace udg;
 
 namespace testing {
 
+Study* StudyTestHelper::createStudy(int numberOfSeriesToAddToStudy, int numberOfImagesToAddToSeries)
+{
+    return createStudyByID("1", numberOfSeriesToAddToStudy, numberOfImagesToAddToSeries);
+}
+
 Study* StudyTestHelper::createStudyByID(QString instanceUID, int numberOfSeriesToAddToStudy, int numberOfImagesToAddToSeries)
 {
     Study *study = new Study();
