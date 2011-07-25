@@ -17,7 +17,7 @@ public:
     static udg::Study* createStudy(int numberOfSeriesToAddToStudy = 0, int numberOfImagesToAddToSeries = 0);
 
     /// Torna un Study amb les dades passades per paràmetre, i el número de series Indicat.
-    static udg::Study* createStudyByID(QString instanceUID, int numberOfSeriesToAddToStudy = 0, int numberOfImagesToAddToSeries = 0);
+    static udg::Study* createStudyByUID(QString instanceUID, int numberOfSeriesToAddToStudy = 0, int numberOfImagesToAddToSeries = 0);
 
     /// Elimina els objectes de l'estructura Patient/Study/Series/Image que pertany la serie
     static void cleanUp(udg::Study *study);

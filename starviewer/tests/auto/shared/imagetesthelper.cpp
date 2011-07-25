@@ -7,7 +7,7 @@ using namespace udg;
 
 namespace testing {
 
-Image* ImageTestHelper::createImageByID(QString SOPInstanceUID)
+Image* ImageTestHelper::createImageByUID(QString SOPInstanceUID)
 {
     Image *testImage = new Image();
 
