@@ -10,10 +10,10 @@ namespace testing {
 
 Series* SeriesTestHelper::createSeries(int numberOfImages)
 {
-    return createSeriesByID("1", numberOfImages);
+    return createSeriesByUID("1", numberOfImages);
 }
 
-Series* SeriesTestHelper::createSeriesByID(QString seriesInstanceUID, int numberOfImages)
+Series* SeriesTestHelper::createSeriesByUID(QString seriesInstanceUID, int numberOfImages)
 {
     Series *series = new Series();
 
@@ -21,7 +21,7 @@ Series* SeriesTestHelper::createSeriesByID(QString seriesInstanceUID, int number
 
     for (int index = 0; index < numberOfImages; index++)
     {
-        series->addImage(ImageTestHelper::createImageByID(QString::number(index)));
+        series->addImage(ImageTestHelper::createImageByUID(QString::number(index)));
     }
 
     return series;

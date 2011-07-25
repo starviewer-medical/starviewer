@@ -10,10 +10,10 @@ namespace testing {
 
 Study* StudyTestHelper::createStudy(int numberOfSeriesToAddToStudy, int numberOfImagesToAddToSeries)
 {
-    return createStudyByID("1", numberOfSeriesToAddToStudy, numberOfImagesToAddToSeries);
+    return createStudyByUID("1", numberOfSeriesToAddToStudy, numberOfImagesToAddToSeries);
 }
 
-Study* StudyTestHelper::createStudyByID(QString instanceUID, int numberOfSeriesToAddToStudy, int numberOfImagesToAddToSeries)
+Study* StudyTestHelper::createStudyByUID(QString instanceUID, int numberOfSeriesToAddToStudy, int numberOfImagesToAddToSeries)
 {
     Study *study = new Study();
 
@@ -21,7 +21,7 @@ Study* StudyTestHelper::createStudyByID(QString instanceUID, int numberOfSeriesT
 
     for (int index = 0; index < numberOfSeriesToAddToStudy; index++)
     {
-        study->addSeries(SeriesTestHelper::createSeriesByID(QString::number(index), numberOfImagesToAddToSeries));
+        study->addSeries(SeriesTestHelper::createSeriesByUID(QString::number(index), numberOfImagesToAddToSeries));
     }
 
     return study;
