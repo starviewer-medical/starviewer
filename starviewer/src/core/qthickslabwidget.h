@@ -21,13 +21,11 @@ public:
     // TODO int o QString?
     void setProjectionMode(int mode);
 
-    /**
-     * Enllacem aquest controlador amb un Q2DViewer. De moment només està previst que
-     * s'enllaci amb un sol visor. Tenir més d'un visor linkat pot no tenir massa sentit ja que
-     * els thickness seran diferents i tampoc es veu cap utilitat de tenir més d'un thickslab
-     * "sincronitzat" alhora
-     * @param viewer Visualitzador al que linkem el control de thick slab
-     */
+    /// Enllacem aquest controlador amb un Q2DViewer. De moment només està previst que
+    /// s'enllaci amb un sol visor. Tenir més d'un visor linkat pot no tenir massa sentit ja que
+    /// els thickness seran diferents i tampoc es veu cap utilitat de tenir més d'un thickslab
+    /// "sincronitzat" alhora
+    /// @param viewer Visualitzador al que linkem el control de thick slab
     void link(Q2DViewer *viewer);
 
     /// Desvinculem el widget del visor que tingui vinculat
@@ -39,28 +37,20 @@ signals:
     void projectionModeChanged(int mode);
 
 protected slots:
-    /**
-     * Aquest slot està connectat als canvis en el combo i segons el valor
-     * escollit aplica sobre el visor el tipus de projecció adequat
-     * @param comboItem
-     */
+    /// Aquest slot està connectat als canvis en el combo i segons el valor
+    /// escollit aplica sobre el visor el tipus de projecció adequat
+    /// @param comboItem
     void applyProjectionMode(int comboItem);
 
-    /**
-     * Actualiza el valor màxim de thickness que es mostra en el combo
-     * d'acord amb les llesques que té el volum del visor actual
-     */
+    /// Actualiza el valor màxim de thickness que es mostra en el combo
+    /// d'acord amb les llesques que té el volum del visor actual
     void updateMaximumThickness();
 
-    /**
-     * Actualitza el valor de thickness que mostra el label. Anirà connectat amb l'slider
-     * @param value Valor de thickness
-     */
+    /// Actualitza el valor de thickness que mostra el label. Anirà connectat amb l'slider
+    /// @param value Valor de thickness
     void updateThicknessLabel(int value);
 
-    /**
-     * Reseteja el viewer associat. Útil per quan ens canvien l'input, per exemple
-     */
+    /// Reseteja el viewer associat. Útil per quan ens canvien l'input, per exemple
     void reset();
 
     /// Aplica el thick slab segons el valor de l'slider.
@@ -71,10 +61,8 @@ protected slots:
     void turnOffDelayedUpdate();
     void onSliderReleased();
 
-    /**
-     * Es cridarà quan es canvïi la vista al visor associat.
-     * Segons les opcions marcades per l'usuari desactivarà o no la projecció aplicada.
-     */
+    /// Es cridarà quan es canvïi la vista al visor associat.
+    /// Segons les opcions marcades per l'usuari desactivarà o no la projecció aplicada.
     void onViewChanged();
 
     /// Si cert, posa el thickness al màxim i el manté encara que es canvïi de vista

@@ -62,15 +62,12 @@ private:
     /// Nombre d'intervals de l'editor.
     unsigned int m_numberOfIntervals;
 
-    /**
-     * Memoria cau de la funció de transferència representada actualment per l'editor (si m_changed
-     * és fals).
-     */
+    /// Memoria cau de la funció de transferència representada actualment per l'editor (si m_changed
+    /// és fals).
     mutable TransferFunction m_transferFunction;
-    /**
-     * Indica si hi ha hagut canvis des de l'últim cop que s'ha actualitzat la memòria cau de la
-     * funció de transferència.
-     */
+
+    /// Indica si hi ha hagut canvis des de l'últim cop que s'ha actualitzat la memòria cau de la
+    /// funció de transferència.
     mutable bool m_changed;
 
 };

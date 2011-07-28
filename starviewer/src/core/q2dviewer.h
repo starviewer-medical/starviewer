@@ -93,75 +93,59 @@ public:
     int getCurrentSlice() const;
     int getCurrentPhase() const;
 
-    /**
-     * Ens retorna el drawer per poder pintar-hi primitives
-     * @return Objecte drawer del viewer
-     */
+    /// Ens retorna el drawer per poder pintar-hi primitives
+    /// @return Objecte drawer del viewer
     Drawer* getDrawer() const;
 
-    /**
-     * Calcula la coordenada de la imatge que es troba per sota del cursor en coordenades de món
-     * En el cas el cursor estigui fora de la imatge, la coordenada no té cap validesa
-     * @param xyz[] La coordenada de la imatge, en sistema de coordenades de món
-     * @return Cert si el cursor es troba dins de la imatge, fals altrament
-     */
+    /// Calcula la coordenada de la imatge que es troba per sota del cursor en coordenades de món
+    /// En el cas el cursor estigui fora de la imatge, la coordenada no té cap validesa
+    /// @param xyz[] La coordenada de la imatge, en sistema de coordenades de món
+    /// @return Cert si el cursor es troba dins de la imatge, fals altrament
     bool getCurrentCursorImageCoordinate(double xyz[3]);
 
-    /**
-     * Ens retorna la imatge que s'està visualitzant en aquell moment
-     * TODO pot ser que aquest mètode sigui purament de conveniència per la tool de reference lines i desaparegui
-     * en un futur o sigui substituit per un altre
-     * @return Objecte Image corresponent al que es visualitza en aquell moment. NULL si no es veu cap imatge
-     */
+    /// Ens retorna la imatge que s'està visualitzant en aquell moment
+    /// TODO pot ser que aquest mètode sigui purament de conveniència per la tool de reference lines i desaparegui
+    /// en un futur o sigui substituit per un altre
+    /// @return Objecte Image corresponent al que es visualitza en aquell moment. NULL si no es veu cap imatge
     Image* getCurrentDisplayedImage() const;
 
-    /**
-     * Ens dóna el pla d'imatge actual que estem visualitzant
-     * @param vtkReconstructionHack HACK variable booleana que ens fa un petit hack
-     * per casos en que el pla "real" no és el que volem i necessitem una petita modificació
-     * ATENCIÓ: Només es donarà aquest paràmetre (amb valor true) en casos que realment se sàpiga el que s'està fent!
-     * @return El pla imatge actual
-     */
+    /// Ens dóna el pla d'imatge actual que estem visualitzant
+    /// @param vtkReconstructionHack HACK variable booleana que ens fa un petit hack
+    /// per casos en que el pla "real" no és el que volem i necessitem una petita modificació
+    /// ATENCIÓ: Només es donarà aquest paràmetre (amb valor true) en casos que realment se sàpiga el que s'està fent!
+    /// @return El pla imatge actual
     ImagePlane* getCurrentImagePlane(bool vtkReconstructionHack = false);
 
-    /**
-     * Ens dóna el pla d'imatge de la llesca
-     * @param vtkReconstructionHack HACK variable booleana que ens fa un petit hack
-     * per casos en que el pla "real" no és el que volem i necessitem una petita modificació
-     * ATENCIÓ: Només es donarà aquest paràmetre (amb valor true) en casos que realment se sàpiga el que s'està fent!
-     * @return El pla imatge de la llesca
-     */
+    /// Ens dóna el pla d'imatge de la llesca
+    /// @param vtkReconstructionHack HACK variable booleana que ens fa un petit hack
+    /// per casos en que el pla "real" no és el que volem i necessitem una petita modificació
+    /// ATENCIÓ: Només es donarà aquest paràmetre (amb valor true) en casos que realment se sàpiga el que s'està fent!
+    /// @return El pla imatge de la llesca
     ImagePlane* getImagePlane(int sliceNumber, int phaseNumber, bool vtkReconstructionHack = false);
 
-    /**
-     * donat un punt 3D en espai de referència DICOM, ens dóna la projecció d'aquest punt sobre
-     * el pla actual, transformat a coordenades de món VTK
-     * @param pointToProject[]
-     * @param projectedPoint[]
-     * @param vtkReconstructionHack HACK variable booleana que ens fa un petit hack
-     * per casos en que el pla "real" no és el que volem i necessitem una petita modificació
-     */
+    /// donat un punt 3D en espai de referència DICOM, ens dóna la projecció d'aquest punt sobre
+    /// el pla actual, transformat a coordenades de món VTK
+    /// @param pointToProject[]
+    /// @param projectedPoint[]
+    /// @param vtkReconstructionHack HACK variable booleana que ens fa un petit hack
+    /// per casos en que el pla "real" no és el que volem i necessitem una petita modificació
     void projectDICOMPointToCurrentDisplayedImage(const double pointToProject[3], double projectedPoint[3], bool vtkReconstructionHack = false);
 
     /// Retorna el thickness
     /// TODO potser un nom més correcte seria getCurrentSliceThickness() ja que podríem tenir imatges amb diferents thickness
     double getThickness();
 
-    /**
-     * Ens retorna el rang actual de llesques, tenint en compte totes les imatges,
-     * tant com si hi ha fases com si no
-     * @param min valor mínim
-     * @param max valor màxim
-     */
+    /// Ens retorna el rang actual de llesques, tenint en compte totes les imatges,
+    /// tant com si hi ha fases com si no
+    /// @param min valor mínim
+    /// @param max valor màxim
     /// TODO podria ser protected o private, ningú necessita aquestes dades fora del visor
     void getSliceRange(int &min, int &max);
     int* getSliceRange();
 
-    /**
-     * Ens dóna la llesca mínima/màxima de llesques, tenint en compte totes les imatges,
-     * tant com si hi ha fases com si no
-     * @return valor de la llesca mínima/màxima
-     */
+    /// Ens dóna la llesca mínima/màxima de llesques, tenint en compte totes les imatges,
+    /// tant com si hi ha fases com si no
+    /// @return valor de la llesca mínima/màxima
     int getMinimumSlice();
     int getMaximumSlice();
 
@@ -176,14 +160,12 @@ public:
     /// Si el thickslab no està actiu, el valor és indefinit
     int getSlabThickness() const;
 
-    /**
-     * Donada una coordenada de món, l'ajustem perquè caigui dins dels límits de l'imatge actual
-     * Això ens serveix per tools que agafen qualsevol punt de món, però necessiten que aquesta estigui
-     * dins dels límits de la imatge, com pot ser una ROI. Aquest mètode acaba d'ajustar la coordenada perquè
-     * estigui dins dels límits de la pròpia imatge
-     * @param xyz[] Coordenada que volem ajustar. Serà un paràmetre d'entrada/sortida i el seu contingut
-     * es modificarà perquè caigui dins dels límits de la imatge
-     */
+    /// Donada una coordenada de món, l'ajustem perquè caigui dins dels límits de l'imatge actual
+    /// Això ens serveix per tools que agafen qualsevol punt de món, però necessiten que aquesta estigui
+    /// dins dels límits de la imatge, com pot ser una ROI. Aquest mètode acaba d'ajustar la coordenada perquè
+    /// estigui dins dels límits de la pròpia imatge
+    /// @param xyz[] Coordenada que volem ajustar. Serà un paràmetre d'entrada/sortida i el seu contingut
+    /// es modificarà perquè caigui dins dels límits de la imatge
     void putCoordinateInCurrentImageBounds(double xyz[3]);
 
     /// Retorna la informació de la llesca actual del visualitzador

@@ -70,11 +70,9 @@ public:
     /// amaga la crida vtkRenderWindow::GetSize()
     int* getRenderWindowSize();
 
-    /**
-     * Mètodes per obtenir l'actual i/o l'anterior coordenada del cursor
-     * del ratolí durant l'últim event
-     * Les coordenades retornades estan en sistema de coordenades de Display
-     */
+    /// Mètodes per obtenir l'actual i/o l'anterior coordenada del cursor
+    /// del ratolí durant l'últim event
+    /// Les coordenades retornades estan en sistema de coordenades de Display
     int* getEventPosition();
     int* getLastEventPosition();
     void getEventPosition(int position[2]);
@@ -84,10 +82,8 @@ public:
     int getLastEventPositionX();
     int getLastEventPositionY();
 
-    /**
-     * Ens diu si el viewer és actiu en aquell moment
-     * @return Cert si actiu, fals altrament
-     */
+    /// Ens diu si el viewer és actiu en aquell moment
+    /// @return Cert si actiu, fals altrament
     bool isActive() const;
 
     /// Ens retorna el ToolProxy del viewer
@@ -119,40 +115,30 @@ public:
     /// TODO de moment només accepta format MPEG
     bool record(const QString &baseName, RecordFileFormatType format = MPEG2);
 
-    /**
-     * Fa zoom sobre l'escena amb el factor donat
-     * @param factor Factor de zoom que volem aplicar a la càmera
-     */
+    /// Fa zoom sobre l'escena amb el factor donat
+    /// @param factor Factor de zoom que volem aplicar a la càmera
     void zoom(double factor);
 
-    /**
-     * Desplaça la càmera segons el vector de moviment que li passem
-     * @param motionVector[] Vector de moviment que determina cap on i quant es mou la càmera
-     */
+    /// Desplaça la càmera segons el vector de moviment que li passem
+    /// @param motionVector[] Vector de moviment que determina cap on i quant es mou la càmera
     void pan(double motionVector[3]);
 
-    /**
-     * Fem un zoom del requadre definit pels paràmetres topCorner i bottomCorner en coordenades de món
-     * perquè s'ajusti a la mida de la finestra.
-     * La determinació sobre quina coordenada es considera "superior" o "inferior" és relativa segons el punt de vista,
-     * el realment important és que aquestes coordenades siguin dos vèrtexs oposats dins del requadre que es vol definir
-     * @param topCorner Coordenada superior
-     * @param bottomCorner Coordenada inferior oposada a la superior
-     * @param marginRate valor en percentatge del marge que es vol deixar
-     */
+    /// Fem un zoom del requadre definit pels paràmetres topCorner i bottomCorner en coordenades de món
+    /// perquè s'ajusti a la mida de la finestra.
+    /// La determinació sobre quina coordenada es considera "superior" o "inferior" és relativa segons el punt de vista,
+    /// el realment important és que aquestes coordenades siguin dos vèrtexs oposats dins del requadre que es vol definir
+    /// @param topCorner Coordenada superior
+    /// @param bottomCorner Coordenada inferior oposada a la superior
+    /// @param marginRate valor en percentatge del marge que es vol deixar
     void scaleToFit3D(double topCorner[3], double bottomCorner[3], double marginRate = 0.0);
 
-    /**
-     * Ens retorna l'objecte que conté tota la informació referent al window level
-     * que es pot aplicar sobre aquest visor
-     * @return L'objecte WindowLevelPresetsToolData
-     */
+    /// Ens retorna l'objecte que conté tota la informació referent al window level
+    /// que es pot aplicar sobre aquest visor
+    /// @return L'objecte WindowLevelPresetsToolData
     WindowLevelPresetsToolData* getWindowLevelData() const;
 
-    /**
-     * Li assignem el window level data externament
-     * @param windowLevelData
-     */
+    /// Li assignem el window level data externament
+    /// @param windowLevelData
     void setWindowLevelData(WindowLevelPresetsToolData *windowLevelData);
 
     /// Habilita/deshabilita que els renderings es facin efectius
@@ -184,10 +170,8 @@ public slots:
     /// Força l'execució de la visualització
     void render();
 
-    /**
-     * Assignem si aquest visualitzador és actiu, és a dir, amb el que s'està interactuant
-     * @param active
-     */
+    /// Assignem si aquest visualitzador és actiu, és a dir, amb el que s'està interactuant
+    /// @param active
     void setActive(bool active);
 
     /// Elimina totes les captures de pantalla
@@ -256,22 +240,18 @@ protected:
     /// Actualitza les dades contingudes a m_windowLevelData
     void updateWindowLevelData();
 
-    /**
-     * Fixem la orientació de la càmera del renderer principal
-     * Si el paràmetre donat no és un dels valors enumerats vàlids, no farà res
-     * @param orientation Orientació, valors enumerats que podran ser Axial, Sagital o Coronal
-     */
+    /// Fixem la orientació de la càmera del renderer principal
+    /// Si el paràmetre donat no és un dels valors enumerats vàlids, no farà res
+    /// @param orientation Orientació, valors enumerats que podran ser Axial, Sagital o Coronal
     void setCameraOrientation(int orientation);
 
     /// Ens retorna la càmera activa pel renderer principal, si n'hi ha, NUL altrament.
     vtkCamera* getActiveCamera();
 
-    /**
-     * Ens dóna la coordenada de món de l'últim (o previ a aquest) event capturat
-     * @param worldCoordinate Variable on es retornarà la coordenada
-     * @param current Si true, ens dóna la coordenada de l'event més recent,
-     * si fals, ens dóna la coordenada anterior a l'event més recent
-     */
+    /// Ens dóna la coordenada de món de l'últim (o previ a aquest) event capturat
+    /// @param worldCoordinate Variable on es retornarà la coordenada
+    /// @param current Si true, ens dóna la coordenada de l'event més recent,
+    /// si fals, ens dóna la coordenada anterior a l'event més recent
     void getRecentEventWorldCoordinate(double worldCoordinate[3], bool current);
 
     virtual void setupInteraction();

@@ -32,15 +32,11 @@ private:
     /// Atura l'estat d'slicing
     void endSlicing();
 
-    /**
-     * Canvia el mode d'slicing tenint en compte l'actual
-     */
+    /// Canvia el mode d'slicing tenint en compte l'actual
     void switchSlicingMode();
 
-    /**
-     * Actualitza el valor de la llesca/fase, en funció del mode en que estem
-     * @param value nou valor de la llesca/fase
-     */
+    /// Actualitza el valor de la llesca/fase, en funció del mode en que estem
+    /// @param value nou valor de la llesca/fase
     void updateIncrement(int increment);
 
     /// Calcula les imatges o fases a tenir en compte

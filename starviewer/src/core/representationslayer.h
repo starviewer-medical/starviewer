@@ -23,9 +23,7 @@ public:
     /// Afegeix una representacio a la llista.
     void addRepresentation(ToolRepresentation *toolRepresentation);
 
-    /**
-    * Esborra totes les primitives que es veuen al visor, és a dir, en el pla i llesques actuals.
-    */
+    /// Esborra totes les primitives que es veuen al visor, és a dir, en el pla i llesques actuals.
     void clearViewer();
 
     /// Esborra totes les toolRepresentation's del viewer

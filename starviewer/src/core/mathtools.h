@@ -80,15 +80,13 @@ static int planeIntersection(double p[3], double n[3], double q[3], double m[3],
 /// Retorna 0 si ... -1 si ... perquè són paral·lels, altrament >0
 static int planeIntersection(double p[3], double n[3], double q[3], double m[3], double r[3], double t[3], double intersectionPoint[3]);
 
-/**
-* Retorna el punt d'intersecció de dues línies
-* infinites definides per dos segments
-* @param p1 Primer punt de la primera recta
-* @param p2 Segon punt de la primera recta
-* @param p3 Primer punt de la segona recta
-* @param p4 Segon punt de la segona recta
-* @param state Contindrà el resultat de la intersecció: ParallelLines, LinesIntersect, SkewLines (no intersecten però es creuen, estan a plans paral·lels)
-*/
+/// Retorna el punt d'intersecció de dues línies
+/// infinites definides per dos segments
+/// @param p1 Primer punt de la primera recta
+/// @param p2 Segon punt de la primera recta
+/// @param p3 Primer punt de la segona recta
+/// @param p4 Segon punt de la segona recta
+/// @param state Contindrà el resultat de la intersecció: ParallelLines, LinesIntersect, SkewLines (no intersecten però es creuen, estan a plans paral·lels)
 static double* infiniteLinesIntersection(double *p1, double *p2, double *p3, double *p4, int &state);
 
 ///
