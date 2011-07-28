@@ -61,17 +61,15 @@ private:
     /// Aquest mètode es fa servir per "debug"
     void projectPlane(ImagePlane *planeToProject);
 
-    /**
-     * Donats quatre punts d'un pla (referència) i el pla localitzador, ens dóna els punts d'intersecció
-     * @param tlhc top left hand corner (origen)
-     * @param trhc top right hand corner
-     * @param brhc bottom right hand corner
-     * @param blhc bottom left hand corner
-     * @param localizerPlane pla localitzador que volem fer intersectar
-     * @param firstIntersectionPoint[] primer punt d'intersecció trobat (si n'hi ha)
-     * @param secondIntersectionPoint[] segon punt d'intersecció trobat (si n'hi ha)
-     * @return el nombre d'interseccions trobades
-     */
+    /// Donats quatre punts d'un pla (referència) i el pla localitzador, ens dóna els punts d'intersecció
+    /// @param tlhc top left hand corner (origen)
+    /// @param trhc top right hand corner
+    /// @param brhc bottom right hand corner
+    /// @param blhc bottom left hand corner
+    /// @param localizerPlane pla localitzador que volem fer intersectar
+    /// @param firstIntersectionPoint[] primer punt d'intersecció trobat (si n'hi ha)
+    /// @param secondIntersectionPoint[] segon punt d'intersecció trobat (si n'hi ha)
+    /// @return el nombre d'interseccions trobades
     int getIntersections(QVector<double> tlhc, QVector<double> trhc, QVector<double> brhc, QVector<double> blhc, ImagePlane *localizerPlane,
                          double firstIntersectionPoint[3], double secondIntersectionPoint[3]);
 

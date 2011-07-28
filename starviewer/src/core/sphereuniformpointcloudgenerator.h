@@ -19,13 +19,10 @@ namespace udg {
 class SphereUniformPointCloudGenerator {
 
 public:
-    /**
-     * Crea l'objecte i inicialitza els paràmetres, però no genera els punts.
-     *
-     * \param radius Radi de l'esfera.
-     * \param depth Nivells de recursió. 0 = 12 punts, 1 = 42 punts, 2 = 162
-     * punts, 3 = 642 punts, 4 = 2562 punts, etc. (n = 2^(2*n)*10+2 punts).
-     */
+    /// Crea l'objecte i inicialitza els paràmetres, però no genera els punts.
+    /// @param radius Radi de l'esfera.
+    /// @param depth Nivells de recursió. 0 = 12 punts, 1 = 42 punts, 2 = 162
+    /// punts, 3 = 642 punts, 4 = 2562 punts, etc. (n = 2^(2*n)*10+2 punts).
     SphereUniformPointCloudGenerator(float radius = 10.0, unsigned char depth = 0);
     ~SphereUniformPointCloudGenerator();
 

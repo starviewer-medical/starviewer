@@ -16,31 +16,23 @@ public:
     ReferenceLinesToolData(QObject *parent = 0);
     ~ReferenceLinesToolData();
 
-    /**
-     * Retorna el frame of reference UID
-     * @return
-     */
+    /// Retorna el frame of reference UID
+    /// @return
     QString getFrameOfReferenceUID() const;
 
-    /**
-     * Retorna els plans a projectar
-     * @return
-     */
+    /// Retorna els plans a projectar
+    /// @return
     QList<ImagePlane*> getPlanesToProject() const;
 
 public slots:
-    /**
-     * Li assignem el frameOfReference del pla de referencia
-     * El frame of reference només pot canviar de valor quan es canvia de sèrie.
-     * Dins d'una mateixa sèrie, totes les imatges tenen el mateix frame of reference
-     * @param frameOfReference
-     */
+    /// Li assignem el frameOfReference del pla de referencia
+    /// El frame of reference només pot canviar de valor quan es canvia de sèrie.
+    /// Dins d'una mateixa sèrie, totes les imatges tenen el mateix frame of reference
+    /// @param frameOfReference
     void setFrameOfReferenceUID(const QString &frameOfReference);
 
-    /**
-     * Assigna els plans de la serie de referencia
-     * @param imagePlane
-     */
+    /// Assigna els plans de la serie de referencia
+    /// @param imagePlane
     void setPlanesToProject(QList<ImagePlane*> planes);
     void setPlanesToProject(ImagePlane *plane);
 

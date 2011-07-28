@@ -17,9 +17,8 @@ public:
     /// Afegir el volume a partir del qual s'ha de generar els fitxers
     void setInput(Volume *volume);
 
-    /** Mètode encarregat de generar el/s fitxer/s a partir del volume introduït
-        @pre Cal haver afegit un Volume \sa setInput
-    */
+    /// Mètode encarregat de generar el/s fitxer/s a partir del volume introduït
+    /// @pre Cal haver afegit un Volume \sa setInpu
     virtual bool generateDICOMFiles();
 
 private:

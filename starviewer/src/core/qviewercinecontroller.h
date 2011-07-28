@@ -22,10 +22,8 @@ public:
 
     ~QViewerCINEController();
 
-    /**
-     * Li assignem el viewer amb el que treballar
-     * @param viewer
-     */
+    /// Li assignem el viewer amb el que treballar
+    /// @param viewer
     void setInputViewer(QViewer *viewer);
 
     enum CINEDimensionType { SpatialDimension, TemporalDimension };
@@ -36,10 +34,8 @@ public:
     QAction* getLoopAction() const;
     QAction* getBoomerangAction() const;
 
-    /**
-     * Li donem el path absolut de l'arxiu on es gravarà el vídeo
-     * @param filename Path absolut, amb o sense extensió
-     */
+    /// Li donem el path absolut de l'arxiu on es gravarà el vídeo
+    /// @param filename Path absolut, amb o sense extensió
     void setRecordFilename(const QString filename);
 
 signals:
@@ -71,10 +67,8 @@ public slots:
     /// Li indiquem l'interval de reproducció
     void setPlayInterval(int firstImage, int lastImage);
 
-    /**
-     * Reseteja la informació de CINE segons l'input donat
-     * @param input
-     */
+    /// Reseteja la informació de CINE segons l'input donat
+    /// @param input
     void resetCINEInformation(Volume *input);
 
     /// Actualitza la informació que té del volum actual
@@ -84,10 +78,8 @@ protected:
     void timerEvent(QTimerEvent *event);
 
 private:
-    /**
-     * Aquí ens ocupem de decidir cap on va el següent frame
-     * durant la reproducció
-     */
+    /// Aquí ens ocupem de decidir cap on va el següent frame
+    /// durant la reproducció
     void handleCINETimerEvent();
 
 private:

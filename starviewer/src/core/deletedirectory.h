@@ -17,12 +17,11 @@ public:
     DeleteDirectory();
     ~DeleteDirectory();
 
-    /** Esborrar el contingut del directori i el directori passat per paràmetres
-     * @param directoryPath path del directori a esborrar
-     * @param deleteRootDirectory indica si s'ha d'esborrar només el contingu del directori o també el directori arrel passat per paràmetre. Si fals nomésç
-     * s'esborra el contingut, si és cert s'esborra el contingut i el directori passat per paràmetre
-     * @return indica si l'operacio s'ha realitzat amb èxit
-     */
+    /// Esborrar el contingut del directori i el directori passat per paràmetres
+    /// @param directoryPath path del directori a esborrar
+    /// @param deleteRootDirectory indica si s'ha d'esborrar només el contingu del directori o també el directori arrel passat per paràmetre. Si fals nomésç
+    /// s'esborra el contingut, si és cert s'esborra el contingut i el directori passat per paràmetre
+    /// @return indica si l'operacio s'ha realitzat amb èxit
     bool deleteDirectory(QString directoryPath, bool deleteRootDirectory);
 
     /// Ens indica si un directori està buit
