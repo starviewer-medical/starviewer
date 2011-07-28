@@ -127,7 +127,8 @@ double StrokeSegmentationMethod::applyMethod()
     connectedThreshold->SetSeed(seedIndex);
 
     DEBUG_LOG("Init filter");
-    std::cout << "Parameters: " << seedIndex << std::endl;
+    DEBUG_LOG(QString("Parameters: %1").arg(*seedIndex.GetIndex()));
+	std::cerr << "Parameters: " << seedIndex << std::endl;
     DEBUG_LOG(QString("Histogram parameters: %1,%2").arg(m_lowerThreshold).arg(m_upperThreshold));
 
     typedef itk::VolumeCalculatorImageFilter<Volume::ItkImageType> VolumeCalcFilterType;
@@ -142,8 +143,8 @@ double StrokeSegmentationMethod::applyMethod()
     }
     catch(itk::ExceptionObject &excep)
     {
-        std::cerr << "Exception caught !" << std::endl;
-        std::cerr << excep << std::endl;
+        DEBUG_LOG("Exception caught !");
+        DEBUG_LOG(excep.what());
     }
 
     m_volume = volumeCalc->GetVolume();
@@ -268,10 +269,14 @@ double StrokeSegmentationMethod::applyCleanSkullMethod()
     t7 = clock();
     resampleFilter->Update();
     t8 = clock();
-    std::cout << "resampleVolumeOriginal: [" << origin[0] << "," << origin[1] << "," << origin[2] << "] ,[" << spacing[0] << "," << spacing[1] << "," <<
-                 spacing[2] << "] ," << size << std::endl;
-    std::cout << "resampleVolumeNew: [" << neworigin[0] << "," << neworigin[1] << "," << neworigin[2] << "] ,[" << newspacing[0] << "," << newspacing[1] <<
-                 "," << newspacing[2] << "] ," << newsize << std::endl;
+    DEBUG_LOG(QString("resampleVolumeOriginal: [%1,%2,%3], [%4,%5,%6], %7")
+        .arg(origin[0]).arg(origin[1]).arg(origin[2])
+        .arg(spacing[0]).arg(spacing[1]).arg(spacing[2])
+        .arg(*size.GetSize()));
+    DEBUG_LOG(QString("resampleVolumeNew: [%1,%2,%3], [%4,%5,%6], %7")
+        .arg(neworigin[0]).arg(neworigin[1]).arg(neworigin[2])
+        .arg(newspacing[0]).arg(newspacing[1]).arg(newspacing[2])
+        .arg(*newsize.GetSize()));
 
     ErodeFilterType::Pointer binaryErode = ErodeFilterType::New();
     DilateFilterType::Pointer binaryDilate = DilateFilterType::New();
@@ -349,10 +354,14 @@ double StrokeSegmentationMethod::applyCleanSkullMethod()
     t5 = clock();
     resample2Filter->Update();
     t6 = clock();
-    std::cout << "resampleVolumeOriginal: [" << origin[0] << "," << origin[1] << "," << origin[2] << "] ,[" << spacing[0] << "," << spacing[1] << "," <<
-                 spacing[2] << "] ," << size << std::endl;
-    std::cout << "resampleVolumeNew: [" << neworigin[0] << "," << neworigin[1] << "," << neworigin[2] << "] ,[" << newspacing[0] << "," << newspacing[1] <<
-                 "," << newspacing[2] << "] ," << newsize << std::endl;
+    DEBUG_LOG(QString("resampleVolumeOriginal: [%1,%2,%3], [%4,%5,%6], %7")
+        .arg(origin[0]).arg(origin[1]).arg(origin[2])
+        .arg(spacing[0]).arg(spacing[1]).arg(spacing[2])
+        .arg(*size.GetSize()));
+    DEBUG_LOG(QString("resampleVolumeNew: [%1,%2,%3], [%4,%5,%6], %7")
+        .arg(neworigin[0]).arg(neworigin[1]).arg(neworigin[2])
+        .arg(newspacing[0]).arg(newspacing[1]).arg(newspacing[2])
+        .arg(*newsize.GetSize()));
 
     Volume::ItkImageType::Pointer maskAux = Volume::ItkImageType::New();
     maskAux->SetSpacing(m_Mask->getItkData()->GetSpacing());
@@ -409,17 +418,17 @@ double StrokeSegmentationMethod::applyCleanSkullMethod()
     }
     catch(itk::ExceptionObject &excep)
     {
-        std::cerr << "Exception caught !" << std::endl;
-        std::cerr << excep << std::endl;
+        DEBUG_LOG("Exception caught !");
+        DEBUG_LOG(excep.what());
     }
     t4 = clock();
-    std::cout << "Estudi temps:" << std::endl;
-    std::cout << "Resample1    : " << (double)(t8 - t7) / 1000000.0 << std::endl;
-    std::cout << "Dilate/Erode : " << (double)(t2 - t1) / 1000000.0 << std::endl;
-    std::cout << "Resample2    : " << (double)(t6 - t5) / 1000000.0 << std::endl;
-    std::cout << "Interseccio  : " << (double)(t3 - t6) / 1000000.0 << std::endl;
-    std::cout << "ConnectedThrd: " << (double)(t4 - t3) / 1000000.0 << std::endl;
-    std::cout << "TOTAL        : " << (double)(t4 - t7) / 1000000.0 << std::endl;
+    DEBUG_LOG("Estudi temps:");
+    DEBUG_LOG(QString("Resample1    : %1").arg((double)(t8 - t7) / 1000000.0));
+    DEBUG_LOG(QString("Dilate/Erode : %1").arg((double)(t2 - t1) / 1000000.0));
+    DEBUG_LOG(QString("Resample2    : %1").arg((double)(t6 - t5) / 1000000.0));
+    DEBUG_LOG(QString("Interseccio  : %1").arg((double)(t3 - t6) / 1000000.0));
+    DEBUG_LOG(QString("ConnectedThrd: %1").arg((double)(t4 - t3) / 1000000.0));
+    DEBUG_LOG(QString("TOTAL        : %1").arg((double)(t4 - t7) / 1000000.0));
 
     m_volume = volumeCalc->GetVolume();
     m_cont = volumeCalc->GetVolumeCount();
@@ -457,8 +466,8 @@ void StrokeSegmentationMethod::applyFilter(Volume *output)
     }
     catch(itk::ExceptionObject &excep)
     {
-        std::cerr << "Exception caught !" << std::endl;
-        std::cerr << excep << std::endl;
+        DEBUG_LOG("Exception caught !");
+        DEBUG_LOG(excep.what());
     }
 
     // TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
@@ -600,10 +609,14 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume *lesionMask)
     resampleFilter->SetInput(m_Volume->getItkData());
     t2 = clock();
     resampleFilter->Update();
-    std::cout << "resampleVolumeOriginal: [" << origin[0] << "," << origin[1] << "," << origin[2] << "] ,[" << spacing[0] << "," << spacing[1] << "," <<
-                  spacing[2] << "] ," << size << std::endl;
-    std::cout << "resampleVolumeNew: [" << neworigin[0] << "," << neworigin[1] << "," << neworigin[2] << "] ,[" << newspacing[0] << "," << newspacing[1] <<
-                 "," << newspacing[2] << "] ," << newsize << std::endl;
+    DEBUG_LOG(QString("resampleVolumeOriginal: [%1,%2,%3], [%4,%5,%6], %7")
+        .arg(origin[0]).arg(origin[1]).arg(origin[2])
+        .arg(spacing[0]).arg(spacing[1]).arg(spacing[2])
+        .arg(*size.GetSize()));
+    DEBUG_LOG(QString("resampleVolumeNew: [%1,%2,%3], [%4,%5,%6], %7")
+        .arg(neworigin[0]).arg(neworigin[1]).arg(neworigin[2])
+        .arg(newspacing[0]).arg(newspacing[1]).arg(newspacing[2])
+        .arg(*newsize.GetSize()));
 
     // Resamplagem la màscara per tal de que tingui un vòxel isomètric (el mètode ho requereix)
     ResampleFilterType::Pointer resampleMaskFilter = ResampleFilterType::New();
@@ -647,11 +660,14 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume *lesionMask)
     resampleMaskFilter->Update();
     t3 = clock();
 
-    std::cout << "resampleMaskOriginal: [" << origin[0] << "," << origin[1] << "," << origin[2] << "] ,[" << spacing[0] << "," << spacing[1] << "," <<
-                  spacing[2] << "] ," << size << std::endl;
-    std::cout << "resampleMaskNew: [" << neworigin[0] << "," << neworigin[1] << "," << neworigin[2] << "] ,[" << newspacing[0] << "," << newspacing[1] <<
-                 "," << newspacing[2] << "] ," << newsize << std::endl;
-
+    DEBUG_LOG(QString("resampleMaskOriginal: [%1,%2,%3], [%4,%5,%6], %7")
+        .arg(origin[0]).arg(origin[1]).arg(origin[2])
+        .arg(spacing[0]).arg(spacing[1]).arg(spacing[2])
+        .arg(*size.GetSize()));
+    DEBUG_LOG(QString("resampleMaskNew: [%1,%2,%3], [%4,%5,%6], %7")
+        .arg(neworigin[0]).arg(neworigin[1]).arg(neworigin[2])
+        .arg(newspacing[0]).arg(newspacing[1]).arg(newspacing[2])
+        .arg(*newsize.GetSize()));
     // Fi resample
 
     itk::ImageRegionIterator<Volume::ItkImageType> mainIt(resampleFilter->GetOutput(), resampleFilter->GetOutput()->GetBufferedRegion());
@@ -690,7 +706,7 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume *lesionMask)
             mean = k + m_lowerVentriclesThreshold;
         }
     }
-    std::cout << "estimed mean: " << mean << std::endl;
+    DEBUG_LOG(QString("estimed mean: %1").arg(mean));
 
     typedef itk::Statistics::CovarianceCalculator<SampleType> CovarianceAlgorithmType;
     CovarianceAlgorithmType::Pointer covarianceAlgorithm = CovarianceAlgorithmType::New();
@@ -699,11 +715,11 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume *lesionMask)
     covarianceAlgorithm->SetMean(0);
     covarianceAlgorithm->Update();
 
-    std::cout << "Using the one pass algorithm:" << std::endl;
-    std::cout << "Mean = " << std::endl;
+    DEBUG_LOG("Using the one pass algorithm:");
+    DEBUG_LOG("Mean = ");
     std::cout << *(covarianceAlgorithm->GetMean()) << std::endl;
 
-    std::cout << "Covariance = " << std::endl;
+    DEBUG_LOG("Covariance = ");
     std::cout << *(covarianceAlgorithm->GetOutput()) << std::endl;
 
     // Cas Comas Pey!!!!!!
@@ -713,7 +729,7 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume *lesionMask)
 
     m_mean = mean;
     m_variance = sqrt((*covarianceAlgorithm->GetOutput())[0][0]);
-    std::cout << "Mean: " << m_mean << ", Variance: " << m_variance << std::endl;
+    DEBUG_LOG(QString("Mean: %1, Variance: %2").arg(m_mean).arg(m_variance));
     //computeSpeedMap(speedMapVolume);
 
     typedef itk::CastImageFilter<Volume::ItkImageType, InternalImageType> InputCastingFilterType;
@@ -799,8 +815,8 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume *lesionMask)
     }
     catch(itk::ExceptionObject &excep)
     {
-        std::cerr << "Exception caught !" << std::endl;
-        std::cerr << excep << std::endl;
+        DEBUG_LOG("Exception caught !");
+        DEBUG_LOG(excep.what());
     }
     t5 = clock();
 
@@ -918,7 +934,7 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume *lesionMask)
     */
     t6 = clock();
 
-    std::cout << "Mask Set!!" << std::endl;
+    DEBUG_LOG("Mask Set!!");
     //lesionMask->setData(resampleMaskFilter2->GetOutput());
     //lesionMask->setData(medianFilter->GetOutput());
     //lesionMask->setData(binaryDilate3->GetOutput());
@@ -1167,8 +1183,8 @@ double StrokeSegmentationMethod::applyMethodEdema2(Volume *lesionMask)
     }
     catch(itk::ExceptionObject &excep)
     {
-        std::cerr << "Exception caught !" << std::endl;
-        std::cerr << excep << std::endl;
+        DEBUG_LOG("Exception caught !");
+        DEBUG_LOG(excep.what());
     }
     //std::cout << "FI fastMarching!!" << std::endl;
 
@@ -1306,8 +1322,8 @@ double StrokeSegmentationMethod::applyVentriclesMethod()
     }
     catch(itk::ExceptionObject &excep)
     {
-        std::cerr << "Exception caught !" << std::endl;
-        std::cerr << excep << std::endl;
+        DEBUG_LOG("Exception caught !");
+        DEBUG_LOG(excep.what());
     }
 
     m_volume = volumeCalc->GetVolume();
@@ -1402,8 +1418,8 @@ void StrokeSegmentationMethod::applyMethod2()
     }
     catch(itk::ExceptionObject &excep)
     {
-        std::cerr << "Exception caught !" << std::endl;
-        std::cerr << excep << std::endl;
+        DEBUG_LOG("Exception caught !");
+        DEBUG_LOG(excep.what());
     }
 
     std::cout << "Fi process!" << std::endl;
@@ -1525,8 +1541,8 @@ int StrokeSegmentationMethod::applyMethod3()
     }
     catch(itk::ExceptionObject &excep)
     {
-        std::cerr << "Exception caught !" << std::endl;
-        std::cerr << excep << std::endl;
+        DEBUG_LOG("Exception caught !");
+        DEBUG_LOG(excep.what());
     }
 
     std::cout << std::endl;
@@ -1651,8 +1667,8 @@ int StrokeSegmentationMethod::applyMethod4()
     }
     catch(itk::ExceptionObject &excep)
     {
-        std::cerr << "Exception caught !" << std::endl;
-        std::cerr << excep << std::endl;
+        DEBUG_LOG("Exception caught !");
+        DEBUG_LOG(excep.what());
     }
     // Software Guide : EndCodeSnippet
 
