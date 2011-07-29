@@ -147,7 +147,8 @@ void QStudyTreeWidget::removeSeries(const QString &studyInstanceUID, const QStri
         if (seriesItem->parent()->childCount() == 1)
         {
             //Si l'estudi només té aquesta sèrie esborrem tot l'estudi
-            delete seriesItem->parent();
+            Study *studyToRemove = getStudyByDICOMItemID(seriesItem->parent()->text(DICOMItemID).toInt());
+            removeStudy(studyToRemove->getInstanceUID(), studyToRemove->getDICOMSource());
         }
         else
         {
