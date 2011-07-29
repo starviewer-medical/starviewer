@@ -19,10 +19,8 @@ public:
     /// El destructor allibera l'espai ocupat pels items, si és que en queden i no s'han alliberat
     ~Repository();
 
-    /**
-        Afegeix un item al repositori.
-        Ens retorna l'id de l'item afegit per poder-lo obtenir més endavant.
-    */
+    /// Afegeix un item al repositori.
+    /// Ens retorna l'id de l'item afegit per poder-lo obtenir més endavant.
     Identifier addItem(ItemType *item);
 
     /// Ens retorna un item del repositori amb l'identificador que especifiquem.

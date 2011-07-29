@@ -27,30 +27,24 @@ public:
 
     virtual ~ExtensionMediator();
 
-    /**
-     * Mètode que ens serveix per, un cop creada l'extensió, inicialitzar-la amb els paràmetres necessàris a partir del seu contexte.
-     * Per poder tractar l'extensió, el primer que caldrà serà realitzar un cast de QWidget a la classe concreta
-     * del widget que se'ns passa.
-     * @return Retorna false en el supòsit que hi hagi alguna cosa que impedeixi inicialitzar-la, true en la resta de casos
-     */
+    /// Mètode que ens serveix per, un cop creada l'extensió, inicialitzar-la amb els paràmetres necessàris a partir del seu contexte.
+    /// Per poder tractar l'extensió, el primer que caldrà serà realitzar un cast de QWidget a la classe concreta
+    /// del widget que se'ns passa.
+    /// @return Retorna false en el supòsit que hi hagi alguna cosa que impedeixi inicialitzar-la, true en la resta de casos
     virtual bool initializeExtension(QWidget *extension, const ExtensionContext &extensionContext) = 0;
 
-    /**
-     * Mètode transicional. Aquest mètode està dissenyat exclusivament perquè quan fem un "view" afegint dades a un estudi ja
-     * existent s'apliquin uns canvis específics. La raó principal són l'aplicació de hanging protocols sobre l'extensió 2D.
-     * La seva implementació és opcional i de moment únicament l'implementa l'extensió 2D que és l'única que el necessita.
-     * TODO aquest mètode hauria de ser temporal i ser re-emplaçat el més aviat possible quan la funció que implementa
-     * quedi coberta per una altra via.
-     */
+    /// Mètode transicional. Aquest mètode està dissenyat exclusivament perquè quan fem un "view" afegint dades a un estudi ja
+    /// existent s'apliquin uns canvis específics. La raó principal són l'aplicació de hanging protocols sobre l'extensió 2D.
+    /// La seva implementació és opcional i de moment únicament l'implementa l'extensió 2D que és l'única que el necessita.
+    /// TODO aquest mètode hauria de ser temporal i ser re-emplaçat el més aviat possible quan la funció que implementa
+    /// quedi coberta per una altra via.
     virtual bool reinitializeExtension(QWidget *extension);
 
-    /**
-     * Retorna l'identificador de la classe Extension amb qui dialoga.
-     * Aquest identificador també serveix per identificar els resources (.qrc) de l'extensió.
-     * Per exemple, si l'extensió té un getExtensionID().getID() com a "MyExtension" al fitxer resources s'hi haurà de posar
-     *  <qresource prefix="/extensions/MyExtension" >
-     * i per accedir-hi: QIcon *icon = new QIcon(":/extensions/MyExtension/images/icon.png");
-     */
+    /// Retorna l'identificador de la classe Extension amb qui dialoga.
+    /// Aquest identificador també serveix per identificar els resources (.qrc) de l'extensió.
+    /// Per exemple, si l'extensió té un getExtensionID().getID() com a "MyExtension" al fitxer resources s'hi haurà de posar
+    ///  <qresource prefix="/extensions/MyExtension" >
+    /// i per accedir-hi: QIcon *icon = new QIcon(":/extensions/MyExtension/images/icon.png");
     virtual DisplayableID getExtensionID() const = 0;
 };
 

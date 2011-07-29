@@ -18,11 +18,9 @@ namespace udg {
 template <class AncestorType, class BaseClass, typename ClassIdentifier, class SingletonRegistry, class ParentType = QObject>
 class GenericSingletonFactoryRegister {
 public:
-    /**
-     * Mètode constructor que ens serveix per registrar una classe amb un id concret en un Factory.
-     * @param id Identificador de la classe que es vol registrar
-     * @return
-     */
+    /// Mètode constructor que ens serveix per registrar una classe amb un id concret en un Factory.
+    /// @param id Identificador de la classe que es vol registrar
+    /// @return
     GenericSingletonFactoryRegister(const ClassIdentifier &id)
     {
         SingletonRegistry::instance()->registerCreateFunction(id, createInstance);

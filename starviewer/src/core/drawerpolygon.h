@@ -21,23 +21,19 @@ public:
     DrawerPolygon(QObject *parent = 0);
     ~DrawerPolygon();
 
-    /**
-     * Afegim un vèrtex al polígon.
-     * @param point[] Punt que defineix el vèrtex del polígon
-     */
+    /// Afegim un vèrtex al polígon.
+    /// @param point[] Punt que defineix el vèrtex del polígon
     void addVertix(double point[3]);
     void addVertix(double x, double y, double z);
 
     /// Buida la llista de vèrtexs
     void removeVertices();
 
-    /**
-     * Assigna el valor del vèrtex i-éssim del polígon. En aquest cas equival a
-     * actualitzar el valor d'aquest punt indicat. Si 'i' està fora de rang,
-     * s'afegeix el vèrtex donat al final, tal com si fessim addVertix(point)
-     * @param i índex del vèrtex que volem modificar
-     * @param point[] coordenades del vèrtex
-     */
+    /// Assigna el valor del vèrtex i-éssim del polígon. En aquest cas equival a
+    /// actualitzar el valor d'aquest punt indicat. Si 'i' està fora de rang,
+    /// s'afegeix el vèrtex donat al final, tal com si fessim addVertix(point)
+    /// @param i índex del vèrtex que volem modificar
+    /// @param point[] coordenades del vèrtex
     void setVertix(int i, double point[3]);
     void setVertix(int i, double x, double y, double z);
 

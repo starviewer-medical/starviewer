@@ -33,12 +33,10 @@ public:
     void setInstanceNumber(const QString &number);
     QString getInstanceNumber() const;
 
-    /**
-     * Assignar/Obtenir la orientació del pla de la imatge, també anomenat direction cosines.
-     * Els valors són els vectors que formen el pla d'imatge.
-     * A partir d'aquests dos vectors, es calcula la normal del pla d'imatge
-     * @param orientation[] Els valors dels vectors que defineixen el pla d'imatge.
-     */
+    /// Assignar/Obtenir la orientació del pla de la imatge, també anomenat direction cosines.
+    /// Els valors són els vectors que formen el pla d'imatge.
+    /// A partir d'aquests dos vectors, es calcula la normal del pla d'imatge
+    /// @param orientation[] Els valors dels vectors que defineixen el pla d'imatge.
     void setImageOrientationPatient(const ImageOrientation &imageOrientation);
     ImageOrientation getImageOrientationPatient() const;
 
@@ -173,13 +171,11 @@ public:
     /// Ens retorna la clau que identifica la imatge
     QString getKeyIdentifier() const;
 
-    /**
-     * El mètode ens retorna el thumbnail de la imatge. Es crearà el primer cop que es demani
-     * @param getFromCache Si és cert intentarà carregar el thumbnail si es troba creat a la cache.
-     *                     Altrament, simplement comprobarà que no estigui creat a memòria i prou
-     * @param resolution La resolució amb la que volem el thumbnail
-     * @return Un QPixmap amb el thumbnail
-     */
+    /// El mètode ens retorna el thumbnail de la imatge. Es crearà el primer cop que es demani
+    /// @param getFromCache Si és cert intentarà carregar el thumbnail si es troba creat a la cache.
+    ///                     Altrament, simplement comprobarà que no estigui creat a memòria i prou
+    /// @param resolution La resolució amb la que volem el thumbnail
+    /// @return Un QPixmap amb el thumbnail
     QPixmap getThumbnail(bool getFromCache = false, int resolution = 100);
 
     /// Ens retorna una llista amb les modalitats que suportem com a Image
@@ -257,11 +253,10 @@ private:
     int m_numberOfFrames;
 
     // TODO millorar definició
-    /** Situació especial de la llesca en mm. (0020,1041)
-        SC->tipus 3
-        NM->tipus 3
-        CT-> A la documentació dicom aquest camp no hi figura però philips l'utiliza com a Table Position
-      */
+    /// Situació especial de la llesca en mm. (0020,1041)
+    /// SC->tipus 3
+    /// NM->tipus 3
+    /// CT-> A la documentació dicom aquest camp no hi figura però philips l'utiliza com a Table Position
     QString m_sliceLocation;
 
     /// Tipus d'imatge. Ens pot definir si es tracta d'un localizer, per exemple. Conté els valors separats per '\\'
@@ -269,37 +264,31 @@ private:
     /// En el cas d'imatges Enhanced CT/MR l'omplirem amb el valor FrameType contingut al functional group CT/MR Image Frame Type
     QString m_imageType;
 
-    /**
-        Vista radiogràfica associada a Patient Position. El trobem als mòduls CR Series (C.8.1.1) i DX Positioning (C.8.11.5)
-        Valors definits:
-        AP = Anterior/Posterior
-        PA = Posterior/Anterior
-        LL = Left Lateral
-        RL = Right Lateral
-        RLD = Right Lateral Decubitus
-        LLD = Left Lateral Decubitus
-        RLO = Right Lateral Oblique
-        LLO = Left Lateral Oblique
-    */
+    /// Vista radiogràfica associada a Patient Position. El trobem als mòduls CR Series (C.8.1.1) i DX Positioning (C.8.11.5)
+    /// Valors definits:
+    /// AP = Anterior/Posterior
+    /// PA = Posterior/Anterior
+    /// LL = Left Lateral
+    /// RL = Right Lateral
+    /// RLD = Right Lateral Decubitus
+    /// LLD = Left Lateral Decubitus
+    /// RLO = Right Lateral Oblique
+    /// LLO = Left Lateral Oblique
     QString m_viewPosition;
 
-    /**
-        Lateralitat de la possiblement aparellada part del cos examinada.
-        El trobem als mòduls DX Anatomy (C.8.11.2), Mammography Image (C.8.11.7), Intra-oral Image (C.8.11.9) i Ocular Region Imaged (C.8.17.5)
-        També el trobem al mòdul Frame Anatomy (C.7.6.16.2.8) comú a tots els enhanced, però el tag s'anomena Frame Laterality en comptes d'Image Laterality.
-        Valors definits:
-        R = right
-        L = left
-        U = unpaired
-        B = both left and right
-    */
+    /// Lateralitat de la possiblement aparellada part del cos examinada.
+    /// El trobem als mòduls DX Anatomy (C.8.11.2), Mammography Image (C.8.11.7), Intra-oral Image (C.8.11.9) i Ocular Region Imaged (C.8.17.5)
+    /// També el trobem al mòdul Frame Anatomy (C.7.6.16.2.8) comú a tots els enhanced, però el tag s'anomena Frame Laterality en comptes d'Image Laterality.
+    /// Valors definits:
+    /// R = right
+    /// L = left
+    /// U = unpaired
+    /// B = both left and right
     QChar m_imageLaterality;
 
-    /**
-        Descripció del tipus de vista de la imatge. El seu ús l'aplicarem bàsicament pels casos de mammografia definits a
-        PS 3.16 - Context ID 4014 (cranio-caudal, medio-lateral oblique, etc...) però podríem extendre el seu ús a d'altres tipus d'imatge
-        que també fan ús d'aquest tag per guardar aquest tipus d'informació amb altres possibles valors específics.
-    */
+    /// Descripció del tipus de vista de la imatge. El seu ús l'aplicarem bàsicament pels casos de mammografia definits a
+    /// PS 3.16 - Context ID 4014 (cranio-caudal, medio-lateral oblique, etc...) però podríem extendre el seu ús a d'altres tipus d'imatge
+    /// que també fan ús d'aquest tag per guardar aquest tipus d'informació amb altres possibles valors específics.
     QString m_viewCodeMeaning;
 
     /// Número de frame

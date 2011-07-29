@@ -58,19 +58,16 @@ public:
     double getOpacity() const;
 
     // Mètodes per construir l'objecte a representar gràficament
-    /**
-     * Construeix l'objecte vtk que representa aquesta primitiva
-     * Retornem un vtkProp, el qual ens permet poder retornar tant vtkActor, vtkActor2D o vtkPropAssembly
-     * @return El vtkProp amb el que es representa la primitiva
-     */
+    
+    /// Construeix l'objecte vtk que representa aquesta primitiva
+    /// Retornem un vtkProp, el qual ens permet poder retornar tant vtkActor, vtkActor2D o vtkPropAssembly
+    /// @return El vtkProp amb el que es representa la primitiva
     virtual vtkProp* getAsVtkProp();
 
-    /**
-     * Ens diu si alguna de les propietats de la primitiva han estat modificades.
-     * Aquesta propietat indica si la seva representació gràfica, ja sigui vtk o openGL, està d'acord
-     * amb el que la defineix l'objecte
-     * @return Cert si s'ha modificat alguna propietat des de l'últim "update". Fals altrament
-     */
+    /// Ens diu si alguna de les propietats de la primitiva han estat modificades.
+    /// Aquesta propietat indica si la seva representació gràfica, ja sigui vtk o openGL, està d'acord
+    /// amb el que la defineix l'objecte
+    /// @return Cert si s'ha modificat alguna propietat des de l'últim "update". Fals altrament
     bool isModified() const;
 
     /// Aquest mètode ens retorna la distància que hi ha des d'una determinada primitiva fins al punt passat per paràmetre.
@@ -81,19 +78,17 @@ public:
     /// en aquest ordre: minX, maxX, minY, maxY, minZ, maxZ
     virtual void getBounds(double bounds[6]) = 0;
 
-    /**
-     * HACK això és una solució temporal, minimitzar el seu ús a casos molt concrets!
-     * Mètodes per emular els smart pointers.
-     * En molts casos necessitem que una primitiva creada per una classe
-     * no es pugui esborrar (ni de memòria ni del drawer) ja que aquella classe
-     * volem que sigui propietària de la primitiva i que si se'ns fa un "RemovePrimitives"
-     * no ens afecti.
-     * Mentres no tinguem alguna classe smart pointer, el més aproximat és fer-ho a través d'aquests
-     * mètodes de forma manual (at your own risk!!)
-     * De moment, si no cridem cap d'aquests mètodes, tindrem un punter com sempre, per tant
-     * quan es faci servir aquest sucedani d'smart pointer n'haurem de ser completament conscients
-     * fins que trobem una solució sòlida
-     */
+    /// HACK això és una solució temporal, minimitzar el seu ús a casos molt concrets!
+    /// Mètodes per emular els smart pointers.
+    /// En molts casos necessitem que una primitiva creada per una classe
+    /// no es pugui esborrar (ni de memòria ni del drawer) ja que aquella classe
+    /// volem que sigui propietària de la primitiva i que si se'ns fa un "RemovePrimitives"
+    /// no ens afecti.
+    /// Mentres no tinguem alguna classe smart pointer, el més aproximat és fer-ho a través d'aquests
+    /// mètodes de forma manual (at your own risk!!)
+    /// De moment, si no cridem cap d'aquests mètodes, tindrem un punter com sempre, per tant
+    /// quan es faci servir aquest sucedani d'smart pointer n'haurem de ser completament conscients
+    /// fins que trobem una solució sòlida
 
     /// Augmenta en 1 la referència a la primitiva. Es farà servir quan volem
     /// ser "propietaris" d'una primitiva
@@ -112,12 +107,10 @@ public:
     bool hasOwners() const;
 
 public slots:
-    /**
-     * Mètode virtual que implementarà cada primitiva i que actualitzarà les representacions
-     * internament. Ara mateix, el 100% dels casos serà VTK.
-     * TODO Si volem que es puguin tenir diverses representacions segons la plataforma
-     * caldria implementar-ho amb algun patró tipus Factory
-     */
+    /// Mètode virtual que implementarà cada primitiva i que actualitzarà les representacions
+    /// internament. Ara mateix, el 100% dels casos serà VTK.
+    /// TODO Si volem que es puguin tenir diverses representacions segons la plataforma
+    /// caldria implementar-ho amb algun patró tipus Factory
     virtual void update() = 0;
 
 signals:
@@ -128,25 +121,19 @@ signals:
     void dying(DrawerPrimitive *);
 
 protected slots:
-    /**
-     * Aquest slot s'hauria de re-implementar per cada classe i és on s'actualitza
-     * l'estructura vtk que s'ha creat per representar la primitiva
-     */
+    /// Aquest slot s'hauria de re-implementar per cada classe i és on s'actualitza
+    /// l'estructura vtk que s'ha creat per representar la primitiva
     virtual void updateVtkProp(){};
 
-    /**
-     * Li diem si està modificat o no
-     * @param modified
-     */
+    /// Li diem si està modificat o no
+    /// @param modified
     void setModified(bool modified = true);
 
 protected:
-    /**
-     * Ens retorna un objecte vtkCoordinate configurat a partir del sistema de coordenades
-     * que té especificada la primitiva. Aquest mètode ens és útil per quan es vol construir
-     * la primitiva en format vtk
-     * @return L'objecte vtkCoordinate
-     */
+    /// Ens retorna un objecte vtkCoordinate configurat a partir del sistema de coordenades
+    /// que té especificada la primitiva. Aquest mètode ens és útil per quan es vol construir
+    /// la primitiva en format vtk
+    /// @return L'objecte vtkCoordinate
     vtkCoordinate* getVtkCoordinateObject();
 
 protected:

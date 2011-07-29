@@ -111,26 +111,22 @@ public:
     /// Volcat d'informació en un string per poder-ho printar on interessi
     QString toString(bool verbose = false);
 
-    /**
-     * Ens dóna la imatge corresponent a la llesca i fase donats
-     * Per defecte, només especificarem la imatge sense tenir en compte la fase
-     * @param sliceNumber llesca
-     * @param phaseNumber fase
-     * @return la imatge en cas que els índexs siguin correctes, NULL altrament
-     */
+    /// Ens dóna la imatge corresponent a la llesca i fase donats
+    /// Per defecte, només especificarem la imatge sense tenir en compte la fase
+    /// @param sliceNumber llesca
+    /// @param phaseNumber fase
+    /// @return la imatge en cas que els índexs siguin correctes, NULL altrament
     Image* getImage(int sliceNumber, int phaseNumber = 0) const;
 
-    /**
-     * Ens retorna la direcció REAL(DICOM) en la que es troben apilades
-     * les imatges que formen el volum. Com que dins d'un mateix volum podem tenir més
-     * d'un frame/stack, hem d'indicar de quin frame/stack volem la direcció
-     * TODO de moment, com que el suport a stacks/frames és bastant patètic, assumim que només hi ha un, però cal corretgir això
-     * Caldrà també tenir com a mínim dues imatges en el mateix stack/frame per donar una direcció fiable.
-     * En cas que només tinguem una sola imatge pel frame/stack donat, retornarem la normal d'aquella imatge
-     * que és el que més se li pot aproximar
-     * @param stack
-     * @param direction[]
-     */
+    /// Ens retorna la direcció REAL(DICOM) en la que es troben apilades
+    /// les imatges que formen el volum. Com que dins d'un mateix volum podem tenir més
+    /// d'un frame/stack, hem d'indicar de quin frame/stack volem la direcció
+    /// TODO de moment, com que el suport a stacks/frames és bastant patètic, assumim que només hi ha un, però cal corretgir això
+    /// Caldrà també tenir com a mínim dues imatges en el mateix stack/frame per donar una direcció fiable.
+    /// En cas que només tinguem una sola imatge pel frame/stack donat, retornarem la normal d'aquella imatge
+    /// que és el que més se li pot aproximar
+    /// @param stack
+    /// @param direction[]
     void getStackDirection(double direction[3], int stack = 0);
 
     /// Obtenim un punter a les dades del VolumePixelData. Veure VolumePixelData::getScalarPointer per més informació.
@@ -158,10 +154,8 @@ public:
     AnatomicalPlane::AnatomicalPlaneType getAcquisitionPlane() const;
 
 signals:
-    /**
-     * Emet l'estat del progrés en el que es troba la càrrega de dades del volum
-     * @param progress progrés de la càrrega en una escala de 1 a 100
-     */
+    /// Emet l'estat del progrés en el que es troba la càrrega de dades del volum
+    /// @param progress progrés de la càrrega en una escala de 1 a 100
     void progress(int);
 
 private:

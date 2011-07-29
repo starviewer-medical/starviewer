@@ -20,12 +20,11 @@ public:
     void setIncrements(int xInc, int yInc, int zInc);
     /// Calcula les posicions per una posició donada, i les retorna com a paràmetres de sortida.
     void getPositions(const Vector3 &position, Vector3 positions[]) const;
-    /**
-     * Calcula els offsets i els pesos per una posició donada, i els retorna com a paràmetres de sortida.
-     * \param position La posició per a la qual es vol calcular els offsets i els pesos.
-     * \param offsets Ha de ser un array de mida 8 on es guardaran els offsets.
-     * \param weights Ha de ser un array de mida 8 on es guardaran els pesos.
-     */
+
+    /// Calcula els offsets i els pesos per una posició donada, i els retorna com a paràmetres de sortida.
+    /// \param position La posició per a la qual es vol calcular els offsets i els pesos.
+    /// \param offsets Ha de ser un array de mida 8 on es guardaran els offsets.
+    /// \param weights Ha de ser un array de mida 8 on es guardaran els pesos.
     void getOffsetsAndWeights(const Vector3 &position, int offsets[], double weights[]) const;
     /// Retorna un valor interpolat a partir d'un array de valors, uns offsets i uns pesos.
     template <class TOutput, class TInput> static TOutput interpolate(const TInput *values, const int offsets[], const double weights[]);
