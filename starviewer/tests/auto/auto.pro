@@ -22,3 +22,6 @@ RCC_DIR = ../../tmp/rcc
 include(shared/shared.pri)
 include(unittests/unittests.pri)
 include(../../sourcelibsdependencies.pri)
+
+#TODO: No afegeix la informacio de UI_DIR com a include a l'hora de compilar el testos
+INCLUDEPATH += ../../tmp/ui
