@@ -2,6 +2,7 @@
 
 #include "study.h"
 #include "series.h"
+#include "image.h"
 #include "dicomsource.h"
 #include "studytesthelper.h"
 #include "pacsdevicetesthelper.h"
@@ -27,35 +28,26 @@ void test_Study::getDICOMSource_ShouldReturnMergedPACSDeviceList_data()
     QTest::addColumn<Study*>("study");
     QTest::addColumn<DICOMSource>("result");
 
-    DICOMSource DICOMSourceWithPACSIDOneAndTwo;
-    DICOMSourceWithPACSIDOneAndTwo.addRetrievePACS(PACSDeviceTestHelper::createPACSDeviceByID("1"));
-    DICOMSourceWithPACSIDOneAndTwo.addRetrievePACS(PACSDeviceTestHelper::createPACSDeviceByID("2"));
-
     DICOMSource DICOMSourceWithPACSIDOne;
     DICOMSourceWithPACSIDOne.addRetrievePACS(PACSDeviceTestHelper::createPACSDeviceByID("1"));
-
     DICOMSource DICOMSourceWithPACSIDTwo;
     DICOMSourceWithPACSIDTwo.addRetrievePACS(PACSDeviceTestHelper::createPACSDeviceByID("2"));
+    DICOMSource DICOMSourceWithPACSIDThree;
+    DICOMSourceWithPACSIDTwo.addRetrievePACS(PACSDeviceTestHelper::createPACSDeviceByID("3"));
 
-    Study *studyWithoutDICOMSourceSeriesWith = StudyTestHelper::createStudy(2);
-    studyWithoutDICOMSourceSeriesWith->getSeries().at(0)->setDICOMSource(DICOMSourceWithPACSIDOne);
-    studyWithoutDICOMSourceSeriesWith->getSeries().at(1)->setDICOMSource(DICOMSourceWithPACSIDTwo);
+    DICOMSource DICOMSourceResult;
+    DICOMSourceResult.addPACSDeviceFromDICOMSource(DICOMSourceWithPACSIDOne);
+    DICOMSourceResult.addPACSDeviceFromDICOMSource(DICOMSourceWithPACSIDTwo);
+    DICOMSourceResult.addPACSDeviceFromDICOMSource(DICOMSourceWithPACSIDThree);
 
-    Study *studyAndSeriesWithDICOMSource = StudyTestHelper::createStudy(2);
-    studyAndSeriesWithDICOMSource->setDICOMSource(DICOMSourceWithPACSIDOne);
-    studyAndSeriesWithDICOMSource->getSeries().at(0)->setDICOMSource(DICOMSourceWithPACSIDOne);
-    studyAndSeriesWithDICOMSource->getSeries().at(1)->setDICOMSource(DICOMSourceWithPACSIDOne);
+    Study *study = StudyTestHelper::createStudy(2, 1);
+    study->setDICOMSource(DICOMSourceWithPACSIDOne);
+    study->getSeries().at(0)->setDICOMSource(DICOMSourceWithPACSIDOne);
+    study->getSeries().at(0)->getImageByIndex(0)->setDICOMSource(DICOMSourceWithPACSIDThree);
+    study->getSeries().at(1)->setDICOMSource(DICOMSourceWithPACSIDTwo);
+    study->getSeries().at(1)->getImageByIndex(0)->setDICOMSource(DICOMSourceWithPACSIDTwo);
 
-    Study *studyWithDICOMSourceAndSeriesNot = StudyTestHelper::createStudy(2);
-    studyWithDICOMSourceAndSeriesNot->setDICOMSource(DICOMSourceWithPACSIDTwo);
-
-    Study *studyAndSeriesWithoutDICOMSource = StudyTestHelper::createStudy(1);
-
-    QTest::newRow("Study without DICOMSource and series with DICOMSource") << studyWithoutDICOMSourceSeriesWith << DICOMSourceWithPACSIDOneAndTwo;
-    QTest::newRow("Study and series with DICOMSource") << studyAndSeriesWithDICOMSource  << DICOMSourceWithPACSIDOne;
-    QTest::newRow("Study with DICOMSource and series without DICOMSource") << studyWithDICOMSourceAndSeriesNot << DICOMSourceWithPACSIDTwo;
-    QTest::newRow("Study and series without DICOMSource") << studyAndSeriesWithoutDICOMSource  << DICOMSource();
-
+    QTest::newRow("Study/series/images with DICOMSource") << study  << DICOMSourceResult;
 }
 
 void test_Study::getDICOMSource_ShouldReturnMergedPACSDeviceList()
