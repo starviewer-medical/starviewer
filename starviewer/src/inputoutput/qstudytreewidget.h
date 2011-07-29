@@ -75,10 +75,11 @@ public:
     /// Ordena descendentment per la columna seleccionada
     void sort();
 
-    /// Retorna l'estudi que tingui el studyInstanceUID i el DICOMSource passat per paràmetre. L'estudi retornat es destruirà quan s'invoqui el mètode
-    /// clean d'aquesta classe, per tant si aquest objecte Study pot ser utilitzat després d'invocar el mètode clean és responsabilitat
-    /// de la classe que el cridi fer-ne una còpia
+    /// Retorna l'estudi/series que tingui el UID i el DICOMSource passat per paràmetre. L'objecte retornat es destruirà quan s'invoqui el mètode
+    /// clean d'aquesta classe, per tant si aquest objecte pot ser utilitzat després d'invocar el mètode clean és responsabilitat de la classe que el cridi
+    /// fer-ne una còpia
     Study* getStudy(const QString &studyInstanceUID, const DICOMSource &dicomSourceOfStudy);
+    Series* getSeries(const QString &studyInstanceUID, const QString &seriesInstanceUID, const DICOMSource &dicomSourceOfSeries);
 
     /// Estableix el menú contextual del Widget
     void setContextMenu(QMenu *contextMenu);

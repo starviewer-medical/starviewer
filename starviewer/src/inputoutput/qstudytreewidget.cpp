@@ -243,6 +243,19 @@ Study* QStudyTreeWidget::getStudy(const QString &studyInstanceUID, const DICOMSo
     return study;
 }
 
+Series* QStudyTreeWidget::getSeries(const QString &studyInstanceUID, const QString &seriesInstanceUID, const DICOMSource &dicomSourceOfSeries)
+{
+    QTreeWidgetItem *seriesItem = getSeriesQTreeWidgetItem(studyInstanceUID, seriesInstanceUID, dicomSourceOfSeries);
+    Series *series = NULL;
+
+    if (seriesItem)
+    {
+        series = getSeriesByDICOMItemID(seriesItem->text(DICOMItemID).toInt());
+    }
+
+    return series;
+}
+
 void QStudyTreeWidget::setContextMenu(QMenu *contextMenu)
 {
     m_contextMenu = contextMenu;
