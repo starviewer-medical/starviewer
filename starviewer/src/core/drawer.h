@@ -19,31 +19,25 @@ public:
     Drawer(Q2DViewer *viewer, QObject *parent = 0);
     ~Drawer();
 
-    /**
-     * Dibuixa la primitiva donada sobre el pla i llesca indicats
-     * En el cas que slice sigui -1, vol dir que voldrem que quan estem sobre aquell pla
-     * la primitiva es veurà sempre. Si indiquem slice >-1, farem que la primitiva només
-     * es vegi quan estem en aquell pla i en aquella llesca en concret
-     * @param primitive Primitiva a pintar
-     * @param plane Pla sobre el qual volem pintar la primitiva
-     * @param slice Llesca a la que adjuntem la primitiva
-     */
+    /// Dibuixa la primitiva donada sobre el pla i llesca indicats
+    /// En el cas que slice sigui -1, vol dir que voldrem que quan estem sobre aquell pla
+    /// la primitiva es veurà sempre. Si indiquem slice >-1, farem que la primitiva només
+    /// es vegi quan estem en aquell pla i en aquella llesca en concret
+    /// @param primitive Primitiva a pintar
+    /// @param plane Pla sobre el qual volem pintar la primitiva
+    /// @param slice Llesca a la que adjuntem la primitiva
     void draw(DrawerPrimitive *primitive, int plane, int slice = -1);
 
     /// Esborra totes les primitives que es veuen al visor, és a dir, en el pla i llesques actuals.
     void clearViewer();
 
-    /**
-     * Afegim una primitiva al grup indicat.
-     * @param primitive Primitiva que volem afegir
-     * @param groupName nom del grup on la volem incloure
-     */
+    /// Afegim una primitiva al grup indicat.
+    /// @param primitive Primitiva que volem afegir
+    /// @param groupName nom del grup on la volem incloure
     void addToGroup(DrawerPrimitive *primitive, const QString &groupName);
 
-    /**
-     * Mostra/amaga les primitives que hi ha en un determinat grup
-     * @param groupName nom del grup que volem mostrar/amagar
-     */
+    /// Mostra/amaga les primitives que hi ha en un determinat grup
+    /// @param groupName nom del grup que volem mostrar/amagar
     void hideGroup(const QString &groupName);
     void showGroup(const QString &groupName);
 
@@ -59,22 +53,18 @@ public:
     int getNumberOfDrawnPrimitives();
 
 public slots:
-    /**
-     * Deixa de mantenir la primitiva dins de la seva estructura interna
-     * i l'elimina de l'escena on s'estava pintant
-     * @param primitive Primitiva que volem deixar de controlar
-     */
+    /// Deixa de mantenir la primitiva dins de la seva estructura interna
+    /// i l'elimina de l'escena on s'estava pintant
+    /// @param primitive Primitiva que volem deixar de controlar
     void erasePrimitive(DrawerPrimitive *primitive);
 
     /// Esborra totes les primitives registrades al drawer.
     void removeAllPrimitives();
 
 private:
-    /**
-     * Mostra/amaga les primitives que hi ha en un pla i llesca determinats
-     * @param plane Pla sobre que volem mostrar/amagar les primitives
-     * @param slice Llesca dins d'aquell pla. En el cas que el pla sigui Top2DPlane, slice no es té en compte
-     */
+    /// Mostra/amaga les primitives que hi ha en un pla i llesca determinats
+    /// @param plane Pla sobre que volem mostrar/amagar les primitives
+    /// @param slice Llesca dins d'aquell pla. En el cas que el pla sigui Top2DPlane, slice no es té en compte
     void hide(int plane, int slice);
     void show(int plane, int slice);
 

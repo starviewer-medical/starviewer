@@ -246,12 +246,10 @@ double MathTools::getPointToFiniteLineDistance(double point[3], double lineFirst
 
 double* MathTools::infiniteLinesIntersection(double *p1, double *p2, double *p3, double *p4, int &state)
 {
-    /**
-     *  Solution by Wolfram Mathematics
-     *
-     *   http://mathworld.wolfram.com/Line-LineIntersection.html
-     *
-     */
+    //  Solution by Wolfram Mathematics
+    //
+    //   http://mathworld.wolfram.com/Line-LineIntersection.html
+    //
     double *intersection;
 
     intersection = new double[3];

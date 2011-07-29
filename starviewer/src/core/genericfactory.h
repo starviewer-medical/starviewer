@@ -56,24 +56,20 @@ public:
     /// Constructor de la classe
     GenericFactory(){}
 
-    /**
-     * Mètode que serveix per registrar una funció de creació d'una classe.
-     * Aquest mètode és el que s'ha de fer servir per tal de poder registrar una determinada classe en el factory.
-     * @param className Nom de la classe que es vol registrar.
-     * @param function Funció del tipus BaseClassCreateFunction que ens retorna un objecte de la classe className.
-     *                 Aquest mètode el dona, automàticament, la classe GenericFactoryRegister.
-     */
+    /// Mètode que serveix per registrar una funció de creació d'una classe.
+    /// Aquest mètode és el que s'ha de fer servir per tal de poder registrar una determinada classe en el factory.
+    /// @param className Nom de la classe que es vol registrar.
+    /// @param function Funció del tipus BaseClassCreateFunction que ens retorna un objecte de la classe className.
+    ///                 Aquest mètode el dona, automàticament, la classe GenericFactoryRegister.
     void registerCreateFunction(const ClassIdentifier &className, BaseClassCreateFunction function)
     {
         m_registry[className] = function;
     }
 
-    /**
-     * Mètode que ens crea l'objecte que vingui definit per l'identificador. El retorna del tipus BaseClass.
-     * @param className Nom de la classe que volem que faci l'objecte
-     * @param parent QObject pare de l'objecte que es crearà.
-     * @return Retorna l'objecte convertit a la classe base BaseClass. En cas que no trobi l'objecte o error retornarà NULL.
-     */
+    /// Mètode que ens crea l'objecte que vingui definit per l'identificador. El retorna del tipus BaseClass.
+    /// @param className Nom de la classe que volem que faci l'objecte
+    /// @param parent QObject pare de l'objecte que es crearà.
+    /// @return Retorna l'objecte convertit a la classe base BaseClass. En cas que no trobi l'objecte o error retornarà NULL.
     BaseClass* create(const ClassIdentifier &className, ParentType *parent = 0) const
     {
         BaseClass *theObject = NULL;

@@ -33,79 +33,59 @@ public:
     /// Etiquetes per cada agrupació de presets
     enum GroupsLabel { AutomaticPreset, FileDefined, StandardPresets, UserDefined, CustomPreset, Other };
 
-    /**
-     * Afegeix un nou preset. Si la operació es fa amb èxit s'emet un senyal donant la informació del preset.
-     * @param description Descripció del preset. Ha de ser única
-     * @param window Valor de window
-     * @param level Valor de level
-     * @param group Grup al que volem que pertanyi, que serà "Other" si no s'especifica
-     */
+    /// Afegeix un nou preset. Si la operació es fa amb èxit s'emet un senyal donant la informació del preset.
+    /// @param description Descripció del preset. Ha de ser única
+    /// @param window Valor de window
+    /// @param level Valor de level
+    /// @param group Grup al que volem que pertanyi, que serà "Other" si no s'especifica
     void addPreset(const QString &description, double window, double level, int group = Other);
 
-    /**
-     * Eliminem el preset que tingui la descripció donada
-     * @param description Descripció del preset que volem eliminar
-     */
+    /// Eliminem el preset que tingui la descripció donada
+    /// @param description Descripció del preset que volem eliminar
     void removePreset(const QString &description);
 
-    /**
-     * Elimina els presets d'un grup
-     * @param group Grup que volem buidar
-     */
+    /// Elimina els presets d'un grup
+    /// @param group Grup que volem buidar
     void removePresetsFromGroup(int group);
 
-    /**
-     * Ens retorna els valors de window level del preset amb la descripció donada
-     * Si el preset no existeix els valor retornat serà 0 per tots dos
-     * @param description Descripció del preset
-     * @param window variable on es retornarà el valor de window
-     * @param level variable on es retornarà el valor de level
-     * @return Cert si existeix aquest preset, fals altrament
-     */
+    /// Ens retorna els valors de window level del preset amb la descripció donada
+    /// Si el preset no existeix els valor retornat serà 0 per tots dos
+    /// @param description Descripció del preset
+    /// @param window variable on es retornarà el valor de window
+    /// @param level variable on es retornarà el valor de level
+    /// @return Cert si existeix aquest preset, fals altrament
     bool getWindowLevelFromDescription(const QString &description, double &window, double &level);
 
-    /**
-     * Ens diu a quin grup pertany el preset indicat. Si no existeix la descripció,
-     * el valor retornat en group és indeterminat
-     * @param description Descripció del preset que busquem
-     * @param group variable on se'ns tornarà el grup al que pertany la descripció donada
-     * @return Cert si la descripció donada existeix, fals altrement
-     */
+    /// Ens diu a quin grup pertany el preset indicat. Si no existeix la descripció,
+    /// el valor retornat en group és indeterminat
+    /// @param description Descripció del preset que busquem
+    /// @param group variable on se'ns tornarà el grup al que pertany la descripció donada
+    /// @return Cert si la descripció donada existeix, fals altrement
     bool getGroup(const QString &description, int &group);
 
-    /**
-     * Ens retorna una llista de presets que conté un grup
-     * @param group grup de presets
-     * @return Retorna llista de descripcions de presets del grup donat.
-     * Si no hi ha cap preset dins del grup demanat la llista serà buida.
-     */
+    /// Ens retorna una llista de presets que conté un grup
+    /// @param group grup de presets
+    /// @return Retorna llista de descripcions de presets del grup donat.
+    /// Si no hi ha cap preset dins del grup demanat la llista serà buida.
     QStringList getDescriptionsFromGroup(int group);
 
-    /**
-     * Ens retorna l'últim preset activat
-     * @return String amb l'últim preset activat
-     */
+    /// Ens retorna l'últim preset activat
+    /// @return String amb l'últim preset activat
     QString getCurrentPreset() const;
 
-    /**
-     * Ens retorna l'índex del preset definit al fitxer.
-     * @param preset Nom del preset
-     * @return Identificador del preset. Retorna -1 si el preset no és de tipus FileDefined
-     */
+    /// Ens retorna l'índex del preset definit al fitxer.
+    /// @param preset Nom del preset
+    /// @return Identificador del preset. Retorna -1 si el preset no és de tipus FileDefined
     int getFileDefinedPresetIndex(const QString &preset) const;
 
 public slots:
-    /**
-     * Donem el valor del preset "A mida"
-     * @param window valor de window
-     * @param level valor de level
-     */
+    /// Donem el valor del preset "A mida"
+    /// @param window valor de window
+    /// @param level valor de level
     void setCustomWindowLevel(double window, double level);
 
-    /**
-     * Indiquem que volem activar el preset indicat
-     * @param preset Nom del preset a activar
-     */
+    /// Indiquem que volem activar el preset indicat
+    /// @param preset Nom del preset a activar
     void activatePreset(const QString &preset);
 
 signals:

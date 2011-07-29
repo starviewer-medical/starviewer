@@ -28,10 +28,8 @@ public:
     void setToolData(ToolData *toolData);
 
 private:
-    /**
-     * Aplica el window level predeterminat per la tecla donada
-     * @param key Caràcter rebut
-     */
+    /// Aplica el window level predeterminat per la tecla donada
+    /// @param key Caràcter rebut
     void applyPreset(char key);
 
 private slots:

@@ -61,8 +61,8 @@ public:
 //     typedef TAccumulator<class T> AccumulatorType;
 
 
-    /** Set/Get the direction in which to accumulate the data.  It must be set
-    * before the update of the filter. Defaults to the last dimension. */
+    /// Set/Get the direction in which to accumulate the data.  It must be set
+    /// before the update of the filter. Defaults to the last dimension.
     vtkSetMacro(ProjectionDimension, unsigned int);
     vtkGetMacro(ProjectionDimension, unsigned int);
 
@@ -94,10 +94,10 @@ protected:
                              vtkImageData ***inData, vtkImageData **outData,
                              int outExt[6], int id);
 
-  /** Apply changes to the output image information. */
+  /// Apply changes to the output image information.
 //   virtual void GenerateOutputInformation();
 
-  /** Apply changes to the input image requested region. */
+  /// Apply changes to the input image requested region.
 //   virtual void GenerateInputRequestedRegion();
 
 //   virtual void ThreadedGenerateData(

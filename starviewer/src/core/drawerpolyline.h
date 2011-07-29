@@ -20,26 +20,20 @@ public:
     DrawerPolyline(QObject *parent = 0);
     ~DrawerPolyline();
 
-    /**
-     * Afegim un punt a la polilínia.
-     * @param point[] Punt que defineix el punt
-     */
+    /// Afegim un punt a la polilínia.
+    /// @param point[] Punt que defineix el punt
     void addPoint(double point[3]);
 
-    /**
-     * Assigna el valor del punt i-éssim de la polilínia. En aquest cas equival a
-     * actualitzar el valor d'aquest punt indicat. Si 'i' està fora de rang,
-     * s'afegeix el punt donat al final, tal com si fessim addPoint(point)
-     * @param i índex del point que volem modificar
-     * @param point[] coordenades del point
-     */
+    /// Assigna el valor del punt i-éssim de la polilínia. En aquest cas equival a
+    /// actualitzar el valor d'aquest punt indicat. Si 'i' està fora de rang,
+    /// s'afegeix el punt donat al final, tal com si fessim addPoint(point)
+    /// @param i índex del point que volem modificar
+    /// @param point[] coordenades del point
     void setPoint(int i, double point[3]);
 
-    /**
-     * Elimina el punt i-éssim de la polilínia. Si 'i' està fora de rang,
-     * no s'esborrarà cap punt de la polilínia.
-     * @param i índex del point que volem modificar
-     */
+    /// Elimina el punt i-éssim de la polilínia. Si 'i' està fora de rang,
+    /// no s'esborrarà cap punt de la polilínia.
+    /// @param i índex del point que volem modificar
     void removePoint(int i);
 
     /// Retorna la polilínia com a objecte VTK de representació

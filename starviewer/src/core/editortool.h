@@ -25,93 +25,59 @@ public:
 
     void handleEvent(unsigned long eventID);
 
-    /**
-     * Retorna les dades de la tool
-     */
+    /// Retorna les dades de la tool
     ToolData* getToolData() const;
 
 private:
-    /**
-     * Pinta el quadrat vert si fa falta (estats Paint i Erase) a la posició del cursor
-     * si el botó esquerre està premut també es fa l'acció de pintar
-     */
+    /// Pinta el quadrat vert si fa falta (estats Paint i Erase) a la posició del cursor
+    /// si el botó esquerre està premut també es fa l'acció de pintar
     void setPaintCursor();
 
-    /**
-     * Canvia l'estat a Erase
-     */
+    /// Canvia l'estat a Erase
     void setErase();
 
-    /**
-     * Canvia l'estat a Paint
-     */
+    /// Canvia l'estat a Paint
     void setPaint();
 
-    /**
-     * Canvia l'estat a Erase Slice
-     */
+    /// Canvia l'estat a Erase Slice
     void setEraseSlice();
 
-    /**
-     * Canvia l'estat a Erase Region
-     */
+    /// Canvia l'estat a Erase Region
     void setEraseRegion();
 
-    /**
-     * Crida a l'acció que convingui seegons l'estat
-     */
+    /// Crida a l'acció que convingui seegons l'estat
     void setEditorPoint();
 
-    /**
-     * Esborra una porció quadrada de la màscara de mida m_editorSize
-     */
+    /// Esborra una porció quadrada de la màscara de mida m_editorSize
     void eraseMask();
 
-    /**
-     * Pinta una porció quadrada de la màscara de mida m_editorSize
-     */
+    /// Pinta una porció quadrada de la màscara de mida m_editorSize
     void paintMask();
 
-    /**
-     * Esborra una llesca de la màscara
-     */
+    /// Esborra una llesca de la màscara
     void eraseSliceMask();
 
-    /**
-     * Esborra una porció conectada de la màscara (en 2D)
-     */
+    /// Esborra una porció conectada de la màscara (en 2D)
     void eraseRegionMask();
 
-    /**
-     * Crida recursiva de la funció eraseRegionMask
-     * @param a, @param b, @param c índex del volum de la màscara que estem mirant en cada crida
-     */
+    /// Crida recursiva de la funció eraseRegionMask
+    /// @param a, @param b, @param c índex del volum de la màscara que estem mirant en cada crida
     void eraseRegionMaskRecursive(int a, int b, int c);
 
-    /**
-     * Decrementa un estat de la tool. Ordre: Paint, Erase, EraseRegion, EraseSlice
-     */
+    /// Decrementa un estat de la tool. Ordre: Paint, Erase, EraseRegion, EraseSlice
     void decreaseState();
 
-    /**
-     * Incrementa un estat de la tool. Ordre: Paint, Erase, EraseRegion, EraseSlice
-     */
+    /// Incrementa un estat de la tool. Ordre: Paint, Erase, EraseRegion, EraseSlice
     void increaseState();
 
-    /**
-     * Incrementa la mida de l'editor
-     */
+    /// Incrementa la mida de l'editor
     void increaseEditorSize();
 
-    /**
-     * Decrementa la mida de l'editor
-     */
+    /// Decrementa la mida de l'editor
     void decreaseEditorSize();
 
 private slots:
-    /**
-     * Inicialitza diverses dades necessàries per la tool: Valors de m_insideValue, m_outsideValue i m_volumeCont
-     */
+    /// Inicialitza diverses dades necessàries per la tool: Valors de m_insideValue, m_outsideValue i m_volumeCont
     void initialize();
 
 private:

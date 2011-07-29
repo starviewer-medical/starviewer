@@ -21,27 +21,20 @@ public:
     ToolRegistry(QObject *parent = 0);
     ~ToolRegistry();
 
-    /**
-     * Ens crea la tool demanada i li assigna el viewer donat
-     * @param toolName
-     * @param viewer
-     * @return
-     */
+    /// Ens crea la tool demanada i li assigna el viewer donat
+    /// @param toolName
+    /// @param viewer
     Tool* getTool(const QString &toolName, QViewer *viewer);
 
-    /**
-     * Crea una acció vàlida per aquella tool
-     * @param toolName El nom de la tool de la qual volem l'acció
-     * @return L'acció de la tool demanada, nul si la tool no existeix TODO o millor una QAction buida?
-     */
+    /// Crea una acció vàlida per aquella tool
+    /// @param toolName El nom de la tool de la qual volem l'acció
+    /// @return L'acció de la tool demanada, nul si la tool no existeix TODO o millor una QAction buida?
     QAction* getToolAction(const QString &toolName);
 
-    /**
-     * Crea un parell amb l'acció de la "Action Tool" demanada més l'SLOT associat
-     * @param actionToolName Nom de la "Action Tool" de la qual volem obtenir la parella
-     * @return un QPair amb l'acció creada i l'string de l'SLOT a cridar. Si la "Action
-     *  Tool" demanada no està registrada, retornarà un QPair amb un objecte QAction i QString buits (no NULS!)
-     */
+    /// Crea un parell amb l'acció de la "Action Tool" demanada més l'SLOT associat
+    /// @param actionToolName Nom de la "Action Tool" de la qual volem obtenir la parella
+    /// @return un QPair amb l'acció creada i l'string de l'SLOT a cridar. Si la "Action
+    ///  Tool" demanada no està registrada, retornarà un QPair amb un objecte QAction i QString buits (no NULS!)
     QPair<QAction*, QString> getActionToolPair(const QString &actionToolName);
 };
 

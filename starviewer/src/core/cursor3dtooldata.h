@@ -16,69 +16,44 @@ public:
     Cursor3DToolData(QObject *parent = 0);
     ~Cursor3DToolData();
 
-    /**
-     * Retorna el frame of reference UID
-     * @return
-     */
+    /// Retorna el frame of reference UID
     QString getFrameOfReferenceUID() const;
 
-    /**
-     * Retorna l'instance UID
-     * @return
-    */
+    /// Retorna l'instance UID
     QString getInstanceUID() const;
 
-    /**
-     * Retorna el pla d'imatge
-     * @return
-     */
+    /// Retorna el pla d'imatge
     ImagePlane* getImagePlane() const;
 
-    /**
-     * Retorna el punt origen
-     * @return
-     */
+    /// Retorna el punt origen
     double* getOriginPointPosition() const;
 
-    /**
-    * Visibilitat del cursor
-    */
+    /// Visibilitat del cursor
     void setVisible(bool visibility);
 
-    /**
-    * Retorna cert si és visible, fals altrament.
-    * @return
-    */
+    /// Retorna cert si és visible, fals altrament.
     bool isVisible();
 
 public slots:
-    /**
-     * Li assignem el frameOfReference del pla de referencia
-     * El frame of reference només pot canviar de valor quan es canvia de sèrie.
-     * Dins d'una mateixa sèrie, totes les imatges tenen el mateix frame of reference
-     * @param frameOfReference
-     */
+    /// Li assignem el frameOfReference del pla de referencia
+    /// El frame of reference només pot canviar de valor quan es canvia de sèrie.
+    /// Dins d'una mateixa sèrie, totes les imatges tenen el mateix frame of reference
+    /// @param frameOfReference
     void setFrameOfReferenceUID(const QString &frameOfReference);
 
-    /**
-     * Li assignem l'instance UID
-     * @param instanceUID
-    */
+    /// Li assignem l'instance UID
+    /// @param instanceUID
     void setInstanceUID(const QString &instanceUID);
 
-    /**
-     * Assigna el pla de la imatge de referencia
-     * Aquest pla pot canviar cada cop que es canvia de llesca en el viewer
-     * Quan canvïi aquest valor, s'emetrà el senyal changed()
-     * @param imagePlane
-     */
+    /// Assigna el pla de la imatge de referencia
+    /// Aquest pla pot canviar cada cop que es canvia de llesca en el viewer
+    /// Quan canvïi aquest valor, s'emetrà el senyal changed()
+    /// @param imagePlane
     void setImagePlane(ImagePlane *imagePlane);
 
-    /**
-     * Assigna una posició al punt origen
-     * Quan canvïi aquest valor, s'emetrà el senyal changed()
-     * @param double
-     */
+    /// Assigna una posició al punt origen
+    /// Quan canvïi aquest valor, s'emetrà el senyal changed()
+    /// @param double
     void setOriginPointPosition(double position[3]);
 
 private:

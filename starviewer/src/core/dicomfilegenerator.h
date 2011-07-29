@@ -20,10 +20,8 @@ public:
 
     ~DICOMFileGenerator();
 
-    /**
-        Assignar el directori a on es vol guardar el/s fitxer/s generat/s
-        Si el directori no existeix es crearà.
-    */
+    /// Assignar el directori a on es vol guardar el/s fitxer/s generat/s
+    /// Si el directori no existeix es crearà.
     bool setDirPath(QString path);
 
     /// Mètode encarregat de generar el/s fitxer/s. Cada generador decideix què genera.
