@@ -115,8 +115,8 @@ private slots:
     /// Mostra el diàleg on s'explica que és una versió beta.
     void showBetaVersionDialog();
 
-    /// Crea una nova finestra i l'obre.
-    void openBlankWindow();
+    /// Crea una nova finestra i la mostra. Retorna una referència a la finestra creada.
+    QApplicationMainWindow* openBlankWindow();
 
     /// Mostra el formulari d'about
     void about();

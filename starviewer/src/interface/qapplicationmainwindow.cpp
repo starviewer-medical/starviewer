@@ -477,15 +477,16 @@ void QApplicationMainWindow::switchToLanguage(QString locale)
 
 void QApplicationMainWindow::setPatientInNewWindow(Patient *patient)
 {
-    QApplicationMainWindow *newMainWindow = new QApplicationMainWindow(0);
+    QApplicationMainWindow *newMainWindow = openBlankWindow();
     newMainWindow->setPatient(patient);
-    newMainWindow->show();
 }
 
-void QApplicationMainWindow::openBlankWindow()
+QApplicationMainWindow* QApplicationMainWindow::openBlankWindow()
 {
     QApplicationMainWindow *newMainWindow = new QApplicationMainWindow(0);
     newMainWindow->show();
+
+    return newMainWindow;
 }
 
 void QApplicationMainWindow::setPatient(Patient *patient)
