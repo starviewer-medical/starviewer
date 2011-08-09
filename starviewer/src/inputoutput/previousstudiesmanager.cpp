@@ -49,8 +49,8 @@ void PreviousStudiesManager::makeAsynchronousStudiesQuery(Patient *patient, QDat
 {
     initializeQuery();
 
-    PacsDeviceManager pacsDeviceManager;
-    QList<PacsDevice> pacsDeviceListToQuery = pacsDeviceManager.getPACSList(PacsDeviceManager::PacsWithQueryRetrieveServiceEnabled, true);
+    QList<PacsDevice> pacsDeviceListToQuery = PacsDeviceManager().getPACSList(PacsDeviceManager::PacsWithQueryRetrieveServiceEnabled, true);
+    pacsDeviceListToQuery = PacsDeviceManager::removeDuplicatePACS(pacsDeviceListToQuery + getPACSRetrievedStudiesOfPatient(patient));
 
     if (pacsDeviceListToQuery.count() == 0)
     {
@@ -293,4 +293,17 @@ void PreviousStudiesManager::deleteQueryResults()
 
     m_mergedStudyList.clear();
 }
+
+QList<PacsDevice> PreviousStudiesManager::getPACSRetrievedStudiesOfPatient(Patient *patient)
+{
+    QList<PacsDevice> pacsDeviceRetrievedStudies;
+
+    foreach (Study *studyPatient, patient->getStudies())
+    {
+        pacsDeviceRetrievedStudies = PacsDeviceManager::removeDuplicatePACS(pacsDeviceRetrievedStudies + studyPatient->getDICOMSource().getRetrievePACS());
+    }
+
+    return pacsDeviceRetrievedStudies;
+}
+
 }

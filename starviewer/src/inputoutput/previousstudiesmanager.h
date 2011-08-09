@@ -99,6 +99,9 @@ private:
     /// Esborra els resultats de la cerca
     void deleteQueryResults();
 
+    /// Retorna una llista indicant de quins PACS s'han descarregat els estudis que conté el pacient, sempre que continguin aquesta informació al DICOMSource
+    QList<PacsDevice> getPACSRetrievedStudiesOfPatient(Patient *patient);
+
 private slots:
     /// Slot que s'activa quan finalitza un job de consulta al PACS
     void queryPACSJobFinished(PACSJob *pacsJob);
