@@ -132,6 +132,11 @@ void RetrieveDICOMFilesFromPACSJob::run()
                     m_retrieveRequestStatus = PACSRequestStatus::RetrieveDatabaseError;
                 }
             }
+            else
+            {
+                //HACK: Els fillers guarden a la base de dades l'estudi sense l'informacio del DICOMSource, invoquem aquest metode per afegir-li
+                updateRetrievedStudyToAddDICOMSource(m_studyToRetrieveDICOMFiles->getInstanceUID(), getPacsDevice());
+            }
         }
         else
         {
@@ -358,6 +363,58 @@ Study* RetrieveDICOMFilesFromPACSJob::copyBasicStudyInformation(Study *studyToCo
     copiedStudy->setDICOMSource(studyToCopy->getDICOMSource());
 
     return copiedStudy;
+}
+
+void RetrieveDICOMFilesFromPACSJob::updateRetrievedStudyToAddDICOMSource(QString retrievedStudyInstanceUID, PacsDevice pacsRetrievedStudy)
+{
+    QScopedPointer<Patient> retrievedPatient(getRetrievedPatientStudyFromDatabase(retrievedStudyInstanceUID));
+
+    if (retrievedPatient.isNull())
+    {
+        return;
+    }
+
+    if (retrievedPatient->getStudies().count() == 0)
+    {
+        ERROR_LOG("No s'han trobat estudis per actualitzar-los el DICOMSource");
+        return;
+    }
+
+    DICOMSource dicomSourceRetrievedStudy;
+    dicomSourceRetrievedStudy.addRetrievePACS(pacsRetrievedStudy);
+
+    retrievedPatient->getStudies().at(0)->setDICOMSource(dicomSourceRetrievedStudy);
+
+    LocalDatabaseManager localDatabaseManager;
+    localDatabaseManager.save(retrievedPatient.data());
+
+    if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
+    {
+        ERROR_LOG("S'ha produit un error al actualitzar a l'estudi descarregat el DICOMSource");
+    }
+}
+
+Patient* RetrieveDICOMFilesFromPACSJob::getRetrievedPatientStudyFromDatabase(QString retrievedStudyInstanceUID)
+{
+    DicomMask dicomMaskStudyRetrieved;
+    dicomMaskStudyRetrieved.setStudyInstanceUID(retrievedStudyInstanceUID);
+
+    LocalDatabaseManager localDatabaseManager;
+    QList<Patient*> queriedPatients = localDatabaseManager.queryPatientStudy(dicomMaskStudyRetrieved);
+
+    if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
+    {
+        ERROR_LOG("S'ha produit un error intentant obtenir l'estudi descarregat per actualitzar-li el DICOMSource");
+        return NULL;
+    }
+
+    if (queriedPatients.count() == 0)
+    {
+        ERROR_LOG("No s'ha trobat l'estudi per actualitzar-li el DICOMSource");
+        return NULL;
+    }
+
+    return queriedPatients.at(0);
 }
 
 };

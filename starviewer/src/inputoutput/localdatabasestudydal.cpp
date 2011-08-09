@@ -7,6 +7,8 @@
 #include "databaseconnection.h"
 #include "logging.h"
 #include "dicommask.h"
+#include "pacsdevicemanager.h"
+#include "dicomsource.h"
 
 namespace udg {
 
@@ -173,6 +175,7 @@ Study* LocalDatabaseStudyDAL::fillStudy(char **reply, int row, int columns)
     study->setReferringPhysiciansName(reply[11 + row * columns]);
     study->setRetrievedDate(QDate().fromString(reply[13 + row * columns], "yyyyMMdd"));
     study->setRetrievedTime(QTime().fromString(reply[14 + row * columns], "hhmmss"));
+    study->setDICOMSource(fillDICOMSource(reply, row, columns));
 
     // Afegim la modalitat que estan separades per "/"
     modalities = QString(reply[6 + row * columns]).split("/");
@@ -188,13 +191,34 @@ Patient* LocalDatabaseStudyDAL::fillPatient(char **reply, int row, int columns)
 {
     Patient *patient = new Patient();
 
-    patient->setDatabaseID(QString(reply[16 + row * columns]).toLongLong());
-    patient->setID(reply[17 + row * columns]);
-    patient->setFullName(reply[18 + row * columns]);
-    patient->setBirthDate(reply[19 + row * columns]);
-    patient->setSex(reply[20 + row * columns]);
+    patient->setDatabaseID(QString(reply[18 + row * columns]).toLongLong());
+    patient->setID(reply[19 + row * columns]);
+    patient->setFullName(reply[20 + row * columns]);
+    patient->setBirthDate(reply[21 + row * columns]);
+    patient->setSex(reply[22 + row * columns]);
 
     return patient;
+}
+
+DICOMSource LocalDatabaseStudyDAL::fillDICOMSource(char **reply, int row, int columns)
+{
+    DICOMSource dicomSourceStudy;
+
+    if (QString(reply[16 + row * columns]).isEmpty())
+    {
+        return dicomSourceStudy;
+    }
+
+    QString PACSAddress = reply[16 + row * columns];
+    int pacsQueryPort = QString(reply[17 + row * columns]).toInt();
+    PacsDevice pacsRetrievedStudy = PacsDeviceManager().getPACSDeviceByAddressAndQueryPort(PACSAddress, pacsQueryPort);
+
+    if (!pacsRetrievedStudy.isEmpty())
+    {
+        dicomSourceStudy.addRetrievePACS(pacsRetrievedStudy);
+    }
+
+    return dicomSourceStudy;
 }
 
 // TODO: Si només acceptem com a paràmatre de filtrar de la DICOMMask l'studyInstanceUID el que s'hauria de fer és directament passar un QString amb
@@ -205,7 +229,7 @@ QString LocalDatabaseStudyDAL::buildSqlSelect(const DicomMask &studyMaskToSelect
 
     selectSentence = "Select InstanceUID, PatientID, ID, PatientAge, PatientWeigth, PatientHeigth, Modalities, Date, Time, "
                             "AccessionNumber, Description, ReferringPhysicianName, LastAccessDate, RetrievedDate, RetrievedTime, "
-                            "State "
+                            "State, RetrievedPACSIP, RetrievedPACSQueryPort "
                        "From Study ";
 
     if (!studyMaskToSelect.getStudyInstanceUID().isEmpty())
@@ -251,7 +275,8 @@ QString LocalDatabaseStudyDAL::buildSqlSelectStudyPatient(const DicomMask &study
 
     selectSentence = "Select InstanceUID, PatientID, Study.ID, PatientAge, PatientWeigth, PatientHeigth, Modalities, Date, Time, "
                             "AccessionNumber, Description, ReferringPhysicianName, LastAccessDate, RetrievedDate, RetrievedTime, "
-                            "Study.State, Patient.ID, Patient.DICOMPatientId, Patient.Name, Patient.Birthdate, Patient.Sex "
+                            "Study.State, RetrievedPACSIP, RetrievedPACSQueryPort, Patient.ID, Patient.DICOMPatientId, Patient.Name, "
+                            "Patient.Birthdate, Patient.Sex "
                        "From Study, Patient ";
 
     whereSentence = "Where Study.PatientID = Patient.ID ";
@@ -317,9 +342,9 @@ QString LocalDatabaseStudyDAL::buildSqlInsert(Study *newStudy, const QDate &last
     QString insertSentence = QString ("Insert into Study   (InstanceUID, PatientID, ID, PatientAge, PatientWeigth, PatientHeigth, "
                                                            "Modalities, Date, Time, AccessionNumber, Description, "
                                                            "ReferringPhysicianName, LastAccessDate, RetrievedDate, "
-                                                           "RetrievedTime , State) "
+                                                           "RetrievedTime , State, RetrievedPACSIP, RetrievedPACSQueryPort) "
                                                    "values ('%1', %2, '%3', '%4', %5, %6, '%7', '%8', '%9', '%10', '%11', "
-                                                            "'%12', '%13', '%14', '%15', %16)")
+                                      "'%12', '%13', '%14', '%15', %16, '%17', %18)")
                                     .arg(DatabaseConnection::formatTextToValidSQLSyntax(newStudy->getInstanceUID()))
                                     .arg(newStudy->getParentPatient()->getDatabaseID())
                                     .arg(DatabaseConnection::formatTextToValidSQLSyntax(newStudy->getID()))
@@ -335,7 +360,9 @@ QString LocalDatabaseStudyDAL::buildSqlInsert(Study *newStudy, const QDate &last
                                     .arg(lastAcessDate.toString("yyyyMMdd"))
                                     .arg(newStudy->getRetrievedDate().toString("yyyyMMdd"))
                                     .arg(newStudy->getRetrievedTime().toString("hhmmss"))
-                                    .arg("0");
+                                    .arg(0)
+                                    .arg(getRetrievedPACS(newStudy).getAddress())
+                                    .arg(ConvertPACSQueryPortToDatabaseNullableInteger(getRetrievedPACS(newStudy)));
 
     return insertSentence;
 }
@@ -355,8 +382,10 @@ QString LocalDatabaseStudyDAL::buildSqlUpdate(Study *studyToUpdate, const QDate 
                                                        "LastAccessDate = '%11', "
                                                        "RetrievedDate = '%12', "
                                                        "RetrievedTime = '%13', "
-                                                       "State = %14 "
-                                                "Where InstanceUid = '%15'")
+                                                       "State = %14,"
+                                                       "RetrievedPACSIP = '%15',"
+                                                       "RetrievedPACSQueryPort = %16 "
+                                                "Where InstanceUid = '%17'")
                                     .arg(DatabaseConnection::formatTextToValidSQLSyntax(studyToUpdate->getID()))
                                     .arg(DatabaseConnection::formatTextToValidSQLSyntax(studyToUpdate->getPatientAge()))
                                     .arg(studyToUpdate->getWeight())
@@ -371,6 +400,8 @@ QString LocalDatabaseStudyDAL::buildSqlUpdate(Study *studyToUpdate, const QDate 
                                     .arg(studyToUpdate->getRetrievedDate().toString("yyyyMMdd"))
                                     .arg(studyToUpdate->getRetrievedTime().toString("hhmmss"))
                                     .arg("0")
+                                    .arg(getRetrievedPACS(studyToUpdate).getAddress())
+                                    .arg(ConvertPACSQueryPortToDatabaseNullableInteger(getRetrievedPACS(studyToUpdate)))
                                     .arg(DatabaseConnection::formatTextToValidSQLSyntax(studyToUpdate->getInstanceUID()));
 
     return updateSentence;
@@ -389,6 +420,24 @@ QString LocalDatabaseStudyDAL::buildSqlDelete(const DicomMask &studyMaskToDelete
     }
 
     return deleteSentence + whereSentence;
+}
+
+PacsDevice LocalDatabaseStudyDAL::getRetrievedPACS(Study *study)
+{
+    PacsDevice pacsDevice;
+
+    if (study->getDICOMSource().getRetrievePACS().count() > 0)
+    {
+        //Un estudi només es pot haver descarregat d'un PACS per tant agafem el primer
+        pacsDevice = study->getDICOMSource().getRetrievePACS().at(0);
+    }
+
+    return pacsDevice;
+}
+
+QString LocalDatabaseStudyDAL::ConvertPACSQueryPortToDatabaseNullableInteger(PacsDevice pacsDevice)
+{
+    return pacsDevice.isEmpty() ? "NULL" : QString::number(pacsDevice.getQueryRetrieveServicePort());
 }
 
 }
