@@ -42,7 +42,7 @@ public:
     bool removeCacheAndReinstallDatabase();
 
     /// Aplica els canvis a fets a la última revisió de la base de dades a la base de dades locals
-    bool updateDatabaseRevision();
+    bool recreateDatabase();
 
     /// Retorna els errors que s'han trobat
     QString getErrorMessage();
@@ -76,6 +76,18 @@ private:
     /// Crea la base de dades
     /// @return indica si s'ha pogut crear la base de dades
     bool createDatabaseFile();
+
+    /// Comprova si la versió actual de la base de dades es pot actualitzar, sense necessitat d'haver d'esborrar la caché i tornar-la a crear
+    bool canBeUpgradedDatabase();
+
+    /// Aplica els canvis necessaris a la base de dades per poder funcionar amb la versió actual de Starviewer, sempre i quan la BD sigui actualitzable
+    bool upgradeDatabase();
+
+    /// Ens aplica la comanda d'actualització a la base de dades
+    bool applySqlUpgradeCommandToDatabase(QString sqlUpgradeCommand);
+
+    /// Retorna el XML a aplicar per actualitzar la base de dades
+    QString getUpgradeDatabaseRevisionXmlData();
 
 private:
     /// Diàleg de progrés per les operacions costoses

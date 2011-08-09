@@ -430,6 +430,15 @@ int LocalDatabaseManager::getDatabaseRevision()
     return databaseRevision;
 }
 
+void LocalDatabaseManager::setDatabaseRevision(int databaseRevision)
+{
+    DatabaseConnection dbConnect;
+    LocalDatabaseUtilDAL utilDAL(&dbConnect);
+
+    utilDAL.updateDatabaseRevision(databaseRevision);
+    setLastError(utilDAL.getLastError());
+}
+
 bool LocalDatabaseManager::thereIsAvailableSpaceOnHardDisk()
 {
     HardDiskInformation hardDiskInformation;

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<upgradeDatabase minimumDatabaseRevisionRequired="6516">
+    <upgradeDatabaseToRevision updateToRevision="7575">
+        <upgradeCommand>ALTER TABLE STUDY ADD COLUMN RetrievedPACSIP TEXT</upgradeCommand>
+        <upgradeCommand>ALTER TABLE STUDY ADD COLUMN RetrievedPACSQueryPort INTEGER</upgradeCommand>
+    </upgradeDatabaseToRevision>
+</upgradeDatabase>

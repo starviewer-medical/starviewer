@@ -9,7 +9,6 @@
         <file>../interface/interface_ca_ES.qm</file>
         <file>../interface/interface_en_GB.qm</file>
         <file>../interface/interface_es_ES.qm</file>
-        <file>cache/database.sql</file>
         <file>images/addNewPrinter.png</file>
         <file>images/advancedSearch.png</file>
         <file>images/airbrush.png</file>
@@ -124,5 +123,7 @@
         <file>xmlSchemes/DICOMDumpDefaultTags.xml</file>
         <file>xmlSchemes/CustomWindowLevels.xml</file>
         <file>images/magictool.png</file>
+        <file>cache/upgradeDatabase.xml</file>
+        <file>cache/database.sql</file>
     </qresource>
 </RCC>

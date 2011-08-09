@@ -11,7 +11,7 @@ CREATE TABLE DatabaseRevision
 
 -- IMPORTANT!!! Cal canviar el número de revisió per un de superior cada vegada que es faci un canvi a aquest fitxer i calgui
 -- que la BD s'actualitzi
-INSERT INTO DatabaseRevision (Revision) VALUES ('6516');
+INSERT INTO DatabaseRevision (Revision) VALUES ('7575');
 
 CREATE TABLE Patient
 ( 
@@ -40,7 +40,9 @@ CREATE TABLE Study
   LastAccessDate                TEXT,
   RetrievedDate                 TEXT,
   RetrievedTime                 TEXT,
-  State                         INTEGER	
+  State                         INTEGER,
+  RetrievedPACSIP               TEXT,
+  RetrievedPACSQueryPort        INTEGER  
 );
 
 CREATE TABLE Series
