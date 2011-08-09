@@ -144,6 +144,42 @@ PacsDevice PacsDeviceManager::getPACSDeviceByID(const QString &pacsIDString)
     return pacs;
 }
 
+PacsDevice PacsDeviceManager::getPACSDeviceByAddressAndQueryPort(QString address, int queryRetrieveServicePort)
+{
+    PacsDevice pacsDeviceToReturn;
+
+    foreach(PacsDevice pacs, getPACSList())
+    {
+        if (address == pacs.getAddress() && queryRetrieveServicePort == pacs.getQueryRetrieveServicePort())
+        {
+            pacsDeviceToReturn = pacs;
+            break;
+        }
+    }
+
+    if (pacsDeviceToReturn.isEmpty())
+    {
+        ERROR_LOG(QString("No existeix cap PACS amb aquest adreca: %1, port query: %2").arg(address, queryRetrieveServicePort));
+    }
+
+    return pacsDeviceToReturn;
+}
+
+QList<PacsDevice> PacsDeviceManager::removeDuplicatePACS(QList<PacsDevice> pacsDeviceList)
+{
+    QList<PacsDevice> pacsDeviceListWithoutDuplicates;
+
+    foreach (PacsDevice pacs, pacsDeviceList)
+    {
+        if (!pacsDeviceListWithoutDuplicates.contains(pacs))
+        {
+            pacsDeviceListWithoutDuplicates.append(pacs);
+        }
+    }
+
+    return pacsDeviceListWithoutDuplicates;
+}
+
 bool PacsDeviceManager::isPACSConfigured(const PacsDevice &pacs)
 {
     QList<PacsDevice> pacsList = getPACSList();
@@ -229,5 +265,4 @@ PacsDevice PacsDeviceManager::keyValueMapToPacsDevice(const Settings::KeyValueMa
 
     return pacsDevice;
 }
-
 };
