@@ -9,6 +9,8 @@
 namespace udg {
 
 class DicomMask;
+class PacsDevice;
+class DICOMSource;
 
 /**
     Aquesta classe s'encarrega de dur a terme les operacions relacionades amb l'objecte estudi de la cache de l'aplicació.
@@ -68,6 +70,15 @@ private:
 
     /// Emplena un objecte Patient a partir de la fila passada per paràmetre
     Patient* fillPatient(char **reply, int row, int columns);
+
+    /// Emplena un objecte DICOM Source a partir de fila passat per paràmetre
+    DICOMSource fillDICOMSource(char **reply, int row, int columns);
+
+    /// Retorna de quin PACS s'ha descarregat l'estudi, si no s'ha pogut obtenir retorna un PacsDevice buit
+    PacsDevice getRetrievedPACS(Study *study);
+
+    /// Retorna el port del PACSDevice com a QString si el pacs no té port de query configurat retorna el text "NULL" per a que el camp tingui el valor null
+    QString ConvertPACSQueryPortToDatabaseNullableInteger(PacsDevice pacsDevice);
 };
 }
 
