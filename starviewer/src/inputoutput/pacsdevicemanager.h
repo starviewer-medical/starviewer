@@ -43,6 +43,13 @@ public:
     /// @return Les dades del PACS si existeix algun amb aquest ID, sinó tindrem un objecte buit
     PacsDevice getPACSDeviceByID(const QString &pacsID);
 
+    /// Retorna un PACS a partir de la seva adreça i port.
+    /// Si en trobar més d'un retorna el primer que troba. En teoria no s'hauria de donar aquest cas
+    PacsDevice getPACSDeviceByAddressAndQueryPort(QString address, int queryPort);
+
+    /// Retorna la llista sense PACS duplicats
+    static QList<PacsDevice> removeDuplicatePACS(QList<PacsDevice> pacsDeviceList);
+
 private:
     /// Comprova si el PACS passat per paràmetre es troba o no dins de la llista de PACS configurats
     /// @param pacs PACS a comprovar
