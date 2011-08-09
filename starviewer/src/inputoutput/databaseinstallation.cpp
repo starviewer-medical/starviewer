@@ -11,6 +11,8 @@
 #include "deletedirectory.h"
 #include "localdatabasemanager.h"
 #include "starviewerapplication.h"
+#include "upgradedatabasexmlparser.h"
+#include "upgradedatabaserevisioncommands.h"
 
 namespace udg {
 
@@ -121,15 +123,31 @@ bool DatabaseInstallation::checkDatabaseRevision()
     if (localDatabaseManager.getDatabaseRevision() != StarviewerDatabaseRevisionRequired)
     {
         INFO_LOG("La revisio actual de la base de dades es " + QString().setNum(localDatabaseManager.getDatabaseRevision()) + " per aquesta versio d'" +
-                 ApplicationNameString + " és necessaria la " + QString().setNum(StarviewerDatabaseRevisionRequired) +
+                 ApplicationNameString + " es necessaria la " + QString().setNum(StarviewerDatabaseRevisionRequired) +
                  ", es procedira a actualitzar la base de dades");
 
-        return updateDatabaseRevision();
+        if (canBeUpgradedDatabase())
+        {
+            if (!upgradeDatabase())
+            {
+                ERROR_LOG("S'ha produit un error al actualtizar la base de dades, es procedira a reinstal.lar la base de dades");
+                return recreateDatabase();
+            }
+        }
+        else
+        {
+            UpgradeDatabaseXMLParser upgradeDatabaseXMLParser(getUpgradeDatabaseRevisionXmlData());
+            INFO_LOG("La base de dades actual no es actualitzable. Versio minima necessaria : " +
+                     QString::number(upgradeDatabaseXMLParser.getMinimumDatabaseRevisionRequiredToUpgrade())
+                      + ", versio de la base de dades actual: " + QString::number(localDatabaseManager.getDatabaseRevision()));
+            INFO_LOG("Es procedira a reinstal.lar la base de dades");
+
+            return recreateDatabase();
+        }
+
     }
-    else
-    {
-        return true;
-    }
+
+    return true;
 }
 
 bool DatabaseInstallation::isDatabaseFileWritable()
@@ -185,7 +203,7 @@ bool DatabaseInstallation::removeCacheAndReinstallDatabase()
     return reinstallDatabase();
 }
 
-bool DatabaseInstallation::updateDatabaseRevision()
+bool DatabaseInstallation::recreateDatabase()
 {
     bool status;
 
@@ -204,6 +222,58 @@ bool DatabaseInstallation::updateDatabaseRevision()
     }
 
     return status;
+}
+
+bool DatabaseInstallation::upgradeDatabase()
+{
+    UpgradeDatabaseXMLParser upgradeDatabaseXMLParser(getUpgradeDatabaseRevisionXmlData());
+    UpgradeDatabaseRevisionCommands upgradeDatabaseRevisionCommands = upgradeDatabaseXMLParser.getUpgradeDatabaseRevisionCommands(LocalDatabaseManager().getDatabaseRevision());
+
+    if (upgradeDatabaseRevisionCommands.getSqlUpgradeCommands().count() == 0)
+    {
+        ERROR_LOG("No s'ha pogut llegir cap comanda d'actualitzacio de la base de dades");
+        return false;
+    }
+
+    foreach(QString sqlUpgradeCommand, upgradeDatabaseRevisionCommands.getSqlUpgradeCommands())
+    {
+        if (!applySqlUpgradeCommandToDatabase(sqlUpgradeCommand))
+        {
+            return false;
+        }
+    }
+
+    LocalDatabaseManager localDatabaseManager;
+    localDatabaseManager.setDatabaseRevision(upgradeDatabaseRevisionCommands.getUpgradeToDatabaseRevision());
+
+    if (localDatabaseManager.getLastError() == LocalDatabaseManager::Ok)
+    {
+        INFO_LOG(QString("Base de dades actualitzada a la revisio %1").arg(upgradeDatabaseRevisionCommands.getUpgradeToDatabaseRevision()));
+    }
+    else
+    {
+        ERROR_LOG(QString("Error al actualitzar la nase de dades a la revisio %1").arg(upgradeDatabaseRevisionCommands.getUpgradeToDatabaseRevision()));
+        return false;
+    }
+
+    return true;
+}
+
+bool DatabaseInstallation::applySqlUpgradeCommandToDatabase(QString sqlUpgradeCommand)
+{
+    DatabaseConnection databaseConnection;
+
+    sqlite3_exec(databaseConnection.getConnection(), qPrintable(sqlUpgradeCommand), 0, 0, 0);
+
+    if (databaseConnection.getLastErrorCode() != SQLITE_OK)
+    {
+        ERROR_LOG(QString("No s'ha pogut aplicar la comanda d'actualitzacio %1, Descripcio error: %2") .arg(databaseConnection.getLastErrorMessage(), sqlUpgradeCommand));
+        return false;
+    }
+
+    INFO_LOG("S'ha aplicat la comanda d'actualitzacio a la base de dades : " + sqlUpgradeCommand);
+
+    return true;
 }
 
 bool DatabaseInstallation::existsLocalImagePath()
@@ -298,6 +368,32 @@ bool DatabaseInstallation::createDatabaseFile()
         ERROR_LOG("No s'ha pogut crear la base de dades");
         return false;
     }
+}
+
+bool DatabaseInstallation::canBeUpgradedDatabase()
+{
+    int minimumDatabaseRevisionRequired = UpgradeDatabaseXMLParser(getUpgradeDatabaseRevisionXmlData()).getMinimumDatabaseRevisionRequiredToUpgrade();
+
+    if (minimumDatabaseRevisionRequired < 0)
+    {
+        ERROR_LOG("No s'ha pogut obtenir quina és la versió mínima requerida de base de dades");
+        return false;
+    }
+
+    return minimumDatabaseRevisionRequired <= LocalDatabaseManager().getDatabaseRevision();
+}
+
+QString DatabaseInstallation::getUpgradeDatabaseRevisionXmlData()
+{
+    QFile file(":cache/upgradeDatabase.xml");
+
+    if (!file.open(QFile::ReadOnly | QFile::Text))
+    {
+        ERROR_LOG("No s'ha trobat el fitxer per actualitzar la base de dades");
+        return NULL;
+    }
+
+    return file.readAll();
 }
 
 void DatabaseInstallation::setValueProgressBar()

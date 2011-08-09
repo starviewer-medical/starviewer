@@ -82,7 +82,9 @@ HEADERS += databaseconnection.h \
     echotopacs.h \
     gdcmanonymizerstarviewer.h \
     dicomanonymizer.h \
-    dicommasktodcmdataset.h
+    dicommasktodcmdataset.h \
+    upgradedatabaserevisioncommands.h \
+    upgradedatabasexmlparser.h
 SOURCES += databaseconnection.cpp \
     pacsdevicemanager.cpp \
     pacsconnection.cpp \
@@ -141,7 +143,9 @@ SOURCES += databaseconnection.cpp \
     echotopacs.cpp \
     gdcmanonymizerstarviewer.cpp \
     dicomanonymizer.cpp \
-    dicommasktodcmdataset.cpp
+    dicommasktodcmdataset.cpp \
+    upgradedatabaserevisioncommands.cpp \
+    upgradedatabasexmlparser.cpp
 INCLUDEPATH += ../core
 DEPENDPATH += ../core
 TEMPLATE = lib

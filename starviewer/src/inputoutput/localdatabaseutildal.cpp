@@ -66,9 +66,24 @@ int LocalDatabaseUtilDAL::getDatabaseRevision()
     }
 }
 
+void LocalDatabaseUtilDAL::updateDatabaseRevision(int databaseRevision)
+{
+    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlUpdateDatabaseRevision(databaseRevision)), 0, 0, 0);
+
+    if (getLastError() != SQLITE_OK)
+    {
+        logError(buildSqlUpdateDatabaseRevision(databaseRevision));
+    }
+}
+
 QString LocalDatabaseUtilDAL::buildSqlGetDatabaseRevision()
 {
     return "select * from DatabaseRevision";
+}
+
+QString LocalDatabaseUtilDAL::buildSqlUpdateDatabaseRevision(int databaseRevision)
+{
+    return "Update DatabaseRevision Set Revision = " + QString::number(databaseRevision);
 }
 
 }
