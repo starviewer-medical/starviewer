@@ -6,6 +6,8 @@
 #include <QMenu>
 #include <QList>
 
+#include "dicomsource.h"
+
 // Forward declarations
 class QString;
 
@@ -17,7 +19,6 @@ class Patient;
 class Series;
 class Image;
 class DicomMask;
-class DICOMSource;
 
 /**
     Aquesta classe mostrar estudis i sèries d'una manera organitzada i fàcilment.
@@ -25,6 +26,10 @@ class DICOMSource;
     La classe manté la llista d'Study/Series/Image que se l'insereixen, i s'eliminen al invocar el mètode clean de la classe, per tant cal recordar
     que les classes que n'invoquin mètodes ue retornen punters a Study/Series/Image seran responsables de fer-ne una còpia si necessiten
     mantenir l'objecte viu una vegada fet un clean.
+
+    Aquesta classe té dos comportaments en funció de setUseDICOMSourceToDiscriminateStudies, que ens permet establir si s'han de discriminar els estudis a part de amb el UID
+    per DICOMSource també. En funció del lo establert es considerarà els estudis amb els mateix UID però diferent DICOMSource com un mateix estudi (duplicats) o s'els considesrarà
+    com estudis diferents.
 */
 class QStudyTreeWidget : public QWidget, private Ui::QStudyTreeWidgetBase {
 Q_OBJECT
@@ -38,7 +43,13 @@ public:
 
     QStudyTreeWidget(QWidget *parent = 0);
 
-    /// Mostrar els estudis passats per paràmetres. Si algun dels estudis ja existeix en sobreescriu la informació
+    /// Indica si s'ha d'utilitzar el DICOMSource a part del InstanceUID per discriminar els estudis i considerar-lo dusplicats. Per defecte s'utilitza el DICOMSource per
+    /// discrimnar els estudis
+    void setUseDICOMSourceToDiscriminateStudies(bool discrimateStudiesByDicomSource);
+    bool getUseDICOMSourceToDiscriminateStudies();
+
+    /// Mostrar els estudis passats per paràmetres. Si algun dels estudis ja existeix en sobreescriu la informació. En funció del valor establert per setUseDICOMSourceToDiscriminateStudies
+    /// estudis amb el mateix UID però diferent DICOMSource es podran considerar duplicats
     void insertPatientList(QList<Patient*> patientList);
 
     /// Insereix el pacient al QStudyTreeWiget. Si el pacient amb aquell estudi ja existeix en sobreescriu la informació
@@ -51,11 +62,11 @@ public:
     void insertImageList(const QString &studyInstanceUID, const QString &seriesInstanceUID, QList<Image*> imageList);
 
     /// Removes study from the list
-    void removeStudy(const QString &studyInstanceUIDToRemove, const DICOMSource &dicomSourceStudyToRemove);
+    void removeStudy(const QString &studyInstanceUIDToRemove, const DICOMSource &dicomSourceStudyToRemove = DICOMSource());
 
     /// Esborra la sèrie del QStudyTreeWidget, si és l'única sèrie de l'estudi també esborra l'estudi, no té sentit tenir una estudi sense
     ///  series al TreeWidget
-    void removeSeries(const QString &studyInstanceUIDToRemove, const QString &seriesInstanceUIDToRemove, const DICOMSource &dicomSourceSeriesToRemove);
+    void removeSeries(const QString &studyInstanceUIDToRemove, const QString &seriesInstanceUIDToRemove, const DICOMSource &dicomSourceSeriesToRemove = DICOMSource());
 
     /// Per cada element seleccionat Study/Series/Imatge retorna la seva DicomMask. Si tenim el cas que tenim seleccionat un estudi, i d'aquest estudi tenim
     /// seleccionada dos sèries o alguna de les imatges només ens retonarà l'estudi, ja que l'acció que s'hagi de fer sobre els elements seleccionats
@@ -78,8 +89,8 @@ public:
     /// Retorna l'estudi/series que tingui el UID i el DICOMSource passat per paràmetre. L'objecte retornat es destruirà quan s'invoqui el mètode
     /// clean d'aquesta classe, per tant si aquest objecte pot ser utilitzat després d'invocar el mètode clean és responsabilitat de la classe que el cridi
     /// fer-ne una còpia
-    Study* getStudy(const QString &studyInstanceUID, const DICOMSource &dicomSourceOfStudy);
-    Series* getSeries(const QString &studyInstanceUID, const QString &seriesInstanceUID, const DICOMSource &dicomSourceOfSeries);
+    Study* getStudy(const QString &studyInstanceUID, const DICOMSource &dicomSourceOfStudy = DICOMSource());
+    Series* getSeries(const QString &studyInstanceUID, const QString &seriesInstanceUID, const DICOMSource &dicomSourceOfSeries = DICOMSource());
 
     /// Estableix el menú contextual del Widget
     void setContextMenu(QMenu *contextMenu);
@@ -93,7 +104,7 @@ public:
 
 public slots:
     /// Indique que ens marqui la sèrie amb el uid passat per paràmetre com a seleccionada
-    void setCurrentSeries(const QString &studyInstanceUID, const QString &seriesInstanceUID, const DICOMSource &dicomSource);
+    void setCurrentSeries(const QString &studyInstanceUID, const QString &seriesInstanceUID, const DICOMSource &dicomSource = DICOMSource());
 
     /// Neteja el TreeView, i esborra els Study*/Series*/Images* inserits
     void clear();
@@ -208,6 +219,7 @@ private:
     Series *m_oldCurrentSeries;
 
     bool m_qTreeWidgetItemHasBeenDoubleClicked;
+    bool m_useDICOMSourceToDiscriminateStudies;
 
     /// Icones utilitzades com a root al TreeWidget
     QIcon m_openFolder, m_closeFolder, m_iconSeries;
