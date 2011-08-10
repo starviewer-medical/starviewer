@@ -20,6 +20,12 @@ Q_OBJECT
 
 private slots:
 
+    void insertPatient_ShouldConsiderStudiesWithSameInstanceUIDButDifferentDICOMSourceAsDuplicatedStudy_data();
+    void insertPatient_ShouldConsiderStudiesWithSameInstanceUIDButDifferentDICOMSourceAsDuplicatedStudy();
+
+    void insertPatient_ShouldConsiderStudiesWithSameInstanceUIDButDifferentDICOMSourceAsDifferentStudy_data();
+    void insertPatient_ShouldConsiderStudiesWithSameInstanceUIDButDifferentDICOMSourceAsDifferentStudy();
+
     void getStudy_ShouldReturnNull_data();
     void getStudy_ShouldReturnNull();
 
@@ -64,6 +70,64 @@ void test_QStudyTreeWidget::cleanupTestCase()
 {
     m_qstudyTreeWidget->clear();
     delete m_qstudyTreeWidget;
+}
+
+void test_QStudyTreeWidget::insertPatient_ShouldConsiderStudiesWithSameInstanceUIDButDifferentDICOMSourceAsDuplicatedStudy_data()
+{
+    QTest::addColumn<QList<Patient*> >("inputPatients");
+    QTest::addColumn<int>("numberOfExpectedStudiesInserted");
+
+    Patient *patientOne = PatientTestHelper::create(1);
+    patientOne->setID("1");
+    patientOne->getStudies().at(0)->setDICOMSource(DICOMSourceTestHelper::createAndAddPACSByID("1"));
+    patientOne->getStudies().at(0)->setInstanceUID("1");
+
+    Patient *patientTwo = PatientTestHelper::create(1);
+    patientTwo->setID("1");
+    patientTwo->getStudies().at(0)->setDICOMSource(DICOMSourceTestHelper::createAndAddPACSByID("2"));
+    patientTwo->getStudies().at(0)->setInstanceUID("1");
+
+    QTest::newRow("Consider studies with same InstacenUID but different DICOMSource as same studies") << (QList<Patient*>() << patientOne << patientTwo) << 1;
+}
+
+void test_QStudyTreeWidget::insertPatient_ShouldConsiderStudiesWithSameInstanceUIDButDifferentDICOMSourceAsDuplicatedStudy()
+{
+    QFETCH(QList<Patient*>, inputPatients);
+    QFETCH(int, numberOfExpectedStudiesInserted);
+
+    m_qstudyTreeWidget->setUseDICOMSourceToDiscriminateStudies(false);
+
+    m_qstudyTreeWidget->insertPatientList(inputPatients);
+    QCOMPARE(m_qstudyTreeWidget->getQTreeWidget()->topLevelItemCount(), numberOfExpectedStudiesInserted);
+}
+
+void test_QStudyTreeWidget::insertPatient_ShouldConsiderStudiesWithSameInstanceUIDButDifferentDICOMSourceAsDifferentStudy_data()
+{
+    QTest::addColumn<QList<Patient*> >("inputPatients");
+    QTest::addColumn<int>("numberOfExpectedStudiesInserted");
+
+    Patient *patientOne = PatientTestHelper::create(1);
+    patientOne->setID("1");
+    patientOne->getStudies().at(0)->setDICOMSource(DICOMSourceTestHelper::createAndAddPACSByID("1"));
+    patientOne->getStudies().at(0)->setInstanceUID("1");
+
+    Patient *patientTwo = PatientTestHelper::create(1);
+    patientTwo->setID("1");
+    patientTwo->getStudies().at(0)->setDICOMSource(DICOMSourceTestHelper::createAndAddPACSByID("2"));
+    patientTwo->getStudies().at(0)->setInstanceUID("1");
+
+    QTest::newRow("Consider studies with same InstacenUID but different DICOMSource as differents studies") << (QList<Patient*>() << patientOne << patientTwo) << 2;
+}
+
+void test_QStudyTreeWidget::insertPatient_ShouldConsiderStudiesWithSameInstanceUIDButDifferentDICOMSourceAsDifferentStudy()
+{
+    QFETCH(QList<Patient*>, inputPatients);
+    QFETCH(int, numberOfExpectedStudiesInserted);
+
+    m_qstudyTreeWidget->setUseDICOMSourceToDiscriminateStudies(true);
+
+    m_qstudyTreeWidget->insertPatientList(inputPatients);
+    QCOMPARE(m_qstudyTreeWidget->getQTreeWidget()->topLevelItemCount(), numberOfExpectedStudiesInserted);
 }
 
 void test_QStudyTreeWidget::getStudy_ShouldReturnNull_data()

@@ -41,6 +41,7 @@ QInputOutputLocalDatabaseWidget::QInputOutputLocalDatabaseWidget(QWidget *parent
     m_statsWatcher->addClicksCounter(m_viewButton);
 
     m_studyTreeWidget->setMaximumExpandTreeItemsLevel(QStudyTreeWidget::SeriesLevel);
+    m_studyTreeWidget->setUseDICOMSourceToDiscriminateStudies(false);
 
     m_qwidgetSelectPacsToStoreDicomImage = new QWidgetSelectPacsToStoreDicomImage();
 
@@ -185,7 +186,7 @@ void QInputOutputLocalDatabaseWidget::addStudyToQStudyTreeWidget(QString studyUI
 
 void QInputOutputLocalDatabaseWidget::removeStudyFromQStudyTreeWidget(QString studyInstanceUID)
 {
-    m_studyTreeWidget->removeStudy(studyInstanceUID, DICOMSource());
+    m_studyTreeWidget->removeStudy(studyInstanceUID);
 }
 
 void QInputOutputLocalDatabaseWidget::requestedSeriesOfStudy(Study *study)
@@ -255,7 +256,7 @@ void QInputOutputLocalDatabaseWidget::currentSeriesOfQStudyTreeWidgetChanged(Ser
 
 void QInputOutputLocalDatabaseWidget::currentSeriesChangedOfQSeriesListWidget(const QString &studyInstanceUID, const QString &seriesInstanceUID)
 {
-    m_studyTreeWidget->setCurrentSeries(studyInstanceUID, seriesInstanceUID, DICOMSource());
+    m_studyTreeWidget->setCurrentSeries(studyInstanceUID, seriesInstanceUID);
 }
 
 void QInputOutputLocalDatabaseWidget::deleteSelectedItemsFromLocalDatabase()
@@ -278,7 +279,7 @@ void QInputOutputLocalDatabaseWidget::deleteSelectedItemsFromLocalDatabase()
                 DicomMask dicomMaskToDelete = selectedDicomMaskDICOMSoruceToDelete.at(index).first;
                 if (m_qcreateDicomdir->studyExistsInDICOMDIRList(dicomMaskToDelete.getStudyInstanceUID()))
                 {
-                    Study *studyToDelete = m_studyTreeWidget->getStudy(dicomMaskToDelete.getStudyInstanceUID(), DICOMSource());
+                    Study *studyToDelete = m_studyTreeWidget->getStudy(dicomMaskToDelete.getStudyInstanceUID());
                     QString warningMessage;
 
                     if (dicomMaskToDelete.getSeriesInstanceUID().isEmpty())
@@ -307,7 +308,7 @@ void QInputOutputLocalDatabaseWidget::deleteSelectedItemsFromLocalDatabase()
                         localDatabaseManager.deleteSeries(dicomMaskToDelete.getStudyInstanceUID(), dicomMaskToDelete.getSeriesInstanceUID());
 
                         m_seriesListWidget->removeSeries(dicomMaskToDelete.getSeriesInstanceUID());
-                        m_studyTreeWidget->removeSeries(dicomMaskToDelete.getStudyInstanceUID(), dicomMaskToDelete.getSeriesInstanceUID(), DICOMSource());
+                        m_studyTreeWidget->removeSeries(dicomMaskToDelete.getStudyInstanceUID(), dicomMaskToDelete.getSeriesInstanceUID());
                     }
                     else
                     {

@@ -40,6 +40,18 @@ QStudyTreeWidget::QStudyTreeWidget(QWidget *parent)
     m_maximumExpandTreeItemsLevel = ImageLevel;
 
     initialize();
+
+    m_useDICOMSourceToDiscriminateStudies = true;
+}
+
+void QStudyTreeWidget::setUseDICOMSourceToDiscriminateStudies(bool discrimateStudiesByDicomSource)
+{
+    m_useDICOMSourceToDiscriminateStudies = discrimateStudiesByDicomSource;
+}
+
+bool QStudyTreeWidget::getUseDICOMSourceToDiscriminateStudies()
+{
+    return m_useDICOMSourceToDiscriminateStudies;
 }
 
 void QStudyTreeWidget::createConnections()
@@ -339,7 +351,8 @@ QTreeWidgetItem* QStudyTreeWidget::getStudyQTreeWidgetItem(const QString &studyU
 
     foreach(QTreeWidgetItem *studyItem, qTreeWidgetItemsStudy)
     {
-        if (isItemStudy(studyItem) && getStudyByDICOMItemID(studyItem->text(DICOMItemID).toInt())->getDICOMSource() == studyDICOMSource)
+        if (isItemStudy(studyItem) &&
+            (getStudyByDICOMItemID(studyItem->text(DICOMItemID).toInt())->getDICOMSource() == studyDICOMSource || !m_useDICOMSourceToDiscriminateStudies))
         {
             return studyItem;
         }
