@@ -36,3 +36,4 @@ src/main/Info.plist
 tests/auto/*.log
 tests/auto/autotests
 tests/auto/autotests.exe
+tests/auto/autotests.exp
