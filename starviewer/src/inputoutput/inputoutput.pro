@@ -8,7 +8,6 @@ TRANSLATIONS += inputoutput_ca_ES.ts \
 FORMS += qconfigurationscreenbase.ui \
     qpacslistbase.ui \
     qstudytreewidgetbase.ui \
-    qserieslistwidgetbase.ui \
     qcreatedicomdirbase.ui \
     qoperationstatescreenbase.ui \
     queryscreenbase.ui \
@@ -22,7 +21,9 @@ FORMS += qconfigurationscreenbase.ui \
     qinputoutputpacswidgetbase.ui \
     qdicomdirconfigurationscreenbase.ui \
     qwidgetselectpacstostoredicomimagebase.ui \
-    qexporterbase.ui
+    qexporterbase.ui \
+    qserieslistwidgetbase.ui \
+    qthumbnailsspreviewwidgetbase.ui
 HEADERS += databaseconnection.h \
     pacsdevicemanager.h \
     pacsconnection.h \
@@ -84,7 +85,8 @@ HEADERS += databaseconnection.h \
     dicomanonymizer.h \
     dicommasktodcmdataset.h \
     upgradedatabaserevisioncommands.h \
-    upgradedatabasexmlparser.h
+    upgradedatabasexmlparser.h \
+    qthumbnailspreviewwidget.h
 SOURCES += databaseconnection.cpp \
     pacsdevicemanager.cpp \
     pacsconnection.cpp \
@@ -145,7 +147,8 @@ SOURCES += databaseconnection.cpp \
     dicomanonymizer.cpp \
     dicommasktodcmdataset.cpp \
     upgradedatabaserevisioncommands.cpp \
-    upgradedatabasexmlparser.cpp
+    upgradedatabasexmlparser.cpp \
+    qthumbnailspreviewwidget.cpp
 INCLUDEPATH += ../core
 DEPENDPATH += ../core
 TEMPLATE = lib
