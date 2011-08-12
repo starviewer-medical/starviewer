@@ -7,34 +7,18 @@
 
 namespace udg {
 
-QSeriesListWidget::QSeriesListWidget(QWidget *parent)
- : QWidget(parent)
+QSeriesListWidget::QSeriesListWidget(QWidget *parent) : QWidget(parent)
 {
     setupUi(this);
-    QSize size;
-
-    // Definim la mida de la imatge que mostrem
-    size.setHeight(scaledSeriesSizeY);
-    size.setWidth(scaledSeriesSizeX);
-    m_seriesListWidget->setIconSize(size);
-
-    createConnections();
-
     m_nonDicomImageSeriesList << "KO" << "PR" << "SR";
     m_lastInsertedImageRow = -1;
-}
 
-void QSeriesListWidget::createConnections()
-{
-    connect(m_seriesListWidget, SIGNAL(itemClicked (QListWidgetItem *)), SLOT(clicked(QListWidgetItem *)));
-    connect(m_seriesListWidget, SIGNAL(itemDoubleClicked (QListWidgetItem *)), SLOT(view(QListWidgetItem *)));
+    createConnections();
 }
 
 void QSeriesListWidget::insertSeries(QString studyInstanceUID, Series *series)
 {
-    QString text, num;
-    QListWidgetItem *item = new QListWidgetItem();
-    QString statusTip;
+    QString text;
 
     text = tr(" Series ") + series->getSeriesNumber();
     // Si hi ha descripció la inserim
@@ -66,16 +50,6 @@ void QSeriesListWidget::insertSeries(QString studyInstanceUID, Series *series)
         }
     }
 
-    QIcon icon(series->getThumbnail());
-
-    item->setText(text);
-    item->setIcon(icon);
-    item->setToolTip(text);
-
-    // A l'status Tip de cada item es guarda la UID de la serie, ja que aquest camp no el vull mostrar i no tinc
-    // enlloc per amagar-lo, ho utilitzo per identificar la sèrie
-    item->setStatusTip(series->getInstanceUID());
-
     // Guardem per la sèrie a quin estudi pertany
     m_HashSeriesStudy[series->getInstanceUID()] = studyInstanceUID;
 
@@ -83,82 +57,24 @@ void QSeriesListWidget::insertSeries(QString studyInstanceUID, Series *series)
     // Comprovem la posició que hem d'inserir la sèrie, si és un DICOM Non-Image (no és una imatge) val final, sinó va després de la última imatge inserida
     if (m_nonDicomImageSeriesList.contains(series->getModality()))
     {
-        m_seriesListWidget->addItem(item);
+        m_seriesThumbnailsPreviewWidget->append(series->getInstanceUID(), series->getThumbnail(), text);
     }
     else
     {
         // És una imatge
         m_lastInsertedImageRow++;
-        m_seriesListWidget->insertItem(m_lastInsertedImageRow, item);
-    }
-}
-
-void QSeriesListWidget::setCurrentSeries(const QString &seriesUID)
-{
-    int index = 0;
-    bool stop = false;
-    QList<QListWidgetItem*> llistaSeries = m_seriesListWidget->findItems ("", Qt::MatchContains);
-
-    while (!stop && index < llistaSeries.count())
-    {
-        if (llistaSeries.at(index)->statusTip() == seriesUID)
-        {
-            stop = true;
-        }
-        else
-        {
-            index++;
-        }
-    }
-    if (stop)
-    {
-        m_seriesListWidget->setCurrentItem(llistaSeries.at(index));
+        m_seriesThumbnailsPreviewWidget->insert(m_lastInsertedImageRow, series->getInstanceUID(), series->getThumbnail(), text);
     }
 }
 
 void QSeriesListWidget::removeSeries(const QString &seriesInstanceUID)
 {
-    int index = 0;
-    bool stop = false;
-    QList<QListWidgetItem*> llistaSeries = m_seriesListWidget->findItems("", Qt::MatchContains);
-
-    while (!stop && index < llistaSeries.count())
-    {
-        if (llistaSeries.at(index)->statusTip() == seriesInstanceUID)
-        {
-            stop = true;
-        }
-        else
-        {
-            index++;
-        }
-    }
-
-    if (stop)
-    {
-        delete llistaSeries.at(index);
-    }
-}
-
-void QSeriesListWidget::clicked(QListWidgetItem *item)
-{
-    if (item != NULL)
-    {
-        emit(selectedSeriesIcon(getCurrentStudyUID(), item->statusTip()));
-    }
-}
-
-void QSeriesListWidget::view(QListWidgetItem *item)
-{
-    if (item != NULL)
-    {
-        emit(viewSeriesIcon());
-    }
+    m_seriesThumbnailsPreviewWidget->remove(seriesInstanceUID);
 }
 
 QString QSeriesListWidget::getCurrentSeriesUID()
 {
-    return m_seriesListWidget->currentItem()->statusTip();
+    return m_seriesThumbnailsPreviewWidget->getSelectedThumbnailID();
 }
 
 QString QSeriesListWidget::getCurrentStudyUID()
@@ -166,17 +82,34 @@ QString QSeriesListWidget::getCurrentStudyUID()
     return m_HashSeriesStudy[getCurrentSeriesUID()];
 }
 
+void QSeriesListWidget::setCurrentSeries(const QString &seriesUID)
+{
+    m_seriesThumbnailsPreviewWidget->setCurrentThumbnail(seriesUID);
+}
+
 void QSeriesListWidget::clear()
 {
-    m_seriesListWidget->clear();
+    m_seriesThumbnailsPreviewWidget->clear();
     m_HashSeriesStudy.clear();
-
     // Indiquem que la última imatge insertada està a la posició 0 perquè hem un clear
     m_lastInsertedImageRow = -1;
 }
 
-QSeriesListWidget::~QSeriesListWidget()
+void QSeriesListWidget::createConnections()
 {
+    connect(m_seriesThumbnailsPreviewWidget, SIGNAL(thumbnailClicked(QString)), this, SLOT(seriesClicked(QString)));
+    connect(m_seriesThumbnailsPreviewWidget, SIGNAL(thumbnailDoubleClicked(QString)), this, SLOT(seriesDoubleClicked(QString)));
 }
 
-};
+void QSeriesListWidget::seriesClicked(QString IDThumbnail)
+{
+    emit(selectedSeriesIcon(getCurrentStudyUID(), IDThumbnail));
+}
+
+void QSeriesListWidget::seriesDoubleClicked(QString IDThumbnail)
+{
+    Q_UNUSED(IDThumbnail)
+    emit(viewSeriesIcon());
+}
+
+}

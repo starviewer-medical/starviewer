@@ -2,18 +2,9 @@
 #define UDGSERIESLISTWIDGET_H
 
 #include "ui_qserieslistwidgetbase.h"
-#include <QWidget>
-#include <QHash>
-#include <QStringList>
-
 namespace udg {
 
 class Series;
-
-/// Mida de la imatge escalada a l'eix x
-const int scaledSeriesSizeX = 100;
-/// Mida de la imatge escalada a l'eix y
-const int scaledSeriesSizeY = 100;
 
 /**
     Aquesta classe és un widget millorat del ListWidget de QT, fet  modificat per poder mostrar les sèries d'un estudi.
@@ -24,8 +15,8 @@ public:
     /// Constructor de la classe
     QSeriesListWidget(QWidget *parent = 0);
 
-    /// Destructor de la classe
-    ~QSeriesListWidget();
+    /// Insereix l'informació d'una sèrie
+    void insertSeries(QString studyInstanceUID, Series *series);
 
     QString getCurrentSeriesUID();
 
@@ -39,19 +30,7 @@ public slots:
     /// Estableix quina és la série seleccionada
     void setCurrentSeries(const QString &seriesUID);
 
-    /// Neteja el ListWidget de sèries
     void clear();
-
-    /// Insereix l'informació d'una sèrie
-    void insertSeries(QString studyInstanceUID, Series *series);
-
-    /// Slot que s'activa quant es selecciona una serie, emiteix signal a QStudyTreeWidget, perquè selecciona la mateixa serie que el QSeriesListWidget
-    ///  @param serie Seleccionada
-    void clicked(QListWidgetItem *item);
-
-    /// Slot que s'activa quant es fa doblec
-    ///  @param item de la serie Seleccionada
-    void view(QListWidgetItem *item);
 
 signals:
     /// Quan seleccionem una sèrie emeiteix una signal per a que el QStudyTreeWidget, tingui seleccionada la mateixa sèrie
@@ -61,15 +40,24 @@ signals:
     void viewSeriesIcon();
 
 private:
+    /// Crea les connexions
+    void createConnections();
+
+private slots:
+    /// Slot que s'activa quan s'ha fet click sobre un thumbnail
+    void seriesClicked(QString IDThumbnail);
+
+    /// Slot que s'activa quan s'ha fet doble click sobre un thumbnail
+    void seriesDoubleClicked(QString IDThumbnail);
+
+private:
+
     /// Guardem per cada sèrie a quin estudi pertany
     QHash<QString, QString> m_HashSeriesStudy;
     /// Modalitats de sèries que no són images, com (KO, PR, SR)
     QStringList m_nonDicomImageSeriesList;
     // Indica a quina ha estat la última fila que hem inseritat una sèrie que era una imatge
     int m_lastInsertedImageRow;
-
-    /// Crea les connexions dels signals i slots
-    void createConnections();
 
 };
 
