@@ -1,4 +1,4 @@
-#include "qserieslistwidget.h"
+#include "qseriesthumbnailpreviewwidget.h"
 
 #include <QString>
 
@@ -6,7 +6,7 @@
 
 namespace udg {
 
-QSeriesListWidget::QSeriesListWidget(QWidget *parent)
+QSeriesThumbnailPreviewWidget::QSeriesThumbnailPreviewWidget(QWidget *parent)
     : QWidget(parent)
 {
     setupUi(this);
@@ -16,7 +16,7 @@ QSeriesListWidget::QSeriesListWidget(QWidget *parent)
     createConnections();
 }
 
-void QSeriesListWidget::insertSeries(QString studyInstanceUID, Series *series)
+void QSeriesThumbnailPreviewWidget::insertSeries(QString studyInstanceUID, Series *series)
 {
     QString seriesThumbnailDescription = getSeriesThumbnailDescription(series);
     m_studyInstanceUIDBySeriesInstanceUID[series->getInstanceUID()] = studyInstanceUID;
@@ -34,17 +34,17 @@ void QSeriesListWidget::insertSeries(QString studyInstanceUID, Series *series)
     }
 }
 
-void QSeriesListWidget::removeSeries(const QString &seriesInstanceUID)
+void QSeriesThumbnailPreviewWidget::removeSeries(const QString &seriesInstanceUID)
 {
     m_seriesThumbnailsPreviewWidget->remove(seriesInstanceUID);
 }
 
-void QSeriesListWidget::setCurrentSeries(const QString &seriesUID)
+void QSeriesThumbnailPreviewWidget::setCurrentSeries(const QString &seriesUID)
 {
     m_seriesThumbnailsPreviewWidget->setCurrentThumbnail(seriesUID);
 }
 
-void QSeriesListWidget::clear()
+void QSeriesThumbnailPreviewWidget::clear()
 {
     m_seriesThumbnailsPreviewWidget->clear();
     m_studyInstanceUIDBySeriesInstanceUID.clear();
@@ -52,13 +52,13 @@ void QSeriesListWidget::clear()
     m_positionOfLastInsertedThumbnail = -1;
 }
 
-void QSeriesListWidget::createConnections()
+void QSeriesThumbnailPreviewWidget::createConnections()
 {
     connect(m_seriesThumbnailsPreviewWidget, SIGNAL(thumbnailClicked(QString)), this, SLOT(seriesClicked(QString)));
     connect(m_seriesThumbnailsPreviewWidget, SIGNAL(thumbnailDoubleClicked(QString)), this, SLOT(seriesDoubleClicked(QString)));
 }
 
-QString QSeriesListWidget::getSeriesThumbnailDescription(Series *series)
+QString QSeriesThumbnailPreviewWidget::getSeriesThumbnailDescription(Series *series)
 {
     QString thumbnailDescription;
     thumbnailDescription = tr(" Series ") + series->getSeriesNumber();
@@ -94,12 +94,12 @@ QString QSeriesListWidget::getSeriesThumbnailDescription(Series *series)
     return thumbnailDescription;
 }
 
-void QSeriesListWidget::seriesClicked(QString IDThumbnail)
+void QSeriesThumbnailPreviewWidget::seriesClicked(QString IDThumbnail)
 {
     emit(seriesThumbnailClicked(m_studyInstanceUIDBySeriesInstanceUID[IDThumbnail], IDThumbnail));
 }
 
-void QSeriesListWidget::seriesDoubleClicked(QString IDThumbnail)
+void QSeriesThumbnailPreviewWidget::seriesDoubleClicked(QString IDThumbnail)
 {
     emit(seriesThumbnailDoubleClicked(m_studyInstanceUIDBySeriesInstanceUID[IDThumbnail], IDThumbnail));
 }
