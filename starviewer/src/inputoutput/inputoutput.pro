@@ -22,7 +22,7 @@ FORMS += qconfigurationscreenbase.ui \
     qdicomdirconfigurationscreenbase.ui \
     qwidgetselectpacstostoredicomimagebase.ui \
     qexporterbase.ui \
-    qserieslistwidgetbase.ui \
+    qseriesthumbnailpreviewwidgetbase.ui \
     qthumbnailsspreviewwidgetbase.ui
 HEADERS += databaseconnection.h \
     pacsdevicemanager.h \
@@ -40,7 +40,7 @@ HEADERS += databaseconnection.h \
     qconfigurationscreen.h \
     qpacslist.h \
     qstudytreewidget.h \
-    qserieslistwidget.h \
+    qseriesthumbnailpreviewwidget.h \
     qcreatedicomdir.h \
     qoperationstatescreen.h \
     queryscreen.h \
@@ -103,7 +103,7 @@ SOURCES += databaseconnection.cpp \
     qconfigurationscreen.cpp \
     qpacslist.cpp \
     qstudytreewidget.cpp \
-    qserieslistwidget.cpp \
+    qseriesthumbnailpreviewwidget.cpp \
     qcreatedicomdir.cpp \
     qoperationstatescreen.cpp \
     queryscreen.cpp \

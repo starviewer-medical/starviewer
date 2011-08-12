@@ -1,7 +1,7 @@
-#ifndef UDGSERIESLISTWIDGET_H
-#define UDGSERIESLISTWIDGET_H
+#ifndef UDGQSERIESTHUMBNAILPREVIEWTWIDGET_H
+#define UDGQSERIESTHUMBNAILPREVIEWTWIDGET_H
 
-#include "ui_qserieslistwidgetbase.h"
+#include "ui_qseriesthumbnailpreviewwidgetbase.h"
 
 namespace udg {
 
@@ -10,11 +10,11 @@ class Series;
 /**
     Ens mostrar una previsualització en forma de thumbnail de les sèries passades al Widget.
   */
-class QSeriesListWidget : public QWidget, private Ui::QSeriesListWidgetBase {
+class QSeriesThumbnailPreviewWidget : public QWidget, private Ui::QSeriesThumbnailPreviewWidgetBase {
 Q_OBJECT
 public:
     /// Constructor de la classe
-    QSeriesListWidget(QWidget *parent = 0);
+    QSeriesThumbnailPreviewWidget(QWidget *parent = 0);
 
     /// Insereix l'informació d'una sèrie
     void insertSeries(QString studyInstanceUID, Series *series);

@@ -69,12 +69,12 @@ void QInputOutputLocalDatabaseWidget::createConnections()
 
     connect(m_viewButton, SIGNAL(clicked()), SLOT(viewFromQStudyTreeWidget()));
 
-    connect(m_seriesListWidget, SIGNAL(seriesThumbnailClicked(QString,QString)), this, SLOT(currentSeriesChangedOfQSeriesListWidget(QString, QString)));
-    connect(m_seriesListWidget, SIGNAL(seriesThumbnailDoubleClicked(QString,QString)), SLOT(viewFromQSeriesListWidget(QString, QString)));
+    connect(m_seriesThumbnailPreviewWidget, SIGNAL(seriesThumbnailClicked(QString,QString)), this, SLOT(currentSeriesChangedOfQSeriesListWidget(QString, QString)));
+    connect(m_seriesThumbnailPreviewWidget, SIGNAL(seriesThumbnailDoubleClicked(QString,QString)), SLOT(viewFromQSeriesListWidget(QString, QString)));
     connect(m_studyTreeWidget, SIGNAL(currentStudyChanged(Study *)), SLOT(setSeriesToSeriesListWidget(Study *)));
     connect(m_studyTreeWidget, SIGNAL(currentSeriesChanged(Series *)), SLOT(currentSeriesOfQStudyTreeWidgetChanged(Series *)));
     // Si passem de tenir un element seleccionat a no tenir-ne li diem al seriesListWidget que no mostri cap previsualització
-    connect(m_studyTreeWidget, SIGNAL(notCurrentItemSelected()), m_seriesListWidget, SLOT(clear()));
+    connect(m_studyTreeWidget, SIGNAL(notCurrentItemSelected()), m_seriesThumbnailPreviewWidget, SLOT(clear()));
 
     // Connecta amb el signal que indica que ha finalitza el thread d'esborrar els estudis vells
     connect(&m_qdeleteOldStudiesThread, SIGNAL(finished()), SLOT(deleteOldStudiesThreadFinished()));
@@ -118,7 +118,7 @@ void QInputOutputLocalDatabaseWidget::setQCreateDicomdir(QCreateDicomdir *qcreat
 void QInputOutputLocalDatabaseWidget::clear()
 {
     m_studyTreeWidget->clear();
-    m_seriesListWidget->clear();
+    m_seriesThumbnailPreviewWidget->clear();
 }
 
 void QInputOutputLocalDatabaseWidget::setPacsManager(PacsManager *pacsManager)
@@ -219,7 +219,7 @@ void QInputOutputLocalDatabaseWidget::requestedSeriesOfStudy(Study *study)
 
 void QInputOutputLocalDatabaseWidget::setSeriesToSeriesListWidget(Study *currentStudy)
 {
-    m_seriesListWidget->clear();
+    m_seriesThumbnailPreviewWidget->clear();
 
     if (!currentStudy)
     {
@@ -240,7 +240,7 @@ void QInputOutputLocalDatabaseWidget::setSeriesToSeriesListWidget(Study *current
 
     foreach (Series *series, seriesList)
     {
-        m_seriesListWidget->insertSeries(currentStudy->getInstanceUID(), series);
+        m_seriesThumbnailPreviewWidget->insertSeries(currentStudy->getInstanceUID(), series);
     }
 
     qDeleteAll(seriesList);
@@ -250,7 +250,7 @@ void QInputOutputLocalDatabaseWidget::currentSeriesOfQStudyTreeWidgetChanged(Ser
 {
     if (series)
     {
-        m_seriesListWidget->setCurrentSeries(series->getInstanceUID());
+        m_seriesThumbnailPreviewWidget->setCurrentSeries(series->getInstanceUID());
     }
 }
 
@@ -307,7 +307,7 @@ void QInputOutputLocalDatabaseWidget::deleteSelectedItemsFromLocalDatabase()
                                     .arg(dicomMaskToDelete.getSeriesInstanceUID(), dicomMaskToDelete.getStudyInstanceUID()));
                         localDatabaseManager.deleteSeries(dicomMaskToDelete.getStudyInstanceUID(), dicomMaskToDelete.getSeriesInstanceUID());
 
-                        m_seriesListWidget->removeSeries(dicomMaskToDelete.getSeriesInstanceUID());
+                        m_seriesThumbnailPreviewWidget->removeSeries(dicomMaskToDelete.getSeriesInstanceUID());
                         m_studyTreeWidget->removeSeries(dicomMaskToDelete.getStudyInstanceUID(), dicomMaskToDelete.getSeriesInstanceUID());
                     }
                     else
@@ -315,7 +315,7 @@ void QInputOutputLocalDatabaseWidget::deleteSelectedItemsFromLocalDatabase()
                         INFO_LOG(QString("L'usuari ha indicat que vol esborrar de la cache l'estudi %1").arg(dicomMaskToDelete.getStudyInstanceUID()));
                         localDatabaseManager.deleteStudy(dicomMaskToDelete.getStudyInstanceUID());
 
-                        m_seriesListWidget->clear();
+                        m_seriesThumbnailPreviewWidget->clear();
                         removeStudyFromQStudyTreeWidget(dicomMaskToDelete.getStudyInstanceUID());
                     }
 
