@@ -69,8 +69,8 @@ void QInputOutputLocalDatabaseWidget::createConnections()
 
     connect(m_viewButton, SIGNAL(clicked()), SLOT(viewFromQStudyTreeWidget()));
 
-    connect(m_seriesListWidget, SIGNAL(selectedSeriesIcon(QString, QString)), this, SLOT(currentSeriesChangedOfQSeriesListWidget(QString, QString)));
-    connect(m_seriesListWidget, SIGNAL(viewSeriesIcon()), SLOT(viewFromQSeriesListWidget()));
+    connect(m_seriesListWidget, SIGNAL(seriesThumbnailClicked(QString,QString)), this, SLOT(currentSeriesChangedOfQSeriesListWidget(QString, QString)));
+    connect(m_seriesListWidget, SIGNAL(seriesThumbnailDoubleClicked(QString,QString)), SLOT(viewFromQSeriesListWidget(QString, QString)));
     connect(m_studyTreeWidget, SIGNAL(currentStudyChanged(Study *)), SLOT(setSeriesToSeriesListWidget(Study *)));
     connect(m_studyTreeWidget, SIGNAL(currentSeriesChanged(Series *)), SLOT(currentSeriesOfQStudyTreeWidgetChanged(Series *)));
     // Si passem de tenir un element seleccionat a no tenir-ne li diem al seriesListWidget que no mostri cap previsualització
@@ -406,11 +406,11 @@ void QInputOutputLocalDatabaseWidget::viewFromQStudyTreeWidget()
     view(dicomMaskStudiesToView);
 }
 
-void QInputOutputLocalDatabaseWidget::viewFromQSeriesListWidget()
+void QInputOutputLocalDatabaseWidget::viewFromQSeriesListWidget(QString studyInstanceUID, QString seriesInstanceUID)
 {
     DicomMask studyToView;
-    studyToView.setStudyInstanceUID(m_seriesListWidget->getCurrentStudyUID());
-    studyToView.setSeriesInstanceUID(m_seriesListWidget->getCurrentSeriesUID());
+    studyToView.setStudyInstanceUID(studyInstanceUID);
+    studyToView.setSeriesInstanceUID(seriesInstanceUID);
 
     view(QList<DicomMask>() << studyToView);
 

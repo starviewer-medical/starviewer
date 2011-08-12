@@ -117,7 +117,7 @@ private slots:
     void addSelectedStudiesToCreateDicomdirList();
 
     /// Visualitza l'estudi que se li ha fet doble click QSeriesListWidget
-    void viewFromQSeriesListWidget();
+    void viewFromQSeriesListWidget(QString studyInstanceUID, QString seriesInstanceUID);
 
     /// Visualitza els estudis seleccionats a la QStudyTreeWidget
     void viewFromQStudyTreeWidget();
