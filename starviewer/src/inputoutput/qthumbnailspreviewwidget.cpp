@@ -53,9 +53,26 @@ void QThumbnailsPreviewWidget::setCurrentThumbnail(QString IDThumbnail)
     m_thumbnailsPreviewWidget->setCurrentItem(getQListWidgetItem(IDThumbnail));
 }
 
-QString QThumbnailsPreviewWidget::getSelectedThumbnailID()
+QStringList QThumbnailsPreviewWidget::getSelectedThumbnailsID()
 {
-    return m_thumbnailsPreviewWidget->currentItem()->statusTip();
+    QStringList selectedThumbnailsID;
+
+    foreach (QListWidgetItem *selectedItem, m_thumbnailsPreviewWidget->selectedItems())
+    {
+        selectedThumbnailsID.append(selectedItem->statusTip());
+    }
+
+    return selectedThumbnailsID;
+}
+
+void QThumbnailsPreviewWidget::setSelectionMode(QAbstractItemView::SelectionMode selectionMode)
+{
+    m_thumbnailsPreviewWidget->setSelectionMode(selectionMode);
+}
+
+QAbstractItemView::SelectionMode QThumbnailsPreviewWidget::getSelectionMode()
+{
+    return m_thumbnailsPreviewWidget->selectionMode();
 }
 
 void QThumbnailsPreviewWidget::itemClicked(QListWidgetItem *item)

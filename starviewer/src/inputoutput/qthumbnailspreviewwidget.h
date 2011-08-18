@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <QHash>
 #include <QStringList>
+#include <QAbstractItemView>
 
 class QPixmap;
 class QListWidgetItem;
@@ -34,7 +35,11 @@ public:
     void setCurrentThumbnail(QString IDThumbnail);
 
     /// Retorna el ID del Thumbnail Seleccionat
-    QString getSelectedThumbnailID();
+    QStringList getSelectedThumbnailsID();
+
+    /// Assigna/Obté el mode de selecció dels Thumbnails del control. Per defecte el valor és SingleSelection
+    void setSelectionMode(QAbstractItemView::SelectionMode selectionMode);
+    QAbstractItemView::SelectionMode getSelectionMode();
 
 public slots:
     /// Neteja el ListWidget de sèries
