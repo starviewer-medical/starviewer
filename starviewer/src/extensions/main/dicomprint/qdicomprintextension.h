@@ -41,9 +41,9 @@ private slots:
     /// Slot que s'executa quan canviem de valor a través del Slider l'interval d'imatges a imprimir
     void m_intervalImagesSliderValueChanged(int value);
     /// Slot que s'executa quan canviem de valor a través del Slider a partir de quina imatge imprimir
-    void m_fromImageSliderValueChanged(int value);
+    void m_fromImageSliderValueChanged();
     /// Slot que s'executa quan canviem de valor a través del Slider fins quina imatge imprimir
-    void m_toImageSliderValueChanged(int value);
+    void m_toImageSliderValueChanged();
     /// Slot que s'exectua quan el LineEdit per especificar el valor del interval d'imatges a imprimir és editat, per traspassar el seu valor al Slider
     void m_intervalImagesLineEditTextEdited(const QString &text);
     /// Slot que s'exectua quan el LineEdit per especificar a partir de quina imatges s'haa imprimir és editat, per traspassar el seu valor al Slider
