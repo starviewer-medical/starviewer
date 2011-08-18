@@ -14,7 +14,7 @@
 #include "dicomprintpage.h"
 #include "logging.h"
 #include "pacsdevice.h"
-#include "../inputoutput/inputoutputsettings.h"
+#include "inputoutputsettings.h"
 
 namespace udg {
 
