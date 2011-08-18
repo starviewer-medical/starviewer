@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>927</width>
-    <height>781</height>
+    <width>930</width>
+    <height>1008</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -39,7 +39,13 @@
        <property name="frameShadow">
         <enum>QFrame::Raised</enum>
        </property>
+       <property name="lineWidth">
+        <number>0</number>
+       </property>
        <layout class="QVBoxLayout" name="verticalLayout">
+        <property name="margin">
+         <number>6</number>
+        </property>
         <item>
          <layout class="QGridLayout" name="gridLayout_3">
           <item row="1" column="0">
@@ -464,23 +470,6 @@
                 </property>
                </widget>
               </item>
-              <item row="3" column="0">
-               <widget class="QLabel" name="label_32">
-                <property name="text">
-                 <string>Pages to print:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="1">
-               <widget class="QLabel" name="m_pagesToPrintLabel">
-                <property name="text">
-                 <string>2</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                </property>
-               </widget>
-              </item>
              </layout>
             </widget>
            </item>
@@ -498,10 +487,98 @@
           <property name="sizeHint" stdset="0">
            <size>
             <width>20</width>
-            <height>20</height>
+            <height>5</height>
            </size>
           </property>
          </spacer>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_6">
+          <item>
+           <spacer name="horizontalSpacer_5">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="m_addToPrintButton">
+            <property name="text">
+             <string>Add to print</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="udg::QThumbnailsPreviewWidget" name="m_thumbnailsPreviewWidget" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>250</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_7">
+          <item>
+           <widget class="QPushButton" name="m_removeSelectedDICOMImagesSelectionToPrintButton">
+            <property name="text">
+             <string>Remove selecteds</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="m_clearDICOMImagesSelectionToPrintButton">
+            <property name="text">
+             <string>Clear</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_6">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_32">
+            <property name="text">
+             <string>Pages to print:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="m_pagesToPrintLabel">
+            <property name="text">
+             <string>2</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
          <widget class="QFrame" name="m_noSupportedSeriesFrame">
@@ -718,15 +795,13 @@ border: 1px solid  #680000;
    <extends>QWidget</extends>
    <header>qdicomprinterbasicsettingswidget.h</header>
   </customwidget>
+  <customwidget>
+   <class>udg::QThumbnailsPreviewWidget</class>
+   <extends>QWidget</extends>
+   <header>qthumbnailspreviewwidget.h</header>
+  </customwidget>
  </customwidgets>
  <resources>
-  <include location="../../../main/main.qrc"/>
-  <include location="../../../main/main.qrc"/>
-  <include location="../../../main/main.qrc"/>
-  <include location="../../../main/main.qrc"/>
-  <include location="../../../main/main.qrc"/>
-  <include location="../../../main/main.qrc"/>
-  <include location="../../../main/main.qrc"/>
   <include location="../../../main/main.qrc"/>
  </resources>
  <connections/>
