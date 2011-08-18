@@ -113,9 +113,9 @@ private:
 
     void setEnabledPrintControls(bool enabled);
 
-    /// Ens afegeix anotacions a la pàgina a imprimir amb informació de la sèrie i de l'estudi, com nom de pacient,
+    /// Ens afegeix anotacions a la pàgina a imprimir amb informació de l'estudi, com nom de pacient,
     /// Data i hora estudi, Institució, ID Estudi i descripció,...
-    void addSeriesInformationAsAnnotationsToDicomPrintPage(DicomPrintPage *dicomPrintPage, Series *seriesToPrint);
+    void addAnnotationsToDicomPrintPage(DicomPrintPage *dicomPrintPage, Image *imageToPrint);
 
     /// Retorna la descripcio pel thumbnail que mostra un rang d'imatges seleccionades per imprimir
     QString getThumbnailPreviewDescriptionOfSelectedGroupedDICOMImagesToPrint();
