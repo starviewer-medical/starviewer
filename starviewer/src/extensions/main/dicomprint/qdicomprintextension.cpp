@@ -61,8 +61,8 @@ void QDicomPrintExtension::createConnections()
     connect(m_currentImageRadioButton, SIGNAL(clicked()), SLOT(imageSelectionModeChanged()));
     // Sliders quan canvia de valor
     connect(m_intervalImagesSlider, SIGNAL(valueChanged(int)), SLOT(m_intervalImagesSliderValueChanged(int)));
-    connect(m_fromImageSlider, SIGNAL(valueChanged(int)), SLOT(m_fromImageSliderValueChanged(int)));
-    connect(m_toImageSlider, SIGNAL(valueChanged(int)), SLOT(m_toImageSliderValueChanged(int)));
+    connect(m_fromImageSlider, SIGNAL(valueChanged(int)), SLOT(m_fromImageSliderValueChanged()));
+    connect(m_toImageSlider, SIGNAL(valueChanged(int)), SLOT(m_toImageSliderValueChanged()));
     // LineEdit canvien de valor
     connect(m_intervalImagesLineEdit, SIGNAL(textEdited (const QString &)), SLOT(m_intervalImagesLineEditTextEdited(const QString &)));
     connect(m_fromImageLineEdit, SIGNAL(textEdited (const QString &)), SLOT(m_fromImageLineEditTextEdited(const QString &)));
@@ -486,15 +486,27 @@ void QDicomPrintExtension::m_intervalImagesSliderValueChanged(int value)
     updateNumberOfDicomPrintPagesToPrint();
 }
 
-void QDicomPrintExtension::m_fromImageSliderValueChanged(int value)
+void QDicomPrintExtension::m_fromImageSliderValueChanged()
 {
-    m_fromImageLineEdit->setText(QString().setNum(value));
+    /// Fem que no es puguin solapar els sliders
+    if (m_fromImageSlider->value() > m_toImageSlider->value())
+    {
+        m_fromImageSlider->setValue(m_toImageSlider->value());
+    }
+
+    m_fromImageLineEdit->setText(QString().setNum(m_fromImageSlider->value()));
     updateNumberOfDicomPrintPagesToPrint();
 }
 
-void QDicomPrintExtension::m_toImageSliderValueChanged(int value)
+void QDicomPrintExtension::m_toImageSliderValueChanged()
 {
-    m_toImageLineEdit->setText(QString().setNum(value));
+    /// Fem que no es puguin solapar els sliders
+    if (m_toImageSlider->value() < m_fromImageSlider->value())
+    {
+        m_toImageSlider->setValue(m_fromImageSlider->value());
+    }
+
+    m_toImageLineEdit->setText(QString().setNum(m_toImageSlider->value()));
     updateNumberOfDicomPrintPagesToPrint();
 }
 
