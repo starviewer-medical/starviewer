@@ -6,6 +6,7 @@
 #include "dicomprint.h"
 
 #include <QTimer>
+#include <QList>
 
 namespace udg {
 
@@ -58,6 +59,15 @@ private slots:
     /// Amaga el frame que indica que s'han enviat a imprimir correctament les imatges
     void timeoutTimer();
 
+    /// Afegeix les imatges selccionades com a grup d'imatges per imprimir i les mostra al ThumbnailsPreview
+    void addSelectedImagesToGroupedDICOMImagesToPrint();
+
+    /// Esborra els grups d'imatges seleccionades per imprimir
+    void clearDICOMImagesGroupedToPrint();
+
+    /// Esborra el grups d'imatges per imprimir seleccionades en el control ThumbnailsPreview
+    void removeGroupedDICOMImagesToPrintSelectedInThumbnailsPreview();
+
 private:
     /// Crea les connexions
     void createConnections();
@@ -68,8 +78,8 @@ private:
     /// Inicialitza les tools que volem tenir activades al viewer
     void initializeViewerTools();
 
-    /// Configura els controls de selecció d'imatges en funció dels nombre d'imatges
-    void updateSelectionImagesValue();
+    /// Reinicia i configura els controls de selecció d'imatges en funció dels nombre d'imatges
+    void resetAndUpdateSelectionImagesValue();
 
     /// Retorna el DicomPrintJob que s'ha d'enviar a imprimir en funció de la impressora i imatges seleccionades
     DicomPrintJob getDicomPrintJobToPrint();
@@ -78,7 +88,7 @@ private:
     QList<DicomPrintPage> getDicomPrintPageListToPrint();
 
     /// Retorna les imatges s'han d'enviar a imprimir en funció de lo definit a la selecció d'imatges
-    QList<Image*> getSelectedImagesToPrint();
+    QList<Image*> getSelectedImagesToAddToPrint();
 
     /// Retorna la impressora seleccionada
     DicomPrinter getSelectedDicomPrinter();
@@ -107,7 +117,26 @@ private:
     /// Data i hora estudi, Institució, ID Estudi i descripció,...
     void addSeriesInformationAsAnnotationsToDicomPrintPage(DicomPrintPage *dicomPrintPage, Series *seriesToPrint);
 
+    /// Retorna la descripcio pel thumbnail que mostra un rang d'imatges seleccionades per imprimir
+    QString getThumbnailPreviewDescriptionOfSelectedGroupedDICOMImagesToPrint();
+
+    /// Treu del grups d'imatges per imprimir el grup d'imatges amb l'ID passat per parametre
+    void removeGroupedDICOMImagesToPrint(int IDGroup);
+
+    /// Retorna les imatges a imprimir
+    QList<Image*> getImagesToPrint();
+
 private:
+    /// Contenidor d'objectes associats a l'estudi que serveix per facilitar la intercomunicació
+    struct GroupedDICOMImagesToPrint
+    {
+        QList<Image*> imagesToPrint;
+        int ID;
+    };
+
+    QList<GroupedDICOMImagesToPrint> m_groupedDICOMImagesToPrintList;
+    int m_lastIDGroupedDICOMImagesToPrint;
+
     /// Gestor de tools pel viewer
     ToolManager *m_toolManager;
 

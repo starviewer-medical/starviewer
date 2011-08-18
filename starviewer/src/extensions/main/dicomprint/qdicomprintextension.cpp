@@ -45,6 +45,9 @@ QDicomPrintExtension::QDicomPrintExtension(QWidget *parent)
     m_2DView->removeAnnotation(Q2DViewer::AllAnnotation);
     m_2DView->enableAnnotation(Q2DViewer::WindowInformationAnnotation | Q2DViewer::PatientOrientationAnnotation | Q2DViewer::SliceAnnotation |
                                Q2DViewer::PatientInformationAnnotation | Q2DViewer::AcquisitionInformationAnnotation, true);
+
+    m_lastIDGroupedDICOMImagesToPrint = 0;
+    m_thumbnailsPreviewWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
 }
 
 void QDicomPrintExtension::createConnections()
@@ -67,6 +70,9 @@ void QDicomPrintExtension::createConnections()
 
     connect(m_qdicomPrinterBasicSettingsWidget, SIGNAL(basicDicomPrinterSettingChanged()), SLOT(updateNumberOfDicomPrintPagesToPrint()));
     connect(m_printButton, SIGNAL(clicked()), SLOT(print()));
+    connect(m_addToPrintButton, SIGNAL(clicked()),SLOT(addSelectedImagesToGroupedDICOMImagesToPrint()));
+    connect(m_clearDICOMImagesSelectionToPrintButton, SIGNAL(clicked()), SLOT(clearDICOMImagesGroupedToPrint()));
+    connect(m_removeSelectedDICOMImagesSelectionToPrintButton, SIGNAL(clicked()), SLOT(removeGroupedDICOMImagesToPrintSelectedInThumbnailsPreview()));
 
     //connect(m_2DView, SIGNAL(eventReceived(unsigned long)), SLOT(strokeEventHandler(unsigned long)));
     connect(m_sliceViewSlider, SIGNAL(valueChanged(int)), m_2DView, SLOT(setSlice(int)));
@@ -113,7 +119,7 @@ void QDicomPrintExtension::updateInput()
 
     m_intervalImagesSlider->setValue(1);
 
-    updateSelectionImagesValue();
+    resetAndUpdateSelectionImagesValue();
 
     updateVolumeSupport();
 }
@@ -169,6 +175,12 @@ void QDicomPrintExtension::fillSelectedDicomPrinterComboBox()
 
 void QDicomPrintExtension::print()
 {
+    if (getImagesToPrint().count() == 0)
+    {
+        QMessageBox::warning(this, ApplicationNameString, tr("Please add images to print."));
+        return;
+    }
+
     DicomPrint dicomPrint;
 
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
@@ -182,6 +194,7 @@ void QDicomPrintExtension::print()
     }
     else
     {
+        clearDICOMImagesGroupedToPrint();
         m_sentToPrintSuccessfullyFrame->setVisible(true);
         // Engeguem timer per a que d'aquí 20 segons s'amagui el frame indicant que s'han enviat a imprimir correctament les imatges
         m_qTimer->start(20000);
@@ -191,6 +204,41 @@ void QDicomPrintExtension::print()
 void QDicomPrintExtension::timeoutTimer()
 {
     m_sentToPrintSuccessfullyFrame->setVisible(false);
+}
+
+void QDicomPrintExtension::addSelectedImagesToGroupedDICOMImagesToPrint()
+{
+    GroupedDICOMImagesToPrint selectedGroupedDICOMImagesToPrint;
+
+    m_lastIDGroupedDICOMImagesToPrint++;
+    selectedGroupedDICOMImagesToPrint.ID = m_lastIDGroupedDICOMImagesToPrint;
+    selectedGroupedDICOMImagesToPrint.imagesToPrint = getSelectedImagesToAddToPrint();
+    m_groupedDICOMImagesToPrintList.append(selectedGroupedDICOMImagesToPrint);
+
+    Image *firstSelectedImage = getSelectedImagesToAddToPrint().first();
+    m_thumbnailsPreviewWidget->append(QString::number(m_lastIDGroupedDICOMImagesToPrint), firstSelectedImage->getThumbnail(), getThumbnailPreviewDescriptionOfSelectedGroupedDICOMImagesToPrint());
+
+    updateNumberOfDicomPrintPagesToPrint();
+}
+
+void QDicomPrintExtension::clearDICOMImagesGroupedToPrint()
+{
+    m_thumbnailsPreviewWidget->clear();
+    m_groupedDICOMImagesToPrintList.clear();
+    m_lastIDGroupedDICOMImagesToPrint = 0;
+
+    updateNumberOfDicomPrintPagesToPrint();
+}
+
+void QDicomPrintExtension::removeGroupedDICOMImagesToPrintSelectedInThumbnailsPreview()
+{
+    foreach(QString thumbnailID, m_thumbnailsPreviewWidget->getSelectedThumbnailsID())
+    {
+        m_thumbnailsPreviewWidget->remove(thumbnailID);
+        removeGroupedDICOMImagesToPrint(thumbnailID.toInt());
+    }
+
+    updateNumberOfDicomPrintPagesToPrint();
 }
 
 DicomPrintJob QDicomPrintExtension::getDicomPrintJobToPrint()
@@ -210,13 +258,13 @@ DicomPrintJob QDicomPrintExtension::getDicomPrintJobToPrint()
 
 QList<DicomPrintPage> QDicomPrintExtension::getDicomPrintPageListToPrint()
 {
-    QList<Image*> selectedImagesToPrint = getSelectedImagesToPrint();
+    QList<Image*> imagesToPrint = getImagesToPrint();
     QList<DicomPrintPage> dicomPrintPageList;
     DicomPrinter dicomPrinter = getSelectedDicomPrinter();
     int numberOfImagesPerPage = dicomPrinter.getDefaultFilmLayoutColumns() * dicomPrinter.getDefaultFilmLayoutRows();
     int numberOfPage = 1;
 
-    while (!selectedImagesToPrint.isEmpty())
+    while (!imagesToPrint.isEmpty())
     {
         int indexOfImagePerPage = 0;
         QList<Image*> imagesPageList;
@@ -225,14 +273,14 @@ QList<DicomPrintPage> QDicomPrintExtension::getDicomPrintPageListToPrint()
         // TODO:No tinc clar que això haig de ser responsabilitat de la Interfície emplenar les anotacions
         if (dicomPrinter.getSupportsAnnotationBox())
         {
-            addSeriesInformationAsAnnotationsToDicomPrintPage(&dicomPrintPage, selectedImagesToPrint.at(0)->getParentSeries());
+            addSeriesInformationAsAnnotationsToDicomPrintPage(&dicomPrintPage, imagesToPrint.at(0)->getParentSeries());
         }
 
         dicomPrintPage.setPageNumber(numberOfPage);
         // Emplenen una dicomPrintPage amb les imatges en funció del número d'imatges que hi caben
-        while (indexOfImagePerPage < numberOfImagesPerPage && !selectedImagesToPrint.isEmpty())
+        while (indexOfImagePerPage < numberOfImagesPerPage && !imagesToPrint.isEmpty())
         {
-            imagesPageList.append(selectedImagesToPrint.takeFirst());
+            imagesPageList.append(imagesToPrint.takeFirst());
             indexOfImagePerPage++;
         }
 
@@ -244,7 +292,7 @@ QList<DicomPrintPage> QDicomPrintExtension::getDicomPrintPageListToPrint()
     return dicomPrintPageList;
 }
 
-QList<Image*> QDicomPrintExtension::getSelectedImagesToPrint()
+QList<Image*> QDicomPrintExtension::getSelectedImagesToAddToPrint()
 {
     QList<Image*> imagesToPrint, imagesVolum = m_2DView->getInput()->getImages();
 
@@ -270,12 +318,7 @@ int QDicomPrintExtension::getNumberOfPagesToPrint()
     int numberOfDicomPrintPagesToPrint = 0, numberOfImagesPerPage, numberOfImagesToPrint;
     DicomPrinter selectedDicomPrinter = getSelectedDicomPrinter();
 
-    numberOfImagesToPrint = (m_toImageSlider->value() - m_fromImageSlider->value() + 1) / m_intervalImagesSlider->value();
-    // Si tenim residu hem d'augmena en 1 el número d'imatges Ex: han seleccionat de la 1 a la 15 d'imatge, cada 10 imatges,
-    // haurem d'imprimir la 1 i la 11 -> 2 Imatges
-    // 15 / 10 = 1
-    // 15 % 10 = 5, és més gran de 1 per tant hem d'afegir una altre imatge
-    numberOfImagesToPrint += (m_toImageSlider->value() - m_fromImageSlider->value() + 1) % m_intervalImagesSlider->value() > 0 ? 1 : 0;
+    numberOfImagesToPrint = getImagesToPrint().count();
 
     numberOfImagesPerPage = selectedDicomPrinter.getDefaultFilmLayoutRows() * selectedDicomPrinter.getDefaultFilmLayoutColumns();
 
@@ -339,6 +382,69 @@ void QDicomPrintExtension::addSeriesInformationAsAnnotationsToDicomPrintPage(Dic
     /// Cinquena posició: Patient ID + Acession number (El patientID l'han demanat els metges perquè és amb el camp que poden cercar els pacients en el SAP)
     dicomPrintPage->addAnnotation(5, seriesToPrint->getParentStudy()->getParentPatient()->getID() + " " +
                                   seriesToPrint->getParentStudy()->getAccessionNumber());
+}
+
+QString QDicomPrintExtension::getThumbnailPreviewDescriptionOfSelectedGroupedDICOMImagesToPrint()
+{
+    Series *seriesParentImagesToPrint;
+    seriesParentImagesToPrint = getSelectedImagesToAddToPrint().at(0)->getParentSeries();
+
+    QString thumbnailDescription;
+    thumbnailDescription = tr("Series ") + seriesParentImagesToPrint->getSeriesNumber() + "\n";
+
+    if (getSelectedImagesToAddToPrint().count() == seriesParentImagesToPrint->getImages().count())
+    {
+        thumbnailDescription += tr("All images");
+    }
+    else if (m_currentImageRadioButton->isChecked())
+    {
+        Image *currentImage = getSelectedImagesToAddToPrint().at(0);
+        thumbnailDescription += tr("image %1").arg(currentImage->getInstanceNumber());
+    }
+    else
+    {
+        if (m_intervalImagesSlider->value() > 1)
+        {
+            thumbnailDescription += tr("Every %1 images").arg(m_intervalImagesSlider->value());
+        }
+
+        if (m_fromImageSlider->value() != 1 || m_toImageSlider->value() != m_toImageSlider->maximum())
+        {
+            thumbnailDescription += tr(" from %1").arg(m_fromImageSlider->value());
+            thumbnailDescription += tr(" to %1").arg(m_toImageSlider->value());
+        }
+    }
+
+    return thumbnailDescription;
+}
+
+void QDicomPrintExtension::removeGroupedDICOMImagesToPrint(int IDGroup)
+{
+    int index = 0;
+    bool notFound = true;
+
+    while (index < m_groupedDICOMImagesToPrintList.count() && notFound)
+    {
+        if (m_groupedDICOMImagesToPrintList.at(index).ID == IDGroup)
+        {
+            m_groupedDICOMImagesToPrintList.removeAt(index);
+            notFound = false;
+        }
+
+        index++;
+    }
+}
+
+QList<Image*> QDicomPrintExtension::getImagesToPrint()
+{
+    QList<Image*> imagesToPrint;
+
+    foreach(GroupedDICOMImagesToPrint groupedDICOMImagesToPrint, m_groupedDICOMImagesToPrintList)
+    {
+        imagesToPrint.append(groupedDICOMImagesToPrint.imagesToPrint);
+    }
+
+    return imagesToPrint;
 }
 
 void QDicomPrintExtension::selectedDicomPrinterChanged(int indexOfSelectedDicomPrinter)
@@ -445,7 +551,7 @@ void QDicomPrintExtension::updateNumberOfDicomPrintPagesToPrint()
 {
     int numberOfDicomPrintPagesToPrint = getNumberOfPagesToPrint();
 
-    if (numberOfDicomPrintPagesToPrint > 0)
+    if (numberOfDicomPrintPagesToPrint >= 0)
     {
         m_pagesToPrintLabel->setText(QString().setNum(numberOfDicomPrintPagesToPrint));
     }
@@ -455,12 +561,15 @@ void QDicomPrintExtension::updateNumberOfDicomPrintPagesToPrint()
     }
 }
 
-void QDicomPrintExtension::updateSelectionImagesValue()
+void QDicomPrintExtension::resetAndUpdateSelectionImagesValue()
 {
     int tickInterval;
     int numberOfImagesOfVolume = m_2DView->getInput()->getImages().count();
 
+    m_intervalImagesSlider->setValue(1);
+
     m_fromImageSlider->setMaximum(numberOfImagesOfVolume);
+    m_fromImageSlider->setValue(1);
 
     m_toImageSlider->setMaximum(numberOfImagesOfVolume);
     m_toImageSlider->setValue(numberOfImagesOfVolume);
