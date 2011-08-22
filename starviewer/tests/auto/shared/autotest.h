@@ -45,10 +45,35 @@ inline void addTest(QObject* object)
 }
 
 
+inline TestList selectTestsToExecute(const QStringList& options)
+{
+    if (options.isEmpty())
+    {
+        return testList();
+    }
+
+    TestList selectedTests;
+    foreach (QObject *test, testList())
+    {
+        bool found = false;
+        QStringListIterator iterator(options);
+        while (!found && iterator.hasNext())
+        {
+            if (test->objectName().contains(iterator.next(), Qt::CaseInsensitive))
+            {
+                found = true;
+                selectedTests << test;
+            }
+        }
+    }
+    return selectedTests;
+}
+
 inline int run()
 {
     int ret = 0;
     QString dirToSaveTests;
+    QStringList testsToExecuteOptions;
 
     // Comprovem paràmetres nostres. Si ni ha, els eliminem perquè al executar el test no es queixi.
     QStringList arguments = qApp->arguments();
@@ -85,6 +110,23 @@ inline int run()
             }
         }
     }
+    else if (arguments.contains("-testsToExecute"))
+    {
+        int argumentPosition = arguments.indexOf("-testsToExecute");
+        arguments.removeAt(argumentPosition);
+        while (argumentPosition < arguments.size() && !arguments.at(argumentPosition).startsWith("-"))
+        {
+            testsToExecuteOptions << arguments.at(argumentPosition);
+            arguments.removeAt(argumentPosition);
+        }
+
+        if (testsToExecuteOptions.isEmpty())
+        {
+            std::cerr << "ERROR: Argument -testsToExecute needs a list of tests to execute" << std::endl;
+            return -1;
+        }
+
+    }
 
     // Generem els paràmetres argc i argv correctes sense els nostres paràmetres
     int modifiedArgc = arguments.count();
@@ -98,7 +140,7 @@ inline int run()
         i++;
     }
 
-    foreach (QObject *test, testList())
+    foreach (QObject *test, selectTestsToExecute(testsToExecuteOptions))
     {
         if (!dirToSaveTests.isEmpty())
         {
