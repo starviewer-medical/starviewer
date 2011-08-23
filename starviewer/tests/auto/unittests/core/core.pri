@@ -12,4 +12,5 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_opacitytransferfunction.cpp \
            $$PWD/test_series.cpp \
            $$PWD/test_study.cpp \
-           $$PWD/test_dicomsource.cpp
+           $$PWD/test_dicomsource.cpp \
+           $$PWD/test_patient.cpp
