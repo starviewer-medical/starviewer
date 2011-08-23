@@ -355,7 +355,7 @@ Patient::PatientsSimilarity Patient::compareTo(const Patient *patient)
         return namesSimilarity;
     }
 
-    return metricToSimilarity(computeStringEditDistanceMetric(patient->m_patientID, this->m_patientID, NeedlemanWunschDistance));
+    return DifferentPatients;
 }
 
 QString Patient::toString() const
