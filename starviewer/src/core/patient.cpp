@@ -297,7 +297,7 @@ Patient Patient::operator +=(const Patient &patient)
 
 QString Patient::clearStrangeSymbols(const QString &patientName)
 {
-    return patientName.toUpper().replace(QRegExp("[^A-Z ^\\d]"), " ").trimmed();
+    return patientName.toUpper().replace(QRegExp("[^A-Z\\d]"), " ").trimmed();
 }
 
 QString Patient::clearPatientName(const QString &patientName)
