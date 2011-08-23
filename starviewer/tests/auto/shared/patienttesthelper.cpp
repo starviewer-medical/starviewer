@@ -20,4 +20,13 @@ Patient* PatientTestHelper::create(int numberOfStudies, int numberOfSeries, int 
     return patient;
 }
 
+udg::Patient* PatientTestHelper::createPatientWithIDAndName(const QString &id, const QString &name)
+{
+    udg::Patient *patient = new Patient();
+    patient->setID(id);
+    patient->setFullName(name);
+
+    return patient;
+}
+
 }
