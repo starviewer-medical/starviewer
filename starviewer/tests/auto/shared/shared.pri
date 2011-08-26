@@ -5,7 +5,9 @@ SOURCES += $$PWD/gmock-gtest-all.cc \
            $$PWD/seriestesthelper.cpp \
            $$PWD/imagetesthelper.cpp \
            $$PWD/dicomsourcetesthelper.cpp \
-           $$PWD/patienttesthelper.cpp
+           $$PWD/patienttesthelper.cpp \
+           $$PWD/fuzzycomparehelper.cpp
+           
 HEADERS += $$PWD/autotest.h \
            $$PWD/gtest/gtest.h \
            $$PWD/gmock/gmock.h \
@@ -14,4 +16,5 @@ HEADERS += $$PWD/autotest.h \
            $$PWD/seriestesthelper.h \
            $$PWD/imagetesthelper.h \
            $$PWD/dicomsourcetesthelper.h \
-           $$PWD/patienttesthelper.h
+           $$PWD/patienttesthelper.h \
+           $$PWD/fuzzycomparehelper.h
