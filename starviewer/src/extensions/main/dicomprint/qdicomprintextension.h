@@ -7,6 +7,7 @@
 
 #include <QTimer>
 #include <QList>
+#include <QPair>
 
 namespace udg {
 
@@ -17,6 +18,7 @@ class DicomPrintPage;
 class DicomPrintJob;
 class Volume;
 class ToolManager;
+class DICOMPrintPresentationStateImage;
 
 class QDicomPrintExtension : public QWidget, private::Ui::QDicomPrintExtensionBase {
 Q_OBJECT
@@ -124,13 +126,17 @@ private:
     void removeGroupedDICOMImagesToPrint(int IDGroup);
 
     /// Retorna les imatges a imprimir
-    QList<Image*> getImagesToPrint();
+    QList<QPair<Image*, DICOMPrintPresentationStateImage> > getImagesToPrint();
+
+    /// Retorna el PresentationState a aplicar a les imatges seleccionades per imprimir
+    DICOMPrintPresentationStateImage getDICOMPrintPresentationStateImageForCurrentSelectedImages() const;
 
 private:
     /// Contenidor d'objectes associats a l'estudi que serveix per facilitar la intercomunicació
     struct GroupedDICOMImagesToPrint
     {
         QList<Image*> imagesToPrint;
+        DICOMPrintPresentationStateImage dicomPrintPresentationStateImage;
         int ID;
     };
 

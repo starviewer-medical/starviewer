@@ -19,7 +19,8 @@ HEADERS +=  qdicomprintextension.h \
             createdicomprintspool.h \
             printdicomspool.h \
             qdicomaddprinterwidget.h \
-            qdicomprinterbasicsettingswidget.h
+            qdicomprinterbasicsettingswidget.h \
+            dicomprintpresentationstateimage.h
             
 SOURCES +=  qdicomprintextension.cpp \
             dicomprintextensionmediator.cpp \
@@ -32,7 +33,8 @@ SOURCES +=  qdicomprintextension.cpp \
             createdicomprintspool.cpp \
             printdicomspool.cpp \
             qdicomaddprinterwidget.cpp \
-            qdicomprinterbasicsettingswidget.cpp
+            qdicomprinterbasicsettingswidget.cpp \
+            dicomprintpresentationstateimage.cpp
 
 RESOURCES += dicomprint.qrc
 

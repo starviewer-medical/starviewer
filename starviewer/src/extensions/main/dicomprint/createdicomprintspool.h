@@ -20,7 +20,7 @@ public:
     CreateDicomPrintSpool::CreateDicomPrintSpoolError getLastError();
 
 private:
-    bool transformImageForPrinting(Image *image, const QString &spoolDirectoryPath);
+    bool transformImageForPrinting(Image *image, DICOMPrintPresentationStateImage dicomPrintPresentationStateImage, const QString &spoolDirectoryPath);
 
     void setBasicFilmBoxAttributes();
 
@@ -36,6 +36,9 @@ private:
     /// que conté n imatges, i els seus paràmetres d'impressió.
     /// Retorna el pathfile del fitxer creat
     QString createStoredPrintDcmtkFile(const QString &spoolDirectoryPath);
+
+    /// A partir d'un DICOMPrintPresentationStateImage ens retorna un PresentationState de DCMTK per aplicar a les imatges a imprimir
+    void applyDICOMPrintPresentationStateImage(DVPresentationState *dvpPresentationState, const DICOMPrintPresentationStateImage &dicomPrintPresentationStateImage);
 
     DicomPrintPage m_dicomPrintPage;
     DicomPrinter m_dicomPrinter;

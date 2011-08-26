@@ -172,12 +172,12 @@ int DicomPrintPage::getPageNumber()
     return m_pageNumber;
 }
 
-void DicomPrintPage::setImagesToPrint(QList<Image*> imagesToPrint)
+void DicomPrintPage::setImagesToPrint(QList<QPair<Image*, DICOMPrintPresentationStateImage> > imagesToPrint)
 {
     m_imagesToPrint = imagesToPrint;
 }
 
-QList<Image*> DicomPrintPage::getImagesToPrint()
+QList<QPair<Image*, DICOMPrintPresentationStateImage> > DicomPrintPage::getImagesToPrint()
 {
     return m_imagesToPrint;
 }
