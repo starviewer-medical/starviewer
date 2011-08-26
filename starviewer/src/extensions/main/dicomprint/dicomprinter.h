@@ -18,7 +18,7 @@ public:
     void setID(int ID);
 
     /// Retorna l'ID de l'impressora
-    int getID();
+    int getID() const;
 
     /// Afegeix el nom de la impressora.
     void setName(const QString &name);
@@ -54,7 +54,7 @@ public:
     void setPort(int port);
 
     /// Retorna el Port de la impressora.
-    int getPort();
+    int getPort() const;
 
     /// Especifica el valor per defecte del MediumType
     void setDefaultMediumType(const QString &mediumType);
@@ -66,7 +66,7 @@ public:
     void setAvailableMediumTypeValues(QStringList mediumTypeValues);
 
     /// Retorna una llista de valors disponibles del MediumType
-    QStringList getAvailableMediumTypeValues();
+    QStringList getAvailableMediumTypeValues() const;
 
     /// Especifica el valor per defecte del FilmSize
     void setDefaultFilmSize(const QString &filmSize);
@@ -78,7 +78,7 @@ public:
     void setAvailableFilmSizeValues(QStringList filmSizeValues);
 
     /// Retorna una llista de valors disponibles del FilmSize
-    QStringList getAvailableFilmSizeValues();
+    QStringList getAvailableFilmSizeValues() const;
 
      /// Especifica el valor per defecte del FilmLayout
     void setDefaultFilmLayout(const QString &filmLayout);
@@ -90,7 +90,7 @@ public:
     void setAvailableFilmLayoutValues(QStringList filmLayoutValues);
 
     /// Retorna una llista de valors disponibles del FilmLayout
-    QStringList getAvailableFilmLayoutValues();
+    QStringList getAvailableFilmLayoutValues() const;
 
      /// Retorna el número de columnes que té el layout del Film per defecte de la impressora.
     int getDefaultFilmLayoutColumns();
@@ -108,7 +108,7 @@ public:
     void setAvailableFilmOrientationValues(QStringList filmOrientationValues);
 
      /// Retorna la llista d'orientacions (horitzontal/vertical) disponibles amb les que es pot imprimir la placa
-    QStringList getAvailableFilmOrientationValues();
+    QStringList getAvailableFilmOrientationValues() const;
 
     /// Afegeix el Magnification Type per defecte a la impressora
     void setDefaultMagnificationType(const QString &magnificationType);
@@ -120,7 +120,7 @@ public:
     void setAvailableMagnificationTypeValues(QStringList magnificationTypeValues);
 
     /// Retorna una llista de Magnification Type disponibles a la impressora
-    QStringList getAvailableMagnificationTypeValues();
+    QStringList getAvailableMagnificationTypeValues() const;
 
     /// Afegeix la Densitat Màxima per defecte a la impressora
     void setDefaultMaxDensity(ushort maxDensity);
@@ -144,19 +144,19 @@ public:
     void setAvailableMinDensityValues(ushort minDensityValues);
 
     /// Retorna la resolució mínima que pot agafar la impressió. Si té valor 0 vol dir que no s'aplica
-    ushort getAvailableMinDensityValues();
+    ushort getAvailableMinDensityValues() const;
 
     /// Especifica si s'accepta TrimBox per defecte
     void setDefaultTrim(bool trim);
 
     /// Retorna si s'accepta TrimBox per defecte
-    bool getDefaultTrim();
+    bool getDefaultTrim() const;
 
     /// Especifica si s'accepta TrimBox.
     void setAvailableTrim(bool availableTrim);
 
     /// Retorna si s'accepta TrimBox.
-    bool getAvailableTrim();
+    bool getAvailableTrim() const;
 
     /// Especifica el valor per defecte de la Densitat del Border.
     void setDefaultBorderDensity(const QString &borderDensity);
@@ -168,7 +168,7 @@ public:
     void setAvailableBorderDensityValues(QStringList borderDensityValues);
 
     /// Retorna una llista de valors disponibles de la Densitat del Border.
-    QStringList getAvailableBorderDensityValues();
+    QStringList getAvailableBorderDensityValues() const;
 
     /// Especifica el valor per defecte de l'EmptyImageDensity
     void setDefaultEmptyImageDensity(const QString &emptyImageDensity);
@@ -180,7 +180,7 @@ public:
     void setAvailableEmptyImageDensityValues(QStringList emptyImageDensityValues);
 
     /// Retorna una llista de valors disponibles de l'EmptyImageDensity
-    QStringList getAvailableEmptyImageDensityValues();
+    QStringList getAvailableEmptyImageDensityValues() const;
 
     /// Especifica el valor per defecte del FilmDestination
     void setDefaultFilmDestination(const QString &filmDestination);
@@ -192,7 +192,7 @@ public:
     void setAvailableFilmDestinationValues(QStringList filmDestinationValues);
 
     /// Retorna una llista de valors disponibles del FilmDestination
-    QStringList getAvailableFilmDestinationValues();
+    QStringList getAvailableFilmDestinationValues() const;
 
     /// Especifica el Smoothing type per defecte amb la que s'imprimirà
     void setDefaultSmoothingType(const QString &smoothingType);
@@ -204,7 +204,7 @@ public:
     void setAvailableSmoothingTypeValues(QStringList smoothingTypeValues);
 
     /// Retorna una llista de Smoothing type disponibles amb la que es pot imprimir.
-    QStringList getAvailableSmoothingTypeValues();
+    QStringList getAvailableSmoothingTypeValues() const;
 
     /// Especifica la prioritat per defecte dels jobs que s'imprimeixin amb aquesta impressora
     void setDefaultPrintPriority(const QString &priority);
@@ -216,7 +216,7 @@ public:
     void setAvailablePrintPriorityValues(QStringList printPriorityValues);
 
     /// Retorna una llista de prioritats disponibles dels jobs que s'imprimeixin amb aquesta impressora
-    QStringList getAvailablePrintPriorityValues();
+    QStringList getAvailablePrintPriorityValues() const;
 
     /// Especifica la polaritat per defecte de l'impressora
     void setDefaultPolarity(const QString &polarity);
@@ -228,7 +228,7 @@ public:
     void setAvailablePolarityValues(QStringList polarityValues);
 
     /// Retorna una llista de polaritats per defecte de l'impressora
-    QStringList getAvailablePolarityValues();
+    QStringList getAvailablePolarityValues() const;
 
     // Especifica/Retorna si la impressora suporta anotacions
     void setSupportsAnnotationBox(bool supportsAnnotationBox);

@@ -90,19 +90,16 @@ private:
     QList<DicomPrintPage> getDicomPrintPageListToPrint();
 
     /// Retorna les imatges s'han d'enviar a imprimir en funció de lo definit a la selecció d'imatges
-    QList<Image*> getSelectedImagesToAddToPrint();
+    QList<Image*> getSelectedImagesToAddToPrint() const;
 
     /// Retorna la impressora seleccionada
-    DicomPrinter getSelectedDicomPrinter();
+    DicomPrinter getSelectedDicomPrinter() const;
 
     /// Indica amb la selecció actua el número de pàgines a imprimir, sinó l'ha pogut calcu·lar correctament retorna 0
-    int getNumberOfPagesToPrint();
-
-    /// Retorna el número d'imatges que caben en la pàgina en funció del layout escollit
-    int getNumberOfImagesPerFilm(QString filmLayout);
+    int getNumberOfPagesToPrint() const;
 
     /// Ens retorna un DicomPrintPage amb els paràmetres d'impressió omplerts a partir d'una impressora. No afegeix les imatges ni número de pàgina
-    DicomPrintPage fillDicomPrintPagePrintSettings(DicomPrinter dicomPrinter);
+    DicomPrintPage fillDicomPrintPagePrintSettings(const DicomPrinter &dicomPrinter) const;
 
     /// Mostra per pantalla els errors que s'han produït alhora d'imprimir
     /// Degut a només podem tenir una pàgina per FilmSession degut a limitacions de dcmtk fa que haguem d'imprimir pàgina per pàgina
@@ -120,13 +117,13 @@ private:
     void addAnnotationsToDicomPrintPage(DicomPrintPage *dicomPrintPage, Image *imageToPrint);
 
     /// Retorna la descripcio pel thumbnail que mostra un rang d'imatges seleccionades per imprimir
-    QString getThumbnailPreviewDescriptionOfSelectedGroupedDICOMImagesToPrint();
+    QString getThumbnailPreviewDescriptionOfSelectedGroupedDICOMImagesToPrint() const;
 
     /// Treu del grups d'imatges per imprimir el grup d'imatges amb l'ID passat per parametre
     void removeGroupedDICOMImagesToPrint(int IDGroup);
 
     /// Retorna les imatges a imprimir
-    QList<QPair<Image*, DICOMPrintPresentationStateImage> > getImagesToPrint();
+    QList<QPair<Image*, DICOMPrintPresentationStateImage> > getImagesToPrint() const;
 
     /// Retorna el PresentationState a aplicar a les imatges seleccionades per imprimir
     DICOMPrintPresentationStateImage getDICOMPrintPresentationStateImageForCurrentSelectedImages() const;

@@ -293,7 +293,7 @@ QList<DicomPrintPage> QDicomPrintExtension::getDicomPrintPageListToPrint()
     return dicomPrintPageList;
 }
 
-QList<Image*> QDicomPrintExtension::getSelectedImagesToAddToPrint()
+QList<Image*> QDicomPrintExtension::getSelectedImagesToAddToPrint() const
 {
     QList<Image*> imagesToPrint, imagesVolum = m_2DView->getInput()->getImages();
 
@@ -314,7 +314,7 @@ QList<Image*> QDicomPrintExtension::getSelectedImagesToAddToPrint()
     return imagesToPrint;
 }
 
-int QDicomPrintExtension::getNumberOfPagesToPrint()
+int QDicomPrintExtension::getNumberOfPagesToPrint() const
 {
     int numberOfDicomPrintPagesToPrint = 0, numberOfImagesPerPage, numberOfImagesToPrint;
     DicomPrinter selectedDicomPrinter = getSelectedDicomPrinter();
@@ -333,7 +333,7 @@ int QDicomPrintExtension::getNumberOfPagesToPrint()
     return numberOfDicomPrintPagesToPrint;
 }
 
-DicomPrintPage QDicomPrintExtension::fillDicomPrintPagePrintSettings(DicomPrinter dicomPrinter)
+DicomPrintPage QDicomPrintExtension::fillDicomPrintPagePrintSettings(const DicomPrinter &dicomPrinter) const
 {
     DicomPrintPage dicomPrintPage;
 
@@ -385,7 +385,7 @@ void QDicomPrintExtension::addAnnotationsToDicomPrintPage(DicomPrintPage *dicomP
     dicomPrintPage->addAnnotation(5, studyToPrint->getParentPatient()->getID() + " " + studyToPrint->getAccessionNumber());
 }
 
-QString QDicomPrintExtension::getThumbnailPreviewDescriptionOfSelectedGroupedDICOMImagesToPrint()
+QString QDicomPrintExtension::getThumbnailPreviewDescriptionOfSelectedGroupedDICOMImagesToPrint() const
 {
     Series *seriesParentImagesToPrint;
     seriesParentImagesToPrint = getSelectedImagesToAddToPrint().at(0)->getParentSeries();
@@ -436,7 +436,7 @@ void QDicomPrintExtension::removeGroupedDICOMImagesToPrint(int IDGroup)
     }
 }
 
-QList<QPair<Image*, DICOMPrintPresentationStateImage> > QDicomPrintExtension::getImagesToPrint()
+QList<QPair<Image*, DICOMPrintPresentationStateImage> > QDicomPrintExtension::getImagesToPrint() const
 {
     QList<QPair<Image*, DICOMPrintPresentationStateImage> > imagesToPrint;
 
@@ -642,7 +642,7 @@ void QDicomPrintExtension::resetAndUpdateSelectionImagesValue()
     updateNumberOfDicomPrintPagesToPrint();
 }
 
-DicomPrinter QDicomPrintExtension::getSelectedDicomPrinter()
+DicomPrinter QDicomPrintExtension::getSelectedDicomPrinter() const
 {
     DicomPrinter dicomPrinter;
     int indexOfSelectedDicomPrinter = m_selectedPrinterComboBox->currentIndex();
