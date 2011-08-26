@@ -2,8 +2,7 @@
 #define _LOGGING_
 
 #include <QString>
-// Per posar la variable d'entorn
-#include <cstdlib>
+#include <QtGlobal> // Pel qpuntenv()
 /*!
     Aquest arxiu conté totes les macros per a fer logs en l'aplicació.
 */
@@ -20,9 +19,8 @@
 #define LOGGER_INIT(file) \
     if (true) \
     { \
-        QByteArray logFilePathByteArray = ("logFilePath=" + QDir::toNativeSeparators(udg::UserLogsFile)).toAscii(); \
-        char *logFilePath = logFilePathByteArray.data(); \
-        putenv(logFilePath); \
+        QByteArray logFilePathValue = (QDir::toNativeSeparators(udg::UserLogsFile)).toAscii(); \
+        qputenv("logFilePath", logFilePathValue); \
         log4cxx::PropertyConfigurator::configure(file); \
     } else (void)0
 
