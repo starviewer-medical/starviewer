@@ -824,11 +824,10 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume *lesionMask)
     std::cout << std::endl;
     std::cout << erfcSegmentation << std::endl;
     std::cout << std::endl;
-    std::cout << "Max. no. iterations: " << erfcSegmentation->GetNumberOfIterations() << std::endl;
-    std::cout << "Max. RMS error: " << erfcSegmentation->GetMaximumRMSError() << std::endl;
-    std::cout << "No. elapsed iterations: " << erfcSegmentation->GetElapsedIterations() << std::endl;
-    std::cout << "RMS change: " << erfcSegmentation->GetRMSChange() << std::endl;
-    std::cout << std::endl;
+    DEBUG_LOG(QString("Max. no. iterations: %1").arg(erfcSegmentation->GetNumberOfIterations()));
+    DEBUG_LOG(QString("Max. RMS error: %1").arg(erfcSegmentation->GetMaximumRMSError()));
+    DEBUG_LOG(QString("No. elapsed iterations: %1").arg(erfcSegmentation->GetElapsedIterations()));
+    DEBUG_LOG(QString("RMS change: %1").arg(erfcSegmentation->GetRMSChange()));
 
     // Posem l'origin i l'spacing correctes a la sortida del filtre
     // No sé perquè no ho fa directament les ITKs!!!!
@@ -836,7 +835,8 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume *lesionMask)
     Volume::ItkImageType::PointType newor = thresholder->GetOutput()->GetOrigin();
     Volume::ItkImageType::SpacingType newsp = thresholder->GetOutput()->GetSpacing();
     newsize = thresholder->GetOutput()->GetBufferedRegion().GetSize();
-    std::cout << "thresholder: [" << newor << " ," << newsp << " ," << newsize << std::endl;
+    DEBUG_LOG(QString("thresholder: (%1, %2, %3), (%4, %5, %6), (%7, %8, %9)")
+        .arg(newor[0]).arg(newor[1]).arg(newor[2]).arg(newsp[0]).arg(newsp[1]).arg(newsp[2]).arg(newsize[0]).arg(newsize[1]).arg(newsize[2]));
 
     // Resamplagem la màscara per tal de que tingui la mida original
     ResampleFilterType::Pointer resampleMaskFilter2 = ResampleFilterType::New();
@@ -948,7 +948,7 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume *lesionMask)
     hematomaIt.GoToBegin();
     m_edemaCont = 0;
 
-    std::cout << "Difference: " << m_insideMaskValue << ", " << m_outsideMaskValue << std::endl;
+    DEBUG_LOG(QString("Difference: %1, %2").arg(m_insideMaskValue).arg(m_outsideMaskValue));
 
     while (!lesionIt.IsAtEnd())
     {
@@ -973,21 +973,21 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume *lesionMask)
     std::cout << "Volume: " << m_Volume->getItkData()->GetOrigin() << " ," << m_Volume->getItkData()->GetSpacing() << " ," <<
                  m_Volume->getItkData()->GetBufferedRegion().GetSize() << std::endl;
 
-    std::cout << "End method!!" << std::endl;
+    DEBUG_LOG("End method!!");
 
     double volspacing[3];
     m_Volume->getSpacing(volspacing);
-    std::cout << "Volume: " << m_edemaCont << ",* " << volspacing[0] * volspacing[1] * volspacing[2] << std::endl;
+    DEBUG_LOG(QString("Volume: %1,* %2").arg(m_edemaCont).arg(volspacing[0] * volspacing[1] * volspacing[2]));
     t7 = clock();
-    std::cout << "Estudi temps:" << std::endl;
-    std::cout << "Dilate          : " << (double)(t2 - t1) / 1000000.0 << std::endl;
-    std::cout << "Resample inicial: " << (double)(t3 - t2) / 1000000.0 << std::endl;
-    std::cout << "Mean i init     : " << (double)(t4 - t3) / 1000000.0 << std::endl;
-    std::cout << "fast marching   : " << (double)(t5 - t4) / 1000000.0 << std::endl;
-    std::cout << "resample 2      : " << (double)(t8 - t5) / 1000000.0 << std::endl;
-    std::cout << "median filter   : " << (double)(t6 - t8) / 1000000.0 << std::endl;
-    std::cout << "dif i volume    : " << (double)(t7 - t6) / 1000000.0 << std::endl;
-    std::cout << "TOTAL           : " << (double)(t7 - t1) / 1000000.0 << std::endl;
+    DEBUG_LOG("Estudi temps:");
+    DEBUG_LOG(QString("Dilate          : %1").arg((double)(t2 - t1) / 1000000.0));
+    DEBUG_LOG(QString("Resample inicial: %1").arg((double)(t3 - t2) / 1000000.0));
+    DEBUG_LOG(QString("Mean i init     : %1").arg((double)(t4 - t3) / 1000000.0));
+    DEBUG_LOG(QString("fast marching   : %1").arg((double)(t5 - t4) / 1000000.0));
+    DEBUG_LOG(QString("resample 2      : %1").arg((double)(t8 - t5) / 1000000.0));
+    DEBUG_LOG(QString("median filter   : %1").arg((double)(t6 - t8) / 1000000.0));
+    DEBUG_LOG(QString("dif i volume    : %1").arg((double)(t7 - t6) / 1000000.0));
+    DEBUG_LOG(QString("TOTAL           : %1").arg((double)(t7 - t1) / 1000000.0));
 
     return (double)m_edemaCont * volspacing[0] * volspacing[1] * volspacing[2];
 }
@@ -1058,7 +1058,7 @@ double StrokeSegmentationMethod::applyMethodEdema2(Volume *lesionMask)
             mean = k + m_lowerVentriclesThreshold;
         }
     }
-    std::cout << "estimed mean: " << mean << std::endl;
+    DEBUG_LOG(QString("estimed mean: %1").arg(mean));
 
     typedef itk::Statistics::CovarianceCalculator<SampleType> CovarianceAlgorithmType;
     CovarianceAlgorithmType::Pointer covarianceAlgorithm = CovarianceAlgorithmType::New();
@@ -1067,11 +1067,11 @@ double StrokeSegmentationMethod::applyMethodEdema2(Volume *lesionMask)
     covarianceAlgorithm->SetMean(0);
     covarianceAlgorithm->Update();
 
-    std::cout << "Using the one pass algorithm:" << std::endl;
-    std::cout << "Mean = " << std::endl;
+    DEBUG_LOG("Using the one pass algorithm:");
+    DEBUG_LOG("Mean = ");
     std::cout << *(covarianceAlgorithm->GetMean()) << std::endl;
 
-    std::cout << "Covariance = " << std::endl;
+    DEBUG_LOG("Covariance = ");
     std::cout << *(covarianceAlgorithm->GetOutput()) << std::endl;
     const double sqrt2 = 1.41421356;
     //double mean = (*covarianceAlgorithm->GetMean())[0];
@@ -1084,7 +1084,7 @@ double StrokeSegmentationMethod::applyMethodEdema2(Volume *lesionMask)
 
     m_mean = mean;
     m_variance = sqrt((*covarianceAlgorithm->GetOutput())[0][0]);
-    std::cout  << "Mean: " << m_mean << ", Variance: " << m_variance << std::endl;
+    DEBUG_LOG(QString("Mean: %1, Variance: %2").arg(m_mean).arg(m_variance));
     //computeSpeedMap(speedMapVolume);
 
     InternalImageType::Pointer speedMapVolume = InternalImageType::New();
@@ -1200,7 +1200,7 @@ double StrokeSegmentationMethod::applyMethodEdema2(Volume *lesionMask)
     outcaster->SetInput(speedMapVolume);
     outcaster->Update();
     lesionMask->setData(outcaster->GetOutput());*/
-    std::cout << "Mask Set!!" << std::endl;
+    DEBUG_LOG("Mask Set!!");
     lesionMask->setData(thresholder->GetOutput());
 
     itk::ImageRegionIterator<Volume::ItkImageType> lesionIt(lesionMask->getItkData(), lesionMask->getItkData()->GetBufferedRegion());
@@ -1422,7 +1422,7 @@ void StrokeSegmentationMethod::applyMethod2()
         DEBUG_LOG(excep.what());
     }
 
-    std::cout << "Fi process!" << std::endl;
+    DEBUG_LOG("Fi process!");
 
    //maskImageOut = thresholder->GetOutput();
 
@@ -1463,7 +1463,7 @@ int StrokeSegmentationMethod::computeSizeMask()
         }
         ++imIt;
     }
-    std::cout << "VolumePelo = " << cont << std::endl;
+    DEBUG_LOG(QString("VolumePelo = %1").arg(cont));
 
     return cont;
 }
@@ -1556,7 +1556,7 @@ int StrokeSegmentationMethod::applyMethod3()
     OutputCastingFilterType::Pointer outcaster = OutputCastingFilterType::New();
     outcaster->SetInput(fastMarching->GetOutput());
     outcaster->Update();
-    std::cout << "Mask Set!!" << std::endl;
+    DEBUG_LOG("Mask Set!!");
     m_Mask->setData(outcaster->GetOutput());
     m_Mask->getVtkData()->Update();
     // m_Mask  = outcaster->GetOutput();
