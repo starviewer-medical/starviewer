@@ -251,7 +251,9 @@ HEADERS += extensionfactory.h \
     machineidentifier.h \
     dicomsource.h \
     pacsdevice.h \
-    machineinformation.h
+    machineinformation.h \
+    diagnosistest.h \
+    diagnosistestresult.h
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
     mathtools.cpp \
@@ -463,7 +465,8 @@ SOURCES += extensionmediator.cpp \
     machineidentifier.cpp \
     dicomsource.cpp \
     pacsdevice.cpp \
-    machineinformation.cpp
+    machineinformation.cpp \
+    diagnosistestresult.cpp
 TEMPLATE = lib
 DESTDIR = ./
 CONFIG += staticlib
