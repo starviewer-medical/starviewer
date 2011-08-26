@@ -3,6 +3,7 @@
 #include "q2dviewerwidget.h"
 #include "hangingprotocoldisplayset.h"
 #include "hangingprotocolimageset.h"
+#include "windowlevelpresetstooldata.h"
 #include "q2dviewer.h"
 #include "logging.h"
 
@@ -97,7 +98,7 @@ void ApplyHangingProtocolQViewerCommand::applyDisplayTransformations(Q2DViewer *
 
     if (displaySet->getWindowCenter() != -1 && displaySet->getWindowWidth() != -1)
     {
-        viewer->setWindowLevel(displaySet->getWindowWidth(), displaySet->getWindowCenter());
+        viewer->getWindowLevelData()->setCustomWindowLevel(displaySet->getWindowWidth(), displaySet->getWindowCenter());
     }
 
     viewer->enableRendering(true);
