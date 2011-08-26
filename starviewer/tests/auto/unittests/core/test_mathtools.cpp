@@ -36,6 +36,9 @@ private slots:
     void crossProduct_ShouldReturnExpectedValues_data();
     void crossProduct_ShouldReturnExpectedValues();
 
+    void directorVector_ShouldReturnExpectedValues_data();
+    void directorVector_ShouldReturnExpectedValues();
+
 private:
     void setupComputeAngleData();
     void setupComputeAngleNaNData();
@@ -48,6 +51,7 @@ const double AngleInRadiansEpsilon = 0.001;
 const double NormalizeEpsilon = 0.000001;
 const double ModulusEpsilon = 0.001;
 const double crossProductEpsilon = 0.001;
+const double directorVectorEpsilon = 0.001;
 
 void test_MathTools::angleInRadians_ShouldComputeAngleInRadians_data()
 {
@@ -244,6 +248,45 @@ void test_MathTools::dotProduct_ShouldReturnExpectedValues()
 void test_MathTools::crossProduct_ShouldReturnExpectedValues_data()
 {
     this->setupCrossAndDotProductData();
+}
+
+void test_MathTools::directorVector_ShouldReturnExpectedValues_data()
+{
+    QTest::addColumn<QVector3D>("firstPoint");
+    QTest::addColumn<QVector3D>("secondPoint");
+    QTest::addColumn<QVector3D>("result");
+
+    QTest::newRow("random 1") << QVector3D(1, 0, 0) << QVector3D(1, 0 ,0) << QVector3D(0, 0, 0);
+    QTest::newRow("random 2") << QVector3D(12.3, 0, 0) << QVector3D(3.25, 0 ,0) << QVector3D(-9.05, 0, 0);
+    QTest::newRow("random 3") << QVector3D(-71, -24, 1353.5) << QVector3D(-71, -24, 1353) << QVector3D(0, 0, -0.5);
+    QTest::newRow("random 4") << QVector3D(143.24654, 0.31235458, 3.235697) << QVector3D(54.2358456, 45.524645, 125.5468) 
+        << QVector3D(-89.0106944, 45.21229042, 122.311103);
+    QTest::newRow("axial 1") << QVector3D(-36.8385, 0.946872, 1369.72) << QVector3D(-27.8487, 64.1007, 1369.72) << QVector3D(8.98986, 63.1538, 0);
+    QTest::newRow("axial 2") << QVector3D(-52.346, 29.4897, 1465.75) << QVector3D(16.4264, -18.8308, 1465.75) << QVector3D(68.7725, -48.3205, 0);
+    QTest::newRow("axial 3") << QVector3D(43.6208, 106.803, 1371.21) << QVector3D(-27.1744, -0.401608, 1371.21) << QVector3D(-70.7952, -107.204, 0);
+    QTest::newRow("sagittal 1") << QVector3D(19.1385, 82.1874, 1478.69) << QVector3D(19.1385, 41.6725, 1403.12) << QVector3D(0, -40.5149, -75.5699);
+    QTest::newRow("sagittal 2") << QVector3D(-47.1244, 98.1202, 1406.31) << QVector3D(-47.1244, 52.5979, 1495.99) << QVector3D(0, -45.5224, 89.6791);
+    QTest::newRow("sagittal 3") << QVector3D(-7.76937, 59.8814, 1519.2) << QVector3D(-7.76937, 0.247106, 1424.97) << QVector3D(0, -59.6343, -94.23);
+    QTest::newRow("coronal 1") << QVector3D(-56.3126, 81.3314, 1435.44) << QVector3D(-22.626, 81.3314, 1493.25) << QVector3D(33.6866, 0, 57.81);
+    QTest::newRow("coronal 2") << QVector3D(67.5083, 3.17039, 1458.2) << QVector3D(-9.87976, 3.17039, 1403.57) << QVector3D(-77.3881, -9.76996e-15, -54.63);
+    QTest::newRow("coronal 3") << QVector3D(17.4337, 74.9248, 1526.94) << QVector3D(46.1128, 74.9248, 1413.59) << QVector3D(28.6791, 0, -113.35);
+}
+
+void test_MathTools::directorVector_ShouldReturnExpectedValues()
+{
+    QFETCH(QVector3D, firstPoint);
+    QFETCH(QVector3D, secondPoint);
+    QFETCH(QVector3D, result);
+
+    double cPoint1[3] = { firstPoint.x(), firstPoint.y(), firstPoint.z() };
+    double cPoint2[3] = { secondPoint.x(), secondPoint.y(), secondPoint.z() };
+
+    double *directorVector = MathTools::directorVector(cPoint1, cPoint2);
+
+    QVERIFY(FuzzyCompareHelper::fuzzyCompare(directorVector[0], result.x(), directorVectorEpsilon));
+    QVERIFY(FuzzyCompareHelper::fuzzyCompare(directorVector[1], result.y(), directorVectorEpsilon));
+    QVERIFY(FuzzyCompareHelper::fuzzyCompare(directorVector[2], result.z(), directorVectorEpsilon));
+
 }
 
 void test_MathTools::crossProduct_ShouldReturnExpectedValues()
