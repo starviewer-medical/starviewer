@@ -17,7 +17,7 @@ void DicomPrinter::setID(int ID)
     m_ID = ID;
 }
 
-int DicomPrinter::getID()
+int DicomPrinter::getID() const
 {
     return m_ID;
 }
@@ -77,7 +77,7 @@ void DicomPrinter::setPort(int port)
     m_port = port;
 }
 
-int DicomPrinter::getPort()
+int DicomPrinter::getPort() const
 {
     return m_port;
 }
@@ -97,7 +97,7 @@ void DicomPrinter::setAvailableMediumTypeValues(QStringList mediumTypeValues)
     m_mediumTypeValues = mediumTypeValues;
 }
 
-QStringList DicomPrinter::getAvailableMediumTypeValues()
+QStringList DicomPrinter::getAvailableMediumTypeValues() const
 {
     return m_mediumTypeValues;
 }
@@ -117,7 +117,7 @@ void DicomPrinter::setAvailableFilmSizeValues(QStringList filmSizeValues)
     m_filmSizeValues = filmSizeValues;
 }
 
-QStringList DicomPrinter::getAvailableFilmSizeValues()
+QStringList DicomPrinter::getAvailableFilmSizeValues() const
 {
     return m_filmSizeValues;
 }
@@ -155,7 +155,7 @@ void DicomPrinter::setAvailableFilmLayoutValues(QStringList filmLayoutValues)
     m_filmLayoutValues = filmLayoutValues;
 }
 
-QStringList DicomPrinter::getAvailableFilmLayoutValues()
+QStringList DicomPrinter::getAvailableFilmLayoutValues() const
 {
     return m_filmLayoutValues;
 }
@@ -175,7 +175,7 @@ void DicomPrinter::setAvailableFilmOrientationValues(QStringList filmOrientation
     m_filmOrientationValues = filmOrientationValues;
 }
 
-QStringList DicomPrinter::getAvailableFilmOrientationValues()
+QStringList DicomPrinter::getAvailableFilmOrientationValues() const
 {
     return m_filmOrientationValues;
 }
@@ -195,7 +195,7 @@ void DicomPrinter::setAvailableMagnificationTypeValues(QStringList magnification
     m_magnificationTypeValues = magnificationTypeValues;
 }
 
-QStringList DicomPrinter::getAvailableMagnificationTypeValues()
+QStringList DicomPrinter::getAvailableMagnificationTypeValues() const
 {
     return m_magnificationTypeValues;
 }
@@ -235,7 +235,7 @@ void DicomPrinter::setAvailableMinDensityValues(ushort minDensityValues)
     m_minDensityValues = minDensityValues;
 }
 
-ushort DicomPrinter::getAvailableMinDensityValues()
+ushort DicomPrinter::getAvailableMinDensityValues() const
 {
     return m_minDensityValues;
 }
@@ -245,7 +245,7 @@ void DicomPrinter::setDefaultTrim(bool _defaultTrim)
     m_defaultTrim = _defaultTrim;
 }
 
-bool DicomPrinter::getDefaultTrim()
+bool DicomPrinter::getDefaultTrim() const
 {
     return m_defaultTrim;
 }
@@ -255,7 +255,7 @@ void DicomPrinter::setAvailableTrim(bool availableTrim)
     m_availableTrim = availableTrim;
 }
 
-bool DicomPrinter::getAvailableTrim()
+bool DicomPrinter::getAvailableTrim() const
 {
     return m_availableTrim;
 }
@@ -275,7 +275,7 @@ void DicomPrinter::setAvailableBorderDensityValues(QStringList borderDensityValu
     m_borderDensityValues = borderDensityValues;
 }
 
-QStringList DicomPrinter::getAvailableBorderDensityValues()
+QStringList DicomPrinter::getAvailableBorderDensityValues() const
 {
     return m_borderDensityValues;
 }
@@ -295,7 +295,7 @@ void DicomPrinter::setAvailableEmptyImageDensityValues(QStringList emptyImageDen
     m_emptyImageDensityValues = emptyImageDensityValues;
 }
 
-QStringList DicomPrinter::getAvailableEmptyImageDensityValues()
+QStringList DicomPrinter::getAvailableEmptyImageDensityValues() const
 {
     return m_emptyImageDensityValues;
 }
@@ -315,7 +315,7 @@ void DicomPrinter::setAvailableFilmDestinationValues(QStringList filmDestination
     m_filmDestinationValues = filmDestinationValues;
 }
 
-QStringList DicomPrinter::getAvailableFilmDestinationValues()
+QStringList DicomPrinter::getAvailableFilmDestinationValues() const
 {
     return m_filmDestinationValues;
 }
@@ -335,7 +335,7 @@ void DicomPrinter::setAvailableSmoothingTypeValues(QStringList smoothingTypeValu
     m_smoothingTypeValues = smoothingTypeValues;
 }
 
-QStringList DicomPrinter::getAvailableSmoothingTypeValues()
+QStringList DicomPrinter::getAvailableSmoothingTypeValues() const
 {
     return m_smoothingTypeValues;
 }
@@ -355,7 +355,7 @@ void DicomPrinter::setAvailablePrintPriorityValues(QStringList printPriorityValu
     m_printPriorityValues = printPriorityValues;
 }
 
-QStringList DicomPrinter::getAvailablePrintPriorityValues()
+QStringList DicomPrinter::getAvailablePrintPriorityValues() const
 {
     return m_printPriorityValues;
 }
@@ -375,7 +375,7 @@ void DicomPrinter::setAvailablePolarityValues(QStringList polarityValues)
     m_polarityValues = polarityValues;
 }
 
-QStringList DicomPrinter::getAvailablePolarityValues()
+QStringList DicomPrinter::getAvailablePolarityValues() const
 {
     return m_polarityValues;
 }
