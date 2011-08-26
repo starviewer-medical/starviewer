@@ -1,8 +1,6 @@
 #ifndef FUZZYCOMPAREHELPER_H
 #define FUZZYCOMPAREHELPER_H
 
-#include <QString>
-
 namespace testing {
 
 /// Classe que contindrà les funcions de comparació fuzzy que necessitem
