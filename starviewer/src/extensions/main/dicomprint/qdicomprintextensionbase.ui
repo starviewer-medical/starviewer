@@ -512,6 +512,10 @@
             <property name="text">
              <string>Add to print</string>
             </property>
+            <property name="icon">
+             <iconset resource="../../../main/main.qrc">
+              <normaloff>:/images/addNewPrinter.png</normaloff>:/images/addNewPrinter.png</iconset>
+            </property>
            </widget>
           </item>
          </layout>
@@ -545,6 +549,10 @@
            <widget class="QPushButton" name="m_clearDICOMImagesSelectionToPrintButton">
             <property name="text">
              <string>Clear</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../../../main/main.qrc">
+              <normaloff>:/images/removePrinter.png</normaloff>:/images/removePrinter.png</iconset>
             </property>
            </widget>
           </item>
