@@ -8,6 +8,8 @@
 
 #include <QDir>
 #include <QDateTime>
+#include <QPair>
+
 #include "dicomprintjob.h"
 #include "dicomprintpage.h"
 #include "dicomprinter.h"
@@ -16,6 +18,7 @@
 #include "starviewerapplication.h"
 #include "pacsdevice.h"
 #include "inputoutputsettings.h"
+#include "dicomprintpresentationstateimage.h"
 
 namespace udg {
 
@@ -42,9 +45,10 @@ QString CreateDicomPrintSpool::createPrintSpool(DicomPrinter dicomPrinter, Dicom
 
     setBasicFilmBoxAttributes();
 
-    foreach (Image *image, m_dicomPrintPage.getImagesToPrint())
+    for (int index = 0; index < m_dicomPrintPage.getImagesToPrint().count(); index++)
     {
-        ok = transformImageForPrinting(image, spoolDirectoryPath);
+        QPair< Image*, DICOMPrintPresentationStateImage > imageToPrintWithPresentationState = m_dicomPrintPage.getImagesToPrint().at(index);
+        ok = transformImageForPrinting(imageToPrintWithPresentationState.first, imageToPrintWithPresentationState.second, spoolDirectoryPath);
 
         if (!ok)
         {
@@ -153,7 +157,7 @@ void CreateDicomPrintSpool::setBasicFilmBoxAttributes()
     INFO_LOG("Emplenats els tags del FilmBox a l'objecte DVPStoredPrint");
 }
 
-bool CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, const QString &spoolDirectoryPath)
+bool CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, DICOMPrintPresentationStateImage dicomPrintPresentationStateImage, const QString &spoolDirectoryPath)
 {
     unsigned long bitmapWidth, bitmapHeight, bitmapSize;
     double pixelAspectRatio;
@@ -207,6 +211,9 @@ bool CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, const
         //per això sumem més 1
         m_presentationState->selectImageFrameNumber(imageToPrint->getFrameNumber() + 1);
     }
+
+    applyDICOMPrintPresentationStateImage(m_presentationState, dicomPrintPresentationStateImage);
+
     bitmapSize = m_presentationState->getPrintBitmapSize();
 
     status = m_presentationState->getPrintBitmapWidthHeight(bitmapWidth, bitmapHeight);
@@ -471,4 +478,35 @@ CreateDicomPrintSpool::CreateDicomPrintSpoolError CreateDicomPrintSpool::getLast
 {
     return m_lastError;
 }
+
+void CreateDicomPrintSpool::applyDICOMPrintPresentationStateImage(DVPresentationState *dvPresentationState,
+                                                                  const DICOMPrintPresentationStateImage &dicomPrintPresentationStateImage)
+{
+    if (!dicomPrintPresentationStateImage.applyDefaultWindowLevelToImage())
+    {
+        int windowWidth;
+        int windowCenter = dicomPrintPresentationStateImage.getWindowCenter();
+
+        if (dicomPrintPresentationStateImage.getWindowWidth() < 0)
+        {
+            //Dcmtk només accepta Window Width positius, l'equivalència de Window Witdh negatiu a dcmtk és invertir els colors de la imatge i aplicar el mateix
+            //window width amb signe positu
+            dvPresentationState->invertImage();
+            windowWidth = -dicomPrintPresentationStateImage.getWindowWidth();
+        }
+        else
+        {
+            windowWidth = dicomPrintPresentationStateImage.getWindowWidth();
+        }
+
+        OFCondition cond = dvPresentationState->setVOIWindow(windowCenter, windowWidth);
+
+        if (!cond.good())
+        {
+            ERROR_LOG(QString("No s'ha pogut aplicar el WL a la imatge a imprimir WC:%1, WL:%2, Descripcio error: %3").
+                      arg(QString::number(windowCenter), QString::number(windowWidth), QString(cond.text())));
+        }
+    }
+}
+
 }

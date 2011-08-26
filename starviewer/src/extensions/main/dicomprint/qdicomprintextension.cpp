@@ -213,6 +213,7 @@ void QDicomPrintExtension::addSelectedImagesToGroupedDICOMImagesToPrint()
     m_lastIDGroupedDICOMImagesToPrint++;
     selectedGroupedDICOMImagesToPrint.ID = m_lastIDGroupedDICOMImagesToPrint;
     selectedGroupedDICOMImagesToPrint.imagesToPrint = getSelectedImagesToAddToPrint();
+    selectedGroupedDICOMImagesToPrint.dicomPrintPresentationStateImage = getDICOMPrintPresentationStateImageForCurrentSelectedImages();
     m_groupedDICOMImagesToPrintList.append(selectedGroupedDICOMImagesToPrint);
 
     Image *firstSelectedImage = getSelectedImagesToAddToPrint().first();
@@ -258,29 +259,29 @@ DicomPrintJob QDicomPrintExtension::getDicomPrintJobToPrint()
 
 QList<DicomPrintPage> QDicomPrintExtension::getDicomPrintPageListToPrint()
 {
-    QList<Image*> imagesToPrint = getImagesToPrint();
+    QList<QPair<Image*, DICOMPrintPresentationStateImage> > imagesToPrintWithPresentationState = getImagesToPrint();
     QList<DicomPrintPage> dicomPrintPageList;
     DicomPrinter dicomPrinter = getSelectedDicomPrinter();
     int numberOfImagesPerPage = dicomPrinter.getDefaultFilmLayoutColumns() * dicomPrinter.getDefaultFilmLayoutRows();
     int numberOfPage = 1;
 
-    while (!imagesToPrint.isEmpty())
+    while (!imagesToPrintWithPresentationState.isEmpty())
     {
         int indexOfImagePerPage = 0;
-        QList<Image*> imagesPageList;
+        QList<QPair<Image*, DICOMPrintPresentationStateImage> > imagesPageList;
         DicomPrintPage dicomPrintPage = fillDicomPrintPagePrintSettings(dicomPrinter);
 
         // TODO:No tinc clar que això haig de ser responsabilitat de la Interfície emplenar les anotacions
         if (dicomPrinter.getSupportsAnnotationBox())
         {
-            addAnnotationsToDicomPrintPage(&dicomPrintPage, imagesToPrint.at(0));
+            addAnnotationsToDicomPrintPage(&dicomPrintPage, imagesToPrintWithPresentationState.at(0).first);
         }
 
         dicomPrintPage.setPageNumber(numberOfPage);
         // Emplenen una dicomPrintPage amb les imatges en funció del número d'imatges que hi caben
-        while (indexOfImagePerPage < numberOfImagesPerPage && !imagesToPrint.isEmpty())
+        while (indexOfImagePerPage < numberOfImagesPerPage && !imagesToPrintWithPresentationState.isEmpty())
         {
-            imagesPageList.append(imagesToPrint.takeFirst());
+            imagesPageList.append(imagesToPrintWithPresentationState.takeFirst());
             indexOfImagePerPage++;
         }
 
@@ -435,16 +436,43 @@ void QDicomPrintExtension::removeGroupedDICOMImagesToPrint(int IDGroup)
     }
 }
 
-QList<Image*> QDicomPrintExtension::getImagesToPrint()
+QList<QPair<Image*, DICOMPrintPresentationStateImage> > QDicomPrintExtension::getImagesToPrint()
 {
-    QList<Image*> imagesToPrint;
+    QList<QPair<Image*, DICOMPrintPresentationStateImage> > imagesToPrint;
 
     foreach(GroupedDICOMImagesToPrint groupedDICOMImagesToPrint, m_groupedDICOMImagesToPrintList)
     {
-        imagesToPrint.append(groupedDICOMImagesToPrint.imagesToPrint);
+        foreach(Image *image, groupedDICOMImagesToPrint.imagesToPrint)
+        {
+            QPair <Image*, DICOMPrintPresentationStateImage> imageWithPresentationState;
+            imageWithPresentationState.first = image;
+            imageWithPresentationState.second = groupedDICOMImagesToPrint.dicomPrintPresentationStateImage;
+
+            imagesToPrint.append(imageWithPresentationState);
+        }
     }
 
     return imagesToPrint;
+}
+
+DICOMPrintPresentationStateImage QDicomPrintExtension::getDICOMPrintPresentationStateImageForCurrentSelectedImages() const
+{
+    DICOMPrintPresentationStateImage dicomPrintPresentationStateImage;
+    double windowLevelFromViewer[2];
+    m_2DView->getCurrentWindowLevel(windowLevelFromViewer);
+
+    // Tenir en compte que imatges dins un mateixa sèrie poden tenir WL
+    Image *currentImageInViewer = m_2DView->getInput()->getImage(m_2DView->getCurrentSlice(), m_2DView->getCurrentPhase());
+    bool windowLevelHasBeenModifiedInViewer = currentImageInViewer->getWindowLevel().first != windowLevelFromViewer[0] ||
+            currentImageInViewer-> getWindowLevel().second != windowLevelFromViewer[1];
+
+    //Si el WL no ha estat modificat per defecte s'aplicarà el que té cada imatge
+    if (windowLevelHasBeenModifiedInViewer)
+    {
+        dicomPrintPresentationStateImage.setWindowLevel(windowLevelFromViewer[0], windowLevelFromViewer[1]);
+    }
+
+    return dicomPrintPresentationStateImage;
 }
 
 void QDicomPrintExtension::selectedDicomPrinterChanged(int indexOfSelectedDicomPrinter)

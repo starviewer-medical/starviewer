@@ -3,6 +3,9 @@
 
 #include <QString>
 #include <QMap>
+#include <QPair>
+
+#include "dicomprintpresentationstateimage.h"
 
 namespace udg {
 
@@ -80,8 +83,8 @@ public:
     int getPageNumber();
 
     /// Especifica/retorna les imatges que s'han d'imprimir en aquesta pàgina. Les imatges s'imprimiren segons l'ordre d'inserció a la llista
-    void setImagesToPrint(QList<Image*> imagesToPrint);
-    QList<Image*> getImagesToPrint();
+    void setImagesToPrint(QList<QPair<Image*, DICOMPrintPresentationStateImage> > imagesToPrint);
+    QList<QPair<Image*, DICOMPrintPresentationStateImage> > getImagesToPrint();
 
 private:
     QString m_filmSize;
@@ -98,7 +101,7 @@ private:
     QMap<int, QString> m_pageAnnotations;
     QString m_annotationDisplayFormatID;
     int m_pageNumber;
-    QList<Image*> m_imagesToPrint;
+    QList<QPair<Image*, DICOMPrintPresentationStateImage> > m_imagesToPrint;
 };
 };
 #endif
