@@ -5,6 +5,7 @@
 #include <dvpssp.h>
 #include <dvpshlp.h>
 #include <dvpsabl.h>
+#include <dvpstyp.h>
 
 #include <QDir>
 #include <QDateTime>
@@ -479,6 +480,9 @@ CreateDicomPrintSpool::CreateDicomPrintSpoolError CreateDicomPrintSpool::getLast
     return m_lastError;
 }
 
+//TODO: Aquest mètode segurament s'hauria de dividir en un mètode per cada obtenir cada tipus de transformació al Presentation state,
+//      i també s'hauria d'estudiar la possibilitat de crear una classe amb la responsabilitat exclusiva de transofrmar un DICOMPrinPresetationStateImage
+//      a DVPPResentationState
 void CreateDicomPrintSpool::applyDICOMPrintPresentationStateImage(DVPresentationState *dvPresentationState,
                                                                   const DICOMPrintPresentationStateImage &dicomPrintPresentationStateImage)
 {
@@ -506,6 +510,24 @@ void CreateDicomPrintSpool::applyDICOMPrintPresentationStateImage(DVPresentation
             ERROR_LOG(QString("No s'ha pogut aplicar el WL a la imatge a imprimir WC:%1, WL:%2, Descripcio error: %3").
                       arg(QString::number(windowCenter), QString::number(windowWidth), QString(cond.text())));
         }
+    }
+
+    dvPresentationState->setFlip(dicomPrintPresentationStateImage.getIsFlipped());
+
+    switch (dicomPrintPresentationStateImage.getRotateClockWise() % 4)
+    {
+        case 1:
+            dvPresentationState->setRotation(DVPSR_90_deg);
+            break;
+        case 2:
+            dvPresentationState->setRotation(DVPSR_180_deg);
+        break;
+        case 3:
+            dvPresentationState->setRotation(DVPSR_270_deg);
+        break;
+        default:
+            dvPresentationState->setRotation(DVPSR_0_deg);
+            break;
     }
 }
 

@@ -8,6 +8,9 @@ DICOMPrintPresentationStateImage::DICOMPrintPresentationStateImage()
     m_windowCenter = 0;
 
     m_applyDefaultWindowLevelToImage = true;
+    m_horitzontalFlip = false;
+
+    m_rotateClockWiseTimes = 0;
 }
 
 double DICOMPrintPresentationStateImage::getWindowCenter() const
@@ -33,5 +36,24 @@ bool DICOMPrintPresentationStateImage::applyDefaultWindowLevelToImage() const
     return m_applyDefaultWindowLevelToImage;
 }
 
+bool DICOMPrintPresentationStateImage::getIsFlipped() const
+{
+    return m_horitzontalFlip;
+}
+
+void DICOMPrintPresentationStateImage::setIsFlipped(bool horitzontalFlip)
+{
+    m_horitzontalFlip = horitzontalFlip;
+}
+
+void DICOMPrintPresentationStateImage::setRotateClockWise(int times)
+{
+    m_rotateClockWiseTimes = times;
+}
+
+int DICOMPrintPresentationStateImage::getRotateClockWise() const
+{
+    return m_rotateClockWiseTimes;
+}
 
 }

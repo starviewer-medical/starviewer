@@ -20,12 +20,21 @@ public:
     /// Indica si s'ha d'aplicat el WindowLevel per defecte que té la Imatge, serà cert en el cas que no s'hagi assignat cap WindowLevel en aquest objecte
     bool applyDefaultWindowLevelToImage() const;
 
+    void setIsFlipped(bool horitzontalFlip);
+    bool getIsFlipped() const;
+
+    void setRotateClockWise(int times = 1);
+    int getRotateClockWise() const;
+
 private:
 
     double m_windowWidth;
     double m_windowCenter;
 
     bool m_applyDefaultWindowLevelToImage;
+    bool m_horitzontalFlip;
+
+    int m_rotateClockWiseTimes;
 };
 
 }
