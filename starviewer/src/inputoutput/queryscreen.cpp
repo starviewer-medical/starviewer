@@ -16,12 +16,12 @@
 #include "localdatabasemanager.h"
 #include "patient.h"
 #include "starviewerapplication.h"
-#include "utils.h"
 #include "statswatcher.h"
 #include "pacsdevice.h"
 #include "risrequestmanager.h"
 #include "pacsmanager.h"
 #include "retrievedicomfilesfrompacsjob.h"
+#include "portinuse.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -187,7 +187,7 @@ void QueryScreen::checkIncomingConnectionsPacsPortNotInUse()
 {
     int localPort = Settings().getValue(InputOutputSettings::IncomingDICOMConnectionsPort).toInt();
 
-    if (Utils::isPortInUse(localPort))
+    if (PortInUse().isPortInUse(localPort))
     {
         QString message = tr("Port %1 for incoming connections from PACS is already in use by another application.").arg(localPort);
         message += tr("\n\n%1 couldn't retrieve studies from PACS if the port is in use, please close the application that is using port %2 or change "
