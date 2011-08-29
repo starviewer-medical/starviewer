@@ -219,14 +219,6 @@ double MathTools::cubeRoot(double x)
     return std::pow(x, 1.0 / 3.0);
 }
 
-double MathTools::getDistance2D(const double firstPoint[2], const double secondPoint[2])
-{
-    double xx = firstPoint[0] - secondPoint[0];
-    double yy = firstPoint[1] - secondPoint[1];
-    double value = pow(xx, 2) + pow(yy, 2);
-    return sqrt(value);
-}
-
 double MathTools::getDistance3D(const double firstPoint[3], const double secondPoint[3])
 {
     double xx = firstPoint[0] - secondPoint[0];

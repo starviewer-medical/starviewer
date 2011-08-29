@@ -60,8 +60,7 @@ static double cubeRoot(double x);
 /// valors passats per paràmetre si la seva diferència és menor al valor d'Epsilon
 static bool closeEnough(float f1, float f2);
 
-/// Distància entre punts 2D i 3D
-static double getDistance2D(const double firstPoint[2], const double secondPoint[2]);
+/// Distància entre punts 3D
 static double getDistance3D(const double firstPoint[3], const double secondPoint[3]);
 
 /// Distància entre un punt i un segment finit definit per lineFirstPoint i lineSecondPoint
