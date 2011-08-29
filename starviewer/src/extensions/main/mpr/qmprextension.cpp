@@ -17,6 +17,7 @@
 // Qt
 #include <QMessageBox>
 #include <QMenu>
+#include <QVector3D>
 // VTK
 #include <vtkAxisActor2D.h>
 // Pels events
@@ -586,7 +587,7 @@ void QMPRExtension::rotateAxialViewAxisActor()
     m_initialPickY = clickedWorldPoint[1];
 
     // Angle de gir en graus
-    double angle = MathTools::angleInDegrees(vec1, vec2);
+    double angle = MathTools::angleInDegrees(QVector3D(vec1[0], vec1[1], vec1[2]), QVector3D(vec2[0], vec2[1], vec2[2]));
 
     // Direcció de l'eix de rotació
     double direction[3];
@@ -697,7 +698,7 @@ void QMPRExtension::rotateSagitalViewAxisActor()
     m_initialPickY = clickedWorldPoint[1];
 
     // Angle de gir en graus
-    double angle = MathTools::angleInDegrees(vec1, vec2);
+    double angle = MathTools::angleInDegrees(QVector3D(vec1[0], vec1[1], vec1[2]), QVector3D(vec2[0], vec2[1], vec2[2]));
 
     // Direcció de l'eix de rotació (coordenades de sagital)
     double direction[3];
@@ -1538,46 +1539,47 @@ void QMPRExtension::getCoronalYVector(double y[3])
 
 bool QMPRExtension::isParallel(double axis[3])
 {
-    double xyzAxis[3] = { 1, 0, 0 };
+    QVector3D xyzAxis(1, 0, 0);
+    QVector3D axis3D(axis[0], axis[1], axis[2]);
     // TODO Hauríem de tenir un mètode MathTools::areParallel(vector1, vector2)
-    if (MathTools::angleInDegrees(xyzAxis, axis) == 0.0)
+    if (MathTools::angleInDegrees(xyzAxis, axis3D) == 0.0)
     {
         return true;
     }
-    xyzAxis[0] = -1;
-    xyzAxis[1] = 0;
-    xyzAxis[2] = 0;
-    if (MathTools::angleInDegrees(xyzAxis, axis) == 0.0)
-    {
-        return true;
-    }
-
-    xyzAxis[0] = 0;
-    xyzAxis[1] = 0;
-    xyzAxis[2] = 1;
-    if (MathTools::angleInDegrees(xyzAxis, axis) == 0.0)
-    {
-        return true;
-    }
-    xyzAxis[0] = 0;
-    xyzAxis[1] = 0;
-    xyzAxis[2] = -1;
-    if (MathTools::angleInDegrees(xyzAxis, axis) == 0.0)
+    xyzAxis.setX(-1);
+    xyzAxis.setY(0);
+    xyzAxis.setZ(0);
+    if (MathTools::angleInDegrees(xyzAxis, axis3D) == 0.0)
     {
         return true;
     }
 
-    xyzAxis[0] = 0;
-    xyzAxis[1] = 1;
-    xyzAxis[2] = 0;
-    if (MathTools::angleInDegrees(xyzAxis, axis) == 0.0)
+    xyzAxis.setX(0);
+    xyzAxis.setY(0);
+    xyzAxis.setZ(1);
+    if (MathTools::angleInDegrees(xyzAxis, axis3D) == 0.0)
     {
         return true;
     }
-    xyzAxis[0] = 0;
-    xyzAxis[1] = -1;
-    xyzAxis[2] = 0;
-    if (MathTools::angleInDegrees(xyzAxis, axis) == 0.0)
+    xyzAxis.setX(0);
+    xyzAxis.setY(0);
+    xyzAxis.setZ(-1);
+    if (MathTools::angleInDegrees(xyzAxis, axis3D) == 0.0)
+    {
+        return true;
+    }
+
+    xyzAxis.setX(0);
+    xyzAxis.setY(1);
+    xyzAxis.setZ(0);
+    if (MathTools::angleInDegrees(xyzAxis, axis3D) == 0.0)
+    {
+        return true;
+    }
+    xyzAxis.setX(0);
+    xyzAxis.setY(-1);
+    xyzAxis.setZ(0);
+    if (MathTools::angleInDegrees(xyzAxis, axis3D) == 0.0)
     {
         return true;
     }

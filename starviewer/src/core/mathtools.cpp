@@ -6,6 +6,8 @@
 #include <vtkPlane.h>
 #include <vtkLine.h>
 
+#include <QVector3D>
+
 namespace udg {
 
 /// Definició de constants
@@ -47,19 +49,19 @@ double MathTools::logTwo(const double x, const bool zero)
     }
 }
 
-double MathTools::angleInRadians(double vec1[3], double vec2[3])
+double MathTools::angleInRadians(const QVector3D &vec1, const QVector3D &vec2)
 {
-    return acos(MathTools::dotProduct(vec1, vec2) / (vtkMath::Norm(vec1) * vtkMath::Norm(vec2)));
+    return acos(QVector3D::dotProduct(vec1, vec2) / (vec1.length() * vec2.length()));
 }
 
-double MathTools::angleInDegrees(double vec1[3], double vec2[3])
+double MathTools::angleInDegrees(const QVector3D &vec1, const QVector3D &vec2)
 {
     return angleInRadians(vec1, vec2) * MathTools::RadiansToDegreesAsDouble;
 }
 
 int MathTools::planeIntersection(double p[3], double n[3], double q[3], double m[3], double r[3], double t[3])
 {
-    if (angleInDegrees(n, m) == 0.0)
+    if (angleInDegrees(QVector3D(n[0], n[1], n[2]), QVector3D(m[0], m[1], m[2])) == 0.0)
     {
         return 0;
     }
