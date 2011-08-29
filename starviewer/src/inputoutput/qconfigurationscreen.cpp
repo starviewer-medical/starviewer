@@ -9,10 +9,10 @@
 #include "pacsdevicemanager.h"
 #include "starviewerapplication.h"
 #include "logging.h"
-#include "utils.h"
 #include "localdatabasemanager.h"
 #include "inputoutputsettings.h"
 #include "echotopacs.h"
+#include "portinuse.h"
 
 namespace udg {
 
@@ -476,7 +476,7 @@ void QConfigurationScreen::enableApplyButtons()
 bool QConfigurationScreen::isIncomingConnectionsPortInUseByAnotherApplication()
 {
     // Comprovem que el port estigui o no en ús i que en el cas que estigui en ús, no sigui utilitzat per l'Starviewer
-    return Utils::isPortInUse(m_textLocalPort->text().toInt()) && !LocalDatabaseManager().isStudyRetrieving();
+    return PortInUse().isPortInUse(m_textLocalPort->text().toInt()) && !LocalDatabaseManager().isStudyRetrieving();
 }
 
 void QConfigurationScreen::checkIncomingConnectionsPortNotInUse()

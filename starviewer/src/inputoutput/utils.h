@@ -12,11 +12,7 @@ namespace udg {
 class Utils {
 
 public:
-    /// Indica si el port passat per paràmetre està en ús
-    static bool isPortInUse(int port);
-
     static QString generateUID(const QString &prefix = QString());
-
 };
 
 };  // end namespace udg

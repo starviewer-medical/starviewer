@@ -86,7 +86,8 @@ HEADERS += databaseconnection.h \
     dicommasktodcmdataset.h \
     upgradedatabaserevisioncommands.h \
     upgradedatabasexmlparser.h \
-    qthumbnailspreviewwidget.h
+    qthumbnailspreviewwidget.h \
+    portinuse.h
 SOURCES += databaseconnection.cpp \
     pacsdevicemanager.cpp \
     pacsconnection.cpp \
@@ -148,7 +149,8 @@ SOURCES += databaseconnection.cpp \
     dicommasktodcmdataset.cpp \
     upgradedatabaserevisioncommands.cpp \
     upgradedatabasexmlparser.cpp \
-    qthumbnailspreviewwidget.cpp
+    qthumbnailspreviewwidget.cpp \
+    portinuse.cpp
 INCLUDEPATH += ../core
 DEPENDPATH += ../core
 TEMPLATE = lib
