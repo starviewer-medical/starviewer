@@ -39,6 +39,9 @@ private slots:
     void directorVector_ShouldReturnExpectedValues_data();
     void directorVector_ShouldReturnExpectedValues();
 
+    void getDistance3D_ShouldComputeDistanceCorrectly_data();
+    void getDistance3D_ShouldComputeDistanceCorrectly();
+
 private:
     void setupComputeAngleData();
     void setupComputeAngleNaNData();
@@ -52,6 +55,7 @@ const double NormalizeEpsilon = 0.000001;
 const double ModulusEpsilon = 0.001;
 const double crossProductEpsilon = 0.001;
 const double directorVectorEpsilon = 0.001;
+const double distance3DEpsion = 0.0005;
 
 void test_MathTools::angleInRadians_ShouldComputeAngleInRadians_data()
 {
@@ -261,6 +265,31 @@ void test_MathTools::crossProduct_ShouldReturnExpectedValues()
     QVERIFY(FuzzyCompareHelper::fuzzyCompare(computedCrossProduct[0], crossProduct.x(), crossProductEpsilon));
     QVERIFY(FuzzyCompareHelper::fuzzyCompare(computedCrossProduct[1], crossProduct.y(), crossProductEpsilon));
     QVERIFY(FuzzyCompareHelper::fuzzyCompare(computedCrossProduct[2], crossProduct.z(), crossProductEpsilon));    
+}
+
+void test_MathTools::getDistance3D_ShouldComputeDistanceCorrectly_data()
+{
+    QTest::addColumn<QVector3D>("vector1");
+    QTest::addColumn<QVector3D>("vector2");
+    QTest::addColumn<double>("distance3D");
+
+    QTest::newRow("Same vectors") << QVector3D(1, 2, 1) << QVector3D(1, 2, 1) << 0.0;
+    QTest::newRow("null vectors") << QVector3D(0, 0, 0) << QVector3D(0, 0, 0) << 0.0;
+    QTest::newRow("random coronal") << QVector3D(-89.9476, 49.8371, 599.893) << QVector3D(-79.0086, 207.671, 599.893) << 158.213;
+    QTest::newRow("random sagital") << QVector3D(7.68421, -11.8899, 695.178) << QVector3D(7.68421, 144.381, 831.915) << 207.648;
+    QTest::newRow("random coronal") << QVector3D(-96.9798, 99.4654, 838.166) << QVector3D(-50.0985, 99.4654, 709.242) << 137.183;
+}
+
+void test_MathTools::getDistance3D_ShouldComputeDistanceCorrectly()
+{
+    QFETCH(QVector3D, vector1);
+    QFETCH(QVector3D, vector2);
+    QFETCH(double, distance3D);
+
+    double v1[3] = { vector1.x(), vector1.y(), vector1.z() };
+    double v2[3] = { vector2.x(), vector2.y(), vector2.z() };
+
+    QVERIFY(FuzzyCompareHelper::fuzzyCompare(MathTools::getDistance3D(v1, v2), distance3D, distance3DEpsion));
 }
 
 void test_MathTools::setupComputeAngleData()
