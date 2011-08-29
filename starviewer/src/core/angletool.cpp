@@ -10,6 +10,8 @@
 #include <vtkRenderWindowInteractor.h>
 #include <vtkCommand.h>
 
+#include <QVector3D>
+
 namespace udg {
 
 AngleTool::AngleTool(QViewer *viewer, QObject *parent)
@@ -109,11 +111,11 @@ void AngleTool::findInitialDegreeArc()
 
     if (pv[depthCoord] > 0)
     {
-        m_initialDegreeArc = (int)MathTools::angleInDegrees(vd1, vd2);
+        m_initialDegreeArc = (int)MathTools::angleInDegrees(QVector3D(vd1[0], vd1[1], vd1[2]), QVector3D(vd2[0], vd2[1], vd2[2]));
     }
     else
     {
-        m_initialDegreeArc = -1 * (int)MathTools::angleInDegrees(vd1, vd2);
+        m_initialDegreeArc = -1 * (int)MathTools::angleInDegrees(QVector3D(vd1[0], vd1[1], vd1[2]), QVector3D(vd2[0], vd2[1], vd2[2]));
     }
 }
 
@@ -158,7 +160,7 @@ void AngleTool::drawCircle()
     // Calculem l'angle que formen els dos segments
     double *firstSegment = MathTools::directorVector(firstPoint, circleCentre);
     double *secondSegment = MathTools::directorVector(lastPoint, circleCentre);
-    m_currentAngle = MathTools::angleInDegrees(firstSegment, secondSegment);
+    m_currentAngle = MathTools::angleInDegrees(QVector3D(firstSegment[0], firstSegment[1], firstSegment[2]), QVector3D(secondSegment[0], secondSegment[1], secondSegment[2]));
 
     // Calculem el radi de l'arc de circumferència que mesurarà
     // un quart del segment més curt dels dos que formen l'angle

@@ -9,6 +9,8 @@
 #include <vtkRenderWindowInteractor.h>
 #include <vtkCommand.h>
 
+#include <QVector3D>
+
 namespace udg {
 
 NonClosedAngleTool::NonClosedAngleTool(QViewer *viewer, QObject *parent)
@@ -257,7 +259,7 @@ void NonClosedAngleTool::computeAngle()
         }
     }
 
-    double angle = MathTools::angleInDegrees(vd1, vd2);
+    double angle = MathTools::angleInDegrees(QVector3D(vd1[0], vd1[1], vd1[2]), QVector3D(vd2[0], vd2[1], vd2[2]));
 
     DrawerText * text = new DrawerText;
 

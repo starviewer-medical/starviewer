@@ -64,18 +64,7 @@ void test_MathTools::angleInRadians_ShouldComputeAngleInRadians()
     QFETCH(QVector3D, vector2);
     QFETCH(double, angleInRadians);
 
-    double v1[3];
-    double v2[3];
-
-    v1[0] = vector1.x();
-    v1[1] = vector1.y();
-    v1[2] = vector1.z();
-
-    v2[0] = vector2.x();
-    v2[1] = vector2.y();
-    v2[2] = vector2.z();
-    
-    QVERIFY(FuzzyCompareHelper::fuzzyCompare(MathTools::angleInRadians(v1, v2), angleInRadians, AngleInRadiansEpsilon));
+    QVERIFY(FuzzyCompareHelper::fuzzyCompare(MathTools::angleInRadians(vector1, vector2), angleInRadians, AngleInRadiansEpsilon));
 }
 
 void test_MathTools::angleInDegrees_ShouldComputeAngleInDegrees_data()
@@ -89,18 +78,7 @@ void test_MathTools::angleInDegrees_ShouldComputeAngleInDegrees()
     QFETCH(QVector3D, vector2);
     QFETCH(double, angleInRadians);
 
-    double v1[3];
-    double v2[3];
-
-    v1[0] = vector1.x();
-    v1[1] = vector1.y();
-    v1[2] = vector1.z();
-
-    v2[0] = vector2.x();
-    v2[1] = vector2.y();
-    v2[2] = vector2.z();
-    
-    QVERIFY(FuzzyCompareHelper::fuzzyCompare(MathTools::angleInDegrees(v1, v2), angleInRadians * MathTools::RadiansToDegreesAsDouble, AngleInDegreesEpsilon));
+    QVERIFY(FuzzyCompareHelper::fuzzyCompare(MathTools::angleInDegrees(vector1, vector2), angleInRadians * MathTools::RadiansToDegreesAsDouble, AngleInDegreesEpsilon));
 }
 
 void test_MathTools::angleInRadians_ShouldReturnNaN_data()
@@ -113,18 +91,7 @@ void test_MathTools::angleInRadians_ShouldReturnNaN()
     QFETCH(QVector3D, vector1);
     QFETCH(QVector3D, vector2);
 
-    double v1[3];
-    double v2[3];
-
-    v1[0] = vector1.x();
-    v1[1] = vector1.y();
-    v1[2] = vector1.z();
-
-    v2[0] = vector2.x();
-    v2[1] = vector2.y();
-    v2[2] = vector2.z();
-
-    QVERIFY(MathTools::isNaN(MathTools::angleInRadians(v1, v2)));
+    QVERIFY(MathTools::isNaN(MathTools::angleInRadians(vector1, vector2)));
 }
 
 void test_MathTools::angleInDegrees_ShouldReturnNaN_data()
@@ -137,18 +104,7 @@ void test_MathTools::angleInDegrees_ShouldReturnNaN()
     QFETCH(QVector3D, vector1);
     QFETCH(QVector3D, vector2);
 
-    double v1[3];
-    double v2[3];
-
-    v1[0] = vector1.x();
-    v1[1] = vector1.y();
-    v1[2] = vector1.z();
-
-    v2[0] = vector2.x();
-    v2[1] = vector2.y();
-    v2[2] = vector2.z();
-
-    QVERIFY(MathTools::isNaN(MathTools::angleInDegrees(v1, v2)));
+    QVERIFY(MathTools::isNaN(MathTools::angleInDegrees(vector1, vector2)));
 }
 
 void test_MathTools::normalize_ShouldReturnExpectedValues_data()

@@ -140,8 +140,6 @@ void OrderImagesFillerStep::processImage(Image *image)
     // El passem a string que ens serà més fàcil de comparar,perquè així és com es guarda a l'estructura d'ordenació
     QString planeNormalString = QString("%1\\%2\\%3").arg(planeNormalVector3D.x(), 0, 'f', 5).arg(planeNormalVector3D.y(), 0, 'f', 5)
                                    .arg(planeNormalVector3D.z(), 0, 'f', 5);
-    // Passem el vector 3D a un array de C perquè el necessitem pel MathTools::angleInDegrees()
-    double planeNormalArray[3] = { planeNormalVector3D.x(), planeNormalVector3D.y(), planeNormalVector3D.z() };
 
     QMap<double, QMap<unsigned long, Image*>*> *imagePositionSet;
     QMap<unsigned long, Image*> *instanceNumberSet;
@@ -177,13 +175,10 @@ void OrderImagesFillerStep::processImage(Image *image)
                 // Tot i que siguin diferents, pot ser que siguin gairebé iguals
                 // llavors cal comprovar que de fet són prou diferents
                 // ja que d'avegades només hi ha petites imprecisions simplement
-                double normalVector[3];
                 QStringList normalSplitted = normal.split("\\");
-                normalVector[0] = normalSplitted.at(0).toDouble();
-                normalVector[1] = normalSplitted.at(1).toDouble();
-                normalVector[2] = normalSplitted.at(2).toDouble();
+                QVector3D normalVector(normalSplitted.at(0).toDouble(), normalSplitted.at(1).toDouble(), normalSplitted.at(2).toDouble());
 
-                double angle = MathTools::angleInDegrees(normalVector, planeNormalArray);
+                double angle = MathTools::angleInDegrees(normalVector, planeNormalVector3D);
                 if (angle < 1.0)
                 {
                     // Si l'angle entre les normals

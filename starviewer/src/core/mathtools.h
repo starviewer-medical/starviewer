@@ -1,6 +1,8 @@
 #ifndef UDGMATHTOOLS_H
 #define UDGMATHTOOLS_H
 
+class QVector3D;
+
 namespace udg {
 
 /**
@@ -108,8 +110,8 @@ static void crossProduct(double vectorDirector1[3], double vectorDirector2[3], d
 static double normalize(double vector[3]);
 
 /// Calcula l'angle entre dos vectors. Retorna el valor en radians o graus
-static double angleInRadians(double vec1[3], double vec2[3]);
-static double angleInDegrees(double vec1[3], double vec2[3]);
+static double angleInRadians(const QVector3D &vec1, const QVector3D &vec2);
+static double angleInDegrees(const QVector3D &vec1, const QVector3D &vec2);
 
 /// Retorna cert si \a x és NaN.
 static bool isNaN(double x);
