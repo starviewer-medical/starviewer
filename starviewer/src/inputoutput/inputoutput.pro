@@ -87,7 +87,8 @@ HEADERS += databaseconnection.h \
     upgradedatabaserevisioncommands.h \
     upgradedatabasexmlparser.h \
     qthumbnailspreviewwidget.h \
-    portinuse.h
+    portinuse.h \
+    portinusetest.h
 SOURCES += databaseconnection.cpp \
     pacsdevicemanager.cpp \
     pacsconnection.cpp \
@@ -150,7 +151,8 @@ SOURCES += databaseconnection.cpp \
     upgradedatabaserevisioncommands.cpp \
     upgradedatabasexmlparser.cpp \
     qthumbnailspreviewwidget.cpp \
-    portinuse.cpp
+    portinuse.cpp \
+    portinusetest.cpp
 INCLUDEPATH += ../core
 DEPENDPATH += ../core
 TEMPLATE = lib
