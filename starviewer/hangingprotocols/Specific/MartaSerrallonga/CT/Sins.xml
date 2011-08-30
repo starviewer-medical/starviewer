@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hangingProtocol name="Sins">
+    <hangingProtocolName>SINS</hangingProtocolName>
+    <protocol>CT</protocol>
+    <restriction identifier="1">
+        <usageFlag>NO_MATCH</usageFlag>
+        <selectorAttribute>ImageType</selectorAttribute>
+        <valueRepresentation>LOCALIZER</valueRepresentation>
+    </restriction>
+    <restriction identifier="2">
+        <usageFlag>MATCH</usageFlag>
+        <selectorAttribute>MinimumNumberOfImages</selectorAttribute>
+        <valueRepresentation>10</valueRepresentation>
+    </restriction>
+    <restriction identifier="3">
+        <usageFlag>MATCH</usageFlag>
+        <selectorAttribute>ProtocolName</selectorAttribute>
+        <valueRepresentation>SENOS</valueRepresentation>
+    </restriction>
+    <imageSet identifier="1">
+        <restriction>1</restriction>
+        <restriction>2</restriction>
+        <restriction>3</restriction>
+    </imageSet>
+    <displaySet identifier="1">
+        <imageSetNumber>1</imageSetNumber>
+        <position>0.0\1.0\0.5\0.5</position>
+        <toolActivation>synchronization</toolActivation>
+        <windowLevel>
+            <width>2000</width>
+            <center>500</center>
+        </windowLevel>
+    </displaySet>
+    <displaySet identifier="2">
+        <imageSetNumber>1</imageSetNumber>
+        <position>0.5\1.0\1.0\0.5</position>
+        <reconstruction>CORONAL</reconstruction>
+        <iconType>COR</iconType>
+    </displaySet>
+    <displaySet identifier="3">
+        <imageSetNumber>1</imageSetNumber>
+        <position>0.0\0.5\0.5\0.0</position>
+        <toolActivation>synchronization</toolActivation>
+        <windowLevel>
+            <width>400</width>
+            <center>40</center>
+        </windowLevel>
+    </displaySet>
+    <displaySet identifier="4">
+        <imageSetNumber>1</imageSetNumber>
+        <position>0.5\0.5\1.0\0.0</position>
+        <reconstruction>SAGITAL</reconstruction>
+        <iconType>SAG</iconType>
+    </displaySet>
+</hangingProtocol>
