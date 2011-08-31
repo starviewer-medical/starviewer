@@ -63,59 +63,63 @@ void AngleTool::handleEvent(long unsigned eventID)
     {
         case vtkCommand::LeftButtonPressEvent:
             handlePointAddition();
-        break;
+            break;
 
         case vtkCommand::MouseMoveEvent:
             simulateCorrespondingSegmentOfAngle();
-        break;
+            break;
     }
 }
 
 void AngleTool::findInitialDegreeArc()
 {
     // Per saber quin l'angle inicial, cal calcular l'angle que forma el primer segment anotat i un segment fictici totalment horitzontal.
-    double horizontalP2[3], *vd1, *vd2, pv[3];
-    double *p1 = m_mainPolyline->getPoint(0);
-    double *p2 = m_mainPolyline->getPoint(1);
-
-    int coord1, depthCoord;
+    int horizontalIndex, zIndex;
 
     switch (m_2DViewer->getView())
     {
         case QViewer::AxialPlane:
-            coord1 = 0;
-            depthCoord = 2;
+            horizontalIndex = 0;
+            zIndex = 2;
             break;
 
         case QViewer::SagitalPlane:
-            coord1 = 1;
-            depthCoord = 0;
+            horizontalIndex = 1;
+            zIndex = 0;
             break;
 
         case QViewer::CoronalPlane:
-            coord1 = 2;
-            depthCoord = 1;
+            horizontalIndex = 2;
+            zIndex = 1;
             break;
     }
 
+    double *firstVertex = m_mainPolyline->getPoint(0);
+    double *secondVertex = m_mainPolyline->getPoint(1);
+
+    double *directorVector1 = MathTools::directorVector(firstVertex, secondVertex);
+
+    double secondVertexHorizontallyMoved[3];
     for (int i = 0; i < 3; i++)
     {
-        horizontalP2[i] = p2[i];
+        secondVertexHorizontallyMoved[i] = secondVertex[i];
     }
+    secondVertexHorizontallyMoved[horizontalIndex] += 10.0;
 
-    vd1 = MathTools::directorVector(p1, p2);
+    double *directorVector2 = MathTools::directorVector(secondVertexHorizontallyMoved, secondVertex);
 
-    horizontalP2[coord1] += 10.0;
-    vd2 = MathTools::directorVector(horizontalP2, p2);
-    MathTools::crossProduct(vd1, vd2, pv);
+    double crossProduct[3];
+    MathTools::crossProduct(directorVector1, directorVector2, crossProduct);
 
-    if (pv[depthCoord] > 0)
+    if (crossProduct[zIndex] > 0)
     {
-        m_initialDegreeArc = (int)MathTools::angleInDegrees(QVector3D(vd1[0], vd1[1], vd1[2]), QVector3D(vd2[0], vd2[1], vd2[2]));
+        m_initialDegreeArc = (int)MathTools::angleInDegrees(QVector3D(directorVector1[0], directorVector1[1], directorVector1[2]), 
+            QVector3D(directorVector2[0], directorVector2[1], directorVector2[2]));
     }
     else
     {
-        m_initialDegreeArc = -1 * (int)MathTools::angleInDegrees(QVector3D(vd1[0], vd1[1], vd1[2]), QVector3D(vd2[0], vd2[1], vd2[2]));
+        m_initialDegreeArc = -1 * (int)MathTools::angleInDegrees(QVector3D(directorVector1[0], directorVector1[1], directorVector1[2]), 
+            QVector3D(directorVector2[0], directorVector2[1], directorVector2[2]));
     }
 }
 
@@ -172,12 +176,12 @@ void AngleTool::drawCircle()
     initialAngle = 360 - m_initialDegreeArc;
     finalAngle = int(360 - (m_currentAngle + m_initialDegreeArc));
 
-    double pv[3];
-    MathTools::crossProduct(firstSegment, secondSegment, pv);
+    double crossProduct[3];
+    MathTools::crossProduct(firstSegment, secondSegment, crossProduct);
 
     Q2DViewer::CameraOrientationType view = m_2DViewer->getView();
     int zIndex = Q2DViewer::getZIndexForView(view);
-    if (pv[zIndex] > 0)
+    if (crossProduct[zIndex] > 0)
     {
         finalAngle = int(m_currentAngle - m_initialDegreeArc);
     }
@@ -194,13 +198,13 @@ void AngleTool::drawCircle()
         degreesIncrease = i * 1.0 * MathTools::DegreesToRadiansAsDouble;
         double newPoint[3];
 
-            // TODO Aquí hauríem de fer alguna cosa d'aquest estil, però si ho fem així,
-            // no se'ns dibuixa l'arc de circumferència que ens esperem sobre la vista coronal.
-            // Potser és degut a com obtenim els punts o per una altra causa. Caldria mirar-ho
-            // per així evitar la consciència del pla en el que ens trobem
-            // newPoint[xIndex] = cos(degreesIncrease)*radius + circleCentre[xIndex];
-            // newPoint[yIndex] = sin(degreesIncrease)*radius + circleCentre[yIndex];
-            // newPoint[zIndex] = 0.0;
+        // TODO Aquí hauríem de fer alguna cosa d'aquest estil, però si ho fem així,
+        // no se'ns dibuixa l'arc de circumferència que ens esperem sobre la vista coronal.
+        // Potser és degut a com obtenim els punts o per una altra causa. Caldria mirar-ho
+        // per així evitar la consciència del pla en el que ens trobem
+        // newPoint[xIndex] = cos(degreesIncrease)*radius + circleCentre[xIndex];
+        // newPoint[yIndex] = sin(degreesIncrease)*radius + circleCentre[yIndex];
+        // newPoint[zIndex] = 0.0;
 
         switch (view)
         {
@@ -310,40 +314,40 @@ void AngleTool::placeText(DrawerText *angleText)
     // Padding de 5 pixels
     const double Padding = 5.0;
 
-    double *p1 = m_mainPolyline->getPoint(0);
-    double *p2 = m_mainPolyline->getPoint(1);
-    double *p3 = m_mainPolyline->getPoint(2);
+    double *point1 = m_mainPolyline->getPoint(0);
+    double *point2 = m_mainPolyline->getPoint(1);
+    double *point3 = m_mainPolyline->getPoint(2);
     double position[3];
     Q2DViewer::CameraOrientationType view = m_2DViewer->getView();
-    int horizontalCoord = Q2DViewer::getXIndexForView(view);
-    int verticalCoord = Q2DViewer::getYIndexForView(view);
+    int xIndex = Q2DViewer::getXIndexForView(view);
+    int yIndex = Q2DViewer::getYIndexForView(view);
 
-    // Mirem on estan horitzontalment els punts p1 i p3 respecte del p2
-    if (p1[0] <= p2[0])
+    // Mirem on estan horitzontalment els punts point1 i point3 respecte del point2
+    if (point1[0] <= point2[0])
     {
         angleText->setHorizontalJustification("Left");
 
-        if (p3[horizontalCoord] <= p2[horizontalCoord])
+        if (point3[xIndex] <= point2[xIndex])
         {
-            angleText->setAttachmentPoint(p2);
+            angleText->setAttachmentPoint(point2);
         }
         else
         {
-            double p2InDisplay[3];
-            // Passem p2 a coordenades de display
-            m_2DViewer->computeWorldToDisplay(p2[0], p2[1], p2[2], p2InDisplay);
+            double point2InDisplay[3];
+            // Passem point2 a coordenades de display
+            m_2DViewer->computeWorldToDisplay(point2[0], point2[1], point2[2], point2InDisplay);
 
             // Apliquem el padding
-            if (p2[verticalCoord] <= p3[verticalCoord])
+            if (point2[yIndex] <= point3[yIndex])
             {
-                p2InDisplay[1] -= Padding;
+                point2InDisplay[1] -= Padding;
             }
             else
             {
-                p2InDisplay[1] += Padding;
+                point2InDisplay[1] += Padding;
             }
             // Tornem a coordenades de món
-            m_2DViewer->computeDisplayToWorld(p2InDisplay[0], p2InDisplay[1], p2InDisplay[2], position);
+            m_2DViewer->computeDisplayToWorld(point2InDisplay[0], point2InDisplay[1], point2InDisplay[2], position);
 
             // Ara position és l'attachment point que volem
             angleText->setAttachmentPoint(position);
@@ -353,27 +357,27 @@ void AngleTool::placeText(DrawerText *angleText)
     {
         angleText->setHorizontalJustification("Right");
 
-        if (p3[horizontalCoord] <= p2[horizontalCoord])
+        if (point3[xIndex] <= point2[xIndex])
         {
-            angleText->setAttachmentPoint(p2);
+            angleText->setAttachmentPoint(point2);
         }
         else
         {
-            double p2InDisplay[3];
-            // Passem p2 a coordenades de display
-            m_2DViewer->computeWorldToDisplay(p2[0], p2[1], p2[2], p2InDisplay);
+            double point2InDisplay[3];
+            // Passem point2 a coordenades de display
+            m_2DViewer->computeWorldToDisplay(point2[0], point2[1], point2[2], point2InDisplay);
 
             // Apliquem el padding
-            if (p2[verticalCoord] <= p3[verticalCoord])
+            if (point2[yIndex] <= point3[yIndex])
             {
-                p2InDisplay[1] += Padding;
+                point2InDisplay[1] += Padding;
             }
             else
             {
-                p2InDisplay[1] -= Padding;
+                point2InDisplay[1] -= Padding;
             }
             // Tornem a coordenades de món
-            m_2DViewer->computeDisplayToWorld(p2InDisplay[0], p2InDisplay[1], p2InDisplay[2], position);
+            m_2DViewer->computeDisplayToWorld(point2InDisplay[0], point2InDisplay[1], point2InDisplay[2], position);
 
             // Ara position és l'attachment point que volem
             angleText->setAttachmentPoint(position);

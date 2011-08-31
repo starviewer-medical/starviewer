@@ -42,7 +42,7 @@ private:
     void computeAngle();
 
     /// Calcula la correcta posició del caption de l'angle segons els punts de l'angle
-    void textPosition(double *p1, double *p2, DrawerText *angleText);
+    void placeText(double *firstLineVertex, double *secondLineVertex, DrawerText *angleText);
 
 private slots:
     /// Inicialitza l'estat de la tool
