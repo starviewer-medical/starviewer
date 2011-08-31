@@ -14,4 +14,5 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_study.cpp \
            $$PWD/test_dicomsource.cpp \
            $$PWD/test_patient.cpp \
-           $$PWD/test_mathtools.cpp 
+           $$PWD/test_mathtools.cpp \
+           $$PWD/test_overlay.cpp
