@@ -731,7 +731,7 @@ void QApplicationMainWindow::openShortcutsGuide()
 
 void QApplicationMainWindow::openReleaseNotes()
 {
-    m_applicationVersionChecker->showReleaseNotes();
+    m_applicationVersionChecker->showLocalReleaseNotes();
 }
 
 void QApplicationMainWindow::computeDefaultToolTextSize()

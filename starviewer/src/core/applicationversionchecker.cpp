@@ -130,7 +130,7 @@ void ApplicationVersionChecker::setCheckVersionInterval(int interval)
     }
 }
 
-void ApplicationVersionChecker::showReleaseNotes()
+void ApplicationVersionChecker::showLocalReleaseNotes()
 {
     // Llegir el contingut dels fitxers HTML de les release notes
     QUrl url = createLocalUrl();
