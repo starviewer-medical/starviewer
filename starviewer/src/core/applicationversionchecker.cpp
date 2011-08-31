@@ -332,32 +332,32 @@ bool ApplicationVersionChecker::compareVersions(const QString &current, const QS
     // Si no, comparar les subversions, alpha, beta, RC, etc.
     else
     {
-        QString currentSplitType = getVersionAttribute(currentSplit[1], "type").toLower();
-        QString lastShownSplitType = getVersionAttribute(lastShownSplit[1], "type").toLower();
+        QString currentSplitType = getVersionAttribute(currentSplit[1], ApplicationVersionChecker::VersionType).toLower();
+        QString lastShownSplitType = getVersionAttribute(lastShownSplit[1], ApplicationVersionChecker::VersionType).toLower();
         // Si no son del mateix tipus, es retorna alfabèticament, es tenen en compte alpha, beta i rc
         if (currentSplitType != lastShownSplitType)
         {
             return currentSplitType.compare(lastShownSplitType) > 0;
         }
         // Si són iguals, compararem el numero
-        return getVersionAttribute(currentSplit[1], "number").toInt()
-                > getVersionAttribute(lastShownSplit[1], "number").toInt();
+        return getVersionAttribute(currentSplit[1], ApplicationVersionChecker::VersionNumber).toInt()
+                > getVersionAttribute(lastShownSplit[1], ApplicationVersionChecker::VersionNumber).toInt();
     }
 }
 
-QString ApplicationVersionChecker::getVersionAttribute(const QString &version, const QString &attribute)
+QString ApplicationVersionChecker::getVersionAttribute(const QString &version, ApplicationVersionChecker::VersionAttribute attribute)
 {
-    if (attribute == "type")
+    switch (attribute)
     {
-        return QString(version).remove(QRegExp("[0-9]"));
+        case ApplicationVersionChecker::VersionType:
+            return QString(version).remove(QRegExp("[0-9]"));
+        case ApplicationVersionChecker::VersionNumber:
+            // Si no hi ha numero no passa res, passar una string buida a int retorna 0.
+            return QString(version).remove(QRegExp("[a-zA-Z]"));
+        default:
+            // Cas improbable, l'atribut no Ã©s correcte
+            return version;
     }
-    else if (attribute == "number")
-    {
-        // Si no hi ha numero no passa res, passar una string buida a int retorna 0.
-        return QString(version).remove(QRegExp("[a-zA-Z]"));
-    }
-    // Si no es vol obtenir ni tipus ni numero retornem la string tal qual
-    return version;
 }
 
 bool ApplicationVersionChecker::isDevelopmentMode()
@@ -370,7 +370,7 @@ bool ApplicationVersionChecker::isDevelopmentMode()
     }
     else if (currentVersion.count() == 3)
     {
-        return getVersionAttribute(currentVersion[2], "type").toLower().contains("devel");
+        return getVersionAttribute(currentVersion[2], ApplicationVersionChecker::VersionType).toLower().contains("devel");
     }
     else
     {
