@@ -53,6 +53,8 @@ public slots:
     void onlineCheckFinished();
 
 private:
+    enum VersionAttribute { VersionType, VersionNumber };
+
     /// Genera la url local del fitxer on hi ha les release notes
     QUrl createLocalUrl();
     /// Comproba que la url local de les release notes existeixi
@@ -73,7 +75,7 @@ private:
     /// Si attribute es type treu el numero de versio d'una alpha, beta, RC, etc. (alpha9 -> alpha),
     /// si attribute es number treu la part de davant i deixa el numero.
     /// @pre Es considera que la versió s'ajusta a l'expressió regular correcte.
-    QString getVersionAttribute(const QString &version, const QString &attibute);
+    QString getVersionAttribute(const QString &version, VersionAttribute attibute);
     /// Comprova si s'està en mode desenvolupament
     bool isDevelopmentMode();
 
