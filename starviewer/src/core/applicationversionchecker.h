@@ -41,7 +41,7 @@ public:
 
     /// Mostra la finestra de les release notes
     /// Es crida des del menu ajuda, així que només comprova que existeixin, i no té en compte si ja s'han mostrat.
-    void showReleaseNotes();
+    void showLocalReleaseNotes();
 
 signals:
     /// Senyal per indicar que s'ha acabat de carregar
