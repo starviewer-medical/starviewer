@@ -1,45 +1,33 @@
 #include "applicationversionchecker.h"
+#include "applicationversioncheckeronserver.h"
 #include "coresettings.h"
 #include "starviewerapplication.h"
 #include "logging.h"
 #include "machineidentifier.h"
 
-#include <QScriptEngine>
-#include <QScriptValue>
 #include <QUrl>
 #include <QFile>
 #include <QDate>
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <QCryptographicHash>
-#include <QNetworkInterface>
-#include <QNetworkProxyQuery>
-#include <QNetworkProxyFactory>
-#include <QProcessEnvironment>
 #include <QStringList>
 #include <QMessageBox>
 
 namespace udg {
-    class QReleaseNotes;
 
 ApplicationVersionChecker::ApplicationVersionChecker(QObject *parent)
 : QObject(parent)
 {
-    // Per defecte diem que volem comprobar la nova versió, si no es canvia
+    // Per defecte diem que volem comprobar la nova versió, si no, ja es canvia
     m_checkNewVersion = true;
-    // La versio que ens retorna el servidor per defecte es cadena buida
+    // Inicialitzem la versio que ens retorna el servidor a cadena buida
     m_checkedVersion = QString("");
-    // Inicialitzem a null m_releaseNotes i m_manager
-    m_manager = NULL;
-    m_releaseNotes = NULL;
+    // Inicialitzem m_releaseNotes i el checker online
+    m_releaseNotes = new QReleaseNotes(NULL);
+    m_applicationVersionCheckerOnServer = new ApplicationVersionCheckerOnServer(this);
 }
 
 ApplicationVersionChecker::~ApplicationVersionChecker()
 {
-    // Destruir el manager de connexions
-    delete m_manager;
-    // I la finestra de les release notes
+    // Destruir la finestra de les release notes
     delete m_releaseNotes;
 }
 
@@ -48,61 +36,70 @@ void ApplicationVersionChecker::checkReleaseNotes()
     m_checkNewVersion = true;
     m_checkFinished = false;
     m_somethingToShow = false;
-    bool async = false;
+    bool checkingOnlineNotes = false;
 
-    // Utilitzar els settings
-    readSettings();
-    // Si no hi ha nova versió al server guardem l'actual als settings
-    m_checkedVersion = m_lastVersionChecked;
-
+    // Precondició:
     if (isDevelopmentMode())
     {
         // En mode desenvolupament no es mostraran les notes ni es faran comprovacions online
+        m_checkFinished = true;
         return;
     }
 
+    // Utilitzar els settings
+    readSettings();
+    // En cas de que no hi hagi nova versió al server guardarem l'actual als settings
+    m_checkedVersion = m_lastVersionChecked;    
+
     if (isNewVersionInstalled())
     {
+        // Si hi ha una nova versió instalada, no fem un check online
+        m_checkNewVersion = false;
         // Llegir el contingut dels fitxers HTML de les release notes
         QUrl url = createLocalUrl();
         if (checkLocalUrl(url))
         {
-            delete m_releaseNotes;
-            m_releaseNotes = new QReleaseNotes(0);
             m_releaseNotes->setDontShowVisible(false);
             m_releaseNotes->setUrl(url);
             m_releaseNotes->setWindowTitle(tr("Release Notes"));
             m_somethingToShow = true;
-            m_checkNewVersion = false;
+            
         }
         else
         {
             // Si no existeix el fitxer local de les notes, guardem als settings la versió actual
             // per tal de que no es busquin més (no es trobaran) fins a la pròxima versió
-
-            // El write settings guarda la versió de les notes locals només si m_checkNewVersion és fals
-            m_checkNewVersion = false;
-            // Fem un write settings i no un setCheckFinished per que encara no ha acabat el check
             writeSettings();
+            // Si en local no existeixen, ara sí que les buscarem online
             m_checkNewVersion = true;
         }
     }
 
-    if (m_checkNewVersion && !m_dontCheckNewVersionsOnline)
+    if (m_checkNewVersion && checkTimeInterval())
     {
-        if (checkTimeInterval())
+        // Si no es mostra res en local, i hem de buscar versions on-line
+        if (m_dontCheckNewVersionsOnline)
         {
-            delete m_releaseNotes;
-            m_releaseNotes = new QReleaseNotes(0);
+            INFO_LOG("No es busquen les release notes perquè les peticions online estan deshabilitades");
+        }
+        else
+        {
+            // Preparem les release notes i fem la crida online a través d'ApplicationVersionCheckerOnServer
             m_releaseNotes->setDontShowVisible(true);
             m_releaseNotes->setWindowTitle(tr("New Version Available"));
-            checkVersionOnServer();
-            async = true;
+            connect(m_applicationVersionCheckerOnServer, 
+                    SIGNAL(checkFinished()),
+                    this, SLOT(onlineCheckFinished()));
+            m_applicationVersionCheckerOnServer->checkVersionOnServer();
+            checkingOnlineNotes = true;
         }
     }
-    if (!async)
+
+    if (!checkingOnlineNotes)
     {
-        setCheckFinished();
+        // Si no es busquen actualitzacions online, el check ja ha acabat
+        m_checkFinished = true;
+        writeSettings();
     }
 }
 
@@ -139,8 +136,6 @@ void ApplicationVersionChecker::showReleaseNotes()
     QUrl url = createLocalUrl();
     if (checkLocalUrl(url))
     {
-        delete m_releaseNotes;
-        m_releaseNotes = new QReleaseNotes(0);
         m_releaseNotes->setDontShowVisible(false);
         m_releaseNotes->setUrl(url);
         m_releaseNotes->setWindowTitle(tr("Release Notes"));
@@ -157,20 +152,51 @@ void ApplicationVersionChecker::showReleaseNotes()
     }
 }
 
+void ApplicationVersionChecker::onlineCheckFinished()
+{
+    m_checkFinished = true;
+    if (m_applicationVersionCheckerOnServer->isNewVersionAvailable())
+    {
+        m_releaseNotes->setUrl(QUrl(m_applicationVersionCheckerOnServer->getReleaseNotesUrl()));
+        m_checkedVersion = m_applicationVersionCheckerOnServer->getVersion();
+        if (m_lastVersionChecked != m_checkedVersion)
+        {
+            if (m_neverShowNewVersionReleaseNotes)
+            {
+                INFO_LOG("No es mostren les release notes perquè l'usuari no ho vol");
+            }
+            else
+            {
+                m_somethingToShow = true;
+                INFO_LOG(QString("Es mostren les notes: %1").arg(m_applicationVersionCheckerOnServer->getReleaseNotesUrl()));
+            }
+        }
+        else
+        {
+            INFO_LOG("No es mostren les notes de la nova versió del servidor, per que ja s'han mostrat anteriorment");
+        }
+    }
+    else
+    {
+        INFO_LOG("Starviewer està actualitzat. No s'ha trobat cap versió nova al servidor.");
+    }
+    writeSettings();
+    emit checkFinished();
+}
+
 QUrl ApplicationVersionChecker::createLocalUrl()
 {
     // Agafar el path del fitxer
     QString defaultPath = qApp->applicationDirPath() + "/releasenotes/";
-    // TODO: si en mode desenvolupament no s'han de veure les release notes, això es pot treure.
     if (!QFile::exists(defaultPath))
     {
-        /// Mode desenvolupament
+        /// Mode desenvolupament (només es veuran notes locals des del menu ajuda -> mostrar notes de la versió)
         defaultPath = qApp->applicationDirPath() + "/../releasenotes/";
     }
 
     QUrl result("");
 
-    QStringList versionList = udg::StarviewerVersionString.split(QString("."));
+    QStringList versionList = StarviewerVersionString.split(QString("."));
     if (versionList.count() > 2)
     {
         if (versionList[2].contains("-"))
@@ -210,45 +236,13 @@ bool ApplicationVersionChecker::checkTimeInterval()
     return i >= m_checkVersionInterval;
 }
 
-void ApplicationVersionChecker::checkVersionOnServer()
-{
-    QUrl url(createWebServiceUrl());
-    m_manager = new QNetworkAccessManager(this);
-    setProxy(url);
-    connect(m_manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(webServiceReply(QNetworkReply *)));
-    m_manager->get(QNetworkRequest(url));
-}
-
-QString ApplicationVersionChecker::createWebServiceUrl()
-{
-    MachineIdentifier machineIdentifier;
-
-    QString machineID = machineIdentifier.getMachineID();
-    QString groupID = machineIdentifier.getGroupID();
-
-    return QString("http://starviewer.udg.edu/checknewversion/?currentVersion=%1&machineID=%2&groupID=%3")
-              .arg(StarviewerVersionString).arg(machineID).arg(groupID);
-}
-
-void ApplicationVersionChecker::setProxy(const QUrl &url)
-{
-    QNetworkProxyQuery q(url);
-
-    QNetworkProxyFactory::setUseSystemConfiguration(true);
-    QList<QNetworkProxy> proxies = QNetworkProxyFactory::systemProxyForQuery(q);
-    if (proxies.size() > 0 && proxies[0].type() != QNetworkProxy::NoProxy)
-    {
-        m_manager->setProxy(proxies[0]);
-    }
-}
-
 void ApplicationVersionChecker::writeSettings()
 {
     Settings settings;
     if (!m_checkNewVersion)
     {
         // Ja no es mostren més fins la proxima actualització
-        QStringList version = udg::StarviewerVersionString.split(".");
+        QStringList version = StarviewerVersionString.split(".");
         // Si la versió actual es de debug (això passa quan LastReleaseNotesVersionShown no te valor
         // i es mostren les release notes per primer cop, podria ser que estiguessim en debug)
         if (version.count() > 3)
@@ -258,7 +252,7 @@ void ApplicationVersionChecker::writeSettings()
         }
         else
         {
-            settings.setValue(CoreSettings::LastReleaseNotesVersionShown, udg::StarviewerVersionString);
+            settings.setValue(CoreSettings::LastReleaseNotesVersionShown, StarviewerVersionString);
         }
     }
     else
@@ -281,17 +275,10 @@ void ApplicationVersionChecker::readSettings()
     m_dontCheckNewVersionsOnline = settings.getValue(CoreSettings::DontCheckNewVersionsOnline).toBool();
 }
 
-void ApplicationVersionChecker::setCheckFinished()
-{
-    m_checkFinished = true;
-    writeSettings();
-    emit checkFinished();
-}
-
 bool ApplicationVersionChecker::isNewVersionInstalled()
 {
     QStringList lastVersionShown = m_lastReleaseNotesVersionShown.split(".");
-    QStringList currentVersion = udg::StarviewerVersionString.split(".");
+    QStringList currentVersion = StarviewerVersionString.split(".");
 
     QRegExp regularExpression("^[0-9]+\\.[0-9]+\\.[0-9]+(\\-[a-zA-Z]+[0-9]*)?$", Qt::CaseSensitive);
 
@@ -301,7 +288,7 @@ bool ApplicationVersionChecker::isNewVersionInstalled()
         return true;
     }
     // Si la versió actual no s'ajusta a l'expressió regular, no farem res.
-    else if (!regularExpression.exactMatch(udg::StarviewerVersionString))
+    else if (!regularExpression.exactMatch(StarviewerVersionString))
     {
         return false;
     }
@@ -375,7 +362,7 @@ QString ApplicationVersionChecker::getVersionAttribute(const QString &version, c
 
 bool ApplicationVersionChecker::isDevelopmentMode()
 {
-    QStringList currentVersion = udg::StarviewerVersionString.split(".");
+    QStringList currentVersion = StarviewerVersionString.split(".");
     // Si la versio actual té tres o més parts i conté devel (0.9.1-devel o 0.9.1.devel)
     if (currentVersion.count() > 3)
     {
@@ -391,100 +378,13 @@ bool ApplicationVersionChecker::isDevelopmentMode()
     }
 }
 
-void ApplicationVersionChecker::webServiceReply(QNetworkReply *reply)
-{
-    // Desconnectar el manager
-    disconnect(m_manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(webServiceReply(QNetworkReply *)));
-
-    bool result = reply->error() == QNetworkReply::NoError;
-    // Si no error
-    if (result)
-    {
-        QString json(reply->readAll());
-
-        QString version("");
-        QString releaseNotesURL("");
-
-        QScriptValue scriptValue;
-        QScriptEngine engine;
-        scriptValue = engine.evaluate("(" + json + ")");
-
-        if (scriptValue.property("error").isObject())
-        {
-            ERROR_LOG(QString("Error llegint la resposta del servidor (error en el json) ") + scriptValue.property("error").property("code").toString() +
-                               QString(": ") + scriptValue.property("error").property("message").toString());
-            setCheckFinished();
-        }
-        else
-        {
-            if (scriptValue.property("updateAvailable").isBool() && scriptValue.property("updateAvailable").toBool() == true)
-            {
-                m_checkedVersion = scriptValue.property("version").toString();
-                releaseNotesURL = scriptValue.property("releaseNotesURL").toString();
-
-                connect(m_manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(updateNotesUrlReply(QNetworkReply *)));
-                m_manager->get(QNetworkRequest(QUrl(releaseNotesURL)));
-
-                INFO_LOG(QString("S'ha trobat una nova versió en el servidor, %1.").arg(m_checkedVersion));
-            }
-            else
-            {
-                INFO_LOG("Starviewer està actualitzat. No s'ha trobat cap versió nova al servidor.");
-                setCheckFinished();
-            }
-        }
-    }
-    else
-    {
-        ERROR_LOG(QString("Error buscant noves versions al server. La resposta del webservice és del tipus ") +
-                  QString::number(reply->error()) + QString(": ") + reply->errorString());
-        setCheckFinished();
-    }
-    reply->deleteLater();
-}
-
-void ApplicationVersionChecker::updateNotesUrlReply(QNetworkReply *reply)
-{
-    // Desconnectar el manager
-    disconnect(m_manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(updateNotesUrlReply(QNetworkReply *)));
-
-    bool result = reply->error() == QNetworkReply::NoError;
-    // Si no error
-    if (result)
-    {
-        if (m_lastVersionChecked != m_checkedVersion)
-        {
-            m_releaseNotes->setUrl(reply->url());
-            if (!m_neverShowNewVersionReleaseNotes)
-            {
-                m_somethingToShow = true;
-                INFO_LOG(QString("Es mostren les notes: %1").arg(reply->url().toString()));
-            }
-            else
-            {
-                INFO_LOG("No es mostren les release notes perquè l'usuari no ho vol");
-            }
-        }
-        else
-        {
-            INFO_LOG("No es mostren les notes de la nova versió del servidor, per que ja s'han mostrat anteriorment");
-        }
-    }
-    else
-    {
-        ERROR_LOG(QString("Error en rebre les notes de la versio %1, tipus ").arg(m_checkedVersion) + QString::number(reply->error())+
-                  QString(": ") + reply->errorString());
-    }
-    reply->deleteLater();
-    setCheckFinished();
-}
-
 void ApplicationVersionChecker::showWhenCheckFinished()
 {
     if (m_somethingToShow)
     {
         m_releaseNotes->show();
+        m_somethingToShow = false;
     }
 }
 
-}; // End namespace udg
+} // End namespace udg
