@@ -21,7 +21,7 @@ ApplicationVersionChecker::ApplicationVersionChecker(QObject *parent)
     // Inicialitzem la versio que ens retorna el servidor a cadena buida
     m_checkedVersion = QString("");
     // Inicialitzem m_releaseNotes i el checker online
-    m_releaseNotes = new QReleaseNotes(NULL);
+    m_releaseNotes = new QReleaseNotes();
     m_applicationVersionCheckerOnServer = new ApplicationVersionCheckerOnServer(this);
 }
 

@@ -17,7 +17,7 @@ Q_OBJECT
 public:
     /// Constructor amb els atributs del QWidget on es posa (0 per que sigui una finestra nova)
     /// i la referència al pare per tal de poder-li indicar quan es tanca la finestra
-    QReleaseNotes(QWidget *parent);
+    QReleaseNotes(QWidget *parent = 0);
     /// Destructor
     ~QReleaseNotes();
     /// Retorna si esta activat el checkbox de no mostrar més
