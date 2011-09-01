@@ -6,7 +6,7 @@
 class QUrl;
 
 namespace udg {
-    class ApplicationVersionCheckerOnServer;
+    class CheckForUpdates;
 
 /**
     Aquesta classe comprovarà si s'han de mostrar les notes d'una versió instal·lada. En cas que no s'hagin de mostrar, utilitzarà 
@@ -105,7 +105,7 @@ private:
     bool m_dontCheckNewVersionsOnline;
 
     /// Per comprovar la versió amb el servidor
-    ApplicationVersionCheckerOnServer *m_applicationVersionCheckerOnServer;
+    CheckForUpdates *m_checkForUpdates;
 };
 
 } // End namespace udg

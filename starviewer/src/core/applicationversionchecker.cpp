@@ -1,5 +1,5 @@
 #include "applicationversionchecker.h"
-#include "applicationversioncheckeronserver.h"
+#include "checkforupdates.h"
 #include "coresettings.h"
 #include "starviewerapplication.h"
 #include "logging.h"
@@ -22,7 +22,7 @@ ApplicationVersionChecker::ApplicationVersionChecker(QObject *parent)
     m_checkedVersion = QString("");
     // Inicialitzem m_releaseNotes i el checker online
     m_releaseNotes = new QReleaseNotes();
-    m_applicationVersionCheckerOnServer = new ApplicationVersionCheckerOnServer(this);
+    m_checkForUpdates = new CheckForUpdates(this);
 }
 
 ApplicationVersionChecker::~ApplicationVersionChecker()
@@ -87,10 +87,10 @@ void ApplicationVersionChecker::checkReleaseNotes()
             // Preparem les release notes i fem la crida online a través d'ApplicationVersionCheckerOnServer
             m_releaseNotes->setDontShowVisible(true);
             m_releaseNotes->setWindowTitle(tr("New Version Available"));
-            connect(m_applicationVersionCheckerOnServer, 
+            connect(m_checkForUpdates, 
                     SIGNAL(checkFinished()),
                     this, SLOT(onlineCheckFinished()));
-            m_applicationVersionCheckerOnServer->checkVersionOnServer();
+            m_checkForUpdates->checkForUpdates();
             checkingOnlineNotes = true;
         }
     }
@@ -155,10 +155,10 @@ void ApplicationVersionChecker::showLocalReleaseNotes()
 void ApplicationVersionChecker::onlineCheckFinished()
 {
     m_checkFinished = true;
-    if (m_applicationVersionCheckerOnServer->isNewVersionAvailable())
+    if (m_checkForUpdates->isNewVersionAvailable())
     {
-        m_releaseNotes->setUrl(QUrl(m_applicationVersionCheckerOnServer->getReleaseNotesUrl()));
-        m_checkedVersion = m_applicationVersionCheckerOnServer->getVersion();
+        m_releaseNotes->setUrl(QUrl(m_checkForUpdates->getReleaseNotesUrl()));
+        m_checkedVersion = m_checkForUpdates->getVersion();
         if (m_lastVersionChecked != m_checkedVersion)
         {
             if (m_neverShowNewVersionReleaseNotes)
@@ -168,7 +168,7 @@ void ApplicationVersionChecker::onlineCheckFinished()
             else
             {
                 m_somethingToShow = true;
-                INFO_LOG(QString("Es mostren les notes: %1").arg(m_applicationVersionCheckerOnServer->getReleaseNotesUrl()));
+                INFO_LOG(QString("Es mostren les notes: %1").arg(m_checkForUpdates->getReleaseNotesUrl()));
             }
         }
         else
