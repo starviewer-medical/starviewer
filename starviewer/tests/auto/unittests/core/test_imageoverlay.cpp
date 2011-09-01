@@ -1,13 +1,13 @@
 #include "autotest.h"
-#include "overlay.h"
+#include "imageoverlay.h"
 
 using namespace udg;
 
-class test_Overlay : public QObject {
+class test_ImageOverlay : public QObject {
 Q_OBJECT
 
 private slots:
-    void Overlay_InitializesClassAsExpected();
+    void ImageOverlay_InitializesClassAsExpected();
     
     void setType_OnlyAdmitsStipulatedValues_data();
     void setType_OnlyAdmitsStipulatedValues();
@@ -19,9 +19,9 @@ private slots:
     void setDICOMFormattedOrigin_WrongFormattedOriginShouldNotModifyOrigin();
 };
 
-void test_Overlay::Overlay_InitializesClassAsExpected()
+void test_ImageOverlay::ImageOverlay_InitializesClassAsExpected()
 {    
-    Overlay overlay;
+    ImageOverlay overlay;
     QCOMPARE(overlay.getRows(), unsigned int(0));
     QCOMPARE(overlay.getColumns(), unsigned int(0));
     QCOMPARE(overlay.getXOrigin(), 1);
@@ -29,7 +29,7 @@ void test_Overlay::Overlay_InitializesClassAsExpected()
     QCOMPARE(overlay.getType(), QChar());
 }
 
-void test_Overlay::setType_OnlyAdmitsStipulatedValues_data()
+void test_ImageOverlay::setType_OnlyAdmitsStipulatedValues_data()
 {
     QTest::addColumn<QChar>("type");
     QTest::addColumn<QChar>("result");
@@ -55,18 +55,18 @@ void test_Overlay::setType_OnlyAdmitsStipulatedValues_data()
     }
 }
 
-void test_Overlay::setType_OnlyAdmitsStipulatedValues()
+void test_ImageOverlay::setType_OnlyAdmitsStipulatedValues()
 {
     QFETCH(QChar, type);
     QFETCH(QChar, result);
 
-    Overlay overlay;
+    ImageOverlay overlay;
     overlay.setType(type);
     
     QCOMPARE(overlay.getType(), result);
 }
 
-void test_Overlay::setDICOMFormattedOrigin_ShouldBeUpdated_data()
+void test_ImageOverlay::setDICOMFormattedOrigin_ShouldBeUpdated_data()
 {
     QTest::addColumn<QString>("origin");
     QTest::addColumn<int>("x");
@@ -81,20 +81,20 @@ void test_Overlay::setDICOMFormattedOrigin_ShouldBeUpdated_data()
     QTest::newRow("4,-4873") << "4\\-4873" << 4 << -4873;
 }
 
-void test_Overlay::setDICOMFormattedOrigin_ShouldBeUpdated()
+void test_ImageOverlay::setDICOMFormattedOrigin_ShouldBeUpdated()
 {
     QFETCH(QString, origin);
     QFETCH(int, x);
     QFETCH(int, y);
 
-    Overlay overlay;
+    ImageOverlay overlay;
     overlay.setDICOMFormattedOrigin(origin);
     
     QCOMPARE(overlay.getXOrigin(), x);
     QCOMPARE(overlay.getYOrigin(), y);
 }
 
-void test_Overlay::setDICOMFormattedOrigin_WrongFormattedOriginShouldNotModifyOrigin_data()
+void test_ImageOverlay::setDICOMFormattedOrigin_WrongFormattedOriginShouldNotModifyOrigin_data()
 {
     QTest::addColumn<QString>("origin");
 
@@ -108,11 +108,11 @@ void test_Overlay::setDICOMFormattedOrigin_WrongFormattedOriginShouldNotModifyOr
     QTest::newRow("contains non-digit characters 2") << "12e+33\\12";
 }
 
-void test_Overlay::setDICOMFormattedOrigin_WrongFormattedOriginShouldNotModifyOrigin()
+void test_ImageOverlay::setDICOMFormattedOrigin_WrongFormattedOriginShouldNotModifyOrigin()
 {
     QFETCH(QString, origin);
 
-    Overlay overlay;
+    ImageOverlay overlay;
     int x = overlay.getXOrigin();
     int y = overlay.getYOrigin();
     overlay.setDICOMFormattedOrigin(origin);
@@ -121,6 +121,6 @@ void test_Overlay::setDICOMFormattedOrigin_WrongFormattedOriginShouldNotModifyOr
     QCOMPARE(overlay.getYOrigin(), y);
 }
 
-DECLARE_TEST(test_Overlay)
+DECLARE_TEST(test_ImageOverlay)
 
-#include "test_overlay.moc"
+#include "test_imageoverlay.moc"

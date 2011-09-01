@@ -1,45 +1,45 @@
-#include "overlay.h"
+#include "imageoverlay.h"
 
 #include <QRegExp>
 #include <QStringList>
 
 namespace udg {
 
-const QChar Overlay::GraphicsType('G');
-const QChar Overlay::ROIType('R');
+const QChar ImageOverlay::GraphicsType('G');
+const QChar ImageOverlay::ROIType('R');
 
-Overlay::Overlay()
+ImageOverlay::ImageOverlay()
 {
     m_rows = 0;
     m_columns = 0;
     setDICOMFormattedOrigin("1\\1");
 }
 
-Overlay::~Overlay()
+ImageOverlay::~ImageOverlay()
 {
 }
 
-void Overlay::setRows(unsigned int rows)
+void ImageOverlay::setRows(unsigned int rows)
 {
     m_rows = rows;
 }
 
-void Overlay::setColumns(unsigned int columns)
+void ImageOverlay::setColumns(unsigned int columns)
 {
     m_columns = columns;
 }
 
-unsigned int Overlay::getRows() const
+unsigned int ImageOverlay::getRows() const
 {
     return m_rows;
 }
 
-unsigned int Overlay::getColumns() const
+unsigned int ImageOverlay::getColumns() const
 {
     return m_columns;
 }
 
-void Overlay::setType(const QChar &overlayType)
+void ImageOverlay::setType(const QChar &overlayType)
 {
     if (overlayType != GraphicsType && overlayType != ROIType)
     {
@@ -51,12 +51,12 @@ void Overlay::setType(const QChar &overlayType)
     }
 }
 
-QChar Overlay::getType() const
+QChar ImageOverlay::getType() const
 {
     return m_type;
 }
 
-void Overlay::setDICOMFormattedOrigin(const QString &origin)
+void ImageOverlay::setDICOMFormattedOrigin(const QString &origin)
 {
     QRegExp originExpression("^-?\\d+\\\\-?\\d+$");
     if (originExpression.exactMatch(origin))
@@ -65,12 +65,12 @@ void Overlay::setDICOMFormattedOrigin(const QString &origin)
     }
 }
 
-int Overlay::getXOrigin() const
+int ImageOverlay::getXOrigin() const
 {
     return m_origin.split("\\").at(0).toInt();
 }
 
-int Overlay::getYOrigin() const
+int ImageOverlay::getYOrigin() const
 {
     return m_origin.split("\\").at(1).toInt();
 }
