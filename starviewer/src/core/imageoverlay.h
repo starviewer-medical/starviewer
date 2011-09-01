@@ -1,5 +1,5 @@
-#ifndef UDGOVERLAY_H
-#define UDGOVERLAY_H
+#ifndef UDGIMAGEOVERLAY_H
+#define UDGIMAGEOVERLAY_H
 
 #include <QString>
 
@@ -9,10 +9,10 @@ namespace udg {
     Classe que encapsula l'objecte Overlay del DICOM.
     Per més informació, consultar apartat C.9 OVERLAYS, PS 3.3.
  */
-class Overlay {
+class ImageOverlay {
 public:
-    Overlay();
-    ~Overlay();
+    ImageOverlay();
+    ~ImageOverlay();
 
     /// Assigna/obté les files i columnes de l'overlay
     void setRows(unsigned int rows);
