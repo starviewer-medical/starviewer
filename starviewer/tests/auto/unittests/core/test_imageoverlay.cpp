@@ -19,8 +19,9 @@ private slots:
 void test_ImageOverlay::ImageOverlay_InitializesClassAsExpected()
 {    
     ImageOverlay overlay;
-    QCOMPARE(overlay.getRows(), unsigned int(0));
-    QCOMPARE(overlay.getColumns(), unsigned int(0));
+    unsigned int uintZero = 0;
+    QCOMPARE(overlay.getRows(), uintZero);
+    QCOMPARE(overlay.getColumns(), uintZero);
     QCOMPARE(overlay.getXOrigin(), 1);
     QCOMPARE(overlay.getYOrigin(), 1);
 }
