@@ -164,6 +164,11 @@ public:
     /// Ens retorna la hora en format hh:mm:ss en que va començar la creació de la imatge
     QString getFormattedImageTime() const;
 
+    /// Mètodes per obtenir/assignar el número d'overlays que té la imatge
+    bool hasOverlays() const;
+    unsigned short getNumberOfOverlays() const;
+    void setNumberOfOverlays(unsigned short overlays);
+
     /// Assingar/Obtenir el DICOMSource de la imatge. Indica quin és l'origen dels fitxers DICOM que conté la imatge
     void setDICOMSource(const DICOMSource &imageDICOMSource);
     DICOMSource getDICOMSource() const;
@@ -316,6 +321,9 @@ private:
     QDate m_retrievedDate;
     QTime m_retrieveTime;
 
+    /// Atribut que ens dirà quants overlays té la imatge
+    unsigned short m_numberOfOverlays;
+    
     /// La sèrie pare
     Series *m_parentSeries;
 
