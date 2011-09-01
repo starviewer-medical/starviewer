@@ -1,5 +1,5 @@
-#ifndef UDGCHECKFORUPDATES_H
-#define UDGCHECKFORUPDATES_H
+#ifndef UDGAPPLICATIONUPDATECHECKER_H
+#define UDGAPPLICATIONUPDATECHECKER_H
 
 #include <QObject>
 class QUrl;
@@ -11,14 +11,14 @@ namespace udg {
 /**
     Aquesta classe fa una crida al webservice per comprobar si hi ha una versió disponible de starviewer més nova que la que tenim instal·lada.
   */
-class CheckForUpdates : public QObject {
+class ApplicationUpdateChecker : public QObject {
 Q_OBJECT
 
 public:
     /// Constructor per defecte
-    CheckForUpdates(QObject *parent = 0);
+    ApplicationUpdateChecker(QObject *parent = 0);
     /// Destructor
-    ~CheckForUpdates();
+    ~ApplicationUpdateChecker();
     /// Fer la crida al servidor per obtenir si hi ha una nova versió
     void checkForUpdates();
     
@@ -79,4 +79,4 @@ private:
 
 } // End namespace udg
 
-#endif // UDGCHECKFORUPDATES_H
+#endif // UDGAPPLICATIONUPDATECHECKER_H
