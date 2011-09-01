@@ -127,18 +127,6 @@ private:
     /// Descripció del hanging protocol
     QString m_description;
 
-    /// Nivell del hanging protocol
-    HangingProtocolLevel m_level;
-
-    /// Creador del hanging protocol
-    QString m_creator;
-
-    /// Data i hora de creació del hanging protocol
-    QString m_dateTime;
-
-    /// Saber si es candidat
-    bool m_candidate;
-
     /// Definició de layouts
     HangingProtocolLayout *m_layout;
 

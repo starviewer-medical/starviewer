@@ -26,10 +26,6 @@ HangingProtocol::HangingProtocol(const HangingProtocol *hangingProtocol)
     m_identifier = hangingProtocol->m_identifier;
     m_name = hangingProtocol->m_name;
     m_description = hangingProtocol->m_description;
-    m_level = hangingProtocol->m_level;
-    m_creator = hangingProtocol->m_creator;
-    m_dateTime = hangingProtocol->m_dateTime;
-    m_candidate = hangingProtocol->m_candidate;
     m_strictness = hangingProtocol->m_strictness;
     m_allDiferent = hangingProtocol->m_allDiferent;
     m_iconType = hangingProtocol->m_iconType;
@@ -219,8 +215,8 @@ HangingProtocolDisplaySet* HangingProtocol::getDisplaySet(int identifier) const
 
 void HangingProtocol::show()
 {
-    DEBUG_LOG(QString("\n---- HANGING PROTOCOL ----\n Name: %1\nDescription: %2\nLevel: %3\nCreator: %4\nDate: %5\n").arg(m_name).arg(
-              m_description).arg(m_level).arg(m_creator).arg(m_dateTime));
+    DEBUG_LOG(QString("\n---- HANGING PROTOCOL ----\n Name: %1\nDescription: %2\n").arg(m_name).arg(
+              m_description));
 
     DEBUG_LOG("List of protocols: \n");
     for (int i = 0; i < m_mask->getProtocolList().size(); i++)
