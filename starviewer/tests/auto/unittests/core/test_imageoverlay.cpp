@@ -9,9 +9,6 @@ Q_OBJECT
 private slots:
     void ImageOverlay_InitializesClassAsExpected();
     
-    void setType_OnlyAdmitsStipulatedValues_data();
-    void setType_OnlyAdmitsStipulatedValues();
-
     void setDICOMFormattedOrigin_ShouldBeUpdated_data();
     void setDICOMFormattedOrigin_ShouldBeUpdated();
 
@@ -26,44 +23,6 @@ void test_ImageOverlay::ImageOverlay_InitializesClassAsExpected()
     QCOMPARE(overlay.getColumns(), unsigned int(0));
     QCOMPARE(overlay.getXOrigin(), 1);
     QCOMPARE(overlay.getYOrigin(), 1);
-    QCOMPARE(overlay.getType(), QChar());
-}
-
-void test_ImageOverlay::setType_OnlyAdmitsStipulatedValues_data()
-{
-    QTest::addColumn<QChar>("type");
-    QTest::addColumn<QChar>("result");
-
-    QTest::newRow("Graphics enum") << QChar('G') << QChar('G');
-    QTest::newRow("ROI enum") << QChar('R') << QChar('R');
-    
-    QTest::newRow("empty value") << QChar() << QChar();
-    // ASCII 71 == 'G'
-    for (char c = 0; c < 71; ++c)
-    {
-        QTest::newRow(qPrintable(QString("wrong value '%1'").arg(c))) << QChar::fromAscii(c) << QChar();
-    }
-    // ASCII 82 == 'R'
-    for (char c = 72; c < 82; ++c)
-    {
-        QTest::newRow(qPrintable(QString("wrong value '%1'").arg(c))) << QChar::fromAscii(c) << QChar();
-    }
-    // La resta de caràcters ASCII
-    for (char c = 83; c < 127; ++c)
-    {
-        QTest::newRow(qPrintable(QString("wrong value '%1'").arg(c))) << QChar::fromAscii(c) << QChar();
-    }
-}
-
-void test_ImageOverlay::setType_OnlyAdmitsStipulatedValues()
-{
-    QFETCH(QChar, type);
-    QFETCH(QChar, result);
-
-    ImageOverlay overlay;
-    overlay.setType(type);
-    
-    QCOMPARE(overlay.getType(), result);
 }
 
 void test_ImageOverlay::setDICOMFormattedOrigin_ShouldBeUpdated_data()
