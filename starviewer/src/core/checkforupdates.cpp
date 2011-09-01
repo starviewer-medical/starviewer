@@ -1,4 +1,4 @@
-#include "applicationversioncheckeronserver.h"
+#include "checkforupdates.h"
 #include "starviewerapplication.h"
 #include "logging.h"
 #include "machineidentifier.h"
@@ -15,17 +15,17 @@
 
 namespace udg {
 
-ApplicationVersionCheckerOnServer::ApplicationVersionCheckerOnServer(QObject *parent)
+CheckForUpdates::CheckForUpdates(QObject *parent)
 : QObject(parent)
 {
     m_manager = new QNetworkAccessManager(this);
 }
 
-ApplicationVersionCheckerOnServer::~ApplicationVersionCheckerOnServer()
+CheckForUpdates::~CheckForUpdates()
 {
 }
 
-void ApplicationVersionCheckerOnServer::checkVersionOnServer()
+void CheckForUpdates::checkForUpdates()
 {
     m_checkedVersion = QString("");
     m_releaseNotesURL = QString("");
@@ -34,36 +34,36 @@ void ApplicationVersionCheckerOnServer::checkVersionOnServer()
 
     QUrl url(createWebServiceUrl());
     setProxy(url);
-    connect(m_manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(checkVersionOnServerReply(QNetworkReply *)));
+    connect(m_manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(checkForUpdatesReply(QNetworkReply *)));
     m_manager->get(QNetworkRequest(url));
 }
 
-QString ApplicationVersionCheckerOnServer::getReleaseNotesUrl() const
+QString CheckForUpdates::getReleaseNotesUrl() const
 {
     return m_releaseNotesURL;
 }
 
-QString ApplicationVersionCheckerOnServer::getVersion() const
+QString CheckForUpdates::getVersion() const
 {
     return m_checkedVersion;
 }
 
-bool ApplicationVersionCheckerOnServer::isNewVersionAvailable() const
+bool CheckForUpdates::isNewVersionAvailable() const
 {
     return m_updateAvailable;
 }
 
-bool ApplicationVersionCheckerOnServer::isOnlineCheckOk() const
+bool CheckForUpdates::isOnlineCheckOk() const
 {
     return m_checkOk;
 }
 
-QString ApplicationVersionCheckerOnServer::getErrorDescription() const
+QString CheckForUpdates::getErrorDescription() const
 {
     return m_errorDescription;
 }
 
-QString ApplicationVersionCheckerOnServer::createWebServiceUrl()
+QString CheckForUpdates::createWebServiceUrl()
 {
     MachineIdentifier machineIdentifier;
 
@@ -74,7 +74,7 @@ QString ApplicationVersionCheckerOnServer::createWebServiceUrl()
               .arg(StarviewerVersionString).arg(machineID).arg(groupID);
 }
 
-void ApplicationVersionCheckerOnServer::setProxy(const QUrl &url)
+void CheckForUpdates::setProxy(const QUrl &url)
 {
     QNetworkProxyQuery q(url);
 
@@ -86,13 +86,13 @@ void ApplicationVersionCheckerOnServer::setProxy(const QUrl &url)
     }
 }
 
-void ApplicationVersionCheckerOnServer::setCheckFinished()
+void CheckForUpdates::setCheckFinished()
 {
     m_checkFinished = true;
     emit checkFinished();
 }
 
-void ApplicationVersionCheckerOnServer::parseWebServiceReply(QNetworkReply *reply)
+void CheckForUpdates::parseWebServiceReply(QNetworkReply *reply)
 {
     m_checkOk = false;
     if (reply->error() == QNetworkReply::NoError)
@@ -108,7 +108,7 @@ void ApplicationVersionCheckerOnServer::parseWebServiceReply(QNetworkReply *repl
     }
 }
 
-void ApplicationVersionCheckerOnServer::parseJSON(const QString &json)
+void CheckForUpdates::parseJSON(const QString &json)
 {
     QScriptValue scriptValue;
     QScriptEngine engine;
@@ -155,10 +155,10 @@ void ApplicationVersionCheckerOnServer::parseJSON(const QString &json)
     }
 }
 
-void ApplicationVersionCheckerOnServer::checkVersionOnServerReply(QNetworkReply *reply)
+void CheckForUpdates::checkForUpdatesReply(QNetworkReply *reply)
 {
     // Desconnectar el manager
-    disconnect(m_manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(checkVersionOnServerReply(QNetworkReply *)));
+    disconnect(m_manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(checkForUpdatesReply(QNetworkReply *)));
 
     // Comprovar si hi ha error a la resposta i si no n'hi ha, es parseja el JSON i es guarda en els atributs de l'objecte.
     // m_checkOk ens dirà si ha anat bé.
@@ -177,7 +177,7 @@ void ApplicationVersionCheckerOnServer::checkVersionOnServerReply(QNetworkReply 
     reply->deleteLater();
 }
 
-void ApplicationVersionCheckerOnServer::doesUpdateNotesUrlExistOnServerReply(QNetworkReply *reply)
+void CheckForUpdates::doesUpdateNotesUrlExistOnServerReply(QNetworkReply *reply)
 {
     
     // Desconnectar el manager

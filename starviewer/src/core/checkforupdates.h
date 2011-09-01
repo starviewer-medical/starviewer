@@ -1,5 +1,5 @@
-#ifndef UDGAPPLICATIONVERSIONCHECKERONSERVER_H
-#define UDGAPPLICATIONVERSIONCHECKERONSERVER_H
+#ifndef UDGCHECKFORUPDATES_H
+#define UDGCHECKFORUPDATES_H
 
 #include <QObject>
 class QUrl;
@@ -11,16 +11,16 @@ namespace udg {
 /**
     Aquesta classe fa una crida al webservice per comprobar si hi ha una versió disponible de starviewer més nova que la que tenim instal·lada.
   */
-class ApplicationVersionCheckerOnServer : public QObject {
+class CheckForUpdates : public QObject {
 Q_OBJECT
 
 public:
     /// Constructor per defecte
-    ApplicationVersionCheckerOnServer(QObject *parent = 0);
+    CheckForUpdates(QObject *parent = 0);
     /// Destructor
-    ~ApplicationVersionCheckerOnServer();
+    ~CheckForUpdates();
     /// Fer la crida al servidor per obtenir si hi ha una nova versió
-    void checkVersionOnServer();
+    void checkForUpdates();
     
     /// Retorna l'url, en forma de QString, de les notes de la nova versió. El resultat és correcte sempre que isNewVersionAvailable sigui cert.
     QString getReleaseNotesUrl() const;
@@ -54,7 +54,7 @@ private:
     
 private slots:
     /// Tracta la resposta del webservice obtenint la versió i la url de les notes de la nova versió
-    void checkVersionOnServerReply(QNetworkReply *reply);
+    void checkForUpdatesReply(QNetworkReply *reply);
     /// Comprova si la url de les release notes és vàlida
     void doesUpdateNotesUrlExistOnServerReply(QNetworkReply *reply);
 
@@ -79,4 +79,4 @@ private:
 
 } // End namespace udg
 
-#endif // UDGAPPLICATIONVERSIONCHECKERONSERVER_H
+#endif // UDGCHECKFORUPDATES_H

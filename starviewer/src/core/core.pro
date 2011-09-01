@@ -255,7 +255,7 @@ HEADERS += extensionfactory.h \
     machineinformation.h \
     diagnosistest.h \
     diagnosistestresult.h \
-    applicationversioncheckeronserver.h
+    checkforupdates.h
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
     mathtools.cpp \
@@ -470,7 +470,7 @@ SOURCES += extensionmediator.cpp \
     pacsdevice.cpp \
     machineinformation.cpp \
     diagnosistestresult.cpp \
-    applicationversioncheckeronserver.cpp
+    checkforupdates.cpp
 TEMPLATE = lib
 DESTDIR = ./
 CONFIG += staticlib
