@@ -386,6 +386,21 @@ QString Image::getFormattedImageTime() const
     return formattedTime;
 }
 
+bool Image::hasOverlays() const
+{
+    return m_numberOfOverlays > 0 ? true : false;
+}
+
+unsigned short Image::getNumberOfOverlays() const
+{
+    return m_numberOfOverlays;
+}
+
+void Image::setNumberOfOverlays(unsigned short overlays)
+{
+    m_numberOfOverlays = overlays;
+}
+
 void Image::setDICOMSource(const DICOMSource &imageDICOMSource)
 {
     m_imageDICOMSource = imageDICOMSource;
