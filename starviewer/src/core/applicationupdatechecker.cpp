@@ -1,4 +1,4 @@
-#include "checkforupdates.h"
+#include "applicationupdatechecker.h"
 #include "starviewerapplication.h"
 #include "logging.h"
 #include "machineidentifier.h"
@@ -15,17 +15,17 @@
 
 namespace udg {
 
-CheckForUpdates::CheckForUpdates(QObject *parent)
+ApplicationUpdateChecker::ApplicationUpdateChecker(QObject *parent)
 : QObject(parent)
 {
     m_manager = new QNetworkAccessManager(this);
 }
 
-CheckForUpdates::~CheckForUpdates()
+ApplicationUpdateChecker::~ApplicationUpdateChecker()
 {
 }
 
-void CheckForUpdates::checkForUpdates()
+void ApplicationUpdateChecker::checkForUpdates()
 {
     m_checkedVersion = QString("");
     m_releaseNotesURL = QString("");
@@ -38,32 +38,32 @@ void CheckForUpdates::checkForUpdates()
     m_manager->get(QNetworkRequest(url));
 }
 
-QString CheckForUpdates::getReleaseNotesUrl() const
+QString ApplicationUpdateChecker::getReleaseNotesUrl() const
 {
     return m_releaseNotesURL;
 }
 
-QString CheckForUpdates::getVersion() const
+QString ApplicationUpdateChecker::getVersion() const
 {
     return m_checkedVersion;
 }
 
-bool CheckForUpdates::isNewVersionAvailable() const
+bool ApplicationUpdateChecker::isNewVersionAvailable() const
 {
     return m_updateAvailable;
 }
 
-bool CheckForUpdates::isOnlineCheckOk() const
+bool ApplicationUpdateChecker::isOnlineCheckOk() const
 {
     return m_checkOk;
 }
 
-QString CheckForUpdates::getErrorDescription() const
+QString ApplicationUpdateChecker::getErrorDescription() const
 {
     return m_errorDescription;
 }
 
-QString CheckForUpdates::createWebServiceUrl()
+QString ApplicationUpdateChecker::createWebServiceUrl()
 {
     MachineIdentifier machineIdentifier;
 
@@ -74,7 +74,7 @@ QString CheckForUpdates::createWebServiceUrl()
               .arg(StarviewerVersionString).arg(machineID).arg(groupID);
 }
 
-void CheckForUpdates::setProxy(const QUrl &url)
+void ApplicationUpdateChecker::setProxy(const QUrl &url)
 {
     QNetworkProxyQuery q(url);
 
@@ -86,13 +86,13 @@ void CheckForUpdates::setProxy(const QUrl &url)
     }
 }
 
-void CheckForUpdates::setCheckFinished()
+void ApplicationUpdateChecker::setCheckFinished()
 {
     m_checkFinished = true;
     emit checkFinished();
 }
 
-void CheckForUpdates::parseWebServiceReply(QNetworkReply *reply)
+void ApplicationUpdateChecker::parseWebServiceReply(QNetworkReply *reply)
 {
     m_checkOk = false;
     if (reply->error() == QNetworkReply::NoError)
@@ -108,7 +108,7 @@ void CheckForUpdates::parseWebServiceReply(QNetworkReply *reply)
     }
 }
 
-void CheckForUpdates::parseJSON(const QString &json)
+void ApplicationUpdateChecker::parseJSON(const QString &json)
 {
     QScriptValue scriptValue;
     QScriptEngine engine;
@@ -155,7 +155,7 @@ void CheckForUpdates::parseJSON(const QString &json)
     }
 }
 
-void CheckForUpdates::checkForUpdatesReply(QNetworkReply *reply)
+void ApplicationUpdateChecker::checkForUpdatesReply(QNetworkReply *reply)
 {
     // Desconnectar el manager
     disconnect(m_manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(checkForUpdatesReply(QNetworkReply *)));
@@ -177,7 +177,7 @@ void CheckForUpdates::checkForUpdatesReply(QNetworkReply *reply)
     reply->deleteLater();
 }
 
-void CheckForUpdates::doesUpdateNotesUrlExistOnServerReply(QNetworkReply *reply)
+void ApplicationUpdateChecker::doesUpdateNotesUrlExistOnServerReply(QNetworkReply *reply)
 {
     
     // Desconnectar el manager
