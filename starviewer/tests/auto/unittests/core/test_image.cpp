@@ -15,8 +15,8 @@ void test_Image::hasOverlays_ReturnExpectedValues_data()
 {
     QTest::addColumn<unsigned short>("numberOfOverlays");
     QTest::addColumn<bool>("hasOverlays");
-
-    QTest::newRow("Zero overlays") << unsigned short(0) << false;
+    unsigned short ushortZero = 0;
+    QTest::newRow("Zero overlays") << ushortZero << false;
     for (unsigned short i = 1; i < 17; ++i)
     {
         QTest::newRow(qPrintable(QString("%1 overlays").arg(i))) << i << true;
