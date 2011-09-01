@@ -20,14 +20,6 @@ public:
     unsigned int getRows() const;
     unsigned int getColumns() const;
 
-    /// Constants per definir els tipus d'Overlay permesos
-    static const QChar GraphicsType;
-    static const QChar ROIType;
-    
-    /// Assigna/obté el tipus d'overlay
-    void setType(const QChar &overlayType);
-    QChar getType() const;
-
     /// Assigna/obté l'origen de l'Overlay
     void setDICOMFormattedOrigin(const QString &origin);
     int getXOrigin() const;
@@ -36,9 +28,6 @@ public:
 private:
     /// Files i columnes de l'overlay
     unsigned int m_rows, m_columns;
-
-    /// Tipus d'overlay. Valors permesos: G = Graphics, R = ROI
-    QChar m_type;
 
     /// Localització del primer punt de l'overlay respecte als pixels a la imatge, donat com fila\columna.
     /// El pixel superior esquerre té la coordenada 1\1

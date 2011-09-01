@@ -5,9 +5,6 @@
 
 namespace udg {
 
-const QChar ImageOverlay::GraphicsType('G');
-const QChar ImageOverlay::ROIType('R');
-
 ImageOverlay::ImageOverlay()
 {
     m_rows = 0;
@@ -37,23 +34,6 @@ unsigned int ImageOverlay::getRows() const
 unsigned int ImageOverlay::getColumns() const
 {
     return m_columns;
-}
-
-void ImageOverlay::setType(const QChar &overlayType)
-{
-    if (overlayType != GraphicsType && overlayType != ROIType)
-    {
-        return;
-    }
-    else
-    {
-        m_type = overlayType;
-    }
-}
-
-QChar ImageOverlay::getType() const
-{
-    return m_type;
 }
 
 void ImageOverlay::setDICOMFormattedOrigin(const QString &origin)
