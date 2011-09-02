@@ -62,6 +62,7 @@ HEADERS += extensionfactory.h \
     shutterfilter.h \
     image.h \
     imageoverlay.h \
+    imageoverlayreader.h \
     dicomtagreader.h \
     patientfiller.h \
     patientfillerstep.h \
@@ -290,6 +291,7 @@ SOURCES += extensionmediator.cpp \
     shutterfilter.cpp \
     image.cpp \
     imageoverlay.cpp \
+    imageoverlayreader.cpp \
     dicomtagreader.cpp \
     patientfiller.cpp \
     patientfillerstep.cpp \
