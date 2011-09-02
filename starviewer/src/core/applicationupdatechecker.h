@@ -2,6 +2,7 @@
 #define UDGAPPLICATIONUPDATECHECKER_H
 
 #include <QObject>
+class QTimer;
 class QUrl;
 class QNetworkReply;
 class QNetworkAccessManager;
@@ -34,6 +35,11 @@ public:
     /// Retorna la descripció de l'error. Si el test ha acabat bé, aquest valor no té sentit.
     QString getErrorDescription() const;
 
+    /// Permet especificar el temps que tarda en fer timout. (15 segons per defecte)
+    void setTimeout(int milliseconds);
+    /// Retorna el temps definit del timout en milisegons
+    int getTimout();
+
 signals:
     /// Senyal per indicar que s'ha acabat de carregar
     void checkFinished();
@@ -55,10 +61,16 @@ private:
 private slots:
     /// Tracta la resposta del webservice obtenint la versió i la url de les notes de la nova versió
     void checkForUpdatesReply(QNetworkReply *reply);
+    
+    /// Emula la funció de timeout que el QNetworkAccessManager no té
+    void checkForUpdatesReplyTimeout();
 
 private:
     /// Indica si ha acabat de carregar-ho tot
     bool m_checkFinished;
+
+    /// Timer per fer el timeout de la resposta del servidor
+    QTimer *m_timeoutTimer;
 
     /// Gestiona les connexions http
     QNetworkAccessManager *m_manager;

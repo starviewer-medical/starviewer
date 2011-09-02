@@ -12,6 +12,7 @@
 #include <QNetworkInterface>
 #include <QNetworkProxyQuery>
 #include <QNetworkProxyFactory>
+#include <QTimer>
 
 namespace udg {
 
@@ -19,6 +20,8 @@ ApplicationUpdateChecker::ApplicationUpdateChecker(QObject *parent)
 : QObject(parent)
 {
     m_manager = new QNetworkAccessManager(this);
+    m_timeoutTimer = new QTimer(this);
+    m_timeoutTimer->setInterval(15000);
 }
 
 ApplicationUpdateChecker::~ApplicationUpdateChecker()
@@ -35,8 +38,10 @@ void ApplicationUpdateChecker::checkForUpdates()
     QUrl url(createWebServiceUrl());
     setProxy(url);
     connect(m_manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(checkForUpdatesReply(QNetworkReply *)));
+    connect(m_timeoutTimer, SIGNAL(timeout()), this, SLOT(checkForUpdatesReplyTimeout()));
     // Fer la petició
     m_manager->get(QNetworkRequest(url));
+    m_timeoutTimer->start();
 }
 
 QString ApplicationUpdateChecker::getReleaseNotesUrl() const
@@ -62,6 +67,16 @@ bool ApplicationUpdateChecker::isOnlineCheckOk() const
 QString ApplicationUpdateChecker::getErrorDescription() const
 {
     return m_errorDescription;
+}
+
+void ApplicationUpdateChecker::setTimeout(int milliseconds)
+{
+    m_timeoutTimer->setInterval(milliseconds);
+}
+
+int ApplicationUpdateChecker::getTimout()
+{
+    return m_timeoutTimer->interval();
 }
 
 QString ApplicationUpdateChecker::createWebServiceUrl()
@@ -160,6 +175,8 @@ void ApplicationUpdateChecker::checkForUpdatesReply(QNetworkReply *reply)
 {
     // Desconectar el manager
     disconnect(m_manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(checkForUpdatesReply(QNetworkReply *)));
+    // I desconectar el timer
+    disconnect(m_timeoutTimer, SIGNAL(timeout()), this, SLOT(checkForUpdatesReplyTimeout()));
 
     // Comprovar si hi ha error a la resposta i si no n'hi ha, es parseja el JSON i es guarda en els atributs de l'objecte.
     // m_checkOk ens dirà si ha anat bé.
@@ -167,6 +184,19 @@ void ApplicationUpdateChecker::checkForUpdatesReply(QNetworkReply *reply)
 
     setCheckFinished();
     reply->deleteLater();
+}
+
+void ApplicationUpdateChecker::checkForUpdatesReplyTimeout()
+{
+    // Desconectar el manager
+    disconnect(m_manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(checkForUpdatesReply(QNetworkReply *)));
+    // I desconectar el timer
+    disconnect(m_timeoutTimer, SIGNAL(timeout()), this, SLOT(checkForUpdatesReplyTimeout()));
+
+    m_checkOk = false;
+    m_errorDescription = tr("Error requesting release notes: timeout");
+    ERROR_LOG("Error en la petició de les release notes. El servidor no respon: Timeout");
+    setCheckFinished();
 }
 
 } // End namespace udg
