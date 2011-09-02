@@ -9,7 +9,7 @@ ImageOverlay::ImageOverlay()
 {
     m_rows = 0;
     m_columns = 0;
-    setDICOMFormattedOrigin("1\\1");
+    setOrigin(1, 1);
     m_data = 0;
 }
 
@@ -42,18 +42,25 @@ void ImageOverlay::setDICOMFormattedOrigin(const QString &origin)
     QRegExp originExpression("^-?\\d+\\\\-?\\d+$");
     if (originExpression.exactMatch(origin))
     {
-        m_origin = origin;
+        QStringList originList = origin.split("\\");
+        setOrigin(originList.at(0).toInt(), originList.at(1).toInt());
     }
+}
+
+void ImageOverlay::setOrigin(int x, int y)
+{
+    m_origin[0] = x;
+    m_origin[1] = y;
 }
 
 int ImageOverlay::getXOrigin() const
 {
-    return m_origin.split("\\").at(0).toInt();
+    return m_origin[0];
 }
 
 int ImageOverlay::getYOrigin() const
 {
-    return m_origin.split("\\").at(1).toInt();
+    return m_origin[1];
 }
 
 void ImageOverlay::setData(unsigned char *data)
