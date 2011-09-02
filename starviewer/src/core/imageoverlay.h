@@ -22,6 +22,7 @@ public:
 
     /// Assigna/obté l'origen de l'Overlay
     void setDICOMFormattedOrigin(const QString &origin);
+    void setOrigin(int x, int y);
     int getXOrigin() const;
     int getYOrigin() const;
 
@@ -38,7 +39,7 @@ private:
     /// Valors de columna majors que 1 indiquen que l'origen del pla d'overlay és a la dreta de l'origen de la imatge. 
     /// Valors de fila majors que 1 indiquen que l'origen del pla d'overlay està per sota de l'origen de la imatge.
     /// Valors per sota de 1 indiquen que l'origen del pla d'overlay està per sobre o a l'esquerra de l'origen de la imatge.
-    QString m_origin;
+    int m_origin[2];
 
     /// Dades de l'overlay
     unsigned char *m_data;
