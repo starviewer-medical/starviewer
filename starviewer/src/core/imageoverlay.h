@@ -25,6 +25,10 @@ public:
     int getXOrigin() const;
     int getYOrigin() const;
 
+    /// Assigna/retorna les dades de l'overlay
+    void setData(unsigned char *data);
+    unsigned char* getData() const;
+
 private:
     /// Files i columnes de l'overlay
     unsigned int m_rows, m_columns;
@@ -35,6 +39,9 @@ private:
     /// Valors de fila majors que 1 indiquen que l'origen del pla d'overlay està per sota de l'origen de la imatge.
     /// Valors per sota de 1 indiquen que l'origen del pla d'overlay està per sobre o a l'esquerra de l'origen de la imatge.
     QString m_origin;
+
+    /// Dades de l'overlay
+    unsigned char *m_data;
 };
 
 }
