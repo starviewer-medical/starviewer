@@ -24,6 +24,8 @@ void test_ImageOverlay::ImageOverlay_InitializesClassAsExpected()
     QCOMPARE(overlay.getColumns(), uintZero);
     QCOMPARE(overlay.getXOrigin(), 1);
     QCOMPARE(overlay.getYOrigin(), 1);
+    unsigned char *nullUCharPointer = 0;
+    QCOMPARE(overlay.getData(), nullUCharPointer);
 }
 
 void test_ImageOverlay::setDICOMFormattedOrigin_ShouldBeUpdated_data()

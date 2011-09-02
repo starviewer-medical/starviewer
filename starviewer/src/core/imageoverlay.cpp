@@ -10,6 +10,7 @@ ImageOverlay::ImageOverlay()
     m_rows = 0;
     m_columns = 0;
     setDICOMFormattedOrigin("1\\1");
+    m_data = 0;
 }
 
 ImageOverlay::~ImageOverlay()
@@ -53,6 +54,16 @@ int ImageOverlay::getXOrigin() const
 int ImageOverlay::getYOrigin() const
 {
     return m_origin.split("\\").at(1).toInt();
+}
+
+void ImageOverlay::setData(unsigned char *data)
+{
+    m_data = data;
+}
+
+unsigned char* ImageOverlay::getData() const
+{
+    return m_data;
 }
 
 }
