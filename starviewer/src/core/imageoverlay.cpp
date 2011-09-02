@@ -37,16 +37,6 @@ unsigned int ImageOverlay::getColumns() const
     return m_columns;
 }
 
-void ImageOverlay::setDICOMFormattedOrigin(const QString &origin)
-{
-    QRegExp originExpression("^-?\\d+\\\\-?\\d+$");
-    if (originExpression.exactMatch(origin))
-    {
-        QStringList originList = origin.split("\\");
-        setOrigin(originList.at(0).toInt(), originList.at(1).toInt());
-    }
-}
-
 void ImageOverlay::setOrigin(int x, int y)
 {
     m_origin[0] = x;

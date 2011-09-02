@@ -21,7 +21,6 @@ public:
     unsigned int getColumns() const;
 
     /// Assigna/obté l'origen de l'Overlay
-    void setDICOMFormattedOrigin(const QString &origin);
     void setOrigin(int x, int y);
     int getXOrigin() const;
     int getYOrigin() const;
