@@ -5,6 +5,8 @@
 
 #include <QWidget>
 
+class QNetworkReply;
+
 namespace udg {
 
 /**
@@ -24,12 +26,17 @@ public:
     bool isDontShowAnymoreChecked();
     /// Mostra o amaga el checkbox don't show anymore
     void setDontShowVisible(bool visible);
-    /// Determina quin url haurà d'obrir la finestra de les release notes
-    void setUrl(const QUrl &url);
+    
+    /// Comprova que l'url existeixi i, si és així, es mostra la finestra de les release notes.
+    void showIfUrlLoadsSuccessfully(const QUrl &url);
 
 protected:
     /// Redifinir el close event per quan es tanqui, guardar els settings
     void closeEvent(QCloseEvent *event);
+
+protected slots:
+    /// comprova si l'url que se li passa relament existeix
+    void loadFinished(QNetworkReply *reply);
 };
 
 } // End namespace udg

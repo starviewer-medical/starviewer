@@ -84,8 +84,9 @@ private slots:
     void showWhenCheckFinished();
 
 private:
-    /// Atribut per decidir si tot s'ha carregat correctament i es pot mostrar la finestra
-    bool m_somethingToShow;
+    /// Guarda l'url que es carregarà
+    QUrl m_urlToShow;
+
     /// Indica si ha acabat de carregar-ho tot
     bool m_checkFinished;
     /// Atribut que indica si s'esta comprobant la nova versió o mostrant les release notes

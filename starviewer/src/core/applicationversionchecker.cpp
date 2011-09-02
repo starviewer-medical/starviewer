@@ -35,7 +35,7 @@ void ApplicationVersionChecker::checkReleaseNotes()
 {
     m_checkNewVersion = true;
     m_checkFinished = false;
-    m_somethingToShow = false;
+    m_urlToShow = QUrl("");
     bool checkingOnlineNotes = false;
 
     // Precondició:
@@ -60,10 +60,8 @@ void ApplicationVersionChecker::checkReleaseNotes()
         if (checkLocalUrl(url))
         {
             m_releaseNotes->setDontShowVisible(false);
-            m_releaseNotes->setUrl(url);
             m_releaseNotes->setWindowTitle(tr("Release Notes"));
-            m_somethingToShow = true;
-            
+            m_urlToShow = url;
         }
         else
         {
@@ -108,10 +106,10 @@ void ApplicationVersionChecker::showIfCorrect()
     if (m_checkFinished)
     {
         // Aqui basicament hi entra quan mostra les notes locals
-        if (m_somethingToShow)
+        if (!m_urlToShow.isEmpty())
         {
-            m_releaseNotes->show();
-            m_somethingToShow = false;
+            m_releaseNotes->showIfUrlLoadsSuccessfully(m_urlToShow);
+            m_urlToShow = QUrl("");
         }
     }
     else
@@ -137,9 +135,8 @@ void ApplicationVersionChecker::showLocalReleaseNotes()
     if (checkLocalUrl(url))
     {
         m_releaseNotes->setDontShowVisible(false);
-        m_releaseNotes->setUrl(url);
         m_releaseNotes->setWindowTitle(tr("Release Notes"));
-        m_releaseNotes->show();
+        m_releaseNotes->showIfUrlLoadsSuccessfully(url);
     }
     else
     {
@@ -157,7 +154,6 @@ void ApplicationVersionChecker::onlineCheckFinished()
     m_checkFinished = true;
     if (m_applicationUpdateChecker->isNewVersionAvailable())
     {
-        m_releaseNotes->setUrl(QUrl(m_applicationUpdateChecker->getReleaseNotesUrl()));
         m_checkedVersion = m_applicationUpdateChecker->getVersion();
         if (m_lastVersionChecked != m_checkedVersion)
         {
@@ -167,7 +163,7 @@ void ApplicationVersionChecker::onlineCheckFinished()
             }
             else
             {
-                m_somethingToShow = true;
+                m_urlToShow = m_applicationUpdateChecker->getReleaseNotesUrl();
                 INFO_LOG(QString("Es mostren les notes: %1").arg(m_applicationUpdateChecker->getReleaseNotesUrl()));
             }
         }
@@ -178,7 +174,11 @@ void ApplicationVersionChecker::onlineCheckFinished()
     }
     else
     {
-        INFO_LOG("Starviewer està actualitzat. No s'ha trobat cap versió nova al servidor.");
+        if (m_applicationUpdateChecker->isOnlineCheckOk())
+        {
+            INFO_LOG("Starviewer està actualitzat. No s'ha trobat cap versió nova al servidor.");
+        }
+        // Si el check no ha anat bé, ja es fa un error log dins de l'application update checker.
     }
     writeSettings();
     emit checkFinished();
@@ -355,7 +355,7 @@ QString ApplicationVersionChecker::getVersionAttribute(const QString &version, A
             // Si no hi ha numero no passa res, passar una string buida a int retorna 0.
             return QString(version).remove(QRegExp("[a-zA-Z]"));
         default:
-            // Cas improbable, l'atribut no Ã©s correcte
+            // Cas improbable, l'atribut no és correcte
             return version;
     }
 }
@@ -380,10 +380,10 @@ bool ApplicationVersionChecker::isDevelopmentMode()
 
 void ApplicationVersionChecker::showWhenCheckFinished()
 {
-    if (m_somethingToShow)
+    if (!m_urlToShow.isEmpty())
     {
-        m_releaseNotes->show();
-        m_somethingToShow = false;
+        m_releaseNotes->showIfUrlLoadsSuccessfully(m_urlToShow);
+        m_urlToShow = QUrl("");
     }
 }
 
