@@ -1,8 +1,10 @@
 #include "qreleasenotes.h"
 #include "coresettings.h"
+#include "logging.h"
 
 #include <QCloseEvent>
 #include <QUrl>
+#include <QNetworkReply>
 
 namespace udg {
 
@@ -32,8 +34,9 @@ void QReleaseNotes::setDontShowVisible(bool visible)
     m_dontShowCheckBox->setVisible(visible);
 }
 
-void QReleaseNotes::setUrl(const QUrl &url)
+void QReleaseNotes::showIfUrlLoadsSuccessfully(const QUrl &url)
 {
+    connect(m_viewWebView->page()->networkAccessManager(), SIGNAL(finished(QNetworkReply *)), this, SLOT(loadFinished(QNetworkReply *)));
     m_viewWebView->setUrl(url);
 }
 
@@ -48,6 +51,24 @@ void QReleaseNotes::closeEvent(QCloseEvent *event)
     }
     // I tancar la finestra
     event->accept();
+}
+
+void QReleaseNotes::loadFinished(QNetworkReply *reply)
+{
+    // Desconectar el manager
+    disconnect(m_viewWebView->page()->networkAccessManager(), SIGNAL(finished(QNetworkReply *)), this, SLOT(loadFinished(QNetworkReply *)));
+
+    if (reply->error() == QNetworkReply::NoError)
+    {
+        // Si no hi ha hagut error, mostrar
+        show();
+    }
+    else
+    {
+        ERROR_LOG(QString("Error en carregar la url, tipus ") + QString::number(reply->error())+
+                  QString(": ") + reply->errorString());
+    }
+    reply->deleteLater();
 }
 
 }; // End namespace udg

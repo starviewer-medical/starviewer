@@ -55,8 +55,6 @@ private:
 private slots:
     /// Tracta la resposta del webservice obtenint la versió i la url de les notes de la nova versió
     void checkForUpdatesReply(QNetworkReply *reply);
-    /// Comprova si la url de les release notes és vàlida
-    void doesUpdateNotesUrlExistOnServerReply(QNetworkReply *reply);
 
 private:
     /// Indica si ha acabat de carregar-ho tot

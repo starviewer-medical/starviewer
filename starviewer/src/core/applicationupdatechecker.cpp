@@ -35,6 +35,7 @@ void ApplicationUpdateChecker::checkForUpdates()
     QUrl url(createWebServiceUrl());
     setProxy(url);
     connect(m_manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(checkForUpdatesReply(QNetworkReply *)));
+    // Fer la petició
     m_manager->get(QNetworkRequest(url));
 }
 
@@ -157,44 +158,15 @@ void ApplicationUpdateChecker::parseJSON(const QString &json)
 
 void ApplicationUpdateChecker::checkForUpdatesReply(QNetworkReply *reply)
 {
-    // Desconnectar el manager
+    // Desconectar el manager
     disconnect(m_manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(checkForUpdatesReply(QNetworkReply *)));
 
     // Comprovar si hi ha error a la resposta i si no n'hi ha, es parseja el JSON i es guarda en els atributs de l'objecte.
     // m_checkOk ens dirà si ha anat bé.
     parseWebServiceReply(reply);
 
-    if (m_checkOk && m_updateAvailable)
-    {
-        connect(m_manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(doesUpdateNotesUrlExistOnServerReply(QNetworkReply *)));
-        m_manager->get(QNetworkRequest(QUrl(m_releaseNotesURL)));
-    }
-    else
-    {
-        setCheckFinished();
-    }
-
-    reply->deleteLater();
-}
-
-void ApplicationUpdateChecker::doesUpdateNotesUrlExistOnServerReply(QNetworkReply *reply)
-{
-    
-    // Desconnectar el manager
-    disconnect(m_manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(doesUpdateNotesUrlExistOnServerReply(QNetworkReply *)));
-
-    bool error = reply->error() != QNetworkReply::NoError;
-    if (error)
-    {
-        ERROR_LOG(QString("Error en rebre les notes de la versio %1, tipus ").arg(m_checkedVersion) + QString::number(reply->error())+
-                  QString(": ") + reply->errorString());
-
-        m_checkOk = false;
-        m_errorDescription = QString(tr("The requested release notes does not exist on the server. Server response is: %1"))
-                                .arg(reply->errorString());
-    }
-    reply->deleteLater();
     setCheckFinished();
+    reply->deleteLater();
 }
 
 } // End namespace udg
