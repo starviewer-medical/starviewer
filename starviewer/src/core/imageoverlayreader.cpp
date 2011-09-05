@@ -32,29 +32,7 @@ bool ImageOverlayReader::read()
     
     for (size_t overlayIndex = 0; overlayIndex < image->GetNumberOfOverlays(); ++overlayIndex)
     {
-        const gdcm::Overlay &gdcmOverlay = image->GetOverlay(overlayIndex);
-        
-        ImageOverlay imageOverlay;
-        imageOverlay.setRows(gdcmOverlay.GetRows());
-        imageOverlay.setColumns(gdcmOverlay.GetColumns());
-        const signed short *origin = gdcmOverlay.GetOrigin();
-        imageOverlay.setOrigin(static_cast<int>(origin[0]), static_cast<int>(origin[1]));
-
-        unsigned char *buffer = 0;
-        try
-        {
-            buffer = new unsigned char[imageOverlay.getRows() * imageOverlay.getColumns()];
-            gdcmOverlay.GetUnpackBuffer(buffer);
-            imageOverlay.setData(buffer);
-        }
-        catch (std::bad_alloc)
-        {
-            ERROR_LOG(QString("No hi ha memòria suficient per carregar l'overlay [%1*%2] = %3 bytes")
-                .arg(imageOverlay.getRows()).arg(imageOverlay.getColumns()).arg((unsigned long)imageOverlay.getRows() * imageOverlay.getColumns()));
-            DEBUG_LOG(QString("No hi ha memòria suficient per carregar l'overlay [%1*%2] = %3 bytes")
-                .arg(imageOverlay.getRows()).arg(imageOverlay.getColumns()).arg((unsigned long)imageOverlay.getRows() * imageOverlay.getColumns()));
-        }
-        m_overlaysList << imageOverlay;
+        m_overlaysList << ImageOverlay::fromGDCMOverlay(image->GetOverlay(overlayIndex));
     }
     
     return true;
