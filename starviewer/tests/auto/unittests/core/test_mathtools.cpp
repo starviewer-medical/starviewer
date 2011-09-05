@@ -3,7 +3,7 @@
 #include <QVector3D>
 
 #include "mathtools.h"
-#include "fuzzycomparehelper.h"
+#include "fuzzycomparetesthelper.h"
 
 using namespace udg;
 using namespace testing;
@@ -68,7 +68,7 @@ void test_MathTools::angleInRadians_ShouldComputeAngleInRadians()
     QFETCH(QVector3D, vector2);
     QFETCH(double, angleInRadians);
 
-    QVERIFY(FuzzyCompareHelper::fuzzyCompare(MathTools::angleInRadians(vector1, vector2), angleInRadians, AngleInRadiansEpsilon));
+    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(MathTools::angleInRadians(vector1, vector2), angleInRadians, AngleInRadiansEpsilon));
 }
 
 void test_MathTools::angleInDegrees_ShouldComputeAngleInDegrees_data()
@@ -82,7 +82,7 @@ void test_MathTools::angleInDegrees_ShouldComputeAngleInDegrees()
     QFETCH(QVector3D, vector2);
     QFETCH(double, angleInRadians);
 
-    QVERIFY(FuzzyCompareHelper::fuzzyCompare(MathTools::angleInDegrees(vector1, vector2), angleInRadians * MathTools::RadiansToDegreesAsDouble, AngleInDegreesEpsilon));
+    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(MathTools::angleInDegrees(vector1, vector2), angleInRadians * MathTools::RadiansToDegreesAsDouble, AngleInDegreesEpsilon));
 }
 
 void test_MathTools::angleInRadians_ShouldReturnNaN_data()
@@ -147,9 +147,9 @@ void test_MathTools::normalize_ShouldReturnExpectedValues()
     double cVector[3] = { vector.x(), vector.y(), vector.z() };
     MathTools::normalize(cVector);
     
-    QVERIFY(FuzzyCompareHelper::fuzzyCompare(cVector[0], result.x(), NormalizeEpsilon));
-    QVERIFY(FuzzyCompareHelper::fuzzyCompare(cVector[1], result.y(), NormalizeEpsilon));
-    QVERIFY(FuzzyCompareHelper::fuzzyCompare(cVector[2], result.z(), NormalizeEpsilon));
+    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(cVector[0], result.x(), NormalizeEpsilon));
+    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(cVector[1], result.y(), NormalizeEpsilon));
+    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(cVector[2], result.z(), NormalizeEpsilon));
 }
 
 void test_MathTools::modulus_ShouldReturnExpectedValues_data()
@@ -185,7 +185,7 @@ void test_MathTools::modulus_ShouldReturnExpectedValues()
 
     double cVector[3] = { vector.x(), vector.y(), vector.z() };
 
-    QVERIFY(FuzzyCompareHelper::fuzzyCompare(MathTools::modulus(cVector), modulus, ModulusEpsilon));
+    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(MathTools::modulus(cVector), modulus, ModulusEpsilon));
 }
 
 void test_MathTools::dotProduct_ShouldReturnExpectedValues_data()
@@ -202,7 +202,7 @@ void test_MathTools::dotProduct_ShouldReturnExpectedValues()
     double cVector1[3] = { vector1.x(), vector1.y(), vector1.z() };
     double cVector2[3] = { vector2.x(), vector2.y(), vector2.z() };
 
-    QVERIFY(FuzzyCompareHelper::fuzzyCompare(MathTools::dotProduct(cVector1, cVector2), dotProduct));
+    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(MathTools::dotProduct(cVector1, cVector2), dotProduct));
 }
 
 void test_MathTools::crossProduct_ShouldReturnExpectedValues_data()
@@ -243,9 +243,9 @@ void test_MathTools::directorVector_ShouldReturnExpectedValues()
 
     double *directorVector = MathTools::directorVector(cPoint1, cPoint2);
 
-    QVERIFY(FuzzyCompareHelper::fuzzyCompare(directorVector[0], result.x(), directorVectorEpsilon));
-    QVERIFY(FuzzyCompareHelper::fuzzyCompare(directorVector[1], result.y(), directorVectorEpsilon));
-    QVERIFY(FuzzyCompareHelper::fuzzyCompare(directorVector[2], result.z(), directorVectorEpsilon));
+    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(directorVector[0], result.x(), directorVectorEpsilon));
+    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(directorVector[1], result.y(), directorVectorEpsilon));
+    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(directorVector[2], result.z(), directorVectorEpsilon));
 
 }
 
@@ -262,9 +262,9 @@ void test_MathTools::crossProduct_ShouldReturnExpectedValues()
 
     MathTools::crossProduct(cVector1, cVector2, computedCrossProduct);
 
-    QVERIFY(FuzzyCompareHelper::fuzzyCompare(computedCrossProduct[0], crossProduct.x(), crossProductEpsilon));
-    QVERIFY(FuzzyCompareHelper::fuzzyCompare(computedCrossProduct[1], crossProduct.y(), crossProductEpsilon));
-    QVERIFY(FuzzyCompareHelper::fuzzyCompare(computedCrossProduct[2], crossProduct.z(), crossProductEpsilon));    
+    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(computedCrossProduct[0], crossProduct.x(), crossProductEpsilon));
+    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(computedCrossProduct[1], crossProduct.y(), crossProductEpsilon));
+    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(computedCrossProduct[2], crossProduct.z(), crossProductEpsilon));    
 }
 
 void test_MathTools::getDistance3D_ShouldComputeDistanceCorrectly_data()
@@ -289,7 +289,7 @@ void test_MathTools::getDistance3D_ShouldComputeDistanceCorrectly()
     double v1[3] = { vector1.x(), vector1.y(), vector1.z() };
     double v2[3] = { vector2.x(), vector2.y(), vector2.z() };
 
-    QVERIFY(FuzzyCompareHelper::fuzzyCompare(MathTools::getDistance3D(v1, v2), distance3D, distance3DEpsion));
+    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(MathTools::getDistance3D(v1, v2), distance3D, distance3DEpsion));
 }
 
 void test_MathTools::setupComputeAngleData()

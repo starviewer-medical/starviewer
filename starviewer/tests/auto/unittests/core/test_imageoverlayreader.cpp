@@ -1,7 +1,7 @@
 #include "autotest.h"
 #include "imageoverlayreader.h"
 
-#include "imageoverlayhelper.h"
+#include "imageoverlaytesthelper.h"
 
 #include <gdcmImage.h>
 
@@ -140,7 +140,7 @@ void test_ImageOverlayReader::getOverlays_ShouldReturnExpectedOverlays()
     QList<ImageOverlay> listOfReadOverlays = overlayReader.getOverlays();
     for (int i = 0; i < numberOfOverlaysRead; ++i)
     {
-        QVERIFY(ImageOverlayHelper::areEqual(listOfReadOverlays.at(i), overlaysList.at(i)));
+        QVERIFY(ImageOverlayTestHelper::areEqual(listOfReadOverlays.at(i), overlaysList.at(i)));
     }
 }
 

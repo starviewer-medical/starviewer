@@ -1,10 +1,10 @@
-#ifndef FUZZYCOMPAREHELPER_H
-#define FUZZYCOMPAREHELPER_H
+#ifndef FUZZYCOMPARETESTHELPER_H
+#define FUZZYCOMPARETESTHELPER_H
 
 namespace testing {
 
 /// Classe que contindrà les funcions de comparació fuzzy que necessitem
-class FuzzyCompareHelper {
+class FuzzyCompareTestHelper {
 public:
     /// Fa una comparació fuzzy de dos valors double. Tenim un tercer paràmetre opcional epsilon que ens 
     /// permetrà fixar la precisió que volem en la comparació.
@@ -13,4 +13,4 @@ public:
 
 }
 
-#endif // FUZZYCOMPAREHELPER_H
+#endif // FUZZYCOMPARETESTHELPER_H
