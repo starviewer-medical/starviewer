@@ -19,6 +19,7 @@ QStudyTreeWidget::QStudyTreeWidget(QWidget *parent)
     setupUi(this);
 
     m_studyTreeView->setColumnHidden(Type, true);
+    m_studyTreeView->setColumnHidden(DICOMItemID, true);
     // Amaguem la columna Hora, ja que ara es mostra la data i hora en un mateix columna per poder ordenar per data i hora els estudis
     m_studyTreeView->setColumnHidden(Time, true);
     //Hack: Degut a que es guarden als settings l'amplada de les columnes per IndexColumna, si afegim una nova columna, l'hem d'afegir al final no la podem afegir al seu lloc corresponent 
