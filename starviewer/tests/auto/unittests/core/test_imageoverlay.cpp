@@ -1,7 +1,7 @@
 #include "autotest.h"
 #include "imageoverlay.h"
 
-#include "imageoverlayhelper.h"
+#include "imageoverlaytesthelper.h"
 
 #include <gdcmOverlay.h>
 
@@ -72,7 +72,7 @@ void test_ImageOverlay::fromGDCMOverlay_ReturnsExpectedValues()
     QFETCH(gdcm::Overlay, gdcmOverlay);
     QFETCH(ImageOverlay, imageOverlay);
 
-    QVERIFY(ImageOverlayHelper::areEqual(ImageOverlay::fromGDCMOverlay(gdcmOverlay), imageOverlay));
+    QVERIFY(ImageOverlayTestHelper::areEqual(ImageOverlay::fromGDCMOverlay(gdcmOverlay), imageOverlay));
 }
 
 DECLARE_TEST(test_ImageOverlay)
