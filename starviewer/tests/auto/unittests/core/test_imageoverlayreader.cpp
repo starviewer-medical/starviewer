@@ -35,11 +35,6 @@ private slots:
 
     void getOverlays_ShouldReturnExpectedOverlays_data();
     void getOverlays_ShouldReturnExpectedOverlays();
-
-private:
-    /// Ens converteix un gdcm::Overlay a ImageOverlay
-    ImageOverlay gdcmOverlayToImageOverlay(const gdcm::Overlay &gdcmOverlay);
-
 };
 
 void test_ImageOverlayReader::read_ShouldReturnExpectedValue_data()
@@ -112,7 +107,7 @@ void test_ImageOverlayReader::getOverlays_ShouldReturnExpectedOverlays_data()
     image->SetNumberOfOverlays(1);
 
     QList<ImageOverlay> overlaysList;
-    overlaysList << gdcmOverlayToImageOverlay(image->GetOverlay(0));
+    overlaysList << ImageOverlay::fromGDCMOverlay(image->GetOverlay(0));
     QTest::newRow("Image with 1 empty overlay") << image << overlaysList;
 
     gdcm::Image *image2 = new gdcm::Image;
@@ -126,7 +121,7 @@ void test_ImageOverlayReader::getOverlays_ShouldReturnExpectedOverlays_data()
     overlay.SetOverlay(overlayData, 100);
 
     QList<ImageOverlay> overlaysList1;
-    overlaysList1 << gdcmOverlayToImageOverlay(overlay);
+    overlaysList1 << ImageOverlay::fromGDCMOverlay(overlay);
     QTest::newRow("Image with 1 overlay (with data)") << image2 << overlaysList1;
 }
 
@@ -147,21 +142,6 @@ void test_ImageOverlayReader::getOverlays_ShouldReturnExpectedOverlays()
     {
         QVERIFY(ImageOverlayHelper::areEqual(listOfReadOverlays.at(i), overlaysList.at(i)));
     }
-}
-
-ImageOverlay test_ImageOverlayReader::gdcmOverlayToImageOverlay(const gdcm::Overlay &gdcmOverlay)
-{
-    ImageOverlay imageOverlay;
-    imageOverlay.setColumns(gdcmOverlay.GetColumns());
-    imageOverlay.setRows(gdcmOverlay.GetRows());
-    const signed short *origin = gdcmOverlay.GetOrigin();
-    imageOverlay.setOrigin(static_cast<int>(origin[0]), static_cast<int>(origin[1]));
-    
-    unsigned char *buffer = new unsigned char[imageOverlay.getRows() * imageOverlay.getColumns()];
-    gdcmOverlay.GetUnpackBuffer(buffer);
-    imageOverlay.setData(buffer);
-
-    return imageOverlay;
 }
 
 DECLARE_TEST(test_ImageOverlayReader)

@@ -3,6 +3,10 @@
 
 #include <QString>
 
+namespace gdcm {
+class Overlay;
+}
+
 namespace udg {
 
 /**
@@ -28,6 +32,9 @@ public:
     /// Assigna/retorna les dades de l'overlay
     void setData(unsigned char *data);
     unsigned char* getData() const;
+
+    /// Construeix un ImageOverlay a partir d'un gdcm::Overlay
+    static ImageOverlay fromGDCMOverlay(const gdcm::Overlay &gdcmOverlay);
 
 private:
     /// Files i columnes de l'overlay

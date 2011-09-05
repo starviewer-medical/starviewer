@@ -1,7 +1,11 @@
 #include "imageoverlay.h"
 
+#include "logging.h"
+
 #include <QRegExp>
 #include <QStringList>
+
+#include <gdcmOverlay.h>
 
 namespace udg {
 
@@ -61,6 +65,40 @@ void ImageOverlay::setData(unsigned char *data)
 unsigned char* ImageOverlay::getData() const
 {
     return m_data;
+}
+
+ImageOverlay ImageOverlay::fromGDCMOverlay(const gdcm::Overlay &gdcmOverlay)
+{
+    ImageOverlay imageOverlay;
+    imageOverlay.setRows(gdcmOverlay.GetRows());
+    imageOverlay.setColumns(gdcmOverlay.GetColumns());
+    const signed short *origin = gdcmOverlay.GetOrigin();
+    imageOverlay.setOrigin(static_cast<int>(origin[0]), static_cast<int>(origin[1]));
+    
+    if (imageOverlay.getColumns() == 0 || imageOverlay.getRows() == 0)
+    {
+        imageOverlay.setData(0);
+    }
+    else
+    {
+        try
+        {
+            unsigned char *buffer = new unsigned char[imageOverlay.getRows() * imageOverlay.getColumns()];
+            gdcmOverlay.GetUnpackBuffer(buffer);
+            imageOverlay.setData(buffer);
+        }
+        catch (std::bad_alloc)
+        {
+            imageOverlay.setData(0);
+            
+            ERROR_LOG(QString("No hi ha memòria suficient per carregar l'overlay [%1*%2] = %3 bytes")
+                .arg(imageOverlay.getRows()).arg(imageOverlay.getColumns()).arg((unsigned long)imageOverlay.getRows() * imageOverlay.getColumns()));
+            DEBUG_LOG(QString("No hi ha memòria suficient per carregar l'overlay [%1*%2] = %3 bytes")
+                .arg(imageOverlay.getRows()).arg(imageOverlay.getColumns()).arg((unsigned long)imageOverlay.getRows() * imageOverlay.getColumns()));
+        }
+    }
+
+    return imageOverlay;
 }
 
 }
