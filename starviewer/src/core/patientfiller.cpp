@@ -1,6 +1,5 @@
 #include "patientfiller.h"
 
-#include <QApplication>
 #include <QTime>
 #include <QtAlgorithms>
 
