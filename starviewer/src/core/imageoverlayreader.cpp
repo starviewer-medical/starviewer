@@ -27,7 +27,7 @@ bool ImageOverlayReader::read()
     gdcm::Image *image = getGDCMImageFromFile(m_filename);
     if (!image)
     {
-        return 0;
+        return false;
     }
     
     for (size_t overlayIndex = 0; overlayIndex < image->GetNumberOfOverlays(); ++overlayIndex)
