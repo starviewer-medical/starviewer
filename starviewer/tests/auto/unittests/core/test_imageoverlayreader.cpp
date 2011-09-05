@@ -1,9 +1,12 @@
 #include "autotest.h"
 #include "imageoverlayreader.h"
 
+#include "imageoverlayhelper.h"
+
 #include <gdcmImage.h>
 
 using namespace udg;
+using namespace testing;
 
 class TestingImageOverlayReader : public ImageOverlayReader {
 public:
@@ -37,8 +40,6 @@ private:
     /// Ens converteix un gdcm::Overlay a ImageOverlay
     ImageOverlay gdcmOverlayToImageOverlay(const gdcm::Overlay &gdcmOverlay);
 
-    /// Compara si dos ImageOverlay són iguals o no
-    bool areEqual(const ImageOverlay &overlay1, const ImageOverlay &overlay2);
 };
 
 void test_ImageOverlayReader::read_ShouldReturnExpectedValue_data()
@@ -144,7 +145,7 @@ void test_ImageOverlayReader::getOverlays_ShouldReturnExpectedOverlays()
     QList<ImageOverlay> listOfReadOverlays = overlayReader.getOverlays();
     for (int i = 0; i < numberOfOverlaysRead; ++i)
     {
-        QVERIFY(areEqual(listOfReadOverlays.at(i), overlaysList.at(i)));
+        QVERIFY(ImageOverlayHelper::areEqual(listOfReadOverlays.at(i), overlaysList.at(i)));
     }
 }
 
@@ -161,47 +162,6 @@ ImageOverlay test_ImageOverlayReader::gdcmOverlayToImageOverlay(const gdcm::Over
     imageOverlay.setData(buffer);
 
     return imageOverlay;
-}
-
-bool test_ImageOverlayReader::areEqual(const ImageOverlay &overlay1, const ImageOverlay &overlay2)
-{
-    bool equal = overlay1.getColumns() == overlay2.getColumns() && overlay1.getRows() == overlay2.getRows() && overlay1.getXOrigin() == overlay2.getXOrigin()
-        && overlay1.getYOrigin() == overlay2.getYOrigin();
-
-    if (!equal)
-    {
-        return false;
-    }
-    
-    // Tots els atributs són iguals, comparem els buffers
-    unsigned char *buffer1 = overlay1.getData();
-    unsigned char *buffer2 = overlay2.getData();
-    
-    if (buffer1 && buffer2)
-    {
-        int length = overlay1.getColumns() * overlay1.getRows();
-        int index = 0;
-        while (length-- > 0)
-        {
-            if (buffer1[index] == buffer2[index])
-            {
-                ++index;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-    else if (!buffer1 && !buffer2)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
 }
 
 DECLARE_TEST(test_ImageOverlayReader)
