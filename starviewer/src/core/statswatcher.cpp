@@ -39,7 +39,7 @@ void StatsWatcher::addTriggerCounter(QMenu *menu)
 {
     if (m_registerLogs)
     {
-        connect(menu, SIGNAL(triggered(QAction *)), SLOT(registerActionTrigger(QAction *)));
+        connect(menu, SIGNAL(triggered(QAction*)), SLOT(registerActionTrigger(QAction*)));
     }
 }
 
@@ -64,7 +64,7 @@ void StatsWatcher::addSliderObserver(QAbstractSlider *slider)
 void StatsWatcher::registerClick(bool checked)
 {
     QString statMessage;
-    QAbstractButton *button = qobject_cast<QAbstractButton *>(sender());
+    QAbstractButton *button = qobject_cast<QAbstractButton*>(sender());
     if (button)
     {
         if (button->isCheckable())
@@ -100,7 +100,7 @@ void StatsWatcher::registerActionTrigger(QAction *action)
 
 void StatsWatcher::registerSliderAction(int action)
 {
-    QAbstractSlider *slider = qobject_cast<QAbstractSlider *>(sender());
+    QAbstractSlider *slider = qobject_cast<QAbstractSlider*>(sender());
     if (!slider)
     {
         DEBUG_LOG("Aquest slot només s'hauria de connectar amb sliders. Retornem de la funció");

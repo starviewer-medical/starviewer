@@ -618,7 +618,7 @@ void Q2DViewer::cancelCurrentVolumeReaderJob()
     // Quan es faci bé, tenir en compte què passa si algun altre visor el vol continuar descarregant igualment i nosaltres aquí el cancelem?
     if (!m_volumeReaderJob.isNull())
     {
-        disconnect(m_volumeReaderJob, SIGNAL(done(ThreadWeaver::Job *)), this, SLOT(volumeReaderJobFinished()));
+        disconnect(m_volumeReaderJob, SIGNAL(done(ThreadWeaver::Job*)), this, SLOT(volumeReaderJobFinished()));
         disconnect(m_volumeReaderJob, SIGNAL(progress(int)), m_workInProgressWidget, SLOT(updateProgress(int)));
     }
     m_volumeReaderJob = NULL;
@@ -631,7 +631,7 @@ void Q2DViewer::loadVolumeAsynchronously(Volume *volume)
     // TODO Esborrar volumeReader!!
     AsynchronousVolumeReader *volumeReader = new AsynchronousVolumeReader();
     m_volumeReaderJob = volumeReader->read(volume);
-    connect(m_volumeReaderJob, SIGNAL(done(ThreadWeaver::Job *)), SLOT(volumeReaderJobFinished()));
+    connect(m_volumeReaderJob, SIGNAL(done(ThreadWeaver::Job*)), SLOT(volumeReaderJobFinished()));
     connect(m_volumeReaderJob, SIGNAL(progress(int)), m_workInProgressWidget, SLOT(updateProgress(int)));
 
     // TODO: De moment no tenim cap més remei que especificar un volume fals. La resta del viewer (i els que en depenen) s'esperen

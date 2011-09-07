@@ -53,7 +53,7 @@ VolumeReaderJob* AsynchronousVolumeReader::read(Volume *volume)
     VolumeReaderJob *volumeReaderJob = new VolumeReaderJob(volume);
     assignResourceRestrictionPolicy(volumeReaderJob);
 
-    connect(volumeReaderJob, SIGNAL(done(ThreadWeaver::Job *)), SLOT(unmarkVolumeFromJobAsLoading(ThreadWeaver::Job *)));
+    connect(volumeReaderJob, SIGNAL(done(ThreadWeaver::Job*)), SLOT(unmarkVolumeFromJobAsLoading(ThreadWeaver::Job*)));
 
     this->markVolumeAsLoadingByJob(volume, volumeReaderJob);
 
@@ -158,7 +158,7 @@ void AsynchronousVolumeReader::cancelLoadingAndDeleteVolume(Volume *volume)
         else
         {
             DEBUG_LOG(QString("Volume %1 cannot be dequeued, requesting abort and delete").arg(volume->getIdentifier().getValue()));
-            connect(job, SIGNAL(done(ThreadWeaver::Job *)), volume, SLOT(deleteLater()));
+            connect(job, SIGNAL(done(ThreadWeaver::Job*)), volume, SLOT(deleteLater()));
             job->requestAbort();
         }
     }

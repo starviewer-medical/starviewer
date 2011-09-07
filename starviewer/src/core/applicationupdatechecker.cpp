@@ -37,7 +37,7 @@ void ApplicationUpdateChecker::checkForUpdates()
 
     QUrl url(createWebServiceUrl());
     setProxy(url);
-    connect(m_manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(checkForUpdatesReply(QNetworkReply *)));
+    connect(m_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(checkForUpdatesReply(QNetworkReply*)));
     connect(m_timeoutTimer, SIGNAL(timeout()), this, SLOT(checkForUpdatesReplyTimeout()));
     // Fer la petició
     m_manager->get(QNetworkRequest(url));
@@ -174,7 +174,7 @@ void ApplicationUpdateChecker::parseJSON(const QString &json)
 void ApplicationUpdateChecker::checkForUpdatesReply(QNetworkReply *reply)
 {
     // Desconectar el manager
-    disconnect(m_manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(checkForUpdatesReply(QNetworkReply *)));
+    disconnect(m_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(checkForUpdatesReply(QNetworkReply*)));
     // I desconectar el timer
     disconnect(m_timeoutTimer, SIGNAL(timeout()), this, SLOT(checkForUpdatesReplyTimeout()));
 
@@ -189,7 +189,7 @@ void ApplicationUpdateChecker::checkForUpdatesReply(QNetworkReply *reply)
 void ApplicationUpdateChecker::checkForUpdatesReplyTimeout()
 {
     // Desconectar el manager
-    disconnect(m_manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(checkForUpdatesReply(QNetworkReply *)));
+    disconnect(m_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(checkForUpdatesReply(QNetworkReply*)));
     // I desconectar el timer
     disconnect(m_timeoutTimer, SIGNAL(timeout()), this, SLOT(checkForUpdatesReplyTimeout()));
 

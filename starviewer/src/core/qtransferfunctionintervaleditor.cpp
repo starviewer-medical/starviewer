@@ -20,7 +20,7 @@ QTransferFunctionIntervalEditor::QTransferFunctionIntervalEditor(QWidget *parent
     connect(m_intervalStartSpinBox, SIGNAL(valueChanged(int)), SIGNAL(startChanged(int)));
     connect(m_intervalEndSpinBox, SIGNAL(valueChanged(int)), SIGNAL(endChanged(int)));
     connect(m_selectColorPushButton, SIGNAL(clicked()), SLOT(selectColor()));
-    connect(m_colorSpinBox, SIGNAL(colorChanged(const QColor &)), SIGNAL(colorChanged(const QColor &)));
+    connect(m_colorSpinBox, SIGNAL(colorChanged(const QColor&)), SIGNAL(colorChanged(const QColor&)));
 }
 
 QTransferFunctionIntervalEditor::QTransferFunctionIntervalEditor(int maximum, QWidget *parent)
@@ -42,7 +42,7 @@ QTransferFunctionIntervalEditor::QTransferFunctionIntervalEditor(int maximum, QW
     connect(m_intervalStartSpinBox, SIGNAL(valueChanged(int)), SIGNAL(startChanged(int)));
     connect(m_intervalEndSpinBox, SIGNAL(valueChanged(int)), SIGNAL(endChanged(int)));
     connect(m_selectColorPushButton, SIGNAL(clicked()), SLOT(selectColor()));
-    connect(m_colorSpinBox, SIGNAL(colorChanged(const QColor &)), SIGNAL(colorChanged(const QColor &)));
+    connect(m_colorSpinBox, SIGNAL(colorChanged(const QColor&)), SIGNAL(colorChanged(const QColor&)));
 }
 
 QTransferFunctionIntervalEditor::~QTransferFunctionIntervalEditor()

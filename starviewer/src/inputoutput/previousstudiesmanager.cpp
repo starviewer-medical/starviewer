@@ -112,8 +112,8 @@ void PreviousStudiesManager::initializeQuery()
 
 void PreviousStudiesManager::enqueueQueryPACSJobToPACSManagerAndConnectSignals(QueryPacsJob *queryPACSJob)
 {
-    connect(queryPACSJob, SIGNAL(PACSJobFinished(PACSJob *)), SLOT(queryPACSJobFinished(PACSJob *)));
-    connect(queryPACSJob, SIGNAL(PACSJobCancelled(PACSJob *)), SLOT(queryPACSJobCancelled(PACSJob *)));
+    connect(queryPACSJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(queryPACSJobFinished(PACSJob*)));
+    connect(queryPACSJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(queryPACSJobCancelled(PACSJob*)));
 
     m_pacsManager->enqueuePACSJob(queryPACSJob);
     m_queryPACSJobPendingExecuteOrExecuting.insert(queryPACSJob->getPACSJobID(), queryPACSJob);

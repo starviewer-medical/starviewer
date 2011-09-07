@@ -68,7 +68,7 @@ static bool launchCrashReporter(const wchar_t *dumpDirPath, const wchar_t *minid
     // DON'T USE THE HEAP!!!
     // So crashHandler indeed means, no QStrings, no qDebug(), no QAnything, seriously!
 
-    const char *crashReporterPath = static_cast<CrashHandler *>(crashHandler)->getCrashReporterPath();
+    const char *crashReporterPath = static_cast<CrashHandler*>(crashHandler)->getCrashReporterPath();
 
     // Convert crashReporterPath to widechars, which sadly means the product name must be Latin1
     wchar_t crashReporterPathWchar[256];

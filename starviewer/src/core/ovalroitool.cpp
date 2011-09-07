@@ -15,7 +15,7 @@ OvalROITool::OvalROITool(QViewer *viewer, QObject *parent)
 {
     m_toolName = "OvalROITool";
 
-    connect(m_2DViewer, SIGNAL(volumeChanged(Volume *)), SLOT(initialize()));
+    connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(initialize()));
 }
 
 OvalROITool::~OvalROITool()

@@ -22,7 +22,7 @@ ToolManager::ToolManager(QObject *parent)
     // El "new" s'haurà de canviar per un ::instance()
     m_toolRegistry = new ToolRegistry(this);
     m_toolsActionSignalMapper = new QSignalMapper(this);
-    connect(m_toolsActionSignalMapper, SIGNAL(mapped(const QString &)), SLOT(triggeredToolAction(const QString &)));
+    connect(m_toolsActionSignalMapper, SIGNAL(mapped(const QString&)), SLOT(triggeredToolAction(const QString&)));
 }
 
 ToolManager::~ToolManager()
@@ -32,7 +32,7 @@ ToolManager::~ToolManager()
 void ToolManager::setViewerTools(QViewer *viewer, const QStringList &toolsList)
 {
     // Cada cop que eliminem un viewer que estem gestionant, l'haurem de "desregistrar" del ToolManager
-    connect(viewer, SIGNAL(destroyed(QObject *)), SLOT(unregisterViewer(QObject *)));
+    connect(viewer, SIGNAL(destroyed(QObject*)), SLOT(unregisterViewer(QObject*)));
     ViewerToolConfigurationPairType pair;
     pair.first = viewer;
     pair.second = NULL;
@@ -52,7 +52,7 @@ void ToolManager::setupRegisteredTools(QViewer *viewer)
 void ToolManager::setViewerTool(QViewer *viewer, const QString &toolName, ToolConfiguration *configuration)
 {
     // Cada cop que eliminem un viewer que estem gestionant, l'haurem de "desregistrar" del ToolManager
-    connect(viewer, SIGNAL(destroyed(QObject *)), SLOT(unregisterViewer(QObject *)));
+    connect(viewer, SIGNAL(destroyed(QObject*)), SLOT(unregisterViewer(QObject*)));
     ViewerToolConfigurationPairType pair;
     pair.first = viewer;
     pair.second = configuration;
@@ -122,7 +122,7 @@ void ToolManager::addExclusiveToolsGroup(const QString &groupName, const QString
     }
     // Guarrada! TODO Aixo es un workaround per poder desactivar "automaticament" les tools dins d'un mateix grup
     // Lo correcte seria plantejar be el tema dels signals mappers o fer una implementacio propia mes elaborada
-    connect(actionGroup, SIGNAL(triggered(QAction *)), SLOT(refreshConnections()));
+    connect(actionGroup, SIGNAL(triggered(QAction*)), SLOT(refreshConnections()));
 }
 
 QAction* ToolManager::registerActionTool(const QString &actionToolName)

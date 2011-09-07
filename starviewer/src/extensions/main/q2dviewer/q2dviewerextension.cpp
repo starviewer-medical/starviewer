@@ -156,8 +156,8 @@ void Q2DViewerExtension::createConnections()
     connect(m_dicomDumpToolButton, SIGNAL(clicked()), SLOT(showDicomDumpCurrentDisplayedImage()));
 
     // Connexions necessaries amb els canvis al layout
-    connect(m_workingArea, SIGNAL(viewerAdded(Q2DViewerWidget *)), SLOT(activateNewViewer(Q2DViewerWidget *)));
-    connect(m_workingArea, SIGNAL(selectedViewerChanged(Q2DViewerWidget *)), SLOT(changeSelectedViewer(Q2DViewerWidget *)));
+    connect(m_workingArea, SIGNAL(viewerAdded(Q2DViewerWidget*)), SLOT(activateNewViewer(Q2DViewerWidget*)));
+    connect(m_workingArea, SIGNAL(selectedViewerChanged(Q2DViewerWidget*)), SLOT(changeSelectedViewer(Q2DViewerWidget*)));
 
 #ifndef STARVIEWER_LITE
     // Per mostrar exportació
@@ -498,7 +498,7 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
         {
 
 #ifndef STARVIEWER_LITE
-            disconnect(m_lastSelectedViewer->getViewer(), SIGNAL(volumeChanged(Volume *)), this, SLOT(validePhases()));
+            disconnect(m_lastSelectedViewer->getViewer(), SIGNAL(volumeChanged(Volume*)), this, SLOT(validePhases()));
 #endif
 
             disconnect(m_lastSelectedViewer->getViewer(), SIGNAL(viewChanged(int)), this, SLOT(updateDICOMInformationButton(int)));
@@ -519,7 +519,7 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
 
 #ifndef STARVIEWER_LITE
             validePhases();
-            connect(viewerWidget->getViewer(), SIGNAL(volumeChanged(Volume *)), SLOT(validePhases()));
+            connect(viewerWidget->getViewer(), SIGNAL(volumeChanged(Volume*)), SLOT(validePhases()));
 #endif
             connect(viewerWidget->getViewer(), SIGNAL(viewChanged(int)), SLOT(updateDICOMInformationButton(int)));
 

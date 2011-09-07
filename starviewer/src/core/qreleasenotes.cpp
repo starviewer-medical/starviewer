@@ -36,7 +36,7 @@ void QReleaseNotes::setDontShowVisible(bool visible)
 
 void QReleaseNotes::showIfUrlLoadsSuccessfully(const QUrl &url)
 {
-    connect(m_viewWebView->page()->networkAccessManager(), SIGNAL(finished(QNetworkReply *)), this, SLOT(loadFinished(QNetworkReply *)));
+    connect(m_viewWebView->page()->networkAccessManager(), SIGNAL(finished(QNetworkReply*)), this, SLOT(loadFinished(QNetworkReply*)));
     m_viewWebView->setUrl(url);
 }
 
@@ -56,7 +56,7 @@ void QReleaseNotes::closeEvent(QCloseEvent *event)
 void QReleaseNotes::loadFinished(QNetworkReply *reply)
 {
     // Desconectar el manager
-    disconnect(m_viewWebView->page()->networkAccessManager(), SIGNAL(finished(QNetworkReply *)), this, SLOT(loadFinished(QNetworkReply *)));
+    disconnect(m_viewWebView->page()->networkAccessManager(), SIGNAL(finished(QNetworkReply*)), this, SLOT(loadFinished(QNetworkReply*)));
 
     if (reply->error() == QNetworkReply::NoError)
     {

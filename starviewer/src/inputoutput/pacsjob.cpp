@@ -11,8 +11,8 @@ PACSJob::PACSJob(PacsDevice pacsDevice)
     m_abortIsRequested = false;
 
     // Ens connectem amb els signals de ThreadWeaver::Job per poder emtre els nostres propis signals quan un PACSJob s'ha començat a executar o ha finalitzat
-    connect(this, SIGNAL(started(ThreadWeaver::Job *)), SLOT(threadWeaverJobStarted()));
-    connect(this, SIGNAL(done(ThreadWeaver::Job *)), SLOT(threadWeaverJobDone()));
+    connect(this, SIGNAL(started(ThreadWeaver::Job*)), SLOT(threadWeaverJobStarted()));
+    connect(this, SIGNAL(done(ThreadWeaver::Job*)), SLOT(threadWeaverJobDone()));
 }
 
 PacsDevice PACSJob::getPacsDevice()

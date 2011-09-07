@@ -148,7 +148,7 @@ bool SendDICOMFilesToPACS::storeSCU(T_ASC_Association *association, QString file
     else
     {
         // Prepare the transmission of data
-        bzero((char *)&request, sizeof(request));
+        bzero((char*)&request, sizeof(request));
         request.MessageID = msgId;
         strcpy(request.AffectedSOPClassUID, sopClass);
         strcpy(request.AffectedSOPInstanceUID, sopInstance);

@@ -134,7 +134,7 @@ void VolumePixelData::convertToNeutralPixelData()
     m_imageDataVTK->SetNumberOfScalarComponents(1);
     m_imageDataVTK->AllocateScalars();
     // Omplim el dataset perquè la imatge resultant quedi amb un cert degradat
-    signed short *scalarPointer = (signed short *) m_imageDataVTK->GetScalarPointer();
+    signed short *scalarPointer = (signed short*) m_imageDataVTK->GetScalarPointer();
     signed short value;
     for (int i = 0; i < 10; i++)
     {

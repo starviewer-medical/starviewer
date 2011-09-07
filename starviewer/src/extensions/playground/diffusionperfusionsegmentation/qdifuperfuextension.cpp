@@ -220,8 +220,8 @@ void QDifuPerfuSegmentationExtension::createConnections()
     // se li vol donar a cada viewer. Capturem la senyal de quin volum s'ha escollit i a partir d'aquí fem el que calgui
     m_diffusion2DView->setAutomaticallyLoadPatientBrowserMenuSelectedInput(false);
     m_perfusion2DView->setAutomaticallyLoadPatientBrowserMenuSelectedInput(false);
-    connect( m_diffusion2DView->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ), SLOT( setDiffusionInput(Volume *) ) );
-    connect( m_perfusion2DView->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ), SLOT( setPerfusionInput(Volume *) ) );
+    connect( m_diffusion2DView->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume*) ), SLOT( setDiffusionInput(Volume*) ) );
+    connect( m_perfusion2DView->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume*) ), SLOT( setPerfusionInput(Volume*) ) );
     
     connect( m_penombraVolumeLineEdit, SIGNAL( textChanged(const QString&) ), SLOT( computePenombraVolume() ) );
 

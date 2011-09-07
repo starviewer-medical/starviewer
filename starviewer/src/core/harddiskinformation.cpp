@@ -140,7 +140,7 @@ void HardDiskInformation::logLastError(const QString &additionalInformation)
     FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, 0, GetLastError(), 0, errorMessage, 1024, NULL);
     // Formatem a QString
 #ifdef UNICODE
-    qtErrorMessage = QString::fromUtf16((ushort *)errorMessage);
+    qtErrorMessage = QString::fromUtf16((ushort*)errorMessage);
 #else
     qtErrorMessage = QString::fromLocal8Bit(errorMessage);
 #endif

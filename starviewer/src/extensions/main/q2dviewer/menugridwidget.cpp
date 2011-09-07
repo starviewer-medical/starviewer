@@ -100,7 +100,7 @@ ItemMenu* MenuGridWidget::createIcon(const HangingProtocol *hangingProtocol)
     }
 
     icon->show();
-    connect(icon, SIGNAL(isSelected(ItemMenu *)), this, SLOT(emitSelected(ItemMenu *)));
+    connect(icon, SIGNAL(isSelected(ItemMenu*)), this, SLOT(emitSelected(ItemMenu*)));
     return icon;
 }
 
