@@ -42,8 +42,8 @@ void TableMenu::initializeTable()
     firstItem->setFixed(true);
     m_itemList.insert(0, firstItem);
     m_gridLayout->addWidget(firstItem, m_columns, m_rows);
-    connect(firstItem, SIGNAL(isActive(ItemMenu *)), this, SLOT(verifySelected(ItemMenu *)));
-    connect(firstItem, SIGNAL(isSelected(ItemMenu *)), this, SLOT(emitSelected(ItemMenu *)));
+    connect(firstItem, SIGNAL(isActive(ItemMenu*)), this, SLOT(verifySelected(ItemMenu*)));
+    connect(firstItem, SIGNAL(isSelected(ItemMenu*)), this, SLOT(emitSelected(ItemMenu*)));
 
     m_information->setText("1x1");
 
@@ -73,8 +73,8 @@ void TableMenu::addColumn()
         m_itemList.insert(((m_columns + 1) * numRow + m_columns), newItem);
         // TODO Necessari al passar a qt 4.3
         newItem->show();
-        connect(newItem, SIGNAL(isActive(ItemMenu *)), this, SLOT(verifySelected(ItemMenu *)));
-        connect(newItem, SIGNAL(isSelected(ItemMenu *)), this, SLOT(emitSelected(ItemMenu *)));
+        connect(newItem, SIGNAL(isActive(ItemMenu*)), this, SLOT(verifySelected(ItemMenu*)));
+        connect(newItem, SIGNAL(isSelected(ItemMenu*)), this, SLOT(emitSelected(ItemMenu*)));
     }
 }
 
@@ -97,8 +97,8 @@ void TableMenu::addRow()
         m_itemList.insert((m_rows * (m_columns + 1) + numColumn), newItem);
         // TODO Necessari al passar a qt 4.3
         newItem->show();
-        connect(newItem, SIGNAL(isActive(ItemMenu *)), this, SLOT(verifySelected(ItemMenu *)));
-        connect(newItem, SIGNAL(isSelected(ItemMenu *)), this, SLOT(emitSelected(ItemMenu *)));
+        connect(newItem, SIGNAL(isActive(ItemMenu*)), this, SLOT(verifySelected(ItemMenu*)));
+        connect(newItem, SIGNAL(isSelected(ItemMenu*)), this, SLOT(emitSelected(ItemMenu*)));
     }
 }
 

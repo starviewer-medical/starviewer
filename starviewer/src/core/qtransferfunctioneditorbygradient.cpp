@@ -60,13 +60,13 @@ QTransferFunctionEditorByGradient::QTransferFunctionEditorByGradient(QWidget *pa
     vbox->addWidget(m_blue_shade);
     vbox->addWidget(m_alpha_shade);
 
-    connect(m_nameLineEdit, SIGNAL(textChanged(const QString &)), SLOT(setTransferFunctionName(const QString &)));
+    connect(m_nameLineEdit, SIGNAL(textChanged(const QString&)), SLOT(setTransferFunctionName(const QString&)));
     connect(m_red_shade, SIGNAL(colorsChanged()), SLOT(pointsUpdated()));
     connect(m_green_shade, SIGNAL(colorsChanged()), SLOT(pointsUpdated()));
     connect(m_blue_shade, SIGNAL(colorsChanged()), SLOT(pointsUpdated()));
     connect(m_alpha_shade, SIGNAL(colorsChanged()), SLOT(pointsUpdated()));
 
-    connect(this, SIGNAL(gradientStopsChanged(const QGradientStops &)), SLOT(setTransferFunction(const QGradientStops &)));
+    connect(this, SIGNAL(gradientStopsChanged(const QGradientStops&)), SLOT(setTransferFunction(const QGradientStops&)));
 }
 
 QTransferFunctionEditorByGradient::~ QTransferFunctionEditorByGradient()

@@ -87,17 +87,17 @@ void RetrieveDICOMFilesFromPACSJob::run()
 
         // S'ha d'especificar com a DirectConnection, perquè sinó aquest signal l'aten qui ha creat el Job, que és la interfície, per tant
         // no s'atendria fins que la interfície estigui lliure, provocant comportaments incorrectes
-        connect(m_retrieveDICOMFilesFromPACS, SIGNAL(DICOMFileRetrieved(DICOMTagReader *, int)), this, SLOT(DICOMFileRetrieved(DICOMTagReader *, int)),
+        connect(m_retrieveDICOMFilesFromPACS, SIGNAL(DICOMFileRetrieved(DICOMTagReader*, int)), this, SLOT(DICOMFileRetrieved(DICOMTagReader*, int)),
                 Qt::DirectConnection);
         // Connectem amb els signals del patientFiller per processar els fitxers descarregats
-        connect(this, SIGNAL(DICOMTagReaderReadyForProcess(DICOMTagReader *)), &patientFiller, SLOT(processDICOMFile(DICOMTagReader *)));
+        connect(this, SIGNAL(DICOMTagReaderReadyForProcess(DICOMTagReader*)), &patientFiller, SLOT(processDICOMFile(DICOMTagReader*)));
         connect(this, SIGNAL(DICOMFilesRetrieveFinished()), &patientFiller, SLOT(finishDICOMFilesProcess()));
         // Connexió entre el processat dels fitxers DICOM i l'inserció al a BD, és important que aquest signal sigui un Qt:DirectConnection perquè així el
         // el processa els thread dels fillers, d'aquesta manera el thread de descarrega que està esperant a fillersThread.wait() quan surt
         // d'aquí perquè els fillers ja han acabat ja s'ha inserit el pacient a la base de dades.
-        connect(&patientFiller, SIGNAL(patientProcessed(Patient *)), &localDatabaseManager, SLOT(save(Patient *)), Qt::DirectConnection);
+        connect(&patientFiller, SIGNAL(patientProcessed(Patient*)), &localDatabaseManager, SLOT(save(Patient*)), Qt::DirectConnection);
         // Connexions per finalitzar els threads
-        connect(&patientFiller, SIGNAL(patientProcessed(Patient *)), &fillersThread, SLOT(quit()), Qt::DirectConnection);
+        connect(&patientFiller, SIGNAL(patientProcessed(Patient*)), &fillersThread, SLOT(quit()), Qt::DirectConnection);
 
         localDatabaseManager.setStudyRetrieving(m_studyToRetrieveDICOMFiles->getInstanceUID());
         fillersThread.start();

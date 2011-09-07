@@ -54,7 +54,7 @@ WindowLevelPresetsTool::WindowLevelPresetsTool(QViewer *viewer, QObject *parent)
     m_characterIndexMap.insert(61, 19);
 
     // Cada cop que es canvïi el volum cal actualitzar la llista de ww/wl per defecte d'aquell volum (definits al DICOM)
-    connect(viewer, SIGNAL(volumeChanged(Volume *)), SLOT(updateWindowLevelData()));
+    connect(viewer, SIGNAL(volumeChanged(Volume*)), SLOT(updateWindowLevelData()));
 }
 
 WindowLevelPresetsTool::~WindowLevelPresetsTool()

@@ -20,12 +20,12 @@ SlicingTool::SlicingTool(QViewer *viewer, QObject *parent)
     m_startPosition[1] = 0;
     m_currentPosition[0] = 0;
     m_currentPosition[1] = 0;
-    m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
+    m_2DViewer = qobject_cast<Q2DViewer*>(viewer);
     // Ens assegurem que desde la creació tenim un viewer vàlid
     Q_ASSERT(m_2DViewer);
 
     // Cada cop que canvïi l'input cal fer algunes inicialitzacions
-    connect(m_2DViewer, SIGNAL(volumeChanged(Volume *)), SLOT(inputChanged(Volume *)));
+    connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(inputChanged(Volume*)));
     inputChanged(m_2DViewer->getInput());
 }
 

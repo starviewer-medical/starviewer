@@ -29,7 +29,7 @@ MagicTool::MagicTool(QViewer *viewer, QObject *parent)
 
     m_roiPolygon = NULL;
 
-    connect(m_2DViewer, SIGNAL(volumeChanged(Volume *)), SLOT(initialize()));
+    connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(initialize()));
 }
 
 MagicTool::~MagicTool()

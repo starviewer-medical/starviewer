@@ -159,7 +159,7 @@ void PerfusionMapCalculatorMainThread::computeDeltaR( )
     time.restart();
     int numberOfThreads = vtkMultiThreader::GetGlobalDefaultNumberOfThreads();  /// \todo QThread::idealThreadCount() amb Qt >= 4.3
     DEBUG_LOG(QString("Number of threads = %1").arg(numberOfThreads));
-    QVector<PerfusionMapCalculatorThread *> threads(numberOfThreads);
+    QVector<PerfusionMapCalculatorThread*> threads(numberOfThreads);
 
     for ( int i = 0; i < numberOfThreads; i++ )
     {

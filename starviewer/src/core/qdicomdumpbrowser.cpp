@@ -44,7 +44,7 @@ QDICOMDumpBrowser::~QDICOMDumpBrowser()
 void QDICOMDumpBrowser::createConnections()
 {
     // Connectem els butons
-    connect(m_searchTagLineEdit, SIGNAL(textChanged(const QString &)), SLOT(updateSearch()));
+    connect(m_searchTagLineEdit, SIGNAL(textChanged(const QString&)), SLOT(updateSearch()));
     connect(m_highlightOnlyCheckBox, SIGNAL(clicked(bool)), SLOT(updateSearch()));
 }
 

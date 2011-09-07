@@ -16,7 +16,7 @@ SynchronizeTool::SynchronizeTool(QViewer *viewer, QObject *parent)
     m_lastSlice = m_q2dviewer->getCurrentSlice();
     m_roundLostSpacingBetweenSlices = 0.0;
 
-    connect(m_q2dviewer, SIGNAL(volumeChanged(Volume *)), SLOT(reset()));
+    connect(m_q2dviewer, SIGNAL(volumeChanged(Volume*)), SLOT(reset()));
     connect(m_q2dviewer, SIGNAL(viewChanged(int)), SLOT(reset()));
 
     setToolData(new SynchronizeToolData());
@@ -76,7 +76,7 @@ void SynchronizeTool::setEnabled(bool enabled)
         connect(m_q2dviewer, SIGNAL(sliceChanged(int)), SLOT(setIncrement(int)));
         connect(m_q2dviewer, SIGNAL(windowLevelChanged(double, double)), SLOT(setWindowLevel(double, double)));
         connect(m_q2dviewer, SIGNAL(zoomFactorChanged(double)), SLOT(setZoomFactor(double)));
-        connect(m_q2dviewer, SIGNAL(panChanged(double *)), SLOT(setPan(double *)));
+        connect(m_q2dviewer, SIGNAL(panChanged(double*)), SLOT(setPan(double*)));
 
         reset();
     }
@@ -90,7 +90,7 @@ void SynchronizeTool::setEnabled(bool enabled)
         disconnect(m_q2dviewer, SIGNAL(sliceChanged(int)), this, SLOT(setIncrement(int)));
         disconnect(m_q2dviewer, SIGNAL(windowLevelChanged(double, double)), this, SLOT(setWindowLevel(double, double)));
         disconnect(m_q2dviewer, SIGNAL(zoomFactorChanged(double)), this, SLOT(setZoomFactor(double)));
-        disconnect(m_q2dviewer, SIGNAL(panChanged(double *)), this, SLOT(setPan(double *)));
+        disconnect(m_q2dviewer, SIGNAL(panChanged(double*)), this, SLOT(setPan(double*)));
     }
 }
 
@@ -217,9 +217,9 @@ void SynchronizeTool::applyPanChanges()
 
     if (configuration && configuration->getValue("Pan").toBool())
     {
-        disconnect(m_viewer, SIGNAL(panChanged(double *)), this, SLOT(setPan(double *)));
+        disconnect(m_viewer, SIGNAL(panChanged(double*)), this, SLOT(setPan(double*)));
         m_q2dviewer->pan(this->m_toolData->getPan());
-        connect(m_viewer, SIGNAL(panChanged(double *)), SLOT(setPan(double *)));
+        connect(m_viewer, SIGNAL(panChanged(double*)), SLOT(setPan(double*)));
     }
 }
 

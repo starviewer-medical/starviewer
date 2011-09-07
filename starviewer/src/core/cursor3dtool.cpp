@@ -34,7 +34,7 @@ Cursor3DTool::Cursor3DTool(QViewer *viewer, QObject *parent)
     }
 
     // Cada cop que el viewer canvïi d'input, hem d'actualitzar el frame of reference
-    connect(m_2DViewer, SIGNAL(volumeChanged(Volume *)), SLOT(refreshReferenceViewerData()));
+    connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(refreshReferenceViewerData()));
     connect(m_2DViewer, SIGNAL(selected()), SLOT(refreshReferenceViewerData()));
     connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(hideCrossHair()));
 

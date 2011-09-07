@@ -102,7 +102,7 @@ void QAngioSubstractionExtension::createConnections()
 	//Només es pot canviar l'input d'un dels viewers (el de l'input)
     m_2DView_1->getViewer()->setAutomaticallyLoadPatientBrowserMenuSelectedInput(false);
     m_2DView_2->getViewer()->setAutomaticallyLoadPatientBrowserMenuSelectedInput(false);
-    connect( m_2DView_1->getViewer()->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ), SLOT( setInput( Volume * ) ) );
+    connect( m_2DView_1->getViewer()->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume*) ), SLOT( setInput( Volume* ) ) );
     connect( m_imageSelectorSpinBox, SIGNAL( valueChanged(int) ), SLOT( computeDifferenceImage( int ) ) );
     //connect( m_autoRegistrationToolButton, SIGNAL( clicked() ), SLOT( computeAutomateSingleImage( ) ) );
 }

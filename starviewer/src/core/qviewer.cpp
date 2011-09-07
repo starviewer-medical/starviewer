@@ -286,7 +286,7 @@ void QViewer::setupInteraction()
 
     m_vtkQtConnections = vtkEventQtSlotConnect::New();
     // Despatxa qualsevol event-> tools
-    m_vtkQtConnections->Connect(this->getInteractor(), vtkCommand::AnyEvent, this, SLOT(eventHandler(vtkObject *, unsigned long, void *, void *, vtkCommand *)));
+    m_vtkQtConnections->Connect(this->getInteractor(), vtkCommand::AnyEvent, this, SLOT(eventHandler(vtkObject*, unsigned long, void*, void*, vtkCommand*)));
 }
 
 vtkCamera* QViewer::getActiveCamera()
@@ -790,11 +790,11 @@ void QViewer::setAutomaticallyLoadPatientBrowserMenuSelectedInput(bool load)
 {
     if (load)
     {
-        connect(m_patientBrowserMenu, SIGNAL(selectedVolume(Volume *)), this, SLOT(setInputAndRender(Volume *)));
+        connect(m_patientBrowserMenu, SIGNAL(selectedVolume(Volume*)), this, SLOT(setInputAndRender(Volume*)));
     }
     else
     {
-        disconnect(m_patientBrowserMenu, SIGNAL(selectedVolume(Volume *)), this, SLOT(setInputAndRender(Volume *)));
+        disconnect(m_patientBrowserMenu, SIGNAL(selectedVolume(Volume*)), this, SLOT(setInputAndRender(Volume*)));
     }
 }
 

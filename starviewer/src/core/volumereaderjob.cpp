@@ -14,7 +14,7 @@ VolumeReaderJob::VolumeReaderJob(Volume *volume, QObject *parent)
     m_lastErrorMessageToUser = "";
     m_abortRequested = false;
 
-    connect(this, SIGNAL(done(ThreadWeaver::Job *)), SLOT(autoDelete()));
+    connect(this, SIGNAL(done(ThreadWeaver::Job*)), SLOT(autoDelete()));
 }
 
 VolumeReaderJob::~VolumeReaderJob()

@@ -80,8 +80,8 @@ void QPopUpRISRequestsScreen::addStudyToRetrieveByAccessionNumber(RetrieveDICOMF
     m_pacsJobIDOfStudiesToRetrieve.append(retrieveDICOMFilesFromPACSJob->getPACSJobID());
     refreshScreenRetrieveStatus();
 
-    connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobFinished(PACSJob *)), SLOT(retrieveDICOMFilesFromPACSJobFinished(PACSJob *)));
-    connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobCancelled(PACSJob *)), SLOT(retrieveDICOMFilesFromPACSJobCancelledOrFailed(PACSJob *)));
+    connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobFinished(PACSJob*)));
+    connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobCancelledOrFailed(PACSJob*)));
 }
 
 void QPopUpRISRequestsScreen::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacsJob)

@@ -123,8 +123,8 @@ void QInputOutputPacsWidget::queryStudy(DicomMask queryMask, QList<PacsDevice> p
 
 void QInputOutputPacsWidget::enqueueQueryPACSJobToPACSManagerAndConnectSignals(QueryPacsJob *queryPACSJob)
 {
-    connect(queryPACSJob, SIGNAL(PACSJobFinished(PACSJob *)), SLOT(queryPACSJobFinished(PACSJob *)));
-    connect(queryPACSJob, SIGNAL(PACSJobCancelled(PACSJob *)), SLOT(queryPACSJobCancelled(PACSJob *)));
+    connect(queryPACSJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(queryPACSJobFinished(PACSJob*)));
+    connect(queryPACSJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(queryPACSJobCancelled(PACSJob*)));
 
     m_pacsManager->enqueuePACSJob(queryPACSJob);
     m_queryPACSJobPendingExecuteOrExecuting.insert(queryPACSJob->getPACSJobID(), queryPACSJob);
@@ -378,8 +378,8 @@ void QInputOutputPacsWidget::retrieve(QString pacsIDToRetrieve, ActionsAfterRetr
         seriesInstanceUIDToRetrieve, sopInstanceUIDToRetrieve);
 
     m_pacsManager->enqueuePACSJob(retrieveDICOMFilesFromPACSJob);
-    connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobStarted(PACSJob *)), SLOT(retrieveDICOMFilesFromPACSJobStarted(PACSJob *)));
-    connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobFinished(PACSJob *)), SLOT(retrieveDICOMFilesFromPACSJobFinished(PACSJob *)));
+    connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobStarted(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobStarted(PACSJob*)));
+    connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobFinished(PACSJob*)));
 
     m_actionsWhenRetrieveJobFinished.insert(retrieveDICOMFilesFromPACSJob->getPACSJobID(), actionAfterRetrieve);
 }

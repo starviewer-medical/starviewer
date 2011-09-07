@@ -71,8 +71,8 @@ void QInputOutputLocalDatabaseWidget::createConnections()
 
     connect(m_seriesThumbnailPreviewWidget, SIGNAL(seriesThumbnailClicked(QString,QString)), this, SLOT(currentSeriesChangedOfQSeriesListWidget(QString, QString)));
     connect(m_seriesThumbnailPreviewWidget, SIGNAL(seriesThumbnailDoubleClicked(QString,QString)), SLOT(viewFromQSeriesListWidget(QString, QString)));
-    connect(m_studyTreeWidget, SIGNAL(currentStudyChanged(Study *)), SLOT(setSeriesToSeriesListWidget(Study *)));
-    connect(m_studyTreeWidget, SIGNAL(currentSeriesChanged(Series *)), SLOT(currentSeriesOfQStudyTreeWidgetChanged(Series *)));
+    connect(m_studyTreeWidget, SIGNAL(currentStudyChanged(Study*)), SLOT(setSeriesToSeriesListWidget(Study*)));
+    connect(m_studyTreeWidget, SIGNAL(currentSeriesChanged(Series*)), SLOT(currentSeriesOfQStudyTreeWidgetChanged(Series*)));
     // Si passem de tenir un element seleccionat a no tenir-ne li diem al seriesListWidget que no mostri cap previsualització
     connect(m_studyTreeWidget, SIGNAL(notCurrentItemSelected()), m_seriesThumbnailPreviewWidget, SLOT(clear()));
 
@@ -124,7 +124,7 @@ void QInputOutputLocalDatabaseWidget::clear()
 void QInputOutputLocalDatabaseWidget::setPacsManager(PacsManager *pacsManager)
 {
     m_pacsManager = pacsManager;
-    connect(pacsManager, SIGNAL(newPACSJobEnqueued(PACSJob *)), SLOT(newPACSJobEnqueued(PACSJob *)));
+    connect(pacsManager, SIGNAL(newPACSJobEnqueued(PACSJob*)), SLOT(newPACSJobEnqueued(PACSJob*)));
 }
 
 void QInputOutputLocalDatabaseWidget::queryStudy(DicomMask queryMask)
@@ -534,7 +534,7 @@ void QInputOutputLocalDatabaseWidget::sendSelectedStudiesToSelectedPacs()
 void QInputOutputLocalDatabaseWidget::sendDICOMFilesToPACS(PacsDevice pacsDevice, QList<Image*> images)
 {
     SendDICOMFilesToPACSJob *sendDICOMFilesToPACSJob = new SendDICOMFilesToPACSJob(pacsDevice, images);
-    connect(sendDICOMFilesToPACSJob, SIGNAL(PACSJobFinished(PACSJob *)), SLOT(sendDICOMFilesToPACSJobFinished(PACSJob *)));
+    connect(sendDICOMFilesToPACSJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(sendDICOMFilesToPACSJobFinished(PACSJob*)));
     m_pacsManager->enqueuePACSJob(sendDICOMFilesToPACSJob);
 }
 

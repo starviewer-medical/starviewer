@@ -57,11 +57,11 @@ bool QStudyTreeWidget::getUseDICOMSourceToDiscriminateStudies()
 
 void QStudyTreeWidget::createConnections()
 {
-    connect(m_studyTreeView, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), SLOT(doubleClicked(QTreeWidgetItem *, int)));
-    connect(m_studyTreeView, SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)),
-            SLOT (currentItemChanged (QTreeWidgetItem *, QTreeWidgetItem *)));
-    connect(m_studyTreeView, SIGNAL(itemExpanded(QTreeWidgetItem *)), SLOT (itemExpanded(QTreeWidgetItem *)));
-    connect(m_studyTreeView, SIGNAL(itemCollapsed(QTreeWidgetItem *)), SLOT (itemCollapsed(QTreeWidgetItem *)));
+    connect(m_studyTreeView, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), SLOT(doubleClicked(QTreeWidgetItem*, int)));
+    connect(m_studyTreeView, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),
+            SLOT (currentItemChanged (QTreeWidgetItem*, QTreeWidgetItem*)));
+    connect(m_studyTreeView, SIGNAL(itemExpanded(QTreeWidgetItem*)), SLOT (itemExpanded(QTreeWidgetItem*)));
+    connect(m_studyTreeView, SIGNAL(itemCollapsed(QTreeWidgetItem*)), SLOT (itemCollapsed(QTreeWidgetItem*)));
 }
 
 void QStudyTreeWidget::insertPatientList(QList<Patient*> patientList)

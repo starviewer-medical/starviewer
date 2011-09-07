@@ -32,14 +32,14 @@ void QAdvancedSearchWidget::createConnections()
 {
     connect(m_fromPatientBirthCheckBox, SIGNAL(toggled(bool)), m_fromPatientBirth, SLOT(setEnabled(bool)));
     connect(m_toPatientBirthCheckBox, SIGNAL(toggled(bool)), m_toPatientBirth, SLOT(setEnabled(bool)));
-    connect(m_fromPatientBirth, SIGNAL(dateChanged(const QDate &)), SLOT(fromPatientBirthDateChanged()));
-    connect(m_toPatientBirth, SIGNAL(dateChanged(const QDate &)), SLOT(toPatientBirthDateChanged()));
+    connect(m_fromPatientBirth, SIGNAL(dateChanged(const QDate&)), SLOT(fromPatientBirthDateChanged()));
+    connect(m_toPatientBirth, SIGNAL(dateChanged(const QDate&)), SLOT(toPatientBirthDateChanged()));
 
     //Creem connect per saber quan alguns dels controls per filtrar té valor, el findChildren fem que només ens retorni els widgets afegits
     //per nosaltres a la UI.
     foreach (QLineEdit *lineEdit, m_qwidgetAdvancedSearch->findChildren<QLineEdit*>(regExpGetMemberWidgets))
     {
-        connect(lineEdit, SIGNAL(textChanged(const QString &)), SLOT(updateAdvancedSearchModifiedStatus()));
+        connect(lineEdit, SIGNAL(textChanged(const QString&)), SLOT(updateAdvancedSearchModifiedStatus()));
     }
 
     foreach (QCheckBox *checkBox, m_qwidgetAdvancedSearch->findChildren<QCheckBox*>())

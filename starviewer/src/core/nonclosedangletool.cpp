@@ -25,7 +25,7 @@ NonClosedAngleTool::NonClosedAngleTool(QViewer *viewer, QObject *parent)
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ") + viewer->metaObject()->className());
     }
 
-    connect(m_2DViewer, SIGNAL(volumeChanged(Volume *)), SLOT(initialize()));
+    connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(initialize()));
 }
 
 NonClosedAngleTool::~NonClosedAngleTool()

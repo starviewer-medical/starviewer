@@ -213,7 +213,7 @@ void ShutterFilter::setPresentationStateShutters(const QString &presentationStat
                                        );
 
                             DEBUG_LOG(status.text());
-                            this->setBitmapShutter((unsigned char *)data, width, height, left, top, foreground);
+                            this->setBitmapShutter((unsigned char*)data, width, height, left, top, foreground);
                         }
                     }
                 }
@@ -356,7 +356,7 @@ void ShutterFilter::setBitmapShutter(unsigned char *data, unsigned int vtkNotUse
     bitmapShutter->AllocateScalars();
 
     int wholeExtent[6];
-    unsigned char *unsignedData = (unsigned char *)data;
+    unsigned char *unsignedData = (unsigned char*)data;
     m_inputData->getWholeExtent(wholeExtent);
     for (int i = 0; i <= wholeExtent[1]; i++)
     {
@@ -368,7 +368,7 @@ void ShutterFilter::setBitmapShutter(unsigned char *data, unsigned int vtkNotUse
                 int index = ((wholeExtent[1] + 1) * j * + i) + k * ((wholeExtent[1] + 1) * (wholeExtent[3] + 1));
 
                 // Get scalar pointer to current pixel
-                unsigned char *currentVoxel = (unsigned char *) bitmapShutter->GetScalarPointer(i, j, k);
+                unsigned char *currentVoxel = (unsigned char*) bitmapShutter->GetScalarPointer(i, j, k);
 
                 // Set scalar value accordingly
 //                             *currentVoxel = (unsigned char *)data[index];

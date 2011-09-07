@@ -86,7 +86,7 @@ vtkPropAssembly* DrawerCrossHair::getAsVtkPropAssembly()
 
 vtkProp* DrawerCrossHair::getAsVtkProp()
 {
-    return (vtkProp *)getAsVtkPropAssembly();
+    return (vtkProp*)getAsVtkPropAssembly();
 }
 
 void DrawerCrossHair::update()

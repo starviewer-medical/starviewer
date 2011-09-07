@@ -262,7 +262,7 @@ void QMPRExtension::createConnections()
     // sobre el volum seleccionat i l'input final del visor pot diferir de l'inicial i és l'extensió qui decideix finalment quin input
     // se li vol donar a cada viewer. Capturem la senyal de quin volum s'ha escollit i a partir d'aquí fem el que calgui
     m_axial2DView->setAutomaticallyLoadPatientBrowserMenuSelectedInput(false);
-    connect(m_axial2DView->getPatientBrowserMenu(), SIGNAL(selectedVolume(Volume *)), SLOT(setInput(Volume *)));
+    connect(m_axial2DView->getPatientBrowserMenu(), SIGNAL(selectedVolume(Volume*)), SLOT(setInput(Volume*)));
 
     // Mostrar o no la informacio del volum a cada visualitzador
     connect(m_viewerInformationToolButton, SIGNAL(toggled(bool)), SLOT(showViewerInformation(bool)));

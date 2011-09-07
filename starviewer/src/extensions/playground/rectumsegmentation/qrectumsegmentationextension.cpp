@@ -165,7 +165,7 @@ void QRectumSegmentationExtension::createConnections()
     // sobre el volum seleccionat i l'input final del visor pot diferir de l'inicial i és l'extensió qui decideix finalment quin input
     // se li vol donar a cada viewer. Capturem la senyal de quin volum s'ha escollit i a partir d'aquí fem el que calgui
     m_2DView->setAutomaticallyLoadPatientBrowserMenuSelectedInput(false);
-    connect( m_2DView->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ), SLOT( setInput( Volume * ) ) );
+    connect( m_2DView->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume*) ), SLOT( setInput( Volume* ) ) );
     connect( m_2DView, SIGNAL( overlayChanged( ) ), SLOT( updateVolumeForced() ) );
     connect( m_2DView, SIGNAL( overlayModified() ), SLOT( updateVolume() ) );
     connect( m_saveMaskPushButton, SIGNAL( clicked() ), SLOT( saveActivedMaskVolume() ) );

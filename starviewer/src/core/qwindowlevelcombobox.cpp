@@ -12,7 +12,7 @@ QWindowLevelComboBox::QWindowLevelComboBox(QWidget *parent)
 {
     m_customWindowLevelDialog = new QCustomWindowLevelDialog();
     m_currentSelectedPreset = "";
-    connect(this, SIGNAL(activated(const QString &)), SLOT(setActiveWindowLevel(const QString &)));
+    connect(this, SIGNAL(activated(const QString&)), SLOT(setActiveWindowLevel(const QString&)));
     Settings settings;
     this->setMaxVisibleItems(settings.getValue(CoreSettings::MaximumNumberOfVisibleWindowLevelComboItems).toInt());
 }

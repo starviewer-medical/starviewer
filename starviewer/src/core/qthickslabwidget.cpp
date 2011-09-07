@@ -61,7 +61,7 @@ void QThickSlabWidget::link(Q2DViewer *viewer)
     m_projectionModeComboBox->setCurrentIndex(projectionMode);
 
     // Creem els vincles
-    connect(m_currentViewer, SIGNAL(volumeChanged(Volume *)), SLOT(reset()));
+    connect(m_currentViewer, SIGNAL(volumeChanged(Volume*)), SLOT(reset()));
     connect(m_currentViewer, SIGNAL(viewChanged(int)), SLOT(onViewChanged()));
     connect(m_slabThicknessSlider, SIGNAL(valueChanged(int)), SLOT(applyThickSlab()));
 

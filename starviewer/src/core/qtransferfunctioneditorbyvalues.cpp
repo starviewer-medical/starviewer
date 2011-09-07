@@ -40,7 +40,7 @@ QTransferFunctionEditorByValues::QTransferFunctionEditorByValues(QWidget *parent
 
     connect(first, SIGNAL(startChanged(int)), SLOT(markAsChanged()));
     connect(first, SIGNAL(endChanged(int)), SLOT(markAsChanged()));
-    connect(first, SIGNAL(colorChanged(const QColor &)), SLOT(markAsChanged()));
+    connect(first, SIGNAL(colorChanged(const QColor&)), SLOT(markAsChanged()));
 
     // Mida mínima de la scroll area
     QStyle *style = scrollArea->style();
@@ -53,7 +53,7 @@ QTransferFunctionEditorByValues::QTransferFunctionEditorByValues(QWidget *parent
 
     connect(m_addPushButton, SIGNAL(clicked()), SLOT(addInterval()));
     connect(m_removePushButton, SIGNAL(clicked()), SLOT(removeInterval()));
-    connect(m_nameLineEdit, SIGNAL(textChanged(const QString &)), SLOT(markAsChanged()));
+    connect(m_nameLineEdit, SIGNAL(textChanged(const QString&)), SLOT(markAsChanged()));
 }
 
 QTransferFunctionEditorByValues::~QTransferFunctionEditorByValues()
@@ -215,7 +215,7 @@ QTransferFunctionIntervalEditor *QTransferFunctionEditorByValues::addIntervalAnd
 
     connect(afterLast, SIGNAL(startChanged(int)), SLOT(markAsChanged()));
     connect(afterLast, SIGNAL(endChanged(int)), SLOT(markAsChanged()));
-    connect(afterLast, SIGNAL(colorChanged(const QColor &)), SLOT(markAsChanged()));
+    connect(afterLast, SIGNAL(colorChanged(const QColor&)), SLOT(markAsChanged()));
 
     last->setIsLast(false);
 
