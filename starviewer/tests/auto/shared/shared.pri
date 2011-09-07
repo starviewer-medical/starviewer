@@ -7,7 +7,10 @@ SOURCES += $$PWD/gmock-gtest-all.cc \
            $$PWD/dicomsourcetesthelper.cpp \
            $$PWD/patienttesthelper.cpp \
            $$PWD/fuzzycomparetesthelper.cpp \
-           $$PWD/imageoverlaytesthelper.cpp
+           $$PWD/imageoverlaytesthelper.cpp \
+           $$PWD/hangingprotocoltesthelper.cpp \
+           $$PWD/hangingprotocolimagesettesthelper.cpp \
+           $$PWD/hangingprotocoldisplaysettesthelper.cpp 
            
 HEADERS += $$PWD/autotest.h \
            $$PWD/gtest/gtest.h \
@@ -19,4 +22,8 @@ HEADERS += $$PWD/autotest.h \
            $$PWD/dicomsourcetesthelper.h \
            $$PWD/patienttesthelper.h \
            $$PWD/fuzzycomparetesthelper.h \
-           $$PWD/imageoverlaytesthelper.h
+           $$PWD/imageoverlaytesthelper.h \
+           $$PWD/hangingprotocoltesthelper.h \
+           $$PWD/hangingprotocolimagesettesthelper.h \
+           $$PWD/hangingprotocoldisplaysettesthelper.h
+           
