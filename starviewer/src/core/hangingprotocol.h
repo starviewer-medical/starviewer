@@ -102,13 +102,16 @@ public:
     void setPrevious(bool isPrevious);
 
     /// Retorna si el hanging protocol te previes o no
-    bool isPrevious();
+    bool isPrevious() const;
 
     /// Assigna una prioritat al hanging protocol
     void setPriority(double priority);
 
     /// Retorna la prioritat del hanging protocol
-    double getPriority();
+    double getPriority() const;
+
+    /// Compara si dos hanging protocols son iguals
+    bool compareTo(const HangingProtocol &hangingProtocol);
 
 private:
     /// Retorna el número de ImageSets que tenen una sèrie assignada

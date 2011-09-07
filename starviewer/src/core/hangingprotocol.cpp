@@ -373,7 +373,7 @@ void HangingProtocol::setPrevious(bool isPrevious)
     m_hasPrevious = isPrevious;
 }
 
-bool HangingProtocol::isPrevious()
+bool HangingProtocol::isPrevious() const
 {
     return m_hasPrevious;
 }
@@ -383,9 +383,75 @@ void HangingProtocol::setPriority(double priority)
     m_priority = priority;
 }
 
-double HangingProtocol::getPriority()
+double HangingProtocol::getPriority() const
 {
     return m_priority;
+}
+
+bool HangingProtocol::compareTo(const HangingProtocol &hangingProtocol)
+{
+    bool hasSameAttributes = m_identifier == hangingProtocol.getIdentifier()
+        && m_name == hangingProtocol.getName()
+        && m_description == hangingProtocol.m_description
+        && m_strictness == hangingProtocol.isStrict()
+        && m_allDiferent == hangingProtocol.getAllDiferent()
+        && m_iconType == hangingProtocol.getIconType()
+        && m_hasPrevious == hangingProtocol.isPrevious()
+        && m_priority == hangingProtocol.getPriority()
+        && m_layout->getDisplayEnvironmentSpatialPositionList() == hangingProtocol.m_layout->getDisplayEnvironmentSpatialPositionList()
+        && m_layout->getHorizontalPixelsList() == hangingProtocol.m_layout->getHorizontalPixelsList()
+        && m_layout->getNumberOfScreens() == hangingProtocol.m_layout->getNumberOfScreens()
+        && m_layout->getVerticalPixelsList() == hangingProtocol.m_layout->getVerticalPixelsList()
+        && m_mask->getProtocolList() == hangingProtocol.m_mask->getProtocolList()
+        && getImageSets().size() == hangingProtocol.getImageSets().size()
+        && getDisplaySets().size() == hangingProtocol.getDisplaySets().size();
+
+    int numberOfImageSets = getImageSets().size();
+    int imageSetNumber = 0;
+
+    while (hasSameAttributes && imageSetNumber < numberOfImageSets)
+    {
+        HangingProtocolImageSet *imageSet = getImageSets().at(imageSetNumber);
+        HangingProtocolImageSet *imageSetToCompare = hangingProtocol.getImageSets().at(imageSetNumber);
+
+        hasSameAttributes = imageSet->getIdentifier() == imageSetToCompare->getIdentifier()
+            && imageSet->getTypeOfItem() == imageSetToCompare->getTypeOfItem()
+            && imageSet->getSeriesToDisplay() == imageSetToCompare->getSeriesToDisplay()
+            && imageSet->getImageToDisplay() == imageSetToCompare->getImageToDisplay()
+            && imageSet->isPreviousStudy() == imageSetToCompare->isPreviousStudy()
+            && imageSet->isDownloaded() == imageSetToCompare->isDownloaded()
+            && imageSet->getPreviousStudyToDisplay() == imageSetToCompare->getPreviousStudyToDisplay()
+            && imageSet->getImageNumberInPatientModality() == imageSetToCompare->getImageNumberInPatientModality();
+
+        imageSetNumber++;
+    }
+
+    int numberOfDisplaySets = getDisplaySets().size();
+    int displaySetNumber = 0;
+
+    while (hasSameAttributes && displaySetNumber < numberOfDisplaySets)
+    {
+        HangingProtocolDisplaySet *displaySet = getDisplaySets().at(displaySetNumber);
+        HangingProtocolDisplaySet *displaySetToCompare = hangingProtocol.getDisplaySets().at(displaySetNumber);
+
+        hasSameAttributes = displaySet->getIdentifier() == displaySetToCompare->getIdentifier()
+            && displaySet->getDescription() == displaySetToCompare->getDescription()
+            && displaySet->getPosition() == displaySetToCompare->getPosition()
+            //&& displaySet->getPatientOrientation() == displaySetToCompare->getPatientOrientation()
+            && displaySet->getReconstruction() == displaySetToCompare->getReconstruction()
+            && displaySet->getPhase() == displaySetToCompare->getPhase()
+            && displaySet->getSlice() == displaySetToCompare->getSlice()
+            && displaySet->getIconType() == displaySetToCompare->getIconType()
+            && displaySet->getAlignment() == displaySetToCompare->getAlignment()
+            && displaySet->getToolActivation() == displaySetToCompare->getToolActivation()
+            && displaySet->getWindowWidth() == displaySetToCompare->getWindowWidth()
+            && displaySet->getWindowCenter() == displaySetToCompare->getWindowCenter()
+            && displaySet->getImageSet()->getIdentifier() == displaySetToCompare->getImageSet()->getIdentifier();
+
+        displaySetNumber++;
+    }
+   
+    return hasSameAttributes;
 }
 
 }
