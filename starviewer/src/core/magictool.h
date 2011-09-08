@@ -18,7 +18,7 @@ class DrawerPolygon;
 class MagicTool : public ROITool {
 Q_OBJECT
 public:
-
+    
     // Creixement
     enum { LeftDown, Down, RightDown, Right, RightUp, Up, LeftUp, Left };
     // Moviments
@@ -69,11 +69,14 @@ private:
     /// Calcula la regió definitiva i mostra per pantalla les mesures
     void endRegion();
 
-    /// Modifica el Magic Factor \sa #m_magicFactor segons el desplaçament del ratolí
+    /// Modifica el Magic Factor #m_magicFactor segons el desplaçament del ratolí
     void modifyRegionByFactor();
 
     ///Troba els extrems per cada configuració
     void assignBounds(int &minX, int &minY, int &maxX, int &maxY);
+
+    ///Mini parche per obtenir el valor de Voxel depenent de si és Axial, Coronal o Sagital
+    double getVoxelValue(int x, int y, int z);
 
 private slots:
     /// Inicialitza la tool

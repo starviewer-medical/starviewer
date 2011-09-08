@@ -88,27 +88,40 @@ void MagicTool::assignBounds(int &minX, int &minY, int &maxX, int &maxY)
 
 }
 
+double MagicTool::getVoxelValue(int x, int y, int z)
+{
+    double value = 0;
+    switch(m_2DViewer->getView())
+    {
+        case Q2DViewer::Axial:
+            value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(x, y, z, 0);
+            break;
+        case Q2DViewer::Sagital:
+            value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(z, x, y, 0);
+            break;
+        case Q2DViewer::Coronal:
+            value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(x, z, y, 0);
+            break;
+        default:
+        DEBUG_LOG("Bad parameter");
+    }
+    return value;
+
+}
+
 void MagicTool::startRegion()
 {
     if (m_2DViewer->getInput())
     {
-        if (m_2DViewer->getView() != Q2DViewer::Axial)
+        if (m_2DViewer->getCurrentCursorImageCoordinate(m_pickedPosition))
         {
-            QMessageBox::warning(m_2DViewer->parentWidget(), tr("Error"),
-                                 tr("This tool can only be used in the acquisition direction. Sorry for the inconvinience."));
-        }
-        else
-        {
-            if (m_2DViewer->getCurrentCursorImageCoordinate(m_pickedPosition))
-            {
-                m_magicFactor = MagicFactor;
-                m_magicSize = MagicSize;
-                m_roiPolygon = new DrawerPolygon;
-                m_roiPolygon->increaseReferenceCount();
-                m_2DViewer->getDrawer()->draw(m_roiPolygon, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+            m_magicFactor = MagicFactor;
+            m_magicSize = MagicSize;
+            m_roiPolygon = new DrawerPolygon;
+            m_roiPolygon->increaseReferenceCount();
+            m_2DViewer->getDrawer()->draw(m_roiPolygon, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
 
-                this->generateRegion();
-            }
+            this->generateRegion();
         }
     }
 }
@@ -217,8 +230,7 @@ void MagicTool::computeRegionMask()
     while (i < 4 && !found)
     {
         this->doMovement(x, y, i);
-        // \TODO S'hauria de fer servir VolumePixelData::getVoxelValue o similar
-        value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(x, y, z, 0);
+        value = this->getVoxelValue(x, y, z);
 
         if ((value >= m_lowerLevel) && (value <= m_upperLevel))
         {
@@ -242,9 +254,8 @@ void MagicTool::computeRegionMask()
         {
             this->doMovement(x, y, i);
             if ((x > minX) && (x < maxX) && (y > minY) && (y < maxY))
-            {
-                // \TODO S'hauria de fer servir VolumePixelData::getVoxelValue o similar
-                value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(x, y, z, 0);
+            {                
+                value = this->getVoxelValue(x, y, z);
 
                 if ((value >= m_lowerLevel) && (value <= m_upperLevel) && (!m_mask[y * maxX + x]))
                 {
@@ -349,8 +360,7 @@ void MagicTool::computePolygon()
     y = j - 1;
     z = m_2DViewer->getCurrentSlice();
     m_roiPolygon->removeVertices();
-
-    // \TODO Afegim el punt 
+    
     this->addPoint(7, x, y, z);
     this->addPoint(1, x, y, z);
     
