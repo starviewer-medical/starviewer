@@ -60,13 +60,13 @@ void MagicTool::handleEvent(unsigned long eventID)
     switch (eventID)
     {
         case vtkCommand::LeftButtonPressEvent:
-            startMagicRegion();
+            startRegion();
             break;
         case vtkCommand::LeftButtonReleaseEvent:
-            closeForm();
+            endRegion();
             break;
         case vtkCommand::MouseMoveEvent:
-            modifyMagicFactor();
+            modifyRegionByFactor();
             break;
         default:
             break;
@@ -88,7 +88,7 @@ void MagicTool::assignBounds(int &minX, int &minY, int &maxX, int &maxY)
 
 }
 
-void MagicTool::startMagicRegion()
+void MagicTool::startRegion()
 {
     if (m_2DViewer->getInput())
     {
@@ -113,7 +113,7 @@ void MagicTool::startMagicRegion()
     }
 }
 
-void MagicTool::closeForm()
+void MagicTool::endRegion()
 {
     if (m_roiPolygon)
     {
@@ -124,7 +124,7 @@ void MagicTool::closeForm()
     }
 }
 
-void MagicTool::modifyMagicFactor()
+void MagicTool::modifyRegionByFactor()
 {
     if (m_roiPolygon)
     {
