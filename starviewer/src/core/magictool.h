@@ -64,13 +64,13 @@ private:
     double getStandardDeviation(int x, int y, int z);
 
     /// Comença la generació de la regió màgica
-    void startMagicRegion();
+    void startRegion();
 
     /// Calcula la regió definitiva i mostra per pantalla les mesures
-    void closeForm();
+    void endRegion();
 
     /// Modifica el Magic Factor \sa #m_magicFactor segons el desplaçament del ratolí
-    void modifyMagicFactor();
+    void modifyRegionByFactor();
 
     ///Troba els extrems per cada configuració
     void assignBounds(int &minX, int &minY, int &maxX, int &maxY);
