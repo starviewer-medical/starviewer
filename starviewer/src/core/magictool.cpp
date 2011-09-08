@@ -254,7 +254,7 @@ void MagicTool::computeRegionMask()
         {
             this->doMovement(x, y, i);
             if ((x > minX) && (x < maxX) && (y > minY) && (y < maxY))
-            {                
+            {
                 value = this->getVoxelValue(x, y, z);
 
                 if ((value >= m_lowerLevel) && (value <= m_upperLevel) && (!m_mask[y * maxX + x]))
