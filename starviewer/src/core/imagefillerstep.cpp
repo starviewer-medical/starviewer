@@ -219,6 +219,9 @@ bool ImageFillerStep::fillCommonImageInformation(Image *image, DICOMTagReader *d
         }
     }
 
+    // C.9 Overlays
+    image->setNumberOfOverlays(getNumberOfOverlays(dicomReader));
+
     return true;
 }
 
@@ -828,6 +831,32 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
             }
         }
     }
+}
+
+unsigned short ImageFillerStep::getNumberOfOverlays(DICOMTagReader *dicomReader)
+{
+    Q_ASSERT(dicomReader);
+
+    DICOMTag overlayTag(DICOMOverlayRows);
+
+    unsigned short numberOfOverlays = 0;
+
+    bool stop = false;
+    while (!stop)
+    {
+        if (dicomReader->tagExists(overlayTag))
+        {
+            ++numberOfOverlays;
+            overlayTag.setGroup(overlayTag.getGroup() + 2);
+        }
+        else
+        {
+            stop = true;
+        }
+    }
+
+    DEBUG_LOG(QString("Number of overlays found: %1").arg(numberOfOverlays));
+    return numberOfOverlays;
 }
 
 void ImageFillerStep::computePixelSpacing(Image *image, DICOMTagReader *dicomReader)
