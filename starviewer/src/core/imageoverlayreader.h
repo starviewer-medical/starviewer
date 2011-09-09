@@ -43,7 +43,7 @@ public:
 
 private:
     /// Ens retorna una gdcm::Image a partir del nom de fitxer especificat. Retornarà nul en cas d'error
-    virtual gdcm::Image* getGDCMImageFromFile(const QString &filename);
+    virtual gdcm::Image getGDCMImageFromFile(const QString &filename);
 
 private:
     /// Nom de l'arxiu del que hem de llegir els overlays

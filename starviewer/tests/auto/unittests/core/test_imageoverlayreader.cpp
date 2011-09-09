@@ -10,10 +10,10 @@ using namespace testing;
 
 class TestingImageOverlayReader : public ImageOverlayReader {
 public:
-    gdcm::Image *m_gdcmImage;
+    gdcm::Image m_gdcmImage;
 
 private:
-    virtual gdcm::Image *getGDCMImageFromFile(const QString &filename)
+    virtual gdcm::Image getGDCMImageFromFile(const QString &filename)
     {
         Q_UNUSED(filename);
         return m_gdcmImage;
@@ -42,9 +42,6 @@ void test_ImageOverlayReader::read_ShouldReturnExpectedValue_data()
     QTest::addColumn<gdcm::Image*>("gdcmImage");
     QTest::addColumn<bool>("returnValue");
 
-    gdcm::Image *nullImage = 0;
-    QTest::newRow("Could not read file (Null image)") << nullImage << false;
-
     gdcm::Image *imageWithoutOverlays = new gdcm::Image;
     QTest::newRow("Image without overlays") << imageWithoutOverlays << true;
 
@@ -67,7 +64,7 @@ void test_ImageOverlayReader::read_ShouldReturnExpectedValue()
     QFETCH(bool, returnValue);
 
     TestingImageOverlayReader overlayReader;
-    overlayReader.m_gdcmImage = gdcmImage;
+    overlayReader.m_gdcmImage = *gdcmImage;
 
     QCOMPARE(overlayReader.read(), returnValue);
 }
@@ -76,9 +73,6 @@ void test_ImageOverlayReader::getOverlays_ShouldReturnEmptyList_data()
 {
     QTest::addColumn<gdcm::Image*>("gdcmImage");
 
-    gdcm::Image *nullImagePointer = 0;
-    QTest::newRow("no image read (image read fail)") << nullImagePointer;
-    
     gdcm::Image *image1 = new gdcm::Image;
     QTest::newRow("image without overlays") << image1;
     
@@ -92,7 +86,7 @@ void test_ImageOverlayReader::getOverlays_ShouldReturnEmptyList()
     QFETCH(gdcm::Image*, gdcmImage);
 
     TestingImageOverlayReader overlayReader;
-    overlayReader.m_gdcmImage = gdcmImage;
+    overlayReader.m_gdcmImage = *gdcmImage;
     overlayReader.read();
 
     QVERIFY(overlayReader.getOverlays().isEmpty());
@@ -131,7 +125,7 @@ void test_ImageOverlayReader::getOverlays_ShouldReturnExpectedOverlays()
     QFETCH(QList<ImageOverlay>, overlaysList);
 
     TestingImageOverlayReader overlayReader;
-    overlayReader.m_gdcmImage = gdcmImage;
+    overlayReader.m_gdcmImage = *gdcmImage;
     overlayReader.read();
 
     int numberOfOverlaysRead = overlayReader.getOverlays().count();
