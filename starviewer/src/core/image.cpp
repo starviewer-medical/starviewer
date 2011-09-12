@@ -4,6 +4,7 @@
 #include "logging.h"
 #include "thumbnailcreator.h"
 #include "mathtools.h"
+#include "imageoverlayreader.h"
 
 #include <QFileInfo>
 
@@ -400,6 +401,31 @@ unsigned short Image::getNumberOfOverlays() const
 void Image::setNumberOfOverlays(unsigned short overlays)
 {
     m_numberOfOverlays = overlays;
+}
+
+QList<ImageOverlay> Image::getOverlays()
+{
+    if (hasOverlays())
+    {
+        // Si el número d'overlays que tenim assignats no coincideix amb el número d'elements de la llista
+        // significa que encara no els hem carregat
+        if (getNumberOfOverlays() != m_overlaysList.count())
+        {
+            ImageOverlayReader reader;
+            reader.setFilename(this->getPath());
+            if (reader.read())
+            {
+                m_overlaysList = reader.getOverlays();
+            }
+            else
+            {
+                ERROR_LOG("Ha fallat la lectura de l'overlay de la imatge amb path: " + this->getPath());
+                DEBUG_LOG("Ha fallat la lectura de l'overlay de la imatge amb path: " + this->getPath());
+            }
+        }
+    }
+
+    return m_overlaysList;
 }
 
 void Image::setDICOMSource(const DICOMSource &imageDICOMSource)
