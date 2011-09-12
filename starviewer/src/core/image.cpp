@@ -16,6 +16,7 @@ Image::Image(QObject *parent)
 {
     m_pixelSpacing[0] = 0.;
     m_pixelSpacing[1] = 0.;
+    m_numberOfOverlays = 0;
     memset(m_imagePositionPatient, 0, 3 * sizeof(double));
 }
 
