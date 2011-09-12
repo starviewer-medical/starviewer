@@ -11,6 +11,7 @@
 #include "dicomsource.h"
 #include "imageorientation.h"
 #include "patientorientation.h"
+#include "imageoverlay.h"
 
 namespace udg {
 
@@ -169,6 +170,9 @@ public:
     unsigned short getNumberOfOverlays() const;
     void setNumberOfOverlays(unsigned short overlays);
 
+    /// Obté la llista d'overlays
+    QList<ImageOverlay> getOverlays();
+
     /// Assingar/Obtenir el DICOMSource de la imatge. Indica quin és l'origen dels fitxers DICOM que conté la imatge
     void setDICOMSource(const DICOMSource &imageDICOMSource);
     DICOMSource getDICOMSource() const;
@@ -323,6 +327,9 @@ private:
 
     /// Atribut que ens dirà quants overlays té la imatge
     unsigned short m_numberOfOverlays;
+    
+    /// Llista d'overlays carregats
+    QList<ImageOverlay> m_overlaysList;
     
     /// La sèrie pare
     Series *m_parentSeries;
