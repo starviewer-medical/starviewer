@@ -135,7 +135,7 @@ void EraserTool::erasePrimitive()
 DrawerPrimitive* EraserTool::getErasablePrimitive(double point[3], int view, int slice)
 {
     double closestPoint[3];
-    DrawerPrimitive *nearestPrimitive = m_2DViewer->getDrawer()->getNearestPrimitiveToPoint(point, view, slice, closestPoint);
+    DrawerPrimitive *nearestPrimitive = m_2DViewer->getDrawer()->getNearestErasablePrimitiveToPoint(point, view, slice, closestPoint);
 
     if (nearestPrimitive)
     {

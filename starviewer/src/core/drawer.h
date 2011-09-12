@@ -28,7 +28,7 @@ public:
     /// @param slice Llesca a la que adjuntem la primitiva
     void draw(DrawerPrimitive *primitive, int plane, int slice = -1);
 
-    /// Esborra totes les primitives que es veuen al visor, és a dir, en el pla i llesques actuals.
+    /// Esborra totes les primitives esborrables que es veuen al visor, és a dir, en el pla i llesques actuals.
     void clearViewer();
 
     /// Afegim una primitiva al grup indicat.
@@ -41,12 +41,12 @@ public:
     void hideGroup(const QString &groupName);
     void showGroup(const QString &groupName);
 
-    /// Retorna la primitiva més propera al punt donat, dins de la vista i llesca proporcionats
+    /// Retorna la primitiva esborrable més propera al punt donat, dins de la vista i llesca proporcionats
     /// Aquest mètode no té en compte cap llindar de proximitat, és a dir, ens retorna la primitiva que en termes
     /// absoluts és més propera al punt donat. En cas que no hi hagi cap primitiva per aquella vista i llesca, es retornarà nul.
-    DrawerPrimitive* getNearestPrimitiveToPoint(double point[3], int view, int slice, double closestPoint[3]);
+    DrawerPrimitive* getNearestErasablePrimitiveToPoint(double point[3], int view, int slice, double closestPoint[3]);
 
-    /// Ens esborra les primitives que estiguin dins de la zona delimitada pels punts passats per paràmetre.
+    /// Ens esborra les primitives esborrables que estiguin dins de la zona delimitada pels punts passats per paràmetre.
     void erasePrimitivesInsideBounds(double bounds[6], Q2DViewer::CameraOrientationType view, int slice);
 
     /// Ens diu el total de primitives dibuixades en totes les vistes
@@ -58,7 +58,7 @@ public slots:
     /// @param primitive Primitiva que volem deixar de controlar
     void erasePrimitive(DrawerPrimitive *primitive);
 
-    /// Esborra totes les primitives registrades al drawer.
+    /// Esborra totes les primitives registrades al drawer (inclou les primitives no esborrables).
     void removeAllPrimitives();
 
 private:

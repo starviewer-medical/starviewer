@@ -57,6 +57,10 @@ public:
     void setOpacity(double opacity);
     double getOpacity() const;
 
+    /// Assigna/Obté si la primitiva és esborrable o no
+    void setErasable(bool erasable);
+    bool isErasable() const;
+
     // Mètodes per construir l'objecte a representar gràficament
     
     /// Construeix l'objecte vtk que representa aquesta primitiva
@@ -168,6 +172,9 @@ protected:
     bool m_modified;
 
 private:
+    /// Propietat d'esborrabilitat de la primitiva
+    bool m_isErasable;
+    
     /// Portarà el control de reference count (sucedani d'smart pointer(TM))
     int m_referenceCount;
 
