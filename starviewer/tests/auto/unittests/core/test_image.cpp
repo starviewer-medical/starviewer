@@ -29,6 +29,8 @@ void test_Image::hasOverlays_ReturnExpectedValues()
     QFETCH(bool, hasOverlays);
 
     Image image;
+    QVERIFY(!image.hasOverlays());
+
     image.setNumberOfOverlays(numberOfOverlays);
     
     QCOMPARE(image.hasOverlays(), hasOverlays);
