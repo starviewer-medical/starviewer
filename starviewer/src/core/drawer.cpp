@@ -103,11 +103,11 @@ void Drawer::clearViewer()
 
     // Obtenim les primitives de la vista i llesca actuals
     QList<DrawerPrimitive*> list = primitivesContainer.values(m_currentSlice);
-    // Eliminem totes aquelles primitives que estiguin a la llista i que no tinguin "propietaris"
+    // Eliminem totes aquelles primitives que estiguin a la llista, que no tinguin "propietaris" i que siguin esborrables
     // Al fer delete es cridarà el mètode erasePrimitive() que ja s'encarrega de fer la "feina bruta"
     foreach (DrawerPrimitive *primitive, list)
     {
-        if (!primitive->hasOwners())
+        if (!primitive->hasOwners() && primitive->isErasable())
         {
             delete primitive;
         }
@@ -156,7 +156,7 @@ void Drawer::removeAllPrimitives()
     foreach (DrawerPrimitive *primitive, list)
     {
         // TODO Atenció amb aquest tractament pel sucedani d'smart pointer.
-        // Només esborrarem si ningú és propietari
+        // Només esborrarem si ningú és propietari, però no comprovarem si són "erasable" o no
         if (!primitive->hasOwners())
         {
             m_2DViewer->getRenderer()->RemoveViewProp(primitive->getAsVtkProp());
@@ -326,7 +326,7 @@ void Drawer::showGroup(const QString &groupName)
     }
 }
 
-DrawerPrimitive* Drawer::getNearestPrimitiveToPoint(double point[3], int view, int slice, double closestPoint[3])
+DrawerPrimitive* Drawer::getNearestErasablePrimitiveToPoint(double point[3], int view, int slice, double closestPoint[3])
 {
     double distance;
     double minimumDistance = MathTools::DoubleMaximumValue;
@@ -355,14 +355,17 @@ DrawerPrimitive* Drawer::getNearestPrimitiveToPoint(double point[3], int view, i
     double localClosestPoint[3];
     foreach (DrawerPrimitive *primitive, primitivesList)
     {
-        distance = primitive->getDistanceToPoint(point, localClosestPoint);
-        if (distance <= minimumDistance)
+        if (primitive->isErasable())
         {
-            minimumDistance = distance;
-            nearestPrimitive = primitive;
-            closestPoint[0] = localClosestPoint[0];
-            closestPoint[1] = localClosestPoint[1];
-            closestPoint[2] = localClosestPoint[2];
+            distance = primitive->getDistanceToPoint(point, localClosestPoint);
+            if (distance <= minimumDistance)
+            {
+                minimumDistance = distance;
+                nearestPrimitive = primitive;
+                closestPoint[0] = localClosestPoint[0];
+                closestPoint[1] = localClosestPoint[1];
+                closestPoint[2] = localClosestPoint[2];
+            }
         }
     }
     return nearestPrimitive;
@@ -392,9 +395,12 @@ void Drawer::erasePrimitivesInsideBounds(double bounds[6], Q2DViewer::CameraOrie
 
     foreach (DrawerPrimitive *primitive, primitivesList)
     {
-        if (isPrimitiveInside(primitive, view, bounds))
+        if (primitive->isErasable())
         {
-            erasePrimitive(primitive);
+            if (isPrimitiveInside(primitive, view, bounds))
+            {
+                erasePrimitive(primitive);
+            }
         }
     }
 }
