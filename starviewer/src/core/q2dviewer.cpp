@@ -52,6 +52,8 @@
 
 namespace udg {
 
+const QString Q2DViewer::DummyVolumeObjectName("Dummy Volume");
+
 Q2DViewer::Q2DViewer(QWidget *parent)
 : QViewer(parent), m_lastView(Q2DViewer::Axial), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_imagePointPicker(0),
   m_cornerAnnotations(0), m_enabledAnnotations(Q2DViewer::AllAnnotation), m_overlapMethod(Q2DViewer::Blend), m_rotateFactor(0),
@@ -702,7 +704,7 @@ Volume* Q2DViewer::getDummyVolumeFromVolume(Volume *volume)
 {
     // TODO: Estem perdent memòria durant la vida del 2dviewer, caldria esborrar el dummy d'abans
     Volume *newVolume = new Volume(this);
-    newVolume->setObjectName("Dummy Volume");
+    newVolume->setObjectName(DummyVolumeObjectName);
     newVolume->setImages(volume->getImages());
     newVolume->convertToNeutralVolume();
 

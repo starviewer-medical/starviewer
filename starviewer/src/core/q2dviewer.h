@@ -437,6 +437,9 @@ protected:
     vtkCornerAnnotation *m_cornerAnnotations;
 
 private:
+    /// Constant per a definir el nom d'objecte dels volums "dummy"
+    static const QString DummyVolumeObjectName;
+    
     /// Flag que ens indica quines anotacions es veuran per la finestra
     AnnotationFlags m_enabledAnnotations;
 
