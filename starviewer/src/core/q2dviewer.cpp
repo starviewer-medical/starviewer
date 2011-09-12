@@ -16,6 +16,8 @@
 #include "patientorientation.h"
 #include "anatomicalplane.h"
 #include "starviewerapplication.h"
+#include "imageoverlay.h"
+#include "drawerbitmap.h"
 // Thickslab
 #include "vtkProjectionImageFilter.h"
 #include "asynchronousvolumereader.h"
@@ -52,6 +54,7 @@
 
 namespace udg {
 
+const QString Q2DViewer::OverlaysDrawerGroup("Overlays");
 const QString Q2DViewer::DummyVolumeObjectName("Dummy Volume");
 
 Q2DViewer::Q2DViewer(QWidget *parent)
@@ -794,12 +797,84 @@ void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVo
 
     // Actualitzem la informació de window level
     this->updateWindowLevelData();
+    loadImageOverlays(volume);
     // HACK
     // S'activa el rendering de nou per tal de que es renderitzi l'escena
     enableRendering(true);
 
     // Indiquem el canvi de volum
     emit volumeChanged(m_mainVolume);
+}
+
+void Q2DViewer::loadImageOverlays(Volume *volume)
+{
+    if (!volume)
+    {
+        return;
+    }
+
+    if (volume->objectName() == DummyVolumeObjectName)
+    {
+        return;
+    }
+
+    int numberOfSlices = volume->getNumberOfSlicesPerPhase();
+    int numberOfPhases = volume->getNumberOfPhases();
+    for (int sliceIndex = 0; sliceIndex < numberOfSlices; ++sliceIndex)
+    {
+        for (int phaseIndex = 0; phaseIndex < numberOfPhases; ++ phaseIndex)
+        {
+            Image *image = volume->getImage(sliceIndex, phaseIndex);
+            if (!image)
+            {
+                ERROR_LOG(QString("Error inesperat intentant accedir a la imatge amb índexs: %1(slice), %2(phase) del volum actual")
+                    .arg(sliceIndex).arg(phaseIndex));
+                DEBUG_LOG(QString("Error inesperat intentant accedir a la imatge amb índexs: %1(slice), %2(phase) del volum actual")
+                    .arg(sliceIndex).arg(phaseIndex));
+            }
+            else
+            {
+                if (image->hasOverlays())
+                {
+                    // TODO Es podria comprovar si el número d'overlays coincideix amb elements de la llista
+                    // el qual indicaria que pot haver-hi algun problema en carregar els overlays
+                    foreach(const ImageOverlay &imageOverlay, image->getOverlays())
+                    {
+                        DrawerBitmap *drawerBitmap = imageOverlayToDrawerBitmap(imageOverlay);
+                        getDrawer()->draw(drawerBitmap, Q2DViewer::Axial, sliceIndex);
+                        getDrawer()->addToGroup(drawerBitmap, OverlaysDrawerGroup);
+                    }
+                }
+            }
+        }
+    }
+}
+
+DrawerBitmap* Q2DViewer::imageOverlayToDrawerBitmap(const ImageOverlay &imageOverlay)
+{
+    DrawerBitmap *drawerBitmap = new DrawerBitmap;
+    // Inicialment tots seran no visibles, llavors segons en la llesca en que ens trobem aquests es veuran o no segons decideixi el Drawer
+    drawerBitmap->setVisibility(false);
+    // La primitiva no es podrà esborrar amb les tools
+    drawerBitmap->setErasable(false);
+
+    double volumeSpacing[3];    
+    m_mainVolume->getSpacing(volumeSpacing);
+    drawerBitmap->setSpacing(volumeSpacing);
+    
+    double volumeOrigin[3];
+    m_mainVolume->getOrigin(volumeOrigin);
+
+    double bitmapOrigin[3];
+
+    bitmapOrigin[0] = volumeOrigin[0] + imageOverlay.getXOrigin() * volumeSpacing[0];
+    bitmapOrigin[1] = volumeOrigin[1] + imageOverlay.getYOrigin() * volumeSpacing[1];
+    bitmapOrigin[2] = volumeOrigin[2];
+    drawerBitmap->setOrigin(volumeOrigin);
+    
+    drawerBitmap->setData(imageOverlay.getColumns(), imageOverlay.getRows(), imageOverlay.getData());
+    
+    return drawerBitmap;
 }
 
 void Q2DViewer::setOverlayInput(Volume *volume)

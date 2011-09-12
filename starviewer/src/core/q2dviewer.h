@@ -25,7 +25,9 @@ namespace udg {
 // Fordward declarations
 class Volume;
 class Image;
+class ImageOverlay;
 class Drawer;
+class DrawerBitmap;
 class ImagePlane;
 class ImageOrientationOperationsMapper;
 class VolumeReaderJob;
@@ -389,6 +391,12 @@ private:
     /// qualsevol excepció possible durant el procés de rendering per evitar que peti
     void setNewVolumeAndExecuteCommand(Volume *volume);
 
+    /// Carrega en memòria els overlays del volum passat per paràmetre (sempre que no sigui un dummy) i els afegeix al Drawer
+    void loadImageOverlays(Volume *volume);
+
+    /// Converteix un ImageOverlay a un DrawerBitmap
+    DrawerBitmap* imageOverlayToDrawerBitmap(const ImageOverlay &imageOverlay);
+
 private slots:
     /// Actualitza les transformacions de càmera (de moment rotació i flip)
     void updateCamera();
@@ -437,6 +445,9 @@ protected:
     vtkCornerAnnotation *m_cornerAnnotations;
 
 private:
+    /// Nom del grup dins del drawer per als Overlays
+    static const QString OverlaysDrawerGroup;
+
     /// Constant per a definir el nom d'objecte dels volums "dummy"
     static const QString DummyVolumeObjectName;
     
