@@ -4,4 +4,7 @@
         <upgradeCommand>ALTER TABLE STUDY ADD COLUMN RetrievedPACSIP TEXT</upgradeCommand>
         <upgradeCommand>ALTER TABLE STUDY ADD COLUMN RetrievedPACSQueryPort INTEGER</upgradeCommand>
     </upgradeDatabaseToRevision>
+    <upgradeDatabaseToRevision updateToRevision="7661">
+        <upgradeCommand>ALTER TABLE IMAGE ADD COLUMN NumberOfOverlays INTEGER</upgradeCommand>
+    </upgradeDatabaseToRevision>
 </upgradeDatabase>

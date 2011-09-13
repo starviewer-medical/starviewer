@@ -138,6 +138,7 @@ Image* LocalDatabaseImageDAL::fillImage(char **reply, int row, int columns)
     image->setOrderNumberInVolume(QString(reply [30 + row * columns]).toInt());
     image->setRetrievedDate(QDate().fromString(reply[31 + row * columns], "yyyyMMdd"));
     image->setRetrievedTime(QTime().fromString(reply[32 + row * columns], "hhmmss"));
+    image->setNumberOfOverlays(QString(reply[34 + row * columns]).toUShort());
 
     // TODO argghh!!! Això només hauria d'estar en un únic lloc, no aquí i en retrieveimages.cpp
     image->setPath(LocalDatabaseManager::getCachePath() + reply[2 + row * columns] + "/" + reply[3 + row * columns] + "/" + reply[0 + row * columns]);
@@ -156,7 +157,7 @@ QString LocalDatabaseImageDAL::buildSqlSelect(const DicomMask &imageMaskToSelect
                                     "WindowLevelExplanations, SliceLocation, RescaleIntercept,"
                                     "PhotometricInterpretation, ImageType, ViewPosition,"
                                     "ImageLaterality, ViewCodeMeaning , PhaseNumber, ImageTime,  VolumeNumberInSeries,"
-                                    "OrderNumberInVolume, RetrievedDate, RetrievedTime, State "
+                                    "OrderNumberInVolume, RetrievedDate, RetrievedTime, State, NumberOfOverlays "
                             "from Image ";
 
     orderSentence = " order by VolumeNumberInSeries, OrderNumberInVolume";
@@ -185,7 +186,7 @@ QString LocalDatabaseImageDAL::buildSqlInsert(Image *newImage)
                                              "WindowLevelExplanations, SliceLocation,"
                                              "RescaleIntercept, PhotometricInterpretation, ImageType, ViewPosition,"
                                              "ImageLaterality, ViewCodeMeaning, PhaseNumber, ImageTime, VolumeNumberInSeries, "
-                                             "OrderNumberInVolume, RetrievedDate, RetrievedTime, State) "
+                                             "OrderNumberInVolume, RetrievedDate, RetrievedTime, State, NumberOfOverlays) "
                                      "values ('%1', %2, '%3', '%4', '%5', "
                                              "'%6', '%7', '%8', %9,"
                                              "'%10', %11, %12, %13, %14, %15, "
@@ -193,7 +194,7 @@ QString LocalDatabaseImageDAL::buildSqlInsert(Image *newImage)
                                              "'%20', '%21', "
                                              "%22, '%23', '%24', '%25',"
                                              "'%26',  '%27', %28, '%29', %30,"
-                                             "%31, '%32', '%33', %34)")
+                                             "%31, '%32', '%33', %34, %35)")
                             .arg(DatabaseConnection::formatTextToValidSQLSyntax(newImage->getSOPInstanceUID()))
                             .arg(newImage->getFrameNumber())
                             .arg(DatabaseConnection::formatTextToValidSQLSyntax(newImage->getParentSeries()->getParentStudy()->getInstanceUID()))
@@ -227,7 +228,8 @@ QString LocalDatabaseImageDAL::buildSqlInsert(Image *newImage)
                             .arg(newImage->getOrderNumberInVolume())
                             .arg(newImage->getRetrievedDate().toString("yyyyMMdd"))
                             .arg(newImage->getRetrievedTime().toString("hhmmss"))
-                            .arg(0);
+                            .arg(0)
+                            .arg(newImage->getNumberOfOverlays());
 
     return insertSentence;
 }
@@ -267,9 +269,10 @@ QString LocalDatabaseImageDAL::buildSqlUpdate(Image *imageToUpdate)
                                               "OrderNumberInVolume = '%29', "
                                               "RetrievedDate = '%30', "
                                               "RetrievedTime = '%31', "
-                                              "State = %32 "
-                                     "Where SOPInstanceUID = '%33' And "
-                                           "FrameNumber = %34")
+                                              "State = %32, "
+                                              "NumberOfOverlays = %33 "
+                                     "Where SOPInstanceUID = '%34' And "
+                                           "FrameNumber = %35")
                             .arg(DatabaseConnection::formatTextToValidSQLSyntax(imageToUpdate->getParentSeries()->getParentStudy()->getInstanceUID()))
                             .arg(DatabaseConnection::formatTextToValidSQLSyntax(imageToUpdate->getParentSeries()->getInstanceUID()))
                             .arg(DatabaseConnection::formatTextToValidSQLSyntax(imageToUpdate->getInstanceNumber()))
@@ -302,6 +305,7 @@ QString LocalDatabaseImageDAL::buildSqlUpdate(Image *imageToUpdate)
                             .arg(imageToUpdate->getRetrievedDate().toString("yyyyMMdd"))
                             .arg(imageToUpdate->getRetrievedTime().toString("hhmmss"))
                             .arg(0)
+                            .arg(imageToUpdate->getNumberOfOverlays())
                             .arg(DatabaseConnection::formatTextToValidSQLSyntax(imageToUpdate->getSOPInstanceUID()))
                             .arg(imageToUpdate->getFrameNumber());
 
