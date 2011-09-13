@@ -11,7 +11,7 @@ CREATE TABLE DatabaseRevision
 
 -- IMPORTANT!!! Cal canviar el número de revisió per un de superior cada vegada que es faci un canvi a aquest fitxer i calgui
 -- que la BD s'actualitzi
-INSERT INTO DatabaseRevision (Revision) VALUES ('7575');
+INSERT INTO DatabaseRevision (Revision) VALUES ('7661');
 
 CREATE TABLE Patient
 ( 
@@ -106,6 +106,7 @@ CREATE TABLE Image
   RetrievedDate	                TEXT,
   RetrievedTime	                TEXT,
   State	                        INTEGER ,
+  NumberOfOverlays              INTEGER,
   PRIMARY KEY ('SOPInstanceUID', 'FrameNumber')
 );
 
