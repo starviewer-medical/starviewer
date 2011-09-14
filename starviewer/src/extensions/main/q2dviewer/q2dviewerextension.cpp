@@ -78,6 +78,21 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
 #endif
 
     m_viewerInformationToolButton->setToolTip(tr("Show/Hide viewer's textual information"));
+    m_viewerInformationToolButton->setPopupMode(QToolButton::MenuButtonPopup);
+    
+    m_showOverlaysAction = new QAction(this);
+    m_showOverlaysAction->setCheckable(true);
+    m_showOverlaysAction->setChecked(true);
+    m_showOverlaysAction->setText(tr("Overlays"));
+    m_showOverlaysAction->setToolTip(tr("Show/Hide image overlays"));
+    m_showOverlaysAction->setStatusTip(m_showOverlaysAction->toolTip());
+    m_showOverlaysAction->setIcon(QIcon(":/images/showOverlays.png"));
+    connect(m_showOverlaysAction, SIGNAL(toggled(bool)), SLOT(showImageOverlays(bool)));
+
+    QMenu *viewerInformationMenu = new QMenu(this);
+    viewerInformationMenu->addAction(m_showOverlaysAction);
+    m_viewerInformationToolButton->setMenu(viewerInformationMenu);
+    
     m_dicomDumpToolButton->setToolTip(tr("Dump DICOM information of the current image"));
     m_windowLevelComboBox->setToolTip(tr("Choose Window/Level Presets"));
 
@@ -572,6 +587,18 @@ void Q2DViewerExtension::showViewerInformation(bool show)
                                                                                     Q2DViewer::SliceAnnotation |
                                                                                     Q2DViewer::PatientInformationAnnotation |
                                                                                     Q2DViewer::AcquisitionInformationAnnotation, show);
+    }
+    
+    m_showOverlaysAction->setChecked(show);
+}
+
+void Q2DViewerExtension::showImageOverlays(bool show)
+{
+    int numberOfViewers = m_workingArea->getNumberOfViewers();
+
+    for (int viewerNumber = 0; viewerNumber < numberOfViewers; ++viewerNumber)
+    {
+        m_workingArea->getViewerWidget(viewerNumber)->getViewer()->showImageOverlays(show);
     }
 }
 
