@@ -97,6 +97,7 @@
     <displaySet identifier="5">
         <imageSetNumber>7</imageSetNumber>
         <position>0.0\0.5\0.25\0.0</position>
+        <toolActivation>synchronization</toolActivation>
     </displaySet>
     <displaySet identifier="6">
         <imageSetNumber>5</imageSetNumber>

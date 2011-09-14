@@ -38,10 +38,15 @@
         <selectorAttribute>SeriesDescription</selectorAttribute>
         <valueRepresentation>SURVEY</valueRepresentation>
     </restriction>
+    <restriction identifier="8">
+        <usageFlag>MATCH</usageFlag>
+        <selectorAttribute>ProtocolName</selectorAttribute>
+        <valueRepresentation>SG</valueRepresentation>
+    </restriction>
     <imageSet identifier="1">
         <restriction>1</restriction>
         <restriction>2</restriction>
-        <restriction>4</restriction>
+        <restriction>8</restriction>
     </imageSet>
     <imageSet identifier="2">
         <restriction>1</restriction>
@@ -90,6 +95,7 @@
     <displaySet identifier="5">
         <imageSetNumber>5</imageSetNumber>
         <position>0.0\0.5\0.25\0.0</position>
+        <toolActivation>synchronization</toolActivation>
     </displaySet>
     <displaySet identifier="6">
         <imageSetNumber>6</imageSetNumber>
