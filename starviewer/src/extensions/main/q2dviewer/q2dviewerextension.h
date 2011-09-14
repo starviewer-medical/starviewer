@@ -75,6 +75,9 @@ public slots:
     /// Mostrar la informació del volum a cada visualitzador o no.
     void showViewerInformation(bool show);
 
+    /// Mostra o amaga els overlays de cada visualitzador
+    void showImageOverlays(bool show);
+    
     /// Mostrar la pantalla de Dicom dump, amb informació de la imatge que es visualitza en aquell moment
     void showDicomDumpCurrentDisplayedImage();
 
@@ -160,6 +163,7 @@ private:
     QAction *m_singleShotAction;
     QAction *m_multipleShotAction;
     QAction *m_screenShotTriggerAction;
+    QAction *m_showOverlaysAction;
 
 #ifndef STARVIEWER_LITE
     QAction *m_sagitalViewAction;
