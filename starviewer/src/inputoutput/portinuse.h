@@ -2,6 +2,7 @@
 #define UDGPORTINUSE_H
 
 #include <QString>
+#include <QAbstractSocket>
 
 namespace udg {
 
@@ -22,6 +23,12 @@ public:
 
     /// Retorna l'string corresponent a l'error. El seu valor només serà vàlid quan m_status valgui PortCheckError.
     QString getErrorString();
+
+protected:
+    /// Retorna si el port passat per paràmetre està lliure (cert) o en ús (fals)
+    /// @param serverError: indica l'error del servidor
+    /// @param errorString: descripcio de l'error.
+    virtual bool isPortAvailable(int port, QAbstractSocket::SocketError &serverError, QString &errorString);
 
 private:
     PortInUse::PortInUseStatus m_status;
