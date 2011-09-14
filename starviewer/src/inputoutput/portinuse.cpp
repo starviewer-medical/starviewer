@@ -8,7 +8,7 @@ namespace udg {
 
 PortInUse::PortInUse()
 {
-    m_status = PortInUse::PortCheckError;
+    m_status = PortInUse::PortUnknownStatus;
     m_errorString = "No port checked yet";
 }
 
@@ -33,6 +33,7 @@ bool PortInUse::isPortInUse(int port)
         // No s'hauria de donar un error diferent a AddressInUseError, de totes maneres per seguretat el loggagem
         ERROR_LOG("No s'ha pogut comprovat correctament si el port " + QString().setNum(port) + " està en ús, per error: " + errorString);
         m_errorString = errorString;
+        m_status = PortInUse::PortCheckError;
     }
 
     return portInUse;
