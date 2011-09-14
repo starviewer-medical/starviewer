@@ -72,11 +72,14 @@ public slots:
     void showPreviousStudiesWidget();
 #endif
 
-    /// Mostrar la informació del volum a cada visualitzador o no.
+    /// Mostra o amaga tota la informació sobreposada a cada visualitzador (informació textual i overlays)
     void showViewerInformation(bool show);
 
     /// Mostra o amaga els overlays de cada visualitzador
     void showImageOverlays(bool show);
+
+    /// Mostra o amaga la informació textual de cada visualitzador
+    void showViewersTextualInformation(bool show);
     
     /// Mostrar la pantalla de Dicom dump, amb informació de la imatge que es visualitza en aquell moment
     void showDicomDumpCurrentDisplayedImage();
@@ -164,6 +167,7 @@ private:
     QAction *m_multipleShotAction;
     QAction *m_screenShotTriggerAction;
     QAction *m_showOverlaysAction;
+    QAction *m_showViewersTextualInformationAction;
 
 #ifndef STARVIEWER_LITE
     QAction *m_sagitalViewAction;
