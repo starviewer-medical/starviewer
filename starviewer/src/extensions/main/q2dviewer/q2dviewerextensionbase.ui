@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1274</width>
+    <width>1333</width>
     <height>636</height>
    </rect>
   </property>
@@ -467,6 +467,32 @@
         <widget class="QToolButton" name="m_eraserToolButton">
          <property name="text">
           <string>Erase</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>../../../../../../../../.designer/backup</normaloff>../../../../../../../../.designer/backup</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextUnderIcon</enum>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="m_magicToolButton">
+         <property name="text">
+          <string>Magic</string>
          </property>
          <property name="icon">
           <iconset>
