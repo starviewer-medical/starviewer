@@ -18,6 +18,7 @@
 #include "screenshottool.h"
 #include "toolproxy.h"
 #include "q2dviewersettings.h"
+#include "shortcutmanager.h"
 
 #ifndef STARVIEWER_LITE
 #include "qpreviousstudieswidget.h"
@@ -450,13 +451,13 @@ void Q2DViewerExtension::initializeTools()
     m_screenShotToolButton->setCheckable(false);
     m_singleShotAction = new QAction(this);
     m_singleShotAction->setText(tr("Save current series image..."));
-    m_singleShotAction->setShortcut(Qt::CTRL + Qt::Key_S);
+    m_singleShotAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::SaveSingleScreenShot));
     m_singleShotAction->setToolTip(tr("Save the current image in a standard image format"));
 
     m_multipleShotAction = new QAction(this);
     m_multipleShotAction->setText(tr("Save all images of the current series..."));
     m_multipleShotAction->setToolTip(tr("Save all the images in the selected viewer in a standard image format"));
-    m_multipleShotAction->setShortcut(Qt::CTRL + Qt::Key_A);
+    m_multipleShotAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::SaveWholeSeriesScreenShot));
 
     QMenu *screenShotMenu = new QMenu(this);
     m_screenShotToolButton->setMenu(screenShotMenu);
