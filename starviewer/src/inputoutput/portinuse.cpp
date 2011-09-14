@@ -14,28 +14,43 @@ PortInUse::PortInUse()
 
 bool PortInUse::isPortInUse(int port)
 {
-    QTcpServer tcpServer;
     bool portInUse;
+    QAbstractSocket::SocketError serverError;
+    QString errorString;
 
-    portInUse = !tcpServer.listen(QHostAddress::Any, port);
+    portInUse = !isPortAvailable(port, serverError, errorString);
 
     if (!portInUse)
     {
         m_status = PortInUse::PortIsAvailable;
-        tcpServer.close();
     }
-    else if (tcpServer.serverError() == QAbstractSocket::AddressInUseError)
+    else if (serverError == QAbstractSocket::AddressInUseError)
     {
         m_status = PortInUse::PortIsInUse;
     }
     else
     {
         // No s'hauria de donar un error diferent a AddressInUseError, de totes maneres per seguretat el loggagem
-        ERROR_LOG("No s'ha pogut comprovat correctament si el port " + QString().setNum(port) + " està en ús, per error: " + tcpServer.errorString());
-        m_errorString = tcpServer.errorString();
+        ERROR_LOG("No s'ha pogut comprovat correctament si el port " + QString().setNum(port) + " està en ús, per error: " + errorString);
+        m_errorString = errorString;
     }
 
     return portInUse;
+}
+
+bool PortInUse::isPortAvailable(int port, QAbstractSocket::SocketError &serverError, QString &errorString)
+{
+    QTcpServer tcpServer;
+    bool result;
+
+    /// Result serà cert si el port està lliure, pertant s'ha de retorna l'oposat
+    result = tcpServer.listen(QHostAddress::Any, port);
+    serverError = tcpServer.serverError();
+    errorString = tcpServer.errorString();
+
+    tcpServer.close();
+
+    return result;
 }
 
 PortInUse::PortInUseStatus PortInUse::getStatus()
