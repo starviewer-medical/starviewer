@@ -39,6 +39,9 @@ const QString Shortcuts::ClearCurrentViewAnnotationsTool(ShortcutsBase + "ClearC
 const QString Shortcuts::TransDifferenceTool(ShortcutsBase + "TransDifferenceActionTool");
 const QString Shortcuts::OvalROITool(ShortcutsBase + "OvalROITool");
 
+const QString Shortcuts::SaveSingleScreenShot(ShortcutsBase + "SaveSingleScreenShot");
+const QString Shortcuts::SaveWholeSeriesScreenShot(ShortcutsBase + "SaveWholeSeriesScreenShot");
+
 const QString Shortcuts::NewWindow(ShortcutsBase + "NewWindow");
 const QString Shortcuts::OpenFile(ShortcutsBase + "OpenFile");
 const QString Shortcuts::OpenDICOMDIR(ShortcutsBase + "OpenDICOMDIR");
@@ -201,6 +204,14 @@ void Shortcuts::init()
     shortcutsList.append(QString("R"));
     settingsRegistry->addSetting(OvalROITool, shortcutsList);
 
+    shortcutsList.clear();
+    shortcutsList.append(QString("Ctrl+S"));
+    settingsRegistry->addSetting(SaveSingleScreenShot, shortcutsList);
+    
+    shortcutsList.clear();
+    shortcutsList.append(QString("Ctrl+A"));
+    settingsRegistry->addSetting(SaveWholeSeriesScreenShot, shortcutsList);
+    
     shortcutsList.clear();
     shortcutsList.append(QKeySequence(QKeySequence::New).toString());
     settingsRegistry->addSetting(NewWindow, shortcutsList);
