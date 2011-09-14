@@ -77,7 +77,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_screenshotsExporterToolButton->setToolTip(tr("Export viewer image(s) to DICOM and send them to a PACS server"));
 #endif
 
-    m_viewerInformationToolButton->setToolTip(tr("Show/Hide viewer's textual information"));
+    m_viewerInformationToolButton->setToolTip(tr("Show/Hide layers"));
     m_viewerInformationToolButton->setPopupMode(QToolButton::MenuButtonPopup);
     
     m_showOverlaysAction = new QAction(this);
@@ -89,8 +89,18 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_showOverlaysAction->setIcon(QIcon(":/images/showOverlays.png"));
     connect(m_showOverlaysAction, SIGNAL(toggled(bool)), SLOT(showImageOverlays(bool)));
 
+    m_showViewersTextualInformationAction = new QAction(this);
+    m_showViewersTextualInformationAction->setCheckable(true);
+    m_showViewersTextualInformationAction->setChecked(true);
+    m_showViewersTextualInformationAction->setText(tr("Text"));
+    m_showViewersTextualInformationAction->setToolTip(tr("Show/Hide viewer's textual information"));
+    m_showViewersTextualInformationAction->setStatusTip(m_showViewersTextualInformationAction->toolTip());
+    m_showViewersTextualInformationAction->setIcon(QIcon(":/images/showViewersTextualInformation.png"));
+    connect(m_showViewersTextualInformationAction, SIGNAL(toggled(bool)), SLOT(showViewersTextualInformation(bool)));
+
     QMenu *viewerInformationMenu = new QMenu(this);
     viewerInformationMenu->addAction(m_showOverlaysAction);
+    viewerInformationMenu->addAction(m_showViewersTextualInformationAction);
     m_viewerInformationToolButton->setMenu(viewerInformationMenu);
     
     m_dicomDumpToolButton->setToolTip(tr("Dump DICOM information of the current image"));
@@ -578,17 +588,7 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
 
 void Q2DViewerExtension::showViewerInformation(bool show)
 {
-    int numberOfViewers = m_workingArea->getNumberOfViewers();
-
-    for (int viewerNumber = 0; viewerNumber < numberOfViewers; ++viewerNumber)
-    {
-        m_workingArea->getViewerWidget(viewerNumber)->getViewer()->enableAnnotation(Q2DViewer::WindowInformationAnnotation |
-                                                                                    Q2DViewer::PatientOrientationAnnotation |
-                                                                                    Q2DViewer::SliceAnnotation |
-                                                                                    Q2DViewer::PatientInformationAnnotation |
-                                                                                    Q2DViewer::AcquisitionInformationAnnotation, show);
-    }
-    
+    m_showViewersTextualInformationAction->setChecked(show);
     m_showOverlaysAction->setChecked(show);
 }
 
@@ -599,6 +599,20 @@ void Q2DViewerExtension::showImageOverlays(bool show)
     for (int viewerNumber = 0; viewerNumber < numberOfViewers; ++viewerNumber)
     {
         m_workingArea->getViewerWidget(viewerNumber)->getViewer()->showImageOverlays(show);
+    }
+}
+
+void Q2DViewerExtension::showViewersTextualInformation(bool show)
+{
+    int numberOfViewers = m_workingArea->getNumberOfViewers();
+
+    for (int viewerNumber = 0; viewerNumber < numberOfViewers; ++viewerNumber)
+    {
+        m_workingArea->getViewerWidget(viewerNumber)->getViewer()->enableAnnotation(Q2DViewer::WindowInformationAnnotation |
+                                                                                    Q2DViewer::PatientOrientationAnnotation |
+                                                                                    Q2DViewer::SliceAnnotation |
+                                                                                    Q2DViewer::PatientInformationAnnotation |
+                                                                                    Q2DViewer::AcquisitionInformationAnnotation, show);
     }
 }
 
