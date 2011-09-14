@@ -11,7 +11,7 @@ namespace udg {
   */
 class PortInUse {
 public:
-    enum PortInUseStatus { PortIsAvailable, PortIsInUse, PortCheckError };
+    enum PortInUseStatus { PortIsAvailable, PortIsInUse, PortCheckError, PortUnknownStatus };
 
     PortInUse();
 
