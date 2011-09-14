@@ -91,6 +91,7 @@ vtkProp* DrawerBitmap::getAsVtkProp()
             m_imageActor = vtkSmartPointer<vtkImageActor>::New();
             m_imageActor->SetInput(mapTransparency->GetOutput());
             m_imageActor->SetDisplayExtent(0, m_width - 1, 0, m_height - 1, 0, 0);
+            m_imageActor->SetVisibility(this->isVisible());
         }
         else
         {
@@ -182,7 +183,16 @@ void DrawerBitmap::update()
 
 void DrawerBitmap::updateVtkProp()
 {
-    // TODO En teoria no cal fer res per aquest cas concret
+    if (m_imageActor)
+    {
+        // TODO De moment únicament contemplem que un cop creat el bitmap, l'únic que podrem modificar serà la seva visibilitat
+        m_imageActor->SetVisibility(this->isVisible());
+        this->setModified(false);
+    }
+    else
+    {
+        DEBUG_LOG("No es pot actualitzar el bitmap, ja que l'actor encara no s'ha creat");
+    }
 }
 
 vtkImageData* DrawerBitmap::rawDataToVtkImageData(unsigned char *data)
