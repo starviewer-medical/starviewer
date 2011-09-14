@@ -279,6 +279,9 @@ public slots:
     /// existeixin combinacions possibles, no es canviarà la orientació de la imatge
     void setImageOrientation(const PatientOrientation &desiredPatientOrientation);
 
+    /// Fa que els ImageOverlays siguin visibles o no
+    void showImageOverlays(bool enable);
+
 signals:
     /// Envia la nova llesca en la que ens trobem
     void sliceChanged(int);

@@ -2330,6 +2330,18 @@ void Q2DViewer::setImageOrientation(const PatientOrientation &desiredPatientOrie
     }
 }
 
+void Q2DViewer::showImageOverlays(bool enable)
+{
+    if (enable)
+    {
+        getDrawer()->showGroup(OverlaysDrawerGroup);
+    }
+    else
+    {
+        getDrawer()->hideGroup(OverlaysDrawerGroup);
+    }
+}
+
 void Q2DViewer::rotate(int times)
 {
     // Si és zero no cal fer res
