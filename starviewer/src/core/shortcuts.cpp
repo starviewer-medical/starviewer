@@ -141,12 +141,10 @@ void Shortcuts::init()
     settingsRegistry->addSetting(AngleTool, shortcutsList);
 
     shortcutsList.clear();
-    // \TODO
     shortcutsList.append(QString("Shift+A"));
     settingsRegistry->addSetting(NonClosedAngleTool, shortcutsList);
 
     shortcutsList.clear();
-    // \TODO
     shortcutsList.append(QString("N"));
     settingsRegistry->addSetting(EditorTool, shortcutsList);
 
@@ -163,17 +161,14 @@ void Shortcuts::init()
     settingsRegistry->addSetting(InvertWindowLevelTool, shortcutsList);
 
     shortcutsList.clear();
-    // \TODO
     shortcutsList.append(QString("Ctrl+1"));
     settingsRegistry->addSetting(AxialViewTool, shortcutsList);
 
     shortcutsList.clear();
-    // \TODO
     shortcutsList.append(QString("Ctrl+2"));
     settingsRegistry->addSetting(SagitalViewTool, shortcutsList);
 
     shortcutsList.clear();
-    // \TODO
     shortcutsList.append(QString("Ctrl+3"));
     settingsRegistry->addSetting(CoronalViewTool, shortcutsList);
 
