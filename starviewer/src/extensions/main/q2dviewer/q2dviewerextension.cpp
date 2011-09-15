@@ -177,7 +177,7 @@ void Q2DViewerExtension::createConnections()
     connect(m_seriesTableGrid, SIGNAL(selectedGrid(int, int)), this, SLOT(setGrid(int, int)));
 
     // Mostrar o no la informacio del volum a cada visualitzador
-    connect(m_viewerInformationToolButton, SIGNAL(toggled(bool)), SLOT(showViewerInformation(bool)));
+    connect(m_viewerInformationToolButton, SIGNAL(toggled(bool)), SLOT(showViewersLayers(bool)));
     // Per mostrar la informació DICOM de la imatge que s'està veient en aquell moment
     connect(m_dicomDumpToolButton, SIGNAL(clicked()), SLOT(showDicomDumpCurrentDisplayedImage()));
 
@@ -586,7 +586,7 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
     }
 }
 
-void Q2DViewerExtension::showViewerInformation(bool show)
+void Q2DViewerExtension::showViewersLayers(bool show)
 {
     m_showViewersTextualInformationAction->setChecked(show);
     m_showOverlaysAction->setChecked(show);

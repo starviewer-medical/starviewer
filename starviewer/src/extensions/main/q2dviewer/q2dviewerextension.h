@@ -73,7 +73,7 @@ public slots:
 #endif
 
     /// Mostra o amaga tota la informació sobreposada a cada visualitzador (informació textual i overlays)
-    void showViewerInformation(bool show);
+    void showViewersLayers(bool show);
 
     /// Mostra o amaga els overlays de cada visualitzador
     void showImageOverlays(bool show);
