@@ -1,7 +1,7 @@
 #ifndef UDGGENERICFACTORY_H
 #define UDGGENERICFACTORY_H
 
-#include <map>
+#include <QMap>
 #include <QObject>
 #include <QList>
 
@@ -50,7 +50,7 @@ namespace udg {
 template <class BaseClass, typename ClassIdentifier, class ParentType = QObject>
 class GenericFactory {
     typedef BaseClass* (*BaseClassCreateFunction)(ParentType*);
-    typedef std::map<ClassIdentifier, BaseClassCreateFunction> FunctionRegistry;
+    typedef QMap<ClassIdentifier, BaseClassCreateFunction> FunctionRegistry;
 
 public:
     /// Constructor de la classe
@@ -63,7 +63,7 @@ public:
     ///                 Aquest mètode el dona, automàticament, la classe GenericFactoryRegister.
     void registerCreateFunction(const ClassIdentifier &className, BaseClassCreateFunction function)
     {
-        m_registry[className] = function;
+        m_registry.insert(className, function);
     }
 
     /// Mètode que ens crea l'objecte que vingui definit per l'identificador. El retorna del tipus BaseClass.
@@ -80,7 +80,7 @@ public:
         {
             try
             {
-                theObject = regEntry->second(parent);
+                theObject = regEntry.value()(parent);
             }
             catch (std::bad_alloc)
             {
@@ -92,14 +92,7 @@ public:
 
     QList<ClassIdentifier> getFactoryNamesList() const
     {
-        QList<ClassIdentifier> list;
-
-        typename FunctionRegistry::const_iterator item;
-        for (item = m_registry.begin(); item != m_registry.end(); ++item)
-        {
-            list.append(item->first);
-        }
-        return list;
+        return m_registry.keys();
     }
 
 private:
