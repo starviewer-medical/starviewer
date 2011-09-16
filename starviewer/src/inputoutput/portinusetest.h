@@ -9,7 +9,7 @@ namespace udg {
 class PortInUseTest : public DiagnosisTest {
 
 public:
-    PortInUseTest(int port);
+    PortInUseTest();
     ~PortInUseTest();
 
     DiagnosisTestResult run();
