@@ -4,7 +4,8 @@
 
 namespace udg {
 
-PortInUseTest::PortInUseTest()
+PortInUseTest::PortInUseTest(QObject *parent)
+ : DiagnosisTest(parent)
 {
     // \TODO Fem que només es miri el port del RIS. S'hauria de valorar si cal comprovar més ports.
     m_port = Settings().getValue(InputOutputSettings::RISRequestsPort).toInt();
