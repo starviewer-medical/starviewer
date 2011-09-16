@@ -9,7 +9,7 @@ namespace udg {
 class PortInUseTest : public DiagnosisTest {
 
 public:
-    PortInUseTest();
+    PortInUseTest(QObject *parent = 0);
     ~PortInUseTest();
 
     DiagnosisTestResult run();
