@@ -1,11 +1,13 @@
 #include "portinusetest.h"
 #include "portinuse.h"
+#include "inputoutputsettings.h"
 
 namespace udg {
 
-PortInUseTest::PortInUseTest(int port)
+PortInUseTest::PortInUseTest()
 {
-    m_port = port;
+    // \TODO Fem que només es miri el port del RIS. S'hauria de valorar si cal comprovar més ports.
+    m_port = Settings().getValue(InputOutputSettings::RISRequestsPort).toInt();
 }
 
 PortInUseTest::~PortInUseTest()
