@@ -24,7 +24,8 @@ win32 {
 
 SOURCES += main.cpp \
            applicationtranslationsloader.cpp
-HEADERS += applicationtranslationsloader.h
+HEADERS += applicationtranslationsloader.h \
+           diagnosistests.h
 RESOURCES = main.qrc
 
 win32{

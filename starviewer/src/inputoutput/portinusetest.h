@@ -3,6 +3,7 @@
 
 #include "diagnosistest.h"
 #include "diagnosistestresult.h"
+#include "diagnosistestfactoryregister.h"
 
 namespace udg {
 
@@ -18,6 +19,8 @@ private:
     /// Port que es comprovarà si està en ús.
     int m_port;
 };
+
+static DiagnosisTestFactoryRegister<PortInUseTest> registerPortInUseTest("PortInUseTest");
 
 } // end namespace udg
 
