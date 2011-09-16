@@ -257,7 +257,9 @@ HEADERS += extensionfactory.h \
     machineinformation.h \
     diagnosistest.h \
     diagnosistestresult.h \
-    applicationupdatechecker.h
+    applicationupdatechecker.h \
+    diagnosistestfactory.h \
+    diagnosistestfactoryregister.h
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
     mathtools.cpp \
