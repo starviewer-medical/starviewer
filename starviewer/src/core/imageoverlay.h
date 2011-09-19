@@ -36,6 +36,14 @@ public:
     /// Construeix un ImageOverlay a partir d'un gdcm::Overlay
     static ImageOverlay fromGDCMOverlay(const gdcm::Overlay &gdcmOverlay);
 
+    /// Fusiona una llista d'overlays en un únic overlay
+    /// Només fusionarà aquells overlays que reuneixin les condicions necessàries per considerar-se vàlids, és a dir, 
+    /// que tingui un nombre de files i columnes > 0 i que tingui dades. El paràmetre ok, servirà per indicar els casos 
+    /// en que no s'ha pogut realitzar fusió per algun error. Si el llistat d'Overlays vàlids és buit, retornarà un
+    /// overlay buit, si només hi ha un de sol, retornarà aquest mateix overlay, la fusió dels n overlays altrament. Per aquests casos 
+    /// el valor d'ok serà true. En cas que no hi hagi prou memòria per allotjar un nou buffer per l'overlay fusionat, retornarà un overlay buit i ok false.
+    static ImageOverlay mergeOverlays(const QList<ImageOverlay> &overlaysList, bool &ok);
+
 private:
     /// Files i columnes de l'overlay
     unsigned int m_rows, m_columns;

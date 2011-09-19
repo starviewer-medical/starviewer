@@ -101,4 +101,122 @@ ImageOverlay ImageOverlay::fromGDCMOverlay(const gdcm::Overlay &gdcmOverlay)
     return imageOverlay;
 }
 
+ImageOverlay ImageOverlay::mergeOverlays(const QList<ImageOverlay> &overlaysList, bool &ok)
+{
+    // Fem tria dels overlays que es puguin considerar vàlids
+    QList<ImageOverlay> validOverlaysList;
+    foreach (const ImageOverlay &overlay, overlaysList)
+    {
+        if (overlay.getData() && overlay.getColumns() > 0 && overlay.getRows() > 0 )
+        {
+            validOverlaysList << overlay;
+        }
+    }
+
+    if (validOverlaysList.isEmpty())
+    {
+        ok = true;
+        return ImageOverlay();
+    }
+
+    int numberOfValidOverlays = validOverlaysList.count();
+
+    if (numberOfValidOverlays == 1)
+    {
+        ok = true;
+        return validOverlaysList.at(0);
+    }
+    
+    // Tenim 2 o més overlays, per tant caldrà fer fusió
+    
+    // Primer calculem l'origen
+    int outOriginX = 1;
+    int outOriginY = 1;
+    for (int i = 0; i < numberOfValidOverlays; ++i)
+    {
+        if (validOverlaysList.at(i).getXOrigin() < outOriginX)
+        {
+            outOriginX = validOverlaysList.at(i).getXOrigin();
+        }
+
+        if (validOverlaysList.at(i).getYOrigin() < outOriginY)
+        {
+            outOriginY = validOverlaysList.at(i).getYOrigin();
+        }
+    }
+
+    // Ara calculem files i columnes
+    int outColumns = 0;
+    int outRows = 0;
+    for (int i = 0; i < numberOfValidOverlays; ++i)
+    {
+        if (validOverlaysList.at(i).getColumns() + validOverlaysList.at(i).getXOrigin() - outOriginX > outColumns)
+        {
+            outColumns = validOverlaysList.at(i).getColumns() + validOverlaysList.at(i).getXOrigin() - outOriginX;
+        }
+
+        if (validOverlaysList.at(i).getRows() + validOverlaysList.at(i).getYOrigin() - outOriginY > outRows)
+        {
+            outRows = validOverlaysList.at(i).getRows() + validOverlaysList.at(i).getYOrigin() - outOriginY;
+        }
+    }
+    
+    // Ara creem el nou buffer únic i en fusionem les dades dels diferents overlays existents
+    unsigned char *data = 0;
+    try
+    {
+        data = new unsigned char[outColumns * outRows];
+    }
+    catch (std::bad_alloc)
+    {
+        ERROR_LOG(QString("No hi ha memòria suficient per crear el buffer per l'overlay fusionat [%1*%2] = %3 bytes")
+            .arg(outRows).arg(outColumns).arg((unsigned long)outRows * outColumns));
+        DEBUG_LOG(QString("No hi ha memòria suficient per crear el buffer per l'overlay fusionat [%1*%2] = %3 bytes")
+            .arg(outRows).arg(outColumns).arg((unsigned long)outRows * outColumns));
+
+        ok = false;
+        return ImageOverlay();
+    }
+
+    // Hem pogut allotjar les dades, procedim a omplir-les amb les dades dels overlays
+    memset(data, 0, sizeof(unsigned char) * outColumns * outRows);
+        
+    int subDataIndex;
+    int subDataXIndex;
+    int subDataYIndex;
+    int outDataIndex;
+    unsigned char outValue = 0;
+    for (int outYIndex = 0; outYIndex < outRows; ++outYIndex)
+    {
+        for (int outXIndex = 0; outXIndex < outColumns; ++outXIndex)
+        {
+            outValue = 0;
+            
+            foreach (const ImageOverlay &overlay, validOverlaysList)
+            {
+                subDataXIndex = outOriginX - overlay.getXOrigin() + outXIndex;
+                subDataYIndex = outOriginY - overlay.getYOrigin() + outYIndex;
+
+                if (subDataXIndex >= 0 && subDataYIndex >=0 && subDataXIndex < overlay.getColumns() && subDataYIndex < overlay.getRows())
+                {
+                    subDataIndex = subDataXIndex + subDataYIndex * overlay.getColumns();
+                    outValue |= overlay.getData()[subDataIndex];
+                }
+            }
+
+            outDataIndex = outXIndex + outYIndex * outColumns;
+            data[outDataIndex] = outValue;
+        }
+    }
+    
+    ImageOverlay imageOverlay;
+    imageOverlay.setRows(outRows);
+    imageOverlay.setColumns(outColumns);
+    imageOverlay.setOrigin(outOriginX, outOriginY);
+    imageOverlay.setData(data);
+
+    ok = true;
+    return imageOverlay;
+}
+
 }
