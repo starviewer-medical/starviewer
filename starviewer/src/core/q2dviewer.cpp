@@ -870,7 +870,7 @@ DrawerBitmap* Q2DViewer::imageOverlayToDrawerBitmap(const ImageOverlay &imageOve
     bitmapOrigin[0] = volumeOrigin[0] + imageOverlay.getXOrigin() * volumeSpacing[0];
     bitmapOrigin[1] = volumeOrigin[1] + imageOverlay.getYOrigin() * volumeSpacing[1];
     bitmapOrigin[2] = volumeOrigin[2];
-    drawerBitmap->setOrigin(volumeOrigin);
+    drawerBitmap->setOrigin(bitmapOrigin);
     
     drawerBitmap->setData(imageOverlay.getColumns(), imageOverlay.getRows(), imageOverlay.getData());
     
