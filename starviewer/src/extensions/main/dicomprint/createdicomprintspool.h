@@ -38,17 +38,29 @@ private:
     QString createStoredPrintDcmtkFile(const QString &spoolDirectoryPath);
 
     /// A partir d'un DICOMPrintPresentationStateImage ens retorna un PresentationState de DCMTK per aplicar a les imatges a imprimir
-    void applyDICOMPrintPresentationStateImage(DVPresentationState *dvpPresentationState, Image *imageToPrint,
+    void transformDICOMPrintPresentationStateToDCMTKPresentationState(DVPresentationState *dcmtkPresentationState, Image *imageToPrint,
                                                const DICOMPrintPresentationStateImage &dicomPrintPresentationStateImage);
+
+    /// Aplica el Window Level especificat en el presentationState al presentation State de DCMTK
+    void setToDCMTKPresentationStateWindowLevelFromDICOMPrintPresentationState(DVPresentationState *dcmtkPresentationState, Image *imageToPrint,
+                                                     const DICOMPrintPresentationStateImage &dicomPrintPresentationStateImage);
+
+    /// Si el Presentation state indica que s'ha d'aplicar Flip al presentation State de DCMTK
+    void setToDCMTKPresentationStateFlipFromDICOMPrintPresentationState(DVPresentationState *dcmtkPresentationState,
+                                                                                  const DICOMPrintPresentationStateImage &dicomPrintPresentationStateImage);
+
+    /// Si el Presentation state indica que s'han d'aplicar rotacions al presentation State de DCMTK
+    void setToDCMTKPresentationStateRotationFromDICOMPrintPresentationState(DVPresentationState *dcmtkPresentationState,
+                                                                            const DICOMPrintPresentationStateImage &dicomPrintPresentationStateImage);
 
     DicomPrintPage m_dicomPrintPage;
     DicomPrinter m_dicomPrinter;
     DVPSStoredPrint *m_storedPrint;
-    DVPresentationState *m_presentationState;
+    DVPresentationState *m_dcmtkPresentationState;
     DVPSAnnotationContent_PList *m_annotationBoxes;
     CreateDicomPrintSpoolError m_lastError;
     QString m_annotationDisplayFormatIDTagValue;
 };
-};
+}
 
 #endif
