@@ -1,5 +1,5 @@
-#ifndef UDGMAGICTOOL_H
-#define UDGMAGICTOOL_H
+#ifndef UDGMAGICROITOOL_H
+#define UDGMAGICROITOOL_H
 
 #include "roitool.h"
 
@@ -15,7 +15,7 @@ class DrawerPolygon;
 /**
     Tool que serveix per editar el volum sobreposat en un visor 2D
 */
-class MagicTool : public ROITool {
+class MagicROITool : public ROITool {
 Q_OBJECT
 public:
     
@@ -24,8 +24,8 @@ public:
     // Moviments
     enum { MoveRight, MoveLeft, MoveUp, MoveDown };
 
-    MagicTool(QViewer *viewer, QObject *parent = 0);
-    ~MagicTool();
+    MagicROITool(QViewer *viewer, QObject *parent = 0);
+    ~MagicROITool();
 
     void handleEvent(unsigned long eventID);
 

@@ -11,7 +11,7 @@
 #include "translatetool.h"
 #include "voxelinformationtool.h"
 #include "seedtool.h"
-#include "magictool.h"
+#include "magicroitool.h"
 #include "rotate3dtool.h"
 #include "screenshottool.h"
 #include "synchronizetool.h"
@@ -75,9 +75,9 @@ Tool* ToolRegistry::getTool(const QString &toolName, QViewer *viewer)
     {
         tool = new SeedTool(viewer);
     }
-    else if (toolName == "MagicTool")
+    else if (toolName == "MagicROITool")
     {
-        tool = new MagicTool(viewer);
+        tool = new MagicROITool(viewer);
     }
     else if (toolName == "ScreenShotTool")
     {
@@ -197,11 +197,11 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
         statusTip = tr("Put Seed tool");
         toolTip = toolAction->text();
     }
-    else if (toolName == "MagicTool")
+    else if (toolName == "MagicROITool")
     {
         toolAction->setText(tr("Magic"));
-        toolAction->setIcon(QIcon(":/images/magictool.png"));
-        toolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::MagicTool));
+        toolAction->setIcon(QIcon(":/images/magicroitool.png"));
+        toolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::MagicROITool));
         statusTip = tr("Enable/Disable Magic tool");
         toolTip = toolAction->text();
     }

@@ -18,7 +18,7 @@ public:
     static const QString ZoomTool;
     static const QString TranslateTool;
     static const QString SeedTool;
-    static const QString MagicTool;
+    static const QString MagicROITool;
     static const QString ScreenShotTool;
     static const QString Rotate3DTool;
     static const QString DistanceTool;

@@ -12,7 +12,7 @@ const QString Shortcuts::WindowLevelTool(ShortcutsBase + "WindowLevelTool");
 const QString Shortcuts::ZoomTool(ShortcutsBase + "ZoomTool");
 const QString Shortcuts::TranslateTool(ShortcutsBase + "TranslateTool");
 const QString Shortcuts::SeedTool(ShortcutsBase + "SeedTool");
-const QString Shortcuts::MagicTool(ShortcutsBase + "MagicTool");
+const QString Shortcuts::MagicROITool(ShortcutsBase + "MagicROITool");
 const QString Shortcuts::ScreenShotTool(ShortcutsBase + "ScreenShotTool");
 const QString Shortcuts::Rotate3DTool(ShortcutsBase + "Rotate3DTool");
 const QString Shortcuts::DistanceTool(ShortcutsBase + "DistanceTool");
@@ -99,7 +99,7 @@ void Shortcuts::init()
 
     shortcutsList.clear();
     shortcutsList.append(QString("M"));
-    settingsRegistry->addSetting(MagicTool, shortcutsList);
+    settingsRegistry->addSetting(MagicROITool, shortcutsList);
 
     shortcutsList.clear();
     // \TODO

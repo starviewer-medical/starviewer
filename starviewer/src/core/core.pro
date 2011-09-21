@@ -96,7 +96,7 @@ HEADERS += extensionfactory.h \
     voxelinformationtool.h \
     windowleveltool.h \
     seedtool.h \
-    magictool.h \
+    magicroitool.h \
     rotate3dtool.h \
     screenshottool.h \
     synchronizetool.h \
@@ -328,7 +328,7 @@ SOURCES += extensionmediator.cpp \
     voxelinformationtool.cpp \
     windowleveltool.cpp \
     seedtool.cpp \
-    magictool.cpp \
+    magicroitool.cpp \
     rotate3dtool.cpp \
     screenshottool.cpp \
     synchronizetool.cpp \
