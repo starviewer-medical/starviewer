@@ -1,26 +1,11 @@
 #include "autotest.h"
 #include "portinuse.h"
+#include "testingportinuse.h"
 
 #include <QAbstractSocket>
 
 using namespace udg;
-
-class TestingPortInUse : public PortInUse {
-public:
-    bool m_testingResult;
-    QAbstractSocket::SocketError m_testingServerError;
-    QString m_testingErrorString;
-    
-protected:
-
-    virtual bool isPortAvailable(int port, QAbstractSocket::SocketError &serverError, QString &errorString)
-    {
-        Q_UNUSED(port);
-        serverError = m_testingServerError;
-        errorString = m_testingErrorString;
-        return m_testingResult;
-    }
-};
+using namespace testing;
 
 Q_DECLARE_METATYPE(QAbstractSocket::SocketError)
 Q_DECLARE_METATYPE(PortInUse::PortInUseStatus)

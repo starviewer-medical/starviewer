@@ -10,7 +10,8 @@ SOURCES += $$PWD/gmock-gtest-all.cc \
            $$PWD/imageoverlaytesthelper.cpp \
            $$PWD/hangingprotocoltesthelper.cpp \
            $$PWD/hangingprotocolimagesettesthelper.cpp \
-           $$PWD/hangingprotocoldisplaysettesthelper.cpp 
+           $$PWD/hangingprotocoldisplaysettesthelper.cpp \
+           $$PWD/testingportinuse.cpp
            
 HEADERS += $$PWD/autotest.h \
            $$PWD/gtest/gtest.h \
@@ -25,5 +26,6 @@ HEADERS += $$PWD/autotest.h \
            $$PWD/imageoverlaytesthelper.h \
            $$PWD/hangingprotocoltesthelper.h \
            $$PWD/hangingprotocolimagesettesthelper.h \
-           $$PWD/hangingprotocoldisplaysettesthelper.h
+           $$PWD/hangingprotocoldisplaysettesthelper.h \
+           $$PWD/testingportinuse.h
            
