@@ -7,7 +7,7 @@ using namespace udg;
 
 class TestingPortInUse : public PortInUse {
 public:
-    int m_testingResult;
+    bool m_testingResult;
     QAbstractSocket::SocketError m_testingServerError;
     QString m_testingErrorString;
     
