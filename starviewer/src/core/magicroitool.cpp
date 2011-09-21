@@ -141,7 +141,7 @@ void MagicROITool::modifyRegionByFactor()
 {
     if (m_roiPolygon)
     {
-        double displacementY = 0.05 * (m_viewer->getEventPositionY() - m_viewer->getLastEventPositionY());
+        double displacementY = 0.05 * (m_viewer->getLastEventPositionY() - m_viewer->getEventPositionY());
         if (m_magicFactor - displacementY > 0.0)
         {
             m_magicFactor -= displacementY;
