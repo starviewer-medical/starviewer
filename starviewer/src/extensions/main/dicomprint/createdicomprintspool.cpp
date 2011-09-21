@@ -213,7 +213,7 @@ bool CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, DICOM
         m_presentationState->selectImageFrameNumber(imageToPrint->getFrameNumber() + 1);
     }
 
-    applyDICOMPrintPresentationStateImage(m_presentationState, dicomPrintPresentationStateImage);
+    applyDICOMPrintPresentationStateImage(m_presentationState, imageToPrint, dicomPrintPresentationStateImage);
 
     bitmapSize = m_presentationState->getPrintBitmapSize();
 
@@ -483,24 +483,36 @@ CreateDicomPrintSpool::CreateDicomPrintSpoolError CreateDicomPrintSpool::getLast
 //TODO: Aquest mètode segurament s'hauria de dividir en un mètode per cada obtenir cada tipus de transformació al Presentation state,
 //      i també s'hauria d'estudiar la possibilitat de crear una classe amb la responsabilitat exclusiva de transofrmar un DICOMPrinPresetationStateImage
 //      a DVPPResentationState
-void CreateDicomPrintSpool::applyDICOMPrintPresentationStateImage(DVPresentationState *dvPresentationState,
+void CreateDicomPrintSpool::applyDICOMPrintPresentationStateImage(DVPresentationState *dvPresentationState, Image *imageToPrint,
                                                                   const DICOMPrintPresentationStateImage &dicomPrintPresentationStateImage)
 {
     if (!dicomPrintPresentationStateImage.applyDefaultWindowLevelToImage())
     {
-        int windowWidth;
-        int windowCenter = dicomPrintPresentationStateImage.getWindowCenter();
+        /*Starviewer pot tenir WindowWidth en valor negatiu i positiu, mentre que DCMTK només accepta valors >= 1. Degut això s'han d'aplicar una sèrie de transformacions,
+          per adaptar els valor de WindowWidth d'Starviewer als valors equivalents per DCMTK, a més en en funció del tipus d'imatge el signe del WindowWitdh d'Starviewer
+          pot indicar que l'usuari ha fet una inversió de la imatge, que també haurem d'aplicar.
 
-        if (dicomPrintPresentationStateImage.getWindowWidth() < 0)
+          Si el valor del WindowWitdh és negatiu, s'ha de transformar en positiu, si el valor és 0 <= WW < 1 se li assigna 1 per defecte.
+
+          En cas que la imatge sigui MONOCHROME1 i el windowWidth d'Starviewer positiu  indica que l'usuari ha invertit la imatge, per tant en aquest cas s'ha d'aplicar
+          una inversió a la imatge. També s'ha d'aplicar inversió en el cas que la imatge no sigui MONOCHROME1 però tingui el WindowWidth amb signe negatiu (WW < 0) */
+
+        int windowWidth;
+        int windowCenter;
+
+        windowCenter = dicomPrintPresentationStateImage.getWindowCenter();
+        windowWidth = dicomPrintPresentationStateImage.getWindowWidth() < 0 ? - dicomPrintPresentationStateImage.getWindowWidth() :
+                                                                              dicomPrintPresentationStateImage.getWindowWidth();
+
+        if (windowWidth < 1)
         {
-            //Dcmtk només accepta Window Width positius, l'equivalència de Window Witdh negatiu a dcmtk és invertir els colors de la imatge i aplicar el mateix
-            //window width amb signe positu
-            dvPresentationState->invertImage();
-            windowWidth = -dicomPrintPresentationStateImage.getWindowWidth();
+            windowWidth = 1;
         }
-        else
+
+        if ((imageToPrint->getPhotometricInterpretation() == "MONOCHROME1" && dicomPrintPresentationStateImage.getWindowWidth() >= 0) ||
+            (imageToPrint->getPhotometricInterpretation() != "MONOCHROME1" && dicomPrintPresentationStateImage.getWindowWidth() < 0))
         {
-            windowWidth = dicomPrintPresentationStateImage.getWindowWidth();
+                dvPresentationState->invertImage();
         }
 
         OFCondition cond = dvPresentationState->setVOIWindow(windowCenter, windowWidth);
@@ -510,6 +522,7 @@ void CreateDicomPrintSpool::applyDICOMPrintPresentationStateImage(DVPresentation
             ERROR_LOG(QString("No s'ha pogut aplicar el WL a la imatge a imprimir WC:%1, WL:%2, Descripcio error: %3").
                       arg(QString::number(windowCenter), QString::number(windowWidth), QString(cond.text())));
         }
+
     }
 
     dvPresentationState->setFlip(dicomPrintPresentationStateImage.getIsFlipped());

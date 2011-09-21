@@ -38,7 +38,8 @@ private:
     QString createStoredPrintDcmtkFile(const QString &spoolDirectoryPath);
 
     /// A partir d'un DICOMPrintPresentationStateImage ens retorna un PresentationState de DCMTK per aplicar a les imatges a imprimir
-    void applyDICOMPrintPresentationStateImage(DVPresentationState *dvpPresentationState, const DICOMPrintPresentationStateImage &dicomPrintPresentationStateImage);
+    void applyDICOMPrintPresentationStateImage(DVPresentationState *dvpPresentationState, Image *imageToPrint,
+                                               const DICOMPrintPresentationStateImage &dicomPrintPresentationStateImage);
 
     DicomPrintPage m_dicomPrintPage;
     DicomPrinter m_dicomPrinter;
