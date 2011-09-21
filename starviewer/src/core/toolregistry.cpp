@@ -199,7 +199,7 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
     }
     else if (toolName == "MagicROITool")
     {
-        toolAction->setText(tr("Magic"));
+        toolAction->setText(tr("Magical ROI"));
         toolAction->setIcon(QIcon(":/images/magicroitool.png"));
         toolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::MagicROITool));
         statusTip = tr("Enable/Disable Magic tool");
