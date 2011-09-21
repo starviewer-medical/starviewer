@@ -178,7 +178,7 @@ bool CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, DICOM
     // films grans deixem els valors per defecte de les dcmtk.
 
     // 6è, 7è - Resolució per la previsualització de la imatge, com que no en farem previsualització deixem els valors standards.
-    m_presentationState = new DVPresentationState(NULL, 1024, 1024, 8192, 8192, 256, 256);
+    m_dcmtkPresentationState = new DVPresentationState(NULL, 1024, 1024, 8192, 8192, 256, 256);
 
     INFO_LOG(QString("Es transformara la imatge %1 frame %2 per imprimir.").arg(imageToPrint->getPath()).arg(imageToPrint->getFrameNumber()));
 
@@ -194,7 +194,7 @@ bool CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, DICOM
     imageToPrintDataset = imageToPrintDcmFileFormat->getDataset();
 
     // Traspassem la informació del mòdul de pacient i imatge entre d'altres al presentation state
-    status = m_presentationState->createFromImage(*imageToPrintDataset);
+    status = m_dcmtkPresentationState->createFromImage(*imageToPrintDataset);
     if (status != EC_Normal)
     {
         ERROR_LOG("No s'ha pogut el Presentation State a partir del dataSet de l'imatge. Descripcio error: " + QString(status.text()));
@@ -204,20 +204,20 @@ bool CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, DICOM
 
     // El 2n paràmete del attach image indica, si el presentation state és l'amo de la imatge passada per paràmetre, per poder destruir l'objecte,
     // en aquest cas l'indiquem que no és l'amo, per poder-lo destruir nosaltres.
-    m_presentationState->attachImage(imageToPrintDcmFileFormat, false);
+    m_dcmtkPresentationState->attachImage(imageToPrintDcmFileFormat, false);
 
     if (imageToPrint->getFrameNumber() != 0)
     {
         //Si no és el primer frame el seleccionem. El número de Frame per dcmtk sempre comença a partir del 1 mentre per nosaltres comença a partir del 0,
         //per això sumem més 1
-        m_presentationState->selectImageFrameNumber(imageToPrint->getFrameNumber() + 1);
+        m_dcmtkPresentationState->selectImageFrameNumber(imageToPrint->getFrameNumber() + 1);
     }
 
-    applyDICOMPrintPresentationStateImage(m_presentationState, imageToPrint, dicomPrintPresentationStateImage);
+    transformDICOMPrintPresentationStateToDCMTKPresentationState(m_dcmtkPresentationState, imageToPrint, dicomPrintPresentationStateImage);
 
-    bitmapSize = m_presentationState->getPrintBitmapSize();
+    bitmapSize = m_dcmtkPresentationState->getPrintBitmapSize();
 
-    status = m_presentationState->getPrintBitmapWidthHeight(bitmapWidth, bitmapHeight);
+    status = m_dcmtkPresentationState->getPrintBitmapWidthHeight(bitmapWidth, bitmapHeight);
     if (status != EC_Normal)
     {
         ERROR_LOG("No s'ha pogut obtenir l'amplada\alçada de la imatge. Descripcio error: " + QString(status.text()));
@@ -225,11 +225,11 @@ bool CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, DICOM
         return false;
     }
 
-    pixelAspectRatio = m_presentationState->getPrintBitmapPixelAspectRatio();
+    pixelAspectRatio = m_dcmtkPresentationState->getPrintBitmapPixelAspectRatio();
     pixelData = new char[bitmapSize];
 
     // El 3r paràmetre indica si la imatge s'ha de redenritzar amb el presentation LUT invers
-    status = m_presentationState->getPrintBitmap(pixelData, bitmapSize, false);
+    status = m_dcmtkPresentationState->getPrintBitmap(pixelData, bitmapSize, false);
     if (status == EC_Normal)
     {
         // Guardem la imatge a disc
@@ -242,7 +242,7 @@ bool CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, DICOM
     }
 
     // No fem delete del imageToPrintDataset perquè és un punter que apunta al Dataset de l'objecte imageToPrintDcmFileFormat del qual ja fem un delete
-    delete m_presentationState;
+    delete m_dcmtkPresentationState;
     delete pixelData;
     delete imageToPrintDcmFileFormat;
 
@@ -261,7 +261,7 @@ bool CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
     bool ok = false;
 
     // Write patient module
-    status = m_presentationState->writeHardcopyImageAttributes(*transformedImageDatasetToPrint);
+    status = m_dcmtkPresentationState->writeHardcopyImageAttributes(*transformedImageDatasetToPrint);
     if (status != EC_Normal)
     {
         ERROR_LOG("No s'han pogut gravar a la imatge per imprimir les dades del pacient");
@@ -326,11 +326,11 @@ bool CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
         pxData->putUint16Array(OFstatic_cast(Uint16 *, pixelDataAsVoid), OFstatic_cast(unsigned long, bitmapWidth * bitmapHeight));
         transformedImageDatasetToPrint->insert(pxData, OFTrue);
 
-        if (m_presentationState->getPresentationLUT() == DVPSP_table)
+        if (m_dcmtkPresentationState->getPresentationLUT() == DVPSP_table)
         {
             // En principi no treballem amb presentation LUT, per tant aquest codi crec que no s'hauria d'executar mai
             INFO_LOG("Gravem presentation LUT");
-            status = m_presentationState->writePresentationLUTforPrint(*transformedImageDatasetToPrint);
+            status = m_dcmtkPresentationState->writePresentationLUTforPrint(*transformedImageDatasetToPrint);
             if (status != EC_Normal)
             {
                 ERROR_LOG("No s'ha pogut gravar el presentation LUT. Descripcio error" + QString(status.text()));
@@ -346,11 +346,11 @@ bool CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
         {
             INFO_LOG("Creada imatge per imprimir al path " + transformedImagePath);
 
-            m_presentationState->getPrintBitmapRequestedImageSize(requestedImageSizeAsOFString);
+            m_dcmtkPresentationState->getPrintBitmapRequestedImageSize(requestedImageSizeAsOFString);
             // Afegim la imatge al Image Box
             status = m_storedPrint->addImageBox(qPrintable(Settings().getValue(InputOutputSettings::LocalAETitle).toString()), InstanceUIDOfTransformedImage,
-                                                requestedImageSizeAsOFString.c_str(), NULL, m_presentationState->getPresentationLUTData(),
-                                                m_presentationState->isMonochrome1Image());
+                                                requestedImageSizeAsOFString.c_str(), NULL, m_dcmtkPresentationState->getPresentationLUTData(),
+                                                m_dcmtkPresentationState->isMonochrome1Image());
 
             if (status != EC_Normal)
             {
@@ -483,64 +483,96 @@ CreateDicomPrintSpool::CreateDicomPrintSpoolError CreateDicomPrintSpool::getLast
 //TODO: Aquest mètode segurament s'hauria de dividir en un mètode per cada obtenir cada tipus de transformació al Presentation state,
 //      i també s'hauria d'estudiar la possibilitat de crear una classe amb la responsabilitat exclusiva de transofrmar un DICOMPrinPresetationStateImage
 //      a DVPPResentationState
-void CreateDicomPrintSpool::applyDICOMPrintPresentationStateImage(DVPresentationState *dvPresentationState, Image *imageToPrint,
+void CreateDicomPrintSpool::transformDICOMPrintPresentationStateToDCMTKPresentationState(DVPresentationState *dcmtkPresentationState, Image *imageToPrint,
                                                                   const DICOMPrintPresentationStateImage &dicomPrintPresentationStateImage)
 {
-    if (!dicomPrintPresentationStateImage.applyDefaultWindowLevelToImage())
+    setToDCMTKPresentationStateWindowLevelFromDICOMPrintPresentationState(dcmtkPresentationState, imageToPrint, dicomPrintPresentationStateImage);
+    setToDCMTKPresentationStateFlipFromDICOMPrintPresentationState(dcmtkPresentationState, dicomPrintPresentationStateImage);
+    setToDCMTKPresentationStateRotationFromDICOMPrintPresentationState(dcmtkPresentationState, dicomPrintPresentationStateImage);
+}
+
+void CreateDicomPrintSpool::setToDCMTKPresentationStateWindowLevelFromDICOMPrintPresentationState(DVPresentationState *dcmtkPresentationState, Image *imageToPrint,
+                                                                                                  const DICOMPrintPresentationStateImage &dicomPrintPresentationStateImage)
+{
+    if (dicomPrintPresentationStateImage.applyDefaultWindowLevelToImage())
     {
-        /*Starviewer pot tenir WindowWidth en valor negatiu i positiu, mentre que DCMTK només accepta valors >= 1. Degut això s'han d'aplicar una sèrie de transformacions,
-          per adaptar els valor de WindowWidth d'Starviewer als valors equivalents per DCMTK, a més en en funció del tipus d'imatge el signe del WindowWitdh d'Starviewer
-          pot indicar que l'usuari ha fet una inversió de la imatge, que també haurem d'aplicar.
-
-          Si el valor del WindowWitdh és negatiu, s'ha de transformar en positiu, si el valor és 0 <= WW < 1 se li assigna 1 per defecte.
-
-          En cas que la imatge sigui MONOCHROME1 i el windowWidth d'Starviewer positiu  indica que l'usuari ha invertit la imatge, per tant en aquest cas s'ha d'aplicar
-          una inversió a la imatge. També s'ha d'aplicar inversió en el cas que la imatge no sigui MONOCHROME1 però tingui el WindowWidth amb signe negatiu (WW < 0) */
-
-        int windowWidth;
-        int windowCenter;
-
-        windowCenter = dicomPrintPresentationStateImage.getWindowCenter();
-        windowWidth = dicomPrintPresentationStateImage.getWindowWidth() < 0 ? - dicomPrintPresentationStateImage.getWindowWidth() :
-                                                                              dicomPrintPresentationStateImage.getWindowWidth();
-
-        if (windowWidth < 1)
-        {
-            windowWidth = 1;
-        }
-
-        if ((imageToPrint->getPhotometricInterpretation() == "MONOCHROME1" && dicomPrintPresentationStateImage.getWindowWidth() >= 0) ||
-            (imageToPrint->getPhotometricInterpretation() != "MONOCHROME1" && dicomPrintPresentationStateImage.getWindowWidth() < 0))
-        {
-                dvPresentationState->invertImage();
-        }
-
-        OFCondition cond = dvPresentationState->setVOIWindow(windowCenter, windowWidth);
-
-        if (!cond.good())
-        {
-            ERROR_LOG(QString("No s'ha pogut aplicar el WL a la imatge a imprimir WC:%1, WL:%2, Descripcio error: %3").
-                      arg(QString::number(windowCenter), QString::number(windowWidth), QString(cond.text())));
-        }
-
+        return;
     }
 
-    dvPresentationState->setFlip(dicomPrintPresentationStateImage.getIsFlipped());
+    /*Starviewer pot tenir WindowWidth en valor negatiu i positiu, mentre que DCMTK només accepta valors >= 1. Degut això s'han d'aplicar una sèrie de transformacions,
+      per adaptar els valor de WindowWidth d'Starviewer als valors equivalents per DCMTK, a més en en funció del tipus d'imatge el signe del WindowWitdh d'Starviewer
+      pot indicar que l'usuari ha fet una inversió de la imatge, que també haurem d'aplicar.
+
+      Si el valor del WindowWitdh és negatiu, s'ha de transformar en positiu, si el valor és 0 <= WW < 1 se li assigna 1 per defecte.
+
+      En cas que la imatge sigui MONOCHROME1 i el windowWidth d'Starviewer positiu  indica que l'usuari ha invertit la imatge, per tant en aquest cas s'ha d'aplicar
+      una inversió a la imatge. També s'ha d'aplicar inversió en el cas que la imatge no sigui MONOCHROME1 però tingui el WindowWidth amb signe negatiu (WW < 0) */
+
+    int windowWidth;
+    int windowCenter;
+
+    windowCenter = dicomPrintPresentationStateImage.getWindowCenter();
+    windowWidth = dicomPrintPresentationStateImage.getWindowWidth() < 0 ? - dicomPrintPresentationStateImage.getWindowWidth() :
+                                                                          dicomPrintPresentationStateImage.getWindowWidth();
+
+    if (windowWidth < 1)
+    {
+        windowWidth = 1;
+    }
+
+    if ((imageToPrint->getPhotometricInterpretation() == "MONOCHROME1" && dicomPrintPresentationStateImage.getWindowWidth() >= 0) ||
+        (imageToPrint->getPhotometricInterpretation() != "MONOCHROME1" && dicomPrintPresentationStateImage.getWindowWidth() < 0))
+    {
+            dcmtkPresentationState->invertImage();
+    }
+
+    OFCondition cond = dcmtkPresentationState->setVOIWindow(windowCenter, windowWidth);
+
+    if (!cond.good())
+    {
+        ERROR_LOG(QString("No s'ha pogut aplicar el WL a la imatge a imprimir WC:%1, WL:%2, Descripcio error: %3").
+                  arg(QString::number(windowCenter), QString::number(windowWidth), QString(cond.text())));
+    }
+}
+
+void CreateDicomPrintSpool::setToDCMTKPresentationStateFlipFromDICOMPrintPresentationState(DVPresentationState *dcmtkPresentationState,
+                                                                                           const DICOMPrintPresentationStateImage &dicomPrintPresentationStateImage)
+{
+    OFCondition condition;
+
+    condition = dcmtkPresentationState->setFlip(dicomPrintPresentationStateImage.getIsFlipped());
+
+    if (!condition.good())
+    {
+        ERROR_LOG(QString("No s'ha pogut aplicar el flip a , Descripcio error: %3").arg(QString(condition.text())));
+    }
+}
+
+void CreateDicomPrintSpool::setToDCMTKPresentationStateRotationFromDICOMPrintPresentationState(DVPresentationState *dcmtkPresentationState,
+                                                                                               const DICOMPrintPresentationStateImage &dicomPrintPresentationStateImage)
+{
+    OFCondition condition;
 
     switch (dicomPrintPresentationStateImage.getRotateClockWise() % 4)
     {
         case 1:
-            dvPresentationState->setRotation(DVPSR_90_deg);
+            condition = dcmtkPresentationState->setRotation(DVPSR_90_deg);
             break;
         case 2:
-            dvPresentationState->setRotation(DVPSR_180_deg);
+            condition = dcmtkPresentationState->setRotation(DVPSR_180_deg);
         break;
         case 3:
-            dvPresentationState->setRotation(DVPSR_270_deg);
+            condition = dcmtkPresentationState->setRotation(DVPSR_270_deg);
         break;
         default:
-            dvPresentationState->setRotation(DVPSR_0_deg);
+            condition = dcmtkPresentationState->setRotation(DVPSR_0_deg);
             break;
+    }
+
+    if (!condition.good())
+    {
+        ERROR_LOG(QString("No s'ha pogut aplicar la rotacio a la imatge de %1 graus, Descripcio error: %3").
+                  arg(QString::number(dicomPrintPresentationStateImage.getRotateClockWise()*90), QString(condition.text())));
     }
 }
 
