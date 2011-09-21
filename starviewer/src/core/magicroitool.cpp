@@ -1,4 +1,4 @@
-#include "magictool.h"
+#include "magicroitool.h"
 #include "logging.h"
 #include "q2dviewer.h"
 #include "volume.h"
@@ -18,21 +18,21 @@ namespace udg {
 static const double MagicSize = 3.0;
 static const double MagicFactor = 1.0;
 
-MagicTool::MagicTool(QViewer *viewer, QObject *parent)
+MagicROITool::MagicROITool(QViewer *viewer, QObject *parent)
 : ROITool(viewer, parent)
 {
     m_magicSize = MagicSize;
     m_magicFactor = MagicFactor;
     m_lowerLevel = 0.0;
     m_upperLevel = 0.0;
-    m_toolName = "MagicTool";
+    m_toolName = "MagicROITool";
 
     m_roiPolygon = NULL;
 
     connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(initialize()));
 }
 
-MagicTool::~MagicTool()
+MagicROITool::~MagicROITool()
 {
     if (!m_roiPolygon.isNull())
     {
@@ -42,7 +42,7 @@ MagicTool::~MagicTool()
     }
 }
 
-void MagicTool::initialize()
+void MagicROITool::initialize()
 {
     // Alliberem les primitives perquè puguin ser esborrades
     if (!m_roiPolygon.isNull())
@@ -55,7 +55,7 @@ void MagicTool::initialize()
     m_roiPolygon = NULL;
 }
 
-void MagicTool::handleEvent(unsigned long eventID)
+void MagicROITool::handleEvent(unsigned long eventID)
 {
     switch (eventID)
     {
@@ -73,7 +73,7 @@ void MagicTool::handleEvent(unsigned long eventID)
     }
 }
 
-void MagicTool::assignBounds(int &minX, int &minY, int &maxX, int &maxY)
+void MagicROITool::assignBounds(int &minX, int &minY, int &maxX, int &maxY)
 {
     int ext[6];
     m_2DViewer->getInput()->getWholeExtent(ext);
@@ -88,7 +88,7 @@ void MagicTool::assignBounds(int &minX, int &minY, int &maxX, int &maxY)
 
 }
 
-double MagicTool::getVoxelValue(int x, int y, int z)
+double MagicROITool::getVoxelValue(int x, int y, int z)
 {
     double value = 0;
     switch(m_2DViewer->getView())
@@ -109,7 +109,7 @@ double MagicTool::getVoxelValue(int x, int y, int z)
 
 }
 
-void MagicTool::startRegion()
+void MagicROITool::startRegion()
 {
     if (m_2DViewer->getInput())
     {
@@ -126,7 +126,7 @@ void MagicTool::startRegion()
     }
 }
 
-void MagicTool::endRegion()
+void MagicROITool::endRegion()
 {
     if (m_roiPolygon)
     {
@@ -137,7 +137,7 @@ void MagicTool::endRegion()
     }
 }
 
-void MagicTool::modifyRegionByFactor()
+void MagicROITool::modifyRegionByFactor()
 {
     if (m_roiPolygon)
     {
@@ -150,7 +150,7 @@ void MagicTool::modifyRegionByFactor()
     }
 }
 
-void MagicTool::generateRegion()
+void MagicROITool::generateRegion()
 {
     this->computeLevelRange();
 
@@ -163,7 +163,7 @@ void MagicTool::generateRegion()
     m_2DViewer->render();
 }
 
-void MagicTool::computeLevelRange()
+void MagicROITool::computeLevelRange()
 {
     int index[3];
     m_2DViewer->getInput()->getPixelData()->computeCoordinateIndex(m_pickedPosition, index);
@@ -181,7 +181,7 @@ void MagicTool::computeLevelRange()
     m_upperLevel = voxelValue.at(0) + m_magicFactor * standardDeviation;
 }
 
-void MagicTool::computeRegionMask()
+void MagicROITool::computeRegionMask()
 {
     // Busquem el voxel inicial
     int index[3];
@@ -281,7 +281,7 @@ void MagicTool::computeRegionMask()
     }
 }
 
-void MagicTool::doMovement(int &x, int &y, int movement)
+void MagicROITool::doMovement(int &x, int &y, int movement)
 {
     switch (movement)
     {
@@ -302,7 +302,7 @@ void MagicTool::doMovement(int &x, int &y, int movement)
     }
 }
 
-void MagicTool::undoMovement(int &x, int &y, int movement)
+void MagicROITool::undoMovement(int &x, int &y, int movement)
 {
     switch (movement)
     {
@@ -323,7 +323,7 @@ void MagicTool::undoMovement(int &x, int &y, int movement)
     }
 }
 
-void MagicTool::computePolygon()
+void MagicROITool::computePolygon()
 {    
     int minX;
     int minY;
@@ -398,7 +398,7 @@ void MagicTool::computePolygon()
     m_hasToComputeStatisticsData = true;
 }
 
-void MagicTool::getNextIndex(int direction, int x, int y, int &nextX, int &nextY)
+void MagicROITool::getNextIndex(int direction, int x, int y, int &nextX, int &nextY)
 {
     switch (direction)
     {
@@ -439,18 +439,18 @@ void MagicTool::getNextIndex(int direction, int x, int y, int &nextX, int &nextY
     }
 }
 
-int MagicTool::getNextDirection(int direction)
+int MagicROITool::getNextDirection(int direction)
 {
     int nextDirection = direction + 1;
     return (nextDirection == 8)? 0: nextDirection;
 }
 
-int MagicTool::getInverseDirection(int direction)
+int MagicROITool::getInverseDirection(int direction)
 {
     return (direction + 4) % 8;
 }
 
-void MagicTool::addPoint(int direction, int x, int y, double z)
+void MagicROITool::addPoint(int direction, int x, int y, double z)
 {    
     double origin[3];
     double spacing[3];
@@ -487,14 +487,14 @@ void MagicTool::addPoint(int direction, int x, int y, double z)
     m_roiPolygon->addVertix(point);
 }
 
-bool MagicTool::isLoopReached()
+bool MagicROITool::isLoopReached()
 {
     const double *firstVertix = this->m_roiPolygon->getVertix(0);
     const double *lastVertix = this->m_roiPolygon->getVertix(m_roiPolygon->getNumberOfPoints() - 1);
     return ((qAbs(firstVertix[0] - lastVertix[0]) < 0.0001) && (qAbs(firstVertix[1] - lastVertix[1]) < 0.0001));
 }
 
-double MagicTool::getStandardDeviation(int x, int y, int z)
+double MagicROITool::getStandardDeviation(int x, int y, int z)
 {
     int ext[6];
     m_2DViewer->getInput()->getWholeExtent(ext);
