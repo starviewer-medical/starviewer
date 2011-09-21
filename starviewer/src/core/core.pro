@@ -60,6 +60,7 @@ HEADERS += extensionfactory.h \
     itkVolumeCalculatorImageFilter.h \
     vtkAtamaiPolyDataToImageStencil2.h \
     shutterfilter.h \
+    displayshutter.h \
     image.h \
     imageoverlay.h \
     imageoverlayreader.h \
@@ -292,6 +293,7 @@ SOURCES += extensionmediator.cpp \
     itkVolumeCalculatorImageFilter.cpp \
     vtkAtamaiPolyDataToImageStencil2.cxx \
     shutterfilter.cpp \
+    displayshutter.cpp \
     image.cpp \
     imageoverlay.cpp \
     imageoverlayreader.cpp \
