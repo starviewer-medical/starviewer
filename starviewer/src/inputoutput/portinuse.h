@@ -30,7 +30,7 @@ protected:
     /// @param errorString: descripcio de l'error.
     virtual bool isPortAvailable(int port, QAbstractSocket::SocketError &serverError, QString &errorString);
 
-private:
+protected:
     PortInUse::PortInUseStatus m_status;
     QString m_errorString;
 
