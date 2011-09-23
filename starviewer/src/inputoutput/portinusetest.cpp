@@ -21,17 +21,16 @@ DiagnosisTestResult PortInUseTest::run()
     QString testResultDescription;
     QString testResultSolution;
 
-    PortInUse portInUse;
-    portInUse.isPortInUse(m_port);
+    PortInUse *portInUse = createAndCheckPortInUse();
 
-    if (portInUse.getStatus() == PortInUse::PortIsAvailable)
+    if (portInUse->getStatus() == PortInUse::PortIsAvailable)
     {
         testResultState = DiagnosisTestResult::Ok;
     }
     else
     {
         testResultState = DiagnosisTestResult::Error;
-        if (portInUse.getStatus() == PortInUse::PortIsInUse)
+        if (portInUse->getStatus() == PortInUse::PortIsInUse)
         {
             testResultDescription = QString("Port is already in use");
             testResultSolution = QString("Try another port or shut down the application using this port");
@@ -39,11 +38,19 @@ DiagnosisTestResult PortInUseTest::run()
         else
         {
             testResultDescription = QString("Unable to test if port " + QString().setNum(m_port) +
-                                            " is in use due to error: " + portInUse.getErrorString());
+                                            " is in use due to error: " + portInUse->getErrorString());
         }
     }
 
+    delete portInUse;
     return DiagnosisTestResult(testResultState, testResultDescription, testResultSolution);
+}
+
+PortInUse* PortInUseTest::createAndCheckPortInUse()
+{
+    PortInUse *portInUse = new PortInUse();
+    portInUse->isPortInUse(m_port);
+    return portInUse;
 }
 
 } // end namespace udg
