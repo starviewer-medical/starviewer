@@ -2,12 +2,22 @@
 
 namespace testing {
 
-bool testing::TestingPortInUse::isPortAvailable(int port, QAbstractSocket::SocketError &serverError, QString &errorString)
+bool TestingPortInUse::isPortAvailable(int port, QAbstractSocket::SocketError &serverError, QString &errorString)
 {
     Q_UNUSED(port);
     serverError = m_testingServerError;
     errorString = m_testingErrorString;
     return m_testingResult;
+}
+
+void TestingPortInUse::setStatus(PortInUse::PortInUseStatus status)
+{
+    m_status = status;
+}
+
+void TestingPortInUse::setErrorString(QString errorString)
+{
+    m_errorString = errorString;
 }
 
 }
