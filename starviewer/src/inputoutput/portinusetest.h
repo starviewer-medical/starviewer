@@ -7,6 +7,8 @@
 
 namespace udg {
 
+class PortInUse;
+
 class PortInUseTest : public DiagnosisTest {
 
 public:
@@ -14,6 +16,9 @@ public:
     ~PortInUseTest();
 
     DiagnosisTestResult run();
+
+protected:
+    virtual PortInUse* createAndCheckPortInUse();
 
 private:
     /// Port que es comprovarà si està en ús.
