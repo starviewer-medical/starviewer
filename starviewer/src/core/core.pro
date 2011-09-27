@@ -261,7 +261,8 @@ HEADERS += extensionfactory.h \
     applicationupdatechecker.h \
     diagnosistestfactory.h \
     diagnosistestfactoryregister.h \
-    firewallaccess.h
+    firewallaccess.h \
+    firewallaccesstest.h
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
     mathtools.cpp \
@@ -480,7 +481,8 @@ SOURCES += extensionmediator.cpp \
     machineinformation.cpp \
     diagnosistestresult.cpp \
     applicationupdatechecker.cpp \
-    firewallaccess.cpp
+    firewallaccess.cpp \
+    firewallaccesstest.cpp
 win32 {
     HEADERS += windowsfirewallaccess.h
     SOURCES += windowsfirewallaccess.cpp
