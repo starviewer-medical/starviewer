@@ -19,4 +19,8 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_imageoverlay.cpp \
            $$PWD/test_imageoverlayreader.cpp \
            $$PWD/test_drawerbitmap.cpp \
-           $$PWD/test_displayshutter.cpp 
+           $$PWD/test_displayshutter.cpp
+
+win32 {
+    SOURCES += $$PWD/test_windowsfirewallaccess.cpp
+}

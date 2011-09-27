@@ -260,7 +260,8 @@ HEADERS += extensionfactory.h \
     diagnosistestresult.h \
     applicationupdatechecker.h \
     diagnosistestfactory.h \
-    diagnosistestfactoryregister.h
+    diagnosistestfactoryregister.h \
+    firewallaccess.h
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
     mathtools.cpp \
@@ -478,7 +479,12 @@ SOURCES += extensionmediator.cpp \
     pacsdevice.cpp \
     machineinformation.cpp \
     diagnosistestresult.cpp \
-    applicationupdatechecker.cpp
+    applicationupdatechecker.cpp \
+    firewallaccess.cpp
+win32 {
+    HEADERS += windowsfirewallaccess.h
+    SOURCES += windowsfirewallaccess.cpp
+}
 TEMPLATE = lib
 DESTDIR = ./
 CONFIG += staticlib
