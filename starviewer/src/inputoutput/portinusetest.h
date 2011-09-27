@@ -18,7 +18,8 @@ public:
     DiagnosisTestResult run();
 
 protected:
-    virtual PortInUse* createAndCheckPortInUse();
+    virtual PortInUse* createPortInUse();
+    virtual void checkIfPortIsInUse(PortInUse *portInUse);
 
 private:
     /// Port que es comprovarà si està en ús.
