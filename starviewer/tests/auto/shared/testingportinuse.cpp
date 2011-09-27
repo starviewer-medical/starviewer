@@ -15,7 +15,7 @@ void TestingPortInUse::setStatus(PortInUse::PortInUseStatus status)
     m_status = status;
 }
 
-void TestingPortInUse::setErrorString(QString errorString)
+void TestingPortInUse::setErrorString(const QString &errorString)
 {
     m_errorString = errorString;
 }
