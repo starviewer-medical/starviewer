@@ -13,12 +13,18 @@ public:
     QString m_testingErrorString;
 
 protected:
-    virtual PortInUse* createAndCheckPortInUse()
+    virtual PortInUse* createPortInUse()
     {
         TestingPortInUse *portInUse = new TestingPortInUse();
-        portInUse->setStatus(m_testingStatus);
-        portInUse->setErrorString(m_testingErrorString);
         return portInUse;
+    }
+
+    virtual void checkIfPortIsInUse(PortInUse *portInUse)
+    {
+        /// S'ha de fer el cast, ja que els mètodes de setStatus i SetErrorString només els té TestingPortInUse.
+        /// Podem fer el cast per que sabem que és un TestingPortInUse ja que l'hem creat al mètode anterior.
+        ((TestingPortInUse*)portInUse)->setStatus(m_testingStatus);
+        ((TestingPortInUse*)portInUse)->setErrorString(m_testingErrorString);
     }
 };
 

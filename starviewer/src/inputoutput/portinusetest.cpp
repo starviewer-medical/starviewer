@@ -21,7 +21,8 @@ DiagnosisTestResult PortInUseTest::run()
     QString testResultDescription;
     QString testResultSolution;
 
-    PortInUse *portInUse = createAndCheckPortInUse();
+    PortInUse *portInUse = createPortInUse();
+    checkIfPortIsInUse(portInUse);
 
     if (portInUse->getStatus() == PortInUse::PortIsAvailable)
     {
@@ -46,11 +47,15 @@ DiagnosisTestResult PortInUseTest::run()
     return DiagnosisTestResult(testResultState, testResultDescription, testResultSolution);
 }
 
-PortInUse* PortInUseTest::createAndCheckPortInUse()
+PortInUse* PortInUseTest::createPortInUse()
 {
     PortInUse *portInUse = new PortInUse();
-    portInUse->isPortInUse(m_port);
     return portInUse;
+}
+
+void PortInUseTest::checkIfPortIsInUse(PortInUse *portInUse)
+{
+    portInUse->isPortInUse(m_port);
 }
 
 } // end namespace udg
