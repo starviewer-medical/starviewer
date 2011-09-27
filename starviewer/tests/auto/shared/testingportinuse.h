@@ -20,7 +20,7 @@ public:
     QString m_testingStatusErrorString;
 
     void setStatus(PortInUse::PortInUseStatus status);
-    void setErrorString(QString errorString);
+    void setErrorString(const QString &errorString);
     
 protected:
     virtual bool isPortAvailable(int port, QAbstractSocket::SocketError &serverError, QString &errorString);
