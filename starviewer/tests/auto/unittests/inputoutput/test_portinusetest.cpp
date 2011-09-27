@@ -75,10 +75,7 @@ void test_PortInUseTest::run_ShouldTestIfRISPortIsInUse()
     if (result.getState() != DiagnosisTestResult::Ok)
     {
         QCOMPARE(result.getDescription(), testingDiagnosisTestResultDescription);
-        if (result.getState() == DiagnosisTestResult::Warning)
-        {
-            QCOMPARE(result.getSolution(), testingDiagnosisTestResultSolution);
-        }
+        QCOMPARE(result.getSolution(), testingDiagnosisTestResultSolution);
     }
 }
 
