@@ -957,7 +957,8 @@ bool ImageFillerStep::areOfDifferentPhotometricInterpretation(Image *firstImage,
 bool ImageFillerStep::isEnhancedImageSOPClass(const QString &sopClassUID)
 {
     return (sopClassUID == UIDEnhancedCTImageStorage || sopClassUID == UIDEnhancedMRImageStorage || sopClassUID == UIDEnhancedXAImageStorage ||
-        sopClassUID == UIDEnhancedXRFImageStorage || sopClassUID == UIDEnhancedUSVolumeStorage || UIDEnhancedMRColorImageStorage || UIDEnhancedPETImageStorage);
+        sopClassUID == UIDEnhancedXRFImageStorage || sopClassUID == UIDEnhancedUSVolumeStorage || sopClassUID == UIDEnhancedMRColorImageStorage ||
+        sopClassUID == UIDEnhancedPETImageStorage);
 }
 
 }
