@@ -63,7 +63,6 @@ QVector<double> DICOMValueRepresentationConverter::decimalStringToDoubleVector(c
     // Si la validació ha fallat, retornem un vector buit, sinó el vector amb els valors convertits
     if (localOk == false)
     {
-        
         return QVector<double>();
     }
     else
