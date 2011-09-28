@@ -428,6 +428,21 @@ QList<ImageOverlay> Image::getOverlays()
     return m_overlaysList;
 }
 
+bool Image::hasDisplayShutters() const
+{
+    return !m_shuttersList.isEmpty();
+}
+
+void Image::addDisplayShutter(const DisplayShutter &shutter)
+{
+    m_shuttersList << shutter;
+}
+
+QList<DisplayShutter> Image::getDisplayShutters() const
+{
+    return m_shuttersList;
+}
+
 void Image::setDICOMSource(const DICOMSource &imageDICOMSource)
 {
     m_imageDICOMSource = imageDICOMSource;
