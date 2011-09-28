@@ -86,7 +86,10 @@ QString DICOMTagReader::getFileName() const
 
 void DICOMTagReader::setDcmDataset(const QString &filename, DcmDataset *dcmDataset)
 {
-    Q_ASSERT(dcmDataset);
+    if (!dcmDataset)
+    {
+        return;
+    }
 
     m_filename = filename;
     // Assumim que sempre serà un fitxer vàlid.
