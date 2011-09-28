@@ -58,9 +58,7 @@ QList<Image*> ImageFillerStep::processDICOMFile(DICOMTagReader *dicomReader)
     if (ok)
     {
         // Comprovem si la imatge és enhanced o no per tal de cridar el mètode específic més adient
-        QString sopClassUID = dicomReader->getValueAttributeAsQString(DICOMSOPClassUID);
-        if (sopClassUID == UIDEnhancedCTImageStorage || sopClassUID == UIDEnhancedMRImageStorage || sopClassUID == UIDEnhancedXAImageStorage ||
-            sopClassUID == UIDEnhancedXRFImageStorage)
+        if (isEnhancedImageSOPClass(dicomReader->getValueAttributeAsQString(DICOMSOPClassUID)))
         {
             generatedImages = processEnhancedDICOMFile(dicomReader);
         }
@@ -954,6 +952,12 @@ bool ImageFillerStep::areOfDifferentPhotometricInterpretation(Image *firstImage,
     Q_ASSERT(secondImage);
 
     return firstImage->getPhotometricInterpretation().trimmed() != secondImage->getPhotometricInterpretation().trimmed();
+}
+
+bool ImageFillerStep::isEnhancedImageSOPClass(const QString &sopClassUID)
+{
+    return (sopClassUID == UIDEnhancedCTImageStorage || sopClassUID == UIDEnhancedMRImageStorage || sopClassUID == UIDEnhancedXAImageStorage ||
+        sopClassUID == UIDEnhancedXRFImageStorage);
 }
 
 }
