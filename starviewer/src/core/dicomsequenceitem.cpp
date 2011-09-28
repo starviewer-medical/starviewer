@@ -21,7 +21,10 @@ DICOMSequenceItem::~DICOMSequenceItem()
 
 void DICOMSequenceItem::addAttribute(DICOMAttribute *attribute)
 {
-    m_attributeList.insert(attribute->getTag()->getKeyAsQString(), attribute);
+    if (attribute)
+    {
+        m_attributeList.insert(attribute->getTag()->getKeyAsQString(), attribute);
+    }
 }
 
 QList<DICOMAttribute*> DICOMSequenceItem::getAttributes()
