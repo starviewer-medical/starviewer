@@ -12,6 +12,7 @@
 #include "imageorientation.h"
 #include "patientorientation.h"
 #include "imageoverlay.h"
+#include "displayshutter.h"
 
 namespace udg {
 
@@ -173,6 +174,15 @@ public:
     /// Obté la llista d'overlays
     QList<ImageOverlay> getOverlays();
 
+    /// Ens diu si té shutters o no
+    bool hasDisplayShutters() const;
+    
+    /// Afegeix un Display Shutter a l'imatge
+    void addDisplayShutter(const DisplayShutter &shutter);
+    
+    /// Obté la llista de Display Shutters
+    QList<DisplayShutter> getDisplayShutters() const;
+    
     /// Assingar/Obtenir el DICOMSource de la imatge. Indica quin és l'origen dels fitxers DICOM que conté la imatge
     void setDICOMSource(const DICOMSource &imageDICOMSource);
     DICOMSource getDICOMSource() const;
@@ -330,6 +340,9 @@ private:
     
     /// Llista d'overlays carregats
     QList<ImageOverlay> m_overlaysList;
+
+    /// Llista de display shutters
+    QList<DisplayShutter> m_shuttersList;
     
     /// La sèrie pare
     Series *m_parentSeries;
