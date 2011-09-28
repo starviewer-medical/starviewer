@@ -107,4 +107,49 @@ bool DisplayShutter::setPoints(const QPoint &topLeft, const QPoint &bottomRight)
     return true;
 }
 
+QPolygon DisplayShutter::getAsQPolygon() const
+{
+    return m_shutterPolygon;
+}
+
+DisplayShutter DisplayShutter::intersection(const QList<DisplayShutter> &shuttersList)
+{
+    if (shuttersList.isEmpty())
+    {
+        return DisplayShutter();
+    }
+
+    if (shuttersList.count() == 1)
+    {
+        return shuttersList.at(0);
+    }
+    
+    QPolygon intersectedPolygon;
+    
+    for (int i = 0; i < shuttersList.count() - 1; ++i)
+    {
+        QPolygon currentPolygon;
+        if (intersectedPolygon.isEmpty())
+        {
+            currentPolygon = shuttersList.at(i).m_shutterPolygon;
+        }
+        else
+        {
+            currentPolygon = intersectedPolygon;
+        }
+        
+        QPolygon nextPolygon = shuttersList.at(i + 1).m_shutterPolygon;
+        intersectedPolygon = currentPolygon.intersected(nextPolygon);
+    }
+    
+    DisplayShutter intersectedShutter;
+    if (!intersectedPolygon.isEmpty())
+    {
+        intersectedShutter.setShape(DisplayShutter::PolygonalShape);
+        intersectedShutter.setPoints(intersectedPolygon);
+    }
+
+    return intersectedShutter;
+}
+
 } // End namespace udg

@@ -38,6 +38,12 @@ public:
     /// Assigna els punts superior esquerre i inferior dret que defineixen la forma rectangular
     bool setPoints(const QPoint &topLeft, const QPoint &bottomRight);
 
+    /// Retorna el shutter en forma de QPolygon
+    QPolygon getAsQPolygon() const;
+    
+    /// Donada una llista de shutters, ens retorna el shutter resultant de la intersecció d'aquests.
+    static DisplayShutter intersection(const QList<DisplayShutter> &shuttersList);
+
 private:
     /// Forma del shutter
     ShapeType m_shape;

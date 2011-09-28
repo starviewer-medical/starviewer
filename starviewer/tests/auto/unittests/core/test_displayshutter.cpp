@@ -15,10 +15,15 @@ private slots:
 
     void setPoints_SetsPolygonalPoints_data();
     void setPoints_SetsPolygonalPoints();
+
+    void intersection_ReturnsExpectedValues_data();
+    void intersection_ReturnsExpectedValues();
 };
 
 Q_DECLARE_METATYPE(DisplayShutter::ShapeType);
 Q_DECLARE_METATYPE(QVector<QPoint>);
+Q_DECLARE_METATYPE(QList<DisplayShutter>);
+Q_DECLARE_METATYPE(DisplayShutter);
 
 void test_DisplayShutter::setPoints_SetsCircularPoints_data()
 {
@@ -107,6 +112,75 @@ void test_DisplayShutter::setPoints_SetsPolygonalPoints()
     shutter.setShape(shapeType);
     QCOMPARE(shutter.setPoints(points), result);
     QVERIFY(shutter.getShape() == shapeAfterSetPoints);
+}
+
+void test_DisplayShutter::intersection_ReturnsExpectedValues_data()
+{
+    QTest::addColumn<QList<DisplayShutter> >("shuttersList");
+    QTest::addColumn<DisplayShutter>("intersectedShutter");
+
+    QList<DisplayShutter> shuttersList;
+    QTest::newRow("Empty list") << shuttersList << DisplayShutter();
+
+    DisplayShutter emptyShutter;
+    
+    shuttersList.clear();
+    shuttersList << emptyShutter;
+    QTest::newRow("Single list ('empty' shutter)") << shuttersList << emptyShutter;
+    
+    DisplayShutter circularShutter;
+    circularShutter.setPoints(QPoint(512, 512), 517);
+
+    shuttersList.clear();
+    shuttersList << circularShutter;
+    QTest::newRow("Single list (circular)") << shuttersList << circularShutter;
+    
+    DisplayShutter rectangularShutter;
+    rectangularShutter.setPoints(QPoint(5, 233), QPoint(1018, 789));
+
+    shuttersList.clear();
+    shuttersList << rectangularShutter;
+    QTest::newRow("Single list (rectangular)") << shuttersList << rectangularShutter;
+    
+    DisplayShutter polygonalShutter;
+    QVector<QPoint> vertices;
+    vertices << QPoint(1,1) << QPoint(1,5) << QPoint(5,5) << QPoint(10,6) << QPoint(8,6);
+    polygonalShutter.setPoints(vertices);
+
+    shuttersList.clear();
+    shuttersList << polygonalShutter;
+    QTest::newRow("Single list (polygonal)") << shuttersList << polygonalShutter;
+
+    shuttersList.clear();
+    shuttersList << circularShutter << rectangularShutter;
+    
+    QPolygon shutterPoints;
+    shutterPoints << QPoint(1018,608) << QPoint(1012,640) << QPoint(992,702) << QPoint(965,761) << QPoint(947,789) << QPoint(76,789) << QPoint(58,761)
+        << QPoint(31,702) << QPoint(11,640) << QPoint(5,605) << QPoint(5,418) << QPoint(11,383) << QPoint(31,321) << QPoint(58,262) << QPoint(77,233)
+        << QPoint(946,233) << QPoint(965,262) << QPoint(992,321) << QPoint(1012,383) << QPoint(1018,415) << QPoint(1018,608);
+    
+    DisplayShutter intersectedShutter;
+    intersectedShutter.setPoints(shutterPoints);
+    QTest::newRow("2-item list with intersection (circular+rectangular)") << shuttersList << intersectedShutter;
+
+    shuttersList.clear();
+    shuttersList << circularShutter << polygonalShutter;
+    QTest::newRow("2-item list, no intersection (circular+polygonal)") << shuttersList << emptyShutter;
+
+    shuttersList.clear();
+    shuttersList << circularShutter << rectangularShutter << polygonalShutter;
+    QTest::newRow("3-item list (circular+rectangular+polygonal), circular and rectangular intersect, but polygonal does not") << shuttersList << emptyShutter;
+}
+
+void test_DisplayShutter::intersection_ReturnsExpectedValues()
+{
+    QFETCH(QList<DisplayShutter>, shuttersList);
+    QFETCH(DisplayShutter, intersectedShutter);
+
+    DisplayShutter resultingShutter = DisplayShutter::intersection(shuttersList);
+    
+    QCOMPARE(resultingShutter.getShape(), intersectedShutter.getShape());
+    QCOMPARE(resultingShutter.getAsQPolygon(), intersectedShutter.getAsQPolygon());
 }
 
 DECLARE_TEST(test_DisplayShutter)
