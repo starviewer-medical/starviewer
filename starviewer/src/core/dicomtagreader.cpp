@@ -183,6 +183,11 @@ DICOMSequenceAttribute* DICOMTagReader::getSequenceAttribute(const DICOMTag &seq
 DICOMSequenceAttribute* DICOMTagReader::convertToDICOMSequenceAttribute(DcmSequenceOfItems *dcmtkSequence,
                                                                         DICOMTagReader::ReturnValueOfTags returnValueOfTags) const
 {
+    if (!dcmtkSequence)
+    {
+        return 0;
+    }
+    
     DICOMSequenceAttribute *sequenceAttribute = new DICOMSequenceAttribute();
 
     sequenceAttribute->setTag(DICOMTag(dcmtkSequence->getGTag(), dcmtkSequence->getETag()));
@@ -217,6 +222,11 @@ DICOMSequenceAttribute* DICOMTagReader::convertToDICOMSequenceAttribute(DcmSeque
 
 DICOMValueAttribute* DICOMTagReader::convertToDICOMValueAttribute(DcmElement *dcmtkDICOMElement, DICOMTagReader::ReturnValueOfTags returnValueOfTags) const
 {
+    if (!dcmtkDICOMElement)
+    {
+        return 0;
+    }
+    
     DICOMValueAttribute *dicomValueAttribute = new DICOMValueAttribute();
     dicomValueAttribute->setTag(DICOMTag(dcmtkDICOMElement->getGTag(), dcmtkDICOMElement->getETag()));
 
@@ -243,6 +253,11 @@ DICOMValueAttribute* DICOMTagReader::convertToDICOMValueAttribute(DcmElement *dc
 
 QList<DICOMAttribute*> DICOMTagReader::convertToDICOMAttributeQList(DcmItem *dcmItem, DICOMTagReader::ReturnValueOfTags returnValueOfTags) const
 {
+    if (!dcmItem)
+    {
+        return QList<DICOMAttribute*>();
+    }
+    
     QList<DICOMAttribute*> attributeList;
     DcmElement *currentElement = NULL;
 
