@@ -227,6 +227,12 @@ DICOMValueAttribute* DICOMTagReader::convertToDICOMValueAttribute(DcmElement *dc
         return 0;
     }
     
+    if (!dcmtkDICOMElement->isLeaf())
+    {
+        // Es tracta d'una seqüència, no es pot convertir a atribut
+        return 0;
+    }
+    
     DICOMValueAttribute *dicomValueAttribute = new DICOMValueAttribute();
     dicomValueAttribute->setTag(DICOMTag(dcmtkDICOMElement->getGTag(), dcmtkDICOMElement->getETag()));
 
