@@ -84,7 +84,7 @@
         <position>0.25\1\0.5\0.5</position>
     </displaySet>
     <displaySet identifier="3">
-        <imageSetNumber>3</imageSetNumber>
+        <imageSetNumber>5</imageSetNumber>
         <position>0.5\1\0.75\0.5</position>
     </displaySet>
     <displaySet identifier="4">
@@ -96,7 +96,7 @@
         <position>0.0\0.5\0.25\0.0</position>
     </displaySet>
     <displaySet identifier="6">
-        <imageSetNumber>5</imageSetNumber>
+        <imageSetNumber>3</imageSetNumber>
         <position>0.25\0.5\0.5\0.0</position>
     </displaySet>
     <displaySet identifier="7">
