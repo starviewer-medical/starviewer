@@ -62,6 +62,10 @@ private:
     /// Retorna quants overlays hi ha en el dataset proporcionat
     unsigned short getNumberOfOverlays(DICOMTagReader *dicomReader);
     
+    /// Afegeix la informació de shutters a la imatge, si n'hi ha
+    void fillDisplayShutterInformation(Image *image, DICOMTagReader *dicomReader);
+    void fillDisplayShutterInformation(Image *image, DICOMSequenceItem *displayShutterItems);
+    
     /// Calcula el pixel spacing i se l'assigna a l'image donada en cas de que aquest es pugui calcular
     /// @param image Image a la que li assignarem el pixel spacing
     /// @param dicomReader Reader de DICOM que conté la font de dades de la Image associada

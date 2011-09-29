@@ -11,6 +11,7 @@
 #include "dicomvalueattribute.h"
 #include "thumbnailcreator.h"
 #include "patientorientation.h"
+#include "displayshutter.h"
 // Pel fabs. Necessari per Mac
 #include <cmath>
 #include <QFileInfo>
@@ -383,6 +384,10 @@ bool ImageFillerStep::processImage(Image *image, DICOMTagReader *dicomReader)
 
         // Només pel cas que sigui DX tindrem aquest atribut a nivell d'imatge
         image->setViewPosition(dicomReader->getValueAttributeAsQString(DICOMViewPosition));
+
+        // Display Shutter Module (C.7.6.11)
+        // Omple la informació referent als Display Shutters que podem trobar en imatges de modalitat CR, XA, RF, DX, MG i IO
+        fillDisplayShutterInformation(image, dicomReader);
     }
     else
     {
@@ -737,6 +742,25 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
     }
 
     //
+    // Frame Display Shutter Macro (C.7.6.16.2.16)
+    // Es pot trobar a les modalitats Enhanced: XA, XRF i US Volume
+    //
+    if (sopClassUID == UIDEnhancedXAImageStorage || sopClassUID == UIDEnhancedXRFImageStorage || sopClassUID == UIDEnhancedUSVolumeStorage)
+    {
+        DICOMSequenceAttribute *frameDisplayShutterSequence = frameItem->getSequenceAttribute(DICOMFrameDisplayShutterSequence);
+        if (frameDisplayShutterSequence)
+        {
+            // Segons DICOM només es permet que contingui un sol ítem
+            QList<DICOMSequenceItem*> frameDisplayShutterItems = frameDisplayShutterSequence->getItems();
+            if (!frameDisplayShutterItems.empty())
+            {
+                DICOMSequenceItem *item = frameDisplayShutterItems.at(0);
+                fillDisplayShutterInformation(image, item);
+            }
+        }
+    }
+    
+    //
     // A continuació llegim els tags/mòduls que es troben a totes les modalitats enhanced (MR/CT/XA/XRF)
     //
 
@@ -855,6 +879,220 @@ unsigned short ImageFillerStep::getNumberOfOverlays(DICOMTagReader *dicomReader)
 
     DEBUG_LOG(QString("Number of overlays found: %1").arg(numberOfOverlays));
     return numberOfOverlays;
+}
+
+void ImageFillerStep::fillDisplayShutterInformation(Image *image, DICOMSequenceItem *displayShutterItems)
+{
+    Q_ASSERT(image);
+    Q_ASSERT(displayShutterItems);
+
+    //
+    // Obtenim Shutter Shape (1)
+    //
+    DICOMValueAttribute *dicomValue = displayShutterItems->getValueAttribute(DICOMShutterShape);
+    QString shutterShape;
+    if (dicomValue)
+    {
+        shutterShape = dicomValue->getValueAsQString();
+    }
+    else
+    {
+        // Si no hi ha el valor shutter shape llavors és que no tenim shutters, no cal mirar cap tag més
+        return;
+    }
+
+    //
+    // Obtenim el valor de presentació (3)
+    //
+    unsigned short presentationValue = 0;
+    dicomValue = displayShutterItems->getValueAttribute(DICOMShutterPresentationValue);
+    if (dicomValue)
+    {
+        presentationValue = dicomValue->getValueAsQString().toUShort();
+    }
+    
+    // Segons els valors de shutterShape, omplirem la informació de cada forma del shutter
+    if (shutterShape.contains("RECTANGULAR"))
+    {
+        int minX, maxX, minY, maxY;
+        // Obtenim Shutter Left Vertical Edge, requerit quan shutter shape conté RECTANGULAR
+        dicomValue = displayShutterItems->getValueAttribute(DICOMShutterLeftVerticalEdge);
+        if (dicomValue)
+        {
+            minX = dicomValue->getValueAsInt();
+        }
+        else
+        {
+            DEBUG_LOG("No s'ha trobat el tag Shutter Left Vertical Edge en un arxiu que se suposa que l'ha de tenir!");
+        }
+
+        // Obtenim Shutter Right Vertical Edge, requerit quan shutter shape conté RECTANGULAR
+        dicomValue = displayShutterItems->getValueAttribute(DICOMShutterRightVerticalEdge);
+        if (dicomValue)
+        {
+            maxX = dicomValue->getValueAsInt();
+        }
+        else
+        {
+            DEBUG_LOG("No s'ha trobat el tag Shutter Right Vertical Edge en un arxiu que se suposa que l'ha de tenir!");
+            ERROR_LOG("No s'ha trobat el tag Shutter Right Vertical Edge en un arxiu que se suposa que l'ha de tenir!");
+        }
+        
+        // Obtenim Shutter Upper Horizontal Edge, requerit quan shutter shape conté RECTANGULAR
+        dicomValue = displayShutterItems->getValueAttribute(DICOMShutterUpperHorizontalEdge);
+        if (dicomValue)
+        {
+            minY = dicomValue->getValueAsInt();
+        }
+        else
+        {
+            DEBUG_LOG("No s'ha trobat el tag Shutter Upper Horizontal Edge en un arxiu que se suposa que l'ha de tenir!");
+            ERROR_LOG("No s'ha trobat el tag Shutter Upper Horizontal Edge en un arxiu que se suposa que l'ha de tenir!");
+        }
+        
+        // Obtenim Shutter Lower Horizontal Edge, requerit quan shutter shape conté RECTANGULAR
+        dicomValue = displayShutterItems->getValueAttribute(DICOMShutterLowerHorizontalEdge);
+        if (dicomValue)
+        {
+            maxY = dicomValue->getValueAsInt();
+        }
+        else
+        {
+            DEBUG_LOG("No s'ha trobat el tag Shutter Lower Horizontal Edge en un arxiu que se suposa que l'ha de tenir!");
+            ERROR_LOG("No s'ha trobat el tag Shutter Lower Horizontal Edge en un arxiu que se suposa que l'ha de tenir!");
+        }
+        
+        DisplayShutter rectangularShutter;
+        rectangularShutter.setShape(DisplayShutter::RectangularShape);
+        rectangularShutter.setShutterValue(presentationValue);
+        rectangularShutter.setPoints(QPoint(minX, minY), QPoint(maxX, maxY));
+
+        image->addDisplayShutter(rectangularShutter);
+    }
+
+    if (shutterShape.contains("CIRCULAR"))
+    {
+        // Obtenim Radius of Circular Shutter, requerit quan shutter shape conté CIRCULAR
+        int radius = 0;
+        dicomValue = displayShutterItems->getValueAttribute(DICOMRadiusOfCircularShutter);
+        if (dicomValue)
+        {
+            radius = dicomValue->getValueAsInt();
+        }
+        else
+        {
+            DEBUG_LOG("No s'ha trobat el tag Radius of Circular Shutter en un arxiu que se suposa que l'ha de tenir!");
+            ERROR_LOG("No s'ha trobat el tag Radius of Circular Shutter en un arxiu que se suposa que l'ha de tenir!");
+        }
+
+        // Obtenim Center of Circular Shutter, requerit quan shutter shape conté CIRCULAR
+        QPoint centre;
+        dicomValue = displayShutterItems->getValueAttribute(DICOMCenterOfCircularShutter);
+        if (dicomValue)
+        {
+            QStringList centreStringList = dicomValue->getValueAsQString().split("\\");
+            if (centreStringList.count() != 2)
+            {
+                DEBUG_LOG("L'atribut Center of Circular Shutter està en un format inesperat: " + dicomValue->getValueAsQString());
+                ERROR_LOG("L'atribut Center of Circular Shutter està en un format inesperat: " + dicomValue->getValueAsQString());
+            }
+            else
+            {
+                centre.setX(centreStringList.at(0).toInt());
+                centre.setY(centreStringList.at(1).toInt());
+            }
+        }
+        else
+        {
+            DEBUG_LOG("No s'ha trobat el tag Radius of Circular Shutter en un arxiu que se suposa que l'ha de tenir!");
+            ERROR_LOG("No s'ha trobat el tag Radius of Circular Shutter en un arxiu que se suposa que l'ha de tenir!");
+        }
+
+        DisplayShutter circularShutter;
+        circularShutter.setShape(DisplayShutter::CircularShape);
+        circularShutter.setShutterValue(presentationValue);
+        circularShutter.setPoints(centre, radius);
+
+        image->addDisplayShutter(circularShutter);
+    }
+    
+    if (shutterShape.contains("POLYGONAL"))
+    {
+        QVector<QPoint> polygonVertices;
+        
+        // Obtenim Vertices of the Polygonal Shutter, requerit quan shutter shape conté POLYGONAL
+        dicomValue = displayShutterItems->getValueAttribute(DICOMVerticesOfThePolygonalShutter);
+        if (dicomValue)
+        {
+            QStringList vertices = dicomValue->getValueAsQString().split("\\");
+            if (vertices.count() % 2 != 0)
+            {
+                DEBUG_LOG("L'atribut Vertices of the Polygonal Shutter està en un format inesperat: " + dicomValue->getValueAsQString());
+                ERROR_LOG("L'atribut Vertices of the Polygonal Shutter està en un format inesperat: " + dicomValue->getValueAsQString());
+            }
+            else
+            {
+                for (int i = 0; i < vertices.count() - 1; i += 2 )
+                {
+                    polygonVertices << QPoint(vertices.at(i).toInt(), vertices.at(i + 1).toInt());
+                }
+            }
+        }
+        else
+        {
+            DEBUG_LOG("No s'ha trobat el tag Vertices of the Polygonal Shutter en un arxiu que se suposa que l'ha de tenir!");
+            ERROR_LOG("No s'ha trobat el tag Vertices of the Polygonal Shutter en un arxiu que se suposa que l'ha de tenir!");
+        }
+        
+        DisplayShutter polygonalShutter;
+        polygonalShutter.setShape(DisplayShutter::PolygonalShape);
+        polygonalShutter.setShutterValue(presentationValue);
+        polygonalShutter.setPoints(polygonVertices);
+
+        image->addDisplayShutter(polygonalShutter);
+    }
+}
+
+void ImageFillerStep::fillDisplayShutterInformation(Image *image, DICOMTagReader *dicomReader)
+{
+    Q_ASSERT(image);
+    Q_ASSERT(dicomReader);
+
+    //
+    // Obtenim Shutter Shape (1)
+    //
+    DICOMValueAttribute *dicomValue = dicomReader->getValueAttribute(DICOMShutterShape);
+    QString shutterShape;
+    if (dicomValue)
+    {
+        // Si tenim el valor de Shutter Shape, llavors és que tenim shutters
+        // Posem els atributs en una seqüència i els tractem en el mètode específic
+        DICOMSequenceItem *displayShutterModuleItems = new DICOMSequenceItem;
+        displayShutterModuleItems->addAttribute(dicomValue);
+
+        //
+        // Obtenim el valor de presentació (3)
+        //
+        displayShutterModuleItems->addAttribute(dicomReader->getValueAttribute(DICOMShutterPresentationValue));
+        // Obtenim els atributs requerits quan shutter shape conté RECTANGULAR
+        displayShutterModuleItems->addAttribute(dicomReader->getValueAttribute(DICOMShutterLeftVerticalEdge));
+        displayShutterModuleItems->addAttribute(dicomReader->getValueAttribute(DICOMShutterRightVerticalEdge));
+        displayShutterModuleItems->addAttribute(dicomReader->getValueAttribute(DICOMShutterUpperHorizontalEdge));
+        displayShutterModuleItems->addAttribute(dicomReader->getValueAttribute(DICOMShutterLowerHorizontalEdge));
+        // Obtenim els atributs requerits quan shutter shape conté CIRCULAR
+        displayShutterModuleItems->addAttribute(dicomReader->getValueAttribute(DICOMRadiusOfCircularShutter));
+        displayShutterModuleItems->addAttribute(dicomReader->getValueAttribute(DICOMCenterOfCircularShutter));
+        // Obtenim Vertices of the Polygonal Shutter, requerit quan shutter shape conté POLYGONAL
+        displayShutterModuleItems->addAttribute(dicomReader->getValueAttribute(DICOMVerticesOfThePolygonalShutter));
+
+        // Tractem els tags adequadament i omplim image
+        fillDisplayShutterInformation(image, displayShutterModuleItems);
+    }
+    else
+    {
+        // No existeix el tag, per tant, no hi ha res a omplir
+        return;
+    }
 }
 
 void ImageFillerStep::computePixelSpacing(Image *image, DICOMTagReader *dicomReader)
