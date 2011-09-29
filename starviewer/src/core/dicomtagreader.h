@@ -63,6 +63,12 @@ public:
     /// Si no es troba el tag es retornarà un QString buit
     QString getValueAttributeAsQString(const DICOMTag &tag) const;
 
+    /// Ens torna un atribut DICOM que estigui al primer nivell (que no estigui contingut en seqüències)
+    /// Retorna nul en cas que no s'hagi trobat el tag o que aquest no es correspongui amb un atribut (p.ex. és una seqüència)
+    /// No discrimina si aquell tag pot ser "pesat" o no, carregarà tota la informació demanada. Per exemple, si demanem 
+    /// la Pixel Data ens carregarà tota la informació d'aquesta
+    DICOMValueAttribute* getValueAttribute(const DICOMTag &attributeTag) const;
+    
     /// Retorna un objecte nou que inclou tota la seqüència. Si no existeix o el tag no correspon a una seqüència retorna null.
     /// Per defecte retorna el tag OverlayData i PixelData amb el seu valor, però si volem que ens el retornin amb el seu
     /// valor buit degut a que pesen molt (en cas d'una mamo pot ocubar més de 80Mb de RAM el PixelData) i no els utilitzarem,

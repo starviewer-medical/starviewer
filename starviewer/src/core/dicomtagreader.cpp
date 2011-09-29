@@ -151,6 +151,34 @@ QString DICOMTagReader::getValueAttributeAsQString(const DICOMTag &tag) const
     return result;
 }
 
+DICOMValueAttribute* DICOMTagReader::getValueAttribute(const DICOMTag &attributeTag) const
+{
+    if (!m_dicomData)
+    {
+        DEBUG_LOG("No hi ha cap m_dicomData (DcmDataset) carregat. Tornem nul.");
+        return 0;
+    }
+    
+    DICOMValueAttribute *valueAttribute = 0;
+    DcmElement *dicomElement = NULL;
+    DcmTagKey dcmtkTag(attributeTag.getGroup(), attributeTag.getElement());
+    OFCondition status = m_dicomData->findAndGetElement(dcmtkTag, dicomElement);
+    if (status.good())
+    {
+        valueAttribute = convertToDICOMValueAttribute(dicomElement, DICOMTagReader::AllTags);
+    }
+    else
+    {
+        if (QString(status.text()) != "Tag Not Found")
+        {
+            DEBUG_LOG(QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2")
+                .arg(dcmtkTag.toString().c_str()).arg(status.text()));
+        }
+    }
+    
+    return valueAttribute;
+}
+
 DICOMSequenceAttribute* DICOMTagReader::getSequenceAttribute(const DICOMTag &sequenceTag, DICOMTagReader::ReturnValueOfTags returnValueOfTags) const
 {
     if (!m_dicomData)
