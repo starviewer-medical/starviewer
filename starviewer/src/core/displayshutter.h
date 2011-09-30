@@ -3,6 +3,8 @@
 
 #include <QPolygon>
 
+class QColor;
+
 namespace udg {
 
 /*
@@ -25,6 +27,9 @@ public:
     void setShutterValue(unsigned short int value);
     unsigned short int getShutterValue() const;
 
+    /// Ens retorna el valor del shutter en forma de QColor
+    QColor getShutterValueAsQColor() const;
+    
     /// Mètodes per assignar els punts per cada tipus de forma. En cas que el format de punts no es correspongui
     /// amb la forma ja assignada, retornarà fals i no es guardarà cap punt. En cas que no s'hagi definit cap forma
     /// (shape = UndefinedShape) el mètode assignarà automàticament la forma que pertoqui per aquell mètode guardant els punts indicats.

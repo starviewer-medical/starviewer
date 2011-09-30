@@ -2,11 +2,16 @@
 
 #include "displayshutter.h"
 
+#include <QColor>
+
 using namespace udg;
 
 class test_DisplayShutter : public QObject {
 Q_OBJECT
 private slots:
+    void getShutterValueAsQColor_ReturnsExpectedValues_data();
+    void getShutterValueAsQColor_ReturnsExpectedValues();
+    
     void setPoints_SetsCircularPoints_data();
     void setPoints_SetsCircularPoints();
 
@@ -17,13 +22,48 @@ private slots:
     void setPoints_SetsPolygonalPoints();
 
     void intersection_ReturnsExpectedValues_data();
-    void intersection_ReturnsExpectedValues();
+    void intersection_ReturnsExpectedValues();   
 };
 
 Q_DECLARE_METATYPE(DisplayShutter::ShapeType);
 Q_DECLARE_METATYPE(QVector<QPoint>);
 Q_DECLARE_METATYPE(QList<DisplayShutter>);
 Q_DECLARE_METATYPE(DisplayShutter);
+Q_DECLARE_METATYPE(QColor);
+
+void test_DisplayShutter::getShutterValueAsQColor_ReturnsExpectedValues_data()
+{
+    QTest::addColumn<unsigned short int>("shutterValue");
+    QTest::addColumn<QColor>("expectedQColor");
+
+    unsigned short int value;
+    
+    value = 0x0;
+    QTest::newRow("0x0->pure black") << value << QColor(Qt::black);
+    value = 0xFFFF;
+    QTest::newRow("0xFFFF->pure white") << value << QColor(Qt::white);
+    value = 0x7FFF;
+    QTest::newRow("0x7FFF->gray") << value << QColor::fromHsv(0, 0 , 127);
+    value = 0x200;
+    QTest::newRow("0x200->close to black") << value << QColor::fromHsv(0, 0 , 1);
+    value = 0xFDFF;
+    QTest::newRow("0xFF00->close to white") << value << QColor::fromHsv(0, 0 , 253);
+    value = 0xBFBF;
+    QTest::newRow("0xBFBF->lighter gray") << value << QColor::fromHsv(0, 0 , 191);
+    value = 0x3F3F;
+    QTest::newRow("0x3F3F->darker gray") << value << QColor::fromHsv(0, 0 , 63);
+}
+
+void test_DisplayShutter::getShutterValueAsQColor_ReturnsExpectedValues()
+{
+    QFETCH(unsigned short int, shutterValue);
+    QFETCH(QColor, expectedQColor);
+
+    DisplayShutter shutter;
+    shutter.setShutterValue(shutterValue);
+    
+    QCOMPARE(shutter.getShutterValueAsQColor().rgba(), expectedQColor.rgba());
+}
 
 void test_DisplayShutter::setPoints_SetsCircularPoints_data()
 {

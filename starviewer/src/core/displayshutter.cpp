@@ -3,6 +3,8 @@
 #include "mathtools.h"
 #include <cmath>
 
+#include <QColor>
+
 namespace udg {
 
 DisplayShutter::DisplayShutter()
@@ -33,6 +35,13 @@ void DisplayShutter::setShutterValue(unsigned short int value)
 unsigned short int DisplayShutter::getShutterValue() const
 {
     return m_shutterValue;
+}
+
+QColor DisplayShutter::getShutterValueAsQColor() const
+{
+    // El rang de valors del shutter pot anar de 0 a 65535 (0xFFFF)
+    // Cal escalar aquest valor al rang que accepta QColor en format HSV que va de 0 a 255 (0xFF)
+    return QColor::fromHsv(0, 0, (m_shutterValue * 255) / 0xFFFF);
 }
 
 bool DisplayShutter::setPoints(const QPoint &centre, int radius)
