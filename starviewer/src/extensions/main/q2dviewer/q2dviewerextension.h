@@ -78,6 +78,9 @@ public slots:
     /// Mostra o amaga els overlays de cada visualitzador
     void showImageOverlays(bool show);
 
+    /// Mostra o amaga els display shutters de cada visualitzador
+    void showDisplayShutters(bool show);
+
     /// Mostra o amaga la informació textual de cada visualitzador
     void showViewersTextualInformation(bool show);
     
@@ -168,6 +171,7 @@ private:
     QAction *m_screenShotTriggerAction;
     QAction *m_showOverlaysAction;
     QAction *m_showViewersTextualInformationAction;
+    QAction *m_showDisplayShuttersAction;
 
 #ifndef STARVIEWER_LITE
     QAction *m_sagitalViewAction;

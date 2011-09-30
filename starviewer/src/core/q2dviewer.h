@@ -283,6 +283,9 @@ public slots:
     /// Fa que els ImageOverlays siguin visibles o no
     void showImageOverlays(bool enable);
 
+    /// Fa que els shutters siguin visibles o no
+    void showDisplayShutters(bool enable);
+
 signals:
     /// Envia la nova llesca en la que ens trobem
     void sliceChanged(int);
