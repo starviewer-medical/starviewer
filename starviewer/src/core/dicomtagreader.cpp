@@ -129,12 +129,10 @@ QString DICOMTagReader::getValueAttributeAsQString(const DICOMTag &tag) const
         return QString();
     }
 
-    // Convertim DICOMTag al format de dcmtk
-    DcmTagKey dcmtkTag(tag.getGroup(), tag.getElement());
     QString result;
 
     OFString value;
-    OFCondition status = m_dicomData->findAndGetOFStringArray(dcmtkTag, value);
+    OFCondition status = m_dicomData->findAndGetOFStringArray(DcmTagKey(tag.getGroup(), tag.getElement()), value);
     if (status.good())
     {
         result = value.c_str();
@@ -144,7 +142,7 @@ QString DICOMTagReader::getValueAttributeAsQString(const DICOMTag &tag) const
         if (QString(status.text()) != "Tag Not Found")
         {
             DEBUG_LOG(QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2")
-                .arg(dcmtkTag.toString().c_str()).arg(status.text()));
+                .arg(tag.getKeyAsQString()).arg(status.text()));
         }
     }
 
@@ -161,8 +159,7 @@ DICOMValueAttribute* DICOMTagReader::getValueAttribute(const DICOMTag &attribute
     
     DICOMValueAttribute *valueAttribute = 0;
     DcmElement *dicomElement = NULL;
-    DcmTagKey dcmtkTag(attributeTag.getGroup(), attributeTag.getElement());
-    OFCondition status = m_dicomData->findAndGetElement(dcmtkTag, dicomElement);
+    OFCondition status = m_dicomData->findAndGetElement(DcmTagKey(attributeTag.getGroup(), attributeTag.getElement()), dicomElement);
     if (status.good())
     {
         valueAttribute = convertToDICOMValueAttribute(dicomElement, DICOMTagReader::AllTags);
@@ -172,7 +169,7 @@ DICOMValueAttribute* DICOMTagReader::getValueAttribute(const DICOMTag &attribute
         if (QString(status.text()) != "Tag Not Found")
         {
             DEBUG_LOG(QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2")
-                .arg(dcmtkTag.toString().c_str()).arg(status.text()));
+                .arg(attributeTag.getKeyAsQString()).arg(status.text()));
         }
     }
     
@@ -186,14 +183,12 @@ DICOMSequenceAttribute* DICOMTagReader::getSequenceAttribute(const DICOMTag &seq
         DEBUG_LOG("No hi ha cap m_dicomData (DcmDataset) carregat. Tornem string-list buida.");
         return NULL;
     }
-    // Convertim els DICOMTag al format de dcmtk, que serà qui farà la feina
-    DcmTagKey dcmtkSequenceTag(sequenceTag.getGroup(), sequenceTag.getElement());
 
     QStringList result;
     // Obtenim els atributs de cada item d'una seqüència de "primer nivell"
     DcmSequenceOfItems *sequence = NULL;
 
-    OFCondition status = m_dicomData->findAndGetSequence(dcmtkSequenceTag, sequence, OFTrue);
+    OFCondition status = m_dicomData->findAndGetSequence(DcmTagKey(sequenceTag.getGroup(), sequenceTag.getElement()), sequence, OFTrue);
 
     if (status.good())
     {
@@ -202,7 +197,7 @@ DICOMSequenceAttribute* DICOMTagReader::getSequenceAttribute(const DICOMTag &seq
     }
     else if (QString(status.text()) != "Tag Not Found")
     {
-        DEBUG_LOG(QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2").arg(dcmtkSequenceTag.toString().c_str()).arg(status.text()));
+        DEBUG_LOG(QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2").arg(sequenceTag.getKeyAsQString()).arg(status.text()));
     }
 
     return NULL;
