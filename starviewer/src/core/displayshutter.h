@@ -46,7 +46,8 @@ public:
     /// Retorna el shutter en forma de QPolygon
     QPolygon getAsQPolygon() const;
     
-    /// Donada una llista de shutters, ens retorna el shutter resultant de la intersecció d'aquests.
+    /// Donada una llista de shutters, ens retorna el shutter resultant de la intersecció d'aquests. 
+    /// En quant al color resultant, serà la mitjana de tots els shutters de la llista.
     static DisplayShutter intersection(const QList<DisplayShutter> &shuttersList);
 
 private:
