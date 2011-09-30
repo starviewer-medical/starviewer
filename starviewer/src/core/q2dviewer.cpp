@@ -26,6 +26,8 @@
 #include "renderqviewercommand.h"
 // Qt
 #include <QResizeEvent>
+#include <QImage>
+#include <QPainter>
 // Include's bàsics vtk
 #include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
@@ -55,6 +57,7 @@
 namespace udg {
 
 const QString Q2DViewer::OverlaysDrawerGroup("Overlays");
+const QString Q2DViewer::DisplayShuttersDrawerGroup("DisplayShutters");
 const QString Q2DViewer::DummyVolumeObjectName("Dummy Volume");
 
 Q2DViewer::Q2DViewer(QWidget *parent)
@@ -798,6 +801,7 @@ void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVo
     // Actualitzem la informació de window level
     this->updateWindowLevelData();
     loadImageOverlays(volume);
+    loadDisplayShutters(volume);
     // HACK
     // S'activa el rendering de nou per tal de que es renderitzi l'escena
     enableRendering(true);
@@ -873,6 +877,93 @@ DrawerBitmap* Q2DViewer::imageOverlayToDrawerBitmap(const ImageOverlay &imageOve
     drawerBitmap->setOrigin(bitmapOrigin);
     
     drawerBitmap->setData(imageOverlay.getColumns(), imageOverlay.getRows(), imageOverlay.getData());
+    
+    return drawerBitmap;
+}
+
+void Q2DViewer::loadDisplayShutters(Volume *volume)
+{
+    if (!volume)
+    {
+        return;
+    }
+
+    if (volume->objectName() == DummyVolumeObjectName)
+    {
+        return;
+    }
+
+    int numberOfSlices = volume->getNumberOfSlicesPerPhase();
+    int numberOfPhases = volume->getNumberOfPhases();
+    for (int sliceIndex = 0; sliceIndex < numberOfSlices; ++sliceIndex)
+    {
+        for (int phaseIndex = 0; phaseIndex < numberOfPhases; ++phaseIndex)
+        {
+            Image *image = volume->getImage(sliceIndex, phaseIndex);
+            if (!image)
+            {
+                ERROR_LOG(QString("Error inesperat intentant accedir a la imatge amb índexs: %1(slice), %2(phase) del volum actual")
+                    .arg(sliceIndex).arg(phaseIndex));
+                DEBUG_LOG(QString("Error inesperat intentant accedir a la imatge amb índexs: %1(slice), %2(phase) del volum actual")
+                    .arg(sliceIndex).arg(phaseIndex));
+            }
+            else
+            {
+                if (image->hasDisplayShutters())
+                {
+                    DrawerBitmap *drawerBitmap = displayShutterToDrawerBitmap(DisplayShutter::intersection(image->getDisplayShutters())); // Qt Painter Method
+                    getDrawer()->draw(drawerBitmap, Q2DViewer::Axial, sliceIndex);
+                    getDrawer()->addToGroup(drawerBitmap, DisplayShuttersDrawerGroup);
+                }
+            }
+        }
+    }
+}
+
+DrawerBitmap* Q2DViewer::displayShutterToDrawerBitmap(const DisplayShutter &shutter)
+{
+    DrawerBitmap *drawerBitmap = new DrawerBitmap;
+    // Inicialment tots seran no visibles, llavors segons en la llesca en que ens trobem aquests es veuran o no segons decideixi el Drawer
+    drawerBitmap->setVisibility(false);
+    // La primitiva no es podrà esborrar amb les tools
+    drawerBitmap->setErasable(false);
+    // El color del bitmap vindrà donat pel valor de presentació del shutter
+    drawerBitmap->setForegroundColor(shutter.getShutterValueAsQColor());
+    
+    double volumeSpacing[3];
+    m_mainVolume->getSpacing(volumeSpacing);
+    drawerBitmap->setSpacing(volumeSpacing);
+    
+    double volumeOrigin[3];
+    m_mainVolume->getOrigin(volumeOrigin);
+    drawerBitmap->setOrigin(volumeOrigin);
+
+    // Creem la màscara del shutter a través d'una QImage
+    int volumeDimensions[3];
+    m_mainVolume->getDimensions(volumeDimensions);
+    
+    QImage shutterImage(volumeDimensions[0], volumeDimensions[1], QImage::Format_RGB32);
+    shutterImage.fill(Qt::black);
+    
+    QPainter shutterPainter(&shutterImage);
+    shutterPainter.setPen(Qt::white);
+    shutterPainter.setBrush(Qt::white);
+    shutterPainter.drawPolygon(shutter.getAsQPolygon());
+    shutterImage.invertPixels();
+    // Màscara feta!
+    
+    // Convertim la imatge en el format de buffer que s'espera drawer bitmap
+    unsigned char *data = new unsigned char[volumeDimensions[0] * volumeDimensions[1]];
+    for (int i = 0; i < volumeDimensions[1]; ++i)
+    {
+        QRgb *currentPixel = reinterpret_cast<QRgb*>(shutterImage.scanLine(i));
+        for (int j = 0; j < volumeDimensions[0]; ++j)
+        {
+            data[j + i * volumeDimensions[0]] = qGray(*currentPixel);
+            ++currentPixel;
+        }
+    }
+    drawerBitmap->setData(volumeDimensions[0], volumeDimensions[1], data);
     
     return drawerBitmap;
 }

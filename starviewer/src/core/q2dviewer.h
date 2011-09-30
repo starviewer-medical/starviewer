@@ -33,6 +33,7 @@ class ImageOrientationOperationsMapper;
 class VolumeReaderJob;
 class QViewerCommand;
 class PatientOrientation;
+class DisplayShutter;
 
 /**
     Classe base per als visualitzadors 2D.
@@ -400,6 +401,12 @@ private:
     /// Converteix un ImageOverlay a un DrawerBitmap
     DrawerBitmap* imageOverlayToDrawerBitmap(const ImageOverlay &imageOverlay);
 
+    /// Carrega en memòria els DisplayShutters del volum passat per paràmetre (sempre que no sigui un dummy) i els afegeix al Drawer
+    void loadDisplayShutters(Volume *volume);
+    
+    /// Converteix un DisplayShutter a un DrawerBitmap
+    DrawerBitmap* displayShutterToDrawerBitmap(const DisplayShutter &shutter);
+
 private slots:
     /// Actualitza les transformacions de càmera (de moment rotació i flip)
     void updateCamera();
@@ -448,8 +455,9 @@ protected:
     vtkCornerAnnotation *m_cornerAnnotations;
 
 private:
-    /// Nom del grup dins del drawer per als Overlays
+    /// Nom dels grups dins del drawer per als Overlays i Display Shutters
     static const QString OverlaysDrawerGroup;
+    static const QString DisplayShuttersDrawerGroup;
 
     /// Constant per a definir el nom d'objecte dels volums "dummy"
     static const QString DummyVolumeObjectName;
