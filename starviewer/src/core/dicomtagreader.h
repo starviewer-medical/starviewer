@@ -10,6 +10,7 @@ class DcmSequenceOfItems;
 class DcmElement;
 class DcmMetaInfo;
 class DcmItem;
+class OFCondition;
 
 namespace udg {
 
@@ -99,6 +100,9 @@ private:
 
     /// Esborra les dades de la últim fitxer carregat. Si no teníem cap fitxer carregat no fa res.
     void deleteDataLastLoadedFile();
+
+    /// Escriu el log segons l'status passat per paràmetre per quan s'ha fet una operació amb un tag i ha anat malament per alguna raó
+    void logStatusForTagOperation(const DICOMTag &tag, const OFCondition &status) const;
 
 private:
     /// Path absolut on es troba l'arxiu del qual extraiem la informació

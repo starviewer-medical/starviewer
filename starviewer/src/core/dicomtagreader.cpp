@@ -139,11 +139,7 @@ QString DICOMTagReader::getValueAttributeAsQString(const DICOMTag &tag) const
     }
     else
     {
-        if (QString(status.text()) != "Tag Not Found")
-        {
-            DEBUG_LOG(QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2")
-                .arg(tag.getKeyAsQString()).arg(status.text()));
-        }
+        logStatusForTagOperation(tag, status);
     }
 
     return result;
@@ -166,11 +162,7 @@ DICOMValueAttribute* DICOMTagReader::getValueAttribute(const DICOMTag &attribute
     }
     else
     {
-        if (QString(status.text()) != "Tag Not Found")
-        {
-            DEBUG_LOG(QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2")
-                .arg(attributeTag.getKeyAsQString()).arg(status.text()));
-        }
+        logStatusForTagOperation(attributeTag, status);
     }
     
     return valueAttribute;
@@ -195,9 +187,9 @@ DICOMSequenceAttribute* DICOMTagReader::getSequenceAttribute(const DICOMTag &seq
         DEBUG_LOG(QString("Cerquem sequencia"));
         return convertToDICOMSequenceAttribute(sequence, returnValueOfTags);
     }
-    else if (QString(status.text()) != "Tag Not Found")
+    else
     {
-        DEBUG_LOG(QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2").arg(sequenceTag.getKeyAsQString()).arg(status.text()));
+        logStatusForTagOperation(sequenceTag, status);
     }
 
     return NULL;
@@ -269,11 +261,10 @@ DICOMValueAttribute* DICOMTagReader::convertToDICOMValueAttribute(DcmElement *dc
         {
             dicomValueAttribute->setValue(QString(value.c_str()));
         }
-        else if (QString(status.text()) != "Tag Not Found")
+        else
         {
             dicomValueAttribute->setValue(QString("Unreadable tag value: %1").arg(status.text()));
-            DEBUG_LOG(QString("S'ha produit el seguent problema a l'intentar obtenir el tag %1 :: %2")
-                        .arg(dcmtkDICOMElement->getTag().toString().c_str()).arg(status.text()));
+            logStatusForTagOperation(DICOMTag(dcmtkDICOMElement->getTag().getGroup(), dcmtkDICOMElement->getTag().getElement()), status);            
         }
     }
 
@@ -328,6 +319,19 @@ QList<DICOMAttribute*> DICOMTagReader::getDICOMHeader() const
     else
     {
         return QList<DICOMAttribute*>();
+    }
+}
+
+void DICOMTagReader::logStatusForTagOperation(const DICOMTag &tag, const OFCondition &status) const
+{
+    if (status.good())
+    {
+        return;
+    }
+
+    if (status.text() != "Tag Not Found")
+    {
+        DEBUG_LOG(QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2").arg(tag.getKeyAsQString()).arg(status.text()));
     }
 }
 
