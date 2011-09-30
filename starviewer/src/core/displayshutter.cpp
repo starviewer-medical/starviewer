@@ -134,6 +134,7 @@ DisplayShutter DisplayShutter::intersection(const QList<DisplayShutter> &shutter
     }
     
     QPolygon intersectedPolygon;
+    unsigned int shutterComposedColor = 0;
     
     for (int i = 0; i < shuttersList.count() - 1; ++i)
     {
@@ -149,13 +150,18 @@ DisplayShutter DisplayShutter::intersection(const QList<DisplayShutter> &shutter
         
         QPolygon nextPolygon = shuttersList.at(i + 1).m_shutterPolygon;
         intersectedPolygon = currentPolygon.intersected(nextPolygon);
+
+        shutterComposedColor += shuttersList.at(i).getShutterValue();
     }
+    shutterComposedColor += shuttersList.last().getShutterValue();
+    shutterComposedColor = shutterComposedColor / shuttersList.count();
     
     DisplayShutter intersectedShutter;
     if (!intersectedPolygon.isEmpty())
     {
         intersectedShutter.setShape(DisplayShutter::PolygonalShape);
         intersectedShutter.setPoints(intersectedPolygon);
+        intersectedShutter.setShutterValue(shutterComposedColor);
     }
 
     return intersectedShutter;

@@ -170,6 +170,7 @@ void test_DisplayShutter::intersection_ReturnsExpectedValues_data()
     
     DisplayShutter circularShutter;
     circularShutter.setPoints(QPoint(512, 512), 517);
+    circularShutter.setShutterValue(0xFF00);
 
     shuttersList.clear();
     shuttersList << circularShutter;
@@ -177,6 +178,7 @@ void test_DisplayShutter::intersection_ReturnsExpectedValues_data()
     
     DisplayShutter rectangularShutter;
     rectangularShutter.setPoints(QPoint(5, 233), QPoint(1018, 789));
+    rectangularShutter.setShutterValue(0x3F3F);
 
     shuttersList.clear();
     shuttersList << rectangularShutter;
@@ -186,6 +188,7 @@ void test_DisplayShutter::intersection_ReturnsExpectedValues_data()
     QVector<QPoint> vertices;
     vertices << QPoint(1,1) << QPoint(1,5) << QPoint(5,5) << QPoint(10,6) << QPoint(8,6);
     polygonalShutter.setPoints(vertices);
+    polygonalShutter.setShutterValue(0xFFFF);
 
     shuttersList.clear();
     shuttersList << polygonalShutter;
@@ -201,6 +204,7 @@ void test_DisplayShutter::intersection_ReturnsExpectedValues_data()
     
     DisplayShutter intersectedShutter;
     intersectedShutter.setPoints(shutterPoints);
+    intersectedShutter.setShutterValue(0x9F1F);
     QTest::newRow("2-item list with intersection (circular+rectangular)") << shuttersList << intersectedShutter;
 
     shuttersList.clear();
@@ -221,6 +225,7 @@ void test_DisplayShutter::intersection_ReturnsExpectedValues()
     
     QCOMPARE(resultingShutter.getShape(), intersectedShutter.getShape());
     QCOMPARE(resultingShutter.getAsQPolygon(), intersectedShutter.getAsQPolygon());
+    QCOMPARE(resultingShutter.getShutterValue(), intersectedShutter.getShutterValue());
 }
 
 DECLARE_TEST(test_DisplayShutter)
