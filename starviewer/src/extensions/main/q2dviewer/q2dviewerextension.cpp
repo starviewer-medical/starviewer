@@ -98,9 +98,19 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_showViewersTextualInformationAction->setIcon(QIcon(":/images/showViewersTextualInformation.png"));
     connect(m_showViewersTextualInformationAction, SIGNAL(toggled(bool)), SLOT(showViewersTextualInformation(bool)));
 
+    m_showDisplayShuttersAction = new QAction(this);
+    m_showDisplayShuttersAction->setCheckable(true);
+    m_showDisplayShuttersAction->setChecked(true);
+    m_showDisplayShuttersAction->setText(tr("Shutters"));
+    m_showDisplayShuttersAction->setToolTip(tr("Show/Hide shutter layer"));
+    m_showDisplayShuttersAction->setStatusTip(m_showDisplayShuttersAction->toolTip());
+    m_showDisplayShuttersAction->setIcon(QIcon(":/images/showDisplayShutters.png"));
+    connect(m_showDisplayShuttersAction, SIGNAL(toggled(bool)), SLOT(showDisplayShutters(bool)));
+    
     QMenu *viewerInformationMenu = new QMenu(this);
     viewerInformationMenu->addAction(m_showOverlaysAction);
     viewerInformationMenu->addAction(m_showViewersTextualInformationAction);
+    viewerInformationMenu->addAction(m_showDisplayShuttersAction);
     m_viewerInformationToolButton->setMenu(viewerInformationMenu);
     
     m_dicomDumpToolButton->setToolTip(tr("Dump DICOM information of the current image"));
@@ -590,6 +600,7 @@ void Q2DViewerExtension::showViewersLayers(bool show)
 {
     m_showViewersTextualInformationAction->setChecked(show);
     m_showOverlaysAction->setChecked(show);
+    m_showDisplayShuttersAction->setChecked(show);
 }
 
 void Q2DViewerExtension::showImageOverlays(bool show)
@@ -599,6 +610,16 @@ void Q2DViewerExtension::showImageOverlays(bool show)
     for (int viewerNumber = 0; viewerNumber < numberOfViewers; ++viewerNumber)
     {
         m_workingArea->getViewerWidget(viewerNumber)->getViewer()->showImageOverlays(show);
+    }
+}
+
+void Q2DViewerExtension::showDisplayShutters(bool show)
+{
+    int numberOfViewers = m_workingArea->getNumberOfViewers();
+
+    for (int viewerNumber = 0; viewerNumber < numberOfViewers; ++viewerNumber)
+    {
+        m_workingArea->getViewerWidget(viewerNumber)->getViewer()->showDisplayShutters(show);
     }
 }
 

@@ -2433,6 +2433,18 @@ void Q2DViewer::showImageOverlays(bool enable)
     }
 }
 
+void Q2DViewer::showDisplayShutters(bool enable)
+{
+    if (enable)
+    {
+        getDrawer()->showGroup(DisplayShuttersDrawerGroup);
+    }
+    else
+    {
+        getDrawer()->hideGroup(DisplayShuttersDrawerGroup);
+    }
+}
+
 void Q2DViewer::rotate(int times)
 {
     // Si és zero no cal fer res
