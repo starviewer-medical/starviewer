@@ -108,8 +108,8 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     connect(m_showDisplayShuttersAction, SIGNAL(toggled(bool)), SLOT(showDisplayShutters(bool)));
     
     QMenu *viewerInformationMenu = new QMenu(this);
-    viewerInformationMenu->addAction(m_showOverlaysAction);
     viewerInformationMenu->addAction(m_showViewersTextualInformationAction);
+    viewerInformationMenu->addAction(m_showOverlaysAction);
     viewerInformationMenu->addAction(m_showDisplayShuttersAction);
     m_viewerInformationToolButton->setMenu(viewerInformationMenu);
     
