@@ -329,7 +329,7 @@ void DICOMTagReader::logStatusForTagOperation(const DICOMTag &tag, const OFCondi
         return;
     }
 
-    if (status.text() != "Tag Not Found")
+    if (QString(status.text()) != "Tag Not Found")
     {
         DEBUG_LOG(QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2").arg(tag.getKeyAsQString()).arg(status.text()));
     }
