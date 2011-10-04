@@ -1,7 +1,7 @@
 #ifndef UPGRADEDATABASEXMLPARSER_H
 #define UPGRADEDATABASEXMLPARSER_H
 
-#include <QList>
+#include <QMap>
 #include <QString>
 
 class QXmlStreamReader;
@@ -33,6 +33,9 @@ private:
 
     /// Parseja tag UpgradeDatabaseRevision del XML
     QStringList parseUpgradeDatabaseToRevisionChildrenTags(QXmlStreamReader *reader) const;
+
+    /// Transforma el QMap amb els resultats obtinguts de parserjar el XML
+    UpgradeDatabaseRevisionCommands fromQMapToUpgradeDatabaseRevisionCommands(QMap<int, QStringList> m_sqlUpgradeCommandsGroupedByDatabaseRevision);
 
     QXmlStreamReader* getXmlReader();
     QString m_xmlData;
