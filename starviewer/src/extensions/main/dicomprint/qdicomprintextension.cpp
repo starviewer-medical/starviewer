@@ -671,11 +671,9 @@ DicomPrinter QDicomPrintExtension::getSelectedDicomPrinter() const
 void QDicomPrintExtension::setEnabledPrintControls(bool enable)
 {
     m_selectionImagesFrame->setEnabled(enable);
-    m_printButton->setEnabled(enable);
     m_currentImageRadioButton->setEnabled(enable);
     m_selectionImageRadioButton->setEnabled(enable);
-    m_qdicomPrinterBasicSettingsWidget->setEnabled(enable);
-    m_numberOfCopiesSpinBox->setEnabled(enable);
+    m_addToPrintButton->setEnabled(enable);
 
     // Si ens indiquen que activem els controls d'impressió però tenim el checkbox d'imprimir només pàgina actual el frame
     // per seleccionar les imatges a imprimir el desactivem, no té sentit que estigui activat
@@ -734,7 +732,7 @@ void QDicomPrintExtension::updateVolumeSupport()
     QString pi = m_2DView->getInput()->getImage(0)->getPhotometricInterpretation();
     if (pi != "MONOCHROME1" && pi != "MONOCHROME2")
     {
-        m_noSupportedSeriesMissage->setText(tr("This series cannot be printed because color is not supported."));
+        m_noSupportedSeriesMissage->setText(tr("This series cannot be added to print because color is not supported."));
         m_noSupportedSeriesFrame->setVisible(true);
 
         setEnabledPrintControls(false);
