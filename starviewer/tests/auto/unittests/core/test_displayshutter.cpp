@@ -9,6 +9,9 @@ using namespace udg;
 class test_DisplayShutter : public QObject {
 Q_OBJECT
 private slots:
+    void getShapeAsDICOMString_ReturnsExpectedValues_data();
+    void getShapeAsDICOMString_ReturnsExpectedValues();
+    
     void getShutterValueAsQColor_ReturnsExpectedValues_data();
     void getShutterValueAsQColor_ReturnsExpectedValues();
     
@@ -30,6 +33,28 @@ Q_DECLARE_METATYPE(QVector<QPoint>);
 Q_DECLARE_METATYPE(QList<DisplayShutter>);
 Q_DECLARE_METATYPE(DisplayShutter);
 Q_DECLARE_METATYPE(QColor);
+
+void test_DisplayShutter::getShapeAsDICOMString_ReturnsExpectedValues_data()
+{
+    QTest::addColumn<DisplayShutter::ShapeType>("shape");
+    QTest::addColumn<QString>("dicomString");
+
+    QTest::newRow("Undefined Shape") << DisplayShutter::UndefinedShape << "";
+    QTest::newRow("Circular Shape") << DisplayShutter::CircularShape << "CIRCULAR";
+    QTest::newRow("Rectangular Shape") << DisplayShutter::RectangularShape << "RECTANGULAR";
+    QTest::newRow("Polygonal Shape") << DisplayShutter::PolygonalShape << "POLYGONAL";
+}
+
+void test_DisplayShutter::getShapeAsDICOMString_ReturnsExpectedValues()
+{
+    QFETCH(DisplayShutter::ShapeType, shape);
+    QFETCH(QString, dicomString);
+
+    DisplayShutter shutter;
+    shutter.setShape(shape);
+    
+    QCOMPARE(shutter.getShapeAsDICOMString(), dicomString);
+}
 
 void test_DisplayShutter::getShutterValueAsQColor_ReturnsExpectedValues_data()
 {
