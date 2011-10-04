@@ -23,6 +23,9 @@ public:
     void setShape(ShapeType shape);
     ShapeType getShape() const;
 
+    /// Ens retorna la forma en una cadena de text segons els valors establerts pel DICOM
+    QString getShapeAsDICOMString() const;
+    
     /// Valor de gris amb el que s'hauria de pintar la part opaca del shutter
     void setShutterValue(unsigned short int value);
     unsigned short int getShutterValue() const;

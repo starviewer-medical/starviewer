@@ -27,6 +27,24 @@ DisplayShutter::ShapeType DisplayShutter::getShape() const
     return m_shape;
 }
 
+QString DisplayShutter::getShapeAsDICOMString() const
+{
+    switch (m_shape)
+    {
+        case DisplayShutter::UndefinedShape:
+            return "";
+
+        case DisplayShutter::RectangularShape:
+            return "RECTANGULAR";
+
+        case DisplayShutter::CircularShape:
+            return "CIRCULAR";
+
+        case DisplayShutter::PolygonalShape:
+            return "POLYGONAL";
+    }
+}
+
 void DisplayShutter::setShutterValue(unsigned short int value)
 {
     m_shutterValue = value;
