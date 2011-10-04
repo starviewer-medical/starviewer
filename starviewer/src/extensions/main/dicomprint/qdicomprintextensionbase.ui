@@ -22,8 +22,57 @@
     <height>16</height>
    </size>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout_3">
-   <item>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0" colspan="2">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <spacer name="horizontalSpacer_4">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QToolButton" name="m_restoreToolButton">
+       <property name="text">
+        <string>Restore</string>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonIconOnly</enum>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="udg::QWindowLevelComboBox" name="m_windowLevelComboBox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="sizeAdjustPolicy">
+        <enum>QComboBox::AdjustToContents</enum>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0">
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
       <widget class="QFrame" name="frame">
@@ -757,7 +806,7 @@ border: 1px solid  #680000;
      </item>
     </layout>
    </item>
-   <item>
+   <item row="1" column="1">
     <layout class="QVBoxLayout" name="verticalLayout_4">
      <item>
       <widget class="udg::Q2DViewer" name="m_2DView" native="true">
@@ -813,6 +862,11 @@ border: 1px solid  #680000;
    <class>udg::QThumbnailsPreviewWidget</class>
    <extends>QWidget</extends>
    <header>qthumbnailspreviewwidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>udg::QWindowLevelComboBox</class>
+   <extends>QComboBox</extends>
+   <header>qwindowlevelcombobox.h</header>
   </customwidget>
  </customwidgets>
  <resources>

@@ -17,6 +17,7 @@
 #include "q2dviewer.h"
 #include "starviewerapplication.h"
 #include "toolmanager.h"
+#include "windowlevelpresetstooldata.h"
 
 // TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències
 // de interface, pacs, etc.etc.!!
@@ -48,6 +49,8 @@ QDicomPrintExtension::QDicomPrintExtension(QWidget *parent)
 
     m_lastIDGroupedDICOMImagesToPrint = 0;
     m_thumbnailsPreviewWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
+
+    m_windowLevelComboBox->setToolTip(tr("Choose Window/Level Presets"));
 }
 
 void QDicomPrintExtension::createConnections()
@@ -99,6 +102,9 @@ void QDicomPrintExtension::initializeViewerTools()
     m_toolManager->registerTool("WindowLevelPresetsTool");
     m_toolManager->registerTool("SlicingKeyboardTool");
 
+    m_restoreToolButton->setDefaultAction(m_toolManager->registerActionTool("RestoreActionTool"));
+    m_toolManager->enableRegisteredActionTools(m_2DView);
+
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
     QStringList defaultTools;
     defaultTools << "WindowLevelPresetsTool" << "SlicingKeyboardTool" << "SlicingTool" << "WindowLevelTool";
@@ -122,6 +128,13 @@ void QDicomPrintExtension::updateInput()
     resetAndUpdateSelectionImagesValue();
 
     updateVolumeSupport();
+
+    WindowLevelPresetsToolData *windowLevelData = m_2DView->getWindowLevelData();
+    m_windowLevelComboBox->setPresetsData(windowLevelData);
+    // TODO Canviem m_windowLevelComboBox->selectPreset() per windowLevelData->activatePreset per solucionar els tickets
+    // 1226 i 1227, però potser s'hauria de millorar una mica el funcionament i/o la interfície de les classes implicades
+    // Pendent de revisar perquè tingui un disseny i interfície més adeqequats (combo box, sobre tot)
+    windowLevelData->activatePreset(windowLevelData->getCurrentPreset());
 }
 
 void QDicomPrintExtension::fillSelectedDicomPrinterComboBox()
