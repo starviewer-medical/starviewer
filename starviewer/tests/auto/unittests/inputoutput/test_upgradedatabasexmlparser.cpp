@@ -67,6 +67,7 @@ void test_UpgradeDatabaseXMLParser::getUpgradeDatabaseRevisionCommands_ShouldRet
     QTest::addColumn<UpgradeDatabaseRevisionCommands>("result");
 
     QStringList sqlUpgradeCommands;
+    sqlUpgradeCommands.append("ALTER TABLE STUDY ADD COLUMN InstanceUID TEXT");
     sqlUpgradeCommands.append("ALTER TABLE STUDY ADD COLUMN RetrievedPACSIP TEXT");
     sqlUpgradeCommands.append("ALTER TABLE STUDY ADD COLUMN RetrievedPACSQueryPort INTEGER");
 
@@ -102,6 +103,9 @@ QString test_UpgradeDatabaseXMLParser::getUpgradeDatabaseXMLTest()
     upgradeDatabaseXMLTest +=   "<upgradeDatabaseToRevision updateToRevision=\"7574\">";
     upgradeDatabaseXMLTest +=       "<upgradeCommand>ALTER TABLE STUDY ADD COLUMN RetrievedPACSIP TEXT</upgradeCommand>";
     upgradeDatabaseXMLTest +=       "<upgradeCommand>ALTER TABLE STUDY ADD COLUMN RetrievedPACSQueryPort INTEGER</upgradeCommand>";
+    upgradeDatabaseXMLTest +=   "</upgradeDatabaseToRevision>";
+    upgradeDatabaseXMLTest +=    "<upgradeDatabaseToRevision updateToRevision=\"7300\">";
+    upgradeDatabaseXMLTest +=       "<upgradeCommand>ALTER TABLE STUDY ADD COLUMN InstanceUID TEXT</upgradeCommand>";
     upgradeDatabaseXMLTest +=   "</upgradeDatabaseToRevision>";
     upgradeDatabaseXMLTest += "</upgradeDatabase>";
 

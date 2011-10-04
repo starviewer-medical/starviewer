@@ -64,21 +64,21 @@ UpgradeDatabaseRevisionCommands UpgradeDatabaseXMLParser::getUpgradeDatabaseRevi
 
 UpgradeDatabaseRevisionCommands UpgradeDatabaseXMLParser::parseUpgradeDatabaseTag(QXmlStreamReader *reader, int fromDatabaseRevision)
 {
-    UpgradeDatabaseRevisionCommands upgradeDatabaseRevisionCommands;
-    QStringList sqlUpgradeCommands;
+    //Guardem les sentències per actualitzar la base de dade en un QMap, per així si el XML d'actualització no té les comandes
+    //ordenades per revisió en ordre ascendent, amb el QMap les podem tornar ordenades correctament
+    QMap<int, QStringList> sqlUpgradeCommandsGroupedByDatabaseRevision;
 
     while (!reader->atEnd())
     {
         if (reader->isStartElement() && reader->name() == "upgradeDatabaseToRevision")
         {
-             int upgradeToDatabaseRevision = reader->attributes().value("updateToRevision").toString().toInt();
+             int upgradeToRevisionParsed = reader->attributes().value("updateToRevision").toString().toInt();
 
-            if (upgradeToDatabaseRevision > fromDatabaseRevision)
+            if (upgradeToRevisionParsed > fromDatabaseRevision)
             {
-                upgradeDatabaseRevisionCommands.setUpgradeToDatabaseRevision(upgradeToDatabaseRevision);
-
                 reader->readNextStartElement();
-                sqlUpgradeCommands.append(parseUpgradeDatabaseToRevisionChildrenTags(reader));
+
+                sqlUpgradeCommandsGroupedByDatabaseRevision.insertMulti(upgradeToRevisionParsed, parseUpgradeDatabaseToRevisionChildrenTags(reader));
             }
             else
             {
@@ -92,9 +92,7 @@ UpgradeDatabaseRevisionCommands UpgradeDatabaseXMLParser::parseUpgradeDatabaseTa
         }
     }
 
-    upgradeDatabaseRevisionCommands.setSqlUpgradeCommands(sqlUpgradeCommands);
-
-    return upgradeDatabaseRevisionCommands;
+    return fromQMapToUpgradeDatabaseRevisionCommands(sqlUpgradeCommandsGroupedByDatabaseRevision);
 }
 
 QStringList UpgradeDatabaseXMLParser::parseUpgradeDatabaseToRevisionChildrenTags(QXmlStreamReader *reader) const
@@ -112,6 +110,27 @@ QStringList UpgradeDatabaseXMLParser::parseUpgradeDatabaseToRevisionChildrenTags
     }
 
     return sqlUpgradeCommands;
+}
+
+UpgradeDatabaseRevisionCommands UpgradeDatabaseXMLParser::fromQMapToUpgradeDatabaseRevisionCommands(QMap<int, QStringList> m_sqlUpgradeCommandsGroupedByDatabaseRevision)
+{
+    //Obtenim les sentències sql a aplicar a la base de dades ordenades per la revisió ascendentment
+    QStringList sqlUpgradeCommands;
+
+    foreach(QStringList sqlUpgradeCommandsParsed, m_sqlUpgradeCommandsGroupedByDatabaseRevision.values())
+    {
+        sqlUpgradeCommands.append(sqlUpgradeCommandsParsed);
+    }
+
+    //Obtenim quin és el número de revisió més gran que hem parsejat, keys retorna els número de revisions ordenats ascendentment
+    int upgradeDatbaseToRevision = m_sqlUpgradeCommandsGroupedByDatabaseRevision.keys().at(m_sqlUpgradeCommandsGroupedByDatabaseRevision.count() - 1);
+
+    UpgradeDatabaseRevisionCommands upgradeDatabaseRevisionCommands;
+    upgradeDatabaseRevisionCommands.setSqlUpgradeCommands(sqlUpgradeCommands);
+    upgradeDatabaseRevisionCommands.setUpgradeToDatabaseRevision(upgradeDatbaseToRevision);
+
+    return upgradeDatabaseRevisionCommands;
+
 }
 
 QXmlStreamReader* UpgradeDatabaseXMLParser::getXmlReader()
