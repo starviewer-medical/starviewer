@@ -18,20 +18,15 @@ bool EchoToPACS::echo(PacsDevice pacsDevice)
 {
     PACSConnection pacsConnection(pacsDevice);
 
-    if (pacsConnection.connectToPACS(PACSConnection::Echo))
+    /// Es fa la connexió connexió
+    if (connectToPACS(&pacsConnection))
     {
-        // Generate next message ID
-        DIC_US id = pacsConnection.getConnection()->nextMsgID++;
-        // Segons el PS 3.7 apartat 9.1.5.1.4 de DICOM l'status només pot ser 0x0000 si s'ha aconseguit connectar, sinó no hauria de tenir valor
-        DIC_US status;
-        DcmDataset *dcmDataset = NULL;
-
-        OFCondition condition = DIMSE_echoUser(pacsConnection.getConnection(), id, DIMSE_BLOCKING, 0, &status, &dcmDataset);
-
-        pacsConnection.disconnect();
-        // We don't care about status detail
-        delete dcmDataset;
-
+        /// Es fa un echo al pacs
+        OFCondition condition = echoToPACS(&pacsConnection);
+        
+        /// Desconnexió
+        disconnectFromPACS(&pacsConnection);
+        
         if (condition.good())
         {
             m_lastError = EchoOk;
@@ -54,6 +49,32 @@ bool EchoToPACS::echo(PacsDevice pacsDevice)
 EchoToPACS::EchoRequestStatus EchoToPACS::getLastError()
 {
     return m_lastError;
+}
+
+bool EchoToPACS::connectToPACS(PACSConnection *pacsConnection)
+{
+    return pacsConnection->connectToPACS(PACSConnection::Echo);
+}
+
+OFCondition EchoToPACS::echoToPACS(PACSConnection *pacsConnection)
+{
+    // Generate next message ID
+    DIC_US id = pacsConnection->getConnection()->nextMsgID++;
+    // Segons el PS 3.7 apartat 9.1.5.1.4 de DICOM l'status només pot ser 0x0000 si s'ha aconseguit connectar, sinó no hauria de tenir valor
+    DIC_US status;
+    DcmDataset *dcmDataset = NULL;
+
+    OFCondition condition = DIMSE_echoUser(pacsConnection->getConnection(), id, DIMSE_BLOCKING, 0, &status, &dcmDataset);
+
+    // We don't care about status detail
+    delete dcmDataset;
+    
+    return condition;
+}
+
+void EchoToPACS::disconnectFromPACS(PACSConnection *pacsConnection)
+{
+    pacsConnection->disconnect();
 }
 
 }
