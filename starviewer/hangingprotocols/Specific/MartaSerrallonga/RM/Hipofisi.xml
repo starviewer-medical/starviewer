@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hangingProtocol name="Cervical">
-    <hangingProtocolName>Cervical</hangingProtocolName>
+<hangingProtocol name="Hipofisi">
+    <hangingProtocolName>Hipofisi</hangingProtocolName>
     <allDifferent>yes</allDifferent>
     <protocol>MR</protocol>
     <restriction identifier="1">
@@ -20,8 +20,8 @@
     </restriction>
     <restriction identifier="4">
         <usageFlag>MATCH</usageFlag>
-        <selectorAttribute>ProtocolName</selectorAttribute>
-        <valueRepresentation>SAG</valueRepresentation>
+        <selectorAttribute>SeriesDescription</selectorAttribute>
+        <valueRepresentation>3D</valueRepresentation>
     </restriction>
     <restriction identifier="5">
         <usageFlag>MATCH</usageFlag>
@@ -31,7 +31,7 @@
     <restriction identifier="6">
         <usageFlag>MATCH</usageFlag>
         <selectorAttribute>ProtocolName</selectorAttribute>
-        <valueRepresentation>TRA</valueRepresentation>
+        <valueRepresentation>FFE</valueRepresentation>
     </restriction>
     <restriction identifier="7">
         <usageFlag>MATCH</usageFlag>
@@ -40,67 +40,42 @@
     </restriction>
     <restriction identifier="8">
         <usageFlag>MATCH</usageFlag>
-        <selectorAttribute>ProtocolName</selectorAttribute>
-        <valueRepresentation>SG</valueRepresentation>
-    </restriction>
-    <restriction identifier="9">
-        <usageFlag>MATCH</usageFlag>
-        <selectorAttribute>SeriesDescription</selectorAttribute>
-        <valueRepresentation>3D</valueRepresentation>
-    </restriction>
-    <restriction identifier="10">
-        <usageFlag>MATCH</usageFlag>
-        <selectorAttribute>SeriesDescription</selectorAttribute>
-        <valueRepresentation>STIR_long</valueRepresentation>
-    </restriction>
-    <restriction identifier="11">
-        <usageFlag>MATCH</usageFlag>
         <selectorAttribute>SeriesDescription</selectorAttribute>
         <valueRepresentation>FFE</valueRepresentation>
     </restriction>
     <imageSet identifier="1">
-        <restriction>2</restriction>
+        <restriction>3</restriction>
         <restriction>5</restriction>
-        <restriction>8</restriction>
     </imageSet>
     <imageSet identifier="2">
         <restriction>3</restriction>
         <restriction>4</restriction>
+        <restriction>8</restriction>
     </imageSet>
     <imageSet identifier="3">
         <restriction>2</restriction>
         <restriction>5</restriction>
-        <restriction>9</restriction>
     </imageSet>
     <imageSet identifier="4">
-        <restriction>2</restriction>
-        <restriction>6</restriction>
-        <restriction>9</restriction>
+        <restriction>3</restriction>
+        <restriction>4</restriction>
+        <restriction>8</restriction>
     </imageSet>
     <imageSet identifier="5">
-        <restriction>2</restriction>
-        <restriction>4</restriction>
-        <restriction>11</restriction>
-    </imageSet>
-    <imageSet identifier="6">
-        <restriction>10</restriction>
-    </imageSet>
-    <imageSet identifier="7">
         <restriction>1</restriction>
         <restriction>7</restriction>
     </imageSet>
-    <imageSet identifier="8">
-        <restriction>1</restriction>
+    <imageSet identifier="6">
+        <restriction>3</restriction>
+        <restriction>5</restriction>
     </imageSet>
     <displaySet identifier="1">
         <imageSetNumber>1</imageSetNumber>
         <position>0.0\1.0\0.25\0.5</position>
-        <toolActivation>synchronization</toolActivation>
     </displaySet>
     <displaySet identifier="2">
         <imageSetNumber>2</imageSetNumber>
         <position>0.25\1\0.5\0.5</position>
-        <toolActivation>synchronization</toolActivation>
     </displaySet>
     <displaySet identifier="3">
         <imageSetNumber>3</imageSetNumber>
@@ -113,19 +88,17 @@
     <displaySet identifier="5">
         <imageSetNumber>5</imageSetNumber>
         <position>0.0\0.5\0.25\0.0</position>
-        <toolActivation>synchronization</toolActivation>
     </displaySet>
     <displaySet identifier="6">
-        <imageSetNumber>6</imageSetNumber>
+        <imageSetNumber>5</imageSetNumber>
         <position>0.25\0.5\0.5\0.0</position>
-        <toolActivation>synchronization</toolActivation>
     </displaySet>
     <displaySet identifier="7">
-        <imageSetNumber>7</imageSetNumber>
+        <imageSetNumber>5</imageSetNumber>
         <position>0.5\0.5\0.75\0.0</position>
     </displaySet>
     <displaySet identifier="8">
-        <imageSetNumber>8</imageSetNumber>
+        <imageSetNumber>6</imageSetNumber>
         <position>0.75\0.5\1.0\0.0</position>
     </displaySet>
 </hangingProtocol>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hangingProtocol name="Cervical">
-    <hangingProtocolName>Cervical</hangingProtocolName>
+<hangingProtocol name="Trigemin">
+    <hangingProtocolName>Trigemin</hangingProtocolName>
     <allDifferent>yes</allDifferent>
     <protocol>MR</protocol>
     <restriction identifier="1">
@@ -25,8 +25,8 @@
     </restriction>
     <restriction identifier="5">
         <usageFlag>MATCH</usageFlag>
-        <selectorAttribute>SeriesDescription</selectorAttribute>
-        <valueRepresentation>TSE</valueRepresentation>
+        <selectorAttribute>ProtocolName</selectorAttribute>
+        <valueRepresentation>FLAIR</valueRepresentation>
     </restriction>
     <restriction identifier="6">
         <usageFlag>MATCH</usageFlag>
@@ -35,76 +35,93 @@
     </restriction>
     <restriction identifier="7">
         <usageFlag>MATCH</usageFlag>
-        <selectorAttribute>SeriesDescription</selectorAttribute>
-        <valueRepresentation>SURVEY</valueRepresentation>
+        <selectorAttribute>ProtocolName</selectorAttribute>
+        <valueRepresentation>SE</valueRepresentation>
     </restriction>
     <restriction identifier="8">
         <usageFlag>MATCH</usageFlag>
         <selectorAttribute>ProtocolName</selectorAttribute>
-        <valueRepresentation>SG</valueRepresentation>
+        <valueRepresentation>DIFUSIO 1000</valueRepresentation>
     </restriction>
     <restriction identifier="9">
         <usageFlag>MATCH</usageFlag>
         <selectorAttribute>SeriesDescription</selectorAttribute>
-        <valueRepresentation>3D</valueRepresentation>
+        <valueRepresentation>SURVEY</valueRepresentation>
     </restriction>
     <restriction identifier="10">
         <usageFlag>MATCH</usageFlag>
         <selectorAttribute>SeriesDescription</selectorAttribute>
-        <valueRepresentation>STIR_long</valueRepresentation>
+        <valueRepresentation>3D</valueRepresentation>
     </restriction>
     <restriction identifier="11">
         <usageFlag>MATCH</usageFlag>
         <selectorAttribute>SeriesDescription</selectorAttribute>
-        <valueRepresentation>FFE</valueRepresentation>
+        <valueRepresentation>long_C</valueRepresentation>
+    </restriction>
+    <restriction identifier="12">
+        <usageFlag>MATCH</usageFlag>
+        <selectorAttribute>SeriesDescription</selectorAttribute>
+        <valueRepresentation>STIR</valueRepresentation>
+    </restriction>
+    <restriction identifier="13">
+        <usageFlag>MATCH</usageFlag>
+        <selectorAttribute>SeriesDescription</selectorAttribute>
+        <valueRepresentation>COR</valueRepresentation>
+    </restriction>
+    <restriction identifier="14">
+        <usageFlag>MATCH</usageFlag>
+        <selectorAttribute>ProtocolName</selectorAttribute>
+        <valueRepresentation>CLEAR</valueRepresentation>
     </restriction>
     <imageSet identifier="1">
-        <restriction>2</restriction>
-        <restriction>5</restriction>
-        <restriction>8</restriction>
-    </imageSet>
-    <imageSet identifier="2">
         <restriction>3</restriction>
         <restriction>4</restriction>
     </imageSet>
-    <imageSet identifier="3">
-        <restriction>2</restriction>
+    <imageSet identifier="2">
         <restriction>5</restriction>
-        <restriction>9</restriction>
+        <restriction>6</restriction>
+        <restriction>14</restriction>
+    </imageSet>
+    <imageSet identifier="3">
+        <restriction>3</restriction>
+        <restriction>7</restriction>
+        <restriction>13</restriction>
+        
     </imageSet>
     <imageSet identifier="4">
-        <restriction>2</restriction>
-        <restriction>6</restriction>
-        <restriction>9</restriction>
+        <restriction>7</restriction>
+        <restriction>11</restriction>
+        <restriction>12</restriction>
     </imageSet>
     <imageSet identifier="5">
-        <restriction>2</restriction>
-        <restriction>4</restriction>
-        <restriction>11</restriction>
+        <restriction>8</restriction>
     </imageSet>
     <imageSet identifier="6">
-        <restriction>10</restriction>
+        <restriction>2</restriction>
+        <restriction>7</restriction>
+        <restriction>14</restriction>
     </imageSet>
     <imageSet identifier="7">
-        <restriction>1</restriction>
         <restriction>7</restriction>
+        <restriction>11</restriction>
+        <restriction>12</restriction>
     </imageSet>
     <imageSet identifier="8">
-        <restriction>1</restriction>
+        <restriction>7</restriction>
+        <restriction>10</restriction>
     </imageSet>
     <displaySet identifier="1">
         <imageSetNumber>1</imageSetNumber>
         <position>0.0\1.0\0.25\0.5</position>
-        <toolActivation>synchronization</toolActivation>
     </displaySet>
     <displaySet identifier="2">
         <imageSetNumber>2</imageSetNumber>
-        <position>0.25\1\0.5\0.5</position>
+        <position>0.25\1.0\0.5\0.5</position>
         <toolActivation>synchronization</toolActivation>
     </displaySet>
     <displaySet identifier="3">
         <imageSetNumber>3</imageSetNumber>
-        <position>0.5\1\0.75\0.5</position>
+        <position>0.5\1.0\0.75\0.5</position>
     </displaySet>
     <displaySet identifier="4">
         <imageSetNumber>4</imageSetNumber>
@@ -118,7 +135,6 @@
     <displaySet identifier="6">
         <imageSetNumber>6</imageSetNumber>
         <position>0.25\0.5\0.5\0.0</position>
-        <toolActivation>synchronization</toolActivation>
     </displaySet>
     <displaySet identifier="7">
         <imageSetNumber>7</imageSetNumber>
