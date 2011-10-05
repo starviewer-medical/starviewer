@@ -1,8 +1,6 @@
 #ifndef UDGFIREWALLACCESS_H
 #define UDGFIREWALLACCESS_H
 
-#include <windows.h>
-#include <netfw.h>
 #include <QString>
 
 namespace udg {
