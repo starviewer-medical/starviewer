@@ -264,7 +264,7 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
     }
     else if (toolName == "PolylineROITool")
     {
-        toolAction->setText(tr("ROI"));
+        toolAction->setText(tr("Polyline ROI"));
         toolAction->setIcon(QIcon(":/images/polyline.png"));
         toolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::ROITool));
         statusTip = tr("Enable/Disable Polyline ROI tool");
