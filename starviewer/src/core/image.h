@@ -180,6 +180,9 @@ public:
     /// Afegeix un Display Shutter a l'imatge
     void addDisplayShutter(const DisplayShutter &shutter);
     
+    /// Assigna una llista de Display Shutters a l'imatge. Aquesta sobreescriu l'anterior.
+    void setDisplayShutters(const QList<DisplayShutter> &shuttersList);
+    
     /// Obté la llista de Display Shutters
     QList<DisplayShutter> getDisplayShutters() const;
     

@@ -438,6 +438,11 @@ void Image::addDisplayShutter(const DisplayShutter &shutter)
     m_shuttersList << shutter;
 }
 
+void Image::setDisplayShutters(const QList<DisplayShutter> &shuttersList)
+{
+    m_shuttersList = shuttersList;
+}
+
 QList<DisplayShutter> Image::getDisplayShutters() const
 {
     return m_shuttersList;
