@@ -57,6 +57,9 @@ public:
     
     /// Retorna el shutter en forma de QPolygon
     QPolygon getAsQPolygon() const;
+
+    /// Retorna els punts del shutter en format d'string. El format serà el mateix que el de setPoints(const QString &)
+    QString getPointsAsString() const;
     
     /// Donada una llista de shutters, ens retorna el shutter resultant de la intersecció d'aquests. 
     /// En quant al color resultant, serà la mitjana de tots els shutters de la llista.

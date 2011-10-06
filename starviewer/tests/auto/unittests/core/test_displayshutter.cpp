@@ -27,6 +27,9 @@ private slots:
     void setPoints_SetsPointsString_data();
     void setPoints_SetsPointsString();
 
+    void getPointsAsString_ReturnsExpectedValues_data();
+    void getPointsAsString_ReturnsExpectedValues();
+    
     void intersection_ReturnsExpectedValues_data();
     void intersection_ReturnsExpectedValues();   
 };
@@ -223,6 +226,36 @@ void test_DisplayShutter::setPoints_SetsPointsString()
     shutter.setShape(shape);
     QCOMPARE(shutter.setPoints(pointsString), success);
     QVERIFY(shutter.getShape() == shapeAfterSetPoints);
+}
+
+void test_DisplayShutter::getPointsAsString_ReturnsExpectedValues_data()
+{
+    QTest::addColumn<DisplayShutter::ShapeType>("shape");
+    QTest::addColumn<QString>("pointsString");
+    QTest::addColumn<QString>("expectedString");
+
+    QString wellFormattedRectangleString("1,1;256,256");
+    QString wellFormattedCircleString("256,256;50");
+    QString wellFormattedPolygonString("1,1;1,3;3,3;3,8;9,10");
+
+    QTest::newRow("Shutter with rectangular shape") << DisplayShutter::RectangularShape << wellFormattedRectangleString << wellFormattedRectangleString;
+    QTest::newRow("Shutter with circular shape") << DisplayShutter::CircularShape << wellFormattedCircleString << wellFormattedCircleString;
+    QTest::newRow("Shutter with polygonal shape") << DisplayShutter::PolygonalShape << wellFormattedPolygonString << wellFormattedPolygonString;
+    QTest::newRow("Shutter with undefined shape") << DisplayShutter::UndefinedShape << QString() << QString();
+}
+
+void test_DisplayShutter::getPointsAsString_ReturnsExpectedValues()
+{
+    QFETCH(DisplayShutter::ShapeType, shape);
+    QFETCH(QString, pointsString);
+    QFETCH(QString, expectedString);
+    
+    DisplayShutter shutter;
+
+    shutter.setShape(shape);
+    shutter.setPoints(pointsString);
+
+    QCOMPARE(shutter.getPointsAsString(), expectedString);
 }
 
 void test_DisplayShutter::intersection_ReturnsExpectedValues_data()
