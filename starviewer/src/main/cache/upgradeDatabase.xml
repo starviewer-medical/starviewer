@@ -7,4 +7,18 @@
     <upgradeDatabaseToRevision updateToRevision="7661">
         <upgradeCommand>ALTER TABLE IMAGE ADD COLUMN NumberOfOverlays INTEGER</upgradeCommand>
     </upgradeDatabaseToRevision>
+    <upgradeDatabaseToRevision updateToRevision="7735">
+        <upgradeCommand>
+            CREATE TABLE DisplayShutter
+            (
+            ID                            INTEGER PRIMARY KEY AUTOINCREMENT,
+            Shape                         TEXT,
+            ShutterValue                  INTEGER,
+            PointsList                    TEXT,
+            ImageInstanceUID              TEXT,
+            ImageFrameNumber              INTEGER,
+            FOREIGN KEY (ImageInstanceUID, ImageFrameNumber) REFERENCES Image (SOPInstanceUID, FrameNumber)
+            );
+        </upgradeCommand>
+    </upgradeDatabaseToRevision>
 </upgradeDatabase>

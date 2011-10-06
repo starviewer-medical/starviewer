@@ -15,6 +15,7 @@ namespace udg {
 
 class DicomMask;
 class DatabaseConnection;
+class DisplayShutter;
 
 /**
     Manager de la base de dades local, permet interactuar amb tots els objectes de la base de dades
@@ -130,6 +131,9 @@ private:
     /// Guarda a la base de dades la llista d'imatges passada per paràmetre, si alguna de les imatges ja existeix actualitza la info
     int saveImages(DatabaseConnection *dbConnect, QList<Image*> listImageToSave, const QDate &currentDate, const QTime &currentTime);
 
+    /// Guarda a la base de dades la llista de display shutters relacionades amb la imatge passada per paràmetre
+    int saveDisplayShutters(DatabaseConnection *dbConnect, QList<DisplayShutter> shuttersList, Image *relatedImage);
+    
     /// Guarda el pacient a la base de dades, si ja existeix li actualitza la informació
     int savePatientOfStudy(DatabaseConnection *dbConnect, Study *study);
 

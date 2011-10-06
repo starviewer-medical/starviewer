@@ -12,6 +12,7 @@
 #include "logging.h"
 #include "localdatabasemanager.h"
 #include "imageorientation.h"
+#include "localdatabasedisplayshutterdal.h"
 
 namespace udg {
 
@@ -65,10 +66,19 @@ QList<Image*> LocalDatabaseImageDAL::query(const DicomMask &imageMask)
         return imageList;
     }
 
+    LocalDatabaseDisplayShutterDAL shutterDAL(m_dbConnection);
     // index = 1 ignorem les capçaleres
     for (int index = 1; index <= rows; index++)
     {
-        imageList.append(fillImage(reply, index, columns));
+        Image *newImage = fillImage(reply, index, columns);
+            
+        // Obtenim els shutters de l'imatge actual
+        DicomMask shuttersMask;
+        shuttersMask.setSOPInstanceUID(newImage->getSOPInstanceUID());
+        shuttersMask.setImageNumber(QString::number(newImage->getFrameNumber()));
+        newImage->setDisplayShutters(shutterDAL.query(shuttersMask));
+        
+        imageList << newImage;
     }
 
     sqlite3_free_table(reply);

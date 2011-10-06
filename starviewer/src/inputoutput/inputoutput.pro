@@ -48,6 +48,7 @@ HEADERS += databaseconnection.h \
     qbasicsearchwidget.h \
     localdatabasemanager.h \
     localdatabasebasedal.h \
+    localdatabasedisplayshutterdal.h \
     localdatabaseimagedal.h \
     localdatabaseseriesdal.h \
     localdatabasestudydal.h \
@@ -113,6 +114,7 @@ SOURCES += databaseconnection.cpp \
     qbasicsearchwidget.cpp \
     localdatabasemanager.cpp \
     localdatabasebasedal.cpp \
+    localdatabasedisplayshutterdal.cpp \
     localdatabaseimagedal.cpp \
     localdatabaseseriesdal.cpp \
     localdatabasestudydal.cpp \
