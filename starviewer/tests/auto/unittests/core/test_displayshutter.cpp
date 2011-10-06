@@ -24,6 +24,9 @@ private slots:
     void setPoints_SetsPolygonalPoints_data();
     void setPoints_SetsPolygonalPoints();
 
+    void setPoints_SetsPointsString_data();
+    void setPoints_SetsPointsString();
+
     void intersection_ReturnsExpectedValues_data();
     void intersection_ReturnsExpectedValues();   
 };
@@ -176,6 +179,49 @@ void test_DisplayShutter::setPoints_SetsPolygonalPoints()
     DisplayShutter shutter;
     shutter.setShape(shapeType);
     QCOMPARE(shutter.setPoints(points), result);
+    QVERIFY(shutter.getShape() == shapeAfterSetPoints);
+}
+
+void test_DisplayShutter::setPoints_SetsPointsString_data()
+{
+    QTest::addColumn<DisplayShutter::ShapeType>("shape");
+    QTest::addColumn<QString>("pointsString");
+    QTest::addColumn<bool>("success");
+    QTest::addColumn<DisplayShutter::ShapeType>("shapeAfterSetPoints");
+
+    QString wellFormattedRectangleString("1,1;256,256");
+    QString wellFormattedCircleString("256,256;50");
+    QString wellFormattedPolygonString("1,1;1,3;3,3;3,8;9,10");
+    QString noMatchingFormatString("abcde");
+    
+    QTest::newRow("Rectangle points, rectangle shape") << DisplayShutter::RectangularShape << wellFormattedRectangleString << true << DisplayShutter::RectangularShape;
+    QTest::newRow("Circle points, circle shape") << DisplayShutter::CircularShape << wellFormattedCircleString << true << DisplayShutter::CircularShape;
+    QTest::newRow("Polygon points, polygonal shape") << DisplayShutter::PolygonalShape << wellFormattedPolygonString << true << DisplayShutter::PolygonalShape;
+    QTest::newRow("Rectangle points, undefined shape") << DisplayShutter::UndefinedShape << wellFormattedRectangleString << true << DisplayShutter::RectangularShape;
+    QTest::newRow("Circle points, undefined shape") << DisplayShutter::UndefinedShape << wellFormattedCircleString << true << DisplayShutter::CircularShape;
+    QTest::newRow("Polygon points, undefined shape") << DisplayShutter::UndefinedShape << wellFormattedPolygonString << true << DisplayShutter::PolygonalShape;
+    QTest::newRow("Rectangle points, bad match (circle shape)") << DisplayShutter::CircularShape << wellFormattedRectangleString << false << DisplayShutter::CircularShape;
+    QTest::newRow("Rectangle points, bad match (polygon shape)") << DisplayShutter::PolygonalShape << wellFormattedRectangleString << false << DisplayShutter::PolygonalShape;
+    QTest::newRow("Circle points, bad match (rectangle shape)") << DisplayShutter::RectangularShape << wellFormattedCircleString << false << DisplayShutter::RectangularShape;
+    QTest::newRow("Circle points, bad match (polygon shape)") << DisplayShutter::PolygonalShape << wellFormattedCircleString << false << DisplayShutter::PolygonalShape;
+    QTest::newRow("Polygon points, bad match (rectangle shape)") << DisplayShutter::RectangularShape << wellFormattedPolygonString << false << DisplayShutter::RectangularShape;
+    QTest::newRow("Polygon points, bad match (circle shape)") << DisplayShutter::CircularShape << wellFormattedPolygonString << false << DisplayShutter::CircularShape;
+    QTest::newRow("Bad string points, rectangle shape") << DisplayShutter::RectangularShape << noMatchingFormatString << false << DisplayShutter::RectangularShape;
+    QTest::newRow("Bad string points, circle shape") << DisplayShutter::CircularShape << noMatchingFormatString << false << DisplayShutter::CircularShape;
+    QTest::newRow("Bad string points, polygon shape") << DisplayShutter::PolygonalShape << noMatchingFormatString << false << DisplayShutter::PolygonalShape;
+    QTest::newRow("Bad string points, undefined shape") << DisplayShutter::UndefinedShape << noMatchingFormatString << false << DisplayShutter::UndefinedShape;
+}
+
+void test_DisplayShutter::setPoints_SetsPointsString()
+{
+    QFETCH(DisplayShutter::ShapeType, shape);
+    QFETCH(QString, pointsString);
+    QFETCH(bool, success);
+    QFETCH(DisplayShutter::ShapeType, shapeAfterSetPoints);
+
+    DisplayShutter shutter;
+    shutter.setShape(shape);
+    QCOMPARE(shutter.setPoints(pointsString), success);
     QVERIFY(shutter.getShape() == shapeAfterSetPoints);
 }
 
