@@ -9,7 +9,6 @@
 #include "inputoutputsettings.h"
 #include "pacsdevicemanager.h"
 #include "logging.h"
-#include "status.h"
 #include "qcreatedicomdir.h"
 #include "dicommask.h"
 #include "qoperationstatescreen.h"

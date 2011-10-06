@@ -7,7 +7,6 @@
 #include <QDir>
 #include <QString>
 #include "localdatabasemanager.h"
-#include "status.h"
 #include "logging.h"
 
 namespace udg {
