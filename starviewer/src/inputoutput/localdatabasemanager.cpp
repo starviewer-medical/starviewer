@@ -4,6 +4,7 @@
 
 #include "patient.h"
 #include "study.h"
+#include "localdatabasedisplayshutterdal.h"
 #include "localdatabaseimagedal.h"
 #include "localdatabaseseriesdal.h"
 #include "localdatabasestudydal.h"
@@ -644,6 +645,28 @@ int LocalDatabaseManager::saveImages(DatabaseConnection *dbConnect, QList<Image*
 
         status = saveImage(dbConnect, imageToSave);
 
+
+        if (status != SQLITE_OK)
+        {
+            return status;
+        }
+
+        
+    }
+
+    return status;
+}
+
+int LocalDatabaseManager::saveDisplayShutters(DatabaseConnection *dbConnect, QList<DisplayShutter> shuttersList, Image *relatedImage)
+{
+    int status = SQLITE_OK;
+
+    LocalDatabaseDisplayShutterDAL displayShutterDAL(dbConnect);
+    foreach (const DisplayShutter &shutter, shuttersList)
+    {
+        displayShutterDAL.insert(shutter, relatedImage);
+        status = displayShutterDAL.getLastError();
+        
         if (status != SQLITE_OK)
         {
             return status;
@@ -713,8 +736,19 @@ int LocalDatabaseManager::saveImage(DatabaseConnection *dbConnect, Image *imageT
     if (imageDAL.getLastError() == SQLITE_CONSTRAINT)
     {
         imageDAL.update(imageToSave);
+        // Un cop actualitzades les imatges, actualitzem els corresponents shutters
+        LocalDatabaseDisplayShutterDAL shutterDAL(dbConnect);
+        shutterDAL.update(imageToSave->getDisplayShutters(), imageToSave);
     }
-
+    else
+    {
+        int status = saveDisplayShutters(dbConnect, imageToSave->getDisplayShutters(), imageToSave);
+        if (status != SQLITE_OK)
+        {
+            return status;
+        }
+    }
+    
     return imageDAL.getLastError();
 }
 
@@ -840,8 +874,17 @@ int LocalDatabaseManager::deleteSeriesFromDatabase(DatabaseConnection *dbConnect
 
 int LocalDatabaseManager::deleteImageFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
 {
-    LocalDatabaseImageDAL localDatabaseImageDAL(dbConnect);
+    // Primer esborrem els shutters que té aquesta imatge -> DELETE CASCADE
+    LocalDatabaseDisplayShutterDAL shutterDAL(dbConnect);
+    shutterDAL.del(maskToDelete);
 
+    if (shutterDAL.getLastError() != SQLITE_OK)
+    {
+        return shutterDAL.getLastError();
+    }
+    
+    // Si no hi ha cap error en esborrar els shutters, esborrem les corresponents imatges
+    LocalDatabaseImageDAL localDatabaseImageDAL(dbConnect);
     localDatabaseImageDAL.del(maskToDelete);
 
     return localDatabaseImageDAL.getLastError();

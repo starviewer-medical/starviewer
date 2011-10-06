@@ -11,7 +11,7 @@ CREATE TABLE DatabaseRevision
 
 -- IMPORTANT!!! Cal canviar el número de revisió per un de superior cada vegada que es faci un canvi a aquest fitxer i calgui
 -- que la BD s'actualitzi
-INSERT INTO DatabaseRevision (Revision) VALUES ('7661');
+INSERT INTO DatabaseRevision (Revision) VALUES ('7735');
 
 CREATE TABLE Patient
 ( 
@@ -110,6 +110,16 @@ CREATE TABLE Image
   PRIMARY KEY ('SOPInstanceUID', 'FrameNumber')
 );
 
+CREATE TABLE DisplayShutter
+(
+  ID                            INTEGER PRIMARY KEY AUTOINCREMENT,
+  Shape                         TEXT,
+  ShutterValue                  INTEGER,
+  PointsList                    TEXT,
+  ImageInstanceUID              TEXT,
+  ImageFrameNumber              INTEGER,
+  FOREIGN KEY (ImageInstanceUID, ImageFrameNumber) REFERENCES Image (SOPInstanceUID, FrameNumber)
+);
 --TODO:Comprovar si s'utilitzarà l'index IndexImage_StudyInstanceUIDSeriesInstanceUID després dels canvis fets a la BD
 CREATE INDEX  IndexImage_StudyInstanceUIDSeriesInstanceUID ON Image (StudyInstanceUID,SeriesInstanceUID); 
 CREATE INDEX  IndexImage_SOPInstanceUIDOrderNumberInVolume ON Image (SOPInstanceUID, OrderNumberInVolume); 
