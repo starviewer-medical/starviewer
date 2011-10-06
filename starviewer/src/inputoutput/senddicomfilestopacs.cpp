@@ -12,7 +12,6 @@
 #include "image.h"
 #include "pacsconnection.h"
 #include "pacsrequeststatus.h"
-#include "status.h"
 #include "inputoutputsettings.h"
 
 namespace udg {

@@ -5,7 +5,6 @@
 #include <QList>
 #include <QObject>
 
-#include "status.h"
 #include "image.h"
 #include "series.h"
 #include "study.h"

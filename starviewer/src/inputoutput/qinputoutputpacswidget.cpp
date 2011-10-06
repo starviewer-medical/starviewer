@@ -6,7 +6,6 @@
 #include <QPair>
 
 #include "inputoutputsettings.h"
-#include "status.h"
 #include "logging.h"
 #include "starviewerapplication.h"
 #include "dicommask.h"

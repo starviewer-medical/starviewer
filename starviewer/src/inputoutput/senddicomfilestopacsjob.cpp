@@ -1,7 +1,5 @@
 #include "senddicomfilestopacsjob.h"
 
-#include "status.h"
-
 #include "logging.h"
 #include "patient.h"
 #include "study.h"

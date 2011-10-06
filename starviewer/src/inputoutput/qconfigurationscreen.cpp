@@ -4,7 +4,6 @@
 #include <QDir>
 
 #include "pacsconnection.h"
-#include "status.h"
 #include "pacsdevice.h"
 #include "pacsdevicemanager.h"
 #include "starviewerapplication.h"
