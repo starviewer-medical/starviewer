@@ -213,6 +213,49 @@ QPolygon DisplayShutter::getAsQPolygon() const
     return m_shutterPolygon;
 }
 
+QString DisplayShutter::getPointsAsString() const
+{
+    QString pointsString;
+    
+    switch (m_shape)
+    {
+        case DisplayShutter::UndefinedShape:
+            break;
+
+        case DisplayShutter::RectangularShape:
+            {
+                QPoint topLeft = m_shutterPolygon.at(0);
+                QPoint bottomRight = m_shutterPolygon.at(2);
+                pointsString = QString("%1,%2;%3,%4").arg(topLeft.x()).arg(topLeft.y()).arg(bottomRight.x()).arg(bottomRight.y());
+            }
+            break;
+
+        case DisplayShutter::CircularShape:
+            {
+                QPoint firstPoint = m_shutterPolygon.first();
+                QPoint midPoint = m_shutterPolygon.at(m_shutterPolygon.count() / 2);
+
+                int radius = abs(firstPoint.x() - midPoint.x()) / 2;
+                QPoint centre;
+                centre.setX(firstPoint.x() - radius);
+                centre.setY(firstPoint.y());
+                pointsString = QString("%1,%2;%3").arg(centre.x()).arg(centre.y()).arg(radius);
+            }
+            break;
+
+        case DisplayShutter::PolygonalShape:
+            foreach(const QPoint &point, m_shutterPolygon)
+            {
+                pointsString += QString("%1,%2;").arg(point.x()).arg(point.y());
+            }
+            // Eliminem el ; final per complir amb el format
+            pointsString.chop(1);
+            break;
+    }
+
+    return pointsString;
+}
+
 DisplayShutter DisplayShutter::intersection(const QList<DisplayShutter> &shuttersList)
 {
     if (shuttersList.isEmpty())
