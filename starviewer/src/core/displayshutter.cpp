@@ -4,6 +4,7 @@
 #include <cmath>
 
 #include <QColor>
+#include <QRegExp>
 
 namespace udg {
 
@@ -134,6 +135,79 @@ bool DisplayShutter::setPoints(const QPoint &topLeft, const QPoint &bottomRight)
     return true;
 }
 
+bool DisplayShutter::setPoints(const QString &pointsString)
+{
+    if (m_shape == UndefinedShape)
+    {
+        if (shapeMatchesPointsStringFormat(RectangularShape, pointsString))
+        {
+            m_shape = RectangularShape;
+        }
+        else if (shapeMatchesPointsStringFormat(CircularShape, pointsString))
+        {
+            m_shape = CircularShape;
+        }
+        else if (shapeMatchesPointsStringFormat(PolygonalShape, pointsString))
+        {
+            m_shape = PolygonalShape;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else if (!shapeMatchesPointsStringFormat(m_shape, pointsString))
+    {
+        return false;
+    }
+    
+    QStringList pointsList = pointsString.split(";", QString::SkipEmptyParts);
+    
+    switch (m_shape)
+    {
+        case RectangularShape:
+            {
+                if (pointsList.count() != 2)
+                {
+                    return false;
+                }
+                
+                QStringList topLeft = pointsList.at(0).split(",");
+                QStringList bottomRight = pointsList.at(1).split(",");
+                return setPoints(QPoint(topLeft.at(0).toInt(), topLeft.at(1).toInt()), QPoint(bottomRight.at(0).toInt(), bottomRight.at(1).toInt()));
+            }
+            break;
+
+        case CircularShape:
+            {
+                if (pointsList.count() != 2)
+                {
+                    return false;
+                }
+                
+                QStringList centre = pointsList.at(0).split(",");
+                return setPoints(QPoint(centre.at(0).toInt(), centre.at(1).toInt()), pointsList.at(1).toInt());
+            }
+            break;
+
+        case PolygonalShape:
+            {
+                QPolygon polygon;
+                
+                for (int i = 0; i < pointsList.count(); ++i)
+                {
+                    QStringList point = pointsList.at(i).split(",");
+                    polygon << QPoint(point.at(0).toInt(), point.at(1).toInt());
+                }
+                
+                return setPoints(polygon);
+            }
+            break;
+    }
+
+    return false;
+}
+
 QPolygon DisplayShutter::getAsQPolygon() const
 {
     return m_shutterPolygon;
@@ -183,6 +257,37 @@ DisplayShutter DisplayShutter::intersection(const QList<DisplayShutter> &shutter
     }
 
     return intersectedShutter;
+}
+
+bool DisplayShutter::shapeMatchesPointsStringFormat(ShapeType shape, const QString &pointsString)
+{
+    QRegExp expression;
+    const QString IntegerPatternString("-?\\d+");
+    const QString PointPatternString(IntegerPatternString + "," + IntegerPatternString);
+    switch (shape)
+    {
+        case RectangularShape:
+            // 2 punts separats per ;
+            expression.setPattern(PointPatternString + ";" + PointPatternString);
+            break;
+            
+        case CircularShape:
+            // Centre;radi
+            expression.setPattern(PointPatternString + ";" + IntegerPatternString);
+            break;
+
+        case PolygonalShape:
+            // Com a mínim 3 punts separats per ;
+            expression.setPattern("(" + PointPatternString + ";){2,}" + PointPatternString);
+            break;
+
+        case UndefinedShape:
+            // Si no hi ha forma definida, no hi ha cap patró vàlid
+            return false;
+            break;
+    }
+
+    return expression.exactMatch(pointsString);
 }
 
 } // End namespace udg

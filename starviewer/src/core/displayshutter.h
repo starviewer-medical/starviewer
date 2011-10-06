@@ -46,12 +46,25 @@ public:
     /// Assigna els punts superior esquerre i inferior dret que defineixen la forma rectangular
     bool setPoints(const QPoint &topLeft, const QPoint &bottomRight);
 
+    /// Assigna els punts en format text. Cada punt tindrà la forma x,x, dos valors enters (x) separats per coma (,) 
+    /// Cada punt dins de la llista anirà separat per punt i coma (;)
+    /// Per la forma rectangular tindrem 2 punts corresponents al punt superior esquerre i al punt inferior dret del rectangle
+    /// Per la forma circular el format serà centre;radi on radi serà un valor enter
+    /// Per la forma poligonal el format serà un llistat de punts amb un mínim de 3 elements
+    /// En cas que el format de punts no es correspongui amb la forma del shutter, retornarà fals, cert altrament
+    /// Si la forma és indefinida, tractarà de veure si es correspon amb algun format de punts definit i li assignarà en cas de trobar-ne correspondència
+    bool setPoints(const QString &pointsString);
+    
     /// Retorna el shutter en forma de QPolygon
     QPolygon getAsQPolygon() const;
     
     /// Donada una llista de shutters, ens retorna el shutter resultant de la intersecció d'aquests. 
     /// En quant al color resultant, serà la mitjana de tots els shutters de la llista.
     static DisplayShutter intersection(const QList<DisplayShutter> &shuttersList);
+
+private:
+    /// Comprova que el format de l'string de punts és correcte segons la forma donada
+    bool shapeMatchesPointsStringFormat(ShapeType shape, const QString &pointsString);
 
 private:
     /// Forma del shutter
