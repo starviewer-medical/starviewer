@@ -2425,11 +2425,11 @@ void Q2DViewer::showImageOverlays(bool enable)
 {
     if (enable)
     {
-        getDrawer()->showGroup(OverlaysDrawerGroup);
+        getDrawer()->enableGroup(OverlaysDrawerGroup);
     }
     else
     {
-        getDrawer()->hideGroup(OverlaysDrawerGroup);
+        getDrawer()->disableGroup(OverlaysDrawerGroup);
     }
 }
 
@@ -2437,11 +2437,11 @@ void Q2DViewer::showDisplayShutters(bool enable)
 {
     if (enable)
     {
-        getDrawer()->showGroup(DisplayShuttersDrawerGroup);
+        getDrawer()->enableGroup(DisplayShuttersDrawerGroup);
     }
     else
     {
-        getDrawer()->hideGroup(DisplayShuttersDrawerGroup);
+        getDrawer()->disableGroup(DisplayShuttersDrawerGroup);
     }
 }
 

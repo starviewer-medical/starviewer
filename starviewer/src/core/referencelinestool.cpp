@@ -107,7 +107,7 @@ void ReferenceLinesTool::updateProjectionLines()
             checkAvailableLines();
             if (planesToProject.count() == 0)
             {
-                m_2DViewer->getDrawer()->hideGroup("ReferenceLines");
+                m_2DViewer->getDrawer()->disableGroup("ReferenceLines");
             }
             else
             {
@@ -124,13 +124,13 @@ void ReferenceLinesTool::updateProjectionLines()
         }
         else
         {
-            m_2DViewer->getDrawer()->hideGroup("ReferenceLines");
+            m_2DViewer->getDrawer()->disableGroup("ReferenceLines");
         }
     }
     else
     {
         // TODO Això només hauria de ser necessari quan el viewer és marcat com actiu
-        m_2DViewer->getDrawer()->hideGroup("ReferenceLines");
+        m_2DViewer->getDrawer()->disableGroup("ReferenceLines");
     }
 }
 
@@ -176,12 +176,12 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
                 m_backgroundProjectedIntersectionLines[drawerLineOffset]->setFirstPoint(firstIntersectionPoint);
                 m_backgroundProjectedIntersectionLines[drawerLineOffset]->setSecondPoint(secondIntersectionPoint);
 
-                m_2DViewer->getDrawer()->showGroup("ReferenceLines");
+                m_2DViewer->getDrawer()->enableGroup("ReferenceLines");
             }
             else
             {
                 // TODO en comptes de fer un hide, posar valors 0,0 a cada coordenada perquè no afecti a altres línies que sí interecten?
-                m_2DViewer->getDrawer()->hideGroup("ReferenceLines");
+                m_2DViewer->getDrawer()->disableGroup("ReferenceLines");
             }
 
             QList<QVector<double> > lowerPlaneBounds = referencePlane->getLowerBounds();
@@ -201,12 +201,12 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
                 m_backgroundProjectedIntersectionLines[drawerLineOffset + 1]->setFirstPoint(firstIntersectionPoint);
                 m_backgroundProjectedIntersectionLines[drawerLineOffset + 1]->setSecondPoint(secondIntersectionPoint);
 
-                m_2DViewer->getDrawer()->showGroup("ReferenceLines");
+                m_2DViewer->getDrawer()->enableGroup("ReferenceLines");
             }
             else
             {
                 // TODO en comptes de fer un hide, posar valors 0,0 a cada coordenada perquè no afecti a altres línies que sí interecten?
-                m_2DViewer->getDrawer()->hideGroup("ReferenceLines");
+                m_2DViewer->getDrawer()->disableGroup("ReferenceLines");
                 // Si no hi ha cap intersecció apliquem el pla directament, "a veure què"
                 // TODO això és per debug ONLY!!
     //             projectPlane(referencePlane);
@@ -232,18 +232,18 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
                 m_backgroundProjectedIntersectionLines[drawerLineOffset]->setFirstPoint(firstIntersectionPoint);
                 m_backgroundProjectedIntersectionLines[drawerLineOffset]->setSecondPoint(secondIntersectionPoint);
 
-                m_2DViewer->getDrawer()->showGroup("ReferenceLines");
+                m_2DViewer->getDrawer()->enableGroup("ReferenceLines");
             }
             else
             {
                 // TODO en comptes de fer un hide, posar valors 0,0 a cada coordenada perquè no afecti a altres línies que sí interecten?
-                m_2DViewer->getDrawer()->hideGroup("ReferenceLines");
+                m_2DViewer->getDrawer()->disableGroup("ReferenceLines");
             }
         }
     }
     else
     {
-        m_2DViewer->getDrawer()->hideGroup("ReferenceLines");
+        m_2DViewer->getDrawer()->disableGroup("ReferenceLines");
     }
 }
 
@@ -262,7 +262,7 @@ void ReferenceLinesTool::projectPlane(ImagePlane *planeToProject)
     m_projectedReferencePlane->setVertix(1, projectedVertix2);
     m_projectedReferencePlane->setVertix(2, projectedVertix3);
     m_projectedReferencePlane->setVertix(3, projectedVertix4);
-    m_2DViewer->getDrawer()->showGroup("ReferenceLines");
+    m_2DViewer->getDrawer()->enableGroup("ReferenceLines");
 }
 
 int ReferenceLinesTool::getIntersections(QVector<double> tlhc, QVector<double> trhc, QVector<double> brhc, QVector<double> blhc, ImagePlane *localizerPlane,
@@ -362,7 +362,7 @@ void ReferenceLinesTool::updateImagePlane()
 void ReferenceLinesTool::refreshReferenceViewerData()
 {
     // Si es projectaven plans sobre el nostre drawer, els amaguem
-    m_2DViewer->getDrawer()->hideGroup("ReferenceLines");
+    m_2DViewer->getDrawer()->disableGroup("ReferenceLines");
     updateFrameOfReference();
     updateImagePlane();
 }
