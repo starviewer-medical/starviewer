@@ -59,7 +59,6 @@ HEADERS += extensionfactory.h \
     itkErfcLevelSetImageFilter.h \
     itkVolumeCalculatorImageFilter.h \
     vtkAtamaiPolyDataToImageStencil2.h \
-    shutterfilter.h \
     displayshutter.h \
     image.h \
     imageoverlay.h \
@@ -294,7 +293,6 @@ SOURCES += extensionmediator.cpp \
     itkErfcLevelSetImageFilter.cpp \
     itkVolumeCalculatorImageFilter.cpp \
     vtkAtamaiPolyDataToImageStencil2.cxx \
-    shutterfilter.cpp \
     displayshutter.cpp \
     image.cpp \
     imageoverlay.cpp \
