@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QMultiMap>
+#include <QSet>
 
 #include "q2dviewer.h"
 
@@ -36,10 +37,14 @@ public:
     /// @param groupName nom del grup on la volem incloure
     void addToGroup(DrawerPrimitive *primitive, const QString &groupName);
 
-    /// Mostra/amaga les primitives que hi ha en un determinat grup
-    /// @param groupName nom del grup que volem mostrar/amagar
-    void hideGroup(const QString &groupName);
-    void showGroup(const QString &groupName);
+    /// Deshabilita les primitives que hi ha en un determinat grup, fent que mai siguin visibles, sota cap condició
+    /// @param groupName Nom del grup de primitives que volem deshabilitar
+    void disableGroup(const QString &groupName);
+
+    /// Habilita les primitives que hi ha en un determinat grup, fent que tornin a tenir el comportament habitual 
+    /// on el Drawer decidirà si han de ser visibles o no segons el pla i llesca assignats
+    /// @param groupName Nom del grup de primitives que volem habilitar
+    void enableGroup(const QString &groupName);
 
     /// Retorna la primitiva esborrable més propera al punt donat, dins de la vista i llesca proporcionats
     /// Aquest mètode no té en compte cap llindar de proximitat, és a dir, ens retorna la primitiva que en termes
@@ -96,6 +101,9 @@ private:
 
     /// Grups de primitives. Les agrupem per nom
     QMultiMap<QString, DrawerPrimitive*> m_primitiveGroups;
+
+    /// Conjunt de primitives en estat disabled
+    QSet<DrawerPrimitive*> m_disabledPrimitives;
 };
 
 }

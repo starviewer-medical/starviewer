@@ -273,7 +273,7 @@ void Drawer::show(int plane, int slice)
 
     foreach (DrawerPrimitive *primitive, primitivesList)
     {
-        if (primitive->isModified() || !primitive->isVisible())
+        if (!m_disabledPrimitives.contains(primitive) && (primitive->isModified() || !primitive->isVisible()))
         {
             primitive->visibilityOn();
             primitive->update();
@@ -286,7 +286,7 @@ int Drawer::getNumberOfDrawnPrimitives()
     return (m_axialPrimitives.size() + m_sagitalPrimitives.size() + m_coronalPrimitives.size());
 }
 
-void Drawer::hideGroup(const QString &groupName)
+void Drawer::disableGroup(const QString &groupName)
 {
     bool hasToRender = false;
     QList<DrawerPrimitive*> primitiveList = m_primitiveGroups.values(groupName);
@@ -298,6 +298,8 @@ void Drawer::hideGroup(const QString &groupName)
             primitive->update();
             hasToRender = true;
         }
+
+        m_disabledPrimitives.insert(primitive);
     }
 
     if (hasToRender)
@@ -306,18 +308,43 @@ void Drawer::hideGroup(const QString &groupName)
     }
 }
 
-void Drawer::showGroup(const QString &groupName)
+void Drawer::enableGroup(const QString &groupName)
 {
-    bool hasToRender = false;
-    QList<DrawerPrimitive*> primitiveList = m_primitiveGroups.values(groupName);
-    foreach (DrawerPrimitive *primitive, primitiveList)
+    QList<DrawerPrimitive*> currentVisiblePrimitives;
+    int currentSlice = m_2DViewer->getCurrentSlice();
+    switch (m_2DViewer->getView())
     {
-        if (primitive->isModified() || !primitive->isVisible())
+        case QViewer::AxialPlane:
+            currentVisiblePrimitives = m_axialPrimitives.values(currentSlice);
+            break;
+
+        case QViewer::SagitalPlane:
+            currentVisiblePrimitives = m_sagitalPrimitives.values(currentSlice);
+            break;
+
+        case QViewer::CoronalPlane:
+            currentVisiblePrimitives = m_coronalPrimitives.values(currentSlice);
+            break;
+    }
+    currentVisiblePrimitives << m_top2DPlanePrimitives;
+
+    bool hasToRender = false;
+    QList<DrawerPrimitive*> groupPrimitives = m_primitiveGroups.values(groupName);
+    foreach (DrawerPrimitive *primitive, groupPrimitives)
+    {
+        // Si la primitiva compleix les condicions de visibilitat per estat enable la farem visible
+        if (currentVisiblePrimitives.contains(primitive))
         {
-            primitive->visibilityOn();
-            primitive->update();
-            hasToRender = true;
+            if (primitive->isModified() || !primitive->isVisible())
+            {
+                primitive->visibilityOn();
+                primitive->update();
+                hasToRender = true;
+            }
         }
+
+        // L'eliminem de la llista de primitives disabled
+        m_disabledPrimitives.remove(primitive);
     }
 
     if (hasToRender)
