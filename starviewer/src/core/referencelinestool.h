@@ -81,6 +81,9 @@ private:
     void checkAvailableLines();
 
 private:
+    /// Nom del grup del drawer on agruparem les primitives del reference lines
+    static const QString ReferenceLinesDrawerGroup;
+    
     /// Dades específiques de la tool
     ReferenceLinesToolData *m_myData;
 
