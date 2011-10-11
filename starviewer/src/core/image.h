@@ -174,6 +174,9 @@ public:
     /// Obté la llista d'overlays
     QList<ImageOverlay> getOverlays();
 
+    /// Ens retorna tots els overlays de la imatge fusionats en un de sol
+    ImageOverlay getMergedOverlay();
+
     /// Ens diu si té shutters o no
     bool hasDisplayShutters() const;
     
@@ -202,6 +205,11 @@ public:
 
     /// Ens retorna una llista amb les modalitats que suportem com a Image
     static QStringList getSupportedModalities();
+
+private:
+    /// Llegeix els overlays. Si merge és true, els fusiona tots en un de sol i els guarda a m_mergedOverlay
+    /// Sinó els llegeix per separat i els guarda a la llista m_overlaysList
+    bool readOverlays(bool merge = true);
 
 private:
     /// Atributs DICOM
@@ -343,6 +351,9 @@ private:
     
     /// Llista d'overlays carregats
     QList<ImageOverlay> m_overlaysList;
+
+    /// Overlay producte de la fusió de tots els overlays de la imatge
+    ImageOverlay m_mergedOverlay;
 
     /// Llista de display shutters
     QList<DisplayShutter> m_shuttersList;
