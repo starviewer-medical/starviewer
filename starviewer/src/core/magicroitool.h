@@ -78,6 +78,9 @@ private:
     ///Mini parche per obtenir el valor de Voxel depenent de si és Axial, Coronal o Sagital
     double getVoxelValue(int x, int y, int z);
 
+    /// Elimina la representacio temporal de la tool
+    void deleteTemporalRepresentation();
+
 private slots:
     /// Inicialitza la tool
     void initialize();

@@ -31,6 +31,11 @@ AngleTool::AngleTool(QViewer *viewer, QObject *parent)
 
 AngleTool::~AngleTool()
 {
+    deleteTemporalRepresentation();
+}
+
+void AngleTool::deleteTemporalRepresentation()
+{
     if (m_state != None)
     {
         bool hasToRefresh = false;
@@ -54,6 +59,8 @@ AngleTool::~AngleTool()
         {
             m_2DViewer->render();
         }
+
+        m_state = None;
     }
 }
 
@@ -67,6 +74,13 @@ void AngleTool::handleEvent(long unsigned eventID)
 
         case vtkCommand::MouseMoveEvent:
             simulateCorrespondingSegmentOfAngle();
+            break;
+        case vtkCommand::KeyPressEvent:
+            int keyCode = m_2DViewer->getInteractor()->GetKeyCode();
+            if (keyCode == 27) // ESC
+            {
+                deleteTemporalRepresentation();
+            }
             break;
     }
 }

@@ -7,6 +7,7 @@
 #include "mathtools.h"
 
 #include <vtkCommand.h>
+#include <vtkRenderWindowInteractor.h>
 
 namespace udg {
 
@@ -20,6 +21,11 @@ OvalROITool::OvalROITool(QViewer *viewer, QObject *parent)
 
 OvalROITool::~OvalROITool()
 {
+    deleteTemporalRepresentation();
+}
+
+void OvalROITool::deleteTemporalRepresentation()
+{
     if (!m_roiPolygon.isNull() && m_state == FirstPointFixed)
     {
         m_roiPolygon->decreaseReferenceCount();
@@ -28,6 +34,7 @@ OvalROITool::~OvalROITool()
     }
 
     m_roiPolygon = 0;
+    m_state = Ready;
 }
 
 void OvalROITool::handleEvent(long unsigned eventID)
@@ -49,6 +56,13 @@ void OvalROITool::handleEvent(long unsigned eventID)
 
         case vtkCommand::LeftButtonReleaseEvent:
             closeForm();
+            break;
+        case vtkCommand::KeyPressEvent:
+            int keyCode = m_2DViewer->getInteractor()->GetKeyCode();
+            if (keyCode == 27) // ESC
+            {
+                deleteTemporalRepresentation();
+            }
             break;
     }
 }
