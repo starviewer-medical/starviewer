@@ -411,21 +411,26 @@ QList<ImageOverlay> Image::getOverlays()
         // significa que encara no els hem carregat
         if (getNumberOfOverlays() != m_overlaysList.count())
         {
-            ImageOverlayReader reader;
-            reader.setFilename(this->getPath());
-            if (reader.read())
-            {
-                m_overlaysList = reader.getOverlays();
-            }
-            else
-            {
-                ERROR_LOG("Ha fallat la lectura de l'overlay de la imatge amb path: " + this->getPath());
-                DEBUG_LOG("Ha fallat la lectura de l'overlay de la imatge amb path: " + this->getPath());
-            }
+            readOverlays(false);
         }
     }
 
     return m_overlaysList;
+}
+
+ImageOverlay Image::getMergedOverlay()
+{
+    if (hasOverlays())
+    {
+        // Si m_merged overlay no té dades
+        // significa que encara no l'hem carregat
+        if (!m_mergedOverlay.getData())
+        {
+            readOverlays(true);
+        }
+    }
+
+    return m_mergedOverlay;
 }
 
 bool Image::hasDisplayShutters() const
@@ -542,6 +547,37 @@ QStringList Image::getSupportedModalities()
     // "RTSTRUCT" << "RTRECORD" << "EPS" << "RTDOSE" << "RTPLAN" << "HD" << "SMR" << "AU"
 
     return supportedModalities;
+}
+
+bool Image::readOverlays(bool merge)
+{
+    ImageOverlayReader reader;
+    reader.setFilename(this->getPath());
+    if (reader.read())
+    {
+        if (merge)
+        {
+            bool mergeOk;
+            m_mergedOverlay = ImageOverlay::mergeOverlays(reader.getOverlays(), mergeOk);
+            if (!mergeOk)
+            {
+                ERROR_LOG("Ha fallat el merge d'overlays! Possible causa: falta de memòria");
+                DEBUG_LOG("Ha fallat el merge d'overlays! Possible causa: falta de memòria");
+            }
+            return mergeOk;
+        }
+        else
+        {
+            m_overlaysList = reader.getOverlays();
+            return true;
+        }
+    }
+    else
+    {
+        ERROR_LOG("Ha fallat la lectura de l'overlay de la imatge amb path: " + this->getPath());
+        DEBUG_LOG("Ha fallat la lectura de l'overlay de la imatge amb path: " + this->getPath());
+        return false;
+    }
 }
 
 }
