@@ -840,7 +840,7 @@ void Q2DViewer::loadImageOverlays(Volume *volume)
             {
                 if (image->hasOverlays())
                 {
-                    DrawerBitmap *drawerBitmap = imageOverlayToDrawerBitmap(image->getMergedOverlay());
+                    DrawerBitmap *drawerBitmap = imageOverlayToDrawerBitmap(image->getMergedOverlay(), sliceIndex);
                     getDrawer()->draw(drawerBitmap, Q2DViewer::Axial, sliceIndex);
                     getDrawer()->addToGroup(drawerBitmap, OverlaysDrawerGroup);
                 }
@@ -849,7 +849,7 @@ void Q2DViewer::loadImageOverlays(Volume *volume)
     }
 }
 
-DrawerBitmap* Q2DViewer::imageOverlayToDrawerBitmap(const ImageOverlay &imageOverlay)
+DrawerBitmap* Q2DViewer::imageOverlayToDrawerBitmap(const ImageOverlay &imageOverlay, int slice)
 {
     DrawerBitmap *drawerBitmap = new DrawerBitmap;
     // Inicialment tots seran no visibles, llavors segons en la llesca en que ens trobem aquests es veuran o no segons decideixi el Drawer
@@ -868,7 +868,7 @@ DrawerBitmap* Q2DViewer::imageOverlayToDrawerBitmap(const ImageOverlay &imageOve
 
     bitmapOrigin[0] = volumeOrigin[0] + imageOverlay.getXOrigin() * volumeSpacing[0];
     bitmapOrigin[1] = volumeOrigin[1] + imageOverlay.getYOrigin() * volumeSpacing[1];
-    bitmapOrigin[2] = volumeOrigin[2];
+    bitmapOrigin[2] = volumeOrigin[2] + slice * volumeSpacing[2];
     drawerBitmap->setOrigin(bitmapOrigin);
     
     drawerBitmap->setData(imageOverlay.getColumns(), imageOverlay.getRows(), imageOverlay.getData());
@@ -906,7 +906,7 @@ void Q2DViewer::loadDisplayShutters(Volume *volume)
             {
                 if (image->hasDisplayShutters())
                 {
-                    DrawerBitmap *drawerBitmap = displayShutterToDrawerBitmap(DisplayShutter::intersection(image->getDisplayShutters())); // Qt Painter Method
+                    DrawerBitmap *drawerBitmap = displayShutterToDrawerBitmap(DisplayShutter::intersection(image->getDisplayShutters()), sliceIndex); // Qt Painter Method
                     getDrawer()->draw(drawerBitmap, Q2DViewer::Axial, sliceIndex);
                     getDrawer()->addToGroup(drawerBitmap, DisplayShuttersDrawerGroup);
                 }
@@ -915,7 +915,7 @@ void Q2DViewer::loadDisplayShutters(Volume *volume)
     }
 }
 
-DrawerBitmap* Q2DViewer::displayShutterToDrawerBitmap(const DisplayShutter &shutter)
+DrawerBitmap* Q2DViewer::displayShutterToDrawerBitmap(const DisplayShutter &shutter, int slice)
 {
     DrawerBitmap *drawerBitmap = new DrawerBitmap;
     // Inicialment tots seran no visibles, llavors segons en la llesca en que ens trobem aquests es veuran o no segons decideixi el Drawer
@@ -931,7 +931,12 @@ DrawerBitmap* Q2DViewer::displayShutterToDrawerBitmap(const DisplayShutter &shut
     
     double volumeOrigin[3];
     m_mainVolume->getOrigin(volumeOrigin);
-    drawerBitmap->setOrigin(volumeOrigin);
+    
+    double bitmapOrigin[3];
+    bitmapOrigin[0] = volumeOrigin[0];
+    bitmapOrigin[0] = volumeOrigin[1];
+    bitmapOrigin[2] = volumeOrigin[2] + volumeSpacing[2] * slice;
+    drawerBitmap->setOrigin(bitmapOrigin);
 
     // Creem la màscara del shutter a través d'una QImage
     int volumeDimensions[3];

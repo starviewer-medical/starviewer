@@ -401,14 +401,14 @@ private:
     /// Carrega en memòria els overlays del volum passat per paràmetre (sempre que no sigui un dummy) i els afegeix al Drawer
     void loadImageOverlays(Volume *volume);
 
-    /// Converteix un ImageOverlay a un DrawerBitmap
-    DrawerBitmap* imageOverlayToDrawerBitmap(const ImageOverlay &imageOverlay);
+    /// Converteix un ImageOverlay a un DrawerBitmap. Cal indicar amb quina llesca es correspon per calcular l'origen z correcte
+    DrawerBitmap* imageOverlayToDrawerBitmap(const ImageOverlay &imageOverlay, int slice);
 
     /// Carrega en memòria els DisplayShutters del volum passat per paràmetre (sempre que no sigui un dummy) i els afegeix al Drawer
     void loadDisplayShutters(Volume *volume);
     
-    /// Converteix un DisplayShutter a un DrawerBitmap
-    DrawerBitmap* displayShutterToDrawerBitmap(const DisplayShutter &shutter);
+    /// Converteix un DisplayShutter a un DrawerBitmap. Cal indicar amb quina llesca es correspon per calcular l'origen z correcte
+    DrawerBitmap* displayShutterToDrawerBitmap(const DisplayShutter &shutter, int slice);
 
 private slots:
     /// Actualitza les transformacions de càmera (de moment rotació i flip)
