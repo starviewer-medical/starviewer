@@ -267,7 +267,7 @@ bool DatabaseInstallation::applySqlUpgradeCommandToDatabase(QString sqlUpgradeCo
 
     if (databaseConnection.getLastErrorCode() != SQLITE_OK)
     {
-        ERROR_LOG(QString("No s'ha pogut aplicar la comanda d'actualitzacio %1, Descripcio error: %2") .arg(databaseConnection.getLastErrorMessage(), sqlUpgradeCommand));
+        ERROR_LOG(QString("No s'ha pogut aplicar la comanda d'actualitzacio %1, Descripcio error: %2") .arg(sqlUpgradeCommand, databaseConnection.getLastErrorMessage()));
         return false;
     }
 
