@@ -840,14 +840,9 @@ void Q2DViewer::loadImageOverlays(Volume *volume)
             {
                 if (image->hasOverlays())
                 {
-                    // TODO Es podria comprovar si el número d'overlays coincideix amb elements de la llista
-                    // el qual indicaria que pot haver-hi algun problema en carregar els overlays
-                    foreach(const ImageOverlay &imageOverlay, image->getOverlays())
-                    {
-                        DrawerBitmap *drawerBitmap = imageOverlayToDrawerBitmap(imageOverlay);
-                        getDrawer()->draw(drawerBitmap, Q2DViewer::Axial, sliceIndex);
-                        getDrawer()->addToGroup(drawerBitmap, OverlaysDrawerGroup);
-                    }
+                    DrawerBitmap *drawerBitmap = imageOverlayToDrawerBitmap(image->getMergedOverlay());
+                    getDrawer()->draw(drawerBitmap, Q2DViewer::Axial, sliceIndex);
+                    getDrawer()->addToGroup(drawerBitmap, OverlaysDrawerGroup);
                 }
             }
         }
