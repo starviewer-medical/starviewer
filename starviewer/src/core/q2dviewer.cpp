@@ -906,7 +906,7 @@ void Q2DViewer::loadDisplayShutters(Volume *volume)
             {
                 if (image->hasDisplayShutters())
                 {
-                    DrawerBitmap *drawerBitmap = displayShutterToDrawerBitmap(DisplayShutter::intersection(image->getDisplayShutters()), sliceIndex); // Qt Painter Method
+                    DrawerBitmap *drawerBitmap = displayShutterToDrawerBitmap(DisplayShutter::intersection(image->getDisplayShutters()), sliceIndex);
                     getDrawer()->draw(drawerBitmap, Q2DViewer::Axial, sliceIndex);
                     getDrawer()->addToGroup(drawerBitmap, DisplayShuttersDrawerGroup);
                 }
