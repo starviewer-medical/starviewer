@@ -37,6 +37,9 @@ private:
     /// Dona el dibuix de l'òval per finalitzat
     void closeForm();
 
+    /// Elimina la representacio temporal de la tool
+    void deleteTemporalRepresentation();
+
 private slots:
     /// Inicialitza la tool
     void initialize();

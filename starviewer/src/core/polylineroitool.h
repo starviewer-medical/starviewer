@@ -37,6 +37,9 @@ private:
     /// Mètode que tanca la forma de la polilínia que s'ha dibuixat
     void closeForm();
 
+    /// Elimina la representacio temporal de la tool
+    void deleteTemporalRepresentation();
+
 private:
     /// Polilínia principal: és la polilínia que ens marca la forma que hem anat editant.
     QPointer<DrawerPolyline> m_mainPolyline;

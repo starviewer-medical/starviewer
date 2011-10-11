@@ -21,6 +21,11 @@ PolylineROITool::PolylineROITool(QViewer *viewer, QObject *parent)
 
 PolylineROITool::~PolylineROITool()
 {
+    deleteTemporalRepresentation();
+}
+
+void PolylineROITool::deleteTemporalRepresentation()
+{
     bool hasToRefresh = false;
     // Cal decrementar el reference count perquè
     // l'annotació s'esborri si "matem" l'eina
@@ -59,6 +64,13 @@ void PolylineROITool::handleEvent(long unsigned eventID)
 
         case vtkCommand::MouseMoveEvent:
             simulateClosingPolyline();
+            break;
+        case vtkCommand::KeyPressEvent:
+            int keyCode = m_2DViewer->getInteractor()->GetKeyCode();
+            if (keyCode == 27) // ESC
+            {
+                deleteTemporalRepresentation();
+            }
             break;
     }
 }

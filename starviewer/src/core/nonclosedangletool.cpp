@@ -30,6 +30,11 @@ NonClosedAngleTool::NonClosedAngleTool(QViewer *viewer, QObject *parent)
 
 NonClosedAngleTool::~NonClosedAngleTool()
 {
+    deleteTemporalRepresentation();
+}
+
+void NonClosedAngleTool::deleteTemporalRepresentation()
+{
     bool hasToRefresh = false;
     // Cal decrementar el reference count perquè
     // l'annotació s'esborri si "matem" l'eina
@@ -51,6 +56,9 @@ NonClosedAngleTool::~NonClosedAngleTool()
     {
         m_2DViewer->render();
     }
+
+    m_state = None;
+    m_lineState = NoPoints;
 }
 
 void NonClosedAngleTool::handleEvent(long unsigned eventID)
@@ -63,6 +71,13 @@ void NonClosedAngleTool::handleEvent(long unsigned eventID)
 
         case vtkCommand::MouseMoveEvent:
             handleLineDrawing();
+            break;
+        case vtkCommand::KeyPressEvent:
+            int keyCode = m_2DViewer->getInteractor()->GetKeyCode();
+            if (keyCode == 27) // ESC
+            {
+                deleteTemporalRepresentation();
+            }
             break;
     }
 }

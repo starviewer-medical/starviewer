@@ -32,6 +32,11 @@ DistanceTool::DistanceTool(QViewer *viewer, QObject *parent)
 
 DistanceTool::~DistanceTool()
 {
+    deleteTemporalRepresentation();
+}
+
+void DistanceTool::deleteTemporalRepresentation()
+{
     bool hasToRefresh = false;
     // Cal decrementar el reference count perquè
     // l'annotació s'esborri si "matem" l'eina
@@ -46,6 +51,8 @@ DistanceTool::~DistanceTool()
     {
         m_2DViewer->render();
     }
+
+    m_lineState = NoPointFixed;
 }
 
 void DistanceTool::handleEvent(long unsigned eventID)
@@ -57,6 +64,13 @@ void DistanceTool::handleEvent(long unsigned eventID)
             break;
         case vtkCommand::MouseMoveEvent:
             simulateLine();
+            break;
+        case vtkCommand::KeyPressEvent:
+            int keyCode = m_2DViewer->getInteractor()->GetKeyCode();
+            if (keyCode == 27) // ESC
+            {
+                deleteTemporalRepresentation();
+            }
             break;
     }
 }

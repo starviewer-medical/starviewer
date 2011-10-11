@@ -51,6 +51,9 @@ private:
     /// Simula la línia quan es mou el ratolí i tenim el primer punt marcat.
     void simulateLine();
 
+    /// Elimina la representacio temporal de la tool
+    void deleteTemporalRepresentation();
+
 private slots:
     /// Inicialitza l'estat de la tool.
     void initialize();

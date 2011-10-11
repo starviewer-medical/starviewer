@@ -34,6 +34,11 @@ MagicROITool::MagicROITool(QViewer *viewer, QObject *parent)
 
 MagicROITool::~MagicROITool()
 {
+    deleteTemporalRepresentation();
+}
+
+void MagicROITool::deleteTemporalRepresentation()
+{
     if (!m_roiPolygon.isNull())
     {
         m_roiPolygon->decreaseReferenceCount();
@@ -68,7 +73,12 @@ void MagicROITool::handleEvent(unsigned long eventID)
         case vtkCommand::MouseMoveEvent:
             modifyRegionByFactor();
             break;
-        default:
+        case vtkCommand::KeyPressEvent:
+            int keyCode = m_2DViewer->getInteractor()->GetKeyCode();
+            if (keyCode == 27) // ESC
+            {
+                deleteTemporalRepresentation();
+            }
             break;
     }
 }

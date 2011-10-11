@@ -44,6 +44,9 @@ private:
     /// Calcula la correcta posició del caption de l'angle segons els punts de l'angle
     void placeText(double *firstLineVertex, double *secondLineVertex, DrawerText *angleText);
 
+    /// Elimina la representacio temporal de la tool
+    void deleteTemporalRepresentation();
+
 private slots:
     /// Inicialitza l'estat de la tool
     void initialize();
