@@ -12,6 +12,11 @@ public:
     PortInUse::PortInUseStatus m_testingStatus;
     QString m_testingErrorString;
 
+    TestingPortInUseTest(int port)
+    {
+        m_port = port;
+    }
+
 protected:
     virtual PortInUse* createPortInUse()
     {
@@ -44,20 +49,24 @@ void test_PortInUseTest::run_ShouldTestIfRISPortIsInUse_data()
     QTest::addColumn<PortInUse::PortInUseStatus>("testingStatus");
     QTest::addColumn<QString>("testingErrorString");
 
+    QTest::addColumn<int>("testingPort");
     QTest::addColumn<DiagnosisTestResult::DiagnosisTestResultState>("testingDiagnosisTestResultState");
     QTest::addColumn<QString>("testingDiagnosisTestResultDescription");
     QTest::addColumn<QString>("testingDiagnosisTestResultSolution");
 
     QString unusedString = "";
+    int port = 0;
 
     QTest::newRow("free port") << PortInUse::PortIsAvailable << unusedString
-                               << DiagnosisTestResult::Ok << unusedString << unusedString;
+                               << port << DiagnosisTestResult::Ok << unusedString << unusedString;
     
     QTest::newRow("port in use") << PortInUse::PortIsInUse << unusedString
-                                 << DiagnosisTestResult::Error << "Port is already in use" << "Try another port or shut down the application using this port";
+                                 << port << DiagnosisTestResult::Error << "Port is already in use"
+                                 << "Try another port or shut down the application using this port";
 
     QTest::newRow("port error") << PortInUse::PortCheckError << "NetworkError"
-                                << DiagnosisTestResult::Error << "Unable to test if port 0 is in use due to error: NetworkError"
+                                << port << DiagnosisTestResult::Error
+                                << "Unable to test if port " + QString("%1").arg(port) + " is in use due to error: NetworkError"
                                 << unusedString;
 }
 
@@ -66,12 +75,12 @@ void test_PortInUseTest::run_ShouldTestIfRISPortIsInUse()
     QFETCH(PortInUse::PortInUseStatus, testingStatus);
     QFETCH(QString, testingErrorString);
  
+    QFETCH(int, testingPort);
     QFETCH(DiagnosisTestResult::DiagnosisTestResultState, testingDiagnosisTestResultState);
     QFETCH(QString, testingDiagnosisTestResultDescription);
     QFETCH(QString, testingDiagnosisTestResultSolution);
 
-    TestingPortInUseTest portInUseTest;
-    
+    TestingPortInUseTest portInUseTest(testingPort);
     portInUseTest.m_testingStatus = testingStatus;
     portInUseTest.m_testingErrorString = testingErrorString;
 
