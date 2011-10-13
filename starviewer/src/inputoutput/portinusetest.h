@@ -12,21 +12,19 @@ class PortInUse;
 class PortInUseTest : public DiagnosisTest {
 
 public:
-    PortInUseTest(QObject *parent = 0);
-    ~PortInUseTest();
+    virtual ~PortInUseTest();
 
     DiagnosisTestResult run();
 
 protected:
+    PortInUseTest(QObject *parent = 0);
     virtual PortInUse* createPortInUse();
     virtual void checkIfPortIsInUse(PortInUse *portInUse);
 
-private:
+protected:
     /// Port que es comprovarà si està en ús.
     int m_port;
 };
-
-static DiagnosisTestFactoryRegister<PortInUseTest> registerPortInUseTest("PortInUseTest");
 
 } // end namespace udg
 

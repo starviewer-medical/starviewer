@@ -90,7 +90,9 @@ HEADERS += databaseconnection.h \
     qthumbnailspreviewwidget.h \
     portinuse.h \
     portinusetest.h \
-    echotopacstest.h
+    echotopacstest.h \
+    risrequestsportinusetest.h \
+    incomingdicomconnectionsportinusetest.h
 SOURCES += databaseconnection.cpp \
     pacsdevicemanager.cpp \
     pacsconnection.cpp \
@@ -156,7 +158,9 @@ SOURCES += databaseconnection.cpp \
     qthumbnailspreviewwidget.cpp \
     portinuse.cpp \
     portinusetest.cpp \
-    echotopacstest.cpp
+    echotopacstest.cpp \
+    risrequestsportinusetest.cpp \
+    incomingdicomconnectionsportinusetest.cpp
 INCLUDEPATH += ../core
 DEPENDPATH += ../core
 TEMPLATE = lib
