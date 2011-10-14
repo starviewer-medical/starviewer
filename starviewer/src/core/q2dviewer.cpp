@@ -800,8 +800,7 @@ void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVo
 
     // Actualitzem la informació de window level
     this->updateWindowLevelData();
-    loadImageOverlays(volume);
-    loadDisplayShutters(volume);
+    loadOverlaysAndShutters(volume);
     // HACK
     // S'activa el rendering de nou per tal de que es renderitzi l'escena
     enableRendering(true);
@@ -810,7 +809,7 @@ void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVo
     emit volumeChanged(m_mainVolume);
 }
 
-void Q2DViewer::loadImageOverlays(Volume *volume)
+void Q2DViewer::loadOverlaysAndShutters(Volume *volume)
 {
     if (!volume)
     {
@@ -844,6 +843,13 @@ void Q2DViewer::loadImageOverlays(Volume *volume)
                     getDrawer()->draw(drawerBitmap, Q2DViewer::Axial, sliceIndex);
                     getDrawer()->addToGroup(drawerBitmap, OverlaysDrawerGroup);
                 }
+
+                if (image->hasDisplayShutters())
+                {
+                    DrawerBitmap *drawerBitmap = displayShutterToDrawerBitmap(DisplayShutter::intersection(image->getDisplayShutters()), sliceIndex);
+                    getDrawer()->draw(drawerBitmap, Q2DViewer::Axial, sliceIndex);
+                    getDrawer()->addToGroup(drawerBitmap, DisplayShuttersDrawerGroup);
+                }
             }
         }
     }
@@ -874,45 +880,6 @@ DrawerBitmap* Q2DViewer::imageOverlayToDrawerBitmap(const ImageOverlay &imageOve
     drawerBitmap->setData(imageOverlay.getColumns(), imageOverlay.getRows(), imageOverlay.getData());
     
     return drawerBitmap;
-}
-
-void Q2DViewer::loadDisplayShutters(Volume *volume)
-{
-    if (!volume)
-    {
-        return;
-    }
-
-    if (volume->objectName() == DummyVolumeObjectName)
-    {
-        return;
-    }
-
-    int numberOfSlices = volume->getNumberOfSlicesPerPhase();
-    int numberOfPhases = volume->getNumberOfPhases();
-    for (int sliceIndex = 0; sliceIndex < numberOfSlices; ++sliceIndex)
-    {
-        for (int phaseIndex = 0; phaseIndex < numberOfPhases; ++phaseIndex)
-        {
-            Image *image = volume->getImage(sliceIndex, phaseIndex);
-            if (!image)
-            {
-                ERROR_LOG(QString("Error inesperat intentant accedir a la imatge amb índexs: %1(slice), %2(phase) del volum actual")
-                    .arg(sliceIndex).arg(phaseIndex));
-                DEBUG_LOG(QString("Error inesperat intentant accedir a la imatge amb índexs: %1(slice), %2(phase) del volum actual")
-                    .arg(sliceIndex).arg(phaseIndex));
-            }
-            else
-            {
-                if (image->hasDisplayShutters())
-                {
-                    DrawerBitmap *drawerBitmap = displayShutterToDrawerBitmap(DisplayShutter::intersection(image->getDisplayShutters()), sliceIndex);
-                    getDrawer()->draw(drawerBitmap, Q2DViewer::Axial, sliceIndex);
-                    getDrawer()->addToGroup(drawerBitmap, DisplayShuttersDrawerGroup);
-                }
-            }
-        }
-    }
 }
 
 DrawerBitmap* Q2DViewer::displayShutterToDrawerBitmap(const DisplayShutter &shutter, int slice)

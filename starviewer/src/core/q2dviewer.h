@@ -398,15 +398,12 @@ private:
     /// qualsevol excepció possible durant el procés de rendering per evitar que peti
     void setNewVolumeAndExecuteCommand(Volume *volume);
 
-    /// Carrega en memòria els overlays del volum passat per paràmetre (sempre que no sigui un dummy) i els afegeix al Drawer
-    void loadImageOverlays(Volume *volume);
+    /// Carrega en memòria els ImageOverlays i DisplayShutters del volum passat per paràmetre (sempre que no sigui un dummy) i els afegeix al Drawer
+    void loadOverlaysAndShutters(Volume *volume);
 
     /// Converteix un ImageOverlay a un DrawerBitmap. Cal indicar amb quina llesca es correspon per calcular l'origen z correcte
     DrawerBitmap* imageOverlayToDrawerBitmap(const ImageOverlay &imageOverlay, int slice);
 
-    /// Carrega en memòria els DisplayShutters del volum passat per paràmetre (sempre que no sigui un dummy) i els afegeix al Drawer
-    void loadDisplayShutters(Volume *volume);
-    
     /// Converteix un DisplayShutter a un DrawerBitmap. Cal indicar amb quina llesca es correspon per calcular l'origen z correcte
     DrawerBitmap* displayShutterToDrawerBitmap(const DisplayShutter &shutter, int slice);
 
