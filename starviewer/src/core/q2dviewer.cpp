@@ -744,25 +744,6 @@ void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVo
     m_lastView = Q2DViewer::Axial;
     m_alignPosition = Q2DViewer::AlignCenter;
 
-    // Aquí corretgim el fet que no s'hagi adquirit la imatge en un espai ortogonal
-    // No s'aplica perquè afectaria al cursor3D entre d'altres
-//     ImagePlane * currentPlane = new ImagePlane();
-//     currentPlane->fillFromImage(m_mainVolume->getImage(0,0));
-//     double currentPlaneRowVector[3], currentPlaneColumnVector[3];
-//     currentPlane->getRowDirectionVector(currentPlaneRowVector);
-//     currentPlane->getColumnDirectionVector(currentPlaneColumnVector);
-//     vtkMatrix4x4 *projectionMatrix = vtkMatrix4x4::New();
-//     projectionMatrix->Identity();
-//     int row;
-//     for (row = 0; row < 3; row++)
-//     {
-//         projectionMatrix->SetElement(row,0, (currentPlaneRowVector[row]));
-//         projectionMatrix->SetElement(row,1, (currentPlaneColumnVector[row]));
-//     }
-//
-//     m_imageActor->SetUserMatrix(projectionMatrix);
-//     delete currentPlane;
-
     m_numberOfPhases = m_mainVolume->getNumberOfPhases();
     m_maxSliceValue = this->getMaximumSlice();
 
