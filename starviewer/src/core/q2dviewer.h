@@ -361,6 +361,9 @@ private:
     ///  Valida el valor d'slice donat i actualitza les variables membres pertinents, com m_currentSlice o m_firstSlabSlice
     void checkAndUpdateSliceValue(int value);
 
+    /// Inicialitza els paràmetres del thick slab i del seu filtre
+    void initializeThickSlab();
+    
     /// Aplica el factor de rotació adient segons els girs que li indiquem. No actualitza la càmera ni l'escena, simplement
     /// es fa servir per posar els valors correctes a les variables internes que controlen com està girada la imatge.
     void rotate(int times);
