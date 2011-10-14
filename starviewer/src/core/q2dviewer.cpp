@@ -744,12 +744,6 @@ void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVo
     m_lastView = Q2DViewer::Axial;
     m_alignPosition = Q2DViewer::AlignCenter;
 
-    // Inicialització del thickSlab
-    m_slabThickness = 1;
-    m_firstSlabSlice = 0;
-    m_lastSlabSlice = 0;
-    m_thickSlabActive = false;
-
     // Aquí corretgim el fet que no s'hagi adquirit la imatge en un espai ortogonal
     // No s'aplica perquè afectaria al cursor3D entre d'altres
 //     ImagePlane * currentPlane = new ImagePlane();
@@ -784,12 +778,7 @@ void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVo
 
     // Preparem el thickSlab
     // TODO Cada cop que fem setInput resetejem els valors per defecte?
-    m_thickSlabProjectionFilter->SetInput(m_mainVolume->getVtkData());
-    m_thickSlabProjectionFilter->SetProjectionDimension(m_lastView);
-    m_thickSlabProjectionFilter->SetAccumulatorType((AccumulatorFactory::AccumulatorType) m_slabProjectionMode);
-    m_thickSlabProjectionFilter->SetFirstSlice(m_firstSlabSlice * m_numberOfPhases + m_currentPhase);
-    m_thickSlabProjectionFilter->SetNumberOfSlicesToProject(m_slabThickness);
-    m_thickSlabProjectionFilter->SetStep(m_numberOfPhases);
+    initializeThickSlab();
 
     // TODO BUG Si no fem aquesta crida ens peta al canviar d'input entre un que fos més gran que l'anterior
     updateDisplayExtent();
@@ -2200,6 +2189,21 @@ void Q2DViewer::checkAndUpdateSliceValue(int value)
 
     m_firstSlabSlice = m_currentSlice;
     m_lastSlabSlice = m_firstSlabSlice + m_slabThickness;
+}
+
+void Q2DViewer::initializeThickSlab()
+{
+    m_slabThickness = 1;
+    m_firstSlabSlice = 0;
+    m_lastSlabSlice = 0;
+    m_thickSlabActive = false;
+    
+    m_thickSlabProjectionFilter->SetInput(m_mainVolume->getVtkData());
+    m_thickSlabProjectionFilter->SetProjectionDimension(m_lastView);
+    m_thickSlabProjectionFilter->SetAccumulatorType((AccumulatorFactory::AccumulatorType) m_slabProjectionMode);
+    m_thickSlabProjectionFilter->SetFirstSlice(m_firstSlabSlice * m_numberOfPhases + m_currentPhase);
+    m_thickSlabProjectionFilter->SetNumberOfSlicesToProject(m_slabThickness);
+    m_thickSlabProjectionFilter->SetStep(m_numberOfPhases);
 }
 
 void Q2DViewer::putCoordinateInCurrentImageBounds(double xyz[3])
