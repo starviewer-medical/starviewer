@@ -111,6 +111,9 @@ Q2DViewer::~Q2DViewer()
     {
         m_blender->Delete();
     }
+
+    removeViewerBitmaps();
+    
     // TODO hem hagut de fer eliminar primer el drawer per davant d'altres objectes
     // per solucionar el ticket #539, però això denota que hi ha algun problema de
     // disseny que fa que no sigui prou robust. L'ordre en que s'esborren els objectes
@@ -727,6 +730,12 @@ void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVo
         this->setViewerStatus(VisualizingVolume);
     }
 
+    if (m_mainVolume != volume)
+    {
+        // Al canviar de volum, eliminem overlays/shutters que poguèssim tenir anteriorment
+        removeViewerBitmaps();
+    }
+    
     // Al fer un nou input, les distàncies que guardava el drawer no tenen sentit, pertant s'esborren
     if (m_mainVolume)
     {
@@ -779,6 +788,17 @@ void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVo
     emit volumeChanged(m_mainVolume);
 }
 
+void Q2DViewer::removeViewerBitmaps()
+{
+    // Eliminem els bitmaps que teníem fins ara
+    foreach (DrawerBitmap *bitmap, m_viewerBitmaps)
+    {
+        bitmap->decreaseReferenceCount();
+        delete bitmap;
+    }
+    m_viewerBitmaps.clear();
+}
+
 void Q2DViewer::loadOverlaysAndShutters(Volume *volume)
 {
     if (!volume)
@@ -812,6 +832,8 @@ void Q2DViewer::loadOverlaysAndShutters(Volume *volume)
                     DrawerBitmap *overlayBitmap = imageOverlayToDrawerBitmap(image->getMergedOverlay(), sliceIndex);
                     getDrawer()->draw(overlayBitmap, Q2DViewer::Axial, sliceIndex);
                     getDrawer()->addToGroup(overlayBitmap, OverlaysDrawerGroup);
+                    overlayBitmap->increaseReferenceCount();
+                    m_viewerBitmaps << overlayBitmap;
                 }
 
                 if (image->hasDisplayShutters())
@@ -819,6 +841,8 @@ void Q2DViewer::loadOverlaysAndShutters(Volume *volume)
                     DrawerBitmap *shutterBitmap = displayShutterToDrawerBitmap(DisplayShutter::intersection(image->getDisplayShutters()), sliceIndex);
                     getDrawer()->draw(shutterBitmap, Q2DViewer::Axial, sliceIndex);
                     getDrawer()->addToGroup(shutterBitmap, DisplayShuttersDrawerGroup);
+                    shutterBitmap->increaseReferenceCount();
+                    m_viewerBitmaps << shutterBitmap;
                 }
             }
         }
