@@ -740,10 +740,16 @@ void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVo
         removeViewerBitmaps();
     }
     
-    // Al fer un nou input, les distàncies que guardava el drawer no tenen sentit, pertant s'esborren
     if (m_mainVolume)
     {
+        // Al fer un nou input, les distàncies que guardava el drawer no tenen sentit, pertant s'esborren
         m_drawer->removeAllPrimitives();
+
+        // Si el volum anterior era un dummy, l'eliminem
+        if (m_mainVolume->objectName() == DummyVolumeObjectName)
+        {
+            delete m_mainVolume;
+        }
     }
 
     // TODO Caldria fer neteja? bloquejar? Per tal que quedi en negre mentres es carrega el nou volum?
