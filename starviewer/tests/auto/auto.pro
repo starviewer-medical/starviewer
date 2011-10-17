@@ -25,3 +25,5 @@ include(../../sourcelibsdependencies.pri)
 
 #TODO: No afegeix la informacio de UI_DIR com a include a l'hora de compilar el testos
 INCLUDEPATH += ../../tmp/ui
+
+RESOURCES = ../../src/main/main.qrc
