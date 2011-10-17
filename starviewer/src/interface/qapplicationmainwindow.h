@@ -41,7 +41,7 @@ public:
 
     /// Crea una nova finestra i l'obre. Si li proporcionem dades de pacient, els hi afegeix
     /// @param context Dades de pacient que volem que contingui la nova finestra
-    void setPatientInNewWindow(Patient *patient);
+    QApplicationMainWindow* setPatientInNewWindow(Patient *patient);
 
     /// Ens retorna el punter al pacient que té ara
     Patient* getCurrentPatient();

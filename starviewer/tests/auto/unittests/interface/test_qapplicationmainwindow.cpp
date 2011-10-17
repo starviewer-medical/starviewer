@@ -1,7 +1,10 @@
 #include "autotest.h"
 #include "qapplicationmainwindow.h"
+#include "patient.h"
 
 using namespace udg;
+
+Q_DECLARE_METATYPE(QSharedPointer<Patient>)
 
 class test_QApplicationMainWindow : public QObject {
 Q_OBJECT
@@ -9,6 +12,8 @@ Q_OBJECT
 private slots:
     void getCountQApplicationMainWindow_ShoudReturnExpectedNumberOfQApplicationMainWindows();
     void getQApplicationMainWindows_ShouldReturnExpectedQApplicationMainWindowList();
+    void setPatientInNewWindow_ShouldReturnNewWindowWithExpectedPatient_data();
+    void setPatientInNewWindow_ShouldReturnNewWindowWithExpectedPatient();
 
 private:
     int countSameMainWindowObjects(const QList<QApplicationMainWindow*> &originalObjects, const QList<QApplicationMainWindow*> &gottenObjects);
@@ -65,6 +70,26 @@ int test_QApplicationMainWindow::countSameMainWindowObjects(const QList<QApplica
         }
     }
     return count;
+}
+
+void test_QApplicationMainWindow::setPatientInNewWindow_ShouldReturnNewWindowWithExpectedPatient_data()
+{
+    QTest::addColumn<QSharedPointer<Patient> >("patient");
+
+    QTest::newRow("null patient") << QSharedPointer<Patient>(0);
+    QTest::newRow("default patient") << QSharedPointer<Patient>(new Patient());
+}
+
+void test_QApplicationMainWindow::setPatientInNewWindow_ShouldReturnNewWindowWithExpectedPatient()
+{
+    QFETCH(QSharedPointer<Patient>, patient);
+
+    QSharedPointer<QApplicationMainWindow> mainWindow(new QApplicationMainWindow(0));
+    QList<QApplicationMainWindow*> mainApps = QApplicationMainWindow::getQApplicationMainWindows();
+    QApplicationMainWindow *newWindow = mainWindow->setPatientInNewWindow(patient.data());
+
+    QVERIFY(!mainApps.contains(newWindow));
+    QCOMPARE(newWindow->getCurrentPatient(), patient.data());
 }
 
 DECLARE_TEST(test_QApplicationMainWindow)
