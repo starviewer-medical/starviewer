@@ -49,6 +49,9 @@ public:
     /// Retorna el numero de finestres amb diferents models que tenim obertes, el num. de QApplicationMainWindow
     unsigned int getCountQApplicationMainWindow();
 
+    /// Retorna totes finestres que tenim obertes
+    static QList<QApplicationMainWindow*> getQApplicationMainWindows();
+
     /// Retorna la finestra activa actual
     static QApplicationMainWindow* getActiveApplicationMainWindow();
 
