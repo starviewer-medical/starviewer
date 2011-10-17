@@ -730,6 +730,10 @@ void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVo
         this->setViewerStatus(VisualizingVolume);
     }
 
+    // HACK
+    // Desactivem el rendering per tal de millorar l'eficiència del setInput ja que altrament es renderitza múltiples vegades
+    enableRendering(false);
+    
     if (m_mainVolume != volume)
     {
         // Al canviar de volum, eliminem overlays/shutters que poguèssim tenir anteriorment
@@ -741,10 +745,6 @@ void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVo
     {
         m_drawer->removeAllPrimitives();
     }
-
-    // HACK
-    // Desactivem el rendering per tal de millorar l'eficiència del setInput ja que altrament es renderitza múltiples vegades
-    enableRendering(false);
 
     // TODO Caldria fer neteja? bloquejar? Per tal que quedi en negre mentres es carrega el nou volum?
     m_mainVolume = volume;
