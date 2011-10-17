@@ -87,21 +87,21 @@ void QInputOutputLocalDatabaseWidget::createContextMenuQStudyTreeWidget()
 {
     QAction *action;
 
-    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/view.png"), tr("&View"), this, SLOT(viewFromQStudyTreeWidget()),
-                                                     ShortcutManager::getShortcuts(Shortcuts::ViewSelectedStudies).first());
+    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/view.png"), tr("&View"), this, SLOT(viewFromQStudyTreeWidget()));
+    action->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::ViewSelectedStudies));
     (void) new QShortcut(action->shortcut(), this, SLOT(viewFromQStudyTreeWidget()));
 
-    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/databaseRemove.png"), tr("&Delete"), this, SLOT(deleteSelectedItemsFromLocalDatabase()),
-                                                     ShortcutManager::getShortcuts(Shortcuts::DeleteSelectedLocalDatabaseStudies).first());
+    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/databaseRemove.png"), tr("&Delete"), this, SLOT(deleteSelectedItemsFromLocalDatabase()));
+    action->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::DeleteSelectedLocalDatabaseStudies));
     (void) new QShortcut(action->shortcut(), this, SLOT(deleteSelectedItemsFromLocalDatabase()));
 
 #ifndef STARVIEWER_LITE
-    action = m_contextMenuQStudyTreeWidget.addAction(tr("Send to DICOMDIR List"), this, SLOT(addSelectedStudiesToCreateDicomdirList()),
-                                                     ShortcutManager::getShortcuts(Shortcuts::SendSelectedStudiesToDICOMDIRList).first());
+    action = m_contextMenuQStudyTreeWidget.addAction(tr("Send to DICOMDIR List"), this, SLOT(addSelectedStudiesToCreateDicomdirList()));
+    action->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::SendSelectedStudiesToDICOMDIRList));
     (void) new QShortcut(action->shortcut(), this, SLOT(addSelectedStudiesToCreateDicomdirList()));
 
-    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/store.png"), tr("Send to PACS"), this, SLOT(selectedStudiesStoreToPacs()),
-                                                     ShortcutManager::getShortcuts(Shortcuts::StoreSelectedStudiesToPACS).first());
+    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/store.png"), tr("Send to PACS"), this, SLOT(selectedStudiesStoreToPacs()));
+    action->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::StoreSelectedStudiesToPACS));
     (void) new QShortcut(action->shortcut(), this, SLOT(selectedStudiesStoreToPacs()));
 #endif
     // Especifiquem que és el menú per la cache

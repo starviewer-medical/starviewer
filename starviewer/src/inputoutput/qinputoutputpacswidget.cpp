@@ -82,12 +82,12 @@ void QInputOutputPacsWidget::createContextMenuQStudyTreeWidget()
     QAction *action;
 
     action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/retrieveAndView.png"), tr("Retrieve && &View"), this,
-                                                     SLOT(retrieveAndViewSelectedItemsFromQStudyTreeWidget()),
-                                                     ShortcutManager::getShortcuts(Shortcuts::RetrieveAndViewSelectedStudies).first());
+                                                     SLOT(retrieveAndViewSelectedItemsFromQStudyTreeWidget()));
+    action->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::RetrieveAndViewSelectedStudies));
     (void) new QShortcut(action->shortcut(), this, SLOT(retrieveAndViewSelectedItemsFromQStudyTreeWidget()));
 
-    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/retrieve.png"), tr("&Retrieve"), this, SLOT(retrieveSelectedItemsFromQStudyTreeWidget()),
-                                                     ShortcutManager::getShortcuts(Shortcuts::RetrieveSelectedStudies).first());
+    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/retrieve.png"), tr("&Retrieve"), this, SLOT(retrieveSelectedItemsFromQStudyTreeWidget()));
+    action->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::RetrieveSelectedStudies));
     (void) new QShortcut(action->shortcut(), this, SLOT(retrieveSelectedItemsFromQStudyTreeWidget()));
 
     // Especifiquem que es el menu del dicomdir
