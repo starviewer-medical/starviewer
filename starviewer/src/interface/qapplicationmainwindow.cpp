@@ -475,10 +475,12 @@ void QApplicationMainWindow::switchToLanguage(QString locale)
     QMessageBox::information(this, tr("Language Switch"), tr("The changes will take effect the next time you startup the application"));
 }
 
-void QApplicationMainWindow::setPatientInNewWindow(Patient *patient)
+QApplicationMainWindow* QApplicationMainWindow::setPatientInNewWindow(Patient *patient)
 {
     QApplicationMainWindow *newMainWindow = openBlankWindow();
     newMainWindow->setPatient(patient);
+
+    return newMainWindow;
 }
 
 QApplicationMainWindow* QApplicationMainWindow::openBlankWindow()
