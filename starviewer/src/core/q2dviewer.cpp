@@ -2236,7 +2236,29 @@ void Q2DViewer::restore()
         return;
     }
 
-    this->setInputAsynchronously(m_mainVolume, m_inputFinishedCommand);
+    // HACK
+    // Desactivem el rendering per tal de millorar l'eficiència de tornar a executar el pipeline,
+    // ja que altrament es renderitza múltiples vegades i provoca efectes indesitjats com el flickering
+    enableRendering(false);
+    
+    // Esborrem les anotacions
+    if (m_mainVolume)
+    {
+        m_drawer->removeAllPrimitives();
+    }
+
+    // TODO Ara mateix fem un reset to axial, però potser el més adequat és que
+    // tinguèssim un command definit per col·locar adequadament la imatge
+    // per defecte segons l'input si no se n'ha definit cap
+    // Tenir en compte que aquesta crida també provoca la desactivació del thickslab
+    resetViewToAxial();
+    updateWindowLevelData();
+    
+    // Apliquem el command
+    executeInputFinishedCommand();
+    
+    // HACK Restaurem el rendering
+    enableRendering(true);
 }
 
 void Q2DViewer::clearViewer()
