@@ -356,55 +356,6 @@ QString Patient::toString() const
     return result;
 }
 
-QList<Patient*> Patient::mergePatients(QList<Patient*> patientsList)
-{
-    QList<Patient*> resultingPatientsList;
-    if (patientsList.count() == 1)
-    {
-        resultingPatientsList = patientsList;
-    }
-    else if (patientsList.count() > 1)
-    {
-        // El mètode no és gaire eficient perquè prova "tots contra tots"
-        // ja que un cop fusionem un, en principi es podria eliminar de
-        // la llista de fusió i no ho fem i tornem a comprovar
-        // TODO millorar l'algorisme de fusió dins de la llista
-
-        QSet<Patient*> patientSet = patientsList.toSet();
-        QMutableSetIterator<Patient*> setIterator(patientSet);
-        while (setIterator.hasNext())
-        {
-            // Agafem el primer element del conjunt i el treiem
-            Patient *currentPatient = setIterator.next();
-            setIterator.remove();
-            // Ara examinem la resta d'elements del conjunt
-            // per veure si els podem fusionar
-            // En cas que es puguin fusionar, els eliminarem del conjunt
-            while (setIterator.hasNext())
-            {
-                // Comparem per fer la fusió o no amb el proper element
-                if (currentPatient->compareTo(setIterator.peekNext()) == Patient::SamePatients)
-                {
-                    // BINGO! Són iguals! El fusionem i l'eliminem del conjunt
-                    *currentPatient += (*setIterator.peekNext());
-                    setIterator.next();
-                    setIterator.remove();
-                }
-                else
-                {
-                    // No són iguals, no fusionem i passem al següent element del conjunt
-                    setIterator.next();
-                }
-            }
-            // Afegim a la llista el pacient ja fusionat si s'escau
-            resultingPatientsList << currentPatient;
-            // Retornem l'iterador a l'inici per continuar analitzant la resta d'elements del conjunt que quedin
-            setIterator.toFront();
-        }
-    }
-    return resultingPatientsList;
-}
-
 void Patient::setSelectedSeries(const QString &selectedSeriesUID)
 {
     Series *selectedSeries = this->getSeries(selectedSeriesUID);

@@ -274,7 +274,7 @@ void QInputOutputDicomdirWidget::view()
     if (!selectedPatientsList.isEmpty())
     {
         DEBUG_LOG("Llançat signal per visualitzar estudi del pacient " + patient->getFullName());
-        emit viewPatients(Patient::mergePatients(selectedPatientsList));
+        emit viewPatients(selectedPatientsList);
     }
     else
     {

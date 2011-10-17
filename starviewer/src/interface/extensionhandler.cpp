@@ -26,6 +26,8 @@ namespace udg {
 
 typedef SingletonPointer<QueryScreen> QueryScreenSingleton;
 
+QHash<QString, bool> ExtensionHandler::m_patientsSimilarityUserDecision;
+
 ExtensionHandler::ExtensionHandler(QApplicationMainWindow *mainApp, QObject *parent)
  : QObject(parent)
 {
@@ -285,34 +287,90 @@ void ExtensionHandler::processInput(const QStringList &inputFiles)
 
 void ExtensionHandler::processInput(QList<Patient*> patientsList, bool loadOnly)
 {
-    if (m_mainApp->isMinimized())
-    {
-        //Si la finestra d'Starviewer està minimitzada la tornem al seu estat original al visualitzar l'estudi
-        ScreenManager().restoreFromMinimized(m_mainApp);
-    }
-
     // Si de tots els pacients que es carreguen intentem carregar-ne un d'igual al que ja tenim carregat, el mantenim
     bool canReplaceActualPatient = true;
     if (m_mainApp->getCurrentPatient())
     {
-        foreach (Patient *patient, patientsList)
+        QListIterator<Patient*> patientsIterator(patientsList);
+        while (canReplaceActualPatient && patientsIterator.hasNext())
         {
-            if (m_mainApp->getCurrentPatient()->compareTo(patient) == Patient::SamePatients)
+            Patient *patient = patientsIterator.next();
+            QListIterator<QApplicationMainWindow*> mainAppsIterator(QApplicationMainWindow::getQApplicationMainWindows());
+            while (canReplaceActualPatient && mainAppsIterator.hasNext())
             {
-                canReplaceActualPatient = false;
-                break;
+                QApplicationMainWindow *mainApp = mainAppsIterator.next();
+                canReplaceActualPatient = !askForPatientsSimilarity(mainApp->getCurrentPatient(), patient);
             }
         }
     }
+
+    bool firstPatient = true;
 
     // Afegim els pacients carregats correctament
     foreach (Patient *patient, patientsList)
     {
         generatePatientVolumes(patient, QString());
-        this->addPatientToWindow(patient, canReplaceActualPatient, loadOnly);
+        QApplicationMainWindow *mainApp = this->addPatientToWindow(patient, canReplaceActualPatient, loadOnly);
+
+        if (mainApp)
+        {
+            if (mainApp->isMinimized())
+            {
+                //Si la finestra d'Starviewer està minimitzada la tornem al seu estat original al visualitzar l'estudi
+                ScreenManager().restoreFromMinimized(mainApp);
+            }
+
+            if (firstPatient)
+            {
+                mainApp->activateWindow();
+            }
+        }
+        firstPatient = false;
+
         // Un cop carregat un pacient, ja no el podem reemplaçar
         canReplaceActualPatient = false;
     }
+}
+
+bool ExtensionHandler::askForPatientsSimilarity(Patient *patient1, Patient *patient2)
+{
+    Patient::PatientsSimilarity patientsSimilarity = patient1->compareTo(patient2);
+    if (patientsSimilarity == Patient::SamePatients)
+    {
+        return true;
+    }
+    else if (patientsSimilarity == Patient::SamePatientIDsDifferentPatientNames || patientsSimilarity == Patient::SamePatientNamesDifferentPatientIDs)
+    {
+        QString idNamePatient1 = QString("%1_%2").arg(patient1->getID()).arg(patient1->getFullName());
+        QString idNamePatient2 = QString("%1_%2").arg(patient2->getID()).arg(patient2->getFullName());
+
+        QString hashKey;
+        if (QString::compare(idNamePatient1, idNamePatient2) > 0)
+        {
+            hashKey = QString("%1_%2").arg(idNamePatient1).arg(idNamePatient2);
+        }
+        else
+        {
+            hashKey = QString("%1_%2").arg(idNamePatient2).arg(idNamePatient1);
+        }
+
+        if (m_patientsSimilarityUserDecision.contains(hashKey))
+        {
+            return m_patientsSimilarityUserDecision.value(hashKey);
+        }
+        else
+        {
+            QString text = tr("We are not able to determine the similarity of these patients.\n\nDo you consider they are the same?\n\n");
+            text += tr("Patient 1\nID: %1\nName: %2\n\n").arg(patient1->getID()).arg(patient1->getFullName());
+            text += tr("Patient 2\nID: %1\nName: %2").arg(patient2->getID()).arg(patient2->getFullName());
+            bool userDecision = QMessageBox::question(0, ApplicationNameString, text, QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes;
+            m_patientsSimilarityUserDecision.insert(hashKey, userDecision);
+
+            return userDecision;
+        }
+    }
+
+    return false;
 }
 
 void ExtensionHandler::generatePatientVolumes(Patient *patient, const QString &defaultSeriesUID)
@@ -371,61 +429,71 @@ void ExtensionHandler::generatePatientVolumes(Patient *patient, const QString &d
     DEBUG_LOG(QString("Patient:\n%1").arg(patient->toString()));
 }
 
-void ExtensionHandler::addPatientToWindow(Patient *patient, bool canReplaceActualPatient, bool loadOnly)
+QApplicationMainWindow* ExtensionHandler::addPatientToWindow(Patient *patient, bool canReplaceActualPatient, bool loadOnly)
 {
-    if (!m_mainApp->getCurrentPatient())
+    QApplicationMainWindow *usedMainApp = NULL;
+
+    if (canReplaceActualPatient && !loadOnly)
     {
         m_mainApp->setPatient(patient);
-        DEBUG_LOG("No tenim dades de cap pacient. Obrim en la finestra actual");
-    }
-    else if ((m_mainApp->getCurrentPatient()->compareTo(patient) == Patient::SamePatients))
-    {
-        m_mainApp->connectPatientVolumesToNotifier(patient);
-        *(m_mainApp->getCurrentPatient()) += *patient;
-        DEBUG_LOG("Ja teníem dades d'aquest pacient. Fusionem informació");
-
-        // Mirem si hi ha alguna extensió oberta, sinó obrim la de per defecte
-        if (m_mainApp->getExtensionWorkspace()->count() == 0)
-        {
-            openDefaultExtension();
-        }
-
-        if (!loadOnly)
-        {
-            // Hem fet un "view", per tant cal reinicialitzar les extensions que ho requereixin
-            QMap<QWidget *, QString> extensions = m_mainApp->getExtensionWorkspace()->getActiveExtensions();
-            QMapIterator<QWidget *, QString> iterator(extensions);
-            while (iterator.hasNext())
-            {
-                iterator.next();
-                ExtensionMediator *mediator = ExtensionMediatorFactory::instance()->create(iterator.value());
-                mediator->reinitializeExtension(iterator.key());
-            }
-        }
+        usedMainApp = m_mainApp;
     }
     else
     {
-        // Són diferents o no sabem diferenciar
-        if (!loadOnly)
+        QApplicationMainWindow *mainApp;
+        bool found = false;
+
+        QListIterator<QApplicationMainWindow*> mainAppsIterator(QApplicationMainWindow::getQApplicationMainWindows());
+        while (!found && mainAppsIterator.hasNext())
         {
-            if (canReplaceActualPatient)
+            mainApp = mainAppsIterator.next();
+            found = askForPatientsSimilarity(mainApp->getCurrentPatient(), patient);
+        }
+
+        if (found)
+        {
+            mainApp->connectPatientVolumesToNotifier(patient);
+            *(mainApp->getCurrentPatient()) += *patient;
+            DEBUG_LOG("Ja teníem dades d'aquest pacient. Fusionem informació");
+
+            // Mirem si hi ha alguna extensió oberta, sinó obrim la de per defecte
+            if (mainApp->getExtensionWorkspace()->count() == 0)
             {
-                m_mainApp->setPatient(patient);
-                DEBUG_LOG("Tenim pacient i el substituim");
+                openDefaultExtension();
             }
-            else
+
+            if (!loadOnly)
             {
-                m_mainApp->setPatientInNewWindow(patient);
-                DEBUG_LOG("Tenim pacient i no ens deixen substituir-lo. L'obrim en una finestra nova.");
+                // Hem fet un "view", per tant cal reinicialitzar les extensions que ho requereixin
+                QMap<QWidget *, QString> extensions = mainApp->getExtensionWorkspace()->getActiveExtensions();
+                QMapIterator<QWidget *, QString> iterator(extensions);
+                while (iterator.hasNext())
+                {
+                    iterator.next();
+                    ExtensionMediator *mediator = ExtensionMediatorFactory::instance()->create(iterator.value());
+                    mediator->reinitializeExtension(iterator.key());
+                }
             }
+
+            usedMainApp = mainApp;
         }
         else
         {
-            // \TODO Tenint en compte els problemes explicats al tiquet #1087, eliminar els objectes aquí pot fer petar l'aplicació en cas de demanar estudis
-            //       sense passar explícitament per la QueryScreen. Donat que en aquest punt encara no s'ha carregat cap volum a memòria,
-            //       per tant no hi haurà fugues importants de memòria si no ho eliminem, obtem per no esborrar cap objecte i així minimitzem el problema.
+            if (!loadOnly)
+            {
+                usedMainApp = m_mainApp->setPatientInNewWindow(patient);
+                DEBUG_LOG("Tenim pacient i no ens deixen substituir-lo. L'obrim en una finestra nova.");
+            }
+            else
+            {
+                // \TODO Tenint en compte els problemes explicats al tiquet #1087, eliminar els objectes aquí pot fer petar l'aplicació en cas de demanar estudis
+                //       sense passar explícitament per la QueryScreen. Donat que en aquest punt encara no s'ha carregat cap volum a memòria,
+                //       per tant no hi haurà fugues importants de memòria si no ho eliminem, obtem per no esborrar cap objecte i així minimitzem el problema.
+            }
         }
     }
+
+    return usedMainApp;
 }
 
 void ExtensionHandler::openDefaultExtension()

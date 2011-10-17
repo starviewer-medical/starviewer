@@ -386,7 +386,7 @@ void QInputOutputLocalDatabaseWidget::view(QList<DicomMask> dicomMaskStudiesToVi
     if (selectedPatientsList.count() > 0)
     {
         DEBUG_LOG("Llançat signal per visualitzar estudi del pacient " + patient->getFullName());
-        emit viewPatients(Patient::mergePatients(selectedPatientsList), loadOnly);
+        emit viewPatients(selectedPatientsList, loadOnly);
     }
 
     QApplication::restoreOverrideCursor();

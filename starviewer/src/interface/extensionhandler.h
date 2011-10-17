@@ -62,13 +62,17 @@ private:
     /// Crea les connexions de signals i slots
     void createConnections();
 
-    /// Afegeix un pacient a la mainwindow tenint en compte si cal fusionar o no i si es pot reemplaçar el pacient actual ja carregat
+    /// Afegeix un pacient a una mainwindow tenint en compte si cal fusionar o no i si es pot reemplaçar el pacient actual ja carregat
     /// Afegim un segon paràmetre que ens indica si els pacients a processar només cal carregar-los o fer-ne un "view"
-    void addPatientToWindow(Patient *patient, bool canReplaceActualPatient, bool loadOnly = false);
+    /// Retorna la mainwindow a on s'ha afegit el pacient.
+    QApplicationMainWindow* addPatientToWindow(Patient *patient, bool canReplaceActualPatient, bool loadOnly = false);
 
     /// Processa el pacient donat per tal que pugui ser usat per les extensions
     //  Li crea els volums al repositori i assigna quina és la sèrie per defecte
     void generatePatientVolumes(Patient *patient, const QString &defaultSeriesUID);
+
+    /// Retorna cert si l'usuari considera que els pacients són iguals.
+    bool askForPatientsSimilarity(Patient *patient1, Patient *patient2);
 
 private:
     /// Punter a l'aplicació principal
@@ -79,6 +83,9 @@ private:
 
     /// Contexte de l'extensió
     ExtensionContext m_extensionContext;
+
+    /// Estructura que ens diu si una parella de pacients (ID+Nom) són considerats el mateix pacient.
+    static QHash<QString, bool> m_patientsSimilarityUserDecision;
 };
 
 };  // end namespace udg

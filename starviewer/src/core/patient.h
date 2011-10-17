@@ -103,12 +103,6 @@ public:
     /// TODO Incorporar paràmetre "verbose" per poder escollir si fer un volcat complet o no
     QString toString() const;
 
-    /// Donada una llista de pacients d'entrada, ens retorna una nova llista on
-    /// estaran fusionats els pacients que siguin considerats iguals. És a dir si d'un
-    /// mateix pacient tenim dos estudis, però a la llista estan com dos pacients separats
-    /// en la llista resultant seran un únic pacient amb els dos estudis
-    static QList<Patient*> mergePatients(QList<Patient*> patientsList);
-
     /// Marca com a seleccionada la sèrie amb l'UID indicat
     /// En cas que no existeixi tal UID, se selecciona la primera
     /// sèrie del primer estudi
