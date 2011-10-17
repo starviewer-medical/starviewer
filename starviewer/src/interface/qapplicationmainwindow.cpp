@@ -535,6 +535,20 @@ unsigned int QApplicationMainWindow::getCountQApplicationMainWindow()
     return count;
 }
 
+QList<QApplicationMainWindow*> QApplicationMainWindow::getQApplicationMainWindows()
+{
+    QList<QApplicationMainWindow*> mainApps;
+    foreach (QWidget *widget, qApp->topLevelWidgets())
+    {
+        QApplicationMainWindow *window = qobject_cast<QApplicationMainWindow*>(widget);
+        if (window)
+        {
+            mainApps << window;
+        }
+    }
+    return mainApps;
+}
+
 QApplicationMainWindow* QApplicationMainWindow::getActiveApplicationMainWindow()
 {
     return qobject_cast<QApplicationMainWindow*>(QApplication::activeWindow());
