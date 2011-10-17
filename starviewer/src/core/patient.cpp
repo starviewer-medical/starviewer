@@ -220,12 +220,12 @@ void Patient::patientFusionLogMessage(const Patient &patient)
         case SamePatients:
             INFO_LOG("Fusionem dos pacients iguals: >>" + m_patientID + ":" + m_fullName + " >>" + patient.m_patientID + ":" + patient.m_fullName);
             break;
-
-        case IndeterminableSimilarity:
-            INFO_LOG("Fusionem dos pacients amb similitut indeterminable: >>" + m_patientID + ":" + m_fullName +
-                     " >>" + patient.m_patientID + ":" + patient.m_fullName);
+        case SamePatientIDsDifferentPatientNames:
+            INFO_LOG("Fusionem dos pacients amb IDs iguals i noms diferents: >>" + m_patientID + ":" + m_fullName + " >>" + patient.m_patientID + ":" + patient.m_fullName);
             break;
-
+        case SamePatientNamesDifferentPatientIDs:
+            INFO_LOG("Fusionem dos pacients amb noms iguals i IDs diferents: >>" + m_patientID + ":" + m_fullName + " >>" + patient.m_patientID + ":" + patient.m_fullName);
+            break;
         case DifferentPatients:
             INFO_LOG("Fusionem dos pacients diferents: >>" + m_patientID + ":" + m_fullName + " >>" + patient.m_patientID + ":" + patient.m_fullName);
             break;
@@ -305,57 +305,39 @@ QString Patient::clearPatientName(const QString &patientName)
     return patientName.toUpper().replace(QRegExp("[^A-Z]"), " ").trimmed();
 }
 
-bool Patient::containtsNumericalSymbols(const QString &patientName)
-{
-    QRegExp rx("\\d\\d?\\d?\\d?");
-    return (rx.indexIn(patientName) != -1);
-}
-
 Patient::PatientsSimilarity Patient::compareTo(const Patient *patient)
 {
     if (!patient)
     {
         DEBUG_LOG("El pacient és NUL");
-        return Patient::IndeterminableSimilarity;
+        return Patient::DifferentPatients;
     }
     // Si tenen el mateix ID de pacient ja podem dir que són el mateix i no cal mirar res més.
-    if (patient->m_patientID == this->m_patientID)
-    {
-        return SamePatients;
-    }
+    bool samePatientIDs = patient->m_patientID == this->m_patientID;
 
     // Pre-tractament sobre el nom del pacient per treure caràcters extranys
     QString nameOfThis = clearStrangeSymbols(this->getFullName());
     QString nameOfParameter = clearStrangeSymbols(patient->getFullName());
 
-    // Tractament especial en el cas de que els noms continguin números
-    if (containtsNumericalSymbols(nameOfThis) && containtsNumericalSymbols(nameOfParameter))
-    {
-        if (nameOfThis == nameOfParameter)
-        {
-            return SamePatients;
-        }
-        else
-        {
-            return DifferentPatients;
-        }
-    }
+    // Mirem si tractant els caràcters extranys i canviant-los per espais els podem considerà iguals.
+    bool samePatientNames = computeStringEditDistanceMetric(nameOfThis, nameOfParameter, NeedlemanWunschDistance) < 0.15;
 
-    // Si passem del condicional anterior és que algun o cap dels noms tenia dades numèriques; pertant fem el tractament normal.
-    // Mirem si tractant els caràcters extranys i canviant-los per espais són iguals. En aquest cas ja no cal mirar res més.
-    if (nameOfThis == nameOfParameter)
+    if (samePatientIDs && samePatientNames)
     {
-        return SamePatients;
+        return Patient::SamePatients;
     }
-
-    PatientsSimilarity namesSimilarity = metricToSimilarity(computeStringEditDistanceMetric(nameOfThis, nameOfParameter, NeedlemanWunschDistance));
-    if (namesSimilarity != IndeterminableSimilarity)
+    else if (!samePatientIDs && !samePatientNames)
     {
-        // Si tenen molta similitud, retornem aquest valor
-        return namesSimilarity;
+        return Patient::DifferentPatients;
     }
-
-    return DifferentPatients;
+    else if (samePatientIDs && !samePatientNames)
+    {
+        return Patient::SamePatientIDsDifferentPatientNames;
+    }
+    else if (!samePatientIDs && samePatientNames)
+    {
+        return Patient::SamePatientNamesDifferentPatientIDs;
+    }
 }
 
 QString Patient::toString() const
@@ -535,22 +517,6 @@ double Patient::computeStringEditDistanceMetric(const QString &stringA, const QS
     delete[] p;
     delete[] d;
     return result;
-}
-
-Patient::PatientsSimilarity Patient::metricToSimilarity(double measure)
-{
-    if (measure < 0.15)
-    {
-        return SamePatients;
-    }
-    else if (measure < 0.31)
-    {
-        return IndeterminableSimilarity;
-    }
-    else
-    {
-        return DifferentPatients;
-    }
 }
 
 }

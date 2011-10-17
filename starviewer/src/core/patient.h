@@ -16,7 +16,7 @@ class Patient : public QObject {
 Q_OBJECT
 public:
     /// Enumeració dels graus de similitud
-    enum PatientsSimilarity { SamePatients, IndeterminableSimilarity, DifferentPatients };
+    enum PatientsSimilarity { SamePatients, DifferentPatients, SamePatientIDsDifferentPatientNames, SamePatientNamesDifferentPatientIDs };
 
     Patient(QObject *parent = 0);
 
@@ -138,9 +138,6 @@ private:
     /// Amb gap == 2, tenim la distància NeedlemanWunsch
     double computeStringEditDistanceMetric(const QString &stringA, const QString &stringB, int gap);
 
-    /// A partir del resultat d'una metrica aplicada a dos pacients ens diu la similaritat entre aquests
-    Patient::PatientsSimilarity metricToSimilarity(double measure);
-
     /// Crea un missatge de log per saber quins pacients estem fusionant
     /// @param patient Les dades del pacient que es fusiona amb aquest
     void patientFusionLogMessage(const Patient &patient);
@@ -154,10 +151,6 @@ private:
     /// per un número, com per exemple VOLUNTARI1, VOLUNTARI2 i no són el mateix pacient, en canvi si treiem els números
     /// els detectarà com a l mateix pacient.
     QString clearStrangeSymbols(const QString &patientName);
-
-    /// Ens diu si el nom del pacient conté números identificadors. Considerem números entre 0-9999, és un rang
-    /// suficientment gran.
-    bool containtsNumericalSymbols(const QString &patientName);
 
 private:
     /// Informació comuna de pacient per a totes les imatges que fan referència a aquest pacient. Apartat C.7.1.1 PS 3.3 DICOM.
