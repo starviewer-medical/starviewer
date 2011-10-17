@@ -401,6 +401,9 @@ private:
     /// qualsevol excepció possible durant el procés de rendering per evitar que peti
     void setNewVolumeAndExecuteCommand(Volume *volume);
 
+    /// Elimina els bitmaps que s'hagin creat per aquest viewer
+    void removeViewerBitmaps();
+    
     /// Carrega en memòria els ImageOverlays i DisplayShutters del volum passat per paràmetre (sempre que no sigui un dummy) i els afegeix al Drawer
     void loadOverlaysAndShutters(Volume *volume);
 
@@ -535,6 +538,9 @@ private:
 
     /// Indica el preset per defecte que s'ha d'aplicar.
     int m_defaultPresetToApply;
+
+    /// Llistat d'overlays i shutters
+    QList<DrawerBitmap*> m_viewerBitmaps;
 
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(Q2DViewer::AnnotationFlags)
