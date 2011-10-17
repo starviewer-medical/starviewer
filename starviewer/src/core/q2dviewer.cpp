@@ -809,16 +809,16 @@ void Q2DViewer::loadOverlaysAndShutters(Volume *volume)
             {
                 if (image->hasOverlays())
                 {
-                    DrawerBitmap *drawerBitmap = imageOverlayToDrawerBitmap(image->getMergedOverlay(), sliceIndex);
-                    getDrawer()->draw(drawerBitmap, Q2DViewer::Axial, sliceIndex);
-                    getDrawer()->addToGroup(drawerBitmap, OverlaysDrawerGroup);
+                    DrawerBitmap *overlayBitmap = imageOverlayToDrawerBitmap(image->getMergedOverlay(), sliceIndex);
+                    getDrawer()->draw(overlayBitmap, Q2DViewer::Axial, sliceIndex);
+                    getDrawer()->addToGroup(overlayBitmap, OverlaysDrawerGroup);
                 }
 
                 if (image->hasDisplayShutters())
                 {
-                    DrawerBitmap *drawerBitmap = displayShutterToDrawerBitmap(DisplayShutter::intersection(image->getDisplayShutters()), sliceIndex);
-                    getDrawer()->draw(drawerBitmap, Q2DViewer::Axial, sliceIndex);
-                    getDrawer()->addToGroup(drawerBitmap, DisplayShuttersDrawerGroup);
+                    DrawerBitmap *shutterBitmap = displayShutterToDrawerBitmap(DisplayShutter::intersection(image->getDisplayShutters()), sliceIndex);
+                    getDrawer()->draw(shutterBitmap, Q2DViewer::Axial, sliceIndex);
+                    getDrawer()->addToGroup(shutterBitmap, DisplayShuttersDrawerGroup);
                 }
             }
         }
