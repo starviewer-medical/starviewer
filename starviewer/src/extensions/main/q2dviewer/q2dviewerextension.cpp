@@ -77,8 +77,8 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_screenshotsExporterToolButton->setToolTip(tr("Export viewer image(s) to DICOM and send them to a PACS server"));
 #endif
 
-    m_viewerInformationToolButton->setToolTip(tr("Show/Hide layers"));
-    m_viewerInformationToolButton->setPopupMode(QToolButton::MenuButtonPopup);
+    m_viewerLayersToolButton->setToolTip(tr("Show/Hide layers"));
+    m_viewerLayersToolButton->setPopupMode(QToolButton::MenuButtonPopup);
     
     m_showOverlaysAction = new QAction(this);
     m_showOverlaysAction->setCheckable(true);
@@ -111,7 +111,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     viewerInformationMenu->addAction(m_showViewersTextualInformationAction);
     viewerInformationMenu->addAction(m_showOverlaysAction);
     viewerInformationMenu->addAction(m_showDisplayShuttersAction);
-    m_viewerInformationToolButton->setMenu(viewerInformationMenu);
+    m_viewerLayersToolButton->setMenu(viewerInformationMenu);
     
     m_dicomDumpToolButton->setToolTip(tr("Dump DICOM information of the current image"));
     m_windowLevelComboBox->setToolTip(tr("Choose Window/Level Presets"));
@@ -138,7 +138,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_statsWatcher->addClicksCounter(m_coronalViewToolButton);
 
     m_statsWatcher->addClicksCounter(m_dicomDumpToolButton);
-    m_statsWatcher->addClicksCounter(m_viewerInformationToolButton);
+    m_statsWatcher->addClicksCounter(m_viewerLayersToolButton);
 
     m_statsWatcher->addClicksCounter(m_rotateClockWiseToolButton);
     m_statsWatcher->addClicksCounter(m_flipHorizontalToolButton);
@@ -187,7 +187,7 @@ void Q2DViewerExtension::createConnections()
     connect(m_seriesTableGrid, SIGNAL(selectedGrid(int, int)), this, SLOT(setGrid(int, int)));
 
     // Mostrar o no la informacio del volum a cada visualitzador
-    connect(m_viewerInformationToolButton, SIGNAL(toggled(bool)), SLOT(showViewersLayers(bool)));
+    connect(m_viewerLayersToolButton, SIGNAL(toggled(bool)), SLOT(showViewersLayers(bool)));
     // Per mostrar la informació DICOM de la imatge que s'està veient en aquell moment
     connect(m_dicomDumpToolButton, SIGNAL(clicked()), SLOT(showDicomDumpCurrentDisplayedImage()));
 
@@ -508,7 +508,7 @@ void Q2DViewerExtension::initializeTools()
 void Q2DViewerExtension::activateNewViewer(Q2DViewerWidget *newViewerWidget)
 {
      // I si cal, activem les annotacions
-    if (m_viewerInformationToolButton->isChecked())
+    if (m_viewerLayersToolButton->isChecked())
     {
         newViewerWidget->getViewer()->enableAnnotation(Q2DViewer::WindowInformationAnnotation | Q2DViewer::PatientOrientationAnnotation |
                                                        Q2DViewer::SliceAnnotation | Q2DViewer::PatientInformationAnnotation |
