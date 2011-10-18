@@ -43,6 +43,9 @@ QString DisplayShutter::getShapeAsDICOMString() const
 
         case DisplayShutter::PolygonalShape:
             return "POLYGONAL";
+
+        default:
+            return "";
     }
 }
 
