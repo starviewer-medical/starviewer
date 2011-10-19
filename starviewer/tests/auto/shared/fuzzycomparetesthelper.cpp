@@ -1,5 +1,7 @@
 #include "fuzzycomparetesthelper.h"
 
+#include <QVector3D>
+
 namespace testing {
 
 bool FuzzyCompareTestHelper::fuzzyCompare(const double &v1, const double &v2, const double &epsilon)
@@ -24,6 +26,13 @@ bool FuzzyCompareTestHelper::fuzzyCompare(const QVector<double> &v1, const QVect
     }
 
     return equal;
+}
+
+bool FuzzyCompareTestHelper::fuzzyCompare(const QVector3D &v1, const QVector3D &v2, const double &epsilon)
+{
+    return fuzzyCompare(v1.x(), v2.x(), epsilon)
+        && fuzzyCompare(v1.y(), v2.y(), epsilon)
+        && fuzzyCompare(v1.z(), v2.z(), epsilon);
 }
 
 }

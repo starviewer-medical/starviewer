@@ -2,8 +2,12 @@
 
 #include "volume.h"
 #include "image.h"
+#include "fuzzycomparetesthelper.h"
+
+#include <QVector3D>
 
 using namespace udg;
+using namespace testing;
 
 class test_Volume : public QObject {
 Q_OBJECT
@@ -14,10 +18,21 @@ private slots:
 
     void getAcquisitionPlane_ShouldReturnExpectedPlane_data();
     void getAcquisitionPlane_ShouldReturnExpectedPlane();
+
+    void getStackDirection_ShouldNotModifyDirection_data();
+    void getStackDirection_ShouldNotModifyDirection();
+
+    void getStackDirection_ShouldReturnNormalVector_data();
+    void getStackDirection_ShouldReturnNormalVector();
+
+    void getStackDirection_ShouldReturnExpectedDirection_data();
+    void getStackDirection_ShouldReturnExpectedDirection();
 };
 
 Q_DECLARE_METATYPE(AnatomicalPlane::AnatomicalPlaneType)
 Q_DECLARE_METATYPE(QList<Image*>)
+Q_DECLARE_METATYPE(Volume*)
+Q_DECLARE_METATYPE(ImageOrientation)
 
 void test_Volume::getAcquisitionPlane_ShouldReturnNotAvailable_data()
 {
@@ -183,6 +198,199 @@ void test_Volume::getAcquisitionPlane_ShouldReturnExpectedPlane()
     volume.setImages(imageSet);
     
     QCOMPARE(volume.getAcquisitionPlane(), expectedResult);
+}
+
+void test_Volume::getStackDirection_ShouldNotModifyDirection_data()
+{
+    QTest::addColumn<QVector3D>("direction");
+
+    QTest::newRow("(0,0,0)") << QVector3D(0.0, 0.0, 0.0);
+    QTest::newRow("(1,2,3)") << QVector3D(1.0, 2.0, 3.0);
+}
+
+void test_Volume::getStackDirection_ShouldNotModifyDirection()
+{
+    QFETCH(QVector3D, direction);
+
+    Volume volume;
+    double dir[3] = { direction.x(), direction.y(), direction.z() };
+    volume.getStackDirection(dir);
+    QVector3D newDirection(dir[0], dir[1], dir[2]);
+
+    QCOMPARE(newDirection, direction);
+}
+
+void test_Volume::getStackDirection_ShouldReturnNormalVector_data()
+{
+    QTest::addColumn<Volume*>("volume");
+    QTest::addColumn<ImageOrientation>("imageOrientation");
+    QTest::addColumn<QVector3D>("normal");
+
+    Volume *volume = new Volume(this);
+    Image *image1 = new Image(volume);
+    volume->addImage(image1);
+    ImageOrientation imageOrientation;
+    QVector3D positiveX(+1.0, 0.0, 0.0);
+    QVector3D negativeX(-1.0, 0.0, 0.0);
+    QVector3D positiveY(0.0, +1.0, 0.0);
+    QVector3D negativeY(0.0, -1.0, 0.0);
+    QVector3D positiveZ(0.0, 0.0, +1.0);
+    QVector3D negativeZ(0.0, 0.0, -1.0);
+
+    QTest::newRow("default orientation") << volume << imageOrientation << imageOrientation.getNormalVector();
+
+    imageOrientation.setRowAndColumnVectors(positiveX, positiveY);
+    QTest::newRow("+x +y") << volume << imageOrientation << imageOrientation.getNormalVector();
+    imageOrientation.setRowAndColumnVectors(positiveX, negativeY);
+    QTest::newRow("+x -y") << volume << imageOrientation << imageOrientation.getNormalVector();
+    imageOrientation.setRowAndColumnVectors(positiveX, positiveZ);
+    QTest::newRow("+x +z") << volume << imageOrientation << imageOrientation.getNormalVector();
+    imageOrientation.setRowAndColumnVectors(positiveX, negativeZ);
+    QTest::newRow("+x -z") << volume << imageOrientation << imageOrientation.getNormalVector();
+
+    imageOrientation.setRowAndColumnVectors(negativeX, positiveY);
+    QTest::newRow("-x +y") << volume << imageOrientation << imageOrientation.getNormalVector();
+    imageOrientation.setRowAndColumnVectors(negativeX, negativeY);
+    QTest::newRow("-x -y") << volume << imageOrientation << imageOrientation.getNormalVector();
+    imageOrientation.setRowAndColumnVectors(negativeX, positiveZ);
+    QTest::newRow("-x +z") << volume << imageOrientation << imageOrientation.getNormalVector();
+    imageOrientation.setRowAndColumnVectors(negativeX, negativeZ);
+    QTest::newRow("-x -z") << volume << imageOrientation << imageOrientation.getNormalVector();
+
+    imageOrientation.setRowAndColumnVectors(positiveY, positiveX);
+    QTest::newRow("+y +x") << volume << imageOrientation << imageOrientation.getNormalVector();
+    imageOrientation.setRowAndColumnVectors(positiveY, negativeX);
+    QTest::newRow("+y -x") << volume << imageOrientation << imageOrientation.getNormalVector();
+    imageOrientation.setRowAndColumnVectors(positiveY, positiveZ);
+    QTest::newRow("+y +z") << volume << imageOrientation << imageOrientation.getNormalVector();
+    imageOrientation.setRowAndColumnVectors(positiveY, negativeZ);
+    QTest::newRow("+y -z") << volume << imageOrientation << imageOrientation.getNormalVector();
+
+    imageOrientation.setRowAndColumnVectors(negativeY, positiveX);
+    QTest::newRow("-y +x") << volume << imageOrientation << imageOrientation.getNormalVector();
+    imageOrientation.setRowAndColumnVectors(negativeY, negativeX);
+    QTest::newRow("-y -x") << volume << imageOrientation << imageOrientation.getNormalVector();
+    imageOrientation.setRowAndColumnVectors(negativeY, positiveZ);
+    QTest::newRow("-y +z") << volume << imageOrientation << imageOrientation.getNormalVector();
+    imageOrientation.setRowAndColumnVectors(negativeY, negativeZ);
+    QTest::newRow("-y -z") << volume << imageOrientation << imageOrientation.getNormalVector();
+
+    imageOrientation.setRowAndColumnVectors(positiveZ, positiveX);
+    QTest::newRow("+z +x") << volume << imageOrientation << imageOrientation.getNormalVector();
+    imageOrientation.setRowAndColumnVectors(positiveZ, negativeX);
+    QTest::newRow("+z -x") << volume << imageOrientation << imageOrientation.getNormalVector();
+    imageOrientation.setRowAndColumnVectors(positiveZ, positiveY);
+    QTest::newRow("+z +y") << volume << imageOrientation << imageOrientation.getNormalVector();
+    imageOrientation.setRowAndColumnVectors(positiveZ, negativeY);
+    QTest::newRow("+z -y") << volume << imageOrientation << imageOrientation.getNormalVector();
+
+    imageOrientation.setRowAndColumnVectors(negativeZ, positiveX);
+    QTest::newRow("-z +x") << volume << imageOrientation << imageOrientation.getNormalVector();
+    imageOrientation.setRowAndColumnVectors(negativeZ, negativeX);
+    QTest::newRow("-z -x") << volume << imageOrientation << imageOrientation.getNormalVector();
+    imageOrientation.setRowAndColumnVectors(negativeZ, positiveY);
+    QTest::newRow("-z +y") << volume << imageOrientation << imageOrientation.getNormalVector();
+    imageOrientation.setRowAndColumnVectors(negativeZ, negativeY);
+    QTest::newRow("-z -y") << volume << imageOrientation << imageOrientation.getNormalVector();
+
+    QVector3D row, column;
+
+    row.setX(+3.9);
+    row.setY(+9.5);
+    row.setZ(+0.8);
+    column.setX(-6.0);
+    column.setY(-6.7);
+    column.setZ(-3.2);
+    imageOrientation.setRowAndColumnVectors(row, column);
+    QTest::newRow("oblique (1)") << volume << imageOrientation << imageOrientation.getNormalVector();
+
+    row.setX(+1.1);
+    row.setY(+8.0);
+    row.setZ(-4.7);
+    column.setX(+3.5);
+    column.setY(-8.4);
+    column.setZ(+6.7);
+    imageOrientation.setRowAndColumnVectors(row, column);
+    QTest::newRow("oblique (2)") << volume << imageOrientation << imageOrientation.getNormalVector();
+
+    row.setX(+3.0);
+    row.setY(-0.6);
+    row.setZ(+1.0);
+    column.setX(-8.6);
+    column.setY(+3.4);
+    column.setZ(+7.2);
+    imageOrientation.setRowAndColumnVectors(row, column);
+    QTest::newRow("oblique (3)") << volume << imageOrientation << imageOrientation.getNormalVector();
+}
+
+void test_Volume::getStackDirection_ShouldReturnNormalVector()
+{
+    QFETCH(Volume*, volume);
+    QFETCH(ImageOrientation, imageOrientation);
+    QFETCH(QVector3D, normal);
+
+    volume->getImage(0)->setImageOrientationPatient(imageOrientation);
+    double dir[3];
+    volume->getStackDirection(dir);
+    QVector3D direction(dir[0], dir[1], dir[2]);
+
+    QCOMPARE(direction, normal);
+}
+
+void test_Volume::getStackDirection_ShouldReturnExpectedDirection_data()
+{
+    QTest::addColumn<Volume*>("volume");
+    QTest::addColumn<QVector3D>("position1");
+    QTest::addColumn<QVector3D>("position2");
+    QTest::addColumn<QVector3D>("expectedDirection");
+
+    Volume* volume = new Volume(this);
+    Image *image1 = new Image(volume);
+    Image *image2 = new Image(volume);
+    volume->setImages(QList<Image*>() << image1 << image2);
+
+    QTest::newRow("+x (distance 1 between planes)") << volume << QVector3D(0.0, 0.0, 0.0) << QVector3D(+1.0, 0.0, 0.0) << QVector3D(+1.0, 0.0, 0.0);
+    QTest::newRow("-x (distance 1 between planes)") << volume << QVector3D(0.0, 0.0, 0.0) << QVector3D(-1.0, 0.0, 0.0) << QVector3D(-1.0, 0.0, 0.0);
+    QTest::newRow("+y (distance 1 between planes)") << volume << QVector3D(0.0, 0.0, 0.0) << QVector3D(0.0, +1.0, 0.0) << QVector3D(0.0, +1.0, 0.0);
+    QTest::newRow("-y (distance 1 between planes)") << volume << QVector3D(0.0, 0.0, 0.0) << QVector3D(0.0, -1.0, 0.0) << QVector3D(0.0, -1.0, 0.0);
+    QTest::newRow("+z (distance 1 between planes)") << volume << QVector3D(0.0, 0.0, 0.0) << QVector3D(0.0, 0.0, +1.0) << QVector3D(0.0, 0.0, +1.0);
+    QTest::newRow("-z (distance 1 between planes)") << volume << QVector3D(0.0, 0.0, 0.0) << QVector3D(0.0, 0.0, -1.0) << QVector3D(0.0, 0.0, -1.0);
+    
+    QTest::newRow("+x (distance 10 between planes)") << volume << QVector3D(0.0, 0.0, 0.0) << QVector3D(+10.0, 0.0, 0.0) << QVector3D(+1.0, 0.0, 0.0);
+    QTest::newRow("-x (distance 10 between planes)") << volume << QVector3D(0.0, 0.0, 0.0) << QVector3D(-10.0, 0.0, 0.0) << QVector3D(-1.0, 0.0, 0.0);
+    QTest::newRow("+y (distance 10 between planes)") << volume << QVector3D(0.0, 0.0, 0.0) << QVector3D(0.0, +10.0, 0.0) << QVector3D(0.0, +1.0, 0.0);
+    QTest::newRow("-y (distance 10 between planes)") << volume << QVector3D(0.0, 0.0, 0.0) << QVector3D(0.0, -10.0, 0.0) << QVector3D(0.0, -1.0, 0.0);
+    QTest::newRow("+z (distance 10 between planes)") << volume << QVector3D(0.0, 0.0, 0.0) << QVector3D(0.0, 0.0, +10.0) << QVector3D(0.0, 0.0, +1.0);
+    QTest::newRow("-z (distance 10 between planes)") << volume << QVector3D(0.0, 0.0, 0.0) << QVector3D(0.0, 0.0, -10.0) << QVector3D(0.0, 0.0, -1.0);
+
+    QTest::newRow("+x (distance 0.1 between planes)") << volume << QVector3D(0.0, 0.0, 0.0) << QVector3D(+0.1, 0.0, 0.0) << QVector3D(+1.0, 0.0, 0.0);
+    QTest::newRow("-x (distance 0.1 between planes)") << volume << QVector3D(0.0, 0.0, 0.0) << QVector3D(-0.1, 0.0, 0.0) << QVector3D(-1.0, 0.0, 0.0);
+    QTest::newRow("+y (distance 0.1 between planes)") << volume << QVector3D(0.0, 0.0, 0.0) << QVector3D(0.0, +0.1, 0.0) << QVector3D(0.0, +1.0, 0.0);
+    QTest::newRow("-y (distance 0.1 between planes)") << volume << QVector3D(0.0, 0.0, 0.0) << QVector3D(0.0, -0.1, 0.0) << QVector3D(0.0, -1.0, 0.0);
+    QTest::newRow("+z (distance 0.1 between planes)") << volume << QVector3D(0.0, 0.0, 0.0) << QVector3D(0.0, 0.0, +0.1) << QVector3D(0.0, 0.0, +1.0);
+    QTest::newRow("-z (distance 0.1 between planes)") << volume << QVector3D(0.0, 0.0, 0.0) << QVector3D(0.0, 0.0, -0.1) << QVector3D(0.0, 0.0, -1.0);
+
+    QTest::newRow("oblique (1)") << volume << QVector3D(0.0, 0.0, 0.0) << QVector3D(+2.3, +6.5, -1.7) << QVector3D(+0.3238794, +0.9153114, -0.2393891);
+    QTest::newRow("oblique (2)") << volume << QVector3D(0.0, 0.0, 0.0) << QVector3D(+3.0, -2.4, -3.3) << QVector3D(+0.5923488, -0.4738791, -0.6515837);
+    QTest::newRow("oblique (3)") << volume << QVector3D(0.0, 0.0, 0.0) << QVector3D(+8.5, +5.2, -4.8) << QVector3D(+0.7685151, +0.4701504, -0.4339850);
+}
+
+void test_Volume::getStackDirection_ShouldReturnExpectedDirection()
+{
+    QFETCH(Volume*, volume);
+    QFETCH(QVector3D, position1);
+    QFETCH(QVector3D, position2);
+    QFETCH(QVector3D, expectedDirection);
+
+    double pos1[3] = { position1.x(), position1.y(), position1.z() };
+    double pos2[3] = { position2.x(), position2.y(), position2.z() };
+    volume->getImage(0)->setImagePositionPatient(pos1);
+    volume->getImage(1)->setImagePositionPatient(pos2);
+    double dir[3];
+    volume->getStackDirection(dir);
+    QVector3D direction(dir[0], dir[1], dir[2]);
+
+    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(direction, expectedDirection, 0.0000001));
 }
 
 DECLARE_TEST(test_Volume)
