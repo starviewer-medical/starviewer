@@ -111,7 +111,8 @@ void AngleTool::findInitialDegreeArc()
     double *firstVertex = m_mainPolyline->getPoint(0);
     double *secondVertex = m_mainPolyline->getPoint(1);
 
-    double *directorVector1 = MathTools::directorVector(firstVertex, secondVertex);
+    QVector3D directorVector1 = MathTools::directorVector(QVector3D(firstVertex[0], firstVertex[1], firstVertex[2]),
+                                                          QVector3D(secondVertex[0], secondVertex[1], secondVertex[2]));
 
     double secondVertexHorizontallyMoved[3];
     for (int i = 0; i < 3; i++)
@@ -120,20 +121,23 @@ void AngleTool::findInitialDegreeArc()
     }
     secondVertexHorizontallyMoved[horizontalIndex] += 10.0;
 
-    double *directorVector2 = MathTools::directorVector(secondVertexHorizontallyMoved, secondVertex);
+    QVector3D directorVector2 = MathTools::directorVector(QVector3D(secondVertexHorizontallyMoved[0],
+                                                                    secondVertexHorizontallyMoved[1],
+                                                                    secondVertexHorizontallyMoved[2]),
+                                                          QVector3D(secondVertex[0], secondVertex[1], secondVertex[2]));
 
     double crossProduct[3];
-    MathTools::crossProduct(directorVector1, directorVector2, crossProduct);
+    double dv1[3] = { directorVector1.x(), directorVector1.y(), directorVector1.z() };
+    double dv2[3] = { directorVector2.x(), directorVector2.y(), directorVector2.z() };
+    MathTools::crossProduct(dv1, dv2, crossProduct);
 
     if (crossProduct[zIndex] > 0)
     {
-        m_initialDegreeArc = (int)MathTools::angleInDegrees(QVector3D(directorVector1[0], directorVector1[1], directorVector1[2]), 
-            QVector3D(directorVector2[0], directorVector2[1], directorVector2[2]));
+        m_initialDegreeArc = (int)MathTools::angleInDegrees(directorVector1, directorVector2);
     }
     else
     {
-        m_initialDegreeArc = -1 * (int)MathTools::angleInDegrees(QVector3D(directorVector1[0], directorVector1[1], directorVector1[2]), 
-            QVector3D(directorVector2[0], directorVector2[1], directorVector2[2]));
+        m_initialDegreeArc = -1 * (int)MathTools::angleInDegrees(directorVector1, directorVector2);
     }
 }
 
@@ -176,9 +180,11 @@ void AngleTool::drawCircle()
     double *lastPoint = m_mainPolyline->getPoint(2);
 
     // Calculem l'angle que formen els dos segments
-    double *firstSegment = MathTools::directorVector(firstPoint, circleCentre);
-    double *secondSegment = MathTools::directorVector(lastPoint, circleCentre);
-    m_currentAngle = MathTools::angleInDegrees(QVector3D(firstSegment[0], firstSegment[1], firstSegment[2]), QVector3D(secondSegment[0], secondSegment[1], secondSegment[2]));
+    QVector3D firstSegment = MathTools::directorVector(QVector3D(firstPoint[0], firstPoint[1], firstPoint[2]),
+                                                       QVector3D(circleCentre[0], circleCentre[1], circleCentre[2]));
+    QVector3D secondSegment = MathTools::directorVector(QVector3D(lastPoint[0], lastPoint[1], lastPoint[2]),
+                                                        QVector3D(circleCentre[0], circleCentre[1], circleCentre[2]));
+    m_currentAngle = MathTools::angleInDegrees(firstSegment, secondSegment);
 
     // Calculem el radi de l'arc de circumferència que mesurarà
     // un quart del segment més curt dels dos que formen l'angle
@@ -191,7 +197,9 @@ void AngleTool::drawCircle()
     finalAngle = int(360 - (m_currentAngle + m_initialDegreeArc));
 
     double crossProduct[3];
-    MathTools::crossProduct(firstSegment, secondSegment, crossProduct);
+    double segment1[3] = { firstSegment.x(), firstSegment.y(), firstSegment.z() };
+    double segment2[3] = { secondSegment.x(), secondSegment.y(), secondSegment.z() };
+    MathTools::crossProduct(segment1, segment2, crossProduct);
 
     Q2DViewer::CameraOrientationType view = m_2DViewer->getView();
     int zIndex = Q2DViewer::getZIndexForView(view);

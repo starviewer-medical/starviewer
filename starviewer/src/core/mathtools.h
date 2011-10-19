@@ -95,7 +95,7 @@ static double* infiniteLinesIntersection(double *p1, double *p2, double *p3, dou
 ///
 
 /// A partir del segment determinat pels dos punts passats com a paràmetres, calcula un dels possibles vectors directors
-static double* directorVector(const double point1[3], const double point2[3]);
+static QVector3D directorVector(const QVector3D &point1, const QVector3D &point2);
 
 /// Calcula el mòdul d'un vector
 static double modulus(double vector[3]);

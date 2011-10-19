@@ -325,12 +325,12 @@ void Volume::getStackDirection(double direction[3], int stack)
         const double *firstOrigin = firstImage->getImagePositionPatient();
         const double *secondOrigin = secondImage->getImagePositionPatient();
         // Calculem la direcció real de com estan apilades
-        double *zDirection = MathTools::directorVector(firstOrigin, secondOrigin);
-        MathTools::normalize(zDirection);
-        for (int i = 0; i < 3; i++)
-        {
-            direction[i] = zDirection[i];
-        }
+        QVector3D zDirection = MathTools::directorVector(QVector3D(firstOrigin[0], firstOrigin[1], firstOrigin[2]),
+                                                         QVector3D(secondOrigin[0], secondOrigin[1], secondOrigin[2]));
+        zDirection.normalize();
+        direction[0] = zDirection.x();
+        direction[1] = zDirection.y();
+        direction[2] = zDirection.z();
     }
 }
 

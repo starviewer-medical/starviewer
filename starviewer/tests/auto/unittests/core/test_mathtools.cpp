@@ -238,15 +238,9 @@ void test_MathTools::directorVector_ShouldReturnExpectedValues()
     QFETCH(QVector3D, secondPoint);
     QFETCH(QVector3D, result);
 
-    double cPoint1[3] = { firstPoint.x(), firstPoint.y(), firstPoint.z() };
-    double cPoint2[3] = { secondPoint.x(), secondPoint.y(), secondPoint.z() };
+    QVector3D directorVector = MathTools::directorVector(firstPoint, secondPoint);
 
-    double *directorVector = MathTools::directorVector(cPoint1, cPoint2);
-
-    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(directorVector[0], result.x(), directorVectorEpsilon));
-    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(directorVector[1], result.y(), directorVectorEpsilon));
-    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(directorVector[2], result.z(), directorVectorEpsilon));
-
+    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(directorVector, result, directorVectorEpsilon));
 }
 
 void test_MathTools::crossProduct_ShouldReturnExpectedValues()
