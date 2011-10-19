@@ -5,8 +5,7 @@
 
 namespace udg {
 
-PatientFillerInput::PatientFillerInput(): m_dicomFile(0), m_currentSeries(0), m_currentVolumeNumber(0), m_currentMultiframeVolumeNumber(1),
-m_currentSingleFrameVolumeNumber(100)
+PatientFillerInput::PatientFillerInput(): m_dicomFile(0), m_currentSeries(0), m_currentVolumeNumber(0)
 {
 }
 
@@ -191,34 +190,46 @@ Series* PatientFillerInput::getCurrentSeries()
     return m_currentSeries;
 }
 
-void PatientFillerInput::resetCurrentMultiframeVolumeNumber()
-{
-    m_currentMultiframeVolumeNumber = 1;
-}
-
 void PatientFillerInput::increaseCurrentMultiframeVolumeNumber()
 {
-    m_currentMultiframeVolumeNumber++;
+    if (m_currentSeries)
+    {
+        m_currentMultiframeVolumeNumber.insert(m_currentSeries, getCurrentMultiframeVolumeNumber() + 1);
+    }
 }
 
 int PatientFillerInput::getCurrentMultiframeVolumeNumber() const
 {
-    return m_currentMultiframeVolumeNumber;
-}
-
-void PatientFillerInput::resetCurrentSingleFrameVolumeNumber()
-{
-    m_currentSingleFrameVolumeNumber = 100;
+    if (m_currentSeries)
+    {
+        // Si no existeix en el hash retorna el número per defecte
+        return m_currentMultiframeVolumeNumber.value(m_currentSeries, 1);
+    }
+    else
+    {
+        return -1;
+    }
 }
 
 void PatientFillerInput::increaseCurrentSingleFrameVolumeNumber()
 {
-    ++m_currentSingleFrameVolumeNumber;
+    if (m_currentSeries)
+    {
+        m_currentSingleFrameVolumeNumber.insert(m_currentSeries, getCurrentSingleFrameVolumeNumber() + 1);
+    }
 }
 
 int PatientFillerInput::getCurrentSingleFrameVolumeNumber() const
 {
-    return m_currentSingleFrameVolumeNumber;
+    if (m_currentSeries)
+    {
+        // Si no existeix en el hash retorna el número per defecte
+        return m_currentSingleFrameVolumeNumber.value(m_currentSeries, 100);
+    }
+    else
+    {
+        return -1;
+    }
 }
 
 void PatientFillerInput::setCurrentVolumeNumber(int volumeNumber)

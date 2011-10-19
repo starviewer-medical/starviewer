@@ -3,6 +3,7 @@
 
 #include <QStringList>
 #include <QMultiMap>
+#include <QHash>
 
 namespace udg {
 
@@ -71,17 +72,11 @@ public:
     void setCurrentSeries(Series *series);
     Series* getCurrentSeries();
 
-    /// Reinicialitza el número de volum (multiframe) actual
-    void resetCurrentMultiframeVolumeNumber();
-
     /// Incrementa el número de volum (multiframe) actual
     void increaseCurrentMultiframeVolumeNumber();
 
     /// Retorna el número de volum (multiframe) actual
     int getCurrentMultiframeVolumeNumber() const;
-
-    /// Reinicialitza el número de volum (single frame) actual
-    void resetCurrentSingleFrameVolumeNumber();
 
     /// Incrementa el número de volum (single frame) actual
     void increaseCurrentSingleFrameVolumeNumber();
@@ -124,10 +119,10 @@ private:
     int m_currentVolumeNumber;
 
     /// Manté el número actual de volum pel subconjunt de volums multiframe
-    int m_currentMultiframeVolumeNumber;
+    QHash<Series*, int> m_currentMultiframeVolumeNumber;
 
     /// Manté el número actual de volum pel subconjunt de volums single frame
-    int m_currentSingleFrameVolumeNumber;
+    QHash<Series*, int> m_currentSingleFrameVolumeNumber;
 };
 
 }
