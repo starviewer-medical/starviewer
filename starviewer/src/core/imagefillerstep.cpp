@@ -877,7 +877,6 @@ unsigned short ImageFillerStep::getNumberOfOverlays(DICOMTagReader *dicomReader)
         }
     }
 
-    DEBUG_LOG(QString("Number of overlays found: %1").arg(numberOfOverlays));
     return numberOfOverlays;
 }
 
