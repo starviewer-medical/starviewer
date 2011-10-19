@@ -844,11 +844,39 @@ void Q2DViewer::loadOverlaysAndShutters(Volume *volume)
 
                 if (image->hasDisplayShutters())
                 {
-                    DrawerBitmap *shutterBitmap = displayShutterToDrawerBitmap(DisplayShutter::intersection(image->getDisplayShutters()), sliceIndex);
-                    getDrawer()->draw(shutterBitmap, Q2DViewer::Axial, sliceIndex);
-                    getDrawer()->addToGroup(shutterBitmap, DisplayShuttersDrawerGroup);
-                    shutterBitmap->increaseReferenceCount();
-                    m_viewerBitmaps << shutterBitmap;
+                    // Obtenim la llista de shutters i primer fem neteja dels que no s'haurien d'aplicar
+                    QList<DisplayShutter> shutterList = image->getDisplayShutters();
+                    QSize minimumSize;
+                    minimumSize.setHeight(image->getRows());
+                    minimumSize.setWidth(image->getColumns());
+                    
+                    for (int i = 0; i < shutterList.count(); ++i)
+                    {
+                        const DisplayShutter &shutter = shutterList.at(i);
+                        if (shutter.getShape() == DisplayShutter::RectangularShape)
+                        {
+                            QPolygon points = shutter.getAsQPolygon();
+                            QPoint shutterSize = points.at(2) - points.at(0);
+                            if (shutterSize.x() >= minimumSize.width() - 1 && shutterSize.y() >= minimumSize.height() - 1)
+                            {
+                                shutterList.removeAt(i);
+                            }
+                        }
+                        else if (shutter.getShape() == DisplayShutter::UndefinedShape)
+                        {
+                            shutterList.removeAt(i);
+                        }
+                    }
+                    
+                    // Un cop feta la criba creem el corresponent bitmap
+                    if (!shutterList.isEmpty())
+                    {
+                        DrawerBitmap *shutterBitmap = displayShutterToDrawerBitmap(DisplayShutter::intersection(shutterList), sliceIndex);
+                        getDrawer()->draw(shutterBitmap, Q2DViewer::Axial, sliceIndex);
+                        getDrawer()->addToGroup(shutterBitmap, DisplayShuttersDrawerGroup);
+                        shutterBitmap->increaseReferenceCount();
+                        m_viewerBitmaps << shutterBitmap;
+                    }
                 }
             }
         }
