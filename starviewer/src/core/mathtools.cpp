@@ -150,16 +150,9 @@ int MathTools::planeIntersection(double p[3], double n[3], double q[3], double m
     return 1;
 }
 
-double* MathTools::directorVector(const double point1[3], const double point2[3])
+QVector3D MathTools::directorVector(const QVector3D &point1, const QVector3D &point2)
 {
-    double *vd = new double[3];
-
-    for (int i = 0; i < 3; i++)
-    {
-        vd[i] = point2[i] - point1[i];
-    }
-
-    return vd;
+    return point2 - point1;
 }
 
 double MathTools::modulus(double vector[3])

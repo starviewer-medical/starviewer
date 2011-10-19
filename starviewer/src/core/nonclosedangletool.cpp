@@ -214,8 +214,8 @@ void NonClosedAngleTool::computeAngle()
     double distance3 = MathTools::getDistance3D(intersection, point3);
     double distance4 = MathTools::getDistance3D(intersection, point4);
 
-    double *directorVector1;
-    double *directorVector2;
+    QVector3D directorVector1;
+    QVector3D directorVector2;
     // Per calcular el vectors directors farem servir la intersecció i el punt
     // més llunyà a la intersecció de cada recta ja que si per alguna casualitat
     // l'usuari fa coincidir un dels punts de cada recta, la distància seria de 0
@@ -224,15 +224,19 @@ void NonClosedAngleTool::computeAngle()
     {
         if (distance3 <= distance4)
         {
-            directorVector1 = MathTools::directorVector(point2, intersection);
-            directorVector2 = MathTools::directorVector(point4, intersection);
+            directorVector1 = MathTools::directorVector(QVector3D(point2[0], point2[1], point2[2]),
+                                                        QVector3D(intersection[0], intersection[1], intersection[2]));
+            directorVector2 = MathTools::directorVector(QVector3D(point4[0], point4[1], point4[2]),
+                                                        QVector3D(intersection[0], intersection[1], intersection[2]));
             m_middleLine->setFirstPoint(point1);
             m_middleLine->setSecondPoint(point3);
         }
         else
         {
-            directorVector1 = MathTools::directorVector(point2, intersection);
-            directorVector2 = MathTools::directorVector(point3, intersection);
+            directorVector1 = MathTools::directorVector(QVector3D(point2[0], point2[1], point2[2]),
+                                                        QVector3D(intersection[0], intersection[1], intersection[2]));
+            directorVector2 = MathTools::directorVector(QVector3D(point3[0], point3[1], point3[2]),
+                                                        QVector3D(intersection[0], intersection[1], intersection[2]));
             m_middleLine->setFirstPoint(point1);
             m_middleLine->setSecondPoint(point4);
         }
@@ -241,15 +245,19 @@ void NonClosedAngleTool::computeAngle()
     {
         if (distance3 <= distance4)
         {
-            directorVector1 = MathTools::directorVector(point1, intersection);
-            directorVector2 = MathTools::directorVector(point4, intersection);
+            directorVector1 = MathTools::directorVector(QVector3D(point1[0], point1[1], point1[2]),
+                                                        QVector3D(intersection[0], intersection[1], intersection[2]));
+            directorVector2 = MathTools::directorVector(QVector3D(point4[0], point4[1], point4[2]),
+                                                        QVector3D(intersection[0], intersection[1], intersection[2]));
             m_middleLine->setFirstPoint(point2);
             m_middleLine->setSecondPoint(point3);
         }
         else
         {
-            directorVector1 = MathTools::directorVector(point1, intersection);
-            directorVector2 = MathTools::directorVector(point3, intersection);
+            directorVector1 = MathTools::directorVector(QVector3D(point1[0], point1[1], point1[2]),
+                                                        QVector3D(intersection[0], intersection[1], intersection[2]));
+            directorVector2 = MathTools::directorVector(QVector3D(point3[0], point3[1], point3[2]),
+                                                        QVector3D(intersection[0], intersection[1], intersection[2]));
             m_middleLine->setFirstPoint(point2);
             m_middleLine->setSecondPoint(point4);
         }
@@ -258,21 +266,33 @@ void NonClosedAngleTool::computeAngle()
     // Dibuixem la línia auxiliar
     m_2DViewer->getDrawer()->draw(m_middleLine, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
 
-    for (int i = 0; i < 3; i++)
+    if (fabs(directorVector1.x()) < 0.0001)
     {
-        if (fabs(directorVector1[i]) < 0.0001)
-        {
-            directorVector1[i] = 0.0;
-        }
-
-        if (fabs(directorVector2[i]) < 0.0001)
-        {
-            directorVector2[i] = 0.0;
-        }
+        directorVector1.setX(0.0);
+    }
+    if (fabs(directorVector1.y()) < 0.0001)
+    {
+        directorVector1.setY(0.0);
+    }
+    if (fabs(directorVector1.z()) < 0.0001)
+    {
+        directorVector1.setZ(0.0);
     }
 
-    double angle = MathTools::angleInDegrees(QVector3D(directorVector1[0], directorVector1[1], directorVector1[2]), 
-        QVector3D(directorVector2[0], directorVector2[1], directorVector2[2]));
+    if (fabs(directorVector2.x()) < 0.0001)
+    {
+        directorVector2.setX(0.0);
+    }
+    if (fabs(directorVector2.y()) < 0.0001)
+    {
+        directorVector2.setY(0.0);
+    }
+    if (fabs(directorVector2.z()) < 0.0001)
+    {
+        directorVector2.setZ(0.0);
+    }
+
+    double angle = MathTools::angleInDegrees(directorVector1, directorVector2);
 
     DrawerText *text = new DrawerText;
 
