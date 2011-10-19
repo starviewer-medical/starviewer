@@ -929,7 +929,7 @@ DrawerBitmap* Q2DViewer::displayShutterToDrawerBitmap(const DisplayShutter &shut
     
     double bitmapOrigin[3];
     bitmapOrigin[0] = volumeOrigin[0];
-    bitmapOrigin[0] = volumeOrigin[1];
+    bitmapOrigin[1] = volumeOrigin[1];
     bitmapOrigin[2] = volumeOrigin[2] + volumeSpacing[2] * slice;
     drawerBitmap->setOrigin(bitmapOrigin);
 
