@@ -14,6 +14,7 @@
 #include "windowlevelpresetstooldata.h"
 #include "qdicomdumpbrowser.h"
 #include "statswatcher.h"
+#include "automaticsynchronizationtool.h"
 // Per poder fer screenshots desde menú
 #include "screenshottool.h"
 #include "toolproxy.h"
@@ -409,6 +410,7 @@ void Q2DViewerExtension::initializeTools()
     m_cursor3DToolButton->setDefaultAction(m_toolManager->registerTool("Cursor3DTool"));
     m_angleToolButton->setDefaultAction(m_toolManager->registerTool("AngleTool"));
     m_openAngleToolButton->setDefaultAction(m_toolManager->registerTool("NonClosedAngleTool"));
+    m_automaticSynchronizationToolButton->setDefaultAction(m_toolManager->registerTool("AutomaticSynchronizationTool"));
 #endif
     m_voxelInformationToolButton->setDefaultAction(m_toolManager->registerTool("VoxelInformationTool"));
     // Registrem les eines de valors predefinits de window level, slicing per teclat i sincronització
@@ -472,6 +474,7 @@ void Q2DViewerExtension::initializeTools()
     // TODO De moment fem exclusiu la tool de sincronització i la de cursor 3d manualment perque la
     // sincronització no té el model de totes les tools
     connect(m_toolManager->getRegisteredToolAction("Cursor3DTool"), SIGNAL(triggered()), SLOT(disableSynchronization()));
+    connect(m_toolManager->getRegisteredToolAction("AutomaticSynchronizationTool"), SIGNAL(triggered(bool)), SLOT(enableAutomaticSincronizationToViewer(bool)));
 #endif
 
     // SCREEN SHOT TOOL
@@ -725,6 +728,19 @@ void Q2DViewerExtension::disableSynchronization()
     }
 }
 
+void Q2DViewerExtension::enableSynchronizationButton(bool enableButton)
+{
+    Q2DViewerWidget *viewer;
+
+    int numberOfViewers = m_workingArea->getNumberOfViewers();
+
+    for (int viewerNumber = 0; viewerNumber < numberOfViewers; ++viewerNumber)
+    {
+        viewer = m_workingArea->getViewerWidget(viewerNumber);
+        viewer->enableSynchronizationButton(enableButton);
+    }
+}
+
 #ifndef STARVIEWER_LITE
 void Q2DViewerExtension::setHangingProtocol(int hangingProtocolNumber)
 {
@@ -769,6 +785,26 @@ void Q2DViewerExtension::searchPreviousStudiesOfMostRecentStudy()
 void Q2DViewerExtension::updatePreviousStudiesWidget()
 {
     m_previousStudiesWidget->updateList();
+}
+
+void Q2DViewerExtension::enableAutomaticSincronizationToViewer(bool enable)
+{
+    if (enable)
+    {
+        disableSynchronization();
+        enableSynchronizationButton(false);
+
+        Tool *tool = m_workingArea->getSelectedViewer()->getViewer()->getToolProxy()->getTool("AutomaticSynchronizationTool");
+        AutomaticSynchronizationTool *automaticSynchronizationTool = dynamic_cast<AutomaticSynchronizationTool*>(tool);
+        if (automaticSynchronizationTool)
+        {
+            automaticSynchronizationTool->changePositionIfActive();
+        }
+    }
+    else
+    {
+        enableSynchronizationButton(true);
+    }
 }
 
 #endif

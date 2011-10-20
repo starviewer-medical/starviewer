@@ -37,6 +37,9 @@ public:
     void setInput(Volume *input);
     void setInputAsynchronously(Volume *input, QViewerCommand *command = 0);
 
+    /// Habilita o deshabilita el botó que permet activar o desactivar l'eina de sincronització
+    void enableSynchronizationButton(bool enable);
+
 public slots:
     /// Habilita o deshabilita l'eina de sincronització en el visor, si aquest la té registrada
     /// Aquest mètode es podrà invocar al clicar sobré el botó de sincronització o bé cridant-lo directament

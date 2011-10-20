@@ -27,6 +27,7 @@
 #include "clippingplanestool.h"
 #include "transdifferencetool.h"
 #include "ovalroitool.h"
+#include "automaticsynchronizationtool.h"
 
 #include "shortcutmanager.h"
 #include "shortcuts.h"
@@ -143,7 +144,11 @@ Tool* ToolRegistry::getTool(const QString &toolName, QViewer *viewer)
     {
         tool = new OvalROITool(viewer);
     }
-    else
+    else if (toolName == "AutomaticSynchronizationTool")
+    {
+        tool = new AutomaticSynchronizationTool(viewer);
+    }
+    else 
     {
         DEBUG_LOG(toolName + "> Tool no registrada!");
     }
@@ -344,6 +349,13 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
         toolAction->setIcon(QIcon(":/images/ellipticalROITool.png"));
         toolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::OvalROITool));
         statusTip = tr("Enable/Disable Elliptical ROI tool");
+        toolTip = toolAction->text();
+    }
+    else if (toolName == "AutomaticSynchronizationTool")
+    {
+        toolAction->setText(tr("Auto"));
+        toolAction->setIcon(QIcon(":/images/synchronize.png"));
+        statusTip = tr("Enable/Disable Automatic synchronization tool");
         toolTip = toolAction->text();
     }
     else
