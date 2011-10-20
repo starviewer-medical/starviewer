@@ -4,6 +4,7 @@
 #include <cmath>
 
 #include <QColor>
+#include <QPainter>
 #include <QRegExp>
 
 namespace udg {
@@ -257,6 +258,20 @@ QString DisplayShutter::getPointsAsString() const
     }
 
     return pointsString;
+}
+
+QImage DisplayShutter::getAsQImage(int width, int height) const
+{
+    QImage shutterImage(width, height, QImage::Format_RGB32);
+    shutterImage.fill(Qt::black);
+    
+    QPainter shutterPainter(&shutterImage);
+    shutterPainter.setPen(Qt::white);
+    shutterPainter.setBrush(Qt::white);
+    shutterPainter.drawPolygon(getAsQPolygon());
+    shutterImage.invertPixels();
+
+    return shutterImage;
 }
 
 DisplayShutter DisplayShutter::intersection(const QList<DisplayShutter> &shuttersList)

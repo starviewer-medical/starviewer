@@ -3,6 +3,7 @@
 #include "displayshutter.h"
 
 #include <QColor>
+#include <QPainter>
 
 using namespace udg;
 
@@ -32,6 +33,9 @@ private slots:
     
     void intersection_ReturnsExpectedValues_data();
     void intersection_ReturnsExpectedValues();   
+
+    void getAsQImage_ReturnsExpectedValues_data();
+    void getAsQImage_ReturnsExpectedValues();
 };
 
 Q_DECLARE_METATYPE(DisplayShutter::ShapeType);
@@ -330,6 +334,77 @@ void test_DisplayShutter::intersection_ReturnsExpectedValues()
     QCOMPARE(resultingShutter.getShape(), intersectedShutter.getShape());
     QCOMPARE(resultingShutter.getAsQPolygon(), intersectedShutter.getAsQPolygon());
     QCOMPARE(resultingShutter.getShutterValue(), intersectedShutter.getShutterValue());
+}
+
+void test_DisplayShutter::getAsQImage_ReturnsExpectedValues_data()
+{
+    QTest::addColumn<DisplayShutter>("shutter");
+    QTest::addColumn<QImage>("expectedQImage");
+    QTest::addColumn<int>("width");
+    QTest::addColumn<int>("height");
+
+    int width = 10;
+    int height = 10;
+    
+    QImage undefinedShutterImage(width, height, QImage::Format_RGB32);
+    undefinedShutterImage.fill(Qt::black);
+    undefinedShutterImage.invertPixels();
+    QTest::newRow("Undefined shutter") << DisplayShutter() << undefinedShutterImage << width << height;
+
+    DisplayShutter rectangularShutter;
+    rectangularShutter.setPoints(QPoint(1, 1), QPoint(5, 5));
+    
+    QImage rectangularShutterImage(width, height, QImage::Format_RGB32);
+    rectangularShutterImage.fill(Qt::black);
+    
+    QPainter rectangularPainter(&rectangularShutterImage);
+    rectangularPainter.setPen(Qt::white);
+    rectangularPainter.setBrush(Qt::white);
+    rectangularPainter.drawRect(1, 1, 4, 4);
+    rectangularShutterImage.invertPixels();
+
+    QTest::newRow("rectangular shutter") << rectangularShutter << rectangularShutterImage << width << height;
+
+    DisplayShutter circularShutter;
+    circularShutter.setPoints(QPoint(5, 5), 3);
+
+    QImage circularShutterImage(width, height, QImage::Format_RGB32);
+    circularShutterImage.fill(Qt::black);
+    
+    QPainter circularPainter(&circularShutterImage);
+    circularPainter.setPen(Qt::white);
+    circularPainter.setBrush(Qt::white);
+    circularPainter.drawPolygon(circularShutter.getAsQPolygon());
+    circularShutterImage.invertPixels();
+
+    QTest::newRow("circular shutter") << circularShutter << circularShutterImage << width << height;
+
+    QPolygon polygon;
+    polygon << QPoint(1,1) << QPoint(6,2) << QPoint(3,8);
+
+    DisplayShutter polygonalShutter;
+    polygonalShutter.setPoints(polygon);
+
+    QImage polygonalShutterImage(width, height, QImage::Format_RGB32);
+    polygonalShutterImage.fill(Qt::black);
+    
+    QPainter polygonalPainter(&polygonalShutterImage);
+    polygonalPainter.setPen(Qt::white);
+    polygonalPainter.setBrush(Qt::white);
+    polygonalPainter.drawPolygon(polygon);
+    polygonalShutterImage.invertPixels();
+
+    QTest::newRow("polygonal shutter") << polygonalShutter << polygonalShutterImage << width << height;
+}
+
+void test_DisplayShutter::getAsQImage_ReturnsExpectedValues()
+{
+    QFETCH(DisplayShutter, shutter);
+    QFETCH(QImage, expectedQImage);
+    QFETCH(int, width);
+    QFETCH(int, height);
+    
+    QCOMPARE(shutter.getAsQImage(width, height), expectedQImage);
 }
 
 DECLARE_TEST(test_DisplayShutter)
