@@ -13,7 +13,6 @@
 // Vtk
 #include <vtkCommand.h>
 #include <vtkMatrix4x4.h>
-#include <vtkPlane.h>
 
 namespace udg {
 
@@ -258,7 +257,7 @@ void Cursor3DTool::projectPoint()
     m_2DViewer->projectDICOMPointToCurrentDisplayedImage(m_myData->getOriginPointPosition(), position);
 
     double distance;
-    int nearestSlice = getNearestSlice(m_myData->getOriginPointPosition(), distance);
+    int nearestSlice = m_2DViewer->getNearestSlice(m_myData->getOriginPointPosition(), distance);
 
     if (nearestSlice != -1 && distance < (m_2DViewer->getThickness() * 1.5))
     {
@@ -318,41 +317,6 @@ void Cursor3DTool::hideCrossHair()
         m_2DViewer->render();
         m_myData->setVisible(false);
     }
-}
-
-int Cursor3DTool::getNearestSlice(double projectedPosition[3], double &distance)
-{
-    double currentDistance;
-    double minimumDistance = -1.0;
-    int minimumSlice = -1;
-    double currentPlaneOrigin[3], currentNormalVector[3];
-    ImagePlane *currentPlane = 0;
-    int maximumSlice = m_2DViewer->getMaximumSlice();
-    int currentPhase = m_2DViewer->getCurrentPhase();
-
-    for (int i = 0; i < maximumSlice; i++)
-    {
-        currentPlane = m_2DViewer->getImagePlane(i, currentPhase);
-
-        if (currentPlane)
-        {
-            currentPlane->getOrigin(currentPlaneOrigin);
-            currentPlane->getNormalVector(currentNormalVector);
-
-            currentDistance = vtkPlane::DistanceToPlane(projectedPosition, currentNormalVector, currentPlaneOrigin);
-
-            if ((currentDistance < minimumDistance) || (minimumDistance == -1.0))
-            {
-                minimumDistance = currentDistance;
-                minimumSlice = i;
-            }
-
-            delete currentPlane;
-        }
-    }
-    distance = minimumDistance;
-
-    return minimumSlice;
 }
 
 }

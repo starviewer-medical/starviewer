@@ -36,6 +36,7 @@
 #include <vtkPropPicker.h>
 #include <QVTKWidget.h>
 #include <vtkWindowToImageFilter.h>
+#include <vtkPlane.h>
 // Composició d'imatges
 #include <vtkImageBlend.h>
 // Anotacions
@@ -2594,5 +2595,39 @@ double Q2DViewer::getCurrentSpacingBetweenSlices()
     }
 
     return currentSpacingBetweenSlices;
+}
+
+int Q2DViewer::getNearestSlice(double projectedPosition[3], double &distance)
+{
+    double currentDistance;
+    double minimumDistance = -1.0;
+    int minimumSlice = -1;
+    double currentPlaneOrigin[3], currentNormalVector[3];
+    ImagePlane *currentPlane = 0;
+    int maximumSlice = getMaximumSlice();
+    int currentPhase = getCurrentPhase();
+
+    for (int i = 0; i < maximumSlice; i++)
+    {
+        currentPlane = getImagePlane(i, currentPhase);
+
+        if (currentPlane)
+        {
+            currentPlane->getOrigin(currentPlaneOrigin);
+            currentPlane->getNormalVector(currentNormalVector);
+            currentDistance = vtkPlane::DistanceToPlane(projectedPosition, currentNormalVector, currentPlaneOrigin);
+
+            if ((currentDistance < minimumDistance) || (minimumDistance == -1.0))
+            {
+                minimumDistance = currentDistance;
+                minimumSlice = i;
+            }
+
+            delete currentPlane;
+        }
+    }
+    distance = minimumDistance;
+
+    return minimumSlice;
 }
 };  // End namespace udg
