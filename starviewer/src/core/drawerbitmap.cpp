@@ -211,11 +211,11 @@ vtkImageData* DrawerBitmap::rawDataToVtkImageData(unsigned char *data)
     int size = m_width * m_height;
     vtkUnsignedCharArray *ucharArray = vtkUnsignedCharArray::New();
     ucharArray->SetNumberOfTuples(size);
+    // TODO De moment fem que vtk no esborri mai les dades a on apunta data quan l'objecte es destrueixi (3r paràmetre == 1)
+    ucharArray->SetArray(data, size, 1);
     imageData->GetPointData()->SetScalars(ucharArray);
     ucharArray->Delete();
 
-    // Copiem les dades a vtk i li assignem les propietats
-    std::memcpy(imageData->GetScalarPointer(), data, size);
     imageData->SetOrigin(m_origin);
     imageData->SetSpacing(m_spacing);
 
