@@ -97,6 +97,9 @@ public slots:
     /// Desactiva l'eina de sincronització.
     void disableSynchronization();
 
+    /// Activa o desactiva només el botó de la sincronització manual
+    void enableSynchronizationButton(bool enable);
+
 #ifndef STARVIEWER_LITE
     /// Apilicar un hanging protocol
     void setHangingProtocol(int hangingProtocolNumber);
@@ -109,6 +112,10 @@ public slots:
 
     /// Mètode encarregat d'actualitzar la llista del widget d'estudis previs per marcar aquells nous estudis que s'han carregat a memòria.
     void updatePreviousStudiesWidget();
+
+    /// Inicialitza la sincronització automàtica agafant de referència el visor que tenim actiu (seleccionat)
+    void enableAutomaticSincronizationToViewer(bool enable);
+
 #endif
 
     /// Aplica un grid regular al layout, i elimina l'etiqueta si algun estudi previ està en descàrrega
@@ -159,6 +166,7 @@ private slots:
 
     /// Mètode que afegeix els hanging protocols amb prèvies
     void addPreviousHangingProtocols(QList<Study*> studies);
+
 #endif
 
 private:

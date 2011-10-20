@@ -188,6 +188,11 @@ void Q2DViewerWidget::enableSynchronization(bool enable)
     }
 }
 
+void Q2DViewerWidget::enableSynchronizationButton(bool enable)
+{
+    m_synchronizeButton->setEnabled(enable);
+}
+
 void Q2DViewerWidget::updateSlider()
 {
     m_slider->setValue(m_2DView->getCurrentSlice());

@@ -260,6 +260,8 @@ HEADERS += extensionfactory.h \
     applicationupdatechecker.h \
     diagnosistestfactory.h \
     diagnosistestfactoryregister.h \
+    automaticsynchronizationtool.h \
+    automaticsynchronizationtooldata.h \
     firewallaccess.h \
     firewallaccesstest.h
 SOURCES += extensionmediator.cpp \
@@ -479,6 +481,8 @@ SOURCES += extensionmediator.cpp \
     machineinformation.cpp \
     diagnosistestresult.cpp \
     applicationupdatechecker.cpp \
+    automaticsynchronizationtool.cpp \
+    automaticsynchronizationtooldata.cpp \
     firewallaccess.cpp \
     firewallaccesstest.cpp
 win32 {
