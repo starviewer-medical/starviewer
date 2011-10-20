@@ -4,6 +4,7 @@
 #include <QPolygon>
 
 class QColor;
+class QImage;
 
 namespace udg {
 
@@ -60,6 +61,9 @@ public:
 
     /// Retorna els punts del shutter en format d'string. El format serà el mateix que el de setPoints(const QString &)
     QString getPointsAsString() const;
+
+    /// Retorna el shutter com una QImage de mides width i height
+    QImage getAsQImage(int width, int height) const;
     
     /// Donada una llista de shutters, ens retorna el shutter resultant de la intersecció d'aquests. 
     /// En quant al color resultant, serà la mitjana de tots els shutters de la llista.
