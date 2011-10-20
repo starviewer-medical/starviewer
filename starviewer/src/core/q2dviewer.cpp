@@ -937,15 +937,7 @@ DrawerBitmap* Q2DViewer::displayShutterToDrawerBitmap(const DisplayShutter &shut
     // Creem la màscara del shutter a través d'una QImage
     int volumeDimensions[3];
     m_mainVolume->getDimensions(volumeDimensions);
-    
-    QImage shutterImage(volumeDimensions[0], volumeDimensions[1], QImage::Format_RGB32);
-    shutterImage.fill(Qt::black);
-    
-    QPainter shutterPainter(&shutterImage);
-    shutterPainter.setPen(Qt::white);
-    shutterPainter.setBrush(Qt::white);
-    shutterPainter.drawPolygon(shutter.getAsQPolygon());
-    shutterImage.invertPixels();
+    QImage shutterImage = shutter.getAsQImage(volumeDimensions[0], volumeDimensions[1]);
     // Màscara feta!
     
     // Convertim la imatge en el format de buffer que s'espera drawer bitmap
