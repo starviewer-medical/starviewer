@@ -54,9 +54,6 @@ private:
     /// Desactiva la tool
     void removePosition();
 
-    /// Busca la llesca que es troba més a prop del punt i retorna la distancia
-    int getNearestSlice(double point[3], double &distance);
-
 private:
     /// Dades específiques de la tool
     Cursor3DToolData *m_myData;
