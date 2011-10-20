@@ -277,7 +277,7 @@ QString Volume::toString(bool verbose)
     }
     else
     {
-        result = "The data is not loaded";
+        result = "Data are not loaded yet";
     }
 
     return result;
