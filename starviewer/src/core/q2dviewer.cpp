@@ -2606,6 +2606,7 @@ int Q2DViewer::getNearestSlice(double projectedPosition[3], double &distance)
         {
             currentPlane->getOrigin(currentPlaneOrigin);
             currentPlane->getNormalVector(currentNormalVector);
+            // TODO Calcular currentDistance amb QVector3D::distanceToPlane() i obtenir la normal amb ImagePlane::getImageOrientation()::getNormalVector()
             currentDistance = vtkPlane::DistanceToPlane(projectedPosition, currentNormalVector, currentPlaneOrigin);
 
             if ((currentDistance < minimumDistance) || (minimumDistance == -1.0))
