@@ -27,7 +27,6 @@
 // Qt
 #include <QResizeEvent>
 #include <QImage>
-#include <QPainter>
 // Include's bàsics vtk
 #include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
