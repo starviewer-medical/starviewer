@@ -42,11 +42,16 @@ private slots:
     void getDistance3D_ShouldComputeDistanceCorrectly_data();
     void getDistance3D_ShouldComputeDistanceCorrectly();
 
+    void infiniteLineIntersection_ShouldComputeExpectedIntersectionAndState_data();
+    void infiniteLineIntersection_ShouldComputeExpectedIntersectionAndState();
+
 private:
     void setupComputeAngleData();
     void setupComputeAngleNaNData();
     void setupCrossAndDotProductData();
 };
+
+Q_DECLARE_METATYPE(MathTools::IntersectionResults)
 
 // Epsilons pels diferents fuzzyCompare de cada test
 const double AngleInDegreesEpsilon = 0.001;
@@ -56,6 +61,7 @@ const double ModulusEpsilon = 0.001;
 const double crossProductEpsilon = 0.001;
 const double directorVectorEpsilon = 0.001;
 const double distance3DEpsion = 0.0005;
+const double LineIntersectionEpsilon = 0.0001;
 
 void test_MathTools::angleInRadians_ShouldComputeAngleInRadians_data()
 {
@@ -284,6 +290,76 @@ void test_MathTools::getDistance3D_ShouldComputeDistanceCorrectly()
     double v2[3] = { vector2.x(), vector2.y(), vector2.z() };
 
     QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(MathTools::getDistance3D(v1, v2), distance3D, distance3DEpsion));
+}
+
+void test_MathTools::infiniteLineIntersection_ShouldComputeExpectedIntersectionAndState_data()
+{
+    QTest::addColumn<QVector3D>("point1");
+    QTest::addColumn<QVector3D>("point2");
+    QTest::addColumn<QVector3D>("point3");
+    QTest::addColumn<QVector3D>("point4");
+    QTest::addColumn<MathTools::IntersectionResults>("expectedState");
+    QTest::addColumn<QVector3D>("expectedIntersection");
+
+    QTest::newRow("all points null") << QVector3D(0.0, 0.0, 0.0) << QVector3D(0.0, 0.0, 0.0) << QVector3D(0.0, 0.0, 0.0) << QVector3D(0.0, 0.0, 0.0)
+                                     << MathTools::ParallelLines << QVector3D(0.0, 0.0, 0.0);
+
+    QTest::newRow("p1 == p2") << QVector3D(-7.4, +6.0, +0.5) << QVector3D(-7.4, +6.0, +0.5) << QVector3D(+9.1, +9.6, -6.6) << QVector3D(+8.2, +2.2, -2.7)
+                              << MathTools::ParallelLines << QVector3D(0.0, 0.0, 0.0);
+    QTest::newRow("p3 == p4") << QVector3D(-7.5, +6.8, +0.3) << QVector3D(-3.9, +3.3, -1.3) << QVector3D(-3.9, -8.5, +8.0) << QVector3D(-3.9, -8.5, +8.0)
+                              << MathTools::ParallelLines << QVector3D(0.0, 0.0, 0.0);
+    QTest::newRow("p1 == p2 && p3 == p4") << QVector3D(-5.7, +7.2, -1.6) << QVector3D(-5.7, +7.2, -1.6) << QVector3D(-1.9, +7.6, +5.8)
+                                          << QVector3D(-1.9, +7.6, +5.8) << MathTools::ParallelLines << QVector3D(0.0, 0.0, 0.0);
+    QTest::newRow("p1 == p2 == p3 == p4") << QVector3D(+0.8, -6.0, +5.4) << QVector3D(+0.8, -6.0, +5.4) << QVector3D(+0.8, -6.0, +5.4)
+                                          << QVector3D(+0.8, -6.0, +5.4) << MathTools::ParallelLines << QVector3D(0.0, 0.0, 0.0);
+
+    QTest::newRow("parallel XY") << QVector3D(+3.3, -0.5, +2.5) << QVector3D(+2.9, -9.8, +2.5) << QVector3D(+3.5, +2.3, +2.5) << QVector3D(+6.3, +67.4, +2.5)
+                                 << MathTools::ParallelLines << QVector3D(0.0, 0.0, 0.0);
+    QTest::newRow("parallel XZ") << QVector3D(+4.6, -7.3, +5.0) << QVector3D(+9.6, -7.3, -9.9) << QVector3D(+4.2, -7.3, +2.6) << QVector3D(+14.2, -7.3, -27.2)
+                                 << MathTools::ParallelLines << QVector3D(0.0, 0.0, 0.0);
+    QTest::newRow("parallel YZ") << QVector3D(+2.5, +8.6, -1.8) << QVector3D(+2.5, +7.8, -1.3) << QVector3D(+2.5, -2.5, -1.0) << QVector3D(+2.5, -0.1, -2.5)
+                                 << MathTools::ParallelLines << QVector3D(0.0, 0.0, 0.0);
+    QTest::newRow("parallel") << QVector3D(-8.4, -6.2, +2.7) << QVector3D(-0.2, -0.1, -1.0) << QVector3D(+8.1, +3.9, +9.5) << QVector3D(+16.3, +10.0, +5.8)
+                              << MathTools::ParallelLines << QVector3D(0.0, 0.0, 0.0);
+
+    QTest::newRow("skew XY") << QVector3D(-8.5, -0.8, -2.2) << QVector3D(+9.2, -7.0, -2.2) << QVector3D(+2.4, -9.8, -8.3) << QVector3D(+8.3, -6.5, -8.3)
+                             << MathTools::LinesIntersect << QVector3D(+8.09689, -6.6136, -2.2);
+    QTest::newRow("skew XZ") << QVector3D(+4.6, -6.4, +0.5) << QVector3D(+7.5, -6.4, +5.5) << QVector3D(-8.8, +10.0, -8.1) << QVector3D(-5.9, +10.0, -1.1)
+                             << MathTools::LinesIntersect << QVector3D(-29.83, -6.4, -58.8621);
+    QTest::newRow("skew YZ") << QVector3D(-5.6, +8.9, -8.8) << QVector3D(-5.6, -1.5, -6.5) << QVector3D(-7.1, +6.6, -2.3) << QVector3D(-7.1, -1.7, -7.3)
+                             << MathTools::LinesIntersect << QVector3D(-5.6, -0.674905, -6.68247);
+    QTest::newRow("skew") << QVector3D(+7.6, -3.7, +7.9) << QVector3D(+8.8, -5.6, -8.9) << QVector3D(-1.3, +3.3, -9.7) << QVector3D(-4.3, -9.7, +4.4)
+                          << MathTools::LinesIntersect << QVector3D(+8.27995, -4.77659, -1.6193);
+
+    QTest::newRow("intersection XY") << QVector3D(+1.0, -1.6, -10.0) << QVector3D(-6.2, -8.2, -10.0) << QVector3D(-8.3, -4.4, -10.0)
+                                     << QVector3D(+0.3, -1.4, -10.0) << MathTools::LinesIntersect << QVector3D(+1.78225, -0.882935, -10.0);
+    QTest::newRow("intersection XZ") << QVector3D(+8.3, +1.6, -4.2) << QVector3D(-2.3, +1.6, +9.9) << QVector3D(-8.1, +1.6, +8.2)
+                                     << QVector3D(-2.4, +1.6, -6.1) << MathTools::LinesIntersect << QVector3D(-16.0885, +1.6, +28.2413);
+    QTest::newRow("intersection YZ") << QVector3D(+9.9, +3.3, +7.1) << QVector3D(+9.9, +7.6, +5.8) << QVector3D(+9.9, -0.2, -3.7)
+                                     << QVector3D(+9.9, +5.9, -2.5) << MathTools::LinesIntersect << QVector3D(+9.9, +23.5616, +0.974408);
+    QTest::newRow("intersection") << QVector3D(+1.8, -3.9, +6.5) << QVector3D(-6.2, +7.3, +8.6) << QVector3D(-9.9, +9.9, +4.0)
+                                  << QVector3D(-340.09, +495.128, +140.259) << MathTools::LinesIntersect << QVector3D(-47.0, +64.42, +19.31);
+}
+
+void test_MathTools::infiniteLineIntersection_ShouldComputeExpectedIntersectionAndState()
+{
+    QFETCH(QVector3D, point1);
+    QFETCH(QVector3D, point2);
+    QFETCH(QVector3D, point3);
+    QFETCH(QVector3D, point4);
+    QFETCH(MathTools::IntersectionResults, expectedState);
+    QFETCH(QVector3D, expectedIntersection);
+
+    double p1[3] = { point1.x(), point1.y(), point1.z() };
+    double p2[3] = { point2.x(), point2.y(), point2.z() };
+    double p3[3] = { point3.x(), point3.y(), point3.z() };
+    double p4[3] = { point4.x(), point4.y(), point4.z() };
+    int state;
+    double *i = MathTools::infiniteLinesIntersection(p1, p2, p3, p4, state);
+    QVector3D intersection(i[0], i[1], i[2]);
+
+    QCOMPARE(state, static_cast<int>(expectedState));
+    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(intersection, expectedIntersection, LineIntersectionEpsilon));
 }
 
 void test_MathTools::setupComputeAngleData()
