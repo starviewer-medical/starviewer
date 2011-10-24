@@ -3,7 +3,6 @@
 #include <vtkImageData.h>
 // Voxel information
 #include <vtkPointData.h>
-#include <vtkCell.h>
 
 #include "logging.h"
 
