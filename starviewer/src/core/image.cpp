@@ -453,6 +453,39 @@ QList<DisplayShutter> Image::getDisplayShutters() const
     return m_shuttersList;
 }
 
+DisplayShutter Image::getDisplayShutterForDisplay()
+{
+    if (!hasDisplayShutters())
+    {
+        DisplayShutter();
+    }
+    
+    // Primer eliminem els shutters que no tingui sentit aplicar
+    // com serien els shutters rectangulars que tinguin una mida igual o major a la imatge i els que no tenen cap forma definida
+    QList<DisplayShutter> shutterList = this->getDisplayShutters();
+    QRect imageRect(1, 1, this->getColumns(), this->getRows());
+    for (int i = 0; i < shutterList.count(); ++i)
+    {
+        const DisplayShutter &shutter = shutterList.at(i);
+        if (shutter.getShape() == DisplayShutter::RectangularShape)
+        {
+            QPolygon points = shutter.getAsQPolygon();
+            QRect shutterRect(points.at(0), points.at(2));       
+            if (imageRect.intersected(shutterRect).contains(imageRect, false))
+            {
+                shutterList.removeAt(i);
+            }
+        }
+        else if (shutter.getShape() == DisplayShutter::UndefinedShape)
+        {
+            shutterList.removeAt(i);
+        }
+    }
+
+    // Un cop feta la criba, retornem la intersecció dels shutters resultants
+    return DisplayShutter::intersection(shutterList);
+}
+
 void Image::setDICOMSource(const DICOMSource &imageDICOMSource)
 {
     m_imageDICOMSource = imageDICOMSource;
