@@ -188,6 +188,10 @@ public:
     
     /// Obté la llista de Display Shutters
     QList<DisplayShutter> getDisplayShutters() const;
+
+    /// Ens retorna la composició de DisplayShutters adequada per display
+    /// Si no existeixen shutters o no hi ha cap disposició vàlida ens tornarà un DisplayShutter buit
+    DisplayShutter getDisplayShutterForDisplay();
     
     /// Assingar/Obtenir el DICOMSource de la imatge. Indica quin és l'origen dels fitxers DICOM que conté la imatge
     void setDICOMSource(const DICOMSource &imageDICOMSource);
