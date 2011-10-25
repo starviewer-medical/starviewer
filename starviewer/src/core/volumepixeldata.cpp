@@ -3,6 +3,8 @@
 #include <vtkImageData.h>
 // Voxel information
 #include <vtkPointData.h>
+// Pel setData(unsigned char *...)
+#include <vtkUnsignedCharArray.h>
 
 #include "logging.h"
 
@@ -57,6 +59,48 @@ void VolumePixelData::setData(vtkImageData *vtkImage)
         m_imageDataVTK->ReleaseData();
     }
     m_imageDataVTK = vtkImage;
+}
+
+void VolumePixelData::setData(unsigned char *data, int extent[6], int bytesPerPixel, bool deleteData)
+{
+    if (!data)
+    {
+        return;
+    }
+    
+    if (bytesPerPixel < 1)
+    {
+        DEBUG_LOG("Bytes per pixel should be > 0");
+        return;
+    }
+    
+    vtkImageData *imageData = vtkImageData::New();
+    imageData->SetExtent(extent);
+    imageData->SetScalarTypeToUnsignedChar();
+    imageData->SetNumberOfScalarComponents(bytesPerPixel);
+    imageData->AllocateScalars();
+    
+    int size = (extent[1] - extent[0] + 1) * (extent[3] - extent[2] + 1) * (extent[5] - extent[4] + 1) * bytesPerPixel;
+    vtkUnsignedCharArray *ucharArray = vtkUnsignedCharArray::New();
+    ucharArray->SetNumberOfTuples(size);
+    
+    int save;
+    if (deleteData)
+    {
+        // save == 0, NO guardar les dades == fer delete, 
+        save = 0;
+    }
+    else
+    {
+        // save == 1, guardar les dades == NO fer delete, 
+        save = 1;
+    }
+    ucharArray->SetArray(data, size, save);
+    imageData->GetPointData()->SetScalars(ucharArray);
+    ucharArray->Delete();
+
+    this->setData(imageData);
+    imageData->Delete();
 }
 
 VolumePixelData::VoxelType* VolumePixelData::getScalarPointer(int x, int y, int z)

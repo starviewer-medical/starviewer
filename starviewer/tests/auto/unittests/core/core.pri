@@ -23,7 +23,8 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_firewallaccesstest.cpp \
            $$PWD/test_dicomtagreader.cpp \
            $$PWD/test_patientfillerinput.cpp \
-           $$PWD/test_automaticsynchronizationtooldata.cpp
+           $$PWD/test_automaticsynchronizationtooldata.cpp \
+           $$PWD/test_volumepixeldata.cpp
 
 win32 {
     SOURCES += $$PWD/test_windowsfirewallaccess.cpp

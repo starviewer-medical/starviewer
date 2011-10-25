@@ -43,6 +43,13 @@ public:
     void setData(vtkImageData *vtkImage);
     vtkImageData* getVtkData();
 
+    /// Creem les dades a partir d'un buffer d'unsigned chars
+    /// L'extent ha de ser coherent amb la mida de les dades del buffer i els bytesPerPixel indicats
+    /// Si deleteData = cert, aquesta classe s'encarregarà de destruir el buffer quan es destrueixi aquest objecte
+    /// Si deleteData = fals, (per defecte) no esborrarà el buffer
+    /// Les característiques d'spacing i origin no s'assignaran amb aquest mètode. Això caldrà fer-ho accedint posteriorment a les dades vtk
+    void setData(unsigned char *data, int extent[6], int bytesPerPixel, bool deleteData = false);
+
     /// Obtenim el punter a les dades que es troben en l'índex donat. És un accés a molt baix nivell, ja que obtenim
     /// el punter de les dades. Retornem el punter transformat al tipus natiu de dades VoxelType.
     VoxelType* getScalarPointer(int x, int y, int z);
