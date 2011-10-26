@@ -11,6 +11,8 @@
 #include "localdatabasemanager.h"
 #include "imageorientation.h"
 #include "localdatabasedisplayshutterdal.h"
+#include "dicomsource.h"
+#include "localdatabasepacsretrievedimagesdal.h"
 
 namespace udg {
 
@@ -147,6 +149,7 @@ Image* LocalDatabaseImageDAL::fillImage(char **reply, int row, int columns)
     image->setRetrievedDate(QDate().fromString(reply[31 + row * columns], "yyyyMMdd"));
     image->setRetrievedTime(QTime().fromString(reply[32 + row * columns], "hhmmss"));
     image->setNumberOfOverlays(QString(reply[34 + row * columns]).toUShort());
+    image->setDICOMSource(getImageDICOMSourceByIDPACSInDatabase(reply[35 + row * columns]));
 
     // TODO argghh!!! Això només hauria d'estar en un únic lloc, no aquí i en retrieveimages.cpp
     image->setPath(LocalDatabaseManager::getCachePath() + reply[2 + row * columns] + "/" + reply[3 + row * columns] + "/" + reply[0 + row * columns]);
@@ -165,7 +168,7 @@ QString LocalDatabaseImageDAL::buildSqlSelect(const DicomMask &imageMaskToSelect
                                     "WindowLevelExplanations, SliceLocation, RescaleIntercept,"
                                     "PhotometricInterpretation, ImageType, ViewPosition,"
                                     "ImageLaterality, ViewCodeMeaning , PhaseNumber, ImageTime,  VolumeNumberInSeries,"
-                                    "OrderNumberInVolume, RetrievedDate, RetrievedTime, State, NumberOfOverlays "
+                                    "OrderNumberInVolume, RetrievedDate, RetrievedTime, State, NumberOfOverlays, RetrievedPACSID "
                             "from Image ";
 
     orderSentence = " order by VolumeNumberInSeries, OrderNumberInVolume";
@@ -194,7 +197,7 @@ QString LocalDatabaseImageDAL::buildSqlInsert(Image *newImage)
                                              "WindowLevelExplanations, SliceLocation,"
                                              "RescaleIntercept, PhotometricInterpretation, ImageType, ViewPosition,"
                                              "ImageLaterality, ViewCodeMeaning, PhaseNumber, ImageTime, VolumeNumberInSeries, "
-                                             "OrderNumberInVolume, RetrievedDate, RetrievedTime, State, NumberOfOverlays) "
+                                             "OrderNumberInVolume, RetrievedDate, RetrievedTime, State, NumberOfOverlays, RetrievedPACSID)"
                                      "values ('%1', %2, '%3', '%4', '%5', "
                                              "'%6', '%7', '%8', %9,"
                                              "'%10', %11, %12, %13, %14, %15, "
@@ -202,7 +205,7 @@ QString LocalDatabaseImageDAL::buildSqlInsert(Image *newImage)
                                              "'%20', '%21', "
                                              "%22, '%23', '%24', '%25',"
                                              "'%26',  '%27', %28, '%29', %30,"
-                                             "%31, '%32', '%33', %34, %35)")
+                                             "%31, '%32', '%33', %34, %35, %36)")
                             .arg(DatabaseConnection::formatTextToValidSQLSyntax(newImage->getSOPInstanceUID()))
                             .arg(newImage->getFrameNumber())
                             .arg(DatabaseConnection::formatTextToValidSQLSyntax(newImage->getParentSeries()->getParentStudy()->getInstanceUID()))
@@ -237,7 +240,8 @@ QString LocalDatabaseImageDAL::buildSqlInsert(Image *newImage)
                             .arg(newImage->getRetrievedDate().toString("yyyyMMdd"))
                             .arg(newImage->getRetrievedTime().toString("hhmmss"))
                             .arg(0)
-                            .arg(newImage->getNumberOfOverlays());
+                            .arg(newImage->getNumberOfOverlays())
+                            .arg(getIDPACSInDatabaseFromDICOMSource(newImage->getDICOMSource()));
 
     return insertSentence;
 }
@@ -278,9 +282,10 @@ QString LocalDatabaseImageDAL::buildSqlUpdate(Image *imageToUpdate)
                                               "RetrievedDate = '%30', "
                                               "RetrievedTime = '%31', "
                                               "State = %32, "
-                                              "NumberOfOverlays = %33 "
-                                     "Where SOPInstanceUID = '%34' And "
-                                           "FrameNumber = %35")
+                                              "NumberOfOverlays = %33, "
+                                              "RetrievedPACSID = %34 "
+                                     "Where SOPInstanceUID = '%35' And "
+                                           "FrameNumber = %36")
                             .arg(DatabaseConnection::formatTextToValidSQLSyntax(imageToUpdate->getParentSeries()->getParentStudy()->getInstanceUID()))
                             .arg(DatabaseConnection::formatTextToValidSQLSyntax(imageToUpdate->getParentSeries()->getInstanceUID()))
                             .arg(DatabaseConnection::formatTextToValidSQLSyntax(imageToUpdate->getInstanceNumber()))
@@ -314,6 +319,7 @@ QString LocalDatabaseImageDAL::buildSqlUpdate(Image *imageToUpdate)
                             .arg(imageToUpdate->getRetrievedTime().toString("hhmmss"))
                             .arg(0)
                             .arg(imageToUpdate->getNumberOfOverlays())
+                            .arg(getIDPACSInDatabaseFromDICOMSource(imageToUpdate->getDICOMSource()))
                             .arg(DatabaseConnection::formatTextToValidSQLSyntax(imageToUpdate->getSOPInstanceUID()))
                             .arg(imageToUpdate->getFrameNumber());
 
@@ -478,6 +484,86 @@ void LocalDatabaseImageDAL::setWindowLevel(Image *selectedImage, const QString &
             selectedImage->addWindowLevel(listWindowLevelWidth.at(index).toDouble(), listWindowLevelCenter.at(index).toDouble());
         }
     }
+}
+
+QString LocalDatabaseImageDAL::getIDPACSInDatabaseFromDICOMSource(DICOMSource DICOMSourceRetrievedImage)
+{
+    if (DICOMSourceRetrievedImage.getRetrievePACS().count() == 0)
+    {
+        return "null";
+    }
+
+    return getIDPACSInDatabase(DICOMSourceRetrievedImage.getRetrievePACS().at(0));
+}
+
+QString LocalDatabaseImageDAL::getIDPACSInDatabase(PacsDevice pacsDevice)
+{
+    QString keyPacsDevice = pacsDevice.getAddress() + QString().setNum(pacsDevice.getQueryRetrieveServicePort());
+
+    if (m_PACSIDCache.contains(keyPacsDevice))
+    {
+        return m_PACSIDCache[keyPacsDevice];
+    }
+
+    LocalDatabasePACSRetrievedImagesDAL localDatabasePACSRetrievedImagesDAL(m_dbConnection);
+    PacsDevice pacsDeviceRetrievedFromDatabase = localDatabasePACSRetrievedImagesDAL.query(pacsDevice.getAETitle(), pacsDevice.getAddress(),
+                                                                                pacsDevice.getQueryRetrieveServicePort());
+    if (!pacsDeviceRetrievedFromDatabase.getID().isEmpty())
+    {
+        //El pacs ja està inserit a la base de dades
+        m_PACSIDCache[keyPacsDevice] = pacsDeviceRetrievedFromDatabase.getID();
+        return pacsDeviceRetrievedFromDatabase.getID();
+    }
+
+    //No hem trobat el PACS l'inserir a la base de dades
+    qlonglong PACSDInDatabase = localDatabasePACSRetrievedImagesDAL.insert(pacsDevice);
+
+    if (localDatabasePACSRetrievedImagesDAL.getLastError() == SQLITE_OK)
+    {
+        m_PACSIDCache[keyPacsDevice] = QString().setNum(PACSDInDatabase);
+        return m_PACSIDCache[keyPacsDevice];
+    }
+
+    return "null";
+}
+
+DICOMSource LocalDatabaseImageDAL::getImageDICOMSourceByIDPACSInDatabase(const QString &retrievedPACSID)
+{
+    DICOMSource imageDICOMSource;
+
+    if (retrievedPACSID == "null")
+    {
+        // La imatge no té de quin PACS s'ha descarregat
+        return imageDICOMSource;
+    }
+
+    PacsDevice pacsDevice = getPACSDeviceByIDPACSInDatabase(retrievedPACSID.toInt());
+
+    if (!pacsDevice.getID().isEmpty())
+    {
+        imageDICOMSource.addRetrievePACS(pacsDevice);
+    }
+
+    return imageDICOMSource;
+}
+
+PacsDevice LocalDatabaseImageDAL::getPACSDeviceByIDPACSInDatabase(int IDPACSInDatabase)
+{
+    if (m_PACSDeviceCacheByIDPACSInDatabase.contains(IDPACSInDatabase))
+    {
+        return m_PACSDeviceCacheByIDPACSInDatabase[IDPACSInDatabase];
+    }
+
+    //Sinó el trobem a la caché el recuperem de la base de dades
+    LocalDatabasePACSRetrievedImagesDAL localDatabasePACSRetrievedImagesDAL(m_dbConnection);
+    PacsDevice pacsDevice = localDatabasePACSRetrievedImagesDAL.query(IDPACSInDatabase);
+
+    if (!pacsDevice.getID().isEmpty())
+    {
+        m_PACSDeviceCacheByIDPACSInDatabase[IDPACSInDatabase] = pacsDevice;
+    }
+
+    return pacsDevice;
 }
 
 }

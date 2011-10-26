@@ -21,12 +21,14 @@
 
 namespace udg {
 
-PatientFiller::PatientFiller(QObject *parent)
+PatientFiller::PatientFiller(DICOMSource dicomSource, QObject *parent)
  : QObject(parent)
 {
     registerSteps();
     m_patientFillerInput = new PatientFillerInput();
     m_imageCounter = 0;
+
+    m_patientFillerInput->setDICOMSource(dicomSource);
 }
 
 PatientFiller::~PatientFiller()

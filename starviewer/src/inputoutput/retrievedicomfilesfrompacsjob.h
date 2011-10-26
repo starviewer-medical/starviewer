@@ -14,6 +14,7 @@ class Study;
 class RetrieveDICOMFilesFromPACS;
 class PacsDevice;
 class DICOMTagReader;
+class DICOMSource;
 
 /**
     Job que s'encarrega de descarregar fitxers del PACS.
@@ -94,12 +95,8 @@ private:
     /// Copia la informacio basica de l'estudi en un nou objecte Study
     Study* copyBasicStudyInformation(Study *studyToCopy);
 
-    /// Els fillers ens retornen l'estudi i ens el insereixen a la base de dades sense la informacio del DICOMSource, aquest metode ens actualitza l'estudi
-    /// a nivell de base de dades afegint-t'hi la informacio de quin DICOMSource prove
-    void updateRetrievedStudyToAddDICOMSource(QString retrievedStudyinstanceUID, PacsDevice pacsRetrieveStudy);
-
-    /// Ens retorna l'estudi descarregat en aquest job de la base de dades. Si no el troba retorna un Study null
-    Patient* getRetrievedPatientStudyFromDatabase(QString retrievedStudyInstanceUID);
+    /// Retorna un DICOMSource amb el PACS del qual es descarreguen els fitxers demanats
+    DICOMSource getDICOMSourceRetrieveFiles();
 
 private:
     RetrieveDICOMFilesFromPACS *m_retrieveDICOMFilesFromPACS;
@@ -113,6 +110,6 @@ private:
     int m_numberOfSeriesRetrieved;
 };
 
-};
+}
 
 #endif

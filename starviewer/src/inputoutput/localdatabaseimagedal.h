@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QList>
+#include <QHash>
 
 #include "localdatabasebasedal.h"
 #include "image.h"
@@ -10,6 +11,8 @@
 namespace udg {
 
 class DicomMask;
+class PacsDevice;
+class DICOMSource;
 
 /**
     Aquesta classe conté els mètodes per operar amb l'objecte image en la caché de l'aplicació
@@ -42,6 +45,12 @@ private:
     double m_imageOrientationPatient[6];
     double m_pixelSpacing[2];
     double m_patientPosition[3];
+
+    //Utilitzem aquest QHash com una cache per fer la tradució de la cadena IP+AETitle a ID de PACS per quan inserim/actualitzem imatges
+    QHash<QString, QString> m_PACSIDCache;
+    //Utilitzem aquest QHash com una cache per fer la traducció del IDPACS a PacsDevice per quan es consulten imatges, d'aquesta manera si ja hem
+    //recuperat un pacs amb un ID determinat no farà falta tornar a accedir a la base de dades per obtenir-ne les dades.
+    QHash<int, PacsDevice> m_PACSDeviceCacheByIDPACSInDatabase;
 
     /// Emplena un l'objecte imatge de la fila passada per paràmetre
     Image* fillImage(char **reply, int row, int columns);
@@ -89,6 +98,23 @@ private:
 
     /// Emplena el windowlevel de la imatge
     void setWindowLevel(Image *selectedImage, const QString &windowLevelWidth, const QString &windowLevelCenter);
+
+    /// Si el DICOMSource conté un PACS retorna l'ID d'aquest a la base de dades, (si no existeix l'insereix)
+    /// Si el DICOMSource té més d'un PACS només es té en compte el primer, una imatge no hauria de tenir més d'un PACS com a DICOMSource
+    /// i si el DICOMSource no conté  cap PACS retorna string contenint la paraula null.
+    QString getIDPACSInDatabaseFromDICOMSource(DICOMSource DICOMSourceRetrievedImage);
+
+    /// Obté el ID del PACS a la base de ades sinó existeix li insereix.
+    /// Guarda una cache dels PACS consultats i inserits de manera que si ja s'ha demanat el ID d'un PACS el va a buscar directament a la caché
+    QString getIDPACSInDatabase(PacsDevice pacsDevice);
+
+    /// A partir del camp retrievedPACSID de la base de dades ens omple el DICOMSource de la imatge
+    DICOMSource getImageDICOMSourceByIDPACSInDatabase(const QString &retrievedPACSID);
+
+    /// Retorna un PACSDevice a partir del seu ID a la base de dades, sinó el troba retorna un pacs buit
+    /// Guarda en una caché el PACS consultats de manere que si es torna demana un PACS ja consultat anteriorment l'obté directament de la caché
+    PacsDevice getPACSDeviceByIDPACSInDatabase(int IDPACSInDatabase);
+
 };
 
 }
