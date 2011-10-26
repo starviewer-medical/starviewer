@@ -5,6 +5,8 @@
 #include <QMultiMap>
 #include <QHash>
 
+#include "dicomsource.h"
+
 namespace udg {
 
 class Patient;
@@ -89,6 +91,10 @@ public:
     void setCurrentVolumeNumber(int volumeNumber);
     int getCurrentVolumeNumber() const;
 
+    /// Assigna/Retorna el DICOMSource de les imatges
+    void setDICOMSource(const DICOMSource &imagesDICOMSource);
+    DICOMSource getDICOMSource() const;
+
 private:
     /// Llista de pacients a omplir
     QList<Patient*> m_patientList;
@@ -123,6 +129,9 @@ private:
 
     /// Manté el número actual de volum pel subconjunt de volums single frame
     QHash<Series*, int> m_currentSingleFrameVolumeNumber;
+
+    /// Conté el DICOMSource del qual provenen les imatges
+    DICOMSource m_imagesDICOMSource;
 };
 
 }

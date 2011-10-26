@@ -242,4 +242,14 @@ int PatientFillerInput::getCurrentVolumeNumber() const
     return m_currentVolumeNumber;
 }
 
+void PatientFillerInput::setDICOMSource(const DICOMSource &imagesDICOMSource)
+{
+    m_imagesDICOMSource = imagesDICOMSource;
+}
+
+DICOMSource PatientFillerInput::getDICOMSource() const
+{
+    return m_imagesDICOMSource;
+}
+
 }

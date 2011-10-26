@@ -3,6 +3,8 @@
 
 #include <QStringList>
 
+#include "dicomsource.h"
+
 namespace udg {
 
 class PatientFillerInput;
@@ -30,7 +32,7 @@ class DICOMTagReader;
 class PatientFiller : public QObject {
 Q_OBJECT
 public:
-    PatientFiller(QObject *parent = 0);
+    PatientFiller(DICOMSource dicomSource = DICOMSource(), QObject *parent = 0);
     ~PatientFiller();
 
 public slots:

@@ -11,7 +11,18 @@ CREATE TABLE DatabaseRevision
 
 -- IMPORTANT!!! Cal canviar el número de revisió per un de superior cada vegada que es faci un canvi a aquest fitxer i calgui
 -- que la BD s'actualitzi
-INSERT INTO DatabaseRevision (Revision) VALUES ('7735');
+
+INSERT INTO DatabaseRevision (Revision) VALUES ('7793');
+
+CREATE TABLE PACSRetrievedImages
+(
+    ID                          INTEGER PRIMARY KEY AUTOINCREMENT,
+    AETitle                     TEXT,
+    Address                     TEXT,
+    QueryPort                   INTEGER
+);
+
+CREATE INDEX IndexPacsDevice_AETitleAddressQueryPort ON PACSRetrievedImages(AETitle, Address, QueryPort);
 
 CREATE TABLE Patient
 ( 
@@ -40,9 +51,7 @@ CREATE TABLE Study
   LastAccessDate                TEXT,
   RetrievedDate                 TEXT,
   RetrievedTime                 TEXT,
-  State                         INTEGER,
-  RetrievedPACSIP               TEXT,
-  RetrievedPACSQueryPort        INTEGER  
+  State                         INTEGER
 );
 
 CREATE TABLE Series
@@ -105,8 +114,9 @@ CREATE TABLE Image
   OrderNumberInVolume           INTEGER,
   RetrievedDate	                TEXT,
   RetrievedTime	                TEXT,
-  State	                        INTEGER ,
+  State	                        INTEGER,
   NumberOfOverlays              INTEGER,
+  RetrievedPACSID               INTEGER,
   PRIMARY KEY ('SOPInstanceUID', 'FrameNumber')
 );
 

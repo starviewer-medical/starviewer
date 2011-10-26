@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <upgradeDatabase minimumDatabaseRevisionRequired="6516">
-    <upgradeDatabaseToRevision updateToRevision="7575">
-        <upgradeCommand>ALTER TABLE STUDY ADD COLUMN RetrievedPACSIP TEXT</upgradeCommand>
-        <upgradeCommand>ALTER TABLE STUDY ADD COLUMN RetrievedPACSQueryPort INTEGER</upgradeCommand>
-    </upgradeDatabaseToRevision>
     <upgradeDatabaseToRevision updateToRevision="7661">
         <upgradeCommand>ALTER TABLE IMAGE ADD COLUMN NumberOfOverlays INTEGER</upgradeCommand>
     </upgradeDatabaseToRevision>
@@ -20,5 +16,17 @@
             FOREIGN KEY (ImageInstanceUID, ImageFrameNumber) REFERENCES Image (SOPInstanceUID, FrameNumber)
             );
         </upgradeCommand>
+    <upgradeDatabaseToRevision updateToRevision="7793">
+        <upgradeCommand>
+            CREATE TABLE PACSRetrievedImages
+            (
+                ID                          INTEGER PRIMARY KEY AUTOINCREMENT,
+                AETitle                     TEXT,
+                Address                     TEXT,
+                QueryPort                   INTEGER
+            )
+        </upgradeCommand>
+        <upgradeCommand>CREATE INDEX IndexPacsDevice_AETitleAddressQueryPort ON PacsRetrievedImages(AETitle, Address, QueryPort)</upgradeCommand>
+        <upgradeCommand>ALTER TABLE IMAGE ADD COLUMN RetrievedPACSID INTEGER</upgradeCommand>
     </upgradeDatabaseToRevision>
 </upgradeDatabase>

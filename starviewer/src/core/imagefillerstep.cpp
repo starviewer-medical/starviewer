@@ -162,6 +162,9 @@ bool ImageFillerStep::fillCommonImageInformation(Image *image, DICOMTagReader *d
     // El path on es troba la imatge a disc
     image->setPath(dicomReader->getFileName());
 
+    // DICOMSource del que prové la imatge
+    image->setDICOMSource(m_input->getDICOMSource());
+
     // C.12.1 SOP Common Module
     image->setSOPInstanceUID(dicomReader->getValueAttributeAsQString(DICOMSOPInstanceUID));
     image->setInstanceNumber(dicomReader->getValueAttributeAsQString(DICOMInstanceNumber));
