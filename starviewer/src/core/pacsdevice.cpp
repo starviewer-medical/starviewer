@@ -169,6 +169,13 @@ bool PacsDevice::isEmpty() const
     }
 }
 
+bool PacsDevice::isSamePacsDevice(const PacsDevice &pacsDevice) const
+{
+    return m_AETitle == pacsDevice.getAETitle()
+        && m_address == pacsDevice.getAddress()
+        && m_queryRetrieveServicePort == pacsDevice.getQueryRetrieveServicePort();
+}
+
 bool PacsDevice::operator ==(const PacsDevice &device)
 {
     return m_AETitle == device.m_AETitle

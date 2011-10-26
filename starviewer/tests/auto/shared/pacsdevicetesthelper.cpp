@@ -23,4 +23,15 @@ PacsDevice PACSDeviceTestHelper::createPACSDeviceByID(QString ID)
     return pacsDevice;
 }
 
+PacsDevice PACSDeviceTestHelper::createPACSDevice(QString ID, QString AETitle, QString address, int queryPort)
+{
+    PacsDevice pacsDevice = createPACSDeviceByID(ID);
+
+    pacsDevice.setAETitle(AETitle);
+    pacsDevice.setAddress(address);
+    pacsDevice.setQueryRetrieveServicePort(queryPort);
+
+    return pacsDevice;
+}
+
 }
