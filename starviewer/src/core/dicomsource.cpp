@@ -4,7 +4,7 @@ namespace udg {
 
 void DICOMSource::addRetrievePACS(const PacsDevice &pacsDeviceToAdd)
 {
-    if (!m_retrievePACS.contains(pacsDeviceToAdd))
+    if (!isAddedSamePacsDevice(pacsDeviceToAdd))
     {
         m_retrievePACS.append(pacsDeviceToAdd);
     }
@@ -12,7 +12,14 @@ void DICOMSource::addRetrievePACS(const PacsDevice &pacsDeviceToAdd)
 
 void DICOMSource::removeRetrievePACS(const PacsDevice &pacsDeviceToRemove)
 {
-    m_retrievePACS.removeOne(pacsDeviceToRemove);
+    foreach (PacsDevice pacsDevice, m_retrievePACS)
+    {
+        if (pacsDevice.isSamePacsDevice(pacsDeviceToRemove))
+        {
+            m_retrievePACS.removeOne(pacsDevice);
+
+        }
+    }
 }
 
 QList<PacsDevice> DICOMSource::getRetrievePACS() const
@@ -37,13 +44,26 @@ bool DICOMSource::operator==(const DICOMSource &DICOMSourceToAdd)
 
     foreach(PacsDevice pacsDevice, DICOMSourceToAdd.getRetrievePACS())
     {
-            if (!this->getRetrievePACS().contains(pacsDevice))
-            {
-                return false;
-            }
+        if (!isAddedSamePacsDevice(pacsDevice))
+        {
+            return false;
+        }
     }
 
     return true;
 }
 
-};
+bool DICOMSource::isAddedSamePacsDevice(const PacsDevice pacsDevice) const
+{
+    foreach (PacsDevice pacsDeviceInList, m_retrievePACS)
+    {
+        if (pacsDeviceInList.isSamePacsDevice(pacsDevice))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+}

@@ -48,7 +48,11 @@ public:
     PacsDevice getPACSDeviceByAddressAndQueryPort(QString address, int queryPort);
 
     /// Retorna la llista sense PACS duplicats
-    static QList<PacsDevice> removeDuplicatePACS(QList<PacsDevice> pacsDeviceList);
+    static QList<PacsDevice> removeDuplicateSamePACS(QList<PacsDevice> pacsDeviceList);
+
+    /// Mètode helper que indica si el mateix pacs està insertat (té el mateix AETitle, Address i QueryPort) a la llista.
+    //TODO: Aquest codi està duplicat a DICOMSource, però com DICOMSource està al core no pot utilitzar aquest mètode, sinó tindríem dependència ciclica
+    static bool isAddedSamePacsDeviceInList(QList<PacsDevice> pacsDeviceList, PacsDevice pacsDevice);
 
 private:
     /// Comprova si el PACS passat per paràmetre es troba o no dins de la llista de PACS configurats

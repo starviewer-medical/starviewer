@@ -165,19 +165,32 @@ PacsDevice PacsDeviceManager::getPACSDeviceByAddressAndQueryPort(QString address
     return pacsDeviceToReturn;
 }
 
-QList<PacsDevice> PacsDeviceManager::removeDuplicatePACS(QList<PacsDevice> pacsDeviceList)
+QList<PacsDevice> PacsDeviceManager::removeDuplicateSamePACS(QList<PacsDevice> pacsDeviceList)
 {
     QList<PacsDevice> pacsDeviceListWithoutDuplicates;
 
-    foreach (PacsDevice pacs, pacsDeviceList)
+    foreach (PacsDevice pacsDevice, pacsDeviceList)
     {
-        if (!pacsDeviceListWithoutDuplicates.contains(pacs))
+        if (!isAddedSamePacsDeviceInList(pacsDeviceListWithoutDuplicates, pacsDevice))
         {
-            pacsDeviceListWithoutDuplicates.append(pacs);
+            pacsDeviceListWithoutDuplicates.append(pacsDevice);
         }
     }
 
     return pacsDeviceListWithoutDuplicates;
+}
+
+bool PacsDeviceManager::isAddedSamePacsDeviceInList(QList<PacsDevice> pacsDeviceList, PacsDevice pacsDevice)
+{
+    foreach (PacsDevice pacsDeviceInList, pacsDeviceList)
+    {
+        if (pacsDeviceInList.isSamePacsDevice(pacsDevice))
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 bool PacsDeviceManager::isPACSConfigured(const PacsDevice &pacs)
