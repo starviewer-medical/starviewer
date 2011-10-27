@@ -16,7 +16,7 @@
             FOREIGN KEY (ImageInstanceUID, ImageFrameNumber) REFERENCES Image (SOPInstanceUID, FrameNumber)
             );
         </upgradeCommand>
-    <upgradeDatabaseToRevision updateToRevision="7793">
+    <upgradeDatabaseToRevision updateToRevision="7794">
         <upgradeCommand>
             CREATE TABLE PACSRetrievedImages
             (
@@ -26,7 +26,7 @@
                 QueryPort                   INTEGER
             )
         </upgradeCommand>
-        <upgradeCommand>CREATE INDEX IndexPacsDevice_AETitleAddressQueryPort ON PacsRetrievedImages(AETitle, Address, QueryPort)</upgradeCommand>
+        <upgradeCommand>CREATE UNIQUE INDEX IndexPacsDevice_AETitleAddressQueryPort ON PacsRetrievedImages(AETitle, Address, QueryPort)</upgradeCommand>
         <upgradeCommand>ALTER TABLE IMAGE ADD COLUMN RetrievedPACSID INTEGER</upgradeCommand>
     </upgradeDatabaseToRevision>
 </upgradeDatabase>

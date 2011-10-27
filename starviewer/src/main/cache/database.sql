@@ -12,7 +12,7 @@ CREATE TABLE DatabaseRevision
 -- IMPORTANT!!! Cal canviar el número de revisió per un de superior cada vegada que es faci un canvi a aquest fitxer i calgui
 -- que la BD s'actualitzi
 
-INSERT INTO DatabaseRevision (Revision) VALUES ('7793');
+INSERT INTO DatabaseRevision (Revision) VALUES ('7794');
 
 CREATE TABLE PACSRetrievedImages
 (
@@ -22,7 +22,7 @@ CREATE TABLE PACSRetrievedImages
     QueryPort                   INTEGER
 );
 
-CREATE INDEX IndexPacsDevice_AETitleAddressQueryPort ON PACSRetrievedImages(AETitle, Address, QueryPort);
+CREATE UNIQUE INDEX IndexPacsDevice_AETitleAddressQueryPort ON PACSRetrievedImages(AETitle, Address, QueryPort);
 
 CREATE TABLE Patient
 ( 
