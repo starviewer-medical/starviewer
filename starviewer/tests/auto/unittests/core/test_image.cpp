@@ -12,6 +12,14 @@ private slots:
 
     void getDisplayShutterForDisplay_ShouldReturnExpectedValues_data();
     void getDisplayShutterForDisplay_ShouldReturnExpectedValues();
+
+    void addWindowLevel_ShouldAddWindowLevel_data();
+    void addWindowLevel_ShouldAddWindowLevel();
+    void addWindowLevel_ShouldNotAddWindowLevel_data();
+    void addWindowLevel_ShouldNotAddWindowLevel();
+    void addWindowLevel_ShouldAddSameWindowLevelTwoTimes();
+
+    void getWindowLevel_ShouldReturnExpectedWindowLevel();
 };
 
 Q_DECLARE_METATYPE(QList<DisplayShutter>);
@@ -114,6 +122,89 @@ void test_Image::getDisplayShutterForDisplay_ShouldReturnExpectedValues()
 
     QCOMPARE(shutterForDisplay.getShape(), expectedShutterForDisplay.getShape());
     QCOMPARE(shutterForDisplay.getAsQPolygon(), expectedShutterForDisplay.getAsQPolygon());
+}
+
+void test_Image::addWindowLevel_ShouldAddWindowLevel_data()
+{
+    QTest::addColumn<double>("window");
+    QTest::addColumn<double>("level");
+
+    QTest::newRow("both positive") << 100.0 << 200.0;
+    QTest::newRow("both negative") << -101.0 << -201.0;
+    QTest::newRow("window positive, level negative") << 102.0 << -202.0;
+    QTest::newRow("window negative, level positive") << -103.0 << 203.0;
+}
+
+void test_Image::addWindowLevel_ShouldAddWindowLevel()
+{
+    QFETCH(double, window);
+    QFETCH(double, level);
+
+    Image image;
+    image.addWindowLevel(window, level);
+
+    QCOMPARE(image.getNumberOfWindowLevels(), 1);
+    QCOMPARE(image.getWindowLevel(0).first, window);
+    QCOMPARE(image.getWindowLevel(0).second, level);
+}
+
+void test_Image::addWindowLevel_ShouldNotAddWindowLevel_data()
+{
+    QTest::addColumn<double>("window");
+    QTest::addColumn<double>("level");
+
+    QTest::newRow("both zero") << 0.0 << 0.0;
+    QTest::newRow("window zero") << 0.0 << 200.0;
+    QTest::newRow("level zero") << 100.0 << 0.0;
+}
+
+void test_Image::addWindowLevel_ShouldNotAddWindowLevel()
+{
+    QFETCH(double, window);
+    QFETCH(double, level);
+
+    Image image;
+    image.addWindowLevel(window, level);
+
+    QCOMPARE(image.getNumberOfWindowLevels(), 0);
+}
+
+void test_Image::addWindowLevel_ShouldAddSameWindowLevelTwoTimes()
+{
+    double window = 100.0;
+    double level = 300.0;
+    Image image;
+    image.addWindowLevel(window, level);
+    image.addWindowLevel(window, level);
+
+    QCOMPARE(image.getNumberOfWindowLevels(), 2);
+    QCOMPARE(image.getWindowLevel(0).first, window);
+    QCOMPARE(image.getWindowLevel(0).second, level);
+    QCOMPARE(image.getWindowLevel(1).first, window);
+    QCOMPARE(image.getWindowLevel(1).second, level);
+}
+
+void test_Image::getWindowLevel_ShouldReturnExpectedWindowLevel()
+{
+    typedef QPair<double, double> QPairDoublesType;
+
+    QList<QPairDoublesType> windowLevels;
+    windowLevels << QPairDoublesType(10.0, 20.0);
+    windowLevels << QPairDoublesType(11.0, 21.0);
+    windowLevels << QPairDoublesType(12.0, 22.0);
+
+    Image image;
+
+    foreach (const QPairDoublesType &pair, windowLevels)
+    {
+        image.addWindowLevel(pair.first, pair.second);
+    }
+
+    QCOMPARE(image.getWindowLevel(-1), QPairDoublesType());
+    QCOMPARE(image.getWindowLevel(0), windowLevels.at(0));
+    QCOMPARE(image.getWindowLevel(1), windowLevels.at(1));
+    QCOMPARE(image.getWindowLevel(2), windowLevels.at(2));
+    QCOMPARE(image.getWindowLevel(3), QPairDoublesType());
 }
 
 DECLARE_TEST(test_Image)
