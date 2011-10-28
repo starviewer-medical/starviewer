@@ -112,7 +112,7 @@ ImageOverlay ImageOverlay::mergeOverlays(const QList<ImageOverlay> &overlaysList
     QList<ImageOverlay> validOverlaysList;
     foreach (const ImageOverlay &overlay, overlaysList)
     {
-        if (overlay.getData() && overlay.getColumns() > 0 && overlay.getRows() > 0 )
+        if (overlay.isValid())
         {
             validOverlaysList << overlay;
         }
