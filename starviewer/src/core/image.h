@@ -97,8 +97,6 @@ public:
 
     /// Assignar/Obtenir els valors del rescalat de la VOI LUT que s'apliquen sobre la imatge
     void addWindowLevel(double window, double level);
-    double getWindowCenter(int index = 0) const;
-    double getWindowWidth(int index = 0) const;
     QPair<double, double> getWindowLevel(int index = 0) const;
 
     /// Ens retorna el nombre de window levels que tenim
