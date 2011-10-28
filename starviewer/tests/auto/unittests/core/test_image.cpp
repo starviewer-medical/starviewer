@@ -133,6 +133,7 @@ void test_Image::addWindowLevel_ShouldAddWindowLevel_data()
     QTest::newRow("both negative") << -101.0 << -201.0;
     QTest::newRow("window positive, level negative") << 102.0 << -202.0;
     QTest::newRow("window negative, level positive") << -103.0 << 203.0;
+    QTest::newRow("level zero") << 100.0 << 0.0;
 }
 
 void test_Image::addWindowLevel_ShouldAddWindowLevel()
@@ -153,9 +154,7 @@ void test_Image::addWindowLevel_ShouldNotAddWindowLevel_data()
     QTest::addColumn<double>("window");
     QTest::addColumn<double>("level");
 
-    QTest::newRow("both zero") << 0.0 << 0.0;
     QTest::newRow("window zero") << 0.0 << 200.0;
-    QTest::newRow("level zero") << 100.0 << 0.0;
 }
 
 void test_Image::addWindowLevel_ShouldNotAddWindowLevel()
