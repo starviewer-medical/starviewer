@@ -114,6 +114,11 @@ QStringList UpgradeDatabaseXMLParser::parseUpgradeDatabaseToRevisionChildrenTags
 
 UpgradeDatabaseRevisionCommands UpgradeDatabaseXMLParser::fromQMapToUpgradeDatabaseRevisionCommands(QMap<int, QStringList> m_sqlUpgradeCommandsGroupedByDatabaseRevision)
 {
+    if (m_sqlUpgradeCommandsGroupedByDatabaseRevision.count() == 0)
+    {
+        return UpgradeDatabaseRevisionCommands();
+    }
+
     //Obtenim les sentències sql a aplicar a la base de dades ordenades per la revisió ascendentment
     QStringList sqlUpgradeCommands;
 
