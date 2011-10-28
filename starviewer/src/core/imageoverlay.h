@@ -33,6 +33,9 @@ public:
     void setData(unsigned char *data);
     unsigned char* getData() const;
 
+    /// Retorna cert sii l'overlay és vàlid (si el nombre de files i el nombre de columnes són positius i té dades).
+    bool isValid() const;
+
     /// Construeix un ImageOverlay a partir d'un gdcm::Overlay
     static ImageOverlay fromGDCMOverlay(const gdcm::Overlay &gdcmOverlay);
 
