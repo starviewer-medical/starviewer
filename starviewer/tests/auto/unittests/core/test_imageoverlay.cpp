@@ -14,6 +14,9 @@ Q_OBJECT
 private slots:
     void ImageOverlay_InitializesClassAsExpected();
 
+    void isValid_ReturnsExpectedValue_data();
+    void isValid_ReturnsExpectedValue();
+
     void fromGDCMOverlay_ReturnsExpectedValues_data();
     void fromGDCMOverlay_ReturnsExpectedValues();
 
@@ -35,6 +38,63 @@ void test_ImageOverlay::ImageOverlay_InitializesClassAsExpected()
     QCOMPARE(overlay.getYOrigin(), 1);
     unsigned char *nullUCharPointer = 0;
     QCOMPARE(overlay.getData(), nullUCharPointer);
+}
+
+void test_ImageOverlay::isValid_ReturnsExpectedValue_data()
+{
+    QTest::addColumn<ImageOverlay>("imageOverlay");
+    QTest::addColumn<bool>("expectedValue");
+
+    ImageOverlay imageOverlay;
+    unsigned char data;
+
+    imageOverlay.setRows(0);
+    imageOverlay.setColumns(0);
+    imageOverlay.setData(0);
+    QTest::newRow("no rows, no columns, no data") << imageOverlay << false;
+
+    imageOverlay.setRows(0);
+    imageOverlay.setColumns(0);
+    imageOverlay.setData(&data);
+    QTest::newRow("no rows, no columns, data") << imageOverlay << false;
+
+    imageOverlay.setRows(0);
+    imageOverlay.setColumns(1);
+    imageOverlay.setData(0);
+    QTest::newRow("no rows, columns, no data") << imageOverlay << false;
+
+    imageOverlay.setRows(0);
+    imageOverlay.setColumns(2);
+    imageOverlay.setData(&data);
+    QTest::newRow("no rows, columns, data") << imageOverlay << false;
+
+    imageOverlay.setRows(3);
+    imageOverlay.setColumns(0);
+    imageOverlay.setData(0);
+    QTest::newRow("rows, no columns, no data") << imageOverlay << false;
+
+    imageOverlay.setRows(4);
+    imageOverlay.setColumns(0);
+    imageOverlay.setData(&data);
+    QTest::newRow("rows, no columns, data") << imageOverlay << false;
+
+    imageOverlay.setRows(5);
+    imageOverlay.setColumns(6);
+    imageOverlay.setData(0);
+    QTest::newRow("rows, columns, no data") << imageOverlay << false;
+
+    imageOverlay.setRows(7);
+    imageOverlay.setColumns(8);
+    imageOverlay.setData(&data);
+    QTest::newRow("rows, columns, data") << imageOverlay << true;
+}
+
+void test_ImageOverlay::isValid_ReturnsExpectedValue()
+{
+    QFETCH(ImageOverlay, imageOverlay);
+    QFETCH(bool, expectedValue);
+
+    QCOMPARE(imageOverlay.isValid(), expectedValue);
 }
 
 void test_ImageOverlay::fromGDCMOverlay_ReturnsExpectedValues_data()

@@ -67,6 +67,11 @@ unsigned char* ImageOverlay::getData() const
     return m_data;
 }
 
+bool ImageOverlay::isValid() const
+{
+    return m_rows > 0 && m_columns > 0 && m_data;
+}
+
 ImageOverlay ImageOverlay::fromGDCMOverlay(const gdcm::Overlay &gdcmOverlay)
 {
     ImageOverlay imageOverlay;
