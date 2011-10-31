@@ -5,6 +5,7 @@
 #include "fuzzycomparetesthelper.h"
 
 #include <QVector3D>
+#include <QSharedPointer>
 
 using namespace udg;
 using namespace testing;
@@ -31,7 +32,7 @@ private slots:
 
 Q_DECLARE_METATYPE(AnatomicalPlane::AnatomicalPlaneType)
 Q_DECLARE_METATYPE(QList<Image*>)
-Q_DECLARE_METATYPE(Volume*)
+Q_DECLARE_METATYPE(QSharedPointer<Volume>)
 Q_DECLARE_METATYPE(ImageOrientation)
 
 void test_Volume::getAcquisitionPlane_ShouldReturnNotAvailable_data()
@@ -222,12 +223,12 @@ void test_Volume::getStackDirection_ShouldNotModifyDirection()
 
 void test_Volume::getStackDirection_ShouldReturnNormalVector_data()
 {
-    QTest::addColumn<Volume*>("volume");
+    QTest::addColumn<QSharedPointer<Volume> >("volume");
     QTest::addColumn<ImageOrientation>("imageOrientation");
     QTest::addColumn<QVector3D>("normal");
 
-    Volume *volume = new Volume(this);
-    Image *image1 = new Image(volume);
+    QSharedPointer<Volume> volume(new Volume());
+    Image *image1 = new Image(volume.data());
     volume->addImage(image1);
     ImageOrientation imageOrientation;
     QVector3D positiveX(+1.0, 0.0, 0.0);
@@ -325,7 +326,7 @@ void test_Volume::getStackDirection_ShouldReturnNormalVector_data()
 
 void test_Volume::getStackDirection_ShouldReturnNormalVector()
 {
-    QFETCH(Volume*, volume);
+    QFETCH(QSharedPointer<Volume>, volume);
     QFETCH(ImageOrientation, imageOrientation);
     QFETCH(QVector3D, normal);
 
@@ -339,14 +340,14 @@ void test_Volume::getStackDirection_ShouldReturnNormalVector()
 
 void test_Volume::getStackDirection_ShouldReturnExpectedDirection_data()
 {
-    QTest::addColumn<Volume*>("volume");
+    QTest::addColumn<QSharedPointer<Volume> >("volume");
     QTest::addColumn<QVector3D>("position1");
     QTest::addColumn<QVector3D>("position2");
     QTest::addColumn<QVector3D>("expectedDirection");
 
-    Volume* volume = new Volume(this);
-    Image *image1 = new Image(volume);
-    Image *image2 = new Image(volume);
+    QSharedPointer<Volume> volume(new Volume());
+    Image *image1 = new Image(volume.data());
+    Image *image2 = new Image(volume.data());
     volume->setImages(QList<Image*>() << image1 << image2);
 
     QTest::newRow("+x (distance 1 between planes)") << volume << QVector3D(0.0, 0.0, 0.0) << QVector3D(+1.0, 0.0, 0.0) << QVector3D(+1.0, 0.0, 0.0);
@@ -377,7 +378,7 @@ void test_Volume::getStackDirection_ShouldReturnExpectedDirection_data()
 
 void test_Volume::getStackDirection_ShouldReturnExpectedDirection()
 {
-    QFETCH(Volume*, volume);
+    QFETCH(QSharedPointer<Volume>, volume);
     QFETCH(QVector3D, position1);
     QFETCH(QVector3D, position2);
     QFETCH(QVector3D, expectedDirection);
