@@ -22,8 +22,6 @@ QInputOutputLocalDatabaseWidget::QInputOutputLocalDatabaseWidget(QWidget *parent
 {
     setupUi(this);
 
-    // Esborrem els estudis vells de la cache
-    deleteOldStudies();
     createContextMenuQStudyTreeWidget();
 
     Settings settings;
@@ -45,6 +43,11 @@ QInputOutputLocalDatabaseWidget::QInputOutputLocalDatabaseWidget(QWidget *parent
     m_qwidgetSelectPacsToStoreDicomImage = new QWidgetSelectPacsToStoreDicomImage();
 
     createConnections();
+
+    // Esborrem els estudis vells de la cache.
+    //ATENCIÓ!S'ha de fer després del createConnections perquè sinó no haurem connectat amb el signal per control els errors al esborrar estudis
+    //TODO: Això s'hauria de moure fora d'aquí no ha de ser responsabilitat d'aquesta classe
+    deleteOldStudies();
 }
 
 QInputOutputLocalDatabaseWidget::~QInputOutputLocalDatabaseWidget()
