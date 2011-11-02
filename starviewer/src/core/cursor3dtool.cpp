@@ -317,6 +317,10 @@ void Cursor3DTool::hideCrossHair()
         m_2DViewer->render();
         m_myData->setVisible(false);
     }
+    else
+    {
+        updatePosition();
+    }
 }
 
 }
