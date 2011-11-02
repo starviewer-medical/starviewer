@@ -5,6 +5,7 @@
 // Tools registrades
 #include "zoomtool.h"
 #include "slicingtool.h"
+#include "slicingwheeltool.h"
 #include "slicingkeyboardtool.h"
 #include "windowleveltool.h"
 #include "referencelinestool.h"
@@ -55,6 +56,10 @@ Tool* ToolRegistry::getTool(const QString &toolName, QViewer *viewer)
     else if (toolName == "SlicingTool")
     {
         tool = new SlicingTool(viewer);
+    }
+    else if (toolName == "SlicingWheelTool")
+    {
+        tool = new SlicingWheelTool(viewer);
     }
     else if (toolName == "ReferenceLinesTool")
     {
@@ -168,6 +173,14 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
         toolAction->setIcon(QIcon(":/images/slicing.png"));
         toolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::SlicingTool));
         statusTip = tr("Enable/Disable scroll tool");
+        toolTip = toolAction->text();
+    }
+    else if (toolName == "SlicingWheelTool")
+    {
+        toolAction->setText(tr("Scroll"));
+        toolAction->setIcon(QIcon(":/images/slicing.png"));
+        toolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::SlicingWheelTool));
+        statusTip = tr("Enable/Disable scroll wheel tool");
         toolTip = toolAction->text();
     }
     else if (toolName == "WindowLevelTool")

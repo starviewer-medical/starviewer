@@ -8,6 +8,7 @@ namespace udg {
 // Definició de les claus
 const QString ShortcutsBase("Shortcuts/");
 const QString Shortcuts::SlicingTool(ShortcutsBase + "SlicingTool");
+const QString Shortcuts::SlicingWheelTool(ShortcutsBase + "SlicingWheelTool");
 const QString Shortcuts::WindowLevelTool(ShortcutsBase + "WindowLevelTool");
 const QString Shortcuts::ZoomTool(ShortcutsBase + "ZoomTool");
 const QString Shortcuts::TranslateTool(ShortcutsBase + "TranslateTool");
@@ -80,6 +81,10 @@ void Shortcuts::init()
     QList<QVariant> shortcutsList;
     shortcutsList.append(QString("S"));
     settingsRegistry->addSetting(SlicingTool, shortcutsList);
+
+    shortcutsList.clear();
+    shortcutsList.append(QString("S"));
+    settingsRegistry->addSetting(SlicingWheelTool, shortcutsList);
 
     shortcutsList.clear();
     shortcutsList.append(QString("W"));
