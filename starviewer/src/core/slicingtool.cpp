@@ -31,12 +31,7 @@ SlicingTool::SlicingTool(QViewer *viewer, QObject *parent)
 
 SlicingTool::~SlicingTool()
 {
-    // Estadístiques
-    if (!m_wheelSteps.isEmpty())
-    {
-        StatsWatcher::log("Slicing Tool: Wheel Record: " + m_wheelSteps);
-        m_wheelSteps.clear();
-    }
+    
 }
 
 void SlicingTool::handleEvent(unsigned long eventID)
@@ -51,13 +46,6 @@ void SlicingTool::handleEvent(unsigned long eventID)
         case vtkCommand::LeftButtonPressEvent:
             m_mouseMovement = false;
             this->startSlicing();
-            // Estadístiques
-            if (!m_wheelSteps.isEmpty())
-            {
-                StatsWatcher::log("Slicing Tool: Wheel Record: " + m_wheelSteps);
-                m_wheelSteps.clear();
-            }
-            break;
 
         case vtkCommand::MouseMoveEvent:
             m_mouseMovement = true;
@@ -73,24 +61,6 @@ void SlicingTool::handleEvent(unsigned long eventID)
                 StatsWatcher::log("Slicing Tool: Button Scroll Record: " + m_scrollSteps + " ::Over a total of " + QString::number(m_numberOfImages) + " images");
                 m_scrollSteps.clear();
             }
-            break;
-
-        case vtkCommand::MouseWheelForwardEvent:
-            m_mouseMovement = false;
-            m_viewer->setCursor(QCursor(QPixmap(":/images/slicing.png")));
-            this->updateIncrement(1);
-            m_viewer->setCursor(Qt::ArrowCursor);
-            // Estadístiques
-            m_wheelSteps += QString::number(1) + " ";
-            break;
-
-        case vtkCommand::MouseWheelBackwardEvent:
-            m_mouseMovement = false;
-            m_viewer->setCursor(QCursor(QPixmap(":/images/slicing.png")));
-            this->updateIncrement(-1);
-            m_viewer->setCursor(Qt::ArrowCursor);
-            // Estadístiques
-            m_wheelSteps += QString::number(-1) + " ";
             break;
 
         case vtkCommand::MiddleButtonPressEvent:
@@ -274,6 +244,11 @@ void SlicingTool::chooseBestDefaultScrollMode(Volume *input)
             StatsWatcher::log("Slicing Tool: Default Scroll Mode = SLICE");
         }
     }
+}
+
+int SlicingTool::getSlicingMode()
+{
+    return m_slicingMode;
 }
 
 }

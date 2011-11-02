@@ -263,7 +263,8 @@ HEADERS += extensionfactory.h \
     automaticsynchronizationtool.h \
     automaticsynchronizationtooldata.h \
     firewallaccess.h \
-    firewallaccesstest.h
+    firewallaccesstest.h \
+    slicingwheeltool.h
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
     mathtools.cpp \
@@ -484,7 +485,8 @@ SOURCES += extensionmediator.cpp \
     automaticsynchronizationtool.cpp \
     automaticsynchronizationtooldata.cpp \
     firewallaccess.cpp \
-    firewallaccesstest.cpp
+    firewallaccesstest.cpp \
+    slicingwheeltool.cpp
 win32 {
     HEADERS += windowsfirewallaccess.h
     SOURCES += windowsfirewallaccess.cpp

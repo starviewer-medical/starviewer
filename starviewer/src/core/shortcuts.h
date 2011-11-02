@@ -14,6 +14,7 @@ public:
 
     /// Declaració de claus
     static const QString SlicingTool;
+    static const QString SlicingWheelTool;
     static const QString WindowLevelTool;
     static const QString ZoomTool;
     static const QString TranslateTool;

@@ -416,6 +416,7 @@ void Q2DViewerExtension::initializeTools()
     // Registrem les eines de valors predefinits de window level, slicing per teclat i sincronització
     m_toolManager->registerTool("WindowLevelPresetsTool");
     m_toolManager->registerTool("SlicingKeyboardTool");
+    m_toolManager->registerTool("SlicingWheelTool");
     m_toolManager->registerTool("SynchronizeTool");
     // Cal marcar l'acció de la tool com a checked perquè sempre estigui disponible
     // Si no ho féssim, cada cop que es canviés de tool, el toolmanager faria un refreshConections() i
@@ -464,7 +465,7 @@ void Q2DViewerExtension::initializeTools()
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
     QStringList defaultTools;
-    defaultTools << "WindowLevelPresetsTool" << "SlicingKeyboardTool" << "SlicingTool" << "WindowLevelTool" << "TranslateTool";
+    defaultTools << "WindowLevelPresetsTool" << "SlicingKeyboardTool" << "SlicingTool" << "SlicingWheelTool" << "WindowLevelTool" << "TranslateTool";
     m_toolManager->triggerTools(defaultTools);
 
     //

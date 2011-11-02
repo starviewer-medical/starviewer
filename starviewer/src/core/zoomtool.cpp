@@ -39,20 +39,6 @@ void ZoomTool::handleEvent(unsigned long eventID)
             this->endZoom();
         break;
 
-        case vtkCommand::MouseWheelForwardEvent:
-            startZoom();
-            // \TODO es podria afegir una variable membre 'm_factor' per poder controlar desde fora com de ràpid és l'augment o disminució del zoom
-            m_viewer->zoom(pow((double)1.1, 2.0));
-            endZoom();
-        break;
-
-        case vtkCommand::MouseWheelBackwardEvent:
-            startZoom();
-            // \TODO es podria afegir una variable membre 'm_factor' per poder controlar desde fora com de ràpid és l'augment o disminució del zoom
-            m_viewer->zoom(pow((double)1.1, -2.0));
-            endZoom();
-        break;
-
         default:
         break;
     }
