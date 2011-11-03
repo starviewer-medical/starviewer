@@ -120,31 +120,34 @@ bool DatabaseInstallation::checkDatabaseRevision()
 {
     LocalDatabaseManager localDatabaseManager;
 
-    if (localDatabaseManager.getDatabaseRevision() != StarviewerDatabaseRevisionRequired)
+    if (localDatabaseManager.getDatabaseRevision() == StarviewerDatabaseRevisionRequired)
+    {
+        return true;
+    }
+    else if (StarviewerDatabaseRevisionRequired  <localDatabaseManager.getDatabaseRevision())
+    {
+        INFO_LOG(QString("La base de dades es de la versio %1 una versio mes nova que la necessaria la %2, aquesta versio es incomptabile"
+                         " amb la versio d'%3 que s'esta executant, es demanara a l'usuari si vol abandonar %3, o reinstal.lar la base de dades.")
+                 .arg(QString::number(localDatabaseManager.getDatabaseRevision()), QString::number(StarviewerDatabaseRevisionRequired), ApplicationNameString));
+
+        if (askToUserIfDowngradeDatabase())
+        {
+            INFO_LOG("L'usuari ha indicat que vol reinstal.lar la base de dades");
+            recreateDatabase();
+        }
+        else
+        {
+            INFO_LOG(QString("L'usuari ha indicat que no vol reinstal.lar la base de dades per tant es tancara %1").arg(ApplicationNameString));
+            exit(0);
+        }
+    }
+    else if (localDatabaseManager.getDatabaseRevision() < StarviewerDatabaseRevisionRequired)
     {
         INFO_LOG("La revisio actual de la base de dades es " + QString().setNum(localDatabaseManager.getDatabaseRevision()) + " per aquesta versio d'" +
                  ApplicationNameString + " es necessaria la " + QString().setNum(StarviewerDatabaseRevisionRequired) +
                  ", es procedira a actualitzar la base de dades");
 
-        if (canBeUpgradedDatabase())
-        {
-            if (!upgradeDatabase())
-            {
-                ERROR_LOG("S'ha produit un error al actualtizar la base de dades, es procedira a reinstal.lar la base de dades");
-                return recreateDatabase();
-            }
-        }
-        else
-        {
-            UpgradeDatabaseXMLParser upgradeDatabaseXMLParser(getUpgradeDatabaseRevisionXmlData());
-            INFO_LOG("La base de dades actual no es actualitzable. Versio minima necessaria : " +
-                     QString::number(upgradeDatabaseXMLParser.getMinimumDatabaseRevisionRequiredToUpgrade())
-                      + ", versio de la base de dades actual: " + QString::number(localDatabaseManager.getDatabaseRevision()));
-            INFO_LOG("Es procedira a reinstal.lar la base de dades");
-
-            return recreateDatabase();
-        }
-
+        return tryToUpgradeDatabaseIfNotRecreateDatabase();
     }
 
     return true;
@@ -222,6 +225,32 @@ bool DatabaseInstallation::recreateDatabase()
     }
 
     return status;
+}
+
+bool DatabaseInstallation::tryToUpgradeDatabaseIfNotRecreateDatabase()
+{
+    LocalDatabaseManager localDatabaseManager;
+
+    if (canBeUpgradedDatabase())
+    {
+        if (!upgradeDatabase())
+        {
+            ERROR_LOG("S'ha produit un error al actualtizar la base de dades, es procedira a reinstal.lar la base de dades");
+            return recreateDatabase();
+        }
+
+        return true;
+    }
+    else
+    {
+        UpgradeDatabaseXMLParser upgradeDatabaseXMLParser(getUpgradeDatabaseRevisionXmlData());
+        INFO_LOG("La base de dades actual no es actualitzable. Versio minima necessaria : " +
+                 QString::number(upgradeDatabaseXMLParser.getMinimumDatabaseRevisionRequiredToUpgrade())
+                  + ", versio de la base de dades actual: " + QString::number(localDatabaseManager.getDatabaseRevision()));
+        INFO_LOG("Es procedira a reinstal.lar la base de dades");
+
+        return recreateDatabase();
+    }
 }
 
 bool DatabaseInstallation::upgradeDatabase()
@@ -404,6 +433,14 @@ void DatabaseInstallation::setValueProgressBar()
 QString DatabaseInstallation::getErrorMessage()
 {
     return m_errorMessage;
+}
+
+bool DatabaseInstallation::askToUserIfDowngradeDatabase()
+{
+    QString questionMessage = QString(tr("Current database is of %1 newer version. To continue executing %1 is necessary to delete retrieved"
+                                  " studies and reinstall database. Do you want to continue?")).arg(ApplicationNameString);
+
+    return QMessageBox::question(NULL, ApplicationNameString, questionMessage, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes ;
 }
 
 }
