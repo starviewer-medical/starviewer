@@ -77,6 +77,9 @@ private:
     /// @return indica si s'ha pogut crear la base de dades
     bool createDatabaseFile();
 
+    /// Intenta actualitzar la base de dades sinó és possible esborra la caché actual i crea una bd nova buid
+    bool tryToUpgradeDatabaseIfNotRecreateDatabase();
+
     /// Comprova si la versió actual de la base de dades es pot actualitzar, sense necessitat d'haver d'esborrar la caché i tornar-la a crear
     bool canBeUpgradedDatabase();
 
@@ -88,6 +91,9 @@ private:
 
     /// Retorna el XML a aplicar per actualitzar la base de dades
     QString getUpgradeDatabaseRevisionXmlData();
+
+    /// Pregunta l'usuari si vol fer un Donwgrade de la base dades, això implicar esborrar la caché actuai tornar a crear la BD
+    bool askToUserIfDowngradeDatabase();
 
 private:
     /// Diàleg de progrés per les operacions costoses
