@@ -68,7 +68,7 @@ vtkProp* DrawerBitmap::getAsVtkProp()
 {
     if (!m_imageActor)
     {
-        vtkImageData *imageData = rawDataToVtkImageData(m_data);   
+        vtkImageData *imageData = rawDataToVtkImageData(m_data);
         if (imageData)
         {
             // Construim LUT per aplicar transparències: fet a partir del codi de http://www.vtk.org/Wiki/VTK/Examples/Cxx/Images/Transparency
@@ -76,7 +76,7 @@ vtkProp* DrawerBitmap::getAsVtkProp()
             lookupTable->SetNumberOfTableValues(2);
             lookupTable->SetRange(0.0, 1.0);
             // Valor 0 té m_backgroundOpacity i color  m_backgroundColor
-            lookupTable->SetTableValue(0,  m_backgroundColor.redF(), m_backgroundColor.greenF(), m_backgroundColor.blueF(), m_backgroundOpacity); 
+            lookupTable->SetTableValue(0, m_backgroundColor.redF(), m_backgroundColor.greenF(), m_backgroundColor.blueF(), m_backgroundOpacity); 
             // Valor 1 és opac amb color m_foregroundColor
             lookupTable->SetTableValue(1, m_foregroundColor.redF(), m_foregroundColor.greenF(), m_foregroundColor.blueF(), 1.0);
             lookupTable->Build();

@@ -157,7 +157,10 @@ void Cursor3DTool::updatePosition()
             if (currentPlane)
             {
                 // 3.- Construim la matiu per mapejar l'index del píxel del DICOM a un punt del món real
-                double currentPlaneRowVector[3], currentPlaneColumnVector[3], currentPlaneOrigin[3];
+                double currentPlaneRowVector[3];
+                double currentPlaneColumnVector[3];
+                double currentPlaneOrigin[3];
+                
                 currentPlane->getRowDirectionVector(currentPlaneRowVector);
                 currentPlane->getColumnDirectionVector(currentPlaneColumnVector);
                 currentPlane->getOrigin(currentPlaneOrigin);
