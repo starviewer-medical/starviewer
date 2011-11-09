@@ -1,6 +1,7 @@
 #include "displayshutter.h"
 
 #include "mathtools.h"
+#include "volumepixeldata.h"
 #include <cmath>
 
 #include <QColor>
@@ -272,6 +273,31 @@ QImage DisplayShutter::getAsQImage(int width, int height) const
     shutterImage.invertPixels();
 
     return shutterImage;
+}
+
+VolumePixelData* DisplayShutter::getAsVolumePixelData(int width, int height, int slice) const
+{
+    // Creem la màscara del shutter a través d'una QImage
+    QImage shutterImage = this->getAsQImage(width, height);
+    
+    // Convertim la QImage en el format de buffer adequat per VolumePixelData
+    unsigned char *data = new unsigned char[width * height];
+    for (int i = 0; i < height; ++i)
+    {
+        QRgb *currentPixel = reinterpret_cast<QRgb*>(shutterImage.scanLine(i));
+        for (int j = 0; j < width; ++j)
+        {
+            data[j + i * width] = qGray(*currentPixel);
+            ++currentPixel;
+        }
+    }
+
+    int volumeExtent[6] = {0, width - 1, 0, height - 1, slice, slice};
+    
+    VolumePixelData *shutterData = new VolumePixelData;
+    shutterData->setData(data, volumeExtent, 1, true);
+
+    return shutterData;
 }
 
 DisplayShutter DisplayShutter::intersection(const QList<DisplayShutter> &shuttersList)

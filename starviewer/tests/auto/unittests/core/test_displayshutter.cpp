@@ -1,6 +1,7 @@
 #include "autotest.h"
 
 #include "displayshutter.h"
+#include "volumepixeldata.h"
 
 #include <QColor>
 #include <QPainter>
@@ -36,6 +37,9 @@ private slots:
 
     void getAsQImage_ReturnsExpectedValues_data();
     void getAsQImage_ReturnsExpectedValues();
+
+    void getAsVolumePixelData_ReturnsExpectedValues_data();
+    void getAsVolumePixelData_ReturnsExpectedValues();
 };
 
 Q_DECLARE_METATYPE(DisplayShutter::ShapeType);
@@ -43,6 +47,7 @@ Q_DECLARE_METATYPE(QVector<QPoint>);
 Q_DECLARE_METATYPE(QList<DisplayShutter>);
 Q_DECLARE_METATYPE(DisplayShutter);
 Q_DECLARE_METATYPE(QColor);
+Q_DECLARE_METATYPE(VolumePixelData*);
 
 void test_DisplayShutter::getShapeAsDICOMString_ReturnsExpectedValues_data()
 {
@@ -405,6 +410,72 @@ void test_DisplayShutter::getAsQImage_ReturnsExpectedValues()
     QFETCH(int, height);
     
     QCOMPARE(shutter.getAsQImage(width, height), expectedQImage);
+}
+
+void test_DisplayShutter::getAsVolumePixelData_ReturnsExpectedValues_data()
+{
+    QTest::addColumn<DisplayShutter>("shutter");
+    QTest::addColumn<int>("width");
+    QTest::addColumn<int>("height");
+    QTest::addColumn<int>("slice");
+    QTest::addColumn<VolumePixelData*>("expectedPixelData");
+
+    int extent1[6] = {0, 9, 0, 11, 0, 0};
+    unsigned char *data1 = new unsigned char[10 * 12];
+    memset(data1, 254, 10 * 12);
+    VolumePixelData *pixelData1 = new VolumePixelData;
+    pixelData1->setData(data1, extent1, 1, true);
+    QTest::newRow("Empty shutter") << DisplayShutter() << 10 << 12 << 0 << pixelData1;
+
+    DisplayShutter rectangularShutter;
+    rectangularShutter.setPoints(QPoint(2, 2), QPoint(4, 4));
+    int extent2[6] = {0, 5, 0, 5, 1, 1};
+    unsigned char *data2 = new unsigned char[36];
+    memset(data2, 254, 36);
+    for (int i = 2; i < 5; ++i)
+    {
+        for (int j = 2; j < 5; ++j)
+        {
+            data2[j + i * 6] = 0;
+        }
+    }
+    VolumePixelData *pixelData2 = new VolumePixelData;
+    pixelData2->setData(data2, extent2, 1, true);
+    QTest::newRow("Rectangular shutter") << rectangularShutter << 6 << 6 << 1 << pixelData2;
+}
+
+void test_DisplayShutter::getAsVolumePixelData_ReturnsExpectedValues()
+{
+    QFETCH(DisplayShutter, shutter);
+    QFETCH(int, width);
+    QFETCH(int, height);
+    QFETCH(int, slice);
+    QFETCH(VolumePixelData*, expectedPixelData);
+    
+    VolumePixelData *shutterPixelData = shutter.getAsVolumePixelData(width, height, slice);
+    
+    QCOMPARE(shutterPixelData->getVtkData()->GetNumberOfScalarComponents(), expectedPixelData->getVtkData()->GetNumberOfScalarComponents());
+    
+    int shutterExtent[6];
+    int expectedExtent[6];
+    shutterPixelData->getVtkData()->GetExtent(shutterExtent);
+    expectedPixelData->getVtkData()->GetExtent(expectedExtent);
+    for (int i = 0; i < 6; ++i)
+    {
+        QCOMPARE(shutterExtent[i], expectedExtent[i]);
+    }
+
+    unsigned char *shutterDataPointer = reinterpret_cast<unsigned char*>(shutterPixelData->getVtkData()->GetScalarPointer());
+    unsigned char *expectedDataPointer = reinterpret_cast<unsigned char*>(expectedPixelData->getVtkData()->GetScalarPointer());
+    for (int j = 0; j < height; ++j)
+    {
+        for (int i = 0; i < width; ++i)
+        {
+            QCOMPARE(*shutterDataPointer, *expectedDataPointer);
+            ++shutterDataPointer;
+            ++expectedDataPointer;
+        }
+    }
 }
 
 DECLARE_TEST(test_DisplayShutter)
