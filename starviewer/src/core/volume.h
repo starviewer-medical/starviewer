@@ -159,6 +159,10 @@ signals:
     void progress(int);
 
 private:
+    /// Ens retorna l'índex intern d'imatge corresponent a la llesca i fase indicats
+    int getImageIndex(int sliceNumber, int phaseNumber) const;
+
+private:
     /// Ens diu si les dades han estat carregades ja en memòria o no.
     /// Aquest membre el farem servir per aplicar el lazy loading
     bool m_volumePixelDataLoaded;
