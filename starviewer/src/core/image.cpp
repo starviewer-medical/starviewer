@@ -213,6 +213,11 @@ void Image::addWindowLevel(double window, double level)
         QPair<double, double> windowLevel(window, level);
         m_windowLevelList << windowLevel;
     }
+    else
+    {
+        WARN_LOG(QString("WW/WL Inconsistent: %1, %2. No s'afegira a la imatge").arg(window).arg(level));
+        DEBUG_LOG(QString("WW/WL Inconsistent: %1, %2. No s'afegira a la imatge").arg(window).arg(level));
+    }
 }
 
 QPair<double, double> Image::getWindowLevel(int index) const
