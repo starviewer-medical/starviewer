@@ -8,6 +8,8 @@ class QImage;
 
 namespace udg {
 
+class VolumePixelData;
+
 /*
     Un display shutter consisteix en una forma geomètrica (cercle, rectangle o polígon)
     que defineix la zona que ha de ser visible en la imatge que s'associa. La part continguda dins de la forma és la visible i la
@@ -64,6 +66,10 @@ public:
 
     /// Retorna el shutter com una QImage de mides width i height
     QImage getAsQImage(int width, int height) const;
+
+    /// Ens retorna el shutter en format VolumePixelData, amb un extent segons el width, height i slice indicats
+    /// Les dades retornades tindran com spacing i origin els valors que s'assignin per defecte a VolumePixelData
+    VolumePixelData* getAsVolumePixelData(int width, int height, int slice) const;
     
     /// Donada una llista de shutters, ens retorna el shutter resultant de la intersecció d'aquests. 
     /// En quant al color resultant, serà la mitjana de tots els shutters de la llista.
