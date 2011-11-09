@@ -289,7 +289,7 @@ Image* Volume::getImage(int sliceNumber, int phaseNumber) const
 
     if (!m_imageSet.isEmpty())
     {
-        int imageIndex = sliceNumber * m_numberOfPhases + phaseNumber;
+        int imageIndex = getImageIndex(sliceNumber, phaseNumber);
         if (imageIndex >= 0 && imageIndex < m_imageSet.count())
         {
             image = m_imageSet.at(imageIndex);
@@ -371,6 +371,11 @@ AnatomicalPlane::AnatomicalPlaneType Volume::getAcquisitionPlane() const
     {
         return AnatomicalPlane::getPlaneTypeFromPatientOrientation(m_imageSet.first()->getPatientOrientation());
     }
+}
+
+int Volume::getImageIndex(int sliceNumber, int phaseNumber) const
+{
+    return sliceNumber * m_numberOfPhases + phaseNumber;
 }
 
 bool Volume::fitsIntoMemory()
