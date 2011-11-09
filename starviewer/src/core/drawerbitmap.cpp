@@ -2,7 +2,7 @@
 
 #include "logging.h"
 #include "mathtools.h"
-
+#include "volumepixeldata.h"
 #include <QColor>
 
 #include <vtkImageActor.h>
@@ -202,24 +202,13 @@ vtkImageData* DrawerBitmap::rawDataToVtkImageData(unsigned char *data)
         return 0;
     }
 
-    vtkImageData* imageData = vtkImageData::New();
-    imageData->SetExtent(0, m_width - 1, 0, m_height - 1, 0, 0);
-    imageData->SetScalarTypeToUnsignedChar(); // The data will be 8 bit
-    imageData->SetNumberOfScalarComponents(1);
-    imageData->AllocateScalars();
-    
-    int size = m_width * m_height;
-    vtkUnsignedCharArray *ucharArray = vtkUnsignedCharArray::New();
-    ucharArray->SetNumberOfTuples(size);
-    // TODO De moment fem que vtk no esborri mai les dades a on apunta data quan l'objecte es destrueixi (3r paràmetre == 1)
-    ucharArray->SetArray(data, size, 1);
-    imageData->GetPointData()->SetScalars(ucharArray);
-    ucharArray->Delete();
+    VolumePixelData *pixelData = new VolumePixelData;
+    int extent[6] = {0, m_width - 1, 0, m_height - 1, 0, 0};
+    pixelData->setData(data, extent, 1, false);
+    pixelData->getVtkData()->SetOrigin(m_origin);
+    pixelData->getVtkData()->SetSpacing(m_spacing);
 
-    imageData->SetOrigin(m_origin);
-    imageData->SetSpacing(m_spacing);
-
-    return imageData;
+    return pixelData->getVtkData();
 }
 
 } // end namespace udg
