@@ -19,6 +19,8 @@ Image::Image(QObject *parent)
     m_pixelSpacing[1] = 0.;
     m_numberOfOverlays = 0;
     memset(m_imagePositionPatient, 0, 3 * sizeof(double));
+
+    m_haveToBuildDisplayShutterForDisplay = false;
 }
 
 Image::~Image()
@@ -446,11 +448,13 @@ bool Image::hasDisplayShutters() const
 void Image::addDisplayShutter(const DisplayShutter &shutter)
 {
     m_shuttersList << shutter;
+    m_haveToBuildDisplayShutterForDisplay = true;
 }
 
 void Image::setDisplayShutters(const QList<DisplayShutter> &shuttersList)
 {
     m_shuttersList = shuttersList;
+    m_haveToBuildDisplayShutterForDisplay = true;
 }
 
 QList<DisplayShutter> Image::getDisplayShutters() const
@@ -464,6 +468,13 @@ DisplayShutter Image::getDisplayShutterForDisplay()
     {
         return DisplayShutter();
     }
+    
+    if (!m_haveToBuildDisplayShutterForDisplay)
+    {
+        return m_displayShutterForDisplay;
+    }
+ 
+    // Si arribem fins aquí, llavors significa que hem de construir el DisplayShutter per display
     
     // Primer eliminem els shutters que no tingui sentit aplicar
     // com serien els shutters rectangulars que tinguin una mida igual o major a la imatge i els que no tenen cap forma definida
@@ -488,7 +499,10 @@ DisplayShutter Image::getDisplayShutterForDisplay()
     }
 
     // Un cop feta la criba, retornem la intersecció dels shutters resultants
-    return DisplayShutter::intersection(shutterList);
+    m_displayShutterForDisplay = DisplayShutter::intersection(shutterList);
+    m_haveToBuildDisplayShutterForDisplay = false;
+    
+    return m_displayShutterForDisplay;
 }
 
 void Image::setDICOMSource(const DICOMSource &imageDICOMSource)
