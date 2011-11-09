@@ -462,7 +462,7 @@ DisplayShutter Image::getDisplayShutterForDisplay()
 {
     if (!hasDisplayShutters())
     {
-        DisplayShutter();
+        return DisplayShutter();
     }
     
     // Primer eliminem els shutters que no tingui sentit aplicar
