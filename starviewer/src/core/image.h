@@ -360,6 +360,12 @@ private:
     /// Llista de display shutters
     QList<DisplayShutter> m_shuttersList;
     
+    /// DisplayShutter per display que guardarem un cop creat
+    DisplayShutter m_displayShutterForDisplay;
+    
+    /// Ens indica si hem de crear el display shutter per display
+    bool m_haveToBuildDisplayShutterForDisplay;
+    
     /// La sèrie pare
     Series *m_parentSeries;
 
