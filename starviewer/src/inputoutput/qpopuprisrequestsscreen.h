@@ -12,6 +12,7 @@ namespace udg {
 class PACSJob;
 class RetrieveDICOMFilesFromPACSJob;
 class Patient;
+class Study;
 
 /**
     Classe que mostra un PopUp indicant que s'ha rebut una petició del RIS per descarregar un estudi
@@ -29,7 +30,12 @@ public:
     void queryStudiesByAccessionNumberStarted();
 
     /// Afegim un estudi per descarregar que s'ha demanat a través del rIS
-    void addStudyToRetrieveByAccessionNumber(RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob);
+    void addStudyToRetrieveFromPACSByAccessionNumber(RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob);
+
+    /// Afegim un estudi que s'ha obtingut de la base de dades del PACS demana't en una petició del RIS
+    //HACK: Com ara mateix nom tenim cap manera de fer el seguiment de les peticions d'estudis a la base de dades, afegim aquest mètode que mostarà
+    //aquest estudi ja com a descarregat i el sumarà al total d'estudis
+    void addStudyRetrievedFromDatabaseByAccessionNumber(Study *study);
 
     /// Mostra en el PopUp que no s'ha trobat cap estudi que compleixi els criteris de cerca
     void showNotStudiesFoundMessage();
@@ -60,7 +66,7 @@ private:
     void showPatientNameOfRetrievingStudies(Patient *patient);
 
     /// Actualitza per pantalla l'estat de la descàrrege
-    void refreshScreenRetrieveStatus();
+    void refreshScreenRetrieveStatus(Study *study);
 
     /// Indica que la descàrrega ha finalitzat, indica el número d'estudis descarregats i el cap de 5 segons amaga el PopUp
     void showRetrieveFinished();
@@ -77,6 +83,9 @@ private:
     /// Animació utilitzada per desplaçar el pop up fin a la cantonada dreta
     QPropertyAnimation m_moveToBottomAnimation;
     QPropertyAnimation m_hidePopUpAnimation;
+
+    /// Guarda el número d'estudis que s'han de descarregar
+    int m_numberOfStudiesToRetrieve;
 };
 
 };

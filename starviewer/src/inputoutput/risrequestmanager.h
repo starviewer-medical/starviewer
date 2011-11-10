@@ -68,6 +68,8 @@ private slots:
     void showListenRISRequestsError(ListenRISRequests::ListenRISRequestsError error);
 
 private:
+    enum DICOMSourcesFromRetrieveStudy { PACS = 0, Database = 1 };
+
     /// Inicialitza les variables globals per escoltar i executar peticions del RIS.
     /// No inicialitzem al construtor perquè si no ens indiquen que hem d'escoltar no cal, inicialitzar les variables i ocupar memòria
     void initialize();
@@ -89,10 +91,30 @@ private:
     void errorQueryingStudy(QueryPacsJob *queryPACSJob);
 
     /// Descarrega els estudis trobats a partir d'una queryPACSJob
-    void retrieveFoundStudiesFromPACS(QueryPacsJob *queryPACSJob);
+    void retrieveFoundStudiesInQueryPACS(QueryPacsJob *queryPACSJob);
+
+    /// Comprova si l'estudi existeix a la base dades, si existeix pregunta a l'usuari si vol tornar a descarregar l'estudi si diu que si obté l'estudi
+    /// de la base de dades, sinó descarrega l'estudi del PACS
+    void retrieveStudyFoundInQueryPACS(Study *study);
 
     /// Sol·licita descarregar l'estudi passat utilitzant el PACSManager
-    RetrieveDICOMFilesFromPACSJob* retrieveStudy(Study *study);
+    RetrieveDICOMFilesFromPACSJob* retrieveStudyFromPACS(Study *study);
+
+    /// Obté l'estudi de la base de dades
+    void retrieveStudyFromDatabase(Study *study);
+
+    /// Una vegada s'ha descarregat fa les accions pertinents amb aquell estudi. Emet signal per visualitzar/load o no fa res
+    void doActionsAfterRetrieve(QString studyInstanceUID);
+
+    /// Indica de quina font hem d'obtenir l'estudi.
+    /// Comprova si l'estudi existeix a la base de dades, si existeix es pregunta a l'usuari si s'ha de tornar a descarregar-lo del PACS, i es guarda la resposta
+    /// perquè en el cas que es trobin més estudis d'una petició del RIS que existeixin a la base de dades, per tots ja fer automàticament fer el que ha indicat l'usuari.
+    /// Si l'estudi no existeix a la base de dades retorna que es descarregui del PACS
+    /// retorna la resposta que ha donat l'usuari la primera vegada. Així no hem de molestar l'usuari cada vegada que trobem que un estudi existeix a la base de dades
+    DICOMSourcesFromRetrieveStudy getDICOMSouceFromRetrieveStudy(Study *study);
+
+    /// Pregunta a l'usuari si vol tornar a descarregar l'estudi si aquest existeix a la base de dades
+    bool askToUserIfRetrieveFromPACSStudyWhenExistsInDatabase(const QString &fullPatientName) const;
 
 private:
     /// No podem executar diverses peticions de RIS a la vegada, per això creem aquesta cua, que ens permetrà en el cas que se'ns
@@ -116,11 +138,18 @@ private:
     /// llista quins són els estudis descarregats.
     QStringList m_studiesInstancesUIDRequestedToRetrieve;
     // Llista de PACSJob pels quals una vegada l'estudi estigui descarregat s'ha de fer un view/load
-    QList<int> m_pacsJobIDToViewWhenFinished;
-    QList<int> m_pacsJobIDToLoadWhenFinished;
+    QList<QString> m_studiesToViewWhenRetrieveFinishedByInstanceUID;
+    QList<QString> m_studiesToLoadWhenRetrieveFinishedByInstanceUID;
 
     /// Hash que ens guarda tots els QueryPACSJob pendent d'executar o que s'estan executant llançats des d'aquesta classe
     QHash<int, QueryPacsJob*> m_queryPACSJobPendingExecuteOrExecuting;
+
+    int m_numberOfStudiesAddedToRetrieveForCurrentRisRequest;
+
+    /// Guarda a l'usuari si per una petició del RIS se li ha preguntat si els estudis que ja existeixen descarregats a la base de dades s'han de tornar a desgarregar
+    bool m_hasBeenAskedToUserIfExistingStudiesInDatabaseHaveToBeenRetrievedAgain;
+    /// Guarda la resposta de l'usuari a la pregunta de si s'han de tornar a descarregar els estudis ja existents a la BD
+    bool m_studiesInDatabaseHaveToBeenRetrievedAgain;
 
 };
 
