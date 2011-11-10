@@ -80,9 +80,6 @@ private:
     /// Mtode que ens indica si hi ha espai disponible per descarregar estudis
     PACSRequestStatus::RetrieveRequestStatus thereIsAvailableSpaceOnHardDisk();
 
-    /// Indica si l'estudi amb l'UID passat permetre ja existeix a la base de dades
-    bool existStudyInLocalDatabase(QString studyInstanceUID);
-
     /// Esborra els fitxers descarregats de la cach si l'estudi no existeix a la base de dades
     /// Aquest mtode est pensat en casos que la descrrega falla i volem esborrar els fitxers descarregats, noms s'esborran si l'estudi no est inserit
     /// a la bd, si l'estudi est inserit no l'esborrem, perqu part dels fitxers descarregats ja podien estar inserit a la base de dades per una anterior

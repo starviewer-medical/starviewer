@@ -49,6 +49,9 @@ public:
     /// Retorna l'estructura omplerta fins al nivell d'study (no omple ni les sèries ni les imatges).
     QList<Patient*> queryPatientStudy(const DicomMask &patientStudyMaskToQuery);
 
+    /// Retorna si existeix l'estudi a la base de dades. Comprova si hi ha una estudi a la base de dades amb l'StudyInstanceUID de l'estudi passat.
+    bool existsStudy(Study *study);
+
     /// Retorna tota l'estructura Patient,Study,Series,Image, de l'estudi que compleix amb el criteri de cerca.
     /// Té en compte el Study InstanceUID, el SeriesInstanceUID i el SOP Instance UID
     Patient* retrieve(const DicomMask &maskToRetrieve);
