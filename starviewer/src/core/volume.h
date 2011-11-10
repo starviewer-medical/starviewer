@@ -153,14 +153,13 @@ public:
     /// es calcula en base a la primera imatge i prou
     AnatomicalPlane::AnatomicalPlaneType getAcquisitionPlane() const;
 
+    /// Ens retorna l'índex intern d'imatge corresponent a la llesca i fase indicats
+    int getImageIndex(int sliceNumber, int phaseNumber) const;
+
 signals:
     /// Emet l'estat del progrés en el que es troba la càrrega de dades del volum
     /// @param progress progrés de la càrrega en una escala de 1 a 100
     void progress(int);
-
-private:
-    /// Ens retorna l'índex intern d'imatge corresponent a la llesca i fase indicats
-    int getImageIndex(int sliceNumber, int phaseNumber) const;
 
 private:
     /// Ens diu si les dades han estat carregades ja en memòria o no.

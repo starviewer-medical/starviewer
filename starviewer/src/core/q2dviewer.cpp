@@ -1128,7 +1128,7 @@ void Q2DViewer::setSlice(int value)
         this->checkAndUpdateSliceValue(value);
         if (isThickSlabActive())
         {
-            m_thickSlabProjectionFilter->SetFirstSlice(m_firstSlabSlice * m_numberOfPhases + m_currentPhase);
+            m_thickSlabProjectionFilter->SetFirstSlice(m_mainVolume->getImageIndex(m_firstSlabSlice, m_currentPhase));
             // TODO Cal actualitzar aquest valor?
             m_thickSlabProjectionFilter->SetNumberOfSlicesToProject(m_slabThickness);
             // Si hi ha el thickslab activat, eliminem totes les roi's. És la decisió ràpida que s'ha près.
@@ -1160,7 +1160,7 @@ void Q2DViewer::setPhase(int value)
         m_currentPhase = value;
         if (isThickSlabActive())
         {
-            m_thickSlabProjectionFilter->SetFirstSlice(m_firstSlabSlice * m_numberOfPhases + m_currentPhase);
+            m_thickSlabProjectionFilter->SetFirstSlice(m_mainVolume->getImageIndex(m_firstSlabSlice, m_currentPhase));
         }
         this->updateDisplayExtent();
         updateDefaultPreset();
@@ -1746,7 +1746,7 @@ void Q2DViewer::updateSliceAnnotationInformation()
         }
     }
 
-    int value = m_currentSlice * m_numberOfPhases + m_currentPhase;
+    int value = m_mainVolume->getImageIndex(m_currentSlice, m_currentPhase);
     if (m_numberOfPhases > 1)
     {
         this->updateSliceAnnotation((value/m_numberOfPhases) + 1, m_maxSliceValue + 1, m_currentPhase + 1, m_numberOfPhases);
@@ -1868,10 +1868,15 @@ void Q2DViewer::updateDisplayExtent()
         return;
     }
 
-    // TODO Potser el càlcul de l'índex de l'imatge l'hauria de fer Volume que
-    // és qui coneix com es guarda la informació de la imatge, ja que si canviem la manera
-    // de guardar les phases, això ja no ens valdria
-    int sliceValue = getImageDataZIndexForSliceAndPhase(m_currentSlice, m_currentPhase);
+    int sliceValue;
+    if (isThickSlabActive())
+    {
+        sliceValue = m_currentSlice;
+    }
+    else
+    {
+        sliceValue = m_mainVolume->getImageIndex(m_currentSlice, m_currentPhase);
+    }
 
     // A partir de l'extent del volum, la vista i la llesca en la que ens trobem,
     // calculem l'extent que li correspon a l'actor imatge
@@ -1884,21 +1889,6 @@ void Q2DViewer::updateDisplayExtent()
 
     // TODO Si separem els renderers potser caldria aplicar-ho a cada renderer?
     getRenderer()->ResetCameraClippingRange();
-}
-
-int Q2DViewer::getImageDataZIndexForSliceAndPhase(int slice, int phase)
-{
-    int zIndex;
-    if (isThickSlabActive())
-    {
-        zIndex = slice;
-    }
-    else
-    {
-        zIndex = slice * m_numberOfPhases + phase;
-    }
-
-    return zIndex;
 }
 
 void Q2DViewer::enableAnnotation(AnnotationFlags annotation, bool enable)
@@ -1994,7 +1984,7 @@ void Q2DViewer::setSlabThickness(int thickness)
 
     if (isThickSlabActive())
     {
-        m_thickSlabProjectionFilter->SetFirstSlice(m_firstSlabSlice * m_numberOfPhases + m_currentPhase);
+        m_thickSlabProjectionFilter->SetFirstSlice(m_mainVolume->getImageIndex(m_firstSlabSlice, m_currentPhase));
         m_thickSlabProjectionFilter->SetNumberOfSlicesToProject(m_slabThickness);
         updateDisplayExtent();
         updateSliceAnnotationInformation();
@@ -2149,7 +2139,7 @@ void Q2DViewer::initializeThickSlab()
     m_thickSlabProjectionFilter->SetInput(m_mainVolume->getVtkData());
     m_thickSlabProjectionFilter->SetProjectionDimension(m_lastView);
     m_thickSlabProjectionFilter->SetAccumulatorType((AccumulatorFactory::AccumulatorType) m_slabProjectionMode);
-    m_thickSlabProjectionFilter->SetFirstSlice(m_firstSlabSlice * m_numberOfPhases + m_currentPhase);
+    m_thickSlabProjectionFilter->SetFirstSlice(m_mainVolume->getImageIndex(m_firstSlabSlice, m_currentPhase));
     m_thickSlabProjectionFilter->SetNumberOfSlicesToProject(m_slabThickness);
     m_thickSlabProjectionFilter->SetStep(m_numberOfPhases);
 }

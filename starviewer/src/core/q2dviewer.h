@@ -348,9 +348,6 @@ private:
     /// Actualitza les característiques dels actors dels viewports
     void updateDisplayExtent();
 
-    /// A partir de l'slice i phase indicats ens diu el corresponent índex Z del volum
-    int getImageDataZIndexForSliceAndPhase(int slice, int phase);
-
     /// Construeix el pipeline pel tractament de window/level de la imatge
     void buildWindowLevelPipeline();
 
