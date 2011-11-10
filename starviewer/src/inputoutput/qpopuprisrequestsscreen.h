@@ -34,9 +34,6 @@ public:
     /// Mostra en el PopUp que no s'ha trobat cap estudi que compleixi els criteris de cerca
     void showNotStudiesFoundMessage();
 
-    /// Indica que la descàrrega ha finalitzat, indica el número d'estudis descarregats i el cap de 5 segons amaga el PopUp
-    void showRetrieveFinished();
-
 protected:
     /// Quan es fa un show al popup s'activa un timer, que passat un temps amaga automàticament el PopUp
     void showEvent(QShowEvent *);
@@ -64,6 +61,9 @@ private:
 
     /// Actualitza per pantalla l'estat de la descàrrege
     void refreshScreenRetrieveStatus();
+
+    /// Indica que la descàrrega ha finalitzat, indica el número d'estudis descarregats i el cap de 5 segons amaga el PopUp
+    void showRetrieveFinished();
 
 private:
     QTimer *m_qTimerToHidePopUp;
