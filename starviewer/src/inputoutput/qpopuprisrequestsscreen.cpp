@@ -66,22 +66,25 @@ void QPopUpRISRequestsScreen::queryStudiesByAccessionNumberStarted()
 
     m_pacsJobIDOfStudiesToRetrieve.clear();
     m_numberOfStudiesRetrieved = 0;
+    m_numberOfStudiesToRetrieve = 0;
 }
 
-void QPopUpRISRequestsScreen::addStudyToRetrieveByAccessionNumber(RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob)
+void QPopUpRISRequestsScreen::addStudyToRetrieveFromPACSByAccessionNumber(RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob)
 {
-    if (m_pacsJobIDOfStudiesToRetrieve.count() == 0)
-    {
-        // Si és el primer estudi indiquem que comencem a descarregar i indiquem el nom del pacient
-        m_operationDescription->setText(tr("Retrieving study"));
-        showPatientNameOfRetrievingStudies(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getParentPatient());
-    }
+    m_numberOfStudiesToRetrieve++;
 
     m_pacsJobIDOfStudiesToRetrieve.append(retrieveDICOMFilesFromPACSJob->getPACSJobID());
-    refreshScreenRetrieveStatus();
+    refreshScreenRetrieveStatus(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles());
 
     connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobFinished(PACSJob*)));
     connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobCancelledOrFailed(PACSJob*)));
+}
+
+void QPopUpRISRequestsScreen::addStudyRetrievedFromDatabaseByAccessionNumber(Study *study)
+{
+    m_numberOfStudiesToRetrieve++;
+    m_numberOfStudiesRetrieved++;
+    refreshScreenRetrieveStatus(study);
 }
 
 void QPopUpRISRequestsScreen::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacsJob)
@@ -112,7 +115,7 @@ void QPopUpRISRequestsScreen::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pac
             {
                 m_numberOfStudiesRetrieved++;
 
-                refreshScreenRetrieveStatus();
+                refreshScreenRetrieveStatus(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles());
             }
             else
             {
@@ -135,18 +138,26 @@ void QPopUpRISRequestsScreen::retrieveDICOMFilesFromPACSJobCancelledOrFailed(PAC
         // Si ha fallat o s'ha cancel·lat la descarrega l'estudi el treiem de la llista d'estudis a descarregar
         if (m_pacsJobIDOfStudiesToRetrieve.removeOne(retrieveDICOMFilesFromPACSJob->getPACSJobID()))
         {
+            m_numberOfStudiesToRetrieve--;
             // Si no està a la llista de PACSJob per descarregar vol dir que és d'una altra petició de RIS que ha estat matxacada per l'actual
             // Com que el QPopUpRisRequestScreen només segueix l'última petició del RIS les ignorem
-            refreshScreenRetrieveStatus();
+            refreshScreenRetrieveStatus(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles());
         }
     }
 }
 
-void QPopUpRISRequestsScreen::refreshScreenRetrieveStatus()
+void QPopUpRISRequestsScreen::refreshScreenRetrieveStatus(Study *study)
 {
-    if (m_numberOfStudiesRetrieved < m_pacsJobIDOfStudiesToRetrieve.count())
+    if (m_numberOfStudiesToRetrieve == 1)
     {
-        m_studiesRetrievingCounter->setText(QString(tr("%1 of %2.")).arg(m_numberOfStudiesRetrieved + 1).arg(m_pacsJobIDOfStudiesToRetrieve.count()));
+        // Si és el primer estudi indiquem que comencem a descarregar i indiquem el nom del pacient
+        m_operationDescription->setText(tr("Retrieving study"));
+        showPatientNameOfRetrievingStudies(study->getParentPatient());
+    }
+
+    if (m_numberOfStudiesRetrieved < m_numberOfStudiesToRetrieve)
+    {
+        m_studiesRetrievingCounter->setText(QString(tr("%1 of %2.")).arg(m_numberOfStudiesRetrieved + 1).arg(m_numberOfStudiesToRetrieve));
     }
     else
     {

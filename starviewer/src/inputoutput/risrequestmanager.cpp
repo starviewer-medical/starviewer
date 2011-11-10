@@ -15,6 +15,7 @@
 #include "qpopuprisrequestsscreen.h"
 #include "querypacsjob.h"
 #include "retrievedicomfilesfrompacsjob.h"
+#include "localdatabasemanager.h"
 
 namespace udg {
 
@@ -88,10 +89,14 @@ void RISRequestManager::processRISRequest(DicomMask dicomMaskRISRequest)
 void RISRequestManager::queryPACSRISStudyRequest(DicomMask maskRISRequest)
 {
     INFO_LOG("Comencem a cercar l'estudi sol·licitat pel RIS amb accession number " + maskRISRequest.getAccessionNumber());
+    m_numberOfStudiesAddedToRetrieveForCurrentRisRequest = 0;
     // Al iniciar una nova consulta netegem la llista UID d'estudis demanats per descarregar i pendents de descarregar
     // TODO:Si ens arriba una altre petició del RIS mentre encara descarreguem l'anterior petició no es farà seguiment de la descarrega actual, sinó de la
     // última que ha arribat
     m_studiesInstancesUIDRequestedToRetrieve.clear();
+
+    m_hasBeenAskedToUserIfExistingStudiesInDatabaseHaveToBeenRetrievedAgain = false;
+    m_studiesInDatabaseHaveToBeenRetrievedAgain = false;
 
     // TODO Ara mateix cal que nosaltres mateixos fem aquesta comprovació però potser seria interessant que el mètode PACSDevicemanager::queryStudy()
     // fes aquesta comprovació i ens retornes algun codi que pugui descriure com ha anat la consulta i així poder actuar en conseqüència mostrant
@@ -138,7 +143,7 @@ void RISRequestManager::queryPACSJobFinished(PACSJob *pacsJob)
     {
         if (queryPACSJob->getStatus() == PACSRequestStatus::QueryOk)
         {
-            retrieveFoundStudiesFromPACS(queryPACSJob);
+            retrieveFoundStudiesInQueryPACS(queryPACSJob);
         }
         else if (queryPACSJob->getStatus() != PACSRequestStatus::QueryCancelled)
         {
@@ -189,7 +194,7 @@ void RISRequestManager::queryRequestRISFinished()
 
     INFO_LOG("Ha acabat la cerca dels estudis sol·licitats pel RIS amb l'Accession number " + dicomMaskRISRequest.getAccessionNumber());
 
-    if (m_studiesInstancesUIDRequestedToRetrieve.count() == 0)
+    if (m_numberOfStudiesAddedToRetrieveForCurrentRisRequest == 0)
     {
         INFO_LOG("No s'ha trobat cap estudi sol·licitat pel RIS amb l'accession number " + dicomMaskRISRequest.getAccessionNumber());
         // Si no hem trobat cap estudi que coincideix llancem MessageBox
@@ -217,7 +222,7 @@ void RISRequestManager::errorQueryingStudy(QueryPacsJob *queryPACSJob)
     QMessageBox::critical(NULL, ApplicationNameString, errorMessage);
 }
 
-void RISRequestManager::retrieveFoundStudiesFromPACS(QueryPacsJob *queryPACSJob)
+void RISRequestManager::retrieveFoundStudiesInQueryPACS(QueryPacsJob *queryPACSJob)
 {
     foreach (Patient *patient, queryPACSJob->getPatientStudyList())
     {
@@ -228,24 +233,7 @@ void RISRequestManager::retrieveFoundStudiesFromPACS(QueryPacsJob *queryPACSJob)
                 INFO_LOG(QString("S'ha trobat estudi que compleix criteri de cerca del RIS. Estudi UID %1, PacsId %2")
                          .arg(study->getInstanceUID(), study->getDICOMSource().getRetrievePACS().at(0).getID()));
 
-                // Descarreguem l'estudi trobat
-                RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = retrieveStudy(study);
-
-                if (Settings().getValue(InputOutputSettings::RISRequestViewOnceRetrieved).toBool())
-                {
-                    // TODO: Això és una mica lleig haver de controlar des d'aquí que fe amb l'estudi una vegada descarregat, no es podria posar com a
-                    // propietat al Job, i centralitzar-ho a un responsable que fos l'encarregat de fer l'acció pertinent
-                    if (m_studiesInstancesUIDRequestedToRetrieve.count() == 0)
-                    {
-                        // El primer estudi que descarreguem trobat d'una petició del RIS fem un retrieve&view, pels altres serà un retrieve&Load
-                        m_pacsJobIDToViewWhenFinished.append(retrieveDICOMFilesFromPACSJob->getPACSJobID());
-                    }
-                    else
-                    {
-                        m_pacsJobIDToLoadWhenFinished.append(retrieveDICOMFilesFromPACSJob->getPACSJobID());
-                    }
-                }
-
+                retrieveStudyFoundInQueryPACS(study);
                 m_studiesInstancesUIDRequestedToRetrieve.append(study->getInstanceUID());
             }
             else
@@ -262,19 +250,57 @@ void RISRequestManager::retrieveFoundStudiesFromPACS(QueryPacsJob *queryPACSJob)
     qDeleteAll(queryPACSJob->getPatientStudyList());
 }
 
-RetrieveDICOMFilesFromPACSJob* RISRequestManager::retrieveStudy(Study *study)
+void RISRequestManager::retrieveStudyFoundInQueryPACS(Study *study)
+{
+    if (Settings().getValue(InputOutputSettings::RISRequestViewOnceRetrieved).toBool())
+    {
+        // TODO: Això és una mica lleig haver de controlar des d'aquí que fe amb l'estudi una vegada descarregat, no es podria posar com a
+        // propietat al Job, i centralitzar-ho a un responsable que fos l'encarregat de fer l'acció pertinent
+        if (m_numberOfStudiesAddedToRetrieveForCurrentRisRequest == 0)
+        {
+            // El primer estudi que descarreguem trobat d'una petició del RIS fem un retrieve&view, pels altres serà un retrieve&Load
+            m_studiesToViewWhenRetrieveFinishedByInstanceUID.append(study->getInstanceUID());
+        }
+        else
+        {
+            m_studiesToLoadWhenRetrieveFinishedByInstanceUID.append(study->getInstanceUID());
+        }
+    }
+
+    switch(getDICOMSouceFromRetrieveStudy(study))
+    {
+        case PACS:
+            retrieveStudyFromPACS(study);
+            break;
+        case Database:
+            retrieveStudyFromDatabase(study);
+            break;
+    }
+
+    m_numberOfStudiesAddedToRetrieveForCurrentRisRequest++;
+}
+
+RetrieveDICOMFilesFromPACSJob* RISRequestManager::retrieveStudyFromPACS(Study *study)
 {
     PacsDevice pacsDevice = study->getDICOMSource().getRetrievePACS().at(0);
 
     RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = new RetrieveDICOMFilesFromPACSJob(pacsDevice, RetrieveDICOMFilesFromPACSJob::Medium, study);
 
-    m_qpopUpRISRequestsScreen->addStudyToRetrieveByAccessionNumber(retrieveDICOMFilesFromPACSJob);
+    m_qpopUpRISRequestsScreen->addStudyToRetrieveFromPACSByAccessionNumber(retrieveDICOMFilesFromPACSJob);
     connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobFinished(PACSJob*)));
     connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobCancelled(PACSJob*)));
 
     m_pacsManager->enqueuePACSJob(retrieveDICOMFilesFromPACSJob);
 
     return retrieveDICOMFilesFromPACSJob;
+}
+
+void RISRequestManager::retrieveStudyFromDatabase(Study *study)
+{
+    m_qpopUpRISRequestsScreen->addStudyRetrievedFromDatabaseByAccessionNumber(study);
+
+    //Ara mateix no cal descarregar un estudi de la base de dades si ja li tenim, per això invoquem directament el mètode doActionsAfterRetrieve
+    doActionsAfterRetrieve(study->getInstanceUID());
 }
 
 void RISRequestManager::retrieveDICOMFilesFromPACSJobCancelled(PACSJob *pacsJob)
@@ -301,35 +327,69 @@ void RISRequestManager::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacsJob)
     if (retrieveDICOMFilesFromPACSJob == NULL)
     {
         ERROR_LOG("El PACSJob que ha finalitzat no és un RetrieveDICOMFilesFromPACSJob");
+        return;
+    }
+
+    if (retrieveDICOMFilesFromPACSJob->getStatus() != PACSRequestStatus::RetrieveOk)
+    {
+        if (retrieveDICOMFilesFromPACSJob->getStatus() == PACSRequestStatus::RetrieveSomeDICOMFilesFailed)
+        {
+            QMessageBox::warning(NULL, ApplicationNameString, retrieveDICOMFilesFromPACSJob->getStatusDescription());
+        }
+        else
+        {
+            QMessageBox::critical(NULL, ApplicationNameString, retrieveDICOMFilesFromPACSJob->getStatusDescription());
+            return;
+        }
+    }
+
+    doActionsAfterRetrieve(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getInstanceUID());
+
+    // Com que l'objecte és un punter altres classes poden haver capturat el Signal per això li fem un deleteLater() en comptes d'un delete, per evitar
+    // que quan responguin al signal es trobin que l'objecte ja no existeix. L'objecte serà destruït per Qt quan es retorni el eventLoop
+    retrieveDICOMFilesFromPACSJob->deleteLater();
+}
+
+void RISRequestManager::doActionsAfterRetrieve(QString studyInstanceUID)
+{
+    if (m_studiesToViewWhenRetrieveFinishedByInstanceUID.removeOne(studyInstanceUID))
+    {
+        emit viewStudyRetrievedFromRISRequest(studyInstanceUID);
+    }
+    else if (m_studiesToLoadWhenRetrieveFinishedByInstanceUID.removeOne(studyInstanceUID))
+    {
+        emit loadStudyRetrievedFromRISRequest(studyInstanceUID);
+    }
+}
+
+RISRequestManager::DICOMSourcesFromRetrieveStudy RISRequestManager::getDICOMSouceFromRetrieveStudy(Study *study)
+{
+    DICOMSourcesFromRetrieveStudy DICOMSourceFromRetrieveStudy;
+
+    if (LocalDatabaseManager().existsStudy(study))
+    {
+        if (!m_hasBeenAskedToUserIfExistingStudiesInDatabaseHaveToBeenRetrievedAgain)
+        {
+            m_hasBeenAskedToUserIfExistingStudiesInDatabaseHaveToBeenRetrievedAgain = true;
+            m_studiesInDatabaseHaveToBeenRetrievedAgain = askToUserIfRetrieveFromPACSStudyWhenExistsInDatabase(study->getParentPatient()->getFullName());
+        }
+
+        DICOMSourceFromRetrieveStudy = m_studiesInDatabaseHaveToBeenRetrievedAgain ? PACS : Database;
     }
     else
     {
-        if (retrieveDICOMFilesFromPACSJob->getStatus() != PACSRequestStatus::RetrieveOk)
-        {
-            if (retrieveDICOMFilesFromPACSJob->getStatus() == PACSRequestStatus::RetrieveSomeDICOMFilesFailed)
-            {
-                QMessageBox::warning(NULL, ApplicationNameString, retrieveDICOMFilesFromPACSJob->getStatusDescription());
-            }
-            else
-            {
-                QMessageBox::critical(NULL, ApplicationNameString, retrieveDICOMFilesFromPACSJob->getStatusDescription());
-                return;
-            }
-        }
-
-        if (m_pacsJobIDToViewWhenFinished.removeOne(retrieveDICOMFilesFromPACSJob->getPACSJobID()))
-        {
-            emit viewStudyRetrievedFromRISRequest(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getInstanceUID());
-        }
-        else if (m_pacsJobIDToLoadWhenFinished.removeOne(retrieveDICOMFilesFromPACSJob->getPACSJobID()))
-        {
-            emit loadStudyRetrievedFromRISRequest(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getInstanceUID());
-        }
-
-        // Com que l'objecte és un punter altres classes poden haver capturat el Signal per això li fem un deleteLater() en comptes d'un delete, per evitar
-        // que quan responguin al signal es trobin que l'objecte ja no existeix. L'objecte serà destruït per Qt quan es retorni el eventLoop
-        retrieveDICOMFilesFromPACSJob->deleteLater();
+        DICOMSourceFromRetrieveStudy = PACS;
     }
+
+    return DICOMSourceFromRetrieveStudy;
+}
+
+bool RISRequestManager::askToUserIfRetrieveFromPACSStudyWhenExistsInDatabase(const QString &fullPatientName) const
+{
+    QString message = tr("Some studies requested from RIS of patient %1 exists in local database. Do you want to retrieve again?")
+            .arg(fullPatientName);
+
+    return QMessageBox::question(NULL, ApplicationNameString, message, QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes;
 }
 
 void RISRequestManager::showListenRISRequestsError(ListenRISRequests::ListenRISRequestsError error)
@@ -351,4 +411,4 @@ void RISRequestManager::showListenRISRequestsError(ListenRISRequests::ListenRISR
     QMessageBox::critical(NULL, ApplicationNameString, message);
 }
 
-};
+}
