@@ -511,13 +511,15 @@ void Q2DViewerExtension::initializeTools()
 
 void Q2DViewerExtension::activateNewViewer(Q2DViewerWidget *newViewerWidget)
 {
-     // I si cal, activem les annotacions
-    if (m_viewerLayersToolButton->isChecked())
-    {
-        newViewerWidget->getViewer()->enableAnnotation(Q2DViewer::WindowInformationAnnotation | Q2DViewer::PatientOrientationAnnotation |
-                                                       Q2DViewer::SliceAnnotation | Q2DViewer::PatientInformationAnnotation |
-                                                       Q2DViewer::AcquisitionInformationAnnotation, true);
-    }
+    // Activem/Desactivem les capes d'annotacions segons l'estat del botó
+    // Informació de l'estudi
+    newViewerWidget->getViewer()->enableAnnotation(Q2DViewer::WindowInformationAnnotation | Q2DViewer::PatientOrientationAnnotation |
+                                                   Q2DViewer::SliceAnnotation | Q2DViewer::PatientInformationAnnotation |
+                                                   Q2DViewer::AcquisitionInformationAnnotation, m_showViewersTextualInformationAction->isChecked());
+    // Overlays
+    newViewerWidget->getViewer()->showImageOverlays(m_showOverlaysAction->isChecked());
+    // Shutters
+    newViewerWidget->getViewer()->showDisplayShutters(m_showDisplayShuttersAction->isChecked());
 
     // Afegim l'eina de sincronització pel nou viewer
     // Per defecte només configurem la sincronització a nivell d'scroll
