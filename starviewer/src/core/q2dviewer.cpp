@@ -57,7 +57,6 @@
 namespace udg {
 
 const QString Q2DViewer::OverlaysDrawerGroup("Overlays");
-const QString Q2DViewer::DisplayShuttersDrawerGroup("DisplayShutters");
 const QString Q2DViewer::DummyVolumeObjectName("Dummy Volume");
 
 Q2DViewer::Q2DViewer(QWidget *parent)
@@ -736,7 +735,7 @@ void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVo
     
     if (m_mainVolume != volume)
     {
-        // Al canviar de volum, eliminem overlays/shutters que poguèssim tenir anteriorment
+        // Al canviar de volum, eliminem overlays que poguèssim tenir anteriorment
         removeViewerBitmaps();
     }
     
@@ -785,7 +784,7 @@ void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVo
 
     // Actualitzem la informació de window level
     this->updateWindowLevelData();
-    loadOverlaysAndShutters(volume);
+    loadOverlays(volume);
     // HACK
     // S'activa el rendering de nou per tal de que es renderitzi l'escena
     enableRendering(true);
@@ -805,7 +804,7 @@ void Q2DViewer::removeViewerBitmaps()
     m_viewerBitmaps.clear();
 }
 
-void Q2DViewer::loadOverlaysAndShutters(Volume *volume)
+void Q2DViewer::loadOverlays(Volume *volume)
 {
     if (!volume)
     {
@@ -841,43 +840,6 @@ void Q2DViewer::loadOverlaysAndShutters(Volume *volume)
                     overlayBitmap->increaseReferenceCount();
                     m_viewerBitmaps << overlayBitmap;
                 }
-
-                if (image->hasDisplayShutters())
-                {
-                    // Obtenim la llista de shutters i primer fem neteja dels que no s'haurien d'aplicar
-                    QList<DisplayShutter> shutterList = image->getDisplayShutters();
-                    QSize minimumSize;
-                    minimumSize.setHeight(image->getRows());
-                    minimumSize.setWidth(image->getColumns());
-                    
-                    for (int i = 0; i < shutterList.count(); ++i)
-                    {
-                        const DisplayShutter &shutter = shutterList.at(i);
-                        if (shutter.getShape() == DisplayShutter::RectangularShape)
-                        {
-                            QPolygon points = shutter.getAsQPolygon();
-                            QPoint shutterSize = points.at(2) - points.at(0);
-                            if (shutterSize.x() >= minimumSize.width() - 1 && shutterSize.y() >= minimumSize.height() - 1)
-                            {
-                                shutterList.removeAt(i);
-                            }
-                        }
-                        else if (shutter.getShape() == DisplayShutter::UndefinedShape)
-                        {
-                            shutterList.removeAt(i);
-                        }
-                    }
-                    
-                    // Un cop feta la criba creem el corresponent bitmap
-                    if (!shutterList.isEmpty())
-                    {
-                        DrawerBitmap *shutterBitmap = displayShutterToDrawerBitmap(DisplayShutter::intersection(shutterList), sliceIndex);
-                        getDrawer()->draw(shutterBitmap, Q2DViewer::Axial, sliceIndex);
-                        getDrawer()->addToGroup(shutterBitmap, DisplayShuttersDrawerGroup);
-                        shutterBitmap->increaseReferenceCount();
-                        m_viewerBitmaps << shutterBitmap;
-                    }
-                }
             }
         }
     }
@@ -906,51 +868,6 @@ DrawerBitmap* Q2DViewer::imageOverlayToDrawerBitmap(const ImageOverlay &imageOve
     drawerBitmap->setOrigin(bitmapOrigin);
     
     drawerBitmap->setData(imageOverlay.getColumns(), imageOverlay.getRows(), imageOverlay.getData());
-    
-    return drawerBitmap;
-}
-
-DrawerBitmap* Q2DViewer::displayShutterToDrawerBitmap(const DisplayShutter &shutter, int slice)
-{
-    DrawerBitmap *drawerBitmap = new DrawerBitmap;
-    // Inicialment tots seran no visibles, llavors segons en la llesca en que ens trobem aquests es veuran o no segons decideixi el Drawer
-    drawerBitmap->setVisibility(false);
-    // La primitiva no es podrà esborrar amb les tools
-    drawerBitmap->setErasable(false);
-    // El color del bitmap vindrà donat pel valor de presentació del shutter
-    drawerBitmap->setForegroundColor(shutter.getShutterValueAsQColor());
-    
-    double volumeSpacing[3];
-    m_mainVolume->getSpacing(volumeSpacing);
-    drawerBitmap->setSpacing(volumeSpacing);
-    
-    double volumeOrigin[3];
-    m_mainVolume->getOrigin(volumeOrigin);
-    
-    double bitmapOrigin[3];
-    bitmapOrigin[0] = volumeOrigin[0];
-    bitmapOrigin[1] = volumeOrigin[1];
-    bitmapOrigin[2] = volumeOrigin[2] + volumeSpacing[2] * slice;
-    drawerBitmap->setOrigin(bitmapOrigin);
-
-    // Creem la màscara del shutter a través d'una QImage
-    int volumeDimensions[3];
-    m_mainVolume->getDimensions(volumeDimensions);
-    QImage shutterImage = shutter.getAsQImage(volumeDimensions[0], volumeDimensions[1]);
-    // Màscara feta!
-    
-    // Convertim la imatge en el format de buffer que s'espera drawer bitmap
-    unsigned char *data = new unsigned char[volumeDimensions[0] * volumeDimensions[1]];
-    for (int i = 0; i < volumeDimensions[1]; ++i)
-    {
-        QRgb *currentPixel = reinterpret_cast<QRgb*>(shutterImage.scanLine(i));
-        for (int j = 0; j < volumeDimensions[0]; ++j)
-        {
-            data[j + i * volumeDimensions[0]] = qGray(*currentPixel);
-            ++currentPixel;
-        }
-    }
-    drawerBitmap->setData(volumeDimensions[0], volumeDimensions[1], data);
     
     return drawerBitmap;
 }
@@ -2461,11 +2378,9 @@ void Q2DViewer::showDisplayShutters(bool enable)
 {
     if (enable)
     {
-        getDrawer()->enableGroup(DisplayShuttersDrawerGroup);
     }
     else
     {
-        getDrawer()->disableGroup(DisplayShuttersDrawerGroup);
     }
 }
 
