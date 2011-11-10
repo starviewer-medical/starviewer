@@ -8,11 +8,7 @@
 #include "image.h"
 #include "series.h"
 #include "study.h"
-#include "patient.h"
 #include "mathtools.h"
-#include "coresettings.h"
-// VTK
-#include <vtkImageData.h>
 
 namespace udg {
 
