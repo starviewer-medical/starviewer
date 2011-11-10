@@ -33,7 +33,6 @@ class ImageOrientationOperationsMapper;
 class VolumeReaderJob;
 class QViewerCommand;
 class PatientOrientation;
-class DisplayShutter;
 
 /**
     Classe base per als visualitzadors 2D.
@@ -407,14 +406,11 @@ private:
     /// Elimina els bitmaps que s'hagin creat per aquest viewer
     void removeViewerBitmaps();
     
-    /// Carrega en memòria els ImageOverlays i DisplayShutters del volum passat per paràmetre (sempre que no sigui un dummy) i els afegeix al Drawer
-    void loadOverlaysAndShutters(Volume *volume);
+    /// Carrega en memòria els ImageOverlays del volum passat per paràmetre (sempre que no sigui un dummy) i els afegeix al Drawer
+    void loadOverlays(Volume *volume);
 
     /// Converteix un ImageOverlay a un DrawerBitmap. Cal indicar amb quina llesca es correspon per calcular l'origen z correcte
     DrawerBitmap* imageOverlayToDrawerBitmap(const ImageOverlay &imageOverlay, int slice);
-
-    /// Converteix un DisplayShutter a un DrawerBitmap. Cal indicar amb quina llesca es correspon per calcular l'origen z correcte
-    DrawerBitmap* displayShutterToDrawerBitmap(const DisplayShutter &shutter, int slice);
 
 private slots:
     /// Actualitza les transformacions de càmera (de moment rotació i flip)
@@ -464,9 +460,8 @@ protected:
     vtkCornerAnnotation *m_cornerAnnotations;
 
 private:
-    /// Nom dels grups dins del drawer per als Overlays i Display Shutters
+    /// Nom del grups dins del drawer per als Overlays
     static const QString OverlaysDrawerGroup;
-    static const QString DisplayShuttersDrawerGroup;
 
     /// Constant per a definir el nom d'objecte dels volums "dummy"
     static const QString DummyVolumeObjectName;
@@ -542,7 +537,7 @@ private:
     /// Indica el preset per defecte que s'ha d'aplicar.
     int m_defaultPresetToApply;
 
-    /// Llistat d'overlays i shutters
+    /// Llistat d'overlays
     QList<DrawerBitmap*> m_viewerBitmaps;
 
 };
