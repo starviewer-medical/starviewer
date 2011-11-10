@@ -245,6 +245,14 @@ QList<Image*> LocalDatabaseManager::queryImage(const DicomMask &imageMaskToQuery
     return queryResult;
 }
 
+bool LocalDatabaseManager::existsStudy(Study *study)
+{
+    DicomMask dicomMask;
+    dicomMask.setStudyInstanceUID(study->getInstanceUID());
+
+    return queryStudy(dicomMask).count() > 0;
+}
+
 Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
 {
     DatabaseConnection dbConnect;
