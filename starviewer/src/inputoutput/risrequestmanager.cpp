@@ -16,6 +16,7 @@
 #include "querypacsjob.h"
 #include "retrievedicomfilesfrompacsjob.h"
 #include "localdatabasemanager.h"
+#include "qmessageboxautoclose.h"
 
 namespace udg {
 
@@ -386,10 +387,18 @@ RISRequestManager::DICOMSourcesFromRetrieveStudy RISRequestManager::getDICOMSouc
 
 bool RISRequestManager::askToUserIfRetrieveFromPACSStudyWhenExistsInDatabase(const QString &fullPatientName) const
 {
-    QString message = tr("Some studies requested from RIS of patient %1 exists in local database. Do you want to retrieve again?")
-            .arg(fullPatientName);
+    QMessageBoxAutoClose qmessageBox(10);
 
-    return QMessageBox::question(NULL, ApplicationNameString, message, QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes;
+    qmessageBox.setText(tr("Some studies requested from RIS of patient %1 exists in local database. Do you want to retrieve again?") .arg(fullPatientName));
+    qmessageBox.setWindowTitle(ApplicationNameString);
+    qmessageBox.setIcon(QMessageBox::Question);
+    qmessageBox.addButton(tr("Yes"), QMessageBox::YesRole);
+    QPushButton *pushButtonNo = qmessageBox.addButton(tr("No"), QMessageBox::NoRole);
+    qmessageBox.setButtonToShowAutoCloseTimer(pushButtonNo);
+
+    qmessageBox.exec();
+
+    return (qobject_cast<QPushButton*>(qmessageBox.clickedButton())) != pushButtonNo;
 }
 
 void RISRequestManager::showListenRISRequestsError(ListenRISRequests::ListenRISRequestsError error)
