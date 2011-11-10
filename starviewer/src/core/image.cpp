@@ -5,6 +5,7 @@
 #include "thumbnailcreator.h"
 #include "mathtools.h"
 #include "imageoverlayreader.h"
+#include "volumepixeldata.h"
 
 #include <QFileInfo>
 
@@ -21,10 +22,12 @@ Image::Image(QObject *parent)
     memset(m_imagePositionPatient, 0, 3 * sizeof(double));
 
     m_haveToBuildDisplayShutterForDisplay = false;
+    m_displayShutterForDisplayPixelData = 0;
 }
 
 Image::~Image()
 {
+    delete m_displayShutterForDisplayPixelData;
 }
 
 void Image::setSOPInstanceUID(const QString &uid)
@@ -503,6 +506,31 @@ DisplayShutter Image::getDisplayShutterForDisplay()
     m_haveToBuildDisplayShutterForDisplay = false;
     
     return m_displayShutterForDisplay;
+}
+
+VolumePixelData* Image::getDisplayShutterForDisplayAsPixelData(int zSlice)
+{
+    if (!hasDisplayShutters())
+    {
+        return 0;
+    }
+    
+    if (!m_displayShutterForDisplayPixelData)
+    {
+        DisplayShutter shutter = this->getDisplayShutterForDisplay();
+        if (shutter.getShape() != DisplayShutter::UndefinedShape)
+        {            
+            m_displayShutterForDisplayPixelData = shutter.getAsVolumePixelData(m_columns, m_rows, zSlice);
+            if (m_displayShutterForDisplayPixelData)
+            {
+                m_displayShutterForDisplayPixelData->getVtkData()->SetOrigin(m_imagePositionPatient);
+                m_displayShutterForDisplayPixelData->getVtkData()->SetSpacing(m_pixelSpacing[0], m_pixelSpacing[1], 1);
+            }
+        }
+    }
+    // TODO En cas que m_displayShutterForDisplayPixelData ja existeixi i que el zSlice demanat sigui diferent del ja demanat anteriorment(extent[4,5]), què fem?
+    
+    return m_displayShutterForDisplayPixelData;
 }
 
 void Image::setDICOMSource(const DICOMSource &imageDICOMSource)
