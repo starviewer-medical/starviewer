@@ -53,6 +53,8 @@
 #include <vtkColorTransferFunction.h>
 // Projecció de punts
 #include <vtkMatrix4x4.h>
+// Filtre pel shutter
+#include <vtkImageMask.h>
 
 namespace udg {
 
@@ -91,6 +93,10 @@ Q2DViewer::Q2DViewer(QWidget *parent)
     Settings settings;
     m_mammographyAutoOrientationExceptions = settings.getValue(CoreSettings::MammographyAutoOrientationExceptions).toStringList();
     m_defaultPresetToApply = 0;
+
+    // Inicialitzem el filtre de shutter
+    initializeShutterFilter();
+    m_shuttersAreEnabled = true;
 }
 
 Q2DViewer::~Q2DViewer()
@@ -105,6 +111,7 @@ Q2DViewer::~Q2DViewer()
     m_imageActor->Delete();
     m_windowLevelLUTMapper->Delete();
     m_thickSlabProjectionFilter->Delete();
+    m_shutterMaskFilter->Delete();
     // Fem delete d'altres objectes vtk en cas que s'hagin hagut de crear
     if (m_blender)
     {
@@ -390,6 +397,17 @@ void Q2DViewer::updatePatientOrientationAnnotation()
             m_patientOrientationTextActor[i]->SetVisibility(false);
         }
     }
+}
+
+void Q2DViewer::initializeShutterFilter()
+{
+    m_shutterMaskFilter = vtkImageMask::New();
+    m_shutterMaskFilter->SetMaskAlpha(1.0);
+    // TODO De moment assignem sempre el color del shutter a 0. 
+    // Si es volgués assignar segons el que indiqui l'objecte DisplayShutter, s'hauria de fer a updateShutterPipeline()
+    m_shutterMaskFilter->SetMaskedOutputValue(0);
+    m_shutterMaskFilter->NotMaskOn();
+    m_shutterMaskFilter->SetMaskInput(0);
 }
 
 void Q2DViewer::refreshAnnotations()
@@ -1121,6 +1139,42 @@ void Q2DViewer::resetCamera()
     camera->SetRoll(cameraRoll);
 }
 
+void Q2DViewer::updateShutterPipeline()
+{
+    if (!m_mainVolume)
+    {
+        return;
+    }
+
+    if (m_mainVolume->objectName() == DummyVolumeObjectName)
+    {
+        return;
+    }
+    
+    bool isShutterFilterApplied = false;
+    if (m_shuttersAreEnabled && !isThickSlabActive() && m_lastView == Axial)
+    {
+        Image *image = m_mainVolume->getImage(m_currentSlice, m_currentPhase);
+        if (image)
+        {
+            VolumePixelData *shutterData = image->getDisplayShutterForDisplayAsPixelData(m_mainVolume->getImageIndex(m_currentSlice, m_currentPhase));
+            if (shutterData)
+            {
+                m_shutterMaskFilter->SetMaskInput(shutterData->getVtkData());
+                m_shutterMaskFilter->SetImageInput(m_windowLevelLUTMapper->GetOutput());
+                m_imageActor->SetInput(m_shutterMaskFilter->GetOutput());
+                isShutterFilterApplied = true;
+            }
+        }
+    }
+    
+    // Si no s'aplica cap shutter, llavors apliquem el pipeline habitual
+    if (!isShutterFilterApplied)
+    {
+        m_imageActor->SetInput(m_windowLevelLUTMapper->GetOutput());
+    }
+}
+
 void Q2DViewer::setSlice(int value)
 {
     if (this->m_mainVolume && this->m_currentSlice != value)
@@ -1134,6 +1188,11 @@ void Q2DViewer::setSlice(int value)
             // Si hi ha el thickslab activat, eliminem totes les roi's. És la decisió ràpida que s'ha près.
             this->getDrawer()->removeAllPrimitives();
         }
+        else
+        {
+            updateShutterPipeline();
+        }
+        
         this->updateDisplayExtent();
         updateDefaultPreset();
         updateSliceAnnotationInformation();
@@ -1935,7 +1994,7 @@ void Q2DViewer::buildWindowLevelPipeline()
         m_windowLevelLUTMapper->SetInput(m_mainVolume->getVtkData());
     }
 
-    m_imageActor->SetInput(m_windowLevelLUTMapper->GetOutput());
+    updateShutterPipeline();
 }
 
 void Q2DViewer::setSlabProjectionMode(int projectionMode)
@@ -2366,12 +2425,9 @@ void Q2DViewer::showImageOverlays(bool enable)
 
 void Q2DViewer::showDisplayShutters(bool enable)
 {
-    if (enable)
-    {
-    }
-    else
-    {
-    }
+    m_shuttersAreEnabled = enable;
+    updateShutterPipeline();
+    render();
 }
 
 void Q2DViewer::rotate(int times)
