@@ -50,7 +50,7 @@ private:
     /// Conté els segons que es tardarà a tancar el QMessageBox des de que es mostri
     int m_sencondsToAutoClose;
     /// Una vegada s'hagin mostrar el QMessageBox conté els segons que queden per tancar-lo
-    int m_secondsLeftToClose;
+    int m_secondsLeftToShowInButton;
 
     //Botó on es mostrarà el temps que queda per tancar el QMessageBox
     QAbstractButton *m_buttonToShowTimer;

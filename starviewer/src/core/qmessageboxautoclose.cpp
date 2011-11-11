@@ -23,7 +23,7 @@ void QMessageBoxAutoClose::setButtonToShowAutoCloseTimer(QPushButton *buttonToSh
 
 void QMessageBoxAutoClose::showEvent(QShowEvent *event)
 {
-    m_secondsLeftToClose = m_sencondsToAutoClose;
+    m_secondsLeftToShowInButton = m_sencondsToAutoClose;
 
     m_timerToCloseQMessageBox.setInterval(m_sencondsToAutoClose * 1000);
     m_timerToRefreshButtonText.setInterval(1000);
@@ -57,13 +57,13 @@ void QMessageBoxAutoClose::updateButtonTextWithSecondsToClose()
 {
     if (m_buttonToShowTimer)
     {
-        m_buttonToShowTimer->setText(m_originalTextButtonToShowTimer + QString(" (%1)").arg(QString::number(m_secondsLeftToClose)));
+        m_buttonToShowTimer->setText(m_originalTextButtonToShowTimer + QString(" (%1)").arg(QString::number(m_secondsLeftToShowInButton)));
     }
 }
 
 void QMessageBoxAutoClose::refreshTimerButtonText()
 {
-    m_secondsLeftToClose--;
+    m_secondsLeftToShowInButton--;
 
     updateButtonTextWithSecondsToClose();
 }
