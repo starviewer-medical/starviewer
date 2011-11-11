@@ -387,18 +387,20 @@ RISRequestManager::DICOMSourcesFromRetrieveStudy RISRequestManager::getDICOMSouc
 
 bool RISRequestManager::askToUserIfRetrieveFromPACSStudyWhenExistsInDatabase(const QString &fullPatientName) const
 {
-    QMessageBoxAutoClose qmessageBox(10);
+    QMessageBoxAutoClose qmessageBoxAutoClose(8);
 
-    qmessageBox.setText(tr("Some studies requested from RIS of patient %1 exists in local database. Do you want to retrieve again?") .arg(fullPatientName));
-    qmessageBox.setWindowTitle(ApplicationNameString);
-    qmessageBox.setIcon(QMessageBox::Question);
-    qmessageBox.addButton(tr("Yes"), QMessageBox::YesRole);
-    QPushButton *pushButtonNo = qmessageBox.addButton(tr("No"), QMessageBox::NoRole);
-    qmessageBox.setButtonToShowAutoCloseTimer(pushButtonNo);
+    qmessageBoxAutoClose.setText(tr("Some studies requested from RIS of patient %1 exists in local database. Do you want to retrieve again?") .arg(fullPatientName));
+    qmessageBoxAutoClose.setWindowTitle(ApplicationNameString);
+    qmessageBoxAutoClose.setIcon(QMessageBox::Question);
+    qmessageBoxAutoClose.addButton(tr("Yes"), QMessageBox::YesRole);
+    QPushButton *pushButtonNo = qmessageBoxAutoClose.addButton(tr("No"), QMessageBox::NoRole);
+    qmessageBoxAutoClose.setButtonToShowAutoCloseTimer(pushButtonNo);
+    //Necessari indicar que estigui a sobre de tots els elements perquè sinó es mostra a sota del QPopUpRISRequestScreen impedint que l'usuari pugui llegir-ne el contingut
+    qmessageBoxAutoClose.setWindowFlags(qmessageBoxAutoClose.windowFlags() | Qt::WindowStaysOnTopHint);
 
-    qmessageBox.exec();
+    qmessageBoxAutoClose.exec();
 
-    return (qobject_cast<QPushButton*>(qmessageBox.clickedButton())) != pushButtonNo;
+    return (qobject_cast<QPushButton*>(qmessageBoxAutoClose.clickedButton())) != pushButtonNo;
 }
 
 void RISRequestManager::showListenRISRequestsError(ListenRISRequests::ListenRISRequestsError error)
