@@ -14,6 +14,7 @@ class vtkCoordinate;
 class vtkImageBlend;
 class vtkImageActor;
 class vtkImageData;
+class vtkImageMask;
 // Grayscale pipeline
 // Permet aplicar window/level amb imatges a color
 class vtkImageMapToWindowLevelColors2;
@@ -318,6 +319,9 @@ protected:
     virtual void resizeEvent(QResizeEvent *resize);
 
 private:
+    /// Inicialitza el filtre de màscara per als shutters
+    void initializeShutterFilter();
+    
     /// Refresca la visibilitat de les annotacions en funció dels flags que tenim
     void refreshAnnotations();
 
@@ -350,6 +354,9 @@ private:
 
     /// Construeix el pipeline pel tractament de window/level de la imatge
     void buildWindowLevelPipeline();
+
+    /// Actualitza el pipeline del filtre de shutter segons si està habilitat o no
+    void updateShutterPipeline();
 
     /// Re-inicia els paràmetres de la càmera segons la vista actual.
     void resetCamera();
@@ -536,6 +543,12 @@ private:
 
     /// Llistat d'overlays
     QList<DrawerBitmap*> m_viewerBitmaps;
+
+    /// Controla si els shutters estan habilitats o no
+    bool m_shuttersAreEnabled;
+
+    /// Filtre de màscara per aplicar els shutters
+    vtkImageMask *m_shutterMaskFilter;
 
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(Q2DViewer::AnnotationFlags)
