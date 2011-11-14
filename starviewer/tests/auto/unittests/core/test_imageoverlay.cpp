@@ -56,7 +56,6 @@ void test_ImageOverlay::isValid_ReturnsExpectedValue_data()
     QTest::addColumn<bool>("expectedValue");
 
     ImageOverlay imageOverlay;
-    unsigned char data;
 
     imageOverlay.setRows(0);
     imageOverlay.setColumns(0);
@@ -65,7 +64,7 @@ void test_ImageOverlay::isValid_ReturnsExpectedValue_data()
 
     imageOverlay.setRows(0);
     imageOverlay.setColumns(0);
-    imageOverlay.setData(&data);
+    imageOverlay.setData(new unsigned char[1]);
     QTest::newRow("no rows, no columns, data") << imageOverlay << false;
 
     imageOverlay.setRows(0);
@@ -75,7 +74,7 @@ void test_ImageOverlay::isValid_ReturnsExpectedValue_data()
 
     imageOverlay.setRows(0);
     imageOverlay.setColumns(2);
-    imageOverlay.setData(&data);
+    imageOverlay.setData(new unsigned char[1]);
     QTest::newRow("no rows, columns, data") << imageOverlay << false;
 
     imageOverlay.setRows(3);
@@ -85,7 +84,7 @@ void test_ImageOverlay::isValid_ReturnsExpectedValue_data()
 
     imageOverlay.setRows(4);
     imageOverlay.setColumns(0);
-    imageOverlay.setData(&data);
+    imageOverlay.setData(new unsigned char[1]);
     QTest::newRow("rows, no columns, data") << imageOverlay << false;
 
     imageOverlay.setRows(5);
@@ -95,7 +94,7 @@ void test_ImageOverlay::isValid_ReturnsExpectedValue_data()
 
     imageOverlay.setRows(7);
     imageOverlay.setColumns(8);
-    imageOverlay.setData(&data);
+    imageOverlay.setData(new unsigned char[1]);
     QTest::newRow("rows, columns, data") << imageOverlay << true;
 }
 
