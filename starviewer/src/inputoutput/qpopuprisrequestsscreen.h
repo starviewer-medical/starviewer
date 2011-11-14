@@ -40,6 +40,10 @@ public:
     /// Mostra en el PopUp que no s'ha trobat cap estudi que compleixi els criteris de cerca
     void showNotStudiesFoundMessage();
 
+    /// S'especifica els segons que ha de tardar el PopUp a amagar-se després que s'hagin acabat de descarregar totes els estudis
+    /// Sinó s'especifica per defecte són 5000 ms
+    void setTimeOutToHidePopUpAfterStudiesHaveBeenRetrieved(int timeOutms);
+
 protected:
     /// Quan es fa un show al popup s'activa un timer, que passat un temps amaga automàticament el PopUp
     void showEvent(QShowEvent *);
@@ -74,7 +78,7 @@ private:
 private:
     QTimer *m_qTimerToHidePopUp;
     QTimer *m_qTimerToMovePopUpToBottomRight;
-    static const int msTimeOutToHidePopUp;
+    int m_msTimeOutToHidePopUp;
     static const int msTimeOutToMovePopUpToBottomRight;
 
     QList<int> m_pacsJobIDOfStudiesToRetrieve;

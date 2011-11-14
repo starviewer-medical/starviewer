@@ -151,6 +151,12 @@ private:
     /// Guarda la resposta de l'usuari a la pregunta de si s'han de tornar a descarregar els estudis ja existents a la BD
     bool m_studiesInDatabaseHaveToBeenRetrievedAgain;
 
+    /// Segons que ha de tardar a amagar-se el PopUp QPopUpRisRequestScreen quan han acabat totes les descàrregues i temps que ha de tadar el QMessageBox a tancar-se automàticament
+    /// Tots dos han de tenir el mateix temps perquè imaginem el cas que descarreguem un primer estudi del PACS llavor el segon el trobem a la BD, si el primer estudi s'ha acabat
+    /// de descarregar el PopUp es pot tancar abans que l'usuari hagi pogut prèmer un del botons del QMessageBox preguntant si s'ha de tornar a descarregar l'estudi del PACS,
+    /// fent que llavors no es pugui seguir la descarrega dels següents estudis a través de QPopUpRISRequestScree
+    static const int secondsTimeOutToHidePopUpAndAutoCloseQMessageBox;
+
 };
 
 };  // end namespace udg
