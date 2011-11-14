@@ -20,6 +20,8 @@
 
 namespace udg {
 
+const int RISRequestManager::secondsTimeOutToHidePopUpAndAutoCloseQMessageBox = 8;
+
 RISRequestManager::RISRequestManager(PacsManager *pacsManager)
 {
     m_pacsManager = pacsManager;
@@ -50,6 +52,7 @@ void RISRequestManager::initialize()
     m_listenRISRequestsQThread->start();
 
     m_qpopUpRISRequestsScreen = new QPopUpRISRequestsScreen();
+    m_qpopUpRISRequestsScreen->setTimeOutToHidePopUpAfterStudiesHaveBeenRetrieved(secondsTimeOutToHidePopUpAndAutoCloseQMessageBox * 1000);
 
     createConnections();
 }
@@ -387,7 +390,7 @@ RISRequestManager::DICOMSourcesFromRetrieveStudy RISRequestManager::getDICOMSouc
 
 bool RISRequestManager::askToUserIfRetrieveFromPACSStudyWhenExistsInDatabase(const QString &fullPatientName) const
 {
-    QMessageBoxAutoClose qmessageBoxAutoClose(8);
+    QMessageBoxAutoClose qmessageBoxAutoClose(secondsTimeOutToHidePopUpAndAutoCloseQMessageBox);
 
     qmessageBoxAutoClose.setText(tr("Some studies requested from RIS of patient %1 exists in local database. Do you want to retrieve again?") .arg(fullPatientName));
     qmessageBoxAutoClose.setWindowTitle(ApplicationNameString);

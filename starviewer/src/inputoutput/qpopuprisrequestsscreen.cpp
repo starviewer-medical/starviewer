@@ -18,7 +18,6 @@
 
 namespace udg {
 
-const int QPopUpRISRequestsScreen::msTimeOutToHidePopUp = 5000;
 const int QPopUpRISRequestsScreen::msTimeOutToMovePopUpToBottomRight = 5000;
 
 QPopUpRISRequestsScreen::QPopUpRISRequestsScreen(QWidget *parent)
@@ -49,6 +48,8 @@ QPopUpRISRequestsScreen::QPopUpRISRequestsScreen(QWidget *parent)
     // el Popup es posa en una zona on molesta l'usuari fent-hi click el pugui amagar.
     this->installEventFilter(this);
     m_groupBox->installEventFilter(this);
+
+    m_msTimeOutToHidePopUp = 5000;
 }
 
 void QPopUpRISRequestsScreen::queryStudiesByAccessionNumberStarted()
@@ -162,15 +163,20 @@ void QPopUpRISRequestsScreen::refreshScreenRetrieveStatus(Study *study)
     else
     {
         showRetrieveFinished();
-        m_qTimerToHidePopUp->start(msTimeOutToHidePopUp);
+        m_qTimerToHidePopUp->start(m_msTimeOutToHidePopUp);
     }
+}
+
+void QPopUpRISRequestsScreen::setTimeOutToHidePopUpAfterStudiesHaveBeenRetrieved(int timeOutms)
+{
+    m_msTimeOutToHidePopUp = timeOutms;
 }
 
 void QPopUpRISRequestsScreen::showNotStudiesFoundMessage()
 {
     m_operationDescription->setText(tr("No studies found."));
     m_operationAnimation->hide();
-    m_qTimerToHidePopUp->start(msTimeOutToHidePopUp);
+    m_qTimerToHidePopUp->start(m_msTimeOutToHidePopUp);
 }
 
 void QPopUpRISRequestsScreen::showRetrieveFinished()
