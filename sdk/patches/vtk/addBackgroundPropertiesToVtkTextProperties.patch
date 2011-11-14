@@ -1,0 +1,99 @@
+--- vtk-5.6.0/Rendering/vtkTextProperty.cxx	2010-09-27 22:40:07.000000000 +0200
++++ vtk-5.6.0/Rendering/vtkTextProperty.cxx	2011-11-11 12:14:45.000000000 +0100
+@@ -26,6 +26,12 @@ vtkTextProperty::vtkTextProperty()
+ 
+   this->Opacity  = 1.0;
+ 
++  this->BackgroundColor[0] = 0.0;
++  this->BackgroundColor[1] = 0.0;
++  this->BackgroundColor[2] = 0.0;
++
++  this->BackgroundOpacity = 0.0;
++
+   this->FontFamilyAsString = 0;
+   this->SetFontFamilyAsString( "Arial" );
+   this->FontSize = 12;
+@@ -61,6 +67,9 @@ void vtkTextProperty::ShallowCopy(vtkTex
+   this->SetColor(tprop->GetColor());
+   this->SetOpacity(tprop->GetOpacity());
+ 
++  this->SetBackgroundColor(tprop->GetBackgroundColor());
++  this->SetBackgroundOpacity(tprop->GetBackgroundOpacity());
++
+   this->SetFontFamilyAsString(tprop->GetFontFamilyAsString());
+   this->SetFontSize(tprop->GetFontSize());
+ 
+@@ -103,6 +112,11 @@ void vtkTextProperty::PrintSelf(ostream&
+ 
+   os << indent << "Opacity: " << this->Opacity << "\n";
+ 
++  os << indent << "BackgroundColor: (" << this->BackgroundColor[0] << ", "
++     << this->BackgroundColor[1] << ", " << this->BackgroundColor[2] << ")\n";
++
++  os << indent << "BackgroundOpacity: " << this->BackgroundOpacity << "\n";
++
+   os << indent << "FontFamilyAsString: " 
+      << (this->FontFamilyAsString ? this->FontFamilyAsString : "(null)") << endl;
+   os << indent << "FontSize: " << this->FontSize << "\n";
+--- vtk-5.6.0/Rendering/vtkTextProperty.h	2010-09-27 22:40:07.000000000 +0200
++++ vtk-5.6.0/Rendering/vtkTextProperty.h	2011-11-11 12:14:45.000000000 +0100
+@@ -48,6 +48,12 @@ public:
+   vtkSetMacro(Opacity,double);
+   vtkGetMacro(Opacity,double);
+ 
++  vtkSetVector3Macro(BackgroundColor,double);
++  vtkGetVector3Macro(BackgroundColor,double);
++
++  vtkSetMacro(BackgroundOpacity,double);
++  vtkGetMacro(BackgroundOpacity,double);
++
+   // Description:
+   // Set/Get the font family. Supports legacy three font family system.
+   vtkGetStringMacro(FontFamilyAsString);
+@@ -146,6 +152,8 @@ protected:
+ 
+   double Color[3];
+   double Opacity;
++  double BackgroundColor[3];
++  double BackgroundOpacity;
+   char* FontFamilyAsString;
+   int   FontSize;
+   int   Bold;
+--- vtk-5.6.0/Rendering/vtkFreeTypeUtilities.cxx	2010-09-27 22:40:07.000000000 +0200
++++ vtk-5.6.0/Rendering/vtkFreeTypeUtilities.cxx	2011-11-11 14:32:23.000000000 +0100
+@@ -1036,6 +1036,11 @@ int vtkFreeTypeUtilities::GetBoundingBox
+       bbox[3] += shadowOffset[1];
+       }
+     }
++  // Add 2px of margin. TODO: It should be customizable.
++  bbox[0] -= 2;
++  bbox[1] += 2;
++  bbox[2] -= 2;
++  bbox[3] += 2;
+   delete [] currentLine;
+   return 1;
+ }
+@@ -1850,9 +1855,20 @@ void vtkFreeTypeUtilities::PrepareImageD
+   *x = (text_bbox[0] < 0 ? -text_bbox[0] : 0);
+   *y = (text_bbox[2] < 0 ? -text_bbox[2] : 0);
+ 
+-  memset(data->GetScalarPointer(), 0, 
+-          (data->GetNumberOfPoints() *
+-            data->GetNumberOfScalarComponents()));
++  double background_color[3];
++  tprop->GetBackgroundColor(background_color);
++  unsigned char *data_ptr = static_cast<unsigned char *>(data->GetScalarPointer());
++  for (int i = 0; i < data->GetNumberOfPoints(); ++i)
++    {
++    *data_ptr = static_cast<unsigned char>(background_color[0]);
++    data_ptr++;
++    *data_ptr = static_cast<unsigned char>(background_color[1]);
++    data_ptr++;
++    *data_ptr = static_cast<unsigned char>(background_color[2]);
++    data_ptr++;
++    *data_ptr = static_cast<unsigned char>(tprop->GetBackgroundOpacity() * 255.0);
++    data_ptr++;
++    }
+ }
+ 
+ //this code borrows liberally from vtkTextMapper::SetConstrainedFontSize
