@@ -1,0 +1,65 @@
+--- vtk-5.6.0/Rendering/vtkTextActor.h	2010-09-27 22:40:07.000000000 +0200
++++ vtk-5.6.0/Rendering/vtkTextActor.h	2011-11-11 12:30:05.000000000 +0100
+@@ -87,6 +87,8 @@ public:
+   vtkSetMacro(MaximumLineHeight,float);
+   vtkGetMacro(MaximumLineHeight,float);
+ 
++  vtkGetVector6Macro(LastBounds,double);
++
+   // Description:
+   // Set how text should be scaled.  If set to
+   // vtkTextActor::TEXT_SCALE_MODE_NONE, the the font size will be fixed by the
+@@ -245,6 +247,7 @@ protected:
+   vtkTransform *Transform;
+   int LastSize[2];
+   int LastOrigin[2];
++  double LastBounds[6];
+   char *Input;
+   bool InputRendered;
+   double FormerOrientation;
+--- vtk-5.6.0/Rendering/vtkTextActor.cxx	2010-09-27 22:40:07.000000000 +0200
++++ vtk-5.6.0/Rendering/vtkTextActor.cxx	2011-11-11 09:26:04.000000000 +0100
+@@ -92,6 +92,13 @@ vtkTextActor::vtkTextActor()
+   this->LastSize[0]       = 0;
+   this->LastSize[1]       = 0;
+ 
++  this->LastBounds[0]     = 0.0;
++  this->LastBounds[1]     = 0.0;
++  this->LastBounds[2]     = 0.0;
++  this->LastBounds[3]     = 0.0;
++  this->LastBounds[4]     = 0.0;
++  this->LastBounds[5]     = 0.0;
++
+   this->MinimumSize[0]    = 10;
+   this->MinimumSize[1]    = 10;
+ 
+@@ -725,6 +732,29 @@ void vtkTextActor::ComputeRectangle(vtkV
+   x = xo + dims[0];
+   y = yo;
+   this->RectanglePoints->InsertNextPoint( c*x-s*y,s*x+c*y,0.0 );
++
++  double attachedPoint[3];
++  this->PositionCoordinate->GetValue(attachedPoint);
++
++  vtkPoints *boundingPoints = vtkPoints::New();
++  boundingPoints->SetNumberOfPoints(4);
++
++  for (int i = 0; i < 4; ++i)
++  {
++    double point[3];
++    this->RectanglePoints->GetPoint(i, point);
++    point[0] = attachedPoint[0] + point[0];
++    point[1] = attachedPoint[1] + point[1];
++    point[2] = attachedPoint[2];
++
++    viewport->SetDisplayPoint(point);
++    viewport->DisplayToWorld();
++    viewport->GetWorldPoint(point);
++
++    boundingPoints->SetPoint(i, point);
++  }
++  boundingPoints->GetBounds(this->LastBounds);
++  boundingPoints->Delete();
+ }
+ 
+ 
