@@ -1,6 +1,7 @@
 #include "imageoverlay.h"
 
 #include "logging.h"
+#include "drawerbitmap.h"
 
 #include <QRegExp>
 #include <QStringList>
@@ -226,6 +227,23 @@ ImageOverlay ImageOverlay::mergeOverlays(const QList<ImageOverlay> &overlaysList
 
     ok = true;
     return imageOverlay;
+}
+
+DrawerBitmap* ImageOverlay::getAsDrawerBitmap(double origin[3], double spacing[3])
+{
+    DrawerBitmap *drawerBitmap = new DrawerBitmap;
+    
+    drawerBitmap->setSpacing(spacing);
+
+    double bitmapOrigin[3];
+    bitmapOrigin[0] = origin[0] + getXOrigin() * spacing[0];
+    bitmapOrigin[1] = origin[1] + getYOrigin() * spacing[1];
+    bitmapOrigin[2] = origin[2];
+    drawerBitmap->setOrigin(bitmapOrigin);
+    
+    drawerBitmap->setData(getColumns(), getRows(), getData());
+    
+    return drawerBitmap;
 }
 
 }

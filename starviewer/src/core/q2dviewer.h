@@ -413,9 +413,6 @@ private:
     /// Carrega en memòria els ImageOverlays del volum passat per paràmetre (sempre que no sigui un dummy) i els afegeix al Drawer
     void loadOverlays(Volume *volume);
 
-    /// Converteix un ImageOverlay a un DrawerBitmap. Cal indicar amb quina llesca es correspon per calcular l'origen z correcte
-    DrawerBitmap* imageOverlayToDrawerBitmap(const ImageOverlay &imageOverlay, int slice);
-
 private slots:
     /// Actualitza les transformacions de càmera (de moment rotació i flip)
     void updateCamera();
