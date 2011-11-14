@@ -2,8 +2,12 @@
 #include "imageoverlay.h"
 
 #include "imageoverlaytesthelper.h"
+#include "drawerbitmap.h"
 
 #include <gdcmOverlay.h>
+
+#include <vtkImageActor.h>
+#include <vtkImageData.h>
 
 using namespace udg;
 using namespace testing;
@@ -22,11 +26,17 @@ private slots:
 
     void mergeOverlays_ReturnsExpectedImageOverlay_data();
     void mergeOverlays_ReturnsExpectedImageOverlay();
+
+    void getAsDrawerBitmap_ReturnsExpectedValues_data();
+    void getAsDrawerBitmap_ReturnsExpectedValues();
+
 };
 
 Q_DECLARE_METATYPE(gdcm::Overlay);
 Q_DECLARE_METATYPE(ImageOverlay);
 Q_DECLARE_METATYPE(QList<ImageOverlay>);
+Q_DECLARE_METATYPE(DrawerBitmap*);
+Q_DECLARE_METATYPE(double*);
 
 void test_ImageOverlay::ImageOverlay_InitializesClassAsExpected()
 {    
@@ -340,6 +350,73 @@ void test_ImageOverlay::mergeOverlays_ReturnsExpectedImageOverlay()
     bool mergeOk;
     QVERIFY(ImageOverlayTestHelper::areEqual(ImageOverlay::mergeOverlays(overlaysList, mergeOk), mergedOverlay));
     QCOMPARE(mergeOk, mergeWasSuccessful);
+}
+
+void test_ImageOverlay::getAsDrawerBitmap_ReturnsExpectedValues_data()
+{
+    QTest::addColumn<ImageOverlay>("overlay");
+    QTest::addColumn<double*>("imageOrigin");
+    QTest::addColumn<double*>("imageSpacing");
+    QTest::addColumn<DrawerBitmap*>("expectedDrawerBitmap");
+
+    ImageOverlay overlay1;
+    overlay1.setRows(5);
+    overlay1.setColumns(10);
+    overlay1.setOrigin(5, 6);
+    unsigned char *data1 = new unsigned char[50];
+    overlay1.setData(data1);
+    
+    double *origin1 = new double[3];
+    origin1[0] = 0.5;
+    origin1[1] = 1.5;
+    origin1[2] = 2.0;
+    double *spacing1 = new double[3];
+    spacing1[0] = 0.33;
+    spacing1[1] = 0.77;
+    spacing1[2] = 3.2;
+    
+    DrawerBitmap *bitmap1 = new DrawerBitmap;
+    bitmap1->setSpacing(spacing1);
+    double bitmap1Origin[3] = {2.15, 6.12, 2.0};
+    bitmap1->setOrigin(bitmap1Origin);
+    bitmap1->setData(10, 5, data1);
+    QTest::newRow("Random overlay") << overlay1 << origin1 << spacing1 << bitmap1;
+}
+
+void test_ImageOverlay::getAsDrawerBitmap_ReturnsExpectedValues()
+{
+    QFETCH(ImageOverlay, overlay);    
+    QFETCH(double*, imageOrigin);
+    QFETCH(double*, imageSpacing);
+    QFETCH(DrawerBitmap*, expectedDrawerBitmap);
+
+    DrawerBitmap *resultingBitmap = overlay.getAsDrawerBitmap(imageOrigin, imageSpacing);
+
+    double resultingBounds[6];
+    resultingBitmap->getBounds(resultingBounds);
+    double expectedBounds[6];
+    expectedDrawerBitmap->getBounds(expectedBounds);
+
+    for (int i = 0; i < 6; ++i)
+    {
+        QCOMPARE(resultingBounds[i], expectedBounds[i]);
+    }
+
+    vtkImageActor *resultingActor = vtkImageActor::SafeDownCast(resultingBitmap->getAsVtkProp());
+    resultingActor->GetInput()->Update();
+
+    vtkImageActor *expectedActor = vtkImageActor::SafeDownCast(expectedDrawerBitmap->getAsVtkProp());
+    expectedActor->GetInput()->Update();
+    
+    unsigned char *resultingDataPointer = reinterpret_cast<unsigned char*>(resultingActor->GetInput()->GetScalarPointer());
+    unsigned char *expectedDataPointer = reinterpret_cast<unsigned char*>(expectedActor->GetInput()->GetScalarPointer());
+    
+    for (int i = 0; i < overlay.getRows() * overlay.getColumns(); ++i)
+    {
+        QCOMPARE(*resultingDataPointer, *expectedDataPointer);
+        ++resultingDataPointer;
+        ++expectedDataPointer;
+    }
 }
 
 DECLARE_TEST(test_ImageOverlay)

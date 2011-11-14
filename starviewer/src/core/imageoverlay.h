@@ -10,6 +10,8 @@ class Overlay;
 
 namespace udg {
 
+class DrawerBitmap;
+
 /**
     Classe que encapsula l'objecte Overlay del DICOM.
     Per més informació, consultar apartat C.9 OVERLAYS, PS 3.3.
@@ -47,6 +49,9 @@ public:
     /// overlay buit, si només hi ha un de sol, retornarà aquest mateix overlay, la fusió dels n overlays altrament. Per aquests casos 
     /// el valor d'ok serà true. En cas que no hi hagi prou memòria per allotjar un nou buffer per l'overlay fusionat, retornarà un overlay buit i ok false.
     static ImageOverlay mergeOverlays(const QList<ImageOverlay> &overlaysList, bool &ok);
+
+    /// Ens retorna l'overlay en format DrawerBitmap per sobreposar sobre una imatge amb l'origin i spacing donats
+    DrawerBitmap* getAsDrawerBitmap(double origin[3], double spacing[3]);
 
 private:
     /// Ús intern per QSharedPointer. Aquest serà el mètode que es cridarà per eliminar 
