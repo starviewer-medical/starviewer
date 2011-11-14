@@ -14,7 +14,6 @@ ImageOverlay::ImageOverlay()
     m_rows = 0;
     m_columns = 0;
     setOrigin(1, 1);
-    m_data = 0;
 }
 
 ImageOverlay::~ImageOverlay()
@@ -57,14 +56,19 @@ int ImageOverlay::getYOrigin() const
     return m_origin[1];
 }
 
+void ImageOverlay::deleteDataArray(unsigned char dataArray[])
+{
+    delete[] dataArray;
+}
+
 void ImageOverlay::setData(unsigned char *data)
 {
-    m_data = data;
+    m_data = QSharedPointer<unsigned char>(data, deleteDataArray);
 }
 
 unsigned char* ImageOverlay::getData() const
 {
-    return m_data;
+    return m_data.data();
 }
 
 bool ImageOverlay::isValid() const

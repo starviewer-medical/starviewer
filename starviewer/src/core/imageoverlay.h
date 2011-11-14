@@ -2,6 +2,7 @@
 #define UDGIMAGEOVERLAY_H
 
 #include <QString>
+#include <QSharedPointer>
 
 namespace gdcm {
 class Overlay;
@@ -48,6 +49,13 @@ public:
     static ImageOverlay mergeOverlays(const QList<ImageOverlay> &overlaysList, bool &ok);
 
 private:
+    /// Ús intern per QSharedPointer. Aquest serà el mètode que es cridarà per eliminar 
+    /// TODO Seria convenient tenir definit un deleter genèric definit en una altra classe amb un template
+    /// template <typename T> void arrayDeleter(T array[])
+    /// en cas que tinguem més shared pointers amb punters a arrays
+    static void deleteDataArray(unsigned char dataArray[]);
+
+private:
     /// Files i columnes de l'overlay
     unsigned int m_rows, m_columns;
 
@@ -59,7 +67,7 @@ private:
     int m_origin[2];
 
     /// Dades de l'overlay
-    unsigned char *m_data;
+    QSharedPointer<unsigned char> m_data;
 };
 
 }
