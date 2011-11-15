@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QList>
+#include <QRegExp>
+
 namespace udg {
 
 class HangingProtocolLayout;
@@ -67,6 +69,10 @@ public:
 
     /// Obté el display set amb identificador "identifier"
     HangingProtocolDisplaySet* getDisplaySet(int identifier) const;
+
+    /// Assigna/Obté l'expressió regular del nom de les institucions al que han de pertànyer les imatges
+    void setInstitutionsRegularExpression(const QRegExp &institutionRegularExpression);
+    QRegExp getInstitutionsRegularExpression() const;
 
     /// Mètode per mostrar els valors
     void show();
@@ -135,6 +141,8 @@ private:
 
     /// Definició de la màscara
     HangingProtocolMask *m_mask;
+
+    QRegExp m_institutionsRegularExpression;
 
     /// Llista d'image sets
     QList<HangingProtocolImageSet*> m_listOfImageSets;

@@ -416,7 +416,7 @@ bool HangingProtocolManager::isValidSerie(Series *serie, HangingProtocolImageSet
     HangingProtocolImageSet::Restriction restriction;
 
     // Els presentation states per defecte no es mostren
-    valid = (serie->getModality() != "PR");
+    valid = (serie->getModality() != "PR") && isValidInstitution(imageSet->getHangingProtocol(), serie->getInstitutionName());
 
     while (valid && i < numberRestrictions)
     {
@@ -490,7 +490,7 @@ bool HangingProtocolManager::isValidImage(Image *image, HangingProtocolImageSet 
         return false;
     }
 
-    bool valid = true;
+    bool valid = isValidInstitution(imageSet->getHangingProtocol(), image->getParentSeries()->getInstitutionName());
     int i = 0;
     QList<HangingProtocolImageSet::Restriction> listOfRestrictions = imageSet->getRestrictions();
     int numberRestrictions = listOfRestrictions.size();
@@ -561,6 +561,16 @@ bool HangingProtocolManager::isValidImage(Image *image, HangingProtocolImageSet 
     }
 
     return valid;
+}
+
+bool HangingProtocolManager::isValidInstitution(HangingProtocol *protocol, const QString &institutionName)
+{
+    if (protocol->getInstitutionsRegularExpression().isEmpty())
+    {
+        return true;
+    }
+
+    return institutionName.contains(protocol->getInstitutionsRegularExpression());
 }
 
 Study* HangingProtocolManager::searchPreviousStudy(HangingProtocol *protocol, Study *referenceStudy, const QList<Study*> &previousStudies)

@@ -22,7 +22,6 @@ HangingProtocol::HangingProtocol(QObject *parent)
 
 HangingProtocol::HangingProtocol(const HangingProtocol *hangingProtocol)
 {
-
     m_identifier = hangingProtocol->m_identifier;
     m_name = hangingProtocol->m_name;
     m_description = hangingProtocol->m_description;
@@ -31,6 +30,7 @@ HangingProtocol::HangingProtocol(const HangingProtocol *hangingProtocol)
     m_iconType = hangingProtocol->m_iconType;
     m_hasPrevious = hangingProtocol->m_hasPrevious;
     m_priority = hangingProtocol->m_priority;
+    m_institutionsRegularExpression = hangingProtocol->getInstitutionsRegularExpression();
 
     // Copia del layout
     m_layout = new HangingProtocolLayout();
@@ -213,6 +213,16 @@ HangingProtocolDisplaySet* HangingProtocol::getDisplaySet(int identifier) const
     return displaySet;
 }
 
+void HangingProtocol::setInstitutionsRegularExpression(const QRegExp &institutionRegularExpression)
+{
+    m_institutionsRegularExpression = institutionRegularExpression;
+}
+
+QRegExp HangingProtocol::getInstitutionsRegularExpression() const
+{
+    return m_institutionsRegularExpression;
+}
+
 void HangingProtocol::show()
 {
     DEBUG_LOG(QString("\n---- HANGING PROTOCOL ----\n Name: %1\nDescription: %2\n").arg(m_name).arg(
@@ -223,6 +233,8 @@ void HangingProtocol::show()
     {
         DEBUG_LOG(QString("%1, \n").arg(m_mask->getProtocolList().value(i)));
     }
+
+    DEBUG_LOG("Institutions regular expression: " + m_institutionsRegularExpression.pattern() + "\n");
 
     DEBUG_LOG("List of image sets: \n");
 
@@ -274,6 +286,16 @@ bool HangingProtocol::isBetterThan(HangingProtocol *hangingToCompare)
         {
             return false;
         }
+    }
+
+    //Si un dels hanging té expressió regular per Institució i l'altre no, guanya el que té l'expressió regular per Insitució
+    if (!this->getInstitutionsRegularExpression().isEmpty() && hangingToCompare->getInstitutionsRegularExpression().isEmpty())
+    {
+        return true;
+    }
+    else if (this->getInstitutionsRegularExpression().isEmpty() && !hangingToCompare->getInstitutionsRegularExpression().isEmpty())
+    {
+        return false;
     }
 
     if (this->countFilledDisplaySets() == hangingToCompare->countFilledDisplaySets())
@@ -404,7 +426,8 @@ bool HangingProtocol::compareTo(const HangingProtocol &hangingProtocol)
         && m_layout->getVerticalPixelsList() == hangingProtocol.m_layout->getVerticalPixelsList()
         && m_mask->getProtocolList() == hangingProtocol.m_mask->getProtocolList()
         && getImageSets().size() == hangingProtocol.getImageSets().size()
-        && getDisplaySets().size() == hangingProtocol.getDisplaySets().size();
+        && getDisplaySets().size() == hangingProtocol.getDisplaySets().size()
+        && m_institutionsRegularExpression == hangingProtocol.getInstitutionsRegularExpression();
 
     int numberOfImageSets = getImageSets().size();
     int imageSetNumber = 0;

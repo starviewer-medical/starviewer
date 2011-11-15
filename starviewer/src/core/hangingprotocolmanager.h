@@ -67,6 +67,9 @@ private:
     /// Cert si la sèrie compleix les restriccions de l'imageSet, fals altrament
     bool isValidSerie(Series *serie, HangingProtocolImageSet *imageSet);
 
+    /// Comprova si el protocol és aplicable a la institució. Si el protocol no té expressió regular per institució és aplicable
+    bool isValidInstitution(HangingProtocol *protocol, const QString &institutionName);
+
     /// Ordena els estudis per data per tal que els hanging protocols els tingui ordenats.
     QList<Study*> sortStudiesByDate(const QList<Study*> &studies);
 

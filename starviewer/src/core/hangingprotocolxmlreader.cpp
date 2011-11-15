@@ -11,6 +11,7 @@
 #include <QDir>
 #include <QList>
 #include <QFileInfoList>
+#include <QRegExp>
 
 namespace udg {
 
@@ -60,6 +61,10 @@ HangingProtocol* HangingProtocolXMLReader::readFile(const QString &path)
                 else if (reader->name() == "protocol")
                 {
                     protocols << reader->readElementText();
+                }
+                else if (reader->name() == "institutions")
+                {
+                    hangingProtocol->setInstitutionsRegularExpression(QRegExp(reader->readElementText(), Qt::CaseInsensitive));
                 }
                 else if (reader->name() == "restriction")
                 {
