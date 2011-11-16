@@ -297,6 +297,16 @@ void Q2DViewerExtension::searchPreviousStudiesWithHangingProtocols()
     }
 }
 
+void Q2DViewerExtension::addPreviousHangingProtocols(QList<Study*> studies)
+{
+    disconnect(m_previousStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), this, SLOT(addPreviousHangingProtocols(QList<Study*>)));
+
+    QList<HangingProtocol*> hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient, studies);
+    m_predefinedSeriesGrid->setHangingItems(hangingCandidates);
+    m_predefinedSeriesGrid->setSearchingItem(false);
+}
+#endif
+
 void Q2DViewerExtension::setupDefaultLeftButtonTool()
 {
     if (!m_patient)
@@ -320,16 +330,6 @@ void Q2DViewerExtension::setupDefaultLeftButtonTool()
         }
     }
 }
-
-void Q2DViewerExtension::addPreviousHangingProtocols(QList<Study*> studies)
-{
-    disconnect(m_previousStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), this, SLOT(addPreviousHangingProtocols(QList<Study*>)));
-
-    QList<HangingProtocol*> hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient, studies);
-    m_predefinedSeriesGrid->setHangingItems(hangingCandidates);
-    m_predefinedSeriesGrid->setSearchingItem(false);
-}
-#endif
 
 void Q2DViewerExtension::showPredefinedGrid()
 {
