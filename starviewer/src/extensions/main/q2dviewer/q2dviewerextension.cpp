@@ -57,6 +57,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_cursor3DToolButton->hide();
     m_previousStudiesToolButton->hide();
     m_screenshotsExporterToolButton->hide();
+    m_downButtonGrid->hide();
 #else
     m_hangingProtocolManager = 0;
 #endif
