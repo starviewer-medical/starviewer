@@ -793,16 +793,16 @@ void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVo
     // TODO Cada cop que fem setInput resetejem els valors per defecte?
     initializeThickSlab();
 
-    // TODO BUG Si no fem aquesta crida ens peta al canviar d'input entre un que fos més gran que l'anterior
-    updateDisplayExtent();
-    resetViewToAxial();
-
     updatePatientAnnotationInformation();
     this->enableAnnotation(m_enabledAnnotations);
 
     // Actualitzem la informació de window level
     this->updateWindowLevelData();
     loadOverlays(volume);
+
+    // TODO BUG Si no fem aquesta crida ens peta al canviar d'input entre un que fos més gran que l'anterior
+    updateDisplayExtent();
+    resetViewToAxial();
     // HACK
     // S'activa el rendering de nou per tal de que es renderitzi l'escena
     enableRendering(true);
