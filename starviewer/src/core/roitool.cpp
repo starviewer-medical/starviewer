@@ -399,7 +399,6 @@ void ROITool::printData()
     attachmentPoint[2] = (bounds[5] + bounds[4]) / 2.0;
 
     text->setAttachmentPoint(attachmentPoint);
-    text->shadowOn();
     m_2DViewer->getDrawer()->draw(text, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
 }
 }
