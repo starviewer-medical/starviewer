@@ -1092,36 +1092,26 @@ void Q2DViewer::resetCamera()
     vtkCamera *camera = getActiveCamera();
     Q_ASSERT(camera);
 
-    double cameraViewUp[3] = { 0.0, 0.0, 0.0 };
-    double cameraPosition[3] = { 0.0, 0.0, 0.0 };
-    double cameraRoll = 0.0;
-
     // Ajustem els paràmetres de la càmera segons la vista
+    double cameraRoll = 0.0;
     switch (m_lastView)
     {
         case Axial:
-            cameraViewUp[1] = -1.0;
-            cameraPosition[2] = -1.0;
+            setCameraViewPlane(XYViewPlane);
             cameraRoll = 180.0;
             break;
 
         case Sagital:
-            cameraViewUp[2] = 1.0;
-            cameraPosition[0] = 1.0;
+            setCameraViewPlane(YZViewPlane);
             cameraRoll = -90.0;
             break;
 
         case Coronal:
-            cameraViewUp[2] = 1.0;
-            cameraPosition[1] = -1.0;
+            setCameraViewPlane(XZViewPlane);
             cameraRoll = 0.0;
             break;
     }
 
-    // Assignem els valors
-    camera->SetFocalPoint(0, 0, 0);
-    camera->SetViewUp(cameraViewUp);
-    camera->SetPosition(cameraPosition);
     camera->SetRoll(cameraRoll);
 }
 
