@@ -55,7 +55,7 @@ bool WindowsFirewallAccess::doesStarviewerHaveAccesThroughFirewall()
                             /// Comprovar si Starviewer està afegit a les excepcions del firewall
                             BSTR starviewerExecutablePath = getStarviewerExecutablePath();
                             result = isApplicationEnabledAtFirewall(firewallProfile, starviewerExecutablePath, &enabled);
-                            SysFreeString(starviewerExecutablePath);
+                            delete[] starviewerExecutablePath;
                             if (SUCCEEDED(result))
                             {
                                 if (enabled)
@@ -319,19 +319,10 @@ BSTR WindowsFirewallAccess::getStarviewerExecutablePath()
 
 BSTR WindowsFirewallAccess::fromQStringToBSTR(const QString &string)
 {
-	WCHAR wideSizeString[MAX_PATH];
-
-    if (string.length() > 0)
-    {
-        size_t size;
-        mbstowcs_s(&size, wideSizeString, string.toLatin1(), MAX_PATH);
-    }
-    else
-    {
-		wideSizeString[0] = '\0';
-    }
-
-	return SysAllocStringLen((BSTR)wideSizeString, wcslen(wideSizeString));
+    BSTR result = new WCHAR[string.size() + 1];
+    int size = string.toWCharArray(result);
+    result[size] = '\0';
+    return result;
 }
 
 HRESULT WindowsFirewallAccess::initializeWindowsFirewallLibrary(LPVOID pvReserved, DWORD dwCoInit)
