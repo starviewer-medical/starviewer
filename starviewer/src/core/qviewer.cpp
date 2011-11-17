@@ -61,6 +61,8 @@ QViewer::QViewer(QWidget *parent)
     m_windowToImageFilter = vtkWindowToImageFilter::New();
     m_windowToImageFilter->SetInput(getRenderWindow());
 
+    m_currentViewPlane = XYViewPlane;
+    
     // Connectem els events
     setupInteraction();
 
@@ -725,28 +727,50 @@ void QViewer::setCameraOrientation(int orientation)
         switch (orientation)
         {
             case Axial:
-                camera->SetFocalPoint(0, 0, 0);
-                // -1 if medical ?
-                camera->SetPosition(0, 0, -1);
-                camera->SetViewUp(0, -1, 0);
+                setCameraViewPlane(XYViewPlane);
                 break;
 
             case Coronal:
-                camera->SetFocalPoint(0, 0, 0);
-                // 1 if medical ?
-                camera->SetPosition(0, -1, 0);
-                camera->SetViewUp(0, 0, 1);
+                setCameraViewPlane(XZViewPlane);
                 break;
 
             case Sagital:
-                camera->SetFocalPoint(0, 0, 0);
-                // -1 if medical ?
-                camera->SetPosition(1, 0, 0);
-                camera->SetViewUp(0, 0, 1);
+                setCameraViewPlane(YZViewPlane);
                 break;
         }
         this->getRenderer()->ResetCamera();
         this->render();
+    }
+}
+
+void QViewer::setCameraViewPlane(CameraViewPlaneType viewPlane)
+{
+    vtkCamera *camera = getActiveCamera();
+    if (!camera)
+    {
+        return;
+    }
+
+    m_currentViewPlane = viewPlane;
+    
+    // Ajustem els paràmetres de la càmera segons la vista
+    camera->SetFocalPoint(0.0, 0.0, 0.0);
+    switch (m_currentViewPlane)
+    {
+        case XYViewPlane:
+            camera->SetViewUp(0.0, -1.0, 0.0);
+            camera->SetPosition(0.0, 0.0, -1.0);
+            break;
+
+        case YZViewPlane:
+            camera->SetViewUp(0.0, 0.0, 1.0);
+            camera->SetPosition(1.0, 0.0, 0.0);
+            break;
+
+        case XZViewPlane:
+            camera->SetViewUp(0.0, 0.0, 1.0);
+            camera->SetPosition(0.0, -1.0, 0.0);
+            break;
     }
 }
 
