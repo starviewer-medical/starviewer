@@ -64,7 +64,6 @@ void VoxelInformationTool::createCaption()
         m_caption = new DrawerText;
         // Així evitem que durant l'ús de l'eina la primitiva pugui ser esborrada per events externs
         m_caption->increaseReferenceCount();
-        m_caption->shadowOn();
         // Inicialment serà invisible
         m_caption->visibilityOff();
         m_2DViewer->getDrawer()->draw(m_caption, Q2DViewer::Top2DPlane);

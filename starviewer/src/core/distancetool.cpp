@@ -195,7 +195,6 @@ void DistanceTool::annotateNewPoint()
         // Ara leftPoint és l'attachment point que volem
         text->setAttachmentPoint(leftPoint);
         text->setHorizontalJustification("Right");
-        text->shadowOn();
         m_2DViewer->getDrawer()->draw(text, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
         // Reiniciem l'estat de la tool
         initialize();

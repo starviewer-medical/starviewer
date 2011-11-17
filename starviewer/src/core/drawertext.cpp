@@ -26,6 +26,8 @@ DrawerText::DrawerText(QObject *parent)
     m_scaled = false;
     m_padding = 0;
     m_vtkActor = 0;
+    m_backgroundColor = QColor(0, 0, 0);
+    m_backgroundOpacity = 0.85;
 }
 
 DrawerText::~DrawerText()
@@ -141,6 +143,12 @@ void DrawerText::updateVtkActorProperties()
 
     // Assignem color
     properties->SetColor(m_color.redF(), m_color.greenF(), m_color.blueF());
+
+    // Mirem l'opacitat
+    properties->SetBackgroundOpacity(m_backgroundOpacity);
+
+    // Assignem color
+    properties->SetBackgroundColor(m_backgroundColor.redF(), m_backgroundColor.greenF(), m_backgroundColor.blueF());
 
     m_vtkActor->SetPadding(m_padding);
     m_vtkActor->SetPosition(-1.0, -1.0);
@@ -457,5 +465,28 @@ void DrawerText::getBounds(double bounds[6])
         m_vtkActor->GetTextActor()->GetLastBounds(bounds);
     }
 }
+
+void DrawerText::setBackgroundColor(QColor color)
+{
+    m_backgroundColor = color;
+    emit changed();
+}
+
+QColor DrawerText::getBackgroundColor() const
+{
+    return m_backgroundColor;
+}
+
+void DrawerText::setBackgroundOpacity(double opacity)
+{
+    m_backgroundOpacity = opacity;
+    emit changed();
+}
+
+double DrawerText::getBackgroundOpacity() const
+{
+    return m_backgroundOpacity;
+}
+
 
 }

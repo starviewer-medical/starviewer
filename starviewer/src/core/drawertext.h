@@ -127,6 +127,14 @@ public:
     /// en aquest ordre: minX, maxX, minY, maxY, minZ, maxZ
     virtual void getBounds(double bounds[6]);
 
+    /// Assigna/Obté el color del fons de l'objecte
+    void setBackgroundColor(QColor color);
+    QColor getBackgroundColor() const;
+
+    /// Assigna/Obté l'opacitat del fons de l'objecte
+    void setBackgroundOpacity(double opacity);
+    double getBackgroundOpacity() const;
+
 public slots:
     void update();
 
@@ -185,6 +193,12 @@ private:
 
     /// Punt on es mostrarà el text
     double m_attachPoint[3];
+
+    /// Color de fons de la imatge
+    QColor m_backgroundColor;
+
+    /// Opacitat del fons de l'objecte, per defecte 1.0, és a dir, completament opac
+    double m_backgroundOpacity;
 };
 
 }
