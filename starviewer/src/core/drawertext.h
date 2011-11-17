@@ -123,7 +123,9 @@ public:
     /// Calcula la distància que té respecte al punt passat per paràmetre
     double getDistanceToPoint(double *point3D, double closestPoint[3]);
 
-    void getBounds(double bounds[6]);
+    /// Ens retorna els límits de l'hexahedre que encapsula la primitiva
+    /// en aquest ordre: minX, maxX, minY, maxY, minZ, maxZ
+    virtual void getBounds(double bounds[6]);
 
 public slots:
     void update();
@@ -134,6 +136,9 @@ protected slots:
 private:
     /// Mètode intern per transformar les propietats de la primitiva a propietats de vtk
     void updateVtkActorProperties();
+
+    /// Retorna cert si el punt està dins de la bounding box del text
+    bool isInside(const double *point3D);
 
 private:
     /// Text a mostrar

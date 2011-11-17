@@ -418,20 +418,43 @@ bool DrawerText::isTextScaled()
 
 double DrawerText::getDistanceToPoint(double *point3D, double closestPoint[3])
 {
-    closestPoint[0] = m_attachPoint[0];
-    closestPoint[1] = m_attachPoint[1];
-    closestPoint[2] = m_attachPoint[2];
+    if (isInside(point3D))
+    {
+        closestPoint[0] = point3D[0];
+        closestPoint[1] = point3D[1];
+        closestPoint[2] = point3D[2];
 
-    return MathTools::getDistance3D(m_attachPoint, point3D);
+        return 0.0;
+    }
+    else
+    {
+        //TODO: S'hauria de fer que quan està fora calculés la distància a l'aresta més propera.
+        return MathTools::DoubleMaximumValue;
+    }
+}
+
+bool DrawerText::isInside(const double *point3D)
+{
+    double bounds[6];
+    this->getBounds(bounds);
+
+    if (((point3D[0] >= bounds[0] && point3D[0] <= bounds[1]) || qAbs(point3D[0] - bounds[0]) < 0.0001) &&
+        ((point3D[1] >= bounds[2] && point3D[1] <= bounds[3]) || qAbs(point3D[1] - bounds[2]) < 0.0001) &&
+        ((point3D[2] >= bounds[4] && point3D[2] <= bounds[5]) || qAbs(point3D[2] - bounds[4]) < 0.0001))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 void DrawerText::getBounds(double bounds[6])
 {
-    // TODO Ara només tenim en compte l'attach point però es podria tenir
-    // en compte d'alguna manera la capsa que envolta el texte
-    for (int i = 0; i < 3; i++)
+    if (m_vtkActor)
     {
-        bounds[i * 2] = bounds[i * 2 + 1] = m_attachPoint[i];
+        m_vtkActor->GetTextActor()->GetLastBounds(bounds);
     }
 }
 
