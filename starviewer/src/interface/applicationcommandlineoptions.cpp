@@ -5,19 +5,11 @@
 
 namespace udg {
 
-const QString ApplicationCommandLineOptions::optionSelectorCharacter("-");
-
-bool ApplicationCommandLineOptions::addOption(QString optionName, bool optionArgumentIsRequired, QString description)
+bool ApplicationCommandLineOptions::addOption(const CommandLineOption &option)
 {
-    if (!m_commandLineOptions.contains(optionName))
+    if (!m_commandLineOptions.contains(option.getName()))
     {
-        Option newOption;
-
-        newOption.name = optionName;
-        newOption.description = description;
-        newOption.argumentIsRequired = optionArgumentIsRequired;
-
-        m_commandLineOptions.insert(optionName, newOption);
+        m_commandLineOptions.insert(option.getName(), option);
         return true;
     }
     else
@@ -44,7 +36,7 @@ bool ApplicationCommandLineOptions::parse()
     QStringList argumentList = m_argumentList;
     QString parameter;
     bool lastParameterWasAnOption = false, nextParameterHasToBeAnArgumentOption = false;
-    Option lastOption;
+    CommandLineOption lastOption;
 
     m_parserErrorMessage = "";
     // Treiem el primer string que és el nom de l'aplicació
@@ -69,18 +61,18 @@ bool ApplicationCommandLineOptions::parse()
 
                     lastParameterWasAnOption = true;
                     lastOption = m_commandLineOptions.value(parameter);
-                    nextParameterHasToBeAnArgumentOption = lastOption.argumentIsRequired;
+                    nextParameterHasToBeAnArgumentOption = lastOption.requiresArgument();
                 }
                 else
                 {
-                    m_parserErrorMessage += QObject::tr("Unknown option ") + optionSelectorCharacter + parameter + "\n";
+                    m_parserErrorMessage += QObject::tr("Unknown option ") + CommandLineOption::OptionSelectorPrefix + parameter + "\n";
                 }
             }
             else
             {
                 // Si l'últim paràmetre parsejat era una opció que se li havia de passar obligatòriament un argument ex "-accessionnumber 12345"
                 // i no se li ha especificat cap argument ex: "-accessionnumber -studyUID" guardem l'error i parem.
-                m_parserErrorMessage += lastOption.name + QObject::tr(" option requires an argument") + "\n";
+                m_parserErrorMessage += lastOption.getName() + QObject::tr(" option requires an argument") + "\n";
             }
         }
         else
@@ -89,7 +81,7 @@ bool ApplicationCommandLineOptions::parse()
             if (lastParameterWasAnOption)
             {
                 // Si tenim un argument i l'últim paràmetre era un opció, vol dir aquest paràmetre és un argument
-                m_parsedOptions[lastOption.name] = parameter;
+                m_parsedOptions[lastOption.getName()] = parameter;
             }
             else
             {
@@ -103,7 +95,7 @@ bool ApplicationCommandLineOptions::parse()
 
     if (nextParameterHasToBeAnArgumentOption)
     {
-        m_parserErrorMessage += lastOption.name + QObject::tr(" option requires an argument") + "\n";
+        m_parserErrorMessage += lastOption.getName() + QObject::tr(" option requires an argument") + "\n";
     }
 
     return m_parserErrorMessage.isEmpty();
@@ -140,16 +132,16 @@ QString ApplicationCommandLineOptions::getOptionsDescription()
 {
     QString optionsDescription;
 
-    foreach (Option option, m_commandLineOptions.values())
+    foreach (CommandLineOption option, m_commandLineOptions.values())
     {
-        optionsDescription += optionSelectorCharacter + option.name;
+        optionsDescription += CommandLineOption::OptionSelectorPrefix + option.getName();
 
-        if (option.argumentIsRequired)
+        if (option.requiresArgument())
         {
             optionsDescription += QObject::tr(" <value>");
         }
 
-        optionsDescription += "\n\t" + option.description + "\n";
+        optionsDescription += "\n\t" + option.getDescription() + "\n";
     }
 
     return optionsDescription;
@@ -158,12 +150,12 @@ QString ApplicationCommandLineOptions::getOptionsDescription()
 bool ApplicationCommandLineOptions::isAnOption(QString optionName)
 {
     // Les opcions sempre comencen "-"
-    return optionName.startsWith(optionSelectorCharacter);
+    return optionName.startsWith(CommandLineOption::OptionSelectorPrefix);
 }
 
 bool ApplicationCommandLineOptions::isAnArgument(QString argument)
 {
-    return !argument.startsWith(optionSelectorCharacter);
+    return !argument.startsWith(CommandLineOption::OptionSelectorPrefix);
 }
 
 }

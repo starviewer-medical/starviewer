@@ -4,6 +4,8 @@
 #include <QHash>
 #include <QStringList>
 
+#include "commandlineoption.h"
+
 class QString;
 
 namespace udg {
@@ -26,7 +28,7 @@ class ApplicationCommandLineOptions {
 
 public:
     /// Permet afegir un argument que acceptarem com a vàlid per la comanda de línies. Retorna fals si ja existeix l'argument
-    bool addOption(QString optionName, bool optionArgumentIsRequired, QString description);
+    bool addOption(const CommandLineOption &option);
 
     /// Especifica la llista d'arguments a parsejar, si hi ha alguna opció de més que no s'ha definit o alguna opció té
     /// més d'un valor es retorna fals indicant que no s'ha parsejat correctament l'argument
@@ -53,17 +55,8 @@ public:
     QString getOptionsDescription();
 
 private:
-    typedef struct Option
-    {
-        QString name, description;
-        bool argumentIsRequired;
-    };
-
-    /// Conté caràcter que defineix si el paràmetre passat per línia de comandes és un option o un value
-    static const QString optionSelectorCharacter;
-
     // Conté les opcions possibles que ens poden entrar des de la línia de comandes, i conté associada la descripció del que fa aquella opció
-    QHash<QString, Option> m_commandLineOptions;
+    QHash<QString, CommandLineOption> m_commandLineOptions;
     // Conté les opcions parsejades entrades per comandes de línia amb el seu valor
     QHash<QString, QString> m_parsedOptions;
     // Argumens de la línia de comandes a persajar
