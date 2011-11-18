@@ -10,11 +10,16 @@ private slots:
     void addOption_SetsDataCorrectly_data();
     void addOption_SetsDataCorrectly();
 
+    void addOption_ReturnsExpectedValues_data();
+    void addOption_ReturnsExpectedValues();
+    
     void parseArgumentList_ReturnsExpectedValues_data();
     void parseArgumentList_ReturnsExpectedValues();
 };
 
 Q_DECLARE_METATYPE(CommandLineOption)
+Q_DECLARE_METATYPE(QList<CommandLineOption>)
+Q_DECLARE_METATYPE(QList<bool>)
 
 void test_ApplicationCommandLineOptions::addOption_SetsDataCorrectly_data()
 {
@@ -37,6 +42,34 @@ void test_ApplicationCommandLineOptions::addOption_SetsDataCorrectly()
     commandLine.addOption(option);
     
     QCOMPARE(commandLine.getOptionsDescription(), expectedOptionsDescription);
+}
+
+void test_ApplicationCommandLineOptions::addOption_ReturnsExpectedValues_data()
+{
+    QTest::addColumn<QList<CommandLineOption> >("optionsList");
+    QTest::addColumn<QList<bool> >("expectedResults");
+
+    QList<CommandLineOption> commands;
+    QList<bool> results;
+    
+    commands << CommandLineOption("option1", true, "description1");
+    commands << CommandLineOption("option1", false, "description1");
+
+    results << true << false;
+    QTest::newRow("Repeated option") << commands << results;
+}
+
+void test_ApplicationCommandLineOptions::addOption_ReturnsExpectedValues()
+{
+    QFETCH(QList<CommandLineOption>, optionsList);
+    QFETCH(QList<bool>, expectedResults);
+
+    ApplicationCommandLineOptions appOptions;
+
+    for (int i = 0; i < optionsList.count(); ++i)
+    {
+        QCOMPARE(appOptions.addOption(optionsList.at(i)), expectedResults.at(i));
+    }
 }
 
 void test_ApplicationCommandLineOptions::parseArgumentList_ReturnsExpectedValues_data()
