@@ -7,9 +7,6 @@ using namespace udg;
 class test_ApplicationCommandLineOptions : public QObject {
 Q_OBJECT
 private slots:
-    void addOption_SetsDataCorrectly_data();
-    void addOption_SetsDataCorrectly();
-
     void getSynopsis_ReturnsExpectedValues_data();
     void getSynopsis_ReturnsExpectedValues();
     
@@ -23,29 +20,6 @@ private slots:
 Q_DECLARE_METATYPE(CommandLineOption)
 Q_DECLARE_METATYPE(QList<CommandLineOption>)
 Q_DECLARE_METATYPE(QList<bool>)
-
-void test_ApplicationCommandLineOptions::addOption_SetsDataCorrectly_data()
-{
-    QTest::addColumn<CommandLineOption>("option");
-    QTest::addColumn<QString>("expectedOptionsDescription");
-
-    CommandLineOption option1("option1", false, "Description of option 1");
-    QTest::newRow("option1, no argument, with description") << option1 << "-option1\n\tDescription of option 1\n";
-
-    CommandLineOption option2("option2", true, "Description of option 2 which needs an argument");
-    QTest::newRow("option2, argument, with description") << option2 << "-option2 <value>\n\tDescription of option 2 which needs an argument\n";
-}
-
-void test_ApplicationCommandLineOptions::addOption_SetsDataCorrectly()
-{
-    QFETCH(CommandLineOption, option);
-    QFETCH(QString, expectedOptionsDescription);
-
-    ApplicationCommandLineOptions commandLine("appName");
-    commandLine.addOption(option);
-    
-    QCOMPARE(commandLine.getOptionsDescription(), expectedOptionsDescription);
-}
 
 void test_ApplicationCommandLineOptions::getSynopsis_ReturnsExpectedValues_data()
 {

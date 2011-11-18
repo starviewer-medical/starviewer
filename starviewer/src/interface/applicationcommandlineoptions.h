@@ -57,9 +57,6 @@ public:
     /// Retorna el número d'opcions que s'han trobat correctes al parserjar
     int getNumberOfParsedOptions();
 
-    /// Retorna un string on mostra cada una de les opcions vàlides reconegudes pel parser i una descripció de la funcionalitat de cada opció
-    QString getOptionsDescription();
-
     /// Retorna un text amb la siniopsis d'ús d'aquestes opcions de comandes
     QString getSynopsis() const;
     
