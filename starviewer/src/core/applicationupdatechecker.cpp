@@ -19,9 +19,13 @@ namespace udg {
 ApplicationUpdateChecker::ApplicationUpdateChecker(QObject *parent)
 : QObject(parent)
 {
-    m_manager = new QNetworkAccessManager(this);
+    m_manager = NULL;
+
     m_timeoutTimer = new QTimer(this);
+    m_timeoutTimer->setSingleShot(true);
     m_timeoutTimer->setInterval(15000);
+
+    m_isChecking = false;
 }
 
 ApplicationUpdateChecker::~ApplicationUpdateChecker()
@@ -30,18 +34,26 @@ ApplicationUpdateChecker::~ApplicationUpdateChecker()
 
 void ApplicationUpdateChecker::checkForUpdates()
 {
+    if (m_isChecking)
+    {
+        return;
+    }
+    m_isChecking = true;
+
     m_checkedVersion = QString("");
     m_releaseNotesURL = QString("");
     m_updateAvailable = false;
     m_checkOk = true;
 
     QUrl url(createWebServiceUrl());
+    m_manager = new QNetworkAccessManager(this);
+
     setProxy(url);
     connect(m_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(checkForUpdatesReply(QNetworkReply*)));
-    connect(m_timeoutTimer, SIGNAL(timeout()), this, SLOT(checkForUpdatesReplyTimeout()));
+    connect(m_timeoutTimer, SIGNAL(timeout()), this, SLOT(checkForUpdatesReplyTimeout()), Qt::DirectConnection);
+    
     // Fer la petició
-    m_manager->get(QNetworkRequest(url));
-    m_timeoutTimer->start();
+    performOnlinePetition(url);
 }
 
 QString ApplicationUpdateChecker::getReleaseNotesUrl() const
@@ -74,9 +86,14 @@ void ApplicationUpdateChecker::setTimeout(int milliseconds)
     m_timeoutTimer->setInterval(milliseconds);
 }
 
-int ApplicationUpdateChecker::getTimout()
+int ApplicationUpdateChecker::getTimout() const
 {
     return m_timeoutTimer->interval();
+}
+
+bool ApplicationUpdateChecker::isChecking() const
+{
+    return m_isChecking;
 }
 
 QString ApplicationUpdateChecker::createWebServiceUrl()
@@ -104,6 +121,7 @@ void ApplicationUpdateChecker::setProxy(const QUrl &url)
 
 void ApplicationUpdateChecker::setCheckFinished()
 {
+    m_isChecking = false;
     m_checkFinished = true;
     emit checkFinished();
 }
@@ -113,7 +131,8 @@ void ApplicationUpdateChecker::parseWebServiceReply(QNetworkReply *reply)
     m_checkOk = false;
     if (reply->error() == QNetworkReply::NoError)
     {
-        parseJSON(reply->readAll());
+        // Punt d'entrada per el unit testing (readReplyData)
+        parseJSON(readReplyData(reply));
     }
     else
     {
@@ -171,31 +190,44 @@ void ApplicationUpdateChecker::parseJSON(const QString &json)
     }
 }
 
+void ApplicationUpdateChecker::performOnlinePetition(const QUrl &url)
+{
+    m_manager->get(QNetworkRequest(url));
+    m_timeoutTimer->start();
+}
+
+QString ApplicationUpdateChecker::readReplyData(QNetworkReply *reply)
+{
+    return QString(reply->readAll());
+}
+
 void ApplicationUpdateChecker::checkForUpdatesReply(QNetworkReply *reply)
 {
     // Desconectar el manager
     disconnect(m_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(checkForUpdatesReply(QNetworkReply*)));
-    // I desconectar el timer
-    disconnect(m_timeoutTimer, SIGNAL(timeout()), this, SLOT(checkForUpdatesReplyTimeout()));
+    m_timeoutTimer->stop();
 
     // Comprovar si hi ha error a la resposta i si no n'hi ha, es parseja el JSON i es guarda en els atributs de l'objecte.
     // m_checkOk ens dirà si ha anat bé.
     parseWebServiceReply(reply);
 
-    setCheckFinished();
     reply->deleteLater();
+    m_manager->deleteLater();
+    
+    setCheckFinished();
 }
 
 void ApplicationUpdateChecker::checkForUpdatesReplyTimeout()
 {
     // Desconectar el manager
     disconnect(m_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(checkForUpdatesReply(QNetworkReply*)));
-    // I desconectar el timer
-    disconnect(m_timeoutTimer, SIGNAL(timeout()), this, SLOT(checkForUpdatesReplyTimeout()));
-
+   
     m_checkOk = false;
     m_errorDescription = tr("Error requesting release notes: timeout");
     ERROR_LOG("Error en la petició de les release notes. El servidor no respon: Timeout");
+    
+    delete m_manager;
+
     setCheckFinished();
 }
 
