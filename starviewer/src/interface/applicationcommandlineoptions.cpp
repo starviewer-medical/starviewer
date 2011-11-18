@@ -90,8 +90,15 @@ bool ApplicationCommandLineOptions::parse()
             // És un argument
             if (lastParameterWasAnOption)
             {
-                // Si tenim un argument i l'últim paràmetre era un opció, vol dir aquest paràmetre és un argument
-                m_parsedOptions[lastOption.getName()] = parameter;
+                if (nextParameterHasToBeAnArgumentOption)
+                {
+                    // Si tenim un argument i l'últim paràmetre era un opció, vol dir aquest paràmetre és un argument
+                    m_parsedOptions[lastOption.getName()] = parameter;
+                }
+                else
+                {
+                    m_parserErrorMessage += lastOption.getName() + QObject::tr(" option requires an argument") + "\n";
+                }
             }
             else
             {
