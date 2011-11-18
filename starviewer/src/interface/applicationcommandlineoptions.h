@@ -54,6 +54,9 @@ public:
     /// Retorna un string on mostra cada una de les opcions vàlides reconegudes pel parser i una descripció de la funcionalitat de cada opció
     QString getOptionsDescription();
 
+    /// Ens retorna la llista de comandes possibles que hi ha registrades
+    QList<CommandLineOption> getCommandLineOptionsList() const;
+
 private:
     // Conté les opcions possibles que ens poden entrar des de la línia de comandes, i conté associada la descripció del que fa aquella opció
     QHash<QString, CommandLineOption> m_commandLineOptions;
