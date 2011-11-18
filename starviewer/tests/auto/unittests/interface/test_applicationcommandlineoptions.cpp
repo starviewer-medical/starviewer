@@ -109,7 +109,7 @@ void test_ApplicationCommandLineOptions::parseArgumentList_ReturnsExpectedValues
 
     arguments << "12345";
     QTest::newRow("valid option with required argument (ok)") << CommandLineOption("option1", true, "") << arguments << true;
-    QTest::newRow("valid option does not require argument followed by an argument [ignored] (ok)") << CommandLineOption("option1", false, "") << arguments << true;
+    QTest::newRow("valid option does not require argument followed by an argument (!ok)") << CommandLineOption("option1", false, "") << arguments << false;
 }
 
 void test_ApplicationCommandLineOptions::parseArgumentList_ReturnsExpectedValues()
