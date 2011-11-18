@@ -147,6 +147,11 @@ QString ApplicationCommandLineOptions::getOptionsDescription()
     return optionsDescription;
 }
 
+QList<CommandLineOption> ApplicationCommandLineOptions::getCommandLineOptionsList() const
+{
+    return m_commandLineOptions.values();
+}
+
 bool ApplicationCommandLineOptions::isAnOption(QString optionName)
 {
     // Les opcions sempre comencen "-"
