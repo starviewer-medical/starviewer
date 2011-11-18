@@ -10,6 +10,9 @@ private slots:
     void addOption_SetsDataCorrectly_data();
     void addOption_SetsDataCorrectly();
 
+    void getSynopsis_ReturnsExpectedValues_data();
+    void getSynopsis_ReturnsExpectedValues();
+    
     void addOption_ReturnsExpectedValues_data();
     void addOption_ReturnsExpectedValues();
     
@@ -42,6 +45,51 @@ void test_ApplicationCommandLineOptions::addOption_SetsDataCorrectly()
     commandLine.addOption(option);
     
     QCOMPARE(commandLine.getOptionsDescription(), expectedOptionsDescription);
+}
+
+void test_ApplicationCommandLineOptions::getSynopsis_ReturnsExpectedValues_data()
+{
+    QTest::addColumn<QString>("appName");
+    QTest::addColumn<QList<CommandLineOption> >("optionsList");
+    QTest::addColumn<QString>("expectedSynopsis");
+
+    QString appName = "applicationX";
+    QList<CommandLineOption> commands;
+    QString expectedSynopsis;
+    
+    CommandLineOption option1("option1", false, "Description of option 1");
+    
+    commands << option1;
+    
+    expectedSynopsis = "Synopsis:\n" + appName + " [" + option1.toString(false) + "]";
+    expectedSynopsis += "\n\nOptions:\n" + option1.toString(true) + "\n\n";
+    
+    QTest::newRow("single element list") << appName << commands << expectedSynopsis;
+
+    CommandLineOption option2("option2", true, "Description of option 2 which needs an argument");
+    
+    commands << option2;
+    
+    expectedSynopsis = "Synopsis:\n" + appName + " [" + option1.toString(false) + "] [" + option2.toString(false) + "]";
+    expectedSynopsis += "\n\nOptions:\n" + option1.toString(true) + "\n\n" + option2.toString(true) + "\n\n";
+    
+    QTest::newRow("two elements lists") << appName << commands << expectedSynopsis;
+}
+
+void test_ApplicationCommandLineOptions::getSynopsis_ReturnsExpectedValues()
+{
+    QFETCH(QString, appName);
+    QFETCH(QList<CommandLineOption>, optionsList);
+    QFETCH(QString, expectedSynopsis);
+
+    ApplicationCommandLineOptions commandLine(appName);
+
+    foreach (const CommandLineOption &option, optionsList)
+    {
+        commandLine.addOption(option);
+    }
+    
+    QCOMPARE(commandLine.getSynopsis(), expectedSynopsis);
 }
 
 void test_ApplicationCommandLineOptions::addOption_ReturnsExpectedValues_data()
