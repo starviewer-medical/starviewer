@@ -20,8 +20,6 @@ public:
     ApplicationUpdateChecker(QObject *parent = 0);
     /// Destructor
     ~ApplicationUpdateChecker();
-    /// Fer la crida al servidor per obtenir si hi ha una nova versió
-    void checkForUpdates();
     
     /// Retorna l'url, en forma de QString, de les notes de la nova versió. El resultat és correcte sempre que isNewVersionAvailable sigui cert.
     QString getReleaseNotesUrl() const;
@@ -38,7 +36,15 @@ public:
     /// Permet especificar el temps que tarda en fer timout. (15 segons per defecte)
     void setTimeout(int milliseconds);
     /// Retorna el temps definit del timout en milisegons
-    int getTimout();
+    int getTimout() const;
+
+    /// Retorna si s'està fent una comprovació online en el moment de la crida.
+    /// Aquest mètode només té sentit si s'ha de cridar més d'una vegada el mètode (slot) checkForUpdates sobre el mateix objecte.
+    bool isChecking() const;
+
+public slots:
+    /// Fer la crida al servidor per obtenir si hi ha una nova versió
+    void checkForUpdates();
 
 signals:
     /// Senyal per indicar que s'ha acabat de carregar
@@ -57,8 +63,12 @@ private:
     void parseWebServiceReply(QNetworkReply *reply);
     /// Interpreta la resposta del servidor en format JSON i emplena els atributs corresponents.
     void parseJSON(const QString &json);
-    
-private slots:
+
+protected:
+    virtual void performOnlinePetition(const QUrl &url);
+    virtual QString readReplyData(QNetworkReply *reply);
+
+protected slots:
     /// Tracta la resposta del webservice obtenint la versió i la url de les notes de la nova versió
     void checkForUpdatesReply(QNetworkReply *reply);
     
@@ -85,6 +95,9 @@ private:
     /// Si hi ha algun error de connexió amb el servidor
     bool m_checkOk;
     QString m_errorDescription;
+
+    /// Defineix si s'està esperant resposta del servidor
+    bool m_isChecking;
 };
 
 } // End namespace udg
