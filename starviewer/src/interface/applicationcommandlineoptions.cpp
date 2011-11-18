@@ -138,25 +138,6 @@ QString ApplicationCommandLineOptions::getParserErrorMessage()
     return m_parserErrorMessage;
 }
 
-QString ApplicationCommandLineOptions::getOptionsDescription()
-{
-    QString optionsDescription;
-
-    foreach (CommandLineOption option, m_commandLineOptions.values())
-    {
-        optionsDescription += CommandLineOption::OptionSelectorPrefix + option.getName();
-
-        if (option.requiresArgument())
-        {
-            optionsDescription += QObject::tr(" <value>");
-        }
-
-        optionsDescription += "\n\t" + option.getDescription() + "\n";
-    }
-
-    return optionsDescription;
-}
-
 QString ApplicationCommandLineOptions::getSynopsis() const
 {
     QString synopsis;
