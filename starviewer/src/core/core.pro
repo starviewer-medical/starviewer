@@ -265,7 +265,8 @@ HEADERS += extensionfactory.h \
     firewallaccess.h \
     firewallaccesstest.h \
     slicingwheeltool.h \
-    qmessageboxautoclose.h
+    qmessageboxautoclose.h \
+    commandlineoption.h
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
     mathtools.cpp \
@@ -488,7 +489,8 @@ SOURCES += extensionmediator.cpp \
     firewallaccess.cpp \
     firewallaccesstest.cpp \
     slicingwheeltool.cpp \
-    qmessageboxautoclose.cpp
+    qmessageboxautoclose.cpp \
+    commandlineoption.cpp
 win32 {
     HEADERS += windowsfirewallaccess.h
     SOURCES += windowsfirewallaccess.cpp
