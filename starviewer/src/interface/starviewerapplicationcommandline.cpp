@@ -2,6 +2,7 @@
 
 #include "applicationcommandlineoptions.h"
 #include "logging.h"
+#include "starviewerapplication.h"
 
 #ifndef STARVIEWER_LITE
 #include "commandlineoption.h"
@@ -13,7 +14,7 @@ const QString StarviewerApplicationCommandLine::accessionNumberOption("accession
 
 ApplicationCommandLineOptions StarviewerApplicationCommandLine::getStarviewerApplicationCommandLineOptions()
 {
-    ApplicationCommandLineOptions starviewerCommandLineOptions;
+    ApplicationCommandLineOptions starviewerCommandLineOptions(ApplicationNameString);
 
     // Configurem les opcions que Starviewer accepta des de línia de comandes
     #ifndef STARVIEWER_LITE

@@ -27,6 +27,12 @@ namespace udg {
 class ApplicationCommandLineOptions {
 
 public:
+    /// Constructor per defecte en el que cal indicar el nom de l'aplicació
+    ApplicationCommandLineOptions(const QString &applicationName);
+
+    /// Retorna el nom de l'aplicació
+    QString getApplicationName() const;
+    
     /// Permet afegir un argument que acceptarem com a vàlid per la comanda de línies. Retorna fals si ja existeix l'argument
     bool addOption(const CommandLineOption &option);
 
@@ -54,10 +60,16 @@ public:
     /// Retorna un string on mostra cada una de les opcions vàlides reconegudes pel parser i una descripció de la funcionalitat de cada opció
     QString getOptionsDescription();
 
+    /// Retorna un text amb la siniopsis d'ús d'aquestes opcions de comandes
+    QString getSynopsis() const;
+    
     /// Ens retorna la llista de comandes possibles que hi ha registrades
     QList<CommandLineOption> getCommandLineOptionsList() const;
 
 private:
+    /// Nom de l'aplicació per la qual s'aplica aquestes opcions
+    QString m_applicationName;
+    
     // Conté les opcions possibles que ens poden entrar des de la línia de comandes, i conté associada la descripció del que fa aquella opció
     QHash<QString, CommandLineOption> m_commandLineOptions;
     // Conté les opcions parsejades entrades per comandes de línia amb el seu valor

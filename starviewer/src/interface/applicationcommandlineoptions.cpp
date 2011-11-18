@@ -5,6 +5,16 @@
 
 namespace udg {
 
+ApplicationCommandLineOptions::ApplicationCommandLineOptions(const QString &applicationName)
+{
+    m_applicationName = applicationName;
+}
+
+QString ApplicationCommandLineOptions::getApplicationName() const
+{
+    return m_applicationName;
+}
+
 bool ApplicationCommandLineOptions::addOption(const CommandLineOption &option)
 {
     if (!m_commandLineOptions.contains(option.getName()))
@@ -145,6 +155,29 @@ QString ApplicationCommandLineOptions::getOptionsDescription()
     }
 
     return optionsDescription;
+}
+
+QString ApplicationCommandLineOptions::getSynopsis() const
+{
+    QString synopsis;
+
+    synopsis = QObject::tr("Synopsis:");
+    synopsis += "\n";
+    synopsis += m_applicationName;
+
+    QString applicationOptions;
+    QString detailedOptions;
+    foreach (const CommandLineOption &option, m_commandLineOptions.values())
+    {
+        applicationOptions += " [" + option.toString(false) + "]";
+        detailedOptions += option.toString(true) + "\n\n";
+    }
+
+    synopsis += applicationOptions + "\n";
+    synopsis += "\n" + QObject::tr("Options:");
+    synopsis += "\n" + detailedOptions;
+
+    return synopsis;
 }
 
 QList<CommandLineOption> ApplicationCommandLineOptions::getCommandLineOptionsList() const

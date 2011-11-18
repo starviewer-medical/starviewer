@@ -38,7 +38,7 @@ void test_ApplicationCommandLineOptions::addOption_SetsDataCorrectly()
     QFETCH(CommandLineOption, option);
     QFETCH(QString, expectedOptionsDescription);
 
-    ApplicationCommandLineOptions commandLine;
+    ApplicationCommandLineOptions commandLine("appName");
     commandLine.addOption(option);
     
     QCOMPARE(commandLine.getOptionsDescription(), expectedOptionsDescription);
@@ -64,7 +64,7 @@ void test_ApplicationCommandLineOptions::addOption_ReturnsExpectedValues()
     QFETCH(QList<CommandLineOption>, optionsList);
     QFETCH(QList<bool>, expectedResults);
 
-    ApplicationCommandLineOptions appOptions;
+    ApplicationCommandLineOptions appOptions("appName");
 
     for (int i = 0; i < optionsList.count(); ++i)
     {
@@ -96,7 +96,7 @@ void test_ApplicationCommandLineOptions::parseArgumentList_ReturnsExpectedValues
     QFETCH(QStringList, argumentsList);
     QFETCH(bool, expectedResult);
 
-    ApplicationCommandLineOptions commandLine;
+    ApplicationCommandLineOptions commandLine("appName");
     commandLine.addOption(option);
     
     QCOMPARE(commandLine.parseArgumentList(argumentsList), expectedResult);
