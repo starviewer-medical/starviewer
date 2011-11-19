@@ -19,7 +19,12 @@ public:
     }
 
     // Necessari per que la classe no sigui abstracte i es pugui instanciar
-    qint64 	readData (char *data, qint64 maxSize){ return 0; }
+    qint64 	readData (char *data, qint64 maxSize)
+    {
+        Q_UNUSED(data);
+        Q_UNUSED(maxSize);
+        return 0;
+    }
 
     // Necessari per que la classe no sigui abstracte i es pugui instanciar
     void abort(){}
@@ -35,6 +40,7 @@ public:
 protected:
     void performOnlinePetition(const QUrl &url)
     {
+        Q_UNUSED(url);
         TestingQNetworkReply *reply = new TestingQNetworkReply();
         reply->setTestingError(m_testingReplyErrorCode, m_testingReplyErrorString);
         
@@ -50,6 +56,7 @@ protected:
 
     QString readReplyData(QNetworkReply *reply)
     {
+        Q_UNUSED(reply);
         return m_testingReplyData;
     }
 };
@@ -81,7 +88,7 @@ void test_ApplicationUpdateChecker::run_ShouldCheckForUpdates_data()
     // Unused
     QString unusedString = "";
 
-    QString json = "{\"updateAvailable\":true,\"version\":\"0.10.1\",\"releaseNotesURL\":\"http:\/\/starviewer.udg.edu\/releasenotes\/releasenotes-0.10.1.html\"}";
+    QString json = "{\"updateAvailable\":true,\"version\":\"0.10.1\",\"releaseNotesURL\":\"http://starviewer.udg.edu/releasenotes/releasenotes-0.10.1.html\"}";
     QTest::newRow("update available") << QNetworkReply::NoError << unusedString << false << json
                                       << true;
     json = "{\"updateAvailable\":false}";
@@ -138,7 +145,7 @@ void test_ApplicationUpdateChecker::run_ShouldCheckForUpdatesAndFail_data()
     QTest::newRow("updateAvailable is not boolean") << QNetworkReply::NoError << unusedString << false << json
                                                     << false << "Error parsing json.";
 
-    json = "{\"updateAvailable\":true,\"version\":true,\"releaseNotesURL\":\"http:\/\/starviewer.udg.edu\/releasenotes\/releasenotes-0.10.1.html\"}";
+    json = "{\"updateAvailable\":true,\"version\":true,\"releaseNotesURL\":\"http://starviewer.udg.edu/releasenotes/releasenotes-0.10.1.html\"}";
     QTest::newRow("version or releaseNotes is not a string") << QNetworkReply::NoError << unusedString << false << json
                                                              << false << "Error parsing json. Version or releaseNotesUrl is not a String";
 }
