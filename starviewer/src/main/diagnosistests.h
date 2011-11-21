@@ -6,5 +6,6 @@
 #include "firewallaccesstest.h"
 #include "echotopacstest.h"
 #include "dicomdirburningapplicationtest.h"
+#include "applicationversiontest.h"
 
 #endif
