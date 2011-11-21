@@ -152,7 +152,7 @@ void AngleTool::annotateFirstPoint()
     m_mainPolyline->addPoint(clickedWorldPoint);
     // Així evitem que durant l'edició la primitiva pugui ser esborrada per events externs
     m_mainPolyline->increaseReferenceCount();
-    m_2DViewer->getDrawer()->draw(m_mainPolyline, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+    m_2DViewer->getDrawer()->draw(m_mainPolyline);
 
     // Actualitzem l'estat de la tool
     m_state = FirstPointFixed;
@@ -167,7 +167,7 @@ void AngleTool::fixFirstSegment()
     m_circlePolyline = new DrawerPolyline;
     // Així evitem que durant l'edició la primitiva pugui ser esborrada per events externs
     m_circlePolyline->increaseReferenceCount();
-    m_2DViewer->getDrawer()->draw(m_circlePolyline, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+    m_2DViewer->getDrawer()->draw(m_circlePolyline);
 }
 
 void AngleTool::drawCircle()
@@ -328,6 +328,10 @@ void AngleTool::finishDrawing()
     text->setText(tr("%1 degrees").arg(m_currentAngle, 0, 'f', 1));
     placeText(text);
     m_2DViewer->getDrawer()->draw(text, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+    
+    // Col·loquem l'angle en el pla corresponent
+    m_2DViewer->getDrawer()->erasePrimitive(m_mainPolyline);
+    m_2DViewer->getDrawer()->draw(m_mainPolyline, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
 }
 
 void AngleTool::placeText(DrawerText *angleText)

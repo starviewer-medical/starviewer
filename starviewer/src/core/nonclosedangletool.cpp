@@ -148,7 +148,7 @@ void NonClosedAngleTool::annotateLinePoints()
             m_secondLine = line;
         }
 
-        m_2DViewer->getDrawer()->draw(line, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+        m_2DViewer->getDrawer()->draw(line);
     }
     else
     {
@@ -312,6 +312,11 @@ void NonClosedAngleTool::computeAngle()
 
     placeText(m_middleLine->getFirstPoint(), m_middleLine->getSecondPoint(), text);
     m_2DViewer->getDrawer()->draw(text, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+    // Col·loquem cada línia al pla que toca
+    m_2DViewer->getDrawer()->erasePrimitive(m_firstLine);
+    m_2DViewer->getDrawer()->erasePrimitive(m_secondLine);
+    m_2DViewer->getDrawer()->draw(m_firstLine, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+    m_2DViewer->getDrawer()->draw(m_secondLine, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
 }
 
 void NonClosedAngleTool::placeText(double *firstLineVertex, double *secondLineVertex, DrawerText *angleText)

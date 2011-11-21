@@ -116,7 +116,7 @@ void PolylineROITool::annotateNewPoint()
     // L'afegim a l'escena
     if (firstPoint)
     {
-        m_2DViewer->getDrawer()->draw(m_mainPolyline, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+        m_2DViewer->getDrawer()->draw(m_mainPolyline);
     }
     // Actualitzem l'estructura interna
     else
@@ -151,7 +151,7 @@ void PolylineROITool::simulateClosingPolyline()
             // Així evitem que la primitiva pugui ser esborrada durant l'edició per events externs
             m_closingPolyline->increaseReferenceCount();
             m_closingPolyline->setLinePattern(DrawerPrimitive::DiscontinuousLinePattern);
-            m_2DViewer->getDrawer()->draw(m_closingPolyline, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+            m_2DViewer->getDrawer()->draw(m_closingPolyline);
 
             // Afegim els punts que simulen aquesta polilínia
             m_closingPolyline->addPoint(m_mainPolyline->getPoint(0));

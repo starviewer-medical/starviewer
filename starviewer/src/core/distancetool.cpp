@@ -105,7 +105,7 @@ void DistanceTool::annotateNewPoint()
         m_line->setSecondPoint(clickedWorldPoint);
         m_lineState = FirstPointFixed;
 
-        m_2DViewer->getDrawer()->draw(m_line, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+        m_2DViewer->getDrawer()->draw(m_line);
     }
     else
     {
@@ -197,6 +197,8 @@ void DistanceTool::annotateNewPoint()
         text->setHorizontalJustification("Right");
         m_2DViewer->getDrawer()->draw(text, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
         // Reiniciem l'estat de la tool
+        m_2DViewer->getDrawer()->erasePrimitive(m_line);
+        m_2DViewer->getDrawer()->draw(m_line, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
         initialize();
     }
 }
