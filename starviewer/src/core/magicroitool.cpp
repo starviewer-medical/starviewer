@@ -129,7 +129,7 @@ void MagicROITool::startRegion()
             m_magicSize = MagicSize;
             m_roiPolygon = new DrawerPolygon;
             m_roiPolygon->increaseReferenceCount();
-            m_2DViewer->getDrawer()->draw(m_roiPolygon, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+            m_2DViewer->getDrawer()->draw(m_roiPolygon);
 
             this->generateRegion();
         }
@@ -142,6 +142,9 @@ void MagicROITool::endRegion()
     {
         this->generateRegion();
         this->printData();
+        // Col·loquem el dibuix al lloc corresponent
+        m_2DViewer->getDrawer()->erasePrimitive(m_roiPolygon);
+        m_2DViewer->getDrawer()->draw(m_roiPolygon, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
         m_roiPolygon->decreaseReferenceCount();
         m_roiPolygon = NULL;
     }

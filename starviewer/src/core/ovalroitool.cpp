@@ -97,7 +97,7 @@ void OvalROITool::simulateOval()
             m_roiPolygon = new DrawerPolygon;
             // Així evitem que la primitiva pugui ser esborrada durant l'edició per events externs
             m_roiPolygon->increaseReferenceCount();
-            m_2DViewer->getDrawer()->draw(m_roiPolygon, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+            m_2DViewer->getDrawer()->draw(m_roiPolygon);
         }
 
         // Actualitzem la forma i renderitzem
@@ -159,6 +159,9 @@ void OvalROITool::closeForm()
     if (m_roiPolygon)
     {
         printData();
+        // Pintem la primitiva al lloc corresponent
+        m_2DViewer->getDrawer()->erasePrimitive(m_roiPolygon);
+        m_2DViewer->getDrawer()->draw(m_roiPolygon, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
         // Alliberem la primitiva perquè pugui ser esborrada
         m_roiPolygon->decreaseReferenceCount();
         m_roiPolygon = 0;
