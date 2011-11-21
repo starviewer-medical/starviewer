@@ -2,7 +2,9 @@
 
 #include "logging.h"
 #include "drawerbitmap.h"
+#include "imageoverlayregionfinder.h"
 
+#include <QRect>
 #include <QRegExp>
 #include <QStringList>
 
@@ -75,6 +77,51 @@ unsigned char* ImageOverlay::getData() const
 bool ImageOverlay::isValid() const
 {
     return m_rows > 0 && m_columns > 0 && m_data;
+}
+
+ImageOverlay ImageOverlay::createSubOverlay(const QRect &region) const
+{
+    ImageOverlay subOverlay;
+
+    if (this->isValid() && region.left() >= 0 && region.right() < m_columns && region.top() >= 0 && region.bottom() < m_rows)
+    {
+        subOverlay.setRows(region.height());
+        subOverlay.setColumns(region.width());
+        subOverlay.setOrigin(getXOrigin() + region.x(), getYOrigin() + region.y());
+        subOverlay.setData(copyDataForSubOverlay(region));
+    }
+
+    return subOverlay;
+}
+
+QList<ImageOverlay> ImageOverlay::split() const
+{
+    ImageOverlayRegionFinder regionFinder(*this);
+    regionFinder.findRegions();
+    const QList<QRect> &regions = regionFinder.regions();
+
+    QList<ImageOverlay> subOverlays;
+
+    foreach (const QRect &region, regions)
+    {
+        subOverlays << createSubOverlay(region);
+    }
+
+    return subOverlays;
+}
+
+bool ImageOverlay::operator ==(const udg::ImageOverlay &overlay) const
+{
+    bool equal = this->m_rows == overlay.m_rows && this->m_columns == overlay.m_columns
+              && this->m_origin[0] == overlay.m_origin[0] && this->m_origin[1] == overlay.m_origin[1]
+              && ((this->m_data && overlay.m_data) || (!this->m_data && !overlay.m_data));
+
+    if (equal && this->m_data)
+    {
+        equal = memcmp(this->m_data.data(), overlay.m_data.data(), this->m_rows * this->m_columns * sizeof(unsigned char)) == 0;
+    }
+
+    return equal;
 }
 
 ImageOverlay ImageOverlay::fromGDCMOverlay(const gdcm::Overlay &gdcmOverlay)
@@ -229,7 +276,7 @@ ImageOverlay ImageOverlay::mergeOverlays(const QList<ImageOverlay> &overlaysList
     return imageOverlay;
 }
 
-DrawerBitmap* ImageOverlay::getAsDrawerBitmap(double origin[3], double spacing[3])
+DrawerBitmap* ImageOverlay::getAsDrawerBitmap(double origin[3], double spacing[3]) const
 {
     DrawerBitmap *drawerBitmap = new DrawerBitmap;
     
@@ -244,6 +291,21 @@ DrawerBitmap* ImageOverlay::getAsDrawerBitmap(double origin[3], double spacing[3
     drawerBitmap->setData(getColumns(), getRows(), getData());
     
     return drawerBitmap;
+}
+
+unsigned char* ImageOverlay::copyDataForSubOverlay(const QRect &region) const
+{
+    unsigned char *regionData = new unsigned char[region.width() * region.height()];
+    const unsigned char *overlayData = m_data.data();
+
+    for (int i = 0; i < region.height(); i++)
+    {
+        int overlayRowOffset = (i + region.top()) * m_columns;
+        int regionRowOffset = i * region.width();
+        memcpy(regionData + regionRowOffset, overlayData + overlayRowOffset + region.left(), region.width() * sizeof(unsigned char));
+    }
+
+    return regionData;
 }
 
 }

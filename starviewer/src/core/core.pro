@@ -267,8 +267,8 @@ HEADERS += extensionfactory.h \
     slicingwheeltool.h \
     qmessageboxautoclose.h \
     commandlineoption.h \
-    applicationversiontest.h
-
+    applicationversiontest.h \
+    imageoverlayregionfinder.h
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
     mathtools.cpp \
@@ -493,7 +493,8 @@ SOURCES += extensionmediator.cpp \
     slicingwheeltool.cpp \
     qmessageboxautoclose.cpp \
     commandlineoption.cpp \
-    applicationversiontest.cpp
+    applicationversiontest.cpp \
+    imageoverlayregionfinder.cpp
 win32 {
     HEADERS += windowsfirewallaccess.h
     SOURCES += windowsfirewallaccess.cpp
