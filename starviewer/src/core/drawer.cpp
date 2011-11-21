@@ -36,19 +36,15 @@ void Drawer::draw(DrawerPrimitive *primitive, int plane, int slice)
             m_coronalPrimitives.insert(slice, primitive);
             break;
 
-        case QViewer::Top2DPlane:
-            m_top2DPlanePrimitives << primitive;
-            break;
-
         default:
             DEBUG_LOG("Pla no definit!");
             return;
             break;
     }
 
-    // En el cas que el pla sigui Axial/Sagital/Coronal, cal comprovar
+    // Segons quin sigui el pla actual caldrà comprovar
     // la visibilitat de la primitiva segons la llesca
-    if (m_2DViewer->getView() == plane && plane != QViewer::Top2DPlane)
+    if (m_2DViewer->getView() == plane)
     {
         if (slice < 0 || m_2DViewer->getCurrentSlice() == slice)
         {
@@ -61,16 +57,15 @@ void Drawer::draw(DrawerPrimitive *primitive, int plane, int slice)
     }
 
     // Procedim a "pintar-la"
-    vtkProp *prop = primitive->getAsVtkProp();
-    if (prop)
-    {
-        connect(primitive, SIGNAL(dying(DrawerPrimitive*)), SLOT(erasePrimitive(DrawerPrimitive*)));
-        m_2DViewer->getRenderer()->AddViewProp(prop);
-        if (primitive->isVisible())
-        {
-            m_2DViewer->render();
-        }
-    }
+    renderPrimitive(primitive);
+}
+
+void Drawer::draw(DrawerPrimitive *primitive)
+{
+    m_top2DPlanePrimitives << primitive;
+
+    // Procedim a "pintar-la"
+    renderPrimitive(primitive);
 }
 
 void Drawer::clearViewer()
@@ -88,11 +83,6 @@ void Drawer::clearViewer()
 
         case QViewer::CoronalPlane:
             primitivesContainer = m_coronalPrimitives;
-            break;
-
-        case QViewer::Top2DPlane:
-            DEBUG_LOG("Esborrar primitives de Top2dPlane no implementat!");
-            return;
             break;
 
         default:
@@ -234,10 +224,6 @@ void Drawer::hide(int plane, int slice)
         case QViewer::CoronalPlane:
             primitivesList = m_coronalPrimitives.values(slice);
             break;
-
-        case QViewer::Top2DPlane:
-            primitivesList = m_top2DPlanePrimitives;
-            break;
     }
     foreach (DrawerPrimitive *primitive, primitivesList)
     {
@@ -264,10 +250,6 @@ void Drawer::show(int plane, int slice)
 
         case QViewer::CoronalPlane:
             primitivesList = m_coronalPrimitives.values(slice);
-            break;
-
-        case QViewer::Top2DPlane:
-            primitivesList = m_top2DPlanePrimitives;
             break;
     }
 
@@ -468,6 +450,20 @@ bool Drawer::erasePrimitiveFromContainer(DrawerPrimitive *primitive, QMultiMap<i
     }
 
     return found;
+}
+
+void Drawer::renderPrimitive(DrawerPrimitive *primitive)
+{
+    vtkProp *prop = primitive->getAsVtkProp();
+    if (prop)
+    {
+        connect(primitive, SIGNAL(dying(DrawerPrimitive*)), SLOT(erasePrimitive(DrawerPrimitive*)));
+        m_2DViewer->getRenderer()->AddViewProp(prop);
+        if (primitive->isVisible())
+        {
+            m_2DViewer->render();
+        }
+    }
 }
 
 }

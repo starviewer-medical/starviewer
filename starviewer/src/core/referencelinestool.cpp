@@ -37,7 +37,7 @@ ReferenceLinesTool::ReferenceLinesTool(QViewer *viewer, QObject *parent)
 //      m_projectedReferencePlane = new DrawerPolygon;
 //     // HACK sucedani d'smart pointer(TM)
 //     m_projectedReferencePlane->increaseReferenceCount();
-//     m_2DViewer->getDrawer()->draw(m_projectedReferencePlane, QViewer::Top2DPlane);
+//     m_2DViewer->getDrawer()->draw(m_projectedReferencePlane);
 //     m_2DViewer->getDrawer()->addToGroup(m_projectedReferencePlane, ReferenceLinesDrawerGroup);
 
     refreshReferenceViewerData();
@@ -408,7 +408,7 @@ void ReferenceLinesTool::checkAvailableLines()
         for (int i = 0; i < linesToCreate; i++)
         {
             DrawerLine *line = createNewLine(true);
-            m_2DViewer->getDrawer()->draw(line, QViewer::Top2DPlane);
+            m_2DViewer->getDrawer()->draw(line);
             m_2DViewer->getDrawer()->addToGroup(line, ReferenceLinesDrawerGroup);
             m_backgroundProjectedIntersectionLines << line;
         }
@@ -437,7 +437,7 @@ void ReferenceLinesTool::checkAvailableLines()
         for (int i = 0; i < linesToCreate; i++)
         {
             DrawerLine *line = createNewLine();
-            m_2DViewer->getDrawer()->draw(line, QViewer::Top2DPlane);
+            m_2DViewer->getDrawer()->draw(line);
             m_2DViewer->getDrawer()->addToGroup(line, ReferenceLinesDrawerGroup);
             m_projectedIntersectionLines << line;
         }

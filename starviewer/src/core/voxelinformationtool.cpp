@@ -66,7 +66,7 @@ void VoxelInformationTool::createCaption()
         m_caption->increaseReferenceCount();
         // Inicialment serà invisible
         m_caption->visibilityOff();
-        m_2DViewer->getDrawer()->draw(m_caption, Q2DViewer::Top2DPlane);
+        m_2DViewer->getDrawer()->draw(m_caption);
     }
 }
 

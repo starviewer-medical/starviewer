@@ -1316,25 +1316,25 @@ void QMPRExtension::updateControls()
     center[2] = 0.0;
     m_axialViewSagitalCenterDrawerPoint->setPosition(center);
     m_axialViewSagitalCenterDrawerPoint->update();
-    m_axial2DView->getDrawer()->draw(m_axialViewSagitalCenterDrawerPoint, QViewer::Top2DPlane);
+    m_axial2DView->getDrawer()->draw(m_axialViewSagitalCenterDrawerPoint);
 
     m_coronalPlaneSource->GetCenter(center);
     center[2] = 0.0;
     m_axialViewCoronalCenterDrawerPoint->setPosition(center);
     m_axialViewCoronalCenterDrawerPoint->update();
-    m_axial2DView->getDrawer()->draw(m_axialViewCoronalCenterDrawerPoint, QViewer::Top2DPlane);
+    m_axial2DView->getDrawer()->draw(m_axialViewCoronalCenterDrawerPoint);
 
     worldToSagitalTransform->TransformPoint(m_axialPlaneSource->GetCenter(), center);
     center[2] = 0.0;
     m_sagitalViewAxialCenterDrawerPoint->setPosition(center);
     m_sagitalViewAxialCenterDrawerPoint->update();
-    m_sagital2DView->getDrawer()->draw(m_sagitalViewAxialCenterDrawerPoint, QViewer::Top2DPlane);
+    m_sagital2DView->getDrawer()->draw(m_sagitalViewAxialCenterDrawerPoint);
 
     worldToSagitalTransform->TransformPoint(m_coronalPlaneSource->GetCenter(), center);
     center[2] = 0.0;
     m_sagitalViewCoronalCenterDrawerPoint->setPosition(center);
     m_sagitalViewCoronalCenterDrawerPoint->update();
-    m_sagital2DView->getDrawer()->draw(m_sagitalViewCoronalCenterDrawerPoint, QViewer::Top2DPlane);
+    m_sagital2DView->getDrawer()->draw(m_sagitalViewCoronalCenterDrawerPoint);
 
     worldToSagitalTransform->Delete();
 
