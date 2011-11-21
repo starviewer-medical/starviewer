@@ -21,13 +21,14 @@ public:
     ~Drawer();
 
     /// Dibuixa la primitiva donada sobre el pla i llesca indicats
-    /// En el cas que slice sigui -1, vol dir que voldrem que quan estem sobre aquell pla
-    /// la primitiva es veurà sempre. Si indiquem slice >-1, farem que la primitiva només
-    /// es vegi quan estem en aquell pla i en aquella llesca en concret
     /// @param primitive Primitiva a pintar
     /// @param plane Pla sobre el qual volem pintar la primitiva
     /// @param slice Llesca a la que adjuntem la primitiva
-    void draw(DrawerPrimitive *primitive, int plane, int slice = -1);
+    void draw(DrawerPrimitive *primitive, int plane, int slice);
+
+    /// Dibuixa la primitiva sempre al cim sense importar en quin pla o llesca ens trobem. 
+    /// La visibilitat dependrà només de la propietat isVisible() de la primitiva
+    void draw(DrawerPrimitive *primitive);
 
     /// Esborra totes les primitives esborrables que es veuen al visor, és a dir, en el pla i llesques actuals.
     void clearViewer();
@@ -69,7 +70,7 @@ public slots:
 private:
     /// Mostra/amaga les primitives que hi ha en un pla i llesca determinats
     /// @param plane Pla sobre que volem mostrar/amagar les primitives
-    /// @param slice Llesca dins d'aquell pla. En el cas que el pla sigui Top2DPlane, slice no es té en compte
+    /// @param slice Llesca dins d'aquell pla.
     void hide(int plane, int slice);
     void show(int plane, int slice);
 
@@ -79,6 +80,9 @@ private:
     /// Esborra la primitiva donada del contenidor de primitives especificat.
     /// Si la troba l'esborra. Retorna cert si la troba, fals altrament.
     bool erasePrimitiveFromContainer(DrawerPrimitive *primitive, QMultiMap<int, DrawerPrimitive*> &primitiveContainer);
+
+    /// Fa que la primitiva es pugui visualitzar al visor associat
+    void renderPrimitive(DrawerPrimitive *primitive);
 
 private slots:
     /// Refresca les primitives que s'han de veure pel viewer segons el seu estat

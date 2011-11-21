@@ -102,7 +102,7 @@ void Cursor3DTool::initializePosition()
         m_crossHair->increaseReferenceCount();
 
         m_crossHair->setCentrePoint(xyz[0], xyz[1], xyz[2]);
-        m_2DViewer->getDrawer()->draw(m_crossHair, QViewer::Top2DPlane);
+        m_2DViewer->getDrawer()->draw(m_crossHair);
     }
 
     m_myData->setVisible(true);
@@ -229,7 +229,7 @@ void Cursor3DTool::updateProjectedPoint()
             // HACK Succedani d'Smart Pointer per tal que el drawer no elimini el crossHair quan s'activi el thickslab
             m_crossHair->increaseReferenceCount();
 
-            m_2DViewer->getDrawer()->draw(m_crossHair, QViewer::Top2DPlane);
+            m_2DViewer->getDrawer()->draw(m_crossHair);
         }
 
         if (!m_myData->isVisible())
