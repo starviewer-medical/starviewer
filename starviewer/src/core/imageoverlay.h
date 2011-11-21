@@ -4,6 +4,8 @@
 #include <QString>
 #include <QSharedPointer>
 
+class QRect;
+
 namespace gdcm {
 class Overlay;
 }
@@ -39,6 +41,17 @@ public:
     /// Retorna cert sii l'overlay és vàlid (si el nombre de files i el nombre de columnes són positius i té dades).
     bool isValid() const;
 
+    /// Crea un overlay més petit dins de la regió donada.
+    /// Si l'overlay no és vàlid o la regió no està completament continguda dins de l'overlay, retorna un overlay invàlid.
+    ImageOverlay createSubOverlay(const QRect &region) const;
+
+    /// Separa l'overlay en overlays més petits que tinguin menys espai desaprofitat per estalviar memòria.
+    /// Si l'overlay no és vàlid o és buit retorna una llista buida.
+    QList<ImageOverlay> split() const;
+
+    /// Compara aquest overlay amb un altre i diu si són iguals.
+    bool operator ==(const ImageOverlay &overlay) const;
+
     /// Construeix un ImageOverlay a partir d'un gdcm::Overlay
     static ImageOverlay fromGDCMOverlay(const gdcm::Overlay &gdcmOverlay);
 
@@ -51,7 +64,7 @@ public:
     static ImageOverlay mergeOverlays(const QList<ImageOverlay> &overlaysList, bool &ok);
 
     /// Ens retorna l'overlay en format DrawerBitmap per sobreposar sobre una imatge amb l'origin i spacing donats
-    DrawerBitmap* getAsDrawerBitmap(double origin[3], double spacing[3]);
+    DrawerBitmap* getAsDrawerBitmap(double origin[3], double spacing[3]) const;
 
 private:
     /// Ús intern per QSharedPointer. Aquest serà el mètode que es cridarà per eliminar 
@@ -59,6 +72,9 @@ private:
     /// template <typename T> void arrayDeleter(T array[])
     /// en cas que tinguem més shared pointers amb punters a arrays
     static void deleteDataArray(unsigned char dataArray[]);
+
+    /// Retorna una còpia de les dades de l'overlay a la regió donada.
+    unsigned char* copyDataForSubOverlay(const QRect &region) const;
 
 private:
     /// Files i columnes de l'overlay

@@ -12,6 +12,30 @@
 using namespace udg;
 using namespace testing;
 
+namespace QTest {
+
+template<>
+char* toString(const QList<ImageOverlay> &overlayList)
+{
+    QByteArray ba = "[";
+    for (int i = 0; i < overlayList.size(); i++)
+    {
+        QString overlayString =
+            QString("{rows = %1, columns = %2, origin = (%3, %4), data = %5}").arg(overlayList[i].getRows()).arg(overlayList[i].getColumns())
+                                                                              .arg(overlayList[i].getXOrigin()).arg(overlayList[i].getYOrigin())
+                                                                              .arg(reinterpret_cast<quintptr>(overlayList[i].getData()), 0, 16);
+        ba += overlayString;
+        if (i < overlayList.size() - 1)
+        {
+            ba += ", ";
+        }
+    }
+    ba += "]";
+    return qstrdup(ba.data());
+}
+
+}
+
 class test_ImageOverlay : public QObject {
 Q_OBJECT
 
@@ -20,6 +44,18 @@ private slots:
 
     void isValid_ReturnsExpectedValue_data();
     void isValid_ReturnsExpectedValue();
+
+    void createSubOverlay_ShouldReturnInvalidOverlay_data();
+    void createSubOverlay_ShouldReturnInvalidOverlay();
+
+    void createSubOverlay_ShouldReturnExpectedOverlay_data();
+    void createSubOverlay_ShouldReturnExpectedOverlay();
+
+    void split_ShouldReturnExpectedResults_data();
+    void split_ShouldReturnExpectedResults();
+
+    void operatorEquals_ShouldReturnCorrectResults_data();
+    void operatorEquals_ShouldReturnCorrectResults();
 
     void fromGDCMOverlay_ReturnsExpectedValues_data();
     void fromGDCMOverlay_ReturnsExpectedValues();
@@ -104,6 +140,145 @@ void test_ImageOverlay::isValid_ReturnsExpectedValue()
     QFETCH(bool, expectedValue);
 
     QCOMPARE(imageOverlay.isValid(), expectedValue);
+}
+
+void test_ImageOverlay::createSubOverlay_ShouldReturnInvalidOverlay_data()
+{
+    QTest::addColumn<ImageOverlay>("overlay");
+    QTest::addColumn<QRect>("region");
+
+    ImageOverlay overlay;
+
+    overlay.setRows(5);
+    overlay.setColumns(5);
+    QTest::newRow("invalid overlay, region not inside") << overlay << QRect(1, 2, 7, 3);
+    QTest::newRow("invalid overlay, region inside") << overlay << QRect(1, 1, 1, 1);
+
+    overlay.setData(new unsigned char[1]);
+    QTest::newRow("valid overlay, region not inside") << overlay << QRect(1, 2, 7, 3);
+}
+
+void test_ImageOverlay::createSubOverlay_ShouldReturnInvalidOverlay()
+{
+    QFETCH(ImageOverlay, overlay);
+    QFETCH(QRect, region);
+
+    QVERIFY(!overlay.createSubOverlay(region).isValid());
+}
+
+void test_ImageOverlay::createSubOverlay_ShouldReturnExpectedOverlay_data()
+{
+    QList<ImageOverlay> overlays = ImageOverlayTestHelper::createImageOverlays();
+    QList< QList<QRect> > overlaysRegions = ImageOverlayTestHelper::createSubOverlayRegions();
+    QList< QList<ImageOverlay> > overlaysSubOverlays = ImageOverlayTestHelper::createSubOverlays();
+
+    QTest::addColumn<ImageOverlay>("overlay");
+    QTest::addColumn<QRect>("region");
+    QTest::addColumn<ImageOverlay>("subOverlay");
+
+    QTest::newRow("overlay #1, sub #1") << overlays[0] << overlaysRegions[0][0] << overlaysSubOverlays[0][0];
+    QTest::newRow("overlay #2, sub #1") << overlays[1] << overlaysRegions[1][0] << overlaysSubOverlays[1][0];
+    QTest::newRow("overlay #2, sub #2") << overlays[1] << overlaysRegions[1][1] << overlaysSubOverlays[1][1];
+    QTest::newRow("overlay #2, sub #3") << overlays[1] << overlaysRegions[1][2] << overlaysSubOverlays[1][2];
+    QTest::newRow("overlay #3, sub #1") << overlays[2] << overlaysRegions[2][0] << overlaysSubOverlays[2][0];
+}
+
+void test_ImageOverlay::createSubOverlay_ShouldReturnExpectedOverlay()
+{
+    QFETCH(ImageOverlay, overlay);
+    QFETCH(QRect, region);
+    QFETCH(ImageOverlay, subOverlay);
+
+    QCOMPARE(overlay.createSubOverlay(region), subOverlay);
+}
+
+void test_ImageOverlay::split_ShouldReturnExpectedResults_data()
+{
+    QList<ImageOverlay> overlays = ImageOverlayTestHelper::createImageOverlays();
+    QList< QList<ImageOverlay> > overlaysSubOverlays = ImageOverlayTestHelper::createSubOverlays();
+
+    QTest::addColumn<ImageOverlay>("overlay");
+    QTest::addColumn< QList<ImageOverlay> >("subOverlays");
+
+    ImageOverlay overlay;
+
+    QTest::newRow("invalid overlay") << overlay << QList<ImageOverlay>();
+
+    overlay.setRows(128);
+    overlay.setColumns(128);
+    overlay.setData(new unsigned char[128 * 128]);
+    memset(overlay.getData(), 0, 128 * 128 * sizeof(unsigned char));
+    QTest::newRow("empty overlay") << overlay << QList<ImageOverlay>();
+
+    QTest::newRow("overlay #1") << overlays[0] << overlaysSubOverlays[0];
+    QTest::newRow("overlay #2") << overlays[1] << overlaysSubOverlays[1];
+    QTest::newRow("overlay #3") << overlays[2] << overlaysSubOverlays[2];
+}
+
+void test_ImageOverlay::split_ShouldReturnExpectedResults()
+{
+    QFETCH(ImageOverlay, overlay);
+    QFETCH(QList<ImageOverlay>, subOverlays);
+
+    QCOMPARE(overlay.split(), subOverlays);
+}
+
+void test_ImageOverlay::operatorEquals_ShouldReturnCorrectResults_data()
+{
+    QTest::addColumn<ImageOverlay>("overlay1");
+    QTest::addColumn<ImageOverlay>("overlay2");
+    QTest::addColumn<bool>("result");
+
+    ImageOverlay overlay1, overlay2;
+    QTest::newRow("default overlays") << overlay1 << overlay2 << true;
+    overlay1.setRows(1);
+    overlay2.setRows(2);
+    QTest::newRow("different number of rows") << overlay1 << overlay2 << false;
+    overlay1.setRows(3);
+    overlay2.setRows(3);
+    overlay1.setColumns(1);
+    overlay2.setColumns(2);
+    QTest::newRow("different number of columns") << overlay1 << overlay2 << false;
+    overlay1.setColumns(3);
+    overlay2.setColumns(3);
+    overlay1.setOrigin(10, 1);
+    overlay2.setOrigin(20, 1);
+    QTest::newRow("different X origin") << overlay1 << overlay2 << false;
+    overlay1.setOrigin(30, 10);
+    overlay2.setOrigin(30, 20);
+    QTest::newRow("different Y origin") << overlay1 << overlay2 << false;
+    overlay1.setOrigin(30, 30);
+    overlay2.setOrigin(30, 30);
+    overlay1.setData(new unsigned char[9]);
+    QTest::newRow("data only in 1") << overlay1 << overlay2 << false;
+    overlay1.setData(0);
+    overlay2.setData(new unsigned char[9]);
+    QTest::newRow("data only in 2") << overlay1 << overlay2 << false;
+    overlay1.setData(new unsigned char[9]);
+    memset(overlay1.getData(), 42, 9 * sizeof(unsigned char));
+    memset(overlay2.getData(), 42, 9 * sizeof(unsigned char));
+    QTest::newRow("same data in both") << overlay1 << overlay2 << true;
+    overlay2.setData(new unsigned char[9]);
+    memset(overlay2.getData(), 42, 9 * sizeof(unsigned char));
+    overlay2.getData()[5] = 24;
+    QTest::newRow("different data in both") << overlay1 << overlay2 << false;
+
+    QList<ImageOverlay> overlays = ImageOverlayTestHelper::createImageOverlays();
+    QTest::newRow("random #1, equal") << overlays[0] << overlays[0] << true;
+    QTest::newRow("random #2, equal") << overlays[1] << overlays[1] << true;
+    QTest::newRow("random #3, equal") << overlays[2] << overlays[2] << true;
+    QTest::newRow("random #4, different") << overlays[0] << overlays[1] << false;
+    QTest::newRow("random #5, different") << overlays[1] << overlays[2] << false;
+    QTest::newRow("random #6, different") << overlays[0] << overlays[2] << false;
+}
+
+void test_ImageOverlay::operatorEquals_ShouldReturnCorrectResults()
+{
+    QFETCH(ImageOverlay, overlay1);
+    QFETCH(ImageOverlay, overlay2);
+    QFETCH(bool, result);
+
+    QCOMPARE(overlay1 == overlay2, result);
 }
 
 void test_ImageOverlay::fromGDCMOverlay_ReturnsExpectedValues_data()
