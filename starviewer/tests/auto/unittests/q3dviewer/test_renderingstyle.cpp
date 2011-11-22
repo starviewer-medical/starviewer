@@ -46,17 +46,17 @@ void test_RenderingStyle::fromVariant_ShouldReturnCorrectRenderingStyle()
 
     RenderingStyle fromVariant = RenderingStyle::fromVariant(variant);
 
-    QCOMPARE(fromVariant.method, renderingStyle.method);
-    QCOMPARE(fromVariant.diffuseLighting, renderingStyle.diffuseLighting);
-    QCOMPARE(fromVariant.specularLighting, renderingStyle.specularLighting);
-    QCOMPARE(fromVariant.specularPower, renderingStyle.specularPower);
-    QCOMPARE(fromVariant.transferFunction, renderingStyle.transferFunction);
-    QCOMPARE(fromVariant.contour, renderingStyle.contour);
-    QCOMPARE(fromVariant.contourThreshold, renderingStyle.contourThreshold);
-    QCOMPARE(fromVariant.obscurance, renderingStyle.obscurance);
-    QCOMPARE(fromVariant.obscuranceQuality, renderingStyle.obscuranceQuality);
-    QCOMPARE(fromVariant.obscuranceFactor, renderingStyle.obscuranceFactor);
-    QCOMPARE(fromVariant.isoValue, renderingStyle.isoValue);
+    QCOMPARE(fromVariant.getMethod(), renderingStyle.getMethod());
+    QCOMPARE(fromVariant.getDiffuseLighting(), renderingStyle.getDiffuseLighting());
+    QCOMPARE(fromVariant.getSpecularLighting(), renderingStyle.getSpecularLighting());
+    QCOMPARE(fromVariant.getSpecularPower(), renderingStyle.getSpecularPower());
+    QCOMPARE(fromVariant.getTransferFunction(), renderingStyle.getTransferFunction());
+    QCOMPARE(fromVariant.getContour(), renderingStyle.getContour());
+    QCOMPARE(fromVariant.getContourThreshold(), renderingStyle.getContourThreshold());
+    QCOMPARE(fromVariant.getObscurance(), renderingStyle.getObscurance());
+    QCOMPARE(fromVariant.getObscuranceQuality(), renderingStyle.getObscuranceQuality());
+    QCOMPARE(fromVariant.getObscuranceFactor(), renderingStyle.getObscuranceFactor());
+    QCOMPARE(fromVariant.getIsoValue(), renderingStyle.getIsoValue());
 }
 
 void test_RenderingStyle::setupData()
@@ -139,27 +139,27 @@ void test_RenderingStyle::setupData()
     {
         RenderingStyle renderingStyle;
         QMap<QString, QVariant> map;
-        renderingStyle.method = methods[i];
+        renderingStyle.setMethod(methods[i]);
         map["method"] = methods[i];
-        renderingStyle.diffuseLighting = diffuseLightings[i];
+        renderingStyle.setDiffuseLighting(diffuseLightings[i]);
         map["diffuseLighting"] = diffuseLightings[i];
-        renderingStyle.specularLighting = specularLightings[i];
+        renderingStyle.setSpecularLighting(specularLightings[i]);
         map["specularLighting"] = specularLightings[i];
-        renderingStyle.specularPower = specularPowers[i];
+        renderingStyle.setSpecularPower(specularPowers[i]);
         map["specularPower"] = specularPowers[i];
-        renderingStyle.transferFunction = transferFunctions[i];
+        renderingStyle.setTransferFunction(transferFunctions[i]);
         map["transferFunction"] = transferFunctions[i].toVariant();
-        renderingStyle.contour = contours[i];
+        renderingStyle.setContour(contours[i]);
         map["contour"] = contours[i];
-        renderingStyle.contourThreshold = contourThresholds[i];
+        renderingStyle.setContourThreshold(contourThresholds[i]);
         map["contourThreshold"] = contourThresholds[i];
-        renderingStyle.obscurance = obscurances[i];
+        renderingStyle.setObscurance(obscurances[i]);
         map["obscurance"] = obscurances[i];
-        renderingStyle.obscuranceQuality = obscuranceQualities[i];
+        renderingStyle.setObscuranceQuality(obscuranceQualities[i]);
         map["obscuranceQuality"] = obscuranceQualities[i];
-        renderingStyle.obscuranceFactor = obscuranceFactors[i];
+        renderingStyle.setObscuranceFactor(obscuranceFactors[i]);
         map["obscuranceFactor"] = obscuranceFactors[i];
-        renderingStyle.isoValue = isoValues[i];
+        renderingStyle.setIsoValue(isoValues[i]);
         map["isoValue"] = isoValues[i];
         QTest::newRow(qPrintable(QString("random (%1)").arg(i))) << renderingStyle << QVariant(map);
     }

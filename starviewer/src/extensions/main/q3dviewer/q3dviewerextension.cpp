@@ -145,130 +145,130 @@ void Q3DViewerExtension::loadRenderingStyles()
     TransferFunction *transferFunction;
 
     item = new QStandardItem(QIcon(":/extensions/Q3DViewerExtension/renderingstyles/spine2.png"), tr("Spine"));
-    renderingStyle.method = RenderingStyle::RayCasting;
-    renderingStyle.diffuseLighting = true;
-    renderingStyle.specularLighting = true;
-    renderingStyle.specularPower = 64.0;
+    renderingStyle.setMethod(RenderingStyle::RayCasting);
+    renderingStyle.setDiffuseLighting(true);
+    renderingStyle.setSpecularLighting(true);
+    renderingStyle.setSpecularPower(64.0);
     transferFunction = TransferFunctionIO::fromXmlFile(":/extensions/Q3DViewerExtension/renderingstyles/spine2.xml");
-    renderingStyle.transferFunction = *transferFunction;
+    renderingStyle.setTransferFunction(*transferFunction);
     delete transferFunction;
-    renderingStyle.contour = false;
-    renderingStyle.obscurance = false;
+    renderingStyle.setContour(false);
+    renderingStyle.setObscurance(false);
     item->setData(renderingStyle.toVariant());
     m_renderingStyleModel->appendRow(item);
 
     item = new QStandardItem(QIcon(":/extensions/Q3DViewerExtension/renderingstyles/thorax1.png"), tr("Thorax"));
-    renderingStyle.method = RenderingStyle::RayCasting;
-    renderingStyle.diffuseLighting = true;
-    renderingStyle.specularLighting = true;
-    renderingStyle.specularPower = 64.0;
+    renderingStyle.setMethod(RenderingStyle::RayCasting);
+    renderingStyle.setDiffuseLighting(true);
+    renderingStyle.setSpecularLighting(true);
+    renderingStyle.setSpecularPower(64.0);
     transferFunction = TransferFunctionIO::fromXmlFile(":/extensions/Q3DViewerExtension/renderingstyles/thorax1.xml");
-    renderingStyle.transferFunction = *transferFunction;
+    renderingStyle.setTransferFunction(*transferFunction);
     delete transferFunction;
-    renderingStyle.contour = false;
-    renderingStyle.obscurance = false;
+    renderingStyle.setContour(false);
+    renderingStyle.setObscurance(false);
     item->setData(renderingStyle.toVariant());
     m_renderingStyleModel->appendRow(item);
 
     item = new QStandardItem(QIcon(":/extensions/Q3DViewerExtension/renderingstyles/pelvis2.png"), tr("Pelvis"));
-    renderingStyle.method = RenderingStyle::RayCasting;
-    renderingStyle.diffuseLighting = true;
-    renderingStyle.specularLighting = true;
-    renderingStyle.specularPower = 64.0;
+    renderingStyle.setMethod(RenderingStyle::RayCasting);
+    renderingStyle.setDiffuseLighting(true);
+    renderingStyle.setSpecularLighting(true);
+    renderingStyle.setSpecularPower(64.0);
     transferFunction = TransferFunctionIO::fromXmlFile(":/extensions/Q3DViewerExtension/renderingstyles/pelvis2.xml");
-    renderingStyle.transferFunction = *transferFunction;
+    renderingStyle.setTransferFunction(*transferFunction);
     delete transferFunction;
-    renderingStyle.contour = false;
-    renderingStyle.obscurance = false;
+    renderingStyle.setContour(false);
+    renderingStyle.setObscurance(false);
     item->setData(renderingStyle.toVariant());
     m_renderingStyleModel->appendRow(item);
 
     item = new QStandardItem(QIcon(":/extensions/Q3DViewerExtension/renderingstyles/cow1.png"), tr("Circle of Willis"));
-    renderingStyle.method = RenderingStyle::RayCasting;
-    renderingStyle.diffuseLighting = true;
-    renderingStyle.specularLighting = false;
+    renderingStyle.setMethod(RenderingStyle::RayCasting);
+    renderingStyle.setDiffuseLighting(true);
+    renderingStyle.setSpecularLighting(false);
     transferFunction = TransferFunctionIO::fromXmlFile(":/extensions/Q3DViewerExtension/renderingstyles/cow1.xml");
-    renderingStyle.transferFunction = *transferFunction;
+    renderingStyle.setTransferFunction(*transferFunction);
     delete transferFunction;
-    renderingStyle.contour = false;
-    renderingStyle.obscurance = false;
+    renderingStyle.setContour(false);
+    renderingStyle.setObscurance(false);
     item->setData(renderingStyle.toVariant());
     m_renderingStyleModel->appendRow(item);
 
     item = new QStandardItem(QIcon(":/extensions/Q3DViewerExtension/renderingstyles/carotids2.png"), tr("Carotids"));
-    renderingStyle.method = RenderingStyle::RayCasting;
-    renderingStyle.diffuseLighting = true;
-    renderingStyle.specularLighting = true;
-    renderingStyle.specularPower = 64.0;
+    renderingStyle.setMethod(RenderingStyle::RayCasting);
+    renderingStyle.setDiffuseLighting(true);
+    renderingStyle.setSpecularLighting(true);
+    renderingStyle.setSpecularPower(64.0);
     transferFunction = TransferFunctionIO::fromXmlFile(":/extensions/Q3DViewerExtension/renderingstyles/carotids2.xml");
-    renderingStyle.transferFunction = *transferFunction;
+    renderingStyle.setTransferFunction(*transferFunction);
     delete transferFunction;
-    renderingStyle.contour = false;
-    renderingStyle.obscurance = false;
+    renderingStyle.setContour(false);
+    renderingStyle.setObscurance(false);
     item->setData(renderingStyle.toVariant());
     m_renderingStyleModel->appendRow(item);
 
     item = new QStandardItem(QIcon(":/extensions/Q3DViewerExtension/renderingstyles/bones4.png"), tr("Bones"));
-    renderingStyle.method = RenderingStyle::RayCasting;
-    renderingStyle.diffuseLighting = true;
-    renderingStyle.specularLighting = true;
-    renderingStyle.specularPower = 64.0;
+    renderingStyle.setMethod(RenderingStyle::RayCasting);
+    renderingStyle.setDiffuseLighting(true);
+    renderingStyle.setSpecularLighting(true);
+    renderingStyle.setSpecularPower(64.0);
     transferFunction = TransferFunctionIO::fromXmlFile(":/extensions/Q3DViewerExtension/renderingstyles/bones4.xml");
-    renderingStyle.transferFunction = *transferFunction;
+    renderingStyle.setTransferFunction(*transferFunction);
     delete transferFunction;
-    renderingStyle.contour = false;
-    renderingStyle.obscurance = false;
+    renderingStyle.setContour(false);
+    renderingStyle.setObscurance(false);
     item->setData(renderingStyle.toVariant());
     m_renderingStyleModel->appendRow(item);
 
     item = new QStandardItem(QIcon(":/extensions/Q3DViewerExtension/renderingstyles/bonehires.png"), tr("Bones 2"));
-    renderingStyle.method = RenderingStyle::RayCasting;
-    renderingStyle.diffuseLighting = true;
-    renderingStyle.specularLighting = false;
+    renderingStyle.setMethod(RenderingStyle::RayCasting);
+    renderingStyle.setDiffuseLighting(true);
+    renderingStyle.setSpecularLighting(false);
     transferFunction = TransferFunctionIO::fromXmlFile(":/extensions/Q3DViewerExtension/renderingstyles/bonehires.xml");
-    renderingStyle.transferFunction = *transferFunction;
+    renderingStyle.setTransferFunction(*transferFunction);
     delete transferFunction;
-    renderingStyle.contour = false;
-    renderingStyle.obscurance = false;
+    renderingStyle.setContour(false);
+    renderingStyle.setObscurance(false);
     item->setData(renderingStyle.toVariant());
     m_renderingStyleModel->appendRow(item);
 
     item = new QStandardItem(QIcon(":/extensions/Q3DViewerExtension/renderingstyles/abdomenbones.png"), tr("Abdomen bones"));
-    renderingStyle.method = RenderingStyle::RayCasting;
-    renderingStyle.diffuseLighting = true;
-    renderingStyle.specularLighting = true;
-    renderingStyle.specularPower = 64.0;
+    renderingStyle.setMethod(RenderingStyle::RayCasting);
+    renderingStyle.setDiffuseLighting(true);
+    renderingStyle.setSpecularLighting(true);
+    renderingStyle.setSpecularPower(64.0);
     transferFunction = TransferFunctionIO::fromXmlFile(":/extensions/Q3DViewerExtension/renderingstyles/abdomenbones.xml");
-    renderingStyle.transferFunction = *transferFunction;
+    renderingStyle.setTransferFunction(*transferFunction);
     delete transferFunction;
-    renderingStyle.contour = false;
-    renderingStyle.obscurance = false;
+    renderingStyle.setContour(false);
+    renderingStyle.setObscurance(false);
     item->setData(renderingStyle.toVariant());
     m_renderingStyleModel->appendRow(item);
 
     item = new QStandardItem(QIcon(":/extensions/Q3DViewerExtension/renderingstyles/abdomenrunoff1.png"), tr("Abdomen run-off"));
-    renderingStyle.method = RenderingStyle::RayCasting;
-    renderingStyle.diffuseLighting = true;
-    renderingStyle.specularLighting = true;
-    renderingStyle.specularPower = 64.0;
+    renderingStyle.setMethod(RenderingStyle::RayCasting);
+    renderingStyle.setDiffuseLighting(true);
+    renderingStyle.setSpecularLighting(true);
+    renderingStyle.setSpecularPower(64.0);
     transferFunction = TransferFunctionIO::fromXmlFile(":/extensions/Q3DViewerExtension/renderingstyles/abdomenrunoff1.xml");
-    renderingStyle.transferFunction = *transferFunction;
+    renderingStyle.setTransferFunction(*transferFunction);
     delete transferFunction;
-    renderingStyle.contour = false;
-    renderingStyle.obscurance = false;
+    renderingStyle.setContour(false);
+    renderingStyle.setObscurance(false);
     item->setData(renderingStyle.toVariant());
     m_renderingStyleModel->appendRow(item);
 
     item = new QStandardItem(QIcon(":/extensions/Q3DViewerExtension/renderingstyles/abdomenslab.png"), tr("Abdomen slab"));
-    renderingStyle.method = RenderingStyle::RayCasting;
-    renderingStyle.diffuseLighting = true;
-    renderingStyle.specularLighting = true;
-    renderingStyle.specularPower = 64.0;
+    renderingStyle.setMethod(RenderingStyle::RayCasting);
+    renderingStyle.setDiffuseLighting(true);
+    renderingStyle.setSpecularLighting(true);
+    renderingStyle.setSpecularPower(64.0);
     transferFunction = TransferFunctionIO::fromXmlFile(":/extensions/Q3DViewerExtension/renderingstyles/abdomenslab.xml");
-    renderingStyle.transferFunction = *transferFunction;
+    renderingStyle.setTransferFunction(*transferFunction);
     delete transferFunction;
-    renderingStyle.contour = false;
-    renderingStyle.obscurance = false;
+    renderingStyle.setContour(false);
+    renderingStyle.setObscurance(false);
     item->setData(renderingStyle.toVariant());
     m_renderingStyleModel->appendRow(item);
 
@@ -569,16 +569,16 @@ void Q3DViewerExtension::applyRenderingStyle(const QModelIndex &index)
     QStandardItem *item = m_renderingStyleModel->itemFromIndex(index);
     RenderingStyle renderingStyle = RenderingStyle::fromVariant(item->data());
 
-    switch (renderingStyle.method)
+    switch (renderingStyle.getMethod())
     {
         case RenderingStyle::RayCasting:
         case RenderingStyle::Texture3D:
         case RenderingStyle::Texture2D:
-            if (renderingStyle.method == RenderingStyle::RayCasting)
+            if (renderingStyle.getMethod() == RenderingStyle::RayCasting)
             {
-                m_renderingMethodComboBox->setCurrentIndex(renderingStyle.obscurance ? 1 : 0);
+                m_renderingMethodComboBox->setCurrentIndex(renderingStyle.getObscurance() ? 1 : 0);
             }
-            else if (renderingStyle.method == RenderingStyle::Texture3D)
+            else if (renderingStyle.getMethod() == RenderingStyle::Texture3D)
             {
                 m_renderingMethodComboBox->setCurrentIndex(3);
             }
@@ -587,27 +587,27 @@ void Q3DViewerExtension::applyRenderingStyle(const QModelIndex &index)
                 m_renderingMethodComboBox->setCurrentIndex(4);
             }
 
-            applyClut(renderingStyle.transferFunction);
-            m_shadingCheckBox->setChecked(renderingStyle.diffuseLighting);
+            applyClut(renderingStyle.getTransferFunction());
+            m_shadingCheckBox->setChecked(renderingStyle.getDiffuseLighting());
 
-            if (renderingStyle.diffuseLighting)
+            if (renderingStyle.getDiffuseLighting())
             {
-                m_specularCheckBox->setChecked(renderingStyle.specularLighting);
-                if (renderingStyle.specularLighting)
+                m_specularCheckBox->setChecked(renderingStyle.getSpecularLighting());
+                if (renderingStyle.getSpecularLighting())
                 {
-                    m_specularPowerDoubleSpinBox->setValue(renderingStyle.specularPower);
+                    m_specularPowerDoubleSpinBox->setValue(renderingStyle.getSpecularPower());
                 }
             }
 
-            if (renderingStyle.method == RenderingStyle::RayCasting)
+            if (renderingStyle.getMethod() == RenderingStyle::RayCasting)
             {
-                m_contourCheckBox->setChecked(renderingStyle.contour);
-                if (renderingStyle.contour)
+                m_contourCheckBox->setChecked(renderingStyle.getContour());
+                if (renderingStyle.getContour())
                 {
-                    m_contourThresholdDoubleSpinBox->setValue(renderingStyle.contourThreshold);
+                    m_contourThresholdDoubleSpinBox->setValue(renderingStyle.getContourThreshold());
                 }
 
-                if (renderingStyle.obscurance)
+                if (renderingStyle.getObscurance())
                 {
                     // Si s'estan calculant no toquem res
                     if (!m_computingObscurance)
@@ -616,7 +616,7 @@ void Q3DViewerExtension::applyRenderingStyle(const QModelIndex &index)
                         if (!m_obscuranceCheckBox->isVisible())
                         {
                             // Si no hi ha obscurances calcular-les
-                            m_obscuranceQualityComboBox->setCurrentIndex(static_cast<int>(renderingStyle.obscuranceQuality));
+                            m_obscuranceQualityComboBox->setCurrentIndex(static_cast<int>(renderingStyle.getObscuranceQuality()));
                             m_obscuranceComputeCancelPushButton->click();
                         }
                         else
@@ -626,7 +626,7 @@ void Q3DViewerExtension::applyRenderingStyle(const QModelIndex &index)
                         }
                     }
 
-                    m_obscuranceFactorDoubleSpinBox->setValue(renderingStyle.obscuranceFactor);
+                    m_obscuranceFactorDoubleSpinBox->setValue(renderingStyle.getObscuranceFactor());
                 }
             }
 
@@ -638,7 +638,7 @@ void Q3DViewerExtension::applyRenderingStyle(const QModelIndex &index)
 
         case RenderingStyle::IsoSurface:
             m_renderingMethodComboBox->setCurrentIndex(5);
-            m_isoValueSpinBox->setValue(static_cast<int>(qRound(renderingStyle.isoValue)));
+            m_isoValueSpinBox->setValue(static_cast<int>(qRound(renderingStyle.getIsoValue())));
             break;
 
         case RenderingStyle::Contouring:
