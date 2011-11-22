@@ -5,13 +5,11 @@
 #include "drawer.h"
 #include "drawerpolygon.h"
 
-#include <QMessageBox>
 #include <qmath.h>
 
 // Vtk
 #include <vtkCommand.h>
 #include <vtkRenderWindowInteractor.h>
-#include <vtkImageData.h>
 
 namespace udg {
 
