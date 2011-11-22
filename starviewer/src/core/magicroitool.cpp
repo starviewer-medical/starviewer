@@ -13,14 +13,13 @@
 
 namespace udg {
 
-static const double MagicSize = 3.0;
-static const double MagicFactor = 1.0;
+const int MagicROITool::MagicSize = 3;
+const double MagicROITool::InitialMagicFactor = 1.0;
 
 MagicROITool::MagicROITool(QViewer *viewer, QObject *parent)
 : ROITool(viewer, parent)
 {
-    m_magicSize = MagicSize;
-    m_magicFactor = MagicFactor;
+    m_magicFactor = InitialMagicFactor;
     m_lowerLevel = 0.0;
     m_upperLevel = 0.0;
     m_toolName = "MagicROITool";
@@ -123,8 +122,7 @@ void MagicROITool::startRegion()
     {
         if (m_2DViewer->getCurrentCursorImageCoordinate(m_pickedPosition))
         {
-            m_magicFactor = MagicFactor;
-            m_magicSize = MagicSize;
+            m_magicFactor = InitialMagicFactor;
             m_roiPolygon = new DrawerPolygon;
             m_roiPolygon->increaseReferenceCount();
             m_2DViewer->getDrawer()->draw(m_roiPolygon);
@@ -517,10 +515,10 @@ double MagicROITool::getStandardDeviation(int x, int y, int z)
     
     this->assignBounds(minX, minY, maxX, maxY);
 
-    minX = qMax(x - m_magicSize, minX);
-    maxX = qMin(x + m_magicSize, maxX);
-    minY = qMax(y - m_magicSize, minY);
-    maxY = qMin(y + m_magicSize, maxY);
+    minX = qMax(x - MagicSize, minX);
+    maxX = qMin(x + MagicSize, maxX);
+    minY = qMax(y - MagicSize, minY);
+    maxY = qMin(y + MagicSize, maxY);
 
     int xIndex, yIndex, zIndex;
     Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());

@@ -87,7 +87,9 @@ private slots:
 
 private:
     /// Mida de la tool
-    int m_magicSize;
+    static const int MagicSize;
+    static const double InitialMagicFactor;
+
     double m_magicFactor;
 
     /// Màscara de la regió que formarà el polígon
