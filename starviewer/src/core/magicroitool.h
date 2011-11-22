@@ -85,6 +85,9 @@ private slots:
     /// Inicialitza la tool
     void initialize();
 
+    /// Reinicia la regió, invalidant l'anterior que hi hagués en curs si existia
+    void restartRegion();
+
 private:
     /// Mida de la tool
     static const int MagicSize;
