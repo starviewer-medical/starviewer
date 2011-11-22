@@ -27,6 +27,8 @@ MagicROITool::MagicROITool(QViewer *viewer, QObject *parent)
     m_roiPolygon = NULL;
 
     connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(initialize()));
+    connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(restartRegion()));
+    connect(m_2DViewer, SIGNAL(phaseChanged(int)), SLOT(restartRegion()));
 }
 
 MagicROITool::~MagicROITool()
@@ -143,6 +145,17 @@ void MagicROITool::endRegion()
         m_2DViewer->getDrawer()->draw(m_roiPolygon, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
         m_roiPolygon->decreaseReferenceCount();
         m_roiPolygon = NULL;
+    }
+}
+
+void MagicROITool::restartRegion()
+{
+    if (!m_roiPolygon.isNull())
+    {
+        m_roiPolygon->decreaseReferenceCount();
+        delete m_roiPolygon;
+        
+        startRegion();
     }
 }
 
