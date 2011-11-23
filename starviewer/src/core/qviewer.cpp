@@ -56,6 +56,7 @@ QViewer::QViewer(QWidget *parent)
     m_renderer->Delete();
     // Forcem 2x buffer
     getRenderWindow()->DoubleBufferOn();
+    getRenderWindow()->LineSmoothingOn();
 
     // Posem a punt el filtre per guardar captures de pantalla
     m_windowToImageFilter = vtkWindowToImageFilter::New();
