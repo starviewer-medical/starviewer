@@ -128,5 +128,9 @@
     <file>cache/upgradeDatabase.xml</file>
     <file>images/magicroitool.png</file>
     <file>cache/database.sql</file>
+    <file>images/lock.png</file>
+    <file>images/minus.png</file>
+    <file>images/minuslock.png</file>
+    <file>images/plus.png</file>
   </qresource>
 </RCC>

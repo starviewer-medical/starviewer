@@ -8,6 +8,7 @@
 #include "windowlevelpresetstooldata.h"
 #include "transferfunction.h"
 #include "qviewerworkinprogresswidget.h"
+#include "automaticsynchronizationwidget.h"
 
 // TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de
 // interface, pacs, etc.etc.!!
@@ -74,6 +75,7 @@ QViewer::QViewer(QWidget *parent)
     setWindowLevelData(new WindowLevelPresetsToolData(this));
 
     m_workInProgressWidget = new QViewerWorkInProgressWidget(this);
+    m_automaticSynchronizationWidget = new AutomaticSynchronizationWidget(this);
 
     // Afegim el layout
     m_stackedLayout = new QStackedLayout(this);
@@ -81,6 +83,7 @@ QViewer::QViewer(QWidget *parent)
     m_stackedLayout->setMargin(0);
     m_stackedLayout->addWidget(m_vtkWidget);
     m_stackedLayout->addWidget(m_workInProgressWidget);
+    m_stackedLayout->addWidget(m_automaticSynchronizationWidget);
 
     // Inicialitzem l'status del viewer
     m_viewerStatus = NoVolumeInput;
@@ -852,6 +855,11 @@ void QViewer::setCurrentWidgetByViewerStatus(ViewerStatus status)
     }
 }
 
+void QViewer::restoreCurrentWidgetByViewerStatus()
+{
+    setCurrentWidgetByViewerStatus(m_viewerStatus);
+}
+
 void QViewer::initializeWorkInProgressByViewerStatus(ViewerStatus status)
 {
     m_workInProgressWidget->reset();
@@ -874,6 +882,16 @@ void QViewer::initializeWorkInProgressByViewerStatus(ViewerStatus status)
             m_workInProgressWidget->setTitle(tr("Error loading data"));
             break;
     }
+}
+
+void QViewer::setSincronitzationEditionWidgetAsCurrentWidget()
+{
+    m_stackedLayout->setCurrentWidget(m_automaticSynchronizationWidget);
+}
+
+AutomaticSynchronizationWidget * QViewer::getAutomaticSynchronizationWidget()
+{
+    return m_automaticSynchronizationWidget;
 }
 
 void QViewer::setInputAndRender(Volume *volume)
