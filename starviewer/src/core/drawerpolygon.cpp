@@ -7,13 +7,14 @@
 #include <vtkActor2D.h>
 #include <vtkPolyDataMapper2D.h>
 #include <vtkProperty2D.h>
+#include <vtkPropAssembly.h>
 // Qt
 #include <QVector>
 
 namespace udg {
 
 DrawerPolygon::DrawerPolygon(QObject *parent)
- : DrawerPrimitive(parent), m_vtkPolydata(0), m_vtkPoints(0), m_vtkCellArray(0), m_vtkActor(0), m_vtkMapper(0)
+ : DrawerPrimitive(parent), m_vtkPolydata(0), m_vtkPoints(0), m_vtkCellArray(0), m_vtkActor(0), m_vtkBackgroundActor(0), m_vtkMapper(0), m_vtkPropAssembly(0)
 {
 }
 
@@ -36,6 +37,10 @@ DrawerPolygon::~DrawerPolygon()
     if (m_vtkActor)
     {
         m_vtkActor->Delete();
+    }
+    if (m_vtkBackgroundActor)
+    {
+        m_vtkBackgroundActor->Delete();
     }
     if (m_vtkMapper)
     {
@@ -105,19 +110,26 @@ const double* DrawerPolygon::getVertix(int i)
 
 vtkProp* DrawerPolygon::getAsVtkProp()
 {
-    if (!m_vtkActor)
+    if (!m_vtkPropAssembly)
     {
+        m_vtkPropAssembly = vtkPropAssembly::New();
+
         buildVtkPoints();
         // Creem el pipeline de l'm_vtkActor
         m_vtkActor = vtkActor2D::New();
+        m_vtkBackgroundActor = vtkActor2D::New();
         m_vtkMapper = vtkPolyDataMapper2D::New();
 
         m_vtkActor->SetMapper(m_vtkMapper);
+        m_vtkBackgroundActor->SetMapper(m_vtkMapper);
         m_vtkMapper->SetInput(m_vtkPolydata);
         // Li donem els atributs
         updateVtkActorProperties();
+
+        m_vtkPropAssembly->AddPart(m_vtkBackgroundActor);
+        m_vtkPropAssembly->AddPart(m_vtkActor);
     }
-    return m_vtkActor;
+    return m_vtkPropAssembly;
 }
 
 void DrawerPolygon::update()
@@ -135,7 +147,7 @@ void DrawerPolygon::update()
 
 void DrawerPolygon::updateVtkProp()
 {
-    if (m_vtkActor)
+    if (m_vtkPropAssembly)
     {
         m_vtkPolydata->Reset();
         buildVtkPoints();
@@ -208,16 +220,21 @@ void DrawerPolygon::updateVtkActorProperties()
     m_vtkMapper->SetTransformCoordinate(this->getVtkCoordinateObject());
     // Estil de la línia
     m_vtkActor->GetProperty()->SetLineStipplePattern(m_linePattern);
+    m_vtkBackgroundActor->GetProperty()->SetLineStipplePattern(m_linePattern);
     // Assignem gruix de la línia
     m_vtkActor->GetProperty()->SetLineWidth(m_lineWidth);
+    m_vtkBackgroundActor->GetProperty()->SetLineWidth(m_lineWidth + 2);
     // Assignem opacitat de la línia
     m_vtkActor->GetProperty()->SetOpacity(m_opacity);
+    m_vtkBackgroundActor->GetProperty()->SetOpacity(m_opacity);
     // Mirem la visibilitat de l'm_vtkActor
     m_vtkActor->SetVisibility(this->isVisible());
+    m_vtkBackgroundActor->SetVisibility(this->isVisible());
 
     // Assignem color
     QColor color = this->getColor();
     m_vtkActor->GetProperty()->SetColor(color.redF(), color.greenF(), color.blueF());
+    m_vtkBackgroundActor->GetProperty()->SetColor(255.0, 255.0, 255.0);
 }
 
 int DrawerPolygon::getNumberOfPoints() const

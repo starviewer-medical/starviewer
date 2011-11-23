@@ -9,6 +9,7 @@ class vtkPoints;
 class vtkCellArray;
 class vtkActor2D;
 class vtkPolyDataMapper2D;
+class vtkPropAssembly;
 
 namespace udg {
 
@@ -75,7 +76,11 @@ private:
     vtkPoints *m_vtkPoints;
     vtkCellArray *m_vtkCellArray;
     vtkActor2D *m_vtkActor;
+    vtkActor2D *m_vtkBackgroundActor;
     vtkPolyDataMapper2D *m_vtkMapper;
+
+    /// vtkProp per agrupar l'actor i el background per simular el contorn
+    vtkPropAssembly *m_vtkPropAssembly;
 };
 
 }
