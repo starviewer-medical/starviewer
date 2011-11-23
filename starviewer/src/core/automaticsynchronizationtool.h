@@ -41,12 +41,15 @@ private slots:
     /// Actualitza la posició segons les dades de la toolData
     void updatePosition();
 
+    /// Reinicialitza les dades
+    void reset();
+
 private:
 
     /// Posa la posició actual a les dades, sobreescrivint l'existent si n'hi ha
     void setPositionToToolData();
 
-    /// 
+    /// Obté la llesca més propera del volum del visor
     int getNearestSlice(double projectedPosition[3], double &distance);
 
 private:
@@ -56,6 +59,12 @@ private:
 
     /// Viewer 2D sobre el qual treballem
     Q2DViewer *m_2DViewer;
+
+    /// Ultima llesca a partir de la qual calcular l'increment
+    int m_lastSlice;
+
+    /// Espai entre llesques perdut per arrodoniment
+    double m_roundLostSpacingBetweenSlices;
 
 };
 

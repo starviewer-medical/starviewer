@@ -15,6 +15,8 @@
 #include "qdicomdumpbrowser.h"
 #include "statswatcher.h"
 #include "automaticsynchronizationtool.h"
+#include "automaticsynchronizationmanager.h"
+#include "automaticsynchronizationtooldata.h"
 // Per poder fer screenshots desde menú
 #include "screenshottool.h"
 #include "toolproxy.h"
@@ -60,6 +62,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_downButtonGrid->hide();
 #else
     m_hangingProtocolManager = 0;
+    m_automaticSynchronizationManager = 0;
 #endif
 
     // TODO Ocultem botons que no son del tot necessaris o que no es faran servir
@@ -477,6 +480,7 @@ void Q2DViewerExtension::initializeTools()
     // sincronització no té el model de totes les tools
     connect(m_toolManager->getRegisteredToolAction("Cursor3DTool"), SIGNAL(triggered()), SLOT(disableSynchronization()));
     connect(m_toolManager->getRegisteredToolAction("AutomaticSynchronizationTool"), SIGNAL(triggered(bool)), SLOT(enableAutomaticSincronizationToViewer(bool)));
+    connect(m_automaticSynchronizationEditionButton, SIGNAL(clicked (bool)), SLOT(enableAutomaticSynchonizationEditor(bool)));
 #endif
 
     // SCREEN SHOT TOOL
@@ -793,22 +797,33 @@ void Q2DViewerExtension::updatePreviousStudiesWidget()
 
 void Q2DViewerExtension::enableAutomaticSincronizationToViewer(bool enable)
 {
+    m_automaticSynchronizationEditionButton->setEnabled(enable);
+    
     if (enable)
     {
-        disableSynchronization();
+        disableSynchronization();//Desactivem sincronització manual
         enableSynchronizationButton(false);
 
         Tool *tool = m_workingArea->getSelectedViewer()->getViewer()->getToolProxy()->getTool("AutomaticSynchronizationTool");
-        AutomaticSynchronizationTool *automaticSynchronizationTool = dynamic_cast<AutomaticSynchronizationTool*>(tool);
-        if (automaticSynchronizationTool)
+        AutomaticSynchronizationToolData *toolData = dynamic_cast<AutomaticSynchronizationToolData*>(tool->getToolData());
+
+        if (m_automaticSynchronizationManager)
         {
-            automaticSynchronizationTool->changePositionIfActive();
+            delete m_automaticSynchronizationManager;
         }
+
+        m_automaticSynchronizationManager = new AutomaticSynchronizationManager(toolData, m_workingArea);
+        m_automaticSynchronizationManager->initialize();
     }
     else
     {
         enableSynchronizationButton(true);
     }
+}
+
+void Q2DViewerExtension::enableAutomaticSynchonizationEditor(bool enable)
+{
+    m_automaticSynchronizationManager->enableEditor(enable);
 }
 
 #endif

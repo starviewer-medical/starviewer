@@ -14,6 +14,7 @@ class Volume;
 class ToolManager;
 class ToolConfiguration;
 class HangingProtocol;
+class AutomaticSynchronizationManager;
 // Estructura pacient
 class Patient;
 class Study;
@@ -156,6 +157,9 @@ private slots:
     /// Mètode que tracta el canvi de visualitzador seleccionat
     void changeSelectedViewer(Q2DViewerWidget *viewerWidget);
 
+    ///
+    void enableAutomaticSynchonizationEditor(bool enable);
+
 #ifndef STARVIEWER_LITE
     ///  Mètode que busca els hanging protocols aplicables
     void searchHangingProtocols();
@@ -224,6 +228,10 @@ private:
 
     /// Manager de hanging protocols
     HangingProtocolManager *m_hangingProtocolManager;
+
+    /// Manager de la sincronització automàtica
+    AutomaticSynchronizationManager *m_automaticSynchronizationManager;
+
 #endif
 
 };

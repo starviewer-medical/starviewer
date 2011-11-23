@@ -694,6 +694,12 @@
        </property>
        <item>
         <widget class="QToolButton" name="m_restoreToolButton">
+         <property name="maximumSize">
+          <size>
+           <width>32</width>
+           <height>16777215</height>
+          </size>
+         </property>
          <property name="text">
           <string>Restore</string>
          </property>
@@ -1050,29 +1056,81 @@
       </layout>
      </item>
      <item>
-      <widget class="QToolButton" name="m_automaticSynchronizationToolButton">
-       <property name="text">
-        <string>Automatic</string>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>32</width>
-         <height>32</height>
-        </size>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-       <property name="checked">
-        <bool>false</bool>
-       </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextUnderIcon</enum>
-       </property>
-       <property name="autoRaise">
-        <bool>true</bool>
-       </property>
-      </widget>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QToolButton" name="m_automaticSynchronizationToolButton">
+         <property name="maximumSize">
+          <size>
+           <width>39</width>
+           <height>38</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Automatic</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../../../main/main.qrc">
+           <normaloff>:/images/synchronize.png</normaloff>:/images/synchronize.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextUnderIcon</enum>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="m_automaticSynchronizationEditionButton">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>39</width>
+           <height>38</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Edit</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../../../main/main.qrc">
+           <normaloff>:/images/synchronize.png</normaloff>:/images/synchronize.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextUnderIcon</enum>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item>
       <spacer>

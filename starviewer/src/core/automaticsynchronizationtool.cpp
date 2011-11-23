@@ -17,14 +17,20 @@ AutomaticSynchronizationTool::AutomaticSynchronizationTool(QViewer *viewer, QObj
     m_toolData = 0;
     m_toolName = "AutomaticSynchronizationTool";
     m_hasSharedData = true;
-    
+
     m_2DViewer = qobject_cast<Q2DViewer*>(viewer);
     if (!m_2DViewer)
     {
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ") + viewer->metaObject()->className());
     }
     
+    m_lastSlice = m_2DViewer->getCurrentSlice();
+    m_roundLostSpacingBetweenSlices = 0.0;
+
     connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(changePositionIfActive()));
+    
+    connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(reset()));
+    connect(m_2DViewer, SIGNAL(viewChanged(int)), SLOT(reset()));
 
     setToolData(new AutomaticSynchronizationToolData());
 }
@@ -34,10 +40,15 @@ AutomaticSynchronizationTool::~AutomaticSynchronizationTool()
 
 }
 
+void AutomaticSynchronizationTool::reset()
+{
+    m_lastSlice = m_2DViewer->getCurrentSlice();
+    m_roundLostSpacingBetweenSlices = 0.0;
+}
+
 void AutomaticSynchronizationTool::setToolData(ToolData *data)
 {
     this->m_toolData = dynamic_cast<AutomaticSynchronizationToolData*>(data);
-
     connect(m_toolData, SIGNAL(changed()), SLOT(updatePosition()));
 }
 
@@ -66,7 +77,21 @@ void AutomaticSynchronizationTool::setPositionToToolData()
     double center[3];
     m_2DViewer->getCurrentImagePlane()->getCenter(center);
 
-    m_toolData->setPosition(frameOfReference, m_2DViewer->getCurrentAnatomicalPlaneLabel(), center);
+    int slice = m_2DViewer->getCurrentSlice();
+    double currentSpacingBetweenSlices = m_2DViewer->getCurrentSpacingBetweenSlices();
+
+    // Si la imatge no té espai entre llesques (0.0), llavors li donem un valor nominal
+    if (currentSpacingBetweenSlices == 0.0)
+    {
+        currentSpacingBetweenSlices = 1.0;
+    }
+
+    // Distancia incrementada
+    double increment = (slice - m_lastSlice) * currentSpacingBetweenSlices;
+    m_lastSlice = slice;
+
+    m_toolData->setPosition(frameOfReference, m_2DViewer->getCurrentAnatomicalPlaneLabel(), center, increment);
+
 }
 
 void AutomaticSynchronizationTool::updatePosition()
@@ -74,23 +99,39 @@ void AutomaticSynchronizationTool::updatePosition()
     if (m_2DViewer->getInput() && !m_2DViewer->isActive())
     {
         QString frameOfReference = m_2DViewer->getInput()->getImage(0)->getParentSeries()->getFrameOfReferenceUID();
-
-        if (m_toolData->hasPosition(frameOfReference, m_2DViewer->getCurrentAnatomicalPlaneLabel()))
+        int activeGroup = m_toolData->getGroupForUID(m_toolData->getSelectedUID());
+        int groupOfActualViewer = m_toolData->getGroupForUID(frameOfReference);
+        
+        if (groupOfActualViewer == activeGroup && m_2DViewer->getCurrentAnatomicalPlaneLabel() == m_toolData->getSelectedView()) //Actualitzem la llesca
         {
-            double *position = m_toolData->getPosition(frameOfReference, m_2DViewer->getCurrentAnatomicalPlaneLabel());
-            double distance;
-            int nearestSlice = m_2DViewer->getNearestSlice(position, distance);
-
-            if (nearestSlice != -1 && distance < (m_2DViewer->getThickness() * 1.5))
+            if (m_toolData->getSelectedUID() == frameOfReference) //Actualitzem per posició
             {
-                m_2DViewer->setSlice(nearestSlice);
+                double *position = m_toolData->getPosition(frameOfReference, m_2DViewer->getCurrentAnatomicalPlaneLabel());
+                double distance;
+                int nearestSlice = m_2DViewer->getNearestSlice(position, distance);
+
+                if (nearestSlice != -1 && distance < (m_2DViewer->getThickness() * 1.5))
+                {
+                    m_2DViewer->setSlice(nearestSlice);
+                }
             }
-        }
-        else //Si no tenim visor de referencia afegim aquest visor com a referencia
-        {
-            setPositionToToolData();
+            else //Actualitzem per increment
+            {
+                double currentSpacingBetweenSlices = m_2DViewer->getCurrentSpacingBetweenSlices();
+                // Si la imatge no té espai entre llesques (0.0), llavors li donem un valor nominal
+                if (currentSpacingBetweenSlices == 0.0)
+                {
+                    currentSpacingBetweenSlices = 1.0;
+                }
+
+                double incrementllegit = this->m_toolData->getDisplacement();
+                double sliceIncrement = (this->m_toolData->getDisplacement()/currentSpacingBetweenSlices) + m_roundLostSpacingBetweenSlices;
+                int slices = qRound(sliceIncrement);
+                m_roundLostSpacingBetweenSlices = sliceIncrement - slices;
+                m_2DViewer->setSlice(m_lastSlice + slices);
+                m_lastSlice += slices;
+            }
         }
     }
 }
-
 }
