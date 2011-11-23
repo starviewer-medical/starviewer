@@ -55,8 +55,8 @@ void test_AutomaticSynchronizationToolData::setPosition_Works()
 
     AutomaticSynchronizationToolData *toolData = new AutomaticSynchronizationToolData();
 
-    toolData->setPosition(frameOfReferenceUID_1, view_1, position_1);
-    toolData->setPosition(frameOfReferenceUID_2, view_2, position_2);
+    toolData->setPosition(frameOfReferenceUID_1, view_1, position_1, 0);
+    toolData->setPosition(frameOfReferenceUID_2, view_2, position_2, 0);
 
     QCOMPARE(toolData->hasPosition(frameOfReferenceUID_1, view_1), true);
     QCOMPARE(toolData->hasPosition(frameOfReferenceUID_2, view_2), true);
