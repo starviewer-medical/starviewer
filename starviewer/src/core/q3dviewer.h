@@ -98,8 +98,10 @@ public slots:
 
     /// Paràmetres d'il·luminació.
     void setShading(bool on);
-    void setSpecular(bool on);
-    void setSpecularPower(double power);
+    void setAmbientCoefficient(double ambientCoefficient);
+    void setDiffuseCoefficient(double diffuseCoefficient);
+    void setSpecularCoefficient(double specularCoefficient);
+    void setSpecularPower(double specularPower);
 
     /// Paràmetres de contorns.
     void setContour(bool on);

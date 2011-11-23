@@ -146,8 +146,10 @@ void Q3DViewerExtension::loadRenderingStyles()
 
     item = new QStandardItem(QIcon(":/extensions/Q3DViewerExtension/renderingstyles/spine2.png"), tr("Spine"));
     renderingStyle.setMethod(RenderingStyle::RayCasting);
-    renderingStyle.setDiffuseLighting(true);
-    renderingStyle.setSpecularLighting(true);
+    renderingStyle.setShading(true);
+    renderingStyle.setAmbientCoefficient(0.1);
+    renderingStyle.setDiffuseCoefficient(0.7);
+    renderingStyle.setSpecularCoefficient(1.0);
     renderingStyle.setSpecularPower(64.0);
     transferFunction = TransferFunctionIO::fromXmlFile(":/extensions/Q3DViewerExtension/renderingstyles/spine2.xml");
     renderingStyle.setTransferFunction(*transferFunction);
@@ -159,8 +161,10 @@ void Q3DViewerExtension::loadRenderingStyles()
 
     item = new QStandardItem(QIcon(":/extensions/Q3DViewerExtension/renderingstyles/thorax1.png"), tr("Thorax"));
     renderingStyle.setMethod(RenderingStyle::RayCasting);
-    renderingStyle.setDiffuseLighting(true);
-    renderingStyle.setSpecularLighting(true);
+    renderingStyle.setShading(true);
+    renderingStyle.setAmbientCoefficient(0.1);
+    renderingStyle.setDiffuseCoefficient(0.7);
+    renderingStyle.setSpecularCoefficient(1.0);
     renderingStyle.setSpecularPower(64.0);
     transferFunction = TransferFunctionIO::fromXmlFile(":/extensions/Q3DViewerExtension/renderingstyles/thorax1.xml");
     renderingStyle.setTransferFunction(*transferFunction);
@@ -172,8 +176,10 @@ void Q3DViewerExtension::loadRenderingStyles()
 
     item = new QStandardItem(QIcon(":/extensions/Q3DViewerExtension/renderingstyles/pelvis2.png"), tr("Pelvis"));
     renderingStyle.setMethod(RenderingStyle::RayCasting);
-    renderingStyle.setDiffuseLighting(true);
-    renderingStyle.setSpecularLighting(true);
+    renderingStyle.setShading(true);
+    renderingStyle.setAmbientCoefficient(0.1);
+    renderingStyle.setDiffuseCoefficient(0.7);
+    renderingStyle.setSpecularCoefficient(1.0);
     renderingStyle.setSpecularPower(64.0);
     transferFunction = TransferFunctionIO::fromXmlFile(":/extensions/Q3DViewerExtension/renderingstyles/pelvis2.xml");
     renderingStyle.setTransferFunction(*transferFunction);
@@ -185,8 +191,10 @@ void Q3DViewerExtension::loadRenderingStyles()
 
     item = new QStandardItem(QIcon(":/extensions/Q3DViewerExtension/renderingstyles/cow1.png"), tr("Circle of Willis"));
     renderingStyle.setMethod(RenderingStyle::RayCasting);
-    renderingStyle.setDiffuseLighting(true);
-    renderingStyle.setSpecularLighting(false);
+    renderingStyle.setShading(true);
+    renderingStyle.setAmbientCoefficient(0.1);
+    renderingStyle.setDiffuseCoefficient(0.7);
+    renderingStyle.setSpecularCoefficient(0.0);
     transferFunction = TransferFunctionIO::fromXmlFile(":/extensions/Q3DViewerExtension/renderingstyles/cow1.xml");
     renderingStyle.setTransferFunction(*transferFunction);
     delete transferFunction;
@@ -197,8 +205,10 @@ void Q3DViewerExtension::loadRenderingStyles()
 
     item = new QStandardItem(QIcon(":/extensions/Q3DViewerExtension/renderingstyles/carotids2.png"), tr("Carotids"));
     renderingStyle.setMethod(RenderingStyle::RayCasting);
-    renderingStyle.setDiffuseLighting(true);
-    renderingStyle.setSpecularLighting(true);
+    renderingStyle.setShading(true);
+    renderingStyle.setAmbientCoefficient(0.1);
+    renderingStyle.setDiffuseCoefficient(0.7);
+    renderingStyle.setSpecularCoefficient(1.0);
     renderingStyle.setSpecularPower(64.0);
     transferFunction = TransferFunctionIO::fromXmlFile(":/extensions/Q3DViewerExtension/renderingstyles/carotids2.xml");
     renderingStyle.setTransferFunction(*transferFunction);
@@ -210,8 +220,10 @@ void Q3DViewerExtension::loadRenderingStyles()
 
     item = new QStandardItem(QIcon(":/extensions/Q3DViewerExtension/renderingstyles/bones4.png"), tr("Bones"));
     renderingStyle.setMethod(RenderingStyle::RayCasting);
-    renderingStyle.setDiffuseLighting(true);
-    renderingStyle.setSpecularLighting(true);
+    renderingStyle.setShading(true);
+    renderingStyle.setAmbientCoefficient(0.1);
+    renderingStyle.setDiffuseCoefficient(0.7);
+    renderingStyle.setSpecularCoefficient(1.0);
     renderingStyle.setSpecularPower(64.0);
     transferFunction = TransferFunctionIO::fromXmlFile(":/extensions/Q3DViewerExtension/renderingstyles/bones4.xml");
     renderingStyle.setTransferFunction(*transferFunction);
@@ -223,8 +235,10 @@ void Q3DViewerExtension::loadRenderingStyles()
 
     item = new QStandardItem(QIcon(":/extensions/Q3DViewerExtension/renderingstyles/bonehires.png"), tr("Bones 2"));
     renderingStyle.setMethod(RenderingStyle::RayCasting);
-    renderingStyle.setDiffuseLighting(true);
-    renderingStyle.setSpecularLighting(false);
+    renderingStyle.setShading(true);
+    renderingStyle.setAmbientCoefficient(0.1);
+    renderingStyle.setDiffuseCoefficient(0.7);
+    renderingStyle.setSpecularCoefficient(0.0);
     transferFunction = TransferFunctionIO::fromXmlFile(":/extensions/Q3DViewerExtension/renderingstyles/bonehires.xml");
     renderingStyle.setTransferFunction(*transferFunction);
     delete transferFunction;
@@ -235,8 +249,10 @@ void Q3DViewerExtension::loadRenderingStyles()
 
     item = new QStandardItem(QIcon(":/extensions/Q3DViewerExtension/renderingstyles/abdomenbones.png"), tr("Abdomen bones"));
     renderingStyle.setMethod(RenderingStyle::RayCasting);
-    renderingStyle.setDiffuseLighting(true);
-    renderingStyle.setSpecularLighting(true);
+    renderingStyle.setShading(true);
+    renderingStyle.setAmbientCoefficient(0.1);
+    renderingStyle.setDiffuseCoefficient(0.7);
+    renderingStyle.setSpecularCoefficient(1.0);
     renderingStyle.setSpecularPower(64.0);
     transferFunction = TransferFunctionIO::fromXmlFile(":/extensions/Q3DViewerExtension/renderingstyles/abdomenbones.xml");
     renderingStyle.setTransferFunction(*transferFunction);
@@ -248,8 +264,10 @@ void Q3DViewerExtension::loadRenderingStyles()
 
     item = new QStandardItem(QIcon(":/extensions/Q3DViewerExtension/renderingstyles/abdomenrunoff1.png"), tr("Abdomen run-off"));
     renderingStyle.setMethod(RenderingStyle::RayCasting);
-    renderingStyle.setDiffuseLighting(true);
-    renderingStyle.setSpecularLighting(true);
+    renderingStyle.setShading(true);
+    renderingStyle.setAmbientCoefficient(0.1);
+    renderingStyle.setDiffuseCoefficient(0.7);
+    renderingStyle.setSpecularCoefficient(1.0);
     renderingStyle.setSpecularPower(64.0);
     transferFunction = TransferFunctionIO::fromXmlFile(":/extensions/Q3DViewerExtension/renderingstyles/abdomenrunoff1.xml");
     renderingStyle.setTransferFunction(*transferFunction);
@@ -261,8 +279,10 @@ void Q3DViewerExtension::loadRenderingStyles()
 
     item = new QStandardItem(QIcon(":/extensions/Q3DViewerExtension/renderingstyles/abdomenslab.png"), tr("Abdomen slab"));
     renderingStyle.setMethod(RenderingStyle::RayCasting);
-    renderingStyle.setDiffuseLighting(true);
-    renderingStyle.setSpecularLighting(true);
+    renderingStyle.setShading(true);
+    renderingStyle.setAmbientCoefficient(0.1);
+    renderingStyle.setDiffuseCoefficient(0.7);
+    renderingStyle.setSpecularCoefficient(1.0);
     renderingStyle.setSpecularPower(64.0);
     transferFunction = TransferFunctionIO::fromXmlFile(":/extensions/Q3DViewerExtension/renderingstyles/abdomenslab.xml");
     renderingStyle.setTransferFunction(*transferFunction);
@@ -279,11 +299,6 @@ void Q3DViewerExtension::createConnections()
 {
     // Actualització del mètode de rendering
     connect(m_renderingMethodComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateUiForRenderingMethod(int)));
-
-    // Shading
-    connect(m_shadingCheckBox, SIGNAL(toggled(bool)), m_specularCheckBox, SLOT(setEnabled(bool)));
-    connect(m_specularCheckBox, SIGNAL(toggled(bool)), m_specularPowerLabel, SLOT(setEnabled(bool)));
-    connect(m_specularCheckBox, SIGNAL(toggled(bool)), m_specularPowerDoubleSpinBox, SLOT(setEnabled(bool)));
 
     // Contorns
     connect(m_contourCheckBox, SIGNAL(toggled(bool)), m_contourThresholdLabel, SLOT(setEnabled(bool)));
@@ -588,15 +603,14 @@ void Q3DViewerExtension::applyRenderingStyle(const QModelIndex &index)
             }
 
             applyClut(renderingStyle.getTransferFunction());
-            m_shadingCheckBox->setChecked(renderingStyle.getDiffuseLighting());
+            m_shadingGroupBox->setChecked(renderingStyle.getShading());
 
-            if (renderingStyle.getDiffuseLighting())
+            if (renderingStyle.getShading())
             {
-                m_specularCheckBox->setChecked(renderingStyle.getSpecularLighting());
-                if (renderingStyle.getSpecularLighting())
-                {
-                    m_specularPowerDoubleSpinBox->setValue(renderingStyle.getSpecularPower());
-                }
+                m_ambientCoefficientDoubleSpinBox->setValue(renderingStyle.getAmbientCoefficient());
+                m_diffuseCoefficientDoubleSpinBox->setValue(renderingStyle.getDiffuseCoefficient());
+                m_specularCoefficientDoubleSpinBox->setValue(renderingStyle.getSpecularCoefficient());
+                m_specularPowerDoubleSpinBox->setValue(renderingStyle.getSpecularPower());
             }
 
             if (renderingStyle.getMethod() == RenderingStyle::RayCasting)
@@ -662,7 +676,7 @@ void Q3DViewerExtension::showScreenshotsExporterDialog()
 
 void Q3DViewerExtension::updateUiForRenderingMethod(int index)
 {
-    m_shadingOptionsWidget->hide();
+    m_shadingGroupBox->hide();
     m_contourOptionsWidget->hide();
     m_obscuranceOptionsWidget->hide();
     m_isosurfaceOptionsWidget->hide();
@@ -671,20 +685,20 @@ void Q3DViewerExtension::updateUiForRenderingMethod(int index)
     {
         case 0:
             // Ray casting
-            m_shadingOptionsWidget->show();
+            m_shadingGroupBox->show();
             m_contourOptionsWidget->show();
             break;
 
         case 1:
             // Ray casting + obscurances
-            m_shadingOptionsWidget->show();
+            m_shadingGroupBox->show();
             m_contourOptionsWidget->show();
             m_obscuranceOptionsWidget->show();
             break;
 
         case 2:
             // GPU ray casting
-            m_shadingOptionsWidget->show();
+            m_shadingGroupBox->show();
             break;
 
         case 3:
@@ -693,12 +707,12 @@ void Q3DViewerExtension::updateUiForRenderingMethod(int index)
 
         case 4:
             // Textures 3d
-            m_shadingOptionsWidget->show();
+            m_shadingGroupBox->show();
             break;
 
         case 5:
             // Textures 2d
-            m_shadingOptionsWidget->show();
+            m_shadingGroupBox->show();
             break;
 
         case 6:
@@ -755,8 +769,10 @@ void Q3DViewerExtension::updateView(bool fast)
             break;
     }
 
-    m_3DView->setShading(m_shadingCheckBox->isChecked());
-    m_3DView->setSpecular(m_specularCheckBox->isChecked());
+    m_3DView->setShading(m_shadingGroupBox->isChecked());
+    m_3DView->setAmbientCoefficient(m_ambientCoefficientDoubleSpinBox->value());
+    m_3DView->setDiffuseCoefficient(m_diffuseCoefficientDoubleSpinBox->value());
+    m_3DView->setSpecularCoefficient(m_specularCoefficientDoubleSpinBox->value());
     m_3DView->setSpecularPower(m_specularPowerDoubleSpinBox->value());
     m_3DView->setContour(m_contourCheckBox->isChecked());
     m_3DView->setContourThreshold(m_contourThresholdDoubleSpinBox->value());
@@ -787,8 +803,10 @@ void Q3DViewerExtension::enableAutoUpdate()
     connect(m_renderingMethodComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateView()));
 
     // Shading
-    connect(m_shadingCheckBox, SIGNAL(toggled(bool)), this, SLOT(updateView()));
-    connect(m_specularCheckBox, SIGNAL(toggled(bool)), this, SLOT(updateView()));
+    connect(m_shadingGroupBox, SIGNAL(toggled(bool)), this, SLOT(updateView()));
+    connect(m_ambientCoefficientDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(updateView()));
+    connect(m_diffuseCoefficientDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(updateView()));
+    connect(m_specularCoefficientDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(updateView()));
     connect(m_specularPowerDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(updateView()));
 
     // Contorns
@@ -809,8 +827,10 @@ void Q3DViewerExtension::disableAutoUpdate()
     disconnect(m_renderingMethodComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateView()));
 
     // Shading
-    disconnect(m_shadingCheckBox, SIGNAL(toggled(bool)), this, SLOT(updateView()));
-    disconnect(m_specularCheckBox, SIGNAL(toggled(bool)), this, SLOT(updateView()));
+    disconnect(m_shadingGroupBox, SIGNAL(toggled(bool)), this, SLOT(updateView()));
+    disconnect(m_ambientCoefficientDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(updateView()));
+    disconnect(m_diffuseCoefficientDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(updateView()));
+    disconnect(m_specularCoefficientDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(updateView()));
     disconnect(m_specularPowerDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(updateView()));
 
     // Contorns

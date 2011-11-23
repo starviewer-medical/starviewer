@@ -47,8 +47,10 @@ void test_RenderingStyle::fromVariant_ShouldReturnCorrectRenderingStyle()
     RenderingStyle fromVariant = RenderingStyle::fromVariant(variant);
 
     QCOMPARE(fromVariant.getMethod(), renderingStyle.getMethod());
-    QCOMPARE(fromVariant.getDiffuseLighting(), renderingStyle.getDiffuseLighting());
-    QCOMPARE(fromVariant.getSpecularLighting(), renderingStyle.getSpecularLighting());
+    QCOMPARE(fromVariant.getShading(), renderingStyle.getShading());
+    QCOMPARE(fromVariant.getAmbientCoefficient(), renderingStyle.getAmbientCoefficient());
+    QCOMPARE(fromVariant.getDiffuseCoefficient(), renderingStyle.getDiffuseCoefficient());
+    QCOMPARE(fromVariant.getSpecularCoefficient(), renderingStyle.getSpecularCoefficient());
     QCOMPARE(fromVariant.getSpecularPower(), renderingStyle.getSpecularPower());
     QCOMPARE(fromVariant.getTransferFunction(), renderingStyle.getTransferFunction());
     QCOMPARE(fromVariant.getContour(), renderingStyle.getContour());
@@ -68,8 +70,10 @@ void test_RenderingStyle::setupData()
 
     RenderingStyle::Method methods[NumberOfRows] = { RenderingStyle::MIP, RenderingStyle::RayCasting, RenderingStyle::IsoSurface,
                                                      RenderingStyle::Contouring, RenderingStyle::Texture2D, RenderingStyle::Texture3D };
-    bool diffuseLightings[NumberOfRows] = { false, false, false, false, true, true };
-    bool specularLightings[NumberOfRows] = { false, false, true, false, false, false };
+    bool shadings[NumberOfRows] = { false, false, false, false, false, true };
+    double ambientCoefficients[NumberOfRows] = { 0.26, 0.74, 1.0, 0.66, 0.72, 0.75 };
+    double diffuseCoefficients[NumberOfRows] = { 0.65, 0.57, 0.88, 0.89, 0.21, 0.12 };
+    double specularCoefficients[NumberOfRows] = { 0.79, 0.77, 0.07, 0.85, 0.42, 0.26 };
     double specularPowers[NumberOfRows] = { 35.2, 109.9, 90.3, 29.8, 125.0, 838.0 };
     TransferFunction transferFunctions[NumberOfRows];
     bool contours[NumberOfRows] = { false, false, false, false, true, false };
@@ -141,10 +145,14 @@ void test_RenderingStyle::setupData()
         QMap<QString, QVariant> map;
         renderingStyle.setMethod(methods[i]);
         map["method"] = methods[i];
-        renderingStyle.setDiffuseLighting(diffuseLightings[i]);
-        map["diffuseLighting"] = diffuseLightings[i];
-        renderingStyle.setSpecularLighting(specularLightings[i]);
-        map["specularLighting"] = specularLightings[i];
+        renderingStyle.setShading(shadings[i]);
+        map["shading"] = shadings[i];
+        renderingStyle.setAmbientCoefficient(ambientCoefficients[i]);
+        map["ambientCoefficient"] = ambientCoefficients[i];
+        renderingStyle.setDiffuseCoefficient(diffuseCoefficients[i]);
+        map["diffuseCoefficient"] = diffuseCoefficients[i];
+        renderingStyle.setSpecularCoefficient(specularCoefficients[i]);
+        map["specularCoefficient"] = specularCoefficients[i];
         renderingStyle.setSpecularPower(specularPowers[i]);
         map["specularPower"] = specularPowers[i];
         renderingStyle.setTransferFunction(transferFunctions[i]);
