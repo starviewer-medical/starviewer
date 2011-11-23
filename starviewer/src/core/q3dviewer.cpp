@@ -1179,14 +1179,24 @@ void Q3DViewer::setShading(bool on)
     }
 }
 
-void Q3DViewer::setSpecular(bool on)
+void Q3DViewer::setAmbientCoefficient(double ambientCoefficient)
 {
-    m_volumeProperty->SetSpecular(on ? 1.0 : 0.0);
+    m_volumeProperty->SetAmbient(ambientCoefficient);
 }
 
-void Q3DViewer::setSpecularPower(double power)
+void Q3DViewer::setDiffuseCoefficient(double diffuseCoefficient)
 {
-    m_volumeProperty->SetSpecularPower(power);
+    m_volumeProperty->SetDiffuse(diffuseCoefficient);
+}
+
+void Q3DViewer::setSpecularCoefficient(double specularCoefficient)
+{
+    m_volumeProperty->SetSpecular(specularCoefficient);
+}
+
+void Q3DViewer::setSpecularPower(double specularPower)
+{
+    m_volumeProperty->SetSpecularPower(specularPower);
 }
 
 void Q3DViewer::computeObscurance(ObscuranceQuality quality)

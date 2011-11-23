@@ -14,24 +14,44 @@ void RenderingStyle::setMethod(Method method)
     m_method = method;
 }
 
-bool RenderingStyle::getDiffuseLighting() const
+bool RenderingStyle::getShading() const
 {
-    return m_diffuseLighting;
+    return m_shading;
 }
 
-void RenderingStyle::setDiffuseLighting(bool diffuseLighting)
+void RenderingStyle::setShading(bool shading)
 {
-    m_diffuseLighting = diffuseLighting;
+    m_shading = shading;
 }
 
-bool RenderingStyle::getSpecularLighting() const
+double RenderingStyle::getAmbientCoefficient() const
 {
-    return m_specularLighting;
+    return m_ambientCoefficient;
 }
 
-void RenderingStyle::setSpecularLighting(bool specularLighting)
+void RenderingStyle::setAmbientCoefficient(double ambientCoefficient)
 {
-    m_specularLighting = specularLighting;
+    m_ambientCoefficient = ambientCoefficient;
+}
+
+double RenderingStyle::getDiffuseCoefficient() const
+{
+    return m_diffuseCoefficient;
+}
+
+void RenderingStyle::setDiffuseCoefficient(double diffuseCoefficient)
+{
+    m_diffuseCoefficient = diffuseCoefficient;
+}
+
+double RenderingStyle::getSpecularCoefficient() const
+{
+    return m_specularCoefficient;
+}
+
+void RenderingStyle::setSpecularCoefficient(double specularCoefficient)
+{
+    m_specularCoefficient = specularCoefficient;
 }
 
 double RenderingStyle::getSpecularPower() const
@@ -118,8 +138,10 @@ QVariant RenderingStyle::toVariant() const
 {
     QMap<QString, QVariant> map;
     map["method"] = m_method;
-    map["diffuseLighting"] = m_diffuseLighting;
-    map["specularLighting"] = m_specularLighting;
+    map["shading"] = m_shading;
+    map["ambientCoefficient"] = m_ambientCoefficient;
+    map["diffuseCoefficient"] = m_diffuseCoefficient;
+    map["specularCoefficient"] = m_specularCoefficient;
     map["specularPower"] = m_specularPower;
     map["transferFunction"] = m_transferFunction.toVariant();
     map["contour"] = m_contour;
@@ -138,8 +160,10 @@ RenderingStyle RenderingStyle::fromVariant(const QVariant &variant)
     QMap<QString, QVariant> map = variant.toMap();
 
     renderingStyle.m_method = static_cast<Method>(map["method"].toInt());
-    renderingStyle.m_diffuseLighting = map["diffuseLighting"].toBool();
-    renderingStyle.m_specularLighting = map["specularLighting"].toBool();
+    renderingStyle.m_shading = map["shading"].toBool();
+    renderingStyle.m_ambientCoefficient = map["ambientCoefficient"].toDouble();
+    renderingStyle.m_diffuseCoefficient = map["diffuseCoefficient"].toDouble();
+    renderingStyle.m_specularCoefficient = map["specularCoefficient"].toDouble();
     renderingStyle.m_specularPower = map["specularPower"].toDouble();
     renderingStyle.m_transferFunction = TransferFunction::fromVariant(map["transferFunction"]);
     renderingStyle.m_contour = map["contour"].toBool();

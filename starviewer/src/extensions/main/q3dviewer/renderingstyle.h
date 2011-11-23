@@ -20,13 +20,16 @@ public:
     /// Assignar/obtenir el mètode de rendering.
     Method getMethod() const;
     void setMethod(Method method);
-    /// Assignar/obtenir si s'aplica il·luminació difusa o no.
-    bool getDiffuseLighting() const;
-    void setDiffuseLighting(bool diffuseLighting);
-    /// Assignar/obtenir si s'aplica il·luminació especular o no.
-    bool getSpecularLighting() const;
-    void setSpecularLighting(bool specularLighting);
-    /// Assignar/obtenir la potència especular.
+    /// Assignar/obtenir si s'aplica il·luminació o no.
+    bool getShading() const;
+    void setShading(bool shading);
+    /// Assignar/obtenir els paràmetres d'il·luminació.
+    double getAmbientCoefficient() const;
+    void setAmbientCoefficient(double ambientCoefficient);
+    double getDiffuseCoefficient() const;
+    void setDiffuseCoefficient(double diffuseCoefficient);
+    double getSpecularCoefficient() const;
+    void setSpecularCoefficient(double specularCoefficient);
     double getSpecularPower() const;
     void setSpecularPower(double specularPower);
     /// Assignar/obtenir la funció de transferència.
@@ -59,11 +62,12 @@ private:
 
     /// Mètode de rendering.
     Method m_method;
-    /// Il·luminació difusa o no.
-    bool m_diffuseLighting;
-    /// Il·luminació especular o no.
-    bool m_specularLighting;
-    /// Potència especular.
+    /// Il·luminació o no.
+    bool m_shading;
+    /// Paràmetres d'il·luminació.
+    double m_ambientCoefficient;
+    double m_diffuseCoefficient;
+    double m_specularCoefficient;
     double m_specularPower;
     /// Funció de transferència.
     TransferFunction m_transferFunction;
