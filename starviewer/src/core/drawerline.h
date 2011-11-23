@@ -6,6 +6,7 @@
 class vtkLineSource;
 class vtkActor2D;
 class vtkPolyDataMapper2D;
+class vtkPropAssembly;
 
 namespace udg {
 
@@ -62,7 +63,11 @@ private:
     /// Estructures de vtk, per construir la línia
     vtkLineSource *m_vtkLineSource;
     vtkActor2D *m_vtkActor;
+    vtkActor2D *m_vtkBackgroundActor;
     vtkPolyDataMapper2D *m_vtkMapper;
+
+    /// vtkProp per agrupar l'actor i el background per simular el contorn
+    vtkPropAssembly *m_vtkPropAssembly;
 };
 
 }
