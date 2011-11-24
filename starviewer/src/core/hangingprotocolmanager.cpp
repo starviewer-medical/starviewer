@@ -76,7 +76,7 @@ QList<HangingProtocol*> HangingProtocolManager::searchHangingProtocols(Patient *
     // Aprofitem per assignar ja les series, per millorar el rendiment
     foreach (HangingProtocol *hangingProtocol, m_availableHangingProtocols)
     {
-        if (isModalityCompatible(hangingProtocol, patient))
+        if (isModalityCompatible(hangingProtocol, patient) && isInstitutionCompatible(hangingProtocol, patient))
         {
             int numberOfFilledImageSets = setInputToHangingProtocolImageSets(hangingProtocol, allSeries, previousStudies);
 
@@ -283,6 +283,22 @@ bool HangingProtocolManager::isModalityCompatible(HangingProtocol *protocol, con
     return protocol->getHangingProtocolMask()->getProtocolList().contains(modality);
 }
 
+bool HangingProtocolManager::isInstitutionCompatible(HangingProtocol *protocol, Patient *patient)
+{
+    foreach(Study *study, patient->getStudies())
+    {
+        foreach(Series *series, study->getSeries())
+        {
+            if (isValidInstitution(protocol, series->getInstitutionName()))
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 Series* HangingProtocolManager::searchSerie(QList<Series*> &listOfSeries, HangingProtocolImageSet *imageSet, bool quitStudy)
 {
     // Si la llista és buida, el resultat de la cerca serà nul
@@ -416,7 +432,7 @@ bool HangingProtocolManager::isValidSerie(Series *serie, HangingProtocolImageSet
     HangingProtocolImageSet::Restriction restriction;
 
     // Els presentation states per defecte no es mostren
-    valid = (serie->getModality() != "PR") && isValidInstitution(imageSet->getHangingProtocol(), serie->getInstitutionName());
+    valid = (serie->getModality() != "PR");
 
     while (valid && i < numberRestrictions)
     {
@@ -490,7 +506,7 @@ bool HangingProtocolManager::isValidImage(Image *image, HangingProtocolImageSet 
         return false;
     }
 
-    bool valid = isValidInstitution(imageSet->getHangingProtocol(), image->getParentSeries()->getInstitutionName());
+    bool valid = true;
     int i = 0;
     QList<HangingProtocolImageSet::Restriction> listOfRestrictions = imageSet->getRestrictions();
     int numberRestrictions = listOfRestrictions.size();
