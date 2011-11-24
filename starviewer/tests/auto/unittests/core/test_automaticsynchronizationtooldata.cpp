@@ -11,6 +11,7 @@ private slots:
 
 void setPosition_Works_data();
 void setPosition_Works();
+void addAndQuitGroup_Works();
 
 };
 
@@ -67,6 +68,22 @@ void test_AutomaticSynchronizationToolData::setPosition_Works()
     QCOMPARE(savedPosition[2], position_2[2]);
 
     delete toolData;
+}
+
+void test_AutomaticSynchronizationToolData::addAndQuitGroup_Works()
+{
+    AutomaticSynchronizationToolData *toolData = new AutomaticSynchronizationToolData();
+
+    toolData->setGroupForUID("1", 1);
+    toolData->setGroupForUID("2", 1);
+
+    QCOMPARE(toolData->getGroupForUID("1"), 1);
+    QCOMPARE(toolData->getGroupForUID("2"), 1);
+
+    toolData->setGroupForUID("2", 2);
+
+    QCOMPARE(toolData->getGroupForUID("1"), 1);
+    QCOMPARE(toolData->getGroupForUID("2"), 2);
 }
 
 DECLARE_TEST(test_AutomaticSynchronizationToolData)
