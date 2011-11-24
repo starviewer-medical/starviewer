@@ -288,16 +288,6 @@ bool HangingProtocol::isBetterThan(HangingProtocol *hangingToCompare)
         }
     }
 
-    //Si un dels hanging té expressió regular per Institució i l'altre no, guanya el que té l'expressió regular per Insitució
-    if (!this->getInstitutionsRegularExpression().isEmpty() && hangingToCompare->getInstitutionsRegularExpression().isEmpty())
-    {
-        return true;
-    }
-    else if (this->getInstitutionsRegularExpression().isEmpty() && !hangingToCompare->getInstitutionsRegularExpression().isEmpty())
-    {
-        return false;
-    }
-
     if (this->countFilledDisplaySets() == hangingToCompare->countFilledDisplaySets())
     {
         if (this->countFilledDisplaySets() / (double)this->getNumberOfDisplaySets() == hangingToCompare->countFilledDisplaySets() /
