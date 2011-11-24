@@ -428,28 +428,13 @@ QList<ImageOverlay> Image::getOverlays()
     return m_overlaysList;
 }
 
-ImageOverlay Image::getMergedOverlay()
-{
-    if (hasOverlays())
-    {
-        // Si m_merged overlay no té dades
-        // significa que encara no l'hem carregat
-        if (!m_mergedOverlay.getData())
-        {
-            readOverlays(true);
-        }
-    }
-
-    return m_mergedOverlay;
-}
-
 QList<ImageOverlay> Image::getOverlaysSplit()
 {
     if (hasOverlays())
     {
         if (m_overlaysSplit.isEmpty())
         {
-            m_overlaysSplit = getMergedOverlay().split();
+            readOverlays(true);
         }
     }
 
@@ -642,22 +627,25 @@ QStringList Image::getSupportedModalities()
     return supportedModalities;
 }
 
-bool Image::readOverlays(bool merge)
+bool Image::readOverlays(bool splitOverlays)
 {
     ImageOverlayReader reader;
     reader.setFilename(this->getPath());
     if (reader.read())
     {
-        if (merge)
+        if (splitOverlays)
         {
             bool mergeOk;
-            m_mergedOverlay = ImageOverlay::mergeOverlays(reader.getOverlays(), mergeOk);
+            ImageOverlay mergedOverlay = ImageOverlay::mergeOverlays(reader.getOverlays(), mergeOk);
             if (!mergeOk)
             {
                 ERROR_LOG("Ha fallat el merge d'overlays! Possible causa: falta de memòria");
                 DEBUG_LOG("Ha fallat el merge d'overlays! Possible causa: falta de memòria");
+                return false;
             }
-            return mergeOk;
+
+            m_overlaysSplit = mergedOverlay.split();
+            return true;
         }
         else
         {
