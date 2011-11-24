@@ -58,6 +58,9 @@ private:
     /// Mira si la modalitat és compatible amb el protocol
     bool isModalityCompatible(HangingProtocol *protocol, const QString &modality);
 
+    /// Mira si la institució és compatible amb el protocol
+    bool isInstitutionCompatible(HangingProtocol *protocol, Patient *patient);
+
     /// Busca la sèrie corresponent dins un grup de sèries. Si el booleà quitStudy és cert, a més, l'eliminarà del conjunt
     Series* searchSerie(QList<Series*> &seriesList, HangingProtocolImageSet *imageSet, bool quitStudy);
 
