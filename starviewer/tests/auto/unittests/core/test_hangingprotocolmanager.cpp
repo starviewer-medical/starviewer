@@ -57,7 +57,7 @@ void test_HangingProtocolManager::searchHangingProtocols_TestInstitutionTag_Shou
     Patient *patientInstitutionSabadell = PatientTestHelper::create(1, 1, 1);
     patientInstitutionSabadell->getStudies().at(0)->getSeries().at(0)->setInstitutionName("Sabadell");
     patientInstitutionSabadell->getStudies().at(0)->addModality("CT");
-    patientInstitutionSabadll->getStudies().at(0)->getSeries().at(0)->setModality("CT");
+    patientInstitutionSabadell->getStudies().at(0)->getSeries().at(0)->setModality("CT");
 
     Patient *patientEmptyInstitution = PatientTestHelper::create(1, 1, 1);
     patientEmptyInstitution->getStudies().at(0)->addModality("CT");
