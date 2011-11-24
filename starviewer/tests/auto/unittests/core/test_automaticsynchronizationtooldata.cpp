@@ -108,6 +108,8 @@ void test_AutomaticSynchronizationToolData::addAndQuitGroup_Works()
 
     QCOMPARE(toolData->getGroupForUID("1"), 1);
     QCOMPARE(toolData->getGroupForUID("2"), 2);
+
+    delete toolData;
 }
 
 DECLARE_TEST(test_AutomaticSynchronizationToolData)
