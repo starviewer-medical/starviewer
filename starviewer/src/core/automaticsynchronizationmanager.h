@@ -28,11 +28,13 @@ public:
     /// Activar l'edicio de la sincronització automàtica
     void enableEditor(bool enable);
 
-    /// Posa l'estat corresponent al widget d'edicio
-    void setWidgetEditionState(Q2DViewer *viewer, ViewerEditionState state);
-
     /// Inicialitza la sincronització autmàtica
     void initialize();
+
+private:
+
+    /// Posa l'estat corresponent al widget d'edicio
+    void setWidgetEditionState(Q2DViewer *viewer, ViewerEditionState state);
 
 private slots:
 
