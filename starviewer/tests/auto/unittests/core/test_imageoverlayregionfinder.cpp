@@ -58,6 +58,7 @@ Q_DECLARE_METATYPE(QList<QRect>)
 void test_ImageOverlayRegionFinder::findRegions_ShouldFindCorrectRegions_data()
 {
     QList<ImageOverlay> overlays = ImageOverlayTestHelper::createImageOverlays();
+    QList< QList<QRect> > allRegions = ImageOverlayTestHelper::createSubOverlayRegions();
 
     QTest::addColumn<ImageOverlay>("imageOverlay");
     QTest::addColumn< QList<QRect> >("regions");
@@ -66,22 +67,19 @@ void test_ImageOverlayRegionFinder::findRegions_ShouldFindCorrectRegions_data()
 
     {
         const ImageOverlay &overlay = overlays[0];
-        QList<QRect> regions;
-        regions << QRect(1, 2, 5, 6);
+        const QList<QRect> &regions = allRegions[0];
         QTest::newRow("{D}, one region") << overlay << regions;
     }
 
     {
         const ImageOverlay &overlay = overlays[1];
-        QList<QRect> regions;
-        regions << QRect(18, 2, 13, 7) << QRect(1, 14, 11, 11) << QRect(23, 20, 8, 11);
+        const QList<QRect> &regions = allRegions[1];
         QTest::newRow("{Tra, O, [F]}, three regions, discontinuity") << overlay << regions;
     }
 
     {
         const ImageOverlay &overlay = overlays[2];
-        QList<QRect> regions;
-        regions << QRect(0, 1, 64, 62);
+        const QList<QRect> &regions = allRegions[2];
         QTest::newRow("{...}, one big region") << overlay << regions;
     }
 }

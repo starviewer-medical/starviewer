@@ -42,6 +42,8 @@ private:
     QRect growRegion(int row, int column, QBitArray &mask);
     /// Posa a 1 tots els píxels de la màscara que pertanyen a la regió.
     void fillMaskForRegion(QBitArray &mask, const QRect &region);
+    /// Afegeix un padding d'un píxel al voltant de la regió.
+    void addPadding(QRect &region);
     /// Afegeix la regió a la llista, fusionant-la amb altres si són molt properes.
     void addRegion(QRect &region);
 

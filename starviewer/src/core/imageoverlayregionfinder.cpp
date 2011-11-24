@@ -37,6 +37,7 @@ void ImageOverlayRegionFinder::findRegions()
             if (data[i] > 0 && !mask.testBit(i))
             {
                 QRect region = growRegion(row, column, mask);
+                addPadding(region);
                 addRegion(region);
                 fillMaskForRegion(mask, region);
             }
@@ -201,6 +202,26 @@ void ImageOverlayRegionFinder::fillMaskForRegion(QBitArray &mask, const QRect &r
     {
         int offset = y * m_overlay.getColumns();
         mask.fill(true, offset + region.left(), offset + region.right() + 1);
+    }
+}
+
+void ImageOverlayRegionFinder::addPadding(QRect &region)
+{
+    if (region.top() > 0)
+    {
+        region.setTop(region.top() - 1);
+    }
+    if (region.bottom() < static_cast<signed>(m_overlay.getRows()) - 1)
+    {
+        region.setBottom(region.bottom() + 1);
+    }
+    if (region.left() > 0)
+    {
+        region.setLeft(region.left() - 1);
+    }
+    if (region.right() < static_cast<signed>(m_overlay.getColumns()) - 1)
+    {
+        region.setRight(region.right() + 1);
     }
 }
 
