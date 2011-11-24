@@ -20,7 +20,7 @@
 
 namespace udg {
 
-const int RISRequestManager::secondsTimeOutToHidePopUpAndAutoCloseQMessageBox = 8;
+const int RISRequestManager::secondsTimeOutToHidePopUpAndAutoCloseQMessageBox = 5;
 
 RISRequestManager::RISRequestManager(PacsManager *pacsManager)
 {
