@@ -25,11 +25,7 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_patientfillerinput.cpp \
            $$PWD/test_automaticsynchronizationtooldata.cpp \
            $$PWD/test_volumepixeldata.cpp \
-           $$PWD/test_drawertext.cpp \
-           $$PWD/test_applicationupdatechecker.cpp \
-           $$PWD/test_commandlineoption.cpp \
-           $$PWD/test_applicationversiontest.cpp \
-           $$PWD/test_imageoverlayregionfinder.cpp
+           $$PWD/test_drawertext.cpp
 
 win32 {
     SOURCES += $$PWD/test_windowsfirewallaccess.cpp
