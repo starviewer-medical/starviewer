@@ -443,6 +443,19 @@ ImageOverlay Image::getMergedOverlay()
     return m_mergedOverlay;
 }
 
+QList<ImageOverlay> Image::getOverlaysSplit()
+{
+    if (hasOverlays())
+    {
+        if (m_overlaysSplit.isEmpty())
+        {
+            m_overlaysSplit = getMergedOverlay().split();
+        }
+    }
+
+    return m_overlaysSplit;
+}
+
 bool Image::hasDisplayShutters() const
 {
     return !m_shuttersList.isEmpty();
