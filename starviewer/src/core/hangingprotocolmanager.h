@@ -44,6 +44,15 @@ public:
     /// Si hi havia estudis en descàrrega, s'elimina de la llista
     void cancelHangingProtocolDownloading();
 
+protected:
+
+    /// Fa una còpia del repositori de HP per poder-los modificar sense que el repositori es vegi afectat.
+    virtual void copyHangingProtocolRepository();
+
+protected:
+    /// Còpia del repositori de HP però poder-los modificar sense que afecti al repositori
+    QList<HangingProtocol*> m_availableHangingProtocols;
+
 private slots:
     /// S'ha descarregat un estudi previ demanat
     void previousStudyDownloaded();
@@ -85,9 +94,6 @@ private:
     /// Assigna una sèrie (i una imatge) vàlida a cada ImageSet. Retorna el número d'ImageSets que tenen input assignat.
     int setInputToHangingProtocolImageSets(HangingProtocol *hangingProtocol, const QList<Series*> &inputSeries, const QList<Study*> &previousStudies);
 
-    /// Fa una còpia del repositori de HP per poder-los modificar sense que el repositori es vegi afectat.
-    void copyHangingProtocolRepository();
-
     /// Busca la imatge número index dins tots els estudis de la modalitat del hanging protocol
     Image* getImageByIndexInPatientModality(Patient *patient, int index, QList<QString> hangingProtocolModalities);
 
@@ -108,9 +114,6 @@ private:
 
     /// Objecte utilitzat per descarregar estudis previs. No es fa servir QueryScreen per problemes de dependències entre carpetes.
     PreviousStudiesManager *m_previousStudiesManager;
-
-    /// Còpia del repositori de HP però poder-los modificar sense que afecti al repositori
-    QList<HangingProtocol*> m_availableHangingProtocols;
 };
 
 }
