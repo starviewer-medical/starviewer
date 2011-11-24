@@ -339,4 +339,19 @@ bool MathTools::isNaN(double x)
     return x != x;
 }
 
+unsigned int MathTools::roundUpToPowerOf2(unsigned int v)
+{
+    // Font: http://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2
+    v--;
+    v |= v >> 1;
+    v |= v >> 2;
+    v |= v >> 4;
+    v |= v >> 8;
+    v |= v >> 16;
+    v++;
+    // Si v == 0 el codi de sobre retorna 0. Ho solucionem amb aquesta suma.
+    v += (v == 0);
+    return v;
+}
+
 }; // End namespace udg

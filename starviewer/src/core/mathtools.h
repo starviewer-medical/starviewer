@@ -116,6 +116,9 @@ static double angleInDegrees(const QVector3D &vec1, const QVector3D &vec2);
 /// Retorna cert si \a x és NaN.
 static bool isNaN(double x);
 
+/// Retorna la potència de 2 superior més propera a v.
+static unsigned int roundUpToPowerOf2(unsigned int v);
+
 };
 
 } // End namespace udg
