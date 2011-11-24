@@ -2,6 +2,7 @@
 <hangingProtocol name="Coll">
     <hangingProtocolName>Coll</hangingProtocolName>
     <protocol>CT</protocol>
+    <institutions>LLEIDA</institutions>
     <restriction identifier="1">
         <usageFlag>NO_MATCH</usageFlag>
         <selectorAttribute>ImageType</selectorAttribute>
