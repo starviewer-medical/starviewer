@@ -860,16 +860,19 @@ void Q2DViewer::loadOverlays(Volume *volume)
                     imageOrigin[0] = volumeOrigin[0];
                     imageOrigin[1] = volumeOrigin[1];
                     imageOrigin[2] = volumeOrigin[2] + sliceIndex * volumeSpacing[2];
-                    // Creem el bitmap
-                    DrawerBitmap *overlayBitmap = image->getMergedOverlay().getAsDrawerBitmap(imageOrigin, volumeSpacing);
-                    // Inicialment no serà, segons la llesca en que ens trobem el Drawer decidirà sobre la seva visibilitat
-                    overlayBitmap->setVisibility(false);
-                    // La primitiva no es podrà esborrar amb les tools
-                    overlayBitmap->setErasable(false);
-                    getDrawer()->draw(overlayBitmap, Q2DViewer::Axial, sliceIndex);
-                    getDrawer()->addToGroup(overlayBitmap, OverlaysDrawerGroup);
-                    overlayBitmap->increaseReferenceCount();
-                    m_viewerBitmaps << overlayBitmap;
+                    // Creem els bitmaps
+                    foreach(const ImageOverlay &overlay, image->getOverlaysSplit())
+                    {
+                        DrawerBitmap *overlayBitmap = overlay.getAsDrawerBitmap(imageOrigin, volumeSpacing);
+                        // Inicialment no serà, segons la llesca en que ens trobem el Drawer decidirà sobre la seva visibilitat
+                        overlayBitmap->setVisibility(false);
+                        // La primitiva no es podrà esborrar amb les tools
+                        overlayBitmap->setErasable(false);
+                        overlayBitmap->increaseReferenceCount();
+                        getDrawer()->draw(overlayBitmap, Q2DViewer::Axial, sliceIndex);
+                        getDrawer()->addToGroup(overlayBitmap, OverlaysDrawerGroup);
+                        m_viewerBitmaps << overlayBitmap;
+                    }
                 }
             }
         }

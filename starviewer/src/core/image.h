@@ -175,6 +175,10 @@ public:
     /// Ens retorna tots els overlays de la imatge fusionats en un de sol
     ImageOverlay getMergedOverlay();
 
+    /// Obté una llista amb la divisió en regions de tots els overlays. Es fusionen tots els overlays originals en un de sol 
+    /// i després es fa la partició òptima de les diferents parts que el composen
+    QList<ImageOverlay> getOverlaysSplit();
+
     /// Ens diu si té shutters o no
     bool hasDisplayShutters() const;
     
@@ -361,6 +365,9 @@ private:
 
     /// Overlay producte de la fusió de tots els overlays de la imatge
     ImageOverlay m_mergedOverlay;
+
+    /// Llista que conté la partició en regions òptimes de la fusió de tots els overlays
+    QList<ImageOverlay> m_overlaysSplit;
 
     /// Llista de display shutters
     QList<DisplayShutter> m_shuttersList;
