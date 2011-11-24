@@ -45,6 +45,9 @@ private slots:
     void infiniteLineIntersection_ShouldComputeExpectedIntersectionAndState_data();
     void infiniteLineIntersection_ShouldComputeExpectedIntersectionAndState();
 
+    void roundUpToPowerOf2_ShouldReturnExpectedValue_data();
+    void roundUpToPowerOf2_ShouldReturnExpectedValue();
+
 private:
     void setupComputeAngleData();
     void setupComputeAngleNaNData();
@@ -360,6 +363,30 @@ void test_MathTools::infiniteLineIntersection_ShouldComputeExpectedIntersectionA
 
     QCOMPARE(state, static_cast<int>(expectedState));
     QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(intersection, expectedIntersection, LineIntersectionEpsilon));
+}
+
+void test_MathTools::roundUpToPowerOf2_ShouldReturnExpectedValue_data()
+{
+    QTest::addColumn<unsigned int>("input");
+    QTest::addColumn<unsigned int>("output");
+
+    QTest::newRow("0")         <<        0u <<         1u;
+    QTest::newRow("random #1") <<        1u <<         1u;
+    QTest::newRow("random #2") <<       16u <<        16u;
+    QTest::newRow("random #3") <<      425u <<       512u;
+    QTest::newRow("random #4") <<     1335u <<      2048u;
+    QTest::newRow("random #5") <<    58102u <<     65536u;
+    QTest::newRow("random #6") << 16044632u <<  16777216u;
+    QTest::newRow("random #7") << 19122171u <<  33554432u;
+    QTest::newRow("random #8") << 91138018u << 134217728u;
+}
+
+void test_MathTools::roundUpToPowerOf2_ShouldReturnExpectedValue()
+{
+    QFETCH(unsigned int, input);
+    QFETCH(unsigned int, output);
+
+    QCOMPARE(MathTools::roundUpToPowerOf2(input), output);
 }
 
 void test_MathTools::setupComputeAngleData()
