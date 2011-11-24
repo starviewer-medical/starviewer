@@ -3,6 +3,7 @@
     <hangingProtocolName>CAI</hangingProtocolName>
     <numberScreens>1</numberScreens>
     <protocol>MR</protocol>
+    <institutions>LLEIDA</institutions>
     <allDifferent>yes</allDifferent>
     <restriction identifier="1">
         <usageFlag>MATCH</usageFlag>

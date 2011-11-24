@@ -3,6 +3,7 @@
     <hangingProtocolName>Willis+TSA</hangingProtocolName>
     <allDifferent>yes</allDifferent>
     <protocol>MR</protocol>
+    <institutions>LLEIDA</institutions>
     <restriction identifier="1">
         <usageFlag>MATCH</usageFlag>
         <selectorAttribute>ProtocolName</selectorAttribute>

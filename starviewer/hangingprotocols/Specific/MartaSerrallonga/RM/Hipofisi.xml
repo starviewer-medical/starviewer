@@ -3,6 +3,7 @@
     <hangingProtocolName>Hipofisi</hangingProtocolName>
     <allDifferent>yes</allDifferent>
     <protocol>MR</protocol>
+    <institutions>LLEIDA</institutions>
     <restriction identifier="1">
         <usageFlag>NO_MATCH</usageFlag>
         <selectorAttribute>SeriesDescription</selectorAttribute>
