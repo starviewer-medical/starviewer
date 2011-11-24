@@ -172,9 +172,6 @@ public:
     /// Obté la llista d'overlays
     QList<ImageOverlay> getOverlays();
 
-    /// Ens retorna tots els overlays de la imatge fusionats en un de sol
-    ImageOverlay getMergedOverlay();
-
     /// Obté una llista amb la divisió en regions de tots els overlays. Es fusionen tots els overlays originals en un de sol 
     /// i després es fa la partició òptima de les diferents parts que el composen
     QList<ImageOverlay> getOverlaysSplit();
@@ -218,9 +215,9 @@ public:
     static QStringList getSupportedModalities();
 
 private:
-    /// Llegeix els overlays. Si merge és true, els fusiona tots en un de sol i els guarda a m_mergedOverlay
+    /// Llegeix els overlays. Si splitOverlays és true, els guarda fent una divisió de les regions òptimes a la llista m_overlaysSplit
     /// Sinó els llegeix per separat i els guarda a la llista m_overlaysList
-    bool readOverlays(bool merge = true);
+    bool readOverlays(bool splitOverlays = true);
 
 private:
     /// Atributs DICOM
@@ -362,9 +359,6 @@ private:
     
     /// Llista d'overlays carregats
     QList<ImageOverlay> m_overlaysList;
-
-    /// Overlay producte de la fusió de tots els overlays de la imatge
-    ImageOverlay m_mergedOverlay;
 
     /// Llista que conté la partició en regions òptimes de la fusió de tots els overlays
     QList<ImageOverlay> m_overlaysSplit;
