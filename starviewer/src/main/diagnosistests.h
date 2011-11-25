@@ -8,5 +8,6 @@
 #include "dicomdirburningapplicationtest.h"
 #include "applicationversiontest.h"
 #include "systemrequerimentstest.h"
+#include "cachetest.h"
 
 #endif
