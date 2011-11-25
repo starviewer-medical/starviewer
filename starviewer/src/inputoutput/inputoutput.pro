@@ -94,7 +94,8 @@ HEADERS += databaseconnection.h \
     risrequestsportinusetest.h \
     incomingdicomconnectionsportinusetest.h \
     dicomdirburningapplicationtest.h \
-    localdatabasepacsretrievedimagesdal.h
+    localdatabasepacsretrievedimagesdal.h \
+    cachetest.h
 SOURCES += databaseconnection.cpp \
     pacsdevicemanager.cpp \
     pacsconnection.cpp \
@@ -164,7 +165,8 @@ SOURCES += databaseconnection.cpp \
     risrequestsportinusetest.cpp \
     incomingdicomconnectionsportinusetest.cpp \
     dicomdirburningapplicationtest.cpp \
-    localdatabasepacsretrievedimagesdal.cpp
+    localdatabasepacsretrievedimagesdal.cpp \
+    cachetest.cpp
 INCLUDEPATH += ../core
 DEPENDPATH += ../core
 TEMPLATE = lib
