@@ -271,7 +271,9 @@ HEADERS += extensionfactory.h \
     qmessageboxautoclose.h \
     commandlineoption.h \
     applicationversiontest.h \
-    imageoverlayregionfinder.h
+    imageoverlayregionfinder.h \
+    systeminformation.h
+
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
     mathtools.cpp \
@@ -499,10 +501,13 @@ SOURCES += extensionmediator.cpp \
     qmessageboxautoclose.cpp \
     commandlineoption.cpp \
     applicationversiontest.cpp \
-    imageoverlayregionfinder.cpp
+    imageoverlayregionfinder.cpp \
+    systeminformation.cpp
 win32 {
-    HEADERS += windowsfirewallaccess.h
-    SOURCES += windowsfirewallaccess.cpp
+    HEADERS += windowsfirewallaccess.h \
+               windowssysteminformation.h
+    SOURCES += windowsfirewallaccess.cpp \
+               windowssysteminformation.cpp
 }
 TEMPLATE = lib
 DESTDIR = ./
@@ -520,4 +525,5 @@ QT += xml \
     network \
     webkit \
     script \
-    xmlpatterns
+    xmlpatterns \
+    opengl
