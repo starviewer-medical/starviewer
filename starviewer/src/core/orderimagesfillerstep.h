@@ -35,9 +35,6 @@ private:
     /// Mètodes per processar la informació específica de series
     void processImage(Image *image);
 
-    /// Mètode per calcular la distància a on es troba la llesca
-    double distance(Image *image);
-
     /// Mètode que transforma l'estructura d'imatges ordenades a una llista i l'insereix a la sèrie.
     void setOrderedImagesIntoSeries(Series *series);
 
