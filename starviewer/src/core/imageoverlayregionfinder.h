@@ -20,7 +20,9 @@ public:
     ImageOverlayRegionFinder(const ImageOverlay &overlay);
 
     /// Troba les regions de l'overlay que contenen objectes i les guarda a la llista de regions.
-    void findRegions();
+    /// Si optimizeForPowersOf2 és cert, ajunta les regions que juntes ocupen menys memòria de textures que per separat, tenint en compte que les textures tenen
+    /// mides que són potències de 2.
+    void findRegions(bool optimizeForPowersOf2);
     /// Retorna la llista de regions de l'overlay.
     const QList<QRect>& regions() const;
 
@@ -47,7 +49,8 @@ private:
     /// Treu el padding d'un píxel al voltant de la regió.
     void removePadding(QRect &region);
     /// Afegeix la regió a la llista, fusionant-la amb altres si són molt properes.
-    void addRegion(QRect &region);
+    /// Si optimizeForPowersOf2 és cert, també les fusiona si juntes aprofiten millor la memòria de textures.
+    void addRegion(QRect &region, bool optimizeForPowersOf2);
 
 private:
 

@@ -97,7 +97,7 @@ ImageOverlay ImageOverlay::createSubOverlay(const QRect &region) const
 QList<ImageOverlay> ImageOverlay::split() const
 {
     ImageOverlayRegionFinder regionFinder(*this);
-    regionFinder.findRegions();
+    regionFinder.findRegions(true);
     const QList<QRect> &regions = regionFinder.regions();
 
     QList<ImageOverlay> subOverlays;
