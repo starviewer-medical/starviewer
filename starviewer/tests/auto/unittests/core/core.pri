@@ -30,7 +30,8 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_commandlineoption.cpp \
            $$PWD/test_applicationversiontest.cpp \
            $$PWD/test_imageoverlayregionfinder.cpp \
-           $$PWD/test_hangingprotocolmanager.cpp
+           $$PWD/test_hangingprotocolmanager.cpp \
+           $$PWD/test_systemrequerimentstest.cpp
 
 win32 {
     SOURCES += $$PWD/test_windowsfirewallaccess.cpp \
