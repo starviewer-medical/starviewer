@@ -39,7 +39,8 @@ DUMMY = $$addLibraryDependency($$PWD/src, core)
 
 win32{
   LIBS += -ladvapi32 \
-          -lRpcrt4
+          -lRpcrt4 \
+          -lwbemuuid
 }
 
 include($$PWD/src/dcmtk.inc)
