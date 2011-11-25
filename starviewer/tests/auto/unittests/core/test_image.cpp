@@ -1,9 +1,12 @@
 #include "autotest.h"
 #include "image.h"
 
+#include "imageorientation.h"
+#include "fuzzycomparetesthelper.h"
 #include "volumepixeldata.h"
 
 using namespace udg;
+using namespace testing;
 
 class test_Image : public QObject {
 Q_OBJECT
@@ -30,12 +33,16 @@ private slots:
     
     void getDisplayShutterForDisplayAsPixelData_ShouldReturnExpectedValues_data();
     void getDisplayShutterForDisplayAsPixelData_ShouldReturnExpectedValues();
+
+    void distance_ReturnsExpectedValues_data();
+    void distance_ReturnsExpectedValues();
 };
 
 Q_DECLARE_METATYPE(QList<DisplayShutter>);
 Q_DECLARE_METATYPE(DisplayShutter);
 Q_DECLARE_METATYPE(VolumePixelData*);
 Q_DECLARE_METATYPE(double*);
+Q_DECLARE_METATYPE(Image*);
 
 void test_Image::hasOverlays_ReturnExpectedValues_data()
 {
@@ -322,6 +329,70 @@ void test_Image::getDisplayShutterForDisplayAsPixelData_ShouldReturnExpectedValu
     {
         QCOMPARE(shutterOrigin[i], imageOrigin[i]);
     }
+}
+
+void test_Image::distance_ReturnsExpectedValues_data()
+{
+    QTest::addColumn<Image*>("image");
+    QTest::addColumn<double>("expectedDistance");
+
+    ImageOrientation pureAxial(QVector3D(1, 0, 0), QVector3D(0, 1, 0));
+    ImageOrientation pureSagittal(QVector3D(0, 1, 0), QVector3D(0, 0, 1));
+    ImageOrientation pureCoronal(QVector3D(1, 0, 0), QVector3D(0, 0, 1));
+    ImageOrientation randomOrientation(QVector3D(1, 0.5, 2.1), QVector3D(0.3, 3.2, 0.5));
+    
+    Image *im1 = new Image;
+    double ori1[3] = { 0.0, 0.0, 0.0 };
+    im1->setImagePositionPatient(ori1);
+    im1->setImageOrientationPatient(pureAxial);
+
+    QTest::newRow("origin 0, pure axial plane") << im1 << 0.0;
+
+    Image *im2 = new Image;
+    double ori2[3] = { 2.1, 4.5, 22.1 };
+    im2->setImagePositionPatient(ori2);
+    im2->setImageOrientationPatient(pureAxial);
+
+    QTest::newRow("random origin, pure axial plane") << im2 << 22.1;
+
+    Image *im3 = new Image;
+    im3->setImagePositionPatient(ori2);
+    im3->setImageOrientationPatient(pureSagittal);
+    QTest::newRow("random origin, pure sagittal plane") << im3 << 2.1;
+
+    Image *im4 = new Image;
+    im4->setImagePositionPatient(ori2);
+    im4->setImageOrientationPatient(pureCoronal);
+    QTest::newRow("random origin, pure coronal plane") << im4 << -4.5;
+
+    Image *im5 = new Image;
+    im5->setImagePositionPatient(ori2);
+    im5->setImageOrientationPatient(randomOrientation);
+    QTest::newRow("random origin, random plane") << im5 << 54.403;
+
+    double ori3[3] = { -126.84476884827, -123.93805261701, -33.708148995414 };
+    ImageOrientation axialLumbar(QVector3D(0.99858468770980, 0.05244236439466, 0.00885681994259), QVector3D(-0.0531411655247, 0.97706925868988, 0.20618361234664));
+
+    Image *im6 = new Image;
+    im6->setImagePositionPatient(ori3);
+    im6->setImageOrientationPatient(axialLumbar);
+    QTest::newRow("[lumbar] stack1 - axial plane") << im6 << -7.68022;
+
+    double ori4[3] = { -126.49146979309, -129.31158469336, 84.0435373485925 };
+    ImageOrientation axialLumbar2(QVector3D(1, -2.566479224E-06, 5.3246378229E-05), QVector3D(4.7077542149E-06, 0.99918949604034, -0.0402535349130));
+
+    Image *im7 = new Image;
+    im7->setImagePositionPatient(ori4);
+    im7->setImageOrientationPatient(axialLumbar2);
+    QTest::newRow("[lumbar] stack3 - axial plane") << im7 << 78.7769;
+}
+
+void test_Image::distance_ReturnsExpectedValues()
+{
+    QFETCH(Image*, image);
+    QFETCH(double, expectedDistance);
+
+    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(Image::distance(image), expectedDistance, 0.0001));
 }
 
 DECLARE_TEST(test_Image)

@@ -164,6 +164,10 @@ public:
     /// Ens retorna la hora en format hh:mm:ss en que va començar la creació de la imatge
     QString getFormattedImageTime() const;
 
+    /// Ens retorna la distància de l'orígen de la imatge passada per paràmetre respecte a un orígen 0, 0, 0, segons la normal del pla
+    /// TODO Assignar-li un nom més entenedor
+    static double distance(Image *image);
+    
     /// Mètodes per obtenir/assignar el número d'overlays que té la imatge
     bool hasOverlays() const;
     unsigned short getNumberOfOverlays() const;

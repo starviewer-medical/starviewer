@@ -398,6 +398,20 @@ QString Image::getFormattedImageTime() const
     return formattedTime;
 }
 
+double Image::distance(Image *image)
+{
+    // Càlcul de la distància (basat en l'algorisme de Jolinda Smith)
+    double distance = 0.0;
+    
+    // Origen del pla
+    const double *imagePosition = image->getImagePositionPatient();
+    // Normal del pla sobre la qual projectarem l'origen
+    QVector3D normalVector = image->getImageOrientationPatient().getNormalVector();
+    distance = normalVector.x() * imagePosition[0] + normalVector.y() * imagePosition[1] + normalVector.z() * imagePosition[2];
+
+    return distance;
+}
+
 bool Image::hasOverlays() const
 {
     return m_numberOfOverlays > 0 ? true : false;
