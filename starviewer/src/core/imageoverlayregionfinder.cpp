@@ -1,10 +1,27 @@
 #include "imageoverlayregionfinder.h"
 
 #include "imageoverlay.h"
+#include "mathtools.h"
 
 #include <QBitArray>
 #include <QQueue>
 #include <QRect>
+
+namespace {
+
+// Retorna la mida de la textura necessària per guardar les dades de la regió, on l'amplada i l'alçada són potències de 2.
+QSize textureSize(const QRect &region)
+{
+    return QSize(udg::MathTools::roundUpToPowerOf2(region.width()), udg::MathTools::roundUpToPowerOf2(region.height()));
+}
+
+// Retorna l'àrea d'un rectangle amb la mida donada.
+int area(const QSize &size)
+{
+    return size.width() * size.height();
+}
+
+}
 
 namespace udg {
 
@@ -13,7 +30,7 @@ ImageOverlayRegionFinder::ImageOverlayRegionFinder(const ImageOverlay &overlay)
 {
 }
 
-void ImageOverlayRegionFinder::findRegions()
+void ImageOverlayRegionFinder::findRegions(bool optimizeForPowersOf2)
 {
     m_regions.clear();
 
@@ -38,7 +55,7 @@ void ImageOverlayRegionFinder::findRegions()
             {
                 QRect region = growRegion(row, column, mask);
                 addPadding(region);
-                addRegion(region);
+                addRegion(region, optimizeForPowersOf2);
                 removePadding(region);
                 fillMaskForRegion(mask, region);
             }
@@ -231,7 +248,7 @@ void ImageOverlayRegionFinder::removePadding(QRect &region)
     region.adjust(+1, +1, -1, -1);
 }
 
-void ImageOverlayRegionFinder::addRegion(QRect &newRegion)
+void ImageOverlayRegionFinder::addRegion(QRect &newRegion, bool optimizeForPowersOf2)
 {
     const int SizeDivisor = 10;
 
@@ -241,12 +258,25 @@ void ImageOverlayRegionFinder::addRegion(QRect &newRegion)
     for (int i = 0; i < m_regions.size();)
     {
         QRect &region = m_regions[i];
-        int distance = distanceBetweenRegions(newRegion, region);
+        QRect jointRegion = newRegion.united(region);
 
-        if (distance <= joinThreshold)
+        int distance = distanceBetweenRegions(newRegion, region);
+        bool join = distance <= joinThreshold;
+
+        if (!join && optimizeForPowersOf2)
         {
-            // join
-            newRegion = newRegion.united(region);
+            QSize newRegionTextureSize = textureSize(newRegion);
+            QSize regionTextureSize = textureSize(region);
+            QSize jointRegionTextureSize = textureSize(jointRegion);
+            int newRegionTextureArea = area(newRegionTextureSize);
+            int regionTextureArea = area(regionTextureSize);
+            int jointRegionTextureArea = area(jointRegionTextureSize);
+            join = jointRegionTextureArea <= newRegionTextureArea + regionTextureArea;
+        }
+
+        if (join)
+        {
+            newRegion = jointRegion;
             m_regions.removeAt(i);
             i = 0;
         }

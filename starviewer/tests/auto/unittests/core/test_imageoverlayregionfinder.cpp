@@ -61,42 +61,69 @@ void test_ImageOverlayRegionFinder::findRegions_ShouldFindCorrectRegions_data()
     QList< QList<QRect> > allRegions = ImageOverlayTestHelper::createSubOverlayRegions();
 
     QTest::addColumn<ImageOverlay>("imageOverlay");
+    QTest::addColumn<bool>("optimizeForPowersOf2");
     QTest::addColumn< QList<QRect> >("regions");
 
-    QTest::newRow("invalid overlay") << ImageOverlay() << QList<QRect>();
+    QTest::newRow("invalid overlay") << ImageOverlay() << false << QList<QRect>();
+    QTest::newRow("invalid overlay (powers of 2)") << ImageOverlay() << true << QList<QRect>();
 
     {
         const ImageOverlay &overlay = overlays[0];
         const QList<QRect> &regions = allRegions[0];
-        QTest::newRow("{D}, one region") << overlay << regions;
+        QTest::newRow("{D}, one region") << overlay << false << regions;
+    }
+
+    {
+        const ImageOverlay &overlay = overlays[0];
+        const QList<QRect> &regions = allRegions[0];
+        QTest::newRow("{D}, one region (powers of 2)") << overlay << true << regions;
     }
 
     {
         const ImageOverlay &overlay = overlays[1];
         const QList<QRect> &regions = allRegions[1];
-        QTest::newRow("{Tra, O, [F]}, three regions, discontinuity") << overlay << regions;
+        QTest::newRow("{Tra, O, [F]}, three regions, discontinuity") << overlay << false << regions;
+    }
+
+    {
+        const ImageOverlay &overlay = overlays[4];
+        const QList<QRect> &regions = allRegions[4];
+        QTest::newRow("{Tra, O [F]}, two regions, discontinuity (powers of 2)") << overlay << true << regions;
     }
 
     {
         const ImageOverlay &overlay = overlays[2];
         const QList<QRect> &regions = allRegions[2];
-        QTest::newRow("{...}, one big region") << overlay << regions;
+        QTest::newRow("{...}, one big region") << overlay << false << regions;
+    }
+
+    {
+        const ImageOverlay &overlay = overlays[2];
+        const QList<QRect> &regions = allRegions[2];
+        QTest::newRow("{...}, one big region (powers of 2)") << overlay << true << regions;
     }
 
     {
         const ImageOverlay &overlay = overlays[3];
         const QList<QRect> &regions = allRegions[3];
-        QTest::newRow("{Tra}, one region (special for padding)") << overlay << regions;
+        QTest::newRow("{Tra}, one region (special for padding)") << overlay << false << regions;
+    }
+
+    {
+        const ImageOverlay &overlay = overlays[3];
+        const QList<QRect> &regions = allRegions[3];
+        QTest::newRow("{Tra}, one region (special for padding) (powers of 2)") << overlay << true << regions;
     }
 }
 
 void test_ImageOverlayRegionFinder::findRegions_ShouldFindCorrectRegions()
 {
     QFETCH(ImageOverlay, imageOverlay);
+    QFETCH(bool, optimizeForPowersOf2);
     QFETCH(QList<QRect>, regions);
 
     ImageOverlayRegionFinder regionFinder(imageOverlay);
-    regionFinder.findRegions();
+    regionFinder.findRegions(optimizeForPowersOf2);
 
     QCOMPARE(regionFinder.regions(), regions);
 }
