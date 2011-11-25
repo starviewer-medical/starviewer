@@ -144,7 +144,7 @@ void OrderImagesFillerStep::processImage(Image *image)
     QMap<double, QMap<unsigned long, Image*>*> *imagePositionSet;
     QMap<unsigned long, Image*> *instanceNumberSet;
 
-    double distance = this->distance(image);
+    double distance = Image::distance(image);
 
     // Primer busquem quina és la key (normal del pla) més semblant de totes les que hi ha
     // Cada key és la normal de cada pla guardat com a string.
@@ -286,7 +286,7 @@ void OrderImagesFillerStep::setOrderedImagesIntoSeries(Series *series)
                     imagePositionSet = m_orderedImageSet->take(key);
                     Image *image = (*(*imagePositionSet->begin())->begin());
 
-                    lastOrderedImageSet.insertMulti(this->distance(image), imagePositionSet);
+                    lastOrderedImageSet.insertMulti(Image::distance(image), imagePositionSet);
                 }
             }
             else
@@ -321,19 +321,6 @@ void OrderImagesFillerStep::setOrderedImagesIntoSeries(Series *series)
         }
     }
     series->setImages(imageSet);
-}
-
-double OrderImagesFillerStep::distance(Image *image)
-{
-    // Càlcul de la distància (basat en l'algorisme de Jolinda Smith)
-    double distance = .0;
-    // Origen del pla
-    const double *imagePosition = image->getImagePositionPatient();
-    // Normal del pla sobre la qual projectarem l'origen
-    QVector3D normalVector = image->getImageOrientationPatient().getNormalVector();
-    distance = normalVector.x() * imagePosition[0] + normalVector.y() * imagePosition[1] + normalVector.z() * imagePosition[2];
-
-    return distance;
 }
 
 }
