@@ -7,5 +7,6 @@
 #include "echotopacstest.h"
 #include "dicomdirburningapplicationtest.h"
 #include "applicationversiontest.h"
+#include "systemrequerimentstest.h"
 
 #endif
