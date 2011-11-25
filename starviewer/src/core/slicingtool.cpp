@@ -234,7 +234,7 @@ void SlicingTool::chooseBestDefaultScrollMode(Volume *input)
     m_slicingMode = SliceMode;
     if (input)
     {
-        if (input->getNumberOfPhases() > 1 && m_2DViewer->getMaximumSlice() <= 1)
+        if (input->getNumberOfPhases() > 1 && input->getNumberOfSlicesPerPhase() <= 1)
         {
             m_slicingMode = PhaseMode;
             StatsWatcher::log("Slicing Tool: Default Scroll Mode = PHASE");
