@@ -82,6 +82,12 @@ void test_ImageOverlayRegionFinder::findRegions_ShouldFindCorrectRegions_data()
         const QList<QRect> &regions = allRegions[2];
         QTest::newRow("{...}, one big region") << overlay << regions;
     }
+
+    {
+        const ImageOverlay &overlay = overlays[3];
+        const QList<QRect> &regions = allRegions[3];
+        QTest::newRow("{Tra}, one region (special for padding)") << overlay << regions;
+    }
 }
 
 void test_ImageOverlayRegionFinder::findRegions_ShouldFindCorrectRegions()

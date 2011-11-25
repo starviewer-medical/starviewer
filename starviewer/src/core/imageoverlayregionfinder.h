@@ -44,6 +44,8 @@ private:
     void fillMaskForRegion(QBitArray &mask, const QRect &region);
     /// Afegeix un padding d'un píxel al voltant de la regió.
     void addPadding(QRect &region);
+    /// Treu el padding d'un píxel al voltant de la regió.
+    void removePadding(QRect &region);
     /// Afegeix la regió a la llista, fusionant-la amb altres si són molt properes.
     void addRegion(QRect &region);
 

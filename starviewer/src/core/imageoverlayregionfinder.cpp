@@ -39,6 +39,7 @@ void ImageOverlayRegionFinder::findRegions()
                 QRect region = growRegion(row, column, mask);
                 addPadding(region);
                 addRegion(region);
+                removePadding(region);
                 fillMaskForRegion(mask, region);
             }
         }
@@ -223,6 +224,11 @@ void ImageOverlayRegionFinder::addPadding(QRect &region)
     {
         region.setRight(region.right() + 1);
     }
+}
+
+void ImageOverlayRegionFinder::removePadding(QRect &region)
+{
+    region.adjust(+1, +1, -1, -1);
 }
 
 void ImageOverlayRegionFinder::addRegion(QRect &newRegion)

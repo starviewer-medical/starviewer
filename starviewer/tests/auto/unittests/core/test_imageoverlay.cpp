@@ -181,6 +181,7 @@ void test_ImageOverlay::createSubOverlay_ShouldReturnExpectedOverlay_data()
     QTest::newRow("overlay #2, sub #2") << overlays[1] << overlaysRegions[1][1] << overlaysSubOverlays[1][1];
     QTest::newRow("overlay #2, sub #3") << overlays[1] << overlaysRegions[1][2] << overlaysSubOverlays[1][2];
     QTest::newRow("overlay #3, sub #1") << overlays[2] << overlaysRegions[2][0] << overlaysSubOverlays[2][0];
+    QTest::newRow("overlay #4, sub #1") << overlays[3] << overlaysRegions[3][0] << overlaysSubOverlays[3][0];
 }
 
 void test_ImageOverlay::createSubOverlay_ShouldReturnExpectedOverlay()
@@ -213,6 +214,7 @@ void test_ImageOverlay::split_ShouldReturnExpectedResults_data()
     QTest::newRow("overlay #1") << overlays[0] << overlaysSubOverlays[0];
     QTest::newRow("overlay #2") << overlays[1] << overlaysSubOverlays[1];
     QTest::newRow("overlay #3") << overlays[2] << overlaysSubOverlays[2];
+    QTest::newRow("overlay #4") << overlays[3] << overlaysSubOverlays[3];
 }
 
 void test_ImageOverlay::split_ShouldReturnExpectedResults()
