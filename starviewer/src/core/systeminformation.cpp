@@ -1,6 +1,10 @@
 // Starviewer
 #include "systeminformation.h"
+
+#ifdef WIN32
 #include "windowssysteminformation.h"
+#endif
+
 // Qt
 #include <QDesktopWidget>
 #include <QRect>
