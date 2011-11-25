@@ -272,7 +272,8 @@ HEADERS += extensionfactory.h \
     commandlineoption.h \
     applicationversiontest.h \
     imageoverlayregionfinder.h \
-    systeminformation.h
+    systeminformation.h \
+    systemrequeriments.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -502,7 +503,8 @@ SOURCES += extensionmediator.cpp \
     commandlineoption.cpp \
     applicationversiontest.cpp \
     imageoverlayregionfinder.cpp \
-    systeminformation.cpp
+    systeminformation.cpp \
+    systemrequeriments.cpp
 win32 {
     HEADERS += windowsfirewallaccess.h \
                windowssysteminformation.h
