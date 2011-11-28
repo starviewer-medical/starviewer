@@ -117,8 +117,9 @@ void SynchronizeTool::setIncrement(int slice)
             this->m_toolData->setIncrement(increment, m_q2dviewer->getCurrentAnatomicalPlaneLabel());
             connect(m_toolData, SIGNAL(sliceChanged()), SLOT(applySliceChanges()));
         }
-        else // No es posa l'increment però s'actualitza la vista
+        else
         {
+            // No es posa l'increment però s'actualitza la vista
             m_lastView = m_q2dviewer->getCurrentAnatomicalPlaneLabel();
         }
     }
@@ -166,7 +167,7 @@ void SynchronizeTool::applySliceChanges()
 
     if (configuration && configuration->getValue("Slicing").toBool())
     {
-        if(m_q2dviewer->getCurrentAnatomicalPlaneLabel().compare(m_toolData->getIncrementView()) == 0)
+        if (m_q2dviewer->getCurrentAnatomicalPlaneLabel().compare(m_toolData->getIncrementView()) == 0)
         {
             double currentSpacingBetweenSlices = m_q2dviewer->getCurrentSpacingBetweenSlices();
             DEBUG_LOG(QString("applySliceChanges::currentSpacingBetweenSlices = %1").arg(currentSpacingBetweenSlices));
@@ -176,7 +177,7 @@ void SynchronizeTool::applySliceChanges()
                 currentSpacingBetweenSlices = 1.0;
             }
 
-            double sliceIncrement = (this->m_toolData->getIncrement()/currentSpacingBetweenSlices) + m_roundLostSpacingBetweenSlices;
+            double sliceIncrement = (this->m_toolData->getIncrement() / currentSpacingBetweenSlices) + m_roundLostSpacingBetweenSlices;
             int slices = qRound(sliceIncrement);
             m_roundLostSpacingBetweenSlices = sliceIncrement - slices;
             disconnect(m_viewer, SIGNAL(sliceChanged(int)), this, SLOT(setIncrement(int)));

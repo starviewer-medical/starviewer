@@ -112,8 +112,9 @@ void AutomaticSynchronizationTool::updatePosition()
                 currentSpacingBetweenSlices = 1.0;
             }
             
-            if (m_toolData->getSelectedUID() == frameOfReference) //Actualitzem per posició
+            if (m_toolData->getSelectedUID() == frameOfReference)
             {
+                // Actualitzem per posició
                 double *position = m_toolData->getPosition(frameOfReference, m_2DViewer->getCurrentAnatomicalPlaneLabel());
                 double distance;
                 int nearestSlice = m_2DViewer->getNearestSlice(position, distance);
@@ -123,9 +124,10 @@ void AutomaticSynchronizationTool::updatePosition()
                     m_2DViewer->setSlice(nearestSlice);
                 }
             }
-            else //Actualitzem per increment
+            else
             {
-                double sliceIncrement = (this->m_toolData->getDisplacement()/currentSpacingBetweenSlices) + m_roundLostSpacingBetweenSlices;
+                // Actualitzem per increment
+                double sliceIncrement = (this->m_toolData->getDisplacement() / currentSpacingBetweenSlices) + m_roundLostSpacingBetweenSlices;
                 int slices = qRound(sliceIncrement);
                 m_roundLostSpacingBetweenSlices = sliceIncrement - slices;
                 m_2DViewer->setSlice(m_lastSlice + slices);
@@ -134,4 +136,5 @@ void AutomaticSynchronizationTool::updatePosition()
         }
     }
 }
+
 }
