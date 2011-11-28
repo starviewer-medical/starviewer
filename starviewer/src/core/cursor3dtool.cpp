@@ -262,7 +262,15 @@ void Cursor3DTool::projectPoint()
     double distance;
     int nearestSlice = m_2DViewer->getNearestSlice(m_myData->getOriginPointPosition(), distance);
 
-    if (nearestSlice != -1 && distance < (m_2DViewer->getThickness() * 1.5))
+    double currentSpacingBetweenSlices = m_2DViewer->getCurrentSpacingBetweenSlices();
+    if (currentSpacingBetweenSlices == 0.0)
+    {
+        // Si la imatge no té espai entre llesques (0.0), llavors li donem un valor nominal
+        // TODO En teoria l'spacing mai hauria de poder ser 0.0, tot i així es manté per seguretat
+        currentSpacingBetweenSlices = 1.0;
+    }
+    
+    if (nearestSlice != -1 && distance < (currentSpacingBetweenSlices * 1.5))
     {
         m_2DViewer->setSlice(nearestSlice);
         m_crossHair->setCentrePoint(position[0], position[1], position[2]);
