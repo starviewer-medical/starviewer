@@ -53,6 +53,9 @@ private:
     /// Si no s'ha produit cap error, no fa res.
     void logWarningLastError(const QStringList &fileList) const;
 
+    /// Arregla l'spacing en els casos que sabem que les llibreries fallen en aquest càlcul
+    void fixSpacingIssues(Volume *volume);
+
 private:
     /// Definim els tipus de lectors que podem fer servir segons les dades del volum
     enum PixelDataReaderType { ITKGDCMPixelDataReader, VTKGDCMPixelDataReader };

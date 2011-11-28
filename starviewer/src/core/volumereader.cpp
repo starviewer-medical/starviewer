@@ -55,6 +55,7 @@ void VolumeReader::executePixelDataReader(Volume *volume)
         {
             // Tot ha anat ok, assignem les dades al volum
             volume->setPixelData(m_volumePixelDataReader->getVolumePixelData());
+            fixSpacingIssues(volume);
         }
         else
         {
@@ -153,6 +154,24 @@ void VolumeReader::logWarningLastError(const QStringList &fileList) const
         case VolumePixelDataReader::UnknownError:
             WARN_LOG("No podem carregar els arxius perquè ha donat un error desconegut");
             break;
+    }
+}
+
+void VolumeReader::fixSpacingIssues(Volume *volume)
+{
+    if (!volume)
+    {
+        DEBUG_LOG("El volum és nul!");
+        return;
+    }
+
+    if (volume->getNumberOfPhases() > 1 && volume->getNumberOfSlicesPerPhase() > 1)
+    {
+        double zSpacing = abs(Image::distance(volume->getImage(0)) - Image::distance(volume->getImage(1)));
+        DEBUG_LOG(QString("Arreglem el z-spacing per volum amb fases. z-spacing llegit (mal calculat): %1  - Nou z-spacing ben calculat: %2")
+            .arg(volume->getSpacing()[2]).arg(zSpacing));
+        
+        volume->getSpacing()[2] = zSpacing;
     }
 }
 
