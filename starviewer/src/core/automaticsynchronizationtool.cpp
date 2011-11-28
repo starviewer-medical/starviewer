@@ -124,7 +124,6 @@ void AutomaticSynchronizationTool::updatePosition()
                     currentSpacingBetweenSlices = 1.0;
                 }
 
-                double incrementllegit = this->m_toolData->getDisplacement();
                 double sliceIncrement = (this->m_toolData->getDisplacement()/currentSpacingBetweenSlices) + m_roundLostSpacingBetweenSlices;
                 int slices = qRound(sliceIncrement);
                 m_roundLostSpacingBetweenSlices = sliceIncrement - slices;
