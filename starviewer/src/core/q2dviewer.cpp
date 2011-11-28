@@ -454,7 +454,7 @@ void Q2DViewer::refreshAnnotations()
     updateAnnotationsInformation(Q2DViewer::WindowInformationAnnotation | Q2DViewer::SliceAnnotation);
 }
 
-double Q2DViewer::getThickness()
+double Q2DViewer::getCurrentSliceThickness()
 {
     double thickness = 0.0;
     
@@ -1880,9 +1880,9 @@ void Q2DViewer::updateSliceAnnotation(int currentSlice, int maxSlice, int curren
             }
         }
         // Afegim el thickness de la llesca nomes si es > 0mm
-        if (this->getThickness() > 0.0)
+        if (this->getCurrentSliceThickness() > 0.0)
         {
-            lowerLeftText += tr(" Thickness: %1 mm").arg(this->getThickness(), 0, 'f', 2);
+            lowerLeftText += tr(" Thickness: %1 mm").arg(this->getCurrentSliceThickness(), 0, 'f', 2);
         }
 
         m_cornerAnnotations->SetText(0, qPrintable(lowerLeftText));

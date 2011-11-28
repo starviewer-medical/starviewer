@@ -135,8 +135,7 @@ public:
     void projectDICOMPointToCurrentDisplayedImage(const double pointToProject[3], double projectedPoint[3], bool vtkReconstructionHack = false);
 
     /// Retorna el thickness. En cas que no disposem del thickness, el valor retornat serà 0.0
-    /// TODO potser un nom més correcte seria getCurrentSliceThickness() ja que podríem tenir imatges amb diferents thickness
-    double getThickness();
+    double getCurrentSliceThickness();
 
     /// Ens retorna el rang actual de llesques, tenint en compte totes les imatges,
     /// tant com si hi ha fases com si no
