@@ -104,26 +104,27 @@ void AutomaticSynchronizationTool::updatePosition()
         
         if (groupOfActualViewer == activeGroup && m_2DViewer->getCurrentAnatomicalPlaneLabel() == m_toolData->getSelectedView()) //Actualitzem la llesca
         {
+            double currentSpacingBetweenSlices = m_2DViewer->getCurrentSpacingBetweenSlices();
+            if (currentSpacingBetweenSlices == 0.0)
+            {
+                // Si la imatge no té espai entre llesques (0.0), llavors li donem un valor nominal
+                // TODO En teoria l'spacing mai hauria de poder ser 0.0, tot i així es manté per seguretat
+                currentSpacingBetweenSlices = 1.0;
+            }
+            
             if (m_toolData->getSelectedUID() == frameOfReference) //Actualitzem per posició
             {
                 double *position = m_toolData->getPosition(frameOfReference, m_2DViewer->getCurrentAnatomicalPlaneLabel());
                 double distance;
                 int nearestSlice = m_2DViewer->getNearestSlice(position, distance);
 
-                if (nearestSlice != -1 && distance < (m_2DViewer->getThickness() * 1.5))
+                if (nearestSlice != -1 && distance < (currentSpacingBetweenSlices * 1.5))
                 {
                     m_2DViewer->setSlice(nearestSlice);
                 }
             }
             else //Actualitzem per increment
             {
-                double currentSpacingBetweenSlices = m_2DViewer->getCurrentSpacingBetweenSlices();
-                // Si la imatge no té espai entre llesques (0.0), llavors li donem un valor nominal
-                if (currentSpacingBetweenSlices == 0.0)
-                {
-                    currentSpacingBetweenSlices = 1.0;
-                }
-
                 double sliceIncrement = (this->m_toolData->getDisplacement()/currentSpacingBetweenSlices) + m_roundLostSpacingBetweenSlices;
                 int slices = qRound(sliceIncrement);
                 m_roundLostSpacingBetweenSlices = sliceIncrement - slices;
