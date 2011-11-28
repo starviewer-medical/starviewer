@@ -2511,7 +2511,7 @@ double Q2DViewer::getCurrentSpacingBetweenSlices()
 {
     int zIndex = getZIndexForView(m_lastView);
     
-    return m_mainVolume->getSpacing()[zIndex] * m_slabThickness;
+    return m_mainVolume->getSpacing()[zIndex];
 }
 
 int Q2DViewer::getNearestSlice(double projectedPosition[3], double &distance)
