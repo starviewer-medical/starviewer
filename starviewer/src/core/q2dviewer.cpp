@@ -456,7 +456,8 @@ void Q2DViewer::refreshAnnotations()
 
 double Q2DViewer::getThickness()
 {
-    double thickness;
+    double thickness = 0.0;
+    
     switch (m_lastView)
     {
         case Axial:
@@ -475,10 +476,6 @@ double Q2DViewer::getThickness()
                     if (image)
                     {
                         thickness = image->getSliceThickness();
-                    }
-                    else
-                    {
-                        thickness = m_mainVolume->getSpacing()[2];
                     }
                 }
         }
