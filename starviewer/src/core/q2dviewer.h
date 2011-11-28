@@ -134,7 +134,7 @@ public:
     /// per casos en que el pla "real" no és el que volem i necessitem una petita modificació
     void projectDICOMPointToCurrentDisplayedImage(const double pointToProject[3], double projectedPoint[3], bool vtkReconstructionHack = false);
 
-    /// Retorna el thickness
+    /// Retorna el thickness. En cas que no disposem del thickness, el valor retornat serà 0.0
     /// TODO potser un nom més correcte seria getCurrentSliceThickness() ja que podríem tenir imatges amb diferents thickness
     double getThickness();
 
