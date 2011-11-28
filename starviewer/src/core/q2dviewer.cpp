@@ -2549,4 +2549,5 @@ int Q2DViewer::getNearestSlice(double projectedPosition[3], double &distance)
 
     return minimumSlice;
 }
+
 };  // End namespace udg
