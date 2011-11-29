@@ -6,6 +6,7 @@
 namespace udg {
 
 class Q2DViewer;
+class DrawerText;
 
 /**
     Tool per calcular l'àrea i la mitjana de grisos d'un òval
@@ -17,6 +18,9 @@ public:
     ~OvalROITool();
 
     void handleEvent(long unsigned eventID);
+
+protected:
+    virtual void setTextPosition(DrawerText *text);
 
 private:
     /// Estats de la Tool
