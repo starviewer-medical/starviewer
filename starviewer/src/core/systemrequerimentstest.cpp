@@ -27,11 +27,12 @@ DiagnosisTestResult SystemRequerimentsTest::run()
     const unsigned int MinimumCoreSpeed = requeriments->getMinimumCPUFrequency();
     const unsigned int MinimumL2CacheSize = requeriments->getMinimumCPUL2CacheSize();
     const unsigned int MinimumGPURAM = requeriments->getMinimumGPURAM();
+    const QList<QString> MinimumOpenGLExtensions = requeriments->getMinimumGPUOpenGLCompatibilities();
+    const QString MinimumOpenGLVersion = requeriments->getMinimumGPUOpenGLVersion();
     const QString MinimumOSVersion = requeriments->getMinimumOperatingSystemVersion();
     const unsigned int MinimumServicePackVersion = requeriments->getMinimumOperatingSystemServicePackVersion();
     const unsigned int MinimumRAM = requeriments->getMinimumRAMTotalAmount();
     const unsigned int MinimumScreenWidth = requeriments->getMinimumScreenWidth();
-    const QList<QString> MinimumOpenGLExtensions = requeriments->getMinimumGPUOpenGLCompatibilities();
     const unsigned int MinimumDiskSpace = requeriments->getMinimumHardDiskFreeSpace();
 
     // TODO Temporal, s'ha de treure i veure com obtenir la unitat on està starviewer
@@ -76,6 +77,14 @@ DiagnosisTestResult SystemRequerimentsTest::run()
             state = DiagnosisTestResult::Error;
             description += QString("The cache size of the CPU is %1 and the minimum required is %2\n").arg(cacheSize).arg(MinimumL2CacheSize);
         }
+    }
+
+    // Comprovar si la versió d'openGL del sistema és suficient
+    QString openGLVersion = getGPUOpenGLVersion(system);
+    if (compareVersions(openGLVersion, MinimumOpenGLVersion) == SystemRequerimentsTest::Older)
+    {
+        state = DiagnosisTestResult::Error;
+        description += QString("Current openGL version is %1 and the minimum required is %2").arg(openGLVersion).arg(MinimumOpenGLVersion);
     }
 
     // Tenir en una llista les compatibilitats openGL que starviewer utilitza i anar-les buscant una a una al retorn del mètode
@@ -256,6 +265,11 @@ unsigned int SystemRequerimentsTest::getCPUL2CacheSize(SystemInformation *system
 QList<QString> SystemRequerimentsTest::getGPUOpenGLCompatibilities(SystemInformation *system)
 {
     return system->getGPUOpenGLCompatibilities();
+}
+
+QString SystemRequerimentsTest::getGPUOpenGLVersion(SystemInformation *system)
+{
+    return system->getGPUOpenGLVersion();
 }
 
 unsigned int SystemRequerimentsTest::getGPURAM(SystemInformation *system)

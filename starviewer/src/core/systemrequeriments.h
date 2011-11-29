@@ -18,6 +18,7 @@ public:
     virtual unsigned int getMinimumCPUFrequency();
     virtual unsigned int getMinimumCPUL2CacheSize();
     virtual QList<QString> getMinimumGPUOpenGLCompatibilities();
+    virtual QString getMinimumGPUOpenGLVersion();
     virtual unsigned int getMinimumGPURAM();
     virtual unsigned int getMinimumHardDiskFreeSpace();
     virtual QString getMinimumOperatingSystemVersion();
@@ -32,6 +33,7 @@ protected:
     unsigned int m_minimumCoreSpeed;
     unsigned int m_minimumL2CacheSize;
     unsigned int m_minimumGPURAM;
+    QString m_minimumOpenGLVersion;
     QString m_minimumOSVersion;
     unsigned int m_minimumServicePackVersion;
     bool m_doesOperatingSystemNeedToBe64BitArchitecutre;

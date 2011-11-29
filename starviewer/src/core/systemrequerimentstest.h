@@ -7,8 +7,7 @@
 #include "systeminformation.h"
 
 class QString;
-//class QList;
-class QSize;
+//class QList;class QSize;
 
 namespace udg {
 
@@ -34,6 +33,7 @@ protected:
     virtual QList<unsigned int> getCPUFrequencies(SystemInformation *system);
     virtual unsigned int getCPUL2CacheSize(SystemInformation *system);
     virtual QList<QString> getGPUOpenGLCompatibilities(SystemInformation *system);
+    virtual QString getGPUOpenGLVersion(SystemInformation *system);
     virtual unsigned int getGPURAM(SystemInformation *system);
     virtual unsigned int getHardDiskFreeSpace(SystemInformation *system, const QString &device);
     virtual SystemInformation::OperatingSystem getOperatingSystem(SystemInformation *system);

@@ -19,6 +19,7 @@ public:
         m_minimumCoreSpeed = 2457; //2.4GHz
         m_minimumL2CacheSize = 8192; // Kbytes
         m_minimumGPURAM = 256; // Mbytes
+        m_minimumOpenGLVersion = "2.1";
         m_minimumOSVersion = "5.0"; // XP
         m_minimumServicePackVersion = 3; // XP service pack 3
         m_minimumRAM = 4096; // 4Gb
@@ -40,6 +41,7 @@ public:
     UnsignedIntList m_testingCPUFrequencies;
     unsigned int m_testingCPUL2CacheSize;
     StringList m_testingGPUOpenGLCompatibilities;
+    QString m_testingGPUOpenGLVersion;
     unsigned int m_testingGPURAM;
     unsigned int m_testingHardDiskFreeSpace;
     SystemInformation::OperatingSystem m_testingOperatingSystem;
@@ -70,6 +72,11 @@ protected:
     {
         Q_UNUSED(system);
         return m_testingGPUOpenGLCompatibilities;
+    }
+    QString getGPUOpenGLVersion(SystemInformation *system)
+    {
+        Q_UNUSED(system);
+        return m_testingGPUOpenGLVersion;
     }
     unsigned int getGPURAM(SystemInformation *system)
     {
@@ -147,6 +154,7 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
     QTest::addColumn<UnsignedIntList>("testingCPUFrequencies");
     QTest::addColumn<unsigned int>("testingCPUL2CacheSize");
     QTest::addColumn<StringList>("testingGPUOpenGLCompatibilities");
+    QTest::addColumn<QString>("testingGPUOpenGLVersion");
     QTest::addColumn<unsigned int>("testingGPURAM");
     QTest::addColumn<unsigned int>("testingHardDiskFreeSpace");
     QTest::addColumn<SystemInformation::OperatingSystem>("testingOperatingSystem");
@@ -171,6 +179,7 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
     cpuFrequencies << (unsigned int)3000;
     StringList openGLExtensions;
     openGLExtensions << "GL_ARB_over_9000" << "GL_ARB_draw_buffers" << "GL_ARB_fragment_program_shadow" << "GL_ARB_half_float_pixel" << "GL_ARB_flux_capacitor";
+    QString openGLVersion = "2.5";
     unsigned int gpuRAM = 500;
     unsigned int hardDiskFreeSpace = 10240;
     SystemInformation::OperatingSystem operatingSystem = SystemInformation::OSWindows;
@@ -190,19 +199,19 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
     requeriments.setRequerimentsForTesting();
 
 
-    QTest::newRow("ok windows") << cpuNumberOfCores << cpuFrequencies << cacheSize << openGLExtensions << gpuRAM << hardDiskFreeSpace
+    QTest::newRow("ok windows") << cpuNumberOfCores << cpuFrequencies << cacheSize << openGLExtensions << openGLVersion << gpuRAM << hardDiskFreeSpace
                                 << operatingSystem << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << writeCapability
                                 << DiagnosisTestResult::Ok << unusedString << unusedString;
     // TODO Si al final en linux no es comprova la versió mínim, aquest test no cal
-    QTest::newRow("ok linux") << cpuNumberOfCores << cpuFrequencies << cacheSize << openGLExtensions << gpuRAM << hardDiskFreeSpace
+    QTest::newRow("ok linux") << cpuNumberOfCores << cpuFrequencies << cacheSize << openGLExtensions << openGLVersion << gpuRAM << hardDiskFreeSpace
                               << SystemInformation::OSLinux << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << writeCapability
                               << DiagnosisTestResult::Ok << unusedString << unusedString;
     // TODO Comprovar la versió de mac
-    QTest::newRow("ok mac") << cpuNumberOfCores << cpuFrequencies << cacheSize << openGLExtensions << gpuRAM << hardDiskFreeSpace
+    QTest::newRow("ok mac") << cpuNumberOfCores << cpuFrequencies << cacheSize << openGLExtensions << openGLVersion << gpuRAM << hardDiskFreeSpace
                             << SystemInformation::OSMac << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << writeCapability
                             << DiagnosisTestResult::Ok << unusedString << unusedString;
 
-    QTest::newRow("not enough cores") << zero << cpuFrequencies << cacheSize << openGLExtensions << gpuRAM << hardDiskFreeSpace
+    QTest::newRow("not enough cores") << zero << cpuFrequencies << cacheSize << openGLExtensions << openGLVersion << gpuRAM << hardDiskFreeSpace
                                       << operatingSystem << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << writeCapability
                                       << DiagnosisTestResult::Error
                                       << QString("The machine currently has %1 cores, and the minimum required is %2").arg(zero).arg(requeriments.getMinimumCPUNumberOfCores())
@@ -210,7 +219,7 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
 
     UnsignedIntList cpuFrequenciesTooSlow;
     cpuFrequenciesTooSlow << zero;
-    QTest::newRow("CPU frequency too slow") << cpuNumberOfCores << cpuFrequenciesTooSlow << cacheSize << openGLExtensions << gpuRAM << hardDiskFreeSpace
+    QTest::newRow("CPU frequency too slow") << cpuNumberOfCores << cpuFrequenciesTooSlow << cacheSize << openGLExtensions << openGLVersion << gpuRAM << hardDiskFreeSpace
                                             << operatingSystem << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << writeCapability
                                             << DiagnosisTestResult::Error
                                             << QString("The fastest CPU runs at %1 and the minimum required is %2").arg(zero).arg(requeriments.getMinimumCPUFrequency())
@@ -218,41 +227,47 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
     StringList missingOpenGLExtensions;
     missingOpenGLExtensions << "GL_ARB_draw_buffers";
     // El resultat és hard coded, si canvia el requeriment, s'ha de canviar la string
-    QTest::newRow("missing openGL extensions") << cpuNumberOfCores << cpuFrequencies << cacheSize << missingOpenGLExtensions << gpuRAM << hardDiskFreeSpace
+    QTest::newRow("missing openGL extensions") << cpuNumberOfCores << cpuFrequencies << cacheSize << missingOpenGLExtensions << openGLVersion << gpuRAM << hardDiskFreeSpace
                                                << operatingSystem << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << writeCapability
                                                << DiagnosisTestResult::Error
                                                << "Current openGL version does not support GL_ARB_flux_capacitor extension\nCurrent openGL version does not support GL_ARB_half_float_pixel extension"
                                                << unusedString;
 
-    QTest::newRow("not enough GPU RAM") << cpuNumberOfCores << cpuFrequencies << cacheSize << openGLExtensions << zero << hardDiskFreeSpace
+    QTest::newRow("Old openGL version") << cpuNumberOfCores << cpuFrequencies << cacheSize << openGLExtensions << "1.0" << gpuRAM << hardDiskFreeSpace
+                                        << operatingSystem << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << writeCapability
+                                        << DiagnosisTestResult::Error
+                                        << QString("Current openGL version is %1 and the minimum required is %2").arg("1.0").arg(requeriments.getMinimumGPUOpenGLVersion())
+                                        << unusedString;
+
+    QTest::newRow("not enough GPU RAM") << cpuNumberOfCores << cpuFrequencies << cacheSize << openGLExtensions << openGLVersion << zero << hardDiskFreeSpace
                                         << operatingSystem << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << writeCapability
                                         << DiagnosisTestResult::Error
                                         << QString("The graphics card has %1Mb of RAM and the minimum required id %2Mb").arg(zero).arg(requeriments.getMinimumGPURAM())
                                         << unusedString;
 
-    QTest::newRow("not enough space on disk") << cpuNumberOfCores << cpuFrequencies << cacheSize << openGLExtensions << gpuRAM << zero
+    QTest::newRow("not enough space on disk") << cpuNumberOfCores << cpuFrequencies << cacheSize << openGLExtensions << openGLVersion << gpuRAM << zero
                                               << operatingSystem << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << writeCapability
                                               << DiagnosisTestResult::Error << "There is not enough disk space to run starviewer properly." << unusedString;
 
-    QTest::newRow("windows is 32 bit") << cpuNumberOfCores << cpuFrequencies << cacheSize << openGLExtensions << gpuRAM << hardDiskFreeSpace
+    QTest::newRow("windows is 32 bit") << cpuNumberOfCores << cpuFrequencies << cacheSize << openGLExtensions << openGLVersion << gpuRAM << hardDiskFreeSpace
                                        << operatingSystem << operatingSystemVersion << servicePackVersion << false << ramTotalAmount << screenResolutions << writeCapability
                                        << DiagnosisTestResult::Error
                                        << QString("Operating system is not 64 bit architecture.")
                                        << unusedString;
 
-    QTest::newRow("windows version error") << cpuNumberOfCores << cpuFrequencies << cacheSize << openGLExtensions << gpuRAM << hardDiskFreeSpace
+    QTest::newRow("windows version error") << cpuNumberOfCores << cpuFrequencies << cacheSize << openGLExtensions << openGLVersion << gpuRAM << hardDiskFreeSpace
                                            << operatingSystem << "4.1" << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << writeCapability
                                            << DiagnosisTestResult::Error
                                            << QString("Current Operative System version is %1 and the minimum required is %2").arg("4.1").arg(requeriments.getMinimumOperatingSystemVersion())
                                            << unusedString;
 
-    QTest::newRow("windows service pack version error") << cpuNumberOfCores << cpuFrequencies << cacheSize << openGLExtensions << gpuRAM << hardDiskFreeSpace
+    QTest::newRow("windows service pack version error") << cpuNumberOfCores << cpuFrequencies << cacheSize << openGLExtensions << openGLVersion << gpuRAM << hardDiskFreeSpace
                                                         << operatingSystem << operatingSystemVersion << "Service Pack 1" << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << writeCapability
                                                         << DiagnosisTestResult::Error
                                                         << QString("Current Service Pack version is %1 and the minimum required is Service Pack %2").arg("Service Pack 1").arg(requeriments.getMinimumOperatingSystemServicePackVersion())
                                                         << unusedString;
 
-    QTest::newRow("not enough RAM") << cpuNumberOfCores << cpuFrequencies << cacheSize << openGLExtensions << gpuRAM << hardDiskFreeSpace
+    QTest::newRow("not enough RAM") << cpuNumberOfCores << cpuFrequencies << cacheSize << openGLExtensions << openGLVersion << gpuRAM << hardDiskFreeSpace
                                     << operatingSystem << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << zero << screenResolutions << writeCapability
                                     << DiagnosisTestResult::Error
                                     << QString("The total amount of RAM memory is %1 and the minimum required is %2").arg(zero).arg(requeriments.getMinimumRAMTotalAmount())
@@ -260,19 +275,19 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
 
     SizeList screenResolutionsTooSmall;
     screenResolutionsTooSmall << QSize(640, 480);
-    QTest::newRow("screen too small") << cpuNumberOfCores << cpuFrequencies << cacheSize << openGLExtensions << gpuRAM << hardDiskFreeSpace
+    QTest::newRow("screen too small") << cpuNumberOfCores << cpuFrequencies << cacheSize << openGLExtensions << openGLVersion << gpuRAM << hardDiskFreeSpace
                                       << operatingSystem << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutionsTooSmall << writeCapability
                                       << DiagnosisTestResult::Error << "The screens is too small to fit Starviewer application." << unusedString;
     // Warning
     SizeList oneScreenResolutionTooSmall;
     oneScreenResolutionTooSmall << QSize(1440, 900) << QSize(640, 480);
-    QTest::newRow("one screen too small") << cpuNumberOfCores << cpuFrequencies << cacheSize << openGLExtensions << gpuRAM << hardDiskFreeSpace
+    QTest::newRow("one screen too small") << cpuNumberOfCores << cpuFrequencies << cacheSize << openGLExtensions << openGLVersion << gpuRAM << hardDiskFreeSpace
                                           << operatingSystem << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << oneScreenResolutionTooSmall << writeCapability
                                           << DiagnosisTestResult::Warning << "One of the screens is too small. Keep in mind that Starviewer won't fit in that screen."
                                           << unusedString;
 
     QTest::newRow("one screen too small, optical drive can not write")
-                         << cpuNumberOfCores << cpuFrequencies << cacheSize << openGLExtensions << gpuRAM << hardDiskFreeSpace
+                         << cpuNumberOfCores << cpuFrequencies << cacheSize << openGLExtensions << openGLVersion << gpuRAM << hardDiskFreeSpace
                          << operatingSystem << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << oneScreenResolutionTooSmall << false
                          << DiagnosisTestResult::Warning << "One of the screens is too small. Keep in mind that Starviewer won't fit in that screen.\nThe optical drive is not capable of writing."
                          << unusedString;
@@ -284,6 +299,7 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
     QFETCH(UnsignedIntList, testingCPUFrequencies);
     QFETCH(unsigned int, testingCPUL2CacheSize);
     QFETCH(StringList, testingGPUOpenGLCompatibilities);
+    QFETCH(QString, testingGPUOpenGLVersion);
     QFETCH(unsigned int, testingGPURAM);
     QFETCH(unsigned int, testingHardDiskFreeSpace);
     QFETCH(SystemInformation::OperatingSystem, testingOperatingSystem);
@@ -303,6 +319,7 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
     systemRequerimentsTest.m_testingCPUFrequencies = testingCPUFrequencies;
     systemRequerimentsTest.m_testingCPUL2CacheSize = testingCPUL2CacheSize;
     systemRequerimentsTest.m_testingGPUOpenGLCompatibilities = testingGPUOpenGLCompatibilities;
+    systemRequerimentsTest.m_testingGPUOpenGLVersion = testingGPUOpenGLVersion;
     systemRequerimentsTest.m_testingGPURAM = testingGPURAM;
     systemRequerimentsTest.m_testingHardDiskFreeSpace = testingHardDiskFreeSpace;
     systemRequerimentsTest.m_testingOperatingSystem = testingOperatingSystem;
