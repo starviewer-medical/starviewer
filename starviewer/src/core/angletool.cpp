@@ -323,15 +323,15 @@ void AngleTool::finishDrawing()
     // Eliminem l'arc de circumferència (s'esborra automàticament del drawer)
     delete m_circlePolyline;
 
+    // Col·loquem l'angle en el pla corresponent
+    m_2DViewer->getDrawer()->erasePrimitive(m_mainPolyline);
+    m_2DViewer->getDrawer()->draw(m_mainPolyline, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+
     // Afegim l'annotació textual
     DrawerText *text = new DrawerText;
     text->setText(tr("%1 degrees").arg(m_currentAngle, 0, 'f', 1));
     placeText(text);
     m_2DViewer->getDrawer()->draw(text, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
-    
-    // Col·loquem l'angle en el pla corresponent
-    m_2DViewer->getDrawer()->erasePrimitive(m_mainPolyline);
-    m_2DViewer->getDrawer()->draw(m_mainPolyline, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
 }
 
 void AngleTool::placeText(DrawerText *angleText)
