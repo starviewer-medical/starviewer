@@ -7,7 +7,7 @@
 #include "systeminformation.h"
 
 class QString;
-//class QList;class QSize;
+class QSize;
 
 namespace udg {
 
