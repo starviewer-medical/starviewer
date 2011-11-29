@@ -182,7 +182,9 @@ DiagnosisTestResult SystemRequerimentsTest::run()
     }
 
     // Que la unitat de CD/DVD no pugui grabar, serà un warning si la resta de requeriments és correcte
-    if (state != DiagnosisTestResult::Error && !doesOpticalDriveHaveWriteCapabilities(system))
+    if (state != DiagnosisTestResult::Error &&
+        requeriments->doesOpticalDriveNeedWriteCapabilities() &&
+        !doesOpticalDriveHaveWriteCapabilities(system))
     {
         state = DiagnosisTestResult::Warning;
         description += "The optical drive is not capable of writing.\n";
