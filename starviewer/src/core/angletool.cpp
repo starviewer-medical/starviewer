@@ -372,7 +372,11 @@ void AngleTool::placeText(DrawerText *angleText)
                 point2InDisplay[1] += Padding;
             }
             // Tornem a coordenades de món
-            m_2DViewer->computeDisplayToWorld(point2InDisplay[0], point2InDisplay[1], point2InDisplay[2], position);
+            double temporalWorldPoint[4];
+            m_2DViewer->computeDisplayToWorld(point2InDisplay[0], point2InDisplay[1], point2InDisplay[2], temporalWorldPoint);
+            position[0] = temporalWorldPoint[0];
+            position[1] = temporalWorldPoint[1];
+            position[2] = temporalWorldPoint[2];
 
             // Ara position és l'attachment point que volem
             angleText->setAttachmentPoint(position);
@@ -402,7 +406,11 @@ void AngleTool::placeText(DrawerText *angleText)
                 point2InDisplay[1] -= Padding;
             }
             // Tornem a coordenades de món
-            m_2DViewer->computeDisplayToWorld(point2InDisplay[0], point2InDisplay[1], point2InDisplay[2], position);
+            double temporalWorldPoint[4];
+            m_2DViewer->computeDisplayToWorld(point2InDisplay[0], point2InDisplay[1], point2InDisplay[2], temporalWorldPoint);
+            position[0] = temporalWorldPoint[0];
+            position[1] = temporalWorldPoint[1];
+            position[2] = temporalWorldPoint[2];
 
             // Ara position és l'attachment point que volem
             angleText->setAttachmentPoint(position);

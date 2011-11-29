@@ -190,7 +190,11 @@ void DistanceTool::annotateNewPoint()
         // Passem leftPoint a coordenades de display
         m_2DViewer->computeWorldToDisplay(leftPoint[0], leftPoint[1], leftPoint[2], leftPointInDisplay);
         // Apliquem el padding i tornem a coordenades de món
-        m_2DViewer->computeDisplayToWorld(leftPointInDisplay[0] - Padding, leftPointInDisplay[1], leftPointInDisplay[2], leftPoint);
+        double temporalWorldPoint[4];
+        m_2DViewer->computeDisplayToWorld(leftPointInDisplay[0] - Padding, leftPointInDisplay[1], leftPointInDisplay[2], temporalWorldPoint);
+        leftPoint[0] = temporalWorldPoint[0];
+        leftPoint[1] = temporalWorldPoint[1];
+        leftPoint[2] = temporalWorldPoint[2];
 
         // Ara leftPoint és l'attachment point que volem
         text->setAttachmentPoint(leftPoint);
