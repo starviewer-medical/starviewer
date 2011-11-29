@@ -33,7 +33,7 @@ protected:
     unsigned int m_minimumCoreSpeed;
     unsigned int m_minimumL2CacheSize;
     unsigned int m_minimumGPURAM;
-    QString m_minimumOpenGLVersion;
+    QString m_minimumGPUOpenGLVersion;
     QString m_minimumOSVersion;
     unsigned int m_minimumServicePackVersion;
     bool m_doesOperatingSystemNeedToBe64BitArchitecutre;

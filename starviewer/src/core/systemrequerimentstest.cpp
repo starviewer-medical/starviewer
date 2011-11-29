@@ -27,8 +27,8 @@ DiagnosisTestResult SystemRequerimentsTest::run()
     const unsigned int MinimumCoreSpeed = requeriments->getMinimumCPUFrequency();
     const unsigned int MinimumL2CacheSize = requeriments->getMinimumCPUL2CacheSize();
     const unsigned int MinimumGPURAM = requeriments->getMinimumGPURAM();
-    const QList<QString> MinimumOpenGLExtensions = requeriments->getMinimumGPUOpenGLCompatibilities();
-    const QString MinimumOpenGLVersion = requeriments->getMinimumGPUOpenGLVersion();
+    const QList<QString> MinimumGPUOpenGLExtensions = requeriments->getMinimumGPUOpenGLCompatibilities();
+    const QString MinimumGPUOpenGLVersion = requeriments->getMinimumGPUOpenGLVersion();
     const QString MinimumOSVersion = requeriments->getMinimumOperatingSystemVersion();
     const unsigned int MinimumServicePackVersion = requeriments->getMinimumOperatingSystemServicePackVersion();
     const unsigned int MinimumRAM = requeriments->getMinimumRAMTotalAmount();
@@ -81,20 +81,20 @@ DiagnosisTestResult SystemRequerimentsTest::run()
 
     // Comprovar si la versió d'openGL del sistema és suficient
     QString openGLVersion = getGPUOpenGLVersion(system);
-    if (compareVersions(openGLVersion, MinimumOpenGLVersion) == SystemRequerimentsTest::Older)
+    if (compareVersions(openGLVersion, MinimumGPUOpenGLVersion) == SystemRequerimentsTest::Older)
     {
         state = DiagnosisTestResult::Error;
-        description += QString("Current openGL version is %1 and the minimum required is %2").arg(openGLVersion).arg(MinimumOpenGLVersion);
+        description += QString("Current openGL version is %1 and the minimum required is %2").arg(openGLVersion).arg(MinimumGPUOpenGLVersion);
     }
 
     // Tenir en una llista les compatibilitats openGL que starviewer utilitza i anar-les buscant una a una al retorn del mètode
     QList<QString> openGLExtensions = getGPUOpenGLCompatibilities(system);
-    for (int i = 0; i < MinimumOpenGLExtensions.count(); i++)
+    for (int i = 0; i < MinimumGPUOpenGLExtensions.count(); i++)
     {
-        if (!openGLExtensions.contains(MinimumOpenGLExtensions.at(i)))
+        if (!openGLExtensions.contains(MinimumGPUOpenGLExtensions.at(i)))
         {
             state = DiagnosisTestResult::Error;
-            description += QString("Current openGL version does not support %1 extension\n").arg(MinimumOpenGLExtensions.at(i));
+            description += QString("Current openGL version does not support %1 extension\n").arg(MinimumGPUOpenGLExtensions.at(i));
         }
     }
     // Memòria RAM de la GPU
