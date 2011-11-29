@@ -162,43 +162,37 @@ void DistanceTool::annotateNewPoint()
             text->setText(tr("%1 mm").arg(distance, 0, 'f', 2));
         }
 
-        // Coloquem el texte a prop del punt que quedi més a l'esquerra de la línia
-        int i;
+        // Coloquem el text a l'esquerra o a la dreta del segon punt segons la forma de la línia.
         int xIndex = Q2DViewer::getXIndexForView(m_2DViewer->getView());
-        double leftPoint[3];
         double *firstPoint = m_line->getFirstPoint();
         double *secondPoint = m_line->getSecondPoint();
 
+        // Apliquem un padding de 5 pixels
+        const double Padding = 5.0;
+        double textPadding;
         if (firstPoint[xIndex] <= secondPoint[xIndex])
         {
-            for (i = 0; i < 3; i++)
-            {
-                leftPoint[i] = firstPoint[i];
-            }
+            textPadding = Padding;
+            text->setHorizontalJustification("Left");
         }
         else
         {
-            for (i = 0; i < 3; i++)
-            {
-                leftPoint[i] = secondPoint[i];
-            }
+            textPadding = -Padding;
+            text->setHorizontalJustification("Right");
         }
 
-        // Apliquem un padding de 5 pixels
-        const double Padding = 5.0;
-        double leftPointInDisplay[3];
-        // Passem leftPoint a coordenades de display
-        m_2DViewer->computeWorldToDisplay(leftPoint[0], leftPoint[1], leftPoint[2], leftPointInDisplay);
+        double secondPointInDisplay[3];
+        // Passem secondPoint a coordenades de display
+        m_2DViewer->computeWorldToDisplay(secondPoint[0], secondPoint[1], secondPoint[2], secondPointInDisplay);
         // Apliquem el padding i tornem a coordenades de món
         double temporalWorldPoint[4];
-        m_2DViewer->computeDisplayToWorld(leftPointInDisplay[0] - Padding, leftPointInDisplay[1], leftPointInDisplay[2], temporalWorldPoint);
-        leftPoint[0] = temporalWorldPoint[0];
-        leftPoint[1] = temporalWorldPoint[1];
-        leftPoint[2] = temporalWorldPoint[2];
+        m_2DViewer->computeDisplayToWorld(secondPointInDisplay[0] + textPadding, secondPointInDisplay[1], secondPointInDisplay[2], temporalWorldPoint);
+        double textPoint[3];
+        textPoint[0] = temporalWorldPoint[0];
+        textPoint[1] = temporalWorldPoint[1];
+        textPoint[2] = temporalWorldPoint[2];
 
-        // Ara leftPoint és l'attachment point que volem
-        text->setAttachmentPoint(leftPoint);
-        text->setHorizontalJustification("Right");
+        text->setAttachmentPoint(textPoint);
         m_2DViewer->getDrawer()->draw(text, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
         // Reiniciem l'estat de la tool
         m_2DViewer->getDrawer()->erasePrimitive(m_line);
