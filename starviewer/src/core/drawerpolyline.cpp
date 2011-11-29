@@ -217,33 +217,8 @@ int DrawerPolyline::getNumberOfPoints()
 
 double DrawerPolyline::getDistanceToPoint(double *point3D, double closestPoint[3])
 {
-    double minimumDistanceFound = MathTools::DoubleMaximumValue;
-
-    if (!m_pointsList.isEmpty())
-    {
-        // Recorrem tots els punts de la polilínia calculant la distància a cadascun dels
-        // segments que uneixen cada vèrtex
-        double distance;
-        double localClosestPoint[3];
-        int i = 0;
-        while (i < m_pointsList.count() - 1)
-        {
-            double startPoint[3] = { m_pointsList.at(i)[0], m_pointsList.at(i)[1], m_pointsList.at(i)[2] };
-            double endPoint[3] = { m_pointsList.at(i + 1)[0], m_pointsList.at(i + 1)[1], m_pointsList.at(i + 1)[2] };
-            distance = MathTools::getPointToFiniteLineDistance(point3D, startPoint, endPoint, localClosestPoint);
-            if (distance < minimumDistanceFound)
-            {
-                minimumDistanceFound = distance;
-                closestPoint[0] = localClosestPoint[0];
-                closestPoint[1] = localClosestPoint[1];
-                closestPoint[2] = localClosestPoint[2];
-            }
-
-            ++i;
-        }
-    }
-
-    return minimumDistanceFound;
+    int closestEdge;
+    return MathTools::getPointToClosestEdgeDistance(point3D, m_pointsList, false, closestPoint, closestEdge);
 }
 
 void DrawerPolyline::getBounds(double bounds[6])

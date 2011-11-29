@@ -223,6 +223,54 @@ double MathTools::getDistance3D(const double firstPoint[3], const double secondP
     return sqrt(value);
 }
 
+double MathTools::getPointToClosestEdgeDistance(double point3D[3], const QList<QVector<double> > &pointsList, bool lastToFirstEdge, double closestPoint[3], int &closestEdge)
+{
+    double minimumDistanceFound = MathTools::DoubleMaximumValue;
+
+    if (!pointsList.isEmpty())
+    {
+        // Recorrem tots els punts del polígon calculant la distància a cadascun dels
+        // segments que uneixen cada vèrtex
+        double distance;
+        double localClosestPoint[3];
+        int i = 0;
+        while (i < pointsList.count() - 1)
+        {
+            double startPoint[3] = { pointsList.at(i).data()[0], pointsList.at(i).data()[1], pointsList.at(i).data()[2] };
+            double endPoint[3] = { pointsList.at(i + 1).data()[0], pointsList.at(i + 1).data()[1], pointsList.at(i + 1).data()[2] };
+            distance = MathTools::getPointToFiniteLineDistance(point3D, startPoint, endPoint, localClosestPoint);
+            if (distance < minimumDistanceFound)
+            {
+                minimumDistanceFound = distance;
+                closestPoint[0] = localClosestPoint[0];
+                closestPoint[1] = localClosestPoint[1];
+                closestPoint[2] = localClosestPoint[2];
+                closestEdge = i;
+            }
+
+            ++i;
+        }
+
+        if (lastToFirstEdge)
+        {
+            // Calculem la distància del segment que va de l'últim al primer punt
+            double startPoint[3] = { pointsList.first().data()[0], pointsList.first().data()[1], pointsList.first().data()[2] };
+            double endPoint[3] = { pointsList.last().data()[0], pointsList.last().data()[1], pointsList.last().data()[2] };
+            distance = MathTools::getPointToFiniteLineDistance(point3D, startPoint, endPoint, localClosestPoint);
+            if (distance < minimumDistanceFound)
+            {
+                minimumDistanceFound = distance;
+                closestPoint[0] = localClosestPoint[0];
+                closestPoint[1] = localClosestPoint[1];
+                closestPoint[2] = localClosestPoint[2];
+                closestEdge = i;
+            }
+        }
+    }
+
+    return minimumDistanceFound;
+}
+
 double MathTools::getPointToFiniteLineDistance(double point[3], double lineFirstPoint[3], double lineSecondPoint[3], double closestPoint[3])
 {
     double parametricCoordinate;
