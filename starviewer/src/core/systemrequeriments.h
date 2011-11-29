@@ -22,6 +22,7 @@ public:
     virtual unsigned int getMinimumHardDiskFreeSpace();
     virtual QString getMinimumOperatingSystemVersion();
     virtual unsigned int getMinimumOperatingSystemServicePackVersion();
+    virtual bool SystemRequeriments::doesOperatingSystemNeedToBe64BitArchitecutre();
     virtual unsigned int getMinimumRAMTotalAmount();
     virtual unsigned int getMinimumScreenWidth();
     virtual bool doesOpticalDriveNeedWriteCapabilities();
@@ -33,6 +34,7 @@ protected:
     unsigned int m_minimumGPURAM;
     QString m_minimumOSVersion;
     unsigned int m_minimumServicePackVersion;
+    bool m_doesOperatingSystemNeedToBe64BitArchitecutre;
     unsigned int m_minimumRAM;
     unsigned int m_minimumScreenWidth;
     QList<QString> m_minimumOpenGLExtensions;

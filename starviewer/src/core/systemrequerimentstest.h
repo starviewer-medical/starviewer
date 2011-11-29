@@ -39,6 +39,7 @@ protected:
     virtual SystemInformation::OperatingSystem getOperatingSystem(SystemInformation *system);
     virtual QString getOperatingSystemVersion(SystemInformation *system);
     virtual QString getOperatingSystemServicePackVersion(SystemInformation *system);
+    virtual bool isOperatingSystem64BitArchitecture(SystemInformation *system);
     virtual unsigned int getRAMTotalAmount(SystemInformation *system);
     virtual QList<QSize> getScreenResolutions(SystemInformation *system);
     virtual bool doesOpticalDriveHaveWriteCapabilities(SystemInformation *system);

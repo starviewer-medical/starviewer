@@ -66,6 +66,11 @@ unsigned int SystemRequeriments::getMinimumOperatingSystemServicePackVersion()
     return m_minimumServicePackVersion;
 }
 
+bool SystemRequeriments::doesOperatingSystemNeedToBe64BitArchitecutre()
+{
+    return m_doesOperatingSystemNeedToBe64BitArchitecutre;
+}
+
 unsigned int SystemRequeriments::getMinimumRAMTotalAmount()
 {
     return m_minimumRAM;
