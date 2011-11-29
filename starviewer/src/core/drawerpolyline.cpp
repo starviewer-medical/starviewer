@@ -54,13 +54,13 @@ DrawerPolyline::~DrawerPolyline()
 
 void DrawerPolyline::addPoint(double point[3])
 {
-    double *localPoint = new double[3];
-    for (int i = 0; i < 3; i++)
-    {
-        localPoint[i] = point[i];
-    }
+    QVector<double> array(3);
 
-    m_pointsList << localPoint;
+    array[0] = point[0];
+    array[1] = point[1];
+    array[2] = point[2];
+
+    m_pointsList << array;
     emit changed();
 }
 
@@ -72,12 +72,12 @@ void DrawerPolyline::setPoint(int i, double point[3])
     }
     else
     {
-        double *array = m_pointsList.takeAt(i);
-        for (int j = 0; j < 3; j++)
-        {
-            array[j] = point[j];
-        }
+        QVector<double> array(3);
+        array[0] = point[0];
+        array[1] = point[1];
+        array[2] = point[2];
 
+        m_pointsList.removeAt(i);
         m_pointsList.insert(i, array);
         emit changed();
     }
@@ -92,7 +92,7 @@ double* DrawerPolyline::getPoint(int position)
     }
     else
     {
-        return m_pointsList.at(position);
+        return m_pointsList[position].data();
     }
 }
 
@@ -175,9 +175,9 @@ void DrawerPolyline::buildVtkPoints()
 
     // Donem els punts
     int i = 0;
-    foreach (double *vertix, m_pointsList)
+    foreach (const QVector<double> &vertix, m_pointsList)
     {
-        m_vtkPoints->InsertPoint(i, vertix);
+        m_vtkPoints->InsertPoint(i, vertix.data());
         m_vtkCellArray->InsertCellPoint(i);
         i++;
     }
@@ -258,7 +258,7 @@ void DrawerPolyline::getBounds(double bounds[6])
     }
 }
 
-QList<double*> DrawerPolyline::getPointsList()
+QList<QVector<double> > DrawerPolyline::getPointsList()
 {
     return m_pointsList;
 }
