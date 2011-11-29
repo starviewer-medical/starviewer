@@ -4,6 +4,8 @@
 #include "drawer.h"
 #include "drawerpolygon.h"
 #include "drawerpolyline.h"
+#include "drawertext.h"
+#include "mathtools.h"
 
 // Vtk
 #include <vtkRenderWindowInteractor.h>
@@ -189,6 +191,110 @@ void PolylineROITool::closeForm()
     // Un cop fets els càlculs, fem el punter nul per poder controlar si podem fer una nova roi o no
     // No fem delete, perquè sinó això faria que s'esborrés del drawer
     m_roiPolygon = NULL;
+}
+
+void PolylineROITool::setTextPosition(DrawerText *text)
+{
+    double lastPoint[3];
+    m_2DViewer->getEventWorldCoordinate(lastPoint);
+    m_2DViewer->putCoordinateInCurrentImageBounds(lastPoint);
+
+    QList<QVector<double> > pointsList = getBoundingBoxPoints();
+
+    double closestPoint[3];
+    int closestEdge;
+    MathTools::getPointToClosestEdgeDistance(lastPoint, pointsList, true, closestPoint, closestEdge);
+
+    const double Padding = 5.0;
+    double paddingX = 0.0;
+    double paddingY = 0.0;
+
+    //     0
+    //    ____
+    // 3 |    | 1
+    //   |____|
+    //     2
+    switch (closestEdge)
+    {
+        case 0:
+            if (m_2DViewer->getView() == Q2DViewer::Axial)
+            {
+                paddingY = Padding;
+                text->setVerticalJustification("Bottom");
+            }
+            else
+            {
+                paddingY = -Padding;
+                text->setVerticalJustification("Top");
+            }
+            text->setHorizontalJustification("Centered");
+            break;
+        case 1:
+            paddingX = Padding;
+            text->setVerticalJustification("Centered");
+            text->setHorizontalJustification("Left");
+            break;
+        case 2:
+            if (m_2DViewer->getView() == Q2DViewer::Axial)
+            {
+                paddingY = -Padding;
+                text->setVerticalJustification("Top");
+            }
+            else
+            {
+                paddingY = Padding;
+                text->setVerticalJustification("Bottom");
+            }
+            text->setHorizontalJustification("Centered");
+            break;
+        case 3:
+            paddingX = -Padding;
+            text->setVerticalJustification("Centered");
+            text->setHorizontalJustification("Right");
+            break;
+    }
+
+    double closestPointInDisplay[3];
+    // Passem closestPoint a coordenades de display
+    m_2DViewer->computeWorldToDisplay(closestPoint[0], closestPoint[1], closestPoint[2], closestPointInDisplay);
+    // Apliquem el padding i tornem a coordenades de món
+    double temporalWorldPoint[4];
+    m_2DViewer->computeDisplayToWorld(closestPointInDisplay[0] + paddingX, closestPointInDisplay[1] + paddingY, closestPointInDisplay[2], temporalWorldPoint);
+    closestPoint[0] = temporalWorldPoint[0];
+    closestPoint[1] = temporalWorldPoint[1];
+    closestPoint[2] = temporalWorldPoint[2];
+
+    text->setAttachmentPoint(closestPoint);
+}
+
+QList<QVector<double> > PolylineROITool::getBoundingBoxPoints()
+{
+    double bounds[6];
+    m_roiPolygon->getBounds(bounds);
+
+    int xIndex, yIndex, zIndex;
+    Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
+
+    QList<QVector<double> > pointsList;
+    QVector<double> point(3);
+    point[xIndex] = bounds[xIndex * 2];
+    point[yIndex] = bounds[yIndex * 2];
+    point[zIndex] = bounds[zIndex * 2];
+    pointsList << point;
+    point[xIndex] = bounds[xIndex * 2 + 1];
+    point[yIndex] = bounds[yIndex * 2];
+    point[zIndex] = bounds[zIndex * 2];
+    pointsList << point;
+    point[xIndex] = bounds[xIndex * 2 + 1];
+    point[yIndex] = bounds[yIndex * 2 + 1];
+    point[zIndex] = bounds[zIndex * 2];
+    pointsList << point;
+    point[xIndex] = bounds[xIndex * 2];
+    point[yIndex] = bounds[yIndex * 2 + 1];
+    point[zIndex] = bounds[zIndex * 2];
+    pointsList << point;
+
+    return pointsList;
 }
 
 void PolylineROITool::initialize()

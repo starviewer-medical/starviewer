@@ -19,6 +19,9 @@ public:
 
     void handleEvent(long unsigned eventID);
 
+protected:
+    virtual void setTextPosition(DrawerText *text);
+
 private slots:
     /// Inicialitza l'estat de la tool
     void initialize();
@@ -39,6 +42,9 @@ private:
 
     /// Elimina la representacio temporal de la tool
     void deleteTemporalRepresentation();
+
+    /// Retorna una llista de punts que representen la bounding box en la vista actual.
+    QList<QVector<double> > getBoundingBoxPoints();
 
 private:
     /// Polilínia principal: és la polilínia que ens marca la forma que hem anat editant.
