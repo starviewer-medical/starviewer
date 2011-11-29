@@ -23,7 +23,7 @@ public:
     virtual unsigned int getMinimumHardDiskFreeSpace();
     virtual QString getMinimumOperatingSystemVersion();
     virtual unsigned int getMinimumOperatingSystemServicePackVersion();
-    virtual bool SystemRequeriments::doesOperatingSystemNeedToBe64BitArchitecutre();
+    virtual bool doesOperatingSystemNeedToBe64BitArchitecutre();
     virtual unsigned int getMinimumRAMTotalAmount();
     virtual unsigned int getMinimumScreenWidth();
     virtual bool doesOpticalDriveNeedWriteCapabilities();
