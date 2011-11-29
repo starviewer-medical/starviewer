@@ -103,6 +103,13 @@ DiagnosisTestResult SystemRequerimentsTest::run()
         description += "There is not enough disk space to run starviewer properly.\n";
     }
 
+    // Arquitectura de la màquina (32 o 64 bits)
+    if (requeriments->doesOperatingSystemNeedToBe64BitArchitecutre() && !isOperatingSystem64BitArchitecture(system))
+    {
+        state = DiagnosisTestResult::Error;
+        description += "Operating system is not 64 bit architecture.\n";
+    }
+
     // Versió del sistema operatiu
     QString version;
     QString servicePack;
@@ -272,6 +279,11 @@ QString SystemRequerimentsTest::getOperatingSystemVersion(SystemInformation *sys
 QString SystemRequerimentsTest::getOperatingSystemServicePackVersion(SystemInformation *system)
 {
     return system->getOperatingSystemServicePackVersion();
+}
+
+bool SystemRequerimentsTest::isOperatingSystem64BitArchitecture(SystemInformation *system)
+{
+    return system->isOperatingSystem64BitArchitecture();
 }
 
 unsigned int SystemRequerimentsTest::getRAMTotalAmount(SystemInformation *system)
