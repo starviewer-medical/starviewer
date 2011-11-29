@@ -34,9 +34,9 @@ SystemInformation::OperatingSystem SystemInformation::getOperatingSystem()
     return SystemInformation::OSLinux;
 }
 
-QString SystemInformation::getOperatingSystemArchitecture()
+bool SystemInformation::isOperatingSystem64BitArchitecture()
 {
-    return "";
+    return true;
 }
 
 QString SystemInformation::getOperatingSystemVersion()

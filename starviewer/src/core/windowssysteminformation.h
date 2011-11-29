@@ -18,7 +18,7 @@ public:
     ~WindowsSystemInformation();
     
     OperatingSystem getOperatingSystem();
-    QString getOperatingSystemArchitecture();
+    bool isOperatingSystem64BitArchitecture();
     QString getOperatingSystemVersion();
     QString getOperatingSystemServicePackVersion();
 

@@ -32,30 +32,28 @@ WindowsSystemInformation::OperatingSystem WindowsSystemInformation::getOperating
     return SystemInformation::OSWindows;
 }
 
-QString WindowsSystemInformation::getOperatingSystemArchitecture()
+bool WindowsSystemInformation::isOperatingSystem64BitArchitecture()
 {
-    QString operatingSystemArchitecture = "";
-    IEnumWbemClassObject* enumerator = executeQuery("SELECT * FROM Win32_OperatingSystem");
+    // El WOW64 és un pool de processos que conté les aplicacions de 32 bits que s'estan executant a un sistema de 64 bits.
+    // És l'encarregat de gestionar totes les diferències d'arquitectures per executar un procés de 32 bits en un sistema de 64.
+    // Si un proces està en aquest pool, llavors és un proces de 32 bits, executant-se en un systema de 64 bits.
+    // Per tant, si starviewer està compilat a 32 bits poden passar dues coses. O bé està en el pool, per tant el sistema és de 64 bits,
+    // o bé no hi és, cosa que indica que el sistema és de 32 bits.
+    // En cas de que es compili per 64 bits, com que només funciona en 64 bits, només cal dir que sí.
 
-    IWbemClassObject* object = getNextObject(enumerator);
-    while (object)
-    {
-        VARIANT variantProperty;
-        if (getProperty(object, "OSArchitecture", &variantProperty))
-        {
-            operatingSystemArchitecture = QString().fromWCharArray(variantProperty.bstrVal);
-            VariantClear(&variantProperty);
-        }
+    BOOL is64Bit = FALSE;
 
-        object->Release();
-        object = getNextObject(enumerator);
-    }
+    #if defined(Q_OS_WIN64)
 
-    if (enumerator)
-    {
-        enumerator->Release();
-    }
-    return operatingSystemArchitecture;
+        is64Bit = true;
+
+    #elif defined(Q_OS_WIN32)
+        
+        IsWow64Process(GetCurrentProcess(), &is64Bit);
+
+    #endif
+
+    return is64Bit != FALSE;
 }
 
 QString WindowsSystemInformation::getOperatingSystemVersion()
