@@ -1,6 +1,9 @@
 #ifndef UDGMATHTOOLS_H
 #define UDGMATHTOOLS_H
 
+#include <QList>
+#include <QVector>
+
 class QVector3D;
 
 namespace udg {
@@ -64,6 +67,11 @@ static bool closeEnough(float f1, float f2);
 
 /// Distància entre punts 3D
 static double getDistance3D(const double firstPoint[3], const double secondPoint[3]);
+
+/// Retorna a distància entre un punt i l'aresta més propera.
+/// LastToFirstEdge significa si volem que es comprovi l'aresta que forma l'últim i el primer punt de la llista.
+/// El paràmetre de sortida closestPoint, ens indicarà quin és el punt de la línia que queda més a prop del punt indicat i ClosestEdge ens indicarà l'aresta.
+static double getPointToClosestEdgeDistance(double point3D[3], const QList<QVector<double> > &pointsList, bool lastToFirstEdge, double closestPoint[3], int &closestEdge);
 
 /// Distància entre un punt i un segment finit definit per lineFirstPoint i lineSecondPoint
 /// El paràmetre de sortida closestPoint, ens indicarà quin és el punt de la línia que queda més a prop del punt indicat

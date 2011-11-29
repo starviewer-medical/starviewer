@@ -48,6 +48,9 @@ private slots:
     void roundUpToPowerOf2_ShouldReturnExpectedValue_data();
     void roundUpToPowerOf2_ShouldReturnExpectedValue();
 
+    void getPointToClosestEdgeDistance_ShouldReturnExpectedValues_data();
+    void getPointToClosestEdgeDistance_ShouldReturnExpectedValues();
+
 private:
     void setupComputeAngleData();
     void setupComputeAngleNaNData();
@@ -55,6 +58,7 @@ private:
 };
 
 Q_DECLARE_METATYPE(MathTools::IntersectionResults)
+Q_DECLARE_METATYPE(QList<QVector<double> >)
 
 // Epsilons pels diferents fuzzyCompare de cada test
 const double AngleInDegreesEpsilon = 0.001;
@@ -536,6 +540,80 @@ void test_MathTools::setupCrossAndDotProductData()
     QTest::newRow("normalized XYZ, XYZ") << XYZVector << XYZVector << 3. << QVector3D(0, 0, 0);
 }
 
+
+void test_MathTools::getPointToClosestEdgeDistance_ShouldReturnExpectedValues_data()
+{
+    QTest::addColumn<QList<QVector<double> > >("points");
+    QTest::addColumn<bool>("lastToFirstEdge");
+    QTest::addColumn<QVector3D>("point3D");
+    QTest::addColumn<double>("expectedDistance");
+    QTest::addColumn<int>("expectedClosestEdge");
+    QTest::addColumn<QVector3D>("expectedClosestPoint");
+
+    QList<QVector<double> > pointsInAxialView;
+    pointsInAxialView << (QVector<double>() << -2.74219 << -4.71093 << 1153.41);
+    pointsInAxialView << (QVector<double>() << -34.0234 << 32.9688 << 1153.41);
+    pointsInAxialView << (QVector<double>() << 11.4766 << 59.2734 << 1153.41);
+    pointsInAxialView << (QVector<double>() << 71.9062 << 20.1719 << 1153.41);
+    pointsInAxialView << (QVector<double>() << 61.9531 << -11.8203 << 1153.41);
+    pointsInAxialView << (QVector<double>() << 22.1406 << 20.8828 << 1153.41);
+    QList<QVector<double> > pointsInSagitalView;
+    pointsInSagitalView << (QVector<double>() << 3.9731 << 2.40157 << 1239.02);
+    pointsInSagitalView << (QVector<double>() << 3.9731 << 28.0331 << 1241.06);
+    pointsInSagitalView << (QVector<double>() << 3.9731 << 7.28377 << 1223.15);
+    pointsInSagitalView << (QVector<double>() << 3.9731 << -13.8724 << 1236.17);
+    pointsInSagitalView << (QVector<double>() << 3.9731 << -6.95596 << 1263.03);
+    pointsInSagitalView << (QVector<double>() << 3.9731 << 9.31801 << 1256.11);
+
+    QList<QVector<double> > pointsInCoronalView;
+    pointsInCoronalView << (QVector<double>() << 24.3605 << 27.4214 << 1264.25);
+    pointsInCoronalView << (QVector<double>() << 9.30705 << 27.4214 << 1245.94);
+    pointsInCoronalView << (QVector<double>() << 22.7331 << 27.4214 << 1230.88);
+    pointsInCoronalView << (QVector<double>() << -2.49158 << 27.4214 << 1232.92);
+    pointsInCoronalView << (QVector<double>() << -13.0697 << 27.4214 << 1247.97);
+    pointsInCoronalView << (QVector<double>() << -5.33952 << 27.4214 << 1260.58);
+
+    QTest::newRow("axial. Closed. Edge0 out") << pointsInAxialView << true << QVector3D(-34.7344, 8.08594, 1153.41) << 16.441 << 0 << QVector3D(-22.0845,18.5877,1153.41);
+    QTest::newRow("axial. Closed. Edge0 in") << pointsInAxialView << true << QVector3D(-9.14062, 23.7266, 1153.41) << 13.2416 << 0 << QVector3D(-19.3288,15.2684,1153.41);
+    QTest::newRow("axial. Closed. Edge3 out") << pointsInAxialView << true << QVector3D(111.719, 72.0703, 1153.41) << 65.4101 << 2 << QVector3D(71.9062,20.1719,1153.41);
+    QTest::newRow("axial. Closed. Edge5 on") << pointsInAxialView << true << QVector3D(15.0312, 15.1953, 1153.41) << 1.13275 << 5 << QVector3D(15.8434,14.4057,1153.41);
+    QTest::newRow("axial. Opened. Edge5 on") << pointsInAxialView << false << QVector3D(15.0312, 15.1953, 1153.41) << 9.10444 << 4 << QVector3D(22.1406,20.8828,1153.41);
+
+    QTest::newRow("sagital. Closed. Edge4 out") << pointsInSagitalView << true << QVector3D(3.9731, 1.99472, 1264.65) << 4.99872 << 4 << QVector3D(3.9731,0.0395213,1260.05);
+    QTest::newRow("sagital. Closed. Edge3 in") << pointsInSagitalView << true << QVector3D(3.9731, -6.14226, 1254.08) << 3.02059 << 3 << QVector3D(3.9731,-9.06737,1254.83);
+    QTest::newRow("sagital. Closed. Edge1 out") << pointsInSagitalView << true << QVector3D(3.9731, 45.5276, 1194.27) << 46.8536 << 1 << QVector3D(3.9731,14.9213,1229.74);
+    QTest::newRow("sagital. Closed. Edge5 on") << pointsInSagitalView << true << QVector3D(3.9731, 4.84267, 1243.9) << 0.431003 << 5 << QVector3D(3.9731,4.44315,1244.07);
+    QTest::newRow("sagital. Opened. Edge5 on") << pointsInSagitalView << false << QVector3D(3.9731, 4.84267, 1243.9) << 4.67376 << 0 << QVector3D(3.9731,5.21244,1239.25);
+
+    QTest::newRow("coronal. Closed. Edge0 out") << pointsInCoronalView << true << QVector3D(53.2468, 27.4214, 1264.25) << 28.8863 << 0 << QVector3D(24.3605,27.4214,1264.25);
+    QTest::newRow("coronal. Closed. Edge4 in") << pointsInCoronalView << true << QVector3D(-13.8834, 27.4214, 1256.92) << 5.37105 << 4 << QVector3D(-9.304,27.4214,1254.12);
+    QTest::newRow("coronal. Closed. Edge2 out") << pointsInCoronalView << true << QVector3D(7.27281, 27.4214, 1169.45) << 62.4782 << 2 << QVector3D(12.2951,27.4214,1231.73);
+    QTest::newRow("coronal. Closed. Edge5 on") << pointsInCoronalView << true << QVector3D(15.0029, 27.4214, 1262.21) << 0.873961 << 5 << QVector3D(14.896,27.4214,1263.08);
+    QTest::newRow("coronal. Opened. Edge5 on") << pointsInCoronalView << false << QVector3D(15.0029, 27.4214, 1262.21) << 5.93604 << 0 << QVector3D(19.5881,27.4214,1258.44);
+}
+void test_MathTools::getPointToClosestEdgeDistance_ShouldReturnExpectedValues()
+{
+    QFETCH(QList<QVector<double> >, points);
+    QFETCH(bool, lastToFirstEdge);
+    QFETCH(QVector3D, point3D);
+    QFETCH(double, expectedDistance);
+    QFETCH(int, expectedClosestEdge);
+    QFETCH(QVector3D, expectedClosestPoint);
+
+    int closestEdge;
+    double closestPoint[3];
+    double inputPoint[3] = {point3D.x(), point3D.y(), point3D.z()};
+    double distance = MathTools::getPointToClosestEdgeDistance(inputPoint, points, lastToFirstEdge, closestPoint, closestEdge);
+    QVector3D closestPoint3D(closestPoint[0], closestPoint[1], closestPoint[2]);
+
+    QString distanceError(QString("\nActual: %1\nExpected: %2").arg(distance).arg(expectedDistance));
+    QString closestPointError(QString("\nActual: (%1, %2, %3)\nExpected: (%4, %5, %6)").arg(closestPoint[0]).arg(closestPoint[1]).arg(closestPoint[2])
+                              .arg(expectedClosestPoint.x()).arg(expectedClosestPoint.y()).arg(expectedClosestPoint.z()));
+
+    QVERIFY2(FuzzyCompareTestHelper::fuzzyCompare(closestPoint3D, expectedClosestPoint, 0.1), qPrintable(closestPointError));
+    QVERIFY2(FuzzyCompareTestHelper::fuzzyCompare(distance, expectedDistance, 0.1), qPrintable(distanceError));
+    QCOMPARE(closestEdge, expectedClosestEdge);
+}
 DECLARE_TEST(test_MathTools)
 
 #include "test_mathtools.moc"

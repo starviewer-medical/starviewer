@@ -244,44 +244,8 @@ int DrawerPolygon::getNumberOfPoints() const
 
 double DrawerPolygon::getDistanceToPoint(double *point3D, double closestPoint[3])
 {
-    double minimumDistanceFound = MathTools::DoubleMaximumValue;
-
-    if (!m_pointsList.isEmpty())
-    {
-        // Recorrem tots els punts del polígon calculant la distància a cadascun dels
-        // segments que uneixen cada vèrtex
-        double distance;
-        double localClosestPoint[3];
-        int i = 0;
-        while (i < m_pointsList.count() - 1)
-        {
-            double startPoint[3] = { m_pointsList.at(i).data()[0], m_pointsList.at(i).data()[1], m_pointsList.at(i).data()[2] };
-            double endPoint[3] = { m_pointsList.at(i + 1).data()[0], m_pointsList.at(i + 1).data()[1], m_pointsList.at(i + 1).data()[2] };
-            distance = MathTools::getPointToFiniteLineDistance(point3D, startPoint, endPoint, localClosestPoint);
-            if (distance < minimumDistanceFound)
-            {
-                minimumDistanceFound = distance;
-                closestPoint[0] = localClosestPoint[0];
-                closestPoint[1] = localClosestPoint[1];
-                closestPoint[2] = localClosestPoint[2];
-            }
-
-            ++i;
-        }
-        // Calculem la distància del segment que va de l'últim al primer punt
-        double startPoint[3] = { m_pointsList.first().data()[0], m_pointsList.first().data()[1], m_pointsList.first().data()[2] };
-        double endPoint[3] = { m_pointsList.last().data()[0], m_pointsList.last().data()[1], m_pointsList.last().data()[2] };
-        distance = MathTools::getPointToFiniteLineDistance(point3D, startPoint, endPoint, localClosestPoint);
-        if (distance < minimumDistanceFound)
-        {
-            minimumDistanceFound = distance;
-            closestPoint[0] = localClosestPoint[0];
-            closestPoint[1] = localClosestPoint[1];
-            closestPoint[2] = localClosestPoint[2];
-        }
-    }
-
-    return minimumDistanceFound;
+    int closestEdge;
+    return MathTools::getPointToClosestEdgeDistance(point3D, m_pointsList, true, closestPoint, closestEdge);
 }
 
 void DrawerPolygon::getBounds(double bounds[6])
