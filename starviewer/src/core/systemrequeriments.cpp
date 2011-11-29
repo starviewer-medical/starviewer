@@ -9,6 +9,7 @@ SystemRequeriments::SystemRequeriments()
     m_minimumCoreSpeed = 2457; //2.4GHz
     m_minimumL2CacheSize = 8192; // Kbytes
     m_minimumGPURAM = 256; // Mbytes
+    m_minimumOpenGLVersion = "2.1";
     m_minimumOSVersion = "5.0"; // XP
     m_minimumServicePackVersion = 3; // XP service pack 3
     m_minimumRAM = 4096; // 4Gb
@@ -44,6 +45,11 @@ unsigned int SystemRequeriments::getMinimumCPUL2CacheSize()
 QList<QString> SystemRequeriments::getMinimumGPUOpenGLCompatibilities()
 {
     return m_minimumOpenGLExtensions;
+}
+
+QString SystemRequeriments::getMinimumGPUOpenGLVersion()
+{
+    return m_minimumOpenGLVersion;
 }
 
 unsigned int SystemRequeriments::getMinimumGPURAM()
