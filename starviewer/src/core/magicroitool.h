@@ -29,6 +29,9 @@ public:
 
     void handleEvent(unsigned long eventID);
 
+protected:
+    virtual void setTextPosition(DrawerText *text);
+
 private:
     /// Crida a la generació de la regió màgica
     void generateRegion();

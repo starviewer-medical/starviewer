@@ -4,6 +4,7 @@
 #include "volume.h"
 #include "drawer.h"
 #include "drawerpolygon.h"
+#include "drawertext.h"
 
 #include <qmath.h>
 
@@ -80,6 +81,45 @@ void MagicROITool::handleEvent(unsigned long eventID)
             }
             break;
     }
+}
+
+void MagicROITool::setTextPosition(DrawerText *text)
+{
+    double bounds[6];
+    m_roiPolygon->getBounds(bounds);
+
+    int xIndex, yIndex, zIndex;
+    Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
+
+    double attachmentPoint[3];
+    attachmentPoint[xIndex] = (bounds[xIndex * 2] + bounds[xIndex * 2 + 1]) / 2.0;
+    attachmentPoint[zIndex] = bounds[zIndex * 2];
+    if (m_2DViewer->getView() == Q2DViewer::Axial)
+    {
+        attachmentPoint[yIndex] = bounds[yIndex * 2 + 1];
+    }
+    else
+    {
+        attachmentPoint[yIndex] = bounds[yIndex * 2];
+    }
+
+    const double Padding = 5.0;
+    double paddingY = 0.0;
+
+    paddingY = -Padding;
+    text->setVerticalJustification("Top");
+
+    double attachmentPointInDisplay[3];
+    // Passem attachmentPoint a coordenades de display
+    m_2DViewer->computeWorldToDisplay(attachmentPoint[0], attachmentPoint[1], attachmentPoint[2], attachmentPointInDisplay);
+    // Apliquem el padding i tornem a coordenades de món
+    double temporalWorldPoint[4];
+    m_2DViewer->computeDisplayToWorld(attachmentPointInDisplay[0], attachmentPointInDisplay[1] + paddingY, attachmentPointInDisplay[2], temporalWorldPoint);
+    attachmentPoint[0] = temporalWorldPoint[0];
+    attachmentPoint[1] = temporalWorldPoint[1];
+    attachmentPoint[2] = temporalWorldPoint[2];
+
+    text->setAttachmentPoint(attachmentPoint);
 }
 
 void MagicROITool::assignBounds(int &minX, int &minY, int &maxX, int &maxY)
