@@ -341,6 +341,31 @@ DrawerPolygon *ROITool::createProjectedROIPolygon()
 
 void ROITool::printData()
 {
+    QString annotation = getAnnotation();
+
+    DrawerText *text = new DrawerText;
+    text->setText(annotation);
+
+    setTextPosition(text);
+
+    m_2DViewer->getDrawer()->draw(text, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+}
+
+void ROITool::setTextPosition(DrawerText *text)
+{
+    double bounds[6];
+    m_roiPolygon->getBounds(bounds);
+
+    double attachmentPoint[3];
+    attachmentPoint[0] = (bounds[1] + bounds[0]) / 2.0;
+    attachmentPoint[1] = (bounds[3] + bounds[2]) / 2.0;
+    attachmentPoint[2] = (bounds[5] + bounds[4]) / 2.0;
+
+    text->setAttachmentPoint(attachmentPoint);
+}
+
+QString ROITool::getAnnotation()
+{
     Q_ASSERT(m_roiPolygon);
     // HACK Comprovem si l'imatge té pixel spacing per saber si la mesura ha d'anar en píxels o mm
     // TODO proporcionar algun mètode alternatiu per no haver d'haver de fer aquest hack
@@ -387,18 +412,6 @@ void ROITool::printData()
         annotation += tr("\nMean: %1\nSt.Dev.: %2").arg(m_mean, 0, 'f', 2).arg(m_standardDeviation, 0, 'f', 2);
     }
 
-    DrawerText *text = new DrawerText;
-    text->setText(annotation);
-
-    double bounds[6];
-    m_roiPolygon->getBounds(bounds);
-
-    double attachmentPoint[3];
-    attachmentPoint[0] = (bounds[1] + bounds[0]) / 2.0;
-    attachmentPoint[1] = (bounds[3] + bounds[2]) / 2.0;
-    attachmentPoint[2] = (bounds[5] + bounds[4]) / 2.0;
-
-    text->setAttachmentPoint(attachmentPoint);
-    m_2DViewer->getDrawer()->draw(text, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+    return annotation;
 }
 }

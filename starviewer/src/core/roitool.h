@@ -9,6 +9,7 @@ namespace udg {
 
 class Q2DViewer;
 class DrawerPolygon;
+class DrawerText;
 
 /**
     Tool pare per totes aquelles tools destinades a crear ROIs.
@@ -28,6 +29,11 @@ public:
 protected:
     /// Mètode per escriure a pantalla les dades calculades.
     void printData();
+
+    /// Mètode que genera el text a mostrar
+    QString getAnnotation();
+    /// Mètode per assignar propietats de posició al text
+    virtual void setTextPosition(DrawerText *text);
 
 protected:
     /// Viewer 2D sobre el qual treballem
