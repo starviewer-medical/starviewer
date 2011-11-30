@@ -49,7 +49,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
     if (numberOfCores < MinimumNumberOfCores)
     {
         state = DiagnosisTestResult::Error;
-        description += QString("The machine currently has %1 cores, and the minimum required is %2\n").arg(numberOfCores).arg(MinimumNumberOfCores);
+        description += tr("The machine currently has %1 cores, and the minimum required is %2\n").arg(numberOfCores).arg(MinimumNumberOfCores);
     }
     else
     {
@@ -68,14 +68,14 @@ DiagnosisTestResult SystemRequerimentsTest::run()
         if (maximumCPUFrequency < MinimumCoreSpeed)
         {
             state = DiagnosisTestResult::Error;
-            description += QString("The fastest CPU runs at %1 and the minimum required is %2\n").arg(maximumCPUFrequency).arg(MinimumCoreSpeed);
+            description += tr("The fastest CPU runs at %1 and the minimum required is %2\n").arg(maximumCPUFrequency).arg(MinimumCoreSpeed);
         }
         // Cache de nivell 2
         unsigned int cacheSize = getCPUL2CacheSize(system);
         if (cacheSize < MinimumL2CacheSize)
         {
             state = DiagnosisTestResult::Error;
-            description += QString("The cache size of the CPU is %1 and the minimum required is %2\n").arg(cacheSize).arg(MinimumL2CacheSize);
+            description += tr("The cache size of the CPU is %1 and the minimum required is %2\n").arg(cacheSize).arg(MinimumL2CacheSize);
         }
     }
 
@@ -84,7 +84,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
     if (compareVersions(openGLVersion, MinimumGPUOpenGLVersion) == SystemRequerimentsTest::Older)
     {
         state = DiagnosisTestResult::Error;
-        description += QString("Current openGL version is %1 and the minimum required is %2").arg(openGLVersion).arg(MinimumGPUOpenGLVersion);
+        description += tr("Current openGL version is %1 and the minimum required is %2").arg(openGLVersion).arg(MinimumGPUOpenGLVersion);
     }
 
     // Tenir en una llista les compatibilitats openGL que starviewer utilitza i anar-les buscant una a una al retorn del mètode
@@ -94,7 +94,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
         if (!openGLExtensions.contains(MinimumGPUOpenGLExtensions.at(i)))
         {
             state = DiagnosisTestResult::Error;
-            description += QString("Current openGL version does not support %1 extension\n").arg(MinimumGPUOpenGLExtensions.at(i));
+            description += tr("Current openGL version does not support %1 extension\n").arg(MinimumGPUOpenGLExtensions.at(i));
         }
     }
     // Memòria RAM de la GPU
@@ -102,21 +102,21 @@ DiagnosisTestResult SystemRequerimentsTest::run()
     if (gpuRAM < MinimumGPURAM)
     {
         state = DiagnosisTestResult::Error;
-        description += QString("The graphics card has %1Mb of RAM and the minimum required id %2Mb\n").arg(gpuRAM).arg(MinimumGPURAM);
+        description += tr("The graphics card has %1Mb of RAM and the minimum required id %2Mb\n").arg(gpuRAM).arg(MinimumGPURAM);
     }
     
     // TODO Disc dur. S'ha de fer també del que conté el directori de la cache????????
     if (getHardDiskFreeSpace(system, whichHardDisk) < MinimumDiskSpace)
     {
         state = DiagnosisTestResult::Error;
-        description += "There is not enough disk space to run starviewer properly.\n";
+        description += tr("There is not enough disk space to run starviewer properly.\n");
     }
 
     // Arquitectura de la màquina (32 o 64 bits)
     if (requeriments->doesOperatingSystemNeedToBe64BitArchitecutre() && !isOperatingSystem64BitArchitecture(system))
     {
         state = DiagnosisTestResult::Error;
-        description += "Operating system is not 64 bit architecture.\n";
+        description += tr("Operating system is not 64 bit architecture.\n");
     }
 
     // Versió del sistema operatiu
@@ -130,7 +130,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
             if (compareVersions(version, MinimumOSVersion) == SystemRequerimentsTest::Older)
             {
                 state = DiagnosisTestResult::Error;
-                description += QString("Current Operative System version is %1 and the minimum required is %2\n").arg(version).arg(MinimumOSVersion);
+                description += tr("Current Operative System version is %1 and the minimum required is %2\n").arg(version).arg(MinimumOSVersion);
             }
             // Si és windows XP (versió 5.xx), s'ha de comprovar el service pack
             if (version.split(".").at(0).toInt() == 5)
@@ -139,7 +139,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
                 if (servicePack.right(servicePack.count() - 13).toUInt() < MinimumServicePackVersion)
                 {
                     state = DiagnosisTestResult::Error;
-                    description += QString("Current Service Pack version is %1 and the minimum required is Service Pack %2\n").arg(servicePack).arg(MinimumServicePackVersion);
+                    description += tr("Current Service Pack version is %1 and the minimum required is Service Pack %2\n").arg(servicePack).arg(MinimumServicePackVersion);
                 }
             }
             break;
@@ -158,7 +158,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
     if (RAMTotalAmount < MinimumRAM)
     {
         state = DiagnosisTestResult::Error;
-        description += QString("The total amount of RAM memory is %1 and the minimum required is %2\n").arg(RAMTotalAmount).arg(MinimumRAM);
+        description += tr("The total amount of RAM memory is %1 and the minimum required is %2\n").arg(RAMTotalAmount).arg(MinimumRAM);
     }
 
     // Si alguna de les pantalles és menor de 1185 pixels d'amplada, poder retornar un warning, ja que starviewer no hi cap.
@@ -168,7 +168,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
         if (resolutions.at(0).width() < (int)MinimumScreenWidth)
         {
             state = DiagnosisTestResult::Error;
-            description += "The screens is too small to fit Starviewer application.\n";
+            description += tr("The screens is too small to fit Starviewer application.\n");
         }
     }
     else
@@ -183,7 +183,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
                 if (resolutions.at(index).width() < (int)MinimumScreenWidth)
                 {
                     state = DiagnosisTestResult::Warning;
-                    description = "One of the screens is too small. Keep in mind that Starviewer won't fit in that screen.\n";
+                    description = tr("One of the screens is too small. Keep in mind that Starviewer won't fit in that screen.\n");
                 }
                 index++;
             }
@@ -196,7 +196,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
         !doesOpticalDriveHaveWriteCapabilities(system))
     {
         state = DiagnosisTestResult::Warning;
-        description += "The optical drive is not capable of writing.\n";
+        description += tr("The optical drive is not capable of writing.\n");
     }
 
     // Si la descripció acaba en \n, es treu

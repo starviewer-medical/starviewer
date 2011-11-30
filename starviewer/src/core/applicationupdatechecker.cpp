@@ -138,8 +138,7 @@ void ApplicationUpdateChecker::parseWebServiceReply(QNetworkReply *reply)
     {
         ERROR_LOG(QString("Error buscant noves versions al servidor. La resposta del webservice és del tipus ") +
                   QString::number(reply->error()) + QString(": ") + reply->errorString());
-        m_errorDescription = QString(tr("Error connecting to the server. Server response is: %1"))
-                                .arg(reply->errorString());
+        m_errorDescription = tr("Error connecting to the server. Server response is: %1").arg(reply->errorString());
     }
 }
 

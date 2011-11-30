@@ -67,26 +67,26 @@ bool WindowsFirewallAccess::doesStarviewerHaveAccesThroughFirewall()
                                 else
                                 {
                                     // el firewall no te starviewer com a excepció
-                                    m_errorString = "Application is not in the firewall's exceptions list";
+                                    m_errorString = QObject::tr("Application is not in the firewall's exceptions list");
                                     m_status = FirewallAccess::FirewallIsBlocking;
                                 }
                             }
                             else
                             {
-                                m_errorString = "Unable to check if application is in the firewall's exceptions list";
+                                m_errorString = QObject::tr("Unable to check if application is in the firewall's exceptions list");
                                 m_status = FirewallAccess::FirewallError;
                             }
                         }
                         else
                         {
                             // si no es permeten excepcions, l'aplicació no té accés
-                            m_errorString = "Windows firewall does not allow exceptions";
+                            m_errorString = QObject::tr("Windows firewall does not allow exceptions");
                             m_status = FirewallAccess::FirewallIsBlocking;
                         }
                     }
                     else
                     {
-                        m_errorString = "Unable to check if firewall allows exceptions";
+                        m_errorString = QObject::tr("Unable to check if firewall allows exceptions");
                         m_status = FirewallAccess::FirewallError;
                     }
                 }
@@ -99,19 +99,19 @@ bool WindowsFirewallAccess::doesStarviewerHaveAccesThroughFirewall()
             }
             else
             {
-                m_errorString = "Unable to check if firewall is enabled";
+                m_errorString = QObject::tr("Unable to check if firewall is enabled");
                 m_status = FirewallAccess::FirewallError;
             }
         }
         else
         {
-            m_errorString = "Unable to initialize firewall";
+            m_errorString = QObject::tr("Unable to initialize firewall");
             m_status = FirewallAccess::FirewallError;
         }
     }
     else
     {
-        m_errorString = "Error initialization firewall's library";
+        m_errorString = QObject::tr("Error initialization firewall's library");
         m_status = FirewallAccess::FirewallError;
         ERROR_LOG(QString("Error inicialitzant la llibreria COM. CoInitializeEx ha fallat amb el codi %1\n").arg(comInitializationResult));
         CleanupWindowsFirewall(firewallProfile);

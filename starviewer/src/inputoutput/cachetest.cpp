@@ -32,15 +32,15 @@ DiagnosisTestResult CacheTest::run()
     {
         testResultState = DiagnosisTestResult::Error;
         testResultDescription << tr("The free space on the cache directory is below the minimum required");
-        testResultSolution << QString("Make some space on disk");
+        testResultSolution << tr("Make some space on disk");
     }
 
     /// Comprovar els permisos de lectura i escriptura a la carpeta de la cache
     if (!doesCacheDirectoryHaveReadWritePermissions(cachePath))
     {
         testResultState = DiagnosisTestResult::Error;
-        testResultDescription << QString("Invalid permissions on the cache directory");
-        testResultSolution << QString("Change the cache path or the permissions of the directory");
+        testResultDescription << tr("Invalid permissions on the cache directory");
+        testResultSolution << tr("Change the cache path or the permissions of the directory");
     }
 
     /// De moment, en el cas de que no hi hagi error, mirarem lo del warning
@@ -48,7 +48,7 @@ DiagnosisTestResult CacheTest::run()
     if (testResultState != DiagnosisTestResult::Error && !isCacheOnDefaultPath())
     {
         testResultState = DiagnosisTestResult::Warning;
-        testResultDescription << QString("The cache is not on the default path");
+        testResultDescription << tr("The cache is not on the default path");
     }
     
     return DiagnosisTestResult(testResultState, testResultDescription.join("\n"), testResultSolution.join("\n"));

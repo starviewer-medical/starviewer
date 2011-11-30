@@ -31,13 +31,12 @@ DiagnosisTestResult PortInUseTest::run()
         testResultState = DiagnosisTestResult::Error;
         if (portInUse->getStatus() == PortInUse::PortIsInUse)
         {
-            testResultDescription = QString("Port is already in use");
-            testResultSolution = QString("Try another port or shut down the application using this port");
+            testResultDescription = tr("Port is already in use");
+            testResultSolution = tr("Try another port or shut down the application using this port");
         }
         else
         {
-            testResultDescription = QString("Unable to test if port " + QString().setNum(m_port) +
-                                            " is in use due to error: " + portInUse->getErrorString());
+            testResultDescription = tr("Unable to test if port %1 is in use due to error: %2").arg(m_port).arg(portInUse->getErrorString());
         }
     }
 

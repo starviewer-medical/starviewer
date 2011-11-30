@@ -33,15 +33,15 @@ DiagnosisTestResult DICOMDIRBurningApplicationTest::run()
         else
         {
             testResultState = DiagnosisTestResult::Error;
-            testResultDescription = "DICOMDIR burning application is not installed on settings folder";
-            testResultSolution = "Please reinstall the application or update the configuration";
+            testResultDescription = tr("DICOMDIR burning application is not installed on settings folder");
+            testResultSolution = tr("Please reinstall the application or update the configuration");
         }
     }
     else
     {
         testResultState = DiagnosisTestResult::Warning;
-        testResultDescription = "There is no DICOMDIR burning application configured";
-        testResultSolution = "Install a DICOMDIR burning application";
+        testResultDescription = tr("There is no DICOMDIR burning application configured");
+        testResultSolution = tr("Install a DICOMDIR burning application");
     }
 
     return DiagnosisTestResult(testResultState, testResultDescription, testResultSolution);
