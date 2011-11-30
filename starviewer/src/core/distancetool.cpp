@@ -201,7 +201,8 @@ void DistanceTool::annotateNewPoint()
         // Coloquem la primitiva en el pla corresponent
         m_2DViewer->getDrawer()->draw(m_line, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
         // Reiniciem l'estat de la tool
-        initialize();
+        m_lineState = NoPointFixed;
+        m_line = NULL;
     }
 }
 
@@ -224,6 +225,7 @@ void DistanceTool::initialize()
     {
         // Així alliberem la primitiva perquè pugui ser esborrada
         m_line->decreaseReferenceCount();
+        delete m_line;
     }
     m_lineState = NoPointFixed;
     m_line = NULL;
