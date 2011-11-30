@@ -216,11 +216,12 @@ void OvalROITool::closeForm()
     if (m_roiPolygon)
     {
         printData();
+        // Alliberem la primitiva perquè pugui ser esborrada
+        m_roiPolygon->decreaseReferenceCount();
         // Pintem la primitiva al lloc corresponent
         m_2DViewer->getDrawer()->erasePrimitive(m_roiPolygon);
         m_2DViewer->getDrawer()->draw(m_roiPolygon, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
-        // Alliberem la primitiva perquè pugui ser esborrada
-        m_roiPolygon->decreaseReferenceCount();
+        // Inicialitzem el punter a 0
         m_roiPolygon = 0;
     }
 

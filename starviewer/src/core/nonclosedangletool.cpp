@@ -93,15 +93,6 @@ void NonClosedAngleTool::handlePointAddition()
             if (m_state == SecondLineFixed)
             {
                 computeAngle();
-                // Així alliberem les primitives perquè puguin ser esborrades
-                m_firstLine->decreaseReferenceCount();
-                m_secondLine->decreaseReferenceCount();
-                m_middleLine->decreaseReferenceCount();
-                // Acabem les línies
-                m_firstLine = NULL;
-                m_secondLine = NULL;
-                m_middleLine = NULL;
-
                 // Restaurem m_state
                 m_state = None;
             }
@@ -263,7 +254,16 @@ void NonClosedAngleTool::computeAngle()
         }
     }
 
-    // Dibuixem la línia auxiliar
+    // Alliberem les primitives perquè puguin ser esborrades
+    m_firstLine->decreaseReferenceCount();
+    m_secondLine->decreaseReferenceCount();
+    m_middleLine->decreaseReferenceCount();
+    
+    // Col·loquem cada línia al pla que toca
+    m_2DViewer->getDrawer()->erasePrimitive(m_firstLine);
+    m_2DViewer->getDrawer()->erasePrimitive(m_secondLine);
+    m_2DViewer->getDrawer()->draw(m_firstLine, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+    m_2DViewer->getDrawer()->draw(m_secondLine, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
     m_2DViewer->getDrawer()->draw(m_middleLine, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
 
     if (fabs(directorVector1.x()) < 0.0001)
@@ -312,11 +312,11 @@ void NonClosedAngleTool::computeAngle()
 
     placeText(m_middleLine->getFirstPoint(), m_middleLine->getSecondPoint(), text);
     m_2DViewer->getDrawer()->draw(text, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
-    // Col·loquem cada línia al pla que toca
-    m_2DViewer->getDrawer()->erasePrimitive(m_firstLine);
-    m_2DViewer->getDrawer()->erasePrimitive(m_secondLine);
-    m_2DViewer->getDrawer()->draw(m_firstLine, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
-    m_2DViewer->getDrawer()->draw(m_secondLine, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+
+    // Re-iniciem els punters
+    m_firstLine = NULL;
+    m_secondLine = NULL;
+    m_middleLine = NULL;
 }
 
 void NonClosedAngleTool::placeText(double *firstLineVertex, double *secondLineVertex, DrawerText *angleText)
