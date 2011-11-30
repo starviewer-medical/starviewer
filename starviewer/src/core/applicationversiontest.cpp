@@ -30,8 +30,8 @@ DiagnosisTestResult ApplicationVersionTest::run()
         if (m_newVersionAvailable)
         {
             state = DiagnosisTestResult::Warning;
-            description = "There is a new version";
-            solution = "Update";
+            description = tr("There is a new version");
+            solution = tr("Update");
         }
         else
         {
@@ -44,7 +44,7 @@ DiagnosisTestResult ApplicationVersionTest::run()
         state = DiagnosisTestResult::Error;
         description = m_olineCheckerErrorDescription;
         // TODO Proposar una solució quan hi ha hagut error en el check online de les release notes
-        solution = "";
+        solution = tr("");
     } 
 
     return DiagnosisTestResult(state, description, solution);

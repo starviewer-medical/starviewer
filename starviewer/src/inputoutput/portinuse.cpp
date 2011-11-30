@@ -9,7 +9,7 @@ namespace udg {
 PortInUse::PortInUse()
 {
     m_status = PortInUse::PortUnknownStatus;
-    m_errorString = "No port checked yet";
+    m_errorString = QObject::tr("No port checked yet");
 }
 
 bool PortInUse::isPortInUse(int port)
