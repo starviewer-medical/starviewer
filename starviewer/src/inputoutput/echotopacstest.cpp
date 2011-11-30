@@ -31,8 +31,8 @@ DiagnosisTestResult EchoToPACSTest::run()
     else
     {
         testResultState = DiagnosisTestResult::Warning;
-        descriptionStringList.append(tr("There are no PACS defined"));
-        solutionStringList.append(tr(""));
+        descriptionStringList << tr("There are no PACS defined");
+        solutionStringList << tr("");
     }
     
     for (int i = 0; i < pacsList.count(); i++)
@@ -46,13 +46,13 @@ DiagnosisTestResult EchoToPACSTest::run()
             if (status == EchoToPACS::EchoFailed)
             {
                 // TODO: Fer lo de concatenar l'String
-                descriptionStringList.append(tr("Echo to pacs with AETitle '%1' failed").arg(pacsList.at(i).getAETitle()));
-                solutionStringList.append(tr("Contact PACS supervisor"));
+                descriptionStringList << tr("Echo to pacs with AETitle '%1' failed").arg(pacsList.at(i).getAETitle());
+                solutionStringList << tr("Contact PACS supervisor");
             }
             else
             {
-                descriptionStringList.append(tr("Unable to connect to PACS with AETitle '%1'").arg(pacsList.at(i).getAETitle()));
-                solutionStringList.append(tr("Check PACS url, or internet connection"));
+                descriptionStringList << tr("Unable to connect to PACS with AETitle '%1'").arg(pacsList.at(i).getAETitle());
+                solutionStringList << tr("Check PACS url, or internet connection");
             }
         }
     }
