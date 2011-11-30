@@ -49,9 +49,6 @@ private:
     /// Posa la posició actual a les dades, sobreescrivint l'existent si n'hi ha
     void setPositionToToolData();
 
-    /// Obté la llesca més propera del volum del visor
-    int getNearestSlice(double projectedPosition[3], double &distance);
-
 private:
     
     /// Dades de la tool
