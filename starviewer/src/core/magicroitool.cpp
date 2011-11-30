@@ -180,10 +180,12 @@ void MagicROITool::endRegion()
     {
         this->generateRegion();
         this->printData();
+        // Alliberem la primitiva perquè es pugui esborrar
+        m_roiPolygon->decreaseReferenceCount();
         // Col·loquem el dibuix al lloc corresponent
         m_2DViewer->getDrawer()->erasePrimitive(m_roiPolygon);
         m_2DViewer->getDrawer()->draw(m_roiPolygon, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
-        m_roiPolygon->decreaseReferenceCount();
+        // Re-iniciem el punter
         m_roiPolygon = NULL;
     }
 }

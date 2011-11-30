@@ -194,9 +194,13 @@ void DistanceTool::annotateNewPoint()
 
         text->setAttachmentPoint(textPoint);
         m_2DViewer->getDrawer()->draw(text, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
-        // Reiniciem l'estat de la tool
+        
+        // Alliberem la primitiva perquè pugui ser esborrada
+        m_line->decreaseReferenceCount();
         m_2DViewer->getDrawer()->erasePrimitive(m_line);
+        // Coloquem la primitiva en el pla corresponent
         m_2DViewer->getDrawer()->draw(m_line, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+        // Reiniciem l'estat de la tool
         initialize();
     }
 }
