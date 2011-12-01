@@ -86,7 +86,7 @@ QViewer::QViewer(QWidget *parent)
     m_stackedLayout->addWidget(m_automaticSynchronizationWidget);
 
     // Inicialitzem l'status del viewer
-    m_viewerStatus = NoVolumeInput;
+    m_previousViewerStatus = m_viewerStatus = NoVolumeInput;
     this->setCurrentWidgetByViewerStatus(m_viewerStatus);
     this->initializeWorkInProgressByViewerStatus(m_viewerStatus);
 
@@ -831,10 +831,16 @@ QViewer::ViewerStatus QViewer::getViewerStatus() const
     return m_viewerStatus;
 }
 
+QViewer::ViewerStatus QViewer::getPreviousViewerStatus() const
+{
+    return m_previousViewerStatus;
+}
+
 void QViewer::setViewerStatus(ViewerStatus status)
 {
     if (m_viewerStatus != status)
     {
+        m_previousViewerStatus = m_viewerStatus;
         m_viewerStatus = status;
         this->setCurrentWidgetByViewerStatus(status);
         this->initializeWorkInProgressByViewerStatus(status);
@@ -849,15 +855,14 @@ void QViewer::setCurrentWidgetByViewerStatus(ViewerStatus status)
     {
         m_stackedLayout->setCurrentWidget(m_vtkWidget);
     }
+    else if (status == SynchronizationEdit)
+    {
+        m_stackedLayout->setCurrentWidget(m_automaticSynchronizationWidget);
+    }
     else
     {
         m_stackedLayout->setCurrentWidget(m_workInProgressWidget);
     }
-}
-
-void QViewer::restoreCurrentWidgetByViewerStatus()
-{
-    setCurrentWidgetByViewerStatus(m_viewerStatus);
 }
 
 void QViewer::initializeWorkInProgressByViewerStatus(ViewerStatus status)
@@ -867,6 +872,7 @@ void QViewer::initializeWorkInProgressByViewerStatus(ViewerStatus status)
     {
         case NoVolumeInput:
         case VisualizingVolume:
+        case SynchronizationEdit:
             // Do nothing
             break;
         case DownloadingVolume:
@@ -882,11 +888,6 @@ void QViewer::initializeWorkInProgressByViewerStatus(ViewerStatus status)
             m_workInProgressWidget->setTitle(tr("Error loading data"));
             break;
     }
-}
-
-void QViewer::setSincronitzationEditionWidgetAsCurrentWidget()
-{
-    m_stackedLayout->setCurrentWidget(m_automaticSynchronizationWidget);
 }
 
 AutomaticSynchronizationWidget * QViewer::getAutomaticSynchronizationWidget()
