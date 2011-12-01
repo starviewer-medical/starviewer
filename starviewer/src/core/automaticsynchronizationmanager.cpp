@@ -65,13 +65,13 @@ void AutomaticSynchronizationManager::enableEditor(bool enable)
                 widget->setBackgroundImage(path);
                 writer->Delete();
 
-                viewer->setSincronitzationEditionWidgetAsCurrentWidget();
+                viewer->setViewerStatus(QViewer::SynchronizationEdit);
             }
         }
         else
         {
             disconnect(viewer->getAutomaticSynchronizationWidget(), SIGNAL(selectedItem(Q2DViewer*)),this, SLOT(changeEditionState(Q2DViewer*)));
-            viewer->restoreCurrentWidgetByViewerStatus();
+            viewer->setViewerStatus(viewer->getPreviousViewerStatus());
         }
     }
 

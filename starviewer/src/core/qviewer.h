@@ -50,7 +50,7 @@ public:
     enum RecordFileFormatType { MPEG2 };
 
     /// Estat del viewer
-    enum ViewerStatus { NoVolumeInput, DownloadingVolume, DownloadingError, LoadingVolume, LoadingError, VisualizingVolume };
+    enum ViewerStatus { NoVolumeInput, DownloadingVolume, DownloadingError, LoadingVolume, LoadingError, VisualizingVolume, SynchronizationEdit };
 
     /// Retorna l'interactor renderer
     virtual vtkRenderWindowInteractor* getInteractor();
@@ -157,18 +157,13 @@ public:
     /// Retorna l'status del viewer. Útil per saber si el visor està visualitzant dades
     /// o està carregant...
     ViewerStatus getViewerStatus() const;
+    ViewerStatus getPreviousViewerStatus() const;
 
     /// Canvia l'status del viewer
     void setViewerStatus(ViewerStatus status);
 
-    /// Posa sobre la pila el widget de sincronització automàtica
-    void setSincronitzationEditionWidgetAsCurrentWidget();
-
     /// Obté el widget d'interfície de la sincronització automàtica
     AutomaticSynchronizationWidget * getAutomaticSynchronizationWidget();
-
-    /// Restaura el widget segons l'estat en què es troba acutalment
-    void restoreCurrentWidgetByViewerStatus();
 
 public slots:
     /// Indiquem les dades d'entrada
@@ -347,8 +342,9 @@ private:
     /// Indica si s'ha definit o no un window level per defecte
     bool m_hasDefaultWindowLevelDefined;
 
-    /// Estat del visor actual
+    /// Estats actual i previ del visor actual
     ViewerStatus m_viewerStatus;
+    ViewerStatus m_previousViewerStatus;
 
     /// Layout que ens permet crear widgets diferents per els estats diferents del visor.
     QStackedLayout *m_stackedLayout;
