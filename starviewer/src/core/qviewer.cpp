@@ -845,6 +845,15 @@ void QViewer::setViewerStatus(ViewerStatus status)
         this->setCurrentWidgetByViewerStatus(status);
         this->initializeWorkInProgressByViewerStatus(status);
 
+        if (m_viewerStatus == SynchronizationEdit)
+        {
+            disableContextMenu();
+        }
+        else
+        {
+            enableContextMenu();
+        }
+        
         emit viewerStatusChanged();
     }
 }
