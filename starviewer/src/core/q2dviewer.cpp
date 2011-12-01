@@ -97,6 +97,7 @@ Q2DViewer::Q2DViewer(QWidget *parent)
     // Inicialitzem el filtre de shutter
     initializeShutterFilter();
     m_shuttersAreEnabled = true;
+    m_overlaysAreEnabled = true;
 }
 
 Q2DViewer::~Q2DViewer()
@@ -873,6 +874,11 @@ void Q2DViewer::loadOverlays(Volume *volume)
                 }
             }
         }
+    }
+
+    if (!m_overlaysAreEnabled)
+    {
+        showImageOverlays(m_overlaysAreEnabled);
     }
 }
 
@@ -2397,6 +2403,8 @@ void Q2DViewer::showImageOverlays(bool enable)
     {
         getDrawer()->disableGroup(OverlaysDrawerGroup);
     }
+
+    m_overlaysAreEnabled = enable;
 }
 
 void Q2DViewer::showDisplayShutters(bool enable)
