@@ -540,6 +540,9 @@ private:
     /// Llistat d'overlays
     QList<DrawerBitmap*> m_viewerBitmaps;
 
+    /// Controla si els overlays estan habilitats o no
+    bool m_overlaysAreEnabled;
+    
     /// Controla si els shutters estan habilitats o no
     bool m_shuttersAreEnabled;
 
