@@ -163,7 +163,7 @@ public:
     void setViewerStatus(ViewerStatus status);
 
     /// Obté el widget d'interfície de la sincronització automàtica
-    AutomaticSynchronizationWidget * getAutomaticSynchronizationWidget();
+    AutomaticSynchronizationWidget* getAutomaticSynchronizationWidget();
 
 public slots:
     /// Indiquem les dades d'entrada

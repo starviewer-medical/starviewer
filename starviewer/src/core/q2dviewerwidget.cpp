@@ -223,4 +223,5 @@ void Q2DViewerWidget::setSliderBarWidgetsEnabled(bool enabled)
     m_synchronizeButtonAction->setEnabled(enabled);
     m_viewText->setEnabled(enabled);
 }
+
 }

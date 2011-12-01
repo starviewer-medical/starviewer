@@ -480,7 +480,7 @@ void Q2DViewerExtension::initializeTools()
     // sincronització no té el model de totes les tools
     connect(m_toolManager->getRegisteredToolAction("Cursor3DTool"), SIGNAL(triggered()), SLOT(disableSynchronization()));
     connect(m_toolManager->getRegisteredToolAction("AutomaticSynchronizationTool"), SIGNAL(triggered(bool)), SLOT(enableAutomaticSincronizationToViewer(bool)));
-    connect(m_automaticSynchronizationEditionButton, SIGNAL(clicked (bool)), SLOT(enableAutomaticSynchonizationEditor(bool)));
+    connect(m_automaticSynchronizationEditionButton, SIGNAL(clicked(bool)), SLOT(enableAutomaticSynchonizationEditor(bool)));
 #endif
 
     // SCREEN SHOT TOOL

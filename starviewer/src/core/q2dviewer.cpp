@@ -1381,7 +1381,7 @@ ImagePlane* Q2DViewer::getImagePlane(int sliceNumber, int phaseNumber, bool vtkR
                     }
 
                     imagePlane = new ImagePlane();
-                    imagePlane->setImageOrientation(ImageOrientation(sagittalRowVector, sagittalColumnVector));                    
+                    imagePlane->setImageOrientation(ImageOrientation(sagittalRowVector, sagittalColumnVector));
                     imagePlane->setSpacing(spacing[1], spacing[2]);
                     imagePlane->setThickness(spacing[0]);
                     imagePlane->setRows(dimensions[2]);

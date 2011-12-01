@@ -899,7 +899,7 @@ void QViewer::initializeWorkInProgressByViewerStatus(ViewerStatus status)
     }
 }
 
-AutomaticSynchronizationWidget * QViewer::getAutomaticSynchronizationWidget()
+AutomaticSynchronizationWidget* QViewer::getAutomaticSynchronizationWidget()
 {
     return m_automaticSynchronizationWidget;
 }
