@@ -115,7 +115,7 @@ public slots:
     void updatePreviousStudiesWidget();
 
     /// Inicialitza la sincronització automàtica agafant de referència el visor que tenim actiu (seleccionat)
-    void enableAutomaticSincronizationToViewer(bool enable);
+    void enableAutomaticSynchronizationToViewer(bool enable);
 
 #endif
 

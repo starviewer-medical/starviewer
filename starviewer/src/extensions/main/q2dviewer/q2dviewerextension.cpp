@@ -479,7 +479,7 @@ void Q2DViewerExtension::initializeTools()
     // TODO De moment fem exclusiu la tool de sincronització i la de cursor 3d manualment perque la
     // sincronització no té el model de totes les tools
     connect(m_toolManager->getRegisteredToolAction("Cursor3DTool"), SIGNAL(triggered()), SLOT(disableSynchronization()));
-    connect(m_toolManager->getRegisteredToolAction("AutomaticSynchronizationTool"), SIGNAL(triggered(bool)), SLOT(enableAutomaticSincronizationToViewer(bool)));
+    connect(m_toolManager->getRegisteredToolAction("AutomaticSynchronizationTool"), SIGNAL(triggered(bool)), SLOT(enableAutomaticSynchronizationToViewer(bool)));
     connect(m_automaticSynchronizationEditionButton, SIGNAL(clicked(bool)), SLOT(enableAutomaticSynchonizationEditor(bool)));
 #endif
 
@@ -795,7 +795,7 @@ void Q2DViewerExtension::updatePreviousStudiesWidget()
     m_previousStudiesWidget->updateList();
 }
 
-void Q2DViewerExtension::enableAutomaticSincronizationToViewer(bool enable)
+void Q2DViewerExtension::enableAutomaticSynchronizationToViewer(bool enable)
 {
     m_automaticSynchronizationEditionButton->setEnabled(enable);
     
