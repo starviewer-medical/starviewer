@@ -76,7 +76,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
         if (cacheSize < MinimumL2CacheSize)
         {
             state = DiagnosisTestResult::Error;
-            description << tr("The cache size of the CPU is %1 and the minimum required is %2").arg(cacheSize).arg(MinimumL2CacheSize);
+            description << tr("The level 2 cache size of the CPU is %1 and the minimum required is %2").arg(cacheSize).arg(MinimumL2CacheSize);
         }
     }
 
