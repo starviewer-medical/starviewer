@@ -224,6 +224,14 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
                                             << DiagnosisTestResult::Error
                                             << QString("The fastest CPU runs at %1 and the minimum required is %2").arg(zero).arg(requeriments.getMinimumCPUFrequency())
                                             << unusedString;
+
+    unsigned int cacheTooSmall = 1024;
+    QTest::newRow("CPU cache too small") << cpuNumberOfCores << cpuFrequencies << cacheTooSmall << openGLExtensions << openGLVersion << gpuRAM << hardDiskFreeSpace
+                                         << operatingSystem << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << writeCapability
+                                         << DiagnosisTestResult::Error
+                                         << QString("The level 2 cache size of the CPU is %1 and the minimum required is %2").arg(cacheTooSmall).arg(requeriments.getMinimumCPUL2CacheSize())
+                                         << unusedString;
+
     StringList missingOpenGLExtensions;
     missingOpenGLExtensions << "GL_ARB_draw_buffers";
     // El resultat és hard coded, si canvia el requeriment, s'ha de canviar la string
