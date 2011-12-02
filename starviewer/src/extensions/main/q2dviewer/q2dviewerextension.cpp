@@ -678,15 +678,25 @@ void Q2DViewerExtension::showScreenshotsExporterDialog()
 
 void Q2DViewerExtension::validePhases()
 {
-    if (m_workingArea->getSelectedViewer()->hasPhases())
+    if (m_workingArea->getSelectedViewer()->getViewer()->getViewerStatus() == QViewer::SynchronizationEdit)
     {
-        m_sagitalViewAction->setEnabled(false);
-        m_coronalViewAction->setEnabled(false);
+        m_axialViewToolButton->setEnabled(false);
+        m_sagitalViewToolButton->setEnabled(false);
+        m_coronalViewToolButton->setEnabled(false);
     }
     else
     {
-        m_sagitalViewAction->setEnabled(true);
-        m_coronalViewAction->setEnabled(true);
+        m_axialViewToolButton->setEnabled(true);
+        if (m_workingArea->getSelectedViewer()->hasPhases())
+        {
+            m_sagitalViewToolButton->setEnabled(false);
+            m_coronalViewToolButton->setEnabled(false);
+        }
+        else
+        {
+            m_sagitalViewToolButton->setEnabled(true);
+            m_coronalViewToolButton->setEnabled(true);
+        }
     }
 }
 #endif
@@ -824,6 +834,21 @@ void Q2DViewerExtension::enableAutomaticSynchronizationToViewer(bool enable)
 void Q2DViewerExtension::enableAutomaticSynchonizationEditor(bool enable)
 {
     m_automaticSynchronizationManager->enableEditor(enable);
+    
+    validePhases();
+    m_flipHorizontalToolButton->setEnabled(!enable);
+    m_flipVerticalToolButton->setEnabled(!enable);
+    m_rotateClockWiseToolButton->setEnabled(!enable);
+    m_rotateCounterClockWiseToolButton->setEnabled(!enable);
+    m_restoreToolButton->setEnabled(!enable);
+    m_automaticSynchronizationToolButton->setEnabled(!enable);
+    m_screenShotToolButton->setEnabled(!enable);
+    m_screenshotsExporterToolButton->setEnabled(!enable);
+    m_buttonGrid->setEnabled(!enable);
+    m_downButtonGrid->setEnabled(!enable);
+    m_previousStudiesToolButton->setEnabled(!enable);
+    m_cineController->setEnabled(!enable);
+    m_thickSlabWidget->setEnabled(!enable);
 }
 
 #endif
