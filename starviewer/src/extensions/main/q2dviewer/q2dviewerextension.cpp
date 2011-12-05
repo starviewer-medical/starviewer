@@ -835,20 +835,43 @@ void Q2DViewerExtension::enableAutomaticSynchonizationEditor(bool enable)
 {
     m_automaticSynchronizationManager->enableEditor(enable);
     
+    m_orientationButtonsLabel->setEnabled(!enable);
     validePhases();
+    m_slicingToolButton->setEnabled(!enable);
+    m_zoomToolButton->setEnabled(!enable);
+    
+    m_roiButton->setEnabled(!enable);
+    m_distanceToolButton->setEnabled(!enable);
+    m_angleToolButton->setEnabled(!enable);
+    m_openAngleToolButton->setEnabled(!enable);
+    m_eraserToolButton->setEnabled(!enable);
+    
     m_flipHorizontalToolButton->setEnabled(!enable);
     m_flipVerticalToolButton->setEnabled(!enable);
     m_rotateClockWiseToolButton->setEnabled(!enable);
     m_rotateCounterClockWiseToolButton->setEnabled(!enable);
     m_restoreToolButton->setEnabled(!enable);
+    m_invertToolButton->setEnabled(!enable);
+    
     m_automaticSynchronizationToolButton->setEnabled(!enable);
     m_screenShotToolButton->setEnabled(!enable);
     m_screenshotsExporterToolButton->setEnabled(!enable);
+    
+    m_layoutsLabel->setEnabled(!enable);
     m_buttonGrid->setEnabled(!enable);
     m_downButtonGrid->setEnabled(!enable);
     m_previousStudiesToolButton->setEnabled(!enable);
-    m_cineController->setEnabled(!enable);
+    
+    m_thickSlabLabel->setEnabled(!enable);
     m_thickSlabWidget->setEnabled(!enable);
+    
+    m_referenceLinesToolButton->setEnabled(!enable);
+    m_cursor3DToolButton->setEnabled(!enable);
+    m_cineController->setEnabled(!enable);
+    m_viewerLayersToolButton->setEnabled(!enable);
+    m_voxelInformationToolButton->setEnabled(!enable);
+    m_dicomDumpToolButton->setEnabled(!enable);
+    m_windowLevelComboBox->setEnabled(!enable);
 }
 
 #endif
