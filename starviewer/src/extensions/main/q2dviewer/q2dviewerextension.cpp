@@ -714,6 +714,12 @@ void Q2DViewerExtension::updateDICOMInformationButton()
         return;
     }
 
+    if (viewerWidget->getViewer()->getViewerStatus() == QViewer::SynchronizationEdit)
+    {
+        m_dicomDumpToolButton->setEnabled(false);
+        return;
+    }
+
     if (viewerWidget->getViewer()->getInput())
     {
         if (viewerWidget->getViewer()->getView() == Q2DViewer::Axial)
@@ -883,7 +889,7 @@ void Q2DViewerExtension::enableAutomaticSynchonizationEditor(bool enable)
     m_cineController->setEnabled(!enable);
     m_viewerLayersToolButton->setEnabled(!enable);
     m_voxelInformationToolButton->setEnabled(!enable);
-    m_dicomDumpToolButton->setEnabled(!enable);
+    updateDICOMInformationButton();
     m_windowLevelComboBox->setEnabled(!enable);
 }
 
