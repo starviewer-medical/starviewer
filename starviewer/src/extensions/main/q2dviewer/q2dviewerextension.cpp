@@ -526,6 +526,10 @@ void Q2DViewerExtension::activateNewViewer(Q2DViewerWidget *newViewerWidget)
     // Shutters
     newViewerWidget->getViewer()->showDisplayShutters(m_showDisplayShuttersAction->isChecked());
 
+#ifndef STARVIEWER_LITE
+    connect(newViewerWidget->getViewer(), SIGNAL(viewerStatusChanged()), SLOT(checkSynchronizationEditCanBeEnabled()));
+#endif
+
     // Afegim l'eina de sincronització pel nou viewer
     // Per defecte només configurem la sincronització a nivell d'scroll
     ToolConfiguration *synchronizeConfiguration = new ToolConfiguration();
@@ -807,8 +811,6 @@ void Q2DViewerExtension::updatePreviousStudiesWidget()
 
 void Q2DViewerExtension::enableAutomaticSynchronizationToViewer(bool enable)
 {
-    m_automaticSynchronizationEditionButton->setEnabled(enable);
-    
     if (enable)
     {
         disableSynchronization();//Desactivem sincronització manual
@@ -824,10 +826,14 @@ void Q2DViewerExtension::enableAutomaticSynchronizationToViewer(bool enable)
 
         m_automaticSynchronizationManager = new AutomaticSynchronizationManager(toolData, m_workingArea);
         m_automaticSynchronizationManager->initialize();
+
+        // Comprovem si podem habilitar l'edició de sincronització
+        checkSynchronizationEditCanBeEnabled();
     }
     else
     {
         enableSynchronizationButton(true);
+        m_automaticSynchronizationEditionButton->setEnabled(false);
     }
 }
 
@@ -872,6 +878,28 @@ void Q2DViewerExtension::enableAutomaticSynchonizationEditor(bool enable)
     m_voxelInformationToolButton->setEnabled(!enable);
     m_dicomDumpToolButton->setEnabled(!enable);
     m_windowLevelComboBox->setEnabled(!enable);
+}
+
+void Q2DViewerExtension::checkSynchronizationEditCanBeEnabled()
+{
+    // En cas que l'eina de sincronització automàtica estigui activada, refresquem l'estat del botó per activar l'edició
+    if (m_toolManager->getRegisteredToolAction("AutomaticSynchronizationTool")->isChecked())
+    {
+        bool synchronizationEditCanBeEnabled = true;
+        
+        // Comprovem que tots els viewers estiguin en un estat en el que es pot realitzar l'edició
+        int numberOfViewers = m_workingArea->getNumberOfViewers();
+        for (int viewerNumber = 0; viewerNumber < numberOfViewers; ++viewerNumber)
+        {        
+            if (m_workingArea->getViewerWidget(viewerNumber)->getViewer()->getViewerStatus() == QViewer::LoadingVolume)
+            {
+                synchronizationEditCanBeEnabled = false;
+                break;
+            }
+        }
+        // Actualitzem l'estat del botó
+        m_automaticSynchronizationEditionButton->setEnabled(synchronizationEditCanBeEnabled);
+    }
 }
 
 #endif

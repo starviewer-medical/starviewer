@@ -161,6 +161,9 @@ private slots:
     void enableAutomaticSynchonizationEditor(bool enable);
 
 #ifndef STARVIEWER_LITE
+    /// Comprova els estats dels viewers quan la sincronització automàtica està activada per determinar si es pot activar l'edició de sincronització
+    void checkSynchronizationEditCanBeEnabled();
+
     ///  Mètode que busca els hanging protocols aplicables
     void searchHangingProtocols();
 
