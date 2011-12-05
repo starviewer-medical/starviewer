@@ -24,7 +24,6 @@ AutomaticSynchronizationManager::AutomaticSynchronizationManager(AutomaticSynchr
 
 AutomaticSynchronizationManager::~AutomaticSynchronizationManager()
 {
-
 }
 
 void AutomaticSynchronizationManager::enableEditor(bool enable)
@@ -44,7 +43,7 @@ void AutomaticSynchronizationManager::enableEditor(bool enable)
             {
                 AutomaticSynchronizationWidget *widget = viewer->getAutomaticSynchronizationWidget();  
 
-                //Construcció del background
+                // Construcció del background
                 QString path = QString("%1/stateOfAutomaticSynchronization").arg(QDir::tempPath());
                 viewer->grabCurrentView();
                 viewer->saveGrabbedViews(path, QViewer::PNG);
@@ -53,7 +52,7 @@ void AutomaticSynchronizationManager::enableEditor(bool enable)
         }
         else
         {
-            disconnect(viewer->getAutomaticSynchronizationWidget(), SIGNAL(selectedItem(Q2DViewer*)),this, SLOT(changeEditionState(Q2DViewer*)));
+            disconnect(viewer->getAutomaticSynchronizationWidget(), SIGNAL(selectedItem(Q2DViewer*)), this, SLOT(changeEditionState(Q2DViewer*)));
             viewer->setViewerStatus(viewer->getPreviousViewerStatus());
         }
     }
@@ -84,11 +83,11 @@ void AutomaticSynchronizationManager::updateEditionStateOfViewer(Q2DViewer *view
         {
             if (frameOfReferenceUID == m_toolData->getSelectedUID())
             {
-                setWidgetEditionState(viewer, Selected );
+                setWidgetEditionState(viewer, Selected);
             }
             else
             {
-                setWidgetEditionState(viewer, AddedInOtherGroup );
+                setWidgetEditionState(viewer, AddedInOtherGroup);
             }
         }
         else
@@ -115,15 +114,17 @@ void AutomaticSynchronizationManager::changeEditionState(Q2DViewer *viewer)
 
         if (groupOfActualViewer == activeGroup)
         {  
-            if (frameOfReferenceUID != m_toolData->getSelectedUID()) // Si tenim un frameOfReference diferent, es treu del grup
+            if (frameOfReferenceUID != m_toolData->getSelectedUID())
             {
+                // Si tenim un frameOfReference diferent, es treu del grup
                 int newGroup = m_toolData->getNumberOfGroups();
                 m_toolData->setGroupForUID(frameOfReferenceUID, newGroup);
                 setWidgetEditionState(viewer, ToAdd );
             }
         }
-        else // S'afegeix al grup seleccionat actualment
+        else
         {
+            // S'afegeix al grup seleccionat actualment
             m_toolData->setGroupForUID(frameOfReferenceUID, activeGroup);
             setWidgetEditionState(viewer, AddedInOtherGroup );
         }
@@ -158,7 +159,6 @@ void AutomaticSynchronizationManager::initialize()
     Tool *tool = m_viewersLayout->getSelectedViewer()->getViewer()->getToolProxy()->getTool("AutomaticSynchronizationTool");
     AutomaticSynchronizationTool *automaticSynchronizationTool = dynamic_cast<AutomaticSynchronizationTool*>(tool);
     automaticSynchronizationTool->changePositionIfActive();
-
 }
 
 }
