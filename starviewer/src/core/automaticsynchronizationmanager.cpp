@@ -52,19 +52,10 @@ void AutomaticSynchronizationManager::enableEditor(bool enable)
                 AutomaticSynchronizationWidget *widget = viewer->getAutomaticSynchronizationWidget();  
 
                 //Construcció del background
-                QString path = QString("%1/stateOfAutomaticSynchronization.png").arg(QDir::tempPath());
-                vtkImageWriter *writer = vtkPNGWriter::New();
-                vtkSmartPointer<vtkWindowToImageFilter> windowToImageFilter = vtkSmartPointer<vtkWindowToImageFilter>::New();
-                windowToImageFilter->SetInput(viewer->getRenderWindow());
-                windowToImageFilter->Update();
-                windowToImageFilter->Modified();
-                vtkSmartPointer<vtkImageData> image = vtkSmartPointer<vtkImageData>::New();
-                image->ShallowCopy(windowToImageFilter->GetOutput());
-                writer->SetInput(image);
-                writer->SetFileName(qPrintable(path));
-                writer->Write();
-                widget->setBackgroundImage(path);
-                writer->Delete();
+                QString path = QString("%1/stateOfAutomaticSynchronization").arg(QDir::tempPath());
+                viewer->grabCurrentView();
+                viewer->saveGrabbedViews(path, QViewer::PNG);
+                widget->setBackgroundImage(path + ".png");
             }
         }
         else
