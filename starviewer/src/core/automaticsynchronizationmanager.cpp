@@ -13,14 +13,6 @@
 
 #include <QDir>
 
-#include <vtkImageWriter.h>
-#include <vtkPNGWriter.h>
-#include <vtkSmartPointer.h>
-#include <vtkWindowToImageFilter.h>
-#include <vtkImageData.h>
-#include <vtkRenderWindow.h>
-#include <vtkRenderer.h>
-
 namespace udg {
 
 AutomaticSynchronizationManager::AutomaticSynchronizationManager(AutomaticSynchronizationToolData *toolData, ViewersLayout *layout, QObject *parent)
