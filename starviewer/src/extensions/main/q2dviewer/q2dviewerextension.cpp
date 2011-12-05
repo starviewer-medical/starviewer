@@ -553,7 +553,7 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
             disconnect(m_lastSelectedViewer->getViewer(), SIGNAL(volumeChanged(Volume*)), this, SLOT(validePhases()));
 #endif
 
-            disconnect(m_lastSelectedViewer->getViewer(), SIGNAL(viewChanged(int)), this, SLOT(updateDICOMInformationButton(int)));
+            disconnect(m_lastSelectedViewer->getViewer(), SIGNAL(viewChanged(int)), this, SLOT(updateDICOMInformationButton()));
             // És necessari associar cada cop al viewer actual les associacions del menú de la tool d'screen shot
             ScreenShotTool *screenShotTool = dynamic_cast<ScreenShotTool*>(m_lastSelectedViewer->getViewer()->getToolProxy()->getTool("ScreenShotTool"));
             disconnect(m_singleShotAction, SIGNAL(triggered()), screenShotTool, SLOT(singleCapture()));
@@ -573,7 +573,7 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
             validePhases();
             connect(viewerWidget->getViewer(), SIGNAL(volumeChanged(Volume*)), SLOT(validePhases()));
 #endif
-            connect(viewerWidget->getViewer(), SIGNAL(viewChanged(int)), SLOT(updateDICOMInformationButton(int)));
+            connect(viewerWidget->getViewer(), SIGNAL(viewChanged(int)), SLOT(updateDICOMInformationButton()));
 
             // És necessari associar cada cop al viewer actual les associacions del menú de la tool d'screen shot
             ScreenShotTool *screenShotTool = dynamic_cast<ScreenShotTool*>(viewerWidget->getViewer()->getToolProxy()->getTool("ScreenShotTool"));
@@ -594,7 +594,7 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
 
             m_cineController->setQViewer(selected2DViewer);
             m_thickSlabWidget->link(selected2DViewer);
-            updateDICOMInformationButton(selected2DViewer->getView());
+            updateDICOMInformationButton();
 
             // Activem les "ActionTool" pel visor seleccionat
             m_toolManager->enableRegisteredActionTools(selected2DViewer);
@@ -705,11 +705,18 @@ void Q2DViewerExtension::validePhases()
 }
 #endif
 
-void Q2DViewerExtension::updateDICOMInformationButton(int view)
+void Q2DViewerExtension::updateDICOMInformationButton()
 {
-    if (m_workingArea->getSelectedViewer()->getViewer()->getInput())
+    Q2DViewerWidget *viewerWidget = m_workingArea->getSelectedViewer();
+    if (!viewerWidget)
     {
-        if (view == Q2DViewer::Axial)
+        m_dicomDumpToolButton->setEnabled(false);
+        return;
+    }
+
+    if (viewerWidget->getViewer()->getInput())
+    {
+        if (viewerWidget->getViewer()->getView() == Q2DViewer::Axial)
         {
             m_dicomDumpToolButton->setEnabled(true);
         }

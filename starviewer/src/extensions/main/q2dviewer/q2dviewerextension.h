@@ -147,9 +147,9 @@ private slots:
     void validePhases();
 #endif
 
-    /// Habilita o deshabilita el botó de Dump d'info DICOM
-    /// segons en la vista en la que ens trobem
-    void updateDICOMInformationButton(int view);
+    /// Habilita o deshabilita el botó de Dump d'info DICOM segons en la vista en la que es trobi
+    /// l'actual visor seleccionat. Si no hi ha cap visor actiu, dehsabilitarà el botó.
+    void updateDICOMInformationButton();
 
     /// Mètode que tracta el nou visualitzador afegit
     void activateNewViewer(Q2DViewerWidget *newViewerWidget);
