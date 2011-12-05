@@ -16,6 +16,7 @@
 namespace udg {
 
 AutomaticSynchronizationManager::AutomaticSynchronizationManager(AutomaticSynchronizationToolData *toolData, ViewersLayout *layout, QObject *parent)
+: QObject(parent)
 {
     m_toolData = toolData;
     m_viewersLayout = layout;
