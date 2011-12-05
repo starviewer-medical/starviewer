@@ -187,34 +187,48 @@ DiagnosisTestResult SystemRequerimentsTest::run()
 
     // Si alguna de les pantalles és menor de 1185 pixels d'amplada, poder retornar un warning, ja que starviewer no hi cap.
     QList<QSize> resolutions = getScreenResolutions(system);
-    if (resolutions.count() == 1)
+    QStringList screensInWhichStarviewerWontFit;
+    bool starviewerWillFitInOneScreen = false;
+    for (int i = 0; i < resolutions.count(); i++)
     {
-        if (resolutions.at(0).width() < (int)MinimumScreenWidth)
+        if (resolutions.at(i).width() < (int)MinimumScreenWidth)
         {
-            state = DiagnosisTestResult::Error;
-            description << tr("The screens is too small to fit Starviewer application.");
-            solution << tr("Change to a higher resolution");
+            // i + 1, ja que les pantalles a la interfície es mostren de 1 a n
+            screensInWhichStarviewerWontFit << QString::number(i + 1);
         }
+        else
+        {
+            starviewerWillFitInOneScreen = true;
+        }
+    }
+
+    if (starviewerWillFitInOneScreen)
+    {
+        // Només retornarem warning, si s'escau, en el cas de què la resta de requeriments es compleixin.
+        if (screensInWhichStarviewerWontFit.count() > 0 && state == DiagnosisTestResult::Ok)
+        {
+            // Warning
+            state = DiagnosisTestResult::Warning;
+            description << tr("One of the screens is too small. Keep in mind that Starviewer won't fit in that screen.");
+            solution << tr("Don't move Starviewer to screen/s %1, or change to a higher resolution").arg(screensInWhichStarviewerWontFit.join(", "));
+        }
+        // else OK
     }
     else
     {
-        // Només retornarem aquest warning, si s'escau, en el cas de què la resta de requeriments es compleixin.
-        if (state == DiagnosisTestResult::Ok)
+        // ERROR
+        state = DiagnosisTestResult::Error;
+        solution << tr("Change to a higher resolution");
+        if (resolutions.count() == 1)
         {
-            int index = 0;
-            bool found = false;
-            while (!found && index < resolutions.count())
-            {
-                if (resolutions.at(index).width() < (int)MinimumScreenWidth)
-                {
-                    state = DiagnosisTestResult::Warning;
-                    description << tr("One of the screens is too small. Keep in mind that Starviewer won't fit in that screen.");
-                    solution << tr("Don't move Starviewer to screen %1, or change to a higher resolution").arg(index + 1);
-                }
-                index++;
-            }
+            description << tr("The screen is too small to fit Starviewer application.");
+        }
+        else
+        {
+            description << tr("The screens are too small to fit Starviewer application.");
         }
     }
+
 
     // Que la unitat de CD/DVD no pugui grabar, serà un warning si la resta de requeriments és correcte
     if (state != DiagnosisTestResult::Error &&
