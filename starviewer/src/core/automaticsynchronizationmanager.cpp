@@ -44,6 +44,7 @@ void AutomaticSynchronizationManager::enableEditor(bool enable)
 
         if (enable)
         {
+            viewer->setViewerStatus(QViewer::SynchronizationEdit);
             connect(viewer->getAutomaticSynchronizationWidget(), SIGNAL(selectedItem(Q2DViewer*)),SLOT(changeEditionState(Q2DViewer*)));
 
             if (viewer->getInput())
@@ -64,8 +65,6 @@ void AutomaticSynchronizationManager::enableEditor(bool enable)
                 writer->Write();
                 widget->setBackgroundImage(path);
                 writer->Delete();
-
-                viewer->setViewerStatus(QViewer::SynchronizationEdit);
             }
         }
         else
