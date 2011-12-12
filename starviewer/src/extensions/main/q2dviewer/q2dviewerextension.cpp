@@ -772,7 +772,10 @@ void Q2DViewerExtension::enableSynchronizationButton(bool enableButton)
     for (int viewerNumber = 0; viewerNumber < numberOfViewers; ++viewerNumber)
     {
         viewer = m_workingArea->getViewerWidget(viewerNumber);
-        viewer->enableSynchronizationButton(enableButton);
+        if (viewer->getViewer()->getInput())
+        {
+            viewer->enableSynchronizationButton(enableButton);
+        }
     }
 }
 
