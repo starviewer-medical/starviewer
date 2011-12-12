@@ -36,12 +36,12 @@ public:
     virtual QList<unsigned int> getCPUFrequencies();
     virtual unsigned int getCPUL2CacheSize(); // en KBytes
 
-    virtual QString getGPUBrand();
-    virtual QString getGPUModel();
-    virtual unsigned int getGPURAM();
+    virtual QList<QString> getGPUBrand();
+    virtual QList<QString> getGPUModel();
+    virtual QList<unsigned int> getGPURAM();
     virtual QList<QString> getGPUOpenGLCompatibilities();
     virtual QString getGPUOpenGLVersion();
-    virtual QString getGPUDriverVersion();
+    virtual QList<QString> getGPUDriverVersion();
 
     //Screen, Display, Monitor, Desktop, ...
     QList<QSize> getScreenResolutions();

@@ -54,6 +54,8 @@ public:
     // GetNextObject retornarà un dels objectes del vector, i per tant necessita un index per anar-lo recorrent. Quan arribi al final
     // retornarà NULL. En cas de atributs que no siguin vectors, després de retornar el seu valor, retornarà NULL.
     int m_getNextObjectIndex;
+    // Per retornar un vector de forma correcta, necessitem un index de 0 a n
+    int m_nextObjectIndex;
     bool m_getPropertyWorksProperly;
 
     QString m_testingAPIRAMTotalAmount;
@@ -61,7 +63,7 @@ public:
 
     UnsignedIntList m_testingAPICPUNumberOfCores;
 
-    unsigned int m_testingAPIGPURAM;
+    UnsignedIntList m_testingAPIGPURAM;
     QString m_testingAPIGPUOpenGLCompatibilities;
 
     QString m_testingAPIGPUDriverVersion;
@@ -79,6 +81,7 @@ protected:
         Q_UNUSED(enumerator);
         if (m_getNextObjectIndex <= 0)
         {
+            m_nextObjectIndex = 0;
             return NULL;
         }
         else
@@ -111,17 +114,17 @@ protected:
         }
         else if (propertyName == "Capacity")
         {
-            propertyVariant->bstrVal = fromQStringToBSTR(m_testingAPIRAMModulesCapacity.at(m_getNextObjectIndex - 1));
+            propertyVariant->bstrVal = fromQStringToBSTR(m_testingAPIRAMModulesCapacity.at(m_nextObjectIndex++));
             m_getNextObjectIndex--;
         }
         else if (propertyName == "NumberOfCores")
         {
-            propertyVariant->uintVal = m_testingAPICPUNumberOfCores.at(m_getNextObjectIndex - 1);
+            propertyVariant->uintVal = m_testingAPICPUNumberOfCores.at(m_nextObjectIndex++);
             m_getNextObjectIndex--;
         }
         else if (propertyName == "AdapterRAM")
         {
-            propertyVariant->uintVal = m_testingAPIGPURAM;
+            propertyVariant->uintVal = m_testingAPIGPURAM.at(m_nextObjectIndex++);
             m_getNextObjectIndex--;
         }
 
@@ -193,7 +196,7 @@ void test_WindowsSystemInformation::run_ShouldTestIfWindowsSystemInformationRuns
     QTest::addColumn<QString>("testingAPIRAMTotalAmount");
     QTest::addColumn<StringList>("testingAPIRAMModulesCapacity");
     QTest::addColumn<UnsignedIntList>("testingAPICPUNumberOfCores");
-    QTest::addColumn<unsigned int>("testingAPIGPURAM");
+    QTest::addColumn<UnsignedIntList>("testingAPIGPURAM");
     QTest::addColumn<QString>("testingAPIGPUOpenGLCompatibilities");
 
     QTest::addColumn<QString>("testingAPIGPUDriverVersion");
@@ -212,9 +215,9 @@ void test_WindowsSystemInformation::run_ShouldTestIfWindowsSystemInformationRuns
     QTest::addColumn<unsigned int>("testingRAMTotalAmount");
     QTest::addColumn<UnsignedIntList>("testingRAMModulesCapacity");
     QTest::addColumn<unsigned int>("testingCPUNumberOfCores");
-    QTest::addColumn<unsigned int>("testingGPURAM");
+    QTest::addColumn<UnsignedIntList>("testingGPURAM");
     QTest::addColumn<StringList>("testingGPUOpenGLCompatibilities");
-    QTest::addColumn<QString>("testingGPUDriverVersion");
+    QTest::addColumn<StringList>("testingGPUDriverVersion");
     QTest::addColumn<unsigned int>("testingHardDiskCapacity");
     QTest::addColumn<unsigned int>("testingHardDiskFreeSpace");
 
@@ -222,16 +225,18 @@ void test_WindowsSystemInformation::run_ShouldTestIfWindowsSystemInformationRuns
     unsigned int RAMTotalAmount = 1024;
 
     StringList APIRAMModulesCapacity;
-    APIRAMModulesCapacity << "1073741824" << "1073741824";
+    APIRAMModulesCapacity << "2147483648" << "1073741824";
     UnsignedIntList RAMModulesCapacity;
-    RAMModulesCapacity << 1024 << 1024;
+    RAMModulesCapacity << 2048 << 1024;
 
     UnsignedIntList APICPUNumberOfCores;
     APICPUNumberOfCores << (unsigned int)2 << (unsigned int)6;
     unsigned int CPUNumberOfCores = 8;
 
-    unsigned int APIGPURAM = 1073741824;
-    unsigned int GPURAM = 1024;
+    UnsignedIntList APIGPURAM;
+    APIGPURAM << 1073741824;
+    UnsignedIntList GPURAM;
+    GPURAM << 1024;
 
     QString APIGPUOpenGLCompatibilities = "GL_ARB_shading_language_100 GL_ARB_shader_objects GL_ARB_fragment_shader GL_ARB_vertex_shader";
     StringList GPUOpenGLCompatibilities;
@@ -242,7 +247,8 @@ void test_WindowsSystemInformation::run_ShouldTestIfWindowsSystemInformationRuns
     QString APIGPUInfFilename = "oem10.inf";
     QString APIGPUInstalledDisplayDrivers = "nvd3dumx.dll,nvwgf2umx.dll,nvwgf2umx.dll,nvd3dum,nvwgf2um,nvwgf2um";
     QString APIGPUInfSection = "Section021";
-    QString GPUDriverVersion = "Version: 8.17.12.6890, Date: 20110612000000.000000-000, Information file: oem10.inf, Display drivers: nvd3dumx.dll,nvwgf2umx.dll,nvwgf2umx.dll,nvd3dum,nvwgf2um,nvwgf2um, Section: Section021";
+    StringList GPUDriverVersion;
+    GPUDriverVersion << "Version: 8.17.12.6890, Date: 20110612000000.000000-000, Information file: oem10.inf, Display drivers: nvd3dumx.dll,nvwgf2umx.dll,nvwgf2umx.dll,nvd3dum,nvwgf2um,nvwgf2um, Section: Section021";
 
     QString APIHardDiskCapacity = "1073741824";
     unsigned int hardDiskCapacity = 1024;
@@ -261,8 +267,10 @@ void test_WindowsSystemInformation::run_ShouldTestIfWindowsSystemInformationRuns
     UnsignedIntList RAMModulesCapacity2;
     RAMModulesCapacity2 << 0 << 0;
     unsigned int CPUNumberOfCores2 = 0;
-    unsigned int GPURAM2 = 0;
-    QString GPUDriverVersion2 = "";
+    UnsignedIntList GPURAM2;
+    GPURAM2 << 0;
+    StringList GPUDriverVersion2;
+    GPUDriverVersion2 << "";
     unsigned int hardDiskCapacity2 = 0;
     unsigned int hardDiskFreeSpace2 = 0;
 
@@ -286,8 +294,8 @@ void test_WindowsSystemInformation::run_ShouldTestIfWindowsSystemInformationRuns
     QFETCH(UnsignedIntList, testingAPICPUNumberOfCores);
     QFETCH(unsigned int, testingCPUNumberOfCores);
 
-    QFETCH(unsigned int, testingAPIGPURAM);
-    QFETCH(unsigned int, testingGPURAM);
+    QFETCH(UnsignedIntList, testingAPIGPURAM);
+    QFETCH(UnsignedIntList, testingGPURAM);
 
     QFETCH(QString, testingAPIGPUOpenGLCompatibilities);
     QFETCH(StringList, testingGPUOpenGLCompatibilities);
@@ -297,7 +305,7 @@ void test_WindowsSystemInformation::run_ShouldTestIfWindowsSystemInformationRuns
     QFETCH(QString, testingAPIGPUInfFilename);
     QFETCH(QString, testingAPIGPUInstalledDisplayDrivers);
     QFETCH(QString, testingAPIGPUInfSection);
-    QFETCH(QString, testingGPUDriverVersion);
+    QFETCH(StringList, testingGPUDriverVersion);
 
     QFETCH(QString, testingAPIHardDiskCapacity);
     QFETCH(unsigned int, testingHardDiskCapacity);
@@ -308,6 +316,8 @@ void test_WindowsSystemInformation::run_ShouldTestIfWindowsSystemInformationRuns
     QFETCH(bool, getPropertyWorksProperly);
 
     TestingWindowsSystemInformation windowsSystemInformation;
+    // Necessari per retornar llistes de forma correcte.
+    windowsSystemInformation.m_nextObjectIndex = 0;
     windowsSystemInformation.m_getPropertyWorksProperly = getPropertyWorksProperly;
     windowsSystemInformation.m_testingAPIRAMTotalAmount = testingAPIRAMTotalAmount;
     windowsSystemInformation.m_testingAPIRAMModulesCapacity = testingAPIRAMModulesCapacity;
@@ -326,16 +336,16 @@ void test_WindowsSystemInformation::run_ShouldTestIfWindowsSystemInformationRuns
     unsigned int RAMTotalAmount = windowsSystemInformation.getRAMTotalAmount();
 
     windowsSystemInformation.m_getNextObjectIndex = testingAPIRAMModulesCapacity.count();
-    QList<unsigned int> RAMModulesCapacity = windowsSystemInformation.getRAMModulesCapacity();
+    UnsignedIntList RAMModulesCapacity = windowsSystemInformation.getRAMModulesCapacity();
 
     windowsSystemInformation.m_getNextObjectIndex = testingAPICPUNumberOfCores.count();
     unsigned int CPUNumberOfCores = windowsSystemInformation.getCPUNumberOfCores();
 
-    windowsSystemInformation.m_getNextObjectIndex = 1;
-    unsigned int GPURAM = windowsSystemInformation.getGPURAM();
+    windowsSystemInformation.m_getNextObjectIndex = testingGPURAM.count();
+    UnsignedIntList GPURAM = windowsSystemInformation.getGPURAM();
 
     windowsSystemInformation.m_getNextObjectIndex = 1;
-    QList<QString> OpenGLCompatibilities = windowsSystemInformation.getGPUOpenGLCompatibilities();
+    StringList OpenGLCompatibilities = windowsSystemInformation.getGPUOpenGLCompatibilities();
 
     windowsSystemInformation.m_getNextObjectIndex = 1;
     unsigned int hardDiskCapacity = windowsSystemInformation.getHardDiskCapacity("C:");
@@ -344,7 +354,7 @@ void test_WindowsSystemInformation::run_ShouldTestIfWindowsSystemInformationRuns
     unsigned int hardDiskFreeSpace = windowsSystemInformation.getHardDiskFreeSpace("C:");
 
     windowsSystemInformation.m_getNextObjectIndex = 1;
-    QString GPUDriverVersion = windowsSystemInformation.getGPUDriverVersion();
+    StringList GPUDriverVersion = windowsSystemInformation.getGPUDriverVersion();
 
     
     QCOMPARE(RAMTotalAmount, testingRAMTotalAmount);
@@ -362,7 +372,10 @@ void test_WindowsSystemInformation::run_ShouldTestIfWindowsSystemInformationRuns
 
     QCOMPARE(CPUNumberOfCores, testingCPUNumberOfCores);
     
-    QCOMPARE(GPURAM, testingGPURAM);
+    for (int i = 0; i < GPURAM.count(); i++)
+    {
+        QCOMPARE(GPURAM.at(i), testingGPURAM.at(i));
+    }
     for (int i = 0; i < OpenGLCompatibilities.count(); i++)
     {
         QCOMPARE(OpenGLCompatibilities.at(i), testingGPUOpenGLCompatibilities.at(i));
@@ -371,7 +384,10 @@ void test_WindowsSystemInformation::run_ShouldTestIfWindowsSystemInformationRuns
     QCOMPARE(hardDiskCapacity, testingHardDiskCapacity);
     QCOMPARE(hardDiskFreeSpace, testingHardDiskFreeSpace);
 
-    QCOMPARE(GPUDriverVersion, testingGPUDriverVersion);
+    for (int i = 0; i < GPUDriverVersion.count(); i++)
+    {
+        QCOMPARE(GPUDriverVersion.at(i), testingGPUDriverVersion.at(i));
+    }
 
 }
 
