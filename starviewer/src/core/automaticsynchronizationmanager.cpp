@@ -1,5 +1,4 @@
 #include "automaticsynchronizationmanager.h"
-#include "logging.h"
 
 #include "viewerslayout.h"
 #include "automaticsynchronizationtooldata.h"

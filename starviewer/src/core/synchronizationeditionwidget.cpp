@@ -1,7 +1,4 @@
 #include "synchronizationeditionwidget.h"
-#include "logging.h"
-
-#include <QAction>
 
 #include "q2dviewer.h"
 
