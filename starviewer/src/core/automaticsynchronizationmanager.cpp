@@ -3,7 +3,7 @@
 
 #include "viewerslayout.h"
 #include "automaticsynchronizationtooldata.h"
-#include "automaticsynchronizationwidget.h"
+#include "synchronizationeditionwidget.h"
 #include "q2dviewer.h"
 #include "volume.h"
 #include "image.h"
@@ -37,11 +37,11 @@ void AutomaticSynchronizationManager::enableEditor(bool enable)
         if (enable)
         {
             viewer->setViewerStatus(QViewer::SynchronizationEdit);
-            connect(viewer->getAutomaticSynchronizationWidget(), SIGNAL(selectedItem(Q2DViewer*)),SLOT(changeEditionState(Q2DViewer*)));
+            connect(viewer->getSynchronizationEditionWidget(), SIGNAL(selectedItem(Q2DViewer*)),SLOT(changeEditionState(Q2DViewer*)));
 
             if (viewer->getInput())
             {
-                AutomaticSynchronizationWidget *widget = viewer->getAutomaticSynchronizationWidget();  
+                SynchronizationEditionWidget *widget = viewer->getSynchronizationEditionWidget();  
 
                 // Construcció del background
                 QString path = QString("%1/stateOfAutomaticSynchronization").arg(QDir::tempPath());
@@ -52,7 +52,7 @@ void AutomaticSynchronizationManager::enableEditor(bool enable)
         }
         else
         {
-            disconnect(viewer->getAutomaticSynchronizationWidget(), SIGNAL(selectedItem(Q2DViewer*)), this, SLOT(changeEditionState(Q2DViewer*)));
+            disconnect(viewer->getSynchronizationEditionWidget(), SIGNAL(selectedItem(Q2DViewer*)), this, SLOT(changeEditionState(Q2DViewer*)));
             viewer->setViewerStatus(viewer->getPreviousViewerStatus());
         }
     }
@@ -99,7 +99,7 @@ void AutomaticSynchronizationManager::updateEditionStateOfViewer(Q2DViewer *view
 
 void AutomaticSynchronizationManager::setWidgetEditionState(Q2DViewer *viewer, ViewerEditionState state)
 {
-    AutomaticSynchronizationWidget *widget = viewer->getAutomaticSynchronizationWidget();  
+    SynchronizationEditionWidget *widget = viewer->getSynchronizationEditionWidget();  
     widget->setState(state);
 }
 
@@ -143,7 +143,7 @@ void AutomaticSynchronizationManager::initialize()
 
         if (viewer->getInput())
         {
-            connect(viewer->getAutomaticSynchronizationWidget(), SIGNAL(selectedItem(Q2DViewer*)),SLOT(updateEditionStateOfViewers()));
+            connect(viewer->getSynchronizationEditionWidget(), SIGNAL(selectedItem(Q2DViewer*)),SLOT(updateEditionStateOfViewers()));
 
             QString frameOfReferenceUID = viewer->getInput()->getImage(0)->getParentSeries()->getFrameOfReferenceUID();
             int groupOfActualViewer = m_toolData->getGroupForUID(frameOfReferenceUID);

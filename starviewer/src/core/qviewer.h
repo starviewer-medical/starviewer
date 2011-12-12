@@ -26,7 +26,7 @@ class WindowLevelPresetsToolData;
 class TransferFunction;
 class PatientBrowserMenu;
 class QViewerWorkInProgressWidget;
-class AutomaticSynchronizationWidget;
+class SynchronizationEditionWidget;
 
 /**
     Classe base per a totes les finestres de visualització
@@ -162,8 +162,8 @@ public:
     /// Canvia l'status del viewer
     void setViewerStatus(ViewerStatus status);
 
-    /// Obté el widget d'interfície de la sincronització automàtica
-    AutomaticSynchronizationWidget* getAutomaticSynchronizationWidget();
+    /// Obté el widget d'interfície de l'edició de sincronització automàtica
+    SynchronizationEditionWidget* getSynchronizationEditionWidget();
 
 public slots:
     /// Indiquem les dades d'entrada
@@ -331,7 +331,7 @@ protected:
     QViewerWorkInProgressWidget *m_workInProgressWidget;
 
     /// Widget que es mostra quan s'activa l'edició de la sincronització automàtica
-    AutomaticSynchronizationWidget *m_automaticSynchronizationWidget;
+    SynchronizationEditionWidget *m_synchronizationEditionWidget;
     
     /// Vista que enfoca la càmera
     CameraViewPlaneType m_currentViewPlane;

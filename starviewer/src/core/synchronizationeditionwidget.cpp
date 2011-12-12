@@ -1,4 +1,4 @@
-#include "automaticsynchronizationwidget.h"
+#include "synchronizationeditionwidget.h"
 #include "logging.h"
 
 #include <QAction>
@@ -7,7 +7,7 @@
 
 namespace udg {
 
-AutomaticSynchronizationWidget::AutomaticSynchronizationWidget(QWidget *parent)
+SynchronizationEditionWidget::SynchronizationEditionWidget(QWidget *parent)
  : QFrame(parent)
 {
     setupUi(this);
@@ -17,17 +17,17 @@ AutomaticSynchronizationWidget::AutomaticSynchronizationWidget(QWidget *parent)
     m_icon->setEnabled(false);
 }
 
-AutomaticSynchronizationWidget::~AutomaticSynchronizationWidget()
+SynchronizationEditionWidget::~SynchronizationEditionWidget()
 {
 
 }
 
-void AutomaticSynchronizationWidget::setBackgroundImage(QString urlImage)
+void SynchronizationEditionWidget::setBackgroundImage(QString urlImage)
 {
     setStyleSheet(QString::fromUtf8("background-color: rgba(75, 75, 75, 0);\n background-image:url(\"%1\");").arg(urlImage));
 }
 
-void AutomaticSynchronizationWidget::setState(AutomaticSynchronizationManager::ViewerEditionState state)
+void SynchronizationEditionWidget::setState(AutomaticSynchronizationManager::ViewerEditionState state)
 {
     QPixmap pixmap;
 
@@ -56,7 +56,7 @@ void AutomaticSynchronizationWidget::setState(AutomaticSynchronizationManager::V
     }
 }
 
-bool AutomaticSynchronizationWidget::event(QEvent *event)
+bool SynchronizationEditionWidget::event(QEvent *event)
 {
     if (event->type() == QEvent::Enter)
     {
