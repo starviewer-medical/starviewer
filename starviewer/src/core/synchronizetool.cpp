@@ -226,9 +226,12 @@ void SynchronizeTool::applyPanChanges()
 
 void SynchronizeTool::reset()
 {
-    m_lastSlice = m_q2dviewer->getCurrentSlice();
-    m_lastView = m_q2dviewer->getCurrentAnatomicalPlaneLabel();
-    m_roundLostSpacingBetweenSlices = 0.0;
+    if (m_q2dviewer->getInput())
+    {
+        m_lastSlice = m_q2dviewer->getCurrentSlice();
+        m_lastView = m_q2dviewer->getCurrentAnatomicalPlaneLabel();
+        m_roundLostSpacingBetweenSlices = 0.0;
+    }
 }
 
 void SynchronizeTool::handleEvent(unsigned long eventID)
