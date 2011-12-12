@@ -116,12 +116,16 @@ DiagnosisTestResult SystemRequerimentsTest::run()
         }
     }
     // Memòria RAM de la GPU
-    unsigned int gpuRAM = getGPURAM(system);
-    if (gpuRAM < MinimumGPURAM)
+    QList<unsigned int> gpuRAM = getGPURAM(system);
+    QList<QString> gpuModel = getGPUModel(system);
+    for (int i = 0; i < gpuRAM.count(); i++)
     {
-        state = DiagnosisTestResult::Error;
-        description << tr("The graphics card has %1Mb of RAM and the minimum required id %2Mb").arg(gpuRAM).arg(MinimumGPURAM);
-        solution << tr("Change the graphics card");
+        if (gpuRAM.at(i) < MinimumGPURAM)
+        {
+            state = DiagnosisTestResult::Error;
+            description << tr("The graphics card %1 has %2Mb of RAM and the minimum required is %3Mb").arg(gpuModel.at(i)).arg(gpuRAM.at(i)).arg(MinimumGPURAM);
+            solution << tr("Change the graphics card");
+        }
     }
     
     // TODO Disc dur. S'ha de fer també del que conté el directori de la cache????????
@@ -309,9 +313,14 @@ QString SystemRequerimentsTest::getGPUOpenGLVersion(SystemInformation *system)
     return system->getGPUOpenGLVersion();
 }
 
-unsigned int SystemRequerimentsTest::getGPURAM(SystemInformation *system)
+QList<unsigned int> SystemRequerimentsTest::getGPURAM(SystemInformation *system)
 {
     return system->getGPURAM();
+}
+
+QList<QString> SystemRequerimentsTest::getGPUModel(SystemInformation *system)
+{
+    return system->getGPUModel();
 }
 
 unsigned int SystemRequerimentsTest::getHardDiskFreeSpace(SystemInformation *system, const QString &device)

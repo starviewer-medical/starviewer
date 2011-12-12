@@ -32,12 +32,12 @@ public:
     QList<unsigned int> getCPUFrequencies();
     unsigned int getCPUL2CacheSize();
 
-    QString getGPUBrand();
-    QString getGPUModel();
-    unsigned int getGPURAM();
+    QList<QString> getGPUBrand();
+    QList<QString> getGPUModel();
+    QList<unsigned int> getGPURAM();
     QList<QString> getGPUOpenGLCompatibilities();
     QString getGPUOpenGLVersion();
-    QString getGPUDriverVersion();
+    QList<QString> getGPUDriverVersion();
 
     //Screen, Display, Monitor, Desktop, ...
     QList<QString> getScreenVendors();

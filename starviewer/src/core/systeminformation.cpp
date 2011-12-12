@@ -79,19 +79,19 @@ unsigned int SystemInformation::getCPUL2CacheSize()
     return 0;
 }
 
-QString SystemInformation::getGPUBrand()
+QList<QString> SystemInformation::getGPUBrand()
 {
-    return "";
+    return QList<QString>();
 }
 
-QString SystemInformation::getGPUModel()
+QList<QString> SystemInformation::getGPUModel()
 {
-    return "";
+    return QList<QString>();
 }
 
-unsigned int SystemInformation::getGPURAM()
+QList<unsigned int> SystemInformation::getGPURAM()
 {
-    return 0;
+    return QList<unsigned int>();
 }
 
 QList<QString> SystemInformation::getGPUOpenGLCompatibilities()
@@ -104,9 +104,9 @@ QString SystemInformation::getGPUOpenGLVersion()
     return "0.0";
 }
 
-QString SystemInformation::getGPUDriverVersion()
+QList<QString> SystemInformation::getGPUDriverVersion()
 {
-    return "0.0.0";
+    return QList<QString>();
 }
 
 QList<QSize> SystemInformation::getScreenResolutions()

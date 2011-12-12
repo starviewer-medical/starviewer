@@ -275,9 +275,9 @@ unsigned int WindowsSystemInformation::getCPUL2CacheSize()
     return cacheSize;
 }
 
-QString WindowsSystemInformation::getGPUBrand()
+QList<QString> WindowsSystemInformation::getGPUBrand()
 {
-    QString GPUBrand = "";
+    QList<QString> GPUBrand;
     /// Si el hardware és incompatible amb WDDM, Win32_VideoController pot no retornar els valors esperats.
     IEnumWbemClassObject* enumerator = executeQuery("SELECT * FROM Win32_VideoController");
 
@@ -287,7 +287,7 @@ QString WindowsSystemInformation::getGPUBrand()
         VARIANT variantProperty;
         if (getProperty(object, "AdapterCompatibility", &variantProperty))
         {
-            GPUBrand = QString::fromWCharArray(variantProperty.bstrVal);
+            GPUBrand << QString::fromWCharArray(variantProperty.bstrVal);
             VariantClear(&variantProperty);
         }
 
@@ -302,9 +302,9 @@ QString WindowsSystemInformation::getGPUBrand()
     return GPUBrand;
 }
 
-QString WindowsSystemInformation::getGPUModel()
+QList<QString> WindowsSystemInformation::getGPUModel()
 {
-    QString GPUBrand = "";
+    QList<QString> GPUModel;
     /// Si el hardware és incompatible amb WDDM, Win32_VideoController pot no retornar els valors esperats.
     IEnumWbemClassObject* enumerator = executeQuery("SELECT * FROM Win32_VideoController");
 
@@ -315,7 +315,7 @@ QString WindowsSystemInformation::getGPUModel()
 
         if (getProperty(object, "VideoProcessor", &variantProperty))
         {
-            GPUBrand = QString::fromWCharArray(variantProperty.bstrVal);
+            GPUModel << QString::fromWCharArray(variantProperty.bstrVal);
             VariantClear(&variantProperty);
         }
 
@@ -327,12 +327,12 @@ QString WindowsSystemInformation::getGPUModel()
     {
         enumerator->Release();
     }
-    return GPUBrand;
+    return GPUModel;
 }
 
-unsigned int WindowsSystemInformation::getGPURAM()
+QList<unsigned int> WindowsSystemInformation::getGPURAM()
 {
-    unsigned int GPURAM = 0;
+    QList<unsigned int> GPURAM;
     IEnumWbemClassObject* enumerator = executeQuery("SELECT * FROM Win32_VideoController");
 
     IWbemClassObject* object = getNextObject(enumerator);
@@ -341,7 +341,7 @@ unsigned int WindowsSystemInformation::getGPURAM()
         VARIANT variantProperty;
         if (getProperty(object, "AdapterRAM", &variantProperty))
         {
-            GPURAM = variantProperty.uintVal / (1024 * 1024);
+            GPURAM << variantProperty.uintVal / (1024 * 1024);
             VariantClear(&variantProperty);
         }
 
@@ -367,46 +367,49 @@ QString WindowsSystemInformation::getGPUOpenGLVersion()
     return createOpenGLContextAndGetVersion();
 }
 
-QString WindowsSystemInformation::getGPUDriverVersion()
+QList<QString> WindowsSystemInformation::getGPUDriverVersion()
 {
-    QString driverVersion = "";
+    QList<QString> driverVersion;
     IEnumWbemClassObject* enumerator = executeQuery("SELECT * FROM Win32_VideoController");
 
     IWbemClassObject* object = getNextObject(enumerator);
     while (object)
     {
         VARIANT variantProperty;
+        QString driverVersionString = "";
 
         if (getProperty(object, "DriverVersion", &variantProperty))
         {
-            driverVersion += "Version: ";
-            driverVersion += QString::fromWCharArray(variantProperty.bstrVal);
+            driverVersionString += "Version: ";
+            driverVersionString += QString::fromWCharArray(variantProperty.bstrVal);
             VariantClear(&variantProperty);
         }
         if (getProperty(object, "DriverDate", &variantProperty))
         {
-            driverVersion += ", Date: ";
-            driverVersion += QString::fromWCharArray(variantProperty.bstrVal);
+            driverVersionString += ", Date: ";
+            driverVersionString += QString::fromWCharArray(variantProperty.bstrVal);
             VariantClear(&variantProperty);
         }
         if (getProperty(object, "infFilename", &variantProperty))
         {
-            driverVersion += ", Information file: ";
-            driverVersion += QString::fromWCharArray(variantProperty.bstrVal);
+            driverVersionString += ", Information file: ";
+            driverVersionString += QString::fromWCharArray(variantProperty.bstrVal);
             VariantClear(&variantProperty);
         }
         if (getProperty(object, "InstalledDisplayDrivers", &variantProperty))
         {
-            driverVersion += ", Display drivers: ";
-            driverVersion += QString::fromWCharArray(variantProperty.bstrVal);
+            driverVersionString += ", Display drivers: ";
+            driverVersionString += QString::fromWCharArray(variantProperty.bstrVal);
             VariantClear(&variantProperty);
         }
         if (getProperty(object, "infSection", &variantProperty))
         {
-            driverVersion += ", Section: ";
-            driverVersion += QString::fromWCharArray(variantProperty.bstrVal);
+            driverVersionString += ", Section: ";
+            driverVersionString += QString::fromWCharArray(variantProperty.bstrVal);
             VariantClear(&variantProperty);
         }
+
+        driverVersion << driverVersionString;
 
         object->Release();
         object = getNextObject(enumerator);
