@@ -1,7 +1,7 @@
-#ifndef AUTOMATICSYNCHRONIZATIONWIDGET_H
-#define AUTOMATICSYNCHRONIZATIONWIDGET_H
+#ifndef SYNCHRONIZATIONEDITIONWIDGET_H
+#define SYNCHRONIZATIONEDITIONWIDGET_H
 
-#include "ui_automaticsynchronizationwidgetbase.h"
+#include "ui_synchronizationeditionwidgetbase.h"
 
 #include "automaticsynchronizationmanager.h"
 
@@ -11,12 +11,12 @@ namespace udg {
     Widget que ens permet mostrar l'estat de cada visor amb la sincronització automàtica i interactuar amb l'usuari
  */
 
-class AutomaticSynchronizationWidget : public QFrame, private Ui::AutomaticSynchronizationWidgetBase {
+class SynchronizationEditionWidget : public QFrame, private Ui::SynchronizationEditionWidgetBase {
 Q_OBJECT
 public:
 
-    AutomaticSynchronizationWidget(QWidget *parent = 0);
-    ~AutomaticSynchronizationWidget();
+    SynchronizationEditionWidget(QWidget *parent = 0);
+    ~SynchronizationEditionWidget();
 
 public:
 

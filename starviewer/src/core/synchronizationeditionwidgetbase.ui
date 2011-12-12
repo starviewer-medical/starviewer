@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>udg::AutomaticSynchronizationWidgetBase</class>
- <widget class="QFrame" name="udg::AutomaticSynchronizationWidgetBase">
+ <class>udg::SynchronizationEditionWidgetBase</class>
+ <widget class="QFrame" name="udg::SynchronizationEditionWidgetBase">
   <property name="geometry">
    <rect>
     <x>0</x>

@@ -15,7 +15,7 @@ FORMS += qlogviewerbase.ui \
     qcustomwindowleveleditwidgetbase.ui \
     qtransferfunctioneditor2base.ui \
     qtransferfunctiongraphicalviewbase.ui \
-    automaticsynchronizationwidgetbase.ui
+    synchronizationeditionwidgetbase.ui
 TRANSLATIONS += core_ca_ES.ts \
     core_es_ES.ts \
     core_en_GB.ts
@@ -266,7 +266,7 @@ HEADERS += extensionfactory.h \
     firewallaccess.h \
     firewallaccesstest.h \
     automaticsynchronizationmanager.h \
-    automaticsynchronizationwidget.h \
+    synchronizationeditionwidget.h \
     slicingwheeltool.h \
     qmessageboxautoclose.h \
     commandlineoption.h \
@@ -498,7 +498,7 @@ SOURCES += extensionmediator.cpp \
     firewallaccess.cpp \
     firewallaccesstest.cpp \
     automaticsynchronizationmanager.cpp \
-    automaticsynchronizationwidget.cpp \
+    synchronizationeditionwidget.cpp \
     slicingwheeltool.cpp \
     qmessageboxautoclose.cpp \
     commandlineoption.cpp \
