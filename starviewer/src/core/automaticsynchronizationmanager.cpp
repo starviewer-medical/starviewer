@@ -36,7 +36,7 @@ void AutomaticSynchronizationManager::enableEditor(bool enable)
         if (enable)
         {
             viewer->setViewerStatus(QViewer::SynchronizationEdit);
-            connect(viewer->getSynchronizationEditionWidget(), SIGNAL(selectedItem(Q2DViewer*)),SLOT(changeEditionState(Q2DViewer*)));
+            connect(viewer->getSynchronizationEditionWidget(), SIGNAL(selectedItem(Q2DViewer*)), SLOT(changeEditionState(Q2DViewer*)));
 
             if (viewer->getInput())
             {
@@ -91,7 +91,7 @@ void AutomaticSynchronizationManager::updateEditionStateOfViewer(Q2DViewer *view
         }
         else
         {
-            setWidgetEditionState(viewer, ToAdd );
+            setWidgetEditionState(viewer, ToAdd);
         }
     }
 }
@@ -118,31 +118,31 @@ void AutomaticSynchronizationManager::changeEditionState(Q2DViewer *viewer)
                 // Si tenim un frameOfReference diferent, es treu del grup
                 int newGroup = m_toolData->getNumberOfGroups();
                 m_toolData->setGroupForUID(frameOfReferenceUID, newGroup);
-                setWidgetEditionState(viewer, ToAdd );
+                setWidgetEditionState(viewer, ToAdd);
             }
         }
         else
         {
             // S'afegeix al grup seleccionat actualment
             m_toolData->setGroupForUID(frameOfReferenceUID, activeGroup);
-            setWidgetEditionState(viewer, AddedInOtherGroup );
+            setWidgetEditionState(viewer, AddedInOtherGroup);
         }
     }
 
-    //La resta de visors, també s'han d'actualitzar
+    // La resta de visors, també s'han d'actualitzar
     updateEditionStateOfViewers();
 }
 
 void AutomaticSynchronizationManager::initialize()
 {
-    //Posar tots els UIDs al grup corresponent
-    for( int i = 0; i < m_viewersLayout->getNumberOfViewers(); i++)
+    // Posar tots els UIDs al grup corresponent
+    for (int i = 0; i < m_viewersLayout->getNumberOfViewers(); i++)
     {
         Q2DViewer *viewer = m_viewersLayout->getViewerWidget(i)->getViewer();
 
         if (viewer->getInput())
         {
-            connect(viewer->getSynchronizationEditionWidget(), SIGNAL(selectedItem(Q2DViewer*)),SLOT(updateEditionStateOfViewers()));
+            connect(viewer->getSynchronizationEditionWidget(), SIGNAL(selectedItem(Q2DViewer*)), SLOT(updateEditionStateOfViewers()));
 
             QString frameOfReferenceUID = viewer->getInput()->getImage(0)->getParentSeries()->getFrameOfReferenceUID();
             int groupOfActualViewer = m_toolData->getGroupForUID(frameOfReferenceUID);

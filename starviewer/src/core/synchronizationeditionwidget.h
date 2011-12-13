@@ -10,16 +10,13 @@ namespace udg {
 /**
     Widget que ens permet mostrar l'estat de cada visor amb la sincronització automàtica i interactuar amb l'usuari
  */
-
 class SynchronizationEditionWidget : public QFrame, private Ui::SynchronizationEditionWidgetBase {
 Q_OBJECT
 public:
-
     SynchronizationEditionWidget(QWidget *parent = 0);
     ~SynchronizationEditionWidget();
 
 public:
-
     /// Tractament dels events
     bool event(QEvent *event);
 
@@ -30,10 +27,8 @@ public:
     void setBackgroundImage(QString urlImage);
 
 signals:
-
     /// Signal que s'emet al seleccionar el widget
     void selectedItem(Q2DViewer *viewer);
-
 };
 
 };

@@ -16,7 +16,6 @@ SynchronizationEditionWidget::SynchronizationEditionWidget(QWidget *parent)
 
 SynchronizationEditionWidget::~SynchronizationEditionWidget()
 {
-
 }
 
 void SynchronizationEditionWidget::setBackgroundImage(QString urlImage)
@@ -28,7 +27,7 @@ void SynchronizationEditionWidget::setState(AutomaticSynchronizationManager::Vie
 {
     QPixmap pixmap;
 
-    switch(state)
+    switch (state)
     {
         case AutomaticSynchronizationManager::ToQuit:
             pixmap.load(QString::fromUtf8(":/images/minus.png"));
@@ -49,7 +48,6 @@ void SynchronizationEditionWidget::setState(AutomaticSynchronizationManager::Vie
             pixmap.load(QString::fromUtf8(":/images/minuslock.png"));
             m_icon->setPixmap(pixmap.scaled(width()*0.4, height()*0.4, Qt::KeepAspectRatio, Qt::SmoothTransformation));
             break;
-
     }
 }
 
