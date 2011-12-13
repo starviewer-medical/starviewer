@@ -2,7 +2,7 @@
 #define UDGAUTOMATICSYNCHRONIZATIONMANAGER_H
 
 #include "tool.h"
-
+#include "synchronizationeditionwidget.h"
 namespace udg {
 
 class AutomaticSynchronizationToolData;
@@ -16,9 +16,6 @@ class AutomaticSynchronizationManager : public QObject {
 Q_OBJECT
 
 public:
-    /// Possibles estats del widget d'un visor durant el proces d'edicio
-    enum ViewerEditionState { Selected, ToQuit, ToAdd, AddedInOtherGroup };
-
     /// Constructor i destructor
     AutomaticSynchronizationManager(AutomaticSynchronizationToolData *toolData, ViewersLayout *layout, QObject *parent = 0);
     ~AutomaticSynchronizationManager();
@@ -31,7 +28,7 @@ public:
 
 private:
     /// Posa l'estat corresponent al widget d'edicio
-    void setWidgetEditionState(Q2DViewer *viewer, ViewerEditionState state);
+    void setWidgetEditionState(Q2DViewer *viewer, SynchronizationEditionWidget::ViewerEditionState state);
 
 private slots:
     /// Canvi l'estat del widget en edicio segons el seu estat actual
