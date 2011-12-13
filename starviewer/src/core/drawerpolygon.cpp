@@ -8,13 +8,15 @@
 #include <vtkPolyDataMapper2D.h>
 #include <vtkProperty2D.h>
 #include <vtkPropAssembly.h>
+#include <vtkTriangleFilter.h>
 // Qt
 #include <QVector>
 
 namespace udg {
 
 DrawerPolygon::DrawerPolygon(QObject *parent)
- : DrawerPrimitive(parent), m_vtkPolydata(0), m_vtkPoints(0), m_vtkCellArray(0), m_vtkActor(0), m_vtkBackgroundActor(0), m_vtkMapper(0), m_vtkPropAssembly(0)
+ : DrawerPrimitive(parent), m_vtkPolydata(0), m_vtkPoints(0), m_vtkCellArray(0), m_vtkActor(0), m_vtkBackgroundActor(0), m_vtkMapper(0), m_vtkTriangleFilter(0),
+   m_vtkPropAssembly(0)
 {
 }
 
@@ -45,6 +47,10 @@ DrawerPolygon::~DrawerPolygon()
     if (m_vtkMapper)
     {
         m_vtkMapper->Delete();
+    }
+    if (m_vtkTriangleFilter)
+    {
+        m_vtkTriangleFilter->Delete();
     }
 }
 
@@ -122,7 +128,11 @@ vtkProp* DrawerPolygon::getAsVtkProp()
 
         m_vtkActor->SetMapper(m_vtkMapper);
         m_vtkBackgroundActor->SetMapper(m_vtkMapper);
-        m_vtkMapper->SetInput(m_vtkPolydata);
+
+        m_vtkTriangleFilter = vtkTriangleFilter::New();
+        m_vtkTriangleFilter->SetInput(m_vtkPolydata);
+        m_vtkMapper->SetInput(m_vtkTriangleFilter->GetOutput());
+
         // Li donem els atributs
         updateVtkActorProperties();
 

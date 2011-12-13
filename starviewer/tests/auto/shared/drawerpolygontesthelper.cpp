@@ -71,6 +71,20 @@ bool DrawerPolygonTestHelper::comparePolyData(vtkPolyData *actualPolyData, vtkPo
 
 bool DrawerPolygonTestHelper::comparePoints(vtkPoints *actualPoints, vtkPoints *expectedPoints, QString &firstDifference)
 {
+    if (!actualPoints && !expectedPoints)
+    {
+        return true;
+    }
+    if (!actualPoints && expectedPoints)
+    {
+        firstDifference = "Different points: actual: null, expected: no null";
+        return false;
+    }
+    if (actualPoints && !expectedPoints)
+    {
+        firstDifference = "Different points: actual: no null, expected: null";
+        return false;
+    }
     if (actualPoints->GetNumberOfPoints() != expectedPoints->GetNumberOfPoints())
     {
         firstDifference = QString("Different number of points: actual: %1, expected: %2").arg(actualPoints->GetNumberOfPoints())
