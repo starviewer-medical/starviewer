@@ -18,6 +18,7 @@
 #include <QStackedLayout>
 #include <QContextMenuEvent>
 #include <QMessageBox>
+#include <QDir>
 
 // Include's vtk
 #include <QVTKWidget.h>
@@ -848,6 +849,15 @@ void QViewer::setViewerStatus(ViewerStatus status)
         if (m_viewerStatus == SynchronizationEdit)
         {
             disableContextMenu();
+            
+            // Assignem la imatge de background corresponent per al widget
+            if (this->getInput())
+            {
+                QString path = QString("%1/stateOfAutomaticSynchronization").arg(QDir::tempPath());
+                this->grabCurrentView();
+                this->saveGrabbedViews(path, QViewer::PNG);
+                m_synchronizationEditionWidget->setBackgroundImage(path + ".png");
+            }
         }
         else
         {
