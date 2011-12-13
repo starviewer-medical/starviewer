@@ -10,8 +10,6 @@
 #include "toolproxy.h"
 #include "automaticsynchronizationtool.h"
 
-#include <QDir>
-
 namespace udg {
 
 AutomaticSynchronizationManager::AutomaticSynchronizationManager(AutomaticSynchronizationToolData *toolData, ViewersLayout *layout, QObject *parent)
@@ -37,17 +35,6 @@ void AutomaticSynchronizationManager::enableEditor(bool enable)
         {
             viewer->setViewerStatus(QViewer::SynchronizationEdit);
             connect(viewer->getSynchronizationEditionWidget(), SIGNAL(selectedItem(Q2DViewer*)), SLOT(changeEditionState(Q2DViewer*)));
-
-            if (viewer->getInput())
-            {
-                SynchronizationEditionWidget *widget = viewer->getSynchronizationEditionWidget();  
-
-                // Construcció del background
-                QString path = QString("%1/stateOfAutomaticSynchronization").arg(QDir::tempPath());
-                viewer->grabCurrentView();
-                viewer->saveGrabbedViews(path, QViewer::PNG);
-                widget->setBackgroundImage(path + ".png");
-            }
         }
         else
         {
