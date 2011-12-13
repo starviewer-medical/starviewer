@@ -2,7 +2,6 @@
 
 #include "viewerslayout.h"
 #include "automaticsynchronizationtooldata.h"
-#include "synchronizationeditionwidget.h"
 #include "q2dviewer.h"
 #include "volume.h"
 #include "image.h"
@@ -69,21 +68,21 @@ void AutomaticSynchronizationManager::updateEditionStateOfViewer(Q2DViewer *view
         {
             if (frameOfReferenceUID == m_toolData->getSelectedUID())
             {
-                setWidgetEditionState(viewer, Selected);
+                setWidgetEditionState(viewer, SynchronizationEditionWidget::Selected);
             }
             else
             {
-                setWidgetEditionState(viewer, AddedInOtherGroup);
+                setWidgetEditionState(viewer, SynchronizationEditionWidget::AddedInOtherGroup);
             }
         }
         else
         {
-            setWidgetEditionState(viewer, ToAdd);
+            setWidgetEditionState(viewer, SynchronizationEditionWidget::ToAdd);
         }
     }
 }
 
-void AutomaticSynchronizationManager::setWidgetEditionState(Q2DViewer *viewer, ViewerEditionState state)
+void AutomaticSynchronizationManager::setWidgetEditionState(Q2DViewer *viewer, SynchronizationEditionWidget::ViewerEditionState state)
 {
     SynchronizationEditionWidget *widget = viewer->getSynchronizationEditionWidget();  
     widget->setState(state);
@@ -105,14 +104,14 @@ void AutomaticSynchronizationManager::changeEditionState(Q2DViewer *viewer)
                 // Si tenim un frameOfReference diferent, es treu del grup
                 int newGroup = m_toolData->getNumberOfGroups();
                 m_toolData->setGroupForUID(frameOfReferenceUID, newGroup);
-                setWidgetEditionState(viewer, ToAdd);
+                setWidgetEditionState(viewer, SynchronizationEditionWidget::ToAdd);
             }
         }
         else
         {
             // S'afegeix al grup seleccionat actualment
             m_toolData->setGroupForUID(frameOfReferenceUID, activeGroup);
-            setWidgetEditionState(viewer, AddedInOtherGroup);
+            setWidgetEditionState(viewer, SynchronizationEditionWidget::AddedInOtherGroup);
         }
     }
 

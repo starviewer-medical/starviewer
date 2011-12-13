@@ -3,9 +3,9 @@
 
 #include "ui_synchronizationeditionwidgetbase.h"
 
-#include "automaticsynchronizationmanager.h"
-
 namespace udg {
+
+class Q2DViewer;
 
 /**
     Widget que ens permet mostrar l'estat de cada visor amb la sincronització automàtica i interactuar amb l'usuari
@@ -13,6 +13,9 @@ namespace udg {
 class SynchronizationEditionWidget : public QFrame, private Ui::SynchronizationEditionWidgetBase {
 Q_OBJECT
 public:
+    /// Possibles estats del widget durant el procés d'edició
+    enum ViewerEditionState { Selected, ToQuit, ToAdd, AddedInOtherGroup };
+    
     SynchronizationEditionWidget(QWidget *parent = 0);
     ~SynchronizationEditionWidget();
 
@@ -21,7 +24,7 @@ public:
     bool event(QEvent *event);
 
     /// Posa la icona corresponent a l'estat del widget
-    void setState(AutomaticSynchronizationManager::ViewerEditionState state);
+    void setState(ViewerEditionState state);
 
     /// Posa la imatge de fons al widget
     void setBackgroundImage(const QString &urlImage);
