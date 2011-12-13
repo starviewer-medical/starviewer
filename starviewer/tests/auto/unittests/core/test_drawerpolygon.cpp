@@ -37,7 +37,6 @@ void test_DrawerPolygon::getAsVtkProp_ShouldReturnPropLikeExpected_data()
         vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
         points->SetNumberOfPoints(0);
         vtkSmartPointer<vtkCellArray> cellArray = vtkSmartPointer<vtkCellArray>::New();
-        cellArray->InsertNextCell(0);
         vtkSmartPointer<vtkPolyData> polyData = vtkSmartPointer<vtkPolyData>::New();
         polyData->SetPoints(points);
         polyData->SetLines(cellArray);
