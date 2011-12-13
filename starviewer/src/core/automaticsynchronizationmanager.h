@@ -12,12 +12,10 @@ class Q2DViewer;
 /**
     Tool de sincronització automatica entre visualitzadors.
 */
-
 class AutomaticSynchronizationManager : public QObject {
 Q_OBJECT
 
 public:
-
     /// Possibles estats del widget d'un visor durant el proces d'edicio
     enum ViewerEditionState { Selected, ToQuit, ToAdd, AddedInOtherGroup };
 
@@ -32,12 +30,10 @@ public:
     void initialize();
 
 private:
-
     /// Posa l'estat corresponent al widget d'edicio
     void setWidgetEditionState(Q2DViewer *viewer, ViewerEditionState state);
 
 private slots:
-
     /// Canvi l'estat del widget en edicio segons el seu estat actual
     void changeEditionState(Q2DViewer *viewer);
 
@@ -48,13 +44,11 @@ private slots:
     void updateEditionStateOfViewer(Q2DViewer *viewer);
 
 private:
-
     /// Dades compartides de la tool automatica de sincronitzacio
     AutomaticSynchronizationToolData *m_toolData;
     
     /// Layaout que conté tots els viewers de l'extensio
     ViewersLayout *m_viewersLayout;
-
 };
 
 }
