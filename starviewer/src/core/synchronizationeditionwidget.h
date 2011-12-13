@@ -24,7 +24,7 @@ public:
     void setState(AutomaticSynchronizationManager::ViewerEditionState state);
 
     /// Posa la imatge de fons al widget
-    void setBackgroundImage(QString urlImage);
+    void setBackgroundImage(const QString &urlImage);
 
 signals:
     /// Signal que s'emet al seleccionar el widget

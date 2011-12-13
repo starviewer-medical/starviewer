@@ -18,7 +18,7 @@ SynchronizationEditionWidget::~SynchronizationEditionWidget()
 {
 }
 
-void SynchronizationEditionWidget::setBackgroundImage(QString urlImage)
+void SynchronizationEditionWidget::setBackgroundImage(const QString &urlImage)
 {
     setStyleSheet(QString::fromUtf8("background-color: rgba(75, 75, 75, 0);\n background-image:url(\"%1\");").arg(urlImage));
 }
