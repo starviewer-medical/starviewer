@@ -321,7 +321,7 @@ void QRectumSegmentationExtension::ApplyMethod( )
 
 void QRectumSegmentationExtension::strokeEventHandler( unsigned long id )
 {
-    switch( id )
+    switch (id)
     {
     case vtkCommand::MouseMoveEvent:
         onMouseMoveEventHandler();

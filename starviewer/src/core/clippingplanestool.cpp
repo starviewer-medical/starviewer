@@ -61,7 +61,7 @@ void ClippingPlanesTool::boundingBoxEventHandler(vtkObject *obj, unsigned long e
     Q_UNUSED(call_data);
     Q_UNUSED(command);
 
-    switch(event)
+    switch (event)
     {
         case vtkCommand::InteractionEvent:
         {

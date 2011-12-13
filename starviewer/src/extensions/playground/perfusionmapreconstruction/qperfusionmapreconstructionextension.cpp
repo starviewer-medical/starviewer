@@ -281,7 +281,7 @@ void QPerfusionMapReconstructionExtension::computePerfusionMap( )
 
 void QPerfusionMapReconstructionExtension::paintMap( )
 {
-    switch(m_mapViewComboBox->currentIndex())
+    switch (m_mapViewComboBox->currentIndex())
     {
     case 0:     //CBV
         m_2DView->getViewer()->setInput( m_mapCalculator->getCBVVolume() );
@@ -994,7 +994,7 @@ void QPerfusionMapReconstructionExtension::applyFilterMapImage( )
 
 void QPerfusionMapReconstructionExtension::eventHandler( unsigned long id )
 {
-    switch( id )
+    switch (id)
     {
     case vtkCommand::MouseMoveEvent:
         paintCursorSignal();

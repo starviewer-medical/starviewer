@@ -73,7 +73,7 @@ void QDicomPrintExtension::createConnections()
 
     connect(m_qdicomPrinterBasicSettingsWidget, SIGNAL(basicDicomPrinterSettingChanged()), SLOT(updateNumberOfDicomPrintPagesToPrint()));
     connect(m_printButton, SIGNAL(clicked()), SLOT(print()));
-    connect(m_addToPrintButton, SIGNAL(clicked()),SLOT(addSelectedImagesToGroupedDICOMImagesToPrint()));
+    connect(m_addToPrintButton, SIGNAL(clicked()), SLOT(addSelectedImagesToGroupedDICOMImagesToPrint()));
     connect(m_clearDICOMImagesSelectionToPrintButton, SIGNAL(clicked()), SLOT(clearDICOMImagesGroupedToPrint()));
     connect(m_removeSelectedDICOMImagesSelectionToPrintButton, SIGNAL(clicked()), SLOT(removeGroupedDICOMImagesToPrintSelectedInThumbnailsPreview()));
 

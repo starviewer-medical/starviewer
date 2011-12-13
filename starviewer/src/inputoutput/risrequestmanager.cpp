@@ -271,11 +271,12 @@ void RISRequestManager::retrieveStudyFoundInQueryPACS(Study *study)
         }
     }
 
-    switch(getDICOMSouceFromRetrieveStudy(study))
+    switch (getDICOMSouceFromRetrieveStudy(study))
     {
         case PACS:
             retrieveStudyFromPACS(study);
             break;
+        
         case Database:
             retrieveStudyFromDatabase(study);
             break;

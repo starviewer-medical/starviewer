@@ -140,7 +140,7 @@ void MagicROITool::assignBounds(int &minX, int &minY, int &maxX, int &maxY)
 double MagicROITool::getVoxelValue(int x, int y, int z)
 {
     double value = 0;
-    switch(m_2DViewer->getView())
+    switch (m_2DViewer->getView())
     {
         case Q2DViewer::Axial:
             value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(x, y, z, 0);
