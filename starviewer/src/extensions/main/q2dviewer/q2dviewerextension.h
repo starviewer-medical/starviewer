@@ -145,6 +145,9 @@ private slots:
 #ifndef STARVIEWER_LITE
     /// Comprova si el nou volum té fases i per tant hem d'activar/descativar la vista coronal+sagital
     void validePhases();
+
+    /// Col·loca i ordena les icones i el menú de les eines de ROI segons l'última tool de ROI seleccionada
+    void rearrangeROIToolsMenu();
 #endif
 
     /// Habilita o deshabilita el botó de Dump d'info DICOM segons en la vista en la que es trobi
