@@ -31,24 +31,22 @@ void SynchronizationEditionWidget::setState(ViewerEditionState state)
     {
         case ToQuit:
             pixmap.load(QString::fromUtf8(":/images/minus.png"));
-            m_icon->setPixmap(pixmap.scaled(width() * 0.4, height() * 0.4, Qt::KeepAspectRatio, Qt::SmoothTransformation));
             break;
 
         case ToAdd:
             pixmap.load(QString::fromUtf8(":/images/plus.png"));
-            m_icon->setPixmap(pixmap.scaled(width() * 0.4, height() * 0.4, Qt::KeepAspectRatio, Qt::SmoothTransformation));
             break;
 
         case Selected:
             pixmap.load(QString::fromUtf8(":/images/lock.png"));
-            m_icon->setPixmap(pixmap.scaled(width() * 0.4, height() * 0.4, Qt::KeepAspectRatio, Qt::SmoothTransformation));
             break;
 
         case AddedInOtherGroup:
             pixmap.load(QString::fromUtf8(":/images/minuslock.png"));
-            m_icon->setPixmap(pixmap.scaled(width() * 0.4, height() * 0.4, Qt::KeepAspectRatio, Qt::SmoothTransformation));
             break;
     }
+
+    m_icon->setPixmap(pixmap.scaled(width() * 0.4, height() * 0.4, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 }
 
 bool SynchronizationEditionWidget::event(QEvent *event)
