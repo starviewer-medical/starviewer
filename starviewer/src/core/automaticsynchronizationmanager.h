@@ -2,7 +2,7 @@
 #define UDGAUTOMATICSYNCHRONIZATIONMANAGER_H
 
 #include "tool.h"
-#include "synchronizationeditionwidget.h"
+
 namespace udg {
 
 class AutomaticSynchronizationToolData;
@@ -25,10 +25,6 @@ public:
 
     /// Inicialitza la sincronització autmàtica
     void initialize();
-
-private:
-    /// Posa l'estat corresponent al widget d'edicio
-    void setWidgetEditionState(Q2DViewer *viewer, SynchronizationEditionWidget::ViewerEditionState state);
 
 private slots:
     /// Canvi l'estat del widget en edicio segons el seu estat actual
