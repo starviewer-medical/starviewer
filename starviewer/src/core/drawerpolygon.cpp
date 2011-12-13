@@ -184,7 +184,10 @@ void DrawerPolygon::buildVtkPoints()
     // Especifiquem el nombre de vèrtexs que té el polígon
     int numberOfVertices = m_pointsList.count() + (extraVertix ? 1 : 0);
     m_vtkCellArray->Reset();
-    m_vtkCellArray->InsertNextCell(numberOfVertices);
+    if (numberOfVertices > 0)
+    {
+        m_vtkCellArray->InsertNextCell(numberOfVertices);
+    }
     m_vtkPoints->SetNumberOfPoints(numberOfVertices);
 
     // Donem els punts/vèrtexs
