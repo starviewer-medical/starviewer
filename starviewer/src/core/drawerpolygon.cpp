@@ -205,6 +205,7 @@ void DrawerPolygon::buildVtkPoints()
         m_vtkPoints->InsertPoint(numberOfVertices - 1, m_pointsList.at(0).data());
         m_vtkCellArray->InsertCellPoint(numberOfVertices - 1);
     }
+    m_vtkPolydata->Initialize();
     // Assignem els punts al polydata
     m_vtkPolydata->SetPoints(m_vtkPoints);
     // Comprovem si la forma està "plena" o no
