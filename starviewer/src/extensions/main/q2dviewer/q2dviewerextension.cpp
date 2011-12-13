@@ -411,6 +411,11 @@ void Q2DViewerExtension::initializeTools()
     m_roiButton->setMenu(roiToolMenu);
     roiToolMenu->addAction(m_toolManager->registerTool("MagicROITool"));
     roiToolMenu->addAction(m_toolManager->registerTool("PolylineROITool"));
+    
+    connect(m_toolManager->getRegisteredToolAction("OvalROITool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
+    connect(m_toolManager->getRegisteredToolAction("MagicROITool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
+    connect(m_toolManager->getRegisteredToolAction("PolylineROITool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
+    
     m_cursor3DToolButton->setDefaultAction(m_toolManager->registerTool("Cursor3DTool"));
     m_angleToolButton->setDefaultAction(m_toolManager->registerTool("AngleTool"));
     m_openAngleToolButton->setDefaultAction(m_toolManager->registerTool("NonClosedAngleTool"));
@@ -677,6 +682,30 @@ void Q2DViewerExtension::showScreenshotsExporterDialog()
             QExporterTool exporter(selectedViewerWidget->getViewer());
             exporter.exec();
         }
+    }
+}
+
+void Q2DViewerExtension::rearrangeROIToolsMenu()
+{
+    QList<QAction*> actions;
+    actions << m_roiButton->defaultAction() << m_roiButton->menu()->actions();
+    
+    bool found = false;
+    int i = 0;
+    while (!found && i < actions.count())
+    {
+        if (actions.at(i)->isChecked())
+        {
+            found = true;
+        }
+        ++i;
+    }
+
+    if (found)
+    {
+        m_roiButton->setDefaultAction(actions.takeAt(i - 1));
+        m_roiButton->menu()->clear();
+        m_roiButton->menu()->addActions(actions);
     }
 }
 
