@@ -31,22 +31,22 @@ void SynchronizationEditionWidget::setState(AutomaticSynchronizationManager::Vie
     {
         case AutomaticSynchronizationManager::ToQuit:
             pixmap.load(QString::fromUtf8(":/images/minus.png"));
-            m_icon->setPixmap(pixmap.scaled(width()*0.4, height()*0.4, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+            m_icon->setPixmap(pixmap.scaled(width() * 0.4, height() * 0.4, Qt::KeepAspectRatio, Qt::SmoothTransformation));
             break;
 
         case AutomaticSynchronizationManager::ToAdd:
             pixmap.load(QString::fromUtf8(":/images/plus.png"));
-            m_icon->setPixmap(pixmap.scaled(width()*0.4, height()*0.4, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+            m_icon->setPixmap(pixmap.scaled(width() * 0.4, height() * 0.4, Qt::KeepAspectRatio, Qt::SmoothTransformation));
             break;
 
         case AutomaticSynchronizationManager::Selected:
             pixmap.load(QString::fromUtf8(":/images/lock.png"));
-            m_icon->setPixmap(pixmap.scaled(width()*0.4, height()*0.4, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+            m_icon->setPixmap(pixmap.scaled(width() * 0.4, height() * 0.4, Qt::KeepAspectRatio, Qt::SmoothTransformation));
             break;
 
         case AutomaticSynchronizationManager::AddedInOtherGroup:
             pixmap.load(QString::fromUtf8(":/images/minuslock.png"));
-            m_icon->setPixmap(pixmap.scaled(width()*0.4, height()*0.4, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+            m_icon->setPixmap(pixmap.scaled(width() * 0.4, height() * 0.4, Qt::KeepAspectRatio, Qt::SmoothTransformation));
             break;
     }
 }

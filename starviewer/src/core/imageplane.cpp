@@ -202,7 +202,7 @@ bool ImagePlane::operator !=(const ImagePlane &imagePlane)
 QList<QVector<double> > ImagePlane::getBounds(int location)
 {
     double factor = 0.0;
-    switch(location)
+    switch (location)
     {
         // Central
         case 0:

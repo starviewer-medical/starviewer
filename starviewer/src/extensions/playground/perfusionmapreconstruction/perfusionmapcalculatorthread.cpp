@@ -50,7 +50,7 @@ void PerfusionMapCalculatorThread::setPerfusionImageMode()
 
 void PerfusionMapCalculatorThread::run()
 {
-    switch(m_mode)
+    switch (m_mode)
     {
         case PerfusionMapCalculatorThread::CheckImage:
             this->runCheckImage();
