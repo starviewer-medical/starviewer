@@ -294,6 +294,8 @@ void MagicROITool::computeRegionMask()
     while (i < 4 && !found)
     {
         this->doMovement(x, y, i);
+        // TODO Desfà els índexs projectats a 2D als originals 3D per poder obtenir el valor
+        // Corretgir-ho d'una millor manera perquè no calgui fer servir aquest mètode (guardar els índexs x,y,z o d'una altra manera)
         value = this->getVoxelValue(x, y, z);
 
         if ((value >= m_lowerLevel) && (value <= m_upperLevel))
@@ -319,6 +321,8 @@ void MagicROITool::computeRegionMask()
             this->doMovement(x, y, i);
             if ((x > minX) && (x < maxX) && (y > minY) && (y < maxY))
             {
+                // TODO Desfà els índexs projectats a 2D als originals 3D per poder obtenir el valor
+                // Corretgir-ho d'una millor manera perquè no calgui fer servir aquest mètode (guardar els índexs x,y,z o d'una altra manera)
                 value = this->getVoxelValue(x, y, z);
 
                 if ((value >= m_lowerLevel) && (value <= m_upperLevel) && (!m_mask[y * maxX + x]))
