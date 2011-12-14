@@ -74,6 +74,8 @@ public:
     /// Mètodes per obtenir l'actual i/o l'anterior coordenada del cursor
     /// del ratolí durant l'últim event
     /// Les coordenades retornades estan en sistema de coordenades de Display
+    QPoint getEventPosition() const;
+    QPoint getLastEventPosition() const;
     void getEventPosition(int position[2]) const;
     void getLastEventPosition(int position[2]) const;
     int getEventPositionX() const;

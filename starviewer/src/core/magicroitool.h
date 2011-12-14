@@ -110,6 +110,9 @@ private:
 
     /// Polígon ple que es mostrarà durant l'edició de la ROI.
     QPointer<DrawerPolygon> m_filledRoiPolygon;
+
+    /// Coordenades de pantalla a on s'ha fet el click inicial
+    QPoint m_pickedPositionInDisplayCoordinates;
 };
 
 }

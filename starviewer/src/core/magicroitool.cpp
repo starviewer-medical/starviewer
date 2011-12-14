@@ -15,7 +15,7 @@
 namespace udg {
 
 const int MagicROITool::MagicSize = 3;
-const double MagicROITool::InitialMagicFactor = 1.0;
+const double MagicROITool::InitialMagicFactor = 0.0;
 
 MagicROITool::MagicROITool(QViewer *viewer, QObject *parent)
 : ROITool(viewer, parent)
@@ -178,6 +178,7 @@ void MagicROITool::startRegion()
     {
         if (m_2DViewer->getCurrentCursorImageCoordinate(m_pickedPosition))
         {
+            m_pickedPositionInDisplayCoordinates = m_2DViewer->getEventPosition();
             m_magicFactor = InitialMagicFactor;
             m_roiPolygon = new DrawerPolygon;
             m_roiPolygon->increaseReferenceCount();
@@ -240,12 +241,17 @@ void MagicROITool::modifyRegionByFactor()
 {
     if (m_roiPolygon)
     {
-        double displacementY = 0.05 * (m_viewer->getLastEventPositionY() - m_viewer->getEventPositionY());
-        if (m_magicFactor - displacementY > 0.0)
+        const double ScaleFactor = 0.05;
+
+        // Fem servir la distància al punt inicial que s'ha clicat. Es fa la distància de mahattan que és una bona aproximació i molt més ràpida de calcular
+        int displacement =  (m_viewer->getEventPosition() - m_pickedPositionInDisplayCoordinates).manhattanLength();
+        m_magicFactor = displacement * ScaleFactor;
+        if (m_magicFactor < 0.0)
         {
-            m_magicFactor -= displacementY;
-            this->generateRegion();
+            m_magicFactor = 0.0;
         }
+
+        this->generateRegion();
     }
 }
 
