@@ -53,33 +53,33 @@ public:
     enum ViewerStatus { NoVolumeInput, DownloadingVolume, DownloadingError, LoadingVolume, LoadingError, VisualizingVolume, SynchronizationEdit };
 
     /// Retorna l'interactor renderer
-    virtual vtkRenderWindowInteractor* getInteractor();
+    virtual vtkRenderWindowInteractor* getInteractor() const;
 
     /// Retorna el renderer
-    virtual vtkRenderer* getRenderer();
+    virtual vtkRenderer* getRenderer() const;
 
     /// Ens retorna el volum d'entrada
-    virtual Volume* getInput()
+    virtual Volume* getInput() const
     {
         return m_mainVolume;
     }
 
     /// Retorna el vtkRenderWindow
-    vtkRenderWindow* getRenderWindow();
+    vtkRenderWindow* getRenderWindow() const;
 
     /// Retorna la mida en coordenades de pantalla (píxels?) de tot el viewport del viewer
     /// amaga la crida vtkRenderWindow::GetSize()
-    int* getRenderWindowSize();
+    int* getRenderWindowSize() const;
 
     /// Mètodes per obtenir l'actual i/o l'anterior coordenada del cursor
     /// del ratolí durant l'últim event
     /// Les coordenades retornades estan en sistema de coordenades de Display
-    void getEventPosition(int position[2]);
-    void getLastEventPosition(int position[2]);
-    int getEventPositionX();
-    int getEventPositionY();
-    int getLastEventPositionX();
-    int getLastEventPositionY();
+    void getEventPosition(int position[2]) const;
+    void getLastEventPosition(int position[2]) const;
+    int getEventPositionX() const;
+    int getEventPositionY() const;
+    int getLastEventPositionX() const;
+    int getLastEventPositionY() const;
 
     /// Ens diu si el viewer és actiu en aquell moment
     /// @return Cert si actiu, fals altrament
@@ -161,7 +161,7 @@ public:
     void setViewerStatus(ViewerStatus status);
 
     /// Obté el widget d'interfície de l'edició de sincronització automàtica
-    SynchronizationEditionWidget* getSynchronizationEditionWidget();
+    SynchronizationEditionWidget* getSynchronizationEditionWidget() const;
 
 public slots:
     /// Indiquem les dades d'entrada
