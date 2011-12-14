@@ -145,14 +145,13 @@ void VoxelInformationTool::computeCaptionAttachmentPointAndTextAlignment(double 
     QPoint cursorPosition = m_2DViewer->getEventPosition();
 
     // Aquestes seran les coordenades que ajustarem per col·locar el caption
-    double adjustedXCursorPosition = cursorPosition.x();
-    double adjustedYCursorPosition = cursorPosition.y();
+    QPoint adjustedCursorPosition = cursorPosition;
 
     bool insideMargins = true;
     // Estem quasi a dalt de tot?
     if (cursorPosition.y() > viewportSize[1] - marginPixels)
     {
-        adjustedYCursorPosition = viewportSize[1] - marginPixels;
+        adjustedCursorPosition.setY(viewportSize[1] - marginPixels);
         verticalJustification = "Bottom";
         insideMargins = false;
     }
@@ -160,7 +159,7 @@ void VoxelInformationTool::computeCaptionAttachmentPointAndTextAlignment(double 
     // Estem quasi abaix del tot?
     if (cursorPosition.y() < marginPixels)
     {
-        adjustedYCursorPosition = marginPixels;
+        adjustedCursorPosition.setY(marginPixels);
         verticalJustification = "Top";
         insideMargins = false;
     }
@@ -168,7 +167,7 @@ void VoxelInformationTool::computeCaptionAttachmentPointAndTextAlignment(double 
     // Estem a prop de la dreta?
     if (cursorPosition.x() > viewportSize[0] - marginPixels)
     {
-        adjustedXCursorPosition = viewportSize[0] - marginPixels;
+        adjustedCursorPosition.setX(viewportSize[0] - marginPixels);
         horizontalJustification = "Right";
         insideMargins = false;
     }
@@ -176,20 +175,20 @@ void VoxelInformationTool::computeCaptionAttachmentPointAndTextAlignment(double 
     // Estem a prop de l'esquerra?
     if (cursorPosition.x() < marginPixels)
     {
-        adjustedXCursorPosition = marginPixels;
+        adjustedCursorPosition.setX(marginPixels);
         horizontalJustification = "Left";
         insideMargins = false;
     }
 
     if (insideMargins)
     {
-        adjustedXCursorPosition -= 5;
-        adjustedYCursorPosition += 5;
+        adjustedCursorPosition.rx() -= 5;
+        adjustedCursorPosition.ry() += 5;
     }
 
     // I finalment transformem la coordenada de viewport en coordenada de món
     double dummy[4];
-    m_2DViewer->computeDisplayToWorld(adjustedXCursorPosition, adjustedYCursorPosition, 0.0, dummy);
+    m_2DViewer->computeDisplayToWorld(adjustedCursorPosition.x(), adjustedCursorPosition.y(), 0.0, dummy);
     attachmentPoint[0] = dummy[0];
     attachmentPoint[1] = dummy[1];
     attachmentPoint[2] = dummy[2];
