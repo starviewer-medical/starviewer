@@ -29,6 +29,7 @@
 #include "transdifferencetool.h"
 #include "ovalroitool.h"
 #include "automaticsynchronizationtool.h"
+#include "magnifyingglasstool.h"
 
 #include "shortcutmanager.h"
 #include "shortcuts.h"
@@ -153,7 +154,11 @@ Tool* ToolRegistry::getTool(const QString &toolName, QViewer *viewer)
     {
         tool = new AutomaticSynchronizationTool(viewer);
     }
-    else 
+    else if (toolName == "MagnifyingGlassTool")
+    {
+        tool = new MagnifyingGlassTool(viewer);
+    }
+    else
     {
         DEBUG_LOG(toolName + "> Tool no registrada!");
     }
@@ -369,6 +374,14 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
         toolAction->setText(tr("Auto"));
         toolAction->setIcon(QIcon(":/images/synchronize.png"));
         statusTip = tr("Enable/Disable Automatic synchronization tool");
+        toolTip = toolAction->text();
+    }
+    else if (toolName == "MagnifyingGlassTool")
+    {
+        toolAction->setText(tr("Magnifying Glass"));
+        toolAction->setIcon(QIcon(":/images/zoom.png"));
+        toolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::MagnifyingGlassTool));
+        statusTip = tr("Enable/Disable the magnifying glass tool");
         toolTip = toolAction->text();
     }
     else

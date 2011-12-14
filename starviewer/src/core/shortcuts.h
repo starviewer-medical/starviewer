@@ -45,6 +45,7 @@ public:
     static const QString ClearCurrentViewAnnotationsTool;
     static const QString TransDifferenceTool;
     static const QString OvalROITool;
+    static const QString MagnifyingGlassTool;
 
     static const QString SaveSingleScreenShot;
     static const QString SaveWholeSeriesScreenShot;

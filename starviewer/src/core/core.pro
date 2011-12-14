@@ -274,7 +274,9 @@ HEADERS += extensionfactory.h \
     imageoverlayregionfinder.h \
     systeminformation.h \
     systemrequeriments.h \
-    systemrequerimentstest.h
+    systemrequerimentstest.h \
+    magnifyingglasstool.h \
+    magnifyingglasstooldata.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -506,7 +508,9 @@ SOURCES += extensionmediator.cpp \
     imageoverlayregionfinder.cpp \
     systeminformation.cpp \
     systemrequeriments.cpp \
-    systemrequerimentstest.cpp
+    systemrequerimentstest.cpp \
+    magnifyingglasstool.cpp \
+    magnifyingglasstooldata.cpp
 win32 {
     HEADERS += windowsfirewallaccess.h \
                windowssysteminformation.h
