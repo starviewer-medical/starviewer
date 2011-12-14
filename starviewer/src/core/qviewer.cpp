@@ -128,6 +128,16 @@ int* QViewer::getRenderWindowSize() const
     return this->getRenderWindow()->GetSize();
 }
 
+QPoint QViewer::getEventPosition() const
+{
+    return QPoint(this->getEventPositionX(), this->getEventPositionY());
+}
+
+QPoint QViewer::getLastEventPosition() const
+{
+    return QPoint(this->getLastEventPositionX(), this->getLastEventPositionY());
+}
+
 void QViewer::getEventPosition(int position[2]) const
 {
     this->getInteractor()->GetEventPosition(position);
