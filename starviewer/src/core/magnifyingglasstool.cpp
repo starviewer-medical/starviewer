@@ -121,7 +121,7 @@ void MagnifyingGlassTool::updateMagnifyingGlassWidget()
     
     int *size = m_myData->get2DMagnifyingGlassViewer()->getRenderWindowSize();
 
-    m_myData->get2DMagnifyingGlassViewer()->computeDisplayToWorld((size[0] / 2), (size[1] / 2), (size[2] / 2), newPickPoint);
+    m_myData->get2DMagnifyingGlassViewer()->computeDisplayToWorld(size[0] / 2, size[1] / 2, size[2] / 2, newPickPoint);
 
     m_2DViewer->getLastEventWorldCoordinate(oldPickPoint);
 
@@ -139,7 +139,7 @@ void MagnifyingGlassTool::updateMagnifyingGlassWidget()
 
     // Map to global
     QPoint globalPoint = m_2DViewer->mapToGlobal(point);
-    m_myData->get2DMagnifyingGlassViewer()->move((point.x() + 100), (point.y() + 100));
+    m_myData->get2DMagnifyingGlassViewer()->move(point.x() + 100, point.y() + 100);
 
     m_myData->get2DMagnifyingGlassViewer()->pan(motionVector);
 }
