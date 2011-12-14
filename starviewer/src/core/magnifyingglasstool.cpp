@@ -119,9 +119,9 @@ void MagnifyingGlassTool::updateMagnifyingGlassWidget()
 {
     double newPickPoint[4], oldPickPoint[4], motionVector[3];
     
-    int *size = m_myData->get2DMagnifyingGlassViewer()->getRenderWindowSize();
+    QSize size = m_myData->get2DMagnifyingGlassViewer()->getRenderWindowSize();
 
-    m_myData->get2DMagnifyingGlassViewer()->computeDisplayToWorld(size[0] / 2, size[1] / 2, 0, newPickPoint);
+    m_myData->get2DMagnifyingGlassViewer()->computeDisplayToWorld(size.width() / 2, size.height() / 2, 0, newPickPoint);
 
     m_2DViewer->getLastEventWorldCoordinate(oldPickPoint);
 
@@ -132,11 +132,11 @@ void MagnifyingGlassTool::updateMagnifyingGlassWidget()
     // Movem la finestra per que acompanyi el cursor
     QPoint eventPosition = m_2DViewer->getEventPosition();
 
-    int *windowSize = m_2DViewer->getRenderWindowSize();
     // Remember to flip y
-    QPoint point = QPoint(eventPosition.x(), windowSize[1] - eventPosition.y());
+    QSize windowSize = m_2DViewer->getRenderWindowSize();
+    eventPosition.setY(windowSize.height() - eventPosition.y());
 
-    m_myData->get2DMagnifyingGlassViewer()->move(point.x() + 100, point.y() + 100);
+    m_myData->get2DMagnifyingGlassViewer()->move(eventPosition.x() + 100, eventPosition.y() + 100);
     m_myData->get2DMagnifyingGlassViewer()->pan(motionVector);
 }
 

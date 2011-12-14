@@ -62,13 +62,13 @@ void WindowLevelTool::doWindowLevel()
     m_viewer->setCursor(QCursor(QPixmap(":/images/windowLevel.png")));
     m_windowLevelCurrentPosition = m_viewer->getEventPosition();
 
-    int *size = m_viewer->getRenderWindowSize();
+    QSize size = m_viewer->getRenderWindowSize();
     double window = m_initialWindow;
     double level = m_initialLevel;
 
     // Compute normalized delta
-    double dx = 4.0 * (m_windowLevelCurrentPosition.x() - m_windowLevelStartPosition.x()) / size[0];
-    double dy = 4.0 * (m_windowLevelStartPosition.y() - m_windowLevelCurrentPosition.y()) / size[1];
+    double dx = 4.0 * (m_windowLevelCurrentPosition.x() - m_windowLevelStartPosition.x()) / size.width();
+    double dy = 4.0 * (m_windowLevelStartPosition.y() - m_windowLevelCurrentPosition.y()) / size.height();
 
     // Scale by current values
     if (fabs(window) > 0.01)

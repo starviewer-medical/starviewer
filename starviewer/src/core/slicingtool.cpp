@@ -12,7 +12,7 @@ namespace udg {
 
 SlicingTool::SlicingTool(QViewer *viewer, QObject *parent)
  : Tool(viewer, parent), m_slicingMode(SliceMode), m_mouseMovement(false), m_numberOfImages(1),
-   m_screenSize(0), m_inputHasPhases(false), m_forcePhaseMode(false)
+   m_inputHasPhases(false), m_forcePhaseMode(false)
 {
     m_state = None;
     m_toolName = "SlicingTool";
@@ -107,17 +107,16 @@ void SlicingTool::doSlicing()
 {
     if (m_state == Slicing)
     {
-        Q_ASSERT(m_screenSize);
+        Q_ASSERT(m_screenSize.isValid());
         m_viewer->setCursor(QCursor(QPixmap(":/images/slicing.png")));
         m_currentPosition.setY(m_2DViewer->getEventPosition().y());
 
         // Increment normalitzat segons la mida de la finestra i el nombre de llesques
-        double increase = (1.75 * (m_currentPosition.y() - m_startPosition.y()) / (double)m_screenSize[1]) * m_numberOfImages;
+        double increase = (1.75 * (m_currentPosition.y() - m_startPosition.y()) / (double)m_screenSize.height()) * m_numberOfImages;
         m_startPosition.setY(m_currentPosition.y());
 
-        int value = 0;
         // Canviem un nombre de llesques segons el desplaçament del mouse
-        value = (int)qRound(increase);
+        int value = qRound(increase);
         if (value == 0)
         {
             if (increase > 0)
