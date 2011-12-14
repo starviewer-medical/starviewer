@@ -137,10 +137,7 @@ void MagnifyingGlassTool::updateMagnifyingGlassWidget()
     // Remember to flip y
     QPoint point = QPoint(eventPositionX, windowSize[1] - eventPositionY);
 
-    // Map to global
-    QPoint globalPoint = m_2DViewer->mapToGlobal(point);
     m_myData->get2DMagnifyingGlassViewer()->move(point.x() + 100, point.y() + 100);
-
     m_myData->get2DMagnifyingGlassViewer()->pan(motionVector);
 }
 
