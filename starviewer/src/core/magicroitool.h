@@ -76,7 +76,7 @@ private:
     void modifyRegionByFactor();
 
     ///Troba els extrems per cada configuració
-    void assignBounds(int &minX, int &minY, int &maxX, int &maxY);
+    void setBounds(int &minX, int &minY, int &maxX, int &maxY);
 
     ///Mini parche per obtenir el valor de Voxel depenent de si és Axial, Coronal o Sagital
     double getVoxelValue(int x, int y, int z);
