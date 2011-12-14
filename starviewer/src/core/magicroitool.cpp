@@ -136,7 +136,7 @@ void MagicROITool::setTextPosition(DrawerText *text)
     text->setAttachmentPoint(attachmentPoint);
 }
 
-void MagicROITool::assignBounds(int &minX, int &minY, int &maxX, int &maxY)
+void MagicROITool::setBounds(int &minX, int &minY, int &maxX, int &maxY)
 {
     int ext[6];
     m_2DViewer->getInput()->getWholeExtent(ext);
@@ -296,7 +296,7 @@ void MagicROITool::computeRegionMask()
     y = index[yIndex];
     z = index[zIndex];
 
-    this->assignBounds(minX, minY, maxX, maxY);
+    this->setBounds(minX, minY, maxX, maxY);
 
     // Creem la màscara
     if (minX == 0 && minY == 0)
@@ -433,7 +433,7 @@ void MagicROITool::computePolygon()
     int maxX;
     int maxY;
     
-    this->assignBounds(minX, minY, maxX, maxY);
+    this->setBounds(minX, minY, maxX, maxY);
 
     int i = minX;
     int j;
@@ -610,7 +610,7 @@ double MagicROITool::getStandardDeviation(int x, int y, int z)
     int maxX;
     int maxY;
     
-    this->assignBounds(minX, minY, maxX, maxY);
+    this->setBounds(minX, minY, maxX, maxY);
 
     minX = qMax(x - MagicSize, minX);
     maxX = qMin(x + MagicSize, maxX);
