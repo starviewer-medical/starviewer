@@ -26,6 +26,7 @@ MagicROITool::MagicROITool(QViewer *viewer, QObject *parent)
     m_toolName = "MagicROITool";
 
     m_roiPolygon = NULL;
+    m_filledRoiPolygon = NULL;
 
     connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(initialize()));
     connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(restartRegion()));
@@ -45,6 +46,12 @@ void MagicROITool::deleteTemporalRepresentation()
         delete m_roiPolygon;
         m_2DViewer->render();
     }
+    if (!m_filledRoiPolygon.isNull())
+    {
+        m_filledRoiPolygon->decreaseReferenceCount();
+        delete m_filledRoiPolygon;
+        m_2DViewer->render();
+    }
 }
 
 void MagicROITool::initialize()
@@ -56,8 +63,15 @@ void MagicROITool::initialize()
         delete m_roiPolygon;
         m_2DViewer->render();
     }
+    if (!m_filledRoiPolygon.isNull())
+    {
+        m_filledRoiPolygon->decreaseReferenceCount();
+        delete m_filledRoiPolygon;
+        m_2DViewer->render();
+    }
 
     m_roiPolygon = NULL;
+    m_filledRoiPolygon = NULL;
 }
 
 void MagicROITool::handleEvent(unsigned long eventID)
@@ -168,6 +182,11 @@ void MagicROITool::startRegion()
             m_roiPolygon = new DrawerPolygon;
             m_roiPolygon->increaseReferenceCount();
             m_2DViewer->getDrawer()->draw(m_roiPolygon);
+            m_filledRoiPolygon = new DrawerPolygon();
+            m_filledRoiPolygon->increaseReferenceCount();
+            m_filledRoiPolygon->setFilled(true);
+            m_filledRoiPolygon->setOpacity(0.5);
+            m_2DViewer->getDrawer()->draw(m_filledRoiPolygon);
 
             this->generateRegion();
         }
@@ -188,10 +207,26 @@ void MagicROITool::endRegion()
         // Re-iniciem el punter
         m_roiPolygon = NULL;
     }
+
+    if (m_filledRoiPolygon)
+    {
+        // Alliberem la primitiva perquè es pugui esborrar
+        m_filledRoiPolygon->decreaseReferenceCount();
+        // Esborrem el polígon ple del visor i el destruïm
+        m_2DViewer->getDrawer()->erasePrimitive(m_filledRoiPolygon);
+        delete m_filledRoiPolygon;
+        m_filledRoiPolygon = NULL;
+    }
 }
 
 void MagicROITool::restartRegion()
 {
+    if (!m_filledRoiPolygon.isNull())
+    {
+        m_filledRoiPolygon->decreaseReferenceCount();
+        delete m_filledRoiPolygon;
+    }
+
     if (!m_roiPolygon.isNull())
     {
         m_roiPolygon->decreaseReferenceCount();
@@ -428,6 +463,7 @@ void MagicROITool::computePolygon()
     y = j - 1;
     z = m_2DViewer->getCurrentSlice();
     m_roiPolygon->removeVertices();
+    m_filledRoiPolygon->removeVertices();
     
     this->addPoint(7, x, y, z);
     this->addPoint(1, x, y, z);
@@ -463,6 +499,7 @@ void MagicROITool::computePolygon()
     }
 
     m_roiPolygon->update();
+    m_filledRoiPolygon->update();
     m_hasToComputeStatisticsData = true;
 }
 
@@ -553,6 +590,7 @@ void MagicROITool::addPoint(int direction, int x, int y, double z)
     point[zIndex] = z * spacing[zIndex] + origin[zIndex];
 
     m_roiPolygon->addVertix(point);
+    m_filledRoiPolygon->addVertix(point);
 }
 
 bool MagicROITool::isLoopReached()

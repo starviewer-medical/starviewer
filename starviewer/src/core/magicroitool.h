@@ -107,6 +107,9 @@ private:
 
     /// Coordenades de món a on s'ha fet el click inicial
     double m_pickedPosition[3];
+
+    /// Polígon ple que es mostrarà durant l'edició de la ROI.
+    QPointer<DrawerPolygon> m_filledRoiPolygon;
 };
 
 }
