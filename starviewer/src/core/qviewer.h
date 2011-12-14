@@ -74,8 +74,6 @@ public:
     /// Mètodes per obtenir l'actual i/o l'anterior coordenada del cursor
     /// del ratolí durant l'últim event
     /// Les coordenades retornades estan en sistema de coordenades de Display
-    int* getEventPosition();
-    int* getLastEventPosition();
     void getEventPosition(int position[2]);
     void getLastEventPosition(int position[2]);
     int getEventPositionX();
