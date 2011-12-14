@@ -56,7 +56,7 @@ void ZoomTool::doZoom()
     {
         m_viewer->setCursor(QCursor(QPixmap(":/images/zoom.png")));
         double *center = m_viewer->getRenderer()->GetCenter();
-        int dy = m_viewer->getEventPositionY() - m_viewer->getLastEventPositionY();
+        int dy = m_viewer->getEventPosition().y() - m_viewer->getLastEventPosition().y();
         // TODO el 10.0 és un valor constant que podria refinar-se si es volgués (motion factor)
         double dyf = 10.0 * (double)(dy) / (double)(center[1]);
         m_viewer->zoom(pow((double)1.1, dyf));

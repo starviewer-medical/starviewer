@@ -78,10 +78,6 @@ public:
     QPoint getLastEventPosition() const;
     void getEventPosition(int position[2]) const;
     void getLastEventPosition(int position[2]) const;
-    int getEventPositionX() const;
-    int getEventPositionY() const;
-    int getLastEventPositionX() const;
-    int getLastEventPositionY() const;
 
     /// Ens diu si el viewer és actiu en aquell moment
     /// @return Cert si actiu, fals altrament
