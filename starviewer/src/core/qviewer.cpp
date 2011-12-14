@@ -130,12 +130,12 @@ int* QViewer::getRenderWindowSize() const
 
 QPoint QViewer::getEventPosition() const
 {
-    return QPoint(this->getEventPositionX(), this->getEventPositionY());
+    return QPoint(this->getInteractor()->GetEventPosition()[0], this->getInteractor()->GetEventPosition()[1]);
 }
 
 QPoint QViewer::getLastEventPosition() const
 {
-    return QPoint(this->getLastEventPositionX(), this->getLastEventPositionY());
+    return QPoint(this->getInteractor()->GetLastEventPosition()[0], this->getInteractor()->GetLastEventPosition()[1]);
 }
 
 void QViewer::getEventPosition(int position[2]) const
@@ -146,26 +146,6 @@ void QViewer::getEventPosition(int position[2]) const
 void QViewer::getLastEventPosition(int position[2]) const
 {
     this->getInteractor()->GetLastEventPosition(position);
-}
-
-int QViewer::getEventPositionX() const
-{
-    return this->getInteractor()->GetEventPosition()[0];
-}
-
-int QViewer::getEventPositionY() const
-{
-    return this->getInteractor()->GetEventPosition()[1];
-}
-
-int QViewer::getLastEventPositionX() const
-{
-    return this->getInteractor()->GetLastEventPosition()[0];
-}
-
-int QViewer::getLastEventPositionY() const
-{
-    return this->getInteractor()->GetLastEventPosition()[1];
 }
 
 bool QViewer::isActive() const
@@ -643,12 +623,11 @@ void QViewer::contextMenuRelease()
     // Extret dels exemples de vtkEventQtSlotConnect
 
     // Obtenim la posició de l'event
-    int eventPositionX = this->getEventPositionX();
-    int eventPositionY = this->getEventPositionY();
+    QPoint point = this->getEventPosition();
 
-    int *size = this->getRenderWindowSize();
     // Remember to flip y
-    QPoint point = QPoint(eventPositionX, size[1] - eventPositionY);
+    int *size = this->getRenderWindowSize();
+    point.setY(size[1] - point.y());
 
     // Map to global
     QPoint globalPoint = this->mapToGlobal(point);

@@ -111,7 +111,7 @@ void SlicingTool::doSlicing()
     {
         Q_ASSERT(m_screenSize);
         m_viewer->setCursor(QCursor(QPixmap(":/images/slicing.png")));
-        m_currentPosition[1] = m_2DViewer->getEventPositionY();
+        m_currentPosition[1] = m_2DViewer->getEventPosition().y();
 
         // Increment normalitzat segons la mida de la finestra i el nombre de llesques
         double increase = (1.75 * (m_currentPosition[1] - m_startPosition[1]) / (double)m_screenSize[1]) * m_numberOfImages;
