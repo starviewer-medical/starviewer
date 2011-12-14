@@ -1,6 +1,8 @@
 #ifndef UDGWINDOWLEVELTOOL_H
 #define UDGWINDOWLEVELTOOL_H
 
+#include <QPoint>
+
 #include "tool.h"
 
 namespace udg {
@@ -31,7 +33,8 @@ private slots:
 private:
     /// Valors per controlar el mapeig del window level
     double m_initialWindow, m_initialLevel, m_currentWindow, m_currentLevel;
-    int m_windowLevelStartPosition[2], m_windowLevelCurrentPosition[2];
+    QPoint m_windowLevelStartPosition;
+    QPoint m_windowLevelCurrentPosition;
 
     /// Estats d'execució de la tool
     int m_state;

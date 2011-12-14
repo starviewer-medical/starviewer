@@ -120,7 +120,7 @@ void TransDifferenceTool::setToolData(ToolData *data)
 void TransDifferenceTool::startTransDifference()
 {
     m_state = Moving;
-    m_viewer->getEventPosition(m_startPosition);
+    m_startPosition = m_viewer->getEventPosition();
     m_dx = 0;
     m_dy = 0;
 }
@@ -130,12 +130,11 @@ void TransDifferenceTool::doTransDifference()
     // TODO: canviar imatge
     m_viewer->setCursor(QCursor(QPixmap(":/images/moveDifference.png")));
 
-    int currentPosition[2];
-    m_viewer->getEventPosition(currentPosition);
+    QPoint currentPosition = m_viewer->getEventPosition();
 
     // Compute normalized delta
-    m_dx = (int)(currentPosition[0] - m_startPosition[0]);
-    m_dy = (int)(m_startPosition[1] - currentPosition[1]);
+    m_dx = currentPosition.x() - m_startPosition.x();
+    m_dy = m_startPosition.y() - currentPosition.y();
 
     this->increaseSingleDifferenceImage(m_dx, m_dy);
 
