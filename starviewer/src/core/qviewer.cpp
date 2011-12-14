@@ -108,52 +108,52 @@ QViewer::~QViewer()
     m_vtkQtConnections->Delete();
 }
 
-vtkRenderWindowInteractor* QViewer::getInteractor()
+vtkRenderWindowInteractor* QViewer::getInteractor() const
 {
     return m_vtkWidget->GetRenderWindow()->GetInteractor();
 }
 
-vtkRenderer* QViewer::getRenderer()
+vtkRenderer* QViewer::getRenderer() const
 {
     return m_renderer;
 }
 
-vtkRenderWindow* QViewer::getRenderWindow()
+vtkRenderWindow* QViewer::getRenderWindow() const
 {
     return m_vtkWidget->GetRenderWindow();
 }
 
-int* QViewer::getRenderWindowSize()
+int* QViewer::getRenderWindowSize() const
 {
     return this->getRenderWindow()->GetSize();
 }
 
-void QViewer::getEventPosition(int position[2])
+void QViewer::getEventPosition(int position[2]) const
 {
     this->getInteractor()->GetEventPosition(position);
 }
 
-void QViewer::getLastEventPosition(int position[2])
+void QViewer::getLastEventPosition(int position[2]) const
 {
     this->getInteractor()->GetLastEventPosition(position);
 }
 
-int QViewer::getEventPositionX()
+int QViewer::getEventPositionX() const
 {
     return this->getInteractor()->GetEventPosition()[0];
 }
 
-int QViewer::getEventPositionY()
+int QViewer::getEventPositionY() const
 {
     return this->getInteractor()->GetEventPosition()[1];
 }
 
-int QViewer::getLastEventPositionX()
+int QViewer::getLastEventPositionX() const
 {
     return this->getInteractor()->GetLastEventPosition()[0];
 }
 
-int QViewer::getLastEventPositionY()
+int QViewer::getLastEventPositionY() const
 {
     return this->getInteractor()->GetLastEventPosition()[1];
 }
@@ -903,7 +903,7 @@ void QViewer::initializeWorkInProgressByViewerStatus(ViewerStatus status)
     }
 }
 
-SynchronizationEditionWidget* QViewer::getSynchronizationEditionWidget()
+SynchronizationEditionWidget* QViewer::getSynchronizationEditionWidget() const
 {
     return m_synchronizationEditionWidget;
 }
