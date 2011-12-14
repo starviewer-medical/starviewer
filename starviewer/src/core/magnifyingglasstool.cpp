@@ -121,7 +121,7 @@ void MagnifyingGlassTool::updateMagnifyingGlassWidget()
     
     int *size = m_myData->get2DMagnifyingGlassViewer()->getRenderWindowSize();
 
-    m_myData->get2DMagnifyingGlassViewer()->computeDisplayToWorld(size[0] / 2, size[1] / 2, size[2] / 2, newPickPoint);
+    m_myData->get2DMagnifyingGlassViewer()->computeDisplayToWorld(size[0] / 2, size[1] / 2, 0, newPickPoint);
 
     m_2DViewer->getLastEventWorldCoordinate(oldPickPoint);
 
