@@ -16,10 +16,8 @@ SlicingTool::SlicingTool(QViewer *viewer, QObject *parent)
 {
     m_state = None;
     m_toolName = "SlicingTool";
-    m_startPosition[0] = 0;
-    m_startPosition[1] = 0;
-    m_currentPosition[0] = 0;
-    m_currentPosition[1] = 0;
+    m_startPosition = QPoint(0, 0);
+    m_currentPosition = QPoint(0, 0);
     m_2DViewer = qobject_cast<Q2DViewer*>(viewer);
     // Ens assegurem que desde la creació tenim un viewer vàlid
     Q_ASSERT(m_2DViewer);
@@ -99,7 +97,7 @@ void SlicingTool::handleEvent(unsigned long eventID)
 void SlicingTool::startSlicing()
 {
     m_state = Slicing;
-    m_2DViewer->getEventPosition(m_startPosition);
+    m_startPosition = m_2DViewer->getEventPosition();
     // Calculem el nombre d'imatges que manipulem
     computeImagesForScrollMode();
     m_screenSize = m_2DViewer->getRenderWindowSize();
@@ -111,11 +109,11 @@ void SlicingTool::doSlicing()
     {
         Q_ASSERT(m_screenSize);
         m_viewer->setCursor(QCursor(QPixmap(":/images/slicing.png")));
-        m_currentPosition[1] = m_2DViewer->getEventPosition().y();
+        m_currentPosition.setY(m_2DViewer->getEventPosition().y());
 
         // Increment normalitzat segons la mida de la finestra i el nombre de llesques
-        double increase = (1.75 * (m_currentPosition[1] - m_startPosition[1]) / (double)m_screenSize[1]) * m_numberOfImages;
-        m_startPosition[1] = m_currentPosition[1];
+        double increase = (1.75 * (m_currentPosition.y() - m_startPosition.y()) / (double)m_screenSize[1]) * m_numberOfImages;
+        m_startPosition.setY(m_currentPosition.y());
 
         int value = 0;
         // Canviem un nombre de llesques segons el desplaçament del mouse

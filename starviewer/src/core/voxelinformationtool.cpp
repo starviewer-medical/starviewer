@@ -142,16 +142,15 @@ void VoxelInformationTool::computeCaptionAttachmentPointAndTextAlignment(double 
     int marginPixels = 50;
     // Calculem les mides del viewport per saber on tenim col·locat el cursor
     int *viewportSize = m_2DViewer->getRenderWindowSize();
-    int cursorPosition[2];
-    m_2DViewer->getEventPosition(cursorPosition);
+    QPoint cursorPosition = m_2DViewer->getEventPosition();
 
     // Aquestes seran les coordenades que ajustarem per col·locar el caption
-    double adjustedXCursorPosition = cursorPosition[0];
-    double adjustedYCursorPosition = cursorPosition[1];
+    double adjustedXCursorPosition = cursorPosition.x();
+    double adjustedYCursorPosition = cursorPosition.y();
 
     bool insideMargins = true;
     // Estem quasi a dalt de tot?
-    if (cursorPosition[1] > viewportSize[1] - marginPixels)
+    if (cursorPosition.y() > viewportSize[1] - marginPixels)
     {
         adjustedYCursorPosition = viewportSize[1] - marginPixels;
         verticalJustification = "Bottom";
@@ -159,7 +158,7 @@ void VoxelInformationTool::computeCaptionAttachmentPointAndTextAlignment(double 
     }
 
     // Estem quasi abaix del tot?
-    if (cursorPosition[1] < marginPixels)
+    if (cursorPosition.y() < marginPixels)
     {
         adjustedYCursorPosition = marginPixels;
         verticalJustification = "Top";
@@ -167,7 +166,7 @@ void VoxelInformationTool::computeCaptionAttachmentPointAndTextAlignment(double 
     }
 
     // Estem a prop de la dreta?
-    if (cursorPosition[0] > viewportSize[0] - marginPixels)
+    if (cursorPosition.x() > viewportSize[0] - marginPixels)
     {
         adjustedXCursorPosition = viewportSize[0] - marginPixels;
         horizontalJustification = "Right";
@@ -175,7 +174,7 @@ void VoxelInformationTool::computeCaptionAttachmentPointAndTextAlignment(double 
     }
 
     // Estem a prop de l'esquerra?
-    if (cursorPosition[0] < marginPixels)
+    if (cursorPosition.x() < marginPixels)
     {
         adjustedXCursorPosition = marginPixels;
         horizontalJustification = "Left";

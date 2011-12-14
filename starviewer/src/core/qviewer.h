@@ -76,8 +76,6 @@ public:
     /// Les coordenades retornades estan en sistema de coordenades de Display
     QPoint getEventPosition() const;
     QPoint getLastEventPosition() const;
-    void getEventPosition(int position[2]) const;
-    void getLastEventPosition(int position[2]) const;
 
     /// Ens diu si el viewer és actiu en aquell moment
     /// @return Cert si actiu, fals altrament

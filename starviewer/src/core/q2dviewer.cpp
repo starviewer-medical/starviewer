@@ -1566,9 +1566,8 @@ bool Q2DViewer::getCurrentCursorImageCoordinate(double xyz[3])
         return inside;
     }
 
-    int position[2];
-    this->getEventPosition(position);
-    if (m_imagePointPicker->PickProp(position[0], position[1], getRenderer()))
+    QPoint position = this->getEventPosition();
+    if (m_imagePointPicker->PickProp(position.x(), position.y(), getRenderer()))
     {
         inside = true;
         // Calculem el pixel trobat

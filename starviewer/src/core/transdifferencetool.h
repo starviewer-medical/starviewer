@@ -1,6 +1,8 @@
 #ifndef UDGTRANSDIFFERENCETOOL_H
 #define UDGTRANSDIFFERENCETOOL_H
 
+#include <QPoint>
+
 #include "tool.h"
 
 namespace udg {
@@ -55,7 +57,7 @@ private:
     Q2DViewer *m_2DViewer;
 
     /// Valors per controlar la translació
-    int m_startPosition[2];
+    QPoint m_startPosition;
     int m_dx, m_dy;
 
     /// Estats d'execució de la tool

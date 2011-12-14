@@ -138,16 +138,6 @@ QPoint QViewer::getLastEventPosition() const
     return QPoint(this->getInteractor()->GetLastEventPosition()[0], this->getInteractor()->GetLastEventPosition()[1]);
 }
 
-void QViewer::getEventPosition(int position[2]) const
-{
-    this->getInteractor()->GetEventPosition(position);
-}
-
-void QViewer::getLastEventPosition(int position[2]) const
-{
-    this->getInteractor()->GetLastEventPosition(position);
-}
-
 bool QViewer::isActive() const
 {
     return m_isActive;
@@ -241,19 +231,19 @@ void QViewer::getLastEventWorldCoordinate(double worldCoordinate[3])
 
 void QViewer::getRecentEventWorldCoordinate(double worldCoordinate[3], bool current)
 {
-    int position[2];
+    QPoint position;
 
     if (current)
     {
-        this->getEventPosition(position);
+        position = this->getEventPosition();
     }
     else
     {
-        this->getLastEventPosition(position);
+        position = this->getLastEventPosition();
     }
 
     double computedCoordinate[4];
-    this->computeDisplayToWorld(position[0], position[1], 0, computedCoordinate);
+    this->computeDisplayToWorld(position.x(), position.y(), 0, computedCoordinate);
     worldCoordinate[0] = computedCoordinate[0];
     worldCoordinate[1] = computedCoordinate[1];
     worldCoordinate[2] = computedCoordinate[2];

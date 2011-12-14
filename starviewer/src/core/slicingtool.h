@@ -1,6 +1,8 @@
 #ifndef UDGSLICINGTOOL_H
 #define UDGSLICINGTOOL_H
 
+#include <QPoint>
+
 #include "tool.h"
 
 namespace udg {
@@ -78,7 +80,8 @@ private:
     enum { SliceMode, PhaseMode };
 
     /// Coordenades per calcular el moviment del mouse que determina com incrmentar o decrementar l'slicing
-    int m_startPosition[2], m_currentPosition[2];
+    QPoint m_startPosition;
+    QPoint m_currentPosition;
 
     /// Estats d'execució de la tool
     int m_state;
