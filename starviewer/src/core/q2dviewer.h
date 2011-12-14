@@ -158,6 +158,9 @@ public:
     /// Si el thickslab no està actiu, el valor és indefinit
     int getSlabProjectionMode() const;
 
+    /// Ens indica si la imatge està invertida
+    bool isImageFlipped() const;
+
     /// Obtenim el gruix de l'slab
     /// Si el thickslab no està actiu, el valor és indefinit
     int getSlabThickness() const;
@@ -252,6 +255,12 @@ public slots:
     /// tantes "times" com li indiquem, per defecte sempre serà 1 "time"
     void rotateCounterClockWise(int times = 1);
 
+    /// Retorna el factor absolut de rotació
+    int getRotationFactor() const;
+    
+    /// Aplica el factor de rotació absolut de 90 en 90 graus. 0: 0º, 1: 90º, 2: 180º, 3: 270º
+    void setRotationFactor(int factor);
+
     /// Aplica un flip horitzontal/vertical sobre la imatge. El flip vertical es farà com una rotació de 180º seguida d'un flip horitzontal
     void horizontalFlip();
     void verticalFlip();
@@ -312,6 +321,12 @@ signals:
     /// Senyal que s'envia quan ha canviat l'overlay
     void overlayChanged();
     void overlayModified();
+
+    /// Indica el factor de rotació absolut
+    void rotationFactorChanged(int factor);
+    
+    /// Indica que s'ha realitzat un flip horitzontal
+    void flippedHorizontally();
 
 protected:
     /// Processem l'event de resize de la finestra Qt

@@ -39,6 +39,7 @@ const QString Shortcuts::VerticalFlipTool(ShortcutsBase + "VerticalFlipTool");
 const QString Shortcuts::ClearCurrentViewAnnotationsTool(ShortcutsBase + "ClearCurrentViewAnnotationsActionTool");
 const QString Shortcuts::TransDifferenceTool(ShortcutsBase + "TransDifferenceActionTool");
 const QString Shortcuts::OvalROITool(ShortcutsBase + "OvalROITool");
+const QString Shortcuts::MagnifyingGlassTool(ShortcutsBase + "MagnifyingGlassTool");
 
 const QString Shortcuts::SaveSingleScreenShot(ShortcutsBase + "SaveSingleScreenShot");
 const QString Shortcuts::SaveWholeSeriesScreenShot(ShortcutsBase + "SaveWholeSeriesScreenShot");
@@ -297,6 +298,10 @@ void Shortcuts::init()
     shortcutsList.clear();
     shortcutsList.append(QString("Ctrl+Shift+M"));
     settingsRegistry->addSetting(MaximizeMultipleScreens, shortcutsList);
+
+    shortcutsList.clear();
+    shortcutsList.append(QString("")); // TODO Falta tecla de shortcut 
+    settingsRegistry->addSetting(MagnifyingGlassTool, shortcutsList);
 }
 
 } // End namespace udg

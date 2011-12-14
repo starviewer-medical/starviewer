@@ -204,6 +204,7 @@ void Q2DViewer::horizontalFlip()
     m_applyFlip = true;
     updateCamera();
     render();
+    emit flippedHorizontally();
 }
 
 void Q2DViewer::verticalFlip()
@@ -302,6 +303,19 @@ PatientOrientation Q2DViewer::getCurrentDisplayedImagePatientOrientation() const
     patientOrientation.setLabels(rowLabel, columnLabel);
 
     return patientOrientation;
+}
+
+int Q2DViewer::getRotationFactor() const
+{
+    return m_rotateFactor;
+}
+
+void Q2DViewer::setRotationFactor(int factor)
+{
+    m_rotateFactor = factor % 4;
+    emit rotationFactorChanged(m_rotateFactor);
+    updateCamera();
+    render();
 }
 
 QString Q2DViewer::getCurrentAnatomicalPlaneLabel() const
@@ -2060,6 +2074,11 @@ bool Q2DViewer::isThickSlabActive() const
     return m_thickSlabActive;
 }
 
+bool Q2DViewer::isImageFlipped() const
+{
+    return m_isImageFlipped;
+}
+
 void Q2DViewer::computeRangeAndSlice(int newSlabThickness)
 {
     // Checking del nou valor
@@ -2429,6 +2448,7 @@ void Q2DViewer::rotate(int times)
     }
 
     m_rotateFactor = (m_rotateFactor + times) % 4;
+    emit rotationFactorChanged(m_rotateFactor);
 }
 
 void Q2DViewer::fitImageIntoViewport()
