@@ -2,6 +2,7 @@
 #define UDGSLICINGTOOL_H
 
 #include <QPoint>
+#include <QSize>
 
 #include "tool.h"
 
@@ -92,7 +93,7 @@ private:
 
     /// Mida de la pantalla
     /// Útil per calcular l'increment proporcional de llesques
-    int *m_screenSize;
+    QSize m_screenSize;
 
     /// NOMÉS PER ESTADÍSTIQUES
     /// Compta el nombre de passos (endavant o enrera) que es fan seguits amb la rodeta

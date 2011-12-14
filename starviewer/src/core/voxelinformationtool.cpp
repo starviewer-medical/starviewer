@@ -141,7 +141,7 @@ void VoxelInformationTool::computeCaptionAttachmentPointAndTextAlignment(double 
     // Amb aquest valor definim el marge fins on considerem estar prou a prop d'alguna de les cantonades del visor
     int marginPixels = 50;
     // Calculem les mides del viewport per saber on tenim col·locat el cursor
-    int *viewportSize = m_2DViewer->getRenderWindowSize();
+    QSize viewportSize = m_2DViewer->getRenderWindowSize();
     QPoint cursorPosition = m_2DViewer->getEventPosition();
 
     // Aquestes seran les coordenades que ajustarem per col·locar el caption
@@ -149,9 +149,9 @@ void VoxelInformationTool::computeCaptionAttachmentPointAndTextAlignment(double 
 
     bool insideMargins = true;
     // Estem quasi a dalt de tot?
-    if (cursorPosition.y() > viewportSize[1] - marginPixels)
+    if (cursorPosition.y() > viewportSize.height() - marginPixels)
     {
-        adjustedCursorPosition.setY(viewportSize[1] - marginPixels);
+        adjustedCursorPosition.setY(viewportSize.height() - marginPixels);
         verticalJustification = "Bottom";
         insideMargins = false;
     }
@@ -165,9 +165,9 @@ void VoxelInformationTool::computeCaptionAttachmentPointAndTextAlignment(double 
     }
 
     // Estem a prop de la dreta?
-    if (cursorPosition.x() > viewportSize[0] - marginPixels)
+    if (cursorPosition.x() > viewportSize.width() - marginPixels)
     {
-        adjustedCursorPosition.setX(viewportSize[0] - marginPixels);
+        adjustedCursorPosition.setX(viewportSize.width() - marginPixels);
         horizontalJustification = "Right";
         insideMargins = false;
     }

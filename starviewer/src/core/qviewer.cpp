@@ -123,9 +123,9 @@ vtkRenderWindow* QViewer::getRenderWindow() const
     return m_vtkWidget->GetRenderWindow();
 }
 
-int* QViewer::getRenderWindowSize() const
+QSize QViewer::getRenderWindowSize() const
 {
-    return this->getRenderWindow()->GetSize();
+    return QSize(this->getRenderWindow()->GetSize()[0], this->getRenderWindow()->GetSize()[1]);
 }
 
 QPoint QViewer::getEventPosition() const
@@ -510,14 +510,14 @@ void QViewer::scaleToFit3D(double topCorner[3], double bottomCorner[3], double m
 
     // Ajustem la imatge segons si la finestra és més estreta per ample o per alçada. Si volem que es vegi tota la regió que em escollit, ajustarem per el que
     // sigui més estret, si ajustèssim pel més ample perderiem imatge per l'altre part
-    int *size = this->getRenderWindowSize();
-    if ((width / size[0]) > (height / size[1]))
+    QSize size = this->getRenderWindowSize();
+    if ((width / size.width()) > (height / size.height()))
     {
-        this->zoom((size[0] / (float)width) * (1.0 - marginRate));
+        this->zoom((size.width() / (float)width) * (1.0 - marginRate));
     }
     else
     {
-        this->zoom((size[1] / (float)height) * (1.0 - marginRate));
+        this->zoom((size.height() / (float)height) * (1.0 - marginRate));
     }
 }
 
@@ -616,8 +616,8 @@ void QViewer::contextMenuRelease()
     QPoint point = this->getEventPosition();
 
     // Remember to flip y
-    int *size = this->getRenderWindowSize();
-    point.setY(size[1] - point.y());
+    QSize size = this->getRenderWindowSize();
+    point.setY(size.height() - point.y());
 
     // Map to global
     QPoint globalPoint = this->mapToGlobal(point);

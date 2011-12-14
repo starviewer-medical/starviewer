@@ -69,7 +69,7 @@ public:
 
     /// Retorna la mida en coordenades de pantalla (píxels?) de tot el viewport del viewer
     /// amaga la crida vtkRenderWindow::GetSize()
-    int* getRenderWindowSize() const;
+    QSize getRenderWindowSize() const;
 
     /// Mètodes per obtenir l'actual i/o l'anterior coordenada del cursor
     /// del ratolí durant l'últim event
