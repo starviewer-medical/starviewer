@@ -46,28 +46,26 @@ void MagnifyingGlassTool::handleEvent(unsigned long eventID)
             double xyz[3];
             if (m_2DViewer->getCurrentCursorImageCoordinate(xyz))
             {
-                    this->updateMagnifyingGlassWidgetPosition();
-                    updateMagnifiedImagePosition();
-                    m_myData->get2DMagnifyingGlassViewer()->show();
+                this->updateMagnifyingGlassWidgetPosition();
+                updateMagnifiedImagePosition();
+                m_myData->get2DMagnifyingGlassViewer()->show();
+
+                // HACK Cal tornar a fer zoom ja que si la finestra encara no s'ha mostrat
+                // el viewer no calcula correctament el zoom
+                if (!m_myData->viewerHasBeenShown())
+                {
+                    m_myData->get2DMagnifyingGlassViewer()->zoom(m_myData->getZoomFactor());
+                    m_myData->setViewerShown(true);
+                }
             }
             else
             {
                 m_myData->get2DMagnifyingGlassViewer()->hide();
             }
-
             break;
 
         case vtkCommand::EnterEvent:
-            updateMagnifyingGlassWidgetPosition();
             updateMagnifiedView();
-            m_myData->get2DMagnifyingGlassViewer()->show();
-            // HACK Cal tornar a fer zoom ja que si la finestra encara no s'ha mostrat
-            // el viewer no calcula correctament el zoom
-            if (!m_myData->viewerHasBeenShown())
-            {
-                m_myData->get2DMagnifyingGlassViewer()->zoom(m_myData->getZoomFactor());
-                m_myData->setViewerShown(true);
-            }
             break;
 
         case vtkCommand::LeaveEvent:
