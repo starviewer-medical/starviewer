@@ -24,7 +24,7 @@ public:
     bool event(QEvent *event);
 
     /// Posa la icona corresponent a l'estat del widget
-    void setState(ViewerEditionState state);
+    void setState(ViewerEditionState state, bool enable);
 
     /// Posa la imatge de fons al widget
     void setBackgroundImage(const QString &urlImage);
@@ -40,6 +40,10 @@ private slots:
 
     // Slot que tracta l'event que s'ha clicat el botó del widget.
     void buttonPress();
+
+private:
+
+    bool m_enable;
 };
 
 };

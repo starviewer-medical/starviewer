@@ -69,16 +69,16 @@ void AutomaticSynchronizationManager::updateEditionStateOfViewer(Q2DViewer *view
         {
             if (frameOfReferenceUID == m_toolData->getSelectedUID())
             {
-                viewer->getSynchronizationEditionWidget()->setState(SynchronizationEditionWidget::Selected);
+                viewer->getSynchronizationEditionWidget()->setState(SynchronizationEditionWidget::Selected, false);
             }
             else
             {
-                viewer->getSynchronizationEditionWidget()->setState(SynchronizationEditionWidget::AddedInOtherGroup);
+                viewer->getSynchronizationEditionWidget()->setState(SynchronizationEditionWidget::AddedInOtherGroup, true);
             }
         }
         else
         {
-            viewer->getSynchronizationEditionWidget()->setState(SynchronizationEditionWidget::ToAdd);
+            viewer->getSynchronizationEditionWidget()->setState(SynchronizationEditionWidget::ToAdd, true);
         }
     }
 }
@@ -99,14 +99,14 @@ void AutomaticSynchronizationManager::changeEditionState(Q2DViewer *viewer)
                 // Si tenim un frameOfReference diferent, es treu del grup
                 int newGroup = m_toolData->getNumberOfGroups();
                 m_toolData->setGroupForUID(frameOfReferenceUID, newGroup);
-                viewer->getSynchronizationEditionWidget()->setState(SynchronizationEditionWidget::ToAdd);
+                viewer->getSynchronizationEditionWidget()->setState(SynchronizationEditionWidget::ToAdd, true);
             }
         }
         else
         {
             // S'afegeix al grup seleccionat actualment
             m_toolData->setGroupForUID(frameOfReferenceUID, activeGroup);
-            viewer->getSynchronizationEditionWidget()->setState(SynchronizationEditionWidget::AddedInOtherGroup);
+            viewer->getSynchronizationEditionWidget()->setState(SynchronizationEditionWidget::AddedInOtherGroup, true);
         }
     }
 
