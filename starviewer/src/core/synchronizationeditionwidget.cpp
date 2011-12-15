@@ -26,9 +26,10 @@ void SynchronizationEditionWidget::setBackgroundImage(const QString &urlImage)
     setStyleSheet(QString::fromUtf8("background-color: rgba(75, 75, 75, 0);\n background-image:url(\"%1\");").arg(urlImage));
 }
 
-void SynchronizationEditionWidget::setState(ViewerEditionState state)
+void SynchronizationEditionWidget::setState(ViewerEditionState state, bool enable)
 {
     QPixmap pixmap;
+    m_enable = enable;
 
     switch (state)
     {
@@ -56,11 +57,11 @@ bool SynchronizationEditionWidget::event(QEvent *event)
 {
     if (event->type() == QEvent::Enter)
     {
-        m_icon->setEnabled(true);
+        m_icon->setEnabled(m_enable); // Només activem si és possible activar-lo
     }
     if (event->type() == QEvent::Leave)
     {
-        m_icon->setEnabled(false);
+        m_icon->setEnabled(false); // Al sortir sempre queda desactivat
     }
     else if (event->type() == QEvent::MouseButtonPress)
     {
