@@ -43,8 +43,18 @@ void MagnifyingGlassTool::handleEvent(unsigned long eventID)
     switch (eventID)
     {
         case vtkCommand::MouseMoveEvent:
-            this->updateMagnifyingGlassWidgetPosition();
-            updateMagnifiedImagePosition();
+            double xyz[3];
+            if (m_2DViewer->getCurrentCursorImageCoordinate(xyz))
+            {
+                    this->updateMagnifyingGlassWidgetPosition();
+                    updateMagnifiedImagePosition();
+                    m_myData->get2DMagnifyingGlassViewer()->show();
+            }
+            else
+            {
+                m_myData->get2DMagnifyingGlassViewer()->hide();
+            }
+
             break;
 
         case vtkCommand::EnterEvent:
