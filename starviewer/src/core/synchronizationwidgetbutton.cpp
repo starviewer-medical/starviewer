@@ -1,7 +1,7 @@
 #include "synchronizationwidgetbutton.h"
 #include "logging.h"
 
-#include <QEvent>
+#include <QMouseEvent>
 
 namespace udg {
 
@@ -16,17 +16,10 @@ SynchronizationWidgetButton::~SynchronizationWidgetButton()
 
 }
 
-bool SynchronizationWidgetButton::event(QEvent *event)
+void SynchronizationWidgetButton::mousePressEvent(QMouseEvent *mouseEvent)
 {
-    if (event->type() == QEvent::MouseButtonPress)
-    {
-        emit buttonPress();
-        event->accept();
-    }
-    else
-    {
-        return QFrame::event(event);
-    }
+    Q_UNUSED(mouseEvent);
+    emit buttonPress();
 }
 
 }
