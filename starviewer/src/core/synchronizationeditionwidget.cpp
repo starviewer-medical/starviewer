@@ -66,6 +66,7 @@ bool SynchronizationEditionWidget::event(QEvent *event)
     {
         Q2DViewer *viewer = dynamic_cast<Q2DViewer*>(parent());
         emit selectedItem(viewer);
+        return true;
     }
 
     return QFrame::event(event);
