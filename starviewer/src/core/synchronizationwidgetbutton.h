@@ -4,6 +4,8 @@
 #include <QLabel>
 #include <QWidget>
 
+class QMouseEvent;
+
 namespace udg {
 
 /**
@@ -19,8 +21,8 @@ public:
 
 public:
 
-    /// Tractament dels events
-    bool event(QEvent *event);
+    /// Tractament de l'event mousePressEvent
+    void mousePressEvent(QMouseEvent *mouseEvent);
 
 signals:
 
