@@ -12,10 +12,13 @@ SynchronizationEditionWidget::SynchronizationEditionWidget(QWidget *parent)
 
     m_icon->setAttribute(Qt::WA_TranslucentBackground);
     m_icon->setEnabled(false);
+
+    connect(m_icon, SIGNAL(buttonPress()), SLOT(buttonPress()));
 }
 
 SynchronizationEditionWidget::~SynchronizationEditionWidget()
 {
+
 }
 
 void SynchronizationEditionWidget::setBackgroundImage(const QString &urlImage)
@@ -66,6 +69,12 @@ bool SynchronizationEditionWidget::event(QEvent *event)
     }
 
     return QFrame::event(event);
+}
+
+void SynchronizationEditionWidget::buttonPress()
+{
+    Q2DViewer *viewer = dynamic_cast<Q2DViewer*>(parent());
+    emit buttonPress(viewer);
 }
 
 }

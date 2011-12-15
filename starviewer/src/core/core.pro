@@ -275,6 +275,7 @@ HEADERS += extensionfactory.h \
     systeminformation.h \
     systemrequeriments.h \
     systemrequerimentstest.h \
+    synchronizationwidgetbutton.h \
     magnifyingglasstool.h \
     magnifyingglasstooldata.h
 
@@ -509,6 +510,7 @@ SOURCES += extensionmediator.cpp \
     systeminformation.cpp \
     systemrequeriments.cpp \
     systemrequerimentstest.cpp \
+    synchronizationwidgetbutton.cpp \
     magnifyingglasstool.cpp \
     magnifyingglasstooldata.cpp
 win32 {
