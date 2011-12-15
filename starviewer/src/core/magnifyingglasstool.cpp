@@ -136,7 +136,10 @@ void MagnifyingGlassTool::updateMagnifyingGlassWidget()
     QSize windowSize = m_2DViewer->getRenderWindowSize();
     eventPosition.setY(windowSize.height() - eventPosition.y());
 
-    m_myData->get2DMagnifyingGlassViewer()->move(eventPosition.x() + 100, eventPosition.y() + 100);
+    // Map to global 
+    QPoint globalPoint = m_2DViewer->mapToGlobal(eventPosition);
+
+    m_myData->get2DMagnifyingGlassViewer()->move(globalPoint.x() + 10, globalPoint.y() + 10);
     m_myData->get2DMagnifyingGlassViewer()->pan(motionVector);
 }
 
