@@ -9,6 +9,7 @@ MagnifyingGlassToolData::MagnifyingGlassToolData(QObject *parent)
 {
     m_zoomFactor = 4;
     initializeViewer();
+    m_viewerHasBeenShown = false;
 }
 
 MagnifyingGlassToolData::~MagnifyingGlassToolData()
@@ -39,6 +40,16 @@ void MagnifyingGlassToolData::initializeViewer()
 Q2DViewer* MagnifyingGlassToolData::get2DMagnifyingGlassViewer() const
 {
     return m_2DMagnifyingGlassViewer;
+}
+
+void MagnifyingGlassToolData::setViewerShown(bool shown)
+{
+    m_viewerHasBeenShown = shown;
+}
+
+bool MagnifyingGlassToolData::viewerHasBeenShown() const
+{
+    return m_viewerHasBeenShown;
 }
 
 }
