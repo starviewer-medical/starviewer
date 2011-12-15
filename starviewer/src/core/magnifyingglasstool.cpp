@@ -13,8 +13,15 @@ MagnifyingGlassTool::MagnifyingGlassTool(QViewer *viewer, QObject *parent)
  : Tool(viewer,parent)
 {
     m_hasSharedData = true;
-    m_myData = new MagnifyingGlassToolData(viewer->parent());
-    m_toolData = m_myData;
+    if (!m_toolData)
+    {
+        m_myData = new MagnifyingGlassToolData(viewer->parent());
+        m_toolData = m_myData;
+    }
+    else
+    {
+        m_myData = dynamic_cast<MagnifyingGlassToolData*>(m_toolData);
+    }
         
     m_toolName = "MagnifyingGlassTool";
     m_2DViewer = qobject_cast<Q2DViewer*>(viewer);
