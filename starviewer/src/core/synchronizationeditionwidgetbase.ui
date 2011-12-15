@@ -95,7 +95,7 @@ background-image:url(&quot;&quot;);</string>
          <string notr="true">background-color: rgb(255, 255, 255,0);</string>
         </property>
         <property name="frameShape">
-         <enum>QFrame::Box</enum>
+         <enum>QFrame::NoFrame</enum>
         </property>
         <property name="text">
          <string/>
@@ -147,7 +147,6 @@ background-image:url(&quot;&quot;);</string>
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../main/main.qrc"/>
   <include location="../main/main.qrc"/>
  </resources>
  <connections/>
