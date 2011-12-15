@@ -51,6 +51,13 @@ void MagnifyingGlassTool::handleEvent(unsigned long eventID)
             updateMagnifyingGlassWidgetPosition();
             updateMagnifiedView();
             m_myData->get2DMagnifyingGlassViewer()->show();
+            // HACK Cal tornar a fer zoom ja que si la finestra encara no s'ha mostrat
+            // el viewer no calcula correctament el zoom
+            if (!m_myData->viewerHasBeenShown())
+            {
+                m_myData->get2DMagnifyingGlassViewer()->zoom(m_myData->getZoomFactor());
+                m_myData->setViewerShown(true);
+            }
             break;
 
         case vtkCommand::LeaveEvent:
@@ -172,7 +179,7 @@ void MagnifyingGlassTool::updateMagnifiedView()
     if (m_2DViewer->isImageFlipped())
     {
         m_myData->get2DMagnifyingGlassViewer()->horizontalFlip();
-    }    
+    }
     updateMagnifiedImagePosition();
     m_myData->get2DMagnifyingGlassViewer()->enableRendering(true);
     m_myData->get2DMagnifyingGlassViewer()->render();

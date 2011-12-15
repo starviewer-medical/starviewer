@@ -23,6 +23,10 @@ public:
     void setZoomFactor(double factor);
     double getZoomFactor() const;
 
+    /// Assigna/Obtè la variable que controla si s'ha fet show del visor o no encara
+    void setViewerShown(bool shown);
+    bool viewerHasBeenShown() const;
+
 private:
     /// Inicialitza el visor i els seus paràmetres
     void initializeViewer();
@@ -33,6 +37,9 @@ private:
 
     /// Factor de zoom a aplicar a la vista magnificada
     double m_zoomFactor;
+    
+    /// Controla si s'ha fet show del viewer o no
+    double m_viewerHasBeenShown;
 };
 
 }
