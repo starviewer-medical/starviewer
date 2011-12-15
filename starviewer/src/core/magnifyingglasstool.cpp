@@ -50,7 +50,6 @@ void MagnifyingGlassTool::handleEvent(unsigned long eventID)
         case vtkCommand::EnterEvent:
             updateMagnifyingGlassWidgetPosition();
             updateMagnifiedView();
-            updateMagnifiedImagePosition();
             m_myData->get2DMagnifyingGlassViewer()->show();
             break;
 
@@ -174,6 +173,7 @@ void MagnifyingGlassTool::updateMagnifiedView()
     {
         m_myData->get2DMagnifyingGlassViewer()->horizontalFlip();
     }    
+    updateMagnifiedImagePosition();
     m_myData->get2DMagnifyingGlassViewer()->enableRendering(true);
     m_myData->get2DMagnifyingGlassViewer()->render();
 }
