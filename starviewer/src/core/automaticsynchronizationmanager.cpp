@@ -123,7 +123,7 @@ void AutomaticSynchronizationManager::initialize()
 
         if (viewer->getInput())
         {
-            connect(viewer->getSynchronizationEditionWidget(), SIGNAL(selectedItem(Q2DViewer*)), SLOT(updateEditionStateOfViewers()));
+            connect(viewer->getSynchronizationEditionWidget(), SIGNAL(selectedItem(Q2DViewer*)), SLOT(setActiveWidget(Q2DViewer*)));
 
             QString frameOfReferenceUID = viewer->getInput()->getImage(0)->getParentSeries()->getFrameOfReferenceUID();
             int groupOfActualViewer = m_toolData->getGroupForUID(frameOfReferenceUID);
@@ -139,6 +139,17 @@ void AutomaticSynchronizationManager::initialize()
     Tool *tool = m_viewersLayout->getSelectedViewer()->getViewer()->getToolProxy()->getTool("AutomaticSynchronizationTool");
     AutomaticSynchronizationTool *automaticSynchronizationTool = dynamic_cast<AutomaticSynchronizationTool*>(tool);
     automaticSynchronizationTool->changePositionIfActive();
+}
+
+void AutomaticSynchronizationManager::setActiveWidget(Q2DViewer *viewer)
+{
+    Q2DViewerWidget *parentWidget = dynamic_cast<Q2DViewerWidget*>(viewer->parent());
+    m_viewersLayout->setSelectedViewer(parentWidget);
+
+    QString frameOfReferenceUID = viewer->getInput()->getImage(0)->getParentSeries()->getFrameOfReferenceUID();
+    m_toolData->setSelectedUID(frameOfReferenceUID);
+
+    updateEditionStateOfViewers();
 }
 
 }

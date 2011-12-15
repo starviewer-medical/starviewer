@@ -36,6 +36,8 @@ private slots:
     /// Actualitza l'estat del widget d'edicio del viewer segons les dades actuals de la tool
     void updateEditionStateOfViewer(Q2DViewer *viewer);
 
+    void setActiveWidget(Q2DViewer *viewer);
+
 private:
     /// Dades compartides de la tool automatica de sincronitzacio
     AutomaticSynchronizationToolData *m_toolData;
