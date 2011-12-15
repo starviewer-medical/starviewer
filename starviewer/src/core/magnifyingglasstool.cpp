@@ -36,11 +36,14 @@ void MagnifyingGlassTool::handleEvent(unsigned long eventID)
     switch (eventID)
     {
         case vtkCommand::MouseMoveEvent:
-            this->updateMagnifyingGlassWidget();
+            this->updateMagnifyingGlassWidgetPosition();
+            updateMagnifiedImagePosition();
             break;
 
         case vtkCommand::EnterEvent:
+            updateMagnifyingGlassWidgetPosition();
             updateMagnifiedView();
+            updateMagnifiedImagePosition();
             m_myData->get2DMagnifyingGlassViewer()->show();
             break;
 
@@ -115,20 +118,8 @@ void MagnifyingGlassTool::setView(int view)
     setSlice(m_2DViewer->getCurrentSlice());
 }
 
-void MagnifyingGlassTool::updateMagnifyingGlassWidget()
+void MagnifyingGlassTool::updateMagnifyingGlassWidgetPosition()
 {
-    double newPickPoint[4], oldPickPoint[4], motionVector[3];
-    
-    QSize size = m_myData->get2DMagnifyingGlassViewer()->getRenderWindowSize();
-
-    m_myData->get2DMagnifyingGlassViewer()->computeDisplayToWorld(size.width() / 2, size.height() / 2, 0, newPickPoint);
-
-    m_2DViewer->getLastEventWorldCoordinate(oldPickPoint);
-
-    motionVector[0] = oldPickPoint[0] - newPickPoint[0];
-    motionVector[1] = oldPickPoint[1] - newPickPoint[1];
-    motionVector[2] = oldPickPoint[2] - newPickPoint[2];
-    
     // Movem la finestra per que acompanyi el cursor
     QPoint eventPosition = m_2DViewer->getEventPosition();
 
@@ -140,6 +131,23 @@ void MagnifyingGlassTool::updateMagnifyingGlassWidget()
     QPoint globalPoint = m_2DViewer->mapToGlobal(eventPosition);
 
     m_myData->get2DMagnifyingGlassViewer()->move(globalPoint.x() + 10, globalPoint.y() + 10);
+}
+
+void MagnifyingGlassTool::updateMagnifiedImagePosition()
+{
+    QSize size = m_myData->get2DMagnifyingGlassViewer()->getRenderWindowSize();
+
+    double newPickPoint[4];
+    m_myData->get2DMagnifyingGlassViewer()->computeDisplayToWorld(size.width() / 2, size.height() / 2, 0, newPickPoint);
+
+    double oldPickPoint[4];
+    m_2DViewer->getLastEventWorldCoordinate(oldPickPoint);
+
+    double motionVector[3];
+    motionVector[0] = oldPickPoint[0] - newPickPoint[0];
+    motionVector[1] = oldPickPoint[1] - newPickPoint[1];
+    motionVector[2] = oldPickPoint[2] - newPickPoint[2];
+
     m_myData->get2DMagnifyingGlassViewer()->pan(motionVector);
 }
 
@@ -159,7 +167,6 @@ void MagnifyingGlassTool::updateMagnifiedView()
     {
         m_myData->get2DMagnifyingGlassViewer()->horizontalFlip();
     }    
-    updateMagnifyingGlassWidget();
     m_myData->get2DMagnifyingGlassViewer()->enableRendering(true);
     m_myData->get2DMagnifyingGlassViewer()->render();
 }

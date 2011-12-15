@@ -28,7 +28,10 @@ private slots:
     void updateMagnifiedView();
 
     /// Actualitza la posició del widget segons el moviment del cursor
-    void updateMagnifyingGlassWidget();
+    void updateMagnifyingGlassWidgetPosition();
+
+    /// Actualitza la posició de la imatge dins de la vista magnificada
+    void updateMagnifiedImagePosition();
 
     /// Mètodes per sincronitzar el visor magnificat amb els canvis del visor de referència 
     void setVolume(Volume *volume);
