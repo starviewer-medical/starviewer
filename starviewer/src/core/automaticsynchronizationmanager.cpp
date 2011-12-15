@@ -34,11 +34,11 @@ void AutomaticSynchronizationManager::enableEditor(bool enable)
         if (enable)
         {
             viewer->setViewerStatus(QViewer::SynchronizationEdit);
-            connect(viewer->getSynchronizationEditionWidget(), SIGNAL(selectedItem(Q2DViewer*)), SLOT(changeEditionState(Q2DViewer*)));
+            connect(viewer->getSynchronizationEditionWidget(), SIGNAL(buttonPress(Q2DViewer*)), SLOT(changeEditionState(Q2DViewer*)));
         }
         else
         {
-            disconnect(viewer->getSynchronizationEditionWidget(), SIGNAL(selectedItem(Q2DViewer*)), this, SLOT(changeEditionState(Q2DViewer*)));
+            disconnect(viewer->getSynchronizationEditionWidget(), SIGNAL(buttonPress(Q2DViewer*)), this, SLOT(changeEditionState(Q2DViewer*)));
             viewer->setViewerStatus(viewer->getPreviousViewerStatus());
         }
     }

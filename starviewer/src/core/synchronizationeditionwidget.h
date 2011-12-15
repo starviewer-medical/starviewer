@@ -32,6 +32,14 @@ public:
 signals:
     /// Signal que s'emet al seleccionar el widget
     void selectedItem(Q2DViewer *viewer);
+
+    /// Signal que s'emet al clicar el boto
+    void buttonPress(Q2DViewer *viewer);
+
+private slots:
+
+    // Slot que tracta l'event que s'ha clicat el botó del widget.
+    void buttonPress();
 };
 
 };

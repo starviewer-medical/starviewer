@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>546</width>
-    <height>546</height>
+    <width>639</width>
+    <height>420</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -81,7 +81,7 @@ background-image:url(&quot;&quot;);</string>
        </spacer>
       </item>
       <item row="1" column="1">
-       <widget class="QLabel" name="m_icon">
+       <widget class="SynchronizationWidgetButton" name="m_icon">
         <property name="enabled">
          <bool>true</bool>
         </property>
@@ -94,11 +94,17 @@ background-image:url(&quot;&quot;);</string>
         <property name="styleSheet">
          <string notr="true">background-color: rgb(255, 255, 255,0);</string>
         </property>
+        <property name="frameShape">
+         <enum>QFrame::Box</enum>
+        </property>
         <property name="text">
          <string/>
         </property>
         <property name="pixmap">
-         <pixmap>../../../../../Desktop/plus.png</pixmap>
+         <pixmap resource="../main/main.qrc">:/images/plus.png</pixmap>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -133,6 +139,16 @@ background-image:url(&quot;&quot;);</string>
    </item>
   </layout>
  </widget>
- <resources/>
+ <customwidgets>
+  <customwidget>
+   <class>SynchronizationWidgetButton</class>
+   <extends>QLabel</extends>
+   <header>synchronizationwidgetbutton.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../main/main.qrc"/>
+  <include location="../main/main.qrc"/>
+ </resources>
  <connections/>
 </ui>
