@@ -153,7 +153,7 @@ void ApplicationUpdateChecker::parseJSON(const QString &json)
         ERROR_LOG(QString("Error llegint la resposta del servidor (error en el json) ") + 
                   scriptValue.property("error").property("code").toString() +
                   QString(": ") + scriptValue.property("error").property("message").toString());
-        m_errorDescription = tr("Error parsing json.");
+        m_errorDescription = tr("Error parsing JSON.");
     }
     else
     {
@@ -173,7 +173,7 @@ void ApplicationUpdateChecker::parseJSON(const QString &json)
                 else
                 {
                     m_checkOk = false;
-                    m_errorDescription = tr("Error parsing json. Version or releaseNotesUrl is not a String");
+                    m_errorDescription = tr("Error parsing JSON. Version or releaseNotesUrl is not a String");
                 }
             }
             else
@@ -184,7 +184,7 @@ void ApplicationUpdateChecker::parseJSON(const QString &json)
         else
         {
             // ERROR
-            m_errorDescription = tr("Error parsing json.");
+            m_errorDescription = tr("Error parsing JSON.");
         }
     }
 }

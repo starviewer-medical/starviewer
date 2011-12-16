@@ -20,7 +20,7 @@
 namespace udg {
 
 const QString ScreenShotTool::PngFileFilter = tr("PNG (*.png)");
-const QString ScreenShotTool::JpegFileFilter = tr("Jpeg (*.jpg)");
+const QString ScreenShotTool::JpegFileFilter = tr("JPEG (*.jpg)");
 const QString ScreenShotTool::BmpFileFilter = tr("BMP (*.bmp)");
 const QString ScreenShotTool::TiffFileFilter = tr("TIFF (*.tiff)");
 

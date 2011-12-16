@@ -706,8 +706,8 @@ void Q2DViewer::setNewVolumeAndExecuteCommand(Volume *volume)
     {
         // Si tenim algun problema durant el rendering mostrem l'error i reiniciem l'estat del viewer
         this->setViewerStatus(LoadingError);
-        m_workInProgressWidget->showError(tr("There's not enough memory for the rendering process. Try to close all the opened %1 windows, restart "
-            "the application and try again. If the problem persists, adding more RAM memory or switching to a 64 bit operating system may solve the problem.")
+        m_workInProgressWidget->showError(tr("There's not enough memory for the rendering process. Try to close all the open %1 windows, restart "
+            "the application and try again. If the problem persists, adding more RAM memory or switching to a 64-bit operating system may solve the problem.")
             .arg(ApplicationNameString));
         
         // TODO Cal esborrar oldRenderWindow per evitar memory leaks. Ara mateix si fem Delete() ens peta.
