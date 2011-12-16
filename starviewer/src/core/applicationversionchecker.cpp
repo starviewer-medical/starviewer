@@ -144,7 +144,7 @@ void ApplicationVersionChecker::showLocalReleaseNotes()
         QMessageBox messageBox;
         messageBox.setText(QString(tr("Release notes for the current version not found.")));
         messageBox.setWindowTitle(QString(tr("Error")));
-        messageBox.addButton(tr("Ok"), QMessageBox::YesRole);
+        messageBox.addButton(tr("OK"), QMessageBox::YesRole);
         messageBox.exec();
     }
 }

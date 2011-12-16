@@ -253,13 +253,13 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
     }
     else if (toolName == "ROITool")
     {
-        toolAction->setText(tr("ROI's"));
+        toolAction->setText(tr("ROIs"));
         toolAction->setIcon(QIcon(":/images/roi.png"));
         statusTip = tr("Enable/Disable ROI tool");
     }
     else if (toolName == "ReferenceLinesTool")
     {
-        toolAction->setText(tr("Ref.Lines"));
+        toolAction->setText(tr("Ref. Lines"));
         toolAction->setIcon(QIcon(":/images/referenceLines.png"));
         toolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::ReferenceLinesTool));
         statusTip = tr("Enable/Disable Reference Lines tool");
