@@ -14,6 +14,8 @@ MagnifyingGlassToolData::MagnifyingGlassToolData(QObject *parent)
 
 MagnifyingGlassToolData::~MagnifyingGlassToolData()
 {
+    delete m_2DMagnifyingGlassViewer;
+
 }
 
 void MagnifyingGlassToolData::setZoomFactor(double factor)
@@ -28,12 +30,11 @@ double MagnifyingGlassToolData::getZoomFactor() const
 
 void MagnifyingGlassToolData::initializeViewer()
 {
-    m_2DMagnifyingGlassViewer = new Q2DViewer((QWidget*)this->parent());
-    m_2DMagnifyingGlassViewer->setWindowFlags(Qt::SplashScreen);
+    m_2DMagnifyingGlassViewer = new Q2DViewer();
+    m_2DMagnifyingGlassViewer->setWindowFlags(m_2DMagnifyingGlassViewer->windowFlags() | Qt::WindowStaysOnTopHint | Qt::SplashScreen);
     m_2DMagnifyingGlassViewer->setGeometry(320, 320, 0, 0);
     m_2DMagnifyingGlassViewer->setMinimumSize(320, 320);
     m_2DMagnifyingGlassViewer->setWindowTitle(tr("Magnifying Glass"));
-    
     m_2DMagnifyingGlassViewer->removeAnnotation(Q2DViewer::AllAnnotation);
 }
 
