@@ -1,6 +1,7 @@
 #include "firewallaccesstest.h"
 #include "firewallaccess.h"
 #include "logging.h"
+#include "starviewerapplication.h"
 
 namespace udg {
 
@@ -40,6 +41,11 @@ DiagnosisTestResult FirewallAccessTest::run()
     delete firewall;
 
     return result;
+}
+
+QString FirewallAccessTest::getDescription()
+{
+    return tr("Firewall allow %1 connections").arg(ApplicationNameString);
 }
 
 FirewallAccess* FirewallAccessTest::createFirewall()

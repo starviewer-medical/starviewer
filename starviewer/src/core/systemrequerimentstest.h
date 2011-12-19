@@ -23,6 +23,9 @@ public:
 
     DiagnosisTestResult run();
 
+    /// Retorna la descripció del test
+    QString getDescription();
+
 protected:
     enum VersionComparison { Older, Same, Newer };
 

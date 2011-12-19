@@ -63,6 +63,11 @@ DiagnosisTestResult EchoToPACSTest::run()
     return DiagnosisTestResult(testResultState, testResultDescription, testResultSolution);
 }
 
+QString EchoToPACSTest::getDescription()
+{
+    return tr("Echo to all configured PACS");
+}
+
 QList<PacsDevice> EchoToPACSTest::getPacsDeviceList()
 {
     return PacsDeviceManager().getPACSList();
