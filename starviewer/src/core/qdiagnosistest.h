@@ -6,10 +6,11 @@
 #include <QList>
 #include <QPair>
 
+#include "diagnosistestresult.h"
+
 namespace udg {
 
 class DiagnosisTest;
-class DiagnosisTestResult;
 
 /**
     Aquest classe és l'encarregada de realitzar el dicomdump de la imatge que s'està visualizant per part de l'usuari.
