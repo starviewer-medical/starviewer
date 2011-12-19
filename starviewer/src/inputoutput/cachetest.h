@@ -15,6 +15,9 @@ public:
 
     DiagnosisTestResult run();
 
+    ///Retorna descripcio del test
+    QString getDescription();
+
 protected:
     virtual unsigned int getFreeSpace(const QString &cachePath);
     virtual unsigned int getMinimumFreeSpace();

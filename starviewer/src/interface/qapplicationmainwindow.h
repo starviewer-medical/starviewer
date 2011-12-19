@@ -155,6 +155,9 @@ private slots:
     /// Obre les release notes
     void openReleaseNotes();
 
+    /// Mostra el diàleg que executa els diagnosis test
+    void showDiagnosisTestDialog();
+
 private:
     /// L'àrea de mini-aplicacions
     ExtensionWorkspace *m_extensionWorkspace;
@@ -191,6 +194,7 @@ private:
     QAction *m_openQuickStartGuideAction;
     QAction *m_openShortcutsGuideAction;
     QAction *m_openReleaseNotesAction;
+    QAction *m_runDiagnosisTestsAction;
 
     QLabel *m_betaVersionMenuText;
 

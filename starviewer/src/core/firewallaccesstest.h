@@ -20,6 +20,9 @@ public:
 
     DiagnosisTestResult run();
 
+    /// Retorna la descripció del test
+    QString getDescription();
+
 protected:
     virtual FirewallAccess* createFirewall();
     virtual void checkIfStarviewerHaveAccessThroughFirewall(FirewallAccess *firewall);

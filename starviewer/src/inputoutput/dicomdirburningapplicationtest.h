@@ -16,6 +16,10 @@ public:
     ~DICOMDIRBurningApplicationTest();
 
     DiagnosisTestResult run();
+
+    ///Retorna descripcio del test
+    QString getDescription();
+
 protected:
     virtual bool burningApplicationIsDefined(const QString &burningApplication);
     virtual bool burningApplicationIsInstalled(const QString &file);

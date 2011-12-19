@@ -13,4 +13,9 @@ RISRequestsPortInUseTest::~RISRequestsPortInUseTest()
 {
 }
 
+QString RISRequestsPortInUseTest::getDescription()
+{
+    return tr("RIS request port %1 is used by another application").arg(m_port);
+}
+
 } // End udg namespace

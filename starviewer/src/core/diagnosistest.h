@@ -12,6 +12,8 @@ public:
     virtual ~DiagnosisTest(){}
     /// Mètode principal de la interfície. No està implementat, i es força a les subclasses a fer-ho.
     virtual DiagnosisTestResult run() = 0;
+    /// Retorna la descripció del test
+    virtual QString getDescription() = 0;
 protected:
     /// Constructor per defecte protected perque no es pugui instanciar objectes DiagnosisTest
     DiagnosisTest(QObject *parent = 0) : QObject(parent){}

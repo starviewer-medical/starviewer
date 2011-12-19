@@ -50,6 +50,11 @@ DiagnosisTestResult ApplicationVersionTest::run()
     return DiagnosisTestResult(state, description, solution);
 }
 
+QString ApplicationVersionTest::getDescription()
+{
+    return tr("New versions available");
+}
+
 void ApplicationVersionTest::onlineCheck()
 {
     ApplicationUpdateChecker onlineChecker;

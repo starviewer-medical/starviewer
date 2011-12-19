@@ -10,6 +10,9 @@ class IncomingDICOMConnectionsPortInUseTest : public PortInUseTest {
 public:
     IncomingDICOMConnectionsPortInUseTest(QObject *parent = 0);
     ~IncomingDICOMConnectionsPortInUseTest();
+
+    ///Retorna descripcio del test
+    QString getDescription();
 };
 
 static DiagnosisTestFactoryRegister<IncomingDICOMConnectionsPortInUseTest> registerIncomingDICOMConnectionsPortInUseTest("IncomingDICOMConnectionsPortInUseTest");

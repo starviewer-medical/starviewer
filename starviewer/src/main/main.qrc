@@ -132,5 +132,8 @@
     <file>images/minus.png</file>
     <file>images/minuslock.png</file>
     <file>images/plus.png</file>
+    <file>images/expand.gif</file>
+    <file>images/checkOkBigger.png</file>
+    <file>images/collapse.gif</file>
   </qresource>
 </RCC>

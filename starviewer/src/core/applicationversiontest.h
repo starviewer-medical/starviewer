@@ -20,6 +20,8 @@ public:
     /// DiagnosisTestResult valdrà OK quan l'aplicació estigui actualitzada, Warning si hi ha alguna actualització disponible,
     /// i Error si hi ha hagut algun error.
     DiagnosisTestResult run();
+    /// Retorna la descripció del test
+    QString getDescription();
 
 signals:
     void startCheckForUpdates();

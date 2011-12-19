@@ -17,6 +17,9 @@ public:
 
     DiagnosisTestResult run();
 
+    ///Retorna descripcio del test
+    QString getDescription();
+
 protected:
     virtual QList<PacsDevice> getPacsDeviceList();
     virtual EchoToPACS::EchoRequestStatus echo(const PacsDevice &pacs);

@@ -47,6 +47,11 @@ DiagnosisTestResult DICOMDIRBurningApplicationTest::run()
     return DiagnosisTestResult(testResultState, testResultDescription, testResultSolution);
 }
 
+QString DICOMDIRBurningApplicationTest::getDescription()
+{
+    return tr("DICOMDIR burning application is configured");
+}
+
 bool DICOMDIRBurningApplicationTest::burningApplicationIsDefined(const QString &burningApplication)
 {
     return !burningApplication.isEmpty();

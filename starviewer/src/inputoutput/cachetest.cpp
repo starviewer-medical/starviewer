@@ -54,6 +54,11 @@ DiagnosisTestResult CacheTest::run()
     return DiagnosisTestResult(testResultState, testResultDescription.join("\n"), testResultSolution.join("\n"));
 }
 
+QString CacheTest::getDescription()
+{
+    return tr("Cache requirements");
+}
+
 unsigned int CacheTest::getFreeSpace(const QString &cachePath)
 {
     SystemInformation *system = SystemInformation::newInstance();

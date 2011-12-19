@@ -252,6 +252,11 @@ DiagnosisTestResult SystemRequerimentsTest::run()
     return result;
 }
 
+QString SystemRequerimentsTest::getDescription()
+{
+    return tr("system requeriments");
+}
+
 SystemRequerimentsTest::VersionComparison SystemRequerimentsTest::compareVersions(QString version1, QString version2)
 {
     // TODO de moment només estar pensat per windows. S'ha d'estendre a més S.O.

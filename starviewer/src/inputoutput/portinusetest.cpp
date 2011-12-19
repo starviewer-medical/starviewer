@@ -44,6 +44,11 @@ DiagnosisTestResult PortInUseTest::run()
     return DiagnosisTestResult(testResultState, testResultDescription, testResultSolution);
 }
 
+QString PortInUseTest::getDescription()
+{
+    return tr("Port %1 is used by another application");
+}
+
 PortInUse* PortInUseTest::createPortInUse()
 {
     PortInUse *portInUse = new PortInUse();
