@@ -24,6 +24,7 @@
 #include "qscreendistribution.h"
 #include "volumerepository.h"
 #include "applicationstylehelper.h"
+#include "qdiagnosistest.h"
 
 // Amb starviewer lite no hi haurà hanging protocols, per tant no els carregarem
 #ifndef STARVIEWER_LITE
