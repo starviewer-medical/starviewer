@@ -7,6 +7,7 @@
 
 #include "diagnosistestfactory.h"
 #include "diagnosistest.h"
+#include "rundiagnosistest.h"
 
 #include "qdiagnosistestresultwidget.h"
 
@@ -17,7 +18,11 @@ QDiagnosisTest::QDiagnosisTest(QWidget *parent)
 {
     setupUi(this);
 
-    updateWidgetToRunDiagnosisTest();
+    m_threadRunningDiagnosisTest = new QThread();
+    m_threadRunningDiagnosisTest->start();
+
+    m_runDiagnosisTest = new RunDiagnosisTest(getDiagnosisTestsToRun());
+    m_runDiagnosisTest->moveToThread(m_threadRunningDiagnosisTest);
 
     createConnections();
 
@@ -27,59 +32,14 @@ QDiagnosisTest::QDiagnosisTest(QWidget *parent)
     operationAnimation->start();
 }
 
-void QDiagnosisTest::qdiagnosisTestResultWidgetResized()
+QDiagnosisTest::~QDiagnosisTest()
 {
-    m_testsResultsTable->resizeRowsToContents();
-}
+    qDeleteAll(m_runDiagnosisTest->getDiagnosisTestToRun());
+    delete m_runDiagnosisTest;
 
-void QDiagnosisTest::runDiagnosisTest()
-{
-    QList<DiagnosisTest*> diagnosisTestsToRun = getDiagnosisTestsToRun();
-    m_animationInProgressLabel->setVisible(true);
-
-    m_testsProgressBar->setValue(0);
-    m_testsProgressBar->setMaximum(diagnosisTestsToRun.count());
-    QThread *threadRunningTests = new QThread();
-
-    foreach(DiagnosisTest *diagnosisTest, diagnosisTestsToRun)
-    {
-        m_executingTestLabel->setText(tr("Running test: ") + diagnosisTest->getDescription());
-        m_executingTestLabel->repaint();
-        this->repaint();
-
-        diagnosisTest->moveToThread(threadRunningTests);
-        DiagnosisTestResult diagnosisTestResult = diagnosisTest->run();
-        m_testsProgressBar->setValue(m_testsProgressBar->value() + 1);
-
-        QPair<DiagnosisTest *, DiagnosisTestResult> executedTest;
-        executedTest.first = diagnosisTest;
-        executedTest.second = diagnosisTestResult;
-
-        if (diagnosisTestResult.getState() == DiagnosisTestResult::Ok)
-        {
-            m_okExecutedDiagnosisTests.append(executedTest);
-        }
-        else if (diagnosisTestResult.getState() == DiagnosisTestResult::Warning)
-        {
-            m_warningExecutedDiagnosisTests.append(executedTest);
-        }
-        else if (diagnosisTestResult.getState() == DiagnosisTestResult::Error || diagnosisTestResult.getState() == DiagnosisTestResult::Invalid)
-        {
-            m_errorExecutedDiagnosisTests.append(executedTest);
-        }
-    }
-
-    showResults();
-} 
-
-void QDiagnosisTest::viewTestsLabelClicked()
-{
-    m_diagnosisTestsResultsFrame->setVisible(true);
-
-    m_succeededTestsToolButton->setChecked(true);
-    fillDiagnosisTestsResultTable();
-
-    this->adjustSize();
+    m_threadRunningDiagnosisTest->terminate();
+    m_threadRunningDiagnosisTest->wait();
+    delete m_threadRunningDiagnosisTest;
 }
 
 void QDiagnosisTest::createConnections()
@@ -92,19 +52,37 @@ void QDiagnosisTest::createConnections()
     connect(m_closeButton, SIGNAL(clicked()), SLOT(accept()));
     
     connect(m_viewTestsLabel, SIGNAL(linkActivated(QString)), SLOT(viewTestsLabelClicked()));
+
+    connect(this, SIGNAL(start()), m_runDiagnosisTest, SLOT(run()));
+    connect(m_runDiagnosisTest, SIGNAL(runningDiagnosisTest(DiagnosisTest *)), this, SLOT(updateRunningDiagnosisTestProgress(DiagnosisTest *)));
+    connect(m_runDiagnosisTest, SIGNAL(finished()), this, SLOT(finishedRunningDiagnosisTest()));
 }
 
-void QDiagnosisTest::updateWidgetToRunDiagnosisTest()
+void QDiagnosisTest::qdiagnosisTestResultWidgetResized()
 {
-    m_diagnosisTestsResultsFrame->setVisible(false);
-    m_allTestSuccededFrame->setVisible(false);
-    m_closeButtonFrame->setVisible(false);
-
-    this->adjustSize();
+    m_testsResultsTable->resizeRowsToContents();
 }
 
-void QDiagnosisTest::showResults()
+void QDiagnosisTest::runDiagnosisTest()
 {
+    updateWidgetToRunDiagnosisTest();
+
+    m_testsProgressBar->setValue(0);
+    m_testsProgressBar->setMaximum(m_runDiagnosisTest->getDiagnosisTestToRun().count());
+
+    emit start();
+} 
+
+void QDiagnosisTest::updateRunningDiagnosisTestProgress(DiagnosisTest * diagnosisTest)
+{
+    m_executingTestLabel->setText(tr("Running test: ") + diagnosisTest->getDescription());
+    m_testsProgressBar->setValue(m_testsProgressBar->value() + 1);
+}
+
+void QDiagnosisTest::finishedRunningDiagnosisTest()
+{
+    groupDiagnosisTestFromRunDiagnosisTestByState();
+
     m_errorTestsToolButton->setText(tr("%1 errors").arg(m_errorExecutedDiagnosisTests.count()));
     m_succeededTestsToolButton->setText(tr("%1 Ok").arg(m_okExecutedDiagnosisTests.count()));
     m_warningTestsToolButton->setText(tr("%1 warnings").arg(m_warningExecutedDiagnosisTests.count()));
@@ -125,6 +103,16 @@ void QDiagnosisTest::showResults()
 
     m_progressBarFrame->setVisible(false);
     m_closeButtonFrame->setVisible(true);
+
+    this->adjustSize();
+}
+
+void QDiagnosisTest::viewTestsLabelClicked()
+{
+    m_diagnosisTestsResultsFrame->setVisible(true);
+
+    m_succeededTestsToolButton->setChecked(true);
+    fillDiagnosisTestsResultTable();
 
     this->adjustSize();
 }
@@ -154,6 +142,15 @@ void QDiagnosisTest::addDiagnosisTestResultToTable(DiagnosisTest *diagnosisTest,
 
     m_testsResultsTable->setRowCount(m_testsResultsTable->rowCount() + 1);
     m_testsResultsTable->setCellWidget(m_testsResultsTable->rowCount() -1, 0, qdiagnosisTestResultWidget);
+}
+
+void QDiagnosisTest::updateWidgetToRunDiagnosisTest()
+{
+    m_diagnosisTestsResultsFrame->setVisible(false);
+    m_allTestSuccededFrame->setVisible(false);
+    m_closeButtonFrame->setVisible(false);
+
+    this->adjustSize();
 }
 
 bool QDiagnosisTest::allDiagnosisTestResultAreOk()
@@ -193,6 +190,29 @@ QList<QPair<DiagnosisTest *,DiagnosisTestResult> > QDiagnosisTest::getDiagnosisT
     }
 
     return testsToShow;
+}
+
+void QDiagnosisTest::groupDiagnosisTestFromRunDiagnosisTestByState()
+{
+    QList<QPair<DiagnosisTest *,DiagnosisTestResult> >  runDiagnosisTests = m_runDiagnosisTest->getRunTests();
+
+    for (int index = 0; index < runDiagnosisTests.count(); index++)
+    {
+        QPair<DiagnosisTest *, DiagnosisTestResult> runDiagnosisTest = runDiagnosisTests.at(index);
+
+        if (runDiagnosisTest.second.getState() == DiagnosisTestResult::Ok)
+        {
+            m_okExecutedDiagnosisTests.append(runDiagnosisTest);
+        }
+        else if (runDiagnosisTest.second.getState() == DiagnosisTestResult::Warning)
+        {
+            m_warningExecutedDiagnosisTests.append(runDiagnosisTest);
+        }
+        else
+        {
+            m_errorExecutedDiagnosisTests.append(runDiagnosisTest);
+        }
+    }
 }
 
 }
