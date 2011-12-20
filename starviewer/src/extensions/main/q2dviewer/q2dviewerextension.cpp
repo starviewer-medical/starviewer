@@ -323,7 +323,7 @@ void Q2DViewerExtension::setupDefaultLeftButtonTool()
     if (study)
     {
         if (study->getModalities().contains("MG") || study->getModalities().contains("CR") || study->getModalities().contains("RF") ||
-            study->getModalities().contains("OP") || study->getModalities().contains("DX"))
+            study->getModalities().contains("OP") || study->getModalities().contains("DX") || study->getModalities().contains("MR"))
         {
             m_slicingToolButton->defaultAction()->toggle();
             m_zoomToolButton->defaultAction()->trigger();
