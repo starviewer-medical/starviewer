@@ -281,7 +281,8 @@ HEADERS += extensionfactory.h \
     magnifyingglasstool.h \
     magnifyingglasstooldata.h \
     qdiagnosistest.h \
-    qdiagnosistestresultwidget.h
+    qdiagnosistestresultwidget.h \
+    rundiagnosistest.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -518,7 +519,8 @@ SOURCES += extensionmediator.cpp \
     magnifyingglasstool.cpp \
     magnifyingglasstooldata.cpp \
     qdiagnosistest.cpp \
-    qdiagnosistestresultwidget.cpp
+    qdiagnosistestresultwidget.cpp \
+    rundiagnosistest.cpp
 win32 {
     HEADERS += windowsfirewallaccess.h \
                windowssysteminformation.h
