@@ -41,7 +41,7 @@ void PatientBrowserMenu::setPatient(Patient *patient)
     foreach (Study *study, descendingSortedStudies)
     {
         // Extreiem el caption de l'estudi
-        caption = tr("Study %1 : %2 [%3] %4")
+        caption = tr("Study %1 %2 [%3] %4")
             .arg(study->getDate().toString(Qt::ISODate))
             .arg(study->getTimeAsString())
             .arg(study->getModalitiesAsSingleString())
