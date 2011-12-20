@@ -42,7 +42,7 @@ void PatientBrowserMenu::setPatient(Patient *patient)
     {
         // Extreiem el caption de l'estudi
         caption = tr("Study %1 : %2 [%3] %4")
-            .arg(study->getDateAsString())
+            .arg(study->getDate().toString(Qt::ISODate))
             .arg(study->getTimeAsString())
             .arg(study->getModalitiesAsSingleString())
             .arg(study->getDescription());
