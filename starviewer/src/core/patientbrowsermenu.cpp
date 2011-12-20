@@ -23,12 +23,22 @@ PatientBrowserMenu::~PatientBrowserMenu()
 {
 }
 
+// Mètode per indicar a qSort com ordenar una llista d'estudis de més recent a més antic
+bool studyNewerThan(Study *study1, Study *study2)
+{
+    return study1->getDateTime() > study2->getDateTime();
+}
+
 void PatientBrowserMenu::setPatient(Patient *patient)
 {
     createWidgets();
     QString caption;
     QString label;
-    foreach (Study *study, patient->getStudies())
+    // TODO Hauríem de tenir els mètodes perquè Patient ens retornés els estudis ordenats en 
+    // ascendent o descendent en comptes de fer-ho així
+    QList<Study*> descendingSortedStudies = patient->getStudies();
+    qSort(descendingSortedStudies.begin(), descendingSortedStudies.end(), studyNewerThan);
+    foreach (Study *study, descendingSortedStudies)
     {
         // Extreiem el caption de l'estudi
         caption = tr("Study %1 : %2 [%3] %4")
