@@ -109,7 +109,7 @@ void test_WindowsFirewallAccess::doesStarviewerHaveAccesThroughFirewall_ShouldCh
                                                   << S_OK << false
                                                   << unusedHRESULT << unusedBool;
 
-    QTest::newRow("firewall starviewer disabled") << false << FirewallAccess::FirewallIsBlocking << "Application is not in the firewall's exceptions list"
+    QTest::newRow("firewall starviewer disabled") << false << FirewallAccess::FirewallIsBlocking << "Application is not in the firewall exceptions list"
                                                   << S_OK << S_OK
                                                   << S_OK << true
                                                   << S_OK << true
@@ -184,7 +184,7 @@ void test_WindowsFirewallAccess::doesStarviewerHaveAccesThroughFirewall_ShouldFa
     HRESULT unusedHRESULT = S_OK;
 
     // Les dades del test
-    QTest::newRow("initialize firewall library fail") << false << FirewallAccess::FirewallError << "Error initialization firewall's library"
+    QTest::newRow("initialize firewall library fail") << false << FirewallAccess::FirewallError << "Error initializing firewall library"
                                                       << E_FAIL << unusedHRESULT
                                                       << unusedHRESULT << unusedBool 
                                                       << unusedHRESULT << unusedBool
@@ -209,7 +209,7 @@ void test_WindowsFirewallAccess::doesStarviewerHaveAccesThroughFirewall_ShouldFa
                                                     << unusedHRESULT << unusedBool;
 
     QTest::newRow("application enabled at firewall fail") << false << FirewallAccess::FirewallError
-                                                          << "Unable to check if application is in the firewall's exceptions list"
+                                                          << "Unable to check if application is in the firewall exceptions list"
                                                           << S_OK << S_OK
                                                           << S_OK << true 
                                                           << S_OK << true 
