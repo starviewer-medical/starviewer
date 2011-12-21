@@ -139,15 +139,15 @@ void test_ApplicationUpdateChecker::run_ShouldCheckForUpdatesAndFail_data()
 
     QString json = "{ json error }";
     QTest::newRow("json error") << QNetworkReply::NoError << unusedString << false << json
-                                << false << "Error parsing json.";
+                                << false << "Error parsing JSON.";
 
     json = "{\"updateAvailable\":\"true\"}";
     QTest::newRow("updateAvailable is not boolean") << QNetworkReply::NoError << unusedString << false << json
-                                                    << false << "Error parsing json.";
+                                                    << false << "Error parsing JSON.";
 
     json = "{\"updateAvailable\":true,\"version\":true,\"releaseNotesURL\":\"http://starviewer.udg.edu/releasenotes/releasenotes-0.10.1.html\"}";
     QTest::newRow("version or releaseNotes is not a string") << QNetworkReply::NoError << unusedString << false << json
-                                                             << false << "Error parsing json. Version or releaseNotesUrl is not a String";
+                                                             << false << "Error parsing JSON. Version or releaseNotesUrl is not a String";
 }
  
 void test_ApplicationUpdateChecker::run_ShouldCheckForUpdatesAndFail()
