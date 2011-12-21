@@ -1203,13 +1203,30 @@ void Q2DViewer::setPhase(int value)
     // Comprovació de rang
     if (m_mainVolume)
     {
-        if (value < 0)
+        Settings settings;
+        bool phaseLoopIsEnabled = settings.getValue(CoreSettings::EnableQ2DViewerPhaseScrollLoop).toBool();
+
+        if (phaseLoopIsEnabled)
         {
-            value = m_numberOfPhases - 1;
+            if (value < 0)
+            {
+                value = m_numberOfPhases - 1;
+            }
+            else if (value > m_numberOfPhases - 1)
+            {
+                value = 0;
+            }
         }
-        else if (value > m_numberOfPhases - 1)
+        else
         {
-            value = 0;
+            if (value < 0)
+            {
+                value = 0;
+            }
+            else if (value > m_numberOfPhases - 1)
+            {
+                value = m_numberOfPhases - 1;
+            }
         }
 
         m_currentPhase = value;
@@ -2171,18 +2188,33 @@ void Q2DViewer::computeRangeAndSlice(int newSlabThickness)
 
 void Q2DViewer::checkAndUpdateSliceValue(int value)
 {
-    if (value < 0)
+    Settings settings;
+    bool sliceLoopIsEnabled = settings.getValue(CoreSettings::EnableQ2DViewerSliceScrollLoop).toBool();
+    
+    if (sliceLoopIsEnabled)
     {
-        m_currentSlice = m_maxSliceValue - m_slabThickness + 1;
-    }
-    else if (value + m_slabThickness - 1 > m_maxSliceValue)
-    {
-        m_currentSlice = 0;
+        if (value < 0)
+        {
+            value = m_maxSliceValue - m_slabThickness + 1;
+        }
+        else if (value + m_slabThickness - 1 > m_maxSliceValue)
+        {
+            value = 0;
+        }
     }
     else
     {
-        m_currentSlice = value;
+        if (value < 0)
+        {
+            value = 0;
+        }
+        else if (value + m_slabThickness - 1 > m_maxSliceValue)
+        {
+            value = m_maxSliceValue - m_slabThickness + 1;
+        }
     }
+
+    m_currentSlice = value;
 
     m_firstSlabSlice = m_currentSlice;
     m_lastSlabSlice = m_firstSlabSlice + m_slabThickness;
