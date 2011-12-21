@@ -20,4 +20,9 @@ void TestingPortInUse::setErrorString(const QString &errorString)
     m_errorString = errorString;
 }
 
+udg::PortInUseByAnotherApplication* TestingPortInUse::createPortInUseByAnotherApplication()
+{
+    return m_testingPortInUseByAnotherApplication;
+}
+
 }

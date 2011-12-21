@@ -3,6 +3,7 @@
 #include "portinusetest.h"
 #include "diagnosistestresult.h"
 #include "testingportinuse.h"
+#include "testingportinusebyanotherapplication.h"
 
 using namespace udg;
 using namespace testing;
@@ -11,6 +12,7 @@ class TestingPortInUseTest : public PortInUseTest {
 public:
     PortInUse::PortInUseStatus m_testingStatus;
     QString m_testingErrorString;
+    bool m_testingInUseByAnotherApplication;
 
     TestingPortInUseTest(int port)
     {
@@ -21,6 +23,9 @@ protected:
     virtual PortInUse* createPortInUse()
     {
         TestingPortInUse *portInUse = new TestingPortInUse();
+        TestingPortInUseByAnotherApplication *portInUseByAnotherApplication = new TestingPortInUseByAnotherApplication();
+        portInUseByAnotherApplication->m_testingInUseByAnotherApplication = m_testingInUseByAnotherApplication;
+        portInUse->m_testingPortInUseByAnotherApplication = portInUseByAnotherApplication;
         return portInUse;
     }
 
@@ -48,25 +53,29 @@ void test_PortInUseTest::run_ShouldTestIfRISPortIsInUse_data()
 {
     QTest::addColumn<PortInUse::PortInUseStatus>("testingStatus");
     QTest::addColumn<QString>("testingErrorString");
+    QTest::addColumn<bool>("testingInUseByAnotherApplication");
 
-    QTest::addColumn<int>("testingPort");
     QTest::addColumn<DiagnosisTestResult::DiagnosisTestResultState>("testingDiagnosisTestResultState");
     QTest::addColumn<QString>("testingDiagnosisTestResultDescription");
     QTest::addColumn<QString>("testingDiagnosisTestResultSolution");
 
     QString unusedString = "";
-    int port = 0;
 
-    QTest::newRow("free port") << PortInUse::PortIsAvailable << unusedString
-                               << port << DiagnosisTestResult::Ok << unusedString << unusedString;
+    QTest::newRow("free port") << PortInUse::PortIsAvailable << unusedString << false
+                               << DiagnosisTestResult::Ok << unusedString << unusedString;
     
-    QTest::newRow("port in use") << PortInUse::PortIsInUse << unusedString
-                                 << port << DiagnosisTestResult::Error << "Port is already in use"
-                                 << "Try another port or shut down the application using this port";
+    QTest::newRow("port in use by another application") 
+                                << PortInUse::PortIsInUse << unusedString << true
+                                << DiagnosisTestResult::Error << "Port is already in use"
+                                << "Try another port or shut down the application using this port";
 
-    QTest::newRow("port error") << PortInUse::PortCheckError << "NetworkError"
-                                << port << DiagnosisTestResult::Error
-                                << "Unable to test if port " + QString("%1").arg(port) + " is in use due to error: NetworkError"
+    QTest::newRow("port in use by starviewer") 
+                                << PortInUse::PortIsInUse << unusedString << false
+                                << DiagnosisTestResult::Ok << unusedString << unusedString;
+
+    QTest::newRow("port error") << PortInUse::PortCheckError << "NetworkError" << false
+                                << DiagnosisTestResult::Error
+                                << "Unable to test if port 0 is in use due to error: NetworkError"
                                 << unusedString;
 }
 
@@ -74,15 +83,17 @@ void test_PortInUseTest::run_ShouldTestIfRISPortIsInUse()
 {
     QFETCH(PortInUse::PortInUseStatus, testingStatus);
     QFETCH(QString, testingErrorString);
- 
-    QFETCH(int, testingPort);
+    QFETCH(bool, testingInUseByAnotherApplication);
+
     QFETCH(DiagnosisTestResult::DiagnosisTestResultState, testingDiagnosisTestResultState);
     QFETCH(QString, testingDiagnosisTestResultDescription);
     QFETCH(QString, testingDiagnosisTestResultSolution);
 
-    TestingPortInUseTest portInUseTest(testingPort);
+    // El port no es fa servir en el test
+    TestingPortInUseTest portInUseTest(0);
     portInUseTest.m_testingStatus = testingStatus;
     portInUseTest.m_testingErrorString = testingErrorString;
+    portInUseTest.m_testingInUseByAnotherApplication = testingInUseByAnotherApplication;
 
     DiagnosisTestResult result = portInUseTest.run();
     
