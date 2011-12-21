@@ -76,6 +76,10 @@ const QString CoreSettings::DefaultPACSListToQuery("PACS/defaultPACSListToQuery"
 //TODO:Aquesta clau està duplicada a InputOutputSettings
 const QString CoreSettings::PacsListConfigurationSectionName = "PacsList";
 
+const QString Q2DViewerBase("2DViewer/");
+const QString CoreSettings::EnableQ2DViewerSliceScrollLoop(Q2DViewerBase + "enable2DViewerSliceScrollLoop");
+const QString CoreSettings::EnableQ2DViewerPhaseScrollLoop(Q2DViewerBase + "enable2DViewerPhaseScrollLoop");
+
 CoreSettings::CoreSettings()
 {
 }
@@ -104,6 +108,8 @@ void CoreSettings::init()
     settingsRegistry->addSetting(AllowAsynchronousVolumeLoading, true);
     settingsRegistry->addSetting(MaximumNumberOfVolumesLoadingConcurrently, 1);
     settingsRegistry->addSetting(MaximumNumberOfVisibleWindowLevelComboItems, 50);
+    settingsRegistry->addSetting(EnableQ2DViewerSliceScrollLoop, false);
+    settingsRegistry->addSetting(EnableQ2DViewerPhaseScrollLoop, false);
 }
 
 } // End namespace udg
