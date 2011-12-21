@@ -22,7 +22,7 @@ DiagnosisTestResult PortInUseTest::run()
     PortInUse *portInUse = createPortInUse();
     checkIfPortIsInUse(portInUse);
 
-    if (portInUse->getStatus() == PortInUse::PortIsAvailable)
+    if (portInUse->getStatus() == PortInUse::PortIsAvailable || portInUse->getOwner() == PortInUse::PortUsedByStarviewer)
     {
         testResultState = DiagnosisTestResult::Ok;
     }

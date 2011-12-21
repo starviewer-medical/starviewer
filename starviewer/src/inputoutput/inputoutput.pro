@@ -95,7 +95,8 @@ HEADERS += databaseconnection.h \
     incomingdicomconnectionsportinusetest.h \
     dicomdirburningapplicationtest.h \
     localdatabasepacsretrievedimagesdal.h \
-    cachetest.h
+    cachetest.h \
+    portinusebyanotherapplication.h
 SOURCES += databaseconnection.cpp \
     pacsdevicemanager.cpp \
     pacsconnection.cpp \
@@ -166,7 +167,12 @@ SOURCES += databaseconnection.cpp \
     incomingdicomconnectionsportinusetest.cpp \
     dicomdirburningapplicationtest.cpp \
     localdatabasepacsretrievedimagesdal.cpp \
-    cachetest.cpp
+    cachetest.cpp \
+    portinusebyanotherapplication.cpp
+win32 {
+    HEADERS += windowsportinusebyanotherapplication.h
+    SOURCES += windowsportinusebyanotherapplication.cpp
+}
 INCLUDEPATH += ../core
 DEPENDPATH += ../core
 TEMPLATE = lib

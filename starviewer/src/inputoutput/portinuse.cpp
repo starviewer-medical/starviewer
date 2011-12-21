@@ -1,4 +1,5 @@
 #include "portinuse.h"
+#include "portinusebyanotherapplication.h"
 
 #include <QTcpServer>
 
@@ -36,7 +37,39 @@ bool PortInUse::isPortInUse(int port)
         m_status = PortInUse::PortCheckError;
     }
 
+    m_lastPortChecked = port;
     return portInUse;
+}
+
+PortInUse::PortInUseOwner PortInUse::getOwner()
+{
+    PortInUse::PortInUseOwner owner = PortInUse::PortUsedByUnknown;
+
+    // En cas que el port estigui en ús, cal mirar si l'ha obert Starviewer o una altra aplicació
+    if (m_status == PortInUse::PortIsInUse)
+    {
+        // S'instancia un objecte de la calsse segons el sistema operatiu
+        PortInUseByAnotherApplication *portInUse = createPortInUseByAnotherApplication();
+        bool error;
+        bool inUse = portInUse->isPortInUseByAnotherApplication(m_lastPortChecked, error);
+        if (!error)
+        {
+            if (inUse)
+            {
+                // Port obert per una altra aplicació
+                owner = PortInUse::PortUsedByOther;
+            }
+            else
+            {
+                // port obert per Starviewer
+                owner = PortInUse::PortUsedByStarviewer;
+            }
+        }
+
+        delete portInUse;
+    }
+
+    return owner;
 }
 
 bool PortInUse::isPortAvailable(int port, QAbstractSocket::SocketError &serverError, QString &errorString)
@@ -62,6 +95,11 @@ PortInUse::PortInUseStatus PortInUse::getStatus()
 QString PortInUse::getErrorString()
 {
     return m_errorString;
+}
+
+udg::PortInUseByAnotherApplication* PortInUse::createPortInUseByAnotherApplication()
+{
+    return PortInUseByAnotherApplication::newInstance();
 }
 
 } // End udg namespace
