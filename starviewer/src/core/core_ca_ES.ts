@@ -432,7 +432,7 @@ Acc:%6
     <message>
         <location filename="q2dviewerconfigurationscreenbase.ui" line="35"/>
         <source>Enable phase scroll loop</source>
-        <translation type="unfinished">Habilitar el desplaçament de fases en bucle</translation>
+        <translation>Habilitar el desplaçament de fases en bucle</translation>
     </message>
 </context>
 <context>
