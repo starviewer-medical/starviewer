@@ -17,7 +17,9 @@ FORMS += qlogviewerbase.ui \
     qtransferfunctiongraphicalviewbase.ui \
     synchronizationeditionwidgetbase.ui \
     qdiagnosistestbase.ui \
-    qdiagnosistestresultwidgetbase.ui
+    qdiagnosistestresultwidgetbase.ui \
+    q2dviewerconfigurationscreenbase.ui
+
 TRANSLATIONS += core_ca_ES.ts \
     core_es_ES.ts \
     core_en_GB.ts
@@ -282,7 +284,8 @@ HEADERS += extensionfactory.h \
     magnifyingglasstooldata.h \
     qdiagnosistest.h \
     qdiagnosistestresultwidget.h \
-    rundiagnosistest.h
+    rundiagnosistest.h \
+    q2dviewerconfigurationscreen.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -520,7 +523,9 @@ SOURCES += extensionmediator.cpp \
     magnifyingglasstooldata.cpp \
     qdiagnosistest.cpp \
     qdiagnosistestresultwidget.cpp \
-    rundiagnosistest.cpp
+    rundiagnosistest.cpp \
+    q2dviewerconfigurationscreen.cpp
+
 win32 {
     HEADERS += windowsfirewallaccess.h \
                windowssysteminformation.h

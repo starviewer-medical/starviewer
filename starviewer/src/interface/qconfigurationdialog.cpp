@@ -7,6 +7,7 @@
 #include "qlocaldatabaseconfigurationscreen.h"
 #include "qlistenrisrequestsconfigurationscreen.h"
 #include "qdicomdirconfigurationscreen.h"
+#include "q2dviewerconfigurationscreen.h"
 #include "starviewerapplication.h"
 
 namespace udg {
@@ -47,6 +48,10 @@ QConfigurationDialog::QConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
 
     connect(m_viewAdvancedOptions, SIGNAL(stateChanged(int)), SLOT(setViewAdvancedConfiguration()));
 
+    // Configuració del visor 2D
+    Q2DViewerConfigurationScreen *q2dviewerScreen = new Q2DViewerConfigurationScreen(this);
+    addConfigurationWidget(q2dviewerScreen, tr("2D Viewer"), BasicConfiguration);
+    
     m_optionsList->setCurrentRow(0);
     m_viewAdvancedOptions->setCheckState(Qt::Checked);
 }

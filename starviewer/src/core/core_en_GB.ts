@@ -14,7 +14,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="coresettings.cpp" line="91"/>
+        <location filename="coresettings.cpp" line="95"/>
         <source>PNG (*.png)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -263,6 +263,11 @@
         <source>Update</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="applicationversiontest.cpp" line="55"/>
+        <source>New versions available</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>udg::DistanceTool</name>
@@ -274,6 +279,14 @@
     <message>
         <location filename="distancetool.cpp" line="124"/>
         <source>%1 px</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::FirewallAccessTest</name>
+    <message>
+        <location filename="firewallaccesstest.cpp" line="48"/>
+        <source>Firewall allow %1 connections</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -294,7 +307,7 @@
 <context>
     <name>udg::MagnifyingGlassToolData</name>
     <message>
-        <location filename="magnifyingglasstooldata.cpp" line="35"/>
+        <location filename="magnifyingglasstooldata.cpp" line="56"/>
         <source>Magnifying Glass</source>
         <translation type="unfinished"></translation>
     </message>
@@ -321,17 +334,12 @@
 <context>
     <name>udg::PatientBrowserMenu</name>
     <message>
-        <location filename="patientbrowsermenu.cpp" line="34"/>
-        <source>Study %1 : %2 [%3] %4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="patientbrowsermenu.cpp" line="44"/>
+        <location filename="patientbrowsermenu.cpp" line="54"/>
         <source> Series %1: %2 %3 %4 %5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="patientbrowsermenu.cpp" line="97"/>
+        <location filename="patientbrowsermenu.cpp" line="107"/>
         <source>%1 
 %2 
 %3
@@ -342,17 +350,17 @@
 <context>
     <name>udg::Q2DViewer</name>
     <message>
-        <location filename="q2dviewer.cpp" line="1885"/>
+        <location filename="q2dviewer.cpp" line="1902"/>
         <source>Slice: %1/%2 Phase: %3/%4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1898"/>
+        <location filename="q2dviewer.cpp" line="1915"/>
         <source>Slice: %1/%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1880"/>
+        <location filename="q2dviewer.cpp" line="1897"/>
         <source>Slice: %1-%2/%3 Phase: %4/%5</source>
         <translation type="unfinished"></translation>
     </message>
@@ -362,23 +370,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1894"/>
+        <location filename="q2dviewer.cpp" line="1911"/>
         <source>Slice: %1-%2/%3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1904"/>
+        <location filename="q2dviewer.cpp" line="1921"/>
         <source> Thickness: %1 mm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1612"/>
+        <location filename="q2dviewer.cpp" line="1629"/>
         <source>%1 x %2
 WW: %5 WL: %6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1648"/>
+        <location filename="q2dviewer.cpp" line="1665"/>
         <source>%1
 %2
 %3 %4 %5
@@ -388,13 +396,31 @@ Acc:%6
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1858"/>
+        <location filename="q2dviewer.cpp" line="1875"/>
         <source>Loc: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1866"/>
+        <location filename="q2dviewer.cpp" line="1883"/>
         <source>-%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::Q2DViewerConfigurationScreenBase</name>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="14"/>
+        <source>2D Viewer Configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="28"/>
+        <source>Enable slice scroll loop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="35"/>
+        <source>Enable phase scroll loop</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -611,6 +637,99 @@ Shading will be disabled, it won&apos;t render as expected.</source>
     <message>
         <location filename="qdicomdumpbrowserbase.ui" line="99"/>
         <source>Highlight only</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QDiagnosisTest</name>
+    <message>
+        <location filename="qdiagnosistest.cpp" line="78"/>
+        <source>Running test: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdiagnosistest.cpp" line="86"/>
+        <source>%1 errors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdiagnosistest.cpp" line="87"/>
+        <source>%1 Ok</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdiagnosistest.cpp" line="88"/>
+        <source>%1 warnings</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QDiagnosisTestBase</name>
+    <message>
+        <location filename="qdiagnosistestbase.ui" line="29"/>
+        <source>Diagnosis test</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdiagnosistestbase.ui" line="49"/>
+        <location filename="qdiagnosistestbase.ui" line="63"/>
+        <source>TextLabel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdiagnosistestbase.ui" line="94"/>
+        <source>Run tests</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdiagnosistestbase.ui" line="188"/>
+        <source>All tests passed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdiagnosistestbase.ui" line="220"/>
+        <source>&lt;a href=&quot;ok&quot;&gt;View tests&lt;/a&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdiagnosistestbase.ui" line="285"/>
+        <source>0 errors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdiagnosistestbase.ui" line="324"/>
+        <source>0 Succeded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdiagnosistestbase.ui" line="353"/>
+        <source>0 warnings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdiagnosistestbase.ui" line="417"/>
+        <source>Test description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdiagnosistestbase.ui" line="453"/>
+        <source>Ok</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QDiagnosisTestResultWidgetBase</name>
+    <message>
+        <location filename="qdiagnosistestresultwidgetbase.ui" line="14"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdiagnosistestresultwidgetbase.ui" line="53"/>
+        <location filename="qdiagnosistestresultwidgetbase.ui" line="72"/>
+        <location filename="qdiagnosistestresultwidgetbase.ui" line="151"/>
+        <location filename="qdiagnosistestresultwidgetbase.ui" line="183"/>
+        <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -983,6 +1102,11 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="systemrequerimentstest.cpp" line="244"/>
         <source>Change the optical drive to a CD-RW/DVD-RW</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="systemrequerimentstest.cpp" line="257"/>
+        <source>system requeriments</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

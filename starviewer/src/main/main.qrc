@@ -135,5 +135,6 @@
     <file>images/expand.gif</file>
     <file>images/checkOkBigger.png</file>
     <file>images/collapse.gif</file>
+    <file>images/q2dviewerconfiguration.png</file>
   </qresource>
 </RCC>
