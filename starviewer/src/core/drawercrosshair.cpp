@@ -138,9 +138,12 @@ double DrawerCrossHair::getDistanceToPoint(double *point3D, double closestPoint[
 
 void DrawerCrossHair::getBounds(double bounds[6])
 {
-    // TODO Falta implementar!!! Ara tornem els bounds "buits"
-    memset(bounds, 0.0, sizeof(double) * 6);
-    DEBUG_LOG("DrawerCrossHair::getBounds() no implementat!");
+    bounds[0] = m_lineLeft->getFirstPoint()[0];
+    bounds[1] = m_lineRight->getFirstPoint()[0];
+    bounds[2] = m_lineUp->getFirstPoint()[1];
+    bounds[3] = m_lineDown->getFirstPoint()[1];
+    bounds[4] = m_lineBack->getFirstPoint()[2];
+    bounds[5] = m_lineFront->getFirstPoint()[2];
 }
 
 void DrawerCrossHair::setVisibility(bool visible)
