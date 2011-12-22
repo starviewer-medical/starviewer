@@ -1127,35 +1127,6 @@
       </layout>
      </item>
      <item>
-      <widget class="QToolButton" name="m_magnifyingGlassToolButton">
-       <property name="text">
-        <string>Lupa</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../../../main/main.qrc">
-         <normaloff>:/images/zoom.png</normaloff>:/images/zoom.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>32</width>
-         <height>32</height>
-        </size>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-       <property name="checked">
-        <bool>false</bool>
-       </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextUnderIcon</enum>
-       </property>
-       <property name="autoRaise">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
       <spacer>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
