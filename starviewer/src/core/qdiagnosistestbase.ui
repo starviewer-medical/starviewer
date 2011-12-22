@@ -86,34 +86,6 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <widget class="QPushButton" name="m_runDiagnosisTestButton">
-          <property name="text">
-           <string>Run tests</string>
-          </property>
-          <property name="icon">
-           <iconset resource="../main/main.qrc">
-            <normaloff>:/images/play.png</normaloff>:/images/play.png</iconset>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>511</width>
-            <height>13</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </item>
      </layout>
     </widget>
    </item>

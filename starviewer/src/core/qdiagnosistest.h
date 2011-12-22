@@ -26,6 +26,9 @@ public:
 
     ~QDiagnosisTest();
 
+    /// Executa els test i mostra el resultats. No torna d'aquest mètode fins que l'usuari tanca el QDialog
+    void execAndRunDiagnosisTest();
+
 signals:
     void start();
 
