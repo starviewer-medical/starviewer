@@ -19,6 +19,10 @@ QConfigurationDialog::QConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
     setWindowTitle(tr("%1 Configuration").arg(ApplicationNameString));
     setWindowFlags((this->windowFlags() | Qt::WindowMaximizeButtonHint) ^ Qt::WindowContextHelpButtonHint);
 
+    // Configuració del visor 2D
+    Q2DViewerConfigurationScreen *q2dviewerScreen = new Q2DViewerConfigurationScreen(this);
+    addConfigurationWidget(q2dviewerScreen, tr("2D Viewer"), BasicConfiguration);
+
 #ifndef STARVIEWER_LITE
     // No mostrem configuració del PACS
     QConfigurationScreen *pacsConfigurationScreen = new QConfigurationScreen(this);
@@ -48,10 +52,6 @@ QConfigurationDialog::QConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
 
     connect(m_viewAdvancedOptions, SIGNAL(stateChanged(int)), SLOT(setViewAdvancedConfiguration()));
 
-    // Configuració del visor 2D
-    Q2DViewerConfigurationScreen *q2dviewerScreen = new Q2DViewerConfigurationScreen(this);
-    addConfigurationWidget(q2dviewerScreen, tr("2D Viewer"), BasicConfiguration);
-    
     m_optionsList->setCurrentRow(0);
     m_viewAdvancedOptions->setCheckState(Qt::Checked);
 }
