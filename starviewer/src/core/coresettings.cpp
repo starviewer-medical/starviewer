@@ -79,6 +79,8 @@ const QString CoreSettings::PacsListConfigurationSectionName = "PacsList";
 const QString Q2DViewerBase("2DViewer/");
 const QString CoreSettings::EnableQ2DViewerSliceScrollLoop(Q2DViewerBase + "enable2DViewerSliceScrollLoop");
 const QString CoreSettings::EnableQ2DViewerPhaseScrollLoop(Q2DViewerBase + "enable2DViewerPhaseScrollLoop");
+const QString CoreSettings::EnableQ2DViewerReferenceLinesForMR(Q2DViewerBase + "enable2DViewerReferenceLinesForMR");
+const QString CoreSettings::EnableQ2DViewerReferenceLinesForCT(Q2DViewerBase + "enable2DViewerReferenceLinesForCT");
 
 CoreSettings::CoreSettings()
 {
@@ -110,6 +112,8 @@ void CoreSettings::init()
     settingsRegistry->addSetting(MaximumNumberOfVisibleWindowLevelComboItems, 50);
     settingsRegistry->addSetting(EnableQ2DViewerSliceScrollLoop, false);
     settingsRegistry->addSetting(EnableQ2DViewerPhaseScrollLoop, false);
+    settingsRegistry->addSetting(EnableQ2DViewerReferenceLinesForMR, true);
+    settingsRegistry->addSetting(EnableQ2DViewerReferenceLinesForCT, false);
 }
 
 } // End namespace udg

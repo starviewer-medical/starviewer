@@ -17,6 +17,7 @@
 #include "automaticsynchronizationtool.h"
 #include "automaticsynchronizationmanager.h"
 #include "automaticsynchronizationtooldata.h"
+#include "coresettings.h"
 // Per poder fer screenshots desde menú
 #include "screenshottool.h"
 #include "toolproxy.h"
@@ -313,7 +314,12 @@ void Q2DViewerExtension::addPreviousHangingProtocols(QList<Study*> studies)
 
 void Q2DViewerExtension::setupDefaultToolsForModalities(const QStringList &modalities)
 {
-    if (modalities.contains("MR"))
+    Settings settings;
+
+    bool enableReferenceLinesForMR = settings.getValue(CoreSettings::EnableQ2DViewerReferenceLinesForMR).toBool();
+    bool enableReferenceLinesForCT = settings.getValue(CoreSettings::EnableQ2DViewerReferenceLinesForCT).toBool();
+    
+    if (modalities.contains("MR") && enableReferenceLinesForMR || modalities.contains("CT") && enableReferenceLinesForCT)
     {
         m_referenceLinesToolButton->defaultAction()->setChecked(true);
     }

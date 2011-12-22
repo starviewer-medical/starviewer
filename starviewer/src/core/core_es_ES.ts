@@ -14,7 +14,7 @@
         <translation>Previsualización no disponible</translation>
     </message>
     <message>
-        <location filename="coresettings.cpp" line="95"/>
+        <location filename="coresettings.cpp" line="97"/>
         <source>PNG (*.png)</source>
         <translation></translation>
     </message>
@@ -335,6 +335,11 @@
 <context>
     <name>udg::PatientBrowserMenu</name>
     <message>
+        <location filename="patientbrowsermenu.cpp" line="44"/>
+        <source>Study %1 %2 [%3] %4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="patientbrowsermenu.cpp" line="54"/>
         <source> Series %1: %2 %3 %4 %5</source>
         <translation> Serie %1: %2 %3 %4 %5</translation>
@@ -432,6 +437,21 @@ Acc:%6
         <location filename="q2dviewerconfigurationscreenbase.ui" line="35"/>
         <source>Enable phase scroll loop</source>
         <translation>Habilitar el desplazamiento de fases en bucle</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="61"/>
+        <source>Reference Lines by default for these modalities</source>
+        <translation>Activar Líneas de Referencia por defecto para estas modalidades</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="67"/>
+        <source>MR</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="77"/>
+        <source>CT</source>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1131,412 +1151,422 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
 <context>
     <name>udg::ToolRegistry</name>
     <message>
-        <location filename="toolregistry.cpp" line="196"/>
+        <location filename="toolregistry.cpp" line="201"/>
         <source>Enable/Disable Window Level tool</source>
         <translation>Activar/desactivar la herramienta de brillo</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="201"/>
+        <location filename="toolregistry.cpp" line="206"/>
         <source>Zoom</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="204"/>
+        <location filename="toolregistry.cpp" line="209"/>
         <source>Enable/Disable Zoom tool</source>
         <translation>Activar/desactivar la herramienta de zoom</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="212"/>
+        <location filename="toolregistry.cpp" line="217"/>
         <source>Enable/Disable Move tool</source>
         <translation>Activar/desactivar la herramienta de mover</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="217"/>
+        <location filename="toolregistry.cpp" line="222"/>
         <source>Seed</source>
         <translation>Semilla</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="220"/>
+        <location filename="toolregistry.cpp" line="225"/>
         <source>Put Seed tool</source>
         <translation>Sitúa la herramienta de semilla</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="228"/>
+        <location filename="toolregistry.cpp" line="233"/>
         <source>Enable/Disable Magic tool</source>
         <translation>Activar/desactivar la herramienta mágica</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="233"/>
+        <location filename="toolregistry.cpp" line="238"/>
         <source>Screen Shot</source>
         <translation>Captura de pantalla</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="235"/>
+        <location filename="toolregistry.cpp" line="240"/>
         <source>Enable/Disable Screen shot tool</source>
         <translation>Activa/desactivar la herramienta de captura de pantalla</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="236"/>
+        <location filename="toolregistry.cpp" line="241"/>
         <source>Export a viewer screenshot to an image file format</source>
         <translation>Exportar una captura de pantalla de un visor a un formato de archivo de imagen</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="240"/>
+        <location filename="toolregistry.cpp" line="245"/>
         <source>3D Rotation</source>
         <translation>Rotación 3D</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="243"/>
+        <location filename="toolregistry.cpp" line="248"/>
         <source>Enable/Disable 3D Rotation tool</source>
         <translation>Activar/desactivar la herramienta de rotación 3D</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="251"/>
+        <location filename="toolregistry.cpp" line="256"/>
         <source>Enable/Disable Distances tool</source>
         <translation>Activar/desactivar la herramienta de edición de distancias</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="256"/>
+        <location filename="toolregistry.cpp" line="261"/>
         <source>ROIs</source>
         <oldsource>ROI&apos;s</oldsource>
         <translation></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="258"/>
+        <location filename="toolregistry.cpp" line="263"/>
         <source>Enable/Disable ROI tool</source>
         <translation>Activar/desactivar la herramienta de ROIs</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="265"/>
+        <location filename="toolregistry.cpp" line="270"/>
         <source>Enable/Disable Reference Lines tool</source>
         <translation>Activar/desactivar la herramienta de líneas de referencia</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="266"/>
+        <location filename="toolregistry.cpp" line="271"/>
         <source>Reference Lines</source>
         <translation>Líneas de referencia</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="270"/>
+        <location filename="toolregistry.cpp" line="275"/>
         <source>Voxel Information</source>
         <translation>Información de vóxel</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="273"/>
+        <location filename="toolregistry.cpp" line="278"/>
         <source>Enable voxel information over cursor</source>
         <translation>Activar la información del vóxel bajo el cursor</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="278"/>
+        <location filename="toolregistry.cpp" line="283"/>
         <source>Synchronize tool</source>
         <translation>Herramienta de sincronización</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="280"/>
+        <location filename="toolregistry.cpp" line="285"/>
         <source>Enable/Disable Synchronize tool</source>
         <translation>Activar/desactivar la herramienta de sincronización</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="281"/>
+        <location filename="toolregistry.cpp" line="286"/>
         <source>Synchronize</source>
         <translation>Sincroniza</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="285"/>
+        <location filename="toolregistry.cpp" line="290"/>
         <source>Window Level Presets tool</source>
         <translation>Herramienta de valores predeterminados de window level</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="286"/>
+        <location filename="toolregistry.cpp" line="291"/>
         <source>Enable/Disable Window Level Presets tool</source>
         <translation>Activar/desactivar la herramienta de valores predeterminats de window level</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="293"/>
-        <location filename="toolregistry.cpp" line="300"/>
+        <location filename="toolregistry.cpp" line="298"/>
+        <location filename="toolregistry.cpp" line="305"/>
         <source>Enable/Disable Polyline ROI tool</source>
         <translation>Activar/desactivar la herramienta de polilíneas de ROIs</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="318"/>
+        <location filename="toolregistry.cpp" line="323"/>
         <source>3D Cursor</source>
         <translation>Cursor 3D</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="350"/>
+        <location filename="toolregistry.cpp" line="355"/>
         <source>Clipping Planes</source>
         <translation>Planos de corte</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="353"/>
+        <location filename="toolregistry.cpp" line="358"/>
         <source>Enable/Disable the clipping planes tool</source>
         <translation>Activar/desactivar la herramienta de planos de corte</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="358"/>
+        <location filename="toolregistry.cpp" line="363"/>
         <source>Translation Difference</source>
         <translatorcomment>No es tradueix perquè no es fa servir a la versió oficial</translatorcomment>
         <translation></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="361"/>
+        <location filename="toolregistry.cpp" line="366"/>
         <source>Enable/Disable the translation difference tool</source>
         <translatorcomment>No es tradueix perquè no es fa servir a la versió oficial</translatorcomment>
         <translation></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="366"/>
+        <location filename="toolregistry.cpp" line="371"/>
         <source>Elliptical ROI</source>
         <translation>ROI elíptica</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="369"/>
+        <location filename="toolregistry.cpp" line="374"/>
         <source>Enable/Disable Elliptical ROI tool</source>
         <translation>Activar/desactivar la herramienta de ROI elíptica</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="374"/>
+        <location filename="toolregistry.cpp" line="379"/>
         <source>Auto</source>
         <translation>Automático</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="376"/>
+        <location filename="toolregistry.cpp" line="381"/>
         <source>Enable/Disable Automatic synchronization tool</source>
         <translation>Activar/desactivar la herramienta de sincronización automática</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="381"/>
+        <location filename="toolregistry.cpp" line="386"/>
         <source>Magnifying Glass</source>
         <translation>Lupa</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="384"/>
+        <location filename="toolregistry.cpp" line="389"/>
         <source>Enable/Disable the magnifying glass tool</source>
         <translation>Activar/desactivar la herramienta de lupa</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="413"/>
+        <location filename="toolregistry.cpp" line="394"/>
+        <source>Circle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="toolregistry.cpp" line="397"/>
+        <source>Enable/Disable Circle tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="toolregistry.cpp" line="426"/>
         <source>Restore</source>
         <translation>Restablecer</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="416"/>
+        <location filename="toolregistry.cpp" line="429"/>
         <source>Restore to initial state</source>
         <translation>Restablecer al estado inicial</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="423"/>
+        <location filename="toolregistry.cpp" line="436"/>
         <source>All of current viewer</source>
         <translation>Todo del visor actual</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="426"/>
+        <location filename="toolregistry.cpp" line="439"/>
         <source>Clear primitives from viewer</source>
         <translation>Borrar primitivas del visor</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="433"/>
+        <location filename="toolregistry.cpp" line="446"/>
         <source>Invert WL</source>
         <translation>Invertir escala de grises</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="436"/>
+        <location filename="toolregistry.cpp" line="449"/>
         <source>Invert window level</source>
         <translation>Invertir escala de grises</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="443"/>
+        <location filename="toolregistry.cpp" line="456"/>
         <source>Axial</source>
         <translation>Axial</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="446"/>
+        <location filename="toolregistry.cpp" line="459"/>
         <source>Switch to Axial View</source>
         <translation>Cambiar a vista axial</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="453"/>
+        <location filename="toolregistry.cpp" line="466"/>
         <source>Sagittal</source>
         <oldsource>Saggital</oldsource>
         <translation>Sagital</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="456"/>
+        <location filename="toolregistry.cpp" line="469"/>
         <source>Switch to Sagittal View</source>
         <oldsource>Switch to Saggital View</oldsource>
         <translation>Cambiar a vista sagital</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="463"/>
+        <location filename="toolregistry.cpp" line="476"/>
         <source>Coronal</source>
         <translation>Coronal</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="466"/>
+        <location filename="toolregistry.cpp" line="479"/>
         <source>Switch to Coronal View</source>
         <translation>Cambiar a vista coronal</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="473"/>
+        <location filename="toolregistry.cpp" line="486"/>
         <source>Rotate</source>
         <translation>Rotar</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="476"/>
+        <location filename="toolregistry.cpp" line="489"/>
         <source>Rotate the image in clockwise direction</source>
         <translation>Rotar la imagen en sentido horario</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="477"/>
+        <location filename="toolregistry.cpp" line="490"/>
         <source>Clockwise rotation</source>
         <translation>Rotación en sentido horario</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="483"/>
+        <location filename="toolregistry.cpp" line="496"/>
         <source>Rotate Counter Clockwise</source>
         <translation>Rotar en sentido anti-horario</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="486"/>
+        <location filename="toolregistry.cpp" line="499"/>
         <source>Rotate the image in counter clockwise direction</source>
         <translation>Rotar la imagen en sentido anti-horario</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="487"/>
+        <location filename="toolregistry.cpp" line="500"/>
         <source>Counter-clockwise rotation</source>
         <translation>Rotación en sentido anti-horario</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="493"/>
+        <location filename="toolregistry.cpp" line="506"/>
         <source>Horizontal Flip</source>
         <translation>Flip horizontal</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="496"/>
+        <location filename="toolregistry.cpp" line="509"/>
         <source>Flip the image horizontally</source>
         <translation>Voltear la imagen horizontalmente</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="503"/>
+        <location filename="toolregistry.cpp" line="516"/>
         <source>Vertical Flip</source>
         <translation>Flip vertical</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="506"/>
+        <location filename="toolregistry.cpp" line="519"/>
         <source>Flip the image vertically</source>
         <translation>Voltear la imagen verticalmente</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="177"/>
-        <location filename="toolregistry.cpp" line="185"/>
+        <location filename="toolregistry.cpp" line="182"/>
+        <location filename="toolregistry.cpp" line="190"/>
         <source>Scroll</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="180"/>
+        <location filename="toolregistry.cpp" line="185"/>
         <source>Enable/Disable scroll tool</source>
         <translation>Activar/desactivar la herramienta de cambio de corte</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="188"/>
+        <location filename="toolregistry.cpp" line="193"/>
         <source>Enable/Disable scroll wheel tool</source>
         <translation>Activar/desactivar la herramienta de scroll con la rueda</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="193"/>
+        <location filename="toolregistry.cpp" line="198"/>
         <source>WW/WL</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="209"/>
+        <location filename="toolregistry.cpp" line="214"/>
         <source>Pan</source>
         <translation>Mover</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="225"/>
+        <location filename="toolregistry.cpp" line="230"/>
         <source>Magical ROI</source>
         <translation>ROI mágica</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="248"/>
+        <location filename="toolregistry.cpp" line="253"/>
         <source>Distance</source>
         <translation>Distancia</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="262"/>
+        <location filename="toolregistry.cpp" line="267"/>
         <source>Ref. Lines</source>
         <oldsource>Ref.Lines</oldsource>
         <translation>Líneas de referencia</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="290"/>
+        <location filename="toolregistry.cpp" line="295"/>
         <source>Polyline ROI</source>
         <translation>ROI polilínea</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="294"/>
-        <location filename="toolregistry.cpp" line="298"/>
+        <location filename="toolregistry.cpp" line="299"/>
+        <location filename="toolregistry.cpp" line="303"/>
         <source>ROI</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="301"/>
+        <location filename="toolregistry.cpp" line="306"/>
         <source>Temporal ROI</source>
         <translation>ROI temporal</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="305"/>
+        <location filename="toolregistry.cpp" line="310"/>
         <source>Keyboard slicing tool</source>
         <translation>Herramienta de cambio de corte por teclado</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="306"/>
+        <location filename="toolregistry.cpp" line="311"/>
         <source>Enable/Disable keyboard slicing tool</source>
         <translation>Activar/desactivar el cambio de corte por teclado</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="310"/>
+        <location filename="toolregistry.cpp" line="315"/>
         <source>Erase</source>
         <translation>Borrar</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="313"/>
+        <location filename="toolregistry.cpp" line="318"/>
         <source>Enable/Disable eraser tool</source>
         <translation>Activar/desactivar la herramienta de borrar</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="321"/>
+        <location filename="toolregistry.cpp" line="326"/>
         <source>Enable/Disable Cursor 3D tool</source>
         <translation>Activar/desactivar herramienta de cursor 3D</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="326"/>
+        <location filename="toolregistry.cpp" line="331"/>
         <source>Angle</source>
         <translation>Ángulo</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="329"/>
+        <location filename="toolregistry.cpp" line="334"/>
         <source>Enable/Disable angle tool</source>
         <translation>Activar/desactivar herramienta de ángulo</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="334"/>
+        <location filename="toolregistry.cpp" line="339"/>
         <source>Editor</source>
         <translation>Editor</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="337"/>
+        <location filename="toolregistry.cpp" line="342"/>
         <source>Enable/Disable editor tool</source>
         <translation>Activar/desactivar la herramienta de edición</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="342"/>
+        <location filename="toolregistry.cpp" line="347"/>
         <source>Open Angle</source>
         <oldsource>Non Closed Angle</oldsource>
         <translation>Ángulo abierto</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="345"/>
+        <location filename="toolregistry.cpp" line="350"/>
         <source>Enable/Disable open-angle tool</source>
         <oldsource>Enable/Disable non closed angle tool</oldsource>
         <translation>Activar/desactivar la herramienta de ángulos abiertos</translation>

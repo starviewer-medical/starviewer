@@ -96,6 +96,10 @@ public:
     static const QString EnableQ2DViewerSliceScrollLoop;
     static const QString EnableQ2DViewerPhaseScrollLoop;
 
+    /// Defineix si habilitem per defecte el reference lines per modalitats MR i/o CT
+    static const QString EnableQ2DViewerReferenceLinesForMR;
+    static const QString EnableQ2DViewerReferenceLinesForCT;
+
 };
 
 } // End namespace udg
