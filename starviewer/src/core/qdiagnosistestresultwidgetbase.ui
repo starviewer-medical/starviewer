@@ -45,12 +45,15 @@
           <widget class="QLabel" name="m_iconDiagnosticResultLabel">
            <property name="maximumSize">
             <size>
-             <width>24</width>
-             <height>24</height>
+             <width>16</width>
+             <height>16</height>
             </size>
            </property>
            <property name="text">
             <string>TextLabel</string>
+           </property>
+           <property name="scaledContents">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
