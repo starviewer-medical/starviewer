@@ -137,7 +137,10 @@ private:
     /// Buscar estudis prèvis
     void searchPreviousStudiesWithHangingProtocols();
 #endif
-
+    
+    /// Configura les tools que cal activar per defecte segons la llista de modalitats donada
+    void setupDefaultToolsForModalities(const QStringList &modalities);
+    
     /// Segons les dades del pacient carregat escollirà quina és l'eina del botó esquerre més adient que cal activar per defecte 
     void setupDefaultLeftButtonTool();
 

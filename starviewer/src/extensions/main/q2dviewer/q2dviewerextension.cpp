@@ -311,6 +311,18 @@ void Q2DViewerExtension::addPreviousHangingProtocols(QList<Study*> studies)
 }
 #endif
 
+void Q2DViewerExtension::setupDefaultToolsForModalities(const QStringList &modalities)
+{
+    if (modalities.contains("MR"))
+    {
+        m_referenceLinesToolButton->defaultAction()->setChecked(true);
+    }
+    else
+    {
+        m_referenceLinesToolButton->defaultAction()->setChecked(false);
+    }
+}
+
 void Q2DViewerExtension::setupDefaultLeftButtonTool()
 {
     if (!m_patient)
@@ -388,6 +400,21 @@ Patient* Q2DViewerExtension::getPatient() const
 void Q2DViewerExtension::setPatient(Patient *patient)
 {
     m_patient = patient;
+
+    if (m_patient)
+    {
+        QStringList modalitiesList;
+        foreach (Study *study, m_patient->getStudies())
+        {
+            if (study)
+            {
+                modalitiesList << study->getModalities();
+            }
+        }
+
+        setupDefaultToolsForModalities(modalitiesList);
+    }
+
     setupDefaultLeftButtonTool();
 }
 
