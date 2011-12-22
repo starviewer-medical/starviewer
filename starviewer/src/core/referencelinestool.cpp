@@ -364,7 +364,10 @@ void ReferenceLinesTool::updateImagePlane()
 void ReferenceLinesTool::refreshReferenceViewerData()
 {
     // Si es projectaven plans sobre el nostre drawer, els amaguem
-    m_2DViewer->getDrawer()->disableGroup(ReferenceLinesDrawerGroup);
+    if (m_2DViewer->isActive())
+    {
+        m_2DViewer->getDrawer()->disableGroup(ReferenceLinesDrawerGroup);
+    }
     updateFrameOfReference();
     updateImagePlane();
 }
