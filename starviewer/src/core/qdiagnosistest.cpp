@@ -30,6 +30,9 @@ QDiagnosisTest::QDiagnosisTest(QWidget *parent)
     operationAnimation->setFileName(":/images/loader.gif");
     m_animationInProgressLabel->setMovie(operationAnimation);
     operationAnimation->start();
+
+    //Treiem icona amb ? que apareix al costat del botó de tancar
+    this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 }
 
 QDiagnosisTest::~QDiagnosisTest()
