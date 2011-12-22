@@ -411,10 +411,12 @@ void Q2DViewerExtension::initializeTools()
     m_roiButton->setMenu(roiToolMenu);
     roiToolMenu->addAction(m_toolManager->registerTool("MagicROITool"));
     roiToolMenu->addAction(m_toolManager->registerTool("PolylineROITool"));
+    roiToolMenu->addAction(m_toolManager->registerTool("CircleTool"));
     
     connect(m_toolManager->getRegisteredToolAction("OvalROITool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
     connect(m_toolManager->getRegisteredToolAction("MagicROITool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
     connect(m_toolManager->getRegisteredToolAction("PolylineROITool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
+    connect(m_toolManager->getRegisteredToolAction("CircleTool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
     
     m_cursor3DToolButton->setDefaultAction(m_toolManager->registerTool("Cursor3DTool"));
     m_angleToolButton->setDefaultAction(m_toolManager->registerTool("AngleTool"));
@@ -459,7 +461,7 @@ void Q2DViewerExtension::initializeTools()
     leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "DistanceTool" << "EraserTool";
 #else
     leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineROITool" << "DistanceTool" << "EraserTool" << "AngleTool" << "NonClosedAngleTool"
-                             << "Cursor3DTool" << "OvalROITool" << "MagicROITool";
+                             << "Cursor3DTool" << "OvalROITool" << "MagicROITool" << "CircleTool";
 #endif
 
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);

@@ -402,4 +402,16 @@ unsigned int MathTools::roundUpToPowerOf2(unsigned int v)
     return v;
 }
 
+double MathTools::copySign(double x, double y)
+{
+    if ((x >= +0.0 && y >= +0.0) || (x <= -0.0 && y <= -0.0))
+    {
+        return x;
+    }
+    else
+    {
+        return -x;
+    }
+}
+
 }; // End namespace udg

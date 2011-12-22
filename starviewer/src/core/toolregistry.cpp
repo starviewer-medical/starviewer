@@ -30,6 +30,7 @@
 #include "ovalroitool.h"
 #include "automaticsynchronizationtool.h"
 #include "magnifyingglasstool.h"
+#include "circletool.h"
 
 #include "shortcutmanager.h"
 #include "shortcuts.h"
@@ -157,6 +158,10 @@ Tool* ToolRegistry::getTool(const QString &toolName, QViewer *viewer)
     else if (toolName == "MagnifyingGlassTool")
     {
         tool = new MagnifyingGlassTool(viewer);
+    }
+    else if (toolName == "CircleTool")
+    {
+        tool = new CircleTool(viewer);
     }
     else
     {
@@ -382,6 +387,14 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
         toolAction->setIcon(QIcon(":/images/zoom.png"));
         toolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::MagnifyingGlassTool));
         statusTip = tr("Enable/Disable the magnifying glass tool");
+        toolTip = toolAction->text();
+    }
+    else if (toolName == "CircleTool")
+    {
+        toolAction->setText(tr("Circle"));
+        toolAction->setIcon(QIcon(":/images/circleTool.png"));
+        //toolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::CircleTool));
+        statusTip = tr("Enable/Disable Circle tool");
         toolTip = toolAction->text();
     }
     else
