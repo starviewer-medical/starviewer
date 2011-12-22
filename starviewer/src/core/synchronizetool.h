@@ -78,6 +78,9 @@ private:
 
     /// Visualitzador 2d al que pertany la tool
     Q2DViewer *m_q2dviewer;
+
+    /// Estat de la tool
+    bool m_enabled;
 };
 
 }

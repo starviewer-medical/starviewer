@@ -49,6 +49,8 @@ signals:
     /// Aquest senyal s'emetrà quan el mouse entri al widget
     void selected(Q2DViewerWidget *viewer);
 
+    void manualSynchronizationStateChanged(bool enable);
+
 protected:
     /// Sobrecàrrega de l'event que s'emet quan el mouse fa un clic dins l'àmbit del widget
     void mousePressEvent(QMouseEvent *mouseEvent);

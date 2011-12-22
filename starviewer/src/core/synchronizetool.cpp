@@ -20,6 +20,8 @@ SynchronizeTool::SynchronizeTool(QViewer *viewer, QObject *parent)
     connect(m_q2dviewer, SIGNAL(viewChanged(int)), SLOT(reset()));
 
     setToolData(new SynchronizeToolData());
+
+    m_enabled = true;
 }
 
 SynchronizeTool::~SynchronizeTool()
@@ -68,15 +70,20 @@ void SynchronizeTool::setEnabled(bool enabled)
 {
     if (enabled)
     {
-        connect(m_toolData, SIGNAL(sliceChanged()), SLOT(applySliceChanges()));
-        connect(m_toolData, SIGNAL(windowLevelChanged()), SLOT(applyWindowLevelChanges()));
-        connect(m_toolData, SIGNAL(zoomFactorChanged()), SLOT(applyZoomFactorChanges()));
-        connect(m_toolData, SIGNAL(panChanged()), SLOT(applyPanChanges()));
+        if (!m_enabled)
+        {
+            connect(m_toolData, SIGNAL(sliceChanged()), SLOT(applySliceChanges()));
+            connect(m_toolData, SIGNAL(windowLevelChanged()), SLOT(applyWindowLevelChanges()));
+            connect(m_toolData, SIGNAL(zoomFactorChanged()), SLOT(applyZoomFactorChanges()));
+            connect(m_toolData, SIGNAL(panChanged()), SLOT(applyPanChanges()));
 
-        connect(m_q2dviewer, SIGNAL(sliceChanged(int)), SLOT(setIncrement(int)));
-        connect(m_q2dviewer, SIGNAL(windowLevelChanged(double, double)), SLOT(setWindowLevel(double, double)));
-        connect(m_q2dviewer, SIGNAL(zoomFactorChanged(double)), SLOT(setZoomFactor(double)));
-        connect(m_q2dviewer, SIGNAL(panChanged(double*)), SLOT(setPan(double*)));
+            connect(m_q2dviewer, SIGNAL(sliceChanged(int)), SLOT(setIncrement(int)));
+            connect(m_q2dviewer, SIGNAL(windowLevelChanged(double, double)), SLOT(setWindowLevel(double, double)));
+            connect(m_q2dviewer, SIGNAL(zoomFactorChanged(double)), SLOT(setZoomFactor(double)));
+            connect(m_q2dviewer, SIGNAL(panChanged(double*)), SLOT(setPan(double*)));
+
+            m_enabled = enabled;
+        }
 
         reset();
     }
@@ -91,6 +98,8 @@ void SynchronizeTool::setEnabled(bool enabled)
         disconnect(m_q2dviewer, SIGNAL(windowLevelChanged(double, double)), this, SLOT(setWindowLevel(double, double)));
         disconnect(m_q2dviewer, SIGNAL(zoomFactorChanged(double)), this, SLOT(setZoomFactor(double)));
         disconnect(m_q2dviewer, SIGNAL(panChanged(double*)), this, SLOT(setPan(double*)));
+
+        m_enabled = false;
     }
 }
 

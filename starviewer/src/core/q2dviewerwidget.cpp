@@ -192,6 +192,7 @@ void Q2DViewerWidget::enableSynchronization(bool enable)
         if (synchronizeTool)
         {
             synchronizeTool->setEnabled(enable);
+            emit manualSynchronizationStateChanged(enable);
         }
         else
         {
