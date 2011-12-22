@@ -754,7 +754,7 @@ void QApplicationMainWindow::openShortcutsGuide()
 void QApplicationMainWindow::showDiagnosisTestDialog()
 {
     QDiagnosisTest qDiagnosisTest;
-    qDiagnosisTest.exec();
+    qDiagnosisTest.execAndRunDiagnosisTest();
 }
 
 void QApplicationMainWindow::openReleaseNotes()

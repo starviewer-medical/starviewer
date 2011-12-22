@@ -42,10 +42,15 @@ QDiagnosisTest::~QDiagnosisTest()
     delete m_threadRunningDiagnosisTest;
 }
 
+void QDiagnosisTest::execAndRunDiagnosisTest()
+{
+    this->show();
+    runDiagnosisTest();
+    this->exec();
+}
+
 void QDiagnosisTest::createConnections()
 {
-    connect(m_runDiagnosisTestButton, SIGNAL(clicked()), SLOT(runDiagnosisTest()));
-
     connect(m_succeededTestsToolButton, SIGNAL(clicked()), SLOT(fillDiagnosisTestsResultTable()));
     connect(m_warningTestsToolButton, SIGNAL(clicked()), SLOT(fillDiagnosisTestsResultTable()));
     connect(m_errorTestsToolButton, SIGNAL(clicked()), SLOT(fillDiagnosisTestsResultTable()));
