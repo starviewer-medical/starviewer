@@ -63,6 +63,8 @@ signals:
     /// Senyal que s'emet quan el visualitzador seleccionat canvia
     void selectedViewerChanged(Q2DViewerWidget *viewer);
 
+    void manualSynchronizationStateChanged(bool enable);
+
 protected:
     /// Tractament de l'event de canvi de tamany de la finestra
     /// Quan rebem aquest event, redimensionem els viewers amb la geometria adequada

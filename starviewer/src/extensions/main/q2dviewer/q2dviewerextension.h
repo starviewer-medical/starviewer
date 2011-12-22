@@ -163,8 +163,17 @@ private slots:
     /// Mètode que tracta el canvi de visualitzador seleccionat
     void changeSelectedViewer(Q2DViewerWidget *viewerWidget);
 
-    ///
+    /// Activa el botó d'edició de la sincronització automàtica
     void enableAutomaticSynchonizationEditor(bool enable);
+
+    /// Activa la sincronització manual a tots els visors
+    void activateManualSynchronizationInAllViewers();
+
+    // Desactiva la sincronització manual de tots els visors
+    void deactivateManualSynchronizationInAllViewers();
+
+    // Tracta l'event de quan s'ha seleccionat/desactivat la sincronització manual en qualsevol dels visors
+    void manualSynchronizationActivated(bool enable);
 
 #ifndef STARVIEWER_LITE
     /// Comprova els estats dels viewers quan la sincronització automàtica està activada per determinar si es pot activar l'edició de sincronització

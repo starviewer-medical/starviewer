@@ -201,6 +201,7 @@ void Q2DViewerExtension::createConnections()
     // Connexions necessaries amb els canvis al layout
     connect(m_workingArea, SIGNAL(viewerAdded(Q2DViewerWidget*)), SLOT(activateNewViewer(Q2DViewerWidget*)));
     connect(m_workingArea, SIGNAL(selectedViewerChanged(Q2DViewerWidget*)), SLOT(changeSelectedViewer(Q2DViewerWidget*)));
+    connect(m_workingArea, SIGNAL(manualSynchronizationStateChanged(bool)), SLOT(manualSynchronizationActivated(bool)));
 
 #ifndef STARVIEWER_LITE
     // Per mostrar exportació
@@ -522,6 +523,8 @@ void Q2DViewerExtension::initializeTools()
     connect(m_toolManager->getRegisteredToolAction("Cursor3DTool"), SIGNAL(triggered()), SLOT(disableSynchronization()));
     connect(m_toolManager->getRegisteredToolAction("AutomaticSynchronizationTool"), SIGNAL(triggered(bool)), SLOT(enableAutomaticSynchronizationToViewer(bool)));
     connect(m_automaticSynchronizationEditionButton, SIGNAL(clicked(bool)), SLOT(enableAutomaticSynchonizationEditor(bool)));
+    connect(m_syncronizeAllViewersButton, SIGNAL(clicked(bool)), SLOT(activateManualSynchronizationInAllViewers()));
+    connect(m_syncronizeNoneViewersButton, SIGNAL(clicked(bool)), SLOT(deactivateManualSynchronizationInAllViewers()));
 #endif
 
     // SCREEN SHOT TOOL
@@ -894,8 +897,7 @@ void Q2DViewerExtension::enableAutomaticSynchronizationToViewer(bool enable)
 {
     if (enable)
     {
-        disableSynchronization();//Desactivem sincronització manual
-        enableSynchronizationButton(false);
+        disableSynchronization();//Desactivem sincronització manual, però no el botó
 
         Tool *tool = m_workingArea->getSelectedViewer()->getViewer()->getToolProxy()->getTool("AutomaticSynchronizationTool");
         AutomaticSynchronizationToolData *toolData = dynamic_cast<AutomaticSynchronizationToolData*>(tool->getToolData());
@@ -913,7 +915,6 @@ void Q2DViewerExtension::enableAutomaticSynchronizationToViewer(bool enable)
     }
     else
     {
-        enableSynchronizationButton(true);
         m_automaticSynchronizationEditionButton->setEnabled(false);
     }
 }
@@ -981,6 +982,49 @@ void Q2DViewerExtension::checkSynchronizationEditCanBeEnabled()
         // Actualitzem l'estat del botó
         m_automaticSynchronizationEditionButton->setEnabled(synchronizationEditCanBeEnabled);
     }
+}
+
+void Q2DViewerExtension::activateManualSynchronizationInAllViewers()
+{
+    int numberOfViewers = m_workingArea->getNumberOfViewers();
+
+    for (int i = 0; i < numberOfViewers; i++)
+    {
+        Q2DViewerWidget *widget = m_workingArea->getViewerWidget(i);
+        
+        if (widget->getViewer()->getInput())
+        {
+            widget->enableSynchronization(true);
+        }
+    }
+    m_automaticSynchronizationToolButton->defaultAction()->setChecked(false);
+    m_toolManager->deactivateTool("AutomaticSynchronizationTool");
+
+}
+
+void Q2DViewerExtension::deactivateManualSynchronizationInAllViewers()
+{
+    int numberOfViewers = m_workingArea->getNumberOfViewers();
+
+    for (int i = 0; i < numberOfViewers; i++)
+    {
+        Q2DViewerWidget *widget = m_workingArea->getViewerWidget(i);
+        
+        if (widget->getViewer()->getInput())
+        {
+            widget->enableSynchronization(false);
+        }
+    } 
+}
+
+void Q2DViewerExtension::manualSynchronizationActivated(bool activated)
+{
+    if (activated)
+    {
+        m_automaticSynchronizationToolButton->defaultAction()->setChecked(false);
+        m_toolManager->deactivateTool("AutomaticSynchronizationTool");
+    }
+    
 }
 
 #endif
