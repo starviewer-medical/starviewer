@@ -127,6 +127,9 @@ static bool isNaN(double x);
 /// Retorna la potència de 2 superior més propera a v.
 static unsigned int roundUpToPowerOf2(unsigned int v);
 
+/// Retorna un double amb la magnitud d'x i el signe d'y. La mateixa funcionalitat que std::copysign de C++11.
+static double copySign(double x, double y);
+
 };
 
 } // End namespace udg
