@@ -122,9 +122,10 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_dicomDumpToolButton->setToolTip(tr("Dump DICOM information of the current image"));
     m_windowLevelComboBox->setToolTip(tr("Choose Window/Level Presets"));
 
-    // TODO De moment no fem accessible aquesta funcionalitat ja que no està a punt
+    // TODO De moment no fem accessibles aquestes funcionalitats ja que no estan a punt
     m_imageGrid->setVisible(false);
     m_downImageGrid->setVisible(false);
+    m_automaticSynchronizationEditionButton->setVisible(false);
 
     readSettings();
     createConnections();

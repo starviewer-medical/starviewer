@@ -1059,12 +1059,6 @@
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <widget class="QToolButton" name="m_automaticSynchronizationToolButton">
-         <property name="maximumSize">
-          <size>
-           <width>39</width>
-           <height>38</height>
-          </size>
-         </property>
          <property name="text">
           <string>Automatic</string>
          </property>
