@@ -286,7 +286,8 @@ HEADERS += extensionfactory.h \
     qdiagnosistestresultwidget.h \
     rundiagnosistest.h \
     q2dviewerconfigurationscreen.h \
-    circletool.h
+    circletool.h \
+    diagnosistestresultwriter.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -526,7 +527,8 @@ SOURCES += extensionmediator.cpp \
     qdiagnosistestresultwidget.cpp \
     rundiagnosistest.cpp \
     q2dviewerconfigurationscreen.cpp \
-    circletool.cpp
+    circletool.cpp \
+    diagnosistestresultwriter.cpp
 win32 {
     HEADERS += windowsfirewallaccess.h \
                windowssysteminformation.h
