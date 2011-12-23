@@ -81,6 +81,7 @@ const QString CoreSettings::EnableQ2DViewerSliceScrollLoop(Q2DViewerBase + "enab
 const QString CoreSettings::EnableQ2DViewerPhaseScrollLoop(Q2DViewerBase + "enable2DViewerPhaseScrollLoop");
 const QString CoreSettings::EnableQ2DViewerReferenceLinesForMR(Q2DViewerBase + "enable2DViewerReferenceLinesForMR");
 const QString CoreSettings::EnableQ2DViewerReferenceLinesForCT(Q2DViewerBase + "enable2DViewerReferenceLinesForCT");
+const QString CoreSettings::ModalitiesWithZoomToolByDefault(Q2DViewerBase + "ModalitiesWithZoomToolByDefault");
 
 CoreSettings::CoreSettings()
 {
@@ -114,6 +115,7 @@ void CoreSettings::init()
     settingsRegistry->addSetting(EnableQ2DViewerPhaseScrollLoop, false);
     settingsRegistry->addSetting(EnableQ2DViewerReferenceLinesForMR, true);
     settingsRegistry->addSetting(EnableQ2DViewerReferenceLinesForCT, false);
+    settingsRegistry->addSetting(ModalitiesWithZoomToolByDefault, "MG;CR;RF;OP;DX;MR");
 }
 
 } // End namespace udg

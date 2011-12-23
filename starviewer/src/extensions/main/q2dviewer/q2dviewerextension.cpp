@@ -342,8 +342,20 @@ void Q2DViewerExtension::setupDefaultLeftButtonTool()
     Study *study = m_patient->getStudies().first();
     if (study)
     {
-        if (study->getModalities().contains("MG") || study->getModalities().contains("CR") || study->getModalities().contains("RF") ||
-            study->getModalities().contains("OP") || study->getModalities().contains("DX") || study->getModalities().contains("MR"))
+        Settings settings;
+        bool enableZoom = false;
+
+        QStringList modalitiesWithZoomList = settings.getValue(CoreSettings::ModalitiesWithZoomToolByDefault).toString().split(";", QString::SkipEmptyParts);
+        foreach (const QString &modality, modalitiesWithZoomList)
+        {
+            if (study->getModalities().contains(modality))
+            {
+                enableZoom = true;
+                break;
+            }
+        }
+
+        if (enableZoom)
         {
             m_slicingToolButton->defaultAction()->toggle();
             m_zoomToolButton->defaultAction()->trigger();

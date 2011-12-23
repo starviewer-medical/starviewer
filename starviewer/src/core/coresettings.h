@@ -100,6 +100,9 @@ public:
     static const QString EnableQ2DViewerReferenceLinesForMR;
     static const QString EnableQ2DViewerReferenceLinesForCT;
 
+    /// Defineix les modalitats a les que se'ls hi ha d'activar el zoom per defecte
+    static const QString ModalitiesWithZoomToolByDefault;
+
 };
 
 } // End namespace udg

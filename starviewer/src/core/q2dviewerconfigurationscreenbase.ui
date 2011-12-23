@@ -97,6 +97,217 @@
     </layout>
    </item>
    <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QGroupBox" name="groupBox_2">
+       <property name="title">
+        <string>Zoom by default for these modalities</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
+         <widget class="QCheckBox" name="m_zoomCRCheckBox">
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="text">
+           <string>CR</string>
+          </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QCheckBox" name="m_zoomESCheckBox">
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="text">
+           <string>ES</string>
+          </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QCheckBox" name="m_zoomNMCheckBox">
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="text">
+           <string>NM</string>
+          </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="QCheckBox" name="m_zoomRFCheckBox">
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="text">
+           <string>RF</string>
+          </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="4">
+         <widget class="QCheckBox" name="m_zoomXACheckBox">
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="text">
+           <string>XA</string>
+          </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QCheckBox" name="m_zoomCTCheckBox">
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="whatsThis">
+           <string/>
+          </property>
+          <property name="text">
+           <string>CT</string>
+          </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QCheckBox" name="m_zoomMGCheckBox">
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="text">
+           <string>MG</string>
+          </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QCheckBox" name="m_zoomOPCheckBox">
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="text">
+           <string>OP</string>
+          </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="3">
+         <widget class="QCheckBox" name="m_zoomSCCheckBox">
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="text">
+           <string>SC</string>
+          </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="4">
+         <widget class="QCheckBox" name="m_zoomXCCheckBox">
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="text">
+           <string>XC</string>
+          </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QCheckBox" name="m_zoomDXCheckBox">
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="text">
+           <string>DX</string>
+          </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QCheckBox" name="m_zoomMRCheckBox">
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="text">
+           <string>MR</string>
+          </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QCheckBox" name="m_zoomPTCheckBox">
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="text">
+           <string>PT</string>
+          </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="3">
+         <widget class="QCheckBox" name="m_zoomUSCheckBox">
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="text">
+           <string>US</string>
+          </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
     <spacer>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
