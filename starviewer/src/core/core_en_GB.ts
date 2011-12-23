@@ -14,7 +14,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="coresettings.cpp" line="97"/>
+        <location filename="coresettings.cpp" line="98"/>
         <source>PNG (*.png)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -435,12 +435,80 @@ Acc:%6
     </message>
     <message>
         <location filename="q2dviewerconfigurationscreenbase.ui" line="67"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="259"/>
         <source>MR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="q2dviewerconfigurationscreenbase.ui" line="77"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="181"/>
         <source>CT</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="104"/>
+        <source>Zoom by default for these modalities</source>
+        <oldsource>Zoom tool enabled by default for these modalities</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="113"/>
+        <source>CR</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="126"/>
+        <source>ES</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="139"/>
+        <source>NM</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="152"/>
+        <source>RF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="165"/>
+        <source>XA</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="194"/>
+        <source>MG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="207"/>
+        <source>OP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="220"/>
+        <source>SC</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="233"/>
+        <source>XC</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="246"/>
+        <source>DX</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="272"/>
+        <source>PT</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="285"/>
+        <source>US</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -663,22 +731,22 @@ Shading will be disabled, it won&apos;t render as expected.</source>
 <context>
     <name>udg::QDiagnosisTest</name>
     <message>
-        <location filename="qdiagnosistest.cpp" line="78"/>
+        <location filename="qdiagnosistest.cpp" line="86"/>
         <source>Running test: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="86"/>
+        <location filename="qdiagnosistest.cpp" line="94"/>
         <source>%1 errors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="87"/>
+        <location filename="qdiagnosistest.cpp" line="95"/>
         <source>%1 Ok</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="88"/>
+        <location filename="qdiagnosistest.cpp" line="96"/>
         <source>%1 warnings</source>
         <translation type="unfinished"></translation>
     </message>
@@ -697,42 +765,37 @@ Shading will be disabled, it won&apos;t render as expected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdiagnosistestbase.ui" line="94"/>
-        <source>Run tests</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qdiagnosistestbase.ui" line="188"/>
+        <location filename="qdiagnosistestbase.ui" line="160"/>
         <source>All tests passed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdiagnosistestbase.ui" line="220"/>
+        <location filename="qdiagnosistestbase.ui" line="192"/>
         <source>&lt;a href=&quot;ok&quot;&gt;View tests&lt;/a&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdiagnosistestbase.ui" line="285"/>
+        <location filename="qdiagnosistestbase.ui" line="257"/>
         <source>0 errors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdiagnosistestbase.ui" line="324"/>
+        <location filename="qdiagnosistestbase.ui" line="296"/>
         <source>0 Succeded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdiagnosistestbase.ui" line="353"/>
+        <location filename="qdiagnosistestbase.ui" line="325"/>
         <source>0 warnings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdiagnosistestbase.ui" line="417"/>
+        <location filename="qdiagnosistestbase.ui" line="389"/>
         <source>Test description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdiagnosistestbase.ui" line="453"/>
+        <location filename="qdiagnosistestbase.ui" line="425"/>
         <source>Ok</source>
         <translation type="unfinished"></translation>
     </message>
@@ -746,9 +809,9 @@ Shading will be disabled, it won&apos;t render as expected.</source>
     </message>
     <message>
         <location filename="qdiagnosistestresultwidgetbase.ui" line="53"/>
-        <location filename="qdiagnosistestresultwidgetbase.ui" line="72"/>
-        <location filename="qdiagnosistestresultwidgetbase.ui" line="151"/>
-        <location filename="qdiagnosistestresultwidgetbase.ui" line="183"/>
+        <location filename="qdiagnosistestresultwidgetbase.ui" line="75"/>
+        <location filename="qdiagnosistestresultwidgetbase.ui" line="154"/>
+        <location filename="qdiagnosistestresultwidgetbase.ui" line="186"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
