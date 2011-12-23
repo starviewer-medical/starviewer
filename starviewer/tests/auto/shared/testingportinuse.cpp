@@ -1,4 +1,5 @@
 #include "testingportinuse.h"
+#include "testingportinusebyanotherapplication.h"
 
 namespace testing {
 

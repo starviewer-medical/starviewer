@@ -23,9 +23,14 @@ protected:
     virtual PortInUse* createPortInUse()
     {
         TestingPortInUse *portInUse = new TestingPortInUse();
-        TestingPortInUseByAnotherApplication *portInUseByAnotherApplication = new TestingPortInUseByAnotherApplication();
-        portInUseByAnotherApplication->m_testingInUseByAnotherApplication = m_testingInUseByAnotherApplication;
-        portInUse->m_testingPortInUseByAnotherApplication = portInUseByAnotherApplication;
+        // El port in use by another application s'esborra dins el mètode getOwner de la classe port in use,
+        // el qual només es crida si l'status és diferent de PortIsAvailable
+        if (m_testingStatus != PortInUse::PortIsAvailable)
+        {
+            TestingPortInUseByAnotherApplication *portInUseByAnotherApplication = new TestingPortInUseByAnotherApplication();
+            portInUseByAnotherApplication->m_testingInUseByAnotherApplication = m_testingInUseByAnotherApplication;
+            portInUse->m_testingPortInUseByAnotherApplication = portInUseByAnotherApplication;
+        }
         return portInUse;
     }
 
