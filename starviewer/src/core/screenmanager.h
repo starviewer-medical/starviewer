@@ -42,6 +42,9 @@ public:
     /// Resultat indefinit si l'identificador de pantalla no es correspon amb cap id vàlid
     QRect getAvailableScreenGeometry(int screenID) const;
 
+    /// Retorna la geometria total de la pantalla indicada.
+    QRect getScreenGeometry(int screenID) const;
+
 private:
     /// Calcula la matriu de distribució de les pantalles.
     /// Utilitza la classe DynamicMatrix per crear-se l'estructura de dades per representar la distribució de
