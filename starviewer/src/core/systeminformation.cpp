@@ -1,5 +1,6 @@
 // Starviewer
 #include "systeminformation.h"
+#include "screenmanager.h"
 
 #ifdef WIN32
 #include "windowssysteminformation.h"
@@ -112,10 +113,10 @@ QList<QString> SystemInformation::getGPUDriverVersion()
 QList<QSize> SystemInformation::getScreenResolutions()
 {
     QList<QSize> screenResolutions;
-    QDesktopWidget desktop;
-    for (int i = 0; i < desktop.screenCount(); i++)
+    ScreenManager screenManager;
+    for (int i = 0; i < screenManager.getNumberOfScreens(); i++)
     {
-        screenResolutions.append(desktop.screenGeometry(i).size());
+        screenResolutions.append(screenManager.getScreenGeometry(i).size());
     }
     return screenResolutions;
 }
