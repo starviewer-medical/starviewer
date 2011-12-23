@@ -10,6 +10,7 @@ public:
     bool m_testingInUseByAnotherApplication;
 public:
     TestingPortInUseByAnotherApplication();
+    ~TestingPortInUseByAnotherApplication();
 
     bool isPortInUseByAnotherApplication(int port, bool &error);
 };

@@ -7,6 +7,10 @@ TestingPortInUseByAnotherApplication::TestingPortInUseByAnotherApplication()
 {
 }
 
+TestingPortInUseByAnotherApplication::~TestingPortInUseByAnotherApplication()
+{
+}
+
 bool TestingPortInUseByAnotherApplication::isPortInUseByAnotherApplication(int port, bool &error)
 {
     Q_UNUSED(port);

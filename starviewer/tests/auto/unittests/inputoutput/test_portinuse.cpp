@@ -115,11 +115,13 @@ void test_PortInUse::isPortInUse_ShouldCheckIfPortIsInUseByAnotherApplication()
     {
         // Si la crida isPortInUse retorna que sí (available = fals), cal que l'error sigui AddressInUseError
         portInUse.m_testingServerError = QAbstractSocket::AddressInUseError;
+        // Aquest port in use by another application que es crea aquí, es destrueix dins el mètode getOwner de la classe port in use,
+        // i el mètode només es crida si l'status és diferent de PortIsAvailable
+        TestingPortInUseByAnotherApplication *portInUseByAnotherApplication = new TestingPortInUseByAnotherApplication();
+        portInUseByAnotherApplication->m_testingInUseByAnotherApplication = testingInUseByAnotherApplication;
+        portInUse.m_testingPortInUseByAnotherApplication = portInUseByAnotherApplication;
     }
-    TestingPortInUseByAnotherApplication *portInUseByAnotherApplication = new TestingPortInUseByAnotherApplication();
-    portInUseByAnotherApplication->m_testingInUseByAnotherApplication = testingInUseByAnotherApplication;
-    portInUse.m_testingPortInUseByAnotherApplication = portInUseByAnotherApplication;
-    
+ 
     // El port a comprovar no importa, hi posem un 0
     portInUse.isPortInUse(0);
     QCOMPARE(portInUse.getOwner(), owner);

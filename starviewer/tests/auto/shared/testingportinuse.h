@@ -26,6 +26,7 @@ public:
     /// Atributs per modificar el resultat de isPortInUseByAnotherApplication
     udg::PortInUseByAnotherApplication* m_testingPortInUseByAnotherApplication;
 
+public:
     void setStatus(PortInUse::PortInUseStatus status);
     void setErrorString(const QString &errorString);
     
