@@ -139,5 +139,6 @@
     <file>images/collapse.gif</file>
     <file>images/q2dviewerconfiguration.png</file>
     <file>images/circleTool.png</file>
+    <file>images/perpendicularDistance.png</file>
   </qresource>
 </RCC>

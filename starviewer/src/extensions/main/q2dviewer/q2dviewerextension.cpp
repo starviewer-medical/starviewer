@@ -448,7 +448,16 @@ void Q2DViewerExtension::initializeTools()
     m_translateToolButton->setDefaultAction(m_toolManager->registerTool("TranslateTool"));
     m_windowLevelToolButton->setDefaultAction(m_toolManager->registerTool("WindowLevelTool"));
     m_referenceLinesToolButton->setDefaultAction(m_toolManager->registerTool("ReferenceLinesTool"));
+
     m_distanceToolButton->setDefaultAction(m_toolManager->registerTool("DistanceTool"));
+    // Afegim un menú al botó de distància per incorporar l'eina de distància perpendicular
+    m_distanceToolButton->setPopupMode(QToolButton::MenuButtonPopup);
+    QMenu *distanceToolMenu = new QMenu(this);
+    m_distanceToolButton->setMenu(distanceToolMenu);
+    distanceToolMenu->addAction(m_toolManager->registerTool("PerpendicularDistanceTool"));
+    connect(m_toolManager->getRegisteredToolAction("DistanceTool"), SIGNAL(triggered()), SLOT(rearrangeDistanceToolsMenu()));
+    connect(m_toolManager->getRegisteredToolAction("PerpendicularDistanceTool"), SIGNAL(triggered()), SLOT(rearrangeDistanceToolsMenu()));
+
     m_eraserToolButton->setDefaultAction(m_toolManager->registerTool("EraserTool"));
 #ifndef STARVIEWER_LITE
     m_roiButton->setDefaultAction(m_toolManager->registerTool("OvalROITool"));
@@ -505,9 +514,9 @@ void Q2DViewerExtension::initializeTools()
     QStringList leftButtonExclusiveTools;
 
 #ifdef STARVIEWER_LITE
-    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "DistanceTool" << "EraserTool";
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "DistanceTool" << "PerpendicularDistanceTool" << "EraserTool";
 #else
-    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineROITool" << "DistanceTool" << "EraserTool" << "AngleTool" << "NonClosedAngleTool"
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineROITool" << "DistanceTool" << "PerpendicularDistanceTool" << "EraserTool" << "AngleTool" << "NonClosedAngleTool"
                              << "Cursor3DTool" << "OvalROITool" << "MagicROITool" << "CircleTool";
 #endif
 
@@ -718,6 +727,30 @@ void Q2DViewerExtension::showDicomDumpCurrentDisplayedImage()
     }
 }
 
+void Q2DViewerExtension::rearrangeToolsMenu(QToolButton *menuButton)
+{
+    QList<QAction*> actions;
+    actions << menuButton->defaultAction() << menuButton->menu()->actions();
+
+    bool found = false;
+    int i = 0;
+    while (!found && i < actions.count())
+    {
+        if (actions.at(i)->isChecked())
+        {
+            found = true;
+        }
+        ++i;
+    }
+
+    if (found)
+    {
+        menuButton->setDefaultAction(actions.takeAt(i - 1));
+        menuButton->menu()->clear();
+        menuButton->menu()->addActions(actions);
+    }
+}
+
 #ifndef STARVIEWER_LITE
 void Q2DViewerExtension::showScreenshotsExporterDialog()
 {
@@ -738,26 +771,7 @@ void Q2DViewerExtension::showScreenshotsExporterDialog()
 
 void Q2DViewerExtension::rearrangeROIToolsMenu()
 {
-    QList<QAction*> actions;
-    actions << m_roiButton->defaultAction() << m_roiButton->menu()->actions();
-    
-    bool found = false;
-    int i = 0;
-    while (!found && i < actions.count())
-    {
-        if (actions.at(i)->isChecked())
-        {
-            found = true;
-        }
-        ++i;
-    }
-
-    if (found)
-    {
-        m_roiButton->setDefaultAction(actions.takeAt(i - 1));
-        m_roiButton->menu()->clear();
-        m_roiButton->menu()->addActions(actions);
-    }
+    rearrangeToolsMenu(m_roiButton);
 }
 
 void Q2DViewerExtension::validePhases()
@@ -784,6 +798,11 @@ void Q2DViewerExtension::validePhases()
     }
 }
 #endif
+
+void Q2DViewerExtension::rearrangeDistanceToolsMenu()
+{
+    rearrangeToolsMenu(m_distanceToolButton);
+}
 
 void Q2DViewerExtension::updateDICOMInformationButton()
 {
