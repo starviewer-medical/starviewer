@@ -31,6 +31,7 @@
 #include "automaticsynchronizationtool.h"
 #include "magnifyingglasstool.h"
 #include "circletool.h"
+#include "perpendiculardistancetool.h"
 
 #include "shortcutmanager.h"
 #include "shortcuts.h"
@@ -162,6 +163,10 @@ Tool* ToolRegistry::getTool(const QString &toolName, QViewer *viewer)
     else if (toolName == "CircleTool")
     {
         tool = new CircleTool(viewer);
+    }
+    else if (toolName == "PerpendicularDistanceTool")
+    {
+        tool = new PerpendicularDistanceTool(viewer);
     }
     else
     {
@@ -395,6 +400,14 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
         toolAction->setIcon(QIcon(":/images/circleTool.png"));
         //toolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::CircleTool));
         statusTip = tr("Enable/Disable Circle tool");
+        toolTip = toolAction->text();
+    }
+    else if (toolName == "PerpendicularDistanceTool")
+    {
+        toolAction->setText(tr("Perpendicular Distance"));
+        toolAction->setIcon(QIcon(":/images/perpendicularDistance.png"));
+        //toolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::PerpendicularDistanceTool));
+        statusTip = tr("Enable/disable perpendicular distance tool");
         toolTip = toolAction->text();
     }
     else

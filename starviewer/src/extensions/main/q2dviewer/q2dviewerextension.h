@@ -144,6 +144,9 @@ private:
     /// Segons les dades del pacient carregat escollirà quina és l'eina del botó esquerre més adient que cal activar per defecte 
     void setupDefaultLeftButtonTool();
 
+    /// Col·loca i ordena les icones i el menú de les eines del botó donat segons l'última eina de distància seleccionada
+    void rearrangeToolsMenu(QToolButton *menuButton);
+
 private slots:
 #ifndef STARVIEWER_LITE
     /// Comprova si el nou volum té fases i per tant hem d'activar/descativar la vista coronal+sagital
@@ -152,6 +155,9 @@ private slots:
     /// Col·loca i ordena les icones i el menú de les eines de ROI segons l'última tool de ROI seleccionada
     void rearrangeROIToolsMenu();
 #endif
+
+    /// Col·loca i ordena les icones i el menú de les eines de distància segons l'última eina de distància seleccionada
+    void rearrangeDistanceToolsMenu();
 
     /// Habilita o deshabilita el botó de Dump d'info DICOM segons en la vista en la que es trobi
     /// l'actual visor seleccionat. Si no hi ha cap visor actiu, dehsabilitarà el botó.

@@ -287,7 +287,8 @@ HEADERS += extensionfactory.h \
     rundiagnosistest.h \
     q2dviewerconfigurationscreen.h \
     circletool.h \
-    diagnosistestresultwriter.h
+    diagnosistestresultwriter.h \
+    perpendiculardistancetool.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -528,7 +529,8 @@ SOURCES += extensionmediator.cpp \
     rundiagnosistest.cpp \
     q2dviewerconfigurationscreen.cpp \
     circletool.cpp \
-    diagnosistestresultwriter.cpp
+    diagnosistestresultwriter.cpp \
+    perpendiculardistancetool.cpp
 win32 {
     HEADERS += windowsfirewallaccess.h \
                windowssysteminformation.h
