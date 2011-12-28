@@ -475,8 +475,16 @@ void Q2DViewerExtension::initializeTools()
     connect(m_toolManager->getRegisteredToolAction("CircleTool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
     
     m_cursor3DToolButton->setDefaultAction(m_toolManager->registerTool("Cursor3DTool"));
+    
     m_angleToolButton->setDefaultAction(m_toolManager->registerTool("AngleTool"));
-    m_openAngleToolButton->setDefaultAction(m_toolManager->registerTool("NonClosedAngleTool"));
+    // Afegim un menú al botó d'angle per incorporar la tool d'angles oberts
+    m_angleToolButton->setPopupMode(QToolButton::MenuButtonPopup);
+    QMenu *angleToolMenu = new QMenu(this);
+    m_angleToolButton->setMenu(angleToolMenu);
+    angleToolMenu->addAction(m_toolManager->registerTool("NonClosedAngleTool"));
+    connect(m_toolManager->getRegisteredToolAction("AngleTool"), SIGNAL(triggered()), SLOT(rearrangeAngleToolsMenu()));
+    connect(m_toolManager->getRegisteredToolAction("NonClosedAngleTool"), SIGNAL(triggered()), SLOT(rearrangeAngleToolsMenu()));
+
     m_automaticSynchronizationToolButton->setDefaultAction(m_toolManager->registerTool("AutomaticSynchronizationTool"));
 #endif
     m_voxelInformationToolButton->setDefaultAction(m_toolManager->registerTool("VoxelInformationTool"));
@@ -774,6 +782,31 @@ void Q2DViewerExtension::rearrangeROIToolsMenu()
     rearrangeToolsMenu(m_roiButton);
 }
 
+void Q2DViewerExtension::rearrangeAngleToolsMenu()
+{
+    QList<QAction*> actions;
+    actions << m_angleToolButton->defaultAction() << m_angleToolButton->menu()->actions();
+    
+    bool found = false;
+    int i = 0;
+    while (!found && i < actions.count())
+    {
+        if (actions.at(i)->isChecked())
+        {
+            found = true;
+        }
+        ++i;
+    }
+
+    if (found)
+    {
+        m_angleToolButton->setDefaultAction(actions.takeAt(i - 1));
+        m_angleToolButton->menu()->clear();
+        m_angleToolButton->menu()->addActions(actions);
+    }
+}
+
+
 void Q2DViewerExtension::validePhases()
 {
     if (m_workingArea->getSelectedViewer()->getViewer()->getViewerStatus() == QViewer::SynchronizationEdit)
@@ -962,7 +995,6 @@ void Q2DViewerExtension::enableAutomaticSynchonizationEditor(bool enable)
     m_roiButton->setEnabled(!enable);
     m_distanceToolButton->setEnabled(!enable);
     m_angleToolButton->setEnabled(!enable);
-    m_openAngleToolButton->setEnabled(!enable);
     m_eraserToolButton->setEnabled(!enable);
     
     m_flipHorizontalToolButton->setEnabled(!enable);

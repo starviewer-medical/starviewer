@@ -154,6 +154,10 @@ private slots:
 
     /// Col·loca i ordena les icones i el menú de les eines de ROI segons l'última tool de ROI seleccionada
     void rearrangeROIToolsMenu();
+
+    /// Col·loca i ordena les icones i el menu de les eines d'angles segons l'última tool d'angles seleccionada
+    void rearrangeAngleToolsMenu();
+
 #endif
 
     /// Col·loca i ordena les icones i el menú de les eines de distància segons l'última eina de distància seleccionada
