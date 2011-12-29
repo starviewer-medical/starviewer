@@ -68,11 +68,11 @@ private slots:
 
 };
 
-Q_DECLARE_METATYPE(gdcm::Overlay);
-Q_DECLARE_METATYPE(ImageOverlay);
-Q_DECLARE_METATYPE(QList<ImageOverlay>);
-Q_DECLARE_METATYPE(DrawerBitmap*);
-Q_DECLARE_METATYPE(double*);
+Q_DECLARE_METATYPE(gdcm::Overlay)
+Q_DECLARE_METATYPE(ImageOverlay)
+Q_DECLARE_METATYPE(QList<ImageOverlay>)
+Q_DECLARE_METATYPE(DrawerBitmap*)
+Q_DECLARE_METATYPE(double*)
 
 void test_ImageOverlay::ImageOverlay_InitializesClassAsExpected()
 {    

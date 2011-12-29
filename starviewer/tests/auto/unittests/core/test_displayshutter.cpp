@@ -42,12 +42,12 @@ private slots:
     void getAsVolumePixelData_ReturnsExpectedValues();
 };
 
-Q_DECLARE_METATYPE(DisplayShutter::ShapeType);
-Q_DECLARE_METATYPE(QVector<QPoint>);
-Q_DECLARE_METATYPE(QList<DisplayShutter>);
-Q_DECLARE_METATYPE(DisplayShutter);
-Q_DECLARE_METATYPE(QColor);
-Q_DECLARE_METATYPE(VolumePixelData*);
+Q_DECLARE_METATYPE(DisplayShutter::ShapeType)
+Q_DECLARE_METATYPE(QVector<QPoint>)
+Q_DECLARE_METATYPE(QList<DisplayShutter>)
+Q_DECLARE_METATYPE(DisplayShutter)
+Q_DECLARE_METATYPE(QColor)
+Q_DECLARE_METATYPE(VolumePixelData*)
 
 void test_DisplayShutter::getShapeAsDICOMString_ReturnsExpectedValues_data()
 {

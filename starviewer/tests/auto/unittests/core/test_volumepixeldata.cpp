@@ -14,8 +14,8 @@ private slots:
     void setData_ShouldSetDataFromArray();
 };
 
-Q_DECLARE_METATYPE(unsigned char*);
-Q_DECLARE_METATYPE(int*);
+Q_DECLARE_METATYPE(unsigned char*)
+Q_DECLARE_METATYPE(int*)
 
 void test_VolumePixelData::setData_WrongParametersFromArrayShouldReturn_data()
 {

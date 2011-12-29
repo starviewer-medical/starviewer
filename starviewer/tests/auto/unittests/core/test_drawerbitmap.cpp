@@ -17,8 +17,8 @@ private slots:
     void getDistanceToPoint_ReturnsExpectedValues();
 };
 
-Q_DECLARE_METATYPE(DrawerBitmap*);
-Q_DECLARE_METATYPE(QVector<double>);
+Q_DECLARE_METATYPE(DrawerBitmap*)
+Q_DECLARE_METATYPE(QVector<double>)
 
 void test_DrawerBitmap::getBounds_ReturnsExpectedValues_data()
 {

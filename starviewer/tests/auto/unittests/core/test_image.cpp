@@ -38,11 +38,11 @@ private slots:
     void distance_ReturnsExpectedValues();
 };
 
-Q_DECLARE_METATYPE(QList<DisplayShutter>);
-Q_DECLARE_METATYPE(DisplayShutter);
-Q_DECLARE_METATYPE(VolumePixelData*);
-Q_DECLARE_METATYPE(double*);
-Q_DECLARE_METATYPE(Image*);
+Q_DECLARE_METATYPE(QList<DisplayShutter>)
+Q_DECLARE_METATYPE(DisplayShutter)
+Q_DECLARE_METATYPE(VolumePixelData*)
+Q_DECLARE_METATYPE(double*)
+Q_DECLARE_METATYPE(Image*)
 
 void test_Image::hasOverlays_ReturnExpectedValues_data()
 {
