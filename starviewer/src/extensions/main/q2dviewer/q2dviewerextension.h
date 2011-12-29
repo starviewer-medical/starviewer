@@ -144,7 +144,7 @@ private:
     /// Segons les dades del pacient carregat escollirà quina és l'eina del botó esquerre més adient que cal activar per defecte 
     void setupDefaultLeftButtonTool();
 
-    /// Col·loca i ordena les icones i el menú de les eines del botó donat segons l'última eina de distància seleccionada
+    /// Col·loca i ordena les icones i el menú de les eines del botó donat segons l'última eina seleccionada
     void rearrangeToolsMenu(QToolButton *menuButton);
 
 private slots:
@@ -158,7 +158,7 @@ private slots:
     /// Col·loca i ordena les icones i el menu de les eines d'angles segons l'última tool d'angles seleccionada
     void rearrangeAngleToolsMenu();
 
-    /// Col·loca i ordena les icones i el menu de les eines de zoom segons l'última tool d'angles seleccionada
+    /// Col·loca i ordena les icones i el menu de les eines de zoom segons l'última tool de Zoom seleccionada
     void rearrangeZoomToolsMenu();
 
 #endif
