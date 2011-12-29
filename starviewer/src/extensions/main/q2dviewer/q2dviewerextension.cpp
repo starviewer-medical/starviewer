@@ -797,26 +797,7 @@ void Q2DViewerExtension::rearrangeROIToolsMenu()
 
 void Q2DViewerExtension::rearrangeAngleToolsMenu()
 {
-    QList<QAction*> actions;
-    actions << m_angleToolButton->defaultAction() << m_angleToolButton->menu()->actions();
-    
-    bool found = false;
-    int i = 0;
-    while (!found && i < actions.count())
-    {
-        if (actions.at(i)->isChecked())
-        {
-            found = true;
-        }
-        ++i;
-    }
-
-    if (found)
-    {
-        m_angleToolButton->setDefaultAction(actions.takeAt(i - 1));
-        m_angleToolButton->menu()->clear();
-        m_angleToolButton->menu()->addActions(actions);
-    }
+    rearrangeToolsMenu(m_angleToolButton);
 }
 
 void Q2DViewerExtension::rearrangeZoomToolsMenu()
