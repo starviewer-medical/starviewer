@@ -247,7 +247,7 @@ void SlicingTool::chooseBestDefaultScrollMode(Volume *input)
     }
 }
 
-int SlicingTool::getSlicingMode()
+SlicingTool::SlicingMode SlicingTool::getSlicingMode()
 {
     return m_slicingMode;
 }
