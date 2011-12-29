@@ -92,4 +92,5 @@ cuda {
 }
 include(../../basicconfextensions.inc)
 include(../../../cuda.inc)
+include(../../../thirdparty/glew/glew.pri)
 QT += opengl

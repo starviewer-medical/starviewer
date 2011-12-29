@@ -192,9 +192,6 @@ HEADERS += extensionfactory.h \
     defaultsettings.h \
     coresettings.h \
     settingsaccesslevelfilereader.h \
-    glew.h \
-    glxew.h \
-    wglew.h \
     shortcuts.h \
     shortcutmanager.h \
     volumebuilder.h \
@@ -441,7 +438,6 @@ SOURCES += extensionmediator.cpp \
     defaultsettings.cpp \
     coresettings.cpp \
     settingsaccesslevelfilereader.cpp \
-    glew.c \
     shortcuts.cpp \
     shortcutmanager.cpp \
     volumebuilder.cpp \
