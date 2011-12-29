@@ -19,9 +19,9 @@ private slots:
     void getValueAttribute_ReturnsExpectedValues();
 };
 
-Q_DECLARE_METATYPE(DcmDataset*);
-Q_DECLARE_METATYPE(DICOMValueAttribute*);
-Q_DECLARE_METATYPE(DICOMTag);
+Q_DECLARE_METATYPE(DcmDataset*)
+Q_DECLARE_METATYPE(DICOMValueAttribute*)
+Q_DECLARE_METATYPE(DICOMTag)
 
 void test_DICOMTagReader::getValueAttribute_ReturnsNull_data()
 {

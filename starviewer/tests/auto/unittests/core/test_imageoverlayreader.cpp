@@ -20,8 +20,8 @@ private:
     }
 };
 
-Q_DECLARE_METATYPE(gdcm::Image*);
-Q_DECLARE_METATYPE(QList<ImageOverlay>);
+Q_DECLARE_METATYPE(gdcm::Image*)
+Q_DECLARE_METATYPE(QList<ImageOverlay>)
 
 class test_ImageOverlayReader : public QObject {
 Q_OBJECT
