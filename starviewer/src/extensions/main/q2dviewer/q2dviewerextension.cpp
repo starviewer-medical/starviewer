@@ -460,6 +460,15 @@ void Q2DViewerExtension::initializeTools()
 
     m_eraserToolButton->setDefaultAction(m_toolManager->registerTool("EraserTool"));
 #ifndef STARVIEWER_LITE
+    // Afegim un menú al botó de zoom per incorporar la tool de zoom focalitzat
+    m_zoomToolButton->setPopupMode(QToolButton::MenuButtonPopup);
+    QMenu *zoomToolMenu = new QMenu(this);
+    m_zoomToolButton->setMenu(zoomToolMenu);
+    zoomToolMenu->addAction(m_toolManager->registerTool("MagnifyingGlassTool"));
+
+    connect(m_toolManager->getRegisteredToolAction("ZoomTool"), SIGNAL(triggered()), SLOT(rearrangeZoomToolsMenu()));
+    connect(m_toolManager->getRegisteredToolAction("MagnifyingGlassTool"), SIGNAL(triggered()), SLOT(rearrangeZoomToolsMenu()));
+
     m_roiButton->setDefaultAction(m_toolManager->registerTool("OvalROITool"));
     // Afegim un menú al botó de PolylineROI per incorporar la tool de ROI Oval
     m_roiButton->setPopupMode(QToolButton::MenuButtonPopup);
@@ -537,6 +546,10 @@ void Q2DViewerExtension::initializeTools()
     QStringList middleButtonExclusiveTools;
     middleButtonExclusiveTools << "TranslateTool";
     m_toolManager->addExclusiveToolsGroup("MiddleButtonGroup", middleButtonExclusiveTools);
+
+    QStringList zoomExclusiveTools;
+    zoomExclusiveTools << "ZoomTool" << "MagnifyingGlassTool";
+    m_toolManager->addExclusiveToolsGroup("ZoomTools", zoomExclusiveTools);
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
     QStringList defaultTools;
@@ -806,6 +819,10 @@ void Q2DViewerExtension::rearrangeAngleToolsMenu()
     }
 }
 
+void Q2DViewerExtension::rearrangeZoomToolsMenu()
+{
+    rearrangeToolsMenu(m_zoomToolButton);
+}
 
 void Q2DViewerExtension::validePhases()
 {

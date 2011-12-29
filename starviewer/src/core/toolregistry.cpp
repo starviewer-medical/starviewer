@@ -388,8 +388,8 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
     }
     else if (toolName == "MagnifyingGlassTool")
     {
-        toolAction->setText(tr("Magnifying Glass"));
-        toolAction->setIcon(QIcon(":/images/zoom.png"));
+        toolAction->setText(tr("Magnify"));
+        toolAction->setIcon(QIcon(":/images/magnify.png"));
         toolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::MagnifyingGlassTool));
         statusTip = tr("Enable/Disable the magnifying glass tool");
         toolTip = toolAction->text();

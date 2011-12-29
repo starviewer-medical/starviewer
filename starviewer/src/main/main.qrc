@@ -140,5 +140,6 @@
     <file>images/q2dviewerconfiguration.png</file>
     <file>images/circleTool.png</file>
     <file>images/perpendicularDistance.png</file>
+    <file>images/magnify.png</file>
   </qresource>
 </RCC>
