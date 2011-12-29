@@ -534,7 +534,7 @@ void Q2DViewerExtension::initializeTools()
     leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "DistanceTool" << "PerpendicularDistanceTool" << "EraserTool";
 #else
     leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineROITool" << "DistanceTool" << "PerpendicularDistanceTool" << "EraserTool" << "AngleTool" << "NonClosedAngleTool"
-                             << "Cursor3DTool" << "OvalROITool" << "MagicROITool" << "CircleTool";
+                             << "Cursor3DTool" << "OvalROITool" << "MagicROITool" << "CircleTool" << "MagnifyingGlassTool";
 #endif
 
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
@@ -546,10 +546,6 @@ void Q2DViewerExtension::initializeTools()
     QStringList middleButtonExclusiveTools;
     middleButtonExclusiveTools << "TranslateTool";
     m_toolManager->addExclusiveToolsGroup("MiddleButtonGroup", middleButtonExclusiveTools);
-
-    QStringList zoomExclusiveTools;
-    zoomExclusiveTools << "ZoomTool" << "MagnifyingGlassTool";
-    m_toolManager->addExclusiveToolsGroup("ZoomTools", zoomExclusiveTools);
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
     QStringList defaultTools;
