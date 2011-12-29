@@ -24,10 +24,10 @@ public:
     ~ImageOverlay();
 
     /// Assigna/obté les files i columnes de l'overlay
-    void setRows(unsigned int rows);
-    void setColumns(unsigned int columns);
-    unsigned int getRows() const;
-    unsigned int getColumns() const;
+    void setRows(int rows);
+    void setColumns(int columns);
+    int getRows() const;
+    int getColumns() const;
 
     /// Assigna/obté l'origen de l'Overlay
     void setOrigin(int x, int y);
@@ -78,7 +78,7 @@ private:
 
 private:
     /// Files i columnes de l'overlay
-    unsigned int m_rows, m_columns;
+    int m_rows, m_columns;
 
     /// Localització del primer punt de l'overlay respecte als pixels a la imatge, donat com fila\columna.
     /// El pixel superior esquerre té la coordenada 1\1

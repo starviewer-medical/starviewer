@@ -23,22 +23,22 @@ ImageOverlay::~ImageOverlay()
 {
 }
 
-void ImageOverlay::setRows(unsigned int rows)
+void ImageOverlay::setRows(int rows)
 {
     m_rows = rows;
 }
 
-void ImageOverlay::setColumns(unsigned int columns)
+void ImageOverlay::setColumns(int columns)
 {
     m_columns = columns;
 }
 
-unsigned int ImageOverlay::getRows() const
+int ImageOverlay::getRows() const
 {
     return m_rows;
 }
 
-unsigned int ImageOverlay::getColumns() const
+int ImageOverlay::getColumns() const
 {
     return m_columns;
 }
