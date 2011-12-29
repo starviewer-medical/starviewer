@@ -158,6 +158,9 @@ private slots:
     /// Col·loca i ordena les icones i el menu de les eines d'angles segons l'última tool d'angles seleccionada
     void rearrangeAngleToolsMenu();
 
+    /// Col·loca i ordena les icones i el menu de les eines de zoom segons l'última tool d'angles seleccionada
+    void rearrangeZoomToolsMenu();
+
 #endif
 
     /// Col·loca i ordena les icones i el menú de les eines de distància segons l'última eina de distància seleccionada
