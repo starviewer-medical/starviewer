@@ -208,6 +208,9 @@ bool DisplayShutter::setPoints(const QString &pointsString)
                 return setPoints(polygon);
             }
             break;
+
+        case UndefinedShape:
+            return false;
     }
 
     return false;
