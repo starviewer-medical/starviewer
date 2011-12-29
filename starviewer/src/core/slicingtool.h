@@ -20,13 +20,16 @@ public:
     /// Estats de la tool
     enum { None, Slicing };
 
+    /// Mode d'slicing, si estem fent per llesques o per fases
+    enum SlicingMode { SliceMode, PhaseMode };
+
     SlicingTool(QViewer *viewer, QObject *parent = 0);
     ~SlicingTool();
 
     void handleEvent(unsigned long eventID);
 
     /// Retorna el mode de slicing (Slice o Phase)
-    int getSlicingMode();
+    SlicingMode getSlicingMode();
 
 protected:
     /// Actualitza el valor de la llesca/fase, en funció del mode en que estem
@@ -75,11 +78,9 @@ protected:
 
     /// El mode en que movem les llesques.
     /// De moment podrà tenir els valors SliceMode o PhaseMode, per defecte SliceMode
-    int m_slicingMode;
+    SlicingMode m_slicingMode;
 
 private:
-    enum { SliceMode, PhaseMode };
-
     /// Coordenades per calcular el moviment del mouse que determina com incrmentar o decrementar l'slicing
     QPoint m_startPosition;
     QPoint m_currentPosition;
