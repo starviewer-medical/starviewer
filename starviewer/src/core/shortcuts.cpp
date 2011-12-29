@@ -300,7 +300,7 @@ void Shortcuts::init()
     settingsRegistry->addSetting(MaximizeMultipleScreens, shortcutsList);
 
     shortcutsList.clear();
-    shortcutsList.append(QString("")); // TODO Falta tecla de shortcut 
+    shortcutsList.append(QString("Shift+Z"));
     settingsRegistry->addSetting(MagnifyingGlassTool, shortcutsList);
 }
 
