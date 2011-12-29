@@ -77,9 +77,8 @@ Q_DECLARE_METATYPE(double*)
 void test_ImageOverlay::ImageOverlay_InitializesClassAsExpected()
 {    
     ImageOverlay overlay;
-    int intZero = 0;
-    QCOMPARE(overlay.getRows(), intZero);
-    QCOMPARE(overlay.getColumns(), intZero);
+    QCOMPARE(overlay.getRows(), 0);
+    QCOMPARE(overlay.getColumns(), 0);
     QCOMPARE(overlay.getXOrigin(), 1);
     QCOMPARE(overlay.getYOrigin(), 1);
     unsigned char *nullUCharPointer = 0;
