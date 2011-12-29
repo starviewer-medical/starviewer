@@ -326,10 +326,6 @@ Patient::PatientsSimilarity Patient::compareTo(const Patient *patient)
     {
         return Patient::SamePatients;
     }
-    else if (!samePatientIDs && !samePatientNames)
-    {
-        return Patient::DifferentPatients;
-    }
     else if (samePatientIDs && !samePatientNames)
     {
         return Patient::SamePatientIDsDifferentPatientNames;
@@ -337,6 +333,10 @@ Patient::PatientsSimilarity Patient::compareTo(const Patient *patient)
     else if (!samePatientIDs && samePatientNames)
     {
         return Patient::SamePatientNamesDifferentPatientIDs;
+    }
+    else
+    {
+        return Patient::DifferentPatients;
     }
 }
 
