@@ -2,40 +2,37 @@
 
 #include "q2dviewer.h"
 #include "logging.h"
-#include "magnifyingglasstooldata.h"
 
 // vtk
 #include <vtkCommand.h>
+#include <vtkRenderWindow.h>
+#include <vtkRenderer.h>
+#include <vtkCamera.h>
+#include <vtkImageActor.h>
 
 namespace udg {
 
 MagnifyingGlassTool::MagnifyingGlassTool(QViewer *viewer, QObject *parent)
  : Tool(viewer,parent)
 {
-    m_hasSharedData = true;
-    if (!m_toolData)
-    {
-        m_myData = new MagnifyingGlassToolData(viewer->parent());
-        m_toolData = m_myData;
-    }
-    else
-    {
-        m_myData = dynamic_cast<MagnifyingGlassToolData*>(m_toolData);
-    }
-        
     m_toolName = "MagnifyingGlassTool";
+    m_magnifyingWindowShown = false;
+    
     m_2DViewer = qobject_cast<Q2DViewer*>(viewer);
     if (!m_2DViewer)
     {
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ")+ viewer->metaObject()->className());
     }
 
+    m_magnifiedRenderer = vtkRenderer::New();
+
     createConnections();
 }
 
 MagnifyingGlassTool::~MagnifyingGlassTool()
 {
-    m_myData->get2DMagnifyingGlassViewer()->close();
+    hideMagnifiedRenderer();
+    m_magnifiedRenderer->Delete();
 }
 
 void MagnifyingGlassTool::handleEvent(unsigned long eventID)
@@ -43,33 +40,18 @@ void MagnifyingGlassTool::handleEvent(unsigned long eventID)
     switch (eventID)
     {
         case vtkCommand::MouseMoveEvent:
-            double xyz[3];
-            if (m_2DViewer->getCurrentCursorImageCoordinate(xyz))
-            {
-                this->updateMagnifyingGlassWidgetPosition();
-                updateMagnifiedImagePosition();
-                m_myData->get2DMagnifyingGlassViewer()->show();
-
-                // HACK Cal tornar a fer zoom ja que si la finestra encara no s'ha mostrat
-                // el viewer no calcula correctament el zoom
-                if (!m_myData->viewerHasBeenShown())
-                {
-                    m_myData->get2DMagnifyingGlassViewer()->zoom(m_myData->getZoomFactor());
-                    m_myData->setViewerShown(true);
-                }
-            }
-            else
-            {
-                m_myData->get2DMagnifyingGlassViewer()->hide();
-            }
+            updateMagnifiedImage();
             break;
 
         case vtkCommand::EnterEvent:
-            updateMagnifiedView();
+            if (!m_magnifyingWindowShown)
+            {
+                updateMagnifiedRenderer();
+            }
             break;
 
         case vtkCommand::LeaveEvent:
-            m_myData->get2DMagnifyingGlassViewer()->hide();
+            hideMagnifiedRenderer();
             break;
 
         default:
@@ -77,151 +59,132 @@ void MagnifyingGlassTool::handleEvent(unsigned long eventID)
     }
 }
 
-void MagnifyingGlassTool::setVolume(Volume *volume)
-{
-    m_myData->get2DMagnifyingGlassViewer()->setInput(volume);
-    m_myData->get2DMagnifyingGlassViewer()->zoom(m_myData->getZoomFactor());
-}
-
-void MagnifyingGlassTool::setSlice(int slice)
-{
-    m_myData->get2DMagnifyingGlassViewer()->enableRendering(false);
-    m_myData->get2DMagnifyingGlassViewer()->setSlice(slice);
-    // TODO Arreglar-ho perquè sigui automàtic i tingui el mateix WW/WL que la finestra que magnifica
-    setWindowLevel(m_window, m_level);
-    m_myData->get2DMagnifyingGlassViewer()->enableRendering(true);
-    m_myData->get2DMagnifyingGlassViewer()->render();
-}
-
-void MagnifyingGlassTool::setPhase(int phase)
-{
-    m_myData->get2DMagnifyingGlassViewer()->enableRendering(false);
-    m_myData->get2DMagnifyingGlassViewer()->setPhase(phase);
-    // TODO Arreglar-ho perquè sigui automàtic i tingui el mateix WW/WL que la finestra que magnifica
-    setWindowLevel(m_window, m_level);
-    
-    m_myData->get2DMagnifyingGlassViewer()->enableRendering(true);
-    m_myData->get2DMagnifyingGlassViewer()->render();
-}
-
-void MagnifyingGlassTool::setWindowLevel(double window, double level)
-{
-    m_myData->get2DMagnifyingGlassViewer()->setWindowLevel(window, level);
-    m_window = window;
-    m_level = level;
-}
-
-void MagnifyingGlassTool::setZoom(double zoom)
-{
-    m_myData->get2DMagnifyingGlassViewer()->zoom(zoom);
-}
-
-void MagnifyingGlassTool::setSlabThickness(int thickness)
-{
-    m_myData->get2DMagnifyingGlassViewer()->setSlabThickness(thickness);
-}
-
-void MagnifyingGlassTool::updateRotationFactor(int rotationFactor)
-{
-    m_myData->get2DMagnifyingGlassViewer()->setRotationFactor(rotationFactor);
-}
-
-void MagnifyingGlassTool::horizontalFlip()
-{
-    m_myData->get2DMagnifyingGlassViewer()->horizontalFlip();
-}
-
-void MagnifyingGlassTool::setView(int view)
-{
-    m_myData->get2DMagnifyingGlassViewer()->resetView(static_cast<QViewer::CameraOrientationType>(view));
-    m_myData->get2DMagnifyingGlassViewer()->zoom(m_myData->getZoomFactor());
-    
-    setSlice(m_2DViewer->getCurrentSlice());
-}
-
-void MagnifyingGlassTool::updateMagnifyingGlassWidgetPosition()
+void MagnifyingGlassTool::updateMagnifiedViewportPosition()
 {
     // Movem la finestra per que acompanyi el cursor
     QPoint eventPosition = m_2DViewer->getEventPosition();
+    QSize size = m_2DViewer->getRenderWindowSize();
 
-    // Remember to flip y
-    QSize windowSize = m_2DViewer->getRenderWindowSize();
-    eventPosition.setY(windowSize.height() - eventPosition.y());
+    double magnifyingWindowSize = 150.0;
 
-    // Map to global 
-    QPoint globalPoint = m_2DViewer->mapToGlobal(eventPosition);
+    double xMin = eventPosition.x() / (double)size.width() - magnifyingWindowSize / size.width();
+    double xMax = eventPosition.x() / (double)size.width() + magnifyingWindowSize / size.width();
+    double yMin = eventPosition.y() / (double)size.height() - magnifyingWindowSize / size.height();
+    double yMax = eventPosition.y() / (double)size.height() + magnifyingWindowSize / size.height();
 
-    m_myData->get2DMagnifyingGlassViewer()->move(globalPoint.x() + 10, globalPoint.y() + 10);
-}
-
-void MagnifyingGlassTool::updateMagnifiedImagePosition()
-{
-    QSize size = m_myData->get2DMagnifyingGlassViewer()->getRenderWindowSize();
-
-    double newPickPoint[4];
-    m_myData->get2DMagnifyingGlassViewer()->computeDisplayToWorld(size.width() / 2, size.height() / 2, 0, newPickPoint);
-
-    double oldPickPoint[4];
-    m_2DViewer->getLastEventWorldCoordinate(oldPickPoint);
-
-    double motionVector[3];
-    motionVector[0] = oldPickPoint[0] - newPickPoint[0];
-    motionVector[1] = oldPickPoint[1] - newPickPoint[1];
-    motionVector[2] = oldPickPoint[2] - newPickPoint[2];
-
-    m_myData->get2DMagnifyingGlassViewer()->pan(motionVector);
-}
-
-void MagnifyingGlassTool::updateMagnifiedView()
-{
-    m_myData->get2DMagnifyingGlassViewer()->enableRendering(false);
-
-    setVolume(m_2DViewer->getInput());
-    setView(m_2DViewer->getView());
-    setPhase(m_2DViewer->getCurrentPhase());
-    setWindowLevel(m_2DViewer->getCurrentColorWindow(), m_2DViewer->getCurrentColorLevel());
-    m_window = m_2DViewer->getCurrentColorWindow();
-    m_level = m_2DViewer->getCurrentColorLevel();
-    setSlabThickness(m_2DViewer->getSlabThickness());
-    m_myData->get2DMagnifyingGlassViewer()->setRotationFactor(m_2DViewer->getRotationFactor());
-    if (m_2DViewer->isImageFlipped())
+    if (xMin < 0)
     {
-        m_myData->get2DMagnifyingGlassViewer()->horizontalFlip();
+        xMin = 0;
+        xMax = (magnifyingWindowSize / size.width()) * 2;
     }
-    updateMagnifiedImagePosition();
-    m_myData->get2DMagnifyingGlassViewer()->enableRendering(true);
-    m_myData->get2DMagnifyingGlassViewer()->render();
+    if (yMin < 0)
+    {
+        yMin = 0;
+        yMax = (magnifyingWindowSize / size.height()) * 2;
+    }
+    if (xMax > 1)
+    {
+        xMin = 1 - ((magnifyingWindowSize / size.width()) * 2);
+        xMax = 1;
+    }
+    if (yMax > 1)
+    {
+        yMin = 1 - ((magnifyingWindowSize / size.height()) * 2);
+        yMax = 1;
+    }
+
+    m_magnifiedRenderer->SetViewport(xMin, yMin, xMax, yMax);
+    m_2DViewer->render();
 }
 
-void MagnifyingGlassTool::setToolData(ToolData *data)
+void MagnifyingGlassTool::hideMagnifiedRenderer()
 {
-    m_toolData = data;
-    m_myData = qobject_cast<MagnifyingGlassToolData*>(data);
+    m_2DViewer->setCursor(QCursor(Qt::ArrowCursor));
+    m_2DViewer->getRenderWindow()->RemoveRenderer(m_magnifiedRenderer);
+    m_2DViewer->render();
+    m_magnifyingWindowShown = false;
+}
 
-    disconnect(m_2DViewer, SIGNAL(volumeChanged(Volume *)), this, SLOT(setVolume(Volume *)));
-    disconnect(m_2DViewer, SIGNAL(viewChanged(int)), this, SLOT(setView(int)));
-    disconnect(m_2DViewer, SIGNAL(sliceChanged(int)), this, SLOT(setSlice(int)));
-    disconnect(m_2DViewer, SIGNAL(phaseChanged(int)), this, SLOT(setPhase(int)));
-    disconnect(m_2DViewer, SIGNAL(windowLevelChanged(double, double)), this, SLOT(setWindowLevel(double, double)));
-    disconnect(m_2DViewer, SIGNAL(zoomFactorChanged(double)), this, SLOT(setZoom(double)));
-    disconnect(m_2DViewer, SIGNAL(slabThicknessChanged(int)), this, SLOT(setSlabThickness(int)));
-    disconnect(m_2DViewer, SIGNAL(rotationFactorChanged(int)), this, SLOT(updateRotationFactor(int)));
-    disconnect(m_2DViewer, SIGNAL(flippedHorizontally()), this, SLOT(horizontalFlip()));
+void MagnifyingGlassTool::updateMagnifiedRenderer()
+{
+    // TODO Nomès s'afegeix una sola vegada si ja existeix??? Comprovar!
+    m_2DViewer->getRenderWindow()->AddRenderer(m_magnifiedRenderer);
+    
+    updateCamera();
 
-    createConnections();
+    // TODO Nomès s'afegeix una sola vegada si ja existeix??? Comprovar!
+    m_magnifiedRenderer->AddViewProp(m_2DViewer->getVtkImageActor());
+    m_magnifyingWindowShown = true;
+}
+
+void MagnifyingGlassTool::updateMagnifiedImage()
+{
+    double xyz[3];
+    if (m_2DViewer->getCurrentCursorImageCoordinate(xyz))
+    {
+        m_2DViewer->setCursor(QCursor(Qt::BlankCursor));
+        if (!m_magnifyingWindowShown)
+        {
+            updateMagnifiedRenderer();
+        }
+        // Actualitzem la posició de la imatge
+        m_magnifiedCamera->SetFocalPoint(xyz);
+        m_magnifiedRenderer->ResetCameraClippingRange();
+        updateMagnifiedViewportPosition();
+        m_2DViewer->render();
+    }
+    else
+    {
+        if (m_magnifyingWindowShown)
+        {
+            hideMagnifiedRenderer();
+        }
+    }
+}
+
+void MagnifyingGlassTool::updateCamera()
+{
+    if (!m_magnifiedCamera)
+    {
+        m_magnifiedCamera = vtkSmartPointer<vtkCamera>::New();
+    }
+    m_magnifiedCamera->DeepCopy(m_2DViewer->getRenderer()->GetActiveCamera());
+    m_magnifiedRenderer->SetActiveCamera(m_magnifiedCamera);
+
+    // Codi extret de QViewer::zoom(). TODO Fer refactoring
+    double factor = 4.0;
+    if (m_magnifiedCamera->GetParallelProjection())
+    {
+        m_magnifiedCamera->SetParallelScale(m_magnifiedCamera->GetParallelScale() / factor);
+    }
+    else
+    {
+        m_magnifiedCamera->Dolly(factor);
+        //if (vtkInteractorStyle::SafeDownCast(this->getInteractor()->GetInteractorStyle())->GetAutoAdjustCameraClippingRange())
+        //{
+            // TODO en principi sempre ens interessarà fer això? ens podriem enstalviar l'if??
+            m_magnifiedRenderer->ResetCameraClippingRange();
+        //}
+    }
+}
+
+void MagnifyingGlassTool::update()
+{
+    updateCamera();
+    updateMagnifiedImage();
+}
+
+void MagnifyingGlassTool::hideAndUpdate()
+{
+    hideMagnifiedRenderer();
+    update();
 }
 
 void MagnifyingGlassTool::createConnections()
 {
-    connect(m_2DViewer, SIGNAL(volumeChanged(Volume *)), SLOT(setVolume(Volume *)));
-    connect(m_2DViewer, SIGNAL(viewChanged(int)), SLOT(setView(int)));
-    connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(setSlice(int)));
-    connect(m_2DViewer, SIGNAL(phaseChanged(int)), SLOT(setPhase(int)));
-    connect(m_2DViewer, SIGNAL(windowLevelChanged(double, double)), SLOT(setWindowLevel(double, double)));
-    connect(m_2DViewer, SIGNAL(zoomFactorChanged(double)), SLOT(setZoom(double)));
-    connect(m_2DViewer, SIGNAL(slabThicknessChanged(int)), SLOT(setSlabThickness(int)));
-    connect(m_2DViewer, SIGNAL(rotationFactorChanged(int)), SLOT(updateRotationFactor(int)));
-    connect(m_2DViewer, SIGNAL(flippedHorizontally()), SLOT(horizontalFlip()));
+    connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(hideAndUpdate()));
+    connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(updateMagnifiedImage()));
+    connect(m_2DViewer, SIGNAL(cameraChanged()), SLOT(update()));
 }
 
 }

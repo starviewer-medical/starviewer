@@ -3,12 +3,19 @@
 
 #include "tool.h"
 
+#include <vtkSmartPointer.h>
+
+class vtkRenderer;
+class vtkCamera;
+
 namespace udg {
 
-class MagnifyingGlassToolData;
 class Q2DViewer;
-class Volume;
 
+/**
+    Tool per mostrar una vista magnificada de la imatge que hi hagi per sota del cursor.
+    L'efecte seria com si poséssim una lupa al cim de la imatge i la poguéssim moure per dins del visor.
+ */
 class MagnifyingGlassTool : public Tool {
 Q_OBJECT
 public:
@@ -17,42 +24,45 @@ public:
 
     void handleEvent(unsigned long eventID);
 
-    void setToolData(ToolData *data);
-    
 protected:
     /// Viewer 2D sobre el qual treballem
     Q2DViewer *m_2DViewer;
 
 private slots:
-    /// Actualitza tots els paràmetres la vista magnificada
-    void updateMagnifiedView();
+    /// Actualitza la càmera i la posició del viewport
+    void update();
+    
+    /// Amaga el renderer i fa un update
+    void hideAndUpdate();
 
-    /// Actualitza la posició del widget segons el moviment del cursor
-    void updateMagnifyingGlassWidgetPosition();
-
-    /// Actualitza la posició de la imatge dins de la vista magnificada
-    void updateMagnifiedImagePosition();
-
-    /// Mètodes per sincronitzar el visor magnificat amb els canvis del visor de referència 
-    void setVolume(Volume *volume);
-    void setView(int view);
-    void setSlice(int slice);
-    void setPhase(int phase);
-    void setWindowLevel(double window, double level);
-    void setZoom(double zoom);
-    void setSlabThickness(int thickness);
-    void updateRotationFactor(int rotationFactor);
-    void horizontalFlip();
+    /// Actualitza la imatge de la vista magnificada
+    void updateMagnifiedImage();
+    
+    /// Actualitza els paràmetres de la càmera de magnificació
+    void updateCamera();
 
 private:
     /// Crea les connexions
     void createConnections();
 
+    /// Actualitza tots els paràmetres la vista magnificada
+    void updateMagnifiedRenderer();
+
+    /// Actualitza la posició de la vista magnificada segons el moviment del cursor
+    void updateMagnifiedViewportPosition();
+
+    /// Elimina el renderer magnificat del render window del Q2DViewer
+    void hideMagnifiedRenderer();
+    
 private:
-    /// Dades específiques de la tool
-    MagnifyingGlassToolData *m_myData;
-    double m_window;
-    double m_level;
+    /// Renderer on tindrem la vista magnificada
+    vtkRenderer *m_magnifiedRenderer;
+    
+    /// Indica si s'ha mostrat o no el renderer de magnificació
+    bool m_magnifyingWindowShown;
+    
+    /// Càmera de la vista magnificada
+    vtkSmartPointer<vtkCamera> m_magnifiedCamera;
 };
 
 }
