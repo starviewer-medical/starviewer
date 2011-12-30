@@ -73,9 +73,6 @@ public slots:
     void showPreviousStudiesWidget();
 #endif
 
-    /// Mostra o amaga tota la informació sobreposada a cada visualitzador (informació textual i overlays)
-    void showViewersLayers(bool show);
-
     /// Mostra o amaga els overlays de cada visualitzador
     void showImageOverlays(bool show);
 

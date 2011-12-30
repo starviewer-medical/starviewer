@@ -113,7 +113,6 @@
     <file>images/usbpendrive.png</file>
     <file>images/view.png</file>
     <file>images/view_left_right.png</file>
-    <file>images/viewerInfo.png</file>
     <file>images/voxelInformation.png</file>
     <file>images/windowLevel.png</file>
     <file>images/zoom.png</file>
@@ -122,7 +121,7 @@
     <file>images/clippingBox.png</file>
     <file>images/showOverlays.png</file>
     <file>images/showDisplayShutters.png</file>
-    <file>images/showViewersTextualInformation.png</file>
+    <file>images/showViewersInformation.png</file>
     <file>xmlSchemes/DICOMDumpDefaultTags.xml</file>
     <file>xmlSchemes/CustomWindowLevels.xml</file>
     <file>cache/upgradeDatabase.xml</file>
