@@ -278,7 +278,6 @@ HEADERS += extensionfactory.h \
     systemrequerimentstest.h \
     synchronizationwidgetbutton.h \
     magnifyingglasstool.h \
-    magnifyingglasstooldata.h \
     qdiagnosistest.h \
     qdiagnosistestresultwidget.h \
     rundiagnosistest.h \
@@ -519,7 +518,6 @@ SOURCES += extensionmediator.cpp \
     systemrequerimentstest.cpp \
     synchronizationwidgetbutton.cpp \
     magnifyingglasstool.cpp \
-    magnifyingglasstooldata.cpp \
     qdiagnosistest.cpp \
     qdiagnosistestresultwidget.cpp \
     rundiagnosistest.cpp \
