@@ -83,8 +83,14 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_screenshotsExporterToolButton->setToolTip(tr("Export viewer image(s) to DICOM and send them to a PACS server"));
 #endif
 
-    m_viewerLayersToolButton->setToolTip(tr("Show/Hide layers"));
-    m_viewerLayersToolButton->setPopupMode(QToolButton::MenuButtonPopup);
+    m_showViewersTextualInformationAction = new QAction(this);
+    m_showViewersTextualInformationAction->setCheckable(true);
+    m_showViewersTextualInformationAction->setChecked(true);
+    m_showViewersTextualInformationAction->setText(tr("Text"));
+    m_showViewersTextualInformationAction->setToolTip(tr("Show/Hide viewer's textual information"));
+    m_showViewersTextualInformationAction->setStatusTip(m_showViewersTextualInformationAction->toolTip());
+    m_showViewersTextualInformationAction->setIcon(QIcon(":/images/showViewersInformation.png"));
+    connect(m_showViewersTextualInformationAction, SIGNAL(toggled(bool)), SLOT(showViewersTextualInformation(bool)));
     
     m_showOverlaysAction = new QAction(this);
     m_showOverlaysAction->setCheckable(true);
@@ -95,15 +101,6 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_showOverlaysAction->setIcon(QIcon(":/images/showOverlays.png"));
     connect(m_showOverlaysAction, SIGNAL(toggled(bool)), SLOT(showImageOverlays(bool)));
 
-    m_showViewersTextualInformationAction = new QAction(this);
-    m_showViewersTextualInformationAction->setCheckable(true);
-    m_showViewersTextualInformationAction->setChecked(true);
-    m_showViewersTextualInformationAction->setText(tr("Text"));
-    m_showViewersTextualInformationAction->setToolTip(tr("Show/Hide viewer's textual information"));
-    m_showViewersTextualInformationAction->setStatusTip(m_showViewersTextualInformationAction->toolTip());
-    m_showViewersTextualInformationAction->setIcon(QIcon(":/images/showViewersTextualInformation.png"));
-    connect(m_showViewersTextualInformationAction, SIGNAL(toggled(bool)), SLOT(showViewersTextualInformation(bool)));
-
     m_showDisplayShuttersAction = new QAction(this);
     m_showDisplayShuttersAction->setCheckable(true);
     m_showDisplayShuttersAction->setChecked(true);
@@ -113,10 +110,12 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_showDisplayShuttersAction->setIcon(QIcon(":/images/showDisplayShutters.png"));
     connect(m_showDisplayShuttersAction, SIGNAL(toggled(bool)), SLOT(showDisplayShutters(bool)));
     
+    m_viewerLayersToolButton->setDefaultAction(m_showViewersTextualInformationAction);
+    
     QMenu *viewerInformationMenu = new QMenu(this);
-    viewerInformationMenu->addAction(m_showViewersTextualInformationAction);
     viewerInformationMenu->addAction(m_showOverlaysAction);
     viewerInformationMenu->addAction(m_showDisplayShuttersAction);
+    m_viewerLayersToolButton->setPopupMode(QToolButton::MenuButtonPopup);
     m_viewerLayersToolButton->setMenu(viewerInformationMenu);
     
     m_dicomDumpToolButton->setToolTip(tr("Dump DICOM information of the current image"));
@@ -193,8 +192,6 @@ void Q2DViewerExtension::createConnections()
     connect(m_predefinedSeriesGrid, SIGNAL(selectedGrid(int)), this, SLOT(setHangingProtocol(int)));
     connect(m_seriesTableGrid, SIGNAL(selectedGrid(int, int)), this, SLOT(setGrid(int, int)));
 
-    // Mostrar o no la informacio del volum a cada visualitzador
-    connect(m_viewerLayersToolButton, SIGNAL(toggled(bool)), SLOT(showViewersLayers(bool)));
     // Per mostrar la informació DICOM de la imatge que s'està veient en aquell moment
     connect(m_dicomDumpToolButton, SIGNAL(clicked()), SLOT(showDicomDumpCurrentDisplayedImage()));
 
@@ -691,13 +688,6 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
             m_thickSlabWidget->unlink();
         }
     }
-}
-
-void Q2DViewerExtension::showViewersLayers(bool show)
-{
-    m_showViewersTextualInformationAction->setChecked(show);
-    m_showOverlaysAction->setChecked(show);
-    m_showDisplayShuttersAction->setChecked(show);
 }
 
 void Q2DViewerExtension::showImageOverlays(bool show)
