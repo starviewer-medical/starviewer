@@ -120,7 +120,7 @@
          <string/>
         </property>
         <property name="pixmap">
-         <pixmap resource="../main/main.qrc">:/images/expand.gif</pixmap>
+         <pixmap resource="../main/main.qrc">:/images/expand.png</pixmap>
         </property>
        </widget>
       </item>
