@@ -24,23 +24,19 @@ public:
     ~DiagnosisTestResultWriter();
 
     /// Mètode que crea i escriu un fitxer txt per guardar resultats dels testos de diagnosi.
-    void write();
-    
-    /// Afegeix la parella de DiagnosisTest* i DiagnosisTestResult a la llista de tests que s'escriuran a fitxer
-    void addDiagnosisTest(DiagnosisTest *diagnosisTest, const DiagnosisTestResult &diagnosisTestResult);
+    void write(const QString &pathFile);
 
-    /// Establir el path i nom del fitxer
-    void setPath(const QString &path);
+    /// Afegeix els testos a gravar al fitxer
+    void setDiagnosisTests(QList<QPair<DiagnosisTest*, DiagnosisTestResult> > diagnosisTests);
 
 protected:
     // Crea el fitxer per poder-hi escriure, si ja existeix l'esborra i el torna a crear perquè quedi net.
-    virtual QFile* createFile();
+    virtual QFile* createFile(const QString &pathFile);
     // Crea el textStream que escriurà a fitxer
     virtual QTextStream* createTextStream(QFile *file);
 
 private:
     QList<QPair<DiagnosisTest*, DiagnosisTestResult> > m_diagnosisTests;
-    QString m_path;
 };
 
 }
