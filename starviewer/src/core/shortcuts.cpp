@@ -40,6 +40,9 @@ const QString Shortcuts::ClearCurrentViewAnnotationsTool(ShortcutsBase + "ClearC
 const QString Shortcuts::TransDifferenceTool(ShortcutsBase + "TransDifferenceActionTool");
 const QString Shortcuts::OvalROITool(ShortcutsBase + "OvalROITool");
 const QString Shortcuts::MagnifyingGlassTool(ShortcutsBase + "MagnifyingGlassTool");
+const QString Shortcuts::AutomaticSynchronizationTool(ShortcutsBase + "AutomaticSynchronizationTool");
+const QString Shortcuts::SynchronizeAllViewers(ShortcutsBase + "SynchronizeAllViewers");
+const QString Shortcuts::DesynchronizeAllViewers(ShortcutsBase + "SynchronizeNoneViewer");
 
 const QString Shortcuts::SaveSingleScreenShot(ShortcutsBase + "SaveSingleScreenShot");
 const QString Shortcuts::SaveWholeSeriesScreenShot(ShortcutsBase + "SaveWholeSeriesScreenShot");
@@ -302,6 +305,19 @@ void Shortcuts::init()
     shortcutsList.clear();
     shortcutsList.append(QString("Shift+Z"));
     settingsRegistry->addSetting(MagnifyingGlassTool, shortcutsList);
+
+    shortcutsList.clear();
+    shortcutsList.append(QString("O"));
+    settingsRegistry->addSetting(AutomaticSynchronizationTool, shortcutsList);
+
+    shortcutsList.clear();
+    shortcutsList.append(QString("P"));
+    settingsRegistry->addSetting(SynchronizeAllViewers, shortcutsList);
+
+    shortcutsList.clear();
+    shortcutsList.append(QString("Shift+P"));
+    settingsRegistry->addSetting(DesynchronizeAllViewers, shortcutsList);
+    
 }
 
 } // End namespace udg

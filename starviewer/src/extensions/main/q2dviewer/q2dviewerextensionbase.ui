@@ -1099,7 +1099,7 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
-        <widget class="QToolButton" name="m_syncronizeAllViewersButton">
+        <widget class="QToolButton" name="m_synchronizeAllViewersButton">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -1128,7 +1128,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="m_syncronizeNoneViewersButton">
+        <widget class="QToolButton" name="m_desynchronizeAllViewersButton">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>

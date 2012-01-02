@@ -556,10 +556,7 @@ void Q2DViewerExtension::initializeTools()
     // TODO De moment fem exclusiu la tool de sincronització i la de cursor 3d manualment perque la
     // sincronització no té el model de totes les tools
     connect(m_toolManager->getRegisteredToolAction("Cursor3DTool"), SIGNAL(triggered()), SLOT(disableSynchronization()));
-    connect(m_toolManager->getRegisteredToolAction("AutomaticSynchronizationTool"), SIGNAL(triggered(bool)), SLOT(enableAutomaticSynchronizationToViewer(bool)));
-    connect(m_automaticSynchronizationEditionButton, SIGNAL(clicked(bool)), SLOT(enableAutomaticSynchonizationEditor(bool)));
-    connect(m_syncronizeAllViewersButton, SIGNAL(clicked(bool)), SLOT(activateManualSynchronizationInAllViewers()));
-    connect(m_syncronizeNoneViewersButton, SIGNAL(clicked(bool)), SLOT(deactivateManualSynchronizationInAllViewers()));
+    
 #endif
 
     // SCREEN SHOT TOOL
@@ -591,6 +588,34 @@ void Q2DViewerExtension::initializeTools()
     m_screenShotToolButton->setIcon(m_screenShotTriggerAction->icon());
     m_screenShotToolButton->setToolTip(m_screenShotTriggerAction->toolTip());
     m_screenShotToolButton->setText(m_screenShotTriggerAction->text());
+
+    // SYNCHRONIZE TOOLS
+    m_synchronizeAllAction = new QAction(this);
+    m_synchronizeAllAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::SynchronizeAllViewers));
+    m_synchronizeAllAction->setToolTip(tr("Activate manual synchronization all viewers"));
+    m_synchronizeAllAction->setIcon(QIcon(":/images/synchronizeAllViewers.png"));
+
+    m_synchronizeAllViewersButton->setIcon(m_synchronizeAllAction->icon());
+    m_synchronizeAllViewersButton->setToolTip(m_synchronizeAllAction->toolTip());
+    m_synchronizeAllViewersButton->setText(m_synchronizeAllAction->text());
+
+    m_synchronizeAllViewersButton->setDefaultAction(m_synchronizeAllAction);
+    connect(m_synchronizeAllAction, SIGNAL(triggered()), SLOT(activateManualSynchronizationInAllViewers()));
+
+    m_desynchronizeAllAction = new QAction(this);
+    m_desynchronizeAllAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::DesynchronizeAllViewers));
+    m_desynchronizeAllAction->setToolTip(tr("Deactivate manual synchronization all viewers"));
+    m_desynchronizeAllAction->setIcon(QIcon(":/images/unsynchronize.png"));
+
+    m_desynchronizeAllViewersButton->setIcon(m_desynchronizeAllAction->icon());
+    m_desynchronizeAllViewersButton->setToolTip(m_desynchronizeAllAction->toolTip());
+    m_desynchronizeAllViewersButton->setText(m_desynchronizeAllAction->text());
+
+    m_desynchronizeAllViewersButton->setDefaultAction(m_desynchronizeAllAction);
+    connect(m_desynchronizeAllAction, SIGNAL(triggered()), SLOT(deactivateManualSynchronizationInAllViewers()));
+    connect(m_toolManager->getRegisteredToolAction("AutomaticSynchronizationTool"), SIGNAL(triggered(bool)), SLOT(enableAutomaticSynchronizationToViewer(bool)));
+    connect(m_automaticSynchronizationEditionButton, SIGNAL(clicked(bool)), SLOT(enableAutomaticSynchonizationEditor(bool)));
+
 }
 
 void Q2DViewerExtension::activateNewViewer(Q2DViewerWidget *newViewerWidget)
