@@ -222,7 +222,7 @@ private:
     Patient *m_patient;
 
     /// Menús per seleccionar el grid de series(predefinits + taula)
-    MenuGridWidget *m_predefinedSeriesGrid;
+    MenuGridWidget *m_hangingProtocolsMenu;
     TableMenu *m_seriesTableGrid;
 
     /// ToolManager per configurar l'entorn deToolConfiguration * configuration = getConfiguration();
