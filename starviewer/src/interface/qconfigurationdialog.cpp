@@ -22,6 +22,7 @@ QConfigurationDialog::QConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
     // Configuració del visor 2D
     Q2DViewerConfigurationScreen *q2dviewerScreen = new Q2DViewerConfigurationScreen(this);
     addConfigurationWidget(q2dviewerScreen, tr("2D Viewer"), BasicConfiguration);
+    connect(m_okButton, SIGNAL(clicked()), q2dviewerScreen, SLOT(applyChanges()));
 
 #ifndef STARVIEWER_LITE
     // No mostrem configuració del PACS
