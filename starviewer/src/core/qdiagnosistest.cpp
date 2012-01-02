@@ -33,6 +33,7 @@ QDiagnosisTest::QDiagnosisTest(QWidget *parent)
 
     //Treiem icona amb ? que apareix al costat del botó de tancar
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    m_qDiagnosisTestResultWidgetExpanded = NULL;
 }
 
 QDiagnosisTest::~QDiagnosisTest()
@@ -43,6 +44,11 @@ QDiagnosisTest::~QDiagnosisTest()
     m_threadRunningDiagnosisTest->terminate();
     m_threadRunningDiagnosisTest->wait();
     delete m_threadRunningDiagnosisTest;
+}
+
+void QDiagnosisTest::resizeEvent(QResizeEvent *)
+{
+    m_testsResultsTable->setColumnWidth(0, m_testsResultsTable->width());
 }
 
 void QDiagnosisTest::execAndRunDiagnosisTest()
@@ -66,8 +72,29 @@ void QDiagnosisTest::createConnections()
     connect(m_runDiagnosisTest, SIGNAL(finished()), this, SLOT(finishedRunningDiagnosisTest()));
 }
 
-void QDiagnosisTest::qdiagnosisTestResultWidgetResized()
+void QDiagnosisTest::qdiagnosisTestResultWidgetClicked(QDiagnosisTestResultWidget *qDiagnosisTestResultWidgetClicked)
 {
+    if (!qDiagnosisTestResultWidgetClicked->isExpandable())
+    {
+        return;
+    }
+
+    if (m_qDiagnosisTestResultWidgetExpanded)
+    {
+        m_qDiagnosisTestResultWidgetExpanded->contract();
+    }
+
+    if (qDiagnosisTestResultWidgetClicked != m_qDiagnosisTestResultWidgetExpanded)
+    {
+        qDiagnosisTestResultWidgetClicked->expand();
+        m_qDiagnosisTestResultWidgetExpanded = qDiagnosisTestResultWidgetClicked;
+    }
+    else
+    {
+        //Si ens han clickat el mateix que element que ja estava expandit, només s'ha de contraure no l'hem de tornar a expandir
+        m_qDiagnosisTestResultWidgetExpanded = NULL;
+    }
+
     m_testsResultsTable->resizeRowsToContents();
 }
 
@@ -105,6 +132,7 @@ void QDiagnosisTest::finishedRunningDiagnosisTest()
         m_warningTestsToolButton->setChecked(true);
         m_errorTestsToolButton->setChecked(true);
         
+        m_someTestsFailedFrame->setVisible(true);
         m_diagnosisTestsResultsFrame->setVisible(true);
         fillDiagnosisTestsResultTable();
     }
@@ -127,6 +155,8 @@ void QDiagnosisTest::viewTestsLabelClicked()
 
 void QDiagnosisTest::fillDiagnosisTestsResultTable()
 {
+    m_qDiagnosisTestResultWidgetExpanded = NULL;
+
     m_testsResultsTable->setColumnWidth(0, m_testsResultsTable->width());
 
     m_testsResultsTable->clear();
@@ -146,7 +176,8 @@ void QDiagnosisTest::fillDiagnosisTestsResultTable()
 void QDiagnosisTest::addDiagnosisTestResultToTable(DiagnosisTest *diagnosisTest, DiagnosisTestResult diagnosisTestResult)
 {
     QDiagnosisTestResultWidget *qdiagnosisTestResultWidget = new QDiagnosisTestResultWidget(diagnosisTest, diagnosisTestResult);
-    connect(qdiagnosisTestResultWidget, SIGNAL(resized()), SLOT(qdiagnosisTestResultWidgetResized()));
+    connect(qdiagnosisTestResultWidget, SIGNAL(clicked(QDiagnosisTestResultWidget*)), SLOT(qdiagnosisTestResultWidgetClicked(QDiagnosisTestResultWidget*)));
+    qdiagnosisTestResultWidget->resize(m_testsResultsTable->width(), qdiagnosisTestResultWidget->height());
 
     m_testsResultsTable->setRowCount(m_testsResultsTable->rowCount() + 1);
     m_testsResultsTable->setCellWidget(m_testsResultsTable->rowCount() -1, 0, qdiagnosisTestResultWidget);
@@ -157,6 +188,7 @@ void QDiagnosisTest::updateWidgetToRunDiagnosisTest()
     m_diagnosisTestsResultsFrame->setVisible(false);
     m_allTestSuccededFrame->setVisible(false);
     m_closeButtonFrame->setVisible(false);
+    m_someTestsFailedFrame->setVisible(false);
 
     this->adjustSize();
 }
@@ -182,19 +214,19 @@ QList<QPair<DiagnosisTest *,DiagnosisTestResult> > QDiagnosisTest::getDiagnosisT
 {
     QList<QPair<DiagnosisTest *,DiagnosisTestResult> > testsToShow;
     
-    if (m_warningTestsToolButton->isChecked())
+    if (m_succeededTestsToolButton->isChecked())
     {
-        testsToShow.append(m_warningExecutedDiagnosisTests);
+        testsToShow.append(m_okExecutedDiagnosisTests);
     }
-    
+
     if (m_errorTestsToolButton->isChecked())
     {
         testsToShow.append(m_errorExecutedDiagnosisTests);
     }
     
-    if (m_succeededTestsToolButton->isChecked())
+    if (m_warningTestsToolButton->isChecked())
     {
-        testsToShow.append(m_okExecutedDiagnosisTests);
+        testsToShow.append(m_warningExecutedDiagnosisTests);
     }
 
     return testsToShow;

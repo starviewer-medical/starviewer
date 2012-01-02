@@ -1,5 +1,8 @@
 <RCC>
   <qresource prefix="/">
+    <file>images/expand.png</file>
+    <file>images/collapse.png</file>
+    <file>images/round-warning.png</file>
     <file>../core/core_ca_ES.qm</file>
     <file>../core/core_en_GB.qm</file>
     <file>../core/core_es_ES.qm</file>
@@ -133,9 +136,7 @@
     <file>images/plus.png</file>
     <file>images/synchronizeAllViewers.png</file>
     <file>images/unsynchronize.png</file>
-    <file>images/expand.gif</file>
     <file>images/checkOkBigger.png</file>
-    <file>images/collapse.gif</file>
     <file>images/q2dviewerconfiguration.png</file>
     <file>images/circleTool.png</file>
     <file>images/perpendicularDistance.png</file>
