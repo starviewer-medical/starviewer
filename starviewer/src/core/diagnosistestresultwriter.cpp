@@ -9,20 +9,19 @@ namespace udg {
 
 DiagnosisTestResultWriter::DiagnosisTestResultWriter()
 {
-    m_path = "";
 }
 
 DiagnosisTestResultWriter::~DiagnosisTestResultWriter()
 {
 }
 
-void DiagnosisTestResultWriter::write()
+void DiagnosisTestResultWriter::write(const QString &pathFile)
 {
     // Per tal de poder utilitzar el Q_FOREACH, hem de redefinir el tipus QPair,
     // ja que conté '<' i '>', i a les macros no els agrada.
     typedef QPair<DiagnosisTest*, DiagnosisTestResult> PairTestResult;
 
-    QFile *file = createFile();
+    QFile *file = createFile(pathFile);
     if (!file)
     {
         return;
@@ -62,29 +61,23 @@ void DiagnosisTestResultWriter::write()
     delete file;
 }
 
-void DiagnosisTestResultWriter::addDiagnosisTest(DiagnosisTest *diagnosisTest, const DiagnosisTestResult &diagnosisTestResult)
+void DiagnosisTestResultWriter::setDiagnosisTests(QList<QPair<DiagnosisTest*, DiagnosisTestResult> > diagnosisTests)
 {
-    m_diagnosisTests.append(QPair<DiagnosisTest*, DiagnosisTestResult>(diagnosisTest, diagnosisTestResult));
+    m_diagnosisTests = diagnosisTests;
 }
 
-
-void DiagnosisTestResultWriter::setPath(const QString &path)
+QFile* DiagnosisTestResultWriter::createFile(const QString &pathFile)
 {
-    m_path = path;
-}
-
-QFile* DiagnosisTestResultWriter::createFile()
-{
-    if (m_path.isEmpty() || QFileInfo(m_path).isDir())
+    if (pathFile.isEmpty() || QFileInfo(pathFile).isDir())
     {
         return NULL;
     }
 
-    QFile *file = new QFile(m_path);
+    QFile *file = new QFile(pathFile);
     if (file->exists())
     {
         // Si ja existeix l'esborrem ja que si és més llarg que el nou, hi quedaran caràcters del vell
-        QFile::remove(m_path);
+        QFile::remove(pathFile);
     }
     if (!file->open(QFile::ReadWrite | QFile::Text))
     {
