@@ -212,6 +212,8 @@ private:
     QAction *m_showOverlaysAction;
     QAction *m_showViewersTextualInformationAction;
     QAction *m_showDisplayShuttersAction;
+    QAction *m_synchronizeAllAction;
+    QAction *m_desynchronizeAllAction;
 
 #ifndef STARVIEWER_LITE
     QAction *m_sagitalViewAction;

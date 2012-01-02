@@ -383,6 +383,7 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
     {
         toolAction->setText(tr("Auto"));
         toolAction->setIcon(QIcon(":/images/synchronize.png"));
+        toolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::AutomaticSynchronizationTool));
         statusTip = tr("Enable/Disable Automatic synchronization tool");
         toolTip = toolAction->text();
     }
