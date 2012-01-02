@@ -17,20 +17,20 @@ public:
 private:
     /// Inicialitza el widget amb els valors corresponents
     void initialize();
-    
-    /// Crea les connexions corresponents de signals i slots
-    void createConnections();
 
     /// Actualitza els checkbox de les modalitats amb zoom per defecte segons els settings
     void initializeModalitiesWithZoomByDefault();
 
 private slots:
-    /// Es cridaran quan es modifiquin els check box actualitzant els corresponents settings
+    /// Actualitzen els corresponents settings
     void updateSliceScrollLoopSetting(bool enable);
     void updatePhaseScrollLoopSetting(bool enable);
     void updateReferenceLinesForMRSetting(bool enable);
     void updateReferenceLinesForCTSetting(bool enable);
     void updateModalitiesWithZoomByDefaultSetting();
+
+    /// Farà que s'apliquin els canvis corresponents en els settings
+    void applyChanges();
 };
 
 }

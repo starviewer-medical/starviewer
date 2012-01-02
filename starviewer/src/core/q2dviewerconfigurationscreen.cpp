@@ -9,7 +9,6 @@ Q2DViewerConfigurationScreen::Q2DViewerConfigurationScreen(QWidget *parent)
 {
     setupUi(this);
     initialize();
-    createConnections();
 }
 
 Q2DViewerConfigurationScreen::~Q2DViewerConfigurationScreen()
@@ -26,29 +25,6 @@ void Q2DViewerConfigurationScreen::initialize()
     m_referenceLinesCTCheckBox->setChecked(settings.getValue(CoreSettings::EnableQ2DViewerReferenceLinesForCT).toBool());
 
     initializeModalitiesWithZoomByDefault();
-}
-
-void Q2DViewerConfigurationScreen::createConnections()
-{
-    connect(m_sliceScrollLoopCheckBox, SIGNAL(toggled(bool)), SLOT(updateSliceScrollLoopSetting(bool)));
-    connect(m_phaseScrollLoopCheckBox, SIGNAL(toggled(bool)), SLOT(updatePhaseScrollLoopSetting(bool)));
-    connect(m_referenceLinesMRCheckBox, SIGNAL(toggled(bool)), SLOT(updateReferenceLinesForMRSetting(bool)));
-    connect(m_referenceLinesCTCheckBox, SIGNAL(toggled(bool)), SLOT(updateReferenceLinesForCTSetting(bool)));
-
-    connect(m_zoomCRCheckBox, SIGNAL(clicked()), SLOT(updateModalitiesWithZoomByDefaultSetting()));
-    connect(m_zoomCTCheckBox, SIGNAL(clicked()), SLOT(updateModalitiesWithZoomByDefaultSetting()));
-    connect(m_zoomDXCheckBox, SIGNAL(clicked()), SLOT(updateModalitiesWithZoomByDefaultSetting()));
-    connect(m_zoomESCheckBox, SIGNAL(clicked()), SLOT(updateModalitiesWithZoomByDefaultSetting()));
-    connect(m_zoomMGCheckBox, SIGNAL(clicked()), SLOT(updateModalitiesWithZoomByDefaultSetting()));
-    connect(m_zoomMRCheckBox, SIGNAL(clicked()), SLOT(updateModalitiesWithZoomByDefaultSetting()));
-    connect(m_zoomNMCheckBox, SIGNAL(clicked()), SLOT(updateModalitiesWithZoomByDefaultSetting()));
-    connect(m_zoomOPCheckBox, SIGNAL(clicked()), SLOT(updateModalitiesWithZoomByDefaultSetting()));
-    connect(m_zoomPTCheckBox, SIGNAL(clicked()), SLOT(updateModalitiesWithZoomByDefaultSetting()));
-    connect(m_zoomRFCheckBox, SIGNAL(clicked()), SLOT(updateModalitiesWithZoomByDefaultSetting()));
-    connect(m_zoomSCCheckBox, SIGNAL(clicked()), SLOT(updateModalitiesWithZoomByDefaultSetting()));
-    connect(m_zoomUSCheckBox, SIGNAL(clicked()), SLOT(updateModalitiesWithZoomByDefaultSetting()));
-    connect(m_zoomXACheckBox, SIGNAL(clicked()), SLOT(updateModalitiesWithZoomByDefaultSetting()));
-    connect(m_zoomXCCheckBox, SIGNAL(clicked()), SLOT(updateModalitiesWithZoomByDefaultSetting()));
 }
 
 void Q2DViewerConfigurationScreen::initializeModalitiesWithZoomByDefault()
@@ -215,6 +191,15 @@ void Q2DViewerConfigurationScreen::updateModalitiesWithZoomByDefaultSetting()
 
     Settings settings;
     settings.setValue(CoreSettings::ModalitiesWithZoomToolByDefault, modalitiesWithZoom);
+}
+
+void Q2DViewerConfigurationScreen::applyChanges()
+{
+    updateSliceScrollLoopSetting(m_sliceScrollLoopCheckBox->isChecked());
+    updatePhaseScrollLoopSetting(m_phaseScrollLoopCheckBox->isChecked());
+    updateReferenceLinesForMRSetting(m_referenceLinesMRCheckBox->isChecked());
+    updateReferenceLinesForCTSetting(m_referenceLinesCTCheckBox->isChecked());
+    updateModalitiesWithZoomByDefaultSetting();
 }
 
 }
