@@ -14,6 +14,7 @@ namespace udg {
 
 class DiagnosisTest;
 class RunDiagnosisTest;
+class QDiagnosisTestResultWidget;
 
 /**
     Aquest classe és l'encarregada de realitzar el dicomdump de la imatge que s'està visualizant per part de l'usuari.
@@ -32,9 +33,12 @@ public:
 signals:
     void start();
 
+protected:
+    void resizeEvent (QResizeEvent *);
+
 private slots:
     ///Slot que indinica que un QDiagnosisTestResultWidget de la taula ha canviat de mida
-    void qdiagnosisTestResultWidgetResized();
+    void qdiagnosisTestResultWidgetClicked(QDiagnosisTestResultWidget *qDiagnosisTestResultWidgetClicked);
 
     //Executa els diagnosisTest
     void runDiagnosisTest();
@@ -83,6 +87,8 @@ private:
     QList<QPair<DiagnosisTest *, DiagnosisTestResult> > m_errorExecutedDiagnosisTests;
     QList<QPair<DiagnosisTest *, DiagnosisTestResult> > m_okExecutedDiagnosisTests;
     QList<QPair<DiagnosisTest *, DiagnosisTestResult> > m_warningExecutedDiagnosisTests;
+
+    QDiagnosisTestResultWidget *m_qDiagnosisTestResultWidgetExpanded;
 };
 
 }

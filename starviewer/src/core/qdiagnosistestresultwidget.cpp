@@ -12,8 +12,8 @@ QDiagnosisTestResultWidget::QDiagnosisTestResultWidget(DiagnosisTest *diagnosisT
     setupUi(this);
 
     m_diagnosisTestDescription->setText(diagnosisTest->getDescription());
-    m_diagnosisTestResultDescription->setText(diagnosisTestResult.getDescription());
-    m_diagnosisTestResultSolution->setText(diagnosisTestResult.getSolution());
+    m_diagnosisTestResultDescription->setText(QString("<b>Description: </b> %1").arg(diagnosisTestResult.getDescription().replace('\n',"<br>")));
+    m_diagnosisTestResultSolution->setText(QString("<b>Solution: </b> %1").arg( diagnosisTestResult.getSolution().replace('\n',"<br>")));
 
     m_iconDiagnosticResultLabel->setPixmap(getIconLabel(diagnosisTestResult));
     
@@ -29,38 +29,39 @@ QDiagnosisTestResultWidget::QDiagnosisTestResultWidget(DiagnosisTest *diagnosisT
     m_descriptionSolutionDiagnosisTestFrame->setVisible(false);
 }
 
-void QDiagnosisTestResultWidget::mouseReleaseEvent(QMouseEvent * event)
+void QDiagnosisTestResultWidget::expand()
 {
-    if (clickIsInAreaTestDescriptionFrame(event))
+    if (m_isExpandable)
     {
-        expandContractDiagnosisTestResult();
-    }
+        m_descriptionSolutionDiagnosisTestFrame->setVisible(true);
+        m_expandContractLabel->setPixmap(QPixmap(":/images/collapse.png"));
 
-    event->accept();
+        this->adjustSize();
+
+        m_isExpanded = true;
+
+    }
 }
 
-void QDiagnosisTestResultWidget::expandContractDiagnosisTestResult()
+bool QDiagnosisTestResultWidget::isExpandable()
 {
-    if (!m_isExpandable)
-    {
-        return;
-    }
+    return m_isExpandable;
+}
 
-    m_isExpanded = !m_isExpanded;
-    m_descriptionSolutionDiagnosisTestFrame->setVisible(m_isExpanded);
- 
-    m_expandContractLabel->setPixmap(QPixmap(m_isExpanded ? ":/images/collapse.gif" : ":/images/expand.gif"));
+void QDiagnosisTestResultWidget::contract()
+{
+    m_descriptionSolutionDiagnosisTestFrame->setVisible(false);
+    m_expandContractLabel->setPixmap(QPixmap(":/images/expand.png"));
 
-    if (!m_isExpanded)
-    {
-        this->resize(m_diagnosisTestDescription->size());
-    }
-    else
-    {
-        this->adjustSize();
-    }
+    this->resize(m_diagnosisTestDescription->size());
 
-    emit(resized());
+    m_isExpanded = false;
+}
+
+void QDiagnosisTestResultWidget::mouseReleaseEvent(QMouseEvent * event)
+{
+    emit(clicked(this));
+    event->accept();
 }
 
 QPixmap QDiagnosisTestResultWidget::getIconLabel(const DiagnosisTestResult &diagnosisTestResult) const
