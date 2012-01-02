@@ -70,7 +70,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_windowLevelToolButton->setVisible(false);
     m_translateToolButton->setVisible(false);
 
-    m_predefinedSeriesGrid = new MenuGridWidget(this);
+    m_hangingProtocolsMenu = new MenuGridWidget(this);
     m_seriesTableGrid = new TableMenu(this);
 
     m_dicomDumpCurrentDisplayedImage = new QDICOMDumpBrowser(this);
@@ -170,7 +170,7 @@ Q2DViewerExtension::~Q2DViewerExtension()
     }
 #endif
 
-    delete m_predefinedSeriesGrid;
+    delete m_hangingProtocolsMenu;
     delete m_seriesTableGrid;
     delete m_dicomDumpCurrentDisplayedImage;
 }
@@ -182,7 +182,7 @@ void Q2DViewerExtension::createConnections()
     connect(m_buttonGrid, SIGNAL(clicked (bool)), SLOT(showInteractiveTable()));
 
     // Connexions del menu
-    connect(m_predefinedSeriesGrid, SIGNAL(selectedGrid(int)), this, SLOT(setHangingProtocol(int)));
+    connect(m_hangingProtocolsMenu, SIGNAL(selectedGrid(int)), this, SLOT(setHangingProtocol(int)));
     connect(m_seriesTableGrid, SIGNAL(selectedGrid(int, int)), this, SLOT(setGrid(int, int)));
 
     // Per mostrar la informació DICOM de la imatge que s'està veient en aquell moment
@@ -236,7 +236,7 @@ void Q2DViewerExtension::setInput(Volume *input)
     }
 
     m_workingArea->setSelectedViewer(m_workingArea->getViewerWidget(0));
-    m_predefinedSeriesGrid->setHangingItems(hangingCandidates);
+    m_hangingProtocolsMenu->setHangingItems(hangingCandidates);
 
     connect(m_patient, SIGNAL(patientFused()), SLOT(searchHangingProtocols()));
 
@@ -268,13 +268,13 @@ void Q2DViewerExtension::searchAndApplyBestHangingProtocol()
 void Q2DViewerExtension::searchHangingProtocols()
 {
     QList<HangingProtocol*> hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient);
-    m_predefinedSeriesGrid->setHangingItems(hangingCandidates);
+    m_hangingProtocolsMenu->setHangingItems(hangingCandidates);
     searchPreviousStudiesWithHangingProtocols();
 }
 
 void Q2DViewerExtension::searchPreviousStudiesWithHangingProtocols()
 {
-    m_predefinedSeriesGrid->setSearchingItem(true);
+    m_hangingProtocolsMenu->setSearchingItem(true);
 
     // 2.- Creacio de la classe per trobar previes
     m_previousStudiesManager = new PreviousStudiesManager();
@@ -299,8 +299,8 @@ void Q2DViewerExtension::addPreviousHangingProtocols(QList<Study*> studies)
     disconnect(m_previousStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), this, SLOT(addPreviousHangingProtocols(QList<Study*>)));
 
     QList<HangingProtocol*> hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient, studies);
-    m_predefinedSeriesGrid->setHangingItems(hangingCandidates);
-    m_predefinedSeriesGrid->setSearchingItem(false);
+    m_hangingProtocolsMenu->setHangingItems(hangingCandidates);
+    m_hangingProtocolsMenu->setSearchingItem(false);
 }
 #endif
 
@@ -360,8 +360,8 @@ void Q2DViewerExtension::setupDefaultLeftButtonTool()
 void Q2DViewerExtension::showPredefinedGrid()
 {
     QPoint point = m_buttonGrid->mapToGlobal(QPoint(0, 0));
-    m_predefinedSeriesGrid->move(point.x(), (point.y() + m_buttonGrid->frameGeometry().height()));
-    m_predefinedSeriesGrid->show();
+    m_hangingProtocolsMenu->move(point.x(), (point.y() + m_buttonGrid->frameGeometry().height()));
+    m_hangingProtocolsMenu->show();
 }
 
 void Q2DViewerExtension::showInteractiveTable()
