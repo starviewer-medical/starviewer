@@ -221,8 +221,10 @@ private:
     /// Pacient que estem tractant
     Patient *m_patient;
 
-    /// Menús per seleccionar el grid de series(predefinits + taula)
+    /// Menú per seleccionar es hanging protocols
     MenuGridWidget *m_hangingProtocolsMenu;
+
+    /// Widget per escollir una distribució de visors definida per l'usuari
     TableMenu *m_seriesTableGrid;
 
     /// ToolManager per configurar l'entorn deToolConfiguration * configuration = getConfiguration();
