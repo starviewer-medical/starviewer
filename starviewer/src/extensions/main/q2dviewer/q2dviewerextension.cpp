@@ -368,14 +368,6 @@ void Q2DViewerExtension::showPredefinedGrid()
 {
     QPoint point = m_buttonGrid->mapToGlobal(QPoint(0, 0));
     m_predefinedSeriesGrid->move(point.x(), (point.y() + m_buttonGrid->frameGeometry().height()));
-
-    QList<Study*> listStudies = m_patient->getStudies();
-    int numberOfSeries = 0;
-    for (int i = 0; i < listStudies.size(); ++i)
-    {
-        numberOfSeries += listStudies.value(i)->getNumberOfSeries();
-    }
-
     m_predefinedSeriesGrid->show();
 }
 
