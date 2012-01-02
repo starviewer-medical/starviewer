@@ -60,14 +60,6 @@ public slots:
     /// TODO S'ha de canviar el mètode per tal que no es crei l'objecte cada cop
     void showInteractiveTable();
 
-    /// Mostrar menu per seleccionar grid predefinit dins una serie
-    /// TODO S'ha de canviar el mètode per tal que no es crei l'objecte cada cop
-    void showPredefinedImageGrid();
-
-    /// Mostrar el menu de la taula per seleccionar grids dins una serie
-    /// TODO S'ha de canviar el mètode per tal que no es crei l'objecte cada cop
-    void showInteractiveImageTable();
-
 #ifndef STARVIEWER_LITE
     /// Mostra el widget per poder descarregar els estudis previs de l'estudi actual
     void showPreviousStudiesWidget();
@@ -232,10 +224,6 @@ private:
     /// Menús per seleccionar el grid de series(predefinits + taula)
     MenuGridWidget *m_predefinedSeriesGrid;
     TableMenu *m_seriesTableGrid;
-
-    /// Menús per seleccionar el grid de les llesques d'una serie (predefinits + taula)
-    MenuGridWidget *m_predefinedSlicesGrid;
-    TableMenu *m_sliceTableGrid;
 
     /// ToolManager per configurar l'entorn deToolConfiguration * configuration = getConfiguration();
     ToolManager *m_toolManager;

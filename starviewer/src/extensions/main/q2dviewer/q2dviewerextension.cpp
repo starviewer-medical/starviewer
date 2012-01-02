@@ -72,8 +72,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
 
     m_predefinedSeriesGrid = new MenuGridWidget(this);
     m_seriesTableGrid = new TableMenu(this);
-    m_predefinedSlicesGrid = new MenuGridWidget(this);
-    m_sliceTableGrid = new TableMenu(this);
+
     m_dicomDumpCurrentDisplayedImage = new QDICOMDumpBrowser(this);
 
 #ifndef STARVIEWER_LITE
@@ -122,8 +121,6 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_windowLevelComboBox->setToolTip(tr("Choose Window/Level Presets"));
 
     // TODO De moment no fem accessibles aquestes funcionalitats ja que no estan a punt
-    m_imageGrid->setVisible(false);
-    m_downImageGrid->setVisible(false);
     m_automaticSynchronizationEditionButton->setVisible(false);
 
     readSettings();
@@ -175,8 +172,6 @@ Q2DViewerExtension::~Q2DViewerExtension()
 
     delete m_predefinedSeriesGrid;
     delete m_seriesTableGrid;
-    delete m_predefinedSlicesGrid;
-    delete m_sliceTableGrid;
     delete m_dicomDumpCurrentDisplayedImage;
 }
 
@@ -185,8 +180,6 @@ void Q2DViewerExtension::createConnections()
     // Menus
     connect(m_downButtonGrid, SIGNAL(clicked (bool)), SLOT(showPredefinedGrid()));
     connect(m_buttonGrid, SIGNAL(clicked (bool)), SLOT(showInteractiveTable()));
-    connect(m_downImageGrid, SIGNAL(clicked (bool)), SLOT(showPredefinedImageGrid()));
-    connect(m_imageGrid, SIGNAL(clicked (bool)), SLOT(showInteractiveImageTable()));
 
     // Connexions del menu
     connect(m_predefinedSeriesGrid, SIGNAL(selectedGrid(int)), this, SLOT(setHangingProtocol(int)));
@@ -376,20 +369,6 @@ void Q2DViewerExtension::showInteractiveTable()
     QPoint point = m_buttonGrid->mapToGlobal(QPoint(0, 0));
     m_seriesTableGrid->move(point.x(), (point.y() + m_buttonGrid->frameGeometry().height()));
     m_seriesTableGrid->show();
-}
-
-void Q2DViewerExtension::showPredefinedImageGrid()
-{
-    QPoint point = m_imageGrid->mapToGlobal(QPoint(0, 0));
-    m_predefinedSlicesGrid->move(point.x(), (point.y() + m_imageGrid->frameGeometry().height()));
-    m_predefinedSlicesGrid->show();
-}
-
-void Q2DViewerExtension::showInteractiveImageTable()
-{
-    QPoint point = m_imageGrid->mapToGlobal(QPoint(0, 0));
-    m_sliceTableGrid->move(point.x(), (point.y() + m_imageGrid->frameGeometry().height()));
-    m_sliceTableGrid->show();
 }
 
 #ifndef STARVIEWER_LITE
