@@ -15,7 +15,7 @@
 namespace udg {
 
 DrawerPolygon::DrawerPolygon(QObject *parent)
- : DrawerPrimitive(parent), m_vtkPolydata(0), m_vtkPoints(0), m_vtkCellArray(0), m_vtkActor(0), m_vtkBackgroundActor(0), m_vtkMapper(0), m_vtkTriangleFilter(0),
+ : DrawerPrimitive(parent), m_vtkPolyData(0), m_vtkPoints(0), m_vtkCellArray(0), m_vtkActor(0), m_vtkBackgroundActor(0), m_vtkMapper(0), m_vtkTriangleFilter(0),
    m_vtkPropAssembly(0)
 {
 }
@@ -24,9 +24,9 @@ DrawerPolygon::~DrawerPolygon()
 {
     emit dying(this);
 
-    if (m_vtkPolydata)
+    if (m_vtkPolyData)
     {
-        m_vtkPolydata->Delete();
+        m_vtkPolyData->Delete();
     }
     if (m_vtkPoints)
     {
@@ -130,7 +130,7 @@ vtkProp* DrawerPolygon::getAsVtkProp()
         m_vtkBackgroundActor->SetMapper(m_vtkMapper);
 
         m_vtkTriangleFilter = vtkTriangleFilter::New();
-        m_vtkTriangleFilter->SetInput(m_vtkPolydata);
+        m_vtkTriangleFilter->SetInput(m_vtkPolyData);
         m_vtkMapper->SetInput(m_vtkTriangleFilter->GetOutput());
 
         // Li donem els atributs
@@ -159,7 +159,7 @@ void DrawerPolygon::updateVtkProp()
 {
     if (m_vtkPropAssembly)
     {
-        m_vtkPolydata->Reset();
+        m_vtkPolyData->Reset();
         buildVtkPoints();
         updateVtkActorProperties();
         this->setModified(false);
@@ -184,9 +184,9 @@ void DrawerPolygon::buildVtkPoints()
             extraVertix = true;
         }
     }
-    if (!m_vtkPolydata)
+    if (!m_vtkPolyData)
     {
-        m_vtkPolydata = vtkPolyData::New();
+        m_vtkPolyData = vtkPolyData::New();
         m_vtkPoints = vtkPoints::New();
         m_vtkCellArray = vtkCellArray::New();
     }
@@ -215,17 +215,17 @@ void DrawerPolygon::buildVtkPoints()
         m_vtkPoints->InsertPoint(numberOfVertices - 1, m_pointsList.at(0).data());
         m_vtkCellArray->InsertCellPoint(numberOfVertices - 1);
     }
-    m_vtkPolydata->Initialize();
+    m_vtkPolyData->Initialize();
     // Assignem els punts al polydata
-    m_vtkPolydata->SetPoints(m_vtkPoints);
+    m_vtkPolyData->SetPoints(m_vtkPoints);
     // Comprovem si la forma està "plena" o no
     if (this->isFilled())
     {
-        m_vtkPolydata->SetPolys(m_vtkCellArray);
+        m_vtkPolyData->SetPolys(m_vtkCellArray);
     }
     else
     {
-        m_vtkPolydata->SetLines(m_vtkCellArray);
+        m_vtkPolyData->SetLines(m_vtkCellArray);
     }
 }
 
@@ -265,9 +265,9 @@ double DrawerPolygon::getDistanceToPoint(double *point3D, double closestPoint[3]
 
 void DrawerPolygon::getBounds(double bounds[6])
 {
-    if (m_vtkPolydata)
+    if (m_vtkPolyData)
     {
-        m_vtkPolydata->GetBounds(bounds);
+        m_vtkPolyData->GetBounds(bounds);
     }
     else
     {

@@ -73,7 +73,7 @@ private:
     QList<QVector<double> > m_pointsList;
 
     /// Estructures de vtk, per construir el polígon
-    vtkPolyData *m_vtkPolydata;
+    vtkPolyData *m_vtkPolyData;
     vtkPoints *m_vtkPoints;
     vtkCellArray *m_vtkCellArray;
     vtkActor2D *m_vtkActor;
