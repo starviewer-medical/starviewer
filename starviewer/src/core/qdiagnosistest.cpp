@@ -4,10 +4,12 @@
 #include <QTableWidgetItem>
 #include <QThread>
 #include <QMovie>
+#include <QFileDialog>
 
 #include "diagnosistestfactory.h"
 #include "diagnosistest.h"
 #include "rundiagnosistest.h"
+#include "diagnosistestresultwriter.h"
 
 #include "qdiagnosistestresultwidget.h"
 
@@ -63,6 +65,7 @@ void QDiagnosisTest::createConnections()
     connect(m_succeededTestsToolButton, SIGNAL(clicked()), SLOT(fillDiagnosisTestsResultTable()));
     connect(m_warningTestsToolButton, SIGNAL(clicked()), SLOT(fillDiagnosisTestsResultTable()));
     connect(m_errorTestsToolButton, SIGNAL(clicked()), SLOT(fillDiagnosisTestsResultTable()));
+    connect(m_saveResultsButton, SIGNAL(clicked()), SLOT(saveDiagnosisTestResultsAsFile()));
     connect(m_closeButton, SIGNAL(clicked()), SLOT(accept()));
     
     connect(m_viewTestsLabel, SIGNAL(linkActivated(QString)), SLOT(viewTestsLabelClicked()));
@@ -191,6 +194,19 @@ void QDiagnosisTest::updateWidgetToRunDiagnosisTest()
     m_someTestsFailedFrame->setVisible(false);
 
     this->adjustSize();
+}
+
+void QDiagnosisTest::saveDiagnosisTestResultsAsFile()
+{
+    QString pathFile = QFileDialog::getSaveFileName(this, tr("Save diagnosis test results"), QDir::homePath(), tr("Images (*.txt)"));
+
+    if (!pathFile.isEmpty())
+    {
+        DiagnosisTestResultWriter diagnosisTestResultWriter;
+        
+        diagnosisTestResultWriter.setDiagnosisTests(m_errorExecutedDiagnosisTests + m_warningExecutedDiagnosisTests + m_okExecutedDiagnosisTests);
+        diagnosisTestResultWriter.write(pathFile);
+    }
 }
 
 bool QDiagnosisTest::allDiagnosisTestResultAreOk()

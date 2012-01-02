@@ -56,6 +56,8 @@ private slots:
     /// de mostrar els testos amb un determinat resultat)
     void fillDiagnosisTestsResultTable();
 
+    /// Guarda els resultats en un fitxer
+    void saveDiagnosisTestResultsAsFile();
 
 private:
     /// Crea les connexions
