@@ -24,6 +24,10 @@ public:
     {
         m_testingFile = new QString();
     }
+    ~TestingDiagnosisTestResultWriter()
+    {
+        delete m_testingFile;
+    }
 
 protected:
     QFile* createFile(const QString &pathFile)
@@ -120,7 +124,6 @@ void test_DiagnosisTestResultWriter::write_ShouldWriteTestResultsToAnIODevice()
     QString writerResult = *writer.m_testingFile;
     QCOMPARE(writerResult, result);
 
-    delete writer.m_testingFile;
     // Eliminem els DiagnosisTests que hem creat.
     for (int i = 0; i < diagnosisTestsToWrite.count(); i++)
     {
