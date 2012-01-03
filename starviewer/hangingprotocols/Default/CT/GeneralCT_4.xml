@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hangingProtocol name="GeneralCT">
-    <hangingProtocolName>General</hangingProtocolName>
+<hangingProtocol name="GeneralCT_4">
+    <hangingProtocolName>CT</hangingProtocolName>
     <numberScreens>1</numberScreens>
     <allDifferent>yes</allDifferent>
-    <strictness>yes</strictness>
     <protocol>CT</protocol>
-    <priority>6</priority>
     <restriction identifier="1">
         <usageFlag>NO_MATCH</usageFlag>
         <selectorAttribute>ImageType</selectorAttribute>
@@ -19,14 +17,28 @@
         <restriction>1</restriction>
         <type>image</type>
     </imageSet>
+    <imageSet identifier="3">
+        <restriction>1</restriction>
+        <type>image</type>
+    </imageSet>
+    <imageSet identifier="4">
+        <restriction>1</restriction>
+        <type>image</type>
+    </imageSet>
     <displaySet identifier="1">
         <imageSetNumber>1</imageSetNumber>
-        <position>0.0\1.0\0.5\0.0</position>
-        <reconstruction>AXIAL</reconstruction>
+        <position>0.0\1.0\0.5\0.5</position>
     </displaySet>
     <displaySet identifier="2">
         <imageSetNumber>2</imageSetNumber>
-        <position>0.5\1.0\1.0\0.0</position>
-        <reconstruction>AXIAL</reconstruction>
+        <position>0.5\1.0\1.0\0.5</position>
+    </displaySet>
+    <displaySet identifier="3">
+        <imageSetNumber>3</imageSetNumber>
+        <position>0.0\0.5\0.5\0.0</position>
+    </displaySet>
+    <displaySet identifier="4">
+        <imageSetNumber>4</imageSetNumber>
+        <position>0.5\0.5\1.0\0.0</position>
     </displaySet>
 </hangingProtocol>
