@@ -62,9 +62,11 @@ protected slots:
     void updateVtkProp();
 
 private:
+
+    /// Mètode intern per construir la pipeline de VTK.
+    void buildVtkPipeline();
     /// Mètode intern per passar de la llista de punts a l'estructura vtk pertinent
     void buildVtkPoints();
-
     /// Mètode intern per transformar les propietats de la primitiva a propietats de vtk
     void updateVtkActorProperties();
 

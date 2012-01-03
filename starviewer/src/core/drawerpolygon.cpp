@@ -24,33 +24,16 @@ DrawerPolygon::~DrawerPolygon()
 {
     emit dying(this);
 
-    if (m_vtkPolyData)
+    if (m_vtkPropAssembly)
     {
         m_vtkPolyData->Delete();
-    }
-    if (m_vtkPoints)
-    {
         m_vtkPoints->Delete();
-    }
-    if (m_vtkCellArray)
-    {
         m_vtkCellArray->Delete();
-    }
-    if (m_vtkActor)
-    {
         m_vtkActor->Delete();
-    }
-    if (m_vtkBackgroundActor)
-    {
         m_vtkBackgroundActor->Delete();
-    }
-    if (m_vtkMapper)
-    {
         m_vtkMapper->Delete();
-    }
-    if (m_vtkTriangleFilter)
-    {
         m_vtkTriangleFilter->Delete();
+        m_vtkPropAssembly->Delete();
     }
 }
 
@@ -68,6 +51,7 @@ void DrawerPolygon::addVertix(double x, double y, double z)
     array[2] = z;
 
     m_pointsList << array;
+    this->setModified(true);
     emit changed();
 }
 
@@ -91,6 +75,7 @@ void DrawerPolygon::setVertix(int i, double x, double y, double z)
         array[2] = z;
 
         m_pointsList.insert(i, array);
+        this->setModified(true);
         emit changed();
     }
 }
@@ -98,6 +83,7 @@ void DrawerPolygon::setVertix(int i, double x, double y, double z)
 void DrawerPolygon::removeVertices()
 {
     m_pointsList.clear();
+    this->setModified(true);
     emit changed();
 }
 
@@ -116,29 +102,7 @@ const double* DrawerPolygon::getVertix(int i)
 
 vtkProp* DrawerPolygon::getAsVtkProp()
 {
-    if (!m_vtkPropAssembly)
-    {
-        m_vtkPropAssembly = vtkPropAssembly::New();
-
-        buildVtkPoints();
-        // Creem el pipeline de l'm_vtkActor
-        m_vtkActor = vtkActor2D::New();
-        m_vtkBackgroundActor = vtkActor2D::New();
-        m_vtkMapper = vtkPolyDataMapper2D::New();
-
-        m_vtkActor->SetMapper(m_vtkMapper);
-        m_vtkBackgroundActor->SetMapper(m_vtkMapper);
-
-        m_vtkTriangleFilter = vtkTriangleFilter::New();
-        m_vtkTriangleFilter->SetInput(m_vtkPolyData);
-        m_vtkMapper->SetInput(m_vtkTriangleFilter->GetOutput());
-
-        // Li donem els atributs
-        updateVtkActorProperties();
-
-        m_vtkPropAssembly->AddPart(m_vtkBackgroundActor);
-        m_vtkPropAssembly->AddPart(m_vtkActor);
-    }
+    updateVtkProp();
     return m_vtkPropAssembly;
 }
 
@@ -157,17 +121,40 @@ void DrawerPolygon::update()
 
 void DrawerPolygon::updateVtkProp()
 {
-    if (m_vtkPropAssembly)
+    // La pipeline s'ha de construir la primera vegada, tant si hi ha hagut modificacions com si no
+    if (!m_vtkPropAssembly)
     {
-        m_vtkPolyData->Reset();
+        buildVtkPipeline();
+    }
+
+    // TODO Quan es canvien les propietats de DrawerPrimitive (com per exemple el color) no es marca la primitiva com a modificada, per tant de moment cridem
+    // sempre aquest mètode per assegurar, però l'ideal seria cridar-lo només si hi ha hagut modificacions
+    updateVtkActorProperties();
+
+    // Si hi ha hagut modificacions reconstruïm els polígons de VTK
+    if (this->isModified())
+    {
         buildVtkPoints();
-        updateVtkActorProperties();
         this->setModified(false);
     }
-    else
-    {
-        DEBUG_LOG("No es pot actualitzar el polígon, ja que encara no s'ha creat!");
-    }
+}
+
+void DrawerPolygon::buildVtkPipeline()
+{
+    m_vtkCellArray = vtkCellArray::New();
+    m_vtkPoints = vtkPoints::New();
+    m_vtkPolyData = vtkPolyData::New();
+    m_vtkTriangleFilter = vtkTriangleFilter::New();
+    m_vtkTriangleFilter->SetInput(m_vtkPolyData);
+    m_vtkMapper = vtkPolyDataMapper2D::New();
+    m_vtkMapper->SetInput(m_vtkTriangleFilter->GetOutput());
+    m_vtkActor = vtkActor2D::New();
+    m_vtkActor->SetMapper(m_vtkMapper);
+    m_vtkBackgroundActor = vtkActor2D::New();
+    m_vtkBackgroundActor->SetMapper(m_vtkMapper);
+    m_vtkPropAssembly = vtkPropAssembly::New();
+    m_vtkPropAssembly->AddPart(m_vtkBackgroundActor);
+    m_vtkPropAssembly->AddPart(m_vtkActor);
 }
 
 void DrawerPolygon::buildVtkPoints()
@@ -183,12 +170,6 @@ void DrawerPolygon::buildVtkPoints()
         {
             extraVertix = true;
         }
-    }
-    if (!m_vtkPolyData)
-    {
-        m_vtkPolyData = vtkPolyData::New();
-        m_vtkPoints = vtkPoints::New();
-        m_vtkCellArray = vtkCellArray::New();
     }
 
     // Especifiquem el nombre de vèrtexs que té el polígon

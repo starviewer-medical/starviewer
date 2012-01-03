@@ -23,6 +23,9 @@ Q_OBJECT
 private slots:
     void getAsVtkProp_ShouldReturnPropLikeExpected_data();
     void getAsVtkProp_ShouldReturnPropLikeExpected();
+
+    void isModified_ShouldReturnExpectedValue_data();
+    void isModified_ShouldReturnExpectedValue();
 };
 
 Q_DECLARE_METATYPE(DrawerPolygon*)
@@ -377,6 +380,174 @@ void test_DrawerPolygon::getAsVtkProp_ShouldReturnPropLikeExpected()
              qPrintable(firstDifference));
     QVERIFY2(DrawerPolygonTestHelper::compareProperties(foregroundActor->GetProperty(), expectedForegroundActor->GetProperty(), firstDifference),
              qPrintable(firstDifference));
+}
+
+void test_DrawerPolygon::isModified_ShouldReturnExpectedValue_data()
+{
+    QTest::addColumn<DrawerPolygon*>("drawerPolygon");
+    QTest::addColumn<bool>("modified");
+
+    {
+        DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
+        QTest::newRow("brand new") << drawerPolygon << false;
+    }
+
+    {
+        DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
+        double vertex[3] = { 0.0, 0.0, 0.0 };
+        drawerPolygon->addVertix(vertex);
+        QTest::newRow("after addVertix (1)") << drawerPolygon << true;
+    }
+
+    {
+        DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
+        drawerPolygon->addVertix(0.0, 0.0, 0.0);
+        QTest::newRow("after addVertix (2)") << drawerPolygon << true;
+    }
+
+    {
+        DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
+        drawerPolygon->removeVertices();
+        QTest::newRow("after removeVertices") << drawerPolygon << true;
+    }
+
+    {
+        DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
+        drawerPolygon->addVertix(1.0, 2.0, 3.0);
+        drawerPolygon->getAsVtkProp();
+        double vertex[3] = { 0.0, 0.0, 0.0 };
+        drawerPolygon->setVertix(0, vertex);
+        QTest::newRow("after setVertix in range (1)") << drawerPolygon << true;
+    }
+
+    {
+        DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
+        drawerPolygon->addVertix(1.0, 2.0, 3.0);
+        drawerPolygon->getAsVtkProp();
+        drawerPolygon->setVertix(0, 0.0, 0.0, 0.0);
+        QTest::newRow("after setVertix in range (2)") << drawerPolygon << true;
+    }
+
+    {
+        DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
+        double vertex[3] = { 0.0, 0.0, 0.0 };
+        drawerPolygon->setVertix(0, vertex);
+        QTest::newRow("after setVertix out of range (1)") << drawerPolygon << true;
+    }
+
+    {
+        DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
+        drawerPolygon->setVertix(0, 0.0, 0.0, 0.0);
+        QTest::newRow("after setVertix out of range (2)") << drawerPolygon << true;
+    }
+
+    {
+        DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
+        drawerPolygon->addVertix(0.0, 0.0, 0.0);
+        drawerPolygon->getAsVtkProp();
+        drawerPolygon->getVertix(0);
+        QTest::newRow("after getVertix in range (on unmodified)") << drawerPolygon << false;
+    }
+
+    {
+        DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
+        drawerPolygon->addVertix(0.0, 0.0, 0.0);
+        drawerPolygon->getVertix(0);
+        QTest::newRow("after getVertix in range (on modified)") << drawerPolygon << true;
+    }
+
+    {
+        DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
+        drawerPolygon->getVertix(0);
+        QTest::newRow("after getVertix out of range (on unmodified)") << drawerPolygon << false;
+    }
+
+    {
+        DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
+        drawerPolygon->removeVertices();
+        drawerPolygon->getVertix(0);
+        QTest::newRow("after getVertix out of range (on modified)") << drawerPolygon << true;
+    }
+
+    {
+        DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
+        drawerPolygon->addVertix(0.0, 0.0, 0.0);
+        drawerPolygon->getAsVtkProp();
+        QTest::newRow("after getAsVtkProp") << drawerPolygon << false;
+    }
+
+    {
+        DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
+        drawerPolygon->getNumberOfPoints();
+        QTest::newRow("after getNumberOfPoints (on unmodified)") << drawerPolygon << false;
+    }
+
+    {
+        DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
+        drawerPolygon->addVertix(0.0, 0.0, 0.0);
+        drawerPolygon->getNumberOfPoints();
+        QTest::newRow("after getNumberOfPoints (on modified)") << drawerPolygon << true;
+    }
+
+    {
+        DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
+        double point[3] = { 0.0, 0.0, 0.0 };
+        double closestPoint[3];
+        drawerPolygon->getDistanceToPoint(point, closestPoint);
+        QTest::newRow("after getDistanceToPoint (on unmodified)") << drawerPolygon << false;
+    }
+
+    {
+        DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
+        drawerPolygon->addVertix(0.0, 0.0, 0.0);
+        double point[3] = { 0.0, 0.0, 0.0 };
+        double closestPoint[3];
+        drawerPolygon->getDistanceToPoint(point, closestPoint);
+        QTest::newRow("after getDistanceToPoint (on modified)") << drawerPolygon << true;
+    }
+
+    {
+        DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
+        double bounds[6];
+        drawerPolygon->getBounds(bounds);
+        QTest::newRow("after getBounds (on unmodified)") << drawerPolygon << false;
+    }
+
+    {
+        DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
+        drawerPolygon->addVertix(0.0, 0.0, 0.0);
+        double bounds[6];
+        drawerPolygon->getBounds(bounds);
+        QTest::newRow("after getBounds (on modified)") << drawerPolygon << true;
+    }
+
+    {
+        DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
+        drawerPolygon->computeArea(QViewer::Axial);
+        QTest::newRow("after computeArea (on unmodified)") << drawerPolygon << false;
+    }
+
+    {
+        DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
+        drawerPolygon->addVertix(0.0, 0.0, 0.0);
+        drawerPolygon->computeArea(QViewer::Axial);
+        QTest::newRow("after computeArea (on modified)") << drawerPolygon << true;
+    }
+
+    {
+        DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
+        drawerPolygon->addVertix(0.0, 0.0, 0.0);
+        drawerPolygon->update();
+        QTest::newRow("after update") << drawerPolygon << false;
+    }
+}
+
+void test_DrawerPolygon::isModified_ShouldReturnExpectedValue()
+{
+    QFETCH(DrawerPolygon*, drawerPolygon);
+    QFETCH(bool, modified);
+
+    QCOMPARE(drawerPolygon->isModified(), modified);
 }
 
 DECLARE_TEST(test_DrawerPolygon)
