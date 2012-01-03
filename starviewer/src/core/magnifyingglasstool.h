@@ -54,6 +54,8 @@ private:
     /// Elimina el renderer magnificat del render window del Q2DViewer
     void hideMagnifiedRenderer();
     
+    /// Ens retorna el factor de zoom que tenim configurat per aplicar
+    double getZoomFactor();
 private:
     /// Renderer on tindrem la vista magnificada
     vtkRenderer *m_magnifiedRenderer;

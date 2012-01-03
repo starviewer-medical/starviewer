@@ -2,6 +2,7 @@
 
 #include "q2dviewer.h"
 #include "logging.h"
+#include "coresettings.h"
 
 // vtk
 #include <vtkCommand.h>
@@ -105,6 +106,20 @@ void MagnifyingGlassTool::hideMagnifiedRenderer()
     m_magnifyingWindowShown = false;
 }
 
+double MagnifyingGlassTool::getZoomFactor()
+{
+    Settings settings;
+    double factor = settings.getValue(CoreSettings::MagnifyingGlassZoomFactor).toDouble();
+    if (factor == 0.0)
+    {
+        // En cas que el setting no tingui un valor vàlid, li assignem un valor per defecte de 4.0
+        factor = 4.0;
+        settings.setValue(CoreSettings::MagnifyingGlassZoomFactor, "4");
+    }
+
+    return factor;
+}
+
 void MagnifyingGlassTool::updateMagnifiedRenderer()
 {
     // TODO Nomès s'afegeix una sola vegada si ja existeix??? Comprovar!
@@ -152,14 +167,13 @@ void MagnifyingGlassTool::updateCamera()
     m_magnifiedRenderer->SetActiveCamera(m_magnifiedCamera);
 
     // Codi extret de QViewer::zoom(). TODO Fer refactoring
-    double factor = 4.0;
     if (m_magnifiedCamera->GetParallelProjection())
     {
-        m_magnifiedCamera->SetParallelScale(m_magnifiedCamera->GetParallelScale() / factor);
+        m_magnifiedCamera->SetParallelScale(m_magnifiedCamera->GetParallelScale() / getZoomFactor());
     }
     else
     {
-        m_magnifiedCamera->Dolly(factor);
+        m_magnifiedCamera->Dolly(getZoomFactor());
         //if (vtkInteractorStyle::SafeDownCast(this->getInteractor()->GetInteractorStyle())->GetAutoAdjustCameraClippingRange())
         //{
             // TODO en principi sempre ens interessarà fer això? ens podriem enstalviar l'if??

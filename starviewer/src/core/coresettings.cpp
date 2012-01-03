@@ -21,8 +21,11 @@ const QString CoreSettings::UserDICOMDumpDefaultTagsPath("DefaultTags/path");
 const QString CoreSettings::UserCustomWindowLevelsPath("CustomWindowLevels/path");
 const QString CoreSettings::RegisterStatLogs("LoggingPolicy/registerStatistics");
 
-const QString CoreSettings::ToolsFontSize("Tools/ToolsFontSize");
+const QString ToolsBase("Tools/");
+const QString CoreSettings::ToolsFontSize(ToolsBase + "ToolsFontSize");
 const QString CoreSettings::ScaledUserInterfaceFontSize("ScaledUserInterfaceFontSize");
+
+const QString CoreSettings::MagnifyingGlassZoomFactor(ToolsBase + "MagnifyingGlassZoomFactor");
 
 // Paràmetres d'obscurances
 const QString ObscurancesBase("3DViewer/obscurances/");
@@ -100,6 +103,7 @@ void CoreSettings::init()
     settingsRegistry->addSetting(UserDICOMDumpDefaultTagsPath, UserDataRootPath + "dicomdumpdefaulttags/");
     settingsRegistry->addSetting(UserCustomWindowLevelsPath, UserDataRootPath + "customwindowlevels/customwindowlevels.xml");
     settingsRegistry->addSetting(RegisterStatLogs, false);
+    settingsRegistry->addSetting(MagnifyingGlassZoomFactor, "4");
     settingsRegistry->addSetting(LanguageLocale, QLocale::system().name());
     settingsRegistry->addSetting(LastReleaseNotesVersionShown, "");
     settingsRegistry->addSetting(NeverShowNewVersionReleaseNotes, false);

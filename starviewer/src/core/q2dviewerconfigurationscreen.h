@@ -21,6 +21,9 @@ private:
     /// Actualitza els checkbox de les modalitats amb zoom per defecte segons els settings
     void initializeModalitiesWithZoomByDefault();
 
+    /// Actualitza quin radio button del factor de zoom de lupa cal activar
+    void initializeMagnifyingGlassToolZoomFactor();
+
 private slots:
     /// Actualitzen els corresponents settings
     void updateSliceScrollLoopSetting(bool enable);
@@ -28,6 +31,7 @@ private slots:
     void updateReferenceLinesForMRSetting(bool enable);
     void updateReferenceLinesForCTSetting(bool enable);
     void updateModalitiesWithZoomByDefaultSetting();
+    void updateMagnifyingGlassZoomFactorSetting();
 
     /// Farà que s'apliquin els canvis corresponents en els settings
     void applyChanges();
