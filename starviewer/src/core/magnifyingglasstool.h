@@ -31,9 +31,6 @@ protected:
 private slots:
     /// Actualitza la càmera i la posició del viewport
     void update();
-    
-    /// Amaga el renderer i fa un update
-    void hideAndUpdate();
 
     /// Actualitza la imatge de la vista magnificada
     void updateMagnifiedImage();
@@ -41,9 +38,12 @@ private slots:
     /// Actualitza els paràmetres de la càmera de magnificació
     void updateCamera();
 
+    /// Elimina el renderer magnificat del render window del Q2DViewer
+    void hideMagnifiedRenderer();
+
 private:
-    /// Crea les connexions
-    void createConnections();
+    /// Habilita o deshabilita les connexions
+    void enableConnections(bool enable = true);
 
     /// Actualitza tots els paràmetres la vista magnificada
     void updateMagnifiedRenderer();
@@ -51,9 +51,6 @@ private:
     /// Actualitza la posició de la vista magnificada segons el moviment del cursor
     void updateMagnifiedViewportPosition();
 
-    /// Elimina el renderer magnificat del render window del Q2DViewer
-    void hideMagnifiedRenderer();
-    
     /// Ens retorna el factor de zoom que tenim configurat per aplicar
     double getZoomFactor();
 private:
