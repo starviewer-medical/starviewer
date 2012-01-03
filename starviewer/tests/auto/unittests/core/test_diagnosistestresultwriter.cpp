@@ -26,8 +26,9 @@ public:
     }
 
 protected:
-    QFile* createFile()
+    QFile* createFile(const QString &pathFile)
     {
+        Q_UNUSED(pathFile);
         // Fem que no ho guardi a cap fitxer
         return new QFile();
     }
@@ -104,27 +105,26 @@ void test_DiagnosisTestResultWriter::write_ShouldWriteTestResultsToAnIODevice()
     QFETCH(QString, result);
     
     TestingDiagnosisTestResultWriter writer;
-    // Utilitzem una llista per guardar les referències dels DiagnosisTests que creem, per poder-los eliminar.
-    QList<TestingDiagnosisTest*> tests;
+    QList<QPair<DiagnosisTest*, DiagnosisTestResult> > diagnosisTestsToWrite;
+
     for (int i = 0; i < diagnosisTestDescriptions.count(); i++)
     {
         TestingDiagnosisTest *test = new TestingDiagnosisTest();
         test->m_description = diagnosisTestDescriptions.at(i);
-        writer.addDiagnosisTest(test, diagnosisTestResults.at(i));
-
-        // Guardem la referència a la llist
-        tests << test;
+        diagnosisTestsToWrite << QPair<DiagnosisTest*, DiagnosisTestResult>(test, diagnosisTestResults.at(i));
     }
-    writer.write();
+
+    writer.setDiagnosisTests(diagnosisTestsToWrite);
+    writer.write("");
 
     QString writerResult = *writer.m_testingFile;
     QCOMPARE(writerResult, result);
 
     delete writer.m_testingFile;
     // Eliminem els DiagnosisTests que hem creat.
-    for (int i = 0; i < tests.count(); i++)
+    for (int i = 0; i < diagnosisTestsToWrite.count(); i++)
     {
-        delete tests[i];
+        delete diagnosisTestsToWrite[i].first;
     }
 }
 
