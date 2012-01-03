@@ -51,6 +51,18 @@ QDiagnosisTest::~QDiagnosisTest()
 void QDiagnosisTest::resizeEvent(QResizeEvent *)
 {
     m_testsResultsTable->setColumnWidth(0, m_testsResultsTable->width());
+    if (m_qDiagnosisTestResultWidgetExpanded)
+    {
+        // Si es fa un rezise i hi ha algun resultat expanded, potser que canvïin el nombre de línies del QLabel, i per tant cal recalcular
+        // la seva mida vertical.
+        // Primer de tot li diem quina mida horitzontal tindrà.
+        m_qDiagnosisTestResultWidgetExpanded->setParentWidgetWidth(m_testsResultsTable->width());
+        // El forçem a calcular la nova mida.
+        m_qDiagnosisTestResultWidgetExpanded->expand();
+        // I ajustem la mida de la taula.
+        m_testsResultsTable->resizeRowsToContents();
+    }
+    
 }
 
 void QDiagnosisTest::execAndRunDiagnosisTest()
@@ -89,6 +101,9 @@ void QDiagnosisTest::qdiagnosisTestResultWidgetClicked(QDiagnosisTestResultWidge
 
     if (qDiagnosisTestResultWidgetClicked != m_qDiagnosisTestResultWidgetExpanded)
     {
+        // Per tal de que es calculi bé la mida del resultat de test quan està expanded, cal passar-li la mida horitzontal de la taula.
+        // D'aquesta manera pot saber quantes línies de text ocupen la descripció i la solució.
+        qDiagnosisTestResultWidgetClicked->setParentWidgetWidth(m_testsResultsTable->width());
         qDiagnosisTestResultWidgetClicked->expand();
         m_qDiagnosisTestResultWidgetExpanded = qDiagnosisTestResultWidgetClicked;
     }
