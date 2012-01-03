@@ -3,6 +3,7 @@
     <hangingProtocolName>CO+SAG+AX</hangingProtocolName>
     <numberScreens>1</numberScreens>
     <protocol>CT</protocol>
+    <priority>5</priority>
     <restriction identifier="1">
         <usageFlag>NO_MATCH</usageFlag>
         <selectorAttribute>ImageType</selectorAttribute>
