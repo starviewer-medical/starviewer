@@ -103,6 +103,9 @@ public:
     /// Defineix les modalitats a les que se'ls hi ha d'activar el zoom per defecte
     static const QString ModalitiesWithZoomToolByDefault;
 
+    /// Defineix el factor de zoom que aplica l'eina de lupa
+    static const QString MagnifyingGlassZoomFactor;
+
 };
 
 } // End namespace udg

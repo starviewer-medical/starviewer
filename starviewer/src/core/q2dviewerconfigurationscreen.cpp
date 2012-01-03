@@ -25,6 +25,7 @@ void Q2DViewerConfigurationScreen::initialize()
     m_referenceLinesCTCheckBox->setChecked(settings.getValue(CoreSettings::EnableQ2DViewerReferenceLinesForCT).toBool());
 
     initializeModalitiesWithZoomByDefault();
+    initializeMagnifyingGlassToolZoomFactor();
 }
 
 void Q2DViewerConfigurationScreen::initializeModalitiesWithZoomByDefault()
@@ -84,6 +85,39 @@ void Q2DViewerConfigurationScreen::initializeModalitiesWithZoomByDefault()
     if (modalitiesWithZoomList.contains("XC"))
     {
         m_zoomXCCheckBox->setChecked(true);
+    }
+}
+
+void Q2DViewerConfigurationScreen::initializeMagnifyingGlassToolZoomFactor()
+{
+    Settings settings;
+
+    QString zoomFactor = settings.getValue(CoreSettings::MagnifyingGlassZoomFactor).toString();
+
+    if (zoomFactor == "1.5")
+    {
+        m_1point5XZoomFactorRadioButton->setChecked(true);
+    }
+    else if (zoomFactor == "2")
+    {
+        m_2XZoomFactorRadioButton->setChecked(true);
+    }
+    else if (zoomFactor == "4")
+    {
+        m_4XZoomFactorRadioButton->setChecked(true);
+    }
+    else if (zoomFactor == "6")
+    {
+        m_6XZoomFactorRadioButton->setChecked(true);
+    }
+    else if (zoomFactor == "8")
+    {
+        m_8XZoomFactorRadioButton->setChecked(true);
+    }
+    else
+    {
+        // Si no hi ha cap valor vàlid, l'augment serà 4x per defecte
+        m_4XZoomFactorRadioButton->setChecked(true);
     }
 }
 
@@ -193,6 +227,40 @@ void Q2DViewerConfigurationScreen::updateModalitiesWithZoomByDefaultSetting()
     settings.setValue(CoreSettings::ModalitiesWithZoomToolByDefault, modalitiesWithZoom);
 }
 
+void Q2DViewerConfigurationScreen::updateMagnifyingGlassZoomFactorSetting()
+{
+    QString zoomFactor;
+
+    if (m_1point5XZoomFactorRadioButton->isChecked())
+    {
+        zoomFactor = "1.5";
+    }
+    else if (m_2XZoomFactorRadioButton->isChecked())
+    {
+        zoomFactor = "2";
+    }
+    else if (m_4XZoomFactorRadioButton->isChecked())
+    {
+        zoomFactor = "4";
+    }
+    else if (m_6XZoomFactorRadioButton->isChecked())
+    {
+        zoomFactor = "6";
+    }
+    else if (m_8XZoomFactorRadioButton->isChecked())
+    {
+        zoomFactor = "8";
+    }
+    else
+    {
+        // Si no hi ha cap botó marcat, l'augment serà 4x per defecte. Tot i així, això no hauria de passar mai
+        zoomFactor = "4";
+    }
+
+    Settings settings;
+    settings.setValue(CoreSettings::MagnifyingGlassZoomFactor, zoomFactor);
+}
+
 void Q2DViewerConfigurationScreen::applyChanges()
 {
     updateSliceScrollLoopSetting(m_sliceScrollLoopCheckBox->isChecked());
@@ -200,6 +268,7 @@ void Q2DViewerConfigurationScreen::applyChanges()
     updateReferenceLinesForMRSetting(m_referenceLinesMRCheckBox->isChecked());
     updateReferenceLinesForCTSetting(m_referenceLinesCTCheckBox->isChecked());
     updateModalitiesWithZoomByDefaultSetting();
+    updateMagnifyingGlassZoomFactorSetting();
 }
 
 }
