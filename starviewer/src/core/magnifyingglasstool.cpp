@@ -96,7 +96,6 @@ void MagnifyingGlassTool::updateMagnifiedViewportPosition()
     }
 
     m_magnifiedRenderer->SetViewport(xMin, yMin, xMax, yMax);
-    m_2DViewer->render();
 }
 
 void MagnifyingGlassTool::hideMagnifiedRenderer()
@@ -128,8 +127,6 @@ void MagnifyingGlassTool::updateMagnifiedRenderer()
 {
     // TODO Nomès s'afegeix una sola vegada si ja existeix??? Comprovar!
     m_2DViewer->getRenderWindow()->AddRenderer(m_magnifiedRenderer);
-    
-    updateCamera();
 
     // TODO Nomès s'afegeix una sola vegada si ja existeix??? Comprovar!
     m_magnifiedRenderer->AddViewProp(m_2DViewer->getVtkImageActor());
@@ -142,14 +139,19 @@ void MagnifyingGlassTool::updateMagnifiedImage()
     if (m_2DViewer->getCurrentCursorImageCoordinate(xyz))
     {
         m_2DViewer->setCursor(QCursor(Qt::BlankCursor));
+        
+        // Actualitzem la mida i posició del viewport
+        updateMagnifiedViewportPosition();
+        
         if (!m_magnifyingWindowShown)
         {
             updateMagnifiedRenderer();
+            updateCamera();
         }
-        // Actualitzem la posició de la imatge
+        
+        // Actualitzem la posició que enfoca la càmera
         m_magnifiedCamera->SetFocalPoint(xyz);
         m_magnifiedRenderer->ResetCameraClippingRange();
-        updateMagnifiedViewportPosition();
         m_2DViewer->render();
     }
     else
@@ -166,24 +168,38 @@ void MagnifyingGlassTool::updateCamera()
     if (!m_magnifiedCamera)
     {
         m_magnifiedCamera = vtkSmartPointer<vtkCamera>::New();
+        m_magnifiedRenderer->SetActiveCamera(m_magnifiedCamera);
     }
-    m_magnifiedCamera->DeepCopy(m_2DViewer->getRenderer()->GetActiveCamera());
-    m_magnifiedRenderer->SetActiveCamera(m_magnifiedCamera);
+    vtkCamera *viewerCamera = m_2DViewer->getRenderer()->GetActiveCamera();
+    m_magnifiedCamera->DeepCopy(viewerCamera);
 
-    // Codi extret de QViewer::zoom(). TODO Fer refactoring
-    if (m_magnifiedCamera->GetParallelProjection())
+    // Ajustem la càmera a la mateixa proporció que el renderer principal
+    // Cal prendre la proporció del viewport magnificat respecte el viewer en sí
+    QSize size = m_2DViewer->getRenderWindowSize();
+    double viewportsProportion;
+    double viewportPoints[4];
+    m_magnifiedRenderer->GetViewport(viewportPoints);
+    if (size.width() > size.height())
     {
-        m_magnifiedCamera->SetParallelScale(m_magnifiedCamera->GetParallelScale() / getZoomFactor());
+        viewportsProportion = fabs(viewportPoints[2] - viewportPoints[0]);
     }
     else
     {
-        m_magnifiedCamera->Dolly(getZoomFactor());
-        //if (vtkInteractorStyle::SafeDownCast(this->getInteractor()->GetInteractorStyle())->GetAutoAdjustCameraClippingRange())
-        //{
-            // TODO en principi sempre ens interessarà fer això? ens podriem enstalviar l'if??
-            m_magnifiedRenderer->ResetCameraClippingRange();
-        //}
+        viewportsProportion = fabs(viewportPoints[3] - viewportPoints[1]);
     }
+
+    // Fixem el mateix zoom que en el renderer principal
+    if (viewerCamera->GetParallelProjection())
+    {
+        m_magnifiedCamera->SetParallelScale(viewerCamera->GetParallelScale() * viewportsProportion);
+    }
+    else
+    {
+        m_magnifiedCamera->SetViewAngle(viewerCamera->GetViewAngle() * viewportsProportion);
+    }
+    
+    // Apliquem el factor de magnificació
+    m_magnifiedCamera->Zoom(getZoomFactor());
 }
 
 void MagnifyingGlassTool::update()
