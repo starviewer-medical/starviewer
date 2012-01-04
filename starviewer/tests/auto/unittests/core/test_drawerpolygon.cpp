@@ -2,6 +2,7 @@
 #include "drawerpolygon.h"
 
 #include "drawerpolygontesthelper.h"
+#include "glutessellator.h"
 
 #include <vtkActor2D.h>
 #include <vtkCellArray.h>
@@ -12,7 +13,6 @@
 #include <vtkPropCollection.h>
 #include <vtkProperty2D.h>
 #include <vtkSmartPointer.h>
-#include <vtkTriangleFilter.h>
 
 using namespace udg;
 using namespace testing;
@@ -38,18 +38,11 @@ void test_DrawerPolygon::getAsVtkProp_ShouldReturnPropLikeExpected_data()
 
     {
         DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
-        vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
-        points->SetNumberOfPoints(0);
-        vtkSmartPointer<vtkCellArray> cellArray = vtkSmartPointer<vtkCellArray>::New();
         vtkSmartPointer<vtkPolyData> polyData = vtkSmartPointer<vtkPolyData>::New();
-        polyData->SetPoints(points);
-        polyData->SetLines(cellArray);
-        vtkSmartPointer<vtkTriangleFilter> triangleFilter = vtkSmartPointer<vtkTriangleFilter>::New();
-        triangleFilter->SetInput(polyData);
         vtkSmartPointer<vtkCoordinate> coordinate = vtkSmartPointer<vtkCoordinate>::New();
         coordinate->SetCoordinateSystemToWorld();
         vtkSmartPointer<vtkPolyDataMapper2D> mapper = vtkSmartPointer<vtkPolyDataMapper2D>::New();
-        mapper->SetInput(triangleFilter->GetOutput());
+        mapper->SetInput(polyData);
         mapper->SetTransformCoordinate(coordinate);
         vtkSmartPointer<vtkActor2D> backgroundActor = DrawerPolygonTestHelper::createDefaultBackgroundActor();
         backgroundActor->SetMapper(mapper);
@@ -73,12 +66,10 @@ void test_DrawerPolygon::getAsVtkProp_ShouldReturnPropLikeExpected_data()
         vtkSmartPointer<vtkPolyData> polyData = vtkSmartPointer<vtkPolyData>::New();
         polyData->SetPoints(points);
         polyData->SetLines(cellArray);
-        vtkSmartPointer<vtkTriangleFilter> triangleFilter = vtkSmartPointer<vtkTriangleFilter>::New();
-        triangleFilter->SetInput(polyData);
         vtkSmartPointer<vtkCoordinate> coordinate = vtkSmartPointer<vtkCoordinate>::New();
         coordinate->SetCoordinateSystemToWorld();
         vtkSmartPointer<vtkPolyDataMapper2D> mapper = vtkSmartPointer<vtkPolyDataMapper2D>::New();
-        mapper->SetInput(triangleFilter->GetOutput());
+        mapper->SetInput(polyData);
         mapper->SetTransformCoordinate(coordinate);
         vtkSmartPointer<vtkActor2D> backgroundActor = DrawerPolygonTestHelper::createDefaultBackgroundActor();
         backgroundActor->SetMapper(mapper);
@@ -107,12 +98,10 @@ void test_DrawerPolygon::getAsVtkProp_ShouldReturnPropLikeExpected_data()
         vtkSmartPointer<vtkPolyData> polyData = vtkSmartPointer<vtkPolyData>::New();
         polyData->SetPoints(points);
         polyData->SetLines(cellArray);
-        vtkSmartPointer<vtkTriangleFilter> triangleFilter = vtkSmartPointer<vtkTriangleFilter>::New();
-        triangleFilter->SetInput(polyData);
         vtkSmartPointer<vtkCoordinate> coordinate = vtkSmartPointer<vtkCoordinate>::New();
         coordinate->SetCoordinateSystemToWorld();
         vtkSmartPointer<vtkPolyDataMapper2D> mapper = vtkSmartPointer<vtkPolyDataMapper2D>::New();
-        mapper->SetInput(triangleFilter->GetOutput());
+        mapper->SetInput(polyData);
         mapper->SetTransformCoordinate(coordinate);
         vtkSmartPointer<vtkActor2D> backgroundActor = DrawerPolygonTestHelper::createDefaultBackgroundActor();
         backgroundActor->SetMapper(mapper);
@@ -144,12 +133,10 @@ void test_DrawerPolygon::getAsVtkProp_ShouldReturnPropLikeExpected_data()
         vtkSmartPointer<vtkPolyData> polyData = vtkSmartPointer<vtkPolyData>::New();
         polyData->SetPoints(points);
         polyData->SetLines(cellArray);
-        vtkSmartPointer<vtkTriangleFilter> triangleFilter = vtkSmartPointer<vtkTriangleFilter>::New();
-        triangleFilter->SetInput(polyData);
         vtkSmartPointer<vtkCoordinate> coordinate = vtkSmartPointer<vtkCoordinate>::New();
         coordinate->SetCoordinateSystemToWorld();
         vtkSmartPointer<vtkPolyDataMapper2D> mapper = vtkSmartPointer<vtkPolyDataMapper2D>::New();
-        mapper->SetInput(triangleFilter->GetOutput());
+        mapper->SetInput(polyData);
         mapper->SetTransformCoordinate(coordinate);
         vtkSmartPointer<vtkActor2D> backgroundActor = DrawerPolygonTestHelper::createDefaultBackgroundActor();
         backgroundActor->SetMapper(mapper);
@@ -182,12 +169,10 @@ void test_DrawerPolygon::getAsVtkProp_ShouldReturnPropLikeExpected_data()
         vtkSmartPointer<vtkPolyData> polyData = vtkSmartPointer<vtkPolyData>::New();
         polyData->SetPoints(points);
         polyData->SetLines(cellArray);
-        vtkSmartPointer<vtkTriangleFilter> triangleFilter = vtkSmartPointer<vtkTriangleFilter>::New();
-        triangleFilter->SetInput(polyData);
         vtkSmartPointer<vtkCoordinate> coordinate = vtkSmartPointer<vtkCoordinate>::New();
         coordinate->SetCoordinateSystemToWorld();
         vtkSmartPointer<vtkPolyDataMapper2D> mapper = vtkSmartPointer<vtkPolyDataMapper2D>::New();
-        mapper->SetInput(triangleFilter->GetOutput());
+        mapper->SetInput(polyData);
         mapper->SetTransformCoordinate(coordinate);
         vtkSmartPointer<vtkActor2D> backgroundActor = DrawerPolygonTestHelper::createDefaultBackgroundActor();
         backgroundActor->SetMapper(mapper);
@@ -223,12 +208,10 @@ void test_DrawerPolygon::getAsVtkProp_ShouldReturnPropLikeExpected_data()
         vtkSmartPointer<vtkPolyData> polyData = vtkSmartPointer<vtkPolyData>::New();
         polyData->SetPoints(points);
         polyData->SetLines(cellArray);
-        vtkSmartPointer<vtkTriangleFilter> triangleFilter = vtkSmartPointer<vtkTriangleFilter>::New();
-        triangleFilter->SetInput(polyData);
         vtkSmartPointer<vtkCoordinate> coordinate = vtkSmartPointer<vtkCoordinate>::New();
         coordinate->SetCoordinateSystemToWorld();
         vtkSmartPointer<vtkPolyDataMapper2D> mapper = vtkSmartPointer<vtkPolyDataMapper2D>::New();
-        mapper->SetInput(triangleFilter->GetOutput());
+        mapper->SetInput(polyData);
         mapper->SetTransformCoordinate(coordinate);
         vtkSmartPointer<vtkActor2D> backgroundActor = DrawerPolygonTestHelper::createDefaultBackgroundActor();
         backgroundActor->SetMapper(mapper);
@@ -247,29 +230,36 @@ void test_DrawerPolygon::getAsVtkProp_ShouldReturnPropLikeExpected_data()
         drawerPolygon->addVertix(3.0, 4.0, 0.0);
         drawerPolygon->addVertix(4.0, 3.0, 0.0);
         drawerPolygon->setFilled(true);
+        // Per saber els punts finals hem de passar per GluTessellator. No poden ser hardcoded perquè poden canviar segons la implementació de GLU.
+        QList<Vector3> vertices;
+        vertices << Vector3(0.0, 0.0, 0.0) << Vector3(1.0, 1.0, 0.0) << Vector3(3.0, 4.0, 0.0) << Vector3(4.0, 3.0, 0.0);
+        GluTessellator tessellator;
+        tessellator.tessellate(vertices);
         vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
-        points->SetNumberOfPoints(5);
-        points->InsertPoint(0, 0.0, 0.0, 0.0);
-        points->InsertPoint(1, 1.0, 1.0, 0.0);
-        points->InsertPoint(2, 3.0, 4.0, 0.0);
-        points->InsertPoint(3, 4.0, 3.0, 0.0);
-        points->InsertPoint(4, 0.0, 0.0, 0.0);
+        vertices = tessellator.getVertices();
+        points->SetNumberOfPoints(vertices.size());
+        for (int i = 0; i < vertices.size(); i++)
+        {
+            double point[3] = { vertices[i].x, vertices[i].y, vertices[i].z };
+            points->SetPoint(i, point);
+        }
         vtkSmartPointer<vtkCellArray> cellArray = vtkSmartPointer<vtkCellArray>::New();
-        cellArray->InsertNextCell(5);
-        cellArray->InsertCellPoint(0);
-        cellArray->InsertCellPoint(1);
-        cellArray->InsertCellPoint(2);
-        cellArray->InsertCellPoint(3);
-        cellArray->InsertCellPoint(4);
+        const QList<GluTessellator::Triangle> &triangles = tessellator.getTriangles();
+        for (int i = 0; i < triangles.size(); i++)
+        {
+            cellArray->InsertNextCell(3);
+            for (int j = 0; j < 3; j++)
+            {
+                cellArray->InsertCellPoint(triangles[i].indices[j]);
+            }
+        }
         vtkSmartPointer<vtkPolyData> polyData = vtkSmartPointer<vtkPolyData>::New();
         polyData->SetPoints(points);
         polyData->SetPolys(cellArray);
-        vtkSmartPointer<vtkTriangleFilter> triangleFilter = vtkSmartPointer<vtkTriangleFilter>::New();
-        triangleFilter->SetInput(polyData);
         vtkSmartPointer<vtkCoordinate> coordinate = vtkSmartPointer<vtkCoordinate>::New();
         coordinate->SetCoordinateSystemToWorld();
         vtkSmartPointer<vtkPolyDataMapper2D> mapper = vtkSmartPointer<vtkPolyDataMapper2D>::New();
-        mapper->SetInput(triangleFilter->GetOutput());
+        mapper->SetInput(polyData);
         mapper->SetTransformCoordinate(coordinate);
         vtkSmartPointer<vtkActor2D> backgroundActor = DrawerPolygonTestHelper::createDefaultBackgroundActor();
         backgroundActor->SetMapper(mapper);
@@ -326,12 +316,10 @@ void test_DrawerPolygon::getAsVtkProp_ShouldReturnPropLikeExpected_data()
         vtkSmartPointer<vtkPolyData> polyData = vtkSmartPointer<vtkPolyData>::New();
         polyData->SetPoints(points);
         polyData->SetLines(cellArray);
-        vtkSmartPointer<vtkTriangleFilter> triangleFilter = vtkSmartPointer<vtkTriangleFilter>::New();
-        triangleFilter->SetInput(polyData);
         vtkSmartPointer<vtkCoordinate> coordinate = vtkSmartPointer<vtkCoordinate>::New();
         coordinate->SetCoordinateSystemToDisplay();
         vtkSmartPointer<vtkPolyDataMapper2D> mapper = vtkSmartPointer<vtkPolyDataMapper2D>::New();
-        mapper->SetInput(triangleFilter->GetOutput());
+        mapper->SetInput(polyData);
         mapper->SetTransformCoordinate(coordinate);
         vtkSmartPointer<vtkActor2D> backgroundActor = DrawerPolygonTestHelper::createDefaultBackgroundActor();
         backgroundActor->GetProperty()->SetLineStipplePattern(0xFF00);

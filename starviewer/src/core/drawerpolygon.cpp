@@ -1,4 +1,5 @@
 #include "drawerpolygon.h"
+#include "glutessellator.h"
 #include "logging.h"
 #include "mathtools.h"
 // Vtk
@@ -8,7 +9,6 @@
 #include <vtkPolyDataMapper2D.h>
 #include <vtkProperty2D.h>
 #include <vtkPropAssembly.h>
-#include <vtkTriangleFilter.h>
 // Qt
 #include <QVector>
 
@@ -16,7 +16,7 @@ namespace udg {
 
 DrawerPolygon::DrawerPolygon(QObject *parent)
  : DrawerPrimitive(parent), m_pointsChanged(false), m_vtkPolyData(0), m_vtkPoints(0), m_vtkCellArray(0), m_vtkActor(0), m_vtkBackgroundActor(0), m_vtkMapper(0),
-   m_vtkTriangleFilter(0), m_vtkPropAssembly(0)
+   m_vtkPropAssembly(0)
 {
 }
 
@@ -32,7 +32,6 @@ DrawerPolygon::~DrawerPolygon()
         m_vtkActor->Delete();
         m_vtkBackgroundActor->Delete();
         m_vtkMapper->Delete();
-        m_vtkTriangleFilter->Delete();
         m_vtkPropAssembly->Delete();
     }
 }
@@ -147,10 +146,8 @@ void DrawerPolygon::buildVtkPipeline()
     m_vtkCellArray = vtkCellArray::New();
     m_vtkPoints = vtkPoints::New();
     m_vtkPolyData = vtkPolyData::New();
-    m_vtkTriangleFilter = vtkTriangleFilter::New();
-    m_vtkTriangleFilter->SetInput(m_vtkPolyData);
     m_vtkMapper = vtkPolyDataMapper2D::New();
-    m_vtkMapper->SetInput(m_vtkTriangleFilter->GetOutput());
+    m_vtkMapper->SetInput(m_vtkPolyData);
     m_vtkActor = vtkActor2D::New();
     m_vtkActor->SetMapper(m_vtkMapper);
     m_vtkBackgroundActor = vtkActor2D::New();
@@ -178,37 +175,70 @@ void DrawerPolygon::buildVtkPoints()
     // Especifiquem el nombre de vèrtexs que té el polígon
     int numberOfVertices = m_pointsList.count() + (extraVertix ? 1 : 0);
     m_vtkCellArray->Reset();
-    if (numberOfVertices > 0)
-    {
-        m_vtkCellArray->InsertNextCell(numberOfVertices);
-    }
-    m_vtkPoints->SetNumberOfPoints(numberOfVertices);
 
-    // Donem els punts/vèrtexs
-    int i = 0;
-    foreach (QVector<double> vertix, m_pointsList)
-    {
-        m_vtkPoints->InsertPoint(i, vertix.data());
-        m_vtkCellArray->InsertCellPoint(i);
-        i++;
-    }
-
-    if (extraVertix)
-    {
-        // Tornem a afegir el primer punt
-        m_vtkPoints->InsertPoint(numberOfVertices - 1, m_pointsList.at(0).data());
-        m_vtkCellArray->InsertCellPoint(numberOfVertices - 1);
-    }
-    m_vtkPolyData->Initialize();
-    // Assignem els punts al polydata
-    m_vtkPolyData->SetPoints(m_vtkPoints);
-    // Comprovem si la forma està "plena" o no
     if (this->isFilled())
     {
+        QList<Vector3> vertices;
+        for (int i = 0; i < m_pointsList.size(); i++)
+        {
+            vertices.append(Vector3(m_pointsList[i][0], m_pointsList[i][1], m_pointsList[i][2]));
+        }
+
+        GluTessellator tessellator;
+        tessellator.tessellate(vertices);
+        
+        vertices = tessellator.getVertices();
+        m_vtkPoints->SetNumberOfPoints(vertices.size());
+
+        for (int i = 0; i < vertices.size(); i++)
+        {
+            double point[3] = { vertices[i].x, vertices[i].y, vertices[i].z };
+            m_vtkPoints->SetPoint(i, point);
+        }
+
+        const QList<GluTessellator::Triangle> &triangles = tessellator.getTriangles();
+        DEBUG_LOG(QString("%1 triangles").arg(triangles.size()));
+
+        for (int i = 0; i < triangles.size(); i++)
+        {
+            m_vtkCellArray->InsertNextCell(3);
+            for (int j = 0; j < 3; j++)
+            {
+                m_vtkCellArray->InsertCellPoint(triangles[i].indices[j]);
+            }
+        }
+
+        m_vtkPolyData->Initialize();
+        // Assignem els punts al polydata
+        m_vtkPolyData->SetPoints(m_vtkPoints);
         m_vtkPolyData->SetPolys(m_vtkCellArray);
     }
     else
     {
+        if (numberOfVertices > 0)
+        {
+            m_vtkCellArray->InsertNextCell(numberOfVertices);
+        }
+        m_vtkPoints->SetNumberOfPoints(numberOfVertices);
+
+        // Donem els punts/vèrtexs
+        int i = 0;
+        foreach (QVector<double> vertix, m_pointsList)
+        {
+            m_vtkPoints->InsertPoint(i, vertix.data());
+            m_vtkCellArray->InsertCellPoint(i);
+            i++;
+        }
+
+        if (extraVertix)
+        {
+            // Tornem a afegir el primer punt
+            m_vtkPoints->InsertPoint(numberOfVertices - 1, m_pointsList.at(0).data());
+            m_vtkCellArray->InsertCellPoint(numberOfVertices - 1);
+        }
+        m_vtkPolyData->Initialize();
+        // Assignem els punts al polydata
+        m_vtkPolyData->SetPoints(m_vtkPoints);
         m_vtkPolyData->SetLines(m_vtkCellArray);
     }
 }

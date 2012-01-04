@@ -10,7 +10,6 @@ class vtkCellArray;
 class vtkActor2D;
 class vtkPolyDataMapper2D;
 class vtkPropAssembly;
-class vtkTriangleFilter;
 
 namespace udg {
 
@@ -83,8 +82,6 @@ private:
     vtkActor2D *m_vtkActor;
     vtkActor2D *m_vtkBackgroundActor;
     vtkPolyDataMapper2D *m_vtkMapper;
-    /// Filtre per triangular el polígon, necessari perquè es dibuixi bé si és còncau.
-    vtkTriangleFilter *m_vtkTriangleFilter;
 
     /// vtkProp per agrupar l'actor i el background per simular el contorn
     vtkPropAssembly *m_vtkPropAssembly;
