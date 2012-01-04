@@ -73,6 +73,8 @@ private:
 private:
     /// Llista de punts del polígon
     QList<QVector<double> > m_pointsList;
+    /// Indica si els punts han canviat des de l'última vegada que s'ha actualitzat la representació de VTK.
+    bool m_pointsChanged;
 
     /// Estructures de vtk, per construir el polígon
     vtkPolyData *m_vtkPolyData;

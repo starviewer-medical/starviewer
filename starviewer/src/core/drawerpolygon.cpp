@@ -15,8 +15,8 @@
 namespace udg {
 
 DrawerPolygon::DrawerPolygon(QObject *parent)
- : DrawerPrimitive(parent), m_vtkPolyData(0), m_vtkPoints(0), m_vtkCellArray(0), m_vtkActor(0), m_vtkBackgroundActor(0), m_vtkMapper(0), m_vtkTriangleFilter(0),
-   m_vtkPropAssembly(0)
+ : DrawerPrimitive(parent), m_pointsChanged(false), m_vtkPolyData(0), m_vtkPoints(0), m_vtkCellArray(0), m_vtkActor(0), m_vtkBackgroundActor(0), m_vtkMapper(0),
+   m_vtkTriangleFilter(0), m_vtkPropAssembly(0)
 {
 }
 
@@ -52,6 +52,7 @@ void DrawerPolygon::addVertix(double x, double y, double z)
 
     m_pointsList << array;
     emit changed();
+    m_pointsChanged = true;
 }
 
 void DrawerPolygon::setVertix(int i, double point[3])
@@ -75,6 +76,7 @@ void DrawerPolygon::setVertix(int i, double x, double y, double z)
 
         m_pointsList.insert(i, array);
         emit changed();
+        m_pointsChanged = true;
     }
 }
 
@@ -82,6 +84,7 @@ void DrawerPolygon::removeVertices()
 {
     m_pointsList.clear();
     emit changed();
+    m_pointsChanged = true;
 }
 
 const double* DrawerPolygon::getVertix(int i)
@@ -125,12 +128,17 @@ void DrawerPolygon::updateVtkProp()
         updateVtkActorProperties();
     }
 
-    // Si hi ha hagut modificacions reconstruïm els polígons de VTK
     if (this->isModified())
     {
-        buildVtkPoints();
         updateVtkActorProperties();
         this->setModified(false);
+    }
+
+    // Si hi ha hagut modificacions dels punts reconstruïm els polígons de VTK
+    if (m_pointsChanged)
+    {
+        buildVtkPoints();
+        m_pointsChanged = false;
     }
 }
 
