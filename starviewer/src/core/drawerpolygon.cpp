@@ -51,7 +51,6 @@ void DrawerPolygon::addVertix(double x, double y, double z)
     array[2] = z;
 
     m_pointsList << array;
-    this->setModified(true);
     emit changed();
 }
 
@@ -75,7 +74,6 @@ void DrawerPolygon::setVertix(int i, double x, double y, double z)
         array[2] = z;
 
         m_pointsList.insert(i, array);
-        this->setModified(true);
         emit changed();
     }
 }
@@ -83,7 +81,6 @@ void DrawerPolygon::setVertix(int i, double x, double y, double z)
 void DrawerPolygon::removeVertices()
 {
     m_pointsList.clear();
-    this->setModified(true);
     emit changed();
 }
 
@@ -125,16 +122,14 @@ void DrawerPolygon::updateVtkProp()
     if (!m_vtkPropAssembly)
     {
         buildVtkPipeline();
+        updateVtkActorProperties();
     }
-
-    // TODO Quan es canvien les propietats de DrawerPrimitive (com per exemple el color) no es marca la primitiva com a modificada, per tant de moment cridem
-    // sempre aquest mètode per assegurar, però l'ideal seria cridar-lo només si hi ha hagut modificacions
-    updateVtkActorProperties();
 
     // Si hi ha hagut modificacions reconstruïm els polígons de VTK
     if (this->isModified())
     {
         buildVtkPoints();
+        updateVtkActorProperties();
         this->setModified(false);
     }
 }
