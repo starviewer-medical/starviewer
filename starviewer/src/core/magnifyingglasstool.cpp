@@ -103,6 +103,7 @@ void MagnifyingGlassTool::hideMagnifiedRenderer()
     if (m_magnifyingWindowShown)
     {
         m_2DViewer->setCursor(QCursor(Qt::ArrowCursor));
+        m_magnifiedRenderer->RemoveAllViewProps();
         m_2DViewer->getRenderWindow()->RemoveRenderer(m_magnifiedRenderer);
         m_2DViewer->render();
         m_magnifyingWindowShown = false;
@@ -125,11 +126,16 @@ double MagnifyingGlassTool::getZoomFactor()
 
 void MagnifyingGlassTool::updateMagnifiedRenderer()
 {
-    // TODO Nomès s'afegeix una sola vegada si ja existeix??? Comprovar!
-    m_2DViewer->getRenderWindow()->AddRenderer(m_magnifiedRenderer);
-
-    // TODO Nomès s'afegeix una sola vegada si ja existeix??? Comprovar!
-    m_magnifiedRenderer->AddViewProp(m_2DViewer->getVtkImageActor());
+    if (!m_2DViewer->getRenderWindow()->HasRenderer(m_magnifiedRenderer))
+    {
+        m_2DViewer->getRenderWindow()->AddRenderer(m_magnifiedRenderer);
+        
+        if (m_magnifiedRenderer->GetActors()->GetNumberOfItems() == 0)
+        {
+            m_magnifiedRenderer->AddViewProp(m_2DViewer->getVtkImageActor());
+        }
+    }
+    
     m_magnifyingWindowShown = true;
 }
 
