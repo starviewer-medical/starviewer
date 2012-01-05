@@ -5,6 +5,7 @@
 #include <QThread>
 #include <QMovie>
 #include <QFileDialog>
+#include <QScrollBar>
 
 #include "diagnosistestfactory.h"
 #include "diagnosistest.h"
@@ -56,11 +57,17 @@ void QDiagnosisTest::resizeEvent(QResizeEvent *)
         // Si es fa un rezise i hi ha algun resultat expanded, potser que canvïin el nombre de línies del QLabel, i per tant cal recalcular
         // la seva mida vertical.
         // Primer de tot li diem quina mida horitzontal tindrà.
+        int parentVerticalScrollWidth = 0;
+        if (m_testsResultsTable->verticalScrollBar()->isVisible())
+        {
+            parentVerticalScrollWidth = m_testsResultsTable->verticalScrollBar()->width();
+        }
         m_qDiagnosisTestResultWidgetExpanded->setParentWidgetWidth(m_testsResultsTable->width());
+        m_qDiagnosisTestResultWidgetExpanded->setParentWidgetVerticalScrollWidth(parentVerticalScrollWidth);
         // El forçem a calcular la nova mida.
         m_qDiagnosisTestResultWidgetExpanded->expand();
         // I ajustem la mida de la taula.
-        m_testsResultsTable->resizeRowsToContents();
+        m_testsResultsTable->resizeRowsToContents(); 
     }
     
 }
@@ -114,6 +121,27 @@ void QDiagnosisTest::qdiagnosisTestResultWidgetClicked(QDiagnosisTestResultWidge
     }
 
     m_testsResultsTable->resizeRowsToContents();
+    // En el cas de que hi hagi scroll vertical, cal recalcular la seva mida
+    // (ja sigui per que ja n'hi havia o per que se n'ha produït al expandir).
+    // La propietat visible de la scrollBar no s'activa fins que no es pinta, per tant aquí encara no la podem utilitzar.
+    // Però podem comprovar si la mida del contingut és major que la de la taula.
+    int contentSize = 0;
+    for (int i = 0; i < m_testsResultsTable->rowCount(); i++)
+    {
+        contentSize += m_testsResultsTable->rowHeight(i);
+    }
+    if (contentSize > m_testsResultsTable->height())
+    {
+        // En el cas que fagi el contract i hi hagi scroll, entrerà aquí, però m_qDiagnosisTestResultWidgetExpanded és NULL.
+        if (m_qDiagnosisTestResultWidgetExpanded)
+        {
+            int parentVerticalScrollWidth = m_testsResultsTable->verticalScrollBar()->width();
+            m_qDiagnosisTestResultWidgetExpanded->setParentWidgetWidth(m_testsResultsTable->width());
+            m_qDiagnosisTestResultWidgetExpanded->setParentWidgetVerticalScrollWidth(parentVerticalScrollWidth);
+            m_qDiagnosisTestResultWidgetExpanded->expand();
+            m_testsResultsTable->resizeRowsToContents();
+        }
+    }
 }
 
 void QDiagnosisTest::runDiagnosisTest()

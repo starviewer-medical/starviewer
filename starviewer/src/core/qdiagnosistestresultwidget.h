@@ -32,6 +32,8 @@ public:
 
     // Assignar la mida del widget pare per poder calcular la mida correcte dels labels amb wordwrap
     void setParentWidgetWidth(int parentWidgetWidth);
+    // Indica si el widget pare té barra d'scroll vertical
+    void setParentWidgetVerticalScrollWidth(int verticalScrollWidth);
 
 signals:
     ///Signal que s'emet quan s'ha canviat la mida del Widget
@@ -63,8 +65,15 @@ private:
     /// Nombre de línies que ocupa la solució del resultat del test en un label amb word wrap
     int m_diagnosisTestResultSolutionLines;
 
-    // Mida del widget pare
+    /// Mida del widget pare
     int m_parentWidgetWidth;
+
+    /// Mida que se li ha donat a l'spacer de la part dreta de la descripció del resultat. Aquest valor és HARD CODED, ja que no es pot obtenir per codi.
+    /// Equival a l'amplada del SizeHint de l'spacer.
+    const int m_initialResultDescriptionHorizontalSpacerWidth;
+    /// Mida que se li ha donat a l'spacer de la part dreta de la solució del resultat. Aquest valor és HARD CODED, ja que no es pot obtenir per codi.
+    /// Equival a l'amplada del SizeHint de l'spacer.
+    const int m_initialResultSolutionHorizontalSpacerWidth;
 };
 
 }

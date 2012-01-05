@@ -8,6 +8,7 @@
 namespace udg {
 
 QDiagnosisTestResultWidget::QDiagnosisTestResultWidget(DiagnosisTest *diagnosisTest, DiagnosisTestResult diagnosisTestResult)
+ : m_initialResultDescriptionHorizontalSpacerWidth(13), m_initialResultSolutionHorizontalSpacerWidth(13)
 {
     setupUi(this);
 
@@ -30,6 +31,10 @@ QDiagnosisTestResultWidget::QDiagnosisTestResultWidget(DiagnosisTest *diagnosisT
 
     m_isExpanded = false;
     m_descriptionSolutionDiagnosisTestFrame->setVisible(false);
+
+    // Els QTextEdit tenen un marge intern de 4px, per tant el treguem
+    m_diagnosisTestResultDescriptionLineCounter->setStyleSheet("margin: -4px");
+    m_diagnosisTestResultSolutionLineCounter->setStyleSheet("margin: -4px");
 }
 
 void QDiagnosisTestResultWidget::expand()
@@ -46,10 +51,14 @@ void QDiagnosisTestResultWidget::expand()
         // Redimencionar-los correctament.
         // Primer de tot cal mirar la posició X dels QTextEdit respecte el pare, ja que sabem la llargada del pare, no la seva.
         QPoint position = m_diagnosisTestResultDescriptionLineCounter->mapTo(this, QPoint(0, 0));
-        // El text d'un QTextEdit té un cert marge des de les cantonades.
-        int internalQTextEditMarging = 10;
-        m_diagnosisTestResultDescriptionLineCounter->setGeometry(0, 0, m_parentWidgetWidth - position.x() + internalQTextEditMarging, 50);
-        m_diagnosisTestResultSolutionLineCounter->setGeometry(0, 0, m_parentWidgetWidth - position.x() + internalQTextEditMarging, 50);
+        int descriptionSpacerWidth = m_resultDescriptionHorizontalSpacer->geometry().width();
+        int solutionSpacerWidth = m_resultSolutionHorizontalSpacer->geometry().width();
+
+        int resultDescriptionWidth = m_parentWidgetWidth - position.x() - descriptionSpacerWidth;
+        int resultSolutionWidth = m_parentWidgetWidth - position.x() - solutionSpacerWidth;
+
+        m_diagnosisTestResultDescriptionLineCounter->setGeometry(0, 0, resultDescriptionWidth, 0);
+        m_diagnosisTestResultSolutionLineCounter->setGeometry(0, 0, resultSolutionWidth, 0);
 
         // Comptar les línies de text que ocuparà el QLabel.
         m_diagnosisTestResultDescriptionLines = countNumberOfLinesWithWordWrap(m_diagnosisTestResultDescriptionLineCounter);
@@ -63,7 +72,6 @@ void QDiagnosisTestResultWidget::expand()
         this->adjustSize();
 
         m_isExpanded = true;
-
     }
 }
 
@@ -75,6 +83,25 @@ bool QDiagnosisTestResultWidget::isExpandable()
 void QDiagnosisTestResultWidget::setParentWidgetWidth(int parentWidgetWidth)
 {
     m_parentWidgetWidth = parentWidgetWidth;
+}
+
+void QDiagnosisTestResultWidget::setParentWidgetVerticalScrollWidth(int verticalScrollWidth)
+{
+    // Descripció: La nova mida serà la inicial, més la de la barra de scroll.
+    int newWidth = m_initialResultDescriptionHorizontalSpacerWidth + verticalScrollWidth;
+    int currentWidth = m_resultDescriptionHorizontalSpacer->geometry().width();
+    if (currentWidth != newWidth)
+    {
+        m_resultDescriptionHorizontalSpacer->changeSize(newWidth, 0, QSizePolicy::Fixed, QSizePolicy::Maximum);
+    }
+
+    // Solució
+    newWidth = m_initialResultSolutionHorizontalSpacerWidth + verticalScrollWidth;
+    currentWidth = m_resultSolutionHorizontalSpacer->geometry().width();
+    if (currentWidth != newWidth)
+    {
+        m_resultSolutionHorizontalSpacer->changeSize(newWidth, 0, QSizePolicy::Fixed, QSizePolicy::Maximum);
+    }
 }
 
 void QDiagnosisTestResultWidget::contract()
