@@ -4,6 +4,7 @@
 #include "tool.h"
 
 #include <vtkSmartPointer.h>
+#include <QRectF>
 
 class vtkRenderer;
 class vtkCamera;
@@ -48,6 +49,9 @@ private:
     /// Actualitza tots els paràmetres la vista magnificada
     void updateMagnifiedRenderer();
 
+    /// Calcula les mides del viewport magnificat
+    QRectF computeMagnifiedViewportBounds(const QPoint &center, const QSize &viewerSize);
+    
     /// Actualitza la posició de la vista magnificada segons el moviment del cursor
     void updateMagnifiedViewportPosition();
 
