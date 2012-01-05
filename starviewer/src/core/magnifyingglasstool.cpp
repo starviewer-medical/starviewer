@@ -62,41 +62,47 @@ void MagnifyingGlassTool::handleEvent(unsigned long eventID)
     }
 }
 
+QRectF MagnifyingGlassTool::computeMagnifiedViewportBounds(const QPoint &center, const QSize &viewerSize)
+{
+    double magnifyingWindowSize = 150.0;
+
+    double xMin = center.x() / (double)viewerSize.width() - magnifyingWindowSize / viewerSize.width();
+    double xMax = center.x() / (double)viewerSize.width() + magnifyingWindowSize / viewerSize.width();
+    double yMin = center.y() / (double)viewerSize.height() - magnifyingWindowSize / viewerSize.height();
+    double yMax = center.y() / (double)viewerSize.height() + magnifyingWindowSize / viewerSize.height();
+
+    if (xMin < 0)
+    {
+        xMax = ((magnifyingWindowSize / viewerSize.width()) * 2) + xMin;
+        xMin = 0;
+    }
+    if (yMin < 0)
+    {
+        yMax = ((magnifyingWindowSize / viewerSize.height()) * 2) + yMin;
+        yMin = 0;
+    }
+    if (xMax > 1)
+    {
+        xMin = xMax - ((magnifyingWindowSize / viewerSize.width()) * 2);
+        xMax = 1;
+    }
+    if (yMax > 1)
+    {
+        yMin = yMax - ((magnifyingWindowSize / viewerSize.height()) * 2);
+        yMax = 1;
+    }
+
+    return QRectF(QPointF(xMin, yMin), QPointF(xMax, yMax));
+}
+
 void MagnifyingGlassTool::updateMagnifiedViewportPosition()
 {
     // Movem la finestra per que acompanyi el cursor
     QPoint eventPosition = m_2DViewer->getEventPosition();
     QSize size = m_2DViewer->getRenderWindowSize();
 
-    double magnifyingWindowSize = 150.0;
-
-    double xMin = eventPosition.x() / (double)size.width() - magnifyingWindowSize / size.width();
-    double xMax = eventPosition.x() / (double)size.width() + magnifyingWindowSize / size.width();
-    double yMin = eventPosition.y() / (double)size.height() - magnifyingWindowSize / size.height();
-    double yMax = eventPosition.y() / (double)size.height() + magnifyingWindowSize / size.height();
-
-    if (xMin < 0)
-    {
-        xMax = ((magnifyingWindowSize / size.width()) * 2) + xMin;
-        xMin = 0;
-    }
-    if (yMin < 0)
-    {
-        yMax = ((magnifyingWindowSize / size.height()) * 2) + yMin;
-        yMin = 0;
-    }
-    if (xMax > 1)
-    {
-        xMin = xMax - ((magnifyingWindowSize / size.width()) * 2);
-        xMax = 1;
-    }
-    if (yMax > 1)
-    {
-        yMin = yMax - ((magnifyingWindowSize / size.height()) * 2);
-        yMax = 1;
-    }
-
-    m_magnifiedRenderer->SetViewport(xMin, yMin, xMax, yMax);
+    QRectF viewportBounds = computeMagnifiedViewportBounds(eventPosition, size);
+    m_magnifiedRenderer->SetViewport(viewportBounds.left(), viewportBounds.top(), viewportBounds.right(), viewportBounds.bottom());
 }
 
 void MagnifyingGlassTool::hideMagnifiedRenderer()
