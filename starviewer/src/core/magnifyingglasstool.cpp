@@ -17,7 +17,7 @@ MagnifyingGlassTool::MagnifyingGlassTool(QViewer *viewer, QObject *parent)
  : Tool(viewer,parent)
 {
     m_toolName = "MagnifyingGlassTool";
-    m_magnifyingWindowShown = false;
+    m_magnifyingRendererIsVisible = false;
     
     m_2DViewer = qobject_cast<Q2DViewer*>(viewer);
     if (!m_2DViewer)
@@ -30,7 +30,7 @@ MagnifyingGlassTool::MagnifyingGlassTool(QViewer *viewer, QObject *parent)
 
 MagnifyingGlassTool::~MagnifyingGlassTool()
 {
-    hideMagnifiedRenderer();
+    removeMagnifiedRenderer();
     m_magnifiedRenderer->Delete();
     m_2DViewer->unsetCursor();
 }
@@ -41,19 +41,19 @@ void MagnifyingGlassTool::handleEvent(unsigned long eventID)
     {
         case vtkCommand::LeftButtonPressEvent:
             enableConnections();
-            updateMagnifiedImage();
+            updateMagnifiedView();
             break;
 
         case vtkCommand::MouseMoveEvent:
-            if (m_magnifyingWindowShown)
+            if (m_magnifyingRendererIsVisible)
             {
-                updateMagnifiedImage();
+                updateMagnifiedView();
             }
             break;
 
         case vtkCommand::LeftButtonReleaseEvent:
             enableConnections(false);
-            hideMagnifiedRenderer();
+            removeMagnifiedRenderer();
             break;
 
         default:
@@ -94,15 +94,15 @@ void MagnifyingGlassTool::updateMagnifiedRendererViewport(const QPoint &center, 
     m_magnifiedRenderer->SetViewport(xMin, yMin, xMax, yMax);
 }
 
-void MagnifyingGlassTool::hideMagnifiedRenderer()
+void MagnifyingGlassTool::removeMagnifiedRenderer()
 {
-    if (m_magnifyingWindowShown)
+    if (m_magnifyingRendererIsVisible)
     {
         m_2DViewer->unsetCursor();
         m_magnifiedRenderer->RemoveAllViewProps();
         m_2DViewer->getRenderWindow()->RemoveRenderer(m_magnifiedRenderer);
         m_2DViewer->render();
-        m_magnifyingWindowShown = false;
+        m_magnifyingRendererIsVisible = false;
     }
 }
 
@@ -120,7 +120,7 @@ double MagnifyingGlassTool::getZoomFactor()
     return factor;
 }
 
-void MagnifyingGlassTool::updateMagnifiedRenderer()
+void MagnifyingGlassTool::addMagnifiedRenderer()
 {
     if (!m_2DViewer->getRenderWindow()->HasRenderer(m_magnifiedRenderer))
     {
@@ -132,19 +132,19 @@ void MagnifyingGlassTool::updateMagnifiedRenderer()
         }
     }
     
-    m_magnifyingWindowShown = true;
+    m_magnifyingRendererIsVisible = true;
 }
 
-void MagnifyingGlassTool::updateMagnifiedImage()
+void MagnifyingGlassTool::updateMagnifiedView()
 {
     QPoint eventPosition = m_2DViewer->getEventPosition();
-    QSize size = m_2DViewer->getRenderWindowSize();
+    QSize renderWindowSize = m_2DViewer->getRenderWindowSize();
 
-    QRect renderWindowBounds(QPoint(0, 0), size);    
+    QRect renderWindowBounds(QPoint(0, 0), renderWindowSize);    
     if (!renderWindowBounds.contains(eventPosition))
     {
         // Si el punt està fora de la render window amaguem i sortim
-        hideMagnifiedRenderer();
+        removeMagnifiedRenderer();
         return;
     }
     
@@ -154,11 +154,11 @@ void MagnifyingGlassTool::updateMagnifiedImage()
         m_2DViewer->setCursor(QCursor(Qt::BlankCursor));
         
         // Actualitzem el viewport
-        updateMagnifiedRendererViewport(eventPosition, size);
+        updateMagnifiedRendererViewport(eventPosition, renderWindowSize);
         
-        if (!m_magnifyingWindowShown)
+        if (!m_magnifyingRendererIsVisible)
         {
-            updateMagnifiedRenderer();
+            addMagnifiedRenderer();
             updateCamera();
         }
         
@@ -169,9 +169,9 @@ void MagnifyingGlassTool::updateMagnifiedImage()
     }
     else
     {
-        if (m_magnifyingWindowShown)
+        if (m_magnifyingRendererIsVisible)
         {
-            hideMagnifiedRenderer();
+            removeMagnifiedRenderer();
         }
     }
 }
@@ -218,21 +218,21 @@ void MagnifyingGlassTool::updateCamera()
 void MagnifyingGlassTool::update()
 {
     updateCamera();
-    updateMagnifiedImage();
+    updateMagnifiedView();
 }
 
 void MagnifyingGlassTool::enableConnections(bool enable)
 {
     if (enable)
     {
-        connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(hideMagnifiedRenderer()));
-        connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(updateMagnifiedImage()));
+        connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(removeMagnifiedRenderer()));
+        connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(updateMagnifiedView()));
         connect(m_2DViewer, SIGNAL(cameraChanged()), SLOT(update()));
     }
     else
     {
-        disconnect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), this, SLOT(hideMagnifiedRenderer()));
-        disconnect(m_2DViewer, SIGNAL(sliceChanged(int)), this, SLOT(updateMagnifiedImage()));
+        disconnect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), this, SLOT(removeMagnifiedRenderer()));
+        disconnect(m_2DViewer, SIGNAL(sliceChanged(int)), this, SLOT(updateMagnifiedView()));
         disconnect(m_2DViewer, SIGNAL(cameraChanged()), this, SLOT(update()));
     }
 }
