@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>969</width>
-    <height>274</height>
+    <height>276</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -191,6 +191,9 @@
             <bold>false</bold>
            </font>
           </property>
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
           <property name="text">
            <string>TextLabel</string>
           </property>
@@ -233,6 +236,12 @@
         </item>
         <item row="1" column="1">
          <widget class="QTextEdit" name="m_diagnosisTestResultDescriptionLineCounter">
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Plain</enum>
+          </property>
           <property name="verticalScrollBarPolicy">
            <enum>Qt::ScrollBarAlwaysOff</enum>
           </property>
@@ -243,6 +252,12 @@
         </item>
         <item row="3" column="1">
          <widget class="QTextEdit" name="m_diagnosisTestResultSolutionLineCounter">
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Plain</enum>
+          </property>
           <property name="verticalScrollBarPolicy">
            <enum>Qt::ScrollBarAlwaysOff</enum>
           </property>
@@ -250,6 +265,38 @@
            <enum>Qt::ScrollBarAlwaysOff</enum>
           </property>
          </widget>
+        </item>
+        <item row="0" column="2">
+         <spacer name="m_resultDescriptionHorizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>13</width>
+            <height>17</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="2" column="2">
+         <spacer name="m_resultSolutionHorizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>13</width>
+            <height>17</height>
+           </size>
+          </property>
+         </spacer>
         </item>
        </layout>
       </item>
