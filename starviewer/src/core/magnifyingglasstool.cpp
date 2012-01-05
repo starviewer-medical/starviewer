@@ -76,22 +76,22 @@ void MagnifyingGlassTool::updateMagnifiedViewportPosition()
 
     if (xMin < 0)
     {
+        xMax = ((magnifyingWindowSize / size.width()) * 2) + xMin;
         xMin = 0;
-        xMax = (magnifyingWindowSize / size.width()) * 2;
     }
     if (yMin < 0)
     {
+        yMax = ((magnifyingWindowSize / size.height()) * 2) + yMin;
         yMin = 0;
-        yMax = (magnifyingWindowSize / size.height()) * 2;
     }
     if (xMax > 1)
     {
-        xMin = 1 - ((magnifyingWindowSize / size.width()) * 2);
+        xMin = xMax - ((magnifyingWindowSize / size.width()) * 2);
         xMax = 1;
     }
     if (yMax > 1)
     {
-        yMin = 1 - ((magnifyingWindowSize / size.height()) * 2);
+        yMin = yMax - ((magnifyingWindowSize / size.height()) * 2);
         yMax = 1;
     }
 
@@ -138,7 +138,7 @@ void MagnifyingGlassTool::updateMagnifiedImage()
     double xyz[3];
     if (m_2DViewer->getCurrentCursorImageCoordinate(xyz))
     {
-        m_2DViewer->setCursor(QCursor(Qt::BlankCursor));
+        //m_2DViewer->setCursor(QCursor(Qt::BlankCursor));
         
         // Actualitzem la mida i posició del viewport
         updateMagnifiedViewportPosition();
