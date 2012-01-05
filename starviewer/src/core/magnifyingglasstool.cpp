@@ -61,7 +61,7 @@ void MagnifyingGlassTool::handleEvent(unsigned long eventID)
     }
 }
 
-QRectF MagnifyingGlassTool::computeMagnifiedViewportBounds(const QPoint &center, const QSize &viewerSize)
+void MagnifyingGlassTool::updateMagnifiedRendererViewport(const QPoint &center, const QSize &viewerSize)
 {
     double magnifyingWindowSize = 150.0;
 
@@ -91,17 +91,7 @@ QRectF MagnifyingGlassTool::computeMagnifiedViewportBounds(const QPoint &center,
         yMax = 1;
     }
 
-    return QRectF(QPointF(xMin, yMin), QPointF(xMax, yMax));
-}
-
-void MagnifyingGlassTool::updateMagnifiedViewportPosition()
-{
-    // Movem la finestra per que acompanyi el cursor
-    QPoint eventPosition = m_2DViewer->getEventPosition();
-    QSize size = m_2DViewer->getRenderWindowSize();
-
-    QRectF viewportBounds = computeMagnifiedViewportBounds(eventPosition, size);
-    m_magnifiedRenderer->SetViewport(viewportBounds.left(), viewportBounds.top(), viewportBounds.right(), viewportBounds.bottom());
+    m_magnifiedRenderer->SetViewport(xMin, yMin, xMax, yMax);
 }
 
 void MagnifyingGlassTool::hideMagnifiedRenderer()
@@ -163,8 +153,8 @@ void MagnifyingGlassTool::updateMagnifiedImage()
     {
         m_2DViewer->setCursor(QCursor(Qt::BlankCursor));
         
-        // Actualitzem la mida i posició del viewport
-        updateMagnifiedViewportPosition();
+        // Actualitzem el viewport
+        updateMagnifiedRendererViewport(eventPosition, size);
         
         if (!m_magnifyingWindowShown)
         {
