@@ -34,21 +34,21 @@ private slots:
     /// Actualitza la càmera i la posició del viewport
     void update();
 
-    /// Actualitza la imatge de la vista magnificada
-    void updateMagnifiedImage();
+    /// Actualitza la vista magnificada
+    void updateMagnifiedView();
     
     /// Actualitza els paràmetres de la càmera de magnificació
     void updateCamera();
 
     /// Elimina el renderer magnificat del render window del Q2DViewer
-    void hideMagnifiedRenderer();
+    void removeMagnifiedRenderer();
 
 private:
     /// Habilita o deshabilita les connexions
     void enableConnections(bool enable = true);
 
-    /// Actualitza tots els paràmetres la vista magnificada
-    void updateMagnifiedRenderer();
+    /// Afegeix el renderer magnificat amb els paràmetres adequats
+    void addMagnifiedRenderer();
 
     /// Calcula les mides del viewport magnificat segons el punt a magnificar i la mida del viewer donada
     void updateMagnifiedRendererViewport(const QPoint &center, const QSize &viewerSize);
@@ -60,7 +60,7 @@ private:
     vtkRenderer *m_magnifiedRenderer;
     
     /// Indica si s'ha mostrat o no el renderer de magnificació
-    bool m_magnifyingWindowShown;
+    bool m_magnifyingRendererIsVisible;
     
     /// Càmera de la vista magnificada
     vtkSmartPointer<vtkCamera> m_magnifiedCamera;
