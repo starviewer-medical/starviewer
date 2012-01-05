@@ -32,6 +32,7 @@ MagnifyingGlassTool::~MagnifyingGlassTool()
 {
     hideMagnifiedRenderer();
     m_magnifiedRenderer->Delete();
+    m_2DViewer->unsetCursor();
 }
 
 void MagnifyingGlassTool::handleEvent(unsigned long eventID)
@@ -102,7 +103,7 @@ void MagnifyingGlassTool::hideMagnifiedRenderer()
 {
     if (m_magnifyingWindowShown)
     {
-        m_2DViewer->setCursor(QCursor(Qt::ArrowCursor));
+        m_2DViewer->unsetCursor();
         m_magnifiedRenderer->RemoveAllViewProps();
         m_2DViewer->getRenderWindow()->RemoveRenderer(m_magnifiedRenderer);
         m_2DViewer->render();
