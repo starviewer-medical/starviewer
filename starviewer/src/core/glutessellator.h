@@ -6,6 +6,10 @@
 #include <QList>
 #include <QtOpenGL>
 
+#ifdef Q_OS_MACX
+   #include <OpenGL/glu.h>
+#endif
+
 #ifdef Q_OS_WIN32
 #define GLU_TESS_CALLBACK __stdcall
 #else
