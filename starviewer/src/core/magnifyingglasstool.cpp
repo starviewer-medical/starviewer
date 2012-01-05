@@ -138,7 +138,7 @@ void MagnifyingGlassTool::updateMagnifiedImage()
     double xyz[3];
     if (m_2DViewer->getCurrentCursorImageCoordinate(xyz))
     {
-        //m_2DViewer->setCursor(QCursor(Qt::BlankCursor));
+        m_2DViewer->setCursor(QCursor(Qt::BlankCursor));
         
         // Actualitzem la mida i posició del viewport
         updateMagnifiedViewportPosition();
