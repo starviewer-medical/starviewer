@@ -16,7 +16,7 @@ h1
     vertical-align: middle;
 }
 
-div.majorRelease, div.minorRelease
+div.majorRelease, div.minorRelease, #previousReleases
 {
     border: 1px;
     border-radius: 5px;
@@ -24,6 +24,20 @@ div.majorRelease, div.minorRelease
     border-color: #BBBBBB;
     background-color:#FFFFFF;
     margin-bottom: 15px;
+}
+
+#previousReleases a
+{
+    padding-left: 20px;
+    color: #555555;
+    line-height: 40px;
+    margin-bottom: 10px;
+    font-size:14px;
+}
+
+#previousReleases a:hover
+{
+    color: #333333;
 }
 
 .version 

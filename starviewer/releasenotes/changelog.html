@@ -7,38 +7,57 @@
         Starviewer Changelog
     </title>
     <link href="changelog.css" rel="stylesheet" type="text/css"/>
+    <script src="jquery-min.js" type="text/javascript"></script>
     <script type="text/javascript">
         /* <![CDATA[ */ //utilitzat per passar la validació xhtml
-        function setTicketLinks()
+        $('document').ready(function()
         {
-            var spans = document.getElementsByTagName("span");
-            for (var i = 0; i < spans.length; i++)
+            addTicketLinks();
+            hidePreviousReleases();
+        });
+
+        function addTicketLinks()
+        {
+            $('.ticket').each(function (){addTicketLink(this)});
+        }
+
+        function addTicketLink(element)
+        {
+            // si hi ha algun ticket dins aquest span
+            if (element.innerHTML != "")
             {
-                // si l'span te la classe ticket i hi ha algun ticket dins aquest span
-                if (/ticket/im.test(spans[i].className) && spans[i].innerHTML != "")
+                var tickets = element.innerHTML.replace(/ /g,"");
+                tickets = tickets.split(",");
+                var innerTexts = [];
+                for (var j in tickets)
                 {
-                    var tickets = spans[i].innerHTML.replace(/ /g,"");
-                    tickets = tickets.split(",");
-                    var innerTexts = [];
-                    for (var j in tickets)
+                    if (/s\:/im.test(tickets[j]))
                     {
-                        if (/s\:/im.test(tickets[j]))
-                        {
-                            innerTexts[j] = "<a href='https://starviewer.udg.edu/support/ticket/" + tickets[j].replace(/s:/g,"") + "' target=\"new\">" + tickets[j] + "</a>";
-                        }
-                        else
-                        {
-                            innerTexts[j] = "<a href='https://trueta.udg.edu/trac/ticket/" + tickets[j] + "' target=\"new\">" + tickets[j] + "</a>";
-                        }
+                        innerTexts[j] = "<a href='https://starviewer.udg.edu/support/ticket/" + tickets[j].replace(/s:/g,"") + "' target=\"new\">" + tickets[j] + "</a>";
                     }
-                    spans[i].innerHTML = innerTexts.join(", "); //si nomes n'hi ha un no hi posa la coma
+                    else
+                    {
+                        innerTexts[j] = "<a href='https://trueta.udg.edu/trac/ticket/" + tickets[j] + "' target=\"new\">" + tickets[j] + "</a>";
+                    }
                 }
+                element.innerHTML = innerTexts.join(", "); //si nomes n'hi ha un no hi posa la coma
             }
+        }
+
+        function hidePreviousReleases()
+        {
+            $('.majorRelease, .minorRelease').first().siblings('.majorRelease, .minorRelease').hide();
+        }
+
+        function showPreviousReleases()
+        {
+            $('#previousReleases').hide();
+            $('.majorRelease, .minorRelease').first().siblings('.majorRelease, .minorRelease').show();
         }
         /* ]]> */
     </script>
  </head>
- <body onload="setTicketLinks()">
+ <body>
     <h1>Starviewer Changelog</h1>
     <div class="majorRelease">
         <div class="version">
@@ -62,7 +81,7 @@
                 <li>S'afegeix la possibilitat de cancel·lar la creació d'una mesura prement la tecla ESC. <span class="ticket">1475</span></li>
                 <li>S'afegeixen nous HP de mamografia, tomografia computeritzada i ressonància magnètica demanats durant diverses visites. <span class="ticket">1611, 1558</span></li>
                 <li>S'afegeix botó per restarurar la imatge i per poder escollir el window level a l'extensió d'impressió DICOM. <span class="ticket">1718</span></li>
-                <li>Es fa que el canvi de llesca sempre estigui disponible en la rodeta del ratolí. Això fa que es pugui canviar de llesca al tenir altres eines seleccionades, com el cursor 3D, ROI's, distàncies, etc.<span class="ticket">1635, 625</span></li>                
+                <li>Es fa que el canvi de llesca sempre estigui disponible en la rodeta del ratolí. Això fa que es pugui canviar de llesca al tenir altres eines seleccionades, com el cursor 3D, ROI's, distàncies, etc.<span class="ticket">1635, 625</span></li>
                 <li>S'afegeix un nout tipus de ROI, la "Magic ROI" que permet seleccionar àrees d'interès de forma molt més ajustada, ràpida i fàcil utilitzant algorismes de segmentació. <span class="ticket">1590</span></li>
                 <li>Nova eina de sincronització automàtica <span class="ticket">1629</span></li>
             </ul>
@@ -222,6 +241,9 @@
                 <li>S'eliminen els "rulers" dels visors 2D per tal de que no molestin a l'hora de visualitzar les imatges.</li>
             </ul>
         </div>
+    </div>
+    <div id="previousReleases">
+        <a href="javascript:showPreviousReleases()">Veure les versions anteriors</a>
     </div>
 </body>
 </html>
