@@ -35,6 +35,9 @@ public:
     // Indica si el widget pare té barra d'scroll vertical
     void setParentWidgetVerticalScrollWidth(int verticalScrollWidth);
 
+    /// Retorna la mida mínima que necessita el frame de la descripció del test per mostrar-se complet.
+    int getTestDescriptionWidthHint();
+
 signals:
     ///Signal que s'emet quan s'ha canviat la mida del Widget
     void clicked(QDiagnosisTestResultWidget *);

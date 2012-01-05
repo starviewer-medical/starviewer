@@ -217,6 +217,26 @@ void QDiagnosisTest::fillDiagnosisTestsResultTable()
     }
     
     m_testsResultsTable->resizeRowsToContents();
+
+    // Recalcular la mida mínima que ha de tenir la finestra perquè tots els resultats dels tests es mostrin correctament.
+    int minimumWindowWidth = 0;
+    for (int index = 0; index < m_testsResultsTable->rowCount(); index++)
+    {
+        QDiagnosisTestResultWidget *qdiagnosisTestResultWidget = (QDiagnosisTestResultWidget*)m_testsResultsTable->cellWidget(index, 0);
+        int testDescriptionWidthHint = qdiagnosisTestResultWidget->getTestDescriptionWidthHint();
+        // La mida mínima serà el màxim del mínims
+        if (testDescriptionWidthHint > minimumWindowWidth)
+        {
+            minimumWindowWidth = testDescriptionWidthHint;
+        }
+    }
+    // Cal tenir en compte el marge de la finestra
+    QRect frameSize = this->frameGeometry();
+    QRect windowSize = this->geometry();
+    minimumWindowWidth += frameSize.right() - windowSize.right(); 
+    // Encara que no es vegi la barra d'scroll, li deixem l'espai necessari per si reduïm l'alçada de la finestra
+    minimumWindowWidth += m_testsResultsTable->verticalScrollBar()->width();
+    this->setMinimumWidth(minimumWindowWidth);
 }
 
 void QDiagnosisTest::addDiagnosisTestResultToTable(DiagnosisTest *diagnosisTest, DiagnosisTestResult diagnosisTestResult)
