@@ -52,7 +52,6 @@ void MagnifyingGlassTool::handleEvent(unsigned long eventID)
             break;
 
         case vtkCommand::LeftButtonReleaseEvent:
-        case vtkCommand::LeaveEvent:
             enableConnections(false);
             hideMagnifiedRenderer();
             break;
@@ -148,6 +147,17 @@ void MagnifyingGlassTool::updateMagnifiedRenderer()
 
 void MagnifyingGlassTool::updateMagnifiedImage()
 {
+    QPoint eventPosition = m_2DViewer->getEventPosition();
+    QSize size = m_2DViewer->getRenderWindowSize();
+
+    QRect renderWindowBounds(QPoint(0, 0), size);    
+    if (!renderWindowBounds.contains(eventPosition))
+    {
+        // Si el punt està fora de la render window amaguem i sortim
+        hideMagnifiedRenderer();
+        return;
+    }
+    
     double xyz[3];
     if (m_2DViewer->getCurrentCursorImageCoordinate(xyz))
     {
