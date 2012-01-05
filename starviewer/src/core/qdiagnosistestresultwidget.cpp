@@ -104,6 +104,25 @@ void QDiagnosisTestResultWidget::setParentWidgetVerticalScrollWidth(int vertical
     }
 }
 
+int QDiagnosisTestResultWidget::getTestDescriptionWidthHint()
+{
+    int widthHint = 0;
+    if (!m_expandContractLabel->isVisible())
+    {
+        // Si la fletxeta per expendir o contraure no hi és mesurem el que ocupa la descripció.
+        QFontMetrics fontMetrics = m_diagnosisTestDescription->fontMetrics();
+        QPoint position = m_diagnosisTestDescription->mapTo(this, QPoint(0, 0));
+        widthHint = position.x() + fontMetrics.width(m_diagnosisTestDescription->text());
+    }
+    else
+    {
+        // Si hi és, agafem com a mída allà on acaba.
+        QPoint position = m_expandContractLabel->mapTo(this, QPoint(m_expandContractLabel->width(), 0));
+        widthHint = position.x();
+    }
+    return widthHint;
+}
+
 void QDiagnosisTestResultWidget::contract()
 {
     m_descriptionSolutionDiagnosisTestFrame->setVisible(false);
