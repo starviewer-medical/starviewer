@@ -31,11 +31,14 @@ DiagnosisTestResult FirewallAccessTest::run()
     {
         result.setState(DiagnosisTestResult::Warning);
         result.setDescription(firewall->getErrorString());
+        result.setSolution(tr("Add %1 to the list of allowed applications through firewall").arg(ApplicationNameString));
     }
     else
     {
         result.setDescription(firewall->getErrorString());
         result.setState(DiagnosisTestResult::Error);
+        // TODO Proposar una solució per quan falla la comprovació del firewall
+        result.setSolution(tr(""));
     }
 
     delete firewall;
