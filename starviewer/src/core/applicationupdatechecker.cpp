@@ -173,7 +173,7 @@ void ApplicationUpdateChecker::parseJSON(const QString &json)
                 else
                 {
                     m_checkOk = false;
-                    m_errorDescription = tr("Error parsing JSON. Version or releaseNotesUrl is not a String");
+                    m_errorDescription = tr("Error parsing JSON: version or releaseNotesURL are not strings");
                 }
             }
             else
