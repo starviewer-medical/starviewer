@@ -26,7 +26,6 @@ DiagnosisTestResult SystemRequerimentsTest::run()
     SystemRequeriments *requeriments = getSystemRequeriments();
     const unsigned int MinimumNumberOfCores = requeriments->getMinimumCPUNumberOfCores();
     const unsigned int MinimumCoreSpeed = requeriments->getMinimumCPUFrequency();
-    const unsigned int MinimumL2CacheSize = requeriments->getMinimumCPUL2CacheSize();
     const unsigned int MinimumGPURAM = requeriments->getMinimumGPURAM();
     const QList<QString> MinimumGPUOpenGLExtensions = requeriments->getMinimumGPUOpenGLCompatibilities();
     const QString MinimumGPUOpenGLVersion = requeriments->getMinimumGPUOpenGLVersion();
@@ -72,14 +71,6 @@ DiagnosisTestResult SystemRequerimentsTest::run()
         {
             state = DiagnosisTestResult::Error;
             description << tr("The fastest CPU runs at %1 and the minimum required is %2").arg(maximumCPUFrequency).arg(MinimumCoreSpeed);
-            solution << tr("Update computer's hardware");
-        }
-        // Cache de nivell 2
-        unsigned int cacheSize = getCPUL2CacheSize(system);
-        if (cacheSize < MinimumL2CacheSize)
-        {
-            state = DiagnosisTestResult::Error;
-            description << tr("The level 2 cache size of the CPU is %1 and the minimum required is %2").arg(cacheSize).arg(MinimumL2CacheSize);
             solution << tr("Update computer's hardware");
         }
     }

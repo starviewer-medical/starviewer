@@ -12,7 +12,7 @@ SystemRequeriments::SystemRequeriments()
     m_minimumGPUOpenGLVersion = "2.1";
     m_minimumOSVersion = "5.0"; // XP
     m_minimumServicePackVersion = 3; // XP service pack 3
-    m_minimumRAM = 4096; // 4Gb
+    m_minimumRAM = 4000; // 4Gb
     m_minimumScreenWidth = 1185; // La mínima amplada que pot tenir starviewer (si s'afageixen controls a la pantalla, s'ha de modificar)
 
     // Quan s'estableixin quines són les extensions d'openGL que es necessiten per cada cosa, es poden afegir aquí
