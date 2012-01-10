@@ -45,7 +45,7 @@ DiagnosisTestResult FirewallAccessTest::run()
 
 QString FirewallAccessTest::getDescription()
 {
-    return tr("Firewall allow %1 connections").arg(ApplicationNameString);
+    return tr("%1 has access through firewall").arg(ApplicationNameString);
 }
 
 FirewallAccess* FirewallAccessTest::createFirewall()

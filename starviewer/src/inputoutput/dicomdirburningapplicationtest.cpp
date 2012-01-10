@@ -49,7 +49,7 @@ DiagnosisTestResult DICOMDIRBurningApplicationTest::run()
 
 QString DICOMDIRBurningApplicationTest::getDescription()
 {
-    return tr("DICOMDIR burning application is configured");
+    return tr("The application to burn DICOMDIRs to CD/DVD is correctly configured");
 }
 
 bool DICOMDIRBurningApplicationTest::burningApplicationIsDefined(const QString &burningApplication)

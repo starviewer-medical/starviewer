@@ -65,7 +65,7 @@ DiagnosisTestResult EchoToPACSTest::run()
 
 QString EchoToPACSTest::getDescription()
 {
-    return tr("Echo to all configured PACS");
+    return tr("All PACS are correctly configured");
 }
 
 QList<PacsDevice> EchoToPACSTest::getPacsDeviceList()
