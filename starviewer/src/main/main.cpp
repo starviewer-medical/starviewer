@@ -132,7 +132,7 @@ int main(int argc, char *argv[])
     #else
     splashPixmap.load(":/images/splash.png");
     #endif
-    QLabel splash(0, Qt::WindowStaysOnTopHint|Qt::SplashScreen|Qt::FramelessWindowHint);
+    QLabel splash(0, Qt::SplashScreen|Qt::FramelessWindowHint);
     splash.setAttribute(Qt::WA_TranslucentBackground);
     splash.setPixmap(splashPixmap);
     splash.resize(splashPixmap.size());
