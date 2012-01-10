@@ -15,7 +15,7 @@ IncomingDICOMConnectionsPortInUseTest::~IncomingDICOMConnectionsPortInUseTest()
 
 QString IncomingDICOMConnectionsPortInUseTest::getDescription()
 {
-    return tr("Incoming DICOM Connections Port %1 is in use by another application").arg(m_port);
+    return tr("Incoming DICOM connections port is available");
 }
 
 } // End udg namespace

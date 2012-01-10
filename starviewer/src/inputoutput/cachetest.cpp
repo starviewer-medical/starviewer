@@ -1,6 +1,7 @@
 #include "cachetest.h"
 #include "inputoutputsettings.h"
 #include "systeminformation.h"
+#include "starviewerapplication.h"
 
 #include <QFileInfo>
 #include <QStringList>
@@ -56,7 +57,7 @@ DiagnosisTestResult CacheTest::run()
 
 QString CacheTest::getDescription()
 {
-    return tr("Cache requirements");
+    return tr("%1 cache is correctly configured").arg(ApplicationNameString);
 }
 
 unsigned int CacheTest::getFreeSpace(const QString &cachePath)

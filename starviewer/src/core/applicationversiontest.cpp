@@ -52,7 +52,7 @@ DiagnosisTestResult ApplicationVersionTest::run()
 
 QString ApplicationVersionTest::getDescription()
 {
-    return tr("New versions available");
+    return tr("%1 is updated to the last version").arg(ApplicationNameString);
 }
 
 void ApplicationVersionTest::onlineCheck()

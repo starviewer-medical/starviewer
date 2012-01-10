@@ -1,6 +1,7 @@
 // Starviewer
 #include "systemrequerimentstest.h"
 #include "systemrequeriments.h"
+#include "starviewerapplication.h"
 
 // Qt
 #include <QString>
@@ -254,7 +255,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
 
 QString SystemRequerimentsTest::getDescription()
 {
-    return tr("system requeriments");
+    return tr("Hardware meets %1's minimum system requeriments").arg(ApplicationNameString);
 }
 
 SystemRequerimentsTest::VersionComparison SystemRequerimentsTest::compareVersions(QString version1, QString version2)

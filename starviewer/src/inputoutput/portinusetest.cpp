@@ -46,7 +46,7 @@ DiagnosisTestResult PortInUseTest::run()
 
 QString PortInUseTest::getDescription()
 {
-    return tr("Port %1 is used by another application");
+    return tr("Port %1 is in use by another application").arg(m_port);
 }
 
 PortInUse* PortInUseTest::createPortInUse()
