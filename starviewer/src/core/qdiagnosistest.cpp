@@ -34,7 +34,7 @@ QDiagnosisTest::QDiagnosisTest(QWidget *parent)
     m_animationInProgressLabel->setMovie(operationAnimation);
     operationAnimation->start();
 
-    //Treiem icona amb ? que apareix al costat del botó de tancar
+    //Treiem icona amb ? que apareix al costat del botÃ³ de tancar
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
     m_qDiagnosisTestResultWidgetExpanded = NULL;
 }
@@ -54,9 +54,9 @@ void QDiagnosisTest::resizeEvent(QResizeEvent *)
     m_testsResultsTable->setColumnWidth(0, m_testsResultsTable->width());
     if (m_qDiagnosisTestResultWidgetExpanded)
     {
-        // Si es fa un rezise i hi ha algun resultat expanded, potser que canvïin el nombre de línies del QLabel, i per tant cal recalcular
+        // Si es fa un rezise i hi ha algun resultat expanded, potser que canvÃ¯in el nombre de lÃ­nies del QLabel, i per tant cal recalcular
         // la seva mida vertical.
-        // Primer de tot li diem quina mida horitzontal tindrà.
+        // Primer de tot li diem quina mida horitzontal tindrÃ .
         int parentVerticalScrollWidth = 0;
         if (m_testsResultsTable->verticalScrollBar()->isVisible())
         {
@@ -64,7 +64,7 @@ void QDiagnosisTest::resizeEvent(QResizeEvent *)
         }
         m_qDiagnosisTestResultWidgetExpanded->setParentWidgetWidth(m_testsResultsTable->width());
         m_qDiagnosisTestResultWidgetExpanded->setParentWidgetVerticalScrollWidth(parentVerticalScrollWidth);
-        // El forçem a calcular la nova mida.
+        // El forÃ§em a calcular la nova mida.
         m_qDiagnosisTestResultWidgetExpanded->expand();
         // I ajustem la mida de la taula.
         m_testsResultsTable->resizeRowsToContents(); 
@@ -108,23 +108,23 @@ void QDiagnosisTest::qdiagnosisTestResultWidgetClicked(QDiagnosisTestResultWidge
 
     if (qDiagnosisTestResultWidgetClicked != m_qDiagnosisTestResultWidgetExpanded)
     {
-        // Per tal de que es calculi bé la mida del resultat de test quan està expanded, cal passar-li la mida horitzontal de la taula.
-        // D'aquesta manera pot saber quantes línies de text ocupen la descripció i la solució.
+        // Per tal de que es calculi bÃ© la mida del resultat de test quan estÃ  expanded, cal passar-li la mida horitzontal de la taula.
+        // D'aquesta manera pot saber quantes lÃ­nies de text ocupen la descripciÃ³ i la soluciÃ³.
         qDiagnosisTestResultWidgetClicked->setParentWidgetWidth(m_testsResultsTable->width());
         qDiagnosisTestResultWidgetClicked->expand();
         m_qDiagnosisTestResultWidgetExpanded = qDiagnosisTestResultWidgetClicked;
     }
     else
     {
-        //Si ens han clickat el mateix que element que ja estava expandit, només s'ha de contraure no l'hem de tornar a expandir
+        //Si ens han clickat el mateix que element que ja estava expandit, nomÃ©s s'ha de contraure no l'hem de tornar a expandir
         m_qDiagnosisTestResultWidgetExpanded = NULL;
     }
 
     m_testsResultsTable->resizeRowsToContents();
     // En el cas de que hi hagi scroll vertical, cal recalcular la seva mida
-    // (ja sigui per que ja n'hi havia o per que se n'ha produït al expandir).
-    // La propietat visible de la scrollBar no s'activa fins que no es pinta, per tant aquí encara no la podem utilitzar.
-    // Però podem comprovar si la mida del contingut és major que la de la taula.
+    // (ja sigui per que ja n'hi havia o per que se n'ha produÃ¯t al expandir).
+    // La propietat visible de la scrollBar no s'activa fins que no es pinta, per tant aquÃ­ encara no la podem utilitzar.
+    // PerÃ² podem comprovar si la mida del contingut Ã©s major que la de la taula.
     int contentSize = 0;
     for (int i = 0; i < m_testsResultsTable->rowCount(); i++)
     {
@@ -132,7 +132,7 @@ void QDiagnosisTest::qdiagnosisTestResultWidgetClicked(QDiagnosisTestResultWidge
     }
     if (contentSize > m_testsResultsTable->height())
     {
-        // En el cas que fagi el contract i hi hagi scroll, entrerà aquí, però m_qDiagnosisTestResultWidgetExpanded és NULL.
+        // En el cas que fagi el contract i hi hagi scroll, entrerÃ  aquÃ­, perÃ² m_qDiagnosisTestResultWidgetExpanded Ã©s NULL.
         if (m_qDiagnosisTestResultWidgetExpanded)
         {
             int parentVerticalScrollWidth = m_testsResultsTable->verticalScrollBar()->width();
@@ -174,7 +174,7 @@ void QDiagnosisTest::finishedRunningDiagnosisTest()
     }
     else
     {
-        //Marquem els botons de warning i error perqué en el llistat apareguin només els testos que han fallat 
+        //Marquem els botons de warning i error perquÃ© en el llistat apareguin nomÃ©s els testos que han fallat 
         m_warningTestsToolButton->setChecked(true);
         m_errorTestsToolButton->setChecked(true);
         
@@ -218,13 +218,13 @@ void QDiagnosisTest::fillDiagnosisTestsResultTable()
     
     m_testsResultsTable->resizeRowsToContents();
 
-    // Recalcular la mida mínima que ha de tenir la finestra perquè tots els resultats dels tests es mostrin correctament.
+    // Recalcular la mida mÃ­nima que ha de tenir la finestra perquÃ¨ tots els resultats dels tests es mostrin correctament.
     int minimumWindowWidth = 0;
     for (int index = 0; index < m_testsResultsTable->rowCount(); index++)
     {
         QDiagnosisTestResultWidget *qdiagnosisTestResultWidget = (QDiagnosisTestResultWidget*)m_testsResultsTable->cellWidget(index, 0);
         int testDescriptionWidthHint = qdiagnosisTestResultWidget->getTestDescriptionWidthHint();
-        // La mida mínima serà el màxim del mínims
+        // La mida mÃ­nima serÃ  el mÃ xim del mÃ­nims
         if (testDescriptionWidthHint > minimumWindowWidth)
         {
             minimumWindowWidth = testDescriptionWidthHint;
@@ -234,7 +234,7 @@ void QDiagnosisTest::fillDiagnosisTestsResultTable()
     QRect frameSize = this->frameGeometry();
     QRect windowSize = this->geometry();
     minimumWindowWidth += frameSize.right() - windowSize.right(); 
-    // Encara que no es vegi la barra d'scroll, li deixem l'espai necessari per si reduïm l'alçada de la finestra
+    // Encara que no es vegi la barra d'scroll, li deixem l'espai necessari per si reduÃ¯m l'alÃ§ada de la finestra
     minimumWindowWidth += m_testsResultsTable->verticalScrollBar()->width();
     this->setMinimumWidth(minimumWindowWidth);
 }

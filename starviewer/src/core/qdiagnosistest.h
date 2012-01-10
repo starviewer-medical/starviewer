@@ -17,8 +17,8 @@ class RunDiagnosisTest;
 class QDiagnosisTestResultWidget;
 
 /**
-    Aquest classe Ès l'encarregada de realitzar el dicomdump de la imatge que s'est‡ visualizant per part de l'usuari.
-    Totes les imatges tenen una sËrie de tags que es descodifiquen en aquesta classe i es visualitzen en forma d'arbre mitjanÁant un QTreeWidget
+    Aquest classe √©s l'encarregada de realitzar el dicomdump de la imatge que s'est√† visualizant per part de l'usuari.
+    Totes les imatges tenen una s√®rie de tags que es descodifiquen en aquesta classe i es visualitzen en forma d'arbre mitjan√ßant un QTreeWidget
   */
 class QDiagnosisTest : public QDialog, private Ui::QDiagnosisTestBase {
 Q_OBJECT
@@ -27,7 +27,7 @@ public:
 
     ~QDiagnosisTest();
 
-    /// Executa els test i mostra el resultats. No torna d'aquest mËtode fins que l'usuari tanca el QDialog
+    /// Executa els test i mostra el resultats. No torna d'aquest m√®tode fins que l'usuari tanca el QDialog
     void execAndRunDiagnosisTest();
 
 signals:
@@ -49,10 +49,10 @@ private slots:
     /// Mostra els resultats dels testos executats
     void finishedRunningDiagnosisTest();
 
-    ///Slot que respÛn quan es click el label ViewTests. Aquest label nomÈs Ès visible si tots els testos han donat ok
+    ///Slot que resp√≥n quan es click el label ViewTests. Aquest label nom√©s √©s visible si tots els testos han donat ok
     void viewTestsLabelClicked();
 
-    /// Emplena la Taula amb els resultats dels testos, en funciÛ de quins s'ha de mostrar en funciÛ de quins botons estiguin activats (sÛn els botons que indiquen si s'han
+    /// Emplena la Taula amb els resultats dels testos, en funci√≥ de quins s'ha de mostrar en funci√≥ de quins botons estiguin activats (s√≥n els botons que indiquen si s'han
     /// de mostrar els testos amb un determinat resultat)
     void fillDiagnosisTestsResultTable();
 
@@ -69,10 +69,10 @@ private:
     ///Afegeix un diagnosisTest a la taula que els mostra
     void addDiagnosisTestResultToTable(DiagnosisTest *diagnosisTest, DiagnosisTestResult diagnosisTestResult);
 
-    /// Indica si el resultat de tots els testos Ès OK
+    /// Indica si el resultat de tots els testos √©s OK
     bool allDiagnosisTestResultAreOk();
 
-    /// Retorna els testos que s'han de mostrar en el llistat en funciÛ de quins botons estiguin activats (sÛn els botons que indiquen si s'han
+    /// Retorna els testos que s'han de mostrar en el llistat en funci√≥ de quins botons estiguin activats (s√≥n els botons que indiquen si s'han
     /// de mostrar els testos amb un determinat resultat)
     QList<QPair<DiagnosisTest *, DiagnosisTestResult> > getDiagnosisTestsToShowInDiagnosisTestsResultTable();
 

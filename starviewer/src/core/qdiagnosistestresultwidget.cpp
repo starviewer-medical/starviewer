@@ -44,12 +44,12 @@ void QDiagnosisTestResultWidget::expand()
         m_descriptionSolutionDiagnosisTestFrame->setVisible(true);
         m_expandContractLabel->setPixmap(QPixmap(":/images/collapse.png"));
         
-        // Posar els QTextEdit a visible per poder contar les lÌnies de text.
+        // Posar els QTextEdit a visible per poder contar les l√≠nies de text.
         m_diagnosisTestResultDescriptionLineCounter->setVisible(true);
         m_diagnosisTestResultSolutionLineCounter->setVisible(true);
 
         // Redimencionar-los correctament.
-        // Primer de tot cal mirar la posiciÛ X dels QTextEdit respecte el pare, ja que sabem la llargada del pare, no la seva.
+        // Primer de tot cal mirar la posici√≥ X dels QTextEdit respecte el pare, ja que sabem la llargada del pare, no la seva.
         QPoint position = m_diagnosisTestResultDescriptionLineCounter->mapTo(this, QPoint(0, 0));
         int descriptionSpacerWidth = m_resultDescriptionHorizontalSpacer->geometry().width();
         int solutionSpacerWidth = m_resultSolutionHorizontalSpacer->geometry().width();
@@ -60,7 +60,7 @@ void QDiagnosisTestResultWidget::expand()
         m_diagnosisTestResultDescriptionLineCounter->setGeometry(0, 0, resultDescriptionWidth, 0);
         m_diagnosisTestResultSolutionLineCounter->setGeometry(0, 0, resultSolutionWidth, 0);
 
-        // Comptar les lÌnies de text que ocupar‡ el QLabel.
+        // Comptar les l√≠nies de text que ocupar√† el QLabel.
         m_diagnosisTestResultDescriptionLines = countNumberOfLinesWithWordWrap(m_diagnosisTestResultDescriptionLineCounter);
         m_diagnosisTestResultSolutionLines = countNumberOfLinesWithWordWrap(m_diagnosisTestResultSolutionLineCounter);
         
@@ -87,7 +87,7 @@ void QDiagnosisTestResultWidget::setParentWidgetWidth(int parentWidgetWidth)
 
 void QDiagnosisTestResultWidget::setParentWidgetVerticalScrollWidth(int verticalScrollWidth)
 {
-    // DescripciÛ: La nova mida ser‡ la inicial, mÈs la de la barra de scroll.
+    // Descripci√≥: La nova mida ser√† la inicial, m√©s la de la barra de scroll.
     int newWidth = m_initialResultDescriptionHorizontalSpacerWidth + verticalScrollWidth;
     int currentWidth = m_resultDescriptionHorizontalSpacer->geometry().width();
     if (currentWidth != newWidth)
@@ -95,7 +95,7 @@ void QDiagnosisTestResultWidget::setParentWidgetVerticalScrollWidth(int vertical
         m_resultDescriptionHorizontalSpacer->changeSize(newWidth, 0, QSizePolicy::Fixed, QSizePolicy::Maximum);
     }
 
-    // SoluciÛ
+    // Soluci√≥
     newWidth = m_initialResultSolutionHorizontalSpacerWidth + verticalScrollWidth;
     currentWidth = m_resultSolutionHorizontalSpacer->geometry().width();
     if (currentWidth != newWidth)
@@ -109,14 +109,14 @@ int QDiagnosisTestResultWidget::getTestDescriptionWidthHint()
     int widthHint = 0;
     if (!m_expandContractLabel->isVisible())
     {
-        // Si la fletxeta per expendir o contraure no hi Ès mesurem el que ocupa la descripciÛ.
+        // Si la fletxeta per expendir o contraure no hi √©s mesurem el que ocupa la descripci√≥.
         QFontMetrics fontMetrics = m_diagnosisTestDescription->fontMetrics();
         QPoint position = m_diagnosisTestDescription->mapTo(this, QPoint(0, 0));
         widthHint = position.x() + fontMetrics.width(m_diagnosisTestDescription->text());
     }
     else
     {
-        // Si hi Ès, agafem com a mÌda all‡ on acaba.
+        // Si hi √©s, agafem com a m√≠da all√† on acaba.
         QPoint position = m_expandContractLabel->mapTo(this, QPoint(m_expandContractLabel->width(), 0));
         widthHint = position.x();
     }
@@ -143,17 +143,17 @@ QSize QDiagnosisTestResultWidget::sizeHint() const
 {
     if (m_isExpanded)
     {
-        /// La mida del widget es calcula de forma manual, qualsevol canvi en el UI requereix modificar aquest mËtode
+        /// La mida del widget es calcula de forma manual, qualsevol canvi en el UI requereix modificar aquest m√®tode
         int descriptionFontHeight = m_diagnosisTestResultDescription->fontMetrics().height();
         int solutionFontHeight = m_diagnosisTestResultSolution->fontMetrics().height();
         
-        // L'alÁada es composa de les tres parts del widget, el tÌtol, la descripciÛ i la lÌnia horitzontal.
+        // L'al√ßada es composa de les tres parts del widget, el t√≠tol, la descripci√≥ i la l√≠nia horitzontal.
         int testDescriptionFrameHeight = m_testDescriptionFrame->sizeHint().height();
         int horizontalLineFrameHeight = horizontalLayout_3->sizeHint().height();
-        // NomÈs ens cal calcular la del frame de la descripciÛ i soluciÛ del test, la resta la podem obtenir correctament amb el sizeHint.
+        // Nom√©s ens cal calcular la del frame de la descripci√≥ i soluci√≥ del test, la resta la podem obtenir correctament amb el sizeHint.
         int testResultDescriptionFrameHeight = 0;
 
-        // El frame de la descripciÛ i soluciÛ del test tÈ marges que cal respectar
+        // El frame de la descripci√≥ i soluci√≥ del test t√© marges que cal respectar
         int top, bottom;
         m_descriptionSolutionDiagnosisTestFrame->layout()->getContentsMargins(NULL, &top, NULL, &bottom);
         int margins = top + bottom;
@@ -163,7 +163,7 @@ QSize QDiagnosisTestResultWidget::sizeHint() const
         // Nombre de vertical spacings que hi ha entre widgets:
         // tenim descriptionLinieCounter, SPACING, description, SPACING, solutionLinieCounter, SPACING i solution, per tant 3
         int numberOfSpacings = 3;
-        // Finalment fem el c‡lcul de la mida vertical del widget de la descripciÛ i soluciÛ del test
+        // Finalment fem el c√†lcul de la mida vertical del widget de la descripci√≥ i soluci√≥ del test
         testResultDescriptionFrameHeight = insideVerticalSpacing * numberOfSpacings +
                                            descriptionFontHeight * m_diagnosisTestResultDescriptionLines +
                                            solutionFontHeight * m_diagnosisTestResultSolutionLines + 
