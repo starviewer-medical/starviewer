@@ -14,7 +14,7 @@
         <translation>La previsualització no està disponible</translation>
     </message>
     <message>
-        <location filename="coresettings.cpp" line="98"/>
+        <location filename="coresettings.cpp" line="101"/>
         <source>PNG (*.png)</source>
         <translation></translation>
     </message>
@@ -208,18 +208,18 @@
         <location filename="applicationupdatechecker.cpp" line="187"/>
         <source>Error parsing JSON.</source>
         <oldsource>Error parsing json.</oldsource>
-        <translation type="unfinished"></translation>
+        <translation>S&apos;ha produït un error en analitzar el JSON.</translation>
     </message>
     <message>
         <location filename="applicationupdatechecker.cpp" line="176"/>
-        <source>Error parsing JSON. Version or releaseNotesUrl is not a String</source>
-        <oldsource>Error parsing json. Version or releaseNotesUrl is not a String</oldsource>
-        <translation type="unfinished"></translation>
+        <source>Error parsing JSON: version or releaseNotesURL are not strings</source>
+        <oldsource>Error parsing JSON: version or releaseNotesUrl are not strings</oldsource>
+        <translation>S&apos;ha produït un error en analitzar el JSON: version o releaseNotesURL no són cadenes</translation>
     </message>
     <message>
         <location filename="applicationupdatechecker.cpp" line="225"/>
         <source>Error requesting release notes: timeout</source>
-        <translation type="unfinished"></translation>
+        <translation>S&apos;ha produït un error en sol·licitar les notes de la versió: temps excedit</translation>
     </message>
 </context>
 <context>
@@ -306,14 +306,6 @@
     </message>
 </context>
 <context>
-    <name>udg::MagnifyingGlassToolData</name>
-    <message>
-        <location filename="magnifyingglasstooldata.cpp" line="56"/>
-        <source>Magnifying Glass</source>
-        <translation>Lupa</translation>
-    </message>
-</context>
-<context>
     <name>udg::NonClosedAngleTool</name>
     <message>
         <location filename="nonclosedangletool.cpp" line="310"/>
@@ -337,7 +329,7 @@
     <message>
         <location filename="patientbrowsermenu.cpp" line="44"/>
         <source>Study %1 %2 [%3] %4</source>
-        <translation type="unfinished"></translation>
+        <translation>Estudi %1 %2 [%3] %4</translation>
     </message>
     <message>
         <location filename="patientbrowsermenu.cpp" line="54"/>
@@ -358,46 +350,60 @@
     </message>
 </context>
 <context>
+    <name>udg::PerpendicularDistanceTool</name>
+    <message>
+        <location filename="perpendiculardistancetool.cpp" line="273"/>
+        <source>%1 px</source>
+        <translation>%1 px</translation>
+    </message>
+    <message>
+        <location filename="perpendiculardistancetool.cpp" line="291"/>
+        <location filename="perpendiculardistancetool.cpp" line="298"/>
+        <source>%1 mm</source>
+        <translation>%1 mm</translation>
+    </message>
+</context>
+<context>
     <name>udg::Q2DViewer</name>
     <message>
-        <location filename="q2dviewer.cpp" line="1902"/>
+        <location filename="q2dviewer.cpp" line="1888"/>
         <source>Slice: %1/%2 Phase: %3/%4</source>
         <translation>Tall: %1/%2 Fase: %3/%4</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1915"/>
+        <location filename="q2dviewer.cpp" line="1901"/>
         <source>Slice: %1/%2</source>
         <translation>Tall: %1/%2</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1897"/>
+        <location filename="q2dviewer.cpp" line="1883"/>
         <source>Slice: %1-%2/%3 Phase: %4/%5</source>
         <translation>Tall: %1-%2/%3 Fase: %4/%5</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="709"/>
+        <location filename="q2dviewer.cpp" line="695"/>
         <source>There&apos;s not enough memory for the rendering process. Try to close all the open %1 windows, restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64-bit operating system may solve the problem.</source>
         <translation>No hi ha prou memòria per al procés de renderització. Intenteu tancar totes les finestres de %1 obertes, reinicieu l&apos;aplicació i torneu-ho a provar. Si el problema es manté, es podria solucionar afegint més memòria RAM o canviant a un sistema operatiu de 64 bits.</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1911"/>
+        <location filename="q2dviewer.cpp" line="1897"/>
         <source>Slice: %1-%2/%3</source>
         <translation>Tall: %1-%2/%3</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1921"/>
+        <location filename="q2dviewer.cpp" line="1907"/>
         <source> Thickness: %1 mm</source>
         <translation> Gruix: %1 mm</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1629"/>
+        <location filename="q2dviewer.cpp" line="1615"/>
         <source>%1 x %2
 WW: %5 WL: %6</source>
         <translation>%1 x %2
 WW: %5 WL: %6</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1665"/>
+        <location filename="q2dviewer.cpp" line="1651"/>
         <source>%1
 %2
 %3 %4 %5
@@ -412,12 +418,12 @@ Acc:%6
 %8</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1875"/>
+        <location filename="q2dviewer.cpp" line="1861"/>
         <source>Loc: %1</source>
         <translation>Loc: %1</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1883"/>
+        <location filename="q2dviewer.cpp" line="1869"/>
         <source>-%1</source>
         <translation>-%1</translation>
     </message>
@@ -520,6 +526,36 @@ Acc:%6
     <message>
         <location filename="q2dviewerconfigurationscreenbase.ui" line="285"/>
         <source>US</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="315"/>
+        <source>Magnifying Glass tool zoom factor</source>
+        <translation>Factor d&apos;ampliació de la lupa</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="321"/>
+        <source>1.5x</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="328"/>
+        <source>2x</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="335"/>
+        <source>4x</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="342"/>
+        <source>6x</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="349"/>
+        <source>8x</source>
         <translation></translation>
     </message>
 </context>
@@ -747,23 +783,33 @@ Marc Ruiz: El GIMP fa servir &quot;brillantor&quot;. De moment ho canvio a l&apo
 <context>
     <name>udg::QDiagnosisTest</name>
     <message>
-        <location filename="qdiagnosistest.cpp" line="86"/>
+        <location filename="qdiagnosistest.cpp" line="159"/>
         <source>Running test: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="94"/>
+        <location filename="qdiagnosistest.cpp" line="167"/>
         <source>%1 errors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="95"/>
+        <location filename="qdiagnosistest.cpp" line="168"/>
         <source>%1 Ok</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="96"/>
+        <location filename="qdiagnosistest.cpp" line="169"/>
         <source>%1 warnings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdiagnosistest.cpp" line="264"/>
+        <source>Save diagnosis test results</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdiagnosistest.cpp" line="264"/>
+        <source>Images (*.txt)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -776,42 +822,52 @@ Marc Ruiz: El GIMP fa servir &quot;brillantor&quot;. De moment ho canvio a l&apo
     </message>
     <message>
         <location filename="qdiagnosistestbase.ui" line="49"/>
-        <location filename="qdiagnosistestbase.ui" line="63"/>
+        <location filename="qdiagnosistestbase.ui" line="62"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdiagnosistestbase.ui" line="160"/>
+        <location filename="qdiagnosistestbase.ui" line="168"/>
         <source>All tests passed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdiagnosistestbase.ui" line="192"/>
+        <location filename="qdiagnosistestbase.ui" line="200"/>
         <source>&lt;a href=&quot;ok&quot;&gt;View tests&lt;/a&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdiagnosistestbase.ui" line="257"/>
+        <location filename="qdiagnosistestbase.ui" line="333"/>
         <source>0 errors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdiagnosistestbase.ui" line="296"/>
+        <location filename="qdiagnosistestbase.ui" line="404"/>
         <source>0 Succeded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdiagnosistestbase.ui" line="325"/>
+        <location filename="qdiagnosistestbase.ui" line="468"/>
+        <source>Save results</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdiagnosistestbase.ui" line="507"/>
+        <source>Some tests have failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdiagnosistestbase.ui" line="378"/>
         <source>0 warnings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdiagnosistestbase.ui" line="389"/>
+        <location filename="qdiagnosistestbase.ui" line="276"/>
         <source>Test description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdiagnosistestbase.ui" line="425"/>
+        <location filename="qdiagnosistestbase.ui" line="461"/>
         <source>Ok</source>
         <translation type="unfinished"></translation>
     </message>
@@ -819,15 +875,15 @@ Marc Ruiz: El GIMP fa servir &quot;brillantor&quot;. De moment ho canvio a l&apo
 <context>
     <name>udg::QDiagnosisTestResultWidgetBase</name>
     <message>
-        <location filename="qdiagnosistestresultwidgetbase.ui" line="14"/>
+        <location filename="qdiagnosistestresultwidgetbase.ui" line="20"/>
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdiagnosistestresultwidgetbase.ui" line="53"/>
-        <location filename="qdiagnosistestresultwidgetbase.ui" line="75"/>
-        <location filename="qdiagnosistestresultwidgetbase.ui" line="154"/>
-        <location filename="qdiagnosistestresultwidgetbase.ui" line="186"/>
+        <location filename="qdiagnosistestresultwidgetbase.ui" line="69"/>
+        <location filename="qdiagnosistestresultwidgetbase.ui" line="107"/>
+        <location filename="qdiagnosistestresultwidgetbase.ui" line="198"/>
+        <location filename="qdiagnosistestresultwidgetbase.ui" line="230"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1218,431 +1274,441 @@ Es recomana que les deseu en una carpeta buida.</translation>
 <context>
     <name>udg::ToolRegistry</name>
     <message>
-        <location filename="toolregistry.cpp" line="201"/>
+        <location filename="toolregistry.cpp" line="206"/>
         <source>Enable/Disable Window Level tool</source>
         <translation>Activa/desactiva l&apos;eina de control de brillantor</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="206"/>
+        <location filename="toolregistry.cpp" line="211"/>
         <source>Zoom</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="209"/>
+        <location filename="toolregistry.cpp" line="214"/>
         <source>Enable/Disable Zoom tool</source>
         <translation>Activa/desactiva l&apos;eina de zoom</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="217"/>
+        <location filename="toolregistry.cpp" line="222"/>
         <source>Enable/Disable Move tool</source>
         <translation>Activa/desactiva l&apos;eina de moure</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="222"/>
+        <location filename="toolregistry.cpp" line="227"/>
         <source>Seed</source>
         <translation>Llavor</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="225"/>
+        <location filename="toolregistry.cpp" line="230"/>
         <source>Put Seed tool</source>
         <translation>Situa l&apos;eina de llavor</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="233"/>
+        <location filename="toolregistry.cpp" line="238"/>
         <source>Enable/Disable Magic tool</source>
         <translation>Activa/desactiva l&apos;eina màgica</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="238"/>
+        <location filename="toolregistry.cpp" line="243"/>
         <source>Screen Shot</source>
         <translation>Captura de pantalla</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="240"/>
+        <location filename="toolregistry.cpp" line="245"/>
         <source>Enable/Disable Screen shot tool</source>
         <translation>Activa/desactiva l&apos;eina de captura de pantalla</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="241"/>
+        <location filename="toolregistry.cpp" line="246"/>
         <source>Export a viewer screenshot to an image file format</source>
         <translation>Exporta una captura de pantalla d&apos;un visor a un format de fitxer d&apos;imatge</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="245"/>
+        <location filename="toolregistry.cpp" line="250"/>
         <source>3D Rotation</source>
         <translation>Rotació 3D</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="248"/>
+        <location filename="toolregistry.cpp" line="253"/>
         <source>Enable/Disable 3D Rotation tool</source>
         <translation>Activa/desactiva l&apos;eina de rotació 3D</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="256"/>
+        <location filename="toolregistry.cpp" line="261"/>
         <source>Enable/Disable Distances tool</source>
         <translation>Activa/desactiva l&apos;eina d&apos;edició de distàncies</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="261"/>
+        <location filename="toolregistry.cpp" line="266"/>
         <source>ROIs</source>
         <oldsource>ROI&apos;s</oldsource>
         <translation></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="263"/>
+        <location filename="toolregistry.cpp" line="268"/>
         <source>Enable/Disable ROI tool</source>
         <translation>Activa/desactiva l&apos;eina de ROIs</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="270"/>
+        <location filename="toolregistry.cpp" line="275"/>
         <source>Enable/Disable Reference Lines tool</source>
         <translation>Activa/desactiva l&apos;eina de línies de referència</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="271"/>
+        <location filename="toolregistry.cpp" line="276"/>
         <source>Reference Lines</source>
         <translation>Línies de referència</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="275"/>
+        <location filename="toolregistry.cpp" line="280"/>
         <source>Voxel Information</source>
         <translation>Informació del vòxel</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="278"/>
+        <location filename="toolregistry.cpp" line="283"/>
         <source>Enable voxel information over cursor</source>
         <translation>Activa la informació del vòxel sota el cursor</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="283"/>
+        <location filename="toolregistry.cpp" line="288"/>
         <source>Synchronize tool</source>
         <translation>Eina de sincronització</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="285"/>
+        <location filename="toolregistry.cpp" line="290"/>
         <source>Enable/Disable Synchronize tool</source>
         <translation>Activa/desactiva l&apos;eina de sincronització</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="286"/>
+        <location filename="toolregistry.cpp" line="291"/>
         <source>Synchronize</source>
         <translation>Sincronitza</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="290"/>
+        <location filename="toolregistry.cpp" line="295"/>
         <source>Window Level Presets tool</source>
         <translatorcomment>Aquí diem window level, però a altres llocs hem dit contrast o lluentor</translatorcomment>
         <translation>Eina de valors predeterminats de window level</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="291"/>
+        <location filename="toolregistry.cpp" line="296"/>
         <source>Enable/Disable Window Level Presets tool</source>
         <translation>Activa/desactiva l&apos;eina de valors predeterminats del window level </translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="298"/>
-        <location filename="toolregistry.cpp" line="305"/>
+        <location filename="toolregistry.cpp" line="303"/>
+        <location filename="toolregistry.cpp" line="310"/>
         <source>Enable/Disable Polyline ROI tool</source>
         <translation>Activa/desactiva l&apos;eina de polilínies de ROIs</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="323"/>
+        <location filename="toolregistry.cpp" line="328"/>
         <source>3D Cursor</source>
         <translation>Cursor 3D</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="355"/>
+        <location filename="toolregistry.cpp" line="360"/>
         <source>Clipping Planes</source>
         <translation>Plans de tall</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="358"/>
+        <location filename="toolregistry.cpp" line="363"/>
         <source>Enable/Disable the clipping planes tool</source>
         <translation>Activa/desactiva l&apos;eina de plans de tall</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="363"/>
+        <location filename="toolregistry.cpp" line="368"/>
         <source>Translation Difference</source>
         <translatorcomment>No es tradueix perquè no es fa servir a la versió oficial</translatorcomment>
         <translation></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="366"/>
+        <location filename="toolregistry.cpp" line="371"/>
         <source>Enable/Disable the translation difference tool</source>
         <translatorcomment>No es tradueix perquè no es fa servir a la versió oficial</translatorcomment>
         <translation></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="371"/>
+        <location filename="toolregistry.cpp" line="376"/>
         <source>Elliptical ROI</source>
         <translation>ROI el·líptica</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="374"/>
+        <location filename="toolregistry.cpp" line="379"/>
         <source>Enable/Disable Elliptical ROI tool</source>
         <translation>Activa/desactiva l&apos;eina de ROI el·líptica</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="379"/>
+        <location filename="toolregistry.cpp" line="384"/>
         <source>Auto</source>
         <translation>Automàtic</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="381"/>
+        <location filename="toolregistry.cpp" line="387"/>
         <source>Enable/Disable Automatic synchronization tool</source>
         <translation>Activa/desactiva l&apos;eina de sincronització automàtica</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="386"/>
-        <source>Magnifying Glass</source>
+        <location filename="toolregistry.cpp" line="392"/>
+        <source>Magnify</source>
         <translation>Lupa</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="389"/>
+        <location filename="toolregistry.cpp" line="395"/>
         <source>Enable/Disable the magnifying glass tool</source>
         <translation>Activa/desactiva l&apos;eina de lupa</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="394"/>
+        <location filename="toolregistry.cpp" line="400"/>
         <source>Circle</source>
-        <translation type="unfinished"></translation>
+        <translation>Cercle</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="397"/>
+        <location filename="toolregistry.cpp" line="403"/>
         <source>Enable/Disable Circle tool</source>
-        <translation type="unfinished"></translation>
+        <translation>Activa/desactiva l&apos;eina de cercle</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="426"/>
+        <location filename="toolregistry.cpp" line="408"/>
+        <source>Perpendicular Distance</source>
+        <translation>Distància perpendicular</translation>
+    </message>
+    <message>
+        <location filename="toolregistry.cpp" line="411"/>
+        <source>Enable/disable perpendicular distance tool</source>
+        <translation>Activa/desactiva l&apos;eina de distància perpendicular</translation>
+    </message>
+    <message>
+        <location filename="toolregistry.cpp" line="440"/>
         <source>Restore</source>
         <translation>Restableix</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="429"/>
+        <location filename="toolregistry.cpp" line="443"/>
         <source>Restore to initial state</source>
         <translation>Restableix a l&apos;estat inicial</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="436"/>
+        <location filename="toolregistry.cpp" line="450"/>
         <source>All of current viewer</source>
         <translation>Tot del visor actual</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="439"/>
+        <location filename="toolregistry.cpp" line="453"/>
         <source>Clear primitives from viewer</source>
         <translation>Esborra les primitives del visor</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="446"/>
+        <location filename="toolregistry.cpp" line="460"/>
         <source>Invert WL</source>
         <translation>Inverteix l&apos;escala de grisos</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="449"/>
+        <location filename="toolregistry.cpp" line="463"/>
         <source>Invert window level</source>
         <translatorcomment>A altres llocs li hem dit window level o contrast o brillantor</translatorcomment>
         <translation>Inverteix l&apos;escala de grisos</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="456"/>
+        <location filename="toolregistry.cpp" line="470"/>
         <source>Axial</source>
         <translation>Axial</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="459"/>
+        <location filename="toolregistry.cpp" line="473"/>
         <source>Switch to Axial View</source>
         <translation>Canvia a la vista axial</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="466"/>
+        <location filename="toolregistry.cpp" line="480"/>
         <source>Sagittal</source>
         <oldsource>Saggital</oldsource>
         <translation>Sagital</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="469"/>
+        <location filename="toolregistry.cpp" line="483"/>
         <source>Switch to Sagittal View</source>
         <oldsource>Switch to Saggital View</oldsource>
         <translation>Canvia a la vista sagital</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="476"/>
+        <location filename="toolregistry.cpp" line="490"/>
         <source>Coronal</source>
         <translation>Coronal</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="479"/>
+        <location filename="toolregistry.cpp" line="493"/>
         <source>Switch to Coronal View</source>
         <translation>Canvia a la vista coronal</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="486"/>
+        <location filename="toolregistry.cpp" line="500"/>
         <source>Rotate</source>
         <translation>Rota</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="489"/>
+        <location filename="toolregistry.cpp" line="503"/>
         <source>Rotate the image in clockwise direction</source>
         <translation>Rota la imatge en sentit horari</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="490"/>
+        <location filename="toolregistry.cpp" line="504"/>
         <source>Clockwise rotation</source>
         <translation>Rotació en sentit horari</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="496"/>
+        <location filename="toolregistry.cpp" line="510"/>
         <source>Rotate Counter Clockwise</source>
         <translation>Rota en sentit anti-horari</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="499"/>
+        <location filename="toolregistry.cpp" line="513"/>
         <source>Rotate the image in counter clockwise direction</source>
         <translation>Rota la imatge en sentit anti-horari</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="500"/>
+        <location filename="toolregistry.cpp" line="514"/>
         <source>Counter-clockwise rotation</source>
         <translation>Rotació en sentit anti-horari</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="506"/>
+        <location filename="toolregistry.cpp" line="520"/>
         <source>Horizontal Flip</source>
         <translatorcomment>Flip o volteja?</translatorcomment>
         <translation>Flip horitzontal</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="509"/>
+        <location filename="toolregistry.cpp" line="523"/>
         <source>Flip the image horizontally</source>
         <translatorcomment>Flip o volteja?</translatorcomment>
         <translation>Volteja la imatge horitzontalment</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="516"/>
+        <location filename="toolregistry.cpp" line="530"/>
         <source>Vertical Flip</source>
         <translatorcomment>Flip o volteja?</translatorcomment>
         <translation>Flip vertical</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="519"/>
+        <location filename="toolregistry.cpp" line="533"/>
         <source>Flip the image vertically</source>
         <translatorcomment>Flip o volteja?</translatorcomment>
         <translation>Volteja la imatge verticalment</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="182"/>
-        <location filename="toolregistry.cpp" line="190"/>
+        <location filename="toolregistry.cpp" line="187"/>
+        <location filename="toolregistry.cpp" line="195"/>
         <source>Scroll</source>
         <translatorcomment>Desplaçament?</translatorcomment>
         <translation></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="185"/>
+        <location filename="toolregistry.cpp" line="190"/>
         <source>Enable/Disable scroll tool</source>
         <translatorcomment>Desplaçament?</translatorcomment>
         <translation>Activa/desactiva l&apos;eina scroll</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="193"/>
+        <location filename="toolregistry.cpp" line="198"/>
         <source>Enable/Disable scroll wheel tool</source>
         <translatorcomment>Desplaçament?</translatorcomment>
         <translation>Activa/desactiva l&apos;eina d&apos;scroll amb la rodeta</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="198"/>
+        <location filename="toolregistry.cpp" line="203"/>
         <source>WW/WL</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="214"/>
+        <location filename="toolregistry.cpp" line="219"/>
         <source>Pan</source>
         <translation>Mou</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="230"/>
+        <location filename="toolregistry.cpp" line="235"/>
         <source>Magical ROI</source>
         <translation>ROI màgica</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="253"/>
+        <location filename="toolregistry.cpp" line="258"/>
         <source>Distance</source>
         <translation>Distància</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="267"/>
+        <location filename="toolregistry.cpp" line="272"/>
         <source>Ref. Lines</source>
         <oldsource>Ref.Lines</oldsource>
         <translation>Línies de referència</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="295"/>
+        <location filename="toolregistry.cpp" line="300"/>
         <source>Polyline ROI</source>
         <translation>ROI polilínia</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="299"/>
-        <location filename="toolregistry.cpp" line="303"/>
+        <location filename="toolregistry.cpp" line="304"/>
+        <location filename="toolregistry.cpp" line="308"/>
         <source>ROI</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="306"/>
+        <location filename="toolregistry.cpp" line="311"/>
         <source>Temporal ROI</source>
         <translation>ROI temporal</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="310"/>
+        <location filename="toolregistry.cpp" line="315"/>
         <source>Keyboard slicing tool</source>
         <translation>Eina de canvi de llesca per teclat</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="311"/>
+        <location filename="toolregistry.cpp" line="316"/>
         <source>Enable/Disable keyboard slicing tool</source>
         <translation>Activa/desactivar l&apos;eina de canvi de llesca per teclat</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="315"/>
+        <location filename="toolregistry.cpp" line="320"/>
         <source>Erase</source>
         <translation>Esborra</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="318"/>
+        <location filename="toolregistry.cpp" line="323"/>
         <source>Enable/Disable eraser tool</source>
         <translation>Activa/desactiva l&apos;eina de esborrar</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="326"/>
+        <location filename="toolregistry.cpp" line="331"/>
         <source>Enable/Disable Cursor 3D tool</source>
         <translation>Activa/desactiva l&apos;eina de cursor 3D</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="331"/>
+        <location filename="toolregistry.cpp" line="336"/>
         <source>Angle</source>
         <translation>Angle</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="334"/>
+        <location filename="toolregistry.cpp" line="339"/>
         <source>Enable/Disable angle tool</source>
         <translation>Activa/desactiva l&apos;eina d&apos;angle</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="339"/>
+        <location filename="toolregistry.cpp" line="344"/>
         <source>Editor</source>
         <translation>Edició</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="342"/>
+        <location filename="toolregistry.cpp" line="347"/>
         <source>Enable/Disable editor tool</source>
         <translation>Activa/desactiva l&apos;eina d&apos;edició</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="347"/>
+        <location filename="toolregistry.cpp" line="352"/>
         <source>Open Angle</source>
         <oldsource>Non Closed Angle</oldsource>
         <translation>Angle obert</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="350"/>
+        <location filename="toolregistry.cpp" line="355"/>
         <source>Enable/Disable open-angle tool</source>
         <oldsource>Enable/Disable non closed angle tool</oldsource>
         <translation>Activa/desactiva l&apos;eina d&apos;angles oberts</translation>
