@@ -30,6 +30,9 @@ public:
     /// Actualitza la llista marcant aquells estudis que ja estan en memòria perquè sigui fàcil identificar-los i no es puguin tornar a descarregar.
     void updateList();
 
+public slots:
+    virtual void setVisible(bool visible);
+
 signals:
     /// S'emet només quan no hi ha altres estudis ja descarregant-se.
     void downloadingStudies();
@@ -48,6 +51,12 @@ private:
     void insertStudyToTree(Study *study);
     /// Actualitza l'amplada del QTreeWidget per aconseguir que l'scroll horitzontal no apareixi i tota la info sigui visible.
     void updateWidthTree();
+    /// Actualitza l'alçada del QTreeWidget per aconseguir que es vegi el màxim de contingut possible.
+    /// Nota: Perquè funcioni correctament el QPreviousStudiesWidget ha de ser visible.
+    void updateHeightTree();
+    /// Calcula l'alçada òptima del QTreeWidget a partir del seu contingut i l'alçada màxima de la pantalla a on es visualitza.
+    /// Nota: Perquè funcioni correctament el QPreviousStudiesWidget ha de ser visible.
+    int computeOptimalHeight();
 
     /// Metodes encarregats de controlar quan s'han d'emetre els signals \sa downloadingStudies i \sa studiesDownloaded;
     void increaseNumberOfDownladingStudies();
