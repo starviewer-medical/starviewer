@@ -4,22 +4,20 @@
     <numberScreens>1</numberScreens>
     <iconType>ECO</iconType>
     <protocol>US</protocol>
-    <restriction identifier="1">
-        <usageFlag>MATCH</usageFlag>
-        <selectorAttribute>MinimumNumberOfImages</selectorAttribute>
-        <valueRepresentation>2</valueRepresentation>
-    </restriction>
     <imageSet identifier="1">
-        <restriction>1</restriction>
+        <type>image</type>
+        <imageNumberInPatientModality>0</imageNumberInPatientModality>
+    </imageSet>
+    <imageSet identifier="2">
+        <type>image</type>
+        <imageNumberInPatientModality>1</imageNumberInPatientModality>
     </imageSet>
     <displaySet identifier="1">
         <imageSetNumber>1</imageSetNumber>
         <position>0.0\1.0\0.5\0.0</position>
-        <imageNumber>0</imageNumber>
     </displaySet>
     <displaySet identifier="2">
-        <imageSetNumber>1</imageSetNumber>
+        <imageSetNumber>2</imageSetNumber>
         <position>0.5\1.0\1.0\0.0</position>
-        <imageNumber>1</imageNumber>
     </displaySet>
 </hangingProtocol>
