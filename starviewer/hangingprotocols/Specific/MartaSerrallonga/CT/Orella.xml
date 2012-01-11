@@ -41,11 +41,19 @@
         <imageSetNumber>1</imageSetNumber>
         <position>0.0\1.0\0.25\0.5</position>
         <toolActivation>synchronization</toolActivation>
+        <windowLevel>
+            <width>2000</width>
+            <center>500</center>
+        </windowLevel>
     </displaySet>
     <displaySet identifier="2">
         <imageSetNumber>1</imageSetNumber>
         <position>0.25\1\0.5\0.5</position>
         <toolActivation>synchronization</toolActivation>
+        <windowLevel>
+            <width>400</width>
+            <center>40</center>
+        </windowLevel>
     </displaySet>
     <displaySet identifier="3">
         <imageSetNumber>2</imageSetNumber>

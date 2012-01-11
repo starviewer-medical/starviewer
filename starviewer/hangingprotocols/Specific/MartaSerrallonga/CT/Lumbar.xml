@@ -27,6 +27,10 @@
         <imageSetNumber>1</imageSetNumber>
         <position>0.0\1.0\0.5\0.5</position>
         <toolActivation>synchronization</toolActivation>
+        <windowLevel>
+            <width>2000</width>
+            <center>500</center>
+        </windowLevel>
     </displaySet>
     <displaySet identifier="2">
         <imageSetNumber>1</imageSetNumber>
@@ -38,6 +42,10 @@
         <imageSetNumber>1</imageSetNumber>
         <position>0.0\0.5\0.5\0.0</position>
         <toolActivation>synchronization</toolActivation>
+        <windowLevel>
+            <width>400</width>
+            <center>40</center>
+        </windowLevel>
     </displaySet>
     <displaySet identifier="4">
         <imageSetNumber>1</imageSetNumber>

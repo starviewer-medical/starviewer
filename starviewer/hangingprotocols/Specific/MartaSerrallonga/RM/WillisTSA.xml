@@ -154,10 +154,18 @@
     <displaySet identifier="5">
         <imageSetNumber>5</imageSetNumber>
         <position>0.66\1.0\0.82\0.5</position>
+        <windowLevel>
+            <width>600</width>
+            <center>400</center>
+        </windowLevel>
     </displaySet>
     <displaySet identifier="6">
         <imageSetNumber>6</imageSetNumber>
         <position>0.82\1.0\1.0\0.5</position>
+        <windowLevel>
+            <width>600</width>
+            <center>400</center>
+        </windowLevel>
     </displaySet>
     <displaySet identifier="7">
         <imageSetNumber>7</imageSetNumber>
@@ -177,13 +185,25 @@
     <displaySet identifier="10">
         <imageSetNumber>10</imageSetNumber>
         <position>0.5\0.5\0.66\0.0</position>
+        <windowLevel>
+            <width>200</width>
+            <center>150</center>
+        </windowLevel>
     </displaySet>
     <displaySet identifier="11">
         <imageSetNumber>11</imageSetNumber>
         <position>0.66\0.5\0.82\0.0</position>
+        <windowLevel>
+            <width>200</width>
+            <center>150</center>
+        </windowLevel>
     </displaySet>
     <displaySet identifier="12">
         <imageSetNumber>12</imageSetNumber>
         <position>0.82\0.5\1.0\0.0</position>
+        <windowLevel>
+            <width>200</width>
+            <center>150</center>
+        </windowLevel>
     </displaySet>
 </hangingProtocol>
