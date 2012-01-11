@@ -6,6 +6,7 @@
 #include "previousstudiesmanager.h"
 #include "queryscreen.h"
 #include "singleton.h"
+#include "screenmanager.h"
 
 #include <QVBoxLayout>
 #include <QMovie>
@@ -212,6 +213,23 @@ void QPreviousStudiesWidget::updateWidthTree()
     m_previousStudiesTree->setFixedWidth(fixedSize + 20);
 }
 
+void QPreviousStudiesWidget::updateHeightTree()
+{
+    m_previousStudiesTree->setFixedHeight(computeOptimalHeight());
+}
+
+int QPreviousStudiesWidget::computeOptimalHeight()
+{
+    ScreenManager screen;
+    int screenAvailableHeight = screen.getAvailableScreenGeometry(screen.getIdOfScreen(this)).height();
+    int topAndMargins = this->geometry().top() + m_previousStudiesTree->geometry().top() * 2; // Es multiplica per 2 pel marge inferior.
+    int maxHeight = screenAvailableHeight - topAndMargins;
+    int minHeight = m_previousStudiesTree->sizeHint().height();
+    int contentHeight = m_previousStudiesTree->sizeHintForRow(0) * (m_previousStudiesTree->topLevelItemCount() + 1); // + 1 pel header.
+
+    return qMin(qMax(minHeight, contentHeight), maxHeight);
+}
+
 void QPreviousStudiesWidget::insertStudiesToTree(QList<Study*> studiesList)
 {
     if (studiesList.size() > 0)
@@ -322,6 +340,15 @@ void QPreviousStudiesWidget::decreaseNumberOfDownladingStudies()
     if (m_numberOfDownloadingStudies == 0)
     {
         emit studiesDownloaded();
+    }
+}
+
+void QPreviousStudiesWidget::setVisible(bool visible)
+{
+    QFrame::setVisible(visible);
+    if (visible)
+    {
+        updateHeightTree();
     }
 }
 
