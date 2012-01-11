@@ -32,6 +32,8 @@ private slots:
     void updateReferenceLinesForCTSetting(bool enable);
     void updateModalitiesWithZoomByDefaultSetting();
     void updateMagnifyingGlassZoomFactorSetting();
+    void updateAutomaticSynchronizationForMRSetting(bool enable);
+    void updateAutomaticSynchronizationForCTSetting(bool enable);
 
     /// Farà que s'apliquin els canvis corresponents en els settings
     void applyChanges();

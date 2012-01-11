@@ -23,6 +23,8 @@ void Q2DViewerConfigurationScreen::initialize()
     m_phaseScrollLoopCheckBox->setChecked(settings.getValue(CoreSettings::EnableQ2DViewerPhaseScrollLoop).toBool());
     m_referenceLinesMRCheckBox->setChecked(settings.getValue(CoreSettings::EnableQ2DViewerReferenceLinesForMR).toBool());
     m_referenceLinesCTCheckBox->setChecked(settings.getValue(CoreSettings::EnableQ2DViewerReferenceLinesForCT).toBool());
+    m_automaticSynchronizationMRCheckBox->setChecked(settings.getValue(CoreSettings::EnableQ2DViewerAutomaticSynchronizationForMR).toBool());
+    m_automaticSynchronizationCTCheckBox->setChecked(settings.getValue(CoreSettings::EnableQ2DViewerAutomaticSynchronizationForCT).toBool());
 
     initializeModalitiesWithZoomByDefault();
     initializeMagnifyingGlassToolZoomFactor();
@@ -149,6 +151,20 @@ void Q2DViewerConfigurationScreen::updateReferenceLinesForCTSetting(bool enable)
     settings.setValue(CoreSettings::EnableQ2DViewerReferenceLinesForCT, enable);
 }
 
+void Q2DViewerConfigurationScreen::updateAutomaticSynchronizationForMRSetting(bool enable)
+{
+    Settings settings;
+
+    settings.setValue(CoreSettings::EnableQ2DViewerAutomaticSynchronizationForMR, enable);
+}
+
+void Q2DViewerConfigurationScreen::updateAutomaticSynchronizationForCTSetting(bool enable)
+{
+    Settings settings;
+
+    settings.setValue(CoreSettings::EnableQ2DViewerAutomaticSynchronizationForCT, enable);
+}
+
 void Q2DViewerConfigurationScreen::updateModalitiesWithZoomByDefaultSetting()
 {
     QString modalitiesWithZoom;
@@ -269,6 +285,8 @@ void Q2DViewerConfigurationScreen::applyChanges()
     updateReferenceLinesForCTSetting(m_referenceLinesCTCheckBox->isChecked());
     updateModalitiesWithZoomByDefaultSetting();
     updateMagnifyingGlassZoomFactorSetting();
+    updateAutomaticSynchronizationForMRSetting(m_automaticSynchronizationMRCheckBox->isChecked());
+    updateAutomaticSynchronizationForCTSetting(m_automaticSynchronizationCTCheckBox->isChecked());
 }
 
 }

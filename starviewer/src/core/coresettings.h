@@ -106,6 +106,10 @@ public:
     /// Defineix el factor de zoom que aplica l'eina de lupa
     static const QString MagnifyingGlassZoomFactor;
 
+    /// Defineix si habilitem per defecte la sincronització automàtica per modalitats MR i/o CT
+    static const QString EnableQ2DViewerAutomaticSynchronizationForMR;
+    static const QString EnableQ2DViewerAutomaticSynchronizationForCT;
+
 };
 
 } // End namespace udg
