@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>805</width>
-    <height>401</height>
+    <height>647</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -73,6 +73,32 @@
         </item>
         <item>
          <widget class="QCheckBox" name="m_referenceLinesCTCheckBox">
+          <property name="text">
+           <string>CT</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="groupBox_4">
+       <property name="title">
+        <string>Automatic Synchronization by default for these modalities</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <item>
+         <widget class="QCheckBox" name="m_automaticSynchronizationMRCheckBox">
+          <property name="text">
+           <string>MR</string>
+          </property>
+          <property name="checked">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="m_automaticSynchronizationCTCheckBox">
           <property name="text">
            <string>CT</string>
           </property>

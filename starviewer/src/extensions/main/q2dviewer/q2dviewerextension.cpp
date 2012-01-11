@@ -319,6 +319,18 @@ void Q2DViewerExtension::setupDefaultToolsForModalities(const QStringList &modal
     {
         m_referenceLinesToolButton->defaultAction()->setChecked(false);
     }
+
+    bool enableAutomaticSynchronizationForMR = settings.getValue(CoreSettings::EnableQ2DViewerAutomaticSynchronizationForMR).toBool();
+    bool enableAutomaticSynchronizationForCT = settings.getValue(CoreSettings::EnableQ2DViewerAutomaticSynchronizationForCT).toBool();
+    
+    if (modalities.contains("MR") && enableAutomaticSynchronizationForMR || modalities.contains("CT") && enableAutomaticSynchronizationForCT)
+    {
+        m_automaticSynchronizationToolButton->defaultAction()->setChecked(true);
+    }
+    else
+    {
+        m_automaticSynchronizationToolButton->defaultAction()->setChecked(false);
+    }
 }
 
 void Q2DViewerExtension::setupDefaultLeftButtonTool()
