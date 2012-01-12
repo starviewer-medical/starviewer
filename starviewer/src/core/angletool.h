@@ -52,6 +52,9 @@ private:
     /// Elimina la representacio temporal de la tool
     void deleteTemporalRepresentation();
 
+    /// Equalitza la profunditat dels elements que formen l'angle final.
+    void equalizeDepth();
+
 private slots:
     /// Inicialitza l'estat de la tool
     void initialize();

@@ -251,6 +251,7 @@ void AngleTool::finishDrawing()
 
     // Col·loquem l'angle en el pla corresponent
     m_2DViewer->getDrawer()->erasePrimitive(m_mainPolyline);
+    equalizeDepth();
     m_2DViewer->getDrawer()->draw(m_mainPolyline, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
 
     // Afegim l'annotació textual
@@ -362,6 +363,20 @@ void AngleTool::initialize()
     m_mainPolyline = NULL;
     m_circlePolyline = NULL;
     m_state = None;
+}
+
+void AngleTool::equalizeDepth()
+{
+    // Assignem a tots els punts la z de l'últim
+    int zIndex = Q2DViewer::getZIndexForView(m_2DViewer->getView());
+    double z = m_mainPolyline->getPoint(2)[zIndex];
+    for (int i = 0; i < 2; i++)
+    {
+        double *point = m_mainPolyline->getPoint(i);
+        point[zIndex] = z;
+        m_mainPolyline->setPoint(i, point);
+    }
+    m_mainPolyline->update();
 }
 
 }
