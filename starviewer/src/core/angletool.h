@@ -25,8 +25,6 @@ public:
     void handleEvent(long unsigned eventID);
 
 private:
-    /// Calcula l'angle que fa el primer segment annotat amb l'eix horitzontal
-    void findInitialDegreeArc();
 
     /// Ens permet anotar el primer vèrtex de l'angle.
     void annotateFirstPoint();
@@ -70,11 +68,6 @@ private:
 
     /// Estat de la tool
     int m_state;
-
-    /// Graus que formen inicialment el primer segement amb un segment horitzontal fictici
-    /// Ens servirà per calcular cap a on hem de dibuixar l'arc de circumferència quan
-    /// estem annotant el segon segment de l'angle
-    int m_initialDegreeArc;
 
     /// Angle que formen en tot moment els dos segments
     double m_currentAngle;

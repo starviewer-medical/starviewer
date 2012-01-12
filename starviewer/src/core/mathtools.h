@@ -4,6 +4,7 @@
 #include <QList>
 #include <QVector>
 
+class QVector2D;
 class QVector3D;
 
 namespace udg {
@@ -116,6 +117,11 @@ static void crossProduct(double vectorDirector1[3], double vectorDirector2[3], d
 
 /// Normalitza el vector passat per paràmetre
 static double normalize(double vector[3]);
+
+/// Retorna l'angle en radians d'un vector 2D amb l'eix horitzontal. Retorna valors en el rang [-pi, pi].
+static double angleInRadians(const QVector2D &vector);
+/// Retorna l'angle en graus d'un vector 2D amb l'eix horitzontal. Retorna valors en el rang [-180, 180].
+static double angleInDegrees(const QVector2D &vector);
 
 /// Calcula l'angle entre dos vectors. Retorna el valor en radians o graus
 static double angleInRadians(const QVector3D &vec1, const QVector3D &vec2);

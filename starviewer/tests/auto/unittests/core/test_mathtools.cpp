@@ -1,5 +1,6 @@
 #include "autotest.h"
 
+#include <QVector2D>
 #include <QVector3D>
 
 #include "mathtools.h"
@@ -12,17 +13,23 @@ class test_MathTools : public QObject {
 Q_OBJECT
 
 private slots:
-    void angleInRadians_ShouldComputeAngleInRadians_data();
-    void angleInRadians_ShouldComputeAngleInRadians();
-    
-    void angleInRadians_ShouldReturnNaN_data();
-    void angleInRadians_ShouldReturnNaN();
-    
-    void angleInDegrees_ShouldComputeAngleInDegrees_data();
-    void angleInDegrees_ShouldComputeAngleInDegrees();
+    void angleInRadians_QVector2D_ShouldComputeAngleInRadians_data();
+    void angleInRadians_QVector2D_ShouldComputeAngleInRadians();
 
-    void angleInDegrees_ShouldReturnNaN_data();
-    void angleInDegrees_ShouldReturnNaN();
+    void angleInDegrees_QVector2D_ShouldComputeAngleInDegrees_data();
+    void angleInDegrees_QVector2D_ShouldComputeAngleInDegrees();
+
+    void angleInRadians_QVector3D_QVector3D_ShouldComputeAngleInRadians_data();
+    void angleInRadians_QVector3D_QVector3D_ShouldComputeAngleInRadians();
+
+    void angleInRadians_QVector3D_QVector3D_ShouldReturnNaN_data();
+    void angleInRadians_QVector3D_QVector3D_ShouldReturnNaN();
+
+    void angleInDegrees_QVector3D_QVector3D_ShouldComputeAngleInDegrees_data();
+    void angleInDegrees_QVector3D_QVector3D_ShouldComputeAngleInDegrees();
+
+    void angleInDegrees_QVector3D_QVector3D_ShouldReturnNaN_data();
+    void angleInDegrees_QVector3D_QVector3D_ShouldReturnNaN();
 
     void normalize_ShouldReturnExpectedValues_data();
     void normalize_ShouldReturnExpectedValues();
@@ -52,8 +59,9 @@ private slots:
     void getPointToClosestEdgeDistance_ShouldReturnExpectedValues();
 
 private:
-    void setupComputeAngleData();
-    void setupComputeAngleNaNData();
+    void setupComputeAngleOfAVectorData();
+    void setupComputeAngleBetweenTwoVectorsData();
+    void setupComputeAngleBetweenTwoVectorsNaNData();
     void setupCrossAndDotProductData();
 };
 
@@ -70,12 +78,43 @@ const double directorVectorEpsilon = 0.001;
 const double distance3DEpsion = 0.0005;
 const double LineIntersectionEpsilon = 0.0001;
 
-void test_MathTools::angleInRadians_ShouldComputeAngleInRadians_data()
+void test_MathTools::angleInRadians_QVector2D_ShouldComputeAngleInRadians_data()
 {
-    this->setupComputeAngleData();
+    this->setupComputeAngleOfAVectorData();
 }
 
-void test_MathTools::angleInRadians_ShouldComputeAngleInRadians()
+void test_MathTools::angleInRadians_QVector2D_ShouldComputeAngleInRadians()
+{
+    QFETCH(QVector2D, vector);
+    QFETCH(double, angleInRadians);
+
+    QVERIFY2(FuzzyCompareTestHelper::fuzzyCompare(MathTools::angleInRadians(vector), angleInRadians, AngleInRadiansEpsilon),
+             qPrintable(QString("actual = %1, expected = %2").arg(MathTools::angleInRadians(vector)).arg(angleInRadians)));
+}
+
+void test_MathTools::angleInDegrees_QVector2D_ShouldComputeAngleInDegrees_data()
+{
+    this->setupComputeAngleOfAVectorData();
+}
+
+void test_MathTools::angleInDegrees_QVector2D_ShouldComputeAngleInDegrees()
+{
+    QFETCH(QVector2D, vector);
+    QFETCH(double, angleInRadians);
+
+    QVERIFY2(FuzzyCompareTestHelper::fuzzyCompare(MathTools::angleInDegrees(vector),
+                                                  angleInRadians * MathTools::RadiansToDegreesAsDouble,
+                                                  AngleInDegreesEpsilon),
+             qPrintable(QString("actual = %1, expected = %2").arg(MathTools::angleInDegrees(vector))
+                                                             .arg(angleInRadians * MathTools::RadiansToDegreesAsDouble)));
+}
+
+void test_MathTools::angleInRadians_QVector3D_QVector3D_ShouldComputeAngleInRadians_data()
+{
+    this->setupComputeAngleBetweenTwoVectorsData();
+}
+
+void test_MathTools::angleInRadians_QVector3D_QVector3D_ShouldComputeAngleInRadians()
 {
     QFETCH(QVector3D, vector1);
     QFETCH(QVector3D, vector2);
@@ -84,12 +123,12 @@ void test_MathTools::angleInRadians_ShouldComputeAngleInRadians()
     QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(MathTools::angleInRadians(vector1, vector2), angleInRadians, AngleInRadiansEpsilon));
 }
 
-void test_MathTools::angleInDegrees_ShouldComputeAngleInDegrees_data()
+void test_MathTools::angleInDegrees_QVector3D_QVector3D_ShouldComputeAngleInDegrees_data()
 {
-    this->setupComputeAngleData();
+    this->setupComputeAngleBetweenTwoVectorsData();
 }
 
-void test_MathTools::angleInDegrees_ShouldComputeAngleInDegrees()
+void test_MathTools::angleInDegrees_QVector3D_QVector3D_ShouldComputeAngleInDegrees()
 {
     QFETCH(QVector3D, vector1);
     QFETCH(QVector3D, vector2);
@@ -98,12 +137,12 @@ void test_MathTools::angleInDegrees_ShouldComputeAngleInDegrees()
     QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(MathTools::angleInDegrees(vector1, vector2), angleInRadians * MathTools::RadiansToDegreesAsDouble, AngleInDegreesEpsilon));
 }
 
-void test_MathTools::angleInRadians_ShouldReturnNaN_data()
+void test_MathTools::angleInRadians_QVector3D_QVector3D_ShouldReturnNaN_data()
 {
-    this->setupComputeAngleNaNData();
+    this->setupComputeAngleBetweenTwoVectorsNaNData();
 }
 
-void test_MathTools::angleInRadians_ShouldReturnNaN()
+void test_MathTools::angleInRadians_QVector3D_QVector3D_ShouldReturnNaN()
 {
     QFETCH(QVector3D, vector1);
     QFETCH(QVector3D, vector2);
@@ -111,12 +150,12 @@ void test_MathTools::angleInRadians_ShouldReturnNaN()
     QVERIFY(MathTools::isNaN(MathTools::angleInRadians(vector1, vector2)));
 }
 
-void test_MathTools::angleInDegrees_ShouldReturnNaN_data()
+void test_MathTools::angleInDegrees_QVector3D_QVector3D_ShouldReturnNaN_data()
 {
-    this->setupComputeAngleNaNData();
+    this->setupComputeAngleBetweenTwoVectorsNaNData();
 }
 
-void test_MathTools::angleInDegrees_ShouldReturnNaN()
+void test_MathTools::angleInDegrees_QVector3D_QVector3D_ShouldReturnNaN()
 {
     QFETCH(QVector3D, vector1);
     QFETCH(QVector3D, vector2);
@@ -393,7 +432,32 @@ void test_MathTools::roundUpToPowerOf2_ShouldReturnExpectedValue()
     QCOMPARE(MathTools::roundUpToPowerOf2(input), output);
 }
 
-void test_MathTools::setupComputeAngleData()
+void test_MathTools::setupComputeAngleOfAVectorData()
+{
+    QTest::addColumn<QVector2D>("vector");
+    QTest::addColumn<double>("angleInRadians");
+
+    QTest::newRow("-X-Y / -3pi/4 rad / -135º") << QVector2D(-1.0, -1.0) << -3.0 * MathTools::PiNumber / 4.0;
+    QTest::newRow("-Y / -pi/2 rad / -90º") << QVector2D(0.0, -1.0) << -MathTools::PiNumber / 2.0;
+    QTest::newRow("+X-Y / -pi/4 rad / -45º") << QVector2D(1.0, -1.0) << -MathTools::PiNumber / 4.0;
+    QTest::newRow("+X / 0 rad / 0º") << QVector2D(1.0, 0.0) << 0.0;
+    QTest::newRow("+X+Y / pi/4 rad / 45º") << QVector2D(1.0, 1.0) << MathTools::PiNumber / 4.0;
+    QTest::newRow("+Y / pi/2 rad / 90º") << QVector2D(0.0, 1.0) << MathTools::PiNumber / 2.0;
+    QTest::newRow("-X+Y / 3pi/4 rad / 135º") << QVector2D(-1.0, 1.0) << 3.0 * MathTools::PiNumber / 4.0;
+    QTest::newRow("-X / pi rad / 180º") << QVector2D(-1.0, 0.0) << MathTools::PiNumber;
+
+    QTest::newRow("random Q1") << QVector2D(1.1, 4.0) << 1.30243;
+    QTest::newRow("random Q2") << QVector2D(-9.7, 4.2) << 2.73297;
+    QTest::newRow("random Q3") << QVector2D(-7.0, -6.2) << -2.41673;
+    QTest::newRow("random Q4") << QVector2D(9.4, -9.3) << -0.78005;
+
+    QTest::newRow("+0+0") << QVector2D(+0.0, +0.0) << +0.0;
+    QTest::newRow("-0+0") << QVector2D(-0.0, +0.0) << MathTools::PiNumber;
+    QTest::newRow("-0-0") << QVector2D(-0.0, -0.0) << -MathTools::PiNumber;
+    QTest::newRow("+0-0") << QVector2D(+0.0, -0.0) << -0.0;
+}
+
+void test_MathTools::setupComputeAngleBetweenTwoVectorsData()
 {
     QTest::addColumn<QVector3D>("vector1");
     QTest::addColumn<QVector3D>("vector2");
@@ -455,7 +519,7 @@ void test_MathTools::setupComputeAngleData()
     QTest::newRow("Two random vectors (73.9º)") << QVector3D(7.2, 1.0, -2) << QVector3D(0.3, 0.0003, -24.3) << 1.29007;
 }
 
-void test_MathTools::setupComputeAngleNaNData()
+void test_MathTools::setupComputeAngleBetweenTwoVectorsNaNData()
 {
     QTest::addColumn<QVector3D>("vector1");
     QTest::addColumn<QVector3D>("vector2");

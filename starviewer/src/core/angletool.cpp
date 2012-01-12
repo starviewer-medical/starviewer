@@ -6,10 +6,13 @@
 #include "drawerpolyline.h"
 #include "drawertext.h"
 #include "mathtools.h"
+// Per la funció swap (si passem a C++11 s'haurà de canviar per <utility>)
+#include <algorithm>
 // VTK
 #include <vtkRenderWindowInteractor.h>
 #include <vtkCommand.h>
 
+#include <QVector2D>
 #include <QVector3D>
 
 namespace udg {
@@ -85,62 +88,6 @@ void AngleTool::handleEvent(long unsigned eventID)
     }
 }
 
-void AngleTool::findInitialDegreeArc()
-{
-    // Per saber quin l'angle inicial, cal calcular l'angle que forma el primer segment anotat i un segment fictici totalment horitzontal.
-    int horizontalIndex, zIndex;
-
-    switch (m_2DViewer->getView())
-    {
-        case QViewer::AxialPlane:
-            horizontalIndex = 0;
-            zIndex = 2;
-            break;
-
-        case QViewer::SagitalPlane:
-            horizontalIndex = 1;
-            zIndex = 0;
-            break;
-
-        case QViewer::CoronalPlane:
-            horizontalIndex = 2;
-            zIndex = 1;
-            break;
-    }
-
-    double *firstVertex = m_mainPolyline->getPoint(0);
-    double *secondVertex = m_mainPolyline->getPoint(1);
-
-    QVector3D directorVector1 = MathTools::directorVector(QVector3D(firstVertex[0], firstVertex[1], firstVertex[2]),
-                                                          QVector3D(secondVertex[0], secondVertex[1], secondVertex[2]));
-
-    double secondVertexHorizontallyMoved[3];
-    for (int i = 0; i < 3; i++)
-    {
-        secondVertexHorizontallyMoved[i] = secondVertex[i];
-    }
-    secondVertexHorizontallyMoved[horizontalIndex] += 10.0;
-
-    QVector3D directorVector2 = MathTools::directorVector(QVector3D(secondVertexHorizontallyMoved[0],
-                                                                    secondVertexHorizontallyMoved[1],
-                                                                    secondVertexHorizontallyMoved[2]),
-                                                          QVector3D(secondVertex[0], secondVertex[1], secondVertex[2]));
-
-    double crossProduct[3];
-    double dv1[3] = { directorVector1.x(), directorVector1.y(), directorVector1.z() };
-    double dv2[3] = { directorVector2.x(), directorVector2.y(), directorVector2.z() };
-    MathTools::crossProduct(dv1, dv2, crossProduct);
-
-    if (crossProduct[zIndex] > 0)
-    {
-        m_initialDegreeArc = (int)MathTools::angleInDegrees(directorVector1, directorVector2);
-    }
-    else
-    {
-        m_initialDegreeArc = -1 * (int)MathTools::angleInDegrees(directorVector1, directorVector2);
-    }
-}
-
 void AngleTool::annotateFirstPoint()
 {
     m_mainPolyline = new DrawerPolyline;
@@ -172,82 +119,62 @@ void AngleTool::fixFirstSegment()
 
 void AngleTool::drawCircle()
 {
-    double degreesIncrease, radius;
-    int initialAngle, finalAngle;
-
     double *firstPoint = m_mainPolyline->getPoint(0);
     double *circleCentre = m_mainPolyline->getPoint(1);
     double *lastPoint = m_mainPolyline->getPoint(2);
 
+    int xIndex, yIndex, zIndex;
+    Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
+    QVector3D firstPointProjected(firstPoint[xIndex], firstPoint[yIndex], 0.0);
+    QVector3D circleCentreProjected(circleCentre[xIndex], circleCentre[yIndex], 0.0);
+    QVector3D lastPointProjected(lastPoint[xIndex], lastPoint[yIndex], 0.0);
+
     // Calculem l'angle que formen els dos segments
-    QVector3D firstSegment = MathTools::directorVector(QVector3D(firstPoint[0], firstPoint[1], firstPoint[2]),
-                                                       QVector3D(circleCentre[0], circleCentre[1], circleCentre[2]));
-    QVector3D secondSegment = MathTools::directorVector(QVector3D(lastPoint[0], lastPoint[1], lastPoint[2]),
-                                                        QVector3D(circleCentre[0], circleCentre[1], circleCentre[2]));
+    QVector3D firstSegment = MathTools::directorVector(circleCentreProjected, firstPointProjected);
+    QVector3D secondSegment = MathTools::directorVector(circleCentreProjected, lastPointProjected);
     m_currentAngle = MathTools::angleInDegrees(firstSegment, secondSegment);
 
-    // Calculem el radi de l'arc de circumferència que mesurarà
-    // un quart del segment més curt dels dos que formen l'angle
-    double distance1 = MathTools::getDistance3D(firstPoint, circleCentre);
-    double distance2 = MathTools::getDistance3D(circleCentre, lastPoint);
-    radius = MathTools::minimum(distance1, distance2) / 4.0;
+    // Calculem el radi de l'arc de circumferència que mesurarà un quart del segment més curt dels dos que formen l'angle
+    double distance1 = firstSegment.length();
+    double distance2 = secondSegment.length();
+    double radius = MathTools::minimum(distance1, distance2) / 4.0;
 
     // Calculem el rang de les iteracions per pintar l'angle correctament
-    initialAngle = 360 - m_initialDegreeArc;
-    finalAngle = int(360 - (m_currentAngle + m_initialDegreeArc));
-
-    double crossProduct[3];
-    double segment1[3] = { firstSegment.x(), firstSegment.y(), firstSegment.z() };
-    double segment2[3] = { secondSegment.x(), secondSegment.y(), secondSegment.z() };
-    MathTools::crossProduct(segment1, segment2, crossProduct);
-
-    Q2DViewer::CameraOrientationType view = m_2DViewer->getView();
-    int zIndex = Q2DViewer::getZIndexForView(view);
-    if (crossProduct[zIndex] > 0)
+    double initialAngle = MathTools::angleInRadians(firstSegment.toVector2D());
+    if (initialAngle < 0.0)
     {
-        finalAngle = int(m_currentAngle - m_initialDegreeArc);
+        initialAngle += 2.0 * MathTools::PiNumber;
     }
-    if ((initialAngle - finalAngle) > 180)
+    double finalAngle = MathTools::angleInRadians(secondSegment.toVector2D());
+    if (finalAngle < 0.0)
     {
-        initialAngle = int(m_currentAngle - m_initialDegreeArc);
-        finalAngle = -m_initialDegreeArc;
+        finalAngle += 2.0 * MathTools::PiNumber;
     }
+    // Tenim els dos angles al rang [0,2pi)
+    // Assegurem que girem en sentit horari -> tindrem angle positiu
+    if (finalAngle < initialAngle)
+    {
+        std::swap(initialAngle, finalAngle);
+    }
+    double angle = finalAngle - initialAngle;
+    // Assegurem que tenim l'angle al rang [0, pi]
+    if (angle > MathTools::PiNumber)
+    {
+        angle = 2.0 * MathTools::PiNumber - angle;
+        std::swap(initialAngle, finalAngle);
+    }
+    int degrees = qRound(angle * MathTools::RadiansToDegreesAsDouble);
+    double increment = angle / degrees;
 
     // Reconstruim l'arc de circumferència
     m_circlePolyline->deleteAllPoints();
-    for (int i = initialAngle; i > finalAngle; i--)
+    for (int i = 0; i <= degrees; i++)
     {
-        degreesIncrease = i * 1.0 * MathTools::DegreesToRadiansAsDouble;
+        angle = initialAngle + i * increment;
         double newPoint[3];
-
-        // TODO Aquí hauríem de fer alguna cosa d'aquest estil, però si ho fem així,
-        // no se'ns dibuixa l'arc de circumferència que ens esperem sobre la vista coronal.
-        // Potser és degut a com obtenim els punts o per una altra causa. Caldria mirar-ho
-        // per així evitar la consciència del pla en el que ens trobem
-        // newPoint[xIndex] = cos(degreesIncrease)*radius + circleCentre[xIndex];
-        // newPoint[yIndex] = sin(degreesIncrease)*radius + circleCentre[yIndex];
-        // newPoint[zIndex] = 0.0;
-
-        switch (view)
-        {
-            case QViewer::AxialPlane:
-                newPoint[0] = cos(degreesIncrease) * radius + circleCentre[0];
-                newPoint[1] = sin(degreesIncrease) * radius + circleCentre[1];
-                newPoint[2] = 0.0;
-                break;
-
-            case QViewer::SagitalPlane:
-                newPoint[0] = 0.0;
-                newPoint[1] = cos(degreesIncrease) * radius + circleCentre[1];
-                newPoint[2] = sin(degreesIncrease) * radius + circleCentre[2];
-                break;
-
-            case QViewer::CoronalPlane:
-                newPoint[0] = sin(degreesIncrease) * radius + circleCentre[0];
-                newPoint[1] = 0.0;
-                newPoint[2] = cos(degreesIncrease) * radius + circleCentre[2];
-                break;
-        }
+        newPoint[xIndex] = cos(angle) * radius + circleCentre[xIndex];
+        newPoint[yIndex] = sin(angle) * radius + circleCentre[yIndex];
+        newPoint[zIndex] = 0.0;
         m_circlePolyline->addPoint(newPoint);
     }
 
@@ -267,7 +194,6 @@ void AngleTool::handlePointAddition()
             else if (m_state == FirstPointFixed)
             {
                 this->fixFirstSegment();
-                this->findInitialDegreeArc();
             }
             else
             {
