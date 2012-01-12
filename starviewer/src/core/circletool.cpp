@@ -94,6 +94,7 @@ void CircleTool::endDrawing()
         m_circle->decreaseReferenceCount();
         // Pintem la primitiva al lloc corresponent
         m_2DViewer->getDrawer()->erasePrimitive(m_circle);
+        equalizeDepth();
         m_2DViewer->getDrawer()->draw(m_circle, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
         // Inicialitzem el punter a 0
         m_circle = 0;
@@ -194,6 +195,29 @@ void CircleTool::updatePolygonPoints()
 Vector3 CircleTool::getCenter() const
 {
     return 0.5 * (m_startPoint + m_endPoint);
+}
+
+void CircleTool::equalizeDepth()
+{
+    // Ens quedem amb la z de la llesca actual
+    double currentPoint[3];
+    m_2DViewer->getEventWorldCoordinate(currentPoint);
+    int zIndex = Q2DViewer::getZIndexForView(m_2DViewer->getView());
+    double z = currentPoint[zIndex];
+    
+    double startPoint[3] = { m_startPoint.x, m_startPoint.y, m_startPoint.z };
+    startPoint[zIndex] = z;
+    m_startPoint.x = startPoint[0];
+    m_startPoint.y = startPoint[1];
+    m_startPoint.z = startPoint[2];
+
+    double endPoint[3] = { m_endPoint.x, m_endPoint.y, m_endPoint.z };
+    endPoint[zIndex] = z;
+    m_endPoint.x = endPoint[0];
+    m_endPoint.y = endPoint[1];
+    m_endPoint.z = endPoint[2];
+
+    updatePolygonPoints();
 }
 
 void CircleTool::initialize()

@@ -43,6 +43,8 @@ private:
     void updatePolygonPoints();
     /// Retorna el centre del cercle.
     Vector3 getCenter() const;
+    /// Equalitza la profunditat dels elements que formen el cercle final.
+    void equalizeDepth();
 
 private slots:
 
