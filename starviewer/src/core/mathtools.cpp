@@ -6,6 +6,7 @@
 #include <vtkPlane.h>
 #include <vtkLine.h>
 
+#include <QVector2D>
 #include <QVector3D>
 
 namespace udg {
@@ -47,6 +48,16 @@ double MathTools::logTwo(const double x, const bool zero)
 
         return double(log(double(x))) * NumberEBase2Logarithm;
     }
+}
+
+double MathTools::angleInRadians(const QVector2D &vector)
+{
+    return atan2(vector.y(), vector.x());
+}
+
+double MathTools::angleInDegrees(const QVector2D &vector)
+{
+    return angleInRadians(vector) * MathTools::RadiansToDegreesAsDouble;
 }
 
 double MathTools::angleInRadians(const QVector3D &vec1, const QVector3D &vec2)
