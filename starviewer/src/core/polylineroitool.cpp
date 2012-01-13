@@ -182,6 +182,8 @@ void PolylineROITool::closeForm()
     delete m_closingPolyline;
     delete m_mainPolyline;
 
+    equalizeDepth();
+
     // Dibuixem el polígon resultant
     m_2DViewer->getDrawer()->draw(m_roiPolygon, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
 
@@ -320,6 +322,22 @@ void PolylineROITool::initialize()
     m_closingPolyline = NULL;
     m_mainPolyline = NULL;
     m_roiPolygon = NULL;
+}
+
+void PolylineROITool::equalizeDepth()
+{
+    // Assignem a tots els punts la z de l'últim
+    int zIndex = Q2DViewer::getZIndexForView(m_2DViewer->getView());
+    int n = m_roiPolygon->getNumberOfPoints();
+    double z = m_roiPolygon->getVertix(n - 1)[zIndex];
+    for (int i = 0; i < n - 1; i++)
+    {
+        const double *constPoint = m_roiPolygon->getVertix(i);
+        double point[3] = { constPoint[0], constPoint[1], constPoint[2] };
+        point[zIndex] = z;
+        m_roiPolygon->setVertix(i, point);
+    }
+    m_roiPolygon->update();
 }
 
 }
