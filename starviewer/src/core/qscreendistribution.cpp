@@ -54,7 +54,7 @@ void QScreenDistribution::mouseMoveEvent(QMouseEvent *event)
     // Si no se n'hi ha trobat cap, llavors està a fora
     if (outside)
     {
-        setCursor(Qt::ArrowCursor);
+        unsetCursor();
         if (m_mouseInScreen != -1)
         {
             m_mouseInScreen = -1;

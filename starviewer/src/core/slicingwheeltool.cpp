@@ -50,7 +50,7 @@ void SlicingWheelTool::handleEvent(unsigned long eventID)
             m_mouseMovement = false;
             m_viewer->setCursor(QCursor(QPixmap(":/images/slicing.png")));
             SlicingTool::updateIncrement(1);
-            m_viewer->setCursor(Qt::ArrowCursor);
+            m_viewer->unsetCursor();
             // Estadístiques
             m_wheelSteps += QString::number(1) + " ";
             break;
@@ -59,7 +59,7 @@ void SlicingWheelTool::handleEvent(unsigned long eventID)
             m_mouseMovement = false;
             m_viewer->setCursor(QCursor(QPixmap(":/images/slicing.png")));
             SlicingTool::updateIncrement(-1);
-            m_viewer->setCursor(Qt::ArrowCursor);
+            m_viewer->unsetCursor();
             // Estadístiques
             m_wheelSteps += QString::number(-1) + " ";
             break;

@@ -448,7 +448,7 @@ void Q3DViewerExtension::computeOrCancelObscurance()
         m_3DView->cancelObscurance();
     }
 
-    this->setCursor(QCursor(Qt::ArrowCursor));
+    this->unsetCursor();
 }
 
 void Q3DViewerExtension::autoCancelObscurance()
@@ -458,7 +458,7 @@ void Q3DViewerExtension::autoCancelObscurance()
     this->setCursor(QCursor(Qt::WaitCursor));
     m_computingObscurance = false;
     m_obscuranceComputeCancelPushButton->setText(tr("Compute"));
-    this->setCursor(QCursor(Qt::ArrowCursor));
+    this->unsetCursor();
 }
 
 void Q3DViewerExtension::endComputeObscurance()
@@ -488,7 +488,7 @@ void Q3DViewerExtension::render()
 {
     this->setCursor(QCursor(Qt::WaitCursor));
     m_3DView->applyCurrentRenderingMethod();
-    this->setCursor(QCursor(Qt::ArrowCursor));
+    this->unsetCursor();
 }
 
 void Q3DViewerExtension::loadClut()
@@ -794,7 +794,7 @@ void Q3DViewerExtension::updateView(bool fast)
         m_3DView->getRenderWindow()->SetDesiredUpdateRate(m_3DView->getInteractor()->GetStillUpdateRate());
     }
 
-    this->setCursor(QCursor(Qt::ArrowCursor));
+    this->unsetCursor();
 }
 
 void Q3DViewerExtension::enableAutoUpdate()

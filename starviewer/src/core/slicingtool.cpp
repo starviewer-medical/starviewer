@@ -140,7 +140,7 @@ void SlicingTool::doSlicing()
 
 void SlicingTool::endSlicing()
 {
-    m_viewer->setCursor(Qt::ArrowCursor);
+    m_viewer->unsetCursor();
     m_state = None;
 }
 
