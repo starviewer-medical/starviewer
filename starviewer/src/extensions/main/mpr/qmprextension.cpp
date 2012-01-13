@@ -1229,14 +1229,15 @@ void QMPRExtension::createActors()
     m_axialOverSagitalIntersectionAxis->TitleVisibilityOff();
     m_axialOverSagitalIntersectionAxis->GetProperty()->SetColor(axialColor.redF(), axialColor.greenF(), axialColor.blueF());
 
-    m_thickSlabOverAxialActor->AxisVisibilityOn();
+    // De moment les línies de thickslab seran invisibles ja que no podem fer MIPs i al quedar superposats sobre les línies dels plans fan mal efecte
+    m_thickSlabOverAxialActor->AxisVisibilityOff();
     m_thickSlabOverAxialActor->TickVisibilityOff();
     m_thickSlabOverAxialActor->LabelVisibilityOff();
     m_thickSlabOverAxialActor->TitleVisibilityOff();
     m_thickSlabOverAxialActor->GetProperty()->SetColor(coronalColor.redF(), coronalColor.greenF(), coronalColor.blueF());
     m_thickSlabOverAxialActor->GetProperty()->SetLineStipplePattern(65280);
 
-    m_thickSlabOverSagitalActor->AxisVisibilityOn();
+    m_thickSlabOverSagitalActor->AxisVisibilityOff();
     m_thickSlabOverSagitalActor->TickVisibilityOff();
     m_thickSlabOverSagitalActor->LabelVisibilityOff();
     m_thickSlabOverSagitalActor->TitleVisibilityOff();
