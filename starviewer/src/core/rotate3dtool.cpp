@@ -84,7 +84,7 @@ void Rotate3DTool::endRotate3D()
 {
     Q_ASSERT(m_interactorStyle);
 
-    m_viewer->setCursor(Qt::ArrowCursor);
+    m_viewer->unsetCursor();
     switch (m_state)
     {
         case Rotating:

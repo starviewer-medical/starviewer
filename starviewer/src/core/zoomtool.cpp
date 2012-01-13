@@ -68,7 +68,7 @@ void ZoomTool::endZoom()
 {
     if (m_state == Zooming)
     {
-        m_viewer->setCursor(Qt::ArrowCursor);
+        m_viewer->unsetCursor();
         m_state = None;
         m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate(m_viewer->getInteractor()->GetStillUpdateRate());
 

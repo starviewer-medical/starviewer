@@ -118,7 +118,7 @@ void WindowLevelTool::doWindowLevel()
 
 void WindowLevelTool::endWindowLevel()
 {
-    m_viewer->setCursor(Qt::ArrowCursor);
+    m_viewer->unsetCursor();
     m_state = None;
     m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate(m_viewer->getInteractor()->GetStillUpdateRate());
     // Necessari perquè es torni a renderitzar a alta resolució en el 3D

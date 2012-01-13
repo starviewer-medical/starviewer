@@ -209,7 +209,7 @@ void Cursor3DTool::removePosition()
     if (m_state == Computing)
     {
         m_state = None;
-        m_viewer->setCursor(Qt::ArrowCursor);
+        m_viewer->unsetCursor();
     }
     /// S'ha demanat que el cursor no desparegui al deixar de clicar.
 //  m_crossHair->setVisibility(false);

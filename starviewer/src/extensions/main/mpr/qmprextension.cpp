@@ -616,7 +616,7 @@ void QMPRExtension::releaseAxialViewAxisActor()
     {
         m_pickedActorReslice->SetInterpolationModeToCubic();
         // TODO No seria millor un restoreOverrideCursor?
-        m_axial2DView->setCursor(Qt::ArrowCursor);
+        m_axial2DView->unsetCursor();
         if (m_pickedActorPlaneSource == m_sagitalPlaneSource)
         {
             m_sagital2DView->render();
@@ -732,7 +732,7 @@ void QMPRExtension::releaseSagitalViewAxisActor()
 {
     if (m_pickedActorReslice)
     {
-        m_sagital2DView->setCursor(Qt::ArrowCursor);
+        m_sagital2DView->unsetCursor();
         m_pickedActorReslice->SetInterpolationModeToCubic();
         m_coronal2DView->render();
         m_state = None;

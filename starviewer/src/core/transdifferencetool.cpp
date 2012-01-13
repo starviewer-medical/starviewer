@@ -146,7 +146,7 @@ void TransDifferenceTool::doTransDifference()
 void TransDifferenceTool::endTransDifference()
 {
     //DEBUG_LOG("End moving");
-    m_viewer->setCursor(Qt::ArrowCursor);
+    m_viewer->unsetCursor();
     m_state = None;
     m_myData->increaseSliceTranslationX(m_2DViewer->getCurrentSlice(), m_dx);
     m_myData->increaseSliceTranslationY(m_2DViewer->getCurrentSlice(), m_dy);
