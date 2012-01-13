@@ -303,7 +303,7 @@
        </property>
        <property name="icon">
         <iconset resource="../../../main/main.qrc">
-         <normaloff>:/images/viewerInfo.png</normaloff>:/images/viewerInfo.png</iconset>
+         <normaloff>:/images/showViewersInformation.png</normaloff>:/images/showViewersInformation.png</iconset>
        </property>
        <property name="iconSize">
         <size>
