@@ -285,7 +285,8 @@ HEADERS += extensionfactory.h \
     circletool.h \
     diagnosistestresultwriter.h \
     perpendiculardistancetool.h \
-    glutessellator.h
+    glutessellator.h \
+    qtreewidgetwithseparatorline.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -526,7 +527,8 @@ SOURCES += extensionmediator.cpp \
     circletool.cpp \
     diagnosistestresultwriter.cpp \
     perpendiculardistancetool.cpp \
-    glutessellator.cpp
+    glutessellator.cpp \
+    qtreewidgetwithseparatorline.cpp
 win32 {
     HEADERS += windowsfirewallaccess.h \
                windowssysteminformation.h
