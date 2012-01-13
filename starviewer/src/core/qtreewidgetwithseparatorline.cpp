@@ -6,7 +6,6 @@ namespace udg
 {
 QTreeWidgetWithSeparatorLine::QTreeWidgetWithSeparatorLine(QWidget* parent) : QTreeWidget(parent)
 {
-    setContentsMargins( 0, 0, 0, 0);
     m_sepatorLineColor = QColor(152, 150, 140); 
 }
  
@@ -25,7 +24,7 @@ void QTreeWidgetWithSeparatorLine::drawRow(QPainter* painter, const QStyleOption
         QRect rect = visualRect(rowIndex.sibling( rowIndex.row(), column));
        
         painter->setPen(m_sepatorLineColor);
-        //Dibuixem la línia a la part de dalt de la fila
+        //Dibuixem la lÃ­nia a la part de dalt de la fila
         painter->drawLine( rect.x(), rect.y(), rect.x() + rect.width(), rect.y());
     }
 }
