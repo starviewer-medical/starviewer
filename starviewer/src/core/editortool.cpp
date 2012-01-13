@@ -39,7 +39,7 @@ EditorTool::EditorTool(QViewer *viewer, QObject *parent)
 
 EditorTool::~EditorTool()
 {
-    m_2DViewer->setCursor(Qt::ArrowCursor);
+    m_2DViewer->unsetCursor();
     m_squareActor -> Delete();
     delete m_myData;
 }

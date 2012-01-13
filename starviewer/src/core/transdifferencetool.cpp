@@ -31,6 +31,7 @@ TransDifferenceTool::TransDifferenceTool(QViewer *viewer, QObject *parent)
 
 TransDifferenceTool::~TransDifferenceTool()
 {
+    m_viewer->unsetCursor();
 }
 
 void TransDifferenceTool::handleEvent(unsigned long eventID)

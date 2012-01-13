@@ -21,6 +21,7 @@ Rotate3DTool::Rotate3DTool(QViewer *viewer, QObject *parent) : Tool(viewer, pare
 
 Rotate3DTool::~Rotate3DTool()
 {
+    m_viewer->unsetCursor();
 }
 
 void Rotate3DTool::handleEvent(unsigned long eventID)

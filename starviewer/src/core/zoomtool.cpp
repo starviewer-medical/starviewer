@@ -21,6 +21,7 @@ ZoomTool::ZoomTool(QViewer *viewer, QObject *parent)
 
 ZoomTool::~ZoomTool()
 {
+    m_viewer->unsetCursor();
 }
 
 void ZoomTool::handleEvent(unsigned long eventID)

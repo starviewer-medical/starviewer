@@ -20,6 +20,7 @@ WindowLevelTool::WindowLevelTool(QViewer *viewer, QObject *parent)
 
 WindowLevelTool::~WindowLevelTool()
 {
+    m_viewer->unsetCursor();
 }
 
 void WindowLevelTool::handleEvent(unsigned long eventID)
