@@ -2632,7 +2632,7 @@ void QExperimental3DExtension::computeSelectedVmi()
     render();
     m_viewer->setCamera(position, focus, up);
 
-    setCursor(QCursor(Qt::ArrowCursor));
+    unsetCursor();
 }
 
 void QExperimental3DExtension::computeSelectedVmii()
@@ -2781,7 +2781,7 @@ void QExperimental3DExtension::computeSelectedVmii()
         fillWeightsEditor();
     }
 
-    setCursor(QCursor(Qt::ArrowCursor));
+    unsetCursor();
 #endif // CUDA_AVAILABLE
 }
 
@@ -4458,13 +4458,13 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
 
         if (MathTools::isNaN(weights.at(0)))
         {
-            setCursor(QCursor(Qt::ArrowCursor));
+            unsetCursor();
             return;
         }
     }
     if (piWeights && minimizeDkl_I_W)
     {
-        setCursor(QCursor(Qt::ArrowCursor));
+        unsetCursor();
         return; // ja estem a l'objectiu
     }
 
@@ -4737,7 +4737,7 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
         viewNormalVolume();
     }
 
-    setCursor(QCursor(Qt::ArrowCursor));
+    unsetCursor();
 #endif // CUDA_AVAILABLE
 }
 
@@ -4775,13 +4775,13 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
 
         if (MathTools::isNaN(weights.at(0)))
         {
-            setCursor(QCursor(Qt::ArrowCursor));
+            unsetCursor();
             return;
         }
     }
     if (piWeights && minimizeDkl_I_W)
     {
-        setCursor(QCursor(Qt::ArrowCursor));
+        unsetCursor();
         return; // ja estem a l'objectiu
     }
 
@@ -5060,7 +5060,7 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
         viewNormalVolume();
     }
 
-    setCursor(QCursor(Qt::ArrowCursor));
+    unsetCursor();
 #endif // CUDA_AVAILABLE
 }
 
@@ -5100,13 +5100,13 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
 
     if (MathTools::isNaN(weights.at(0)))
     {
-        setCursor(QCursor(Qt::ArrowCursor));
+        unsetCursor();
         return;
     }
 
     if (piWeights && minimizeDkl_I_W)
     {
-        setCursor(QCursor(Qt::ArrowCursor));
+        unsetCursor();
         return; // ja estem a l'objectiu
     }
 
@@ -5651,7 +5651,7 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
         viewNormalVolume();
     }
 
-    setCursor(QCursor(Qt::ArrowCursor));
+    unsetCursor();
 
     m_optimizing = m_stopOptimization = false;
 
