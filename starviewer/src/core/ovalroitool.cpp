@@ -215,6 +215,7 @@ void OvalROITool::closeForm()
     // per exemple, ja que no s'hauria passat per l'event de mouse move, que és quan es crea la primitiva.
     if (m_roiPolygon)
     {
+        equalizeDepth();
         printData();
         // Alliberem la primitiva perquè pugui ser esborrada
         m_roiPolygon->decreaseReferenceCount();
@@ -240,6 +241,18 @@ void OvalROITool::initialize()
 
     m_roiPolygon = 0;
     m_state = Ready;
+}
+
+void OvalROITool::equalizeDepth()
+{
+    // Ens quedem amb la z de la llesca actual
+    double currentPoint[3];
+    m_2DViewer->getEventWorldCoordinate(currentPoint);
+    int zIndex = Q2DViewer::getZIndexForView(m_2DViewer->getView());
+    double z = currentPoint[zIndex];
+    m_firstPoint[zIndex] = z;
+    m_secondPoint[zIndex] = z;
+    updatePolygonPoints();
 }
 
 }
