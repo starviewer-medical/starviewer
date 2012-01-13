@@ -155,11 +155,11 @@ void MagnifyingGlassTool::updateMagnifiedView()
         
         // Actualitzem el viewport
         updateMagnifiedRendererViewport(eventPosition, renderWindowSize);
+        updateCamera();
         
         if (!m_magnifyingRendererIsVisible)
         {
             addMagnifiedRenderer();
-            updateCamera();
         }
         
         // Actualitzem la posició que enfoca la càmera
@@ -192,14 +192,7 @@ void MagnifyingGlassTool::updateCamera()
     double viewportsProportion;
     double viewportPoints[4];
     m_magnifiedRenderer->GetViewport(viewportPoints);
-    if (size.width() > size.height())
-    {
-        viewportsProportion = fabs(viewportPoints[2] - viewportPoints[0]);
-    }
-    else
-    {
-        viewportsProportion = fabs(viewportPoints[3] - viewportPoints[1]);
-    }
+    viewportsProportion = fabs(viewportPoints[3] - viewportPoints[1]);
 
     // Fixem el mateix zoom que en el renderer principal
     if (viewerCamera->GetParallelProjection())
