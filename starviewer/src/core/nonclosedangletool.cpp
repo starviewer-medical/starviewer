@@ -183,6 +183,8 @@ void NonClosedAngleTool::simulateLine(DrawerLine *line)
 
 void NonClosedAngleTool::computeAngle()
 {
+    equalizeDepth();
+
     if (!m_middleLine)
     {
         m_middleLine = new DrawerLine;
@@ -351,6 +353,24 @@ void NonClosedAngleTool::initialize()
     m_secondLine = NULL;
     m_state = None;
     m_lineState = NoPoints;
+}
+
+void NonClosedAngleTool::equalizeDepth()
+{
+    // Assignem a tots els punts la z de l'últim
+    int zIndex = Q2DViewer::getZIndexForView(m_2DViewer->getView());
+    double z = m_secondLine->getSecondPoint()[zIndex];
+    double *point = m_firstLine->getFirstPoint();
+    point[zIndex] = z;
+    m_firstLine->setFirstPoint(point);
+    point = m_firstLine->getSecondPoint();
+    point[zIndex] = z;
+    m_firstLine->setSecondPoint(point);
+    m_firstLine->update();
+    point = m_secondLine->getFirstPoint();
+    point[zIndex] = z;
+    m_secondLine->setFirstPoint(point);
+    m_secondLine->update();
 }
 
 }
