@@ -55,6 +55,10 @@ private:
 
     /// Ens retorna el factor de zoom que tenim configurat per aplicar
     double getZoomFactor();
+
+    /// Calcula el focal point correcte tenint en compte que si estem a les cantonades
+    /// el focal point no ha de ser necessariament el punt on esta el cursor.
+    void setFocalPoint(const double cursorPosition[3]);
 private:
     /// Renderer on tindrem la vista magnificada
     vtkRenderer *m_magnifiedRenderer;
