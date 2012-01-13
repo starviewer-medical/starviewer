@@ -70,26 +70,10 @@ void MagnifyingGlassTool::updateMagnifiedRendererViewport(const QPoint &center, 
     double yMin = center.y() / (double)viewerSize.height() - magnifyingWindowSize / viewerSize.height();
     double yMax = center.y() / (double)viewerSize.height() + magnifyingWindowSize / viewerSize.height();
 
-    if (xMin < 0)
-    {
-        xMax = ((magnifyingWindowSize / viewerSize.width()) * 2) + xMin;
-        xMin = 0;
-    }
-    if (yMin < 0)
-    {
-        yMax = ((magnifyingWindowSize / viewerSize.height()) * 2) + yMin;
-        yMin = 0;
-    }
-    if (xMax > 1)
-    {
-        xMin = xMax - ((magnifyingWindowSize / viewerSize.width()) * 2);
-        xMax = 1;
-    }
-    if (yMax > 1)
-    {
-        yMin = yMax - ((magnifyingWindowSize / viewerSize.height()) * 2);
-        yMax = 1;
-    }
+    xMin = qMax(0.0, xMin);
+    yMin = qMax(0.0, yMin);
+    xMax = qMin(1.0, xMax);
+    yMax = qMin(1.0, yMax);
 
     m_magnifiedRenderer->SetViewport(xMin, yMin, xMax, yMax);
 }
