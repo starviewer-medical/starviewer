@@ -147,7 +147,7 @@ void MagnifyingGlassTool::updateMagnifiedView()
         }
         
         // Actualitzem la posició que enfoca la càmera
-        m_magnifiedCamera->SetFocalPoint(xyz);
+        setFocalPoint(xyz);
         m_magnifiedRenderer->ResetCameraClippingRange();
         m_2DViewer->render();
     }
@@ -158,6 +158,42 @@ void MagnifyingGlassTool::updateMagnifiedView()
             removeMagnifiedRenderer();
         }
     }
+}
+
+void MagnifyingGlassTool::setFocalPoint(const double cursorPosition[3])
+{
+    // Passem el punt a coordenades de display
+    double pointInDisplay[3];
+    m_2DViewer->computeWorldToDisplay(cursorPosition[0], cursorPosition[1], cursorPosition[2], pointInDisplay);
+
+    double viewportBounds[4];
+    m_magnifiedRenderer->GetViewport(viewportBounds);
+
+    QSize renderWindowSize = m_2DViewer->getRenderWindowSize();
+
+    double magnifyingWindowHalfWidht = (viewportBounds[2] - viewportBounds[0]) * renderWindowSize.width() / 2.0;
+    double magnifyingWindowHalfHeight = (viewportBounds[3] - viewportBounds[1]) * renderWindowSize.height() / 2.0;
+
+    // Calculem la diferencia entre el centre del viewport i on esta el cursor per calcular el punt central real
+    double offsetXMin = qMax(0.0, magnifyingWindowHalfWidht - pointInDisplay[0]);
+    double offsetXMax = qMax(0.0, (pointInDisplay[0] + magnifyingWindowHalfWidht) - renderWindowSize.width());
+    double offsetYMin = qMax(0.0, magnifyingWindowHalfHeight - pointInDisplay[1]);
+    double offsetYMax = qMax(0.0, (pointInDisplay[1] + magnifyingWindowHalfHeight) - renderWindowSize.height());
+
+    // Apliquem el factor de zoom perque volem la distancia en el render magnificat
+    double zoomFactor = getZoomFactor();
+    double offsetX = (offsetXMax - offsetXMin) / zoomFactor;
+    double offsetY = (offsetYMax - offsetYMin) / zoomFactor;
+
+    double temporalWorldPoint[4];
+    m_2DViewer->computeDisplayToWorld(pointInDisplay[0] - offsetX, pointInDisplay[1] - offsetY, pointInDisplay[2], temporalWorldPoint);
+
+    double focalPoint[3];
+    focalPoint[0] = temporalWorldPoint[0];
+    focalPoint[1] = temporalWorldPoint[1];
+    focalPoint[2] = temporalWorldPoint[2];
+
+    m_magnifiedCamera->SetFocalPoint(focalPoint);
 }
 
 void MagnifyingGlassTool::updateCamera()
