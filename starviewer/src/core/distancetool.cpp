@@ -198,6 +198,7 @@ void DistanceTool::annotateNewPoint()
         // Alliberem la primitiva perquè pugui ser esborrada
         m_line->decreaseReferenceCount();
         m_2DViewer->getDrawer()->erasePrimitive(m_line);
+        equalizeDepth();
         // Coloquem la primitiva en el pla corresponent
         m_2DViewer->getDrawer()->draw(m_line, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
         // Reiniciem l'estat de la tool
@@ -229,6 +230,17 @@ void DistanceTool::initialize()
     }
     m_lineState = NoPointFixed;
     m_line = NULL;
+}
+
+void DistanceTool::equalizeDepth()
+{
+    // Assignem al primer punt la z del segon
+    int zIndex = Q2DViewer::getZIndexForView(m_2DViewer->getView());
+    double z = m_line->getSecondPoint()[zIndex];
+    double *firstPoint = m_line->getFirstPoint();
+    firstPoint[zIndex] = z;
+    m_line->setFirstPoint(firstPoint);
+    m_line->update();
 }
 
 }
