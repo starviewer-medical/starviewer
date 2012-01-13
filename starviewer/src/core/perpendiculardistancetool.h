@@ -71,6 +71,8 @@ private:
     QString getDistanceText() const;
     /// Avorta el dibuix de la distància perpendicular.
     void abortDrawing();
+    /// Equalitza la profunditat dels elements que formen la distància perpendicular final.
+    void equalizeDepth();
 
 private slots:
 

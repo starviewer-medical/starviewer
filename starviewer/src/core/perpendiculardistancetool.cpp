@@ -175,6 +175,8 @@ void PerpendicularDistanceTool::updateDistanceLine()
 {
     Q_ASSERT(m_state == DrawingDistanceLine);
 
+    equalizeDepth();
+
     // Obtenim la posició del ratolí
     double mouseWorldPoint[3];
     m_2DViewer->getEventWorldCoordinate(mouseWorldPoint);
@@ -304,6 +306,29 @@ void PerpendicularDistanceTool::abortDrawing()
     Q_ASSERT(m_state != NotDrawing);
 
     reset();
+}
+
+void PerpendicularDistanceTool::equalizeDepth()
+{
+    // Ens quedem amb la z de la z actual
+    double currentPoint[3];
+    m_2DViewer->getEventWorldCoordinate(currentPoint);
+    int zIndex = Q2DViewer::getZIndexForView(m_2DViewer->getView());
+    double z = currentPoint[zIndex];
+    double *point = m_firstLine->getFirstPoint();
+    point[zIndex] = z;
+    m_firstLine->setFirstPoint(point);
+    point = m_firstLine->getSecondPoint();
+    point[zIndex] = z;
+    m_firstLine->setSecondPoint(point);
+    m_firstLine->update();
+    point = m_distanceLine->getFirstPoint();
+    point[zIndex] = z;
+    m_distanceLine->setFirstPoint(point);
+    point = m_distanceLine->getSecondPoint();
+    point[zIndex] = z;
+    m_distanceLine->setSecondPoint(point);
+    m_distanceLine->update();
 }
 
 void PerpendicularDistanceTool::reset()
