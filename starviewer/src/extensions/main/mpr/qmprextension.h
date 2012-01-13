@@ -72,6 +72,12 @@ private:
 
     /// Inicialitza les tools que tindrà l'extensió
     void initializeTools();
+    
+    /// Inicialitza grups d'eines concretes
+    void initializeZoomTools();
+    void initializeROITools();
+    void initializeDistanceTools();
+    void initializeAngleTools();
 
     /// Actualitza valors dels plans i del reslice final
     /// TODO: separar en dos mètodes diferenciats segons quin pla????
@@ -102,6 +108,10 @@ private:
     /// Crea les connexions entre signals i slots
     void createConnections();
 
+    /// Col·loca i ordena les icones i el menú de les eines del botó donat segons l'última eina seleccionada
+    /// TODO Refactoritzar i posar aquest mètode en una classe comuna per totes les extensions i no tenir el codi duplicat aquí i a la extensió 2D
+    void rearrangeToolsMenu(QToolButton *menuButton);
+    
     /// Ens retorna la línia d'intersecció entre dos plans definida per un punt i un vector
     void planeIntersection(vtkPlaneSource *plane1, vtkPlaneSource *plane2, double r[3], double t[3]);
 
@@ -118,6 +128,18 @@ private:
     vtkTransform* getWorldToSagitalTransform() const;
 
 private slots:
+    /// Col·loca i ordena les icones i el menú de les eines de ROI segons l'última tool de ROI seleccionada
+    void rearrangeROIToolsMenu();
+
+    /// Col·loca i ordena les icones i el menu de les eines d'angles segons l'última tool d'angles seleccionada
+    void rearrangeAngleToolsMenu();
+
+    /// Col·loca i ordena les icones i el menu de les eines de zoom segons l'última tool de Zoom seleccionada
+    void rearrangeZoomToolsMenu();
+
+    /// Col·loca i ordena les icones i el menú de les eines de distància segons l'última eina de distància seleccionada
+    void rearrangeDistanceToolsMenu();
+    
     /// Marca quins són els viewers que s'han de considerar seleccionats
     void changeSelectedViewer();
 

@@ -184,36 +184,92 @@ void QMPRExtension::createActions()
     m_mipToolButton->setDefaultAction(m_mipAction);
 }
 
+void QMPRExtension::initializeZoomTools()
+{
+    Q_ASSERT(m_toolManager);
+    
+    m_zoomToolButton->setDefaultAction(m_toolManager->registerTool("ZoomTool"));
+    // Afegim un menú al botó de zoom per incorporar la tool de zoom focalitzat
+    m_zoomToolButton->setPopupMode(QToolButton::MenuButtonPopup);
+    QMenu *zoomToolMenu = new QMenu(this);
+    m_zoomToolButton->setMenu(zoomToolMenu);
+    zoomToolMenu->addAction(m_toolManager->registerTool("MagnifyingGlassTool"));
+
+    connect(m_toolManager->getRegisteredToolAction("ZoomTool"), SIGNAL(triggered()), SLOT(rearrangeZoomToolsMenu()));
+    connect(m_toolManager->getRegisteredToolAction("MagnifyingGlassTool"), SIGNAL(triggered()), SLOT(rearrangeZoomToolsMenu()));
+}
+
+void QMPRExtension::initializeROITools()
+{
+    Q_ASSERT(m_toolManager);
+    
+    m_ROIToolButton->setDefaultAction(m_toolManager->registerTool("OvalROITool"));
+    // Afegim un menú al botó de PolylineROI per incorporar la tool de ROI Oval
+    m_ROIToolButton->setPopupMode(QToolButton::MenuButtonPopup);
+    QMenu *roiToolMenu = new QMenu(this);
+    m_ROIToolButton->setMenu(roiToolMenu);
+    roiToolMenu->addAction(m_toolManager->registerTool("MagicROITool"));
+    roiToolMenu->addAction(m_toolManager->registerTool("PolylineROITool"));
+    roiToolMenu->addAction(m_toolManager->registerTool("CircleTool"));
+    
+    connect(m_toolManager->getRegisteredToolAction("OvalROITool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
+    connect(m_toolManager->getRegisteredToolAction("MagicROITool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
+    connect(m_toolManager->getRegisteredToolAction("PolylineROITool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
+    connect(m_toolManager->getRegisteredToolAction("CircleTool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
+}
+
+void QMPRExtension::initializeDistanceTools()
+{
+    Q_ASSERT(m_toolManager);
+
+    m_distanceToolButton->setDefaultAction(m_toolManager->registerTool("DistanceTool"));
+    // Afegim un menú al botó de distància per incorporar l'eina de distància perpendicular
+    m_distanceToolButton->setPopupMode(QToolButton::MenuButtonPopup);
+    QMenu *distanceToolMenu = new QMenu(this);
+    m_distanceToolButton->setMenu(distanceToolMenu);
+    distanceToolMenu->addAction(m_toolManager->registerTool("PerpendicularDistanceTool"));
+    connect(m_toolManager->getRegisteredToolAction("DistanceTool"), SIGNAL(triggered()), SLOT(rearrangeDistanceToolsMenu()));
+    connect(m_toolManager->getRegisteredToolAction("PerpendicularDistanceTool"), SIGNAL(triggered()), SLOT(rearrangeDistanceToolsMenu()));
+}
+
+void QMPRExtension::initializeAngleTools()
+{
+    Q_ASSERT(m_toolManager);
+
+    m_angleToolButton->setDefaultAction(m_toolManager->registerTool("AngleTool"));
+    // Afegim un menú al botó d'angle per incorporar la tool d'angles oberts
+    m_angleToolButton->setPopupMode(QToolButton::MenuButtonPopup);
+    QMenu *angleToolMenu = new QMenu(this);
+    m_angleToolButton->setMenu(angleToolMenu);
+    angleToolMenu->addAction(m_toolManager->registerTool("NonClosedAngleTool"));
+    connect(m_toolManager->getRegisteredToolAction("AngleTool"), SIGNAL(triggered()), SLOT(rearrangeAngleToolsMenu()));
+    connect(m_toolManager->getRegisteredToolAction("NonClosedAngleTool"), SIGNAL(triggered()), SLOT(rearrangeAngleToolsMenu()));
+}
+
 void QMPRExtension::initializeTools()
 {
     // Creem el tool manager
     m_toolManager = new ToolManager(this);
-    // Obtenim les accions de cada tool que volem
-    m_zoomToolButton->setDefaultAction(m_toolManager->registerTool("ZoomTool"));
+    // Configurem les diferents tools
+    initializeZoomTools();
+    initializeROITools();
+    initializeDistanceTools();
+    initializeAngleTools();
     m_slicingToolButton->setDefaultAction(m_toolManager->registerTool("SlicingTool"));
     m_moveToolButton->setDefaultAction(m_toolManager->registerTool("TranslateTool"));
     m_windowLevelToolButton->setDefaultAction(m_toolManager->registerTool("WindowLevelTool"));
     m_voxelInformationToolButton->setDefaultAction(m_toolManager->registerTool("VoxelInformationTool"));
     m_toolManager->registerTool("ScreenShotTool");
     m_screenShotToolButton->setToolTip(m_toolManager->getRegisteredToolAction("ScreenShotTool")->toolTip());
-    m_distanceToolButton->setDefaultAction(m_toolManager->registerTool("DistanceTool"));
-    // La tool de ROI per defecte serà l'el·líptica
-    m_ROIToolButton->setDefaultAction(m_toolManager->registerTool("OvalROITool"));
-    // Afegim un menú al botó de ROI per incorporar la tool de ROI poligonal
-    m_ROIToolButton->setPopupMode(QToolButton::MenuButtonPopup);
-    QMenu *roiToolMenu = new QMenu(this);
-    m_ROIToolButton->setMenu(roiToolMenu);
-    roiToolMenu->addAction(m_toolManager->registerTool("PolylineROITool"));
-    m_angleToolButton->setDefaultAction(m_toolManager->registerTool("AngleTool"));
-    m_openAngleToolButton->setDefaultAction(m_toolManager->registerTool("NonClosedAngleTool"));
+    
     m_eraserToolButton->setDefaultAction(m_toolManager->registerTool("EraserTool"));
     m_toolManager->registerTool("WindowLevelPresetsTool");
     m_toolManager->registerTool("SlicingKeyboardTool");
 
     // Definim els grups exclusius
     QStringList leftButtonExclusiveTools;
-    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "DistanceTool" << "PolylineROITool" << "OvalROITool" << "EraserTool" << "AngleTool"
-                             << "NonClosedAngleTool";
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineROITool" << "DistanceTool" << "PerpendicularDistanceTool" << "EraserTool" << "AngleTool" 
+        << "NonClosedAngleTool" << "Cursor3DTool" << "OvalROITool" << "MagicROITool" << "CircleTool" << "MagnifyingGlassTool";
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
 
     QStringList middleButtonExclusiveTools;
@@ -275,6 +331,50 @@ void QMPRExtension::createConnections()
 
     // Per mostrar exportació
     connect(m_screenshotsExporterToolButton, SIGNAL(clicked()), SLOT(showScreenshotsExporterDialog()));
+}
+
+void QMPRExtension::rearrangeToolsMenu(QToolButton *menuButton)
+{
+    QList<QAction*> actions;
+    actions << menuButton->defaultAction() << menuButton->menu()->actions();
+
+    bool found = false;
+    int i = 0;
+    while (!found && i < actions.count())
+    {
+        if (actions.at(i)->isChecked())
+        {
+            found = true;
+        }
+        ++i;
+    }
+
+    if (found)
+    {
+        menuButton->setDefaultAction(actions.takeAt(i - 1));
+        menuButton->menu()->clear();
+        menuButton->menu()->addActions(actions);
+    }
+}
+
+void QMPRExtension::rearrangeROIToolsMenu()
+{
+    rearrangeToolsMenu(m_ROIToolButton);
+}
+
+void QMPRExtension::rearrangeAngleToolsMenu()
+{
+    rearrangeToolsMenu(m_angleToolButton);
+}
+
+void QMPRExtension::rearrangeZoomToolsMenu()
+{
+    rearrangeToolsMenu(m_zoomToolButton);
+}
+
+void QMPRExtension::rearrangeDistanceToolsMenu()
+{
+    rearrangeToolsMenu(m_distanceToolButton);
 }
 
 void QMPRExtension::changeSelectedViewer()
