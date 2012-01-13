@@ -46,6 +46,9 @@ private:
     /// Retorna una llista de punts que representen la bounding box en la vista actual.
     QList<QVector<double> > getBoundingBoxPoints();
 
+    /// Equalitza la profunditat dels elements que formen la ROI polilínia final.
+    void equalizeDepth();
+
 private:
     /// Polilínia principal: és la polilínia que ens marca la forma que hem anat editant.
     QPointer<DrawerPolyline> m_mainPolyline;
