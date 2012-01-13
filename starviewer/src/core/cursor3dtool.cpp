@@ -50,6 +50,7 @@ Cursor3DTool::~Cursor3DTool()
         m_crossHair->decreaseReferenceCount();
         delete m_crossHair;
     }
+    m_viewer->unsetCursor();
 }
 
 void Cursor3DTool::setToolData(ToolData *data)

@@ -33,7 +33,7 @@ SlicingTool::SlicingTool(QViewer *viewer, QObject *parent)
 
 SlicingTool::~SlicingTool()
 {
-    
+    m_viewer->unsetCursor();
 }
 
 void SlicingTool::handleEvent(unsigned long eventID)
