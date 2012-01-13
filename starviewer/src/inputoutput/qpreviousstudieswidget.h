@@ -2,10 +2,12 @@
 #define UDGQPREVIOUSSTUDIESWIDGET_H
 
 #include <QWidget>
-#include <QTreeWidget>
 #include <QSignalMapper>
 #include <QPushButton>
 #include <QLabel>
+#include <QHash>
+
+class QTreeWidgetItem;
 
 namespace udg {
 
@@ -13,6 +15,7 @@ class Study;
 class PreviousStudiesManager;
 class QueryScreen;
 class Patient;
+class QTreeWidgetWithSeparatorLine;
 
 class QPreviousStudiesWidget : public QFrame {
 Q_OBJECT
@@ -64,6 +67,15 @@ private:
 
     void initializeSearch();
 
+    /// Ressalta el QTreeWidgetItem posant el text que conté a negreta
+    void highlightQTreeWidgetItem(QTreeWidgetItem *item);
+
+    /// Treu del llistat de modalitats les modalitats que no són d'imatge
+    QStringList removeNonImageModalities(const QStringList &studiesModalities);
+    
+    /// Indica si s'ha de ressaltar l'estudi en el QTreeWidget
+    bool hasToHighlightStudy(Study *study);
+
 private slots:
     /// Insereix els estudis a l'arbre.
     void insertStudiesToTree(QList<Study*> studiesList);
@@ -94,7 +106,7 @@ private:
     /// Estructura que s'encarrega de guardar els contenidors associats a cada Study
     QHash<QString, StudyInfo*> m_infomationPerStudy;
     /// Widget utilitzat per mostrar la llista dels estudis previs
-    QTreeWidget *m_previousStudiesTree;
+    QTreeWidgetWithSeparatorLine *m_previousStudiesTree;
     /// Widget que apareix quan s'està fent la consulta dels possibles estudis previs.
     QWidget *m_lookingForStudiesWidget;
     /// Label per mostrar que no hi ha estudis previs.
@@ -109,6 +121,9 @@ private:
     int m_numberOfDownloadingStudies;
     /// Pacient associat a la última cerca feta.
     Patient *m_patient;
+
+    ///Llistat amb les modalitats dels estudis que hem de ressalar
+    QStringList m_modalitiesOfStudiesToHighlight;
 };
 
 }

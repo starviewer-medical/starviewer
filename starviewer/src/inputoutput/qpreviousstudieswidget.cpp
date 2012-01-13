@@ -7,6 +7,7 @@
 #include "queryscreen.h"
 #include "singleton.h"
 #include "screenmanager.h"
+#include "qtreewidgetwithseparatorline.h"
 
 #include <QVBoxLayout>
 #include <QMovie>
@@ -21,7 +22,7 @@ QPreviousStudiesWidget::QPreviousStudiesWidget(QWidget *parent)
     QVBoxLayout *verticalLayout = new QVBoxLayout(this);
 
     m_lookingForStudiesWidget = new QWidget(this);
-    m_previousStudiesTree = new QTreeWidget(this);
+    m_previousStudiesTree = new QTreeWidgetWithSeparatorLine(this);
     m_previousStudiesManager = new PreviousStudiesManager();
     m_signalMapper = new QSignalMapper(this);
     m_queryScreen = SingletonPointer<QueryScreen>::instance();
@@ -42,7 +43,6 @@ QPreviousStudiesWidget::QPreviousStudiesWidget(QWidget *parent)
     m_lookingForStudiesWidget->setVisible(false);
     m_noPreviousStudiesLabel->setVisible(false);
     m_previousStudiesTree->setVisible(false);
-
 }
 
 QPreviousStudiesWidget::~QPreviousStudiesWidget()
@@ -87,6 +87,7 @@ void QPreviousStudiesWidget::searchPreviousStudiesOf(Study *study)
     initializeSearch();
     m_patient = study->getParentPatient();
     m_previousStudiesManager->queryMergedPreviousStudies(study);
+    m_modalitiesOfStudiesToHighlight = removeNonImageModalities(study->getModalities());
 }
 
 void QPreviousStudiesWidget::searchStudiesOf(Patient *patient)
@@ -96,6 +97,11 @@ void QPreviousStudiesWidget::searchStudiesOf(Patient *patient)
     initializeSearch();
     m_patient = patient;
     m_previousStudiesManager->queryMergedStudies(patient);
+
+    foreach(Study *study, patient->getStudies())
+    {
+        m_modalitiesOfStudiesToHighlight.append(study->getModalities());
+    }
 }
 
 void QPreviousStudiesWidget::initializeSearch()
@@ -139,7 +145,6 @@ void QPreviousStudiesWidget::initializeTree()
     m_previousStudiesTree->header()->setResizeMode(DownloadingStatus, QHeaderView::Fixed);
     m_previousStudiesTree->header()->setResizeMode(DownloadButton, QHeaderView::Fixed);
     m_previousStudiesTree->header()->setMovable(false);
-    m_previousStudiesTree->setAlternatingRowColors(true);
     m_previousStudiesTree->setUniformRowHeights(true);
     m_previousStudiesTree->setSortingEnabled(true);
 
@@ -189,6 +194,11 @@ void QPreviousStudiesWidget::insertStudyToTree(Study *study)
     connect(downloadButton, SIGNAL(clicked()), m_signalMapper, SLOT(map()));
     m_signalMapper->setMapping(downloadButton, study->getInstanceUID());
 
+    if (hasToHighlightStudy(study))
+    {
+        highlightQTreeWidgetItem(item);
+    }
+
     m_previousStudiesTree->setItemWidget(item, DownloadButton, downloadButton);
 
     // Guardem informació relacionada amb l'estudi per facilitar la feina
@@ -200,6 +210,14 @@ void QPreviousStudiesWidget::insertStudyToTree(Study *study)
     relatedStudyInfo->status = Initialized;
     m_infomationPerStudy.insert(study->getInstanceUID(), relatedStudyInfo);
 
+}
+
+void QPreviousStudiesWidget::highlightQTreeWidgetItem(QTreeWidgetItem *item)
+{
+    for (int index = 0; index < item->columnCount(); index++)
+    {
+        item->setBackground(index, QColor(195, 225, 236, 255));
+    }
 }
 
 void QPreviousStudiesWidget::updateWidthTree()
@@ -350,6 +368,29 @@ void QPreviousStudiesWidget::setVisible(bool visible)
     {
         updateHeightTree();
     }
+}
+
+QStringList QPreviousStudiesWidget::removeNonImageModalities(const QStringList &studiesModalities)
+{
+    QStringList studiesModalitiesToReturn(studiesModalities);
+    studiesModalitiesToReturn.removeAll("KO");
+    studiesModalitiesToReturn.removeAll("PR");
+    studiesModalitiesToReturn.removeAll("SR");
+
+    return studiesModalities;
+}
+
+bool QPreviousStudiesWidget::hasToHighlightStudy(Study *study)
+{
+    foreach (QString modality, study->getModalities())
+    {
+        if (m_modalitiesOfStudiesToHighlight.contains(modality))
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 }
