@@ -310,7 +310,7 @@ void PerpendicularDistanceTool::abortDrawing()
 
 void PerpendicularDistanceTool::equalizeDepth()
 {
-    // Ens quedem amb la z de la z actual
+    // Ens quedem amb la z de la llesca actual
     double currentPoint[3];
     m_2DViewer->getEventWorldCoordinate(currentPoint);
     int zIndex = Q2DViewer::getZIndexForView(m_2DViewer->getView());
