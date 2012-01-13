@@ -176,7 +176,6 @@ void QPreviousStudiesWidget::insertStudyToTree(Study *study)
 
     // Afegim l'item al widget
     m_previousStudiesTree->addTopLevelItem(item);
-
     item->setFlags(Qt::ItemIsEnabled);
 
     item->setText(Name, study->getParentPatient()->getFullName());
@@ -188,8 +187,13 @@ void QPreviousStudiesWidget::insertStudyToTree(Study *study)
 
     m_previousStudiesTree->setItemWidget(item, DownloadingStatus, status);
 
+    // Posem el botó en un Layout amb Margin 2 per a que els Items del QTreeWidget no estiguin tant junts i el control sigui més llegible
     QIcon dowloadIcon(QString(":/images/view.png"));
     QPushButton *downloadButton = new QPushButton(dowloadIcon, QString(""));
+    QWidget *downloadButtonWidget = new QWidget();
+    QVBoxLayout *layout = new QVBoxLayout(downloadButtonWidget);
+    layout->setMargin(2);
+    layout->addWidget(downloadButton);
 
     connect(downloadButton, SIGNAL(clicked()), m_signalMapper, SLOT(map()));
     m_signalMapper->setMapping(downloadButton, study->getInstanceUID());
@@ -199,7 +203,7 @@ void QPreviousStudiesWidget::insertStudyToTree(Study *study)
         highlightQTreeWidgetItem(item);
     }
 
-    m_previousStudiesTree->setItemWidget(item, DownloadButton, downloadButton);
+    m_previousStudiesTree->setItemWidget(item, DownloadButton, downloadButtonWidget);
 
     // Guardem informació relacionada amb l'estudi per facilitar la feina
     StudyInfo *relatedStudyInfo = new StudyInfo;
