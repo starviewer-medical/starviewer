@@ -75,14 +75,14 @@ bool ApplicationCommandLineOptions::parse()
                 }
                 else
                 {
-                    m_parserErrorMessage += QObject::tr("Unknown option ") + CommandLineOption::OptionSelectorPrefix + parameter + "\n";
+                    m_parserErrorMessage += QObject::tr("Unknown option %1").arg(CommandLineOption::OptionSelectorPrefix + parameter) + "\n";
                 }
             }
             else
             {
                 // Si l'últim paràmetre parsejat era una opció que se li havia de passar obligatòriament un argument ex "-accessionnumber 12345"
                 // i no se li ha especificat cap argument ex: "-accessionnumber -studyUID" guardem l'error i parem.
-                m_parserErrorMessage += lastOption.getName() + QObject::tr(" option requires an argument") + "\n";
+                m_parserErrorMessage += QObject::tr("%1 option requires an argument").arg(lastOption.getName()) + "\n";
             }
         }
         else
@@ -97,12 +97,12 @@ bool ApplicationCommandLineOptions::parse()
                 }
                 else
                 {
-                    m_parserErrorMessage += lastOption.getName() + QObject::tr(" option requires an argument") + "\n";
+                    m_parserErrorMessage += QObject::tr("%1 option requires an argument").arg(lastOption.getName()) + "\n";
                 }
             }
             else
             {
-                m_parserErrorMessage += QObject::tr("Unexpected value ") + parameter + "\n";
+                m_parserErrorMessage += QObject::tr("Unexpected value %1").arg(parameter) + "\n";
             }
 
             lastParameterWasAnOption = false;
@@ -112,7 +112,7 @@ bool ApplicationCommandLineOptions::parse()
 
     if (nextParameterHasToBeAnArgumentOption)
     {
-        m_parserErrorMessage += lastOption.getName() + QObject::tr(" option requires an argument") + "\n";
+        m_parserErrorMessage += QObject::tr("%1 option requires an argument").arg(lastOption.getName()) + "\n";
     }
 
     return m_parserErrorMessage.isEmpty();
