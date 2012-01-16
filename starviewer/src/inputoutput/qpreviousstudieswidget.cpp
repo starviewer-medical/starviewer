@@ -185,7 +185,7 @@ void QPreviousStudiesWidget::insertStudyToTree(Study *study)
 
     QWidget *statusWidget = new QWidget(m_previousStudiesTree);
     QHBoxLayout *statusLayout = new QHBoxLayout(statusWidget);
-    QLabel *status = new QLabel();
+    QLabel *status = new QLabel(statusWidget);
     statusLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
     statusLayout->addWidget(status);
     statusLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
@@ -196,7 +196,7 @@ void QPreviousStudiesWidget::insertStudyToTree(Study *study)
     // Posem el botó en un Layout amb Margin 2 per a que els Items del QTreeWidget no estiguin tant junts i el control sigui més llegible
     QIcon dowloadIcon(QString(":/images/view.png"));
     QPushButton *downloadButton = new QPushButton(dowloadIcon, QString(""));
-    QWidget *downloadButtonWidget = new QWidget();
+    QWidget *downloadButtonWidget = new QWidget(m_previousStudiesTree);
     QVBoxLayout *downloadButtonLayout = new QVBoxLayout(downloadButtonWidget);
     //Apliquem 1px més de layout per la línia separadora 
     downloadButtonLayout->setContentsMargins(0, 2, 0, 1);
