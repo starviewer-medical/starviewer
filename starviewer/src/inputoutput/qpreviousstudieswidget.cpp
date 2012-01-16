@@ -183,17 +183,24 @@ void QPreviousStudiesWidget::insertStudyToTree(Study *study)
     item->setText(Modality, study->getModalitiesAsSingleString());
     item->setText(Description, study->getDescription());
 
+    QWidget *statusWidget = new QWidget(m_previousStudiesTree);
+    QHBoxLayout *statusLayout = new QHBoxLayout(statusWidget);
     QLabel *status = new QLabel();
+    statusLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
+    statusLayout->addWidget(status);
+    statusLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
+    statusLayout->setMargin(0);
 
-    m_previousStudiesTree->setItemWidget(item, DownloadingStatus, status);
+    m_previousStudiesTree->setItemWidget(item, DownloadingStatus, statusWidget);
 
     // Posem el botó en un Layout amb Margin 2 per a que els Items del QTreeWidget no estiguin tant junts i el control sigui més llegible
     QIcon dowloadIcon(QString(":/images/view.png"));
     QPushButton *downloadButton = new QPushButton(dowloadIcon, QString(""));
     QWidget *downloadButtonWidget = new QWidget();
-    QVBoxLayout *layout = new QVBoxLayout(downloadButtonWidget);
-    layout->setMargin(2);
-    layout->addWidget(downloadButton);
+    QVBoxLayout *downloadButtonLayout = new QVBoxLayout(downloadButtonWidget);
+    //Apliquem 1px més de layout per la línia separadora 
+    downloadButtonLayout->setContentsMargins(0, 2, 0, 1);
+    downloadButtonLayout->addWidget(downloadButton);
 
     connect(downloadButton, SIGNAL(clicked()), m_signalMapper, SLOT(map()));
     m_signalMapper->setMapping(downloadButton, study->getInstanceUID());
