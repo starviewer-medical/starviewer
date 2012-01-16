@@ -220,14 +220,13 @@ void QPreviousStudiesWidget::insertStudyToTree(Study *study)
     relatedStudyInfo->statusIcon = status;
     relatedStudyInfo->status = Initialized;
     m_infomationPerStudy.insert(study->getInstanceUID(), relatedStudyInfo);
-
 }
 
 void QPreviousStudiesWidget::highlightQTreeWidgetItem(QTreeWidgetItem *item)
 {
     for (int index = 0; index < item->columnCount(); index++)
     {
-        item->setBackground(index, QColor(195, 225, 236, 255));
+        item->setBackground(index, QColor(149, 206, 236, 255));
     }
 }
 
