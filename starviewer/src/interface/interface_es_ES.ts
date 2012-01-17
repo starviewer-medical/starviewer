@@ -6,11 +6,12 @@
     <message>
         <location filename="qconfigurationdialogbase.ui" line="86"/>
         <source>Show Advanced Options</source>
-        <translation>Mostrar Opciones Avanzadas</translation>
+        <translation>Mostrar opciones avanzadas</translation>
     </message>
     <message>
         <location filename="qconfigurationdialogbase.ui" line="109"/>
-        <source>&amp;Ok</source>
+        <source>&amp;OK</source>
+        <oldsource>&amp;Ok</oldsource>
         <translation>&amp;Aceptar</translation>
     </message>
     <message>
@@ -33,21 +34,23 @@
     <name>QObject</name>
     <message>
         <location filename="applicationcommandlineoptions.cpp" line="78"/>
-        <source>Unknown option </source>
-        <oldsource>Unknow option </oldsource>
-        <translation>Opción desconocida </translation>
+        <source>Unknown option %1</source>
+        <oldsource>Unknown option </oldsource>
+        <translation>Opción desconocida %1</translation>
     </message>
     <message>
         <location filename="applicationcommandlineoptions.cpp" line="85"/>
         <location filename="applicationcommandlineoptions.cpp" line="100"/>
         <location filename="applicationcommandlineoptions.cpp" line="115"/>
-        <source> option requires an argument</source>
-        <translation> requiere un argumento</translation>
+        <source>%1 option requires an argument</source>
+        <oldsource> option requires an argument</oldsource>
+        <translation>La opción %1 requiere un argumento</translation>
     </message>
     <message>
         <location filename="applicationcommandlineoptions.cpp" line="105"/>
-        <source>Unexpected value </source>
-        <translation>Valor inesperado </translation>
+        <source>Unexpected value %1</source>
+        <oldsource>Unexpected value </oldsource>
+        <translation>Valor inesperado %1</translation>
     </message>
     <message>
         <location filename="applicationcommandlineoptions.cpp" line="152"/>
@@ -71,12 +74,12 @@
     <message>
         <location filename="appimportfile.cpp" line="39"/>
         <source>Choose a file to open...</source>
-        <translation>Seleccionar un archivo para abrir...</translation>
+        <translation>Elija un archivo para abrir...</translation>
     </message>
     <message>
         <location filename="appimportfile.cpp" line="62"/>
         <source>Choose a directory to scan</source>
-        <translation>Escoger un directorio a explorar</translation>
+        <translation>Elija un directorio para explorar</translation>
     </message>
     <message>
         <location filename="appimportfile.cpp" line="94"/>
@@ -89,7 +92,7 @@
     <message>
         <location filename="extensionhandler.cpp" line="198"/>
         <source>Loading, please wait...</source>
-        <translation>Cargando, espere por favor...</translation>
+        <translation>Cargando, espere...</translation>
     </message>
     <message>
         <location filename="extensionhandler.cpp" line="197"/>
@@ -100,7 +103,7 @@
         <location filename="extensionhandler.cpp" line="269"/>
         <source>Sorry, an error occurred while loading the data of patients:&lt;br&gt; %1</source>
         <oldsource>Sorry, an error ocurred while loading the data of patients:&lt;br&gt; %1</oldsource>
-        <translation>Lo sentimos, ha habido algún error mientras se cargaban los datos de los pacientes:&lt;br&gt; %1</translation>
+        <translation>Ha habido un error mientras se cargaban los datos de los pacientes:&lt;br&gt; %1</translation>
     </message>
     <message>
         <location filename="extensionhandler.cpp" line="363"/>
@@ -109,7 +112,11 @@
 Do you consider they are the same?
 
 </source>
-        <translation type="unfinished"></translation>
+        <translation>No se puede determinar la similitud de los pacientes.
+
+Considera que son el mismo?
+
+</translation>
     </message>
     <message>
         <location filename="extensionhandler.cpp" line="364"/>
@@ -118,19 +125,25 @@ ID: %1
 Name: %2
 
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Paciente 1
+ID: %1
+Nombre: %2
+
+</translation>
     </message>
     <message>
         <location filename="extensionhandler.cpp" line="365"/>
         <source>Patient 2
 ID: %1
 Name: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Paciente 2
+ID: %1
+Nombre: %2</translation>
     </message>
     <message>
         <location filename="extensionhandler.cpp" line="213"/>
         <source>Sorry, it seems that there is no patient data we can load.</source>
-        <translation>Lo sentimos, pero parece no haber datos de paciente válidos que se puedan cargar.</translation>
+        <translation>Parece que no hay datos de paciente que se puedan cargar.</translation>
     </message>
 </context>
 <context>
@@ -183,7 +196,7 @@ Name: %2</source>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="403"/>
         <source>&amp;Help</source>
-        <translation>&amp;Ayuda</translation>
+        <translation>A&amp;yuda</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="389"/>
@@ -193,7 +206,7 @@ Name: %2</source>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="165"/>
         <source>Open a new working window</source>
-        <translation>Abre una nueva ventana de trabajo</translation>
+        <translation>Abrir una nueva ventana de trabajo</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="192"/>
@@ -203,7 +216,7 @@ Name: %2</source>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="194"/>
         <source>Open PACS Query Screen</source>
-        <translation>Abre el diálogo de consulta del PACS</translation>
+        <translation>Abrir el diálogo de consulta del PACS</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="379"/>
@@ -218,23 +231,23 @@ Name: %2</source>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="481"/>
         <source>Language Switch</source>
-        <translation>Cambio de Idioma</translation>
+        <translation>Cambio de idioma</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="304"/>
         <source>Close the current extension page</source>
-        <translation>Cerrar la página de extensión actual</translation>
+        <translation>Cerrar la página de la extensión actual</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="284"/>
         <location filename="qapplicationmainwindow.cpp" line="285"/>
         <source>Show log file</source>
-        <translation>Mostrar archivo de bitácora</translation>
+        <translation>Mostrar archivo de registro</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="395"/>
         <source>&amp;Window</source>
-        <translation>&amp;Ventana</translation>
+        <translation>V&amp;entana</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="226"/>
@@ -255,7 +268,7 @@ Name: %2</source>
         <location filename="qapplicationmainwindow.cpp" line="197"/>
         <source>&amp;Local Database Studies...</source>
         <oldsource>&amp;Local Database Studies</oldsource>
-        <translation>Estudios de la Base de Datos &amp;Local...</translation>
+        <translation>Estudios de la base de datos &amp;local...</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="199"/>
@@ -271,7 +284,7 @@ Name: %2</source>
         <location filename="qapplicationmainwindow.cpp" line="212"/>
         <source>Open DICOMDIR from CD, DVD, Pendrive or hard disk</source>
         <oldsource>Open DICOMDIR from CD,DVD,Pendrive or HardDisk</oldsource>
-        <translation>Abrir DICOMDIR a partir de CD, DVD, Pendrive o Disco duro</translation>
+        <translation>Abrir DICOMDIR desde CD, DVD, pendrive o disco duro</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="241"/>
@@ -281,7 +294,7 @@ Name: %2</source>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="242"/>
         <source>Maximize The Window To As Many Screens As Possible</source>
-        <translation type="unfinished">Maximiza la ventana a todas las pantallas posibles</translation>
+        <translation>Maximizar la ventana a todas las pantallas posibles</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="250"/>
@@ -292,7 +305,7 @@ Name: %2</source>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="251"/>
         <source>Move The Window To The Screen ...</source>
-        <translation>Mueve la ventana a la pantalla...</translation>
+        <translation>Mover la ventana a la pantalla...</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="269"/>
@@ -302,7 +315,7 @@ Name: %2</source>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="270"/>
         <source>Open User guide</source>
-        <translation>Abre la guía de usuario</translation>
+        <translation>Abrir la guía de usuario</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="274"/>
@@ -312,7 +325,7 @@ Name: %2</source>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="275"/>
         <source>Open Quick Start guide</source>
-        <translation>Abre la guía rápida</translation>
+        <translation>Abrir la guía rápida</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="279"/>
@@ -322,17 +335,17 @@ Name: %2</source>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="280"/>
         <source>Open Shortcuts guide</source>
-        <translation>Abre la guía de accesos rápidos</translation>
+        <translation>Abrir la guía de accesos rápidos</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="291"/>
         <source>&amp;Release notes</source>
-        <translation type="unfinished">&amp;Notas de la versión</translation>
+        <translation>&amp;Notas de la versión</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="292"/>
         <source>Show the application&apos;s release notes for current version</source>
-        <translation type="unfinished">Muestra las notas de la versión actual de la aplicación</translation>
+        <translation>Mostrar las notas de la versión actual de la aplicación</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="316"/>
@@ -342,12 +355,12 @@ Name: %2</source>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="323"/>
         <source>&amp;Run diagnosis tests</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ejecutar tests de diagnosis</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="324"/>
         <source>Run %1 diagnosis test</source>
-        <translation type="unfinished"></translation>
+        <translation>Ejecutar el test de diagnosis de %1</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="388"/>
@@ -372,34 +385,34 @@ Name: %2</source>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="448"/>
         <source>Switch to %1 Language</source>
-        <translation type="unfinished">Cambiar al lenguaje %1</translation>
+        <translation>Cambiar al idioma %1</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="595"/>
         <source>&lt;h2&gt;%1&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2005-%2 Graphics &amp; Imaging Laboratory (GILab), Girona&lt;p align=&apos;justify&apos;&gt;%1 is a basic but fully featured image review software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, CR, MG,...) fully compliant with the DICOM standard for image communication and image file formats. It can also read many other file formats specified by the MetaIO standard (*.mhd files). </source>
         <oldsource>&lt;h2&gt;%1&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2005-%2 Graphics &amp; Imaging Laboratory (GILab), Girona&lt;p align=&apos;justify&apos;&gt;%1 is a basic but fully featured image review software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, CR, MG,...) fully compliant with the DICOM standard for image communication and image file formats. It can also read many other file formats specified by the MetaIO standard (*.mhd files).</oldsource>
-        <translation>&lt;h2&gt;%1&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2005-%2 Graphics &amp; Imaging Laboratory (GILab), Girona&lt;p align=&apos;justify&apos;&gt;%1 es un programa de revisión de imagen básico pero completo dedicado a imágenes DICOM producidas por equipamiento médico (MRI, CT, PET, PET-CT, CR, MG,...) totalmente compatible con el estándar DICOM para  la comunicación de imagen y formato de archivo de imagen. También puede leer otros formatos establecidos por el estándar MetaIO (archivos *.mhd). </translation>
+        <translation>&lt;h2&gt;%1&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2005-%2 Graphics &amp; Imaging Laboratory (GILab), Girona&lt;p align=&apos;justify&apos;&gt;%1 es un programa de revisión de imagen básico pero completo dedicado a imágenes DICOM producidas por equipamiento médico (MRI, CT, PET, PET-CT, CR, MG, ...) totalmente compatible con el estándar DICOM para la comunicación de imagen y formatos de archivo de imagen. También puede leer otros formatos establecidos por el estándar MetaIO (archivos *.mhd). </translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="605"/>
         <source>%1 is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p align=&apos;justify&apos;&gt;%1 enables navigation and visualization of multimodality and multidimensional images through a complete 2D Viewer which integrates advanced reconstruction techniques such as Thick Slab (including Maximum Intensity Projection (MIP), Minimum Intensity Projection (MinIP) and average projection), fast orthogonal reconstruction and 3D navigation tools such as 3D-Cursor. It also incorporates Multi-Planar Reconstruction (MPR) and 3D Viewer for volume rendering.&lt;p align=&apos;justify&apos;&gt;%1 is at the same time a DICOM workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging and 3D imaging.</source>
         <oldsource>%1 is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p align=&apos;justify&apos;&gt;%1 has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR (Multiplanar reconstruction) Viewer, 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection(MIP).&lt;p align=&apos;justify&apos;&gt;%1 is at the same time a DICOM workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging and 3D imaging.</oldsource>
-        <translation>%1 puede recibir imágenes enviadas siguiendo el protocolo de comunicación DICOM desde cualquier PACS o equipamiento de imagen médica (STORE SCP - Service Class Provider, STORE SCU - Service Class User, y Query/Retrieve).&lt;p align=&apos;justify&apos;&gt;%1 permite la exploración y visualización de imágenes multimodalidad y multidimensionales a través de un completo visor 2D que integra técnicas avanzadas de recontrucción tales como Thick Slab (incluyendo Proyección de Máxima Intensidad (MIP), Proyección de Mínima Intensidad (MinIP) y proyección promedio), reconstrucción ortogonal rápida y herramientas de navegación tridimensionales como el Cursor 3D. También incorpora Reconstrucción Multi-Planar (MPR) y visor 3D para realizar &lt;em&gt;volume rendering&lt;/em&gt;.&lt;p align=&apos;justify&apos;&gt;%1 es una estación de trabajo DICOM para imagen médica y a la vez un software de procesamiento de imágenes para investigación médica (radiología y medicina nuclear).</translation>
+        <translation>%1 puede recibir imágenes enviadas siguiendo el protocolo de comunicación DICOM desde cualquier PACS o equipamiento de imagen médica (STORE SCP - Service Class Provider, STORE SCU - Service Class User, y Query/Retrieve).&lt;p align=&apos;justify&apos;&gt;%1 permite la exploración y visualización de imágenes multimodalidad y multidimensionales a través de un completo visor 2D que integra técnicas avanzadas de recontrucción tales como Thick Slab (incluyendo Proyección de Máxima Intensidad (MIP), Proyección de Mínima Intensidad (MinIP) y proyección promedio), reconstrucción ortogonal rápida y herramientas de navegación tridimensionales como el Cursor 3D. También incorpora Reconstrucción Multi-Planar (MPR) y visor 3D para renderización de volúmenes.&lt;p align=&apos;justify&apos;&gt;%1 es una estación de trabajo DICOM para imagen médica y a la vez un software de procesamiento de imágenes para investigación médica (radiología y medicina nuclear).</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="654"/>
         <source>Beta version</source>
-        <translation>Versión Beta</translation>
+        <translation>Versión beta</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="655"/>
         <source>&lt;h2&gt;%1&lt;/h2&gt;&lt;p align=&apos;justify&apos;&gt;This is a preview release of %1 used exclusively for testing purposes.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;This version is intended for radiologists and our test-team members. Users of this version should not expect the extensions function properly.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;If you want to help us to improve %1, please report any found bug or any feature request you may have by sending an e-mail to: &lt;a href=&quot;mailto:%2&quot;&gt;%2&lt;/a&gt;&lt;/p&gt;&lt;h3&gt;We really appreciate your feedback!&lt;/h3&gt;</source>
-        <translation>&lt;h2&gt;%1&lt;/h2&gt;&lt;p align=&apos;justify&apos;&gt;Esta es una versión preliminar de %1, que se tendría que utilizar exclusivamente con fines de testing.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;Esta versión está dirigida a los radiólogos y a nuestro equipo de pruebas. En esta versión es posible que las extensiones no funcionen correctamente.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;Si quiere ayudarnos a mejorar %1 infórmenos de cualquier error o funcionalidad que necesite, enviando un correo electrónico a: &lt;a href=&quot;mailto:%2&quot;&gt;%2.&lt;/a&gt;&lt;/p&gt;&lt;h3&gt; Agradecemos mucho su colaboración.&lt;/h3&gt;</translation>
+        <translation>&lt;h2&gt;%1&lt;/h2&gt;&lt;p align=&apos;justify&apos;&gt;Esta es una versión preliminar de %1, que se tendría que utilizar exclusivamente con fines de testeo.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;Esta versión está dirigida a los radiólogos y a nuestro equipo de pruebas. En esta versión es posible que las extensiones no funcionen correctamente.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;Si quiere ayudarnos a mejorar %1 infórmenos de cualquier error o funcionalidad que necesite, enviando un correo electrónico a: &lt;a href=&quot;mailto:%2&quot;&gt;%2.&lt;/a&gt;&lt;/p&gt;&lt;h3&gt; Agradecemos mucho su colaboración.&lt;/h3&gt;</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="726"/>
         <source>Please activate &quot;Listen RIS Request&quot; option in %1 configuration to retrieve studies from SAP.</source>
-        <translation>Por favor, active la opción &quot;Escuchar Peticiones del RIS&quot; en el panel de configuración de %1 para poder recibir estudios del SAP.</translation>
+        <translation>Active la opción &quot;Escuchar peticiones del RIS&quot; en la configuración de %1 para poder recibir estudios del SAP.</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="128"/>
@@ -409,7 +422,7 @@ Name: %2</source>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="129"/>
         <source>Loading data, please wait...</source>
-        <translation>Cargando datos, por favor espere...</translation>
+        <translation>Cargando los datos, espere...</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="188"/>
@@ -439,7 +452,7 @@ Name: %2</source>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="617"/>
         <source>&lt;p&gt;Support email: &lt;a href=&quot;mailto:%1&quot;&gt;%1&lt;/a&gt;&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;p&gt;E-mail de soporte: &lt;a href=&quot;mailto:%1&quot;&gt;%1&lt;/a&gt;&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Correo electrónico de soporte: &lt;a href=&quot;mailto:%1&quot;&gt;%1&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="618"/>
@@ -465,7 +478,7 @@ Name: %2</source>
 You can resolve this error by Tools&gt;Configuration&gt;Local Database menu.</source>
         <translation>
 
-Estos errores se pueden resolver en el menú Herramientas-&gt;Configuración-&gt;Base de datos local.</translation>
+Este error se puede resolver en el menú Herramientas-&gt;Configuración-&gt;Base de datos local.</translation>
     </message>
 </context>
 <context>
@@ -476,27 +489,27 @@ Estos errores se pueden resolver en el menú Herramientas-&gt;Configuración-&gt
         <translation>Configuración de %1</translation>
     </message>
     <message>
-        <location filename="qconfigurationdialog.cpp" line="25"/>
+        <location filename="qconfigurationdialog.cpp" line="30"/>
         <source>PACS</source>
         <translation>PACS</translation>
     </message>
     <message>
-        <location filename="qconfigurationdialog.cpp" line="32"/>
+        <location filename="qconfigurationdialog.cpp" line="37"/>
         <source>Local Database</source>
         <translation>Base de datos local</translation>
     </message>
     <message>
-        <location filename="qconfigurationdialog.cpp" line="39"/>
+        <location filename="qconfigurationdialog.cpp" line="44"/>
         <source>RIS Listener</source>
         <translation>Escuchar peticiones del RIS</translation>
     </message>
     <message>
-        <location filename="qconfigurationdialog.cpp" line="46"/>
+        <location filename="qconfigurationdialog.cpp" line="51"/>
         <source>DICOMDIR</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qconfigurationdialog.cpp" line="53"/>
+        <location filename="qconfigurationdialog.cpp" line="24"/>
         <source>2D Viewer</source>
         <translation>Visor 2D</translation>
     </message>
