@@ -10,7 +10,8 @@
     </message>
     <message>
         <location filename="qconfigurationdialogbase.ui" line="109"/>
-        <source>&amp;Ok</source>
+        <source>&amp;OK</source>
+        <oldsource>&amp;Ok</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -33,20 +34,22 @@
     <name>QObject</name>
     <message>
         <location filename="applicationcommandlineoptions.cpp" line="78"/>
-        <source>Unknown option </source>
-        <oldsource>Unknow option </oldsource>
+        <source>Unknown option %1</source>
+        <oldsource>Unknown option </oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="applicationcommandlineoptions.cpp" line="85"/>
         <location filename="applicationcommandlineoptions.cpp" line="100"/>
         <location filename="applicationcommandlineoptions.cpp" line="115"/>
-        <source> option requires an argument</source>
+        <source>%1 option requires an argument</source>
+        <oldsource> option requires an argument</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="applicationcommandlineoptions.cpp" line="105"/>
-        <source>Unexpected value </source>
+        <source>Unexpected value %1</source>
+        <oldsource>Unexpected value </oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -473,27 +476,27 @@ You can resolve this error by Tools&gt;Configuration&gt;Local Database menu.</so
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationdialog.cpp" line="25"/>
+        <location filename="qconfigurationdialog.cpp" line="30"/>
         <source>PACS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationdialog.cpp" line="32"/>
+        <location filename="qconfigurationdialog.cpp" line="37"/>
         <source>Local Database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationdialog.cpp" line="39"/>
+        <location filename="qconfigurationdialog.cpp" line="44"/>
         <source>RIS Listener</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationdialog.cpp" line="46"/>
+        <location filename="qconfigurationdialog.cpp" line="51"/>
         <source>DICOMDIR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationdialog.cpp" line="53"/>
+        <location filename="qconfigurationdialog.cpp" line="24"/>
         <source>2D Viewer</source>
         <translation type="unfinished"></translation>
     </message>
