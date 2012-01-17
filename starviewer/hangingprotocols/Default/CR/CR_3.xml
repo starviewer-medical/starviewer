@@ -3,6 +3,7 @@
     <hangingProtocolName>CR 3</hangingProtocolName>
     <priority>0</priority>
     <protocol>CR</protocol>
+    <iconType>CR</iconType>
     <imageSet identifier="1">
         <type>image</type>
         <imageNumberInPatientModality>0</imageNumberInPatientModality>
