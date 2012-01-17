@@ -18,41 +18,17 @@ GridIcon::GridIcon(QWidget *parent, const QString &iconType)
     m_label->setFrameShape(QFrame::StyledPanel);
     QPixmap pixmap;
 
+    QString path;
     if (!iconType.isEmpty())
     {
-        if (iconType == "COR")
-        {
-            pixmap.load(QString::fromUtf8(":/images/coronal.png"));
-        }
-        else if (iconType == "SAG")
-        {
-            pixmap.load(QString::fromUtf8(":/images/sagital.png"));
-        }
-        else if (iconType == "ECO")
-        {
-            pixmap.load(QString::fromUtf8(":/images/eco.png"));
-        }
-        else if (iconType == "MLO_R")
-        {
-            pixmap.load(QString::fromUtf8(":/images/MLO_R.png"));
-        }
-        else if (iconType == "MLO_L")
-        {
-            pixmap.load(QString::fromUtf8(":/images/MLO_L.png"));
-        }
-        else if (iconType == "CC_R")
-        {
-            pixmap.load(QString::fromUtf8(":/images/CC_R.png"));
-        }
-        else if (iconType == "CC_L")
-        {
-            pixmap.load(QString::fromUtf8(":/images/CC_L.png"));
-        }
+        path = QString::fromUtf8(":/images/") + iconType + ".png";
     }
     else
     {
-        pixmap.load(QString::fromUtf8(":/images/axial.png"));
+        path = QString::fromUtf8(":/images/axial.png");
     }
+    
+    pixmap.load(path);
 
     m_label->setPixmap(pixmap);
     gridLayout->addWidget(m_label, 0, 0, 1, 1);

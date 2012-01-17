@@ -2,7 +2,7 @@
 <hangingProtocol name="Ecography_8">
     <hangingProtocolName>ECO 8</hangingProtocolName>
     <numberScreens>1</numberScreens>
-    <iconType>ECO</iconType>
+    <iconType>eco</iconType>
     <protocol>US</protocol>
     <imageSet identifier="1">
         <type>image</type>
