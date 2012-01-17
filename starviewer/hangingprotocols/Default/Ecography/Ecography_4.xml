@@ -3,7 +3,7 @@
     <hangingProtocolName>ECO 4</hangingProtocolName>
     <numberScreens>1</numberScreens>
     <protocol>US</protocol>
-    <iconType>ECO</iconType>
+    <iconType>eco</iconType>
     <imageSet identifier="1">
         <type>image</type>
         <imageNumberInPatientModality>0</imageNumberInPatientModality>

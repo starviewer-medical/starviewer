@@ -4,7 +4,7 @@
     <numberScreens>1</numberScreens>
     <priority>0</priority>
     <protocol>US</protocol>
-    <iconType>ECO</iconType>
+    <iconType>eco</iconType>
     <imageSet identifier="1">
         <type>image</type>
         <imageNumberInPatientModality>24</imageNumberInPatientModality>

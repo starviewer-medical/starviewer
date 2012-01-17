@@ -67,13 +67,13 @@
         <imageSetNumber>1</imageSetNumber>
         <position>0.0\0.5\0.25\0.0</position>
         <reconstruction>CORONAL</reconstruction>
-        <iconType>COR</iconType>
+        <iconType>coronal</iconType>
     </displaySet>
     <displaySet identifier="6">
         <imageSetNumber>1</imageSetNumber>
         <position>0.25\0.5\0.5\0.0</position>
         <reconstruction>SAGITAL</reconstruction>
-        <iconType>SAG</iconType>
+        <iconType>sagital</iconType>
     </displaySet>
     <displaySet identifier="7">
         <imageSetNumber>2</imageSetNumber>
