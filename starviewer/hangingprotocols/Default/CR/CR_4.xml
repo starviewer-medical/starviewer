@@ -3,6 +3,7 @@
     <hangingProtocolName>CR 4</hangingProtocolName>
     <numberScreens>1</numberScreens>
     <protocol>CR</protocol>
+    <iconType>CR</iconType>
     <imageSet identifier="1">
         <type>image</type>
         <imageNumberInPatientModality>0</imageNumberInPatientModality>

@@ -4,6 +4,7 @@
 	<numberScreens>1</numberScreens>
 	<strictness>yes</strictness>
 	<protocol>RF</protocol>
+    <iconType>RF</iconType>
 	<imageSet identifier="1">
 		<type>image</type>
 		<imageNumberInPatientModality>0</imageNumberInPatientModality>

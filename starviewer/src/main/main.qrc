@@ -141,5 +141,7 @@
     <file>images/circleTool.png</file>
     <file>images/perpendicularDistance.png</file>
     <file>images/magnify.png</file>
+    <file>images/CR.png</file>
+    <file>images/RF.png</file>
   </qresource>
 </RCC>

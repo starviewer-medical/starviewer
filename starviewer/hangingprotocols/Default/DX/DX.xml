@@ -8,6 +8,7 @@
     <hangingProtocolName>DX</hangingProtocolName>
     <numberScreens>1</numberScreens>
     <protocol>DX</protocol>
+    <iconType>CR</iconType>
     <imageSet identifier="1">
         <type>image</type>
         <imageNumberInPatientModality>0</imageNumberInPatientModality>

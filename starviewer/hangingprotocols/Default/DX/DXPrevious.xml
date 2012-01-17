@@ -4,6 +4,7 @@
     <numberScreens>1</numberScreens>
     <allDifferent>yes</allDifferent>
     <protocol>DX</protocol>
+    <iconType>CR</iconType>
     <restriction identifier="1">
         <usageFlag>MATCH</usageFlag>
         <selectorAttribute>Anterior</selectorAttribute>

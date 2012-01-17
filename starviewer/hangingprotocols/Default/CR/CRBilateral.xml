@@ -3,6 +3,7 @@
     <hangingProtocolName>Bilater.</hangingProtocolName>
     <numberScreens>1</numberScreens>
     <protocol>CR</protocol>
+    <iconType>CR</iconType>
     <restriction identifier="1">
         <usageFlag>MATCH</usageFlag>
         <selectorAttribute>Laterality</selectorAttribute>
