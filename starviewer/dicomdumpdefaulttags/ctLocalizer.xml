@@ -101,5 +101,9 @@
             <group>0020</group>
             <element>0013</element>
         </tag>
+        <tag>
+          <group>0008</group>
+          <element>1070</element>
+        </tag>
     </tagsToShow>
 </DICOMDumpDefaultTags>

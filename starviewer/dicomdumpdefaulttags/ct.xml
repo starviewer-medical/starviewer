@@ -123,6 +123,10 @@
             <group>0008</group>
             <element>0008</element>
         </tag>
+        <tag>
+          <group>0008</group>
+          <element>1070</element>
+        </tag>
         <!-- Series info -->
         <tag>
             <group>0018</group>
