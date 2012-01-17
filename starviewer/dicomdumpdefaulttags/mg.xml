@@ -78,6 +78,10 @@
             <group>0018</group>
             <element>1020</element>
         </tag>
+        <tag>
+          <group>0008</group>
+          <element>1070</element>
+        </tag>
         <!-- X-Ray acquisition dose information -->
         <tag>
             <group>0018</group>
