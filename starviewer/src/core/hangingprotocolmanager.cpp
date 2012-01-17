@@ -735,7 +735,7 @@ Image* HangingProtocolManager::getImageByIndexInPatientModality(Patient *patient
     QList<Image*> allImagesInStudy;
 
     // TODO Es podria millorar amb una cerca fins a la imatge que està a l'índex, envers d'un recorregut agafant-les totes
-    foreach (Study *study, patient->getStudies())
+    foreach (Study *study, sortStudiesByDate(patient->getStudies()))
     {
         foreach (Series *series, study->getSeries())
         {
