@@ -14,7 +14,7 @@
         <translation>Previsualización no disponible</translation>
     </message>
     <message>
-        <location filename="coresettings.cpp" line="101"/>
+        <location filename="coresettings.cpp" line="103"/>
         <source>PNG (*.png)</source>
         <translation></translation>
     </message>
@@ -191,7 +191,7 @@
 <context>
     <name>udg::AngleTool</name>
     <message>
-        <location filename="angletool.cpp" line="332"/>
+        <location filename="angletool.cpp" line="259"/>
         <source>%1 degrees</source>
         <translation>%1 grados</translation>
     </message>
@@ -266,7 +266,7 @@
     </message>
     <message>
         <location filename="applicationversiontest.cpp" line="55"/>
-        <source>New versions available</source>
+        <source>%1 is updated to the last version</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -286,8 +286,13 @@
 <context>
     <name>udg::FirewallAccessTest</name>
     <message>
-        <location filename="firewallaccesstest.cpp" line="48"/>
-        <source>Firewall allow %1 connections</source>
+        <location filename="firewallaccesstest.cpp" line="34"/>
+        <source>Add %1 to the list of allowed applications through firewall</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="firewallaccesstest.cpp" line="51"/>
+        <source>%1 has access through firewall</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -308,17 +313,17 @@
 <context>
     <name>udg::NonClosedAngleTool</name>
     <message>
-        <location filename="nonclosedangletool.cpp" line="310"/>
+        <location filename="nonclosedangletool.cpp" line="312"/>
         <source>%1 degrees</source>
         <translation>%1 grados</translation>
     </message>
     <message>
-        <location filename="nonclosedangletool.cpp" line="301"/>
+        <location filename="nonclosedangletool.cpp" line="303"/>
         <source>0.0 degrees</source>
         <translation>0.0 grados</translation>
     </message>
     <message>
-        <location filename="nonclosedangletool.cpp" line="306"/>
+        <location filename="nonclosedangletool.cpp" line="308"/>
         <source>Skew lines</source>
         <oldsource>Skew lines.</oldsource>
         <translation>Líneas cruzadas</translation>
@@ -351,13 +356,13 @@
 <context>
     <name>udg::PerpendicularDistanceTool</name>
     <message>
-        <location filename="perpendiculardistancetool.cpp" line="273"/>
+        <location filename="perpendiculardistancetool.cpp" line="275"/>
         <source>%1 px</source>
         <translation>%1 px</translation>
     </message>
     <message>
-        <location filename="perpendiculardistancetool.cpp" line="291"/>
-        <location filename="perpendiculardistancetool.cpp" line="298"/>
+        <location filename="perpendiculardistancetool.cpp" line="293"/>
+        <location filename="perpendiculardistancetool.cpp" line="300"/>
         <source>%1 mm</source>
         <translation>%1 mm</translation>
     </message>
@@ -451,109 +456,116 @@ Acc:%6
     </message>
     <message>
         <location filename="q2dviewerconfigurationscreenbase.ui" line="67"/>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="259"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="93"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="285"/>
         <source>MR</source>
         <translation></translation>
     </message>
     <message>
         <location filename="q2dviewerconfigurationscreenbase.ui" line="77"/>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="181"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="103"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="207"/>
         <source>CT</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="104"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="87"/>
+        <source>Automatic Synchronization by default for these modalities</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="130"/>
         <source>Zoom by default for these modalities</source>
         <oldsource>Zoom tool enabled by default for these modalities</oldsource>
         <translation>Activar Zoom por defecto para estas modalidades</translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="113"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="139"/>
         <source>CR</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="126"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="152"/>
         <source>ES</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="139"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="165"/>
         <source>NM</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="152"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="178"/>
         <source>RF</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="165"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="191"/>
         <source>XA</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="194"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="220"/>
         <source>MG</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="207"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="233"/>
         <source>OP</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="220"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="246"/>
         <source>SC</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="233"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="259"/>
         <source>XC</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="246"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="272"/>
         <source>DX</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="272"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="298"/>
         <source>PT</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="285"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="311"/>
         <source>US</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="315"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="341"/>
         <source>Magnifying Glass tool zoom factor</source>
         <translation>Factor de ampliación de la lupa</translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="321"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="347"/>
         <source>1.5x</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="328"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="354"/>
         <source>2x</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="335"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="361"/>
         <source>4x</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="342"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="368"/>
         <source>6x</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="349"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="375"/>
         <source>8x</source>
         <translation></translation>
     </message>
@@ -1136,7 +1148,6 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
     <message>
         <location filename="systemrequerimentstest.cpp" line="54"/>
         <location filename="systemrequerimentstest.cpp" line="74"/>
-        <location filename="systemrequerimentstest.cpp" line="82"/>
         <source>Update computer&apos;s hardware</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1146,124 +1157,119 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="81"/>
-        <source>The level 2 cache size of the CPU is %1 and the minimum required is %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemrequerimentstest.cpp" line="91"/>
+        <location filename="systemrequerimentstest.cpp" line="83"/>
         <source>Current openGL version is %1 and the minimum required is %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="93"/>
-        <location filename="systemrequerimentstest.cpp" line="108"/>
+        <location filename="systemrequerimentstest.cpp" line="85"/>
+        <location filename="systemrequerimentstest.cpp" line="100"/>
         <source>Update your graphics card driver</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="104"/>
+        <location filename="systemrequerimentstest.cpp" line="96"/>
         <source>Current openGL version does not support %1 extension</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="126"/>
+        <location filename="systemrequerimentstest.cpp" line="118"/>
         <source>The graphics card %1 has %2Mb of RAM and the minimum required is %3Mb</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="127"/>
+        <location filename="systemrequerimentstest.cpp" line="119"/>
         <source>Change the graphics card</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="135"/>
+        <location filename="systemrequerimentstest.cpp" line="127"/>
         <source>There is not enough disk space to run starviewer properly.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="136"/>
+        <location filename="systemrequerimentstest.cpp" line="128"/>
         <source>Free some space in the hard disk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="143"/>
+        <location filename="systemrequerimentstest.cpp" line="135"/>
         <source>Operating system is not 64 bit architecture.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="144"/>
+        <location filename="systemrequerimentstest.cpp" line="136"/>
         <source>Update operating system to a 64 bit version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="158"/>
+        <location filename="systemrequerimentstest.cpp" line="150"/>
         <source>Current Operative System version is %1 and the minimum required is %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="159"/>
+        <location filename="systemrequerimentstest.cpp" line="151"/>
         <source>Update operating system to a newer version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="168"/>
+        <location filename="systemrequerimentstest.cpp" line="160"/>
         <source>Current Service Pack version is %1 and the minimum required is Service Pack %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="169"/>
+        <location filename="systemrequerimentstest.cpp" line="161"/>
         <source>Install a newer service pack</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="188"/>
+        <location filename="systemrequerimentstest.cpp" line="180"/>
         <source>The total amount of RAM memory is %1 and the minimum required is %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="189"/>
+        <location filename="systemrequerimentstest.cpp" line="181"/>
         <source>Add more RAM memory to the computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="216"/>
+        <location filename="systemrequerimentstest.cpp" line="208"/>
         <source>One of the screens is too small. Keep in mind that Starviewer won&apos;t fit in that screen.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="217"/>
+        <location filename="systemrequerimentstest.cpp" line="209"/>
         <source>Don&apos;t move Starviewer to screen/s %1, or change to a higher resolution</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="225"/>
+        <location filename="systemrequerimentstest.cpp" line="217"/>
         <source>Change to a higher resolution</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="228"/>
+        <location filename="systemrequerimentstest.cpp" line="220"/>
         <source>The screen is too small to fit Starviewer application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="232"/>
+        <location filename="systemrequerimentstest.cpp" line="224"/>
         <source>The screens are too small to fit Starviewer application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="243"/>
+        <location filename="systemrequerimentstest.cpp" line="235"/>
         <source>The optical drive is not capable of writing.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="244"/>
+        <location filename="systemrequerimentstest.cpp" line="236"/>
         <source>Change the optical drive to a CD-RW/DVD-RW</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="257"/>
-        <source>system requeriments</source>
+        <location filename="systemrequerimentstest.cpp" line="249"/>
+        <source>Hardware meets %1&apos;s minimum system requeriments</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1436,7 +1442,8 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
     <message>
         <location filename="toolregistry.cpp" line="384"/>
         <source>Auto</source>
-        <translation>Automático</translation>
+        <oldsource>Auto-Sync</oldsource>
+        <translation type="unfinished">Automático</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="387"/>
@@ -1465,13 +1472,18 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="408"/>
+        <source>TA-GT</source>
+        <translation></translation>
+    </message>
+    <message>
         <source>Perpendicular Distance</source>
-        <translation>Distancia perpendicular</translation>
+        <translation type="obsolete">Distancia perpendicular</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="411"/>
-        <source>Enable/disable perpendicular distance tool</source>
-        <translation>Activar/desactivar la herramienta de distancia perpendicular</translation>
+        <source>Enable/disable TA-GT distance tool</source>
+        <oldsource>Enable/disable perpendicular distance tool</oldsource>
+        <translation>Activar/desactivar la herramienta de distancia TA-GT</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="440"/>
