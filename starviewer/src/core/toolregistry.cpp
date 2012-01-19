@@ -399,7 +399,6 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
     {
         toolAction->setText(tr("Circle"));
         toolAction->setIcon(QIcon(":/images/circleTool.png"));
-        //toolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::CircleTool));
         statusTip = tr("Enable/Disable Circle tool");
         toolTip = toolAction->text();
     }
@@ -407,7 +406,6 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
     {
         toolAction->setText(tr("TA-GT"));
         toolAction->setIcon(QIcon(":/images/perpendicularDistance.png"));
-        //toolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::PerpendicularDistanceTool));
         statusTip = tr("Enable/disable TA-GT distance tool");
         toolTip = toolAction->text();
     }
