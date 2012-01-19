@@ -405,10 +405,10 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
     }
     else if (toolName == "PerpendicularDistanceTool")
     {
-        toolAction->setText(tr("Perpendicular Distance"));
+        toolAction->setText(tr("TA-GT"));
         toolAction->setIcon(QIcon(":/images/perpendicularDistance.png"));
         //toolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::PerpendicularDistanceTool));
-        statusTip = tr("Enable/disable perpendicular distance tool");
+        statusTip = tr("Enable/disable TA-GT distance tool");
         toolTip = toolAction->text();
     }
     else
