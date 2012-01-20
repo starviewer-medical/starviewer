@@ -340,7 +340,7 @@ void QLocalDatabaseConfigurationScreen::compactCache()
     }
     else
     {
-        QMessageBox::information(this, ApplicationNameString, tr("Starviewer database has been compacted successfully.");
+        QMessageBox::information(this, ApplicationNameString, tr("Starviewer database has been compacted successfully."));
     }
 }
 
