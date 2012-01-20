@@ -62,6 +62,10 @@ void Q2DViewerConfigurationScreen::initializeModalitiesWithZoomByDefault()
     }
     if (modalitiesWithZoomList.contains("NM"))
     {
+        m_zoomNMCheckBox->setChecked(true);
+    }
+    if (modalitiesWithZoomList.contains("OP"))
+    {
         m_zoomOPCheckBox->setChecked(true);
     }
     if (modalitiesWithZoomList.contains("PT"))
