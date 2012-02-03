@@ -190,7 +190,19 @@ void SynchronizeTool::applySliceChanges()
             int slices = qRound(sliceIncrement);
             m_roundLostSpacingBetweenSlices = sliceIncrement - slices;
             disconnect(m_viewer, SIGNAL(sliceChanged(int)), this, SLOT(setIncrement(int)));
-            m_q2dviewer->setSlice(m_lastSlice + slices);
+
+            int nextSlice = m_lastSlice + slices;
+            if ( nextSlice > m_q2dviewer->getMaximumSlice()) // Fixem a la última llesca per si hi ha l'slicinc cíclic activat
+            {
+                nextSlice = m_q2dviewer->getMaximumSlice();
+            }
+            else if ( nextSlice < 0 ) // Fixem a la primera llesca per si hi ha l'slicinc cíclic activat
+            {
+                nextSlice = 0;
+            }
+
+            m_q2dviewer->setSlice(nextSlice);
+
             m_lastSlice += slices;
             connect(m_viewer, SIGNAL(sliceChanged(int)), SLOT(setIncrement(int)));
         }
