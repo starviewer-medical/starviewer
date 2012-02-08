@@ -55,13 +55,17 @@ void PerpendicularDistanceTool::handleEvent(unsigned long eventId)
             }
             break;
         case vtkCommand::MouseMoveEvent:
-            if (m_state == DrawingFirstLine)
+            if (m_state == DrawingReferenceLine)
             {
-                updateFirstLineAndRender();
+                updateReferenceLineAndRender();
             }
-            else if (m_state == DrawingDistanceLine)
+            else if (m_state == DrawingFirstPerpendicularLine)
             {
-                updateDistanceLineAndRender();
+                updateFirstPerpendicularLineAndRender();
+            }
+            else if (m_state == DrawingSecondPerpendicularLine)
+            {
+                updateSecondPerpendicularLineAndRender();
             }
             break;
         case vtkCommand::KeyPressEvent:
@@ -81,12 +85,14 @@ void PerpendicularDistanceTool::handleClick()
         case NotDrawing:
             addFirstPoint();
             break;
-        case DrawingFirstLine:
+        case DrawingReferenceLine:
             addSecondPoint();
             break;
-        case DrawingDistanceLine:
+        case DrawingFirstPerpendicularLine:
             addThirdPoint();
             break;
+        case DrawingSecondPerpendicularLine:
+            addFourthPoint();
     }
 }
 
@@ -94,86 +100,114 @@ void PerpendicularDistanceTool::addFirstPoint()
 {
     Q_ASSERT(m_state == NotDrawing);
 
-    if (!m_firstLine)
+    if (!m_referenceLine)
     {
-        m_firstLine = new DrawerLine();
+        m_referenceLine = new DrawerLine();
         // Així evitem que durant l'edició la primitiva pugui ser esborrada per esdeveniments externs
-        m_firstLine->increaseReferenceCount();
+        m_referenceLine->increaseReferenceCount();
     }
 
     double clickedWorldPoint[3];
     m_2DViewer->getEventWorldCoordinate(clickedWorldPoint);
 
     // Afegim el punt
-    m_firstLine->setFirstPoint(clickedWorldPoint);
-    m_firstLine->setSecondPoint(clickedWorldPoint);
-    m_firstLine->update();
+    m_referenceLine->setFirstPoint(clickedWorldPoint);
+    m_referenceLine->setSecondPoint(clickedWorldPoint);
+    m_referenceLine->update();
 
-    m_2DViewer->getDrawer()->draw(m_firstLine);
+    m_2DViewer->getDrawer()->draw(m_referenceLine);
 
-    m_state = DrawingFirstLine;
+    m_state = DrawingReferenceLine;
 }
 
 void PerpendicularDistanceTool::addSecondPoint()
 {
-    Q_ASSERT(m_state == DrawingFirstLine);
+    Q_ASSERT(m_state == DrawingReferenceLine);
 
-    updateFirstLine();
+    updateReferenceLine();
 
-    if (!m_distanceLine)
+    if (!m_firstPerpendicularLine)
     {
-        m_distanceLine = new DrawerLine();
+        m_firstPerpendicularLine = new DrawerLine();
         // Així evitem que durant l'edició la primitiva pugui ser esborrada per esdeveniments externs
-        m_distanceLine->increaseReferenceCount();
+        m_firstPerpendicularLine->increaseReferenceCount();
     }
 
     double clickedWorldPoint[3];
     m_2DViewer->getEventWorldCoordinate(clickedWorldPoint);
-    m_distanceLine->setFirstPoint(clickedWorldPoint);
-    m_distanceLine->setSecondPoint(clickedWorldPoint);
-    m_distanceLine->update();
+    m_firstPerpendicularLine->setFirstPoint(clickedWorldPoint);
+    m_firstPerpendicularLine->setSecondPoint(clickedWorldPoint);
+    m_firstPerpendicularLine->update();
 
-    m_2DViewer->getDrawer()->draw(m_distanceLine);
+    m_2DViewer->getDrawer()->draw(m_firstPerpendicularLine);
 
-    m_state = DrawingDistanceLine;
+    m_state = DrawingFirstPerpendicularLine;
 }
 
 void PerpendicularDistanceTool::addThirdPoint()
 {
-    Q_ASSERT(m_state == DrawingDistanceLine);
+    Q_ASSERT(m_state == DrawingFirstPerpendicularLine);
 
-    updateDistanceLine();
+    updateFirstPerpendicularLine();
+
+    if (!m_secondPerpendicularLine)
+    {
+        m_secondPerpendicularLine = new DrawerLine();
+        // Així evitem que durant l'edició la primitiva pugui ser esborrada per esdeveniments externs
+        m_secondPerpendicularLine->increaseReferenceCount();
+    }
+
+    double clickedWorldPoint[3];
+    m_2DViewer->getEventWorldCoordinate(clickedWorldPoint);
+    m_secondPerpendicularLine->setFirstPoint(clickedWorldPoint);
+    m_secondPerpendicularLine->setSecondPoint(clickedWorldPoint);
+    m_secondPerpendicularLine->update();
+
+    m_2DViewer->getDrawer()->draw(m_secondPerpendicularLine);
+
+    m_state = DrawingSecondPerpendicularLine;
+}
+
+void PerpendicularDistanceTool::addFourthPoint()
+{
+    Q_ASSERT(m_state == DrawingSecondPerpendicularLine);
+
+    updateSecondPerpendicularLine();
 
     // Movem les línies al pla corresponent
-    m_firstLine->decreaseReferenceCount();
-    m_distanceLine->decreaseReferenceCount();
-    m_2DViewer->getDrawer()->erasePrimitive(m_firstLine);
-    m_2DViewer->getDrawer()->erasePrimitive(m_distanceLine);
-    m_2DViewer->getDrawer()->draw(m_distanceLine, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
-    m_2DViewer->getDrawer()->draw(m_firstLine, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+    m_referenceLine->decreaseReferenceCount();
+    m_firstPerpendicularLine->decreaseReferenceCount();
+    m_secondPerpendicularLine->decreaseReferenceCount();
+    m_2DViewer->getDrawer()->erasePrimitive(m_referenceLine);
+    m_2DViewer->getDrawer()->erasePrimitive(m_firstPerpendicularLine);
+    m_2DViewer->getDrawer()->erasePrimitive(m_secondPerpendicularLine);
+    m_2DViewer->getDrawer()->draw(m_firstPerpendicularLine, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+    m_2DViewer->getDrawer()->draw(m_secondPerpendicularLine, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+    m_2DViewer->getDrawer()->draw(m_referenceLine, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
 
     // Calculem i dibuxem la distància
     drawDistance();
 
-    m_firstLine = 0;
-    m_distanceLine = 0;
+    m_referenceLine = 0;
+    m_firstPerpendicularLine = 0;
+    m_secondPerpendicularLine = 0;
 
     m_state = NotDrawing;
 }
 
-void PerpendicularDistanceTool::updateFirstLine()
+void PerpendicularDistanceTool::updateReferenceLine()
 {
-    Q_ASSERT(m_state == DrawingFirstLine);
+    Q_ASSERT(m_state == DrawingReferenceLine);
 
     double mouseWorldPoint[3];
     m_2DViewer->getEventWorldCoordinate(mouseWorldPoint);
-    m_firstLine->setSecondPoint(mouseWorldPoint);
-    m_firstLine->update();
+    m_referenceLine->setSecondPoint(mouseWorldPoint);
+    m_referenceLine->update();
 }
 
-void PerpendicularDistanceTool::updateDistanceLine()
+void PerpendicularDistanceTool::updateFirstPerpendicularLine()
 {
-    Q_ASSERT(m_state == DrawingDistanceLine);
+    Q_ASSERT(m_state == DrawingFirstPerpendicularLine);
 
     equalizeDepth();
 
@@ -181,55 +215,103 @@ void PerpendicularDistanceTool::updateDistanceLine()
     double mouseWorldPoint[3];
     m_2DViewer->getEventWorldCoordinate(mouseWorldPoint);
 
-    // Obtenim el punt de la primera línia més proper a la posició del ratolí i també la distància
-    // Serà el primer punt de la línia de distància
-    double distanceLineFirstPoint[3];
+    // Obtenim el punt de la línia de referència més proper a la posició del ratolí i també la distància
+    // Serà el primer punt de la primera línia perpendicular
+    double firstPerpendicularLineFirstPoint[3];
     double distance;
-    distance = MathTools::getPointToFiniteLineDistance(mouseWorldPoint, m_firstLine->getFirstPoint(), m_firstLine->getSecondPoint(), distanceLineFirstPoint);
+    distance = MathTools::getPointToFiniteLineDistance(mouseWorldPoint, m_referenceLine->getFirstPoint(), m_referenceLine->getSecondPoint(),
+                                                       firstPerpendicularLineFirstPoint);
 
-    // Calculem una línia perpendicular a la primera línia que passi pel punt obtingut al pas anterior
-    QVector3D firstLineFirstPoint(m_firstLine->getFirstPoint()[0], m_firstLine->getFirstPoint()[1], m_firstLine->getFirstPoint()[2]);
-    QVector3D firstLineSecondPoint(m_firstLine->getSecondPoint()[0], m_firstLine->getSecondPoint()[1], m_firstLine->getSecondPoint()[2]);
-    QVector3D firstLineDirectorVector = MathTools::directorVector(firstLineFirstPoint, firstLineSecondPoint);
-    double aFirstLineDirectorVector[3] = { firstLineDirectorVector.x(), firstLineDirectorVector.y(), firstLineDirectorVector.z() };
+    // Calculem una línia perpendicular a la línia de referència que passi pel punt obtingut al pas anterior
+    QVector3D referenceLineFirstPoint(m_referenceLine->getFirstPoint()[0], m_referenceLine->getFirstPoint()[1], m_referenceLine->getFirstPoint()[2]);
+    QVector3D referenceLineSecondPoint(m_referenceLine->getSecondPoint()[0], m_referenceLine->getSecondPoint()[1], m_referenceLine->getSecondPoint()[2]);
+    QVector3D referenceLineDirectorVector = MathTools::directorVector(referenceLineFirstPoint, referenceLineSecondPoint);
+    double aReferenceLineDirectorVector[3] = { referenceLineDirectorVector.x(), referenceLineDirectorVector.y(), referenceLineDirectorVector.z() };
     int xIndex, yIndex, zIndex;
     Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
     double aAuxiliarLineDirectorVector[3];
-    aAuxiliarLineDirectorVector[xIndex] = aFirstLineDirectorVector[yIndex];
-    aAuxiliarLineDirectorVector[yIndex] = -aFirstLineDirectorVector[xIndex];
-    aAuxiliarLineDirectorVector[zIndex] = aFirstLineDirectorVector[zIndex];
-    double aAuxiliarLineFirstPoint[3] = { distanceLineFirstPoint[0] + distance * aAuxiliarLineDirectorVector[0],
-                                          distanceLineFirstPoint[1] + distance * aAuxiliarLineDirectorVector[1],
-                                          distanceLineFirstPoint[2] + distance * aAuxiliarLineDirectorVector[2] };
-    double aAuxiliarLineSecondPoint[3] = { distanceLineFirstPoint[0] - distance * aAuxiliarLineDirectorVector[0],
-                                           distanceLineFirstPoint[1] - distance * aAuxiliarLineDirectorVector[1],
-                                           distanceLineFirstPoint[2] - distance * aAuxiliarLineDirectorVector[2] };
+    aAuxiliarLineDirectorVector[xIndex] = aReferenceLineDirectorVector[yIndex];
+    aAuxiliarLineDirectorVector[yIndex] = -aReferenceLineDirectorVector[xIndex];
+    aAuxiliarLineDirectorVector[zIndex] = aReferenceLineDirectorVector[zIndex];
+    double aAuxiliarLineFirstPoint[3] = { firstPerpendicularLineFirstPoint[0] + distance * aAuxiliarLineDirectorVector[0],
+                                          firstPerpendicularLineFirstPoint[1] + distance * aAuxiliarLineDirectorVector[1],
+                                          firstPerpendicularLineFirstPoint[2] + distance * aAuxiliarLineDirectorVector[2] };
+    double aAuxiliarLineSecondPoint[3] = { firstPerpendicularLineFirstPoint[0] - distance * aAuxiliarLineDirectorVector[0],
+                                           firstPerpendicularLineFirstPoint[1] - distance * aAuxiliarLineDirectorVector[1],
+                                           firstPerpendicularLineFirstPoint[2] - distance * aAuxiliarLineDirectorVector[2] };
 
     // Obtenim el punt de la línia auxiliar més proper a la posició del ratolí
-    // Serà el segon punt de la línia de distància
-    double distanceLineSecondPoint[3];
-    MathTools::getPointToFiniteLineDistance(mouseWorldPoint, aAuxiliarLineFirstPoint, aAuxiliarLineSecondPoint, distanceLineSecondPoint);
+    // Serà el segon punt de la primera línia perpendicular
+    double firstPerpendicularLineSecondPoint[3];
+    MathTools::getPointToFiniteLineDistance(mouseWorldPoint, aAuxiliarLineFirstPoint, aAuxiliarLineSecondPoint, firstPerpendicularLineSecondPoint);
 
-    // Assignem els punts calculats a la línia de distància
-    m_distanceLine->setFirstPoint(distanceLineFirstPoint);
-    m_distanceLine->setSecondPoint(distanceLineSecondPoint);
-    m_distanceLine->update();
+    // Assignem els punts calculats a la primera línia perpendicular
+    m_firstPerpendicularLine->setFirstPoint(firstPerpendicularLineFirstPoint);
+    m_firstPerpendicularLine->setSecondPoint(firstPerpendicularLineSecondPoint);
+    m_firstPerpendicularLine->update();
 }
 
-void PerpendicularDistanceTool::updateFirstLineAndRender()
+void PerpendicularDistanceTool::updateSecondPerpendicularLine()
 {
-    updateFirstLine();
+    Q_ASSERT(m_state == DrawingSecondPerpendicularLine);
+
+    equalizeDepth();
+
+    // Obtenim la posició del ratolí
+    double mouseWorldPoint[3];
+    m_2DViewer->getEventWorldCoordinate(mouseWorldPoint);
+
+    // Obtenim el punt de la línia de referència més proper a la posició del ratolí
+    // Serà el primer punt de la segona línia perpendicular
+    double secondPerpendicularLineFirstPoint[3];
+    MathTools::getPointToFiniteLineDistance(mouseWorldPoint, m_referenceLine->getFirstPoint(), m_referenceLine->getSecondPoint(),
+                                            secondPerpendicularLineFirstPoint);
+
+    // Calculem la longitud i el vector director de la primera línia perpendicular per fer que la segona sigui igual
+    QVector3D firstPerpendicularLineFirstPoint(m_firstPerpendicularLine->getFirstPoint()[0],
+                                               m_firstPerpendicularLine->getFirstPoint()[1],
+                                               m_firstPerpendicularLine->getFirstPoint()[2]);
+    QVector3D firstPerpendicularLineSecondPoint(m_firstPerpendicularLine->getSecondPoint()[0],
+                                                m_firstPerpendicularLine->getSecondPoint()[1],
+                                                m_firstPerpendicularLine->getSecondPoint()[2]);
+    // No fem servir el mètode de MathTools perquè volem el vector que va del primer punt al segon, i MathTools no assegura que sigui sempre així.
+    QVector3D firstPerpendicularLineDirectorVector = firstPerpendicularLineSecondPoint - firstPerpendicularLineFirstPoint;
+    double length = firstPerpendicularLineDirectorVector.length();
+    firstPerpendicularLineDirectorVector.normalize();
+
+    // Calculem el segon punt de la segona línia perpendicular
+    double secondPerpendicularLineSecondPoint[3] = { secondPerpendicularLineFirstPoint[0] + length * firstPerpendicularLineDirectorVector.x(),
+                                                     secondPerpendicularLineFirstPoint[1] + length * firstPerpendicularLineDirectorVector.y(),
+                                                     secondPerpendicularLineFirstPoint[2] + length * firstPerpendicularLineDirectorVector.z() };
+
+    // Assignem els punts calculats a la segona línia perpendicular
+    m_secondPerpendicularLine->setFirstPoint(secondPerpendicularLineFirstPoint);
+    m_secondPerpendicularLine->setSecondPoint(secondPerpendicularLineSecondPoint);
+    m_secondPerpendicularLine->update();
+}
+
+void PerpendicularDistanceTool::updateReferenceLineAndRender()
+{
+    updateReferenceLine();
     m_2DViewer->render();
 }
 
-void PerpendicularDistanceTool::updateDistanceLineAndRender()
+void PerpendicularDistanceTool::updateFirstPerpendicularLineAndRender()
 {
-    updateDistanceLine();
+    updateFirstPerpendicularLine();
     m_2DViewer->render();
 }
 
-void PerpendicularDistanceTool::drawDistance() const
+void PerpendicularDistanceTool::updateSecondPerpendicularLineAndRender()
 {
+    updateSecondPerpendicularLine();
+    m_2DViewer->render();
+}
+
+void PerpendicularDistanceTool::drawDistance()
+{
+    drawDistanceLine();
+
     DrawerText *text = new DrawerText();
     text->setText(getDistanceText());
 
@@ -261,6 +343,48 @@ void PerpendicularDistanceTool::drawDistance() const
     text->setAttachmentPoint(attachmentPoint);
 
     m_2DViewer->getDrawer()->draw(text, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+}
+
+void PerpendicularDistanceTool::drawDistanceLine()
+{
+    m_distanceLine = new DrawerLine();
+
+    // Obtenim la posició del ratolí
+    double mouseWorldPoint[3];
+    m_2DViewer->getEventWorldCoordinate(mouseWorldPoint);
+
+    // Obtenim el punt de la primera línia perpendicular més proper a la posició del ratolí
+    // Serà el primer punt de la línia de distància
+    double distanceLineFirstPoint[3];
+    MathTools::getPointToFiniteLineDistance(mouseWorldPoint, m_firstPerpendicularLine->getFirstPoint(), m_firstPerpendicularLine->getSecondPoint(),
+                                            distanceLineFirstPoint);
+
+    // Obtenim el punt de la segona línia perpendicular més proper a la posició del ratolí
+    // Serà el segon punt de la línia de distància
+    double distanceLineSecondPoint[3];
+    MathTools::getPointToFiniteLineDistance(mouseWorldPoint, m_secondPerpendicularLine->getFirstPoint(), m_secondPerpendicularLine->getSecondPoint(),
+                                            distanceLineSecondPoint);
+
+    // La línia de distància coincidirà amb la de referència; la posem a l'altre extrem de les línies perpendiculars
+    if (distanceLineFirstPoint[0] == m_firstPerpendicularLine->getFirstPoint()[0]
+        && distanceLineFirstPoint[1] == m_firstPerpendicularLine->getFirstPoint()[1]
+        && distanceLineFirstPoint[2] == m_firstPerpendicularLine->getFirstPoint()[2])
+    {
+        distanceLineFirstPoint[0] = m_firstPerpendicularLine->getSecondPoint()[0];
+        distanceLineFirstPoint[1] = m_firstPerpendicularLine->getSecondPoint()[1];
+        distanceLineFirstPoint[2] = m_firstPerpendicularLine->getSecondPoint()[2];
+        distanceLineSecondPoint[0] = m_secondPerpendicularLine->getSecondPoint()[0];
+        distanceLineSecondPoint[1] = m_secondPerpendicularLine->getSecondPoint()[1];
+        distanceLineSecondPoint[2] = m_secondPerpendicularLine->getSecondPoint()[2];
+    }
+
+    // Assignem els punts calculats a la línia de distància
+    m_distanceLine->setFirstPoint(distanceLineFirstPoint);
+    m_distanceLine->setSecondPoint(distanceLineSecondPoint);
+    m_distanceLine->update();
+
+    // Pintem la línia de distància
+    m_2DViewer->getDrawer()->draw(m_distanceLine, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
 }
 
 QString PerpendicularDistanceTool::getDistanceText() const
@@ -315,39 +439,57 @@ void PerpendicularDistanceTool::equalizeDepth()
     m_2DViewer->getEventWorldCoordinate(currentPoint);
     int zIndex = Q2DViewer::getZIndexForView(m_2DViewer->getView());
     double z = currentPoint[zIndex];
-    double *point = m_firstLine->getFirstPoint();
+    double *point = m_referenceLine->getFirstPoint();
     point[zIndex] = z;
-    m_firstLine->setFirstPoint(point);
-    point = m_firstLine->getSecondPoint();
+    m_referenceLine->setFirstPoint(point);
+    point = m_referenceLine->getSecondPoint();
     point[zIndex] = z;
-    m_firstLine->setSecondPoint(point);
-    m_firstLine->update();
-    point = m_distanceLine->getFirstPoint();
+    m_referenceLine->setSecondPoint(point);
+    m_referenceLine->update();
+    point = m_firstPerpendicularLine->getFirstPoint();
     point[zIndex] = z;
-    m_distanceLine->setFirstPoint(point);
-    point = m_distanceLine->getSecondPoint();
+    m_firstPerpendicularLine->setFirstPoint(point);
+    point = m_firstPerpendicularLine->getSecondPoint();
     point[zIndex] = z;
-    m_distanceLine->setSecondPoint(point);
-    m_distanceLine->update();
+    m_firstPerpendicularLine->setSecondPoint(point);
+    m_firstPerpendicularLine->update();
+    if (m_secondPerpendicularLine)
+    {
+        point = m_secondPerpendicularLine->getFirstPoint();
+        point[zIndex] = z;
+        m_secondPerpendicularLine->setFirstPoint(point);
+        point = m_secondPerpendicularLine->getSecondPoint();
+        point[zIndex] = z;
+        m_secondPerpendicularLine->setSecondPoint(point);
+        m_secondPerpendicularLine->update();
+    }
 }
 
 void PerpendicularDistanceTool::reset()
 {
     bool hasToRender = m_2DViewer;
 
-    if (m_firstLine)
+    if (m_referenceLine)
     {
         // Així alliberem la primitiva perquè pugui ser esborrada
-        m_firstLine->decreaseReferenceCount();
-        delete m_firstLine;
+        m_referenceLine->decreaseReferenceCount();
+        delete m_referenceLine;
         hasToRender &= true;
     }
 
-    if (m_distanceLine)
+    if (m_firstPerpendicularLine)
     {
         // Així alliberem la primitiva perquè pugui ser esborrada
-        m_distanceLine->decreaseReferenceCount();
-        delete m_distanceLine;
+        m_firstPerpendicularLine->decreaseReferenceCount();
+        delete m_firstPerpendicularLine;
+        hasToRender &= true;
+    }
+
+    if (m_secondPerpendicularLine)
+    {
+        // Així alliberem la primitiva perquè pugui ser esborrada
+        m_secondPerpendicularLine->decreaseReferenceCount();
+        delete m_secondPerpendicularLine;
         hasToRender &= true;
     }
 
