@@ -703,7 +703,7 @@ Assegureu-vos que la IP i el AETitle d&apos;aquest siguin correctes.</translatio
     <message>
         <location filename="qconfigurationscreenbase.ui" line="522"/>
         <source>Add the new PACS to the list</source>
-        <translation>Afegeix el nou Pacs a la llista</translation>
+        <translation>Afegeix el nou PACS a la llista</translation>
     </message>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="532"/>
