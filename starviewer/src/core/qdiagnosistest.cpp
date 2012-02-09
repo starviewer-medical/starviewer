@@ -165,7 +165,7 @@ void QDiagnosisTest::finishedRunningDiagnosisTest()
     groupDiagnosisTestFromRunDiagnosisTestByState();
 
     m_errorTestsToolButton->setText(tr("%1 errors").arg(m_errorExecutedDiagnosisTests.count()));
-    m_succeededTestsToolButton->setText(tr("%1 Ok").arg(m_okExecutedDiagnosisTests.count()));
+    m_succeededTestsToolButton->setText(tr("%1 OK").arg(m_okExecutedDiagnosisTests.count()));
     m_warningTestsToolButton->setText(tr("%1 warnings").arg(m_warningExecutedDiagnosisTests.count()));
 
     if (allDiagnosisTestResultAreOk())
