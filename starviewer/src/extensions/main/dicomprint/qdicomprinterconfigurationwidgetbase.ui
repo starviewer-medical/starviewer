@@ -44,7 +44,7 @@
      </column>
      <column>
       <property name="text">
-       <string>AETitle</string>
+       <string>AE Title</string>
       </property>
      </column>
      <column>
@@ -156,7 +156,7 @@
          <bool>true</bool>
         </property>
         <property name="text">
-         <string>AETitle:</string>
+         <string>AE Title:</string>
         </property>
        </widget>
       </item>
