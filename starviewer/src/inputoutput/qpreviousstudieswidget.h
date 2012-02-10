@@ -57,9 +57,6 @@ private:
     /// Actualitza l'alçada del QTreeWidget per aconseguir que es vegi el màxim de contingut possible.
     /// Nota: Perquè funcioni correctament el QPreviousStudiesWidget ha de ser visible.
     void updateHeightTree();
-    /// Calcula l'alçada òptima del QTreeWidget a partir del seu contingut i l'alçada màxima de la pantalla a on es visualitza.
-    /// Nota: Perquè funcioni correctament el QPreviousStudiesWidget ha de ser visible.
-    int computeOptimalHeight();
 
     /// Metodes encarregats de controlar quan s'han d'emetre els signals \sa downloadingStudies i \sa studiesDownloaded;
     void increaseNumberOfDownladingStudies();

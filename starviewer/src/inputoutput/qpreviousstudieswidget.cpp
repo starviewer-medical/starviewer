@@ -12,6 +12,7 @@
 #include <QVBoxLayout>
 #include <QMovie>
 #include <QTreeWidgetItem>
+#include <QScrollBar>
 
 namespace udg {
 
@@ -243,19 +244,19 @@ void QPreviousStudiesWidget::updateWidthTree()
 
 void QPreviousStudiesWidget::updateHeightTree()
 {
-    m_previousStudiesTree->setFixedHeight(computeOptimalHeight());
-}
-
-int QPreviousStudiesWidget::computeOptimalHeight()
-{
     ScreenManager screen;
     int screenAvailableHeight = screen.getAvailableScreenGeometry(screen.getIdOfScreen(this)).height();
     int topAndMargins = this->geometry().top() + m_previousStudiesTree->geometry().top() * 2; // Es multiplica per 2 pel marge inferior.
     int maxHeight = screenAvailableHeight - topAndMargins;
     int minHeight = m_previousStudiesTree->sizeHint().height();
-    int contentHeight = m_previousStudiesTree->sizeHintForRow(0) * (m_previousStudiesTree->topLevelItemCount() + 1); // + 1 pel header.
-
-    return qMin(qMax(minHeight, contentHeight), maxHeight);
+    int contentHeight = minHeight;
+    bool found = false;
+    while (!found && contentHeight < maxHeight)
+    {
+        m_previousStudiesTree->setFixedHeight(contentHeight);
+        found = m_previousStudiesTree->verticalScrollBar()->maximum() <= m_previousStudiesTree->verticalScrollBar()->minimum();
+        contentHeight += 5;
+    }
 }
 
 void QPreviousStudiesWidget::insertStudiesToTree(QList<Study*> studiesList)
