@@ -277,6 +277,7 @@ void QPreviousStudiesWidget::insertStudiesToTree(QList<Study*> studiesList)
         m_previousStudiesTree->setVisible(true);
 
         updateWidthTree();
+        updateHeightTree();
     }
     else
     {
@@ -284,6 +285,8 @@ void QPreviousStudiesWidget::insertStudiesToTree(QList<Study*> studiesList)
     }
 
     m_lookingForStudiesWidget->setVisible(false);
+
+    this->adjustSize();
 }
 
 void QPreviousStudiesWidget::retrieveAndLoadStudy(const QString &studyInstanceUID)
