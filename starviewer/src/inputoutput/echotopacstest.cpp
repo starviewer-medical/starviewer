@@ -46,13 +46,13 @@ DiagnosisTestResult EchoToPACSTest::run()
             if (status == EchoToPACS::EchoFailed)
             {
                 // TODO: Fer lo de concatenar l'String
-                descriptionStringList << tr("Echo to pacs with AETitle '%1' failed").arg(pacsList.at(i).getAETitle());
+                descriptionStringList << tr("Echo to pacs with AE Title '%1' failed").arg(pacsList.at(i).getAETitle());
                 solutionStringList << tr("Contact PACS supervisor");
             }
             else
             {
-                descriptionStringList << tr("Unable to connect to PACS with AETitle '%1'").arg(pacsList.at(i).getAETitle());
-                solutionStringList << tr("Check PACS url, or internet connection");
+                descriptionStringList << tr("Unable to connect to PACS with AE Title '%1'").arg(pacsList.at(i).getAETitle());
+                solutionStringList << tr("Check PACS URL, or internet connection");
             }
         }
     }

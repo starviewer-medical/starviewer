@@ -96,13 +96,13 @@ void test_EchoToPACSTest::run_ShouldTestIfPACSAreAccessible_data()
     QTest::newRow("one pacs working") << pacsListTest2 << hashTest2 << DiagnosisTestResult::Ok << unusedString << unusedString;
     QTest::newRow("one pacs fail") << pacsListTest3 << hashTest3
                                    << DiagnosisTestResult::Error
-                                   << "Echo to pacs with AETitle '" + AETitlesTest3[0] + "' failed"
+                                   << "Echo to pacs with AE Title '" + AETitlesTest3[0] + "' failed"
                                    << "Contact PACS supervisor";
     QTest::newRow("3 pacs: fail, ok, connect error") << pacsListTest4 << hashTest4
                                                  << DiagnosisTestResult::Error 
-                                                 << "Echo to pacs with AETitle '" + AETitlesTest4[0] +
-                                                    "' failed\nUnable to connect to PACS with AETitle '" + AETitlesTest4[2] + "'" 
-                                                 << "Contact PACS supervisor\nCheck PACS url, or internet connection";
+                                                 << "Echo to pacs with AE Title '" + AETitlesTest4[0] +
+                                                    "' failed\nUnable to connect to PACS with AE Title '" + AETitlesTest4[2] + "'" 
+                                                 << "Contact PACS supervisor\nCheck PACS URL, or internet connection";
 }
 
 void test_EchoToPACSTest::run_ShouldTestIfPACSAreAccessible()

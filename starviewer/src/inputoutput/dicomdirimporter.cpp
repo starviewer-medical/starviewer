@@ -264,7 +264,7 @@ QString DICOMDIRImporter::getDicomdirImagePath(Image *image)
     }
     else
     {
-        ERROR_LOG("Dicomdir inconsistent: La imatge [" + image->getPath() + "] no existeix");
+        ERROR_LOG("DICOMDIR inconsistent: La imatge [" + image->getPath() + "] no existeix");
         return "";
     }
 

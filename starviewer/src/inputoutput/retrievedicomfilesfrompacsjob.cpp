@@ -55,7 +55,7 @@ void RetrieveDICOMFilesFromPACSJob::run()
 {
     Settings settings;
     // TODO: És aquest el lloc per aquest missatge ? no seria potser millor fer-ho a RetrieveDICOMFilesFromPACS
-    INFO_LOG(QString("Iniciant descarrega del PACS %1, IP: %2, Port: %3, AETitle Local: %4 Port local: %5, "
+    INFO_LOG(QString("Iniciant descarrega del PACS %1, IP: %2, Port: %3, AE Title Local: %4 Port local: %5, "
                      "l'estudi UID: %6, series UID: %7, SOP Instance UID:%8")
         .arg(getPacsDevice().getAETitle(), getPacsDevice().getAddress(), QString::number(getPacsDevice().getQueryRetrieveServicePort()))
         .arg(settings.getValue(InputOutputSettings::LocalAETitle).toString(), settings.getValue(InputOutputSettings::IncomingDICOMConnectionsPort).toString())
@@ -291,7 +291,7 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
             message += tr("\n\nThe study may be corrupted, if It is not corrupted please contact with %1 team.").arg(ApplicationNameString);
             break;
         case PACSRequestStatus::RetrieveDestinationAETileUnknown:
-            message = tr("Images from study %1 of patient %2 can't be retrieved because PACS %3 doesn't recognize your computer's AETitle %4.")
+            message = tr("Images from study %1 of patient %2 can't be retrieved because PACS %3 doesn't recognize your computer's AE Title %4.")
                     .arg(studyID, patientName, pacsAETitle, settings.getValue(InputOutputSettings::LocalAETitle).toString());
             message += tr("\n\nContact with an administrator to register your computer to the PACS.");
             break;

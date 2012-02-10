@@ -207,7 +207,7 @@ bool PACSConnection::connectToPACS(PACSServiceToRequest pacsServiceToRequest)
 
     if (!condition.good())
     {
-        ERROR_LOG("S'ha produit un error al configurar la connexio. AETitle: " + m_pacs.getAETitle() + ", adreca: " +
+        ERROR_LOG("S'ha produit un error al configurar la connexio. AE Title: " + m_pacs.getAETitle() + ", adreca: " +
             constructPacsServerAddress(pacsServiceToRequest, m_pacs) + ". Descripcio error: " + QString(condition.text()));
         return false;
     }
@@ -217,7 +217,7 @@ bool PACSConnection::connectToPACS(PACSServiceToRequest pacsServiceToRequest)
 
     if (m_associationNetwork == NULL)
     {
-        ERROR_LOG("S'ha produit un error inicialitzant els parametres de la connexio. AETitle: " + m_pacs.getAETitle() + ", adreca: " +
+        ERROR_LOG("S'ha produit un error inicialitzant els parametres de la connexio. AE Title: " + m_pacs.getAETitle() + ", adreca: " +
             constructPacsServerAddress(pacsServiceToRequest, m_pacs));
         return false;
     }
@@ -229,14 +229,14 @@ bool PACSConnection::connectToPACS(PACSServiceToRequest pacsServiceToRequest)
     {
         if (ASC_countAcceptedPresentationContexts(m_associationParameters) == 0)
         {
-            ERROR_LOG("El PACS no ens ha acceptat cap dels Presentation Context presentats. AETitle: " + m_pacs.getAETitle() + ", adreca: " +
+            ERROR_LOG("El PACS no ens ha acceptat cap dels Presentation Context presentats. AE Title: " + m_pacs.getAETitle() + ", adreca: " +
                 constructPacsServerAddress(pacsServiceToRequest, m_pacs));
             return false;
         }
     }
     else
     {
-        ERROR_LOG("S'ha produit un error al intentar connectar amb el PACS. AETitle: " + m_pacs.getAETitle() + ", adreca: " +
+        ERROR_LOG("S'ha produit un error al intentar connectar amb el PACS. AE Title: " + m_pacs.getAETitle() + ", adreca: " +
             constructPacsServerAddress(pacsServiceToRequest, m_pacs) + ". Descripcio error: " + QString(condition.text()));
 
         // Si no hem pogut connectar al PACS i és una descàrrega haurem obert el port per rebre connexions entrants DICOM, com no que podrem descarregar
@@ -307,7 +307,7 @@ QString PACSConnection::constructPacsServerAddress(PACSServiceToRequest pacsServ
             ERROR_LOG("No s'ha pogut configurar per quin port fer l'echo al PACS " + pacsDevice.getAETitle() + " perque la modalitat de connexio és invalida");
     }
 
-    INFO_LOG("Pacs Adress build:" + pacsServerAddress);
+    INFO_LOG("PACS Adress build:" + pacsServerAddress);
 
     return pacsServerAddress;
 }

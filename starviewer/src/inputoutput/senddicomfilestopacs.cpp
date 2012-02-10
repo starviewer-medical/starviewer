@@ -33,7 +33,7 @@ PACSRequestStatus::SendRequestStatus SendDICOMFilesToPACS::send(QList<Image*> im
     // TODO: S'hauria de comprovar que es tracti d'un PACS amb el servei d'store configurat
     if (!pacsConnection.connectToPACS(PACSConnection::SendDICOMFiles))
     {
-        ERROR_LOG(" S'ha produit un error al intentar connectar al PACS per fer un send. AETitle: " + m_pacs.getAETitle());
+        ERROR_LOG(" S'ha produit un error al intentar connectar al PACS per fer un send. AE Title: " + m_pacs.getAETitle());
         return PACSRequestStatus::SendCanNotConnectToPACS;
     }
 
