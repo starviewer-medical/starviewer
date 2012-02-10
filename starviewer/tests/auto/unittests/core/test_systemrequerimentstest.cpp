@@ -28,7 +28,7 @@ public:
         // Quan s'estableixin quines són les extensions d'openGL que es necessiten per cada cosa, es poden afegir aquí
         m_minimumOpenGLExtensions << "GL_ARB_flux_capacitor" << "GL_ARB_half_float_pixel";
         
-        m_minimumDiskSpace = 5120; // 5 Gb (en principi, el mínim que es necessita per la cache està en un setting)
+        m_minimumDiskSpace = 5120; // 5 GB (en principi, el mínim que es necessita per la cache està en un setting)
 
         m_doesOpticalDriveNeedsToWrite = true;
         m_doesOperatingSystemNeedToBe64BitArchitecutre = true;

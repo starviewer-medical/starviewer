@@ -18,7 +18,7 @@ SystemRequeriments::SystemRequeriments()
     // Quan s'estableixin quines són les extensions d'openGL que es necessiten per cada cosa, es poden afegir aquí
     //m_minimumOpenGLExtensions << "GL_ARB_flux_capacitor";
     
-    m_minimumDiskSpace = 5120; // 5 Gb (en principi, el mínim que es necessita per la cache està en un setting)
+    m_minimumDiskSpace = 5120; // 5 GB (en principi, el mínim que es necessita per la cache està en un setting)
 
     m_doesOpticalDriveNeedsToWrite = true;
 }

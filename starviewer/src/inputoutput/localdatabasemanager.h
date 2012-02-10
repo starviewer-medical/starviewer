@@ -79,7 +79,7 @@ public:
 
     /// Comprova si es disposa d'espai suficient al disc dur per descarregar nous objectes.
     /// Si la opció de configuració d'esborrar estudis automàticament està activada intentarà
-    /// esborrar estudis vells tant Gb d'estudis vell com s'hagi especificat a la configuració
+    /// esborrar estudis vells tant GB d'estudis vell com s'hagi especificat a la configuració
     /// per tal d'alliberar suficient espai per permetre noves descàrregues
     bool thereIsAvailableSpaceOnHardDisk();
 
