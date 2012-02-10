@@ -151,12 +151,12 @@ void QCreateDicomdir::createConnections()
 void QCreateDicomdir::showDICOMDIRSize()
 {
     QString sizeOfDicomdirText, sizeText;
-    double sizeInMb;
+    double sizeInMB;
     Settings settings;
 
-    // Passem a Mb
-    sizeInMb = m_dicomdirSizeBytes / (1024.0 * 1024);
-    sizeText.setNum(sizeInMb, 'f', 0);
+    // Passem a MB
+    sizeInMB = m_dicomdirSizeBytes / (1024.0 * 1024);
+    sizeText.setNum(sizeInMB, 'f', 0);
 
     // Si les imatges s'han de convertir a LittleEndian obtenim el tamany que ocuparà l'estudi de manera aproximada
     if (settings.getValue(InputOutputSettings::ConvertDICOMDIRImagesToLittleEndianKey).toBool())
@@ -171,9 +171,9 @@ void QCreateDicomdir::showDICOMDIRSize()
 
     m_dicomdirSizeOnDiskLabel->setText(sizeOfDicomdirText);
 
-    if (sizeInMb < m_progressBarOcupat->maximum())
+    if (sizeInMB < m_progressBarOcupat->maximum())
     {
-        m_progressBarOcupat->setValue((int)sizeInMb);
+        m_progressBarOcupat->setValue((int)sizeInMB);
     }
     else
     {

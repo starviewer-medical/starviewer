@@ -462,14 +462,14 @@ bool LocalDatabaseManager::thereIsAvailableSpaceOnHardDisk()
 
     if (freeSpaceInHardDisk < minimumSpaceRequired)
     {
-        INFO_LOG(QString("No hi ha suficient espai lliure per descarregar fitxers. Espai lliure: %1 Mb, espai minim necessari: %2 Mb")
+        INFO_LOG(QString("No hi ha suficient espai lliure per descarregar fitxers. Espai lliure: %1 MB, espai minim necessari: %2 MB")
                     .arg(QString::number(freeSpaceInHardDisk), QString::number(minimumSpaceRequired)));
 
         if (settings.getValue(InputOutputSettings::DeleteLeastRecentlyUsedStudiesNoFreeSpaceCriteria).toBool())
         {
             INFO_LOG("s'intentara esborrar estudis vells per alliberar suficient espai");
 
-            // No hi ha suficient espai indiquem quina és la quantitat de Mb d'estudis vells que intentem alliberar. Aquest és el número de Mbytes fins arribar
+            // No hi ha suficient espai indiquem quina és la quantitat de MB d'estudis vells que intentem alliberar. Aquest és el número de Mbytes fins arribar
             // l'espai míninm necessari (minimumSpaceRequired - freeSpaceInHardDisk), més una quantitat fixa, per assegurar que disposem de prou espai per
             // descarregar estudis grans, i no haver d'estar en cada descarrega alliberant espai
             MbytesToFree = (minimumSpaceRequired - freeSpaceInHardDisk) + MbytesToEraseWhereNotEnoughSpaceAvailableInHardDisk;
@@ -484,7 +484,7 @@ bool LocalDatabaseManager::thereIsAvailableSpaceOnHardDisk()
             // Tornem a consultar l'espai lliure
             if (hardDiskInformation.getNumberOfFreeMBytes(LocalDatabaseManager::getCachePath()) < minimumSpaceRequired)
             {
-                INFO_LOG("No hi ha suficient espai lliure per descarregar (" + QString().setNum(freeSpaceInHardDisk) + " Mb)");
+                INFO_LOG("No hi ha suficient espai lliure per descarregar (" + QString().setNum(freeSpaceInHardDisk) + " MB)");
                 return false;
             }
             else

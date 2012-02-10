@@ -221,7 +221,7 @@ void test_WindowsSystemInformation::run_ShouldTestIfWindowsSystemInformationRuns
     QTest::addColumn<unsigned int>("testingHardDiskCapacity");
     QTest::addColumn<unsigned int>("testingHardDiskFreeSpace");
 
-    QString APIRAMTotalAmount = "1073741824"; // 1024 Mb
+    QString APIRAMTotalAmount = "1073741824"; // 1024 MB
     unsigned int RAMTotalAmount = 1024;
 
     StringList APIRAMModulesCapacity;
