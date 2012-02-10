@@ -141,12 +141,12 @@ void QDicomPrinterConfigurationWidget::testPrinter()
             switch (dicomPrint.getLastError())
             {
                 case DicomPrint::NotRespondedAsExpected:
-                    messageError = tr("Printer %1 doesn't respond correctly.\nBe sure that hostname and AETitle are correct.")
+                    messageError = tr("Printer %1 doesn't respond correctly.\nBe sure that hostname and AE Title are correct.")
                                  .arg(selectedDicomPrinter.getAETitle());
                     break;
                 case DicomPrint::CanNotConnectToDicomPrinter:
                 default:
-                    messageError = tr("Printer %1 doesn't respond.\nBe sure that hostname and AETitle are correct.").arg(selectedDicomPrinter.getAETitle());
+                    messageError = tr("Printer %1 doesn't respond.\nBe sure that hostname and AE Title are correct.").arg(selectedDicomPrinter.getAETitle());
                     break;
             }
 
@@ -263,7 +263,7 @@ bool QDicomPrinterConfigurationWidget::validatePrinterSettings()
     text = m_printerAetitleLineEdit->text();
     if (text.length() == 0)
     {
-        QMessageBox::warning(this, ApplicationNameString, tr("AETitle field can't be empty."));
+        QMessageBox::warning(this, ApplicationNameString, tr("AE Title field can't be empty."));
         return false;
     }
 

@@ -8,10 +8,6 @@
         <translation>Añadir nueva impresora DICOM</translation>
     </message>
     <message>
-        <source>AETitle:</source>
-        <translation>AETitle:</translation>
-    </message>
-    <message>
         <source>Hostname:</source>
         <translation>Dirección:</translation>
     </message>
@@ -39,20 +35,13 @@
         <source>Printer Settings</source>
         <translation>Parámetros impresora</translation>
     </message>
-</context>
-<context>
-    <name>QDicomJobCreatorWidgetBase</name>
     <message>
-        <source>QDicomJobCreatorWidget</source>
+        <source>AE Title:</source>
         <translation></translation>
     </message>
 </context>
 <context>
     <name>QDicomPrintExtensionBase</name>
-    <message>
-        <source>DICOM print</source>
-        <translation>Imprimir DICOM</translation>
-    </message>
     <message>
         <source>Printer</source>
         <translation>Impresora</translation>
@@ -137,6 +126,22 @@ border: 1px solid  #680000;
         <source>Images sent to DICOM print successfully.</source>
         <translation>Las imágenes se han enviado correctamente a la impresora.</translation>
     </message>
+    <message>
+        <source>Restore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add to print</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove selecteds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QDicomPrinterBasicSettingsWidgetBase</name>
@@ -180,10 +185,6 @@ border: 1px solid  #680000;
 <context>
     <name>QDicomPrinterConfigurationWidgetBase</name>
     <message>
-        <source>AETitle</source>
-        <translation>AETitle</translation>
-    </message>
-    <message>
         <source>Port</source>
         <translation>Puerto</translation>
     </message>
@@ -214,10 +215,6 @@ border: 1px solid  #680000;
     <message>
         <source>Printer Settings</source>
         <translation>Parámetros impresora</translation>
-    </message>
-    <message>
-        <source>AETitle:</source>
-        <translation>AETitle:</translation>
     </message>
     <message>
         <source>Hostname:</source>
@@ -307,6 +304,14 @@ border: 1px solid  #680000;
         <source>Maximum Density:</source>
         <translation>Densidad máxima:</translation>
     </message>
+    <message>
+        <source>AE Title</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>AE Title:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>udg::DicomPrintExtensionMediator</name>
@@ -322,8 +327,8 @@ border: 1px solid  #680000;
 <context>
     <name>udg::QDicomAddPrinterWidget</name>
     <message>
-        <source>%1 can&apos;t add the printer %2 because a printer with the same AETitle already exists.</source>
-        <translation>%1 no puede añadir la impresora %2 porque ya existe otra con el mismo AETitle.</translation>
+        <source>%1 can&apos;t add the printer %2 because a printer with the same AE Title already exists.</source>
+        <translation>%1 no puede añadir la impresora %2 por que ya existe otra con el mismo AE Title.</translation>
     </message>
 </context>
 <context>
@@ -361,14 +366,6 @@ border: 1px solid  #680000;
 </translation>
     </message>
     <message>
-        <source>This series cannot be printed because color is not supported.</source>
-        <translation>No se puede imprimir esta serie porque la impresión de imágenes en color no está soportada.</translation>
-    </message>
-    <message>
-        <source>This series cannot be printed because multi-frame images are not supported.</source>
-        <translation>No se puede imprimir la serie porque la impresión de imágenes multi-frame no está soportada.</translation>
-    </message>
-    <message>
         <source>The images can&apos;t be printed because </source>
         <translation>Las imágenes no se pueden imprimir porque </translation>
     </message>
@@ -391,6 +388,42 @@ border: 1px solid  #680000;
     <message>
         <source>an unknown error has produced.</source>
         <translation>se ha producido un error desconocido.</translation>
+    </message>
+    <message>
+        <source>Choose Window/Level Presets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please add images to print.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Series </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All images</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>image %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Every %1 images</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> from %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> to %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This series cannot be added to print because color is not supported.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -416,24 +449,22 @@ border: 1px solid  #680000;
         <translation>No se ha seleccionado ninguna impresora para aplicar los cambios.</translation>
     </message>
     <message>
-        <source>Printer %1 doesn&apos;t respond.
-Be sure that hostname and AETitle are correct.</source>
-        <translation>La impresora %1 no ha respondido.
-Asegúrese que la dirección y el AETitle son correctos.</translation>
-    </message>
-    <message>
-        <source>AETitle field can&apos;t be empty.</source>
-        <translation>Tiene que introducir el AETitle de la impresora.</translation>
-    </message>
-    <message>
         <source>Hostname can&apos;t be empty.</source>
         <translation>Tiene que introducir la dirección de la impresora.</translation>
     </message>
     <message>
         <source>Printer %1 doesn&apos;t respond correctly.
-Be sure that hostname and AETitle are correct.</source>
-        <translation>La impresora %1 no ha respondido correctamente.
-Asegúrese que la dirección IP y el AETitle son correctos.</translation>
+Be sure that hostname and AE Title are correct.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Printer %1 doesn&apos;t respond.
+Be sure that hostname and AE Title are correct.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>AE Title field can&apos;t be empty.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

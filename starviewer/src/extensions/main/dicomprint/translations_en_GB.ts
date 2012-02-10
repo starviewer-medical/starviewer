@@ -8,10 +8,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>AETitle:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Hostname:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -39,20 +35,13 @@
         <source>Printer Settings</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>QDicomJobCreatorWidgetBase</name>
     <message>
-        <source>QDicomJobCreatorWidget</source>
+        <source>AE Title:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>QDicomPrintExtensionBase</name>
-    <message>
-        <source>DICOM print</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <source>Printer</source>
         <translation type="unfinished"></translation>
@@ -137,6 +126,22 @@ border: 1px solid  #680000;
         <source>Images sent to DICOM print successfully.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Restore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add to print</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove selecteds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QDicomPrinterBasicSettingsWidgetBase</name>
@@ -180,10 +185,6 @@ border: 1px solid  #680000;
 <context>
     <name>QDicomPrinterConfigurationWidgetBase</name>
     <message>
-        <source>AETitle</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Port</source>
         <translation type="unfinished"></translation>
     </message>
@@ -213,10 +214,6 @@ border: 1px solid  #680000;
     </message>
     <message>
         <source>Printer Settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>AETitle:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -307,6 +304,14 @@ border: 1px solid  #680000;
         <source>Maximum Density:</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>AE Title</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>AE Title:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>udg::DicomPrintExtensionMediator</name>
@@ -322,7 +327,7 @@ border: 1px solid  #680000;
 <context>
     <name>udg::QDicomAddPrinterWidget</name>
     <message>
-        <source>%1 can&apos;t add the printer %2 because a printer with the same AETitle already exists.</source>
+        <source>%1 can&apos;t add the printer %2 because a printer with the same AE Title already exists.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -355,14 +360,6 @@ border: 1px solid  #680000;
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>This series cannot be printed because color is not supported.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This series cannot be printed because multi-frame images are not supported.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>The images can&apos;t be printed because </source>
         <translation type="unfinished"></translation>
     </message>
@@ -384,6 +381,42 @@ border: 1px solid  #680000;
     </message>
     <message>
         <source>an unknown error has produced.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose Window/Level Presets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please add images to print.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Series </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All images</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>image %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Every %1 images</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> from %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> to %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This series cannot be added to print because color is not supported.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -410,21 +443,21 @@ border: 1px solid  #680000;
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Printer %1 doesn&apos;t respond.
-Be sure that hostname and AETitle are correct.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>AETitle field can&apos;t be empty.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Hostname can&apos;t be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Printer %1 doesn&apos;t respond correctly.
-Be sure that hostname and AETitle are correct.</source>
+Be sure that hostname and AE Title are correct.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Printer %1 doesn&apos;t respond.
+Be sure that hostname and AE Title are correct.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>AE Title field can&apos;t be empty.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

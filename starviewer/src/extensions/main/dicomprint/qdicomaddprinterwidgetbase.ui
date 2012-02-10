@@ -29,7 +29,7 @@
          <bool>true</bool>
         </property>
         <property name="text">
-         <string>AETitle:</string>
+         <string>AE Title:</string>
         </property>
        </widget>
       </item>

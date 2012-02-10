@@ -47,7 +47,7 @@ void PrintDicomSpool::printBasicGrayscale(DicomPrinter dicomPrinter, DicomPrintJ
 
     if (result.bad())
     {
-        ERROR_LOG(QString("No s'ha pogut connectar amb la impressora amb AETitle: %1, IP: %2, port: %3, descripcio error:%4 ").arg(m_dicomPrinter.getAETitle(),
+        ERROR_LOG(QString("No s'ha pogut connectar amb la impressora amb AE Title: %1, IP: %2, port: %3, descripcio error:%4 ").arg(m_dicomPrinter.getAETitle(),
                            m_dicomPrinter.getHostname(), QString().setNum(m_dicomPrinter.getPort()), result.text()));
 
         m_lastError = PrintDicomSpool::CanNotConnectToDICOMPrinter;
