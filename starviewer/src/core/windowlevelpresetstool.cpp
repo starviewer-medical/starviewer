@@ -66,7 +66,12 @@ void WindowLevelPresetsTool::handleEvent(unsigned long eventID)
     switch (eventID)
     {
         case vtkCommand::KeyPressEvent:
-            applyPreset(m_viewer->getInteractor()->GetKeyCode());
+            // Cal controlar que les tecles Ctrl i Alt no estiguin pitjades, sinó ens podria activar un preset no desitjat
+            // TODO Vtk només és capaç de detectar AltGr com a tecla Alt. La tecla Alt per sí sola no la detecta.
+            if (!m_viewer->getInteractor()->GetControlKey() && !m_viewer->getInteractor()->GetAltKey())
+            {
+                applyPreset(m_viewer->getInteractor()->GetKeyCode());
+            }
             break;
 
         default:
