@@ -1130,6 +1130,7 @@ void Q2DViewer::updateShutterPipeline()
 
     if (m_mainVolume->objectName() == DummyVolumeObjectName)
     {
+        m_imageActor->SetInput(m_windowLevelLUTMapper->GetOutput());
         return;
     }
     
