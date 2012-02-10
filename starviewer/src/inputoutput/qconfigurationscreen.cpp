@@ -258,7 +258,7 @@ void QConfigurationScreen::test()
         PacsDevice pacsDevice = getPacsDeviceFromControls();
         EchoToPACS echoToPACS;
 
-        INFO_LOG("Es fa echoSCU al PACS amb AETitle " + pacsDevice.getAETitle());
+        INFO_LOG("Es fa echoSCU al PACS amb AE Title " + pacsDevice.getAETitle());
 
         if (echoToPACS.echo(pacsDevice))
         {
@@ -273,10 +273,10 @@ void QConfigurationScreen::test()
             switch (echoToPACS.getLastError())
             {
                 case EchoToPACS::EchoFailed:
-                    message = tr("PACS \"%1\" doesn't respond correctly.\nBe sure that the IP and AETitle of It are correct.").arg(pacsDevice.getAETitle());
+                    message = tr("PACS \"%1\" doesn't respond correctly.\nBe sure that the IP and AE Title of It are correct.").arg(pacsDevice.getAETitle());
                     break;
                 case EchoToPACS::EchoCanNotConnectToPACS:
-                    message = tr("PACS \"%1\" doesn't respond.\nBe sure that the IP and AETitle of It are correct.").arg(pacsDevice.getAETitle());
+                    message = tr("PACS \"%1\" doesn't respond.\nBe sure that the IP and AE Title of It are correct.").arg(pacsDevice.getAETitle());
                     break;
                 default:
                     // No hauria de passar mai
@@ -293,7 +293,7 @@ bool QConfigurationScreen::validatePacsDeviceToEcho()
 {
     if (m_textAETitle->text().length() == 0)
     {
-        QMessageBox::warning(this, ApplicationNameString, tr("AETitle field can't be empty."));
+        QMessageBox::warning(this, ApplicationNameString, tr("AE Title field can't be empty."));
         return false;
     }
 

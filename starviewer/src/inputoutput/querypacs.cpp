@@ -83,7 +83,7 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::query()
 
     if (!m_pacsConnection->connectToPACS(PACSConnection::Query))
     {
-        ERROR_LOG("S'ha produit un error al intentar connectar al PACS per fer query. AETitle: " + m_pacsDevice.getAETitle());
+        ERROR_LOG("S'ha produit un error al intentar connectar al PACS per fer query. AE Title: " + m_pacsDevice.getAETitle());
         delete m_pacsConnection;
         return PACSRequestStatus::QueryCanNotConnectToPACS;
     }
