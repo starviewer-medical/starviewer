@@ -34,7 +34,7 @@ signals:
     void start();
 
 protected:
-    void resizeEvent (QResizeEvent *);
+    void resizeEvent(QResizeEvent *);
 
 private slots:
     ///Slot que indinica que un QDiagnosisTestResultWidget de la taula ha canviat de mida
@@ -74,7 +74,7 @@ private:
 
     /// Retorna els testos que s'han de mostrar en el llistat en funció de quins botons estiguin activats (són els botons que indiquen si s'han
     /// de mostrar els testos amb un determinat resultat)
-    QList<QPair<DiagnosisTest *, DiagnosisTestResult> > getDiagnosisTestsToShowInDiagnosisTestsResultTable();
+    QList<QPair<DiagnosisTest*, DiagnosisTestResult> > getDiagnosisTestsToShowInDiagnosisTestsResultTable();
 
     /// Agrupa i guarda en variables internes de la classe els testos executats agrupats per l'estat del seu DiagnosisTestResult
     void groupDiagnosisTestFromRunDiagnosisTestByState();
@@ -86,9 +86,9 @@ private:
     RunDiagnosisTest *m_runDiagnosisTest;
     QThread *m_threadRunningDiagnosisTest;
 
-    QList<QPair<DiagnosisTest *, DiagnosisTestResult> > m_errorExecutedDiagnosisTests;
-    QList<QPair<DiagnosisTest *, DiagnosisTestResult> > m_okExecutedDiagnosisTests;
-    QList<QPair<DiagnosisTest *, DiagnosisTestResult> > m_warningExecutedDiagnosisTests;
+    QList<QPair<DiagnosisTest*, DiagnosisTestResult> > m_errorExecutedDiagnosisTests;
+    QList<QPair<DiagnosisTest*, DiagnosisTestResult> > m_okExecutedDiagnosisTests;
+    QList<QPair<DiagnosisTest*, DiagnosisTestResult> > m_warningExecutedDiagnosisTests;
 
     QDiagnosisTestResultWidget *m_qDiagnosisTestResultWidgetExpanded;
 };

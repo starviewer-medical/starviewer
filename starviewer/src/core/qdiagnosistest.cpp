@@ -90,7 +90,7 @@ void QDiagnosisTest::createConnections()
     connect(m_viewTestsLabel, SIGNAL(linkActivated(QString)), SLOT(viewTestsLabelClicked()));
 
     connect(this, SIGNAL(start()), m_runDiagnosisTest, SLOT(run()));
-    connect(m_runDiagnosisTest, SIGNAL(runningDiagnosisTest(DiagnosisTest *)), this, SLOT(updateRunningDiagnosisTestProgress(DiagnosisTest *)));
+    connect(m_runDiagnosisTest, SIGNAL(runningDiagnosisTest(DiagnosisTest*)), this, SLOT(updateRunningDiagnosisTestProgress(DiagnosisTest*)));
     connect(m_runDiagnosisTest, SIGNAL(finished()), this, SLOT(finishedRunningDiagnosisTest()));
 }
 
@@ -174,7 +174,7 @@ void QDiagnosisTest::finishedRunningDiagnosisTest()
     }
     else
     {
-        //Marquem els botons de warning i error perqué en el llistat apareguin només els testos que han fallat 
+        // Marquem els botons de warning i error perqué en el llistat apareguin només els testos que han fallat 
         m_warningTestsToolButton->setChecked(true);
         m_errorTestsToolButton->setChecked(true);
         
@@ -208,7 +208,7 @@ void QDiagnosisTest::fillDiagnosisTestsResultTable()
     m_testsResultsTable->clear();
     m_testsResultsTable->setRowCount(0);
 
-    QList<QPair<DiagnosisTest *,DiagnosisTestResult> > testsToShow = getDiagnosisTestsToShowInDiagnosisTestsResultTable();
+    QList<QPair<DiagnosisTest*, DiagnosisTestResult> > testsToShow = getDiagnosisTestsToShowInDiagnosisTestsResultTable();
 
     for (int index = 0; index < testsToShow.count(); index++)
     {
@@ -289,9 +289,9 @@ QList<DiagnosisTest*> QDiagnosisTest::getDiagnosisTestsToRun() const
     return diagnosisTestsToRun;
 }
 
-QList<QPair<DiagnosisTest *,DiagnosisTestResult> > QDiagnosisTest::getDiagnosisTestsToShowInDiagnosisTestsResultTable()
+QList<QPair<DiagnosisTest*, DiagnosisTestResult> > QDiagnosisTest::getDiagnosisTestsToShowInDiagnosisTestsResultTable()
 {
-    QList<QPair<DiagnosisTest *,DiagnosisTestResult> > testsToShow;
+    QList<QPair<DiagnosisTest*, DiagnosisTestResult> > testsToShow;
     
     if (m_succeededTestsToolButton->isChecked())
     {
@@ -313,11 +313,11 @@ QList<QPair<DiagnosisTest *,DiagnosisTestResult> > QDiagnosisTest::getDiagnosisT
 
 void QDiagnosisTest::groupDiagnosisTestFromRunDiagnosisTestByState()
 {
-    QList<QPair<DiagnosisTest *,DiagnosisTestResult> >  runDiagnosisTests = m_runDiagnosisTest->getRunTests();
+    QList<QPair<DiagnosisTest*, DiagnosisTestResult> >  runDiagnosisTests = m_runDiagnosisTest->getRunTests();
 
     for (int index = 0; index < runDiagnosisTests.count(); index++)
     {
-        QPair<DiagnosisTest *, DiagnosisTestResult> runDiagnosisTest = runDiagnosisTests.at(index);
+        QPair<DiagnosisTest*, DiagnosisTestResult> runDiagnosisTest = runDiagnosisTests.at(index);
 
         if (runDiagnosisTest.second.getState() == DiagnosisTestResult::Ok)
         {
