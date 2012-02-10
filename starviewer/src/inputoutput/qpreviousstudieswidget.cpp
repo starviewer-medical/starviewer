@@ -378,6 +378,7 @@ void QPreviousStudiesWidget::setVisible(bool visible)
     if (visible)
     {
         updateHeightTree();
+        this->adjustSize();
     }
 }
 
