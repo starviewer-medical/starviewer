@@ -650,7 +650,7 @@ border: 1px solid  #680000;
           <item>
            <widget class="QPushButton" name="m_removeSelectedDICOMImagesSelectionToPrintButton">
             <property name="text">
-             <string>Remove selecteds</string>
+             <string>Remove selection</string>
             </property>
            </widget>
           </item>
@@ -883,6 +883,7 @@ border: 1px solid  #680000;
   </customwidget>
  </customwidgets>
  <resources>
+  <include location="../../../main/main.qrc"/>
   <include location="../../../main/main.qrc"/>
   <include location="../../../main/main.qrc"/>
  </resources>

@@ -437,8 +437,8 @@ QString DatabaseInstallation::getErrorMessage()
 
 bool DatabaseInstallation::askToUserIfDowngradeDatabase()
 {
-    QString questionMessage = tr("Current database is of %1 newer version. To continue executing %1 is necessary to delete retrieved"
-                                  " studies and reinstall database. Do you want to continue?").arg(ApplicationNameString);
+    QString questionMessage = tr("Current database is of newer version. To execute %1 retrieved studies will be deleted and database will be reinstalled."
+                                  " Do you want to continue?").arg(ApplicationNameString);
 
     return QMessageBox::question(NULL, ApplicationNameString, questionMessage, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes ;
 }

@@ -128,19 +128,19 @@ border: 1px solid  #680000;
     </message>
     <message>
         <source>Restore</source>
-        <translation type="unfinished"></translation>
+        <translation>Restaurar</translation>
     </message>
     <message>
         <source>Add to print</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove selecteds</source>
-        <translation type="unfinished"></translation>
+        <translation>Añadir para imprimir</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Eliminar todas</translation>
+    </message>
+    <message>
+        <source>Remove selection</source>
+        <translation>Eliminar seleccionadas</translation>
     </message>
 </context>
 <context>
@@ -306,11 +306,11 @@ border: 1px solid  #680000;
     </message>
     <message>
         <source>AE Title</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>AE Title:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -391,39 +391,39 @@ border: 1px solid  #680000;
     </message>
     <message>
         <source>Choose Window/Level Presets</source>
-        <translation type="unfinished"></translation>
+        <translation>Escoger ventana predeterminada</translation>
     </message>
     <message>
         <source>Please add images to print.</source>
-        <translation type="unfinished"></translation>
+        <translation>No hay imágenes para imprimir.</translation>
     </message>
     <message>
         <source>Series </source>
-        <translation type="unfinished"></translation>
+        <translation>Serie</translation>
     </message>
     <message>
         <source>All images</source>
-        <translation type="unfinished"></translation>
+        <translation>Todas las imágenes</translation>
     </message>
     <message>
         <source>image %1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Every %1 images</source>
-        <translation type="unfinished"></translation>
+        <translation>Una de cada %1 imágenes</translation>
     </message>
     <message>
         <source> from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Desde la %1</translation>
     </message>
     <message>
         <source> to %1</source>
-        <translation type="unfinished"></translation>
+        <translation>hasta la %1</translation>
     </message>
     <message>
         <source>This series cannot be added to print because color is not supported.</source>
-        <translation type="unfinished"></translation>
+        <translation>No está soportada la impresión de imágenes en color.</translation>
     </message>
 </context>
 <context>
@@ -455,16 +455,18 @@ border: 1px solid  #680000;
     <message>
         <source>Printer %1 doesn&apos;t respond correctly.
 Be sure that hostname and AE Title are correct.</source>
-        <translation type="unfinished"></translation>
+        <translation>La impresora %1 no ha respondido.
+Asegúrese que la dirección y el AE Title son correctos.</translation>
     </message>
     <message>
         <source>Printer %1 doesn&apos;t respond.
 Be sure that hostname and AE Title are correct.</source>
-        <translation type="unfinished"></translation>
+        <translation>La impresora %1 no ha respondido.
+Asegúrese que la dirección y el AE Title son correctos.</translation>
     </message>
     <message>
         <source>AE Title field can&apos;t be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Debe especificar el AE Title de la impresora.</translation>
     </message>
 </context>
 </TS>

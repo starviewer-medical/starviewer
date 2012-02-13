@@ -120,17 +120,18 @@
     <message>
         <location filename="qdicomprintextensionbase.ui" line="622"/>
         <source>Add to print</source>
-        <translation type="unfinished"></translation>
+        <translation>Afegir per imprimir</translation>
     </message>
     <message>
         <location filename="qdicomprintextensionbase.ui" line="653"/>
-        <source>Remove selecteds</source>
-        <translation type="unfinished"></translation>
+        <source>Remove selection</source>
+        <oldsource>Remove selecteds</oldsource>
+        <translation>Eliminar seleccionades</translation>
     </message>
     <message>
         <location filename="qdicomprintextensionbase.ui" line="660"/>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Eliminar totes</translation>
     </message>
     <message>
         <location filename="qdicomprintextensionbase.ui" line="684"/>
@@ -154,7 +155,7 @@ border: 1px solid  #680000;
     <message>
         <location filename="qdicomprintextensionbase.ui" line="44"/>
         <source>Restore</source>
-        <translation type="unfinished"></translation>
+        <translation>Restaurar</translation>
     </message>
     <message>
         <location filename="qdicomprintextensionbase.ui" line="344"/>
@@ -247,7 +248,7 @@ border: 1px solid  #680000;
         <location filename="qdicomprinterconfigurationwidgetbase.ui" line="47"/>
         <source>AE Title</source>
         <oldsource>AETitle</oldsource>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qdicomprinterconfigurationwidgetbase.ui" line="52"/>
@@ -284,7 +285,7 @@ border: 1px solid  #680000;
         <location filename="qdicomprinterconfigurationwidgetbase.ui" line="159"/>
         <source>AE Title:</source>
         <oldsource>AETitle:</oldsource>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qdicomprinterconfigurationwidgetbase.ui" line="169"/>
@@ -428,42 +429,42 @@ border: 1px solid  #680000;
     <message>
         <location filename="qdicomprintextension.cpp" line="53"/>
         <source>Choose Window/Level Presets</source>
-        <translation type="unfinished"></translation>
+        <translation>Escollir finestra predeterminada</translation>
     </message>
     <message>
         <location filename="qdicomprintextension.cpp" line="193"/>
         <source>Please add images to print.</source>
-        <translation type="unfinished"></translation>
+        <translation>No hi ha imatges a imprimir.</translation>
     </message>
     <message>
         <location filename="qdicomprintextension.cpp" line="407"/>
         <source>Series </source>
-        <translation type="unfinished"></translation>
+        <translation>Sèrie </translation>
     </message>
     <message>
         <location filename="qdicomprintextension.cpp" line="411"/>
         <source>All images</source>
-        <translation type="unfinished"></translation>
+        <translation>Totes les imatges</translation>
     </message>
     <message>
         <location filename="qdicomprintextension.cpp" line="416"/>
         <source>image %1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qdicomprintextension.cpp" line="422"/>
         <source>Every %1 images</source>
-        <translation type="unfinished"></translation>
+        <translation>Una de cada %1 imatges</translation>
     </message>
     <message>
         <location filename="qdicomprintextension.cpp" line="427"/>
         <source> from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Des de la %1</translation>
     </message>
     <message>
         <location filename="qdicomprintextension.cpp" line="428"/>
         <source> to %1</source>
-        <translation type="unfinished"></translation>
+        <translation>fins la %1</translation>
     </message>
     <message>
         <location filename="qdicomprintextension.cpp" line="694"/>
@@ -541,7 +542,7 @@ border: 1px solid  #680000;
     <message>
         <location filename="qdicomprintextension.cpp" line="735"/>
         <source>This series cannot be added to print because color is not supported.</source>
-        <translation type="unfinished"></translation>
+        <translation>No està suportada l&apos;impressió d&apos;imatges en color.</translation>
     </message>
 </context>
 <context>
@@ -572,7 +573,8 @@ border: 1px solid  #680000;
         <location filename="qdicomprinterconfigurationwidget.cpp" line="144"/>
         <source>Printer %1 doesn&apos;t respond correctly.
 Be sure that hostname and AE Title are correct.</source>
-        <translation type="unfinished"></translation>
+        <translation>La impressora %1 no ha respòs correctament.
+Assegureu-vos que la direcció i el AE Title són correctes.</translation>
     </message>
     <message>
         <location filename="qdicomprinterconfigurationwidget.cpp" line="158"/>
@@ -582,7 +584,7 @@ Be sure that hostname and AE Title are correct.</source>
     <message>
         <location filename="qdicomprinterconfigurationwidget.cpp" line="266"/>
         <source>AE Title field can&apos;t be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Heu d&apos;especificar el AE Title de la impressora.</translation>
     </message>
     <message>
         <location filename="qdicomprinterconfigurationwidget.cpp" line="273"/>
@@ -596,8 +598,8 @@ Be sure that hostname and AE Title are correct.</source>
 Be sure that hostname and AE Title are correct.</source>
         <oldsource>Printer %1 doesn&apos;t respond correctly.
 Be sure that hostname and AETitle are correct.</oldsource>
-        <translation>La impressora %1 no ha respòs correctament.
-Assegureu-vos que la direcció IP i AE Title són correctes.</translation>
+        <translation>La impressora %1 no ha respòs.
+Assegureu-vos que la direcció i el AE Title són correctes.</translation>
     </message>
 </context>
 </TS>
