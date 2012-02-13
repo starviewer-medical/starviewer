@@ -108,8 +108,8 @@ void RISRequestManager::queryPACSRISStudyRequest(DicomMask maskRISRequest)
     QList<PacsDevice> queryablePACS = PacsDeviceManager().getPACSList(PacsDeviceManager::PacsWithQueryRetrieveServiceEnabled, true);
     if (queryablePACS.isEmpty())
     {
-        QMessageBox::information(0, ApplicationNameString, tr("A RIS request has been received, but It could not be performed because there are not "
-                                                              "configured default PACS to query.") + "\n\n" + tr("Please, check your PACS settings."));
+        QMessageBox::information(0, ApplicationNameString, tr("Can't be retrieved the requested studies by RIS, because there are not configured default "
+                                                              "PACS to query.") + "\n\n" + tr("Please, check your PACS settings."));
         INFO_LOG("No s'ha pogut processar la peticio del RIS perque no hi ha PACS configurats per cercar per defecte");
         m_queueRISRequests.dequeue();
         return;

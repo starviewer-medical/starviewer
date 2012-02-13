@@ -66,6 +66,44 @@
         <oldsource>An error occurred with the iso image file create process.</oldsource>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="portinuse.cpp" line="13"/>
+        <source>No port checked yet</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::CacheTest</name>
+    <message>
+        <location filename="cachetest.cpp" line="35"/>
+        <source>The free space on the cache directory is below the minimum required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="cachetest.cpp" line="36"/>
+        <source>Make some space on disk</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="cachetest.cpp" line="43"/>
+        <source>Invalid permissions on the cache directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="cachetest.cpp" line="44"/>
+        <source>Change the cache path or the permissions of the directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="cachetest.cpp" line="52"/>
+        <source>The cache is not on the default path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="cachetest.cpp" line="60"/>
+        <source>%1 cache is correctly configured</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>udg::ConvertToDicomdir</name>
@@ -73,6 +111,34 @@
         <location filename="converttodicomdir.cpp" line="158"/>
         <source>Creating DICOMDIR...</source>
         <oldsource>Creating Dicomdir...</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::DICOMDIRBurningApplicationTest</name>
+    <message>
+        <location filename="dicomdirburningapplicationtest.cpp" line="36"/>
+        <source>DICOMDIR burning application is not installed on settings folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dicomdirburningapplicationtest.cpp" line="37"/>
+        <source>Please reinstall the application or update the configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dicomdirburningapplicationtest.cpp" line="43"/>
+        <source>There is no DICOMDIR burning application configured</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dicomdirburningapplicationtest.cpp" line="44"/>
+        <source>Install a DICOMDIR burning application</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dicomdirburningapplicationtest.cpp" line="52"/>
+        <source>The application to burn DICOMDIRs to CD/DVD is correctly configured</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -95,7 +161,8 @@
     </message>
     <message>
         <location filename="dicomdirimporter.cpp" line="347"/>
-        <source>Importing Images from DICOMDIR</source>
+        <source>Importing images from DICOMDIR</source>
+        <oldsource>Importing Images from DICOMDIR</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -149,7 +216,72 @@ You don&apos;t have write permissions on cache image directory. You couldn&apos;
     </message>
     <message>
         <location filename="databaseinstallation.cpp" line="440"/>
-        <source>Current database is of %1 newer version. To continue executing %1 is necessary to delete retrieved studies and reinstall database. Do you want to continue?</source>
+        <source>Current database is of newer version. To execute %1 retrieved studies will be deleted and database will be reinstalled. Do you want to continue?</source>
+        <oldsource>Current database is of %1 newer version. To continue executing %1 is necessary to delete retrieved studies and reinstall database. Do you want to continue?</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::EchoToPACSTest</name>
+    <message>
+        <location filename="echotopacstest.cpp" line="34"/>
+        <source>There are no PACS defined</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="echotopacstest.cpp" line="49"/>
+        <source>Echo to pacs with AE Title &apos;%1&apos; failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="echotopacstest.cpp" line="50"/>
+        <source>Contact PACS supervisor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="echotopacstest.cpp" line="54"/>
+        <source>Unable to connect to PACS with AE Title &apos;%1&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="echotopacstest.cpp" line="55"/>
+        <source>Check PACS URL, or internet connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="echotopacstest.cpp" line="68"/>
+        <source>All PACS are correctly configured</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::IncomingDICOMConnectionsPortInUseTest</name>
+    <message>
+        <location filename="incomingdicomconnectionsportinusetest.cpp" line="18"/>
+        <source>Incoming DICOM connections port is available</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::PortInUseTest</name>
+    <message>
+        <location filename="portinusetest.cpp" line="34"/>
+        <source>Port is already in use</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="portinusetest.cpp" line="35"/>
+        <source>Try another port or shut down the application using this port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="portinusetest.cpp" line="39"/>
+        <source>Unable to test if port %1 is in use due to error: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="portinusetest.cpp" line="49"/>
+        <source>Port %1 is in use by another application</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -167,7 +299,8 @@ You don&apos;t have write permissions on cache image directory. You couldn&apos;
     </message>
     <message>
         <location filename="qadvancedsearchwidgetbase.ui" line="44"/>
-        <source>Patient Birth:</source>
+        <source>Birth date:</source>
+        <oldsource>Patient Birth:</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -182,7 +315,7 @@ You don&apos;t have write permissions on cache image directory. You couldn&apos;
     </message>
     <message>
         <location filename="qadvancedsearchwidgetbase.ui" line="147"/>
-        <source>Patient Age:</source>
+        <source>Age:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -465,8 +598,8 @@ You don&apos;t have write permissions on cache image directory. You couldn&apos;
     <name>udg::QConfigurationScreen</name>
     <message>
         <location filename="qconfigurationscreen.cpp" line="296"/>
-        <source>AETitle field can&apos;t be empty.</source>
-        <oldsource>AETitle field can&apos;t be empty</oldsource>
+        <source>AE Title field can&apos;t be empty.</source>
+        <oldsource>AETitle field can&apos;t be empty.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -534,16 +667,16 @@ You don&apos;t have write permissions on cache image directory. You couldn&apos;
     <message>
         <location filename="qconfigurationscreen.cpp" line="279"/>
         <source>PACS &quot;%1&quot; doesn&apos;t respond.
-Be sure that the IP and AETitle of It are correct.</source>
+Be sure that the IP and AE Title of It are correct.</source>
         <oldsource>PACS &quot;%1&quot; doesn&apos;t respond.
-Be sure that the IP and AETitle of it are correct.</oldsource>
+Be sure that the IP and AETitle of It are correct.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qconfigurationscreen.cpp" line="276"/>
         <source>PACS &quot;%1&quot; doesn&apos;t respond correctly.
-Be sure that the IP and AETitle of It are correct.</source>
-        <oldsource>PACS &quot;%1&quot; doesn&apos;t respond correclty.
+Be sure that the IP and AE Title of It are correct.</source>
+        <oldsource>PACS &quot;%1&quot; doesn&apos;t respond correctly.
 Be sure that the IP and AETitle of It are correct.</oldsource>
         <translation type="unfinished"></translation>
     </message>
@@ -2115,6 +2248,12 @@ Close all %1 windows and try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="343"/>
+        <source>Database has been compacted successfully.</source>
+        <oldsource>Starviewer database has been compacted successfully.</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="362"/>
         <source>The extension of the database has to be &apos;.sdb&apos;</source>
         <translation type="unfinished"></translation>
@@ -2373,7 +2512,8 @@ Close all %1 windows and try again.</source>
     </message>
     <message>
         <location filename="qpacslistbase.ui" line="111"/>
-        <source>Pacs</source>
+        <source>PACS</source>
+        <oldsource>Pacs</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2461,32 +2601,32 @@ Close all %1 windows and try again.</source>
 <context>
     <name>udg::QPreviousStudiesWidget</name>
     <message>
-        <location filename="qpreviousstudieswidget.cpp" line="30"/>
+        <location filename="qpreviousstudieswidget.cpp" line="33"/>
         <source>No related studies found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qpreviousstudieswidget.cpp" line="131"/>
+        <location filename="qpreviousstudieswidget.cpp" line="139"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qpreviousstudieswidget.cpp" line="131"/>
+        <location filename="qpreviousstudieswidget.cpp" line="139"/>
         <source>Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qpreviousstudieswidget.cpp" line="163"/>
+        <location filename="qpreviousstudieswidget.cpp" line="170"/>
         <source>Looking for related studies...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qpreviousstudieswidget.cpp" line="131"/>
+        <location filename="qpreviousstudieswidget.cpp" line="139"/>
         <source>Modality</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qpreviousstudieswidget.cpp" line="131"/>
+        <location filename="qpreviousstudieswidget.cpp" line="139"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2644,7 +2784,8 @@ Close all %1 windows and try again.</source>
     </message>
     <message>
         <location filename="qstudytreewidgetbase.ui" line="149"/>
-        <source>Patient Birth</source>
+        <source>Birth Date</source>
+        <oldsource>Patient Birth</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2862,7 +3003,8 @@ If the problem persists contact with an administrator.</source>
     <name>udg::RISRequestManager</name>
     <message>
         <location filename="risrequestmanager.cpp" line="111"/>
-        <source>A RIS request has been received, but It could not be performed because there are not configured default PACS to query.</source>
+        <source>Can&apos;t be retrieved the requested studies by A RIS request has been received, because there are not configured default PACS to query.</source>
+        <oldsource>A RIS request has been received, but It could not be performed because there are not configured default PACS to query.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2878,42 +3020,50 @@ If the problem persists contact with an administrator.</source>
     <message>
         <location filename="risrequestmanager.cpp" line="222"/>
         <source>Processing the RIS request, can&apos;t query PACS %1 from %2.
-Be sure that the IP and AETitle of It are correct.</source>
+Be sure that the IP and AE Title of It are correct.</source>
         <oldsource>Processing the RIS request, can&apos;t query PACS %1 from %2.
-Be sure that the IP and AETitle of It are correct</oldsource>
+Be sure that the IP and AETitle of It are correct.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="395"/>
+        <location filename="risrequestmanager.cpp" line="396"/>
         <source>Some studies requested from RIS of patient %1 exists in local database. Do you want to retrieve again?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="398"/>
+        <location filename="risrequestmanager.cpp" line="399"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="399"/>
+        <location filename="risrequestmanager.cpp" line="400"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="417"/>
+        <location filename="risrequestmanager.cpp" line="418"/>
         <source>Can&apos;t listen RIS requests on port %1, the port is in use by another application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="420"/>
+        <location filename="risrequestmanager.cpp" line="421"/>
         <source>Can&apos;t listen RIS requests on port %1, an unknown network error has produced.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="421"/>
+        <location filename="risrequestmanager.cpp" line="422"/>
         <source>
 If the problem persists contact with an administrator.</source>
         <oldsource>
 If the problem persist contact with an administrator.</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::RISRequestsPortInUseTest</name>
+    <message>
+        <location filename="risrequestsportinusetest.cpp" line="18"/>
+        <source>RIS request port is available</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3010,7 +3160,8 @@ The study may be corrupted, if It is not corrupted please contact with %1 team.<
     </message>
     <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="294"/>
-        <source>Images from study %1 of patient %2 can&apos;t be retrieved because PACS %3 doesn&apos;t recognize your computer&apos;s AETitle %4.</source>
+        <source>Images from study %1 of patient %2 can&apos;t be retrieved because PACS %3 doesn&apos;t recognize your computer&apos;s AE Title %4.</source>
+        <oldsource>Images from study %1 of patient %2 can&apos;t be retrieved because PACS %3 doesn&apos;t recognize your computer&apos;s AETitle %4.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>

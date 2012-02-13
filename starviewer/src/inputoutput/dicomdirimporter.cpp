@@ -344,7 +344,7 @@ QString DICOMDIRImporter::getDescriptionForQProgressDialog(QString studyInstance
     else
     {
         //No hauria de passar mai que arribés aquí
-        description = tr("Importing Images from DICOMDIR");
+        description = tr("Importing images from DICOMDIR");
     }
 
     qDeleteAll(imageToImport);

@@ -146,7 +146,7 @@
      </column>
      <column>
       <property name="text">
-       <string>Patient Birth</string>
+       <string>Birth Date</string>
       </property>
      </column>
     </widget>

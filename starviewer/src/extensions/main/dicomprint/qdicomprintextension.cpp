@@ -190,7 +190,7 @@ void QDicomPrintExtension::print()
 {
     if (getImagesToPrint().count() == 0)
     {
-        QMessageBox::warning(this, ApplicationNameString, tr("Please add images to print."));
+        QMessageBox::warning(this, ApplicationNameString, tr("No added images to print."));
         return;
     }
 

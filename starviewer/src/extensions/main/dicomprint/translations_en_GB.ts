@@ -135,11 +135,11 @@ border: 1px solid  #680000;
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Remove selecteds</source>
+        <source>Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Clear</source>
+        <source>Remove selection</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

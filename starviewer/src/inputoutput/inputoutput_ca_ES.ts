@@ -66,6 +66,44 @@
         <oldsource>An error occurred with the iso image file create process.</oldsource>
         <translation>S&apos;ha produït un error generant la imatge ISO.</translation>
     </message>
+    <message>
+        <location filename="portinuse.cpp" line="13"/>
+        <source>No port checked yet</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::CacheTest</name>
+    <message>
+        <location filename="cachetest.cpp" line="35"/>
+        <source>The free space on the cache directory is below the minimum required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="cachetest.cpp" line="36"/>
+        <source>Make some space on disk</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="cachetest.cpp" line="43"/>
+        <source>Invalid permissions on the cache directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="cachetest.cpp" line="44"/>
+        <source>Change the cache path or the permissions of the directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="cachetest.cpp" line="52"/>
+        <source>The cache is not on the default path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="cachetest.cpp" line="60"/>
+        <source>%1 cache is correctly configured</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>udg::ConvertToDicomdir</name>
@@ -77,26 +115,55 @@
     </message>
 </context>
 <context>
+    <name>udg::DICOMDIRBurningApplicationTest</name>
+    <message>
+        <location filename="dicomdirburningapplicationtest.cpp" line="36"/>
+        <source>DICOMDIR burning application is not installed on settings folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dicomdirburningapplicationtest.cpp" line="37"/>
+        <source>Please reinstall the application or update the configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dicomdirburningapplicationtest.cpp" line="43"/>
+        <source>There is no DICOMDIR burning application configured</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dicomdirburningapplicationtest.cpp" line="44"/>
+        <source>Install a DICOMDIR burning application</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dicomdirburningapplicationtest.cpp" line="52"/>
+        <source>The application to burn DICOMDIRs to CD/DVD is correctly configured</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>udg::DICOMDIRImporter</name>
     <message>
         <location filename="dicomdirimporter.cpp" line="332"/>
         <source>Importing Image %1 of Series %2 from Study %3, %4</source>
-        <translation type="unfinished"></translation>
+        <translation>Important imatge %1 de la sèrie %2 de l&apos;estudi %3, %4</translation>
     </message>
     <message>
         <location filename="dicomdirimporter.cpp" line="337"/>
         <source>Importing Series %1 of Study %2, %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Important sèrie %1 de l&apos;estudi %2, %3</translation>
     </message>
     <message>
         <location filename="dicomdirimporter.cpp" line="342"/>
         <source>Importing Study %1, %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Important estudi %1, %2</translation>
     </message>
     <message>
         <location filename="dicomdirimporter.cpp" line="347"/>
-        <source>Importing Images from DICOMDIR</source>
-        <translation type="unfinished"></translation>
+        <source>Importing images from DICOMDIR</source>
+        <oldsource>Importing Images from DICOMDIR</oldsource>
+        <translation>Important imatges del DICOMDIR</translation>
     </message>
 </context>
 <context>
@@ -153,7 +220,72 @@ No teniu permisos d&apos;escriptura en el directori de la caché d&apos;imatges.
     </message>
     <message>
         <location filename="databaseinstallation.cpp" line="440"/>
-        <source>Current database is of %1 newer version. To continue executing %1 is necessary to delete retrieved studies and reinstall database. Do you want to continue?</source>
+        <source>Current database is of newer version. To execute %1 retrieved studies will be deleted and database will be reinstalled. Do you want to continue?</source>
+        <oldsource>Current database is of %1 newer version. To continue executing %1 is necessary to delete retrieved studies and reinstall database. Do you want to continue?</oldsource>
+        <translation>La base de dades és d&apos;una versió posterior a l&apos;actual. Per continuar executant %1 es reinstal·larà la base de dades i s&apos;esborraran els estudis descarregats. Voleu continuar?</translation>
+    </message>
+</context>
+<context>
+    <name>udg::EchoToPACSTest</name>
+    <message>
+        <location filename="echotopacstest.cpp" line="34"/>
+        <source>There are no PACS defined</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="echotopacstest.cpp" line="49"/>
+        <source>Echo to pacs with AE Title &apos;%1&apos; failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="echotopacstest.cpp" line="50"/>
+        <source>Contact PACS supervisor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="echotopacstest.cpp" line="54"/>
+        <source>Unable to connect to PACS with AE Title &apos;%1&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="echotopacstest.cpp" line="55"/>
+        <source>Check PACS URL, or internet connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="echotopacstest.cpp" line="68"/>
+        <source>All PACS are correctly configured</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::IncomingDICOMConnectionsPortInUseTest</name>
+    <message>
+        <location filename="incomingdicomconnectionsportinusetest.cpp" line="18"/>
+        <source>Incoming DICOM connections port is available</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::PortInUseTest</name>
+    <message>
+        <location filename="portinusetest.cpp" line="34"/>
+        <source>Port is already in use</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="portinusetest.cpp" line="35"/>
+        <source>Try another port or shut down the application using this port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="portinusetest.cpp" line="39"/>
+        <source>Unable to test if port %1 is in use due to error: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="portinusetest.cpp" line="49"/>
+        <source>Port %1 is in use by another application</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -167,27 +299,28 @@ No teniu permisos d&apos;escriptura en el directori de la caché d&apos;imatges.
     <message>
         <location filename="qadvancedsearchwidgetbase.ui" line="36"/>
         <source>Patient</source>
-        <translation type="unfinished">Pacient</translation>
+        <translation>Pacient</translation>
     </message>
     <message>
         <location filename="qadvancedsearchwidgetbase.ui" line="44"/>
-        <source>Patient Birth:</source>
-        <translation type="unfinished"></translation>
+        <source>Birth date:</source>
+        <oldsource>Patient Birth:</oldsource>
+        <translation>Data naixement:</translation>
     </message>
     <message>
         <location filename="qadvancedsearchwidgetbase.ui" line="56"/>
         <source>From</source>
-        <translation type="unfinished">Des de</translation>
+        <translation>Des de</translation>
     </message>
     <message>
         <location filename="qadvancedsearchwidgetbase.ui" line="112"/>
         <source>To</source>
-        <translation type="unfinished">Fins</translation>
+        <translation>Fins</translation>
     </message>
     <message>
         <location filename="qadvancedsearchwidgetbase.ui" line="147"/>
-        <source>Patient Age:</source>
-        <translation type="unfinished"></translation>
+        <source>Age:</source>
+        <translation>Edat:</translation>
     </message>
     <message>
         <location filename="qadvancedsearchwidgetbase.ui" line="183"/>
@@ -286,12 +419,12 @@ No teniu permisos d&apos;escriptura en el directori de la caché d&apos;imatges.
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="74"/>
         <source>Patient Name</source>
-        <translation>Nom Pacient</translation>
+        <translation>Nom pacient</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="90"/>
         <source>Patient ID</source>
-        <translation>ID Pacient</translation>
+        <translation>ID pacient</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="155"/>
@@ -316,7 +449,7 @@ No teniu permisos d&apos;escriptura en el directori de la caché d&apos;imatges.
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="202"/>
         <source>Last Week</source>
-        <translation>Última Setmana</translation>
+        <translation>Última setmana</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="232"/>
@@ -336,17 +469,17 @@ No teniu permisos d&apos;escriptura en el directori de la caché d&apos;imatges.
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="373"/>
         <source>Series Modality</source>
-        <translation>Modalitat Sèrie</translation>
+        <translation>Modalitat sèrie</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="393"/>
         <source>All</source>
-        <translation>Tots</translation>
+        <translation>Totes</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="409"/>
         <source>Computerized Radiography</source>
-        <translation>Radiografia Computeritzada</translation>
+        <translation>Radiografia computeritzada</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="412"/>
@@ -361,7 +494,7 @@ No teniu permisos d&apos;escriptura en el directori de la caché d&apos;imatges.
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="432"/>
         <source>Nuclear Medicine</source>
-        <translation>Medicina Nuclear</translation>
+        <translation>Medicina nuclear</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="435"/>
@@ -386,7 +519,7 @@ No teniu permisos d&apos;escriptura en el directori de la caché d&apos;imatges.
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="468"/>
         <source>Computerized Tomography</source>
-        <translation>Tomografia Computeritzada</translation>
+        <translation>Tomografia computeritzada</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="474"/>
@@ -401,13 +534,13 @@ No teniu permisos d&apos;escriptura en el directori de la caché d&apos;imatges.
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="494"/>
         <source>Ophthalmic Photography</source>
-        <translation type="unfinished"></translation>
+        <translation>Fotografia oftàlmica</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="497"/>
         <source>OP</source>
         <oldsource>DT</oldsource>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="507"/>
@@ -422,7 +555,7 @@ No teniu permisos d&apos;escriptura en el directori de la caché d&apos;imatges.
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="527"/>
         <source>Direct Radiography</source>
-        <translation>Radiografia Directa</translation>
+        <translation>Radiografia directa</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="530"/>
@@ -432,7 +565,7 @@ No teniu permisos d&apos;escriptura en el directori de la caché d&apos;imatges.
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="540"/>
         <source>Magnetic Resonance</source>
-        <translation>Ressonància Magnètica</translation>
+        <translation>Ressonància magnètica</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="543"/>
@@ -469,8 +602,8 @@ No teniu permisos d&apos;escriptura en el directori de la caché d&apos;imatges.
     <name>udg::QConfigurationScreen</name>
     <message>
         <location filename="qconfigurationscreen.cpp" line="296"/>
-        <source>AETitle field can&apos;t be empty.</source>
-        <oldsource>AETitle field can&apos;t be empty</oldsource>
+        <source>AE Title field can&apos;t be empty.</source>
+        <oldsource>AETitle field can&apos;t be empty.</oldsource>
         <translation>El camp AETitle no pot estar buit.</translation>
     </message>
     <message>
@@ -538,17 +671,17 @@ No teniu permisos d&apos;escriptura en el directori de la caché d&apos;imatges.
     <message>
         <location filename="qconfigurationscreen.cpp" line="279"/>
         <source>PACS &quot;%1&quot; doesn&apos;t respond.
-Be sure that the IP and AETitle of It are correct.</source>
+Be sure that the IP and AE Title of It are correct.</source>
         <oldsource>PACS &quot;%1&quot; doesn&apos;t respond.
-Be sure that the IP and AETitle of it are correct.</oldsource>
+Be sure that the IP and AETitle of It are correct.</oldsource>
         <translation>PACS &quot;%1&quot; no respon.
 Assegureu-vos que la IP i el AETitle d&apos;aquest siguin correctes.</translation>
     </message>
     <message>
         <location filename="qconfigurationscreen.cpp" line="276"/>
         <source>PACS &quot;%1&quot; doesn&apos;t respond correctly.
-Be sure that the IP and AETitle of It are correct.</source>
-        <oldsource>PACS &quot;%1&quot; doesn&apos;t respond correclty.
+Be sure that the IP and AE Title of It are correct.</source>
+        <oldsource>PACS &quot;%1&quot; doesn&apos;t respond correctly.
 Be sure that the IP and AETitle of It are correct.</oldsource>
         <translation>PACS &quot;%1&quot; no has respòs de la forma esperada.
 Assegureu-vos que la IP i el AETitle d&apos;aquest siguin correctes.</translation>
@@ -2160,6 +2293,12 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
         <translation>Esborrant estudis</translation>
     </message>
     <message>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="343"/>
+        <source>Database has been compacted successfully.</source>
+        <oldsource>Starviewer database has been compacted successfully.</oldsource>
+        <translation>S&apos;ha compactat correctament la base de dades.</translation>
+    </message>
+    <message>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="362"/>
         <source>The extension of the database has to be &apos;.sdb&apos;</source>
         <translation>L&apos;extensió de la base de dades ha de ser &apos;.sdb&apos;</translation>
@@ -2418,7 +2557,8 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
     </message>
     <message>
         <location filename="qpacslistbase.ui" line="111"/>
-        <source>Pacs</source>
+        <source>PACS</source>
+        <oldsource>Pacs</oldsource>
         <translation></translation>
     </message>
     <message>
@@ -2506,32 +2646,32 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
 <context>
     <name>udg::QPreviousStudiesWidget</name>
     <message>
-        <location filename="qpreviousstudieswidget.cpp" line="30"/>
+        <location filename="qpreviousstudieswidget.cpp" line="33"/>
         <source>No related studies found.</source>
         <translation>No s&apos;han trobat estudis relacionats.</translation>
     </message>
     <message>
-        <location filename="qpreviousstudieswidget.cpp" line="131"/>
+        <location filename="qpreviousstudieswidget.cpp" line="139"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="qpreviousstudieswidget.cpp" line="131"/>
+        <location filename="qpreviousstudieswidget.cpp" line="139"/>
         <source>Date</source>
         <translation>Data</translation>
     </message>
     <message>
-        <location filename="qpreviousstudieswidget.cpp" line="163"/>
+        <location filename="qpreviousstudieswidget.cpp" line="170"/>
         <source>Looking for related studies...</source>
         <translation>Cercant estudis relacionats...</translation>
     </message>
     <message>
-        <location filename="qpreviousstudieswidget.cpp" line="131"/>
+        <location filename="qpreviousstudieswidget.cpp" line="139"/>
         <source>Modality</source>
         <translation>Modalitat</translation>
     </message>
     <message>
-        <location filename="qpreviousstudieswidget.cpp" line="131"/>
+        <location filename="qpreviousstudieswidget.cpp" line="139"/>
         <source>Description</source>
         <translation>Descripció</translation>
     </message>
@@ -2541,27 +2681,27 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
     <message>
         <location filename="qseriesthumbnailpreviewwidget.cpp" line="64"/>
         <source> Series </source>
-        <translation type="unfinished">Sèrie </translation>
+        <translation>Sèrie </translation>
     </message>
     <message>
         <location filename="qseriesthumbnailpreviewwidget.cpp" line="78"/>
         <source> Key Object Note</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qseriesthumbnailpreviewwidget.cpp" line="82"/>
         <source> Presentation State</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qseriesthumbnailpreviewwidget.cpp" line="86"/>
         <source> Structured Report</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qseriesthumbnailpreviewwidget.cpp" line="90"/>
         <source> Images</source>
-        <translation type="unfinished"> Imatges</translation>
+        <translation> Imatges</translation>
     </message>
 </context>
 <context>
@@ -2569,7 +2709,7 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
     <message>
         <location filename="qseriesthumbnailpreviewwidgetbase.ui" line="20"/>
         <source>Form1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -2600,7 +2740,7 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
     <message>
         <location filename="qstudytreewidgetbase.ui" line="59"/>
         <source>Patient ID</source>
-        <translation>ID Pacient</translation>
+        <translation>ID pacient</translation>
     </message>
     <message>
         <location filename="qstudytreewidgetbase.ui" line="54"/>
@@ -2635,7 +2775,7 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
     <message>
         <location filename="qstudytreewidgetbase.ui" line="89"/>
         <source>DICOMItemID</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qstudytreewidgetbase.ui" line="94"/>
@@ -2655,12 +2795,12 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
     <message>
         <location filename="qstudytreewidgetbase.ui" line="104"/>
         <source>Study ID</source>
-        <translation>ID Estudi</translation>
+        <translation>ID estudi</translation>
     </message>
     <message>
         <location filename="qstudytreewidgetbase.ui" line="109"/>
         <source>Protocol Name</source>
-        <translation>Nom del Protocol</translation>
+        <translation>Nom del protocol</translation>
     </message>
     <message>
         <location filename="qstudytreewidgetbase.ui" line="124"/>
@@ -2689,8 +2829,9 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
     </message>
     <message>
         <location filename="qstudytreewidgetbase.ui" line="149"/>
-        <source>Patient Birth</source>
-        <translation type="unfinished"></translation>
+        <source>Birth Date</source>
+        <oldsource>Patient Birth</oldsource>
+        <translation>Data naixement</translation>
     </message>
 </context>
 <context>
@@ -2698,7 +2839,7 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
     <message>
         <location filename="qthumbnailsspreviewwidgetbase.ui" line="20"/>
         <source>Form1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -2916,8 +3057,9 @@ Si el problema persisteix contacteu amb un administrador.</translation>
     <name>udg::RISRequestManager</name>
     <message>
         <location filename="risrequestmanager.cpp" line="111"/>
-        <source>A RIS request has been received, but It could not be performed because there are not configured default PACS to query.</source>
-        <translation type="unfinished"></translation>
+        <source>Can&apos;t be retrieved the requested studies by A RIS request has been received, because there are not configured default PACS to query.</source>
+        <oldsource>A RIS request has been received, but It could not be performed because there are not configured default PACS to query.</oldsource>
+        <translation>No es poden descarregar els estudis sol·licitats del RIS perquè no s&apos;han configurat PACS per cercar per defecte.</translation>
     </message>
     <message>
         <location filename="risrequestmanager.cpp" line="112"/>
@@ -2932,45 +3074,53 @@ Si el problema persisteix contacteu amb un administrador.</translation>
     <message>
         <location filename="risrequestmanager.cpp" line="222"/>
         <source>Processing the RIS request, can&apos;t query PACS %1 from %2.
-Be sure that the IP and AETitle of It are correct.</source>
+Be sure that the IP and AE Title of It are correct.</source>
         <oldsource>Processing the RIS request, can&apos;t query PACS %1 from %2.
-Be sure that the IP and AETitle of It are correct</oldsource>
+Be sure that the IP and AETitle of It are correct.</oldsource>
         <translation>Processant la petició del RIS, no s&apos;ha pogut consultar al PACS %1 de %2.
 Asseguris que la IP i el AETitle d &apos;aquest siguin correctes.</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="395"/>
+        <location filename="risrequestmanager.cpp" line="396"/>
         <source>Some studies requested from RIS of patient %1 exists in local database. Do you want to retrieve again?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="risrequestmanager.cpp" line="398"/>
-        <source>Yes</source>
-        <translation type="unfinished">Sí</translation>
+        <translation>Alguns dels estudis sol·licitats des del RIS del pacient %1 ja han estat descarregats en local. Vol tornar-los a descarregar?</translation>
     </message>
     <message>
         <location filename="risrequestmanager.cpp" line="399"/>
-        <source>No</source>
-        <translation type="unfinished">No</translation>
+        <source>Yes</source>
+        <translation>Sí</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="417"/>
+        <location filename="risrequestmanager.cpp" line="400"/>
+        <source>No</source>
+        <translation>No</translation>
+    </message>
+    <message>
+        <location filename="risrequestmanager.cpp" line="418"/>
         <source>Can&apos;t listen RIS requests on port %1, the port is in use by another application.</source>
         <translation>Starviewer no pot escoltar les peticions del RIS pel port %1, ja que el port està sent utilitzat per una altra aplicació.</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="420"/>
+        <location filename="risrequestmanager.cpp" line="421"/>
         <source>Can&apos;t listen RIS requests on port %1, an unknown network error has produced.</source>
         <translation>No es poden escoltar peticions del RIS pel port %1, s&apos;ha produït un error desconegut.</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="421"/>
+        <location filename="risrequestmanager.cpp" line="422"/>
         <source>
 If the problem persists contact with an administrator.</source>
         <oldsource>
 If the problem persist contact with an administrator.</oldsource>
         <translation>
 Si el problema persisteix contacteu amb un administrador.</translation>
+    </message>
+</context>
+<context>
+    <name>udg::RISRequestsPortInUseTest</name>
+    <message>
+        <location filename="risrequestsportinusetest.cpp" line="18"/>
+        <source>RIS request port is available</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3077,7 +3227,8 @@ L&apos;estudi pot estar corrupte, si creieu que no està corrupte si us plau pos
     </message>
     <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="294"/>
-        <source>Images from study %1 of patient %2 can&apos;t be retrieved because PACS %3 doesn&apos;t recognize your computer&apos;s AETitle %4.</source>
+        <source>Images from study %1 of patient %2 can&apos;t be retrieved because PACS %3 doesn&apos;t recognize your computer&apos;s AE Title %4.</source>
+        <oldsource>Images from study %1 of patient %2 can&apos;t be retrieved because PACS %3 doesn&apos;t recognize your computer&apos;s AETitle %4.</oldsource>
         <translation>No s&apos;han pogut descarregar les imatges del estudi %1 del pacient %2 perquè el PACS %3 no ha reconegut l&apos;AETitle %4 del vostre ordinador.</translation>
     </message>
     <message>
@@ -3213,7 +3364,7 @@ Si el problema persisteix contacteu amb un administrador.</translation>
     <message>
         <location filename="senddicomfilestopacsjob.cpp" line="111"/>
         <source>The sent of images from study %1 from patient %2 to PACS %3 has been cancelled.</source>
-        <translation>L&apos;enviament d&apos;imatges de l&apos;estudi %1 del pacient %2 al PACS %3 s&apos;ha cancel·lat</translation>
+        <translation>L&apos;enviament d&apos;imatges de l&apos;estudi %1 del pacient %2 al PACS %3 s&apos;ha cancel·lat.</translation>
     </message>
     <message>
         <location filename="senddicomfilestopacsjob.cpp" line="115"/>
