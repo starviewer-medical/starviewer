@@ -160,91 +160,47 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
 
         if (m_showPlaneThickness)
         {
-            // Calculem totes les possibles interseccions
-            QList<QVector<double> > upperPlaneBounds = referencePlane->getUpperBounds();
-            double firstIntersectionPoint[3], secondIntersectionPoint[3];
-
-            int numberOfIntersections = this->getIntersections(upperPlaneBounds.at(0), upperPlaneBounds.at(1), upperPlaneBounds.at(2), upperPlaneBounds.at(3),
-                                                               localizerPlane, firstIntersectionPoint, secondIntersectionPoint);
-            if (numberOfIntersections > 0)
-            {
-                m_2DViewer->projectDICOMPointToCurrentDisplayedImage(firstIntersectionPoint, firstIntersectionPoint);
-                m_2DViewer->projectDICOMPointToCurrentDisplayedImage(secondIntersectionPoint, secondIntersectionPoint);
-
-                // Linia discontinua
-                m_projectedIntersectionLines[drawerLineOffset]->setFirstPoint(firstIntersectionPoint);
-                m_projectedIntersectionLines[drawerLineOffset]->setSecondPoint(secondIntersectionPoint);
-                // Linia de background
-                m_backgroundProjectedIntersectionLines[drawerLineOffset]->setFirstPoint(firstIntersectionPoint);
-                m_backgroundProjectedIntersectionLines[drawerLineOffset]->setSecondPoint(secondIntersectionPoint);
-
-                m_2DViewer->getDrawer()->enableGroup(ReferenceLinesDrawerGroup);
-            }
-            else
-            {
-                // TODO en comptes de fer un hide, posar valors 0,0 a cada coordenada perquè no afecti a altres línies que sí interecten?
-                m_2DViewer->getDrawer()->disableGroup(ReferenceLinesDrawerGroup);
-            }
-
-            QList<QVector<double> > lowerPlaneBounds = referencePlane->getLowerBounds();
-            numberOfIntersections = this->getIntersections(lowerPlaneBounds.at(0), lowerPlaneBounds.at(1), lowerPlaneBounds.at(2), lowerPlaneBounds.at(3),
-                                                           localizerPlane, firstIntersectionPoint, secondIntersectionPoint);
-
-            // Un cop tenim les interseccions nomes cal projectar-les i pintar la linia
-            if (numberOfIntersections > 0)
-            {
-                m_2DViewer->projectDICOMPointToCurrentDisplayedImage(firstIntersectionPoint, firstIntersectionPoint);
-                m_2DViewer->projectDICOMPointToCurrentDisplayedImage(secondIntersectionPoint, secondIntersectionPoint);
-
-                // Linia discontinua
-                m_projectedIntersectionLines[drawerLineOffset + 1]->setFirstPoint(firstIntersectionPoint);
-                m_projectedIntersectionLines[drawerLineOffset + 1]->setSecondPoint(secondIntersectionPoint);
-                // Linia de background
-                m_backgroundProjectedIntersectionLines[drawerLineOffset + 1]->setFirstPoint(firstIntersectionPoint);
-                m_backgroundProjectedIntersectionLines[drawerLineOffset + 1]->setSecondPoint(secondIntersectionPoint);
-
-                m_2DViewer->getDrawer()->enableGroup(ReferenceLinesDrawerGroup);
-            }
-            else
-            {
-                // TODO en comptes de fer un hide, posar valors 0,0 a cada coordenada perquè no afecti a altres línies que sí interecten?
-                m_2DViewer->getDrawer()->disableGroup(ReferenceLinesDrawerGroup);
-                // Si no hi ha cap intersecció apliquem el pla directament, "a veure què"
-                // TODO això és per debug ONLY!!
-    //             projectPlane(referencePlane);
-            }
+            computeIntersectionAndUpdateProjectionLines(localizerPlane, referencePlane->getUpperBounds(), drawerLineOffset);
+            computeIntersectionAndUpdateProjectionLines(localizerPlane, referencePlane->getLowerBounds(), drawerLineOffset + 1);
         }
-        // Nomes agafem el pla "central"
         else
         {
-            QList<QVector<double> > planeBounds = referencePlane->getCentralBounds();
-            double firstIntersectionPoint[3], secondIntersectionPoint[3];
-
-            int numberOfIntersections = this->getIntersections(planeBounds.at(0), planeBounds.at(1), planeBounds.at(2), planeBounds.at(3), localizerPlane,
-                                                               firstIntersectionPoint, secondIntersectionPoint);
-            if (numberOfIntersections > 0)
-            {
-                m_2DViewer->projectDICOMPointToCurrentDisplayedImage(firstIntersectionPoint, firstIntersectionPoint);
-                m_2DViewer->projectDICOMPointToCurrentDisplayedImage(secondIntersectionPoint, secondIntersectionPoint);
-
-                // Linia discontinua
-                m_projectedIntersectionLines[drawerLineOffset]->setFirstPoint(firstIntersectionPoint);
-                m_projectedIntersectionLines[drawerLineOffset]->setSecondPoint(secondIntersectionPoint);
-                // Linia de background
-                m_backgroundProjectedIntersectionLines[drawerLineOffset]->setFirstPoint(firstIntersectionPoint);
-                m_backgroundProjectedIntersectionLines[drawerLineOffset]->setSecondPoint(secondIntersectionPoint);
-
-                m_2DViewer->getDrawer()->enableGroup(ReferenceLinesDrawerGroup);
-            }
-            else
-            {
-                // TODO en comptes de fer un hide, posar valors 0,0 a cada coordenada perquè no afecti a altres línies que sí interecten?
-                m_2DViewer->getDrawer()->disableGroup(ReferenceLinesDrawerGroup);
-            }
+            // Nomes agafem el pla "central"
+            computeIntersectionAndUpdateProjectionLines(localizerPlane, referencePlane->getCentralBounds(), drawerLineOffset);
         }
     }
     else
     {
+        m_2DViewer->getDrawer()->disableGroup(ReferenceLinesDrawerGroup);
+    }
+}
+
+void ReferenceLinesTool::computeIntersectionAndUpdateProjectionLines(ImagePlane *localizerPlane, const QList<QVector<double> > &referencePlaneBounds, 
+                                                                     int lineOffset)
+{
+    // Calculem totes les possibles interseccions
+    double firstIntersectionPoint[3], secondIntersectionPoint[3];
+
+    int numberOfIntersections = this->getIntersections(referencePlaneBounds.at(0), referencePlaneBounds.at(1), referencePlaneBounds.at(2),
+        referencePlaneBounds.at(3), localizerPlane, firstIntersectionPoint, secondIntersectionPoint);
+    
+    if (numberOfIntersections > 0)
+    {
+        m_2DViewer->projectDICOMPointToCurrentDisplayedImage(firstIntersectionPoint, firstIntersectionPoint);
+        m_2DViewer->projectDICOMPointToCurrentDisplayedImage(secondIntersectionPoint, secondIntersectionPoint);
+
+        // Linia discontinua
+        m_projectedIntersectionLines[lineOffset]->setFirstPoint(firstIntersectionPoint);
+        m_projectedIntersectionLines[lineOffset]->setSecondPoint(secondIntersectionPoint);
+        // Linia de background
+        m_backgroundProjectedIntersectionLines[lineOffset]->setFirstPoint(firstIntersectionPoint);
+        m_backgroundProjectedIntersectionLines[lineOffset]->setSecondPoint(secondIntersectionPoint);
+
+        m_2DViewer->getDrawer()->enableGroup(ReferenceLinesDrawerGroup);
+    }
+    else
+    {
+        // TODO en comptes de fer un hide, posar valors 0,0 a cada coordenada perquè no afecti a altres línies que sí intersecten?
         m_2DViewer->getDrawer()->disableGroup(ReferenceLinesDrawerGroup);
     }
 }

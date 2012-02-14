@@ -56,6 +56,10 @@ private:
     /// Projecta la intersecció del pla de referència amb el localitzador, sobre el pla de localitzador
     /// tambe li indiquem quina es la linia a modificar
     void projectIntersection(ImagePlane *referencePlane, ImagePlane *localizerPlane, int drawerLineOffset = 0);
+    
+    /// Calcula la intersecció entre el pla localitzador i el pla de referència donats. Si hi ha intersecció, actualitza les corresponents
+    /// línies segons l'offset indicat
+    void computeIntersectionAndUpdateProjectionLines(ImagePlane *localizerPlane, const QList<QVector<double> > &referencePlaneBounds, int lineOffset);
 
     /// Projecta directament el pla donat, sobre el pla actual que s'està visualitzant al viewer
     /// Aquest mètode es fa servir per "debug"
