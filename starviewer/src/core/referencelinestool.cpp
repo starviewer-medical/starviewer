@@ -155,18 +155,26 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
         localizerPlane->getNormalVector(localizerNormalVector);
         localizerPlane->getOrigin(localizerOrigin);
 
-        // TODO mirar exactament quan cal amagar les línies i quan no, depenent de les interseccions trobades
-        // un cop tenim les interseccions nomes cal projectar-les i pintar la linia
-
+        bool showLines = false;
         if (m_showPlaneThickness)
         {
-            computeIntersectionAndUpdateProjectionLines(localizerPlane, referencePlane->getUpperBounds(), drawerLineOffset);
-            computeIntersectionAndUpdateProjectionLines(localizerPlane, referencePlane->getLowerBounds(), drawerLineOffset + 1);
+            // Cal que intersectin els dos plans del gruix perquè es mostrin les línies
+            showLines = computeIntersectionAndUpdateProjectionLines(localizerPlane, referencePlane->getUpperBounds(), drawerLineOffset);
+            showLines = showLines && computeIntersectionAndUpdateProjectionLines(localizerPlane, referencePlane->getLowerBounds(), drawerLineOffset + 1);
         }
         else
         {
             // Nomes agafem el pla "central"
-            computeIntersectionAndUpdateProjectionLines(localizerPlane, referencePlane->getCentralBounds(), drawerLineOffset);
+            showLines = computeIntersectionAndUpdateProjectionLines(localizerPlane, referencePlane->getCentralBounds(), drawerLineOffset);
+        }
+
+        if (showLines)
+        {
+            m_2DViewer->getDrawer()->enableGroup(ReferenceLinesDrawerGroup);
+        }
+        else
+        {
+            m_2DViewer->getDrawer()->disableGroup(ReferenceLinesDrawerGroup);
         }
     }
     else
@@ -175,7 +183,7 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
     }
 }
 
-void ReferenceLinesTool::computeIntersectionAndUpdateProjectionLines(ImagePlane *localizerPlane, const QList<QVector<double> > &referencePlaneBounds, 
+bool ReferenceLinesTool::computeIntersectionAndUpdateProjectionLines(ImagePlane *localizerPlane, const QList<QVector<double> > &referencePlaneBounds, 
                                                                      int lineOffset)
 {
     // Calculem totes les possibles interseccions
@@ -196,12 +204,20 @@ void ReferenceLinesTool::computeIntersectionAndUpdateProjectionLines(ImagePlane 
         m_backgroundProjectedIntersectionLines[lineOffset]->setFirstPoint(firstIntersectionPoint);
         m_backgroundProjectedIntersectionLines[lineOffset]->setSecondPoint(secondIntersectionPoint);
 
-        m_2DViewer->getDrawer()->enableGroup(ReferenceLinesDrawerGroup);
+        return true;
     }
     else
     {
-        // TODO en comptes de fer un hide, posar valors 0,0 a cada coordenada perquè no afecti a altres línies que sí intersecten?
-        m_2DViewer->getDrawer()->disableGroup(ReferenceLinesDrawerGroup);
+        // Per assegurar-nos que no queden dades residuals, matxaquem els punts posant-lis a tots el mateix valor, així no es produeix cap línia
+        double nullPoint[3] = { 0.0, 0.0, 0.0 };
+        // Linia discontinua
+        m_projectedIntersectionLines[lineOffset]->setFirstPoint(nullPoint);
+        m_projectedIntersectionLines[lineOffset]->setSecondPoint(nullPoint);
+        // Linia de background
+        m_backgroundProjectedIntersectionLines[lineOffset]->setFirstPoint(nullPoint);
+        m_backgroundProjectedIntersectionLines[lineOffset]->setSecondPoint(nullPoint);
+        
+        return false;
     }
 }
 
