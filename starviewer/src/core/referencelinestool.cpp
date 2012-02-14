@@ -400,20 +400,25 @@ void ReferenceLinesTool::checkAvailableLines()
         neededLines *= 2;
     }
 
-    // Llistat de linies de background
-    int numberOfLines = m_backgroundProjectedIntersectionLines.count();
+    createAndRemoveLines(neededLines, m_backgroundProjectedIntersectionLines, true);
+    createAndRemoveLines(neededLines, m_projectedIntersectionLines, false);
+}
 
-    // Ara comprovem pels dos llistats que estiguin be
+void ReferenceLinesTool::createAndRemoveLines(int neededLines, QList<DrawerLine*> &linesList, bool areBackgroundLines)
+{
+    int numberOfLines = linesList.count();
+
+    // Comprovem que el nombre sigui el que necessitem
     if (neededLines > numberOfLines)
     {
         int linesToCreate = neededLines - numberOfLines;
         // Cal crear linies noves
         for (int i = 0; i < linesToCreate; i++)
         {
-            DrawerLine *line = createNewLine(true);
+            DrawerLine *line = createNewLine(areBackgroundLines);
             m_2DViewer->getDrawer()->draw(line);
             m_2DViewer->getDrawer()->addToGroup(line, ReferenceLinesDrawerGroup);
-            m_backgroundProjectedIntersectionLines << line;
+            linesList << line;
         }
     }
     else if (neededLines < numberOfLines)
@@ -422,36 +427,7 @@ void ReferenceLinesTool::checkAvailableLines()
         // Tenim mes linies de les necessaries, cal esborrar
         for (int i = 0; i < linesToRemove; i++)
         {
-            DrawerLine *line = m_backgroundProjectedIntersectionLines.takeLast();
-            // Ja no som propietaris de les línies creades, HACK sucedani d'smart pointer(TM)
-            line->decreaseReferenceCount();
-            delete line;
-        }
-    }
-
-    // Llistat de linies "principals"
-    numberOfLines = m_projectedIntersectionLines.count();
-
-    // Ara comprovem pels dos llistats que estiguin be
-    if (neededLines > numberOfLines)
-    {
-        int linesToCreate = neededLines - numberOfLines;
-        // Cal crear linies noves
-        for (int i = 0; i < linesToCreate; i++)
-        {
-            DrawerLine *line = createNewLine();
-            m_2DViewer->getDrawer()->draw(line);
-            m_2DViewer->getDrawer()->addToGroup(line, ReferenceLinesDrawerGroup);
-            m_projectedIntersectionLines << line;
-        }
-    }
-    else if (neededLines < numberOfLines)
-    {
-        int linesToRemove = numberOfLines - neededLines;
-        // Tenim mes linies de les necessaries, cal esborrar
-        for (int i = 0; i < linesToRemove; i++)
-        {
-            DrawerLine *line = m_projectedIntersectionLines.takeLast();
+            DrawerLine *line = linesList.takeLast();
             // Ja no som propietaris de les línies creades, HACK sucedani d'smart pointer(TM)
             line->decreaseReferenceCount();
             delete line;

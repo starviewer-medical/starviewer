@@ -80,6 +80,10 @@ private:
     /// sigui l'adequat i actua en consequencia
     void checkAvailableLines();
 
+    /// Crea o elimina línies de la llista segons la quantitat necessària total indicada. 
+    /// El paràmetre areBackgroundLines indica si les línies a crear han de ser estil background o no
+    void createAndRemoveLines(int neededLines, QList<DrawerLine*> &linesList, bool areBackgroundLines);
+
 private:
     /// Nom del grup del drawer on agruparem les primitives del reference lines
     static const QString ReferenceLinesDrawerGroup;
