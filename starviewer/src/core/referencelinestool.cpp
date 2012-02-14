@@ -102,7 +102,7 @@ void ReferenceLinesTool::updateProjectionLines()
     {
         // Intentarem projectar el pla que hi ha a m_myData
         // Primer cal que comparteixin el mateix FrameOfReference
-        if (m_myFrameOfReferenceUID == m_myData->getFrameOfReferenceUID())
+        if (m_myFrameOfReferenceUID == m_myData->getFrameOfReferenceUID() && !m_myFrameOfReferenceUID.isEmpty())
         {
             QList<ImagePlane*> planesToProject = m_myData->getPlanesToProject();
             // Primer comprovar si tenim el nombre adequat de linies creades, donat el nombre de plans a projectar
