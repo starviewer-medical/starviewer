@@ -1955,7 +1955,7 @@ Es recomana que les deseu en una carpeta buida.</translation>
         <location filename="windowlevelpresetstooldata.cpp" line="141"/>
         <location filename="windowlevelpresetstooldata.cpp" line="142"/>
         <source>Custom</source>
-        <translation>A mida</translation>
+        <translation>Personalitzat</translation>
     </message>
     <message>
         <location filename="windowlevelpresetstooldata.cpp" line="12"/>
