@@ -194,6 +194,15 @@ void MagnifyingGlassTool::setFocalPoint(const double cursorPosition[3])
     focalPoint[2] = temporalWorldPoint[2];
 
     m_magnifiedCamera->SetFocalPoint(focalPoint);
+
+    int xIndex, yIndex, zIndex;
+    Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
+
+    double position[3];
+    m_magnifiedCamera->GetPosition(position);
+    position[xIndex] = temporalWorldPoint[xIndex];
+    position[yIndex] = temporalWorldPoint[yIndex];
+    m_magnifiedCamera->SetPosition(position);
 }
 
 void MagnifyingGlassTool::updateCamera()
