@@ -2532,6 +2532,7 @@ void Q2DViewer::updateDefaultPreset()
                     windowLevel.first = -windowLevel.first;
                 }
                 setWindowLevel(windowLevel.first, windowLevel.second);
+                m_windowLevelData->updateCurrentFileDefinedPreset(windowLevel.first, windowLevel.second);
             }
         }
     }
