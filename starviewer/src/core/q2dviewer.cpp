@@ -2529,12 +2529,9 @@ void Q2DViewer::updateDefaultPreset()
                 QPair<double, double> windowLevel = image->getWindowLevel(m_defaultPresetToApply);
                 if (image->getPhotometricInterpretation() == "MONOCHROME1")
                 {
-                    setWindowLevel(-windowLevel.first, windowLevel.second);
+                    windowLevel.first = -windowLevel.first;
                 }
-                else
-                {
-                    setWindowLevel(windowLevel.first, windowLevel.second);
-                }
+                setWindowLevel(windowLevel.first, windowLevel.second);
             }
         }
     }
