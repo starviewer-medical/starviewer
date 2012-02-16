@@ -133,31 +133,28 @@ void MagnifyingGlassTool::updateMagnifiedView()
     }
     
     double xyz[3];
-    if (m_2DViewer->getCurrentCursorImageCoordinate(xyz))
+    if (!m_2DViewer->getCurrentCursorImageCoordinate(xyz))
     {
-        m_2DViewer->setCursor(QCursor(Qt::BlankCursor));
-        
-        // Actualitzem el viewport
-        updateMagnifiedRendererViewport(eventPosition, renderWindowSize);
-        updateCamera();
-        
-        if (!m_magnifyingRendererIsVisible)
-        {
-            addMagnifiedRenderer();
-        }
-        
-        // Actualitzem la posició que enfoca la càmera
-        setFocalPoint(xyz);
-        m_magnifiedRenderer->ResetCameraClippingRange();
-        m_2DViewer->render();
+        m_2DViewer->getEventWorldCoordinate(xyz);
     }
-    else
+
+    m_2DViewer->setCursor(QCursor(Qt::BlankCursor));
+    
+    // Actualitzem el viewport
+    updateMagnifiedRendererViewport(eventPosition, renderWindowSize);
+    updateCamera();
+    
+    if (!m_magnifyingRendererIsVisible)
     {
-        if (m_magnifyingRendererIsVisible)
-        {
-            removeMagnifiedRenderer();
-        }
+        addMagnifiedRenderer();
     }
+    
+    // Actualitzem la posició que enfoca la càmera
+    setFocalPoint(xyz);
+    m_magnifiedRenderer->ResetCameraClippingRange();
+    m_2DViewer->render();
+
+    
 }
 
 void MagnifyingGlassTool::setFocalPoint(const double cursorPosition[3])
