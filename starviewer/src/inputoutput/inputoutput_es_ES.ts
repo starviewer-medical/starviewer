@@ -2598,18 +2598,21 @@ Cierre todas las ventanas de %1 y vuelva a intentarlo.</translation>
     </message>
     <message>
         <location filename="qpopuprisrequestsscreen.cpp" line="188"/>
-        <source>No studies has been retrieved.</source>
-        <translation>No se han descargado estudios.</translation>
+        <source>No studies has been found.</source>
+        <oldsource>No studies has been retrieved.</oldsource>
+        <translation>No se han encontrado estudios.</translation>
     </message>
     <message>
         <location filename="qpopuprisrequestsscreen.cpp" line="192"/>
-        <source>%1 study has been retrieved.</source>
-        <translation>Se ha descargado %1 estudio.</translation>
+        <source>%1 study has been found.</source>
+        <oldsource>%1 study has been retrieved.</oldsource>
+        <translation>Se ha encontrado %1 estudio.</translation>
     </message>
     <message>
         <location filename="qpopuprisrequestsscreen.cpp" line="196"/>
-        <source>%1 studies have been retrieved.</source>
-        <translation>Se han descargado %1 estudios.</translation>
+        <source>%1 studies have been found.</source>
+        <oldsource>%1 studies have been retrieved.</oldsource>
+        <translation>Se han encontrado %1 estudios.</translation>
     </message>
     <message>
         <location filename="qpopuprisrequestsscreen.cpp" line="203"/>

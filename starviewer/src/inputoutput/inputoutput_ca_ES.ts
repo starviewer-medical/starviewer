@@ -2601,18 +2601,21 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
     </message>
     <message>
         <location filename="qpopuprisrequestsscreen.cpp" line="188"/>
-        <source>No studies has been retrieved.</source>
-        <translation>No s&apos;han descarregat estudis.</translation>
+        <source>No studies has been found.</source>
+        <oldsource>No studies has been retrieved.</oldsource>
+        <translation>No s&apos;han trobat estudis.</translation>
     </message>
     <message>
         <location filename="qpopuprisrequestsscreen.cpp" line="192"/>
-        <source>%1 study has been retrieved.</source>
-        <translation>S&apos;ha descarregat %1 estudi.</translation>
+        <source>%1 study has been found.</source>
+        <oldsource>%1 study has been retrieved.</oldsource>
+        <translation>S&apos;ha trobat %1 estudi.</translation>
     </message>
     <message>
         <location filename="qpopuprisrequestsscreen.cpp" line="196"/>
-        <source>%1 studies have been retrieved.</source>
-        <translation>S&apos;han descarregat %1 estudis.</translation>
+        <source>%1 studies have been found.</source>
+        <oldsource>%1 studies have been retrieved.</oldsource>
+        <translation>S&apos;han trobat %1 estudis.</translation>
     </message>
     <message>
         <location filename="qpopuprisrequestsscreen.cpp" line="203"/>
@@ -3083,7 +3086,7 @@ Asseguris que la IP i el AETitle d &apos;aquest siguin correctes.</translation>
     <message>
         <location filename="risrequestmanager.cpp" line="396"/>
         <source>Some studies requested from RIS of patient %1 exists in local database. Do you want to retrieve again?</source>
-        <translation>Alguns dels estudis sol·licitats des del RIS del pacient %1 ja han estat descarregats en local. Vol tornar-los a descarregar?</translation>
+        <translation>Alguns dels estudis sol·licitats des del RIS del pacient %1 ja han estat descarregats en local. Voleu tornar-los a descarregar?</translation>
     </message>
     <message>
         <location filename="risrequestmanager.cpp" line="399"/>
