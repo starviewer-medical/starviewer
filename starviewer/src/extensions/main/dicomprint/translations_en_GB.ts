@@ -388,10 +388,6 @@ border: 1px solid  #680000;
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Please add images to print.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Series </source>
         <translation type="unfinished"></translation>
     </message>
@@ -417,6 +413,10 @@ border: 1px solid  #680000;
     </message>
     <message>
         <source>This series cannot be added to print because color is not supported.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No added images to print.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

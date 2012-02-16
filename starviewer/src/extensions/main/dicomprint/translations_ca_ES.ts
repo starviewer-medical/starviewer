@@ -433,7 +433,8 @@ border: 1px solid  #680000;
     </message>
     <message>
         <location filename="qdicomprintextension.cpp" line="193"/>
-        <source>Please add images to print.</source>
+        <source>No added images to print.</source>
+        <oldsource>Please add images to print.</oldsource>
         <translation>No hi ha imatges a imprimir.</translation>
     </message>
     <message>

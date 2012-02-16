@@ -163,7 +163,7 @@
         <location filename="dicomdirimporter.cpp" line="347"/>
         <source>Importing images from DICOMDIR</source>
         <oldsource>Importing Images from DICOMDIR</oldsource>
-        <translation type="unfinished">Importando imágenes del DICOMDIR</translation>
+        <translation>Importando imágenes del DICOMDIR</translation>
     </message>
 </context>
 <context>
@@ -3054,8 +3054,8 @@ Si el problema persiste contacte con un administrador.</translation>
     <name>udg::RISRequestManager</name>
     <message>
         <location filename="risrequestmanager.cpp" line="111"/>
-        <source>Can&apos;t be retrieved the requested studies by A RIS request has been received, because there are not configured default PACS to query.</source>
-        <oldsource>A RIS request has been received, but It could not be performed because there are not configured default PACS to query.</oldsource>
+        <source>Can&apos;t be retrieved the requested studies by RIS, because there are not configured default PACS to query.</source>
+        <oldsource>Can&apos;t be retrieved the requested studies by A RIS request has been received, because there are not configured default PACS to query.</oldsource>
         <translation>No se pueden descargar los estudios solicitados del RIS porque no hay PACS configurados para buscar por defecto.</translation>
     </message>
     <message>
