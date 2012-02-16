@@ -158,6 +158,8 @@ void QWindowLevelComboBox::setActiveWindowLevel(const QString &text)
 {
     if (text == tr("Custom"))
     {
+        // Reestablim el valor que hi havia perquè no quedi seleccionat la fila de l'editor.
+        this->selectPreset(m_currentSelectedPreset);
         m_customWindowLevelDialog->exec();
     }
     else if (text == tr("Edit Custom WW/WL"))
