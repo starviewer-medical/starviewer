@@ -3057,8 +3057,8 @@ Si el problema persisteix contacteu amb un administrador.</translation>
     <name>udg::RISRequestManager</name>
     <message>
         <location filename="risrequestmanager.cpp" line="111"/>
-        <source>Can&apos;t be retrieved the requested studies by A RIS request has been received, because there are not configured default PACS to query.</source>
-        <oldsource>A RIS request has been received, but It could not be performed because there are not configured default PACS to query.</oldsource>
+        <source>Can&apos;t be retrieved the requested studies by RIS, because there are not configured default PACS to query.</source>
+        <oldsource>Can&apos;t be retrieved the requested studies by A RIS request has been received, because there are not configured default PACS to query.</oldsource>
         <translation>No es poden descarregar els estudis sol·licitats del RIS perquè no s&apos;han configurat PACS per cercar per defecte.</translation>
     </message>
     <message>

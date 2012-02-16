@@ -394,10 +394,6 @@ border: 1px solid  #680000;
         <translation>Escoger ventana predeterminada</translation>
     </message>
     <message>
-        <source>Please add images to print.</source>
-        <translation>No hay imágenes para imprimir.</translation>
-    </message>
-    <message>
         <source>Series </source>
         <translation>Serie</translation>
     </message>
@@ -424,6 +420,10 @@ border: 1px solid  #680000;
     <message>
         <source>This series cannot be added to print because color is not supported.</source>
         <translation>No está soportada la impresión de imágenes en color.</translation>
+    </message>
+    <message>
+        <source>No added images to print.</source>
+        <translation>No hay imágenes para imprimir.</translation>
     </message>
 </context>
 <context>

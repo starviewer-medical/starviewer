@@ -35,7 +35,7 @@
     <message>
         <location filename="q2dviewerextension.cpp" line="82"/>
         <source>Export viewer image(s) to DICOM and send them to a PACS server</source>
-        <translation type="unfinished">Exporta la imatge(s) del visor a DICOM i envia-les al servidor PACS</translation>
+        <translation>Exporta la imatge(s) del visor a DICOM i envia-les al servidor PACS</translation>
     </message>
     <message>
         <location filename="q2dviewerextension.cpp" line="88"/>
