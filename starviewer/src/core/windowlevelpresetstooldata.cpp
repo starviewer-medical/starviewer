@@ -1,5 +1,6 @@
 #include "windowlevelpresetstooldata.h"
 #include "customwindowlevelsrepository.h"
+#include "logging.h"
 #include <QStringList>
 
 namespace udg {
@@ -131,6 +132,30 @@ QString WindowLevelPresetsToolData::getCurrentPreset() const
 int WindowLevelPresetsToolData::getFileDefinedPresetIndex(const QString &preset) const
 {
     return m_fileDefinedPresets.indexOf(preset);
+}
+
+void WindowLevelPresetsToolData::updateCurrentFileDefinedPreset(double window, double level)
+{
+    int group;
+    if (getGroup(m_currentPreset, group))
+    {
+        if (group == FileDefined)
+        {
+            WindowLevelStruct data = { window, level, FileDefined };
+            m_presets.insert(m_currentPreset, data);
+            emit currentWindowLevel(window, level);
+            // En aquest cas no fem emit presetChanged(preset) perquè sinó provocaria un bucle infinit
+            // Només cal notificar el valor perquè el diàleg de custom WW/WL actualitzi el seu valor
+        }
+        else
+        {
+            DEBUG_LOG("El preset actual no és de tipus FileDefined. No s'actualitza cap valor de window/level");
+        }
+    }
+    else
+    {
+        DEBUG_LOG("El preset actual no existeix al contenidor de presets. No s'actualitza cap valor de window/level");
+    }
 }
 
 void WindowLevelPresetsToolData::setCustomWindowLevel(double window, double level)

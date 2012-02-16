@@ -78,6 +78,11 @@ public:
     /// @return Identificador del preset. Retorna -1 si el preset no és de tipus FileDefined
     int getFileDefinedPresetIndex(const QString &preset) const;
 
+    /// Actualitza els valors del preset actual de tipus FileDefined.  
+    /// Només l'actualitza si el preset que està activat és de tipus FileDefined 
+    /// Cal doncs haver fet prèviament un activatePreset() d'un preset d'aquest tipus perquè l'actualitzaciósigui efectiva
+    void updateCurrentFileDefinedPreset(double window, double level);
+
 public slots:
     /// Donem el valor del preset "A mida"
     /// @param window valor de window
