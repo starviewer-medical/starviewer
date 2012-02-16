@@ -2556,17 +2556,20 @@ Close all %1 windows and try again.</source>
     </message>
     <message>
         <location filename="qpopuprisrequestsscreen.cpp" line="188"/>
-        <source>No studies has been retrieved.</source>
+        <source>No studies has been found.</source>
+        <oldsource>No studies has been retrieved.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qpopuprisrequestsscreen.cpp" line="192"/>
-        <source>%1 study has been retrieved.</source>
+        <source>%1 study has been found.</source>
+        <oldsource>%1 study has been retrieved.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qpopuprisrequestsscreen.cpp" line="196"/>
-        <source>%1 studies have been retrieved.</source>
+        <source>%1 studies have been found.</source>
+        <oldsource>%1 studies have been retrieved.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
