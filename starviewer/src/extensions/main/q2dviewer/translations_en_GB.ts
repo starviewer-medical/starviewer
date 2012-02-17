@@ -89,6 +89,21 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="q2dviewerextension.cpp" line="580"/>
+        <source>All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextension.cpp" line="591"/>
+        <source>Deactivate manual synchronization in all viewers (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextension.cpp" line="593"/>
+        <source>None</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="q2dviewerextension.cpp" line="558"/>
         <source>Save the current image in a standard image format</source>
         <translation type="unfinished"></translation>
@@ -100,21 +115,17 @@
     </message>
     <message>
         <location filename="q2dviewerextension.cpp" line="578"/>
-        <source>Activate manual synchronization all viewers</source>
+        <source>Activate manual synchronization in all viewers (%1)</source>
+        <oldsource>Activate manual synchronization all viewers</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="590"/>
-        <source>Deactivate manual synchronization all viewers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerextension.cpp" line="777"/>
+        <location filename="q2dviewerextension.cpp" line="779"/>
         <source>Export to DICOM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="777"/>
+        <location filename="q2dviewerextension.cpp" line="779"/>
         <source>This action is not allowed because the selected viewer is empty.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -248,12 +259,23 @@
     </message>
     <message>
         <location filename="q2dviewerextensionbase.ui" line="972"/>
-        <source>Automatic</source>
+        <source>Auto-Sync</source>
+        <oldsource>Automatic</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="q2dviewerextensionbase.ui" line="1010"/>
         <source>Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextensionbase.ui" line="1049"/>
+        <source>All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextensionbase.ui" line="1078"/>
+        <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

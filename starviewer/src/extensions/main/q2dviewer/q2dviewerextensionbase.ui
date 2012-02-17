@@ -969,7 +969,7 @@
        <item>
         <widget class="QToolButton" name="m_automaticSynchronizationToolButton">
          <property name="text">
-          <string>Automatic</string>
+          <string>Auto-Sync</string>
          </property>
          <property name="icon">
           <iconset resource="../../../main/main.qrc">
@@ -1046,11 +1046,11 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string/>
+          <string>All</string>
          </property>
          <property name="icon">
           <iconset resource="../../../main/main.qrc">
-           <normaloff>:/images/synchronizeAllViewers.png</normaloff>:/images/synchronizeAllViewers.png</iconset>
+           <normaloff>:/images/linkAll.png</normaloff>:/images/linkAll.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -1059,7 +1059,7 @@
           </size>
          </property>
          <property name="toolButtonStyle">
-          <enum>Qt::ToolButtonTextUnderIcon</enum>
+          <enum>Qt::ToolButtonTextBesideIcon</enum>
          </property>
          <property name="autoRaise">
           <bool>true</bool>
@@ -1075,11 +1075,11 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string/>
+          <string>None</string>
          </property>
          <property name="icon">
           <iconset resource="../../../main/main.qrc">
-           <normaloff>:/images/unsynchronize.png</normaloff>:/images/unsynchronize.png</iconset>
+           <normaloff>:/images/unlinkAll.png</normaloff>:/images/unlinkAll.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -1088,7 +1088,7 @@
           </size>
          </property>
          <property name="toolButtonStyle">
-          <enum>Qt::ToolButtonTextUnderIcon</enum>
+          <enum>Qt::ToolButtonTextBesideIcon</enum>
          </property>
          <property name="autoRaise">
           <bool>true</bool>

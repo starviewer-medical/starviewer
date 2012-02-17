@@ -17,9 +17,9 @@ Q2DViewerWidget::Q2DViewerWidget(QWidget *parent)
 
     // Creació de l'acció del boto de sincronitzar.
     m_synchronizeButtonAction = new QAction(0);
-    m_synchronizeButtonAction->setText(tr("Synchronize tool"));
-    m_synchronizeButtonAction->setStatusTip(tr("Enable/Disable Synchronize tool"));
-    m_synchronizeButtonAction->setIcon(QIcon(":/images/synchronize.png"));
+    m_synchronizeButtonAction->setIcon(QIcon(":/images/unlinked.png"));
+    m_synchronizeButtonAction->setText(tr("Enable manual synchronization in this viewer"));
+    m_synchronizeButtonAction->setStatusTip(m_synchronizeButtonAction->text());
     m_synchronizeButtonAction->setCheckable(true);
     m_synchronizeButton->setDefaultAction(m_synchronizeButtonAction);
     m_synchronizeButton->setEnabled(false);
@@ -180,6 +180,19 @@ void Q2DViewerWidget::setDefaultAction(QAction *synchronizeAction)
 
 void Q2DViewerWidget::enableSynchronization(bool enable)
 {
+    if (!enable)
+    {
+        m_synchronizeButtonAction->setIcon(QIcon(":/images/unlinked.png"));
+        m_synchronizeButtonAction->setText(tr("Enable manual synchronization in this viewer"));
+        m_synchronizeButtonAction->setStatusTip(m_synchronizeButtonAction->text());
+    }
+    else
+    {
+        m_synchronizeButtonAction->setIcon(QIcon(":/images/linked.png"));
+        m_synchronizeButtonAction->setText(tr("Disable manual synchronization in this viewer"));
+        m_synchronizeButtonAction->setStatusTip(m_synchronizeButtonAction->text());
+    }
+    
     if (m_synchronizeButtonAction->isChecked() != enable)
     {
         // Ens han invocat el mètode directament, no s'ha fet clicant el botó

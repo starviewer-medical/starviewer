@@ -381,7 +381,7 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
     }
     else if (toolName == "AutomaticSynchronizationTool")
     {
-        toolAction->setText(tr("Auto"));
+        toolAction->setText(tr("Auto-Sync"));
         toolAction->setIcon(QIcon(":/images/synchronize.png"));
         toolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::AutomaticSynchronizationTool));
         statusTip = tr("Enable/Disable Automatic synchronization tool");

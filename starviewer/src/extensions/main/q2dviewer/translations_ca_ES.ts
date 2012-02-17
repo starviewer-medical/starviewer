@@ -89,6 +89,21 @@
         <translation>Guarda totes les imatges de la sèrie actual...</translation>
     </message>
     <message>
+        <location filename="q2dviewerextension.cpp" line="580"/>
+        <source>All</source>
+        <translation>Tots</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextension.cpp" line="591"/>
+        <source>Deactivate manual synchronization in all viewers (%1)</source>
+        <translation>Desactiva la sincronització manual a tots els visors (%1)</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextension.cpp" line="593"/>
+        <source>None</source>
+        <translation>Cap</translation>
+    </message>
+    <message>
         <location filename="q2dviewerextension.cpp" line="558"/>
         <source>Save the current image in a standard image format</source>
         <translation>Guarda la imatge actual en un format estàndard</translation>
@@ -100,21 +115,17 @@
     </message>
     <message>
         <location filename="q2dviewerextension.cpp" line="578"/>
-        <source>Activate manual synchronization all viewers</source>
-        <translation>Activa la sincronització manual a tots els visors</translation>
+        <source>Activate manual synchronization in all viewers (%1)</source>
+        <oldsource>Activate manual synchronization all viewers</oldsource>
+        <translation>Activa la sincronització manual a tots els visors (%1)</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="590"/>
-        <source>Deactivate manual synchronization all viewers</source>
-        <translation>Desactiva la sincronització manual a tots els visors</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerextension.cpp" line="777"/>
+        <location filename="q2dviewerextension.cpp" line="779"/>
         <source>Export to DICOM</source>
         <translation>Exporta a DICOM</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="777"/>
+        <location filename="q2dviewerextension.cpp" line="779"/>
         <source>This action is not allowed because the selected viewer is empty.</source>
         <translation>Aquesta acció no està permesa ja que el visor està buit.</translation>
     </message>
@@ -248,13 +259,24 @@
     </message>
     <message>
         <location filename="q2dviewerextensionbase.ui" line="972"/>
-        <source>Automatic</source>
-        <translation>Automàtica</translation>
+        <source>Auto-Sync</source>
+        <oldsource>Automatic</oldsource>
+        <translation></translation>
     </message>
     <message>
         <location filename="q2dviewerextensionbase.ui" line="1010"/>
         <source>Edit</source>
         <translation>Edita</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextensionbase.ui" line="1049"/>
+        <source>All</source>
+        <translation>Tots</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextensionbase.ui" line="1078"/>
+        <source>None</source>
+        <translation>Cap</translation>
     </message>
     <message>
         <location filename="q2dviewerextensionbase.ui" line="788"/>
