@@ -46,6 +46,16 @@ void QDICOMDumpBrowser::createConnections()
     // Connectem els butons
     connect(m_searchTagLineEdit, SIGNAL(textChanged(const QString&)), SLOT(updateSearch()));
     connect(m_highlightOnlyCheckBox, SIGNAL(clicked(bool)), SLOT(updateSearch()));
+    connect(m_dumpTabWidget, SIGNAL(currentChanged(int)), SLOT(onTabChange(int)));
+}
+
+void QDICOMDumpBrowser::onTabChange(int index)
+{
+    if (index == 1)
+    {
+        // Pestanya de tots els tags, li donem el focus al line edit de cerca
+        m_searchTagLineEdit->setFocus();
+    }
 }
 
 void QDICOMDumpBrowser::searchTag(const QString &textToSearch, bool highlightOnly)
