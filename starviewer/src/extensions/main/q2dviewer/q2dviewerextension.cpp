@@ -575,8 +575,9 @@ void Q2DViewerExtension::initializeTools()
     // SYNCHRONIZE TOOLS
     m_synchronizeAllAction = new QAction(this);
     m_synchronizeAllAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::SynchronizeAllViewers));
-    m_synchronizeAllAction->setToolTip(tr("Activate manual synchronization all viewers"));
-    m_synchronizeAllAction->setIcon(QIcon(":/images/synchronizeAllViewers.png"));
+    m_synchronizeAllAction->setToolTip(tr("Activate manual synchronization in all viewers (%1)").arg(m_synchronizeAllAction->shortcut().toString()));
+    m_synchronizeAllAction->setIcon(QIcon(":/images/linkAll.png"));
+    m_synchronizeAllAction->setText(tr("All"));
 
     m_synchronizeAllViewersButton->setIcon(m_synchronizeAllAction->icon());
     m_synchronizeAllViewersButton->setToolTip(m_synchronizeAllAction->toolTip());
@@ -587,8 +588,9 @@ void Q2DViewerExtension::initializeTools()
 
     m_desynchronizeAllAction = new QAction(this);
     m_desynchronizeAllAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::DesynchronizeAllViewers));
-    m_desynchronizeAllAction->setToolTip(tr("Deactivate manual synchronization all viewers"));
-    m_desynchronizeAllAction->setIcon(QIcon(":/images/unsynchronize.png"));
+    m_desynchronizeAllAction->setToolTip(tr("Deactivate manual synchronization in all viewers (%1)").arg(m_desynchronizeAllAction->shortcut().toString()));
+    m_desynchronizeAllAction->setIcon(QIcon(":/images/unlinkAll.png"));
+    m_desynchronizeAllAction->setText(tr("None"));
 
     m_desynchronizeAllViewersButton->setIcon(m_desynchronizeAllAction->icon());
     m_desynchronizeAllViewersButton->setToolTip(m_desynchronizeAllAction->toolTip());

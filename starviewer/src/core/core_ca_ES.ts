@@ -357,13 +357,13 @@
 <context>
     <name>udg::PerpendicularDistanceTool</name>
     <message>
-        <location filename="perpendiculardistancetool.cpp" line="275"/>
+        <location filename="perpendiculardistancetool.cpp" line="399"/>
         <source>%1 px</source>
         <translation>%1 px</translation>
     </message>
     <message>
-        <location filename="perpendiculardistancetool.cpp" line="293"/>
-        <location filename="perpendiculardistancetool.cpp" line="300"/>
+        <location filename="perpendiculardistancetool.cpp" line="417"/>
+        <location filename="perpendiculardistancetool.cpp" line="424"/>
         <source>%1 mm</source>
         <translation>%1 mm</translation>
     </message>
@@ -371,17 +371,17 @@
 <context>
     <name>udg::Q2DViewer</name>
     <message>
-        <location filename="q2dviewer.cpp" line="1888"/>
+        <location filename="q2dviewer.cpp" line="1889"/>
         <source>Slice: %1/%2 Phase: %3/%4</source>
         <translation>Tall: %1/%2 Fase: %3/%4</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1901"/>
+        <location filename="q2dviewer.cpp" line="1902"/>
         <source>Slice: %1/%2</source>
         <translation>Tall: %1/%2</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1883"/>
+        <location filename="q2dviewer.cpp" line="1884"/>
         <source>Slice: %1-%2/%3 Phase: %4/%5</source>
         <translation>Tall: %1-%2/%3 Fase: %4/%5</translation>
     </message>
@@ -391,24 +391,24 @@
         <translation>No hi ha prou memòria per al procés de renderització. Intenteu tancar totes les finestres de %1 obertes, reinicieu l&apos;aplicació i torneu-ho a provar. Si el problema es manté, es podria solucionar afegint més memòria RAM o canviant a un sistema operatiu de 64 bits.</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1897"/>
+        <location filename="q2dviewer.cpp" line="1898"/>
         <source>Slice: %1-%2/%3</source>
         <translation>Tall: %1-%2/%3</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1907"/>
+        <location filename="q2dviewer.cpp" line="1908"/>
         <source> Thickness: %1 mm</source>
         <translation> Gruix: %1 mm</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1615"/>
+        <location filename="q2dviewer.cpp" line="1616"/>
         <source>%1 x %2
 WW: %5 WL: %6</source>
         <translation>%1 x %2
 WW: %5 WL: %6</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1651"/>
+        <location filename="q2dviewer.cpp" line="1652"/>
         <source>%1
 %2
 %3 %4 %5
@@ -423,12 +423,12 @@ Acc:%6
 %8</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1861"/>
+        <location filename="q2dviewer.cpp" line="1862"/>
         <source>Loc: %1</source>
         <translation>Loc: %1</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1869"/>
+        <location filename="q2dviewer.cpp" line="1870"/>
         <source>-%1</source>
         <translation>-%1</translation>
     </message>
@@ -574,14 +574,17 @@ Acc:%6
 <context>
     <name>udg::Q2DViewerWidget</name>
     <message>
-        <location filename="q2dviewerwidget.cpp" line="20"/>
-        <source>Synchronize tool</source>
-        <translation>Eina de sincronització</translation>
+        <location filename="q2dviewerwidget.cpp" line="21"/>
+        <location filename="q2dviewerwidget.cpp" line="186"/>
+        <source>Enable manual synchronization in this viewer</source>
+        <oldsource>Enable manual synchronization on this viewer</oldsource>
+        <translation>Activa la sincronització manual en aquest visor</translation>
     </message>
     <message>
-        <location filename="q2dviewerwidget.cpp" line="21"/>
-        <source>Enable/Disable Synchronize tool</source>
-        <translation>Activa/desactiva l&apos;eina de sincronització</translation>
+        <location filename="q2dviewerwidget.cpp" line="192"/>
+        <source>Disable manual synchronization in this viewer</source>
+        <oldsource>Disable manual synchronization on this viewer</oldsource>
+        <translation>Desactiva la sincronització manual en aquest visor</translation>
     </message>
 </context>
 <context>
@@ -806,7 +809,8 @@ Marc Ruiz: El GIMP fa servir &quot;brillantor&quot;. De moment ho canvio a l&apo
     </message>
     <message>
         <location filename="qdiagnosistest.cpp" line="168"/>
-        <source>%1 Ok</source>
+        <source>%1 OK</source>
+        <oldsource>%1 Ok</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -880,8 +884,9 @@ Marc Ruiz: El GIMP fa servir &quot;brillantor&quot;. De moment ho canvio a l&apo
     </message>
     <message>
         <location filename="qdiagnosistestbase.ui" line="461"/>
-        <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <source>OK</source>
+        <oldsource>Ok</oldsource>
+        <translation type="unfinished">D&apos;acord</translation>
     </message>
 </context>
 <context>
@@ -1086,7 +1091,7 @@ Variable d&apos;entorn(logFilePath): %2</translation>
     </message>
     <message>
         <location filename="qwindowlevelcombobox.cpp" line="154"/>
-        <location filename="qwindowlevelcombobox.cpp" line="163"/>
+        <location filename="qwindowlevelcombobox.cpp" line="165"/>
         <source>Edit Custom WW/WL</source>
         <translation>Edita els WW/WL personalitzats</translation>
     </message>
@@ -1446,9 +1451,9 @@ Es recomana que les deseu en una carpeta buida.</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="384"/>
-        <source>Auto</source>
-        <oldsource>Auto-Sync</oldsource>
-        <translation type="unfinished">Automàtic</translation>
+        <source>Auto-Sync</source>
+        <oldsource>Auto</oldsource>
+        <translation></translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="387"/>
@@ -1471,138 +1476,134 @@ Es recomana que les deseu en una carpeta buida.</translation>
         <translation>Cercle</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="403"/>
+        <location filename="toolregistry.cpp" line="402"/>
         <source>Enable/Disable Circle tool</source>
         <translation>Activa/desactiva l&apos;eina de cercle</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="408"/>
+        <location filename="toolregistry.cpp" line="407"/>
         <source>TA-GT</source>
         <translation></translation>
     </message>
     <message>
-        <source>Perpendicular Distance</source>
-        <translation type="obsolete">Distància perpendicular</translation>
-    </message>
-    <message>
-        <location filename="toolregistry.cpp" line="411"/>
+        <location filename="toolregistry.cpp" line="409"/>
         <source>Enable/disable TA-GT distance tool</source>
         <oldsource>Enable/disable perpendicular distance tool</oldsource>
         <translation>Activa/desactiva l&apos;eina de distància TA-GT</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="440"/>
+        <location filename="toolregistry.cpp" line="438"/>
         <source>Restore</source>
         <translation>Restableix</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="443"/>
+        <location filename="toolregistry.cpp" line="441"/>
         <source>Restore to initial state</source>
         <translation>Restableix a l&apos;estat inicial</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="450"/>
+        <location filename="toolregistry.cpp" line="448"/>
         <source>All of current viewer</source>
         <translation>Tot del visor actual</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="453"/>
+        <location filename="toolregistry.cpp" line="451"/>
         <source>Clear primitives from viewer</source>
         <translation>Esborra les primitives del visor</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="460"/>
+        <location filename="toolregistry.cpp" line="458"/>
         <source>Invert WL</source>
         <translation>Inverteix l&apos;escala de grisos</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="463"/>
+        <location filename="toolregistry.cpp" line="461"/>
         <source>Invert window level</source>
         <translatorcomment>A altres llocs li hem dit window level o contrast o brillantor</translatorcomment>
         <translation>Inverteix l&apos;escala de grisos</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="470"/>
+        <location filename="toolregistry.cpp" line="468"/>
         <source>Axial</source>
         <translation>Axial</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="473"/>
+        <location filename="toolregistry.cpp" line="471"/>
         <source>Switch to Axial View</source>
         <translation>Canvia a la vista axial</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="480"/>
+        <location filename="toolregistry.cpp" line="478"/>
         <source>Sagittal</source>
         <oldsource>Saggital</oldsource>
         <translation>Sagital</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="483"/>
+        <location filename="toolregistry.cpp" line="481"/>
         <source>Switch to Sagittal View</source>
         <oldsource>Switch to Saggital View</oldsource>
         <translation>Canvia a la vista sagital</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="490"/>
+        <location filename="toolregistry.cpp" line="488"/>
         <source>Coronal</source>
         <translation>Coronal</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="493"/>
+        <location filename="toolregistry.cpp" line="491"/>
         <source>Switch to Coronal View</source>
         <translation>Canvia a la vista coronal</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="500"/>
+        <location filename="toolregistry.cpp" line="498"/>
         <source>Rotate</source>
         <translation>Rota</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="503"/>
+        <location filename="toolregistry.cpp" line="501"/>
         <source>Rotate the image in clockwise direction</source>
         <translation>Rota la imatge en sentit horari</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="504"/>
+        <location filename="toolregistry.cpp" line="502"/>
         <source>Clockwise rotation</source>
         <translation>Rotació en sentit horari</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="510"/>
+        <location filename="toolregistry.cpp" line="508"/>
         <source>Rotate Counter Clockwise</source>
         <translation>Rota en sentit anti-horari</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="513"/>
+        <location filename="toolregistry.cpp" line="511"/>
         <source>Rotate the image in counter clockwise direction</source>
         <translation>Rota la imatge en sentit anti-horari</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="514"/>
+        <location filename="toolregistry.cpp" line="512"/>
         <source>Counter-clockwise rotation</source>
         <translation>Rotació en sentit anti-horari</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="520"/>
+        <location filename="toolregistry.cpp" line="518"/>
         <source>Horizontal Flip</source>
         <translatorcomment>Flip o volteja?</translatorcomment>
         <translation>Flip horitzontal</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="523"/>
+        <location filename="toolregistry.cpp" line="521"/>
         <source>Flip the image horizontally</source>
         <translatorcomment>Flip o volteja?</translatorcomment>
         <translation>Volteja la imatge horitzontalment</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="530"/>
+        <location filename="toolregistry.cpp" line="528"/>
         <source>Vertical Flip</source>
         <translatorcomment>Flip o volteja?</translatorcomment>
         <translation>Flip vertical</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="533"/>
+        <location filename="toolregistry.cpp" line="531"/>
         <source>Flip the image vertically</source>
         <translatorcomment>Flip o volteja?</translatorcomment>
         <translation>Volteja la imatge verticalment</translation>
@@ -1891,74 +1892,74 @@ Es recomana que les deseu en una carpeta buida.</translation>
 <context>
     <name>udg::WindowLevelPresetsToolData</name>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="13"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="14"/>
         <source>CT Bone</source>
         <translation>Ós CT</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="14"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="15"/>
         <source>CT Lung</source>
         <translation>Pulmó CT</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="15"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="16"/>
         <source>CT Soft Tissues</source>
         <oldsource>CT Soft Tissues, Non Contrast</oldsource>
         <translation>CT Teixits Tous</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="16"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="17"/>
         <source>CT Soft Tissues+Contrast</source>
         <oldsource>CT Soft Tissues, Contrast</oldsource>
         <translation>CT Teixits Tous+Contrast</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="19"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="20"/>
         <source>CT Liver+Contrast</source>
         <oldsource>CT Liver, Contrast</oldsource>
         <translation>CT Fetge+Contrast</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="20"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="21"/>
         <source>CT Liver</source>
         <translation>CT Fetge</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="21"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="22"/>
         <source>CT Neck+Contrast</source>
         <oldsource>CT Neck, Contrast</oldsource>
         <translation>CT Coll+Contrast</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="24"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="25"/>
         <source>Angiography</source>
         <translation>Angiografia</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="27"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="28"/>
         <source>Osteoporosis</source>
         <translation>Osteoporosi</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="28"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="29"/>
         <source>Emphysema</source>
         <translation>Emfisema</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="29"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="30"/>
         <source>Petrous Bone</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="30"/>
-        <location filename="windowlevelpresetstooldata.cpp" line="139"/>
-        <location filename="windowlevelpresetstooldata.cpp" line="141"/>
-        <location filename="windowlevelpresetstooldata.cpp" line="142"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="31"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="164"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="166"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="167"/>
         <source>Custom</source>
         <translation>Personalitzat</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="12"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="13"/>
         <source>CT Head</source>
         <translation>Crani CT</translation>
     </message>
