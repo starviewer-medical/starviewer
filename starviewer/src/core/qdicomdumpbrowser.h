@@ -29,6 +29,10 @@ public slots:
     /// Cerca els nodes de l'arbre (Tags) que contenen el valor textToSearch
     void searchTag(const QString &textToSearch, bool highlightOnly = false);
 
+private slots:
+    /// Realitza les accions necessàries quan es canvia de pestanya
+    void onTabChange(int index);
+
 private:
     /// Crea les connexions dels signals
     void createConnections();
