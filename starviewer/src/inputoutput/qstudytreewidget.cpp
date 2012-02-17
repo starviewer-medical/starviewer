@@ -80,9 +80,6 @@ void QStudyTreeWidget::insertPatient(Patient *patient)
 {
     if (patient->getNumberOfStudies() > 0)
     {
-        // Si l'estudi ja hi existeix a StudyTreeView l'esborrem
-        removeStudy(patient->getStudies().at(0)->getInstanceUID(), patient->getStudies().at(0)->getDICOMSource());
-
         m_studyTreeView->addTopLevelItems(fillPatient(patient));
         m_studyTreeView->clearSelection();
 
@@ -401,6 +398,9 @@ QList<QTreeWidgetItem*> QStudyTreeWidget::fillPatient(Patient *patient)
 
     foreach (Study *studyToInsert, patient->getStudies())
     {
+        // Si l'estudi ja hi existeix a StudyTreeView l'esborrem
+        removeStudy(patient->getStudies().at(0)->getInstanceUID(), patient->getStudies().at(0)->getDICOMSource());
+
         // Inserim l'estudi a la llista d'estudis
         m_addedStudiesByDICOMItemID[m_nextIDICOMItemIDOfStudy] = studyToInsert;
 
