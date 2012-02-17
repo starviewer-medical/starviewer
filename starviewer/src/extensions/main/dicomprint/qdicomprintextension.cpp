@@ -670,6 +670,7 @@ DicomPrinter QDicomPrintExtension::getSelectedDicomPrinter() const
 
 void QDicomPrintExtension::setEnabledPrintControls(bool enable)
 {
+    m_qdicomPrinterBasicSettingsWidget->setEnabled(enable);
     m_selectionImagesFrame->setEnabled(enable);
     m_currentImageRadioButton->setEnabled(enable);
     m_selectionImageRadioButton->setEnabled(enable);
