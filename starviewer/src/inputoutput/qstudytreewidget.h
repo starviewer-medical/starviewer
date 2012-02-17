@@ -207,6 +207,7 @@ private:
     int m_nextDICOMItemIDOfSeries;
     int m_nextDICOMItemIDOfImage;
 
+    QList<Patient*> m_addedPatients;
     QHash<int, Study*> m_addedStudiesByDICOMItemID;
     QHash<int, Series*> m_adddSeriesByDICOMItemID;
     QHash<int, Image*> m_addedImagesByDICOMItemID;

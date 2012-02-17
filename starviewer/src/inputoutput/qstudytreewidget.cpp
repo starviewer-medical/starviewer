@@ -85,6 +85,9 @@ void QStudyTreeWidget::insertPatient(Patient *patient)
 
         m_studyTreeView->addTopLevelItems(fillPatient(patient));
         m_studyTreeView->clearSelection();
+
+        //Hi ha estudis que poden compartir el mateix objecte pacient, per exemple en DICOMDIR on un mateix pacient hi tingui més d'un estudi
+        m_addedPatients.append(patient);
     }
 }
 
@@ -316,18 +319,13 @@ void QStudyTreeWidget::setCurrentSeries(const QString &studyInstanceUID, const Q
 void QStudyTreeWidget::clear()
 {
     m_studyTreeView->clear();
-    QList<Patient*> patientList;
-
-    foreach (Study *study, m_addedStudiesByDICOMItemID)
-    {
-        patientList.append(study->getParentPatient());
-    }
 
     qDeleteAll(m_addedImagesByDICOMItemID);
     qDeleteAll(m_adddSeriesByDICOMItemID);
     qDeleteAll(m_addedStudiesByDICOMItemID);
-    qDeleteAll(patientList);
+    qDeleteAll(m_addedPatients);
 
+    m_addedPatients.clear();
     m_addedStudiesByDICOMItemID.clear();
     m_adddSeriesByDICOMItemID.clear();
     m_addedImagesByDICOMItemID.clear();
