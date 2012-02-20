@@ -514,14 +514,6 @@ void Q2DViewerExtension::initializeTools()
 
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
 
-    QStringList rightButtonExclusiveTools;
-    rightButtonExclusiveTools << "WindowLevelTool";
-    m_toolManager->addExclusiveToolsGroup("RightButtonGroup", rightButtonExclusiveTools);
-
-    QStringList middleButtonExclusiveTools;
-    middleButtonExclusiveTools << "TranslateTool";
-    m_toolManager->addExclusiveToolsGroup("MiddleButtonGroup", middleButtonExclusiveTools);
-
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
     QStringList defaultTools;
     defaultTools << "WindowLevelPresetsTool" << "SlicingKeyboardTool" << "SlicingTool" << "SlicingWheelTool" << "WindowLevelTool" << "TranslateTool";

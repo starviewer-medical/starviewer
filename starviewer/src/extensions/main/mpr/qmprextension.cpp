@@ -270,14 +270,6 @@ void QMPRExtension::initializeTools()
         << "NonClosedAngleTool" << "Cursor3DTool" << "OvalROITool" << "MagicROITool" << "CircleTool" << "MagnifyingGlassTool";
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
 
-    QStringList middleButtonExclusiveTools;
-    middleButtonExclusiveTools << "TranslateTool";
-    m_toolManager->addExclusiveToolsGroup("MiddleButtonGroup", middleButtonExclusiveTools);
-
-    QStringList rightButtonExclusiveTools;
-    rightButtonExclusiveTools << "WindowLevelTool";
-    m_toolManager->addExclusiveToolsGroup("RighttButtonGroup", rightButtonExclusiveTools);
-
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
     QStringList defaultTools;
     defaultTools << "WindowLevelPresetsTool" << "SlicingTool" << "SlicingWheelTool" << "WindowLevelTool" << "TranslateTool" << "ScreenShotTool" << "SlicingKeyboardTool";
