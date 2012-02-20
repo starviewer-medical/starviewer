@@ -366,17 +366,17 @@
 <context>
     <name>udg::Q2DViewer</name>
     <message>
-        <location filename="q2dviewer.cpp" line="1889"/>
+        <location filename="q2dviewer.cpp" line="1899"/>
         <source>Slice: %1/%2 Phase: %3/%4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1902"/>
+        <location filename="q2dviewer.cpp" line="1912"/>
         <source>Slice: %1/%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1884"/>
+        <location filename="q2dviewer.cpp" line="1894"/>
         <source>Slice: %1-%2/%3 Phase: %4/%5</source>
         <translation type="unfinished"></translation>
     </message>
@@ -386,12 +386,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1898"/>
-        <source>Slice: %1-%2/%3</source>
+        <location filename="q2dviewer.cpp" line="1657"/>
+        <source>Acc: %1
+</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="q2dviewer.cpp" line="1908"/>
+        <source>Slice: %1-%2/%3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q2dviewer.cpp" line="1918"/>
         <source> Thickness: %1 mm</source>
         <translation type="unfinished"></translation>
     </message>
@@ -402,22 +408,12 @@ WW: %5 WL: %6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1652"/>
-        <source>%1
-%2
-%3 %4 %5
-Acc:%6
-%7
-%8</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q2dviewer.cpp" line="1862"/>
+        <location filename="q2dviewer.cpp" line="1872"/>
         <source>Loc: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1870"/>
+        <location filename="q2dviewer.cpp" line="1880"/>
         <source>-%1</source>
         <translation type="unfinished"></translation>
     </message>

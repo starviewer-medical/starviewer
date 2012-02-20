@@ -371,17 +371,17 @@
 <context>
     <name>udg::Q2DViewer</name>
     <message>
-        <location filename="q2dviewer.cpp" line="1889"/>
+        <location filename="q2dviewer.cpp" line="1899"/>
         <source>Slice: %1/%2 Phase: %3/%4</source>
         <translation>Tall: %1/%2 Fase: %3/%4</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1902"/>
+        <location filename="q2dviewer.cpp" line="1912"/>
         <source>Slice: %1/%2</source>
         <translation>Tall: %1/%2</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1884"/>
+        <location filename="q2dviewer.cpp" line="1894"/>
         <source>Slice: %1-%2/%3 Phase: %4/%5</source>
         <translation>Tall: %1-%2/%3 Fase: %4/%5</translation>
     </message>
@@ -391,12 +391,18 @@
         <translation>No hi ha prou memòria per al procés de renderització. Intenteu tancar totes les finestres de %1 obertes, reinicieu l&apos;aplicació i torneu-ho a provar. Si el problema es manté, es podria solucionar afegint més memòria RAM o canviant a un sistema operatiu de 64 bits.</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1898"/>
+        <location filename="q2dviewer.cpp" line="1657"/>
+        <source>Acc: %1
+</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="q2dviewer.cpp" line="1908"/>
         <source>Slice: %1-%2/%3</source>
         <translation>Tall: %1-%2/%3</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1908"/>
+        <location filename="q2dviewer.cpp" line="1918"/>
         <source> Thickness: %1 mm</source>
         <translation> Gruix: %1 mm</translation>
     </message>
@@ -408,27 +414,12 @@ WW: %5 WL: %6</source>
 WW: %5 WL: %6</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1652"/>
-        <source>%1
-%2
-%3 %4 %5
-Acc:%6
-%7
-%8</source>
-        <translation>%1
-%2
-%3 %4 %5
-Acc:%6
-%7
-%8</translation>
-    </message>
-    <message>
-        <location filename="q2dviewer.cpp" line="1862"/>
+        <location filename="q2dviewer.cpp" line="1872"/>
         <source>Loc: %1</source>
         <translation>Loc: %1</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1870"/>
+        <location filename="q2dviewer.cpp" line="1880"/>
         <source>-%1</source>
         <translation>-%1</translation>
     </message>
