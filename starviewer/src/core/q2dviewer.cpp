@@ -1649,9 +1649,19 @@ void Q2DViewer::updatePatientAnnotationInformation()
             seriesTime = "--:--";
         }
 
-        m_upperRightText = tr("%1\n%2\n%3 %4 %5\nAcc:%6\n%7\n%8").arg(series->getInstitutionName()).arg(patient->getFullName())
-                         .arg(study->getPatientAge()).arg(patient->getSex()).arg(patient->getID()).arg(study->getAccessionNumber())
-                         .arg(study->getDate().toString(Qt::ISODate)).arg(seriesTime);
+        m_upperRightText = series->getInstitutionName() + "\n";
+        m_upperRightText += patient->getFullName() + "\n";
+        m_upperRightText += QString("%1 %2 %3\n").arg(study->getPatientAge()).arg(patient->getSex()).arg(patient->getID());
+        if (!study->getAccessionNumber().isEmpty())
+        {
+            m_upperRightText += tr("Acc: %1\n").arg(study->getAccessionNumber());
+        }
+        else
+        {
+            m_upperRightText += "\n";
+        }
+        m_upperRightText += study->getDate().toString(Qt::ISODate) + "\n";
+        m_upperRightText += seriesTime;
 
         if (series->getModality() == "MG")
         {
