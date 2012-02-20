@@ -100,7 +100,6 @@ QueryScreen::~QueryScreen()
 void QueryScreen::initialize()
 {
     // Indiquem que la llista de Pacs no es mostra
-    m_showPACSNodes = false;
     m_PACSNodes->setVisible(false);
     m_qcreateDicomdir = new udg::QCreateDicomdir(this);
 #ifndef STARVIEWER_LITE
