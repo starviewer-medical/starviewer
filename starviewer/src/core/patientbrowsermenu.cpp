@@ -234,8 +234,8 @@ void PatientBrowserMenu::createWidgets()
     m_patientAdditionalInfo->setWindowFlags(Qt::Popup);
     m_patientBrowserList->setWindowFlags(Qt::Popup);
 
-    connect(m_patientAdditionalInfo, SIGNAL(close()), m_patientBrowserList, SLOT(close()));
-    connect(m_patientBrowserList, SIGNAL(close()), m_patientAdditionalInfo, SLOT(close()));
+    connect(m_patientAdditionalInfo, SIGNAL(closed()), m_patientBrowserList, SLOT(close()));
+    connect(m_patientBrowserList, SIGNAL(closed()), m_patientAdditionalInfo, SLOT(close()));
 }
 
 }

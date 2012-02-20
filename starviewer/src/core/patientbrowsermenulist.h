@@ -43,7 +43,7 @@ signals:
     void selectedItem(QString);
 
     /// Signal que s'emet quan es rep l'event de tancar el menu
-    void close();
+    void closed();
 
 private:
     /// Ítem que tenim marcat

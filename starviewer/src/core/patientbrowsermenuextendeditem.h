@@ -23,7 +23,7 @@ public:
 
 signals:
     /// Signal que s'emet quan es rep l'event de tancar el menu
-    void close();
+    void closed();
 
 private:
     /// Crea el widget inicial sense cap informació
