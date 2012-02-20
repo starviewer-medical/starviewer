@@ -65,7 +65,6 @@ QMPRExtension::QMPRExtension(QWidget *parent)
     m_mipToolButton->setVisible(visible);
     // Aquests els amaguem per guanyar espai
     m_windowLevelToolButton->setVisible(false);
-    m_moveToolButton->setVisible(false);
 
     m_screenshotsExporterToolButton->setToolTip(tr("Export viewer image(s) to DICOM and send them to a PACS server"));
     m_viewerInformationToolButton->setToolTip(tr("Show/Hide viewer's textual information"));
@@ -256,7 +255,7 @@ void QMPRExtension::initializeTools()
     initializeDistanceTools();
     initializeAngleTools();
     m_slicingToolButton->setDefaultAction(m_toolManager->registerTool("SlicingTool"));
-    m_moveToolButton->setDefaultAction(m_toolManager->registerTool("TranslateTool"));
+    m_toolManager->registerTool("TranslateTool");
     m_windowLevelToolButton->setDefaultAction(m_toolManager->registerTool("WindowLevelTool"));
     m_voxelInformationToolButton->setDefaultAction(m_toolManager->registerTool("VoxelInformationTool"));
     m_toolManager->registerTool("ScreenShotTool");

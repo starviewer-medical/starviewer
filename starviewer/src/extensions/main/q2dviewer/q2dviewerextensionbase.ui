@@ -237,32 +237,6 @@
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="m_translateToolButton">
-         <property name="text">
-          <string>Pan</string>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff>../../../../../../../../.designer/backup</normaloff>../../../../../../../../.designer/backup</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <property name="toolButtonStyle">
-          <enum>Qt::ToolButtonTextUnderIcon</enum>
-         </property>
-         <property name="autoRaise">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QToolButton" name="m_zoomToolButton">
          <property name="text">
           <string>Zoom</string>
