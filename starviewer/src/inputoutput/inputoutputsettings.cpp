@@ -39,6 +39,7 @@ const QString InputOutputSettings::ConfigurationScreenPACSList(InterfaceBase + "
 const QString InputOutputSettings::LocalDatabaseStudyList(InterfaceBase + "studyCacheList/");
 const QString InputOutputSettings::LocalDatabaseSplitterState(InterfaceBase + "queryscreen/StudyTreeSeriesListQSplitterState");
 const QString InputOutputSettings::QueryScreenGeometry(InterfaceBase + "queryscreen/geometry");
+const QString InputOutputSettings::QueryScreenPACSListIsVisible(InterfaceBase + "queryscreen/PACSListIsVisible");
 const QString InputOutputSettings::PACSStudyListSortByColumn(InterfaceBase + "studyPacsList/sortByColumn");
 const QString InputOutputSettings::PACSStudyListSortOrder(InterfaceBase + "studyPacsList/sortOrder");
 const QString InputOutputSettings::LocalDatabaseStudyListSortByColumn(InterfaceBase + "studyCacheList/sortByColumn");
@@ -141,7 +142,9 @@ void InputOutputSettings::init()
     settingsRegistry->addSetting(DICOMDIRFolderPathToCopy, "");
     settingsRegistry->addSetting(CopyFolderContentToDICOMDIROnCDOrDVD, false);
     settingsRegistry->addSetting(CopyFolderContentToDICOMDIROnUSBOrHardDisk, false);
-
+    
+    settingsRegistry->addSetting(QueryScreenPACSListIsVisible, false);
+    
     settingsRegistry->addSetting(PACSStudyListSortByColumn, QStudyTreeWidget::ObjectName);
     settingsRegistry->addSetting(PACSStudyListSortOrder, (int) Qt::AscendingOrder);
     settingsRegistry->addSetting(LocalDatabaseStudyListSortByColumn, QStudyTreeWidget::ObjectName);

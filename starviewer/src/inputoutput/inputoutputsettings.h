@@ -42,6 +42,7 @@ public:
     static const QString LocalDatabaseStudyList;
     static const QString LocalDatabaseSplitterState;
     static const QString QueryScreenGeometry;
+    static const QString QueryScreenPACSListIsVisible;
     static const QString PACSStudyListSortByColumn;
     static const QString PACSStudyListSortOrder;
     static const QString LocalDatabaseStudyListSortByColumn;
