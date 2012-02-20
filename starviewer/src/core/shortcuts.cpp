@@ -11,7 +11,6 @@ const QString Shortcuts::SlicingTool(ShortcutsBase + "SlicingTool");
 const QString Shortcuts::SlicingWheelTool(ShortcutsBase + "SlicingWheelTool");
 const QString Shortcuts::WindowLevelTool(ShortcutsBase + "WindowLevelTool");
 const QString Shortcuts::ZoomTool(ShortcutsBase + "ZoomTool");
-const QString Shortcuts::TranslateTool(ShortcutsBase + "TranslateTool");
 const QString Shortcuts::SeedTool(ShortcutsBase + "SeedTool");
 const QString Shortcuts::MagicROITool(ShortcutsBase + "MagicROITool");
 const QString Shortcuts::ScreenShotTool(ShortcutsBase + "ScreenShotTool");
@@ -97,10 +96,6 @@ void Shortcuts::init()
     shortcutsList.clear();
     shortcutsList.append(QString("Z"));
     settingsRegistry->addSetting(ZoomTool, shortcutsList);
-
-    shortcutsList.clear();
-    shortcutsList.append(QString("T"));
-    settingsRegistry->addSetting(TranslateTool, shortcutsList);
 
     shortcutsList.clear();
     shortcutsList.append(QString("X"));
