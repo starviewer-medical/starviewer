@@ -218,7 +218,6 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
     {
         toolAction->setText(tr("Pan"));
         toolAction->setIcon(QIcon(":/images/move.png"));
-        toolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::TranslateTool));
         statusTip = tr("Enable/Disable Move tool");
         toolTip = toolAction->text();
     }
