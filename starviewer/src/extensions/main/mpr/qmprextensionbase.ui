@@ -55,32 +55,6 @@
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="m_windowLevelToolButton">
-       <property name="text">
-        <string>Window Level</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../../../main/main.qrc">
-         <normaloff>:/images/windowLevel.png</normaloff>:/images/windowLevel.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>32</width>
-         <height>32</height>
-        </size>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextUnderIcon</enum>
-       </property>
-       <property name="autoRaise">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QToolButton" name="m_zoomToolButton">
        <property name="text">
         <string>Angle</string>
