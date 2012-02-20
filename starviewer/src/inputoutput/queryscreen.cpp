@@ -143,7 +143,7 @@ void QueryScreen::createConnections()
     connect(m_clearToolButton, SIGNAL(clicked()), SLOT(clearTexts()));
 #ifndef STARVIEWER_LITE
     connect(m_operationListToolButton, SIGNAL(clicked()), SLOT(showOperationStateScreen()));
-    connect(m_showPACSNodesToolButton, SIGNAL(toggled(bool)), m_PACSNodes, SLOT(setVisible(bool)));
+    connect(m_showPACSNodesToolButton, SIGNAL(toggled(bool)), SLOT(updatePACSNodesVisibility()));
     connect(m_pacsManager, SIGNAL(newPACSJobEnqueued(PACSJob*)), SLOT(newPACSJobEnqueued(PACSJob*)));
     if (m_risRequestManager != NULL)
     {
@@ -328,6 +328,21 @@ void QueryScreen::refreshTab(int index)
                 m_qbasicSearchWidget->setEnabledSeriesModality(false);
                 m_qadvancedSearchWidget->setEnabled(false);
                 break;
+    }
+    updatePACSNodesVisibility();
+}
+
+void QueryScreen::updatePACSNodesVisibility()
+{
+    if (m_tab->currentIndex() == PACSQueryTab)
+    {
+        m_showPACSNodesToolButton->show();
+        m_PACSNodes->setVisible(m_showPACSNodesToolButton->isChecked());
+    }
+    else
+    {
+        m_showPACSNodesToolButton->hide();
+        m_PACSNodes->hide();
     }
 }
 
