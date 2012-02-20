@@ -131,6 +131,10 @@ private slots:
     void showQProgressDialogUntilNoPACSJobsAreExecuting(int timeoutMs = INT_MAX);
 #endif
 
+    /// Actualitza segons el tab en el que ens trobem la visibilitat del llistat de PACS
+    /// El llistat només es podrà habilitar o deshabilitar quan estem en la pestanya PACS
+    void updatePACSNodesVisibility();
+
 private:
 #ifdef STARVIEWER_LITE
     // Al fer remove de la pestanya del pacs es canvia el index de cada tab, per això hem de redefinir-lo pel cas de StarviewerLite
