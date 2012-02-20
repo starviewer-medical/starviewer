@@ -76,6 +76,10 @@ QueryScreen::QueryScreen(QWidget *parent)
 QueryScreen::~QueryScreen()
 {
 #ifndef STARVIEWER_LITE
+
+    Settings settings;
+    settings.setValue(InputOutputSettings::QueryScreenPACSListIsVisible, m_showPACSNodesToolButton->isChecked());
+
     if (m_pacsManager->isExecutingPACSJob())
     {
         // Si hi ha PacsJob executant-se demanem cancel·lar i mostrem un QProgressDialog mentre s'estan
@@ -395,6 +399,10 @@ void QueryScreen::readSettings()
     // Aquesta clau substitueix les obsoletes "queryScreenWindowPositionX", "queryScreenWindowPositionY", "queryScreenWindowWidth" i "queryScreenWindowHeight"
     // que tenien les claus /interface/queryscreen/ + windowPositionX, windowPositionY, windowWidth i windowHeigth respectivament
     // TODO fer neteja d'aquestes claus antigues amb la migració de dades
+
+#ifndef STARVIEWER_LITE
+    m_showPACSNodesToolButton->setChecked(settings.getValue(InputOutputSettings::QueryScreenPACSListIsVisible).toBool());
+#endif
 }
 
 void QueryScreen::writeSettings()
