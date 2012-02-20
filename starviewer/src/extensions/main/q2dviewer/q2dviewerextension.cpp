@@ -68,7 +68,6 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
 
     // TODO Ocultem botons que no son del tot necessaris o que no es faran servir
     m_windowLevelToolButton->setVisible(false);
-    m_translateToolButton->setVisible(false);
 
     m_hangingProtocolsMenu = new MenuGridWidget(this);
     m_seriesTableGrid = new TableMenu(this);
@@ -425,7 +424,7 @@ void Q2DViewerExtension::initializeTools()
     // Obtenim les accions de cada tool que volem
     m_zoomToolButton->setDefaultAction(m_toolManager->registerTool("ZoomTool"));
     m_slicingToolButton->setDefaultAction(m_toolManager->registerTool("SlicingTool"));
-    m_translateToolButton->setDefaultAction(m_toolManager->registerTool("TranslateTool"));
+    m_toolManager->registerTool("TranslateTool");
     m_windowLevelToolButton->setDefaultAction(m_toolManager->registerTool("WindowLevelTool"));
     m_referenceLinesToolButton->setDefaultAction(m_toolManager->registerTool("ReferenceLinesTool"));
 

@@ -64,7 +64,7 @@ void Q3DViewerExtension::initializeTools()
     m_zoomToolButton->setDefaultAction(m_toolManager->registerTool("ZoomTool"));
     m_rotate3DToolButton->setDefaultAction(m_toolManager->registerTool("Rotate3DTool"));
     m_windowLevelToolButton->setDefaultAction(m_toolManager->registerTool("WindowLevelTool"));
-    m_panToolButton->setDefaultAction(m_toolManager->registerTool("TranslateTool"));
+    m_toolManager->registerTool("TranslateTool");
     m_clippingBoxToolButton->setDefaultAction(m_toolManager->registerTool("ClippingPlanesTool"));
     m_toolManager->registerTool("ScreenShotTool");
     m_screenShotToolButton->setToolTip(m_toolManager->getRegisteredToolAction("ScreenShotTool")->toolTip());
