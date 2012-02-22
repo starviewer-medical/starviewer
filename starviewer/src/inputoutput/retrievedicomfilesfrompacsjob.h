@@ -2,6 +2,7 @@
 #define RETRIEVEDICOMFILESFROMPACSJOB_H
 
 #include <QObject>
+#include <QSet>
 
 #include "pacsjob.h"
 #include "pacsrequeststatus.h"
@@ -102,9 +103,9 @@ private:
     QString m_SOPInstanceUIDToRetrieve;
     PACSRequestStatus::RetrieveRequestStatus m_retrieveRequestStatus;
     RetrievePriorityJob m_retrievePriorityJob;
-    QList<QString> m_retrievedSeriesInstanceUID;
-    QString m_lastImageSeriesInstanceUID;
-    int m_numberOfSeriesRetrieved;
+    
+    /// Conjunt que conté els diferents UIDs de sèrie de les imatges descarregades
+    QSet<QString> m_retrievedSeriesInstanceUIDSet;
 };
 
 }

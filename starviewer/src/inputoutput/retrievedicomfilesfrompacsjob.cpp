@@ -61,9 +61,7 @@ void RetrieveDICOMFilesFromPACSJob::run()
         .arg(settings.getValue(InputOutputSettings::LocalAETitle).toString(), settings.getValue(InputOutputSettings::IncomingDICOMConnectionsPort).toString())
         .arg(m_studyToRetrieveDICOMFiles->getInstanceUID(), m_seriesInstanceUIDToRetrieve, m_SOPInstanceUIDToRetrieve));
 
-    m_numberOfSeriesRetrieved = 0;
-    m_lastImageSeriesInstanceUID = "";
-    m_retrievedSeriesInstanceUID.clear();
+    m_retrievedSeriesInstanceUIDSet.clear();
 
     m_retrieveRequestStatus = thereIsAvailableSpaceOnHardDisk();
 
@@ -113,9 +111,7 @@ void RetrieveDICOMFilesFromPACSJob::run()
                 .arg(m_studyToRetrieveDICOMFiles->getInstanceUID(), getPacsDevice().getAETitle())
                 .arg(m_retrieveDICOMFilesFromPACS->getNumberOfDICOMFilesRetrieved()));
 
-            m_numberOfSeriesRetrieved++;
-            // Indiquem que s'ha descarregat la última sèrie
-            emit DICOMSeriesRetrieved(this, m_numberOfSeriesRetrieved);
+            // Indiquem que el procés de descàrrega ha finalitzat
             emit DICOMFilesRetrieveFinished();
 
             // Esperem que el processat i l'insersió a la base de dades acabin
@@ -166,20 +162,12 @@ void RetrieveDICOMFilesFromPACSJob::DICOMFileRetrieved(DICOMTagReader *dicomTagR
 {
     emit DICOMFileRetrieved(this, numberOfImagesRetrieved);
 
+    /// Actualitzem el número de sèries processades si ens arriba una nova imatge que pertanyi a una sèrie no descarregada fins al moment
     QString seriesInstancedUIDRetrievedImage = dicomTagReader->getValueAttributeAsQString(DICOMSeriesInstanceUID);
-
-    // Comprovem si hem descarregat una nova sèrie. Degut a que pot ser que el PACS ens enviï les imatges desornades (que no estiguin agrupades per sèrie-9
-    // hem de comprovar que quan detectem un canvi de sèrie respecte l'anterior imatge descarregada, aquesta no s'hagi ja comptabilitzat. Som conscients
-    // que podem donar informació falsejada a l'usuari, però es fa per donar-lo més feedback amb la descàrrega d'imatges.
-    if (seriesInstancedUIDRetrievedImage != m_lastImageSeriesInstanceUID && !m_lastImageSeriesInstanceUID.isEmpty())
+    if (!m_retrievedSeriesInstanceUIDSet.contains(seriesInstancedUIDRetrievedImage))
     {
-        if (!m_retrievedSeriesInstanceUID.contains(seriesInstancedUIDRetrievedImage))
-        {
-            m_numberOfSeriesRetrieved++;
-            emit DICOMSeriesRetrieved(this, m_numberOfSeriesRetrieved);
-
-            m_retrievedSeriesInstanceUID.append(seriesInstancedUIDRetrievedImage);
-        }
+        m_retrievedSeriesInstanceUIDSet.insert(seriesInstancedUIDRetrievedImage);
+        emit DICOMSeriesRetrieved(this, m_retrievedSeriesInstanceUIDSet.count());
     }
 
     // Fem un emit indicat que dicomTagReader està a punt per ser processat per l'Slot processDICOMFile de PatientFiller, no podem fer un connect
@@ -188,8 +176,6 @@ void RetrieveDICOMFilesFromPACSJob::DICOMFileRetrieved(DICOMTagReader *dicomTagR
     // RetrieveDICOMFileFromPACS comprovem si és una sèrie nova la que es descarrega i llavors fem l'emit per que PatientFiller processi el DICOMTagReader
 
     emit DICOMTagReaderReadyForProcess(dicomTagReader);
-
-    m_lastImageSeriesInstanceUID = seriesInstancedUIDRetrievedImage;
 }
 
 int RetrieveDICOMFilesFromPACSJob::priority() const
