@@ -187,9 +187,13 @@ void QViewer::setActive(bool active)
 {
     if (!m_isActive && active)
     {
+        m_isActive = true;
         emit selected();
     }
-    m_isActive = active;
+    else
+    {
+        m_isActive = active;
+    }
 }
 
 void QViewer::computeDisplayToWorld(double x, double y, double z, double worldPoint[4])

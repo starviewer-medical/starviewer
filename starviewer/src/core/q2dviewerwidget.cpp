@@ -140,10 +140,7 @@ void Q2DViewerWidget::setAsActiveViewer()
 
 void Q2DViewerWidget::emitSelectedViewer()
 {
-    if (!m_2DView->isActive())
-    {
-        emit selected(this);
-    }
+    emit selected(this);
 }
 
 void Q2DViewerWidget::setSelected(bool option)
