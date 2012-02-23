@@ -166,10 +166,7 @@ void QViewer::eventHandler(vtkObject *object, unsigned long vtkEvent, void *clie
         case vtkCommand::MouseWheelForwardEvent:
         case vtkCommand::MouseWheelBackwardEvent:
             m_mouseHasMoved = false;
-            if (!m_isActive)
-            {
-                emit selected();
-            }
+            setActive(true);
             break;
 
         case vtkCommand::MouseMoveEvent:
@@ -188,6 +185,10 @@ void QViewer::eventHandler(vtkObject *object, unsigned long vtkEvent, void *clie
 
 void QViewer::setActive(bool active)
 {
+    if (!m_isActive && active)
+    {
+        emit selected();
+    }
     m_isActive = active;
 }
 void QViewer::computeDisplayToWorld(double x, double y, double z, double worldPoint[4])

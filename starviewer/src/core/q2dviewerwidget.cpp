@@ -61,8 +61,8 @@ void Q2DViewerWidget::createConnections()
     connect(m_2DView, SIGNAL(viewChanged(int)), SLOT(resetSliderRangeAndValue()));
     connect(m_2DView, SIGNAL(slabThicknessChanged(int)), SLOT(resetSliderRangeAndValue()));
 
-    // HACK amb això conseguim que quan es varïi el valor de la llesca amb l'slider, el viewer es marqui com a seleccionat
-    connect(m_slider, SIGNAL(sliderPressed()), SLOT(emitSelectedViewer()));
+    // Quan seleccionem l'slider, també volem que el viewer quedi com a actiu/seleccionat
+    connect(m_slider, SIGNAL(sliderPressed()), SLOT(setAsActiveViewer()));
 
     connect(m_2DView, SIGNAL (selected()), SLOT(emitSelectedViewer()));
     connect(m_2DView, SIGNAL(volumeChanged(Volume*)), SLOT(updateInput(Volume*)));
@@ -130,7 +130,12 @@ void Q2DViewerWidget::updateInput(Volume *input)
 void Q2DViewerWidget::mousePressEvent(QMouseEvent *mouseEvent)
 {
     Q_UNUSED(mouseEvent);
-    emitSelectedViewer();
+    setAsActiveViewer();
+}
+
+void Q2DViewerWidget::setAsActiveViewer()
+{
+    m_2DView->setActive(true);
 }
 
 void Q2DViewerWidget::emitSelectedViewer()

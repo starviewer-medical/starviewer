@@ -71,6 +71,9 @@ private slots:
 
     void updateInput(Volume *input);
 
+    /// Fem que el viewer sigui actiu
+    void setAsActiveViewer();
+    
     /// Quan el visualitzador s'ha seleccionat, emet el senyal amb aquest widget
     void emitSelectedViewer();
 
