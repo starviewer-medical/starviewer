@@ -191,6 +191,7 @@ void QViewer::setActive(bool active)
     }
     m_isActive = active;
 }
+
 void QViewer::computeDisplayToWorld(double x, double y, double z, double worldPoint[4])
 {
     vtkRenderer *renderer = this->getRenderer();
