@@ -40,16 +40,16 @@ ReferenceLinesTool::ReferenceLinesTool(QViewer *viewer, QObject *parent)
 //     m_2DViewer->getDrawer()->draw(m_projectedReferencePlane);
 //     m_2DViewer->getDrawer()->addToGroup(m_projectedReferencePlane, ReferenceLinesDrawerGroup);
 
-    refreshReferenceViewerData();
+    initialize();
 
     // Cada cop que el viewer canvïi d'input, hem d'actualitzar el frame of reference
-    connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(refreshReferenceViewerData()));
+    connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(updateDataForCurrentInput()));
     // Cada cop que el viewer canvïi de llesca, hem d'actualitzar el pla de projecció
     connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(updateImagePlane()));
     // Cada cop que canvii l'slab thickness haurem d'actualitzar els plans a projectar
     connect(m_2DViewer, SIGNAL(slabThicknessChanged(int)), SLOT(updateImagePlane()));
 
-    connect(m_2DViewer, SIGNAL(selected()), SLOT(refreshReferenceViewerData()));
+    connect(m_2DViewer, SIGNAL(selected()), SLOT(setAsReferenceViewer()));
 }
 
 ReferenceLinesTool::~ReferenceLinesTool()
@@ -72,6 +72,25 @@ ReferenceLinesTool::~ReferenceLinesTool()
         backgroundLine->decreaseReferenceCount();
         delete backgroundLine;
     }
+
+    if (m_2DViewer->isActive())
+    {
+        m_myData->setFrameOfReferenceUID(QString());
+    }
+}
+
+void ReferenceLinesTool::initialize()
+{
+    updateFrameOfReference();
+    if (m_2DViewer->isActive())
+    {
+        m_2DViewer->getDrawer()->disableGroup(ReferenceLinesDrawerGroup);
+        updateImagePlane();
+    }
+    else
+    {
+        updateProjectionLines();
+    }
 }
 
 void ReferenceLinesTool::setToolData(ToolData *data)
@@ -88,11 +107,7 @@ void ReferenceLinesTool::setToolData(ToolData *data)
 
     // Això serveix perquè s'apliqui tot just quan es creïi la tool
     // amb múltiples viewers
-    if (m_2DViewer->isActive())
-    {
-        refreshReferenceViewerData();
-    }
-    updateProjectionLines();
+    initialize();
 }
 
 void ReferenceLinesTool::updateProjectionLines()
@@ -299,8 +314,11 @@ void ReferenceLinesTool::updateFrameOfReference()
             DEBUG_LOG("EL nou volum no té series NUL!");
         }
     }
-    // I actualitzem el de les dades
-    m_myData->setFrameOfReferenceUID(m_myFrameOfReferenceUID);
+    // I actualitzem el de les dades en cas que sigui un visor actiu
+    if (m_2DViewer->isActive())
+    {
+        m_myData->setFrameOfReferenceUID(m_myFrameOfReferenceUID);
+    }
 }
 
 void ReferenceLinesTool::updateImagePlane()
@@ -333,13 +351,33 @@ void ReferenceLinesTool::updateImagePlane()
     }
 }
 
-void ReferenceLinesTool::refreshReferenceViewerData()
+void ReferenceLinesTool::updateDataForCurrentInput()
 {
-    // Si es projectaven plans sobre el nostre drawer, els amaguem
-    if (m_2DViewer->isActive())
+    // Actualitzem el frame of reference
+    updateFrameOfReference();
+    
+    // Si sóc el visor actiu
+    // - actualitzo el frame of reference de les dades compartides (implícit a updateFrameOfReference();
+    // - no cal actualitzar el pla a projectar, ja es farà al respondre al signal sliceChanged()->updateImagePlane()
+    // - no cal amagar el grup de primitives, al ser l'actiu ja s'ha hagut de fer anteriorment
+
+    // Si sóc el visor inactiu
+    // - recalculo la intersecció del pla de referència amb el meu pla actual
+    if (!m_2DViewer->isActive())
     {
-        m_2DViewer->getDrawer()->disableGroup(ReferenceLinesDrawerGroup);
+        updateProjectionLines();
     }
+}
+
+void ReferenceLinesTool::setAsReferenceViewer()
+{
+    if (!m_2DViewer->isActive())
+    {
+        return;
+    }
+    
+    // Aquest visor no mostra cap projeccció, s'actualitza el pla de referència i quins plans cal projectar
+    m_2DViewer->getDrawer()->disableGroup(ReferenceLinesDrawerGroup);
     updateFrameOfReference();
     updateImagePlane();
 }

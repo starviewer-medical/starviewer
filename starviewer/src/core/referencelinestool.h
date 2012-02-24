@@ -38,17 +38,23 @@ private slots:
     /// Actualitza les línies a projectar sobre la imatge segons les dades de la tool
     void updateProjectionLines();
 
-    /// Actualitza el frame of reference de les dades a partir del volum donat
+    /// Actualitza el frame of reference corresponent a aquest visor i actualitza el de referència (dades compartides) si aquest visor és l'actiu
     void updateFrameOfReference();
 
     /// Actualitza el pla d'imatge a projectar. Es crida cada cop que al viewer es canvia de llesca
     void updateImagePlane();
 
-    /// Aquest slot es crida per actualitzar les dades que marquen quin és el pla de referència
-    /// Es cridarà quan el viewer sigui actiu o quan el viewer actiu canvïi d'input
-    void refreshReferenceViewerData();
+    /// Actualitza les dades segons l'input actual
+    void updateDataForCurrentInput();
+    
+    /// Fa que aquest sigui el visor de referència i actualitza la informació corresponent
+    /// Es cridarà quan el viewer sigui l'actiu
+    void setAsReferenceViewer();
 
 private:
+    /// Inicialitza la tool i el que s'ha de mostrar al viewer segons l'estat en el que es troba
+    void initialize();
+    
     /// Crea les primitives que es faran servir per
     /// mostrar les interseccions projectades
     void createPrimitives();
