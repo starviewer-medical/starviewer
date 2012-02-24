@@ -86,34 +86,10 @@ void AsynchronousVolumeReader::assignResourceRestrictionPolicy(VolumeReaderJob *
         // Si és 32 bits limitem la concurrència si tenim volums multiframe o que no siguin CT o MR
         QStringList allowedModalities;
         allowedModalities << QString("CT") << QString("MR");
-        bool found = false;
-        QListIterator<Volume*> iterator(VolumeRepository::getRepository()->getItems());
-        while (iterator.hasNext() && !found)
-        {
-            Volume *currentVolume = iterator.next();
-            QList<Image*> imageList = currentVolume->getImages();
-            // Mirem si és multiframe
-            if (imageList.count() > 1)
-            {
-                // Comprovant la primera i segona imatges n'hi ha prou
-                if (imageList.at(0)->getPath() == imageList.at(1)->getPath())
-                {
-                    found = true;
-                }
-            }
-            // Mirem si és una modalitat permesa
-            if (imageList.count() > 0)
-            {
-                QString modality = imageList.at(0)->getParentSeries()->getModality();
-                if (!allowedModalities.contains(modality))
-                {
-                    found = true;
-                }
-            }
-        }
-
+        bool foundRestrictions = checkForResourceRestrictions(true, allowedModalities);
+        
         int numberOfVolumesLoadingConcurrently;
-        if (found)
+        if (foundRestrictions)
         {
             numberOfVolumesLoadingConcurrently = 1;
             INFO_LOG(QString("Windows 32 bits amb volums que poden requerir molta memòria. Limitem a %1 la quantitat de volums carregant-se simultàniament.").arg(numberOfVolumesLoadingConcurrently));
@@ -125,6 +101,49 @@ void AsynchronousVolumeReader::assignResourceRestrictionPolicy(VolumeReaderJob *
         m_resourceRestrictionPolicy.setCap(numberOfVolumesLoadingConcurrently);
         volumeReaderJob->assignQueuePolicy(&m_resourceRestrictionPolicy);
     }
+}
+
+bool AsynchronousVolumeReader::checkForResourceRestrictions(bool checkMultiframeImages, const QStringList &modalitiesWithoutRestriction)
+{
+    if (!checkMultiframeImages && modalitiesWithoutRestriction.isEmpty())
+    {
+        return false;
+    }
+    
+    bool foundRestriction = false;
+    QListIterator<Volume*> iterator(VolumeRepository::getRepository()->getItems());
+    while (iterator.hasNext() && !foundRestriction)
+    {
+        Volume *currentVolume = iterator.next();
+        QList<Image*> imageList = currentVolume->getImages();
+        // Mirem si és multiframe
+        if (checkMultiframeImages)
+        {
+            if (imageList.count() > 1)
+            {
+                // Comprovant la primera i segona imatges n'hi ha prou
+                if (imageList.at(0)->getPath() == imageList.at(1)->getPath())
+                {
+                    foundRestriction = true;
+                }
+            }
+        }
+
+        // Mirem si és una modalitat a la que cal aplicar restricció o no
+        if (!modalitiesWithoutRestriction.isEmpty())
+        {
+            if (imageList.count() > 0)
+            {
+                QString modality = imageList.at(0)->getParentSeries()->getModality();
+                if (!modalitiesWithoutRestriction.contains(modality))
+                {
+                    foundRestriction = true;
+                }
+            }
+        }
+    }
+
+    return foundRestriction;
 }
 
 void AsynchronousVolumeReader::unmarkVolumeFromJobAsLoading(ThreadWeaver::Job *job)
