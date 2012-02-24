@@ -41,8 +41,8 @@ private slots:
     /// Actualitza el frame of reference corresponent a aquest visor i actualitza el de referència (dades compartides) si aquest visor és l'actiu
     void updateFrameOfReference();
 
-    /// Actualitza el pla d'imatge a projectar. Es crida cada cop que al viewer es canvia de llesca
-    void updateImagePlane();
+    /// Actualitza el pla d'imatge a projectar quan el viewer és l'actiu. Es crida cada cop que al viewer es canvia de llesca
+    void updateReferenceImagePlanesToProject();
 
     /// Actualitza les dades segons l'input actual
     void updateDataForCurrentInput();
