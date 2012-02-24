@@ -387,6 +387,7 @@ DrawerLine* ReferenceLinesTool::createNewLine(bool isBackgroundLine)
     DrawerLine *line = new DrawerLine;
     // HACK Sucedani d'smart pointer(TM)
     line->increaseReferenceCount();
+    line->setVisibility(false);
 
     if (isBackgroundLine)
     {
