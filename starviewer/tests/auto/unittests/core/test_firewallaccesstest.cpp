@@ -70,7 +70,7 @@ void test_FirewallAccessTest::run_ShouldTestIfStarviewerHaveAccessThroughFirewal
                             << DiagnosisTestResult::Ok << "" << "";
     
     QTest::newRow("blocked") << FirewallAccess::FirewallIsBlocking << "Firewall is blocking"
-                             << DiagnosisTestResult::Warning << "Firewall is blocking" << "";
+                             << DiagnosisTestResult::Warning << "Firewall is blocking" << "Add Starviewer to the list of allowed applications through firewall";
 
     QTest::newRow("error") << FirewallAccess::FirewallError << "Firewall error"
                            << DiagnosisTestResult::Error << "Firewall error" << "";
