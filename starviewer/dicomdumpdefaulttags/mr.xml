@@ -94,6 +94,27 @@
           <group>0008</group>
           <element>1070</element>
         </tag>
+		<!-- Dynamic Gradient -->
+		<tag>
+          <group>0018</group>
+          <element>9076</element>
+        </tag>
+		<tag>
+          <group>0018</group>
+          <element>9089</element>
+        </tag>
+		<tag>
+          <group>0018</group>
+          <element>9180</element>
+        </tag>
+		<tag>
+          <group>0018</group>
+          <element>9182</element>
+        </tag>
+		<tag>
+          <group>0018</group>
+          <element>9241</element>
+        </tag>
         <!-- Series info -->
         <tag>
             <group>2001</group>
