@@ -154,7 +154,7 @@ double ImagePlane::getColumnLength() const
 
 bool ImagePlane::fillFromImage(const Image *image)
 {
-    if(image)
+    if (image)
     {
         this->setImageOrientation(image->getImageOrientationPatient());
         this->setSpacing(image->getPixelSpacing()[0], image->getPixelSpacing()[1]);
@@ -175,16 +175,9 @@ bool ImagePlane::fillFromImage(const Image *image)
 
 bool ImagePlane::operator ==(const ImagePlane &imagePlane)
 {
-    if(m_imageOrientation == imagePlane.m_imageOrientation &&
-        m_origin[0] == imagePlane.m_origin[0] &&
-        m_origin[1] == imagePlane.m_origin[1] &&
-        m_origin[2] == imagePlane.m_origin[2] &&
-        m_spacing[0] == imagePlane.m_spacing[0] &&
-        m_spacing[1] == imagePlane.m_spacing[1] &&
-        m_rows == imagePlane.m_rows &&
-        m_columns == imagePlane.m_columns &&
-        m_thickness == imagePlane.m_thickness
-      )
+    if (m_imageOrientation == imagePlane.m_imageOrientation && m_origin[0] == imagePlane.m_origin[0] && m_origin[1] == imagePlane.m_origin[1] &&
+        m_origin[2] == imagePlane.m_origin[2] && m_spacing[0] == imagePlane.m_spacing[0] && m_spacing[1] == imagePlane.m_spacing[1] &&
+        m_rows == imagePlane.m_rows && m_columns == imagePlane.m_columns && m_thickness == imagePlane.m_thickness)
     {
         return true;
     }
@@ -228,7 +221,7 @@ QList<QVector<double> > ImagePlane::getBounds(int location)
     this->getColumnDirectionVector(columnVector);
     this->getNormalVector(normalVector);
     
-    for(int i = 0; i < 3; i++)
+    for (int i = 0; i < 3; i++)
     {
         tlhc << m_origin[i] + normalVector[i] * factor;
         trhc << m_origin[i] + rowVector[i] * this->getRowLength() + normalVector[i] * factor;
@@ -272,7 +265,7 @@ QString ImagePlane::toString(bool verbose)
     result += QString("\nRow length: %1").arg(getRowLength());
     result += QString("\nColumn length: %1").arg(getColumnLength());
 
-    if(verbose)
+    if (verbose)
     {
         QList<QVector<double> > bounds = this->getCentralBounds();
         result += QString("\nTLHC: %1, %2, %3").arg(bounds.at(0)[0]).arg(bounds.at(0)[1]).arg(bounds.at(0)[2]);
@@ -300,24 +293,24 @@ int ImagePlane::getIntersections(ImagePlane *planeToIntersect, double firstInter
     QVector<double> blhc = upperPlaneBounds.at(3);
 
     // Primera "paral·lela" (X)
-    if(vtkPlane::IntersectWithLine((double*)tlhc.data(), (double*)trhc.data(), localizerNormalVector, localizerOrigin, t, firstIntersectionPoint))
+    if (vtkPlane::IntersectWithLine((double*)tlhc.data(), (double*)trhc.data(), localizerNormalVector, localizerOrigin, t, firstIntersectionPoint))
     {
         numberOfIntersections++;
     }
-    if(vtkPlane::IntersectWithLine((double*)brhc.data(), (double*)blhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint))
+    if (vtkPlane::IntersectWithLine((double*)brhc.data(), (double*)blhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint))
     {
         numberOfIntersections++;
     }
 
-    if(numberOfIntersections == 0)
+    if (numberOfIntersections == 0)
     {
         // Provar amb la segona "paral·lela" (Y)
-        if(vtkPlane::IntersectWithLine((double*)trhc.data(), (double*)brhc.data(), localizerNormalVector, localizerOrigin, t, firstIntersectionPoint))
+        if (vtkPlane::IntersectWithLine((double*)trhc.data(), (double*)brhc.data(), localizerNormalVector, localizerOrigin, t, firstIntersectionPoint))
         {
             numberOfIntersections++;
         }
 
-        if(vtkPlane::IntersectWithLine((double*)blhc.data(), (double*)tlhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint))
+        if (vtkPlane::IntersectWithLine((double*)blhc.data(), (double*)tlhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint))
         {
             numberOfIntersections++;
         }
@@ -333,7 +326,7 @@ void ImagePlane::updateCenter()
     this->getRowDirectionVector(rowVector);
     this->getColumnDirectionVector(columnVector);
     
-    for(int i = 0; i < 3; i++)
+    for (int i = 0; i < 3; i++)
     {
         m_center[i] = m_origin[i] + 0.5 * (rowVector[i] * this->getRowLength() + columnVector[i] * this->getColumnLength());
     }

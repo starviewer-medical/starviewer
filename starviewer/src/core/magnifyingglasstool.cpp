@@ -22,7 +22,7 @@ MagnifyingGlassTool::MagnifyingGlassTool(QViewer *viewer, QObject *parent)
     m_2DViewer = qobject_cast<Q2DViewer*>(viewer);
     if (!m_2DViewer)
     {
-        DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ")+ viewer->metaObject()->className());
+        DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ") + viewer->metaObject()->className());
     }
 
     m_magnifiedRenderer = vtkRenderer::New();
@@ -153,8 +153,6 @@ void MagnifyingGlassTool::updateMagnifiedView()
     setFocalPoint(xyz);
     m_magnifiedRenderer->ResetCameraClippingRange();
     m_2DViewer->render();
-
-    
 }
 
 void MagnifyingGlassTool::setFocalPoint(const double cursorPosition[3])
