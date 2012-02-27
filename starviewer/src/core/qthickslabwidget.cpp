@@ -254,10 +254,12 @@ void QThickSlabWidget::enableVolumeMode(bool enable)
     {
         m_slabThicknessSlider->setValue(m_currentViewer->getMaximumSlice() + 1);
         m_slabThicknessSlider->setEnabled(false);
+        m_slabThicknessLabel->setEnabled(false);
     }
     else
     {
         m_slabThicknessSlider->setEnabled(true);
+        m_slabThicknessLabel->setEnabled(true);
     }
 }
 
