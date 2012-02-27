@@ -291,9 +291,6 @@ private:
     /// "Explicació" dels window levels, texte descriptiu.(0028,1055) Tipus 3.
     QStringList m_windowLevelExplanationList;
 
-    /// Nombre de frames de la imatge. (0028,0008) Tipus 1
-    int m_numberOfFrames;
-
     // TODO millorar definició
     /// Situació especial de la llesca en mm. (0020,1041)
     /// SC->tipus 3
