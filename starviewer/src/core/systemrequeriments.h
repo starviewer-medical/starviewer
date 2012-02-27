@@ -16,7 +16,6 @@ public:
 
     virtual unsigned int getMinimumCPUNumberOfCores();
     virtual unsigned int getMinimumCPUFrequency();
-    virtual unsigned int getMinimumCPUL2CacheSize();
     virtual QList<QString> getMinimumGPUOpenGLCompatibilities();
     virtual QString getMinimumGPUOpenGLVersion();
     virtual unsigned int getMinimumGPURAM();
@@ -31,7 +30,6 @@ public:
 protected:
     unsigned int m_minimumNumberOfCores;
     unsigned int m_minimumCoreSpeed;
-    unsigned int m_minimumL2CacheSize;
     unsigned int m_minimumGPURAM;
     QString m_minimumGPUOpenGLVersion;
     QString m_minimumOSVersion;

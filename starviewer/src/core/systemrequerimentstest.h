@@ -34,7 +34,6 @@ protected:
 
     virtual unsigned int getCPUNumberOfCores(SystemInformation *system);
     virtual QList<unsigned int> getCPUFrequencies(SystemInformation *system);
-    virtual unsigned int getCPUL2CacheSize(SystemInformation *system);
     virtual QList<QString> getGPUOpenGLCompatibilities(SystemInformation *system);
     virtual QString getGPUOpenGLVersion(SystemInformation *system);
     virtual QList<unsigned int> getGPURAM(SystemInformation *system);
