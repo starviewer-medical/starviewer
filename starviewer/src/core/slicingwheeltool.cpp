@@ -1,5 +1,4 @@
 #include "slicingwheeltool.h"
-#include "logging.h"
 #include "q2dviewer.h"
 #include "statswatcher.h"
 #include "toolproxy.h"
@@ -14,7 +13,6 @@ SlicingWheelTool::SlicingWheelTool(QViewer *viewer, QObject *parent)
 : SlicingTool(viewer, parent)
 {
     m_toolName = "SlicingWheelTool";
-    DEBUG_LOG("Es crea la Tool SlicingWheel");
     m_2DViewer = qobject_cast<Q2DViewer*>(viewer);
     // Ens assegurem que desde la creació tenim un viewer vàlid
     Q_ASSERT(m_2DViewer);
@@ -70,7 +68,6 @@ void SlicingWheelTool::handleEvent(unsigned long eventID)
             {
                 StatsWatcher::log("Slicing Wheel Tool: Wheel Record: " + m_wheelSteps);
                 m_wheelSteps.clear();
-                DEBUG_LOG("S'entra al LeftButtonPress");
             }
             break;
         
