@@ -295,11 +295,6 @@ QList<unsigned int> SystemRequerimentsTest::getCPUFrequencies(SystemInformation 
     return system->getCPUFrequencies();
 }
 
-unsigned int SystemRequerimentsTest::getCPUL2CacheSize(SystemInformation *system)
-{
-    return system->getCPUL2CacheSize();
-}
-
 QList<QString> SystemRequerimentsTest::getGPUOpenGLCompatibilities(SystemInformation *system)
 {
     return system->getGPUOpenGLCompatibilities();

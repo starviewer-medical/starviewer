@@ -7,7 +7,6 @@ SystemRequeriments::SystemRequeriments()
 {
     m_minimumNumberOfCores = 4;
     m_minimumCoreSpeed = 2457; //2.4GHz
-    m_minimumL2CacheSize = 8192; // Kbytes
     m_minimumGPURAM = 256; // Mbytes
     m_minimumGPUOpenGLVersion = "2.1";
     m_minimumOSVersion = "5.0"; // XP
@@ -35,11 +34,6 @@ unsigned int SystemRequeriments::getMinimumCPUNumberOfCores()
 unsigned int SystemRequeriments::getMinimumCPUFrequency()
 {
     return m_minimumCoreSpeed;
-}
-
-unsigned int SystemRequeriments::getMinimumCPUL2CacheSize()
-{
-    return m_minimumL2CacheSize;
 }
 
 QList<QString> SystemRequeriments::getMinimumGPUOpenGLCompatibilities()
