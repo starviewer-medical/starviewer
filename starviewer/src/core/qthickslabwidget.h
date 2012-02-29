@@ -36,6 +36,9 @@ signals:
     // TODO enviar int o QString?
     void projectionModeChanged(int mode);
 
+    /// S'emet cada cop que canvia l'estat del checkbox del mode de gruix màxim indicant si està marcat o no
+    void maximumThicknessModeToggled(bool checked);
+
 protected slots:
     /// Aquest slot està connectat als canvis en el combo i segons el valor
     /// escollit aplica sobre el visor el tipus de projecció adequat
