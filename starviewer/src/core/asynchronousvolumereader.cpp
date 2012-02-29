@@ -81,18 +81,33 @@ void AsynchronousVolumeReader::assignResourceRestrictionPolicy(VolumeReaderJob *
             ERROR_LOG("El valor per limitar la quantitat de volums carregant-se simultàniament ha de ser més gran de 0.");
         }
     }
-    else if (is32BitWindows())
+    else 
     {
-        // Si és 32 bits limitem la concurrència si tenim volums multiframe o que no siguin CT o MR
         QStringList allowedModalities;
-        allowedModalities << QString("CT") << QString("MR");
+        if (is32BitWindows())
+        {
+            // Si és 32 bits a més de limitar la concurrència si tenim volums multiframe ho fem també amb els que no siguin CT o MR
+            allowedModalities << QString("CT") << QString("MR");
+        }
+        // Si és 64 bits, només limitarem la concurrència si tenim volums multiframe, ja que les gdcm necessiten molta memòria per carregar-les
+        // i es poden produir pics de memòria considerables que impedeixen obrir les imatges
+        
         bool foundRestrictions = checkForResourceRestrictions(true, allowedModalities);
         
         int numberOfVolumesLoadingConcurrently;
         if (foundRestrictions)
         {
             numberOfVolumesLoadingConcurrently = 1;
-            INFO_LOG(QString("Windows 32 bits amb volums que poden requerir molta memòria. Limitem a %1 la quantitat de volums carregant-se simultàniament.").arg(numberOfVolumesLoadingConcurrently));
+            if (is32BitWindows())
+            {
+                INFO_LOG(QString("Windows 32 bits amb volums que poden requerir molta memòria. Limitem a %1 la quantitat de volums carregant-se simultàniament.")
+                    .arg(numberOfVolumesLoadingConcurrently));
+            }
+            else
+            {
+                INFO_LOG(QString("Windows 64 bits amb volums multiframe que poden requerir molta memòria. Limitem a %1 la quantitat de volums carregant-se "
+                    "simultàniament.").arg(numberOfVolumesLoadingConcurrently));
+            }
         }
         else
         {
