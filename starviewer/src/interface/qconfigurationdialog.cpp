@@ -28,21 +28,21 @@ QConfigurationDialog::QConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
     // No mostrem configuració del PACS
     QConfigurationScreen *pacsConfigurationScreen = new QConfigurationScreen(this);
     this->addConfigurationWidget(pacsConfigurationScreen, tr("PACS"), AdvancedConfiguration);
-    connect(pacsConfigurationScreen, SIGNAL(configurationChanged(const QString &)), this, SIGNAL(configurationChanged(const QString &)));
+    connect(pacsConfigurationScreen, SIGNAL(configurationChanged(const QString&)), this, SIGNAL(configurationChanged(const QString&)));
     connect(m_okButton, SIGNAL(clicked()), pacsConfigurationScreen, SLOT(applyChanges()));
 #endif
 
     // Configuracions de la base de dades local
     QLocalDatabaseConfigurationScreen *localDatabaseScreen = new QLocalDatabaseConfigurationScreen(this);
     this->addConfigurationWidget(localDatabaseScreen, tr("Local Database"), AdvancedConfiguration);
-    connect(localDatabaseScreen, SIGNAL(configurationChanged(const QString &)), this, SIGNAL(configurationChanged(const QString &)));
+    connect(localDatabaseScreen, SIGNAL(configurationChanged(const QString&)), this, SIGNAL(configurationChanged(const QString&)));
     connect(m_okButton, SIGNAL(clicked()), localDatabaseScreen, SLOT(applyChanges()));
 
 #ifndef STARVIEWER_LITE
     // No mostrem configuració del servei que escolta les peticions del RIS
     QListenRisRequestsConfigurationScreen *qListenRisRequestsConfigurationScreen = new QListenRisRequestsConfigurationScreen(this);
     this->addConfigurationWidget(qListenRisRequestsConfigurationScreen, tr("RIS Listener"), AdvancedConfiguration);
-    connect(qListenRisRequestsConfigurationScreen, SIGNAL(configurationChanged(const QString &)), this, SIGNAL(configurationChanged(const QString &)));
+    connect(qListenRisRequestsConfigurationScreen, SIGNAL(configurationChanged(const QString&)), this, SIGNAL(configurationChanged(const QString&)));
     connect(m_okButton, SIGNAL(clicked()), qListenRisRequestsConfigurationScreen, SLOT(applyChanges()));
 #endif
 

@@ -49,12 +49,12 @@ void QLocalDatabaseConfigurationScreen::createConnections()
     connect(m_buttonCreateDatabase, SIGNAL(clicked()), SLOT(createDatabase()));
 
     // Activen el boto apply quant canvia el seu valor
-    connect(m_textDatabaseRoot, SIGNAL(textChanged(const QString &)), SLOT(enableApplyButtons()));
-    connect(m_textCacheImagePath, SIGNAL(textChanged(const QString &)), SLOT(enableApplyButtons()));
-    connect(m_textMinimumSpaceRequiredToRetrieve, SIGNAL(textChanged(const QString &)), SLOT(enableApplyButtons()));
-    connect(m_textDatabaseRoot, SIGNAL(textChanged(const QString &)), SLOT (configurationChangedDatabaseRoot()));
-    connect(m_textMaximumDaysNotViewed, SIGNAL(textChanged(const QString &)), SLOT(enableApplyButtons()));
-    connect(m_textSpaceToFreeIfNotEnoughSpaceAvailable, SIGNAL(textChanged(const QString &)), SLOT(enableApplyButtons()));
+    connect(m_textDatabaseRoot, SIGNAL(textChanged(const QString&)), SLOT(enableApplyButtons()));
+    connect(m_textCacheImagePath, SIGNAL(textChanged(const QString&)), SLOT(enableApplyButtons()));
+    connect(m_textMinimumSpaceRequiredToRetrieve, SIGNAL(textChanged(const QString&)), SLOT(enableApplyButtons()));
+    connect(m_textDatabaseRoot, SIGNAL(textChanged(const QString&)), SLOT (configurationChangedDatabaseRoot()));
+    connect(m_textMaximumDaysNotViewed, SIGNAL(textChanged(const QString&)), SLOT(enableApplyButtons()));
+    connect(m_textSpaceToFreeIfNotEnoughSpaceAvailable, SIGNAL(textChanged(const QString&)), SLOT(enableApplyButtons()));
     connect(m_checkBoxDeletedOldStudies, SIGNAL(toggled(bool)), SLOT(enableApplyButtons()));
     connect(m_checkBoxDeleteStudiesIfNotEnoughFreeSpaceAvailable, SIGNAL(toggled(bool)), SLOT(enableApplyButtons()));
 

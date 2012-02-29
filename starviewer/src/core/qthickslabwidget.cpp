@@ -103,8 +103,8 @@ void QThickSlabWidget::applyProjectionMode(int comboItem)
     {
         // Desconnectem qualsevol possible connexió
         disconnect(m_slabThicknessSlider, SIGNAL(valueChanged(int)), this, SLOT(applyThickSlab()));
-        disconnect(m_slabThicknessSlider, SIGNAL(sliderPressed ()), this, SLOT(turnOnDelayedUpdate()));
-        disconnect(m_slabThicknessSlider, SIGNAL(sliderReleased ()), this, SLOT(onSliderReleased()));
+        disconnect(m_slabThicknessSlider, SIGNAL(sliderPressed()), this, SLOT(turnOnDelayedUpdate()));
+        disconnect(m_slabThicknessSlider, SIGNAL(sliderReleased()), this, SLOT(onSliderReleased()));
 
         m_currentViewer->enableThickSlab(false);
         m_slabThicknessSlider->setEnabled(false);
@@ -137,7 +137,7 @@ void QThickSlabWidget::applyProjectionMode(int comboItem)
         // la resposta de l'interfície fos una mica lenta, ja que calcular el nou slab és costós
         // TODO si el procés de l'slab anés amb threads no tindríem aquest problema
         turnOffDelayedUpdate();
-        connect(m_slabThicknessSlider, SIGNAL(sliderPressed ()), SLOT(turnOnDelayedUpdate()));
+        connect(m_slabThicknessSlider, SIGNAL(sliderPressed()), SLOT(turnOnDelayedUpdate()));
 
         // TODO ara fem la conversió a id d'enter, però en un futur anirà tot amb Strings
         int projectionModeID = -1;
@@ -193,12 +193,12 @@ void QThickSlabWidget::applyThickSlab()
 void QThickSlabWidget::turnOnDelayedUpdate()
 {
     disconnect(m_slabThicknessSlider, SIGNAL(valueChanged(int)), this, SLOT(applyThickSlab()));
-    connect(m_slabThicknessSlider, SIGNAL(sliderReleased ()), SLOT(onSliderReleased()));
+    connect(m_slabThicknessSlider, SIGNAL(sliderReleased()), SLOT(onSliderReleased()));
 }
 
 void QThickSlabWidget::turnOffDelayedUpdate()
 {
-    disconnect(m_slabThicknessSlider, SIGNAL(sliderReleased ()), this, SLOT(onSliderReleased()));
+    disconnect(m_slabThicknessSlider, SIGNAL(sliderReleased()), this, SLOT(onSliderReleased()));
     connect(m_slabThicknessSlider, SIGNAL(valueChanged(int)), SLOT(applyThickSlab()));
 }
 

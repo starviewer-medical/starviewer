@@ -125,7 +125,7 @@ void QPreviousStudiesWidget::initializeSearch()
 void QPreviousStudiesWidget::createConnections()
 {
     connect(m_previousStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), this, SLOT(insertStudiesToTree(QList<Study*>)));
-    connect(m_signalMapper, SIGNAL(mapped(const QString &)), this, SLOT(retrieveAndLoadStudy(const QString &)));
+    connect(m_signalMapper, SIGNAL(mapped(const QString&)), this, SLOT(retrieveAndLoadStudy(const QString&)));
     connect(m_queryScreen, SIGNAL(studyRetrieveStarted(QString)), this, SLOT(studyRetrieveStarted(QString)));
     connect(m_queryScreen, SIGNAL(studyRetrieveFinished(QString)), this, SLOT(studyRetrieveFinished(QString)));
     connect(m_queryScreen, SIGNAL(studyRetrieveFailed(QString)), this, SLOT(studyRetrieveFailed(QString)));
