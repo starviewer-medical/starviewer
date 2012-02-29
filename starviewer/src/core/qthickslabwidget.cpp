@@ -261,6 +261,8 @@ void QThickSlabWidget::enableVolumeMode(bool enable)
         m_slabThicknessSlider->setEnabled(true);
         m_slabThicknessLabel->setEnabled(true);
     }
+
+    emit maximumThicknessModeToggled(enable);
 }
 
 void QThickSlabWidget::disconnectSignalsAndSlots()

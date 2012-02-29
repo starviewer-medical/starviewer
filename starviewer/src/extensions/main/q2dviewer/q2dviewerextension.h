@@ -165,6 +165,9 @@ private slots:
     /// Mètode que tracta el canvi de visualitzador seleccionat
     void changeSelectedViewer(Q2DViewerWidget *viewerWidget);
 
+    /// Si enable és true, activa el gruix màxim a tots els visors on hi hagi algun mode de thickslab actiu
+    void enableMaximumThicknessMode(bool enable);
+
     /// Activa el botó d'edició de la sincronització automàtica
     void enableAutomaticSynchonizationEditor(bool enable);
 

@@ -197,6 +197,7 @@ void Q2DViewerExtension::createConnections()
     connect(m_previousStudiesToolButton, SIGNAL(clicked (bool)), SLOT(showPreviousStudiesWidget()));
 #endif
 
+    connect(m_thickSlabWidget, SIGNAL(maximumThicknessModeToggled(bool)), SLOT(enableMaximumThicknessMode(bool)));
 }
 
 void Q2DViewerExtension::setInput(Volume *input)
@@ -685,6 +686,27 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
             m_thickSlabWidget->unlink();
         }
     }
+}
+
+void Q2DViewerExtension::enableMaximumThicknessMode(bool enable)
+{
+    if (!enable)
+    {
+        return;
+    }
+
+    int numberOfViewers = m_workingArea->getNumberOfViewers();
+
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    for (int viewerNumber = 0; viewerNumber < numberOfViewers; ++viewerNumber)
+    {
+        Q2DViewer *viewer = m_workingArea->getViewerWidget(viewerNumber)->getViewer();
+        if (viewer->isThickSlabActive() && !viewer->isActive())
+        {
+            viewer->setSlabThickness(viewer->getMaximumSlice() + 1);
+        }
+    }
+    QApplication::restoreOverrideCursor();
 }
 
 void Q2DViewerExtension::showImageOverlays(bool show)
