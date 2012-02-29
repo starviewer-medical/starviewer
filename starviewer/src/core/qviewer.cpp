@@ -543,6 +543,7 @@ void QViewer::setWindowLevelData(WindowLevelPresetsToolData *windowLevelData)
     m_windowLevelData = windowLevelData;
     connect(m_windowLevelData, SIGNAL(presetChanged(QString)), SLOT(setWindowLevelPreset(QString)));
 }
+
 void QViewer::grabCurrentView()
 {
     m_windowToImageFilter->Update();

@@ -67,9 +67,9 @@ void QDicomPrintExtension::createConnections()
     connect(m_fromImageSlider, SIGNAL(valueChanged(int)), SLOT(m_fromImageSliderValueChanged()));
     connect(m_toImageSlider, SIGNAL(valueChanged(int)), SLOT(m_toImageSliderValueChanged()));
     // LineEdit canvien de valor
-    connect(m_intervalImagesLineEdit, SIGNAL(textEdited (const QString &)), SLOT(m_intervalImagesLineEditTextEdited(const QString &)));
-    connect(m_fromImageLineEdit, SIGNAL(textEdited (const QString &)), SLOT(m_fromImageLineEditTextEdited(const QString &)));
-    connect(m_toImageLineEdit, SIGNAL(textEdited (const QString &)), SLOT(m_toImageLineEditTextEdited(const QString &)));
+    connect(m_intervalImagesLineEdit, SIGNAL(textEdited (const QString&)), SLOT(m_intervalImagesLineEditTextEdited(const QString&)));
+    connect(m_fromImageLineEdit, SIGNAL(textEdited (const QString&)), SLOT(m_fromImageLineEditTextEdited(const QString&)));
+    connect(m_toImageLineEdit, SIGNAL(textEdited (const QString&)), SLOT(m_toImageLineEditTextEdited(const QString&)));
 
     connect(m_qdicomPrinterBasicSettingsWidget, SIGNAL(basicDicomPrinterSettingChanged()), SLOT(updateNumberOfDicomPrintPagesToPrint()));
     connect(m_printButton, SIGNAL(clicked()), SLOT(print()));

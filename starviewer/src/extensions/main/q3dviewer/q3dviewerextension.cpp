@@ -96,7 +96,7 @@ void Q3DViewerExtension::loadClutPresets()
 {
     DEBUG_LOG("loadClutPresets()");
 
-    disconnect(m_clutPresetsComboBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(applyPresetClut(const QString &)));
+    disconnect(m_clutPresetsComboBox, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(applyPresetClut(const QString&)));
 
     m_clutPresetsComboBox->clear();
 
@@ -131,7 +131,7 @@ void Q3DViewerExtension::loadClutPresets()
     m_clutPresetsComboBox->addItems(m_clutNameToFileName.keys());
     m_clutPresetsComboBox->setCurrentIndex(-1);
 
-    connect(m_clutPresetsComboBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(applyPresetClut(const QString &)));
+    connect(m_clutPresetsComboBox, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(applyPresetClut(const QString&)));
 }
 
 void Q3DViewerExtension::loadRenderingStyles()
@@ -322,14 +322,14 @@ void Q3DViewerExtension::createConnections()
 
     connect(m_customStyleToolButton, SIGNAL(clicked()), SLOT(toggleClutEditor()));
 
-    connect(m_3DView, SIGNAL(transferFunctionChanged ()), SLOT(changeViewerTransferFunction()));
-    connect(this, SIGNAL(newTransferFunction ()), m_3DView, SLOT(setNewTransferFunction()));
+    connect(m_3DView, SIGNAL(transferFunctionChanged()), SLOT(changeViewerTransferFunction()));
+    connect(this, SIGNAL(newTransferFunction()), m_3DView, SLOT(setNewTransferFunction()));
 
     // Visor 3d
     connect(m_3DView, SIGNAL(scalarRange(double, double)), SLOT(setScalarRange(double, double)));
 
     // Rendering styles
-    connect(m_renderingStyleListView, SIGNAL(activated(const QModelIndex &)), SLOT(applyRenderingStyle(const QModelIndex &)));
+    connect(m_renderingStyleListView, SIGNAL(activated(const QModelIndex&)), SLOT(applyRenderingStyle(const QModelIndex&)));
 
     connect(m_editorSplitter, SIGNAL(splitterMoved(int, int)), SLOT(setCustomStyleButtonStateBySplitter()));
 
@@ -362,7 +362,7 @@ void Q3DViewerExtension::setScalarRange(double min, double max)
         m_currentClut.set(min, Qt::black, 0.0);
         m_currentClut.set(max, Qt::white, 1.0);
         m_firstInput = false;
-        emit newTransferFunction ();
+        emit newTransferFunction();
     }
 }
 
@@ -391,9 +391,9 @@ void Q3DViewerExtension::applyClut(const TransferFunction &clut, bool preset)
     if (!preset)
     {
         // Cal fer el disconnect per evitar un bucle infinit
-        disconnect(m_clutPresetsComboBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(applyPresetClut(const QString &)));
+        disconnect(m_clutPresetsComboBox, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(applyPresetClut(const QString&)));
         m_clutPresetsComboBox->setCurrentIndex(-1);
-        connect(m_clutPresetsComboBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(applyPresetClut(const QString &)));
+        connect(m_clutPresetsComboBox, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(applyPresetClut(const QString&)));
     }
     m_gradientEditor->setTransferFunction(m_currentClut);
     m_editorByValues->setTransferFunction(m_currentClut);

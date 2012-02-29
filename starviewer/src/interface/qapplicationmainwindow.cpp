@@ -351,7 +351,7 @@ void QApplicationMainWindow::moveToNextDesktop()
 void QApplicationMainWindow::showConfigurationDialog()
 {
     QConfigurationDialog configurationDialog;
-    connect(&configurationDialog, SIGNAL(configurationChanged(const QString &)), m_extensionHandler, SLOT(updateConfiguration(const QString &)));
+    connect(&configurationDialog, SIGNAL(configurationChanged(const QString&)), m_extensionHandler, SLOT(updateConfiguration(const QString&)));
     configurationDialog.exec();
 }
 
@@ -640,7 +640,7 @@ void QApplicationMainWindow::markAsBetaVersion()
     m_betaVersionMenuText = new QLabel(menuBar());
     m_betaVersionMenuText->setText("<a href='beta'><img src=':/images/beta-warning.png'></a>&nbsp;<a href='beta'>Beta Version</a>");
     m_betaVersionMenuText->setAlignment(Qt::AlignVCenter);
-    connect(m_betaVersionMenuText, SIGNAL(linkActivated(const QString &)), SLOT(showBetaVersionDialog()));
+    connect(m_betaVersionMenuText, SIGNAL(linkActivated(const QString&)), SLOT(showBetaVersionDialog()));
     updateBetaVersionTextPosition();
 }
 

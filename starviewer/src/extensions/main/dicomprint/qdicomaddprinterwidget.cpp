@@ -35,9 +35,9 @@ void QDicomAddPrinterWidget::createConnections()
 {
     connect(m_addButton, SIGNAL(clicked()), SLOT(addPrinter()));
     connect(m_cancelButton, SIGNAL(clicked()), SLOT(close()));
-    connect(m_printerAetitleLineEdit, SIGNAL(textChanged(const QString &)), SLOT(enableAddButton()));
-    connect(m_printerHostnameLineEdit, SIGNAL(textChanged(const QString &)), SLOT(enableAddButton()));
-    connect(m_printerPortLineEdit, SIGNAL(textChanged(const QString &)), SLOT(enableAddButton()));
+    connect(m_printerAetitleLineEdit, SIGNAL(textChanged(const QString&)), SLOT(enableAddButton()));
+    connect(m_printerHostnameLineEdit, SIGNAL(textChanged(const QString&)), SLOT(enableAddButton()));
+    connect(m_printerPortLineEdit, SIGNAL(textChanged(const QString&)), SLOT(enableAddButton()));
 }
 
 void QDicomAddPrinterWidget::configureInputValidator()

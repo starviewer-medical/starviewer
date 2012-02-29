@@ -80,7 +80,7 @@ public:
     ~udgPerfusionEstimator();
 
     void SetInsideValue(MaskPixelType in){m_insideValue = in;}
-    MaskPixelType GetInsideValue () {return m_insideValue;}
+    MaskPixelType GetInsideValue() {return m_insideValue;}
 
     void SetPerfuImage(PerfuImageType *imPerfu) {m_perfuImage = imPerfu;}
 

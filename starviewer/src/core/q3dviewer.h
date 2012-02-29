@@ -128,7 +128,7 @@ signals:
     void scalarRange(double min, double max);
     /// Indica el nou window level
     void windowLevelChanged(double window, double level);
-    void transferFunctionChanged ();
+    void transferFunctionChanged();
 
 private:
     /// Fa la visualització per raycasting

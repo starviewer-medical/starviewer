@@ -51,19 +51,19 @@ void QConfigurationScreen::createConnections()
     // Connecta el boto aplicar del Pacs amb l'slot apply
     connect(m_buttonApplyPacs, SIGNAL(clicked()), SLOT(applyChanges()));
 
-    connect(m_textAETitleMachine, SIGNAL(textChanged(const QString &)), SLOT(enableApplyButtons()));
-    connect(m_textTimeout, SIGNAL(textChanged(const QString &)), SLOT(enableApplyButtons()));
-    connect(m_textLocalPort, SIGNAL(textChanged(const QString &)), SLOT(enableApplyButtons()));
+    connect(m_textAETitleMachine, SIGNAL(textChanged(const QString&)), SLOT(enableApplyButtons()));
+    connect(m_textTimeout, SIGNAL(textChanged(const QString&)), SLOT(enableApplyButtons()));
+    connect(m_textLocalPort, SIGNAL(textChanged(const QString&)), SLOT(enableApplyButtons()));
     // En el moment en que ens editen el textBox si apareixia el missatge de port en ús el fem invisible
-    connect(m_textLocalPort, SIGNAL(textChanged(const QString &)), SLOT(checkIncomingConnectionsPortNotInUse()));
-    connect(m_textMaxConnections, SIGNAL(textChanged(const QString &)), SLOT(enableApplyButtons()));
-    connect(m_textInstitutionName, SIGNAL(textChanged(const QString &)), SLOT(enableApplyButtons()));
-    connect(m_textInstitutionAddress, SIGNAL(textChanged(const QString &)), SLOT(enableApplyButtons()));
-    connect(m_textInstitutionTown, SIGNAL(textChanged(const QString &)), SLOT(enableApplyButtons()));
-    connect(m_textInstitutionZipCode, SIGNAL(textChanged(const QString &)), SLOT(enableApplyButtons()));
-    connect(m_textInstitutionCountry, SIGNAL(textChanged(const QString &)), SLOT(enableApplyButtons()));
-    connect(m_textInstitutionPhoneNumber, SIGNAL(textChanged(const QString &)), SLOT(enableApplyButtons()));
-    connect(m_textInstitutionEmail, SIGNAL(textChanged(const QString &)), SLOT(enableApplyButtons()));
+    connect(m_textLocalPort, SIGNAL(textChanged(const QString&)), SLOT(checkIncomingConnectionsPortNotInUse()));
+    connect(m_textMaxConnections, SIGNAL(textChanged(const QString&)), SLOT(enableApplyButtons()));
+    connect(m_textInstitutionName, SIGNAL(textChanged(const QString&)), SLOT(enableApplyButtons()));
+    connect(m_textInstitutionAddress, SIGNAL(textChanged(const QString&)), SLOT(enableApplyButtons()));
+    connect(m_textInstitutionTown, SIGNAL(textChanged(const QString&)), SLOT(enableApplyButtons()));
+    connect(m_textInstitutionZipCode, SIGNAL(textChanged(const QString&)), SLOT(enableApplyButtons()));
+    connect(m_textInstitutionCountry, SIGNAL(textChanged(const QString&)), SLOT(enableApplyButtons()));
+    connect(m_textInstitutionPhoneNumber, SIGNAL(textChanged(const QString&)), SLOT(enableApplyButtons()));
+    connect(m_textInstitutionEmail, SIGNAL(textChanged(const QString&)), SLOT(enableApplyButtons()));
 
     connect(m_checkBoxQueryRetrieveEnabled, SIGNAL(stateChanged(int)), SLOT(queryRetrieveServiceEnabledChanged()));
     connect(m_checkBoxStoreEnabled, SIGNAL(stateChanged(int)), SLOT(storeServiceEnabledChanged()));
