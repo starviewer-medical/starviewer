@@ -49,6 +49,9 @@ private:
     /// Posa la posició actual a les dades, sobreescrivint l'existent si n'hi ha
     void setPositionToToolData();
 
+    /// Inicialitza el grup a les dades, si és que no està inicialitzat
+    void initializeGroupToolData();
+
 private:
     
     /// Dades de la tool

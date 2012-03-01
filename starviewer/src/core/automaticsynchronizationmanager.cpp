@@ -9,6 +9,7 @@
 #include "toolproxy.h"
 #include "automaticsynchronizationtool.h"
 #include "synchronizationeditionwidget.h"
+#include "logging.h"
 
 namespace udg {
 
@@ -130,7 +131,14 @@ void AutomaticSynchronizationManager::initialize()
 
             if (groupOfActualViewer == -1)
             {
-                m_toolData->setGroupForUID(frameOfReferenceUID, m_toolData->getNumberOfGroups());
+                if (frameOfReferenceUID != "" )
+                {
+                    m_toolData->setGroupForUID(frameOfReferenceUID, m_toolData->getNumberOfGroups());
+                }
+                else
+                {
+                    DEBUG_LOG(QString("Viewer sense frameOfReference, no es tindrà en compte a la sincronitzacio automatica."));
+                }
             }
         }
     }
