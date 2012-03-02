@@ -75,33 +75,35 @@
 <context>
     <name>udg::CacheTest</name>
     <message>
+        <location filename="cachetest.cpp" line="34"/>
+        <source>The free space on the local database location is below the minimum required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="cachetest.cpp" line="35"/>
-        <source>The free space on the cache directory is below the minimum required</source>
+        <source>Make some space on disk or change the local database to other location</source>
+        <oldsource>The free space on the cache directory is below the minimum required</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="cachetest.cpp" line="36"/>
-        <source>Make some space on disk</source>
+        <location filename="cachetest.cpp" line="45"/>
+        <source>Fix the permissions of the directory or change the local database to other location</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="cachetest.cpp" line="43"/>
-        <source>Invalid permissions on the cache directory</source>
+        <location filename="cachetest.cpp" line="55"/>
+        <source>The local database is not on the default path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="cachetest.cpp" line="65"/>
+        <source>%1 local database is correctly configured</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="cachetest.cpp" line="44"/>
-        <source>Change the cache path or the permissions of the directory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="cachetest.cpp" line="52"/>
-        <source>The cache is not on the default path</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="cachetest.cpp" line="60"/>
-        <source>%1 cache is correctly configured</source>
+        <source>Invalid permissions on the local database directory</source>
+        <oldsource>Change the cache path or the permissions of the directory</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -117,27 +119,27 @@
 <context>
     <name>udg::DICOMDIRBurningApplicationTest</name>
     <message>
-        <location filename="dicomdirburningapplicationtest.cpp" line="36"/>
-        <source>DICOMDIR burning application is not installed on settings folder</source>
+        <location filename="dicomdirburningapplicationtest.cpp" line="31"/>
+        <source>DICOMDIR burning application is not installed on the given location.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dicomdirburningapplicationtest.cpp" line="37"/>
-        <source>Please reinstall the application or update the configuration</source>
+        <location filename="dicomdirburningapplicationtest.cpp" line="32"/>
+        <source>Provide the correct location on Tools &gt; Configuration &gt; DICOMDIR.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dicomdirburningapplicationtest.cpp" line="43"/>
-        <source>There is no DICOMDIR burning application configured</source>
+        <location filename="dicomdirburningapplicationtest.cpp" line="40"/>
+        <source>There is no DICOMDIR burning application configured.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dicomdirburningapplicationtest.cpp" line="44"/>
-        <source>Install a DICOMDIR burning application</source>
+        <location filename="dicomdirburningapplicationtest.cpp" line="41"/>
+        <source>Install a DICOMDIR burning application and configure Starviewer to use it on Tools &gt; Configuration &gt; DICOMDIR.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dicomdirburningapplicationtest.cpp" line="52"/>
+        <location filename="dicomdirburningapplicationtest.cpp" line="50"/>
         <source>The application to burn DICOMDIRs to CD/DVD is correctly configured</source>
         <translation type="unfinished"></translation>
     </message>
@@ -228,32 +230,38 @@ No teniu permisos d&apos;escriptura en el directori de la caché d&apos;imatges.
 <context>
     <name>udg::EchoToPACSTest</name>
     <message>
-        <location filename="echotopacstest.cpp" line="34"/>
+        <location filename="echotopacstest.cpp" line="28"/>
         <source>There are no PACS defined</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="echotopacstest.cpp" line="29"/>
+        <source>New PACS can be defined at Tools &gt; Configuration &gt; PACS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="echotopacstest.cpp" line="44"/>
+        <source>Echo to PACS with AETitle &apos;%1&apos; failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="echotopacstest.cpp" line="45"/>
+        <source>Check PACS configuration at Tools &gt; Configuration &gt; PACS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="echotopacstest.cpp" line="49"/>
-        <source>Echo to pacs with AE Title &apos;%1&apos; failed</source>
+        <source>Unable to connect to PACS with AETitle &apos;%1&apos;</source>
+        <oldsource>Echo to pacs with AE Title &apos;%1&apos; failed</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="echotopacstest.cpp" line="50"/>
-        <source>Contact PACS supervisor</source>
+        <source>Check internet connection and PACS configuration at Tools &gt; Configuration &gt; PACS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="echotopacstest.cpp" line="54"/>
-        <source>Unable to connect to PACS with AE Title &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="echotopacstest.cpp" line="55"/>
-        <source>Check PACS URL, or internet connection</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="echotopacstest.cpp" line="68"/>
+        <location filename="echotopacstest.cpp" line="61"/>
         <source>All PACS are correctly configured</source>
         <translation type="unfinished"></translation>
     </message>
@@ -269,22 +277,27 @@ No teniu permisos d&apos;escriptura en el directori de la caché d&apos;imatges.
 <context>
     <name>udg::PortInUseTest</name>
     <message>
+        <location filename="portinusetest.cpp" line="29"/>
+        <source>Port %1 is already in use by other application</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="portinusetest.cpp" line="30"/>
+        <source>Try another port or shutdown the application using this port.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="portinusetest.cpp" line="34"/>
-        <source>Port is already in use</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="portinusetest.cpp" line="35"/>
-        <source>Try another port or shut down the application using this port</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="portinusetest.cpp" line="39"/>
         <source>Unable to test if port %1 is in use due to error: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="portinusetest.cpp" line="49"/>
+        <location filename="portinusetest.cpp" line="35"/>
+        <source>Contact technical service to evaluate the problem.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="portinusetest.cpp" line="46"/>
         <source>Port %1 is in use by another application</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2585,40 +2598,35 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
         <translation>Consultant al PACS...</translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="155"/>
-        <source>Retrieving study</source>
-        <translation>Descarregant estudi</translation>
+        <location filename="qpopuprisrequestsscreen.cpp" line="152"/>
+        <source>Retrieving study %1 of %2.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="161"/>
-        <source>%1 of %2.</source>
-        <translation>%1 de %2.</translation>
-    </message>
-    <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="177"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="168"/>
         <source>No studies found.</source>
         <translation>No s&apos;han trobat estudis.</translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="188"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="179"/>
         <source>No studies has been found.</source>
         <oldsource>No studies has been retrieved.</oldsource>
         <translation>No s&apos;han trobat estudis.</translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="192"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="183"/>
         <source>%1 study has been found.</source>
         <oldsource>%1 study has been retrieved.</oldsource>
         <translation>S&apos;ha trobat %1 estudi.</translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="196"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="187"/>
         <source>%1 studies have been found.</source>
         <oldsource>%1 studies have been retrieved.</oldsource>
         <translation>S&apos;han trobat %1 estudis.</translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="203"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="193"/>
         <source>%1 has received a request from RIS to retrieve studies of patient %2.</source>
         <translation>%1 ha rebut una petició del RIS per descarregar estudis del pacient %2.</translation>
     </message>
@@ -2639,11 +2647,6 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
         <location filename="qpopuprisrequestsscreenbase.ui" line="298"/>
         <source>Starviewer will proceed to retrieve it.</source>
         <translation>Starviewer procedirà a descarregar-lo.</translation>
-    </message>
-    <message>
-        <location filename="qpopuprisrequestsscreenbase.ui" line="320"/>
-        <source>TextLabel</source>
-        <translation></translation>
     </message>
 </context>
 <context>
@@ -2718,7 +2721,7 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
 <context>
     <name>udg::QStudyTreeWidget</name>
     <message>
-        <location filename="qstudytreewidget.cpp" line="452"/>
+        <location filename="qstudytreewidget.cpp" line="450"/>
         <source>Series %1</source>
         <translation>Sèrie %1</translation>
     </message>
@@ -2728,7 +2731,7 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
         <translation>Arxiu %1</translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="421"/>
+        <location filename="qstudytreewidget.cpp" line="419"/>
         <source>Study %1</source>
         <translation>Estudi %1</translation>
     </message>
@@ -2973,12 +2976,12 @@ Si el problema persisteix contacteu amb un administrador.</translation>
 <context>
     <name>udg::QueryScreen</name>
     <message>
-        <location filename="queryscreen.cpp" line="191"/>
+        <location filename="queryscreen.cpp" line="192"/>
         <source>Port %1 for incoming connections from PACS is already in use by another application.</source>
         <translation>El port %1 per connexions entrants des del PACS està sent utilitzat per una altra aplicació.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="192"/>
+        <location filename="queryscreen.cpp" line="193"/>
         <source>
 
 %1 couldn&apos;t retrieve studies from PACS if the port is in use, please close the application that is using port %2 or change Starviewer port for incoming connections from PACS in the configuration screen.</source>
@@ -2987,7 +2990,7 @@ Si el problema persisteix contacteu amb un administrador.</translation>
 %1 no pot descarregar estudis del PACS si el port està en ús, si us plau tanqueu l&apos;aplicació que està utilitzant el port %2 o canvieu el port per connexions entrants en la pantalla de configuració.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="487"/>
+        <location filename="queryscreen.cpp" line="507"/>
         <source>Cancelling PACS operations...</source>
         <oldsource>Cancelling PACS operations</oldsource>
         <translation>Cancel·lant les operacions amb el PACS...</translation>
@@ -3084,32 +3087,32 @@ Be sure that the IP and AETitle of It are correct.</oldsource>
 Asseguris que la IP i el AETitle d &apos;aquest siguin correctes.</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="396"/>
+        <location filename="risrequestmanager.cpp" line="417"/>
         <source>Some studies requested from RIS of patient %1 exists in local database. Do you want to retrieve again?</source>
         <translation>Alguns dels estudis sol·licitats des del RIS del pacient %1 ja han estat descarregats en local. Voleu tornar-los a descarregar?</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="399"/>
+        <location filename="risrequestmanager.cpp" line="420"/>
         <source>Yes</source>
         <translation>Sí</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="400"/>
+        <location filename="risrequestmanager.cpp" line="421"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="418"/>
+        <location filename="risrequestmanager.cpp" line="439"/>
         <source>Can&apos;t listen RIS requests on port %1, the port is in use by another application.</source>
         <translation>Starviewer no pot escoltar les peticions del RIS pel port %1, ja que el port està sent utilitzat per una altra aplicació.</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="421"/>
+        <location filename="risrequestmanager.cpp" line="442"/>
         <source>Can&apos;t listen RIS requests on port %1, an unknown network error has produced.</source>
         <translation>No es poden escoltar peticions del RIS pel port %1, s&apos;ha produït un error desconegut.</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="422"/>
+        <location filename="risrequestmanager.cpp" line="443"/>
         <source>
 If the problem persists contact with an administrator.</source>
         <oldsource>
@@ -3129,29 +3132,29 @@ Si el problema persisteix contacteu amb un administrador.</translation>
 <context>
     <name>udg::RetrieveDICOMFilesFromPACSJob</name>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="262"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="248"/>
         <source>
 Be sure that your computer is connected on network and the PACS parameters are correct.</source>
         <translation>
 Asseguris que el seu ordinador està connectat a la xarxa i que els paràmetres del PACS són correctes.</translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="263"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="249"/>
         <source>
 If the problem persists contact with an administrator.</source>
         <translation>
 Si el problema persisteix contacteu amb un administrador.</translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="271"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="257"/>
         <source>There is not enough space to retrieve images of study %1 from patient %2, please free space or change your Local Database settings.</source>
         <oldsource>There is not enough space to retrieve images %1 from patient %2, please free space or change your Local Database settings.</oldsource>
         <translation>No hi ha suficient espai per descarregar les imatges del estudi %1 del pacient %2, allibereu espai o canvieu la configuració de la base de dades local.</translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="280"/>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="285"/>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="322"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="266"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="271"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="308"/>
         <source>
 
 Close all %1 windows and try again.
@@ -3163,31 +3166,31 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.
 Si el problema persisteix contacteu amb un administrador.</translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="284"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="270"/>
         <source>Images from study %1 of patient %2 can&apos;t be retrieved because a database error occurred.</source>
         <oldsource>Images from study %1 of patient %2 can&apos;t be retrieved because a database error ocurred.</oldsource>
         <translation>No s&apos;ha pogut descarregar les imatges de l&apos;estudi %1 del pacient %2 perquè s&apos;ha produït un error a la base de dades.</translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="254"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="240"/>
         <source>Images from study %1 of patient %2 has been retrieved successfully from PACS %3.</source>
         <oldsource>Images from study %1 of patient %2 has been retrieved succesfully from PACS %3.</oldsource>
         <translation>Les imatges del estudi %1 del pacient %2 s&apos;han descarregat correctament del PACS %3.</translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="257"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="243"/>
         <source>Retrieve images from study %1 of patient %2 from PACS %3 has been cancelled.</source>
         <translation>La descàrrega d&apos;imatges del estudi %1 del pacient %2 del PACS %3 s&apos;ha cancel·lat.</translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="260"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="246"/>
         <source>%1 can&apos;t connect to PACS %2 trying to retrieve images from study %3 of patient %4.
 </source>
         <translation>No s&apos;ha pogut connectar amb el PACS %2 per descarregar les imatges de l&apos;estudi %3 del pacient %4.
 </translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="274"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="260"/>
         <source>
 
 - Available space in Disk: %1 MB.</source>
@@ -3199,7 +3202,7 @@ Si el problema persisteix contacteu amb un administrador.</translation>
 - Espai disponible al disc: %1 MB.</translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="275"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="261"/>
         <source>
 - Minimum space required in Disk to retrieve studies: %1 MB.</source>
         <oldsource>
@@ -3208,19 +3211,19 @@ Si el problema persisteix contacteu amb un administrador.</translation>
 - Espai mínim requerit en el disc per descarregar estudis: %1 MB.</translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="279"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="265"/>
         <source>An error occurred freeing space on hard disk, the images from study %1 of patient %2 won&apos;t be retrieved.</source>
         <oldsource>An error ocurred freeing space on harddisk, the images from study %1 of patient %2 won&apos;t be retrieved.</oldsource>
         <translation>S&apos;ha produït un error alliberant espai en el disc dur. Les imatges de l&apos;estudi %1 del pacient %2 no es descarregaran.</translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="289"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="275"/>
         <source>Images from study %1 of patient %2 can&apos;t be retrieved from PACS %3 because %4 has not be capable of read correctly data images.</source>
         <oldsource>Images from study %1 of patient %2 can&apos;t be retrieved because PACS %3 because has not be capable of read correctly data images.</oldsource>
         <translation>No s&apos;ha pogut descarregar l&apos; estudi %1 del pacient %2 del PACS %3, perquè no se n&apos;ha pogut llegir correctament la informació de les imatges.</translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="291"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="277"/>
         <source>
 
 The study may be corrupted, if It is not corrupted please contact with %1 team.</source>
@@ -3229,13 +3232,13 @@ The study may be corrupted, if It is not corrupted please contact with %1 team.<
 L&apos;estudi pot estar corrupte, si creieu que no està corrupte si us plau poseu-vos en contacte amb l&apos;equip del %1.</translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="294"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="280"/>
         <source>Images from study %1 of patient %2 can&apos;t be retrieved because PACS %3 doesn&apos;t recognize your computer&apos;s AE Title %4.</source>
         <oldsource>Images from study %1 of patient %2 can&apos;t be retrieved because PACS %3 doesn&apos;t recognize your computer&apos;s AETitle %4.</oldsource>
         <translation>No s&apos;han pogut descarregar les imatges del estudi %1 del pacient %2 perquè el PACS %3 no ha reconegut l&apos;AETitle %4 del vostre ordinador.</translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="296"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="282"/>
         <source>
 
 Contact with an administrator to register your computer to the PACS.</source>
@@ -3247,7 +3250,7 @@ Contact with an administrador to register your computer to the PACS.</oldsource>
 Contacteu amb un administrador per registrar el vostre ordinador al PACS.</translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="299"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="285"/>
         <source>Images from study %1 of patient %2 can&apos;t be retrieved due to an unknown error of PACS %3.
 
 </source>
@@ -3259,13 +3262,13 @@ Contacteu amb un administrador per registrar el vostre ordinador al PACS.</trans
 </translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="301"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="287"/>
         <source>The cause of the error can be that the requested images are corrupted. Please contact with a PACS administrator.</source>
         <oldsource>The cause of the error can be that the requested images are corrupted.</oldsource>
         <translation>La causa de l&apos;error podria ser que les imatges demanades estan corruptes, contacteu amb un administrador del PACS.</translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="304"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="290"/>
         <source>Images from study %1 of patient %2 can&apos;t be retrieved due to an error of PACS %3.
 
 </source>
@@ -3274,23 +3277,23 @@ Contacteu amb un administrador per registrar el vostre ordinador al PACS.</trans
 </translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="306"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="292"/>
         <source>The cause of the error can be that the requested images are corrupted or the incoming connections port in PACS configuration is not correct.</source>
         <oldsource>The cause of the error can be that the requested images are corrupted or the incoming connections port in PACS configuration is not correct. Please contact with a PACS administrator.</oldsource>
         <translation>La causa del error podria ser que les imatges demanades estan corruptes o que el port de connexions entrants del PACS no està correctament configurat.</translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="310"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="296"/>
         <source>Images from study %1 of patient %2 can&apos;t be retrieved because port %3 for incoming connections from PACS is already in use by another application.</source>
         <translation>Les imatges de l&apos;estudi %1 del pacient %2 no s&apos;han pogut descarregar, perquè el port %3 per connexions entrants del PACS està sent utilitzat per una altra aplicació.</translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="315"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="301"/>
         <source>%1 can&apos;t retrieve all images from study %2 of patient %3 from PACS %4. May be those images are missing or corrupted in PACS.</source>
         <translation>No s&apos;han pogut descarregar algunes de les imatges del estudi %2 del pacient %3. Pot ser que aquestes imatges no existeixin al PACS o que estiguin corruptes.</translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="320"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="306"/>
         <source>An unknown error has occurred and %1 can&apos;t retrieve images from study %2 of patient %3 from PACS %4.</source>
         <oldsource>An unknown error has ocurred and %1 can&apos;t retrieve images from study %2 of patient %3 from PACS %4.</oldsource>
         <translation>No s&apos;han pogut descarregar les imatges del l&apos;estudi %2 del pacient %3 del PACS %4 perquè s&apos;ha produït un error desconegut.</translation>
