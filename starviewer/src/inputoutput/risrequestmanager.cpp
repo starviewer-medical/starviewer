@@ -147,7 +147,7 @@ void RISRequestManager::queryPACSJobFinished(PACSJob *pacsJob)
     {
         if (queryPACSJob->getStatus() == PACSRequestStatus::QueryOk)
         {
-            retrieveFoundStudiesInQueryPACS(queryPACSJob);
+            addFoundStudiesToRetrieveQueue(queryPACSJob);
         }
         else if (queryPACSJob->getStatus() != PACSRequestStatus::QueryCancelled)
         {
@@ -226,7 +226,7 @@ void RISRequestManager::errorQueryingStudy(QueryPacsJob *queryPACSJob)
     QMessageBox::critical(NULL, ApplicationNameString, errorMessage);
 }
 
-void RISRequestManager::retrieveFoundStudiesInQueryPACS(QueryPacsJob *queryPACSJob)
+void RISRequestManager::addFoundStudiesToRetrieveQueue(QueryPacsJob *queryPACSJob)
 {
     foreach (Patient *patient, queryPACSJob->getPatientStudyList())
     {
@@ -235,23 +235,44 @@ void RISRequestManager::retrieveFoundStudiesInQueryPACS(QueryPacsJob *queryPACSJ
             if (!m_studiesInstancesUIDRequestedToRetrieve.contains(study->getInstanceUID()))
             {
                 INFO_LOG(QString("S'ha trobat estudi que compleix criteri de cerca del RIS. Estudi UID %1, PacsId %2")
-                         .arg(study->getInstanceUID(), study->getDICOMSource().getRetrievePACS().at(0).getID()));
+                    .arg(study->getInstanceUID(), study->getDICOMSource().getRetrievePACS().at(0).getID()));
 
-                retrieveStudyFoundInQueryPACS(study);
+                //Quan es posa un estudi a descarregar es comprova si aquest existeix a la BD, si existeix es pregunta al usuari si vol tornar a descarregar els estudis
+                //que ja estan en local. Mentre es mostra el QMessageBox preguntant a l'usuari el thread que executa aquesta classe (és el thread de la UI) es continua execuant
+                //podent respondre a nous signals, podent passar que arribi un signal d'un altre PACS que ha acabat de fer la cerca, mentre l'usuari no ha respós al QMessageBox no s'ha
+                //de fer cap descàrrega a l'espera de que respongui l'usuari. Per això encuem els estudis a descarregar en una cua, simulant un productor consumidor, d'aquesta manera
+                //quan l'usuari ha respós es processen els estudis afegits a la cua de descàrrega, sabent que s'ha de fer amb aquests estudis, sinó ens podriem trobar preguntant a l'usuari
+                //diverses vegades per una mateixa petició si els estudis que existeixin en local s'han de tornar a descarregar
+                m_studiesToRetrieveQueue.enqueue(study);
                 m_studiesInstancesUIDRequestedToRetrieve.append(study->getInstanceUID());
+
+                if (m_studiesToRetrieveQueue.count() == 1)
+                {
+                    //Si no hi havia cap estudi per descarregar engeguem el consumidor
+                    retrieveFoundStudiesInQueue();
+                }
             }
             else
             {
+                //Ja hem trobat l'estudi en un altra PACS pel qual ja s'ha demanat descarregar-lo, no cal tornar-hi.
                 WARN_LOG(QString("S'ha trobat l'estudi UID %1 del PACS Id %2 que coincidieix amb els parametres del cerca del RIS, pero ja s'ha demanat "
-                                 "descarregar-lo d'un altre PACS.")
-                            .arg(study->getInstanceUID(), study->getDICOMSource().getRetrievePACS().at(0).getID()));
+                             "descarregar-lo d'un altre PACS.")
+                        .arg(study->getInstanceUID(), study->getDICOMSource().getRetrievePACS().at(0).getID()));
             }
         }
     }
+}
 
-    //Al esborra els pacients automàticament s'esborren els Study del Patient. Study i Patient hereden de QObject i els objectes Study estan inserits com a fills QObject de Patient.
-    //Això fa que quan eliminem Patient s'esborrin els estudis, perquè tot objecte que heredi de QObject quan es destrueix fa un delete dels seus QObject fills, que en aquest cas seria Study
-    qDeleteAll(queryPACSJob->getPatientStudyList());
+void RISRequestManager::retrieveFoundStudiesInQueue()
+{
+    while (!m_studiesToRetrieveQueue.isEmpty())
+    {
+        retrieveStudyFoundInQueryPACS(m_studiesToRetrieveQueue.head());
+
+        //Al esborra els pacients automàticament s'esborren els Study del Patient. Study i Patient hereden de QObject i els objectes Study estan inserits com a fills QObject de Patient.
+        //Això fa que quan eliminem Patient s'esborrin els estudis, perquè tot objecte que heredi de QObject quan es destrueix fa un delete dels seus QObject fills, que en aquest cas seria Study
+        m_studiesToRetrieveQueue.dequeue()->getParentPatient()->deleteLater();
+    }
 }
 
 void RISRequestManager::retrieveStudyFoundInQueryPACS(Study *study)

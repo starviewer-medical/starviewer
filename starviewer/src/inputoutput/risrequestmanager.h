@@ -5,6 +5,7 @@
 #include <QQueue>
 #include <QHash>
 #include <QStringList>
+#include <QQueue>
 
 #include "listenrisrequests.h"
 #include "pacsdevice.h"
@@ -90,8 +91,11 @@ private:
     /// Mostra un missatge indicant que s'ha produït un error al fer la consulta a un PACS
     void errorQueryingStudy(QueryPacsJob *queryPACSJob);
 
+    /// Posa els estudis d'un QueryPacsJob a la cua d'estudis trobats per processa
+    void addFoundStudiesToRetrieveQueue(QueryPacsJob *queryPACSJob);
+
     /// Descarrega els estudis trobats a partir d'una queryPACSJob
-    void retrieveFoundStudiesInQueryPACS(QueryPacsJob *queryPACSJob);
+    void retrieveFoundStudiesInQueue();
 
     /// Comprova si l'estudi existeix a la base dades, si existeix pregunta a l'usuari si vol tornar a descarregar l'estudi si diu que si obté l'estudi
     /// de la base de dades, sinó descarrega l'estudi del PACS
@@ -135,7 +139,7 @@ private:
     QThread *m_listenRISRequestsQThread;
 
     /// Pot ser que diversos PACS continguin el mateix estudi amb un mateix accession number, per evitar descarregar-lo més d'una vegada ens guardem en una
-    /// llista quins són els estudis descarregats.
+    /// llista quins són els estudis descarregats per una mateixa petició.
     QStringList m_studiesInstancesUIDRequestedToRetrieve;
     // Llista de PACSJob pels quals una vegada l'estudi estigui descarregat s'ha de fer un view/load
     QList<QString> m_studiesToViewWhenRetrieveFinishedByInstanceUID;
@@ -156,6 +160,8 @@ private:
     /// de descarregar el PopUp es pot tancar abans que l'usuari hagi pogut prèmer un del botons del QMessageBox preguntant si s'ha de tornar a descarregar l'estudi del PACS,
     /// fent que llavors no es pugui seguir la descarrega dels següents estudis a través de QPopUpRISRequestScree
     static const int secondsTimeOutToHidePopUpAndAutoCloseQMessageBox;
+
+    QQueue<Study*> m_studiesToRetrieveQueue;
 
 };
 
