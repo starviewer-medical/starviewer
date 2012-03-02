@@ -40,7 +40,8 @@ DiagnosisTestResult ApplicationVersionTest::run()
         // En mode Debug retorna error, ja que la caden de text de la versió de l'aplicació que s'envia al webservice conté -devel
         DiagnosisTestProblem problem;
         problem.setState(DiagnosisTestProblem::Error);
-        problem.setDescription(m_olineCheckerErrorDescription);
+        QRegExp url("http://[\\S]+", Qt::CaseSensitive);
+        problem.setDescription(m_olineCheckerErrorDescription.remove(url));
         // TODO Proposar una solució quan hi ha hagut error en el check online de les release notes
         problem.setSolution("");
         result.addError(problem);
