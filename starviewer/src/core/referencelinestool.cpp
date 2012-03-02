@@ -17,6 +17,9 @@ namespace udg {
 
 const QString ReferenceLinesTool::ReferenceLinesDrawerGroup("ReferenceLines");
 
+const double ReferenceLinesTool::MinimumAngleConstraint = 45.0;
+const double ReferenceLinesTool::MaximumAngleConstraint = 135.0;
+
 ReferenceLinesTool::ReferenceLinesTool(QViewer *viewer, QObject *parent)
  : Tool(viewer, parent), m_projectedReferencePlane(0), m_showPlaneThickness(true), m_planesToProject(SingleImage)
 {
@@ -158,6 +161,13 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
         return;
     }
 
+    // Si l'angle entre plans no està dins de l'establert no s'aplicaran reference lines
+    if (!meetAngleConstraint(localizerPlane, referencePlane))
+    {
+        m_2DViewer->getDrawer()->disableGroup(ReferenceLinesDrawerGroup);
+        return;
+    }
+    
     // Primer mirem que siguin plans diferents
     if (*localizerPlane != *referencePlane)
     {
@@ -444,6 +454,27 @@ void ReferenceLinesTool::createAndRemoveLines(int neededLines, QList<DrawerLine*
             delete line;
         }
     }
+}
+
+bool ReferenceLinesTool::meetAngleConstraint(ImagePlane *firstPlane, ImagePlane *secondPlane)
+{
+    if (!firstPlane || !secondPlane)
+    {
+        return false;
+    }
+
+    // Comprovem l'angle que formen els plans
+    double angle = MathTools::angleInDegrees(firstPlane->getImageOrientation().getNormalVector(), secondPlane->getImageOrientation().getNormalVector());
+    
+    if (fabs(angle) < MinimumAngleConstraint || fabs(angle) > MaximumAngleConstraint)
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+
 }
 
 }
