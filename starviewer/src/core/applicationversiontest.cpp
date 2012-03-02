@@ -30,8 +30,8 @@ DiagnosisTestResult ApplicationVersionTest::run()
         if (m_newVersionAvailable)
         {
             state = DiagnosisTestResult::Warning;
-            description = tr("There is a new version");
-            solution = tr("Update");
+            description = tr("There is a new version available.");
+            solution = tr("Contact technical service to request the software update.");
         }
         else
         {

@@ -33,15 +33,15 @@ DiagnosisTestResult DICOMDIRBurningApplicationTest::run()
         else
         {
             testResultState = DiagnosisTestResult::Error;
-            testResultDescription = tr("DICOMDIR burning application is not installed on settings folder");
-            testResultSolution = tr("Please reinstall the application or update the configuration");
+            testResultDescription = tr("DICOMDIR burning application is not installed on the given location.");
+            testResultSolution = tr("Provide the correct location on Tools > Configuration > DICOMDIR.");
         }
     }
     else
     {
         testResultState = DiagnosisTestResult::Warning;
-        testResultDescription = tr("There is no DICOMDIR burning application configured");
-        testResultSolution = tr("Install a DICOMDIR burning application");
+        testResultDescription = tr("There is no DICOMDIR burning application configured.");
+        testResultSolution = tr("Install a DICOMDIR burning application and configure Starviewer to use it on Tools > Configuration > DICOMDIR.");
     }
 
     return DiagnosisTestResult(testResultState, testResultDescription, testResultSolution);

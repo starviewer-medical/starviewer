@@ -80,7 +80,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
     if (compareVersions(openGLVersion, MinimumGPUOpenGLVersion) == SystemRequerimentsTest::Older)
     {
         state = DiagnosisTestResult::Error;
-        description << tr("Current openGL version is %1 and the minimum required is %2").arg(openGLVersion).arg(MinimumGPUOpenGLVersion);
+        description << tr("Current OpenGL version is %1 and the minimum required is %2").arg(openGLVersion).arg(MinimumGPUOpenGLVersion);
         // Normalment la versió d'openGL s'actualitza amb els drivers de la gràfica
         solution << tr("Update your graphics card driver");
     }
@@ -93,7 +93,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
         if (!openGLExtensions.contains(MinimumGPUOpenGLExtensions.at(i)))
         {
             state = DiagnosisTestResult::Error;
-            description << tr("Current openGL version does not support %1 extension").arg(MinimumGPUOpenGLExtensions.at(i));
+            description << tr("Current OpenGL version does not support %1 extension").arg(MinimumGPUOpenGLExtensions.at(i));
             if (!solutionGiven)
             {
                 // En cas de que l'extensió no es suporti es pot instalar algun paquet d'extensions (GLEW, ...), o actualitzar la versió
@@ -232,7 +232,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
         !doesOpticalDriveHaveWriteCapabilities(system))
     {
         state = DiagnosisTestResult::Warning;
-        description << tr("The optical drive is not capable of writing.");
+        description << tr("The optical drive is not capable of burning.");
         solution << tr("Change the optical drive to a CD-RW/DVD-RW");
     }
 
