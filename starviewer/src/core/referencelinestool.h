@@ -94,9 +94,17 @@ private:
     /// El paràmetre areBackgroundLines indica si les línies a crear han de ser estil background o no
     void createAndRemoveLines(int neededLines, QList<DrawerLine*> &linesList, bool areBackgroundLines);
 
+    /// Comprova si els dos plans donats compleixen la restricció de l'angle que hi ha d'haver entre els plans de referència i localitzador
+    /// per poder aplicar reference lines
+    bool meetAngleConstraint(ImagePlane *firstPlane, ImagePlane *secondPlane);
+
 private:
     /// Nom del grup del drawer on agruparem les primitives del reference lines
     static const QString ReferenceLinesDrawerGroup;
+
+    /// Rang d'angles en el que s'han de trobar els plans que intersecten per poder aplicar el reference lines
+    static const double MinimumAngleConstraint;
+    static const double MaximumAngleConstraint;
     
     /// Dades específiques de la tool
     ReferenceLinesToolData *m_myData;
