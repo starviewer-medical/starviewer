@@ -31,12 +31,13 @@ DiagnosisTestResult PortInUseTest::run()
         testResultState = DiagnosisTestResult::Error;
         if (portInUse->getStatus() == PortInUse::PortIsInUse)
         {
-            testResultDescription = tr("Port is already in use");
-            testResultSolution = tr("Try another port or shut down the application using this port");
+            testResultDescription = tr("Port %1 is already in use by other application").arg(m_port);
+            testResultSolution = tr("Try another port or shutdown the application using this port.");
         }
         else
         {
             testResultDescription = tr("Unable to test if port %1 is in use due to error: %2").arg(m_port).arg(portInUse->getErrorString());
+            testResultSolution = tr("Contact technical service to evaluate the problem.");
         }
     }
 

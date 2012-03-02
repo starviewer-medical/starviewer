@@ -32,16 +32,16 @@ DiagnosisTestResult CacheTest::run()
     if (freeSpace / 1024.0f < minimumFreeSpace)
     {
         testResultState = DiagnosisTestResult::Error;
-        testResultDescription << tr("The free space on the cache directory is below the minimum required");
-        testResultSolution << tr("Make some space on disk");
+        testResultDescription << tr("The free space on the local database location is below the minimum required.");
+        testResultSolution << tr("Make some space on disk or change the local database to other location.");
     }
 
     /// Comprovar els permisos de lectura i escriptura a la carpeta de la cache
     if (!doesCacheDirectoryHaveReadWritePermissions(cachePath))
     {
         testResultState = DiagnosisTestResult::Error;
-        testResultDescription << tr("Invalid permissions on the cache directory");
-        testResultSolution << tr("Change the cache path or the permissions of the directory");
+        testResultDescription << tr("Invalid permissions on the local database directory");
+        testResultSolution << tr("Fix the permissions of the directory or change the local database to other location.");
     }
 
     /// De moment, en el cas de que no hi hagi error, mirarem lo del warning
@@ -49,7 +49,7 @@ DiagnosisTestResult CacheTest::run()
     if (testResultState != DiagnosisTestResult::Error && !isCacheOnDefaultPath())
     {
         testResultState = DiagnosisTestResult::Warning;
-        testResultDescription << tr("The cache is not on the default path");
+        testResultDescription << tr("The local database is not on the default path.");
     }
     
     return DiagnosisTestResult(testResultState, testResultDescription.join("\n"), testResultSolution.join("\n"));
@@ -57,7 +57,7 @@ DiagnosisTestResult CacheTest::run()
 
 QString CacheTest::getDescription()
 {
-    return tr("%1 cache is correctly configured").arg(ApplicationNameString);
+    return tr("%1 local database is correctly configured").arg(ApplicationNameString);
 }
 
 unsigned int CacheTest::getFreeSpace(const QString &cachePath)
