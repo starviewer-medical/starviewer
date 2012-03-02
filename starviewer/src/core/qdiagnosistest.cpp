@@ -164,9 +164,9 @@ void QDiagnosisTest::finishedRunningDiagnosisTest()
 {
     groupDiagnosisTestFromRunDiagnosisTestByState();
 
-    m_errorTestsToolButton->setText(tr("%1 errors").arg(m_errorExecutedDiagnosisTests.count()));
-    m_succeededTestsToolButton->setText(tr("%1 OK").arg(m_okExecutedDiagnosisTests.count()));
-    m_warningTestsToolButton->setText(tr("%1 warnings").arg(m_warningExecutedDiagnosisTests.count()));
+    m_errorTestsToolButton->setText(tr("%1 Errors").arg(m_errorExecutedDiagnosisTests.count()));
+    m_succeededTestsToolButton->setText(tr("%1 Succeeded").arg(m_okExecutedDiagnosisTests.count()));
+    m_warningTestsToolButton->setText(tr("%1 Warnings").arg(m_warningExecutedDiagnosisTests.count()));
 
     if (allDiagnosisTestResultAreOk())
     {
@@ -261,7 +261,7 @@ void QDiagnosisTest::updateWidgetToRunDiagnosisTest()
 
 void QDiagnosisTest::saveDiagnosisTestResultsAsFile()
 {
-    QString pathFile = QFileDialog::getSaveFileName(this, tr("Save diagnosis test results"), QDir::homePath(), tr("Images (*.txt)"));
+    QString pathFile = QFileDialog::getSaveFileName(this, tr("Save diagnosis test results"), QDir::homePath(), tr("Files (*.txt)"));
 
     if (!pathFile.isEmpty())
     {
