@@ -17,7 +17,6 @@ FORMS += qlogviewerbase.ui \
     qtransferfunctiongraphicalviewbase.ui \
     synchronizationeditionwidgetbase.ui \
     qdiagnosistestbase.ui \
-    qdiagnosistestresultwidgetbase.ui \
     q2dviewerconfigurationscreenbase.ui
 
 TRANSLATIONS += core_ca_ES.ts \
@@ -279,7 +278,6 @@ HEADERS += extensionfactory.h \
     synchronizationwidgetbutton.h \
     magnifyingglasstool.h \
     qdiagnosistest.h \
-    qdiagnosistestresultwidget.h \
     rundiagnosistest.h \
     q2dviewerconfigurationscreen.h \
     circletool.h \
@@ -522,7 +520,6 @@ SOURCES += extensionmediator.cpp \
     synchronizationwidgetbutton.cpp \
     magnifyingglasstool.cpp \
     qdiagnosistest.cpp \
-    qdiagnosistestresultwidget.cpp \
     rundiagnosistest.cpp \
     q2dviewerconfigurationscreen.cpp \
     circletool.cpp \
