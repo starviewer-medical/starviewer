@@ -19,26 +19,25 @@ DiagnosisTestResult FirewallAccessTest::run()
 {
     /// Crear el firewall
     FirewallAccess *firewall = createFirewall();
-    /// I comprovar si starviewer té access
+    /// I comprovar si starviewer t access
     checkIfStarviewerHaveAccessThroughFirewall(firewall);
     DiagnosisTestResult result;
 
-    if (firewall->getStatus() == FirewallAccess::FirewallIsAccessible)
+    if (firewall->getStatus() == FirewallAccess::FirewallIsBlocking)
     {
-        result.setState(DiagnosisTestResult::Ok);
+        DiagnosisTestProblem problem;
+        problem.setState(DiagnosisTestProblem::Warning);
+        problem.setDescription(firewall->getErrorString());
+        problem.setSolution(tr("Add %1 to the list of applications that have access through firewall on Control Panel > Firewall").arg(ApplicationNameString));
+        result.addWarning(problem);
     }
-    else if (firewall->getStatus() == FirewallAccess::FirewallIsBlocking)
+    else if (firewall->getStatus() != FirewallAccess::FirewallIsAccessible)
     {
-        result.setState(DiagnosisTestResult::Warning);
-        result.setDescription(firewall->getErrorString());
-        result.setSolution(tr("Add %1 to the list of applications that have access through firewall on Control Panel > Firewall.").arg(ApplicationNameString));
-    }
-    else
-    {
-        result.setDescription(firewall->getErrorString());
-        result.setState(DiagnosisTestResult::Error);
-        // TODO Proposar una solució per quan falla la comprovació del firewall
-        result.setSolution(tr("Contact technical service to evaluate the problem."));
+        DiagnosisTestProblem problem;
+        problem.setState(DiagnosisTestProblem::Error);
+        problem.setDescription(firewall->getErrorString());
+        problem.setSolution(tr("Contact technical service to evaluate the problem"));
+        result.addError(problem);
     }
 
     delete firewall;

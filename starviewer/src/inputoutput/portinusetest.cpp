@@ -15,34 +15,30 @@ PortInUseTest::~PortInUseTest()
 
 DiagnosisTestResult PortInUseTest::run()
 {
-    DiagnosisTestResult::DiagnosisTestResultState testResultState = DiagnosisTestResult::Invalid;
-    QString testResultDescription;
-    QString testResultSolution;
+    DiagnosisTestResult result;
 
     PortInUse *portInUse = createPortInUse();
     checkIfPortIsInUse(portInUse);
 
-    if (portInUse->getStatus() == PortInUse::PortIsAvailable || portInUse->getOwner() == PortInUse::PortUsedByStarviewer)
+    if (portInUse->getStatus() != PortInUse::PortIsAvailable && portInUse->getOwner() != PortInUse::PortUsedByStarviewer)
     {
-        testResultState = DiagnosisTestResult::Ok;
-    }
-    else
-    {
-        testResultState = DiagnosisTestResult::Error;
+        DiagnosisTestProblem problem;
+        problem.setState(DiagnosisTestProblem::Error);
         if (portInUse->getStatus() == PortInUse::PortIsInUse)
         {
-            testResultDescription = tr("Port %1 is already in use by other application").arg(m_port);
-            testResultSolution = tr("Try another port or shutdown the application using this port.");
+            problem.setDescription(tr("Port %1 is already in use by other application").arg(m_port));
+            problem.setSolution(tr("Try another port or shutdown the application using this port."));
         }
         else
         {
-            testResultDescription = tr("Unable to test if port %1 is in use due to error: %2").arg(m_port).arg(portInUse->getErrorString());
-            testResultSolution = tr("Contact technical service to evaluate the problem.");
+            problem.setDescription(tr("Unable to test if port %1 is in use due to error: %2").arg(m_port).arg(portInUse->getErrorString()));
+            problem.setSolution(tr("Contact technical service to evaluate the problem."));
         }
+        result.addError(problem);
     }
 
     delete portInUse;
-    return DiagnosisTestResult(testResultState, testResultDescription, testResultSolution);
+    return result;
 }
 
 QString PortInUseTest::getDescription()

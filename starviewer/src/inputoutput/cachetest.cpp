@@ -19,9 +19,7 @@ CacheTest::~CacheTest()
 
 DiagnosisTestResult CacheTest::run()
 {
-    DiagnosisTestResult::DiagnosisTestResultState testResultState = DiagnosisTestResult::Ok;
-    QStringList testResultDescription;
-    QStringList testResultSolution;
+    DiagnosisTestResult problems;
 
     Settings settings;
     QString cachePath = settings.getValue(InputOutputSettings::CachePath).toString();    
@@ -31,28 +29,35 @@ DiagnosisTestResult CacheTest::run()
     unsigned int minimumFreeSpace = getMinimumFreeSpace();
     if (freeSpace / 1024.0f < minimumFreeSpace)
     {
-        testResultState = DiagnosisTestResult::Error;
-        testResultDescription << tr("The free space on the local database location is below the minimum required.");
-        testResultSolution << tr("Make some space on disk or change the local database to other location.");
+        DiagnosisTestProblem problem;
+        problem.setState(DiagnosisTestProblem::Error);
+        problem.setDescription(tr("The free space on the local database location is below the minimum required"));
+        problem.setSolution(tr("Make some space on disk or change the local database to other location"));
+        problems.addError(problem);
     }
 
     /// Comprovar els permisos de lectura i escriptura a la carpeta de la cache
     if (!doesCacheDirectoryHaveReadWritePermissions(cachePath))
     {
-        testResultState = DiagnosisTestResult::Error;
-        testResultDescription << tr("Invalid permissions on the local database directory");
-        testResultSolution << tr("Fix the permissions of the directory or change the local database to other location.");
+        DiagnosisTestProblem problem;
+        problem.setState(DiagnosisTestProblem::Error);
+        problem.setDescription(tr("Invalid permissions on the local database directory"));
+        problem.setSolution(tr("Fix the permissions of the directory or change the local database to other location"));
+        problems.addError(problem);
     }
 
     /// De moment, en el cas de que no hi hagi error, mirarem lo del warning
     /// Comprovar si la caché està, o no, al path per defecte
-    if (testResultState != DiagnosisTestResult::Error && !isCacheOnDefaultPath())
+    if (!isCacheOnDefaultPath())
     {
-        testResultState = DiagnosisTestResult::Warning;
-        testResultDescription << tr("The local database is not on the default path.");
+        DiagnosisTestProblem problem;
+        problem.setState(DiagnosisTestProblem::Warning);
+        problem.setDescription(tr("The local database is not on the default path"));
+        problem.setSolution("");
+        problems.addWarning(problem);
     }
     
-    return DiagnosisTestResult(testResultState, testResultDescription.join("\n"), testResultSolution.join("\n"));
+    return problems;
 }
 
 QString CacheTest::getDescription()

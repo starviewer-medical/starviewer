@@ -44,7 +44,7 @@ protected:
 };
 
 Q_DECLARE_METATYPE(PortInUse::PortInUseStatus)
-Q_DECLARE_METATYPE(DiagnosisTestResult::DiagnosisTestResultState)
+Q_DECLARE_METATYPE(DiagnosisTestResult)
 
 class test_PortInUseTest : public QObject {
 Q_OBJECT
@@ -60,28 +60,28 @@ void test_PortInUseTest::run_ShouldTestIfRISPortIsInUse_data()
     QTest::addColumn<QString>("testingErrorString");
     QTest::addColumn<bool>("testingInUseByAnotherApplication");
 
-    QTest::addColumn<DiagnosisTestResult::DiagnosisTestResultState>("testingDiagnosisTestResultState");
-    QTest::addColumn<QString>("testingDiagnosisTestResultDescription");
-    QTest::addColumn<QString>("testingDiagnosisTestResultSolution");
+    QTest::addColumn<DiagnosisTestResult>("testingDiagnosisTestResult");
 
     QString unusedString = "";
+    DiagnosisTestResult portUsedError;
+    portUsedError.addError(DiagnosisTestProblem(DiagnosisTestProblem::Error, "Port 0 is already in use by other application", "Try another port or shutdown the application using this port."));
+
+    DiagnosisTestResult portError;
+    portError.addError(DiagnosisTestProblem(DiagnosisTestProblem::Error, "Unable to test if port 0 is in use due to error: NetworkError", "Contact technical service to evaluate the problem."));
 
     QTest::newRow("free port") << PortInUse::PortIsAvailable << unusedString << false
-                               << DiagnosisTestResult::Ok << unusedString << unusedString;
+                               << DiagnosisTestResult();
     
     QTest::newRow("port in use by another application") 
                                 << PortInUse::PortIsInUse << unusedString << true
-                                << DiagnosisTestResult::Error << "Port is already in use"
-                                << "Try another port or shut down the application using this port";
+                                << portUsedError;
 
     QTest::newRow("port in use by starviewer") 
                                 << PortInUse::PortIsInUse << unusedString << false
-                                << DiagnosisTestResult::Ok << unusedString << unusedString;
+                                << DiagnosisTestResult();
 
     QTest::newRow("port error") << PortInUse::PortCheckError << "NetworkError" << false
-                                << DiagnosisTestResult::Error
-                                << "Unable to test if port 0 is in use due to error: NetworkError"
-                                << unusedString;
+                                << portError;
 }
 
 void test_PortInUseTest::run_ShouldTestIfRISPortIsInUse()
@@ -90,9 +90,7 @@ void test_PortInUseTest::run_ShouldTestIfRISPortIsInUse()
     QFETCH(QString, testingErrorString);
     QFETCH(bool, testingInUseByAnotherApplication);
 
-    QFETCH(DiagnosisTestResult::DiagnosisTestResultState, testingDiagnosisTestResultState);
-    QFETCH(QString, testingDiagnosisTestResultDescription);
-    QFETCH(QString, testingDiagnosisTestResultSolution);
+    QFETCH(DiagnosisTestResult, testingDiagnosisTestResult);
 
     // El port no es fa servir en el test
     TestingPortInUseTest portInUseTest(0);
@@ -102,11 +100,22 @@ void test_PortInUseTest::run_ShouldTestIfRISPortIsInUse()
 
     DiagnosisTestResult result = portInUseTest.run();
     
-    QCOMPARE(result.getState(), testingDiagnosisTestResultState);
+    QCOMPARE(result.getState(), testingDiagnosisTestResult.getState());
     if (result.getState() != DiagnosisTestResult::Ok)
     {
-        QCOMPARE(result.getDescription(), testingDiagnosisTestResultDescription);
-        QCOMPARE(result.getSolution(), testingDiagnosisTestResultSolution);
+        QCOMPARE(result.getErrors().size(), testingDiagnosisTestResult.getErrors().size());
+        QCOMPARE(result.getWarnings().size(), testingDiagnosisTestResult.getWarnings().size());
+
+        QListIterator<DiagnosisTestProblem> resultIterator(result.getErrors() + result.getWarnings());
+        QListIterator<DiagnosisTestProblem> testingResultIterator(testingDiagnosisTestResult.getErrors() + testingDiagnosisTestResult.getWarnings());
+        while (resultIterator.hasNext() && testingResultIterator.hasNext())
+        {
+            DiagnosisTestProblem problem = resultIterator.next();
+            DiagnosisTestProblem testingProblem = testingResultIterator.next();
+
+            QCOMPARE(problem.getDescription(), testingProblem.getDescription());
+            QCOMPARE(problem.getSolution(), testingProblem.getSolution());
+        }
     }
 }
 

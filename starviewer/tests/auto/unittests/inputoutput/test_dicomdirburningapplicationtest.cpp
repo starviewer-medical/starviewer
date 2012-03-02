@@ -25,7 +25,7 @@ protected:
     }
 };
 
-Q_DECLARE_METATYPE(DiagnosisTestResult::DiagnosisTestResultState)
+Q_DECLARE_METATYPE(DiagnosisTestResult)
 
 class test_DICOMDIRBurningApplicationTest : public QObject {
 Q_OBJECT
@@ -42,23 +42,21 @@ void test_DICOMDIRBurningApplicationTest::run_ShouldTestIfDICOMDIRBurningApplica
     QTest::addColumn<bool>("testingInstalled");
 
     /// Sortida
-    QTest::addColumn<DiagnosisTestResult::DiagnosisTestResultState>("testingDiagnosisTestResultState");
-    QTest::addColumn<QString>("testingDiagnosisTestResultDescription");
-    QTest::addColumn<QString>("testingDiagnosisTestResultSolution");
+    QTest::addColumn<DiagnosisTestResult>("testingDiagnosisTestResult");
 
-    QString unusedString = "";
     bool unusedBool = false;
 
-    QTest::newRow("burning application is installed") << true << true << DiagnosisTestResult::Ok << unusedString << unusedString;
+    DiagnosisTestResult noConfiguredResult;
+    DiagnosisTestProblem noConfiguredProblem(DiagnosisTestProblem::Warning, "There is no DICOMDIR burning application configured.", "Install a DICOMDIR burning application and configure Starviewer to use it on Tools > Configuration > DICOMDIR.");
+    noConfiguredResult.addWarning(noConfiguredProblem);
 
-    QTest::newRow("burning application is not configured") << false << unusedBool
-                                                           << DiagnosisTestResult::Warning
-                                                           << "There is no DICOMDIR burning application configured"
-                                                           << "Install a DICOMDIR burning application";
-    
-    QTest::newRow("burning application is configured but does not exist") << true << false << DiagnosisTestResult::Error
-                                                                          << "DICOMDIR burning application is not installed on settings folder"
-                                                                          << "Please reinstall the application or update the configuration";
+    DiagnosisTestResult noExistsResult;
+    DiagnosisTestProblem noExistsProblem(DiagnosisTestProblem::Error, "DICOMDIR burning application is not installed on the given location.", "Provide the correct location on Tools > Configuration > DICOMDIR.");
+    noExistsResult.addError(noExistsProblem);
+
+    QTest::newRow("burning application is installed") << true << true << DiagnosisTestResult();
+    QTest::newRow("burning application is not configured") << false << unusedBool << noConfiguredResult;
+    QTest::newRow("burning application is configured but does not exist") << true << false << noExistsResult;
 }
 
 void test_DICOMDIRBurningApplicationTest::run_ShouldTestIfDICOMDIRBurningApplicationIsConfigured()
@@ -66,9 +64,7 @@ void test_DICOMDIRBurningApplicationTest::run_ShouldTestIfDICOMDIRBurningApplica
     QFETCH(bool, testingDefined);
     QFETCH(bool, testingInstalled);
  
-    QFETCH(DiagnosisTestResult::DiagnosisTestResultState, testingDiagnosisTestResultState);
-    QFETCH(QString, testingDiagnosisTestResultDescription);
-    QFETCH(QString, testingDiagnosisTestResultSolution);
+    QFETCH(DiagnosisTestResult, testingDiagnosisTestResult);
 
     TestingDICOMDIRBurningApplicationTest burningApplicationTest;
     burningApplicationTest.m_defined = testingDefined;
@@ -76,11 +72,22 @@ void test_DICOMDIRBurningApplicationTest::run_ShouldTestIfDICOMDIRBurningApplica
 
     DiagnosisTestResult result = burningApplicationTest.run();
     
-    QCOMPARE(result.getState(), testingDiagnosisTestResultState);
+    QCOMPARE(result.getState(), testingDiagnosisTestResult.getState());
     if (result.getState() != DiagnosisTestResult::Ok)
     {
-        QCOMPARE(result.getDescription(), testingDiagnosisTestResultDescription);
-        QCOMPARE(result.getSolution(), testingDiagnosisTestResultSolution);
+        QCOMPARE(result.getErrors().size(), testingDiagnosisTestResult.getErrors().size());
+        QCOMPARE(result.getWarnings().size(), testingDiagnosisTestResult.getWarnings().size());
+
+        QListIterator<DiagnosisTestProblem> resultIterator(result.getErrors() + result.getWarnings());
+        QListIterator<DiagnosisTestProblem> testingResultIterator(testingDiagnosisTestResult.getErrors() + testingDiagnosisTestResult.getWarnings());
+        while (resultIterator.hasNext() && testingResultIterator.hasNext())
+        {
+            DiagnosisTestProblem problem = resultIterator.next();
+            DiagnosisTestProblem testingProblem = testingResultIterator.next();
+
+            QCOMPARE(problem.getDescription(), testingProblem.getDescription());
+            QCOMPARE(problem.getSolution(), testingProblem.getSolution());
+        }
     }
 }
 

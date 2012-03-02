@@ -232,13 +232,13 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
     QTest::newRow("missing openGL extensions") << cpuNumberOfCores << cpuFrequencies << missingOpenGLExtensions << openGLVersion << gpuRAM << gpuModel << hardDiskFreeSpace
                                                << operatingSystem << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << writeCapability
                                                << DiagnosisTestResult::Error
-                                               << "Current openGL version does not support GL_ARB_flux_capacitor extension\nCurrent openGL version does not support GL_ARB_half_float_pixel extension"
-                                               << "Update your graphics card driver\n";
+                                               << "Current OpenGL version does not support these extensions: GL_ARB_flux_capacitor, GL_ARB_half_float_pixel"
+                                               << "Update your graphics card driver";
 
     QTest::newRow("Old openGL version") << cpuNumberOfCores << cpuFrequencies << openGLExtensions << "1.0" << gpuRAM << gpuModel << hardDiskFreeSpace
                                         << operatingSystem << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << writeCapability
                                         << DiagnosisTestResult::Error
-                                        << QString("Current openGL version is %1 and the minimum required is %2").arg("1.0").arg(requeriments.getMinimumGPUOpenGLVersion())
+                                        << QString("Current OpenGL version is %1 and the minimum required is %2").arg("1.0").arg(requeriments.getMinimumGPUOpenGLVersion())
                                         << "Update your graphics card driver";
 
     UnsignedIntList notEnoughRAM;
@@ -308,7 +308,7 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
                          << cpuNumberOfCores << cpuFrequencies << openGLExtensions << openGLVersion << gpuRAM << gpuModel << hardDiskFreeSpace
                          << operatingSystem << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << false
                          << DiagnosisTestResult::Warning
-                         << "The optical drive is not capable of writing."
+                         << "The optical drive is not capable of burning."
                          << "Change the optical drive to a CD-RW/DVD-RW";
 }
 
@@ -354,8 +354,10 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
     QCOMPARE(result.getState(), testingDiagnosisTestResultState);
     if (result.getState() != DiagnosisTestResult::Ok)
     {
-        QCOMPARE(result.getDescription(), testingDiagnosisTestResultDescription);
-        QCOMPARE(result.getSolution(), testingDiagnosisTestResultSolution);
+        QList<DiagnosisTestProblem> problems = result.getErrors() + result.getWarnings();
+        QCOMPARE(problems.count(), 1);
+        QCOMPARE(problems.at(0).getDescription(), testingDiagnosisTestResultDescription);
+        QCOMPARE(problems.at(0).getSolution(), testingDiagnosisTestResultSolution);
     }
 }
 

@@ -2,11 +2,8 @@
 
 namespace udg {
 
-DiagnosisTestResult::DiagnosisTestResult(DiagnosisTestResult::DiagnosisTestResultState state, QString description, QString solution)
+DiagnosisTestResult::DiagnosisTestResult()
 {
-    m_state = state;
-    m_description = description;
-    m_solution = solution;
 }
 
 DiagnosisTestResult::~DiagnosisTestResult()
@@ -16,32 +13,38 @@ DiagnosisTestResult::~DiagnosisTestResult()
 
 DiagnosisTestResult::DiagnosisTestResultState DiagnosisTestResult::getState() const
 {
-    return m_state;
+    if (!m_errors.isEmpty())
+    {
+        return DiagnosisTestResult::Error;
+    }
+    else if (!m_warnings.isEmpty())
+    {
+        return DiagnosisTestResult::Warning;
+    }
+    else
+    {
+        return DiagnosisTestResult::Ok;
+    }
 }
 
-void DiagnosisTestResult::setState(DiagnosisTestResult::DiagnosisTestResultState state)
+void DiagnosisTestResult::addError(const DiagnosisTestProblem &problem)
 {
-    m_state = state;
+    m_errors.append(problem);
 }
 
-QString DiagnosisTestResult::getDescription() const
+void DiagnosisTestResult::addWarning(const DiagnosisTestProblem &problem)
 {
-    return m_description;
+    m_warnings.append(problem);
 }
 
-void DiagnosisTestResult::setDescription(const QString &description)
+QList<DiagnosisTestProblem> DiagnosisTestResult::getErrors() const
 {
-    m_description = description;
+    return m_errors;
 }
 
-QString DiagnosisTestResult::getSolution() const
+QList<DiagnosisTestProblem> DiagnosisTestResult::getWarnings() const
 {
-    return m_solution;
-}
-
-void DiagnosisTestResult::setSolution(const QString &solution)
-{
-    m_solution = solution;
+    return m_warnings;
 }
 
 }
