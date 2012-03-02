@@ -32,6 +32,8 @@ Cursor3DTool::Cursor3DTool(QViewer *viewer, QObject *parent)
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ") + viewer->metaObject()->className());
     }
 
+    m_state = None;
+    
     // Cada cop que el viewer canvïi d'input, hem d'actualitzar el frame of reference
     connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(refreshReferenceViewerData()));
     connect(m_2DViewer, SIGNAL(selected()), SLOT(refreshReferenceViewerData()));
