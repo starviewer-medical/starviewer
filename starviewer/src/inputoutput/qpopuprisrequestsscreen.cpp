@@ -63,8 +63,6 @@ void QPopUpRISRequestsScreen::queryStudiesByAccessionNumberStarted()
     m_operationDescription->setText(tr("Querying PACS..."));
     m_operationAnimation->show();
 
-    m_studiesRetrievingCounter->setText("");
-
     m_pacsJobIDOfStudiesToRetrieve.clear();
     m_numberOfStudiesRetrieved = 0;
     m_numberOfStudiesToRetrieve = 0;
@@ -149,16 +147,9 @@ void QPopUpRISRequestsScreen::retrieveDICOMFilesFromPACSJobCancelledOrFailed(PAC
 
 void QPopUpRISRequestsScreen::refreshScreenRetrieveStatus(Study *study)
 {
-    if (m_numberOfStudiesToRetrieve == 1)
-    {
-        // Si és el primer estudi indiquem que comencem a descarregar i indiquem el nom del pacient
-        m_operationDescription->setText(tr("Retrieving study"));
-        showPatientNameOfRetrievingStudies(study->getParentPatient());
-    }
-
     if (m_numberOfStudiesRetrieved < m_numberOfStudiesToRetrieve)
     {
-        m_studiesRetrievingCounter->setText(QString(tr("%1 of %2.")).arg(m_numberOfStudiesRetrieved + 1).arg(m_numberOfStudiesToRetrieve));
+        m_operationDescription->setText(QString(tr("Retrieving study %1 of %2.")).arg(m_numberOfStudiesRetrieved + 1).arg(m_numberOfStudiesToRetrieve));
     }
     else
     {
@@ -195,7 +186,6 @@ void QPopUpRISRequestsScreen::showRetrieveFinished()
     {
         m_operationDescription->setText(tr("%1 studies have been found.").arg(m_numberOfStudiesRetrieved));
     }
-    m_studiesRetrievingCounter->setText("");
 }
 
 void QPopUpRISRequestsScreen::showPatientNameOfRetrievingStudies(Patient *patient)
