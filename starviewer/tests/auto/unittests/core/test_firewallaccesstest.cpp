@@ -2,6 +2,7 @@
 #include "firewallaccess.h"
 #include "firewallaccesstest.h"
 #include "diagnosistestresult.h"
+#include "starviewerapplication.h"
 
 using namespace udg;
 
@@ -47,7 +48,7 @@ protected:
 };
 
 Q_DECLARE_METATYPE(FirewallAccess::FirewallStatus)
-Q_DECLARE_METATYPE(DiagnosisTestResult::DiagnosisTestResultState)
+Q_DECLARE_METATYPE(DiagnosisTestResult)
 
 class test_FirewallAccessTest : public QObject {
 Q_OBJECT
@@ -62,18 +63,21 @@ void test_FirewallAccessTest::run_ShouldTestIfStarviewerHaveAccessThroughFirewal
     QTest::addColumn<FirewallAccess::FirewallStatus>("testingStatus");
     QTest::addColumn<QString>("testingErrorString");
 
-    QTest::addColumn<DiagnosisTestResult::DiagnosisTestResultState>("testingDiagnosisTestResultState");
-    QTest::addColumn<QString>("testingDiagnosisTestResultDescription");
-    QTest::addColumn<QString>("testingDiagnosisTestResultSolution");
+    QTest::addColumn<DiagnosisTestResult>("testingDiagnosisTestResult");
+
+    DiagnosisTestResult firewallBlockingWarning;
+    firewallBlockingWarning.addWarning(DiagnosisTestProblem(DiagnosisTestProblem::Warning, "Firewall is blocking", QString("Add %1 to the list of applications that have access through firewall on Control Panel > Firewall").arg(ApplicationNameString)));
+    DiagnosisTestResult firewallError;
+    firewallError.addError(DiagnosisTestProblem(DiagnosisTestProblem::Error, "Firewall error", "Contact technical service to evaluate the problem"));
 
     QTest::newRow("access") << FirewallAccess::FirewallIsAccessible << ""
-                            << DiagnosisTestResult::Ok << "" << "";
+                            << DiagnosisTestResult();
     
     QTest::newRow("blocked") << FirewallAccess::FirewallIsBlocking << "Firewall is blocking"
-                             << DiagnosisTestResult::Warning << "Firewall is blocking" << "Add Starviewer to the list of allowed applications through firewall";
+                             << firewallBlockingWarning;
 
     QTest::newRow("error") << FirewallAccess::FirewallError << "Firewall error"
-                           << DiagnosisTestResult::Error << "Firewall error" << "";
+                           << firewallError;
 }
 
 void test_FirewallAccessTest::run_ShouldTestIfStarviewerHaveAccessThroughFirewall()
@@ -81,9 +85,7 @@ void test_FirewallAccessTest::run_ShouldTestIfStarviewerHaveAccessThroughFirewal
     QFETCH(FirewallAccess::FirewallStatus, testingStatus);
     QFETCH(QString, testingErrorString);
 
-    QFETCH(DiagnosisTestResult::DiagnosisTestResultState, testingDiagnosisTestResultState);
-    QFETCH(QString, testingDiagnosisTestResultDescription);
-    QFETCH(QString, testingDiagnosisTestResultSolution);
+    QFETCH(DiagnosisTestResult, testingDiagnosisTestResult);
 
     TestingFirewallAccessTest firewallAccessTest;
     firewallAccessTest.m_testingStatus = testingStatus;
@@ -91,11 +93,22 @@ void test_FirewallAccessTest::run_ShouldTestIfStarviewerHaveAccessThroughFirewal
 
     DiagnosisTestResult result = firewallAccessTest.run();
     
-    QCOMPARE(result.getState(), testingDiagnosisTestResultState);
+    QCOMPARE(result.getState(), testingDiagnosisTestResult.getState());
     if (result.getState() != DiagnosisTestResult::Ok)
     {
-        QCOMPARE(result.getDescription(), testingDiagnosisTestResultDescription);
-        QCOMPARE(result.getSolution(), testingDiagnosisTestResultSolution);
+        QCOMPARE(result.getErrors().size(), testingDiagnosisTestResult.getErrors().size());
+        QCOMPARE(result.getWarnings().size(), testingDiagnosisTestResult.getWarnings().size());
+
+        QListIterator<DiagnosisTestProblem> resultIterator(result.getErrors() + result.getWarnings());
+        QListIterator<DiagnosisTestProblem> testingResultIterator(testingDiagnosisTestResult.getErrors() + testingDiagnosisTestResult.getWarnings());
+        while (resultIterator.hasNext() && testingResultIterator.hasNext())
+        {
+            DiagnosisTestProblem problem = resultIterator.next();
+            DiagnosisTestProblem testingProblem = testingResultIterator.next();
+
+            QCOMPARE(problem.getDescription(), testingProblem.getDescription());
+            QCOMPARE(problem.getSolution(), testingProblem.getSolution());
+        }
     }
 }
 

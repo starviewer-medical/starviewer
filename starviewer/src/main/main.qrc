@@ -145,5 +145,10 @@
     <file>images/magnify.png</file>
     <file>images/CR.png</file>
     <file>images/RF.png</file>
+    <file>images/succeeded.png</file>
+    <file>images/error.png</file>
+    <file>javascript/jquery-min.js</file>
+    <file>javascript/qdiagnosistest.js</file>
+    <file>css/qdiagnosistest.css</file>
   </qresource>
 </RCC>

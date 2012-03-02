@@ -42,6 +42,11 @@ protected:
         Q_UNUSED(file);
         return new QTextStream(m_testingFile);
     }
+
+    void writeHead(QXmlStreamWriter &writer)
+    {
+        writer.writeEmptyElement("head");
+    }
 };
 
 class TestingDiagnosisTest : public DiagnosisTest {
@@ -87,17 +92,29 @@ void test_DiagnosisTestResultWriter::write_ShouldWriteTestResultsToAnIODevice_da
     QTest::addColumn<QString>("result");
 
     StringList descriptions;
-    descriptions << "Diagnosis test 1" << "Diagnosis test 2" << "Invalid Test";
+    descriptions << "Diagnosis test: OK" << "Diagnosis test: 1 Warning" << "Diagnosis test: 1 Error" << "Diagnosis test: 1 Error & 1 Warning";
     
     DiagnosisTestResultList testsResults;
-    testsResults << DiagnosisTestResult(DiagnosisTestResult::Ok, "", "");
-    testsResults << DiagnosisTestResult(DiagnosisTestResult::Error, "Error during the course of the test", "No solution available");
-    testsResults << DiagnosisTestResult(DiagnosisTestResult::Invalid, "Invalid test", "No solution available");
+    //Succeeded DiagnosisTestResult
+    testsResults << DiagnosisTestResult();
 
-    
-    QString result = QString("Diagnosis test: %1\nResult: Ok\nDescription: \nSolution: \n\n").arg(descriptions.at(0));
-    result += QString("Diagnosis test: %1\nResult: Error\nDescription: Error during the course of the test\nSolution: No solution available\n\n").arg(descriptions.at(1));
-    result += QString("Diagnosis test: %1\nResult: Invalid\nDescription: Invalid test\nSolution: No solution available\n\n").arg(descriptions.at(2));
+    // DiagnosisTestResult with one warning
+    DiagnosisTestResult warningResult;
+    warningResult.addWarning(DiagnosisTestProblem(DiagnosisTestProblem::Warning, "Warning during the course of the test", "Try to solve the warning"));
+    testsResults << warningResult;
+
+    // DiagnosisTestResult with one error
+    DiagnosisTestResult errorResult;
+    errorResult.addError(DiagnosisTestProblem(DiagnosisTestProblem::Error, "Error during the course of the test", "No solution available"));
+    testsResults << errorResult;
+
+    // DiagnosisTestResult with one error and one warning
+    DiagnosisTestResult errorAndWarningResult;
+    errorAndWarningResult.addWarning(DiagnosisTestProblem(DiagnosisTestProblem::Warning, "Warning during the course of the test", "Try to solve the warning"));
+    errorAndWarningResult.addError(DiagnosisTestProblem(DiagnosisTestProblem::Error, "Error during the course of the test", "No solution available"));
+    testsResults << errorAndWarningResult;
+
+    QString result = "<?xml version=\"1.0\"?><!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\"><html><head/><body><div class=\"buttons\"><span id=\"succeededButton\" class=\"button\"><span class=\"buttonDescription\">1 succeeded</span></span><span id=\"errorButton\" class=\"button\"><span class=\"buttonDescription\">2 errors</span></span><span id=\"warningButton\" class=\"button\"><span class=\"buttonDescription\">1 warnings</span></span></div><div class=\"tests\"><div class=\"succeededTest\"><div class=\"result\"><div class=\"description\">Diagnosis test: OK</div></div></div><div class=\"warningTest\"><div class=\"result\"><div class=\"description\">Diagnosis test: 1 Warning</div></div><div class=\"problems\"><ul class=\"error\"/><ul class=\"warning\"><li><strong>Warning during the course of the test</strong><br/>Try to solve the warning</li></ul></div></div><div class=\"errorTest\"><div class=\"result\"><div class=\"description\">Diagnosis test: 1 Error</div></div><div class=\"problems\"><ul class=\"error\"><li><strong>Error during the course of the test</strong><br/>No solution available</li></ul><ul class=\"warning\"/></div></div><div class=\"errorTest\"><div class=\"result\"><div class=\"description\">Diagnosis test: 1 Error &amp; 1 Warning</div></div><div class=\"problems\"><ul class=\"error\"><li><strong>Error during the course of the test</strong><br/>No solution available</li></ul><ul class=\"warning\"><li><strong>Warning during the course of the test</strong><br/>Try to solve the warning</li></ul></div></div></div></body></html>";
     
     QTest::newRow("ok") << descriptions << testsResults << result;
 }
@@ -121,7 +138,8 @@ void test_DiagnosisTestResultWriter::write_ShouldWriteTestResultsToAnIODevice()
     writer.setDiagnosisTests(diagnosisTestsToWrite);
     writer.write("");
 
-    QString writerResult = *writer.m_testingFile;
+    QRegExp enters("\\s*\n\\s*");
+    QString writerResult = writer.m_testingFile->remove(enters);
     QCOMPARE(writerResult, result);
 
     // Eliminem els DiagnosisTests que hem creat.

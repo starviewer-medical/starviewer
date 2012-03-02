@@ -28,7 +28,7 @@ protected:
 };
 
 Q_DECLARE_METATYPE(EchoToPACS::EchoRequestStatus)
-Q_DECLARE_METATYPE(DiagnosisTestResult::DiagnosisTestResultState)
+Q_DECLARE_METATYPE(DiagnosisTestResult)
 Q_DECLARE_METATYPE(QList<PacsDevice>)
 Q_DECLARE_METATYPE(EchoRequestStatusHash)
 
@@ -51,9 +51,7 @@ void test_EchoToPACSTest::run_ShouldTestIfPACSAreAccessible_data()
     QTest::addColumn<EchoRequestStatusHash>("testingEchoRequestStatusHash");
 
     /// Sortida
-    QTest::addColumn<DiagnosisTestResult::DiagnosisTestResultState>("testingDiagnosisTestResultState");
-    QTest::addColumn<QString>("testingDiagnosisTestResultDescription");
-    QTest::addColumn<QString>("testingDiagnosisTestResultSolution");
+    QTest::addColumn<DiagnosisTestResult>("testingDiagnosisTestResult");
 
     /// Variables unused
     QString unusedString = "";
@@ -61,6 +59,11 @@ void test_EchoToPACSTest::run_ShouldTestIfPACSAreAccessible_data()
     EchoRequestStatusHash unusedHash;
 
     /// Dades dels tests
+    // Dades del text 1
+    DiagnosisTestResult noPacsResult;
+    DiagnosisTestProblem noPacsProblem(DiagnosisTestProblem::Warning, "There are no PACS defined", "New PACS can be defined at Tools > Configuration > PACS");
+    noPacsResult.addWarning(noPacsProblem);
+
     // Dades del test 2
     QList<QString> AETitlesTest2;
     QList<EchoToPACS::EchoRequestStatus> statusesTest2;
@@ -81,6 +84,10 @@ void test_EchoToPACSTest::run_ShouldTestIfPACSAreAccessible_data()
     statusesTest3 << EchoToPACS::EchoFailed;
     fillPacsListAndHash(&pacsListTest3, &hashTest3, AETitlesTest3, statusesTest3);
     
+    DiagnosisTestResult pacsFailResult;
+    DiagnosisTestProblem pacsFailProblem(DiagnosisTestProblem::Error, QString("Echo to PACS with AETitle '%1' failed").arg(AETitlesTest3[0]), "Check PACS configuration at Tools > Configuration > PACS");
+    pacsFailResult.addError(pacsFailProblem);
+
     // Dades del test 4
     QList<QString> AETitlesTest4;
     QList<EchoToPACS::EchoRequestStatus> statusesTest4;
@@ -91,18 +98,17 @@ void test_EchoToPACSTest::run_ShouldTestIfPACSAreAccessible_data()
     statusesTest4 << EchoToPACS::EchoFailed << EchoToPACS::EchoOk << EchoToPACS::EchoCanNotConnectToPACS;
     fillPacsListAndHash(&pacsListTest4, &hashTest4, AETitlesTest4, statusesTest4);
 
+    DiagnosisTestResult test4Result;
+    DiagnosisTestProblem failProblem(DiagnosisTestProblem::Error, QString("Echo to PACS with AETitle '%1' failed").arg(AETitlesTest4[0]), "Check PACS configuration at Tools > Configuration > PACS");
+    test4Result.addError(failProblem);
+    DiagnosisTestProblem failProblem2(DiagnosisTestProblem::Error, QString("Unable to connect to PACS with AETitle '%1'").arg(AETitlesTest4[2]), "Check internet connection and PACS configuration at Tools > Configuration > PACS");
+    test4Result.addError(failProblem2);
+
     /// Tests
-    QTest::newRow("no pacs") << unusedPacsList << unusedHash << DiagnosisTestResult::Warning << "There are no PACS defined" << unusedString;
-    QTest::newRow("one pacs working") << pacsListTest2 << hashTest2 << DiagnosisTestResult::Ok << unusedString << unusedString;
-    QTest::newRow("one pacs fail") << pacsListTest3 << hashTest3
-                                   << DiagnosisTestResult::Error
-                                   << "Echo to pacs with AE Title '" + AETitlesTest3[0] + "' failed"
-                                   << "Contact PACS supervisor";
-    QTest::newRow("3 pacs: fail, ok, connect error") << pacsListTest4 << hashTest4
-                                                 << DiagnosisTestResult::Error 
-                                                 << "Echo to pacs with AE Title '" + AETitlesTest4[0] +
-                                                    "' failed\nUnable to connect to PACS with AE Title '" + AETitlesTest4[2] + "'" 
-                                                 << "Contact PACS supervisor\nCheck PACS URL, or internet connection";
+    QTest::newRow("no pacs") << unusedPacsList << unusedHash << noPacsResult;
+    QTest::newRow("one pacs working") << pacsListTest2 << hashTest2 << DiagnosisTestResult();
+    QTest::newRow("one pacs fail") << pacsListTest3 << hashTest3 << pacsFailResult;
+    QTest::newRow("3 pacs: fail, ok, connect error") << pacsListTest4 << hashTest4 << test4Result;
 }
 
 void test_EchoToPACSTest::run_ShouldTestIfPACSAreAccessible()
@@ -110,9 +116,7 @@ void test_EchoToPACSTest::run_ShouldTestIfPACSAreAccessible()
     QFETCH(QList<PacsDevice>, testingPacsDevices);
     QFETCH(EchoRequestStatusHash, testingEchoRequestStatusHash);
  
-    QFETCH(DiagnosisTestResult::DiagnosisTestResultState, testingDiagnosisTestResultState);
-    QFETCH(QString, testingDiagnosisTestResultDescription);
-    QFETCH(QString, testingDiagnosisTestResultSolution);
+    QFETCH(DiagnosisTestResult, testingDiagnosisTestResult);
 
     TestingEchoToPACSTest echoToPACSTest;
     
@@ -121,11 +125,22 @@ void test_EchoToPACSTest::run_ShouldTestIfPACSAreAccessible()
 
     DiagnosisTestResult result = echoToPACSTest.run();
 
-    QCOMPARE(result.getState(), testingDiagnosisTestResultState);
-    if (result.getState()!= DiagnosisTestResult::Ok)
+    QCOMPARE(result.getState(), testingDiagnosisTestResult.getState());
+    if (result.getState() != DiagnosisTestResult::Ok)
     {
-        QCOMPARE(result.getDescription(), testingDiagnosisTestResultDescription);
-        QCOMPARE(result.getSolution(), testingDiagnosisTestResultSolution);
+        QCOMPARE(result.getErrors().size(), testingDiagnosisTestResult.getErrors().size());
+        QCOMPARE(result.getWarnings().size(), testingDiagnosisTestResult.getWarnings().size());
+
+        QListIterator<DiagnosisTestProblem> resultIterator(result.getErrors() + result.getWarnings());
+        QListIterator<DiagnosisTestProblem> testingResultIterator(testingDiagnosisTestResult.getErrors() + testingDiagnosisTestResult.getWarnings());
+        while (resultIterator.hasNext() && testingResultIterator.hasNext())
+        {
+            DiagnosisTestProblem problem = resultIterator.next();
+            DiagnosisTestProblem testingProblem = testingResultIterator.next();
+
+            QCOMPARE(problem.getDescription(), testingProblem.getDescription());
+            QCOMPARE(problem.getSolution(), testingProblem.getSolution());
+        }
     }
 }
 

@@ -7,6 +7,7 @@
 #include <QPair>
 
 #include "diagnosistestresult.h"
+#include "diagnosistestresultwriter.h"
 
 class QThread;
 
@@ -14,7 +15,6 @@ namespace udg {
 
 class DiagnosisTest;
 class RunDiagnosisTest;
-class QDiagnosisTestResultWidget;
 
 /**
     Aquest classe és l'encarregada de realitzar el dicomdump de la imatge que s'està visualizant per part de l'usuari.
@@ -33,13 +33,7 @@ public:
 signals:
     void start();
 
-protected:
-    void resizeEvent(QResizeEvent *);
-
 private slots:
-    ///Slot que indinica que un QDiagnosisTestResultWidget de la taula ha canviat de mida
-    void qdiagnosisTestResultWidgetClicked(QDiagnosisTestResultWidget *qDiagnosisTestResultWidgetClicked);
-
     //Executa els diagnosisTest
     void runDiagnosisTest();
 
@@ -72,10 +66,6 @@ private:
     /// Indica si el resultat de tots els testos és OK
     bool allDiagnosisTestResultAreOk();
 
-    /// Retorna els testos que s'han de mostrar en el llistat en funció de quins botons estiguin activats (són els botons que indiquen si s'han
-    /// de mostrar els testos amb un determinat resultat)
-    QList<QPair<DiagnosisTest*, DiagnosisTestResult> > getDiagnosisTestsToShowInDiagnosisTestsResultTable();
-
     /// Agrupa i guarda en variables internes de la classe els testos executats agrupats per l'estat del seu DiagnosisTestResult
     void groupDiagnosisTestFromRunDiagnosisTestByState();
 
@@ -90,7 +80,7 @@ private:
     QList<QPair<DiagnosisTest*, DiagnosisTestResult> > m_okExecutedDiagnosisTests;
     QList<QPair<DiagnosisTest*, DiagnosisTestResult> > m_warningExecutedDiagnosisTests;
 
-    QDiagnosisTestResultWidget *m_qDiagnosisTestResultWidgetExpanded;
+    DiagnosisTestResultWriter m_diagnosisTestResultWriter;
 };
 
 }

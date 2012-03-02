@@ -17,34 +17,32 @@ DICOMDIRBurningApplicationTest::~DICOMDIRBurningApplicationTest()
 
 DiagnosisTestResult DICOMDIRBurningApplicationTest::run()
 {
-    DiagnosisTestResult::DiagnosisTestResultState testResultState = DiagnosisTestResult::Invalid;
-    QString testResultDescription;
-    QString testResultSolution;
+    DiagnosisTestResult result;
 
     Settings settings;
     QString burningApplicationExecutable = settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationPathKey).toString();
     
     if (burningApplicationIsDefined(burningApplicationExecutable))
     {
-        if (burningApplicationIsInstalled(burningApplicationExecutable))
+        if (!burningApplicationIsInstalled(burningApplicationExecutable))
         {
-            testResultState = DiagnosisTestResult::Ok;
-        }
-        else
-        {
-            testResultState = DiagnosisTestResult::Error;
-            testResultDescription = tr("DICOMDIR burning application is not installed on the given location.");
-            testResultSolution = tr("Provide the correct location on Tools > Configuration > DICOMDIR.");
+            DiagnosisTestProblem problem;
+            problem.setState(DiagnosisTestProblem::Error);
+            problem.setDescription(tr("DICOMDIR burning application is not installed on the given location."));
+            problem.setSolution(tr("Provide the correct location on Tools > Configuration > DICOMDIR."));
+            result.addError(problem);
         }
     }
     else
     {
-        testResultState = DiagnosisTestResult::Warning;
-        testResultDescription = tr("There is no DICOMDIR burning application configured.");
-        testResultSolution = tr("Install a DICOMDIR burning application and configure Starviewer to use it on Tools > Configuration > DICOMDIR.");
+        DiagnosisTestProblem problem;
+        problem.setState(DiagnosisTestProblem::Warning);
+        problem.setDescription(tr("There is no DICOMDIR burning application configured."));
+        problem.setSolution(tr("Install a DICOMDIR burning application and configure Starviewer to use it on Tools > Configuration > DICOMDIR."));
+        result.addWarning(problem);
     }
 
-    return DiagnosisTestResult(testResultState, testResultDescription, testResultSolution);
+    return result;
 }
 
 QString DICOMDIRBurningApplicationTest::getDescription()

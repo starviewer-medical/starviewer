@@ -19,7 +19,7 @@ protected:
     }
 };
 
-Q_DECLARE_METATYPE(DiagnosisTestResult::DiagnosisTestResultState)
+Q_DECLARE_METATYPE(DiagnosisTestResult)
 
 class test_ApplicationVersionTest : public QObject {
 Q_OBJECT
@@ -36,22 +36,21 @@ void test_ApplicationVersionTest::run_ShouldTestIfApplicationIsUpToDate_data()
     QTest::addColumn<bool>("testingNewVersionAvailable");
     QTest::addColumn<QString>("testingOlineCheckerErrorDescription");
     // Sortida    
-    QTest::addColumn<DiagnosisTestResult::DiagnosisTestResultState>("testingDiagnosisTestResultState");
-    QTest::addColumn<QString>("testingDiagnosisTestResultDescription");
-    QTest::addColumn<QString>("testingDiagnosisTestResultSolution");
+    QTest::addColumn<DiagnosisTestResult>("testingDiagnosisTestResult");
 
     QString unusedString = "";
     bool unusedBool = true;
 
-    QTest::newRow("up to date") << true << false << unusedString
-                                << DiagnosisTestResult::Ok << "" << "";
-    
-    QTest::newRow("update available") << true << true << unusedString
-                                      << DiagnosisTestResult::Warning << "There is a new version" << "Update";
+    DiagnosisTestResult updateAvailableResult;
+    updateAvailableResult.addWarning(DiagnosisTestProblem(DiagnosisTestProblem::Warning, "There is a new version available.", "Contact technical service to request the software update."));
 
     QString errorString = "Online checker error";
-    QTest::newRow("error") << false << unusedBool << errorString
-                           << DiagnosisTestResult::Error << errorString << "";
+    DiagnosisTestResult errorResult;
+    errorResult.addError(DiagnosisTestProblem(DiagnosisTestProblem::Error, errorString, ""));
+    
+    QTest::newRow("up to date") << true << false << unusedString << DiagnosisTestResult();
+    QTest::newRow("update available") << true << true << unusedString << updateAvailableResult;
+    QTest::newRow("error") << false << unusedBool << errorString << errorResult;
 }
 
 void test_ApplicationVersionTest::run_ShouldTestIfApplicationIsUpToDate()
@@ -60,9 +59,7 @@ void test_ApplicationVersionTest::run_ShouldTestIfApplicationIsUpToDate()
     QFETCH(bool, testingNewVersionAvailable);
     QFETCH(QString, testingOlineCheckerErrorDescription);
 
-    QFETCH(DiagnosisTestResult::DiagnosisTestResultState, testingDiagnosisTestResultState);
-    QFETCH(QString, testingDiagnosisTestResultDescription);
-    QFETCH(QString, testingDiagnosisTestResultSolution);
+    QFETCH(DiagnosisTestResult, testingDiagnosisTestResult);
 
     TestingApplicationVersionTest applicationVersionTest;
     applicationVersionTest.m_testingOnlineCheckOk = testingOnlineCheckOk;
@@ -71,11 +68,22 @@ void test_ApplicationVersionTest::run_ShouldTestIfApplicationIsUpToDate()
 
     DiagnosisTestResult result = applicationVersionTest.run();
     
-    QCOMPARE(result.getState(), testingDiagnosisTestResultState);
+    QCOMPARE(result.getState(), testingDiagnosisTestResult.getState());
     if (result.getState() != DiagnosisTestResult::Ok)
     {
-        QCOMPARE(result.getDescription(), testingDiagnosisTestResultDescription);
-        QCOMPARE(result.getSolution(), testingDiagnosisTestResultSolution);
+        QCOMPARE(result.getErrors().size(), testingDiagnosisTestResult.getErrors().size());
+        QCOMPARE(result.getWarnings().size(), testingDiagnosisTestResult.getWarnings().size());
+
+        QListIterator<DiagnosisTestProblem> resultIterator(result.getErrors() + result.getWarnings());
+        QListIterator<DiagnosisTestProblem> testingResultIterator(testingDiagnosisTestResult.getErrors() + testingDiagnosisTestResult.getWarnings());
+        while (resultIterator.hasNext() && testingResultIterator.hasNext())
+        {
+            DiagnosisTestProblem problem = resultIterator.next();
+            DiagnosisTestProblem testingProblem = testingResultIterator.next();
+
+            QCOMPARE(problem.getDescription(), testingProblem.getDescription());
+            QCOMPARE(problem.getSolution(), testingProblem.getSolution());
+        }
     }
 }
 

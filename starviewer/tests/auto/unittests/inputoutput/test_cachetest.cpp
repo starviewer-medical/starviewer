@@ -37,7 +37,7 @@ protected:
     }
 };
 
-Q_DECLARE_METATYPE(DiagnosisTestResult::DiagnosisTestResultState)
+Q_DECLARE_METATYPE(DiagnosisTestResult)
 
 class test_CacheTest : public QObject {
 Q_OBJECT
@@ -56,31 +56,31 @@ void test_CacheTest::run_ShouldTestIfCacheIsCorrectlyConfigured_data()
     QTest::addColumn<bool>("testingCacheIsOnDefaultPath");
 
     /// Sortida
-    QTest::addColumn<DiagnosisTestResult::DiagnosisTestResultState>("testingDiagnosisTestResultState");
-    QTest::addColumn<QString>("testingDiagnosisTestResultDescription");
-    QTest::addColumn<QString>("testingDiagnosisTestResultSolution");
+    QTest::addColumn<DiagnosisTestResult>("testingDiagnosisTestResult");
 
     /// Variables unused
     QString unusedString = "";
     bool unusedBool = true;
 
+    DiagnosisTestProblem permissionsProblem(DiagnosisTestProblem::Error, "Invalid permissions on the local database directory", "Fix the permissions of the directory or change the local database to other location");
+    DiagnosisTestProblem noSpaceProblem(DiagnosisTestProblem::Error, "The free space on the local database location is below the minimum required", "Make some space on disk or change the local database to other location");
+    DiagnosisTestProblem defaultPathProblem(DiagnosisTestProblem::Warning, "The local database is not on the default path", "");
+
+    DiagnosisTestResult permissionsResult;
+    permissionsResult.addError(permissionsProblem);
+
+    DiagnosisTestResult noSpaceAndPermissionsResult;
+    noSpaceAndPermissionsResult.addError(noSpaceProblem);
+    noSpaceAndPermissionsResult.addError(permissionsProblem);
+
+    DiagnosisTestResult defaultPathResult;
+    defaultPathResult.addWarning(defaultPathProblem);
+
     /// Tests
-    QTest::newRow("ok") << (unsigned int)1 << (unsigned int)0 << true << true
-                        << DiagnosisTestResult::Ok << unusedString << unusedString;
-
-    QTest::newRow("invalid permissions") << (unsigned int)1 << (unsigned int)0 << false << unusedBool
-                                         << DiagnosisTestResult::Error 
-                                         << "Invalid permissions on the cache directory"
-                                         << "Change the cache path or the permissions of the directory";
-
-    QTest::newRow("not enough free space and invalid permissions")
-        << (unsigned int)0 << (unsigned int)1 << false << unusedBool
-        << DiagnosisTestResult::Error
-        << "The free space on the cache directory is below the minimum required\nInvalid permissions on the cache directory" 
-        << "Make some space on disk\nChange the cache path or the permissions of the directory";
-
-    QTest::newRow("cache not on default path") << (unsigned int)1 << (unsigned int)0 << true << false
-                                               << DiagnosisTestResult::Warning << "The cache is not on the default path" << unusedString;
+    QTest::newRow("ok") << (unsigned int)1 << (unsigned int)0 << true << true << DiagnosisTestResult();
+    QTest::newRow("invalid permissions") << (unsigned int)1 << (unsigned int)0 << false << unusedBool << permissionsResult;
+    QTest::newRow("not enough free space and invalid permissions") << (unsigned int)0 << (unsigned int)1 << false << unusedBool << noSpaceAndPermissionsResult;
+    QTest::newRow("cache not on default path") << (unsigned int)1 << (unsigned int)0 << true << false << defaultPathResult;
 }
 
 void test_CacheTest::run_ShouldTestIfCacheIsCorrectlyConfigured()
@@ -90,9 +90,7 @@ void test_CacheTest::run_ShouldTestIfCacheIsCorrectlyConfigured()
     QFETCH(bool, testingPermissions);
     QFETCH(bool, testingCacheIsOnDefaultPath);
  
-    QFETCH(DiagnosisTestResult::DiagnosisTestResultState, testingDiagnosisTestResultState);
-    QFETCH(QString, testingDiagnosisTestResultDescription);
-    QFETCH(QString, testingDiagnosisTestResultSolution);
+    QFETCH(DiagnosisTestResult, testingDiagnosisTestResult);
 
     TestingCacheTest cacheTest;
     
@@ -103,11 +101,22 @@ void test_CacheTest::run_ShouldTestIfCacheIsCorrectlyConfigured()
 
     DiagnosisTestResult result = cacheTest.run();
 
-    QCOMPARE(result.getState(), testingDiagnosisTestResultState);
-    if (result.getState()!= DiagnosisTestResult::Ok)
+    QCOMPARE(result.getState(), testingDiagnosisTestResult.getState());
+    if (result.getState() != DiagnosisTestResult::Ok)
     {
-        QCOMPARE(result.getDescription(), testingDiagnosisTestResultDescription);
-        QCOMPARE(result.getSolution(), testingDiagnosisTestResultSolution);
+        QCOMPARE(result.getErrors().size(), testingDiagnosisTestResult.getErrors().size());
+        QCOMPARE(result.getWarnings().size(), testingDiagnosisTestResult.getWarnings().size());
+
+        QListIterator<DiagnosisTestProblem> resultIterator(result.getErrors() + result.getWarnings());
+        QListIterator<DiagnosisTestProblem> testingResultIterator(testingDiagnosisTestResult.getErrors() + testingDiagnosisTestResult.getWarnings());
+        while (resultIterator.hasNext() && testingResultIterator.hasNext())
+        {
+            DiagnosisTestProblem problem = resultIterator.next();
+            DiagnosisTestProblem testingProblem = testingResultIterator.next();
+
+            QCOMPARE(problem.getDescription(), testingProblem.getDescription());
+            QCOMPARE(problem.getSolution(), testingProblem.getSolution());
+        }
     }
 }
 

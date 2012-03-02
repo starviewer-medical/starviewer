@@ -1,0 +1,177 @@
+/* CSS Document */
+body 
+{
+    background-color:#F0F0F0;
+    font-family: Helvetica, sans-serif;
+    margin: 0px;
+    padding: 0px;
+    -webkit-user-select: none;
+}
+
+.errorTest, .warningTest, .succeededTest
+{
+    border: 1px;
+    border-radius: 5px;
+    border-style: solid;
+    border-color: #BBBBBB;
+    background-color:#FFFFFF;
+    margin-bottom: 10px;
+}
+
+.problems
+{
+    padding: 10px 10px 0px 10px;
+}
+
+.result
+{
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-color: #BBBBBB;
+    border-bottom-style: solid;
+    border-bottom-width: 0px;
+    background-color: #E4E4E4;
+    padding: 7px 10px;
+}
+
+.description
+{
+    background-repeat: no-repeat;	
+    background-position: 0 center;
+    padding-left: 20px;
+    color: #333333;
+    font-weight:bold;
+    font-size:15px;
+    -webkit-user-select: text;
+}
+
+.succeededTest .result .description
+{
+    background-image: url(qrc:///images/succeeded.png);
+}
+.errorTest .result .description
+{
+    background-image: url(qrc:///images/error.png);
+}
+.warningTest .result .description
+{
+    background-image: url(qrc:///images/beta-warning.png);
+}
+
+.tests
+{
+    position:relative;
+    top: 45px;
+    padding: 10px;
+}
+
+.closed div.problems
+{
+    display:none;
+}
+
+.errorTest .result, .warningTest .result
+{
+    cursor: pointer;
+}
+
+.succeededTest .result
+{
+    cursor: cursor;
+}
+
+.buttons
+{
+    position: fixed;
+    background-color:#F0F0F0;
+    box-shadow: 0px 0px 6px  #505050;
+    width:100%;
+    height: 30px;
+    z-index: 100;
+    padding-top: 10px;
+    padding-left: 10px;
+}
+
+.button
+{
+    background-color: #FFFFFFF;
+    border-style: solid;
+    border-color: #BBBBBB;
+    border-width: 1px;
+    padding: 4px;
+    margin-right: 5px;
+    border-radius: 2px;
+    cursor: pointer;
+    background-image: -webkit-gradient(linear, 0% 40%, 0% 100%, from(#F5F5F5), to(#F1F1F1));
+}
+
+.button:hover
+{
+    -webkit-box-shadow: rgba(0, 0, 0, 0.0976562) 0px 1px 1px 0px ;
+    background-image: -webkit-gradient(linear, 0% 40%, 0% 100%, from(#F8F8F8), to(#F1F1F1));
+    border-color: #AAAAAA;
+}
+
+.pressed
+{
+    -webkit-box-shadow: inset rgba(0, 0, 0, 0.0976562) -1px 1px 1px 0px ;
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#EEEEEE), to(#E1E1E1));
+}
+
+.pressed:hover
+{
+    -webkit-box-shadow: inset rgba(0, 0, 0, 0.0976562) -1px 1px 1px 0px ;
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#F1F1F1), to(#E8E8E8));
+}
+
+.buttonDescription
+{
+    background-repeat: no-repeat;
+    background-position: 0 center;
+    padding-left: 20px;
+    margin-bottom: 3px;
+    font-size: 12px;
+}
+
+#succeededButton .buttonDescription
+{
+    background-image: url(qrc:///images/succeeded.png);
+}
+
+#errorButton .buttonDescription
+{
+    background-image: url(qrc:///images/error.png);
+}
+
+#warningButton .buttonDescription
+{
+    background-image: url(qrc:///images/beta-warning.png);
+}
+
+ul
+{
+    list-style: none;
+    font-size:13px;
+    padding: 0px;
+    margin: 0px;
+}
+
+li 
+{
+    background-repeat: no-repeat;
+    background-position: 0px 1px;
+    padding-left: 20px;
+    padding-bottom: 10px;
+    vertical-align: top;
+    -webkit-user-select: text;
+}
+
+.error li
+{
+    background-image: url(qrc:///images/error.png);
+}
+
+.warning li
+{
+    background-image: url(qrc:///images/beta-warning.png);
+}

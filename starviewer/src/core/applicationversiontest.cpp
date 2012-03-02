@@ -22,32 +22,31 @@ DiagnosisTestResult ApplicationVersionTest::run()
     /// Fer el check online. Després de cridar aquest mètode, les variables m_onlineCheckOk i m_newVersionAvailable prenen valor.
     onlineCheck();
 
-    DiagnosisTestResult::DiagnosisTestResultState state;
-    QString description = "";
-    QString solution = "";
+    DiagnosisTestResult result;
+
     if (m_onlineCheckOk)
     {
         if (m_newVersionAvailable)
         {
-            state = DiagnosisTestResult::Warning;
-            description = tr("There is a new version available.");
-            solution = tr("Contact technical service to request the software update.");
-        }
-        else
-        {
-            state = DiagnosisTestResult::Ok;
+            DiagnosisTestProblem problem;
+            problem.setState(DiagnosisTestProblem::Warning);
+            problem.setDescription(tr("There is a new version available."));
+            problem.setSolution(tr("Contact technical service to request the software update."));
+            result.addWarning(problem);
         }
     }
     else
     {
         // En mode Debug retorna error, ja que la caden de text de la versió de l'aplicació que s'envia al webservice conté -devel
-        state = DiagnosisTestResult::Error;
-        description = m_olineCheckerErrorDescription;
+        DiagnosisTestProblem problem;
+        problem.setState(DiagnosisTestProblem::Error);
+        problem.setDescription(m_olineCheckerErrorDescription);
         // TODO Proposar una solució quan hi ha hagut error en el check online de les release notes
-        solution = tr("");
+        problem.setSolution("");
+        result.addError(problem);
     } 
 
-    return DiagnosisTestResult(state, description, solution);
+    return result;
 }
 
 QString ApplicationVersionTest::getDescription()
