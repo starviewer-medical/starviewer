@@ -285,7 +285,6 @@ void MagicROITool::computeLevelRange()
     if (m_2DViewer->getView() == Q2DViewer::Axial)
     {
         z = m_2DViewer->getInput()->getImageIndex(m_2DViewer->getCurrentSlice(), m_2DViewer->getCurrentPhase());
-        DEBUG_LOG(QString("Z-index: %1").arg(zIndex));
     }
     else
     {
