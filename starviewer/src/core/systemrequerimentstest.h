@@ -17,6 +17,7 @@ class SystemRequeriments;
     Test de diagnosis de l'aplicació que comprova si el sistema compleix els requeriments mínims per que Starviewer funcioni correctament.
 */
 class SystemRequerimentsTest : public DiagnosisTest {
+Q_OBJECT
 public:
     SystemRequerimentsTest(QObject *parent = 0);
     ~SystemRequerimentsTest();

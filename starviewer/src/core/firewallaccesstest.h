@@ -13,7 +13,7 @@ class FirewallAccess;
     Test de diagnosis de l'aplicació que comprova si Starviewer té accés a través del firewall.
 */
 class FirewallAccessTest : public DiagnosisTest {
-
+Q_OBJECT
 public:
     FirewallAccessTest(QObject *parent = 0);
     ~FirewallAccessTest();
