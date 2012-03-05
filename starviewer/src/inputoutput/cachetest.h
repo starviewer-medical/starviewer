@@ -8,7 +8,7 @@
 namespace udg {
 
 class CacheTest : public DiagnosisTest {
-
+Q_OBJECT
 public:
     CacheTest(QObject *parent = 0);
     ~CacheTest();

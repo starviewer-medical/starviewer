@@ -10,7 +10,7 @@ namespace udg {
 class PortInUse;
 
 class PortInUseTest : public DiagnosisTest {
-
+Q_OBJECT
 public:
     virtual ~PortInUseTest();
 

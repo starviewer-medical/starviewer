@@ -10,7 +10,7 @@ class QString;
 namespace udg {
 
 class DICOMDIRBurningApplicationTest : public DiagnosisTest {
-
+Q_OBJECT
 public:
     DICOMDIRBurningApplicationTest(QObject *parent = 0);
     ~DICOMDIRBurningApplicationTest();

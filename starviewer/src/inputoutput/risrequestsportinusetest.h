@@ -6,7 +6,7 @@
 namespace udg {
 
 class RISRequestsPortInUseTest : public PortInUseTest {
-
+Q_OBJECT
 public:
     RISRequestsPortInUseTest(QObject *parent = 0);
     ~RISRequestsPortInUseTest();
