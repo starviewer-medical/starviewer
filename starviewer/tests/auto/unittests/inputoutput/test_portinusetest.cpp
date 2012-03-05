@@ -64,10 +64,10 @@ void test_PortInUseTest::run_ShouldTestIfRISPortIsInUse_data()
 
     QString unusedString = "";
     DiagnosisTestResult portUsedError;
-    portUsedError.addError(DiagnosisTestProblem(DiagnosisTestProblem::Error, "Port 0 is already in use by other application", "Try another port or shutdown the application using this port."));
+    portUsedError.addError(DiagnosisTestProblem(DiagnosisTestProblem::Error, "Port 0 is already in use by other application", "Try another port or shutdown the application using this port"));
 
     DiagnosisTestResult portError;
-    portError.addError(DiagnosisTestProblem(DiagnosisTestProblem::Error, "Unable to test if port 0 is in use due to error: NetworkError", "Contact technical service to evaluate the problem."));
+    portError.addError(DiagnosisTestProblem(DiagnosisTestProblem::Error, "Unable to test if port 0 is in use due to error: NetworkError", "Contact technical service to evaluate the problem"));
 
     QTest::newRow("free port") << PortInUse::PortIsAvailable << unusedString << false
                                << DiagnosisTestResult();

@@ -28,8 +28,8 @@ DiagnosisTestResult DICOMDIRBurningApplicationTest::run()
         {
             DiagnosisTestProblem problem;
             problem.setState(DiagnosisTestProblem::Error);
-            problem.setDescription(tr("DICOMDIR burning application is not installed on the given location."));
-            problem.setSolution(tr("Provide the correct location on Tools > Configuration > DICOMDIR."));
+            problem.setDescription(tr("DICOMDIR burning application is not installed on the given location"));
+            problem.setSolution(tr("Provide the correct location on Tools > Configuration > DICOMDIR"));
             result.addError(problem);
         }
     }
@@ -37,8 +37,8 @@ DiagnosisTestResult DICOMDIRBurningApplicationTest::run()
     {
         DiagnosisTestProblem problem;
         problem.setState(DiagnosisTestProblem::Warning);
-        problem.setDescription(tr("There is no DICOMDIR burning application configured."));
-        problem.setSolution(tr("Install a DICOMDIR burning application and configure Starviewer to use it on Tools > Configuration > DICOMDIR."));
+        problem.setDescription(tr("There is no DICOMDIR burning application configured"));
+        problem.setSolution(tr("Install a DICOMDIR burning application and configure Starviewer to use it on Tools > Configuration > DICOMDIR"));
         result.addWarning(problem);
     }
 

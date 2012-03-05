@@ -42,7 +42,7 @@ void test_ApplicationVersionTest::run_ShouldTestIfApplicationIsUpToDate_data()
     bool unusedBool = true;
 
     DiagnosisTestResult updateAvailableResult;
-    updateAvailableResult.addWarning(DiagnosisTestProblem(DiagnosisTestProblem::Warning, "There is a new version available.", "Contact technical service to request the software update."));
+    updateAvailableResult.addWarning(DiagnosisTestProblem(DiagnosisTestProblem::Warning, "There is a new version available", "Contact technical service to request the software update"));
 
     QString errorString = "Online checker error http://bla.com?a=10-devel&amp;b=prova link";
     DiagnosisTestResult errorResult;

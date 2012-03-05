@@ -30,8 +30,8 @@ DiagnosisTestResult ApplicationVersionTest::run()
         {
             DiagnosisTestProblem problem;
             problem.setState(DiagnosisTestProblem::Warning);
-            problem.setDescription(tr("There is a new version available."));
-            problem.setSolution(tr("Contact technical service to request the software update."));
+            problem.setDescription(tr("There is a new version available"));
+            problem.setSolution(tr("Contact technical service to request the software update"));
             result.addWarning(problem);
         }
     }

@@ -128,7 +128,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
     {
         DiagnosisTestProblem problem;
         problem.setState(DiagnosisTestProblem::Error);
-        problem.setDescription(tr("There is not enough disk space to run starviewer properly."));
+        problem.setDescription(tr("There is not enough disk space to run starviewer properly"));
         problem.setSolution(tr("Free some space in the hard disk"));
         result.addError(problem);
     }
@@ -138,7 +138,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
     {
         DiagnosisTestProblem problem;
         problem.setState(DiagnosisTestProblem::Error);
-        problem.setDescription(tr("Operating system is not 64 bit architecture."));
+        problem.setDescription(tr("Operating system is not 64 bit architecture"));
         problem.setSolution(tr("Update operating system to a 64 bit version"));
         result.addError(problem);
     }
@@ -218,7 +218,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
             // Warning
             DiagnosisTestProblem problem;
             problem.setState(DiagnosisTestProblem::Warning);
-            problem.setDescription(tr("One of the screens is too small. Keep in mind that Starviewer won't fit in that screen."));
+            problem.setDescription(tr("One of the screens is too small. Keep in mind that Starviewer won't fit in that screen"));
             problem.setSolution(tr("Don't move Starviewer to screen/s %1, or change to a higher resolution").arg(screensInWhichStarviewerWontFit.join(", ")));
             result.addWarning(problem);
         }
@@ -232,11 +232,11 @@ DiagnosisTestResult SystemRequerimentsTest::run()
         problem.setSolution(tr("Change to a higher resolution"));
         if (resolutions.count() == 1)
         {
-            problem.setDescription(tr("The screen is too small to fit Starviewer application."));
+            problem.setDescription(tr("The screen is too small to fit Starviewer application"));
         }
         else
         {
-            problem.setDescription(tr("The screens are too small to fit Starviewer application."));
+            problem.setDescription(tr("The screens are too small to fit Starviewer application"));
         }
         result.addError(problem);
     }
@@ -247,7 +247,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
     {
         DiagnosisTestProblem problem;
         problem.setState(DiagnosisTestProblem::Warning);
-        problem.setDescription(tr("The optical drive is not capable of burning."));
+        problem.setDescription(tr("The optical drive is not capable of burning"));
         problem.setSolution(tr("Change the optical drive to a CD-RW/DVD-RW"));
         result.addWarning(problem);
     }
