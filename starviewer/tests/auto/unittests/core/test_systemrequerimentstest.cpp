@@ -252,13 +252,13 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
     QTest::newRow("not enough space on disk") << cpuNumberOfCores << cpuFrequencies << openGLExtensions << openGLVersion << gpuRAM << gpuModel << zero
                                               << operatingSystem << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << writeCapability
                                               << DiagnosisTestResult::Error
-                                              << "There is not enough disk space to run starviewer properly."
+                                              << "There is not enough disk space to run starviewer properly"
                                               << "Free some space in the hard disk";
 
     QTest::newRow("windows is 32 bit") << cpuNumberOfCores << cpuFrequencies << openGLExtensions << openGLVersion << gpuRAM << gpuModel << hardDiskFreeSpace
                                        << operatingSystem << operatingSystemVersion << servicePackVersion << false << ramTotalAmount << screenResolutions << writeCapability
                                        << DiagnosisTestResult::Error
-                                       << QString("Operating system is not 64 bit architecture.")
+                                       << QString("Operating system is not 64 bit architecture")
                                        << "Update operating system to a 64 bit version";
 
     QTest::newRow("windows version error") << cpuNumberOfCores << cpuFrequencies << openGLExtensions << openGLVersion << gpuRAM << gpuModel << hardDiskFreeSpace
@@ -284,7 +284,7 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
     QTest::newRow("screen too small") << cpuNumberOfCores << cpuFrequencies << openGLExtensions << openGLVersion << gpuRAM << gpuModel << hardDiskFreeSpace
                                       << operatingSystem << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutionsTooSmall << writeCapability
                                       << DiagnosisTestResult::Error
-                                      << "The screen is too small to fit Starviewer application."
+                                      << "The screen is too small to fit Starviewer application"
                                       << "Change to a higher resolution";
 
     SizeList screensResolutionsTooSmall;
@@ -292,7 +292,7 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
     QTest::newRow("screens too small") << cpuNumberOfCores << cpuFrequencies << openGLExtensions << openGLVersion << gpuRAM << gpuModel << hardDiskFreeSpace
                                       << operatingSystem << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << screensResolutionsTooSmall << writeCapability
                                       << DiagnosisTestResult::Error
-                                      << "The screens are too small to fit Starviewer application."
+                                      << "The screens are too small to fit Starviewer application"
                                       << "Change to a higher resolution";
 
     // Warning
@@ -301,14 +301,14 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
     QTest::newRow("one screen too small") << cpuNumberOfCores << cpuFrequencies << openGLExtensions << openGLVersion << gpuRAM << gpuModel << hardDiskFreeSpace
                                           << operatingSystem << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << oneScreenResolutionTooSmall << writeCapability
                                           << DiagnosisTestResult::Warning
-                                          << "One of the screens is too small. Keep in mind that Starviewer won't fit in that screen."
+                                          << "One of the screens is too small. Keep in mind that Starviewer won't fit in that screen"
                                           << QString("Don't move Starviewer to screen/s %1, %2, or change to a higher resolution").arg(1).arg(3);
 
     QTest::newRow("one screen too small, optical drive can not write")
                          << cpuNumberOfCores << cpuFrequencies << openGLExtensions << openGLVersion << gpuRAM << gpuModel << hardDiskFreeSpace
                          << operatingSystem << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << false
                          << DiagnosisTestResult::Warning
-                         << "The optical drive is not capable of burning."
+                         << "The optical drive is not capable of burning"
                          << "Change the optical drive to a CD-RW/DVD-RW";
 }
 

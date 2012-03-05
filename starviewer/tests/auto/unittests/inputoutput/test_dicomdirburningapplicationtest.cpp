@@ -47,11 +47,11 @@ void test_DICOMDIRBurningApplicationTest::run_ShouldTestIfDICOMDIRBurningApplica
     bool unusedBool = false;
 
     DiagnosisTestResult noConfiguredResult;
-    DiagnosisTestProblem noConfiguredProblem(DiagnosisTestProblem::Warning, "There is no DICOMDIR burning application configured.", "Install a DICOMDIR burning application and configure Starviewer to use it on Tools > Configuration > DICOMDIR.");
+    DiagnosisTestProblem noConfiguredProblem(DiagnosisTestProblem::Warning, "There is no DICOMDIR burning application configured", "Install a DICOMDIR burning application and configure Starviewer to use it on Tools > Configuration > DICOMDIR");
     noConfiguredResult.addWarning(noConfiguredProblem);
 
     DiagnosisTestResult noExistsResult;
-    DiagnosisTestProblem noExistsProblem(DiagnosisTestProblem::Error, "DICOMDIR burning application is not installed on the given location.", "Provide the correct location on Tools > Configuration > DICOMDIR.");
+    DiagnosisTestProblem noExistsProblem(DiagnosisTestProblem::Error, "DICOMDIR burning application is not installed on the given location", "Provide the correct location on Tools > Configuration > DICOMDIR");
     noExistsResult.addError(noExistsProblem);
 
     QTest::newRow("burning application is installed") << true << true << DiagnosisTestResult();
