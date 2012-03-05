@@ -66,7 +66,7 @@ void test_FirewallAccessTest::run_ShouldTestIfStarviewerHaveAccessThroughFirewal
     QTest::addColumn<DiagnosisTestResult>("testingDiagnosisTestResult");
 
     DiagnosisTestResult firewallBlockingWarning;
-    firewallBlockingWarning.addWarning(DiagnosisTestProblem(DiagnosisTestProblem::Warning, "Firewall is blocking", QString("Add %1 to the list of applications that have access through firewall on Control Panel > Firewall").arg(ApplicationNameString)));
+    firewallBlockingWarning.addWarning(DiagnosisTestProblem(DiagnosisTestProblem::Warning, "Firewall is blocking", QString("Add %1 to the list of applications that have access through firewall").arg(ApplicationNameString)));
     DiagnosisTestResult firewallError;
     firewallError.addError(DiagnosisTestProblem(DiagnosisTestProblem::Error, "Firewall error", "Contact technical service to evaluate the problem"));
 

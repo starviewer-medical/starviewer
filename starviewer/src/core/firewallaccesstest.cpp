@@ -28,7 +28,7 @@ DiagnosisTestResult FirewallAccessTest::run()
         DiagnosisTestProblem problem;
         problem.setState(DiagnosisTestProblem::Warning);
         problem.setDescription(firewall->getErrorString());
-        problem.setSolution(tr("Add %1 to the list of applications that have access through firewall on Control Panel > Firewall").arg(ApplicationNameString));
+        problem.setSolution(tr("Add %1 to the list of applications that have access through firewall").arg(ApplicationNameString));
         result.addWarning(problem);
     }
     else if (firewall->getStatus() != FirewallAccess::FirewallIsAccessible)
