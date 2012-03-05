@@ -10,7 +10,7 @@
 namespace udg {
 
 class EchoToPACSTest : public DiagnosisTest {
-
+Q_OBJECT
 public:
     EchoToPACSTest(QObject *parent = 0);
     ~EchoToPACSTest();
