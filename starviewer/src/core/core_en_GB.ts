@@ -92,6 +92,21 @@
         <oldsource>Error initialization firewall&apos;s library</oldsource>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="154"/>
+        <source>%1 succeeded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="155"/>
+        <source>%1 errors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="156"/>
+        <source>%1 warnings</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QTransferFunctionEditor2Base</name>
@@ -255,12 +270,14 @@
     <name>udg::ApplicationVersionTest</name>
     <message>
         <location filename="applicationversiontest.cpp" line="33"/>
-        <source>There is a new version</source>
+        <source>There is a new version available</source>
+        <oldsource>There is a new version available.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="applicationversiontest.cpp" line="34"/>
-        <source>Update</source>
+        <source>Contact technical service to request the software update</source>
+        <oldsource>Contact technical service to request the software update.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -285,12 +302,18 @@
 <context>
     <name>udg::FirewallAccessTest</name>
     <message>
-        <location filename="firewallaccesstest.cpp" line="34"/>
-        <source>Add %1 to the list of allowed applications through firewall</source>
+        <location filename="firewallaccesstest.cpp" line="31"/>
+        <source>Add %1 to the list of applications that have access through firewall</source>
+        <oldsource>Add %1 to the list of applications that have access through firewall on Control Panel &gt; Firewall</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="firewallaccesstest.cpp" line="51"/>
+        <location filename="firewallaccesstest.cpp" line="39"/>
+        <source>Contact technical service to evaluate the problem</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="firewallaccesstest.cpp" line="50"/>
         <source>%1 has access through firewall</source>
         <translation type="unfinished"></translation>
     </message>
@@ -560,13 +583,13 @@ WW: %5 WL: %6</source>
     <name>udg::Q2DViewerWidget</name>
     <message>
         <location filename="q2dviewerwidget.cpp" line="21"/>
-        <location filename="q2dviewerwidget.cpp" line="186"/>
+        <location filename="q2dviewerwidget.cpp" line="188"/>
         <source>Enable manual synchronization in this viewer</source>
         <oldsource>Enable manual synchronization on this viewer</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerwidget.cpp" line="192"/>
+        <location filename="q2dviewerwidget.cpp" line="194"/>
         <source>Disable manual synchronization in this viewer</source>
         <oldsource>Disable manual synchronization on this viewer</oldsource>
         <translation type="unfinished"></translation>
@@ -778,34 +801,18 @@ Shading will be disabled, it won&apos;t render as expected.</source>
 <context>
     <name>udg::QDiagnosisTest</name>
     <message>
-        <location filename="qdiagnosistest.cpp" line="159"/>
+        <location filename="qdiagnosistest.cpp" line="81"/>
         <source>Running test: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="167"/>
-        <source>%1 errors</source>
+        <location filename="qdiagnosistest.cpp" line="133"/>
+        <source>Files (*.txt)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="168"/>
-        <source>%1 OK</source>
-        <oldsource>%1 Ok</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qdiagnosistest.cpp" line="169"/>
-        <source>%1 warnings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qdiagnosistest.cpp" line="264"/>
+        <location filename="qdiagnosistest.cpp" line="133"/>
         <source>Save diagnosis test results</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qdiagnosistest.cpp" line="264"/>
-        <source>Images (*.txt)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -817,71 +824,40 @@ Shading will be disabled, it won&apos;t render as expected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdiagnosistestbase.ui" line="49"/>
-        <location filename="qdiagnosistestbase.ui" line="62"/>
+        <location filename="qdiagnosistestbase.ui" line="46"/>
+        <location filename="qdiagnosistestbase.ui" line="59"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdiagnosistestbase.ui" line="168"/>
-        <source>All tests passed</source>
+        <location filename="qdiagnosistestbase.ui" line="178"/>
+        <source>All tests have passed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdiagnosistestbase.ui" line="200"/>
-        <source>&lt;a href=&quot;ok&quot;&gt;View tests&lt;/a&gt;</source>
+        <location filename="qdiagnosistestbase.ui" line="220"/>
+        <source>&lt;a href=&quot;ok&quot; style=&quot;color:#333333&quot;&gt;View tests&lt;/a&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdiagnosistestbase.ui" line="333"/>
-        <source>0 errors</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qdiagnosistestbase.ui" line="404"/>
-        <source>0 Succeded</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qdiagnosistestbase.ui" line="468"/>
-        <source>Save results</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qdiagnosistestbase.ui" line="507"/>
-        <source>Some tests have failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qdiagnosistestbase.ui" line="378"/>
-        <source>0 warnings</source>
+        <location filename="qdiagnosistestbase.ui" line="236"/>
+        <source>about:blank</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qdiagnosistestbase.ui" line="276"/>
-        <source>Test description</source>
+        <source>Save Results</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdiagnosistestbase.ui" line="461"/>
+        <location filename="qdiagnosistestbase.ui" line="116"/>
+        <source>Some tests have failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdiagnosistestbase.ui" line="269"/>
         <source>OK</source>
         <oldsource>Ok</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>udg::QDiagnosisTestResultWidgetBase</name>
-    <message>
-        <location filename="qdiagnosistestresultwidgetbase.ui" line="20"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qdiagnosistestresultwidgetbase.ui" line="69"/>
-        <location filename="qdiagnosistestresultwidgetbase.ui" line="107"/>
-        <location filename="qdiagnosistestresultwidgetbase.ui" line="198"/>
-        <location filename="qdiagnosistestresultwidgetbase.ui" line="230"/>
-        <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1007,32 +983,32 @@ Environment variable(logFilePath): %2</source>
 <context>
     <name>udg::QViewer</name>
     <message>
-        <location filename="qviewer.cpp" line="635"/>
+        <location filename="qviewer.cpp" line="642"/>
         <source>Default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="636"/>
+        <location filename="qviewer.cpp" line="643"/>
         <source>Auto</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="868"/>
+        <location filename="qviewer.cpp" line="875"/>
         <source>Downloading related study...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="876"/>
+        <location filename="qviewer.cpp" line="883"/>
         <source>Error downloading related study</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="872"/>
+        <location filename="qviewer.cpp" line="879"/>
         <source>Loading data...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="880"/>
+        <location filename="qviewer.cpp" line="887"/>
         <source>Error loading data</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1124,134 +1100,140 @@ It&apos;s recommended you save them in an empty folder.</source>
 <context>
     <name>udg::SystemRequerimentsTest</name>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="53"/>
+        <location filename="systemrequerimentstest.cpp" line="52"/>
         <source>The machine currently has %1 cores, and the minimum required is %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="54"/>
-        <location filename="systemrequerimentstest.cpp" line="74"/>
+        <location filename="systemrequerimentstest.cpp" line="53"/>
+        <location filename="systemrequerimentstest.cpp" line="75"/>
         <source>Update computer&apos;s hardware</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="73"/>
+        <location filename="systemrequerimentstest.cpp" line="74"/>
         <source>The fastest CPU runs at %1 and the minimum required is %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="83"/>
-        <source>Current openGL version is %1 and the minimum required is %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemrequerimentstest.cpp" line="85"/>
-        <location filename="systemrequerimentstest.cpp" line="100"/>
+        <location filename="systemrequerimentstest.cpp" line="88"/>
+        <location filename="systemrequerimentstest.cpp" line="107"/>
         <source>Update your graphics card driver</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="96"/>
-        <source>Current openGL version does not support %1 extension</source>
+        <location filename="systemrequerimentstest.cpp" line="86"/>
+        <source>Current OpenGL version is %1 and the minimum required is %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="118"/>
+        <location filename="systemrequerimentstest.cpp" line="106"/>
+        <source>Current OpenGL version does not support these extensions: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="systemrequerimentstest.cpp" line="120"/>
         <source>The graphics card %1 has %2Mb of RAM and the minimum required is %3Mb</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="119"/>
+        <location filename="systemrequerimentstest.cpp" line="121"/>
         <source>Change the graphics card</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="127"/>
-        <source>There is not enough disk space to run starviewer properly.</source>
+        <location filename="systemrequerimentstest.cpp" line="131"/>
+        <source>There is not enough disk space to run starviewer properly</source>
+        <oldsource>There is not enough disk space to run starviewer properly.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="128"/>
+        <location filename="systemrequerimentstest.cpp" line="132"/>
         <source>Free some space in the hard disk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="135"/>
-        <source>Operating system is not 64 bit architecture.</source>
+        <location filename="systemrequerimentstest.cpp" line="141"/>
+        <source>Operating system is not 64 bit architecture</source>
+        <oldsource>Operating system is not 64 bit architecture.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="136"/>
+        <location filename="systemrequerimentstest.cpp" line="142"/>
         <source>Update operating system to a 64 bit version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="150"/>
+        <location filename="systemrequerimentstest.cpp" line="158"/>
         <source>Current Operative System version is %1 and the minimum required is %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="151"/>
+        <location filename="systemrequerimentstest.cpp" line="159"/>
         <source>Update operating system to a newer version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="160"/>
+        <location filename="systemrequerimentstest.cpp" line="170"/>
         <source>Current Service Pack version is %1 and the minimum required is Service Pack %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="161"/>
+        <location filename="systemrequerimentstest.cpp" line="171"/>
         <source>Install a newer service pack</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="180"/>
+        <location filename="systemrequerimentstest.cpp" line="192"/>
         <source>The total amount of RAM memory is %1 and the minimum required is %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="181"/>
+        <location filename="systemrequerimentstest.cpp" line="193"/>
         <source>Add more RAM memory to the computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="208"/>
-        <source>One of the screens is too small. Keep in mind that Starviewer won&apos;t fit in that screen.</source>
+        <location filename="systemrequerimentstest.cpp" line="221"/>
+        <source>One of the screens is too small. Keep in mind that Starviewer won&apos;t fit in that screen</source>
+        <oldsource>One of the screens is too small. Keep in mind that Starviewer won&apos;t fit in that screen.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="209"/>
+        <location filename="systemrequerimentstest.cpp" line="222"/>
         <source>Don&apos;t move Starviewer to screen/s %1, or change to a higher resolution</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="217"/>
+        <location filename="systemrequerimentstest.cpp" line="232"/>
         <source>Change to a higher resolution</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="220"/>
-        <source>The screen is too small to fit Starviewer application.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemrequerimentstest.cpp" line="224"/>
-        <source>The screens are too small to fit Starviewer application.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="systemrequerimentstest.cpp" line="235"/>
-        <source>The optical drive is not capable of writing.</source>
+        <source>The screen is too small to fit Starviewer application</source>
+        <oldsource>The screen is too small to fit Starviewer application.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="236"/>
+        <location filename="systemrequerimentstest.cpp" line="239"/>
+        <source>The screens are too small to fit Starviewer application</source>
+        <oldsource>The screens are too small to fit Starviewer application.</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="systemrequerimentstest.cpp" line="250"/>
+        <source>The optical drive is not capable of burning</source>
+        <oldsource>The optical drive is not capable of burning.</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="systemrequerimentstest.cpp" line="251"/>
         <source>Change the optical drive to a CD-RW/DVD-RW</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="249"/>
+        <location filename="systemrequerimentstest.cpp" line="261"/>
         <source>Hardware meets %1&apos;s minimum system requeriments</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1274,303 +1256,303 @@ It&apos;s recommended you save them in an empty folder.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="222"/>
+        <location filename="toolregistry.cpp" line="221"/>
         <source>Enable/Disable Move tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="227"/>
+        <location filename="toolregistry.cpp" line="226"/>
         <source>Seed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="230"/>
+        <location filename="toolregistry.cpp" line="229"/>
         <source>Put Seed tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="238"/>
+        <location filename="toolregistry.cpp" line="237"/>
         <source>Enable/Disable Magic tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="243"/>
+        <location filename="toolregistry.cpp" line="242"/>
         <source>Screen Shot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="245"/>
+        <location filename="toolregistry.cpp" line="244"/>
         <source>Enable/Disable Screen shot tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="246"/>
+        <location filename="toolregistry.cpp" line="245"/>
         <source>Export a viewer screenshot to an image file format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="250"/>
+        <location filename="toolregistry.cpp" line="249"/>
         <source>3D Rotation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="253"/>
+        <location filename="toolregistry.cpp" line="252"/>
         <source>Enable/Disable 3D Rotation tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="261"/>
+        <location filename="toolregistry.cpp" line="260"/>
         <source>Enable/Disable Distances tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="266"/>
+        <location filename="toolregistry.cpp" line="265"/>
         <source>ROIs</source>
         <oldsource>ROI&apos;s</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="268"/>
+        <location filename="toolregistry.cpp" line="267"/>
         <source>Enable/Disable ROI tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="275"/>
+        <location filename="toolregistry.cpp" line="274"/>
         <source>Enable/Disable Reference Lines tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="276"/>
+        <location filename="toolregistry.cpp" line="275"/>
         <source>Reference Lines</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="280"/>
+        <location filename="toolregistry.cpp" line="279"/>
         <source>Voxel Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="283"/>
+        <location filename="toolregistry.cpp" line="282"/>
         <source>Enable voxel information over cursor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="288"/>
+        <location filename="toolregistry.cpp" line="287"/>
         <source>Synchronize tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="290"/>
+        <location filename="toolregistry.cpp" line="289"/>
         <source>Enable/Disable Synchronize tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="291"/>
+        <location filename="toolregistry.cpp" line="290"/>
         <source>Synchronize</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="295"/>
+        <location filename="toolregistry.cpp" line="294"/>
         <source>Window Level Presets tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="296"/>
+        <location filename="toolregistry.cpp" line="295"/>
         <source>Enable/Disable Window Level Presets tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="303"/>
-        <location filename="toolregistry.cpp" line="310"/>
+        <location filename="toolregistry.cpp" line="302"/>
+        <location filename="toolregistry.cpp" line="309"/>
         <source>Enable/Disable Polyline ROI tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="328"/>
+        <location filename="toolregistry.cpp" line="327"/>
         <source>3D Cursor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="360"/>
+        <location filename="toolregistry.cpp" line="359"/>
         <source>Clipping Planes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="363"/>
+        <location filename="toolregistry.cpp" line="362"/>
         <source>Enable/Disable the clipping planes tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="368"/>
+        <location filename="toolregistry.cpp" line="367"/>
         <source>Translation Difference</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="371"/>
+        <location filename="toolregistry.cpp" line="370"/>
         <source>Enable/Disable the translation difference tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="376"/>
+        <location filename="toolregistry.cpp" line="375"/>
         <source>Elliptical ROI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="379"/>
+        <location filename="toolregistry.cpp" line="378"/>
         <source>Enable/Disable Elliptical ROI tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="384"/>
+        <location filename="toolregistry.cpp" line="383"/>
         <source>Auto-Sync</source>
         <oldsource>Auto</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="387"/>
+        <location filename="toolregistry.cpp" line="386"/>
         <source>Enable/Disable Automatic synchronization tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="392"/>
+        <location filename="toolregistry.cpp" line="391"/>
         <source>Magnify</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="395"/>
+        <location filename="toolregistry.cpp" line="394"/>
         <source>Enable/Disable the magnifying glass tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="400"/>
+        <location filename="toolregistry.cpp" line="399"/>
         <source>Circle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="402"/>
+        <location filename="toolregistry.cpp" line="401"/>
         <source>Enable/Disable Circle tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="407"/>
+        <location filename="toolregistry.cpp" line="406"/>
         <source>TA-GT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="409"/>
+        <location filename="toolregistry.cpp" line="408"/>
         <source>Enable/disable TA-GT distance tool</source>
         <oldsource>Enable/disable perpendicular distance tool</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="438"/>
+        <location filename="toolregistry.cpp" line="437"/>
         <source>Restore</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="441"/>
+        <location filename="toolregistry.cpp" line="440"/>
         <source>Restore to initial state</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="448"/>
+        <location filename="toolregistry.cpp" line="447"/>
         <source>All of current viewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="451"/>
+        <location filename="toolregistry.cpp" line="450"/>
         <source>Clear primitives from viewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="458"/>
+        <location filename="toolregistry.cpp" line="457"/>
         <source>Invert WL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="461"/>
+        <location filename="toolregistry.cpp" line="460"/>
         <source>Invert window level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="468"/>
+        <location filename="toolregistry.cpp" line="467"/>
         <source>Axial</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="471"/>
+        <location filename="toolregistry.cpp" line="470"/>
         <source>Switch to Axial View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="478"/>
+        <location filename="toolregistry.cpp" line="477"/>
         <source>Sagittal</source>
         <oldsource>Saggital</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="481"/>
+        <location filename="toolregistry.cpp" line="480"/>
         <source>Switch to Sagittal View</source>
         <oldsource>Switch to Saggital View</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="488"/>
+        <location filename="toolregistry.cpp" line="487"/>
         <source>Coronal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="491"/>
+        <location filename="toolregistry.cpp" line="490"/>
         <source>Switch to Coronal View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="498"/>
+        <location filename="toolregistry.cpp" line="497"/>
         <source>Rotate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="501"/>
+        <location filename="toolregistry.cpp" line="500"/>
         <source>Rotate the image in clockwise direction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="502"/>
+        <location filename="toolregistry.cpp" line="501"/>
         <source>Clockwise rotation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="508"/>
+        <location filename="toolregistry.cpp" line="507"/>
         <source>Rotate Counter Clockwise</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="511"/>
+        <location filename="toolregistry.cpp" line="510"/>
         <source>Rotate the image in counter clockwise direction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="512"/>
+        <location filename="toolregistry.cpp" line="511"/>
         <source>Counter-clockwise rotation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="518"/>
+        <location filename="toolregistry.cpp" line="517"/>
         <source>Horizontal Flip</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="521"/>
+        <location filename="toolregistry.cpp" line="520"/>
         <source>Flip the image horizontally</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="528"/>
+        <location filename="toolregistry.cpp" line="527"/>
         <source>Vertical Flip</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="531"/>
+        <location filename="toolregistry.cpp" line="530"/>
         <source>Flip the image vertically</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1601,90 +1583,90 @@ It&apos;s recommended you save them in an empty folder.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="235"/>
+        <location filename="toolregistry.cpp" line="234"/>
         <source>Magical ROI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="258"/>
+        <location filename="toolregistry.cpp" line="257"/>
         <source>Distance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="272"/>
+        <location filename="toolregistry.cpp" line="271"/>
         <source>Ref. Lines</source>
         <oldsource>Ref.Lines</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="300"/>
+        <location filename="toolregistry.cpp" line="299"/>
         <source>Polyline ROI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="304"/>
-        <location filename="toolregistry.cpp" line="308"/>
+        <location filename="toolregistry.cpp" line="303"/>
+        <location filename="toolregistry.cpp" line="307"/>
         <source>ROI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="311"/>
+        <location filename="toolregistry.cpp" line="310"/>
         <source>Temporal ROI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="315"/>
+        <location filename="toolregistry.cpp" line="314"/>
         <source>Keyboard slicing tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="316"/>
+        <location filename="toolregistry.cpp" line="315"/>
         <source>Enable/Disable keyboard slicing tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="320"/>
+        <location filename="toolregistry.cpp" line="319"/>
         <source>Erase</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="323"/>
+        <location filename="toolregistry.cpp" line="322"/>
         <source>Enable/Disable eraser tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="331"/>
+        <location filename="toolregistry.cpp" line="330"/>
         <source>Enable/Disable Cursor 3D tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="336"/>
+        <location filename="toolregistry.cpp" line="335"/>
         <source>Angle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="339"/>
+        <location filename="toolregistry.cpp" line="338"/>
         <source>Enable/Disable angle tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="344"/>
+        <location filename="toolregistry.cpp" line="343"/>
         <source>Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="347"/>
+        <location filename="toolregistry.cpp" line="346"/>
         <source>Enable/Disable editor tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="352"/>
+        <location filename="toolregistry.cpp" line="351"/>
         <source>Open Angle</source>
         <oldsource>Non Closed Angle</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="355"/>
+        <location filename="toolregistry.cpp" line="354"/>
         <source>Enable/Disable open-angle tool</source>
         <oldsource>Enable/Disable non closed angle tool</oldsource>
         <translation type="unfinished"></translation>
