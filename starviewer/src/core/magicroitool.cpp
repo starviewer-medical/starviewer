@@ -276,14 +276,28 @@ void MagicROITool::computeLevelRange()
     int xIndex, yIndex, zIndex;
     Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
 
+    int x = index[xIndex];
+    int y = index[yIndex];
+    // HACK Per poder crear les regions correctament quan tenim imatges amb fases
+    // Com que els volums no suporten recontruccions, només hem de tractar el cas Axial
+    // TODO Revisar això quan s'implementi el ticket #1247 (Suportar reconstruccions per volums amb fases)
+    int z;
+    if (m_2DViewer->getView() == Q2DViewer::Axial)
+    {
+        z = m_2DViewer->getInput()->getImageIndex(m_2DViewer->getCurrentSlice(), m_2DViewer->getCurrentPhase());
+        DEBUG_LOG(QString("Z-index: %1").arg(zIndex));
+    }
+    else
+    {
+        z = index[zIndex];
+    }
     // Calculem la desviació estàndard dins la finestra que ens marca la magic size
-    double standardDeviation = getStandardDeviation(index[xIndex], index[yIndex], index[zIndex]);
+    double standardDeviation = getStandardDeviation(x, y, z);
     
     // Calculem els llindars com el valor en el pixel +/- la desviació estàndard * magic factor
-    QVector<double> voxelValue;
-    m_2DViewer->getInput()->getVoxelValue(m_pickedPosition, voxelValue);
-    m_lowerLevel = voxelValue.at(0) - m_magicFactor * standardDeviation;
-    m_upperLevel = voxelValue.at(0) + m_magicFactor * standardDeviation;
+    double value = this->getVoxelValue(x, y, z);
+    m_lowerLevel = value - m_magicFactor * standardDeviation;
+    m_upperLevel = value + m_magicFactor * standardDeviation;
 }
 
 void MagicROITool::computeRegionMask()
@@ -300,7 +314,17 @@ void MagicROITool::computeRegionMask()
 
     x = index[xIndex];
     y = index[yIndex];
-    z = index[zIndex];
+    // HACK Per poder crear les regions correctament quan tenim imatges amb fases
+    // Com que els volums no suporten recontruccions, només hem de tractar el cas Axial
+    // TODO Revisar això quan s'implementi el ticket #1247 (Suportar reconstruccions per volums amb fases)
+    if (m_2DViewer->getView() == Q2DViewer::Axial)
+    {
+        z = m_2DViewer->getInput()->getImageIndex(m_2DViewer->getCurrentSlice(), m_2DViewer->getCurrentPhase());
+    }
+    else
+    {
+        z = index[zIndex];
+    }
 
     this->setBounds(minX, minY, maxX, maxY);
 
@@ -313,10 +337,11 @@ void MagicROITool::computeRegionMask()
     {
         DEBUG_LOG("ERROR: extension no comença a 0");
     }
-    QVector<double> voxelValue;
     
-    m_2DViewer->getInput()->getVoxelValue(m_pickedPosition, voxelValue);
-    double value = voxelValue.at(0);
+    // TODO Desfà els índexs projectats a 2D als originals 3D per poder obtenir el valor
+    // Corretgir-ho d'una millor manera perquè no calgui fer servir aquest mètode (guardar els índexs x,y,z o d'una altra manera)
+    double value = this->getVoxelValue(x, y, z);
+    
     if ((value >= m_lowerLevel) && (value <= m_upperLevel))
     {
         m_mask[y * maxX + x] = true;
