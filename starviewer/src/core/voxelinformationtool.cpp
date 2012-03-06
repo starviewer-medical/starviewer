@@ -105,7 +105,15 @@ QString VoxelInformationTool::computeVoxelValue(double worldCoordinate[3])
     QString valueString;
 
     QVector<double> voxelValue;
-    if (m_2DViewer->getInput()->getVoxelValue(worldCoordinate, voxelValue))
+    int phaseIndex = 0;
+    int numberOfPhases = 1;
+    if (m_2DViewer->getView() == Q2DViewer::Axial && m_2DViewer->getInput()->getNumberOfPhases() > 1)
+    {
+        numberOfPhases = m_2DViewer->getInput()->getNumberOfPhases();
+        phaseIndex = m_2DViewer->getCurrentPhase();
+    }
+    
+    if (m_2DViewer->getInput()->getPixelData()->getVoxelValue(worldCoordinate, voxelValue, phaseIndex, numberOfPhases))
     {
         if (voxelValue.size() == 1)
         {
