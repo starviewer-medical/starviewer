@@ -154,16 +154,26 @@ void MagicROITool::setBounds(int &minX, int &minY, int &maxX, int &maxY)
 double MagicROITool::getVoxelValue(int x, int y, int z)
 {
     double value = 0;
+    vtkImageData *imageData = 0;
+    if (m_2DViewer->isThickSlabActive())
+    {
+        imageData = m_2DViewer->getCurrentSlabProjection();
+    }
+    else
+    {
+        imageData = m_2DViewer->getInput()->getVtkData();
+    }
+    
     switch (m_2DViewer->getView())
     {
         case Q2DViewer::Axial:
-            value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(x, y, z, 0);
+            value = imageData->GetScalarComponentAsDouble(x, y, z, 0);
             break;
         case Q2DViewer::Sagital:
-            value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(z, x, y, 0);
+            value = imageData->GetScalarComponentAsDouble(z, x, y, 0);
             break;
         case Q2DViewer::Coronal:
-            value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(x, z, y, 0);
+            value = imageData->GetScalarComponentAsDouble(x, z, y, 0);
             break;
         default:
         DEBUG_LOG("Bad parameter");
@@ -271,7 +281,21 @@ void MagicROITool::generateRegion()
 void MagicROITool::computeLevelRange()
 {
     int index[3];
-    m_2DViewer->getInput()->getPixelData()->computeCoordinateIndex(m_pickedPosition, index);
+    VolumePixelData *pixelData = 0;
+    if (m_2DViewer->isThickSlabActive())
+    {
+        pixelData = new VolumePixelData();
+        pixelData->setData(m_2DViewer->getCurrentSlabProjection());
+    }
+    else
+    {
+        pixelData = m_2DViewer->getInput()->getPixelData();
+    }
+    pixelData->computeCoordinateIndex(m_pickedPosition, index);
+    if (m_2DViewer->isThickSlabActive())
+    {
+        delete pixelData;
+    }
 
     int xIndex, yIndex, zIndex;
     Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
@@ -282,7 +306,7 @@ void MagicROITool::computeLevelRange()
     // Com que els volums no suporten recontruccions, només hem de tractar el cas Axial
     // TODO Revisar això quan s'implementi el ticket #1247 (Suportar reconstruccions per volums amb fases)
     int z;
-    if (m_2DViewer->getView() == Q2DViewer::Axial)
+    if (m_2DViewer->getView() == Q2DViewer::Axial && !m_2DViewer->isThickSlabActive())
     {
         z = m_2DViewer->getInput()->getImageIndex(m_2DViewer->getCurrentSlice(), m_2DViewer->getCurrentPhase());
     }
@@ -303,7 +327,22 @@ void MagicROITool::computeRegionMask()
 {
     // Busquem el voxel inicial
     int index[3];
-    m_2DViewer->getInput()->getPixelData()->computeCoordinateIndex(m_pickedPosition, index);
+    VolumePixelData *pixelData = 0;
+    if (m_2DViewer->isThickSlabActive())
+    {
+        pixelData = new VolumePixelData();
+        pixelData->setData(m_2DViewer->getCurrentSlabProjection());
+    }
+    else
+    {
+        pixelData = m_2DViewer->getInput()->getPixelData();
+    }
+    pixelData->computeCoordinateIndex(m_pickedPosition, index);
+    if (m_2DViewer->isThickSlabActive())
+    {
+        delete pixelData;
+    }
+    
     int minX, minY;
     int maxX, maxY;
     int x, y, z;
@@ -316,7 +355,7 @@ void MagicROITool::computeRegionMask()
     // HACK Per poder crear les regions correctament quan tenim imatges amb fases
     // Com que els volums no suporten recontruccions, només hem de tractar el cas Axial
     // TODO Revisar això quan s'implementi el ticket #1247 (Suportar reconstruccions per volums amb fases)
-    if (m_2DViewer->getView() == Q2DViewer::Axial)
+    if (m_2DViewer->getView() == Q2DViewer::Axial && !m_2DViewer->isThickSlabActive())
     {
         z = m_2DViewer->getInput()->getImageIndex(m_2DViewer->getCurrentSlice(), m_2DViewer->getCurrentPhase());
     }
@@ -657,13 +696,23 @@ double MagicROITool::getStandardDeviation(int x, int y, int z)
     double mean = 0.0;
     double value;
 
+    vtkImageData *imageData = 0;
+    if (m_2DViewer->isThickSlabActive())
+    {
+        imageData = m_2DViewer->getCurrentSlabProjection();
+    }
+    else
+    {
+        imageData = m_2DViewer->getInput()->getVtkData();
+    }
+    
     for (int i = minX; i <= maxX; ++i)
     {
         for (int j = minY; j <= maxY; ++j)
         {
             index[xIndex] = i;
             index[yIndex] = j;
-            value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(index[0], index[1], index[2], 0);
+            value = imageData->GetScalarComponentAsDouble(index[0], index[1], index[2], 0);
             mean += value;
         }
     }
@@ -679,7 +728,7 @@ double MagicROITool::getStandardDeviation(int x, int y, int z)
         {
             index[xIndex] = i;
             index[yIndex] = j;
-            value = m_2DViewer->getInput()->getVtkData()->GetScalarComponentAsDouble(index[0], index[1], index[2], 0);
+            value = imageData->GetScalarComponentAsDouble(index[0], index[1], index[2], 0);
             deviation += qPow(value - mean, 2);
         }
     }
