@@ -340,11 +340,6 @@ Volume::VoxelType* Volume::getScalarPointer(int index[3])
     return this->getScalarPointer(index[0], index[1], index[2]);
 }
 
-bool Volume::getVoxelValue(double coordinate[3], QVector<double> &voxelValue)
-{
-    return this->getPixelData()->getVoxelValue(coordinate, voxelValue);
-}
-
 void Volume::convertToNeutralVolume()
 {
     m_volumePixelData->convertToNeutralPixelData();
