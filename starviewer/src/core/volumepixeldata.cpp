@@ -131,7 +131,7 @@ bool VolumePixelData::computeCoordinateIndex(const double coordinate[3], int ind
     return inside;
 }
 
-bool VolumePixelData::getVoxelValue(double coordinate[3], QVector<double> &voxelValue)
+bool VolumePixelData::getVoxelValue(double coordinate[3], QVector<double> &voxelValue, int phaseNumber, int numberOfPhases)
 {
     if (!this->getVtkData())
     {
@@ -145,6 +145,11 @@ bool VolumePixelData::getVoxelValue(double coordinate[3], QVector<double> &voxel
 
     if (inside)
     {
+        // HACK Aquest càlcul és necessari per pal·liar la manca de coneixement de la fase
+        // TODO Cal resoldre això d'una forma més elegant, el qual comporta un redisseny del tractament de fases i volums
+        // Calculem l'índex correcte en cas que tinguem fases
+        voxelIndex[2] = voxelIndex[2] * numberOfPhases + phaseNumber;
+        
         vtkIdType pointId = this->getVtkData()->ComputePointId(voxelIndex);
         vtkDataArray *scalars = this->getVtkData()->GetPointData()->GetScalars();
         int numberOfComponents = scalars->GetNumberOfComponents();
