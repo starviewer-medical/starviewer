@@ -157,6 +157,8 @@ void ROITool::computeStatisticsData()
     int intersectionState;
     // Obtenim el punter al contenidor de píxels amb el que calcularem els valors
     VolumePixelData *pixelData = 0;
+    int phaseIndex = 0;
+    int numberOfPhases = 1;
     if (m_2DViewer->isThickSlabActive())
     {
         pixelData = new VolumePixelData;
@@ -165,6 +167,11 @@ void ROITool::computeStatisticsData()
     else
     {
         pixelData = m_2DViewer->getInput()->getPixelData();
+        if (m_2DViewer->getView() == Q2DViewer::Axial && m_2DViewer->getInput()->getNumberOfPhases() > 1)
+        {
+            numberOfPhases = m_2DViewer->getInput()->getNumberOfPhases();
+            phaseIndex = m_2DViewer->getCurrentPhase();
+        }
     }
 
     // Inicialitzem la llista de valors de gris
@@ -234,7 +241,7 @@ void ROITool::computeStatisticsData()
                     while (firstIntersection[intersectionCoordinateIndex] <= secondIntersection[intersectionCoordinateIndex])
                     {
                         QVector<double> voxelValue;
-                        if (pixelData->getVoxelValue(firstIntersection, voxelValue))
+                        if (pixelData->getVoxelValue(firstIntersection, voxelValue, phaseIndex, numberOfPhases))
                         {
                             m_grayValues << voxelValue.at(0);
                         }
@@ -247,7 +254,7 @@ void ROITool::computeStatisticsData()
                     while (firstIntersection[intersectionCoordinateIndex] >= secondIntersection[intersectionCoordinateIndex])
                     {
                         QVector<double> voxelValue;
-                        if (pixelData->getVoxelValue(firstIntersection, voxelValue))
+                        if (pixelData->getVoxelValue(firstIntersection, voxelValue, phaseIndex, numberOfPhases))
                         {
                             m_grayValues << voxelValue.at(0);
                         }
