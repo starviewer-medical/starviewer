@@ -133,10 +133,6 @@ public:
     VoxelType* getScalarPointer(int x = 0, int y = 0, int z = 0);
     VoxelType* getScalarPointer(int index[3]);
 
-    /// Donada una coordenada de món, ens dóna el valor del vòxel del VolumePixelData corresponent.
-    /// Veure VolumePixelData::getVoxelValue per més informació.
-    bool getVoxelValue(double coordinate[3], QVector<double> &voxelValue);
-
     /// Ens calcula si el volum quep a memòria. Si el volum ja ha estat carregat prèviament amb èxit, retornarà cert
     bool fitsIntoMemory();
 
