@@ -1,5 +1,6 @@
 #include "dicomdirburningapplicationtest.h"
 #include "inputoutputsettings.h"
+#include "starviewerapplication.h"
 
 #include <QFile>
 #include <QString>
@@ -38,7 +39,7 @@ DiagnosisTestResult DICOMDIRBurningApplicationTest::run()
         DiagnosisTestProblem problem;
         problem.setState(DiagnosisTestProblem::Warning);
         problem.setDescription(tr("There is no DICOMDIR burning application configured"));
-        problem.setSolution(tr("Install a DICOMDIR burning application and configure Starviewer to use it on Tools > Configuration > DICOMDIR"));
+        problem.setSolution(tr("Install a DICOMDIR burning application and configure %1 to use it on Tools > Configuration > DICOMDIR").arg(ApplicationNameString));
         result.addWarning(problem);
     }
 
