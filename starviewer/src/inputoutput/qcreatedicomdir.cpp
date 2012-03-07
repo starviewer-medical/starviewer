@@ -496,6 +496,12 @@ Status QCreateDicomdir::startCreateDicomdir(QString dicomdirPath)
                     "or try to create the DICOMDIR without anonymize option.")
                     .arg(dicomdirPath));
                 break;
+
+            case 3001:
+                QMessageBox::warning(this, ApplicationNameString, tr("Error copying files, be sure you have appropriate permissions on both source and "
+                    "destination folders to copy the files."));
+                break;
+            
             default:
                 QMessageBox::critical(this, ApplicationNameString, tr("Error creating DICOMDIR. Be sure you have write permissions in %1 and It is empty.")
                                                                  .arg(m_lineEditDicomdirPath->text()));
