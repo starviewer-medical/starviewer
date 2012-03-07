@@ -44,7 +44,7 @@ void AutomaticSynchronizationTool::reset()
 {
     m_lastSlice = m_2DViewer->getCurrentSlice();
     m_roundLostSpacingBetweenSlices = 0.0;
-    initializeGroupToolData();
+    initialize();
 }
 
 void AutomaticSynchronizationTool::setToolData(ToolData *data)
@@ -52,10 +52,10 @@ void AutomaticSynchronizationTool::setToolData(ToolData *data)
     this->m_toolData = dynamic_cast<AutomaticSynchronizationToolData*>(data);
     connect(m_toolData, SIGNAL(changed()), SLOT(updatePosition()));
 
-    initializeGroupToolData();
+    initialize();
 }
 
-void AutomaticSynchronizationTool::initializeGroupToolData()
+void AutomaticSynchronizationTool::initialize()
 {
     if (m_2DViewer->getInput())
     {
@@ -73,7 +73,11 @@ void AutomaticSynchronizationTool::initializeGroupToolData()
                 DEBUG_LOG(QString("Viewer sense frameOfReference, no es tindrà en compte a la sincronitzacio automatica."));
             }
         }
+
+        changePositionIfActive();
+        updatePosition();
     }
+
 }
 
 ToolData *AutomaticSynchronizationTool::getToolData() const
