@@ -252,7 +252,7 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
     QTest::newRow("not enough space on disk") << cpuNumberOfCores << cpuFrequencies << openGLExtensions << openGLVersion << gpuRAM << gpuModel << zero
                                               << operatingSystem << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << writeCapability
                                               << DiagnosisTestResult::Error
-                                              << "There is not enough disk space to run starviewer properly"
+                                              << "There is not enough disk space to run Starviewer properly"
                                               << "Free some space in the hard disk";
 
     QTest::newRow("windows is 32 bit") << cpuNumberOfCores << cpuFrequencies << openGLExtensions << openGLVersion << gpuRAM << gpuModel << hardDiskFreeSpace

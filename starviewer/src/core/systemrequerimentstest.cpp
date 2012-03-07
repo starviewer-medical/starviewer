@@ -128,7 +128,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
     {
         DiagnosisTestProblem problem;
         problem.setState(DiagnosisTestProblem::Error);
-        problem.setDescription(tr("There is not enough disk space to run starviewer properly"));
+        problem.setDescription(tr("There is not enough disk space to run %1 properly").arg(ApplicationNameString));
         problem.setSolution(tr("Free some space in the hard disk"));
         result.addError(problem);
     }
@@ -218,8 +218,8 @@ DiagnosisTestResult SystemRequerimentsTest::run()
             // Warning
             DiagnosisTestProblem problem;
             problem.setState(DiagnosisTestProblem::Warning);
-            problem.setDescription(tr("One of the screens is too small. Keep in mind that Starviewer won't fit in that screen"));
-            problem.setSolution(tr("Don't move Starviewer to screen/s %1, or change to a higher resolution").arg(screensInWhichStarviewerWontFit.join(", ")));
+            problem.setDescription(tr("One of the screens is too small. Keep in mind that %1 won't fit in that screen").arg(ApplicationNameString));
+            problem.setSolution(tr("Don't move %1 to screen/s %2, or change to a higher resolution").arg(ApplicationNameString).arg(screensInWhichStarviewerWontFit.join(", ")));
             result.addWarning(problem);
         }
         // else OK
@@ -232,11 +232,11 @@ DiagnosisTestResult SystemRequerimentsTest::run()
         problem.setSolution(tr("Change to a higher resolution"));
         if (resolutions.count() == 1)
         {
-            problem.setDescription(tr("The screen is too small to fit Starviewer application"));
+            problem.setDescription(tr("The screen is too small to fit %1 application").arg(ApplicationNameString));
         }
         else
         {
-            problem.setDescription(tr("The screens are too small to fit Starviewer application"));
+            problem.setDescription(tr("The screens are too small to fit %1 application").arg(ApplicationNameString));
         }
         result.addError(problem);
     }
