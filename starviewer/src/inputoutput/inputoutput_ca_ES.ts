@@ -69,7 +69,7 @@
     <message>
         <location filename="portinuse.cpp" line="13"/>
         <source>No port checked yet</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">No s&apos;ha comprovat cap port</translation>
     </message>
 </context>
 <context>
@@ -77,34 +77,34 @@
     <message>
         <location filename="cachetest.cpp" line="34"/>
         <source>The free space on the local database location is below the minimum required</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">L&apos;espai necessari per a la base de dades local és menor al mínim requerit</translation>
     </message>
     <message>
         <location filename="cachetest.cpp" line="35"/>
         <source>Make some space on disk or change the local database to other location</source>
         <oldsource>The free space on the cache directory is below the minimum required</oldsource>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Feu espai al disc o canvieu la base de dades local a una altra ubicació</translation>
     </message>
     <message>
         <location filename="cachetest.cpp" line="45"/>
         <source>Fix the permissions of the directory or change the local database to other location</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Arregleu els permisos del directori o canvieu la base de dades local a una altra ubicació</translation>
     </message>
     <message>
         <location filename="cachetest.cpp" line="55"/>
         <source>The local database is not on the default path</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">La base de dades local no està a la ubicació per defecte</translation>
     </message>
     <message>
         <location filename="cachetest.cpp" line="65"/>
         <source>%1 local database is correctly configured</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">La base de dades d&apos;%1 està configurada correctament</translation>
     </message>
     <message>
         <location filename="cachetest.cpp" line="44"/>
         <source>Invalid permissions on the local database directory</source>
         <oldsource>Change the cache path or the permissions of the directory</oldsource>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Els permisos del directori on està la base de dades local són incorrectes</translation>
     </message>
 </context>
 <context>
@@ -119,29 +119,29 @@
 <context>
     <name>udg::DICOMDIRBurningApplicationTest</name>
     <message>
-        <location filename="dicomdirburningapplicationtest.cpp" line="31"/>
-        <source>DICOMDIR burning application is not installed on the given location.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="dicomdirburningapplicationtest.cpp" line="32"/>
-        <source>Provide the correct location on Tools &gt; Configuration &gt; DICOMDIR.</source>
-        <translation type="unfinished"></translation>
+        <source>DICOMDIR burning application is not installed on the given location</source>
+        <translation type="unfinished">L&apos;aplicació per gravar DICOMDIR no està instal·lada a la ubicació especificada</translation>
     </message>
     <message>
-        <location filename="dicomdirburningapplicationtest.cpp" line="40"/>
-        <source>There is no DICOMDIR burning application configured.</source>
-        <translation type="unfinished"></translation>
+        <location filename="dicomdirburningapplicationtest.cpp" line="33"/>
+        <source>Provide the correct location on Tools &gt; Configuration &gt; DICOMDIR</source>
+        <translation type="unfinished">Indiqueu la ubicació a Eines &gt; Configuració &gt; DICOMDIR</translation>
     </message>
     <message>
         <location filename="dicomdirburningapplicationtest.cpp" line="41"/>
-        <source>Install a DICOMDIR burning application and configure Starviewer to use it on Tools &gt; Configuration &gt; DICOMDIR.</source>
-        <translation type="unfinished"></translation>
+        <source>There is no DICOMDIR burning application configured</source>
+        <translation type="unfinished">No s&apos;ha configurat cap aplicació per gravar DICOMDIR</translation>
     </message>
     <message>
-        <location filename="dicomdirburningapplicationtest.cpp" line="50"/>
+        <location filename="dicomdirburningapplicationtest.cpp" line="42"/>
+        <source>Install a DICOMDIR burning application and configure %1 to use it on Tools &gt; Configuration &gt; DICOMDIR</source>
+        <translation type="unfinished">Instal·leu una aplicació per gravar DICOMDIR i configureu %1 perquè la pugui fer servir a Eines &gt; Configuració &gt; DICOMDIR</translation>
+    </message>
+    <message>
+        <location filename="dicomdirburningapplicationtest.cpp" line="51"/>
         <source>The application to burn DICOMDIRs to CD/DVD is correctly configured</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">L&apos;aplicació per gravar DICOMDIR està configurada correctament</translation>
     </message>
 </context>
 <context>
@@ -232,38 +232,39 @@ No teniu permisos d&apos;escriptura en el directori de la caché d&apos;imatges.
     <message>
         <location filename="echotopacstest.cpp" line="28"/>
         <source>There are no PACS defined</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">No s&apos;ha definit cap PACS</translation>
     </message>
     <message>
         <location filename="echotopacstest.cpp" line="29"/>
         <source>New PACS can be defined at Tools &gt; Configuration &gt; PACS</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Definiu un PACS a Eines &gt; Configuració &gt; PACS</translation>
     </message>
     <message>
         <location filename="echotopacstest.cpp" line="44"/>
-        <source>Echo to PACS with AETitle &apos;%1&apos; failed</source>
-        <translation type="unfinished"></translation>
+        <source>Echo to PACS with AE Title &apos;%1&apos; failed</source>
+        <oldsource>Echo to PACS with AETitle &apos;%1&apos; failed</oldsource>
+        <translation type="unfinished">La comunicació amb el PACS amb AE TItle &apos;%1&apos; ha fallat</translation>
     </message>
     <message>
         <location filename="echotopacstest.cpp" line="45"/>
         <source>Check PACS configuration at Tools &gt; Configuration &gt; PACS</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Comproveu la configuració del PACS a Eines &gt; Configuració &gt; PACS</translation>
     </message>
     <message>
         <location filename="echotopacstest.cpp" line="49"/>
-        <source>Unable to connect to PACS with AETitle &apos;%1&apos;</source>
-        <oldsource>Echo to pacs with AE Title &apos;%1&apos; failed</oldsource>
-        <translation type="unfinished"></translation>
+        <source>Unable to connect to PACS with AE Title &apos;%1&apos;</source>
+        <oldsource>Unable to connect to PACS with AETitle &apos;%1&apos;</oldsource>
+        <translation type="unfinished">No s&apos;ha pogut connectar amb el PACS amb AE Title &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="echotopacstest.cpp" line="50"/>
         <source>Check internet connection and PACS configuration at Tools &gt; Configuration &gt; PACS</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Comprova la connexió a internet i la configuració del PACS a Eines &gt; Configuració &gt; PACS</translation>
     </message>
     <message>
         <location filename="echotopacstest.cpp" line="61"/>
         <source>All PACS are correctly configured</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Els PACS estan configurats correctament</translation>
     </message>
 </context>
 <context>
@@ -271,7 +272,7 @@ No teniu permisos d&apos;escriptura en el directori de la caché d&apos;imatges.
     <message>
         <location filename="incomingdicomconnectionsportinusetest.cpp" line="18"/>
         <source>Incoming DICOM connections port is available</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">El port per connexions DICOM d&apos;entrada està disponible</translation>
     </message>
 </context>
 <context>
@@ -279,27 +280,27 @@ No teniu permisos d&apos;escriptura en el directori de la caché d&apos;imatges.
     <message>
         <location filename="portinusetest.cpp" line="29"/>
         <source>Port %1 is already in use by other application</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">El port %1 està essent utilitzat per una altra aplicació</translation>
     </message>
     <message>
         <location filename="portinusetest.cpp" line="30"/>
-        <source>Try another port or shutdown the application using this port.</source>
-        <translation type="unfinished"></translation>
+        <source>Try another port or shutdown the application using this port</source>
+        <translation type="unfinished">Proveu un altre port o tanqueu l&apos;aplicació que està utilitzant el port</translation>
     </message>
     <message>
         <location filename="portinusetest.cpp" line="34"/>
         <source>Unable to test if port %1 is in use due to error: %2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">S&apos;ha produït el següent error al comprovar si el port %1 està en ús: %2</translation>
     </message>
     <message>
         <location filename="portinusetest.cpp" line="35"/>
-        <source>Contact technical service to evaluate the problem.</source>
-        <translation type="unfinished"></translation>
+        <source>Contact technical service to evaluate the problem</source>
+        <translation type="unfinished">Poseu-vos en contacte amb el servei tècnic per evaluar el problema</translation>
     </message>
     <message>
         <location filename="portinusetest.cpp" line="46"/>
         <source>Port %1 is in use by another application</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">El port %1 està essent utilitzat per una altra aplicació</translation>
     </message>
 </context>
 <context>
@@ -2600,7 +2601,7 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
     <message>
         <location filename="qpopuprisrequestsscreen.cpp" line="152"/>
         <source>Retrieving study %1 of %2.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">S&apos;està descarregant l&apos;estudi %1 de %2.</translation>
     </message>
     <message>
         <location filename="qpopuprisrequestsscreen.cpp" line="168"/>
@@ -3126,7 +3127,7 @@ Si el problema persisteix contacteu amb un administrador.</translation>
     <message>
         <location filename="risrequestsportinusetest.cpp" line="18"/>
         <source>RIS request port is available</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">El port per escoltar peticions de RIS està disponible</translation>
     </message>
 </context>
 <context>

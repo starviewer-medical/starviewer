@@ -119,27 +119,30 @@
 <context>
     <name>udg::DICOMDIRBurningApplicationTest</name>
     <message>
-        <location filename="dicomdirburningapplicationtest.cpp" line="31"/>
-        <source>DICOMDIR burning application is not installed on the given location.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="dicomdirburningapplicationtest.cpp" line="32"/>
-        <source>Provide the correct location on Tools &gt; Configuration &gt; DICOMDIR.</source>
+        <source>DICOMDIR burning application is not installed on the given location</source>
+        <oldsource>DICOMDIR burning application is not installed on the given location.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dicomdirburningapplicationtest.cpp" line="40"/>
-        <source>There is no DICOMDIR burning application configured.</source>
+        <location filename="dicomdirburningapplicationtest.cpp" line="33"/>
+        <source>Provide the correct location on Tools &gt; Configuration &gt; DICOMDIR</source>
+        <oldsource>Provide the correct location on Tools &gt; Configuration &gt; DICOMDIR.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="dicomdirburningapplicationtest.cpp" line="41"/>
-        <source>Install a DICOMDIR burning application and configure Starviewer to use it on Tools &gt; Configuration &gt; DICOMDIR.</source>
+        <source>There is no DICOMDIR burning application configured</source>
+        <oldsource>There is no DICOMDIR burning application configured.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dicomdirburningapplicationtest.cpp" line="50"/>
+        <location filename="dicomdirburningapplicationtest.cpp" line="42"/>
+        <source>Install a DICOMDIR burning application and configure %1 to use it on Tools &gt; Configuration &gt; DICOMDIR</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dicomdirburningapplicationtest.cpp" line="51"/>
         <source>The application to burn DICOMDIRs to CD/DVD is correctly configured</source>
         <translation type="unfinished"></translation>
     </message>
@@ -237,7 +240,8 @@ You don&apos;t have write permissions on cache image directory. You couldn&apos;
     </message>
     <message>
         <location filename="echotopacstest.cpp" line="44"/>
-        <source>Echo to PACS with AETitle &apos;%1&apos; failed</source>
+        <source>Echo to PACS with AE Title &apos;%1&apos; failed</source>
+        <oldsource>Echo to PACS with AETitle &apos;%1&apos; failed</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -247,8 +251,8 @@ You don&apos;t have write permissions on cache image directory. You couldn&apos;
     </message>
     <message>
         <location filename="echotopacstest.cpp" line="49"/>
-        <source>Unable to connect to PACS with AETitle &apos;%1&apos;</source>
-        <oldsource>Echo to pacs with AE Title &apos;%1&apos; failed</oldsource>
+        <source>Unable to connect to PACS with AE Title &apos;%1&apos;</source>
+        <oldsource>Unable to connect to PACS with AETitle &apos;%1&apos;</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -279,7 +283,8 @@ You don&apos;t have write permissions on cache image directory. You couldn&apos;
     </message>
     <message>
         <location filename="portinusetest.cpp" line="30"/>
-        <source>Try another port or shutdown the application using this port.</source>
+        <source>Try another port or shutdown the application using this port</source>
+        <oldsource>Try another port or shutdown the application using this port.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -289,7 +294,8 @@ You don&apos;t have write permissions on cache image directory. You couldn&apos;
     </message>
     <message>
         <location filename="portinusetest.cpp" line="35"/>
-        <source>Contact technical service to evaluate the problem.</source>
+        <source>Contact technical service to evaluate the problem</source>
+        <oldsource>Contact technical service to evaluate the problem.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
