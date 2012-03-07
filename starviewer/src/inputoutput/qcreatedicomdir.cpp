@@ -472,7 +472,7 @@ Status QCreateDicomdir::startCreateDicomdir(QString dicomdirPath)
     if (!state.good())
     {
         QApplication::restoreOverrideCursor();
-
+        // TODO Estaria bé que el diàleg pogués mostrar adicionalment els detalls de l'error produit que es trobarien a state.text()
         switch (state.code())
         {
             case 4001:
