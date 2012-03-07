@@ -50,7 +50,7 @@ private:
     void setPositionToToolData();
 
     /// Inicialitza el grup a les dades, si és que no està inicialitzat
-    void initializeGroupToolData();
+    void initialize();
 
 private:
     
