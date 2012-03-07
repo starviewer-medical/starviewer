@@ -1066,12 +1066,12 @@ Variable d&apos;entorn(logFilePath): %2</translation>
 <context>
     <name>udg::ROITool</name>
     <message>
-        <location filename="roitool.cpp" line="402"/>
+        <location filename="roitool.cpp" line="409"/>
         <source>Area: %1 %2</source>
         <translation>Àrea: %1 %2</translation>
     </message>
     <message>
-        <location filename="roitool.cpp" line="412"/>
+        <location filename="roitool.cpp" line="419"/>
         <source>
 Mean: %1
 St.Dev.: %2</source>
@@ -1125,129 +1125,130 @@ Es recomana que les deseu en una carpeta buida.</translation>
         <location filename="systemrequerimentstest.cpp" line="53"/>
         <location filename="systemrequerimentstest.cpp" line="75"/>
         <source>Update computer&apos;s hardware</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Actualitza el maquinari</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="74"/>
         <source>The fastest CPU runs at %1 and the minimum required is %2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">La CPU més ràpida va a %1 i la velocitat mínima requerida és %2</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="88"/>
         <location filename="systemrequerimentstest.cpp" line="107"/>
         <source>Update your graphics card driver</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Actualitzeu el controlador de la targeta gràfica</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="86"/>
         <source>Current OpenGL version is %1 and the minimum required is %2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">La versió actual d&apos;OpenGL és %1 quan la mínima requerida és %2</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="106"/>
         <source>Current OpenGL version does not support these extensions: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">La versió actual d&apos;OpenGL no suporta les següents extensions: %1</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="120"/>
         <source>The graphics card %1 has %2Mb of RAM and the minimum required is %3Mb</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">La targeta gràfica %1 té %2Mb de RAM quan el mínim requerit és %3Mb</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="121"/>
         <source>Change the graphics card</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Canvieu la targeta gràfica</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="131"/>
-        <source>There is not enough disk space to run starviewer properly</source>
-        <oldsource>There is not enough disk space to run starviewer properly.</oldsource>
-        <translation type="unfinished"></translation>
+        <source>There is not enough disk space to run %1 properly</source>
+        <oldsource>There is not enough disk space to run starviewer properly</oldsource>
+        <translation type="unfinished">No hi ha espai suficient al disc per executar correctament %1</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="132"/>
         <source>Free some space in the hard disk</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Allibereu espai al disc</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="141"/>
         <source>Operating system is not 64 bit architecture</source>
         <oldsource>Operating system is not 64 bit architecture.</oldsource>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">El sistema operatiu no és d&apos;arquitectura 64 bit</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="142"/>
         <source>Update operating system to a 64 bit version</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Actualitzeu el sistema operatiu a una versió 64 bit</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="158"/>
         <source>Current Operative System version is %1 and the minimum required is %2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">La versió actual del sistema operatiu és %1 quan la mínima requerida és %2</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="159"/>
         <source>Update operating system to a newer version</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Actualitzeu el sistema operatiu a una versió més recent</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="170"/>
         <source>Current Service Pack version is %1 and the minimum required is Service Pack %2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">La versió actual del Service Pack és %1 quan el Service Pack mínim requerit és el %2</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="171"/>
         <source>Install a newer service pack</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Instal·leu el Service Pack més recent</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="192"/>
         <source>The total amount of RAM memory is %1 and the minimum required is %2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">La memòria RAM total és %1 quan la mínima requerida és %2</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="193"/>
         <source>Add more RAM memory to the computer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Afegiu més memòria RAM</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="221"/>
-        <source>One of the screens is too small. Keep in mind that Starviewer won&apos;t fit in that screen</source>
-        <oldsource>One of the screens is too small. Keep in mind that Starviewer won&apos;t fit in that screen.</oldsource>
-        <translation type="unfinished"></translation>
+        <source>One of the screens is too small. Keep in mind that %1 won&apos;t fit in that screen</source>
+        <oldsource>One of the screens is too small. Keep in mind that Starviewer won&apos;t fit in that screen</oldsource>
+        <translation type="unfinished">Una de les pantalles té una resolució massa petita. %1 no es mostrarà bé en aquesta pantalla</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="222"/>
-        <source>Don&apos;t move Starviewer to screen/s %1, or change to a higher resolution</source>
-        <translation type="unfinished"></translation>
+        <source>Don&apos;t move %1 to screen/s %2, or change to a higher resolution</source>
+        <oldsource>Don&apos;t move Starviewer to screen/s %1, or change to a higher resolution</oldsource>
+        <translation type="unfinished">Eviteu utilitzar %1 a la pantalla o pantalles %2, o augmenteu la resolució</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="232"/>
         <source>Change to a higher resolution</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Augmenteu la resolució de la pantalla</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="235"/>
-        <source>The screen is too small to fit Starviewer application</source>
-        <oldsource>The screen is too small to fit Starviewer application.</oldsource>
-        <translation type="unfinished"></translation>
+        <source>The screen is too small to fit %1 application</source>
+        <oldsource>The screen is too small to fit Starviewer application</oldsource>
+        <translation type="unfinished">La resolució de la pantalla és massa petita per mostrar %1 correctament</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="239"/>
-        <source>The screens are too small to fit Starviewer application</source>
-        <oldsource>The screens are too small to fit Starviewer application.</oldsource>
-        <translation type="unfinished"></translation>
+        <source>The screens are too small to fit %1 application</source>
+        <oldsource>The screens are too small to fit Starviewer application</oldsource>
+        <translation type="unfinished">La resolució de les pantalles és massa petita per mostrar %1 correctament</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="250"/>
         <source>The optical drive is not capable of burning</source>
         <oldsource>The optical drive is not capable of burning.</oldsource>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">La unitat de disc òptic no permet gravar</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="251"/>
         <source>Change the optical drive to a CD-RW/DVD-RW</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Canvieu la unitat de disc òptic per una CD-RW/DVD-RW</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="261"/>
@@ -1857,7 +1858,7 @@ Es recomana que les deseu en una carpeta buida.</translation>
 <context>
     <name>udg::VoxelInformationTool</name>
     <message>
-        <location filename="voxelinformationtool.cpp" line="128"/>
+        <location filename="voxelinformationtool.cpp" line="146"/>
         <source>N/A</source>
         <translation>N/D</translation>
     </message>

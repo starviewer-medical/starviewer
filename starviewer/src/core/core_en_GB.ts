@@ -1053,12 +1053,12 @@ Environment variable(logFilePath): %2</source>
 <context>
     <name>udg::ROITool</name>
     <message>
-        <location filename="roitool.cpp" line="402"/>
+        <location filename="roitool.cpp" line="409"/>
         <source>Area: %1 %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="roitool.cpp" line="412"/>
+        <location filename="roitool.cpp" line="419"/>
         <source>
 Mean: %1
 St.Dev.: %2</source>
@@ -1143,8 +1143,8 @@ It&apos;s recommended you save them in an empty folder.</source>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="131"/>
-        <source>There is not enough disk space to run starviewer properly</source>
-        <oldsource>There is not enough disk space to run starviewer properly.</oldsource>
+        <source>There is not enough disk space to run %1 properly</source>
+        <oldsource>There is not enough disk space to run starviewer properly</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1195,13 +1195,14 @@ It&apos;s recommended you save them in an empty folder.</source>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="221"/>
-        <source>One of the screens is too small. Keep in mind that Starviewer won&apos;t fit in that screen</source>
-        <oldsource>One of the screens is too small. Keep in mind that Starviewer won&apos;t fit in that screen.</oldsource>
+        <source>One of the screens is too small. Keep in mind that %1 won&apos;t fit in that screen</source>
+        <oldsource>One of the screens is too small. Keep in mind that Starviewer won&apos;t fit in that screen</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="222"/>
-        <source>Don&apos;t move Starviewer to screen/s %1, or change to a higher resolution</source>
+        <source>Don&apos;t move %1 to screen/s %2, or change to a higher resolution</source>
+        <oldsource>Don&apos;t move Starviewer to screen/s %1, or change to a higher resolution</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1211,14 +1212,14 @@ It&apos;s recommended you save them in an empty folder.</source>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="235"/>
-        <source>The screen is too small to fit Starviewer application</source>
-        <oldsource>The screen is too small to fit Starviewer application.</oldsource>
+        <source>The screen is too small to fit %1 application</source>
+        <oldsource>The screen is too small to fit Starviewer application</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="239"/>
-        <source>The screens are too small to fit Starviewer application</source>
-        <oldsource>The screens are too small to fit Starviewer application.</oldsource>
+        <source>The screens are too small to fit %1 application</source>
+        <oldsource>The screens are too small to fit Starviewer application</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1828,7 +1829,7 @@ It&apos;s recommended you save them in an empty folder.</source>
 <context>
     <name>udg::VoxelInformationTool</name>
     <message>
-        <location filename="voxelinformationtool.cpp" line="128"/>
+        <location filename="voxelinformationtool.cpp" line="146"/>
         <source>N/A</source>
         <translation type="unfinished"></translation>
     </message>
