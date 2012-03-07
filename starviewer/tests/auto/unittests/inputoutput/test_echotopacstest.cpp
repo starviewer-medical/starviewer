@@ -85,7 +85,7 @@ void test_EchoToPACSTest::run_ShouldTestIfPACSAreAccessible_data()
     fillPacsListAndHash(&pacsListTest3, &hashTest3, AETitlesTest3, statusesTest3);
     
     DiagnosisTestResult pacsFailResult;
-    DiagnosisTestProblem pacsFailProblem(DiagnosisTestProblem::Error, QString("Echo to PACS with AETitle '%1' failed").arg(AETitlesTest3[0]), "Check PACS configuration at Tools > Configuration > PACS");
+    DiagnosisTestProblem pacsFailProblem(DiagnosisTestProblem::Error, QString("Echo to PACS with AE Title '%1' failed").arg(AETitlesTest3[0]), "Check PACS configuration at Tools > Configuration > PACS");
     pacsFailResult.addError(pacsFailProblem);
 
     // Dades del test 4
@@ -99,9 +99,9 @@ void test_EchoToPACSTest::run_ShouldTestIfPACSAreAccessible_data()
     fillPacsListAndHash(&pacsListTest4, &hashTest4, AETitlesTest4, statusesTest4);
 
     DiagnosisTestResult test4Result;
-    DiagnosisTestProblem failProblem(DiagnosisTestProblem::Error, QString("Echo to PACS with AETitle '%1' failed").arg(AETitlesTest4[0]), "Check PACS configuration at Tools > Configuration > PACS");
+    DiagnosisTestProblem failProblem(DiagnosisTestProblem::Error, QString("Echo to PACS with AE Title '%1' failed").arg(AETitlesTest4[0]), "Check PACS configuration at Tools > Configuration > PACS");
     test4Result.addError(failProblem);
-    DiagnosisTestProblem failProblem2(DiagnosisTestProblem::Error, QString("Unable to connect to PACS with AETitle '%1'").arg(AETitlesTest4[2]), "Check internet connection and PACS configuration at Tools > Configuration > PACS");
+    DiagnosisTestProblem failProblem2(DiagnosisTestProblem::Error, QString("Unable to connect to PACS with AE Title '%1'").arg(AETitlesTest4[2]), "Check internet connection and PACS configuration at Tools > Configuration > PACS");
     test4Result.addError(failProblem2);
 
     /// Tests

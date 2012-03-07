@@ -41,12 +41,12 @@ DiagnosisTestResult EchoToPACSTest::run()
 
             if (status == EchoToPACS::EchoFailed)
             {
-                problem.setDescription(tr("Echo to PACS with AETitle '%1' failed").arg(pacsList.at(i).getAETitle()));
+                problem.setDescription(tr("Echo to PACS with AE Title '%1' failed").arg(pacsList.at(i).getAETitle()));
                 problem.setSolution(tr("Check PACS configuration at Tools > Configuration > PACS"));
             }
             else
             {
-                problem.setDescription(tr("Unable to connect to PACS with AETitle '%1'").arg(pacsList.at(i).getAETitle()));
+                problem.setDescription(tr("Unable to connect to PACS with AE Title '%1'").arg(pacsList.at(i).getAETitle()));
                 problem.setSolution(tr("Check internet connection and PACS configuration at Tools > Configuration > PACS"));
             }
             testResults.addError(problem);
