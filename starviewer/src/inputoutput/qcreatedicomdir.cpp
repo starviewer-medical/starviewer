@@ -468,6 +468,7 @@ Status QCreateDicomdir::startCreateDicomdir(QString dicomdirPath)
 
     state = convertToDicomdir.convert(dicomdirPath, m_currentDevice, haveToCopyFolderContentToDICOMDIR());
 
+    bool clearScreen = false;
     if (!state.good())
     {
         QApplication::restoreOverrideCursor();
@@ -478,6 +479,7 @@ Status QCreateDicomdir::startCreateDicomdir(QString dicomdirPath)
                 // Alguna de les imatges no compleix l'estandard dicom però es pot continuar endavant
                 QMessageBox::information(this, ApplicationNameString, tr("Some images are not 100 % DICOM compliant. It could be possible that some "
                                                                          "viewers have problems to visualize them."));
+                clearScreen = true;
                 break;
             case 4002:
                 QMessageBox::warning(this, ApplicationNameString, tr("%1 can't create the DICOMDIR because can't copy the content of '%2'. Be sure you have "
@@ -501,9 +503,16 @@ Status QCreateDicomdir::startCreateDicomdir(QString dicomdirPath)
                 return state;
         }
     }
+    else
+    {
+        clearScreen = true;
+    }
 
     INFO_LOG("Finalitzada la creació del DICOMDIR");
-    clearQCreateDicomdirScreen();
+    if (clearScreen)
+    {
+        clearQCreateDicomdirScreen();
+    }
 
     QApplication::restoreOverrideCursor();
 
