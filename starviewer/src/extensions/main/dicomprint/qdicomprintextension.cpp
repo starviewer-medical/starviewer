@@ -166,6 +166,8 @@ void QDicomPrintExtension::fillSelectedDicomPrinterComboBox()
 
     if (m_selectedPrinterComboBox->count() > 0)
     {
+        m_printButton->setEnabled(true);
+
         // Només ho habilitarem si la serie se suporta
         if (!m_noSupportedSeriesFrame->isVisible())
         {
@@ -181,6 +183,7 @@ void QDicomPrintExtension::fillSelectedDicomPrinterComboBox()
     }
     else
     {
+        m_printButton->setEnabled(false);
         setEnabledPrintControls(false);
         selectedDicomPrinterChanged(-1);
     }
