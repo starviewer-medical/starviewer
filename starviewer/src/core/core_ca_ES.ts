@@ -273,18 +273,18 @@
         <location filename="applicationversiontest.cpp" line="33"/>
         <source>There is a new version available</source>
         <oldsource>There is a new version available.</oldsource>
-        <translation type="unfinished">Hi ha una nova versió disponible</translation>
+        <translation>Hi ha una nova versió disponible</translation>
     </message>
     <message>
         <location filename="applicationversiontest.cpp" line="34"/>
         <source>Contact technical service to request the software update</source>
         <oldsource>Contact technical service to request the software update.</oldsource>
-        <translation type="unfinished">Poseu-vos en contacte amb el servei tècnic per solicitar l&apos;actualització</translation>
+        <translation>Poseu-vos en contacte amb el servei tècnic per fer l&apos;actualització</translation>
     </message>
     <message>
         <location filename="applicationversiontest.cpp" line="55"/>
         <source>%1 is updated to the last version</source>
-        <translation type="unfinished">%1 està actualitzat a la versió més recent</translation>
+        <translation>%1 està actualitzat a la versió més recent</translation>
     </message>
 </context>
 <context>
@@ -457,12 +457,12 @@ WW: %5 WL: %6</translation>
     <message>
         <location filename="q2dviewerconfigurationscreenbase.ui" line="28"/>
         <source>Enable slice scroll loop</source>
-        <translation type="unfinished">Habilita el desplaçament d&apos;imatges en bucle</translation>
+        <translation>Habilita el desplaçament cíclic d&apos;imatges</translation>
     </message>
     <message>
         <location filename="q2dviewerconfigurationscreenbase.ui" line="35"/>
         <source>Enable phase scroll loop</source>
-        <translation type="unfinished">Habilita el desplaçament de fases en bucle</translation>
+        <translation>Habilita el desplaçament de fases en bucle</translation>
     </message>
     <message>
         <location filename="q2dviewerconfigurationscreenbase.ui" line="61"/>

@@ -498,7 +498,7 @@ Status QCreateDicomdir::startCreateDicomdir(QString dicomdirPath)
                 break;
 
             case 3001:
-                QMessageBox::warning(this, ApplicationNameString, tr("Error copying files, be sure you have appropriate permissions on both source and "
+                QMessageBox::warning(this, ApplicationNameString, tr("Error copying files, be sure you have appropriate permissions on both cache and "
                     "destination folders to copy the files."));
                 break;
             
