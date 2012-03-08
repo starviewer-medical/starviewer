@@ -71,6 +71,9 @@ QueryScreen::QueryScreen(QWidget *parent)
     m_statsWatcher->addClicksCounter(m_advancedSearchToolButton);
     m_statsWatcher->addClicksCounter(m_clearToolButton);
     m_statsWatcher->addClicksCounter(m_createDICOMDIRToolButton);
+
+    //HACK: Per traduir el botó Yes dels QMessageBox, aquesta no és la solució bona, s'hauria d'agafar les traduccions de sistema de Qt,
+    QT_TRANSLATE_NOOP("QDialogButtonBox", "&Yes");
 }
 
 QueryScreen::~QueryScreen()

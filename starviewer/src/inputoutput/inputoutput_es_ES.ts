@@ -2,6 +2,14 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="es">
 <context>
+    <name>QDialogButtonBox</name>
+    <message>
+        <location filename="queryscreen.cpp" line="76"/>
+        <source>&amp;Yes</source>
+        <translation>&amp;Sí</translation>
+    </message>
+</context>
+<context>
     <name>QFileDialog</name>
     <message>
         <location filename="qdicomdirconfigurationscreen.cpp" line="149"/>
@@ -14,7 +22,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="634"/>
+        <location filename="qcreatedicomdir.cpp" line="649"/>
         <source>Creating DICOMDIR Image...</source>
         <translation>Creando imagen de DICOMDIR...</translation>
     </message>
@@ -971,7 +979,7 @@ Asegúrese que la IP y el AETitle de este sean correctos.</translation>
         <translation>No se puede crear el directorio. Revise sus permisos de usuario.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="606"/>
+        <location filename="qcreatedicomdir.cpp" line="621"/>
         <source>Please select a study to remove of the list.</source>
         <translation>Por favor seleccione el estudio que desea eliminar del la lista.</translation>
     </message>
@@ -1073,37 +1081,37 @@ Asegúrese que la IP y el AETitle de este sean correctos.</translation>
         <translation>Seleccione los estudios con los que quiere crear el DICOMDIR.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="479"/>
+        <location filename="qcreatedicomdir.cpp" line="480"/>
         <source>Some images are not 100 % DICOM compliant. It could be possible that some viewers have problems to visualize them.</source>
         <translation>Algunas de las imágenes no cumplen al 100% el estándar DICOM. Es posible que algunos visualizadores tengan problemas para visualizarlas.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="498"/>
+        <location filename="qcreatedicomdir.cpp" line="506"/>
         <source>Error creating DICOMDIR. Be sure you have write permissions in %1 and It is empty.</source>
         <oldsource>Error creating DICOMDIR. Be sure you have user permissions in %1 and the directory is empty.</oldsource>
         <translation>Error creando el DICOMDIR. Asegúrese que tiene permisos de escritura en %1 y que el directorio está vacío.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="672"/>
+        <location filename="qcreatedicomdir.cpp" line="687"/>
         <source>There was an error during the burning of the DICOMDIR ISO image file.
 </source>
         <translation>Se ha producido un error en la grabación en CD/DVD del DICOMDIR.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="679"/>
-        <location filename="qcreatedicomdir.cpp" line="723"/>
+        <location filename="qcreatedicomdir.cpp" line="694"/>
+        <location filename="qcreatedicomdir.cpp" line="738"/>
         <source>DICOMDIR creation failure</source>
         <translation>Error creando DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="757"/>
+        <location filename="qcreatedicomdir.cpp" line="772"/>
         <source>
 Error Number: %1</source>
         <translation>
 Código de error: %1</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="695"/>
+        <location filename="qcreatedicomdir.cpp" line="710"/>
         <source>The process [ %1 ] failed to start. Either the invoked program is missing, or you may have insufficient permissions to invoke the program.</source>
         <translation>No se ha podido iniciar el proceso [ %1 ]. Puede que el programa invocado no esté instalado o que no tenga suficientes permisos para invocar el programa.</translation>
     </message>
@@ -1187,13 +1195,13 @@ Lo estudios seleccionados exceden el espacio disponible en el dispositivo.</tran
 </translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="483"/>
+        <location filename="qcreatedicomdir.cpp" line="485"/>
         <source>%1 can&apos;t create the DICOMDIR because can&apos;t copy the content of &apos;%2&apos;. Be sure you have read permissions in the directory or uncheck copy folder content option.</source>
         <oldsource>%1 can&apos;t create the DICOMDIR because can&apos;t copy the content of &apos;%2&apos; to the DICOMDIR. Be sure you have read permissions in the directory or uncheck copy folder content option.</oldsource>
         <translation>%1 no ha podido crear el DICOMDIR porqué no se ha podido copiar el contenido del directorio &apos;%2&apos;. Asegúrese que tiene permisos de lectura sobre el directorio o desactive la opción de copiar el contenido del directorio.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="488"/>
+        <location filename="qcreatedicomdir.cpp" line="490"/>
         <source>%1 can&apos;t create the DICOMDIR because the folder to copy &apos;%2&apos; contents an item called DICOMDIR or DICOM.
 
 Remove it from the directory or uncheck copy folder content option.</source>
@@ -1205,62 +1213,67 @@ Remove it from the directory or uncheck copy folder content to DICOMDIR option.<
 Borre estos elementos del directorio o desactive la opción copiar el contenido del directorio.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="493"/>
+        <location filename="qcreatedicomdir.cpp" line="495"/>
         <source>Error anonymizing DICOMDIR, be sure you have write permissions on %1 or try to create the DICOMDIR without anonymize option.</source>
         <translation>Error al anonimizar el DICOMDIR, asegúrese de que tiene permisos de escritura en el directorio %1 o intente crear el DICOMDIR sin la opción de anonimizar.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="672"/>
+        <location filename="qcreatedicomdir.cpp" line="501"/>
+        <source>Error copying files, be sure you have appropriate permissions on both source and destination folders to copy the files.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="687"/>
         <source>DICOMDIR Burning Failure</source>
         <translation>Error al grabar DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="673"/>
-        <location filename="qcreatedicomdir.cpp" line="680"/>
-        <location filename="qcreatedicomdir.cpp" line="724"/>
+        <location filename="qcreatedicomdir.cpp" line="688"/>
+        <location filename="qcreatedicomdir.cpp" line="695"/>
+        <location filename="qcreatedicomdir.cpp" line="739"/>
         <source>Please, contact your system administrator to solve this problem.</source>
         <oldsource>There was an error during the creation of the ISO image file. </oldsource>
         <translation>Por favor, contacte con su administrador de sistemas para solventar el problema.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="679"/>
+        <location filename="qcreatedicomdir.cpp" line="694"/>
         <source>There was an error during the creation of the DICOMDIR ISO image file. </source>
         <translation>Se ha producido un error al crear la imagen ISO del DICOMDIR. </translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="700"/>
+        <location filename="qcreatedicomdir.cpp" line="715"/>
         <source>The process [ %1 ] crashed some time after starting successfully.</source>
         <translation>El proceso [ %1 ] se ha colgado después de haberse iniciado correctamente.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="708"/>
+        <location filename="qcreatedicomdir.cpp" line="723"/>
         <source>An error occurred when attempting to write to the process [ %1 ]. For example, the process may not be running, or it may have closed its input channel.</source>
         <translation>Ha habido algún error cuando se intentaba escribir al proceso [ %1 ]. Por ejemplo, puede que el proceso no se esté ejecutando o puede haberse cerrado.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="713"/>
+        <location filename="qcreatedicomdir.cpp" line="728"/>
         <source>An error occurred when attempting to read from the process [ %1 ]. For example, the process may not be running.</source>
         <translation>Ha habido algún error cuando se intentaba leer del proceso [ %1 ]. Por ejemplo, puede que el proceso no se esté ejecutando.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="723"/>
+        <location filename="qcreatedicomdir.cpp" line="738"/>
         <source>There was an error during the creation of the DICOMDIR.</source>
         <translation>Se produjo un error durante la creación del DICOMDIR.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="827"/>
+        <location filename="qcreatedicomdir.cpp" line="842"/>
         <source>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of the device is %1 MB.</source>
         <oldsource>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of the device is %1 Mb.</oldsource>
         <translation>El dispositivo seleccionado no tiene suficiente espacio para crear un DICOMDIR con todos los estudios, por favor quite algunos de los estudios. La capacidad del dispositivo es de %1 MB.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="848"/>
+        <location filename="qcreatedicomdir.cpp" line="863"/>
         <source>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of a CD is %1 MB.</source>
         <oldsource>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of a CD is %1 Mb.</oldsource>
         <translation>El dispositivo seleccionado no tiene suficiente espacio para crear un DICOMDIR con todos los estudios, por favor quite algunos de los estudios. La capacidad de un CD es de %1 MB.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="856"/>
+        <location filename="qcreatedicomdir.cpp" line="871"/>
         <source>Invalid DICOMDIR burning application configuration.
 It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</source>
         <translation>La configuración de la aplicación para grabar DICOMDIR no es correcta.
@@ -1272,7 +1285,7 @@ Especifique una configuración válida en el menú Herramientas -&gt; Configurac
         <translation>El directorio de destino no está vacío, por favor escoja un directorio vacío.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="557"/>
+        <location filename="qcreatedicomdir.cpp" line="572"/>
         <source>Choose an empty directory...</source>
         <translation>Escoja un directorio vacío...</translation>
     </message>
@@ -2979,12 +2992,12 @@ Si el problema persiste contacte con un administrador.</translation>
 <context>
     <name>udg::QueryScreen</name>
     <message>
-        <location filename="queryscreen.cpp" line="192"/>
+        <location filename="queryscreen.cpp" line="195"/>
         <source>Port %1 for incoming connections from PACS is already in use by another application.</source>
         <translation>El puerto %1 para las conexiones entrantes del PACS está siendo utilizado por otra aplicación.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="193"/>
+        <location filename="queryscreen.cpp" line="196"/>
         <source>
 
 %1 couldn&apos;t retrieve studies from PACS if the port is in use, please close the application that is using port %2 or change Starviewer port for incoming connections from PACS in the configuration screen.</source>
@@ -2993,7 +3006,7 @@ Si el problema persiste contacte con un administrador.</translation>
 %1 no puede descargar estudios del PACS si el puerto está en uso, por favor cierre la aplicación que está usando el puerto %2 o cambie el puerto para conexiones entrantes del PACS des de la pantalla de configuración.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="507"/>
+        <location filename="queryscreen.cpp" line="510"/>
         <source>Cancelling PACS operations...</source>
         <oldsource>Cancelling PACS operations</oldsource>
         <translation>Cancelando las operaciones con el PACS...</translation>
@@ -3065,23 +3078,23 @@ Si el problema persiste contacte con un administrador.</translation>
 <context>
     <name>udg::RISRequestManager</name>
     <message>
-        <location filename="risrequestmanager.cpp" line="111"/>
+        <location filename="risrequestmanager.cpp" line="113"/>
         <source>Can&apos;t be retrieved the requested studies by RIS, because there are not configured default PACS to query.</source>
         <oldsource>Can&apos;t be retrieved the requested studies by A RIS request has been received, because there are not configured default PACS to query.</oldsource>
         <translation>No se pueden descargar los estudios solicitados del RIS porque no hay PACS configurados para buscar por defecto.</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="112"/>
+        <location filename="risrequestmanager.cpp" line="114"/>
         <source>Please, check your PACS settings.</source>
         <translation>Por favor, compruebe la configuración de PACS.</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="205"/>
+        <location filename="risrequestmanager.cpp" line="207"/>
         <source>%2 can&apos;t execute the RIS request, because hasn&apos;t found the Study with accession number %1 in the default PACS.</source>
         <translation>%2 no puede ejecutar la petición del RIS, porque no se ha encontrado ningún estudio con el accession number %1 en los PACS seleccionados por defecto.</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="222"/>
+        <location filename="risrequestmanager.cpp" line="224"/>
         <source>Processing the RIS request, can&apos;t query PACS %1 from %2.
 Be sure that the IP and AE Title of It are correct.</source>
         <oldsource>Processing the RIS request, can&apos;t query PACS %1 from %2.
@@ -3090,32 +3103,32 @@ Be sure that the IP and AETitle of It are correct.</oldsource>
 Asegúrese que la IP y el AETitle de este sean correctos.</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="417"/>
+        <location filename="risrequestmanager.cpp" line="411"/>
         <source>Some studies requested from RIS of patient %1 exists in local database. Do you want to retrieve again?</source>
         <translation>Algunos de los estudios solicitados des del RIS del paciente %1 ya estan descargados en local. Quiere volverlos a descargar?</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="420"/>
+        <location filename="risrequestmanager.cpp" line="414"/>
         <source>Yes</source>
         <translation>Si</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="421"/>
+        <location filename="risrequestmanager.cpp" line="415"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="439"/>
+        <location filename="risrequestmanager.cpp" line="433"/>
         <source>Can&apos;t listen RIS requests on port %1, the port is in use by another application.</source>
         <translation>No se pueden escuchar las peticiones del RIS por el puerto %1, este puerto está siendo utilizado por otra aplicación.</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="442"/>
+        <location filename="risrequestmanager.cpp" line="436"/>
         <source>Can&apos;t listen RIS requests on port %1, an unknown network error has produced.</source>
         <translation>No se pueden escuchar peticiones del RIS por el puerto %1, se ha producido un error de red desconocido.</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="443"/>
+        <location filename="risrequestmanager.cpp" line="437"/>
         <source>
 If the problem persists contact with an administrator.</source>
         <oldsource>
