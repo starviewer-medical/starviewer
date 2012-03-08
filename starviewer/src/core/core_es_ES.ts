@@ -273,18 +273,18 @@
         <location filename="applicationversiontest.cpp" line="33"/>
         <source>There is a new version available</source>
         <oldsource>There is a new version available.</oldsource>
-        <translation type="unfinished">Hay una nueva versión disponible</translation>
+        <translation>Hay una nueva versión disponible</translation>
     </message>
     <message>
         <location filename="applicationversiontest.cpp" line="34"/>
         <source>Contact technical service to request the software update</source>
         <oldsource>Contact technical service to request the software update.</oldsource>
-        <translation type="unfinished">Póngase en contacto con el servicio técnico para solicitar la actualización</translation>
+        <translation>Póngase en contacto con el servicio técnico para solicitar la actualización</translation>
     </message>
     <message>
         <location filename="applicationversiontest.cpp" line="55"/>
         <source>%1 is updated to the last version</source>
-        <translation type="unfinished">%1 está actualizado a la versión más reciente</translation>
+        <translation>%1 está actualizado a la versión más reciente</translation>
     </message>
 </context>
 <context>

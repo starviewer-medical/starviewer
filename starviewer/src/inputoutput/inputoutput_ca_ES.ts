@@ -1206,8 +1206,9 @@ Esborreu aquests elements del directori o desmarqueu l&apos;opció de copiar el 
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="501"/>
-        <source>Error copying files, be sure you have appropriate permissions on both source and destination folders to copy the files.</source>
-        <translation type="unfinished"></translation>
+        <source>Error copying files, be sure you have appropriate permissions on both cache and destination folders to copy the files.</source>
+        <oldsource>Error copying files, be sure you have appropriate permissions on both source and destination folders to copy the files.</oldsource>
+        <translation>Error copiant els fitxers, assegureu-vos que tingueu els permisos necessaris en el directori de la caché i en el de destí.</translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="687"/>
@@ -2614,7 +2615,7 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
     <message>
         <location filename="qpopuprisrequestsscreen.cpp" line="152"/>
         <source>Retrieving study %1 of %2.</source>
-        <translation type="unfinished">S&apos;està descarregant l&apos;estudi %1 de %2.</translation>
+        <translation>S&apos;està descarregant l&apos;estudi %1 de %2.</translation>
     </message>
     <message>
         <location filename="qpopuprisrequestsscreen.cpp" line="168"/>
@@ -2914,7 +2915,7 @@ Asseguris que el seu ordinador està connectat a la xarxa i que els paràmetres 
         <location filename="querypacsjob.cpp" line="104"/>
         <source>%1 can&apos;t connect to PACS %2 trying to query %3.
 </source>
-        <translation>No s&apos;ha pogut connectar amb el PACS %2 intentant consultar %3.
+        <translation>%1 no ha pogut connectar amb el PACS %2 intentant consultar %3.
 </translation>
     </message>
     <message>
@@ -3346,7 +3347,7 @@ Si el problema persisteix contacteu amb un administrador.</translation>
         <location filename="senddicomfilestopacsjob.cpp" line="90"/>
         <source>%1 can&apos;t send DICOM images from study %2 of patient %3 because can&apos;t connect to PACS %4.
 </source>
-        <translation>No s&apos;han pogut enviar les imatges de l&apos;estudi %2 del pacient %3 perquè no s&apos;ha pogut connectar amb el PACS %4.</translation>
+        <translation>%1 no ha pogut enviar les imatges de l&apos;estudi %2 del pacient %3 perquè no s&apos;ha pogut connectar amb el PACS %4.</translation>
     </message>
     <message>
         <location filename="senddicomfilestopacsjob.cpp" line="97"/>

@@ -1201,7 +1201,8 @@ Remove it from the directory or uncheck copy folder content to DICOMDIR option.<
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="501"/>
-        <source>Error copying files, be sure you have appropriate permissions on both source and destination folders to copy the files.</source>
+        <source>Error copying files, be sure you have appropriate permissions on both cache and destination folders to copy the files.</source>
+        <oldsource>Error copying files, be sure you have appropriate permissions on both source and destination folders to copy the files.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
