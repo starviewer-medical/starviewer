@@ -326,6 +326,7 @@ Study* RetrieveDICOMFilesFromPACSJob::copyBasicStudyInformation(Study *studyToCo
     copiedStudy->setID(studyToCopy->getID());
     copiedStudy->setDateTime(studyToCopy->getDateAsString(), studyToCopy->getTimeAsString());
     copiedStudy->setDescription(studyToCopy->getDescription());
+    copiedStudy->setAccessionNumber(studyToCopy->getAccessionNumber());
 
     foreach(QString modality, studyToCopy->getModalities())
     {
