@@ -82,6 +82,8 @@ void RISRequestManager::processRISRequest(DicomMask dicomMaskRISRequest)
     // Per anar atenent les descàrregues a mesura que ens arriben encuem les peticions, només fem una cerca al PACS a la vegada, una
     // vegada hem trobat l'estudi en algun PACS, es posa a descarregar i s'aten una altra petició
     m_queueRISRequests.enqueue(dicomMaskRISRequest);
+    m_accessionNumberOfLastRequest = dicomMaskRISRequest.getAccessionNumber();
+    m_signalViewStudyEmittedForLastRISRequest = false;
 
     // Si tenim més d'un element ja hi ha un altre consulta d'un RIS Executant-se per tant no fem res
     if (m_queueRISRequests.count() == 1)
@@ -277,21 +279,6 @@ void RISRequestManager::retrieveFoundStudiesInQueue()
 
 void RISRequestManager::retrieveStudyFoundInQueryPACS(Study *study)
 {
-    if (Settings().getValue(InputOutputSettings::RISRequestViewOnceRetrieved).toBool())
-    {
-        // TODO: Això és una mica lleig haver de controlar des d'aquí que fe amb l'estudi una vegada descarregat, no es podria posar com a
-        // propietat al Job, i centralitzar-ho a un responsable que fos l'encarregat de fer l'acció pertinent
-        if (m_numberOfStudiesAddedToRetrieveForCurrentRisRequest == 0)
-        {
-            // El primer estudi que descarreguem trobat d'una petició del RIS fem un retrieve&view, pels altres serà un retrieve&Load
-            m_studiesToViewWhenRetrieveFinishedByInstanceUID.append(study->getInstanceUID());
-        }
-        else
-        {
-            m_studiesToLoadWhenRetrieveFinishedByInstanceUID.append(study->getInstanceUID());
-        }
-    }
-
     switch (getDICOMSouceFromRetrieveStudy(study))
     {
         case PACS:
@@ -326,7 +313,7 @@ void RISRequestManager::retrieveStudyFromDatabase(Study *study)
     m_qpopUpRISRequestsScreen->addStudyRetrievedFromDatabaseByAccessionNumber(study);
 
     //Ara mateix no cal descarregar un estudi de la base de dades si ja li tenim, per això invoquem directament el mètode doActionsAfterRetrieve
-    doActionsAfterRetrieve(study->getInstanceUID());
+    doActionsAfterRetrieve(study);
 }
 
 void RISRequestManager::retrieveDICOMFilesFromPACSJobCancelled(PACSJob *pacsJob)
@@ -369,22 +356,29 @@ void RISRequestManager::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacsJob)
         }
     }
 
-    doActionsAfterRetrieve(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getInstanceUID());
+    doActionsAfterRetrieve(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles());
 
     // Com que l'objecte és un punter altres classes poden haver capturat el Signal per això li fem un deleteLater() en comptes d'un delete, per evitar
     // que quan responguin al signal es trobin que l'objecte ja no existeix. L'objecte serà destruït per Qt quan es retorni el eventLoop
     retrieveDICOMFilesFromPACSJob->deleteLater();
 }
 
-void RISRequestManager::doActionsAfterRetrieve(QString studyInstanceUID)
+void RISRequestManager::doActionsAfterRetrieve(Study *study)
 {
-    if (m_studiesToViewWhenRetrieveFinishedByInstanceUID.removeOne(studyInstanceUID))
+    //Les descarregues d'altres peticions que no siguin l'actual les ignorem. (Per exemple cas en que el metge primer demana descarregar uns estudis i llavors se n'adona
+    //que no era aquells que volia, doncs els estudis descarregats de la primera petició s'ignoraran i no se'n farà res)
+    if (Settings().getValue(InputOutputSettings::RISRequestViewOnceRetrieved).toBool() && study->getAccessionNumber() == m_accessionNumberOfLastRequest)
     {
-        emit viewStudyRetrievedFromRISRequest(studyInstanceUID);
-    }
-    else if (m_studiesToLoadWhenRetrieveFinishedByInstanceUID.removeOne(studyInstanceUID))
-    {
-        emit loadStudyRetrievedFromRISRequest(studyInstanceUID);
+        if (!m_signalViewStudyEmittedForLastRISRequest)
+        {
+            m_signalViewStudyEmittedForLastRISRequest = true;
+            emit viewStudyRetrievedFromRISRequest(study->getInstanceUID());
+        }
+        else
+        {
+            //Si ja s'ha emés un view per veure un estudi d'aquesta petició, pels altres de la petició emetrem un load
+            emit loadStudyRetrievedFromRISRequest(study->getInstanceUID());
+        }
     }
 }
 

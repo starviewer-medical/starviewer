@@ -108,7 +108,7 @@ private:
     void retrieveStudyFromDatabase(Study *study);
 
     /// Una vegada s'ha descarregat fa les accions pertinents amb aquell estudi. Emet signal per visualitzar/load o no fa res
-    void doActionsAfterRetrieve(QString studyInstanceUID);
+    void doActionsAfterRetrieve(Study *study);
 
     /// Indica de quina font hem d'obtenir l'estudi.
     /// Comprova si l'estudi existeix a la base de dades, si existeix es pregunta a l'usuari si s'ha de tornar a descarregar-lo del PACS, i es guarda la resposta
@@ -141,9 +141,6 @@ private:
     /// Pot ser que diversos PACS continguin el mateix estudi amb un mateix accession number, per evitar descarregar-lo més d'una vegada ens guardem en una
     /// llista quins són els estudis descarregats per una mateixa petició.
     QStringList m_studiesInstancesUIDRequestedToRetrieve;
-    // Llista de PACSJob pels quals una vegada l'estudi estigui descarregat s'ha de fer un view/load
-    QList<QString> m_studiesToViewWhenRetrieveFinishedByInstanceUID;
-    QList<QString> m_studiesToLoadWhenRetrieveFinishedByInstanceUID;
 
     /// Hash que ens guarda tots els QueryPACSJob pendent d'executar o que s'estan executant llançats des d'aquesta classe
     QHash<int, QueryPacsJob*> m_queryPACSJobPendingExecuteOrExecuting;
@@ -163,6 +160,11 @@ private:
 
     QQueue<Study*> m_studiesToRetrieveQueue;
 
+    ///Guarda l'accessionnumber de la última petició del RIS
+    QString m_accessionNumberOfLastRequest;
+
+    /// Indica si per l'útlima petició del RIS s'ha emés signal per visualitzar un estudi
+    bool m_signalViewStudyEmittedForLastRISRequest;
 };
 
 };  // end namespace udg
