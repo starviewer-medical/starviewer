@@ -26,6 +26,8 @@ QPopUpRISRequestsScreen::QPopUpRISRequestsScreen(QWidget *parent)
     setupUi(this);
     this->setWindowFlags(Qt::SubWindow | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
 
+    m_operationDescription->setText(tr("%1 will proceed to retrieve it.").arg(ApplicationNameString));
+    
     m_qTimerToHidePopUp = new QTimer();
     m_qTimerToHidePopUp->setSingleShot(true);
     m_qTimerToMovePopUpToBottomRight = new QTimer();
