@@ -498,7 +498,7 @@ Status QCreateDicomdir::startCreateDicomdir(QString dicomdirPath)
                 break;
 
             case 3001:
-                QMessageBox::warning(this, ApplicationNameString, tr("Error copying files, be sure you have appropriate permissions on both cache and "
+                QMessageBox::warning(this, ApplicationNameString, tr("Error copying files, be sure you have appropriate permissions on both source and "
                     "destination folders to copy the files."));
                 break;
             
@@ -508,8 +508,8 @@ Status QCreateDicomdir::startCreateDicomdir(QString dicomdirPath)
                 break;
             
             default:
-                QMessageBox::critical(this, ApplicationNameString, tr("Error creating DICOMDIR. Be sure you have write permissions in %1 and It is empty.")
-                                                                 .arg(m_lineEditDicomdirPath->text()));
+                QMessageBox::critical(this, ApplicationNameString, tr("Error creating DICOMDIR. Be sure you have appropriate permissions on both source and "
+                    "destination folders and %1 folder is empty.").arg(m_lineEditDicomdirPath->text()));
                 ERROR_LOG(QString("Error (%1) al crear el DICOMDIR: %2").arg(state.code()).arg(state.text()));
                 DEBUG_LOG(QString("Error (%1) al crear el DICOMDIR: %2").arg(state.code()).arg(state.text()));
                 return state;

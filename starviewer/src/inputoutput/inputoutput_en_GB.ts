@@ -22,7 +22,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="649"/>
+        <location filename="qcreatedicomdir.cpp" line="655"/>
         <source>Creating DICOMDIR Image...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -229,8 +229,8 @@ You don&apos;t have write permissions on cache image directory. You couldn&apos;
     </message>
     <message>
         <location filename="databaseinstallation.cpp" line="440"/>
-        <source>Current database is of newer version. To execute %1 retrieved studies will be deleted and database will be reinstalled. Do you want to continue?</source>
-        <oldsource>Current database is of %1 newer version. To continue executing %1 is necessary to delete retrieved studies and reinstall database. Do you want to continue?</oldsource>
+        <source>Current database is of newer version. In order to run %1, local studies must be deleted and database will be reinstalled. Do you want to continue?</source>
+        <oldsource>Current database is of newer version. To execute %1 retrieved studies will be deleted and database will be reinstalled. Do you want to continue?</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -693,24 +693,24 @@ You don&apos;t have write permissions on cache image directory. You couldn&apos;
     </message>
     <message>
         <location filename="qconfigurationscreen.cpp" line="279"/>
-        <source>PACS &quot;%1&quot; doesn&apos;t respond.
-Be sure that the IP and AE Title of It are correct.</source>
+        <source>PACS &quot;%1&quot; did not respond.
+Be sure its IP and AE Title are correct.</source>
         <oldsource>PACS &quot;%1&quot; doesn&apos;t respond.
-Be sure that the IP and AETitle of It are correct.</oldsource>
+Be sure its IP and AE Title are correct.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qconfigurationscreen.cpp" line="276"/>
-        <source>PACS &quot;%1&quot; doesn&apos;t respond correctly.
-Be sure that the IP and AE Title of It are correct.</source>
+        <source>PACS &quot;%1&quot; did not respond correctly.
+Be sure its IP and AE Title are correct.</source>
         <oldsource>PACS &quot;%1&quot; doesn&apos;t respond correctly.
-Be sure that the IP and AETitle of It are correct.</oldsource>
+Be sure its IP and AE Title are correct.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qconfigurationscreen.cpp" line="283"/>
-        <source>PACS &quot;%1&quot; doesn&apos;t respond as expected, and unknown error has produced.</source>
-        <oldsource>PACS &quot;%1&quot; doesn&apos;t respond as expected, and unknow error has produced.</oldsource>
+        <source>PACS &quot;%1&quot; did not respond as expected, and unknown error has occurred.</source>
+        <oldsource>PACS &quot;%1&quot; doesn&apos;t respond as expected, and unknown error has produced.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -973,7 +973,7 @@ Be sure that the IP and AETitle of It are correct.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="621"/>
+        <location filename="qcreatedicomdir.cpp" line="627"/>
         <source>Please select a study to remove of the list.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1079,30 +1079,30 @@ Be sure that the IP and AETitle of It are correct.</oldsource>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="506"/>
-        <source>Error creating DICOMDIR. Be sure you have write permissions in %1 and It is empty.</source>
-        <oldsource>Error creating DICOMDIR. Be sure you have user permissions in %1 and the directory is empty.</oldsource>
+        <source>Error creating DICOMDIR file, be sure you have read and write permissions on destination folder.</source>
+        <oldsource>Error creating DICOMDIR. Be sure you have write permissions in %1 and It is empty.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="687"/>
+        <location filename="qcreatedicomdir.cpp" line="693"/>
         <source>There was an error during the burning of the DICOMDIR ISO image file.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="694"/>
-        <location filename="qcreatedicomdir.cpp" line="738"/>
+        <location filename="qcreatedicomdir.cpp" line="700"/>
+        <location filename="qcreatedicomdir.cpp" line="744"/>
         <source>DICOMDIR creation failure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="772"/>
+        <location filename="qcreatedicomdir.cpp" line="778"/>
         <source>
 Error Number: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="710"/>
+        <location filename="qcreatedicomdir.cpp" line="716"/>
         <source>The process [ %1 ] failed to start. Either the invoked program is missing, or you may have insufficient permissions to invoke the program.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1201,62 +1201,68 @@ Remove it from the directory or uncheck copy folder content to DICOMDIR option.<
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="501"/>
-        <source>Error copying files, be sure you have appropriate permissions on both cache and destination folders to copy the files.</source>
-        <oldsource>Error copying files, be sure you have appropriate permissions on both source and destination folders to copy the files.</oldsource>
+        <source>Error copying files, be sure you have appropriate permissions on both source and destination folders to copy the files.</source>
+        <oldsource>Error copying files, be sure you have appropriate permissions on both cache and destination folders to copy the files.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="687"/>
+        <location filename="qcreatedicomdir.cpp" line="511"/>
+        <source>Error creating DICOMDIR. Be sure you have appropriate permissions on both source and destination folders and %1 folder is empty.</source>
+        <oldsource>Error creating DICOMDIR. Be sure you have write permissions in %1 and it is empty.</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="693"/>
         <source>DICOMDIR Burning Failure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="688"/>
-        <location filename="qcreatedicomdir.cpp" line="695"/>
-        <location filename="qcreatedicomdir.cpp" line="739"/>
+        <location filename="qcreatedicomdir.cpp" line="694"/>
+        <location filename="qcreatedicomdir.cpp" line="701"/>
+        <location filename="qcreatedicomdir.cpp" line="745"/>
         <source>Please, contact your system administrator to solve this problem.</source>
         <oldsource>There was an error during the creation of the ISO image file. </oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="694"/>
+        <location filename="qcreatedicomdir.cpp" line="700"/>
         <source>There was an error during the creation of the DICOMDIR ISO image file. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="715"/>
+        <location filename="qcreatedicomdir.cpp" line="721"/>
         <source>The process [ %1 ] crashed some time after starting successfully.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="723"/>
+        <location filename="qcreatedicomdir.cpp" line="729"/>
         <source>An error occurred when attempting to write to the process [ %1 ]. For example, the process may not be running, or it may have closed its input channel.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="728"/>
+        <location filename="qcreatedicomdir.cpp" line="734"/>
         <source>An error occurred when attempting to read from the process [ %1 ]. For example, the process may not be running.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="738"/>
+        <location filename="qcreatedicomdir.cpp" line="744"/>
         <source>There was an error during the creation of the DICOMDIR.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="842"/>
+        <location filename="qcreatedicomdir.cpp" line="848"/>
         <source>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of the device is %1 MB.</source>
         <oldsource>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of the device is %1 Mb.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="863"/>
+        <location filename="qcreatedicomdir.cpp" line="869"/>
         <source>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of a CD is %1 MB.</source>
         <oldsource>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of a CD is %1 Mb.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="871"/>
+        <location filename="qcreatedicomdir.cpp" line="877"/>
         <source>Invalid DICOMDIR burning application configuration.
 It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</source>
         <translation type="unfinished"></translation>
@@ -1267,7 +1273,7 @@ It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="572"/>
+        <location filename="qcreatedicomdir.cpp" line="578"/>
         <source>Choose an empty directory...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2563,45 +2569,45 @@ Close all %1 windows and try again.</source>
 <context>
     <name>udg::QPopUpRISRequestsScreen</name>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="62"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="29"/>
+        <source>%1 will proceed to retrieve it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qpopuprisrequestsscreen.cpp" line="64"/>
         <source>%1 has received a request from RIS to retrieve studies.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="63"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="65"/>
         <source>Querying PACS...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="152"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="154"/>
         <source>Retrieving study %1 of %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="168"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="170"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="181"/>
         <source>No studies found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="179"/>
-        <source>No studies has been found.</source>
-        <oldsource>No studies has been retrieved.</oldsource>
+        <location filename="qpopuprisrequestsscreen.cpp" line="185"/>
+        <source>%1 study found.</source>
+        <oldsource>%1 study has been found.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="183"/>
-        <source>%1 study has been found.</source>
-        <oldsource>%1 study has been retrieved.</oldsource>
+        <location filename="qpopuprisrequestsscreen.cpp" line="189"/>
+        <source>%1 studies found.</source>
+        <oldsource>%1 studies have been found.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="187"/>
-        <source>%1 studies have been found.</source>
-        <oldsource>%1 studies have been retrieved.</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="193"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="195"/>
         <source>%1 has received a request from RIS to retrieve studies of patient %2.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2862,7 +2868,9 @@ Close all %1 windows and try again.</source>
     <message>
         <location filename="querypacsjob.cpp" line="105"/>
         <source>
-Be sure that your computer is connected on network and the PACS parameters are correct.</source>
+Be sure your computer is connected to the network and the PACS configuration is correct. </source>
+        <oldsource>
+Be sure your computer is connected to the network and the PACS configuration is correct.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2872,8 +2880,10 @@ Be sure that your computer is connected on network and the PACS parameters are c
     </message>
     <message>
         <location filename="querypacsjob.cpp" line="104"/>
-        <source>%1 can&apos;t connect to PACS %2 trying to query %3.
+        <source>Query failed: Unable to connect to PACS %1.
 </source>
+        <oldsource>Query failed: Unable to connect to PACS %2.
+</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2952,7 +2962,10 @@ If the problem persists contact with an administrator.</source>
         <location filename="queryscreen.cpp" line="196"/>
         <source>
 
-%1 couldn&apos;t retrieve studies from PACS if the port is in use, please close the application that is using port %2 or change Starviewer port for incoming connections from PACS in the configuration screen.</source>
+%1 couldn&apos;t retrieve studies from PACS if the port is in use, please close the application that is using port %2 or change %1 port for incoming connections from PACS in the configuration screen.</source>
+        <oldsource>
+
+%1 couldn&apos;t retrieve studies from PACS if the port is in use, please close the application that is using port %2 or change Starviewer port for incoming connections from PACS in the configuration screen.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3040,7 +3053,8 @@ If the problem persists contact with an administrator.</source>
     </message>
     <message>
         <location filename="risrequestmanager.cpp" line="207"/>
-        <source>%2 can&apos;t execute the RIS request, because hasn&apos;t found the Study with accession number %1 in the default PACS.</source>
+        <source>%2 can&apos;t execute the RIS request. The study with accession number %1 was not found in the default PACS.</source>
+        <oldsource>%2 can&apos;t execute the RIS request, because hasn&apos;t found the Study with accession number %1 in the default PACS.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>

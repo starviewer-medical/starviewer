@@ -204,7 +204,7 @@ void RISRequestManager::queryRequestRISFinished()
     {
         INFO_LOG("No s'ha trobat cap estudi sol·licitat pel RIS amb l'accession number " + dicomMaskRISRequest.getAccessionNumber());
         // Si no hem trobat cap estudi que coincideix llancem MessageBox
-        QString message = tr("%2 can't execute the RIS request, because hasn't found the Study with accession number %1 in the default PACS.")
+        QString message = tr("%2 can't execute the RIS request. The study with accession number %1 was not found in the default PACS.")
                         .arg(dicomMaskRISRequest.getAccessionNumber(), ApplicationNameString);
 
         m_qpopUpRISRequestsScreen->showNotStudiesFoundMessage();
