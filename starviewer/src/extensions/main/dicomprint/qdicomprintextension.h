@@ -110,7 +110,11 @@ private:
     /// Comprova si se suporta el format de la sèrie i actualitza la interfície segons convingui.
     void updateVolumeSupport();
 
+    /// Activa/desactiva els controls de configuració d'impressió i el botó d'impressió
     void setEnabledPrintControls(bool enabled);
+
+    ///Activa/desactiva els controls per afegir imatges a imprimir
+    void setEnabledAddImagesToPrintControls(bool enabled);
 
     /// Ens afegeix anotacions a la pàgina a imprimir amb informació de l'estudi, com nom de pacient,
     /// Data i hora estudi, Institució, ID Estudi i descripció,...
