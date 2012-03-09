@@ -77,42 +77,43 @@
     <message>
         <location filename="portinuse.cpp" line="13"/>
         <source>No port checked yet</source>
-        <translation type="unfinished">No se ha comprobado ningún puerto</translation>
+        <translation>No se ha comprobado ningún puerto</translation>
     </message>
 </context>
 <context>
     <name>udg::CacheTest</name>
     <message>
         <location filename="cachetest.cpp" line="34"/>
-        <source>The free space on the local database location is below the minimum required</source>
-        <translation type="unfinished">El espacio necesario para la base de datos local és inferior al mínimo requerido</translation>
+        <source>The free space on the local database location is below %1GB minimum requireds</source>
+        <oldsource>The free space on the local database location is below %1GB minimum required</oldsource>
+        <translation>El espacio necesario para la base de datos local es inferior a %1GB, el mínimo requerido</translation>
     </message>
     <message>
         <location filename="cachetest.cpp" line="35"/>
         <source>Make some space on disk or change the local database to other location</source>
         <oldsource>The free space on the cache directory is below the minimum required</oldsource>
-        <translation type="unfinished">Haga espacio en el disco o cambie la base de datos local de ubicación</translation>
+        <translation>Haga espacio en el disco o cambie la base de datos local de ubicación</translation>
     </message>
     <message>
         <location filename="cachetest.cpp" line="45"/>
         <source>Fix the permissions of the directory or change the local database to other location</source>
-        <translation type="unfinished">Arregle los permisos del directorio o cambie la base de datos de ubicación</translation>
+        <translation>Arregle los permisos del directorio o cambie la base de datos de ubicación</translation>
     </message>
     <message>
         <location filename="cachetest.cpp" line="55"/>
         <source>The local database is not on the default path</source>
-        <translation type="unfinished">La base de datos local no está en la ubicación por defecto</translation>
+        <translation>La base de datos local no está en la ubicación por defecto</translation>
     </message>
     <message>
         <location filename="cachetest.cpp" line="65"/>
         <source>%1 local database is correctly configured</source>
-        <translation type="unfinished">La base de datos de %1 está configurada correctamente</translation>
+        <translation>La base de datos de %1 está configurada correctamente</translation>
     </message>
     <message>
         <location filename="cachetest.cpp" line="44"/>
         <source>Invalid permissions on the local database directory</source>
         <oldsource>Change the cache path or the permissions of the directory</oldsource>
-        <translation type="unfinished">Los permisos del directorio donde está la base de datos local son incorrectos</translation>
+        <translation>Los permisos del directorio donde está la base de datos local son incorrectos</translation>
     </message>
 </context>
 <context>
@@ -130,29 +131,29 @@
         <location filename="dicomdirburningapplicationtest.cpp" line="32"/>
         <source>DICOMDIR burning application is not installed on the given location</source>
         <oldsource>DICOMDIR burning application is not installed on the given location.</oldsource>
-        <translation type="unfinished">La aplicación para grabar DICOMDIR no está instalada en la ubicación especificada</translation>
+        <translation>La aplicación para grabar DICOMDIR no está instalada en la ubicación indicada</translation>
     </message>
     <message>
         <location filename="dicomdirburningapplicationtest.cpp" line="33"/>
         <source>Provide the correct location on Tools &gt; Configuration &gt; DICOMDIR</source>
         <oldsource>Provide the correct location on Tools &gt; Configuration &gt; DICOMDIR.</oldsource>
-        <translation type="unfinished">Indique la ubicación en Herramientas &gt; Configuración &gt; DICOMDIR</translation>
+        <translation>Indique la ubicación en Herramientas &gt; Configuración &gt; DICOMDIR</translation>
     </message>
     <message>
         <location filename="dicomdirburningapplicationtest.cpp" line="41"/>
         <source>There is no DICOMDIR burning application configured</source>
         <oldsource>There is no DICOMDIR burning application configured.</oldsource>
-        <translation type="unfinished">No se ha configurado ninguna aplicación para grabar DICOMDIR</translation>
+        <translation>No se ha configurado ninguna aplicación para grabar DICOMDIR</translation>
     </message>
     <message>
         <location filename="dicomdirburningapplicationtest.cpp" line="42"/>
         <source>Install a DICOMDIR burning application and configure %1 to use it on Tools &gt; Configuration &gt; DICOMDIR</source>
-        <translation type="unfinished">Instale una aplicació para grabar DICOMDIR y configure %1 para que la pueda utilizar en Herramientas &gt; Configuración &gt; DICOMDIR</translation>
+        <translation>Instale una aplicación para grabar DICOMDIR y configure %1 para que la pueda utilizar en Herramientas &gt; Configuración &gt; DICOMDIR</translation>
     </message>
     <message>
         <location filename="dicomdirburningapplicationtest.cpp" line="51"/>
         <source>The application to burn DICOMDIRs to CD/DVD is correctly configured</source>
-        <translation type="unfinished">La aplicación para grabar DICOMDIR está configurada correctamente</translation>
+        <translation>La aplicación para grabar DICOMDIR está configurada correctamente</translation>
     </message>
 </context>
 <context>
@@ -242,39 +243,39 @@ No tiene permisos de escritura en el directorio de la caché de imágenes. No po
     <message>
         <location filename="echotopacstest.cpp" line="28"/>
         <source>There are no PACS defined</source>
-        <translation type="unfinished">No se ha definido ningún PACS</translation>
+        <translation>No hay PACS configurados</translation>
     </message>
     <message>
         <location filename="echotopacstest.cpp" line="29"/>
         <source>New PACS can be defined at Tools &gt; Configuration &gt; PACS</source>
-        <translation type="unfinished">Define un PACS a Herramientas &gt; Configuración &gt; PACS</translation>
+        <translation>Configure un PACS a Herramientas &gt; Configuración &gt; PACS</translation>
     </message>
     <message>
         <location filename="echotopacstest.cpp" line="44"/>
         <source>Echo to PACS with AE Title &apos;%1&apos; failed</source>
         <oldsource>Echo to PACS with AETitle &apos;%1&apos; failed</oldsource>
-        <translation type="unfinished">La comunicación con el PACS con AE Title &apos;%1&apos; ha fallado</translation>
+        <translation>La comunicación con el PACS con AE Title &apos;%1&apos; ha fallado</translation>
     </message>
     <message>
         <location filename="echotopacstest.cpp" line="45"/>
         <source>Check PACS configuration at Tools &gt; Configuration &gt; PACS</source>
-        <translation type="unfinished">Compruebe la configuración del PACS en Herramientas &gt; Configuración &gt; PACS</translation>
+        <translation>Compruebe la configuración del PACS en Herramientas &gt; Configuración &gt; PACS</translation>
     </message>
     <message>
         <location filename="echotopacstest.cpp" line="49"/>
         <source>Unable to connect to PACS with AE Title &apos;%1&apos;</source>
         <oldsource>Unable to connect to PACS with AETitle &apos;%1&apos;</oldsource>
-        <translation type="unfinished">No se ha podido conectar con el PACS con AE Title &apos;%1&apos;</translation>
+        <translation>No se ha podido conectar con el PACS con AE Title &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="echotopacstest.cpp" line="50"/>
         <source>Check internet connection and PACS configuration at Tools &gt; Configuration &gt; PACS</source>
-        <translation type="unfinished">Compruebe la conexión a internet y la configuración del PACS en Herramientas &gt; Configuración &gt; PACS</translation>
+        <translation>Compruebe la conexión a internet y la configuración del PACS en Herramientas &gt; Configuración &gt; PACS</translation>
     </message>
     <message>
         <location filename="echotopacstest.cpp" line="61"/>
         <source>All PACS are correctly configured</source>
-        <translation type="unfinished">Los PACS están configurados correctamente</translation>
+        <translation>Los PACS están configurados correctamente</translation>
     </message>
 </context>
 <context>
@@ -282,7 +283,7 @@ No tiene permisos de escritura en el directorio de la caché de imágenes. No po
     <message>
         <location filename="incomingdicomconnectionsportinusetest.cpp" line="18"/>
         <source>Incoming DICOM connections port is available</source>
-        <translation type="unfinished">El port para conexiones DICOM de entrada está disponible</translation>
+        <translation>El puerto para conexiones DICOM de entrada está disponible</translation>
     </message>
 </context>
 <context>
@@ -290,29 +291,29 @@ No tiene permisos de escritura en el directorio de la caché de imágenes. No po
     <message>
         <location filename="portinusetest.cpp" line="29"/>
         <source>Port %1 is already in use by other application</source>
-        <translation type="unfinished">El puerto %1 está siendo utilizado por otra aplicación</translation>
+        <translation>El puerto %1 está siendo utilizado por otra aplicación</translation>
     </message>
     <message>
         <location filename="portinusetest.cpp" line="30"/>
         <source>Try another port or shutdown the application using this port</source>
         <oldsource>Try another port or shutdown the application using this port.</oldsource>
-        <translation type="unfinished">Pruebe otro puerto o cierre la aplicación que está utilitzando el puerto</translation>
+        <translation>Pruebe otro puerto o cierre la aplicación que está utilitzando el puerto</translation>
     </message>
     <message>
         <location filename="portinusetest.cpp" line="34"/>
         <source>Unable to test if port %1 is in use due to error: %2</source>
-        <translation type="unfinished">Error al comprovar si el puerto %1 está en uso: %2</translation>
+        <translation>Error al comprobar si el puerto %1 está en uso: %2</translation>
     </message>
     <message>
         <location filename="portinusetest.cpp" line="35"/>
         <source>Contact technical service to evaluate the problem</source>
         <oldsource>Contact technical service to evaluate the problem.</oldsource>
-        <translation type="unfinished">Póngase en contacto con el servicio técnico para evaluar el problema</translation>
+        <translation>Póngase en contacto con el servicio técnico para evaluar el problema</translation>
     </message>
     <message>
         <location filename="portinusetest.cpp" line="46"/>
         <source>Port %1 is in use by another application</source>
-        <translation type="unfinished">El puerto %1 está siendo utilizado por otra aplicación</translation>
+        <translation>El puerto %1 está siendo utilizado por otra aplicación</translation>
     </message>
 </context>
 <context>

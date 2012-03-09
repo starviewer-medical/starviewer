@@ -31,7 +31,7 @@ DiagnosisTestResult CacheTest::run()
     {
         DiagnosisTestProblem problem;
         problem.setState(DiagnosisTestProblem::Error);
-        problem.setDescription(tr("The free space on the local database location is below the minimum required"));
+        problem.setDescription(tr("The free space on the local database location is below %1GB minimum requireds").arg(minimumFreeSpace));
         problem.setSolution(tr("Make some space on disk or change the local database to other location"));
         problems.addError(problem);
     }

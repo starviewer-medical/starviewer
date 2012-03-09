@@ -96,17 +96,17 @@
     <message>
         <location filename="diagnosistestresultwriter.cpp" line="154"/>
         <source>%1 succeeded</source>
-        <translation type="unfinished">%1 correctos</translation>
+        <translation>%1 correctos</translation>
     </message>
     <message>
         <location filename="diagnosistestresultwriter.cpp" line="155"/>
         <source>%1 errors</source>
-        <translation type="unfinished">%1 errores</translation>
+        <translation>%1 errores</translation>
     </message>
     <message>
         <location filename="diagnosistestresultwriter.cpp" line="156"/>
         <source>%1 warnings</source>
-        <translation type="unfinished">%1 avisos</translation>
+        <translation>%1 avisos</translation>
     </message>
 </context>
 <context>
@@ -306,17 +306,17 @@
         <location filename="firewallaccesstest.cpp" line="31"/>
         <source>Add %1 to the list of applications that have access through firewall</source>
         <oldsource>Add %1 to the list of applications that have access through firewall on Control Panel &gt; Firewall</oldsource>
-        <translation type="unfinished">Añade %1 a la lista de aplicaciones que tienen acceso al cortafuegos </translation>
+        <translation>Añada %1 a la lista de aplicaciones que tienen acceso a través del cortafuegos</translation>
     </message>
     <message>
         <location filename="firewallaccesstest.cpp" line="39"/>
         <source>Contact technical service to evaluate the problem</source>
-        <translation type="unfinished">Póngase en contacto con el servicio técnico para evaluar el problema</translation>
+        <translation>Póngase en contacto con el servicio técnico para evaluar el problema</translation>
     </message>
     <message>
         <location filename="firewallaccesstest.cpp" line="50"/>
         <source>%1 has access through firewall</source>
-        <translation type="unfinished">%1 tiene acceso a través del cortafuegos</translation>
+        <translation>%1 tiene acceso a través del cortafuegos</translation>
     </message>
 </context>
 <context>
@@ -466,7 +466,7 @@ WW: %5 WL: %6</translation>
     <message>
         <location filename="q2dviewerconfigurationscreenbase.ui" line="61"/>
         <source>Reference Lines by default for these modalities</source>
-        <translation>Activar Líneas de Referencia por defecto para estas modalidades</translation>
+        <translation>Activar líneas de referencia por defecto para estas modalidades</translation>
     </message>
     <message>
         <location filename="q2dviewerconfigurationscreenbase.ui" line="67"/>
@@ -485,7 +485,7 @@ WW: %5 WL: %6</translation>
     <message>
         <location filename="q2dviewerconfigurationscreenbase.ui" line="87"/>
         <source>Automatic Synchronization by default for these modalities</source>
-        <translation type="unfinished">Activar la sincronización automática por defecto para estas modalidades</translation>
+        <translation>Activar la sincronización automática por defecto para estas modalidades</translation>
     </message>
     <message>
         <location filename="q2dviewerconfigurationscreenbase.ui" line="130"/>
@@ -811,17 +811,17 @@ Se desactivará el sombreado, no se renderizadará de la forma esperada.</transl
     <message>
         <location filename="qdiagnosistest.cpp" line="81"/>
         <source>Running test: </source>
-        <translation type="unfinished">Ejecutando el test: </translation>
+        <translation>Ejecutando el test: </translation>
     </message>
     <message>
         <location filename="qdiagnosistest.cpp" line="133"/>
         <source>Files (*.txt)</source>
-        <translation type="unfinished">Archivos (*.txt)</translation>
+        <translation>Archivos (*.txt)</translation>
     </message>
     <message>
         <location filename="qdiagnosistest.cpp" line="133"/>
         <source>Save diagnosis test results</source>
-        <translation type="unfinished">Guardar los resultados</translation>
+        <translation>Guardar los resultados</translation>
     </message>
 </context>
 <context>
@@ -829,44 +829,44 @@ Se desactivará el sombreado, no se renderizadará de la forma esperada.</transl
     <message>
         <location filename="qdiagnosistestbase.ui" line="29"/>
         <source>Diagnosis test</source>
-        <translation type="unfinished">Tests de diagnóstico</translation>
+        <translation>Tests de diagnóstico</translation>
     </message>
     <message>
         <location filename="qdiagnosistestbase.ui" line="46"/>
         <location filename="qdiagnosistestbase.ui" line="59"/>
         <source>TextLabel</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qdiagnosistestbase.ui" line="178"/>
         <source>All tests have passed</source>
-        <translation type="unfinished">Se han ejecutado correctamente todos los tests</translation>
+        <translation>Se han ejecutado correctamente todos los tests</translation>
     </message>
     <message>
         <location filename="qdiagnosistestbase.ui" line="220"/>
         <source>&lt;a href=&quot;ok&quot; style=&quot;color:#333333&quot;&gt;View tests&lt;/a&gt;</source>
-        <translation type="unfinished">&lt;a href=&quot;ok&quot; style=&quot;color:#333333&quot;&gt;Ver los resultados&lt;/a&gt;</translation>
+        <translation>&lt;a href=&quot;ok&quot; style=&quot;color:#333333&quot;&gt;Ver los resultados&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="qdiagnosistestbase.ui" line="236"/>
         <source>about:blank</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qdiagnosistestbase.ui" line="276"/>
         <source>Save Results</source>
-        <translation type="unfinished">Guardar los resultados</translation>
+        <translation>Guardar los resultados</translation>
     </message>
     <message>
         <location filename="qdiagnosistestbase.ui" line="116"/>
         <source>Some tests have failed</source>
-        <translation type="unfinished">Algunos tests han fallado</translation>
+        <translation>Algunos tests han fallado</translation>
     </message>
     <message>
         <location filename="qdiagnosistestbase.ui" line="269"/>
         <source>OK</source>
         <oldsource>Ok</oldsource>
-        <translation type="unfinished">Aceptar</translation>
+        <translation>Aceptar</translation>
     </message>
 </context>
 <context>
@@ -1115,141 +1115,142 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
     <message>
         <location filename="systemrequerimentstest.cpp" line="52"/>
         <source>The machine currently has %1 cores, and the minimum required is %2</source>
-        <translation type="unfinished">La máquina tiene %1 núcleos però se requieren %2</translation>
+        <translation>La máquina tiene %1 núcleos però se requieren como mínimo %2</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="53"/>
         <location filename="systemrequerimentstest.cpp" line="75"/>
         <source>Update computer&apos;s hardware</source>
-        <translation type="unfinished">Actualize la maquinaria</translation>
+        <translation>Actualize la maquinaria</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="74"/>
         <source>The fastest CPU runs at %1 and the minimum required is %2</source>
-        <translation type="unfinished">La velocidad de la CPU más rápida és %1 però la velocidad mínima requerida es %2</translation>
+        <translation>La velocidad de la CPU más rápida es %1 pero la velocidad mínima requerida es %2</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="88"/>
         <location filename="systemrequerimentstest.cpp" line="107"/>
         <source>Update your graphics card driver</source>
-        <translation type="unfinished">Actualize el controlador de la tarjeta gráfica</translation>
+        <translation>Actualize el controlador de la tarjeta gráfica</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="86"/>
         <source>Current OpenGL version is %1 and the minimum required is %2</source>
-        <translation type="unfinished">La versión actual de OpenGL es %1 però la mínima requerida es %2</translation>
+        <translation>La versión actual de OpenGL es %1 pero la mínima requerida es %2</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="106"/>
         <source>Current OpenGL version does not support these extensions: %1</source>
-        <translation type="unfinished">La versión actual de OpenGL no soporta las siguientes extensiones: %1</translation>
+        <translation>La versión actual de OpenGL no soporta las siguientes extensiones: %1</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="120"/>
         <source>The graphics card %1 has %2Mb of RAM and the minimum required is %3Mb</source>
-        <translation type="unfinished">La tarjeta gráfica %1 tiene %2Mb de RAM pero el mínimo requerido es %3Mb</translation>
+        <translation>La tarjeta gráfica %1 tiene %2Mb de RAM pero el mínimo requerido es %3Mb</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="121"/>
         <source>Change the graphics card</source>
-        <translation type="unfinished">Cambie la tarjeta gráfica</translation>
+        <translation>Cambie la tarjeta gráfica</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="131"/>
         <source>There is not enough disk space to run %1 properly</source>
         <oldsource>There is not enough disk space to run starviewer properly</oldsource>
-        <translation type="unfinished">No hay espacio suficiente en el disc para ejecutar correctamente %1</translation>
+        <translation>No hay espacio suficiente en el disco para ejecutar correctamente %1</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="132"/>
         <source>Free some space in the hard disk</source>
-        <translation type="unfinished">Allibere espacio en el disco</translation>
+        <translation>Libere espacio en el disco</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="141"/>
-        <source>Operating system is not 64 bit architecture</source>
-        <oldsource>Operating system is not 64 bit architecture.</oldsource>
-        <translation type="unfinished">El sistema operativo no es de arquitectura 64 bit </translation>
+        <source>Operating system is not 64 bits architecture</source>
+        <oldsource>Operating system is not 64 bit architecture</oldsource>
+        <translation>El sistema operativo no es de arquitectura 64 bits</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="142"/>
-        <source>Update operating system to a 64 bit version</source>
-        <translation type="unfinished">Actualize el sistema operativo a una versión 64 bit</translation>
+        <source>Update operating system to a 64 bits version</source>
+        <oldsource>Update operating system to a 64 bit version</oldsource>
+        <translation>Actualize el sistema operativo a una versión 64 bits</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="158"/>
         <source>Current Operative System version is %1 and the minimum required is %2</source>
-        <translation type="unfinished">La versión actual del sistema operativo es %1 pero la mínima requerida es %2</translation>
+        <translation>La versión actual del sistema operativo es %1 pero la mínima requerida es %2</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="159"/>
         <source>Update operating system to a newer version</source>
-        <translation type="unfinished">Actualize el sistema operativo a una versión más reciente</translation>
+        <translation>Actualize el sistema operativo a una versión más reciente</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="170"/>
         <source>Current Service Pack version is %1 and the minimum required is Service Pack %2</source>
-        <translation type="unfinished">La versión actual del Service Pack es la %1 pero el Service Pack mínimo requerido es el %2</translation>
+        <translation>La versión actual del Service Pack es la %1 pero el Service Pack mínimo requerido es el %2</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="171"/>
         <source>Install a newer service pack</source>
-        <translation type="unfinished">Instale el Service Pack más reciente</translation>
+        <translation>Instale el Service Pack más reciente</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="192"/>
         <source>The total amount of RAM memory is %1 and the minimum required is %2</source>
-        <translation type="unfinished">La memoria RAM total es de %1 pero la mínima requerida es %2</translation>
+        <translation>La memoria RAM total es de %1 pero la mínima requerida es %2</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="193"/>
         <source>Add more RAM memory to the computer</source>
-        <translation type="unfinished">Añade más memoria RAM</translation>
+        <translation>Añade más memoria RAM</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="221"/>
         <source>One of the screens is too small. Keep in mind that %1 won&apos;t fit in that screen</source>
         <oldsource>One of the screens is too small. Keep in mind that Starviewer won&apos;t fit in that screen</oldsource>
-        <translation type="unfinished">Una de las pantallas tiene una resolución demasiado pequeña. %1 no se mostrará bien en esta pantalla</translation>
+        <translation>Una de las pantallas tiene una resolución demasiado pequeña. %1 no se mostrará bien en esta pantalla</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="222"/>
         <source>Don&apos;t move %1 to screen/s %2, or change to a higher resolution</source>
         <oldsource>Don&apos;t move Starviewer to screen/s %1, or change to a higher resolution</oldsource>
-        <translation type="unfinished">No utilize %1 a la pantalla o pantallas %2, o augmente la resolución</translation>
+        <translation>No utilize %1 a la pantalla o pantallas %2, o augmente la resolución de estas</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="232"/>
         <source>Change to a higher resolution</source>
-        <translation type="unfinished">Aumente la resolución de la pantalla</translation>
+        <translation>Aumente la resolución de la pantalla</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="235"/>
         <source>The screen is too small to fit %1 application</source>
         <oldsource>The screen is too small to fit Starviewer application</oldsource>
-        <translation type="unfinished">La resolución de la pantalla es demasiado pequeña para mostrar %1 correctamente</translation>
+        <translation>La resolución de la pantalla es demasiado pequeña para mostrar %1 correctamente</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="239"/>
         <source>The screens are too small to fit %1 application</source>
         <oldsource>The screens are too small to fit Starviewer application</oldsource>
-        <translation type="unfinished">La resolución de las pantallas es demasiado pequeña para mostrar %1 correctamente</translation>
+        <translation>La resolución de las pantallas es demasiado pequeña para mostrar %1 correctamente</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="250"/>
         <source>The optical drive is not capable of burning</source>
         <oldsource>The optical drive is not capable of burning.</oldsource>
-        <translation type="unfinished">La unidad de disco óptico no permite grabar</translation>
+        <translation>La unidad de disco óptico no permite grabar</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="251"/>
         <source>Change the optical drive to a CD-RW/DVD-RW</source>
-        <translation type="unfinished">Cambie la unidad de disco óptico por una CD-RW/DVD-RW</translation>
+        <translation>Cambie la unidad de disco óptico por una CD-RW/DVD-RW</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="261"/>
         <source>Hardware meets %1&apos;s minimum system requeriments</source>
-        <translation type="unfinished">La máquina cumple los requerimientos mínimos de %1</translation>
+        <translation>La máquina cumple los requerimientos mínimos de %1</translation>
     </message>
 </context>
 <context>

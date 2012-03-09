@@ -96,17 +96,17 @@
     <message>
         <location filename="diagnosistestresultwriter.cpp" line="154"/>
         <source>%1 succeeded</source>
-        <translation type="unfinished">%1 correctes</translation>
+        <translation>%1 correctes</translation>
     </message>
     <message>
         <location filename="diagnosistestresultwriter.cpp" line="155"/>
         <source>%1 errors</source>
-        <translation type="unfinished">%1 errors</translation>
+        <translation>%1 errors</translation>
     </message>
     <message>
         <location filename="diagnosistestresultwriter.cpp" line="156"/>
         <source>%1 warnings</source>
-        <translation type="unfinished">%1 avisos</translation>
+        <translation>%1 avisos</translation>
     </message>
 </context>
 <context>
@@ -306,17 +306,17 @@
         <location filename="firewallaccesstest.cpp" line="31"/>
         <source>Add %1 to the list of applications that have access through firewall</source>
         <oldsource>Add %1 to the list of applications that have access through firewall on Control Panel &gt; Firewall</oldsource>
-        <translation type="unfinished">Afegiu %1 a la llista d&apos;aplicacions que tenen accés a través del tallafocs</translation>
+        <translation>Afegiu %1 a la llista d&apos;aplicacions que tenen accés a través del tallafocs</translation>
     </message>
     <message>
         <location filename="firewallaccesstest.cpp" line="39"/>
         <source>Contact technical service to evaluate the problem</source>
-        <translation type="unfinished">Poseu-vos en contacte amb el servei tècnic per evaluar el problema</translation>
+        <translation>Poseu-vos en contacte amb el servei tècnic per evaluar el problema</translation>
     </message>
     <message>
         <location filename="firewallaccesstest.cpp" line="50"/>
         <source>%1 has access through firewall</source>
-        <translation type="unfinished">%1 té accés a través del tallafocs</translation>
+        <translation>%1 té accés a través del tallafocs</translation>
     </message>
 </context>
 <context>
@@ -467,7 +467,7 @@ WW: %5 WL: %6</translation>
     <message>
         <location filename="q2dviewerconfigurationscreenbase.ui" line="61"/>
         <source>Reference Lines by default for these modalities</source>
-        <translation type="unfinished">Activa Línies de Referència per defecte per aquestes modalitats</translation>
+        <translation>Activa línies de referència per defecte per aquestes modalitats</translation>
     </message>
     <message>
         <location filename="q2dviewerconfigurationscreenbase.ui" line="67"/>
@@ -486,13 +486,13 @@ WW: %5 WL: %6</translation>
     <message>
         <location filename="q2dviewerconfigurationscreenbase.ui" line="87"/>
         <source>Automatic Synchronization by default for these modalities</source>
-        <translation type="unfinished">Activa la sincronització automàtica per defecte per aquestes modalitats</translation>
+        <translation>Activa la sincronització automàtica per defecte per aquestes modalitats</translation>
     </message>
     <message>
         <location filename="q2dviewerconfigurationscreenbase.ui" line="130"/>
         <source>Zoom by default for these modalities</source>
         <oldsource>Zoom tool enabled by default for these modalities</oldsource>
-        <translation type="unfinished">Activa Zoom per defecte per aquestes modalitats</translation>
+        <translation>Activa Zoom per defecte per aquestes modalitats</translation>
     </message>
     <message>
         <location filename="q2dviewerconfigurationscreenbase.ui" line="139"/>
@@ -814,17 +814,17 @@ Marc Ruiz: El GIMP fa servir &quot;brillantor&quot;. De moment ho canvio a l&apo
     <message>
         <location filename="qdiagnosistest.cpp" line="81"/>
         <source>Running test: </source>
-        <translation type="unfinished">Executant el test: </translation>
+        <translation>Executant el test: </translation>
     </message>
     <message>
         <location filename="qdiagnosistest.cpp" line="133"/>
         <source>Files (*.txt)</source>
-        <translation type="unfinished">Fitxers (*.txt)</translation>
+        <translation>Fitxers (*.txt)</translation>
     </message>
     <message>
         <location filename="qdiagnosistest.cpp" line="133"/>
         <source>Save diagnosis test results</source>
-        <translation type="unfinished">Guarda els resultats</translation>
+        <translation>Guarda els resultats</translation>
     </message>
 </context>
 <context>
@@ -832,44 +832,44 @@ Marc Ruiz: El GIMP fa servir &quot;brillantor&quot;. De moment ho canvio a l&apo
     <message>
         <location filename="qdiagnosistestbase.ui" line="29"/>
         <source>Diagnosis test</source>
-        <translation type="unfinished">Tests de diagnosi</translation>
+        <translation>Tests de diagnosi</translation>
     </message>
     <message>
         <location filename="qdiagnosistestbase.ui" line="46"/>
         <location filename="qdiagnosistestbase.ui" line="59"/>
         <source>TextLabel</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qdiagnosistestbase.ui" line="178"/>
         <source>All tests have passed</source>
-        <translation type="unfinished">S&apos;han executat correctament tots els tests</translation>
+        <translation>S&apos;han executat correctament tots els tests</translation>
     </message>
     <message>
         <location filename="qdiagnosistestbase.ui" line="220"/>
         <source>&lt;a href=&quot;ok&quot; style=&quot;color:#333333&quot;&gt;View tests&lt;/a&gt;</source>
-        <translation type="unfinished">&lt;a href=&quot;ok&quot; style=&quot;color:#333333&quot;&gt;Veure els resultats&lt;/a&gt;</translation>
+        <translation>&lt;a href=&quot;ok&quot; style=&quot;color:#333333&quot;&gt;Veure els resultats&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="qdiagnosistestbase.ui" line="236"/>
         <source>about:blank</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qdiagnosistestbase.ui" line="276"/>
         <source>Save Results</source>
-        <translation type="unfinished">Guarda els resultats</translation>
+        <translation>Guarda els resultats</translation>
     </message>
     <message>
         <location filename="qdiagnosistestbase.ui" line="116"/>
         <source>Some tests have failed</source>
-        <translation type="unfinished">Alguns tests han fallat</translation>
+        <translation>Alguns tests han fallat</translation>
     </message>
     <message>
         <location filename="qdiagnosistestbase.ui" line="269"/>
         <source>OK</source>
         <oldsource>Ok</oldsource>
-        <translation type="unfinished">D&apos;acord</translation>
+        <translation>D&apos;acord</translation>
     </message>
 </context>
 <context>
@@ -1119,141 +1119,142 @@ Es recomana que les deseu en una carpeta buida.</translation>
     <message>
         <location filename="systemrequerimentstest.cpp" line="52"/>
         <source>The machine currently has %1 cores, and the minimum required is %2</source>
-        <translation type="unfinished">La màquina té %1 nuclis quan el mínim requerit és %2</translation>
+        <translation>La màquina té %1 nuclis quan el mínim requerit és %2</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="53"/>
         <location filename="systemrequerimentstest.cpp" line="75"/>
         <source>Update computer&apos;s hardware</source>
-        <translation type="unfinished">Actualitza el maquinari</translation>
+        <translation>Actualitza el maquinari</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="74"/>
         <source>The fastest CPU runs at %1 and the minimum required is %2</source>
-        <translation type="unfinished">La CPU més ràpida va a %1 i la velocitat mínima requerida és %2</translation>
+        <translation>La CPU més ràpida va a %1 quan la velocitat mínima requerida és %2</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="88"/>
         <location filename="systemrequerimentstest.cpp" line="107"/>
         <source>Update your graphics card driver</source>
-        <translation type="unfinished">Actualitzeu el controlador de la targeta gràfica</translation>
+        <translation>Actualitzeu el controlador de la targeta gràfica</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="86"/>
         <source>Current OpenGL version is %1 and the minimum required is %2</source>
-        <translation type="unfinished">La versió actual d&apos;OpenGL és %1 quan la mínima requerida és %2</translation>
+        <translation>La versió actual d&apos;OpenGL és %1 quan la mínima requerida és %2</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="106"/>
         <source>Current OpenGL version does not support these extensions: %1</source>
-        <translation type="unfinished">La versió actual d&apos;OpenGL no suporta les següents extensions: %1</translation>
+        <translation>La versió actual d&apos;OpenGL no suporta les següents extensions: %1</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="120"/>
         <source>The graphics card %1 has %2Mb of RAM and the minimum required is %3Mb</source>
-        <translation type="unfinished">La targeta gràfica %1 té %2Mb de RAM quan el mínim requerit és %3Mb</translation>
+        <translation>La targeta gràfica %1 té %2Mb de RAM quan el mínim requerit és %3Mb</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="121"/>
         <source>Change the graphics card</source>
-        <translation type="unfinished">Canvieu la targeta gràfica</translation>
+        <translation>Canvieu la targeta gràfica</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="131"/>
         <source>There is not enough disk space to run %1 properly</source>
         <oldsource>There is not enough disk space to run starviewer properly</oldsource>
-        <translation type="unfinished">No hi ha espai suficient al disc per executar correctament %1</translation>
+        <translation>No hi ha espai suficient al disc per executar correctament %1</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="132"/>
         <source>Free some space in the hard disk</source>
-        <translation type="unfinished">Allibereu espai al disc</translation>
+        <translation>Allibereu espai al disc</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="141"/>
-        <source>Operating system is not 64 bit architecture</source>
-        <oldsource>Operating system is not 64 bit architecture.</oldsource>
-        <translation type="unfinished">El sistema operatiu no és d&apos;arquitectura 64 bit</translation>
+        <source>Operating system is not 64 bits architecture</source>
+        <oldsource>Operating system is not 64 bit architecture</oldsource>
+        <translation>El sistema operatiu no és d&apos;arquitectura 64 bits</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="142"/>
-        <source>Update operating system to a 64 bit version</source>
-        <translation type="unfinished">Actualitzeu el sistema operatiu a una versió 64 bit</translation>
+        <source>Update operating system to a 64 bits version</source>
+        <oldsource>Update operating system to a 64 bit version</oldsource>
+        <translation>Actualitzeu el sistema operatiu a una versió 64 bits</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="158"/>
         <source>Current Operative System version is %1 and the minimum required is %2</source>
-        <translation type="unfinished">La versió actual del sistema operatiu és %1 quan la mínima requerida és %2</translation>
+        <translation>La versió actual del sistema operatiu és %1 quan la mínima requerida és %2</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="159"/>
         <source>Update operating system to a newer version</source>
-        <translation type="unfinished">Actualitzeu el sistema operatiu a una versió més recent</translation>
+        <translation>Actualitzeu el sistema operatiu a una versió més recent</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="170"/>
         <source>Current Service Pack version is %1 and the minimum required is Service Pack %2</source>
-        <translation type="unfinished">La versió actual del Service Pack és %1 quan el Service Pack mínim requerit és el %2</translation>
+        <translation>La versió actual del Service Pack és %1 quan el Service Pack mínim requerit és el %2</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="171"/>
         <source>Install a newer service pack</source>
-        <translation type="unfinished">Instal·leu el Service Pack més recent</translation>
+        <translation>Instal·leu el Service Pack més recent</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="192"/>
         <source>The total amount of RAM memory is %1 and the minimum required is %2</source>
-        <translation type="unfinished">La memòria RAM total és %1 quan la mínima requerida és %2</translation>
+        <translation>La memòria RAM total és %1 quan la mínima requerida és %2</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="193"/>
         <source>Add more RAM memory to the computer</source>
-        <translation type="unfinished">Afegiu més memòria RAM</translation>
+        <translation>Afegiu més memòria RAM</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="221"/>
         <source>One of the screens is too small. Keep in mind that %1 won&apos;t fit in that screen</source>
         <oldsource>One of the screens is too small. Keep in mind that Starviewer won&apos;t fit in that screen</oldsource>
-        <translation type="unfinished">Una de les pantalles té una resolució massa petita. %1 no es mostrarà bé en aquesta pantalla</translation>
+        <translation>Una de les pantalles té una resolució massa petita. %1 no es mostrarà bé en aquesta pantalla</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="222"/>
         <source>Don&apos;t move %1 to screen/s %2, or change to a higher resolution</source>
         <oldsource>Don&apos;t move Starviewer to screen/s %1, or change to a higher resolution</oldsource>
-        <translation type="unfinished">Eviteu utilitzar %1 a la pantalla o pantalles %2, o augmenteu la resolució</translation>
+        <translation>Eviteu utilitzar %1 a la pantalla o pantalles %2, o augmenteu la resolució d&apos;aquestes</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="232"/>
         <source>Change to a higher resolution</source>
-        <translation type="unfinished">Augmenteu la resolució de la pantalla</translation>
+        <translation>Augmenteu la resolució de la pantalla</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="235"/>
         <source>The screen is too small to fit %1 application</source>
         <oldsource>The screen is too small to fit Starviewer application</oldsource>
-        <translation type="unfinished">La resolució de la pantalla és massa petita per mostrar %1 correctament</translation>
+        <translation>La resolució de la pantalla és massa petita per mostrar %1 correctament</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="239"/>
         <source>The screens are too small to fit %1 application</source>
         <oldsource>The screens are too small to fit Starviewer application</oldsource>
-        <translation type="unfinished">La resolució de les pantalles és massa petita per mostrar %1 correctament</translation>
+        <translation>La resolució de les pantalles és massa petita per mostrar %1 correctament</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="250"/>
         <source>The optical drive is not capable of burning</source>
         <oldsource>The optical drive is not capable of burning.</oldsource>
-        <translation type="unfinished">La unitat de disc òptic no permet gravar</translation>
+        <translation>La unitat de disc òptic no permet gravar</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="251"/>
         <source>Change the optical drive to a CD-RW/DVD-RW</source>
-        <translation type="unfinished">Canvieu la unitat de disc òptic per una CD-RW/DVD-RW</translation>
+        <translation>Canvieu la unitat de disc òptic per una CD-RW/DVD-RW</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="261"/>
         <source>Hardware meets %1&apos;s minimum system requeriments</source>
-        <translation type="unfinished">El maquinari compleix els requeriments mínims d&apos;%1</translation>
+        <translation>El maquinari compleix els requeriments mínims d&apos;%1</translation>
     </message>
 </context>
 <context>
