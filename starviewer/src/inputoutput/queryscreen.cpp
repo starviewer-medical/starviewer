@@ -194,7 +194,7 @@ void QueryScreen::checkIncomingConnectionsPacsPortNotInUse()
     {
         QString message = tr("Port %1 for incoming connections from PACS is already in use by another application.").arg(localPort);
         message += tr("\n\n%1 couldn't retrieve studies from PACS if the port is in use, please close the application that is using port %2 or change "
-                      "Starviewer port for incoming connections from PACS in the configuration screen.").arg(ApplicationNameString).arg(localPort);
+                      "%1 port for incoming connections from PACS in the configuration screen.").arg(ApplicationNameString).arg(localPort);
 
         QMessageBox::warning(this, ApplicationNameString, message);
     }
