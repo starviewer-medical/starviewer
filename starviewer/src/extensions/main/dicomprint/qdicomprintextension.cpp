@@ -166,14 +166,6 @@ void QDicomPrintExtension::fillSelectedDicomPrinterComboBox()
 
     if (m_selectedPrinterComboBox->count() > 0)
     {
-        m_printButton->setEnabled(true);
-
-        // Només ho habilitarem si la serie se suporta
-        if (!m_noSupportedSeriesFrame->isVisible())
-        {
-            setEnabledPrintControls(true);
-        }
-
         // Si no hi ha cap impressora per defecte fem que quedi seleccionada la primera de la llista.
         if (noDefaultPrinter)
         {
@@ -183,8 +175,6 @@ void QDicomPrintExtension::fillSelectedDicomPrinterComboBox()
     }
     else
     {
-        m_printButton->setEnabled(false);
-        setEnabledPrintControls(false);
         selectedDicomPrinterChanged(-1);
     }
 }
@@ -504,10 +494,11 @@ void QDicomPrintExtension::selectedDicomPrinterChanged(int indexOfSelectedDicomP
 
         m_qdicomPrinterBasicSettingsWidget->setDicomPrinterBasicSettings(selectedDicomPrinter);
 
+        setEnabledPrintControls(true);
         // Només ho habilitarem si la serie se suporta
         if (!m_noSupportedSeriesFrame->isVisible())
         {
-            setEnabledPrintControls(true);
+            setEnabledAddImagesToPrintControls(true);
         }
     }
     else
@@ -516,6 +507,7 @@ void QDicomPrintExtension::selectedDicomPrinterChanged(int indexOfSelectedDicomP
         m_portLabel->setText("");
 
         setEnabledPrintControls(false);
+        setEnabledAddImagesToPrintControls(false);
     }
 }
 
@@ -673,7 +665,12 @@ DicomPrinter QDicomPrintExtension::getSelectedDicomPrinter() const
 
 void QDicomPrintExtension::setEnabledPrintControls(bool enable)
 {
+    m_printButton->setEnabled(enable);
     m_qdicomPrinterBasicSettingsWidget->setEnabled(enable);
+}
+
+void QDicomPrintExtension::setEnabledAddImagesToPrintControls(bool enable)
+{
     m_selectionImagesFrame->setEnabled(enable);
     m_currentImageRadioButton->setEnabled(enable);
     m_selectionImageRadioButton->setEnabled(enable);
@@ -739,7 +736,7 @@ void QDicomPrintExtension::updateVolumeSupport()
         m_noSupportedSeriesMissage->setText(tr("This series cannot be added to print because color is not supported."));
         m_noSupportedSeriesFrame->setVisible(true);
 
-        setEnabledPrintControls(false);
+        setEnabledAddImagesToPrintControls(false);
     }
     else
     {
@@ -748,7 +745,7 @@ void QDicomPrintExtension::updateVolumeSupport()
         // Només activem les opcions si tenim impressores.
         if (m_selectedPrinterComboBox->count() > 0)
         {
-            setEnabledPrintControls(true);
+            setEnabledAddImagesToPrintControls(true);
         }
     }
 }
