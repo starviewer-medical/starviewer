@@ -1154,13 +1154,14 @@ It&apos;s recommended you save them in an empty folder.</source>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="141"/>
-        <source>Operating system is not 64 bit architecture</source>
-        <oldsource>Operating system is not 64 bit architecture.</oldsource>
+        <source>Operating system is not 64 bits architecture</source>
+        <oldsource>Operating system is not 64 bit architecture</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="142"/>
-        <source>Update operating system to a 64 bit version</source>
+        <source>Update operating system to a 64 bits version</source>
+        <oldsource>Update operating system to a 64 bit version</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>

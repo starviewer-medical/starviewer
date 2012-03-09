@@ -138,8 +138,8 @@ DiagnosisTestResult SystemRequerimentsTest::run()
     {
         DiagnosisTestProblem problem;
         problem.setState(DiagnosisTestProblem::Error);
-        problem.setDescription(tr("Operating system is not 64 bit architecture"));
-        problem.setSolution(tr("Update operating system to a 64 bit version"));
+        problem.setDescription(tr("Operating system is not 64 bits architecture"));
+        problem.setSolution(tr("Update operating system to a 64 bits version"));
         result.addError(problem);
     }
 
