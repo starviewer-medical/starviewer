@@ -502,6 +502,11 @@ Status QCreateDicomdir::startCreateDicomdir(QString dicomdirPath)
                     "destination folders to copy the files."));
                 break;
             
+            case 1301:
+                QMessageBox::warning(this, ApplicationNameString, tr("Error creating DICOMDIR file, be sure you have read and write permissions on "
+                    "destination folder."));
+                break;
+            
             default:
                 QMessageBox::critical(this, ApplicationNameString, tr("Error creating DICOMDIR. Be sure you have write permissions in %1 and It is empty.")
                                                                  .arg(m_lineEditDicomdirPath->text()));

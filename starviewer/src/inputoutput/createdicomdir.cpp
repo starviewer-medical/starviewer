@@ -123,8 +123,9 @@ Status CreateDicomdir::create(QString dicomdirPath)
     // Comprovem que el directori no estigui buit
     if (fileNames.empty())
     {
-        ERROR_LOG("El directori origen està buit");
-        state.setStatus(" no input files: the directory is empty ", false, 1301);
+        ERROR_LOG(QString("El directori destí del DICOMDIR [%1] està buit o no hi tenim accés per llistar-ne el contingut. No podem crear l'arxiu de DICOMDIR.")
+            .arg(dicomdirPath));
+        state.setStatus("DICOMDIR file destination directory is either empty or not readable.", false, 1301);
         return state;
     }
 
