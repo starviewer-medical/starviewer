@@ -273,14 +273,14 @@ void QConfigurationScreen::test()
             switch (echoToPACS.getLastError())
             {
                 case EchoToPACS::EchoFailed:
-                    message = tr("PACS \"%1\" doesn't respond correctly.\nBe sure that the IP and AE Title of It are correct.").arg(pacsDevice.getAETitle());
+                    message = tr("PACS \"%1\" did not respond correctly.\nBe sure its IP and AE Title are correct.").arg(pacsDevice.getAETitle());
                     break;
                 case EchoToPACS::EchoCanNotConnectToPACS:
-                    message = tr("PACS \"%1\" doesn't respond.\nBe sure that the IP and AE Title of It are correct.").arg(pacsDevice.getAETitle());
+                    message = tr("PACS \"%1\" did not respond.\nBe sure its IP and AE Title are correct.").arg(pacsDevice.getAETitle());
                     break;
                 default:
                     // No hauria de passar mai
-                    message = tr("PACS \"%1\" doesn't respond as expected, and unknown error has produced.").arg(pacsDevice.getAETitle());
+                    message = tr("PACS \"%1\" did not respond as expected, and unknown error has occurred.").arg(pacsDevice.getAETitle());
                     break;
             }
 

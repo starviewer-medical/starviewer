@@ -101,8 +101,8 @@ QString QueryPacsJob::getStatusDescription()
             message = tr("Query %1 to PACS %2 has been cancelled.").arg(getQueryLevelAsQString(), pacsAETitle);
             break;
         case PACSRequestStatus::QueryCanNotConnectToPACS:
-            message = tr("%1 can't connect to PACS %2 trying to query %3.\n").arg(ApplicationNameString, pacsAETitle, getQueryLevelAsQString());
-            message += tr("\nBe sure that your computer is connected on network and the PACS parameters are correct.");
+            message = tr("Query failed: Unable to connect to PACS %1.\n").arg(pacsAETitle);
+            message += tr("\nBe sure your computer is connected to the network and the PACS configuration is correct. ");
             message += tr("If the problem persists contact with an administrator.");
             break;
         case PACSRequestStatus::QueryFailedOrRefused:

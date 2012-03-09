@@ -178,15 +178,15 @@ void QPopUpRISRequestsScreen::showRetrieveFinished()
 
     if (m_numberOfStudiesRetrieved == 0)
     {
-        m_operationDescription->setText(tr("No studies has been found.").arg(m_numberOfStudiesRetrieved));
+        m_operationDescription->setText(tr("No studies found.").arg(m_numberOfStudiesRetrieved));
     }
     else if (m_numberOfStudiesRetrieved == 1)
     {
-        m_operationDescription->setText(tr("%1 study has been found.").arg(m_numberOfStudiesRetrieved));
+        m_operationDescription->setText(tr("%1 study found.").arg(m_numberOfStudiesRetrieved));
     }
     else
     {
-        m_operationDescription->setText(tr("%1 studies have been found.").arg(m_numberOfStudiesRetrieved));
+        m_operationDescription->setText(tr("%1 studies found.").arg(m_numberOfStudiesRetrieved));
     }
 }
 

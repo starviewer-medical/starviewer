@@ -22,7 +22,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="649"/>
+        <location filename="qcreatedicomdir.cpp" line="655"/>
         <source>Creating DICOMDIR Image...</source>
         <translation>Creant la Imatge del DICOMDIR...</translation>
     </message>
@@ -230,8 +230,8 @@ No teniu permisos d&apos;escriptura en el directori de la caché d&apos;imatges.
     </message>
     <message>
         <location filename="databaseinstallation.cpp" line="440"/>
-        <source>Current database is of newer version. To execute %1 retrieved studies will be deleted and database will be reinstalled. Do you want to continue?</source>
-        <oldsource>Current database is of %1 newer version. To continue executing %1 is necessary to delete retrieved studies and reinstall database. Do you want to continue?</oldsource>
+        <source>Current database is of newer version. In order to run %1, local studies must be deleted and database will be reinstalled. Do you want to continue?</source>
+        <oldsource>Current database is of newer version. To execute %1 retrieved studies will be deleted and database will be reinstalled. Do you want to continue?</oldsource>
         <translation>La base de dades és d&apos;una versió posterior a l&apos;actual. Per continuar executant %1 es reinstal·larà la base de dades i s&apos;esborraran els estudis descarregats. Voleu continuar?</translation>
     </message>
 </context>
@@ -692,26 +692,26 @@ No teniu permisos d&apos;escriptura en el directori de la caché d&apos;imatges.
     </message>
     <message>
         <location filename="qconfigurationscreen.cpp" line="279"/>
-        <source>PACS &quot;%1&quot; doesn&apos;t respond.
-Be sure that the IP and AE Title of It are correct.</source>
+        <source>PACS &quot;%1&quot; did not respond.
+Be sure its IP and AE Title are correct.</source>
         <oldsource>PACS &quot;%1&quot; doesn&apos;t respond.
-Be sure that the IP and AETitle of It are correct.</oldsource>
+Be sure its IP and AE Title are correct.</oldsource>
         <translation>PACS &quot;%1&quot; no respon.
 Assegureu-vos que la IP i el AETitle d&apos;aquest siguin correctes.</translation>
     </message>
     <message>
         <location filename="qconfigurationscreen.cpp" line="276"/>
-        <source>PACS &quot;%1&quot; doesn&apos;t respond correctly.
-Be sure that the IP and AE Title of It are correct.</source>
+        <source>PACS &quot;%1&quot; did not respond correctly.
+Be sure its IP and AE Title are correct.</source>
         <oldsource>PACS &quot;%1&quot; doesn&apos;t respond correctly.
-Be sure that the IP and AETitle of It are correct.</oldsource>
-        <translation>PACS &quot;%1&quot; no has respòs de la forma esperada.
+Be sure its IP and AE Title are correct.</oldsource>
+        <translation>PACS &quot;%1&quot; no ha respòs de la forma esperada.
 Assegureu-vos que la IP i el AETitle d&apos;aquest siguin correctes.</translation>
     </message>
     <message>
         <location filename="qconfigurationscreen.cpp" line="283"/>
-        <source>PACS &quot;%1&quot; doesn&apos;t respond as expected, and unknown error has produced.</source>
-        <oldsource>PACS &quot;%1&quot; doesn&apos;t respond as expected, and unknow error has produced.</oldsource>
+        <source>PACS &quot;%1&quot; did not respond as expected, and unknown error has occurred.</source>
+        <oldsource>PACS &quot;%1&quot; doesn&apos;t respond as expected, and unknown error has produced.</oldsource>
         <translation>El PACS &quot;%1&quot; no ha respòs com s&apos;esperava, s&apos;ha produït un error desconegut.</translation>
     </message>
     <message>
@@ -975,7 +975,7 @@ Assegureu-vos que la IP i el AETitle d&apos;aquest siguin correctes.</translatio
         <translation>No es pot crear el directori. Si us plau reviseu els permisos d&apos;usuari.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="621"/>
+        <location filename="qcreatedicomdir.cpp" line="627"/>
         <source>Please select a study to remove of the list.</source>
         <translation>Si us plau seleccioni l&apos;estudi que vol esborrar de la llista.</translation>
     </message>
@@ -1081,25 +1081,25 @@ Assegureu-vos que la IP i el AETitle d&apos;aquest siguin correctes.</translatio
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="506"/>
-        <source>Error creating DICOMDIR. Be sure you have write permissions in %1 and It is empty.</source>
-        <oldsource>Error creating DICOMDIR. Be sure you have user permissions in %1 and the directory is empty.</oldsource>
-        <translation>Error creant el DICOMDIR. Asseguris que té permisos d&apos;escriptura al directori %1 i que aquest està buit.</translation>
+        <source>Error creating DICOMDIR file, be sure you have read and write permissions on destination folder.</source>
+        <oldsource>Error creating DICOMDIR. Be sure you have write permissions in %1 and It is empty.</oldsource>
+        <translation>Error creant l&apos;arxiu de DICOMDIR, comproveu que teniu permisos de lectura i escriptura al directori de destí.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="694"/>
-        <location filename="qcreatedicomdir.cpp" line="738"/>
+        <location filename="qcreatedicomdir.cpp" line="700"/>
+        <location filename="qcreatedicomdir.cpp" line="744"/>
         <source>DICOMDIR creation failure</source>
         <translation>Error creant el DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="772"/>
+        <location filename="qcreatedicomdir.cpp" line="778"/>
         <source>
 Error Number: %1</source>
         <translation>
 Codi d&apos;error: %1</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="710"/>
+        <location filename="qcreatedicomdir.cpp" line="716"/>
         <source>The process [ %1 ] failed to start. Either the invoked program is missing, or you may have insufficient permissions to invoke the program.</source>
         <translation>No s&apos;ha pogut iniciar el procés [ %1 ]. O bé el programa invocat no està instal·lat o bé no teniu prou permisos per invocar el programa.</translation>
     </message>
@@ -1206,68 +1206,74 @@ Esborreu aquests elements del directori o desmarqueu l&apos;opció de copiar el 
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="501"/>
-        <source>Error copying files, be sure you have appropriate permissions on both cache and destination folders to copy the files.</source>
-        <oldsource>Error copying files, be sure you have appropriate permissions on both source and destination folders to copy the files.</oldsource>
-        <translation>Error copiant els fitxers, assegureu-vos que tingueu els permisos necessaris en el directori de la caché i en el de destí.</translation>
+        <source>Error copying files, be sure you have appropriate permissions on both source and destination folders to copy the files.</source>
+        <oldsource>Error copying files, be sure you have appropriate permissions on both cache and destination folders to copy the files.</oldsource>
+        <translation>Error copiant els fitxers, comproveu que tingueu els permisos adequats en el directori d&apos;origen i en el de destí per poder copiar els arxius.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="687"/>
+        <location filename="qcreatedicomdir.cpp" line="511"/>
+        <source>Error creating DICOMDIR. Be sure you have appropriate permissions on both source and destination folders and %1 folder is empty.</source>
+        <oldsource>Error creating DICOMDIR. Be sure you have write permissions in %1 and it is empty.</oldsource>
+        <translation>Error creant el DICOMDIR. Comproveu que teniu els permisos adequats en les carpetes d&apos;origen i destí i que la carpeta %1 estigui buida.</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="693"/>
         <source>DICOMDIR Burning Failure</source>
         <translation>Error al gravar DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="688"/>
-        <location filename="qcreatedicomdir.cpp" line="695"/>
-        <location filename="qcreatedicomdir.cpp" line="739"/>
+        <location filename="qcreatedicomdir.cpp" line="694"/>
+        <location filename="qcreatedicomdir.cpp" line="701"/>
+        <location filename="qcreatedicomdir.cpp" line="745"/>
         <source>Please, contact your system administrator to solve this problem.</source>
         <oldsource>There was an error during the creation of the ISO image file. </oldsource>
         <translation>Si us plau, contacti amb el seu administrador de sistemes per solucionar aquest problema.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="687"/>
+        <location filename="qcreatedicomdir.cpp" line="693"/>
         <source>There was an error during the burning of the DICOMDIR ISO image file.
 </source>
         <translation>S&apos;ha produït un error durant la gravació de la imatge ISO amb el DICOMDIR.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="694"/>
+        <location filename="qcreatedicomdir.cpp" line="700"/>
         <source>There was an error during the creation of the DICOMDIR ISO image file. </source>
         <translation>S&apos;ha produït un error al crear la imatge ISO del DICOMDIR.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="715"/>
+        <location filename="qcreatedicomdir.cpp" line="721"/>
         <source>The process [ %1 ] crashed some time after starting successfully.</source>
         <translation>El procés [ %1 ] s&apos;ha penjat després d&apos;haver-se iniciat correctament.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="723"/>
+        <location filename="qcreatedicomdir.cpp" line="729"/>
         <source>An error occurred when attempting to write to the process [ %1 ]. For example, the process may not be running, or it may have closed its input channel.</source>
         <translation>Hi ha hagut algun error quan s&apos;intentava escriure al procés [ %1 ]. Per exemple, el procés pot ser que no s&apos;estigui executant o pot ser que s&apos;hagi tancat.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="728"/>
+        <location filename="qcreatedicomdir.cpp" line="734"/>
         <source>An error occurred when attempting to read from the process [ %1 ]. For example, the process may not be running.</source>
         <translation>Hi ha hagut algun error quan s&apos;intentava llegir del procés [ %1 ]. Per exemple, el procés pot ser que no s&apos;estigués executant.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="738"/>
+        <location filename="qcreatedicomdir.cpp" line="744"/>
         <source>There was an error during the creation of the DICOMDIR.</source>
         <translation>S&apos;ha produït un error durant la creació del DICOMDIR.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="842"/>
+        <location filename="qcreatedicomdir.cpp" line="848"/>
         <source>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of the device is %1 MB.</source>
         <oldsource>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of the device is %1 Mb.</oldsource>
         <translation>El dispositiu seleccionat no té suficient espai lliure per crear el DICOMDIR amb tots els estudis, si us plau tregui alguns dels estudis. La capacitat del dispositiu és de %1 MB.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="863"/>
+        <location filename="qcreatedicomdir.cpp" line="869"/>
         <source>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of a CD is %1 MB.</source>
         <oldsource>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of a CD is %1 Mb.</oldsource>
         <translation>El dispositiu seleccionat no té suficient espai lliure per crear el DICOMDIR amb tots els estudis, si us plau tregui alguns dels estudis. La capacitat d&apos;un CD és de %1 MB.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="871"/>
+        <location filename="qcreatedicomdir.cpp" line="877"/>
         <source>Invalid DICOMDIR burning application configuration.
 It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</source>
         <translation>La configuració de l&apos;aplicació per gravar DICOMDIR no és correcte.
@@ -1279,7 +1285,7 @@ Especifiqui una configuració vàlida en el menú Eines -&gt; Configuració -&gt
         <translation>El directori de destí no està buit, si us plau escolliu un directori buit.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="572"/>
+        <location filename="qcreatedicomdir.cpp" line="578"/>
         <source>Choose an empty directory...</source>
         <translation>Escolliu un directori buit...</translation>
     </message>
@@ -2603,45 +2609,45 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
 <context>
     <name>udg::QPopUpRISRequestsScreen</name>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="62"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="29"/>
+        <source>%1 will proceed to retrieve it.</source>
+        <translation>Es procedirà a descarregar-lo.</translation>
+    </message>
+    <message>
+        <location filename="qpopuprisrequestsscreen.cpp" line="64"/>
         <source>%1 has received a request from RIS to retrieve studies.</source>
         <translation>%1 ha rebut una petició del RIS per descarregar estudis.</translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="63"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="65"/>
         <source>Querying PACS...</source>
         <translation>Consultant al PACS...</translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="152"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="154"/>
         <source>Retrieving study %1 of %2.</source>
         <translation>S&apos;està descarregant l&apos;estudi %1 de %2.</translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="168"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="170"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="181"/>
         <source>No studies found.</source>
         <translation>No s&apos;han trobat estudis.</translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="179"/>
-        <source>No studies has been found.</source>
-        <oldsource>No studies has been retrieved.</oldsource>
-        <translation>No s&apos;han trobat estudis.</translation>
-    </message>
-    <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="183"/>
-        <source>%1 study has been found.</source>
-        <oldsource>%1 study has been retrieved.</oldsource>
+        <location filename="qpopuprisrequestsscreen.cpp" line="185"/>
+        <source>%1 study found.</source>
+        <oldsource>%1 study has been found.</oldsource>
         <translation>S&apos;ha trobat %1 estudi.</translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="187"/>
-        <source>%1 studies have been found.</source>
-        <oldsource>%1 studies have been retrieved.</oldsource>
+        <location filename="qpopuprisrequestsscreen.cpp" line="189"/>
+        <source>%1 studies found.</source>
+        <oldsource>%1 studies have been found.</oldsource>
         <translation>S&apos;han trobat %1 estudis.</translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="193"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="195"/>
         <source>%1 has received a request from RIS to retrieve studies of patient %2.</source>
         <translation>%1 ha rebut una petició del RIS per descarregar estudis del pacient %2.</translation>
     </message>
@@ -2902,9 +2908,11 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
     <message>
         <location filename="querypacsjob.cpp" line="105"/>
         <source>
-Be sure that your computer is connected on network and the PACS parameters are correct.</source>
+Be sure your computer is connected to the network and the PACS configuration is correct. </source>
+        <oldsource>
+Be sure your computer is connected to the network and the PACS configuration is correct.</oldsource>
         <translation>
-Asseguris que el seu ordinador està connectat a la xarxa i que els paràmetres del PACS són correctes.</translation>
+Comproveu que l&apos;ordinador està connectat a la xarxa i que la configuració del PACS és correcta.</translation>
     </message>
     <message>
         <location filename="querypacsjob.cpp" line="106"/>
@@ -2913,9 +2921,11 @@ Asseguris que el seu ordinador està connectat a la xarxa i que els paràmetres 
     </message>
     <message>
         <location filename="querypacsjob.cpp" line="104"/>
-        <source>%1 can&apos;t connect to PACS %2 trying to query %3.
+        <source>Query failed: Unable to connect to PACS %1.
 </source>
-        <translation>%1 no ha pogut connectar amb el PACS %2 intentant consultar %3.
+        <oldsource>Query failed: Unable to connect to PACS %2.
+</oldsource>
+        <translation>La consulta ha fallat: No s&apos;ha pogut connectar amb el PACS %1.
 </translation>
     </message>
     <message>
@@ -2999,7 +3009,10 @@ Si el problema persisteix contacteu amb un administrador.</translation>
         <location filename="queryscreen.cpp" line="196"/>
         <source>
 
-%1 couldn&apos;t retrieve studies from PACS if the port is in use, please close the application that is using port %2 or change Starviewer port for incoming connections from PACS in the configuration screen.</source>
+%1 couldn&apos;t retrieve studies from PACS if the port is in use, please close the application that is using port %2 or change %1 port for incoming connections from PACS in the configuration screen.</source>
+        <oldsource>
+
+%1 couldn&apos;t retrieve studies from PACS if the port is in use, please close the application that is using port %2 or change Starviewer port for incoming connections from PACS in the configuration screen.</oldsource>
         <translation>
 
 %1 no pot descarregar estudis del PACS si el port està en ús, si us plau tanqueu l&apos;aplicació que està utilitzant el port %2 o canvieu el port per connexions entrants en la pantalla de configuració.</translation>
@@ -3089,8 +3102,9 @@ Si el problema persisteix contacteu amb un administrador.</translation>
     </message>
     <message>
         <location filename="risrequestmanager.cpp" line="207"/>
-        <source>%2 can&apos;t execute the RIS request, because hasn&apos;t found the Study with accession number %1 in the default PACS.</source>
-        <translation>%2 no pot executar la petició del RIS, perquè no ha trobat cap estudi amb l&apos;accession number %1 en els PACS escollits per defecte.</translation>
+        <source>%2 can&apos;t execute the RIS request. The study with accession number %1 was not found in the default PACS.</source>
+        <oldsource>%2 can&apos;t execute the RIS request, because hasn&apos;t found the Study with accession number %1 in the default PACS.</oldsource>
+        <translation>No es pot executar la petició del RIS. No s&apos;ha trobat cap estudi amb l&apos;accession number %1 en els PACS seleccionats per defecte.</translation>
     </message>
     <message>
         <location filename="risrequestmanager.cpp" line="224"/>
@@ -3141,7 +3155,7 @@ Si el problema persisteix contacteu amb un administrador.</translation>
     <message>
         <location filename="risrequestsportinusetest.cpp" line="18"/>
         <source>RIS request port is available</source>
-        <translation type="unfinished">El port per escoltar peticions de RIS està disponible</translation>
+        <translation>El port per escoltar peticions de RIS està disponible</translation>
     </message>
 </context>
 <context>
