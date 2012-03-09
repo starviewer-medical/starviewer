@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -14,7 +13,7 @@
    height="297mm"
    id="svg2"
    sodipodi:version="0.32"
-   inkscape:version="0.47 r22583"
+   inkscape:version="0.46"
    sodipodi:docname="teclat_shortcuts.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
    version="1.1">
@@ -942,6 +941,42 @@
        inkscape:vp_y="0 : 1000 : 0"
        inkscape:vp_x="0 : 0.5 : 1"
        sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3262"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3275"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3288"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3301"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <filter
+       inkscape:collect="always"
+       id="filter4415">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.031402933"
+         id="feGaussianBlur4417" />
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -951,14 +986,14 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.9613019"
-     inkscape:cx="442.10828"
-     inkscape:cy="790.22406"
+     inkscape:cx="212.40038"
+     inkscape:cy="782.57608"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      inkscape:window-width="1680"
-     inkscape:window-height="994"
-     inkscape:window-x="-4"
-     inkscape:window-y="-4"
+     inkscape:window-height="988"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:object-points="true"
      inkscape:object-nodes="true"
      inkscape:object-paths="false"
@@ -999,12 +1034,12 @@
      style="display:inline">
     <g
        id="g3414"
-       transform="matrix(0.10765233,0,0,0.10744678,-118.18569,621.83811)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       transform="matrix(0.1076523,0,0,0.1074468,-115.08704,624.93676)"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <rect
-         style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:7.5;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:7.5;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
          id="rect5999"
          width="7947.0723"
          height="2687.5476"
@@ -1020,10 +1055,10 @@
          height="2812.2012"
          width="7894.9946"
          id="rect5020"
-         style="color:#000000;fill:#e6e6e6;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:7.5;marker:none;visibility:visible;display:inline;overflow:visible;filter:url(#filter5995);enable-background:accumulate"
-         transform="matrix(1,0,0,0.95266056,0,-246.18746)" />
+         style="fill:#e6e6e6;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:7.5;marker:none;visibility:visible;display:inline;overflow:visible;filter:url(#filter5995);enable-background:accumulate"
+         transform="matrix(1,0,0,0.9526606,0,-246.18746)" />
       <rect
-         style="opacity:0;color:#000000;fill:#aaaaff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.94488591;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         style="opacity:0;fill:#aaaaff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.94488591;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
          id="rect3633"
          width="68.321968"
          height="14.786097"
@@ -1043,7 +1078,7 @@
        rx="40.789234"
        ry="40.789234"
        transform="matrix(0.10843322,0,0,0.10779334,-123.64648,624.09436)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <path
@@ -1060,7 +1095,7 @@
        d="m 5268.6563,-3302.8125 c -24.9703,0 -45.0626,20.1234 -45.0625,45.0937 l 0.8312,311.257 c -0.8312,6.4248 -7.1653,37.697 -36.4989,33.1367 l -255.1448,-0.8312 c -24.9703,0 -45.0938,20.0924 -45.0938,45.0625 l 0,315.0938 c 0,24.9703 20.1234,45.0938 45.0938,45.0937 l 927.0312,0 c 24.9703,0 45.0626,-20.1234 45.0625,-45.0937 l 0,-315.0938 c 0,-24.9703 -20.0922,-45.0625 -45.0625,-45.0625 l -265.4384,-0.8312 c -11.8778,-1.2584 -27.3554,-1.5502 -28.1866,-41.449 l 0,-301.2823 c 0,-24.9703 -20.0923,-45.0937 -45.0625,-45.0937 l -252.4687,0 z"
        id="path3338"
        transform="matrix(0.10843322,0,0,0.10843322,-123.64648,626.96807)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300"
        sodipodi:nodetypes="ccccccccccccccccc" />
@@ -1070,7 +1105,7 @@
        id="path3296"
        sodipodi:nodetypes="ccccccccc"
        transform="matrix(0.10843322,0,0,0.10843322,-123.64648,626.96807)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <path
@@ -1079,7 +1114,7 @@
        id="rect14539"
        sodipodi:nodetypes="ccccccccc"
        transform="matrix(0.10843322,0,0,0.10843322,-123.64648,626.96807)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <rect
@@ -1092,7 +1127,7 @@
        id="rect7663"
        style="fill:#333333;fill-opacity:1;stroke:none;filter:url(#filter8666)"
        transform="matrix(0.10843322,0,0,0.10843322,-123.64648,626.96807)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <rect
@@ -1105,7 +1140,7 @@
        rx="45.072746"
        ry="45.072746"
        transform="matrix(0.10843322,0,0,0.10843322,-123.64648,626.96807)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <rect
@@ -1118,13 +1153,13 @@
        id="rect7658"
        style="fill:#333333;fill-opacity:1;stroke:none;filter:url(#filter8674)"
        transform="matrix(0.10843322,0,0,0.10843322,-123.64648,626.96807)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <g
        id="g5793"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -1155,7 +1190,7 @@
     <g
        id="g5819"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -1187,7 +1222,7 @@
        id="g5024"
        style="fill:#e6e6e6;fill-opacity:1"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -1228,7 +1263,7 @@
     <g
        id="g5036"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -1257,12 +1292,12 @@
     </g>
     <g
        id="g4695"
-       transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       transform="matrix(1.361158,0,0,1.361158,-248.7959,-22.776082)"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <rect
-         transform="matrix(0.02925445,0,0,0.07966248,119.307,477.34664)"
+         transform="matrix(2.925445e-2,0,0,7.966248e-2,119.307,477.34664)"
          ry="48.947079"
          rx="104.48342"
          y="-4980.6069"
@@ -1274,15 +1309,15 @@
       <path
          sodipodi:nodetypes="ccccccccc"
          style="fill:#ececec;fill-opacity:1;stroke:none"
-         d="m 67.920151,81.730963 30.5899,0 c 1.960059,0 3.538009,1.450556 3.538009,3.252339 l 0,23.741648 c 0,1.80179 -1.57795,3.25229 -3.538009,3.25229 l -30.5899,0 c -1.960053,0 -3.53801,-1.4505 -3.53801,-3.25229 l 0,-23.741648 c 0,-1.801783 1.577957,-3.252339 3.53801,-3.252339 z"
+         d="M 67.920151,81.730963 L 98.510051,81.730963 C 100.47011,81.730963 102.04806,83.181519 102.04806,84.983302 L 102.04806,108.72495 C 102.04806,110.52674 100.47011,111.97724 98.510051,111.97724 L 67.920151,111.97724 C 65.960098,111.97724 64.382141,110.52674 64.382141,108.72495 L 64.382141,84.983302 C 64.382141,83.181519 65.960098,81.730963 67.920151,81.730963 z"
          id="path7632" />
       <path
          id="path2462"
-         d="m 86.770668,86.023057 3.085119,-1.039755 0,23.741648 -3.085119,-3.55123 0,-19.150663 z"
+         d="M 86.770668,86.023057 L 89.855787,84.983302 L 89.855787,108.72495 L 86.770668,105.17372 L 86.770668,86.023057 z"
          style="fill:none;stroke:none" />
       <path
          id="path2464"
-         d="m 70.148293,107.79705 13.941348,0 2.228136,4.18019 -18.397626,0 2.228142,-4.18019"
+         d="M 70.148293,107.79705 L 84.089641,107.79705 L 86.317777,111.97724 L 67.920151,111.97724 L 70.148293,107.79705"
          style="fill:none;stroke:none" />
       <text
          xml:space="preserve"
@@ -1299,7 +1334,7 @@
     <g
        id="g4852"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -1325,7 +1360,7 @@
     <g
        id="g4880"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -1351,7 +1386,7 @@
     <g
        id="g4888"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -1377,7 +1412,7 @@
     <g
        id="g4896"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -1403,7 +1438,7 @@
     <g
        id="g4904"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -1429,7 +1464,7 @@
     <g
        id="g4912"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -1455,7 +1490,7 @@
     <g
        id="g4920"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -1481,7 +1516,7 @@
     <g
        id="g4928"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -1507,7 +1542,7 @@
     <g
        id="g4936"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -1533,7 +1568,7 @@
     <g
        id="g4944"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -1559,7 +1594,7 @@
     <g
        id="g4952"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -1583,7 +1618,7 @@
     <g
        id="g5593"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -1617,7 +1652,7 @@
     <g
        id="g5444"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -1648,7 +1683,7 @@
     <g
        id="g5045"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -1678,7 +1713,7 @@
     <g
        id="g5054"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -1708,7 +1743,7 @@
     <g
        id="g5063"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -1738,11 +1773,11 @@
     <g
        id="g5072"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
-         style="fill:#c6e9af;fill-opacity:1;stroke:none"
+         style="fill:#e6e6e6;fill-opacity:1;stroke:none"
          d="m 224.74467,151.90861 18.39762,0 c 1.96005,0 3.538,1.45055 3.538,3.25233 l 0,23.74166 c 0,1.80178 -1.57795,3.25228 -3.538,3.25228 l -18.39762,0 c -1.96006,0 -3.53801,-1.4505 -3.53801,-3.25228 l 0,-23.74166 c 0,-1.80178 1.57795,-3.25233 3.53801,-3.25233 z"
          id="path7330" />
       <path
@@ -1768,7 +1803,7 @@
     <g
        id="g5081"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -1798,7 +1833,7 @@
     <g
        id="g3504"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -1831,7 +1866,7 @@
     <g
        id="g5097"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <g
@@ -1870,11 +1905,11 @@
     <g
        id="g5111"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
-         style="fill:#ececec;fill-opacity:1;stroke:none"
+         style="fill:#c6e9af;fill-opacity:1;stroke:none"
          d="m 331.17445,151.90861 18.39762,0 c 1.96006,0 3.538,1.45055 3.538,3.25233 l 0,23.74166 c 0,1.80178 -1.57794,3.25223 -3.538,3.25223 l -18.39762,0 c -1.96006,0 -3.53802,-1.45045 -3.53802,-3.25223 l 0,-23.74166 c 0,-1.80178 1.57796,-3.25233 3.53802,-3.25233 z"
          id="path7346" />
       <path
@@ -1900,17 +1935,17 @@
     <g
        id="g5120"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <g
-         style="fill:#ffffff"
+         style="fill:#c6e9af;fill-opacity:1"
          id="g7348"
          transform="matrix(0.07966248,0,0,0.07966248,75.290988,472.79749)">
         <path
            id="path7350"
            d="m 3546.0981,-4028.1067 230.9447,0 c 24.6045,0 44.4124,18.2083 44.4124,40.8258 l 0,298.0282 c 0,22.6175 -19.8079,40.8258 -44.4124,40.8258 l -230.9447,0 c -24.6045,0 -44.4125,-18.2083 -44.4125,-40.8258 l 0,-298.0282 c 0,-22.6175 19.808,-40.8258 44.4125,-40.8258 z"
-           style="fill:#ececec;fill-opacity:1;stroke:none" />
+           style="fill:#c6e9af;fill-opacity:1;stroke:none" />
       </g>
       <g
          transform="matrix(0.07966248,0,0,0.07966248,75.290988,472.79749)"
@@ -1939,7 +1974,7 @@
     <g
        id="g5453"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -1969,7 +2004,7 @@
     <g
        id="g5462"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -2000,7 +2035,7 @@
        id="g5471"
        inkscape:transform-center-x="-30.700995"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -2030,7 +2065,7 @@
     <g
        id="g5490"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -2060,7 +2095,7 @@
     <g
        id="g5499"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -2090,7 +2125,7 @@
     <g
        id="g5508"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -2120,7 +2155,7 @@
     <g
        id="g5517"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <g
@@ -2159,7 +2194,7 @@
     <g
        id="g5533"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <g
@@ -2198,7 +2233,7 @@
     <g
        id="g5547"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -2228,7 +2263,7 @@
     <g
        id="g5556"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <g
@@ -2267,7 +2302,7 @@
     <g
        id="g5613"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -2297,7 +2332,7 @@
     <g
        id="g5622"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -2327,7 +2362,7 @@
     <g
        id="g5631"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -2357,7 +2392,7 @@
     <g
        id="g5640"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -2387,7 +2422,7 @@
     <g
        id="g5649"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -2417,7 +2452,7 @@
     <g
        id="g5731"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <g
@@ -2456,17 +2491,17 @@
     <g
        id="g5658"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <g
-         style="fill:#ffffff"
+         style="fill:#c6e9af;fill-opacity:1"
          id="g7210"
          transform="matrix(0.07966248,0,0,0.07966248,69.045494,536.51763)">
         <path
            id="path7212"
            d="m 2828.2076,-4044.4223 230.9447,0 c 24.6045,0 44.4124,18.2083 44.4124,40.8258 l 0,298.0282 c 0,22.6175 -19.8079,40.8258 -44.4124,40.8258 l -230.9447,0 c -24.6045,0 -44.4125,-18.2083 -44.4125,-40.8258 l 0,-298.0282 c 0,-22.6175 19.808,-40.8258 44.4125,-40.8258 z"
-           style="fill:#ececec;fill-opacity:1;stroke:none" />
+           style="fill:#c6e9af;fill-opacity:1;stroke:none" />
       </g>
       <g
          transform="matrix(0.07966248,0,0,0.07966248,69.045494,536.51763)"
@@ -2495,7 +2530,7 @@
     <g
        id="g5749"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -2529,7 +2564,7 @@
     <g
        id="g5759"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <g
@@ -2572,7 +2607,7 @@
     <g
        id="g5785"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -2598,7 +2633,7 @@
     <g
        id="g5868"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -2629,7 +2664,7 @@
     <g
        id="g5833"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -2660,7 +2695,7 @@
     <g
        id="g5802"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <g
@@ -2721,7 +2756,7 @@
     <g
        id="g5842"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -2781,7 +2816,7 @@
     <g
        id="g5828"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -2793,7 +2828,7 @@
     <g
        id="g4705"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -2823,7 +2858,7 @@
     <g
        id="g4714"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -2853,7 +2888,7 @@
     <g
        id="g4723"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -2883,7 +2918,7 @@
     <g
        id="g4732"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -2913,7 +2948,7 @@
     <g
        id="g4741"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -2943,7 +2978,7 @@
     <g
        id="g4750"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -2973,7 +3008,7 @@
     <g
        id="g4759"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -3003,7 +3038,7 @@
     <g
        id="g4768"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -3033,7 +3068,7 @@
     <g
        id="g4777"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -3063,7 +3098,7 @@
     <g
        id="g4786"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -3093,7 +3128,7 @@
     <g
        id="g4795"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -3123,7 +3158,7 @@
     <g
        id="g4804"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -3153,7 +3188,7 @@
     <g
        id="g5853"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -3209,7 +3244,7 @@
     <g
        id="g5223"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -3239,7 +3274,7 @@
     <g
        id="g4813"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -3273,7 +3308,7 @@
     <g
        id="g4823"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -3307,7 +3342,7 @@
     <g
        id="g4833"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -3337,7 +3372,7 @@
     <g
        id="g4960"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -3367,7 +3402,7 @@
     <g
        id="g4969"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -3397,7 +3432,7 @@
     <g
        id="g4978"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -3431,7 +3466,7 @@
     <g
        id="g5235"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -3461,7 +3496,7 @@
     <g
        id="g5244"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -3491,7 +3526,7 @@
     <g
        id="g5253"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -3525,7 +3560,7 @@
     <g
        id="g5428"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -3548,7 +3583,7 @@
     <g
        id="g5392"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -3571,7 +3606,7 @@
     <g
        id="g5436"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -3594,7 +3629,7 @@
     <g
        id="g5420"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -4178,7 +4213,7 @@
     <g
        id="g5774"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -4216,7 +4251,7 @@
     <g
        id="g5603"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -4250,7 +4285,7 @@
     <g
        id="g4860"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -4287,7 +4322,7 @@
     <g
        id="g4870"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -4324,7 +4359,7 @@
     <g
        id="g4842"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -4361,7 +4396,7 @@
     <g
        id="g5570"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -4406,7 +4441,7 @@
     <g
        id="g5582"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -4447,7 +4482,7 @@
     <g
        id="g5134"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -4492,7 +4527,7 @@
     <g
        id="g3505"
        transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
@@ -4544,7 +4579,7 @@
        width="4.8939762"
        id="rect2988-1"
        style="fill:#666666;fill-opacity:1;stroke:none;display:inline"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
@@ -4553,8 +4588,8 @@
        id="image17748"
        height="24.124847"
        width="24.124847"
-       xlink:href="file:///C:/Documents%20and%20Settings/Roger/starviewer/src/main/images/zoom.png"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       xlink:href="../../../src/main/images/zoom.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
@@ -4563,8 +4598,8 @@
        id="image17762"
        height="26.206869"
        width="26.206869"
-       xlink:href="file:///C:/Documents%20and%20Settings/Roger/starviewer/src/main/images/angle.png"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       xlink:href="../../../src/main/images/angle.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
@@ -4573,8 +4608,8 @@
        id="image17776"
        height="21.348818"
        width="21.348818"
-       xlink:href="file:///C:/Documents%20and%20Settings/Roger/starviewer/src/main/images/windowLevel.png"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       xlink:href="../../../src/main/images/windowLevel.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
@@ -4583,8 +4618,8 @@
        id="image17790"
        height="25.512863"
        width="25.512863"
-       xlink:href="file:///C:/Documents%20and%20Settings/Roger/starviewer/src/main/images/slicing.png"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       xlink:href="../../../src/main/images/slicing.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
@@ -4593,8 +4628,8 @@
        id="image3636"
        height="26.900877"
        width="26.900877"
-       xlink:href="file:///C:/Documents%20and%20Settings/Roger/starviewer/src/main/images/distance.png"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       xlink:href="../../../src/main/images/distance.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
@@ -4603,8 +4638,8 @@
        id="image3678"
        height="23.332289"
        width="23.332289"
-       xlink:href="file:///C:/Documents%20and%20Settings/Roger/starviewer/src/main/images/flipHorizontal.png"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       xlink:href="../../../src/main/images/flipHorizontal.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
@@ -4613,8 +4648,8 @@
        id="image3692"
        height="22.312557"
        width="22.312557"
-       xlink:href="file:///C:/Documents%20and%20Settings/Roger/starviewer/src/main/images/flipVertical.png"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       xlink:href="../../../src/main/images/flipVertical.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
@@ -4623,8 +4658,8 @@
        id="image3706"
        height="22.457861"
        width="22.457861"
-       xlink:href="file:///C:/Documents%20and%20Settings/Roger/starviewer/src/main/images/referenceLines.png"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       xlink:href="../../../src/main/images/referenceLines.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
@@ -4634,15 +4669,15 @@
        id="image17776-1"
        height="21.348818"
        width="21.348818"
-       xlink:href="file:///C:/Documents%20and%20Settings/Roger/starviewer/src/main/images/windowLevel.png"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       xlink:href="../../../src/main/images/windowLevel.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <path
        style="opacity:0;color:#000000;fill:#ffb380;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.94488591;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        d="m -123.27264,181.29718 -1.25148,-1.25149 0,-17.63671 0,-17.63671 1.25148,-1.25149 1.25149,-1.25148 14.57752,0 14.577513,0 1.251489,1.25148 1.251487,1.25149 0,17.63671 0,17.63671 -1.251487,1.25149 -1.251489,1.25148 -14.577513,0 -14.57752,0 -1.25149,-1.25148 z m 7.92609,-12.00502 c 0,-2.80426 -0.17208,-5.0972 -0.3824,-5.09543 -0.42761,0.004 -2.16692,2.8861 -2.16692,3.59115 0,0.2489 0.34416,0.32048 0.7648,0.15907 0.63226,-0.24263 0.76479,0.29029 0.76479,3.07519 0,1.90587 0.22141,3.36868 0.50987,3.36868 0.30592,0 0.50986,-2.03947 0.50986,-5.09866 z m -1.52959,-13.00157 c 0,-0.42063 -0.22944,-0.76479 -0.50987,-0.76479 -0.28042,0 -0.50986,0.34416 -0.50986,0.76479 0,0.42064 0.22944,0.7648 0.50986,0.7648 0.28043,0 0.50987,-0.34416 0.50987,-0.7648 z m 0,-5.35358 c 0,-2.37937 -0.21245,-4.07893 -0.50987,-4.07893 -0.56443,0 -0.72237,7.26552 -0.16995,7.81794 0.6294,0.6294 0.67982,0.3521 0.67982,-3.73901 z"
        id="path3619"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <rect
@@ -4654,7 +4689,7 @@
        y="274.30756"
        rx="24.983406"
        ry="8.1578465"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <rect
@@ -4666,7 +4701,7 @@
        y="274.30756"
        rx="45.072746"
        ry="17.335424"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <rect
@@ -4678,13 +4713,13 @@
        y="238.10712"
        rx="45.072746"
        ry="17.335424"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <g
        id="g5074"
        transform="translate(-20.971575,29.923931)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <rect
@@ -4720,7 +4755,7 @@
        style="display:inline"
        id="g5074-5"
        transform="translate(-20.971575,115.75949)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <rect
@@ -4760,7 +4795,7 @@
        style="display:inline"
        id="g5074-7"
        transform="translate(40.994624,-13.760644)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <rect
@@ -4790,69 +4825,86 @@
        id="image5231"
        height="21.299999"
        width="21.299999"
-       xlink:href="file:///C:/Documents%20and%20Settings/Roger/starviewer/src/main/images/rotate3d.png" />
+       xlink:href="../../../src/main/images/rotate3d.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <image
        y="198.13155"
        x="-15.4763"
        id="image5245"
        height="26.952589"
        width="26.952589"
-       xlink:href="file:///C:/Documents%20and%20Settings/Roger/starviewer/src/main/images/eraser2.png" />
-    <image
-       y="201.28148"
-       x="61.153263"
-       id="image5259"
-       height="22"
-       width="22"
-       xlink:href="file:///C:/Documents%20and%20Settings/Roger/starviewer/src/main/images/move.png" />
+       xlink:href="../../../src/main/images/eraser2.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <image
        y="244.16609"
        x="69.676971"
        id="image5273"
        height="23.1"
        width="23.1"
-       xlink:href="file:///C:/Documents%20and%20Settings/Roger/starviewer/src/main/images/rotateClockWise.png"
-       style="fill:#ffd42a" />
+       xlink:href="../../../src/main/images/rotateClockWise.png"
+       style="fill:#ffd42a"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <image
        y="244.36343"
        x="31.229334"
        id="image5287"
        height="23.1"
        width="23.1"
-       xlink:href="file:///C:/Documents%20and%20Settings/Roger/starviewer/src/main/images/rotateCounterClockWise.png" />
+       xlink:href="../../../src/main/images/rotateCounterClockWise.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <image
        y="286.13708"
        x="9.9085035"
        id="image5301"
        height="23"
        width="23"
-       xlink:href="file:///C:/Documents%20and%20Settings/Roger/starviewer/src/main/images/mouse.png" />
+       xlink:href="../../../src/main/images/mouse.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <image
        y="285.36646"
        x="45.650509"
        id="image5315"
        height="23"
        width="23"
-       xlink:href="file:///C:/Documents%20and%20Settings/Roger/starviewer/src/main/images/voxelInformation.png" />
+       xlink:href="../../../src/main/images/voxelInformation.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <image
        y="285.41605"
        x="84.177536"
        id="image5329"
        height="23"
        width="23"
-       xlink:href="file:///C:/Documents%20and%20Settings/Roger/starviewer/src/main/images/clippingBox.png" />
+       xlink:href="../../../src/main/images/clippingBox.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <image
        y="199.69717"
        x="169.17534"
        id="image5343"
        height="23"
        width="23"
-       xlink:href="file:///C:/Documents%20and%20Settings/Roger/starviewer/src/main/images/invertWL.png" />
+       xlink:href="../../../src/main/images/invertWL.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <g
        style="display:inline"
        id="g5074-2"
        transform="translate(-106.71842,-7.6487363)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <rect
@@ -4888,12 +4940,15 @@
        id="image3677"
        height="22.626238"
        width="22.626238"
-       xlink:href="file:///C:/Documents%20and%20Settings/Roger/starviewer/src/main/images/ellipticalROITool.png" />
+       xlink:href="../../../src/main/images/ellipticalROITool.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <g
        style="display:inline"
        id="g5074-2-7"
        transform="translate(-549.72622,-130.38693)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <rect
@@ -4922,5 +4977,66 @@
            sodipodi:role="line"
            id="tspan3709">definides a la imatge actual</tspan></text>
     </g>
+    <image
+       y="286.86005"
+       x="159.39368"
+       id="image3277"
+       height="19.253365"
+       width="19.253365"
+       sodipodi:absref="..\..\..\\src\main\images\magicroitool.png"
+       xlink:href="..\..\..\\src\main\images\magicroitool.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
+    <image
+       y="195.67305"
+       x="206.30133"
+       id="image3290"
+       height="21.292826"
+       width="21.292826"
+       sodipodi:absref="..\..\..\\src\main\images\synchronize.png"
+       xlink:href="..\..\..\\src\main\images\synchronize.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
+    <image
+       y="196.49532"
+       x="241.9919"
+       id="image3303"
+       height="21.802692"
+       width="21.802692"
+       sodipodi:absref="..\..\..\\src\main\images\linkAll.png"
+       xlink:href="..\..\..\\src\main\images\linkAll.png"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter4415);font-family:Bitstream Vera Sans"
+       x="199.12375"
+       y="223.32103"
+       id="text3307"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"><tspan
+         sodipodi:role="line"
+         x="199.12375"
+         y="223.32103"
+         style="font-size:6px;fill:#000000;fill-opacity:1;stroke:none;stroke-opacity:1"
+         id="tspan3313">Auto-Sincr</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;filter:url(#filter4415);font-family:Bitstream Vera Sans"
+       x="235.50484"
+       y="223.34416"
+       id="text4428"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"><tspan
+         sodipodi:role="line"
+         x="235.50484"
+         y="223.34416"
+         style="font-size:6px;fill:#000000;fill-opacity:1;stroke:none;stroke-opacity:1"
+         id="tspan4430">Sincr-Tots</tspan></text>
   </g>
 </svg>
