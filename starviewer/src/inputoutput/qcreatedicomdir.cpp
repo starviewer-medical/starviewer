@@ -510,7 +510,8 @@ Status QCreateDicomdir::startCreateDicomdir(QString dicomdirPath)
             default:
                 QMessageBox::critical(this, ApplicationNameString, tr("Error creating DICOMDIR. Be sure you have write permissions in %1 and It is empty.")
                                                                  .arg(m_lineEditDicomdirPath->text()));
-                ERROR_LOG("Error al crear el DICOMDIR ERROR : " + state.text());
+                ERROR_LOG(QString("Error (%1) al crear el DICOMDIR: %2").arg(state.code()).arg(state.text()));
+                DEBUG_LOG(QString("Error (%1) al crear el DICOMDIR: %2").arg(state.code()).arg(state.text()));
                 return state;
         }
     }
