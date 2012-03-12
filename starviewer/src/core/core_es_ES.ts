@@ -1121,7 +1121,7 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
         <location filename="systemrequerimentstest.cpp" line="53"/>
         <location filename="systemrequerimentstest.cpp" line="75"/>
         <source>Update computer&apos;s hardware</source>
-        <translation>Actualize la maquinaria</translation>
+        <translation>Actualice la maquinaria</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="74"/>
@@ -1132,7 +1132,7 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
         <location filename="systemrequerimentstest.cpp" line="88"/>
         <location filename="systemrequerimentstest.cpp" line="107"/>
         <source>Update your graphics card driver</source>
-        <translation>Actualize el controlador de la tarjeta gráfica</translation>
+        <translation>Actualice el controlador de la tarjeta gráfica</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="86"/>
@@ -1185,7 +1185,7 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
     <message>
         <location filename="systemrequerimentstest.cpp" line="159"/>
         <source>Update operating system to a newer version</source>
-        <translation>Actualize el sistema operativo a una versión más reciente</translation>
+        <translation>Actualice el sistema operativo a una versión más reciente</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="170"/>
@@ -1205,7 +1205,7 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
     <message>
         <location filename="systemrequerimentstest.cpp" line="193"/>
         <source>Add more RAM memory to the computer</source>
-        <translation>Añade más memoria RAM</translation>
+        <translation>Añada más memoria RAM</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="221"/>
