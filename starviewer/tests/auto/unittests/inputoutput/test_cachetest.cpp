@@ -63,7 +63,7 @@ void test_CacheTest::run_ShouldTestIfCacheIsCorrectlyConfigured_data()
     bool unusedBool = true;
 
     DiagnosisTestProblem permissionsProblem(DiagnosisTestProblem::Error, "Invalid permissions on the local database directory", "Fix the permissions of the directory or change the local database to other location");
-    DiagnosisTestProblem noSpaceProblem(DiagnosisTestProblem::Error, "The free space on the local database location is below the minimum required", "Make some space on disk or change the local database to other location");
+    DiagnosisTestProblem noSpaceProblem(DiagnosisTestProblem::Error, "The free space on the local database location is below the minimum 1 GB required", "Make some space on disk or change the local database to other location");
     DiagnosisTestProblem defaultPathProblem(DiagnosisTestProblem::Warning, "The local database is not on the default path", "");
 
     DiagnosisTestResult permissionsResult;

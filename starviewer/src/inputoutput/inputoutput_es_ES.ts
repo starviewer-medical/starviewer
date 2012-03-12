@@ -84,9 +84,9 @@
     <name>udg::CacheTest</name>
     <message>
         <location filename="cachetest.cpp" line="34"/>
-        <source>The free space on the local database location is below %1GB minimum requireds</source>
-        <oldsource>The free space on the local database location is below %1GB minimum required</oldsource>
-        <translation>El espacio necesario para la base de datos local es inferior a %1GB, el mínimo requerido</translation>
+        <source>The free space on the local database location is below the minimum %1 GB required</source>
+        <oldsource>The free space on the local database location is below the minimum required %1 GB</oldsource>
+        <translation>El espacio necesario para la base de datos local es inferior a los %1 GB  mínimos requeridos</translation>
     </message>
     <message>
         <location filename="cachetest.cpp" line="35"/>

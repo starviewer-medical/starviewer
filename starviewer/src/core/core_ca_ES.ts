@@ -1171,14 +1171,14 @@ Es recomana que les deseu en una carpeta buida.</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="141"/>
-        <source>Operating system is not 64 bits architecture</source>
-        <oldsource>Operating system is not 64 bit architecture</oldsource>
+        <source>Operating system is not 64 bit architecture</source>
+        <oldsource>Operating system is not 64 bits architecture</oldsource>
         <translation>El sistema operatiu no és d&apos;arquitectura 64 bits</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="142"/>
-        <source>Update operating system to a 64 bits version</source>
-        <oldsource>Update operating system to a 64 bit version</oldsource>
+        <source>Update operating system to a 64 bit version</source>
+        <oldsource>Update operating system to a 64 bits version</oldsource>
         <translation>Actualitzeu el sistema operatiu a una versió 64 bits</translation>
     </message>
     <message>
