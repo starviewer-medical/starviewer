@@ -30,7 +30,6 @@ DiagnosisTestResult SystemRequerimentsTest::run()
     const QList<QString> MinimumGPUOpenGLExtensions = requeriments->getMinimumGPUOpenGLCompatibilities();
     const QString MinimumGPUOpenGLVersion = requeriments->getMinimumGPUOpenGLVersion();
     const QString MinimumOSVersion = requeriments->getMinimumOperatingSystemVersion();
-    const unsigned int MinimumServicePackVersion = requeriments->getMinimumOperatingSystemServicePackVersion();
     const unsigned int MinimumRAM = requeriments->getMinimumRAMTotalAmount();
     const unsigned int MinimumScreenWidth = requeriments->getMinimumScreenWidth();
     const unsigned int MinimumDiskSpace = requeriments->getMinimumHardDiskFreeSpace();
@@ -163,11 +162,21 @@ DiagnosisTestResult SystemRequerimentsTest::run()
             if (version.split(".").at(0).toInt() == 5)
             {
                 servicePack = getOperatingSystemServicePackVersion(system);
-                if (servicePack.right(servicePack.count() - 13).toUInt() < MinimumServicePackVersion)
+                unsigned int minimumServicePackVersion;
+                if (isOperatingSystem64BitArchitecture(system))
+                {
+                    minimumServicePackVersion = requeriments->getMinimum64bitOperatingSystemServicePackVersion();
+                }
+                else
+                {
+                    minimumServicePackVersion = requeriments->getMinimum32bitOperatingSystemServicePackVersion();
+                }
+                
+                if (servicePack.right(servicePack.count() - 13).toUInt() < minimumServicePackVersion)
                 {
                     DiagnosisTestProblem problem;
                     problem.setState(DiagnosisTestProblem::Error);
-                    problem.setDescription(tr("Current Service Pack version is %1 and the minimum required is Service Pack %2").arg(servicePack).arg(MinimumServicePackVersion));
+                    problem.setDescription(tr("Current Service Pack version is %1 and the minimum required is Service Pack %2").arg(servicePack).arg(minimumServicePackVersion));
                     problem.setSolution(tr("Install a newer service pack"));
                     result.addError(problem);
                 }

@@ -20,7 +20,8 @@ public:
         m_minimumGPURAM = 256; // Mbytes
         m_minimumGPUOpenGLVersion = "2.1";
         m_minimumOSVersion = "5.0"; // XP
-        m_minimumServicePackVersion = 3; // XP service pack 3
+        m_minimum32bitServicePackVersion = 3; // XP service pack 3
+        m_minimum64bitServicePackVersion = 2; // XP service pack 2
         m_minimumRAM = 4096; // 4Gb
         m_minimumScreenWidth = 1185; // La mínima amplada que pot tenir starviewer (si s'afageixen controls a la pantalla, s'ha de modificar)
 
@@ -270,7 +271,7 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
     QTest::newRow("windows service pack version error") << cpuNumberOfCores << cpuFrequencies << openGLExtensions << openGLVersion << gpuRAM << gpuModel << hardDiskFreeSpace
                                                         << operatingSystem << operatingSystemVersion << "Service Pack 1" << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << writeCapability
                                                         << DiagnosisTestResult::Error
-                                                        << QString("Current Service Pack version is %1 and the minimum required is Service Pack %2").arg("Service Pack 1").arg(requeriments.getMinimumOperatingSystemServicePackVersion())
+                                                        << QString("Current Service Pack version is %1 and the minimum required is Service Pack %2").arg("Service Pack 1").arg(requeriments.getMinimum64bitOperatingSystemServicePackVersion())
                                                         << "Install a newer service pack";
 
     QTest::newRow("not enough RAM") << cpuNumberOfCores << cpuFrequencies << openGLExtensions << openGLVersion << gpuRAM << gpuModel << hardDiskFreeSpace

@@ -10,7 +10,8 @@ SystemRequeriments::SystemRequeriments()
     m_minimumGPURAM = 256; // Mbytes
     m_minimumGPUOpenGLVersion = "2.1";
     m_minimumOSVersion = "5.0"; // XP
-    m_minimumServicePackVersion = 3; // XP service pack 3
+    m_minimum32bitServicePackVersion = 3; // XP service pack 3
+    m_minimum64bitServicePackVersion = 2; // XP service pack 2
     m_minimumRAM = 4000; // 4Gb
     m_minimumScreenWidth = 1185; // La mínima amplada que pot tenir starviewer (si s'afageixen controls a la pantalla, s'ha de modificar)
 
@@ -61,9 +62,14 @@ QString SystemRequeriments::getMinimumOperatingSystemVersion()
     return m_minimumOSVersion;
 }
 
-unsigned int SystemRequeriments::getMinimumOperatingSystemServicePackVersion()
+unsigned int SystemRequeriments::getMinimum32bitOperatingSystemServicePackVersion()
 {
-    return m_minimumServicePackVersion;
+    return m_minimum32bitServicePackVersion;
+}
+
+unsigned int SystemRequeriments::getMinimum64bitOperatingSystemServicePackVersion()
+{
+    return m_minimum64bitServicePackVersion;
 }
 
 bool SystemRequeriments::doesOperatingSystemNeedToBe64BitArchitecutre()
