@@ -1167,15 +1167,15 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="141"/>
-        <source>Operating system is not 64 bits architecture</source>
-        <oldsource>Operating system is not 64 bit architecture</oldsource>
+        <source>Operating system is not 64 bit architecture</source>
+        <oldsource>Operating system is not 64 bits architecture</oldsource>
         <translation>El sistema operativo no es de arquitectura 64 bits</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="142"/>
-        <source>Update operating system to a 64 bits version</source>
-        <oldsource>Update operating system to a 64 bit version</oldsource>
-        <translation>Actualize el sistema operativo a una versión 64 bits</translation>
+        <source>Update operating system to a 64 bit version</source>
+        <oldsource>Update operating system to a 64 bits version</oldsource>
+        <translation>Actualice el sistema operativo a una versión 64 bits</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="158"/>
