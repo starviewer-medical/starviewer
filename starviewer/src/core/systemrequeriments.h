@@ -21,6 +21,8 @@ public:
     virtual unsigned int getMinimumGPURAM();
     virtual unsigned int getMinimumHardDiskFreeSpace();
     virtual QString getMinimumOperatingSystemVersion();
+    // TODO S'assumeix que el sistema operatiu al que ens referim pel service pack és Windows XP
+    // Caldria fer un mètode més genèric per contemplar altres sistemes operatius Windows, com 7
     virtual unsigned int getMinimum32bitOperatingSystemServicePackVersion();
     virtual unsigned int getMinimum64bitOperatingSystemServicePackVersion();
     virtual bool doesOperatingSystemNeedToBe64BitArchitecutre();
