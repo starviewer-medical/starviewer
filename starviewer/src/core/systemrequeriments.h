@@ -21,7 +21,8 @@ public:
     virtual unsigned int getMinimumGPURAM();
     virtual unsigned int getMinimumHardDiskFreeSpace();
     virtual QString getMinimumOperatingSystemVersion();
-    virtual unsigned int getMinimumOperatingSystemServicePackVersion();
+    virtual unsigned int getMinimum32bitOperatingSystemServicePackVersion();
+    virtual unsigned int getMinimum64bitOperatingSystemServicePackVersion();
     virtual bool doesOperatingSystemNeedToBe64BitArchitecutre();
     virtual unsigned int getMinimumRAMTotalAmount();
     virtual unsigned int getMinimumScreenWidth();
@@ -33,7 +34,8 @@ protected:
     unsigned int m_minimumGPURAM;
     QString m_minimumGPUOpenGLVersion;
     QString m_minimumOSVersion;
-    unsigned int m_minimumServicePackVersion;
+    unsigned int m_minimum32bitServicePackVersion;
+    unsigned int m_minimum64bitServicePackVersion;
     bool m_doesOperatingSystemNeedToBe64BitArchitecutre;
     unsigned int m_minimumRAM;
     unsigned int m_minimumScreenWidth;
