@@ -48,7 +48,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
     {
         DiagnosisTestProblem problem;
         problem.setState(DiagnosisTestProblem::Error);
-        problem.setDescription(tr("The machine currently has %1 cores, and the minimum required is %2").arg(numberOfCores).arg(MinimumNumberOfCores));
+        problem.setDescription(tr("The computer has %1 cores, and the minimum required is %2").arg(numberOfCores).arg(MinimumNumberOfCores));
         problem.setSolution(tr("Update computer's hardware"));
         result.addError(problem);
     }
@@ -70,7 +70,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
         {
             DiagnosisTestProblem problem;
             problem.setState(DiagnosisTestProblem::Error);
-            problem.setDescription(tr("The fastest CPU runs at %1 and the minimum required is %2").arg(maximumCPUFrequency).arg(MinimumCoreSpeed));
+            problem.setDescription(tr("The fastest CPU runs at %1 MHz, and the minimum required is %2 MHz").arg(maximumCPUFrequency).arg(MinimumCoreSpeed));
             problem.setSolution(tr("Update computer's hardware"));
             result.addError(problem);
         }
@@ -82,7 +82,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
     {
         DiagnosisTestProblem problem;
         problem.setState(DiagnosisTestProblem::Error);
-        problem.setDescription(tr("Current OpenGL version is %1 and the minimum required is %2").arg(openGLVersion).arg(MinimumGPUOpenGLVersion));
+        problem.setDescription(tr("Current OpenGL version is %1, and the minimum required is %2").arg(openGLVersion).arg(MinimumGPUOpenGLVersion));
         // Normalment la versió d'openGL s'actualitza amb els drivers de la gràfica
         problem.setSolution(tr("Update your graphics card driver"));
         result.addError(problem);
@@ -116,7 +116,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
         {
             DiagnosisTestProblem problem;
             problem.setState(DiagnosisTestProblem::Error);
-            problem.setDescription(tr("The graphics card %1 has %2Mb of RAM and the minimum required is %3Mb").arg(gpuModel.at(i)).arg(gpuRAM.at(i)).arg(MinimumGPURAM));
+            problem.setDescription(tr("The graphics card %1 has %2 MB of RAM, and the minimum required is %3 MB").arg(gpuModel.at(i)).arg(gpuRAM.at(i)).arg(MinimumGPURAM));
             problem.setSolution(tr("Change the graphics card"));
             result.addError(problem);
         }
@@ -154,7 +154,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
             {
                 DiagnosisTestProblem problem;
                 problem.setState(DiagnosisTestProblem::Error);
-                problem.setDescription(tr("Current Operative System version is %1 and the minimum required is %2").arg(version).arg(MinimumOSVersion));
+                problem.setDescription(tr("Current Operative System version is %1, and the minimum required is %2").arg(version).arg(MinimumOSVersion));
                 problem.setSolution(tr("Update operating system to a newer version"));
                 result.addError(problem);
             }
@@ -176,7 +176,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
                 {
                     DiagnosisTestProblem problem;
                     problem.setState(DiagnosisTestProblem::Error);
-                    problem.setDescription(tr("Current Service Pack version is %1 and the minimum required is Service Pack %2").arg(servicePack).arg(minimumServicePackVersion));
+                    problem.setDescription(tr("Current Service Pack version is %1, and the minimum required is Service Pack %2").arg(servicePack).arg(minimumServicePackVersion));
                     problem.setSolution(tr("Install a newer service pack"));
                     result.addError(problem);
                 }
@@ -198,8 +198,8 @@ DiagnosisTestResult SystemRequerimentsTest::run()
     {
         DiagnosisTestProblem problem;
         problem.setState(DiagnosisTestProblem::Error);
-        problem.setDescription(tr("The total amount of RAM memory is %1 and the minimum required is %2").arg(RAMTotalAmount).arg(MinimumRAM));
-        problem.setSolution(tr("Add more RAM memory to the computer"));
+        problem.setDescription(tr("The total amount of RAM memory is %1 MB, and the minimum required is %2 MB").arg(RAMTotalAmount).arg(MinimumRAM));
+        problem.setSolution(tr("Upgrade computer's RAM memory"));
         result.addError(problem);
     }
 
@@ -228,7 +228,8 @@ DiagnosisTestResult SystemRequerimentsTest::run()
             DiagnosisTestProblem problem;
             problem.setState(DiagnosisTestProblem::Warning);
             problem.setDescription(tr("One of the screens is too small. Keep in mind that %1 won't fit in that screen").arg(ApplicationNameString));
-            problem.setSolution(tr("Don't move %1 to screen/s %2, or change to a higher resolution").arg(ApplicationNameString).arg(screensInWhichStarviewerWontFit.join(", ")));
+            problem.setSolution(tr("Avoid placing %1 on the screen or screens %2, or increase their resolution if possible").arg(ApplicationNameString)
+                .arg(screensInWhichStarviewerWontFit.join(", ")));
             result.addWarning(problem);
         }
         // else OK
@@ -238,7 +239,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
         // ERROR
         DiagnosisTestProblem problem;
         problem.setState(DiagnosisTestProblem::Error);
-        problem.setSolution(tr("Change to a higher resolution"));
+        problem.setSolution(tr("Increase screen resolution"));
         if (resolutions.count() == 1)
         {
             problem.setDescription(tr("The screen is too small to fit %1 application").arg(ApplicationNameString));

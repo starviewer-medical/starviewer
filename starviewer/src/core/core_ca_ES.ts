@@ -311,7 +311,7 @@
     <message>
         <location filename="firewallaccesstest.cpp" line="39"/>
         <source>Contact technical service to evaluate the problem</source>
-        <translation>Poseu-vos en contacte amb el servei tècnic per evaluar el problema</translation>
+        <translation>Poseu-vos en contacte amb el servei tècnic per avaluar el problema</translation>
     </message>
     <message>
         <location filename="firewallaccesstest.cpp" line="50"/>
@@ -824,7 +824,7 @@ Marc Ruiz: El GIMP fa servir &quot;brillantor&quot;. De moment ho canvio a l&apo
     <message>
         <location filename="qdiagnosistest.cpp" line="133"/>
         <source>Save diagnosis test results</source>
-        <translation>Guarda els resultats</translation>
+        <translation>Desa els resultats</translation>
     </message>
 </context>
 <context>
@@ -858,7 +858,7 @@ Marc Ruiz: El GIMP fa servir &quot;brillantor&quot;. De moment ho canvio a l&apo
     <message>
         <location filename="qdiagnosistestbase.ui" line="276"/>
         <source>Save Results</source>
-        <translation>Guarda els resultats</translation>
+        <translation>Desa els resultats</translation>
     </message>
     <message>
         <location filename="qdiagnosistestbase.ui" line="116"/>
@@ -1117,142 +1117,151 @@ Es recomana que les deseu en una carpeta buida.</translation>
 <context>
     <name>udg::SystemRequerimentsTest</name>
     <message>
+        <location filename="systemrequerimentstest.cpp" line="51"/>
+        <source>The computer has %1 cores, and the minimum required is %2</source>
+        <oldsource>The machine currently has %1 cores, and the minimum required is %2</oldsource>
+        <translation>Els nuclis de l&apos;equip són %1 quan el mínim requerit són %2</translation>
+    </message>
+    <message>
         <location filename="systemrequerimentstest.cpp" line="52"/>
-        <source>The machine currently has %1 cores, and the minimum required is %2</source>
-        <translation>La màquina té %1 nuclis quan el mínim requerit és %2</translation>
-    </message>
-    <message>
-        <location filename="systemrequerimentstest.cpp" line="53"/>
-        <location filename="systemrequerimentstest.cpp" line="75"/>
-        <source>Update computer&apos;s hardware</source>
-        <translation>Actualitza el maquinari</translation>
-    </message>
-    <message>
         <location filename="systemrequerimentstest.cpp" line="74"/>
-        <source>The fastest CPU runs at %1 and the minimum required is %2</source>
-        <translation>La CPU més ràpida va a %1 quan la velocitat mínima requerida és %2</translation>
+        <source>Update computer&apos;s hardware</source>
+        <translation>Actualitzeu el maquinari</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="88"/>
-        <location filename="systemrequerimentstest.cpp" line="107"/>
+        <location filename="systemrequerimentstest.cpp" line="73"/>
+        <source>The fastest CPU runs at %1 MHz, and the minimum required is %2 MHz</source>
+        <oldsource>The fastest CPU runs at %1 and the minimum required is %2</oldsource>
+        <translation>La CPU més ràpida va a %1 MHz quan la velocitat mínima requerida és %2 MHz</translation>
+    </message>
+    <message>
+        <location filename="systemrequerimentstest.cpp" line="87"/>
+        <location filename="systemrequerimentstest.cpp" line="106"/>
         <source>Update your graphics card driver</source>
         <translation>Actualitzeu el controlador de la targeta gràfica</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="86"/>
-        <source>Current OpenGL version is %1 and the minimum required is %2</source>
+        <location filename="systemrequerimentstest.cpp" line="85"/>
+        <source>Current OpenGL version is %1, and the minimum required is %2</source>
+        <oldsource>Current OpenGL version is %1 and the minimum required is %2</oldsource>
         <translation>La versió actual d&apos;OpenGL és %1 quan la mínima requerida és %2</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="106"/>
+        <location filename="systemrequerimentstest.cpp" line="105"/>
         <source>Current OpenGL version does not support these extensions: %1</source>
         <translation>La versió actual d&apos;OpenGL no suporta les següents extensions: %1</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="120"/>
-        <source>The graphics card %1 has %2Mb of RAM and the minimum required is %3Mb</source>
-        <translation>La targeta gràfica %1 té %2Mb de RAM quan el mínim requerit és %3Mb</translation>
+        <location filename="systemrequerimentstest.cpp" line="119"/>
+        <source>The graphics card %1 has %2 MB of RAM, and the minimum required is %3 MB</source>
+        <oldsource>The graphics card %1 has %2 MB of RAM and the minimum required is %3 MB</oldsource>
+        <translation>La targeta gràfica %1 té %2 MB de memòria RAM quan el mínim requerit és %3 MB</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="121"/>
+        <location filename="systemrequerimentstest.cpp" line="120"/>
         <source>Change the graphics card</source>
         <translation>Canvieu la targeta gràfica</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="131"/>
+        <location filename="systemrequerimentstest.cpp" line="130"/>
         <source>There is not enough disk space to run %1 properly</source>
         <oldsource>There is not enough disk space to run starviewer properly</oldsource>
         <translation>No hi ha espai suficient al disc per executar correctament %1</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="132"/>
+        <location filename="systemrequerimentstest.cpp" line="131"/>
         <source>Free some space in the hard disk</source>
         <translation>Allibereu espai al disc</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="141"/>
+        <location filename="systemrequerimentstest.cpp" line="140"/>
         <source>Operating system is not 64 bit architecture</source>
         <oldsource>Operating system is not 64 bits architecture</oldsource>
         <translation>El sistema operatiu no és d&apos;arquitectura 64 bits</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="142"/>
+        <location filename="systemrequerimentstest.cpp" line="141"/>
         <source>Update operating system to a 64 bit version</source>
         <oldsource>Update operating system to a 64 bits version</oldsource>
         <translation>Actualitzeu el sistema operatiu a una versió 64 bits</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="158"/>
-        <source>Current Operative System version is %1 and the minimum required is %2</source>
+        <location filename="systemrequerimentstest.cpp" line="157"/>
+        <source>Current Operative System version is %1, and the minimum required is %2</source>
+        <oldsource>Current Operative System version is %1 and the minimum required is %2</oldsource>
         <translation>La versió actual del sistema operatiu és %1 quan la mínima requerida és %2</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="159"/>
+        <location filename="systemrequerimentstest.cpp" line="158"/>
         <source>Update operating system to a newer version</source>
         <translation>Actualitzeu el sistema operatiu a una versió més recent</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="170"/>
-        <source>Current Service Pack version is %1 and the minimum required is Service Pack %2</source>
+        <location filename="systemrequerimentstest.cpp" line="179"/>
+        <source>Current Service Pack version is %1, and the minimum required is Service Pack %2</source>
+        <oldsource>Current Service Pack version is %1 and the minimum required is Service Pack %2</oldsource>
         <translation>La versió actual del Service Pack és %1 quan el Service Pack mínim requerit és el %2</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="171"/>
+        <location filename="systemrequerimentstest.cpp" line="180"/>
         <source>Install a newer service pack</source>
         <translation>Instal·leu el Service Pack més recent</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="192"/>
-        <source>The total amount of RAM memory is %1 and the minimum required is %2</source>
-        <translation>La memòria RAM total és %1 quan la mínima requerida és %2</translation>
+        <location filename="systemrequerimentstest.cpp" line="201"/>
+        <source>The total amount of RAM memory is %1 MB, and the minimum required is %2 MB</source>
+        <oldsource>The total amount of RAM memory is %1 and the minimum required is %2</oldsource>
+        <translation>La memòria RAM total és de %1 MB quan la mínima requerida és de %2 MB</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="193"/>
-        <source>Add more RAM memory to the computer</source>
+        <location filename="systemrequerimentstest.cpp" line="202"/>
+        <source>Upgrade computer&apos;s RAM memory</source>
+        <oldsource>Add more RAM memory to the computer</oldsource>
         <translation>Afegiu més memòria RAM</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="221"/>
+        <location filename="systemrequerimentstest.cpp" line="230"/>
         <source>One of the screens is too small. Keep in mind that %1 won&apos;t fit in that screen</source>
         <oldsource>One of the screens is too small. Keep in mind that Starviewer won&apos;t fit in that screen</oldsource>
         <translation>Una de les pantalles té una resolució massa petita. %1 no es mostrarà bé en aquesta pantalla</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="222"/>
-        <source>Don&apos;t move %1 to screen/s %2, or change to a higher resolution</source>
-        <oldsource>Don&apos;t move Starviewer to screen/s %1, or change to a higher resolution</oldsource>
-        <translation>Eviteu utilitzar %1 a la pantalla o pantalles %2, o augmenteu la resolució d&apos;aquestes</translation>
+        <location filename="systemrequerimentstest.cpp" line="231"/>
+        <source>Avoid placing %1 on the screen or screens %2, or increase their resolution if possible</source>
+        <oldsource>Don&apos;t move %1 to screen/s %2, or change to a higher resolution</oldsource>
+        <translation>Eviteu utilitzar %1 a la pantalla o pantalles %2, o augmenteu la resolució d&apos;aquestess si és possible</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="232"/>
-        <source>Change to a higher resolution</source>
-        <translation>Augmenteu la resolució de la pantalla</translation>
+        <location filename="systemrequerimentstest.cpp" line="242"/>
+        <source>Increase screen resolution</source>
+        <oldsource>Increase the resolution of the screens</oldsource>
+        <translation>Augmenteu la resolució de pantalla</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="235"/>
+        <location filename="systemrequerimentstest.cpp" line="245"/>
         <source>The screen is too small to fit %1 application</source>
         <oldsource>The screen is too small to fit Starviewer application</oldsource>
         <translation>La resolució de la pantalla és massa petita per mostrar %1 correctament</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="239"/>
+        <location filename="systemrequerimentstest.cpp" line="249"/>
         <source>The screens are too small to fit %1 application</source>
         <oldsource>The screens are too small to fit Starviewer application</oldsource>
         <translation>La resolució de les pantalles és massa petita per mostrar %1 correctament</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="250"/>
+        <location filename="systemrequerimentstest.cpp" line="260"/>
         <source>The optical drive is not capable of burning</source>
         <oldsource>The optical drive is not capable of burning.</oldsource>
         <translation>La unitat de disc òptic no permet gravar</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="251"/>
+        <location filename="systemrequerimentstest.cpp" line="261"/>
         <source>Change the optical drive to a CD-RW/DVD-RW</source>
         <translation>Canvieu la unitat de disc òptic per una CD-RW/DVD-RW</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="261"/>
+        <location filename="systemrequerimentstest.cpp" line="271"/>
         <source>Hardware meets %1&apos;s minimum system requeriments</source>
         <translation>El maquinari compleix els requeriments mínims d&apos;%1</translation>
     </message>
