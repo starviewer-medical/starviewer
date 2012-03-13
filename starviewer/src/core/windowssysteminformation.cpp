@@ -217,6 +217,13 @@ unsigned int WindowsSystemInformation::getCPUNumberOfCores()
     {
         enumerator->Release();
     }
+
+    // En el cas que la propietat NumberOfCores no existeixi, fem servir la variable d'entorn NUMBER_OF_PROCESSORS
+    if (CPUNumberOfCores == 0)
+    {
+        CPUNumberOfCores = qgetenv("NUMBER_OF_PROCESSORS").toInt();
+    }
+
     return CPUNumberOfCores;
 }
 
