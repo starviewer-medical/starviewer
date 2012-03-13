@@ -450,7 +450,7 @@ border: 1px solid  #680000;
     <message>
         <location filename="qdicomprintextension.cpp" line="416"/>
         <source>image %1</source>
-        <translation></translation>
+        <translation>imatge %1</translation>
     </message>
     <message>
         <location filename="qdicomprintextension.cpp" line="422"/>
@@ -460,12 +460,12 @@ border: 1px solid  #680000;
     <message>
         <location filename="qdicomprintextension.cpp" line="427"/>
         <source> from %1</source>
-        <translation>Des de la %1</translation>
+        <translation> des de la %1</translation>
     </message>
     <message>
         <location filename="qdicomprintextension.cpp" line="428"/>
         <source> to %1</source>
-        <translation>fins la %1</translation>
+        <translation> fins la %1</translation>
     </message>
     <message>
         <location filename="qdicomprintextension.cpp" line="694"/>
@@ -517,7 +517,7 @@ border: 1px solid  #680000;
     <message>
         <location filename="qdicomprintextension.cpp" line="713"/>
         <source>%1 can&apos;t create print spool.</source>
-        <translation>No s&apos;ha pogut crear el treball d&apos;impressió.</translation>
+        <translation>%1 no ha pogut crear el treball d&apos;impressió.</translation>
     </message>
     <message>
         <location filename="qdicomprintextension.cpp" line="716"/>

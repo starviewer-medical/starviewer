@@ -355,7 +355,7 @@ border: 1px solid  #680000;
     </message>
     <message>
         <source>%1 can&apos;t create print spool.</source>
-        <translation>No se ha podido crear el trabajo de impresión.</translation>
+        <translation>%1 no ha podido crear el trabajo de impresión.</translation>
     </message>
     <message>
         <source>%1 can&apos;t load some of the images to print.
@@ -403,7 +403,7 @@ border: 1px solid  #680000;
     </message>
     <message>
         <source>image %1</source>
-        <translation></translation>
+        <translation>imagen %1</translation>
     </message>
     <message>
         <source>Every %1 images</source>
@@ -411,11 +411,11 @@ border: 1px solid  #680000;
     </message>
     <message>
         <source> from %1</source>
-        <translation>Desde la %1</translation>
+        <translation> desde la %1</translation>
     </message>
     <message>
         <source> to %1</source>
-        <translation>hasta la %1</translation>
+        <translation> hasta la %1</translation>
     </message>
     <message>
         <source>This series cannot be added to print because color is not supported.</source>
