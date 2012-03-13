@@ -432,54 +432,54 @@ border: 1px solid  #680000;
         <translation>Escollir finestra predeterminada</translation>
     </message>
     <message>
-        <location filename="qdicomprintextension.cpp" line="193"/>
+        <location filename="qdicomprintextension.cpp" line="186"/>
         <source>No added images to print.</source>
         <oldsource>Please add images to print.</oldsource>
         <translation>No hi ha imatges a imprimir.</translation>
     </message>
     <message>
-        <location filename="qdicomprintextension.cpp" line="407"/>
+        <location filename="qdicomprintextension.cpp" line="400"/>
         <source>Series </source>
         <translation>Sèrie </translation>
     </message>
     <message>
-        <location filename="qdicomprintextension.cpp" line="411"/>
+        <location filename="qdicomprintextension.cpp" line="404"/>
         <source>All images</source>
         <translation>Totes les imatges</translation>
     </message>
     <message>
-        <location filename="qdicomprintextension.cpp" line="416"/>
+        <location filename="qdicomprintextension.cpp" line="409"/>
         <source>image %1</source>
         <translation>imatge %1</translation>
     </message>
     <message>
-        <location filename="qdicomprintextension.cpp" line="422"/>
+        <location filename="qdicomprintextension.cpp" line="415"/>
         <source>Every %1 images</source>
         <translation>Una de cada %1 imatges</translation>
     </message>
     <message>
-        <location filename="qdicomprintextension.cpp" line="427"/>
+        <location filename="qdicomprintextension.cpp" line="420"/>
         <source> from %1</source>
         <translation> des de la %1</translation>
     </message>
     <message>
-        <location filename="qdicomprintextension.cpp" line="428"/>
+        <location filename="qdicomprintextension.cpp" line="421"/>
         <source> to %1</source>
         <translation> fins la %1</translation>
     </message>
     <message>
-        <location filename="qdicomprintextension.cpp" line="694"/>
+        <location filename="qdicomprintextension.cpp" line="695"/>
         <source>Some of the pages film can&apos;t be printed because </source>
         <translation>Algunes de les plaques no s&apos;han pogut imprimir perquè </translation>
     </message>
     <message>
-        <location filename="qdicomprintextension.cpp" line="698"/>
+        <location filename="qdicomprintextension.cpp" line="699"/>
         <source>The images can&apos;t be printed because </source>
         <oldsource>The film can&apos;t be printed because </oldsource>
         <translation>Les imatges no es poden imprimir perquè </translation>
     </message>
     <message>
-        <location filename="qdicomprintextension.cpp" line="704"/>
+        <location filename="qdicomprintextension.cpp" line="705"/>
         <source>the printer doesn&apos;t respond.
 
 </source>
@@ -488,13 +488,13 @@ border: 1px solid  #680000;
 </translation>
     </message>
     <message>
-        <location filename="qdicomprintextension.cpp" line="705"/>
+        <location filename="qdicomprintextension.cpp" line="706"/>
         <source>Be sure the computer is connected on the network and the printer network parameters are correct.</source>
         <oldsource>Be sure that computer is connected on the network and the printer network parameters are correct.</oldsource>
         <translation>Assegureu-vos de que l&apos;ordinador està connectat a la xarxa i que els paràmetres de xarxa de la impressora són correctes.</translation>
     </message>
     <message>
-        <location filename="qdicomprintextension.cpp" line="708"/>
+        <location filename="qdicomprintextension.cpp" line="709"/>
         <source>the printer doesn&apos;t respond as expected.
 
 </source>
@@ -503,24 +503,24 @@ border: 1px solid  #680000;
 </translation>
     </message>
     <message>
-        <location filename="qdicomprintextension.cpp" line="709"/>
+        <location filename="qdicomprintextension.cpp" line="710"/>
         <source>In most cases this error is produced because the printer doesn&apos;t support some of the print configuration parameters.</source>
         <oldsource>In most cases this error is produced because the printer doesn&apos;t accept some of the print configuration parameters.</oldsource>
         <translation>En la majoria de casos aquest error es produeix perquè la impressora no suporta alguns dels paràmetres de configuració.</translation>
     </message>
     <message>
-        <location filename="qdicomprintextension.cpp" line="710"/>
+        <location filename="qdicomprintextension.cpp" line="711"/>
         <source>Check printer DICOM Conformance to be sure that it accepts all your print parameters.</source>
         <oldsource>Check printer DICOM Conformance to be sure that it accepts all your print configuration parameters.</oldsource>
         <translation>Comproveu amb el DICOM conformance de la impressora que aquesta accepti els vostres paràmetres d&apos;impressió.</translation>
     </message>
     <message>
-        <location filename="qdicomprintextension.cpp" line="713"/>
+        <location filename="qdicomprintextension.cpp" line="714"/>
         <source>%1 can&apos;t create print spool.</source>
         <translation>%1 no ha pogut crear el treball d&apos;impressió.</translation>
     </message>
     <message>
-        <location filename="qdicomprintextension.cpp" line="716"/>
+        <location filename="qdicomprintextension.cpp" line="717"/>
         <source>%1 can&apos;t load some of the images to print.
 
 </source>
@@ -529,19 +529,19 @@ border: 1px solid  #680000;
 </translation>
     </message>
     <message>
-        <location filename="qdicomprintextension.cpp" line="717"/>
+        <location filename="qdicomprintextension.cpp" line="718"/>
         <source>Close &apos;DICOM print&apos; tab and try it again.</source>
         <oldsource>Close image print tab and try again to print.</oldsource>
         <translation>Tanqueu la pestanya de &apos;Imprimir DICOM&apos; i torneu-ho a provar.</translation>
     </message>
     <message>
-        <location filename="qdicomprintextension.cpp" line="721"/>
+        <location filename="qdicomprintextension.cpp" line="722"/>
         <source>an unknown error has produced.</source>
         <oldsource>an unknow error has produced.</oldsource>
         <translation>s&apos;ha produït un error desconegut.</translation>
     </message>
     <message>
-        <location filename="qdicomprintextension.cpp" line="735"/>
+        <location filename="qdicomprintextension.cpp" line="736"/>
         <source>This series cannot be added to print because color is not supported.</source>
         <translation>No està suportada l&apos;impressió d&apos;imatges en color.</translation>
     </message>
