@@ -1100,142 +1100,151 @@ It&apos;s recommended you save them in an empty folder.</source>
 <context>
     <name>udg::SystemRequerimentsTest</name>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="52"/>
-        <source>The machine currently has %1 cores, and the minimum required is %2</source>
+        <location filename="systemrequerimentstest.cpp" line="51"/>
+        <source>The computer has %1 cores, and the minimum required is %2</source>
+        <oldsource>The machine currently has %1 cores, and the minimum required is %2</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="53"/>
-        <location filename="systemrequerimentstest.cpp" line="75"/>
+        <location filename="systemrequerimentstest.cpp" line="52"/>
+        <location filename="systemrequerimentstest.cpp" line="74"/>
         <source>Update computer&apos;s hardware</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="74"/>
-        <source>The fastest CPU runs at %1 and the minimum required is %2</source>
+        <location filename="systemrequerimentstest.cpp" line="73"/>
+        <source>The fastest CPU runs at %1 MHz, and the minimum required is %2 MHz</source>
+        <oldsource>The fastest CPU runs at %1 and the minimum required is %2</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="88"/>
-        <location filename="systemrequerimentstest.cpp" line="107"/>
+        <location filename="systemrequerimentstest.cpp" line="87"/>
+        <location filename="systemrequerimentstest.cpp" line="106"/>
         <source>Update your graphics card driver</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="86"/>
-        <source>Current OpenGL version is %1 and the minimum required is %2</source>
+        <location filename="systemrequerimentstest.cpp" line="85"/>
+        <source>Current OpenGL version is %1, and the minimum required is %2</source>
+        <oldsource>Current OpenGL version is %1 and the minimum required is %2</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="106"/>
+        <location filename="systemrequerimentstest.cpp" line="105"/>
         <source>Current OpenGL version does not support these extensions: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="120"/>
-        <source>The graphics card %1 has %2Mb of RAM and the minimum required is %3Mb</source>
+        <location filename="systemrequerimentstest.cpp" line="119"/>
+        <source>The graphics card %1 has %2 MB of RAM, and the minimum required is %3 MB</source>
+        <oldsource>The graphics card %1 has %2 MB of RAM and the minimum required is %3 MB</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="121"/>
+        <location filename="systemrequerimentstest.cpp" line="120"/>
         <source>Change the graphics card</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="131"/>
+        <location filename="systemrequerimentstest.cpp" line="130"/>
         <source>There is not enough disk space to run %1 properly</source>
         <oldsource>There is not enough disk space to run starviewer properly</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="132"/>
+        <location filename="systemrequerimentstest.cpp" line="131"/>
         <source>Free some space in the hard disk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="141"/>
+        <location filename="systemrequerimentstest.cpp" line="140"/>
         <source>Operating system is not 64 bit architecture</source>
         <oldsource>Operating system is not 64 bits architecture</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="142"/>
+        <location filename="systemrequerimentstest.cpp" line="141"/>
         <source>Update operating system to a 64 bit version</source>
         <oldsource>Update operating system to a 64 bits version</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="158"/>
-        <source>Current Operative System version is %1 and the minimum required is %2</source>
+        <location filename="systemrequerimentstest.cpp" line="157"/>
+        <source>Current Operative System version is %1, and the minimum required is %2</source>
+        <oldsource>Current Operative System version is %1 and the minimum required is %2</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="159"/>
+        <location filename="systemrequerimentstest.cpp" line="158"/>
         <source>Update operating system to a newer version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="170"/>
-        <source>Current Service Pack version is %1 and the minimum required is Service Pack %2</source>
+        <location filename="systemrequerimentstest.cpp" line="179"/>
+        <source>Current Service Pack version is %1, and the minimum required is Service Pack %2</source>
+        <oldsource>Current Service Pack version is %1 and the minimum required is Service Pack %2</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="171"/>
+        <location filename="systemrequerimentstest.cpp" line="180"/>
         <source>Install a newer service pack</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="192"/>
-        <source>The total amount of RAM memory is %1 and the minimum required is %2</source>
+        <location filename="systemrequerimentstest.cpp" line="201"/>
+        <source>The total amount of RAM memory is %1 MB, and the minimum required is %2 MB</source>
+        <oldsource>The total amount of RAM memory is %1 and the minimum required is %2</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="193"/>
-        <source>Add more RAM memory to the computer</source>
+        <location filename="systemrequerimentstest.cpp" line="202"/>
+        <source>Upgrade computer&apos;s RAM memory</source>
+        <oldsource>Add more RAM memory to the computer</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="221"/>
+        <location filename="systemrequerimentstest.cpp" line="230"/>
         <source>One of the screens is too small. Keep in mind that %1 won&apos;t fit in that screen</source>
         <oldsource>One of the screens is too small. Keep in mind that Starviewer won&apos;t fit in that screen</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="222"/>
-        <source>Don&apos;t move %1 to screen/s %2, or change to a higher resolution</source>
-        <oldsource>Don&apos;t move Starviewer to screen/s %1, or change to a higher resolution</oldsource>
+        <location filename="systemrequerimentstest.cpp" line="231"/>
+        <source>Avoid placing %1 on the screen or screens %2, or increase their resolution if possible</source>
+        <oldsource>Don&apos;t move %1 to screen/s %2, or change to a higher resolution</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="232"/>
-        <source>Change to a higher resolution</source>
+        <location filename="systemrequerimentstest.cpp" line="242"/>
+        <source>Increase screen resolution</source>
+        <oldsource>Increase the resolution of the screens</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="235"/>
+        <location filename="systemrequerimentstest.cpp" line="245"/>
         <source>The screen is too small to fit %1 application</source>
         <oldsource>The screen is too small to fit Starviewer application</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="239"/>
+        <location filename="systemrequerimentstest.cpp" line="249"/>
         <source>The screens are too small to fit %1 application</source>
         <oldsource>The screens are too small to fit Starviewer application</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="250"/>
+        <location filename="systemrequerimentstest.cpp" line="260"/>
         <source>The optical drive is not capable of burning</source>
         <oldsource>The optical drive is not capable of burning.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="251"/>
+        <location filename="systemrequerimentstest.cpp" line="261"/>
         <source>Change the optical drive to a CD-RW/DVD-RW</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="261"/>
+        <location filename="systemrequerimentstest.cpp" line="271"/>
         <source>Hardware meets %1&apos;s minimum system requeriments</source>
         <translation type="unfinished"></translation>
     </message>
