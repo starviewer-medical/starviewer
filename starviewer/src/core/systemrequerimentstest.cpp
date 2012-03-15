@@ -275,9 +275,9 @@ SystemRequerimentsTest::VersionComparison SystemRequerimentsTest::compareVersion
 {
     // TODO de moment només estar pensat per windows. S'ha d'estendre a més S.O.
     
-    //5.1.2600
-    QStringList version1List = version1.split(".");
-    QStringList version2List = version2.split(".");
+    //5.1.2600 XXX.XXX
+    QStringList version1List = (version1.split(" ")[0]).split(".");
+    QStringList version2List = (version2.split(" ")[0]).split(".");
 
     int index = 0;
     // Mentre les parts siguin iguals, anem comparant
