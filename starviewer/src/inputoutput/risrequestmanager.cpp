@@ -408,14 +408,15 @@ bool RISRequestManager::askToUserIfRetrieveFromPACSStudyWhenExistsInDatabase(con
 {
     QMessageBoxAutoClose qmessageBoxAutoClose(secondsTimeOutToHidePopUpAndAutoCloseQMessageBox);
 
+    //Necessari indicar que estigui a sobre de tots els elements perquè sinó es mostra a sota del QPopUpRISRequestScreen impedint que l'usuari pugui llegir-ne el contingut
+    //Hack: El SetWindowFlags s'ha de fer abans de setButtonToShowAutoCloseTimer, ja que sinó el botó que mostra el comptador endarrera no queda seleccionat per defecte
+    qmessageBoxAutoClose.setWindowFlags(qmessageBoxAutoClose.windowFlags() | Qt::WindowStaysOnTopHint);
     qmessageBoxAutoClose.setText(tr("Some studies requested from RIS of patient %1 exists in local database. Do you want to retrieve again?") .arg(fullPatientName));
     qmessageBoxAutoClose.setWindowTitle(ApplicationNameString);
     qmessageBoxAutoClose.setIcon(QMessageBox::Question);
-    qmessageBoxAutoClose.addButton(tr("Yes"), QMessageBox::YesRole);
-    QPushButton *pushButtonNo = qmessageBoxAutoClose.addButton(tr("No"), QMessageBox::NoRole);
+    qmessageBoxAutoClose.addButton(QMessageBox::Yes);
+    QPushButton *pushButtonNo = qmessageBoxAutoClose.addButton(QMessageBox::No);
     qmessageBoxAutoClose.setButtonToShowAutoCloseTimer(pushButtonNo);
-    //Necessari indicar que estigui a sobre de tots els elements perquè sinó es mostra a sota del QPopUpRISRequestScreen impedint que l'usuari pugui llegir-ne el contingut
-    qmessageBoxAutoClose.setWindowFlags(qmessageBoxAutoClose.windowFlags() | Qt::WindowStaysOnTopHint);
 
     qmessageBoxAutoClose.exec();
 
