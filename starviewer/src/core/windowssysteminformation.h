@@ -50,6 +50,10 @@ public:
     unsigned int getNetworkAdapterSpeed();
 
 protected:
+    /// Mètode alternatiu per si no podem obtenir el nombre de nuclis via WMI
+    unsigned int getCPUNumberOfCoresFromEnvironmentVar();
+
+protected:
     virtual IWbemClassObject* getNextObject(IEnumWbemClassObject *enumerator);
     virtual IEnumWbemClassObject* executeQuery(QString query);
     virtual bool getProperty(IWbemClassObject *object, QString propertyName, VARIANT *propertyVariant);
