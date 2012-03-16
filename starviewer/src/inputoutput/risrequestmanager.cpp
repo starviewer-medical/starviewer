@@ -221,7 +221,7 @@ void RISRequestManager::queryRequestRISFinished()
 
 void RISRequestManager::errorQueryingStudy(QueryPacsJob *queryPACSJob)
 {
-    QString errorMessage = tr("Processing the RIS request, can't query PACS %1 from %2.\nBe sure that the IP and AE Title of It are correct.")
+    QString errorMessage = tr("Processing the RIS request, can't query PACS %1 from %2.\nBe sure its IP and AE Title are correct.")
         .arg(queryPACSJob->getPacsDevice().getAETitle())
         .arg(queryPACSJob->getPacsDevice().getInstitution());
 

@@ -295,7 +295,7 @@ void QInputOutputDicomdirWidget::showDICOMDIRImporterError(QString studyInstance
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
         case DICOMDIRImporter::ErrorCopyingFiles:
-            message = tr("Some files of study with UID %2 could not be imported. Be sure that you have write permissions on the %1 cache directory.")
+            message = tr("Some files of study with UID %2 could not be imported. Be sure you have write permissions on the %1 cache directory.")
                     .arg(ApplicationNameString, studyInstanceUID);
             message += tr("\n\nIf the problem persists contact with an administrator.");
             QMessageBox::critical(this, ApplicationNameString, message);

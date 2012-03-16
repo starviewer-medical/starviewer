@@ -237,15 +237,15 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
     switch (getStatus())
     {
         case PACSRequestStatus::RetrieveOk:
-            message = tr("Images from study %1 of patient %2 has been retrieved successfully from PACS %3.").arg(studyID, patientName, pacsAETitle);
+            message = tr("Images from study %1 of patient %2 have been successfully retrieved from PACS %3.").arg(studyID, patientName, pacsAETitle);
             break;
         case PACSRequestStatus::RetrieveCancelled:
-            message = tr("Retrieve images from study %1 of patient %2 from PACS %3 has been cancelled.").arg(studyID, patientName, pacsAETitle);
+            message = tr("Retrieval of the images from study %1 of patient %2 from PACS %3 has been canceled.").arg(studyID, patientName, pacsAETitle);
             break;
         case PACSRequestStatus::RetrieveCanNotConnectToPACS:
-            message = tr("%1 can't connect to PACS %2 trying to retrieve images from study %3 of patient %4.\n")
+            message = tr("%1 can't connect to PACS %2 to retrieve images from study %3 of patient %4.\n")
                 .arg(ApplicationNameString, pacsAETitle, studyID, patientName);
-            message += tr("\nBe sure that your computer is connected on network and the PACS parameters are correct.");
+            message += tr("\nBe sure your computer is connected to the network and the PACS parameters are correct.");
             message += tr("\nIf the problem persists contact with an administrator.");
             break;
         case PACSRequestStatus::RetrieveNoEnoughSpace:
@@ -274,7 +274,7 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
         case PACSRequestStatus::RetrievePatientInconsistent:
             message = tr("Images from study %1 of patient %2 can't be retrieved from PACS %3 because %4 has not be capable of read correctly data images.")
                 .arg(studyID, patientName, pacsAETitle, ApplicationNameString);
-            message += tr("\n\nThe study may be corrupted, if It is not corrupted please contact with %1 team.").arg(ApplicationNameString);
+            message += tr("\n\nThe study may be corrupted, if it is not corrupted please contact with %1 team.").arg(ApplicationNameString);
             break;
         case PACSRequestStatus::RetrieveDestinationAETileUnknown:
             message = tr("Images from study %1 of patient %2 can't be retrieved because PACS %3 doesn't recognize your computer's AE Title %4.")

@@ -89,7 +89,7 @@ QString SendDICOMFilesToPACSJob::getStatusDescription()
         case PACSRequestStatus::SendCanNotConnectToPACS:
             message = tr("%1 can't send DICOM images from study %2 of patient %3 because can't connect to PACS %4.\n")
                 .arg(ApplicationNameString, studyID, patientName, pacsAETitle);
-            message += tr("\nBe sure that your computer is connected on network and the PACS parameters are correct.");
+            message += tr("\nBe sure your computer is connected to the network and the PACS parameters are correct.");
             message += tr("\nIf the problem persists contact with an administrator.");
             break;
         case PACSRequestStatus::SendAllDICOMFilesFailed:
