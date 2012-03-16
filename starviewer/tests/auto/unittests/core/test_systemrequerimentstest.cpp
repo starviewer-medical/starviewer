@@ -242,6 +242,14 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
                                         << QString("Current OpenGL version is %1, and the minimum required is %2").arg("1.0").arg(requeriments.getMinimumGPUOpenGLVersion())
                                         << "Update your graphics card driver";
 
+    QTest::newRow("OK openGL version with vendor info") << cpuNumberOfCores << cpuFrequencies << openGLExtensions << openGLVersion+" ATI-1.0" << gpuRAM << gpuModel << hardDiskFreeSpace
+                                        << operatingSystem << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << writeCapability
+                                        << DiagnosisTestResult::Ok << unusedString << unusedString;
+
+    QTest::newRow("OK openGL version format X.X.X") << cpuNumberOfCores << cpuFrequencies << openGLExtensions << "2.1.2" << gpuRAM << gpuModel << hardDiskFreeSpace
+                                        << operatingSystem << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << writeCapability
+                                        << DiagnosisTestResult::Ok << unusedString << unusedString;
+
     UnsignedIntList notEnoughRAM;
     notEnoughRAM << zero;
     QTest::newRow("not enough GPU RAM") << cpuNumberOfCores << cpuFrequencies << openGLExtensions << openGLVersion << notEnoughRAM << gpuModel << hardDiskFreeSpace
