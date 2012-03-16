@@ -1828,13 +1828,15 @@ Si el problema persiste contacte con un administrador.</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="316"/>
-        <source>* Reserved disk space for system: %1Gb</source>
-        <translation>* Espacio de disco reservado para el sistema: %1Gb</translation>
+        <source>* Reserved disk space for system: %1 GB</source>
+        <oldsource>* Reserved disk space for system: %1Gb</oldsource>
+        <translation>* Espacio de disco reservado para el sistema: %1GB</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="318"/>
-        <source>* Free disk space: %1Gb</source>
-        <translation>* Espacio libre en el disco: %1Gb</translation>
+        <source>* Free disk space: %1 GB</source>
+        <oldsource>* Free disk space: %1Gb</oldsource>
+        <translation>* Espacio libre en el disco: %1GB</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="324"/>

@@ -313,9 +313,9 @@ void QInputOutputDicomdirWidget::showDICOMDIRImporterError(QString studyInstance
                 message += "\n\n";
                 message += tr("Current location resources:");
                 message += "\n";
-                message += "    " + tr("* Reserved disk space for system: %1Gb").arg(minimumFreeSpaceRequired / 1024.0);
+                message += "    " + tr("* Reserved disk space for system: %1 GB").arg(minimumFreeSpaceRequired / 1024.0);
                 message += "\n";
-                message += "    " + tr("* Free disk space: %1Gb").arg(freeSpaceInHardDisk / 1024.0);
+                message += "    " + tr("* Free disk space: %1 GB").arg(freeSpaceInHardDisk / 1024.0);
 
                 QMessageBox::warning(this, ApplicationNameString, message);
                 break;

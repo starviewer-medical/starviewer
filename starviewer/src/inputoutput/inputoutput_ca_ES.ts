@@ -1822,13 +1822,15 @@ Si el problema persisteix contacteu amb un administrador.</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="316"/>
-        <source>* Reserved disk space for system: %1Gb</source>
-        <translation>* Espai reservat pel sistema: %1Gb</translation>
+        <source>* Reserved disk space for system: %1 GB</source>
+        <oldsource>* Reserved disk space for system: %1Gb</oldsource>
+        <translation>* Espai reservat pel sistema: %1GB</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="318"/>
-        <source>* Free disk space: %1Gb</source>
-        <translation>* Espai lliure al disc: %1Gb</translation>
+        <source>* Free disk space: %1 GB</source>
+        <oldsource>* Free disk space: %1Gb</oldsource>
+        <translation>* Espai lliure al disc: %1GB</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="324"/>
