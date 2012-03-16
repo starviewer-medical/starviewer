@@ -62,6 +62,7 @@ public:
     StringList m_testingAPIRAMModulesCapacity;
 
     UnsignedIntList m_testingAPICPUNumberOfCores;
+    unsigned int m_testingEnvironmentCPUNumberOfCores;
 
     UnsignedIntList m_testingAPIGPURAM;
     QString m_testingAPIGPUOpenGLCompatibilities;
@@ -176,6 +177,10 @@ protected:
         return m_testingAPIGPUOpenGLCompatibilities.toLocal8Bit();
     }
     
+    unsigned int getCPUNumberOfCoresFromEnvironmentVar()
+    {
+        return m_testingEnvironmentCPUNumberOfCores;
+    }
 };
 
 Q_DECLARE_METATYPE(StringList)
@@ -196,6 +201,7 @@ void test_WindowsSystemInformation::run_ShouldTestIfWindowsSystemInformationRuns
     QTest::addColumn<QString>("testingAPIRAMTotalAmount");
     QTest::addColumn<StringList>("testingAPIRAMModulesCapacity");
     QTest::addColumn<UnsignedIntList>("testingAPICPUNumberOfCores");
+    QTest::addColumn<unsigned int>("testingEnvironmentCPUNumberOfCores");
     QTest::addColumn<UnsignedIntList>("testingAPIGPURAM");
     QTest::addColumn<QString>("testingAPIGPUOpenGLCompatibilities");
 
@@ -231,6 +237,7 @@ void test_WindowsSystemInformation::run_ShouldTestIfWindowsSystemInformationRuns
 
     UnsignedIntList APICPUNumberOfCores;
     APICPUNumberOfCores << (unsigned int)2 << (unsigned int)6;
+    unsigned int environmentCPUNumberOfCores = 8;
     unsigned int CPUNumberOfCores = 8;
 
     UnsignedIntList APIGPURAM;
@@ -256,9 +263,9 @@ void test_WindowsSystemInformation::run_ShouldTestIfWindowsSystemInformationRuns
     QString APIHardDiskFreeSpace = "1073741824";
     unsigned int hardDiskFreeSpace = 1024;
 
-    QTest::newRow("ok") << APIRAMTotalAmount << APIRAMModulesCapacity << APICPUNumberOfCores << APIGPURAM << APIGPUOpenGLCompatibilities
-                        << APIGPUDriverVersion << APIGPUDriverDate << APIGPUInfFilename << APIGPUInstalledDisplayDrivers << APIGPUInfSection
-                        << APIHardDiskCapacity << APIHardDiskFreeSpace
+    QTest::newRow("ok") << APIRAMTotalAmount << APIRAMModulesCapacity << APICPUNumberOfCores << environmentCPUNumberOfCores << APIGPURAM 
+                        << APIGPUOpenGLCompatibilities << APIGPUDriverVersion << APIGPUDriverDate << APIGPUInfFilename << APIGPUInstalledDisplayDrivers 
+                        << APIGPUInfSection << APIHardDiskCapacity << APIHardDiskFreeSpace
                         << true
                         << RAMTotalAmount << RAMModulesCapacity << CPUNumberOfCores << GPURAM
                         << GPUOpenGLCompatibilities << GPUDriverVersion << hardDiskCapacity << hardDiskFreeSpace;
@@ -266,7 +273,6 @@ void test_WindowsSystemInformation::run_ShouldTestIfWindowsSystemInformationRuns
     unsigned int RAMTotalAmount2 = 0;
     UnsignedIntList RAMModulesCapacity2;
     RAMModulesCapacity2 << 0 << 0;
-    unsigned int CPUNumberOfCores2 = 0;
     UnsignedIntList GPURAM2;
     GPURAM2 << 0;
     StringList GPUDriverVersion2;
@@ -275,11 +281,11 @@ void test_WindowsSystemInformation::run_ShouldTestIfWindowsSystemInformationRuns
     unsigned int hardDiskFreeSpace2 = 0;
 
     QTest::newRow("API not getting properties") 
-                    << APIRAMTotalAmount << APIRAMModulesCapacity << APICPUNumberOfCores << APIGPURAM << APIGPUOpenGLCompatibilities
-                    << APIGPUDriverVersion << APIGPUDriverDate << APIGPUInfFilename << APIGPUInstalledDisplayDrivers << APIGPUInfSection
-                    << APIHardDiskCapacity << APIHardDiskFreeSpace
+                    << APIRAMTotalAmount << APIRAMModulesCapacity << APICPUNumberOfCores << environmentCPUNumberOfCores << APIGPURAM 
+                    << APIGPUOpenGLCompatibilities << APIGPUDriverVersion << APIGPUDriverDate << APIGPUInfFilename << APIGPUInstalledDisplayDrivers 
+                    << APIGPUInfSection << APIHardDiskCapacity << APIHardDiskFreeSpace
                     << false
-                    << RAMTotalAmount2 << RAMModulesCapacity2 << CPUNumberOfCores2 << GPURAM2
+                    << RAMTotalAmount2 << RAMModulesCapacity2 << environmentCPUNumberOfCores << GPURAM2
                     << GPUOpenGLCompatibilities << GPUDriverVersion2 << hardDiskCapacity2 << hardDiskFreeSpace2;
 }
 
@@ -292,6 +298,7 @@ void test_WindowsSystemInformation::run_ShouldTestIfWindowsSystemInformationRuns
     QFETCH(UnsignedIntList, testingRAMModulesCapacity);
 
     QFETCH(UnsignedIntList, testingAPICPUNumberOfCores);
+    QFETCH(unsigned int, testingEnvironmentCPUNumberOfCores);
     QFETCH(unsigned int, testingCPUNumberOfCores);
 
     QFETCH(UnsignedIntList, testingAPIGPURAM);
@@ -322,6 +329,7 @@ void test_WindowsSystemInformation::run_ShouldTestIfWindowsSystemInformationRuns
     windowsSystemInformation.m_testingAPIRAMTotalAmount = testingAPIRAMTotalAmount;
     windowsSystemInformation.m_testingAPIRAMModulesCapacity = testingAPIRAMModulesCapacity;
     windowsSystemInformation.m_testingAPICPUNumberOfCores = testingAPICPUNumberOfCores;
+    windowsSystemInformation.m_testingEnvironmentCPUNumberOfCores = testingEnvironmentCPUNumberOfCores;
     windowsSystemInformation.m_testingAPIGPURAM = testingAPIGPURAM;
     windowsSystemInformation.m_testingAPIGPUOpenGLCompatibilities = testingAPIGPUOpenGLCompatibilities;
     windowsSystemInformation.m_testingAPIHardDiskCapacity = testingAPIHardDiskCapacity;
