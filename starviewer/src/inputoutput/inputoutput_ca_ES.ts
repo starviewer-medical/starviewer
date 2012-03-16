@@ -1799,7 +1799,8 @@ Si el problema persisteix contacteu amb un administrador.</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="298"/>
-        <source>Some files of study with UID %2 could not be imported. Be sure that you have write permissions on the %1 cache directory.</source>
+        <source>Some files of study with UID %2 could not be imported. Be sure you have write permissions on the %1 cache directory.</source>
+        <oldsource>Some files of study with UID %2 could not be imported. Be sure that you have write permissions on the %1 cache directory.</oldsource>
         <translation>Alguns fitxers del estudi amb UID %2 no s&apos;han pogut importar. Assegureu-vos que teniu permisos d&apos;escriptura en el directori de la caché del %1.</translation>
     </message>
     <message>
@@ -3110,9 +3111,9 @@ Si el problema persisteix contacteu amb un administrador.</translation>
     <message>
         <location filename="risrequestmanager.cpp" line="224"/>
         <source>Processing the RIS request, can&apos;t query PACS %1 from %2.
-Be sure that the IP and AE Title of It are correct.</source>
+Be sure its IP and AE Title are correct.</source>
         <oldsource>Processing the RIS request, can&apos;t query PACS %1 from %2.
-Be sure that the IP and AETitle of It are correct.</oldsource>
+Be sure that the IP and AE Title of It are correct.</oldsource>
         <translation>Processant la petició del RIS, no s&apos;ha pogut consultar al PACS %1 de %2.
 Asseguris que la IP i el AETitle d &apos;aquest siguin correctes.</translation>
     </message>
@@ -3164,8 +3165,10 @@ Si el problema persisteix contacteu amb un administrador.</translation>
     <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="248"/>
         <source>
-Be sure that your computer is connected on network and the PACS parameters are correct.</source>
-        <translation>
+Be sure your computer is connected to the network and the PACS parameters are correct.</source>
+        <oldsource>
+Be sure that your computer is connected on network and the PACS parameters are correct.</oldsource>
+        <translation type="unfinished">
 Asseguris que el seu ordinador està connectat a la xarxa i que els paràmetres del PACS són correctes.</translation>
     </message>
     <message>
@@ -3203,20 +3206,23 @@ Si el problema persisteix contacteu amb un administrador.</translation>
     </message>
     <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="240"/>
-        <source>Images from study %1 of patient %2 has been retrieved successfully from PACS %3.</source>
-        <oldsource>Images from study %1 of patient %2 has been retrieved succesfully from PACS %3.</oldsource>
-        <translation>Les imatges del estudi %1 del pacient %2 s&apos;han descarregat correctament del PACS %3.</translation>
+        <source>Images from study %1 of patient %2 have been successfully retrieved from PACS %3.</source>
+        <oldsource>Images from study %1 of patient %2 has been retrieved successfully from PACS %3.</oldsource>
+        <translation type="unfinished">Les imatges del estudi %1 del pacient %2 s&apos;han descarregat correctament del PACS %3.</translation>
     </message>
     <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="243"/>
-        <source>Retrieve images from study %1 of patient %2 from PACS %3 has been cancelled.</source>
-        <translation>La descàrrega d&apos;imatges del estudi %1 del pacient %2 del PACS %3 s&apos;ha cancel·lat.</translation>
+        <source>Retrieval of the images from study %1 of patient %2 from PACS %3 has been canceled.</source>
+        <oldsource>Retrieve images from study %1 of patient %2 from PACS %3 has been cancelled.</oldsource>
+        <translation type="unfinished">La descàrrega d&apos;imatges del estudi %1 del pacient %2 del PACS %3 s&apos;ha cancel·lat.</translation>
     </message>
     <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="246"/>
-        <source>%1 can&apos;t connect to PACS %2 trying to retrieve images from study %3 of patient %4.
+        <source>%1 can&apos;t connect to PACS %2 to retrieve images from study %3 of patient %4.
 </source>
-        <translation>No s&apos;ha pogut connectar amb el PACS %2 per descarregar les imatges de l&apos;estudi %3 del pacient %4.
+        <oldsource>%1 can&apos;t connect to PACS %2 trying to retrieve images from study %3 of patient %4.
+</oldsource>
+        <translation type="unfinished">No s&apos;ha pogut connectar amb el PACS %2 per descarregar les imatges de l&apos;estudi %3 del pacient %4.
 </translation>
     </message>
     <message>
@@ -3256,8 +3262,11 @@ Si el problema persisteix contacteu amb un administrador.</translation>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="277"/>
         <source>
 
-The study may be corrupted, if It is not corrupted please contact with %1 team.</source>
-        <translation>
+The study may be corrupted, if it is not corrupted please contact with %1 team.</source>
+        <oldsource>
+
+The study may be corrupted, if It is not corrupted please contact with %1 team.</oldsource>
+        <translation type="unfinished">
 
 L&apos;estudi pot estar corrupte, si creieu que no està corrupte si us plau poseu-vos en contacte amb l&apos;equip del %1.</translation>
     </message>
@@ -3334,7 +3343,9 @@ Contacteu amb un administrador per registrar el vostre ordinador al PACS.</trans
     <message>
         <location filename="senddicomfilestopacsjob.cpp" line="92"/>
         <source>
-Be sure that your computer is connected on network and the PACS parameters are correct.</source>
+Be sure your computer is connected to the network and the PACS parameters are correct.</source>
+        <oldsource>
+Be sure that your computer is connected on network and the PACS parameters are correct.</oldsource>
         <translation>
 Asseguris que el seu ordinador està connectat a la xarxa i que els paràmetres del PACS són correctes.</translation>
     </message>
