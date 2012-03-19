@@ -657,8 +657,8 @@ void Q3DViewer::setTransferFunction(TransferFunction *transferFunction)
         catch (std::bad_alloc &e)
         {
             ERROR_LOG(QString("Excepció al voler aplicar shading en el volum: ") + e.what());
-            QMessageBox::warning(this, tr("Can't apply rendering style"), tr("The system doesn't have enough memory to properly apply this rendering style "
-                                          "with this volume.\nShading will be disabled, it won't render as expected."));
+            QMessageBox::warning(this, tr("Unable to apply rendering style"), tr("The system does not have enough memory to properly apply this rendering style "
+                                          "with this volume.\nShading will be disabled, it will not render as expected."));
             m_canEnableShading = false;
             this->setShading(false);
             // TODO Comprovar si seria suficient amb un render()

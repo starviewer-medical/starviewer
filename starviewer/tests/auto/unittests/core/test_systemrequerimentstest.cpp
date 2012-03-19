@@ -317,7 +317,7 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
                          << cpuNumberOfCores << cpuFrequencies << openGLExtensions << openGLVersion << gpuRAM << gpuModel << hardDiskFreeSpace
                          << operatingSystem << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << false
                          << DiagnosisTestResult::Warning
-                         << "The optical drive is not capable of burning"
+                         << "The optical drive has not burning capabilities"
                          << "Change the optical drive to a CD-RW/DVD-RW";
 }
 

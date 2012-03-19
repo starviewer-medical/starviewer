@@ -257,7 +257,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
     {
         DiagnosisTestProblem problem;
         problem.setState(DiagnosisTestProblem::Warning);
-        problem.setDescription(tr("The optical drive is not capable of burning"));
+        problem.setDescription(tr("The optical drive has not burning capabilities"));
         problem.setSolution(tr("Change the optical drive to a CD-RW/DVD-RW"));
         result.addWarning(problem);
     }
