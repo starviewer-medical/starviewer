@@ -306,7 +306,7 @@ void QInputOutputDicomdirWidget::showDICOMDIRImporterError(QString studyInstance
                 Settings settings;
                 quint64 freeSpaceInHardDisk = hardDiskInformation.getNumberOfFreeMBytes(LocalDatabaseManager::getCachePath());
                 quint64 minimumFreeSpaceRequired = quint64(settings.getValue(InputOutputSettings::MinimumFreeGigaBytesForCache).toULongLong() * 1024);
-                message = tr("The study can't be imported because there isn't enough space.");
+                message = tr("The study cannot be imported because there is not enough space.");
                 message += "\n";
                 message += tr("Try to free hard disk space, delete local studies or change in %1 configuration the size of reserved disk space for "
                               "system to be able to import the study.").arg(ApplicationNameString);
@@ -321,26 +321,26 @@ void QInputOutputDicomdirWidget::showDICOMDIRImporterError(QString studyInstance
                 break;
             }
         case DICOMDIRImporter::ErrorFreeingSpace:
-            message = tr("An error has occurred freeing space, some studies can't be imported.");
+            message = tr("An error has occurred freeing space, some studies cannot be imported.");
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
         case DICOMDIRImporter::DatabaseError:
-            message = tr("A database error has occurred, some studies can't be imported.");
+            message = tr("A database error has occurred, some studies cannot be imported.");
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
         case DICOMDIRImporter::PatientInconsistent:
-            message = tr("The study with UID %2 can't be imported, because %1 has not been capable of read correctly DICOM information of the study.")
+            message = tr("The study with UID %2 cannot be imported, because %1 has not been able to correctly read DICOM information of the study.")
                     .arg(ApplicationNameString, studyInstanceUID);
-            message += tr("\n\nThe study may be corrupted, if It is not corrupted please contact with %1 team.").arg(ApplicationNameString);
+            message += tr("\n\nThe study may be corrupted, if it is not corrupted please contact with %1 team.").arg(ApplicationNameString);
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
         case DICOMDIRImporter::DicomdirInconsistent:
-            message = tr("Trying to import study with UID %1 ").arg(studyInstanceUID);
-            message += tr("has occurred an error. This DICOMDIR is inconsistent, can't be imported.");
+            message = tr("An error has occurred while trying to import study with UID %1. ").arg(studyInstanceUID);
+            message += tr("This DICOMDIR is inconsistent and thus cannot be imported.");
             message += tr("\n\nPlease contact with %1 team.").arg(ApplicationNameString);
             QMessageBox::critical(this, ApplicationNameString, message);
             break;

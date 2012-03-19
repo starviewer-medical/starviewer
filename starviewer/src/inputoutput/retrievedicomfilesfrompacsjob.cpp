@@ -243,7 +243,7 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
             message = tr("Retrieval of the images from study %1 of patient %2 from PACS %3 has been canceled.").arg(studyID, patientName, pacsAETitle);
             break;
         case PACSRequestStatus::RetrieveCanNotConnectToPACS:
-            message = tr("%1 can't connect to PACS %2 to retrieve images from study %3 of patient %4.\n")
+            message = tr("%1 cannot connect to PACS %2 to retrieve images from study %3 of patient %4.\n")
                 .arg(ApplicationNameString, pacsAETitle, studyID, patientName);
             message += tr("\nBe sure your computer is connected to the network and the PACS parameters are correct.");
             message += tr("\nIf the problem persists contact with an administrator.");
@@ -267,43 +267,43 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
                          "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
             break;
         case PACSRequestStatus::RetrieveDatabaseError:
-            message = tr("Images from study %1 of patient %2 can't be retrieved because a database error occurred.").arg(studyID, patientName);
+            message = tr("Images from study %1 of patient %2 cannot be retrieved because a database error occurred.").arg(studyID, patientName);
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
             break;
         case PACSRequestStatus::RetrievePatientInconsistent:
-            message = tr("Images from study %1 of patient %2 can't be retrieved from PACS %3 because %4 has not be capable of read correctly data images.")
-                .arg(studyID, patientName, pacsAETitle, ApplicationNameString);
+            message = tr("Images from study %1 of patient %2 cannot be retrieved from PACS %3. Unable to correctly read data from images.")
+                .arg(studyID, patientName, pacsAETitle);
             message += tr("\n\nThe study may be corrupted, if it is not corrupted please contact with %1 team.").arg(ApplicationNameString);
             break;
         case PACSRequestStatus::RetrieveDestinationAETileUnknown:
-            message = tr("Images from study %1 of patient %2 can't be retrieved because PACS %3 doesn't recognize your computer's AE Title %4.")
+            message = tr("Images from study %1 of patient %2 cannot be retrieved because PACS %3 does not recognize your computer's AE Title %4.")
                     .arg(studyID, patientName, pacsAETitle, settings.getValue(InputOutputSettings::LocalAETitle).toString());
             message += tr("\n\nContact with an administrator to register your computer to the PACS.");
             break;
         case PACSRequestStatus::RetrieveUnknowStatus:
-            message = tr("Images from study %1 of patient %2 can't be retrieved due to an unknown error of PACS %3.\n\n")
+            message = tr("Images from study %1 of patient %2 cannot be retrieved due to an unknown error of PACS %3.\n\n")
                 .arg(studyID, patientName, pacsAETitle);
             message += tr("The cause of the error can be that the requested images are corrupted. Please contact with a PACS administrator.");
             break;
         case PACSRequestStatus::RetrieveFailureOrRefused:
-            message = tr("Images from study %1 of patient %2 can't be retrieved due to an error of PACS %3.\n\n")
+            message = tr("Images from study %1 of patient %2 cannot be retrieved due to an error of PACS %3.\n\n")
                 .arg(studyID, patientName, pacsAETitle);
             message += tr("The cause of the error can be that the requested images are corrupted or the incoming connections port in PACS configuration "
                           "is not correct.");
             break;
         case PACSRequestStatus::RetrieveIncomingDICOMConnectionsPortInUse:
-            message = tr("Images from study %1 of patient %2 can't be retrieved because port %3 for incoming connections from PACS is already in use "
+            message = tr("Images from study %1 of patient %2 cannot be retrieved because port %3 for incoming connections from PACS is already in use "
                          "by another application.")
                 .arg(studyID, patientName, settings.getValue(InputOutputSettings::IncomingDICOMConnectionsPort).toString());
             break;
         case PACSRequestStatus::RetrieveSomeDICOMFilesFailed:
-            message = tr("%1 can't retrieve all images from study %2 of patient %3 from PACS %4. May be those images are missing or corrupted in PACS.")
+            message = tr("%1 cannot retrieve all images from study %2 of patient %3 from PACS %4. May be those images are missing or corrupted in PACS.")
                 .arg(ApplicationNameString, studyID, patientName, pacsAETitle);
             message += "\n";
             break;
         default:
-            message = tr("An unknown error has occurred and %1 can't retrieve images from study %2 of patient %3 from PACS %4.")
+            message = tr("An unknown error has occurred and %1 cannot retrieve images from study %2 of patient %3 from PACS %4.")
                 .arg(ApplicationNameString, studyID, patientName, pacsAETitle);
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);

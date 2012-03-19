@@ -429,7 +429,7 @@ Status ConvertToDicomdir::copyImageToDicomdirPath(Image *image)
             }
             else
             {
-                state.setStatus(QString("Can't anonymize image Little Endian Image %1").arg(imageOutputPath), false, 3003);
+                state.setStatus(QString("Unable to anonymize image Little Endian Image %1").arg(imageOutputPath), false, 3003);
             }
         }
     }
@@ -446,7 +446,7 @@ Status ConvertToDicomdir::copyImageToDicomdirPath(Image *image)
             }
             else
             {
-                state.setStatus(QString("Can't anonymize image %1 to %2").arg(image->getPath(), imageOutputPath), false, 3003);
+                state.setStatus(QString("Unable to anonymize image %1 to %2").arg(image->getPath(), imageOutputPath), false, 3003);
             }
         }
         else
@@ -458,7 +458,7 @@ Status ConvertToDicomdir::copyImageToDicomdirPath(Image *image)
             else
             {
                 ERROR_LOG(QString("No s'ha pogut copiar la imatge %1 a %2").arg(image->getPath(), imageOutputPath));
-                state.setStatus(QString("Can't copy image %1 to %2").arg(image->getPath(), imageOutputPath), false, 3001);
+                state.setStatus(QString("Unable to copy image %1 to %2").arg(image->getPath(), imageOutputPath), false, 3001);
             }
         }
     }
