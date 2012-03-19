@@ -86,7 +86,7 @@ bool QDicomPrinterConfigurationWidget::modifyPrinter()
             if (!dicomPrinterManager.updatePrinter(m_selectedPrinterId, dicomPrinter))
             {
                 // Si rebem un error és que no ha trobat la impressora amb el ID passat per paràmetre
-                QMessageBox::critical(this, ApplicationNameString, tr("Error can't apply changes to the printer."));
+                QMessageBox::critical(this, ApplicationNameString, tr("An error has occurred. Unable to apply changes to the printer."));
             }
             else
             {
@@ -141,12 +141,12 @@ void QDicomPrinterConfigurationWidget::testPrinter()
             switch (dicomPrint.getLastError())
             {
                 case DicomPrint::NotRespondedAsExpected:
-                    messageError = tr("Printer %1 doesn't respond correctly.\nBe sure that hostname and AE Title are correct.")
+                    messageError = tr("Printer %1 does not respond correctly.\nBe sure the hostname and AE Title are correct.")
                                  .arg(selectedDicomPrinter.getAETitle());
                     break;
                 case DicomPrint::CanNotConnectToDicomPrinter:
                 default:
-                    messageError = tr("Printer %1 doesn't respond.\nBe sure that hostname and AE Title are correct.").arg(selectedDicomPrinter.getAETitle());
+                    messageError = tr("Printer %1 does not respond.\nBe sure the hostname and AE Title are correct.").arg(selectedDicomPrinter.getAETitle());
                     break;
             }
 
@@ -263,14 +263,14 @@ bool QDicomPrinterConfigurationWidget::validatePrinterSettings()
     text = m_printerAetitleLineEdit->text();
     if (text.length() == 0)
     {
-        QMessageBox::warning(this, ApplicationNameString, tr("AE Title field can't be empty."));
+        QMessageBox::warning(this, ApplicationNameString, tr("AE Title field cannot be empty."));
         return false;
     }
 
     text = m_printerHostnameLineEdit->text();
     if (text.length() == 0)
     {
-        QMessageBox::warning(this, ApplicationNameString, tr ("Hostname can't be empty."));
+        QMessageBox::warning(this, ApplicationNameString, tr ("Hostname cannot be empty."));
         return false;
     }
 

@@ -327,46 +327,12 @@ border: 1px solid  #680000;
 <context>
     <name>udg::QDicomAddPrinterWidget</name>
     <message>
-        <source>%1 can&apos;t add the printer %2 because a printer with the same AE Title already exists.</source>
+        <source>Unable to add the printer %1 because a printer with the same AE Title already exists.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>udg::QDicomPrintExtension</name>
-    <message>
-        <source>Some of the pages film can&apos;t be printed because </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>the printer doesn&apos;t respond.
-
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>the printer doesn&apos;t respond as expected.
-
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 can&apos;t create print spool.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 can&apos;t load some of the images to print.
-
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The images can&apos;t be printed because </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>In most cases this error is produced because the printer doesn&apos;t support some of the print configuration parameters.</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <source>Close &apos;DICOM print&apos; tab and try it again.</source>
         <translation type="unfinished"></translation>
@@ -377,10 +343,6 @@ border: 1px solid  #680000;
     </message>
     <message>
         <source>Be sure the computer is connected on the network and the printer network parameters are correct.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>an unknown error has produced.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -419,15 +381,49 @@ border: 1px solid  #680000;
         <source>No added images to print.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>The images cannot be printed because </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>the printer does not respond.
+
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>the printer does not respond as expected.
+
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>In most cases this error is produced because the printer does not support some of the print configuration parameters.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>an unknown error has occurred.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Some of the film pages cannot be printed because </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to create print spool.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to load some of the images to print.
+
+</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>udg::QDicomPrinterConfigurationWidget</name>
     <message>
         <source>Automatic</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Error can&apos;t apply changes to the printer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -443,21 +439,25 @@ border: 1px solid  #680000;
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Hostname can&apos;t be empty.</source>
+        <source>Printer %1 does not respond correctly.
+Be sure the hostname and AE Title are correct.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Printer %1 doesn&apos;t respond correctly.
-Be sure that hostname and AE Title are correct.</source>
+        <source>Printer %1 does not respond.
+Be sure the hostname and AE Title are correct.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Printer %1 doesn&apos;t respond.
-Be sure that hostname and AE Title are correct.</source>
+        <source>AE Title field cannot be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>AE Title field can&apos;t be empty.</source>
+        <source>Hostname cannot be empty.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>An error has occurred. Unable to apply changes to the printer.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
