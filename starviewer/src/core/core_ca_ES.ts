@@ -328,8 +328,10 @@
     </message>
     <message>
         <location filename="hangingprotocolxmlreader.cpp" line="35"/>
-        <source>Cannot read file %1:
+        <source>Unable to read file %1:
 %2.</source>
+        <oldsource>Cannot read file %1:
+%2.</oldsource>
         <translation>No es pot llegir el fitxer %1:%2.</translation>
     </message>
 </context>
@@ -622,6 +624,18 @@ WW: %5 WL: %6</translation>
 <context>
     <name>udg::Q3DViewer</name>
     <message>
+        <location filename="q3dviewer.cpp" line="660"/>
+        <source>Unable to apply rendering style</source>
+        <translation>No es pot aplicar l&apos;estil de renderització</translation>
+    </message>
+    <message>
+        <location filename="q3dviewer.cpp" line="660"/>
+        <source>The system does not have enough memory to properly apply this rendering style with this volume.
+Shading will be disabled, it will not render as expected.</source>
+        <translation>El sistema no té prou memòria per aplicar adequadament aquest estil de rendering amb aquest volum.
+El shading es deshabilitarà pel qual el renderitzat no serà l&apos;esperat.</translation>
+    </message>
+    <message>
         <location filename="q3dviewer.cpp" line="1356"/>
         <source>Volume not supported</source>
         <oldsource>Not supported volume</oldsource>
@@ -639,22 +653,10 @@ WW: %5 WL: %6</translation>
         <translation>El volum és massa gran</translation>
     </message>
     <message>
-        <location filename="q3dviewer.cpp" line="660"/>
-        <source>The system doesn&apos;t have enough memory to properly apply this rendering style with this volume.
-Shading will be disabled, it won&apos;t render as expected.</source>
-        <translation>El sistema no té prou memòria per aplicar correctament aquest estil de renderització al volum actual.
-S&apos;inhabilitarà l&apos;ombrejat, no es renderitzarà com s&apos;esperava.</translation>
-    </message>
-    <message>
         <location filename="q3dviewer.cpp" line="773"/>
         <location filename="q3dviewer.cpp" line="1348"/>
         <source>Current volume is too large. Please select another volume or close other extensions and try again.</source>
         <translation>El volum actual és massa gran. Seleccioneu un altre volum o tanqueu altres extensions i torneu-ho a provar.</translation>
-    </message>
-    <message>
-        <location filename="q3dviewer.cpp" line="660"/>
-        <source>Can&apos;t apply rendering style</source>
-        <translation>No es pot aplicar l&apos;estil de renderització</translation>
     </message>
 </context>
 <context>
@@ -1251,8 +1253,8 @@ Es recomana que les deseu en una carpeta buida.</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="260"/>
-        <source>The optical drive is not capable of burning</source>
-        <oldsource>The optical drive is not capable of burning.</oldsource>
+        <source>The optical drive has not burning capabilities</source>
+        <oldsource>The optical drive is not capable of burning</oldsource>
         <translation>La unitat de disc òptic no permet gravar</translation>
     </message>
     <message>

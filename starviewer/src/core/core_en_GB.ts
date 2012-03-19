@@ -327,8 +327,10 @@
     </message>
     <message>
         <location filename="hangingprotocolxmlreader.cpp" line="35"/>
-        <source>Cannot read file %1:
+        <source>Unable to read file %1:
 %2.</source>
+        <oldsource>Cannot read file %1:
+%2.</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -616,6 +618,17 @@ WW: %5 WL: %6</source>
 <context>
     <name>udg::Q3DViewer</name>
     <message>
+        <location filename="q3dviewer.cpp" line="660"/>
+        <source>Unable to apply rendering style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q3dviewer.cpp" line="660"/>
+        <source>The system does not have enough memory to properly apply this rendering style with this volume.
+Shading will be disabled, it will not render as expected.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="q3dviewer.cpp" line="1356"/>
         <source>Volume not supported</source>
         <oldsource>Not supported volume</oldsource>
@@ -633,20 +646,9 @@ WW: %5 WL: %6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewer.cpp" line="660"/>
-        <source>The system doesn&apos;t have enough memory to properly apply this rendering style with this volume.
-Shading will be disabled, it won&apos;t render as expected.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="q3dviewer.cpp" line="773"/>
         <location filename="q3dviewer.cpp" line="1348"/>
         <source>Current volume is too large. Please select another volume or close other extensions and try again.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q3dviewer.cpp" line="660"/>
-        <source>Can&apos;t apply rendering style</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1234,8 +1236,8 @@ It&apos;s recommended you save them in an empty folder.</source>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="260"/>
-        <source>The optical drive is not capable of burning</source>
-        <oldsource>The optical drive is not capable of burning.</oldsource>
+        <source>The optical drive has not burning capabilities</source>
+        <oldsource>The optical drive is not capable of burning</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
