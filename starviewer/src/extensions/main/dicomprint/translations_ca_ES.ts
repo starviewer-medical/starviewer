@@ -96,24 +96,24 @@
         <translation>Selecció</translation>
     </message>
     <message>
-        <location filename="qdicomprintextensionbase.ui" line="420"/>
+        <location filename="qdicomprintextensionbase.ui" line="578"/>
         <source>Interval:</source>
         <translation>Interval:</translation>
     </message>
     <message>
-        <location filename="qdicomprintextensionbase.ui" line="439"/>
-        <location filename="qdicomprintextensionbase.ui" line="496"/>
-        <location filename="qdicomprintextensionbase.ui" line="547"/>
+        <location filename="qdicomprintextensionbase.ui" line="433"/>
+        <location filename="qdicomprintextensionbase.ui" line="484"/>
+        <location filename="qdicomprintextensionbase.ui" line="565"/>
         <source>1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qdicomprintextensionbase.ui" line="483"/>
+        <location filename="qdicomprintextensionbase.ui" line="420"/>
         <source>From:</source>
         <translation>Des de:</translation>
     </message>
     <message>
-        <location filename="qdicomprintextensionbase.ui" line="534"/>
+        <location filename="qdicomprintextensionbase.ui" line="471"/>
         <source>To:</source>
         <translation>Fins:</translation>
     </message>
@@ -419,9 +419,9 @@ border: 1px solid  #680000;
     <name>udg::QDicomAddPrinterWidget</name>
     <message>
         <location filename="qdicomaddprinterwidget.cpp" line="71"/>
-        <source>%1 can&apos;t add the printer %2 because a printer with the same AE Title already exists.</source>
-        <oldsource>%1 can&apos;t add the printer %2 because a printer with the same AETitle already exists.</oldsource>
-        <translation>%1 no pot afegir la impressora %2 perquè ja n&apos;existeix una altra amb el mateix AE Title.</translation>
+        <source>Unable to add the printer %1 because a printer with the same AE Title already exists.</source>
+        <oldsource>%1 cannot add the printer %2 because a printer with the same AE Title already exists.</oldsource>
+        <translation>No es pot afegir la impressora %1 perquè ja n&apos;existeix una altra amb el mateix AE Title.</translation>
     </message>
 </context>
 <context>
@@ -469,20 +469,24 @@ border: 1px solid  #680000;
     </message>
     <message>
         <location filename="qdicomprintextension.cpp" line="695"/>
-        <source>Some of the pages film can&apos;t be printed because </source>
+        <source>Some of the film pages cannot be printed because </source>
+        <oldsource>Some of the pages film cannot be printed because </oldsource>
         <translation>Algunes de les plaques no s&apos;han pogut imprimir perquè </translation>
     </message>
     <message>
         <location filename="qdicomprintextension.cpp" line="699"/>
-        <source>The images can&apos;t be printed because </source>
-        <oldsource>The film can&apos;t be printed because </oldsource>
+        <source>The images cannot be printed because </source>
+        <oldsource>The images can&apos;t be printed because </oldsource>
         <translation>Les imatges no es poden imprimir perquè </translation>
     </message>
     <message>
         <location filename="qdicomprintextension.cpp" line="705"/>
-        <source>the printer doesn&apos;t respond.
+        <source>the printer does not respond.
 
 </source>
+        <oldsource>the printer doesn&apos;t respond.
+
+</oldsource>
         <translation>la impressora no respon.
 
 </translation>
@@ -495,17 +499,20 @@ border: 1px solid  #680000;
     </message>
     <message>
         <location filename="qdicomprintextension.cpp" line="709"/>
-        <source>the printer doesn&apos;t respond as expected.
+        <source>the printer does not respond as expected.
 
 </source>
+        <oldsource>the printer doesn&apos;t respond as expected.
+
+</oldsource>
         <translation>la impressora no ha respost com s&apos;esperava.
 
 </translation>
     </message>
     <message>
         <location filename="qdicomprintextension.cpp" line="710"/>
-        <source>In most cases this error is produced because the printer doesn&apos;t support some of the print configuration parameters.</source>
-        <oldsource>In most cases this error is produced because the printer doesn&apos;t accept some of the print configuration parameters.</oldsource>
+        <source>In most cases this error is produced because the printer does not support some of the print configuration parameters.</source>
+        <oldsource>In most cases this error is produced because the printer doesn&apos;t support some of the print configuration parameters.</oldsource>
         <translation>En la majoria de casos aquest error es produeix perquè la impressora no suporta alguns dels paràmetres de configuració.</translation>
     </message>
     <message>
@@ -516,15 +523,19 @@ border: 1px solid  #680000;
     </message>
     <message>
         <location filename="qdicomprintextension.cpp" line="714"/>
-        <source>%1 can&apos;t create print spool.</source>
-        <translation>%1 no ha pogut crear el treball d&apos;impressió.</translation>
+        <source>Unable to create print spool.</source>
+        <oldsource>%1 cannot create print spool.</oldsource>
+        <translation>No s&apos;ha pogut crear el treball d&apos;impressió.</translation>
     </message>
     <message>
         <location filename="qdicomprintextension.cpp" line="717"/>
-        <source>%1 can&apos;t load some of the images to print.
+        <source>Unable to load some of the images to print.
 
 </source>
-        <translation>%1 no ha pogut carregar algunes de les imatges per imprimir.
+        <oldsource>%1 cannot load some of the images to print.
+
+</oldsource>
+        <translation>No s&apos;han pogut carregar algunes de les imatges per imprimir.
 
 </translation>
     </message>
@@ -536,8 +547,8 @@ border: 1px solid  #680000;
     </message>
     <message>
         <location filename="qdicomprintextension.cpp" line="722"/>
-        <source>an unknown error has produced.</source>
-        <oldsource>an unknow error has produced.</oldsource>
+        <source>an unknown error has occurred.</source>
+        <oldsource>an unknown error has produced.</oldsource>
         <translation>s&apos;ha produït un error desconegut.</translation>
     </message>
     <message>
@@ -556,8 +567,9 @@ border: 1px solid  #680000;
     </message>
     <message>
         <location filename="qdicomprinterconfigurationwidget.cpp" line="89"/>
-        <source>Error can&apos;t apply changes to the printer.</source>
-        <translation>Error no es poden aplicar els canvis a la impressora.</translation>
+        <source>An error has occurred. Unable to apply changes to the printer.</source>
+        <oldsource>Error cannot apply changes to the printer.</oldsource>
+        <translation>Hi ha hagut un error. No es poden aplicar els canvis a la impressora.</translation>
     </message>
     <message>
         <location filename="qdicomprinterconfigurationwidget.cpp" line="103"/>
@@ -572,8 +584,10 @@ border: 1px solid  #680000;
     </message>
     <message>
         <location filename="qdicomprinterconfigurationwidget.cpp" line="144"/>
-        <source>Printer %1 doesn&apos;t respond correctly.
-Be sure that hostname and AE Title are correct.</source>
+        <source>Printer %1 does not respond correctly.
+Be sure the hostname and AE Title are correct.</source>
+        <oldsource>Printer %1 doesn&apos;t respond correctly.
+Be sure the hostname and AE Title are correct.</oldsource>
         <translation>La impressora %1 no ha respòs correctament.
 Assegureu-vos que la direcció i el AE Title són correctes.</translation>
     </message>
@@ -584,21 +598,22 @@ Assegureu-vos que la direcció i el AE Title són correctes.</translation>
     </message>
     <message>
         <location filename="qdicomprinterconfigurationwidget.cpp" line="266"/>
-        <source>AE Title field can&apos;t be empty.</source>
+        <source>AE Title field cannot be empty.</source>
+        <oldsource>AE Title field can&apos;t be empty.</oldsource>
         <translation>Heu d&apos;especificar el AE Title de la impressora.</translation>
     </message>
     <message>
         <location filename="qdicomprinterconfigurationwidget.cpp" line="273"/>
-        <source>Hostname can&apos;t be empty.</source>
-        <oldsource>Hostname can&apos;t be empty</oldsource>
+        <source>Hostname cannot be empty.</source>
+        <oldsource>Hostname can&apos;t be empty.</oldsource>
         <translation>Heu d&apos;introduir la direcció de la impressora.</translation>
     </message>
     <message>
         <location filename="qdicomprinterconfigurationwidget.cpp" line="149"/>
-        <source>Printer %1 doesn&apos;t respond.
-Be sure that hostname and AE Title are correct.</source>
-        <oldsource>Printer %1 doesn&apos;t respond correctly.
-Be sure that hostname and AETitle are correct.</oldsource>
+        <source>Printer %1 does not respond.
+Be sure the hostname and AE Title are correct.</source>
+        <oldsource>Printer %1 doesn&apos;t respond.
+Be sure the hostname and AE Title are correct.</oldsource>
         <translation>La impressora %1 no ha respòs.
 Assegureu-vos que la direcció i el AE Title són correctes.</translation>
     </message>

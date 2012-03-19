@@ -68,8 +68,8 @@ void QDicomAddPrinterWidget::addPrinter()
 
     if (!dicomPrinterManager.addPrinter(dicomPrinter))
     {
-        QString messageError = tr("%1 can't add the printer %2 because a printer with the same AE Title already exists.")
-                             .arg(ApplicationNameString, dicomPrinter.getAETitle());
+        QString messageError = tr("Unable to add the printer %1 because a printer with the same AE Title already exists.")
+                             .arg(dicomPrinter.getAETitle());
         QMessageBox::critical(this, ApplicationNameString, messageError);
     }
     else

@@ -327,52 +327,12 @@ border: 1px solid  #680000;
 <context>
     <name>udg::QDicomAddPrinterWidget</name>
     <message>
-        <source>%1 can&apos;t add the printer %2 because a printer with the same AE Title already exists.</source>
-        <translation>%1 no puede añadir la impresora %2 por que ya existe otra con el mismo AE Title.</translation>
+        <source>Unable to add the printer %1 because a printer with the same AE Title already exists.</source>
+        <translation>No se puede añadir la impresora %1 porque ya existe otra am con el mismo AE Title.</translation>
     </message>
 </context>
 <context>
     <name>udg::QDicomPrintExtension</name>
-    <message>
-        <source>Some of the pages film can&apos;t be printed because </source>
-        <translation>Algunas de las placas no se han podido imprimir porque </translation>
-    </message>
-    <message>
-        <source>the printer doesn&apos;t respond.
-
-</source>
-        <translation>la impresora no responde.
-
-</translation>
-    </message>
-    <message>
-        <source>the printer doesn&apos;t respond as expected.
-
-</source>
-        <translation>la impresora no ha respondido como se esperaba.
-
-</translation>
-    </message>
-    <message>
-        <source>%1 can&apos;t create print spool.</source>
-        <translation>%1 no ha podido crear el trabajo de impresión.</translation>
-    </message>
-    <message>
-        <source>%1 can&apos;t load some of the images to print.
-
-</source>
-        <translation>%1 no ha podido cargar algunas de las imágenes a imprimir.
-
-</translation>
-    </message>
-    <message>
-        <source>The images can&apos;t be printed because </source>
-        <translation>Las imágenes no se pueden imprimir porque </translation>
-    </message>
-    <message>
-        <source>In most cases this error is produced because the printer doesn&apos;t support some of the print configuration parameters.</source>
-        <translation>En la mayoría de casos este error se produce porque la impresora no soporta algunos de los parámetros de impresión.</translation>
-    </message>
     <message>
         <source>Close &apos;DICOM print&apos; tab and try it again.</source>
         <translation>Cierre la pestaña &apos;Imprimir DICOM&quot; y vuelva a intentar-lo.</translation>
@@ -384,10 +344,6 @@ border: 1px solid  #680000;
     <message>
         <source>Be sure the computer is connected on the network and the printer network parameters are correct.</source>
         <translation>Asegúrese que el ordenador está conectado a la red y que los parámetros de red de la impresora sean correctos.</translation>
-    </message>
-    <message>
-        <source>an unknown error has produced.</source>
-        <translation>se ha producido un error desconocido.</translation>
     </message>
     <message>
         <source>Choose Window/Level Presets</source>
@@ -425,16 +381,56 @@ border: 1px solid  #680000;
         <source>No added images to print.</source>
         <translation>No hay imágenes para imprimir.</translation>
     </message>
+    <message>
+        <source>The images cannot be printed because </source>
+        <translation>Las imágenes no se pueden imprimiri porque </translation>
+    </message>
+    <message>
+        <source>the printer does not respond.
+
+</source>
+        <translation>la impresora no responde.
+
+</translation>
+    </message>
+    <message>
+        <source>the printer does not respond as expected.
+
+</source>
+        <translation>la impresora no ha respondido como se esperaba.
+
+</translation>
+    </message>
+    <message>
+        <source>In most cases this error is produced because the printer does not support some of the print configuration parameters.</source>
+        <translation>En la mayoría de casos este error se produce porque la impresora no soporta algunos de los parámetros de configuración.</translation>
+    </message>
+    <message>
+        <source>an unknown error has occurred.</source>
+        <translation>se produjo un error desconocido.</translation>
+    </message>
+    <message>
+        <source>Some of the film pages cannot be printed because </source>
+        <translation>Algunas de las placas no se han podido imprimir porque </translation>
+    </message>
+    <message>
+        <source>Unable to create print spool.</source>
+        <translation>No se ha podido crear el trabajo de impresión.</translation>
+    </message>
+    <message>
+        <source>Unable to load some of the images to print.
+
+</source>
+        <translation>No se han podido cargar algunas de las imágenes para imprimir.
+
+</translation>
+    </message>
 </context>
 <context>
     <name>udg::QDicomPrinterConfigurationWidget</name>
     <message>
         <source>Automatic</source>
         <translation>Automático</translation>
-    </message>
-    <message>
-        <source>Error can&apos;t apply changes to the printer.</source>
-        <translation>Error no se pueden aplicar los cambios a la impresora.</translation>
     </message>
     <message>
         <source>Test of printer %1 is correct.</source>
@@ -449,24 +445,28 @@ border: 1px solid  #680000;
         <translation>No se ha seleccionado ninguna impresora para aplicar los cambios.</translation>
     </message>
     <message>
-        <source>Hostname can&apos;t be empty.</source>
-        <translation>Tiene que introducir la dirección de la impresora.</translation>
+        <source>Printer %1 does not respond correctly.
+Be sure the hostname and AE Title are correct.</source>
+        <translation>La impresora %1 no ha respondido correctamente.
+Asegúrese que la dirección y el AE Title son correctos.</translation>
     </message>
     <message>
-        <source>Printer %1 doesn&apos;t respond correctly.
-Be sure that hostname and AE Title are correct.</source>
+        <source>Printer %1 does not respond.
+Be sure the hostname and AE Title are correct.</source>
         <translation>La impresora %1 no ha respondido.
 Asegúrese que la dirección y el AE Title son correctos.</translation>
     </message>
     <message>
-        <source>Printer %1 doesn&apos;t respond.
-Be sure that hostname and AE Title are correct.</source>
-        <translation>La impresora %1 no ha respondido.
-Asegúrese que la dirección y el AE Title son correctos.</translation>
+        <source>AE Title field cannot be empty.</source>
+        <translation>Se debe especificar el campo AE Title.</translation>
     </message>
     <message>
-        <source>AE Title field can&apos;t be empty.</source>
-        <translation>Debe especificar el AE Title de la impresora.</translation>
+        <source>Hostname cannot be empty.</source>
+        <translation>Se debe especificar la dirección de la impresora.</translation>
+    </message>
+    <message>
+        <source>An error has occurred. Unable to apply changes to the printer.</source>
+        <translation>Ha habido un error. No se pueden aplicar los cambios a la impresora.</translation>
     </message>
 </context>
 </TS>
