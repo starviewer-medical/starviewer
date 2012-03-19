@@ -113,13 +113,13 @@ bool QLocalDatabaseConfigurationScreen::validateChanges()
         {
             switch (QMessageBox::question(this,
                     tr("Create directory?"),
-                    tr("The cache image directory doesn't exists. Do you want to create it?"),
+                    tr("The cache image directory does not exist. Do you want to create it?"),
                     tr("&Yes"), tr("&No"), 0, 1))
             {
                 case 0:
                     if (!dir.mkpath(m_textCacheImagePath->text()))
                     {
-                        QMessageBox::critical(this, ApplicationNameString, tr("%1 can't create the directory. Please check users permission.")
+                        QMessageBox::critical(this, ApplicationNameString, tr("%1 cannot create the directory. Please check user permissions.")
                                                                          .arg(ApplicationNameString));
                         return false;
                     }
@@ -148,7 +148,7 @@ bool QLocalDatabaseConfigurationScreen::validateChanges()
     {
         if (m_textSpaceToFreeIfNotEnoughSpaceAvailable->text().toUInt() < 1)
         {
-            messageBoxText += tr("\n- At least 1 GB of studies have to be delete when there is not enough space to retrieve or import new studies.");
+            messageBoxText += tr("\n- At least 1 GB of studies must be deleted when there is not enough space to retrieve or import new studies.");
             valid = false;
         }
     }
@@ -157,7 +157,7 @@ bool QLocalDatabaseConfigurationScreen::validateChanges()
     {
         if (m_textMaximumDaysNotViewed->text().toUInt() < 1)
         {
-            messageBoxText += tr("\n- Can't delete studies not viewed last 0 days, at least has to be studies not viewed last 1 day.");
+            messageBoxText += tr("\n- Unable to delete studies not viewed in the last 0 days, must be at least 1 day.");
             valid = false;
         }
     }
@@ -365,7 +365,7 @@ void QLocalDatabaseConfigurationScreen::createDatabase()
     {
         if (databaseFile.exists(m_textDatabaseRoot->text()))
         {
-            QMessageBox::warning(this, ApplicationNameString, tr("%1 can't create the database because a database with the same name exists in the directory.")
+            QMessageBox::warning(this, ApplicationNameString, tr("%1 cannot create the database because a database with the same name exists in the directory.")
                                                             .arg(ApplicationNameString));
         }
         else

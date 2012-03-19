@@ -39,7 +39,7 @@ bool DatabaseInstallation::checkStarviewerDatabase()
         if (!createDatabaseFile())
         {
             ERROR_LOG("Error no s'ha pogut crear la base de dades a " + LocalDatabaseManager::getDatabaseFilePath());
-            m_errorMessage.append(tr("\nCan't create database, be sure you have write permissions on database directory."));
+            m_errorMessage.append(tr("\nUnable to create database, be sure you have write permissions on database directory."));
             isCorrect = false;
         }
     }
@@ -51,14 +51,14 @@ bool DatabaseInstallation::checkStarviewerDatabase()
             // TODO què fem? cal retornar fals? Avisar a l'usuari?
             ERROR_LOG("L'arxiu de base de dades [" + LocalDatabaseManager::getDatabaseFilePath() + "] no es pot obrir amb permisos d'escriptura, " +
                       "no podrem guardar estudis nous ni modificar els ja existents.");
-            m_errorMessage.append(tr("\nYou don't have write permissions on %1 database, you couldn't retrieve or import new studies.")
+            m_errorMessage.append(tr("\nYou don't have write permissions on %1 database. Retrieval or importing of new studies will fail.")
                                     .arg(ApplicationNameString));
         }
 
         isCorrect = checkDatabaseRevision();
         if (!isCorrect)
         {
-            m_errorMessage.append(tr("\nCan't upgrade database file, be sure you have write permissions on database directory."));
+            m_errorMessage.append(tr("\nUnable to upgrade database file, be sure you have write permissions on database directory."));
         }
     }
 
@@ -80,7 +80,7 @@ bool DatabaseInstallation::checkLocalImagePath()
         if (!createLocalImageDir())
         {
             ERROR_LOG("Error el path de la cache d'imatges no s'ha pogut crear " + LocalDatabaseManager::getCachePath());
-            m_errorMessage.append(tr("\nCan't create the cache image directory. Please check users permissions."));
+            m_errorMessage.append(tr("\nUnable to create the cache image directory. Please check user permissions."));
             return false;
         }
     }
@@ -91,7 +91,7 @@ bool DatabaseInstallation::checkLocalImagePath()
         if (!imagePathInfo.isWritable())
         {
             ERROR_LOG("El directori de la cache d'imatges no te permisos d'escriptura: " + LocalDatabaseManager::getCachePath());
-            m_errorMessage.append(tr("\nYou don't have write permissions on cache image directory. You couldn't retrieve or import new studies."));
+            m_errorMessage.append(tr("\nYou don't have write permissions on cache image directory. Retrieval or importing of new studies will fail."));
             return false;
         }
     }

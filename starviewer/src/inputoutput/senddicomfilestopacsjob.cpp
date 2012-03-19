@@ -87,7 +87,7 @@ QString SendDICOMFilesToPACSJob::getStatusDescription()
             message = tr("Images from study %1 of patient %2 has been sent successfully to PACS %3.").arg(studyID, patientName, pacsAETitle);
             break;
         case PACSRequestStatus::SendCanNotConnectToPACS:
-            message = tr("%1 can't send DICOM images from study %2 of patient %3 because can't connect to PACS %4.\n")
+            message = tr("%1 cannot send DICOM images from study %2 of patient %3 because cannot connect to PACS %4.\n")
                 .arg(ApplicationNameString, studyID, patientName, pacsAETitle);
             message += tr("\nBe sure your computer is connected to the network and the PACS parameters are correct.");
             message += tr("\nIf the problem persists contact with an administrator.");
@@ -99,7 +99,7 @@ QString SendDICOMFilesToPACSJob::getStatusDescription()
             message += tr("Wait a few minutes and try again, if the problem persist contact with an administrator.");
             break;
         case PACSRequestStatus::SendSomeDICOMFilesFailed:
-            message = tr("%1 images from study %2 of patient %3 can't be sent because PACS %4 has rejected them.\n\n").arg(
+            message = tr("%1 images from study %2 of patient %3 cannot be sent because PACS %4 has rejected them.\n\n").arg(
                 QString().setNum(m_sendDICOMFilesToPACS->getNumberOfDICOMFilesSentFailed()), studyID, patientName, pacsAETitle);
             message += tr("Please contact with an administrator to solve the problem.");
             break;

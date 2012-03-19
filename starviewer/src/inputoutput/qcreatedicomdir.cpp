@@ -277,15 +277,15 @@ void QCreateDicomdir::createDicomdir()
         {
             if (!qdir.exists())
             {
-                message = tr("The directory '%1' to copy the content to DICOMDIR doesn't exist.\n\n")
+                message = tr("The directory '%1' to copy the content to DICOMDIR does not exist.\n\n")
                     .arg(settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString());
             }
             else
             {
-                message = tr("You don't have read permissions on directory '%1' to copy the content of It to DICOMDIR.\n\n")
+                message = tr("You don't have read permissions on directory '%1' to copy its content to DICOMDIR.\n\n")
                     .arg(settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString());
             }
-            message += tr("Do you want to continue creating DICOMDIR without copy the content of it?");
+            message += tr("Do you want to continue creating DICOMDIR without copying its content?");
 
             if (QMessageBox::question(this, ApplicationNameString, message, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::No)
             {
@@ -339,9 +339,9 @@ Status QCreateDicomdir::createDicomdirOnCdOrDvd()
     // Creem el directori temporal
     if (!temporaryDirPath.mkpath(dicomdirPath))
     {
-        QMessageBox::critical(this, ApplicationNameString, tr("Can't create the temporary directory to create DICOMDIR. Please check users permission."));
+        QMessageBox::critical(this, ApplicationNameString, tr("Unable to create the temporary directory to create DICOMDIR. Please check user permissions."));
         ERROR_LOG("Error al crear directori " + dicomdirPath);
-        return state.setStatus("Can't create temporary DICOMDIR", false, 3002);
+        return state.setStatus("Unable to create temporary DICOMDIR", false, 3002);
     }
     else
     {
@@ -400,13 +400,13 @@ void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
         {
                 switch (QMessageBox::question(this,
                         tr("Create directory?"),
-                        tr("The DICOMDIR directory doesn't exists. Do you want to create it?"),
+                        tr("The DICOMDIR directory does not exist. Do you want to create it?"),
                         tr("&Yes"), tr("&No"), 0, 1))
                 {
                     case 0:
                         if (!directoryDicomdirPath.mkpath(dicomdirPath))
                         {
-                            QMessageBox::critical(this, ApplicationNameString, tr("Can't create the directory. Please check users permissions."));
+                            QMessageBox::critical(this, ApplicationNameString, tr("Unable to create the directory. Please check user permissions."));
                             ERROR_LOG("Error al crear directori " + dicomdirPath);
                         }
                         break;
@@ -477,17 +477,17 @@ Status QCreateDicomdir::startCreateDicomdir(QString dicomdirPath)
         {
             case 4001:
                 // Alguna de les imatges no compleix l'estandard dicom però es pot continuar endavant
-                QMessageBox::information(this, ApplicationNameString, tr("Some images are not 100 % DICOM compliant. It could be possible that some "
-                                                                         "viewers have problems to visualize them."));
+                QMessageBox::information(this, ApplicationNameString, tr("Some images are not 100 % DICOM compliant. Some viewers might have problems" 
+                                                                            " to open them."));
                 clearScreen = true;
                 break;
             case 4002:
-                QMessageBox::warning(this, ApplicationNameString, tr("%1 can't create the DICOMDIR because can't copy the content of '%2'. Be sure you have "
+                QMessageBox::warning(this, ApplicationNameString, tr("%1 cannot create the DICOMDIR because cannot copy the content of '%2'. Be sure you have "
                     "read permissions in the directory or uncheck copy folder content option.")
                     .arg(ApplicationNameString, settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString()));
                 break;
             case 4003:
-                QMessageBox::warning(this, ApplicationNameString, tr("%1 can't create the DICOMDIR because the folder to copy '%2' contents an item called "
+                QMessageBox::warning(this, ApplicationNameString, tr("%1 cannot create the DICOMDIR because the folder to copy '%2' contents an item called "
                     "DICOMDIR or DICOM.\n\nRemove it from the directory or uncheck copy folder content option.")
                     .arg(ApplicationNameString, settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString()));
                 break;
@@ -845,7 +845,7 @@ void QCreateDicomdir::deviceChanged(int index)
 
             if (m_dicomdirSizeBytes > m_availableSpaceToRecordInBytes)
             {
-                QMessageBox::warning(this, ApplicationNameString, tr("The selected device doesn't have enough space to create a DICOMDIR with all this "
+                QMessageBox::warning(this, ApplicationNameString, tr("The selected device does not have enough space to create a DICOMDIR with the selected "
                     "studies, please remove some studies. The capacity of the device is %1 MB.").arg(m_availableSpaceToRecordInBytes / (1024 * 1024)));
             }
 
@@ -866,7 +866,7 @@ void QCreateDicomdir::deviceChanged(int index)
 
                 if (m_dicomdirSizeBytes > m_availableSpaceToRecordInBytes)
                 {
-                    QMessageBox::warning(this, ApplicationNameString, tr("The selected device doesn't have enough space to create a DICOMDIR with all this "
+                    QMessageBox::warning(this, ApplicationNameString, tr("The selected device does not have enough space to create a DICOMDIR with the selected "
                         "studies, please remove some studies. The capacity of a CD is %1 MB.").arg(maximumDeviceCapacity));
                 }
             }

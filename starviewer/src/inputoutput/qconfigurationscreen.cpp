@@ -293,7 +293,7 @@ bool QConfigurationScreen::validatePacsDeviceToEcho()
 {
     if (m_textAETitle->text().length() == 0)
     {
-        QMessageBox::warning(this, ApplicationNameString, tr("AE Title field can't be empty."));
+        QMessageBox::warning(this, ApplicationNameString, tr("AE Title field cannot be empty."));
         return false;
     }
 
@@ -331,7 +331,7 @@ bool QConfigurationScreen::validatePacsDeviceToSave()
         // La institució no pot estar en blanc
         if (m_textInstitution->text().length() == 0)
         {
-            QMessageBox::warning(this, ApplicationNameString, tr("Institution field can't be empty."));
+            QMessageBox::warning(this, ApplicationNameString, tr("Institution field cannot be empty."));
             return false;
         }
 

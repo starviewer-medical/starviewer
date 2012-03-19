@@ -360,7 +360,7 @@
      <item>
       <widget class="QCheckBox" name="m_checkBoxDeletedOldStudies">
        <property name="text">
-        <string>Delete studies automatically that have not been viewed last</string>
+        <string>Automatically delete studies not viewed in the last</string>
        </property>
       </widget>
      </item>
@@ -413,7 +413,7 @@
      <item>
       <widget class="QCheckBox" name="m_checkBoxDeleteStudiesIfNotEnoughFreeSpaceAvailable">
        <property name="text">
-        <string>When there isn't enough free space to retrieve or import new studies delete old studies until get</string>
+        <string>When there is not enough free space to retrieve or import new studies, delete old studies until obtaining</string>
        </property>
       </widget>
      </item>

@@ -110,7 +110,7 @@ void RISRequestManager::queryPACSRISStudyRequest(DicomMask maskRISRequest)
     QList<PacsDevice> queryablePACS = PacsDeviceManager().getPACSList(PacsDeviceManager::PacsWithQueryRetrieveServiceEnabled, true);
     if (queryablePACS.isEmpty())
     {
-        QMessageBox::information(0, ApplicationNameString, tr("Can't be retrieved the requested studies by RIS, because there are not configured default "
+        QMessageBox::information(0, ApplicationNameString, tr("The requested studies by RIS cannot be retrieved because there is no configured default "
                                                               "PACS to query.") + "\n\n" + tr("Please, check your PACS settings."));
         INFO_LOG("No s'ha pogut processar la peticio del RIS perque no hi ha PACS configurats per cercar per defecte");
         m_queueRISRequests.dequeue();
@@ -204,7 +204,7 @@ void RISRequestManager::queryRequestRISFinished()
     {
         INFO_LOG("No s'ha trobat cap estudi sol·licitat pel RIS amb l'accession number " + dicomMaskRISRequest.getAccessionNumber());
         // Si no hem trobat cap estudi que coincideix llancem MessageBox
-        QString message = tr("%2 can't execute the RIS request. The study with accession number %1 was not found in the default PACS.")
+        QString message = tr("%2 cannot execute the RIS request. The study with accession number %1 was not found in the default PACS.")
                         .arg(dicomMaskRISRequest.getAccessionNumber(), ApplicationNameString);
 
         m_qpopUpRISRequestsScreen->showNotStudiesFoundMessage();
@@ -221,7 +221,7 @@ void RISRequestManager::queryRequestRISFinished()
 
 void RISRequestManager::errorQueryingStudy(QueryPacsJob *queryPACSJob)
 {
-    QString errorMessage = tr("Processing the RIS request, can't query PACS %1 from %2.\nBe sure its IP and AE Title are correct.")
+    QString errorMessage = tr("Processing the RIS request, cannot query PACS %1 from %2.\nBe sure its IP and AE Title are correct.")
         .arg(queryPACSJob->getPacsDevice().getAETitle())
         .arg(queryPACSJob->getPacsDevice().getInstitution());
 
@@ -431,10 +431,10 @@ void RISRequestManager::showListenRISRequestsError(ListenRISRequests::ListenRISR
     switch (error)
     {
         case ListenRISRequests::RisPortInUse:
-            message = tr("Can't listen RIS requests on port %1, the port is in use by another application.").arg(risPort);
+            message = tr("Unable to listen RIS requests on port %1, the port is in use by another application.").arg(risPort);
             break;
         case ListenRISRequests::UnknownNetworkError:
-            message = tr("Can't listen RIS requests on port %1, an unknown network error has produced.").arg(risPort);
+            message = tr("Unable to listen RIS requests on port %1, an unknown network error has occurred.").arg(risPort);
             message += tr("\nIf the problem persists contact with an administrator.");
             break;
     }

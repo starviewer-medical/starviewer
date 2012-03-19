@@ -70,7 +70,7 @@ void IsoImageFileCreator::startCreateIsoImageFile()
     // Es comprova que el directori o fitxer a partir del qual es vol generar el fitxer d'imatge ISO existeix
     if (!QFile::exists(m_inputPath))
     {
-        m_lastErrorDescription = QObject::tr("The input path \"%1\" that we want to turn into an ISO image doesn't exist.").arg(m_inputPath);
+        m_lastErrorDescription = QObject::tr("The input path \"%1\" to create the ISO image does not exist.").arg(m_inputPath);
         m_lastError = InputPathNotFound;
         emit finishedCreateIsoImageFile(false);
     }
@@ -82,7 +82,7 @@ void IsoImageFileCreator::startCreateIsoImageFile()
         // Es comprova que el directori on es vol guardar el fitxer de imatge ISO existeixi
         if (!outputIsoImageFilePathInfo.dir().exists())
         {
-            m_lastErrorDescription = QObject::tr("The directory \"%1\" where you want to save ISO image file doesn't exist.")
+            m_lastErrorDescription = QObject::tr("The directory \"%1\" to save the ISO image file does not exist.")
                                                 .arg(QDir::toNativeSeparators(outputIsoImageFilePathInfo.absolutePath()));
             m_lastError = OutputPathNotFound;
             emit finishedCreateIsoImageFile(false);
@@ -173,7 +173,7 @@ void IsoImageFileCreator::finishCreationProcess(int exitCode)
     // correctament i s'emet el signal finishedCreateIsoImageFile(bool)
     if (exitCode != 0)
     {
-        m_lastErrorDescription = QObject::tr("An error occurred with the ISO image file create process.");
+        m_lastErrorDescription = QObject::tr("An error occurred during the ISO image file creation process.");
         m_lastError = InternalError;
 
         ERROR_LOG("Error al crear ISO; Exit code qprocess: " + exitCode);
