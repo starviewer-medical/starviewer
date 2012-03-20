@@ -1268,19 +1268,13 @@ Esborreu aquests elements del directori o desmarqueu l&apos;opció de copiar el 
         <translation>S&apos;ha produït un error durant la creació del DICOMDIR.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="848"/>
+        <location filename="qcreatedicomdir.cpp" line="843"/>
         <source>The selected device does not have enough space to create a DICOMDIR with the selected studies, please remove some studies. The capacity of the device is %1 MB.</source>
         <oldsource>The selected device does not have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of the device is %1 MB.</oldsource>
         <translation>El dispositiu seleccionat no té suficient espai lliure per crear el DICOMDIR amb els estudis escollits, si us plau tregui alguns dels estudis. La capacitat del dispositiu és de %1 MB.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="869"/>
-        <source>The selected device does not have enough space to create a DICOMDIR with the selected studies, please remove some studies. The capacity of a CD is %1 MB.</source>
-        <oldsource>The selected device does not have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of a CD is %1 MB.</oldsource>
-        <translation>El dispositiu seleccionat no té suficient espai lliure per crear el DICOMDIR amb els estudis escollits, si us plau tregui alguns dels estudis. La capacitat d&apos;un CD és de %1 MB.</translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="877"/>
+        <location filename="qcreatedicomdir.cpp" line="867"/>
         <source>Invalid DICOMDIR burning application configuration.
 It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</source>
         <translation>La configuració de l&apos;aplicació per gravar DICOMDIR no és correcte.

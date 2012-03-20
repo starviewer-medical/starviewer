@@ -1275,19 +1275,13 @@ Borre estos elementos del directorio o desactive la opción copiar el contenido 
         <translation>Se produjo un error durante la creación del DICOMDIR.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="848"/>
+        <location filename="qcreatedicomdir.cpp" line="843"/>
         <source>The selected device does not have enough space to create a DICOMDIR with the selected studies, please remove some studies. The capacity of the device is %1 MB.</source>
         <oldsource>The selected device does not have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of the device is %1 MB.</oldsource>
         <translation>El dispositivo seleccionado no tiene suficiente espacio para crear un DICOMDIR con los estudios seleccionados, por favor quite algunos de los estudios. La capacidad del dispositivo es de %1 MB.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="869"/>
-        <source>The selected device does not have enough space to create a DICOMDIR with the selected studies, please remove some studies. The capacity of a CD is %1 MB.</source>
-        <oldsource>The selected device does not have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of a CD is %1 MB.</oldsource>
-        <translation>El dispositivo seleccionado no tiene suficiente espacio para crear un DICOMDIR con los estudios seleccionados, por favor quite algunos de los estudios. La capacidad de un CD es de %1 MB.</translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="877"/>
+        <location filename="qcreatedicomdir.cpp" line="867"/>
         <source>Invalid DICOMDIR burning application configuration.
 It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</source>
         <translation>La configuración de la aplicación para grabar DICOMDIR no es correcta.

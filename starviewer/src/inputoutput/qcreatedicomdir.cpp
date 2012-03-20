@@ -837,38 +837,28 @@ void QCreateDicomdir::deviceChanged(int index)
     // la mida del DICOMDIR
     updateDICOMDIRSizeWithFolderToCopyToDICOMDIRSize();
 
+    int maximumDeviceCapacityInMB = m_availableSpaceToRecordInBytes / (1024 * 1024);
+    if (m_dicomdirSizeBytes > m_availableSpaceToRecordInBytes)
+    {
+        QMessageBox::warning(this, ApplicationNameString, tr("The selected device does not have enough space to create a DICOMDIR with the selected studies, "
+            "please remove some studies. The capacity of the device is %1 MB.").arg(maximumDeviceCapacityInMB));
+    }
+    
     switch (m_currentDevice)
     {
         case CreateDicomdir::UsbPen:
         case CreateDicomdir::HardDisk:
             m_stackedWidget->setCurrentIndex(1);
-
-            if (m_dicomdirSizeBytes > m_availableSpaceToRecordInBytes)
-            {
-                QMessageBox::warning(this, ApplicationNameString, tr("The selected device does not have enough space to create a DICOMDIR with the selected "
-                    "studies, please remove some studies. The capacity of the device is %1 MB.").arg(m_availableSpaceToRecordInBytes / (1024 * 1024)));
-            }
-
             break;
+
         case CreateDicomdir::CdRom:
         case CreateDicomdir::DvdRom:
-            int maximumDeviceCapacity;
-
             if (checkDICOMDIRBurningApplicationConfiguration())
             {
-                // La configuració de l'aplicació per gravar cd/dvd és vàlida
-                maximumDeviceCapacity = m_currentDevice == CreateDicomdir::CdRom ? CDRomSizeMb : DVDRomSizeMb;
-
                 // Indiquem que es mostri la barra de progrés
                 m_stackedWidget->setCurrentIndex(0);
 
-                m_progressBarOcupat->setMaximum(maximumDeviceCapacity);
-
-                if (m_dicomdirSizeBytes > m_availableSpaceToRecordInBytes)
-                {
-                    QMessageBox::warning(this, ApplicationNameString, tr("The selected device does not have enough space to create a DICOMDIR with the selected "
-                        "studies, please remove some studies. The capacity of a CD is %1 MB.").arg(maximumDeviceCapacity));
-                }
+                m_progressBarOcupat->setMaximum(maximumDeviceCapacityInMB);
             }
             else
             {
