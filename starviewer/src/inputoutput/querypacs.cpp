@@ -26,6 +26,33 @@ QueryPacs::QueryPacs(PacsDevice pacsDevice)
     m_pacsDevice = pacsDevice;
     m_pacsConnection = NULL;
     m_resultsDICOMSource.addRetrievePACS(pacsDevice);
+
+    m_patientStudyListGot = false;
+    m_seriesListGot = false;
+    m_imageListGot = false;
+}
+
+QueryPacs::~QueryPacs()
+{
+    //Esborrem els llistats de resultats de cerca que no ens hagin demanat a través dels mètodes get
+    if (!m_patientStudyListGot)
+    {
+        foreach(Patient *patient, m_patientStudyList)
+        {
+            qDeleteAll(patient->getStudies());
+            delete patient;
+        }
+    }
+
+    if (!m_seriesListGot)
+    {
+        qDeleteAll(m_seriesList);
+    }
+
+    if (!m_imageListGot)
+    {
+        qDeleteAll(m_imageList);
+    }
 }
 
 void QueryPacs::foundMatchCallback(void *callbackData, T_DIMSE_C_FindRQ *request, int responseCount, T_DIMSE_C_FindRSP *rsp,
@@ -194,16 +221,19 @@ void QueryPacs::addImage(DICOMTagReader *dicomTagReader)
 
 QList<Patient*> QueryPacs::getQueryResultsAsPatientStudyList()
 {
+    m_patientStudyListGot = true;
     return m_patientStudyList;
 }
 
 QList<Series*> QueryPacs::getQueryResultsAsSeriesList()
 {
+    m_seriesListGot = true;
     return m_seriesList;
 }
 
 QList<Image*> QueryPacs::getQueryResultsAsImageList()
 {
+    m_imageListGot = true;
     return m_imageList;
 }
 

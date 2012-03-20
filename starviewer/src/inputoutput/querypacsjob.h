@@ -45,13 +45,16 @@ public:
     /// Indica a quin nivell es fa la consulta study, series, image
     QueryLevel getQueryLevel();
 
-    /// Retorna la llista d'estudis trobats que compleixen el criteri de cerca
+    /// Retorna la llista d'estudis trobats que compleixen el criteri de cerca. La classe que demani els resultats de cerca d'estudis, és responsable 
+    /// d'eliminar els objects retornats aquest mètode
     QList<Patient*> getPatientStudyList();
 
-    /// Retorna la llista de series trobades que compleixen els criteris de cerca
+    /// Retorna la llista de series trobades que compleixen els criteris de cerca. La classe que demani els resultats de cerca de sèries és responsable 
+    /// d'eliminar els objects retornats aquest mètode
     QList<Series*> getSeriesList();
 
-    /// Retorna la llista d'imatges trobades que compleixen els criteris de cerca
+    /// Retorna la llista d'imatges trobades que compleixen els criteris de cerca. LLa classe que demani els resultats de cerca d'imatges, és responsable d'eliminar 
+    /// els objects retornats aquest mètode
     QList<Image*> getImageList();
 
     /// Retorna l'estat de la consulta

@@ -31,6 +31,7 @@ class QueryPacs {
 public:
     /// Constructor de la classe
     QueryPacs(PacsDevice pacsDevice);
+    ~QueryPacs();
 
     /// Cerca els estudis que compleixin la màscara passada
     PACSRequestStatus::QueryRequestStatus query(const DicomMask &mask);
@@ -41,8 +42,11 @@ public:
     /// cancel·la la query
     void cancelQuery();
 
+    ///Retornen els pacients amb els estudis trobats. La classe que demani els resultats de cerca d'estudis, és responsable d'eliminar els objects retornats aquest mètode
     QList<Patient*> getQueryResultsAsPatientStudyList();
+    ///Retornen les sèries trobades. La classe que demani els resultats de cerca de sèries, és responsable d'eliminar els objects retornats aquest mètode
     QList<Series*> getQueryResultsAsSeriesList();
+    ///Retornen les imatges trobades. La classe que demani els resultats de cerca d'imatge, és responsable d'eliminar els objects retornats aquest mètode
     QList<Image*> getQueryResultsAsImageList();
 
 private:
@@ -83,6 +87,11 @@ private:
 
     // Indicarà de quin PACS hem obtingut estudis, sèries, imatges
     DICOMSource m_resultsDICOMSource;
+
+    /// Indiquen si s'ha fet un get de la llista de resultats 
+    bool m_patientStudyListGot;
+    bool m_seriesListGot;
+    bool m_imageListGot;
 };
 };
 #endif
