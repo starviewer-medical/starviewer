@@ -844,8 +844,9 @@ Marc Ruiz: El GIMP fa servir &quot;brillantor&quot;. De moment ho canvio a l&apo
     </message>
     <message>
         <location filename="qdiagnosistestbase.ui" line="178"/>
-        <source>All tests have passed</source>
-        <translation>S&apos;han executat correctament tots els tests</translation>
+        <source>Tests completed successfully</source>
+        <oldsource>All tests have passed</oldsource>
+        <translation>Tests superats satisfactòriament</translation>
     </message>
     <message>
         <location filename="qdiagnosistestbase.ui" line="220"/>
@@ -865,7 +866,7 @@ Marc Ruiz: El GIMP fa servir &quot;brillantor&quot;. De moment ho canvio a l&apo
     <message>
         <location filename="qdiagnosistestbase.ui" line="116"/>
         <source>Some tests have failed</source>
-        <translation>Alguns tests han fallat</translation>
+        <translation>Algun test ha fallat</translation>
     </message>
     <message>
         <location filename="qdiagnosistestbase.ui" line="269"/>

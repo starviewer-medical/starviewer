@@ -175,7 +175,7 @@
            </font>
           </property>
           <property name="text">
-           <string>All tests have passed</string>
+           <string>Tests completed successfully</string>
           </property>
          </widget>
         </item>
@@ -294,6 +294,7 @@
   </customwidget>
  </customwidgets>
  <resources>
+  <include location="../main/main.qrc"/>
   <include location="../main/main.qrc"/>
   <include location="../main/main.qrc"/>
  </resources>
