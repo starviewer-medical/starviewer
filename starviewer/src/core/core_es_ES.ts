@@ -841,8 +841,9 @@ El shading se deshabilitará por lo tanto el renderizado no será el esperado.</
     </message>
     <message>
         <location filename="qdiagnosistestbase.ui" line="178"/>
-        <source>All tests have passed</source>
-        <translation>Se han ejecutado correctamente todos los tests</translation>
+        <source>Tests completed successfully</source>
+        <oldsource>All tests have passed</oldsource>
+        <translation>Tests superados satisfactoriamente</translation>
     </message>
     <message>
         <location filename="qdiagnosistestbase.ui" line="220"/>
@@ -862,7 +863,7 @@ El shading se deshabilitará por lo tanto el renderizado no será el esperado.</
     <message>
         <location filename="qdiagnosistestbase.ui" line="116"/>
         <source>Some tests have failed</source>
-        <translation>Algunos tests han fallado</translation>
+        <translation>Algun test ha fallado</translation>
     </message>
     <message>
         <location filename="qdiagnosistestbase.ui" line="269"/>

@@ -833,7 +833,8 @@ Shading will be disabled, it will not render as expected.</source>
     </message>
     <message>
         <location filename="qdiagnosistestbase.ui" line="178"/>
-        <source>All tests have passed</source>
+        <source>Tests completed successfully</source>
+        <oldsource>All tests have passed</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
