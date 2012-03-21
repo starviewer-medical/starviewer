@@ -882,8 +882,7 @@ Asegúrese que la IP y el AETitle de este sean correctos.</translation>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="535"/>
         <source>Update PACS</source>
-        <translatorcomment>Actualitzar PACS</translatorcomment>
-        <translation></translation>
+        <translation>Actualizar PACS</translation>
     </message>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="545"/>
