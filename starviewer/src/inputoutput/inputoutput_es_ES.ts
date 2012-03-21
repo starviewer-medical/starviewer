@@ -2091,7 +2091,7 @@ Estos archivos se tendrán que borrar de forma manual.</translation>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="84"/>
         <source>Retrieve &amp;&amp; &amp;View</source>
-        <translation>Descargar &amp;&amp; &amp;Visualizar</translation>
+        <translation>Descargar y &amp;visualizar</translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="89"/>

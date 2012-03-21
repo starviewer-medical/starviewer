@@ -16,7 +16,7 @@
         <location filename="qinputoutputdicomdirwidget.cpp" line="89"/>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="213"/>
         <source>Open</source>
-        <translation>Obrir</translation>
+        <translation>Obre</translation>
     </message>
 </context>
 <context>
@@ -1296,7 +1296,7 @@ Especifiqui una configuració vàlida en el menú Eines -&gt; Configuració -&gt
     <message>
         <location filename="qcreatedicomdirbase.ui" line="14"/>
         <source>Create DICOMDIR</source>
-        <translation>Crear DICOMDIR</translation>
+        <translation>Crea DICOMDIR</translation>
     </message>
     <message>
         <location filename="qcreatedicomdirbase.ui" line="63"/>
@@ -1342,12 +1342,12 @@ Especifiqui una configuració vàlida en el menú Eines -&gt; Configuració -&gt
     <message>
         <location filename="qcreatedicomdirbase.ui" line="125"/>
         <source>Remove</source>
-        <translation>Esborrar</translation>
+        <translation>Esborra</translation>
     </message>
     <message>
         <location filename="qcreatedicomdirbase.ui" line="151"/>
         <source>Remove All</source>
-        <translation>Esborrar tots</translation>
+        <translation>Esborra&apos;ls tots</translation>
     </message>
     <message>
         <location filename="qcreatedicomdirbase.ui" line="148"/>
@@ -1362,7 +1362,7 @@ Especifiqui una configuració vàlida en el menú Eines -&gt; Configuració -&gt
     <message>
         <location filename="qcreatedicomdirbase.ui" line="182"/>
         <source>Create DICOMDIR on...</source>
-        <translation>Crear DICOMDIR a...</translation>
+        <translation>Crea DICOMDIR a...</translation>
     </message>
     <message>
         <location filename="qcreatedicomdirbase.ui" line="68"/>
@@ -1414,12 +1414,12 @@ Especifiqui una configuració vàlida en el menú Eines -&gt; Configuració -&gt
     <message>
         <location filename="qcreatedicomdirbase.ui" line="642"/>
         <source>Create</source>
-        <translation>Crear</translation>
+        <translation>Crea</translation>
     </message>
     <message>
         <location filename="qcreatedicomdirbase.ui" line="649"/>
         <source>Cancel</source>
-        <translation>Cancel·lar</translation>
+        <translation>Cancel·la</translation>
     </message>
     <message>
         <location filename="qcreatedicomdirbase.ui" line="204"/>
@@ -1515,7 +1515,7 @@ Especifiqui una configuració vàlida en el menú Eines -&gt; Configuració -&gt
     <message>
         <location filename="qdicomdirconfigurationscreenbase.ui" line="70"/>
         <source>Convert all images to Explicit Little Endian</source>
-        <translation>Convertir totes les imatges a Explicit Little Endian</translation>
+        <translation>Converteix totes les imatges a Explicit Little Endian</translation>
     </message>
     <message>
         <location filename="qdicomdirconfigurationscreenbase.ui" line="101"/>
@@ -1550,7 +1550,7 @@ Especifiqui una configuració vàlida en el menú Eines -&gt; Configuració -&gt
     <message>
         <location filename="qdicomdirconfigurationscreenbase.ui" line="229"/>
         <source>Use different parameters for CD and DVD burning:</source>
-        <translation>Utilitzar paràmetres diferents per gravar CD i DVD:</translation>
+        <translation>Utilitza paràmetres diferents per gravar CD i DVD:</translation>
     </message>
     <message>
         <location filename="qdicomdirconfigurationscreenbase.ui" line="241"/>
@@ -1565,17 +1565,17 @@ Especifiqui una configuració vàlida en el menú Eines -&gt; Configuració -&gt
     <message>
         <location filename="qdicomdirconfigurationscreenbase.ui" line="320"/>
         <source>Copy the content of folder to DICOMDIR</source>
-        <translation>Copiar el contingut del directori al DICOMDIR</translation>
+        <translation>Copia el contingut del directori al DICOMDIR</translation>
     </message>
     <message>
         <location filename="qdicomdirconfigurationscreenbase.ui" line="353"/>
         <source>Copy additional folder content when creating DICOMDIR on these supports</source>
-        <translation>Copiar el contingut de la carpeta quan es creï un DICOMDIR en els suports</translation>
+        <translation>Copia el contingut de la carpeta quan es creï un DICOMDIR en els suports</translation>
     </message>
     <message>
         <location filename="qdicomdirconfigurationscreenbase.ui" line="359"/>
         <source>USB Drive or Hard Disk</source>
-        <translation>Memòria USB o Disc dur</translation>
+        <translation>Memòria USB o disc dur</translation>
     </message>
     <message>
         <location filename="qdicomdirconfigurationscreenbase.ui" line="366"/>
@@ -1585,7 +1585,7 @@ Especifiqui una configuració vàlida en el menú Eines -&gt; Configuració -&gt
     <message>
         <location filename="qdicomdirconfigurationscreenbase.ui" line="408"/>
         <source>Folder path to copy content:</source>
-        <translation>Copiar el contingut del directori:</translation>
+        <translation>Copia el contingut del directori:</translation>
     </message>
     <message>
         <location filename="qdicomdirconfigurationscreenbase.ui" line="431"/>
@@ -1598,7 +1598,7 @@ Especifiqui una configuració vàlida en el menú Eines -&gt; Configuració -&gt
     <message>
         <location filename="qexporterbase.ui" line="20"/>
         <source>Exporter</source>
-        <translation>Exportar</translation>
+        <translation>Exporta</translation>
     </message>
     <message>
         <location filename="qexporterbase.ui" line="35"/>
@@ -1648,22 +1648,22 @@ Especifiqui una configuració vàlida en el menú Eines -&gt; Configuració -&gt
     <message>
         <location filename="qexporterbase.ui" line="185"/>
         <source>Store to local database</source>
-        <translation>Guardar a la base de dades local</translation>
+        <translation>Guarda a la base de dades local</translation>
     </message>
     <message>
         <location filename="qexporterbase.ui" line="195"/>
         <source>Send to PACS node:</source>
-        <translation>Enviar al node PACS:</translation>
+        <translation>Envia al node PACS:</translation>
     </message>
     <message>
         <location filename="qexporterbase.ui" line="262"/>
         <source>Discard</source>
-        <translation>Cancel·lar</translation>
+        <translation>Cancel·la</translation>
     </message>
     <message>
         <location filename="qexporterbase.ui" line="269"/>
         <source>Save</source>
-        <translation>Guardar</translation>
+        <translation>Guarda</translation>
     </message>
 </context>
 <context>
@@ -1701,7 +1701,7 @@ Especifiqui una configuració vàlida en el menú Eines -&gt; Configuració -&gt
     <message>
         <location filename="qexportertool.cpp" line="275"/>
         <source>Export to DICOM</source>
-        <translation>Exportar a DICOM</translation>
+        <translation>Exporta a DICOM</translation>
     </message>
     <message>
         <location filename="qexportertool.cpp" line="275"/>
@@ -1714,12 +1714,12 @@ Especifiqui una configuració vàlida en el menú Eines -&gt; Configuració -&gt
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="70"/>
         <source>&amp;View</source>
-        <translation>&amp;Visualitzar</translation>
+        <translation>&amp;Visualitza</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="74"/>
         <source>&amp;Import</source>
-        <translation>&amp;Importar</translation>
+        <translation>&amp;Importa</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="101"/>
@@ -1915,17 +1915,17 @@ Si us plau contacteu amb l&apos;equip del %1.</translation>
     <message>
         <location filename="qinputoutputdicomdirwidgetbase.ui" line="55"/>
         <source>View</source>
-        <translation>Visualitzar</translation>
+        <translation>Visualitza</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidgetbase.ui" line="74"/>
         <source>Import</source>
-        <translation>Importar</translation>
+        <translation>Importa</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidgetbase.ui" line="106"/>
         <source>Open DICOMDIR</source>
-        <translation>Obrir DICOMDIR</translation>
+        <translation>Obre DICOMDIR</translation>
     </message>
 </context>
 <context>
@@ -1933,23 +1933,23 @@ Si us plau contacteu amb l&apos;equip del %1.</translation>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="93"/>
         <source>&amp;View</source>
-        <translation>&amp;Visualitzar</translation>
+        <translation>&amp;Visualitza</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="97"/>
         <source>&amp;Delete</source>
-        <translation>&amp;Esborrar</translation>
+        <translation>&amp;Esborra</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="102"/>
         <source>Send to DICOMDIR List</source>
-        <translation>Enviar a la llista de DICOMDIR</translation>
+        <translation>Envia a la llista de DICOMDIR</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="106"/>
         <source>Send to PACS</source>
         <oldsource>Store to PACS</oldsource>
-        <translation>Enviar al PACS</translation>
+        <translation>Envia al PACS</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="159"/>
@@ -2076,7 +2076,7 @@ Aquests hauran de ser esborrats de forma manual.</translation>
     <message>
         <location filename="qinputoutputlocaldatabasewidgetbase.ui" line="63"/>
         <source>View</source>
-        <translation>Visualitzar</translation>
+        <translation>Visualitza</translation>
     </message>
 </context>
 <context>
@@ -2084,12 +2084,12 @@ Aquests hauran de ser esborrats de forma manual.</translation>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="84"/>
         <source>Retrieve &amp;&amp; &amp;View</source>
-        <translation>Descarregar &amp;&amp; &amp;Visualitzar</translation>
+        <translation>Descarregar i &amp;Visualitza</translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="89"/>
         <source>&amp;Retrieve</source>
-        <translation>&amp;Descarregar</translation>
+        <translation>&amp;Descarrega</translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="106"/>
@@ -2151,12 +2151,12 @@ Està segur que vol continuar?</translation>
     <message>
         <location filename="qinputoutputpacswidgetbase.ui" line="46"/>
         <source>Retrieve &amp;&amp; View</source>
-        <translation>Descarregar &amp;&amp; Visualitzar</translation>
+        <translation>Descarrega i visualitza</translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidgetbase.ui" line="66"/>
         <source>Retrieve</source>
-        <translation>Descarregar</translation>
+        <translation>Descarrega</translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidgetbase.ui" line="111"/>
@@ -2171,7 +2171,7 @@ Està segur que vol continuar?</translation>
     <message>
         <location filename="qinputoutputpacswidgetbase.ui" line="130"/>
         <source>Cancel query</source>
-        <translation>Cancel·lar cerca</translation>
+        <translation>Cancel·la la cerca</translation>
     </message>
 </context>
 <context>
@@ -2192,12 +2192,12 @@ Està segur que vol continuar?</translation>
     <message>
         <location filename="qlistenrisrequestsconfigurationscreenbase.ui" line="46"/>
         <source>Apply changes</source>
-        <translation>Aplicar canvis</translation>
+        <translation>Aplica els canvis</translation>
     </message>
     <message>
         <location filename="qlistenrisrequestsconfigurationscreenbase.ui" line="92"/>
         <source>Automatically view the studies upon reception</source>
-        <translation>Visualitzar automàticament els estudis quan s&apos;hagin descarregat</translation>
+        <translation>Visualitza automàticament els estudis quan s&apos;hagin descarregat</translation>
     </message>
     <message>
         <location filename="qlistenrisrequestsconfigurationscreenbase.ui" line="109"/>
@@ -2245,7 +2245,7 @@ Està segur que vol continuar?</translation>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="122"/>
         <source>%1 cannot create the directory. Please check user permissions.</source>
         <oldsource>%1 can&apos;t create the directory. Please check users permission.</oldsource>
-        <translation>No s&apos;ha pogut crear el directori. Si us plau reviseu els vostres permisos d&apos;usuari.</translation>
+        <translation>%1 no ha pogut crear el directori. Si us plau reviseu els vostres permisos d&apos;usuari.</translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="142"/>
@@ -2373,13 +2373,13 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
     <message>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="182"/>
         <source>Create database</source>
-        <translation>Crear la base de dades</translation>
+        <translation>Crea la base de dades</translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="205"/>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="208"/>
         <source>Compact Database</source>
-        <translation>Compactar base de dades</translation>
+        <translation>Compacta la base de dades</translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="231"/>
@@ -2389,7 +2389,7 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
     <message>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="234"/>
         <source>Delete all Studies</source>
-        <translation>Esborrar tots els estudis</translation>
+        <translation>Esborra tots els estudis</translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="287"/>
@@ -2399,7 +2399,7 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
     <message>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="293"/>
         <source>Apply Changes</source>
-        <translation>Aplicar canvis</translation>
+        <translation>Aplica els canvis</translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="310"/>
@@ -2576,17 +2576,17 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
     <message>
         <location filename="qoperationstatescreenbase.ui" line="119"/>
         <source>Cancel Selected</source>
-        <translation>Cancel·lar seleccionades</translation>
+        <translation>Cancel·la les seleccionades</translation>
     </message>
     <message>
         <location filename="qoperationstatescreenbase.ui" line="126"/>
         <source>Cancel All</source>
-        <translation>Cancel·lar totes</translation>
+        <translation>Cancel·la totes</translation>
     </message>
     <message>
         <location filename="qoperationstatescreenbase.ui" line="175"/>
         <source>Clear</source>
-        <translation>Netejar</translation>
+        <translation>Neteja</translation>
     </message>
     <message>
         <location filename="qoperationstatescreenbase.ui" line="14"/>
@@ -2891,7 +2891,7 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
     <message>
         <location filename="qwidgetselectpacstostoredicomimagebase.ui" line="17"/>
         <source>Send DICOM objects to PACS</source>
-        <translation>Enviar objectes DICOM al PACS</translation>
+        <translation>Envia objectes DICOM al PACS</translation>
     </message>
     <message>
         <location filename="qwidgetselectpacstostoredicomimagebase.ui" line="23"/>
@@ -2901,12 +2901,12 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
     <message>
         <location filename="qwidgetselectpacstostoredicomimagebase.ui" line="96"/>
         <source>Send</source>
-        <translation>Enviar</translation>
+        <translation>Envia</translation>
     </message>
     <message>
         <location filename="qwidgetselectpacstostoredicomimagebase.ui" line="119"/>
         <source>Cancel</source>
-        <translation>Cancel·lar</translation>
+        <translation>Cancel·la</translation>
     </message>
 </context>
 <context>
@@ -3046,12 +3046,12 @@ Si el problema persisteix contacteu amb un administrador.</translation>
     <message>
         <location filename="queryscreenbase.ui" line="13"/>
         <source>Query Study</source>
-        <translation>Cercar estudi</translation>
+        <translation>Cerca estudi</translation>
     </message>
     <message>
         <location filename="queryscreenbase.ui" line="188"/>
         <source>Search</source>
-        <translation>Cercar</translation>
+        <translation>Cerca</translation>
     </message>
     <message>
         <location filename="queryscreenbase.ui" line="231"/>
@@ -3061,7 +3061,7 @@ Si el problema persisteix contacteu amb un administrador.</translation>
     <message>
         <location filename="queryscreenbase.ui" line="404"/>
         <source>Create DICOMDIR</source>
-        <translation>Crear DICOMDIR</translation>
+        <translation>Crea DICOMDIR</translation>
     </message>
     <message>
         <location filename="queryscreenbase.ui" line="311"/>
@@ -3071,7 +3071,7 @@ Si el problema persisteix contacteu amb un administrador.</translation>
     <message>
         <location filename="queryscreenbase.ui" line="166"/>
         <source>Clear Search Fields</source>
-        <translation>Netejar els camps de cerca</translation>
+        <translation>Neteja els camps de cerca</translation>
     </message>
     <message>
         <location filename="queryscreenbase.ui" line="271"/>
@@ -3091,7 +3091,7 @@ Si el problema persisteix contacteu amb un administrador.</translation>
     <message>
         <location filename="queryscreenbase.ui" line="128"/>
         <source>Advanced Search &gt;&gt;</source>
-        <translation>Cerca Avançada &gt;&gt;</translation>
+        <translation>Cerca avançada &gt;&gt;</translation>
     </message>
     <message>
         <location filename="queryscreenbase.ui" line="251"/>
