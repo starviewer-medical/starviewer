@@ -1647,7 +1647,7 @@ Especifiqui una configuració vàlida en el menú Eines -&gt; Configuració -&gt
     <message>
         <location filename="qexporterbase.ui" line="185"/>
         <source>Store to local database</source>
-        <translation>Guarda a la base de dades local</translation>
+        <translation>Desa a la base de dades local</translation>
     </message>
     <message>
         <location filename="qexporterbase.ui" line="195"/>
@@ -1662,7 +1662,7 @@ Especifiqui una configuració vàlida en el menú Eines -&gt; Configuració -&gt
     <message>
         <location filename="qexporterbase.ui" line="269"/>
         <source>Save</source>
-        <translation>Guarda</translation>
+        <translation>Desa</translation>
     </message>
 </context>
 <context>
@@ -2021,7 +2021,7 @@ Close all the others %1 windows and try again.</oldsource>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="598"/>
         <source>%1 database is corrupted.</source>
-        <translation>La base de dades del %1 està corrupte.</translation>
+        <translation>La base de dades és corrupte.</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="524"/>
@@ -2045,7 +2045,7 @@ Si el problema persisteix contacteu amb un administrador.</translation>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="603"/>
         <source>%1 database syntax error.</source>
-        <translation>Error de sintaxis a la base de dades del %1.</translation>
+        <translation>Error de sintaxis a la base de dades.</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="608"/>
@@ -2244,7 +2244,7 @@ Està segur que vol continuar?</translation>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="122"/>
         <source>%1 cannot create the directory. Please check user permissions.</source>
         <oldsource>%1 can&apos;t create the directory. Please check users permission.</oldsource>
-        <translation>%1 no ha pogut crear el directori. Si us plau reviseu els vostres permisos d&apos;usuari.</translation>
+        <translation>No s&apos;ha pogut crear el directori. Si us plau reviseu els vostres permisos d&apos;usuari.</translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="142"/>
@@ -2354,7 +2354,7 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="368"/>
         <source>%1 cannot create the database because a database with the same name exists in the directory.</source>
         <oldsource>%1 can&apos;t create the database because a database with the same name exists in the directory.</oldsource>
-        <translation>%1 no pot crear la base de dades perquè ja existeix en el directori una base de dades amb el mateix nom.</translation>
+        <translation>No s&apos;ha pogut crear la base de dades perquè ja existeix en el directori una base de dades amb el mateix nom.</translation>
     </message>
 </context>
 <context>
@@ -2632,7 +2632,7 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
     <message>
         <location filename="qpopuprisrequestsscreen.cpp" line="64"/>
         <source>%1 has received a request from RIS to retrieve studies.</source>
-        <translation>%1 ha rebut una petició del RIS per descarregar estudis.</translation>
+        <translation>S&apos;ha rebut una petició del RIS per descarregar estudis.</translation>
     </message>
     <message>
         <location filename="qpopuprisrequestsscreen.cpp" line="65"/>
@@ -2665,7 +2665,7 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
     <message>
         <location filename="qpopuprisrequestsscreen.cpp" line="195"/>
         <source>%1 has received a request from RIS to retrieve studies of patient %2.</source>
-        <translation>%1 ha rebut una petició del RIS per descarregar estudis del pacient %2.</translation>
+        <translation>S&apos;ha rebut una petició del RIS per descarregar estudis del pacient %2.</translation>
     </message>
 </context>
 <context>
@@ -3031,7 +3031,7 @@ Si el problema persisteix contacteu amb un administrador.</translation>
 %1 couldn&apos;t retrieve studies from PACS if the port is in use, please close the application that is using port %2 or change Starviewer port for incoming connections from PACS in the configuration screen.</oldsource>
         <translation>
 
-%1 no pot descarregar estudis del PACS si el port està en ús, si us plau tanqueu l&apos;aplicació que està utilitzant el port %2 o canvieu el port per connexions entrants en la pantalla de configuració.</translation>
+No s&apos;han pogut descarregar estudis del PACS perquè el port està en ús, si us plau tanqueu l&apos;aplicació que està utilitzant el port %2 o canvieu el port per connexions entrants en la pantalla de configuració.</translation>
     </message>
     <message>
         <location filename="queryscreen.cpp" line="510"/>
@@ -3386,7 +3386,7 @@ Si el problema persisteix contacteu amb un administrador.</translation>
 </source>
         <oldsource>%1 can&apos;t send DICOM images from study %2 of patient %3 because can&apos;t connect to PACS %4.
 </oldsource>
-        <translation>%1 no ha pogut enviar les imatges de l&apos;estudi %2 del pacient %3 perquè no s&apos;ha pogut connectar amb el PACS %4.</translation>
+        <translation>No s&apos;han pogut enviar les imatges de l&apos;estudi %2 del pacient %3 perquè no s&apos;ha pogut connectar amb el PACS %4.</translation>
     </message>
     <message>
         <location filename="senddicomfilestopacsjob.cpp" line="97"/>

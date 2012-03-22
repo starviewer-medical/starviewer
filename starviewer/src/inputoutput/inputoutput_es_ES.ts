@@ -1204,7 +1204,7 @@ Lo estudios seleccionados exceden el espacio disponible en el dispositivo.</tran
         <location filename="qcreatedicomdir.cpp" line="485"/>
         <source>%1 cannot create the DICOMDIR because cannot copy the content of &apos;%2&apos;. Be sure you have read permissions in the directory or uncheck copy folder content option.</source>
         <oldsource>%1 can&apos;t create the DICOMDIR because can&apos;t copy the content of &apos;%2&apos;. Be sure you have read permissions in the directory or uncheck copy folder content option.</oldsource>
-        <translation>%1 no ha podido crear el DICOMDIR porque no se ha podido copiar el contenido del directorio &apos;%2&apos;. Asegúrese que tiene permisos de lectura sobre el directorio o desactive la opción de copiar el contenido del directorio.</translation>
+        <translation>No se ha podido crear el DICOMDIR porque no se ha podido copiar el contenido del directorio &apos;%2&apos;. Asegúrese que tiene permisos de lectura sobre el directorio o desactive la opción de copiar el contenido del directorio.</translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="490"/>
@@ -1214,7 +1214,7 @@ Remove it from the directory or uncheck copy folder content option.</source>
         <oldsource>%1 can&apos;t create the DICOMDIR because the folder to copy &apos;%2&apos; contents an item called DICOMDIR or DICOM.
 
 Remove it from the directory or uncheck copy folder content option.</oldsource>
-        <translation>%1 no ha podido crear el DICOMDIR, porque el contenido del directorio a copiar &apos;%2&apos; contiene un elemento con nombre DICOMDIR o DICOM.
+        <translation>No se ha podido crear el DICOMDIR, porque el contenido del directorio a copiar &apos;%2&apos; contiene un elemento con nombre DICOMDIR o DICOM.
 
 Borre estos elementos del directorio o desactive la opción copiar el contenido del directorio.</translation>
     </message>
@@ -2028,7 +2028,7 @@ Close all the others %1 windows and try again.</oldsource>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="598"/>
         <source>%1 database is corrupted.</source>
-        <translation>La base de datos del %1 está corrupta.</translation>
+        <translation>La base de datos está corrupta.</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="524"/>
@@ -2052,7 +2052,7 @@ Si el problema persiste contacte con un administrador.</translation>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="603"/>
         <source>%1 database syntax error.</source>
-        <translation>Error de sintaxis en la base de datos de %1.</translation>
+        <translation>Error de sintaxis en la base de datos.</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="608"/>
@@ -2357,7 +2357,7 @@ Cierre todas las ventanas de %1 y vuelva a intentarlo.</translation>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="368"/>
         <source>%1 cannot create the database because a database with the same name exists in the directory.</source>
         <oldsource>%1 can&apos;t create the database because a database with the same name exists in the directory.</oldsource>
-        <translation>%1 no puede crear la base de datos porque ya existe en el mismo directorio una base de datos con el mismo nombre.</translation>
+        <translation>No se puede crear la base de datos porque ya existe en el mismo directorio una base de datos con el mismo nombre.</translation>
     </message>
 </context>
 <context>
@@ -2635,7 +2635,7 @@ Cierre todas las ventanas de %1 y vuelva a intentarlo.</translation>
     <message>
         <location filename="qpopuprisrequestsscreen.cpp" line="64"/>
         <source>%1 has received a request from RIS to retrieve studies.</source>
-        <translation>%1 ha recibido una petición del RIS para descargar estudios.</translation>
+        <translation>Se ha recibido una petición del RIS para descargar estudios.</translation>
     </message>
     <message>
         <location filename="qpopuprisrequestsscreen.cpp" line="65"/>
@@ -2668,7 +2668,7 @@ Cierre todas las ventanas de %1 y vuelva a intentarlo.</translation>
     <message>
         <location filename="qpopuprisrequestsscreen.cpp" line="195"/>
         <source>%1 has received a request from RIS to retrieve studies of patient %2.</source>
-        <translation>%1 ha recibido una petición del RIS para descargar estudios del paciente %2.</translation>
+        <translation>Se ha recibido una petición del RIS para descargar estudios del paciente %2.</translation>
     </message>
 </context>
 <context>
@@ -3034,7 +3034,7 @@ Si el problema persiste contacte con un administrador.</translation>
 %1 couldn&apos;t retrieve studies from PACS if the port is in use, please close the application that is using port %2 or change Starviewer port for incoming connections from PACS in the configuration screen.</oldsource>
         <translation>
 
-%1 no puede descargar estudios del PACS si el puerto está en uso, por favor cierre la aplicación que está usando el puerto %2 o cambie el puerto para conexiones entrantes del PACS desde la pantalla de configuración.</translation>
+No pueden descargar estudios del PACS si el puerto está en uso, por favor cierre la aplicación que está usando el puerto %2 o cambie el puerto para conexiones entrantes del PACS desde la pantalla de configuración.</translation>
     </message>
     <message>
         <location filename="queryscreen.cpp" line="510"/>
@@ -3390,7 +3390,7 @@ Si el problema persiste contacte con un administrador.</translation>
 </source>
         <oldsource>%1 can&apos;t send DICOM images from study %2 of patient %3 because can&apos;t connect to PACS %4.
 </oldsource>
-        <translation>%1 no ha podido enviar las imágenes del estudio %2 al paciente %3 porque no se ha podido conectar con el PACS %4.</translation>
+        <translation>No se han podido enviar las imágenes del estudio %2 al paciente %3 porque no se ha podido conectar con el PACS %4.</translation>
     </message>
     <message>
         <location filename="senddicomfilestopacsjob.cpp" line="97"/>
