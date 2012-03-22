@@ -784,7 +784,7 @@ Assegureu-vos que la IP i el AETitle d&apos;aquest siguin correctes.</translatio
         <location filename="qconfigurationscreenbase.ui" line="119"/>
         <location filename="qconfigurationscreenbase.ui" line="334"/>
         <source>Default query PACS</source>
-        <translation>Cercar per defecte al PACS</translation>
+        <translation>Cerca per defecte al PACS</translation>
     </message>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="153"/>
@@ -794,7 +794,7 @@ Assegureu-vos que la IP i el AETitle d&apos;aquest siguin correctes.</translatio
     <message>
         <location filename="qconfigurationscreenbase.ui" line="156"/>
         <source>Delete</source>
-        <translation>Esborrar</translation>
+        <translation>Esborra</translation>
     </message>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="496"/>
@@ -804,12 +804,12 @@ Assegureu-vos que la IP i el AETitle d&apos;aquest siguin correctes.</translatio
     <message>
         <location filename="qconfigurationscreenbase.ui" line="499"/>
         <source>Test</source>
-        <translation>Testejar</translation>
+        <translation>Testeja</translation>
     </message>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="196"/>
         <source>Modify selected PACS Server/Add new PACS Server</source>
-        <translation>Modificar el PACS seleccionat/Afegir nou PACS</translation>
+        <translation>Modifica el PACS seleccionat/Afegeix nou PACS</translation>
     </message>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="241"/>
@@ -873,7 +873,7 @@ Assegureu-vos que la IP i el AETitle d&apos;aquest siguin correctes.</translatio
     <message>
         <location filename="qconfigurationscreenbase.ui" line="525"/>
         <source>Add as new PACS</source>
-        <translation>Afegir com a PACS nou</translation>
+        <translation>Afegeix com a nou PACS</translation>
     </message>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="535"/>
@@ -883,7 +883,7 @@ Assegureu-vos que la IP i el AETitle d&apos;aquest siguin correctes.</translatio
     <message>
         <location filename="qconfigurationscreenbase.ui" line="545"/>
         <source>Local Configuration</source>
-        <translation>Configuració Local</translation>
+        <translation>Configuració local</translation>
     </message>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="557"/>
@@ -950,7 +950,7 @@ Assegureu-vos que la IP i el AETitle d&apos;aquest siguin correctes.</translatio
         <location filename="qconfigurationscreenbase.ui" line="1072"/>
         <location filename="qconfigurationscreenbase.ui" line="1078"/>
         <source>Apply changes</source>
-        <translation>Aplicar canvis</translation>
+        <translation>Aplica canvis</translation>
     </message>
 </context>
 <context>
@@ -2204,7 +2204,7 @@ Està segur que vol continuar?</translation>
     <message>
         <location filename="qlistenrisrequestsconfigurationscreenbase.ui" line="109"/>
         <source>Listen RIS Requests on port</source>
-        <translation>Escoltar les peticions del RIS pel port</translation>
+        <translation>Escolta les peticions del RIS pel port</translation>
     </message>
 </context>
 <context>
@@ -2419,7 +2419,7 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="363"/>
         <source>Automatically delete studies not viewed in the last</source>
         <oldsource>Delete studies automatically that have not been viewed last</oldsource>
-        <translation>Esborrar automàticament els estudis que no han estat visualitzats en els últims</translation>
+        <translation>Esborra automàticament els estudis que no han estat visualitzats en els últims</translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="386"/>
