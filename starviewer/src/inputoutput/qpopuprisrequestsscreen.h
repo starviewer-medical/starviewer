@@ -66,9 +66,6 @@ private slots:
     void retrieveDICOMFilesFromPACSJobCancelledOrFailed(PACSJob *pacsJob);
 
 private:
-    /// Mostra per pantalla el nom del pacient pel qual s'ha rebut la petició de descarregar estudis.
-    void showPatientNameOfRetrievingStudies(Patient *patient);
-
     /// Actualitza per pantalla l'estat de la descàrrege
     void refreshScreenRetrieveStatus(Study *study);
 
