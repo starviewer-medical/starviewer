@@ -201,12 +201,12 @@
     <message>
         <location filename="q3dviewerextensionbase.ui" line="918"/>
         <source>Save transfer function</source>
-        <translation>Guarda funció de transferència</translation>
+        <translation>Desa la funció de transferència</translation>
     </message>
     <message>
         <location filename="q3dviewerextensionbase.ui" line="921"/>
         <source>Save...</source>
-        <translation>Guarda...</translation>
+        <translation>Desa...</translation>
     </message>
     <message>
         <location filename="q3dviewerextensionbase.ui" line="928"/>
@@ -322,7 +322,7 @@
     <message>
         <location filename="q3dviewerextension.cpp" line="523"/>
         <source>Save CLUT</source>
-        <translation>Guarda CLUT</translation>
+        <translation>Desa CLUT</translation>
     </message>
 </context>
 <context>

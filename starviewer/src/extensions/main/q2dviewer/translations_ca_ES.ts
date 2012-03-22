@@ -80,13 +80,13 @@
     <message>
         <location filename="q2dviewerextension.cpp" line="556"/>
         <source>Save current series image...</source>
-        <translation>Guarda la imatge de la sèrie actual...</translation>
+        <translation>Desa la imatge de la sèrie actual...</translation>
     </message>
     <message>
         <location filename="q2dviewerextension.cpp" line="561"/>
         <source>Save all images of the current series...</source>
         <oldsource>Save all images from current series...</oldsource>
-        <translation>Guarda totes les imatges de la sèrie actual...</translation>
+        <translation>Desa totes les imatges de la sèrie actual...</translation>
     </message>
     <message>
         <location filename="q2dviewerextension.cpp" line="580"/>
@@ -106,12 +106,12 @@
     <message>
         <location filename="q2dviewerextension.cpp" line="558"/>
         <source>Save the current image in a standard image format</source>
-        <translation>Guarda la imatge actual en un format estàndard</translation>
+        <translation>Desa la imatge actual en un format estàndard</translation>
     </message>
     <message>
         <location filename="q2dviewerextension.cpp" line="562"/>
         <source>Save all the images in the selected viewer in a standard image format</source>
-        <translation>Guarda totes les imatges del visualitzador escollit en un format estàndard</translation>
+        <translation>Desa totes les imatges del visualitzador escollit en un format estàndard</translation>
     </message>
     <message>
         <location filename="q2dviewerextension.cpp" line="578"/>
