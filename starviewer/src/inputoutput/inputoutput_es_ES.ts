@@ -14,7 +14,7 @@
     <message>
         <location filename="qdicomdirconfigurationscreen.cpp" line="149"/>
         <location filename="qinputoutputdicomdirwidget.cpp" line="89"/>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="213"/>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="212"/>
         <source>Open</source>
         <translation>Abrir</translation>
     </message>
@@ -1202,19 +1202,19 @@ Lo estudios seleccionados exceden el espacio disponible en el dispositivo.</tran
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="485"/>
-        <source>%1 cannot create the DICOMDIR because cannot copy the content of &apos;%2&apos;. Be sure you have read permissions in the directory or uncheck copy folder content option.</source>
-        <oldsource>%1 can&apos;t create the DICOMDIR because can&apos;t copy the content of &apos;%2&apos;. Be sure you have read permissions in the directory or uncheck copy folder content option.</oldsource>
-        <translation>No se ha podido crear el DICOMDIR porque no se ha podido copiar el contenido del directorio &apos;%2&apos;. Asegúrese que tiene permisos de lectura sobre el directorio o desactive la opción de copiar el contenido del directorio.</translation>
+        <source>Unable to create the DICOMDIR. The content of &apos;%1&apos; cannot be copied. Be sure you have read permissions in the directory or uncheck copy folder content option.</source>
+        <oldsource>%1 cannot create the DICOMDIR because cannot copy the content of &apos;%2&apos;. Be sure you have read permissions in the directory or uncheck copy folder content option.</oldsource>
+        <translation>No se ha podido crear el DICOMDIR. El contenido de &apos;%1&apos;  no se ha podido copiar. Asegúrese que tiene permisos de lectura sobre el directorio o desactive la opción de copiar el contenido del directorio.</translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="490"/>
-        <source>%1 cannot create the DICOMDIR because the folder to copy &apos;%2&apos; contents an item called DICOMDIR or DICOM.
+        <source>Unable to create the DICOMDIR. The folder &apos;%1&apos; to copy from, contents an item called DICOMDIR or DICOM.
 
 Remove it from the directory or uncheck copy folder content option.</source>
-        <oldsource>%1 can&apos;t create the DICOMDIR because the folder to copy &apos;%2&apos; contents an item called DICOMDIR or DICOM.
+        <oldsource>Unable to create the DICOMDIR. The folder &apos;%2&apos; to copy from, contents an item called DICOMDIR or DICOM.
 
 Remove it from the directory or uncheck copy folder content option.</oldsource>
-        <translation>No se ha podido crear el DICOMDIR, porque el contenido del directorio a copiar &apos;%2&apos; contiene un elemento con nombre DICOMDIR o DICOM.
+        <translation>No se ha podido crear el DICOMDIR. El directorio &apos;%1&apos;  a copiar, contiene elementos llamados DICOMDIR o DICOM.
 
 Borre estos elementos del directorio o desactive la opción copiar el contenido del directorio.</translation>
     </message>
@@ -2027,7 +2027,8 @@ Close all the others %1 windows and try again.</oldsource>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="598"/>
-        <source>%1 database is corrupted.</source>
+        <source>Database is corrupted.</source>
+        <oldsource>%1 database is corrupted.</oldsource>
         <translation>La base de datos está corrupta.</translation>
     </message>
     <message>
@@ -2051,13 +2052,15 @@ Si el problema persiste contacte con un administrador.</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="603"/>
-        <source>%1 database syntax error.</source>
+        <source>Database syntax error.</source>
+        <oldsource>%1 database syntax error.</oldsource>
         <translation>Error de sintaxis en la base de datos.</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="608"/>
-        <source>An internal error occurs with %1 database.</source>
-        <translation>Se ha producido un error interno desconocido en la base de datos de %1.</translation>
+        <source>An internal database error occurred.</source>
+        <oldsource>An internal error occurs with %1 database.</oldsource>
+        <translation>Se ha producido un error interno en la base de datos.</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="613"/>
@@ -2247,12 +2250,12 @@ Está seguro que quiere continuar?</translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="122"/>
-        <source>%1 cannot create the directory. Please check user permissions.</source>
-        <oldsource>%1 can&apos;t create the directory. Please check users permission.</oldsource>
+        <source>Unable to create the directory. Please check user permissions.</source>
+        <oldsource>%1 cannot create the directory. Please check user permissions.</oldsource>
         <translation>No se ha podido crear el directorio. Revise sus permisos de usuario.</translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="142"/>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="141"/>
         <source>
 - At least 1 GB of free space in hard disk is necessary to retrieve or import new studies.</source>
         <oldsource>
@@ -2261,7 +2264,7 @@ Está seguro que quiere continuar?</translation>
 - Es necesario como mínimo 1 GB de espacio libre para descargar o importar nuevos estudios.</translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="151"/>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="150"/>
         <source>
 - At least 1 GB of studies must be deleted when there is not enough space to retrieve or import new studies.</source>
         <oldsource>
@@ -2269,7 +2272,7 @@ Está seguro que quiere continuar?</translation>
         <translation>- Como mínimo 1 GB de estudios tienen que ser borrados cuando no haya suficiente espacio para descargar o importar nuevos estudios.</translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="160"/>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="159"/>
         <source>
 - Unable to delete studies not viewed in the last 0 days, must be at least 1 day.</source>
         <oldsource>
@@ -2277,42 +2280,42 @@ Está seguro que quiere continuar?</translation>
         <translation>- No se pueden borrar estudios que no hayan sido vistos los últimos 0 días, como mínimo tiene que ser 1 día.</translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="183"/>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="375"/>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="182"/>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="373"/>
         <source>The application has to be restarted to apply the changes.</source>
         <translation>La aplicación debe reiniciarse para aplicar los cambios.</translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="231"/>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="230"/>
         <source>Choose the Cache images path...</source>
         <translation>Seleccione el directorio de la cache de imágenes...</translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="282"/>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="281"/>
         <source>Are you sure you want to delete all Studies of the cache?</source>
         <oldsource>Are you sure you want to delete all Studies of the cache ?</oldsource>
         <translation>¿Está seguro que desea borrar todos los estudios de la caché?</translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="314"/>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="313"/>
         <source>Some files cannot be deleted. 
 These files have to be deleted manually.</source>
         <translation>No se han podido borrar algunos archivos, se tendrán que borrar manualmente.</translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="318"/>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="317"/>
         <source>An error has occurred deleting studies from database, be sure you have write permissions on database directory. </source>
         <oldsource>An error has ocurred deleting studies from database, be sure you have write permissions on database directory. </oldsource>
         <translation>Se ha producido un error borrando lo estudios de la base de datos, asegúrese de que tiene permisos sobre el directorio de la base de datos.</translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="321"/>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="339"/>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="320"/>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="338"/>
         <source>If the problem persists contact with an administrator.</source>
         <translation>Si el problema persiste contacte con un administrador.</translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="320"/>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="319"/>
         <source>
 
 Close all %1 windows and try again.</source>
@@ -2321,12 +2324,12 @@ Close all %1 windows and try again.</source>
 Cierre todas las ventanas de %1 y vuelva a intentarlo.</translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="339"/>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="338"/>
         <source>Close all %1 windows and try again.</source>
         <translation>Cierre todas las ventanas de %1 y vuelva a intentarlo.</translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="338"/>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="337"/>
         <source>The database cannot be compacted, an unknown error has occurred.
 
 </source>
@@ -2338,25 +2341,25 @@ Cierre todas las ventanas de %1 y vuelva a intentarlo.</translation>
 </translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="299"/>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="298"/>
         <source>Deleting studies</source>
         <translation>Eliminado estudios</translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="343"/>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="342"/>
         <source>Database has been compacted successfully.</source>
         <oldsource>Starviewer database has been compacted successfully.</oldsource>
         <translation>Se ha compactado correctamente la base de datos.</translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="362"/>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="361"/>
         <source>The extension of the database has to be &apos;.sdb&apos;</source>
         <translation>La extensión de la base de datos debe ser &apos;.sdb&apos;</translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="368"/>
-        <source>%1 cannot create the database because a database with the same name exists in the directory.</source>
-        <oldsource>%1 can&apos;t create the database because a database with the same name exists in the directory.</oldsource>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="367"/>
+        <source>Unable to create the database because a database with the same name exists in the directory.</source>
+        <oldsource>%1 cannot create the database because a database with the same name exists in the directory.</oldsource>
         <translation>No se puede crear la base de datos porque ya existe en el mismo directorio una base de datos con el mismo nombre.</translation>
     </message>
 </context>
@@ -3028,13 +3031,13 @@ Si el problema persiste contacte con un administrador.</translation>
         <location filename="queryscreen.cpp" line="196"/>
         <source>
 
-%1 couldn&apos;t retrieve studies from PACS if the port is in use, please close the application that is using port %2 or change %1 port for incoming connections from PACS in the configuration screen.</source>
+Unable to retrieve studies from PACS if the port is in use, please close the application that is using port %1 or change port for incoming connections from PACS in the configuration screen.</source>
         <oldsource>
 
-%1 couldn&apos;t retrieve studies from PACS if the port is in use, please close the application that is using port %2 or change Starviewer port for incoming connections from PACS in the configuration screen.</oldsource>
+%1 couldn&apos;t retrieve studies from PACS if the port is in use, please close the application that is using port %2 or change %1 port for incoming connections from PACS in the configuration screen.</oldsource>
         <translation>
 
-No pueden descargar estudios del PACS si el puerto está en uso, por favor cierre la aplicación que está usando el puerto %2 o cambie el puerto para conexiones entrantes del PACS desde la pantalla de configuración.</translation>
+No pueden descargar estudios del PACS si el puerto está en uso, por favor cierre la aplicación que está usando el puerto %1 o cambie el puerto para conexiones entrantes del PACS desde la pantalla de configuración.</translation>
     </message>
     <message>
         <location filename="queryscreen.cpp" line="510"/>
@@ -3121,8 +3124,8 @@ No pueden descargar estudios del PACS si el puerto está en uso, por favor cierr
     </message>
     <message>
         <location filename="risrequestmanager.cpp" line="207"/>
-        <source>%2 cannot execute the RIS request. The study with accession number %1 was not found in the default PACS.</source>
-        <oldsource>%2 can&apos;t execute the RIS request. The study with accession number %1 was not found in the default PACS.</oldsource>
+        <source>Unable to execute the RIS request. The study with accession number %1 was not found in the default PACS.</source>
+        <oldsource>%2 cannot execute the RIS request. The study with accession number %1 was not found in the default PACS.</oldsource>
         <translation>No se puede ejecutar la petición del RIS. No se ha encontrado ningún estudio con el accession number %1 en los PACS seleccionados por defecto.</translation>
     </message>
     <message>
@@ -3227,11 +3230,11 @@ Si el problema persiste contacte con un administrador.</translation>
     </message>
     <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="246"/>
-        <source>%1 cannot connect to PACS %2 to retrieve images from study %3 of patient %4.
+        <source>Unable to connect to PACS %1 to retrieve images from study %2 of patient %3.
 </source>
-        <oldsource>%1 can&apos;t connect to PACS %2 to retrieve images from study %3 of patient %4.
+        <oldsource>%1 cannot connect to PACS %2 to retrieve images from study %3 of patient %4.
 </oldsource>
-        <translation>No se ha podido conectar con el PACS %2 para descargar las imágenes del estudio %3 del paciente %4.
+        <translation>No se ha podido conectar con el PACS %1 para descargar las imágenes del estudio %2 del paciente %3.
 </translation>
     </message>
     <message>
@@ -3342,15 +3345,15 @@ Contacte con un administrador para registrar su ordenador al PACS.</translation>
     </message>
     <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="301"/>
-        <source>%1 cannot retrieve all images from study %2 of patient %3 from PACS %4. May be those images are missing or corrupted in PACS.</source>
-        <oldsource>%1 can&apos;t retrieve all images from study %2 of patient %3 from PACS %4. May be those images are missing or corrupted in PACS.</oldsource>
-        <translation>No se han podido descargar algunas de las imágenes del estudio %2 del paciente %3. Puede ser que estas imágenes no existan en el PACS o que estén corruptas.</translation>
+        <source>Unable to retrieve all images from study %1 of patient %2 from PACS %3. May be those images are missing or corrupted in PACS.</source>
+        <oldsource>%1 cannot retrieve all images from study %2 of patient %3 from PACS %4. May be those images are missing or corrupted in PACS.</oldsource>
+        <translation>No se han podido descargar algunas de las imágenes del estudio %1 del paciente %2 del PACS %3. Puede ser que estas imágenes no existan en el PACS o que estén corruptas.</translation>
     </message>
     <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="306"/>
-        <source>An unknown error has occurred and %1 cannot retrieve images from study %2 of patient %3 from PACS %4.</source>
-        <oldsource>An unknown error has occurred and %1 can&apos;t retrieve images from study %2 of patient %3 from PACS %4.</oldsource>
-        <translation>No se han podido descargar las imágenes del estudio %2 del paciente %3 del PACS %4 porque se ha producido un error desconocido.</translation>
+        <source>An unknown error has occurred and thus retrieval of images from study %1 of patient %2 from PACS %3 could not be performed.</source>
+        <oldsource>An unknown error has occurred and %1 cannot retrieve images from study %2 of patient %3 from PACS %4.</oldsource>
+        <translation>No se han podido descargar las imágenes del estudio %1 del paciente %2 del PACS %3 porque se ha producido un error desconocido.</translation>
     </message>
 </context>
 <context>
@@ -3386,11 +3389,11 @@ Si el problema persiste contacte con un administrador.</translation>
     </message>
     <message>
         <location filename="senddicomfilestopacsjob.cpp" line="90"/>
-        <source>%1 cannot send DICOM images from study %2 of patient %3 because cannot connect to PACS %4.
+        <source>Unable to send DICOM images from study %1 of patient %2 because cannot connect to PACS %3.
 </source>
-        <oldsource>%1 can&apos;t send DICOM images from study %2 of patient %3 because can&apos;t connect to PACS %4.
+        <oldsource>%1 cannot send DICOM images from study %2 of patient %3 because cannot connect to PACS %4.
 </oldsource>
-        <translation>No se han podido enviar las imágenes del estudio %2 al paciente %3 porque no se ha podido conectar con el PACS %4.</translation>
+        <translation>No se han podido enviar las imágenes del estudio %1 al paciente %2 porque no se ha podido conectar con el PACS %3.</translation>
     </message>
     <message>
         <location filename="senddicomfilestopacsjob.cpp" line="97"/>

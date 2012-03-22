@@ -595,17 +595,17 @@ bool QInputOutputLocalDatabaseWidget::showDatabaseManagerError(LocalDatabaseMana
                          "\n\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
             break;
         case LocalDatabaseManager::DatabaseCorrupted:
-            message += tr("%1 database is corrupted.").arg(ApplicationNameString);
+            message += tr("Database is corrupted.");
             message += tr("\nClose all %1 windows and try again."
                          "\n\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
             break;
         case LocalDatabaseManager::SyntaxErrorSQL:
-            message += tr("%1 database syntax error.").arg(ApplicationNameString);
+            message += tr("Database syntax error.");
             message += tr("\nClose all %1 windows and try again."
                          "\n\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
             break;
         case LocalDatabaseManager::DatabaseError:
-            message += tr("An internal error occurs with %1 database.").arg(ApplicationNameString);
+            message += tr("An internal database error occurred.");
             message += tr("\nClose all %1 windows and try again."
                          "\n\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
             break;

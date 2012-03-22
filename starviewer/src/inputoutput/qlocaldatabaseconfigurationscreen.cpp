@@ -119,8 +119,7 @@ bool QLocalDatabaseConfigurationScreen::validateChanges()
                 case 0:
                     if (!dir.mkpath(m_textCacheImagePath->text()))
                     {
-                        QMessageBox::critical(this, ApplicationNameString, tr("%1 cannot create the directory. Please check user permissions.")
-                                                                         .arg(ApplicationNameString));
+                        QMessageBox::critical(this, ApplicationNameString, tr("Unable to create the directory. Please check user permissions."));
                         return false;
                     }
                     else
@@ -365,8 +364,7 @@ void QLocalDatabaseConfigurationScreen::createDatabase()
     {
         if (databaseFile.exists(m_textDatabaseRoot->text()))
         {
-            QMessageBox::warning(this, ApplicationNameString, tr("%1 cannot create the database because a database with the same name exists in the directory.")
-                                                            .arg(ApplicationNameString));
+            QMessageBox::warning(this, ApplicationNameString, tr("Unable to create the database because a database with the same name exists in the directory."));
         }
         else
         {

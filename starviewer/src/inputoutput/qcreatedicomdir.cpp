@@ -482,14 +482,14 @@ Status QCreateDicomdir::startCreateDicomdir(QString dicomdirPath)
                 clearScreen = true;
                 break;
             case 4002:
-                QMessageBox::warning(this, ApplicationNameString, tr("%1 cannot create the DICOMDIR because cannot copy the content of '%2'. Be sure you have "
+                QMessageBox::warning(this, ApplicationNameString, tr("Unable to create the DICOMDIR. The content of '%1' cannot be copied. Be sure you have "
                     "read permissions in the directory or uncheck copy folder content option.")
-                    .arg(ApplicationNameString, settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString()));
+                    .arg(settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString()));
                 break;
             case 4003:
-                QMessageBox::warning(this, ApplicationNameString, tr("%1 cannot create the DICOMDIR because the folder to copy '%2' contents an item called "
+                QMessageBox::warning(this, ApplicationNameString, tr("Unable to create the DICOMDIR. The folder '%1' to copy from, contents an item called "
                     "DICOMDIR or DICOM.\n\nRemove it from the directory or uncheck copy folder content option.")
-                    .arg(ApplicationNameString, settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString()));
+                    .arg(settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString()));
                 break;
             case 3003:
                 QMessageBox::warning(this, ApplicationNameString, tr("Error anonymizing DICOMDIR, be sure you have write permissions on %1 "

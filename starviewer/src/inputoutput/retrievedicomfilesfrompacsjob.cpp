@@ -243,8 +243,8 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
             message = tr("Retrieval of the images from study %1 of patient %2 from PACS %3 has been canceled.").arg(studyID, patientName, pacsAETitle);
             break;
         case PACSRequestStatus::RetrieveCanNotConnectToPACS:
-            message = tr("%1 cannot connect to PACS %2 to retrieve images from study %3 of patient %4.\n")
-                .arg(ApplicationNameString, pacsAETitle, studyID, patientName);
+            message = tr("Unable to connect to PACS %1 to retrieve images from study %2 of patient %3.\n")
+                .arg(pacsAETitle, studyID, patientName);
             message += tr("\nBe sure your computer is connected to the network and the PACS parameters are correct.");
             message += tr("\nIf the problem persists contact with an administrator.");
             break;
@@ -298,12 +298,12 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
                 .arg(studyID, patientName, settings.getValue(InputOutputSettings::IncomingDICOMConnectionsPort).toString());
             break;
         case PACSRequestStatus::RetrieveSomeDICOMFilesFailed:
-            message = tr("%1 cannot retrieve all images from study %2 of patient %3 from PACS %4. May be those images are missing or corrupted in PACS.")
-                .arg(ApplicationNameString, studyID, patientName, pacsAETitle);
+            message = tr("Unable to retrieve all images from study %1 of patient %2 from PACS %3. May be those images are missing or corrupted in PACS.")
+                .arg(studyID, patientName, pacsAETitle);
             message += "\n";
             break;
         default:
-            message = tr("An unknown error has occurred and %1 cannot retrieve images from study %2 of patient %3 from PACS %4.")
+            message = tr("An unknown error has occurred and thus retrieval of images from study %1 of patient %2 from PACS %3 could not be performed.")
                 .arg(ApplicationNameString, studyID, patientName, pacsAETitle);
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
