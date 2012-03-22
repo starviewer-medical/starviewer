@@ -190,12 +190,6 @@ void QPopUpRISRequestsScreen::showRetrieveFinished()
     }
 }
 
-void QPopUpRISRequestsScreen::showPatientNameOfRetrievingStudies(Patient *patient)
-{
-    QString popUpText = tr("%1 has received a request from RIS to retrieve studies of patient %2.").arg(ApplicationNameString).arg(patient->getFullName());
-    m_labelRisRequestDescription->setText(popUpText);
-}
-
 void QPopUpRISRequestsScreen::showEvent(QShowEvent *)
 {
     // Es situa el PopUp al centre de la pantalla on està la mainWindow del Starviewer

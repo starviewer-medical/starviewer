@@ -2665,11 +2665,6 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
         <oldsource>%1 studies have been found.</oldsource>
         <translation>S&apos;han trobat %1 estudis.</translation>
     </message>
-    <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="195"/>
-        <source>%1 has received a request from RIS to retrieve studies of patient %2.</source>
-        <translation>S&apos;ha rebut una petició del RIS per descarregar estudis del pacient %2.</translation>
-    </message>
 </context>
 <context>
     <name>udg::QPopUpRISRequestsScreenBase</name>
