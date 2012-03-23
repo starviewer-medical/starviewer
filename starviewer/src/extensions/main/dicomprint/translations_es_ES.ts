@@ -5,7 +5,7 @@
     <name>QDicomAddPrinterWidgetBase</name>
     <message>
         <source>Add new DICOM printer</source>
-        <translation>Añadir nueva impresora DICOM</translation>
+        <translation>Añada nueva impresora DICOM</translation>
     </message>
     <message>
         <source>Hostname:</source>
@@ -151,7 +151,7 @@ border: 1px solid  #680000;
     </message>
     <message>
         <source>Print Settings</source>
-        <translation>Parámetros impresora</translation>
+        <translation>Parámetros de impresión</translation>
     </message>
     <message>
         <source>Print priority:</source>
@@ -167,7 +167,7 @@ border: 1px solid  #680000;
     </message>
     <message>
         <source>Film Settings</source>
-        <translation>Formato impresión</translation>
+        <translation>Formato de impresión</translation>
     </message>
     <message>
         <source>Layout:</source>
@@ -210,7 +210,7 @@ border: 1px solid  #680000;
     </message>
     <message>
         <source>Test Printer</source>
-        <translation>Test impresora</translation>
+        <translation>Comprobar impresora</translation>
     </message>
     <message>
         <source>Printer Settings</source>
@@ -262,7 +262,7 @@ border: 1px solid  #680000;
     </message>
     <message>
         <source>Yes</source>
-        <translation>Si</translation>
+        <translation>Sí</translation>
     </message>
     <message>
         <source>No</source>
@@ -317,7 +317,7 @@ border: 1px solid  #680000;
     <name>udg::DicomPrintExtensionMediator</name>
     <message>
         <source>DICOM Print</source>
-        <translation>Imprimir DICOM</translation>
+        <translation>Impresión DICOM</translation>
     </message>
     <message>
         <source>The selected item is not an image</source>
@@ -375,7 +375,7 @@ border: 1px solid  #680000;
     </message>
     <message>
         <source>This series cannot be added to print because color is not supported.</source>
-        <translation>No está soportada la impresión de imágenes en color.</translation>
+        <translation>La impresión de imágenes en color no está soportada.</translation>
     </message>
     <message>
         <source>No added images to print.</source>
