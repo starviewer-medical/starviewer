@@ -6,7 +6,7 @@
     <message>
         <location filename="qdicomaddprinterwidgetbase.ui" line="17"/>
         <source>Add new DICOM printer</source>
-        <translation>Afegir nova impressora DICOM</translation>
+        <translation>Afegeix nova impressora DICOM</translation>
     </message>
     <message>
         <location filename="qdicomaddprinterwidgetbase.ui" line="23"/>
@@ -43,12 +43,12 @@
     <message>
         <location filename="qdicomaddprinterwidgetbase.ui" line="145"/>
         <source>Cancel</source>
-        <translation>Cancel·lar</translation>
+        <translation>Cancel·la</translation>
     </message>
     <message>
         <location filename="qdicomaddprinterwidgetbase.ui" line="152"/>
         <source>Add</source>
-        <translation>Afegir</translation>
+        <translation>Afegeix</translation>
     </message>
 </context>
 <context>
@@ -73,7 +73,7 @@
         <location filename="qdicomprintextensionbase.ui" line="196"/>
         <source>Configure DICOM printers</source>
         <oldsource>Configure printers</oldsource>
-        <translation>Configurar impressores DICOM</translation>
+        <translation>Configura impressores DICOM</translation>
     </message>
     <message>
         <location filename="qdicomprintextensionbase.ui" line="236"/>
@@ -120,18 +120,18 @@
     <message>
         <location filename="qdicomprintextensionbase.ui" line="622"/>
         <source>Add to print</source>
-        <translation>Afegir per imprimir</translation>
+        <translation>Afegeix per imprimir</translation>
     </message>
     <message>
         <location filename="qdicomprintextensionbase.ui" line="653"/>
         <source>Remove selection</source>
         <oldsource>Remove selecteds</oldsource>
-        <translation>Eliminar seleccionades</translation>
+        <translation>Elimina seleccionades</translation>
     </message>
     <message>
         <location filename="qdicomprintextensionbase.ui" line="660"/>
         <source>Clear</source>
-        <translation>Eliminar totes</translation>
+        <translation>Elimina totes</translation>
     </message>
     <message>
         <location filename="qdicomprintextensionbase.ui" line="684"/>
@@ -155,7 +155,7 @@ border: 1px solid  #680000;
     <message>
         <location filename="qdicomprintextensionbase.ui" line="44"/>
         <source>Restore</source>
-        <translation>Restaurar</translation>
+        <translation>Restaura</translation>
     </message>
     <message>
         <location filename="qdicomprintextensionbase.ui" line="344"/>
@@ -176,7 +176,7 @@ border: 1px solid  #680000;
     <message>
         <location filename="qdicomprintextensionbase.ui" line="798"/>
         <source>Print</source>
-        <translation>Imprimir</translation>
+        <translation>Imprimeix</translation>
     </message>
     <message>
         <location filename="qdicomprintextensionbase.ui" line="845"/>
@@ -269,17 +269,17 @@ border: 1px solid  #680000;
     <message>
         <location filename="qdicomprinterconfigurationwidgetbase.ui" line="84"/>
         <source>Add New Printer</source>
-        <translation>Afegir nova impressora</translation>
+        <translation>Afegeix nova impressora</translation>
     </message>
     <message>
         <location filename="qdicomprinterconfigurationwidgetbase.ui" line="120"/>
         <source>Remove Printer</source>
-        <translation>Esborrar impressora</translation>
+        <translation>Esborra impressora</translation>
     </message>
     <message>
         <location filename="qdicomprinterconfigurationwidgetbase.ui" line="137"/>
         <source>Test Printer</source>
-        <translation>Test impressora</translation>
+        <translation>Comprova impressora</translation>
     </message>
     <message>
         <location filename="qdicomprinterconfigurationwidgetbase.ui" line="159"/>
@@ -389,17 +389,17 @@ border: 1px solid  #680000;
     <message>
         <location filename="qdicomprinterconfigurationwidgetbase.ui" line="776"/>
         <source>Accept</source>
-        <translation>Acceptar</translation>
+        <translation>Accepta</translation>
     </message>
     <message>
         <location filename="qdicomprinterconfigurationwidgetbase.ui" line="786"/>
         <source>Apply</source>
-        <translation>Aplicar</translation>
+        <translation>Aplica</translation>
     </message>
     <message>
         <location filename="qdicomprinterconfigurationwidgetbase.ui" line="793"/>
         <source>Cancel</source>
-        <translation>Cancel·lar</translation>
+        <translation>Cancel·la</translation>
     </message>
 </context>
 <context>
@@ -407,7 +407,7 @@ border: 1px solid  #680000;
     <message>
         <location filename="dicomprintextensionmediator.cpp" line="24"/>
         <source>DICOM Print</source>
-        <translation>Imprimir DICOM</translation>
+        <translation>Impressió DICOM</translation>
     </message>
     <message>
         <location filename="dicomprintextensionmediator.cpp" line="39"/>
@@ -429,7 +429,7 @@ border: 1px solid  #680000;
     <message>
         <location filename="qdicomprintextension.cpp" line="53"/>
         <source>Choose Window/Level Presets</source>
-        <translation>Escollir finestra predeterminada</translation>
+        <translation>Escull finestra predeterminada</translation>
     </message>
     <message>
         <location filename="qdicomprintextension.cpp" line="186"/>
@@ -495,7 +495,7 @@ border: 1px solid  #680000;
         <location filename="qdicomprintextension.cpp" line="706"/>
         <source>Be sure the computer is connected on the network and the printer network parameters are correct.</source>
         <oldsource>Be sure that computer is connected on the network and the printer network parameters are correct.</oldsource>
-        <translation>Assegureu-vos de que l&apos;ordinador està connectat a la xarxa i que els paràmetres de xarxa de la impressora són correctes.</translation>
+        <translation>Assegureu-vos que l&apos;ordinador està connectat a la xarxa i que els paràmetres de xarxa de la impressora són correctes.</translation>
     </message>
     <message>
         <location filename="qdicomprintextension.cpp" line="709"/>
@@ -505,7 +505,7 @@ border: 1px solid  #680000;
         <oldsource>the printer doesn&apos;t respond as expected.
 
 </oldsource>
-        <translation>la impressora no ha respost com s&apos;esperava.
+        <translation>la impressora no ha respòs com s&apos;esperava.
 
 </translation>
     </message>
@@ -519,7 +519,7 @@ border: 1px solid  #680000;
         <location filename="qdicomprintextension.cpp" line="711"/>
         <source>Check printer DICOM Conformance to be sure that it accepts all your print parameters.</source>
         <oldsource>Check printer DICOM Conformance to be sure that it accepts all your print configuration parameters.</oldsource>
-        <translation>Comproveu amb el DICOM conformance de la impressora que aquesta accepti els vostres paràmetres d&apos;impressió.</translation>
+        <translation>Comproveu amb el DICOM Conformance de la impressora que aquesta accepti els vostres paràmetres d&apos;impressió.</translation>
     </message>
     <message>
         <location filename="qdicomprintextension.cpp" line="714"/>
@@ -554,7 +554,7 @@ border: 1px solid  #680000;
     <message>
         <location filename="qdicomprintextension.cpp" line="736"/>
         <source>This series cannot be added to print because color is not supported.</source>
-        <translation>No està suportada l&apos;impressió d&apos;imatges en color.</translation>
+        <translation>La impressió d&apos;imatges en color no està suportada.</translation>
     </message>
 </context>
 <context>
