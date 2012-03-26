@@ -64,27 +64,30 @@ void QStudyTreeWidget::createConnections()
     connect(m_studyTreeView, SIGNAL(itemCollapsed(QTreeWidgetItem*)), SLOT (itemCollapsed(QTreeWidgetItem*)));
 }
 
-void QStudyTreeWidget::insertPatientList(QList<Patient*> patientList)
+void QStudyTreeWidget::insertPatientList(QList<Patient*> patientList, bool removeDuplicateStudies)
 {
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
     foreach (Patient *patient, patientList)
     {
-        insertPatient(patient);
+        insertPatient(patient, removeDuplicateStudies);
     }
 
     QApplication::restoreOverrideCursor();
 }
 
-void QStudyTreeWidget::insertPatient(Patient *patient)
+void QStudyTreeWidget::insertPatient(Patient *patient, bool removeDuplicateStudy)
 {
     if (patient->getNumberOfStudies() > 0)
     {
+        // Si l'estudi ja hi existeix a StudyTreeView l'esborrem
+        if (removeDuplicateStudy)
+        {
+            removeStudy(patient->getStudies().at(0)->getInstanceUID(), patient->getStudies().at(0)->getDICOMSource());
+        }
+
         m_studyTreeView->addTopLevelItems(fillPatient(patient));
         m_studyTreeView->clearSelection();
-
-        //Hi ha estudis que poden compartir el mateix objecte pacient, per exemple en DICOMDIR on un mateix pacient hi tingui més d'un estudi
-        m_addedPatients.append(patient);
     }
 }
 
@@ -398,9 +401,6 @@ QList<QTreeWidgetItem*> QStudyTreeWidget::fillPatient(Patient *patient)
 
     foreach (Study *studyToInsert, patient->getStudies())
     {
-        // Si l'estudi ja hi existeix a StudyTreeView l'esborrem
-        removeStudy(patient->getStudies().at(0)->getInstanceUID(), patient->getStudies().at(0)->getDICOMSource());
-
         // Inserim l'estudi a la llista d'estudis
         m_addedStudiesByDICOMItemID[m_nextIDICOMItemIDOfStudy] = studyToInsert;
 
