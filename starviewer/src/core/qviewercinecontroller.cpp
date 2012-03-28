@@ -306,6 +306,11 @@ void QViewerCINEController::resetCINEInformation(Volume *input)
 
 void QViewerCINEController::updateThickness(int thickness)
 {
+    if (!m_2DViewer->getInput())
+    {
+        return;
+    }
+
     if (m_cineDimension == SpatialDimension)
     {
         if (m_2DViewer->isThickSlabActive())
