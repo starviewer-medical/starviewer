@@ -282,10 +282,12 @@ void RISRequestManager::retrieveStudyFoundInQueryPACS(Study *study)
     switch (getDICOMSouceFromRetrieveStudy(study))
     {
         case PACS:
+            INFO_LOG(QString("L'estudi sol.licitat pel RIS %1 s'obtindra del PACS").arg(study->getInstanceUID())); 
             retrieveStudyFromPACS(study);
             break;
         
         case Database:
+            INFO_LOG(QString("L'estudi sol.licitat pel RIS %1 s'obtindra de la base de dades local").arg(study->getInstanceUID())); 
             retrieveStudyFromDatabase(study);
             break;
     }
@@ -390,8 +392,18 @@ RISRequestManager::DICOMSourcesFromRetrieveStudy RISRequestManager::getDICOMSouc
     {
         if (!m_hasBeenAskedToUserIfExistingStudiesInDatabaseHaveToBeenRetrievedAgain)
         {
+            INFO_LOG("S'han trobat estudis sol.licitats pel RIS a la base de dades local, es preguntara l'usuari si vol tornar-los a descarregar del PACS");
             m_hasBeenAskedToUserIfExistingStudiesInDatabaseHaveToBeenRetrievedAgain = true;
             m_studiesInDatabaseHaveToBeenRetrievedAgain = askToUserIfRetrieveFromPACSStudyWhenExistsInDatabase(study->getParentPatient()->getFullName());
+
+            if (m_studiesInDatabaseHaveToBeenRetrievedAgain)
+            {
+                INFO_LOG("L'usuari ha indicat que s'han de tornar a descarregar del PACS els estudis sol.licitats del RIS trobats a la base de dades local");
+            }
+            else
+            {
+                INFO_LOG("L'usuari ha indicat que no s'han de tornar a descarregar del PACS els estudis sol.licitats del RIS trobats a la base de dades local");
+            }
         }
 
         DICOMSourceFromRetrieveStudy = m_studiesInDatabaseHaveToBeenRetrievedAgain ? PACS : Database;
