@@ -2929,7 +2929,7 @@ Be sure your computer is connected to the network and the PACS configuration is 
         <oldsource>
 Be sure your computer is connected to the network and the PACS configuration is correct.</oldsource>
         <translation>
-Compruebe que el ordenador está conectado a la red y que la configuración del PACS es correcta.</translation>
+Compruebe que el ordenador está conectado a la red y que la configuración del PACS es correcta. </translation>
     </message>
     <message>
         <location filename="querypacsjob.cpp" line="106"/>

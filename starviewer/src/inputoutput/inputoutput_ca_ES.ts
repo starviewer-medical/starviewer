@@ -2926,7 +2926,7 @@ Be sure your computer is connected to the network and the PACS configuration is 
         <oldsource>
 Be sure your computer is connected to the network and the PACS configuration is correct.</oldsource>
         <translation>
-Comproveu que l&apos;ordinador està connectat a la xarxa i que la configuració del PACS és correcta.</translation>
+Comproveu que l&apos;ordinador està connectat a la xarxa i que la configuració del PACS és correcta. </translation>
     </message>
     <message>
         <location filename="querypacsjob.cpp" line="106"/>
