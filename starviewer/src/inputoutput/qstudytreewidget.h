@@ -50,10 +50,10 @@ public:
 
     /// Mostrar els estudis passats per paràmetres. Si algun dels estudis ja existeix en sobreescriu la informació. En funció del valor establert per setUseDICOMSourceToDiscriminateStudies
     /// estudis amb el mateix UID però diferent DICOMSource es podran considerar duplicats
-    void insertPatientList(QList<Patient*> patientList, bool removeDuplicateStudies = false);
+    void insertPatientList(QList<Patient*> patientList);
 
     /// Insereix el pacient al QStudyTreeWiget. Si el pacient amb aquell estudi ja existeix en sobreescriu la informació
-    void insertPatient(Patient *patient, bool removeDuplicateStudy = false);
+    void insertPatient(Patient *patient);
 
     /// Insereix un llista de sèries a l'estudi seleccionat actualment.
     void insertSeriesList(const QString &studyIstanceUID, QList<Series*> seriesList);

@@ -161,7 +161,7 @@ void QInputOutputLocalDatabaseWidget::queryStudy(DicomMask queryMask)
     else
     {
         // Es mostra la llista d'estudis
-        m_studyTreeWidget->insertPatientList(patientStudyList, true);
+        m_studyTreeWidget->insertPatientList(patientStudyList);
         QApplication::restoreOverrideCursor();
     }
 }
@@ -181,7 +181,7 @@ void QInputOutputLocalDatabaseWidget::addStudyToQStudyTreeWidget(QString studyUI
 
     if (patientList.count() == 1)
     {
-        m_studyTreeWidget->insertPatient(patientList.at(0), true);
+        m_studyTreeWidget->insertPatient(patientList.at(0));
         m_studyTreeWidget->sort();
     }
 }
