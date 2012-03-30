@@ -145,12 +145,12 @@ void InputOutputSettings::init()
     
     settingsRegistry->addSetting(QueryScreenPACSListIsVisible, false);
     
-    settingsRegistry->addSetting(PACSStudyListSortByColumn, QStudyTreeWidget::ObjectName);
-    settingsRegistry->addSetting(PACSStudyListSortOrder, (int) Qt::AscendingOrder);
-    settingsRegistry->addSetting(LocalDatabaseStudyListSortByColumn, QStudyTreeWidget::ObjectName);
-    settingsRegistry->addSetting(LocalDatabaseStudyListSortOrder, Qt::AscendingOrder);
-    settingsRegistry->addSetting(DICOMDIRStudyListSortByColumn, QStudyTreeWidget::ObjectName);
-    settingsRegistry->addSetting(DICOMDIRStudyListSortOrder, Qt::AscendingOrder);
+    settingsRegistry->addSetting(PACSStudyListSortByColumn, QStudyTreeWidget::Date);
+    settingsRegistry->addSetting(PACSStudyListSortOrder, (int) Qt::DescendingOrder);
+    settingsRegistry->addSetting(LocalDatabaseStudyListSortByColumn, QStudyTreeWidget::Date);
+    settingsRegistry->addSetting(LocalDatabaseStudyListSortOrder, Qt::DescendingOrder);
+    settingsRegistry->addSetting(DICOMDIRStudyListSortByColumn, QStudyTreeWidget::Date);
+    settingsRegistry->addSetting(DICOMDIRStudyListSortOrder, Qt::DescendingOrder);
     settingsRegistry->addSetting(OperationStateListSortByColumn, QOperationStateScreen::Date);
     settingsRegistry->addSetting(OperationStateListSortOrder, Qt::AscendingOrder);
 
