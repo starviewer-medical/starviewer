@@ -14,7 +14,6 @@ class Volume;
 class ToolManager;
 class ToolConfiguration;
 class HangingProtocol;
-class AutomaticSynchronizationManager;
 // Estructura pacient
 class Patient;
 class Study;
@@ -31,6 +30,7 @@ class StatsWatcher;
 class QPreviousStudiesWidget;
 class PreviousStudiesManager;
 class HangingProtocolManager;
+class AutomaticSynchronizationManager;
 #endif
 
 /**
@@ -168,18 +168,6 @@ private slots:
     /// Si enable és true, activa el gruix màxim a tots els visors on hi hagi algun mode de thickslab actiu
     void enableMaximumThicknessMode(bool enable);
 
-    /// Activa el botó d'edició de la sincronització automàtica
-    void enableAutomaticSynchonizationEditor(bool enable);
-
-    /// Activa la sincronització manual a tots els visors
-    void activateManualSynchronizationInAllViewers();
-
-    // Desactiva la sincronització manual de tots els visors
-    void deactivateManualSynchronizationInAllViewers();
-
-    // Tracta l'event de quan s'ha seleccionat/desactivat la sincronització manual en qualsevol dels visors
-    void manualSynchronizationActivated(bool enable);
-
 #ifndef STARVIEWER_LITE
     /// Comprova els estats dels viewers quan la sincronització automàtica està activada per determinar si es pot activar l'edició de sincronització
     void checkSynchronizationEditCanBeEnabled();
@@ -193,6 +181,18 @@ private slots:
 
     /// Mètode que afegeix els hanging protocols amb prèvies
     void addPreviousHangingProtocols(QList<Study*> studies);
+
+    /// Activa el botó d'edició de la sincronització automàtica
+    void enableAutomaticSynchonizationEditor(bool enable);
+
+    /// Activa la sincronització manual a tots els visors
+    void activateManualSynchronizationInAllViewers();
+
+    // Desactiva la sincronització manual de tots els visors
+    void deactivateManualSynchronizationInAllViewers();
+
+    // Tracta l'event de quan s'ha seleccionat/desactivat la sincronització manual en qualsevol dels visors
+    void manualSynchronizationActivated(bool enable);
 
 #endif
 

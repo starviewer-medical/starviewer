@@ -61,10 +61,15 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_previousStudiesToolButton->hide();
     m_screenshotsExporterToolButton->hide();
     m_downButtonGrid->hide();
+    m_automaticSynchronizationToolButton->hide();
+    m_synchronizeAllViewersButton->hide();
+    m_desynchronizeAllViewersButton->hide();
+
 #else
     m_hangingProtocolManager = 0;
     m_automaticSynchronizationManager = 0;
 #endif
+
     m_hangingProtocolsMenu = new MenuGridWidget(this);
     m_seriesTableGrid = new TableMenu(this);
 
@@ -186,7 +191,6 @@ void Q2DViewerExtension::createConnections()
     // Connexions necessaries amb els canvis al layout
     connect(m_workingArea, SIGNAL(viewerAdded(Q2DViewerWidget*)), SLOT(activateNewViewer(Q2DViewerWidget*)));
     connect(m_workingArea, SIGNAL(selectedViewerChanged(Q2DViewerWidget*)), SLOT(changeSelectedViewer(Q2DViewerWidget*)));
-    connect(m_workingArea, SIGNAL(manualSynchronizationStateChanged(bool)), SLOT(manualSynchronizationActivated(bool)));
 
 #ifndef STARVIEWER_LITE
     // Per mostrar exportació
@@ -195,6 +199,8 @@ void Q2DViewerExtension::createConnections()
     connect(m_previousStudiesWidget, SIGNAL(downloadingStudies()), this, SLOT(changeToPreviousStudiesDownloadingIcon()));
     connect(m_previousStudiesWidget, SIGNAL(studiesDownloaded()), this, SLOT(changeToPreviousStudiesDefaultIcon()));
     connect(m_previousStudiesToolButton, SIGNAL(clicked (bool)), SLOT(showPreviousStudiesWidget()));
+    connect(m_workingArea, SIGNAL(manualSynchronizationStateChanged(bool)), SLOT(manualSynchronizationActivated(bool)));
+
 #endif
 
     connect(m_thickSlabWidget, SIGNAL(maximumThicknessModeToggled(bool)), SLOT(enableMaximumThicknessMode(bool)));
@@ -207,6 +213,7 @@ void Q2DViewerExtension::setInput(Volume *input)
 #ifdef STARVIEWER_LITE
     Q2DViewerWidget *viewerWidget = m_workingArea->addViewer("0.0\\1.0\\1.0\\0.0");
     viewerWidget->setInput(m_mainVolume);
+    m_workingArea->setSelectedViewer(m_workingArea->getViewerWidget(0));
 #else
     // Aplicació dels hanging protocols
     if (m_hangingProtocolManager != 0)
@@ -302,6 +309,9 @@ void Q2DViewerExtension::addPreviousHangingProtocols(QList<Study*> studies)
 
 void Q2DViewerExtension::setupDefaultToolsForModalities(const QStringList &modalities)
 {
+
+#ifndef STARVIEWER_LITE
+
     Settings settings;
 
     bool enableReferenceLinesForMR = settings.getValue(CoreSettings::EnableQ2DViewerReferenceLinesForMR).toBool();
@@ -327,6 +337,8 @@ void Q2DViewerExtension::setupDefaultToolsForModalities(const QStringList &modal
     {
         m_automaticSynchronizationToolButton->defaultAction()->setChecked(false);
     }
+
+#endif
 }
 
 void Q2DViewerExtension::setupDefaultLeftButtonTool()
@@ -426,13 +438,6 @@ void Q2DViewerExtension::initializeTools()
     m_referenceLinesToolButton->setDefaultAction(m_toolManager->registerTool("ReferenceLinesTool"));
 
     m_distanceToolButton->setDefaultAction(m_toolManager->registerTool("DistanceTool"));
-    // Afegim un menú al botó de distància per incorporar l'eina de distància perpendicular
-    m_distanceToolButton->setPopupMode(QToolButton::MenuButtonPopup);
-    QMenu *distanceToolMenu = new QMenu(this);
-    m_distanceToolButton->setMenu(distanceToolMenu);
-    distanceToolMenu->addAction(m_toolManager->registerTool("PerpendicularDistanceTool"));
-    connect(m_toolManager->getRegisteredToolAction("DistanceTool"), SIGNAL(triggered()), SLOT(rearrangeDistanceToolsMenu()));
-    connect(m_toolManager->getRegisteredToolAction("PerpendicularDistanceTool"), SIGNAL(triggered()), SLOT(rearrangeDistanceToolsMenu()));
 
     m_eraserToolButton->setDefaultAction(m_toolManager->registerTool("EraserTool"));
 #ifndef STARVIEWER_LITE
@@ -444,6 +449,14 @@ void Q2DViewerExtension::initializeTools()
 
     connect(m_toolManager->getRegisteredToolAction("ZoomTool"), SIGNAL(triggered()), SLOT(rearrangeZoomToolsMenu()));
     connect(m_toolManager->getRegisteredToolAction("MagnifyingGlassTool"), SIGNAL(triggered()), SLOT(rearrangeZoomToolsMenu()));
+
+    // Afegim un menú al botó de distància per incorporar l'eina de distància perpendicular
+    m_distanceToolButton->setPopupMode(QToolButton::MenuButtonPopup);
+    QMenu *distanceToolMenu = new QMenu(this);
+    m_distanceToolButton->setMenu(distanceToolMenu);
+    distanceToolMenu->addAction(m_toolManager->registerTool("PerpendicularDistanceTool"));
+    connect(m_toolManager->getRegisteredToolAction("DistanceTool"), SIGNAL(triggered()), SLOT(rearrangeDistanceToolsMenu()));
+    connect(m_toolManager->getRegisteredToolAction("PerpendicularDistanceTool"), SIGNAL(triggered()), SLOT(rearrangeDistanceToolsMenu()));
 
     m_roiButton->setDefaultAction(m_toolManager->registerTool("OvalROITool"));
     // Afegim un menú al botó de PolylineROI per incorporar la tool de ROI Oval
@@ -527,6 +540,35 @@ void Q2DViewerExtension::initializeTools()
     // TODO De moment fem exclusiu la tool de sincronització i la de cursor 3d manualment perque la
     // sincronització no té el model de totes les tools
     connect(m_toolManager->getRegisteredToolAction("Cursor3DTool"), SIGNAL(triggered()), SLOT(disableSynchronization()));
+
+    // SYNCHRONIZE TOOLS
+    m_synchronizeAllAction = new QAction(this);
+    m_synchronizeAllAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::SynchronizeAllViewers));
+    m_synchronizeAllAction->setToolTip(tr("Activate manual synchronization in all viewers (%1)").arg(m_synchronizeAllAction->shortcut().toString()));
+    m_synchronizeAllAction->setIcon(QIcon(":/images/linkAll.png"));
+    m_synchronizeAllAction->setText(tr("All"));
+
+    m_synchronizeAllViewersButton->setIcon(m_synchronizeAllAction->icon());
+    m_synchronizeAllViewersButton->setToolTip(m_synchronizeAllAction->toolTip());
+    m_synchronizeAllViewersButton->setText(m_synchronizeAllAction->text());
+
+    m_synchronizeAllViewersButton->setDefaultAction(m_synchronizeAllAction);
+    connect(m_synchronizeAllAction, SIGNAL(triggered()), SLOT(activateManualSynchronizationInAllViewers()));
+
+    m_desynchronizeAllAction = new QAction(this);
+    m_desynchronizeAllAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::DesynchronizeAllViewers));
+    m_desynchronizeAllAction->setToolTip(tr("Deactivate manual synchronization in all viewers (%1)").arg(m_desynchronizeAllAction->shortcut().toString()));
+    m_desynchronizeAllAction->setIcon(QIcon(":/images/unlinkAll.png"));
+    m_desynchronizeAllAction->setText(tr("None"));
+
+    m_desynchronizeAllViewersButton->setIcon(m_desynchronizeAllAction->icon());
+    m_desynchronizeAllViewersButton->setToolTip(m_desynchronizeAllAction->toolTip());
+    m_desynchronizeAllViewersButton->setText(m_desynchronizeAllAction->text());
+
+    m_desynchronizeAllViewersButton->setDefaultAction(m_desynchronizeAllAction);
+    connect(m_desynchronizeAllAction, SIGNAL(triggered()), SLOT(deactivateManualSynchronizationInAllViewers()));
+    connect(m_toolManager->getRegisteredToolAction("AutomaticSynchronizationTool"), SIGNAL(triggered(bool)), SLOT(enableAutomaticSynchronizationToViewer(bool)));
+    connect(m_automaticSynchronizationEditionButton, SIGNAL(clicked(bool)), SLOT(enableAutomaticSynchonizationEditor(bool)));
     
 #endif
 
@@ -559,36 +601,6 @@ void Q2DViewerExtension::initializeTools()
     m_screenShotToolButton->setIcon(m_screenShotTriggerAction->icon());
     m_screenShotToolButton->setToolTip(m_screenShotTriggerAction->toolTip());
     m_screenShotToolButton->setText(m_screenShotTriggerAction->text());
-
-    // SYNCHRONIZE TOOLS
-    m_synchronizeAllAction = new QAction(this);
-    m_synchronizeAllAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::SynchronizeAllViewers));
-    m_synchronizeAllAction->setToolTip(tr("Activate manual synchronization in all viewers (%1)").arg(m_synchronizeAllAction->shortcut().toString()));
-    m_synchronizeAllAction->setIcon(QIcon(":/images/linkAll.png"));
-    m_synchronizeAllAction->setText(tr("All"));
-
-    m_synchronizeAllViewersButton->setIcon(m_synchronizeAllAction->icon());
-    m_synchronizeAllViewersButton->setToolTip(m_synchronizeAllAction->toolTip());
-    m_synchronizeAllViewersButton->setText(m_synchronizeAllAction->text());
-
-    m_synchronizeAllViewersButton->setDefaultAction(m_synchronizeAllAction);
-    connect(m_synchronizeAllAction, SIGNAL(triggered()), SLOT(activateManualSynchronizationInAllViewers()));
-
-    m_desynchronizeAllAction = new QAction(this);
-    m_desynchronizeAllAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::DesynchronizeAllViewers));
-    m_desynchronizeAllAction->setToolTip(tr("Deactivate manual synchronization in all viewers (%1)").arg(m_desynchronizeAllAction->shortcut().toString()));
-    m_desynchronizeAllAction->setIcon(QIcon(":/images/unlinkAll.png"));
-    m_desynchronizeAllAction->setText(tr("None"));
-
-    m_desynchronizeAllViewersButton->setIcon(m_desynchronizeAllAction->icon());
-    m_desynchronizeAllViewersButton->setToolTip(m_desynchronizeAllAction->toolTip());
-    m_desynchronizeAllViewersButton->setText(m_desynchronizeAllAction->text());
-
-    m_desynchronizeAllViewersButton->setDefaultAction(m_desynchronizeAllAction);
-    connect(m_desynchronizeAllAction, SIGNAL(triggered()), SLOT(deactivateManualSynchronizationInAllViewers()));
-    connect(m_toolManager->getRegisteredToolAction("AutomaticSynchronizationTool"), SIGNAL(triggered(bool)), SLOT(enableAutomaticSynchronizationToViewer(bool)));
-    connect(m_automaticSynchronizationEditionButton, SIGNAL(clicked(bool)), SLOT(enableAutomaticSynchonizationEditor(bool)));
-
 }
 
 void Q2DViewerExtension::activateNewViewer(Q2DViewerWidget *newViewerWidget)
