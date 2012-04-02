@@ -93,18 +93,68 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="154"/>
+        <location filename="diagnosistestresultwriter.cpp" line="159"/>
         <source>%1 succeeded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="155"/>
+        <location filename="diagnosistestresultwriter.cpp" line="160"/>
         <source>%1 errors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="156"/>
+        <location filename="diagnosistestresultwriter.cpp" line="161"/>
         <source>%1 warnings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="209"/>
+        <source>System Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="215"/>
+        <source>Operating System: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="216"/>
+        <source>RAM Memory: %1 MB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="223"/>
+        <source>CPU Clock Speed: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="224"/>
+        <source>Number of cores: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="228"/>
+        <source>GPU %1: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="231"/>
+        <source>Driver: %1. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="235"/>
+        <source>OpenGL: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="242"/>
+        <source>Screen %1: %2x%3 </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="245"/>
+        <source>Primary</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

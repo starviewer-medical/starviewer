@@ -8,7 +8,7 @@ body
     -webkit-user-select: none;
 }
 
-.errorTest, .warningTest, .succeededTest
+.errorTest, .warningTest, .succeededTest, #systemInformation
 {
     border: 1px;
     border-radius: 5px;
@@ -45,6 +45,16 @@ body
     -webkit-user-select: text;
 }
 
+#systemInformation .result .description
+{
+    background-image: url(qrc:///images/info_small.png);
+}
+
+#systemInformation .info
+{
+    padding: 10px 10px 0px 10px;
+}
+
 .succeededTest .result .description
 {
     background-image: url(qrc:///images/succeeded.png);
@@ -65,12 +75,12 @@ body
     padding: 10px;
 }
 
-.closed div.problems
+.closed div.problems, .closed div.info
 {
     display:none;
 }
 
-.errorTest .result, .warningTest .result
+.errorTest .result, .warningTest .result, #systemInformation .result
 {
     cursor: pointer;
 }
