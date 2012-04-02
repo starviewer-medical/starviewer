@@ -1,11 +1,11 @@
 
 $('document').ready(function()
 {
-    $('.errorTest, .warningTest, .succeededTest').addClass('closed');
+    $('.errorTest, .warningTest, .succeededTest, #systemInformation').addClass('closed');
     $('#errorButton, #warningButton').addClass('pressed');
     $('.succeededTest').hide();
 
-    $('.errorTest .result, .warningTest .result').click(function()
+    $('.errorTest .result, .warningTest .result, #systemInformation .result').click(function()
     {
         var $test = $(this).parent();
         if ($test.hasClass('closed'))

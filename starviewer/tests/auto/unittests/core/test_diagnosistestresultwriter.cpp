@@ -47,6 +47,11 @@ protected:
     {
         writer.writeEmptyElement("head");
     }
+
+    void writeSystemInformation(QXmlStreamWriter &writer)
+    {
+        Q_UNUSED(writer);
+    }
 };
 
 class TestingDiagnosisTest : public DiagnosisTest {

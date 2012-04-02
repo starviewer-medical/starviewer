@@ -1,11 +1,16 @@
 #include "diagnosistest.h"
 #include "diagnosistestresultwriter.h"
+#include "systeminformation.h"
+#include "screenmanager.h"
 
 #include <QFile>
 #include <QFileInfo>
 #include <QTextStream>
 #include <QXmlStreamWriter>
 #include <QRegExp>
+#include <QStringList>
+#include <QRect>
+#include <QSize>
 
 namespace udg {
 
@@ -177,6 +182,9 @@ void DiagnosisTestResultWriter::writeTests(QXmlStreamWriter &writer)
     //div tests
     writer.writeStartElement("div");
     writer.writeAttribute("class", "tests");
+
+    writeSystemInformation(writer);
+
     // Per cada test
     foreach (const Pair &pair, m_diagnosisTests)
     {
@@ -187,6 +195,63 @@ void DiagnosisTestResultWriter::writeTests(QXmlStreamWriter &writer)
     }
     //end div tests
     writer.writeEndElement();
+}
+
+void DiagnosisTestResultWriter::writeSystemInformation(QXmlStreamWriter &writer)
+{
+    SystemInformation *systemInformation = SystemInformation::newInstance();
+    writer.writeStartElement("div");
+    writer.writeAttribute("id", "systemInformation");
+    writer.writeStartElement("div");
+    writer.writeAttribute("class", "result");
+    writer.writeStartElement("div");
+    writer.writeAttribute("class", "description");
+    writer.writeCharacters(QObject::tr("System Information"));
+    writer.writeEndElement();
+    writer.writeEndElement();
+    writer.writeStartElement("div");
+    writer.writeAttribute("class", "info");
+    writer.writeStartElement("ul");
+    writer.writeTextElement("li", QObject::tr("Operating System: %1").arg(systemInformation->getOperatingSystemAsString()));
+    writer.writeTextElement("li", QObject::tr("RAM Memory: %1 MB").arg(systemInformation->getRAMTotalAmount()));
+
+    QStringList cpus;
+    foreach (unsigned int cpu, systemInformation->getCPUFrequencies())
+    {
+        cpus << QString::number(cpu) + " MHz";
+    }
+    writer.writeTextElement("li", QObject::tr("CPU Clock Speed: %1").arg(cpus.join(", ")));
+    writer.writeTextElement("li", QObject::tr("Number of cores: %1").arg(systemInformation->getCPUNumberOfCores()));
+
+    for (int i = 0; i < systemInformation->getGPUBrand().size(); ++i)
+    {
+        QString gpu = QObject::tr("GPU %1: ").arg(i + 1);
+        gpu += systemInformation->getGPUModel().at(i) + " ";
+        gpu += QString("%1 MB. ").arg(systemInformation->getGPURAM().at(i));
+        gpu += QObject::tr("Driver: %1. ").arg(systemInformation->getGPUDriverVersion().at(i));
+        writer.writeTextElement("li", gpu);
+    }
+
+    writer.writeTextElement("li", QObject::tr("OpenGL: %1").arg(systemInformation->getGPUOpenGLVersion()));
+
+    ScreenManager screenManager;
+    int primaryID = screenManager.getPrimaryScreenID();
+    for (int i = 0; i < screenManager.getNumberOfScreens(); i++)
+    {
+        QSize size = screenManager.getScreenGeometry(i).size();
+        QString screen = QObject::tr("Screen %1: %2x%3 ").arg(i + 1).arg(size.width()).arg(size.height());
+        if (i == primaryID)
+        {
+            screen += QObject::tr("Primary");
+        }
+        writer.writeTextElement("li", screen);
+    }
+
+    writer.writeEndElement(); //end ul
+    writer.writeEndElement(); //end div result
+    writer.writeEndElement(); //end div systemInformation
+
+    delete systemInformation;
 }
 
 void DiagnosisTestResultWriter::writeTestDescription(QXmlStreamWriter &writer, DiagnosisTestResult::DiagnosisTestResultState state, const QString &description)

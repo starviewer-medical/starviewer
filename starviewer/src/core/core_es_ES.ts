@@ -94,19 +94,69 @@
         <translation>Error al inicializar la biblioteca del cortafuegos</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="154"/>
+        <location filename="diagnosistestresultwriter.cpp" line="159"/>
         <source>%1 succeeded</source>
         <translation>%1 correctos</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="155"/>
+        <location filename="diagnosistestresultwriter.cpp" line="160"/>
         <source>%1 errors</source>
         <translation>%1 errores</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="156"/>
+        <location filename="diagnosistestresultwriter.cpp" line="161"/>
         <source>%1 warnings</source>
         <translation>%1 avisos</translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="209"/>
+        <source>System Information</source>
+        <translation>Información del sistema</translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="215"/>
+        <source>Operating System: %1</source>
+        <translation>Sistema operativo: %1</translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="216"/>
+        <source>RAM Memory: %1 MB</source>
+        <translation>Memoria RAM: %1 MB</translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="223"/>
+        <source>CPU Clock Speed: %1</source>
+        <translation>Velocidad de los procesadores: %1</translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="224"/>
+        <source>Number of cores: %1</source>
+        <translation>Número de procesadores: %1</translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="228"/>
+        <source>GPU %1: </source>
+        <translation>Tarjeta gráfica %1: </translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="231"/>
+        <source>Driver: %1. </source>
+        <translation>Controlador: %1. </translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="235"/>
+        <source>OpenGL: %1</source>
+        <translation>OpenGL: %1</translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="242"/>
+        <source>Screen %1: %2x%3 </source>
+        <translation>Pantalla %1: %2x%3 </translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="245"/>
+        <source>Primary</source>
+        <translation>Principal</translation>
     </message>
 </context>
 <context>

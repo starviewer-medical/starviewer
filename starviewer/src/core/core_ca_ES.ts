@@ -94,19 +94,69 @@
         <translation>S&apos;ha produït un error en inicialitzar la biblioteca del tallafocs</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="154"/>
+        <location filename="diagnosistestresultwriter.cpp" line="159"/>
         <source>%1 succeeded</source>
         <translation>%1 correctes</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="155"/>
+        <location filename="diagnosistestresultwriter.cpp" line="160"/>
         <source>%1 errors</source>
         <translation>%1 errors</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="156"/>
+        <location filename="diagnosistestresultwriter.cpp" line="161"/>
         <source>%1 warnings</source>
         <translation>%1 avisos</translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="209"/>
+        <source>System Information</source>
+        <translation>Informació del sistema</translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="215"/>
+        <source>Operating System: %1</source>
+        <translation>Sistema operatiu: %1</translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="216"/>
+        <source>RAM Memory: %1 MB</source>
+        <translation>Memòria RAM: %1 MB</translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="223"/>
+        <source>CPU Clock Speed: %1</source>
+        <translation>Velocitat dels processadors: %1</translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="224"/>
+        <source>Number of cores: %1</source>
+        <translation>Número de processadors: %1</translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="228"/>
+        <source>GPU %1: </source>
+        <translation>Targeta gràfica %1: </translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="231"/>
+        <source>Driver: %1. </source>
+        <translation>Controlador: %1. </translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="235"/>
+        <source>OpenGL: %1</source>
+        <translation>OpenGL: %1</translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="242"/>
+        <source>Screen %1: %2x%3 </source>
+        <translation>Pantalla %1: %2x%3 </translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="245"/>
+        <source>Primary</source>
+        <translation>Principal</translation>
     </message>
 </context>
 <context>
