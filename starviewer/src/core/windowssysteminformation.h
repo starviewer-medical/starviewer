@@ -21,6 +21,8 @@ public:
     bool isOperatingSystem64BitArchitecture();
     QString getOperatingSystemVersion();
     QString getOperatingSystemServicePackVersion();
+    QString getOperatingSystemName();
+    QString getOperatingSystemAsString();
 
     /// Retorna la quantitat total de memòria RAM en MegaBytes
     unsigned int getRAMTotalAmount();
