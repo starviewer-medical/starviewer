@@ -365,7 +365,7 @@ QList<QString> WindowsSystemInformation::getGPUModel()
     {
         VARIANT variantProperty;
 
-        if (getProperty(object, "VideoProcessor", &variantProperty))
+        if (getProperty(object, "Name", &variantProperty))
         {
             GPUModel << QString::fromWCharArray(variantProperty.bstrVal);
             VariantClear(&variantProperty);
