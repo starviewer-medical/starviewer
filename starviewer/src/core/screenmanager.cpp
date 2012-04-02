@@ -254,6 +254,11 @@ QRect ScreenManager::getScreenGeometry(int screenID) const
     return m_applicationDesktop->screenGeometry(screenID);
 }
 
+int ScreenManager::getPrimaryScreenID() const
+{
+    return m_applicationDesktop->primaryScreen();
+}
+
 DynamicMatrix ScreenManager::computeScreenMatrix(QWidget *window)
 {
     int desktopIAm = m_applicationDesktop->screenNumber(window);
