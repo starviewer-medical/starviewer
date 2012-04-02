@@ -432,32 +432,7 @@ QList<QString> WindowsSystemInformation::getGPUDriverVersion()
 
         if (getProperty(object, "DriverVersion", &variantProperty))
         {
-            driverVersionString += "Version: ";
-            driverVersionString += QString::fromWCharArray(variantProperty.bstrVal);
-            VariantClear(&variantProperty);
-        }
-        if (getProperty(object, "DriverDate", &variantProperty))
-        {
-            driverVersionString += ", Date: ";
-            driverVersionString += QString::fromWCharArray(variantProperty.bstrVal);
-            VariantClear(&variantProperty);
-        }
-        if (getProperty(object, "infFilename", &variantProperty))
-        {
-            driverVersionString += ", Information file: ";
-            driverVersionString += QString::fromWCharArray(variantProperty.bstrVal);
-            VariantClear(&variantProperty);
-        }
-        if (getProperty(object, "InstalledDisplayDrivers", &variantProperty))
-        {
-            driverVersionString += ", Display drivers: ";
-            driverVersionString += QString::fromWCharArray(variantProperty.bstrVal);
-            VariantClear(&variantProperty);
-        }
-        if (getProperty(object, "infSection", &variantProperty))
-        {
-            driverVersionString += ", Section: ";
-            driverVersionString += QString::fromWCharArray(variantProperty.bstrVal);
+            driverVersionString = QString::fromWCharArray(variantProperty.bstrVal);
             VariantClear(&variantProperty);
         }
 
