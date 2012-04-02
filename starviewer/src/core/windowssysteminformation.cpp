@@ -108,6 +108,46 @@ QString WindowsSystemInformation::getOperatingSystemServicePackVersion()
     return servicePackVersion;
 }
 
+QString WindowsSystemInformation::getOperatingSystemName()
+{
+    QString operatingSystemVersion = "";
+    IEnumWbemClassObject* enumerator = executeQuery("SELECT * FROM Win32_OperatingSystem");
+
+    IWbemClassObject* object = getNextObject(enumerator);
+    while (object)
+    {
+        VARIANT variantProperty;
+        if (getProperty(object, "Caption", &variantProperty))
+        {
+            operatingSystemVersion = QString().fromWCharArray(variantProperty.bstrVal);
+            VariantClear(&variantProperty);
+        }
+
+        object->Release();
+        object = getNextObject(enumerator);
+    }
+
+    if (enumerator)
+    {
+        enumerator->Release();
+    }
+    return operatingSystemVersion;
+}
+
+
+QString WindowsSystemInformation::getOperatingSystemAsString()
+{
+    QString architecture;
+    isOperatingSystem64BitArchitecture()? architecture = "64-bit" : architecture = "32-bit";
+    QString servicePack = getOperatingSystemServicePackVersion();
+    if (!servicePack.isEmpty())
+    {
+        servicePack = "(" + servicePack + ")";
+    }
+    
+    return getOperatingSystemName() + ", " + architecture + " " + servicePack;
+}
+
 unsigned int WindowsSystemInformation::getRAMTotalAmount()
 {
     unsigned int RAMTotalAmount = 0;

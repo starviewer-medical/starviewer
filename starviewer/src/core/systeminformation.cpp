@@ -35,6 +35,12 @@ SystemInformation::OperatingSystem SystemInformation::getOperatingSystem()
     return SystemInformation::OSLinux;
 }
 
+QString SystemInformation::getOperatingSystemAsString()
+{
+    return "Unknown";
+}
+
+
 bool SystemInformation::isOperatingSystem64BitArchitecture()
 {
     return true;

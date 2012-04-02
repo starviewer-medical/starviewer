@@ -24,7 +24,8 @@ public:
     virtual QString getOperatingSystemVersion();
     /// Retorna la versió de service pack instal·lat, només en windows
     virtual QString getOperatingSystemServicePackVersion();
-
+    /// Returna el nom complert del Sistema Operatiu (Nom, arquitectura, actualitzacions...)
+    virtual QString getOperatingSystemAsString();
     /// Retorna la quantitat total de memòria RAM en MegaBytes
     virtual unsigned int getRAMTotalAmount();
     //En MBytes
