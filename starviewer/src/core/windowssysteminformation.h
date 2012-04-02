@@ -53,7 +53,7 @@ public:
 
 protected:
     /// Mètode alternatiu per si no podem obtenir el nombre de nuclis via WMI
-    unsigned int getCPUNumberOfCoresFromEnvironmentVar();
+    virtual unsigned int getCPUNumberOfCoresFromEnvironmentVar();
 
 protected:
     virtual IWbemClassObject* getNextObject(IEnumWbemClassObject *enumerator);
