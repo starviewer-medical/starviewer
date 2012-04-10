@@ -158,13 +158,15 @@ void PolylineROITool::simulateClosingPolyline()
             // Afegim els punts que simulen aquesta polilínia
             m_closingPolyline->addPoint(m_mainPolyline->getPoint(0));
             m_closingPolyline->addPoint(pickedPoint);
-            m_closingPolyline->addPoint(m_mainPolyline->getPoint(m_mainPolyline->getNumberOfPoints() - 1));
         }
         else
         {
             // Modifiquem els punts que han canviat
             m_closingPolyline->setPoint(1, pickedPoint);
-            m_closingPolyline->setPoint(2, m_mainPolyline->getPoint(m_mainPolyline->getNumberOfPoints() - 1));
+            if (m_mainPolyline->getNumberOfPoints() >= 2)
+            {
+                m_closingPolyline->setPoint(2, m_mainPolyline->getPoint(m_mainPolyline->getNumberOfPoints() - 1));
+            }
             // Actualitzem els atributs de la polilínia
             m_closingPolyline->update();
         }
