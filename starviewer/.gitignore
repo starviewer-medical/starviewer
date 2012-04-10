@@ -31,9 +31,16 @@ src/main/Info.plist
 *.vcproj
 *vcproj.*.*.user
 *.ncb
+*.lib
+*.exp
+*.dll
+# Application executables
+bin/*.exe
 
 # Testing outputs
 tests/auto/*.log
 tests/auto/autotests
 tests/auto/autotests.exe
 tests/auto/autotests.exp
+# Other files
+sys$command
