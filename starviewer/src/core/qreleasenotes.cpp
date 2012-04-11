@@ -5,6 +5,7 @@
 #include <QCloseEvent>
 #include <QUrl>
 #include <QNetworkReply>
+#include <QWebHistory>
 
 namespace udg {
 
@@ -18,6 +19,9 @@ QReleaseNotes::QReleaseNotes(QWidget *parent)
 
     // Fer que la finestra sempre quedi davant i no es pugui fer res fins que no es tanqui
     setWindowModality(Qt::ApplicationModal);
+
+    m_viewWebView->setContextMenuPolicy(Qt::NoContextMenu);
+    m_viewWebView->history()->setMaximumItemCount(0);
 }
 
 QReleaseNotes::~QReleaseNotes()
