@@ -81,6 +81,9 @@ Q2DViewer::Q2DViewer(QWidget *parent)
 
     // Creem el picker per obtenir les coordenades de la imatge
     m_imagePointPicker = vtkPropPicker::New();
+    m_imagePointPicker->InitializePickList();
+    m_imagePointPicker->AddPickList(m_imageActor);
+    m_imagePointPicker->PickFromListOn();
     this->getInteractor()->SetPicker(m_imagePointPicker);
 
     // Creem el drawer, passant-li com a visor l'objecte this
@@ -1571,7 +1574,7 @@ bool Q2DViewer::getCurrentCursorImageCoordinate(double xyz[3])
     }
 
     QPoint position = this->getEventPosition();
-    if (m_imagePointPicker->PickProp(position.x(), position.y(), getRenderer()))
+    if (m_imagePointPicker->Pick(position.x(), position.y(), 0.0, getRenderer()))
     {
         inside = true;
         // Calculem el pixel trobat
