@@ -324,6 +324,11 @@ void Cursor3DTool::refreshReferenceViewerData()
 
 void Cursor3DTool::hideCrossHair()
 {
+    if (!m_crossHair)
+    {
+        return;
+    }
+
     if (m_2DViewer->isActive() && m_state == None)
     {
         m_crossHair->setVisibility(false);
