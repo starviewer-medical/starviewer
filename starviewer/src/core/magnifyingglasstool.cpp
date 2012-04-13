@@ -51,6 +51,7 @@ void MagnifyingGlassTool::handleEvent(unsigned long eventID)
             }
             break;
 
+        case vtkCommand::RightButtonPressEvent:
         case vtkCommand::LeftButtonReleaseEvent:
             enableConnections(false);
             removeMagnifiedRenderer();
