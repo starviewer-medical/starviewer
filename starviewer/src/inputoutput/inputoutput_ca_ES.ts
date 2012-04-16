@@ -2655,8 +2655,9 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
     </message>
     <message>
         <location filename="qpopuprisrequestsscreen.cpp" line="188"/>
-        <source>Couldn&apos;t retrieve requested studies.</source>
-        <translation type="unfinished">Error al descarregar els estudis demanats.</translation>
+        <source>Unable to retrieve requested studies.</source>
+        <oldsource>Couldn&apos;t retrieve requested studies.</oldsource>
+        <translation>No s&apos;han pogut descarregar els estudis demanats.</translation>
     </message>
     <message>
         <location filename="qpopuprisrequestsscreen.cpp" line="195"/>
@@ -2666,7 +2667,7 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
     <message>
         <location filename="qpopuprisrequestsscreen.cpp" line="199"/>
         <source>%1 studies retrieved.</source>
-        <translation type="unfinished">%1 estudis descarregats.</translation>
+        <translation>%1 estudis descarregats.</translation>
     </message>
     <message>
         <location filename="qpopuprisrequestsscreen.cpp" line="204"/>
