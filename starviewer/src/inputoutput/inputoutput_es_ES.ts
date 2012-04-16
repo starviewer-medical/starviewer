@@ -2646,27 +2646,35 @@ Cierre todas las ventanas de %1 y vuelva a intentarlo.</translation>
         <translation>Consultado al PACS...</translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="154"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="155"/>
         <source>Retrieving study %1 of %2.</source>
         <translation>Descargando estudio %1 de %2.</translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="170"/>
-        <location filename="qpopuprisrequestsscreen.cpp" line="181"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="171"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="184"/>
         <source>No studies found.</source>
         <translation>No se han encontrado estudios.</translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="185"/>
-        <source>%1 study found.</source>
-        <oldsource>%1 study has been found.</oldsource>
-        <translation>Se ha encontrado %1 estudio.</translation>
+        <location filename="qpopuprisrequestsscreen.cpp" line="188"/>
+        <source>Couldn&apos;t retrieve requested studies.</source>
+        <translation type="unfinished">Error al descargar los estudios pedidos.</translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="189"/>
-        <source>%1 studies found.</source>
-        <oldsource>%1 studies have been found.</oldsource>
-        <translation>Se han encontrado %1 estudios.</translation>
+        <location filename="qpopuprisrequestsscreen.cpp" line="195"/>
+        <source>%1 study retrieved.</source>
+        <translation>%1 estudio encontrado.</translation>
+    </message>
+    <message>
+        <location filename="qpopuprisrequestsscreen.cpp" line="199"/>
+        <source>%1 studies retrieved.</source>
+        <translation type="unfinished">%1 estudios descargados.</translation>
+    </message>
+    <message>
+        <location filename="qpopuprisrequestsscreen.cpp" line="204"/>
+        <source>%1 studies retrieved, %2 failed.</source>
+        <translation>%1 estudios descargados, %2 fallados.</translation>
     </message>
 </context>
 <context>
@@ -3133,24 +3141,24 @@ Be sure its IP and AE Title are correct.</oldsource>
 Asegúrese que la IP y el AETitle de este sean correctos.</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="414"/>
+        <location filename="risrequestmanager.cpp" line="426"/>
         <source>Some studies requested from RIS of patient %1 exists in local database. Do you want to retrieve again?</source>
         <translation>Algunos de los estudios solicitados des del RIS del paciente %1 ya estan descargados en local. Quiere volverlos a descargar?</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="434"/>
+        <location filename="risrequestmanager.cpp" line="446"/>
         <source>Unable to listen RIS requests on port %1, the port is in use by another application.</source>
         <oldsource>Can&apos;t listen RIS requests on port %1, the port is in use by another application.</oldsource>
         <translation>No se pueden escuchar las peticiones del RIS por el puerto %1, el puerto está en uso por otra aplicación.</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="437"/>
+        <location filename="risrequestmanager.cpp" line="449"/>
         <source>Unable to listen RIS requests on port %1, an unknown network error has occurred.</source>
         <oldsource>Unable to listen RIS requests on port %1, an unknown network error has produced.</oldsource>
         <translation>No se pueden escuchar peticiones del RIS por el puerto %1, se ha producido un error de red desconocido.</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="438"/>
+        <location filename="risrequestmanager.cpp" line="450"/>
         <source>
 If the problem persists contact with an administrator.</source>
         <oldsource>
