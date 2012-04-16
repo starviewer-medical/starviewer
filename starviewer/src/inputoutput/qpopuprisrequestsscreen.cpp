@@ -185,7 +185,7 @@ void QPopUpRISRequestsScreen::showRetrieveFinished()
         }
         else 
         {
-            m_operationDescription->setText(tr("Couldn't retrieve requested studies.").arg(ApplicationNameString));
+            m_operationDescription->setText(tr("Unable to retrieve requested studies.").arg(ApplicationNameString));
         }
     }
     else if (m_numberOfStudiesFailedToRetrieve == 0)

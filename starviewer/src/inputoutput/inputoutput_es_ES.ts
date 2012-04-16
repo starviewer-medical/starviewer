@@ -2658,8 +2658,9 @@ Cierre todas las ventanas de %1 y vuelva a intentarlo.</translation>
     </message>
     <message>
         <location filename="qpopuprisrequestsscreen.cpp" line="188"/>
-        <source>Couldn&apos;t retrieve requested studies.</source>
-        <translation type="unfinished">Error al descargar los estudios pedidos.</translation>
+        <source>Unable to retrieve requested studies.</source>
+        <oldsource>Couldn&apos;t retrieve requested studies.</oldsource>
+        <translation>No se pudo descargar los estudios pedidos.</translation>
     </message>
     <message>
         <location filename="qpopuprisrequestsscreen.cpp" line="195"/>
@@ -2669,7 +2670,7 @@ Cierre todas las ventanas de %1 y vuelva a intentarlo.</translation>
     <message>
         <location filename="qpopuprisrequestsscreen.cpp" line="199"/>
         <source>%1 studies retrieved.</source>
-        <translation type="unfinished">%1 estudios descargados.</translation>
+        <translation>%1 estudios descargados.</translation>
     </message>
     <message>
         <location filename="qpopuprisrequestsscreen.cpp" line="204"/>

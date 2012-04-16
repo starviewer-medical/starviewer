@@ -2616,7 +2616,8 @@ Close all %1 windows and try again.</source>
     </message>
     <message>
         <location filename="qpopuprisrequestsscreen.cpp" line="188"/>
-        <source>Couldn&apos;t retrieve requested studies.</source>
+        <source>Unable to retrieve requested studies.</source>
+        <oldsource>Couldn&apos;t retrieve requested studies.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
