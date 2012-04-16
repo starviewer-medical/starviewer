@@ -63,7 +63,7 @@ private slots:
     void retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacsJob);
 
     /// S'indica que ha fallat o s'ha cancel·lat la descàrrega dels estudi demanat pel RIS
-    void retrieveDICOMFilesFromPACSJobCancelledOrFailed(PACSJob *pacsJob);
+    void retrieveDICOMFilesFromPACSJobCancelled(PACSJob *pacsJob);
 
 private:
     /// Actualitza per pantalla l'estat de la descàrrege
@@ -80,6 +80,7 @@ private:
 
     QList<int> m_pacsJobIDOfStudiesToRetrieve;
     int m_numberOfStudiesRetrieved;
+    int m_numberOfStudiesFailedToRetrieve;
 
     /// Animació utilitzada per desplaçar el pop up fin a la cantonada dreta
     QPropertyAnimation m_moveToBottomAnimation;

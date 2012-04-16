@@ -68,6 +68,7 @@ void QPopUpRISRequestsScreen::queryStudiesByAccessionNumberStarted()
     m_pacsJobIDOfStudiesToRetrieve.clear();
     m_numberOfStudiesRetrieved = 0;
     m_numberOfStudiesToRetrieve = 0;
+    m_numberOfStudiesFailedToRetrieve = 0;
 }
 
 void QPopUpRISRequestsScreen::addStudyToRetrieveFromPACSByAccessionNumber(RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob)
@@ -78,7 +79,7 @@ void QPopUpRISRequestsScreen::addStudyToRetrieveFromPACSByAccessionNumber(Retrie
     refreshScreenRetrieveStatus(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles());
 
     connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobFinished(PACSJob*)));
-    connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobCancelledOrFailed(PACSJob*)));
+    connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobCancelled(PACSJob*)));
 }
 
 void QPopUpRISRequestsScreen::addStudyRetrievedFromDatabaseByAccessionNumber(Study *study)
@@ -115,18 +116,18 @@ void QPopUpRISRequestsScreen::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pac
                 retrieveDICOMFilesFromPACSJob->getStatus() == PACSRequestStatus::RetrieveSomeDICOMFilesFailed)
             {
                 m_numberOfStudiesRetrieved++;
-
-                refreshScreenRetrieveStatus(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles());
             }
             else
             {
-                retrieveDICOMFilesFromPACSJobCancelledOrFailed(pacsJob);
+                m_numberOfStudiesFailedToRetrieve++;
             }
+
+            refreshScreenRetrieveStatus(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles());
         }
     }
 }
 
-void QPopUpRISRequestsScreen::retrieveDICOMFilesFromPACSJobCancelledOrFailed(PACSJob *pacsJob)
+void QPopUpRISRequestsScreen::retrieveDICOMFilesFromPACSJobCancelled(PACSJob *pacsJob)
 {
     RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = qobject_cast<RetrieveDICOMFilesFromPACSJob*>(pacsJob);
 
@@ -149,9 +150,9 @@ void QPopUpRISRequestsScreen::retrieveDICOMFilesFromPACSJobCancelledOrFailed(PAC
 
 void QPopUpRISRequestsScreen::refreshScreenRetrieveStatus(Study *study)
 {
-    if (m_numberOfStudiesRetrieved < m_numberOfStudiesToRetrieve)
+    if (m_numberOfStudiesRetrieved + m_numberOfStudiesFailedToRetrieve < m_numberOfStudiesToRetrieve)
     {
-        m_operationDescription->setText(QString(tr("Retrieving study %1 of %2.")).arg(m_numberOfStudiesRetrieved + 1).arg(m_numberOfStudiesToRetrieve));
+        m_operationDescription->setText(QString(tr("Retrieving study %1 of %2.")).arg(m_numberOfStudiesRetrieved + m_numberOfStudiesFailedToRetrieve + 1).arg(m_numberOfStudiesToRetrieve));
     }
     else
     {
@@ -178,15 +179,29 @@ void QPopUpRISRequestsScreen::showRetrieveFinished()
 
     if (m_numberOfStudiesRetrieved == 0)
     {
-        m_operationDescription->setText(tr("No studies found.").arg(m_numberOfStudiesRetrieved));
+        if (m_numberOfStudiesFailedToRetrieve == 0)
+        {
+            m_operationDescription->setText(tr("No studies found.").arg(m_numberOfStudiesRetrieved));
+        }
+        else 
+        {
+            m_operationDescription->setText(tr("Couldn't retrieve requested studies.").arg(ApplicationNameString));
+        }
     }
-    else if (m_numberOfStudiesRetrieved == 1)
+    else if (m_numberOfStudiesFailedToRetrieve == 0)
     {
-        m_operationDescription->setText(tr("%1 study found.").arg(m_numberOfStudiesRetrieved));
+        if (m_numberOfStudiesRetrieved == 1)
+        {
+            m_operationDescription->setText(tr("%1 study retrieved.").arg(m_numberOfStudiesRetrieved));
+        }
+        else
+        {
+            m_operationDescription->setText(tr("%1 studies retrieved.").arg(m_numberOfStudiesRetrieved));
+        }
     }
     else
     {
-        m_operationDescription->setText(tr("%1 studies found.").arg(m_numberOfStudiesRetrieved));
+        m_operationDescription->setText(tr("%1 studies retrieved, %2 failed.").arg(QString::number(m_numberOfStudiesRetrieved), QString::number(m_numberOfStudiesFailedToRetrieve)));
     }
 }
 
