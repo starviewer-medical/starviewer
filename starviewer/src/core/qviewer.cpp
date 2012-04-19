@@ -881,6 +881,7 @@ void QViewer::initializeWorkInProgressByViewerStatus(ViewerStatus status)
         
         case DownloadingError:
             m_workInProgressWidget->setTitle(tr("Error downloading related study"));
+            m_workInProgressWidget->showError(QString());
             break;
         
         case LoadingError:
