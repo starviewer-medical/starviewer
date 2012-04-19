@@ -252,12 +252,12 @@ Nom: %2</translation>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="226"/>
         <source>Open the %1 Application</source>
-        <translation>Obrir l&apos;aplicació %1</translation>
+        <translation>Obre l&apos;aplicació %1</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="481"/>
         <source>The changes will take effect the next time you startup the application</source>
-        <translation>Els canvis tindran efecte el pròxim cop que inicieu l&apos;aplicació</translation>
+        <translation>Els canvis tindran efecte la propera vegada que inicieu l&apos;aplicació</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="178"/>
@@ -336,7 +336,7 @@ Nom: %2</translation>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="280"/>
         <source>Open Shortcuts guide</source>
-        <translation>Obre la guia dreceres</translation>
+        <translation>Obre la guia de dreceres</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="291"/>

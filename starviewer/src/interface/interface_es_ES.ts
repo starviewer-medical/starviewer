@@ -114,7 +114,7 @@ Do you consider they are the same?
 </source>
         <translation>No se puede determinar la similitud de los pacientes.
 
-Considera que son el mismo?
+¿Considera que son el mismo?
 
 </translation>
     </message>
