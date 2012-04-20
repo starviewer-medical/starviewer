@@ -84,10 +84,11 @@ private slots:
     void studyRetrieveStarted(QString studyInstanceUID);
     void studyRetrieveFinished(QString studyInstanceUID);
     void studyRetrieveFailed(QString studyInstanceUID);
+    void studyRetrieveCancelled(QString studyInstanceUID);
 
 private:
     /// Enumeració creada per tal de saber si els signals que emet QueryScreen pertanyen a alguna de les peticions d'aquesta classe
-    enum Status { Initialized, Pending, Downloading, Finished, Failed };
+    enum Status { Initialized, Pending, Downloading, Finished, Failed, Cancelled };
     enum Columns { DownloadingStatus = 0, DownloadButton = 1, Modality = 2, Description = 3, Date = 4, Name = 5 };
 
     /// Contenidor d'objectes associats a l'estudi que serveix per facilitar la intercomunicació

@@ -77,6 +77,9 @@ signals:
     /// Indica que ha comença la descarrega d'un estudi sol·licitat a través del mètode public retrieveStudy
     void studyRetrieveStarted(QString studyInstanceUID);
 
+    /// Indica que s'ha cancel·lat la descàrrega d'un estudi sol·licitat a través del mètode public retrieveStudy
+    void studyRetrieveCancelled(QString studyInstanceUID);
+
 protected:
     ///  Event que s'activa al tancar al rebren un event de tancament
     ///  @param event de tancament
@@ -116,6 +119,9 @@ private slots:
 
     /// Slot que s'activa quan s'inicia la descàrrega d'un estudi
     void studyRetrieveStartedSlot(QString studyInstanceUID);
+
+    /// Slot que s'activa quan es cancel·la la descàrrega d'un estudi
+    void studyRetrieveCancelledSlot(QString studyInstanceUID);
 
     /// Slot que s'activa quan s'ha encuat un nou PACSJob si aquest és d'enviament o descarrega de fitxers es mostra el gif animat que indica que
     /// s'estan processant peticions

@@ -129,6 +129,7 @@ void QPreviousStudiesWidget::createConnections()
     connect(m_queryScreen, SIGNAL(studyRetrieveStarted(QString)), this, SLOT(studyRetrieveStarted(QString)));
     connect(m_queryScreen, SIGNAL(studyRetrieveFinished(QString)), this, SLOT(studyRetrieveFinished(QString)));
     connect(m_queryScreen, SIGNAL(studyRetrieveFailed(QString)), this, SLOT(studyRetrieveFailed(QString)));
+    connect(m_queryScreen, SIGNAL(studyRetrieveCancelled(QString)), SLOT(studyRetrieveCancelled(QString)));
 }
 
 void QPreviousStudiesWidget::initializeTree()
@@ -349,6 +350,24 @@ void QPreviousStudiesWidget::studyRetrieveFailed(QString studyInstanceUID)
         if (studyInfo->status == Downloading)
         {
             studyInfo->status = Failed;
+            studyInfo->statusIcon->setPixmap(QPixmap(":/images/cancel.png"));
+            studyInfo->downloadButton->setEnabled(true);
+
+            this->decreaseNumberOfDownladingStudies();
+        }
+    }
+}
+
+void QPreviousStudiesWidget::studyRetrieveCancelled(QString studyInstanceUID)
+{
+    StudyInfo *studyInfo = m_infomationPerStudy[studyInstanceUID];
+
+    // Comprovem que el signal capturat de QueryScreen sigui nostre
+    if (studyInfo != NULL)
+    {
+        if (studyInfo->status == Downloading || studyInfo->status == Pending)
+        {
+            studyInfo->status = Cancelled;
             studyInfo->statusIcon->setPixmap(QPixmap(":/images/cancel.png"));
             studyInfo->downloadButton->setEnabled(true);
 
