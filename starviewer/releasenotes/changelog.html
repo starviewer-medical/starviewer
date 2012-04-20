@@ -66,95 +66,97 @@
         </div>
         <div class="new">
             <ul>
-                <li>S'afegeix una eina de diagnosi per poder detectar les possibles causes en cas de mal funcionament de l'aplicació.<span class="ticket">935</span></li>
+                <li>S'afegeix suport a Overlays. Això permet mostrar les annotacions fetes en l'adquisició d'estudis de tot tipus, emprat habitualment en estudis de placa simple. <span class="ticket">1358</span></li>
+                <li>S'afegeix suport a Display Shutters. Això permet, per exemple, eliminar automàticament el fons blanc que envolta la imatge en estudis de tipus RF. <span class="ticket">1318</span></li>
+                <li>S'afegeix una eina de diagnosi per poder detectar les possibles causes en cas de mal funcionament de l'aplicació. <span class="ticket">935</span></li>
+                <li>Si al sol·licitar un estudi des del RIS es detecta que aquest ja està descarregat a la base de dades local es pregunta l'usuari si el vol tornar a descarregar. <span class="ticket">1620</span></li>
+                <li>Els estudis locals es conserven quan s'actualitza a una nova versió i no s'esborren com passava fins la versió 0.10. <span class="ticket">1597</span></li>
                 <li>S'afegeix l'eina de Lupa. <span class="ticket">176</span></li>
-                <li>Es fa que l'eina de Reference Lines s'activi per defecte per estudis d'MR. <span class="ticket">1750</span></li>
-                <li>S'afegeix la possibilitat de configurar amb quines modalitats es vol activar el zoom per defecte. <span class="ticket">1751</span></li>
-                <li>S'afegeix suport a Overlays. Això permet fer coses com mostrar marques sobre estudis de tipus RM. <span class="ticket">1358</span></li>
-                <li>S'afegeix suport a Display Shutters. Això permet, per exemple, eliminar marques blanques sobre estudis de tipus RF. <span class="ticket">1318</span></li>
-                <li>S'afegeix la possibilitat de recòrrer les imatges i/o fases del volum de manera cíclica. <span class="ticket">370, 1754</span></li>
-                <li>S'afegeix l'opció de cercar per data naixament o edat del pacient a la cerca avançada al PACS. <span class="ticket">1617</span></li>
-                <li>S'afegeix la modalitat OP la llistat de modalitats per cercar.<span class="ticket">1568</span></li>
-                <li>La consulta d'estudis relacionats, a part de cercar en els PACS marcats per defecte, ara també cerca en el PACS del qual s'ha descarregat l'estudi.<span class="ticket">1697</span></li>
-                <li>Amb la instal·lació de noves versions d'Starviewer, la base de dades no s'esborrarà com es fèia fins ara, sinó que s'actualitzarà permeten conservar els estudis en local.<span class="ticket">1597</span></li>
-                <li>S'afegeix la funcionalitat de poder imprimir imatges de diverses sèries en una mateixa placa.<span class="ticket">1675</span></li>
-                <li>S'afegeix la funcionalitat de poder modificar el Window level de les imatges a imprimir.<span class="ticket">1651</span></li>
-                <li>Si al sol·licitar un estudi des del RIS es detecta que aquest ja està descarregat a la base de dades local es pregunta l'usuari si el vol tornar a descarregar.<span class="ticket">1620</span></li>
-                <li>S'afegeix la possibilitat de cancel·lar la creació d'una mesura prement la tecla ESC. <span class="ticket">1475</span></li>
-                <li>S'afegeixen nous HP de mamografia, tomografia computeritzada i ressonància magnètica demanats durant diverses visites. <span class="ticket">1611, 1558, 1748</span></li>
-                <li>S'afegeix botó per restaurar la imatge i per poder escollir el window level a l'extensió d'impressió DICOM. <span class="ticket">1718</span></li>
-                <li>Es fa que el canvi de llesca sempre estigui disponible en la rodeta del ratolí. Això fa que es pugui canviar de llesca al tenir altres eines seleccionades, com el cursor 3D, ROI's, distàncies, etc.<span class="ticket">1635, 625</span></li>
-                <li>S'afegeix un nou tipus de ROI, la "Magic ROI" que permet seleccionar àrees d'interès de forma molt més ajustada, ràpida i fàcil utilitzant algorismes de segmentació. <span class="ticket">1590</span></li>
-                <li>Nova eina de sincronització automàtica, sincronització de tots els visors, i desincronització de tots els visors <span class="ticket">1629</span></li>
+                <li>S'afegeix una nova eina que permet sincronitzar automàticament les sèries d'un mateix estudi. <span class="ticket">1629</span></li>
+                <li>S'afegeixen dos nous botons per activar i desactivar la sincronització manual en tots els visors. <span class="ticket">1629</span></li>
+                <li>S'afegeix una nova eina de ROI, la "Magic ROI" que permet seleccionar àrees d'interès de forma molt més ajustada, ràpida i fàcil utilitzant algorismes de segmentació. <span class="ticket">1590</span></li>
                 <li>S'afegeix una eina de cercle que permet dibuixar un cercle amb una creu marcant-ne el centre. <span class="ticket">1746</span></li>
-                <li>S'afegeix una eina de distància perpendicular que permet crear una línia de referència i després fer una línia perpendicular a aquesta per calcular una distància. <span class="ticket">1747</span></li>
-                <li>Es canvia el logotip i tota l'estètica corporativa. <span class="ticket">1645</span></li>
+                <li>S'afegeix una eina per fer mesures de TA-GT. <span class="ticket">1747</span></li>
+                <li>S'afegeix la possibilitat de cancel·lar la creació d'una mesura prement la tecla ESC. <span class="ticket">1475</span></li>
+                <li>Es fa que l'eina de Reference Lines s'activi per defecte per estudis d'MR i que es pugui configurar també per CT. <span class="ticket">1750</span></li>
+                <li>Es fa que l'eina d'Scroll sempre estigui disponible en la rodeta del ratolí. Això fa que es pugui canviar d'imatge al tenir altres eines seleccionades, com el zoom, cursor 3D, ROI's, distàncies, etc. <span class="ticket">1635, 625</span></li>
+                <li>S'afegeix que l'eina de zoom s'activi per defecte per estudis de modalitat CR, DX, MG, MR i RF i que es pugui configurar per qualsevol modalitat. Això fa que poguem tenir totes les eines bàsiques disponibles al mouse. <span class="ticket">1751, 1649</span></li>
+                <li>S'afegeix que l'eina de sincronització automàtica s'activi per defecte per estudis de MR. Configurable per MR i CT. <span class="ticket">1630</span></li>
+                <li>S'afegeix la possibilitat de recòrrer les imatges i/o fases de manera cíclica dins d'una mateixa sèrie. <span class="ticket">370, 1754</span></li>
+                <li>S'afegeix nova pantalla de configuració per als paràmetres del visor 2D, com per exemple quines eines s'activen per defecte segons la modalitat de l'estudi o paràmetres d'eines concretes. <span class="ticket">1754, 1751, 1649, 1750, 1754, 1630</span></li>
+                <li>S'afegeix l'opció de cercar per data naixament o edat del pacient a la cerca avançada al PACS. <span class="ticket">1617</span></li>
+                <li>S'afegeix la modalitat OP la llistat de modalitats per cercar. <span class="ticket">1568</span></li>
+                <li>S'afegeixen nous HP de mamografia, tomografia computeritzada i ressonància magnètica demanats durant diverses visites. <span class="ticket">1611, 1558, 1748</span></li>
+                <li>Es crea un nou logotip i una nova estètica corporativa. <span class="ticket">1645</span></li>
+                <li>S'afegeix la funcionalitat de poder imprimir imatges de diverses sèries en una mateixa placa. <span class="ticket">1675</span></li>
+                <li>S'afegeix la funcionalitat de poder modificar el Window level de les imatges a imprimir. <span class="ticket">1651</span></li>
+                <li>S'afegeix botó per restaurar la imatge i per poder escollir el window level a l'extensió d'impressió DICOM. <span class="ticket">1718</span></li>
             </ul>
         </div>
         <div class="improved">
             <ul>
-                <li>Es millora el dibuix de la línia discontínua de l'eina de ROI polilínia.<span class="ticket">1803</span></li>
-                <li>Es fa que es recordi si el llistat de PACS ha de ser visible o no en la finestra de cerques a PACS<span class="ticket">1801</span></li>
-                <li>Es fa que el camp de cerca del bolcat DICOM sempre tingui el focus<span class="ticket">1835</span></li>
-                <li>Es milloren les icones de la sincronització manual, canviant d'aspecte segons l'estat<span class="ticket">1776</span></li>
-                <li>Es millora la distribució de la barra d'eines fent-la més compacta. <span class="ticket">1706, 1760</span></li>
-                <li>Es fa que el format de l'any sigui de 4 dígits a les dates mostrades al visor 2D i al menú contextual de pacient<span class="ticket">1745</span></li>
-                <li>Es fa que els estudis del menú contextual estiguin ordenats de més recent a més antic<span class="ticket">1743</span></li>
-                <li>Es ressalta quina eina de ROI està activada canviant la icona de la barra d'eines segons l'última eina de ROI escollida</li>
+                <li>Es fa que es recordi si el llistat de PACS ha de ser visible o no en la finestra de cerques a PACS. <span class="ticket">1801</span></li>
+                <li>La consulta d'estudis relacionats, a part de cercar en els PACS marcats per defecte, sempre cerca en el PACS del qual s'ha descarregat l'estudi, independentment de si està seleccionat o no. <span class="ticket">1697</span></li>
+                <li>Es millora la sincronització manual perquè només sincronitzi imatges que estan en el mateix pla d'adquisició. <span class="ticket">1629</span></li>
+                <li>Es millora el dibuix de la línia discontínua de l'eina de ROI polilínia. <span class="ticket">1803</span></li>
+                <li>Es millora i es fa més fàcil l'esborrar amb un clic per les anotacions textuals. <span class="ticket">1576</span></li>
+                <li>Es millora la llegibilitat de les mesures i les seves anotacions. <span class="ticket">779, 1233</span></li>
+                <li>Es millora el posicionament de la informació associada a les eines de mesura per millorar-ne la visibilitat. <span class="ticket">1252</span></li>
                 <li>Es té en compte que es pugui canviar d'imatge o fase mentres es fan annotacions, mostrant aquestes correctament sobre la imatge que correspongui. <span class="ticket">1448</span></li>
+                <li>Es milloren les icones de la sincronització manual, canviant d'aspecte segons l'estat. <span class="ticket">1776</span></li>
+                <li>Es millora la distribució de la barra d'eines fent-la més compacta. <span class="ticket">1706, 1760</span></li>
+                <li>Es fa que el format de l'any sigui de 4 dígits a les dates mostrades al visor 2D i al menú contextual de pacient. <span class="ticket">1745</span></li>
+                <li>Es fa que els estudis del menú contextual, llistat d'estudis relacionats i resultats de cerca estiguin ordenats de més recent a més antic. <span class="ticket">1743</span></li>
+                <li>Al llistat d'estudis relacionats d'un pacient es ressalten de color blau els estudis de la mateixa modalitat que el que s'està visualitzant. <span class="ticket">1741</span></li>
+                <li>Es fa que l'alçada del llistat d'estudis relacionats s'adapti segons els resultats i l'alçada de pantalla, mostrant el màxim de resultats possibles sense haver d'aparèxier l'scroll bar. <span class="ticket">1740</span></li>
+                <li>Es ressalta quina eina de ROI està activada canviant la icona de la barra d'eines segons l'última eina de ROI escollida. </li>
+                <li>Es fa que el camp de cerca del bolcat DICOM sempre tingui el focus. <span class="ticket">1835</span></li>
                 <li>S'afegeixen els tags Exposure, ExposureTime, ExposureTimeInMs i ExposureInmAs en els tags rellevants del volcat DICOM de CT. <span class="ticket">1608</span></li>
                 <li>Es permet importar DICOMDIR a nivell de sèries o imatges. <span class="ticket">712</span></li>
                 <li>Es millora el tractament d'errors en la creació de DICOMDIR. <span class="ticket">1824, 1825, 1824</span></li>
-                <li>Es restaura la finestra d'Starviewer al seu estat original, si quan s'ha acabat de descarregar un estudi demanat a través del SAP la finestra d'Starviewer està minimitzada<span class="ticket">1658</span></li>
-                <li>Es permet la impressió en de sèries Multiframe<span class="ticket">1094</span></li>
-                <li>Es permet afegir tag opcional "institutions" als Hanging protocols per definir pels estudis de quines institucions són aplicables.<span class="ticket">1721</span></li>
-                <li>Es millora la manera d'esborrar les anotacions. <span class="ticket">1576</span></li>
-                <li>Es millora la llegibilitat de les mesures i les seves anotacions. <span class="ticket">779, 1233</span></li>
-                <li>Es millora el posicionament de la informació associada a les eines de mesura per millorar-ne la visibilitat. <span class="ticket">1252</span></li>
-                <li>Es millora la gestió de la memòria. <span class="ticket">839</span></li>
-                <li>S'afegeix que l'eina de zoom també s'activi per defecte per estudis de modalitat DX i MR. Això fa que tinguem totes les eines bàsiques disponibles al mouse. <span class="ticket">1751, 1649</span></li>
-                <li>S'afegeix que l'eina de sincronització automàtica s'activi per defecte per estudis de MR. Configurable per MR i CT. <span class="ticket">1630</span></li>
-                <li>S'afegeix la possibilitat de canviar els paràmetres d'il·luminació del visor 3D.</li>
+                <li>Si en acabar de descarregar un estudi demanat a través del SAP, la finestra d'Starviewer està minimitzada, aquesta es restaura al seu estat original. <span class="ticket">1658</span></li>
                 <li>Es millora el procés de decidir si dos estudis pertanyen al mateix pacient. <span class="ticket">1736</span></li>
-                <li>Immeditament després de crear un DICOMDIR s'eliminen els arxius temporals creats. <span class="ticket">1198</span></li>
-                <li>Millora dels hanging protocols per ecografia amb estudis amb volums.<span class="ticket">1615</span></li>
-                <li>Al llistat d'estudis relacionats d'un pacient es ressalten de color blau els estudis de la mateixa modalitat que el que s'està visualitzant.<span class="ticket">1741</span></li>
-                <li>Es fa que l'alçada del visor d'estudis relacionats s'adapti al contingut.<span class="ticket">1740</span></li>
+                <li>Es permet afegir tag opcional "institutions" als Hanging protocols per definir pels estudis de quines institucions són aplicables. <span class="ticket">1721</span></li>
+                <li>Es millora la gestió de la memòria. <span class="ticket">839</span></li>
+                <li>S'afegeix la possibilitat de canviar els paràmetres d'il·luminació del visor 3D. </li>
+                <li>S'eliminen els arxius temporals creats immeditament després de crear un DICOMDIR. <span class="ticket">1198</span></li>
+                <li>Millora dels hanging protocols per ecografia amb estudis amb volums. <span class="ticket">1615</span></li>
+                <li>Es permet la impressió de sèries Multiframe. <span class="ticket">1094</span></li>
             </ul>
         </div>
         <div class="fixed">
             <ul>
-                <li>Es corregeix el missatge d'error mostrat en cas que fem la petició de descàrrega a través del RIS i l'estudi existeixi però no es pugui baixar.<span class="ticket">1867</span></li>
-                <li>Es corregeix que la barra de progrés no s'amagués si fallava la descàrrega d'un estudi previ a través d'un hanging protocol.<span class="ticket">1860</span></li>
-                <li>Es corregeix problema de l'eina d'informació de vòxel que podia no mostrar els valors correctes en volums amb fases o quan s'aplicava un thick slab.<span class="ticket">1848, 1851, 1775</span></li>
-                <li>Es corregeix problema de l'eina Cursor 3D que provocava que l'aplicació es tanqués si s'obria un nou volum en un visor buit.<span class="ticket">1873</span></li>
-                <li>Es corregeix que el selector de finestres per defecte mostri els valors actuals quan volem aplicar una finestra personalitzada o editar-la.<span class="ticket">1833, 1809</span></li>
-                <li>Es millora el comportament de l'eina de reference lines evitant casos en els que es mostraven línies que no s'havien de mostrar<span class="ticket">1806</span></li>
-                <li>Es fa que l'eina d'informació de vòxel s'actualitzi correctament quan es fa un canvi de la càmera (rotació, flip, reconstrucció, etc.)<span class="ticket">r8157</span></li>
-                <li>Es resolen els problemes de càlcul d'espaiat quan es realitza la sincronització.<span class="ticket">1598</span></li>
-                <li>Es resol problema que feia que el cursor 3D no es pogués posicionar sobre la llesca corresponent quan aquesta era la última del volum.<span class="ticket">1731</span></li>
-                <li>Es resol que el mode d'scroll per fases s'activés per defecte per un cas en que no havia de ser així.</li>
-                <li>Si es trobava un mateix estudi a més d'un PACS, no sempre es descarregava del PACS que s'havia sol·licitat.<span class="ticket">1023</span></li>
-                <li>Es resol problema que provocava el tancament inesperat d'Starviewer en algunes ocasions al eliminar estudis des la pantalla de base de dades local.</li>
-                <li>Es resol error que provocava que els estudis de la base de dades local es reordenessin en ordre ascendent, si al descarregar un nou estudi del PACS els teníem ordenats en ordre descendent.</li>
-                <li>Se soluciona un problema que podia provocar que pacients bessons es tractessin com un mateix pacient. <span class="ticket">1696</span></li>
-                <li>Se soluciona un problema que provocava que una sèrie pogués quedar dividida en varis volums. <span class="ticket">1589</span></li>
-                <li>Es corregeix un problema que feia que la finestra no s'apliqués correctament en certs casos. <span class="ticket">1716</span></li>
-                <li>Es soluciona un problema que feia que l’eina d’esborrar no funcionés del tot correctament en determinades situacions. <span class="ticket">1574</span></li>
-                <li>Es corregeix el problema que deixava desplegar les imatges d’una sèrie en la base de dades local quan aquesta acció no tenia sentit.<span class="ticket">1687</span></li>
-                <li>Es soluciona un error que podia fer que la consulta de xarxa no es tanqués mai si es produia un error. <span class="ticket">1704</span></li>
-                <li>Es solucionen problemes que es produïen al esborrar estudis vells, on determinats errors no s'informaven a l'usuari.<span class="ticket">1711</span></li>
-                <li>Es soluciona el problema que hi havia d'assignar un window level a un visor a través de hanging protocol.<span class="ticket">7596</span></li>
-                <li>Es soluciona el problema de l'eina d'angle que feia que no es calculés bé l'angle i no es dibuixés bé l'arc quan es començava l'angle en una llesca i s'acabava en una altra. <span class="ticket">1724</span></li>
+                <li>Es corregeix el missatge d'error mostrat en cas que fem la petició de descàrrega a través del RIS i l'estudi existeixi però no es pugui baixar. <span class="ticket">1867</span></li>
+                <li>Es corregeix que la barra de progrés no s'amagués si fallava la descàrrega d'un estudi previ a través d'un hanging protocol. <span class="ticket">1860</span></li>
+                <li>Es soluciona problema de l'eina d'informació de vòxel que podia no mostrar els valors correctes amb volums amb fases o quan s'aplicava un thick slab. <span class="ticket">1848, 1851, 1775</span></li>
+                <li>Es soluciona problema de l'eina Cursor 3D que provocava que l'aplicació es tanqués si s'obria un nou volum en un visor buit. <span class="ticket">1873</span></li>
+                <li>Es corregeix el valor inicial en l'edició de finestra fent que mostri els valors actuals del visor seleccionat. <span class="ticket">1833, 1809</span></li>
+                <li>Es millora el comportament de l'eina de Reference Lines evitant casos en els que es mostraven línies que no s'havien de mostrar. <span class="ticket">1806</span></li>
+                <li>Es fa que l'eina d'informació de vòxel s'actualitzi correctament quan es fa un canvi de la càmera (rotació, flip, reconstrucció, etc.). <span class="ticket">r8157</span></li>
+                <li>Es solucionen problemes de càlcul d'espaiat quan es realitza la sincronització manual. <span class="ticket">1598</span></li>
+                <li>Es soluciona problema que fèia que el cursor 3D no es pogués posicionar sobre la imatge corresponent quan aquesta era la última del volum. <span class="ticket">1731</span></li>
+                <li>Es corregeix que el mode d'scroll per fases s'activés per defecte per un cas en que no havia de ser així. </li>
+                <li>Es corregeix que si es troba un mateix estudi a més d'un PACS es descarregui sempre l'estudi del PACS seleccionat. <span class="ticket">1023</span></li>
+                <li>Es soluciona problema que provocava que l'aplicació es tanqués en algunes ocasions en eliminar estudis des de la pantalla de base de dades local. </li>
+                <li>Es corregeix que els estudis de la base de dades local es reordenessin en ordre ascendent si al descarregar un nou estudi del PACS els teníem ordenats en ordre descendent. </li>
+                <li>Es soluciona un problema que podia provocar que pacients bessons es tractessin com un mateix pacient. <span class="ticket">1696</span></li>
+                <li>Es soluciona un problema que provocava que una sèrie pogués quedar dividida en varis volums. <span class="ticket">1589</span></li>
+                <li>Es soluciona un problema que fèia que la finestra no s'apliqués correctament en certs casos. <span class="ticket">1716</span></li>
+                <li>Es soluciona un problema que fèia que l'eina d'esborrar no funcionés del tot correctament en determinades situacions. <span class="ticket">1574</span></li>
+                <li>Es soluciona un problema que deixava desplegar les imatges d'una sèrie en la base de dades local quan aquesta acció no tenia sentit. <span class="ticket">1687</span></li>
+                <li>Es corregeix un error que podia fer que la consulta de xarxa no es tanqués mai si es produia un error. <span class="ticket">1704</span></li>
+                <li>Es solucionen problemes que es produïen en esborrar estudis vells on no s'informava de determinats errors a l'usuari. <span class="ticket">1711</span></li>
+                <li>Es soluciona el problema que hi havia d'assignar un window level a un visor a través de hanging protocol. <span class="ticket">7596</span></li>
+                <li>Es soluciona el problema de l'eina d'angle que feia que no es calculés bé l'angle i no es dibuixés bé l'arc quan es començava l'angle en una imatge i s'acabava en una altra. <span class="ticket">1724</span></li>
                 <li>Es soluciona el problema que no es podien esborrar anotacions amb un clic quan es feia un flip de la imatge. <span class="ticket">1147</span></li>
-                <li>Es soluciona el problema que no es podien esborrar anotacions amb un clic quan es començava l'anotació en una llesca i s'acabava en una altra. <span class="ticket">1777</span></li>
-                <li>Es soluciona el problema que fèia que si cercàvem dins un DICOMDIR on un mateix pacient hi tenia més d'estudi, Starviewer es tanqués inesperadament <span class="ticket">1815</span></li>
+                <li>Es soluciona el problema que no es podien esborrar anotacions amb un clic quan es començava l'anotació en una imatge i s'acabava en una altra. <span class="ticket">1777</span></li>
+                <li>Es soluciona el problema que fèia que si cercàvem dins un DICOMDIR on un mateix pacient hi tenia més d'estudi, Starviewer es tanqués inesperadament. <span class="ticket">1815</span></li>
             </ul>
         </div>
         <div class="removed">
             <ul>
-                <li>S'elimina la funcionalitat de zoom amb la rodeta del mouse per poder fer scroll permanentment.<span class="ticket">1635</span></li>
-                <li>S'eliminen les funcionalitats de refresc i historial a la vista de les notes de versió.<span class="ticket">1871</span></li>
+                <li>S'elimina la funcionalitat de zoom amb la rodeta del mouse per poder fer scroll permanentment. <span class="ticket">1635</span></li>
+                <li>S'eliminen les funcionalitats de refresc i historial a la vista de les notes de versió. <span class="ticket">1871</span></li>
             </ul>
         </div>
     </div>
