@@ -175,6 +175,7 @@ void QueryScreen::createConnections()
     connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieveFinished(QString)), SLOT(studyRetrieveFinishedSlot(QString)));
     connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieveFailed(QString)), SLOT(studyRetrieveFailedSlot(QString)));
     connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieveStarted(QString)), SLOT(studyRetrieveStartedSlot(QString)));
+    connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieveCancelled(QString)), SLOT(studyRetrieveCancelledSlot(QString)));
 }
 
 void QueryScreen::checkRequeriments()
@@ -474,6 +475,16 @@ void QueryScreen::studyRetrieveStartedSlot(QString studyInstanceUID)
     }
 }
 
+void QueryScreen::studyRetrieveCancelledSlot(QString studyInstanceUID)
+{
+    if (m_studyRequestedToRetrieveFromPublicMethod.contains(studyInstanceUID))
+    {
+        // És un estudi dels que ens han demanat des del mètode públic
+        m_studyRequestedToRetrieveFromPublicMethod.removeOne(studyInstanceUID);
+
+        emit studyRetrieveCancelled(studyInstanceUID);
+    }
+}
 void QueryScreen::newPACSJobEnqueued(PACSJob *pacsJob)
 {
     if (pacsJob->getPACSJobType() == PACSJob::SendDICOMFilesToPACSJobType || pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType)

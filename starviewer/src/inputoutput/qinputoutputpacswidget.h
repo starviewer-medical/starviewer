@@ -70,6 +70,9 @@ signals:
     /// Signal que s'emet per indica que un estudi ha estat descarregat
     void studyRetrieveFinished(QString studyInstanceUID);
 
+    /// Signal que s'emet per indicar que la descàrrgea d'un estudi s'ha cencel·lat
+    void studyRetrieveCancelled(QString studyInstanceUID);
+
 private:
     /// Crea les connexions entre signals i slots
     void createConnections();
@@ -125,6 +128,9 @@ private slots:
     /// Slot que s'activa quan finalitza un job de descàrrega d'imatges
     void retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacsJob);
 
+    /// Slot que s'activa quan es cancel·la un job de descàrrega d'imatges
+    void retrieveDICOMFilesFromPACSJobCancelled(PACSJob *pacsJob);
+    
     /// Slot que s'activa quan finalitza un job de consulta al PACS
     void queryPACSJobFinished(PACSJob *pacsJob);
 
