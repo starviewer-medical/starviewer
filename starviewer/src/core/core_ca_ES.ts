@@ -514,7 +514,7 @@ WW: %5 WL: %6</translation>
     <message>
         <location filename="q2dviewerconfigurationscreenbase.ui" line="35"/>
         <source>Enable phase scroll loop</source>
-        <translation>Habilita el desplaçament de fases en bucle</translation>
+        <translation>Habilita el desplaçament cíclic de fases</translation>
     </message>
     <message>
         <location filename="q2dviewerconfigurationscreenbase.ui" line="61"/>
