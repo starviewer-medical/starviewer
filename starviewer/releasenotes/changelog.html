@@ -93,6 +93,7 @@
         </div>
         <div class="improved">
             <ul>
+                <li>Es millora el dibuix de la línia discontínua de l'eina de ROI polilínia.<span class="ticket">1803</span></li>
                 <li>Es fa que es recordi si el llistat de PACS ha de ser visible o no en la finestra de cerques a PACS<span class="ticket">1801</span></li>
                 <li>Es fa que el camp de cerca del bolcat DICOM sempre tingui el focus<span class="ticket">1835</span></li>
                 <li>Es milloren les icones de la sincronització manual, canviant d'aspecte segons l'estat<span class="ticket">1776</span></li>
@@ -122,6 +123,10 @@
         </div>
         <div class="fixed">
             <ul>
+                <li>Es corregeix el missatge d'error mostrat en cas que fem la petició de descàrrega a través del RIS i l'estudi existeixi però no es pugui baixar.<span class="ticket">1867</span></li>
+                <li>Es corregeix que la barra de progrés no s'amagués si fallava la descàrrega d'un estudi previ a través d'un hanging protocol.<span class="ticket">1860</span></li>
+                <li>Es corregeix problema de l'eina d'informació de vòxel que podia no mostrar els valors correctes en volums amb fases o quan s'aplicava un thick slab.<span class="ticket">1848, 1851, 1775</span></li>
+                <li>Es corregeix problema de l'eina Cursor 3D que provocava que l'aplicació es tanqués si s'obria un nou volum en un visor buit.<span class="ticket">1873</span></li>
                 <li>Es corregeix que el selector de finestres per defecte mostri els valors actuals quan volem aplicar una finestra personalitzada o editar-la.<span class="ticket">1833, 1809</span></li>
                 <li>Es millora el comportament de l'eina de reference lines evitant casos en els que es mostraven línies que no s'havien de mostrar<span class="ticket">1806</span></li>
                 <li>Es fa que l'eina d'informació de vòxel s'actualitzi correctament quan es fa un canvi de la càmera (rotació, flip, reconstrucció, etc.)<span class="ticket">r8157</span></li>
@@ -148,6 +153,7 @@
         <div class="removed">
             <ul>
                 <li>S'elimina la funcionalitat de zoom amb la rodeta del mouse per poder fer scroll permanentment.<span class="ticket">1635</span></li>
+                <li>S'eliminen les funcionalitats de refresc i historial a la vista de les notes de versió.<span class="ticket">1871</span></li>
             </ul>
         </div>
     </div>
