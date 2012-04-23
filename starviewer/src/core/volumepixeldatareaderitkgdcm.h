@@ -73,10 +73,6 @@ private:
     /// Motor de lectura DICOM de gdcm
     ImageIOType::Pointer m_gdcmIO;
 
-    /// TODO membre temporal per la transició al tractament de fases
-    int m_numberOfPhases;
-    int m_numberOfSlicesPerPhase;
-
     /// Traductor d'events itk en signals de Qt
     /// per poder monitorejar el progrés de lectura d'arxius
     itk::QtSignalAdaptor *m_progressSignalAdaptor;
