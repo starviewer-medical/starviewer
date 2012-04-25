@@ -25,6 +25,7 @@ Cursor3DTool::Cursor3DTool(QViewer *viewer, QObject *parent)
     m_myData = new Cursor3DToolData;
     m_toolData = m_myData;
     connect(m_toolData, SIGNAL(changed()), SLOT(updateProjectedPoint()));
+    connect(m_toolData, SIGNAL(turnOffCursor()), SLOT(hideCursor()));
 
     m_2DViewer = qobject_cast<Q2DViewer*>(viewer);
     if (!m_2DViewer)
@@ -60,6 +61,7 @@ void Cursor3DTool::setToolData(ToolData *data)
     m_toolData = data;
     m_myData = qobject_cast<Cursor3DToolData*>(data);
     connect(m_toolData, SIGNAL(changed()), SLOT(updateProjectedPoint()));
+    connect(m_toolData, SIGNAL(turnOffCursor()), SLOT(hideCursor()));
 
     if (m_2DViewer->isActive())
     {
@@ -108,7 +110,6 @@ void Cursor3DTool::initializePosition()
         m_2DViewer->getDrawer()->draw(m_crossHair);
     }
 
-    m_myData->setVisible(true);
     updatePosition();
 }
 
@@ -235,22 +236,16 @@ void Cursor3DTool::updateProjectedPoint()
             m_2DViewer->getDrawer()->draw(m_crossHair);
         }
 
-        if (!m_myData->isVisible())
+        // Només podem projectar si tenen el mateix frame of reference UID
+        if (m_myFrameOfReferenceUID == m_myData->getFrameOfReferenceUID())
         {
-            m_crossHair->setVisibility(false);
+            projectPoint();
         }
         else
         {
-            // Només podem projectar si tenen el mateix frame of reference UID
-            if (m_myFrameOfReferenceUID == m_myData->getFrameOfReferenceUID())
-            {
-                projectPoint();
-            }
-            else
-            {
-                m_crossHair->setVisibility(false);
-            }
+            m_crossHair->setVisibility(false);
         }
+
         m_crossHair->update();
         m_2DViewer->render();
     }
@@ -327,15 +322,24 @@ void Cursor3DTool::handleSliceChange()
 
     if (m_2DViewer->isActive() && m_state == None)
     {
-        m_crossHair->setVisibility(false);
-        m_crossHair->update();
-        m_2DViewer->render();
-        m_myData->setVisible(false);
+        m_myData->hideCursors();
     }
     else
     {
         updatePosition();
     }
+}
+
+void Cursor3DTool::hideCursor()
+{
+    if (!m_crossHair)
+    {
+        return;
+    }
+
+    m_crossHair->setVisibility(false);
+    m_crossHair->update();
+    m_2DViewer->render();
 }
 
 }
