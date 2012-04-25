@@ -214,11 +214,6 @@ void Cursor3DTool::removePosition()
         m_state = None;
         m_viewer->unsetCursor();
     }
-    /// S'ha demanat que el cursor no desparegui al deixar de clicar.
-//  m_crossHair->setVisibility(false);
-//  m_crossHair->update();
-//  m_2DViewer->render();
-//  m_myData->setVisible(false);
 }
 
 void Cursor3DTool::updateProjectedPoint()
