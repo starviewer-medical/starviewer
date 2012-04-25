@@ -99,14 +99,12 @@ void Cursor3DTool::initializePosition()
 
     if (!m_crossHair)
     {
-        double xyz[3];
-        m_2DViewer->getCurrentCursorImageCoordinate(xyz);
         m_crossHair = new DrawerCrossHair;
 
         // HACK Succedani d'Smart Pointer per tal que el drawer no elimini el crossHair quan s'activi el thickslab
         m_crossHair->increaseReferenceCount();
 
-        m_crossHair->setCentrePoint(xyz[0], xyz[1], xyz[2]);
+        m_crossHair->setVisibility(false);
         m_2DViewer->getDrawer()->draw(m_crossHair);
     }
 
@@ -228,6 +226,7 @@ void Cursor3DTool::updateProjectedPoint()
             // HACK Succedani d'Smart Pointer per tal que el drawer no elimini el crossHair quan s'activi el thickslab
             m_crossHair->increaseReferenceCount();
 
+            m_crossHair->setVisibility(false);
             m_2DViewer->getDrawer()->draw(m_crossHair);
         }
 
