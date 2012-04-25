@@ -41,8 +41,8 @@ private slots:
     /// Actualitza la posició de la tool
     void updatePosition();
 
-    /// Amaga el crossHair al canviar de llesca
-    void hideCrossHair();
+    /// Gestiona les accions a fer amb el crossHair al canviar de llesca
+    void handleSliceChange();
 
 private:
     /// Projecta el pla de referència sobre el pla de localitzador
