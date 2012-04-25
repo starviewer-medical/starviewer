@@ -244,7 +244,6 @@ void Cursor3DTool::updateProjectedPoint()
             // Només podem projectar si tenen el mateix frame of reference UID
             if (m_myFrameOfReferenceUID == m_myData->getFrameOfReferenceUID())
             {
-                m_crossHair->setVisibility(true);
                 projectPoint();
             }
             else
@@ -284,9 +283,6 @@ void Cursor3DTool::projectPoint()
         // L'amaguem perquè sinó estariem mostrant un punt incorrecte
         m_crossHair->setVisibility(false);
     }
-
-    m_crossHair->update();
-    m_2DViewer->render();
 }
 
 void Cursor3DTool::updateFrameOfReference()
