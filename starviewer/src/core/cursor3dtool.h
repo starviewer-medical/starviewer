@@ -57,6 +57,9 @@ private:
     /// Desactiva la tool
     void removePosition();
 
+    /// Crea una nova primitiva pel cursor 3D
+    void createNewCrossHair();
+
 private:
     /// Dades específiques de la tool
     Cursor3DToolData *m_myData;

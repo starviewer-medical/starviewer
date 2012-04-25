@@ -99,13 +99,7 @@ void Cursor3DTool::initializePosition()
 
     if (!m_crossHair)
     {
-        m_crossHair = new DrawerCrossHair;
-
-        // HACK Succedani d'Smart Pointer per tal que el drawer no elimini el crossHair quan s'activi el thickslab
-        m_crossHair->increaseReferenceCount();
-
-        m_crossHair->setVisibility(false);
-        m_2DViewer->getDrawer()->draw(m_crossHair);
+        createNewCrossHair();
     }
 
     updatePosition();
@@ -221,13 +215,7 @@ void Cursor3DTool::updateProjectedPoint()
     {
         if (!m_crossHair && m_2DViewer->getInput())
         {
-            m_crossHair = new DrawerCrossHair;
-
-            // HACK Succedani d'Smart Pointer per tal que el drawer no elimini el crossHair quan s'activi el thickslab
-            m_crossHair->increaseReferenceCount();
-
-            m_crossHair->setVisibility(false);
-            m_2DViewer->getDrawer()->draw(m_crossHair);
+            createNewCrossHair();
         }
 
         // Només podem projectar si tenen el mateix frame of reference UID
@@ -334,6 +322,17 @@ void Cursor3DTool::hideCursor()
     m_crossHair->setVisibility(false);
     m_crossHair->update();
     m_2DViewer->render();
+}
+
+void Cursor3DTool::createNewCrossHair()
+{
+    m_crossHair = new DrawerCrossHair;
+
+    // HACK Succedani d'Smart Pointer per tal que el drawer no elimini el crossHair quan s'activi el thickslab
+    m_crossHair->increaseReferenceCount();
+
+    m_crossHair->setVisibility(false);
+    m_2DViewer->getDrawer()->draw(m_crossHair);
 }
 
 }
