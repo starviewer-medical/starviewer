@@ -28,11 +28,12 @@ public:
     /// Retorna el punt origen
     double* getOriginPointPosition() const;
 
-    /// Visibilitat del cursor
-    void setVisible(bool visibility);
+    /// Indica que tots els cursors s'han d'amagar
+    void hideCursors();
 
-    /// Retorna cert si és visible, fals altrament.
-    bool isVisible();
+signals:
+    /// Indica que el cursor s'ha d'amagar
+    void turnOffCursor();
 
 public slots:
     /// Li assignem el frameOfReference del pla de referencia

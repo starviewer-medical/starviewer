@@ -44,6 +44,9 @@ private slots:
     /// Gestiona les accions a fer amb el crossHair al canviar de llesca
     void handleSliceChange();
 
+    /// Amaga el cursor 3D
+    void hideCursor();
+
 private:
     /// Projecta el pla de referència sobre el pla de localitzador
     void projectPoint();
