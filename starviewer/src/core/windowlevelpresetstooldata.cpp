@@ -56,6 +56,14 @@ void WindowLevelPresetsToolData::removePreset(const QString &description)
 {
     if (m_presets.contains(description))
     {
+        int group;
+        if (getGroup(description, group))
+        {
+            if (group == FileDefined)
+            {
+                m_fileDefinedPresets.removeAt(m_fileDefinedPresets.indexOf(description));
+            }
+        }
         m_presets.remove(description);
         emit presetRemoved(description);
     }
@@ -72,6 +80,11 @@ void WindowLevelPresetsToolData::removePresetsFromGroup(int group)
             emit presetRemoved(iterator.key());
             iterator.remove();
         }
+    }
+
+    if (group == FileDefined)
+    {
+        m_fileDefinedPresets.clear();
     }
 }
 
