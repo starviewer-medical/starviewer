@@ -334,6 +334,11 @@ void ExtensionHandler::processInput(QList<Patient*> patientsList, bool loadOnly)
 
 bool ExtensionHandler::askForPatientsSimilarity(Patient *patient1, Patient *patient2)
 {
+    if (!patient1 || !patient2)
+    {
+        return false;
+    }
+
     Patient::PatientsSimilarity patientsSimilarity = patient1->compareTo(patient2);
     if (patientsSimilarity == Patient::SamePatients)
     {
