@@ -80,6 +80,9 @@ signals:
     /// Indica que s'ha cancel·lat la descàrrega d'un estudi sol·licitat a través del mètode public retrieveStudy
     void studyRetrieveCancelled(QString studyInstanceUID);
 
+    /// S'emet quan la finestra es tanca
+    void closed();
+
 protected:
     ///  Event que s'activa al tancar al rebren un event de tancament
     ///  @param event de tancament

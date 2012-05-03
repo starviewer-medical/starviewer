@@ -406,6 +406,8 @@ void QueryScreen::closeEvent(QCloseEvent *event)
     m_qcreateDicomdir->close();
 
     event->accept();
+
+    emit closed();
 }
 
 void QueryScreen::readSettings()

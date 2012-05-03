@@ -58,6 +58,9 @@ private slots:
     /// Afegim un segon paràmetre que ens indica si els pacients a processar només cal carregar-los o fer-ne un "view"
     void processInput(QList<Patient*> patientsList, bool loadOnly = false);
 
+    /// Es cridarà quan la QueryScreen es tanqui
+    void queryScreenIsClosed();
+
 private:
     /// Crea les connexions de signals i slots
     void createConnections();
@@ -84,6 +87,9 @@ private:
     /// Contexte de l'extensió
     ExtensionContext m_extensionContext;
 
+    /// Indica si a aquesta finestra li pertoca o no tancar la QueryScreen
+    bool m_haveToCloseQueryScreen;
+    
     /// Estructura que ens diu si una parella de pacients (ID+Nom) són considerats el mateix pacient.
     static QHash<QString, bool> m_patientsSimilarityUserDecision;
 };
