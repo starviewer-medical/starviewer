@@ -31,6 +31,12 @@ void VolumeRepository::deleteVolume(Identifier id)
 {
     // L'obtenim
     Volume *volume = this->getVolume(id);
+    if (!volume)
+    {
+        INFO_LOG(QString("No existeix cap volum al repositori amb l'id: %1. No esborrarem res del repositori.").arg(id.getValue()));
+        return;
+    }
+
     // El treiem de la llista
     this->removeItem(id);
 
