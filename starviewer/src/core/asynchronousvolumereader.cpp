@@ -175,11 +175,23 @@ void AsynchronousVolumeReader::unmarkVolumeFromJobAsLoading(ThreadWeaver::Job *j
 
 bool AsynchronousVolumeReader::isVolumeLoading(Volume *volume) const
 {
+    if (!volume)
+    {
+        DEBUG_LOG("El volum és nul. No pot estar carregant-se.");
+        return false;
+    }
+
     return m_volumesLoading.contains(volume->getIdentifier().getValue());
 }
 
 void AsynchronousVolumeReader::cancelLoadingAndDeleteVolume(Volume *volume)
 {
+    if (!volume)
+    {
+        DEBUG_LOG("El volum és nul. No es pot fer cancel de la càrrega ni esborrar.");
+        return;
+    }
+
     if (this->isVolumeLoading(volume))
     {
         DEBUG_LOG(QString("Volume %1 isLoading, trying dequeue").arg(volume->getIdentifier().getValue()));
