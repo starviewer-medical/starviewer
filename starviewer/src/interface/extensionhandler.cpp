@@ -35,21 +35,33 @@ ExtensionHandler::ExtensionHandler(QApplicationMainWindow *mainApp, QObject *par
 
     createConnections();
 
+    // Cada cop que creem una nova finestra tancarem qualsevol instància de QueryScreen. Així queda més clar que 
+    // la finestra que la invoca és la que rep el resultat d'aquesta
+    // TODO Cal millorar el disseny de la interacció amb la QueryScreen per tal de no tenir problemes com els que s'exposen als tickets
+    // #1858, #1018. De moment ho solventem amb aquests hacks, però no són una bona solució
     // TODO:xapussa per a que l'starviewer escolti les peticions del RIS, com que tot el codi d'escoltar les peticions del ris està a la
     // queryscreen l'hem d'instanciar ja a l'inici perquè ja escolti les peticions
-    QueryScreenSingleton::instance();
+    disconnect(QueryScreenSingleton::instance(), SIGNAL(selectedPatients(QList<Patient*>, bool)), 0, 0);
     connect(QueryScreenSingleton::instance(), SIGNAL(selectedPatients(QList<Patient*>, bool)), SLOT(processInput(QList<Patient*>, bool)));
+
+    connect(QueryScreenSingleton::instance(), SIGNAL(closed()), SLOT(queryScreenIsClosed()));
+    m_haveToCloseQueryScreen = false;
 }
 
 ExtensionHandler::~ExtensionHandler()
 {
-    // Si és la última finestra oberta, hem de tancar la queryscreen
-    if (m_mainApp->getCountQApplicationMainWindow() == 1)
+    // Cada cop que tanquem una finestra forçarem el tancament de la queryscreen. Això es fa perquè quedi clar que
+    // QueryScreen <-> finestra on s'obren els estudis, estan lligats segons qui l'ha invocat
+    // TODO Tot això precisa d'un millor disseny, però de moment evita problemes com els del ticket #1858
+    if (m_haveToCloseQueryScreen)
     {
-        // TODO:Xapussa invoquem el close() de la QueryScreen que tanca totes les finestres dependent de la QueryScreen perquè s'emeti el signal
-        // lasWindowClosed al qual responem des de la main fent un quit, no podríem fer un quit directament des d'aquí?
         QueryScreenSingleton::instance()->close();
     }
+}
+
+void ExtensionHandler::queryScreenIsClosed()
+{
+    m_haveToCloseQueryScreen = false;
 }
 
 void ExtensionHandler::request(int who)
@@ -74,6 +86,7 @@ void ExtensionHandler::request(int who)
             disconnect(QueryScreenSingleton::instance(), SIGNAL(selectedPatients(QList<Patient*>, bool)), 0, 0);
             QueryScreenSingleton::instance()->showPACSTab();
             connect(QueryScreenSingleton::instance(), SIGNAL(selectedPatients(QList<Patient*>, bool)), SLOT(processInput(QList<Patient*>, bool)));
+            m_haveToCloseQueryScreen = true;
             break;
 
         case 8:
@@ -83,6 +96,7 @@ void ExtensionHandler::request(int who)
             disconnect(QueryScreenSingleton::instance(), SIGNAL(selectedPatients(QList<Patient*>, bool)), 0, 0);
             QueryScreenSingleton::instance()->openDicomdir();
             connect(QueryScreenSingleton::instance(), SIGNAL(selectedPatients(QList<Patient*>, bool)), SLOT(processInput(QList<Patient*>, bool)));
+            m_haveToCloseQueryScreen = true;
             break;
 
         case 10:
@@ -93,6 +107,7 @@ void ExtensionHandler::request(int who)
             disconnect(QueryScreenSingleton::instance(), SIGNAL(selectedPatients(QList<Patient*>, bool)), 0, 0);
             QueryScreenSingleton::instance()->showLocalExams();
             connect(QueryScreenSingleton::instance(), SIGNAL(selectedPatients(QList<Patient*>, bool)), SLOT(processInput(QList<Patient*>, bool)));
+            m_haveToCloseQueryScreen = true;
             break;
     }
 }
@@ -334,6 +349,11 @@ void ExtensionHandler::processInput(QList<Patient*> patientsList, bool loadOnly)
 
 bool ExtensionHandler::askForPatientsSimilarity(Patient *patient1, Patient *patient2)
 {
+    if (!patient1 || !patient2)
+    {
+        return false;
+    }
+
     Patient::PatientsSimilarity patientsSimilarity = patient1->compareTo(patient2);
     if (patientsSimilarity == Patient::SamePatients)
     {
