@@ -268,23 +268,26 @@ bool HangingProtocol::isBetterThan(HangingProtocol *hangingToCompare)
         return true;
     }
 
-    if (this->getPriority() != -1 && hangingToCompare->getPriority() != -1)
+    if (this->getPriority() != hangingToCompare->getPriority())
     {
-        // Si tots 2 tenen prioritat definida els fem competir
-        return this->getPriority() > hangingToCompare->getPriority();
-    }
-    else
-    {
-        // Si un des 2 hangings no té la prioritat definida, la prioritat només serveix
-        // per dir si un hanging ha de ser el més o el menys aconsellat.
-        if (this->getPriority() == 10 || hangingToCompare->getPriority() == 0)
+        if (this->getPriority() != -1 && hangingToCompare->getPriority() != -1)
         {
-            return true;
+            // Si tots 2 tenen prioritat definida els fem competir
+            return this->getPriority() > hangingToCompare->getPriority();
         }
-
-        if (this->getPriority() == 0 || hangingToCompare->getPriority() == 10)
+        else
         {
-            return false;
+            // Si un des 2 hangings no té la prioritat definida, la prioritat només serveix
+            // per dir si un hanging ha de ser el més o el menys aconsellat.
+            if (this->getPriority() == 10 || hangingToCompare->getPriority() == 0)
+            {
+                return true;
+            }
+
+            if (this->getPriority() == 0 || hangingToCompare->getPriority() == 10)
+            {
+                return false;
+            }
         }
     }
 
