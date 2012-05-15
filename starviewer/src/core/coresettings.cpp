@@ -123,7 +123,7 @@ void CoreSettings::init()
     settingsRegistry->addSetting(EnableQ2DViewerReferenceLinesForCT, false);
     settingsRegistry->addSetting(ModalitiesWithZoomToolByDefault, "MG;CR;RF;OP;DX;MR");
     settingsRegistry->addSetting(EnableQ2DViewerAutomaticSynchronizationForMR, true);
-    settingsRegistry->addSetting(EnableQ2DViewerAutomaticSynchronizationForCT, false);
+    settingsRegistry->addSetting(EnableQ2DViewerAutomaticSynchronizationForCT, true);
 }
 
 } // End namespace udg
