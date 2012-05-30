@@ -422,7 +422,7 @@ void test_DisplayShutter::getAsVolumePixelData_ReturnsExpectedValues_data()
 
     int extent1[6] = {0, 9, 0, 11, 0, 0};
     unsigned char *data1 = new unsigned char[10 * 12];
-    memset(data1, 254, 10 * 12);
+    memset(data1, 255, 10 * 12);
     VolumePixelData *pixelData1 = new VolumePixelData;
     pixelData1->setData(data1, extent1, 1, true);
     QTest::newRow("Empty shutter") << DisplayShutter() << 10 << 12 << 0 << pixelData1;
@@ -431,7 +431,7 @@ void test_DisplayShutter::getAsVolumePixelData_ReturnsExpectedValues_data()
     rectangularShutter.setPoints(QPoint(2, 2), QPoint(4, 4));
     int extent2[6] = {0, 5, 0, 5, 1, 1};
     unsigned char *data2 = new unsigned char[36];
-    memset(data2, 254, 36);
+    memset(data2, 255, 36);
     for (int i = 2; i < 5; ++i)
     {
         for (int j = 2; j < 5; ++j)
