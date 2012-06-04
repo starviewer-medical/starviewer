@@ -148,6 +148,8 @@
     <file>images/succeeded.png</file>
     <file>images/error.png</file>
     <file>images/info_small.png</file>
+    <file>images/gilabLogoAbout.png</file>
+    <file>images/idiLogoAbout.png</file>
     <file>images/idiLogoBackground.png</file>
     <file>javascript/jquery-min.js</file>
     <file>javascript/qdiagnosistest.js</file>
