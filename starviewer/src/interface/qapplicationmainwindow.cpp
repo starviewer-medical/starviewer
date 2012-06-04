@@ -297,7 +297,7 @@ void QApplicationMainWindow::createActions()
     m_aboutAction = new QAction(this);
     m_aboutAction->setText(tr("&About"));
     m_aboutAction->setStatusTip(tr("Show the application's About box"));
-    m_aboutAction->setIcon(QIcon(":/images/info.png"));
+    m_aboutAction->setIcon(QIcon(":/images/starviewer.png"));
     connect(m_aboutAction, SIGNAL(triggered()), SLOT(about()));
 
     m_closeAction = new QAction(this);
