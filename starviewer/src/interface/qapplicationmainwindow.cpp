@@ -16,6 +16,8 @@
 #include "interfacesettings.h"
 #include "starviewerapplicationcommandline.h"
 #include "qstarviewersapwrapper.h"
+#include "qaboutdialog.h"
+
 // Pel LanguageLocale
 #include "coresettings.h"
 #include "inputoutputsettings.h"
@@ -295,7 +297,7 @@ void QApplicationMainWindow::createActions()
     m_aboutAction = new QAction(this);
     m_aboutAction->setText(tr("&About"));
     m_aboutAction->setStatusTip(tr("Show the application's About box"));
-    m_aboutAction->setIcon(QIcon(":/images/info.png"));
+    m_aboutAction->setIcon(QIcon(":/images/starviewer.png"));
     connect(m_aboutAction, SIGNAL(triggered()), SLOT(about()));
 
     m_closeAction = new QAction(this);
@@ -592,32 +594,8 @@ void QApplicationMainWindow::showEvent(QShowEvent *event)
 
 void QApplicationMainWindow::about()
 {
-    QString aboutMessage = tr("<h2>%1</h2>"
-        "<p>Copyright &copy; 2005-%2 Graphics & Imaging Laboratory (GILab), Girona"
-        "<p align='justify'>%1 is a basic but fully featured image review software dedicated to DICOM images produced by medical equipment (MRI,"
-        " CT, PET, PET-CT, CR, MG,...) fully compliant with the DICOM standard for image communication and image file formats. It can also read"
-        " many other file formats specified by the MetaIO standard (*.mhd files). ").arg(ApplicationNameString).arg(2012);
-    // TODO repassar els textos de l'about
-#ifdef STARVIEWER_LITE
-    aboutMessage += tr("<p align='justify'>%1 has been specifically designed for navigation and visualization of multimodality and"
-               " multidimensional images").arg(ApplicationNameString);
-#else
-    aboutMessage += tr("%1 is able to receive images "
-               "transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, "
-               "STORE SCU - Service Class User, and Query/Retrieve)."
-               "<p align='justify'>%1 enables navigation and visualization of multimodality and multidimensional images through"
-               " a complete 2D Viewer which integrates advanced reconstruction techniques such as Thick Slab (including Maximum"
-               " Intensity Projection (MIP), Minimum Intensity Projection (MinIP) and average projection), fast orthogonal reconstruction"
-               " and 3D navigation tools such as 3D-Cursor. It also incorporates Multi-Planar Reconstruction (MPR) and 3D Viewer for volume rendering."
-               "<p align='justify'>%1 is at the same time a DICOM workstation for medical imaging and an image processing"
-               " software for medical research (radiology and nuclear imaging), functional imaging and 3D imaging.").arg(ApplicationNameString);
-#endif
-
-    aboutMessage += tr("<p>Version: %1 </p>").arg(StarviewerVersionString);
-    aboutMessage += tr("<p>Support email: <a href=\"mailto:%1\">%1</a></p>").arg(OrganizationEmailString);
-    aboutMessage += tr("<p>Web: <a href=\"%1\">%1</a></p>").arg(OrganizationWebURL);
-
-    QMessageBox::about(this, tr("About %1").arg(ApplicationNameString), aboutMessage);
+    QAboutDialog *about = new QAboutDialog(this);
+    about->exec();
 }
 
 void QApplicationMainWindow::writeSettings()

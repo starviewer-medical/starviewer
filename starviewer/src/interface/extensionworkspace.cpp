@@ -31,7 +31,12 @@ void ExtensionWorkspace::setDarkBackgroundColorEnabled(bool enabled)
 {
     if (enabled)
     {
-        this->setStyleSheet("QTabWidget QStackedWidget { background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #222222, stop: 1 #333333); }");
+        this->setStyleSheet("QTabWidget QStackedWidget {"
+                        "background: url(:images/idiLogoBackground.png); "
+                        "background-repeat:no-repeat; "
+                        "background-position: right bottom; "
+                        "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #222222, stop: 1 #333333); "
+                        "}");
     }
     else
     {

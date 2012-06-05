@@ -6,7 +6,8 @@
 TRANSLATIONS += interface_ca_ES.ts \
                 interface_es_ES.ts \
                 interface_en_GB.ts 
-FORMS += qconfigurationdialogbase.ui
+FORMS += qconfigurationdialogbase.ui \
+        qaboutdialogbase.ui
 HEADERS += qapplicationmainwindow.h \
            interfacesettings.h \
            appimportfile.h \
@@ -14,7 +15,8 @@ HEADERS += qapplicationmainwindow.h \
            extensionworkspace.h \
            qconfigurationdialog.h \
            starviewerapplicationcommandline.h \
-           applicationcommandlineoptions.h
+           applicationcommandlineoptions.h \
+           qaboutdialog.h
 SOURCES += qapplicationmainwindow.cpp \
            interfacesettings.cpp \
            appimportfile.cpp \
@@ -22,7 +24,8 @@ SOURCES += qapplicationmainwindow.cpp \
            extensionworkspace.cpp \
            qconfigurationdialog.cpp \
            starviewerapplicationcommandline.cpp \
-           applicationcommandlineoptions.cpp
+           applicationcommandlineoptions.cpp \
+           qaboutdialog.cpp
            
 
 INCLUDEPATH += ../inputoutput \
