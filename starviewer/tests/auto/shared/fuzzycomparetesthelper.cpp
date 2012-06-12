@@ -35,4 +35,18 @@ bool FuzzyCompareTestHelper::fuzzyCompare(const QVector3D &v1, const QVector3D &
         && fuzzyCompare(v1.z(), v2.z(), epsilon);
 }
 
+bool FuzzyCompareTestHelper::fuzzyCompare(const Vector3Float &v1, const Vector3Float &v2, const double &epsilon)
+{
+    return fuzzyCompare(v1.x, v2.x, epsilon)
+        && fuzzyCompare(v1.y, v2.y, epsilon)
+        && fuzzyCompare(v1.z, v2.z, epsilon);
+}
+
+bool FuzzyCompareTestHelper::fuzzyCompare(const Vector3 &v1, const Vector3 &v2, const double &epsilon)
+{
+    return fuzzyCompare(v1.x, v2.x, epsilon)
+        && fuzzyCompare(v1.y, v2.y, epsilon)
+        && fuzzyCompare(v1.z, v2.z, epsilon);
+}
+
 }
