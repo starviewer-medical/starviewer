@@ -10,8 +10,12 @@ win32 {
     DEFINES += GLEW_STATIC
     
     # Volem veure missatges a std::cout en debug
-    debug:CONFIG += console
-    release:CONFIG -= console
+	CONFIG(debug, debug|release) {
+		CONFIG += console
+	}
+	else {
+		CONFIG -= console
+	}
 }
 
 macx {
