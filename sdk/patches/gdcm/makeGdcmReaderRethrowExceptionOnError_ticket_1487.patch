@@ -1,8 +1,15 @@
-diff -uprN gdcm-2.0.17_original/Source/DataStructureAndEncodingDefinition/gdcmReader.cxx gdcm-2.0.17/Source/DataStructureAndEncodingDefinition/gdcmReader.cxx
---- gdcm-2.0.17_original/Source/DataStructureAndEncodingDefinition/gdcmReader.cxx	2011-01-25 16:48:14.000000000 +0100
-+++ gdcm-2.0.17/Source/DataStructureAndEncodingDefinition/gdcmReader.cxx	2011-07-21 09:15:48.000000000 +0200
-@@ -657,11 +657,13 @@ bool Reader::InternalReadCommon(const T_
-     {
+--- gdcm-2.0.19/Source/DataStructureAndEncodingDefinition/gdcmReader.cxx	Tue Jun 12 12:16:11 2012
++++ gdcm-2.0.19_with_modifications/Source/DataStructureAndEncodingDefinition/gdcmReader.cxx	Tue Jun 12 11:39:31 2012
+@@ -657,6 +657,7 @@
+ #else
+     gdcmDebugMacro( ex.what() );
+     success = false;
++    throw ex;
+ #endif /* GDCM_SUPPORT_BROKEN_IMPLEMENTATION */
+     }
+   catch( Exception &ex )
+@@ -664,11 +665,13 @@
+ 	(void)ex;  //to avoid unreferenced variable warning on release
      gdcmDebugMacro( ex.what() );
      success = false;
 +    throw ex;
@@ -13,10 +20,10 @@ diff -uprN gdcm-2.0.17_original/Source/DataStructureAndEncodingDefinition/gdcmRe
      success = false;
 +    throw;
      }
-
+ 
    //if( success ) assert( Stream->eof() );
-@@ -671,11 +673,13 @@ bool Reader::InternalReadCommon(const T_
-     {
+@@ -679,11 +682,13 @@
+ 	(void)ex;  //to avoid unreferenced variable warning on release
      gdcmDebugMacro( ex.what() );
      success = false;
 +    throw ex;
