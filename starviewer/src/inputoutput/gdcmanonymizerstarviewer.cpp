@@ -644,7 +644,7 @@ bool gdcmAnonymizerStarviewer::BALCPProtect(DataSet &ds, Tag const &tag, IOD con
 
             if (!copy.IsEmpty())
             {
-                if (ByteValue *bv = copy.GetByteValue())
+                if (const ByteValue *bv = copy.GetByteValue())
                 {
                     UIDToAnonymize = std::string(bv->GetPointer(), bv->GetLength());
                 }

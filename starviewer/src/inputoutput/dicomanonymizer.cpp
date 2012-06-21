@@ -219,7 +219,7 @@ QString DICOMAnonymizer::readTagValue(gdcm::File *gdcmFile, gdcm::Tag tagToRead)
 
     if (!dataElement.IsEmpty())
     {
-        if (gdcm::ByteValue *byteValueTag = dataElement.GetByteValue())
+        if (const gdcm::ByteValue *byteValueTag = dataElement.GetByteValue())
         {
             tagValue = (std::string(byteValueTag->GetPointer(), byteValueTag->GetLength())).c_str();
         }
