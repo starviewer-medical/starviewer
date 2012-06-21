@@ -10,7 +10,12 @@ DEPENDPATH += ../../../core \
                ../../../inputoutput
 MOC_DIR = ../../../../tmp/moc
 UI_DIR = ../../../../tmp/ui
-OBJECTS_DIR = ../../../../tmp/obj
+win32-msvc2010 {
+	OBJECTS_DIR = ../../../../tmp/obj/$${TARGET}
+	}
+	else {
+	OBJECTS_DIR = ../../../../tmp/obj
+	}
 RCC_DIR = ../../../../tmp/rcc
 CONFIG += release \
           warn_on \

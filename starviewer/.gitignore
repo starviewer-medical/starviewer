@@ -47,3 +47,5 @@ sys$command
 *.vcxproj
 *.vcxproj.*
 starviewer.sdf
+*.opensdf
+ipch/*
