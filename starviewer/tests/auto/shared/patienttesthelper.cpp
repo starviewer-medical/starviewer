@@ -14,7 +14,7 @@ Patient* PatientTestHelper::create(int numberOfStudies, int numberOfSeries, int 
 
     for (int index = 0; index < numberOfStudies; index++)
     {
-        patient->addStudy(StudyTestHelper::createStudy(numberOfSeries, numberOfImages));
+		patient->addStudy(StudyTestHelper::createStudyByUID(QString().setNum(index), numberOfSeries, numberOfImages));
     }
 
     return patient;
