@@ -1,4 +1,4 @@
-#include "qpreviousstudieswidget.h"
+#include "qrelatedstudieswidget.h"
 
 #include "logging.h"
 #include "study.h"
@@ -16,39 +16,39 @@
 
 namespace udg {
 
-QPreviousStudiesWidget::QPreviousStudiesWidget(QWidget *parent)
+QRelatedStudiesWidget::QRelatedStudiesWidget(QWidget *parent)
    : QFrame(parent)
 {
     setWindowFlags(Qt::Popup);
     QVBoxLayout *verticalLayout = new QVBoxLayout(this);
 
     m_lookingForStudiesWidget = new QWidget(this);
-    m_previousStudiesTree = new QTreeWidgetWithSeparatorLine(this);
+    m_relatedStudiesTree = new QTreeWidgetWithSeparatorLine(this);
     m_previousStudiesManager = new PreviousStudiesManager();
     m_signalMapper = new QSignalMapper(this);
     m_queryScreen = SingletonPointer<QueryScreen>::instance();
     m_numberOfDownloadingStudies = 0;
 
-    m_noPreviousStudiesLabel = new QLabel(this);
-    m_noPreviousStudiesLabel->setText(tr("No related studies found."));
+    m_noRelatedStudiesLabel = new QLabel(this);
+    m_noRelatedStudiesLabel->setText(tr("No related studies found."));
 
     initializeLookingForStudiesWidget();
     initializeTree();
 
     verticalLayout->addWidget(m_lookingForStudiesWidget);
-    verticalLayout->addWidget(m_noPreviousStudiesLabel);
-    verticalLayout->addWidget(m_previousStudiesTree);
+    verticalLayout->addWidget(m_noRelatedStudiesLabel);
+    verticalLayout->addWidget(m_relatedStudiesTree);
 
     createConnections();
 
     m_lookingForStudiesWidget->setVisible(false);
-    m_noPreviousStudiesLabel->setVisible(false);
-    m_previousStudiesTree->setVisible(false);
+    m_noRelatedStudiesLabel->setVisible(false);
+    m_relatedStudiesTree->setVisible(false);
 }
 
-QPreviousStudiesWidget::~QPreviousStudiesWidget()
+QRelatedStudiesWidget::~QRelatedStudiesWidget()
 {
-    delete m_previousStudiesTree;
+    delete m_relatedStudiesTree;
     foreach (QString key, m_infomationPerStudy.keys())
     {
         delete m_infomationPerStudy.take(key);
@@ -56,10 +56,10 @@ QPreviousStudiesWidget::~QPreviousStudiesWidget()
     delete m_previousStudiesManager;
     delete m_lookingForStudiesWidget;
     delete m_signalMapper;
-    delete m_noPreviousStudiesLabel;
+    delete m_noRelatedStudiesLabel;
 }
 
-void QPreviousStudiesWidget::updateList()
+void QRelatedStudiesWidget::updateList()
 {
     if (!m_infomationPerStudy.isEmpty())
     {
@@ -81,7 +81,7 @@ void QPreviousStudiesWidget::updateList()
     }
 }
 
-void QPreviousStudiesWidget::searchPreviousStudiesOf(Study *study)
+void QRelatedStudiesWidget::searchPreviousStudiesOf(Study *study)
 {
     Q_ASSERT(study);
 
@@ -91,7 +91,7 @@ void QPreviousStudiesWidget::searchPreviousStudiesOf(Study *study)
     m_modalitiesOfStudiesToHighlight = removeNonImageModalities(study->getModalities());
 }
 
-void QPreviousStudiesWidget::searchStudiesOf(Patient *patient)
+void QRelatedStudiesWidget::searchStudiesOf(Patient *patient)
 {
     Q_ASSERT(patient);
 
@@ -105,16 +105,16 @@ void QPreviousStudiesWidget::searchStudiesOf(Patient *patient)
     }
 }
 
-void QPreviousStudiesWidget::initializeSearch()
+void QRelatedStudiesWidget::initializeSearch()
 {
     m_lookingForStudiesWidget->setVisible(true);
-    m_noPreviousStudiesLabel->setVisible(false);
-    m_previousStudiesTree->setVisible(false);
+    m_noRelatedStudiesLabel->setVisible(false);
+    m_relatedStudiesTree->setVisible(false);
 
-    int items = m_previousStudiesTree->topLevelItemCount();
+    int items = m_relatedStudiesTree->topLevelItemCount();
     for (int i = 0; i < items; i++)
     {
-        delete m_previousStudiesTree->takeTopLevelItem(0);
+        delete m_relatedStudiesTree->takeTopLevelItem(0);
     }
     foreach (QString key, m_infomationPerStudy.keys())
     {
@@ -122,7 +122,7 @@ void QPreviousStudiesWidget::initializeSearch()
     }
 }
 
-void QPreviousStudiesWidget::createConnections()
+void QRelatedStudiesWidget::createConnections()
 {
     connect(m_previousStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), this, SLOT(insertStudiesToTree(QList<Study*>)));
     connect(m_signalMapper, SIGNAL(mapped(const QString&)), this, SLOT(retrieveAndLoadStudy(const QString&)));
@@ -132,32 +132,32 @@ void QPreviousStudiesWidget::createConnections()
     connect(m_queryScreen, SIGNAL(studyRetrieveCancelled(QString)), SLOT(studyRetrieveCancelled(QString)));
 }
 
-void QPreviousStudiesWidget::initializeTree()
+void QRelatedStudiesWidget::initializeTree()
 {
 
     // Inicialitzem la capçalera
     QStringList labels;
     labels << "" << "" << tr("Modality") << tr("Description") << tr("Date") << tr("Name");
-    m_previousStudiesTree->setHeaderLabels(labels);
+    m_relatedStudiesTree->setHeaderLabels(labels);
 
     // Fem 8 columnes perquè la primera l'amagarem
-    m_previousStudiesTree->setColumnCount(6);
-    m_previousStudiesTree->setRootIsDecorated(false);
-    m_previousStudiesTree->setItemsExpandable(false);
-    m_previousStudiesTree->header()->setResizeMode(DownloadingStatus, QHeaderView::Fixed);
-    m_previousStudiesTree->header()->setResizeMode(DownloadButton, QHeaderView::Fixed);
-    m_previousStudiesTree->header()->setMovable(false);
-    m_previousStudiesTree->setUniformRowHeights(true);
-    m_previousStudiesTree->setSortingEnabled(true);
+    m_relatedStudiesTree->setColumnCount(6);
+    m_relatedStudiesTree->setRootIsDecorated(false);
+    m_relatedStudiesTree->setItemsExpandable(false);
+    m_relatedStudiesTree->header()->setResizeMode(DownloadingStatus, QHeaderView::Fixed);
+    m_relatedStudiesTree->header()->setResizeMode(DownloadButton, QHeaderView::Fixed);
+    m_relatedStudiesTree->header()->setMovable(false);
+    m_relatedStudiesTree->setUniformRowHeights(true);
+    m_relatedStudiesTree->setSortingEnabled(true);
 
     // Ordenem els estudis per data i hora
-    m_previousStudiesTree->sortItems(Date, Qt::DescendingOrder);
+    m_relatedStudiesTree->sortItems(Date, Qt::DescendingOrder);
 
     // El farem visible quan rebem la llista d'estudis previs
-    m_previousStudiesTree->setVisible(false);
+    m_relatedStudiesTree->setVisible(false);
 }
 
-void QPreviousStudiesWidget::initializeLookingForStudiesWidget()
+void QRelatedStudiesWidget::initializeLookingForStudiesWidget()
 {
     QHBoxLayout *horizontalLayout = new QHBoxLayout(m_lookingForStudiesWidget);
 
@@ -172,12 +172,12 @@ void QPreviousStudiesWidget::initializeLookingForStudiesWidget()
 
 }
 
-void QPreviousStudiesWidget::insertStudyToTree(Study *study)
+void QRelatedStudiesWidget::insertStudyToTree(Study *study)
 {
     QTreeWidgetItem *item = new QTreeWidgetItem();
 
     // Afegim l'item al widget
-    m_previousStudiesTree->addTopLevelItem(item);
+    m_relatedStudiesTree->addTopLevelItem(item);
     item->setFlags(Qt::ItemIsEnabled);
 
     item->setText(Name, study->getParentPatient()->getFullName());
@@ -185,7 +185,7 @@ void QPreviousStudiesWidget::insertStudyToTree(Study *study)
     item->setText(Modality, study->getModalitiesAsSingleString());
     item->setText(Description, study->getDescription());
 
-    QWidget *statusWidget = new QWidget(m_previousStudiesTree);
+    QWidget *statusWidget = new QWidget(m_relatedStudiesTree);
     QHBoxLayout *statusLayout = new QHBoxLayout(statusWidget);
     QLabel *status = new QLabel(statusWidget);
     statusLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
@@ -193,12 +193,12 @@ void QPreviousStudiesWidget::insertStudyToTree(Study *study)
     statusLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
     statusLayout->setMargin(0);
 
-    m_previousStudiesTree->setItemWidget(item, DownloadingStatus, statusWidget);
+    m_relatedStudiesTree->setItemWidget(item, DownloadingStatus, statusWidget);
 
     // Posem el botó en un Layout amb Margin 2 per a que els Items del QTreeWidget no estiguin tant junts i el control sigui més llegible
     QIcon dowloadIcon(QString(":/images/view.png"));
     QPushButton *downloadButton = new QPushButton(dowloadIcon, QString(""));
-    QWidget *downloadButtonWidget = new QWidget(m_previousStudiesTree);
+    QWidget *downloadButtonWidget = new QWidget(m_relatedStudiesTree);
     QVBoxLayout *downloadButtonLayout = new QVBoxLayout(downloadButtonWidget);
     //Apliquem 1px més de layout per la línia separadora 
     downloadButtonLayout->setContentsMargins(0, 2, 0, 1);
@@ -212,7 +212,7 @@ void QPreviousStudiesWidget::insertStudyToTree(Study *study)
         highlightQTreeWidgetItem(item);
     }
 
-    m_previousStudiesTree->setItemWidget(item, DownloadButton, downloadButtonWidget);
+    m_relatedStudiesTree->setItemWidget(item, DownloadButton, downloadButtonWidget);
 
     // Guardem informació relacionada amb l'estudi per facilitar la feina
     StudyInfo *relatedStudyInfo = new StudyInfo;
@@ -224,7 +224,7 @@ void QPreviousStudiesWidget::insertStudyToTree(Study *study)
     m_infomationPerStudy.insert(study->getInstanceUID(), relatedStudyInfo);
 }
 
-void QPreviousStudiesWidget::highlightQTreeWidgetItem(QTreeWidgetItem *item)
+void QRelatedStudiesWidget::highlightQTreeWidgetItem(QTreeWidgetItem *item)
 {
     for (int index = 0; index < item->columnCount(); index++)
     {
@@ -232,35 +232,35 @@ void QPreviousStudiesWidget::highlightQTreeWidgetItem(QTreeWidgetItem *item)
     }
 }
 
-void QPreviousStudiesWidget::updateWidthTree()
+void QRelatedStudiesWidget::updateWidthTree()
 {
     int fixedSize = 0;
-    for (int i = 0; i < m_previousStudiesTree->columnCount(); i++)
+    for (int i = 0; i < m_relatedStudiesTree->columnCount(); i++)
     {
-        m_previousStudiesTree->resizeColumnToContents(i);
-        fixedSize += m_previousStudiesTree->columnWidth(i);
+        m_relatedStudiesTree->resizeColumnToContents(i);
+        fixedSize += m_relatedStudiesTree->columnWidth(i);
     }
-    m_previousStudiesTree->setFixedWidth(fixedSize + 20);
+    m_relatedStudiesTree->setFixedWidth(fixedSize + 20);
 }
 
-void QPreviousStudiesWidget::updateHeightTree()
+void QRelatedStudiesWidget::updateHeightTree()
 {
     ScreenManager screen;
     int screenAvailableHeight = screen.getAvailableScreenGeometry(screen.getIdOfScreen(this)).height();
-    int topAndMargins = this->geometry().top() + m_previousStudiesTree->geometry().top() * 2; // Es multiplica per 2 pel marge inferior.
+    int topAndMargins = this->geometry().top() + m_relatedStudiesTree->geometry().top() * 2; // Es multiplica per 2 pel marge inferior.
     int maxHeight = screenAvailableHeight - topAndMargins;
-    int minHeight = m_previousStudiesTree->sizeHint().height();
+    int minHeight = m_relatedStudiesTree->sizeHint().height();
     int contentHeight = minHeight;
     bool found = false;
     while (!found && contentHeight < maxHeight)
     {
-        m_previousStudiesTree->setFixedHeight(contentHeight);
-        found = m_previousStudiesTree->verticalScrollBar()->maximum() <= m_previousStudiesTree->verticalScrollBar()->minimum();
+        m_relatedStudiesTree->setFixedHeight(contentHeight);
+        found = m_relatedStudiesTree->verticalScrollBar()->maximum() <= m_relatedStudiesTree->verticalScrollBar()->minimum();
         contentHeight += 5;
     }
 }
 
-void QPreviousStudiesWidget::insertStudiesToTree(QList<Study*> studiesList)
+void QRelatedStudiesWidget::insertStudiesToTree(QList<Study*> studiesList)
 {
     if (studiesList.size() > 0)
     {
@@ -275,14 +275,14 @@ void QPreviousStudiesWidget::insertStudiesToTree(QList<Study*> studiesList)
 
         updateList();
 
-        m_previousStudiesTree->setVisible(true);
+        m_relatedStudiesTree->setVisible(true);
 
         updateWidthTree();
         updateHeightTree();
     }
     else
     {
-        m_noPreviousStudiesLabel->setVisible(true);
+        m_noRelatedStudiesLabel->setVisible(true);
     }
 
     m_lookingForStudiesWidget->setVisible(false);
@@ -290,7 +290,7 @@ void QPreviousStudiesWidget::insertStudiesToTree(QList<Study*> studiesList)
     this->adjustSize();
 }
 
-void QPreviousStudiesWidget::retrieveAndLoadStudy(const QString &studyInstanceUID)
+void QRelatedStudiesWidget::retrieveAndLoadStudy(const QString &studyInstanceUID)
 {
     StudyInfo *studyInfo = m_infomationPerStudy[studyInstanceUID];
 
@@ -308,7 +308,7 @@ void QPreviousStudiesWidget::retrieveAndLoadStudy(const QString &studyInstanceUI
     this->increaseNumberOfDownladingStudies();
 }
 
-void QPreviousStudiesWidget::studyRetrieveStarted(QString studyInstanceUID)
+void QRelatedStudiesWidget::studyRetrieveStarted(QString studyInstanceUID)
 {
     StudyInfo *studyInfo = m_infomationPerStudy[studyInstanceUID];
 
@@ -322,7 +322,7 @@ void QPreviousStudiesWidget::studyRetrieveStarted(QString studyInstanceUID)
     }
 }
 
-void QPreviousStudiesWidget::studyRetrieveFinished(QString studyInstanceUID)
+void QRelatedStudiesWidget::studyRetrieveFinished(QString studyInstanceUID)
 {
     StudyInfo *studyInfo = m_infomationPerStudy[studyInstanceUID];
 
@@ -340,7 +340,7 @@ void QPreviousStudiesWidget::studyRetrieveFinished(QString studyInstanceUID)
 
 }
 
-void QPreviousStudiesWidget::studyRetrieveFailed(QString studyInstanceUID)
+void QRelatedStudiesWidget::studyRetrieveFailed(QString studyInstanceUID)
 {
     StudyInfo *studyInfo = m_infomationPerStudy[studyInstanceUID];
 
@@ -358,7 +358,7 @@ void QPreviousStudiesWidget::studyRetrieveFailed(QString studyInstanceUID)
     }
 }
 
-void QPreviousStudiesWidget::studyRetrieveCancelled(QString studyInstanceUID)
+void QRelatedStudiesWidget::studyRetrieveCancelled(QString studyInstanceUID)
 {
     StudyInfo *studyInfo = m_infomationPerStudy[studyInstanceUID];
 
@@ -376,7 +376,7 @@ void QPreviousStudiesWidget::studyRetrieveCancelled(QString studyInstanceUID)
     }
 }
 
-void QPreviousStudiesWidget::increaseNumberOfDownladingStudies()
+void QRelatedStudiesWidget::increaseNumberOfDownladingStudies()
 {
     m_numberOfDownloadingStudies++;
     if (m_numberOfDownloadingStudies == 1)
@@ -385,7 +385,7 @@ void QPreviousStudiesWidget::increaseNumberOfDownladingStudies()
     }
 }
 
-void QPreviousStudiesWidget::decreaseNumberOfDownladingStudies()
+void QRelatedStudiesWidget::decreaseNumberOfDownladingStudies()
 {
     m_numberOfDownloadingStudies--;
     if (m_numberOfDownloadingStudies == 0)
@@ -394,7 +394,7 @@ void QPreviousStudiesWidget::decreaseNumberOfDownladingStudies()
     }
 }
 
-void QPreviousStudiesWidget::setVisible(bool visible)
+void QRelatedStudiesWidget::setVisible(bool visible)
 {
     QFrame::setVisible(visible);
     if (visible)
@@ -404,7 +404,7 @@ void QPreviousStudiesWidget::setVisible(bool visible)
     }
 }
 
-QStringList QPreviousStudiesWidget::removeNonImageModalities(const QStringList &studiesModalities)
+QStringList QRelatedStudiesWidget::removeNonImageModalities(const QStringList &studiesModalities)
 {
     QStringList studiesModalitiesToReturn(studiesModalities);
     studiesModalitiesToReturn.removeAll("KO");
@@ -414,7 +414,7 @@ QStringList QPreviousStudiesWidget::removeNonImageModalities(const QStringList &
     return studiesModalities;
 }
 
-bool QPreviousStudiesWidget::hasToHighlightStudy(Study *study)
+bool QRelatedStudiesWidget::hasToHighlightStudy(Study *study)
 {
     foreach (QString modality, study->getModalities())
     {

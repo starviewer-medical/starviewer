@@ -1,5 +1,5 @@
-#ifndef UDGQPREVIOUSSTUDIESWIDGET_H
-#define UDGQPREVIOUSSTUDIESWIDGET_H
+#ifndef UDGQRELATEDSTUDIESWIDGET_H
+#define UDGQRELATEDSTUDIESWIDGET_H
 
 #include <QWidget>
 #include <QSignalMapper>
@@ -17,13 +17,13 @@ class QueryScreen;
 class Patient;
 class QTreeWidgetWithSeparatorLine;
 
-class QPreviousStudiesWidget : public QFrame {
+class QRelatedStudiesWidget : public QFrame {
 Q_OBJECT
 public:
-    QPreviousStudiesWidget(QWidget *parent = 0);
-    ~QPreviousStudiesWidget();
+    QRelatedStudiesWidget(QWidget *parent = 0);
+    ~QRelatedStudiesWidget();
 
-    /// Mètode per activar la cerca d'estudis previs. Es mostraran al widget els estudis del pacient anteriors a la data
+    /// Mètode per activar la cerca d'estudis relacionats. Es mostraran al widget els estudis del pacient anteriors a la data
     /// de l'estudi proporcionat. Es farà la consulta als PACS que estan seleccionats a la llista de nodes de la QueryScreen
     void searchPreviousStudiesOf(Study *study);
 
@@ -46,16 +46,16 @@ signals:
 private:
     /// Creació de connexions
     void createConnections();
-    /// Inicialització del QTreeWidget on es visualitzaran els estudis previs
+    /// Inicialització del QTreeWidget on es visualitzaran els estudis relacionats
     void initializeTree();
-    /// Inicialització del widget mostrat quan s'estan cercant estudis previs.
+    /// Inicialització del widget mostrat quan s'estan cercant estudis relacionats.
     void initializeLookingForStudiesWidget();
     /// Insereix un estudi a l'arbre i genera el contenidor associat a aquest estudi.
     void insertStudyToTree(Study *study);
     /// Actualitza l'amplada del QTreeWidget per aconseguir que l'scroll horitzontal no apareixi i tota la info sigui visible.
     void updateWidthTree();
     /// Actualitza l'alçada del QTreeWidget per aconseguir que es vegi el màxim de contingut possible.
-    /// Nota: Perquè funcioni correctament el QPreviousStudiesWidget ha de ser visible.
+    /// Nota: Perquè funcioni correctament el QRelatedStudiesWidget ha de ser visible.
     void updateHeightTree();
 
     /// Metodes encarregats de controlar quan s'han d'emetre els signals \sa downloadingStudies i \sa studiesDownloaded;
@@ -103,13 +103,13 @@ private:
 
     /// Estructura que s'encarrega de guardar els contenidors associats a cada Study
     QHash<QString, StudyInfo*> m_infomationPerStudy;
-    /// Widget utilitzat per mostrar la llista dels estudis previs
-    QTreeWidgetWithSeparatorLine *m_previousStudiesTree;
-    /// Widget que apareix quan s'està fent la consulta dels possibles estudis previs.
+    /// Widget utilitzat per mostrar la llista dels estudis relacionats
+    QTreeWidgetWithSeparatorLine *m_relatedStudiesTree;
+    /// Widget que apareix quan s'està fent la consulta dels possibles estudis relacionats.
     QWidget *m_lookingForStudiesWidget;
-    /// Label per mostrar que no hi ha estudis previs.
-    QLabel *m_noPreviousStudiesLabel;
-    /// Objecte encarregat de cercar estudis previs
+    /// Label per mostrar que no hi ha estudis relacionats.
+    QLabel *m_noRelatedStudiesLabel;
+    /// Objecte encarregat de cercar estudis relacionats
     PreviousStudiesManager *m_previousStudiesManager;
     /// Mapper utilitzat per saber cada botó de descàrrega a quin estudi està associat.
     QSignalMapper *m_signalMapper;
@@ -125,4 +125,4 @@ private:
 };
 
 }
-#endif // UDGQPREVIOUSSTUDIESWIDGET_H
+#endif // UDGQRELATEDSTUDIESWIDGET_H
