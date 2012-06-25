@@ -276,7 +276,7 @@ void RelatedStudiesManager::downloadStudy(Study *study, QString pacs)
 {
     QueryScreen *queryScreen = SingletonPointer<QueryScreen>::instance();
     queryScreen->retrieveStudy(QInputOutputPacsWidget::Load, pacs, study);
-    connect(queryScreen, SIGNAL(studyRetrieveFailed(QString)), SIGNAL(errorDownloadingPreviousStudy(QString)));
+    connect(queryScreen, SIGNAL(studyRetrieveFailed(QString)), SIGNAL(errorDownloadingStudy(QString)));
 }
 
 void RelatedStudiesManager::deleteQueryResults()

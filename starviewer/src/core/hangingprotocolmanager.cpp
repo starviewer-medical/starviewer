@@ -30,7 +30,7 @@ HangingProtocolManager::HangingProtocolManager(QObject *parent)
 
     copyHangingProtocolRepository();
 
-    connect(m_relatedStudiesManager, SIGNAL(errorDownloadingPreviousStudy(QString)), SLOT(errorDowlonadingPreviousStudies(QString)));
+    connect(m_relatedStudiesManager, SIGNAL(errorDownloadingStudy(QString)), SLOT(errorDowlonadingPreviousStudies(QString)));
 }
 
 HangingProtocolManager::~HangingProtocolManager()
