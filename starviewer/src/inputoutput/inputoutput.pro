@@ -72,7 +72,7 @@ HEADERS += databaseconnection.h \
     isoimagefilecreator.h \
     dicomdirburningapplication.h \
     risrequestmanager.h \
-    previousstudiesmanager.h \
+    relatedstudiesmanager.h \
     qstarviewersapwrapper.h \
     qwidgetselectpacstostoredicomimage.h \
     qrelatedstudieswidget.h \
@@ -145,7 +145,7 @@ SOURCES += databaseconnection.cpp \
     isoimagefilecreator.cpp \
     dicomdirburningapplication.cpp \
     risrequestmanager.cpp \
-    previousstudiesmanager.cpp \
+    relatedstudiesmanager.cpp \
     qstarviewersapwrapper.cpp \
     qwidgetselectpacstostoredicomimage.cpp \
     qrelatedstudieswidget.cpp \

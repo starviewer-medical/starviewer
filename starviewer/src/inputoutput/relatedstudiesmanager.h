@@ -1,5 +1,5 @@
-#ifndef UDGPREVIOUSSTUDIESMANAGER_H
-#define UDGPREVIOUSSTUDIESMANAGER_H
+#ifndef UDGRELATEDSTUDIESMANAGER_H
+#define UDGRELATEDSTUDIESMANAGER_H
 
 #include <QObject>
 #include <QHash>
@@ -27,11 +27,11 @@ class QueryPacsJob;
    ja s'hagin fet a través del SAP i constatem que el Patient ID pel mateix pacient sempre és el mateix,
    la cerca per nom de pacient podria desapareixer
  */
-class PreviousStudiesManager : public QObject {
+class RelatedStudiesManager : public QObject {
 Q_OBJECT
 public:
-    PreviousStudiesManager();
-    ~PreviousStudiesManager();
+    RelatedStudiesManager();
+    ~RelatedStudiesManager();
 
     /// Fa una consulta d'estudis previs assíncrona als PACS que estiguin marcats per defecte, si dos del PACS retornen el mateix estudi només es tindrà en compte
     /// el del primer PACS que ha respós
@@ -125,4 +125,4 @@ private:
 
 }
 
-#endif // UDGPREVIOUSSTUDIESMANAGER_H
+#endif // UDGRELATEDSTUDIESMANAGER_H
