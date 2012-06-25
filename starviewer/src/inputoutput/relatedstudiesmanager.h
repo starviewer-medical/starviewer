@@ -18,8 +18,8 @@ class PACSJob;
 class QueryPacsJob;
 
 /**
-    Aquesta classe donat un Study demana els estudis previs en els PACS configurats per defecte, degut a que
-    ara actualment en el PACS tenim el mateix pacients amb PatientID diferents, també a part de cercar estudis
+    Aquesta classe donat un Study demana els estudis relacionats o previs en els PACS configurats per defecte, degut a que
+    ara actualment en el PACS podem tenir pacients que són el mateix però amb PatientID diferents, també a part de cercar estudis
     que coincideixin amb el PatientID també es farà una altre cerca per Patient Name.
   */
 /* TODO: En teoria amb la implantació del SAP els problemes de que un Pacient té diversos Patient ID o que té el nom
@@ -53,7 +53,7 @@ public:
     void downloadStudy(Study *study, QString pacs);
 
 signals:
-    /// Signal que s'emet quan ha finalitzat la consulta d'estudis previs. La llista amb els resultats s'esborrarà quan es demani una altra cerca.
+    /// Signal que s'emet quan ha finalitzat la consulta d'estudis. La llista amb els resultats s'esborrarà quan es demani una altra cerca.
     void queryStudiesFinished(QList<Study*>);
 
     /// Signal que s'emet per indicar que s'ha produït un error a la consulta d'estudis d'un PACS
@@ -68,15 +68,15 @@ private:
     /// Si no es passa cap data per paràmetre cercarà tots els estudis, independentment de la data.
     void makeAsynchronousStudiesQuery(Patient *patient, QDate untilDate = QDate());
 
-    /// Retorna una màscara de cerca base a partir de les quals es generan les DicomMask per cercar previs
+    /// Retorna una màscara de cerca base a partir de les quals es generan les DicomMask per cercar estudis relacionats
     DicomMask getBasicDicomMask();
 
-    /// Ens indica si aquell estudi està a la llista d'estudis ja rebuts de previs, per evitar duplicats
+    /// Ens indica si aquell estudi està a la llista d'estudis ja rebuts, per evitar duplicats
     /// Hem de tenir en compte que com fem la cerca per ID i un altre per Patient Name per obtenir més resultats
     /// potser que en les dos consultes ens retornin el mateix estudi, per tant hem d'evitar duplicats.
     bool isStudyInMergedStudyList(Study *study);
 
-    /// Ens indica si aquest estudi és el mateix pel qual ens han demanat els previs, per evitar incloure'l a la llista
+    /// Ens indica si aquest estudi és el mateix pel qual ens han demanat els estudis relacionts, per evitar incloure'l a la llista
     bool isStudyToFindPrevious(Study *study);
 
     /// Inicialitza les variables per realitzar una nova consulta
@@ -112,14 +112,17 @@ private slots:
 private:
     PacsManager *m_pacsManager;
     QList<Study*> m_mergedStudyList;
+
+	/// Study instance UID de l'estudi a partir del qual hem de trobar estudis relacionats
     QString m_studyInstanceUIDToFindPrevious;
-    /// Com fem una consulta dos consultes al mateix PACS si falla una segurament també fallarà la segona per això
+    
+	/// Com fem una consulta dos consultes al mateix PACS si falla una segurament també fallarà la segona per això
     /// en aquesta llista registrarem l'ID dels Pacs pel quals hem emés el signal d'error i si rebem un segon error
     /// com ja el tindrem aquesta llista ja no en farem signal
     QStringList m_pacsDeviceIDErrorEmited;
     /// Hash que ens guarda tots els QueryPACSJob pendent d'executar o que s'estan executant llançats des d'aquesta classe
     QHash<int, QueryPacsJob*> m_queryPACSJobPendingExecuteOrExecuting;
-    /// Boolea per saber si s'ha de cercar previes a partir del nom del pacient.
+    /// Boolea per saber si s'ha de cercar estudis relacionats a partir del nom del pacient.
     bool m_searchRelatedStudiesByName;
 };
 
