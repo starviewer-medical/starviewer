@@ -17,7 +17,7 @@
 #include "volumerepository.h"
 #include "applyhangingprotocolqviewercommand.h"
 // Necessari per poder anar a buscar prèvies
-#include "../inputoutput/previousstudiesmanager.h"
+#include "../inputoutput/relatedstudiesmanager.h"
 
 namespace udg {
 
