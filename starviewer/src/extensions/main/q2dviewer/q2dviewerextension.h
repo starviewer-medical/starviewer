@@ -28,7 +28,7 @@ class StatsWatcher;
 
 #ifndef STARVIEWER_LITE
 class QRelatedStudiesWidget;
-class PreviousStudiesManager;
+class RelatedStudiesManager;
 class HangingProtocolManager;
 class AutomaticSynchronizationManager;
 #endif
@@ -247,7 +247,7 @@ private:
     QRelatedStudiesWidget *m_relatedStudiesWidget;
 
     /// Manager per estudis previs
-    PreviousStudiesManager *m_previousStudiesManager;
+    RelatedStudiesManager *m_relatedStudiesManager;
 
     /// Manager de hanging protocols
     HangingProtocolManager *m_hangingProtocolManager;

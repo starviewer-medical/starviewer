@@ -3,7 +3,7 @@
 #include "logging.h"
 #include "study.h"
 #include "patient.h"
-#include "previousstudiesmanager.h"
+#include "relatedstudiesmanager.h"
 #include "queryscreen.h"
 #include "singleton.h"
 #include "screenmanager.h"
@@ -24,7 +24,7 @@ QRelatedStudiesWidget::QRelatedStudiesWidget(QWidget *parent)
 
     m_lookingForStudiesWidget = new QWidget(this);
     m_relatedStudiesTree = new QTreeWidgetWithSeparatorLine(this);
-    m_previousStudiesManager = new PreviousStudiesManager();
+    m_relatedStudiesManager = new RelatedStudiesManager();
     m_signalMapper = new QSignalMapper(this);
     m_queryScreen = SingletonPointer<QueryScreen>::instance();
     m_numberOfDownloadingStudies = 0;
@@ -53,7 +53,7 @@ QRelatedStudiesWidget::~QRelatedStudiesWidget()
     {
         delete m_infomationPerStudy.take(key);
     }
-    delete m_previousStudiesManager;
+    delete m_relatedStudiesManager;
     delete m_lookingForStudiesWidget;
     delete m_signalMapper;
     delete m_noRelatedStudiesLabel;
@@ -87,7 +87,7 @@ void QRelatedStudiesWidget::searchPreviousStudiesOf(Study *study)
 
     initializeSearch();
     m_patient = study->getParentPatient();
-    m_previousStudiesManager->queryMergedPreviousStudies(study);
+    m_relatedStudiesManager->queryMergedPreviousStudies(study);
     m_modalitiesOfStudiesToHighlight = removeNonImageModalities(study->getModalities());
 }
 
@@ -97,7 +97,7 @@ void QRelatedStudiesWidget::searchStudiesOf(Patient *patient)
 
     initializeSearch();
     m_patient = patient;
-    m_previousStudiesManager->queryMergedStudies(patient);
+    m_relatedStudiesManager->queryMergedStudies(patient);
 
     foreach(Study *study, patient->getStudies())
     {
@@ -124,7 +124,7 @@ void QRelatedStudiesWidget::initializeSearch()
 
 void QRelatedStudiesWidget::createConnections()
 {
-    connect(m_previousStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), this, SLOT(insertStudiesToTree(QList<Study*>)));
+    connect(m_relatedStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), this, SLOT(insertStudiesToTree(QList<Study*>)));
     connect(m_signalMapper, SIGNAL(mapped(const QString&)), this, SLOT(retrieveAndLoadStudy(const QString&)));
     connect(m_queryScreen, SIGNAL(studyRetrieveStarted(QString)), this, SLOT(studyRetrieveStarted(QString)));
     connect(m_queryScreen, SIGNAL(studyRetrieveFinished(QString)), this, SLOT(studyRetrieveFinished(QString)));

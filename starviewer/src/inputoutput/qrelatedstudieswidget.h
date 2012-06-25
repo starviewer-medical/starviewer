@@ -12,7 +12,7 @@ class QTreeWidgetItem;
 namespace udg {
 
 class Study;
-class PreviousStudiesManager;
+class RelatedStudiesManager;
 class QueryScreen;
 class Patient;
 class QTreeWidgetWithSeparatorLine;
@@ -110,7 +110,7 @@ private:
     /// Label per mostrar que no hi ha estudis relacionats.
     QLabel *m_noRelatedStudiesLabel;
     /// Objecte encarregat de cercar estudis relacionats
-    PreviousStudiesManager *m_previousStudiesManager;
+    RelatedStudiesManager *m_relatedStudiesManager;
     /// Mapper utilitzat per saber cada botó de descàrrega a quin estudi està associat.
     QSignalMapper *m_signalMapper;
     /// Objecte utilitzat per invocar la descàrrega d'estudis.

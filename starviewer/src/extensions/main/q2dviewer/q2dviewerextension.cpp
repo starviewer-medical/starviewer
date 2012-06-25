@@ -27,7 +27,7 @@
 #ifndef STARVIEWER_LITE
 #include "qrelatedstudieswidget.h"
 #include "hangingprotocolmanager.h"
-#include "previousstudiesmanager.h"
+#include "relatedstudiesmanager.h"
 #include "qexportertool.h"
 #endif
 
@@ -280,26 +280,26 @@ void Q2DViewerExtension::searchPreviousStudiesWithHangingProtocols()
     m_hangingProtocolsMenu->setSearchingItem(true);
 
     // 2.- Creacio de la classe per trobar previes
-    m_previousStudiesManager = new PreviousStudiesManager();
+    m_relatedStudiesManager = new RelatedStudiesManager();
 
     // 3.- Es connecta el signal per quan acabi
-    connect(m_previousStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), SLOT(addPreviousHangingProtocols(QList<Study*>)));
+    connect(m_relatedStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), SLOT(addPreviousHangingProtocols(QList<Study*>)));
 
     // 4.- Es busquen els previs
     if (m_mainVolume)
     {
-        m_previousStudiesManager->queryMergedPreviousStudies(m_mainVolume->getStudy());
+        m_relatedStudiesManager->queryMergedPreviousStudies(m_mainVolume->getStudy());
     }
     else
     {
         // En el cas que no tinguéssim un input vàlid, ho farem a partir del pacient actual
-        m_previousStudiesManager->queryMergedPreviousStudies(m_patient->getStudies().first());
+        m_relatedStudiesManager->queryMergedPreviousStudies(m_patient->getStudies().first());
     }
 }
 
 void Q2DViewerExtension::addPreviousHangingProtocols(QList<Study*> studies)
 {
-    disconnect(m_previousStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), this, SLOT(addPreviousHangingProtocols(QList<Study*>)));
+    disconnect(m_relatedStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), this, SLOT(addPreviousHangingProtocols(QList<Study*>)));
 
     QList<HangingProtocol*> hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient, studies);
     m_hangingProtocolsMenu->setHangingItems(hangingCandidates);

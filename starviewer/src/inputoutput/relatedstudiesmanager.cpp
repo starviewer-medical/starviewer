@@ -1,4 +1,4 @@
-#include "previousstudiesmanager.h"
+#include "relatedstudiesmanager.h"
 
 #include "study.h"
 #include "dicommask.h"
@@ -13,7 +13,7 @@
 
 namespace udg {
 
-PreviousStudiesManager::PreviousStudiesManager()
+RelatedStudiesManager::RelatedStudiesManager()
 {
     m_pacsManager = new PacsManager();
     m_studyInstanceUIDToFindPrevious = "invalid";
@@ -22,20 +22,20 @@ PreviousStudiesManager::PreviousStudiesManager()
     m_searchRelatedStudiesByName = settings.getValue(InputOutputSettings::SearchRelatedStudiesByName).toBool();
 }
 
-PreviousStudiesManager::~PreviousStudiesManager()
+RelatedStudiesManager::~RelatedStudiesManager()
 {
     cancelCurrentQuery();
     deleteQueryResults();
 }
 
-void PreviousStudiesManager::queryMergedStudies(Patient *patient)
+void RelatedStudiesManager::queryMergedStudies(Patient *patient)
 {
     INFO_LOG("Es buscaran els estudis del pacient " + patient->getFullName() + " amb ID " + patient->getID());
 
     this->makeAsynchronousStudiesQuery(patient);
 }
 
-void PreviousStudiesManager::queryMergedPreviousStudies(Study *study)
+void RelatedStudiesManager::queryMergedPreviousStudies(Study *study)
 {
     INFO_LOG("Es buscaran els estudis previs del pacient " + study->getParentPatient()->getFullName() + " amb ID " + study->getParentPatient()->getID() +
     " de l'estudi " + study->getInstanceUID() + " fet a la data " + study->getDate().toString());
@@ -45,7 +45,7 @@ void PreviousStudiesManager::queryMergedPreviousStudies(Study *study)
     this->makeAsynchronousStudiesQuery(study->getParentPatient(), study->getDate());
 }
 
-void PreviousStudiesManager::makeAsynchronousStudiesQuery(Patient *patient, QDate untilDate)
+void RelatedStudiesManager::makeAsynchronousStudiesQuery(Patient *patient, QDate untilDate)
 {
     initializeQuery();
 
@@ -101,7 +101,7 @@ void PreviousStudiesManager::makeAsynchronousStudiesQuery(Patient *patient, QDat
     }
 }
 
-void PreviousStudiesManager::initializeQuery()
+void RelatedStudiesManager::initializeQuery()
 {
     cancelCurrentQuery();
 
@@ -110,7 +110,7 @@ void PreviousStudiesManager::initializeQuery()
     m_pacsDeviceIDErrorEmited.clear();
 }
 
-void PreviousStudiesManager::enqueueQueryPACSJobToPACSManagerAndConnectSignals(QueryPacsJob *queryPACSJob)
+void RelatedStudiesManager::enqueueQueryPACSJobToPACSManagerAndConnectSignals(QueryPacsJob *queryPACSJob)
 {
     connect(queryPACSJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(queryPACSJobFinished(PACSJob*)));
     connect(queryPACSJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(queryPACSJobCancelled(PACSJob*)));
@@ -119,7 +119,7 @@ void PreviousStudiesManager::enqueueQueryPACSJobToPACSManagerAndConnectSignals(Q
     m_queryPACSJobPendingExecuteOrExecuting.insert(queryPACSJob->getPACSJobID(), queryPACSJob);
 }
 
-void PreviousStudiesManager::cancelCurrentQuery()
+void RelatedStudiesManager::cancelCurrentQuery()
 {
     foreach (QueryPacsJob *queryPACSJob, m_queryPACSJobPendingExecuteOrExecuting)
     {
@@ -130,12 +130,12 @@ void PreviousStudiesManager::cancelCurrentQuery()
     m_studyInstanceUIDToFindPrevious = "invalid";
 }
 
-bool PreviousStudiesManager::isExecutingQueries()
+bool RelatedStudiesManager::isExecutingQueries()
 {
     return !m_queryPACSJobPendingExecuteOrExecuting.isEmpty();
 }
 
-void PreviousStudiesManager::queryPACSJobCancelled(PACSJob *pacsJob)
+void RelatedStudiesManager::queryPACSJobCancelled(PACSJob *pacsJob)
 {
     // Aquest slot també serveix per si alguna altre classe ens cancel·la un PACSJob nostre per a que ens n'assabentem
     QueryPacsJob *queryPACSJob = qobject_cast<QueryPacsJob*>(pacsJob);
@@ -158,7 +158,7 @@ void PreviousStudiesManager::queryPACSJobCancelled(PACSJob *pacsJob)
     }
 }
 
-void PreviousStudiesManager::queryPACSJobFinished(PACSJob *pacsJob)
+void RelatedStudiesManager::queryPACSJobFinished(PACSJob *pacsJob)
 {
     QueryPacsJob *queryPACSJob = qobject_cast<QueryPacsJob*>(pacsJob);
 
@@ -189,7 +189,7 @@ void PreviousStudiesManager::queryPACSJobFinished(PACSJob *pacsJob)
     }
 }
 
-void PreviousStudiesManager::mergeFoundStudiesInQuery(QueryPacsJob *queryPACSJob)
+void RelatedStudiesManager::mergeFoundStudiesInQuery(QueryPacsJob *queryPACSJob)
 {
     if (queryPACSJob->getQueryLevel() != QueryPacsJob::study)
     {
@@ -211,7 +211,7 @@ void PreviousStudiesManager::mergeFoundStudiesInQuery(QueryPacsJob *queryPACSJob
     }
 }
 
-void PreviousStudiesManager::errorQueringPACS(QueryPacsJob *queryPACSJob)
+void RelatedStudiesManager::errorQueringPACS(QueryPacsJob *queryPACSJob)
 {
     if (queryPACSJob->getStatus() != PACSRequestStatus::QueryOk && queryPACSJob->getStatus() != PACSRequestStatus::QueryCancelled)
     {
@@ -227,14 +227,14 @@ void PreviousStudiesManager::errorQueringPACS(QueryPacsJob *queryPACSJob)
     }
 }
 
-void PreviousStudiesManager::queryFinished()
+void RelatedStudiesManager::queryFinished()
 {
     // Quan totes les query han acabat és quant fem l'emit amb els estudis previs trobats. No podem emetre els resultats que anem rebent,
     // perquè hem de fer un merge del resultats rebuts, per no tenir duplicats (Estudis del matiex pacient que estiguin a més d'un PACS)
     emit queryStudiesFinished(m_mergedStudyList);
 }
 
-bool PreviousStudiesManager::isStudyInMergedStudyList(Study *study)
+bool RelatedStudiesManager::isStudyInMergedStudyList(Study *study)
 {
     bool studyFoundInMergedList = false;
 
@@ -250,12 +250,12 @@ bool PreviousStudiesManager::isStudyInMergedStudyList(Study *study)
     return studyFoundInMergedList;
 }
 
-bool PreviousStudiesManager::isStudyToFindPrevious(Study *study)
+bool RelatedStudiesManager::isStudyToFindPrevious(Study *study)
 {
     return study->getInstanceUID() == m_studyInstanceUIDToFindPrevious;
 }
 
-DicomMask PreviousStudiesManager::getBasicDicomMask()
+DicomMask RelatedStudiesManager::getBasicDicomMask()
 {
     DicomMask dicomMask;
 
@@ -272,14 +272,14 @@ DicomMask PreviousStudiesManager::getBasicDicomMask()
     return dicomMask;
 }
 
-void PreviousStudiesManager::downloadStudy(Study *study, QString pacs)
+void RelatedStudiesManager::downloadStudy(Study *study, QString pacs)
 {
     QueryScreen *queryScreen = SingletonPointer<QueryScreen>::instance();
     queryScreen->retrieveStudy(QInputOutputPacsWidget::Load, pacs, study);
     connect(queryScreen, SIGNAL(studyRetrieveFailed(QString)), SIGNAL(errorDownloadingPreviousStudy(QString)));
 }
 
-void PreviousStudiesManager::deleteQueryResults()
+void RelatedStudiesManager::deleteQueryResults()
 {
     QList<Patient*> patientsStudy;
 
@@ -294,7 +294,7 @@ void PreviousStudiesManager::deleteQueryResults()
     m_mergedStudyList.clear();
 }
 
-QList<PacsDevice> PreviousStudiesManager::getPACSRetrievedStudiesOfPatient(Patient *patient)
+QList<PacsDevice> RelatedStudiesManager::getPACSRetrievedStudiesOfPatient(Patient *patient)
 {
     QList<PacsDevice> pacsDeviceRetrievedStudies;
 
