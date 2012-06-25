@@ -16,7 +16,7 @@ namespace udg {
 RelatedStudiesManager::RelatedStudiesManager()
 {
     m_pacsManager = new PacsManager();
-    m_studyInstanceUIDToFindPrevious = "invalid";
+    m_studyInstanceUIDOfStudyToFindRelated = "invalid";
 
     Settings settings;
     m_searchRelatedStudiesByName = settings.getValue(InputOutputSettings::SearchRelatedStudiesByName).toBool();
@@ -40,7 +40,7 @@ void RelatedStudiesManager::queryMergedPreviousStudies(Study *study)
     INFO_LOG("Es buscaran els estudis previs del pacient " + study->getParentPatient()->getFullName() + " amb ID " + study->getParentPatient()->getID() +
     " de l'estudi " + study->getInstanceUID() + " fet a la data " + study->getDate().toString());
 
-    m_studyInstanceUIDToFindPrevious = study->getInstanceUID();
+    m_studyInstanceUIDOfStudyToFindRelated = study->getInstanceUID();
 
     this->makeAsynchronousStudiesQuery(study->getParentPatient(), study->getDate());
 }
@@ -127,7 +127,7 @@ void RelatedStudiesManager::cancelCurrentQuery()
         m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
     }
 
-    m_studyInstanceUIDToFindPrevious = "invalid";
+    m_studyInstanceUIDOfStudyToFindRelated = "invalid";
 }
 
 bool RelatedStudiesManager::isExecutingQueries()
@@ -201,7 +201,7 @@ void RelatedStudiesManager::mergeFoundStudiesInQuery(QueryPacsJob *queryPACSJob)
     {
         foreach (Study *study, patient->getStudies())
         {
-            if (!isStudyInMergedStudyList(study) && !isStudyToFindPrevious(study))
+            if (!isStudyInMergedStudyList(study) && !isMainStudy(study))
             {
                 // Si l'estudi no està a llista ja d'estudis afegits i no és el mateix estudi pel qua ens han demanat el
                 // previ l'afegim
@@ -250,9 +250,9 @@ bool RelatedStudiesManager::isStudyInMergedStudyList(Study *study)
     return studyFoundInMergedList;
 }
 
-bool RelatedStudiesManager::isStudyToFindPrevious(Study *study)
+bool RelatedStudiesManager::isMainStudy(Study *study)
 {
-    return study->getInstanceUID() == m_studyInstanceUIDToFindPrevious;
+    return study->getInstanceUID() == m_studyInstanceUIDOfStudyToFindRelated;
 }
 
 DicomMask RelatedStudiesManager::getBasicDicomMask()
