@@ -75,7 +75,7 @@ HEADERS += databaseconnection.h \
     previousstudiesmanager.h \
     qstarviewersapwrapper.h \
     qwidgetselectpacstostoredicomimage.h \
-    qpreviousstudieswidget.h \
+    qrelatedstudieswidget.h \
     qexportertool.h \
     pacsjob.h \
     senddicomfilestopacsjob.h \
@@ -148,7 +148,7 @@ SOURCES += databaseconnection.cpp \
     previousstudiesmanager.cpp \
     qstarviewersapwrapper.cpp \
     qwidgetselectpacstostoredicomimage.cpp \
-    qpreviousstudieswidget.cpp \
+    qrelatedstudieswidget.cpp \
     qexportertool.cpp \
     pacsjob.cpp \
     senddicomfilestopacsjob.cpp  \
