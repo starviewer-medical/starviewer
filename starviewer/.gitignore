@@ -49,3 +49,6 @@ sys$command
 starviewer.sdf
 *.opensdf
 ipch/*
+vcxproj.*
+fixdebug*
+*.tmp
