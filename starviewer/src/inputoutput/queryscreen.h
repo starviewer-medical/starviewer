@@ -34,9 +34,9 @@ public:
     ///               interna una llista de les sol·licituds que ha fet per saber si aquell signal l'afecta o no.
     ///
     /// @param actionAfterRetrieve Indica l'acció a prendre un cop descarregat l'estudi
-    /// @param pacsID Identificador del PACS des d'on es descarrega l'estudi
+    /// @param pacsDevice PACS des d'on es descarrega l'estudi
     /// @param study Objecte Study amb la informació de l'estudi que volem descarregar
-    void retrieveStudy(QInputOutputPacsWidget::ActionsAfterRetrieve actionAfterRetrieve, QString pacsID, Study *study);
+    void retrieveStudy(QInputOutputPacsWidget::ActionsAfterRetrieve actionAfterRetrieve, const PacsDevice &pacsDevice, Study *study);
 
 public slots:
     /// Obre un dicomdir
