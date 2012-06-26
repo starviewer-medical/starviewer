@@ -272,10 +272,10 @@ DicomMask RelatedStudiesManager::getBasicDicomMask()
     return dicomMask;
 }
 
-void RelatedStudiesManager::downloadStudy(Study *study, QString pacs)
+void RelatedStudiesManager::downloadStudy(Study *study, const PacsDevice &pacsDevice)
 {
     QueryScreen *queryScreen = SingletonPointer<QueryScreen>::instance();
-    queryScreen->retrieveStudy(QInputOutputPacsWidget::Load, pacs, study);
+    queryScreen->retrieveStudy(QInputOutputPacsWidget::Load, pacsDevice, study);
     connect(queryScreen, SIGNAL(studyRetrieveFailed(QString)), SIGNAL(errorDownloadingStudy(QString)));
 }
 

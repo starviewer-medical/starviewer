@@ -50,7 +50,7 @@ public:
     bool isExecutingQueries();
 
     /// Mètode per demanar que es descarregui un estudi
-    void downloadStudy(Study *study, QString pacs);
+    void downloadStudy(Study *study, const PacsDevice &pacsDevice);
 
 signals:
     /// Signal que s'emet quan ha finalitzat la consulta d'estudis. La llista amb els resultats s'esborrarà quan es demani una altra cerca.

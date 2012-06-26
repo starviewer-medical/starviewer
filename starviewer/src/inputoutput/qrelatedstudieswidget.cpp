@@ -296,7 +296,7 @@ void QRelatedStudiesWidget::retrieveAndLoadStudy(const QString &studyInstanceUID
 
     studyInfo->downloadButton->setEnabled(false);
 
-    m_queryScreen->retrieveStudy(QInputOutputPacsWidget::Load, studyInfo->study->getDICOMSource().getRetrievePACS().at(0).getID() , studyInfo->study);
+    m_queryScreen->retrieveStudy(QInputOutputPacsWidget::Load, studyInfo->study->getDICOMSource().getRetrievePACS().at(0), studyInfo->study);
 
     studyInfo->status = Pending;
 

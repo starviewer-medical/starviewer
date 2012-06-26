@@ -435,7 +435,7 @@ void QueryScreen::writeSettings()
     }
 }
 
-void QueryScreen::retrieveStudy(QInputOutputPacsWidget::ActionsAfterRetrieve actionAfterRetrieve, QString pacsID, Study *study)
+void QueryScreen::retrieveStudy(QInputOutputPacsWidget::ActionsAfterRetrieve actionAfterRetrieve, const PacsDevice &pacsDevice, Study *study)
 {
     // QueryScreen rep un signal cada vegada que qualsevol estudis en el procés de descàrrega canvia d'estat,
     // en principi només ha de reemetre aquests signals cap a fora quan és un signal que afecta un estudi
@@ -443,7 +443,7 @@ void QueryScreen::retrieveStudy(QInputOutputPacsWidget::ActionsAfterRetrieve act
     // pendents de descarregar sol·licitats a partir d'aquest mètode
     m_studyRequestedToRetrieveFromPublicMethod.append(study->getInstanceUID());
 
-    m_qInputOutputPacsWidget->retrieve(pacsID, actionAfterRetrieve, study);
+    m_qInputOutputPacsWidget->retrieve(pacsDevice, actionAfterRetrieve, study);
 }
 
 void QueryScreen::studyRetrieveFailedSlot(QString studyInstanceUID)
