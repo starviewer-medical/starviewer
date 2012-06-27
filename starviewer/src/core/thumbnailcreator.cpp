@@ -201,28 +201,7 @@ bool ThumbnailCreator::isSuitableForThumbnailCreation(DICOMTagReader *reader) co
         return false;
     }
 
-    bool suitable = true;
-
-    // Ens hem trobat que per algunes imatges que contenen Overlays, la DICOMImage no es pot crear.
-    // Els casos que hem trobat estan descrits al ticket #1121
-    // La solució adoptada ara mateix és que si trobem que la imatge conté algun dels tags següents,
-    // descartem la creació del thumbnail i en creem un de "neutre" indicant que no s'ha pogut crear aquest
-    // En quant siguem capaços de tornar a llegir aquestes imatges sense problema, aquesta comprovació desapareixerà
-    QList<DICOMTag> tags;
-    tags << DICOMOverlayRows << DICOMOverlayColumns << DICOMOverlayType << DICOMOverlayOrigin << DICOMOverlayBitsAllocated << DICOMOverlayBitPosition <<
-            DICOMOverlayData;
-    foreach (DICOMTag tag, tags)
-    {
-        if (reader->tagExists(tag))
-        {
-            suitable = false;
-            DEBUG_LOG(QString("Found Tag: %1,%2. Overlay restriction applied. Preview image won't be available.").arg(tag.getGroup(), 0, 16).arg(
-                      tag.getElement(), 0, 16));
-        }
-    }
-
-    // TODO Comprovar la modalitat també?
-    return suitable;
+	return true;
 }
 
 QImage ThumbnailCreator::convertToQImage(DicomImage *dicomImage)
