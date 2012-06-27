@@ -92,7 +92,8 @@ QImage ThumbnailCreator::createThumbnail(DICOMTagReader *reader, int resolution)
         try
         {
             // Carreguem el fitxer dicom a escalar
-            DicomImage *dicomImage = new DicomImage(reader->getDcmDataset(), reader->getDcmDataset()->getOriginalXfer());
+			// Fem que en el cas que sigui una imatge multiframe, només carregui la primera imatge i prou, estalviant allotjar memòria innecessàriament
+			DicomImage *dicomImage = new DicomImage(reader->getDcmDataset(), reader->getDcmDataset()->getOriginalXfer(), CIF_UsePartialAccessToPixelData, 0, 1);
             thumbnail = createThumbnail(dicomImage, resolution);
 
             // Cal esborrar la DicomImage per no tenir fugues de memòria
