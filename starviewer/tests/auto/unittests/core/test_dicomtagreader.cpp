@@ -65,7 +65,7 @@ void test_DICOMTagReader::getValueAttribute_ReturnsExpectedValues_data()
     OFCondition ok = dataset->putAndInsertString(DCM_PixelSpacing, "1.5\\1.2");
     dataset->putAndInsertUint16(DCM_Rows, 10);
     dataset->putAndInsertString(DCM_PhotometricInterpretation, "MONOCHROME1");
-    dataset->putAndInsertString(DCM_PatientsName, "JOHN^DOE");
+    dataset->putAndInsertString(DCM_PatientName, "JOHN^DOE");
     dataset->putAndInsertString(DCM_StudyDate, "19991231");
 
     DICOMValueAttribute *pixelSpacingAttribute = new DICOMValueAttribute;

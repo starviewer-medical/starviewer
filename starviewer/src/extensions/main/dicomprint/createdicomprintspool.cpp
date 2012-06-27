@@ -279,8 +279,8 @@ bool CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
     }
 
     // Hardcopy Equipment Module
-    transformedImageDatasetToPrint->putAndInsertString(DCM_HardcopyDeviceManufacturer, qPrintable(ApplicationNameString), true);
-    transformedImageDatasetToPrint->putAndInsertString(DCM_HardcopyDeviceSoftwareVersion, qPrintable(StarviewerVersionString), true);
+    transformedImageDatasetToPrint->putAndInsertString(DCM_RETIRED_HardcopyDeviceManufacturer, qPrintable(ApplicationNameString), true);
+    transformedImageDatasetToPrint->putAndInsertString(DCM_RETIRED_HardcopyDeviceSoftwareVersion, qPrintable(StarviewerVersionString), true);
 
     // General Image Module
     transformedImageDatasetToPrint->putAndInsertString(DCM_InstanceNumber, qPrintable(imageToPrint->getInstanceNumber()));
@@ -290,7 +290,7 @@ bool CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
     transformedImageDatasetToPrint->putAndInsertString(DCM_DerivationDescription, "Hardcopy rendered using Presentation State");
 
     // SOP Common Module
-    transformedImageDatasetToPrint->putAndInsertString(DCM_SOPClassUID, UID_HardcopyGrayscaleImageStorage);
+    transformedImageDatasetToPrint->putAndInsertString(DCM_SOPClassUID, UID_RETIRED_HardcopyGrayscaleImageStorage);
 
     dcmGenerateUniqueIdentifier(InstanceUIDOfTransformedImage);
     transformedImageDatasetToPrint->putAndInsertString(DCM_SOPInstanceUID, InstanceUIDOfTransformedImage);
@@ -442,7 +442,7 @@ QString CreateDicomPrintSpool::createStoredPrintDcmtkFile(const QString &spoolDi
         m_annotationBoxes->write(*dataset);
 
         DcmItem *sequenceFilmBox = NULL;
-        dataset->findOrCreateSequenceItem(DCM_FilmBoxContentSequence, sequenceFilmBox);
+        dataset->findOrCreateSequenceItem(DCM_RETIRED_FilmBoxContentSequence, sequenceFilmBox);
 
         if (sequenceFilmBox)
         {
