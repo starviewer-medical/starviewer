@@ -12,11 +12,6 @@
 #include <GUSI.h>
 #endif
 
-#ifdef WITH_ZLIB
-// For zlibVersion()
-#include <zlib.h>
-#endif
-
 #include "status.h"
 #include "logging.h"
 
@@ -46,7 +41,7 @@ Status ConvertDicomToLittleEndian::convert(QString inputFile, QString outputFile
     E_PaddingEncoding opt_opadenc = EPD_noChange;
     OFCmdUnsignedInt opt_filepad = 0;
     OFCmdUnsignedInt opt_itempad = 0;
-    OFBool opt_oDataset = OFFalse;
+	E_FileWriteMode writeMode = EWM_fileformat;
 
     error = fileformat.loadFile(qPrintable(QDir::toNativeSeparators(inputFile)), opt_ixfer, EGL_noChange, DCM_MaxReadLength, opt_readMode);
 
@@ -70,7 +65,7 @@ Status ConvertDicomToLittleEndian::convert(QString inputFile, QString outputFile
     }
 
     error = fileformat.saveFile(qPrintable(QDir::toNativeSeparators(outputFile)), opt_oxfer, opt_oenctype, opt_oglenc, opt_opadenc,
-                                OFstatic_cast(Uint32, opt_filepad), OFstatic_cast(Uint32, opt_itempad), opt_oDataset);
+                                OFstatic_cast(Uint32, opt_filepad), OFstatic_cast(Uint32, opt_itempad), writeMode);
 
     if (!error.good())
     {

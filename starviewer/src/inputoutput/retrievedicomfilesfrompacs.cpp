@@ -198,7 +198,8 @@ void RetrieveDICOMFilesFromPACS::storeSCPCallback(void *callbackData, T_DIMSE_St
 
 OFCondition RetrieveDICOMFilesFromPACS::save(DcmFileFormat *fileRetrieved, QString dicomFileAbsolutePath)
 {
-    OFBool useMetaheader = OFTrue;
+	// Indiquem que no fem servir meta-header
+	E_FileWriteMode writeMode = EWM_fileformat;
     E_EncodingType sequenceType = EET_ExplicitLength;
     E_GrpLenEncoding groupLength = EGL_recalcGL;
     E_PaddingEncoding paddingType = EPD_withoutPadding;
@@ -206,7 +207,7 @@ OFCondition RetrieveDICOMFilesFromPACS::save(DcmFileFormat *fileRetrieved, QStri
     E_TransferSyntax transferSyntaxFile = fileRetrieved->getDataset()->getOriginalXfer();
 
     return fileRetrieved->saveFile(qPrintable(QDir::toNativeSeparators(dicomFileAbsolutePath)), transferSyntaxFile, sequenceType, groupLength, paddingType,
-                                   filePadding, itemPadding, !useMetaheader);
+                                   filePadding, itemPadding, writeMode);
 }
 
 OFCondition RetrieveDICOMFilesFromPACS::storeSCP(T_ASC_Association *association, T_DIMSE_Message *msg, T_ASC_PresentationContextID presentationContextID)
