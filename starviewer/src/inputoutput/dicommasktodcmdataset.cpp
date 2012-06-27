@@ -25,10 +25,10 @@ DcmDataset* DicomMaskToDcmDataset::getDicomMaskAsDcmDataset(const DicomMask &dic
 
     //Afegim els tags d'estudi
     addTagToDcmDatasetAsString(maskDcmDataset, DCM_PatientID, dicomMask.getPatientID());
-    addTagToDcmDatasetAsString(maskDcmDataset, DCM_PatientsName, dicomMask.getPatientName());
-    addTagToDcmDatasetAsString(maskDcmDataset, DCM_PatientsBirthDate, dicomMask.getPatientBirthRangeAsDICOMFormat());
-    addTagToDcmDatasetAsString(maskDcmDataset, DCM_PatientsSex, dicomMask.getPatientSex());
-    addTagToDcmDatasetAsString(maskDcmDataset, DCM_PatientsAge, dicomMask.getPatientAge());
+    addTagToDcmDatasetAsString(maskDcmDataset, DCM_PatientName, dicomMask.getPatientName());
+    addTagToDcmDatasetAsString(maskDcmDataset, DCM_PatientBirthDate, dicomMask.getPatientBirthRangeAsDICOMFormat());
+    addTagToDcmDatasetAsString(maskDcmDataset, DCM_PatientSex, dicomMask.getPatientSex());
+    addTagToDcmDatasetAsString(maskDcmDataset, DCM_PatientAge, dicomMask.getPatientAge());
 
     //Afegim els tags de sèrie
     addTagToDcmDatasetAsString(maskDcmDataset, DCM_StudyInstanceUID, dicomMask.getStudyInstanceUID());
@@ -38,7 +38,7 @@ DcmDataset* DicomMaskToDcmDataset::getDicomMaskAsDcmDataset(const DicomMask &dic
     addTagToDcmDatasetAsString(maskDcmDataset, DCM_StudyDate, dicomMask.getStudyDateRangeAsDICOMFormat());
     addTagToDcmDatasetAsString(maskDcmDataset, DCM_StudyTime, dicomMask.getStudyTimeRangeAsDICOMFormat());
     addTagToDcmDatasetAsString(maskDcmDataset, DCM_AccessionNumber, dicomMask.getAccessionNumber());
-    addTagToDcmDatasetAsString(maskDcmDataset, DCM_ReferringPhysiciansName, dicomMask.getReferringPhysiciansName());
+    addTagToDcmDatasetAsString(maskDcmDataset, DCM_ReferringPhysicianName, dicomMask.getReferringPhysiciansName());
     addTagToDcmDatasetAsString(maskDcmDataset, DCM_SeriesNumber, dicomMask.getSeriesNumber());
     addTagToDcmDatasetAsString(maskDcmDataset, DCM_SeriesDate, dicomMask.getSeriesDateRangeAsDICOMFormat());
     addTagToDcmDatasetAsString(maskDcmDataset, DCM_Modality, dicomMask.getSeriesModality());
