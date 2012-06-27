@@ -503,8 +503,8 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResp
             // Refused: Out of Resources – Unable to perform sub-operations
             // Related Fields DCM_NumberOfRemainingSuboperations (0000,1020), DCM_NumberOfCompletedSuboperations (0000,1021)
             // DCM_NumberOfFailedSuboperations (0000,1022), DCM_NumberOfWarningSuboperations (0000,1023)
-            relatedFieldsList << DCM_NumberOfRemainingSuboperations << DCM_NumberOfCompletedSuboperations;
-            relatedFieldsList << DCM_NumberOfFailedSuboperations << DCM_NumberOfWarningSuboperations;
+            relatedFieldsList << DCM_NumberOfRemainingSubOperations << DCM_NumberOfCompletedSubOperations;
+            relatedFieldsList << DCM_NumberOfFailedSubOperations << DCM_NumberOfWarningSubOperations;
 
             ERROR_LOG(messageErrorLog + QString(DU_cmoveStatusString(moveResponse->DimseStatus)));
             retrieveRequestStatus = PACSRequestStatus::RetrieveFailureOrRefused;
@@ -538,7 +538,7 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResp
             // Sub-operations Complete – One or more Failures
             // Related fields DCM_NumberOfRemainingSuboperations (0000,1020), DCM_NumberOfFailedSuboperations (0000,1022),
             // DCM_NumberOfWarningSuboperations (0000,1023)
-            relatedFieldsList << DCM_NumberOfRemainingSuboperations << DCM_NumberOfFailedSuboperations << DCM_NumberOfWarningSuboperations;
+            relatedFieldsList << DCM_NumberOfRemainingSubOperations << DCM_NumberOfFailedSubOperations << DCM_NumberOfWarningSubOperations;
 
             WARN_LOG("Error no s'ha pogut descarregar tot l'estudi. Descripcio rebuda: " + QString(DU_cmoveStatusString(moveResponse->DimseStatus)));
             retrieveRequestStatus = PACSRequestStatus::RetrieveSomeDICOMFilesFailed;
