@@ -43,7 +43,7 @@ public:
     static const QString VerticalFlipTool;
     static const QString ClearCurrentViewAnnotationsTool;
     static const QString TransDifferenceTool;
-    static const QString OvalROITool;
+    static const QString EllipticalROITool;
     static const QString MagnifyingGlassTool;
     static const QString AutomaticSynchronizationTool;
     static const QString SynchronizeAllViewers;

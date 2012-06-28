@@ -148,9 +148,9 @@ Tool* ToolRegistry::getTool(const QString &toolName, QViewer *viewer)
     {
         tool = new TransDifferenceTool(viewer);
     }
-    else if (toolName == "OvalROITool")
+    else if (toolName == "EllipticalROITool")
     {
-        tool = new OvalROITool(viewer);
+        tool = new EllipticalROITool(viewer);
     }
     else if (toolName == "AutomaticSynchronizationTool")
     {
@@ -370,11 +370,11 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
         statusTip = tr("Enable/Disable the translation difference tool");
         toolTip = toolAction->text();
     }
-    else if (toolName == "OvalROITool")
+    else if (toolName == "EllipticalROITool")
     {
         toolAction->setText(tr("Elliptical ROI"));
         toolAction->setIcon(QIcon(":/images/ellipticalROITool.png"));
-        toolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::OvalROITool));
+        toolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::EllipticalROITool));
         statusTip = tr("Enable/Disable Elliptical ROI tool");
         toolTip = toolAction->text();
     }
