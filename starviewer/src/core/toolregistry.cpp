@@ -27,7 +27,7 @@
 #include "nonclosedangletool.h"
 #include "clippingplanestool.h"
 #include "transdifferencetool.h"
-#include "ovalroitool.h"
+#include "ellipticalroitool.h"
 #include "automaticsynchronizationtool.h"
 #include "magnifyingglasstool.h"
 #include "circletool.h"
