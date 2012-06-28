@@ -12,20 +12,20 @@
 
 namespace udg {
 
-OvalROITool::OvalROITool(QViewer *viewer, QObject *parent)
+EllipticalROITool::EllipticalROITool(QViewer *viewer, QObject *parent)
  : ROITool(viewer, parent), m_state(Ready)
 {
-    m_toolName = "OvalROITool";
+    m_toolName = "EllipticalROITool";
 
     connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(initialize()));
 }
 
-OvalROITool::~OvalROITool()
+EllipticalROITool::~EllipticalROITool()
 {
     deleteTemporalRepresentation();
 }
 
-void OvalROITool::deleteTemporalRepresentation()
+void EllipticalROITool::deleteTemporalRepresentation()
 {
     if (!m_roiPolygon.isNull() && m_state == FirstPointFixed)
     {
@@ -38,7 +38,7 @@ void OvalROITool::deleteTemporalRepresentation()
     m_state = Ready;
 }
 
-void OvalROITool::handleEvent(long unsigned eventID)
+void EllipticalROITool::handleEvent(long unsigned eventID)
 {
     if (!m_2DViewer->getInput())
     {
@@ -52,7 +52,7 @@ void OvalROITool::handleEvent(long unsigned eventID)
             break;
 
         case vtkCommand::MouseMoveEvent:
-            simulateOval();
+            simulateEllipse();
             break;
 
         case vtkCommand::LeftButtonReleaseEvent:
@@ -68,7 +68,7 @@ void OvalROITool::handleEvent(long unsigned eventID)
     }
 }
 
-void OvalROITool::setTextPosition(DrawerText *text)
+void EllipticalROITool::setTextPosition(DrawerText *text)
 {
     double bounds[6];
     m_roiPolygon->getBounds(bounds);
@@ -124,7 +124,7 @@ void OvalROITool::setTextPosition(DrawerText *text)
     text->setAttachmentPoint(attachmentPoint);
 }
 
-void OvalROITool::handlePointAddition()
+void EllipticalROITool::handlePointAddition()
 {
     if (m_state == Ready)
     {
@@ -140,7 +140,7 @@ void OvalROITool::handlePointAddition()
     }
 }
 
-void OvalROITool::simulateOval()
+void EllipticalROITool::simulateEllipse()
 {
     if (m_state == FirstPointFixed)
     {
@@ -163,7 +163,7 @@ void OvalROITool::simulateOval()
     }
 }
 
-void OvalROITool::computeOvalCentre(double centre[3])
+void EllipticalROITool::computeEllipseCentre(double centre[3])
 {
     for (int i = 0; i < 3; ++i)
     {
@@ -171,10 +171,10 @@ void OvalROITool::computeOvalCentre(double centre[3])
     }
 }
 
-void OvalROITool::updatePolygonPoints()
+void EllipticalROITool::updatePolygonPoints()
 {
     double centre[3];
-    computeOvalCentre(centre);
+    computeEllipseCentre(centre);
 
     int xIndex, yIndex, zIndex;
     Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
@@ -209,7 +209,7 @@ void OvalROITool::updatePolygonPoints()
     m_roiPolygon->update();
 }
 
-void OvalROITool::closeForm()
+void EllipticalROITool::closeForm()
 {
     // Cal comprovar si hi ha un objecte creat ja que podria ser que no s'hagués creat si s'hagués realitzat un doble clic,
     // per exemple, ja que no s'hauria passat per l'event de mouse move, que és quan es crea la primitiva.
@@ -229,7 +229,7 @@ void OvalROITool::closeForm()
     m_state = Ready;
 }
 
-void OvalROITool::initialize()
+void EllipticalROITool::initialize()
 {
     // Alliberem les primitives perquè puguin ser esborrades
     if (!m_roiPolygon.isNull())
@@ -243,7 +243,7 @@ void OvalROITool::initialize()
     m_state = Ready;
 }
 
-void OvalROITool::equalizeDepth()
+void EllipticalROITool::equalizeDepth()
 {
     // Ens quedem amb la z de la llesca actual
     double currentPoint[3];

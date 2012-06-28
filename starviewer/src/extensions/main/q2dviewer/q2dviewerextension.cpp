@@ -461,8 +461,8 @@ void Q2DViewerExtension::initializeTools()
     connect(m_toolManager->getRegisteredToolAction("DistanceTool"), SIGNAL(triggered()), SLOT(rearrangeDistanceToolsMenu()));
     connect(m_toolManager->getRegisteredToolAction("PerpendicularDistanceTool"), SIGNAL(triggered()), SLOT(rearrangeDistanceToolsMenu()));
 
-    m_roiButton->setDefaultAction(m_toolManager->registerTool("OvalROITool"));
-    // Afegim un menú al botó de PolylineROI per incorporar la tool de ROI Oval
+    m_roiButton->setDefaultAction(m_toolManager->registerTool("EllipticalROITool"));
+    // Afegim un menú al botó de PolylineROI per incorporar la tool de ROI el·líptica
     m_roiButton->setPopupMode(QToolButton::MenuButtonPopup);
     QMenu *roiToolMenu = new QMenu(this);
     m_roiButton->setMenu(roiToolMenu);
@@ -470,7 +470,7 @@ void Q2DViewerExtension::initializeTools()
     roiToolMenu->addAction(m_toolManager->registerTool("PolylineROITool"));
     roiToolMenu->addAction(m_toolManager->registerTool("CircleTool"));
     
-    connect(m_toolManager->getRegisteredToolAction("OvalROITool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
+    connect(m_toolManager->getRegisteredToolAction("EllipticalROITool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
     connect(m_toolManager->getRegisteredToolAction("MagicROITool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
     connect(m_toolManager->getRegisteredToolAction("PolylineROITool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
     connect(m_toolManager->getRegisteredToolAction("CircleTool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
@@ -526,7 +526,7 @@ void Q2DViewerExtension::initializeTools()
     leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "DistanceTool" << "PerpendicularDistanceTool" << "EraserTool";
 #else
     leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineROITool" << "DistanceTool" << "PerpendicularDistanceTool" << "EraserTool" << "AngleTool" << "NonClosedAngleTool"
-                             << "Cursor3DTool" << "OvalROITool" << "MagicROITool" << "CircleTool" << "MagnifyingGlassTool";
+                             << "Cursor3DTool" << "EllipticalROITool" << "MagicROITool" << "CircleTool" << "MagnifyingGlassTool";
 #endif
 
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);

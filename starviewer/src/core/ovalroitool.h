@@ -1,5 +1,5 @@
-#ifndef UDGOVALROITOOL_H
-#define UDGOVALROITOOL_H
+#ifndef UDGELLIPTICALROITOOL_H
+#define UDGELLIPTICALROITOOL_H
 
 #include "roitool.h"
 
@@ -11,11 +11,11 @@ class DrawerText;
 /**
     Tool per calcular l'àrea i la mitjana de grisos d'un òval
   */
-class OvalROITool : public ROITool {
+class EllipticalROITool : public ROITool {
 Q_OBJECT
 public:
-    OvalROITool(QViewer *viewer, QObject *parent = 0);
-    ~OvalROITool();
+    EllipticalROITool(QViewer *viewer, QObject *parent = 0);
+    ~EllipticalROITool();
 
     void handleEvent(long unsigned eventID);
 
@@ -29,11 +29,11 @@ private:
     /// Gestiona les accions a realitzar quan es clica el ratolí
     void handlePointAddition();
 
-    /// Simula la forma de l'òval quan tenim el primer punt i movem el mouse
-    void simulateOval();
+    /// Simula la forma de l'el·lipse quan tenim el primer punt i movem el mouse
+    void simulateEllipse();
 
-    /// Calcula el centre de l'òval a partir dels punts introduits mitjançant la interacció de l'usuari
-    void computeOvalCentre(double centre[3]);
+    /// Calcula el centre de l'el·lipse a partir dels punts introduits mitjançant la interacció de l'usuari
+    void computeEllipseCentre(double centre[3]);
 
     /// Actualitza els punts del polígon perquè resulti el dibuix de l'òval
     void updatePolygonPoints();

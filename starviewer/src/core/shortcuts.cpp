@@ -37,7 +37,7 @@ const QString Shortcuts::HorizontalFlipTool(ShortcutsBase + "HorizontalFlipTool"
 const QString Shortcuts::VerticalFlipTool(ShortcutsBase + "VerticalFlipTool");
 const QString Shortcuts::ClearCurrentViewAnnotationsTool(ShortcutsBase + "ClearCurrentViewAnnotationsActionTool");
 const QString Shortcuts::TransDifferenceTool(ShortcutsBase + "TransDifferenceActionTool");
-const QString Shortcuts::OvalROITool(ShortcutsBase + "OvalROITool");
+const QString Shortcuts::EllipticalROITool(ShortcutsBase + "EllipticalROITool");
 const QString Shortcuts::MagnifyingGlassTool(ShortcutsBase + "MagnifyingGlassTool");
 const QString Shortcuts::AutomaticSynchronizationTool(ShortcutsBase + "AutomaticSynchronizationTool");
 const QString Shortcuts::SynchronizeAllViewers(ShortcutsBase + "SynchronizeAllViewers");
@@ -206,7 +206,7 @@ void Shortcuts::init()
 
     shortcutsList.clear();
     shortcutsList.append(QString("R"));
-    settingsRegistry->addSetting(OvalROITool, shortcutsList);
+    settingsRegistry->addSetting(EllipticalROITool, shortcutsList);
 
     shortcutsList.clear();
     shortcutsList.append(QString("Ctrl+S"));
