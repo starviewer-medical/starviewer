@@ -28,6 +28,12 @@ private slots:
 
     void getStackDirection_ShouldReturnExpectedDirection_data();
     void getStackDirection_ShouldReturnExpectedDirection();
+
+    void getPhaseImages_ShouldReturnExpectedPhaseImages_data();
+    void getPhaseImages_ShouldReturnExpectedPhaseImages();
+
+    void getOrigin_ShouldReturnExpectedOrigin_data();
+    void getOrigin_ShouldReturnExpectedOrigin();
 };
 
 Q_DECLARE_METATYPE(AnatomicalPlane::AnatomicalPlaneType)
@@ -392,6 +398,66 @@ void test_Volume::getStackDirection_ShouldReturnExpectedDirection()
     QVector3D direction(dir[0], dir[1], dir[2]);
 
     QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(direction, expectedDirection, 0.0000001));
+}
+
+void test_Volume::getPhaseImages_ShouldReturnExpectedPhaseImages_data()
+{
+    QTest::addColumn<QList<Image*>>("volumeImages");
+    QTest::addColumn<int>("slicesPerPhase");
+    QTest::addColumn<int>("phase");
+    QTest::addColumn<QList<Image*>>("phaseImages");
+
+    Image *image1 = new Image();
+    Image *image2 = new Image();
+    Image *image3 = new Image();
+    Image *image4 = new Image();
+    Image *image5 = new Image();
+    Image *image6 = new Image();
+
+    QList<Image*> allImages, phase2Images;
+    allImages << image1 << image2 << image3 << image4 << image5 << image6;
+
+    phase2Images << image2 << image4 << image6;
+
+    QTest::newRow("Volume with phases") << allImages << 3 << 1 << phase2Images;
+
+    QTest::newRow("Volume without phases") << allImages << 6 << 0 << (QList<Image*>() << image1 << image2 << image3 << image4 << image5 << image6);
+
+    //REPASSAR AQUEST
+    QTest::newRow("Incorrect phase") << (QList<Image*>() << image1 << image2 << image3 << image4 << image5 << image6) << 2 << -1 << QList<Image*>();
+}
+
+void test_Volume::getPhaseImages_ShouldReturnExpectedPhaseImages()
+{
+    QFETCH(QList<Image*>, volumeImages);
+    QFETCH(int, slicesPerPhase);
+    QFETCH(int, phase);
+    QFETCH(QList<Image*>, phaseImages);
+
+    QSharedPointer<Volume> volume(new Volume());
+    volume->setImages(volumeImages);
+    volume->setNumberOfSlicesPerPhase(slicesPerPhase);
+    volume->setNumberOfPhases(volumeImages.size()/slicesPerPhase);
+
+    std::cout << "total:" << qPrintable(QString("%1").arg(volumeImages.size())) << std::endl;
+    std::cout << "expected:" << qPrintable(QString("%1").arg(phaseImages.size())) << std::endl;
+    std::cout << "real:" << qPrintable(QString("%1").arg(volume->getPhaseImages(phase).size())) << std::endl;
+
+    QCOMPARE(volume->getPhaseImages(phase).size(), phaseImages.size());
+
+    QCOMPARE(phaseImages, volume->getPhaseImages(phase));
+
+    //ImageTestHelper::cleanUp(volume);
+}
+
+void test_Volume::getOrigin_ShouldReturnExpectedOrigin_data()
+{
+    QSharedPointer<Volume> volume(new Volume());
+}
+
+void test_Volume::getOrigin_ShouldReturnExpectedOrigin()
+{
+
 }
 
 DECLARE_TEST(test_Volume)
