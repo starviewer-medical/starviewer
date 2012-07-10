@@ -34,7 +34,6 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_systemrequerimentstest.cpp \
            $$PWD/test_drawerpolygon.cpp \
            $$PWD/test_diagnosistestresultwriter.cpp \
-           $$PWD/test_synchronizetool.cpp \
            $$PWD/test_vector3float.cpp \
            $$PWD/test_vector3double.cpp
 
