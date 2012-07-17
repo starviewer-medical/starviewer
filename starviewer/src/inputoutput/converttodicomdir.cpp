@@ -8,14 +8,13 @@
 #include "status.h"
 #include "dicommask.h"
 #include "convertdicomtolittleendian.h"
-#include "deletedirectory.h"
+#include "directoryutilities.h"
 #include "starviewerapplication.h"
 #include "localdatabasemanager.h"
 #include "patient.h"
 #include "study.h"
 #include "image.h"
 #include "inputoutputsettings.h"
-#include "copydirectory.h"
 #include "dicomanonymizer.h"
 
 namespace udg {
@@ -149,7 +148,7 @@ Status ConvertToDicomdir::convert(const QString &dicomdirPath, CreateDicomdir::r
 
     if (!state.good())
     {
-        DeleteDirectory().deleteDirectory(m_dicomDirPath, false);
+        DirectoryUtilities().deleteDirectory(m_dicomDirPath, false);
         return state;
     }
 
@@ -180,7 +179,7 @@ Status ConvertToDicomdir::convert(const QString &dicomdirPath, CreateDicomdir::r
     if (!state.good())
     {
         m_progress->close();
-        DeleteDirectory().deleteDirectory(m_dicomDirPath, false);
+        DirectoryUtilities().deleteDirectory(m_dicomDirPath, false);
         return state;
     }
     // Una vegada copiada les imatges les creem
@@ -189,7 +188,7 @@ Status ConvertToDicomdir::convert(const QString &dicomdirPath, CreateDicomdir::r
     if (!state.good() && state.code() != 4001)
     {
         // L'error 4001 és que les imatges no compleixen l'estàndard al 100, però el dicomdir es pot utilitzar
-        DeleteDirectory().deleteDirectory(m_dicomDirPath, false);
+        DirectoryUtilities().deleteDirectory(m_dicomDirPath, false);
     }
     else
     {
@@ -201,7 +200,7 @@ Status ConvertToDicomdir::convert(const QString &dicomdirPath, CreateDicomdir::r
             if (!copyFolderContentToDICOMDIR())
             {
                 m_progress->close();
-                DeleteDirectory().deleteDirectory(m_dicomDirPath, false);
+                DirectoryUtilities().deleteDirectory(m_dicomDirPath, false);
                 state.setStatus("", false, 4002);
                 return state;
             }
@@ -535,7 +534,7 @@ bool ConvertToDicomdir::copyFolderContentToDICOMDIR()
 
     INFO_LOG("Es copiara al DICOMDIR el contingut de la carpeta " + folderToCopyPath);
 
-    if (!CopyDirectory::copyDirectory(folderToCopyPath, m_dicomDirPath))
+    if (!DirectoryUtilities::copyDirectory(folderToCopyPath, m_dicomDirPath))
     {
         ERROR_LOG(QString("No s'ha pogut copiar el visor DICOM %1 al DICOMDIR %2").arg(folderToCopyPath, m_dicomDirPath));
         ok = false;

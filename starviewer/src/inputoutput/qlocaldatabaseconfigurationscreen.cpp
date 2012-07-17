@@ -11,7 +11,7 @@
 #include "inputoutputsettings.h"
 #include "logging.h"
 #include "databaseinstallation.h"
-#include "deletedirectory.h"
+#include "directoryutilities.h"
 
 namespace udg {
 
@@ -294,7 +294,7 @@ void QLocalDatabaseConfigurationScreen::clearCache()
 {
     // Esborrem les imatges que tenim a la base de dades local , i reinstal·lem la bd ja que no té sentit eliminar tots els registres i compactar-la, ja que
     // tardaríem més que si la tornem a reinstal·lar.
-    DeleteDirectory deleteDirectory;
+    DirectoryUtilities deleteDirectory;
     QProgressDialog qprogressDialog(tr("Deleting studies"), ApplicationNameString, 0, 0, this);;
 
     qprogressDialog.setCancelButton(0);

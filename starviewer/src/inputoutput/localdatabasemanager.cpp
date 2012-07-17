@@ -14,7 +14,7 @@
 #include "dicommask.h"
 #include "sqlite3.h"
 #include "logging.h"
-#include "deletedirectory.h"
+#include "directoryutilities.h"
 #include "inputoutputsettings.h"
 #include "starviewerapplication.h"
 #include "harddiskinformation.h"
@@ -805,7 +805,7 @@ int LocalDatabaseManager::deleteSeriesStructureFromDatabase(DatabaseConnection *
 
 void LocalDatabaseManager::deleteRetrievedObjects(Patient *failedPatient)
 {
-    DeleteDirectory delDirectory;
+    DirectoryUtilities delDirectory;
 
     foreach (Study *failedStudy, failedPatient->getStudies())
     {
@@ -815,7 +815,7 @@ void LocalDatabaseManager::deleteRetrievedObjects(Patient *failedPatient)
 
 void LocalDatabaseManager::deleteRetrievedObjects(Series *failedSeries)
 {
-    DeleteDirectory delDirectory;
+    DirectoryUtilities delDirectory;
     QString studyPath = LocalDatabaseManager::getCachePath() + failedSeries->getParentStudy()->getInstanceUID();
     QString seriesDirectory = studyPath + QDir::separator() + failedSeries->getInstanceUID();
 
@@ -933,7 +933,7 @@ void LocalDatabaseManager::freeSpaceDeletingStudies(quint64 MbytesToErase)
 
 void LocalDatabaseManager::deleteStudyFromHardDisk(const QString &studyInstanceToDelete)
 {
-    DeleteDirectory deleteDirectory;
+    DirectoryUtilities deleteDirectory;
 
     // TODO El Path del directori no s'hauria de calcular aquí
     if (!deleteDirectory.deleteDirectory(getStudyPath(studyInstanceToDelete), true))
@@ -948,7 +948,7 @@ void LocalDatabaseManager::deleteStudyFromHardDisk(const QString &studyInstanceT
 
 void LocalDatabaseManager::deleteSeriesFromHardDisk(const QString &studyInstanceUID, const QString &seriesInstanceUID)
 {
-    DeleteDirectory deleteDirectory;
+    DirectoryUtilities deleteDirectory;
 
     // TODO El Path del directori no s'hauria de calcular aquí
     if (!deleteDirectory.deleteDirectory(getStudyPath(studyInstanceUID) + QDir::separator() + seriesInstanceUID, true))

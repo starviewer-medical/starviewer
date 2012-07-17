@@ -13,7 +13,7 @@
 #include "dicommask.h"
 #include "localdatabasemanager.h"
 #include "patientfiller.h"
-#include "deletedirectory.h"
+#include "directoryutilities.h"
 #include "harddiskinformation.h"
 #include "inputoutputsettings.h"
 #include "dicomtagreader.h"
@@ -216,7 +216,7 @@ void RetrieveDICOMFilesFromPACSJob::deleteRetrievedDICOMFilesIfStudyNotExistInDa
         // tipus error per part de MoveSCP indicaria s'ha pogut descarregar cap objecte dicom amb èxit
 
         INFO_LOG("L'estudi " + m_studyToRetrieveDICOMFiles->getInstanceUID() + " no existeix a la base de de dades, esborrem el contingut del seu directori.");
-        DeleteDirectory().deleteDirectory(LocalDatabaseManager().getStudyPath(m_studyToRetrieveDICOMFiles->getInstanceUID()), true);
+        DirectoryUtilities().deleteDirectory(LocalDatabaseManager().getStudyPath(m_studyToRetrieveDICOMFiles->getInstanceUID()), true);
     }
     else
     {
