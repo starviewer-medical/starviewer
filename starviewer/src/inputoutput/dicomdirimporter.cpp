@@ -15,7 +15,7 @@
 #include "dicomtagreader.h"
 #include "localdatabasemanager.h"
 #include "localdatabasemanager.h"
-#include "deletedirectory.h"
+#include "directoryutilities.h"
 
 namespace udg {
 
@@ -290,7 +290,7 @@ void DICOMDIRImporter::createConnections(PatientFiller *patientFiller, LocalData
 
 void DICOMDIRImporter::deleteFailedImportedStudy(QString studyInstanceUID)
 {
-    DeleteDirectory delDirectory;
+    DirectoryUtilities delDirectory;
     LocalDatabaseManager localDatabaseManager;
 
     INFO_LOG("S'esborrarà de la caché les imatges importades de l'estudi " + studyInstanceUID + " ja que la seva importació ha fallat");

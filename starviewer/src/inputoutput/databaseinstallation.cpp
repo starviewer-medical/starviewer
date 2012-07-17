@@ -8,7 +8,7 @@
 
 #include "databaseconnection.h"
 #include "logging.h"
-#include "deletedirectory.h"
+#include "directoryutilities.h"
 #include "localdatabasemanager.h"
 #include "starviewerapplication.h"
 #include "upgradedatabasexmlparser.h"
@@ -184,7 +184,7 @@ bool DatabaseInstallation::reinstallDatabase()
 
 bool DatabaseInstallation::removeCacheAndReinstallDatabase()
 {
-    DeleteDirectory *deleteDirectory = new DeleteDirectory();
+    DirectoryUtilities *deleteDirectory = new DirectoryUtilities();
 
     if (m_qprogressDialog == NULL)
     {

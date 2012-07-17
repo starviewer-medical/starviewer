@@ -11,7 +11,7 @@
 #include "pacsdevice.h"
 #include "echotopacs.h"
 #include "logging.h"
-#include "deletedirectory.h"
+#include "directoryutilities.h"
 
 namespace udg {
 
@@ -21,7 +21,7 @@ int DicomPrint::print(DicomPrinter printer, DicomPrintJob printJob)
 
     QStringList dcmtkStoredPrintPathFileList;
     int indexNumberOfCopies = 0, numberOfCopies, numberOfFilmSessionPrinted = 0;
-    DeleteDirectory deleteDirectory;
+    DirectoryUtilities deleteDirectory;
 
     m_lastError = Ok;
 

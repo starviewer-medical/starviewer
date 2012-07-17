@@ -13,7 +13,7 @@
 #include "logging.h"
 #include "status.h"
 #include "harddiskinformation.h"
-#include "deletedirectory.h"
+#include "directoryutilities.h"
 #include "starviewerapplication.h"
 #include "study.h"
 #include "patient.h"
@@ -352,7 +352,7 @@ Status QCreateDicomdir::createDicomdirOnCdOrDvd()
 void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
 {
     QString dicomdirPath = m_lineEditDicomdirPath->text();
-    DeleteDirectory delDirectory;
+    DirectoryUtilities delDirectory;
     QDir directoryDicomdirPath(dicomdirPath);
 
     // Comprovem si el directori ja es un dicomdir, si és el cas demanem a l'usuari si el desitja sobreecriue o, els estudis seleccionats s'afegiran ja al
@@ -766,7 +766,7 @@ void QCreateDicomdir::clearTemporaryDICOMDIRPath()
 
     if (QFile::exists(dicomdirPath))
     {
-        DeleteDirectory delDirectory;
+        DirectoryUtilities delDirectory;
         delDirectory.deleteDirectory(dicomdirPath, true);
     }
 }

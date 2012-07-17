@@ -38,7 +38,6 @@ HEADERS += extensionfactory.h \
     itkQtAdaptor.h \
     harddiskinformation.h \
     logging.h \
-    deletedirectory.h \
     volume.h \
     volumereader.h \
     volumepixeldatareader.h \
@@ -210,7 +209,6 @@ HEADERS += extensionfactory.h \
     anatomicalplane.h \
     patientorientation.h \
     imageorientation.h \
-    copydirectory.h \
     qreleasenotes.h \
     qdicomdumpbrowser.h \
     applicationversionchecker.h \
@@ -285,13 +283,13 @@ HEADERS += extensionfactory.h \
     perpendiculardistancetool.h \
     glutessellator.h \
     qtreewidgetwithseparatorline.h \
-    diagnosistestproblem.h
+    diagnosistestproblem.h \
+    directoryutilities.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
     mathtools.cpp \
     harddiskinformation.cpp \
-    deletedirectory.cpp \
     volume.cpp \
     volumereader.cpp \
     volumepixeldatareader.cpp \
@@ -456,7 +454,6 @@ SOURCES += extensionmediator.cpp \
     anatomicalplane.cpp \
     patientorientation.cpp \
     imageorientation.cpp \
-    copydirectory.cpp \
     qreleasenotes.cpp \
     qdicomdumpbrowser.cpp \
     applicationversionchecker.cpp \
@@ -527,7 +524,8 @@ SOURCES += extensionmediator.cpp \
     perpendiculardistancetool.cpp \
     glutessellator.cpp \
     qtreewidgetwithseparatorline.cpp \
-    diagnosistestproblem.cpp
+    diagnosistestproblem.cpp \
+    directoryutilities.cpp
 win32 {
     HEADERS += windowsfirewallaccess.h \
                windowssysteminformation.h
