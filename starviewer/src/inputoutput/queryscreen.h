@@ -134,12 +134,6 @@ private slots:
     /// si no n'està executant cap més s'amaga el gif animat que indica que s'està processant una petició
     void pacsJobFinishedOrCancelled(PACSJob *pacsJob);
 
-#ifndef STARVIEWER_LITE
-    /// Ensenya un barra de progrés fins que no hi ha PACSJob executant a la PACSManager, es pot passar-li un valor de temsp, passat el mètode
-    /// deixa d'ensenyar el progressBar i retorna;
-    void showQProgressDialogUntilNoPACSJobsAreExecuting(int timeoutMs = INT_MAX);
-#endif
-
     /// Actualitza segons el tab en el que ens trobem la visibilitat del llistat de PACS
     /// El llistat només es podrà habilitar o deshabilitar quan estem en la pestanya PACS
     void updatePACSNodesVisibility();
