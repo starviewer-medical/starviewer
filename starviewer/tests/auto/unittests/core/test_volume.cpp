@@ -2,6 +2,8 @@
 
 #include "volume.h"
 #include "image.h"
+#include "volumetesthelper.h"
+
 #include "fuzzycomparetesthelper.h"
 
 #include <QVector3D>
@@ -28,11 +30,27 @@ private slots:
 
     void getStackDirection_ShouldReturnExpectedDirection_data();
     void getStackDirection_ShouldReturnExpectedDirection();
+
+    void getPhaseImages_ShouldReturnExpectedPhaseImages_data();
+    void getPhaseImages_ShouldReturnExpectedPhaseImages();
+
+    void getOrigin_ShouldReturnExpectedOrigin_data();
+    void getOrigin_ShouldReturnExpectedOrigin();
+
+    void getDimensions_ShouldReturnExpectedDimensions_data();
+    void getDimensions_ShouldReturnExpectedDimensions();
+
+    void getSpacing_ShouldReturnExpectedSpacing_data();
+    void getSpacing_ShouldReturnExpectedSpacing();
+
+    void getExtent_ShouldReturnExpectedExtent_data();
+    void getExtent_ShouldReturnExpectedExtent();
 };
 
 Q_DECLARE_METATYPE(AnatomicalPlane::AnatomicalPlaneType)
 Q_DECLARE_METATYPE(QList<Image*>)
 Q_DECLARE_METATYPE(QSharedPointer<Volume>)
+Q_DECLARE_METATYPE(Volume*)
 Q_DECLARE_METATYPE(ImageOrientation)
 
 void test_Volume::getAcquisitionPlane_ShouldReturnNotAvailable_data()
@@ -392,6 +410,214 @@ void test_Volume::getStackDirection_ShouldReturnExpectedDirection()
     QVector3D direction(dir[0], dir[1], dir[2]);
 
     QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(direction, expectedDirection, 0.0000001));
+}
+
+void test_Volume::getPhaseImages_ShouldReturnExpectedPhaseImages_data()
+{
+    QTest::addColumn<Volume*>("volume");
+    QTest::addColumn<int>("phase");
+    QTest::addColumn<QList<Image*>>("phaseImages");
+
+    Volume *volumeWithPhases = VolumeTestHelper::createVolume(6, 2, 3);
+    QList<Image*> images_1 = volumeWithPhases->getImages();
+
+    Volume *volumeWithoutPhases = VolumeTestHelper::createVolume(2, 1, 2);
+    QList<Image*> images_2 = volumeWithoutPhases->getImages();
+
+    Volume *volumeGeneric = VolumeTestHelper::createVolume(2, 1, 2);
+
+    QTest::newRow("Volume with phases") << volumeWithPhases << 1 << (QList<Image*>() << images_1.at(1) << images_1.at(3) << images_1.at(5));
+    QTest::newRow("Volume without phases") << volumeWithoutPhases << 0 << (QList<Image*>() << images_2.at(0) << images_2.at(1));
+    QTest::newRow("Incorrect phase") << volumeGeneric << -1 << QList<Image*>();
+}
+
+void test_Volume::getPhaseImages_ShouldReturnExpectedPhaseImages()
+{
+    QFETCH(Volume*, volume);
+    QFETCH(int, phase);
+    QFETCH(QList<Image*>, phaseImages);
+
+    QCOMPARE(volume->getPhaseImages(phase).size(), phaseImages.size());
+    QCOMPARE(phaseImages, volume->getPhaseImages(phase));
+
+    VolumeTestHelper::cleanUp(volume);
+}
+
+void test_Volume::getOrigin_ShouldReturnExpectedOrigin_data()
+{
+     QTest::addColumn<Volume*>("volume");
+     QTest::addColumn<double>("xValue");
+     QTest::addColumn<double>("yValue");
+     QTest::addColumn<double>("zValue");
+
+     int dimensions[3];
+     double spacing[3];
+     int extent[6];
+     double origin[3];
+     origin[0] = 10.56;
+     origin[1] = -45.185;
+     origin[2] = 12;
+     Volume *volumeWithOrigin = VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, spacing, dimensions, extent);
+
+     double nullOrigin[3];
+     nullOrigin[0] = NULL;
+     nullOrigin[1] = NULL;
+     nullOrigin[2] = NULL;
+     Volume *volumeWithNullOrigin = VolumeTestHelper::createVolumeWithParameters(1, 1, 1, nullOrigin, spacing, dimensions, extent);
+
+     QTest::newRow("Volume with origin") << volumeWithOrigin << origin[0] << origin[1] << origin[2];
+     QTest::newRow("Volume with null origin") << volumeWithNullOrigin << 0.0 << 0.0 << 0.0;
+}
+
+void test_Volume::getOrigin_ShouldReturnExpectedOrigin()
+{
+    QFETCH(Volume*, volume);
+    QFETCH(double, xValue);
+    QFETCH(double, yValue);
+    QFETCH(double, zValue);
+
+    QCOMPARE(volume->getOrigin()[0], xValue);
+    QCOMPARE(volume->getOrigin()[1], yValue);
+    QCOMPARE(volume->getOrigin()[2], zValue);
+
+    VolumeTestHelper::cleanUp(volume);
+}
+
+void test_Volume::getDimensions_ShouldReturnExpectedDimensions_data()
+{
+    QTest::addColumn<Volume*>("volume");
+    QTest::addColumn<int>("xValue");
+    QTest::addColumn<int>("yValue");
+    QTest::addColumn<int>("zValue");
+
+    double origin[3];
+    double spacing[3];
+    int extent[6];
+    int dimensions[3];
+    dimensions[0] = 128;
+    dimensions[1] = -512;
+    dimensions[2] = 45;
+    Volume *volumeWithDimensions = VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, spacing, dimensions, extent);
+
+    int nullDimensions[3];
+    nullDimensions[0] = NULL;
+    nullDimensions[1] = NULL;
+    nullDimensions[2] = NULL;
+    Volume *volumeWithNullDimensions = VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, spacing, nullDimensions, extent);
+
+    QTest::newRow("Volume with dimensions") << volumeWithDimensions << dimensions[0] << dimensions[1] << dimensions[2];
+    QTest::newRow("Volume with null dimensions") << volumeWithNullDimensions << 0 << 0 << 0;
+}
+
+void test_Volume::getDimensions_ShouldReturnExpectedDimensions()
+{
+    QFETCH(Volume*, volume);
+    QFETCH(int, xValue);
+    QFETCH(int, yValue);
+    QFETCH(int, zValue);
+
+    QCOMPARE(volume->getDimensions()[0], xValue);
+    QCOMPARE(volume->getDimensions()[1], yValue);
+    QCOMPARE(volume->getDimensions()[2], zValue);
+
+    VolumeTestHelper::cleanUp(volume);
+}
+
+void test_Volume::getSpacing_ShouldReturnExpectedSpacing_data()
+{
+    QTest::addColumn<Volume*>("volume");
+    QTest::addColumn<double>("xValue");
+    QTest::addColumn<double>("yValue");
+    QTest::addColumn<double>("zValue");
+
+    double origin[3];
+    int dimensions[3];
+    int extent[6];
+    double spacing[3];
+    spacing[0] = 3;
+    spacing[1] = -2;
+    spacing[2] = 2.5;
+    Volume *volumeWithSpacing = VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, spacing, dimensions, extent);
+
+    double nullSpacing[3];
+    nullSpacing[0] = NULL;
+    nullSpacing[1] = NULL;
+    nullSpacing[2] = NULL;
+    Volume *volumeWithNullSpacing = VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, nullSpacing, dimensions, extent);
+
+    QTest::newRow("Volume with spacing") << volumeWithSpacing << spacing[0] << spacing[1] << spacing[2];
+    QTest::newRow("Volume with null spacing") << volumeWithNullSpacing << 0.0 << 0.0 << 0.0;
+}
+
+void test_Volume::getSpacing_ShouldReturnExpectedSpacing()
+{
+    QFETCH(Volume*, volume);
+    QFETCH(double, xValue);
+    QFETCH(double, yValue);
+    QFETCH(double, zValue);
+
+    QCOMPARE(volume->getSpacing()[0], xValue);
+    QCOMPARE(volume->getSpacing()[1], yValue);
+    QCOMPARE(volume->getSpacing()[2], zValue);
+
+    VolumeTestHelper::cleanUp(volume);
+}
+
+void test_Volume::getExtent_ShouldReturnExpectedExtent_data()
+{
+    QTest::addColumn<Volume*>("volume");
+    QTest::addColumn<int>("x1");
+    QTest::addColumn<int>("x2");
+    QTest::addColumn<int>("y1");
+    QTest::addColumn<int>("y2");
+    QTest::addColumn<int>("z1");
+    QTest::addColumn<int>("z2");
+
+    double origin[3];
+    int dimensions[3];
+    double spacing[3];
+    int extent[6];
+    extent[0] = 10;
+    extent[1] = -2;
+    extent[2] = 9;
+    extent[3] = 2;
+    extent[4] = 100;
+    extent[5] = -500;
+
+    Volume *volumeWithExtent = VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, spacing, dimensions, extent);
+
+    int nullExtent[6];
+    nullExtent[0] = NULL;
+    nullExtent[1] = NULL;
+    nullExtent[2] = NULL;
+    nullExtent[3] = NULL;
+    nullExtent[4] = NULL;
+    nullExtent[5] = NULL;
+    
+    Volume *volumeWithNullExtent = VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, spacing, dimensions, nullExtent);
+
+    QTest::newRow("Volume with extent") << volumeWithExtent << extent[0] << extent[1] << extent[2] << extent[3] << extent[4] << extent[5];
+    QTest::newRow("Volume with null extent") << volumeWithNullExtent << 0 << 0 << 0 << 0 << 0 << 0;
+}
+
+void test_Volume::getExtent_ShouldReturnExpectedExtent()
+{
+    QFETCH(Volume*, volume);
+    QFETCH(int, x1);
+    QFETCH(int, x2);
+    QFETCH(int, y1);
+    QFETCH(int, y2);
+    QFETCH(int, z1);
+    QFETCH(int, z2);
+
+    QCOMPARE(volume->getWholeExtent()[0], x1);
+    QCOMPARE(volume->getWholeExtent()[1], x2);
+    QCOMPARE(volume->getWholeExtent()[2], y1);
+    QCOMPARE(volume->getWholeExtent()[3], y2);
+    QCOMPARE(volume->getWholeExtent()[4], z1);
+    QCOMPARE(volume->getWholeExtent()[5], z2);
+
+    VolumeTestHelper::cleanUp(volume);
 }
 
 DECLARE_TEST(test_Volume)
