@@ -45,6 +45,9 @@ private slots:
 
     void getExtent_ShouldReturnExpectedExtent_data();
     void getExtent_ShouldReturnExpectedExtent();
+
+    void setPhases_ShouldSetValidPhasesValue_data();
+    void setPhases_ShouldSetValidPhasesValue();
 };
 
 Q_DECLARE_METATYPE(AnatomicalPlane::AnatomicalPlaneType)
@@ -616,6 +619,35 @@ void test_Volume::getExtent_ShouldReturnExpectedExtent()
     QCOMPARE(volume->getWholeExtent()[3], y2);
     QCOMPARE(volume->getWholeExtent()[4], z1);
     QCOMPARE(volume->getWholeExtent()[5], z2);
+
+    VolumeTestHelper::cleanUp(volume);
+}
+
+void test_Volume::setPhases_ShouldSetValidPhasesValue_data()
+{
+    QTest::addColumn<Volume*>("volume");
+    QTest::addColumn<int>("phases");
+
+    Volume *volumeWithValidPhases = VolumeTestHelper::createVolume();
+    volumeWithValidPhases->setNumberOfPhases(10);
+
+    Volume *volumeWithInvalidPhases = VolumeTestHelper::createVolume();
+    volumeWithInvalidPhases->setNumberOfPhases(-5);
+
+    Volume *volumeWithZeroPhases = VolumeTestHelper::createVolume();
+    volumeWithZeroPhases->setNumberOfPhases(0);
+
+    QTest::newRow("Volume with valid phases") << volumeWithValidPhases << 10;
+    QTest::newRow("Volume with invalid phases") << volumeWithInvalidPhases << 1;
+    QTest::newRow("Volume with zero phases") << volumeWithZeroPhases << 1;
+}
+
+void test_Volume::setPhases_ShouldSetValidPhasesValue()
+{
+    QFETCH(Volume*, volume);
+    QFETCH(int, phases);
+
+    QCOMPARE(volume->getNumberOfPhases(), phases);
 
     VolumeTestHelper::cleanUp(volume);
 }
