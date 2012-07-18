@@ -118,7 +118,6 @@ void test_VolumePixelData::setData_vtk_ShouldSetDataCorrectly()
 
     VolumePixelData volumePixelData;
     volumePixelData.setData(vtkData);
-    volumePixelData.setData(vtkData);
 
     QCOMPARE(volumePixelData.getVtkData(), vtkData.GetPointer());
 }
