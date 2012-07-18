@@ -1,3 +1,6 @@
+#ifndef VOLUMEPIXELDATATESTHELPER_H
+#define VOLUMEPIXELDATATESTHELPER_H
+
 #include "volumepixeldata.h"
 
 using namespace udg;
@@ -19,3 +22,5 @@ public:
 };
 
 }
+
+#endif // VOLUMEPIXELDATATESTHELPER_H
