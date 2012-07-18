@@ -14,7 +14,8 @@ SOURCES += $$PWD/gmock-gtest-all.cc \
            $$PWD/testingportinuse.cpp \
            $$PWD/drawerpolygontesthelper.cpp \
            $$PWD/testingportinusebyanotherapplication.cpp \
-           $$PWD/volumetesthelper.cpp
+           $$PWD/volumetesthelper.cpp \
+		   $$PWD/volumepixeldatatesthelper.cpp
            
 HEADERS += $$PWD/autotest.h \
            $$PWD/gtest/gtest.h \
@@ -33,4 +34,5 @@ HEADERS += $$PWD/autotest.h \
            $$PWD/testingportinuse.h \
            $$PWD/drawerpolygontesthelper.h \
            $$PWD/testingportinusebyanotherapplication.h \
-           $$PWD/volumetesthelper.h
+           $$PWD/volumetesthelper.h \
+		   $$PWD/volumepixeldatatesthelper.h
