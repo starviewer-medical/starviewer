@@ -1,6 +1,7 @@
 #include "autotest.h"
 #include "volumepixeldata.h"
 
+#include "itkandvtkimagetesthelper.h"
 #include "volumepixeldatatesthelper.h"
 
 using namespace udg;
@@ -57,7 +58,7 @@ void test_VolumePixelData::setData_itk_ShouldCreateExpectedVtkData_data()
         double origin[3] = { 0.0, 0.0, 0.0 };
         VolumePixelData::ItkImageTypePointer itkData;
         vtkSmartPointer<vtkImageData> vtkData;
-        VolumePixelDataTestHelper::createItkAndVtkImages(dimensions, startIndex, spacing, origin, itkData, vtkData);
+        ItkAndVtkImageTestHelper::createItkAndVtkImages(dimensions, startIndex, spacing, origin, itkData, vtkData);
         QTest::newRow("random #1") << itkData << vtkData;
     }
 
@@ -68,7 +69,7 @@ void test_VolumePixelData::setData_itk_ShouldCreateExpectedVtkData_data()
         double origin[3] = { 48.0, 41.0, -68.0 };
         VolumePixelData::ItkImageTypePointer itkData;
         vtkSmartPointer<vtkImageData> vtkData;
-        VolumePixelDataTestHelper::createItkAndVtkImages(dimensions, startIndex, spacing, origin, itkData, vtkData);
+        ItkAndVtkImageTestHelper::createItkAndVtkImages(dimensions, startIndex, spacing, origin, itkData, vtkData);
         QTest::newRow("random #2") << itkData << vtkData;
     }
 }
