@@ -3,7 +3,7 @@
 #include "volume.h"
 #include "image.h"
 #include "volumetesthelper.h"
-
+#include "imagetesthelper.h"
 #include "fuzzycomparetesthelper.h"
 
 #include <QVector3D>
@@ -48,6 +48,9 @@ private slots:
 
     void setPhases_ShouldSetValidPhasesValue_data();
     void setPhases_ShouldSetValidPhasesValue();
+
+    void addImage_ShouldAddValidImages_data();
+    void addImage_ShouldAddValidImages();
 };
 
 Q_DECLARE_METATYPE(AnatomicalPlane::AnatomicalPlaneType)
@@ -648,6 +651,37 @@ void test_Volume::setPhases_ShouldSetValidPhasesValue()
     QFETCH(int, phases);
 
     QCOMPARE(volume->getNumberOfPhases(), phases);
+
+    VolumeTestHelper::cleanUp(volume);
+}
+
+void test_Volume::addImage_ShouldAddValidImages_data()
+{
+    QTest::addColumn<Volume*>("volume");
+    QTest::addColumn<QList<Image*>>("images");
+
+    Volume *volumeWithTwoDifferentImages = VolumeTestHelper::createVolume();
+    Image *image_1 = ImageTestHelper::createImageByUID("1");
+    Image *image_2 = ImageTestHelper::createImageByUID("2");
+    volumeWithTwoDifferentImages->addImage(image_1);
+    volumeWithTwoDifferentImages->addImage(image_2);
+
+    Volume *volumeWithDupplicate = VolumeTestHelper::createVolume();
+    Image *image = ImageTestHelper::createImageByUID("1");
+    volumeWithDupplicate->addImage(image);
+    volumeWithDupplicate->addImage(image);
+
+    QTest::newRow("Volume with two different images") << volumeWithTwoDifferentImages << (QList<Image*>() << image_1 << image_2);
+    QTest::newRow("Volume with dipplicate") << volumeWithDupplicate << (QList<Image*>() << image);
+}
+
+void test_Volume::addImage_ShouldAddValidImages()
+{
+    QFETCH(Volume*, volume);
+    QFETCH(QList<Image*>, images);
+
+    QCOMPARE(volume->getImages().size(), images.size());
+    QCOMPARE(volume->getImages(), images);
 
     VolumeTestHelper::cleanUp(volume);
 }
