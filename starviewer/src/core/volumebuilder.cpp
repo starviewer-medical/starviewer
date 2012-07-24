@@ -1,6 +1,3 @@
-#ifndef UDGVOLUMEBUILDER_CPP
-#define UDGVOLUMEBUILDER_CPP
-
 #include "volumebuilder.h"
 
 namespace udg {
@@ -23,5 +20,3 @@ QString VolumeBuilder::getSeriesDescription() const
     return m_seriesDescription;
 }
 }
-
-#endif

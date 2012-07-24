@@ -1,6 +1,3 @@
-#ifndef UDGDICOMWRITER_CPP
-#define UDGDICOMWRITER_CPP
-
 #include "dicomwriter.h"
 #include "dicomwriterdcmtk.h"
 
@@ -27,5 +24,3 @@ QString DICOMWriter::getPath()
 }
 
 }
-
-#endif

@@ -1,6 +1,3 @@
-#ifndef UDGDICOMFILEGENERATOR_CPP
-#define UDGDICOMFILEGENERATOR_CPP
-
 #include "dicomfilegenerator.h"
 
 #include "dicomwriter.h"
@@ -213,5 +210,3 @@ void DICOMFileGenerator::fillGeneralEquipmentInfo(DICOMWriter *writer, Series *s
 }
 
 }
-
-#endif

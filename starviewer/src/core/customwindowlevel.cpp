@@ -1,6 +1,3 @@
-#ifndef UDGCUSTOMWINDOWLEVEL_CPP
-#define UDGCUSTOMWINDOWLEVEL_CPP
-
 #include "customwindowlevel.h"
 #include <QString>
 
@@ -45,4 +42,3 @@ double CustomWindowLevel::getLevel() const
 }
 
 }
-#endif

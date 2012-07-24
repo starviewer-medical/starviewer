@@ -1,6 +1,3 @@
-#ifndef UDGDICOMDUMPDEFAULTTAGS_CPP
-#define UDGDICOMDUMPDEFAULTTAGS_CPP
-
 #include "dicomdumpdefaulttags.h"
 #include <QString>
 
@@ -59,4 +56,3 @@ QList<DICOMTag> DICOMDumpDefaultTags::getTagsToShow() const
     return m_tagsToShow;
 }
 }
-#endif

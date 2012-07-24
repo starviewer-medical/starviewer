@@ -1,6 +1,3 @@
-#ifndef UDGDICOMTAG_CPP
-#define UDGDICOMTAG_CPP
-
 #include "dicomtag.h"
 
 #include <dctag.h>
@@ -83,5 +80,3 @@ bool DICOMTag::operator!=(const DICOMTag &tag)
 }
 
 }
-
-#endif

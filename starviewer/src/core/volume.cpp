@@ -1,6 +1,3 @@
-#ifndef UDGVOLUME_CPP
-#define UDGVOLUME_CPP
-
 #include "volume.h"
 
 #include "volumereader.h"
@@ -396,5 +393,3 @@ bool Volume::fitsIntoMemory()
 }
 
 };
-
-#endif

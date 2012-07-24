@@ -1,6 +1,3 @@
-#ifndef UDGVOLUMEREPOSITORY_CPP
-#define UDGVOLUMEREPOSITORY_CPP
-
 #include "volumerepository.h"
 #include "volume.h"
 #include "logging.h"
@@ -54,5 +51,3 @@ int VolumeRepository::getNumberOfVolumes()
 }
 
 }
-
-#endif
