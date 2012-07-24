@@ -3,11 +3,15 @@
 #include "volume.h"
 #include "image.h"
 #include "volumetesthelper.h"
+#include "volumepixeldatatesthelper.h"
 #include "imagetesthelper.h"
+#include "itkandvtkimagetesthelper.h"
 #include "fuzzycomparetesthelper.h"
 
 #include <QVector3D>
 #include <QSharedPointer>
+
+#include <itkImageRegionConstIterator.h>
 
 using namespace udg;
 using namespace testing;
@@ -16,6 +20,17 @@ class test_Volume : public QObject {
 Q_OBJECT
 
 private slots:
+    void constructor_ShouldCreateMinimalVolume();
+
+    void setData_itk_ShouldBehaveAsExpected_data();
+    void setData_itk_ShouldBehaveAsExpected();
+
+    void setData_vtk_ShouldBehaveAsExpected_data();
+    void setData_vtk_ShouldBehaveAsExpected();
+
+    void setPixelData_ShouldBehaveAsExpected_data();
+    void setPixelData_ShouldBehaveAsExpected();
+
     void getAcquisitionPlane_ShouldReturnNotAvailable_data();
     void getAcquisitionPlane_ShouldReturnNotAvailable();
 
@@ -51,6 +66,9 @@ private slots:
 
     void addImage_ShouldAddValidImages_data();
     void addImage_ShouldAddValidImages();
+
+    void convertToNeutralVolume_ShouldBehaveAsExpected_data();
+    void convertToNeutralVolume_ShouldBehaveAsExpected();
 };
 
 Q_DECLARE_METATYPE(AnatomicalPlane::AnatomicalPlaneType)
@@ -58,6 +76,117 @@ Q_DECLARE_METATYPE(QList<Image*>)
 Q_DECLARE_METATYPE(QSharedPointer<Volume>)
 Q_DECLARE_METATYPE(Volume*)
 Q_DECLARE_METATYPE(ImageOrientation)
+Q_DECLARE_METATYPE(Volume::ItkImageTypePointer)
+Q_DECLARE_METATYPE(vtkSmartPointer<vtkImageData>)
+Q_DECLARE_METATYPE(VolumePixelData*)
+
+void test_Volume::constructor_ShouldCreateMinimalVolume()
+{
+    Volume volume;
+
+    QCOMPARE(volume.getNumberOfPhases(), 1);
+    QCOMPARE(volume.getNumberOfSlicesPerPhase(), 1);
+    QCOMPARE(volume.isPixelDataLoaded(), false);
+    QVERIFY(volume.getPixelData() != 0);
+}
+
+void test_Volume::setData_itk_ShouldBehaveAsExpected_data()
+{
+    QTest::addColumn<Volume::ItkImageTypePointer>("itkData");
+
+    {
+        Volume::ItkImageTypePointer itkData = Volume::ItkImageType::New();
+        QTest::newRow("default") << itkData;
+    }
+
+    {
+        int dimensions[3] = { 200, 200, 200 };
+        int startIndex[3] = { 0, 0, 0 };
+        double spacing[3] = { 0.33, 0.33, 1.20 };
+        double origin[3] = { 0.0, 0.0, 0.0 };
+        QTest::newRow("random #1") << ItkAndVtkImageTestHelper::createItkImage(dimensions, startIndex, spacing, origin);
+    }
+
+    {
+        int dimensions[3] = { 33, 124, 6 };
+        int startIndex[3] = { 200, 169, 156 };
+        double spacing[3] = { 2.2, 0.74, 1.44 };
+        double origin[3] = { 48.0, 41.0, -68.0 };
+        QTest::newRow("random #2") << ItkAndVtkImageTestHelper::createItkImage(dimensions, startIndex, spacing, origin);
+    }
+}
+
+void test_Volume::setData_itk_ShouldBehaveAsExpected()
+{
+    QFETCH(Volume::ItkImageTypePointer, itkData);
+
+    Volume volume;
+    volume.setData(itkData);
+
+    QCOMPARE(volume.isPixelDataLoaded(), true);
+
+    Volume::ItkImageTypePointer outputItkData = volume.getItkData();
+
+    for (int i = 0; i < 3; i++)
+    {
+        QCOMPARE(outputItkData->GetLargestPossibleRegion().GetSize()[i], itkData->GetLargestPossibleRegion().GetSize()[i]);
+        QCOMPARE(outputItkData->GetLargestPossibleRegion().GetIndex()[i], itkData->GetLargestPossibleRegion().GetIndex()[i]);
+        QCOMPARE(outputItkData->GetSpacing()[i], itkData->GetSpacing()[i]);
+        QCOMPARE(outputItkData->GetOrigin()[i], itkData->GetOrigin()[i]);
+    }
+
+    itk::ImageRegionConstIterator<VolumePixelData::ItkImageType> actualIterator(outputItkData, outputItkData->GetLargestPossibleRegion());
+    itk::ImageRegionConstIterator<VolumePixelData::ItkImageType> expectedIterator(itkData, itkData->GetLargestPossibleRegion());
+    actualIterator.GoToBegin();
+    expectedIterator.GoToBegin();
+
+    while (!actualIterator.IsAtEnd())
+    {
+        QCOMPARE(actualIterator.Get(), expectedIterator.Get());
+        ++actualIterator;
+        ++expectedIterator;
+    }
+}
+
+void test_Volume::setData_vtk_ShouldBehaveAsExpected_data()
+{
+    QTest::addColumn<vtkSmartPointer<vtkImageData>>("vtkData");
+
+    QTest::newRow("null") << vtkSmartPointer<vtkImageData>();
+    QTest::newRow("not null") << vtkSmartPointer<vtkImageData>::New();
+}
+
+void test_Volume::setData_vtk_ShouldBehaveAsExpected()
+{
+    QFETCH(vtkSmartPointer<vtkImageData>, vtkData);
+
+    Volume volume;
+    volume.setData(vtkData);
+
+    QCOMPARE(volume.isPixelDataLoaded(), true);
+
+    vtkImageData *outputVtkData = volume.getVtkData();
+    QCOMPARE(outputVtkData, vtkData.GetPointer());
+}
+
+void test_Volume::setPixelData_ShouldBehaveAsExpected_data()
+{
+    QTest::addColumn<VolumePixelData*>("pixelData");
+
+    QTest::newRow("null") << static_cast<VolumePixelData*>(0);
+    QTest::newRow("not null") << new VolumePixelData(this);
+}
+
+void test_Volume::setPixelData_ShouldBehaveAsExpected()
+{
+    QFETCH(VolumePixelData*, pixelData);
+
+    Volume volume;
+    volume.setPixelData(pixelData);
+
+    QCOMPARE(volume.isPixelDataLoaded(), true);
+    QCOMPARE(volume.getPixelData(), pixelData);
+}
 
 void test_Volume::getAcquisitionPlane_ShouldReturnNotAvailable_data()
 {
@@ -684,6 +813,95 @@ void test_Volume::addImage_ShouldAddValidImages()
     QCOMPARE(volume->getImages(), images);
 
     VolumeTestHelper::cleanUp(volume);
+}
+
+void test_Volume::convertToNeutralVolume_ShouldBehaveAsExpected_data()
+{
+    QTest::addColumn<Volume*>("volume");
+
+    {
+        QTest::newRow("default") << new Volume(this);
+    }
+
+    {
+        int dimensions[3] = { 200, 200, 200 };
+        int extent[6] = { 0, 199, 0, 199, 0, 199 };
+        double spacing[3] = { 0.33, 0.33, 1.20 };
+        double origin[3] = { 0.0, 0.0, 0.0 };
+        VolumePixelData *pixelData = VolumePixelDataTestHelper::createVolumePixelData(dimensions, extent, spacing, origin);
+        Volume *volume = new Volume(this);
+        volume->setPixelData(pixelData);
+        QTest::newRow("random #1") << volume;
+    }
+
+    {
+        int dimensions[3] = { 33, 124, 6 };
+        int extent[6] = { 200, 232, 169, 292, 156, 161 };
+        double spacing[3] = { 2.2, 0.74, 1.44 };
+        double origin[3] = { 48.0, 41.0, -68.0 };
+        VolumePixelData *pixelData = VolumePixelDataTestHelper::createVolumePixelData(dimensions, extent, spacing, origin);
+        Volume *volume = new Volume(this);
+        volume->setPixelData(pixelData);
+        volume->setNumberOfPhases(42);
+        QTest::newRow("random #2") << volume;
+    }
+}
+
+void test_Volume::convertToNeutralVolume_ShouldBehaveAsExpected()
+{
+    QFETCH(Volume*, volume);
+
+    volume->convertToNeutralVolume();
+
+    VolumePixelData *pixelData = volume->getPixelData();
+    QVERIFY(pixelData != 0);
+
+    vtkImageData *vtkData = pixelData->getVtkData();
+    QVERIFY(vtkData != 0);
+
+    for (int i = 0; i < 3; i++)
+    {
+        QCOMPARE(vtkData->GetOrigin()[i], 0.0);
+        QCOMPARE(vtkData->GetSpacing()[i], 1.0);
+    }
+
+    QCOMPARE(vtkData->GetDimensions()[0], 10);
+    QCOMPARE(vtkData->GetDimensions()[1], 10);
+    QCOMPARE(vtkData->GetDimensions()[2], 1);
+
+    QCOMPARE(vtkData->GetExtent()[0], 0);
+    QCOMPARE(vtkData->GetExtent()[1], 9);
+    QCOMPARE(vtkData->GetExtent()[2], 0);
+    QCOMPARE(vtkData->GetExtent()[3], 9);
+    QCOMPARE(vtkData->GetExtent()[4], 0);
+    QCOMPARE(vtkData->GetExtent()[5], 0);
+
+    QCOMPARE(vtkData->GetScalarType(), VTK_SHORT);
+    QCOMPARE(vtkData->GetNumberOfScalarComponents(), 1);
+
+    QVERIFY(vtkData->GetScalarPointer() != 0);
+
+    signed short *scalarPointer = static_cast<signed short*>(vtkData->GetScalarPointer());
+    signed short expectedValue;
+
+    for (int i = 0; i < 10; i++)
+    {
+        expectedValue = 150 - i * 20;
+
+        if (i > 4)
+        {
+            expectedValue = 150 - (10 - i - 1) * 20;
+        }
+
+        for (int j = 0; j < 10; j++)
+        {
+            QCOMPARE(*scalarPointer, expectedValue);
+            scalarPointer++;
+        }
+    }
+
+    QCOMPARE(volume->getNumberOfPhases(), 1);
+    QCOMPARE(volume->isPixelDataLoaded(), true);
 }
 
 DECLARE_TEST(test_Volume)
