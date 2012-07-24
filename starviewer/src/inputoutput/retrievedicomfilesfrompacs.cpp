@@ -470,7 +470,7 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResp
 {
     // Llista de camps relacionats amb l'error que poden contenir informació adicional
     QList<DcmTagKey> relatedFieldsList;
-    QString messageErrorLog = "No s'ha pogut descarregar l'estudi, descripcio error rebuda";
+    QString messageErrorLog = "No s'ha pogut descarregar l'estudi, descripcio error rebuda: ";
     PACSRequestStatus::RetrieveRequestStatus retrieveRequestStatus;
 
     // Al PS 3.4, secció C.4.2.1.5, taula C.4-2 podem trobar un descripció dels errors.
