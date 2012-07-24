@@ -1,7 +1,7 @@
 #ifndef UDGCUSTOMWINDOWLEVELSWRITER_H
 #define UDGCUSTOMWINDOWLEVELSWRITER_H
 
-#include "customwindowlevel.h"
+class QString;
 
 namespace udg {
 
