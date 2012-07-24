@@ -69,6 +69,10 @@ private slots:
 
     void convertToNeutralVolume_ShouldBehaveAsExpected_data();
     void convertToNeutralVolume_ShouldBehaveAsExpected();
+    
+    void setImages_ShouldAddImageList_data();
+    void setImages_ShouldAddImageList();
+
 };
 
 Q_DECLARE_METATYPE(AnatomicalPlane::AnatomicalPlaneType)
@@ -812,6 +816,47 @@ void test_Volume::addImage_ShouldAddValidImages()
     QCOMPARE(volume->getImages().size(), images.size());
     QCOMPARE(volume->getImages(), images);
 
+    VolumeTestHelper::cleanUp(volume);
+}
+
+void test_Volume::setImages_ShouldAddImageList_data()
+{
+    QTest::addColumn<Volume*>("volume");
+    QTest::addColumn<QList<Image*>>("images");
+    QTest::addColumn<bool>("loaded");
+
+
+    Volume *volumeWithImageList = VolumeTestHelper::createVolume();
+    QList<Image*> imageList_1;
+    QList<Image*> imageList_2;
+    Image *image_1 = ImageTestHelper::createImageByUID("1");
+    Image *image_2 = ImageTestHelper::createImageByUID("2");
+    Image *image_3 = ImageTestHelper::createImageByUID("3");
+    imageList_1 << image_1 << image_2;
+    imageList_2 << image_3;
+    volumeWithImageList->setImages(imageList_1);
+    volumeWithImageList->setImages(imageList_2);
+
+    Volume *volumeWithNoImages = VolumeTestHelper::createVolume();
+    Image *image = ImageTestHelper::createImageByUID("1");
+    volumeWithNoImages->addImage(image);
+    QList<Image*> imageList_3;
+    volumeWithNoImages->setImages(imageList_3);
+
+    QTest::newRow("Volume with two different images") << volumeWithImageList << imageList_2 << false;
+    QTest::newRow("Volume with dipplicate") << volumeWithNoImages << imageList_3 << false;
+}
+
+void test_Volume::setImages_ShouldAddImageList()
+{
+    QFETCH(Volume*, volume);
+    QFETCH(QList<Image*>, images);
+    QFETCH(bool, loaded);
+
+    QCOMPARE(volume->getImages().size(), images.size());
+    QCOMPARE(volume->getImages(), images);
+    QCOMPARE(volume->isPixelDataLoaded(), loaded);
+    
     VolumeTestHelper::cleanUp(volume);
 }
 
