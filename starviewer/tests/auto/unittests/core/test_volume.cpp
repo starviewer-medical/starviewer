@@ -792,6 +792,7 @@ void test_Volume::addImage_ShouldAddValidImages_data()
 {
     QTest::addColumn<Volume*>("volume");
     QTest::addColumn<QList<Image*>>("images");
+    QTest::addColumn<bool>("loaded");
 
     Volume *volumeWithTwoDifferentImages = VolumeTestHelper::createVolume();
     Image *image_1 = ImageTestHelper::createImageByUID("1");
@@ -799,22 +800,22 @@ void test_Volume::addImage_ShouldAddValidImages_data()
     volumeWithTwoDifferentImages->addImage(image_1);
     volumeWithTwoDifferentImages->addImage(image_2);
 
-    Volume *volumeWithDupplicate = VolumeTestHelper::createVolume();
-    Image *image = ImageTestHelper::createImageByUID("1");
-    volumeWithDupplicate->addImage(image);
-    volumeWithDupplicate->addImage(image);
+    Volume *volumeWithDupplicate = VolumeTestHelper::createVolume(1);
+    volumeWithDupplicate->addImage(volumeWithDupplicate->getImages().at(0));
 
-    QTest::newRow("Volume with two different images") << volumeWithTwoDifferentImages << (QList<Image*>() << image_1 << image_2);
-    QTest::newRow("Volume with dipplicate") << volumeWithDupplicate << (QList<Image*>() << image);
+    QTest::newRow("Volume with two different images") << volumeWithTwoDifferentImages << (QList<Image*>() << image_1 << image_2) << false;
+    QTest::newRow("Volume with dipplicate") << volumeWithDupplicate << (QList<Image*>() << volumeWithDupplicate->getImages().at(0)) << true;
 }
 
 void test_Volume::addImage_ShouldAddValidImages()
 {
     QFETCH(Volume*, volume);
     QFETCH(QList<Image*>, images);
+    QFETCH(bool, loaded);
 
     QCOMPARE(volume->getImages().size(), images.size());
     QCOMPARE(volume->getImages(), images);
+    QCOMPARE(volume->isPixelDataLoaded(), loaded);
 
     VolumeTestHelper::cleanUp(volume);
 }
