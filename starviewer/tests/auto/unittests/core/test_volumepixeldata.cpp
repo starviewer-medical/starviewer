@@ -208,7 +208,6 @@ void test_VolumePixelData::setData_ShouldSetDataFromArray()
         ++dataPointer;
     }
 
-    delete[] data;
     delete[] extent;
     delete pixelData;
 }
