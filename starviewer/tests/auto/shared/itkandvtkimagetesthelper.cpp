@@ -4,6 +4,33 @@
 
 namespace testing {
 
+VolumePixelData::ItkImageTypePointer ItkAndVtkImageTestHelper::createItkImage(int dimensions[3], int startIndex[3], double spacing[3], double origin[3])
+{
+    VolumePixelData::ItkImageType::SizeType size = { dimensions[0], dimensions[1], dimensions[2] };
+    VolumePixelData::ItkImageType::IndexType index = { startIndex[0], startIndex[1], startIndex[2] };
+    VolumePixelData::ItkImageType::RegionType region;
+    region.SetSize(size);
+    region.SetIndex(index);
+    VolumePixelData::ItkImageTypePointer itkImage = VolumePixelData::ItkImageType::New();
+    itkImage->SetRegions(region);
+    itkImage->SetSpacing(spacing);
+    itkImage->SetOrigin(origin);
+    itkImage->Allocate();
+
+    itk::ImageRegionIterator<VolumePixelData::ItkImageType> itkIterator(itkImage, itkImage->GetLargestPossibleRegion());
+    itkIterator.GoToBegin();
+    VolumePixelData::VoxelType value = 0;
+
+    while (!itkIterator.IsAtEnd())
+    {
+        itkIterator.Set(value);
+        ++itkIterator;
+        ++value;
+    }
+
+    return itkImage;
+}
+
 void ItkAndVtkImageTestHelper::createItkAndVtkImages(int dimensions[3], int startIndex[3], double spacing[3], double origin[3],
                                                      VolumePixelData::ItkImageTypePointer &itkImage, vtkSmartPointer<vtkImageData> &vtkImage)
 {
