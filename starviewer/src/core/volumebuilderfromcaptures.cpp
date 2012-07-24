@@ -1,6 +1,3 @@
-#ifndef UDGVOLUMEBUILDERFROMCAPTURES_CPP
-#define UDGVOLUMEBUILDERFROMCAPTURES_CPP
-
 #include "volumebuilderfromcaptures.h"
 
 #include <vtkImageAppend.h>
@@ -230,5 +227,3 @@ Volume* VolumeBuilderFromCaptures::build()
 }
 
 }
-
-#endif

@@ -1,6 +1,3 @@
-#ifndef UDGDICOMDUMPDEFAULTTAGSREADER_CPP
-#define UDGDICOMDUMPDEFAULTTAGSREADER_CPP
-
 #include "dicomdumpdefaulttagsreader.h"
 #include "dicomtag.h"
 #include "dicomdumpdefaulttags.h"
@@ -120,5 +117,3 @@ DICOMDumpDefaultTagsRestriction DICOMDumpDefaultTagsReader::readRestriction(QXml
     return dicomRestriction;
 }
 }
-
-#endif

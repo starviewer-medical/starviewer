@@ -1,6 +1,3 @@
-#ifndef UDGDICOMIMAGEFILEGENERATOR_CPP
-#define UDGDICOMIMAGEFILEGENERATOR_CPP
-
 #include "dicomimagefilegenerator.h"
 #include "dicomdictionary.h"
 #include "volume.h"
@@ -194,5 +191,3 @@ void DICOMImageFileGenerator::fillSOPInfo(DICOMWriter *writer, Image *image)
 }
 
 }
-
-#endif

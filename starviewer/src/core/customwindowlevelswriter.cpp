@@ -1,6 +1,3 @@
-#ifndef UDGCUSTOMWINDOWLEVELSWRITER_CPP
-#define UDGCUSTOMWINDOWLEVELSWRITER_CPP
-
 #include "customwindowlevelswriter.h"
 #include "customwindowlevel.h"
 #include "customwindowlevelsrepository.h"
@@ -98,5 +95,3 @@ QString CustomWindowLevelsWriter::getPath()
 }
 
 }
-
-#endif

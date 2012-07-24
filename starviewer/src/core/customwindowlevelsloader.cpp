@@ -1,6 +1,3 @@
-#ifndef UDGCUSTOMWINDOWLEVELSLOADER_CPP
-#define UDGCUSTOMWINDOWLEVELSLOADER_CPP
-
 #include "customwindowlevel.h"
 #include "customwindowlevelsloader.h"
 #include "customwindowlevelsreader.h"
@@ -95,4 +92,3 @@ QString CustomWindowLevelsLoader::loadXMLFile(const QFileInfo &fileInfo)
 }
 
 }
-#endif

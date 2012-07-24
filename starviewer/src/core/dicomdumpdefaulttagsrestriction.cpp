@@ -1,6 +1,3 @@
-#ifndef UDGDICOMDUMPDEFAULTTAGSRESTRICTION_CPP
-#define UDGDICOMDUMPDEFAULTTAGSRESTRICTION_CPP
-
 #include "dicomdumpdefaulttagsrestriction.h"
 #include "dicomtag.h"
 
@@ -87,5 +84,3 @@ bool DICOMDumpDefaultTagsRestriction::isValidValue(const QString &value) const
     return isValidValue;
 }
 }
-
-#endif

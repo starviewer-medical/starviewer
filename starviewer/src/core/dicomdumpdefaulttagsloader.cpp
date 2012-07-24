@@ -1,6 +1,3 @@
-#ifndef UDGDICOMDUMPDEFAULTTAGSLOADER_CPP
-#define UDGDICOMDUMPDEFAULTTAGSLOADER_CPP
-
 #include "dicomdumpdefaulttagsloader.h"
 #include "dicomdumpdefaulttagsreader.h"
 #include "dicomdumpdefaulttagsrepository.h"
@@ -116,4 +113,3 @@ QString DICOMDumpDefaultTagsLoader::loadXMLFile(const QFileInfo &fileInfo)
 }
 
 }
-#endif

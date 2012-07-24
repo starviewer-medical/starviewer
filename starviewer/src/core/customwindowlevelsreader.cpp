@@ -1,6 +1,3 @@
-#ifndef UDGCUSTOMWINDOWLEVELSREADER_CPP
-#define UDGDCUSTOMWINDOWLEVELSREADER_CPP
-
 #include "customwindowlevelsreader.h"
 #include "customwindowlevel.h"
 #include "logging.h"
@@ -73,5 +70,3 @@ QList<CustomWindowLevel*> CustomWindowLevelsReader::readFile(const QString &path
 }
 
 }
-
-#endif
