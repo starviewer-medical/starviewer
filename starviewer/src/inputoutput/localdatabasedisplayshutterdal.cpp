@@ -50,8 +50,10 @@ void LocalDatabaseDisplayShutterDAL::del(const DicomMask &mask)
 
 QList<DisplayShutter> LocalDatabaseDisplayShutterDAL::query(const DicomMask &mask)
 {
-    int columns, rows;
-    char **reply = NULL, **error = NULL;
+    int columns;
+    int rows;
+    char **reply = NULL;
+    char **error = NULL;
     QList<DisplayShutter> shutterList;
 
     m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(), qPrintable(buildSQLSelect(mask)), &reply, &rows, &columns, error);
@@ -112,8 +114,7 @@ QString LocalDatabaseDisplayShutterDAL::buildSQLSelect(const DicomMask &mask)
 
 QString LocalDatabaseDisplayShutterDAL::buildSQLInsert(const DisplayShutter &shutter, Image *shuttersImage)
 {
-    QString insertSentence;
-    insertSentence = "INSERT INTO DisplayShutter ";
+    QString insertSentence = "INSERT INTO DisplayShutter ";
     insertSentence += "(Shape, ShutterValue, PointsList, ImageInstanceUID, ImageFrameNumber) ";
     insertSentence += QString("VALUES ('%1', %2, '%3', '%4', %5)")
         .arg(DatabaseConnection::formatTextToValidSQLSyntax(shutter.getShapeAsDICOMString()))

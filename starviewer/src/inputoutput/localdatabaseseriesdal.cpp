@@ -47,8 +47,10 @@ void LocalDatabaseSeriesDAL::del(const DicomMask &seriesMaskToDelete)
 
 QList<Series*> LocalDatabaseSeriesDAL::query(const DicomMask &seriesMask)
 {
-    int columns, rows;
-    char **reply = NULL, **error = NULL;
+    int columns;
+    int rows;
+    char **reply = NULL;
+    char **error = NULL;
     QList<Series*> seriesList;
 
     m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
