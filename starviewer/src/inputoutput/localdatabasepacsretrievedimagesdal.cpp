@@ -43,8 +43,10 @@ PacsDevice LocalDatabasePACSRetrievedImagesDAL::query(const QString AETitle, con
 
 PacsDevice LocalDatabasePACSRetrievedImagesDAL::query(const QString &sqlQuerySentence)
 {
-    int columns, rows;
-    char **reply = NULL, **error = NULL;
+    int columns;
+    int rows;
+    char **reply = NULL;
+    char **error = NULL;
 
     m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(), qPrintable(sqlQuerySentence), &reply, &rows, &columns, error);
 
@@ -91,17 +93,15 @@ QString LocalDatabasePACSRetrievedImagesDAL::buildSqlInsert(const PacsDevice &pa
 
 QString LocalDatabasePACSRetrievedImagesDAL::buildSqlSelect()
 {
-    QString selectSentence;
-    selectSentence = "Select ID, AETitle, Address, QueryPort "
-                       "From PACSRetrievedImages ";
+    QString selectSentence = "Select ID, AETitle, Address, QueryPort "
+                             "From PACSRetrievedImages ";
 
     return selectSentence;
 }
 
 QString LocalDatabasePACSRetrievedImagesDAL::buildSqlSelect(const qlonglong &IDPACSInDatabase)
 {
-    QString whereSentence;
-    whereSentence = QString(" Where ID = %1 ").arg(IDPACSInDatabase);
+    QString whereSentence = QString(" Where ID = %1 ").arg(IDPACSInDatabase);
 
     return buildSqlSelect() + whereSentence;
 
@@ -109,9 +109,7 @@ QString LocalDatabasePACSRetrievedImagesDAL::buildSqlSelect(const qlonglong &IDP
 
 QString LocalDatabasePACSRetrievedImagesDAL::buildSqlSelect(const QString AETitle, const QString address, int queryPort)
 {
-    QString whereSentence;
-
-    whereSentence = QString(" Where AETitle = '%1' and "
+    QString whereSentence = QString(" Where AETitle = '%1' and "
                                    "Address = '%2' and "
                                    "QueryPort = %3")
             .arg(DatabaseConnection::formatTextToValidSQLSyntax(AETitle))

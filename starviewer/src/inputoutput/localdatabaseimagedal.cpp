@@ -53,8 +53,10 @@ void LocalDatabaseImageDAL::update(Image *imageToUpdate)
 
 QList<Image*> LocalDatabaseImageDAL::query(const DicomMask &imageMask)
 {
-    int columns, rows;
-    char **reply = NULL, **error = NULL;
+    int columns;
+    int rows;
+    char **reply = NULL;
+    char **error = NULL;
     QList<Image*> imageList;
 
     m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
@@ -88,8 +90,10 @@ QList<Image*> LocalDatabaseImageDAL::query(const DicomMask &imageMask)
 
 int LocalDatabaseImageDAL::count(const DicomMask &imageMaskToCount)
 {
-    int columns, rows;
-    char **reply = NULL, **error = NULL;
+    int columns;
+    int rows;
+    char **reply = NULL;
+    char **error = NULL;
 
     m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
                                           qPrintable(buildSqlSelectCountImages(imageMaskToCount)),
@@ -159,9 +163,7 @@ Image* LocalDatabaseImageDAL::fillImage(char **reply, int row, int columns)
 
 QString LocalDatabaseImageDAL::buildSqlSelect(const DicomMask &imageMaskToSelect)
 {
-    QString selectSentence, orderSentence;
-
-    selectSentence = "Select SOPInstanceUID, FrameNumber, StudyInstanceUID, SeriesInstanceUID, InstanceNumber,"
+    QString selectSentence = "Select SOPInstanceUID, FrameNumber, StudyInstanceUID, SeriesInstanceUID, InstanceNumber,"
                                     "ImageOrientationPatient, PatientOrientation, PixelSpacing, SliceThickness,"
                                     "PatientPosition, SamplesPerPixel, Rows, Columns, BitsAllocated, BitsStored,"
                                     "PixelRepresentation, RescaleSlope, WindowLevelWidth, WindowLevelCenter,"
@@ -171,26 +173,21 @@ QString LocalDatabaseImageDAL::buildSqlSelect(const DicomMask &imageMaskToSelect
                                     "OrderNumberInVolume, RetrievedDate, RetrievedTime, State, NumberOfOverlays, RetrievedPACSID "
                             "from Image ";
 
-    orderSentence = " order by VolumeNumberInSeries, OrderNumberInVolume";
+    QString orderSentence = " order by VolumeNumberInSeries, OrderNumberInVolume";
 
     return selectSentence + buildWhereSentence(imageMaskToSelect) + orderSentence;
 }
 
 QString LocalDatabaseImageDAL::buildSqlSelectCountImages(const DicomMask &imageMaskToSelect)
 {
-    QString selectSentence;
-
-    selectSentence = "Select count(*) "
-                     "from Image ";
+    QString selectSentence = "Select count(*) from Image ";
 
     return selectSentence + buildWhereSentence(imageMaskToSelect);
 }
 
 QString LocalDatabaseImageDAL::buildSqlInsert(Image *newImage)
 {
-    QString insertSentence;
-
-    insertSentence = QString("Insert into Image (SOPInstanceUID, FrameNumber, StudyInstanceUID, SeriesInstanceUID, InstanceNumber,"
+    QString insertSentence = QString("Insert into Image (SOPInstanceUID, FrameNumber, StudyInstanceUID, SeriesInstanceUID, InstanceNumber,"
                                              "ImageOrientationPatient, PatientOrientation, PixelSpacing, SliceThickness,"
                                              "PatientPosition, SamplesPerPixel, Rows, Columns, BitsAllocated, BitsStored,"
                                              "PixelRepresentation, RescaleSlope, WindowLevelWidth, WindowLevelCenter,"
@@ -248,9 +245,7 @@ QString LocalDatabaseImageDAL::buildSqlInsert(Image *newImage)
 
 QString LocalDatabaseImageDAL::buildSqlUpdate(Image *imageToUpdate)
 {
-    QString updateSentence;
-
-    updateSentence = QString("Update Image set StudyInstanceUID = '%1',"
+    QString updateSentence = QString("Update Image set StudyInstanceUID = '%1',"
                                               "SeriesInstanceUID = '%2',"
                                               "InstanceNumber = '%3',"
                                               "ImageOrientationPatient = '%4',"
@@ -373,7 +368,8 @@ QString LocalDatabaseImageDAL::buildWhereSentence(const DicomMask &imageMask)
 
 QString LocalDatabaseImageDAL::getPixelSpacingAsQString(Image *newImage)
 {
-    QString imagePixelSpacing = "", value;
+    QString imagePixelSpacing = "";
+    QString value;
 
     imagePixelSpacing += value.setNum(newImage->getPixelSpacing()[0], 'g', 10) + "\\";
     imagePixelSpacing += value.setNum(newImage->getPixelSpacing()[1], 'g', 10);
@@ -420,7 +416,8 @@ double* LocalDatabaseImageDAL::getPatientPositionAsDouble(const QString &patient
 
 QString LocalDatabaseImageDAL::getPatientPositionAsQString(Image *newImage)
 {
-    QString patientPosition = "", value;
+    QString patientPosition = "";
+    QString value;
 
     patientPosition += value.setNum(newImage->getImagePositionPatient()[0], 'g', 10) + "\\";
     patientPosition += value.setNum(newImage->getImagePositionPatient()[1], 'g', 10) + "\\";
@@ -431,7 +428,8 @@ QString LocalDatabaseImageDAL::getPatientPositionAsQString(Image *newImage)
 
 QString LocalDatabaseImageDAL::getWindowWidthAsQString(Image *newImage)
 {
-    QString windowWidth = "", value;
+    QString windowWidth = "";
+    QString value;
 
     for (int index = 0; index < newImage->getNumberOfWindowLevels(); index++)
     {
@@ -444,7 +442,8 @@ QString LocalDatabaseImageDAL::getWindowWidthAsQString(Image *newImage)
 
 QString LocalDatabaseImageDAL::getWindowCenterAsQString(Image *newImage)
 {
-    QString windowCenter = "", value;
+    QString windowCenter = "";
+    QString value;
 
     for (int index = 0; index < newImage->getNumberOfWindowLevels(); index++)
     {

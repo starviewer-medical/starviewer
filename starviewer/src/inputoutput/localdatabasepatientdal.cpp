@@ -53,8 +53,10 @@ void LocalDatabasePatientDAL::del(qlonglong patientID)
 
 QList<Patient*> LocalDatabasePatientDAL::query(const DicomMask &patientMask)
 {
-    int columns, rows;
-    char **reply = NULL, **error = NULL;
+    int columns;
+    int rows;
+    char **reply = NULL;
+    char **error = NULL;
     QList<Patient*> patientList;
 
     m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
@@ -93,11 +95,10 @@ Patient* LocalDatabasePatientDAL::fillPatient(char **reply, int row, int columns
 
 QString LocalDatabasePatientDAL::buildSqlSelect(const DicomMask &patientMaskToSelect)
 {
-    QString selectSentence, whereSentence;
+    QString selectSentence = "Select ID, DICOMPatientID, Name, Birthdate, Sex "
+                             "From Patient ";
 
-    selectSentence = "Select ID, DICOMPatientID, Name, Birthdate, Sex "
-                       "From Patient ";
-
+    QString whereSentence;
     if (!patientMaskToSelect.getPatientID().isEmpty())
     {
         whereSentence = QString(" Where DICOMPatientID = '%1' ").arg(DatabaseConnection::formatTextToValidSQLSyntax(patientMaskToSelect.getPatientID()));
@@ -135,10 +136,8 @@ QString LocalDatabasePatientDAL::buildSqlUpdate(Patient *patientToUpdate)
 
 QString LocalDatabasePatientDAL::buildSqlDelete(qlonglong patientID)
 {
-    QString deleteSentence, whereSentence = "";
-
-    deleteSentence = "Delete From Patient ";
-    whereSentence = QString(" Where ID = %1").arg(patientID);
+    QString deleteSentence = "Delete From Patient ";
+    QString whereSentence = QString(" Where ID = %1").arg(patientID);
 
     return deleteSentence + whereSentence;
 }

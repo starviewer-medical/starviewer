@@ -47,8 +47,10 @@ void LocalDatabaseStudyDAL::del(const DicomMask &studyMaskToDelete)
 
 QList<Study*> LocalDatabaseStudyDAL::queryOrderByLastAccessDate(const DicomMask &studyMask, QDate lastAccessDateMinor, QDate lastAccessDateEqualOrMajor)
 {
-    int columns, rows;
-    char **reply = NULL, **error = NULL;
+    int columns;
+    int rows;
+    char **reply = NULL;
+    char **error = NULL;
     QList<Study*> studyList;
     QString sqlSentence = buildSqlSelect(studyMask, lastAccessDateMinor, lastAccessDateEqualOrMajor) + " Order by LastAccessDate";
 
@@ -73,8 +75,10 @@ QList<Study*> LocalDatabaseStudyDAL::queryOrderByLastAccessDate(const DicomMask 
 
 QList<Study*> LocalDatabaseStudyDAL::query(const DicomMask &studyMask, QDate lastAccessDateMinor, QDate lastAccessDateEqualOrMajor)
 {
-    int columns, rows;
-    char **reply = NULL, **error = NULL;
+    int columns;
+    int rows;
+    char **reply = NULL;
+    char **error = NULL;
     QList<Study*> studyList;
 
     m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
@@ -101,7 +105,8 @@ QList<Study*> LocalDatabaseStudyDAL::query(const DicomMask &studyMask, QDate las
 QList<Patient*> LocalDatabaseStudyDAL::queryPatientStudy(const DicomMask &patientStudyMaskToQuery, QDate lastAccessDateMinor, QDate lastAccessDateEqualOrMajor)
 {
     int columns, rows;
-    char **reply = NULL, **error = NULL;
+    char **reply = NULL;
+    char **error = NULL;
     QList<Patient*> patientList;
 
     m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
@@ -129,8 +134,10 @@ QList<Patient*> LocalDatabaseStudyDAL::queryPatientStudy(const DicomMask &patien
 
 qlonglong LocalDatabaseStudyDAL::getPatientIDFromStudyInstanceUID(const QString &studyInstanceUID)
 {
-    int columns, rows;
-    char **reply = NULL, **error = NULL;
+    int columns;
+    int rows;
+    char **reply = NULL;
+    char **error = NULL;
     qlonglong patientID = -1;
 
     m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(), qPrintable(buildSqlGetPatientIDFromStudyInstanceUID(studyInstanceUID)),
@@ -201,13 +208,11 @@ Patient* LocalDatabaseStudyDAL::fillPatient(char **reply, int row, int columns)
 // StudyInstanceUID
 QString LocalDatabaseStudyDAL::buildSqlSelect(const DicomMask &studyMaskToSelect, const QDate &lastAccessDateMinor, const QDate &lastAccessDateEqualOrMajor)
 {
-    QString selectSentence, whereSentence;
-
-    selectSentence = "Select InstanceUID, PatientID, ID, PatientAge, PatientWeigth, PatientHeigth, Modalities, Date, Time, "
+    QString selectSentence = "Select InstanceUID, PatientID, ID, PatientAge, PatientWeigth, PatientHeigth, Modalities, Date, Time, "
                             "AccessionNumber, Description, ReferringPhysicianName, LastAccessDate, RetrievedDate, RetrievedTime, "
                             "State "
-                       "From Study ";
-
+                            "From Study ";
+    QString whereSentence;
     if (!studyMaskToSelect.getStudyInstanceUID().isEmpty())
     {
         whereSentence = QString(" Where InstanceUID = '%1' ").arg(DatabaseConnection::formatTextToValidSQLSyntax(studyMaskToSelect.getStudyInstanceUID()));
@@ -247,15 +252,13 @@ QString LocalDatabaseStudyDAL::buildSqlSelect(const DicomMask &studyMaskToSelect
 QString LocalDatabaseStudyDAL::buildSqlSelectStudyPatient(const DicomMask &studyMaskToSelect, const QDate &lastAccessDateMinor,
                                                           const QDate &lastAccessDateEqualOrMajor)
 {
-    QString selectSentence, whereSentence, orderBySentence;
-
-    selectSentence = "Select InstanceUID, PatientID, Study.ID, PatientAge, PatientWeigth, PatientHeigth, Modalities, Date, Time, "
+    QString selectSentence = "Select InstanceUID, PatientID, Study.ID, PatientAge, PatientWeigth, PatientHeigth, Modalities, Date, Time, "
                             "AccessionNumber, Description, ReferringPhysicianName, LastAccessDate, RetrievedDate, RetrievedTime, "
                             "Study.State, Patient.ID, Patient.DICOMPatientId, Patient.Name, "
                             "Patient.Birthdate, Patient.Sex "
                        "From Study, Patient ";
 
-    whereSentence = "Where Study.PatientID = Patient.ID ";
+    QString whereSentence = "Where Study.PatientID = Patient.ID ";
 
     if (!studyMaskToSelect.getStudyInstanceUID().isEmpty())
     {
@@ -298,7 +301,7 @@ QString LocalDatabaseStudyDAL::buildSqlSelectStudyPatient(const DicomMask &study
         whereSentence += QString(" and Modalities like '%%1%' ").arg(studyMaskToSelect.getSeriesModality());
     }
 
-    orderBySentence = " Order by Patient.Name";
+    QString orderBySentence = " Order by Patient.Name";
 
     return selectSentence + whereSentence + orderBySentence;
 }
@@ -381,9 +384,8 @@ QString LocalDatabaseStudyDAL::buildSqlUpdate(Study *studyToUpdate, const QDate 
 // StudyInstanceUID
 QString LocalDatabaseStudyDAL::buildSqlDelete(const DicomMask &studyMaskToDelete)
 {
-    QString deleteSentence, whereSentence = "";
-
-    deleteSentence = "Delete From Study ";
+    QString deleteSentence = "Delete From Study ";
+    QString whereSentence;
     if (!studyMaskToDelete.getStudyInstanceUID().isEmpty())
     {
         whereSentence = QString(" Where InstanceUID = '%1'").arg(DatabaseConnection::formatTextToValidSQLSyntax(studyMaskToDelete.getStudyInstanceUID()));
