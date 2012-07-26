@@ -76,6 +76,8 @@ private slots:
     void getImage_ShouldReturnExpectedImage_data();
     void getImage_ShouldReturnExpectedImage();
 
+    void getImageIndex_ShouldReturnExpectedImageIndex_data();
+    void getImageIndex_ShouldReturnExpectedImageIndex();
 };
 
 Q_DECLARE_METATYPE(AnatomicalPlane::AnatomicalPlaneType)
@@ -979,6 +981,36 @@ void test_Volume::getImage_ShouldReturnExpectedImage()
     QFETCH(Image*, image);
 
     QCOMPARE(volume->getImage(sliceNumber, phaseNumber), image);
+
+    VolumeTestHelper::cleanUp(volume);
+}
+
+void test_Volume::getImageIndex_ShouldReturnExpectedImageIndex_data()
+{
+    QTest::addColumn<Volume*>("volume");
+    QTest::addColumn<int>("sliceNumber");
+    QTest::addColumn<int>("phaseNumber");
+    QTest::addColumn<int>("result");
+
+    Volume *volumeWithoutPhases = VolumeTestHelper::createVolume(5);
+    Volume *volumeWithPhases = VolumeTestHelper::createVolume(6, 2, 3);
+    Volume *volumeGeneric_1 = VolumeTestHelper::createVolume(2);
+    Volume *volumeGeneric_2 = VolumeTestHelper::createVolume(2);
+
+    QTest::newRow("Volume with 1 phase") << volumeWithoutPhases << 0 << 0 << 0;
+    QTest::newRow("Volume with phases") << volumeWithPhases << 2 << 1 << 5;
+    QTest::newRow("Incorrect slice") << volumeGeneric_1 << -1 << -1 << -2;
+    QTest::newRow("Incorrect phase") << volumeGeneric_2 << 0 << -1 << -1;
+}
+
+void test_Volume::getImageIndex_ShouldReturnExpectedImageIndex()
+{
+    QFETCH(Volume*, volume);
+    QFETCH(int, sliceNumber);
+    QFETCH(int, phaseNumber);
+    QFETCH(int, result);
+
+    QCOMPARE(volume->getImageIndex(sliceNumber, phaseNumber), result);
 
     VolumeTestHelper::cleanUp(volume);
 }
