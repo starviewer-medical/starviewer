@@ -35,7 +35,8 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_drawerpolygon.cpp \
            $$PWD/test_diagnosistestresultwriter.cpp \
            $$PWD/test_vector3float.cpp \
-           $$PWD/test_vector3double.cpp
+           $$PWD/test_vector3double.cpp \
+           $$PWD/test_windowlevel.cpp
 
 win32 {
     SOURCES += $$PWD/test_windowsfirewallaccess.cpp \
