@@ -2,7 +2,7 @@
 #define UDGCUSTOMWINDOWLEVELSREPOSITORY_H
 
 #include "repository.h"
-#include "customwindowlevel.h"
+#include "windowlevel.h"
 
 namespace udg {
 

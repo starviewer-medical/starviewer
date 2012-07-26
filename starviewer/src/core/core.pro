@@ -225,7 +225,7 @@ HEADERS += extensionfactory.h \
     dicomdumpdefaulttagsreader.h \
     dicomdumpdefaulttagsrepository.h \
     dicomdumpdefaulttagsrestriction.h \
-    customwindowlevel.h \
+    windowlevel.h \
     customwindowlevelsloader.h \
     customwindowlevelsreader.h \
     customwindowlevelsrepository.h \
@@ -469,7 +469,7 @@ SOURCES += extensionmediator.cpp \
     dicomdumpdefaulttagsreader.cpp \
     dicomdumpdefaulttagsrepository.cpp \
     dicomdumpdefaulttagsrestriction.cpp \
-    customwindowlevel.cpp \
+    windowlevel.cpp \
     customwindowlevelsloader.cpp \
     customwindowlevelsreader.cpp \
     customwindowlevelsrepository.cpp \

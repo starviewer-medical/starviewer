@@ -1,5 +1,5 @@
 #include "customwindowlevelsreader.h"
-#include "customwindowlevel.h"
+#include "windowlevel.h"
 #include "logging.h"
 
 #include <QFile>
