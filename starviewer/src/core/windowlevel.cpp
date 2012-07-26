@@ -5,6 +5,8 @@ namespace udg {
 
 WindowLevel::WindowLevel()
 {
+    m_width = 0.0;
+    m_level = 0.0;
 }
 
 WindowLevel::~WindowLevel()
