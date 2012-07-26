@@ -73,10 +73,10 @@ QStringList CustomWindowLevelsLoader::loadXMLFiles(const QFileInfo &fileInfo)
 QString CustomWindowLevelsLoader::loadXMLFile(const QFileInfo &fileInfo)
 {
     CustomWindowLevelsReader customWindowLevelsReader;
-    QList<CustomWindowLevel*> listOfCustomWindowLevels = customWindowLevelsReader.readFile(fileInfo.absoluteFilePath());
+    QList<WindowLevel*> listOfCustomWindowLevels = customWindowLevelsReader.readFile(fileInfo.absoluteFilePath());
 
     CustomWindowLevelsRepository *repository = CustomWindowLevelsRepository::getRepository();
-    foreach (CustomWindowLevel *customWindowLevel, listOfCustomWindowLevels)
+    foreach (WindowLevel *customWindowLevel, listOfCustomWindowLevels)
     {
         repository->addItem(customWindowLevel);
     }

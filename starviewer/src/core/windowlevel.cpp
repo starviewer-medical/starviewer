@@ -3,40 +3,40 @@
 
 namespace udg {
 
-CustomWindowLevel::CustomWindowLevel()
+WindowLevel::WindowLevel()
 {
 }
 
-CustomWindowLevel::~CustomWindowLevel()
+WindowLevel::~WindowLevel()
 {
 }
 
-void CustomWindowLevel::setName(const QString &name)
+void WindowLevel::setName(const QString &name)
 {
     m_name = name;
 }
 
-void CustomWindowLevel::setWidth(double width)
+void WindowLevel::setWidth(double width)
 {
     m_width = width;
 }
 
-void CustomWindowLevel::setLevel(double level)
+void WindowLevel::setLevel(double level)
 {
     m_level = level;
 }
 
-QString CustomWindowLevel::getName() const
+QString WindowLevel::getName() const
 {
     return m_name;
 }
 
-double CustomWindowLevel::getWidth() const
+double WindowLevel::getWidth() const
 {
     return m_width;
 }
 
-double CustomWindowLevel::getLevel() const
+double WindowLevel::getLevel() const
 {
     return m_level;
 }

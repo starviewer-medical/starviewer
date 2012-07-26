@@ -20,21 +20,21 @@ CustomWindowLevelsReader::~CustomWindowLevelsReader()
 {
 }
 
-QList<CustomWindowLevel*> CustomWindowLevelsReader::readFile(const QString &path)
+QList<WindowLevel*> CustomWindowLevelsReader::readFile(const QString &path)
 {
     QFile file(path);
     if (!file.open(QFile::ReadOnly | QFile::Text))
     {
-        return QList<CustomWindowLevel*>();
+        return QList<WindowLevel*>();
     }
 
     if (!m_customWindowLevelsSchemaValidator.validate(QUrl::fromLocalFile(file.fileName())))
     {
         DEBUG_LOG("No es processa perquè es invalid");
-        return QList<CustomWindowLevel*>();
+        return QList<WindowLevel*>();
     }
 
-    QList<CustomWindowLevel*> listOfCustomWindowLevels;
+    QList<WindowLevel*> listOfCustomWindowLevels;
 
     QXmlStreamReader reader(&file);
     if (reader.readNextStartElement())
@@ -45,7 +45,7 @@ QList<CustomWindowLevel*> CustomWindowLevelsReader::readFile(const QString &path
             {
                 if (reader.name() == "CustomWindowLevel")
                 {
-                    CustomWindowLevel *customWindowLevel = new CustomWindowLevel();
+                    WindowLevel *customWindowLevel = new WindowLevel();
                     QString name = reader.attributes().first().value().toString();
                     customWindowLevel->setName(name);
 

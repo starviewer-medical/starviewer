@@ -43,7 +43,7 @@ void QCustomWindowLevelEditWidget::loadCustomWindowLevelPresets()
         delete m_customWindowLevelTreeWidget->takeTopLevelItem(0);
     }
 
-    foreach (CustomWindowLevel *customWindowLevel, CustomWindowLevelsRepository::getRepository()->getItems())
+    foreach (WindowLevel *customWindowLevel, CustomWindowLevelsRepository::getRepository()->getItems())
     {
         addWindowLevelItem(customWindowLevel->getName(), customWindowLevel->getWidth(), customWindowLevel->getLevel());
     }
@@ -118,7 +118,7 @@ void QCustomWindowLevelEditWidget::updatePresetsIfAreValid()
         QTreeWidgetItemIterator iterator(m_customWindowLevelTreeWidget);
         while (*iterator)
         {
-            CustomWindowLevel *customWindowLevel = new CustomWindowLevel();
+            WindowLevel *customWindowLevel = new WindowLevel();
             customWindowLevel->setWidth(qobject_cast<QDoubleSpinBox*>(m_customWindowLevelTreeWidget->itemWidget((*iterator), 0))->value());
             customWindowLevel->setLevel(qobject_cast<QDoubleSpinBox*>(m_customWindowLevelTreeWidget->itemWidget((*iterator), 1))->value());
             customWindowLevel->setName((*iterator)->text(2));

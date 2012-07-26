@@ -50,7 +50,7 @@ void CustomWindowLevelsWriter::write()
     // Per exemple com a atribut xmlns
 
     // Per cada custom window level
-    foreach (CustomWindowLevel *windowLevel, CustomWindowLevelsRepository::getRepository()->getItems())
+    foreach (WindowLevel *windowLevel, CustomWindowLevelsRepository::getRepository()->getItems())
     {
         writer.writeStartElement(QString("CustomWindowLevel"));
         writer.writeAttribute(QString("name"), QString("%1").arg(windowLevel->getName()));
