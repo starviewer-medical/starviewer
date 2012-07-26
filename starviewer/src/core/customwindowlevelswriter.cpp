@@ -1,5 +1,5 @@
 #include "customwindowlevelswriter.h"
-#include "customwindowlevel.h"
+#include "windowlevel.h"
 #include "customwindowlevelsrepository.h"
 #include "starviewerapplication.h"
 #include "logging.h"
