@@ -73,6 +73,9 @@ private slots:
     void setImages_ShouldAddImageList_data();
     void setImages_ShouldAddImageList();
 
+    void getImage_ShouldReturnExpectedImage_data();
+    void getImage_ShouldReturnExpectedImage();
+
 };
 
 Q_DECLARE_METATYPE(AnatomicalPlane::AnatomicalPlaneType)
@@ -83,6 +86,7 @@ Q_DECLARE_METATYPE(ImageOrientation)
 Q_DECLARE_METATYPE(Volume::ItkImageTypePointer)
 Q_DECLARE_METATYPE(vtkSmartPointer<vtkImageData>)
 Q_DECLARE_METATYPE(VolumePixelData*)
+Q_DECLARE_METATYPE(Image*)
 
 void test_Volume::constructor_ShouldCreateMinimalVolume()
 {
@@ -948,6 +952,35 @@ void test_Volume::convertToNeutralVolume_ShouldBehaveAsExpected()
 
     QCOMPARE(volume->getNumberOfPhases(), 1);
     QCOMPARE(volume->isPixelDataLoaded(), true);
+}
+
+void test_Volume::getImage_ShouldReturnExpectedImage_data()
+{
+    QTest::addColumn<Volume*>("volume");
+    QTest::addColumn<int>("sliceNumber");
+    QTest::addColumn<int>("phaseNumber");
+    QTest::addColumn<Image*>("image");
+
+    Volume *volumeWithoutPhases = VolumeTestHelper::createVolume(5);
+    Volume *volumeWithPhases = VolumeTestHelper::createVolume(6, 2, 3);
+    Volume *volumeGeneric = VolumeTestHelper::createVolume(2);
+    Image *image = NULL;
+
+    QTest::newRow("Volume with 1 phase") << volumeWithoutPhases << 0 << 0 << volumeWithoutPhases->getImages().at(0);
+    QTest::newRow("Volume with phases") << volumeWithPhases << 2 << 1 << volumeWithPhases->getImages().at(5);
+    QTest::newRow("Incorrect image") << volumeGeneric << -1 << -1 << image;
+}
+
+void test_Volume::getImage_ShouldReturnExpectedImage()
+{
+    QFETCH(Volume*, volume);
+    QFETCH(int, sliceNumber);
+    QFETCH(int, phaseNumber);
+    QFETCH(Image*, image);
+
+    QCOMPARE(volume->getImage(sliceNumber, phaseNumber), image);
+
+    VolumeTestHelper::cleanUp(volume);
 }
 
 DECLARE_TEST(test_Volume)
