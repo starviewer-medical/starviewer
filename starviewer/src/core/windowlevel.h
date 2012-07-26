@@ -1,19 +1,18 @@
-#ifndef UDGCUSTOMWINDOWLEVEL_H
-#define UDGCUSTOMWINDOWLEVEL_H
+#ifndef UDGWINDOWLEVEL_H
+#define UDGWINDOWLEVEL_H
 
 #include <QString>
 
 namespace udg {
 
 /**
-    Classe que ens representa el Mappeig d'un fitxer que conté la llista de custom window levels
+    Classe que encapsula el concepte de Window Level.
   */
-class CustomWindowLevel {
+class WindowLevel {
 
 public:
-    CustomWindowLevel();
-
-    ~CustomWindowLevel();
+    WindowLevel();
+    ~WindowLevel();
 
     /// Mètode per definir el nom del custom window level
     void setName(const QString &name);

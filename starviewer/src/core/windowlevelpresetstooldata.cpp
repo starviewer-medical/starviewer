@@ -193,7 +193,7 @@ void WindowLevelPresetsToolData::activatePreset(const QString &preset)
 
 void WindowLevelPresetsToolData::loadCustomWindowLevelPresets()
 {
-    foreach (CustomWindowLevel *customWindowLevel, CustomWindowLevelsRepository::getRepository()->getItems())
+    foreach (WindowLevel *customWindowLevel, CustomWindowLevelsRepository::getRepository()->getItems())
     {
         addPreset(customWindowLevel->getName(), customWindowLevel->getWidth(), customWindowLevel->getLevel(), UserDefined);
     }
