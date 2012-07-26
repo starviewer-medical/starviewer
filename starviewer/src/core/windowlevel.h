@@ -14,18 +14,16 @@ public:
     WindowLevel();
     ~WindowLevel();
 
-    /// Mètode per definir el nom del custom window level
+    /// Defineix/obté la descripció window level
     void setName(const QString &name);
-    /// Mètode per definir el width del custom window level
-    void setWidth(double width);
-    /// Mètode per definir el level del custom window level
-    void setLevel(double level);
-
-    /// Mètode que retorna el nom del custom window level
     QString getName() const;
-    /// Mètode que retorna el width del custom window level
+    
+    /// Defineix/obté el width del window level
+    void setWidth(double width);
     double getWidth() const;
-    /// Mètode que retorna el level del custom window level
+    
+    /// Defineix/obté el level del window level
+    void setLevel(double level);
     double getLevel() const;
 
 private:
