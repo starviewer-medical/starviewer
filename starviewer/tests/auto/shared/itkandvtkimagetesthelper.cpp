@@ -50,6 +50,7 @@ void ItkAndVtkImageTestHelper::createItkAndVtkImages(int dimensions[3], int star
     int extent[6] = { startIndex[0], startIndex[0] + dimensions[0] - 1, startIndex[1], startIndex[1] + dimensions[1] - 1, startIndex[2],
                       startIndex[2] + dimensions[2] - 1 };
     vtkImage->SetExtent(extent);
+    vtkImage->SetWholeExtent(extent);
     vtkImage->SetSpacing(spacing);
     vtkImage->SetOrigin(origin);
     vtkImage->AllocateScalars();

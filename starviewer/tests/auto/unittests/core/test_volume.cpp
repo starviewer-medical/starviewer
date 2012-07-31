@@ -7,6 +7,8 @@
 #include "imagetesthelper.h"
 #include "itkandvtkimagetesthelper.h"
 #include "fuzzycomparetesthelper.h"
+#include "testingvolume.h"
+#include "testingvolumereader.h"
 
 #include <QVector3D>
 #include <QSharedPointer>
@@ -30,6 +32,11 @@ private slots:
 
     void setPixelData_ShouldBehaveAsExpected_data();
     void setPixelData_ShouldBehaveAsExpected();
+
+    void getPixelData_ShouldReturnCurrentPixelData_data();
+    void getPixelData_ShouldReturnCurrentPixelData();
+
+    void getPixelData_ShouldRead();
 
     void getAcquisitionPlane_ShouldReturnNotAvailable_data();
     void getAcquisitionPlane_ShouldReturnNotAvailable();
@@ -78,6 +85,11 @@ private slots:
 
     void getImageIndex_ShouldReturnExpectedImageIndex_data();
     void getImageIndex_ShouldReturnExpectedImageIndex();
+
+    void toString_ShouldReturnExpectedString_data();
+    void toString_ShouldReturnExpectedString();
+
+    void fitsIntoMemory_ShouldReturnTrueWhenDataIsLoaded();
 };
 
 Q_DECLARE_METATYPE(AnatomicalPlane::AnatomicalPlaneType)
@@ -196,6 +208,45 @@ void test_Volume::setPixelData_ShouldBehaveAsExpected()
 
     QCOMPARE(volume.isPixelDataLoaded(), true);
     QCOMPARE(volume.getPixelData(), pixelData);
+}
+
+void test_Volume::getPixelData_ShouldReturnCurrentPixelData_data()
+{
+    QTest::addColumn<VolumePixelData*>("pixelData");
+
+    QTest::newRow("null") << static_cast<VolumePixelData*>(0);
+    QTest::newRow("not null") << new VolumePixelData(this);
+}
+
+void test_Volume::getPixelData_ShouldReturnCurrentPixelData()
+{
+    QFETCH(VolumePixelData*, pixelData);
+
+    bool read;
+    TestingVolumeReader *volumeReader = new TestingVolumeReader(read, this);
+    TestingVolume volume;
+    volume.m_volumeReaderToUse = volumeReader;
+    volume.setPixelData(pixelData);
+
+    QCOMPARE(volume.isPixelDataLoaded(), true);
+
+    QCOMPARE(volume.getPixelData(), pixelData);
+    QCOMPARE(read, false);
+    QCOMPARE(volume.isPixelDataLoaded(), true);
+}
+
+void test_Volume::getPixelData_ShouldRead()
+{
+    bool read;
+    TestingVolumeReader *volumeReader = new TestingVolumeReader(read, this);
+    TestingVolume volume;
+    volume.m_volumeReaderToUse = volumeReader;
+
+    QCOMPARE(volume.isPixelDataLoaded(), false);
+
+    volume.getPixelData();
+
+    QCOMPARE(read, true);
 }
 
 void test_Volume::getAcquisitionPlane_ShouldReturnNotAvailable_data()
@@ -1013,6 +1064,42 @@ void test_Volume::getImageIndex_ShouldReturnExpectedImageIndex()
     QCOMPARE(volume->getImageIndex(sliceNumber, phaseNumber), result);
 
     VolumeTestHelper::cleanUp(volume);
+}
+
+void test_Volume::toString_ShouldReturnExpectedString_data()
+{
+    QTest::addColumn<Volume*>("volume");
+    QTest::addColumn<QString>("expectedString");
+
+    QTest::newRow("data not loaded") << new Volume(this) << "Data are not loaded yet";
+
+    int dimensions[3] = { 66, 66, 57 };
+    int extent[6] = { 0, 65, 0, 65, 0, 56 };
+    double spacing[3] = { 3.9, 3.9, 0.8 };
+    double origin[3] = { -90.4, -48.7, -8.7 };
+    VolumePixelData *pixelData = VolumePixelDataTestHelper::createVolumePixelData(dimensions, extent, spacing, origin);
+    Volume *volume = new Volume(this);
+    volume->setPixelData(pixelData);
+    QString expectedString = "Dimensions: 66, 66, 57\nOrigin: -90.4, -48.7, -8.7\nSpacing: 3.9, 3.9, 0.8\nExtent: 0..65, 0..65, 0..56\nBounds: -90.4..163.1, -48.7..204.8, -8.7..36.1";
+    QTest::newRow("data loaded") << volume << expectedString;
+}
+
+void test_Volume::toString_ShouldReturnExpectedString()
+{
+    QFETCH(Volume*, volume);
+    QFETCH(QString, expectedString);
+
+    QCOMPARE(volume->toString(), expectedString);
+}
+
+void test_Volume::fitsIntoMemory_ShouldReturnTrueWhenDataIsLoaded()
+{
+    Volume volume;
+    volume.setPixelData(0);
+
+    QVERIFY(volume.isPixelDataLoaded());
+
+    QCOMPARE(volume.fitsIntoMemory(), true);
 }
 
 DECLARE_TEST(test_Volume)
