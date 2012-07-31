@@ -20,7 +20,7 @@ public:
 
     /// Donat un punter vàlid a Volume, llegeix les dades
     /// corresponents i li assigna.
-    void read(Volume *volume);
+    virtual void read(Volume *volume);
 
     /// Llegeix un Volume sense mostrar cap diàleg d'error
     /// TODO: S'hauria d'eliminar i fusionar amb read, ja que no s'hauria de mostrar cap error de tan avall

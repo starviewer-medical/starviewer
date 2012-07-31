@@ -17,6 +17,7 @@ namespace udg {
 class Image;
 class Study;
 class Patient;
+class VolumeReader;
 
 /**
     Aquesta classe respresenta un volum de dades. Aquesta serà la classe on es guardaran les dades que voldrem tractar.
@@ -156,6 +157,10 @@ signals:
     /// Emet l'estat del progrés en el que es troba la càrrega de dades del volum
     /// @param progress progrés de la càrrega en una escala de 1 a 100
     void progress(int);
+
+private:
+
+    virtual VolumeReader* createVolumeReader();
 
 private:
     /// Ens diu si les dades han estat carregades ja en memòria o no.

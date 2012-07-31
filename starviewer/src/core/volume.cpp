@@ -57,7 +57,7 @@ VolumePixelData* Volume::getPixelData()
 {
     if (!m_volumePixelDataLoaded)
     {
-        VolumeReader *volumeReader = new VolumeReader();
+        VolumeReader *volumeReader = createVolumeReader();
         connect(volumeReader, SIGNAL(progress(int)), SIGNAL(progress(int)));
         volumeReader->read(this);
         delete volumeReader;
@@ -390,6 +390,11 @@ bool Volume::fitsIntoMemory()
     {
         return false;
     }
+}
+
+VolumeReader* Volume::createVolumeReader()
+{
+    return new VolumeReader(this);
 }
 
 };
