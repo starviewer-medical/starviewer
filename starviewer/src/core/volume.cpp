@@ -55,7 +55,7 @@ void Volume::setPixelData(VolumePixelData *pixelData)
 
 VolumePixelData* Volume::getPixelData()
 {
-    if (!m_volumePixelDataLoaded)
+    if (!isPixelDataLoaded())
     {
         VolumeReader *volumeReader = createVolumeReader();
         connect(volumeReader, SIGNAL(progress(int)), SIGNAL(progress(int)));
@@ -248,7 +248,7 @@ QString Volume::toString(bool verbose)
     Q_UNUSED(verbose);
     QString result;
 
-    if (m_volumePixelDataLoaded)
+    if (isPixelDataLoaded())
     {
         int dims[3];
         double origin[3];
@@ -368,7 +368,7 @@ int Volume::getImageIndex(int sliceNumber, int phaseNumber) const
 
 bool Volume::fitsIntoMemory()
 {
-    if (m_volumePixelDataLoaded)
+    if (isPixelDataLoaded())
     {
         return true;
     }
