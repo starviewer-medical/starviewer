@@ -284,7 +284,8 @@ HEADERS += extensionfactory.h \
     glutessellator.h \
     qtreewidgetwithseparatorline.h \
     diagnosistestproblem.h \
-    directoryutilities.h
+    directoryutilities.h \
+    dicomformattedvaluesconverter.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -525,7 +526,8 @@ SOURCES += extensionmediator.cpp \
     glutessellator.cpp \
     qtreewidgetwithseparatorline.cpp \
     diagnosistestproblem.cpp \
-    directoryutilities.cpp
+    directoryutilities.cpp \
+    dicomformattedvaluesconverter.cpp
 win32 {
     HEADERS += windowsfirewallaccess.h \
                windowssysteminformation.h
