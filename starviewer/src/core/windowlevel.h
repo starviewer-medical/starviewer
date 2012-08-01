@@ -12,7 +12,7 @@ class WindowLevel {
 
 public:
     WindowLevel();
-    WindowLevel(double window, double level, const QString &name = QString());
+    WindowLevel(double width, double center, const QString &name = QString());
     ~WindowLevel();
 
     /// Defineix/obté la descripció window level
