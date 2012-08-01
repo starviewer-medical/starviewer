@@ -46,6 +46,8 @@ Q_DECLARE_METATYPE(DisplayShutter)
 Q_DECLARE_METATYPE(VolumePixelData*)
 Q_DECLARE_METATYPE(double*)
 Q_DECLARE_METATYPE(Image*)
+Q_DECLARE_METATYPE(WindowLevel)
+Q_DECLARE_METATYPE(QList<WindowLevel>)
 
 void test_Image::hasOverlays_ReturnExpectedValues_data()
 {
@@ -148,61 +150,56 @@ void test_Image::getDisplayShutterForDisplay_ShouldReturnExpectedValues()
 
 void test_Image::addWindowLevel_ShouldAddWindowLevel_data()
 {
-    QTest::addColumn<double>("window");
-    QTest::addColumn<double>("level");
-
-    QTest::newRow("both positive") << 100.0 << 200.0;
-    QTest::newRow("both negative") << -101.0 << -201.0;
-    QTest::newRow("window positive, level negative") << 102.0 << -202.0;
-    QTest::newRow("window negative, level positive") << -103.0 << 203.0;
-    QTest::newRow("level zero") << 100.0 << 0.0;
+    QTest::addColumn<WindowLevel>("windowLevel");
+    
+    QTest::newRow("both positive") << WindowLevel(100.0, 200.0);
+    QTest::newRow("both negative") << WindowLevel(-101.0, -201.0);
+    QTest::newRow("window positive, level negative") << WindowLevel(102.0, -202.0);
+    QTest::newRow("window negative, level positive") << WindowLevel(-103.0, 203.0);
+    QTest::newRow("level zero") << WindowLevel(100.0, 0.0);
 }
 
 void test_Image::addWindowLevel_ShouldAddWindowLevel()
 {
-    QFETCH(double, window);
-    QFETCH(double, level);
+    QFETCH(WindowLevel, windowLevel);
 
     Image image;
-    image.addWindowLevel(window, level);
+    image.addWindowLevel(windowLevel);
 
     QCOMPARE(image.getNumberOfWindowLevels(), 1);
-    QCOMPARE(image.getWindowLevel(0).first, window);
-    QCOMPARE(image.getWindowLevel(0).second, level);
+    QCOMPARE(image.getWindowLevel(0).first, windowLevel.getWidth());
+    QCOMPARE(image.getWindowLevel(0).second, windowLevel.getLevel());
 }
 
 void test_Image::addWindowLevel_ShouldNotAddWindowLevel_data()
 {
-    QTest::addColumn<double>("window");
-    QTest::addColumn<double>("level");
+    QTest::addColumn<WindowLevel>("windowLevel");
 
-    QTest::newRow("window zero") << 0.0 << 200.0;
+    QTest::newRow("window zero") << WindowLevel(0.0, 200.0);
 }
 
 void test_Image::addWindowLevel_ShouldNotAddWindowLevel()
 {
-    QFETCH(double, window);
-    QFETCH(double, level);
+    QFETCH(WindowLevel, windowLevel);
 
     Image image;
-    image.addWindowLevel(window, level);
+    image.addWindowLevel(windowLevel);
 
     QCOMPARE(image.getNumberOfWindowLevels(), 0);
 }
 
 void test_Image::addWindowLevel_ShouldAddSameWindowLevelTwoTimes()
 {
-    double window = 100.0;
-    double level = 300.0;
+    WindowLevel windowLevel(100.0, 300.0);
     Image image;
-    image.addWindowLevel(window, level);
-    image.addWindowLevel(window, level);
+    image.addWindowLevel(windowLevel);
+    image.addWindowLevel(windowLevel);
 
     QCOMPARE(image.getNumberOfWindowLevels(), 2);
-    QCOMPARE(image.getWindowLevel(0).first, window);
-    QCOMPARE(image.getWindowLevel(0).second, level);
-    QCOMPARE(image.getWindowLevel(1).first, window);
-    QCOMPARE(image.getWindowLevel(1).second, level);
+    QCOMPARE(image.getWindowLevel(0).first, windowLevel.getWidth());
+    QCOMPARE(image.getWindowLevel(0).second, windowLevel.getLevel());
+    QCOMPARE(image.getWindowLevel(1).first, windowLevel.getWidth());
+    QCOMPARE(image.getWindowLevel(1).second, windowLevel.getLevel());
 }
 
 void test_Image::getWindowLevel_ShouldReturnExpectedWindowLevel()
@@ -218,7 +215,7 @@ void test_Image::getWindowLevel_ShouldReturnExpectedWindowLevel()
 
     foreach (const QPairDoublesType &pair, windowLevels)
     {
-        image.addWindowLevel(pair.first, pair.second);
+        image.addWindowLevel(WindowLevel(pair.first, pair.second));
     }
 
     QCOMPARE(image.getWindowLevel(-1), QPairDoublesType());
@@ -230,27 +227,33 @@ void test_Image::getWindowLevel_ShouldReturnExpectedWindowLevel()
 
 void test_Image::getWindowLevelExplanation_ShouldReturnExpectedExplanation_data()
 {
-    QTest::addColumn<QStringList>("explanationsList");
+    QTest::addColumn<QList<WindowLevel> >("windowLevelList");
     QTest::addColumn<int>("index");
     QTest::addColumn<QString>("expectedExplanation");
 
-    QStringList explanations;
-    explanations << "WINDOW 1" << "WINDOW 2";
+    WindowLevel wl1(1.0, 1.0, "WINDOW 1");
+    WindowLevel wl2(2.0, 2.0, "WINDOW 2");
     
-    QTest::newRow("index out of range: below 0") << explanations << -1 << QString();
-    QTest::newRow("index out of range: greater than list size") << explanations << explanations.size() << QString();
-    QTest::newRow("index in bounds [0]") << explanations << 0 << "WINDOW 1";
-    QTest::newRow("index in bounds [1]") << explanations << 1 << "WINDOW 2";
+    QList<WindowLevel> windowLevelsList;
+    windowLevelsList << wl1 << wl2;
+    
+    QTest::newRow("index out of range: below 0") << windowLevelsList << -1 << QString();
+    QTest::newRow("index out of range: greater than list size") << windowLevelsList << windowLevelsList.size() << QString();
+    QTest::newRow("index in bounds [0]") << windowLevelsList << 0 << "WINDOW 1";
+    QTest::newRow("index in bounds [1]") << windowLevelsList << 1 << "WINDOW 2";
 }
 
 void test_Image::getWindowLevelExplanation_ShouldReturnExpectedExplanation()
 {
-    QFETCH(QStringList, explanationsList);
+    QFETCH(QList<WindowLevel>, windowLevelList);
     QFETCH(int, index);
     QFETCH(QString, expectedExplanation);
 
     Image image;
-    image.setWindowLevelExplanations(explanationsList);
+    foreach (WindowLevel wl, windowLevelList)
+    {
+        image.addWindowLevel(wl);
+    }
     
     QCOMPARE(image.getWindowLevelExplanation(index), expectedExplanation);
 }

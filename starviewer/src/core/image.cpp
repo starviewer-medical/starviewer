@@ -211,17 +211,17 @@ QString Image::getSliceLocation() const
     return m_sliceLocation;
 }
 
-void Image::addWindowLevel(double window, double level)
+void Image::addWindowLevel(const WindowLevel &windowLevel)
 {
-    if (window != 0.0)
+    if (windowLevel.isValid())
     {
-        QPair<double, double> windowLevel(window, level);
         m_windowLevelList << windowLevel;
     }
     else
     {
-        WARN_LOG(QString("WW/WL Inconsistent: %1, %2. No s'afegira a la imatge").arg(window).arg(level));
-        DEBUG_LOG(QString("WW/WL Inconsistent: %1, %2. No s'afegira a la imatge").arg(window).arg(level));
+        QString logMessage = QString("WW/WL Inconsistent: %1, %2. No s'afegira a la imatge").arg(windowLevel.getWidth()).arg(windowLevel.getLevel());
+        WARN_LOG(logMessage);
+        DEBUG_LOG(logMessage);
     }
 }
 
@@ -229,7 +229,10 @@ QPair<double, double> Image::getWindowLevel(int index) const
 {
     if (index >= 0 && index < m_windowLevelList.size())
     {
-        return m_windowLevelList.at(index);
+        QPair<double, double> windowLevelPair;
+        windowLevelPair.first = m_windowLevelList.at(index).getWidth();
+        windowLevelPair.second = m_windowLevelList.at(index).getLevel();
+        return windowLevelPair;
     }
     else
     {
@@ -243,16 +246,11 @@ int Image::getNumberOfWindowLevels()
     return m_windowLevelList.size();
 }
 
-void Image::setWindowLevelExplanations(const QStringList &explanations)
-{
-    m_windowLevelExplanationList = explanations;
-}
-
 QString Image::getWindowLevelExplanation(int index) const
 {
-    if (index >= 0 && index < m_windowLevelExplanationList.size())
+    if (index >= 0 && index < m_windowLevelList.size())
     {
-        return m_windowLevelExplanationList.at(index);
+        return m_windowLevelList.at(index).getName();
     }
     else
     {

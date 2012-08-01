@@ -13,6 +13,7 @@
 #include "localdatabasedisplayshutterdal.h"
 #include "dicomsource.h"
 #include "localdatabasepacsretrievedimagesdal.h"
+#include "dicomformattedvaluesconverter.h"
 
 namespace udg {
 
@@ -136,8 +137,11 @@ Image* LocalDatabaseImageDAL::fillImage(char **reply, int row, int columns)
     image->setBitsStored(QString(reply[14 + row * columns]).toInt());
     image->setPixelRepresentation(QString(reply[15 + row * columns]).toInt());
     image->setRescaleSlope(QString(reply[16 + row * columns]).toDouble());
-    setWindowLevel(image, reply[17 + row * columns], reply[18 + row * columns]);
-    image->setWindowLevelExplanations(getWindowLevelExplanationAsQStringList(reply[19 + row * columns]));
+    QList<WindowLevel> windowLevels = DICOMFormattedValuesConverter::parseWindowLevelValues(reply[17 + row * columns], reply[18 + row * columns], reply[19 + row * columns]);
+    foreach (WindowLevel wl, windowLevels)
+    {
+        image->addWindowLevel(wl);
+    }
     image->setSliceLocation(reply[20 + row * columns]);
     image->setRescaleIntercept(QString(reply[21 + row * columns]).toDouble());
     image->setPhotometricInterpretation(reply[22 + row * columns]);
@@ -470,19 +474,6 @@ QString LocalDatabaseImageDAL::getWindowLevelExplanationAsQString(Image *newImag
 QStringList LocalDatabaseImageDAL::getWindowLevelExplanationAsQStringList(const QString &explanationList)
 {
     return explanationList.split("\\");
-}
-
-void LocalDatabaseImageDAL::setWindowLevel(Image *selectedImage, const QString &windowLevelWidth, const QString &windowLevelCenter)
-{
-    QStringList listWindowLevelWidth = windowLevelWidth.split("\\"), listWindowLevelCenter = windowLevelCenter.split("\\");
-
-    if (listWindowLevelWidth.size() == listWindowLevelCenter.size())
-    {
-        for (int index = 0; index < listWindowLevelWidth.size(); index++)
-        {
-            selectedImage->addWindowLevel(listWindowLevelWidth.at(index).toDouble(), listWindowLevelCenter.at(index).toDouble());
-        }
-    }
 }
 
 QString LocalDatabaseImageDAL::getIDPACSInDatabaseFromDICOMSource(DICOMSource DICOMSourceRetrievedImage)

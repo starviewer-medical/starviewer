@@ -13,6 +13,7 @@
 #include "patientorientation.h"
 #include "imageoverlay.h"
 #include "displayshutter.h"
+#include "windowlevel.h"
 
 namespace udg {
 
@@ -96,14 +97,13 @@ public:
     double getRescaleIntercept() const;
 
     /// Assignar/Obtenir els valors del rescalat de la VOI LUT que s'apliquen sobre la imatge
-    void addWindowLevel(double window, double level);
+    void addWindowLevel(const WindowLevel &windowLevel);
     QPair<double, double> getWindowLevel(int index = 0) const;
 
     /// Ens retorna el nombre de window levels que tenim
     int getNumberOfWindowLevels();
 
     /// Assignar/Obtenir textes descriptius dels window level
-    void setWindowLevelExplanations(const QStringList &explanations);
     QString getWindowLevelExplanation(int index = 0) const;
 
     /// Li indiquem quina és la sèrie pare a la qual pertany
@@ -284,11 +284,9 @@ private:
     double m_rescaleSlope, m_rescaleIntercept;
 
     /// Valors de rescalat de la VOI LUT. (0028,1050),(0028,1051) Tipus 1C, present si no hi ha VOI LUT Sequence
+    /// Poden incloure "Explicació" dels window levels si n'hi ha, texte descriptiu.(0028,1055) Tipus 3.
     /// Com que podem tenir més d'un tindrem una llista
-    QList<QPair<double, double> > m_windowLevelList;
-
-    /// "Explicació" dels window levels, texte descriptiu.(0028,1055) Tipus 3.
-    QStringList m_windowLevelExplanationList;
+    QList<WindowLevel> m_windowLevelList;
 
     // TODO millorar definició
     /// Situació especial de la llesca en mm. (0020,1041)
