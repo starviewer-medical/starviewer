@@ -12,6 +12,7 @@
 #include "thumbnailcreator.h"
 #include "patientorientation.h"
 #include "displayshutter.h"
+#include "dicomformattedvaluesconverter.h"
 // Pel fabs. Necessari per Mac
 #include <cmath>
 #include <QFileInfo>
@@ -342,20 +343,19 @@ bool ImageFillerStep::processImage(Image *image, DICOMTagReader *dicomReader)
         image->setRescaleIntercept(dicomReader->getValueAttributeAsQString(DICOMRescaleIntercept).toDouble());
 
         //
-        // Llegim els valors de window level, tipus 1C
+        // Llegim els valors de window level, tipus 1C i les respectives descripcions de ww/wl si n'hi ha (tipus 3)
         // Aquests es troben a VOI LUT Module (C.11.2)
         // El mòdul és opcional a CR, CT, MR, NM, US, US MF, SC, XA, RF, RF IM i PET
         // i és condicional a SC MF GB, SC MF GW, DX, MG i IO
         //
-        QStringList windowWidthList = dicomReader->getValueAttributeAsQString(DICOMWindowWidth).split("\\");
-        QStringList windowLevelList = dicomReader->getValueAttributeAsQString(DICOMWindowCenter).split("\\");
-        for (int i = 0; i < windowWidthList.size(); i++)
+        QString windowWidthString = dicomReader->getValueAttributeAsQString(DICOMWindowWidth);
+        QString windowCenterString = dicomReader->getValueAttributeAsQString(DICOMWindowCenter);
+        QString windowLevelExplanationString = dicomReader->getValueAttributeAsQString(DICOMWindowCenterWidthExplanation);
+        QList<WindowLevel> windowLevelList = DICOMFormattedValuesConverter::parseWindowLevelValues(windowWidthString, windowCenterString, windowLevelExplanationString);
+        foreach (WindowLevel wl, windowLevelList)
         {
-            image->addWindowLevel(windowWidthList.at(i).toDouble(), windowLevelList.at(i).toDouble());
+            image->addWindowLevel(wl);
         }
-
-        // Llegim les respectives descripcions de ww/wl si n'hi ha (tipus 3)
-        image->setWindowLevelExplanations(dicomReader->getValueAttributeAsQString(DICOMWindowCenterWidthExplanation).split("\\"));
 
         // Propietats útils pels hanging protocols
         value = dicomReader->getValueAttributeAsQString(DICOMImageLaterality);
@@ -782,10 +782,10 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
             // Obtenim Window Center (1)
             //
             DICOMValueAttribute *dicomValue = item->getValueAttribute(DICOMWindowCenter);
-            QStringList windowLevelList;
+            QString windowCenterString;
             if (dicomValue)
             {
-                windowLevelList = dicomValue->getValueAsQString().split("\\");
+                windowCenterString = dicomValue->getValueAsQString();
             }
             else
             {
@@ -797,10 +797,10 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
             // Obtenim Window Width (1)
             //
             dicomValue = item->getValueAttribute(DICOMWindowWidth);
-            QStringList windowWidthList;
+            QString windowWidthString;
             if (dicomValue)
             {
-                windowWidthList = dicomValue->getValueAsQString().split("\\");
+                windowWidthString = dicomValue->getValueAsQString();
             }
             else
             {
@@ -808,20 +808,21 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
                 ERROR_LOG("No s'ha trobat el tag Window Width en un arxiu que se suposa que l'ha de tenir!");
             }
 
-            // Per evitar que hi hagi problemes si les llistes no tenen la mateixa llargada tenim en compte la més curta
-            int maxNumberOfElements = windowWidthList.size() < windowLevelList.size()? windowWidthList.size(): windowLevelList.size();
-            for (int i = 0; i < maxNumberOfElements; i++)
-            {
-                image->addWindowLevel(windowWidthList.at(i).toDouble(), windowLevelList.at(i).toDouble());
-            }
-
             //
             // Obtenim Window Explanations (3)
             //
             dicomValue = item->getValueAttribute(DICOMWindowCenterWidthExplanation);
+            QString windowLevelExplanationString;
             if (dicomValue)
             {
-                image->setWindowLevelExplanations(dicomValue->getValueAsQString().split("\\"));
+                windowLevelExplanationString = dicomValue->getValueAsQString();
+            }
+            
+            // Afegim els valors de window level a la imatge
+            QList<WindowLevel> windowLevelList = DICOMFormattedValuesConverter::parseWindowLevelValues(windowWidthString, windowCenterString, windowLevelExplanationString);
+            foreach (WindowLevel wl, windowLevelList)
+            {
+                image->addWindowLevel(wl);
             }
         }
     }
