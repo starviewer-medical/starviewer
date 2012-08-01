@@ -23,7 +23,10 @@ private slots:
     void addWindowLevel_ShouldNotAddWindowLevel_data();
     void addWindowLevel_ShouldNotAddWindowLevel();
     void addWindowLevel_ShouldAddSameWindowLevelTwoTimes();
-
+    
+    void setWindowLevelList_SetsValuesAsExpected_data();
+    void setWindowLevelList_SetsValuesAsExpected();
+    
     void getWindowLevel_ShouldReturnExpectedWindowLevel();
 
     void getWindowLevelExplanation_ShouldReturnExpectedExplanation_data();
@@ -200,6 +203,45 @@ void test_Image::addWindowLevel_ShouldAddSameWindowLevelTwoTimes()
     QCOMPARE(image.getWindowLevel(0).second, windowLevel.getLevel());
     QCOMPARE(image.getWindowLevel(1).first, windowLevel.getWidth());
     QCOMPARE(image.getWindowLevel(1).second, windowLevel.getLevel());
+}
+
+void test_Image::setWindowLevelList_SetsValuesAsExpected_data()
+{
+    QTest::addColumn<QList<WindowLevel> >("inputList");
+    QTest::addColumn<QList<WindowLevel> >("expectedSetList");
+
+    QTest::newRow("Input list is empty") << QList<WindowLevel>() << QList<WindowLevel>();
+
+    WindowLevel validWL(1.0, 2.0, "VALID WINDOW");
+    WindowLevel invalidWL(0.0, 2.0, "INVALID WINDOW");
+    
+    QList<WindowLevel> validItemsList;
+    validItemsList << validWL << validWL;
+    QTest::newRow("Input list has only valid items") << validItemsList << validItemsList;
+
+    validItemsList.clear();
+    validItemsList << validWL << invalidWL << validWL;
+
+    QList<WindowLevel> expectedResultList;
+    expectedResultList << validWL << validWL;
+    QTest::newRow("Input list has invalid items") << validItemsList << expectedResultList;
+}
+
+void test_Image::setWindowLevelList_SetsValuesAsExpected()
+{
+    QFETCH(QList<WindowLevel>, inputList);
+    QFETCH(QList<WindowLevel>, expectedSetList);
+
+    Image image;
+    image.setWindowLevelList(inputList);
+
+    QCOMPARE(image.getNumberOfWindowLevels(), expectedSetList.count());
+    
+    for (int i = 0; i < image.getNumberOfWindowLevels(); ++i)
+    {
+        QPair<double, double> wl = image.getWindowLevel(i);
+        QVERIFY(WindowLevel(wl.first, wl.second).valuesAreEqual(expectedSetList.at(i)));
+    }
 }
 
 void test_Image::getWindowLevel_ShouldReturnExpectedWindowLevel()
