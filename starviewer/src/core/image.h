@@ -107,9 +107,6 @@ public:
     /// Ens retorna el nombre de window levels que tenim
     int getNumberOfWindowLevels();
 
-    /// Assignar/Obtenir textes descriptius dels window level
-    QString getWindowLevelExplanation(int index = 0) const;
-
     /// Li indiquem quina és la sèrie pare a la qual pertany
     void setParentSeries(Series *series);
     Series* getParentSeries() const;

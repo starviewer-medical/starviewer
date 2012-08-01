@@ -252,18 +252,6 @@ int Image::getNumberOfWindowLevels()
     return m_windowLevelList.size();
 }
 
-QString Image::getWindowLevelExplanation(int index) const
-{
-    if (index >= 0 && index < m_windowLevelList.size())
-    {
-        return m_windowLevelList.at(index).getName();
-    }
-    else
-    {
-        return QString();
-    }
-}
-
 void Image::setRetrievedDate(QDate retrievedDate)
 {
     m_retrievedDate = retrievedDate;

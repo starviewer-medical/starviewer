@@ -27,10 +27,8 @@ private slots:
     void setWindowLevelList_SetsValuesAsExpected_data();
     void setWindowLevelList_SetsValuesAsExpected();
     
-    void getWindowLevel_ShouldReturnExpectedWindowLevel();
-
-    void getWindowLevelExplanation_ShouldReturnExpectedExplanation_data();
-    void getWindowLevelExplanation_ShouldReturnExpectedExplanation();
+    void getWindowLevel_ShouldReturnExpectedValues_data();
+    void getWindowLevel_ShouldReturnExpectedValues();
 
     void getDisplayShutterForDisplayAsPixelData_ShouldReturnNull_data();
     void getDisplayShutterForDisplayAsPixelData_ShouldReturnNull();
@@ -240,54 +238,37 @@ void test_Image::setWindowLevelList_SetsValuesAsExpected()
     }
 }
 
-void test_Image::getWindowLevel_ShouldReturnExpectedWindowLevel()
-{
-    QList<WindowLevel> windowLevels;
-    windowLevels << WindowLevel(10.0, 20.0);
-    windowLevels << WindowLevel(11.0, 21.0);
-    windowLevels << WindowLevel(12.0, 22.0);
-
-    Image image;
-    image.setWindowLevelList(windowLevels);
-
-    QCOMPARE(image.getWindowLevel(-1), WindowLevel());
-    QCOMPARE(image.getWindowLevel(0), windowLevels.at(0));
-    QCOMPARE(image.getWindowLevel(1), windowLevels.at(1));
-    QCOMPARE(image.getWindowLevel(2), windowLevels.at(2));
-    QCOMPARE(image.getWindowLevel(3), WindowLevel());
-}
-
-void test_Image::getWindowLevelExplanation_ShouldReturnExpectedExplanation_data()
+void test_Image::getWindowLevel_ShouldReturnExpectedValues_data()
 {
     QTest::addColumn<QList<WindowLevel> >("windowLevelList");
     QTest::addColumn<int>("index");
-    QTest::addColumn<QString>("expectedExplanation");
+    QTest::addColumn<WindowLevel>("expectedWindowLevel");
 
-    WindowLevel wl1(1.0, 1.0, "WINDOW 1");
-    WindowLevel wl2(2.0, 2.0, "WINDOW 2");
     
+    WindowLevel wl1(10.0, 20.0, "WINDOW 1");
+    WindowLevel wl2(11.0, 21.0, "WINDOW 2");
+    WindowLevel wl3(12.0, 22.0, "WINDOW 3");
+
     QList<WindowLevel> windowLevelsList;
-    windowLevelsList << wl1 << wl2;
+    windowLevelsList << wl1 << wl2 << wl3;
     
-    QTest::newRow("index out of range: below 0") << windowLevelsList << -1 << QString();
-    QTest::newRow("index out of range: greater than list size") << windowLevelsList << windowLevelsList.size() << QString();
-    QTest::newRow("index in bounds [0]") << windowLevelsList << 0 << "WINDOW 1";
-    QTest::newRow("index in bounds [1]") << windowLevelsList << 1 << "WINDOW 2";
+    QTest::newRow("index out of range: below 0") << windowLevelsList << -1 << WindowLevel();
+    QTest::newRow("index out of range: greater than list size") << windowLevelsList << windowLevelsList.size() << WindowLevel();
+    QTest::newRow("index in bounds [0]") << windowLevelsList << 0 << wl1;
+    QTest::newRow("index in bounds [1]") << windowLevelsList << 1 << wl2;
+    QTest::newRow("index in bounds [2]") << windowLevelsList << 2 << wl3;
 }
 
-void test_Image::getWindowLevelExplanation_ShouldReturnExpectedExplanation()
+void test_Image::getWindowLevel_ShouldReturnExpectedValues()
 {
     QFETCH(QList<WindowLevel>, windowLevelList);
     QFETCH(int, index);
-    QFETCH(QString, expectedExplanation);
+    QFETCH(WindowLevel, expectedWindowLevel);
 
     Image image;
-    foreach (WindowLevel wl, windowLevelList)
-    {
-        image.addWindowLevel(wl);
-    }
+    image.setWindowLevelList(windowLevelList);
     
-    QCOMPARE(image.getWindowLevelExplanation(index), expectedExplanation);
+    QCOMPARE(image.getWindowLevel(index), expectedWindowLevel);
 }
 
 void test_Image::getDisplayShutterForDisplayAsPixelData_ShouldReturnNull_data()
