@@ -37,7 +37,8 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_vector3float.cpp \
            $$PWD/test_vector3double.cpp \
            $$PWD/test_windowlevel.cpp \
-           $$PWD/test_windowlevelpresetstooldata.cpp
+           $$PWD/test_windowlevelpresetstooldata.cpp \
+           $$PWD/test_dicomformattedvaluesconverter.cpp
 
 win32 {
     SOURCES += $$PWD/test_windowsfirewallaccess.cpp \
