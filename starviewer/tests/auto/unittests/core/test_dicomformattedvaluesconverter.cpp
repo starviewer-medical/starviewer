@@ -24,7 +24,15 @@ void test_DICOMFormattedValuesConverter::parseWindowLevelValues_ReturnsExpectedV
     QTest::addColumn<QList<WindowLevel> >("expectedResult");
 
     QTest::newRow("Empty strings (All)") << QString() << QString() << QString() << QList<WindowLevel>();
-    QTest::newRow("Different number of ww/wl (1 ww, 2 wl)") << "1.0" << "1.0\\2.0" << QString() << QList<WindowLevel>();
+
+    WindowLevel wl1;
+    wl1.setWidth(1.0);
+    wl1.setLevel(3.0);
+    
+    QList<WindowLevel> windowLevelList;
+    windowLevelList << wl1;
+    QTest::newRow("Different number of ww/wl (1 ww, 2 wl)") << "1.0" << "3.0\\2.0" << QString() << windowLevelList;
+    QTest::newRow("Different number of ww/wl (2 ww, 1 wl)") << "1.0\\22.6" << "3.0" << QString() << windowLevelList;
     QTest::newRow("Different number of ww/wl (0 ww, 2 wl)") << QString() << "1.0\\2.0" << QString() << QList<WindowLevel>();
     QTest::newRow("Different number of ww/wl (1 ww, 0 wl)") << "1.0" << QString() << QString() << QList<WindowLevel>();
     QTest::newRow("WW is not a decimal string - 1 element") << "absjkh" << "1.0\\2.0" << QString() << QList<WindowLevel>();
@@ -32,17 +40,12 @@ void test_DICOMFormattedValuesConverter::parseWindowLevelValues_ReturnsExpectedV
     QTest::newRow("WL is not a decimal string - 1 element") << "1.0" << "378jnso2" << QString() << QList<WindowLevel>();
     QTest::newRow("WL is not a decimal string - 2 element") << "1.0" << "4.3\\abc2do2" << QString() << QList<WindowLevel>();
     
-    QList<WindowLevel> windowLevelList;
-    WindowLevel wl1;
-    wl1.setWidth(1.0);
-    wl1.setLevel(3.0);
-    
     WindowLevel wl2;
     wl2.setWidth(22.6);
     wl2.setLevel(44.3);
-
+    
+    windowLevelList.clear();
     windowLevelList << wl1 << wl2;
-
     QTest::newRow("Same number of WW & WL") << "1.0\\22.6" << "3.0\\44.3" << QString() << windowLevelList;
     
     windowLevelList.clear();
