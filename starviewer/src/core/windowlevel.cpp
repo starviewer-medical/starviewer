@@ -9,9 +9,9 @@ WindowLevel::WindowLevel()
     m_center = 0.0;
 }
 
-WindowLevel::WindowLevel(double window, double center, const QString &name)
+WindowLevel::WindowLevel(double width, double center, const QString &name)
 {
-    m_width = window;
+    m_width = width;
     m_center = center;
     m_name = name;
 }
