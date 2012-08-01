@@ -31,6 +31,13 @@ public:
     /// Un WindowLevel serà sempre vàlid excepte en el cas que width sigui 0
     bool isValid() const;
 
+    /// Compara si els valors de window width i window level són iguals amb el WindowLevel passat per paràmetre.
+    /// La descripció no es té en compte en aquesta comparació
+    bool valuesAreEqual(const WindowLevel &windowLevel) const;
+
+    /// Compara que tots els membres de la classe siguin iguals
+    bool WindowLevel::operator==(const WindowLevel &windowLevelToCompare);
+
 private:
     QString m_name;
     double m_width;
