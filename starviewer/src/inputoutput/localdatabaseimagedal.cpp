@@ -450,9 +450,9 @@ void LocalDatabaseImageDAL::getWindowLevelInformationAsQString(Image *newImage, 
     }
 
     // Treiem l'últim "\\" afegit
-    windowWidth.left(windowWidth.length() - 1);
-    windowCenter.left(windowCenter.length() - 1);
-    explanation.left(explanation.length() - 1);
+    windowWidth = windowWidth.left(windowWidth.length() - 1);
+    windowCenter = windowCenter.left(windowCenter.length() - 1);
+    explanation = explanation.left(explanation.length() - 1);
 }
 
 QString LocalDatabaseImageDAL::getIDPACSInDatabaseFromDICOMSource(DICOMSource DICOMSourceRetrievedImage)
