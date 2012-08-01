@@ -455,11 +455,6 @@ void LocalDatabaseImageDAL::getWindowLevelInformationAsQString(Image *newImage, 
     explanation.left(explanation.length() - 1);
 }
 
-QStringList LocalDatabaseImageDAL::getWindowLevelExplanationAsQStringList(const QString &explanationList)
-{
-    return explanationList.split("\\");
-}
-
 QString LocalDatabaseImageDAL::getIDPACSInDatabaseFromDICOMSource(DICOMSource DICOMSourceRetrievedImage)
 {
     if (DICOMSourceRetrievedImage.getRetrievePACS().count() == 0)
