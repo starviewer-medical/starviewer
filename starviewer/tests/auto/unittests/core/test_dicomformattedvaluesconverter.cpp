@@ -25,9 +25,7 @@ void test_DICOMFormattedValuesConverter::parseWindowLevelValues_ReturnsExpectedV
 
     QTest::newRow("Empty strings (All)") << QString() << QString() << QString() << QList<WindowLevel>();
 
-    WindowLevel wl1;
-    wl1.setWidth(1.0);
-    wl1.setCenter(3.0);
+    WindowLevel wl1(1.0, 3.0);
     
     QList<WindowLevel> windowLevelList;
     windowLevelList << wl1;
@@ -40,9 +38,7 @@ void test_DICOMFormattedValuesConverter::parseWindowLevelValues_ReturnsExpectedV
     QTest::newRow("WL is not a decimal string - 1 element") << "1.0" << "378jnso2" << QString() << QList<WindowLevel>();
     QTest::newRow("WL is not a decimal string - 2 element") << "1.0" << "4.3\\abc2do2" << QString() << QList<WindowLevel>();
     
-    WindowLevel wl2;
-    wl2.setWidth(22.6);
-    wl2.setCenter(44.3);
+    WindowLevel wl2(22.6, 44.3);
     
     windowLevelList.clear();
     windowLevelList << wl1 << wl2;
@@ -76,9 +72,7 @@ void test_DICOMFormattedValuesConverter::parseWindowLevelValues_ReturnsExpectedV
         WindowLevel currentWL = windowLevelList.at(i);
         WindowLevel expectedWL = expectedResult.at(i);
         
-        QCOMPARE(currentWL.getWidth(), expectedWL.getWidth());
-        QCOMPARE(currentWL.getLevel(), expectedWL.getLevel());
-        QCOMPARE(currentWL.getName(), expectedWL.getName());
+        QCOMPARE(currentWL, expectedWL);
     }
 }
 
