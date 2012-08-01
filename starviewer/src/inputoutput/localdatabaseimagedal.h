@@ -84,14 +84,8 @@ private:
     /// Retorna el Patient Position en format double
     double* getPatientPositionAsDouble(const QString &patientPosition);
 
-    /// Retorna el WindowWidth en format d'string separats per "\\";
-    QString getWindowWidthAsQString(Image *newImage);
-
-    /// Retorna el WindowWidth en format d'string separats per "\\";
-    QString getWindowCenterAsQString(Image *newImage);
-
-    /// Retorna el WindowLevelExplanation en format d'string separats per "\\";
-    QString getWindowLevelExplanationAsQString(Image *newImage);
+    /// Retorna el WindowWidth, WindowCenter i explanation en format d'string separats per "\\" en els strings passats per paràmetre;
+    void getWindowLevelInformationAsQString(Image *newImage, QString &windowWidth, QString &windowCenter, QString &explanation);
 
     /// Retorna el WindowLevelExplanation en una llista d'strings
     QStringList getWindowLevelExplanationAsQStringList(const QString &explanationList);

@@ -187,6 +187,9 @@ QString LocalDatabaseImageDAL::buildSqlSelectCountImages(const DicomMask &imageM
 
 QString LocalDatabaseImageDAL::buildSqlInsert(Image *newImage)
 {
+    QString windowWidth, windowCenter, windowExplanation;
+    getWindowLevelInformationAsQString(newImage, windowWidth, windowCenter, windowExplanation);
+    
     QString insertSentence = QString("Insert into Image (SOPInstanceUID, FrameNumber, StudyInstanceUID, SeriesInstanceUID, InstanceNumber,"
                                              "ImageOrientationPatient, PatientOrientation, PixelSpacing, SliceThickness,"
                                              "PatientPosition, SamplesPerPixel, Rows, Columns, BitsAllocated, BitsStored,"
@@ -220,9 +223,9 @@ QString LocalDatabaseImageDAL::buildSqlInsert(Image *newImage)
                             .arg(newImage->getBitsStored())
                             .arg(newImage->getPixelRepresentation())
                             .arg(newImage->getRescaleSlope())
-                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(getWindowWidthAsQString(newImage)))
-                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(getWindowCenterAsQString(newImage)))
-                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(getWindowLevelExplanationAsQString(newImage)))
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(windowWidth))
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(windowCenter))
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(windowExplanation))
                             .arg(DatabaseConnection::formatTextToValidSQLSyntax(newImage->getSliceLocation()))
                             .arg(newImage->getRescaleIntercept())
                             .arg(DatabaseConnection::formatTextToValidSQLSyntax(newImage->getPhotometricInterpretation()))
@@ -245,6 +248,9 @@ QString LocalDatabaseImageDAL::buildSqlInsert(Image *newImage)
 
 QString LocalDatabaseImageDAL::buildSqlUpdate(Image *imageToUpdate)
 {
+    QString windowWidth, windowCenter, windowExplanation;
+    getWindowLevelInformationAsQString(imageToUpdate, windowWidth, windowCenter, windowExplanation);
+    
     QString updateSentence = QString("Update Image set StudyInstanceUID = '%1',"
                                               "SeriesInstanceUID = '%2',"
                                               "InstanceNumber = '%3',"
@@ -296,9 +302,9 @@ QString LocalDatabaseImageDAL::buildSqlUpdate(Image *imageToUpdate)
                             .arg(imageToUpdate->getBitsStored())
                             .arg(imageToUpdate->getPixelRepresentation())
                             .arg(imageToUpdate->getRescaleSlope())
-                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(getWindowWidthAsQString(imageToUpdate)))
-                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(getWindowCenterAsQString(imageToUpdate)))
-                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(getWindowLevelExplanationAsQString(imageToUpdate)))
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(windowWidth))
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(windowCenter))
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(windowExplanation))
                             .arg(DatabaseConnection::formatTextToValidSQLSyntax(imageToUpdate->getSliceLocation()))
                             .arg(imageToUpdate->getRescaleIntercept())
                             .arg(DatabaseConnection::formatTextToValidSQLSyntax(imageToUpdate->getPhotometricInterpretation()))
@@ -426,45 +432,27 @@ QString LocalDatabaseImageDAL::getPatientPositionAsQString(Image *newImage)
     return patientPosition;
 }
 
-QString LocalDatabaseImageDAL::getWindowWidthAsQString(Image *newImage)
+void LocalDatabaseImageDAL::getWindowLevelInformationAsQString(Image *newImage, QString &windowWidth, QString &windowCenter, QString &explanation)
 {
-    QString windowWidth = "";
+    windowWidth.clear();
+    windowCenter.clear();
+    explanation.clear();
+    
     QString value;
-
-    for (int index = 0; index < newImage->getNumberOfWindowLevels(); index++)
+    WindowLevel windowLevel;
+    for (int index = 0; index < newImage->getNumberOfWindowLevels(); ++index)
     {
-        windowWidth += value.setNum(newImage->getWindowLevel(index).first, 'g', 10) + "\\";
+        windowLevel = newImage->getWindowLevel(index);
+        
+        windowWidth += value.setNum(windowLevel.getWidth(), 'g', 10) + "\\";
+        windowCenter += value.setNum(windowLevel.getLevel(), 'g', 10) + "\\";
+        explanation += windowLevel.getName() + "\\";
     }
 
     // Treiem l'últim "\\" afegit
-    return windowWidth.left(windowWidth.length() - 1);
-}
-
-QString LocalDatabaseImageDAL::getWindowCenterAsQString(Image *newImage)
-{
-    QString windowCenter = "";
-    QString value;
-
-    for (int index = 0; index < newImage->getNumberOfWindowLevels(); index++)
-    {
-        windowCenter += value.setNum(newImage->getWindowLevel(index).second, 'g', 10) + "\\";
-    }
-
-    // Treiem l'últim "\\" afegit
-    return windowCenter.left(windowCenter.length() - 1);
-}
-
-QString LocalDatabaseImageDAL::getWindowLevelExplanationAsQString(Image *newImage)
-{
-    QString windowLevelExplanation = "";
-
-    for (int index = 0; index < newImage->getNumberOfWindowLevels(); index++)
-    {
-        windowLevelExplanation += newImage->getWindowLevelExplanation(index) + "\\";
-    }
-
-    // Treiem l'últim "\\" afegit
-    return windowLevelExplanation.left(windowLevelExplanation.length() - 1);
+    windowWidth.left(windowWidth.length() - 1);
+    windowCenter.left(windowCenter.length() - 1);
+    explanation.left(explanation.length() - 1);
 }
 
 QStringList LocalDatabaseImageDAL::getWindowLevelExplanationAsQStringList(const QString &explanationList)

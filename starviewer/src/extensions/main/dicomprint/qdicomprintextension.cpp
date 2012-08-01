@@ -469,8 +469,8 @@ DICOMPrintPresentationStateImage QDicomPrintExtension::getDICOMPrintPresentation
 
     // Tenir en compte que imatges dins un mateixa sèrie poden tenir WL
     Image *currentImageInViewer = m_2DView->getInput()->getImage(m_2DView->getCurrentSlice(), m_2DView->getCurrentPhase());
-    bool windowLevelHasBeenModifiedInViewer = currentImageInViewer->getWindowLevel().first != windowLevelFromViewer[0] ||
-            currentImageInViewer-> getWindowLevel().second != windowLevelFromViewer[1];
+    bool windowLevelHasBeenModifiedInViewer = currentImageInViewer->getWindowLevel().getWidth() != windowLevelFromViewer[0] ||
+            currentImageInViewer->getWindowLevel().getLevel() != windowLevelFromViewer[1];
 
     //Si el WL no ha estat modificat per defecte s'aplicarà el que té cada imatge
     if (windowLevelHasBeenModifiedInViewer)

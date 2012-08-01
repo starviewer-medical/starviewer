@@ -225,19 +225,16 @@ void Image::addWindowLevel(const WindowLevel &windowLevel)
     }
 }
 
-QPair<double, double> Image::getWindowLevel(int index) const
+WindowLevel Image::getWindowLevel(int index) const
 {
     if (index >= 0 && index < m_windowLevelList.size())
     {
-        QPair<double, double> windowLevelPair;
-        windowLevelPair.first = m_windowLevelList.at(index).getWidth();
-        windowLevelPair.second = m_windowLevelList.at(index).getLevel();
-        return windowLevelPair;
+        return m_windowLevelList.at(index);
     }
     else
     {
         DEBUG_LOG("Index out of range");
-        return QPair<double, double>();
+        return WindowLevel();
     }
 }
 
