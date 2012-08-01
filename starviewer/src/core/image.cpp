@@ -219,7 +219,7 @@ void Image::addWindowLevel(const WindowLevel &windowLevel)
     }
     else
     {
-        QString logMessage = QString("WW/WL Inconsistent: %1, %2. No s'afegira a la imatge").arg(windowLevel.getWidth()).arg(windowLevel.getLevel());
+        QString logMessage = QString("WW/WL Inconsistent: %1, %2. No s'afegira a la imatge").arg(windowLevel.getWidth()).arg(windowLevel.getCenter());
         WARN_LOG(logMessage);
         DEBUG_LOG(logMessage);
     }

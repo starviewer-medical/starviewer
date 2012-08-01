@@ -26,7 +26,7 @@ void test_WindowLevel::WindowLevel_InitializesDataAsExpected()
     WindowLevel windowLevel;
 
     QCOMPARE(windowLevel.getWidth(), 0.0);
-    QCOMPARE(windowLevel.getLevel(), 0.0);
+    QCOMPARE(windowLevel.getCenter(), 0.0);
     QCOMPARE(windowLevel.getName(), QString());
 }
 
@@ -49,7 +49,7 @@ void test_WindowLevel::isValid_ReturnsExpectedValues()
     WindowLevel windowLevel;
 
     windowLevel.setWidth(width);
-    windowLevel.setLevel(level);
+    windowLevel.setCenter(level);
 
     QCOMPARE(windowLevel.isValid(), expectedReturnValue);
 

@@ -27,7 +27,7 @@ void test_DICOMFormattedValuesConverter::parseWindowLevelValues_ReturnsExpectedV
 
     WindowLevel wl1;
     wl1.setWidth(1.0);
-    wl1.setLevel(3.0);
+    wl1.setCenter(3.0);
     
     QList<WindowLevel> windowLevelList;
     windowLevelList << wl1;
@@ -42,7 +42,7 @@ void test_DICOMFormattedValuesConverter::parseWindowLevelValues_ReturnsExpectedV
     
     WindowLevel wl2;
     wl2.setWidth(22.6);
-    wl2.setLevel(44.3);
+    wl2.setCenter(44.3);
     
     windowLevelList.clear();
     windowLevelList << wl1 << wl2;

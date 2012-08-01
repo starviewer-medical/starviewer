@@ -2544,8 +2544,8 @@ void Q2DViewer::updateDefaultPreset()
                 {
                     windowLevel.setWidth(-windowLevel.getWidth());
                 }
-                setWindowLevel(windowLevel.getWidth(), windowLevel.getLevel());
-                m_windowLevelData->updateCurrentFileDefinedPreset(windowLevel.getWidth(), windowLevel.getLevel());
+                setWindowLevel(windowLevel.getWidth(), windowLevel.getCenter());
+                m_windowLevelData->updateCurrentFileDefinedPreset(windowLevel.getWidth(), windowLevel.getCenter());
             }
         }
     }

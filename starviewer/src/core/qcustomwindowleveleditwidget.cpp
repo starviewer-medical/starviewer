@@ -45,7 +45,7 @@ void QCustomWindowLevelEditWidget::loadCustomWindowLevelPresets()
 
     foreach (WindowLevel *customWindowLevel, CustomWindowLevelsRepository::getRepository()->getItems())
     {
-        addWindowLevelItem(customWindowLevel->getName(), customWindowLevel->getWidth(), customWindowLevel->getLevel());
+        addWindowLevelItem(customWindowLevel->getName(), customWindowLevel->getWidth(), customWindowLevel->getCenter());
     }
     m_addWindowLevelPushButton->setFocus();
 }
@@ -120,11 +120,11 @@ void QCustomWindowLevelEditWidget::updatePresetsIfAreValid()
         {
             WindowLevel *customWindowLevel = new WindowLevel();
             customWindowLevel->setWidth(qobject_cast<QDoubleSpinBox*>(m_customWindowLevelTreeWidget->itemWidget((*iterator), 0))->value());
-            customWindowLevel->setLevel(qobject_cast<QDoubleSpinBox*>(m_customWindowLevelTreeWidget->itemWidget((*iterator), 1))->value());
+            customWindowLevel->setCenter(qobject_cast<QDoubleSpinBox*>(m_customWindowLevelTreeWidget->itemWidget((*iterator), 1))->value());
             customWindowLevel->setName((*iterator)->text(2));
             CustomWindowLevelsRepository::getRepository()->addItem(customWindowLevel);
             INFO_LOG(QString("-> Descripcio: %1, WW/WL: %2 / %3").arg(customWindowLevel->getName()).arg(customWindowLevel->getWidth())
-                        .arg(customWindowLevel->getLevel()));
+                        .arg(customWindowLevel->getCenter()));
             ++iterator;
         }
         INFO_LOG("Fi de llistat del repositori de WW/WL");

@@ -6,13 +6,13 @@ namespace udg {
 WindowLevel::WindowLevel()
 {
     m_width = 0.0;
-    m_level = 0.0;
+    m_center = 0.0;
 }
 
-WindowLevel::WindowLevel(double window, double level, const QString &name)
+WindowLevel::WindowLevel(double window, double center, const QString &name)
 {
     m_width = window;
-    m_level = level;
+    m_center = center;
     m_name = name;
 }
 
@@ -30,9 +30,9 @@ void WindowLevel::setWidth(double width)
     m_width = width;
 }
 
-void WindowLevel::setLevel(double level)
+void WindowLevel::setCenter(double center)
 {
-    m_level = level;
+    m_center = center;
 }
 
 QString WindowLevel::getName() const
@@ -45,9 +45,9 @@ double WindowLevel::getWidth() const
     return m_width;
 }
 
-double WindowLevel::getLevel() const
+double WindowLevel::getCenter() const
 {
-    return m_level;
+    return m_center;
 }
 
 bool WindowLevel::isValid() const
@@ -64,7 +64,7 @@ bool WindowLevel::isValid() const
 
 bool WindowLevel::valuesAreEqual(const WindowLevel &windowLevel) const
 {
-    if (m_width == windowLevel.getWidth() && m_level == windowLevel.getLevel())
+    if (m_width == windowLevel.getWidth() && m_center == windowLevel.getCenter())
     {
         return true;
     }
@@ -76,7 +76,7 @@ bool WindowLevel::valuesAreEqual(const WindowLevel &windowLevel) const
 
 bool WindowLevel::operator==(const WindowLevel &windowLevelToCompare) const
 {
-    if (m_width == windowLevelToCompare.getWidth() && m_level == windowLevelToCompare.getLevel() && m_name == windowLevelToCompare.getName())
+    if (m_width == windowLevelToCompare.getWidth() && m_center == windowLevelToCompare.getCenter() && m_name == windowLevelToCompare.getName())
     {
         return true;
     }
