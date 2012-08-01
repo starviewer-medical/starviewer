@@ -28,7 +28,7 @@ public:
 
     /// Ens determina si els valors de width i level són vàlids.
     /// Un WindowLevel serà sempre vàlid excepte en el cas que width sigui 0
-    bool isValid();
+    bool isValid() const;
 
 private:
     QString m_name;

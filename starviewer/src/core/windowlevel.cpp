@@ -43,7 +43,7 @@ double WindowLevel::getLevel() const
     return m_level;
 }
 
-bool WindowLevel::isValid()
+bool WindowLevel::isValid() const
 {
     if (m_width == 0.0)
     {
