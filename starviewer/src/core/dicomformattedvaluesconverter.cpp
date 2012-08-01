@@ -44,7 +44,7 @@ QList<WindowLevel> DICOMFormattedValuesConverter::parseWindowLevelValues(const Q
         WindowLevel newWindowLevel;
 
         newWindowLevel.setWidth(windowWidthArray.at(i));
-        newWindowLevel.setLevel(windowCenterArray.at(i));
+        newWindowLevel.setCenter(windowCenterArray.at(i));
 
         if (i < explanationsList.count())
         {

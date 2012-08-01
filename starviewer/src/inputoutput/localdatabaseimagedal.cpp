@@ -445,7 +445,7 @@ void LocalDatabaseImageDAL::getWindowLevelInformationAsQString(Image *newImage, 
         windowLevel = newImage->getWindowLevel(index);
         
         windowWidth += value.setNum(windowLevel.getWidth(), 'g', 10) + "\\";
-        windowCenter += value.setNum(windowLevel.getLevel(), 'g', 10) + "\\";
+        windowCenter += value.setNum(windowLevel.getCenter(), 'g', 10) + "\\";
         explanation += windowLevel.getName() + "\\";
     }
 

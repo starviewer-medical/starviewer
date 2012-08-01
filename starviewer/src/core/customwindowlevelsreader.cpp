@@ -57,7 +57,7 @@ QList<WindowLevel*> CustomWindowLevelsReader::readFile(const QString &path)
                         }
                         else if (reader.name() == "level")
                         {
-                            customWindowLevel->setLevel(reader.readElementText().toDouble());
+                            customWindowLevel->setCenter(reader.readElementText().toDouble());
                         }
                     }
                     listOfCustomWindowLevels.append(customWindowLevel);

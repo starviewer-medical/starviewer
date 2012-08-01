@@ -23,9 +23,9 @@ public:
     void setWidth(double width);
     double getWidth() const;
     
-    /// Defineix/obté el level del window level
-    void setLevel(double level);
-    double getLevel() const;
+    /// Defineix/obté el center del window level
+    void setCenter(double center);
+    double getCenter() const;
 
     /// Ens determina si els valors de width i level són vàlids.
     /// Un WindowLevel serà sempre vàlid excepte en el cas que width sigui 0
@@ -41,7 +41,7 @@ public:
 private:
     QString m_name;
     double m_width;
-    double m_level;
+    double m_center;
 };
 
 }

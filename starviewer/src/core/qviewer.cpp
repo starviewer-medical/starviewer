@@ -678,7 +678,7 @@ void QViewer::updateWindowLevelData()
             {
                 description = QString("%1 %2").arg(DefaultWindowLevelName).arg(i);
             }
-            m_windowLevelData->addPreset(description, windowLevel.getWidth() * windowWidthSign, windowLevel.getLevel(), WindowLevelPresetsToolData::FileDefined);
+            m_windowLevelData->addPreset(description, windowLevel.getWidth() * windowWidthSign, windowLevel.getCenter(), WindowLevelPresetsToolData::FileDefined);
 
             if (i == 0)
             {

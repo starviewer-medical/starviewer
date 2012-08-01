@@ -195,7 +195,7 @@ void WindowLevelPresetsToolData::loadCustomWindowLevelPresets()
 {
     foreach (WindowLevel *customWindowLevel, CustomWindowLevelsRepository::getRepository()->getItems())
     {
-        addPreset(customWindowLevel->getName(), customWindowLevel->getWidth(), customWindowLevel->getLevel(), UserDefined);
+        addPreset(customWindowLevel->getName(), customWindowLevel->getWidth(), customWindowLevel->getCenter(), UserDefined);
     }
 }
 
