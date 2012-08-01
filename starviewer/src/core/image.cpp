@@ -243,11 +243,6 @@ int Image::getNumberOfWindowLevels()
     return m_windowLevelList.size();
 }
 
-void Image::addWindowLevelExplanation(const QString &explanation)
-{
-    m_windowLevelExplanationList << explanation;
-}
-
 void Image::setWindowLevelExplanations(const QStringList &explanations)
 {
     m_windowLevelExplanationList = explanations;
