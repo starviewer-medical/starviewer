@@ -103,7 +103,6 @@ public:
     int getNumberOfWindowLevels();
 
     /// Assignar/Obtenir textes descriptius dels window level
-    void addWindowLevelExplanation(const QString &explanation);
     void setWindowLevelExplanations(const QStringList &explanations);
     QString getWindowLevelExplanation(int index = 0) const;
 
