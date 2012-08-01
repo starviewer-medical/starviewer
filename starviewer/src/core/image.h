@@ -98,7 +98,7 @@ public:
 
     /// Assignar/Obtenir els valors del rescalat de la VOI LUT que s'apliquen sobre la imatge
     void addWindowLevel(const WindowLevel &windowLevel);
-    QPair<double, double> getWindowLevel(int index = 0) const;
+    WindowLevel getWindowLevel(int index = 0) const;
 
     /// Assignem el llistat de WindowLevels de la imatge. Si el llistat conté algun WW/WL invàlid, no s'afegeix
     /// Sempre s'esborrarà qualsevol llistat de window level que hi hagués anteriorment

@@ -170,8 +170,7 @@ void test_Image::addWindowLevel_ShouldAddWindowLevel()
     image.addWindowLevel(windowLevel);
 
     QCOMPARE(image.getNumberOfWindowLevels(), 1);
-    QCOMPARE(image.getWindowLevel(0).first, windowLevel.getWidth());
-    QCOMPARE(image.getWindowLevel(0).second, windowLevel.getLevel());
+    QCOMPARE(image.getWindowLevel(0), windowLevel);
 }
 
 void test_Image::addWindowLevel_ShouldNotAddWindowLevel_data()
@@ -199,10 +198,8 @@ void test_Image::addWindowLevel_ShouldAddSameWindowLevelTwoTimes()
     image.addWindowLevel(windowLevel);
 
     QCOMPARE(image.getNumberOfWindowLevels(), 2);
-    QCOMPARE(image.getWindowLevel(0).first, windowLevel.getWidth());
-    QCOMPARE(image.getWindowLevel(0).second, windowLevel.getLevel());
-    QCOMPARE(image.getWindowLevel(1).first, windowLevel.getWidth());
-    QCOMPARE(image.getWindowLevel(1).second, windowLevel.getLevel());
+    QCOMPARE(image.getWindowLevel(0), windowLevel);
+    QCOMPARE(image.getWindowLevel(1), windowLevel);
 }
 
 void test_Image::setWindowLevelList_SetsValuesAsExpected_data()
@@ -239,32 +236,25 @@ void test_Image::setWindowLevelList_SetsValuesAsExpected()
     
     for (int i = 0; i < image.getNumberOfWindowLevels(); ++i)
     {
-        QPair<double, double> wl = image.getWindowLevel(i);
-        QVERIFY(WindowLevel(wl.first, wl.second).valuesAreEqual(expectedSetList.at(i)));
+        QCOMPARE(image.getWindowLevel(i), expectedSetList.at(i));
     }
 }
 
 void test_Image::getWindowLevel_ShouldReturnExpectedWindowLevel()
 {
-    typedef QPair<double, double> QPairDoublesType;
-
-    QList<QPairDoublesType> windowLevels;
-    windowLevels << QPairDoublesType(10.0, 20.0);
-    windowLevels << QPairDoublesType(11.0, 21.0);
-    windowLevels << QPairDoublesType(12.0, 22.0);
+    QList<WindowLevel> windowLevels;
+    windowLevels << WindowLevel(10.0, 20.0);
+    windowLevels << WindowLevel(11.0, 21.0);
+    windowLevels << WindowLevel(12.0, 22.0);
 
     Image image;
+    image.setWindowLevelList(windowLevels);
 
-    foreach (const QPairDoublesType &pair, windowLevels)
-    {
-        image.addWindowLevel(WindowLevel(pair.first, pair.second));
-    }
-
-    QCOMPARE(image.getWindowLevel(-1), QPairDoublesType());
+    QCOMPARE(image.getWindowLevel(-1), WindowLevel());
     QCOMPARE(image.getWindowLevel(0), windowLevels.at(0));
     QCOMPARE(image.getWindowLevel(1), windowLevels.at(1));
     QCOMPARE(image.getWindowLevel(2), windowLevels.at(2));
-    QCOMPARE(image.getWindowLevel(3), QPairDoublesType());
+    QCOMPARE(image.getWindowLevel(3), WindowLevel());
 }
 
 void test_Image::getWindowLevelExplanation_ShouldReturnExpectedExplanation_data()
