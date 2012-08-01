@@ -74,7 +74,7 @@ bool WindowLevel::valuesAreEqual(const WindowLevel &windowLevel) const
     }
 }
 
-bool WindowLevel::operator==(const WindowLevel &windowLevelToCompare)
+bool WindowLevel::operator==(const WindowLevel &windowLevelToCompare) const
 {
     if (m_width == windowLevelToCompare.getWidth() && m_level == windowLevelToCompare.getLevel() && m_name == windowLevelToCompare.getName())
     {
