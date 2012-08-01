@@ -9,6 +9,13 @@ WindowLevel::WindowLevel()
     m_level = 0.0;
 }
 
+WindowLevel::WindowLevel(double window, double level, const QString &name)
+{
+    m_width = window;
+    m_level = level;
+    m_name = name;
+}
+
 WindowLevel::~WindowLevel()
 {
 }
