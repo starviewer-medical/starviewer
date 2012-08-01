@@ -87,9 +87,6 @@ private:
     /// Retorna el WindowWidth, WindowCenter i explanation en format d'string separats per "\\" en els strings passats per paràmetre;
     void getWindowLevelInformationAsQString(Image *newImage, QString &windowWidth, QString &windowCenter, QString &explanation);
 
-    /// Retorna el WindowLevelExplanation en una llista d'strings
-    QStringList getWindowLevelExplanationAsQStringList(const QString &explanationList);
-
     /// Si el DICOMSource conté un PACS retorna l'ID d'aquest a la base de dades, (si no existeix l'insereix)
     /// Si el DICOMSource té més d'un PACS només es té en compte el primer, una imatge no hauria de tenir més d'un PACS com a DICOMSource
     /// i si el DICOMSource no conté  cap PACS retorna string contenint la paraula null.
