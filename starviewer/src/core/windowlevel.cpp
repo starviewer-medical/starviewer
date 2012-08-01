@@ -62,4 +62,28 @@ bool WindowLevel::isValid() const
     }
 }
 
+bool WindowLevel::valuesAreEqual(const WindowLevel &windowLevel) const
+{
+    if (m_width == windowLevel.getWidth() && m_level == windowLevel.getLevel())
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool WindowLevel::operator==(const WindowLevel &windowLevelToCompare)
+{
+    if (m_width == windowLevelToCompare.getWidth() && m_level == windowLevelToCompare.getLevel() && m_name == windowLevelToCompare.getName())
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 }
