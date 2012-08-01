@@ -36,7 +36,7 @@ public:
     bool valuesAreEqual(const WindowLevel &windowLevel) const;
 
     /// Compara que tots els membres de la classe siguin iguals
-    bool WindowLevel::operator==(const WindowLevel &windowLevelToCompare);
+    bool operator==(const WindowLevel &windowLevelToCompare);
 
 private:
     QString m_name;
