@@ -241,6 +241,15 @@ QPair<double, double> Image::getWindowLevel(int index) const
     }
 }
 
+void Image::setWindowLevelList(const QList<WindowLevel> &windowLevelList)
+{
+    m_windowLevelList.clear();
+    foreach (WindowLevel windowLevel, windowLevelList)
+    {
+        addWindowLevel(windowLevel);
+    }
+}
+
 int Image::getNumberOfWindowLevels()
 {
     return m_windowLevelList.size();

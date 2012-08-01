@@ -137,11 +137,7 @@ Image* LocalDatabaseImageDAL::fillImage(char **reply, int row, int columns)
     image->setBitsStored(QString(reply[14 + row * columns]).toInt());
     image->setPixelRepresentation(QString(reply[15 + row * columns]).toInt());
     image->setRescaleSlope(QString(reply[16 + row * columns]).toDouble());
-    QList<WindowLevel> windowLevels = DICOMFormattedValuesConverter::parseWindowLevelValues(reply[17 + row * columns], reply[18 + row * columns], reply[19 + row * columns]);
-    foreach (WindowLevel wl, windowLevels)
-    {
-        image->addWindowLevel(wl);
-    }
+    image->setWindowLevelList(DICOMFormattedValuesConverter::parseWindowLevelValues(reply[17 + row * columns], reply[18 + row * columns], reply[19 + row * columns]));
     image->setSliceLocation(reply[20 + row * columns]);
     image->setRescaleIntercept(QString(reply[21 + row * columns]).toDouble());
     image->setPhotometricInterpretation(reply[22 + row * columns]);
