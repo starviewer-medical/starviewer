@@ -153,6 +153,11 @@ public:
     /// Ens retorna l'índex intern d'imatge corresponent a la llesca i fase indicats
     int getImageIndex(int sliceNumber, int phaseNumber) const;
 
+    /// Donada una coordenada de món, ens dóna l'índex del vòxel corresponent.
+    /// Si la coordenada està dins del volum retorna true, false altrament.
+    /// TODO S'espera que la coordenada sigui dins del món VTK!
+    bool computeCoordinateIndex(const double coordinate[3], int index[3]);
+
 signals:
     /// Emet l'estat del progrés en el que es troba la càrrega de dades del volum
     /// @param progress progrés de la càrrega en una escala de 1 a 100

@@ -123,7 +123,7 @@ void Cursor3DTool::updatePosition()
         if (m_2DViewer->getCurrentCursorImageCoordinate(xyz))
         {
             // 2.- Trobar l'índex del vòxel en el DICOM
-            m_2DViewer->getInput()->getVtkData()->ComputeStructuredCoordinates(xyz, index, coordinates);
+            m_2DViewer->getInput()->computeCoordinateIndex(xyz, index);
 
             // 3.- Necessitem la imatge la qual pertany el punt per tal de trobar la imatge del dicom que conté la informació del pla.
             int slice = m_2DViewer->getCurrentSlice();
