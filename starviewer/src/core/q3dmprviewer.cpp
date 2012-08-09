@@ -324,7 +324,7 @@ void Q3DMPRViewer::resetPlanes()
 {
     if (m_mainVolume)
     {
-        int *size = m_mainVolume->getVtkData()->GetDimensions();
+        int *size = m_mainVolume->getDimensions();
 
         m_axialImagePlaneWidget->SetPlaneOrientationToZAxes();
         m_axialImagePlaneWidget->SetSliceIndex(size[2]/2);
