@@ -397,4 +397,10 @@ VolumeReader* Volume::createVolumeReader()
     return new VolumeReader(this);
 }
 
+bool Volume::computeCoordinateIndex(const double coordinate[3], int index[3])
+{
+    return getPixelData()->computeCoordinateIndex(coordinate, index);
+}
+
+
 };
