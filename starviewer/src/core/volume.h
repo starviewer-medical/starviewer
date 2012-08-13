@@ -158,6 +158,9 @@ public:
     /// TODO S'espera que la coordenada sigui dins del món VTK!
     bool computeCoordinateIndex(const double coordinate[3], int index[3]);
 
+    /// Retorna el nombre de components
+    int getNumberOfScalarComponents();
+
 signals:
     /// Emet l'estat del progrés en el que es troba la càrrega de dades del volum
     /// @param progress progrés de la càrrega en una escala de 1 a 100
