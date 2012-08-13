@@ -71,6 +71,16 @@ public:
     /// els que ens quedem sense memòria o ens trobem amb altres problemes a l'hora d'intentar allotjar-ne un en memòria
     void convertToNeutralPixelData();
 
+    /// Assigna/Obté l'origen
+    void setOrigin(double origin[3]);
+    void setOrigin(double x, double y, double z);
+    void getOrigin(double origin[3]);
+
+    /// Assigna/Obté l'espaiat del model al llarg dels eixos
+    void setSpacing(double spacing[3]);
+    void setSpacing(double x, double y, double z);
+    void getSpacing(double spacing[3]);
+
 private:
     /// Filtres per importar/exportar
     typedef itk::ImageToVTKImageFilter<ItkImageType> ItkToVtkFilterType;
