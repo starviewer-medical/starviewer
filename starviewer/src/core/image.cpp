@@ -522,8 +522,8 @@ VolumePixelData* Image::getDisplayShutterForDisplayAsPixelData(int zSlice)
             m_displayShutterForDisplayPixelData = shutter.getAsVolumePixelData(m_columns, m_rows, zSlice);
             if (m_displayShutterForDisplayPixelData)
             {
-                m_displayShutterForDisplayPixelData->getVtkData()->SetOrigin(m_imagePositionPatient);
-                m_displayShutterForDisplayPixelData->getVtkData()->SetSpacing(m_pixelSpacing[0], m_pixelSpacing[1], 1);
+                m_displayShutterForDisplayPixelData->setOrigin(m_imagePositionPatient);
+                m_displayShutterForDisplayPixelData->setSpacing(m_pixelSpacing[0], m_pixelSpacing[1], 1);
             }
         }
     }

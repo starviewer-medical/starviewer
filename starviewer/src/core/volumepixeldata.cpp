@@ -200,4 +200,36 @@ void VolumePixelData::convertToNeutralPixelData()
     }
 }
 
+void VolumePixelData::setOrigin(double origin[3])
+{
+    this->setOrigin(origin[0], origin[1], origin[2]);
+}
+
+void VolumePixelData::setOrigin(double x, double y, double z)
+{
+    m_imageDataVTK->SetOrigin(x, y, z);
+}
+
+void VolumePixelData::getOrigin(double origin[3])
+{
+    return m_imageDataVTK->GetOrigin(origin);
+}
+
+void VolumePixelData::setSpacing(double spacing[3])
+{
+    this->setSpacing(spacing[0], spacing[1], spacing[2]);
+}
+
+void VolumePixelData::setSpacing(double x, double y, double z)
+{
+   m_imageDataVTK->SetSpacing(x, y, z);
+}
+
+void VolumePixelData::getSpacing(double spacing[3])
+{
+    return m_imageDataVTK->GetSpacing(spacing);
+}
+
+
+
 } // End namespace udg
