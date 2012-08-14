@@ -314,7 +314,7 @@ void VolumePixelDataReaderITKGDCM::checkZeroSpacingException()
     {
         double spacing[3];
 
-        m_volumePixelData->getVtkData()->GetSpacing(spacing);
+        m_volumePixelData->getSpacing(spacing);
         DEBUG_LOG(QString("checkZeroSpacing: (x, y, z) = (%1, %2, %3)").arg(spacing[0]).arg(spacing[1]).arg(spacing[2]));
 
         if (spacing[0] == 0.0 || spacing[1] == 0.0)
