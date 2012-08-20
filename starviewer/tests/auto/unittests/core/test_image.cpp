@@ -352,7 +352,7 @@ void test_Image::getDisplayShutterForDisplayAsPixelData_ShouldReturnExpectedValu
     VolumePixelData *shutterData = image->getDisplayShutterForDisplayAsPixelData(zSlice);
 
     int extent[6];
-    shutterData->getVtkData()->GetExtent(extent);
+    shutterData->getExtent(extent);
     
     QCOMPARE(extent[0], 0);
     QCOMPARE(extent[2], 0);
@@ -362,14 +362,14 @@ void test_Image::getDisplayShutterForDisplayAsPixelData_ShouldReturnExpectedValu
     QCOMPARE(extent[5], zSlice);
 
     double shutterSpacing[3];
-    shutterData->getVtkData()->GetSpacing(shutterSpacing);
+    shutterData->getSpacing(shutterSpacing);
 
     QCOMPARE(shutterSpacing[0], imageSpacing[0]);
     QCOMPARE(shutterSpacing[1], imageSpacing[1]);
     QCOMPARE(shutterSpacing[2], 1.0);
 
     double shutterOrigin[3];
-    shutterData->getVtkData()->GetOrigin(shutterOrigin);
+    shutterData->getOrigin(shutterOrigin);
 
     for (int i = 0; i < 3; ++i)
     {
