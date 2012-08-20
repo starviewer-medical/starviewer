@@ -230,6 +230,9 @@ void VolumePixelData::getSpacing(double spacing[3])
     return m_imageDataVTK->GetSpacing(spacing);
 }
 
-
+void VolumePixelData::getExtent(int extent[6])
+{
+    return m_imageDataVTK->GetExtent(extent);
+}
 
 } // End namespace udg

@@ -81,6 +81,9 @@ public:
     void setSpacing(double x, double y, double z);
     void getSpacing(double spacing[3]);
 
+    /// Retorna l'extent
+    void getExtent(int extent[6]);
+
 private:
     /// Filtres per importar/exportar
     typedef itk::ImageToVTKImageFilter<ItkImageType> ItkToVtkFilterType;
