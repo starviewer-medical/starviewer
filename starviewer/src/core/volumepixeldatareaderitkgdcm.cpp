@@ -250,8 +250,8 @@ void VolumePixelDataReaderITKGDCM::readDifferentSizeImagesIntoOneVolume(const QS
         }
         catch (...)
         {
-            WARN_LOG(QString("Excepció desconeguda llegint els arxius del directori [%1] Descripció: [%2]").arg(QFileInfo(filenames.at(0)).dir().path()));
-            DEBUG_LOG(QString("Excepció desconeguda els arxius del directori [%1] Descripció: [%2]").arg(QFileInfo(filenames.at(0)).dir().path()));
+            WARN_LOG(QString("Excepció desconeguda llegint els arxius del directori [%1]").arg(QFileInfo(filenames.at(0)).dir().path()));
+            DEBUG_LOG(QString("Excepció desconeguda els arxius del directori [%1]").arg(QFileInfo(filenames.at(0)).dir().path()));
             errorCode = UnknownError;
         }
         
