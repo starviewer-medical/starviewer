@@ -242,16 +242,16 @@ void VolumePixelDataReaderITKGDCM::readDifferentSizeImagesIntoOneVolume(const QS
         }
         catch (gdcm::Exception &e)
         {
-            WARN_LOG(QString("ExcepciÃ³ llegint els arxius del directori [%1] DescripciÃ³: [%2]")
+            WARN_LOG(QString("Excepció llegint els arxius del directori [%1] Descripció: [%2]")
                 .arg(QFileInfo(filenames.at(0)).dir().path()).arg(e.GetDescription()));
-            DEBUG_LOG(QString("ExcepciÃ³ llegint els arxius del directori [%1] DescripciÃ³: [%2]")
+            DEBUG_LOG(QString("Excepció llegint els arxius del directori [%1] Descripció: [%2]")
                 .arg(QFileInfo(filenames.at(0)).dir().path()).arg(e.GetDescription()));
             errorCode = identifyErrorMessage(QString(e.GetDescription()));;
         }
         catch (...)
         {
-            WARN_LOG(QString("ExcepciÃ³ desconeguda llegint els arxius del directori [%1] DescripciÃ³: [%2]").arg(QFileInfo(filenames.at(0)).dir().path()));
-            DEBUG_LOG(QString("ExcepciÃ³ desconeguda els arxius del directori [%1] DescripciÃ³: [%2]").arg(QFileInfo(filenames.at(0)).dir().path()));
+            WARN_LOG(QString("Excepció desconeguda llegint els arxius del directori [%1] Descripció: [%2]").arg(QFileInfo(filenames.at(0)).dir().path()));
+            DEBUG_LOG(QString("Excepció desconeguda els arxius del directori [%1] Descripció: [%2]").arg(QFileInfo(filenames.at(0)).dir().path()));
             errorCode = UnknownError;
         }
         
@@ -319,20 +319,20 @@ void VolumePixelDataReaderITKGDCM::checkZeroSpacingException()
 
         if (spacing[0] == 0.0 || spacing[1] == 0.0)
         {
-            WARN_LOG(QString("x Ã³ y spacing Ã©s 0; [x,y] = [%1,%2]. Donem el volum per vÃ lid igualment.").arg(spacing[0]).arg(spacing[1]));
-            DEBUG_LOG(QString("x Ã³ y spacing Ã©s 0; [x,y] = [%1,%2]. Donem el volum per vÃ lid igualment.").arg(spacing[0]).arg(spacing[1]));
+            WARN_LOG(QString("x o y spacing és 0; [x,y] = [%1,%2]. Donem el volum per vàlid igualment.").arg(spacing[0]).arg(spacing[1]));
+            DEBUG_LOG(QString("x o y spacing és 0; [x,y] = [%1,%2]. Donem el volum per vàlid igualment.").arg(spacing[0]).arg(spacing[1]));
         }
         else if (spacing[2] == 0.0)
         {
-            WARN_LOG("El z-spacing de les dades llegides Ã©s 0. Possiblement la informaciÃ³ corresponent (SliceThikness/SpacingBetweenSlices) estigui dins "
-                     "de seqÃ¼Ã¨ncies privades. Donem el volum per vÃ lid igualment.");
-            DEBUG_LOG("El z-spacing de les dades llegides Ã©s 0. Possiblement la informaciÃ³ corresponent (SliceThikness/SpacingBetweenSlices) estigui dins "
-                      "de seqÃ¼Ã¨ncies privades. Donem el volum per vÃ lid igualment.");
+            WARN_LOG("El z-spacing de les dades llegides és 0. Possiblement la informació corresponent (SliceThikness/SpacingBetweenSlices) estigui dins "
+                     "de seqüències privades. Donem el volum per vàlid igualment.");
+            DEBUG_LOG("El z-spacing de les dades llegides és 0. Possiblement la informació corresponent (SliceThikness/SpacingBetweenSlices) estigui dins "
+                     "de seqüències privades. Donem el volum per vàlid igualment.");
         }
     }
     else
     {
-        DEBUG_LOG("No s'han assignat les dades vtk! No podem fer cap comprovaciÃ³.");
+        DEBUG_LOG("No s'han assignat les dades vtk! No podem fer cap comprovació.");
     }
 }
 
