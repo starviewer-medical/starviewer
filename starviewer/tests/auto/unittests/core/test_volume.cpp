@@ -90,6 +90,9 @@ private slots:
     void toString_ShouldReturnExpectedString();
 
     void fitsIntoMemory_ShouldReturnTrueWhenDataIsLoaded();
+
+    void getScalarPointer_ShouldReturnCorrectScalarPointer_data();
+    void getScalarPointer_ShouldReturnCorrectScalarPointer();
 };
 
 Q_DECLARE_METATYPE(AnatomicalPlane::AnatomicalPlaneType)
@@ -1100,6 +1103,40 @@ void test_Volume::fitsIntoMemory_ShouldReturnTrueWhenDataIsLoaded()
     QVERIFY(volume.isPixelDataLoaded());
 
     QCOMPARE(volume.fitsIntoMemory(), true);
+}
+
+void test_Volume::getScalarPointer_ShouldReturnCorrectScalarPointer_data()
+{
+    QTest::addColumn<int>("x");
+    QTest::addColumn<int>("y");
+    QTest::addColumn<int>("z");
+    QTest::addColumn<int>("value");
+
+    QTest::newRow("up-left point") << 0 << 0 << 0 << 150;
+    QTest::newRow("down-left point") << 0 << 9 << 0 << 150;
+    QTest::newRow("up-right point") << 9 << 0 << 0 << 150;
+    QTest::newRow("down-right point") << 9 << 9 << 0 << 150;
+    QTest::newRow("middle-left point") << 0 << 5 << 0 << 70;
+    QTest::newRow("middle-center point") << 5 << 5 << 0 << 70;
+    QTest::newRow("middle-right point") << 9 << 5 << 0 << 70;
+
+}
+
+void test_Volume::getScalarPointer_ShouldReturnCorrectScalarPointer()
+{
+    QFETCH(int, x);
+    QFETCH(int, y);
+    QFETCH(int, z);
+    QFETCH(int, value);
+
+    Volume *volume = new Volume();
+    volume->convertToNeutralVolume();
+
+    udg::Volume::VoxelType *voxelValue = volume->getScalarPointer(x,y,z);
+    
+    QCOMPARE(voxelValue[0], (short)value);
+    
+    delete volume;
 }
 
 DECLARE_TEST(test_Volume)
