@@ -198,7 +198,6 @@ void StrokeSegmentationMethod::applyMethodVTKRecursive(vtkImageData* imMask, int
     if ((a >= m_Volume->getWholeExtent()[0]) && (a <= m_Volume->getWholeExtent()[1]) && (b >= m_Volume->getWholeExtent()[2]) && (b <=
         m_Volume->getWholeExtent()[3]) && (c >= m_Volume->getWholeExtent()[4]) && (c <= m_Volume->getWholeExtent()[5]))
     {
-        value = m_Volume->getScalarPointer(a, b, c);
         maskValue = (Volume::VoxelType*)imMask->GetScalarPointer(a, b, c);
         if ((*maskValue) == m_insideMaskValue - 100)
         {
