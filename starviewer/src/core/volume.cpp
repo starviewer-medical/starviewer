@@ -337,6 +337,11 @@ Volume::VoxelType* Volume::getScalarPointer(int index[3])
     return this->getScalarPointer(index[0], index[1], index[2]);
 }
 
+Volume::VoxelType Volume::getScalarValue(int x, int y, int z)
+{
+    return (double)(*this->getPixelData()->getScalarPointer(x, y, z));
+}
+
 void Volume::convertToNeutralVolume()
 {
     m_volumePixelData->convertToNeutralPixelData();

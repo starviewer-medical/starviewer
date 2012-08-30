@@ -134,6 +134,9 @@ public:
     VoxelType* getScalarPointer(int x = 0, int y = 0, int z = 0);
     VoxelType* getScalarPointer(int index[3]);
 
+    /// Obté el valor de la posició del VolumePixelData.
+    VoxelType getScalarValue(int x, int y, int z);
+
     /// Ens calcula si el volum quep a memòria. Si el volum ja ha estat carregat prèviament amb èxit, retornarà cert
     bool fitsIntoMemory();
 
