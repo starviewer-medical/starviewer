@@ -153,31 +153,25 @@ void MagicROITool::setBounds(int &minX, int &minY, int &maxX, int &maxY)
 
 double MagicROITool::getVoxelValue(int x, int y, int z)
 {
+    int xIndex, yIndex, zIndex;
+    Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
+
+    int index[3];
+    index[xIndex] = x;
+    index[yIndex] = y;
+    index[zIndex] = z;
+
     double value = 0;
-    vtkImageData *imageData = 0;
+    VolumePixelData *volumePixelData = m_2DViewer->getInput()->getPixelData();
+
     if (m_2DViewer->isThickSlabActive())
     {
-        imageData = m_2DViewer->getCurrentSlabProjection();
+        volumePixelData = new VolumePixelData();
+        volumePixelData->setData(m_2DViewer->getCurrentSlabProjection());
     }
-    else
-    {
-        imageData = m_2DViewer->getInput()->getVtkData();
-    }
-    
-    switch (m_2DViewer->getView())
-    {
-        case Q2DViewer::Axial:
-            value = imageData->GetScalarComponentAsDouble(x, y, z, 0);
-            break;
-        case Q2DViewer::Sagital:
-            value = imageData->GetScalarComponentAsDouble(z, x, y, 0);
-            break;
-        case Q2DViewer::Coronal:
-            value = imageData->GetScalarComponentAsDouble(x, z, y, 0);
-            break;
-        default:
-        DEBUG_LOG("Bad parameter");
-    }
+
+    value = volumePixelData->getScalarComponentAsDouble(index[0], index[1], index[2]);
+
     return value;
 
 }

@@ -67,6 +67,13 @@ public:
     /// HACK S'introdueixen els paràmetres phaseNumber i numberOfPhases per poder calcular l'índex correcte dins del volum corresponent a la fase actual
     bool getVoxelValue(double coordinate[3], QVector<double> &voxelValue, int phaseNumber = 0, int numberOfPhases = 1);
 
+    /// Donada una posició del volum, ens dona el valor coma double del vòxel corresponent
+    /// Bàsicament crida el getScalarComponentAsDouble del vtkImageData
+    /// TODO El mètode de vtkImageData incorpora el paràmetre int comp però no s'ha inclòs degut a que s'ha fet per realitzar un refactoring de volume i 
+    /// es crida amb el paràmetre comp = 0 tal i com es feia abans desde la magicTool.
+    /// TODO Intentar fer servir el getVoxelValue directament tot i que això no seria un refactor sinó una millora o canvi de comportament
+    double getScalarComponentAsDouble(int x, int y, int z);
+
     /// S'encarrega de convertir el VolumePixelData en un pixel data neutre que permet que es faci servir en casos en
     /// els que ens quedem sense memòria o ens trobem amb altres problemes a l'hora d'intentar allotjar-ne un en memòria
     void convertToNeutralPixelData();
