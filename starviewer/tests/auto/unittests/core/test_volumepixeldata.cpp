@@ -3,6 +3,9 @@
 
 #include "itkandvtkimagetesthelper.h"
 #include "volumepixeldatatesthelper.h"
+#include "fuzzycomparetesthelper.h"
+
+#include "vtkImageData.h"
 
 using namespace udg;
 using namespace testing;
@@ -26,6 +29,12 @@ private slots:
 
     void convertToNeutralPixelData_ShouldActAsExpected_data();
     void convertToNeutralPixelData_ShouldActAsExpected();
+
+    void getScalarComponentAsDouble_ShouldReturnExpectedValueFromNeutral_data();
+    void getScalarComponentAsDouble_ShouldReturnExpectedValueFromNeutral();
+
+    void getScalarComponentAsDouble_ShouldReturnExpectedValue_data();
+    void getScalarComponentAsDouble_ShouldReturnExpectedValue();
 };
 
 Q_DECLARE_METATYPE(unsigned char*)
@@ -289,6 +298,99 @@ void test_VolumePixelData::convertToNeutralPixelData_ShouldActAsExpected()
     }
 
     delete volumePixelData;
+}
+
+void test_VolumePixelData::getScalarComponentAsDouble_ShouldReturnExpectedValueFromNeutral_data()
+{
+    QTest::addColumn<VolumePixelData*>("volumePixelData");
+    int dimensions[3] = { 0, 0, 0 };
+    int extent[6] = { 0, 1, 0, 1, 0, 1 };
+    double spacing[3] = { 0.1, 0.1, 0.1 };
+    double origin[3] = { 0.0, 0.0, 0.0 };
+    VolumePixelData *volumePixelDataTest = VolumePixelDataTestHelper::createVolumePixelData(dimensions, extent, spacing, origin);
+    volumePixelDataTest->convertToNeutralPixelData();
+    QTest::newRow("Every position of a neutralPixelData") << volumePixelDataTest;
+}
+
+void test_VolumePixelData::getScalarComponentAsDouble_ShouldReturnExpectedValueFromNeutral()
+{
+    QFETCH(VolumePixelData*, volumePixelData);
+
+    signed short expectedValue;
+
+    for (int i = 0; i < 10; i++)
+    {
+        expectedValue = 150 - i * 20;
+
+        if (i > 4)
+        {
+            expectedValue = 150 - (10 - i - 1) * 20;
+        }
+
+        for (int j = 0; j < 10; j++)
+        {
+            QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(volumePixelData->getScalarComponentAsDouble(j, i, 0), expectedValue, 0.0000001));
+        }
+    }
+}
+
+void test_VolumePixelData::getScalarComponentAsDouble_ShouldReturnExpectedValue_data()
+{
+    QTest::addColumn<VolumePixelData*>("volumePixelData");
+
+    vtkSmartPointer<vtkImageData> imageDataVTK = vtkSmartPointer<vtkImageData>::New();
+    // Inicialitzem les dades
+    imageDataVTK->SetOrigin(.0, .0, .0);
+    imageDataVTK->SetSpacing(1., 1., 1.);
+    imageDataVTK->SetDimensions(10, 10, 10);
+    imageDataVTK->SetWholeExtent(0, 9, 0, 9, 0, 9);
+    imageDataVTK->SetScalarTypeToShort();
+    imageDataVTK->SetNumberOfScalarComponents(1);
+    imageDataVTK->AllocateScalars();
+    // Omplim el dataset perquè la imatge resultant quedi amb un cert degradat
+    signed short *scalarPointer = (signed short*) imageDataVTK->GetScalarPointer();
+    signed short value;
+    for (int i = 0; i < 10; i++)
+    {
+        value = i;
+        for (int j = 0; j < 10; j++)
+        {
+            value = value + j;
+            for (int k = 0; k < 10; k++)
+            {
+                *scalarPointer = value;
+                *scalarPointer++;
+            }
+        }
+    }
+    int dimensions[3] = { 10, 10, 10 };
+    int extent[6] = { 0, 9, 0, 9, 0, 9 };
+    double spacing[3] = { 1., 1., 1. };
+    double origin[3] = { .0, .0, .0 };
+    VolumePixelData *volumePixelDataTest = VolumePixelDataTestHelper::createVolumePixelData(dimensions, extent, spacing, origin);
+    volumePixelDataTest->setData(imageDataVTK);
+
+    QTest::newRow("Every position of a synthetic volumePixelData") << volumePixelDataTest;
+}
+
+void test_VolumePixelData::getScalarComponentAsDouble_ShouldReturnExpectedValue()
+{
+    QFETCH(VolumePixelData*, volumePixelData);
+
+    signed short expectedValue;
+
+    for (int i = 0; i < 10; i++)
+    {
+        expectedValue = i;
+        for (int j = 0; j < 10; j++)
+        {
+            expectedValue = expectedValue + j;
+            for (int k = 0; k < 10; k++)
+            {
+                QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(volumePixelData->getScalarComponentAsDouble(k, j, i), expectedValue, 0.0000001));
+            }
+        }
+    }
 }
 
 DECLARE_TEST(test_VolumePixelData)
