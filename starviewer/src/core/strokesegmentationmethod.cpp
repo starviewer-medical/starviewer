@@ -174,8 +174,8 @@ double StrokeSegmentationMethod::applyMethodVTK()
     imageThreshold->Update();
     vtkImageData *imMask = imageThreshold->GetOutput();
 
-    m_Volume->getVtkData()->GetSpacing(spacing[0], spacing[1], spacing[2]);
-    m_Volume->getVtkData()->GetOrigin(origin[0], origin[1], origin[2]);
+    m_Volume->getSpacing(spacing);
+    m_Volume->getOrigin(origin);
     index[0] = (int)(((double)m_px - origin[0]) / spacing[0]);
     index[1] = (int)(((double)m_py - origin[1]) / spacing[1]);
     index[2] = (int)(((double)m_pz - origin[2]) / spacing[2]);
