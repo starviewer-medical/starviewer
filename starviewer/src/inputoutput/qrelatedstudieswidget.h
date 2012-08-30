@@ -53,10 +53,10 @@ private:
     /// Insereix un estudi a l'arbre i genera el contenidor associat a aquest estudi.
     void insertStudyToTree(Study *study);
     /// Actualitza l'amplada del QTreeWidget per aconseguir que l'scroll horitzontal no apareixi i tota la info sigui visible.
-    void updateWidthTree();
+    void updateWidgetWidth();
     /// Actualitza l'alçada del QTreeWidget per aconseguir que es vegi el màxim de contingut possible.
     /// Nota: Perquè funcioni correctament el QRelatedStudiesWidget ha de ser visible.
-    void updateHeightTree();
+    void updateWidgetHeight();
 
     /// Metodes encarregats de controlar quan s'han d'emetre els signals \sa downloadingStudies i \sa studiesDownloaded;
     void increaseNumberOfDownladingStudies();

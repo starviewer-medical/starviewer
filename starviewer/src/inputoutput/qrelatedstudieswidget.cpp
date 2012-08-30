@@ -232,7 +232,7 @@ void QRelatedStudiesWidget::highlightQTreeWidgetItem(QTreeWidgetItem *item)
     }
 }
 
-void QRelatedStudiesWidget::updateWidthTree()
+void QRelatedStudiesWidget::updateWidgetWidth()
 {
     int fixedSize = 0;
     for (int i = 0; i < m_relatedStudiesTree->columnCount(); i++)
@@ -243,7 +243,7 @@ void QRelatedStudiesWidget::updateWidthTree()
     m_relatedStudiesTree->setFixedWidth(fixedSize + 20);
 }
 
-void QRelatedStudiesWidget::updateHeightTree()
+void QRelatedStudiesWidget::updateWidgetHeight()
 {
     ScreenManager screen;
     int screenAvailableHeight = screen.getAvailableScreenGeometry(screen.getIdOfScreen(this)).height();
@@ -277,8 +277,8 @@ void QRelatedStudiesWidget::insertStudiesToTree(QList<Study*> studiesList)
 
         m_relatedStudiesTree->setVisible(true);
 
-        updateWidthTree();
-        updateHeightTree();
+        updateWidgetWidth();
+        updateWidgetHeight();
     }
     else
     {
@@ -399,7 +399,7 @@ void QRelatedStudiesWidget::setVisible(bool visible)
     QFrame::setVisible(visible);
     if (visible)
     {
-        updateHeightTree();
+        updateWidgetHeight();
         this->adjustSize();
     }
 }
