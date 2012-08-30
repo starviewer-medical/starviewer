@@ -45,6 +45,10 @@ private:
     /// Crea els widgets dels que es composa el menú
     void createWidgets();
 
+    /// Calcula la mida que queda fora de la pantalla del widget amb la llista d'estudis/sèries segons el punt de popup.
+    /// Si queda dins de la pantalla, la mida serà (0,0).
+    void computeListOutsideSize(const QPoint &popupPoint, QSize &out);
+    
     /// Col·loca el widget d'informació adicional all lloc més adient depenent de la posició del menú principal
     void placeAdditionalInfoWidget();
 
