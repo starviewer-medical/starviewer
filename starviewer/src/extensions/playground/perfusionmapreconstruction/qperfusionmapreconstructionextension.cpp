@@ -1098,7 +1098,7 @@ void QPerfusionMapReconstructionExtension::paintAIFSignal( )
 			{
 				for (t=0;t<tend;t++)
 				{
-					signal[t] = (double)(*(m_DSCVolume->getScalarPointer(index[0],index[1],index[2])));
+					signal[t] = m_DSCVolume->getScalarValue(index[0],index[1],index[2]);
 					index[2]++;
 			   }
 
