@@ -665,14 +665,11 @@ bool MagicROITool::isLoopReached()
 
 double MagicROITool::getStandardDeviation(int x, int y, int z)
 {
-    int ext[6];
-    m_2DViewer->getInput()->getWholeExtent(ext);
-
     int minX;
     int minY;
     int maxX;
     int maxY;
-    
+
     this->setBounds(minX, minY, maxX, maxY);
 
     minX = qMax(x - MagicSize, minX);
@@ -680,33 +677,15 @@ double MagicROITool::getStandardDeviation(int x, int y, int z)
     minY = qMax(y - MagicSize, minY);
     maxY = qMin(y + MagicSize, maxY);
 
-    int xIndex, yIndex, zIndex;
-    Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
-
-    int index[3];
-    index[zIndex] = z;
-
     // Calculem la mitjana
     double mean = 0.0;
     double value;
 
-    vtkImageData *imageData = 0;
-    if (m_2DViewer->isThickSlabActive())
-    {
-        imageData = m_2DViewer->getCurrentSlabProjection();
-    }
-    else
-    {
-        imageData = m_2DViewer->getInput()->getVtkData();
-    }
-    
     for (int i = minX; i <= maxX; ++i)
     {
         for (int j = minY; j <= maxY; ++j)
         {
-            index[xIndex] = i;
-            index[yIndex] = j;
-            value = imageData->GetScalarComponentAsDouble(index[0], index[1], index[2], 0);
+            value = this->getVoxelValue(i, j, z);
             mean += value;
         }
     }
@@ -720,9 +699,7 @@ double MagicROITool::getStandardDeviation(int x, int y, int z)
     {
         for (int j = minY; j <= maxY; ++j)
         {
-            index[xIndex] = i;
-            index[yIndex] = j;
-            value = imageData->GetScalarComponentAsDouble(index[0], index[1], index[2], 0);
+            value = this->getVoxelValue(i, j, z);
             deviation += qPow(value - mean, 2);
         }
     }
