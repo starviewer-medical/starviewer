@@ -119,6 +119,14 @@ void PatientBrowserMenu::popup(const QPoint &point, const QString &identifier)
     // Marquem l'ítem actual de la llista
     m_patientBrowserList->markItem(identifier);
 
+    // Mirem si l'alçada  del widget excedeix l'alçada de la pantalla
+    // En cas que sigui així anem afegint noves columnes per redistribuir els elements fins que l'alçada sigui menor a la de la pantalla
+    ScreenManager screenManager;
+    QRect currentScreenGeometry = screenManager.getAvailableScreenGeometry(screenManager.getScreenID(point));
+    while (m_patientBrowserList->sizeHint().height() > currentScreenGeometry.height())
+    {
+        m_patientBrowserList->addColumn();
+    }
     // Calculem quanta part de la llista queda fora segons la geometria de la pantalla on se'ns ha demanat obrir el menú
     // i així poder determianr la posició del widget per tal que no surti fora de la pantalla i es pugui veure el seu contingut.
     QSize outside;
