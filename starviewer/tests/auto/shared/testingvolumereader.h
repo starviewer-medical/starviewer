@@ -24,7 +24,7 @@ public:
 
 public:
 
-    /// Pixel data que el read() assigna al volum.
+    /// Pixel data que el read() assigna al volum. Si és nul no fa l'assignació.
     VolumePixelData *m_readPixelData;
 
 private:

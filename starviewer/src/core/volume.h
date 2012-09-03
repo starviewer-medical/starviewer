@@ -49,8 +49,7 @@ public:
     vtkImageData* getVtkData();
 
     /// Assigna/Retorna el Volume Pixel Data
-    /// Pressuposa que les dades assignades no estan per carregar i que les que retorna només són vàlides
-    /// si isPixelDataLoaded() retorna true.
+    /// L'assignació no accepta punters nuls.
     void setPixelData(VolumePixelData *pixelData);
     VolumePixelData* getPixelData();
 
