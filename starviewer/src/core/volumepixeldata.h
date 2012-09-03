@@ -50,6 +50,9 @@ public:
     /// Les característiques d'spacing i origin no s'assignaran amb aquest mètode. Això caldrà fer-ho accedint posteriorment a les dades vtk
     void setData(unsigned char *data, int extent[6], int bytesPerPixel, bool deleteData = false);
 
+    /// Retorna cert si conté dades carregades.
+    bool isLoaded() const;
+
     /// Obtenim el punter a les dades que es troben en l'índex donat. És un accés a molt baix nivell, ja que obtenim
     /// el punter de les dades. Retornem el punter transformat al tipus natiu de dades VoxelType.
     VoxelType* getScalarPointer(int x, int y, int z);
@@ -98,6 +101,9 @@ private:
 
     /// Les dades en format vtk
     vtkSmartPointer<vtkImageData> m_imageDataVTK;
+
+    /// Indica si conté dades carregades o no.
+    bool m_loaded;
 
     /// Filtres per passar de vtk a itk
     ItkToVtkFilterType::Pointer m_itkToVtkFilter;

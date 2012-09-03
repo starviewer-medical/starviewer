@@ -174,9 +174,6 @@ private:
     virtual VolumeReader* createVolumeReader();
 
 private:
-    /// Ens diu si les dades han estat carregades ja en memòria o no.
-    /// Aquest membre el farem servir per aplicar el lazy loading
-    bool m_volumePixelDataLoaded;
 
     /// Conjunt d'imatges que composen el volum
     QList<Image*> m_imageSet;
