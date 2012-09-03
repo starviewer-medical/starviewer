@@ -70,6 +70,29 @@ void PatientBrowserMenuList::addItemsGroup(const QString &caption, const QList<Q
     m_mainLayout->addWidget(groupWidget);
 }
 
+void PatientBrowserMenuList::addColumn()
+{
+    int columns = m_mainLayout->columnCount();
+
+    int numberOfElements = m_mainLayout->count();
+    int rowsPerColum = ceil((double)numberOfElements / (columns + 1));
+    int currentElementIndex = numberOfElements - 1;
+
+    for (int j = columns; j >= 0; --j)
+    {
+        for (int i = rowsPerColum - 1; i >= 0 ; --i)
+        {
+            // Cal comprovar que l'índex està dins del nombre d'elements existents
+            if (i + (j * rowsPerColum) <= currentElementIndex && currentElementIndex >= 0)
+            {
+                QLayoutItem *item = m_mainLayout->takeAt(currentElementIndex);
+                m_mainLayout->addItem(item, i, j);
+                --currentElementIndex;
+            }
+        }
+    }
+}
+
 PatientBrowserMenuBasicItem *PatientBrowserMenuList::createBasicItem(const QString &label, const QString &identifier)
 {
     PatientBrowserMenuBasicItem *seriebasicWidget = new PatientBrowserMenuBasicItem(this);
