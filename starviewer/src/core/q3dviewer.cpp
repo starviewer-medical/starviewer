@@ -718,8 +718,9 @@ bool Q3DViewer::rescale(Volume *volume)
         return false;
     }
 
-    vtkImageData *image = volume->getVtkData();
-    double *range = image->GetScalarRange();
+    double range[2];
+    volume->getScalarRange(range);
+    
     double min = range[0], max = range[1];
     double rangeLength = max - min;
     double shift = -min;
@@ -729,7 +730,7 @@ bool Q3DViewer::rescale(Volume *volume)
     DEBUG_LOG(QString("Q3DViewer: volume scalar range: min = %1, max = %2, range = %3, shift = %4").arg(min).arg(max).arg(rangeLength).arg(shift));
 
     vtkImageShiftScale *rescaler = vtkImageShiftScale::New();
-    rescaler->SetInput(image);
+    rescaler->SetInput(volume->getVtkData());
     rescaler->SetShift(shift);
 //    rescaler->SetScale(1.0);    // per defecte
     // Ho psoem en unsigned short per tal de mantenir tota la informació
