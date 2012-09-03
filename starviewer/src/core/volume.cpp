@@ -15,7 +15,6 @@ Volume::Volume(QObject *parent)
     m_numberOfPhases = 1;
     m_numberOfSlicesPerPhase = 1;
 
-    m_volumePixelDataLoaded = false;
     m_volumePixelData = new VolumePixelData(this);
 }
 
@@ -38,19 +37,16 @@ vtkImageData* Volume::getVtkData()
 void Volume::setData(ItkImageTypePointer itkImage)
 {
     m_volumePixelData->setData(itkImage);
-    m_volumePixelDataLoaded = true;
 }
 
 void Volume::setData(vtkImageData *vtkImage)
 {
     m_volumePixelData->setData(vtkImage);
-    m_volumePixelDataLoaded = true;
 }
 
 void Volume::setPixelData(VolumePixelData *pixelData)
 {
     m_volumePixelData = pixelData;
-    m_volumePixelDataLoaded = true;
 }
 
 VolumePixelData* Volume::getPixelData()
@@ -68,7 +64,7 @@ VolumePixelData* Volume::getPixelData()
 
 bool Volume::isPixelDataLoaded() const
 {
-    return m_volumePixelDataLoaded;
+    return m_volumePixelData && m_volumePixelData->isLoaded();
 }
 
 void Volume::getOrigin(double xyz[3])
@@ -198,7 +194,13 @@ void Volume::addImage(Image *image)
     if (!m_imageSet.contains(image))
     {
         m_imageSet << image;
-        m_volumePixelDataLoaded = false;
+        // Si tenim dades carregades passen a ser invàlides
+        if (isPixelDataLoaded())
+        {
+            // WARNING Possible memory leak temporal: el VolumePixelData anterior quedarà penjat sense destruir fins que es destruixi el seu pare (si en té,
+            // sinó per sempre).
+            m_volumePixelData = new VolumePixelData(this);
+        }
     }
 }
 
@@ -206,7 +208,13 @@ void Volume::setImages(const QList<Image*> &imageList)
 {
     m_imageSet.clear();
     m_imageSet = imageList;
-    m_volumePixelDataLoaded = false;
+    // Si tenim dades carregades passen a ser invàlides
+    if (isPixelDataLoaded())
+    {
+        // WARNING Possible memory leak temporal: el VolumePixelData anterior quedarà penjat sense destruir fins que es destruixi el seu pare (si en té, sinó
+        // per sempre).
+        m_volumePixelData = new VolumePixelData(this);
+    }
 }
 
 QList<Image*> Volume::getImages() const
@@ -349,9 +357,6 @@ void Volume::convertToNeutralVolume()
     // Quan creem el volum neutre indiquem que només tenim 1 sola fase
     // TODO Potser s'haurien de crear tantes fases com les que indiqui la sèrie?
     this->setNumberOfPhases(1);
-
-    // Indiquem que hem carregat les dades
-    m_volumePixelDataLoaded = true;
 }
 
 AnatomicalPlane::AnatomicalPlaneType Volume::getAcquisitionPlane() const

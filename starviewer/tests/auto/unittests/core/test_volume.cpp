@@ -176,19 +176,21 @@ void test_Volume::setData_itk_ShouldBehaveAsExpected()
 void test_Volume::setData_vtk_ShouldBehaveAsExpected_data()
 {
     QTest::addColumn<vtkSmartPointer<vtkImageData>>("vtkData");
+    QTest::addColumn<bool>("pixelDataLoaded");
 
-    QTest::newRow("null") << vtkSmartPointer<vtkImageData>();
-    QTest::newRow("not null") << vtkSmartPointer<vtkImageData>::New();
+    QTest::newRow("null") << vtkSmartPointer<vtkImageData>() << false;
+    QTest::newRow("not null") << vtkSmartPointer<vtkImageData>::New() << true;
 }
 
 void test_Volume::setData_vtk_ShouldBehaveAsExpected()
 {
     QFETCH(vtkSmartPointer<vtkImageData>, vtkData);
+    QFETCH(bool, pixelDataLoaded);
 
     Volume volume;
     volume.setData(vtkData);
 
-    QCOMPARE(volume.isPixelDataLoaded(), true);
+    QCOMPARE(volume.isPixelDataLoaded(), pixelDataLoaded);
 
     vtkImageData *outputVtkData = volume.getVtkData();
     QCOMPARE(outputVtkData, vtkData.GetPointer());
@@ -197,45 +199,76 @@ void test_Volume::setData_vtk_ShouldBehaveAsExpected()
 void test_Volume::setPixelData_ShouldBehaveAsExpected_data()
 {
     QTest::addColumn<VolumePixelData*>("pixelData");
+    QTest::addColumn<bool>("pixelDataLoaded");
 
-    QTest::newRow("null") << static_cast<VolumePixelData*>(0);
-    QTest::newRow("not null") << new VolumePixelData(this);
+    QTest::newRow("null") << static_cast<VolumePixelData*>(0) << false;
+    QTest::newRow("not null, empty pixel data") << new VolumePixelData(this) << false;
+    VolumePixelData *pixelData = new VolumePixelData(this);
+    pixelData->setData(vtkImageData::New());
+    QTest::newRow("not null, \"filled\" pixel data") << pixelData << true;
 }
 
 void test_Volume::setPixelData_ShouldBehaveAsExpected()
 {
     QFETCH(VolumePixelData*, pixelData);
+    QFETCH(bool, pixelDataLoaded);
 
     Volume volume;
     volume.setPixelData(pixelData);
 
-    QCOMPARE(volume.isPixelDataLoaded(), true);
+    QCOMPARE(volume.isPixelDataLoaded(), pixelDataLoaded);
     QCOMPARE(volume.getPixelData(), pixelData);
 }
 
 void test_Volume::getPixelData_ShouldReturnCurrentPixelData_data()
 {
-    QTest::addColumn<VolumePixelData*>("pixelData");
+    QTest::addColumn<VolumePixelData*>("originalPixelData");
+    QTest::addColumn<bool>("originalPixelDataLoaded");
+    QTest::addColumn<VolumePixelData*>("returnedPixelData");
+    QTest::addColumn<bool>("read");
+    QTest::addColumn<bool>("returnedPixelDataLoaded");
 
-    QTest::newRow("null") << static_cast<VolumePixelData*>(0);
-    QTest::newRow("not null") << new VolumePixelData(this);
+    {
+        VolumePixelData *readPixelData = new VolumePixelData(this);
+        readPixelData->setData(vtkImageData::New());
+        QTest::newRow("null") << static_cast<VolumePixelData*>(0) << false << readPixelData << true << true;
+    }
+
+    {
+        VolumePixelData *readPixelData = new VolumePixelData(this);
+        readPixelData->setData(vtkImageData::New());
+        QTest::newRow("not null, empty pixel data") << new VolumePixelData(this) << false << readPixelData << true << true;
+    }
+
+    {
+        VolumePixelData *readPixelData = new VolumePixelData(this);
+        readPixelData->setData(vtkImageData::New());
+        VolumePixelData *pixelData = new VolumePixelData(this);
+        pixelData->setData(vtkImageData::New());
+        QTest::newRow("not null, \"filled\" pixel data") << pixelData << true << pixelData << false << true;
+    }
 }
 
 void test_Volume::getPixelData_ShouldReturnCurrentPixelData()
 {
-    QFETCH(VolumePixelData*, pixelData);
+    QFETCH(VolumePixelData*, originalPixelData);
+    QFETCH(bool, originalPixelDataLoaded);
+    QFETCH(VolumePixelData*, returnedPixelData);
+    QFETCH(bool, read);
+    QFETCH(bool, returnedPixelDataLoaded);
 
-    bool read;
-    TestingVolumeReader *volumeReader = new TestingVolumeReader(read, this);
+    bool hasRead;
+    TestingVolumeReader *volumeReader = new TestingVolumeReader(hasRead, this);
+    volumeReader->m_readPixelData = returnedPixelData;
     TestingVolume volume;
     volume.m_volumeReaderToUse = volumeReader;
-    volume.setPixelData(pixelData);
+    volume.setPixelData(originalPixelData);
 
-    QCOMPARE(volume.isPixelDataLoaded(), true);
+    QCOMPARE(volume.isPixelDataLoaded(), originalPixelDataLoaded);
 
-    QCOMPARE(volume.getPixelData(), pixelData);
-    QCOMPARE(read, false);
-    QCOMPARE(volume.isPixelDataLoaded(), true);
+    QCOMPARE(volume.getPixelData(), returnedPixelData);
+    QCOMPARE(hasRead, read);
+    QCOMPARE(volume.isPixelDataLoaded(), returnedPixelDataLoaded);
 }
 
 void test_Volume::getPixelData_ShouldRead()
@@ -1097,8 +1130,10 @@ void test_Volume::toString_ShouldReturnExpectedString()
 
 void test_Volume::fitsIntoMemory_ShouldReturnTrueWhenDataIsLoaded()
 {
+    VolumePixelData *pixelData = new VolumePixelData(this);
+    pixelData->setData(vtkImageData::New());
     Volume volume;
-    volume.setPixelData(0);
+    volume.setPixelData(pixelData);
 
     QVERIFY(volume.isPixelDataLoaded());
 

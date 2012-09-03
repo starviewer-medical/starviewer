@@ -11,7 +11,7 @@
 namespace udg {
 
 VolumePixelData::VolumePixelData(QObject *parent) :
-    QObject(parent)
+    QObject(parent), m_loaded(false)
 {
     m_imageDataVTK = vtkSmartPointer<vtkImageData>::New();
 
@@ -59,6 +59,8 @@ void VolumePixelData::setData(vtkImageData *vtkImage)
         m_imageDataVTK->ReleaseData();
     }
     m_imageDataVTK = vtkImage;
+    // Si el punter que ens assignen no és nul considerem que són dades carregades
+    m_loaded = vtkImage != 0;
 }
 
 void VolumePixelData::setData(unsigned char *data, int extent[6], int bytesPerPixel, bool deleteData)
@@ -101,6 +103,11 @@ void VolumePixelData::setData(unsigned char *data, int extent[6], int bytesPerPi
 
     this->setData(imageData);
     imageData->Delete();
+}
+
+bool VolumePixelData::isLoaded() const
+{
+    return m_loaded;
 }
 
 VolumePixelData::VoxelType* VolumePixelData::getScalarPointer(int x, int y, int z)
@@ -203,6 +210,7 @@ void VolumePixelData::convertToNeutralPixelData()
             *scalarPointer++;
         }
     }
+    m_loaded = true;
 }
 
 void VolumePixelData::setOrigin(double origin[3])
