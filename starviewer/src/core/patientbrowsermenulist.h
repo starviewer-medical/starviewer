@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QKeyEvent>
 
-class QVBoxLayout;
+class QGridLayout;
 
 namespace udg {
 
@@ -56,7 +56,7 @@ private:
     QList<PatientBrowserMenuBasicItem*> m_itemsList;
 
     /// Layout on colocarem els elements
-    QVBoxLayout *m_verticalLayout;
+    QGridLayout *m_mainLayout;
 };
 
 }
