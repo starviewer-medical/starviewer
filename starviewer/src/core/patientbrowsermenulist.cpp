@@ -1,7 +1,6 @@
 #include "patientbrowsermenulist.h"
 
 #include <QLabel>
-#include <QVBoxLayout>
 #include <QGridLayout>
 
 #include "patientbrowsermenubasicitem.h"
@@ -12,8 +11,8 @@ namespace udg {
 
 PatientBrowserMenuList::PatientBrowserMenuList(QWidget *parent) : QWidget(parent)
 {
-    m_verticalLayout = new QVBoxLayout(this);
-    m_verticalLayout->setMargin(0);
+    m_mainLayout = new QGridLayout(this);
+    m_mainLayout->setMargin(0);
 }
 
 PatientBrowserMenuList::~PatientBrowserMenuList()
@@ -68,7 +67,7 @@ void PatientBrowserMenuList::addItemsGroup(const QString &caption, const QList<Q
         }
     }
 
-    m_verticalLayout->addWidget(groupWidget);
+    m_mainLayout->addWidget(groupWidget);
 }
 
 PatientBrowserMenuBasicItem *PatientBrowserMenuList::createBasicItem(const QString &label, const QString &identifier)
