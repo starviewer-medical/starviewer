@@ -201,11 +201,10 @@ void test_Volume::setPixelData_ShouldBehaveAsExpected_data()
     QTest::addColumn<VolumePixelData*>("pixelData");
     QTest::addColumn<bool>("pixelDataLoaded");
 
-    QTest::newRow("null") << static_cast<VolumePixelData*>(0) << false;
-    QTest::newRow("not null, empty pixel data") << new VolumePixelData(this) << false;
+    QTest::newRow("empty pixel data") << new VolumePixelData(this) << false;
     VolumePixelData *pixelData = new VolumePixelData(this);
     pixelData->setData(vtkImageData::New());
-    QTest::newRow("not null, \"filled\" pixel data") << pixelData << true;
+    QTest::newRow("\"filled\" pixel data") << pixelData << true;
 }
 
 void test_Volume::setPixelData_ShouldBehaveAsExpected()
@@ -231,13 +230,7 @@ void test_Volume::getPixelData_ShouldReturnCurrentPixelData_data()
     {
         VolumePixelData *readPixelData = new VolumePixelData(this);
         readPixelData->setData(vtkImageData::New());
-        QTest::newRow("null") << static_cast<VolumePixelData*>(0) << false << readPixelData << true << true;
-    }
-
-    {
-        VolumePixelData *readPixelData = new VolumePixelData(this);
-        readPixelData->setData(vtkImageData::New());
-        QTest::newRow("not null, empty pixel data") << new VolumePixelData(this) << false << readPixelData << true << true;
+        QTest::newRow("empty pixel data") << new VolumePixelData(this) << false << readPixelData << true << true;
     }
 
     {
@@ -245,7 +238,7 @@ void test_Volume::getPixelData_ShouldReturnCurrentPixelData_data()
         readPixelData->setData(vtkImageData::New());
         VolumePixelData *pixelData = new VolumePixelData(this);
         pixelData->setData(vtkImageData::New());
-        QTest::newRow("not null, \"filled\" pixel data") << pixelData << true << pixelData << false << true;
+        QTest::newRow("\"filled\" pixel data") << pixelData << true << pixelData << false << true;
     }
 }
 

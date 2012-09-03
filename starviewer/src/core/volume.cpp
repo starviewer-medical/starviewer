@@ -46,6 +46,7 @@ void Volume::setData(vtkImageData *vtkImage)
 
 void Volume::setPixelData(VolumePixelData *pixelData)
 {
+    Q_ASSERT(pixelData != 0);
     m_volumePixelData = pixelData;
 }
 

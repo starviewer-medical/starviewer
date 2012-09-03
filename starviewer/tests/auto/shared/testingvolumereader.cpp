@@ -14,7 +14,7 @@ void TestingVolumeReader::read(Volume *volume)
 {
     m_readHasBeenCalled = true;
 
-    if (volume)
+    if (volume && m_readPixelData)
     {
         volume->setPixelData(m_readPixelData);
     }
