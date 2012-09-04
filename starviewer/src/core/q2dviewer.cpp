@@ -1934,7 +1934,7 @@ void Q2DViewer::updateDisplayExtent()
     Q_ASSERT(m_imageActor);
 
     // Ens assegurem que tenim dades vàlides
-    if (!m_mainVolume->getVtkData())
+    if (!m_mainVolume->isPixelDataLoaded())
     {
         return;
     }
