@@ -115,6 +115,11 @@ VolumePixelData::VoxelType* VolumePixelData::getScalarPointer(int x, int y, int 
     return static_cast<VolumePixelData::VoxelType*>(this->getVtkData()->GetScalarPointer(x, y, z));
 }
 
+VolumePixelData::VoxelType* VolumePixelData::getScalarPointer()
+{
+    return reinterpret_cast<VolumePixelData::VoxelType*>(this->getVtkData()->GetScalarPointer());
+}
+
 bool VolumePixelData::computeCoordinateIndex(const double coordinate[3], int index[3])
 {
     if (!this->getVtkData())
@@ -247,5 +252,15 @@ void VolumePixelData::getExtent(int extent[6])
 {
     return m_imageDataVTK->GetExtent(extent);
 }
+
+int VolumePixelData::getNumberOfScalarComponents()
+{
+    return m_imageDataVTK->GetNumberOfScalarComponents();
+}
+
+int VolumePixelData::getScalarSize()
+{
+    return m_imageDataVTK->GetScalarSize();
+}  
 
 } // End namespace udg
