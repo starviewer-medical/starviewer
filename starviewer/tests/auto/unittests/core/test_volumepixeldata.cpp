@@ -199,19 +199,18 @@ void test_VolumePixelData::setData_ShouldSetDataFromArray()
     VolumePixelData *pixelData = new VolumePixelData();
     pixelData->setData(data, extent, bytesPerPixel, true);
 
-    vtkImageData *vtkData = pixelData->getVtkData();
-
     int vtkExtent[6];
-    vtkData->GetExtent(vtkExtent);
+    pixelData->getExtent(vtkExtent);
     for (int i = 0; i < 6; i++)
     {
         QCOMPARE(extent[i], vtkExtent[i]);
     }
-    QCOMPARE(vtkData->GetNumberOfScalarComponents(), bytesPerPixel);
-    QCOMPARE(vtkData->GetScalarType(), VTK_UNSIGNED_CHAR);
+    QCOMPARE(pixelData->getNumberOfScalarComponents(), bytesPerPixel);
+    QCOMPARE(pixelData->getScalarType(), VTK_UNSIGNED_CHAR);
 
-    unsigned char *dataPointer = reinterpret_cast<unsigned char*>(vtkData->GetScalarPointer());
-    for (int i = 0; i < vtkData->GetNumberOfPoints(); ++i)
+    unsigned char* dataPointer = reinterpret_cast<unsigned char*>(pixelData->getScalarPointer());
+    
+    for (int i = 0; i < pixelData->getNumberOfPoints(); ++i)
     {
         QCOMPARE(*dataPointer, data[i]);
         ++dataPointer;

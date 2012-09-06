@@ -100,6 +100,12 @@ public:
 
     /// Retorna el nombre de components escalars
     int getScalarSize();
+    
+    /// Obté el tipus d'escalars
+    int getScalarType();
+
+    //  Obté el nombre de punts
+    int getNumberOfPoints();
    
 private:
     /// Filtres per importar/exportar

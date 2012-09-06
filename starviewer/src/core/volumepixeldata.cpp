@@ -263,4 +263,13 @@ int VolumePixelData::getScalarSize()
     return m_imageDataVTK->GetScalarSize();
 }  
 
+int VolumePixelData::getScalarType()
+{
+    return m_imageDataVTK->GetScalarType();
+}
+
+int VolumePixelData::getNumberOfPoints()
+{
+    return m_imageDataVTK->GetNumberOfPoints();
+} 
 } // End namespace udg
