@@ -56,6 +56,7 @@ public:
     /// Obtenim el punter a les dades que es troben en l'índex donat. És un accés a molt baix nivell, ja que obtenim
     /// el punter de les dades. Retornem el punter transformat al tipus natiu de dades VoxelType.
     VoxelType* getScalarPointer(int x, int y, int z);
+    VoxelType* getScalarPointer();
 
     /// Donada una coordenada de món, ens dóna l'índex del vòxel corresponent.
     /// Si la coordenada està dins del volum retorna true, false altrament.
@@ -94,6 +95,12 @@ public:
     /// Retorna l'extent
     void getExtent(int extent[6]);
 
+    /// Retorna el nombre de components escalars
+    int getNumberOfScalarComponents();
+
+    /// Retorna el nombre de components escalars
+    int getScalarSize();
+   
 private:
     /// Filtres per importar/exportar
     typedef itk::ImageToVTKImageFilter<ItkImageType> ItkToVtkFilterType;

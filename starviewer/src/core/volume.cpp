@@ -415,7 +415,11 @@ bool Volume::computeCoordinateIndex(const double coordinate[3], int index[3])
 
 int Volume::getNumberOfScalarComponents()
 {
-    return this->getPixelData()->getVtkData()->GetNumberOfScalarComponents();
+    return this->getPixelData()->getNumberOfScalarComponents();
 }
 
+int Volume::getScalarSize()
+{
+    return this->getPixelData()->getScalarSize();
+}
 };

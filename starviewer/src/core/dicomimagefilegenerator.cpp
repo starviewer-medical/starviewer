@@ -49,11 +49,10 @@ bool DICOMImageFileGenerator::generateDICOMFiles()
 
 bool DICOMImageFileGenerator::generateSecondaryCaptureDICOMFiles()
 {
-    vtkImageData *data = m_input->getVtkData();
+    int *dimensions = m_input->getDimensions();
+    int bytesPerImage = m_input->getScalarSize() * m_input->getNumberOfScalarComponents() * dimensions[0] * dimensions[1];
 
-    int *dimensions = data->GetDimensions();
-    int bytesPerImage = data->GetScalarSize() * data->GetNumberOfScalarComponents() * dimensions[0] * dimensions[1];
-    const char *scalarPointer = static_cast<const char*>(data->GetScalarPointer());
+    const char *scalarPointer = reinterpret_cast<const char*>(m_input->getScalarPointer());
     int i = 1;
 
     DICOMWriter *writer;

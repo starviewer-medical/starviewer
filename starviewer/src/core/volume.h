@@ -163,6 +163,9 @@ public:
     /// Retorna el nombre de components
     int getNumberOfScalarComponents();
 
+     /// Retorna la mida dels escalars
+    int getScalarSize();
+    
 signals:
     /// Emet l'estat del progrés en el que es troba la càrrega de dades del volum
     /// @param progress progrés de la càrrega en una escala de 1 a 100
