@@ -24,9 +24,9 @@ OrderImagesFillerStep::~OrderImagesFillerStep()
     QMap<QString, QMap<double, QMap< unsigned long, Image*>*>*> *normalVectorImageSet;
     QMap<int, QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*>*> *volumesInSeries;
 
-    foreach (Series *key, OrderImagesInternalInfo.keys())
+    foreach (Series *key, m_orderImagesInternalInfo.keys())
     {
-        volumesInSeries = OrderImagesInternalInfo.take(key);
+        volumesInSeries = m_orderImagesInternalInfo.take(key);
         foreach (int volumeNumber, volumesInSeries->keys())
         {
             normalVectorImageSet = volumesInSeries->take(volumeNumber);
@@ -60,9 +60,9 @@ bool OrderImagesFillerStep::fillIndividually()
 {
     QMap<int, QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*>*> *volumesInSeries;
 
-    if (OrderImagesInternalInfo.contains(m_input->getCurrentSeries()))
+    if (m_orderImagesInternalInfo.contains(m_input->getCurrentSeries()))
     {
-        volumesInSeries = OrderImagesInternalInfo.value(m_input->getCurrentSeries());
+        volumesInSeries = m_orderImagesInternalInfo.value(m_input->getCurrentSeries());
         if (volumesInSeries->contains(m_input->getCurrentVolumeNumber()))
         {
             m_orderedImageSet = volumesInSeries->value(m_input->getCurrentVolumeNumber());
@@ -82,7 +82,7 @@ bool OrderImagesFillerStep::fillIndividually()
         volumesInSeries = new QMap<int, QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*>*>();
         m_orderedImageSet = new QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*>();
         volumesInSeries->insert(m_input->getCurrentVolumeNumber(), m_orderedImageSet);
-        OrderImagesInternalInfo.insert(m_input->getCurrentSeries(), volumesInSeries);
+        m_orderImagesInternalInfo.insert(m_input->getCurrentSeries(), volumesInSeries);
     }
 
     foreach (Image * image, m_input->getCurrentImages())
@@ -127,7 +127,7 @@ bool OrderImagesFillerStep::fillIndividually()
 
 void OrderImagesFillerStep::postProcessing()
 {
-    foreach (Series *key, OrderImagesInternalInfo.keys())
+    foreach (Series *key, m_orderImagesInternalInfo.keys())
     {
         setOrderedImagesIntoSeries(key);
     }
@@ -174,7 +174,7 @@ void OrderImagesFillerStep::processImage(Image *image)
             {
                 // Tot i que siguin diferents, pot ser que siguin gairebé iguals
                 // llavors cal comprovar que de fet són prou diferents
-                // ja que d'avegades només hi ha petites imprecisions simplement
+                // ja que a vegades només hi ha petites imprecisions simplement
                 QStringList normalSplitted = normal.split("\\");
                 QVector3D normalVector(normalSplitted.at(0).toDouble(), normalSplitted.at(1).toDouble(), normalSplitted.at(2).toDouble());
 
@@ -236,7 +236,7 @@ void OrderImagesFillerStep::setOrderedImagesIntoSeries(Series *series)
     Image *currentImage;
     int orderNumberInVolume;
 
-    volumesInSeries = OrderImagesInternalInfo.take(series);
+    volumesInSeries = m_orderImagesInternalInfo.take(series);
 
     foreach (int currentVolumeNumber, volumesInSeries->keys())
     {
