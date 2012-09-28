@@ -26,6 +26,12 @@ public:
     void moveToPreviousDesktop(QWidget *window);
     /// Mètode per moure la finestra a la següent pantalla segons l'identificador de pantalla
     void moveToNextDesktop(QWidget *window);
+
+    /// Ens indica quina és la pantalla que es troba a la dreta/esquerra de la pantalla amb ID indicada.
+    /// Retorna -1 si no n'hi ha cap pantalla en el costat indicat
+    int getScreenOnTheRightOf(int screenID);
+    int getScreenOnTheLeftOf(int screenID);
+
     ///Restaura la finestra a l'estat d'abans d'estar minimitzada
     void restoreFromMinimized(QWidget *window);
 
