@@ -152,6 +152,58 @@ void ScreenManager::moveToPreviousDesktop(QWidget *window)
     moveToDesktop(window, desktopIllBe);
 }
 
+int ScreenManager::getScreenOnTheRightOf(int screenID)
+{
+    int rightScreen = -1;
+    // Buscar una pantalla a la dreta i a la mateixa altura + o -
+    for (int i = 0; i < getNumberOfScreens(); i++)
+    {
+        // Si està a la dreta, però no està completament per sobre ni per sota
+        if (isOnRight(i, screenID) && !isOver(i, screenID) && !isUnder(i, screenID))
+        {
+            // Si encara no hem trobat cap pantalla
+            if (rightScreen == -1)
+            {
+                rightScreen = i;
+            }
+            // De les pantalles de la dreta, volem la més pròxima
+            // Si la pantalla que hem trobat està més a l'esquerra que la que tenim
+            else if (isOnLeft(i, rightScreen))
+            {
+                rightScreen = i;
+            }
+        }
+    }
+
+    return rightScreen;
+}
+
+int ScreenManager::getScreenOnTheLeftOf(int screenID)
+{
+     int leftScreen = -1;
+    // Buscar una pantalla a l'esquera i a la mateixa altura + o -
+    for (int i = 0; i < getNumberOfScreens(); i++)
+    {
+        // Si està a l'esquera, però no està completament per sobre ni per sota
+        if (isOnLeft(i, screenID) && !isOver(i, screenID) && !isUnder(i, screenID))
+        {
+            // Si encara no hem trobat cap pantalla
+            if (leftScreen == -1)
+            {
+                leftScreen = i;
+            }
+            // De les pantalles de l'esquera, volem la més pròxima
+            // Si la pantalla que hem trobat està més a la dreta que la que tenim
+            else if (isOnRight(i, leftScreen))
+            {
+                leftScreen = i;
+            }
+        }
+    }
+
+    return leftScreen;
+}
+
 void ScreenManager::moveToNextDesktop(QWidget *window)
 {
     int desktopIAm = getIdOfScreen(window);

@@ -17,6 +17,9 @@ PatientBrowserMenu::PatientBrowserMenu(QWidget *parent)
 {
     ApplicationStyleHelper style;
     style.setScaledFontSizeTo(this);
+
+    // Inicialment no sabem en quina pantalla es pot desplegar el menú
+    m_currentScreenID = m_leftScreenID = m_rightScreenID = -1;
 }
 
 PatientBrowserMenu::~PatientBrowserMenu()
@@ -119,19 +122,31 @@ void PatientBrowserMenu::popup(const QPoint &point, const QString &identifier)
     // Marquem l'ítem actual de la llista
     m_patientBrowserList->markItem(identifier);
 
+    // Determinem quines són les pantalles que tenim
+    ScreenManager screenManager;
+    m_currentScreenID = screenManager.getScreenID(point);
+    m_leftScreenID = screenManager.getScreenOnTheLeftOf(m_currentScreenID);
+    m_rightScreenID = screenManager.getScreenOnTheRightOf(m_currentScreenID);
+    
     // Mirem si l'alçada  del widget excedeix l'alçada de la pantalla
     // En cas que sigui així anem afegint noves columnes per redistribuir els elements fins que l'alçada sigui menor a la de la pantalla
-    ScreenManager screenManager;
-    QRect currentScreenGeometry = screenManager.getAvailableScreenGeometry(screenManager.getScreenID(point));
+    QRect currentScreenGeometry = screenManager.getAvailableScreenGeometry(m_currentScreenID);
     while (m_patientBrowserList->sizeHint().height() > currentScreenGeometry.height())
     {
         m_patientBrowserList->addColumn();
     }
+    
+    // Calculem l'alineament del menú
+    bool rightAligned = shouldAlignMenuToTheRight(currentScreenGeometry);
+    
     // Calculem quanta part de la llista queda fora segons la geometria de la pantalla on se'ns ha demanat obrir el menú
-    // i així poder determianr la posició del widget per tal que no surti fora de la pantalla i es pugui veure el seu contingut.
+    // i així poder determinar la posició del widget per tal que no surti fora de la pantalla i es pugui veure el seu contingut.
     QSize outside;
-    computeListOutsideSize(point, outside);
+    computeListOutsideSize(point, outside, rightAligned);
 
+    // TODO Què fem si la pantalla adicional té una alçada més petita que l'actual? Recalculem tot el menú perquè tingui l'alçada menor?
+    // De moment això no es tindrà en compte
+    
     // Si els valors són positius caldrà moure la posició original com a mínim tot el que ens sortim de les fronteres
     // TODO En teoria aquest Margin no seria necessari si fèssim servir frameGeometry() en comptes de sizeHint()
     const int Margin = 5;
@@ -166,11 +181,62 @@ void PatientBrowserMenu::popup(const QPoint &point, const QString &identifier)
     // del llistat si aquest no hi cap a la pantalla, per exemple.
 }
 
-void PatientBrowserMenu::computeListOutsideSize(const QPoint &popupPoint, QSize &out)
+bool PatientBrowserMenu::shouldAlignMenuToTheRight(const QRect &currentScreenGeometry)
+{
+    bool rightAligned = true;
+    // Cal comprovar si la llista resultant és més ample
+    if (m_patientBrowserList->sizeHint().width() > currentScreenGeometry.width())
+    {
+        int chosenScreenToExpandHorizontally = -1;
+        
+        if (m_leftScreenID == -1)
+        {
+            if (m_rightScreenID == -1)
+            {
+                // No podem expandir més, no tenim més pantalles.
+                // TODO Explorar top i bottom?
+            }
+            else
+            {
+                // Tenim pantalla per expandir-nos a la dreta
+                rightAligned = false;
+            }
+        }
+        else
+        {
+            if (m_rightScreenID == -1)
+            {
+                // Tenim pantalla per expandir-nos a l'esquerra
+                rightAligned = true;
+            }
+            else
+            {
+                // Tenim pantalles a esquerra i dreta. Cal escollir quina és la més adequada.
+                // Opció 1) La pantalla amb la mateixa alçada o major per mantenir aspecte
+                ScreenManager screenManager;
+                QRect leftScreenGeometry = screenManager.getScreenGeometry(m_leftScreenID);
+                QRect rightScreenGeometry = screenManager.getScreenGeometry(m_rightScreenID);
+
+                if (leftScreenGeometry.height() >= rightScreenGeometry.height())
+                {
+                    rightAligned = true;
+                }
+                else
+                {
+                    rightAligned = false;
+                }
+            }
+        }
+    }
+
+    return rightAligned;
+}
+
+void PatientBrowserMenu::computeListOutsideSize(const QPoint &popupPoint, QSize &out, bool rightAligned)
 {
     // Obtenim la geometria de la pantalla on se'ns ha demanat obrir el menú
     ScreenManager screenManager;
-    QRect currentScreenGeometry = screenManager.getAvailableScreenGeometry(screenManager.getScreenID(popupPoint));
+    QRect currentScreenGeometry = screenManager.getAvailableScreenGeometry(m_currentScreenID);
     QPoint currentScreenGlobalOriginPoint = currentScreenGeometry.topLeft();
 
     // Calculem les mides dels widgets per saber on els hem de col·locar
@@ -182,21 +248,30 @@ void PatientBrowserMenu::computeListOutsideSize(const QPoint &popupPoint, QSize 
     int mainMenuApproximateWidth = m_patientBrowserList->sizeHint().width();
     int wholeMenuApproximateHeight = qMax(m_patientBrowserList->sizeHint().height(), m_patientAdditionalInfo->sizeHint().height());
 
-    // Calculem les fronteres per on ens podria sortir el menú (lateral dret i per sota)
-    int globalRight = currentScreenGlobalOriginPoint.x() + currentScreenGeometry.width();
+    // Calculem les fronteres per on ens podria sortir el menú (lateral dret/esquerre)
+    if (rightAligned)
+    {
+        int globalRight = currentScreenGlobalOriginPoint.x() + currentScreenGeometry.width();
+        int widgetRight = mainMenuApproximateWidth + popupPoint.x();
+        out.setWidth(widgetRight - globalRight);
+    }
+    else
+    {
+        int globalLeft = currentScreenGlobalOriginPoint.x();
+        int widgetLeft = popupPoint.x();
+        out.setWidth(widgetLeft - globalLeft);
+    }
+    
+    // Calculem les fronteres per on ens podria sortir el menú (alçada)
     int globalBottom = currentScreenGlobalOriginPoint.y() + currentScreenGeometry.height();
-    int widgetRight = mainMenuApproximateWidth + popupPoint.x();
     int widgetBottom = wholeMenuApproximateHeight + popupPoint.y();
-
-    // Calculem quant d'ample i/o alçada ens surt el menú.
-    out.setWidth(widgetRight - globalRight);
     out.setHeight(widgetBottom - globalBottom);
 }
 
 void PatientBrowserMenu::placeAdditionalInfoWidget()
 {
     ScreenManager screenManager;
-    QRect currentScreenGeometry = screenManager.getAvailableScreenGeometry(screenManager.getScreenID(m_patientBrowserList->pos()));
+    QRect currentScreenGeometry = screenManager.getAvailableScreenGeometry(m_currentScreenID);
     QPoint currentScreenGlobalOriginPoint = currentScreenGeometry.topLeft();
 
     // TODO Aquesta mesura no és la més exacta. L'adequada hauria de basar-se en els valors de QWidget::frameGeometry()
@@ -207,16 +282,41 @@ void PatientBrowserMenu::placeAdditionalInfoWidget()
     m_patientAdditionalInfo->adjustSize();
     int additionalInfoWidgetApproximateWidth = m_patientAdditionalInfo->frameGeometry().width();
 
+    int menuXShift = 0;
     if (menuXPosition + mainMenuApproximateWidth + additionalInfoWidgetApproximateWidth > currentScreenGlobalOriginPoint.x() + currentScreenGeometry.width())
     {
-        // A l'esquerra
-        m_patientAdditionalInfo->move(menuXPosition - additionalInfoWidgetApproximateWidth, menuYPosition);
+        // En cas que la combinació de menús en sí, ja ocupi tota la pantalla comprobem en quina pantalla és millor col·locar el menú addicional
+        if (mainMenuApproximateWidth + additionalInfoWidgetApproximateWidth >= currentScreenGlobalOriginPoint.x() + currentScreenGeometry.width())
+        {
+            if (m_leftScreenID != -1)
+            {
+                // A l'esquerra
+                menuXShift = -additionalInfoWidgetApproximateWidth;
+            }
+            else if (m_rightScreenID != -1)
+            {
+                // A la dreta
+                menuXShift = mainMenuApproximateWidth;
+            }
+            else
+            {
+                // No tenim pantalles ni a esquerre ni a dreta, li indiquem a l'esquerra
+                menuXShift = -additionalInfoWidgetApproximateWidth;
+            }
+        }
+        else
+        {
+            // Tenim espai a l'esquerra, dins de la mateixa pantalla
+            menuXShift = -additionalInfoWidgetApproximateWidth;
+        }
     }
     else
     {
-        // A la dreta
-        m_patientAdditionalInfo->move(menuXPosition + mainMenuApproximateWidth, menuYPosition);
+        // Tenim espai a la dreta, dins de la mateixa pantalla
+        menuXShift = mainMenuApproximateWidth;
     }
+
+    m_patientAdditionalInfo->move(menuXPosition + menuXShift, menuYPosition);
 }
 
 void PatientBrowserMenu::processSelectedItem(const QString &identifier)
