@@ -3,6 +3,7 @@
 #include "logging.h"
 #include "drawerbitmap.h"
 #include "imageoverlayregionfinder.h"
+#include "mathtools.h"
 
 #include <QRect>
 #include <QRegExp>
@@ -140,7 +141,9 @@ ImageOverlay ImageOverlay::fromGDCMOverlay(const gdcm::Overlay &gdcmOverlay)
     {
         try
         {
-            unsigned char *buffer = new unsigned char[imageOverlay.getRows() * imageOverlay.getColumns()];
+            // #1903: degut a la implementació de GetUnpackBuffer, la mida del buffer ha de ser múltiple de 8
+            int bufferSize = MathTools::roundUpToMultipleOfNumber(imageOverlay.getRows() * imageOverlay.getColumns(), 8);
+            unsigned char *buffer = new unsigned char[bufferSize];
             gdcmOverlay.GetUnpackBuffer(buffer);
             imageOverlay.setData(buffer);
         }
