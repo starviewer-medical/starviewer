@@ -116,6 +116,9 @@ private slots:
     void roundUpToPowerOf2_ShouldReturnExpectedValue_data();
     void roundUpToPowerOf2_ShouldReturnExpectedValue();
 
+    void roundUpToMultipleOfNumber_ShouldReturnExpectedValue_data();
+    void roundUpToMultipleOfNumber_ShouldReturnExpectedValue();
+
     void getPointToClosestEdgeDistance_ShouldReturnExpectedValues_data();
     void getPointToClosestEdgeDistance_ShouldReturnExpectedValues();
 
@@ -1053,6 +1056,31 @@ void test_MathTools::roundUpToPowerOf2_ShouldReturnExpectedValue()
     QFETCH(unsigned int, output);
 
     QCOMPARE(MathTools::roundUpToPowerOf2(input), output);
+}
+
+void test_MathTools::roundUpToMultipleOfNumber_ShouldReturnExpectedValue_data()
+{
+    QTest::addColumn<unsigned int>("input");
+    QTest::addColumn<unsigned int>("multiple");
+    QTest::addColumn<unsigned int>("output");
+
+    QTest::newRow("random #1") <<  0u << 49u <<  0u;
+    QTest::newRow("random #2") <<  9u << 14u << 14u;
+    QTest::newRow("random #3") << 23u << 15u << 30u;
+    QTest::newRow("random #4") << 30u << 15u << 30u;
+    QTest::newRow("random #5") <<  2u << 32u << 32u;
+    QTest::newRow("random #6") << 34u << 38u << 38u;
+    QTest::newRow("random #7") << 53u <<  4u << 56u;
+    QTest::newRow("random #8") << 88u << 24u << 96u;
+}
+
+void test_MathTools::roundUpToMultipleOfNumber_ShouldReturnExpectedValue()
+{
+    QFETCH(unsigned int, input);
+    QFETCH(unsigned int, multiple);
+    QFETCH(unsigned int, output);
+
+    QCOMPARE(MathTools::roundUpToMultipleOfNumber(input, multiple), output);
 }
 
 void test_MathTools::getPointToClosestEdgeDistance_ShouldReturnExpectedValues_data()
