@@ -65,7 +65,7 @@ void ScreenManager::moveToDesktop(QWidget *window, int idDesktop)
         // La finestra està maximitzada i es mou a una altra pantalla
         // per tant es desmaximitza, es mou i es maximitza de nou
         // Si es mou a la mateixa pantalla, no es fa res
-        int desktopIAm = getIdOfScreen(window);
+        int desktopIAm = getScreenID(window);
         if (idDesktop != desktopIAm)
         {
             window->showNormal();
@@ -85,7 +85,7 @@ void ScreenManager::moveToDesktop(QWidget *window, int idDesktop)
 
 void ScreenManager::moveToPreviousDesktop(QWidget *window)
 {
-    int desktopIAm = getIdOfScreen(window);
+    int desktopIAm = getScreenID(window);
     int desktopIllBe = -1;
 
     // Buscar una pantalla a l'esquerra i a la mateixa altura + o -
@@ -206,7 +206,7 @@ int ScreenManager::getScreenOnTheLeftOf(int screenID)
 
 void ScreenManager::moveToNextDesktop(QWidget *window)
 {
-    int desktopIAm = getIdOfScreen(window);
+    int desktopIAm = getScreenID(window);
     int desktopIllBe = -1;
 
     // Buscar una pantalla a la dreta i a la mateixa altura + o -
@@ -286,7 +286,7 @@ int ScreenManager::getNumberOfScreens()
     return m_applicationDesktop->numScreens();
 }
 
-int ScreenManager::getIdOfScreen(QWidget *window)
+int ScreenManager::getScreenID(QWidget *window) const
 {
     return m_applicationDesktop->screenNumber(window);
 }
@@ -313,7 +313,7 @@ int ScreenManager::getPrimaryScreenID() const
 
 DynamicMatrix ScreenManager::computeScreenMatrix(QWidget *window)
 {
-    int desktopIAm = getIdOfScreen(window);
+    int desktopIAm = getScreenID(window);
 
     // Primer de tot buscar les pantalles de la mateixa fila
     DynamicMatrix dynamicMatrix;
