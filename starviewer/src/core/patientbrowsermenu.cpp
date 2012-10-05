@@ -187,8 +187,6 @@ bool PatientBrowserMenu::shouldAlignMenuToTheRight(const QRect &currentScreenGeo
     // Cal comprovar si la llista resultant és més ample
     if (m_patientBrowserList->sizeHint().width() > currentScreenGeometry.width())
     {
-        int chosenScreenToExpandHorizontally = -1;
-        
         if (m_leftScreenID == -1)
         {
             if (m_rightScreenID == -1)
