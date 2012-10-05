@@ -37,10 +37,9 @@ public:
 
     /// Retrona quantes pantalles hi ha.
     int getNumberOfScreens();
-    /// Retorna a quina pantalla està la finestra
-    int getIdOfScreen(QWidget *window);
-
-    /// Retorna l'identificador de pantalla segons una posició global
+    
+    /// Retorna a quina pantalla es troba el widget/coordenada
+    int getScreenID(QWidget *window) const;
     int getScreenID(const QPoint &point) const;
 
     /// Retorna la geometria disponible de la pantalla indicada. Depenent de la plataforma el que es considera

@@ -246,7 +246,7 @@ void QRelatedStudiesWidget::updateWidgetWidth()
 void QRelatedStudiesWidget::updateWidgetHeight()
 {
     ScreenManager screen;
-    int screenAvailableHeight = screen.getAvailableScreenGeometry(screen.getIdOfScreen(this)).height();
+    int screenAvailableHeight = screen.getAvailableScreenGeometry(screen.getScreenID(this)).height();
     int topAndMargins = this->geometry().top() + m_relatedStudiesTree->geometry().top() * 2; // Es multiplica per 2 pel marge inferior.
     int maxHeight = screenAvailableHeight - topAndMargins;
     int minHeight = m_relatedStudiesTree->sizeHint().height();
