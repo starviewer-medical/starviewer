@@ -5,6 +5,7 @@
 #include <QMap>
 #include <QHash>
 #include <QString>
+#include <QVector3D>
 
 namespace udg {
 
@@ -38,15 +39,17 @@ private:
     /// Mètode que transforma l'estructura d'imatges ordenades a una llista i l'insereix a la sèrie.
     void setOrderedImagesIntoSeries(Series *series);
 
-    /// Estructura per guardar les imatges ordenades
-    //  NormalVector    Distance    InstanceNumberOFrameNumber
-    QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*> *m_orderedImageSet;
+    //  Angle       NormalVector    Distance    InstanceNumberOFrameNumber
+    QMap<double, QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*>*> *m_orderedNormalsSet;
 
-    //    Series        Volume     NormalVector    Distance  InstanceNumberOFrameNumber
-    QHash<Series*, QMap<int, QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*>*>*> m_orderImagesInternalInfo;
-
+    //    Series        Volume     AngleNormal    Distance  InstanceNumberOFrameNumber
+    QHash<Series*, QMap<int, QMap<double, QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*>*>*>*> m_orderImagesInternalInfo;
+   
     //    Series       Volume     AcqNumber MultipleAcqNumbers?
     QHash<Series*, QHash<int, QPair<QString, bool>*> > m_acquisitionNumberEvaluation;
+
+    QVector3D m_firstPlaneVector3D;
+    QVector3D m_direction;
 };
 
 }
