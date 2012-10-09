@@ -113,7 +113,6 @@ void Cursor3DTool::updatePosition()
     {
         int index[3];
         double dicomWorldPosition[4];
-        double coordinates[3];
         double xyz[3];
         ImagePlane *currentPlane = NULL;
         Image *image = NULL;
