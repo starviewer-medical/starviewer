@@ -1579,12 +1579,13 @@ bool Q2DViewer::getCurrentCursorImageCoordinate(double xyz[3])
         inside = true;
         // Calculem el pixel trobat
         m_imagePointPicker->GetPickPosition(xyz);
-        // Calculem la profunditat correcta ja que si tenim altres actors pel mig poden interferir en la mesura
-        // TODO Una altre solució possible és tenir renderers separats i en el que fem el pick només tenir-hi l'image actor
-        double bounds[6];
-        m_imageActor->GetDisplayBounds(bounds);
+        // Calculem la profunditat correcta. S'ha de tenir en compte que en el cas que tinguem fases
+        // vtk no n'és conscient (cada fase es desplaça en la profunditat z com si fos una imatge més)
+        // i si no fèssim aquest càlcul, estaríem donant una coordenada Z incorrecta
         int zIndex = getZIndexForView(m_lastView);
-        xyz[zIndex] = bounds[zIndex * 2];
+        double zSpacing = m_mainVolume->getSpacing()[zIndex];
+        double zOrigin = m_mainVolume->getOrigin()[zIndex];
+        xyz[zIndex] =  zOrigin + zSpacing * m_currentSlice;;
     }
     else
     {
