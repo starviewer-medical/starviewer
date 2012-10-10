@@ -34,8 +34,7 @@ protected:
             status = OF_failure;
         }
 
-        OFConditionString *conditionString = new OFConditionString(0, 0, status, "");
-        OFCondition condition(conditionString);
+        OFCondition condition(0, 0, status, "");
 
         return condition;
     }

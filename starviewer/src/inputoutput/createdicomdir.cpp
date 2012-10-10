@@ -50,10 +50,10 @@ void CreateDicomdir::setDevice(recordDeviceDicomDir deviceToCreateDicomdir)
             m_optProfile = DicomDirInterface::AP_GeneralPurpose;
             break;
         case recordDeviceDicomDir(DvdRom):
-            m_optProfile = DicomDirInterface::AP_GeneralPurposeDVD;
+            m_optProfile = DicomDirInterface::AP_GeneralPurposeDVDJPEG;
             break;
         case recordDeviceDicomDir(UsbPen):
-            m_optProfile = DicomDirInterface::AP_USBandFlash;
+            m_optProfile = DicomDirInterface::AP_GeneralPurpose;
             break;
         default:
             m_optProfile = DicomDirInterface::AP_GeneralPurpose;
