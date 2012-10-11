@@ -39,10 +39,10 @@ private:
     /// Mètode que transforma l'estructura d'imatges ordenades a una llista i l'insereix a la sèrie.
     void setOrderedImagesIntoSeries(Series *series);
 
-    //  Angle       NormalVector    Distance    InstanceNumberOFrameNumber
+    //  Angle       NormalVector    Distance    InstanceNumber0FrameNumber
     QMap<double, QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*>*> *m_orderedNormalsSet;
 
-    //    Series        Volume     AngleNormal    Distance  InstanceNumberOFrameNumber
+    //    Series        Volume     AngleNormal    Distance  InstanceNumber0FrameNumber
     QHash<Series*, QMap<int, QMap<double, QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*>*>*>*> m_orderImagesInternalInfo;
    
     //    Series       Volume     AcqNumber MultipleAcqNumbers?
