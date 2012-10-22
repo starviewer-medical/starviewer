@@ -36,8 +36,13 @@ void test_WindowLevel::isValid_ReturnsExpectedValues_data()
     QTest::addColumn<double>("level");
     QTest::addColumn<bool>("expectedReturnValue");
 
-    QTest::newRow("invalid values") << 0.0 << 12.0 << false; 
+    QTest::newRow("invalid values - width == 0.0") << 0.0 << 12.0 << false; 
+    QTest::newRow("invalid values - width < 1 (nearly 0)") << 1.5613731011E-14 << 12.0 << false; 
+    QTest::newRow("invalid values - width < 1 (nearly 1)") << 0.99 << 12.0 << false; 
     QTest::newRow("valid values") << 128.7 << 0.0 << true;
+    QTest::newRow("valid values - negative width") << -128.7 << 0.0 << true;
+    QTest::newRow("valid values 2") << 128.7 << -1.415534356E-14 << true;
+    QTest::newRow("valid values 3") << 128.7 << -1.415534356E-14 << true;
 }
 
 void test_WindowLevel::isValid_ReturnsExpectedValues()
