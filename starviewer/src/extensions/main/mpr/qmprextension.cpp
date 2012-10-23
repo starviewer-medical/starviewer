@@ -1123,11 +1123,7 @@ void QMPRExtension::initOrientation()
     // Calculem els extents del sagital
     double sagitalExtentLengthX = sqrt(static_cast<double>(extentLength[0] * extentLength[0] + extentLength[1] * extentLength[1]));
     // sagitalExtentLengthX *= 2.0;    // potser caldria doblar l'extent per assegurar que no es perdi detall (Nyquist)
-    m_sagitalExtentLength[0] = 1;
-    while (m_sagitalExtentLength[0] < MathTools::roundToNearestInteger(sagitalExtentLengthX))
-    {
-        m_sagitalExtentLength[0] *= 2;
-    }
+    m_sagitalExtentLength[0] = MathTools::roundUpToPowerOf2(MathTools::roundToNearestInteger(sagitalExtentLengthX));
     m_sagitalExtentLength[1] = extentLength[2];
 
     // ZX, y-normal : vista coronal
@@ -1146,11 +1142,7 @@ void QMPRExtension::initOrientation()
     double coronalExtentLength = sqrt(static_cast<double>(extentLength[0] * extentLength[0] + extentLength[1] * extentLength[1] + extentLength[2] *
                                                           extentLength[2]));
     // coronalExtentLength *= 2.0; // potser caldria doblar l'extent per assegurar que no es perdi detall (Nyquist)
-    m_coronalExtentLength[0] = 1;
-    while (m_coronalExtentLength[0] < MathTools::roundToNearestInteger(coronalExtentLength))
-    {
-        m_coronalExtentLength[0] *= 2;
-    }
+    m_coronalExtentLength[0] = MathTools::roundUpToPowerOf2(MathTools::roundToNearestInteger(coronalExtentLength));
     m_coronalExtentLength[1] = m_coronalExtentLength[0];
 
     // Posem les mides dels drawer points
