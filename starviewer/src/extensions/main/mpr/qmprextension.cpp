@@ -1124,7 +1124,7 @@ void QMPRExtension::initOrientation()
     double sagitalExtentLengthX = sqrt(static_cast<double>(extentLength[0] * extentLength[0] + extentLength[1] * extentLength[1]));
     // sagitalExtentLengthX *= 2.0;    // potser caldria doblar l'extent per assegurar que no es perdi detall (Nyquist)
     m_sagitalExtentLength[0] = 1;
-    while (m_sagitalExtentLength[0] < sagitalExtentLengthX)
+    while (m_sagitalExtentLength[0] < MathTools::roundToNearestInteger(sagitalExtentLengthX))
     {
         m_sagitalExtentLength[0] *= 2;
     }
@@ -1147,7 +1147,7 @@ void QMPRExtension::initOrientation()
                                                           extentLength[2]));
     // coronalExtentLength *= 2.0; // potser caldria doblar l'extent per assegurar que no es perdi detall (Nyquist)
     m_coronalExtentLength[0] = 1;
-    while (m_coronalExtentLength[0] < coronalExtentLength)
+    while (m_coronalExtentLength[0] < MathTools::roundToNearestInteger(coronalExtentLength))
     {
         m_coronalExtentLength[0] *= 2;
     }
