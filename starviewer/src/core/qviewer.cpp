@@ -824,8 +824,6 @@ void QViewer::setViewerStatus(ViewerStatus status)
 
         if (m_viewerStatus == SynchronizationEdit)
         {
-            disableContextMenu();
-            
             // Assignem la imatge de background corresponent per al widget
             if (this->getInput())
             {
@@ -835,11 +833,6 @@ void QViewer::setViewerStatus(ViewerStatus status)
                 m_synchronizationEditionWidget->setBackgroundImage(path + ".png");
             }
         }
-        else
-        {
-            enableContextMenu();
-        }
-        
         emit viewerStatusChanged();
     }
 }
