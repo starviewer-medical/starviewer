@@ -213,15 +213,15 @@ QString Image::getSliceLocation() const
 
 void Image::addWindowLevel(double window, double level)
 {
-    if (window != 0.0)
-    {
-        QPair<double, double> windowLevel(window, level);
-        m_windowLevelList << windowLevel;
-    }
-    else
+    if (std::abs(window) < 1.0)
     {
         WARN_LOG(QString("WW/WL Inconsistent: %1, %2. No s'afegira a la imatge").arg(window).arg(level));
         DEBUG_LOG(QString("WW/WL Inconsistent: %1, %2. No s'afegira a la imatge").arg(window).arg(level));
+    }
+    else
+    {
+        QPair<double, double> windowLevel(window, level);
+        m_windowLevelList << windowLevel;
     }
 }
 
