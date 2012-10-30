@@ -44,12 +44,6 @@ QViewer::QViewer(QWidget *parent)
  : QWidget(parent), m_mainVolume(0), m_contextMenuActive(true), m_mouseHasMoved(false), m_windowLevelData(0), m_defaultWindow(.0),
    m_defaultLevel(.0), m_transferFunction(0), m_isRenderingEnabled(true), m_isActive(false), m_hasDefaultWindowLevelDefined(false)
 {
-    // TODO: De moment es desactiven els warnings en release i windows perquè no apareixi la finestra vtkOutputWindow
-    // però la solució bona és que els viewers no donin warnings.
-#ifdef QT_NO_DEBUG
-    vtkObject::GlobalWarningDisplayOff();
-#endif
-
     m_vtkWidget = new QVTKWidget(this);
     m_vtkWidget->setFocusPolicy(Qt::WheelFocus);
     // Creem el renderer i li assignem a la render window
@@ -824,8 +818,6 @@ void QViewer::setViewerStatus(ViewerStatus status)
 
         if (m_viewerStatus == SynchronizationEdit)
         {
-            disableContextMenu();
-            
             // Assignem la imatge de background corresponent per al widget
             if (this->getInput())
             {
@@ -835,11 +827,6 @@ void QViewer::setViewerStatus(ViewerStatus status)
                 m_synchronizationEditionWidget->setBackgroundImage(path + ".png");
             }
         }
-        else
-        {
-            enableContextMenu();
-        }
-        
         emit viewerStatusChanged();
     }
 }
