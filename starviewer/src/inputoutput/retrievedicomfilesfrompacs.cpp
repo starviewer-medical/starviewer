@@ -198,8 +198,8 @@ void RetrieveDICOMFilesFromPACS::storeSCPCallback(void *callbackData, T_DIMSE_St
 
 OFCondition RetrieveDICOMFilesFromPACS::save(DcmFileFormat *fileRetrieved, QString dicomFileAbsolutePath)
 {
-	// Indiquem que no fem servir meta-header
-	E_FileWriteMode writeMode = EWM_fileformat;
+    // Indiquem que no fem servir meta-header
+    E_FileWriteMode writeMode = EWM_fileformat;
     E_EncodingType sequenceType = EET_ExplicitLength;
     E_GrpLenEncoding groupLength = EGL_recalcGL;
     E_PaddingEncoding paddingType = EPD_withoutPadding;
