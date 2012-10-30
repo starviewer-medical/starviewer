@@ -34,9 +34,9 @@ public:
     ///               interna una llista de les sol·licituds que ha fet per saber si aquell signal l'afecta o no.
     ///
     /// @param actionAfterRetrieve Indica l'acció a prendre un cop descarregat l'estudi
-    /// @param pacsID Identificador del PACS des d'on es descarrega l'estudi
+    /// @param pacsDevice PACS des d'on es descarrega l'estudi
     /// @param study Objecte Study amb la informació de l'estudi que volem descarregar
-    void retrieveStudy(QInputOutputPacsWidget::ActionsAfterRetrieve actionAfterRetrieve, QString pacsID, Study *study);
+    void retrieveStudy(QInputOutputPacsWidget::ActionsAfterRetrieve actionAfterRetrieve, const PacsDevice &pacsDevice, Study *study);
 
 public slots:
     /// Obre un dicomdir
@@ -133,12 +133,6 @@ private slots:
     /// Slot que s'activa quan un PACSJob ha finalitzat, es comprova si la PacsManager està executant més jobs de descàrrega o enviament
     /// si no n'està executant cap més s'amaga el gif animat que indica que s'està processant una petició
     void pacsJobFinishedOrCancelled(PACSJob *pacsJob);
-
-#ifndef STARVIEWER_LITE
-    /// Ensenya un barra de progrés fins que no hi ha PACSJob executant a la PACSManager, es pot passar-li un valor de temsp, passat el mètode
-    /// deixa d'ensenyar el progressBar i retorna;
-    void showQProgressDialogUntilNoPACSJobsAreExecuting(int timeoutMs = INT_MAX);
-#endif
 
     /// Actualitza segons el tab en el que ens trobem la visibilitat del llistat de PACS
     /// El llistat només es podrà habilitar o deshabilitar quan estem en la pestanya PACS

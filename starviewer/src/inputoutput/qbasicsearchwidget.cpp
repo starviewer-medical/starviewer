@@ -29,9 +29,10 @@ void QBasicSearchWidget::initialize()
 {
     m_fromStudyDate->setDate(QDate::currentDate());
     m_toStudyDate->setDate(QDate::currentDate());
-    // Indiquem que les setmanes del calendari que apareixen per escollir la data comencin el dilluns
-    m_fromStudyDate->calendarWidget()->setFirstDayOfWeek(Qt::Monday);
-    m_toStudyDate->calendarWidget()->setFirstDayOfWeek(Qt::Monday);
+    // Indiquem que les setmanes del calendari que apareixen per escollir la data comencin el dia segons la locale configurada o la del sistema en el seu defecte
+    QLocale locale;
+    m_fromStudyDate->calendarWidget()->setFirstDayOfWeek(locale.firstDayOfWeek());
+    m_toStudyDate->calendarWidget()->setFirstDayOfWeek(locale.firstDayOfWeek());
 
     m_fromStudyDate->setDisplayFormat("dd/MM/yyyy");
     m_toStudyDate->setDisplayFormat("dd/MM/yyyy");

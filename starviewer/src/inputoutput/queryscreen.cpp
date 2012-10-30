@@ -3,7 +3,6 @@
 #include <QMessageBox>
 #include <QCloseEvent>
 #include <QMovie>
-#include <QProgressDialog>
 
 #include "qpacslist.h"
 #include "inputoutputsettings.h"
@@ -85,10 +84,8 @@ QueryScreen::~QueryScreen()
 
     if (m_pacsManager->isExecutingPACSJob())
     {
-        // Si hi ha PacsJob executant-se demanem cancel·lar i mostrem un QProgressDialog mentre s'estan
-        // abortant el Jobs si en 15 segons no s'han abortat continuem amb la destrucció de la classe
+        // Si hi ha PacsJob executant-se demanem cancel·lar
         m_pacsManager->requestCancelAllPACSJobs();
-        showQProgressDialogUntilNoPACSJobsAreExecuting(15000);
     }
 
     delete m_risRequestManager;
@@ -435,7 +432,7 @@ void QueryScreen::writeSettings()
     }
 }
 
-void QueryScreen::retrieveStudy(QInputOutputPacsWidget::ActionsAfterRetrieve actionAfterRetrieve, QString pacsID, Study *study)
+void QueryScreen::retrieveStudy(QInputOutputPacsWidget::ActionsAfterRetrieve actionAfterRetrieve, const PacsDevice &pacsDevice, Study *study)
 {
     // QueryScreen rep un signal cada vegada que qualsevol estudis en el procés de descàrrega canvia d'estat,
     // en principi només ha de reemetre aquests signals cap a fora quan és un signal que afecta un estudi
@@ -443,7 +440,7 @@ void QueryScreen::retrieveStudy(QInputOutputPacsWidget::ActionsAfterRetrieve act
     // pendents de descarregar sol·licitats a partir d'aquest mètode
     m_studyRequestedToRetrieveFromPublicMethod.append(study->getInstanceUID());
 
-    m_qInputOutputPacsWidget->retrieve(pacsID, actionAfterRetrieve, study);
+    m_qInputOutputPacsWidget->retrieve(pacsDevice, actionAfterRetrieve, study);
 }
 
 void QueryScreen::studyRetrieveFailedSlot(QString studyInstanceUID)
@@ -516,24 +513,5 @@ void QueryScreen::pacsJobFinishedOrCancelled(PACSJob *)
         m_labelOperation->hide();
     }
 }
-
-#ifndef STARVIEWER_LITE
-void QueryScreen::showQProgressDialogUntilNoPACSJobsAreExecuting(int timeoutMs)
-{
-    QProgressDialog progressDialog(tr("Cancelling PACS operations..."), "", 0, 0);
-    QTime timer;
-
-    progressDialog.setModal(true);
-    progressDialog.show();
-    progressDialog.setCancelButton(0);
-    timer.start();
-
-    while (!m_pacsManager->waitForAllPACSJobsFinished(100) && timer.elapsed() < timeoutMs)
-    {
-        progressDialog.setValue(progressDialog.value() + 1);
-        QCoreApplication::processEvents();
-    }
-}
-#endif
 
 };

@@ -25,9 +25,9 @@
 #include "shortcutmanager.h"
 
 #ifndef STARVIEWER_LITE
-#include "qpreviousstudieswidget.h"
+#include "qrelatedstudieswidget.h"
 #include "hangingprotocolmanager.h"
-#include "previousstudiesmanager.h"
+#include "relatedstudiesmanager.h"
 #include "qexportertool.h"
 #endif
 
@@ -76,7 +76,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_dicomDumpCurrentDisplayedImage = new QDICOMDumpBrowser(this);
 
 #ifndef STARVIEWER_LITE
-    m_previousStudiesWidget = new QPreviousStudiesWidget(this);
+    m_relatedStudiesWidget = new QRelatedStudiesWidget(this);
     m_previousStudiesToolButton->setEnabled(false);
     m_previousStudiesToolButton->setToolTip(tr("Search related studies"));
     m_screenshotsExporterToolButton->setToolTip(tr("Export viewer image(s) to DICOM and send them to a PACS server"));
@@ -159,9 +159,9 @@ Q2DViewerExtension::~Q2DViewerExtension()
 
 #ifndef STARVIEWER_LITE
     // L'objecte es crea quan fem un setInput. Per tant, fem la comprovació.
-    if (m_previousStudiesWidget)
+    if (m_relatedStudiesWidget)
     {
-        delete m_previousStudiesWidget;
+        delete m_relatedStudiesWidget;
     }
 
     if (m_hangingProtocolManager)
@@ -196,8 +196,8 @@ void Q2DViewerExtension::createConnections()
     // Per mostrar exportació
     connect(m_screenshotsExporterToolButton, SIGNAL(clicked()), SLOT(showScreenshotsExporterDialog()));
 
-    connect(m_previousStudiesWidget, SIGNAL(downloadingStudies()), this, SLOT(changeToPreviousStudiesDownloadingIcon()));
-    connect(m_previousStudiesWidget, SIGNAL(studiesDownloaded()), this, SLOT(changeToPreviousStudiesDefaultIcon()));
+    connect(m_relatedStudiesWidget, SIGNAL(downloadingStudies()), this, SLOT(changeToPreviousStudiesDownloadingIcon()));
+    connect(m_relatedStudiesWidget, SIGNAL(studiesDownloaded()), this, SLOT(changeToPreviousStudiesDefaultIcon()));
     connect(m_previousStudiesToolButton, SIGNAL(clicked (bool)), SLOT(showPreviousStudiesWidget()));
     connect(m_workingArea, SIGNAL(manualSynchronizationStateChanged(bool)), SLOT(manualSynchronizationActivated(bool)));
 
@@ -247,12 +247,12 @@ void Q2DViewerExtension::setInput(Volume *input)
     m_previousStudiesToolButton->setEnabled(true);
     if (m_mainVolume)
     {
-        m_previousStudiesWidget->searchStudiesOf(m_mainVolume->getPatient());
+        m_relatedStudiesWidget->searchStudiesOf(m_mainVolume->getPatient());
     }
     else
     {
         // Si no tenim volum, farem servir el pacient actual directament
-        m_previousStudiesWidget->searchStudiesOf(m_patient);
+        m_relatedStudiesWidget->searchStudiesOf(m_patient);
     }
 
     searchPreviousStudiesWithHangingProtocols();
@@ -280,26 +280,29 @@ void Q2DViewerExtension::searchPreviousStudiesWithHangingProtocols()
     m_hangingProtocolsMenu->setSearchingItem(true);
 
     // 2.- Creacio de la classe per trobar previes
-    m_previousStudiesManager = new PreviousStudiesManager();
+    m_relatedStudiesManager = new RelatedStudiesManager();
 
     // 3.- Es connecta el signal per quan acabi
-    connect(m_previousStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), SLOT(addPreviousHangingProtocols(QList<Study*>)));
+    connect(m_relatedStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), SLOT(addPreviousHangingProtocols(QList<Study*>)));
 
     // 4.- Es busquen els previs
+	Study *studyToSearchFrom = 0;
     if (m_mainVolume)
     {
-        m_previousStudiesManager->queryMergedPreviousStudies(m_mainVolume->getStudy());
+		studyToSearchFrom = m_mainVolume->getStudy();
+        
     }
     else
     {
         // En el cas que no tinguéssim un input vàlid, ho farem a partir del pacient actual
-        m_previousStudiesManager->queryMergedPreviousStudies(m_patient->getStudies().first());
+        studyToSearchFrom = m_patient->getStudies().first();
     }
+	m_relatedStudiesManager->queryMergedPreviousStudies(studyToSearchFrom);
 }
 
 void Q2DViewerExtension::addPreviousHangingProtocols(QList<Study*> studies)
 {
-    disconnect(m_previousStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), this, SLOT(addPreviousHangingProtocols(QList<Study*>)));
+    disconnect(m_relatedStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), this, SLOT(addPreviousHangingProtocols(QList<Study*>)));
 
     QList<HangingProtocol*> hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient, studies);
     m_hangingProtocolsMenu->setHangingItems(hangingCandidates);
@@ -395,8 +398,8 @@ void Q2DViewerExtension::showInteractiveTable()
 void Q2DViewerExtension::showPreviousStudiesWidget()
 {
     QPoint point = m_previousStudiesToolButton->mapToGlobal(QPoint(0, 0));
-    m_previousStudiesWidget->move(point.x(), (point.y() + m_previousStudiesToolButton->frameGeometry().height()));
-    m_previousStudiesWidget->show();
+    m_relatedStudiesWidget->move(point.x(), (point.y() + m_previousStudiesToolButton->frameGeometry().height()));
+    m_relatedStudiesWidget->show();
 }
 #endif
 
@@ -458,8 +461,8 @@ void Q2DViewerExtension::initializeTools()
     connect(m_toolManager->getRegisteredToolAction("DistanceTool"), SIGNAL(triggered()), SLOT(rearrangeDistanceToolsMenu()));
     connect(m_toolManager->getRegisteredToolAction("PerpendicularDistanceTool"), SIGNAL(triggered()), SLOT(rearrangeDistanceToolsMenu()));
 
-    m_roiButton->setDefaultAction(m_toolManager->registerTool("OvalROITool"));
-    // Afegim un menú al botó de PolylineROI per incorporar la tool de ROI Oval
+    m_roiButton->setDefaultAction(m_toolManager->registerTool("EllipticalROITool"));
+    // Afegim un menú al botó de PolylineROI per incorporar la tool de ROI el·líptica
     m_roiButton->setPopupMode(QToolButton::MenuButtonPopup);
     QMenu *roiToolMenu = new QMenu(this);
     m_roiButton->setMenu(roiToolMenu);
@@ -467,7 +470,7 @@ void Q2DViewerExtension::initializeTools()
     roiToolMenu->addAction(m_toolManager->registerTool("PolylineROITool"));
     roiToolMenu->addAction(m_toolManager->registerTool("CircleTool"));
     
-    connect(m_toolManager->getRegisteredToolAction("OvalROITool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
+    connect(m_toolManager->getRegisteredToolAction("EllipticalROITool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
     connect(m_toolManager->getRegisteredToolAction("MagicROITool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
     connect(m_toolManager->getRegisteredToolAction("PolylineROITool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
     connect(m_toolManager->getRegisteredToolAction("CircleTool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
@@ -523,7 +526,7 @@ void Q2DViewerExtension::initializeTools()
     leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "DistanceTool" << "PerpendicularDistanceTool" << "EraserTool";
 #else
     leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineROITool" << "DistanceTool" << "PerpendicularDistanceTool" << "EraserTool" << "AngleTool" << "NonClosedAngleTool"
-                             << "Cursor3DTool" << "OvalROITool" << "MagicROITool" << "CircleTool" << "MagnifyingGlassTool";
+                             << "Cursor3DTool" << "EllipticalROITool" << "MagicROITool" << "CircleTool" << "MagnifyingGlassTool";
 #endif
 
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
@@ -963,13 +966,13 @@ void Q2DViewerExtension::searchPreviousStudiesOfMostRecentStudy()
                 }
             }
         }
-        m_previousStudiesWidget->searchPreviousStudiesOf(recentStudy);
+        m_relatedStudiesWidget->searchPreviousStudiesOf(recentStudy);
     }
 }
 
 void Q2DViewerExtension::updatePreviousStudiesWidget()
 {
-    m_previousStudiesWidget->updateList();
+    m_relatedStudiesWidget->updateList();
 }
 
 void Q2DViewerExtension::enableAutomaticSynchronizationToViewer(bool enable)

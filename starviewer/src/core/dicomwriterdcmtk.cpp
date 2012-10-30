@@ -10,6 +10,9 @@
 #include <dcmpstat/dvpshlp.h>
 #include <dcmdata/dcsequen.h>
 #include <dcmdata/dcitem.h>
+// Pels tags DcmTagKey DCM_xxxx
+#include <dctagkey.h>
+#include <dcdeftag.h>
 
 #include "logging.h"
 

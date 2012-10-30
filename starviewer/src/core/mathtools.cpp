@@ -413,6 +413,15 @@ unsigned int MathTools::roundUpToPowerOf2(unsigned int v)
     return v;
 }
 
+unsigned int MathTools::roundUpToMultipleOfNumber(unsigned int i, unsigned int multiple)
+{
+    if (i % multiple != 0)
+    {
+        i += multiple - i % multiple;
+    }
+    return i;
+}
+
 double MathTools::copySign(double x, double y)
 {
     if ((x >= +0.0 && y >= +0.0) || (x <= -0.0 && y <= -0.0))

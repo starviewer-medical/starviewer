@@ -72,10 +72,10 @@ HEADERS += databaseconnection.h \
     isoimagefilecreator.h \
     dicomdirburningapplication.h \
     risrequestmanager.h \
-    previousstudiesmanager.h \
+    relatedstudiesmanager.h \
     qstarviewersapwrapper.h \
     qwidgetselectpacstostoredicomimage.h \
-    qpreviousstudieswidget.h \
+    qrelatedstudieswidget.h \
     qexportertool.h \
     pacsjob.h \
     senddicomfilestopacsjob.h \
@@ -145,10 +145,10 @@ SOURCES += databaseconnection.cpp \
     isoimagefilecreator.cpp \
     dicomdirburningapplication.cpp \
     risrequestmanager.cpp \
-    previousstudiesmanager.cpp \
+    relatedstudiesmanager.cpp \
     qstarviewersapwrapper.cpp \
     qwidgetselectpacstostoredicomimage.cpp \
-    qpreviousstudieswidget.cpp \
+    qrelatedstudieswidget.cpp \
     qexportertool.cpp \
     pacsjob.cpp \
     senddicomfilestopacsjob.cpp  \

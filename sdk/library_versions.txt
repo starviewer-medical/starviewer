@@ -4,11 +4,11 @@ Library Versions
 Per saber si al compilar una llibreria cal aplicar-li patches cal mirar si existeix un directori sdk/patches/[nomLlibreria].
 Si existeix vol dir que cal aplicar tots els patch que hi hagi en aquest directori. Si no, no s'ha d'aplicar cap patch.
 
-- Qt 4.7.1
-- DCMTK 3.5.4
-- ITK 3.20.0
+- Qt 4.8.2
+- DCMTK 3.6.0
+- ITK 3.20.1
 - VTK 5.6.1
-- gdcm 2.0.17
+- gdcm 2.0.19
 - log4cxx 0.10.0
-- ThreadWeaver de KDE 4.2.0
-- sqlite3 3.5.6
+- ThreadWeaver de KDE 4.8.0
+- sqlite3 3.7.13

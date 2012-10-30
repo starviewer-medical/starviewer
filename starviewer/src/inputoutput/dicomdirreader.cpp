@@ -508,7 +508,7 @@ Patient* DICOMDIRReader::fillPatient(DcmDirectoryRecord *dcmDirectoryRecordPatie
     Patient *patient = new Patient();
 
     // Nom pacient
-    dcmDirectoryRecordPatient->findAndGetOFStringArray(DCM_PatientsName, tagValue);
+    dcmDirectoryRecordPatient->findAndGetOFStringArray(DCM_PatientName, tagValue);
     patient->setFullName(QString::fromLatin1(tagValue.c_str()));
     // Id pacient
     dcmDirectoryRecordPatient->findAndGetOFStringArray(DCM_PatientID, tagValue);

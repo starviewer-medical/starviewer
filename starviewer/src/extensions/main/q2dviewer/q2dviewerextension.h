@@ -27,8 +27,8 @@ class QDICOMDumpBrowser;
 class StatsWatcher;
 
 #ifndef STARVIEWER_LITE
-class QPreviousStudiesWidget;
-class PreviousStudiesManager;
+class QRelatedStudiesWidget;
+class RelatedStudiesManager;
 class HangingProtocolManager;
 class AutomaticSynchronizationManager;
 #endif
@@ -61,7 +61,7 @@ public slots:
     void showInteractiveTable();
 
 #ifndef STARVIEWER_LITE
-    /// Mostra el widget per poder descarregar els estudis previs de l'estudi actual
+    /// Mostra el widget per poder descarregar els estudis relacionats amb l'estudi actual
     void showPreviousStudiesWidget();
 #endif
 
@@ -243,11 +243,11 @@ private:
     StatsWatcher *m_statsWatcher;
 
 #ifndef STARVIEWER_LITE
-    /// Widget per poder seleccionar estudis previs
-    QPreviousStudiesWidget *m_previousStudiesWidget;
+    /// Widget per poder seleccionar estudis relacionats
+    QRelatedStudiesWidget *m_relatedStudiesWidget;
 
     /// Manager per estudis previs
-    PreviousStudiesManager *m_previousStudiesManager;
+    RelatedStudiesManager *m_relatedStudiesManager;
 
     /// Manager de hanging protocols
     HangingProtocolManager *m_hangingProtocolManager;

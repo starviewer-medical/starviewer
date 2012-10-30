@@ -44,3 +44,11 @@ tests/auto/autotests.exe
 tests/auto/autotests.exp
 # Other files
 sys$command
+*.vcxproj
+*.vcxproj.*
+starviewer.sdf
+*.opensdf
+ipch/*
+vcxproj.*
+fixdebug*
+*.tmp

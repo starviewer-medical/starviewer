@@ -116,7 +116,7 @@ HEADERS += extensionfactory.h \
     drawerpolyline.h \
     drawerbitmap.h \
     polylineroitool.h \
-    ovalroitool.h \
+    ellipticalroitool.h \
     polylinetemporalroitool.h \
     polylinetemporalroitooldata.h \
     distancetool.h \
@@ -285,7 +285,8 @@ HEADERS += extensionfactory.h \
     perpendiculardistancetool.h \
     glutessellator.h \
     qtreewidgetwithseparatorline.h \
-    diagnosistestproblem.h
+    diagnosistestproblem.h \
+    loggingoutputwindow.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -371,7 +372,7 @@ SOURCES += extensionmediator.cpp \
     drawerpolyline.cpp \
     drawerbitmap.cpp \
     polylineroitool.cpp \
-    ovalroitool.cpp \
+    ellipticalroitool.cpp \
     polylinetemporalroitool.cpp \
     polylinetemporalroitooldata.cpp \
     distancetool.cpp \
@@ -527,7 +528,9 @@ SOURCES += extensionmediator.cpp \
     perpendiculardistancetool.cpp \
     glutessellator.cpp \
     qtreewidgetwithseparatorline.cpp \
-    diagnosistestproblem.cpp
+    diagnosistestproblem.cpp \
+    loggingoutputwindow.cpp
+
 win32 {
     HEADERS += windowsfirewallaccess.h \
                windowssysteminformation.h

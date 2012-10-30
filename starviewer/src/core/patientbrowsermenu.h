@@ -45,6 +45,14 @@ private:
     /// Crea els widgets dels que es composa el menú
     void createWidgets();
 
+    /// Ens retorna cert si cal alinear el menú a la dreta. Fals en cas que s'hagi d'alinear a la l'esquerra.
+    bool shouldAlignMenuToTheRight(const QRect &currentScreenGeometry);
+    
+    /// Calcula la mida que queda fora de la pantalla del widget amb la llista d'estudis/sèries segons el punt de popup.
+    /// Si queda dins de la pantalla, la mida serà (0,0). El tercer paràmetre indica com volem que quedi alineat el menú
+    /// respecte la pantalla. Si true, fa els càlculs tenint en compte que s'alinea a la dreta, altrament com si s'alineés a l'esquerra
+    void computeListOutsideSize(const QPoint &popupPoint, QSize &out, bool rightAligned);
+    
     /// Col·loca el widget d'informació adicional all lloc més adient depenent de la posició del menú principal
     void placeAdditionalInfoWidget();
 
@@ -54,6 +62,12 @@ private:
 
     /// Atribut que guarda el punter al menú amb informació addicional de l'ítem seleccionat
     PatientBrowserMenuExtendedItem *m_patientAdditionalInfo;
+
+    /// Identificadors de les pantalles respecte on es troba desplegat el menú
+    /// L'ID de la pantalla actual, i les pantalles annexes, es calcularà cada cop que es faci el popup del menú
+    int m_currentScreenID;
+    int m_leftScreenID;
+    int m_rightScreenID;
 };
 
 }

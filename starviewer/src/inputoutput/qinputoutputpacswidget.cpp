@@ -318,7 +318,7 @@ void QInputOutputPacsWidget::retrieveSelectedItemsFromQStudyTreeWidget(ActionsAf
             DICOMSource dicomSourceStudyToRetrieve = dicomMaskDICOMSourceList.at(index).second;
             PacsDevice pacsDeviceFromRetrieve = dicomSourceStudyToRetrieve.getRetrievePACS().at(0); //Agafem el primer PACS
 
-            retrieve(pacsDeviceFromRetrieve.getID(), _actionsAfterRetrieve, m_studyTreeWidget->getStudy(dicomMaskToRetrieve.getStudyInstanceUID(), dicomSourceStudyToRetrieve),
+            retrieve(pacsDeviceFromRetrieve, _actionsAfterRetrieve, m_studyTreeWidget->getStudy(dicomMaskToRetrieve.getStudyInstanceUID(), dicomSourceStudyToRetrieve),
                 dicomMaskToRetrieve.getSeriesInstanceUID(), dicomMaskToRetrieve.getSOPInstanceUID());
         }
     }
@@ -377,10 +377,9 @@ void QInputOutputPacsWidget::retrieveDICOMFilesFromPACSJobCancelled(PACSJob *pac
     pacsJob->deleteLater();
 }
 
-void QInputOutputPacsWidget::retrieve(QString pacsIDToRetrieve, ActionsAfterRetrieve actionAfterRetrieve, Study *studyToRetrieve,
+void QInputOutputPacsWidget::retrieve(const PacsDevice &pacsDevice, ActionsAfterRetrieve actionAfterRetrieve, Study *studyToRetrieve,
     const QString &seriesInstanceUIDToRetrieve, const QString &sopInstanceUIDToRetrieve)
 {
-    PacsDevice pacsDevice = PacsDeviceManager().getPACSDeviceByID(pacsIDToRetrieve);
     RetrieveDICOMFilesFromPACSJob::RetrievePriorityJob retrievePriorityJob = actionAfterRetrieve == View ? RetrieveDICOMFilesFromPACSJob::High
         : RetrieveDICOMFilesFromPACSJob::Medium;
 

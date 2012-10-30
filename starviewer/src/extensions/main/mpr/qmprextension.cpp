@@ -161,7 +161,7 @@ void QMPRExtension::init()
     m_mipViewer = 0;
 
     m_extensionToolsList << "ZoomTool" << "SlicingTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool"
-                         << "DistanceTool" << "PolylineROITool" << "OvalROITool" << "EraserTool";
+                         << "DistanceTool" << "PolylineROITool" << "EllipticalROITool" << "EraserTool";
 }
 
 void QMPRExtension::createActions()
@@ -200,8 +200,8 @@ void QMPRExtension::initializeROITools()
 {
     Q_ASSERT(m_toolManager);
     
-    m_ROIToolButton->setDefaultAction(m_toolManager->registerTool("OvalROITool"));
-    // Afegim un menú al botó de PolylineROI per incorporar la tool de ROI Oval
+    m_ROIToolButton->setDefaultAction(m_toolManager->registerTool("EllipticalROITool"));
+    // Afegim un menú al botó de PolylineROI per incorporar la tool de ROI el·líptica
     m_ROIToolButton->setPopupMode(QToolButton::MenuButtonPopup);
     QMenu *roiToolMenu = new QMenu(this);
     m_ROIToolButton->setMenu(roiToolMenu);
@@ -209,7 +209,7 @@ void QMPRExtension::initializeROITools()
     roiToolMenu->addAction(m_toolManager->registerTool("PolylineROITool"));
     roiToolMenu->addAction(m_toolManager->registerTool("CircleTool"));
     
-    connect(m_toolManager->getRegisteredToolAction("OvalROITool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
+    connect(m_toolManager->getRegisteredToolAction("EllipticalROITool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
     connect(m_toolManager->getRegisteredToolAction("MagicROITool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
     connect(m_toolManager->getRegisteredToolAction("PolylineROITool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
     connect(m_toolManager->getRegisteredToolAction("CircleTool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
@@ -267,7 +267,7 @@ void QMPRExtension::initializeTools()
     // Definim els grups exclusius
     QStringList leftButtonExclusiveTools;
     leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineROITool" << "DistanceTool" << "PerpendicularDistanceTool" << "EraserTool" << "AngleTool" 
-        << "NonClosedAngleTool" << "Cursor3DTool" << "OvalROITool" << "MagicROITool" << "CircleTool" << "MagnifyingGlassTool";
+        << "NonClosedAngleTool" << "Cursor3DTool" << "EllipticalROITool" << "MagicROITool" << "CircleTool" << "MagnifyingGlassTool";
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
@@ -1124,7 +1124,7 @@ void QMPRExtension::initOrientation()
     double sagitalExtentLengthX = sqrt(static_cast<double>(extentLength[0] * extentLength[0] + extentLength[1] * extentLength[1]));
     // sagitalExtentLengthX *= 2.0;    // potser caldria doblar l'extent per assegurar que no es perdi detall (Nyquist)
     m_sagitalExtentLength[0] = 1;
-    while (m_sagitalExtentLength[0] < sagitalExtentLengthX)
+    while (m_sagitalExtentLength[0] < MathTools::roundToNearestInteger(sagitalExtentLengthX))
     {
         m_sagitalExtentLength[0] *= 2;
     }
@@ -1147,7 +1147,7 @@ void QMPRExtension::initOrientation()
                                                           extentLength[2]));
     // coronalExtentLength *= 2.0; // potser caldria doblar l'extent per assegurar que no es perdi detall (Nyquist)
     m_coronalExtentLength[0] = 1;
-    while (m_coronalExtentLength[0] < coronalExtentLength)
+    while (m_coronalExtentLength[0] < MathTools::roundToNearestInteger(coronalExtentLength))
     {
         m_coronalExtentLength[0] *= 2;
     }

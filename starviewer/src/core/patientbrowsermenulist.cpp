@@ -1,7 +1,6 @@
 #include "patientbrowsermenulist.h"
 
 #include <QLabel>
-#include <QVBoxLayout>
 #include <QGridLayout>
 
 #include "patientbrowsermenubasicitem.h"
@@ -12,8 +11,8 @@ namespace udg {
 
 PatientBrowserMenuList::PatientBrowserMenuList(QWidget *parent) : QWidget(parent)
 {
-    m_verticalLayout = new QVBoxLayout(this);
-    m_verticalLayout->setMargin(0);
+    m_mainLayout = new QGridLayout(this);
+    m_mainLayout->setMargin(0);
 }
 
 PatientBrowserMenuList::~PatientBrowserMenuList()
@@ -68,7 +67,30 @@ void PatientBrowserMenuList::addItemsGroup(const QString &caption, const QList<Q
         }
     }
 
-    m_verticalLayout->addWidget(groupWidget);
+    m_mainLayout->addWidget(groupWidget);
+}
+
+void PatientBrowserMenuList::addColumn()
+{
+    int columns = m_mainLayout->columnCount();
+
+    int numberOfElements = m_mainLayout->count();
+    int rowsPerColum = ceil((double)numberOfElements / (columns + 1));
+    int currentElementIndex = numberOfElements - 1;
+
+    for (int j = columns; j >= 0; --j)
+    {
+        for (int i = rowsPerColum - 1; i >= 0 ; --i)
+        {
+            // Cal comprovar que l'índex està dins del nombre d'elements existents
+            if (i + (j * rowsPerColum) <= currentElementIndex && currentElementIndex >= 0)
+            {
+                QLayoutItem *item = m_mainLayout->takeAt(currentElementIndex);
+                m_mainLayout->addItem(item, i, j);
+                --currentElementIndex;
+            }
+        }
+    }
 }
 
 PatientBrowserMenuBasicItem *PatientBrowserMenuList::createBasicItem(const QString &label, const QString &identifier)

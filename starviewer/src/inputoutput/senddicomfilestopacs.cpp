@@ -157,7 +157,7 @@ bool SendDICOMFilesToPACS::storeSCU(T_ASC_Association *association, QString file
         m_lastOFCondition = DIMSE_storeUser(association, presentationContextID, &request, NULL /*imageFileName*/, dcmff.getDataset(),
                                             NULL /*progressCallback*/, NULL /*callbackData */, DIMSE_NONBLOCKING,
                                             Settings().getValue(InputOutputSettings::PACSConnectionTimeout).toInt(), &response, &statusDetail,
-                                            NULL /*check for cancel parameters*/, DU_fileSize(qPrintable(filepathToStore)));
+                                            NULL /*check for cancel parameters*/, OFStandard::getFileSize(qPrintable(filepathToStore)));
 
         if (m_lastOFCondition.bad())
         {

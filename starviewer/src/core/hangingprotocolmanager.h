@@ -18,7 +18,7 @@ class Study;
 class Image;
 class Q2DViewerWidget;
 class Q2DViewer;
-class PreviousStudiesManager;
+class RelatedStudiesManager;
 
 /**
     Classe encarregada de fer la gestió de HP: cercar HP candidats i aplicar HP.
@@ -112,8 +112,8 @@ private:
 
     Patient *m_patient;
 
-    /// Objecte utilitzat per descarregar estudis previs. No es fa servir QueryScreen per problemes de dependències entre carpetes.
-    PreviousStudiesManager *m_previousStudiesManager;
+    /// Objecte utilitzat per descarregar estudis relacionats. No es fa servir QueryScreen per problemes de dependències entre carpetes.
+    RelatedStudiesManager *m_relatedStudiesManager;
 };
 
 }

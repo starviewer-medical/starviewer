@@ -18,6 +18,7 @@
 #include "shortcuts.h"
 #include "starviewerapplicationcommandline.h"
 #include "applicationcommandlineoptions.h"
+#include "loggingoutputwindow.h"
 
 #ifndef NO_CRASH_REPORTER
 #include "crashhandler.h"
@@ -31,6 +32,8 @@
 #include <QDir>
 #include <QMessageBox>
 #include <qtsingleapplication.h>
+
+#include <vtkOutputWindow.h>
 
 typedef udg::SingletonPointer<udg::StarviewerApplicationCommandLine> StarviewerSingleApplicationCommandLineSingleton;
 
@@ -58,6 +61,11 @@ void configureLogging()
 
     LOGGER_INIT(configurationFile.toStdString());
     DEBUG_LOG("Arxiu de configuració del log: " + configurationFile);
+
+    // Redirigim els missatges de VTK cap al log.
+    udg::LoggingOutputWindow *loggingOutputWindow = udg::LoggingOutputWindow::New();
+    vtkOutputWindow::SetInstance(loggingOutputWindow);
+    loggingOutputWindow->Delete();
 }
 
 void initializeTranslations(QApplication &app)

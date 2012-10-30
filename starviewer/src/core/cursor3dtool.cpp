@@ -126,12 +126,7 @@ void Cursor3DTool::updatePosition()
             m_2DViewer->getInput()->getVtkData()->ComputeStructuredCoordinates(xyz, index, coordinates);
 
             // 3.- Necessitem la imatge la qual pertany el punt per tal de trobar la imatge del dicom que conté la informació del pla.
-            int slice = m_2DViewer->getCurrentSlice();
             double *spacing = m_2DViewer->getInput()->getSpacing();
-            double *origin = m_2DViewer->getInput()->getOrigin();
-            int zIndex = Q2DViewer::getZIndexForView(m_2DViewer->getView());
-
-            xyz[zIndex] = origin[zIndex] + (slice * spacing[zIndex]);
             switch (m_2DViewer->getView())
             {
                 case Q2DViewer::Axial:

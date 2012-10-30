@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QKeyEvent>
 
-class QVBoxLayout;
+class QGridLayout;
 
 namespace udg {
 
@@ -23,6 +23,12 @@ public:
     /// Afegeix un grup d'ítems amb le caption donat
     void addItemsGroup(const QString &caption, const QList<QPair<QString, QString> > &itemsList);
 
+    /// Afegeix una columna redistribuint els elements existents i reduïnt conseqüentment l'alçada de la llista
+    /// L'ordre dels elements quan tenim més d'una columna serà de dalt cap a baix, columna per columna.
+    /// Per exemple, si tenim 4 elements i dues columnes, el primer element estarà a la primera fila i primera columna,
+    /// el segon element a la primera columna i segona fila, el tercer element a la segona columna i primera fila, etc.
+    void addColumn();
+    
     /// Marquem com a seleccionat l'ítem que tingui l'identificador donat
     void markItem(const QString &identifier);
 
@@ -56,7 +62,7 @@ private:
     QList<PatientBrowserMenuBasicItem*> m_itemsList;
 
     /// Layout on colocarem els elements
-    QVBoxLayout *m_verticalLayout;
+    QGridLayout *m_mainLayout;
 };
 
 }
