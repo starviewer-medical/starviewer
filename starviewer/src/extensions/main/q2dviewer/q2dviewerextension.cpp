@@ -289,7 +289,7 @@ void Q2DViewerExtension::searchPreviousStudiesWithHangingProtocols()
 	Study *studyToSearchFrom = 0;
     if (m_mainVolume)
     {
-		studyToSearchFrom = m_mainVolume->getStudy();
+        studyToSearchFrom = m_mainVolume->getStudy();
         
     }
     else

@@ -7,13 +7,13 @@ DCMTKLIBDIR = $$(DCMTKLIBDIR)
 isEmpty(DCMTKLIBDIR){
     unix:DCMTKLIBDIR = /usr/lib/dcmtk
     macx:DCMTKLIBDIR = /usr/local/dicom/lib
-	win32:DCMTKLIBDIR = C:/dcmtk-3.6.1-20120515/lib
+    win32:DCMTKLIBDIR = C:/dcmtk-3.6.1-20120515/lib
 }
 DCMTKINCLUDEDIR = $$(DCMTKINCLUDEDIR)
 isEmpty(DCMTKINCLUDEDIR){
     unix:DCMTKINCLUDEDIR = /usr/include/dcmtk
     macx:DCMTKINCLUDEDIR = /usr/local/dicom/include/dcmtk
-	win32:DCMTKINCLUDEDIR = C:/dcmtk-3.6.1-20120515/include/dcmtk
+    win32:DCMTKINCLUDEDIR = C:/dcmtk-3.6.1-20120515/include/dcmtk
 }
 
 

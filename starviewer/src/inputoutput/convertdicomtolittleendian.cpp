@@ -41,7 +41,7 @@ Status ConvertDicomToLittleEndian::convert(QString inputFile, QString outputFile
     E_PaddingEncoding opt_opadenc = EPD_noChange;
     OFCmdUnsignedInt opt_filepad = 0;
     OFCmdUnsignedInt opt_itempad = 0;
-	E_FileWriteMode writeMode = EWM_fileformat;
+    E_FileWriteMode writeMode = EWM_fileformat;
 
     error = fileformat.loadFile(qPrintable(QDir::toNativeSeparators(inputFile)), opt_ixfer, EGL_noChange, DCM_MaxReadLength, opt_readMode);
 

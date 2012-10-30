@@ -6,7 +6,7 @@ INCLUDEPATH += $${DCMTKINCLUDEDIR} \
     $${DCMTKINCLUDEDIR}/dcmnet/ \
     $${DCMTKINCLUDEDIR}/dcmsign/ \
     $${DCMTKINCLUDEDIR}/ofstd/ \
-	$${DCMTKINCLUDEDIR}/oflog/ \
+    $${DCMTKINCLUDEDIR}/oflog/ \
     $${DCMTKINCLUDEDIR}/dcmimage/ \
     $${DCMTKINCLUDEDIR}/config \
     $${DCMTKINCLUDEDIR}/dcmpstat \
@@ -18,7 +18,7 @@ LIBS += -L$${DCMTKLIBDIR} \
     -ldcmnet \
     -ldcmdata \
     -lofstd \
-	-loflog \
+    -loflog \
     -ldcmimgle \
     -ldcmimage \
     -ldcmsr \

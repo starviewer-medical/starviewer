@@ -1,8 +1,8 @@
 CONFIG += debug_and_release
 
 unix {
-	QMAKE_CXXFLAGS_RELEASE += -Wno-deprecated
-	QMAKE_CXXFLAGS_DEBUG += -Wno-deprecated
+    QMAKE_CXXFLAGS_RELEASE += -Wno-deprecated
+    QMAKE_CXXFLAGS_DEBUG += -Wno-deprecated
 }
 
 win32 {
@@ -10,12 +10,12 @@ win32 {
     DEFINES += GLEW_STATIC
     
     # Volem veure missatges a std::cout en debug
-	CONFIG(debug, debug|release) {
-		CONFIG += console
-	}
-	else {
-		CONFIG -= console
-	}
+    CONFIG(debug, debug|release) {
+        CONFIG += console
+    }
+    else {
+        CONFIG -= console
+    }
 }
 
 macx {

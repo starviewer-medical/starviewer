@@ -6,11 +6,11 @@ CONFIG += warn_on \
           stl
           
 win32-msvc2010 {
-	OBJECTS_DIR = ../../tmp/obj/$${TARGET}
-	}
-	else {
-	OBJECTS_DIR = ../../tmp/obj
-	}
+    OBJECTS_DIR = ../../tmp/obj/$${TARGET}
+    }
+    else {
+    OBJECTS_DIR = ../../tmp/obj
+    }
 
 UI_DIR = ../../tmp/ui
 MOC_DIR = ../../tmp/moc
