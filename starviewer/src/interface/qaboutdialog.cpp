@@ -39,6 +39,7 @@ QAboutDialog::QAboutDialog(QWidget *parent)
     aboutMessage += tr("<p>Support email: <a href=\"mailto:%1\">%1</a></p>").arg(OrganizationEmailString);
     aboutMessage += tr("<p>Web: <a href=\"%1\">%1</a></p>").arg(OrganizationWebURL);
     m_aboutTextLabel->setText(aboutMessage);
+    m_aboutTextLabel->setOpenExternalLinks(true);
 }
 
 QAboutDialog::~QAboutDialog()
