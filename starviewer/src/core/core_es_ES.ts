@@ -407,17 +407,17 @@
 <context>
     <name>udg::PatientBrowserMenu</name>
     <message>
-        <location filename="patientbrowsermenu.cpp" line="44"/>
+        <location filename="patientbrowsermenu.cpp" line="47"/>
         <source>Study %1 %2 [%3] %4</source>
         <translation>Estudio %1 %2 [%3] %4</translation>
     </message>
     <message>
-        <location filename="patientbrowsermenu.cpp" line="54"/>
+        <location filename="patientbrowsermenu.cpp" line="57"/>
         <source> Series %1: %2 %3 %4 %5</source>
         <translation> Serie %1: %2 %3 %4 %5</translation>
     </message>
     <message>
-        <location filename="patientbrowsermenu.cpp" line="107"/>
+        <location filename="patientbrowsermenu.cpp" line="110"/>
         <source>%1 
 %2 
 %3
@@ -445,55 +445,55 @@
 <context>
     <name>udg::Q2DViewer</name>
     <message>
-        <location filename="q2dviewer.cpp" line="1899"/>
+        <location filename="q2dviewer.cpp" line="1903"/>
         <source>Slice: %1/%2 Phase: %3/%4</source>
         <translation>Corte: %1/%2 Fase: %3/%4</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1912"/>
+        <location filename="q2dviewer.cpp" line="1916"/>
         <source>Slice: %1/%2</source>
         <translation>Corte: %1/%2</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1894"/>
+        <location filename="q2dviewer.cpp" line="1898"/>
         <source>Slice: %1-%2/%3 Phase: %4/%5</source>
         <translation>Corte: %1-%2/%3 Fase: %4/%5</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="695"/>
+        <location filename="q2dviewer.cpp" line="698"/>
         <source>There&apos;s not enough memory for the rendering process. Try to close all the open %1 windows, restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64-bit operating system may solve the problem.</source>
         <translation>No hay memoria suficiente para el procesos de renderización. Intente cerrar todas las ventanas de %1 abiertas, reinicie la aplicación y vuélvalo a intentar. Si el problema persiste, podría solucionarse añadiendo más memoria RAM o cambiando a un sistema operativo de 64 bits.</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1657"/>
+        <location filename="q2dviewer.cpp" line="1661"/>
         <source>Acc: %1
 </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1908"/>
+        <location filename="q2dviewer.cpp" line="1912"/>
         <source>Slice: %1-%2/%3</source>
         <translation>Corte: %1-%2/%3</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1918"/>
+        <location filename="q2dviewer.cpp" line="1922"/>
         <source> Thickness: %1 mm</source>
         <translation> Grosor: %1 mm</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1616"/>
+        <location filename="q2dviewer.cpp" line="1620"/>
         <source>%1 x %2
 WW: %5 WL: %6</source>
         <translation>%1 x %2
 WW: %5 WL: %6</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1872"/>
+        <location filename="q2dviewer.cpp" line="1876"/>
         <source>Loc: %1</source>
         <translation>Loc: %1</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1880"/>
+        <location filename="q2dviewer.cpp" line="1884"/>
         <source>-%1</source>
         <translation>-%1</translation>
     </message>
@@ -861,17 +861,17 @@ El shading se deshabilitará por lo tanto el renderizado no será el esperado.</
 <context>
     <name>udg::QDiagnosisTest</name>
     <message>
-        <location filename="qdiagnosistest.cpp" line="81"/>
+        <location filename="qdiagnosistest.cpp" line="85"/>
         <source>Running test: </source>
         <translation>Ejecutando el test: </translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="133"/>
+        <location filename="qdiagnosistest.cpp" line="137"/>
         <source>Files (*.txt)</source>
         <translation>Archivos (*.txt)</translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="133"/>
+        <location filename="qdiagnosistest.cpp" line="137"/>
         <source>Save diagnosis test results</source>
         <translation>Guardar los resultados</translation>
     </message>
@@ -1045,32 +1045,32 @@ Variable de entorno(logFilePath): %2</translation>
 <context>
     <name>udg::QViewer</name>
     <message>
-        <location filename="qviewer.cpp" line="642"/>
+        <location filename="qviewer.cpp" line="636"/>
         <source>Default</source>
         <translation>Predeterminado</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="643"/>
+        <location filename="qviewer.cpp" line="637"/>
         <source>Auto</source>
         <translation>Automático</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="875"/>
+        <location filename="qviewer.cpp" line="862"/>
         <source>Downloading related study...</source>
         <translation>Descargando estudio relacionado...</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="883"/>
+        <location filename="qviewer.cpp" line="870"/>
         <source>Error downloading related study</source>
         <translation>Error al descargar estudio relacionado</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="879"/>
+        <location filename="qviewer.cpp" line="866"/>
         <source>Loading data...</source>
         <translation>Cargando los datos...</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="887"/>
+        <location filename="qviewer.cpp" line="875"/>
         <source>Error loading data</source>
         <translatorcomment>No hi faltaria punt a la traducció orginal?</translatorcomment>
         <translation>Error al cargar los datos</translation>
@@ -1975,9 +1975,9 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
     </message>
     <message>
         <location filename="windowlevelpresetstooldata.cpp" line="31"/>
-        <location filename="windowlevelpresetstooldata.cpp" line="164"/>
-        <location filename="windowlevelpresetstooldata.cpp" line="166"/>
-        <location filename="windowlevelpresetstooldata.cpp" line="167"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="177"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="179"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="180"/>
         <source>Custom</source>
         <translation>Personalizado</translation>
     </message>

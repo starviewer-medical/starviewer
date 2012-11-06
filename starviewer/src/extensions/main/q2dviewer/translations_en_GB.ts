@@ -78,54 +78,54 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="556"/>
+        <location filename="q2dviewerextension.cpp" line="589"/>
         <source>Save current series image...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="561"/>
+        <location filename="q2dviewerextension.cpp" line="594"/>
         <source>Save all images of the current series...</source>
         <oldsource>Save all images from current series...</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="580"/>
+        <location filename="q2dviewerextension.cpp" line="552"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="591"/>
+        <location filename="q2dviewerextension.cpp" line="563"/>
         <source>Deactivate manual synchronization in all viewers (%1)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="593"/>
+        <location filename="q2dviewerextension.cpp" line="565"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="558"/>
+        <location filename="q2dviewerextension.cpp" line="591"/>
         <source>Save the current image in a standard image format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="562"/>
+        <location filename="q2dviewerextension.cpp" line="595"/>
         <source>Save all the images in the selected viewer in a standard image format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="578"/>
+        <location filename="q2dviewerextension.cpp" line="550"/>
         <source>Activate manual synchronization in all viewers (%1)</source>
         <oldsource>Activate manual synchronization all viewers</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="779"/>
+        <location filename="q2dviewerextension.cpp" line="803"/>
         <source>Export to DICOM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="779"/>
+        <location filename="q2dviewerextension.cpp" line="803"/>
         <source>This action is not allowed because the selected viewer is empty.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -133,15 +133,10 @@
 <context>
     <name>udg::Q2DViewerExtensionBase</name>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="216"/>
-        <source>WW/WL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="q2dviewerextensionbase.ui" line="62"/>
         <location filename="q2dviewerextensionbase.ui" line="97"/>
-        <location filename="q2dviewerextensionbase.ui" line="673"/>
-        <location filename="q2dviewerextensionbase.ui" line="865"/>
+        <location filename="q2dviewerextensionbase.ui" line="621"/>
+        <location filename="q2dviewerextensionbase.ui" line="813"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -157,37 +152,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="304"/>
+        <location filename="q2dviewerextensionbase.ui" line="252"/>
         <source>ROI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="426"/>
+        <location filename="q2dviewerextensionbase.ui" line="374"/>
         <source>Axial</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="449"/>
+        <location filename="q2dviewerextensionbase.ui" line="397"/>
         <source>Sagital</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="472"/>
+        <location filename="q2dviewerextensionbase.ui" line="420"/>
         <source>Coronal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="581"/>
+        <location filename="q2dviewerextensionbase.ui" line="529"/>
         <source>-90</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="537"/>
+        <location filename="q2dviewerextensionbase.ui" line="485"/>
         <source>FlipH</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="517"/>
+        <location filename="q2dviewerextensionbase.ui" line="465"/>
         <source>FlipV</source>
         <translation type="unfinished"></translation>
     </message>
@@ -202,94 +197,89 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="242"/>
-        <source>Pan</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerextensionbase.ui" line="268"/>
+        <location filename="q2dviewerextensionbase.ui" line="216"/>
         <source>Zoom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="561"/>
+        <location filename="q2dviewerextensionbase.ui" line="509"/>
         <source>Rotate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="330"/>
+        <location filename="q2dviewerextensionbase.ui" line="278"/>
         <source>Distance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="382"/>
+        <location filename="q2dviewerextensionbase.ui" line="330"/>
         <source>Erase</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="497"/>
+        <location filename="q2dviewerextensionbase.ui" line="445"/>
         <source>Orientation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="617"/>
+        <location filename="q2dviewerextensionbase.ui" line="565"/>
         <source>Restore</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="640"/>
+        <location filename="q2dviewerextensionbase.ui" line="588"/>
         <source>Invert</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="696"/>
+        <location filename="q2dviewerextensionbase.ui" line="644"/>
         <source>Exporter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="768"/>
+        <location filename="q2dviewerextensionbase.ui" line="716"/>
         <source>Thick Slab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="887"/>
-        <location filename="q2dviewerextensionbase.ui" line="907"/>
+        <location filename="q2dviewerextensionbase.ui" line="835"/>
+        <location filename="q2dviewerextensionbase.ui" line="855"/>
         <source>Info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="972"/>
+        <location filename="q2dviewerextensionbase.ui" line="920"/>
         <source>Auto-Sync</source>
         <oldsource>Automatic</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="1010"/>
+        <location filename="q2dviewerextensionbase.ui" line="958"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="1049"/>
+        <location filename="q2dviewerextensionbase.ui" line="997"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="1078"/>
+        <location filename="q2dviewerextensionbase.ui" line="1026"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="788"/>
+        <location filename="q2dviewerextensionbase.ui" line="736"/>
         <source>Ref.Lines</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="356"/>
+        <location filename="q2dviewerextensionbase.ui" line="304"/>
         <source>Angle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="811"/>
+        <location filename="q2dviewerextensionbase.ui" line="759"/>
         <source>3D cursor</source>
         <translation type="unfinished"></translation>
     </message>

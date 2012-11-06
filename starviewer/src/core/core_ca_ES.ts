@@ -407,18 +407,18 @@
 <context>
     <name>udg::PatientBrowserMenu</name>
     <message>
-        <location filename="patientbrowsermenu.cpp" line="44"/>
+        <location filename="patientbrowsermenu.cpp" line="47"/>
         <source>Study %1 %2 [%3] %4</source>
         <translation>Estudi %1 %2 [%3] %4</translation>
     </message>
     <message>
-        <location filename="patientbrowsermenu.cpp" line="54"/>
+        <location filename="patientbrowsermenu.cpp" line="57"/>
         <source> Series %1: %2 %3 %4 %5</source>
         <oldsource> Serie %1: %2 %3 %4 %5</oldsource>
         <translation>Sèrie %1: %2 %3 %4 %5</translation>
     </message>
     <message>
-        <location filename="patientbrowsermenu.cpp" line="107"/>
+        <location filename="patientbrowsermenu.cpp" line="110"/>
         <source>%1 
 %2 
 %3
@@ -446,55 +446,55 @@
 <context>
     <name>udg::Q2DViewer</name>
     <message>
-        <location filename="q2dviewer.cpp" line="1899"/>
+        <location filename="q2dviewer.cpp" line="1903"/>
         <source>Slice: %1/%2 Phase: %3/%4</source>
         <translation>Tall: %1/%2 Fase: %3/%4</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1912"/>
+        <location filename="q2dviewer.cpp" line="1916"/>
         <source>Slice: %1/%2</source>
         <translation>Tall: %1/%2</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1894"/>
+        <location filename="q2dviewer.cpp" line="1898"/>
         <source>Slice: %1-%2/%3 Phase: %4/%5</source>
         <translation>Tall: %1-%2/%3 Fase: %4/%5</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="695"/>
+        <location filename="q2dviewer.cpp" line="698"/>
         <source>There&apos;s not enough memory for the rendering process. Try to close all the open %1 windows, restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64-bit operating system may solve the problem.</source>
         <translation>No hi ha prou memòria per al procés de renderització. Intenteu tancar totes les finestres de %1 obertes, reinicieu l&apos;aplicació i torneu-ho a provar. Si el problema es manté, es podria solucionar afegint més memòria RAM o canviant a un sistema operatiu de 64 bits.</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1657"/>
+        <location filename="q2dviewer.cpp" line="1661"/>
         <source>Acc: %1
 </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1908"/>
+        <location filename="q2dviewer.cpp" line="1912"/>
         <source>Slice: %1-%2/%3</source>
         <translation>Tall: %1-%2/%3</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1918"/>
+        <location filename="q2dviewer.cpp" line="1922"/>
         <source> Thickness: %1 mm</source>
         <translation> Gruix: %1 mm</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1616"/>
+        <location filename="q2dviewer.cpp" line="1620"/>
         <source>%1 x %2
 WW: %5 WL: %6</source>
         <translation>%1 x %2
 WW: %5 WL: %6</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1872"/>
+        <location filename="q2dviewer.cpp" line="1876"/>
         <source>Loc: %1</source>
         <translation>Loc: %1</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1880"/>
+        <location filename="q2dviewer.cpp" line="1884"/>
         <source>-%1</source>
         <translation>-%1</translation>
     </message>
@@ -864,17 +864,17 @@ Marc Ruiz: El GIMP fa servir &quot;brillantor&quot;. De moment ho canvio a l&apo
 <context>
     <name>udg::QDiagnosisTest</name>
     <message>
-        <location filename="qdiagnosistest.cpp" line="81"/>
+        <location filename="qdiagnosistest.cpp" line="85"/>
         <source>Running test: </source>
         <translation>Executant el test: </translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="133"/>
+        <location filename="qdiagnosistest.cpp" line="137"/>
         <source>Files (*.txt)</source>
         <translation>Fitxers (*.txt)</translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="133"/>
+        <location filename="qdiagnosistest.cpp" line="137"/>
         <source>Save diagnosis test results</source>
         <translation>Desa els resultats</translation>
     </message>
@@ -1048,33 +1048,33 @@ Variable d&apos;entorn(logFilePath): %2</translation>
 <context>
     <name>udg::QViewer</name>
     <message>
-        <location filename="qviewer.cpp" line="642"/>
+        <location filename="qviewer.cpp" line="636"/>
         <source>Default</source>
         <translation>Predeterminat</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="643"/>
+        <location filename="qviewer.cpp" line="637"/>
         <source>Auto</source>
         <translation>Automàtic</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="875"/>
+        <location filename="qviewer.cpp" line="862"/>
         <source>Downloading related study...</source>
         <translation>S&apos;està descarregant l&apos;estudi relacionat...</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="883"/>
+        <location filename="qviewer.cpp" line="870"/>
         <source>Error downloading related study</source>
         <translation>S&apos;ha produït un error en descarregar l&apos;estudi relacionat</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="879"/>
+        <location filename="qviewer.cpp" line="866"/>
         <source>Loading data...</source>
         <translatorcomment>No hauria de ser igual que lo d&apos;Assynchronous loading ? En allà simplement s&apos;indica Loading... </translatorcomment>
         <translation>Carregant les dades...</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="887"/>
+        <location filename="qviewer.cpp" line="875"/>
         <source>Error loading data</source>
         <translation>S&apos;ha produït un error en carregar les dades</translation>
     </message>
@@ -1989,9 +1989,9 @@ Es recomana que les deseu en una carpeta buida.</translation>
     </message>
     <message>
         <location filename="windowlevelpresetstooldata.cpp" line="31"/>
-        <location filename="windowlevelpresetstooldata.cpp" line="164"/>
-        <location filename="windowlevelpresetstooldata.cpp" line="166"/>
-        <location filename="windowlevelpresetstooldata.cpp" line="167"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="177"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="179"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="180"/>
         <source>Custom</source>
         <translation>Personalitzat</translation>
     </message>

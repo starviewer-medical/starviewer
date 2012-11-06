@@ -4,7 +4,7 @@
 <context>
     <name>QDialogButtonBox</name>
     <message>
-        <location filename="queryscreen.cpp" line="76"/>
+        <location filename="queryscreen.cpp" line="75"/>
         <source>&amp;Yes</source>
         <translation>&amp;Sí</translation>
     </message>
@@ -2118,18 +2118,18 @@ Estos archivos se tendrán que borrar de forma manual.</translation>
         <translation>Seleccione un estudio para descargar y visualizar.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="391"/>
+        <location filename="qinputoutputpacswidget.cpp" line="402"/>
         <source>Please select a PACS to query.</source>
         <oldsource>Please select a PACS to query</oldsource>
         <translation>Seleccione un PACS a consultar.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="398"/>
+        <location filename="qinputoutputpacswidget.cpp" line="409"/>
         <source>No search fields were filled.</source>
         <translation>No se han introducido criterios de búsqueda.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="399"/>
+        <location filename="qinputoutputpacswidget.cpp" line="410"/>
         <source>The query can take a long time.
 Do you want continue?</source>
         <translation>La consulta puede tardar bastantes minutos.
@@ -2697,36 +2697,36 @@ Cierre todas las ventanas de %1 y vuelva a intentarlo.</translation>
     </message>
 </context>
 <context>
-    <name>udg::QPreviousStudiesWidget</name>
+    <name>udg::QRelatedStudiesWidget</name>
     <message>
-        <location filename="qpreviousstudieswidget.cpp" line="33"/>
+        <location filename="qrelatedstudieswidget.cpp" line="33"/>
         <source>No related studies found.</source>
         <translation>No se han encontrado estudios relacionados.</translation>
     </message>
     <message>
-        <location filename="qpreviousstudieswidget.cpp" line="139"/>
-        <source>Name</source>
-        <translation>Nombre</translation>
-    </message>
-    <message>
-        <location filename="qpreviousstudieswidget.cpp" line="139"/>
-        <source>Date</source>
-        <translation>Fecha</translation>
-    </message>
-    <message>
-        <location filename="qpreviousstudieswidget.cpp" line="170"/>
-        <source>Looking for related studies...</source>
-        <translation>Buscando estudios relacionados...</translation>
-    </message>
-    <message>
-        <location filename="qpreviousstudieswidget.cpp" line="139"/>
+        <location filename="qrelatedstudieswidget.cpp" line="140"/>
         <source>Modality</source>
         <translation>Modalidad</translation>
     </message>
     <message>
-        <location filename="qpreviousstudieswidget.cpp" line="139"/>
+        <location filename="qrelatedstudieswidget.cpp" line="140"/>
         <source>Description</source>
         <translation>Descripción</translation>
+    </message>
+    <message>
+        <location filename="qrelatedstudieswidget.cpp" line="140"/>
+        <source>Date</source>
+        <translation>Fecha</translation>
+    </message>
+    <message>
+        <location filename="qrelatedstudieswidget.cpp" line="140"/>
+        <source>Name</source>
+        <translation>Nombre</translation>
+    </message>
+    <message>
+        <location filename="qrelatedstudieswidget.cpp" line="171"/>
+        <source>Looking for related studies...</source>
+        <translation>Buscando estudios relacionados...</translation>
     </message>
 </context>
 <context>
@@ -3027,12 +3027,12 @@ Si el problema persiste contacte con un administrador.</translation>
 <context>
     <name>udg::QueryScreen</name>
     <message>
-        <location filename="queryscreen.cpp" line="195"/>
+        <location filename="queryscreen.cpp" line="193"/>
         <source>Port %1 for incoming connections from PACS is already in use by another application.</source>
         <translation>El puerto %1 para las conexiones entrantes del PACS está siendo utilizado por otra aplicación.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="196"/>
+        <location filename="queryscreen.cpp" line="194"/>
         <source>
 
 Unable to retrieve studies from PACS if the port is in use, please close the application that is using port %1 or change port for incoming connections from PACS in the configuration screen.</source>
@@ -3042,12 +3042,6 @@ Unable to retrieve studies from PACS if the port is in use, please close the app
         <translation>
 
 No pueden descargar estudios del PACS si el puerto está en uso, por favor cierre la aplicación que está usando el puerto %1 o cambie el puerto para conexiones entrantes del PACS desde la pantalla de configuración.</translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="510"/>
-        <source>Cancelling PACS operations...</source>
-        <oldsource>Cancelling PACS operations</oldsource>
-        <translation>Cancelando las operaciones con el PACS...</translation>
     </message>
 </context>
 <context>

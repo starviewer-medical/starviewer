@@ -4,7 +4,7 @@
 <context>
     <name>QDialogButtonBox</name>
     <message>
-        <location filename="queryscreen.cpp" line="76"/>
+        <location filename="queryscreen.cpp" line="75"/>
         <source>&amp;Yes</source>
         <translation>&amp;Sí</translation>
     </message>
@@ -2111,18 +2111,18 @@ Aquests hauran de ser esborrats de forma manual.</translation>
         <translation>Seleccioni un estudi per descarregar i visualitzar.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="391"/>
+        <location filename="qinputoutputpacswidget.cpp" line="402"/>
         <source>Please select a PACS to query.</source>
         <oldsource>Please select a PACS to query</oldsource>
         <translation>Seleccioni un PACS a consultar.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="398"/>
+        <location filename="qinputoutputpacswidget.cpp" line="409"/>
         <source>No search fields were filled.</source>
         <translation>No s&apos;han introduït criteris de cerca.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="399"/>
+        <location filename="qinputoutputpacswidget.cpp" line="410"/>
         <source>The query can take a long time.
 Do you want continue?</source>
         <translation>La cerca pot tardar bastants minuts.
@@ -2694,36 +2694,36 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
     </message>
 </context>
 <context>
-    <name>udg::QPreviousStudiesWidget</name>
+    <name>udg::QRelatedStudiesWidget</name>
     <message>
-        <location filename="qpreviousstudieswidget.cpp" line="33"/>
+        <location filename="qrelatedstudieswidget.cpp" line="33"/>
         <source>No related studies found.</source>
         <translation>No s&apos;han trobat estudis relacionats.</translation>
     </message>
     <message>
-        <location filename="qpreviousstudieswidget.cpp" line="139"/>
-        <source>Name</source>
-        <translation>Nom</translation>
-    </message>
-    <message>
-        <location filename="qpreviousstudieswidget.cpp" line="139"/>
-        <source>Date</source>
-        <translation>Data</translation>
-    </message>
-    <message>
-        <location filename="qpreviousstudieswidget.cpp" line="170"/>
-        <source>Looking for related studies...</source>
-        <translation>Cercant estudis relacionats...</translation>
-    </message>
-    <message>
-        <location filename="qpreviousstudieswidget.cpp" line="139"/>
+        <location filename="qrelatedstudieswidget.cpp" line="140"/>
         <source>Modality</source>
         <translation>Modalitat</translation>
     </message>
     <message>
-        <location filename="qpreviousstudieswidget.cpp" line="139"/>
+        <location filename="qrelatedstudieswidget.cpp" line="140"/>
         <source>Description</source>
         <translation>Descripció</translation>
+    </message>
+    <message>
+        <location filename="qrelatedstudieswidget.cpp" line="140"/>
+        <source>Date</source>
+        <translation>Data</translation>
+    </message>
+    <message>
+        <location filename="qrelatedstudieswidget.cpp" line="140"/>
+        <source>Name</source>
+        <translation>Nom</translation>
+    </message>
+    <message>
+        <location filename="qrelatedstudieswidget.cpp" line="171"/>
+        <source>Looking for related studies...</source>
+        <translation>Cercant estudis relacionats...</translation>
     </message>
 </context>
 <context>
@@ -3024,12 +3024,12 @@ Si el problema persisteix contacteu amb un administrador.</translation>
 <context>
     <name>udg::QueryScreen</name>
     <message>
-        <location filename="queryscreen.cpp" line="195"/>
+        <location filename="queryscreen.cpp" line="193"/>
         <source>Port %1 for incoming connections from PACS is already in use by another application.</source>
         <translation>El port %1 per connexions entrants des del PACS està sent utilitzat per una altra aplicació.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="196"/>
+        <location filename="queryscreen.cpp" line="194"/>
         <source>
 
 Unable to retrieve studies from PACS if the port is in use, please close the application that is using port %1 or change port for incoming connections from PACS in the configuration screen.</source>
@@ -3039,12 +3039,6 @@ Unable to retrieve studies from PACS if the port is in use, please close the app
         <translation>
 
 No s&apos;han pogut descarregar estudis del PACS perquè el port està en ús, si us plau tanqueu l&apos;aplicació que està utilitzant el port %1 o canvieu el port per connexions entrants en la pantalla de configuració.</translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="510"/>
-        <source>Cancelling PACS operations...</source>
-        <oldsource>Cancelling PACS operations</oldsource>
-        <translation>Cancel·lant les operacions amb el PACS...</translation>
     </message>
 </context>
 <context>
