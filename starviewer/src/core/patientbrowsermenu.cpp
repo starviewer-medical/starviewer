@@ -125,8 +125,9 @@ void PatientBrowserMenu::popup(const QPoint &point, const QString &identifier)
     // Determinem quines són les pantalles que tenim
     ScreenManager screenManager;
     m_currentScreenID = screenManager.getScreenID(point);
-    m_leftScreenID = screenManager.getScreenOnTheLeftOf(m_currentScreenID);
-    m_rightScreenID = screenManager.getScreenOnTheRightOf(m_currentScreenID);
+    ScreenLayout screenLayout = screenManager.getScreenLayout();
+    m_leftScreenID = screenLayout.getScreenOnTheLeftOf(m_currentScreenID);
+    m_rightScreenID = screenLayout.getScreenOnTheRightOf(m_currentScreenID);
     
     // Mirem si l'alçada  del widget excedeix l'alçada de la pantalla
     // En cas que sigui així anem afegint noves columnes per redistribuir els elements fins que l'alçada sigui menor a la de la pantalla
