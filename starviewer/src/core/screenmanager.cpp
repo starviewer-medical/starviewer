@@ -108,68 +108,7 @@ void ScreenManager::moveToDesktop(QWidget *window, int idDesktop)
 void ScreenManager::moveToPreviousDesktop(QWidget *window)
 {
     int desktopIAm = getScreenID(window);
-    int desktopIllBe = -1;
-
-    // Buscar una pantalla a l'esquerra i a la mateixa altura + o -
-    for (int i = 0; i < getNumberOfScreens(); i++)
-    {
-        // Si està a l'esquerra, però no està completament per sobre ni per sota
-        if (isOnLeft(i, desktopIAm) && !isOver(i, desktopIAm) && !isUnder(i, desktopIAm))
-        {
-            // Si encara no hem trobat cap pantalla
-            if (desktopIllBe == -1)
-            {
-                desktopIllBe = i;
-            }
-            // De les pantalles de l'esquerra, volem la més pròxima
-            // Si la pantalla que hem trobat està més a la dreta que la que tenim
-            else if (isOnRight(i, desktopIllBe))
-            {
-                desktopIllBe = i;
-            }
-        }
-    }
-
-    // Si no hi ha cap pantalla a l'esquerra, llavors busquem la de més a la dreta que està per sobre d'aquesta
-    if (desktopIllBe == -1)
-    {
-        for (int i = 0; i < getNumberOfScreens(); i++)
-        {
-            if (isHigher(i, desktopIAm))
-            {
-                // Si encara no hem trobat cap pantalla
-                if (desktopIllBe == -1)
-                {
-                    desktopIllBe = i;
-                }
-                // De les pantalles de sobre, volem la més a la dreta
-                else if (isOnRight(i, desktopIllBe))
-                {
-                    desktopIllBe = i;
-                }
-            }
-        }
-    }
-
-    // Si no hi ha cap patalla per sobre de la actual, agafarem la de més avall a la dreta
-    if (desktopIllBe == -1)
-    {
-        // Amb això assegurem que mai arribarà al moveToDesktop valent -1
-        desktopIllBe = 0;
-        for (int i = 1; i < getNumberOfScreens(); i++)
-        {
-            // Si està per sota de l'actual ens la quedem
-            if (isUnder(i, desktopIllBe))
-            {
-                desktopIllBe = i;
-            }
-            // Si no, si no està per sobre, l'agafem si està més a la dreta que l'actual
-            else if (!isOver(i, desktopIllBe) && isMoreOnRight(i, desktopIllBe))
-            {
-                desktopIllBe = i;
-            }
-        }
-    }
+    int desktopIllBe = m_screenLayout.getPreviousScreenOf(desktopIAm);
 
     moveToDesktop(window, desktopIllBe);
 }
@@ -229,68 +168,7 @@ int ScreenManager::getScreenOnTheLeftOf(int screenID)
 void ScreenManager::moveToNextDesktop(QWidget *window)
 {
     int desktopIAm = getScreenID(window);
-    int desktopIllBe = -1;
-
-    // Buscar una pantalla a la dreta i a la mateixa altura + o -
-    for (int i = 0; i < getNumberOfScreens(); i++)
-    {
-        // Si està a la dreta, però no està completament per sobre ni per sota
-        if (isOnRight(i, desktopIAm) && !isOver(i, desktopIAm) && !isUnder(i, desktopIAm))
-        {
-            // Si encara no hem trobat cap pantalla
-            if (desktopIllBe == -1)
-            {
-                desktopIllBe = i;
-            }
-            // De les pantalles de la dreta, volem la més pròxima
-            // Si la pantalla que hem trobat està més a l'esquerra que la que tenim
-            else if (isOnLeft(i, desktopIllBe))
-            {
-                desktopIllBe = i;
-            }
-        }
-    }
-
-    // Si no hi ha cap pantalla a la dreta, llavors busquem la de més a l'esquerra que està per sota d'aquesta
-    if (desktopIllBe == -1)
-    {
-        for (int i = 0; i < getNumberOfScreens(); i++)
-        {
-            if (isLower(i, desktopIAm))
-            {
-                // Si encara no hem trobat cap pantalla
-                if (desktopIllBe == -1)
-                {
-                    desktopIllBe = i;
-                }
-                // De les pantalles de sota, volem la més a l'esquerra
-                else if (isOnLeft(i, desktopIllBe))
-                {
-                    desktopIllBe = i;
-                }
-            }
-        }
-    }
-
-    // Si no hi ha cap patalla per sota de la actual, agafarem la de més amunt a l'esquerra
-    if (desktopIllBe == -1)
-    {
-        // Amb això assegurem que mai arribarà al moveToDesktop valent -1
-        desktopIllBe = 0;
-        for (int i = 1; i < getNumberOfScreens(); i++)
-        {
-            // Si està per sobre de l'actual ens la quedem
-            if (isOver(i, desktopIllBe))
-            {
-                desktopIllBe = i;
-            }
-            // Si no, si no està per sota, l'agafem si està més a l'esquerra que l'actual
-            else if (!isUnder(i, desktopIllBe) && isMoreOnLeft(i, desktopIllBe))
-            {
-                desktopIllBe = i;
-            }
-        }
-    }
+    int desktopIllBe = m_screenLayout.getNextScreenOf(desktopIAm);
 
     moveToDesktop(window, desktopIllBe);
 }
