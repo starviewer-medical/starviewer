@@ -20,22 +20,10 @@ public:
     AutomaticSynchronizationManager(AutomaticSynchronizationToolData *toolData, ViewersLayout *layout, QObject *parent = 0);
     ~AutomaticSynchronizationManager();
 
-    /// Activar l'edicio de la sincronització automàtica
-    void enableEditor(bool enable);
-
     /// Inicialitza la sincronització autmàtica
     void initialize();
 
 private slots:
-    /// Canvi l'estat del widget en edicio segons el seu estat actual
-    void changeEditionState(Q2DViewer *viewer);
-
-    /// Actualitza l'estat del widget d'edicio dels diferents viewers segons les dades acutals de la tool
-    void updateEditionStateOfViewers();
-
-    /// Actualitza l'estat del widget d'edicio del viewer segons les dades actuals de la tool
-    void updateEditionStateOfViewer(Q2DViewer *viewer);
-
     void setActiveWidget(Q2DViewer *viewer);
 
 private:

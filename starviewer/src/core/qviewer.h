@@ -26,7 +26,6 @@ class WindowLevelPresetsToolData;
 class TransferFunction;
 class PatientBrowserMenu;
 class QViewerWorkInProgressWidget;
-class SynchronizationEditionWidget;
 
 /**
     Classe base per a totes les finestres de visualització
@@ -50,7 +49,7 @@ public:
     enum RecordFileFormatType { MPEG2 };
 
     /// Estat del viewer
-    enum ViewerStatus { NoVolumeInput, DownloadingVolume, DownloadingError, LoadingVolume, LoadingError, VisualizingVolume, SynchronizationEdit };
+    enum ViewerStatus { NoVolumeInput, DownloadingVolume, DownloadingError, LoadingVolume, LoadingError, VisualizingVolume };
 
     /// Retorna l'interactor renderer
     virtual vtkRenderWindowInteractor* getInteractor() const;
@@ -155,9 +154,6 @@ public:
 
     /// Canvia l'status del viewer
     void setViewerStatus(ViewerStatus status);
-
-    /// Obté el widget d'interfície de l'edició de sincronització automàtica
-    SynchronizationEditionWidget* getSynchronizationEditionWidget() const;
 
 public slots:
     /// Indiquem les dades d'entrada
@@ -324,9 +320,6 @@ protected:
     /// Widget que es mostra quan s'està realitzant algun treball asíncron
     QViewerWorkInProgressWidget *m_workInProgressWidget;
 
-    /// Widget que es mostra quan s'activa l'edició de la sincronització automàtica
-    SynchronizationEditionWidget *m_synchronizationEditionWidget;
-    
     /// Vista que enfoca la càmera
     CameraViewPlaneType m_currentViewPlane;
 

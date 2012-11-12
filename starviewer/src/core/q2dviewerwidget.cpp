@@ -82,20 +82,7 @@ void Q2DViewerWidget::setSliderBarWidgetsEnabledFromViewerStatus()
 {
     if (m_2DView->getViewerStatus() == Q2DViewer::VisualizingVolume)
     {
-        if (m_2DView->getPreviousViewerStatus() == QViewer::SynchronizationEdit)
-        {
-            m_slider->setEnabled(true);
-            m_viewText->setEnabled(true);
-        }
-        else
-        {
-            this->setSliderBarWidgetsEnabled(true);
-        }
-    }
-    else if (m_2DView->getViewerStatus() == QViewer::SynchronizationEdit)
-    {
-        m_slider->setEnabled(false);
-        m_viewText->setEnabled(false);
+        this->setSliderBarWidgetsEnabled(true);
     }
     else
     {
