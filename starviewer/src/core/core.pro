@@ -15,7 +15,6 @@ FORMS += qlogviewerbase.ui \
     qcustomwindowleveleditwidgetbase.ui \
     qtransferfunctioneditor2base.ui \
     qtransferfunctiongraphicalviewbase.ui \
-    synchronizationeditionwidgetbase.ui \
     qdiagnosistestbase.ui \
     q2dviewerconfigurationscreenbase.ui
 
@@ -266,7 +265,6 @@ HEADERS += extensionfactory.h \
     firewallaccess.h \
     firewallaccesstest.h \
     automaticsynchronizationmanager.h \
-    synchronizationeditionwidget.h \
     slicingwheeltool.h \
     qmessageboxautoclose.h \
     commandlineoption.h \
@@ -275,7 +273,6 @@ HEADERS += extensionfactory.h \
     systeminformation.h \
     systemrequeriments.h \
     systemrequerimentstest.h \
-    synchronizationwidgetbutton.h \
     magnifyingglasstool.h \
     qdiagnosistest.h \
     rundiagnosistest.h \
@@ -511,7 +508,6 @@ SOURCES += extensionmediator.cpp \
     firewallaccess.cpp \
     firewallaccesstest.cpp \
     automaticsynchronizationmanager.cpp \
-    synchronizationeditionwidget.cpp \
     slicingwheeltool.cpp \
     qmessageboxautoclose.cpp \
     commandlineoption.cpp \
@@ -520,7 +516,6 @@ SOURCES += extensionmediator.cpp \
     systeminformation.cpp \
     systemrequeriments.cpp \
     systemrequerimentstest.cpp \
-    synchronizationwidgetbutton.cpp \
     magnifyingglasstool.cpp \
     qdiagnosistest.cpp \
     rundiagnosistest.cpp \

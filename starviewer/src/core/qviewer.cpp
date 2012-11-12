@@ -8,7 +8,6 @@
 #include "windowlevelpresetstooldata.h"
 #include "transferfunction.h"
 #include "qviewerworkinprogresswidget.h"
-#include "synchronizationeditionwidget.h"
 
 // TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de
 // interface, pacs, etc.etc.!!
@@ -70,7 +69,6 @@ QViewer::QViewer(QWidget *parent)
     setWindowLevelData(new WindowLevelPresetsToolData(this));
 
     m_workInProgressWidget = new QViewerWorkInProgressWidget(this);
-    m_synchronizationEditionWidget = new SynchronizationEditionWidget(this);
 
     // Afegim el layout
     m_stackedLayout = new QStackedLayout(this);
@@ -78,7 +76,6 @@ QViewer::QViewer(QWidget *parent)
     m_stackedLayout->setMargin(0);
     m_stackedLayout->addWidget(m_vtkWidget);
     m_stackedLayout->addWidget(m_workInProgressWidget);
-    m_stackedLayout->addWidget(m_synchronizationEditionWidget);
 
     // Inicialitzem l'status del viewer
     m_previousViewerStatus = m_viewerStatus = NoVolumeInput;
@@ -815,18 +812,6 @@ void QViewer::setViewerStatus(ViewerStatus status)
         m_viewerStatus = status;
         this->setCurrentWidgetByViewerStatus(status);
         this->initializeWorkInProgressByViewerStatus(status);
-
-        if (m_viewerStatus == SynchronizationEdit)
-        {
-            // Assignem la imatge de background corresponent per al widget
-            if (this->getInput())
-            {
-                QString path = QString("%1/stateOfAutomaticSynchronization").arg(QDir::tempPath());
-                this->grabCurrentView();
-                this->saveGrabbedViews(path, QViewer::PNG);
-                m_synchronizationEditionWidget->setBackgroundImage(path + ".png");
-            }
-        }
         emit viewerStatusChanged();
     }
 }
@@ -836,10 +821,6 @@ void QViewer::setCurrentWidgetByViewerStatus(ViewerStatus status)
     if (status == NoVolumeInput || status == VisualizingVolume)
     {
         m_stackedLayout->setCurrentWidget(m_vtkWidget);
-    }
-    else if (status == SynchronizationEdit)
-    {
-        m_stackedLayout->setCurrentWidget(m_synchronizationEditionWidget);
     }
     else
     {
@@ -854,7 +835,6 @@ void QViewer::initializeWorkInProgressByViewerStatus(ViewerStatus status)
     {
         case NoVolumeInput:
         case VisualizingVolume:
-        case SynchronizationEdit:
             // Do nothing
             break;
         
@@ -875,11 +855,6 @@ void QViewer::initializeWorkInProgressByViewerStatus(ViewerStatus status)
             m_workInProgressWidget->setTitle(tr("Error loading data"));
             break;
     }
-}
-
-SynchronizationEditionWidget* QViewer::getSynchronizationEditionWidget() const
-{
-    return m_synchronizationEditionWidget;
 }
 
 void QViewer::setInputAndRender(Volume *volume)

@@ -169,9 +169,6 @@ private slots:
     void enableMaximumThicknessMode(bool enable);
 
 #ifndef STARVIEWER_LITE
-    /// Comprova els estats dels viewers quan la sincronització automàtica està activada per determinar si es pot activar l'edició de sincronització
-    void checkSynchronizationEditCanBeEnabled();
-
     ///  Mètode que busca els hanging protocols aplicables
     void searchHangingProtocols();
 
@@ -181,9 +178,6 @@ private slots:
 
     /// Mètode que afegeix els hanging protocols amb prèvies
     void addPreviousHangingProtocols(QList<Study*> studies);
-
-    /// Activa el botó d'edició de la sincronització automàtica
-    void enableAutomaticSynchonizationEditor(bool enable);
 
     /// Activa la sincronització manual a tots els visors
     void activateManualSynchronizationInAllViewers();

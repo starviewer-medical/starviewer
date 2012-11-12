@@ -120,9 +120,6 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_dicomDumpToolButton->setToolTip(tr("Dump DICOM information of the current image"));
     m_windowLevelComboBox->setToolTip(tr("Choose Window/Level Presets"));
 
-    // TODO De moment no fem accessibles aquestes funcionalitats ja que no estan a punt
-    m_automaticSynchronizationEditionButton->setVisible(false);
-
     readSettings();
     createConnections();
     initializeTools();
@@ -571,7 +568,6 @@ void Q2DViewerExtension::initializeTools()
     m_desynchronizeAllViewersButton->setDefaultAction(m_desynchronizeAllAction);
     connect(m_desynchronizeAllAction, SIGNAL(triggered()), SLOT(deactivateManualSynchronizationInAllViewers()));
     connect(m_toolManager->getRegisteredToolAction("AutomaticSynchronizationTool"), SIGNAL(triggered(bool)), SLOT(enableAutomaticSynchronizationToViewer(bool)));
-    connect(m_automaticSynchronizationEditionButton, SIGNAL(clicked(bool)), SLOT(enableAutomaticSynchonizationEditor(bool)));
     
 #endif
 
@@ -617,10 +613,6 @@ void Q2DViewerExtension::activateNewViewer(Q2DViewerWidget *newViewerWidget)
     newViewerWidget->getViewer()->showImageOverlays(m_showOverlaysAction->isChecked());
     // Shutters
     newViewerWidget->getViewer()->showDisplayShutters(m_showDisplayShuttersAction->isChecked());
-
-#ifndef STARVIEWER_LITE
-    connect(newViewerWidget->getViewer(), SIGNAL(viewerStatusChanged()), SLOT(checkSynchronizationEditCanBeEnabled()));
-#endif
 
     // Afegim l'eina de sincronització pel nou viewer
     // Per defecte només configurem la sincronització a nivell d'scroll
@@ -827,25 +819,16 @@ void Q2DViewerExtension::rearrangeZoomToolsMenu()
 
 void Q2DViewerExtension::validePhases()
 {
-    if (m_workingArea->getSelectedViewer()->getViewer()->getViewerStatus() == QViewer::SynchronizationEdit)
+    m_axialViewToolButton->setEnabled(true);
+    if (m_workingArea->getSelectedViewer()->hasPhases())
     {
-        m_axialViewToolButton->setEnabled(false);
         m_sagitalViewToolButton->setEnabled(false);
         m_coronalViewToolButton->setEnabled(false);
     }
     else
     {
-        m_axialViewToolButton->setEnabled(true);
-        if (m_workingArea->getSelectedViewer()->hasPhases())
-        {
-            m_sagitalViewToolButton->setEnabled(false);
-            m_coronalViewToolButton->setEnabled(false);
-        }
-        else
-        {
-            m_sagitalViewToolButton->setEnabled(true);
-            m_coronalViewToolButton->setEnabled(true);
-        }
+        m_sagitalViewToolButton->setEnabled(true);
+        m_coronalViewToolButton->setEnabled(true);
     }
 }
 #endif
@@ -859,12 +842,6 @@ void Q2DViewerExtension::updateDICOMInformationButton()
 {
     Q2DViewerWidget *viewerWidget = m_workingArea->getSelectedViewer();
     if (!viewerWidget)
-    {
-        m_dicomDumpToolButton->setEnabled(false);
-        return;
-    }
-
-    if (viewerWidget->getViewer()->getViewerStatus() == QViewer::SynchronizationEdit)
     {
         m_dicomDumpToolButton->setEnabled(false);
         return;
@@ -991,77 +968,6 @@ void Q2DViewerExtension::enableAutomaticSynchronizationToViewer(bool enable)
 
         m_automaticSynchronizationManager = new AutomaticSynchronizationManager(toolData, m_workingArea);
         m_automaticSynchronizationManager->initialize();
-
-        // Comprovem si podem habilitar l'edició de sincronització
-        checkSynchronizationEditCanBeEnabled();
-    }
-    else
-    {
-        m_automaticSynchronizationEditionButton->setEnabled(false);
-    }
-}
-
-void Q2DViewerExtension::enableAutomaticSynchonizationEditor(bool enable)
-{
-    m_automaticSynchronizationManager->enableEditor(enable);
-    
-    m_orientationButtonsLabel->setEnabled(!enable);
-    validePhases();
-    m_slicingToolButton->setEnabled(!enable);
-    m_zoomToolButton->setEnabled(!enable);
-    
-    m_roiButton->setEnabled(!enable);
-    m_distanceToolButton->setEnabled(!enable);
-    m_angleToolButton->setEnabled(!enable);
-    m_eraserToolButton->setEnabled(!enable);
-    
-    m_flipHorizontalToolButton->setEnabled(!enable);
-    m_flipVerticalToolButton->setEnabled(!enable);
-    m_rotateClockWiseToolButton->setEnabled(!enable);
-    m_rotateCounterClockWiseToolButton->setEnabled(!enable);
-    m_restoreToolButton->setEnabled(!enable);
-    m_invertToolButton->setEnabled(!enable);
-    
-    m_automaticSynchronizationToolButton->setEnabled(!enable);
-    m_screenShotToolButton->setEnabled(!enable);
-    m_screenshotsExporterToolButton->setEnabled(!enable);
-    
-    m_layoutsLabel->setEnabled(!enable);
-    m_buttonGrid->setEnabled(!enable);
-    m_downButtonGrid->setEnabled(!enable);
-    m_previousStudiesToolButton->setEnabled(!enable);
-    
-    m_thickSlabLabel->setEnabled(!enable);
-    m_thickSlabWidget->setEnabled(!enable);
-    
-    m_referenceLinesToolButton->setEnabled(!enable);
-    m_cursor3DToolButton->setEnabled(!enable);
-    m_cineController->setEnabled(!enable);
-    m_viewerLayersToolButton->setEnabled(!enable);
-    m_voxelInformationToolButton->setEnabled(!enable);
-    updateDICOMInformationButton();
-    m_windowLevelComboBox->setEnabled(!enable);
-}
-
-void Q2DViewerExtension::checkSynchronizationEditCanBeEnabled()
-{
-    // En cas que l'eina de sincronització automàtica estigui activada, refresquem l'estat del botó per activar l'edició
-    if (m_toolManager->getRegisteredToolAction("AutomaticSynchronizationTool")->isChecked())
-    {
-        bool synchronizationEditCanBeEnabled = true;
-        
-        // Comprovem que tots els viewers estiguin en un estat en el que es pot realitzar l'edició
-        int numberOfViewers = m_workingArea->getNumberOfViewers();
-        for (int viewerNumber = 0; viewerNumber < numberOfViewers; ++viewerNumber)
-        {        
-            if (m_workingArea->getViewerWidget(viewerNumber)->getViewer()->getViewerStatus() == QViewer::LoadingVolume)
-            {
-                synchronizationEditCanBeEnabled = false;
-                break;
-            }
-        }
-        // Actualitzem l'estat del botó
-        m_automaticSynchronizationEditionButton->setEnabled(synchronizationEditCanBeEnabled);
     }
 }
 
