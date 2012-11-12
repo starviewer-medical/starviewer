@@ -74,6 +74,42 @@ QString Screen::toString() const
     return string;
 }
 
+bool Screen::isHigher(const Screen &screen)
+{
+    if (m_geometry.top() < screen.getGeometry().top())
+    {
+        return true;
+    }
+    return false;
+}
+
+bool Screen::isLower(const Screen &screen)
+{
+    if (m_geometry.top() > screen.getGeometry().top())
+    {
+        return true;
+    }
+    return false;
+}
+
+bool Screen::isMoreToTheLeft(const Screen &screen)
+{
+    if (m_geometry.left() < screen.getGeometry().left())
+    {
+        return true;
+    }
+    return false;
+}
+
+bool Screen::isMoreToTheRight(const Screen &screen)
+{
+    if (m_geometry.right() > screen.getGeometry().right())
+    {
+        return true;
+    }
+    return false;
+}
+
 bool Screen::operator==(const Screen &screen) const
 {
     return m_isPrimary == screen.m_isPrimary

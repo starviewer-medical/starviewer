@@ -7,6 +7,7 @@ namespace udg {
 
 /**
     Classe per definir una pantalla. Ens permet definir la seva geometria, el seu ID i si és principal o no.
+    També incorpora mètodes per determinar les posicions relatives entre la seva geometria
  */
 class Screen {
 public:
@@ -33,6 +34,16 @@ public:
 
     /// Ens retorna les propietats de l'objecte en un string
     QString toString() const;
+    
+    /// Ens diu si aquesta pantalla està més amunt/avall que l'altra. Només comprova que el seu top estigui per sobre/sota del top de la pantalla a comparar,
+    /// per tant retornarà cert tant si està completa com parcialment per sobre/sota.
+    bool isHigher(const Screen &screen);
+    bool isLower(const Screen &screen);
+    
+    /// Ens diu si aquesta pantalla està més a la esquerra/dreta que l'altra. Només comprova que que l'esquerra/dreta de cadascú ho estigui més o no,
+    /// per tant retornarà cert tant si està completa com parcialment més a l'esquerra/dreta.
+    bool isMoreToTheLeft(const Screen &screen);
+    bool isMoreToTheRight(const Screen &screen);
     
     /// Operador igualtat
     bool operator==(const Screen &screen) const;
