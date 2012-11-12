@@ -216,6 +216,8 @@ HEADERS += extensionfactory.h \
     vtkthresholdfilter.h \
     dynamicmatrix.h \
     screenmanager.h \
+    screenlayout.h \
+    screen.h \
     colortransferfunction.h \
     transferfunctiontemplate.h \
     opacitytransferfunction.h \
@@ -463,6 +465,8 @@ SOURCES += extensionmediator.cpp \
     vtkthresholdfilter.cpp \
     dynamicmatrix.cpp \
     screenmanager.cpp \
+    screenlayout.cpp \
+    screen.cpp \
     colortransferfunction.cpp \
     opacitytransferfunction.cpp \
     qscreendistribution.cpp \
