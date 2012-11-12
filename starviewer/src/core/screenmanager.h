@@ -13,6 +13,7 @@ namespace udg {
 /**
     Aquesta classe s'utilitza per dues funcionalitats principals, maximitzar una finestra quan hi ha múltiples pantalles,
     i moure una finestra d'una pantalla a una altra.
+    Aquesta també s'encarrega de calcular quin és el layout de pantalles (ScreenLayout) al sistema.
     El seu funcionament bàsic és a través dels mètodes maximize i moveToDesktop, als que se li passa la finestra a tractar.
   */
 class ScreenManager {
