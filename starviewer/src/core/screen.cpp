@@ -215,9 +215,9 @@ bool Screen::isRight(const Screen &screen) const
 
 bool Screen::isTopLeft(const Screen &screen) const
 {
-    int x = abs(m_geometry.bottomRight().x() - screen.getGeometry().topLeft().x());
-    int y = abs(m_geometry.bottomRight().y() - screen.getGeometry().topLeft().y());
-    if (abs(x * x - y * y) < MaximumDistanceInBetween)
+    QPoint distancePoint = m_geometry.bottomRight() - screen.getGeometry().topLeft();
+    
+    if (distancePoint.manhattanLength() < MaximumDistanceInBetween)
     {
         return true;
     }
@@ -226,9 +226,9 @@ bool Screen::isTopLeft(const Screen &screen) const
 
 bool Screen::isTopRight(const Screen &screen) const
 {
-    int x = abs(m_geometry.bottomLeft().x() - screen.getGeometry().topRight().x());
-    int y = abs(m_geometry.bottomLeft().y() - screen.getGeometry().topRight().y());
-    if (abs(x * x - y * y) < MaximumDistanceInBetween)
+    QPoint distancePoint = m_geometry.bottomLeft() - screen.getGeometry().topRight();
+    
+    if (distancePoint.manhattanLength() < MaximumDistanceInBetween)
     {
         return true;
     }
@@ -237,9 +237,9 @@ bool Screen::isTopRight(const Screen &screen) const
 
 bool Screen::isBottomLeft(const Screen &screen) const
 {
-    int x = abs(m_geometry.topRight().x() - screen.getGeometry().bottomLeft().x());
-    int y = abs(m_geometry.topRight().y() - screen.getGeometry().bottomLeft().y());
-    if (abs(x * x - y * y) < MaximumDistanceInBetween)
+    QPoint distancePoint = m_geometry.topRight() - screen.getGeometry().bottomLeft();
+    
+    if (distancePoint.manhattanLength() < MaximumDistanceInBetween)
     {
         return true;
     }
@@ -248,9 +248,9 @@ bool Screen::isBottomLeft(const Screen &screen) const
 
 bool Screen::isBottomRight(const Screen &screen) const
 {
-    int x = abs(m_geometry.topLeft().x() - screen.getGeometry().bottomRight().x());
-    int y = abs(m_geometry.topLeft().y() - screen.getGeometry().bottomRight().y());
-    if (abs(x * x - y * y) < MaximumDistanceInBetween)
+    QPoint distancePoint = m_geometry.topLeft() - screen.getGeometry().bottomRight();
+    
+    if (distancePoint.manhattanLength() < MaximumDistanceInBetween)
     {
         return true;
     }
