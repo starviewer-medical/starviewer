@@ -83,54 +83,60 @@ int ScreenLayout::getPrimaryScreenID() const
 
 int ScreenLayout::getScreenOnTheRightOf(int screenID) const
 {
-    int rightScreen = Screen::NullScreenID;
+    int rightScreenID = Screen::NullScreenID;
+    Screen screen = getScreen(screenID);
+    Screen screenToCompare;
     // Buscar una pantalla a la dreta i a la mateixa altura + o -
     for (int i = 0; i < getNumberOfScreens(); ++i)
     {
+        screenToCompare = getScreen(i);
         // Si està a la dreta, però no està completament per sobre ni per sota
-        if (isOnRight(i, screenID) && !isOver(i, screenID) && !isUnder(i, screenID))
+        if (screenToCompare.isOnRight(screen) && !screenToCompare.isOver(screen) && !screenToCompare.isUnder(screen))
         {
             // Si encara no hem trobat cap pantalla
-            if (rightScreen == Screen::NullScreenID)
+            if (rightScreenID == Screen::NullScreenID)
             {
-                rightScreen = i;
+                rightScreenID = i;
             }
             // De les pantalles de la dreta, volem la més pròxima
             // Si la pantalla que hem trobat està més a l'esquerra que la que tenim
-            else if (isOnLeft(i, rightScreen))
+            else if (screenToCompare.isOnLeft(getScreen(rightScreenID)))
             {
-                rightScreen = i;
+                rightScreenID = i;
             }
         }
     }
 
-    return rightScreen;
+    return rightScreenID;
 }
 
 int ScreenLayout::getScreenOnTheLeftOf(int screenID) const
 {
-    int leftScreen = Screen::NullScreenID;
+    int leftScreenID = Screen::NullScreenID;
+    Screen screen = getScreen(screenID);
+    Screen screenToCompare;
     // Buscar una pantalla a l'esquera i a la mateixa altura + o -
     for (int i = 0; i < getNumberOfScreens(); ++i)
     {
+        screenToCompare = getScreen(i);
         // Si està a l'esquera, però no està completament per sobre ni per sota
-        if (isOnLeft(i, screenID) && !isOver(i, screenID) && !isUnder(i, screenID))
+        if (screenToCompare.isOnLeft(screen) && !screenToCompare.isOver(screen) && !screenToCompare.isUnder(screen))
         {
             // Si encara no hem trobat cap pantalla
-            if (leftScreen == Screen::NullScreenID)
+            if (leftScreenID == Screen::NullScreenID)
             {
-                leftScreen = i;
+                leftScreenID = i;
             }
             // De les pantalles de l'esquera, volem la més pròxima
             // Si la pantalla que hem trobat està més a la dreta que la que tenim
-            else if (isOnRight(i, leftScreen))
+            else if (screenToCompare.isOnRight(getScreen(leftScreenID)))
             {
-                leftScreen = i;
+                leftScreenID = i;
             }
         }
     }
 
-    return leftScreen;
+    return leftScreenID;
 }
 
 int ScreenLayout::getPreviousScreenOf(int screenID) const
@@ -158,7 +164,7 @@ int ScreenLayout::getPreviousScreenOf(int screenID) const
                     previousScreenID = i;
                 }
                 // De les pantalles de sobre, volem la més a la dreta
-                else if (isOnRight(i, previousScreenID))
+                else if (screen.isOnRight(getScreen(previousScreenID)))
                 {
                     previousScreenID = i;
                 }
@@ -176,7 +182,7 @@ int ScreenLayout::getPreviousScreenOf(int screenID) const
         {
             screen = getScreen(i);
             // Si està per sota de l'actual ens la quedem
-            if (isUnder(i, previousScreenID))
+            if (screen.isUnder(getScreen(previousScreenID)))
             {
                 previousScreenID = i;
             }
@@ -184,7 +190,7 @@ int ScreenLayout::getPreviousScreenOf(int screenID) const
             else
             {
                 Screen previousScreen = getScreen(previousScreenID);
-                if (!isOver(i, previousScreenID) && screen.isMoreToTheRight(previousScreen))
+                if (!screen.isOver(previousScreen) && screen.isMoreToTheRight(previousScreen))
                 {
                     previousScreenID = i;
                 }
@@ -222,7 +228,7 @@ int ScreenLayout::getNextScreenOf(int screenID) const
                     nextScreenID = i;
                 }
                 // De les pantalles de sota, volem la més a l'esquerra
-                else if (isOnLeft(i, nextScreenID))
+                else if (screen.isOnLeft(getScreen(nextScreenID)))
                 {
                     nextScreenID = i;
                 }
@@ -240,7 +246,7 @@ int ScreenLayout::getNextScreenOf(int screenID) const
         {
             screen = getScreen(i);
             // Si està per sobre de l'actual ens la quedem
-            if (isOver(i, nextScreenID))
+            if (screen.isOver(getScreen(nextScreenID)))
             {
                 nextScreenID = i;
             }
@@ -248,7 +254,7 @@ int ScreenLayout::getNextScreenOf(int screenID) const
             else
             {
                 Screen nextScreen = getScreen(nextScreenID);
-                if (!isUnder(i, nextScreenID) && screen.isMoreToTheLeft(nextScreen))
+                if (!screen.isUnder(nextScreen) && screen.isMoreToTheLeft(nextScreen))
                 {
                     nextScreenID = i;
                 }
@@ -257,70 +263,6 @@ int ScreenLayout::getNextScreenOf(int screenID) const
     }
 
     return nextScreenID;
-}
-
-bool ScreenLayout::isOver(int screen1, int screen2) const
-{
-    if (getIndexOfScreen(screen1) == Screen::NullScreenID || getIndexOfScreen(screen2) == Screen::NullScreenID)
-    {
-        return false;
-    }
-    
-    QRect screen1Geometry = getScreen(screen1).getGeometry();
-    QRect screen2Geometry = getScreen(screen2).getGeometry();
-    if (screen1Geometry.bottom() <= screen2Geometry.top())
-    {
-        return true;
-    }
-    return false;
-}
-
-bool ScreenLayout::isUnder(int screen1, int screen2) const
-{
-    if (getIndexOfScreen(screen1) == Screen::NullScreenID || getIndexOfScreen(screen2) == Screen::NullScreenID)
-    {
-        return false;
-    }
-
-    QRect screen1Geometry = getScreen(screen1).getGeometry();
-    QRect screen2Geometry = getScreen(screen2).getGeometry();
-    if (screen1Geometry.top() >= screen2Geometry.bottom())
-    {
-        return true;
-    }
-    return false;
-}
-
-bool ScreenLayout::isOnLeft(int screen1, int screen2) const
-{
-    if (getIndexOfScreen(screen1) == Screen::NullScreenID || getIndexOfScreen(screen2) == Screen::NullScreenID)
-    {
-        return false;
-    }
-
-    QRect screen1Geometry = getScreen(screen1).getGeometry();
-    QRect screen2Geometry = getScreen(screen2).getGeometry();
-    if (screen1Geometry.right() <= screen2Geometry.left())
-    {
-        return true;
-    }
-    return false;
-}
-
-bool ScreenLayout::isOnRight(int screen1, int screen2) const
-{
-    if (getIndexOfScreen(screen1) == Screen::NullScreenID || getIndexOfScreen(screen2) == Screen::NullScreenID)
-    {
-        return false;
-    }
-    
-    QRect screen1Geometry = getScreen(screen1).getGeometry();
-    QRect screen2Geometry = getScreen(screen2).getGeometry();
-    if (screen1Geometry.left() >= screen2Geometry.right())
-    {
-        return true;
-    }
-    return false;
 }
 
 int ScreenLayout::getIndexOfScreen(int screenID) const
