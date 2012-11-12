@@ -54,31 +54,6 @@ private:
     /// A més, centra la finestra.
     void fitInto(QWidget *window, int IdDesktop);
 
-    /// Indica si la primera pantalla està sobre de la segona. Per que sigui cert han de ser de la mateixa amplada
-    /// i el top de la primera ha de ser igual al bottom de la segona
-    bool isTop(int desktop1, int desktop2);
-    /// Indica si la primera pantalla està sota de la segona. Per que sigui cert han de ser de la mateixa amplada
-    /// i el bottom de la primera ha de ser igual al top de la segona
-    bool isBottom(int desktop1, int desktop2);
-    /// Indica si la primera pantalla està a l'esquerra de la segona. Per que sigui cert han de ser de la mateixa alçada
-    /// i el right de la primera ha de ser igual al left de la segona
-    bool isLeft(int desktop1, int desktop2);
-    /// Indica si la primera pantalla està a la dreta de la segona. Per que sigui cert han de ser de la mateixa alçada
-    /// i el left de la primera ha de ser igual al right de la segona
-    bool isRight(int desktop1, int desktop2);
-    /// Indica si la primera pantalla està en diagonal a sobre a l'esquerra de la segona. Per que sigui cert
-    /// el punt bottomRight de la primera ha de ser igual al punt topLeft de la segona
-    bool isTopLeft(int desktop1, int desktop2);
-    /// Indica si la primera pantalla està en diagonal a sobre a la dreta de la segona. Per que sigui cert
-    /// el punt bottomLeft de la primera ha de ser igual al punt topRight de la segona
-    bool isTopRight(int desktop1, int desktop2);
-    /// Indica si la primera pantalla està en diagonal a sota a l'esquerra de la segona. Per que sigui cert
-    /// el punt topRight de la primera ha de ser igual al punt bottomLeft de la segona
-    bool isBottomLeft(int desktop1, int desktop2);
-    /// Indica si la primera pantalla està en diagonal a sota a la dreta de la segona. Per que sigui cert
-    /// el punt topLeft de la primera ha de ser igual al punt bottomRight de la segona
-    bool isBottomRight(int desktop1, int desktop2);
-
     /// Retorna el punt de més adalt a l'esquerra segons la geometria disponible.
     /// (tenint en compte la barra de tasques)
     QPoint getTopLeft(const DynamicMatrix &dynamicMatrix) const;
@@ -92,9 +67,6 @@ private:
 
     /// Distribució de pantalles
     ScreenLayout m_screenLayout;
-    
-    /// Quan dues finestres estan a menys de SamePosition de distància es consideren a la mateixa posició
-    const int SamePosition;
 };
 
 } // End namespace udg
