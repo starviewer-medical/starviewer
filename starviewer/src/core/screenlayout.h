@@ -38,6 +38,11 @@ public:
     int getScreenOnTheRightOf(int screenID) const;
     int getScreenOnTheLeftOf(int screenID) const;
 
+    /// Ens indica quina és la pantalla que es considera anterior/posterior en el layout respecte a la pantalla passada per paràmetre
+    /// Retorna el mateix ID si no tenim més pantalles que la nostra i -1 si la pantalla passada no existeix.
+    int getPreviousScreenOf(int screenID) const;
+    int getNextScreenOf(int screenID) const;
+    
     /// Indica si la primera pantalla està per sobre de la segona. Comprova que el bottom de la primera estigui per sobre del top de la segona.
     bool isOver(int screen1, int screen2) const;
     

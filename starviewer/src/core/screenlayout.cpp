@@ -133,6 +133,132 @@ int ScreenLayout::getScreenOnTheLeftOf(int screenID) const
     return leftScreen;
 }
 
+int ScreenLayout::getPreviousScreenOf(int screenID) const
+{
+    if (getIndexOfScreen(screenID) < 0)
+    {
+        return -1;
+    }
+    
+    Screen currentScreen = getScreen(screenID);
+
+    int previousScreenID = getScreenOnTheLeftOf(screenID);
+    // Si no hi ha cap pantalla a l'esquerra, llavors busquem la de més a la dreta que està per sobre d'aquesta
+    if (previousScreenID == -1)
+    {
+        Screen screen;
+        for (int i = 0; i < getNumberOfScreens(); i++)
+        {
+            screen = getScreen(i);
+            if (screen.isHigher(currentScreen))
+            {
+                // Si encara no hem trobat cap pantalla
+                if (previousScreenID == -1)
+                {
+                    previousScreenID = i;
+                }
+                // De les pantalles de sobre, volem la més a la dreta
+                else if (isOnRight(i, previousScreenID))
+                {
+                    previousScreenID = i;
+                }
+            }
+        }
+    }
+
+    // Si no hi ha cap pantalla per sobre de la actual, agafarem la de més avall a la dreta
+    if (previousScreenID == -1)
+    {
+        Screen screen;
+        // Amb això assegurem que mai arribarà al moveToDesktop valent -1
+        previousScreenID = 0;
+        for (int i = 1; i < getNumberOfScreens(); i++)
+        {
+            screen = getScreen(i);
+            // Si està per sota de l'actual ens la quedem
+            if (isUnder(i, previousScreenID))
+            {
+                previousScreenID = i;
+            }
+            // Si no, si no està per sobre, l'agafem si està més a la dreta que l'actual
+            else
+            {
+                Screen previousScreen = getScreen(previousScreenID);
+                if (!isOver(i, previousScreenID) && screen.isMoreToTheRight(previousScreen))
+                {
+                    previousScreenID = i;
+                }
+            }
+        }
+    }
+
+    return previousScreenID;
+}
+
+int ScreenLayout::getNextScreenOf(int screenID) const
+{
+    if (getIndexOfScreen(screenID) < 0)
+    {
+        return -1;
+    }
+    
+    Screen currentScreen = getScreen(screenID);
+
+    // Buscar una pantalla a la dreta i a la mateixa altura + o -
+    int nextScreenID = getScreenOnTheRightOf(screenID);
+    
+    // Si no hi ha cap pantalla a la dreta, llavors busquem la de més a l'esquerra que està per sota d'aquesta
+    if (nextScreenID == -1)
+    {
+        Screen screen;
+        for (int i = 0; i < getNumberOfScreens(); i++)
+        {
+            screen = getScreen(i);
+            if (screen.isLower(currentScreen))
+            {
+                // Si encara no hem trobat cap pantalla
+                if (nextScreenID == -1)
+                {
+                    nextScreenID = i;
+                }
+                // De les pantalles de sota, volem la més a l'esquerra
+                else if (isOnLeft(i, nextScreenID))
+                {
+                    nextScreenID = i;
+                }
+            }
+        }
+    }
+
+    // Si no hi ha cap patalla per sota de la actual, agafarem la de més amunt a l'esquerra
+    if (nextScreenID == -1)
+    {
+        Screen screen;
+        // Amb això assegurem que mai arribarà al moveToDesktop valent -1
+        nextScreenID = 0;
+        for (int i = 1; i < getNumberOfScreens(); i++)
+        {
+            screen = getScreen(i);
+            // Si està per sobre de l'actual ens la quedem
+            if (isOver(i, nextScreenID))
+            {
+                nextScreenID = i;
+            }
+            // Si no, si no està per sota, l'agafem si està més a l'esquerra que l'actual
+            else
+            {
+                Screen nextScreen = getScreen(nextScreenID);
+                if (!isUnder(i, nextScreenID) && screen.isMoreToTheLeft(nextScreen))
+                {
+                    nextScreenID = i;
+                }
+            }
+        }
+    }
+
+    return nextScreenID;
+}
+
 bool ScreenLayout::isOver(int screen1, int screen2) const
 {
     if (getIndexOfScreen(screen1) == Screen::NullScreenID || getIndexOfScreen(screen2) == Screen::NullScreenID)
