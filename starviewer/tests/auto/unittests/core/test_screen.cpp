@@ -35,10 +35,35 @@ private slots:
     void isOnRight_returnsExpectedValues_data();
     void isOnRight_returnsExpectedValues();
 
+    void isTop_returnsExpectedValues_data();
+    void isTop_returnsExpectedValues();
+
+    void isBottom_returnsExpectedValues_data();
+    void isBottom_returnsExpectedValues();
+
+    void isLeft_returnsExpectedValues_data();
+    void isLeft_returnsExpectedValues();
+
+    void isRight_returnsExpectedValues_data();
+    void isRight_returnsExpectedValues();
+
+    void isTopLeft_returnsExpectedValues_data();
+    void isTopLeft_returnsExpectedValues();
+
+    void isTopRight_returnsExpectedValues_data();
+    void isTopRight_returnsExpectedValues();
+
+    void isBottomLeft_returnsExpectedValues_data();
+    void isBottomLeft_returnsExpectedValues();
+
+    void isBottomRight_returnsExpectedValues_data();
+    void isBottomRight_returnsExpectedValues();
+
 private:
     void setup_isHigherLower_data();
     void setup_isMoreToTheLeftRight_data();
     void setup_isOverUnderLeftRight_data();
+    void setup_isTopBottomEtc_data();
 };
 
 Q_DECLARE_METATYPE(Screen)
@@ -323,6 +348,244 @@ void test_Screen::isOnRight_returnsExpectedValues()
     QFETCH(bool, expectedIsOnRightValue);
 
     QCOMPARE(screen1.isOnRight(screen2), expectedIsOnRightValue);
+}
+
+void test_Screen::setup_isTopBottomEtc_data()
+{
+    QTest::addColumn<Screen>("screen1");
+    QTest::addColumn<Screen>("screen2");
+    QTest::addColumn<bool>("expectedIsTopValue");
+    QTest::addColumn<bool>("expectedIsBottomValue");
+    QTest::addColumn<bool>("expectedIsLeftValue");
+    QTest::addColumn<bool>("expectedIsRightValue");
+    QTest::addColumn<bool>("expectedIsTopLeftValue");
+    QTest::addColumn<bool>("expectedIsTopRightValue");
+    QTest::addColumn<bool>("expectedIsBottomLeftValue");
+    QTest::addColumn<bool>("expectedIsBottomRightValue");
+    
+    Screen topLeftScreen;
+    topLeftScreen.setGeometry(QRect(0, 0, 20, 20));
+    
+    Screen topRightScreen;
+    topRightScreen.setGeometry(QRect(21, 0, 20, 20));
+
+    Screen bottomLeftScreen;
+    bottomLeftScreen.setGeometry(QRect(0, 21, 20, 20));
+
+    Screen bottomRightScreen;
+    bottomRightScreen.setGeometry(QRect(21, 21, 20, 20));
+    
+    QTest::newRow("Default build screens") << Screen() << Screen() << true << true << true << true
+        << true << true << true << true;
+    
+    QTest::newRow("top screen, same width & height, within separation limits (1)") << topLeftScreen << bottomLeftScreen << true << false << false << false
+        << false << false << false << false;
+    QTest::newRow("top screen, same width & height, within separation limits (2)") << topRightScreen << bottomRightScreen << true << false << false << false
+        << false << false << false << false;
+    
+    QTest::newRow("bottom screen, same width & height, within separation limits (1)") << bottomLeftScreen << topLeftScreen << false << true << false << false
+        << false << false << false << false;
+    QTest::newRow("bottom screen, same width & height, within separation limits (2)") << bottomRightScreen << topRightScreen << false << true << false << false
+        << false << false << false << false;
+    
+    QTest::newRow("left screen, same width & height, same top, within separation limits (1)") << topLeftScreen << topRightScreen << false << false << true << false
+        << false << false << false << false;
+    QTest::newRow("left screen, same width & height, same top, within separation limits (2)") << bottomLeftScreen << bottomRightScreen << false << false << true << false
+        << false << false << false << false;
+    QTest::newRow("left screen, same width & height, different top, within separation limits (1)") << topLeftScreen << bottomRightScreen << false << false << false << false
+        << true << false << false << true; // TODO mirar cas true bottomRight, potser cal corregir mètode
+    QTest::newRow("left screen, same width & height, different top, within separation limits (2)") << bottomLeftScreen << topRightScreen << false << false << false << false
+        << false << true << true << false; // TODO mirar cas true topRight, potser cal corregir mètode
+
+    QTest::newRow("right screen, same width & height, same top, within separation limits (1)") << topRightScreen << topLeftScreen << false << false << false << true
+        << false << false << false << false;
+    QTest::newRow("right screen, same width & height, same top, within separation limits (2)") << bottomRightScreen << bottomLeftScreen << false << false << false << true
+        << false << false << false << false;
+    
+    QTest::newRow("right screen, same width & height, different top, within separation limits (1)") << bottomRightScreen << topLeftScreen << false << false << false << false
+        << true << false << false << true; // TODO mirar cas true topLeft, potser cal corregir mètode
+    QTest::newRow("right screen, same width & height, different top, within separation limits (2)") << topRightScreen << bottomLeftScreen << false << false << false << false
+        << false << true << true << false; // TODO mirar cas true bottomLeft, potser cal corregir mètode
+
+    // Fem que estiguin prou separades com perquè cap mètode doni true
+    topLeftScreen.setGeometry(QRect(0, 0, 20, 20));
+    topRightScreen.setGeometry(QRect(24, 0, 20, 20));
+    bottomLeftScreen.setGeometry(QRect(0, 24, 20, 20));
+    bottomRightScreen.setGeometry(QRect(24, 24, 20, 20));
+    
+    QTest::newRow("top screen, same width & height, outside separation limits (1)") << topLeftScreen << bottomLeftScreen << false << false << false << false
+        << false << false << false << false;
+    QTest::newRow("top screen, same width & height, outside separation limits (2)") << topRightScreen << bottomRightScreen << false << false << false << false
+        << false << false << false << false;
+    
+    QTest::newRow("bottom screen, same width & height, outside separation limits (1)") << bottomLeftScreen << topLeftScreen << false << false << false << false
+        << false << false << false << false;
+    QTest::newRow("bottom screen, same width & height, outside separation limits (2)") << bottomRightScreen << topRightScreen << false << false << false << false
+        << false << false << false << false;
+    
+    QTest::newRow("left screen, same width & height, same top, outside separation limits (1)") << topLeftScreen << topRightScreen << false << false << false << false
+        << false << false << false << false;
+    QTest::newRow("left screen, same width & height, same top, outside separation limits (2)") << bottomLeftScreen << bottomRightScreen << false << false << false << false
+        << false << false << false << false;
+    QTest::newRow("left screen, same width & height, different top, outside separation limits (1)") << topLeftScreen << bottomRightScreen << false << false << false << false
+        << true << false << false << true; // TODO Mirar cas bottomRight true, potser cal corregir mètode
+    QTest::newRow("left screen, same width & height, different top, outside separation limits (2)") << bottomLeftScreen << topRightScreen << false << false << false << false
+        << false << true << true << false; // TODO Mirar cas topRight true, potser cal corregir mètode
+
+    QTest::newRow("right screen, same width & height, same top, outside separation limits (1)") << topRightScreen << topLeftScreen << false << false << false << false
+        << false << false << false << false;
+    QTest::newRow("right screen, same width & height, same top, outside separation limits (2)") << bottomRightScreen << bottomLeftScreen << false << false << false << false
+        << false << false << false << false;
+    QTest::newRow("right screen, same width & height, different top, outside separation limits (1)") << bottomRightScreen << topLeftScreen << false << false << false << false
+        << true << false << false << true; // TODO mirar cas true topLeft, potser cal corregir mètode
+    QTest::newRow("right screen, same width & height, different top, outside separation limits (2)") << topRightScreen << bottomLeftScreen << false << false << false << false
+        << false << true << true << false; // TODO mirar cas true bottomLeft, potser cal corregir mètode
+
+    // Fem que tinguin mides diferents
+    topLeftScreen.setGeometry(QRect(0, 0, 20, 15));
+    topRightScreen.setGeometry(QRect(22, 0, 20, 30));
+    bottomLeftScreen.setGeometry(QRect(0, 17, 20, 25));
+    bottomRightScreen.setGeometry(QRect(22, 32, 30, 10));
+    
+    QTest::newRow("top screen, same width, different height, within separation limits (1)") << topLeftScreen << bottomLeftScreen << true << false << false << false
+        << false << false << false << false;
+    QTest::newRow("top screen, different width, same height, within separation limits (2)") << topRightScreen << bottomRightScreen << false << false << false << false
+        << false << false << false << false;
+
+    QTest::newRow("bottom screen, same width, different height, within separation limits (1)") << bottomLeftScreen << topLeftScreen << false << true << false << false
+        << false << false << false << false;
+    QTest::newRow("bottom screen, different width, same height, within separation limits (2)") << bottomRightScreen << topRightScreen << false << false << false << false
+        << false << false << false << false;
+
+    QTest::newRow("left screen, same width, different height, same top, within separation limits (1)") << topLeftScreen << topRightScreen << false << false << false << false
+        << false << false << false << false;
+    QTest::newRow("left screen, different width & height, different top, within separation limits (2)") << bottomLeftScreen << bottomRightScreen << false << false << false << false
+        << false << false << false << false;
+    QTest::newRow("left screen, different width & height, different top, within separation limits (1)") << topLeftScreen << bottomRightScreen << false << false << false << false
+        << false << false << false << false;
+    QTest::newRow("left screen, same width, different height, different top, within separation limits (2)") << bottomLeftScreen << topRightScreen << false << false << false << false
+        << false << true << false << false; // TODO mirar cas topRight true, potser cal corregir el mètode
+
+    QTest::newRow("right screen, same width, different height, same top, within separation limits (1)") << topRightScreen << topLeftScreen << false << false << false << false
+        << false << false << false << false;
+    QTest::newRow("right screen, different width & height, different top, within separation limits (2)") << bottomRightScreen << bottomLeftScreen << false << false << false << false
+        << false << false << false << false;
+    QTest::newRow("right screen, different width & height, different top, within separation limits (1)") << bottomRightScreen << topLeftScreen << false << false << false << false
+        << false << false << false << false;
+    QTest::newRow("right screen, same width, different height, different top, within separation limits (2)") << topRightScreen << bottomLeftScreen << false << false << false << false
+        << false << false << true << false; // TODO mirar cas bottomLeft true, potser cal corregir el mètode
+}
+
+void test_Screen::isTop_returnsExpectedValues_data()
+{
+    this->setup_isTopBottomEtc_data();
+}
+
+void test_Screen::isTop_returnsExpectedValues()
+{
+    QFETCH(Screen, screen1);
+    QFETCH(Screen, screen2);
+    QFETCH(bool, expectedIsTopValue);
+
+    QCOMPARE(screen1.isTop(screen2), expectedIsTopValue);
+}
+
+void test_Screen::isBottom_returnsExpectedValues_data()
+{
+    this->setup_isTopBottomEtc_data();
+}
+
+void test_Screen::isBottom_returnsExpectedValues()
+{
+    QFETCH(Screen, screen1);
+    QFETCH(Screen, screen2);
+    QFETCH(bool, expectedIsBottomValue);
+
+    QCOMPARE(screen1.isBottom(screen2), expectedIsBottomValue);
+}
+
+void test_Screen::isLeft_returnsExpectedValues_data()
+{
+    this->setup_isTopBottomEtc_data();
+}
+
+void test_Screen::isLeft_returnsExpectedValues()
+{
+    QFETCH(Screen, screen1);
+    QFETCH(Screen, screen2);
+    QFETCH(bool, expectedIsLeftValue);
+
+    QCOMPARE(screen1.isLeft(screen2), expectedIsLeftValue);
+}
+
+void test_Screen::isRight_returnsExpectedValues_data()
+{
+    this->setup_isTopBottomEtc_data();
+}
+
+void test_Screen::isRight_returnsExpectedValues()
+{
+    QFETCH(Screen, screen1);
+    QFETCH(Screen, screen2);
+    QFETCH(bool, expectedIsRightValue);
+
+    QCOMPARE(screen1.isRight(screen2), expectedIsRightValue);
+}
+
+void test_Screen::isTopLeft_returnsExpectedValues_data()
+{
+    this->setup_isTopBottomEtc_data();
+}
+
+void test_Screen::isTopLeft_returnsExpectedValues()
+{
+    QFETCH(Screen, screen1);
+    QFETCH(Screen, screen2);
+    QFETCH(bool, expectedIsTopLeftValue);
+
+    QCOMPARE(screen1.isTopLeft(screen2), expectedIsTopLeftValue);
+}
+
+void test_Screen::isTopRight_returnsExpectedValues_data()
+{
+    this->setup_isTopBottomEtc_data();
+}
+
+void test_Screen::isTopRight_returnsExpectedValues()
+{
+    QFETCH(Screen, screen1);
+    QFETCH(Screen, screen2);
+    QFETCH(bool, expectedIsTopRightValue);
+
+    QCOMPARE(screen1.isTopRight(screen2), expectedIsTopRightValue);
+}
+
+void test_Screen::isBottomLeft_returnsExpectedValues_data()
+{
+    this->setup_isTopBottomEtc_data();
+}
+
+void test_Screen::isBottomLeft_returnsExpectedValues()
+{
+    QFETCH(Screen, screen1);
+    QFETCH(Screen, screen2);
+    QFETCH(bool, expectedIsBottomLeftValue);
+
+    QCOMPARE(screen1.isBottomLeft(screen2), expectedIsBottomLeftValue);
+}
+
+void test_Screen::isBottomRight_returnsExpectedValues_data()
+{
+    this->setup_isTopBottomEtc_data();
+}
+
+void test_Screen::isBottomRight_returnsExpectedValues()
+{
+    QFETCH(Screen, screen1);
+    QFETCH(Screen, screen2);
+    QFETCH(bool, expectedIsBottomRightValue);
+
+    QCOMPARE(screen1.isBottomRight(screen2), expectedIsBottomRightValue);
 }
 
 DECLARE_TEST(test_Screen)

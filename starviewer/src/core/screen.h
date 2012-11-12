@@ -57,6 +57,38 @@ public:
     /// Indica si aquesta pantalla està completament a la dreta de l'altra. Comprova que el left d'aquesta sigui major que el right de l'altra.
     bool isOnRight(const Screen &screen) const;
     
+    /// Indica si aquesta pantalla està sobre de l'altra. Per que sigui cert han de ser de la mateixa amplada
+    /// i el top d'aquesta ha de ser igual al bottom de l'altra
+    bool isTop(const Screen &screen) const;
+    
+    /// Indica si aquesta pantalla està sota de l'altra. Per que sigui cert han de ser de la mateixa amplada
+    /// i el bottom d'aquesta ha de ser igual al top de l'altra
+    bool isBottom(const Screen &screen) const;
+    
+    /// Indica si aquesta pantalla està a l'esquerra de l'altra. Per que sigui cert han de ser de la mateixa alçada
+    /// i el right d'aquesta ha de ser igual al left de l'altra
+    bool isLeft(const Screen &screen) const;
+    
+    /// Indica si aquesta pantalla està a la dreta de l'altra. Per que sigui cert han de ser de la mateixa alçada
+    /// i el left d'aquesta ha de ser igual al right de l'altra
+    bool isRight(const Screen &screen) const;
+    
+    /// Indica si aquesta pantalla està en diagonal a sobre a l'esquerra de l'altra. Per que sigui cert
+    /// el punt bottomRight d'aquesta ha de ser igual al punt topLeft de l'altra
+    bool isTopLeft(const Screen &screen) const;
+    
+    /// Indica si aquesta pantalla està en diagonal a sobre a la dreta de l'altra. Per que sigui cert
+    /// el punt bottomLeft d'aquesta ha de ser igual al punt topRight de l'altra
+    bool isTopRight(const Screen &screen) const;
+    
+    /// Indica si aquesta pantalla està en diagonal a sota a l'esquerra de l'altra. Per que sigui cert
+    /// el punt topRight d'aquesta ha de ser igual al punt bottomLeft de l'altra
+    bool isBottomLeft(const Screen &screen) const;
+    
+    /// Indica si aquesta pantalla està en diagonal a sota a la dreta de l'altra. Per que sigui cert
+    /// el punt topLeft d'aquesta ha de ser igual al punt bottomRight de l'altra
+    bool isBottomRight(const Screen &screen) const;
+    
     /// Operador igualtat
     bool operator==(const Screen &screen) const;
     
@@ -64,6 +96,9 @@ public:
     static const int NullScreenID;
 
 private:
+    /// Threshold amb el que definim la màxima distància entre finestres per determinar que estan de cantó
+    static const int MaximumDistanceInBetween;
+    
     /// Inicialitza valors per defecte
     void initializeValues();
 
