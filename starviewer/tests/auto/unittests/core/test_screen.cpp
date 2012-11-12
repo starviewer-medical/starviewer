@@ -23,9 +23,22 @@ private slots:
     void isMoreToTheRight_returnsExpectedValues_data();
     void isMoreToTheRight_returnsExpectedValues();
 
+    void isOver_returnsExpectedValues_data();
+    void isOver_returnsExpectedValues();
+
+    void isUnder_returnsExpectedValues_data();
+    void isUnder_returnsExpectedValues();
+
+    void isOnLeft_returnsExpectedValues_data();
+    void isOnLeft_returnsExpectedValues();
+
+    void isOnRight_returnsExpectedValues_data();
+    void isOnRight_returnsExpectedValues();
+
 private:
     void setup_isHigherLower_data();
     void setup_isMoreToTheLeftRight_data();
+    void setup_isOverUnderLeftRight_data();
 };
 
 Q_DECLARE_METATYPE(Screen)
@@ -215,6 +228,101 @@ void test_Screen::isMoreToTheRight_returnsExpectedValues()
     QFETCH(bool, rightExpectedValue);
 
     QCOMPARE(screen1.isMoreToTheRight(screen2), rightExpectedValue);
+}
+
+void test_Screen::setup_isOverUnderLeftRight_data()
+{
+    QTest::addColumn<Screen>("screen1");
+    QTest::addColumn<Screen>("screen2");
+    QTest::addColumn<bool>("expectedIsOverValue");
+    QTest::addColumn<bool>("expectedIsUnderValue");
+    QTest::addColumn<bool>("expectedIsOnLeftValue");
+    QTest::addColumn<bool>("expectedIsOnRightValue");
+
+    Screen topLeftScreen;
+    topLeftScreen.setGeometry(QRect(0, 0, 20, 20));
+    
+    Screen topRightScreen;
+    topRightScreen.setGeometry(QRect(25, 0, 20, 20));
+
+    Screen bottomLeftScreen;
+    bottomLeftScreen.setGeometry(QRect(0, 25, 20, 20));
+
+    Screen bottomRightScreen;
+    bottomRightScreen.setID(3);
+    bottomRightScreen.setGeometry(QRect(25, 25, 20, 20));
+
+    QTest::newRow("Default build  empty screens") << Screen() << Screen() << true << true << true << true;
+    QTest::newRow("Same geometry screens") << topLeftScreen << topLeftScreen << false << false << false << false;
+    
+    QTest::newRow("0 left- 1 right") << topLeftScreen << topRightScreen << false << false << true << false;
+    QTest::newRow("2 left- 3 right") << bottomLeftScreen << bottomRightScreen << false << false << true << false;
+    QTest::newRow("0 left top- 3 right bottom") << topLeftScreen << bottomRightScreen << true << false << true << false;
+    QTest::newRow("2 left bottom- 1 right top") << bottomLeftScreen << topRightScreen << false << true << true << false;
+    QTest::newRow("1 right- 0 left") << topRightScreen << topLeftScreen << false << false << false << true;
+    QTest::newRow("3 right- 2 left") << bottomRightScreen << bottomLeftScreen << false << false << false << true;
+    QTest::newRow("1 right top- 2 left bottom") << topRightScreen << bottomLeftScreen << true << false << false << true;
+    QTest::newRow("3 right bottom- 0 left top") << bottomRightScreen << topLeftScreen << false << true << false << true;
+    QTest::newRow("0 top - 2 bottom") << topLeftScreen << bottomLeftScreen << true << false << false << false;
+    QTest::newRow("1 top - 3 bottom") << topRightScreen << bottomRightScreen << true << false << false << false;
+    QTest::newRow("2 bottom - 0 top") << bottomLeftScreen << topLeftScreen<< false << true << false << false;
+    QTest::newRow("3 bottom - 1 top") << bottomRightScreen << topRightScreen << false << true << false << false;
+}
+
+void test_Screen::isOver_returnsExpectedValues_data()
+{
+    this->setup_isOverUnderLeftRight_data();
+}
+
+void test_Screen::isOver_returnsExpectedValues()
+{
+    QFETCH(Screen, screen1);
+    QFETCH(Screen, screen2);
+    QFETCH(bool, expectedIsOverValue);
+
+    QCOMPARE(screen1.isOver(screen2), expectedIsOverValue);
+}
+
+void test_Screen::isUnder_returnsExpectedValues_data()
+{
+    this->setup_isOverUnderLeftRight_data();
+}
+
+void test_Screen::isUnder_returnsExpectedValues()
+{
+    QFETCH(Screen, screen1);
+    QFETCH(Screen, screen2);
+    QFETCH(bool, expectedIsUnderValue);
+
+    QCOMPARE(screen1.isUnder(screen2), expectedIsUnderValue);
+}
+
+void test_Screen::isOnLeft_returnsExpectedValues_data()
+{
+    this->setup_isOverUnderLeftRight_data();
+}
+
+void test_Screen::isOnLeft_returnsExpectedValues()
+{
+    QFETCH(Screen, screen1);
+    QFETCH(Screen, screen2);
+    QFETCH(bool, expectedIsOnLeftValue);
+
+    QCOMPARE(screen1.isOnLeft(screen2), expectedIsOnLeftValue);
+}
+
+void test_Screen::isOnRight_returnsExpectedValues_data()
+{
+    this->setup_isOverUnderLeftRight_data();
+}
+
+void test_Screen::isOnRight_returnsExpectedValues()
+{
+    QFETCH(Screen, screen1);
+    QFETCH(Screen, screen2);
+    QFETCH(bool, expectedIsOnRightValue);
+
+    QCOMPARE(screen1.isOnRight(screen2), expectedIsOnRightValue);
 }
 
 DECLARE_TEST(test_Screen)

@@ -110,6 +110,42 @@ bool Screen::isMoreToTheRight(const Screen &screen)
     return false;
 }
 
+bool Screen::isOver(const Screen &screen) const
+{
+    if (m_geometry.bottom() <= screen.getGeometry().top())
+    {
+        return true;
+    }
+    return false;
+}
+
+bool Screen::isUnder(const Screen &screen) const
+{
+    if (m_geometry.top() >= screen.getGeometry().bottom())
+    {
+        return true;
+    }
+    return false;
+}
+
+bool Screen::isOnLeft(const Screen &screen) const
+{
+    if (m_geometry.right() <= screen.getGeometry().left())
+    {
+        return true;
+    }
+    return false;
+}
+
+bool Screen::isOnRight(const Screen &screen) const
+{
+    if (m_geometry.left() >= screen.getGeometry().right())
+    {
+        return true;
+    }
+    return false;
+}
+
 bool Screen::operator==(const Screen &screen) const
 {
     return m_isPrimary == screen.m_isPrimary
