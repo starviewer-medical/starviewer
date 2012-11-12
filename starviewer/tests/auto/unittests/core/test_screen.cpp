@@ -393,9 +393,9 @@ void test_Screen::setup_isTopBottomEtc_data()
     QTest::newRow("left screen, same width & height, same top, within separation limits (2)") << bottomLeftScreen << bottomRightScreen << false << false << true << false
         << false << false << false << false;
     QTest::newRow("left screen, same width & height, different top, within separation limits (1)") << topLeftScreen << bottomRightScreen << false << false << false << false
-        << true << false << false << true; // TODO mirar cas true bottomRight, potser cal corregir mètode
+        << true << false << false << false;
     QTest::newRow("left screen, same width & height, different top, within separation limits (2)") << bottomLeftScreen << topRightScreen << false << false << false << false
-        << false << true << true << false; // TODO mirar cas true topRight, potser cal corregir mètode
+        << false << false << true << false;
 
     QTest::newRow("right screen, same width & height, same top, within separation limits (1)") << topRightScreen << topLeftScreen << false << false << false << true
         << false << false << false << false;
@@ -403,9 +403,9 @@ void test_Screen::setup_isTopBottomEtc_data()
         << false << false << false << false;
     
     QTest::newRow("right screen, same width & height, different top, within separation limits (1)") << bottomRightScreen << topLeftScreen << false << false << false << false
-        << true << false << false << true; // TODO mirar cas true topLeft, potser cal corregir mètode
+        << false << false << false << true;
     QTest::newRow("right screen, same width & height, different top, within separation limits (2)") << topRightScreen << bottomLeftScreen << false << false << false << false
-        << false << true << true << false; // TODO mirar cas true bottomLeft, potser cal corregir mètode
+        << false << true << false << false;
 
     // Fem que estiguin prou separades com perquè cap mètode doni true
     topLeftScreen.setGeometry(QRect(0, 0, 20, 20));
@@ -428,18 +428,18 @@ void test_Screen::setup_isTopBottomEtc_data()
     QTest::newRow("left screen, same width & height, same top, outside separation limits (2)") << bottomLeftScreen << bottomRightScreen << false << false << false << false
         << false << false << false << false;
     QTest::newRow("left screen, same width & height, different top, outside separation limits (1)") << topLeftScreen << bottomRightScreen << false << false << false << false
-        << true << false << false << true; // TODO Mirar cas bottomRight true, potser cal corregir mètode
+        << false << false << false << false;
     QTest::newRow("left screen, same width & height, different top, outside separation limits (2)") << bottomLeftScreen << topRightScreen << false << false << false << false
-        << false << true << true << false; // TODO Mirar cas topRight true, potser cal corregir mètode
+        << false << false << false << false;
 
     QTest::newRow("right screen, same width & height, same top, outside separation limits (1)") << topRightScreen << topLeftScreen << false << false << false << false
         << false << false << false << false;
     QTest::newRow("right screen, same width & height, same top, outside separation limits (2)") << bottomRightScreen << bottomLeftScreen << false << false << false << false
         << false << false << false << false;
     QTest::newRow("right screen, same width & height, different top, outside separation limits (1)") << bottomRightScreen << topLeftScreen << false << false << false << false
-        << true << false << false << true; // TODO mirar cas true topLeft, potser cal corregir mètode
+        << false << false << false << false;
     QTest::newRow("right screen, same width & height, different top, outside separation limits (2)") << topRightScreen << bottomLeftScreen << false << false << false << false
-        << false << true << true << false; // TODO mirar cas true bottomLeft, potser cal corregir mètode
+        << false << false << false << false;
 
     // Fem que tinguin mides diferents
     topLeftScreen.setGeometry(QRect(0, 0, 20, 15));
@@ -464,7 +464,7 @@ void test_Screen::setup_isTopBottomEtc_data()
     QTest::newRow("left screen, different width & height, different top, within separation limits (1)") << topLeftScreen << bottomRightScreen << false << false << false << false
         << false << false << false << false;
     QTest::newRow("left screen, same width, different height, different top, within separation limits (2)") << bottomLeftScreen << topRightScreen << false << false << false << false
-        << false << true << false << false; // TODO mirar cas topRight true, potser cal corregir el mètode
+        << false << false << false << false;
 
     QTest::newRow("right screen, same width, different height, same top, within separation limits (1)") << topRightScreen << topLeftScreen << false << false << false << false
         << false << false << false << false;
@@ -473,7 +473,7 @@ void test_Screen::setup_isTopBottomEtc_data()
     QTest::newRow("right screen, different width & height, different top, within separation limits (1)") << bottomRightScreen << topLeftScreen << false << false << false << false
         << false << false << false << false;
     QTest::newRow("right screen, same width, different height, different top, within separation limits (2)") << topRightScreen << bottomLeftScreen << false << false << false << false
-        << false << false << true << false; // TODO mirar cas bottomLeft true, potser cal corregir el mètode
+        << false << false << false << false;
 }
 
 void test_Screen::isTop_returnsExpectedValues_data()
