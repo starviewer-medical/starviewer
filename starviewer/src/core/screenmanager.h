@@ -79,15 +79,6 @@ private:
     /// el punt topLeft de la primera ha de ser igual al punt bottomRight de la segona
     bool isBottomRight(int desktop1, int desktop2);
 
-    /// Retorna l'identificador de la pantalla que hi ha a l'esquerra de la que es passa per paràmetres.
-    int whoIsLeft(int desktopIAm);
-    /// Retorna l'identificador de la pantalla que hi ha a la dreta de la que es passa per paràmetres.
-    int whoIsRight(int desktopIAm);
-    /// Retorna l'identificador de la pantalla que hi ha a sobre de la que es passa per paràmetres.
-    int whoIsTop(int desktopIAm);
-    /// Retorna l'identificador de la pantalla que hi ha a sota de la que es passa per paràmetres.
-    int whoIsBottom(int desktopIAm);
-
     /// Retorna el punt de més adalt a l'esquerra segons la geometria disponible.
     /// (tenint en compte la barra de tasques)
     QPoint getTopLeft(const DynamicMatrix &dynamicMatrix) const;

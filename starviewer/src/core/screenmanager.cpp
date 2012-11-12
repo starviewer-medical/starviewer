@@ -449,59 +449,6 @@ bool ScreenManager::isBottomRight(int desktop1, int desktop2)
     return false;
 }
 
-int ScreenManager::whoIsLeft(int desktopIAm)
-{
-    for (int i = 0; i < m_screenLayout.getNumberOfScreens(); i++)
-    {
-        if (isLeft(i, desktopIAm))
-        {
-            return i;
-        }
-    }
-
-    return -1;
-}
-
-int ScreenManager::whoIsRight(int desktopIAm)
-{
-    for (int i = 0; i < m_screenLayout.getNumberOfScreens(); i++)
-    {
-        if (isRight(i, desktopIAm))
-        {
-            return i;
-        }
-    }
-
-    return -1;
-}
-
-int ScreenManager::whoIsTop(int desktopIAm)
-{
-    for (int i = 0; i < m_screenLayout.getNumberOfScreens(); i++)
-    {
-        if (isTop(i, desktopIAm))
-        {
-            return i;
-        }
-    }
-
-    return -1;
-}
-
-int ScreenManager::whoIsBottom(int desktopIAm)
-{
-
-    for (int i = 0; i < m_screenLayout.getNumberOfScreens(); i++)
-    {
-        if (isBottom(i, desktopIAm))
-        {
-            return i;
-        }
-    }
-
-    return -1;
-}
-
 QPoint ScreenManager::getTopLeft(const DynamicMatrix &dynamicMatrix) const
 {
     // Primer de tot buscar la cantonada esquerra, a partir de la llista de monitors a l'esquerra,
