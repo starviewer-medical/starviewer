@@ -5,6 +5,7 @@
 namespace udg {
 
 const int Screen::NullScreenID = -1;
+const int Screen::MaximumDistanceInBetween = 5;
 
 Screen::Screen()
 {
@@ -140,6 +141,116 @@ bool Screen::isOnLeft(const Screen &screen) const
 bool Screen::isOnRight(const Screen &screen) const
 {
     if (m_geometry.left() >= screen.getGeometry().right())
+    {
+        return true;
+    }
+    return false;
+}
+
+bool Screen::isTop(const Screen &screen) const
+{
+    // Esta posat a sobre
+    if (abs(m_geometry.bottom() - screen.getGeometry().top()) < MaximumDistanceInBetween)
+    {
+        // Te la mateixa alçada
+        int leftPart = abs(m_geometry.left() - screen.getGeometry().left());
+        int rightPart = abs(m_geometry.right() - screen.getGeometry().right());
+        if (leftPart + rightPart < MaximumDistanceInBetween)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool Screen::isBottom(const Screen &screen) const
+{
+    // Esta posat a sota
+    if (abs(m_geometry.top() - screen.getGeometry().bottom()) < MaximumDistanceInBetween)
+    {
+        // Te la mateixa alçada
+        int leftPart = abs(m_geometry.left() - screen.getGeometry().left());
+        int rightPart = abs(m_geometry.right() - screen.getGeometry().right());
+        if (leftPart + rightPart < MaximumDistanceInBetween)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool Screen::isLeft(const Screen &screen) const
+{
+    // Esta posat a l'esquerra
+    if (abs(m_geometry.right() - screen.getGeometry().left()) < MaximumDistanceInBetween)
+    {
+        // Te la mateixa alçada
+        int topPart = abs(m_geometry.top() - screen.getGeometry().top());
+        int bottomPart = abs(m_geometry.bottom() - screen.getGeometry().bottom());
+        if (topPart + bottomPart < MaximumDistanceInBetween)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Screen::isRight(const Screen &screen) const
+{
+    // Esta posat a l'esquerra
+    if (abs(m_geometry.left() - screen.getGeometry().right()) < MaximumDistanceInBetween)
+    {
+        // Te la mateixa alçada
+        int topPart = abs(m_geometry.top() - screen.getGeometry().top());
+        int bottomPart = abs(m_geometry.bottom() - screen.getGeometry().bottom());
+        if (topPart + bottomPart < MaximumDistanceInBetween)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Screen::isTopLeft(const Screen &screen) const
+{
+    int x = abs(m_geometry.bottomRight().x() - screen.getGeometry().topLeft().x());
+    int y = abs(m_geometry.bottomRight().y() - screen.getGeometry().topLeft().y());
+    if (abs(x * x - y * y) < MaximumDistanceInBetween)
+    {
+        return true;
+    }
+    return false;
+}
+
+bool Screen::isTopRight(const Screen &screen) const
+{
+    int x = abs(m_geometry.bottomLeft().x() - screen.getGeometry().topRight().x());
+    int y = abs(m_geometry.bottomLeft().y() - screen.getGeometry().topRight().y());
+    if (abs(x * x - y * y) < MaximumDistanceInBetween)
+    {
+        return true;
+    }
+    return false;
+}
+
+bool Screen::isBottomLeft(const Screen &screen) const
+{
+    int x = abs(m_geometry.topRight().x() - screen.getGeometry().bottomLeft().x());
+    int y = abs(m_geometry.topRight().y() - screen.getGeometry().bottomLeft().y());
+    if (abs(x * x - y * y) < MaximumDistanceInBetween)
+    {
+        return true;
+    }
+    return false;
+}
+
+bool Screen::isBottomRight(const Screen &screen) const
+{
+    int x = abs(m_geometry.topLeft().x() - screen.getGeometry().bottomRight().x());
+    int y = abs(m_geometry.topLeft().y() - screen.getGeometry().bottomRight().y());
+    if (abs(x * x - y * y) < MaximumDistanceInBetween)
     {
         return true;
     }
