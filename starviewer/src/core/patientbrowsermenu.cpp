@@ -131,7 +131,7 @@ void PatientBrowserMenu::popup(const QPoint &point, const QString &identifier)
     
     // Mirem si l'alçada  del widget excedeix l'alçada de la pantalla
     // En cas que sigui així anem afegint noves columnes per redistribuir els elements fins que l'alçada sigui menor a la de la pantalla
-    QRect currentScreenGeometry = screenManager.getAvailableScreenGeometry(m_currentScreenID);
+    QRect currentScreenGeometry = screenLayout.getScreen(m_currentScreenID).getAvailableGeometry();
     while (m_patientBrowserList->sizeHint().height() > currentScreenGeometry.height())
     {
         m_patientBrowserList->addColumn();
@@ -212,9 +212,9 @@ bool PatientBrowserMenu::shouldAlignMenuToTheRight(const QRect &currentScreenGeo
             {
                 // Tenim pantalles a esquerra i dreta. Cal escollir quina és la més adequada.
                 // Opció 1) La pantalla amb la mateixa alçada o major per mantenir aspecte
-                ScreenManager screenManager;
-                QRect leftScreenGeometry = screenManager.getScreenGeometry(m_leftScreenID);
-                QRect rightScreenGeometry = screenManager.getScreenGeometry(m_rightScreenID);
+                ScreenLayout screenLayout = ScreenManager().getScreenLayout();
+                QRect leftScreenGeometry = screenLayout.getScreen(m_leftScreenID).getGeometry();
+                QRect rightScreenGeometry = screenLayout.getScreen(m_rightScreenID).getGeometry();
 
                 if (leftScreenGeometry.height() >= rightScreenGeometry.height())
                 {
@@ -234,8 +234,8 @@ bool PatientBrowserMenu::shouldAlignMenuToTheRight(const QRect &currentScreenGeo
 void PatientBrowserMenu::computeListOutsideSize(const QPoint &popupPoint, QSize &out, bool rightAligned)
 {
     // Obtenim la geometria de la pantalla on se'ns ha demanat obrir el menú
-    ScreenManager screenManager;
-    QRect currentScreenGeometry = screenManager.getAvailableScreenGeometry(m_currentScreenID);
+    ScreenLayout screenLayout = ScreenManager().getScreenLayout();
+    QRect currentScreenGeometry = screenLayout.getScreen(m_currentScreenID).getAvailableGeometry();
     QPoint currentScreenGlobalOriginPoint = currentScreenGeometry.topLeft();
 
     // Calculem les mides dels widgets per saber on els hem de col·locar
@@ -269,8 +269,8 @@ void PatientBrowserMenu::computeListOutsideSize(const QPoint &popupPoint, QSize 
 
 void PatientBrowserMenu::placeAdditionalInfoWidget()
 {
-    ScreenManager screenManager;
-    QRect currentScreenGeometry = screenManager.getAvailableScreenGeometry(m_currentScreenID);
+    ScreenLayout screenLayout = ScreenManager().getScreenLayout();
+    QRect currentScreenGeometry = screenLayout.getScreen(m_currentScreenID).getAvailableGeometry();
     QPoint currentScreenGlobalOriginPoint = currentScreenGeometry.topLeft();
 
     // TODO Aquesta mesura no és la més exacta. L'adequada hauria de basar-se en els valors de QWidget::frameGeometry()

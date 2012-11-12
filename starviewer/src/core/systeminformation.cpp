@@ -119,10 +119,10 @@ QList<QString> SystemInformation::getGPUDriverVersion()
 QList<QSize> SystemInformation::getScreenResolutions()
 {
     QList<QSize> screenResolutions;
-    ScreenManager screenManager;
-    for (int i = 0; i < screenManager.getNumberOfScreens(); i++)
+    ScreenLayout layout = ScreenManager().getScreenLayout();
+    for (int i = 0; i < layout.getNumberOfScreens(); i++)
     {
-        screenResolutions.append(screenManager.getScreenGeometry(i).size());
+        screenResolutions.append(layout.getScreen(i).getGeometry().size());
     }
     return screenResolutions;
 }
