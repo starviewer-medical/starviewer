@@ -10,7 +10,29 @@ namespace udg {
 ScreenManager::ScreenManager()
 : SamePosition(5)
 {
+    setupCurrentScreenLayout();
+}
+
+void ScreenManager::setupCurrentScreenLayout()
+{
+    m_screenLayout.clear();
     m_applicationDesktop = QApplication::desktop();
+
+    Screen screen;
+    for (int i = 0; i < m_applicationDesktop->screenCount(); ++i)
+    {
+        screen.setID(i);
+        screen.setGeometry(m_applicationDesktop->screenGeometry(i));
+        screen.setAvailableGeometry(m_applicationDesktop->availableGeometry(i));
+        screen.setAsPrimary(m_applicationDesktop->primaryScreen() == i);
+        
+        m_screenLayout.addScreen(screen);
+    }
+}
+
+ScreenLayout ScreenManager::getScreenLayout() const
+{
+    return m_screenLayout;
 }
 
 void ScreenManager::maximize(QWidget *window)

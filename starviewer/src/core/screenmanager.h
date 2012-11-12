@@ -2,6 +2,7 @@
 #define UDGSCREENMANAGER_H
 
 #include "dynamicmatrix.h"
+#include "screenlayout.h"
 
 class QWidget;
 class QDesktopWidget;
@@ -18,7 +19,11 @@ class ScreenManager {
 public:
     /// Constructor per defecte.
     ScreenManager();
-    /// Mètode que maximitza la finestra passada per paràmetres a tantes pantalles com sigui possile per tal de que es vegi bé.
+    
+    /// Ens retorna el layout actual
+    ScreenLayout getScreenLayout() const;
+    
+    /// Mètode que maximitza la finestra passada per paràmetres a tantes pantalles com sigui possible per tal de que es vegi bé.
     void maximize(QWidget *window);
     /// Mètode per canviar la finestra especificada per el primer paràmetre a la pantalla amb l'identificador del segon paràmetre.
     void moveToDesktop(QWidget *window, int idDesktop);
@@ -54,6 +59,9 @@ public:
     int getPrimaryScreenID() const;
 
 private:
+    /// Prepara l'screen layout segons la configuració actual
+    void setupCurrentScreenLayout();
+    
     /// Calcula la matriu de distribució de les pantalles.
     /// Utilitza la classe DynamicMatrix per crear-se l'estructura de dades per representar la distribució de
     /// les pantalles a l'espai.
@@ -134,6 +142,10 @@ private:
 private:
     /// Gestor d'escriptori on es fan les crides referents al múltiples escriptoris o pantalles
     QDesktopWidget *m_applicationDesktop;
+
+    /// Distribució de pantalles
+    ScreenLayout m_screenLayout;
+    
     /// Quan dues finestres estan a menys de SamePosition de distància es consideren a la mateixa posició
     const int SamePosition;
 };
