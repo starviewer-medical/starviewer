@@ -81,7 +81,7 @@ int ScreenLayout::getPrimaryScreenID() const
     return id;
 }
 
-int ScreenLayout::getScreenOnTheRightOf(int screenID)
+int ScreenLayout::getScreenOnTheRightOf(int screenID) const
 {
     int rightScreen = Screen::NullScreenID;
     // Buscar una pantalla a la dreta i a la mateixa altura + o -
@@ -107,7 +107,7 @@ int ScreenLayout::getScreenOnTheRightOf(int screenID)
     return rightScreen;
 }
 
-int ScreenLayout::getScreenOnTheLeftOf(int screenID)
+int ScreenLayout::getScreenOnTheLeftOf(int screenID) const
 {
     int leftScreen = Screen::NullScreenID;
     // Buscar una pantalla a l'esquera i a la mateixa altura + o -
@@ -133,7 +133,7 @@ int ScreenLayout::getScreenOnTheLeftOf(int screenID)
     return leftScreen;
 }
 
-bool ScreenLayout::isOver(int screen1, int screen2)
+bool ScreenLayout::isOver(int screen1, int screen2) const
 {
     if (getIndexOfScreen(screen1) == Screen::NullScreenID || getIndexOfScreen(screen2) == Screen::NullScreenID)
     {
@@ -149,7 +149,7 @@ bool ScreenLayout::isOver(int screen1, int screen2)
     return false;
 }
 
-bool ScreenLayout::isUnder(int screen1, int screen2)
+bool ScreenLayout::isUnder(int screen1, int screen2) const
 {
     if (getIndexOfScreen(screen1) == Screen::NullScreenID || getIndexOfScreen(screen2) == Screen::NullScreenID)
     {
@@ -165,7 +165,7 @@ bool ScreenLayout::isUnder(int screen1, int screen2)
     return false;
 }
 
-bool ScreenLayout::isOnLeft(int screen1, int screen2)
+bool ScreenLayout::isOnLeft(int screen1, int screen2) const
 {
     if (getIndexOfScreen(screen1) == Screen::NullScreenID || getIndexOfScreen(screen2) == Screen::NullScreenID)
     {
@@ -181,7 +181,7 @@ bool ScreenLayout::isOnLeft(int screen1, int screen2)
     return false;
 }
 
-bool ScreenLayout::isOnRight(int screen1, int screen2)
+bool ScreenLayout::isOnRight(int screen1, int screen2) const
 {
     if (getIndexOfScreen(screen1) == Screen::NullScreenID || getIndexOfScreen(screen2) == Screen::NullScreenID)
     {
