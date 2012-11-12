@@ -39,6 +39,12 @@ private slots:
     void getScreenOnTheLeftOf_returnsExpectedValues_data();
     void getScreenOnTheLeftOf_returnsExpectedValues();
 
+    void getPreviousScreenOf_returnsExpectedValues_data();
+    void getPreviousScreenOf_returnsExpectedValues();
+
+    void getNextScreenOf_returnsExpectedValues_data();
+    void getNextScreenOf_returnsExpectedValues();
+
 private:
     /// Retorna un layout base
     ScreenLayout getSampleScreenLayout();
@@ -48,6 +54,8 @@ private:
 
     /// Prepara les dades comunes dels testos unitaris de getScreenOnTheRight/LeftOf()
     void setup_getScreenOnThe_data();
+
+    void setup_getPreviousNextScreenOf_data();
 };
 
 Q_DECLARE_METATYPE(QList<Screen>)
@@ -315,6 +323,55 @@ void test_ScreenLayout::getScreenOnTheLeftOf_returnsExpectedValues()
     QFETCH(int, expectedOnTheLeftValue);
 
     QCOMPARE(layout.getScreenOnTheLeftOf(screenID), expectedOnTheLeftValue);
+}
+
+void test_ScreenLayout::setup_getPreviousNextScreenOf_data()
+{
+    QTest::addColumn<ScreenLayout>("layout");
+    QTest::addColumn<int>("screenID");
+    QTest::addColumn<int>("expectedPreviousValue");
+    QTest::addColumn<int>("expectedNextValue");
+
+    Screen screen(QRect(0, 0, 100, 100), QRect());
+    screen.setID(0);
+    ScreenLayout layout;
+    layout.addScreen(screen);
+    QTest::newRow("Of single screen layout") << layout << 0 << 0 << 0;
+    
+    QTest::newRow("Non existing screen") << getSampleScreenLayout() << 600 << -1 << -1;
+    QTest::newRow("Invalid ID") << getSampleScreenLayout() << -1 << -1 << -1;
+    QTest::newRow("Screen 0") << getSampleScreenLayout() << 0 << 3 << 1;
+    QTest::newRow("Screen 1") << getSampleScreenLayout() << 1 << 0 << 2;
+    QTest::newRow("Screen 2") << getSampleScreenLayout() << 2 << 1 << 3;
+    QTest::newRow("Screen 3") << getSampleScreenLayout() << 3 << 2 << 0;
+}
+
+void test_ScreenLayout::getPreviousScreenOf_returnsExpectedValues_data()
+{
+    this->setup_getPreviousNextScreenOf_data();
+}
+
+void test_ScreenLayout::getPreviousScreenOf_returnsExpectedValues()
+{
+    QFETCH(ScreenLayout, layout);
+    QFETCH(int, screenID);
+    QFETCH(int, expectedPreviousValue);
+
+    QCOMPARE(layout.getPreviousScreenOf(screenID), expectedPreviousValue);
+}
+
+void test_ScreenLayout::getNextScreenOf_returnsExpectedValues_data()
+{
+    this->setup_getPreviousNextScreenOf_data();
+}
+
+void test_ScreenLayout::getNextScreenOf_returnsExpectedValues()
+{
+    QFETCH(ScreenLayout, layout);
+    QFETCH(int, screenID);
+    QFETCH(int, expectedNextValue);
+
+    QCOMPARE(layout.getNextScreenOf(screenID), expectedNextValue);
 }
 
 ScreenLayout test_ScreenLayout::getSampleScreenLayout()
