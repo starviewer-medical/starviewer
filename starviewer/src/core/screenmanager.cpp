@@ -8,7 +8,6 @@
 namespace udg {
 
 ScreenManager::ScreenManager()
-: SamePosition(5)
 {
     setupCurrentScreenLayout();
 }
@@ -152,20 +151,28 @@ DynamicMatrix ScreenManager::computeScreenMatrix(QWidget *window)
     dynamicMatrix.setValue(0, 0, desktopIAm);
     int numberOfScreens = m_screenLayout.getNumberOfScreens();
     bool changes = true;
+    Screen screen1;
+    Screen screen2;
     while (changes)
     {
         changes = false;
         for (int i = 0; i < numberOfScreens; i++)
         {
-            if (isLeft(i, dynamicMatrix.getValue(0, indexLeft)))
+            screen1 = m_screenLayout.getScreen(i);
+            screen2 = m_screenLayout.getScreen(dynamicMatrix.getValue(0, indexLeft));
+            if (screen1.isLeft(screen2))
             {
                 dynamicMatrix.setValue(0, --indexLeft, i);
                 changes = true;
             }
-            else if (isRight(i, dynamicMatrix.getValue(0, indexRight)))
+            else
             {
-                dynamicMatrix.setValue(0, ++indexRight, i);
-                changes = true;
+                screen2 = m_screenLayout.getScreen(dynamicMatrix.getValue(0, indexRight));
+                if (screen1.isRight(screen2))
+                {
+                    dynamicMatrix.setValue(0, ++indexRight, i);
+                    changes = true;
+                }
             }
         }
     }
@@ -187,7 +194,9 @@ DynamicMatrix ScreenManager::computeScreenMatrix(QWidget *window)
             int j = 0;
             while (j < numberOfScreens)
             {
-                if (isTop(j, dynamicMatrix.getValue(indexTop, index)))
+                screen1 = m_screenLayout.getScreen(j);
+                screen2 = m_screenLayout.getScreen(dynamicMatrix.getValue(indexTop, index));
+                if (screen1.isTop(screen2))
                 {
                     topRow.append(j);
                     found = true;
@@ -228,7 +237,9 @@ DynamicMatrix ScreenManager::computeScreenMatrix(QWidget *window)
             int j = 0;
             while (j < numberOfScreens)
             {
-                if (isBottom(j, dynamicMatrix.getValue(indexBottom, index)))
+                screen1 = m_screenLayout.getScreen(j);
+                screen2 = m_screenLayout.getScreen(dynamicMatrix.getValue(indexBottom, index));
+                if (screen1.isBottom(screen2))
                 {
                     bottomRow.append(j);
                     found = true;
@@ -321,132 +332,6 @@ void ScreenManager::fitInto(QWidget *window, int IdDesktop)
                         y,
                         width - leftBorder - rightBorder,
                         height - topBorder - bottomBorder);
-}
-
-bool ScreenManager::isTop(int desktop1, int desktop2)
-{
-    QRect screen1Geometry = m_screenLayout.getScreen(desktop1).getGeometry();
-    QRect screen2Geometry = m_screenLayout.getScreen(desktop2).getGeometry();
-    // Esta posat a sobre
-    if (abs(screen1Geometry.bottom() - screen2Geometry.top()) < SamePosition)
-    {
-        // Te la mateixa alçada
-        int leftPart = abs(screen1Geometry.left() - screen2Geometry.left());
-        int rightPart = abs(screen1Geometry.right() - screen2Geometry.right());
-        if (leftPart + rightPart < SamePosition)
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-bool ScreenManager::isBottom(int desktop1, int desktop2)
-{
-    QRect screen1Geometry = m_screenLayout.getScreen(desktop1).getGeometry();
-    QRect screen2Geometry = m_screenLayout.getScreen(desktop2).getGeometry();
-    // Esta posat a sota
-    if (abs(screen1Geometry.top() - screen2Geometry.bottom()) < SamePosition)
-    {
-        // Te la mateixa alçada
-        int leftPart = abs(screen1Geometry.left() - screen2Geometry.left());
-        int rightPart = abs(screen1Geometry.right() - screen2Geometry.right());
-        if (leftPart + rightPart < SamePosition)
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-bool ScreenManager::isLeft(int desktop1, int desktop2)
-{
-    QRect screen1Geometry = m_screenLayout.getScreen(desktop1).getGeometry();
-    QRect screen2Geometry = m_screenLayout.getScreen(desktop2).getGeometry();
-    // Esta posat a l'esquerra
-    if (abs(screen1Geometry.right() - screen2Geometry.left()) < SamePosition)
-    {
-        // Te la mateixa alçada
-        int topPart = abs(screen1Geometry.top() - screen2Geometry.top());
-        int bottomPart = abs(screen1Geometry.bottom() - screen2Geometry.bottom());
-        if (topPart + bottomPart < SamePosition)
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
-bool ScreenManager::isRight(int desktop1, int desktop2)
-{
-    QRect screen1Geometry = m_screenLayout.getScreen(desktop1).getGeometry();
-    QRect screen2Geometry = m_screenLayout.getScreen(desktop2).getGeometry();
-    // Esta posat a l'esquerra
-    if (abs(screen1Geometry.left() - screen2Geometry.right()) < SamePosition)
-    {
-        // Te la mateixa alçada
-        int topPart = abs(screen1Geometry.top() - screen2Geometry.top());
-        int bottomPart = abs(screen1Geometry.bottom() - screen2Geometry.bottom());
-        if (topPart + bottomPart < SamePosition)
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
-bool ScreenManager::isTopLeft(int desktop1, int desktop2)
-{
-    QRect screen1Geometry = m_screenLayout.getScreen(desktop1).getGeometry();
-    QRect screen2Geometry = m_screenLayout.getScreen(desktop2).getGeometry();
-    int x = abs(screen1Geometry.bottomRight().x() - screen2Geometry.topLeft().x());
-    int y = abs(screen1Geometry.bottomRight().y() - screen2Geometry.topLeft().y());
-    if (abs(x * x - y * y) < SamePosition)
-    {
-        return true;
-    }
-    return false;
-}
-
-bool ScreenManager::isTopRight(int desktop1, int desktop2)
-{
-    QRect screen1Geometry = m_screenLayout.getScreen(desktop1).getGeometry();
-    QRect screen2Geometry = m_screenLayout.getScreen(desktop2).getGeometry();
-    int x = abs(screen1Geometry.bottomLeft().x() - screen2Geometry.topRight().x());
-    int y = abs(screen1Geometry.bottomLeft().y() - screen2Geometry.topRight().y());
-    if (abs(x * x - y * y) < SamePosition)
-    {
-        return true;
-    }
-    return false;
-}
-
-bool ScreenManager::isBottomLeft(int desktop1, int desktop2)
-{
-    QRect screen1Geometry = m_screenLayout.getScreen(desktop1).getGeometry();
-    QRect screen2Geometry = m_screenLayout.getScreen(desktop2).getGeometry();
-    int x = abs(screen1Geometry.topRight().x() - screen2Geometry.bottomLeft().x());
-    int y = abs(screen1Geometry.topRight().y() - screen2Geometry.bottomLeft().y());
-    if (abs(x * x - y * y) < SamePosition)
-    {
-        return true;
-    }
-    return false;
-}
-
-bool ScreenManager::isBottomRight(int desktop1, int desktop2)
-{
-    QRect screen1Geometry = m_screenLayout.getScreen(desktop1).getGeometry();
-    QRect screen2Geometry = m_screenLayout.getScreen(desktop2).getGeometry();
-    int x = abs(screen1Geometry.topLeft().x() - screen2Geometry.bottomRight().x());
-    int y = abs(screen1Geometry.topLeft().y() - screen2Geometry.bottomRight().y());
-    if (abs(x * x - y * y) < SamePosition)
-    {
-        return true;
-    }
-    return false;
 }
 
 QPoint ScreenManager::getTopLeft(const DynamicMatrix &dynamicMatrix) const
