@@ -44,6 +44,18 @@ public:
     /// per tant retornarà cert tant si està completa com parcialment més a l'esquerra/dreta.
     bool isMoreToTheLeft(const Screen &screen);
     bool isMoreToTheRight(const Screen &screen);
+
+    /// Indica si aquesta pantalla està completament per sobre de l'altra. Comprova que el bottom d'aquesta estigui per sobre del top de l'altra.
+    bool isOver(const Screen &screen) const;
+    
+    /// Indica si aquesta pantalla està completament per sota de l'altra. Comprova que el top d'aquesta estigui per sota del bottom de l'altra.
+    bool isUnder(const Screen &screen) const;
+    
+    /// Indica si aquesta pantalla està completament a l'esquerra de l'altra. Comprova que el right d'aquesta sigui menor que el left de l'altra.
+    bool isOnLeft(const Screen &screen) const;
+    
+    /// Indica si aquesta pantalla està completament a la dreta de l'altra. Comprova que el left d'aquesta sigui major que el right de l'altra.
+    bool isOnRight(const Screen &screen) const;
     
     /// Operador igualtat
     bool operator==(const Screen &screen) const;
