@@ -20,18 +20,6 @@ private slots:
 
     void getPrimaryScreenID_returnsExpectedValues_data();
     void getPrimaryScreenID_returnsExpectedValues();
-    
-    void isOver_returnsExpectedValues_data();
-    void isOver_returnsExpectedValues();
-
-    void isUnder_returnsExpectedValues_data();
-    void isUnder_returnsExpectedValues();
-
-    void isOnLeft_returnsExpectedValues_data();
-    void isOnLeft_returnsExpectedValues();
-
-    void isOnRight_returnsExpectedValues_data();
-    void isOnRight_returnsExpectedValues();
 
     void getScreenOnTheRightOf_returnsExpectedValues_data();
     void getScreenOnTheRightOf_returnsExpectedValues();
@@ -48,9 +36,6 @@ private slots:
 private:
     /// Retorna un layout base
     ScreenLayout getSampleScreenLayout();
-
-    /// Prepara les dades comunes dels testos unitaris de isOver(), isUnder(), isOnLeft() i isOnRight()
-    void setup_isOverUnderLeftRight_data();
 
     /// Prepara les dades comunes dels testos unitaris de getScreenOnTheRight/LeftOf()
     void setup_getScreenOnThe_data();
@@ -192,94 +177,6 @@ void test_ScreenLayout::getPrimaryScreenID_returnsExpectedValues()
     QFETCH(int, expectedValue);
 
     QCOMPARE(layout.getPrimaryScreenID(), expectedValue);
-}
-
-void test_ScreenLayout::setup_isOverUnderLeftRight_data()
-{
-    QTest::addColumn<ScreenLayout>("layout");
-    QTest::addColumn<int>("screen1ID");
-    QTest::addColumn<int>("screen2ID");
-    QTest::addColumn<bool>("expectedIsOverValue");
-    QTest::addColumn<bool>("expectedIsUnderValue");
-    QTest::addColumn<bool>("expectedIsOnLeftValue");
-    QTest::addColumn<bool>("expectedIsOnRightValue");
-
-    QTest::newRow("non-existing IDs 1") << getSampleScreenLayout() << 400 << 500 << false << false << false << false;
-    QTest::newRow("non-existing IDs 2") << getSampleScreenLayout() << -1 << -1 << false << false << false << false;
-    
-    QTest::newRow("same existing IDs") << getSampleScreenLayout() << 1 << 1 << false << false << false << false;
-    QTest::newRow("0 left- 1 right") << getSampleScreenLayout() << 0 << 1 << false << false << true << false;
-    QTest::newRow("2 left- 3 right") << getSampleScreenLayout() << 2 << 3 << false << false << true << false;
-    QTest::newRow("0 left top- 3 right bottom") << getSampleScreenLayout() << 0 << 3 << true << false << true << false;
-    QTest::newRow("2 left bottom- 1 right top") << getSampleScreenLayout() << 2 << 1 << false << true << true << false;
-    QTest::newRow("1 right- 0 left") << getSampleScreenLayout() << 1 << 0 << false << false << false << true;
-    QTest::newRow("3 right- 2 left") << getSampleScreenLayout() << 3 << 2 << false << false << false << true;
-    QTest::newRow("1 right top- 2 left bottom") << getSampleScreenLayout() << 1 << 2 << true << false << false << true;
-    QTest::newRow("3 right bottom- 0 left top") << getSampleScreenLayout() << 3 << 0 << false << true << false << true;
-    QTest::newRow("0 top - 2 bottom") << getSampleScreenLayout() << 0 << 2 << true << false << false << false;
-    QTest::newRow("1 top - 3 bottom") << getSampleScreenLayout() << 1 << 3 << true << false << false << false;
-    QTest::newRow("2 bottom - 0 top") << getSampleScreenLayout() << 2 << 0 << false << true << false << false;
-    QTest::newRow("3 bottom - 1 top") << getSampleScreenLayout() << 3 << 1 << false << true << false << false;
-}
-
-void test_ScreenLayout::isOver_returnsExpectedValues_data()
-{
-    this->setup_isOverUnderLeftRight_data();
-}
-
-void test_ScreenLayout::isOver_returnsExpectedValues()
-{
-    QFETCH(ScreenLayout, layout);
-    QFETCH(int, screen1ID);
-    QFETCH(int, screen2ID);
-    QFETCH(bool, expectedIsOverValue);
-
-    QCOMPARE(layout.isOver(screen1ID, screen2ID), expectedIsOverValue);
-}
-
-void test_ScreenLayout::isUnder_returnsExpectedValues_data()
-{
-    this->setup_isOverUnderLeftRight_data();
-}
-
-void test_ScreenLayout::isUnder_returnsExpectedValues()
-{
-    QFETCH(ScreenLayout, layout);
-    QFETCH(int, screen1ID);
-    QFETCH(int, screen2ID);
-    QFETCH(bool, expectedIsUnderValue);
-
-    QCOMPARE(layout.isUnder(screen1ID, screen2ID), expectedIsUnderValue);
-}
-
-void test_ScreenLayout::isOnLeft_returnsExpectedValues_data()
-{
-    this->setup_isOverUnderLeftRight_data();
-}
-
-void test_ScreenLayout::isOnLeft_returnsExpectedValues()
-{
-    QFETCH(ScreenLayout, layout);
-    QFETCH(int, screen1ID);
-    QFETCH(int, screen2ID);
-    QFETCH(bool, expectedIsOnLeftValue);
-
-    QCOMPARE(layout.isOnLeft(screen1ID, screen2ID), expectedIsOnLeftValue);
-}
-
-void test_ScreenLayout::isOnRight_returnsExpectedValues_data()
-{
-    this->setup_isOverUnderLeftRight_data();
-}
-
-void test_ScreenLayout::isOnRight_returnsExpectedValues()
-{
-    QFETCH(ScreenLayout, layout);
-    QFETCH(int, screen1ID);
-    QFETCH(int, screen2ID);
-    QFETCH(bool, expectedIsOnRightValue);
-
-    QCOMPARE(layout.isOnRight(screen1ID, screen2ID), expectedIsOnRightValue);
 }
 
 void test_ScreenLayout::setup_getScreenOnThe_data()

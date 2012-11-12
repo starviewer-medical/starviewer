@@ -42,18 +42,6 @@ public:
     /// Retorna el mateix ID si no tenim més pantalles que la nostra i -1 si la pantalla passada no existeix.
     int getPreviousScreenOf(int screenID) const;
     int getNextScreenOf(int screenID) const;
-    
-    /// Indica si la primera pantalla està per sobre de la segona. Comprova que el bottom de la primera estigui per sobre del top de la segona.
-    bool isOver(int screen1, int screen2) const;
-    
-    /// Indica si la primera pantalla està per sota de la segona. Comprova que el top de la primera estigui per sota del bottom de la segona.
-    bool isUnder(int screen1, int screen2) const;
-    
-    /// Indica si la primera pantalla està a l'esquerra de la segona. Comprova que el right de la primera sigui menor que el left de la segona.
-    bool isOnLeft(int screen1, int screen2) const;
-    
-    /// Indica si la primera pantalla està a la dreta de la segona. Comprova que el left de la primera sigui major que el right de la segona.
-    bool isOnRight(int screen1, int screen2) const;
 
 private:
     /// Ens retorna l'índex de la pantalla amb ID screenID. Si no existeix, l'índex serà -1
