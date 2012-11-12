@@ -235,10 +235,11 @@ void DiagnosisTestResultWriter::writeSystemInformation(QXmlStreamWriter &writer)
     writer.writeTextElement("li", QObject::tr("OpenGL: %1").arg(systemInformation->getGPUOpenGLVersion()));
 
     ScreenManager screenManager;
-    int primaryID = screenManager.getPrimaryScreenID();
-    for (int i = 0; i < screenManager.getNumberOfScreens(); i++)
+    ScreenLayout layout = screenManager.getScreenLayout();
+    int primaryID = layout.getPrimaryScreenID();
+    for (int i = 0; i < layout.getNumberOfScreens(); i++)
     {
-        QSize size = screenManager.getScreenGeometry(i).size();
+        QSize size = layout.getScreen(i).getGeometry().size();
         QString screen = QObject::tr("Screen %1: %2x%3 ").arg(i + 1).arg(size.width()).arg(size.height());
         if (i == primaryID)
         {

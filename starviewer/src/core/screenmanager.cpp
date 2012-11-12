@@ -129,11 +129,6 @@ void ScreenManager::restoreFromMinimized(QWidget *window)
     window->setWindowState(window->windowState() & ~Qt::WindowMinimized | Qt::WindowActive);
 }
 
-int ScreenManager::getNumberOfScreens()
-{
-    return m_applicationDesktop->numScreens();
-}
-
 int ScreenManager::getScreenID(QWidget *window) const
 {
     return m_applicationDesktop->screenNumber(window);
@@ -142,21 +137,6 @@ int ScreenManager::getScreenID(QWidget *window) const
 int ScreenManager::getScreenID(const QPoint &point) const
 {
     return m_applicationDesktop->screenNumber(point);
-}
-
-QRect ScreenManager::getAvailableScreenGeometry(int screenID) const
-{
-    return m_applicationDesktop->availableGeometry(screenID);
-}
-
-QRect ScreenManager::getScreenGeometry(int screenID) const
-{
-    return m_applicationDesktop->screenGeometry(screenID);
-}
-
-int ScreenManager::getPrimaryScreenID() const
-{
-    return m_applicationDesktop->primaryScreen();
 }
 
 DynamicMatrix ScreenManager::computeScreenMatrix(QWidget *window)

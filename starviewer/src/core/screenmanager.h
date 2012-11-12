@@ -35,24 +35,10 @@ public:
 
     ///Restaura la finestra a l'estat d'abans d'estar minimitzada
     void restoreFromMinimized(QWidget *window);
-
-    /// Retrona quantes pantalles hi ha.
-    int getNumberOfScreens();
     
     /// Retorna a quina pantalla es troba el widget/coordenada
     int getScreenID(QWidget *window) const;
     int getScreenID(const QPoint &point) const;
-
-    /// Retorna la geometria disponible de la pantalla indicada. Depenent de la plataforma el que es considera
-    /// dins del disponible pot variar, com per exemple a windows on s'exclouria de l'espai total el que ocupa la barra de tasques
-    /// Resultat indefinit si l'identificador de pantalla no es correspon amb cap id vàlid
-    QRect getAvailableScreenGeometry(int screenID) const;
-
-    /// Retorna la geometria total de la pantalla indicada.
-    QRect getScreenGeometry(int screenID) const;
-
-    /// Retorna la geometria total de la pantalla indicada.
-    int getPrimaryScreenID() const;
 
 private:
     /// Prepara l'screen layout segons la configuració actual
