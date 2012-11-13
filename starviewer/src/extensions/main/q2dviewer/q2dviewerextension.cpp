@@ -241,7 +241,7 @@ void Q2DViewerExtension::setInput(Volume *input)
 
     connect(m_patient, SIGNAL(patientFused()), SLOT(searchHangingProtocols()));
 
-    // Habilitem la possibilitat de buscar estudis previs.
+    // Habilitem la possibilitat de buscar estudis relacionats.
     m_relatedStudiesToolButton->setEnabled(true);
     if (m_mainVolume)
     {
@@ -277,7 +277,7 @@ void Q2DViewerExtension::searchPreviousStudiesWithHangingProtocols()
 {
     m_hangingProtocolsMenu->setSearchingItem(true);
 
-    // 2.- Creacio de la classe per trobar previes
+    // 2.- Creacio de la classe per trobar estudis relacionats
     m_relatedStudiesManager = new RelatedStudiesManager();
 
     // 3.- Es connecta el signal per quan acabi
