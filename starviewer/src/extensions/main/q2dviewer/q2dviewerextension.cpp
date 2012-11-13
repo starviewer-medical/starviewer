@@ -58,7 +58,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_thickSlabWidget->hide();
     m_referenceLinesToolButton->hide();
     m_cursor3DToolButton->hide();
-    m_previousStudiesToolButton->hide();
+    m_relatedStudiesToolButton->hide();
     m_screenshotsExporterToolButton->hide();
     m_downButtonGrid->hide();
     m_automaticSynchronizationToolButton->hide();
@@ -68,6 +68,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
 #else
     m_hangingProtocolManager = 0;
     m_automaticSynchronizationManager = 0;
+    m_relatedStudiesManager = 0;
 #endif
 
     m_hangingProtocolsMenu = new MenuGridWidget(this);
@@ -77,8 +78,8 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
 
 #ifndef STARVIEWER_LITE
     m_relatedStudiesWidget = new QRelatedStudiesWidget(this);
-    m_previousStudiesToolButton->setEnabled(false);
-    m_previousStudiesToolButton->setToolTip(tr("Search related studies"));
+    m_relatedStudiesToolButton->setEnabled(false);
+    m_relatedStudiesToolButton->setToolTip(tr("Search related studies"));
     m_screenshotsExporterToolButton->setToolTip(tr("Export viewer image(s) to DICOM and send them to a PACS server"));
 #endif
 
@@ -147,7 +148,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_statsWatcher->addClicksCounter(m_cursor3DToolButton);
     m_statsWatcher->addClicksCounter(m_referenceLinesToolButton);
 
-    m_statsWatcher->addClicksCounter(m_previousStudiesToolButton);
+    m_statsWatcher->addClicksCounter(m_relatedStudiesToolButton);
 }
 
 Q2DViewerExtension::~Q2DViewerExtension()
@@ -195,7 +196,7 @@ void Q2DViewerExtension::createConnections()
 
     connect(m_relatedStudiesWidget, SIGNAL(downloadingStudies()), this, SLOT(changeToPreviousStudiesDownloadingIcon()));
     connect(m_relatedStudiesWidget, SIGNAL(studiesDownloaded()), this, SLOT(changeToPreviousStudiesDefaultIcon()));
-    connect(m_previousStudiesToolButton, SIGNAL(clicked (bool)), SLOT(showPreviousStudiesWidget()));
+    connect(m_relatedStudiesToolButton, SIGNAL(clicked (bool)), SLOT(showPreviousStudiesWidget()));
     connect(m_workingArea, SIGNAL(manualSynchronizationStateChanged(bool)), SLOT(manualSynchronizationActivated(bool)));
 
 #endif
@@ -241,7 +242,7 @@ void Q2DViewerExtension::setInput(Volume *input)
     connect(m_patient, SIGNAL(patientFused()), SLOT(searchHangingProtocols()));
 
     // Habilitem la possibilitat de buscar estudis previs.
-    m_previousStudiesToolButton->setEnabled(true);
+    m_relatedStudiesToolButton->setEnabled(true);
     if (m_mainVolume)
     {
         m_relatedStudiesWidget->searchStudiesOf(m_mainVolume->getPatient());
@@ -394,8 +395,8 @@ void Q2DViewerExtension::showInteractiveTable()
 #ifndef STARVIEWER_LITE
 void Q2DViewerExtension::showPreviousStudiesWidget()
 {
-    QPoint point = m_previousStudiesToolButton->mapToGlobal(QPoint(0, 0));
-    m_relatedStudiesWidget->move(point.x(), (point.y() + m_previousStudiesToolButton->frameGeometry().height()));
+    QPoint point = m_relatedStudiesToolButton->mapToGlobal(QPoint(0, 0));
+    m_relatedStudiesWidget->move(point.x(), (point.y() + m_relatedStudiesToolButton->frameGeometry().height()));
     m_relatedStudiesWidget->show();
 }
 #endif
@@ -914,12 +915,12 @@ void Q2DViewerExtension::setHangingProtocol(int hangingProtocolNumber)
 
 void Q2DViewerExtension::changeToPreviousStudiesDownloadingIcon()
 {
-    m_previousStudiesToolButton->setIcon(QIcon(QString(":images/cal_downloading.png")));
+    m_relatedStudiesToolButton->setIcon(QIcon(QString(":images/cal_downloading.png")));
 }
 
 void Q2DViewerExtension::changeToPreviousStudiesDefaultIcon()
 {
-    m_previousStudiesToolButton->setIcon(QIcon(QString(":images/cal.png")));
+    m_relatedStudiesToolButton->setIcon(QIcon(QString(":images/cal.png")));
 }
 
 void Q2DViewerExtension::searchPreviousStudiesOfMostRecentStudy()
