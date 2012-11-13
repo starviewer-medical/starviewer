@@ -100,7 +100,7 @@ public slots:
     /// Mètode per buscar les prèvies de l'estudi carregat més recent.
     void searchPreviousStudiesOfMostRecentStudy();
 
-    /// Mètode encarregat d'actualitzar la llista del widget d'estudis previs per marcar aquells nous estudis que s'han carregat a memòria.
+    /// Mètode encarregat d'actualitzar la llista del widget d'estudis relacionats per marcar aquells nous estudis que s'han carregat a memòria.
     void updateRelatedStudiesWidget();
 
     /// Inicialitza la sincronització automàtica agafant de referència el visor que tenim actiu (seleccionat)
@@ -108,7 +108,7 @@ public slots:
 
 #endif
 
-    /// Aplica un grid regular al layout, i elimina l'etiqueta si algun estudi previ està en descàrrega
+    /// Aplica un grid regular al layout, i elimina l'etiqueta si algun estudi relacionat està en descàrrega
     void setGrid(int rows, int columns);
 
 private:
@@ -172,7 +172,7 @@ private slots:
     ///  Mètode que busca els hanging protocols aplicables
     void searchHangingProtocols();
 
-    /// Mètodes utilitzats per modificar la icona del botó d'estudis previs per saber si s'estan descarregat estudis sense haver d'obrir el widget.
+    /// Mètodes utilitzats per modificar la icona del botó d'estudis relacionats per saber si s'estan descarregat estudis sense haver d'obrir el widget.
     void changeToRelatedStudiesDownloadingIcon();
     void changeToRelatedStudiesDefaultIcon();
 
@@ -240,7 +240,7 @@ private:
     /// Widget per poder seleccionar estudis relacionats
     QRelatedStudiesWidget *m_relatedStudiesWidget;
 
-    /// Manager per estudis previs
+    /// Manager per estudis relacionats
     RelatedStudiesManager *m_relatedStudiesManager;
 
     /// Manager de hanging protocols
