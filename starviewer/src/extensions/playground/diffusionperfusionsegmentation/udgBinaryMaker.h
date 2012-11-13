@@ -29,14 +29,14 @@ public:
      typedef typename itk::ImageRegionIterator<InputImageType> InputIteratorType;
      typedef typename itk::ImageRegionIterator<MaskImageType>  MaskIteratorType;
      
-     typedef itk::BinaryThresholdImageFilter<InputImageType, MaskImageType >				ThresholdFilterType;
-     typedef itk::ConnectedThresholdImageFilter<InputImageType, MaskImageType >				ConnectedThresholdFilterType;
-     typedef itk::BinaryBallStructuringElement<InputPixelType,ImageDimension >				StructuringElementType;
-     typedef itk::BinaryErodeImageFilter< InputImageType,MaskImageType,StructuringElementType >	ErodeFilterType;
-     typedef itk::BinaryDilateImageFilter<InputImageType,MaskImageType,StructuringElementType >	DilateFilterType;
+     typedef itk::BinaryThresholdImageFilter<InputImageType, MaskImageType> ThresholdFilterType;
+     typedef itk::ConnectedThresholdImageFilter<InputImageType, MaskImageType> ConnectedThresholdFilterType;
+     typedef itk::BinaryBallStructuringElement<InputPixelType, ImageDimension> StructuringElementType;
+     typedef itk::BinaryErodeImageFilter<InputImageType,MaskImageType, StructuringElementType> ErodeFilterType;
+     typedef itk::BinaryDilateImageFilter<InputImageType,MaskImageType, StructuringElementType> DilateFilterType;
       
-    typedef itk::ImageFileReader< InputImageType >  ReaderType;
-    typedef itk::ImageFileWriter< InputImageType >  WriterType;
+    typedef itk::ImageFileReader<InputImageType> ReaderType;
+    typedef itk::ImageFileWriter<InputImageType> WriterType;
 
     
     udgBinaryMaker();

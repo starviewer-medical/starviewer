@@ -112,9 +112,9 @@ CREATE TABLE Image
   ImageTime                     TEXT,
   VolumeNumberInSeries          INTEGER,
   OrderNumberInVolume           INTEGER,
-  RetrievedDate	                TEXT,
-  RetrievedTime	                TEXT,
-  State	                        INTEGER,
+  RetrievedDate                 TEXT,
+  RetrievedTime                 TEXT,
+  State                         INTEGER,
   NumberOfOverlays              INTEGER,
   RetrievedPACSID               INTEGER,
   PRIMARY KEY ('SOPInstanceUID', 'FrameNumber')

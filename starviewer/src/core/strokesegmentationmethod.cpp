@@ -128,7 +128,7 @@ double StrokeSegmentationMethod::applyMethod()
 
     DEBUG_LOG("Init filter");
     DEBUG_LOG(QString("Parameters: %1").arg(*seedIndex.GetIndex()));
-	std::cerr << "Parameters: " << seedIndex << std::endl;
+    std::cerr << "Parameters: " << seedIndex << std::endl;
     DEBUG_LOG(QString("Histogram parameters: %1,%2").arg(m_lowerThreshold).arg(m_upperThreshold));
 
     typedef itk::VolumeCalculatorImageFilter<Volume::ItkImageType> VolumeCalcFilterType;

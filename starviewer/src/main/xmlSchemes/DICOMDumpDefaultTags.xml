@@ -40,7 +40,7 @@
                 </xsd:restriction>
               </xsd:simpleType>
             </xsd:element>
-			<xsd:element name="name" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="name" type="xsd:string" minOccurs="0" maxOccurs="1"/>
         </xsd:sequence>
     </xsd:complexType>
 

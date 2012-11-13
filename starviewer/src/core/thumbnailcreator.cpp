@@ -202,7 +202,7 @@ bool ThumbnailCreator::isSuitableForThumbnailCreation(DICOMTagReader *reader) co
         return false;
     }
 
-	return true;
+    return true;
 }
 
 QImage ThumbnailCreator::convertToQImage(DicomImage *dicomImage)

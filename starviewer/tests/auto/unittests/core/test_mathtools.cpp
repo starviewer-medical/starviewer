@@ -122,8 +122,8 @@ private slots:
     void getPointToClosestEdgeDistance_ShouldReturnExpectedValues_data();
     void getPointToClosestEdgeDistance_ShouldReturnExpectedValues();
 
-	void getPointToFiniteLineDistance_ShouldReturnExpectedValues_data();
-	void getPointToFiniteLineDistance_ShouldReturnExpectedValues();
+    void getPointToFiniteLineDistance_ShouldReturnExpectedValues_data();
+    void getPointToFiniteLineDistance_ShouldReturnExpectedValues();
 
     void isNaN_ShouldReturnExpectedValue_data();
     void isNaN_ShouldReturnExpectedValue();
@@ -680,7 +680,7 @@ void test_MathTools::getDistance3D_ShouldComputeDistanceCorrectly_data()
     QTest::newRow("random coronal") << QVector3D(-89.9476, 49.8371, 599.893) << QVector3D(-79.0086, 207.671, 599.893) << 158.213;
     QTest::newRow("random sagital") << QVector3D(7.68421, -11.8899, 695.178) << QVector3D(7.68421, 144.381, 831.915) << 207.648;
     QTest::newRow("random coronal") << QVector3D(-96.9798, 99.4654, 838.166) << QVector3D(-50.0985, 99.4654, 709.242) << 137.183;
-	QTest::newRow("random") << QVector3D(35.44, 12.61, -85.28) << QVector3D(92.56, -95.19, 28.85) << 167.060;
+    QTest::newRow("random") << QVector3D(35.44, 12.61, -85.28) << QVector3D(92.56, -95.19, 28.85) << 167.060;
 }
 
 void test_MathTools::getDistance3D_ShouldComputeDistanceCorrectly()
@@ -1377,8 +1377,8 @@ void test_MathTools::copySign_ShouldReturnNaNWithExpectedSign()
     // Hem de distingir +NaN de -NaN. Aquest cop no podem comparar tot el patró de bits com amb els zeros, perquè hi ha bits que poden tenir diferents valors
     // que representen NaN (http://en.wikipedia.org/wiki/NaN). El que sí podem fer és comprovar el bit més significatiu, el de més a l'esquerra, que és el del
     // signe. Si el bit és zero vol dir positiu, i si és 1 vol dir negatiu (http://en.wikipedia.org/wiki/Sign_bit). Per fer-ho, llegim aquest float com si fos
-	// un unsigned long long per crear un bitset. D'aquest bitset n'hem de consultar l'últim bit, perquè estan ordenats de dreta a esquerra. Abans de tot
-	// comprovem que el format dels doubles sigui IEC 559 / IEEE 754. Sinó, tota la resta no té sentit.
+    // un unsigned long long per crear un bitset. D'aquest bitset n'hem de consultar l'últim bit, perquè estan ordenats de dreta a esquerra. Abans de tot
+    // comprovem que el format dels doubles sigui IEC 559 / IEEE 754. Sinó, tota la resta no té sentit.
     QVERIFY(std::numeric_limits<double>::is_iec559);
     unsigned long long *pNaN = reinterpret_cast<unsigned long long*>(&NaN);
     std::bitset<8*sizeof(unsigned long long)> fNaNBits(*pNaN);
