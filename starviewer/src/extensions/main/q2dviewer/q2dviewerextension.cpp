@@ -281,7 +281,7 @@ void Q2DViewerExtension::searchPreviousStudiesWithHangingProtocols()
     m_relatedStudiesManager = new RelatedStudiesManager();
 
     // 3.- Es connecta el signal per quan acabi
-    connect(m_relatedStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), SLOT(addPreviousHangingProtocols(QList<Study*>)));
+    connect(m_relatedStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), SLOT(addHangingProtocolsWithPrevious(QList<Study*>)));
 
     // 4.- Es busquen els previs
     Study *studyToSearchFrom = 0;
@@ -298,9 +298,9 @@ void Q2DViewerExtension::searchPreviousStudiesWithHangingProtocols()
     m_relatedStudiesManager->queryMergedPreviousStudies(studyToSearchFrom);
 }
 
-void Q2DViewerExtension::addPreviousHangingProtocols(QList<Study*> studies)
+void Q2DViewerExtension::addHangingProtocolsWithPrevious(QList<Study*> studies)
 {
-    disconnect(m_relatedStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), this, SLOT(addPreviousHangingProtocols(QList<Study*>)));
+    disconnect(m_relatedStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), this, SLOT(addHangingProtocolsWithPrevious(QList<Study*>)));
 
     QList<HangingProtocol*> hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient, studies);
     m_hangingProtocolsMenu->setHangingItems(hangingCandidates);
