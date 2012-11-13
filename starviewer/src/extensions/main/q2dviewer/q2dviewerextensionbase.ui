@@ -143,7 +143,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QToolButton" name="m_previousStudiesToolButton">
+        <widget class="QToolButton" name="m_relatedStudiesToolButton">
          <property name="text">
           <string>Previous</string>
          </property>
