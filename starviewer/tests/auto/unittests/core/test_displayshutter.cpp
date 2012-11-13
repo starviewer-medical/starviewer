@@ -454,19 +454,19 @@ void test_DisplayShutter::getAsVolumePixelData_ReturnsExpectedValues()
     
     VolumePixelData *shutterPixelData = shutter.getAsVolumePixelData(width, height, slice);
     
-    QCOMPARE(shutterPixelData->getVtkData()->GetNumberOfScalarComponents(), expectedPixelData->getVtkData()->GetNumberOfScalarComponents());
+    QCOMPARE(shutterPixelData->getNumberOfScalarComponents(), expectedPixelData->getNumberOfScalarComponents());
     
     int shutterExtent[6];
     int expectedExtent[6];
-    shutterPixelData->getVtkData()->GetExtent(shutterExtent);
-    expectedPixelData->getVtkData()->GetExtent(expectedExtent);
+    shutterPixelData->getExtent(shutterExtent);
+    expectedPixelData->getExtent(expectedExtent);
     for (int i = 0; i < 6; ++i)
     {
         QCOMPARE(shutterExtent[i], expectedExtent[i]);
     }
 
-    unsigned char *shutterDataPointer = reinterpret_cast<unsigned char*>(shutterPixelData->getVtkData()->GetScalarPointer());
-    unsigned char *expectedDataPointer = reinterpret_cast<unsigned char*>(expectedPixelData->getVtkData()->GetScalarPointer());
+    unsigned char *shutterDataPointer = reinterpret_cast<unsigned char*>(shutterPixelData->getScalarPointer());
+    unsigned char *expectedDataPointer = reinterpret_cast<unsigned char*>(expectedPixelData->getScalarPointer());
     for (int j = 0; j < height; ++j)
     {
         for (int i = 0; i < width; ++i)
