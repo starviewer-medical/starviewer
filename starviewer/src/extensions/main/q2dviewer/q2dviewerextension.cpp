@@ -194,9 +194,9 @@ void Q2DViewerExtension::createConnections()
     // Per mostrar exportació
     connect(m_screenshotsExporterToolButton, SIGNAL(clicked()), SLOT(showScreenshotsExporterDialog()));
 
-    connect(m_relatedStudiesWidget, SIGNAL(downloadingStudies()), this, SLOT(changeToPreviousStudiesDownloadingIcon()));
-    connect(m_relatedStudiesWidget, SIGNAL(studiesDownloaded()), this, SLOT(changeToPreviousStudiesDefaultIcon()));
-    connect(m_relatedStudiesToolButton, SIGNAL(clicked (bool)), SLOT(showPreviousStudiesWidget()));
+    connect(m_relatedStudiesWidget, SIGNAL(downloadingStudies()), this, SLOT(changeToRelatedStudiesDownloadingIcon()));
+    connect(m_relatedStudiesWidget, SIGNAL(studiesDownloaded()), this, SLOT(changeToRelatedStudiesDefaultIcon()));
+    connect(m_relatedStudiesToolButton, SIGNAL(clicked (bool)), SLOT(showRelatedStudiesWidget()));
     connect(m_workingArea, SIGNAL(manualSynchronizationStateChanged(bool)), SLOT(manualSynchronizationActivated(bool)));
 
 #endif
@@ -393,7 +393,7 @@ void Q2DViewerExtension::showInteractiveTable()
 }
 
 #ifndef STARVIEWER_LITE
-void Q2DViewerExtension::showPreviousStudiesWidget()
+void Q2DViewerExtension::showRelatedStudiesWidget()
 {
     QPoint point = m_relatedStudiesToolButton->mapToGlobal(QPoint(0, 0));
     m_relatedStudiesWidget->move(point.x(), (point.y() + m_relatedStudiesToolButton->frameGeometry().height()));
@@ -913,12 +913,12 @@ void Q2DViewerExtension::setHangingProtocol(int hangingProtocolNumber)
     m_hangingProtocolManager->applyHangingProtocol(hangingProtocolNumber, m_workingArea, m_patient);
 }
 
-void Q2DViewerExtension::changeToPreviousStudiesDownloadingIcon()
+void Q2DViewerExtension::changeToRelatedStudiesDownloadingIcon()
 {
     m_relatedStudiesToolButton->setIcon(QIcon(QString(":images/cal_downloading.png")));
 }
 
-void Q2DViewerExtension::changeToPreviousStudiesDefaultIcon()
+void Q2DViewerExtension::changeToRelatedStudiesDefaultIcon()
 {
     m_relatedStudiesToolButton->setIcon(QIcon(QString(":images/cal.png")));
 }
@@ -948,7 +948,7 @@ void Q2DViewerExtension::searchPreviousStudiesOfMostRecentStudy()
     }
 }
 
-void Q2DViewerExtension::updatePreviousStudiesWidget()
+void Q2DViewerExtension::updateRelatedStudiesWidget()
 {
     m_relatedStudiesWidget->updateList();
 }
