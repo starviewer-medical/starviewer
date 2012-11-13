@@ -62,7 +62,7 @@ public slots:
 
 #ifndef STARVIEWER_LITE
     /// Mostra el widget per poder descarregar els estudis relacionats amb l'estudi actual
-    void showPreviousStudiesWidget();
+    void showRelatedStudiesWidget();
 #endif
 
     /// Mostra o amaga els overlays de cada visualitzador
@@ -101,7 +101,7 @@ public slots:
     void searchPreviousStudiesOfMostRecentStudy();
 
     /// Mètode encarregat d'actualitzar la llista del widget d'estudis previs per marcar aquells nous estudis que s'han carregat a memòria.
-    void updatePreviousStudiesWidget();
+    void updateRelatedStudiesWidget();
 
     /// Inicialitza la sincronització automàtica agafant de referència el visor que tenim actiu (seleccionat)
     void enableAutomaticSynchronizationToViewer(bool enable);
@@ -173,8 +173,8 @@ private slots:
     void searchHangingProtocols();
 
     /// Mètodes utilitzats per modificar la icona del botó d'estudis previs per saber si s'estan descarregat estudis sense haver d'obrir el widget.
-    void changeToPreviousStudiesDownloadingIcon();
-    void changeToPreviousStudiesDefaultIcon();
+    void changeToRelatedStudiesDownloadingIcon();
+    void changeToRelatedStudiesDefaultIcon();
 
     /// Mètode que afegeix els hanging protocols amb prèvies
     void addPreviousHangingProtocols(QList<Study*> studies);
