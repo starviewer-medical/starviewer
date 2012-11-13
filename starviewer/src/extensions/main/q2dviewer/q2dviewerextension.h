@@ -177,7 +177,7 @@ private slots:
     void changeToRelatedStudiesDefaultIcon();
 
     /// Mètode que afegeix els hanging protocols amb prèvies
-    void addPreviousHangingProtocols(QList<Study*> studies);
+    void addHangingProtocolsWithPrevious(QList<Study*> studies);
 
     /// Activa la sincronització manual a tots els visors
     void activateManualSynchronizationInAllViewers();
