@@ -19,7 +19,7 @@ public:
     }
 
     // Necessari per que la classe no sigui abstracte i es pugui instanciar
-    qint64 	readData (char *data, qint64 maxSize)
+    qint64 readData(char *data, qint64 maxSize)
     {
         Q_UNUSED(data);
         Q_UNUSED(maxSize);

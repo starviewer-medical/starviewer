@@ -113,10 +113,10 @@ private:
     PacsManager *m_pacsManager;
     QList<Study*> m_mergedStudyList;
 
-	/// Study instance UID de l'estudi a partir del qual hem de trobar estudis relacionats
+    /// Study instance UID de l'estudi a partir del qual hem de trobar estudis relacionats
     QString m_studyInstanceUIDOfStudyToFindRelated;
     
-	/// Com fem una consulta dos consultes al mateix PACS si falla una segurament també fallarà la segona per això
+    /// Com fem una consulta dos consultes al mateix PACS si falla una segurament també fallarà la segona per això
     /// en aquesta llista registrarem l'ID dels Pacs pel quals hem emés el signal d'error i si rebem un segon error
     /// com ja el tindrem aquesta llista ja no en farem signal
     QStringList m_pacsDeviceIDErrorEmited;

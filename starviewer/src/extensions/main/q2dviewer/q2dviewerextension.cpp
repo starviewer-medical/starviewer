@@ -283,7 +283,7 @@ void Q2DViewerExtension::searchPreviousStudiesWithHangingProtocols()
     connect(m_relatedStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), SLOT(addPreviousHangingProtocols(QList<Study*>)));
 
     // 4.- Es busquen els previs
-	Study *studyToSearchFrom = 0;
+    Study *studyToSearchFrom = 0;
     if (m_mainVolume)
     {
         studyToSearchFrom = m_mainVolume->getStudy();
@@ -294,7 +294,7 @@ void Q2DViewerExtension::searchPreviousStudiesWithHangingProtocols()
         // En el cas que no tinguéssim un input vàlid, ho farem a partir del pacient actual
         studyToSearchFrom = m_patient->getStudies().first();
     }
-	m_relatedStudiesManager->queryMergedPreviousStudies(studyToSearchFrom);
+    m_relatedStudiesManager->queryMergedPreviousStudies(studyToSearchFrom);
 }
 
 void Q2DViewerExtension::addPreviousHangingProtocols(QList<Study*> studies)
