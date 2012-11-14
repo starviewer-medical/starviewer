@@ -221,9 +221,7 @@ void Q2DViewerExtension::setInput(Volume *input)
     }
     m_hangingProtocolManager = new HangingProtocolManager();
 
-    QApplication::setOverrideCursor(Qt::WaitCursor);
     QList<HangingProtocol*> hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient);
-    QApplication::restoreOverrideCursor();
 
     if (hangingCandidates.size() == 0)
     {
@@ -260,10 +258,8 @@ void Q2DViewerExtension::setInput(Volume *input)
 #ifndef STARVIEWER_LITE
 void Q2DViewerExtension::searchAndApplyBestHangingProtocol()
 {
-    QApplication::setOverrideCursor(Qt::WaitCursor);
     QList<HangingProtocol*> hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient);
     m_hangingProtocolManager->setBestHangingProtocol(m_patient, hangingCandidates, m_workingArea);
-    QApplication::restoreOverrideCursor();
 }
 
 void Q2DViewerExtension::searchHangingProtocols()
