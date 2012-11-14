@@ -213,31 +213,11 @@ void Q2DViewerExtension::setInput(Volume *input)
     viewerWidget->setInput(m_mainVolume);
     m_workingArea->setSelectedViewer(m_workingArea->getViewerWidget(0));
 #else
-    // Aplicació dels hanging protocols
-    if (m_hangingProtocolManager != 0)
-    {
-        m_hangingProtocolManager->cancelHangingProtocolDownloading();
-        delete m_hangingProtocolManager;
-    }
-    m_hangingProtocolManager = new HangingProtocolManager();
-
-    QList<HangingProtocol*> hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient);
-
-    if (hangingCandidates.size() == 0)
-    {
-        // No hi ha hanging protocols
-        Q2DViewerWidget *viewerWidget = m_workingArea->addViewer("0.0\\1.0\\1.0\\0.0");
-        viewerWidget->setInputAsynchronously(m_mainVolume);
-    }
-    else
-    {
-        m_hangingProtocolManager->setBestHangingProtocol(m_patient, hangingCandidates, m_workingArea);
-    }
+    // Posta a punt dels hanging protocols
+    setupHangingProtocols();
+    searchAndApplyBestHangingProtocol();
 
     m_workingArea->setSelectedViewer(m_workingArea->getViewerWidget(0));
-    m_hangingProtocolsMenu->setHangingItems(hangingCandidates);
-
-    connect(m_patient, SIGNAL(patientFused()), SLOT(searchHangingProtocols()));
 
     // Habilitem la possibilitat de buscar estudis relacionats.
     m_relatedStudiesToolButton->setEnabled(true);
@@ -259,7 +239,17 @@ void Q2DViewerExtension::setInput(Volume *input)
 void Q2DViewerExtension::searchAndApplyBestHangingProtocol()
 {
     QList<HangingProtocol*> hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient);
-    m_hangingProtocolManager->setBestHangingProtocol(m_patient, hangingCandidates, m_workingArea);
+    m_hangingProtocolsMenu->setHangingItems(hangingCandidates);
+    if (hangingCandidates.size() == 0)
+    {
+        // No hi ha hanging protocols
+        Q2DViewerWidget *viewerWidget = m_workingArea->addViewer("0.0\\1.0\\1.0\\0.0");
+        viewerWidget->setInputAsynchronously(m_mainVolume);
+    }
+    else
+    {
+        m_hangingProtocolManager->setBestHangingProtocol(m_patient, hangingCandidates, m_workingArea);
+    }
 }
 
 void Q2DViewerExtension::searchHangingProtocols()
@@ -267,6 +257,18 @@ void Q2DViewerExtension::searchHangingProtocols()
     QList<HangingProtocol*> hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient);
     m_hangingProtocolsMenu->setHangingItems(hangingCandidates);
     searchPreviousStudiesWithHangingProtocols();
+}
+
+void Q2DViewerExtension::setupHangingProtocols()
+{
+    if (m_hangingProtocolManager != 0)
+    {
+        m_hangingProtocolManager->cancelHangingProtocolDownloading();
+        delete m_hangingProtocolManager;
+    }
+    m_hangingProtocolManager = new HangingProtocolManager();
+
+    connect(m_patient, SIGNAL(patientFused()), SLOT(searchHangingProtocols()));
 }
 
 void Q2DViewerExtension::searchPreviousStudiesWithHangingProtocols()
