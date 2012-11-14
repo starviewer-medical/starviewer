@@ -123,6 +123,9 @@ private:
     void initializeTools();
 
 #ifndef STARVIEWER_LITE
+    /// Inicialitza el l'entorn dels hanging protocols per poder-se utilitzar
+    void setupHangingProtocols();
+    
     /// Buscar estudis prèvis
     void searchPreviousStudiesWithHangingProtocols();
 #endif
