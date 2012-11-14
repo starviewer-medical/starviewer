@@ -439,6 +439,11 @@ Q2DViewerWidget* ViewersLayout::getViewerWidget(int number)
     return viewerWidget;
 }
 
+bool ViewersLayout::isRegular() const
+{
+    return m_isRegular;
+}
+
 void ViewersLayout::setViewerGeometry(Q2DViewerWidget *viewer, const QString &geometry)
 {
     if (!viewer)

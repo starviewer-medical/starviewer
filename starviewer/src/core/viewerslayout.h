@@ -30,6 +30,9 @@ public:
     /// ens retornarà un punter nul.
     Q2DViewerWidget* getViewerWidget(int number);
 
+    /// Ens diu si el layout és regular o no
+    bool isRegular() const;
+
 public slots:
     /// Canviar el nombre de files i columnes
     void addColumns(int columns = 1);
