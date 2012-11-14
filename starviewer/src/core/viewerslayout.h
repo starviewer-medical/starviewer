@@ -33,27 +33,34 @@ public:
     /// Ens diu si el layout és regular o no
     bool isRegular() const;
 
+    /// Retorna el nombre de columnes/files visibles
+    int getVisibleColumns() const;
+    int getVisibleRows() const;
+
+    /// Fa un layout regular amb les files i columnes indicades
+    void setGrid(int rows, int columns);
+
+    /// Afegeix un nou visualitzador amb la geometria indicada
+    Q2DViewerWidget* addViewer(const QString &geometry);
+
+    /// Neteja el layout, eliminant tots els visors i geometries,
+    /// deixant-lo en l'estat inicial, com si acabéssim de crear l'objecte
+    void cleanUp();
+
 public slots:
+    /// Marquem com a seleccionat el viewer passat per paràmetre
+    void setSelectedViewer(Q2DViewerWidget *viewer);
+
+private:
     /// Canviar el nombre de files i columnes
     void addColumns(int columns = 1);
     void addRows(int rows = 1);
     void removeColumns(int columns = 1);
     void removeRows(int rows = 1);
-    void setGrid(int rows, int columns);
     void showRows(int rows);
     void hideRows(int rows);
     void showColumns(int columns);
     void hideColumns(int columns);
-
-    /// Afegeix un nou visualitzador amb la geometria indicada
-    Q2DViewerWidget* addViewer(const QString &geometry);
-
-    /// Marquem com a seleccionat el viewer passat per paràmetre
-    void setSelectedViewer(Q2DViewerWidget *viewer);
-
-    /// Neteja el layout, eliminant tots els visors i geometries,
-    /// deixant-lo en l'estat inicial, com si acabéssim de crear l'objecte
-    void cleanUp();
 
 signals:
     /// Senyal que s'emet quan s'afegeix un visualitzador
