@@ -165,6 +165,9 @@ public:
 
      /// Retorna la mida dels escalars
     int getScalarSize();
+
+    /// Retorna l'scalar pointer de la imatge en forma de QByteArray.
+    QByteArray getImageScalarPointer(int imageNumber);
     
 signals:
     /// Emet l'estat del progrés en el que es troba la càrrega de dades del volum
