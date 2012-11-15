@@ -422,4 +422,17 @@ int Volume::getScalarSize()
 {
     return this->getPixelData()->getScalarSize();
 }
+
+QByteArray Volume::getImageScalarPointer(int imageNumber)
+{
+    int *dimensions = getDimensions();
+    int bytesPerImage = getScalarSize() * getNumberOfScalarComponents() * dimensions[0] * dimensions[1];
+
+    const char *scalarPointer = reinterpret_cast<const char*>(this->getScalarPointer());
+
+    scalarPointer += bytesPerImage*imageNumber;
+
+    return QByteArray(scalarPointer,bytesPerImage);
+}
+
 };

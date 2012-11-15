@@ -49,13 +49,8 @@ bool DICOMImageFileGenerator::generateDICOMFiles()
 
 bool DICOMImageFileGenerator::generateSecondaryCaptureDICOMFiles()
 {
-    int *dimensions = m_input->getDimensions();
-    int bytesPerImage = m_input->getScalarSize() * m_input->getNumberOfScalarComponents() * dimensions[0] * dimensions[1];
-
-    const char *scalarPointer = reinterpret_cast<const char*>(m_input->getScalarPointer());
-    int i = 1;
-
     DICOMWriter *writer;
+    int i = 0;
 
     foreach (Image *image, m_input->getImages())
     {
@@ -76,11 +71,8 @@ bool DICOMImageFileGenerator::generateSecondaryCaptureDICOMFiles()
         // Afegim el pixel data
         DICOMValueAttribute pixelData;
         pixelData.setTag(DICOMPixelData);
-        pixelData.setValue(QByteArray(scalarPointer, bytesPerImage));
+        pixelData.setValue(m_input->getImageScalarPointer(i));
         writer->addValueAttribute(&pixelData);
-
-        scalarPointer += bytesPerImage;
-        i++;
 
         // \TODO Si falla a l'escriure cal decidir què fer amb els fitxers que prèviament s'han pogut generar. Esborrar-los?
         if (! writer->write())
@@ -89,9 +81,9 @@ bool DICOMImageFileGenerator::generateSecondaryCaptureDICOMFiles()
         }
 
         image->setPath(writer->getPath());
+        i++;
 
         delete writer;
-
     }
 
     return true;
