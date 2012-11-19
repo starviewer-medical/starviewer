@@ -25,12 +25,12 @@ void test_DrawerBitmap::getBounds_ReturnsExpectedValues_data()
     QTest::addColumn<DrawerBitmap*>("drawerBitmap");
     QTest::addColumn<QVector<double> >("bounds");
 
-    DrawerBitmap *emptyBitmap = new DrawerBitmap;
+    DrawerBitmap *emptyBitmap = new DrawerBitmap(this);
     QVector<double> emptyBounds(6, 0.0);
     emptyBounds[5] = 1.0;
     QTest::newRow("Empty drawer bitmap") << emptyBitmap << emptyBounds;
 
-    DrawerBitmap *bitmap = new DrawerBitmap;
+    DrawerBitmap *bitmap = new DrawerBitmap(this);
     double origin[3] = { 1.5, 3.8, 7.2 };
     double spacing[3] = { 0.5, 2.0, 1.0 };
     unsigned int width = 256;
@@ -146,7 +146,7 @@ void test_DrawerBitmap::getDistanceToPoint_ReturnsExpectedValues()
     QFETCH(double, distance);
     QFETCH(QVector<double>, closestPoint);
 
-    DrawerBitmap *bitmap = new DrawerBitmap;
+    DrawerBitmap *bitmap = new DrawerBitmap(this);
     bitmap->setOrigin(origin.data());
     bitmap->setSpacing(spacing.data());
     bitmap->setData(width, height, 0);
