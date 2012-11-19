@@ -444,6 +444,16 @@ bool ViewersLayout::isRegular() const
     return m_isRegular;
 }
 
+int ViewersLayout::getVisibleColumns() const
+{
+    return m_visibleColumns;
+}
+
+int ViewersLayout::getVisibleRows() const
+{
+    return m_visibleRows;
+}
+
 void ViewersLayout::setViewerGeometry(Q2DViewerWidget *viewer, const QString &geometry)
 {
     if (!viewer)
