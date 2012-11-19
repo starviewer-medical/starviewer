@@ -12,7 +12,7 @@
 namespace udg {
 
 /**
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class rectumSegmentationMethod{
 
@@ -66,8 +66,8 @@ private:
     Volume* m_Mask;
     Volume* m_filteredInputImage;
 
-	InternalImageType::Pointer m_maskrecursive;
-	InternalImageType::Pointer m_imrecursive;
+    InternalImageType::Pointer m_maskrecursive;
+    InternalImageType::Pointer m_imrecursive;
 
     ///Posició de la llavor
     double m_px, m_py, m_pz;

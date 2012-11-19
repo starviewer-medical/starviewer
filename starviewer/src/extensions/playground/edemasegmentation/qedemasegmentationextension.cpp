@@ -213,7 +213,7 @@ void QEdemaSegmentationExtension::setInput( Volume *input )
     m_2DView->setInput( m_mainVolume );
     //això ho fem per indicar que no hi ha cap overlay
     m_2DView->setOverlapMethodToNone();
-	//m_2DView->setOverlayInput(m_lesionMaskVolume);
+    //m_2DView->setOverlayInput(m_lesionMaskVolume);
     
     int* dim;
     dim = m_mainVolume->getDimensions();
@@ -360,11 +360,11 @@ void QEdemaSegmentationExtension::applyVentriclesMethod()
     {
         m_imageThreshold = vtkImageThreshold::New();
     }else{
-		m_imageThreshold->Delete();
-		m_imageThreshold = vtkImageThreshold::New();
-	}
-	
-	m_imageThreshold->SetInput( m_mainVolume->getVtkData() );
+        m_imageThreshold->Delete();
+        m_imageThreshold = vtkImageThreshold::New();
+    }
+    
+    m_imageThreshold->SetInput( m_mainVolume->getVtkData() );
     m_lowerVentriclesValue = m_lowerValueVentriclesSlider->value();
     m_upperVentriclesValue = m_upperValueVentriclesSlider->value();
     m_imageThreshold->ThresholdBetween( m_lowerVentriclesValue,  m_upperVentriclesValue);

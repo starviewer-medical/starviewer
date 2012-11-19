@@ -31,7 +31,7 @@ class PerfusionMapCalculatorMainThread;
 class SeedToolData;
 
 /**
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class QPerfusionMapReconstructionExtension : public QWidget , private Ui::QPerfusionMapReconstructionExtensionBase {
 Q_OBJECT
@@ -84,10 +84,10 @@ private slots:
     /// gestiona els events del moviment del cursor
     void paintCursorSignal( );
 
-	/// pinta senyal temporal si la llavor està activada
-	void paintAIFSignal( );
+    /// pinta senyal temporal si la llavor està activada
+    void paintAIFSignal( );
 
-	/// pinta la mitjana del deltaR de cada llesca
+    /// pinta la mitjana del deltaR de cada llesca
     void paintMeanSlice( int slice );
 
     /// pinta les dades de la ROI
@@ -118,21 +118,21 @@ private:
     /// Tool manager
     ToolManager *m_toolManager;
 
-	/// Dades de la seed Tool per saber quin és l'arterial input function
-	SeedToolData *m_seedToolData;
+    /// Dades de la seed Tool per saber quin és l'arterial input function
+    SeedToolData *m_seedToolData;
     
-	///Calculadora de mapes de perfusió
+    ///Calculadora de mapes de perfusió
     PerfusionMapCalculatorMainThread* m_mapCalculator;
 
     DrawerPoint* m_aifDrawPoint;
     int m_aifIndex[3];
     int m_aifSlice;
 
-	///Valors de l'echo time i repetition time
-	double m_newTR;
-	double m_newTE;
+    ///Valors de l'echo time i repetition time
+    double m_newTR;
+    double m_newTE;
 
-	//DeltaR mitjana per cada llesca
+    //DeltaR mitjana per cada llesca
     QVector<QVector<double> > m_meanseries;
 };
 

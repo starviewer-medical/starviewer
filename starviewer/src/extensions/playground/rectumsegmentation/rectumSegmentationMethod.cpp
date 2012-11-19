@@ -151,7 +151,7 @@ double rectumSegmentationMethod::applyMethod()
     std::cout<<"Histogram parameters: "<<m_lowerThreshold<<" "<<m_upperThreshold<<std::endl;
     std::cout<<"mask Values: "<<m_insideMaskValue<<" "<<m_outsideMaskValue<<std::endl;
     std::cout<<"Seed Indexs: "<<internalSeedIndex[0]<<" "<<internalSeedIndex[1]<<std::endl;
-	*/
+    */
 
     typedef itk::BinaryBallStructuringElement<Volume::ItkPixelType,2> StructuringElementType;
     typedef itk::BinaryErodeImageFilter<InternalImageType,InternalImageType,StructuringElementType > ErodeFilterType;
@@ -316,12 +316,12 @@ double rectumSegmentationMethod::applyMethod()
         for (int i = 0; i < static_cast<int>(sizeOut[0]); ++i)
         {
             if (itSeg.Get() == m_insideMaskValue && i >= m_minROI[0] && i <= m_maxROI[0] && j >= m_minROI[1] && j <= m_maxROI[1])
-			{
+            {
                 itMask.Set(m_insideMaskValue);
                 ++m_cont;
             }
-			else
-			{
+            else
+            {
                 itMask.Set(m_outsideMaskValue);
                 ++cont2;
             }
@@ -383,8 +383,8 @@ void rectumSegmentationMethod::applyMethodNextSlice( unsigned int slice, int ste
     std::cout<<"Slice: "<<slice<<std::endl;
     std::cout<<"Histogram parameters: "<<m_lowerThreshold<<" "<<m_upperThreshold<<std::endl;
     std::cout<<"mask Values: "<<m_insideMaskValue<<" "<<m_outsideMaskValue<<std::endl;
-	*/
-	
+    */
+    
     typedef itk::BinaryBallStructuringElement<Volume::ItkPixelType,2> StructuringElementType;
     typedef itk::BinaryErodeImageFilter<InternalImageType,InternalImageType,StructuringElementType > ErodeFilterType;
     typedef itk::BinaryDilateImageFilter<InternalImageType,InternalImageType,StructuringElementType > DilateFilterType;
@@ -480,9 +480,9 @@ void rectumSegmentationMethod::applyMethodNextSlice( unsigned int slice, int ste
         if((itDilate.Get()==m_insideMaskValue)&&(itPrevious.Get()==m_insideMaskValue)&&(itRegion.Get()!=m_insideMaskValue))
         {
             //std::cout<<"Crida a regionGrowingRecursive a "<<itDilate.GetIndex()[0]<<", "<<itDilate.GetIndex()[1]<<" [ "<<regionThreshold->GetLargestPossibleRegion().GetSize()<<std::endl;
-			//Primer ho desem en atributs de la classe així ja no s'ha de passar per paràmetre
-			m_maskrecursive = regionThreshold;
-			m_imrecursive = binaryDilate->GetOutput();
+            //Primer ho desem en atributs de la classe així ja no s'ha de passar per paràmetre
+            m_maskrecursive = regionThreshold;
+            m_imrecursive = binaryDilate->GetOutput();
             this->regionGrowingRecursive( itDilate.GetIndex()[0], itDilate.GetIndex()[1],0);
         }
         ++itDilate;
@@ -508,7 +508,7 @@ void rectumSegmentationMethod::applyMethodNextSlice( unsigned int slice, int ste
     for(j=0;j<sizeOut[1];j++){
         for(i=0;i<sizeOut[0];i++){
             if(itSeg.Get()==m_insideMaskValue)
-			{
+            {
                 itMask.Set(m_insideMaskValue);
                 m_cont++;
             }
@@ -541,7 +541,7 @@ void rectumSegmentationMethod::regionGrowingRecursive(int indexX, int indexY , i
     index[0]=indexX;
     index[1]=indexY;
 
-	itIm.SetIndex(index);
+    itIm.SetIndex(index);
     itMask.SetIndex(index);
     //if((itIm.Get()>=m_lowerThreshold)&&(itIm.Get()<=m_upperThreshold)&&(itMask.Get()!=m_insideMaskValue))
     //if((itIm.Get()==m_insideMaskValue)&&(itMask.Get()!=m_insideMaskValue))

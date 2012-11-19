@@ -24,7 +24,7 @@ class ToolManager;
 class TransDifferenceToolData;
 
 /**
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class QAngioSubstractionExtension : public QWidget , private Ui::QAngioSubstractionExtensionBase {
 Q_OBJECT
@@ -42,14 +42,14 @@ private:
     /// Crea les connexions entre signals i slots
     void createConnections();
 
-	/// Guarda i llegeix les característiques
+    /// Guarda i llegeix les característiques
     void readSettings();
     void writeSettings();
 
 private slots:
 
-	/// Calcula la imatge diferència respecte la imatge imageid
-	void computeDifferenceImage( int imageid );
+    /// Calcula la imatge diferència respecte la imatge imageid
+    void computeDifferenceImage( int imageid );
 
     /// Calcula automàticament (registre) la imatge diferència respecte la imatge imageid
     void computeAutomateSingleImage( );

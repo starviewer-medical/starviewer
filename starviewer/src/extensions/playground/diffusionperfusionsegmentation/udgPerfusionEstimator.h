@@ -53,26 +53,26 @@ public:
      typedef typename PerfuNeighborIteratorType::RadiusType RadiusNeighborType;
 
      typedef TTransform TransformType;
-//     typedef TransformType::ParametersType 	TransformParametersType;
+//     typedef TransformType::ParametersType TransformParametersType;
 
-     typedef itk::NearestNeighborInterpolateImageFunction<MaskImageType, double>	InterpolatorType;
-//     typedef itk::LinearInterpolateImageFunction<MaskImageType, double>	InterpolatorType;
+     typedef itk::NearestNeighborInterpolateImageFunction<MaskImageType, double> InterpolatorType;
+//     typedef itk::LinearInterpolateImageFunction<MaskImageType, double> InterpolatorType;
      typedef typename InterpolatorType::RealType InterpolatorRealType;
 
-     typedef itk::BinaryBallStructuringElement<MaskPixelType,ImageDimension >			StructuringElementType;
-     typedef itk::BinaryDilateImageFilter<MaskImageType,MaskImageType,StructuringElementType >	DilateFilterType;
-//     typedef itk::GradientAnisotropicDiffusionImageFilter<PerfuImageType, PerfuImageType>	SmoothingFilterType;
-//     typedef itk::CurvatureFlowImageFilter<PerfuImageType, PerfuImageType>	SmoothingFilterType;
-     typedef itk::DiscreteGaussianImageFilter<PerfuImageType, PerfuImageType>			SmoothingFilterType;
+     typedef itk::BinaryBallStructuringElement<MaskPixelType,ImageDimension > StructuringElementType;
+     typedef itk::BinaryDilateImageFilter<MaskImageType,MaskImageType,StructuringElementType > DilateFilterType;
+//     typedef itk::GradientAnisotropicDiffusionImageFilter<PerfuImageType, PerfuImageType> SmoothingFilterType;
+//     typedef itk::CurvatureFlowImageFilter<PerfuImageType, PerfuImageType> SmoothingFilterType;
+     typedef itk::DiscreteGaussianImageFilter<PerfuImageType, PerfuImageType> SmoothingFilterType;
 
      typedef itk::ResampleImageFilter<MaskImageType, PerfuImageType > ResampleFilterType;
      typedef itk::RescaleIntensityImageFilter<PerfuImageType, PerfuImageType > RescaleFilterType;
 
 
-/*     typedef itk::BinaryThresholdImageFilter<InputImageType, OutputImageType >				ThresholdFilterType;
-     typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension >				StructuringElementType;
-     typedef itk::BinaryErodeImageFilter< InputImageType, OutputImageType,StructuringElementType >	ErodeFilterType;
-     typedef itk::BinaryDilateImageFilter<InputImageType,OutputImageType,StructuringElementType >	DilateFilterType;
+/*     typedef itk::BinaryThresholdImageFilter<InputImageType, OutputImageType > ThresholdFilterType;
+     typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension > StructuringElementType;
+     typedef itk::BinaryErodeImageFilter< InputImageType, OutputImageType,StructuringElementType > ErodeFilterType;
+     typedef itk::BinaryDilateImageFilter<InputImageType,OutputImageType,StructuringElementType > DilateFilterType;
   */
 
     udgPerfusionEstimator();
