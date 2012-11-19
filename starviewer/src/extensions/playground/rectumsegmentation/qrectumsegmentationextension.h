@@ -64,10 +64,10 @@ private slots:
     /// visualitza la informació de la llavor del mètode de segmentació
     void setSeedPosition(double x, double y, double z);
 
-	/// actulitza els controls quan es canvia l'input
-	void updateInputFeatures( Volume *input );
+    /// actulitza els controls quan es canvia l'input
+    void updateInputFeatures( Volume *input );
 
-	void setRegionOfInterest( );
+    void setRegionOfInterest( );
     void setMovingRegionOfInterest( );
     void setReleaseRegionOfInterest( );
     void viewRegionState(int st);
@@ -88,7 +88,7 @@ private slots:
     double calculateMaskVolume();
 
     /// Refresca el resultat del volum
-	void updateVolumeForced();
+    void updateVolumeForced();
     void updateVolume();
 
     /// Visualitza la màscara donats uns thresholds

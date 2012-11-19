@@ -274,11 +274,11 @@ void QDifuPerfuSegmentationExtension::setDiffusionInput( Volume * input )
 
 
     disconnect( m_selectedDiffusionImageSpinBox, SIGNAL( valueChanged(int) ), this, SLOT( setDiffusionImage(int) ) );
-	m_selectedDiffusionImageSpinBox->setMaximum(m_diffusionInputVolume->getNumberOfPhases() -1);
+    m_selectedDiffusionImageSpinBox->setMaximum(m_diffusionInputVolume->getNumberOfPhases() -1);
     m_selectedDiffusionImageSpinBox->setValue(m_diffusionInputVolume->getNumberOfPhases() -1);
 
     m_diffusionSliceSlider->setValue( m_diffusion2DView->getCurrentSlice() );
-	setDiffusionImage(m_diffusionInputVolume->getNumberOfPhases() - 1);
+    setDiffusionImage(m_diffusionInputVolume->getNumberOfPhases() - 1);
     connect( m_selectedDiffusionImageSpinBox, SIGNAL( valueChanged(int) ), SLOT( setDiffusionImage(int) ) );
 }
 
@@ -331,7 +331,7 @@ void QDifuPerfuSegmentationExtension::setDiffusionImage( int index )
 
 void QDifuPerfuSegmentationExtension::setPerfusionInput( Volume * input )
 {
-	if ( !input )
+    if ( !input )
     {
         ERROR_LOG( "setPerfusionInput: null input");
         return;
@@ -352,7 +352,7 @@ void QDifuPerfuSegmentationExtension::setPerfusionInput( Volume * input )
     m_applyRegistrationPushButton->setEnabled( true );
 
     m_perfusionSliceSlider->setValue( m_perfusion2DView->getCurrentSlice() );
-	setPerfusionImage(m_perfusionInputVolume->getNumberOfPhases() - 1);
+    setPerfusionImage(m_perfusionInputVolume->getNumberOfPhases() - 1);
 }
 
 void QDifuPerfuSegmentationExtension::setPerfusionLut( int threshold )

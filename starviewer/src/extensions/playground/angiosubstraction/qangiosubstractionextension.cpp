@@ -99,7 +99,7 @@ void QAngioSubstractionExtension::initializeTools()
 
 void QAngioSubstractionExtension::createConnections()
 {
-	//Només es pot canviar l'input d'un dels viewers (el de l'input)
+    //Només es pot canviar l'input d'un dels viewers (el de l'input)
     m_2DView_1->getViewer()->setAutomaticallyLoadPatientBrowserMenuSelectedInput(false);
     m_2DView_2->getViewer()->setAutomaticallyLoadPatientBrowserMenuSelectedInput(false);
     connect( m_2DView_1->getViewer()->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume*) ), SLOT( setInput( Volume* ) ) );
@@ -111,28 +111,28 @@ void QAngioSubstractionExtension::setInput( Volume *input )
 {
     m_mainVolume = input;
 
-	//Desactivem la sincronització perquè si no quan es canvia l'input no funciona correctament
+    //Desactivem la sincronització perquè si no quan es canvia l'input no funciona correctament
     m_2DView_1->enableSynchronization(false);
     m_2DView_2->enableSynchronization(false);
 
-	//eliminem l'anterior m_differenceVolume si n'hi ha
-	if(m_differenceVolume){
-		delete m_differenceVolume;
-		m_differenceVolume = 0;
-	}
+    //eliminem l'anterior m_differenceVolume si n'hi ha
+    if(m_differenceVolume){
+        delete m_differenceVolume;
+        m_differenceVolume = 0;
+    }
 
 
-	//Compute the new difference Volume
-	m_2DView_1->getViewer()->setInput(m_mainVolume);
-	m_imageSelectorSpinBox->setMinimum(1);
-	m_imageSelectorSpinBox->setMaximum(m_mainVolume->getDimensions()[2]);
-	m_imageSelectorSpinBox->setValue(1);
+    //Compute the new difference Volume
+    m_2DView_1->getViewer()->setInput(m_mainVolume);
+    m_imageSelectorSpinBox->setMinimum(1);
+    m_imageSelectorSpinBox->setMaximum(m_mainVolume->getDimensions()[2]);
+    m_imageSelectorSpinBox->setValue(1);
 
-	computeDifferenceImage( m_imageSelectorSpinBox->value() );
+    computeDifferenceImage( m_imageSelectorSpinBox->value() );
 
-	//Només actualitzem l'1 perquè el 2 ja es fa en l'acció computeDifferenceImage
-	//Això es fa així perquè l'acció està lligada a un connect
-	m_2DView_1->getViewer()->render();
+    //Només actualitzem l'1 perquè el 2 ja es fa en l'acció computeDifferenceImage
+    //Això es fa així perquè l'acció està lligada a un connect
+    m_2DView_1->getViewer()->render();
 
     m_2DView_1->enableSynchronization(true);
     m_2DView_2->enableSynchronization(true);
@@ -150,7 +150,7 @@ void QAngioSubstractionExtension::computeDifferenceImage( int imageid )
     }
 
     QApplication::setOverrideCursor( Qt::WaitCursor );
-	//DEBUG_LOG(QString("Init computeDifferenceImage: %1").arg(imageid));
+    //DEBUG_LOG(QString("Init computeDifferenceImage: %1").arg(imageid));
     
     //Actualitzem les dades de la transdifference tool
     m_toolManager->triggerTool("TransDifferenceTool");

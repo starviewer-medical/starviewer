@@ -64,7 +64,7 @@ void PerfusionMapCalculatorMainThread::run()
     this->computeDeltaR();
     deltaRtime += time.elapsed();
     time.restart();
-	//\TODO: Si m_AIFIsSet només caldria calcular el moment 0!!!
+    //\TODO: Si m_AIFIsSet només caldria calcular el moment 0!!!
     DEBUG_LOG("Compute Moments");
     this->computeMoments();
     momentstime += time.elapsed();

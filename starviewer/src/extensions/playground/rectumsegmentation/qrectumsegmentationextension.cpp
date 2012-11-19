@@ -178,7 +178,7 @@ void QRectumSegmentationExtension::setInput( Volume *input )
 {
     m_mainVolume = input;
     m_2DView->setInput( input );
-	this->updateInputFeatures(input);
+    this->updateInputFeatures(input);
     m_2DView->removeAnnotation( Q2DViewer::AllAnnotation );
     //m_2DView->resetWindowLevelToDefault();
     m_2DView->setOverlapMethodToBlend();
@@ -539,16 +539,16 @@ void QRectumSegmentationExtension::updateVolumeForced()
                 }
             }
         }
-		double spacing[3];
-		m_lesionMaskVolume->getSpacing(spacing);
-		double volume = 1.0;
+        double spacing[3];
+        m_lesionMaskVolume->getSpacing(spacing);
+        double volume = 1.0;
 
-		for(unsigned int i=0;i<Volume::VDimension;i++)
-		{
-			volume *= spacing[i];
-		}
+        for(unsigned int i=0;i<Volume::VDimension;i++)
+        {
+            volume *= spacing[i];
+        }
 
-		m_volume = volume*(double)cont;
+        m_volume = volume*(double)cont;
         m_resultsLineEdit->clear();
         m_resultsLineEdit->insert(QString("%1").arg(m_volume, 0, 'f', 2));
     }
@@ -606,25 +606,25 @@ double QRectumSegmentationExtension::calculateMaskVolume()
         return 0.0;
 
     int cont;
-	EditorTool* edTool = static_cast<EditorTool*> (m_2DView->getToolProxy()->getTool("EditorTool"));
+    EditorTool* edTool = static_cast<EditorTool*> (m_2DView->getToolProxy()->getTool("EditorTool"));
     if(edTool!=0)
     {
-		EditorToolData* edToolData = static_cast<EditorToolData*> ( m_2DView->getToolProxy()->getTool("EditorTool")->getToolData() );
-		if(edToolData!=0)
-		{
-			cont = edToolData->getVolumeVoxels();
-		}
-		else
-		{
-			DEBUG_LOG("No existeix la editor tool");
-			return 0.0;
-		}
-	}
-	else
-	{
-		DEBUG_LOG("No existeix la editor tool");
-		return 0.0;
-	}
+        EditorToolData* edToolData = static_cast<EditorToolData*> ( m_2DView->getToolProxy()->getTool("EditorTool")->getToolData() );
+        if(edToolData!=0)
+        {
+            cont = edToolData->getVolumeVoxels();
+        }
+        else
+        {
+            DEBUG_LOG("No existeix la editor tool");
+            return 0.0;
+        }
+    }
+    else
+    {
+        DEBUG_LOG("No existeix la editor tool");
+        return 0.0;
+    }
 
     double spacing[3];
     m_lesionMaskVolume->getSpacing(spacing);

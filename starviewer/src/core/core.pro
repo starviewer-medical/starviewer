@@ -285,7 +285,7 @@ HEADERS += extensionfactory.h \
     diagnosistestproblem.h \
     directoryutilities.h \
     dicomformattedvaluesconverter.h \
-	loggingoutputwindow.h
+    loggingoutputwindow.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -528,7 +528,7 @@ SOURCES += extensionmediator.cpp \
     diagnosistestproblem.cpp \
     directoryutilities.cpp \
     dicomformattedvaluesconverter.cpp \
-	loggingoutputwindow.cpp
+    loggingoutputwindow.cpp
 win32 {
     HEADERS += windowsfirewallaccess.h \
                windowssysteminformation.h
