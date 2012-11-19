@@ -51,17 +51,6 @@ public slots:
     /// Marquem com a seleccionat el viewer passat per paràmetre
     void setSelectedViewer(Q2DViewerWidget *viewer);
 
-private:
-    /// Canviar el nombre de files i columnes
-    void addColumns(int columns = 1);
-    void addRows(int rows = 1);
-    void removeColumns(int columns = 1);
-    void removeRows(int rows = 1);
-    void showRows(int rows);
-    void hideRows(int rows);
-    void showColumns(int columns);
-    void hideColumns(int columns);
-
 signals:
     /// Senyal que s'emet quan s'afegeix un visualitzador
     void viewerAdded(Q2DViewerWidget *viewer);
@@ -79,6 +68,17 @@ protected:
     /// Tractament de l'event de canvi de tamany de la finestra
     /// Quan rebem aquest event, redimensionem els viewers amb la geometria adequada
     void resizeEvent(QResizeEvent *event);
+
+private:
+    /// Canviar el nombre de files i columnes
+    void addColumns(int columns = 1);
+    void addRows(int rows = 1);
+    void removeColumns(int columns = 1);
+    void removeRows(int rows = 1);
+    void showRows(int rows);
+    void hideRows(int rows);
+    void showColumns(int columns);
+    void hideColumns(int columns);
 
 private:
     /// Crea i retorna un nou visor configurat adequadament
