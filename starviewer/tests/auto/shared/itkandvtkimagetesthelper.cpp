@@ -1,5 +1,9 @@
 #include "itkandvtkimagetesthelper.h"
 
+#include "fuzzycomparetesthelper.h"
+
+#include <QTest>
+
 #include <itkImageRegionIterator.h>
 
 namespace testing {
@@ -68,6 +72,45 @@ void ItkAndVtkImageTestHelper::createItkAndVtkImages(int dimensions[3], int star
         ++vtkPointer;
         ++value;
     }
+}
+
+void ItkAndVtkImageTestHelper::compareVtkImageData(vtkImageData *actualImageData, vtkImageData *expectedImageData, bool &equal)
+{
+    equal = false;
+
+    if (actualImageData == expectedImageData)
+    {
+        equal = true;
+        return;
+    }
+
+    QVERIFY(actualImageData != 0);
+    QVERIFY(expectedImageData != 0);
+
+    for (int i = 0; i < 3; i++)
+    {
+        QCOMPARE(actualImageData->GetDimensions()[i], expectedImageData->GetDimensions()[i]);
+        QVERIFY2(FuzzyCompareTestHelper::fuzzyCompare(actualImageData->GetSpacing()[i], expectedImageData->GetSpacing()[i]),
+            qPrintable(QString("actualSpacing[%1] = %2, expectedSpacing[%1] = %3").arg(i).arg(actualImageData->GetSpacing()[i])
+                                                                                  .arg(expectedImageData->GetSpacing()[i])));
+        QVERIFY2(FuzzyCompareTestHelper::fuzzyCompare(actualImageData->GetOrigin()[i], expectedImageData->GetOrigin()[i]),
+            qPrintable(QString("actualOrigin[%1] = %2, expectedOrigin[%1] = %3").arg(i).arg(actualImageData->GetOrigin()[i])
+                                                                                .arg(expectedImageData->GetOrigin()[i])));
+    }
+
+    for (int i = 0; i < 6; i++)
+    {
+        QCOMPARE(actualImageData->GetExtent()[i], expectedImageData->GetExtent()[i]);
+        QCOMPARE(actualImageData->GetWholeExtent()[i], expectedImageData->GetWholeExtent()[i]);
+    }
+
+    QCOMPARE(actualImageData->GetScalarType(), expectedImageData->GetScalarType());
+    QCOMPARE(actualImageData->GetNumberOfScalarComponents(), expectedImageData->GetNumberOfScalarComponents());
+
+    QVERIFY(memcmp(actualImageData->GetScalarPointer(), expectedImageData->GetScalarPointer(),
+                   actualImageData->GetNumberOfPoints() * actualImageData->GetNumberOfScalarComponents() * actualImageData->GetScalarSize()) == 0);
+
+    equal = true;
 }
 
 }
