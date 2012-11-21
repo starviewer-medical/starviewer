@@ -19,6 +19,10 @@ public:
     static void createItkAndVtkImages(int dimensions[3], int startIndex[3], double spacing[3], double origin[3], VolumePixelData::ItkImageTypePointer &itkImage,
                                       vtkSmartPointer<vtkImageData> &vtkImage);
 
+    /// Compara dos objectes vtkImageData fent servir l'API de QTest. Posa equal a cert si són iguals i a fals si són diferents.
+    /// Per la manera com funcionen QCOMPARE i QVERIFY aquest mètode no pot retornar un valor directament, per això el retorna per paràmetre de sortida.
+    static void compareVtkImageData(vtkImageData *actualImageData, vtkImageData *expectedImageData, bool &equal);
+
 };
 
 }

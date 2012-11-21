@@ -2,6 +2,12 @@
 
 #include "drawerbitmap.h"
 #include "fuzzycomparetesthelper.h"
+#include "itkandvtkimagetesthelper.h"
+
+#include <vtkImageActor.h>
+#include <vtkImageData.h>
+#include <vtkImageMapToColors.h>
+#include <vtkLookupTable.h>
 
 using namespace udg;
 using namespace testing;
@@ -15,10 +21,16 @@ private slots:
 
     void getDistanceToPoint_ReturnsExpectedValues_data();
     void getDistanceToPoint_ReturnsExpectedValues();
+
+    void getAsVtkProp_ShouldReturnNull();
+
+    void getAsVtkProp_ShouldReturnPropLikeExpected_data();
+    void getAsVtkProp_ShouldReturnPropLikeExpected();
 };
 
 Q_DECLARE_METATYPE(DrawerBitmap*)
 Q_DECLARE_METATYPE(QVector<double>)
+Q_DECLARE_METATYPE(vtkSmartPointer<vtkImageActor>)
 
 void test_DrawerBitmap::getBounds_ReturnsExpectedValues_data()
 {
@@ -154,6 +166,89 @@ void test_DrawerBitmap::getDistanceToPoint_ReturnsExpectedValues()
     QVector<double> computedClosestPoint(3);
     QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(bitmap->getDistanceToPoint(point.data(), computedClosestPoint.data()), distance, 0.0001));
     QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(computedClosestPoint, closestPoint));
+}
+
+void test_DrawerBitmap::getAsVtkProp_ShouldReturnNull()
+{
+    QCOMPARE((new DrawerBitmap(this))->getAsVtkProp(), static_cast<vtkProp*>(nullptr));
+}
+
+void test_DrawerBitmap::getAsVtkProp_ShouldReturnPropLikeExpected_data()
+{
+    QTest::addColumn<DrawerBitmap*>("drawerBitmap");
+    QTest::addColumn<vtkSmartPointer<vtkImageActor>>("expectedProp");
+
+    double origin[3] = { 1.0, 2.0, 3.0 };
+    double spacing[3] = { 0.5, 0.5, 2.5 };
+    unsigned int width = 256;
+    unsigned int height = 256;
+    unsigned char *data = new unsigned char[width * height];
+    for (unsigned int i = 0; i < width * height; i++)
+    {
+        data[i] = i;
+    }
+    double backgroundOpacity = 0.1;
+    QColor backgroundColor(12, 12, 14);
+    QColor foregroundColor(2, 25, 255);
+
+    DrawerBitmap *drawerBitmap = new DrawerBitmap(this);
+    drawerBitmap->setOrigin(origin);
+    drawerBitmap->setSpacing(spacing);
+    drawerBitmap->setData(width, height, data);
+    drawerBitmap->setBackgroundOpacity(backgroundOpacity);
+    drawerBitmap->setBackgroundColor(backgroundColor);
+    drawerBitmap->setForegroundColor(foregroundColor);
+
+    vtkImageData *imageData = vtkImageData::New();
+    imageData->SetOrigin(origin);
+    imageData->SetSpacing(spacing);
+    imageData->SetExtent(0, width - 1, 0, height - 1, 0, 0);
+    imageData->SetScalarTypeToUnsignedChar();
+    imageData->SetNumberOfScalarComponents(1);
+    imageData->AllocateScalars();
+    memcpy(imageData->GetScalarPointer(), data, width * height * sizeof(unsigned char));
+
+    vtkLookupTable *lookupTable = vtkLookupTable::New();
+    lookupTable->SetNumberOfTableValues(2);
+    lookupTable->SetRange(0.0, 1.0);
+    lookupTable->SetTableValue(0, backgroundColor.redF(), backgroundColor.greenF(), backgroundColor.blueF(), backgroundOpacity);
+    lookupTable->SetTableValue(1, foregroundColor.redF(), foregroundColor.greenF(), foregroundColor.blueF(), 1.0);
+    lookupTable->Build();
+
+    vtkImageMapToColors *mapTransparency = vtkImageMapToColors::New();
+    mapTransparency->SetLookupTable(lookupTable);
+    mapTransparency->SetInput(imageData);
+    mapTransparency->PassAlphaToOutputOn();
+
+    vtkSmartPointer<vtkImageActor> imageActor = vtkSmartPointer<vtkImageActor>::New();
+    imageActor->SetInput(mapTransparency->GetOutput());
+    imageActor->SetDisplayExtent(0, width - 1, 0, height - 1, 0, 0);
+    imageActor->SetVisibility(true);
+
+    imageData->Delete();
+    lookupTable->Delete();
+    mapTransparency->Delete();
+
+    QTest::newRow("non-empty drawer bitmap") << drawerBitmap << imageActor;
+}
+
+void test_DrawerBitmap::getAsVtkProp_ShouldReturnPropLikeExpected()
+{
+    QFETCH(DrawerBitmap*, drawerBitmap);
+    QFETCH(vtkSmartPointer<vtkImageActor>, expectedProp);
+
+    vtkImageActor *imageActor = vtkImageActor::SafeDownCast(drawerBitmap->getAsVtkProp());
+    QVERIFY(imageActor != 0);
+    QCOMPARE(imageActor->GetVisibility(), expectedProp->GetVisibility());
+    
+    for (int i = 0; i < 6; i++)
+    {
+        QCOMPARE(imageActor->GetDisplayExtent()[i], expectedProp->GetDisplayExtent()[i]);
+    }
+
+    bool equal;
+    ItkAndVtkImageTestHelper::compareVtkImageData(imageActor->GetInput(), expectedProp->GetInput(), equal);
+    QVERIFY(equal);
 }
 
 DECLARE_TEST(test_DrawerBitmap)
