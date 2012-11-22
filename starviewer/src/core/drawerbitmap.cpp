@@ -3,12 +3,11 @@
 #include "logging.h"
 #include "mathtools.h"
 #include "volumepixeldata.h"
+#include "vtkimagedatacreator.h"
+
 #include <QColor>
 
 #include <vtkImageActor.h>
-#include <vtkImageData.h>
-#include <vtkUnsignedCharArray.h>
-#include <vtkPointData.h>
 #include <vtkLookupTable.h>
 #include <vtkImageMapToColors.h>
 
@@ -68,9 +67,13 @@ vtkProp* DrawerBitmap::getAsVtkProp()
 {
     if (!m_imageActor)
     {
-        vtkImageData *imageData = rawDataToVtkImageData(m_data);
-        if (imageData)
+        if (m_data)
         {
+            VtkImageDataCreator imageDataCreator;
+            imageDataCreator.setOrigin(m_origin);
+            imageDataCreator.setSpacing(m_spacing);
+            vtkSmartPointer<vtkImageData> imageData = imageDataCreator.createVtkImageData(m_width, m_height, 1, m_data);
+
             // Construim LUT per aplicar transparències: fet a partir del codi de http://www.vtk.org/Wiki/VTK/Examples/Cxx/Images/Transparency
             vtkSmartPointer<vtkLookupTable> lookupTable = vtkSmartPointer<vtkLookupTable>::New();
             lookupTable->SetNumberOfTableValues(2);
@@ -84,7 +87,6 @@ vtkProp* DrawerBitmap::getAsVtkProp()
             vtkSmartPointer<vtkImageMapToColors> mapTransparency = vtkSmartPointer<vtkImageMapToColors>::New();
             mapTransparency->SetLookupTable(lookupTable);
             mapTransparency->SetInput(imageData);
-            imageData->Delete();
             mapTransparency->PassAlphaToOutputOn();
  
             // Creem l'actor
@@ -193,22 +195,6 @@ void DrawerBitmap::updateVtkProp()
     {
         DEBUG_LOG("No es pot actualitzar el bitmap, ja que l'actor encara no s'ha creat");
     }
-}
-
-vtkImageData* DrawerBitmap::rawDataToVtkImageData(unsigned char *data)
-{
-    if (!data)
-    {
-        return 0;
-    }
-
-    VolumePixelData *pixelData = new VolumePixelData;
-    int extent[6] = {0, m_width - 1, 0, m_height - 1, 0, 0};
-    pixelData->setData(data, extent, 1, false);
-    pixelData->getVtkData()->SetOrigin(m_origin);
-    pixelData->getVtkData()->SetSpacing(m_spacing);
-
-    return pixelData->getVtkData();
 }
 
 } // end namespace udg
