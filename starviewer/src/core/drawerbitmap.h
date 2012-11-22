@@ -7,7 +7,6 @@
 
 class QColor;
 class vtkImageActor;
-class vtkImageData;
 
 namespace udg {
 
@@ -55,10 +54,6 @@ public slots:
 
 protected slots:
     void updateVtkProp();
-
-private:
-    /// Transforma les dades "raw" en un vtkImageData
-    vtkImageData* rawDataToVtkImageData(unsigned char *data);
 
 private:
     /// Origen del bitmap
