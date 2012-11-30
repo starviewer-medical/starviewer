@@ -226,6 +226,9 @@ public:
     /// comprovar que es tracti d'un SOP Class suportat per l'aplicació
     bool isViewable() const;
 
+    /// Ens indica si la sèrie és un localizer de CT
+    bool isCTLocalizer() const;
+    
     /// Mètode per obtenir el volume que conté una imatge en concret
     Volume* getVolumeOfImage(Image *image);
 
