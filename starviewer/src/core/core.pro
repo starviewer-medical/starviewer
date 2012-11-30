@@ -286,6 +286,7 @@ HEADERS += extensionfactory.h \
     directoryutilities.h \
     dicomformattedvaluesconverter.h \
     loggingoutputwindow.h \
+    optimalviewersgridestimator.h \
     vtkimagedatacreator.h
 
 SOURCES += extensionmediator.cpp \
@@ -530,6 +531,7 @@ SOURCES += extensionmediator.cpp \
     directoryutilities.cpp \
     dicomformattedvaluesconverter.cpp \
     loggingoutputwindow.cpp \
+    optimalviewersgridestimator.cpp \
     vtkimagedatacreator.cpp
 win32 {
     HEADERS += windowsfirewallaccess.h \
