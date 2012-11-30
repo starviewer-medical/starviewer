@@ -576,7 +576,9 @@ bool Series::isMRSurvey() const
     {
         foreach (const QString &string, getDescription().split("\\"))
         {
-            if (QString::compare(string.trimmed(), "SURVEY", Qt::CaseInsensitive) == 0)
+            // TODO Estudiar si considerar com a surveys també aquells que continguin "localizer" o "SURV" a la descripció.
+            // S'han trobat casos, tot i que no és tant habitual.
+            if (string.contains("SURVEY", Qt::CaseInsensitive))
             {
                 isSurvey = true;
             }
