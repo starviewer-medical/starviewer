@@ -21,11 +21,11 @@ void ViewersLayout::initLayouts()
     m_totalRows = 0;
     m_totalColumns = 0;
 
-    m_viewersLayout = new QGridLayout();
-    m_viewersLayout->setSpacing(0);
-    m_viewersLayout->setMargin(0);
+    m_regularViewersGridLayout = new QGridLayout();
+    m_regularViewersGridLayout->setSpacing(0);
+    m_regularViewersGridLayout->setMargin(0);
 
-    this->setLayout(m_viewersLayout);
+    this->setLayout(m_regularViewersGridLayout);
 
     m_isRegular = true;
 }
@@ -84,9 +84,9 @@ void ViewersLayout::addColumns(int columns)
                 newViewer = getNewQ2DViewerWidget();
             }
 
-            m_viewersLayout->addWidget(newViewer, rows, m_totalColumns - 1);
+            m_regularViewersGridLayout->addWidget(newViewer, rows, m_totalColumns - 1);
             newViewer->show();
-            m_vectorViewers.insert(viewerPosition, newViewer);
+            m_regularViewersGridVector.insert(viewerPosition, newViewer);
             viewerPosition += m_visibleColumns;
             if (rows >= m_visibleRows)
             {
@@ -122,9 +122,9 @@ void ViewersLayout::addRows(int rows)
             {
                 newViewer = getNewQ2DViewerWidget();
             }
-            m_viewersLayout->addWidget(newViewer, m_visibleRows - 1, column);
+            m_regularViewersGridLayout->addWidget(newViewer, m_visibleRows - 1, column);
             newViewer->show();
-            m_vectorViewers.push_back(newViewer);
+            m_regularViewersGridVector.push_back(newViewer);
             if (column >= m_visibleColumns)
             {
                 hideViewer(newViewer);
@@ -140,11 +140,11 @@ void ViewersLayout::removeColumns(int columns)
     {
         int viewerPosition = m_visibleColumns - 1;
         // Eliminem un widget de cada fila per tenir una columna menys
-        for (int rows = 0; rows < m_viewersLayout->rowCount(); ++rows)
+        for (int rows = 0; rows < m_regularViewersGridLayout->rowCount(); ++rows)
         {
             Q2DViewerWidget *oldViewer = getViewerWidget(viewerPosition);
-            m_viewersLayout->removeWidget(oldViewer);
-            m_vectorViewers.remove(viewerPosition);
+            m_regularViewersGridLayout->removeWidget(oldViewer);
+            m_regularViewersGridVector.remove(viewerPosition);
             if (m_selectedViewer == oldViewer)
             {
                 setSelectedViewer(getViewerWidget(0));
@@ -159,7 +159,7 @@ void ViewersLayout::removeColumns(int columns)
 
 void ViewersLayout::removeRows(int rows)
 {
-    int viewerPosition = m_vectorViewers.count() - 1;
+    int viewerPosition = m_regularViewersGridVector.count() - 1;
 
     while (rows > 0 && m_visibleRows > 1)
     {
@@ -167,8 +167,8 @@ void ViewersLayout::removeRows(int rows)
         for (int i = 0; i < m_visibleColumns; ++i)
         {
             Q2DViewerWidget *oldViewer = getViewerWidget(viewerPosition);
-            m_vectorViewers.remove(viewerPosition);
-            m_viewersLayout->removeWidget(oldViewer);
+            m_regularViewersGridVector.remove(viewerPosition);
+            m_regularViewersGridLayout->removeWidget(oldViewer);
             // TODO eliminar els viewers que treiem del toolManager???
             if (m_selectedViewer == oldViewer)
             {
@@ -327,11 +327,11 @@ void ViewersLayout::cleanUp()
     for (int i = 0; i < getNumberOfViewers(); ++i)
     {
         Q2DViewerWidget *viewer = getViewerWidget(i);
-        m_viewersLayout->removeWidget(viewer);
+        m_regularViewersGridLayout->removeWidget(viewer);
         this->deleteQ2DViewerWidget(viewer);
     }
     // Eliminem els visors i les geometries
-    m_vectorViewers.clear();
+    m_regularViewersGridVector.clear();
     m_freeLayoutViewersList.clear();
     m_geometriesList.clear();
 
@@ -411,7 +411,7 @@ int ViewersLayout::getNumberOfViewers() const
 {
     if (m_isRegular)
     {
-        return m_vectorViewers.size();
+        return m_regularViewersGridVector.size();
     }
     else
     {
@@ -428,7 +428,7 @@ Q2DViewerWidget* ViewersLayout::getViewerWidget(int number)
     {
         if (m_isRegular)
         {
-            viewerWidget = m_vectorViewers.at(number);
+            viewerWidget = m_regularViewersGridVector.at(number);
         }
         else
         {
