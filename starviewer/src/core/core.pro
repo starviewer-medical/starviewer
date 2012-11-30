@@ -286,6 +286,7 @@ HEADERS += extensionfactory.h \
     directoryutilities.h \
     dicomformattedvaluesconverter.h \
     loggingoutputwindow.h \
+    studylayoutconfig.h \
     optimalviewersgridestimator.h \
     vtkimagedatacreator.h
 
@@ -531,6 +532,7 @@ SOURCES += extensionmediator.cpp \
     directoryutilities.cpp \
     dicomformattedvaluesconverter.cpp \
     loggingoutputwindow.cpp \
+    studylayoutconfig.cpp \
     optimalviewersgridestimator.cpp \
     vtkimagedatacreator.cpp
 win32 {
