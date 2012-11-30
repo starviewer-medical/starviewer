@@ -49,6 +49,9 @@ private slots:
 
     void isCTLocalizer_ReturnsExpectedValues_data();
     void isCTLocalizer_ReturnsExpectedValues();
+
+    void isMRSurvey_ReturnsExpectedValues_data();
+    void isMRSurvey_ReturnsExpectedValues();
 };
 
 Q_DECLARE_METATYPE(DICOMSource)
@@ -375,6 +378,48 @@ void test_Series::isCTLocalizer_ReturnsExpectedValues()
     QFETCH(bool, expectedValue);
 
     QCOMPARE(series->isCTLocalizer(), expectedValue);
+    
+    SeriesTestHelper::cleanUp(series);
+}
+
+void test_Series::isMRSurvey_ReturnsExpectedValues_data()
+{
+    QTest::addColumn<Series*>("series");
+    QTest::addColumn<bool>("expectedValue");
+
+    QTest::newRow("Empty series") << new Series() << false;
+
+    Series *series1 = new Series();
+    series1->setDescription("Survey");
+    QTest::newRow("Non-MR with survey description") << series1 << false;
+
+    Series *series2 = new Series();
+    series2->setDescription("Survey");
+    series2->setModality("MR");
+    QTest::newRow("MR with survey description") << series2 << true;
+
+    Series *series3 = new Series();
+    series3->setDescription("artywebhsSURVEYloryance");
+    series3->setModality("MR");
+    QTest::newRow("MR, contains survey in description inside another word") << series3 << false;
+
+    Series *series4 = new Series();
+    series4->setDescription("artywebhs\\SURVEY\\loryance");
+    series4->setModality("MR");
+    QTest::newRow("MR, contains survey in description separated by '\\'") << series4 << true;
+
+    Series *series5 = new Series();
+    series5->setDescription("ghsgajs\\klsjhjshk\\SURV\\EY");
+    series5->setModality("MR");
+    QTest::newRow("MR, not contains survey as standalone word") << series5 << false;
+}
+
+void test_Series::isMRSurvey_ReturnsExpectedValues()
+{
+    QFETCH(Series*, series);
+    QFETCH(bool, expectedValue);
+
+    QCOMPARE(series->isMRSurvey(), expectedValue);
     
     SeriesTestHelper::cleanUp(series);
 }

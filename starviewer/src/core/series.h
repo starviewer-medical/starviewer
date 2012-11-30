@@ -228,6 +228,9 @@ public:
 
     /// Ens indica si la sèrie és un localizer de CT
     bool isCTLocalizer() const;
+
+    /// Ens indica si la sèrie és un survey d'MR
+    bool isMRSurvey() const;
     
     /// Mètode per obtenir el volume que conté una imatge en concret
     Volume* getVolumeOfImage(Image *image);
