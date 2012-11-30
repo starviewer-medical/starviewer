@@ -538,6 +538,36 @@ bool Series::isViewable() const
     }
 }
 
+
+bool Series::isCTLocalizer() const
+{
+    // \TODO Ara estem considerant que un volume serà localizer si la primera imatge ho és, però res ens indica que els localizers no puguin estar barretjats
+    // amb la resta.
+    bool isLocalizer = false;
+    
+    if (getModality() == "CT")
+    {
+        Image *currentImage = getImageByIndex(0);
+        QString value = currentImage->getImageType();
+        QStringList valueList = value.split("\\");
+        if (valueList.count() >= 3)
+        {
+            if (valueList.at(2) == "LOCALIZER")
+            {
+                isLocalizer = true;
+            }
+        }
+        else
+        {
+            // TODO aquesta comprovació s'ha afegit perquè hem trobat un cas en que aquestes dades apareixen incoherents
+            // tot i així, lo seu seria disposar d'alguna eina que comprovés si les dades són consistents o no.
+            DEBUG_LOG("ERROR: Inconsistència DICOM: La imatge " + currentImage->getSOPInstanceUID() + " de la serie " + getInstanceUID() +
+                        " té el camp ImageType que és tipus 1, amb un nombre incorrecte d'elements: Valor del camp:: [" + value + "]");
+        }
+    }
+    return isLocalizer;
+}
+
 void Series::setManufacturer(QString manufacturer)
 {
     m_manufacturer = manufacturer;

@@ -46,6 +46,9 @@ private slots:
     /// Test que comprova si s'afegeix una imatge correctament
     void addImage_ShouldReturnCorrectAnswer_data();
     void addImage_ShouldReturnCorrectAnswer();
+
+    void isCTLocalizer_ReturnsExpectedValues_data();
+    void isCTLocalizer_ReturnsExpectedValues();
 };
 
 Q_DECLARE_METATYPE(DICOMSource)
@@ -310,6 +313,69 @@ void test_Series::addImage_ShouldReturnCorrectAnswer()
 
     QCOMPARE(series->addImage(images), result);
 
+    SeriesTestHelper::cleanUp(series);
+}
+
+void test_Series::isCTLocalizer_ReturnsExpectedValues_data()
+{
+    QTest::addColumn<Series*>("series");
+    QTest::addColumn<bool>("expectedValue");
+
+    QTest::newRow("Empty series") << SeriesTestHelper::createSeries(0) << false;
+    QTest::newRow("Series with 1 image, no modality") << SeriesTestHelper::createSeries(1) << false;
+    QTest::newRow("Series with 2 image, no modality") << SeriesTestHelper::createSeries(2) << false;
+
+    QString localizerImageType = "VALUE1\\VALUE2\\LOCALIZER";
+    Image *localizerImage = new Image();
+    localizerImage->setImageType(localizerImageType);
+
+    QString noLocalizerImageType = "VALUE1\\VALUE2\\VALUE3";
+    Image *noLocalizerImage = new Image();
+    noLocalizerImage->setImageType(noLocalizerImageType);
+
+    QString invalidImageType = "NUMBER_OF_VALUES_IS_!=3";
+    Image *imageWithInvalidImageType = new Image();
+    imageWithInvalidImageType->setImageType(invalidImageType);
+
+    Series *series1 = new Series();
+    series1->addImage(localizerImage);
+    series1->setModality("CT");
+    QTest::newRow("CT Series with one localizer image") << series1 << true;
+
+    Series *series2 = new Series();
+    series2->addImage(localizerImage);
+    series2->setModality("RF");
+    QTest::newRow("Non-CT Series with one localizer image") << series2 << false;
+
+    Series *series3 = SeriesTestHelper::createSeries(1);
+    series3->addImage(localizerImage);
+    series3->setModality("CT");
+    QTest::newRow("CT Series with 2 images, second is localizer image, first not") << series3 << false;
+
+    Series *series4 = new Series();
+    series4->addImage(localizerImage);
+    series4->addImage(noLocalizerImage);
+    series4->setModality("CT");
+    QTest::newRow("CT Series with 2 images, fisrt is localizer image, second not") << series4 << true;
+
+    Series *series5 = new Series();
+    series5->addImage(noLocalizerImage);
+    series5->setModality("CT");
+    QTest::newRow("CT Series, 1 image, no localizer") << series5 << false;
+
+    Series *series6 = new Series();
+    series6->addImage(imageWithInvalidImageType);
+    series6->setModality("CT");
+    QTest::newRow("CT Series, 1 image, invalid image type") << series6 << false;
+}
+
+void test_Series::isCTLocalizer_ReturnsExpectedValues()
+{
+    QFETCH(Series*, series);
+    QFETCH(bool, expectedValue);
+
+    QCOMPARE(series->isCTLocalizer(), expectedValue);
+    
     SeriesTestHelper::cleanUp(series);
 }
 
