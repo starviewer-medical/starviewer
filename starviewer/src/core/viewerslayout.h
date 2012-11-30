@@ -104,7 +104,7 @@ private:
 
 private:
     /// Grid per gestionar les distribucions regulars de visors
-    QGridLayout *m_viewersLayout;
+    QGridLayout *m_regularViewersGridLayout;
 
     /// Visualitzador selecciona. Sempre en tindrem un.
     Q2DViewerWidget *m_selectedViewer;
@@ -117,7 +117,7 @@ private:
 
     /// Array amb tots els viewers que podem manipular
     /// Visors dins del grid regular (distribuits dins del gridLayout)
-    QVector<Q2DViewerWidget*> m_vectorViewers;
+    QVector<Q2DViewerWidget*> m_regularViewersGridVector;
     /// Visors definits amb geometries lliures (distribuits fora del gridLayout)
     QList<Q2DViewerWidget*> m_freeLayoutViewersList;
 
