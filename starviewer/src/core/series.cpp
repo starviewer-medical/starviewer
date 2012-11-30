@@ -509,7 +509,7 @@ QPixmap Series::getThumbnail()
     return m_seriesThumbnail;
 }
 
-Image* Series::getImageByIndex(int index)
+Image* Series::getImageByIndex(int index) const
 {
     Image *resultImage = 0;
     // Està dins del rang

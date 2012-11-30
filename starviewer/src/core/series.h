@@ -212,7 +212,7 @@ public:
     /// Mètode temporal per obtenir la Image segons com està ordenada a la llista
     /// Si l'índex que donem està fora de rang, es retorna una imatge nul·la
     /// TODO això no ens assegura que obtenim la imatge que suposadament volem
-    Image* getImageByIndex(int index);
+    Image* getImageByIndex(int index) const;
 
     /// Permet establir quin és el thumbnail de la sèrie
     void setThumbnail(QPixmap seriesThumbnail);
