@@ -401,7 +401,7 @@ void test_Series::isMRSurvey_ReturnsExpectedValues_data()
     Series *series3 = new Series();
     series3->setDescription("artywebhsSURVEYloryance");
     series3->setModality("MR");
-    QTest::newRow("MR, contains survey in description inside another word") << series3 << false;
+    QTest::newRow("MR, contains survey in description inside another word") << series3 << true;
 
     Series *series4 = new Series();
     series4->setDescription("artywebhs\\SURVEY\\loryance");
@@ -412,6 +412,11 @@ void test_Series::isMRSurvey_ReturnsExpectedValues_data()
     series5->setDescription("ghsgajs\\klsjhjshk\\SURV\\EY");
     series5->setModality("MR");
     QTest::newRow("MR, not contains survey as standalone word") << series5 << false;
+
+    Series *series6 = new Series();
+    series6->setDescription("SURVEY_SAG");
+    series6->setModality("MR");
+    QTest::newRow("MR, contains survey + underscore + word") << series6 << true;
 }
 
 void test_Series::isMRSurvey_ReturnsExpectedValues()
