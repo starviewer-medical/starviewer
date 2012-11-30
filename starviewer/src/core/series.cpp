@@ -568,6 +568,24 @@ bool Series::isCTLocalizer() const
     return isLocalizer;
 }
 
+bool Series::isMRSurvey() const
+{
+    bool isSurvey = false;
+
+    if (getModality() == "MR")
+    {
+        foreach (const QString &string, getDescription().split("\\"))
+        {
+            if (QString::compare(string.trimmed(), "SURVEY", Qt::CaseInsensitive) == 0)
+            {
+                isSurvey = true;
+            }
+        }
+    }
+
+    return isSurvey;
+}
+
 void Series::setManufacturer(QString manufacturer)
 {
     m_manufacturer = manufacturer;
