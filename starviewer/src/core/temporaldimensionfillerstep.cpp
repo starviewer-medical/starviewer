@@ -83,29 +83,10 @@ bool TemporalDimensionFillerStep::fillIndividually()
         volumeInfo->multipleAcquisitionNumber = false;
 
         // En el cas del CT ens interessa saber si és localizer
-        // \TODO Ara estem considerant que un volume serà localizer si la primera imatge ho és, però res ens indica que els localizers no puguin està barretjats
-        // amb la resta.
-        if (m_input->getCurrentSeries()->getModality() == "CT")
+        if (m_input->getCurrentSeries()->isCTLocalizer())
         {
-            Image *currentImage = m_input->getCurrentImages().at(0);
-            QString value = currentImage->getImageType();
-            QStringList valueList = value.split("\\");
-            if (valueList.count() >= 3)
-            {
-                if (valueList.at(2) == "LOCALIZER")
-                {
-                    DEBUG_LOG("La serie amb uid " + m_input->getCurrentSeries()->getInstanceUID() + " no és dinàmica (És un CT LOCALIZER)");
-                    volumeInfo->isCTLocalizer = true;
-                }
-            }
-            else
-            {
-                // TODO aquesta comprovació s'ha afegit perquè hem trobat un cas en que aquestes dades apareixen incoherents
-                // tot i així, lo seu seria disposar d'alguna eina que comprovés si les dades són consistents o no.
-                DEBUG_LOG("ERROR: Inconsistència DICOM: La imatge " + currentImage->getSOPInstanceUID() + " de la serie " +
-                          m_input->getCurrentSeries()->getInstanceUID() +
-                          " té el camp ImageType que és tipus 1, amb un nombre incorrecte d'elements: Valor del camp:: [" + value + "]");
-            }
+            DEBUG_LOG("La serie amb uid " + m_input->getCurrentSeries()->getInstanceUID() + " no és dinàmica (És un CT LOCALIZER)");
+            volumeInfo->isCTLocalizer = true;
         }
     }
 
