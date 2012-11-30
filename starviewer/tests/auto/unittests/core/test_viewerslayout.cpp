@@ -67,5 +67,5 @@ void test_ViewersLayout::isRegular_ReturnsExpectedValues()
 
 DECLARE_TEST(test_ViewersLayout)
 
-#include "test_ViewersLayout.moc"
+#include "test_viewerslayout.moc"
 
