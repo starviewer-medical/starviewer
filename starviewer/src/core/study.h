@@ -17,6 +17,9 @@ class Patient;
 class Study : public QObject {
 Q_OBJECT
 public:
+    /// Tipus d'ordenació d'un conjunt d'estudis
+    enum StudySortType { RecentStudiesFirst, OlderStudiesFirst };
+    
     Study(Patient *parentPatient = 0, QObject *parent = 0);
     ~Study();
 
@@ -130,6 +133,10 @@ public:
     /// Operadors per comparar si un estudi és més antic (operador <) o més recent (operador >).
     bool operator<(const Study &study);
     bool operator>(const Study &study);
+
+    /// Ens ordena una llista d'estudis segons el criteri d'ordenació donat
+    static QList<Study*> sortStudies(const QList<Study*> &studiesList, StudySortType sortCriteria);
+
 private:
     /// Inserta una serie a la llista de series ordenat per SeriesNumber.
     /// Pre: se presuposa que s'ha comprovat anteriorment que la serie no existeix a la llista
