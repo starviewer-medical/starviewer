@@ -387,7 +387,7 @@ void Patient::copyPatientInformation(const Patient *patient)
 void Patient::insertStudy(Study *study)
 {
     int i = 0;
-    while (i < m_studiesSet.size() && m_studiesSet.at(i)->getDateTime() < study->getDateTime())
+    while (i < m_studiesSet.size() && m_studiesSet.at(i)->getDateTime() > study->getDateTime())
     {
         ++i;
     }

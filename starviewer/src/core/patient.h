@@ -117,7 +117,7 @@ private:
     /// La informació es matxaca i no es fa cap mena de comprovació.
     void copyPatientInformation(const Patient *patient);
 
-    /// Inserta un estudi a la llista d'estudis ordenat per data.
+    /// Inserta un estudi a la llista d'estudis ordenat per data. Els estudis més recents primer.
     /// Pre: se presuposa que s'ha comprovat anteriorment que l'estudi no existeix a la llista
     void insertStudy(Study *study);
 
