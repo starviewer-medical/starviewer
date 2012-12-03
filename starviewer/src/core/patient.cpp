@@ -152,9 +152,16 @@ int Patient::getNumberOfStudies()
     return m_studiesSet.size();
 }
 
-QList<Study*> Patient::getStudies() const
+QList<Study*> Patient::getStudies(Study::StudySortType sortCriteria) const
 {
-    return m_studiesSet;
+    if (sortCriteria == Study::OlderStudiesFirst)
+    {
+        return Study::sortStudies(m_studiesSet, Study::OlderStudiesFirst);
+    }
+    else
+    {
+        return m_studiesSet;
+    }
 }
 
 Series *Patient::getSeries(const QString &uid)
