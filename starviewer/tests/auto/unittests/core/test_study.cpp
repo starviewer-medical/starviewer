@@ -55,6 +55,12 @@ private slots:
     /// Test que comprova si retorna la llista de series correctament
     void getSeries_ShouldReturnCorrectSeriesPassedByUID_data();
     void getSeries_ShouldReturnCorrectSeriesPassedByUID();
+
+    void operatorLessThan_ShouldReturnExpectedValues_data();
+    void operatorLessThan_ShouldReturnExpectedValues();
+
+    void operatorGreaterThan_ShouldReturnExpectedValues_data();
+    void operatorGreaterThan_ShouldReturnExpectedValues();
 };
 
 Q_DECLARE_METATYPE(DICOMSource)
@@ -413,6 +419,86 @@ void test_Study::getSeries_ShouldReturnCorrectSeriesPassedByUID()
     QFETCH(bool, result);
 
     QCOMPARE(study->getSeries(series->getInstanceUID()) == series, result);
+}
+
+void test_Study::setupUpOperatorsLessThanGreaterThanData()
+{
+    QTest::addColumn<Study*>("firstStudy");
+    QTest::addColumn<Study*>("secondStudy");
+    QTest::addColumn<bool>("lessThanExpectedValue");
+    QTest::addColumn<bool>("greaterThanExpectedValue");
+
+    Study *study = new Study(0);
+    QTest::newRow("newly created studies") << study << study << false << false;
+
+    Study *study1 = new Study(0);
+    Study *study2 = new Study(0);
+    QDate date1;
+    QDate date2;
+    
+    date1.setDate(2011, 10, 6);
+    date2.setDate(2012, 11, 15);
+    study1->setDate(date1);
+    study2->setDate(date2);
+    QTest::newRow("date is less than") << study1 << study2 << true << false;
+    QTest::newRow("date is greater than") << study2 << study1 << false << true;
+
+    study1 = new Study(0);
+    study2 = new Study(0);
+    study1->setDate(date1);
+    study2->setDate(date1);
+    QTest::newRow("dates are equal") << study1 << study2 << false << false;
+    
+    QTime time1;
+    QTime time2;
+    
+    time1.setHMS(8, 45, 59);
+    time2.setHMS(10, 45, 59);
+
+    study1 = new Study(0);
+    study2 = new Study(0);
+    study1->setDate(date1);
+    study1->setTime(time1);
+    study2->setDate(date1);
+    study2->setTime(time2);
+    QTest::newRow("same date, time less than (hours)") << study1 << study2 << true << false;
+    QTest::newRow("same date, time greater than (hours)") << study2 << study1 << false << true;
+
+    study1 = new Study(0);
+    study2 = new Study(0);
+    study1->setDate(date1);
+    study1->setTime(time1);
+    study2->setDate(date1);
+    study2->setTime(time1);
+    QTest::newRow("same date, same time") << study1 << study2 << false << false;
+}
+
+void test_Study::operatorLessThan_ShouldReturnExpectedValues_data()
+{
+    setupUpOperatorsLessThanGreaterThanData();
+}
+
+void test_Study::operatorLessThan_ShouldReturnExpectedValues()
+{
+    QFETCH(Study*, firstStudy);
+    QFETCH(Study*, secondStudy);
+    QFETCH(bool, lessThanExpectedValue);
+
+    QCOMPARE(*firstStudy < *secondStudy, lessThanExpectedValue);
+}
+
+void test_Study::operatorGreaterThan_ShouldReturnExpectedValues_data()
+{
+    setupUpOperatorsLessThanGreaterThanData();
+}
+
+void test_Study::operatorGreaterThan_ShouldReturnExpectedValues()
+{
+    QFETCH(Study*, firstStudy);
+    QFETCH(Study*, secondStudy);
+    QFETCH(bool, greaterThanExpectedValue);
+
+    QCOMPARE(*firstStudy > *secondStudy, greaterThanExpectedValue);
 }
 
 DECLARE_TEST(test_Study)

@@ -127,6 +127,9 @@ public:
 
     QString toString();
 
+    /// Operadors per comparar si un estudi és més antic (operador <) o més recent (operador >).
+    bool operator<(const Study &study);
+    bool operator>(const Study &study);
 private:
     /// Inserta una serie a la llista de series ordenat per SeriesNumber.
     /// Pre: se presuposa que s'ha comprovat anteriorment que la serie no existeix a la llista

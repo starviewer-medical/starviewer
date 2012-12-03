@@ -383,6 +383,16 @@ QString Study::toString()
     return result;
 }
 
+bool Study::operator<(const Study &study)
+{
+    return getDateTime() < study.getDateTime();
+}
+
+bool Study::operator>(const Study &study)
+{
+    return getDateTime() > study.getDateTime();
+}
+
 void Study::insertSeries(Series *series)
 {
     int i = 0;
