@@ -595,6 +595,7 @@ Study* HangingProtocolManager::searchPreviousStudy(HangingProtocol *protocol, St
 
     foreach (Study *study, sortedPreviousStudies)
     {
+        // Atenció, tal com està fet ara, es considera previ si és d'almenys un dia abans, si és del mateix dia, no es considera previ
         if (study->getDate() < referenceStudy->getDate())
         {
             foreach (const QString &modality, study->getModalities())
