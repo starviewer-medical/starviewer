@@ -220,7 +220,7 @@ QString Study::getTimeAsString()
     return m_time.toString("HH:mm:ss");
 }
 
-QDateTime Study::getDateTime()
+QDateTime Study::getDateTime() const
 {
     return QDateTime(m_date, m_time);
 }

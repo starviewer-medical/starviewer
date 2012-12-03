@@ -82,7 +82,7 @@ public:
     QString getDateAsString();
     QTime getTime();
     QString getTimeAsString();
-    QDateTime getDateTime();
+    QDateTime getDateTime() const;
 
     /// Assignar/Obtenir la data i hora en que l'estudi s'ha descarregat a la base de dades Local
     void setRetrievedDate(QDate date);
