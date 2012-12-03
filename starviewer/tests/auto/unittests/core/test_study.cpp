@@ -61,12 +61,20 @@ private slots:
 
     void operatorGreaterThan_ShouldReturnExpectedValues_data();
     void operatorGreaterThan_ShouldReturnExpectedValues();
+
+    void sortStudies_ReturnExpectedValues_data();
+    void sortStudies_ReturnExpectedValues();
+private:
+    /// Prepara les dades comunes de testing per els operadors > i <.
+    void setupUpOperatorsLessThanGreaterThanData();
 };
 
 Q_DECLARE_METATYPE(DICOMSource)
 Q_DECLARE_METATYPE(Study*)
 Q_DECLARE_METATYPE(Series*)
 Q_DECLARE_METATYPE(QList<Series*>)
+Q_DECLARE_METATYPE(QList<Study*>)
+Q_DECLARE_METATYPE(Study::StudySortType)
 
 void test_Study::getDICOMSource_ShouldReturnMergedPACSDeviceList_data()
 {
@@ -499,6 +507,45 @@ void test_Study::operatorGreaterThan_ShouldReturnExpectedValues()
     QFETCH(bool, greaterThanExpectedValue);
 
     QCOMPARE(*firstStudy > *secondStudy, greaterThanExpectedValue);
+}
+
+void test_Study::sortStudies_ReturnExpectedValues_data()
+{
+    QTest::addColumn<QList<Study*> >("inputStudies");
+    QTest::addColumn<Study::StudySortType>("sortCriteria");
+    QTest::addColumn<QList<Study*> >("expectedSortedStudies");
+    
+    QList<Study*> inputStudiesList;
+    QTest::newRow("empty list (recent first)") << inputStudiesList << Study::RecentStudiesFirst << QList<Study*>();
+    QTest::newRow("empty list (older first)") << inputStudiesList << Study::OlderStudiesFirst << QList<Study*>();
+
+    Study *mostRecentStudy = new Study(0);
+    mostRecentStudy->setDate(QDate(2012, 12, 31));
+
+    Study *olderStudy = new Study(0);
+    olderStudy->setDate(QDate(2000, 1, 1));
+
+    Study *middleAgedStudy = new Study(0);
+    middleAgedStudy->setDate(QDate(2006, 6, 15));
+
+    inputStudiesList << middleAgedStudy << mostRecentStudy << olderStudy;
+
+    QList<Study*> recentFirstSortedResult;
+    recentFirstSortedResult << mostRecentStudy << middleAgedStudy << olderStudy;
+    QTest::newRow("sort unsorted list with recent first") << inputStudiesList << Study::RecentStudiesFirst << recentFirstSortedResult;
+
+    QList<Study*> olderFirstSortedResult;
+    olderFirstSortedResult << olderStudy << middleAgedStudy << mostRecentStudy;
+    QTest::newRow("sort unsorted list with older first") << inputStudiesList << Study::OlderStudiesFirst << olderFirstSortedResult;
+}
+
+void test_Study::sortStudies_ReturnExpectedValues()
+{
+    QFETCH(QList<Study*>, inputStudies);
+    QFETCH(Study::StudySortType, sortCriteria);
+    QFETCH(QList<Study*>, expectedSortedStudies);
+
+    QCOMPARE(Study::sortStudies(inputStudies, sortCriteria), expectedSortedStudies);
 }
 
 DECLARE_TEST(test_Study)
