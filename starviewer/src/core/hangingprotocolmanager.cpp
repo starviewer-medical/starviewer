@@ -67,7 +67,7 @@ QList<HangingProtocol*> HangingProtocolManager::searchHangingProtocols(Patient *
 
     QList<Series*> allSeries;
 
-    foreach (Study *study, sortStudiesByDate(patient->getStudies()))
+    foreach (Study *study, patient->getStudies())
     {
         allSeries += study->getViewableSeries();
     }
@@ -591,7 +591,7 @@ bool HangingProtocolManager::isValidInstitution(HangingProtocol *protocol, const
 
 Study* HangingProtocolManager::searchPreviousStudy(HangingProtocol *protocol, Study *referenceStudy, const QList<Study*> &previousStudies)
 {
-    QList<Study*> sortedPreviousStudies = sortStudiesByDate(previousStudies);
+    QList<Study*> sortedPreviousStudies = Study::sortStudies(previousStudies, Study::RecentStudiesFirst);
 
     foreach (Study *study, sortedPreviousStudies)
     {
@@ -659,18 +659,6 @@ void HangingProtocolManager::errorDowlonadingPreviousStudies(const QString &stud
     }
 }
 
-QList<Study*> HangingProtocolManager::sortStudiesByDate(const QList<Study*> &studies)
-{
-    QMultiMap<long, Study*> sortedStudiesByDate;
-
-    foreach (Study *study, studies)
-    {
-        // Es posa la data en negatiu per ordenar els estudies de gran a petit
-        sortedStudiesByDate.insert(-study->getDateTime().toTime_t(), study);
-    }
-    return sortedStudiesByDate.values();
-}
-
 void HangingProtocolManager::cancelHangingProtocolDownloading()
 {
     foreach (QString key, m_studiesDownloading->keys())
@@ -735,7 +723,8 @@ Image* HangingProtocolManager::getImageByIndexInPatientModality(Patient *patient
     QList<Image*> allImagesInStudy;
 
     // TODO Es podria millorar amb una cerca fins a la imatge que està a l'índex, envers d'un recorregut agafant-les totes
-    foreach (Study *study, sortStudiesByDate(patient->getStudies()))
+    
+    foreach (Study *study, patient->getStudies())
     {
         foreach (Series *series, study->getSeries())
         {

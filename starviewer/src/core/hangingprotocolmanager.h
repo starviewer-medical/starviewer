@@ -82,9 +82,6 @@ private:
     /// Comprova si el protocol és aplicable a la institució. Si el protocol no té expressió regular per institució és aplicable
     bool isValidInstitution(HangingProtocol *protocol, const QString &institutionName);
 
-    /// Ordena els estudis per data per tal que els hanging protocols els tingui ordenats.
-    QList<Study*> sortStudiesByDate(const QList<Study*> &studies);
-
     /// Mètode encarregat d'assignar l'input al viewer a partir de les especificacions del displaySet+imageSet.
     void setInputToViewer(Q2DViewerWidget *viewerWidget, Series *series, HangingProtocolDisplaySet *displaySet);
 
