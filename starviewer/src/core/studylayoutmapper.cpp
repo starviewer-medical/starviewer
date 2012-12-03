@@ -123,8 +123,15 @@ void StudyLayoutMapper::applyConfig(const StudyLayoutConfig &config, ViewersLayo
         }
     }
 
-    // TODO Falta tenir en compte el paràmetre de maximum number of viewers de la configuració
-
+    // Si el nombre màxim de visors per configuració és menor al nombre mínim de visors requerits, haurem d'actualitzar aquest paràmetre abans de crear el grid
+    int maxNumbersOfViewersByConfig = config.getMaximumNumberOfViewers();
+    if (maxNumbersOfViewersByConfig > 0)
+    {
+        if (maxNumbersOfViewersByConfig < numberOfMinimumViewersRequired)
+        {
+            numberOfMinimumViewersRequired = maxNumbersOfViewersByConfig;
+        }
+    }
     // Ara ja sabem el nombre mínim de visors requerits, ara cal calcular quina és la distribució idònia en graella
     OptimalViewersGridEstimator gridEstimator;
     QPair<int, int> grid = gridEstimator.getOptimalGrid(numberOfMinimumViewersRequired);
