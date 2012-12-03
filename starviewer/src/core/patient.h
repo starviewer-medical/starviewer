@@ -59,7 +59,7 @@ public:
     };
 
     /// Afegeix un nou estudi. A l'estudi se li assigna com a "parentPatient" aquest Patient.
-    /// Retorna fals si existeix un estudi ja amb el mateix uid o l'uid és buit
+    /// Retorna fals si existeix un estudi ja amb el mateix uid o l'uid és buit.
     bool addStudy(Study *study);
 
     /// Li treu al pacient l'estudi amb l'UID donat
@@ -74,8 +74,8 @@ public:
     /// Mètode per obtenir el nombre d'estudis del pacient
     int getNumberOfStudies();
 
-    /// Mètode per obtenir la llista d'estudis del pacient
-    QList<Study*> getStudies() const;
+    /// Mètode per obtenir la llista d'estudis del pacient. Per defecte ens la retorna ordenada amb els estudis més recents primer.
+    QList<Study*> getStudies(Study::StudySortType sortCriteria = Study::RecentStudiesFirst) const;
 
     /// Mètode ràpid per trobar si hi ha una series amb el uid donat. Retorna nul si aquesta no existeix
     Series* getSeries(const QString &uid);
