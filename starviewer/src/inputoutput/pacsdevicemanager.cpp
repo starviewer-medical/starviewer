@@ -98,7 +98,7 @@ QList<PacsDevice> PacsDeviceManager::getPACSList(FilterPACSByService filter, boo
     QList<PacsDevice> configuredPacsList;
     Settings settings;
     Settings::SettingListType list = settings.getList(InputOutputSettings::PacsListConfigurationSectionName);
-    foreach (Settings::KeyValueMapType item, list)
+    foreach (Settings::SettingsListItemType item, list)
     {
         PacsDevice pacs;
         pacs = keyValueMapToPacsDevice(item);
@@ -210,9 +210,9 @@ bool PacsDeviceManager::isPACSConfigured(const PacsDevice &pacs)
     return false;
 }
 
-Settings::KeyValueMapType PacsDeviceManager::pacsDeviceToKeyValueMap(const PacsDevice &pacsDevice)
+Settings::SettingsListItemType PacsDeviceManager::pacsDeviceToKeyValueMap(const PacsDevice &pacsDevice)
 {
-    Settings::KeyValueMapType item;
+    Settings::SettingsListItemType item;
 
     item["ID"] = pacsDevice.getID();
     item["AETitle"] = pacsDevice.getAETitle();
@@ -228,7 +228,7 @@ Settings::KeyValueMapType PacsDeviceManager::pacsDeviceToKeyValueMap(const PacsD
     return item;
 }
 
-PacsDevice PacsDeviceManager::keyValueMapToPacsDevice(const Settings::KeyValueMapType &item)
+PacsDevice PacsDeviceManager::keyValueMapToPacsDevice(const Settings::SettingsListItemType &item)
 {
     PacsDevice pacsDevice;
     // TODO cal comprovar que hi ha les claus que volem? sinó quedarà amb valors empty

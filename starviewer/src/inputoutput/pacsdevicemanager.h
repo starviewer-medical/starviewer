@@ -61,10 +61,10 @@ private:
     bool isPACSConfigured(const PacsDevice &pacs);
 
     /// Donat un objecte PacsDevice el transformem en un conjunt de claus-valor per una manipulació de settings més còmode
-    Settings::KeyValueMapType pacsDeviceToKeyValueMap(const PacsDevice &parameters);
+    Settings::SettingsListItemType pacsDeviceToKeyValueMap(const PacsDevice &parameters);
 
     /// Donat un conjunt de claus-valor omple i retorna un objecte PacsDevice
-    PacsDevice keyValueMapToPacsDevice(const Settings::KeyValueMapType &item);
+    PacsDevice keyValueMapToPacsDevice(const Settings::SettingsListItemType &item);
 };
 
 };

@@ -207,7 +207,7 @@ QStringList PacsDevice::getDefaultPACSKeyNamesList() const
         // del format antic, és a dir, a partir dels elements amb els valors "default" = "S" de la llista de PACS
         // Un cop llegits, els escrivim en el nou format
         Settings::SettingListType list = settings.getList(CoreSettings::PacsListConfigurationSectionName);
-        foreach (Settings::KeyValueMapType item, list)
+        foreach (Settings::SettingsListItemType item, list)
         {
             // El camp "default" té aquesta clau
             if (item.contains("."))
