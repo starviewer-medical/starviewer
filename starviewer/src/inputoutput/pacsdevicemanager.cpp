@@ -44,7 +44,7 @@ bool PacsDeviceManager::addPACS(PacsDevice &pacs)
         }
 
         Settings settings;
-        settings.addListItem(InputOutputSettings::PacsListConfigurationSectionName, pacsDeviceToKeyValueMap(pacs));
+        settings.addListItem(InputOutputSettings::PacsListConfigurationSectionName, pacsDeviceToSettingsListItem(pacs));
     }
 
     return ok;
@@ -101,7 +101,7 @@ QList<PacsDevice> PacsDeviceManager::getPACSList(FilterPACSByService filter, boo
     foreach (Settings::SettingsListItemType item, list)
     {
         PacsDevice pacs;
-        pacs = keyValueMapToPacsDevice(item);
+        pacs = settingsListItemToPacsDevice(item);
         // Depenent del paràmetre "onlyDefault" afegirem o no els pacs
         if ((onlyDefault && pacs.isDefault()) || !onlyDefault)
         {
@@ -210,7 +210,7 @@ bool PacsDeviceManager::isPACSConfigured(const PacsDevice &pacs)
     return false;
 }
 
-Settings::SettingsListItemType PacsDeviceManager::pacsDeviceToKeyValueMap(const PacsDevice &pacsDevice)
+Settings::SettingsListItemType PacsDeviceManager::pacsDeviceToSettingsListItem(const PacsDevice &pacsDevice)
 {
     Settings::SettingsListItemType item;
 
@@ -228,7 +228,7 @@ Settings::SettingsListItemType PacsDeviceManager::pacsDeviceToKeyValueMap(const 
     return item;
 }
 
-PacsDevice PacsDeviceManager::keyValueMapToPacsDevice(const Settings::SettingsListItemType &item)
+PacsDevice PacsDeviceManager::settingsListItemToPacsDevice(const Settings::SettingsListItemType &item)
 {
     PacsDevice pacsDevice;
     // TODO cal comprovar que hi ha les claus que volem? sinó quedarà amb valors empty
