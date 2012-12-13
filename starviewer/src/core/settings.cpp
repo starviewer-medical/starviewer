@@ -72,9 +72,9 @@ void Settings::remove(const QString &key)
     getSettingsObject(key)->remove(key);
 }
 
-Settings::KeyValueMapType Settings::getListItem(const QString &key, int index)
+Settings::SettingsListItemType Settings::getListItem(const QString &key, int index)
 {
-    KeyValueMapType item;
+    SettingsListItemType item;
     QSettings *qsettings = getSettingsObject(key);
 
     int size = qsettings->beginReadArray(key);
@@ -82,7 +82,7 @@ Settings::KeyValueMapType Settings::getListItem(const QString &key, int index)
     {
         qsettings->setArrayIndex(index);
         // Omplim el conjunt de claus-valor a partir de les claus de l'índex de la llista
-        item = fillKeyValueMapFromKeyList(qsettings->allKeys(), qsettings);
+        item = fillSettingsListItemFromKeysList(qsettings->allKeys(), qsettings);
     }
     else
     {
@@ -103,9 +103,9 @@ Settings::SettingListType Settings::getList(const QString &key)
     {
         qsettings->setArrayIndex(i);
 
-        KeyValueMapType item;
+        SettingsListItemType item;
         // Omplim el conjunt de claus-valor a partir de les claus de l'índex de la llista
-        item = fillKeyValueMapFromKeyList(qsettings->allKeys(), qsettings);
+        item = fillSettingsListItemFromKeysList(qsettings->allKeys(), qsettings);
         // Afegim el nou conjunts de valors a la llista
         list << item;
     }
@@ -114,7 +114,7 @@ Settings::SettingListType Settings::getList(const QString &key)
     return list;
 }
 
-void Settings::addListItem(const QString &key, const KeyValueMapType &item)
+void Settings::addListItem(const QString &key, const SettingsListItemType &item)
 {
     QSettings *qsettings = getSettingsObject(key);
 
@@ -124,11 +124,11 @@ void Settings::addListItem(const QString &key, const KeyValueMapType &item)
     qsettings->beginWriteArray(key);
     qsettings->setArrayIndex(arraySize);
     // Omplim
-    dumpKeyValueMap(item, qsettings);
+    dumpSettingsListItem(item, qsettings);
     qsettings->endArray();
 }
 
-void Settings::setListItem(int index, const QString &key, const KeyValueMapType &item)
+void Settings::setListItem(int index, const QString &key, const SettingsListItemType &item)
 {
     Settings::SettingListType list = getList(key);
     int listSize = list.count();
@@ -166,10 +166,10 @@ void Settings::setList(const QString &key, const SettingListType &list)
     int index = 0;
     // Escrivim la llista
     qsettings->beginWriteArray(key);
-    foreach (const KeyValueMapType &item, list)
+    foreach (const SettingsListItemType &item, list)
     {
         qsettings->setArrayIndex(index);
-        dumpKeyValueMap(item, qsettings);
+        dumpSettingsListItem(item, qsettings);
         index++;
     }
     qsettings->endArray();
@@ -232,11 +232,11 @@ void Settings::restoreGeometry(const QString &key, QSplitter *splitter)
     splitter->restoreState(this->getValue(key).toByteArray());
 }
 
-Settings::KeyValueMapType Settings::fillKeyValueMapFromKeyList(const QStringList &keysList, QSettings *qsettings)
+Settings::SettingsListItemType Settings::fillSettingsListItemFromKeysList(const QStringList &keysList, QSettings *qsettings)
 {
     Q_ASSERT(qsettings);
 
-    KeyValueMapType item;
+    SettingsListItemType item;
 
     foreach (const QString &key, keysList)
     {
@@ -245,7 +245,7 @@ Settings::KeyValueMapType Settings::fillKeyValueMapFromKeyList(const QStringList
     return item;
 }
 
-void Settings::dumpKeyValueMap(const KeyValueMapType &item, QSettings *qsettings)
+void Settings::dumpSettingsListItem(const SettingsListItemType &item, QSettings *qsettings)
 {
     Q_ASSERT(qsettings);
 

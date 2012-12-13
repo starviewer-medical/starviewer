@@ -104,7 +104,7 @@ QList<DicomPrinter> DicomPrinterManager::getDicomPrinterList()
 
     Settings::SettingListType list = settings.getList(DicomPrinterListSectionName);
 
-    foreach (Settings::KeyValueMapType item, list)
+    foreach (Settings::SettingsListItemType item, list)
     {
         DicomPrinter dicomPrinter;
 
@@ -139,9 +139,9 @@ DicomPrinter DicomPrinterManager::getDefaultAvailableParametersValuesDICOMPrinte
     return dicomPrinter;
 }
 
-Settings::KeyValueMapType DicomPrinterManager::dicomPrinterToKeyValueMap(DicomPrinter &dicomPrinter)
+Settings::SettingsListItemType DicomPrinterManager::dicomPrinterToKeyValueMap(DicomPrinter &dicomPrinter)
 {
-    Settings::KeyValueMapType item;
+    Settings::SettingsListItemType item;
 
     item["AETitle"] = dicomPrinter.getAETitle();
     item["PrinterName"] = dicomPrinter.getName();
@@ -171,7 +171,7 @@ Settings::KeyValueMapType DicomPrinterManager::dicomPrinterToKeyValueMap(DicomPr
     return item;
 }
 
-DicomPrinter DicomPrinterManager::keyValueMapToDicomPrinter(Settings::KeyValueMapType &item)
+DicomPrinter DicomPrinterManager::keyValueMapToDicomPrinter(Settings::SettingsListItemType &item)
 {
     DicomPrinter dicomPrinter;
 

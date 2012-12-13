@@ -39,11 +39,11 @@ public:
     DicomPrinter getDefaultAvailableParametersValuesDICOMPrinters();
 
 private:
-    /// Retorna un Settings::KeyValueMapType omplert amb les dades de la impressora dicomPrinter.
-    Settings::KeyValueMapType dicomPrinterToKeyValueMap(DicomPrinter &dicomPrinter);
+    /// Retorna un Settings::SettingsListItemType omplert amb les dades de la impressora dicomPrinter.
+    Settings::SettingsListItemType dicomPrinterToKeyValueMap(DicomPrinter &dicomPrinter);
 
-    /// Retorna un DicomPrinter omplert amb les dades que conté el Settings::KeyValueMapType.
-    DicomPrinter keyValueMapToDicomPrinter(Settings::KeyValueMapType &item);
+    /// Retorna un DicomPrinter omplert amb les dades que conté el Settings::SettingsListItemType.
+    DicomPrinter keyValueMapToDicomPrinter(Settings::SettingsListItemType &item);
 
     /// Retorna l'index on està emmagatzemada la impressora printer dins del sistema (Settings).
     int indexOfPrinterInSettings(DicomPrinter &printer);

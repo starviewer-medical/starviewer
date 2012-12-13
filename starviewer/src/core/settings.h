@@ -45,13 +45,13 @@ public:
 
     // També existeix el tipus QSettings::SettingsMap que és QMap<QString, QVariant>
     // TODO podríem fer typedef QSettings::SettingsMap en comptes d'això
-    typedef QMap<QString, QVariant> KeyValueMapType;
-    typedef QList<KeyValueMapType> SettingListType;
+    typedef QMap<QString, QVariant> SettingsListItemType;
+    typedef QList<SettingsListItemType> SettingListType;
 
     // Obtenció d'informació de llistes de settings
 
     /// Ens retorna l'i-éssim (index) conjunt de valors de la llista amb clau "key"
-    KeyValueMapType getListItem(const QString &key, int index);
+    SettingsListItemType getListItem(const QString &key, int index);
 
     /// Ens retorna tota la llista de settings que hi hagi sota key
     SettingListType getList(const QString &key);
@@ -59,10 +59,10 @@ public:
     // Modificació de llistes de conjunts de valors
 
     /// Afegeix a la llista amb clau "key" un conjunt de valors
-    void addListItem(const QString &key, const KeyValueMapType &item);
+    void addListItem(const QString &key, const SettingsListItemType &item);
 
     /// Actualitza les dades del conjunt de valors "item" a l'índex index de la llista amb clau "key"
-    void setListItem(int index, const QString &key, const KeyValueMapType &item);
+    void setListItem(int index, const QString &key, const SettingsListItemType &item);
 
     /// Elimina de la llista amb clau "key" l'element i-éssim (index)
     void removeListItem(const QString &key, int index);
@@ -90,11 +90,11 @@ public:
 private:
     /// A partir d'una llista de claus, omplim un conjunt clau-valor.
     /// És necessari que li passem l'objecte qsettings (user/system) amb el que obtindrà els valors
-    KeyValueMapType fillKeyValueMapFromKeyList(const QStringList &keysList, QSettings *qsettings);
+    SettingsListItemType fillSettingsListItemFromKeysList(const QStringList &keysList, QSettings *qsettings);
 
     /// Traspassa el contingut del conjunt clau-valor a m_settings
     /// És necessari que li passem l'objecte qsettings (user/system) en el que volcarà els valors
-    void dumpKeyValueMap(const KeyValueMapType &item, QSettings *qsettings);
+    void dumpSettingsListItem(const SettingsListItemType &item, QSettings *qsettings);
 
     /// Ens retorna l'objecte adient de settings (usuari o sistema)
     /// segons com estigui configurada la clau en qüestió
