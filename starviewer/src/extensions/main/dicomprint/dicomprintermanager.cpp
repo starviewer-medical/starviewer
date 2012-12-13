@@ -21,7 +21,7 @@ bool DicomPrinterManager::addPrinter(DicomPrinter &printer)
         }
 
         Settings settings;
-        settings.addListItem(DicomPrinterListSectionName, dicomPrinterToKeyValueMap(printer));
+        settings.addListItem(DicomPrinterListSectionName, dicomPrinterToSettingsListItem(printer));
         printer.setID(this->getDicomPrinterList().count() - 1);
         return true;
     }
@@ -41,7 +41,7 @@ bool DicomPrinterManager::updatePrinter(int printerID, DicomPrinter &printer)
             setAllPrintersAsNoDefaultPrinter();
         }
 
-        settings.setListItem(printerID, DicomPrinterListSectionName, dicomPrinterToKeyValueMap(printer));
+        settings.setListItem(printerID, DicomPrinterListSectionName, dicomPrinterToSettingsListItem(printer));
         return true;
     }
     else
@@ -65,7 +65,7 @@ void DicomPrinterManager::setAllPrintersAsNoDefaultPrinter()
     foreach (DicomPrinter dicomPrinter, dicomPrinterList)
     {
         dicomPrinter.setIsDefault(false);
-        settings.setListItem(dicomPrinter.getID(), DicomPrinterListSectionName, dicomPrinterToKeyValueMap(dicomPrinter));
+        settings.setListItem(dicomPrinter.getID(), DicomPrinterListSectionName, dicomPrinterToSettingsListItem(dicomPrinter));
     }
 }
 
@@ -108,7 +108,7 @@ QList<DicomPrinter> DicomPrinterManager::getDicomPrinterList()
     {
         DicomPrinter dicomPrinter;
 
-        dicomPrinter = keyValueMapToDicomPrinter(item);
+        dicomPrinter = settingsListItemToDicomPrinter(item);
         dicomPrinter.setID(indexOfIDPrinter);
         dicomPrintersList << dicomPrinter;
         indexOfIDPrinter++;
@@ -139,7 +139,7 @@ DicomPrinter DicomPrinterManager::getDefaultAvailableParametersValuesDICOMPrinte
     return dicomPrinter;
 }
 
-Settings::SettingsListItemType DicomPrinterManager::dicomPrinterToKeyValueMap(DicomPrinter &dicomPrinter)
+Settings::SettingsListItemType DicomPrinterManager::dicomPrinterToSettingsListItem(DicomPrinter &dicomPrinter)
 {
     Settings::SettingsListItemType item;
 
@@ -171,7 +171,7 @@ Settings::SettingsListItemType DicomPrinterManager::dicomPrinterToKeyValueMap(Di
     return item;
 }
 
-DicomPrinter DicomPrinterManager::keyValueMapToDicomPrinter(Settings::SettingsListItemType &item)
+DicomPrinter DicomPrinterManager::settingsListItemToDicomPrinter(Settings::SettingsListItemType &item)
 {
     DicomPrinter dicomPrinter;
 

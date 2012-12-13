@@ -40,10 +40,10 @@ public:
 
 private:
     /// Retorna un Settings::SettingsListItemType omplert amb les dades de la impressora dicomPrinter.
-    Settings::SettingsListItemType dicomPrinterToKeyValueMap(DicomPrinter &dicomPrinter);
+    Settings::SettingsListItemType dicomPrinterToSettingsListItem(DicomPrinter &dicomPrinter);
 
     /// Retorna un DicomPrinter omplert amb les dades que conté el Settings::SettingsListItemType.
-    DicomPrinter keyValueMapToDicomPrinter(Settings::SettingsListItemType &item);
+    DicomPrinter settingsListItemToDicomPrinter(Settings::SettingsListItemType &item);
 
     /// Retorna l'index on està emmagatzemada la impressora printer dins del sistema (Settings).
     int indexOfPrinterInSettings(DicomPrinter &printer);
