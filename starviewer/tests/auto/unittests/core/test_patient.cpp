@@ -15,6 +15,9 @@ private slots:
 
     void getStudies_ShouldGetThemInTheExpectedOrder_data();
     void getStudies_ShouldGetThemInTheExpectedOrder();
+
+    void getStudiesByModality_ShouldReturnExpectedResults_data();
+    void getStudiesByModality_ShouldReturnExpectedResults();
 };
 
 Q_DECLARE_METATYPE(Patient::PatientsSimilarity)
@@ -104,7 +107,74 @@ void test_Patient::getStudies_ShouldGetThemInTheExpectedOrder()
     QCOMPARE(patient->getStudies(sortCriteria), expectedSortedStudies);
 }
 
+void test_Patient::getStudiesByModality_ShouldReturnExpectedResults_data()
+{
+    QTest::addColumn<Patient*>("patient");
+    QTest::addColumn<QString>("modality");
+    QTest::addColumn<QList<Study*> >("expectedStudies");
+
+    QTest::newRow("patient with no studies") << new Patient() << "MR" << QList<Study*>();
+
+    Study *MRStudy = new Study(0);
+    MRStudy->setInstanceUID("MR_study");
+    MRStudy->addModality("MR");
+    
+    Study *CRandRFStudy = new Study(0);
+    CRandRFStudy->setInstanceUID("CR_and_RF_study");
+    CRandRFStudy->addModality("CR");
+    CRandRFStudy->addModality("RF");
+
+    Study *MRandPRStudy = new Study(0);
+    MRandPRStudy->setInstanceUID("MR_and_PR_study");
+    MRandPRStudy->addModality("MR");
+    MRandPRStudy->addModality("PR");
+
+    QList<Study*> filteredList;
+    Patient *patient = new Patient(0);
+
+    patient->addStudy(MRStudy);
+    filteredList << MRStudy;
+    QTest::newRow("Patient with one MR study, matching modality MR") << patient << "MR" << filteredList;
+
+    patient = new Patient(0);
+    patient->addStudy(MRStudy);
+    QTest::newRow("Patient with one MR study, non-matching modality CR") << patient << "CR" << QList<Study*>();
+
+    filteredList.clear();
+    patient = new Patient(0);
+    patient->addStudy(MRandPRStudy);
+    filteredList << MRandPRStudy;
+    QTest::newRow("Patient with one MR/PR study, matching modality MR") << patient << "MR" << filteredList;
+
+    patient = new Patient(0);
+    patient->addStudy(MRandPRStudy);
+    QTest::newRow("Patient with one MR/PR study, non-matching modality SR") << patient << "SR" << QList<Study*>();
+
+    filteredList.clear();
+    patient = new Patient(0);
+    patient->addStudy(MRandPRStudy);
+    patient->addStudy(CRandRFStudy);
+    filteredList << MRandPRStudy;
+    QTest::newRow("Patient with 2 studies, MR/PR & CR/RF, matching modality MR") << patient << "MR" << filteredList;
+
+    filteredList.clear();
+    patient = new Patient(0);
+    patient->addStudy(MRandPRStudy);
+    patient->addStudy(CRandRFStudy);
+    patient->addStudy(MRStudy);
+    filteredList << MRStudy << MRandPRStudy;
+    QTest::newRow("Patient with 3 studies, MR/PR, CR/RF & MR, matching modality MR") << patient << "MR" << filteredList;
+}
+
+void test_Patient::getStudiesByModality_ShouldReturnExpectedResults()
+{
+    QFETCH(Patient*, patient);
+    QFETCH(QString, modality);
+    QFETCH(QList<Study*>, expectedStudies);
+
+    QCOMPARE(patient->getStudiesByModality(modality), expectedStudies);
+}
+
 DECLARE_TEST(test_Patient)
 
 #include "test_patient.moc"
-
