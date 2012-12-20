@@ -217,10 +217,9 @@ void Q2DViewerExtension::setInput(Volume *input)
     viewerWidget->setInput(m_mainVolume);
     m_workingArea->setSelectedViewer(m_workingArea->getViewerWidget(0));
 #else
-    // Posta a punt dels hanging protocols
-    setupHangingProtocols();
-    searchAndApplyBestHangingProtocol();
 
+    setupHangingProtocols();
+    applyProperLayoutChoice();
     m_workingArea->setSelectedViewer(m_workingArea->getViewerWidget(0));
 
     // Habilitem la possibilitat de buscar estudis relacionats.
