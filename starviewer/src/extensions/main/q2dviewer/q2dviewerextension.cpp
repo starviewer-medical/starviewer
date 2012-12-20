@@ -253,6 +253,7 @@ void Q2DViewerExtension::searchAndApplyBestHangingProtocol()
     if (hangingCandidates.size() == 0)
     {
         // No hi ha hanging protocols
+        // TODO Aquí hauria d'aplicar un layout automàtic millor
         Q2DViewerWidget *viewerWidget = m_workingArea->addViewer("0.0\\1.0\\1.0\\0.0");
         viewerWidget->setInputAsynchronously(m_mainVolume);
     }
