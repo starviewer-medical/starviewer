@@ -55,10 +55,7 @@ bool Q2DViewerExtensionMediator::reinitializeExtension(QWidget *extension)
     else
     {
 #ifndef STARVIEWER_LITE
-        // Busquem i apliquem el millor hanging protocol possible
-        q2dviewerExtension->searchAndApplyBestHangingProtocol();
-        // Actualitzem el widget de prèvies.
-        q2dviewerExtension->updateRelatedStudiesWidget();
+        q2dviewerExtension->onPatientUpdated();
 #endif
         return true;
     }

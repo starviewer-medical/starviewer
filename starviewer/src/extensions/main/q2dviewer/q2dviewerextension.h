@@ -51,6 +51,10 @@ public:
     /// Mètode per obtenir el pacient
     Patient* getPatient() const;
 
+    /// Fa les accions necessàries quan les dades del pacient actual s'han actualitzat
+    /// TODO S'ha d'acabar de perfilar, es podria dir, onStudyAdded()
+    void onPatientUpdated();
+
 public slots:
     /// Mostrar menu per seleccionar grid predefinit
     /// TODO S'ha de canviar el mètode per tal que no es crei l'objecte cada cop
