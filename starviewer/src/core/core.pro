@@ -289,6 +289,7 @@ HEADERS += extensionfactory.h \
     dicomformattedvaluesconverter.h \
     loggingoutputwindow.h \
     studylayoutconfig.h \
+    studylayoutconfigsettingsmanager.h \
     studylayoutconfigsettingsconverter.h \
     studylayoutmapper.h \
     optimalviewersgridestimator.h \
@@ -538,6 +539,7 @@ SOURCES += extensionmediator.cpp \
     dicomformattedvaluesconverter.cpp \
     loggingoutputwindow.cpp \
     studylayoutconfig.cpp \
+    studylayoutconfigsettingsmanager.cpp \
     studylayoutconfigsettingsconverter.cpp \
     studylayoutmapper.cpp \
     optimalviewersgridestimator.cpp \
