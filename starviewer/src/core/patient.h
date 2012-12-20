@@ -172,7 +172,7 @@ private:
     bool m_identityIsRemoved;
 
     /// Llista que conté els estudis del pacient ordenats per data
-    QList<Study*> m_studiesSet;
+    QList<Study*> m_studiesList;
 };
 
 }

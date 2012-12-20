@@ -22,12 +22,12 @@ Patient::Patient(const Patient &patient, QObject *parent)
     m_birthDate = patient.m_birthDate;
     m_sex = patient.m_sex;
     m_identityIsRemoved = patient.m_identityIsRemoved;
-    m_studiesSet = patient.m_studiesSet;
+    m_studiesList = patient.m_studiesList;
 }
 
 Patient::~Patient()
 {
-    m_studiesSet.clear();
+    m_studiesList.clear();
 }
 
 void Patient::setFullName(const QString &name)
@@ -118,7 +118,7 @@ void Patient::removeStudy(const QString &uid)
     int index = this->findStudyIndex(uid);
     if (index != -1)
     {
-        m_studiesSet.removeAt(index);
+        m_studiesList.removeAt(index);
     }
 }
 
@@ -127,7 +127,7 @@ Study *Patient::getStudy(const QString &uid)
     int index = this->findStudyIndex(uid);
     if (index != -1)
     {
-        return m_studiesSet[index];
+        return m_studiesList[index];
     }
     else
     {
@@ -149,25 +149,25 @@ bool Patient::studyExists(const QString &uid)
 
 int Patient::getNumberOfStudies()
 {
-    return m_studiesSet.size();
+    return m_studiesList.size();
 }
 
 QList<Study*> Patient::getStudies(Study::StudySortType sortCriteria) const
 {
     if (sortCriteria == Study::OlderStudiesFirst)
     {
-        return Study::sortStudies(m_studiesSet, Study::OlderStudiesFirst);
+        return Study::sortStudies(m_studiesList, Study::OlderStudiesFirst);
     }
     else
     {
-        return m_studiesSet;
+        return m_studiesList;
     }
 }
 
 Series *Patient::getSeries(const QString &uid)
 {
     Series *result = NULL;
-    foreach (Study *study, m_studiesSet)
+    foreach (Study *study, m_studiesList)
     {
         result = study->getSeries(uid);
         if (result)
@@ -181,7 +181,7 @@ Series *Patient::getSeries(const QString &uid)
 QList<Series*> Patient::getSelectedSeries()
 {
     QList<Series*> selectedSeries;
-    foreach (Study *study, m_studiesSet)
+    foreach (Study *study, m_studiesList)
     {
         QList<Series*> list = study->getSelectedSeries();
         if (!list.empty())
@@ -216,7 +216,7 @@ Patient& Patient::operator =(const Patient &patient)
     m_birthDate = patient.m_birthDate;
     m_sex = patient.m_sex;
     m_identityIsRemoved = patient.m_identityIsRemoved;
-    m_studiesSet = patient.m_studiesSet;
+    m_studiesList = patient.m_studiesList;
     return *this;
 }
 
@@ -246,7 +246,7 @@ Patient Patient::operator +(const Patient &patient)
     // Copiem informació estructural en el resultat
     result.copyPatientInformation(&patient);
 
-    result.m_studiesSet = this->m_studiesSet;
+    result.m_studiesList = this->m_studiesList;
 
     // Ara recorrem els estudis que té "l'altre pacient" per afegir-los al resultat si no els té ja
     QList<Study*> studyListToAdd = patient.getStudies();
@@ -394,20 +394,20 @@ void Patient::copyPatientInformation(const Patient *patient)
 void Patient::insertStudy(Study *study)
 {
     int i = 0;
-    while (i < m_studiesSet.size() && m_studiesSet.at(i)->getDateTime() > study->getDateTime())
+    while (i < m_studiesList.size() && m_studiesList.at(i)->getDateTime() > study->getDateTime())
     {
         ++i;
     }
-    m_studiesSet.insert(i, study);
+    m_studiesList.insert(i, study);
 }
 
 int Patient::findStudyIndex(const QString &uid)
 {
     int i = 0;
     bool found = false;
-    while (i < m_studiesSet.size() && !found)
+    while (i < m_studiesList.size() && !found)
     {
-        if (m_studiesSet.at(i)->getInstanceUID() == uid)
+        if (m_studiesList.at(i)->getInstanceUID() == uid)
         {
             found = true;
         }
