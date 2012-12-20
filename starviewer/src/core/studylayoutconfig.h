@@ -2,7 +2,8 @@
 #define UDGSTUDYLAYOUTCONFIG_H
 
 #include <QSet>
-#include <QStringList>
+
+class QString;
 
 namespace udg {
 
@@ -26,8 +27,8 @@ public:
     void addExclusionCriteria(ExclusionCriteriaType criteria);
     QList<ExclusionCriteriaType> getExclusionCriteria() const;
 
-    void addModality(const QString &modality);
-    QStringList getModalities() const;
+    void setModality(const QString &modality);
+    QString getModality() const;
 
     void setMaximumNumberOfViewers(int maximum);
     int getMaximumNumberOfViewers() const;
@@ -45,8 +46,8 @@ private:
     /// Conjunt de criteris d'exclusió
     QSet<ExclusionCriteriaType> m_exclusionCriteria;
 
-    /// Llistat de modalitats a les que aplicar aquesta configuració
-    QStringList m_modalities;
+    /// Modalitat a la que aplicar aquesta configuració
+    QString m_modality;
 };
 
 } // End namespace udg

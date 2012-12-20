@@ -26,7 +26,7 @@ void StudyLayoutMapper::applyConfig(const StudyLayoutConfig &config, ViewersLayo
 
     // Primer trobem els estudis que compleixin amb els requisits
     // Requisit 1: Que contingui la modalitat de la configuració
-    QList<Study*> matchingStudies = getMatchingStudies(config, patient);
+    QList<Study*> matchingStudies = patient->getStudiesByModality(config.getModality());
     
     if (matchingStudies.isEmpty())
     {
@@ -58,19 +58,6 @@ void StudyLayoutMapper::applyConfig(const StudyLayoutConfig &config, ViewersLayo
     layout->setGrid(rows, columns);
     // Col·loquem les imatges en el layout donat
     placeImagesInCurrentLayout(candidateImages, config.getUnfoldDirection(), layout);
-}
-
-QList<Study*> StudyLayoutMapper::getMatchingStudies(const StudyLayoutConfig &config, Patient *patient)
-{
-    QList<Study*> matchingStudies;
-    QStringList modalities = config.getModalities();
-
-    foreach (const QString configModality, modalities)
-    {
-        matchingStudies << patient->getStudiesByModality(configModality);
-    }
-
-    return matchingStudies;
 }
 
 QList<QPair<Volume*, int> > StudyLayoutMapper::getImagesToPlace(const StudyLayoutConfig &config, const QList<Study*> &matchingStudies)
