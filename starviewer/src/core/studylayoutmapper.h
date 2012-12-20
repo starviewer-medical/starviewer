@@ -4,9 +4,10 @@
 #include <QList>
 #include <QPair>
 
+#include "studylayoutconfig.h"
+
 namespace udg {
 
-class StudyLayoutConfig;
 class ViewersLayout;
 class Patient;
 class Volume;
@@ -25,7 +26,7 @@ private:
     QList<Study*> getMatchingStudies(const StudyLayoutConfig &config, Patient *patient);
     
     /// Donada una llista de volums amb la corresponent llesca, els col·loca al layout segons la configuració donada
-    void placeImagesInCurrentLayout(const QList<QPair<Volume*, int> > &volumesToPlace, const StudyLayoutConfig &config, ViewersLayout *layout);
+    void placeImagesInCurrentLayout(const QList<QPair<Volume*, int> > &volumesToPlace, StudyLayoutConfig::UnfoldDirectionType unfoldDirection, ViewersLayout *layout);
 };
 
 } // End namespace udg
