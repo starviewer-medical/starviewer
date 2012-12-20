@@ -1,6 +1,5 @@
 #include "studylayoutmapper.h"
 
-#include "studylayoutconfig.h"
 #include "optimalviewersgridestimator.h"
 #include "viewerslayout.h"
 #include "patient.h"
@@ -118,7 +117,7 @@ void StudyLayoutMapper::applyConfig(const StudyLayoutConfig &config, ViewersLayo
     int columns = grid.second;
     layout->setGrid(rows, columns);
     // Col·loquem les imatges en el layout donat
-    placeImagesInCurrentLayout(candidateVolumes, config, layout);
+    placeImagesInCurrentLayout(candidateVolumes, config.getUnfoldDirection(), layout);
 }
 
 QList<Study*> StudyLayoutMapper::getMatchingStudies(const StudyLayoutConfig &config, Patient *patient)
@@ -134,7 +133,7 @@ QList<Study*> StudyLayoutMapper::getMatchingStudies(const StudyLayoutConfig &con
     return matchingStudies;
 }
 
-void StudyLayoutMapper::placeImagesInCurrentLayout(const QList<QPair<Volume*, int> > &volumesToPlace, const StudyLayoutConfig &config, ViewersLayout *layout)
+void StudyLayoutMapper::placeImagesInCurrentLayout(const QList<QPair<Volume*, int> > &volumesToPlace, StudyLayoutConfig::UnfoldDirectionType unfoldDirection, ViewersLayout *layout)
 {
     int rows = layout->getVisibleRows();
     int columns = layout->getVisibleColumns();
@@ -149,10 +148,9 @@ void StudyLayoutMapper::placeImagesInCurrentLayout(const QList<QPair<Volume*, in
         numberOfVolumesToPlace = rows * columns;
     }
     // Ara toca assignar els inputs
-    StudyLayoutConfig::UnfoldDirectionType direction = config.getUnfoldDirection();
     int numberOfPlacedVolumes = 0;
     
-    if (direction == StudyLayoutConfig::LeftToRightFirst)
+    if (unfoldDirection == StudyLayoutConfig::LeftToRightFirst)
     {
         for (int i = 0; i < rows; ++i)
         {
@@ -169,7 +167,7 @@ void StudyLayoutMapper::placeImagesInCurrentLayout(const QList<QPair<Volume*, in
             }
         }
     }
-    else if (direction == StudyLayoutConfig::TopToBottomFirst)
+    else if (unfoldDirection == StudyLayoutConfig::TopToBottomFirst)
     {
         for (int i = 0; i < columns; ++i)
         {
