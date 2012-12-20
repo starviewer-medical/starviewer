@@ -22,9 +22,6 @@ public:
     void applyConfig(const StudyLayoutConfig &config, ViewersLayout *layout, Patient *patient);
 
 private:
-    /// Donada una configuració ens retorna la llista d'estudis del pacient que donen amb el perfil de la configuració
-    QList<Study*> getMatchingStudies(const StudyLayoutConfig &config, Patient *patient);
-    
     /// Ens retorna la llista de volums amb la corresponent imatge que hem de col·locar segons la configuració i els estudis obtinguts a getMatchingStudies()
     QList<QPair<Volume*, int> > getImagesToPlace(const StudyLayoutConfig &config, const QList<Study*> &matchingStudies);
     

@@ -14,7 +14,7 @@ StudyLayoutConfig::StudyLayoutConfig(const QString &modality, UnfoldType unfoldT
     m_maxNumberOfViewers = 0;
     m_unfoldType = unfoldType;
     m_unfoldDirection = unfoldDirection;
-    addModality(modality);
+    m_modality = modality;
 }
 
 StudyLayoutConfig::~StudyLayoutConfig()
@@ -51,14 +51,14 @@ QList<StudyLayoutConfig::ExclusionCriteriaType> StudyLayoutConfig::getExclusionC
     return m_exclusionCriteria.toList();
 }
 
-void StudyLayoutConfig::addModality(const QString &modality)
+void StudyLayoutConfig::setModality(const QString &modality)
 {
-    m_modalities << modality;
+    m_modality = modality;
 }
 
-QStringList StudyLayoutConfig::getModalities() const
+QString StudyLayoutConfig::getModality() const
 {
-    return m_modalities;
+    return m_modality;
 }
 
 void StudyLayoutConfig::setMaximumNumberOfViewers(int maximum)
