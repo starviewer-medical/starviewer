@@ -5,8 +5,8 @@ namespace udg {
 StudyLayoutConfig::StudyLayoutConfig()
 {
     m_maxNumberOfViewers = 0;
-    m_unfoldType = UnfoldSeries;
-    m_unfoldDirection = LeftToRightFirst;
+    m_unfoldType = DefaultUnfoldType;
+    m_unfoldDirection = DefaultUnfoldDirection;
 }
 
 StudyLayoutConfig::StudyLayoutConfig(const QString &modality, UnfoldType unfoldType, UnfoldDirectionType unfoldDirection)
