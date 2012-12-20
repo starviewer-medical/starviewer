@@ -164,6 +164,21 @@ QList<Study*> Patient::getStudies(Study::StudySortType sortCriteria) const
     }
 }
 
+QList<Study*> Patient::getStudiesByModality(const QString &modality)
+{
+    QList<Study*> filteredStudies;
+
+    foreach (Study *study, m_studiesList)
+    {
+        if (study->getModalities().contains(modality))
+        {
+            filteredStudies << study;
+        }
+    }
+    
+    return filteredStudies;
+}
+
 Series *Patient::getSeries(const QString &uid)
 {
     Series *result = NULL;

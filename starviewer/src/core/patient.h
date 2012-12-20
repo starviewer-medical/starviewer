@@ -77,6 +77,9 @@ public:
     /// Mètode per obtenir la llista d'estudis del pacient. Per defecte ens la retorna ordenada amb els estudis més recents primer.
     QList<Study*> getStudies(Study::StudySortType sortCriteria = Study::RecentStudiesFirst) const;
 
+    /// Ens retorna una llista amb els estudis del pacient que continguin la modalitat donada. La llista d'estudis no està en cap ordre concret.
+    QList<Study*> getStudiesByModality(const QString &modality);
+    
     /// Mètode ràpid per trobar si hi ha una series amb el uid donat. Retorna nul si aquesta no existeix
     Series* getSeries(const QString &uid);
 
