@@ -101,13 +101,9 @@ QList<QPair<Volume*, int> > StudyLayoutMapper::getImagesToPlace(const StudyLayou
                     if (config.getUnfoldType() == StudyLayoutConfig::UnfoldImages)
                     {
                         // TODO Cal pensar què fer en el cas que tinguem fases. Ara mateix no les estem contemplant.
-                        for (int i = 0; i < series->getNumberOfVolumes(); ++i)
+                        for (int slice = 0; slice < currentVolume->getNumberOfSlicesPerPhase(); ++slice)
                         {
-                            Volume *currentVolume = series->getVolumesList().at(i);
-                            for (int slice = 0; slice < currentVolume->getNumberOfSlicesPerPhase(); ++slice)
-                            {
-                                candidateImages << QPair<Volume*, int>(currentVolume, slice);
-                            }
+                            candidateImages << QPair<Volume*, int>(currentVolume, slice);
                         }
                     }
                     else
