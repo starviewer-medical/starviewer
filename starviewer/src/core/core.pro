@@ -17,6 +17,7 @@ FORMS += qlogviewerbase.ui \
     qtransferfunctiongraphicalviewbase.ui \
     qdiagnosistestbase.ui \
     qmodalitiesselectorgroupboxbase.ui \
+    q2dviewerlayoutconfigurationscreenbase.ui \
     q2dviewerconfigurationscreenbase.ui
 
 TRANSLATIONS += core_ca_ES.ts \
@@ -278,6 +279,7 @@ HEADERS += extensionfactory.h \
     qdiagnosistest.h \
     rundiagnosistest.h \
     q2dviewerconfigurationscreen.h \
+    q2dviewerlayoutconfigurationscreen.h \
     qmodalitiesselectorgroupbox.h \
     circletool.h \
     diagnosistestresultwriter.h \
@@ -529,6 +531,7 @@ SOURCES += extensionmediator.cpp \
     qdiagnosistest.cpp \
     rundiagnosistest.cpp \
     q2dviewerconfigurationscreen.cpp \
+    q2dviewerlayoutconfigurationscreen.cpp \
     qmodalitiesselectorgroupbox.cpp \
     circletool.cpp \
     diagnosistestresultwriter.cpp \
