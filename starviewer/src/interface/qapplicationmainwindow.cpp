@@ -32,6 +32,7 @@
 #ifndef STARVIEWER_LITE
 #include "hangingprotocolsloader.h"
 #include "customwindowlevelsloader.h"
+#include "studylayoutconfigsloader.h"
 #endif
 
 // Qt
@@ -117,6 +118,9 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
 
         CustomWindowLevelsLoader customWindowLevelsLoader;
         customWindowLevelsLoader.loadDefaults();
+
+        StudyLayoutConfigsLoader layoutConfigsLoader;
+        layoutConfigsLoader.load();
 
         repositoriesLoaded = true;
     }
