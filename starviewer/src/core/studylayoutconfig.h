@@ -33,6 +33,8 @@ public:
     void setMaximumNumberOfViewers(int maximum);
     int getMaximumNumberOfViewers() const;
 
+    bool operator ==(const StudyLayoutConfig &config) const;
+
 private:
     /// Nombre màxim de visors a desplegar. Si és zero indicaria que s'han de desplegar tants com sigui possible.
     int m_maxNumberOfViewers;
