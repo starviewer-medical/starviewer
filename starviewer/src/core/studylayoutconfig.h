@@ -9,13 +9,13 @@ namespace udg {
 
 class StudyLayoutConfig {
 public:
-    enum UnfoldType { UnfoldImages, UnfoldSeries };
-    enum UnfoldDirectionType { LeftToRightFirst, TopToBottomFirst };
+    enum UnfoldType { UnfoldImages, UnfoldSeries, DefaultUnfoldType = UnfoldSeries };
+    enum UnfoldDirectionType { LeftToRightFirst, TopToBottomFirst, DefaultUnfoldDirection = LeftToRightFirst };
     enum ExclusionCriteriaType { Survey, Localizer };
     
     StudyLayoutConfig();
     /// Constructor amb paràmetres més habituals
-    StudyLayoutConfig(const QString &modality, UnfoldType unfoldType = UnfoldSeries, UnfoldDirectionType unfoldDirection = LeftToRightFirst);
+    StudyLayoutConfig(const QString &modality, UnfoldType unfoldType = DefaultUnfoldType, UnfoldDirectionType unfoldDirection = DefaultUnfoldDirection);
     ~StudyLayoutConfig();
 
     void setUnfoldType(UnfoldType unfoldType);
