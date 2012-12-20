@@ -10,6 +10,7 @@ class StudyLayoutConfig;
 class ViewersLayout;
 class Patient;
 class Volume;
+class Study;
 
 class StudyLayoutMapper {
 public:
@@ -20,6 +21,9 @@ public:
     void applyConfig(const StudyLayoutConfig &config, ViewersLayout *layout, Patient *patient);
 
 private:
+    /// Donada una configuració ens retorna la llista d'estudis del pacient que donen amb el perfil de la configuració
+    QList<Study*> getMatchingStudies(const StudyLayoutConfig &config, Patient *patient);
+    
     /// Donada una llista de volums amb la corresponent llesca, els col·loca al layout segons la configuració donada
     void placeImagesInCurrentLayout(const QList<QPair<Volume*, int> > &volumesToPlace, const StudyLayoutConfig &config, ViewersLayout *layout);
 };
