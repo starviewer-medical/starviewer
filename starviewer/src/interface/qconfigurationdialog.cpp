@@ -8,6 +8,7 @@
 #include "qlistenrisrequestsconfigurationscreen.h"
 #include "qdicomdirconfigurationscreen.h"
 #include "q2dviewerconfigurationscreen.h"
+#include "q2dviewerlayoutconfigurationscreen.h"
 #include "starviewerapplication.h"
 
 namespace udg {
@@ -23,6 +24,11 @@ QConfigurationDialog::QConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
     Q2DViewerConfigurationScreen *q2dviewerScreen = new Q2DViewerConfigurationScreen(this);
     addConfigurationWidget(q2dviewerScreen, tr("2D Viewer"), BasicConfiguration);
     connect(m_okButton, SIGNAL(clicked()), q2dviewerScreen, SLOT(applyChanges()));
+
+    // Configuració del layout del visor 2D
+    Q2DViewerLayoutConfigurationScreen *q2dviewerLayoutScreen = new Q2DViewerLayoutConfigurationScreen(this);
+    addConfigurationWidget(q2dviewerLayoutScreen, tr("2D Viewer Layout"), BasicConfiguration);
+    connect(m_okButton, SIGNAL(clicked()), q2dviewerLayoutScreen, SLOT(applyChanges()));
 
 #ifndef STARVIEWER_LITE
     // No mostrem configuració del PACS
