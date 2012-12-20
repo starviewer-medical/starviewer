@@ -208,6 +208,13 @@ void Q2DViewerExtension::createConnections()
     connect(m_thickSlabWidget, SIGNAL(maximumThicknessModeToggled(bool)), SLOT(enableMaximumThicknessMode(bool)));
 }
 
+void Q2DViewerExtension::onPatientUpdated()
+{
+    applyProperLayoutChoice();
+    // Actualitzem el widget de prèvies.
+    updateRelatedStudiesWidget();
+}
+
 void Q2DViewerExtension::setInput(Volume *input)
 {
     m_mainVolume = input;
