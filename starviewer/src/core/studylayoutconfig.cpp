@@ -9,6 +9,14 @@ StudyLayoutConfig::StudyLayoutConfig()
     m_unfoldDirection = LeftToRightFirst;
 }
 
+StudyLayoutConfig::StudyLayoutConfig(const QString &modality, UnfoldType unfoldType, UnfoldDirectionType unfoldDirection)
+{
+    m_maxNumberOfViewers = 0;
+    m_unfoldType = unfoldType;
+    m_unfoldDirection = unfoldDirection;
+    addModality(modality);
+}
+
 StudyLayoutConfig::~StudyLayoutConfig()
 {
 }
