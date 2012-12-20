@@ -71,4 +71,21 @@ int StudyLayoutConfig::getMaximumNumberOfViewers() const
     return m_maxNumberOfViewers;
 }
 
+bool StudyLayoutConfig::operator ==(const StudyLayoutConfig &config) const
+{
+    if (m_maxNumberOfViewers == config.m_maxNumberOfViewers &&
+        m_unfoldType == config.m_unfoldType &&
+        m_unfoldDirection == config.m_unfoldDirection &&
+        m_exclusionCriteria == config.m_exclusionCriteria &&
+        m_modality == config.m_modality)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+
+}
+
 } // End namespace udg
