@@ -38,6 +38,10 @@
 #include <QProgressDialog>
 #include <QMessageBox>
 
+#include "studylayoutconfig.h"
+#include "studylayoutmapper.h"
+#include "studylayoutconfigsettingsmanager.h"
+
 namespace udg {
 
 Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
@@ -780,6 +784,61 @@ void Q2DViewerExtension::rearrangeToolsMenu(QToolButton *menuButton)
         menuButton->setDefaultAction(actions.takeAt(i - 1));
         menuButton->menu()->clear();
         menuButton->menu()->addActions(actions);
+    }
+}
+
+void Q2DViewerExtension::applyProperLayoutChoice()
+{
+    // Primer mirem quines modalitats té el pacient per poder decidir si mirar primer HP o layouts automàtics
+    Settings settings;
+    QStringList modalitiesWithHPPriority = settings.getValue(CoreSettings::ModalitiesToApplyHangingProtocolsAsFirstOption)
+        .toString().split(";", QString::SkipEmptyParts);
+    QStringList patientModalities;
+    foreach (Study *study, m_patient->getStudies())
+    {
+        patientModalities << study->getModalities();
+    }
+
+    bool hasToApplyHangingProtocol = false;
+    QSet<QString> matchingModalities = modalitiesWithHPPriority.toSet().intersect(patientModalities.toSet());
+    if (matchingModalities.isEmpty())
+    {
+        // Primer trobem quines configuracions candidates tenim segons les modalitats del pacient
+        StudyLayoutConfigSettingsManager settingsManager;
+        QList<StudyLayoutConfig> configurationCandidates;
+        foreach (const StudyLayoutConfig &currentConfig, settingsManager.getConfigList())
+        {
+            if (!m_patient->getStudiesByModality(currentConfig.getModality()).isEmpty())
+            {
+                configurationCandidates << currentConfig;
+            }
+        }
+
+        if (!configurationCandidates.isEmpty())
+        {
+            // TODO De moment només provem amb el primer
+            StudyLayoutMapper mapper;
+            mapper.applyConfig(configurationCandidates.first(), m_workingArea, m_patient);
+        }
+        else
+        {
+            hasToApplyHangingProtocol = true;
+        }
+    }
+    else
+    {
+        hasToApplyHangingProtocol = true;
+    }
+
+    if (hasToApplyHangingProtocol)
+    {
+        // Busquem i apliquem el millor hanging protocol possible
+        searchAndApplyBestHangingProtocol();
+    }
+    else
+    {
+        // Actualizem HPs només
+        searchHangingProtocols();
     }
 }
 

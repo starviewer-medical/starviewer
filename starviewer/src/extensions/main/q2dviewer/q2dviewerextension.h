@@ -139,6 +139,9 @@ private:
     /// Col·loca i ordena les icones i el menú de les eines del botó donat segons l'última eina seleccionada
     void rearrangeToolsMenu(QToolButton *menuButton);
 
+    /// Determina com fem el layout del pacient que es carrega, si amb layout automàtic o amb hanging protocols
+    void applyProperLayoutChoice();
+
 private slots:
 #ifndef STARVIEWER_LITE
     /// Comprova si el nou volum té fases i per tant hem d'activar/descativar la vista coronal+sagital
