@@ -42,6 +42,7 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_screen.cpp \
            $$PWD/test_screenlayout.cpp \
            $$PWD/test_viewerslayout.cpp \
+           $$PWD/test_studylayoutconfigsettingsconverter.cpp \
            $$PWD/test_optimalviewersgridestimator.cpp \
            $$PWD/test_vtkimagedatacreator.cpp
 
