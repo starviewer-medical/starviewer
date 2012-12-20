@@ -87,6 +87,7 @@ const QString CoreSettings::EnableQ2DViewerReferenceLinesForCT(Q2DViewerBase + "
 const QString CoreSettings::ModalitiesWithZoomToolByDefault(Q2DViewerBase + "ModalitiesWithZoomToolByDefault");
 const QString CoreSettings::EnableQ2DViewerAutomaticSynchronizationForMR(Q2DViewerBase + "enable2DViewerAutomaticSynchronizationForMR");
 const QString CoreSettings::EnableQ2DViewerAutomaticSynchronizationForCT(Q2DViewerBase + "enable2DViewerAutomaticSynchronizationForCT");
+const QString CoreSettings::StudyLayoutConfigList(Q2DViewerBase + "StudyLayoutConfigList");
 
 CoreSettings::CoreSettings()
 {
