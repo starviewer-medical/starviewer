@@ -110,6 +110,8 @@ public:
     static const QString EnableQ2DViewerAutomaticSynchronizationForMR;
     static const QString EnableQ2DViewerAutomaticSynchronizationForCT;
 
+    /// Defineix les modalitats on s'aplicarà els hanging protocols com a primera opció de distribució
+    static const QString ModalitiesToApplyHangingProtocolsAsFirstOption;
     /// Nom de la llista on es guarden les configuracions de layouts automàtics
     static const QString StudyLayoutConfigList;
 };
