@@ -55,9 +55,6 @@ public:
     /// TODO S'ha d'acabar de perfilar, es podria dir, onStudyAdded()
     void onPatientUpdated();
 
-    /// Activa o desactiva només el botó de la sincronització manual
-    void enableSynchronizationButton(bool enable);
-
 
     /// Mètode per buscar les prèvies de l'estudi carregat més recent.
     void searchPreviousStudiesOfMostRecentStudy();

@@ -955,22 +955,6 @@ void Q2DViewerExtension::disableSynchronization()
     }
 }
 
-void Q2DViewerExtension::enableSynchronizationButton(bool enableButton)
-{
-    Q2DViewerWidget *viewer;
-
-    int numberOfViewers = m_workingArea->getNumberOfViewers();
-
-    for (int viewerNumber = 0; viewerNumber < numberOfViewers; ++viewerNumber)
-    {
-        viewer = m_workingArea->getViewerWidget(viewerNumber);
-        if (viewer->getViewer()->getInput())
-        {
-            viewer->enableSynchronizationButton(enableButton);
-        }
-    }
-}
-
 #ifndef STARVIEWER_LITE
 void Q2DViewerExtension::setHangingProtocol(int hangingProtocolNumber)
 {
