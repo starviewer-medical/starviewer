@@ -55,66 +55,12 @@ public:
     /// TODO S'ha d'acabar de perfilar, es podria dir, onStudyAdded()
     void onPatientUpdated();
 
-public slots:
-    /// Mostrar menu per seleccionar grid predefinit
-    /// TODO S'ha de canviar el mètode per tal que no es crei l'objecte cada cop
-    void showPredefinedGrid();
-
-    /// Mostrar el menu de la taula per seleccionar grids
-    /// TODO S'ha de canviar el mètode per tal que no es crei l'objecte cada cop
-    void showInteractiveTable();
-
-#ifndef STARVIEWER_LITE
-    /// Mostra el widget per poder descarregar els estudis relacionats amb l'estudi actual
-    void showRelatedStudiesWidget();
-#endif
-
-    /// Mostra o amaga els overlays de cada visualitzador
-    void showImageOverlays(bool show);
-
-    /// Mostra o amaga els display shutters de cada visualitzador
-    void showDisplayShutters(bool show);
-
-    /// Mostra o amaga la informació textual de cada visualitzador
-    void showViewersTextualInformation(bool show);
-    
-    /// Mostrar la pantalla de Dicom dump, amb informació de la imatge que es visualitza en aquell moment
-    void showDicomDumpCurrentDisplayedImage();
-
-#ifndef STARVIEWER_LITE
-    /// Mostrar el diàleg per exportar la sèrie del visor seleccionat.
-    void showScreenshotsExporterDialog();
-#endif
-
-    /// TODO Mètode per solucionar problemes perquè la sincronització
-    /// encara no està adaptada a la resta de les tools
-    /// Desactiva l'eina de sincronització.
-    void disableSynchronization();
-
     /// Activa o desactiva només el botó de la sincronització manual
     void enableSynchronizationButton(bool enable);
 
-#ifndef STARVIEWER_LITE
-    /// Apilicar un hanging protocol
-    void setHangingProtocol(int hangingProtocolNumber);
-
-    /// Mètode que busca els hanging protocols aplicables i aplica el millor de tots
-    void searchAndApplyBestHangingProtocol();
 
     /// Mètode per buscar les prèvies de l'estudi carregat més recent.
     void searchPreviousStudiesOfMostRecentStudy();
-
-    /// Mètode encarregat d'actualitzar la llista del widget d'estudis relacionats per marcar aquells nous estudis que s'han carregat a memòria.
-    void updateRelatedStudiesWidget();
-
-    /// Inicialitza la sincronització automàtica agafant de referència el visor que tenim actiu (seleccionat)
-    void enableAutomaticSynchronizationToViewer(bool enable);
-
-#endif
-
-    /// Aplica un grid regular al layout, i elimina l'etiqueta si algun estudi relacionat està en descàrrega
-    void setGrid(int rows, int columns);
-
 private:
     /// Crea les connexions entre signals i slots
     void createConnections();
@@ -130,6 +76,12 @@ private:
     /// Inicialitza el l'entorn dels hanging protocols per poder-se utilitzar
     void setupHangingProtocols();
     
+    /// Mètode que busca els hanging protocols aplicables i aplica el millor de tots
+    void searchAndApplyBestHangingProtocol();
+
+    /// Mètode encarregat d'actualitzar la llista del widget d'estudis relacionats per marcar aquells nous estudis que s'han carregat a memòria.
+    void updateRelatedStudiesWidget();
+
     /// Buscar estudis prèvis
     void searchPreviousStudiesWithHangingProtocols();
 #endif
@@ -178,7 +130,43 @@ private slots:
     /// Si enable és true, activa el gruix màxim a tots els visors on hi hagi algun mode de thickslab actiu
     void enableMaximumThicknessMode(bool enable);
 
+    /// Mostrar menu per seleccionar grid predefinit
+    /// TODO S'ha de canviar el mètode per tal que no es crei l'objecte cada cop
+    void showPredefinedGrid();
+
+    /// Mostrar el menu de la taula per seleccionar grids
+    /// TODO S'ha de canviar el mètode per tal que no es crei l'objecte cada cop
+    void showInteractiveTable();
+
+    /// Mostra o amaga els overlays de cada visualitzador
+    void showImageOverlays(bool show);
+
+    /// Mostra o amaga els display shutters de cada visualitzador
+    void showDisplayShutters(bool show);
+
+    /// Mostra o amaga la informació textual de cada visualitzador
+    void showViewersTextualInformation(bool show);
+    
+    /// Mostrar la pantalla de Dicom dump, amb informació de la imatge que es visualitza en aquell moment
+    void showDicomDumpCurrentDisplayedImage();
+
 #ifndef STARVIEWER_LITE
+    /// Mostrar el diàleg per exportar la sèrie del visor seleccionat.
+    void showScreenshotsExporterDialog();
+#endif
+
+    /// TODO Mètode per solucionar problemes perquè la sincronització
+    /// encara no està adaptada a la resta de les tools
+    /// Desactiva l'eina de sincronització.
+    void disableSynchronization();
+
+#ifndef STARVIEWER_LITE
+    /// Apilicar un hanging protocol
+    void setHangingProtocol(int hangingProtocolNumber);
+
+    /// Inicialitza la sincronització automàtica agafant de referència el visor que tenim actiu (seleccionat)
+    void enableAutomaticSynchronizationToViewer(bool enable);
+
     ///  Mètode que busca els hanging protocols aplicables
     void searchHangingProtocols();
 
@@ -189,6 +177,9 @@ private slots:
     /// Mètode que afegeix els hanging protocols amb prèvies
     void addHangingProtocolsWithPrevious(QList<Study*> studies);
 
+    /// Mostra el widget per poder descarregar els estudis relacionats amb l'estudi actual
+    void showRelatedStudiesWidget();
+    
     /// Activa la sincronització manual a tots els visors
     void activateManualSynchronizationInAllViewers();
 
@@ -199,6 +190,9 @@ private slots:
     void manualSynchronizationActivated(bool enable);
 
 #endif
+
+    /// Aplica un grid regular al layout, i elimina l'etiqueta si algun estudi relacionat està en descàrrega
+    void setGrid(int rows, int columns);
 
 private:
     /// El volum principal
