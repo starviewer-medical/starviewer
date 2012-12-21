@@ -971,31 +971,6 @@ void Q2DViewerExtension::changeToRelatedStudiesDefaultIcon()
     m_relatedStudiesToolButton->setIcon(QIcon(QString(":images/cal.png")));
 }
 
-void Q2DViewerExtension::searchPreviousStudiesOfMostRecentStudy()
-{
-    Study *recentStudy = NULL;
-
-    // Només busquem si hi ha el volum principal
-    if (m_mainVolume)
-    {
-        foreach (Study *study, m_mainVolume->getPatient()->getStudies())
-        {
-            if (recentStudy == NULL)
-            {
-                recentStudy = study;
-            }
-            else
-            {
-                if (study->getDateTime() > recentStudy->getDateTime())
-                {
-                    recentStudy = study;
-                }
-            }
-        }
-        m_relatedStudiesWidget->searchPreviousStudiesOf(recentStudy);
-    }
-}
-
 void Q2DViewerExtension::updateRelatedStudiesWidget()
 {
     m_relatedStudiesWidget->updateList();

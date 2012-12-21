@@ -55,9 +55,6 @@ public:
     /// TODO S'ha d'acabar de perfilar, es podria dir, onStudyAdded()
     void onPatientUpdated();
 
-
-    /// Mètode per buscar les prèvies de l'estudi carregat més recent.
-    void searchPreviousStudiesOfMostRecentStudy();
 private:
     /// Crea les connexions entre signals i slots
     void createConnections();
