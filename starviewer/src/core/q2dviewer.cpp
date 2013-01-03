@@ -1815,6 +1815,24 @@ void Q2DViewer::updateSliceAnnotationInformation()
             m_cornerAnnotations->SetText(1, qPrintable(m_lowerRightText.trimmed()));
         }
     }
+    else
+    {
+        Image *currentImage = getCurrentDisplayedImage();
+        if (currentImage)
+        {
+            QChar laterality = currentImage->getImageLaterality();
+            if (laterality.isNull() || laterality.isSpace())
+            {
+                laterality = image->getParentSeries()->getLaterality();
+            }
+
+            if (!laterality.isNull() && !laterality.isSpace())
+            {
+                QString lateralityAnnotation = "Lat: " + QString(laterality) + "\n";
+                m_cornerAnnotations->SetText(1, qPrintable(lateralityAnnotation + m_lowerRightText.trimmed()));
+            }
+        }
+    }
 
     int value = m_mainVolume->getImageIndex(m_currentSlice, m_currentPhase);
     if (m_numberOfPhases > 1)
