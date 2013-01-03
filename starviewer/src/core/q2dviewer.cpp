@@ -957,7 +957,6 @@ void Q2DViewer::resetView(CameraOrientationType view)
         // estalviant-nos crides i crides
         m_maxSliceValue = this->getMaximumSlice();
 
-        enableRendering(false);
         // TODO Solució inmediata per afrontar el ticket #355, pero s'hauria de fer d'una manera mes elegant i consistent
         // TODO Potser la solució més elegant sigui fer servir Q2DViewer::setImageOrientation() en comptes de fer-ho segons 
         // el valor de patient position, ja que en sagital i coronal, sempre voldrem que la orientació sigui d'una forma determinada
@@ -991,7 +990,6 @@ void Q2DViewer::resetView(CameraOrientationType view)
         {
             initialSliceIndex = m_maxSliceValue/2;
         }
-        enableRendering(true);
         m_currentSlice = -1; // HACK! Necessari perquè s'actualitzi la llesca correctament
         setSlice(initialSliceIndex);
     }
