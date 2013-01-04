@@ -93,6 +93,9 @@ private slots:
 
     void getScalarPointer_ShouldReturnCorrectScalarPointer_data();
     void getScalarPointer_ShouldReturnCorrectScalarPointer();
+
+    void isMultiframe_ShouldReturnTrueForMultiframeVolumes_data();
+    void isMultiframe_ShouldReturnTrueForMultiframeVolumes();
 };
 
 Q_DECLARE_METATYPE(AnatomicalPlane::AnatomicalPlaneType)
@@ -1165,6 +1168,24 @@ void test_Volume::getScalarPointer_ShouldReturnCorrectScalarPointer()
     QCOMPARE(voxelValue[0], (short)value);
     
     delete volume;
+}
+
+void test_Volume::isMultiframe_ShouldReturnTrueForMultiframeVolumes_data()
+{
+    QTest::addColumn<QSharedPointer<Volume>>("volume");
+    QTest::addColumn<bool>("isMultiframe");
+
+    QTest::newRow("singleframe 1 image") << QSharedPointer<Volume>(VolumeTestHelper::createVolume(1)) << false;
+    QTest::newRow("singleframe n images") << QSharedPointer<Volume>(VolumeTestHelper::createVolume(5)) << false;
+    QTest::newRow("multiframe") << QSharedPointer<Volume>(VolumeTestHelper::createMultiframeVolume(5)) << true;
+}
+
+void test_Volume::isMultiframe_ShouldReturnTrueForMultiframeVolumes()
+{
+    QFETCH(QSharedPointer<Volume>, volume);
+    QFETCH(bool, isMultiframe);
+
+    QCOMPARE(volume->isMultiframe(), isMultiframe);
 }
 
 DECLARE_TEST(test_Volume)

@@ -228,6 +228,20 @@ int Volume::getNumberOfFrames() const
     return m_imageSet.count();
 }
 
+bool Volume::isMultiframe() const
+{
+    if (m_imageSet.count() > 1)
+    {
+        // Comprovant la primera i segona imatges n'hi ha prou
+        if (m_imageSet.at(0)->getPath() == m_imageSet.at(1)->getPath())
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 Study* Volume::getStudy()
 {
     if (!m_imageSet.isEmpty())
