@@ -1,4 +1,6 @@
 #include "volumetesthelper.h"
+
+#include "image.h"
 #include "imagetesthelper.h"
 #include "volumepixeldata.h"
 #include "volume.h"
@@ -17,7 +19,9 @@ Volume* VolumeTestHelper::createVolume(int numberOfImages, int numberOfPhases, i
 
     for (int index = 0; index < numberOfImages; index++)
     {
-        testVolume->addImage(ImageTestHelper::createImageByUID(QString::number(index)));
+        Image *image = ImageTestHelper::createImageByUID(QString::number(index));
+        image->setPath(QString("C:\\Test\\path\\%1").arg(index));
+        testVolume->addImage(image);
     }
 
     vtkImageData *testVtkImageData = vtkImageData::New();
@@ -34,7 +38,9 @@ Volume* VolumeTestHelper::createVolumeWithParameters(int numberOfImages, int num
 
     for (int index = 0; index < numberOfImages; index++)
     {
-        testVolume->addImage(ImageTestHelper::createImageByUID(QString::number(index)));
+        Image *image = ImageTestHelper::createImageByUID(QString::number(index));
+        image->setPath(QString("C:\\Test\\path\\%1").arg(index));
+        testVolume->addImage(image);
     }
 
     vtkImageData *testVtkImageData = vtkImageData::New();
@@ -42,6 +48,25 @@ Volume* VolumeTestHelper::createVolumeWithParameters(int numberOfImages, int num
     testVtkImageData->SetSpacing(spacing);
     testVtkImageData->SetDimensions(dimensions);
     testVtkImageData->SetWholeExtent(extent);
+    testVolume->setData(testVtkImageData);
+
+    return testVolume;
+}
+
+Volume* VolumeTestHelper::createMultiframeVolume(int numberOfImages, int numberOfPhases, int numberOfSlicesPerPhase)
+{
+    Volume *testVolume = new Volume();
+    testVolume->setNumberOfPhases(numberOfPhases);
+    testVolume->setNumberOfSlicesPerPhase(numberOfSlicesPerPhase);
+
+    for (int index = 0; index < numberOfImages; index++)
+    {
+        Image *image = ImageTestHelper::createImageByUID(QString::number(index));
+        image->setPath("C:\\Test\\path");
+        testVolume->addImage(image);
+    }
+
+    vtkImageData *testVtkImageData = vtkImageData::New();
     testVolume->setData(testVtkImageData);
 
     return testVolume;
