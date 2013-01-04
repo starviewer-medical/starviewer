@@ -134,13 +134,9 @@ bool AsynchronousVolumeReader::checkForResourceRestrictions(bool checkMultiframe
         // Mirem si és multiframe
         if (checkMultiframeImages)
         {
-            if (imageList.count() > 1)
+            if (currentVolume->isMultiframe())
             {
-                // Comprovant la primera i segona imatges n'hi ha prou
-                if (imageList.at(0)->getPath() == imageList.at(1)->getPath())
-                {
-                    foundRestriction = true;
-                }
+                foundRestriction = true;
             }
         }
 
