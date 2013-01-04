@@ -104,6 +104,9 @@ public:
     /// Retorna el nombre total de frames que té el volum amb els objectes Image que conté
     int getNumberOfFrames() const;
 
+    /// Retorna cert si el volum és multiframe.
+    bool isMultiframe() const;
+
     /// Mètodes ràpids per obtenir estudi/pacient al que pertany aquest volum
     Study* getStudy();
     Patient* getPatient();
