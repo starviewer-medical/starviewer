@@ -2355,8 +2355,9 @@ void Q2DViewer::alignLeft()
     switch (m_lastView)
     {
         case Axial:
-            // Si la imatge està rotada o flipada, s'agafa l'altre punt
-            if (m_isImageFlipped || (m_rotateFactor == 2))
+            // Si es dóna el cas que o bé està rotada 180º o bé està voltejada, cal agafar l'altre extrem
+            // L'operació realitzada és un XOR (!=)
+            if (m_isImageFlipped != (m_rotateFactor == 2))
             {
                 motionVector[0] = bounds[1] - viewerLeft[0];
             }
@@ -2399,8 +2400,9 @@ void Q2DViewer::alignRight()
     switch (m_lastView)
     {
         case Axial:
-            // Si la imatge està rotada o flipada, s'agafa l'altre punt
-            if (m_isImageFlipped || (m_rotateFactor == 2))
+            // Si es dóna el cas que o bé està rotada 180º o bé està voltejada, cal agafar l'altre extrem
+            // L'operació realitzada és un XOR (!=)
+            if (m_isImageFlipped != (m_rotateFactor == 2))
             {
                 motionVector[0] = bounds[0] - viewerRight[0];
             }
