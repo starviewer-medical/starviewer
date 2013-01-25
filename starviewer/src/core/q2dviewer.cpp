@@ -1815,6 +1815,24 @@ void Q2DViewer::updateSliceAnnotationInformation()
             m_cornerAnnotations->SetText(1, qPrintable(m_lowerRightText.trimmed()));
         }
     }
+    else
+    {
+        Image *currentImage = getCurrentDisplayedImage();
+        if (currentImage)
+        {
+            QChar laterality = currentImage->getImageLaterality();
+            if (laterality.isNull() || laterality.isSpace())
+            {
+                laterality = image->getParentSeries()->getLaterality();
+            }
+
+            if (!laterality.isNull() && !laterality.isSpace())
+            {
+                QString lateralityAnnotation = "Lat: " + QString(laterality) + "\n";
+                m_cornerAnnotations->SetText(1, qPrintable(lateralityAnnotation + m_lowerRightText.trimmed()));
+            }
+        }
+    }
 
     int value = m_mainVolume->getImageIndex(m_currentSlice, m_currentPhase);
     if (m_numberOfPhases > 1)
@@ -2337,8 +2355,9 @@ void Q2DViewer::alignLeft()
     switch (m_lastView)
     {
         case Axial:
-            // Si la imatge està rotada o flipada, s'agafa l'altre punt
-            if (m_isImageFlipped || (m_rotateFactor == 2))
+            // Si es dóna el cas que o bé està rotada 180º o bé està voltejada, cal agafar l'altre extrem
+            // L'operació realitzada és un XOR (!=)
+            if (m_isImageFlipped != (m_rotateFactor == 2))
             {
                 motionVector[0] = bounds[1] - viewerLeft[0];
             }
@@ -2381,8 +2400,9 @@ void Q2DViewer::alignRight()
     switch (m_lastView)
     {
         case Axial:
-            // Si la imatge està rotada o flipada, s'agafa l'altre punt
-            if (m_isImageFlipped || (m_rotateFactor == 2))
+            // Si es dóna el cas que o bé està rotada 180º o bé està voltejada, cal agafar l'altre extrem
+            // L'operació realitzada és un XOR (!=)
+            if (m_isImageFlipped != (m_rotateFactor == 2))
             {
                 motionVector[0] = bounds[0] - viewerRight[0];
             }

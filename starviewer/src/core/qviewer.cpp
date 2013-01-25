@@ -415,7 +415,10 @@ void QViewer::clearGrabbedViews()
 
 void QViewer::render()
 {
-    if (m_isRenderingEnabled)
+    // ATENCIO És important que només es faci render quan estem en estat VisualizingVolume
+    // ja que sinó pot provocar que en alguns casos es presentin problemes de rendering
+    // al no obtenir-se el context de rendering openGL adequat
+    if (m_isRenderingEnabled && getViewerStatus() == VisualizingVolume)
     {
         this->getRenderWindow()->Render();
     }
