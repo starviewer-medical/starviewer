@@ -24,26 +24,19 @@
         <selectorAttribute>CodeMeaning</selectorAttribute>
         <valueRepresentation>later</valueRepresentation>
     </restriction>
-    <restriction identifier="5">
-        <usageFlag>NO_MATCH</usageFlag>
-        <selectorAttribute>CodeMeaning</selectorAttribute>
-        <valueRepresentation>cranio-caudal</valueRepresentation>
-    </restriction>
     <imageSet identifier="1">
         <restriction>1</restriction>
         <restriction>4</restriction>
-        <restriction>5</restriction>
         <type>image</type>
     </imageSet>
     <imageSet identifier="2">
-        <restriction>2</restriction>
-        <restriction>4</restriction>
-        <restriction>5</restriction>
+        <restriction>1</restriction>
+        <restriction>3</restriction>
         <type>image</type>
     </imageSet>
     <imageSet identifier="3">
-        <restriction>1</restriction>
-        <restriction>3</restriction>
+        <restriction>2</restriction>
+        <restriction>4</restriction>
         <type>image</type>
     </imageSet>
     <imageSet identifier="4">
@@ -58,18 +51,18 @@
         <alignment>right</alignment>
     </displaySet>
     <displaySet identifier="2">
-        <imageSetNumber>3</imageSetNumber>
+        <imageSetNumber>2</imageSetNumber>
         <position>0.25\1.0\0.5\0.0</position>
         <patientOrientation>A\L</patientOrientation>
         <iconType>CC_L</iconType>
-        <alignment>right</alignment>
+        <alignment>left</alignment>
     </displaySet>
     <displaySet identifier="3">
-        <imageSetNumber>2</imageSetNumber>
+        <imageSetNumber>3</imageSetNumber>
         <position>0.5\1.0\0.75\0.0</position>
         <patientOrientation>P\F</patientOrientation>
         <iconType>MLO_R</iconType>
-        <alignment>left</alignment>
+        <alignment>right</alignment>
     </displaySet>
     <displaySet identifier="4">
         <imageSetNumber>4</imageSetNumber>
