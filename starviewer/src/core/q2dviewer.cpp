@@ -2340,63 +2340,41 @@ void Q2DViewer::invertWindowLevel()
 
 void Q2DViewer::alignLeft()
 {
-    double viewerLeft[4];
-    double bounds[6];
-    double motionVector[4];
-
-    computeDisplayToWorld(0.0, 0.0, 0.0, viewerLeft);
-    m_imageActor->GetBounds(bounds);
-    motionVector[0] = 0.0;
-    motionVector[1] = 0.0;
-    motionVector[2] = 0.0;
-    motionVector[3] = 0.0;
-
-    // Càlcul del desplaçament
-    switch (m_lastView)
-    {
-        case Axial:
-            // Si es dóna el cas que o bé està rotada 180º o bé està voltejada, cal agafar l'altre extrem
-            // L'operació realitzada és un XOR (!=)
-            if (m_isImageFlipped != (m_rotateFactor == 2))
-            {
-                motionVector[0] = bounds[1] - viewerLeft[0];
-            }
-            else
-            {
-                motionVector[0] = bounds[0] - viewerLeft[0];
-            }
-            break;
-
-        case Sagital:
-            motionVector[1] = bounds[2] - viewerLeft[1];
-            break;
-
-        case Coronal:
-            motionVector[0] = bounds[0] - viewerLeft[0];
-            break;
-    }
-
-    pan(motionVector);
-
-    m_alignPosition = Q2DViewer::AlignLeft;
+    setAlignPosition(AlignLeft);
 }
 
 void Q2DViewer::alignRight()
 {
-    int *size;
-    double viewerRight[4];
+    setAlignPosition(AlignRight);
+}
+
+void Q2DViewer::setAlignPosition(AlignPosition alignPosition)
+{
+    m_alignPosition = alignPosition;
+    
+    if (alignPosition == AlignCenter)
+    {
+        // No cal fer res més
+        return;
+    }
+
+    // Cas que sigui AlignRight o AlignLeft
     double bounds[6];
-    double motionVector[4];
-
-    size = this->getRenderer()->GetSize();
-    computeDisplayToWorld((double)size[0], 0.0, 0.0, viewerRight);
     m_imageActor->GetBounds(bounds);
-    motionVector[0] = 0.0;
-    motionVector[1] = 0.0;
-    motionVector[2] = 0.0;
-    motionVector[3] = 0.0;
-
+    double motionVector[4] = { 0.0, 0.0, 0.0, 0.0 };
+    
+    double alignmentPoint[4];
+    if (alignPosition == AlignLeft)
+    {
+        computeDisplayToWorld(0.0, 0.0, 0.0, alignmentPoint);
+    }
+    else if (alignPosition == AlignRight)
+    {
+        computeDisplayToWorld((double)this->getRenderer()->GetSize()[0], 0.0, 0.0, alignmentPoint);
+    }
+    
     // Càlcul del desplaçament
+    int boundIndex = 0;
     switch (m_lastView)
     {
         case Axial:
@@ -2404,43 +2382,49 @@ void Q2DViewer::alignRight()
             // L'operació realitzada és un XOR (!=)
             if (m_isImageFlipped != (m_rotateFactor == 2))
             {
-                motionVector[0] = bounds[0] - viewerRight[0];
+                if (alignPosition == AlignLeft)
+                {
+                    boundIndex = 1;
+                }
             }
             else
             {
-                motionVector[0] = bounds[1] - viewerRight[0];
+                if (alignPosition == AlignRight)
+                {
+                    boundIndex = 1;
+                }
             }
+
+            motionVector[0] = bounds[boundIndex] - alignmentPoint[0];
+            
             break;
 
         case Sagital:
-            motionVector[1] = bounds[3] - viewerRight[1];
+            if (alignPosition == AlignLeft)
+            {
+                boundIndex = 2;
+            }
+            else if (alignPosition == AlignRight)
+            {
+                boundIndex = 3;
+            }
+            
+            motionVector[1] = bounds[boundIndex] - alignmentPoint[1];
+            
             break;
 
         case Coronal:
-            motionVector[0] = bounds[1] - viewerRight[0];
+            if (alignPosition == AlignRight)
+            {
+                boundIndex = 1;
+            }
+            
+            motionVector[0] = bounds[boundIndex] - alignmentPoint[0];
+            
             break;
     }
 
     pan(motionVector);
-    m_alignPosition = Q2DViewer::AlignRight;
-}
-
-void Q2DViewer::setAlignPosition(AlignPosition alignPosition)
-{
-    switch (alignPosition)
-    {
-        case AlignRight:
-            alignRight();
-            break;
-
-        case AlignLeft:
-            alignLeft();
-            break;
-
-        case AlignCenter:
-            m_alignPosition = Q2DViewer::AlignCenter;
-            break;
-    }
 }
 
 void Q2DViewer::setImageOrientation(const PatientOrientation &desiredPatientOrientation)
