@@ -24,9 +24,15 @@
         <selectorAttribute>CodeMeaning</selectorAttribute>
         <valueRepresentation>later</valueRepresentation>
     </restriction>
-    <imageSet identifier="1">
+    <restriction identifier="5">
+      <usageFlag>NO_MATCH</usageFlag>
+      <selectorAttribute>CodeMeaning</selectorAttribute>
+    <valueRepresentation>cranio-caudal</valueRepresentation>
+    </restriction>
+  <imageSet identifier="1">
         <restriction>1</restriction>
         <restriction>4</restriction>
+        <restriction>5</restriction>
         <type>image</type>
     </imageSet>
     <imageSet identifier="2">
@@ -37,6 +43,7 @@
     <imageSet identifier="3">
         <restriction>2</restriction>
         <restriction>4</restriction>
+        <restriction>5</restriction>
         <type>image</type>
     </imageSet>
     <imageSet identifier="4">
