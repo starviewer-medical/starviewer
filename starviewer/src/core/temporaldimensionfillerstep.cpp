@@ -120,6 +120,17 @@ bool TemporalDimensionFillerStep::fillIndividually()
                         volumeInfo->numberOfPhases++;
                     }
                 }
+
+                if (volumeInfo->phasesPerPositionHash.contains(imagePositionPatientString))
+                {
+                    // Ja el tenim, augmentem el nombre de fases per aquella posició
+                    volumeInfo->phasesPerPositionHash.insert(imagePositionPatientString, volumeInfo->phasesPerPositionHash.value(imagePositionPatientString) + 1);
+                }
+                else
+                {
+                    // Creem la nova entrada, inicialment seria la primera fase
+                    volumeInfo->phasesPerPositionHash.insert(imagePositionPatientString, 1);
+                }
             }
 
             volumeInfo->numberOfImages++;
@@ -160,7 +171,17 @@ void TemporalDimensionFillerStep::postProcessing()
                     }
                     else
                     {
+                        // Inicialment donem per fet que el càlcul de fases és correcte
                         numberOfPhases = volumeInfo->numberOfPhases;
+                        // Si passem la llista de valors a un QSet i aquest té mida 1, vol dir que totes les posicions tenen el mateix nombre de fases
+                        // (Un QSet no admet duplicats). S'ha de tenir en compte que si només hi ha una posició amb diferents fases no cal fer res ja que serà correcte
+                        QList<int> phasesList = volumeInfo->phasesPerPositionHash.values();
+                        int listSize = phasesList.count();
+                        if (listSize > 1 && phasesList.toSet().count() > 1)
+                        {
+                            numberOfPhases = 1;
+                        }
+                        // TODO Si el càlcul no ha sigut correcte, caldria dividir en volums?
                     }
                     // L'esborrem perquè ja no el necessitarem més
                     if (volumeInfo)
