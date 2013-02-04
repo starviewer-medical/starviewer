@@ -47,6 +47,7 @@ bool TemporalDimensionFillerStep::fillIndividually()
 
         if (volumeHash->contains(m_input->getCurrentVolumeNumber()))
         {
+            // Ja tenim el un VolumeInfo existent pel número de volum que estem processant actualment
             volumeInfoInitialized = true;
             volumeInfo = volumeHash->value(m_input->getCurrentVolumeNumber());
 
@@ -60,6 +61,7 @@ bool TemporalDimensionFillerStep::fillIndividually()
         }
         else
         {
+            // El número de volum actual és nou, per tant cal crear un nou VolumeInfo associat a aquest nou volum
             volumeInfo = new VolumeInfo;
             volumeHash->insert(m_input->getCurrentVolumeNumber(), volumeInfo);
         }
