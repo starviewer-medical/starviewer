@@ -95,7 +95,8 @@ QList<Image*> ImageFillerStep::processDICOMFile(DICOMTagReader *dicomReader)
                         {
                             // Si la imatge anterior i l'actual tenen mides diferents, aniran en un volum diferent
                             Image *lastProcessedImage = m_input->getCurrentSeries()->getImages().last();
-                            if (areOfDifferentSize(lastProcessedImage, image) || areOfDifferentPhotometricInterpretation(lastProcessedImage, image))
+                            if (areOfDifferentSize(lastProcessedImage, image) || areOfDifferentPhotometricInterpretation(lastProcessedImage, image) 
+                                || areOfDifferentPixelSpacing(lastProcessedImage, image))
                             {
                                 m_input->increaseCurrentSingleFrameVolumeNumber();
                                 volumeNumber = m_input->getCurrentSingleFrameVolumeNumber();
