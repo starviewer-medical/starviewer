@@ -69,7 +69,7 @@ private:
     /// En cas que no, cal ordenar el corresponent subvolum per instance number com en el cas dels m_acquisitionNumberEvaluation
     /// TODO Potser amb aquesta avaluació seria suficient i la que es fa per Acquisition Number es podria eliminar
     /// <Sèrie, <VolumeNumber, SameNumberOfPhasesPerPosition?> >
-    QHash<Series*, QHash<int, bool>* > m_sameNumberOfPhasesPerPositionPerVolumeInSeriesHash;
+    QHash<Series*, QHash<int, bool>*> m_sameNumberOfPhasesPerPositionPerVolumeInSeriesHash;
 };
 
 }
