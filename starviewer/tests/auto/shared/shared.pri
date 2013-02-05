@@ -15,10 +15,10 @@ SOURCES += $$PWD/gmock-gtest-all.cc \
            $$PWD/drawerpolygontesthelper.cpp \
            $$PWD/testingportinusebyanotherapplication.cpp \
            $$PWD/volumetesthelper.cpp \
-		   $$PWD/volumepixeldatatesthelper.cpp \
-		   $$PWD/itkandvtkimagetesthelper.cpp \
-		   $$PWD/testingvolume.cpp \
-		   $$PWD/testingvolumereader.cpp
+           $$PWD/volumepixeldatatesthelper.cpp \
+           $$PWD/itkandvtkimagetesthelper.cpp \
+           $$PWD/testingvolume.cpp \
+           $$PWD/testingvolumereader.cpp
            
 HEADERS += $$PWD/autotest.h \
            $$PWD/gtest/gtest.h \
@@ -38,7 +38,7 @@ HEADERS += $$PWD/autotest.h \
            $$PWD/drawerpolygontesthelper.h \
            $$PWD/testingportinusebyanotherapplication.h \
            $$PWD/volumetesthelper.h \
-		   $$PWD/volumepixeldatatesthelper.h \
-		   $$PWD/itkandvtkimagetesthelper.h \
-		   $$PWD/testingvolume.h \
-		   $$PWD/testingvolumereader.h
+           $$PWD/volumepixeldatatesthelper.h \
+           $$PWD/itkandvtkimagetesthelper.h \
+           $$PWD/testingvolume.h \
+           $$PWD/testingvolumereader.h
