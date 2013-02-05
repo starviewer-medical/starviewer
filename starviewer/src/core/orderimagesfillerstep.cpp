@@ -51,6 +51,23 @@ OrderImagesFillerStep::~OrderImagesFillerStep()
         delete volumesInSeries;
     }
 
+    foreach (Series *series, m_phasesPerPositionEvaluation.keys())
+    {
+        QHash<int, PhasesPerPositionHashType*> *volumeHash = m_phasesPerPositionEvaluation.take(series);
+        foreach (int volumeNumber, volumeHash->keys())
+        {
+            PhasesPerPositionHashType *phasesPerPositionHash = volumeHash->take(volumeNumber);
+            delete phasesPerPositionHash;
+        }
+        delete volumeHash;
+    }
+
+    QHash<Series*, QHash<int, bool>* > m_sameNumberOfPhasesPerPositionPerVolumeInSeriesHash;
+    foreach (Series *series, m_sameNumberOfPhasesPerPositionPerVolumeInSeriesHash.keys())
+    {
+        QHash<int, bool> *volumeHash = m_sameNumberOfPhasesPerPositionPerVolumeInSeriesHash.take(series);
+        delete volumeHash;
+    }
     foreach (Series *series, m_acquisitionNumberEvaluation.keys())
     {
         QHash<int, QPair<QString, bool>*> volumeHash = m_acquisitionNumberEvaluation.take(series);
