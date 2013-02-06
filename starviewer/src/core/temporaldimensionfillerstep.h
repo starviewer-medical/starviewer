@@ -36,9 +36,14 @@ private:
         QString firstImagePosition;
         QString firstAcquisitionNumber;
         bool multipleAcquisitionNumber;
+        /// Hash per comptar les fases corresponents a cada posició
+        /// La clau del hash és un string amb la posició de la imatge (ImagePositionPatient) i el valor associat compta les ocurrències (fases) d'aquesta posició.
+        /// Si tenim igual nombre de fases a totes les posicions, podem dir que és un volum amb fases.
+        QHash<QString, int> phasesPerPositionHash;
     };
 
     /// Estructura que s'utiliza en cas que es processi l'step individiualment per fitxers.
+    ///  <Sèrie,             <VolumeNumber, VolumeInfo>
     QHash<Series*, QHash<int, VolumeInfo*>*> TemporalDimensionInternalInfo;
 };
 

@@ -77,6 +77,9 @@ private:
     /// Ens diu si les imatges tenen photometric interpretations diferents
     bool areOfDifferentPhotometricInterpretation(Image *firstImage, Image *secondImage);
 
+    /// Ens diu si les imatges tenen pixel spacing diferents
+    bool areOfDifferentPixelSpacing(Image *firstImage, Image *secondImage);
+
     /// Ens diu si el SOP Class UID es correspon amb el d'una imatge enhanced
     bool isEnhancedImageSOPClass(const QString &sopClassUID);
 };

@@ -51,6 +51,23 @@ OrderImagesFillerStep::~OrderImagesFillerStep()
         delete volumesInSeries;
     }
 
+    foreach (Series *series, m_phasesPerPositionEvaluation.keys())
+    {
+        QHash<int, PhasesPerPositionHashType*> *volumeHash = m_phasesPerPositionEvaluation.take(series);
+        foreach (int volumeNumber, volumeHash->keys())
+        {
+            PhasesPerPositionHashType *phasesPerPositionHash = volumeHash->take(volumeNumber);
+            delete phasesPerPositionHash;
+        }
+        delete volumeHash;
+    }
+
+    QHash<Series*, QHash<int, bool>* > m_sameNumberOfPhasesPerPositionPerVolumeInSeriesHash;
+    foreach (Series *series, m_sameNumberOfPhasesPerPositionPerVolumeInSeriesHash.keys())
+    {
+        QHash<int, bool> *volumeHash = m_sameNumberOfPhasesPerPositionPerVolumeInSeriesHash.take(series);
+        delete volumeHash;
+    }
     foreach (Series *series, m_acquisitionNumberEvaluation.keys())
     {
         QHash<int, QPair<QString, bool>*> volumeHash = m_acquisitionNumberEvaluation.take(series);
@@ -94,6 +111,8 @@ bool OrderImagesFillerStep::fillIndividually()
     foreach (Image * image, m_input->getCurrentImages())
     {
         processImage(image);
+        // Avaluació del nombre de fases per posició
+        processPhasesPerPositionEvaluation(image);
     }
 
     // Avaluació dels AcquisitionNumbers
@@ -133,6 +152,28 @@ bool OrderImagesFillerStep::fillIndividually()
 
 void OrderImagesFillerStep::postProcessing()
 {
+    // Per cada subvolum de cada sèrie, comprovem si aquestes tenen el mateix nombre de fases per posició
+    foreach (Series *currentSeries, m_phasesPerPositionEvaluation.keys())
+    {
+        // <VolumeNumber, SameNumberOfPhasesPerPosition?>
+        QHash<int, bool> *volumeNumberPhaseCountHash = new QHash<int, bool>();
+        foreach (int currentVolumeNumber, m_phasesPerPositionEvaluation.value(currentSeries)->keys())
+        {
+            PhasesPerPositionHashType *phasesPerPositionHash = m_phasesPerPositionEvaluation.value(currentSeries)->value(currentVolumeNumber);
+            // Si passem la llista de valors a un QSet i aquest té mida 1, vol dir que totes les posicions tenen el mateix nombre de fases
+            // (Un QSet no admet duplicats). S'ha de tenir en compte que si només hi ha una posició amb diferents fases no cal fer res ja que serà correcte
+            QList<int> phasesList = phasesPerPositionHash->values();
+            int listSize = phasesList.count();
+            bool sameNumberOfPhases = true;
+            if (listSize > 1 && phasesList.toSet().count() > 1)
+            {
+                sameNumberOfPhases = false;
+            }
+            volumeNumberPhaseCountHash->insert(currentVolumeNumber, sameNumberOfPhases);
+        }
+        m_sameNumberOfPhasesPerPositionPerVolumeInSeriesHash.insert(currentSeries, volumeNumberPhaseCountHash);
+    }
+    
     foreach (Series *key, m_orderImagesInternalInfo.keys())
     {
         setOrderedImagesIntoSeries(key);
@@ -273,6 +314,60 @@ void OrderImagesFillerStep::processImage(Image *image)
     }
 }
 
+void OrderImagesFillerStep::processPhasesPerPositionEvaluation(Image *image)
+{
+    Series *currentSeries = m_input->getCurrentSeries();
+    
+    // Comprovem si tenim hash per la sèrie actual i l'assignem en cas que sigui necessari
+    QHash<int, PhasesPerPositionHashType*> *volumeNumberPhasesPerPositionHash = 0;
+    if (m_phasesPerPositionEvaluation.contains(currentSeries))
+    {
+        volumeNumberPhasesPerPositionHash = m_phasesPerPositionEvaluation.value(currentSeries);
+    }
+    else
+    {
+        volumeNumberPhasesPerPositionHash = new QHash<int, PhasesPerPositionHashType*>();
+        m_phasesPerPositionEvaluation.insert(currentSeries, volumeNumberPhasesPerPositionHash);
+    }
+
+    // Ara comprovem si el segon hash té l'actual número de volum i li assignem els valors en cas que sigui necessari
+    int currentVolumeNumber = m_input->getCurrentVolumeNumber();
+    PhasesPerPositionHashType *phasesPerPositionHash = 0;
+    if (volumeNumberPhasesPerPositionHash->contains(currentVolumeNumber))
+    {
+        phasesPerPositionHash = volumeNumberPhasesPerPositionHash->value(currentVolumeNumber);
+    }
+    else
+    {
+        phasesPerPositionHash = new PhasesPerPositionHashType;
+        volumeNumberPhasesPerPositionHash->insert(currentVolumeNumber, phasesPerPositionHash);
+    }
+
+    // Ara ja tenim el hash de les fases per posició corresponent a l'actual sèrie i número de volum
+    // Procedim a inserir la informació corresponent
+    const double *imagePositionPatient = image->getImagePositionPatient();
+
+    if (!(imagePositionPatient[0] == 0. && imagePositionPatient[1] == 0. && imagePositionPatient[2] == 0.))
+    {
+        QString imagePositionPatientString = QString("%1\\%2\\%3").arg(imagePositionPatient[0])
+                                                                    .arg(imagePositionPatient[1])
+                                                                    .arg(imagePositionPatient[2]);
+
+        if (phasesPerPositionHash->contains(imagePositionPatientString))
+        {
+            // Ja el tenim, augmentem el nombre de fases per aquella posició
+            phasesPerPositionHash->insert(imagePositionPatientString, phasesPerPositionHash->value(imagePositionPatientString) + 1);
+        }
+        else
+        {
+            // Creem la nova entrada, inicialment seria la primera fase
+            phasesPerPositionHash->insert(imagePositionPatientString, 1);
+        }
+        // TODO L'if anterior en principi es podria resumir en aquesta sola línia
+        // m_phasesPerPositionHash.insert(imagePositionPatientString, m_phasesPerPositionHash.value(imagePositionPatientString, 0) + 1);
+    }
+}
+
 void OrderImagesFillerStep::setOrderedImagesIntoSeries(Series *series)
 {
     QList<Image*> imageSet;
@@ -290,13 +385,28 @@ void OrderImagesFillerStep::setOrderedImagesIntoSeries(Series *series)
 
     foreach (int currentVolumeNumber, volumesInSeries->keys())
     {
+        bool orderByInstanceNumber = false;
+        // Diferent número d'imatges per fase
+        if (!m_sameNumberOfPhasesPerPositionPerVolumeInSeriesHash.value(series)->value(currentVolumeNumber))
+        {
+            orderByInstanceNumber = true;
+            DEBUG_LOG(QString("No totes les imatges tenen el mateix nombre de fases. Ordenem el volume %1 de la serie %2 per Instance Number").arg(
+                      currentVolumeNumber).arg(series->getInstanceUID()));
+            INFO_LOG(QString("No totes les imatges tenen el mateix nombre de fases. Ordenem el volume %1 de la serie %2 per Instance Number").arg(
+                     currentVolumeNumber).arg(series->getInstanceUID()));
+        }
         // Multiple acquisition number
         if (m_acquisitionNumberEvaluation[series][currentVolumeNumber]->second)
         {
+            orderByInstanceNumber = true;
             DEBUG_LOG(QString("No totes les imatges tenen el mateix AcquisitionNumber. Ordenem el volume %1 de la serie %2 per Instance Number").arg(
                       currentVolumeNumber).arg(series->getInstanceUID()));
             INFO_LOG(QString("No totes les imatges tenen el mateix AcquisitionNumber. Ordenem el volume %1 de la serie %2 per Instance Number").arg(
                      currentVolumeNumber).arg(series->getInstanceUID()));
+        }
+
+        if (orderByInstanceNumber)
+        {
             m_orderedNormalsSet = volumesInSeries->take(currentVolumeNumber);
             QMap<unsigned long, Image*> sortedImagesByInstanceNumber;
 

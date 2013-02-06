@@ -94,7 +94,8 @@ QList<Image*> ImageFillerStep::processDICOMFile(DICOMTagReader *dicomReader)
                         {
                             // Si la imatge anterior i l'actual tenen mides diferents, aniran en un volum diferent
                             Image *lastProcessedImage = m_input->getCurrentSeries()->getImages().last();
-                            if (areOfDifferentSize(lastProcessedImage, image) || areOfDifferentPhotometricInterpretation(lastProcessedImage, image))
+                            if (areOfDifferentSize(lastProcessedImage, image) || areOfDifferentPhotometricInterpretation(lastProcessedImage, image) 
+                                || areOfDifferentPixelSpacing(lastProcessedImage, image))
                             {
                                 m_input->increaseCurrentSingleFrameVolumeNumber();
                                 volumeNumber = m_input->getCurrentSingleFrameVolumeNumber();
@@ -1192,6 +1193,17 @@ bool ImageFillerStep::areOfDifferentPhotometricInterpretation(Image *firstImage,
     Q_ASSERT(secondImage);
 
     return firstImage->getPhotometricInterpretation().trimmed() != secondImage->getPhotometricInterpretation().trimmed();
+}
+
+bool ImageFillerStep::areOfDifferentPixelSpacing(Image *firstImage, Image *secondImage)
+{
+    Q_ASSERT(firstImage);
+    Q_ASSERT(secondImage);
+
+    const double *spacing1 = firstImage->getPixelSpacing();
+    const double *spacing2 = secondImage->getPixelSpacing();
+
+    return QString::number(spacing1[0], 'f', 3) != QString::number(spacing2[0], 'f', 3) || QString::number(spacing1[1], 'f', 3) != QString::number(spacing2[1], 'f', 3);
 }
 
 bool ImageFillerStep::isEnhancedImageSOPClass(const QString &sopClassUID)
