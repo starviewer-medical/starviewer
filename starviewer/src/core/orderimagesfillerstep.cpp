@@ -272,7 +272,7 @@ void OrderImagesFillerStep::processImage(Image *image)
             if(m_orderedNormalsSet->size() == 1) // Busquem la normal per saber la direcció per on s'han d'ordenar
             {
                 m_direction = QVector3D::crossProduct(m_firstPlaneVector3D, planeNormalVector3D);
-                m_direction =  QVector3D::crossProduct(m_direction, m_firstPlaneVector3D);
+                m_direction = QVector3D::crossProduct(m_direction, m_firstPlaneVector3D);
             }
             
             angle = MathTools::angleInRadians(m_firstPlaneVector3D, planeNormalVector3D);
@@ -303,7 +303,6 @@ void OrderImagesFillerStep::processImage(Image *image)
             // Per evitar el problema es fa un insertMulti.
             imagePositionSet->value(distance)->insertMulti(QString("%1%2%3").arg(image->getInstanceNumber()).arg("0")
                                                               .arg(image->getFrameNumber()).toULong(), image);
-
         }
         else
         {
@@ -375,6 +374,7 @@ void OrderImagesFillerStep::setOrderedImagesIntoSeries(Series *series)
     QMap<double, QMap<unsigned long, Image*>*> *imagePositionSet;
     QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*> *orderedImageSet;
     QMap<double, QMap<double, QMap<double, QMap<unsigned long, Image*>*>*>*> lastOrderedImageSetDistanceAngle;
+    QMap<double, QMap<double, QMap<double, QMap<unsigned long, Image*>*>*>*> lastOrderedImageSetDistanceStack;
     QMap<double, QMap<double, QMap<unsigned long, Image*>*>*> *lastOrderedImageSetDistance;
     QMap<int, QMap<double, QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*>*>*> *volumesInSeries;
 
@@ -410,11 +410,9 @@ void OrderImagesFillerStep::setOrderedImagesIntoSeries(Series *series)
             m_orderedNormalsSet = volumesInSeries->take(currentVolumeNumber);
             QMap<unsigned long, Image*> sortedImagesByInstanceNumber;
 
-            
             foreach (double key, m_orderedNormalsSet->keys())
             {
                 orderedImageSet = m_orderedNormalsSet->take(key);
-
                 foreach (QString key, orderedImageSet->keys())
                 {
                     imagePositionSet = orderedImageSet->take(key);
@@ -444,30 +442,54 @@ void OrderImagesFillerStep::setOrderedImagesIntoSeries(Series *series)
         else
         {
             m_orderedNormalsSet = volumesInSeries->take(currentVolumeNumber);
+
             // Cal ordernar les agrupacions d'imatges
-            
             foreach (double angle, m_orderedNormalsSet->keys())
             {
                 orderedImageSet = m_orderedNormalsSet->take(angle);
-
                 lastOrderedImageSetDistance = new QMap<double, QMap<double, QMap<unsigned long, Image*>*>*>();
+                bool isRotational = true;
 
                 foreach (QString normal, orderedImageSet->keys())
                 {
                     imagePositionSet = orderedImageSet->take(normal);
-                    Image *image = (*(*imagePositionSet->begin())->begin());
-                    lastOrderedImageSetDistance->insertMulti(Image::distance(image), imagePositionSet);       
-                }
-                lastOrderedImageSetDistanceAngle.insertMulti(angle, lastOrderedImageSetDistance);
-            }
+                    
+                    Image *firstImage = (*(*imagePositionSet->begin())->begin());
+                    double distance = Image::distance(firstImage);
+                    lastOrderedImageSetDistance->insertMulti(distance, imagePositionSet);
 
+                    if (imagePositionSet->size() > 1)
+                    {
+                        int pos = (imagePositionSet->size())-1;
+                        double key = imagePositionSet->keys().at(pos);
+                        Image *lastImage = (*(imagePositionSet->value(key))->begin());
+                        double distanceToFirstImage = fabs(Image::distance(lastImage)-distance);
+                        if (distanceToFirstImage > 1.0) 
+                        {
+                            isRotational = false;
+                        }
+                    }
+                }
+
+                if (isRotational)//Rotacionals
+                {
+                    lastOrderedImageSetDistanceAngle.insertMulti(angle, lastOrderedImageSetDistance);
+                }
+                else //Stacks
+                {
+                    Image *image = (*(*imagePositionSet->begin())->begin());
+                    lastOrderedImageSetDistanceStack.insertMulti(Image::distance(image), lastOrderedImageSetDistance);
+                }
+            }
+            
+            QList<QMap<double, QMap<double, QMap<unsigned long, Image*>*>*>*> orderedSet = lastOrderedImageSetDistanceStack.values();
+            orderedSet.append(lastOrderedImageSetDistanceAngle.values());
+            
             orderNumberInVolume = 0;
 
-            // Passar l'estructura a la series
-            foreach (double key, lastOrderedImageSetDistanceAngle.keys())
-            {
-                lastOrderedImageSetDistance = lastOrderedImageSetDistanceAngle.take(key);
-                
+            for (int position = 0; position < orderedSet.size(); position++)
+            {    
+                lastOrderedImageSetDistance = orderedSet.value(position);
                 foreach (double key2, lastOrderedImageSetDistance->keys())
                 {
                     imagePositionSet = lastOrderedImageSetDistance->take(key2);
