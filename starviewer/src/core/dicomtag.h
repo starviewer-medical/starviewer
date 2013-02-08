@@ -34,10 +34,10 @@ public:
     QString getKeyAsQString() const;
 
     /// Comparar si són iguals evaluant el group i element
-    bool operator==(const DICOMTag &tag);
+    bool operator==(const DICOMTag &tag) const;
 
     /// Comparar si són diferents evaluant el group i element
-    bool operator!=(const DICOMTag &tag);
+    bool operator!=(const DICOMTag &tag) const;
 
 private:
     unsigned int m_group;
