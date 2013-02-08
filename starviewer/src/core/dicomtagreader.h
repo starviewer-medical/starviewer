@@ -38,7 +38,7 @@ public:
     /// D'aquesta forma no cal tornar-lo a llegir.
     DICOMTagReader(const QString &filename, DcmDataset *dcmDataset);
 
-    ~DICOMTagReader();
+    virtual ~DICOMTagReader();
 
     /// Nom de l'arxiu DICOM que es vol llegir. Torna cert si l'arxiu s'ha pogut carregar correctament, fals altrament.
     bool setFile(const QString &filename);
@@ -58,11 +58,11 @@ public:
     DcmDataset* getDcmDataset() const;
 
     /// Ens diu si el tag és present al fitxer o no. Cal haver fet un ús correcte de l'objecte m_dicomData.
-    bool tagExists(const DICOMTag &tag) const;
+    virtual bool tagExists(const DICOMTag &tag) const;
 
     /// Obté el valor de l'atribut demanat i ens el retorna com a QString
     /// Si no es troba el tag es retornarà un QString buit
-    QString getValueAttributeAsQString(const DICOMTag &tag) const;
+    virtual QString getValueAttributeAsQString(const DICOMTag &tag) const;
 
     /// Ens torna un atribut DICOM que estigui al primer nivell (que no estigui contingut en seqüències)
     /// Retorna nul en cas que no s'hagi trobat el tag o que aquest no es correspongui amb un atribut (p.ex. és una seqüència)
