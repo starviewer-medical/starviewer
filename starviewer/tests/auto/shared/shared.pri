@@ -18,7 +18,8 @@ SOURCES += $$PWD/gmock-gtest-all.cc \
            $$PWD/volumepixeldatatesthelper.cpp \
            $$PWD/itkandvtkimagetesthelper.cpp \
            $$PWD/testingvolume.cpp \
-           $$PWD/testingvolumereader.cpp
+           $$PWD/testingvolumereader.cpp \
+           $$PWD/testingdicomtagreader.cpp
            
 HEADERS += $$PWD/autotest.h \
            $$PWD/gtest/gtest.h \
@@ -41,4 +42,5 @@ HEADERS += $$PWD/autotest.h \
            $$PWD/volumepixeldatatesthelper.h \
            $$PWD/itkandvtkimagetesthelper.h \
            $$PWD/testingvolume.h \
-           $$PWD/testingvolumereader.h
+           $$PWD/testingvolumereader.h \
+           $$PWD/testingdicomtagreader.h
