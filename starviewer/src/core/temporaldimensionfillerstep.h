@@ -27,7 +27,7 @@ public:
         return "TemporalDimensionFillerStep";
     }
 
-private:
+protected:
     struct VolumeInfo
     {
         int numberOfPhases;
