@@ -68,15 +68,6 @@ OrderImagesFillerStep::~OrderImagesFillerStep()
         QHash<int, bool> *volumeHash = m_sameNumberOfPhasesPerPositionPerVolumeInSeriesHash.take(series);
         delete volumeHash;
     }
-    foreach (Series *series, m_acquisitionNumberEvaluation.keys())
-    {
-        QHash<int, QPair<QString, bool>*> volumeHash = m_acquisitionNumberEvaluation.take(series);
-        foreach (int volumeNumber, volumeHash.keys())
-        {
-            QPair<QString, bool> *pair = volumeHash.take(volumeNumber);
-            delete pair;
-        }
-    }
 }
 
 bool OrderImagesFillerStep::fillIndividually()
@@ -113,36 +104,6 @@ bool OrderImagesFillerStep::fillIndividually()
         processImage(image);
         // Avaluació del nombre de fases per posició
         processPhasesPerPositionEvaluation(image);
-    }
-
-    // Avaluació dels AcquisitionNumbers
-    if (m_acquisitionNumberEvaluation.contains(m_input->getCurrentSeries()))
-    {
-        if (m_acquisitionNumberEvaluation.value(m_input->getCurrentSeries()).contains(m_input->getCurrentVolumeNumber()))
-        {
-            // Comparem els Acquisition Numbers
-            QPair<QString, bool> *pair = m_acquisitionNumberEvaluation[m_input->getCurrentSeries()][m_input->getCurrentVolumeNumber()];
-            if (!pair->second)
-            {
-                if (pair->first != m_input->getDICOMFile()->getValueAttributeAsQString(DICOMAcquisitionNumber))
-                {
-                    pair->second = true;
-                }
-            }
-        }
-        else
-        {
-            QPair<QString, bool> *acquisitionPair = new QPair<QString, bool>(m_input->getDICOMFile()->getValueAttributeAsQString(DICOMAcquisitionNumber), false);
-            m_acquisitionNumberEvaluation[m_input->getCurrentSeries()].insert(m_input->getCurrentVolumeNumber(), acquisitionPair);
-        }
-    }
-    else
-    {
-        QHash<int, QPair<QString, bool>*> volumeHash;
-        QPair<QString, bool> *acquisitionPair = new QPair<QString, bool>(m_input->getDICOMFile()->getValueAttributeAsQString(DICOMAcquisitionNumber), false);
-        volumeHash.insert(m_input->getCurrentVolumeNumber(), acquisitionPair);
-
-        m_acquisitionNumberEvaluation.insert(m_input->getCurrentSeries(), volumeHash);
     }
 
     m_input->addLabelToSeries("OrderImagesFillerStep", m_input->getCurrentSeries());
@@ -393,15 +354,6 @@ void OrderImagesFillerStep::setOrderedImagesIntoSeries(Series *series)
             DEBUG_LOG(QString("No totes les imatges tenen el mateix nombre de fases. Ordenem el volume %1 de la serie %2 per Instance Number").arg(
                       currentVolumeNumber).arg(series->getInstanceUID()));
             INFO_LOG(QString("No totes les imatges tenen el mateix nombre de fases. Ordenem el volume %1 de la serie %2 per Instance Number").arg(
-                     currentVolumeNumber).arg(series->getInstanceUID()));
-        }
-        // Multiple acquisition number
-        if (m_acquisitionNumberEvaluation[series][currentVolumeNumber]->second)
-        {
-            orderByInstanceNumber = true;
-            DEBUG_LOG(QString("No totes les imatges tenen el mateix AcquisitionNumber. Ordenem el volume %1 de la serie %2 per Instance Number").arg(
-                      currentVolumeNumber).arg(series->getInstanceUID()));
-            INFO_LOG(QString("No totes les imatges tenen el mateix AcquisitionNumber. Ordenem el volume %1 de la serie %2 per Instance Number").arg(
                      currentVolumeNumber).arg(series->getInstanceUID()));
         }
 
