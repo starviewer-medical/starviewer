@@ -47,9 +47,6 @@ private:
 
     //    Series        Volume     AngleNormal    Distance  InstanceNumber0FrameNumber
     QHash<Series*, QMap<int, QMap<double, QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*>*>*>*> m_orderImagesInternalInfo;
-   
-    //    Series       Volume     AcqNumber MultipleAcqNumbers?
-    QHash<Series*, QHash<int, QPair<QString, bool>*> > m_acquisitionNumberEvaluation;
 
     QVector3D m_firstPlaneVector3D;
     QVector3D m_direction;
