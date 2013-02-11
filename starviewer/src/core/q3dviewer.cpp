@@ -467,7 +467,9 @@ QString Q3DViewer::getRenderFunctionAsString()
 void Q3DViewer::setInput(Volume *volume)
 {
     setCursor(Qt::WaitCursor);
-
+    // És necessari indicar que l'estat és VisualizingVolume, sinó el visor no s'actualitzarà correctament 
+    // quan volguem fer canvis de window/level, zoom, moure, etc. ja que és condició necessària per dur a terme el render.
+    setViewerStatus(VisualizingVolume);
     if (!checkInputVolume(volume))
     {
         unsetCursor();
