@@ -29,8 +29,8 @@ diff -rupN vtk-5.6.1_allPatchesButAero/GUISupport/Qt/QVTKWidget.cxx vtk-5.6.1/GU
 +     QSysInfo::windowsVersion() >= QSysInfo::WV_VISTA)
 +  {
 +    InvalidateRect(this->winId(), NULL, FALSE);
-+   }
-+   return false;
++  }
++  return false;
 +}
 +#endif
  
