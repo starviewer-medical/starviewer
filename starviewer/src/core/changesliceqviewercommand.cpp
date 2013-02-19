@@ -51,7 +51,6 @@ void ChangeSliceQViewerCommand::execute()
             }
             break;
     }
-    m_viewer->render();
 }
 
 }
