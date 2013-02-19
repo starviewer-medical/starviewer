@@ -2314,11 +2314,10 @@ void Q2DViewer::restore()
     resetViewToAxial();
     updateWindowLevelData();
     
-    // Apliquem el command
-    executeInputFinishedCommand();
-    
     // HACK Restaurem el rendering
     enableRendering(true);
+    // Apliquem el command
+    executeInputFinishedCommand();
 }
 
 void Q2DViewer::clearViewer()
