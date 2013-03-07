@@ -33,10 +33,6 @@ public:
     void setDefaultDate(DefaultDateFlags flag);
 
 private slots:
-    /// Slot que s'activa quan s'ha editat el m_textOtherModality, en cas que el text sigui <> "" deselecciona totes les modalitats,
-    /// i en cas que sigui = "" selecciona la modalitat checkAll
-    void textOtherModalityEdited();
-
     /// Checkeig de les dates que canvien els QDateEdit per mantenir consistència
     /// @param date
     void checkFromDate(QDate date);

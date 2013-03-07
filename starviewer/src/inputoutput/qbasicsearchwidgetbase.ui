@@ -353,264 +353,10 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="m_buttonGroupModality">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>16777215</height>
-          </size>
-         </property>
+        <widget class="udg::QModalitiesSelectorGroupBox" name="m_buttonGroupModality">
          <property name="title">
           <string>Series Modality</string>
          </property>
-         <layout class="QGridLayout">
-          <property name="margin">
-           <number>9</number>
-          </property>
-          <property name="spacing">
-           <number>6</number>
-          </property>
-          <item row="0" column="0">
-           <layout class="QGridLayout">
-            <property name="margin">
-             <number>0</number>
-            </property>
-            <property name="spacing">
-             <number>6</number>
-            </property>
-            <item row="0" column="0">
-             <widget class="QCheckBox" name="m_checkAll">
-              <property name="text">
-               <string>All</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-              <property name="autoExclusive">
-               <bool>true</bool>
-              </property>
-              <property name="tristate">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QCheckBox" name="m_checkCR">
-              <property name="toolTip">
-               <string>Computerized Radiography</string>
-              </property>
-              <property name="text">
-               <string>CR</string>
-              </property>
-              <property name="autoExclusive">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QCheckBox" name="m_checkES">
-              <property name="text">
-               <string>ES</string>
-              </property>
-              <property name="autoExclusive">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="2">
-             <widget class="QCheckBox" name="m_checkNM">
-              <property name="toolTip">
-               <string>Nuclear Medicine</string>
-              </property>
-              <property name="text">
-               <string>NM</string>
-              </property>
-              <property name="autoExclusive">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="3">
-             <widget class="QCheckBox" name="m_checkRF">
-              <property name="toolTip">
-               <string>Radiography Fluoroscopy</string>
-              </property>
-              <property name="text">
-               <string>RF</string>
-              </property>
-              <property name="autoExclusive">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="4">
-             <widget class="QCheckBox" name="m_checkXA">
-              <property name="text">
-               <string>XA</string>
-              </property>
-              <property name="autoExclusive">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QCheckBox" name="m_checkCT">
-              <property name="toolTip">
-               <string>Computerized Tomography</string>
-              </property>
-              <property name="whatsThis">
-               <string/>
-              </property>
-              <property name="text">
-               <string>CT</string>
-              </property>
-              <property name="autoExclusive">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QCheckBox" name="m_checkMG">
-              <property name="text">
-               <string>MG</string>
-              </property>
-              <property name="autoExclusive">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="2">
-             <widget class="QCheckBox" name="m_checkOP">
-              <property name="toolTip">
-               <string>Ophthalmic Photography</string>
-              </property>
-              <property name="text">
-               <string>OP</string>
-              </property>
-              <property name="autoExclusive">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="3">
-             <widget class="QCheckBox" name="m_checkSC">
-              <property name="text">
-               <string>SC</string>
-              </property>
-              <property name="autoExclusive">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="4">
-             <widget class="QCheckBox" name="m_checkXC">
-              <property name="text">
-               <string>XC</string>
-              </property>
-              <property name="autoExclusive">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="0">
-             <widget class="QCheckBox" name="m_checkDX">
-              <property name="toolTip">
-               <string>Direct Radiography</string>
-              </property>
-              <property name="text">
-               <string>DX</string>
-              </property>
-              <property name="autoExclusive">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="1">
-             <widget class="QCheckBox" name="m_checkMR">
-              <property name="toolTip">
-               <string>Magnetic Resonance</string>
-              </property>
-              <property name="text">
-               <string>MR</string>
-              </property>
-              <property name="autoExclusive">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="2">
-             <widget class="QCheckBox" name="m_checkPT">
-              <property name="toolTip">
-               <string>Penetrant Test</string>
-              </property>
-              <property name="text">
-               <string>PT</string>
-              </property>
-              <property name="autoExclusive">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="3">
-             <widget class="QCheckBox" name="m_checkUS">
-              <property name="toolTip">
-               <string>Ultrasounds</string>
-              </property>
-              <property name="text">
-               <string>US</string>
-              </property>
-              <property name="autoExclusive">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="4">
-             <widget class="QCheckBox" name="m_checkOtherModality">
-              <property name="maximumSize">
-               <size>
-                <width>60</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>Other</string>
-              </property>
-              <property name="autoExclusive">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="5">
-             <widget class="QLineEdit" name="m_textOtherModality">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>30</width>
-                <height>16777215</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
         </widget>
        </item>
       </layout>
@@ -619,6 +365,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>udg::QModalitiesSelectorGroupBox</class>
+   <extends>QGroupBox</extends>
+   <header>qmodalitiesselectorgroupbox.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>
@@ -714,22 +468,6 @@
     <hint type="destinationlabel">
      <x>177</x>
      <y>215</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>m_checkOtherModality</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>m_textOtherModality</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>540</x>
-     <y>183</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>588</x>
-     <y>183</y>
     </hint>
    </hints>
   </connection>
