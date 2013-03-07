@@ -75,8 +75,8 @@ private:
     /// Modifica el Magic Factor #m_magicFactor segons el desplaçament del ratolí
     void modifyRegionByFactor();
 
-    ///Troba els extrems per cada configuració
-    void setBounds(int &minX, int &minY, int &maxX, int &maxY);
+    /// Calcula els bounds de la màscara
+    void computeMaskBounds();
 
     ///Mini parche per obtenir el valor de Voxel depenent de si és Axial, Coronal o Sagital
     double getVoxelValue(int x, int y, int z);
@@ -104,6 +104,9 @@ private:
     /// Màscara de la regió que formarà el polígon
     QVector<bool> m_mask;
 
+    /// Bounds de la màscara
+    int m_minX, m_maxX, m_minY, m_maxY;
+    
     /// Rang de valors que es tindran en compte pel region growing
     double m_lowerLevel;
     double m_upperLevel;
