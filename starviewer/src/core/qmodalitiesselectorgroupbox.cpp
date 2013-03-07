@@ -140,4 +140,14 @@ void QModalitiesSelectorGroupBox::initialize()
     connect(m_otherCheckBox, SIGNAL(toggled(bool)), m_otherLineEdit, SLOT(setEnabled(bool)));
 }
 
+void QModalitiesSelectorGroupBox::setAllModalitiesCheckBoxChecked(bool checked)
+{
+    m_allCheckBox->setChecked(checked);
+}
+
+bool QModalitiesSelectorGroupBox::isAllModalitiesCheckBoxChecked() const
+{
+    return m_allCheckBox->isChecked();
+}
+
 }
