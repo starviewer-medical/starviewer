@@ -43,6 +43,12 @@ QStringList QModalitiesSelectorGroupBox::getCheckedModalities()
             checkedModalities << button->text();
         }
     }
+
+    if (m_otherCheckBox->isChecked())
+    {
+        checkedModalities << m_otherLineEdit->text();
+    }
+
     return checkedModalities;
 }
 
