@@ -21,6 +21,10 @@ MagicROITool::MagicROITool(QViewer *viewer, QObject *parent)
 : ROITool(viewer, parent)
 {
     m_magicFactor = InitialMagicFactor;
+    m_minX = 0;
+    m_maxX = 0;
+    m_minY = 0;
+    m_maxY = 0;
     m_lowerLevel = 0.0;
     m_upperLevel = 0.0;
     m_toolName = "MagicROITool";
@@ -136,7 +140,7 @@ void MagicROITool::setTextPosition(DrawerText *text)
     text->setAttachmentPoint(attachmentPoint);
 }
 
-void MagicROITool::setBounds(int &minX, int &minY, int &maxX, int &maxY)
+void MagicROITool::computeMaskBounds()
 {
     int extent[6];
     m_2DViewer->getInput()->getWholeExtent(extent);
@@ -144,11 +148,10 @@ void MagicROITool::setBounds(int &minX, int &minY, int &maxX, int &maxY)
     int xIndex, yIndex, zIndex;
     Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
 
-    minX = extent[xIndex * 2];
-    maxX = extent[(xIndex * 2) + 1];
-    minY = extent[yIndex * 2];
-    maxY = extent[(yIndex * 2) + 1];
-
+    m_minX = extent[xIndex * 2];
+    m_maxX = extent[(xIndex * 2) + 1];
+    m_minY = extent[yIndex * 2];
+    m_maxY = extent[(yIndex * 2) + 1];
 }
 
 double MagicROITool::getVoxelValue(int x, int y, int z)
@@ -261,6 +264,8 @@ void MagicROITool::modifyRegionByFactor()
 
 void MagicROITool::generateRegion()
 {
+    computeMaskBounds();
+    
     this->computeLevelRange();
 
     // Posem a true els punts on la imatge està dins els llindard i connectat amb la llavor (region growing)
@@ -356,14 +361,10 @@ void MagicROITool::computeRegionMask()
         z = index[zIndex];
     }
 
-    int minX, minY;
-    int maxX, maxY;
-    this->setBounds(minX, minY, maxX, maxY);
-
     // Creem la màscara
-    if (minX == 0 && minY == 0)
+    if (m_minX == 0 && m_minY == 0)
     {
-        m_mask = QVector<bool>((maxX + 1) * (maxY + 1), false);
+        m_mask = QVector<bool>((m_maxX + 1) * (m_maxY + 1), false);
     }
     else
     {
@@ -376,7 +377,7 @@ void MagicROITool::computeRegionMask()
     
     if ((value >= m_lowerLevel) && (value <= m_upperLevel))
     {
-        int maskIndex = computeMaskVectorIndex(x, y, maxX);
+        int maskIndex = computeMaskVectorIndex(x, y, m_maxX);
         m_mask[maskIndex] = true;
     }
     else
@@ -400,7 +401,7 @@ void MagicROITool::computeRegionMask()
 
         if ((value >= m_lowerLevel) && (value <= m_upperLevel))
         {
-            maskIndex = computeMaskVectorIndex(x, y, maxX);
+            maskIndex = computeMaskVectorIndex(x, y, m_maxX);
             m_mask[maskIndex] = true;
             found = true;
             movements.push_back(i);
@@ -420,12 +421,12 @@ void MagicROITool::computeRegionMask()
         while (i < 4 && !found)
         {
             this->doMovement(x, y, i);
-            if ((x > minX) && (x < maxX) && (y > minY) && (y < maxY))
+            if ((x > m_minX) && (x < m_maxX) && (y > m_minY) && (y < m_maxY))
             {
                 // TODO Desfà els índexs projectats a 2D als originals 3D per poder obtenir el valor
                 // Corretgir-ho d'una millor manera perquè no calgui fer servir aquest mètode (guardar els índexs x,y,z o d'una altra manera)
                 value = this->getVoxelValue(x, y, z);
-                maskIndex = computeMaskVectorIndex(x, y, maxX);
+                maskIndex = computeMaskVectorIndex(x, y, m_maxX);
                 if ((value >= m_lowerLevel) && (value <= m_upperLevel) && (!m_mask[maskIndex]))
                 {
                     m_mask[maskIndex] = true;
@@ -493,25 +494,18 @@ void MagicROITool::undoMovement(int &x, int &y, int movement)
 }
 
 void MagicROITool::computePolygon()
-{    
-    int minX;
-    int minY;
-    int maxX;
-    int maxY;
-    
-    this->setBounds(minX, minY, maxX, maxY);
-
-    int i = minX;
+{
+    int i = m_minX;
     int j;
     int maskIndex = 0;
     // Busquem el primer punt
     bool found = false;
-    while ((i <= maxX) && !found)
+    while ((i <= m_maxX) && !found)
     {
-        j = minY;
-        while ((j <= maxY) && !found)
+        j = m_minY;
+        while ((j <= m_maxY) && !found)
         {
-            maskIndex = computeMaskVectorIndex(i, j, maxX);
+            maskIndex = computeMaskVectorIndex(i, j, m_maxX);
             if (m_mask[maskIndex])
             {
                 found = true;
@@ -542,7 +536,7 @@ void MagicROITool::computePolygon()
     while (!loop)
     {
         this->getNextIndex(direction, x, y, nextX, nextY);
-        maskIndex = computeMaskVectorIndex(nextX, nextY, maxX);
+        maskIndex = computeMaskVectorIndex(nextX, nextY, m_maxX);
         next = m_mask[maskIndex];
         while (!next && !loop)
         {
@@ -553,7 +547,7 @@ void MagicROITool::computePolygon()
             }
             direction = this->getNextDirection(direction);
             this->getNextIndex(direction, x, y, nextX, nextY);
-            maskIndex = computeMaskVectorIndex(nextX, nextY, maxX);
+            maskIndex = computeMaskVectorIndex(nextX, nextY, m_maxX);
             next = m_mask[maskIndex];
         }
         x = nextX;
@@ -666,17 +660,10 @@ bool MagicROITool::isLoopReached()
 
 double MagicROITool::getStandardDeviation(int x, int y, int z)
 {
-    int minX;
-    int minY;
-    int maxX;
-    int maxY;
-
-    this->setBounds(minX, minY, maxX, maxY);
-
-    minX = qMax(x - MagicSize, minX);
-    maxX = qMin(x + MagicSize, maxX);
-    minY = qMax(y - MagicSize, minY);
-    maxY = qMin(y + MagicSize, maxY);
+    int minX = qMax(x - MagicSize, m_minX);
+    int maxX = qMin(x + MagicSize, m_maxX);
+    int minY = qMax(y - MagicSize, m_minY);
+    int maxY = qMin(y + MagicSize, m_maxY);
 
     // Calculem la mitjana
     double mean = 0.0;
