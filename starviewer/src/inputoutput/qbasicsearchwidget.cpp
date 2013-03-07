@@ -19,8 +19,6 @@ QBasicSearchWidget::QBasicSearchWidget(QWidget *parent)
 
 void QBasicSearchWidget::createConnections()
 {
-    connect(m_textOtherModality, SIGNAL(editingFinished()), SLOT(textOtherModalityEdited()));
-
     connect(m_fromStudyDate, SIGNAL(dateChanged(QDate)), SLOT(checkFromDate(QDate)));
     connect(m_toStudyDate, SIGNAL(dateChanged(QDate)), SLOT(checkToDate(QDate)));
 }
@@ -37,6 +35,10 @@ void QBasicSearchWidget::initialize()
     m_fromStudyDate->setDisplayFormat("dd/MM/yyyy");
     m_toStudyDate->setDisplayFormat("dd/MM/yyyy");
 
+    m_buttonGroupModality->enableAllModalitiesCheckBox(true);
+    m_buttonGroupModality->enableOtherModalitiesCheckBox(true);
+    m_buttonGroupModality->setExclusive(true);
+    
     m_widgetHasBeenShowed = false;
 }
 
@@ -118,7 +120,7 @@ DicomMask QBasicSearchWidget::buildDicomMask()
     setStudyDateToDICOMMask(&mask);
 
     // Si hem de filtrar per un camp a nivell d'imatge o serie activem els filtres de serie
-    if (!m_checkAll->isChecked())
+    if (!m_buttonGroupModality->isAllModalitiesCheckBoxChecked())
     {
         mask.setSeriesDate(QDate(), QDate());
         mask.setSeriesTime(QTime(), QTime());
@@ -132,65 +134,11 @@ DicomMask QBasicSearchWidget::buildDicomMask()
         if (m_buttonGroupModality->isEnabled())
         {
             // Es crea una sentencia per poder fer un in
-            if (m_checkCT->isChecked())
+            QStringList checkedModalities = m_buttonGroupModality->getCheckedModalities();
+            // Com que el grup de modalitats és exclusiu, només s'hauria de tenir una marcada com a màxim
+            if (!checkedModalities.isEmpty())
             {
-                mask.setSeriesModality("CT");
-            }
-            else if (m_checkCR->isChecked())
-            {
-                mask.setSeriesModality("CR");
-            }
-            else if (m_checkDX->isChecked())
-            {
-                mask.setSeriesModality("DX");
-            }
-            else if (m_checkES->isChecked())
-            {
-                mask.setSeriesModality("ES");
-            }
-            else if (m_checkMG->isChecked())
-            {
-                mask.setSeriesModality("MG");
-            }
-            else if (m_checkMR->isChecked())
-            {
-                mask.setSeriesModality("MR");
-            }
-            else if (m_checkNM->isChecked())
-            {
-                mask.setSeriesModality("NM");
-            }
-            else if (m_checkOP->isChecked())
-            {
-                mask.setSeriesModality("OP");
-            }
-            else if (m_checkPT->isChecked())
-            {
-                mask.setSeriesModality("PT");
-            }
-            else if (m_checkRF->isChecked())
-            {
-                mask.setSeriesModality("RF");
-            }
-            else if (m_checkSC->isChecked())
-            {
-                mask.setSeriesModality("SC");
-            }
-            else if (m_checkUS->isChecked())
-            {
-                mask.setSeriesModality("US");
-            }
-            else if (m_checkXA->isChecked())
-            {
-                mask.setSeriesModality("XA");
-            }
-            else if (m_checkXC->isChecked())
-            {
-                mask.setSeriesModality("XC");
-            }
-            else if (m_checkOtherModality->isChecked())
-            {
-                mask.setSeriesModality(m_textOtherModality->text());
+                mask.setSeriesModality(checkedModalities.first());
             }
         }
     }
@@ -260,14 +208,6 @@ void QBasicSearchWidget::setStudyDateToDICOMMask(DicomMask *mask)
     }
 }
 
-void QBasicSearchWidget::textOtherModalityEdited()
-{
-    if (m_textOtherModality->text().isEmpty())
-    {
-        m_checkAll->setChecked(true);
-    }
-}
-
 void QBasicSearchWidget::checkFromDate(QDate date)
 {
     if (date > m_toStudyDate->date())
@@ -286,8 +226,8 @@ void QBasicSearchWidget::checkToDate(QDate date)
 
 void QBasicSearchWidget::clearSeriesModality()
 {
-    m_checkAll->setChecked(true);
-    m_textOtherModality->clear();
+    m_buttonGroupModality->clear();
+    m_buttonGroupModality->setAllModalitiesCheckBoxChecked(true);
 }
 
 void QBasicSearchWidget::showEvent(QShowEvent *event)
