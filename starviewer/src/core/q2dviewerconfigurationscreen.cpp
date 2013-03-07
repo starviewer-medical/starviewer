@@ -32,66 +32,13 @@ void Q2DViewerConfigurationScreen::initialize()
 
 void Q2DViewerConfigurationScreen::initializeModalitiesWithZoomByDefault()
 {
-    Settings settings;
+    m_zoomByDefaultModalitiesGroupBox->enableAllModalitiesCheckBox(false);
+    m_zoomByDefaultModalitiesGroupBox->enableOtherModalitiesCheckBox(false);
+    m_zoomByDefaultModalitiesGroupBox->setExclusive(false);
     
-    QStringList modalitiesWithZoomList = settings.getValue(CoreSettings::ModalitiesWithZoomToolByDefault).toString().split(";");
-
-    if (modalitiesWithZoomList.contains("CR"))
-    {
-        m_zoomCRCheckBox->setChecked(true);
-    }
-    if (modalitiesWithZoomList.contains("CT"))
-    {
-        m_zoomCTCheckBox->setChecked(true);
-    }
-    if (modalitiesWithZoomList.contains("DX"))
-    {
-        m_zoomDXCheckBox->setChecked(true);
-    }
-    if (modalitiesWithZoomList.contains("ES"))
-    {
-        m_zoomESCheckBox->setChecked(true);
-    }
-    if (modalitiesWithZoomList.contains("MG"))
-    {
-        m_zoomMGCheckBox->setChecked(true);
-    }
-    if (modalitiesWithZoomList.contains("MR"))
-    {
-        m_zoomMRCheckBox->setChecked(true);
-    }
-    if (modalitiesWithZoomList.contains("NM"))
-    {
-        m_zoomNMCheckBox->setChecked(true);
-    }
-    if (modalitiesWithZoomList.contains("OP"))
-    {
-        m_zoomOPCheckBox->setChecked(true);
-    }
-    if (modalitiesWithZoomList.contains("PT"))
-    {
-        m_zoomPTCheckBox->setChecked(true);
-    }
-    if (modalitiesWithZoomList.contains("RF"))
-    {
-        m_zoomRFCheckBox->setChecked(true);
-    }
-    if (modalitiesWithZoomList.contains("SC"))
-    {
-        m_zoomSCCheckBox->setChecked(true);
-    }
-    if (modalitiesWithZoomList.contains("US"))
-    {
-        m_zoomUSCheckBox->setChecked(true);
-    }
-    if (modalitiesWithZoomList.contains("XA"))
-    {
-        m_zoomXACheckBox->setChecked(true);
-    }
-    if (modalitiesWithZoomList.contains("XC"))
-    {
-        m_zoomXCCheckBox->setChecked(true);
-    }
+    Settings settings;
+    QStringList modalitiesWithZoomList = settings.getValue(CoreSettings::ModalitiesWithZoomToolByDefault).toString().split(";", QString::SkipEmptyParts);
+    m_zoomByDefaultModalitiesGroupBox->checkModalities(modalitiesWithZoomList);
 }
 
 void Q2DViewerConfigurationScreen::initializeMagnifyingGlassToolZoomFactor()
@@ -171,79 +118,8 @@ void Q2DViewerConfigurationScreen::updateAutomaticSynchronizationForCTSetting(bo
 
 void Q2DViewerConfigurationScreen::updateModalitiesWithZoomByDefaultSetting()
 {
-    QString modalitiesWithZoom;
-    
-    if (m_zoomCRCheckBox->isChecked())
-    {
-        modalitiesWithZoom += "CR;";
-    }
-
-    if (m_zoomCTCheckBox->isChecked())
-    {
-        modalitiesWithZoom += "CT;";
-    }
-
-    if (m_zoomDXCheckBox->isChecked())
-    {
-        modalitiesWithZoom += "DX;";
-    }
-
-    if (m_zoomESCheckBox->isChecked())
-    {
-        modalitiesWithZoom += "ES;";
-    }
-
-    if (m_zoomMGCheckBox->isChecked())
-    {
-        modalitiesWithZoom += "MG;";
-    }
-
-    if (m_zoomMRCheckBox->isChecked())
-    {
-        modalitiesWithZoom += "MR;";
-    }
-
-    if (m_zoomNMCheckBox->isChecked())
-    {
-        modalitiesWithZoom += "NM;";
-    }
-
-    if (m_zoomOPCheckBox->isChecked())
-    {
-        modalitiesWithZoom += "OP;";
-    }
-
-    if (m_zoomPTCheckBox->isChecked())
-    {
-        modalitiesWithZoom += "PT;";
-    }
-
-    if (m_zoomRFCheckBox->isChecked())
-    {
-        modalitiesWithZoom += "RF;";
-    }
-
-    if (m_zoomSCCheckBox->isChecked())
-    {
-        modalitiesWithZoom += "SC;";
-    }
-
-    if (m_zoomUSCheckBox->isChecked())
-    {
-        modalitiesWithZoom += "US;";
-    }
-
-    if (m_zoomXACheckBox->isChecked())
-    {
-        modalitiesWithZoom += "XA;";
-    }
-
-    if (m_zoomXCCheckBox->isChecked())
-    {
-        modalitiesWithZoom += "XC;";
-    }
-
     Settings settings;
+    QString modalitiesWithZoom = m_zoomByDefaultModalitiesGroupBox->getCheckedModalities().join(";");
     settings.setValue(CoreSettings::ModalitiesWithZoomToolByDefault, modalitiesWithZoom);
 }
 
