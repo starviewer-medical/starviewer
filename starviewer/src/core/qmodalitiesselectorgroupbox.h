@@ -29,6 +29,12 @@ public:
     /// Selecciona les modalitats de la llista. Si la modalitat no és vàlida no marca res.
     void checkModalities(const QStringList &modalities);
 
+    /// Fa que el check box especial "All" es marqui o desmarqui
+    void setAllModalitiesCheckBoxChecked(bool checked);
+
+    /// Ens indica si el check box de "All" està marcat o no, independentment de si està habilitat o no
+    bool isAllModalitiesCheckBoxChecked() const;
+
 private:
     void initialize();
 
