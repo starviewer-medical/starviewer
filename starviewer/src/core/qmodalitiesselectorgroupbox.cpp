@@ -31,6 +31,15 @@ void QModalitiesSelectorGroupBox::setExclusive(bool exclusive)
     m_buttonGroup->setExclusive(exclusive);
 }
 
+void QModalitiesSelectorGroupBox::clear()
+{
+    foreach (QAbstractButton *button, m_buttonGroup->buttons())
+    {
+        button->setChecked(false);
+    }
+    m_otherLineEdit->clear();
+}
+
 QStringList QModalitiesSelectorGroupBox::getCheckedModalities()
 {
     QStringList checkedModalities;

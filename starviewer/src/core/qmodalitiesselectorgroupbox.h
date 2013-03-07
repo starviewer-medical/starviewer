@@ -20,6 +20,9 @@ public:
     void enableAllModalitiesCheckBox(bool enable);
     void enableOtherModalitiesCheckBox(bool enable);
     
+    /// Desmarca tots els check box
+    void clear();
+    
     /// Indica si podem seleccionar una sola modalitat o múltiples
     void setExclusive(bool exlusive);
 
