@@ -84,6 +84,9 @@ private:
     /// Elimina la representacio temporal de la tool
     void deleteTemporalRepresentation();
 
+    /// Mètode auxiliar. Donats els índexs x,y i el nombre de columnes de la imatge, ens calcula el corresponent índex de la màscara.
+    int computeMaskVectorIndex(int x, int y, int columns);
+
 private slots:
     /// Inicialitza la tool
     void initialize();

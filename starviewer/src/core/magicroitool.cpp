@@ -376,7 +376,8 @@ void MagicROITool::computeRegionMask()
     
     if ((value >= m_lowerLevel) && (value <= m_upperLevel))
     {
-        m_mask[y * maxX + x] = true;
+        int maskIndex = computeMaskVectorIndex(x, y, maxX);
+        m_mask[maskIndex] = true;
     }
     else
     {
@@ -389,6 +390,7 @@ void MagicROITool::computeRegionMask()
     // First movement \TODO Codi duplicat amb main loop
     int i = 0;
     bool found = false;
+    int maskIndex = 0;
     while (i < 4 && !found)
     {
         this->doMovement(x, y, i);
@@ -398,7 +400,8 @@ void MagicROITool::computeRegionMask()
 
         if ((value >= m_lowerLevel) && (value <= m_upperLevel))
         {
-            m_mask[y * maxX + x] = true;
+            maskIndex = computeMaskVectorIndex(x, y, maxX);
+            m_mask[maskIndex] = true;
             found = true;
             movements.push_back(i);
         }
@@ -422,10 +425,10 @@ void MagicROITool::computeRegionMask()
                 // TODO Desfà els índexs projectats a 2D als originals 3D per poder obtenir el valor
                 // Corretgir-ho d'una millor manera perquè no calgui fer servir aquest mètode (guardar els índexs x,y,z o d'una altra manera)
                 value = this->getVoxelValue(x, y, z);
-
-                if ((value >= m_lowerLevel) && (value <= m_upperLevel) && (!m_mask[y * maxX + x]))
+                maskIndex = computeMaskVectorIndex(x, y, maxX);
+                if ((value >= m_lowerLevel) && (value <= m_upperLevel) && (!m_mask[maskIndex]))
                 {
-                    m_mask[y * maxX + x] = true;
+                    m_mask[maskIndex] = true;
                     found = true;
                     movements.push_back(i);
                     i = 0;
@@ -500,7 +503,7 @@ void MagicROITool::computePolygon()
 
     int i = minX;
     int j;
-
+    int maskIndex = 0;
     // Busquem el primer punt
     bool found = false;
     while ((i <= maxX) && !found)
@@ -508,7 +511,8 @@ void MagicROITool::computePolygon()
         j = minY;
         while ((j <= maxY) && !found)
         {
-            if (m_mask[j * maxX + i])
+            maskIndex = computeMaskVectorIndex(i, j, maxX);
+            if (m_mask[maskIndex])
             {
                 found = true;
             }
@@ -538,7 +542,8 @@ void MagicROITool::computePolygon()
     while (!loop)
     {
         this->getNextIndex(direction, x, y, nextX, nextY);
-        next = m_mask[nextY * maxX + nextX];
+        maskIndex = computeMaskVectorIndex(nextX, nextY, maxX);
+        next = m_mask[maskIndex];
         while (!next && !loop)
         {
             if (((direction % 2) != 0) && !next)
@@ -548,7 +553,8 @@ void MagicROITool::computePolygon()
             }
             direction = this->getNextDirection(direction);
             this->getNextIndex(direction, x, y, nextX, nextY);
-            next = m_mask[nextY * maxX + nextX];
+            maskIndex = computeMaskVectorIndex(nextX, nextY, maxX);
+            next = m_mask[maskIndex];
         }
         x = nextX;
         y = nextY;
@@ -700,6 +706,11 @@ double MagicROITool::getStandardDeviation(int x, int y, int z)
     }
     deviation = qSqrt(deviation / (double)numberOfSamples);
     return deviation;
+}
+
+int MagicROITool::computeMaskVectorIndex(int x, int y, int columns)
+{
+    return y * columns + x;
 }
 
 }
