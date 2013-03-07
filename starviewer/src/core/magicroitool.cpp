@@ -138,16 +138,16 @@ void MagicROITool::setTextPosition(DrawerText *text)
 
 void MagicROITool::setBounds(int &minX, int &minY, int &maxX, int &maxY)
 {
-    int ext[6];
-    m_2DViewer->getInput()->getWholeExtent(ext);
+    int extent[6];
+    m_2DViewer->getInput()->getWholeExtent(extent);
 
     int xIndex, yIndex, zIndex;
     Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
 
-    minX = ext[xIndex * 2];
-    maxX = ext[(xIndex * 2) + 1];
-    minY = ext[yIndex * 2];
-    maxY = ext[(yIndex * 2) + 1];
+    minX = extent[xIndex * 2];
+    maxX = extent[(xIndex * 2) + 1];
+    minY = extent[yIndex * 2];
+    maxY = extent[(yIndex * 2) + 1];
 
 }
 
@@ -320,7 +320,6 @@ void MagicROITool::computeLevelRange()
 void MagicROITool::computeRegionMask()
 {
     // Busquem el voxel inicial
-    int index[3];
     VolumePixelData *pixelData = 0;
     if (m_2DViewer->isThickSlabActive())
     {
@@ -331,21 +330,20 @@ void MagicROITool::computeRegionMask()
     {
         pixelData = m_2DViewer->getInput()->getPixelData();
     }
+    
+    int index[3];
     pixelData->computeCoordinateIndex(m_pickedPosition, index);
     if (m_2DViewer->isThickSlabActive())
     {
         delete pixelData;
     }
-    
-    int minX, minY;
-    int maxX, maxY;
-    int x, y, z;
 
     int xIndex, yIndex, zIndex;
     Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
-
-    x = index[xIndex];
-    y = index[yIndex];
+    
+    int x = index[xIndex];
+    int y = index[yIndex];
+    int z;
     // HACK Per poder crear les regions correctament quan tenim imatges amb fases
     // Com que els volums no suporten recontruccions, només hem de tractar el cas Axial
     // TODO Revisar això quan s'implementi el ticket #1247 (Suportar reconstruccions per volums amb fases)
@@ -358,6 +356,8 @@ void MagicROITool::computeRegionMask()
         z = index[zIndex];
     }
 
+    int minX, minY;
+    int maxX, maxY;
     this->setBounds(minX, minY, maxX, maxY);
 
     // Creem la màscara
@@ -517,14 +517,10 @@ void MagicROITool::computePolygon()
         ++i;
     }
 
-    int x;
-    int y;
-    int z;
-
     // L'índex és -1 pq els hem incrementat una vegada més    
-    x = i - 1;
-    y = j - 1;
-    z = m_2DViewer->getCurrentSlice();
+    int x = i - 1;
+    int y = j - 1;
+    int z = m_2DViewer->getCurrentSlice();
     m_roiPolygon->removeVertices();
     m_filledRoiPolygon->removeVertices();
     
@@ -533,8 +529,7 @@ void MagicROITool::computePolygon()
     
     int nextX;
     int nextY;
-    int nextZ;
-    nextZ = z;
+    int nextZ = z;
 
     int direction = 0;
 
