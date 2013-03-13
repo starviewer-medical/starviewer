@@ -49,6 +49,14 @@ bool TemporalDimensionFillerStep::fillIndividually()
         {
             volumeInfoInitialized = true;
             volumeInfo = volumeHash->value(m_input->getCurrentVolumeNumber());
+
+            if (!volumeInfo->multipleAcquisitionNumber)
+            {
+                if (volumeInfo->firstAcquisitionNumber != m_input->getDICOMFile()->getValueAttributeAsQString(DICOMAcquisitionNumber))
+                {
+                    volumeInfo->multipleAcquisitionNumber = true;
+                }
+            }
         }
         else
         {
@@ -71,6 +79,8 @@ bool TemporalDimensionFillerStep::fillIndividually()
         volumeInfo->numberOfImages = 0;
         volumeInfo->isCTLocalizer = false;
         volumeInfo->firstImagePosition = "";
+        volumeInfo->firstAcquisitionNumber = m_input->getDICOMFile()->getValueAttributeAsQString(DICOMAcquisitionNumber);
+        volumeInfo->multipleAcquisitionNumber = false;
 
         // En el cas del CT ens interessa saber si és localizer
         // \TODO Ara estem considerant que un volume serà localizer si la primera imatge ho és, però res ens indica que els localizers no puguin està barretjats
@@ -167,18 +177,29 @@ void TemporalDimensionFillerStep::postProcessing()
                 if (volumeHash->contains(currentVolume))
                 {
                     VolumeInfo *volumeInfo = volumeHash->take(currentVolume);
-                    // Inicialment donem per fet que el càlcul de fases és correcte
-                    numberOfPhases = volumeInfo->numberOfPhases;
-                    // Si passem la llista de valors a un QSet i aquest té mida 1, vol dir que totes les posicions tenen el mateix nombre de fases
-                    // (Un QSet no admet duplicats). S'ha de tenir en compte que si només hi ha una posició amb diferents fases no cal fer res ja que serà correcte
-                    QList<int> phasesList = volumeInfo->phasesPerPositionHash.values();
-                    int listSize = phasesList.count();
-                    if (listSize > 1 && phasesList.toSet().count() > 1)
+
+                    if (volumeInfo->multipleAcquisitionNumber)
                     {
                         numberOfPhases = 1;
+                        DEBUG_LOG(QString("No totes les imatges tenen el mateix AcquisitionNumber. Considerem que el volume %1 de la sèrie %2 no és dinàmic.")
+                                     .arg(currentVolume).arg(key->getInstanceUID()));
+                        INFO_LOG(QString("No totes les imatges tenen el mateix AcquisitionNumber. Considerem que el volume %1 de la sèrie %2 no és dinàmic.")
+                                    .arg(currentVolume).arg(key->getInstanceUID()));
                     }
-                    // TODO Si el càlcul no ha sigut correcte, caldria dividir en volums?
-                    
+                    else
+                    {
+                        // Inicialment donem per fet que el càlcul de fases és correcte
+                        numberOfPhases = volumeInfo->numberOfPhases;
+                        // Si passem la llista de valors a un QSet i aquest té mida 1, vol dir que totes les posicions tenen el mateix nombre de fases
+                        // (Un QSet no admet duplicats). S'ha de tenir en compte que si només hi ha una posició amb diferents fases no cal fer res ja que serà correcte
+                        QList<int> phasesList = volumeInfo->phasesPerPositionHash.values();
+                        int listSize = phasesList.count();
+                        if (listSize > 1 && phasesList.toSet().count() > 1)
+                        {
+                            numberOfPhases = 1;
+                        }
+                        // TODO Si el càlcul no ha sigut correcte, caldria dividir en volums?
+                    }
                     // L'esborrem perquè ja no el necessitarem més
                     if (volumeInfo)
                     {
