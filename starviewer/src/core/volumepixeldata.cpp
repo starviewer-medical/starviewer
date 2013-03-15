@@ -241,12 +241,24 @@ void VolumePixelData::setSpacing(double spacing[3])
 
 void VolumePixelData::setSpacing(double x, double y, double z)
 {
-    vtkImageChangeInformation *changeInformation = vtkImageChangeInformation::New();
-    changeInformation->SetInput(m_imageDataVTK);
-    changeInformation->SetOutputSpacing(x, y, z);
-    changeInformation->Update();
-    this->setData(changeInformation->GetOutput());
-    changeInformation->Delete();
+    // Cal separar dos possibles casos, si venim d'ITK o directament de VTK, perquè si fem servir sempre vtkImageChangeInformation hi ha un problema amb els
+    // shutters que fa que cap al final de la pipeline el whole extent sigui (0, -1, 0, -1, 0, -1). No sabem per què passa, però sí que podem evitar-ho si no
+    // fem servir vtkImageChangeInformation en el cas dels shutters. Sabem que els shutters creen les dades directament en format VTK, i que quan les dades
+    // vénen de VTK el SetSpacing() directe ja ens funciona bé, per tant el que farem és fer un SetSpacing() quan les dades són originàries de VTK (ho detectem
+    // perquè el filtre ITK->VTK no té input) i fer servir vtkImageChangeInformation quan vénen d'ITK (el filtre ITK->VTK sí té input).
+    if (m_itkToVtkFilter->GetExporter()->GetNumberOfInputs() == 0)
+    {
+        m_imageDataVTK->SetSpacing(x, y, z);
+    }
+    else
+    {
+        vtkImageChangeInformation *changeInformation = vtkImageChangeInformation::New();
+        changeInformation->SetInput(m_imageDataVTK);
+        changeInformation->SetOutputSpacing(x, y, z);
+        changeInformation->Update();
+        this->setData(changeInformation->GetOutput());
+        changeInformation->Delete();
+    }
 }
 
 void VolumePixelData::getSpacing(double spacing[3])
