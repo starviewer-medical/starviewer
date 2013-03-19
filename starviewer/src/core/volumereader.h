@@ -58,7 +58,7 @@ private:
 
 private:
     /// Definim els tipus de lectors que podem fer servir segons les dades del volum
-    enum PixelDataReaderType { ITKGDCMPixelDataReader, VTKGDCMPixelDataReader };
+    enum PixelDataReaderType { ITKDCMTKPixelDataReader, ITKGDCMPixelDataReader, VTKGDCMPixelDataReader };
 
     /// Ens retorna els arxius que hem de llegir, sense retornar-ne cap de repetit
     QStringList getFilesToRead(Volume *volume) const;
