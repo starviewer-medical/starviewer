@@ -1125,7 +1125,7 @@ DCMTKFileReader
 {
   double dircos[6];
   int rval = this->GetDirCosArray(dircos);
-  if(rval == EXIT_SUCCESS)
+  //if(rval == EXIT_SUCCESS)
     {
     dir1[0] = dircos[0]; dir1[1] = dircos[1]; dir1[2] = dircos[2];
     dir2[0] = dircos[3]; dir2[1] = dircos[4]; dir2[2] = dircos[5];
