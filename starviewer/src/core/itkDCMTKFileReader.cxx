@@ -1258,69 +1258,82 @@ int
 DCMTKFileReader
 ::GetSpacing(double *spacing)
 {
-  double _spacing[3];
-  //
-  // There are several tags that can have spacing, and we're going
-  // from most to least desirable, starting with PixelSpacing, which
-  // is guaranteed to be in patient space.
-  // Imager Pixel spacing is inter-pixel spacing at the sensor front plane
-  // Pixel spacing
-  DCMTKSequence spacingSequence;
-  DCMTKItem item;
-  DCMTKSequence subSequence;
-  // first, shared function groups sequence, then
-  // per-frame groups sequence
-  _spacing[0] = _spacing[1] = _spacing[2] = 0.0;
-  int rval(EXIT_SUCCESS);
+    // There are several tags that can have spacing, and we're going from most to least desirable, starting with PixelSpacing, which is guaranteed to be in
+    // patient space.
+    // Imager Pixel spacing is inter-pixel spacing at the sensor front plane.
 
-  rval = this->GetElementDS<double>(0x0028,0x0030,2,_spacing,false);
-  if(rval != EXIT_SUCCESS)
+    double _spacing[3] = { 1.0, 1.0, 1.0 };
+
+    // Pixel spacing
+    int rval = this->GetElementDS<double>(0x0028, 0x0030, 2, _spacing, false);
+
+    if (rval != EXIT_SUCCESS)
     {
-    // imager pixel spacing
-    rval = this->GetElementDS<double>(0x0018, 0x1164, 2, &_spacing[0],false);
-    if(rval != EXIT_SUCCESS)
-      {
-      // Nominal Scanned PixelSpacing
-      rval = this->GetElementDS<double>(0x0018, 0x2010, 2, &_spacing[0],false);
-      }
-    }
-  if(rval == EXIT_SUCCESS)
-    {
-    // slice thickness
-    rval = this->GetElementDS<double>(0x0018,0x0050,1,&_spacing[2],false);
-    }
-  if(rval != EXIT_SUCCESS)
-    {
-    rval = this->GetElementSQ(0x5200,0x9230,spacingSequence,false);
-    if(rval != EXIT_SUCCESS)
-      {
-      // this is a complete punt -- in the files I've seen, there was
-      // no 0028,9110
-      rval = this->GetElementSQ(0X5200,0X9229,spacingSequence,false);
-      }
-    if(rval == EXIT_SUCCESS)
-      {
-      if(spacingSequence.GetElementItem(0,item,false) == EXIT_SUCCESS)
+        DCMTKSequence sharedFunctionalGroupsSequence;
+        rval = this->GetElementSQ(0x5200, 0x9229, sharedFunctionalGroupsSequence, false);
+
+        if (rval == EXIT_SUCCESS)
         {
-        if(item.GetElementSQ(0x0028,0x9110,subSequence,false) == EXIT_SUCCESS)
-          {
-          subSequence.GetElementDS<double>(0x0028,0x0030,2,_spacing);
-          subSequence.GetElementDS<double>(0x0018,0x0050,1,&_spacing[2]);
-          }
+            DCMTKItem item;
+            rval = sharedFunctionalGroupsSequence.GetElementItem(0, item, false);
+
+            if (rval == EXIT_SUCCESS)
+            {
+                DCMTKSequence pixelMeasuresSequence;
+                rval = item.GetElementSQ(0x0028, 0x9110, pixelMeasuresSequence, false);
+
+                if (rval == EXIT_SUCCESS)
+                {
+                    rval = pixelMeasuresSequence.GetElementDS<double>(0x0028, 0x0030, 2, _spacing, false);
+                }
+            }
         }
-      }
     }
-  //
-  // spacing is row spacing\column spacing
-  // but a slice is width-first, i.e. columns increase fastest.
-  //
-  if(rval == EXIT_SUCCESS)
+
+    if (rval != EXIT_SUCCESS)
     {
+        DCMTKSequence perFrameFunctionalGroupsSequence;
+        rval = this->GetElementSQ(0x5200, 0x9230, perFrameFunctionalGroupsSequence, false);
+
+        if (rval == EXIT_SUCCESS)
+        {
+            DCMTKItem item;
+            rval = perFrameFunctionalGroupsSequence.GetElementItem(0, item, false);
+
+            if (rval == EXIT_SUCCESS)
+            {
+                DCMTKSequence pixelMeasuresSequence;
+                rval = item.GetElementSQ(0x0028, 0x9110, pixelMeasuresSequence, false);
+
+                if (rval == EXIT_SUCCESS)
+                {
+                    rval = pixelMeasuresSequence.GetElementDS<double>(0x0028, 0x0030, 2, _spacing, false);
+                }
+            }
+        }
+    }
+
+    if (rval != EXIT_SUCCESS)
+    {
+        // imager pixel spacing
+        rval = this->GetElementDS<double>(0x0018, 0x1164, 2, _spacing,false);
+
+        if (rval != EXIT_SUCCESS)
+        {
+            // Nominal Scanned PixelSpacing
+            rval = this->GetElementDS<double>(0x0018, 0x2010, 2, _spacing,false);
+        }
+    }
+
+    // Spacing between slices
+    rval = this->GetElementDS<double>(0x0018, 0x0088, 1, &_spacing[2], false);
+
+    // spacing is row spacing\column spacing but a slice is width-first, i.e. columns increase fastest.
     spacing[0] = _spacing[1];
     spacing[1] = _spacing[0];
     spacing[2] = _spacing[2];
-    }
-  return rval;
+
+    return rval;
 }
 
 int
