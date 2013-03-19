@@ -58,6 +58,8 @@ DCMTKImageIO::DCMTKImageIO()
   // this->AddSupportedReadExtension(".DCM");
   // this->AddSupportedReadExtension(".dicom");
   // this->AddSupportedReadExtension(".DICOM");
+
+  m_ReadFrameByFrame = false;
 }
 
 /** Destructor */
@@ -155,7 +157,15 @@ DCMTKImageIO
     if (status.good())
     {
         DcmDataset *dataset = dicomFile.getAndRemoveDataset();
-        m_DImage = new DicomImage(dataset, dataset->getOriginalXfer(), this->m_RescaleSlope, this->m_RescaleIntercept, CIF_TakeOverExternalDataset);
+        if (m_ReadFrameByFrame)
+        {
+            m_DImage = new DicomImage(dataset, dataset->getOriginalXfer(), this->m_RescaleSlope, this->m_RescaleIntercept,
+                                      CIF_TakeOverExternalDataset | CIF_UsePartialAccessToPixelData, 0, 1);
+        }
+        else
+        {
+            m_DImage = new DicomImage(dataset, dataset->getOriginalXfer(), this->m_RescaleSlope, this->m_RescaleIntercept, CIF_TakeOverExternalDataset);
+        }
         this->m_LastFileName = this->m_FileName;
     }
     }
@@ -234,11 +244,14 @@ DCMTKImageIO
         break;
       }
     // get the image in the DCMTK buffer
-    const DiPixel * const interData = m_DImage->getInterData();
-    memcpy(buffer,
-           interData->getData(),
-           interData->getCount() * voxelSize);
-
+    size_t readBytes = 0;
+    do
+    {
+        const DiPixel * const interData = m_DImage->getInterData();
+        memcpy(static_cast<char*>(buffer) + readBytes, interData->getData(), interData->getCount() * voxelSize);
+        readBytes += interData->getCount() * voxelSize;
+    }
+    while (m_DImage->processNextFrames());
     }
   else
     {
@@ -345,6 +358,16 @@ void DCMTKImageIO::ReadImageInformation()
     case 4:
       this->m_PixelType = RGBA; break;
     }
+}
+
+bool DCMTKImageIO::GetReadFrameByFrame() const
+{
+    return m_ReadFrameByFrame;
+}
+
+void DCMTKImageIO::SetReadFrameByFrame(bool readFrameByFrame)
+{
+    m_ReadFrameByFrame = readFrameByFrame;
 }
 
 void

@@ -80,6 +80,10 @@ public:
    * that the IORegions has been set properly. */
   virtual void Write(const void *buffer);
 
+  /** If true, a multiframe image is read frame by frame, otherwise all frames are read at once. */
+  bool GetReadFrameByFrame() const;
+  void SetReadFrameByFrame(bool readFrameByFrame);
+
   DCMTKImageIO();
   ~DCMTKImageIO();
   void PrintSelf(std::ostream & os, Indent indent) const;
@@ -102,6 +106,8 @@ private:
   double      m_RescaleSlope;
   double      m_RescaleIntercept;
   std::string m_LastFileName;
+
+  bool m_ReadFrameByFrame;
 };
 } // end namespace itk
 
