@@ -160,7 +160,7 @@ DCMTKImageIO
         if (m_ReadFrameByFrame)
         {
             m_DImage = new DicomImage(dataset, dataset->getOriginalXfer(), this->m_RescaleSlope, this->m_RescaleIntercept,
-                                      CIF_TakeOverExternalDataset | CIF_UsePartialAccessToPixelData, 0, 1);
+                                      CIF_TakeOverExternalDataset | CIF_UsePartialAccessToPixelData | CIF_UseAbsolutePixelRange, 0, 1);
         }
         else
         {
