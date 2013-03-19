@@ -17,6 +17,7 @@ VolumePixelDataReaderITKDCMTK::VolumePixelDataReaderITKDCMTK(QObject *parent)
     m_seriesReader = SeriesReaderType::New();
 
     m_dcmtkIO = ImageIOType::New();
+    m_dcmtkIO->SetReadFrameByFrame(true);
 
     m_progressSignalAdaptor = new itk::QtSignalAdaptor();
     // Connect the adaptor as an observer of a Filter's event
