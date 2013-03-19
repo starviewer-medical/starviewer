@@ -264,8 +264,8 @@ void DCMTKImageIO::ReadImageInformation()
     }
   unsigned short rows,columns;
   reader.GetDimensions(rows,columns);
-  this->m_Dimensions[0] = rows;
-  this->m_Dimensions[1] = columns;
+  this->m_Dimensions[0] = columns;
+  this->m_Dimensions[1] = rows;
   this->m_Dimensions[2] = reader.GetFrameCount();
 
   vnl_vector<double> dir1(3),dir2(3),dir3(3);
