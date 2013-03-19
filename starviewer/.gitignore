@@ -10,7 +10,7 @@ src/main/extensions.h
 
 # Temporals of Qt Single Application
 bin/*.dylib
-src/thirdparty/qtsingleapplication/buildlib
+src/thirdparty/qtsingleapplication/buildlib/*/
 
 # Directories
 tmp
