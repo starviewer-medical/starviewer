@@ -1344,6 +1344,8 @@ DCMTKFileReader
   DCMTKItem item;
   DCMTKSequence subSequence;
 
+  origin[0] = origin[1] = origin[2] = 0.0;
+
   int rval = this->GetElementDS<double>(0x0020,0x0032,3,origin,false);
   if(rval != EXIT_SUCCESS)
     {
