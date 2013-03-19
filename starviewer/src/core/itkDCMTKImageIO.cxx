@@ -272,7 +272,7 @@ void DCMTKImageIO::ReadImageInformation()
   reader.GetDirCosines(dir1,dir2,dir3);
   this->SetDirection(0,dir1);
   this->SetDirection(1,dir2);
-  if(this->m_NumberOfDimensions > 2 && this->m_Dimensions[2] != 1)
+  if(this->m_NumberOfDimensions > 2)
     {
     this->SetDirection(2,dir3);
     }
