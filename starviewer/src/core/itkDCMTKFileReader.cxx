@@ -1165,6 +1165,7 @@ DCMTKFileReader
     case 16:
       pixelType = ImageIOBase::SCALAR;
       break;
+    case 3:
     case 24:
       pixelType = ImageIOBase::RGB;
       break;
