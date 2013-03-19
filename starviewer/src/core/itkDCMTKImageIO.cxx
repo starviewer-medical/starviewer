@@ -27,6 +27,7 @@
 #include "dcmtk/dcmjpeg/djdecode.h"
 #include "dcmtk/dcmjpls/djdecode.h"
 #include "dcmtk/dcmdata/dcrledrg.h"
+#include "dcmtk/dcmdata/dcfilefo.h"
 
 namespace itk
 {
@@ -149,8 +150,14 @@ DCMTKImageIO
     }
   if( m_DImage == NULL )
     {
-    m_DImage = new DicomImage( m_FileName.c_str() );
-    this->m_LastFileName = this->m_FileName;
+    DcmFileFormat dicomFile;
+    OFCondition status = dicomFile.loadFile(m_FileName.c_str());
+    if (status.good())
+    {
+        DcmDataset *dataset = dicomFile.getAndRemoveDataset();
+        m_DImage = new DicomImage(dataset, dataset->getOriginalXfer(), this->m_RescaleSlope, this->m_RescaleIntercept, CIF_TakeOverExternalDataset);
+        this->m_LastFileName = this->m_FileName;
+    }
     }
   if(this->m_DImage == 0)
     {
