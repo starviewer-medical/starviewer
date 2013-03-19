@@ -10,6 +10,7 @@
 #include "logging.h"
 #include "starviewerapplication.h"
 #include "coresettings.h"
+#include "computezspacingpostprocessor.h"
 
 #include <QMessageBox>
 
@@ -50,12 +51,14 @@ void VolumeReader::executePixelDataReader(Volume *volume)
         // Posem a punt el reader i llegim les dades
         PixelDataReaderType readerType = this->getSuitableReader(volume);
         this->setUpReader(readerType, showProgress);
+        this->setUpPostprocessors(readerType);
 
         m_lastError = m_volumePixelDataReader->read(fileList);
         if (m_lastError == VolumePixelDataReader::NoError)
         {
             // Tot ha anat ok, assignem les dades al volum
             volume->setPixelData(m_volumePixelDataReader->getVolumePixelData());
+            runPostprocessors(volume);
             fixSpacingIssues(volume);
         }
         else
@@ -373,6 +376,29 @@ void VolumeReader::setUpReader(PixelDataReaderType readerType, bool showProgress
     {
         // Connectem les senyals de notificació de progrés
         connect(m_volumePixelDataReader, SIGNAL(progress(int)), SIGNAL(progress(int)));
+    }
+}
+
+void VolumeReader::setUpPostprocessors(PixelDataReaderType readerType)
+{
+    m_postprocessorsQueue.clear();
+
+    switch (readerType)
+    {
+        case ITKDCMTKPixelDataReader:
+            m_postprocessorsQueue.enqueue(QSharedPointer<Postprocessor>(new ComputeZSpacingPostprocessor()));
+            break;
+
+        default:
+            break;
+    }
+}
+
+void VolumeReader::runPostprocessors(Volume *volume)
+{
+    while (!m_postprocessorsQueue.isEmpty())
+    {
+        m_postprocessorsQueue.dequeue()->postprocess(volume);
     }
 }
 
