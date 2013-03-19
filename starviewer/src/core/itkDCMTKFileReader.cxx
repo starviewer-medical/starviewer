@@ -1138,15 +1138,61 @@ int
 DCMTKFileReader
 ::GetSlopeIntercept(double &slope, double &intercept)
 {
-  if(this->GetElementDS<double>(0x0028,0x1053,1,&slope,false) != EXIT_SUCCESS)
-    {
     slope = 1.0;
-    }
-  if(this->GetElementDS<double>(0x0028,0x1052,1,&intercept,false) != EXIT_SUCCESS)
-    {
     intercept = 0.0;
+
+    int rval = this->GetElementDS<double>(0x0028, 0x1053, 1, &slope, false);
+    rval = this->GetElementDS<double>(0x0028, 0x1052, 1, &intercept, false);
+
+    if (rval != EXIT_SUCCESS)
+    {
+        DCMTKSequence sharedFunctionalGroupsSequence;
+        rval = this->GetElementSQ(0x5200, 0x9229, sharedFunctionalGroupsSequence, false);
+
+        if (rval == EXIT_SUCCESS)
+        {
+            DCMTKItem item;
+            rval = sharedFunctionalGroupsSequence.GetElementItem(0, item, false);
+
+            if (rval == EXIT_SUCCESS)
+            {
+                DCMTKSequence pixelValueTransformationSequence;
+                rval = item.GetElementSQ(0x0028, 0x9145, pixelValueTransformationSequence, false);
+
+                if (rval == EXIT_SUCCESS)
+                {
+                    rval = pixelValueTransformationSequence.GetElementDS<double>(0x0028, 0x1053, 1, &slope, false);
+                    rval = pixelValueTransformationSequence.GetElementDS<double>(0x0028, 0x1052, 1, &intercept, false);
+                }
+            }
+        }
     }
-  return EXIT_SUCCESS;
+
+    if (rval != EXIT_SUCCESS)
+    {
+        DCMTKSequence perFrameFunctionalGroupsSequence;
+        rval = this->GetElementSQ(0x5200, 0x9230, perFrameFunctionalGroupsSequence, false);
+
+        if (rval == EXIT_SUCCESS)
+        {
+            DCMTKItem item;
+            rval = perFrameFunctionalGroupsSequence.GetElementItem(0, item, false);
+
+            if (rval == EXIT_SUCCESS)
+            {
+                DCMTKSequence pixelValueTransformationSequence;
+                rval = item.GetElementSQ(0x0028, 0x9145, pixelValueTransformationSequence, false);
+
+                if (rval == EXIT_SUCCESS)
+                {
+                    rval = pixelValueTransformationSequence.GetElementDS<double>(0x0028, 0x1053, 1, &slope, false);
+                    rval = pixelValueTransformationSequence.GetElementDS<double>(0x0028, 0x1052, 1, &intercept, false);
+                }
+            }
+        }
+    }
+
+    return rval;
 }
 
 ImageIOBase::IOPixelType
