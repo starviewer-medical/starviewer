@@ -1,5 +1,6 @@
 #include "volumereader.h"
 
+#include "volumepixeldatareaderitkdcmtk.h"
 #include "volumepixeldatareaderitkgdcm.h"
 #include "volumepixeldatareadervtkgdcm.h"
 
@@ -265,6 +266,11 @@ VolumeReader::PixelDataReaderType VolumeReader::getSuitableReader(Volume *volume
         // Com que el reader de vtkGDCM decideix el tipus dinàmicament, allotjarem el tipus de pixel correcte
         return VTKGDCMPixelDataReader;
     }
+    else if (volume->isMultiframe())
+    {
+        // Si és un volum multiframe el llegirem amb ITK-DCMTK per evitar pics de memòria que es produeixen amb GDCM
+        return ITKDCMTKPixelDataReader;
+    }
     else
     {
         // TODO De moment, per defecte llegirem amb ITK-GDCM excepte en les condicions anteriors
@@ -291,6 +297,12 @@ bool VolumeReader::mustForceReaderLibraryBackdoor(Volume *volume, PixelDataReade
     {
         INFO_LOG("Forcem la lectura de qualsevol imatge amb itk");
         forcedReaderLibrary = ITKGDCMPixelDataReader;
+        forceLibrary = true;
+    }
+    else if (forceReadingWithSpecfiedLibrary == "itkdcmtk")
+    {
+        INFO_LOG("Forcem la lectura de qualsevol imatge amb itkdcmtk");
+        forcedReaderLibrary = ITKDCMTKPixelDataReader;
         forceLibrary = true;
     }
 
@@ -341,6 +353,11 @@ void VolumeReader::setUpReader(PixelDataReaderType readerType, bool showProgress
     // Segons quin pixel data reader estigui seleccionat, crearem l'objecte que toqui
     switch (readerType)
     {
+        case ITKDCMTKPixelDataReader:
+            m_volumePixelDataReader = new VolumePixelDataReaderITKDCMTK(this);
+            DEBUG_LOG("Escollim ITK-DCMTK per llegir la pixel data del volum");
+            break;
+
         case ITKGDCMPixelDataReader:
             m_volumePixelDataReader = new VolumePixelDataReaderITKGDCM(this);
             DEBUG_LOG("Escollim ITK-GDCM per llegir la pixel data del volum");

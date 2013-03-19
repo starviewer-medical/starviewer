@@ -296,7 +296,12 @@ HEADERS += extensionfactory.h \
     studylayoutconfigsloader.h \
     studylayoutmapper.h \
     optimalviewersgridestimator.h \
-    vtkimagedatacreator.h
+    vtkimagedatacreator.h \
+    itkDCMTKFileReader.h \
+    itkDCMTKImageIO.h \
+    itkDCMTKImageIOFactory.h \
+    itkDCMTKSeriesFileNames.h \
+    volumepixeldatareaderitkdcmtk.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -548,7 +553,12 @@ SOURCES += extensionmediator.cpp \
     studylayoutconfigsloader.cpp \
     studylayoutmapper.cpp \
     optimalviewersgridestimator.cpp \
-    vtkimagedatacreator.cpp
+    vtkimagedatacreator.cpp \
+    itkDCMTKFileReader.cxx \
+    itkDCMTKImageIO.cxx \
+    itkDCMTKImageIOFactory.cxx \
+    itkDCMTKSeriesFileNames.cxx \
+    volumepixeldatareaderitkdcmtk.cpp
 win32 {
     HEADERS += windowsfirewallaccess.h \
                windowssysteminformation.h
