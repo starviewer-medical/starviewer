@@ -1304,6 +1304,25 @@ DCMTKFileReader
 
     double _spacing[3] = { 1.0, 1.0, 1.0 };
 
+    auto getFromFunctionalGroupsSequence = [&](DCMTKSequence &functionalGroupsSequence, int itemIndex) -> int
+    {
+        DCMTKItem item;
+        int rval = functionalGroupsSequence.GetElementItem(itemIndex, item, false);
+
+        if (rval == EXIT_SUCCESS)
+        {
+            DCMTKSequence pixelMeasuresSequence;
+            rval = item.GetElementSQ(0x0028, 0x9110, pixelMeasuresSequence, false);
+
+            if (rval == EXIT_SUCCESS)
+            {
+                rval = pixelMeasuresSequence.GetElementDS<double>(0x0028, 0x0030, 2, _spacing, false);
+            }
+        }
+
+        return rval;
+    };
+
     // Pixel spacing
     int rval = this->GetElementDS<double>(0x0028, 0x0030, 2, _spacing, false);
 
@@ -1314,19 +1333,7 @@ DCMTKFileReader
 
         if (rval == EXIT_SUCCESS)
         {
-            DCMTKItem item;
-            rval = sharedFunctionalGroupsSequence.GetElementItem(0, item, false);
-
-            if (rval == EXIT_SUCCESS)
-            {
-                DCMTKSequence pixelMeasuresSequence;
-                rval = item.GetElementSQ(0x0028, 0x9110, pixelMeasuresSequence, false);
-
-                if (rval == EXIT_SUCCESS)
-                {
-                    rval = pixelMeasuresSequence.GetElementDS<double>(0x0028, 0x0030, 2, _spacing, false);
-                }
-            }
+            rval = getFromFunctionalGroupsSequence(sharedFunctionalGroupsSequence, 0);
         }
     }
 
@@ -1337,19 +1344,7 @@ DCMTKFileReader
 
         if (rval == EXIT_SUCCESS)
         {
-            DCMTKItem item;
-            rval = perFrameFunctionalGroupsSequence.GetElementItem(0, item, false);
-
-            if (rval == EXIT_SUCCESS)
-            {
-                DCMTKSequence pixelMeasuresSequence;
-                rval = item.GetElementSQ(0x0028, 0x9110, pixelMeasuresSequence, false);
-
-                if (rval == EXIT_SUCCESS)
-                {
-                    rval = pixelMeasuresSequence.GetElementDS<double>(0x0028, 0x0030, 2, _spacing, false);
-                }
-            }
+            rval = getFromFunctionalGroupsSequence(perFrameFunctionalGroupsSequence, 0);
         }
     }
 
