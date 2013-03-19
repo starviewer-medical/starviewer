@@ -3,8 +3,12 @@
 
 #include <QObject>
 
+#include <QQueue>
+#include <QSharedPointer>
+
 namespace udg {
 
+class Postprocessor;
 class Volume;
 class VolumePixelDataReader;
 
@@ -79,12 +83,20 @@ private:
     /// Podem especificar si volem que el reader ens doni el progrés o no.
     void setUpReader(PixelDataReaderType readerType, bool showProgress);
 
+    /// Prepara la cua de postprocessadors que requereix el tipus de reader passat.
+    void setUpPostprocessors(PixelDataReaderType readerType);
+    /// Treu i executa en ordre els postprocessadors de la cua sobre el volum passat.
+    void runPostprocessors(Volume *volume);
+
 private:
     /// Classe amb la qual llegirem les dades d'imatge del volum
     VolumePixelDataReader *m_volumePixelDataReader;
 
     /// Guardem l'ultim error que s'ha produit al llegir
     int m_lastError;
+
+    /// Cua on guardarem els postprocessadors que s'han d'executar després de llegir el volum.
+    QQueue<QSharedPointer<Postprocessor>> m_postprocessorsQueue;
 };
 
 } // End namespace udg
