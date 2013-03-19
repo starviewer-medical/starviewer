@@ -1141,6 +1141,26 @@ DCMTKFileReader
     slope = 1.0;
     intercept = 0.0;
 
+    auto getFromFunctionalGroupsSequence = [&](DCMTKSequence &functionalGroupsSequence, int itemIndex) -> int
+    {
+        DCMTKItem item;
+        int rval = functionalGroupsSequence.GetElementItem(itemIndex, item, false);
+
+        if (rval == EXIT_SUCCESS)
+        {
+            DCMTKSequence pixelValueTransformationSequence;
+            rval = item.GetElementSQ(0x0028, 0x9145, pixelValueTransformationSequence, false);
+
+            if (rval == EXIT_SUCCESS)
+            {
+                rval = pixelValueTransformationSequence.GetElementDS<double>(0x0028, 0x1053, 1, &slope, false);
+                rval = pixelValueTransformationSequence.GetElementDS<double>(0x0028, 0x1052, 1, &intercept, false);
+            }
+        }
+
+        return rval;
+    };
+
     int rval = this->GetElementDS<double>(0x0028, 0x1053, 1, &slope, false);
     rval = this->GetElementDS<double>(0x0028, 0x1052, 1, &intercept, false);
 
@@ -1151,20 +1171,7 @@ DCMTKFileReader
 
         if (rval == EXIT_SUCCESS)
         {
-            DCMTKItem item;
-            rval = sharedFunctionalGroupsSequence.GetElementItem(0, item, false);
-
-            if (rval == EXIT_SUCCESS)
-            {
-                DCMTKSequence pixelValueTransformationSequence;
-                rval = item.GetElementSQ(0x0028, 0x9145, pixelValueTransformationSequence, false);
-
-                if (rval == EXIT_SUCCESS)
-                {
-                    rval = pixelValueTransformationSequence.GetElementDS<double>(0x0028, 0x1053, 1, &slope, false);
-                    rval = pixelValueTransformationSequence.GetElementDS<double>(0x0028, 0x1052, 1, &intercept, false);
-                }
-            }
+            rval = getFromFunctionalGroupsSequence(sharedFunctionalGroupsSequence, 0);
         }
     }
 
@@ -1175,20 +1182,7 @@ DCMTKFileReader
 
         if (rval == EXIT_SUCCESS)
         {
-            DCMTKItem item;
-            rval = perFrameFunctionalGroupsSequence.GetElementItem(0, item, false);
-
-            if (rval == EXIT_SUCCESS)
-            {
-                DCMTKSequence pixelValueTransformationSequence;
-                rval = item.GetElementSQ(0x0028, 0x9145, pixelValueTransformationSequence, false);
-
-                if (rval == EXIT_SUCCESS)
-                {
-                    rval = pixelValueTransformationSequence.GetElementDS<double>(0x0028, 0x1053, 1, &slope, false);
-                    rval = pixelValueTransformationSequence.GetElementDS<double>(0x0028, 0x1052, 1, &intercept, false);
-                }
-            }
+            rval = getFromFunctionalGroupsSequence(perFrameFunctionalGroupsSequence, 0);
         }
     }
 
