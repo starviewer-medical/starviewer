@@ -1154,7 +1154,7 @@ DCMTKFileReader
 ::GetImagePixelType()
 {
   unsigned short SamplesPerPixel;
-  if(this->GetElementUS(0x0028,0x0100,SamplesPerPixel,false) != EXIT_SUCCESS)
+  if(this->GetElementUS(0x0028,0x0002,SamplesPerPixel,false) != EXIT_SUCCESS)
     {
     return ImageIOBase::UNKNOWNPIXELTYPE;
     }
