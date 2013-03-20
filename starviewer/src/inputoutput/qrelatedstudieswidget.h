@@ -75,7 +75,7 @@ private:
 
 private slots:
     /// Insereix els estudis a l'arbre.
-    void insertStudiesToTree(QList<Study*> studiesList);
+    void insertStudiesToTree(const QList<Study*> &studiesList);
 
     /// Invoca la descàrrega i càrrega de l'estudi identificat amb l'uid proporcionat.
     void retrieveAndViewStudy(const QString &studyInstanceUID);
