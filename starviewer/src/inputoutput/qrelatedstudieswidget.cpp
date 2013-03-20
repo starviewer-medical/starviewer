@@ -260,7 +260,7 @@ void QRelatedStudiesWidget::updateWidgetHeight()
     }
 }
 
-void QRelatedStudiesWidget::insertStudiesToTree(QList<Study*> studiesList)
+void QRelatedStudiesWidget::insertStudiesToTree(const QList<Study*> &studiesList)
 {
     if (studiesList.size() > 0)
     {
