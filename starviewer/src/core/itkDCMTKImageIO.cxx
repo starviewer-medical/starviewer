@@ -69,8 +69,8 @@ DCMTKImageIO::~DCMTKImageIO()
     {
     delete m_DImage;
     }
-  DJDecoderRegistration::cleanup();
-  DcmRLEDecoderRegistration::cleanup();
+  //DJDecoderRegistration::cleanup();
+  //DcmRLEDecoderRegistration::cleanup();
 }
 
 bool DCMTKImageIO::CanReadFile(const char *filename)
