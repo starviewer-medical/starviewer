@@ -272,10 +272,41 @@ DicomMask RelatedStudiesManager::getBasicDicomMask()
     return dicomMask;
 }
 
-void RelatedStudiesManager::downloadStudy(Study *study, const PacsDevice &pacsDevice)
+void RelatedStudiesManager::retrieve(Study *study, const PacsDevice &pacsDevice)
 {
+    retrieveAndApplyAction(study, pacsDevice, None);
+}
+
+void RelatedStudiesManager::retrieveAndLoad(Study *study, const PacsDevice &pacsDevice)
+{
+    retrieveAndApplyAction(study, pacsDevice, Load);
+}
+
+void RelatedStudiesManager::retrieveAndView(Study *study, const PacsDevice &pacsDevice)
+{
+    retrieveAndApplyAction(study, pacsDevice, View);
+}
+
+void RelatedStudiesManager::retrieveAndApplyAction(Study *study, const PacsDevice &pacsDevice, ActionsAfterRetrieve action)
+{
+    QInputOutputPacsWidget::ActionsAfterRetrieve queryScreenAction = QInputOutputPacsWidget::None;
+    switch (action)
+    {
+        case None:
+            queryScreenAction = QInputOutputPacsWidget::None;
+            break;
+
+        case View:
+            queryScreenAction = QInputOutputPacsWidget::View;
+            break;
+
+        case Load:
+            queryScreenAction = QInputOutputPacsWidget::Load;
+            break;
+    }
+    
     QueryScreen *queryScreen = SingletonPointer<QueryScreen>::instance();
-    queryScreen->retrieveStudy(QInputOutputPacsWidget::Load, pacsDevice, study);
+    queryScreen->retrieveStudy(queryScreenAction, pacsDevice, study);
     connect(queryScreen, SIGNAL(studyRetrieveFailed(QString)), SIGNAL(errorDownloadingStudy(QString)));
 }
 

@@ -248,8 +248,8 @@ void HangingProtocolManager::applyHangingProtocol(HangingProtocol *hangingProtoc
             {
                 //En principi sempre hauríem de tenir algun PACS al DICOMSource
                 connect(m_patient, SIGNAL(patientFused()), SLOT(previousStudyDownloaded()));
-                m_relatedStudiesManager->downloadStudy(hangingProtocolImageSet->getPreviousStudyToDisplay(),
-                                                        hangingProtocolImageSet->getPreviousStudyToDisplay()->getDICOMSource().getRetrievePACS().at(0));
+                m_relatedStudiesManager->retrieveAndLoad(hangingProtocolImageSet->getPreviousStudyToDisplay(),
+                    hangingProtocolImageSet->getPreviousStudyToDisplay()->getDICOMSource().getRetrievePACS().at(0));
             }
         }
         else

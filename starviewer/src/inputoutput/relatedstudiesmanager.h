@@ -49,8 +49,14 @@ public:
     /// Indica si s'executen queries en aquest moment
     bool isExecutingQueries();
 
-    /// Mètode per demanar que es descarregui un estudi
-    void downloadStudy(Study *study, const PacsDevice &pacsDevice);
+    /// Retrieves (only) the given study from the specified PACS
+    void retrieve(Study *study, const PacsDevice &pacsDevice);
+
+    /// Retrieves and loads the given study from the specified PACS
+    void retrieveAndLoad(Study *study, const PacsDevice &pacsDevice);
+
+    /// Retrieves and views the given study from the specified PACS
+    void retrieveAndView(Study *study, const PacsDevice &pacsDevice);
 
 signals:
     /// Signal que s'emet quan ha finalitzat la consulta d'estudis. La llista amb els resultats s'esborrarà quan es demani una altra cerca.
@@ -101,6 +107,13 @@ private:
 
     /// Retorna una llista indicant de quins PACS s'han descarregat els estudis que conté el pacient, sempre que continguin aquesta informació al DICOMSource
     QList<PacsDevice> getPACSRetrievedStudiesOfPatient(Patient *patient);
+    
+    /// TODO This enum is the very same as QInputOutputPacsWidget::ActionsAfterRetrieve. We don't use that to avoid dependencies in the header file.
+    /// Maybe a common enum for both classes could improve this.
+    enum ActionsAfterRetrieve { None, View, Load };
+    
+    /// Retrieves the given study from the specified PACS and applies the given action upon retrieval
+    void retrieveAndApplyAction(Study *study, const PacsDevice &pacsDevice, ActionsAfterRetrieve action);
 
 private slots:
     /// Slot que s'activa quan finalitza un job de consulta al PACS
