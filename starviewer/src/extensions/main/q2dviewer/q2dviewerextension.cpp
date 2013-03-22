@@ -216,28 +216,18 @@ void Q2DViewerExtension::onPatientUpdated()
     updateRelatedStudiesWidget();
 }
 
+#ifdef STARVIEWER_LITE
 void Q2DViewerExtension::setInput(Volume *input)
 {
-#ifdef STARVIEWER_LITE
+
     m_workingArea->setGrid(1, 1);
     m_workingArea->setSelectedViewer(m_workingArea->getViewerWidget(0));
     if (input)
     {
         m_workingArea->getViewerWidget(0)->setInput(input);
     }
-#else
-
-    setupHangingProtocols();
-    applyProperLayoutChoice();
-    m_workingArea->setSelectedViewer(m_workingArea->getViewerWidget(0));
-
-    // Habilitem la possibilitat de buscar estudis relacionats.
-    m_relatedStudiesToolButton->setEnabled(true);
-    m_relatedStudiesWidget->searchStudiesOf(m_patient);
-
-    searchPreviousStudiesWithHangingProtocols();
-#endif
 }
+#endif
 
 #ifndef STARVIEWER_LITE
 void Q2DViewerExtension::searchAndApplyBestHangingProtocol()
@@ -416,6 +406,18 @@ void Q2DViewerExtension::setPatient(Patient *patient)
     }
 
     setupDefaultLeftButtonTool();
+
+#ifndef STARVIEWER_LITE
+    setupHangingProtocols();
+    applyProperLayoutChoice();
+    m_workingArea->setSelectedViewer(m_workingArea->getViewerWidget(0));
+    
+    // Habilitem la possibilitat de buscar estudis relacionats.
+    m_relatedStudiesToolButton->setEnabled(true);
+    m_relatedStudiesWidget->searchStudiesOf(m_patient);
+
+    searchPreviousStudiesWithHangingProtocols();
+#endif
 }
 
 void Q2DViewerExtension::initializeTools()

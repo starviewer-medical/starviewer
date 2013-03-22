@@ -43,8 +43,10 @@ public:
     Q2DViewerExtension(QWidget *parent = 0);
     ~Q2DViewerExtension();
 
+#ifdef STARVIEWER_LITE
     /// Li assigna el volum principal
     void setInput(Volume *input);
+#endif
 
     /// Mètode per assignar un pacient
     void setPatient(Patient *patient);

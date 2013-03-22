@@ -30,7 +30,6 @@ bool Q2DViewerExtensionMediator::initializeExtension(QWidget *extension, const E
         return false;
     }
 
-    q2dviewerExtension->setPatient(extensionContext.getPatient());
     Volume *input = extensionContext.getDefaultVolume();
     // Si no tenim cap volum, alertem a l'usuari
     if (!input)
@@ -38,8 +37,11 @@ bool Q2DViewerExtensionMediator::initializeExtension(QWidget *extension, const E
         QMessageBox::information(0, ApplicationNameString, tr("There is not any viewable or supported Series in the selected Studies"));
     }
 
+    q2dviewerExtension->setPatient(extensionContext.getPatient());
+#ifdef STARVIEWER_LITE
     // Assignem l'input per defecte al visor
     q2dviewerExtension->setInput(input);
+#endif
 
     return true;
 }
