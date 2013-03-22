@@ -383,26 +383,27 @@ void Q2DViewerExtension::setupDefaultLeftButtonTool()
 
 void Q2DViewerExtension::showPredefinedGrid()
 {
-    QPoint point = m_buttonGrid->mapToGlobal(QPoint(0, 0));
-    m_hangingProtocolsMenu->move(point.x(), (point.y() + m_buttonGrid->frameGeometry().height()));
-    m_hangingProtocolsMenu->show();
+    showWidgetBelowButton(m_hangingProtocolsMenu, m_buttonGrid);
 }
 
 void Q2DViewerExtension::showInteractiveTable()
 {
-    QPoint point = m_buttonGrid->mapToGlobal(QPoint(0, 0));
-    m_seriesTableGrid->move(point.x(), (point.y() + m_buttonGrid->frameGeometry().height()));
-    m_seriesTableGrid->show();
+    showWidgetBelowButton(m_seriesTableGrid, m_buttonGrid);
 }
 
 #ifndef STARVIEWER_LITE
 void Q2DViewerExtension::showRelatedStudiesWidget()
 {
-    QPoint point = m_relatedStudiesToolButton->mapToGlobal(QPoint(0, 0));
-    m_relatedStudiesWidget->move(point.x(), (point.y() + m_relatedStudiesToolButton->frameGeometry().height()));
-    m_relatedStudiesWidget->show();
+    showWidgetBelowButton(m_relatedStudiesWidget, m_relatedStudiesToolButton);
 }
 #endif
+
+void Q2DViewerExtension::showWidgetBelowButton(QWidget *widget, QAbstractButton *button)
+{
+    QPoint point = button->mapToGlobal(QPoint(0, 0));
+    widget->move(point.x(), (point.y() + button->frameGeometry().height()));
+    widget->show();
+}
 
 Patient* Q2DViewerExtension::getPatient() const
 {
