@@ -221,9 +221,12 @@ void Q2DViewerExtension::setInput(Volume *input)
     m_mainVolume = input;
 
 #ifdef STARVIEWER_LITE
-    Q2DViewerWidget *viewerWidget = m_workingArea->addViewer("0.0\\1.0\\1.0\\0.0");
-    viewerWidget->setInput(m_mainVolume);
+    m_workingArea->setGrid(1, 1);
     m_workingArea->setSelectedViewer(m_workingArea->getViewerWidget(0));
+    if (input)
+    {
+        m_workingArea->getViewerWidget(0)->setInput(input);
+    }
 #else
 
     setupHangingProtocols();
