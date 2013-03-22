@@ -862,6 +862,31 @@ QList<StudyLayoutConfig> Q2DViewerExtension::getLayoutCandidates(Patient *patien
     return configurationCandidates;
 }
 
+void Q2DViewerExtension::applyLayoutCandidates(const QList<StudyLayoutConfig> &candidates, Patient *patient)
+{
+    QStringList patientModalities;
+    foreach (Study *study, m_patient->getStudies())
+    {
+        patientModalities << study->getModalities();
+    }
+    
+    StudyLayoutConfig layoutToApply;
+    if (!candidates.isEmpty())
+    {
+        // TODO We only take into account the first candidate, the others, if any, are discarded. We should take them into account too.
+        layoutToApply = candidates.first();
+    }
+    else
+    {
+        // If no candidate found, we choose a default configuration.
+        // This default configuration is not yet configurable through settings, could be done in a future enhancement.
+        layoutToApply = StudyLayoutConfigsLoader::getDefaultConfigForModality(patientModalities.first());
+    }
+
+    StudyLayoutMapper mapper;
+    mapper.applyConfig(layoutToApply, m_workingArea, m_patient);
+}
+
 #ifndef STARVIEWER_LITE
 void Q2DViewerExtension::showScreenshotsExporterDialog()
 {

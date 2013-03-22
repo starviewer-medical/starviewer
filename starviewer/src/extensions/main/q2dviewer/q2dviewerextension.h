@@ -96,6 +96,9 @@ private:
     /// Returns a list of StudyLayoutConfig corresponding to the given Patient
     QList<StudyLayoutConfig> getLayoutCandidates(Patient *patient);
 
+    /// Applies the proper layout candidate from the list for the given Patient
+    void applyLayoutCandidates(const QList<StudyLayoutConfig> &candidates, Patient *patient);
+
 private slots:
 #ifndef STARVIEWER_LITE
     /// Comprova si el nou volum té fases i per tant hem d'activar/descativar la vista coronal+sagital
