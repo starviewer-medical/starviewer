@@ -41,6 +41,7 @@
 #include "studylayoutconfig.h"
 #include "studylayoutmapper.h"
 #include "studylayoutconfigsettingsmanager.h"
+#include "studylayoutconfigsloader.h"
 
 namespace udg {
 
