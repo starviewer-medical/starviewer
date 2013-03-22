@@ -811,15 +811,7 @@ void Q2DViewerExtension::applyProperLayoutChoice()
     if (matchingModalities.isEmpty())
     {
         // Primer trobem quines configuracions candidates tenim segons les modalitats del pacient
-        StudyLayoutConfigSettingsManager settingsManager;
-        QList<StudyLayoutConfig> configurationCandidates;
-        foreach (const StudyLayoutConfig &currentConfig, settingsManager.getConfigList())
-        {
-            if (!m_patient->getStudiesByModality(currentConfig.getModality()).isEmpty())
-            {
-                configurationCandidates << currentConfig;
-            }
-        }
+        QList<StudyLayoutConfig> configurationCandidates = getLayoutCandidates(m_patient);
 
         if (!configurationCandidates.isEmpty())
         {
@@ -847,6 +839,27 @@ void Q2DViewerExtension::applyProperLayoutChoice()
         // Actualizem HPs només
         searchHangingProtocols();
     }
+}
+
+QList<StudyLayoutConfig> Q2DViewerExtension::getLayoutCandidates(Patient *patient)
+{
+    QList<StudyLayoutConfig> configurationCandidates;
+    
+    if (!patient)
+    {
+        return configurationCandidates;
+    }
+    
+    StudyLayoutConfigSettingsManager settingsManager;
+    foreach (const StudyLayoutConfig &currentConfig, settingsManager.getConfigList())
+    {
+        if (!patient->getStudiesByModality(currentConfig.getModality()).isEmpty())
+        {
+            configurationCandidates << currentConfig;
+        }
+    }
+
+    return configurationCandidates;
 }
 
 #ifndef STARVIEWER_LITE
