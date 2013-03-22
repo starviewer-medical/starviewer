@@ -181,8 +181,8 @@ Q2DViewerExtension::~Q2DViewerExtension()
 void Q2DViewerExtension::createConnections()
 {
     // Menus
-    connect(m_hangingProtocolsMenuButton, SIGNAL(clicked(bool)), SLOT(showPredefinedGrid()));
-    connect(m_viewersLayoutGridButton, SIGNAL(clicked(bool)), SLOT(showInteractiveTable()));
+    connect(m_hangingProtocolsMenuButton, SIGNAL(clicked(bool)), SLOT(showAvailableHangingProtocolsMenu()));
+    connect(m_viewersLayoutGridButton, SIGNAL(clicked(bool)), SLOT(showViewersLayoutGridTable()));
 
     // Connexions del menu
     connect(m_hangingProtocolsMenu, SIGNAL(selectedGrid(int)), this, SLOT(setHangingProtocol(int)));
@@ -381,12 +381,12 @@ void Q2DViewerExtension::setupDefaultLeftButtonTool()
     }
 }
 
-void Q2DViewerExtension::showPredefinedGrid()
+void Q2DViewerExtension::showAvailableHangingProtocolsMenu()
 {
     showWidgetBelowButton(m_hangingProtocolsMenu, m_viewersLayoutGridButton);
 }
 
-void Q2DViewerExtension::showInteractiveTable()
+void Q2DViewerExtension::showViewersLayoutGridTable()
 {
     showWidgetBelowButton(m_seriesTableGrid, m_viewersLayoutGridButton);
 }
