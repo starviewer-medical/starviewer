@@ -197,9 +197,6 @@ private slots:
     void setGrid(int rows, int columns);
 
 private:
-    /// El volum principal
-    Volume *m_mainVolume;
-
     /// Accions
     QAction *m_singleShotAction;
     QAction *m_multipleShotAction;
