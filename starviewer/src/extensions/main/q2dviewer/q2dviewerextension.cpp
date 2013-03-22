@@ -811,18 +811,7 @@ void Q2DViewerExtension::applyProperLayoutChoice()
     if (matchingModalities.isEmpty())
     {
         // Primer trobem quines configuracions candidates tenim segons les modalitats del pacient
-        QList<StudyLayoutConfig> configurationCandidates = getLayoutCandidates(m_patient);
-
-        if (!configurationCandidates.isEmpty())
-        {
-            // TODO De moment només provem amb el primer
-            StudyLayoutMapper mapper;
-            mapper.applyConfig(configurationCandidates.first(), m_workingArea, m_patient);
-        }
-        else
-        {
-            hasToApplyHangingProtocol = true;
-        }
+        applyLayoutCandidates(getLayoutCandidates(m_patient), m_patient);
     }
     else
     {
