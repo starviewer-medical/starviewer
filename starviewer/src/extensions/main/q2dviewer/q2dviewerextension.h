@@ -99,6 +99,9 @@ private:
     /// Applies the proper layout candidate from the list for the given Patient
     void applyLayoutCandidates(const QList<StudyLayoutConfig> &candidates, Patient *patient);
 
+    /// Shows the given widget below the button, as if it was the button's menu
+    void showWidgetBelowButton(QWidget *widget, QAbstractButton *button);
+
 private slots:
 #ifndef STARVIEWER_LITE
     /// Comprova si el nou volum té fases i per tant hem d'activar/descativar la vista coronal+sagital
