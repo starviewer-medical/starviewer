@@ -65,7 +65,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_cursor3DToolButton->hide();
     m_relatedStudiesToolButton->hide();
     m_screenshotsExporterToolButton->hide();
-    m_downButtonGrid->hide();
+    m_hangingProtocolsMenuButton->hide();
     m_automaticSynchronizationToolButton->hide();
     m_synchronizeAllViewersButton->hide();
     m_desynchronizeAllViewersButton->hide();
@@ -181,8 +181,8 @@ Q2DViewerExtension::~Q2DViewerExtension()
 void Q2DViewerExtension::createConnections()
 {
     // Menus
-    connect(m_downButtonGrid, SIGNAL(clicked(bool)), SLOT(showPredefinedGrid()));
-    connect(m_buttonGrid, SIGNAL(clicked(bool)), SLOT(showInteractiveTable()));
+    connect(m_hangingProtocolsMenuButton, SIGNAL(clicked(bool)), SLOT(showPredefinedGrid()));
+    connect(m_viewersLayoutGridButton, SIGNAL(clicked(bool)), SLOT(showInteractiveTable()));
 
     // Connexions del menu
     connect(m_hangingProtocolsMenu, SIGNAL(selectedGrid(int)), this, SLOT(setHangingProtocol(int)));
@@ -383,12 +383,12 @@ void Q2DViewerExtension::setupDefaultLeftButtonTool()
 
 void Q2DViewerExtension::showPredefinedGrid()
 {
-    showWidgetBelowButton(m_hangingProtocolsMenu, m_buttonGrid);
+    showWidgetBelowButton(m_hangingProtocolsMenu, m_viewersLayoutGridButton);
 }
 
 void Q2DViewerExtension::showInteractiveTable()
 {
-    showWidgetBelowButton(m_seriesTableGrid, m_buttonGrid);
+    showWidgetBelowButton(m_seriesTableGrid, m_viewersLayoutGridButton);
 }
 
 #ifndef STARVIEWER_LITE

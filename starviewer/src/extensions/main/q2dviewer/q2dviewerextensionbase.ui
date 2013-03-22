@@ -42,7 +42,7 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QToolButton" name="m_buttonGrid">
+          <widget class="QToolButton" name="m_viewersLayoutGridButton">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -77,7 +77,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="m_downButtonGrid">
+          <widget class="QToolButton" name="m_hangingProtocolsMenuButton">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
