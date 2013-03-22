@@ -26,17 +26,11 @@ public:
 
     /// Assigna/Obté el nom complet del pacient
     void setFullName(const QString &name);
-    QString getFullName() const
-    {
-        return m_fullName;
-    }
+    QString getFullName() const;
 
     /// Assigna/Obté l'ID del pacient
     void setID(const QString &id);
-    QString getID() const
-    {
-        return m_patientID;
-    }
+    QString getID() const;
 
     /// Assigna/Obté el ID de pacient a la BD d'Starviewer
     void setDatabaseID(qlonglong databaseID);
@@ -53,10 +47,7 @@ public:
 
     /// Assigna/Obté sexe del pacient
     void setSex(const QString &sex);
-    inline QString getSex() const
-    {
-        return m_sex;
-    };
+    QString getSex() const;
 
     /// Afegeix un nou estudi. A l'estudi se li assigna com a "parentPatient" aquest Patient.
     /// Retorna fals si existeix un estudi ja amb el mateix uid o l'uid és buit.

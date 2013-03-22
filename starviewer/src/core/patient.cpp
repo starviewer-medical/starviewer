@@ -35,9 +35,19 @@ void Patient::setFullName(const QString &name)
     m_fullName = name;
 }
 
+QString Patient::getFullName() const
+{
+    return m_fullName;
+}
+
 void Patient::setID(const QString &id)
 {
     m_patientID = id;
+}
+
+QString Patient::getID() const
+{
+    return m_patientID;
 }
 
 void Patient::setDatabaseID(qlonglong databaseID)
@@ -88,6 +98,11 @@ int Patient::getYearOfBirth()
 void Patient::setSex(const QString &sex)
 {
     m_sex = sex;
+}
+
+QString Patient::getSex() const
+{
+    return m_sex;
 }
 
 bool Patient::addStudy(Study *study)
