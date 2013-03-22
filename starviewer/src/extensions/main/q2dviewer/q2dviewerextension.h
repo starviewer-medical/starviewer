@@ -134,13 +134,11 @@ private slots:
     /// Si enable és true, activa el gruix màxim a tots els visors on hi hagi algun mode de thickslab actiu
     void enableMaximumThicknessMode(bool enable);
 
-    /// Mostrar menu per seleccionar grid predefinit
-    /// TODO S'ha de canviar el mètode per tal que no es crei l'objecte cada cop
-    void showPredefinedGrid();
+    /// Shows a widget with the available Hanging Protocols for the current Patient below its button
+    void showAvailableHangingProtocolsMenu();
 
-    /// Mostrar el menu de la taula per seleccionar grids
-    /// TODO S'ha de canviar el mètode per tal que no es crei l'objecte cada cop
-    void showInteractiveTable();
+    /// Shows a widget with an interactive grid table to select the desired viewers layout below its corresponding button
+    void showViewersLayoutGridTable();
 
     /// Mostra o amaga els overlays de cada visualitzador
     void showImageOverlays(bool show);
