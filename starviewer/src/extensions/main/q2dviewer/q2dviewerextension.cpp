@@ -181,8 +181,8 @@ Q2DViewerExtension::~Q2DViewerExtension()
 void Q2DViewerExtension::createConnections()
 {
     // Menus
-    connect(m_downButtonGrid, SIGNAL(clicked (bool)), SLOT(showPredefinedGrid()));
-    connect(m_buttonGrid, SIGNAL(clicked (bool)), SLOT(showInteractiveTable()));
+    connect(m_downButtonGrid, SIGNAL(clicked(bool)), SLOT(showPredefinedGrid()));
+    connect(m_buttonGrid, SIGNAL(clicked(bool)), SLOT(showInteractiveTable()));
 
     // Connexions del menu
     connect(m_hangingProtocolsMenu, SIGNAL(selectedGrid(int)), this, SLOT(setHangingProtocol(int)));
@@ -298,7 +298,6 @@ void Q2DViewerExtension::searchPreviousStudiesWithHangingProtocols()
     if (m_mainVolume)
     {
         studyToSearchFrom = m_mainVolume->getStudy();
-        
     }
     else
     {
@@ -318,11 +317,8 @@ void Q2DViewerExtension::addHangingProtocolsWithPrevious(QList<Study*> studies)
 
 void Q2DViewerExtension::setupDefaultToolsForModalities(const QStringList &modalities)
 {
-
 #ifndef STARVIEWER_LITE
-
     Settings settings;
-
     bool enableReferenceLinesForMR = settings.getValue(CoreSettings::EnableQ2DViewerReferenceLinesForMR).toBool();
     bool enableReferenceLinesForCT = settings.getValue(CoreSettings::EnableQ2DViewerReferenceLinesForCT).toBool();
     
@@ -346,7 +342,6 @@ void Q2DViewerExtension::setupDefaultToolsForModalities(const QStringList &modal
     {
         m_automaticSynchronizationToolButton->defaultAction()->setChecked(false);
     }
-
 #endif
 }
 
@@ -1006,7 +1001,8 @@ void Q2DViewerExtension::enableAutomaticSynchronizationToViewer(bool enable)
 {
     if (enable)
     {
-        disableSynchronization();//Desactivem sincronització manual, però no el botó
+        // Desactivem sincronització manual, però no el botó
+        disableSynchronization();
 
         Tool *tool = m_workingArea->getSelectedViewer()->getViewer()->getToolProxy()->getTool("AutomaticSynchronizationTool");
         AutomaticSynchronizationToolData *toolData = dynamic_cast<AutomaticSynchronizationToolData*>(tool->getToolData());
@@ -1036,7 +1032,6 @@ void Q2DViewerExtension::activateManualSynchronizationInAllViewers()
     }
     m_automaticSynchronizationToolButton->defaultAction()->setChecked(false);
     m_toolManager->deactivateTool("AutomaticSynchronizationTool");
-
 }
 
 void Q2DViewerExtension::deactivateManualSynchronizationInAllViewers()
@@ -1061,7 +1056,6 @@ void Q2DViewerExtension::manualSynchronizationActivated(bool activated)
         m_automaticSynchronizationToolButton->defaultAction()->setChecked(false);
         m_toolManager->deactivateTool("AutomaticSynchronizationTool");
     }
-    
 }
 
 #endif
