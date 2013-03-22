@@ -77,7 +77,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
 #endif
 
     m_hangingProtocolsMenu = new MenuGridWidget(this);
-    m_seriesTableGrid = new TableMenu(this);
+    m_viewersLayoutGrid = new TableMenu(this);
 
     m_dicomDumpCurrentDisplayedImage = new QDICOMDumpBrowser(this);
 
@@ -174,7 +174,7 @@ Q2DViewerExtension::~Q2DViewerExtension()
 #endif
 
     delete m_hangingProtocolsMenu;
-    delete m_seriesTableGrid;
+    delete m_viewersLayoutGrid;
     delete m_dicomDumpCurrentDisplayedImage;
 }
 
@@ -186,7 +186,7 @@ void Q2DViewerExtension::createConnections()
 
     // Connexions del menu
     connect(m_hangingProtocolsMenu, SIGNAL(selectedGrid(int)), this, SLOT(setHangingProtocol(int)));
-    connect(m_seriesTableGrid, SIGNAL(selectedGrid(int, int)), this, SLOT(setGrid(int, int)));
+    connect(m_viewersLayoutGrid, SIGNAL(selectedGrid(int, int)), this, SLOT(setGrid(int, int)));
 
     // Per mostrar la informació DICOM de la imatge que s'està veient en aquell moment
     connect(m_dicomDumpToolButton, SIGNAL(clicked()), SLOT(showDicomDumpCurrentDisplayedImage()));
@@ -388,7 +388,7 @@ void Q2DViewerExtension::showAvailableHangingProtocolsMenu()
 
 void Q2DViewerExtension::showViewersLayoutGridTable()
 {
-    showWidgetBelowButton(m_seriesTableGrid, m_viewersLayoutGridButton);
+    showWidgetBelowButton(m_viewersLayoutGrid, m_viewersLayoutGridButton);
 }
 
 #ifndef STARVIEWER_LITE

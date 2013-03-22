@@ -228,7 +228,7 @@ private:
     MenuGridWidget *m_hangingProtocolsMenu;
 
     /// Widget per escollir una distribució de visors definida per l'usuari
-    TableMenu *m_seriesTableGrid;
+    TableMenu *m_viewersLayoutGrid;
 
     /// ToolManager per configurar l'entorn deToolConfiguration * configuration = getConfiguration();
     ToolManager *m_toolManager;
