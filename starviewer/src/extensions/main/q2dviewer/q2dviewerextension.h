@@ -25,6 +25,7 @@ class MenuGridWidget;
 class TableMenu;
 class QDICOMDumpBrowser;
 class StatsWatcher;
+class StudyLayoutConfig;
 
 #ifndef STARVIEWER_LITE
 class QRelatedStudiesWidget;
@@ -91,6 +92,9 @@ private:
 
     /// Determina com fem el layout del pacient que es carrega, si amb layout automàtic o amb hanging protocols
     void applyProperLayoutChoice();
+
+    /// Returns a list of StudyLayoutConfig corresponding to the given Patient
+    QList<StudyLayoutConfig> getLayoutCandidates(Patient *patient);
 
 private slots:
 #ifndef STARVIEWER_LITE
