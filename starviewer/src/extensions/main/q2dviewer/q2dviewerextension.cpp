@@ -46,7 +46,7 @@
 namespace udg {
 
 Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
- : QWidget(parent), m_mainVolume(0), m_patient(0), m_lastSelectedViewer(0)
+ : QWidget(parent), m_patient(0), m_lastSelectedViewer(0)
 {
     setupUi(this);
     Q2DViewerSettings().init();
@@ -218,8 +218,6 @@ void Q2DViewerExtension::onPatientUpdated()
 
 void Q2DViewerExtension::setInput(Volume *input)
 {
-    m_mainVolume = input;
-
 #ifdef STARVIEWER_LITE
     m_workingArea->setGrid(1, 1);
     m_workingArea->setSelectedViewer(m_workingArea->getViewerWidget(0));
@@ -235,15 +233,7 @@ void Q2DViewerExtension::setInput(Volume *input)
 
     // Habilitem la possibilitat de buscar estudis relacionats.
     m_relatedStudiesToolButton->setEnabled(true);
-    if (m_mainVolume)
-    {
-        m_relatedStudiesWidget->searchStudiesOf(m_mainVolume->getPatient());
-    }
-    else
-    {
-        // Si no tenim volum, farem servir el pacient actual directament
-        m_relatedStudiesWidget->searchStudiesOf(m_patient);
-    }
+    m_relatedStudiesWidget->searchStudiesOf(m_patient);
 
     searchPreviousStudiesWithHangingProtocols();
 #endif
@@ -297,16 +287,10 @@ void Q2DViewerExtension::searchPreviousStudiesWithHangingProtocols()
     }
     
     // 4.- Es busquen els previs
-    Study *studyToSearchFrom = 0;
-    if (m_mainVolume)
-    {
-        studyToSearchFrom = m_mainVolume->getStudy();
-    }
-    else
-    {
-        // En el cas que no tinguéssim un input vàlid, ho farem a partir del pacient actual
-        studyToSearchFrom = m_patient->getStudies().first();
-    }
+    // En el cas que no tinguéssim un input vàlid, ho farem a partir del pacient actual
+    // TODO Improve the way to choose from wich study to search from. Do we want to search from the most recent study only?
+    Study *studyToSearchFrom = m_patient->getStudies().first();
+    
     m_relatedStudiesManager->queryMergedPreviousStudies(studyToSearchFrom);
 }
 
