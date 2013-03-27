@@ -74,34 +74,31 @@ void LayoutManager::applyProperLayoutChoice()
 
     if (hasToApplyHangingProtocol)
     {
-        searchAndApplyBestHangingProtocol();
-    }
-    else
-    {
-        // Updating only hanging protocols
-        searchHangingProtocols();
+        if (!applyBestHangingProtocol())
+        {
+            // There are no hanging protocols available, applying automatic layouts
+            applyLayoutCandidates(getLayoutCandidates(m_patient), m_patient);
+        }
     }
 }
 
 void LayoutManager::searchHangingProtocols()
 {
-    QList<HangingProtocol*> hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient);
-    emit hangingProtocolCandidatesFound(hangingCandidates);
+    m_hangingProtocolCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient);
+    emit hangingProtocolCandidatesFound(m_hangingProtocolCandidates);
 }
 
-void LayoutManager::searchAndApplyBestHangingProtocol()
+bool LayoutManager::applyBestHangingProtocol()
 {
-    QList<HangingProtocol*> hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient);
-    emit hangingProtocolCandidatesFound(hangingCandidates);
-    if (hangingCandidates.size() == 0)
+    bool hangingProtocolApplied = false;
+    
+    if (m_hangingProtocolCandidates.size() > 0)
     {
-        // There are no hanging protocols available, applying automatic layouts
-        applyLayoutCandidates(getLayoutCandidates(m_patient), m_patient);
+        m_hangingProtocolManager->setBestHangingProtocol(m_patient, m_hangingProtocolCandidates, m_layout);
+        hangingProtocolApplied = true;
     }
-    else
-    {
-        m_hangingProtocolManager->setBestHangingProtocol(m_patient, hangingCandidates, m_layout);
-    }
+
+    return hangingProtocolApplied;
 }
 
 void LayoutManager::cancelOngoingOperations()
@@ -162,8 +159,8 @@ void LayoutManager::setHangingProtocol(int hangingProtocolNumber)
 
 void LayoutManager::addHangingProtocolsWithPrevious(QList<Study*> studies)
 {
-    QList<HangingProtocol*> hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient, studies);
-    emit hangingProtocolCandidatesFound(hangingCandidates);
+    m_hangingProtocolCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient, studies);
+    emit hangingProtocolCandidatesFound(m_hangingProtocolCandidates);
     // HACK To notify we ended searching related studies and thus we have all the hanging protocols available
     emit previousStudiesSearchEnded();
 }

@@ -48,8 +48,9 @@ private:
     /// Sets up hanging protocols environment
     void setupHangingProtocols();
 
-    /// Self-explanatory
-    void searchAndApplyBestHangingProtocol();
+    /// Applies the best matching hanging protocol from the available candidates found with searchHangingProtocols
+    /// If there are no candidates to apply, false is returned, true otherwise.
+    bool applyBestHangingProtocol();
 
     /// Auto Layouts
 
@@ -76,6 +77,9 @@ private:
     /// Hanging Protocols and related studies managers
     HangingProtocolManager *m_hangingProtocolManager;
     RelatedStudiesManager *m_relatedStudiesManager;
+
+    /// Hanging protocol candidates for the current input
+    QList<HangingProtocol*> m_hangingProtocolCandidates;
 };
 
 } // end namespace udg
