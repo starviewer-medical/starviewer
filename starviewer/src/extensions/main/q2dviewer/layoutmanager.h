@@ -64,7 +64,7 @@ private slots:
     /// Sets and applies the hanging protocol with the given identifier
     void setHangingProtocol(int hangingProtocolNumber);
 
-    ///  Searches for hanging protocols for the current patient
+    /// Searches for hanging protocols for the current patient
     void searchHangingProtocols();
 
     /// Called when a new study has been added to the current patient applying the corresponding layout actions
