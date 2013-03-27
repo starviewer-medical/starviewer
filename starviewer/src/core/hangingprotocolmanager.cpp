@@ -661,6 +661,7 @@ void HangingProtocolManager::cancelHangingProtocolDownloading()
 {
     foreach (QString key, m_studiesDownloading->keys())
     {
+        emit discardedStudy(key);
         // S'agafa i es treu de la llista l'element que s'està esperant
         // i es treu el label de downloading
         StructPreviousStudyDownloading *element = m_studiesDownloading->take(key);

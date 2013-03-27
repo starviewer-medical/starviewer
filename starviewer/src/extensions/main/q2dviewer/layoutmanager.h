@@ -2,6 +2,7 @@
 #define UDGLAYOUTMANAGER_H
 
 #include <QObject>
+#include <QSet>
 
 namespace udg {
 
@@ -70,6 +71,9 @@ private slots:
     /// Called when a new study has been added to the current patient applying the corresponding layout actions
     void onStudyAdded(Study *study);
 
+    /// Adds the study UID to the ignore set when added
+    void addStudyToIgnore(const QString &uid);
+
 private:
     /// Patient for the layout
     Patient *m_patient;
@@ -83,6 +87,9 @@ private:
 
     /// Hanging protocol candidates for the current input
     QList<HangingProtocol*> m_hangingProtocolCandidates;
+
+    /// Set of study UIDs of studies that should be ignored (no action on layout) when they are added
+    QSet<QString> m_studiesToIgnoreWhenAdded;
 };
 
 } // end namespace udg

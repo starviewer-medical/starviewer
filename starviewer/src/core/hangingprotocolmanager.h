@@ -47,6 +47,12 @@ public:
     /// Returns true if the given study corresponds to a previous study fetched by a hanging protocol with previous, false otherwise
     bool isPreviousStudyForHangingProtocol(Study *study);
 
+signals:
+    /// Emits the study UID of a study requested by a hanging protocol which no longer needs it because it's not going to be applied for some reason
+    /// This will happen when a hanging protocol requests to download a previous study and before it is applied
+    /// another hanging protocol is applied or it is explicitly cancelled
+    void discardedStudy(QString);
+
 protected:
 
     /// Fa una còpia del repositori de HP per poder-los modificar sense que el repositori es vegi afectat.
