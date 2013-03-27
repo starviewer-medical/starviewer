@@ -68,7 +68,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
 
 #else
     m_automaticSynchronizationManager = 0;
-    m_relatedStudiesManager = 0;
+    m_relatedStudiesManager = new RelatedStudiesManager();
 #endif
 
     m_hangingProtocolsMenu = new MenuGridWidget(this);
@@ -77,7 +77,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_dicomDumpCurrentDisplayedImage = new QDICOMDumpBrowser(this);
 
 #ifndef STARVIEWER_LITE
-    m_relatedStudiesWidget = new QRelatedStudiesWidget(this);
+    m_relatedStudiesWidget = new QRelatedStudiesWidget(m_relatedStudiesManager, this);
     m_relatedStudiesToolButton->setEnabled(false);
     m_relatedStudiesToolButton->setToolTip(tr("Search related studies"));
     m_screenshotsExporterToolButton->setToolTip(tr("Export viewer image(s) to DICOM and send them to a PACS server"));
@@ -160,6 +160,11 @@ Q2DViewerExtension::~Q2DViewerExtension()
     if (m_relatedStudiesWidget)
     {
         delete m_relatedStudiesWidget;
+    }
+    
+    if (m_relatedStudiesManager)
+    {
+        delete m_relatedStudiesManager;
     }
 #endif
 
@@ -333,7 +338,6 @@ void Q2DViewerExtension::setPatient(Patient *patient)
         m_layoutManager = new LayoutManager(m_patient, m_workingArea);
         connect(m_layoutManager, SIGNAL(hangingProtocolCandidatesFound(QList<HangingProtocol*>)), m_hangingProtocolsMenu, SLOT(setHangingItems(QList<HangingProtocol*>)));
         // HACK Should be done in a better way
-        connect(m_layoutManager, SIGNAL(previousStudiesSearchBegan()), SLOT(showHangingProtocolsWithPreviousAreBeingSearchedInMenu()));
         connect(m_layoutManager, SIGNAL(previousStudiesSearchEnded()), SLOT(hideHangingProtocolsWithPreviousAreBeingSearchedInMenu()));
         connect(m_hangingProtocolsMenu, SIGNAL(selectedGrid(int)), m_layoutManager, SLOT(setHangingProtocol(int)));
         m_layoutManager->initialize();
@@ -344,13 +348,10 @@ void Q2DViewerExtension::setPatient(Patient *patient)
 #ifndef STARVIEWER_LITE
     // Habilitem la possibilitat de buscar estudis relacionats.
     m_relatedStudiesToolButton->setEnabled(true);
+    connect(m_relatedStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), m_layoutManager, SLOT(addHangingProtocolsWithPrevious(QList<Study*>)));
+    m_hangingProtocolsMenu->setSearchingItem(true);
     m_relatedStudiesWidget->searchStudiesOf(m_patient);
 #endif
-}
-
-void Q2DViewerExtension::showHangingProtocolsWithPreviousAreBeingSearchedInMenu()
-{
-    m_hangingProtocolsMenu->setSearchingItem(true);
 }
 
 void Q2DViewerExtension::hideHangingProtocolsWithPreviousAreBeingSearchedInMenu()

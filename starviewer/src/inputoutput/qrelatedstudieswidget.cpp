@@ -16,15 +16,18 @@
 
 namespace udg {
 
-QRelatedStudiesWidget::QRelatedStudiesWidget(QWidget *parent)
+QRelatedStudiesWidget::QRelatedStudiesWidget(RelatedStudiesManager *relatedStudiesManager, QWidget *parent)
    : QFrame(parent)
 {
+    Q_ASSERT(relatedStudiesManager);
+    
+    m_relatedStudiesManager = relatedStudiesManager;
+    
     setWindowFlags(Qt::Popup);
     QVBoxLayout *verticalLayout = new QVBoxLayout(this);
 
     m_lookingForStudiesWidget = new QWidget(this);
     m_relatedStudiesTree = new QTreeWidgetWithSeparatorLine(this);
-    m_relatedStudiesManager = new RelatedStudiesManager();
     m_signalMapper = new QSignalMapper(this);
     m_queryScreen = SingletonPointer<QueryScreen>::instance();
     m_numberOfDownloadingStudies = 0;
@@ -53,7 +56,6 @@ QRelatedStudiesWidget::~QRelatedStudiesWidget()
     {
         delete m_infomationPerStudy.take(key);
     }
-    delete m_relatedStudiesManager;
     delete m_lookingForStudiesWidget;
     delete m_signalMapper;
     delete m_noRelatedStudiesLabel;
