@@ -81,8 +81,7 @@ private:
     void showWidgetBelowButton(QWidget *widget, QAbstractButton *button);
 
 private slots:
-    // HACKS to be removed
-    void showHangingProtocolsWithPreviousAreBeingSearchedInMenu();
+    // HACK to be replaced by a proper solution
     void hideHangingProtocolsWithPreviousAreBeingSearchedInMenu();
 
 #ifndef STARVIEWER_LITE

@@ -31,12 +31,15 @@ public:
     /// Cancels started operations such as downloading previous studies for an ordered hanging protocol
     void cancelOngoingOperations();
 
+public slots:
+    /// Searches and adds suitable hanging protocols for the given previous studies
+    void addHangingProtocolsWithPrevious(QList<Study*> studies);
+
 signals:
     /// Emits this signal when new hanging protocols are found for the current patient
     void hangingProtocolCandidatesFound(QList<HangingProtocol*> candidates);
 
-    /// Emitted when previous studies are
-    void previousStudiesSearchBegan();
+    /// Emitted when previous studies search is ended. This signal is a hack and should be replaced by a proper solution.
     void previousStudiesSearchEnded();
 
 private:
@@ -44,9 +47,6 @@ private:
     
     /// Sets up hanging protocols environment
     void setupHangingProtocols();
-
-    /// Searches previous studies and adds hanging protocols candidates which match them
-    void searchPreviousStudiesWithHangingProtocols();
 
     /// Self-explanatory
     void searchAndApplyBestHangingProtocol();
@@ -60,9 +60,6 @@ private:
     void applyLayoutCandidates(const QList<StudyLayoutConfig> &candidates, Patient *patient);
 
 private slots:
-    /// Searches and adds suitable hanging protocols for the given previous studies
-    void addHangingProtocolsWithPrevious(QList<Study*> studies);
-    
     /// Sets and applies the hanging protocol with the given identifier
     void setHangingProtocol(int hangingProtocolNumber);
 

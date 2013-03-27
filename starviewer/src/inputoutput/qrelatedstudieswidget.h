@@ -20,7 +20,7 @@ class QTreeWidgetWithSeparatorLine;
 class QRelatedStudiesWidget : public QFrame {
 Q_OBJECT
 public:
-    QRelatedStudiesWidget(QWidget *parent = 0);
+    QRelatedStudiesWidget(RelatedStudiesManager *relatedStudiesManager, QWidget *parent = 0);
     ~QRelatedStudiesWidget();
 
     /// Mètode per buscar els estudis relacionat amb el pacient.

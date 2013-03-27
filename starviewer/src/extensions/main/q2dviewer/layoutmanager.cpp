@@ -87,14 +87,12 @@ void LayoutManager::searchHangingProtocols()
 {
     QList<HangingProtocol*> hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient);
     emit hangingProtocolCandidatesFound(hangingCandidates);
-    searchPreviousStudiesWithHangingProtocols();
 }
 
 void LayoutManager::searchAndApplyBestHangingProtocol()
 {
     QList<HangingProtocol*> hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient);
     emit hangingProtocolCandidatesFound(hangingCandidates);
-    searchPreviousStudiesWithHangingProtocols();
     if (hangingCandidates.size() == 0)
     {
         // There are no hanging protocols available, applying automatic layouts
@@ -104,23 +102,6 @@ void LayoutManager::searchAndApplyBestHangingProtocol()
     {
         m_hangingProtocolManager->setBestHangingProtocol(m_patient, hangingCandidates, m_layout);
     }
-}
-
-void LayoutManager::searchPreviousStudiesWithHangingProtocols()
-{
-    // HACK To notify we begin searching related studies and thus we'll probably have more hanging protocols available
-    emit previousStudiesSearchBegan();
-
-    if (!m_relatedStudiesManager)
-    {
-        m_relatedStudiesManager = new RelatedStudiesManager();
-        connect(m_relatedStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), SLOT(addHangingProtocolsWithPrevious(QList<Study*>)));
-    }
-    
-    // TODO Improve the way to choose from wich study to search from. Do we want to search from the most recent study only?
-    Study *studyToSearchFrom = m_patient->getStudies().first();
-    
-    m_relatedStudiesManager->queryMergedPreviousStudies(studyToSearchFrom);
 }
 
 void LayoutManager::cancelOngoingOperations()
