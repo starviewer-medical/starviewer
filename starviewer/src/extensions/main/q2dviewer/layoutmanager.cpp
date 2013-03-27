@@ -9,7 +9,6 @@
 #include "studylayoutmapper.h"
 #include "studylayoutconfig.h"
 #include "studylayoutconfigsettingsmanager.h"
-#include "hangingprotocolmanager.h"
 
 namespace udg {
 
