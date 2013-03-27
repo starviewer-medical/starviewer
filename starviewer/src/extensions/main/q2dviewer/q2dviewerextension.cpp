@@ -204,8 +204,6 @@ void Q2DViewerExtension::createConnections()
 void Q2DViewerExtension::onPatientUpdated()
 {
     m_layoutManager->applyProperLayoutChoice();
-    // Actualitzem el widget de prèvies.
-    m_relatedStudiesWidget->updateList();
 }
 
 #ifdef STARVIEWER_LITE
@@ -348,6 +346,7 @@ void Q2DViewerExtension::setPatient(Patient *patient)
     connect(m_relatedStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), m_layoutManager, SLOT(addHangingProtocolsWithPrevious(QList<Study*>)));
     m_hangingProtocolsMenu->setSearchingItem(true);
     m_relatedStudiesWidget->searchStudiesOf(m_patient);
+    connect(m_patient, SIGNAL(studyAdded(Study*)), m_relatedStudiesWidget, SLOT(updateList()));
 #endif
 }
 
