@@ -202,7 +202,7 @@ void Q2DViewerExtension::onPatientUpdated()
 {
     m_layoutManager->applyProperLayoutChoice();
     // Actualitzem el widget de prèvies.
-    updateRelatedStudiesWidget();
+    m_relatedStudiesWidget->updateList();
 }
 
 #ifdef STARVIEWER_LITE
@@ -831,11 +831,6 @@ void Q2DViewerExtension::changeToRelatedStudiesDownloadingIcon()
 void Q2DViewerExtension::changeToRelatedStudiesDefaultIcon()
 {
     m_relatedStudiesToolButton->setIcon(QIcon(QString(":images/cal.png")));
-}
-
-void Q2DViewerExtension::updateRelatedStudiesWidget()
-{
-    m_relatedStudiesWidget->updateList();
 }
 
 void Q2DViewerExtension::enableAutomaticSynchronizationToViewer(bool enable)
