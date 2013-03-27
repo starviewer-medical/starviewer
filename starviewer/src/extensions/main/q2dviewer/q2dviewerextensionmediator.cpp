@@ -46,21 +46,4 @@ bool Q2DViewerExtensionMediator::initializeExtension(QWidget *extension, const E
     return true;
 }
 
-bool Q2DViewerExtensionMediator::reinitializeExtension(QWidget *extension)
-{
-    Q2DViewerExtension *q2dviewerExtension;
-
-    if (!(q2dviewerExtension = qobject_cast<Q2DViewerExtension*>(extension)))
-    {
-        return false;
-    }
-    else
-    {
-#ifndef STARVIEWER_LITE
-        q2dviewerExtension->onPatientUpdated();
-#endif
-        return true;
-    }
-}
-
 } // End udg namespace

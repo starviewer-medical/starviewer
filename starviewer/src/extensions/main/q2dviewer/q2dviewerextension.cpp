@@ -201,11 +201,6 @@ void Q2DViewerExtension::createConnections()
     connect(m_thickSlabWidget, SIGNAL(maximumThicknessModeToggled(bool)), SLOT(enableMaximumThicknessMode(bool)));
 }
 
-void Q2DViewerExtension::onPatientUpdated()
-{
-    m_layoutManager->applyProperLayoutChoice();
-}
-
 #ifdef STARVIEWER_LITE
 void Q2DViewerExtension::setInput(Volume *input)
 {
