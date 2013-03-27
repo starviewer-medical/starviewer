@@ -44,9 +44,6 @@ private:
     void applyProperLayoutChoice();
     
     /// Hanging Protocols
-    
-    /// Sets up hanging protocols environment
-    void setupHangingProtocols();
 
     /// Applies the best matching hanging protocol from the available candidates found with searchHangingProtocols
     /// If there are no candidates to apply, false is returned, true otherwise.

@@ -29,14 +29,9 @@ LayoutManager::~LayoutManager()
 
 void LayoutManager::initialize()
 {
-    setupHangingProtocols();
+    searchHangingProtocols();
     applyProperLayoutChoice();
     m_layout->setSelectedViewer(m_layout->getViewerWidget(0));
-}
-
-void LayoutManager::setupHangingProtocols()
-{
-    searchHangingProtocols();
 }
 
 void LayoutManager::applyProperLayoutChoice()
