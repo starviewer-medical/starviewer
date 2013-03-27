@@ -123,6 +123,7 @@ bool Patient::addStudy(Study *study)
     {
         study->setParentPatient(this);
         this->insertStudy(study);
+        emit studyAdded(study);
     }
 
     return ok;
@@ -133,7 +134,8 @@ void Patient::removeStudy(const QString &uid)
     int index = this->findStudyIndex(uid);
     if (index != -1)
     {
-        m_studiesList.removeAt(index);
+        Study *removedStudy = m_studiesList.takeAt(index);
+        emit studyRemoved(removedStudy);
     }
 }
 
