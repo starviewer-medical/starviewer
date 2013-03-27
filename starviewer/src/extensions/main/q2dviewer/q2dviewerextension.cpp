@@ -185,8 +185,8 @@ void Q2DViewerExtension::createConnections()
     connect(m_viewersLayoutGridButton, SIGNAL(clicked(bool)), SLOT(showViewersLayoutGridTable()));
 
     // Connexions del menu
-    connect(m_hangingProtocolsMenu, SIGNAL(selectedGrid(int)), this, SLOT(setHangingProtocol(int)));
-    connect(m_viewersLayoutGrid, SIGNAL(selectedGrid(int, int)), this, SLOT(setGrid(int, int)));
+    connect(m_hangingProtocolsMenu, SIGNAL(selectedGrid(int)), SLOT(setHangingProtocol(int)));
+    connect(m_viewersLayoutGrid, SIGNAL(selectedGrid(int, int)), SLOT(setGrid(int, int)));
 
     // Per mostrar la informació DICOM de la imatge que s'està veient en aquell moment
     connect(m_dicomDumpToolButton, SIGNAL(clicked()), SLOT(showDicomDumpCurrentDisplayedImage()));
@@ -199,8 +199,8 @@ void Q2DViewerExtension::createConnections()
     // Per mostrar exportació
     connect(m_screenshotsExporterToolButton, SIGNAL(clicked()), SLOT(showScreenshotsExporterDialog()));
 
-    connect(m_relatedStudiesWidget, SIGNAL(downloadingStudies()), this, SLOT(changeToRelatedStudiesDownloadingIcon()));
-    connect(m_relatedStudiesWidget, SIGNAL(studiesDownloaded()), this, SLOT(changeToRelatedStudiesDefaultIcon()));
+    connect(m_relatedStudiesWidget, SIGNAL(downloadingStudies()), SLOT(changeToRelatedStudiesDownloadingIcon()));
+    connect(m_relatedStudiesWidget, SIGNAL(studiesDownloaded()), SLOT(changeToRelatedStudiesDefaultIcon()));
     connect(m_relatedStudiesToolButton, SIGNAL(clicked (bool)), SLOT(showRelatedStudiesWidget()));
     connect(m_workingArea, SIGNAL(manualSynchronizationStateChanged(bool)), SLOT(manualSynchronizationActivated(bool)));
 
