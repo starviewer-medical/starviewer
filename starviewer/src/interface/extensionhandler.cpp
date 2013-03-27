@@ -482,19 +482,6 @@ QApplicationMainWindow* ExtensionHandler::addPatientToWindow(Patient *patient, b
                 openDefaultExtension();
             }
 
-            if (!loadOnly)
-            {
-                // Hem fet un "view", per tant cal reinicialitzar les extensions que ho requereixin
-                QMap<QWidget *, QString> extensions = mainApp->getExtensionWorkspace()->getActiveExtensions();
-                QMapIterator<QWidget *, QString> iterator(extensions);
-                while (iterator.hasNext())
-                {
-                    iterator.next();
-                    ExtensionMediator *mediator = ExtensionMediatorFactory::instance()->create(iterator.value());
-                    mediator->reinitializeExtension(iterator.key());
-                }
-            }
-
             usedMainApp = mainApp;
         }
         else
