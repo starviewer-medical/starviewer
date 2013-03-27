@@ -10,7 +10,6 @@ class Patient;
 class Study;
 class ViewersLayout;
 class HangingProtocolManager;
-class RelatedStudiesManager;
 class StudyLayoutConfig;
 class HangingProtocol;
 
@@ -81,9 +80,8 @@ private:
     /// Layout object
     ViewersLayout *m_layout;
 
-    /// Hanging Protocols and related studies managers
+    /// Hanging Protocols manager
     HangingProtocolManager *m_hangingProtocolManager;
-    RelatedStudiesManager *m_relatedStudiesManager;
 
     /// Hanging protocol candidates for the current input
     QList<HangingProtocol*> m_hangingProtocolCandidates;
