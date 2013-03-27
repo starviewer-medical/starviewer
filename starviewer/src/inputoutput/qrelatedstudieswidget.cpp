@@ -114,11 +114,11 @@ void QRelatedStudiesWidget::initializeSearch()
 
 void QRelatedStudiesWidget::createConnections()
 {
-    connect(m_relatedStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), this, SLOT(insertStudiesToTree(QList<Study*>)));
-    connect(m_signalMapper, SIGNAL(mapped(const QString&)), this, SLOT(retrieveAndViewStudy(const QString&)));
-    connect(m_queryScreen, SIGNAL(studyRetrieveStarted(QString)), this, SLOT(studyRetrieveStarted(QString)));
-    connect(m_queryScreen, SIGNAL(studyRetrieveFinished(QString)), this, SLOT(studyRetrieveFinished(QString)));
-    connect(m_queryScreen, SIGNAL(studyRetrieveFailed(QString)), this, SLOT(studyRetrieveFailed(QString)));
+    connect(m_relatedStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), SLOT(insertStudiesToTree(QList<Study*>)));
+    connect(m_signalMapper, SIGNAL(mapped(const QString&)), SLOT(retrieveAndViewStudy(const QString&)));
+    connect(m_queryScreen, SIGNAL(studyRetrieveStarted(QString)), SLOT(studyRetrieveStarted(QString)));
+    connect(m_queryScreen, SIGNAL(studyRetrieveFinished(QString)), SLOT(studyRetrieveFinished(QString)));
+    connect(m_queryScreen, SIGNAL(studyRetrieveFailed(QString)), SLOT(studyRetrieveFailed(QString)));
     connect(m_queryScreen, SIGNAL(studyRetrieveCancelled(QString)), SLOT(studyRetrieveCancelled(QString)));
 }
 
