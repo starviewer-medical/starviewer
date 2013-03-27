@@ -26,9 +26,6 @@ public:
     /// Sets up and initizalizes the layout for the current input
     void initialize();
 
-    /// Applies hanging protocols or automatic layouts depending on the user settings and the availability of the former
-    void applyProperLayoutChoice();
-    
     /// Cancels started operations such as downloading previous studies for an ordered hanging protocol
     void cancelOngoingOperations();
 
@@ -44,6 +41,9 @@ signals:
     void previousStudiesSearchEnded();
 
 private:
+    /// Applies hanging protocols or automatic layouts depending on the user settings and the availability of the former
+    void applyProperLayoutChoice();
+    
     /// Hanging Protocols
     
     /// Sets up hanging protocols environment
