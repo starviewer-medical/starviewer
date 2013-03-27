@@ -68,11 +68,6 @@ private:
     /// Inicialitza les tools que tindrà l'extensió
     void initializeTools();
 
-#ifndef STARVIEWER_LITE
-    /// Mètode encarregat d'actualitzar la llista del widget d'estudis relacionats per marcar aquells nous estudis que s'han carregat a memòria.
-    void updateRelatedStudiesWidget();
-#endif
-    
     /// Configura les tools que cal activar per defecte segons la llista de modalitats donada
     void setupDefaultToolsForModalities(const QStringList &modalities);
     
