@@ -325,7 +325,7 @@ void Q2DViewerExtension::setPatient(Patient *patient)
 
         setupDefaultToolsForModalities(modalitiesList);
 
-        m_layoutManager = new LayoutManager(m_patient, m_workingArea);
+        m_layoutManager = new LayoutManager(m_patient, m_workingArea, this);
         connect(m_layoutManager, SIGNAL(hangingProtocolCandidatesFound(QList<HangingProtocol*>)), m_hangingProtocolsMenu, SLOT(setHangingItems(QList<HangingProtocol*>)));
         // HACK Should be done in a better way
         connect(m_layoutManager, SIGNAL(previousStudiesSearchEnded()), SLOT(hideHangingProtocolsWithPreviousAreBeingSearchedInMenu()));
