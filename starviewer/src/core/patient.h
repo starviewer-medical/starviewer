@@ -106,6 +106,12 @@ signals:
     /// Senyal que indica que s'ha fusionat el pacient
     void patientFused();
 
+    /// Emitted when a study has been added
+    void studyAdded(Study*);
+
+    /// Emitted when a study has been removed
+    void studyRemoved(Study*);
+
 private:
     /// Donat un pacient, copia únicament la informació del pacient. No fa res respecte els estudis,series o imatges.
     /// La informació es matxaca i no es fa cap mena de comprovació.
