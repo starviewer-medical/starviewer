@@ -279,6 +279,16 @@ void Q2DViewerExtension::setupDefaultLeftButtonTool()
     }
 }
 
+void Q2DViewerExtension::setupLayoutManager()
+{
+    m_layoutManager = new LayoutManager(m_patient, m_workingArea, this);
+    connect(m_layoutManager, SIGNAL(hangingProtocolCandidatesFound(QList<HangingProtocol*>)), m_hangingProtocolsMenu, SLOT(setHangingItems(QList<HangingProtocol*>)));
+    // HACK Should be done in a better way
+    connect(m_layoutManager, SIGNAL(previousStudiesSearchEnded()), SLOT(hideHangingProtocolsWithPreviousAreBeingSearchedInMenu()));
+    connect(m_hangingProtocolsMenu, SIGNAL(selectedGrid(int)), m_layoutManager, SLOT(setHangingProtocol(int)));
+    m_layoutManager->initialize();
+}
+
 void Q2DViewerExtension::showAvailableHangingProtocolsMenu()
 {
     showWidgetBelowButton(m_hangingProtocolsMenu, m_viewersLayoutGridButton);
@@ -325,12 +335,7 @@ void Q2DViewerExtension::setPatient(Patient *patient)
 
         setupDefaultToolsForModalities(modalitiesList);
 
-        m_layoutManager = new LayoutManager(m_patient, m_workingArea, this);
-        connect(m_layoutManager, SIGNAL(hangingProtocolCandidatesFound(QList<HangingProtocol*>)), m_hangingProtocolsMenu, SLOT(setHangingItems(QList<HangingProtocol*>)));
-        // HACK Should be done in a better way
-        connect(m_layoutManager, SIGNAL(previousStudiesSearchEnded()), SLOT(hideHangingProtocolsWithPreviousAreBeingSearchedInMenu()));
-        connect(m_hangingProtocolsMenu, SIGNAL(selectedGrid(int)), m_layoutManager, SLOT(setHangingProtocol(int)));
-        m_layoutManager->initialize();
+        setupLayoutManager();
     }
 
     setupDefaultLeftButtonTool();

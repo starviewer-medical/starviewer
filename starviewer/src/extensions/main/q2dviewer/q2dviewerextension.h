@@ -70,6 +70,9 @@ private:
     /// Segons les dades del pacient carregat escollirà quina és l'eina del botó esquerre més adient que cal activar per defecte 
     void setupDefaultLeftButtonTool();
 
+    /// Sets up layout manager and its connections properly
+    void setupLayoutManager();
+    
     /// Col·loca i ordena les icones i el menú de les eines del botó donat segons l'última eina seleccionada
     void rearrangeToolsMenu(QToolButton *menuButton);
 
