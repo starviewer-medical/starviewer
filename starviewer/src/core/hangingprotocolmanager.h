@@ -44,6 +44,9 @@ public:
     /// Si hi havia estudis en descàrrega, s'elimina de la llista
     void cancelHangingProtocolDownloading();
 
+    /// Returns true if the given study corresponds to a previous study fetched by a hanging protocol with previous, false otherwise
+    bool isPreviousStudyForHangingProtocol(Study *study);
+
 protected:
 
     /// Fa una còpia del repositori de HP per poder-los modificar sense que el repositori es vegi afectat.
