@@ -3,7 +3,6 @@
 #include "patient.h"
 #include "study.h"
 #include "hangingprotocolmanager.h"
-#include "relatedstudiesmanager.h"
 #include "viewerslayout.h"
 #include "coresettings.h"
 #include "studylayoutconfigsloader.h"
@@ -18,7 +17,6 @@ LayoutManager::LayoutManager(Patient *patient, ViewersLayout *layout, QObject *p
  : QObject(parent)
 {
     m_hangingProtocolManager = 0;
-    m_relatedStudiesManager = 0;
 
     m_patient = patient;
     m_layout = layout;
