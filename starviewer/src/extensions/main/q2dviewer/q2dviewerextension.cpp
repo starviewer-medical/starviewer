@@ -26,7 +26,6 @@
 
 #ifndef STARVIEWER_LITE
 #include "qrelatedstudieswidget.h"
-#include "hangingprotocolmanager.h"
 #include "relatedstudiesmanager.h"
 #include "qexportertool.h"
 #endif
@@ -38,10 +37,7 @@
 #include <QProgressDialog>
 #include <QMessageBox>
 
-#include "studylayoutconfig.h"
-#include "studylayoutmapper.h"
-#include "studylayoutconfigsettingsmanager.h"
-#include "studylayoutconfigsloader.h"
+#include "layoutmanager.h"
 
 namespace udg {
 
@@ -71,7 +67,6 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_desynchronizeAllViewersButton->hide();
 
 #else
-    m_hangingProtocolManager = 0;
     m_automaticSynchronizationManager = 0;
     m_relatedStudiesManager = 0;
 #endif
@@ -166,11 +161,6 @@ Q2DViewerExtension::~Q2DViewerExtension()
     {
         delete m_relatedStudiesWidget;
     }
-
-    if (m_hangingProtocolManager)
-    {
-        delete m_hangingProtocolManager;
-    }
 #endif
 
     delete m_hangingProtocolsMenu;
@@ -185,7 +175,6 @@ void Q2DViewerExtension::createConnections()
     connect(m_viewersLayoutGridButton, SIGNAL(clicked(bool)), SLOT(showViewersLayoutGridTable()));
 
     // Connexions del menu
-    connect(m_hangingProtocolsMenu, SIGNAL(selectedGrid(int)), SLOT(setHangingProtocol(int)));
     connect(m_viewersLayoutGrid, SIGNAL(selectedGrid(int, int)), SLOT(setGrid(int, int)));
 
     // Per mostrar la informació DICOM de la imatge que s'està veient en aquell moment
@@ -211,7 +200,7 @@ void Q2DViewerExtension::createConnections()
 
 void Q2DViewerExtension::onPatientUpdated()
 {
-    applyProperLayoutChoice();
+    m_layoutManager->applyProperLayoutChoice();
     // Actualitzem el widget de prèvies.
     updateRelatedStudiesWidget();
 }
@@ -226,69 +215,6 @@ void Q2DViewerExtension::setInput(Volume *input)
     {
         m_workingArea->getViewerWidget(0)->setInput(input);
     }
-}
-#endif
-
-#ifndef STARVIEWER_LITE
-void Q2DViewerExtension::searchAndApplyBestHangingProtocol()
-{
-    QList<HangingProtocol*> hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient);
-    m_hangingProtocolsMenu->setHangingItems(hangingCandidates);
-    if (hangingCandidates.size() == 0)
-    {
-        // There are no hanging protocols available, applying automatic layouts
-        applyLayoutCandidates(getLayoutCandidates(m_patient), m_patient);
-    }
-    else
-    {
-        m_hangingProtocolManager->setBestHangingProtocol(m_patient, hangingCandidates, m_workingArea);
-    }
-}
-
-void Q2DViewerExtension::searchHangingProtocols()
-{
-    QList<HangingProtocol*> hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient);
-    m_hangingProtocolsMenu->setHangingItems(hangingCandidates);
-    searchPreviousStudiesWithHangingProtocols();
-}
-
-void Q2DViewerExtension::setupHangingProtocols()
-{
-    if (m_hangingProtocolManager != 0)
-    {
-        m_hangingProtocolManager->cancelHangingProtocolDownloading();
-        delete m_hangingProtocolManager;
-    }
-    m_hangingProtocolManager = new HangingProtocolManager();
-
-    connect(m_patient, SIGNAL(patientFused()), SLOT(searchHangingProtocols()));
-}
-
-void Q2DViewerExtension::searchPreviousStudiesWithHangingProtocols()
-{
-    m_hangingProtocolsMenu->setSearchingItem(true);
-
-    // 2.- Creacio de la classe per trobar estudis relacionats
-    if (!m_relatedStudiesManager)
-    {
-        m_relatedStudiesManager= new RelatedStudiesManager();
-        // 3.- Es connecta el signal per quan acabi
-        connect(m_relatedStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), SLOT(addHangingProtocolsWithPrevious(QList<Study*>)));
-    }
-    
-    // 4.- Es busquen els previs
-    // En el cas que no tinguéssim un input vàlid, ho farem a partir del pacient actual
-    // TODO Improve the way to choose from wich study to search from. Do we want to search from the most recent study only?
-    Study *studyToSearchFrom = m_patient->getStudies().first();
-    
-    m_relatedStudiesManager->queryMergedPreviousStudies(studyToSearchFrom);
-}
-
-void Q2DViewerExtension::addHangingProtocolsWithPrevious(QList<Study*> studies)
-{
-    QList<HangingProtocol*> hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient, studies);
-    m_hangingProtocolsMenu->setHangingItems(hangingCandidates);
-    m_hangingProtocolsMenu->setSearchingItem(false);
 }
 #endif
 
@@ -403,21 +329,33 @@ void Q2DViewerExtension::setPatient(Patient *patient)
         }
 
         setupDefaultToolsForModalities(modalitiesList);
+
+        m_layoutManager = new LayoutManager(m_patient, m_workingArea);
+        connect(m_layoutManager, SIGNAL(hangingProtocolCandidatesFound(QList<HangingProtocol*>)), m_hangingProtocolsMenu, SLOT(setHangingItems(QList<HangingProtocol*>)));
+        // HACK Should be done in a better way
+        connect(m_layoutManager, SIGNAL(previousStudiesSearchBegan()), SLOT(showHangingProtocolsWithPreviousAreBeingSearchedInMenu()));
+        connect(m_layoutManager, SIGNAL(previousStudiesSearchEnded()), SLOT(hideHangingProtocolsWithPreviousAreBeingSearchedInMenu()));
+        connect(m_hangingProtocolsMenu, SIGNAL(selectedGrid(int)), m_layoutManager, SLOT(setHangingProtocol(int)));
+        m_layoutManager->initialize();
     }
 
     setupDefaultLeftButtonTool();
 
 #ifndef STARVIEWER_LITE
-    setupHangingProtocols();
-    applyProperLayoutChoice();
-    m_workingArea->setSelectedViewer(m_workingArea->getViewerWidget(0));
-    
     // Habilitem la possibilitat de buscar estudis relacionats.
     m_relatedStudiesToolButton->setEnabled(true);
     m_relatedStudiesWidget->searchStudiesOf(m_patient);
-
-    searchPreviousStudiesWithHangingProtocols();
 #endif
+}
+
+void Q2DViewerExtension::showHangingProtocolsWithPreviousAreBeingSearchedInMenu()
+{
+    m_hangingProtocolsMenu->setSearchingItem(true);
+}
+
+void Q2DViewerExtension::hideHangingProtocolsWithPreviousAreBeingSearchedInMenu()
+{
+    m_hangingProtocolsMenu->setSearchingItem(false);
 }
 
 void Q2DViewerExtension::initializeTools()
@@ -778,88 +716,6 @@ void Q2DViewerExtension::rearrangeToolsMenu(QToolButton *menuButton)
     }
 }
 
-void Q2DViewerExtension::applyProperLayoutChoice()
-{
-    // Primer mirem quines modalitats té el pacient per poder decidir si mirar primer HP o layouts automàtics
-    Settings settings;
-    QStringList modalitiesWithHPPriority = settings.getValue(CoreSettings::ModalitiesToApplyHangingProtocolsAsFirstOption)
-        .toString().split(";", QString::SkipEmptyParts);
-    QStringList patientModalities;
-    foreach (Study *study, m_patient->getStudies())
-    {
-        patientModalities << study->getModalities();
-    }
-
-    bool hasToApplyHangingProtocol = false;
-    QSet<QString> matchingModalities = modalitiesWithHPPriority.toSet().intersect(patientModalities.toSet());
-    if (matchingModalities.isEmpty())
-    {
-        // Primer trobem quines configuracions candidates tenim segons les modalitats del pacient
-        applyLayoutCandidates(getLayoutCandidates(m_patient), m_patient);
-    }
-    else
-    {
-        hasToApplyHangingProtocol = true;
-    }
-
-    if (hasToApplyHangingProtocol)
-    {
-        // Busquem i apliquem el millor hanging protocol possible
-        searchAndApplyBestHangingProtocol();
-    }
-    else
-    {
-        // Actualizem HPs només
-        searchHangingProtocols();
-    }
-}
-
-QList<StudyLayoutConfig> Q2DViewerExtension::getLayoutCandidates(Patient *patient)
-{
-    QList<StudyLayoutConfig> configurationCandidates;
-    
-    if (!patient)
-    {
-        return configurationCandidates;
-    }
-    
-    StudyLayoutConfigSettingsManager settingsManager;
-    foreach (const StudyLayoutConfig &currentConfig, settingsManager.getConfigList())
-    {
-        if (!patient->getStudiesByModality(currentConfig.getModality()).isEmpty())
-        {
-            configurationCandidates << currentConfig;
-        }
-    }
-
-    return configurationCandidates;
-}
-
-void Q2DViewerExtension::applyLayoutCandidates(const QList<StudyLayoutConfig> &candidates, Patient *patient)
-{
-    QStringList patientModalities;
-    foreach (Study *study, m_patient->getStudies())
-    {
-        patientModalities << study->getModalities();
-    }
-    
-    StudyLayoutConfig layoutToApply;
-    if (!candidates.isEmpty())
-    {
-        // TODO We only take into account the first candidate, the others, if any, are discarded. We should take them into account too.
-        layoutToApply = candidates.first();
-    }
-    else
-    {
-        // If no candidate found, we choose a default configuration.
-        // This default configuration is not yet configurable through settings, could be done in a future enhancement.
-        layoutToApply = StudyLayoutConfigsLoader::getDefaultConfigForModality(patientModalities.first());
-    }
-
-    StudyLayoutMapper mapper;
-    mapper.applyConfig(layoutToApply, m_workingArea, m_patient);
-}
-
 #ifndef STARVIEWER_LITE
 void Q2DViewerExtension::showScreenshotsExporterDialog()
 {
@@ -967,11 +823,6 @@ void Q2DViewerExtension::disableSynchronization()
 }
 
 #ifndef STARVIEWER_LITE
-void Q2DViewerExtension::setHangingProtocol(int hangingProtocolNumber)
-{
-    m_hangingProtocolManager->applyHangingProtocol(hangingProtocolNumber, m_workingArea, m_patient);
-}
-
 void Q2DViewerExtension::changeToRelatedStudiesDownloadingIcon()
 {
     m_relatedStudiesToolButton->setIcon(QIcon(QString(":images/cal_downloading.png")));
@@ -1053,7 +904,7 @@ void Q2DViewerExtension::manualSynchronizationActivated(bool activated)
 void Q2DViewerExtension::setGrid(int rows, int columns)
 {
 #ifndef STARVIEWER_LITE
-    m_hangingProtocolManager->cancelHangingProtocolDownloading();
+    m_layoutManager->cancelOngoingOperations();
 #endif
     m_workingArea->setGrid(rows, columns);
 }
