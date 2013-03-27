@@ -23,10 +23,6 @@ public:
     QRelatedStudiesWidget(QWidget *parent = 0);
     ~QRelatedStudiesWidget();
 
-    /// Mètode per activar la cerca d'estudis relacionats. Es mostraran al widget els estudis del pacient anteriors a la data
-    /// de l'estudi proporcionat. Es farà la consulta als PACS que estan seleccionats a la llista de nodes de la QueryScreen
-    void searchPreviousStudiesOf(Study *study);
-
     /// Mètode per buscar els estudis relacionat amb el pacient.
     void searchStudiesOf(Patient *patient);
 

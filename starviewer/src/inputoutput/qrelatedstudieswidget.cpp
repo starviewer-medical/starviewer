@@ -81,16 +81,6 @@ void QRelatedStudiesWidget::updateList()
     }
 }
 
-void QRelatedStudiesWidget::searchPreviousStudiesOf(Study *study)
-{
-    Q_ASSERT(study);
-
-    initializeSearch();
-    m_patient = study->getParentPatient();
-    m_relatedStudiesManager->queryMergedPreviousStudies(study);
-    m_modalitiesOfStudiesToHighlight = removeNonImageModalities(study->getModalities());
-}
-
 void QRelatedStudiesWidget::searchStudiesOf(Patient *patient)
 {
     Q_ASSERT(patient);
