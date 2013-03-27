@@ -26,11 +26,11 @@ public:
     /// Mètode per buscar els estudis relacionat amb el pacient.
     void searchStudiesOf(Patient *patient);
 
-    /// Actualitza la llista marcant aquells estudis que ja estan en memòria perquè sigui fàcil identificar-los i no es puguin tornar a descarregar.
-    void updateList();
-
 public slots:
     virtual void setVisible(bool visible);
+
+    /// Actualitza la llista marcant aquells estudis que ja estan en memòria perquè sigui fàcil identificar-los i no es puguin tornar a descarregar.
+    void updateList();
 
 signals:
     /// S'emet només quan no hi ha altres estudis ja descarregant-se.
