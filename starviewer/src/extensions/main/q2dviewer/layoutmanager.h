@@ -67,6 +67,9 @@ private slots:
     ///  Searches for hanging protocols for the current patient
     void searchHangingProtocols();
 
+    /// Called when a new study has been added to the current patient applying the corresponding layout actions
+    void onStudyAdded(Study *study);
+
 private:
     /// Patient for the layout
     Patient *m_patient;

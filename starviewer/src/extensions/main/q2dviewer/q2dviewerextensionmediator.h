@@ -16,8 +16,6 @@ public:
 
     virtual bool initializeExtension(QWidget *extension, const ExtensionContext &extensionContext);
 
-    virtual bool reinitializeExtension(QWidget *extension);
-
     virtual DisplayableID getExtensionID() const;
 };
 

@@ -22,6 +22,8 @@ LayoutManager::LayoutManager(Patient *patient, ViewersLayout *layout, QObject *p
 
     m_patient = patient;
     m_layout = layout;
+
+    connect(m_patient, SIGNAL(studyAdded(Study*)), SLOT(onStudyAdded(Study*)));
 }
 
 LayoutManager::~LayoutManager()
@@ -44,7 +46,6 @@ void LayoutManager::setupHangingProtocols()
     }
     m_hangingProtocolManager = new HangingProtocolManager();
 
-    connect(m_patient, SIGNAL(studyAdded(Study*)), SLOT(searchHangingProtocols()));
     searchHangingProtocols();
 }
 
@@ -163,6 +164,16 @@ void LayoutManager::addHangingProtocolsWithPrevious(QList<Study*> studies)
     emit hangingProtocolCandidatesFound(m_hangingProtocolCandidates);
     // HACK To notify we ended searching related studies and thus we have all the hanging protocols available
     emit previousStudiesSearchEnded();
+}
+
+void LayoutManager::onStudyAdded(Study *study)
+{
+    addHangingProtocolsWithPrevious(QList<Study*>() << study);
+    // Only update the layout again if the study does not correspond to a previously demanded study by a hanging protocol with previous
+    if (!m_hangingProtocolManager->isPreviousStudyForHangingProtocol(study))
+    {
+        applyProperLayoutChoice();
+    }
 }
 
 } // end namespace udg
