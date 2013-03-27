@@ -15,12 +15,12 @@ namespace udg {
 LayoutManager::LayoutManager(Patient *patient, ViewersLayout *layout, QObject *parent)
  : QObject(parent)
 {
-    m_hangingProtocolManager = 0;
-
     m_patient = patient;
     m_layout = layout;
-
+    m_hangingProtocolManager = new HangingProtocolManager(this);
+    
     connect(m_patient, SIGNAL(studyAdded(Study*)), SLOT(onStudyAdded(Study*)));
+    connect(m_hangingProtocolManager, SIGNAL(discardedStudy(QString)), SLOT(addStudyToIgnore(QString)));
 }
 
 LayoutManager::~LayoutManager()
@@ -36,14 +36,6 @@ void LayoutManager::initialize()
 
 void LayoutManager::setupHangingProtocols()
 {
-    if (m_hangingProtocolManager != 0)
-    {
-        m_hangingProtocolManager->cancelHangingProtocolDownloading();
-        delete m_hangingProtocolManager;
-    }
-    m_hangingProtocolManager = new HangingProtocolManager();
-    connect(m_hangingProtocolManager, SIGNAL(discardedStudy(QString)), SLOT(addStudyToIgnore(QString)));
-    
     searchHangingProtocols();
 }
 
