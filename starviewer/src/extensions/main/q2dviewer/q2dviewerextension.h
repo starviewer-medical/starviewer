@@ -96,7 +96,6 @@ private slots:
 
     /// Col·loca i ordena les icones i el menu de les eines de zoom segons l'última tool de Zoom seleccionada
     void rearrangeZoomToolsMenu();
-
 #endif
 
     /// Col·loca i ordena les icones i el menú de les eines de distància segons l'última eina de distància seleccionada
@@ -162,7 +161,6 @@ private slots:
 
     // Tracta l'event de quan s'ha seleccionat/desactivat la sincronització manual en qualsevol dels visors
     void manualSynchronizationActivated(bool enable);
-
 #endif
 
     /// Aplica un grid regular al layout, i elimina l'etiqueta si algun estudi relacionat està en descàrrega
@@ -221,10 +219,8 @@ private:
     /// Manager per estudis relacionats
     RelatedStudiesManager *m_relatedStudiesManager;
 
-
     /// Manager de la sincronització automàtica
     AutomaticSynchronizationManager *m_automaticSynchronizationManager;
-
 #endif
 
 };

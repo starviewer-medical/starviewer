@@ -65,7 +65,6 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_automaticSynchronizationToolButton->hide();
     m_synchronizeAllViewersButton->hide();
     m_desynchronizeAllViewersButton->hide();
-
 #else
     m_automaticSynchronizationManager = 0;
     m_relatedStudiesManager = new RelatedStudiesManager();
@@ -197,7 +196,6 @@ void Q2DViewerExtension::createConnections()
     connect(m_relatedStudiesWidget, SIGNAL(studiesDownloaded()), SLOT(changeToRelatedStudiesDefaultIcon()));
     connect(m_relatedStudiesToolButton, SIGNAL(clicked (bool)), SLOT(showRelatedStudiesWidget()));
     connect(m_workingArea, SIGNAL(manualSynchronizationStateChanged(bool)), SLOT(manualSynchronizationActivated(bool)));
-
 #endif
 
     connect(m_thickSlabWidget, SIGNAL(maximumThicknessModeToggled(bool)), SLOT(enableMaximumThicknessMode(bool)));
@@ -213,7 +211,6 @@ void Q2DViewerExtension::onPatientUpdated()
 #ifdef STARVIEWER_LITE
 void Q2DViewerExtension::setInput(Volume *input)
 {
-
     m_workingArea->setGrid(1, 1);
     m_workingArea->setSelectedViewer(m_workingArea->getViewerWidget(0));
     if (input)
@@ -373,6 +370,7 @@ void Q2DViewerExtension::initializeTools()
     m_distanceToolButton->setDefaultAction(m_toolManager->registerTool("DistanceTool"));
 
     m_eraserToolButton->setDefaultAction(m_toolManager->registerTool("EraserTool"));
+
 #ifndef STARVIEWER_LITE
     // Afegim un menú al botó de zoom per incorporar la tool de zoom focalitzat
     m_zoomToolButton->setPopupMode(QToolButton::MenuButtonPopup);
@@ -418,6 +416,7 @@ void Q2DViewerExtension::initializeTools()
 
     m_automaticSynchronizationToolButton->setDefaultAction(m_toolManager->registerTool("AutomaticSynchronizationTool"));
 #endif
+
     m_voxelInformationToolButton->setDefaultAction(m_toolManager->registerTool("VoxelInformationTool"));
     // Registrem les eines de valors predefinits de window level, slicing per teclat i sincronització
     m_toolManager->registerTool("WindowLevelPresetsTool");
@@ -501,7 +500,6 @@ void Q2DViewerExtension::initializeTools()
     m_desynchronizeAllViewersButton->setDefaultAction(m_desynchronizeAllAction);
     connect(m_desynchronizeAllAction, SIGNAL(triggered()), SLOT(deactivateManualSynchronizationInAllViewers()));
     connect(m_toolManager->getRegisteredToolAction("AutomaticSynchronizationTool"), SIGNAL(triggered(bool)), SLOT(enableAutomaticSynchronizationToViewer(bool)));
-    
 #endif
 
     // SCREEN SHOT TOOL
@@ -894,7 +892,6 @@ void Q2DViewerExtension::manualSynchronizationActivated(bool activated)
         m_toolManager->deactivateTool("AutomaticSynchronizationTool");
     }
 }
-
 #endif
 
 void Q2DViewerExtension::setGrid(int rows, int columns)
