@@ -247,7 +247,7 @@ void HangingProtocolManager::applyHangingProtocol(HangingProtocol *hangingProtoc
             if (!isDownloading && hangingProtocolImageSet->getPreviousStudyToDisplay()->getDICOMSource().getRetrievePACS().count() > 0)
             {
                 //En principi sempre hauríem de tenir algun PACS al DICOMSource
-                connect(m_patient, SIGNAL(patientFused()), SLOT(previousStudyDownloaded()));
+                connect(m_patient, SIGNAL(studyAdded(Study*)), SLOT(previousStudyDownloaded(Study*)));
                 m_relatedStudiesManager->retrieveAndLoad(hangingProtocolImageSet->getPreviousStudyToDisplay(),
                     hangingProtocolImageSet->getPreviousStudyToDisplay()->getDICOMSource().getRetrievePACS().at(0));
             }
@@ -611,7 +611,7 @@ Study* HangingProtocolManager::searchPreviousStudy(HangingProtocol *protocol, St
     return 0;
 }
 
-void HangingProtocolManager::previousStudyDownloaded()
+void HangingProtocolManager::previousStudyDownloaded(Study *study)
 {
     if (m_studiesDownloading->isEmpty())
     {
@@ -619,28 +619,25 @@ void HangingProtocolManager::previousStudyDownloaded()
     }
 
     // Es busca quins estudis nous hi ha
-    foreach (Study *study, m_patient->getStudies())
+    int count = m_studiesDownloading->count(study->getInstanceUID());
+    for (int i = 0; i < count; ++i)
     {
-        int count = m_studiesDownloading->count(study->getInstanceUID());
-        for (int i = 0; i < count; ++i)
-        {
-            // Per cada estudi que esperàvem que es descarregués
-            // Agafem l'estructura amb les dades que s'havien guardat per poder aplicar-ho
-            StructPreviousStudyDownloading *structPreviousStudyDownloading = m_studiesDownloading->take(study->getInstanceUID());
+        // Per cada estudi que esperàvem que es descarregués
+        // Agafem l'estructura amb les dades que s'havien guardat per poder aplicar-ho
+        StructPreviousStudyDownloading *structPreviousStudyDownloading = m_studiesDownloading->take(study->getInstanceUID());
 
-            // Busquem la millor serie de l'estudi que ho satisfa
-            QList<Series*> studySeries = study->getSeries();
-            Series *series = searchSerie(studySeries, structPreviousStudyDownloading->displaySet->getImageSet(), false);
+        // Busquem la millor serie de l'estudi que ho satisfa
+        QList<Series*> studySeries = study->getSeries();
+        Series *series = searchSerie(studySeries, structPreviousStudyDownloading->displaySet->getImageSet(), false);
 
-            Q2DViewerWidget *viewerWidget = structPreviousStudyDownloading->widgetToDisplay;
-            structPreviousStudyDownloading->displaySet->getImageSet()->setDownloaded(true);
+        Q2DViewerWidget *viewerWidget = structPreviousStudyDownloading->widgetToDisplay;
+        structPreviousStudyDownloading->displaySet->getImageSet()->setDownloaded(true);
 
-            viewerWidget->getViewer()->setViewerStatus(QViewer::NoVolumeInput);
+        viewerWidget->getViewer()->setViewerStatus(QViewer::NoVolumeInput);
 
-            setInputToViewer(viewerWidget, series, structPreviousStudyDownloading->displaySet);
+        setInputToViewer(viewerWidget, series, structPreviousStudyDownloading->displaySet);
 
-            delete structPreviousStudyDownloading;
-        }
+        delete structPreviousStudyDownloading;
     }
 }
 

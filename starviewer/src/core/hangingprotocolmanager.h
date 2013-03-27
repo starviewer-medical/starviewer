@@ -55,7 +55,7 @@ protected:
 
 private slots:
     /// S'ha descarregat un estudi previ demanat
-    void previousStudyDownloaded();
+    void previousStudyDownloaded(Study *study);
 
     /// Slot que comprova si l'error a la descarrega d'un estudi és un dels que s'estava esperan
     void errorDowlonadingPreviousStudies(const QString &studyUID);
