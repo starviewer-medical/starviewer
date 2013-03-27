@@ -27,9 +27,6 @@ public:
     /// Elimina tot el contingut del widget
     void dropContent();
 
-    /// Posa els hanging protocols que ha de representar el menú
-    void setHangingItems(const QList<HangingProtocol*> &listOfCandidates);
-
     /// Afegeix hanging protocols al menú
     void addHangingItems(const QList<HangingProtocol*> &items);
 
@@ -40,6 +37,9 @@ public:
     void setSearchingItem(bool state);
 
 public slots:
+    /// Posa els hanging protocols que ha de representar el menú
+    void setHangingItems(const QList<HangingProtocol*> &listOfCandidates);
+    
     /// Mètode que cada vegada que es seleccioni un dels items emet el grid resultat
     void emitSelected(ItemMenu *selected);
 

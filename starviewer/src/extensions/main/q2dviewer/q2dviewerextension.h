@@ -25,12 +25,11 @@ class MenuGridWidget;
 class TableMenu;
 class QDICOMDumpBrowser;
 class StatsWatcher;
-class StudyLayoutConfig;
+class LayoutManager;
 
 #ifndef STARVIEWER_LITE
 class QRelatedStudiesWidget;
 class RelatedStudiesManager;
-class HangingProtocolManager;
 class AutomaticSynchronizationManager;
 #endif
 
@@ -70,17 +69,8 @@ private:
     void initializeTools();
 
 #ifndef STARVIEWER_LITE
-    /// Inicialitza el l'entorn dels hanging protocols per poder-se utilitzar
-    void setupHangingProtocols();
-    
-    /// Mètode que busca els hanging protocols aplicables i aplica el millor de tots
-    void searchAndApplyBestHangingProtocol();
-
     /// Mètode encarregat d'actualitzar la llista del widget d'estudis relacionats per marcar aquells nous estudis que s'han carregat a memòria.
     void updateRelatedStudiesWidget();
-
-    /// Buscar estudis prèvis
-    void searchPreviousStudiesWithHangingProtocols();
 #endif
     
     /// Configura les tools que cal activar per defecte segons la llista de modalitats donada
@@ -92,19 +82,14 @@ private:
     /// Col·loca i ordena les icones i el menú de les eines del botó donat segons l'última eina seleccionada
     void rearrangeToolsMenu(QToolButton *menuButton);
 
-    /// Determina com fem el layout del pacient que es carrega, si amb layout automàtic o amb hanging protocols
-    void applyProperLayoutChoice();
-
-    /// Returns a list of StudyLayoutConfig corresponding to the given Patient
-    QList<StudyLayoutConfig> getLayoutCandidates(Patient *patient);
-
-    /// Applies the proper layout candidate from the list for the given Patient
-    void applyLayoutCandidates(const QList<StudyLayoutConfig> &candidates, Patient *patient);
-
     /// Shows the given widget below the button, as if it was the button's menu
     void showWidgetBelowButton(QWidget *widget, QAbstractButton *button);
 
 private slots:
+    // HACKS to be removed
+    void showHangingProtocolsWithPreviousAreBeingSearchedInMenu();
+    void hideHangingProtocolsWithPreviousAreBeingSearchedInMenu();
+
 #ifndef STARVIEWER_LITE
     /// Comprova si el nou volum té fases i per tant hem d'activar/descativar la vista coronal+sagital
     void validePhases();
@@ -165,21 +150,12 @@ private slots:
     void disableSynchronization();
 
 #ifndef STARVIEWER_LITE
-    /// Apilicar un hanging protocol
-    void setHangingProtocol(int hangingProtocolNumber);
-
     /// Inicialitza la sincronització automàtica agafant de referència el visor que tenim actiu (seleccionat)
     void enableAutomaticSynchronizationToViewer(bool enable);
-
-    ///  Mètode que busca els hanging protocols aplicables
-    void searchHangingProtocols();
 
     /// Mètodes utilitzats per modificar la icona del botó d'estudis relacionats per saber si s'estan descarregat estudis sense haver d'obrir el widget.
     void changeToRelatedStudiesDownloadingIcon();
     void changeToRelatedStudiesDefaultIcon();
-
-    /// Mètode que afegeix els hanging protocols amb prèvies
-    void addHangingProtocolsWithPrevious(QList<Study*> studies);
 
     /// Mostra el widget per poder descarregar els estudis relacionats amb l'estudi actual
     void showRelatedStudiesWidget();
@@ -240,6 +216,9 @@ private:
 
     /// Per fer estadístiques d'usabilitat
     StatsWatcher *m_statsWatcher;
+    
+    /// Handles hanging protocols and automatic layouts
+    LayoutManager *m_layoutManager;
 
 #ifndef STARVIEWER_LITE
     /// Widget per poder seleccionar estudis relacionats
@@ -248,8 +227,6 @@ private:
     /// Manager per estudis relacionats
     RelatedStudiesManager *m_relatedStudiesManager;
 
-    /// Manager de hanging protocols
-    HangingProtocolManager *m_hangingProtocolManager;
 
     /// Manager de la sincronització automàtica
     AutomaticSynchronizationManager *m_automaticSynchronizationManager;
