@@ -44,7 +44,7 @@ void LayoutManager::setupHangingProtocols()
     }
     m_hangingProtocolManager = new HangingProtocolManager();
 
-    connect(m_patient, SIGNAL(patientFused()), SLOT(searchHangingProtocols()));
+    connect(m_patient, SIGNAL(studyAdded(Study*)), SLOT(searchHangingProtocols()));
     searchHangingProtocols();
 }
 
