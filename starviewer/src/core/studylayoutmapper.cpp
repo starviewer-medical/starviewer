@@ -58,6 +58,8 @@ void StudyLayoutMapper::applyConfig(const StudyLayoutConfig &config, ViewersLayo
     layout->setGrid(rows, columns);
     // Col·loquem les imatges en el layout donat
     placeImagesInCurrentLayout(candidateImages, config.getUnfoldDirection(), layout);
+    // Make the first viewer selected
+    layout->setSelectedViewer(layout->getViewerWidget(0));
 }
 
 QList<QPair<Volume*, int> > StudyLayoutMapper::getImagesToPlace(const StudyLayoutConfig &config, const QList<Study*> &matchingStudies)
