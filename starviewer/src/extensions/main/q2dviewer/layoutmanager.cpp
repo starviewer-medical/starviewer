@@ -31,7 +31,6 @@ void LayoutManager::initialize()
 {
     searchHangingProtocols();
     applyProperLayoutChoice();
-    m_layout->setSelectedViewer(m_layout->getViewerWidget(0));
 }
 
 void LayoutManager::applyProperLayoutChoice()
