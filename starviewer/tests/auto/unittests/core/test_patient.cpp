@@ -18,6 +18,9 @@ private slots:
 
     void getStudiesByModality_ShouldReturnExpectedResults_data();
     void getStudiesByModality_ShouldReturnExpectedResults();
+
+    void getModalities_ShouldReturnExpectedValues_data();
+    void getModalities_ShouldReturnExpectedValues();
 };
 
 Q_DECLARE_METATYPE(Patient::PatientsSimilarity)
@@ -173,6 +176,68 @@ void test_Patient::getStudiesByModality_ShouldReturnExpectedResults()
     QFETCH(QList<Study*>, expectedStudies);
 
     QCOMPARE(patient->getStudiesByModality(modality), expectedStudies);
+}
+
+void test_Patient::getModalities_ShouldReturnExpectedValues_data()
+{
+    QTest::addColumn<Patient*>("patient");
+    QTest::addColumn<QStringList>("expectedModalities");
+
+    Patient *patientWithNoStudies = new Patient(0);
+    QTest::newRow("No studies") << patientWithNoStudies << QStringList();
+
+    Study *MRStudy = new Study(0);
+    MRStudy->setInstanceUID("MR_study");
+    MRStudy->addModality("MR");
+    
+    Study *CRandRFStudy = new Study(0);
+    CRandRFStudy->setInstanceUID("CR_and_RF_study");
+    CRandRFStudy->addModality("CR");
+    CRandRFStudy->addModality("RF");
+
+    Study *MRandPRStudy = new Study(0);
+    MRandPRStudy->setInstanceUID("MR_and_PR_study");
+    MRandPRStudy->addModality("MR");
+    MRandPRStudy->addModality("PR");
+
+    QStringList modalities;
+    
+    Patient *patient = new Patient(0);
+    patient->addStudy(MRStudy);
+    modalities << "MR";
+    QTest::newRow("1 study 1 modality") << patient << modalities;
+
+    patient = new Patient(0);
+    modalities.clear();
+
+    patient->addStudy(MRandPRStudy);
+    modalities << "PR" << "MR";
+    QTest::newRow("1 study 2 modalities") << patient << modalities;
+
+    patient = new Patient(0);
+    modalities.clear();
+
+    patient->addStudy(MRStudy);
+    patient->addStudy(CRandRFStudy);
+    modalities << "RF" << "MR" << "CR";
+    QTest::newRow("2 studies 3 modalities") << patient << modalities;
+
+    patient = new Patient(0);
+    modalities.clear();
+
+    patient->addStudy(MRandPRStudy);
+    patient->addStudy(CRandRFStudy);
+    patient->addStudy(MRStudy);
+    modalities << "PR" << "MR" << "RF" << "CR";
+    QTest::newRow("3 studies 4 modalities (1 repeated among studies)") << patient << modalities;
+}
+
+void test_Patient::getModalities_ShouldReturnExpectedValues()
+{
+    QFETCH(Patient*, patient);
+    QFETCH(QStringList, expectedModalities);
+
+    QCOMPARE(patient->getModalities(), expectedModalities);
 }
 
 DECLARE_TEST(test_Patient)
