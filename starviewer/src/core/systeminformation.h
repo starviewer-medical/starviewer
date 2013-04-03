@@ -2,8 +2,7 @@
 #define UDGSYSTEMINFORMATION_H
 
 // Qt
-#include <QString>
-#include <QList>
+#include <QStringList>
 #include <QSize>
 
 namespace udg {
@@ -37,18 +36,18 @@ public:
     virtual QList<unsigned int> getCPUFrequencies();
     virtual unsigned int getCPUL2CacheSize(); // en KBytes
 
-    virtual QList<QString> getGPUBrand();
-    virtual QList<QString> getGPUModel();
+    virtual QStringList getGPUBrand();
+    virtual QStringList getGPUModel();
     virtual QList<unsigned int> getGPURAM();
-    virtual QList<QString> getGPUOpenGLCompatibilities();
+    virtual QStringList getGPUOpenGLCompatibilities();
     virtual QString getGPUOpenGLVersion();
-    virtual QList<QString> getGPUDriverVersion();
+    virtual QStringList getGPUDriverVersion();
 
     //Screen, Display, Monitor, Desktop, ...
     QList<QSize> getScreenResolutions();
-    virtual QList<QString> getScreenVendors();
+    virtual QStringList getScreenVendors();
 
-    virtual QList<QString> getHardDiskDevices();
+    virtual QStringList getHardDiskDevices();
     virtual unsigned int getHardDiskCapacity(const QString &device);
     virtual unsigned int getHardDiskFreeSpace(const QString &device);
     virtual bool doesOpticalDriveHaveWriteCapabilities();

@@ -4,15 +4,13 @@
 #include "diagnosistestresultwriter.h"
 
 #include <QObject>
-#include <QList>
+#include <QStringList>
 #include <QFile>
-#include <QString>
 #include <QTextStream>
 
 using namespace udg;
 
 typedef QList<DiagnosisTestResult> DiagnosisTestResultList;
-typedef QList<QString> StringList;
 
 class TestingDiagnosisTestResultWriter : public DiagnosisTestResultWriter {
 public:
@@ -80,7 +78,6 @@ public:
 };
 
 Q_DECLARE_METATYPE(DiagnosisTestResultList)
-Q_DECLARE_METATYPE(StringList)
 
 class test_DiagnosisTestResultWriter : public QObject {
 Q_OBJECT
@@ -92,11 +89,11 @@ private slots:
 
 void test_DiagnosisTestResultWriter::write_ShouldWriteTestResultsToAnIODevice_data()
 {
-    QTest::addColumn<StringList>("diagnosisTestDescriptions");
+    QTest::addColumn<QStringList>("diagnosisTestDescriptions");
     QTest::addColumn<DiagnosisTestResultList>("diagnosisTestResults");
     QTest::addColumn<QString>("result");
 
-    StringList descriptions;
+    QStringList descriptions;
     descriptions << "Diagnosis test: OK" << "Diagnosis test: 1 Warning" << "Diagnosis test: 1 Error" << "Diagnosis test: 1 Error & 1 Warning";
     
     DiagnosisTestResultList testsResults;
@@ -126,7 +123,7 @@ void test_DiagnosisTestResultWriter::write_ShouldWriteTestResultsToAnIODevice_da
 
 void test_DiagnosisTestResultWriter::write_ShouldWriteTestResultsToAnIODevice()
 {
-    QFETCH(StringList, diagnosisTestDescriptions);
+    QFETCH(QStringList, diagnosisTestDescriptions);
     QFETCH(DiagnosisTestResultList, diagnosisTestResults);
     QFETCH(QString, result);
     

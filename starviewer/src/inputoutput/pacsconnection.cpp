@@ -4,6 +4,7 @@
 #include <ofcond.h>
 #include <assoc.h>
 #include <QHostInfo>
+#include <QStringList>
 
 #include "logging.h"
 #include "inputoutputsettings.h"
@@ -88,7 +89,7 @@ OFCondition PACSConnection::configureStore()
 
     // TODO Si que la podem arribar a saber la transfer syntax, només hem de mirar la SOPClassUID de cada imatge a enviar, mirar
     // codi storescu.cc a partir de la línia 639
-    QList<QString> sopClasses;
+    QStringList sopClasses;
     for (int i = 0; i < numberOfDcmShortSCUStorageSOPClassUIDs; i++)
     {
         // Comprovem que no hi hagi que cap SOPClas duplicada

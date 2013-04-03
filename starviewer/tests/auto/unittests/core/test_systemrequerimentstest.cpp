@@ -6,7 +6,6 @@
 using namespace udg;
 
 typedef QList<unsigned int> UnsignedIntList;
-typedef QList<QString> StringList;
 typedef QList<QSize> SizeList;
 
 class TestingSystemRequeriments : public SystemRequeriments {
@@ -39,10 +38,10 @@ class TestingSystemRequerimentsTest : public SystemRequerimentsTest {
 public:
     unsigned int m_testingCPUNumberOfCores;
     UnsignedIntList m_testingCPUFrequencies;
-    StringList m_testingGPUOpenGLCompatibilities;
+    QStringList m_testingGPUOpenGLCompatibilities;
     QString m_testingGPUOpenGLVersion;
     UnsignedIntList m_testingGPURAM;
-    StringList m_testingGPUModel;
+    QStringList m_testingGPUModel;
     unsigned int m_testingHardDiskFreeSpace;
     SystemInformation::OperatingSystem m_testingOperatingSystem;
     QString m_testingOperatingSystemVersion;
@@ -63,7 +62,7 @@ protected:
         Q_UNUSED(system);
         return m_testingCPUFrequencies;
     }
-    QList<QString> getGPUOpenGLCompatibilities(SystemInformation *system)
+    QStringList getGPUOpenGLCompatibilities(SystemInformation *system)
     {
         Q_UNUSED(system);
         return m_testingGPUOpenGLCompatibilities;
@@ -78,7 +77,7 @@ protected:
         Q_UNUSED(system);
         return m_testingGPURAM;
     }
-    QList<QString> getGPUModel(SystemInformation *system)
+    QStringList getGPUModel(SystemInformation *system)
     {
         Q_UNUSED(system);
         return m_testingGPUModel;
@@ -136,7 +135,6 @@ protected:
 Q_DECLARE_METATYPE(DiagnosisTestResult::DiagnosisTestResultState)
 Q_DECLARE_METATYPE(SystemInformation::OperatingSystem)
 Q_DECLARE_METATYPE(UnsignedIntList)
-Q_DECLARE_METATYPE(StringList)
 Q_DECLARE_METATYPE(SizeList)
 
 class test_SystemRequerimentsTest : public QObject {
@@ -152,10 +150,10 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
     // Entrada
     QTest::addColumn<unsigned int>("testingCPUNumberOfCores");
     QTest::addColumn<UnsignedIntList>("testingCPUFrequencies");
-    QTest::addColumn<StringList>("testingGPUOpenGLCompatibilities");
+    QTest::addColumn<QStringList>("testingGPUOpenGLCompatibilities");
     QTest::addColumn<QString>("testingGPUOpenGLVersion");
     QTest::addColumn<UnsignedIntList>("testingGPURAM");
-    QTest::addColumn<StringList>("testingGPUModel");
+    QTest::addColumn<QStringList>("testingGPUModel");
     QTest::addColumn<unsigned int>("testingHardDiskFreeSpace");
     QTest::addColumn<SystemInformation::OperatingSystem>("testingOperatingSystem");
     QTest::addColumn<QString>("testingOperatingSystemVersion");
@@ -176,12 +174,12 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
     unsigned int cpuNumberOfCores = 4;
     UnsignedIntList cpuFrequencies;
     cpuFrequencies << (unsigned int)3000;
-    StringList openGLExtensions;
+    QStringList openGLExtensions;
     openGLExtensions << "GL_ARB_over_9000" << "GL_ARB_draw_buffers" << "GL_ARB_fragment_program_shadow" << "GL_ARB_half_float_pixel" << "GL_ARB_flux_capacitor";
     QString openGLVersion = "2.5";
     UnsignedIntList gpuRAM;
     gpuRAM << (unsigned int)500;
-    StringList gpuModel;
+    QStringList gpuModel;
     gpuModel << "NVidia GeForce GTX 470";
     unsigned int hardDiskFreeSpace = 10240;
     SystemInformation::OperatingSystem operatingSystem = SystemInformation::OSWindows;
@@ -227,7 +225,7 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
                                             << QString("The fastest CPU runs at %1 MHz, and the minimum required is %2 MHz").arg(zero).arg(requeriments.getMinimumCPUFrequency())
                                             << "Update computer's hardware";
 
-    StringList missingOpenGLExtensions;
+    QStringList missingOpenGLExtensions;
     missingOpenGLExtensions << "GL_ARB_draw_buffers";
     // El resultat és hard coded, si canvia el requeriment, s'ha de canviar la string
     QTest::newRow("missing openGL extensions") << cpuNumberOfCores << cpuFrequencies << missingOpenGLExtensions << openGLVersion << gpuRAM << gpuModel << hardDiskFreeSpace
@@ -325,10 +323,10 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
 {
     QFETCH(unsigned int, testingCPUNumberOfCores);
     QFETCH(UnsignedIntList, testingCPUFrequencies);
-    QFETCH(StringList, testingGPUOpenGLCompatibilities);
+    QFETCH(QStringList, testingGPUOpenGLCompatibilities);
     QFETCH(QString, testingGPUOpenGLVersion);
     QFETCH(UnsignedIntList, testingGPURAM);
-    QFETCH(StringList, testingGPUModel);
+    QFETCH(QStringList, testingGPUModel);
     QFETCH(unsigned int, testingHardDiskFreeSpace);
     QFETCH(SystemInformation::OperatingSystem, testingOperatingSystem);
     QFETCH(QString, testingOperatingSystemVersion);

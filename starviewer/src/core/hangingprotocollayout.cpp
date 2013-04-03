@@ -26,7 +26,7 @@ void HangingProtocolLayout::setHorizontalPixelsList(const QList<int> &horizontal
     m_horizontalPixelsList = horizontalPixelsList;
 }
 
-void HangingProtocolLayout::setDisplayEnvironmentSpatialPositionList(const QList<QString> &displayEnvironmentSpatialPosition)
+void HangingProtocolLayout::setDisplayEnvironmentSpatialPositionList(const QStringList &displayEnvironmentSpatialPosition)
 {
     m_displayEnvironmentSpatialPosition = displayEnvironmentSpatialPosition;
 }
@@ -46,7 +46,7 @@ QList<int> HangingProtocolLayout::getHorizontalPixelsList() const
     return m_horizontalPixelsList;
 }
 
-QList<QString> HangingProtocolLayout::getDisplayEnvironmentSpatialPositionList() const
+QStringList HangingProtocolLayout::getDisplayEnvironmentSpatialPositionList() const
 {
     return m_displayEnvironmentSpatialPosition;
 }

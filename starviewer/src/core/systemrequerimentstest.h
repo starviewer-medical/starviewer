@@ -35,10 +35,10 @@ protected:
 
     virtual unsigned int getCPUNumberOfCores(SystemInformation *system);
     virtual QList<unsigned int> getCPUFrequencies(SystemInformation *system);
-    virtual QList<QString> getGPUOpenGLCompatibilities(SystemInformation *system);
+    virtual QStringList getGPUOpenGLCompatibilities(SystemInformation *system);
     virtual QString getGPUOpenGLVersion(SystemInformation *system);
     virtual QList<unsigned int> getGPURAM(SystemInformation *system);
-    virtual QList<QString> getGPUModel(SystemInformation *system);
+    virtual QStringList getGPUModel(SystemInformation *system);
     virtual unsigned int getHardDiskFreeSpace(SystemInformation *system, const QString &device);
     virtual SystemInformation::OperatingSystem getOperatingSystem(SystemInformation *system);
     virtual QString getOperatingSystemVersion(SystemInformation *system);

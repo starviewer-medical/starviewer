@@ -131,12 +131,12 @@ void HangingProtocol::setNumberOfScreens(int screens)
     m_layout->setNumberOfScreens(screens);
 }
 
-void HangingProtocol::setDisplayEnvironmentSpatialPositionList(const QList<QString> &positions)
+void HangingProtocol::setDisplayEnvironmentSpatialPositionList(const QStringList &positions)
 {
     m_layout->setDisplayEnvironmentSpatialPositionList(positions);
 }
 
-void HangingProtocol::setProtocolsList(const QList<QString> &protocols)
+void HangingProtocol::setProtocolsList(const QStringList &protocols)
 {
     m_mask->setProtocolsList(protocols);
 }

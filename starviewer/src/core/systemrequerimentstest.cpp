@@ -27,7 +27,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
     const unsigned int MinimumNumberOfCores = requeriments->getMinimumCPUNumberOfCores();
     const unsigned int MinimumCoreSpeed = requeriments->getMinimumCPUFrequency();
     const unsigned int MinimumGPURAM = requeriments->getMinimumGPURAM();
-    const QList<QString> MinimumGPUOpenGLExtensions = requeriments->getMinimumGPUOpenGLCompatibilities();
+    const QStringList MinimumGPUOpenGLExtensions = requeriments->getMinimumGPUOpenGLCompatibilities();
     const QString MinimumGPUOpenGLVersion = requeriments->getMinimumGPUOpenGLVersion();
     const QString MinimumOSVersion = requeriments->getMinimumOperatingSystemVersion();
     const unsigned int MinimumRAM = requeriments->getMinimumRAMTotalAmount();
@@ -89,7 +89,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
     }
 
     // Tenir en una llista les compatibilitats openGL que starviewer utilitza i anar-les buscant una a una al retorn del mètode
-    QList<QString> openGLExtensions = getGPUOpenGLCompatibilities(system);
+    QStringList openGLExtensions = getGPUOpenGLCompatibilities(system);
     QStringList unsupportedOpenGLExtensions;
     for (int i = 0; i < MinimumGPUOpenGLExtensions.count(); i++)
     {
@@ -109,7 +109,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
 
     // Memòria RAM de la GPU
     QList<unsigned int> gpuRAM = getGPURAM(system);
-    QList<QString> gpuModel = getGPUModel(system);
+    QStringList gpuModel = getGPUModel(system);
     for (int i = 0; i < gpuRAM.count(); i++)
     {
         if (gpuRAM.at(i) < MinimumGPURAM)
@@ -317,7 +317,7 @@ QList<unsigned int> SystemRequerimentsTest::getCPUFrequencies(SystemInformation 
     return system->getCPUFrequencies();
 }
 
-QList<QString> SystemRequerimentsTest::getGPUOpenGLCompatibilities(SystemInformation *system)
+QStringList SystemRequerimentsTest::getGPUOpenGLCompatibilities(SystemInformation *system)
 {
     return system->getGPUOpenGLCompatibilities();
 }
@@ -332,7 +332,7 @@ QList<unsigned int> SystemRequerimentsTest::getGPURAM(SystemInformation *system)
     return system->getGPURAM();
 }
 
-QList<QString> SystemRequerimentsTest::getGPUModel(SystemInformation *system)
+QStringList SystemRequerimentsTest::getGPUModel(SystemInformation *system)
 {
     return system->getGPUModel();
 }

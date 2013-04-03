@@ -1,8 +1,7 @@
 #ifndef UDGSYSTEMREQUERIMENTS_H
 #define UDGSYSTEMREQUERIMENTS_H
 
-#include <QString>
-#include <QList>
+#include <QStringList>
 
 namespace udg {
 
@@ -16,7 +15,7 @@ public:
 
     virtual unsigned int getMinimumCPUNumberOfCores();
     virtual unsigned int getMinimumCPUFrequency();
-    virtual QList<QString> getMinimumGPUOpenGLCompatibilities();
+    virtual QStringList getMinimumGPUOpenGLCompatibilities();
     virtual QString getMinimumGPUOpenGLVersion();
     virtual unsigned int getMinimumGPURAM();
     virtual unsigned int getMinimumHardDiskFreeSpace();
@@ -41,7 +40,7 @@ protected:
     bool m_doesOperatingSystemNeedToBe64BitArchitecutre;
     unsigned int m_minimumRAM;
     unsigned int m_minimumScreenWidth;
-    QList<QString> m_minimumOpenGLExtensions;
+    QStringList m_minimumOpenGLExtensions;
     unsigned int m_minimumDiskSpace;
     bool m_doesOpticalDriveNeedsToWrite;
 };

@@ -2,6 +2,7 @@
 #define UDGHANGINGPROTOCOLLAYOUT_H
 
 #include <QObject>
+#include <QStringList>
 
 namespace udg {
 
@@ -19,7 +20,7 @@ public:
     /// Posar la llista de píxels en horitzontal
     void setHorizontalPixelsList(const QList<int> &horizontalPixelsList);
     /// Posar la llista de posicions dels visualitzadors
-    void setDisplayEnvironmentSpatialPositionList(const QList<QString> &displayEnvironmentSpatialPosition);
+    void setDisplayEnvironmentSpatialPositionList(const QStringList &displayEnvironmentSpatialPosition);
     /// Obtenir el nombre de pantalles
     int getNumberOfScreens() const;
     /// Obtenir la llista de píxels en vertical
@@ -27,7 +28,7 @@ public:
     /// Obtenir la llista de píxels en horitzontal
     QList<int> getHorizontalPixelsList() const;
     /// Obtenir la llista de posicions dels visualitzadors
-    QList<QString> getDisplayEnvironmentSpatialPositionList() const;
+    QStringList getDisplayEnvironmentSpatialPositionList() const;
 
 private:
     /// Hanging Protocol Environment Module Attributes
@@ -38,7 +39,7 @@ private:
     /// Llista de píxels en horitzontal
     QList<int> m_horizontalPixelsList;
     /// Llista de posicions dels visualitzadors
-    QList<QString> m_displayEnvironmentSpatialPosition;
+    QStringList m_displayEnvironmentSpatialPosition;
 };
 
 }

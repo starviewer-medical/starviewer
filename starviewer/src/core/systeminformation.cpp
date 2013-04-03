@@ -86,14 +86,14 @@ unsigned int SystemInformation::getCPUL2CacheSize()
     return 0;
 }
 
-QList<QString> SystemInformation::getGPUBrand()
+QStringList SystemInformation::getGPUBrand()
 {
-    return QList<QString>();
+    return QStringList();
 }
 
-QList<QString> SystemInformation::getGPUModel()
+QStringList SystemInformation::getGPUModel()
 {
-    return QList<QString>();
+    return QStringList();
 }
 
 QList<unsigned int> SystemInformation::getGPURAM()
@@ -101,9 +101,9 @@ QList<unsigned int> SystemInformation::getGPURAM()
     return QList<unsigned int>();
 }
 
-QList<QString> SystemInformation::getGPUOpenGLCompatibilities()
+QStringList SystemInformation::getGPUOpenGLCompatibilities()
 {
-    return QList<QString>();
+    return QStringList();
 }
 
 QString SystemInformation::getGPUOpenGLVersion()
@@ -111,9 +111,9 @@ QString SystemInformation::getGPUOpenGLVersion()
     return "0.0";
 }
 
-QList<QString> SystemInformation::getGPUDriverVersion()
+QStringList SystemInformation::getGPUDriverVersion()
 {
-    return QList<QString>();
+    return QStringList();
 }
 
 QList<QSize> SystemInformation::getScreenResolutions()
@@ -127,14 +127,14 @@ QList<QSize> SystemInformation::getScreenResolutions()
     return screenResolutions;
 }
 
-QList<QString> SystemInformation::getScreenVendors()
+QStringList SystemInformation::getScreenVendors()
 {
-    return QList<QString>();
+    return QStringList();
 }
 
-QList<QString> SystemInformation::getHardDiskDevices()
+QStringList SystemInformation::getHardDiskDevices()
 {
-    return QList<QString>();
+    return QStringList();
 }
 
 unsigned int SystemInformation::getHardDiskCapacity(const QString &device)

@@ -37,7 +37,7 @@ unsigned int SystemRequeriments::getMinimumCPUFrequency()
     return m_minimumCoreSpeed;
 }
 
-QList<QString> SystemRequeriments::getMinimumGPUOpenGLCompatibilities()
+QStringList SystemRequeriments::getMinimumGPUOpenGLCompatibilities()
 {
     return m_minimumOpenGLExtensions;
 }
