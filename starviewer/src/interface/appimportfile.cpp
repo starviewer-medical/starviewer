@@ -104,7 +104,7 @@ QStringList AppImportFile::generateFilenames(const QString &dirPath)
     QFileInfoList fileInfoList = dir.entryInfoList(QDir::Files);
 
     // Afegim a la llista cadascun dels paths absoluts dels arxius que contingui el directori
-    foreach (QFileInfo fileInfo, fileInfoList)
+    foreach (const QFileInfo &fileInfo, fileInfoList)
     {
         list << fileInfo.absoluteFilePath();
     }

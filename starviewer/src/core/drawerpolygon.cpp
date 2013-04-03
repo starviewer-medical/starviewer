@@ -223,7 +223,7 @@ void DrawerPolygon::buildVtkPoints()
 
         // Donem els punts/vèrtexs
         int i = 0;
-        foreach (QVector<double> vertix, m_pointsList)
+        foreach (const QVector<double> &vertix, m_pointsList)
         {
             m_vtkPoints->InsertPoint(i, vertix.data());
             m_vtkCellArray->InsertCellPoint(i);

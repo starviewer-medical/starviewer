@@ -180,7 +180,7 @@ QStringList SettingsParser::getLocalHostIPv4Addresses()
     QHostInfo hostInfo = QHostInfo::fromName(QHostInfo::localHostName());
     // TODO També es podria optar per fer servir QNetworkInterface::allAddresses(), tot i que ens retorna l'adreça 127.0.0.1 a més a més,
     // en comptes de fer servir hostInfo.addresses()
-    foreach (QHostAddress ip, hostInfo.addresses())
+    foreach (const QHostAddress &ip, hostInfo.addresses())
     {
         QString ipString = ip.toString();
         if (isIPv4Address(ipString))
