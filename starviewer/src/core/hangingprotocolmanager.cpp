@@ -264,14 +264,11 @@ void HangingProtocolManager::applyHangingProtocol(HangingProtocol *hangingProtoc
 
 bool HangingProtocolManager::isModalityCompatible(HangingProtocol *protocol, Patient *patient)
 {
-    foreach (Study *study, patient->getStudies())
+    foreach (QString modality, patient->getModalities())
     {
-        foreach (QString modality, study->getModalities())
+        if (isModalityCompatible(protocol, modality))
         {
-            if (isModalityCompatible(protocol, modality))
-            {
-                return true;
-            }
+            return true;
         }
     }
 

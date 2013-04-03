@@ -91,10 +91,7 @@ void QRelatedStudiesWidget::searchStudiesOf(Patient *patient)
     m_patient = patient;
     m_relatedStudiesManager->queryMergedStudies(patient);
 
-    foreach(Study *study, patient->getStudies())
-    {
-        m_modalitiesOfStudiesToHighlight.append(study->getModalities());
-    }
+    m_modalitiesOfStudiesToHighlight.append(patient->getModalities());
 }
 
 void QRelatedStudiesWidget::initializeSearch()

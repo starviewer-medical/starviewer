@@ -324,16 +324,7 @@ void Q2DViewerExtension::setPatient(Patient *patient)
 
     if (m_patient)
     {
-        QStringList modalitiesList;
-        foreach (Study *study, m_patient->getStudies())
-        {
-            if (study)
-            {
-                modalitiesList << study->getModalities();
-            }
-        }
-
-        setupDefaultToolsForModalities(modalitiesList);
+        setupDefaultToolsForModalities(m_patient->getModalities());
 
         setupLayoutManager();
     }

@@ -39,14 +39,9 @@ void LayoutManager::applyProperLayoutChoice()
     Settings settings;
     QStringList modalitiesWithHPPriority = settings.getValue(CoreSettings::ModalitiesToApplyHangingProtocolsAsFirstOption)
         .toString().split(";", QString::SkipEmptyParts);
-    QStringList patientModalities;
-    foreach (Study *study, m_patient->getStudies())
-    {
-        patientModalities << study->getModalities();
-    }
 
     bool hasToApplyHangingProtocol = false;
-    QSet<QString> matchingModalities = modalitiesWithHPPriority.toSet().intersect(patientModalities.toSet());
+    QSet<QString> matchingModalities = modalitiesWithHPPriority.toSet().intersect(m_patient->getModalities().toSet());
     if (matchingModalities.isEmpty())
     {
         // First we find out which candidate configurations we have according to the patient's modalities
@@ -114,12 +109,6 @@ QList<StudyLayoutConfig> LayoutManager::getLayoutCandidates(Patient *patient)
 
 void LayoutManager::applyLayoutCandidates(const QList<StudyLayoutConfig> &candidates, Patient *patient)
 {
-    QStringList patientModalities;
-    foreach (Study *study, patient->getStudies())
-    {
-        patientModalities << study->getModalities();
-    }
-    
     StudyLayoutConfig layoutToApply;
     if (!candidates.isEmpty())
     {
@@ -130,7 +119,7 @@ void LayoutManager::applyLayoutCandidates(const QList<StudyLayoutConfig> &candid
     {
         // If no candidate found, we choose a default configuration.
         // This default configuration is not yet configurable through settings, could be done in a future enhancement.
-        layoutToApply = StudyLayoutConfigsLoader::getDefaultConfigForModality(patientModalities.first());
+        layoutToApply = StudyLayoutConfigsLoader::getDefaultConfigForModality(patient->getModalities().first());
     }
 
     StudyLayoutMapper mapper;
