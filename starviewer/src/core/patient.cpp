@@ -196,6 +196,18 @@ QList<Study*> Patient::getStudiesByModality(const QString &modality)
     return filteredStudies;
 }
 
+QStringList Patient::getModalities() const
+{
+    QSet<QString> modalitiesSet;
+    foreach (Study *study, m_studiesList)
+    {
+        // This way we remove duplicates if any
+        modalitiesSet += study->getModalities().toSet();
+    }
+    
+    return modalitiesSet.toList();
+}
+
 Series *Patient::getSeries(const QString &uid)
 {
     Series *result = NULL;

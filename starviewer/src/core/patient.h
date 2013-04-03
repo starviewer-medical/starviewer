@@ -71,6 +71,9 @@ public:
     /// Ens retorna una llista amb els estudis del pacient que continguin la modalitat donada. La llista d'estudis no està en cap ordre concret.
     QList<Study*> getStudiesByModality(const QString &modality);
     
+    /// Returns a string list with its studies modalities
+    QStringList getModalities() const;
+    
     /// Mètode ràpid per trobar si hi ha una series amb el uid donat. Retorna nul si aquesta no existeix
     Series* getSeries(const QString &uid);
 
