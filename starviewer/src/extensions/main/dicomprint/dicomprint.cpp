@@ -47,7 +47,7 @@ int DicomPrint::print(DicomPrinter printer, DicomPrintJob printJob)
         {
             INFO_LOG("Envio a imprimir la copia " + QString().setNum(indexNumberOfCopies + 1) + "/" + QString().setNum(numberOfCopies));
             // Enviem a imprimir cada pàgina
-            foreach (QString dcmtkStoredPrintPathFile, dcmtkStoredPrintPathFileList)
+            foreach (const QString &dcmtkStoredPrintPathFile, dcmtkStoredPrintPathFileList)
             {
                 INFO_LOG("Envio FilmSession a imprimir");
                 printDicomSpool.printBasicGrayscale(printer, printJob, dcmtkStoredPrintPathFile, getSpoolDirectory());

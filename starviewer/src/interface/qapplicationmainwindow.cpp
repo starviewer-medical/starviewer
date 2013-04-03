@@ -221,7 +221,7 @@ void QApplicationMainWindow::createActions()
     connect(m_openDICOMDIRAction, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
 
     QStringList extensionsMediatorNames = ExtensionMediatorFactory::instance()->getFactoryNamesList();
-    foreach (QString name, extensionsMediatorNames)
+    foreach (const QString &name, extensionsMediatorNames)
     {
         ExtensionMediator *mediator = ExtensionMediatorFactory::instance()->create(name);
 

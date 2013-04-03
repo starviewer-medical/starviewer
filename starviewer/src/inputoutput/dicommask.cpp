@@ -708,7 +708,7 @@ QString DicomMask::getFilledMaskFields() const
         // per exemple [20090512-] (desde), [-20090611] (fins), i ens ho mostrarà com una data única
         QStringList datesList = getStudyDateRangeAsDICOMFormat().split("-", QString::SkipEmptyParts);
         // "traduim" less dates a un format mé llegible
-        foreach (QString dateString, datesList)
+        foreach (const QString &dateString, datesList)
         {
             date = QDate::fromString(dateString, DateFormatAsString);
             if (date == today)

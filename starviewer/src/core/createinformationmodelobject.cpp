@@ -42,7 +42,7 @@ Study* CreateInformationModelObject::createStudy(DICOMTagReader *dicomTagReader)
     // Tenir en compte si aquest objecte s'utilitza per fer el dicomclassifierfillerstep que ells omplen la modalitat a partir de les series
     studyModalities = dicomTagReader->getValueAttributeAsQString(DICOMModalitiesInStudy);
 
-    foreach (QString modality, studyModalities.split("\\"))
+    foreach (const QString &modality, studyModalities.split("\\"))
     {
         study->addModality(modality);
     }

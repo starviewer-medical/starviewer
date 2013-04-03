@@ -183,7 +183,7 @@ Study* LocalDatabaseStudyDAL::fillStudy(char **reply, int row, int columns)
 
     // Afegim la modalitat que estan separades per "/"
     modalities = QString(reply[6 + row * columns]).split("/");
-    foreach (QString modality, modalities)
+    foreach (const QString &modality, modalities)
     {
         study->addModality(modality);
     }

@@ -52,7 +52,7 @@ QRelatedStudiesWidget::QRelatedStudiesWidget(RelatedStudiesManager *relatedStudi
 QRelatedStudiesWidget::~QRelatedStudiesWidget()
 {
     delete m_relatedStudiesTree;
-    foreach (QString key, m_infomationPerStudy.keys())
+    foreach (const QString &key, m_infomationPerStudy.keys())
     {
         delete m_infomationPerStudy.take(key);
     }
@@ -105,7 +105,7 @@ void QRelatedStudiesWidget::initializeSearch()
     {
         delete m_relatedStudiesTree->takeTopLevelItem(0);
     }
-    foreach (QString key, m_infomationPerStudy.keys())
+    foreach (const QString &key, m_infomationPerStudy.keys())
     {
         delete m_infomationPerStudy.take(key);
     }
@@ -405,7 +405,7 @@ QStringList QRelatedStudiesWidget::removeNonImageModalities(const QStringList &s
 
 bool QRelatedStudiesWidget::hasToHighlightStudy(Study *study)
 {
-    foreach (QString modality, study->getModalities())
+    foreach (const QString &modality, study->getModalities())
     {
         if (m_modalitiesOfStudiesToHighlight.contains(modality))
         {
