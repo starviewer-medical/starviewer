@@ -13,7 +13,7 @@ QList<QKeySequence> ShortcutManager::getShortcuts(const QString &key)
 {
     Settings settings;
     QList<QKeySequence> shortcuts;
-    foreach (QString string, settings.getValue(key).toStringList())
+    foreach (const QString &string, settings.getValue(key).toStringList())
     {
         shortcuts << QKeySequence(string);
     }

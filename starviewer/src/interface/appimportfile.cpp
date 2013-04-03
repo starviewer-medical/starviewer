@@ -74,7 +74,7 @@ void AppImportFile::openDirectory(bool recursively)
             QStringList dirList;
             scanDirectories(directoryName, dirList);
             // Per cada directori, obtenim els arxius que podem tractar
-            foreach (QString dirName, dirList)
+            foreach (const QString &dirName, dirList)
             {
                 filenames << generateFilenames(dirName);
             }
@@ -124,7 +124,7 @@ void AppImportFile::scanDirectories(const QString &rootPath, QStringList &dirsLi
         if (!subdirs.isEmpty())
         {
             // Per cada subdirectori escanejem recursivament
-            foreach (QString subDir, subdirs)
+            foreach (const QString &subDir, subdirs)
             {
                 scanDirectories(rootPath + "/" + subDir, dirsList);
             }

@@ -656,7 +656,7 @@ void HangingProtocolManager::errorDowlonadingPreviousStudies(const QString &stud
 
 void HangingProtocolManager::cancelHangingProtocolDownloading()
 {
-    foreach (QString key, m_studiesDownloading->keys())
+    foreach (const QString &key, m_studiesDownloading->keys())
     {
         emit discardedStudy(key);
         // S'agafa i es treu de la llista l'element que s'està esperant

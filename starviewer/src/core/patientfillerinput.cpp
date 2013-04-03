@@ -129,7 +129,7 @@ QStringList PatientFillerInput::getLabels() const
 
 bool PatientFillerInput::hasAllLabels(QStringList requiredLabelsList) const
 {
-    foreach (QString requiredLabel, requiredLabelsList)
+    foreach (const QString &requiredLabel, requiredLabelsList)
     {
         if (!getLabels().contains(requiredLabel))
         {

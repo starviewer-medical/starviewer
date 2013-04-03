@@ -83,7 +83,7 @@ void initializeTranslations(QApplication &app)
     INFO_LOG("Locales = " + defaultLocale.name());
 
     QStringList extensionsMediatorNames = udg::ExtensionMediatorFactory::instance()->getFactoryNamesList();
-    foreach (QString mediatorName, extensionsMediatorNames)
+    foreach (const QString &mediatorName, extensionsMediatorNames)
     {
         udg::ExtensionMediator *mediator = udg::ExtensionMediatorFactory::instance()->create(mediatorName);
 

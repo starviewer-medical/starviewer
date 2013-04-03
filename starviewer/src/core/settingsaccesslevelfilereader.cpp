@@ -42,7 +42,7 @@ bool SettingsAccessLevelFileReader::read(const QString &filePath)
                 bool ok;
                 QString value;
                 Settings::AccessLevel accessLevel;
-                foreach (QString key, list)
+                foreach (const QString &key, list)
                 {
                     value = settings.value(key).toString();
                     ok = true;

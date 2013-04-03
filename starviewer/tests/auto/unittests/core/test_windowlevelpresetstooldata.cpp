@@ -274,7 +274,7 @@ void test_WindowLevelPresetsToolData::getDescriptionsFromGroup_ReturnsExpectedVa
     QStringList namesList = wlData->getDescriptionsFromGroup(group);
     QCOMPARE(namesList.count(), expectedPresetsNames.count());
     
-    foreach (QString presetName, expectedPresetsNames)
+    foreach (const QString &presetName, expectedPresetsNames)
     {
         QVERIFY(namesList.contains(presetName));
     }

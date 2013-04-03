@@ -107,7 +107,7 @@ OFCondition PACSConnection::configureStore()
     // transfer syntax ens podem comunicar, llavors el PACS ens indicarà si ell pot guardar aquest tipus de SOPClass, i amb quin
     // transfer syntax li hem d'enviar la imatge
 
-    foreach (QString sopClass, sopClasses)
+    foreach (const QString &sopClass, sopClasses)
     {
         // No poden haver més de 255 presentation context
         if (presentationContextID > 255)

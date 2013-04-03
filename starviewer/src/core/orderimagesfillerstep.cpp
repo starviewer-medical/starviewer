@@ -34,7 +34,7 @@ OrderImagesFillerStep::~OrderImagesFillerStep()
             foreach (double normalVectorKey, normalVectorImageSet->keys())
             {
                 orderedImageSet = normalVectorImageSet->take(normalVectorKey);
-                foreach (QString key, orderedImageSet->keys())
+                foreach (const QString &key, orderedImageSet->keys())
                 {
                     imagePositionSet = orderedImageSet->take(key);
                     foreach (double distanceKey, imagePositionSet->keys())
@@ -207,7 +207,7 @@ void OrderImagesFillerStep::processImage(Image *image)
     // Aquest bucle serveix per trobar si la normal de la nova imatge
     // coincideix amb alguna normal de les imatges ja processada
     QString keyPlaneNormal;
-    foreach (QString normal, planeNormals)
+    foreach (const QString &normal, planeNormals)
     {
         if (normal == planeNormalString)
         {
@@ -413,7 +413,7 @@ void OrderImagesFillerStep::setOrderedImagesIntoSeries(Series *series)
             foreach (double key, m_orderedNormalsSet->keys())
             {
                 orderedImageSet = m_orderedNormalsSet->take(key);
-                foreach (QString key, orderedImageSet->keys())
+                foreach (const QString &key, orderedImageSet->keys())
                 {
                     imagePositionSet = orderedImageSet->take(key);
                     foreach (double key2, imagePositionSet->keys())
@@ -450,7 +450,7 @@ void OrderImagesFillerStep::setOrderedImagesIntoSeries(Series *series)
                 lastOrderedImageSetDistance = new QMap<double, QMap<double, QMap<unsigned long, Image*>*>*>();
                 bool isRotational = true;
 
-                foreach (QString normal, orderedImageSet->keys())
+                foreach (const QString &normal, orderedImageSet->keys())
                 {
                     imagePositionSet = orderedImageSet->take(normal);
                     
