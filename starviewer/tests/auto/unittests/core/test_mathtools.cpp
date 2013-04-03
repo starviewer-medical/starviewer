@@ -193,7 +193,7 @@ void test_MathTools::truncate_ShouldReturnTruncatedValue_data()
     QTest::addColumn<double>("value");
     QTest::addColumn<double>("truncated");
 
-    QTest::newRow("negative") << -32.14 << -33.0;
+    QTest::newRow("negative") << -32.14 << -32.0;
     QTest::newRow("positive") << 77.97 << 77.0;
     QTest::newRow("+zero") << 0.0 << 0.0;
     QTest::newRow("-zero") << -0.0 << -0.0;

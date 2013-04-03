@@ -370,7 +370,7 @@ double* MathTools::infiniteLinesIntersection(double *p1, double *p2, double *p3,
 
 double MathTools::truncate(double x)
 {
-    return std::floor(x);
+    return x > 0.0 ? std::floor(x) : std::ceil(x);
 }
 
 int MathTools::roundToNearestInteger(double x)
