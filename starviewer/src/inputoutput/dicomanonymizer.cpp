@@ -100,7 +100,7 @@ bool DICOMAnonymizer::anonymyzeDICOMFilesDirectory(const QString &directoryPath)
     QDir directory;
     directory.setPath(directoryPath);
 
-    foreach (QFileInfo entryInfo, directory.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files))
+    foreach (const QFileInfo &entryInfo, directory.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files))
     {
         if (entryInfo.isDir())
         {

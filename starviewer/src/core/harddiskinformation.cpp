@@ -50,7 +50,7 @@ qint64 HardDiskInformation::getDirectorySizeInBytes(const QString &directoryPath
     // Llista de fitxers del directori
     fileInfoList = directory.entryInfoList(QDir::Files);
 
-    foreach (QFileInfo fileInfo, fileInfoList)
+    foreach (const QFileInfo &fileInfo, fileInfoList)
     {
         directorySize += fileInfo.size();
     }
