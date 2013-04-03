@@ -101,7 +101,7 @@ private:
     int setInputToHangingProtocolImageSets(HangingProtocol *hangingProtocol, const QList<Series*> &inputSeries, const QList<Study*> &previousStudies);
 
     /// Busca la imatge número index dins tots els estudis de la modalitat del hanging protocol
-    Image* getImageByIndexInPatientModality(Patient *patient, int index, QList<QString> hangingProtocolModalities);
+    Image* getImageByIndexInPatientModality(Patient *patient, int index, QStringList hangingProtocolModalities);
 
 private:
     /// Estructura per guardar les dades que es necessiten quan es rep que s'ha fusionat un pacient amb un nou estudi

@@ -264,7 +264,7 @@ void HangingProtocolManager::applyHangingProtocol(HangingProtocol *hangingProtoc
 
 bool HangingProtocolManager::isModalityCompatible(HangingProtocol *protocol, Patient *patient)
 {
-    foreach (QString modality, patient->getModalities())
+    foreach (const QString &modality, patient->getModalities())
     {
         if (isModalityCompatible(protocol, modality))
         {
@@ -338,7 +338,7 @@ Series* HangingProtocolManager::searchSerie(QList<Series*> &listOfSeries, Hangin
     if (imageSet->getImageNumberInPatientModality() != -1)
     {
         Patient *patient = listOfSeries.at(0)->getParentStudy()->getParentPatient();
-        QList<QString> modalities = imageSet->getHangingProtocol()->getHangingProtocolMask()->getProtocolList();
+        QStringList modalities = imageSet->getHangingProtocol()->getHangingProtocolMask()->getProtocolList();
         Image *image = getImageByIndexInPatientModality(patient, imageSet->getImageNumberInPatientModality(), modalities);
 
         if (isValidImage(image, imageSet))
@@ -724,7 +724,7 @@ void HangingProtocolManager::setInputToViewer(Q2DViewerWidget *viewerWidget, Ser
     }
 }
 
-Image* HangingProtocolManager::getImageByIndexInPatientModality(Patient *patient, int index, QList<QString> hangingProtocolModalities)
+Image* HangingProtocolManager::getImageByIndexInPatientModality(Patient *patient, int index, QStringList hangingProtocolModalities)
 {
     QList<Image*> allImagesInStudy;
 

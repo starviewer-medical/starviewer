@@ -130,7 +130,7 @@ QList<HangingProtocol*> test_HangingProtocolManager::getHangingProtocolsReposito
 {
     // MG estricte i totes les imatges diferents, amb institució
     HangingProtocol *MGhangingProtocol = HangingProtocolTestHelper::createHangingProtocolWithAttributes("MG", 10, true, true, false, 1, 4, 4);
-    MGhangingProtocol->setProtocolsList(QList<QString>() << "MG");
+    MGhangingProtocol->setProtocolsList(QStringList() << "MG");
     MGhangingProtocol->setInstitutionsRegularExpression(QRegExp("GIRONA|SABADELL", Qt::CaseInsensitive));
     //Restrictions MG
     HangingProtocolImageSet::Restriction restrictionMG_1 = createRestriction(HangingProtocolImageSet::Match, "ImageLaterality", "R");
@@ -169,7 +169,7 @@ QList<HangingProtocol*> test_HangingProtocolManager::getHangingProtocolsReposito
 
     // CT general no estricte i no cal que les series siguin diferents
     HangingProtocol *CThangingProtocol = HangingProtocolTestHelper::createHangingProtocolWithAttributes("CT", 10, false, false, false, 2, 2, 2);
-    CThangingProtocol->setProtocolsList(QList<QString>() << "CT");
+    CThangingProtocol->setProtocolsList(QStringList() << "CT");
     // ImageSets CT
     HangingProtocolImageSet *imageSetCT_1 = CThangingProtocol->getImageSet(1);
     HangingProtocolImageSet *imageSetCT_2 = CThangingProtocol->getImageSet(2);
@@ -181,7 +181,7 @@ QList<HangingProtocol*> test_HangingProtocolManager::getHangingProtocolsReposito
 
     // MR no aplicable
     HangingProtocol *MRhangingProtocol = HangingProtocolTestHelper::createHangingProtocolWithAttributes("MR", 10, true, true, false, 3, 2, 2);
-    MRhangingProtocol->setProtocolsList(QList<QString>() << "MR");
+    MRhangingProtocol->setProtocolsList(QStringList() << "MR");
     //Restrictions MR
     HangingProtocolImageSet::Restriction restrictionMR_1 = createRestriction(HangingProtocolImageSet::Match, "SeriesDescription", "description");
     HangingProtocolImageSet::Restriction restrictionMR_2 = createRestriction(HangingProtocolImageSet::NoMatch, "SeriesDescription", "description");
@@ -198,7 +198,7 @@ QList<HangingProtocol*> test_HangingProtocolManager::getHangingProtocolsReposito
 
     // US general amb numero d'imatge
     HangingProtocol *UShangingProtocol = HangingProtocolTestHelper::createHangingProtocolWithAttributes("US", 5, false, false, false, 4, 2, 2);
-    UShangingProtocol->setProtocolsList(QList<QString>() << "US");
+    UShangingProtocol->setProtocolsList(QStringList() << "US");
     // ImageSets US
     HangingProtocolImageSet *imageSetUS_1 = UShangingProtocol->getImageSet(1);
     imageSetUS_1->setTypeOfItem("image");

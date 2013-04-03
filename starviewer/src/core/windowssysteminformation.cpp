@@ -327,9 +327,9 @@ unsigned int WindowsSystemInformation::getCPUL2CacheSize()
     return cacheSize;
 }
 
-QList<QString> WindowsSystemInformation::getGPUBrand()
+QStringList WindowsSystemInformation::getGPUBrand()
 {
-    QList<QString> GPUBrand;
+    QStringList GPUBrand;
     /// Si el hardware és incompatible amb WDDM, Win32_VideoController pot no retornar els valors esperats.
     IEnumWbemClassObject* enumerator = executeQuery("SELECT * FROM Win32_VideoController");
 
@@ -354,9 +354,9 @@ QList<QString> WindowsSystemInformation::getGPUBrand()
     return GPUBrand;
 }
 
-QList<QString> WindowsSystemInformation::getGPUModel()
+QStringList WindowsSystemInformation::getGPUModel()
 {
-    QList<QString> GPUModel;
+    QStringList GPUModel;
     /// Si el hardware és incompatible amb WDDM, Win32_VideoController pot no retornar els valors esperats.
     IEnumWbemClassObject* enumerator = executeQuery("SELECT * FROM Win32_VideoController");
 
@@ -408,7 +408,7 @@ QList<unsigned int> WindowsSystemInformation::getGPURAM()
     return GPURAM;
 }
 
-QList<QString> WindowsSystemInformation::getGPUOpenGLCompatibilities()
+QStringList WindowsSystemInformation::getGPUOpenGLCompatibilities()
 {
     QString extensions = createOpenGLContextAndGetExtensions();
     return extensions.split(" ");
@@ -419,9 +419,9 @@ QString WindowsSystemInformation::getGPUOpenGLVersion()
     return createOpenGLContextAndGetVersion();
 }
 
-QList<QString> WindowsSystemInformation::getGPUDriverVersion()
+QStringList WindowsSystemInformation::getGPUDriverVersion()
 {
-    QList<QString> driverVersion;
+    QStringList driverVersion;
     IEnumWbemClassObject* enumerator = executeQuery("SELECT * FROM Win32_VideoController");
 
     IWbemClassObject* object = getNextObject(enumerator);
@@ -449,9 +449,9 @@ QList<QString> WindowsSystemInformation::getGPUDriverVersion()
     return driverVersion;
 }
 
-QList<QString> WindowsSystemInformation::getScreenVendors()
+QStringList WindowsSystemInformation::getScreenVendors()
 {
-    QList<QString> screenVendors;
+    QStringList screenVendors;
     IEnumWbemClassObject* enumerator = executeQuery("SELECT * FROM Win32_DesktopMonitor");
 
     IWbemClassObject* object = getNextObject(enumerator);
@@ -476,9 +476,9 @@ QList<QString> WindowsSystemInformation::getScreenVendors()
     return screenVendors;
 }
 
-QList<QString> WindowsSystemInformation::getHardDiskDevices()
+QStringList WindowsSystemInformation::getHardDiskDevices()
 {
-    QList<QString> devices;
+    QStringList devices;
     IEnumWbemClassObject* enumerator = executeQuery("SELECT * FROM Win32_LogicalDisk");
 
     IWbemClassObject* object = getNextObject(enumerator);

@@ -45,7 +45,7 @@ HangingProtocol* HangingProtocolXMLReader::readFile(const QString &path)
         if (reader->name() == "hangingProtocol")
         {
             HangingProtocol *hangingProtocol = new HangingProtocol();
-            QList<QString> protocols;
+            QStringList protocols;
             QList<HangingProtocolImageSet::Restriction> restrictionList;
 
             while (reader->readNextStartElement())

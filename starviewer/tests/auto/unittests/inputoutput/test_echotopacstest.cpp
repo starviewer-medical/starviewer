@@ -41,7 +41,7 @@ private slots:
 
 private:
     void fillPacsListAndHash(QList<PacsDevice> *list, EchoRequestStatusHash *hash,
-                             const QList<QString> &AETitles, const QList<EchoToPACS::EchoRequestStatus> &statuses);
+                             const QStringList &AETitles, const QList<EchoToPACS::EchoRequestStatus> &statuses);
 };
 
 void test_EchoToPACSTest::run_ShouldTestIfPACSAreAccessible_data()
@@ -65,7 +65,7 @@ void test_EchoToPACSTest::run_ShouldTestIfPACSAreAccessible_data()
     noPacsResult.addWarning(noPacsProblem);
 
     // Dades del test 2
-    QList<QString> AETitlesTest2;
+    QStringList AETitlesTest2;
     QList<EchoToPACS::EchoRequestStatus> statusesTest2;
     QList<PacsDevice> pacsListTest2;
     EchoRequestStatusHash hashTest2;
@@ -75,7 +75,7 @@ void test_EchoToPACSTest::run_ShouldTestIfPACSAreAccessible_data()
     fillPacsListAndHash(&pacsListTest2, &hashTest2, AETitlesTest2, statusesTest2);
 
     // Dades del test 3
-    QList<QString> AETitlesTest3;
+    QStringList AETitlesTest3;
     QList<EchoToPACS::EchoRequestStatus> statusesTest3;
     QList<PacsDevice> pacsListTest3;
     EchoRequestStatusHash hashTest3;
@@ -89,7 +89,7 @@ void test_EchoToPACSTest::run_ShouldTestIfPACSAreAccessible_data()
     pacsFailResult.addError(pacsFailProblem);
 
     // Dades del test 4
-    QList<QString> AETitlesTest4;
+    QStringList AETitlesTest4;
     QList<EchoToPACS::EchoRequestStatus> statusesTest4;
     QList<PacsDevice> pacsListTest4;
     EchoRequestStatusHash hashTest4;
@@ -145,7 +145,7 @@ void test_EchoToPACSTest::run_ShouldTestIfPACSAreAccessible()
 }
 
 void test_EchoToPACSTest::fillPacsListAndHash(QList<PacsDevice> *list, EchoRequestStatusHash *hash,
-                                              const QList<QString> &AETitles, const QList<EchoToPACS::EchoRequestStatus> &statuses)
+                                              const QStringList &AETitles, const QList<EchoToPACS::EchoRequestStatus> &statuses)
 {
     if (AETitles.count() != statuses.count())
     {

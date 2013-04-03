@@ -34,17 +34,17 @@ public:
     QList<unsigned int> getCPUFrequencies();
     unsigned int getCPUL2CacheSize();
 
-    QList<QString> getGPUBrand();
-    QList<QString> getGPUModel();
+    QStringList getGPUBrand();
+    QStringList getGPUModel();
     QList<unsigned int> getGPURAM();
-    QList<QString> getGPUOpenGLCompatibilities();
+    QStringList getGPUOpenGLCompatibilities();
     QString getGPUOpenGLVersion();
-    QList<QString> getGPUDriverVersion();
+    QStringList getGPUDriverVersion();
 
     //Screen, Display, Monitor, Desktop, ...
-    QList<QString> getScreenVendors();
+    QStringList getScreenVendors();
 
-    QList<QString> getHardDiskDevices();
+    QStringList getHardDiskDevices();
     unsigned int getHardDiskCapacity(const QString &device); // Del disc dur que conté la carpeta de la cache de Starviewer
     unsigned int getHardDiskFreeSpace(const QString &device);
     bool doesOpticalDriveHaveWriteCapabilities();

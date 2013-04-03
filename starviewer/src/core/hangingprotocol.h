@@ -38,10 +38,10 @@ public:
     void setNumberOfScreens(int screens);
 
     /// Assigna els protocols que tracta el hanging protocol
-    void setProtocolsList(const QList<QString> &protocols);
+    void setProtocolsList(const QStringList &protocols);
 
     /// Assigna les posicions de les finestres
-    void setDisplayEnvironmentSpatialPositionList(const QList<QString> &positions);
+    void setDisplayEnvironmentSpatialPositionList(const QStringList &positions);
 
     /// Afegeix un image set
     void addImageSet(HangingProtocolImageSet *imageSet);

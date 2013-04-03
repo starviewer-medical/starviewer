@@ -2,8 +2,7 @@
 #define UDGHANGINGPROTOCOLMASK_H
 
 #include <QObject>
-#include <QList>
-#include <QString>
+#include <QStringList>
 
 namespace udg {
 
@@ -15,13 +14,13 @@ public:
     ~HangingProtocolMask();
 
     /// Llista de protocols a tractar del hanging protocol
-    void setProtocolsList(const QList<QString> &protocols);
+    void setProtocolsList(const QStringList &protocols);
 
     /// Obtenir la llista de protocols
-    QList<QString> getProtocolList() const;
+    QStringList getProtocolList() const;
 
 private:
-    QList<QString> m_protocolsList;
+    QStringList m_protocolsList;
 };
 
 }

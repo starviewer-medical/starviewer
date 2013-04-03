@@ -11,12 +11,12 @@ HangingProtocolMask::~HangingProtocolMask()
 {
 }
 
-void HangingProtocolMask::setProtocolsList(const QList<QString> &protocols)
+void HangingProtocolMask::setProtocolsList(const QStringList &protocols)
 {
     m_protocolsList = protocols;
 }
 
-QList<QString> HangingProtocolMask::getProtocolList() const
+QStringList HangingProtocolMask::getProtocolList() const
 {
     return m_protocolsList;
 }
