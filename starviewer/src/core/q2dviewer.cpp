@@ -801,7 +801,10 @@ void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVo
     this->updateWindowLevelData();
     loadOverlays(volume);
 
-    resetViewToAxial();
+    // TODO The camera, view and projection handling should be enhanced, being coherent with the used names, giving
+    // the real meaning and view correspondance to QViewer::Axial, QViewer::Sagital and QViewer::Coronal,
+    // because they assume original plane acquisition is always Axial
+    resetView(QViewer::Axial);
     // HACK
     // S'activa el rendering de nou per tal de que es renderitzi l'escena
     enableRendering(true);
@@ -1001,17 +1004,125 @@ void Q2DViewer::resetView(CameraOrientationType view)
 
 void Q2DViewer::resetViewToAxial()
 {
-    resetView(Q2DViewer::Axial);
+    if (!m_mainVolume)
+    {
+        return;
+    }
+
+    Image *image = m_mainVolume->getImage(0);
+    if (!image)
+    {
+        return;
+    }
+
+    // In the case the original acquisition plane is different to Axial, we have to do this tricky hack
+    // The way m_lastView is being handled should be corrected. By now is assuming the original acquisition
+    // plane is always Axial, and because of this bad assumption we have to do this hacks.
+    // Camera view space and real world projection space should be decoupled
+    PatientOrientation desiredOrientation;
+    desiredOrientation.setLabels(PatientOrientation::LeftLabel, PatientOrientation::PosteriorLabel);
+    switch (AnatomicalPlane::getPlaneTypeFromPatientOrientation(image->getPatientOrientation()))
+    {
+        case AnatomicalPlane::Axial:
+            resetView(Q2DViewer::Axial);
+            break;
+
+        case AnatomicalPlane::Sagittal:
+            resetView(Q2DViewer::Coronal);
+            setImageOrientation(desiredOrientation);
+            break;
+
+        case AnatomicalPlane::Coronal:
+            resetView(Q2DViewer::Coronal);
+            setImageOrientation(desiredOrientation);
+            break;
+
+        default:
+            resetView(Q2DViewer::Axial);
+            break;
+    }
 }
 
 void Q2DViewer::resetViewToCoronal()
 {
-    resetView(Q2DViewer::Coronal);
+    if (!m_mainVolume)
+    {
+        return;
+    }
+
+    Image *image = m_mainVolume->getImage(0);
+    if (!image)
+    {
+        return;
+    }
+
+    // In the case the original acquisition plane is different to Axial, we have to do this tricky hack
+    // The way m_lastView is being handled should be corrected. By now is assuming the original acquisition
+    // plane is always Axial, and because of this bad assumption we have to do this hacks.
+    // Camera view space and real world projection space should be decoupled
+    PatientOrientation desiredOrientation;
+    desiredOrientation.setLabels(PatientOrientation::LeftLabel, PatientOrientation::FeetLabel);
+    switch (AnatomicalPlane::getPlaneTypeFromPatientOrientation(image->getPatientOrientation()))
+    {
+        case AnatomicalPlane::Axial:
+            resetView(Q2DViewer::Coronal);
+            break;
+
+        case AnatomicalPlane::Sagittal:
+            resetView(Q2DViewer::Sagital);
+            setImageOrientation(desiredOrientation);
+            break;
+
+        case AnatomicalPlane::Coronal:
+            resetView(Q2DViewer::Axial);
+            setImageOrientation(desiredOrientation);
+            break;
+
+        default:
+            resetView(Q2DViewer::Coronal);
+            break;
+    }
 }
 
 void Q2DViewer::resetViewToSagital()
 {
-    resetView(Q2DViewer::Sagital);
+    if (!m_mainVolume)
+    {
+        return;
+    }
+
+    Image *image = m_mainVolume->getImage(0);
+    if (!image)
+    {
+        return;
+    }
+
+    // In the case the original acquisition plane is different to Axial, we have to do this tricky hack
+    // The way m_lastView is being handled should be corrected. By now is assuming the original acquisition
+    // plane is always Axial, and because of this bad assumption we have to do this hacks.
+    // Camera view space and real world projection space should be decoupled
+    PatientOrientation desiredOrientation;
+    desiredOrientation.setLabels(PatientOrientation::PosteriorLabel, PatientOrientation::FeetLabel);
+    switch (AnatomicalPlane::getPlaneTypeFromPatientOrientation(image->getPatientOrientation()))
+    {
+        case AnatomicalPlane::Axial:
+            resetView(Q2DViewer::Sagital);
+            break;
+
+        case AnatomicalPlane::Sagittal:
+            resetView(Q2DViewer::Axial);
+            setImageOrientation(desiredOrientation);
+            break;
+
+        case AnatomicalPlane::Coronal:
+            resetView(Q2DViewer::Sagital);
+            setImageOrientation(desiredOrientation);
+            break;
+
+        default:
+            resetView(Q2DViewer::Sagital);
+            break;
+    }
 }
 
 void Q2DViewer::updateCamera()
@@ -2311,7 +2422,11 @@ void Q2DViewer::restore()
     // tinguèssim un command definit per col·locar adequadament la imatge
     // per defecte segons l'input si no se n'ha definit cap
     // Tenir en compte que aquesta crida també provoca la desactivació del thickslab
-    resetViewToAxial();
+    // Setting the default view to QViewer::Axial means to reset to the original acquisition plane.
+    // TODO The camera, view and projection handling should be enhanced, being coherent with the used names, giving
+    // the real meaning and view correspondance to QViewer::Axial, QViewer::Sagital and QViewer::Coronal,
+    // because they assume original plane acquisition is always Axial
+    resetView(QViewer::Axial);
     updateWindowLevelData();
     
     // HACK Restaurem el rendering
