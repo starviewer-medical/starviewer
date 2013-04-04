@@ -5,9 +5,10 @@
 #include "thumbnailcreator.h"
 #include "mathtools.h"
 #include "imageoverlayreader.h"
-#include "volumepixeldata.h"
 
 #include <QFileInfo>
+
+#include <vtkImageData.h>
 
 namespace udg {
 
@@ -22,12 +23,10 @@ Image::Image(QObject *parent)
     memset(m_imagePositionPatient, 0, 3 * sizeof(double));
 
     m_haveToBuildDisplayShutterForDisplay = false;
-    m_displayShutterForDisplayPixelData = 0;
 }
 
 Image::~Image()
 {
-    delete m_displayShutterForDisplayPixelData;
 }
 
 void Image::setSOPInstanceUID(const QString &uid)
@@ -507,29 +506,29 @@ DisplayShutter Image::getDisplayShutterForDisplay()
     return m_displayShutterForDisplay;
 }
 
-VolumePixelData* Image::getDisplayShutterForDisplayAsPixelData(int zSlice)
+vtkImageData* Image::getDisplayShutterForDisplayAsVtkImageData(int zSlice)
 {
     if (!hasDisplayShutters())
     {
         return 0;
     }
-    
-    if (!m_displayShutterForDisplayPixelData)
+
+    if (!m_displayShutterForDisplayVtkImageData)
     {
         DisplayShutter shutter = this->getDisplayShutterForDisplay();
         if (shutter.getShape() != DisplayShutter::UndefinedShape)
-        {            
-            m_displayShutterForDisplayPixelData = shutter.getAsVolumePixelData(m_columns, m_rows, zSlice);
-            if (m_displayShutterForDisplayPixelData)
+        {
+            m_displayShutterForDisplayVtkImageData = shutter.getAsVtkImageData(m_columns, m_rows, zSlice);
+            if (m_displayShutterForDisplayVtkImageData)
             {
-                m_displayShutterForDisplayPixelData->setOrigin(m_imagePositionPatient);
-                m_displayShutterForDisplayPixelData->setSpacing(m_pixelSpacing[0], m_pixelSpacing[1], 1);
+                m_displayShutterForDisplayVtkImageData->SetOrigin(m_imagePositionPatient);
+                m_displayShutterForDisplayVtkImageData->SetSpacing(m_pixelSpacing[0], m_pixelSpacing[1], 1);
             }
         }
     }
-    // TODO En cas que m_displayShutterForDisplayPixelData ja existeixi i que el zSlice demanat sigui diferent del ja demanat anteriorment(extent[4,5]), què fem?
-    
-    return m_displayShutterForDisplayPixelData;
+    // TODO Assuming that all calls to this method on the same Image object have all the same zSlice. What should we do otherwise?
+
+    return m_displayShutterForDisplayVtkImageData;
 }
 
 void Image::setDICOMSource(const DICOMSource &imageDICOMSource)

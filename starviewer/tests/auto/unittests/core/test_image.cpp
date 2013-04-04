@@ -3,7 +3,8 @@
 
 #include "imageorientation.h"
 #include "fuzzycomparetesthelper.h"
-#include "volumepixeldata.h"
+
+#include <vtkImageData.h>
 
 using namespace udg;
 using namespace testing;
@@ -30,13 +31,13 @@ private slots:
     void getWindowLevel_ShouldReturnExpectedValues_data();
     void getWindowLevel_ShouldReturnExpectedValues();
 
-    void getDisplayShutterForDisplayAsPixelData_ShouldReturnNull_data();
-    void getDisplayShutterForDisplayAsPixelData_ShouldReturnNull();
+    void getDisplayShutterForDisplayAsVtkImageData_ShouldReturnNull_data();
+    void getDisplayShutterForDisplayAsVtkImageData_ShouldReturnNull();
 
-    void getDisplayShutterForDisplayAsPixelData_ShouldReturnNullWhenThereAreNoShutters();
+    void getDisplayShutterForDisplayAsVtkImageData_ShouldReturnNullWhenThereAreNoShutters();
     
-    void getDisplayShutterForDisplayAsPixelData_ShouldReturnExpectedValues_data();
-    void getDisplayShutterForDisplayAsPixelData_ShouldReturnExpectedValues();
+    void getDisplayShutterForDisplayAsVtkImageData_ShouldReturnExpectedValues_data();
+    void getDisplayShutterForDisplayAsVtkImageData_ShouldReturnExpectedValues();
 
     void distance_ReturnsExpectedValues_data();
     void distance_ReturnsExpectedValues();
@@ -44,7 +45,6 @@ private slots:
 
 Q_DECLARE_METATYPE(QList<DisplayShutter>)
 Q_DECLARE_METATYPE(DisplayShutter)
-Q_DECLARE_METATYPE(VolumePixelData*)
 Q_DECLARE_METATYPE(double*)
 Q_DECLARE_METATYPE(Image*)
 Q_DECLARE_METATYPE(WindowLevel)
@@ -271,12 +271,12 @@ void test_Image::getWindowLevel_ShouldReturnExpectedValues()
     QCOMPARE(image.getWindowLevel(index), expectedWindowLevel);
 }
 
-void test_Image::getDisplayShutterForDisplayAsPixelData_ShouldReturnNull_data()
+void test_Image::getDisplayShutterForDisplayAsVtkImageData_ShouldReturnNull_data()
 {
     QTest::addColumn<QList<DisplayShutter> >("shutters");
 
     QList<DisplayShutter> shuttersList;
-    
+
     shuttersList << DisplayShutter();
     QTest::newRow("single undefined shape shutter") << shuttersList;
 
@@ -285,29 +285,29 @@ void test_Image::getDisplayShutterForDisplayAsPixelData_ShouldReturnNull_data()
     
     DisplayShutter shutter2;
     shutter2.setPoints(QPoint(10, 10), 2);
-    
+
     shuttersList.clear();
     shuttersList << shutter1 << shutter2;
     QTest::newRow("two shutters with no intersection") << shuttersList;
 }
 
-void test_Image::getDisplayShutterForDisplayAsPixelData_ShouldReturnNull()
+void test_Image::getDisplayShutterForDisplayAsVtkImageData_ShouldReturnNull()
 {
     QFETCH(QList<DisplayShutter>, shutters);
 
     Image *image = new Image;
     image->setDisplayShutters(shutters);
-    
-    QVERIFY(!image->getDisplayShutterForDisplayAsPixelData());
+
+    QVERIFY(!image->getDisplayShutterForDisplayAsVtkImageData());
 }
 
-void test_Image::getDisplayShutterForDisplayAsPixelData_ShouldReturnNullWhenThereAreNoShutters()
+void test_Image::getDisplayShutterForDisplayAsVtkImageData_ShouldReturnNullWhenThereAreNoShutters()
 {
     Image *image = new Image;
-    QVERIFY(!image->getDisplayShutterForDisplayAsPixelData());
+    QVERIFY(!image->getDisplayShutterForDisplayAsVtkImageData());
 }
 
-void test_Image::getDisplayShutterForDisplayAsPixelData_ShouldReturnExpectedValues_data()
+void test_Image::getDisplayShutterForDisplayAsVtkImageData_ShouldReturnExpectedValues_data()
 {
     QTest::addColumn<int>("rows");
     QTest::addColumn<int>("columns");
@@ -328,11 +328,11 @@ void test_Image::getDisplayShutterForDisplayAsPixelData_ShouldReturnExpectedValu
 
     DisplayShutter shutter1;
     shutter1.setPoints(QPoint(1,3), 2);
-    
+
     QTest::newRow("image1 with circular shutter, zSlice = 3") << 5 << 6 << origin1 << spacing1 << shutter1 << 3;
 }
 
-void test_Image::getDisplayShutterForDisplayAsPixelData_ShouldReturnExpectedValues()
+void test_Image::getDisplayShutterForDisplayAsVtkImageData_ShouldReturnExpectedValues()
 {
     QFETCH(int, rows);
     QFETCH(int, columns);
@@ -348,12 +348,12 @@ void test_Image::getDisplayShutterForDisplayAsPixelData_ShouldReturnExpectedValu
     image->setImagePositionPatient(imageOrigin);
     image->setPixelSpacing(imageSpacing[0], imageSpacing[1]);
     image->addDisplayShutter(shutter);
-    
-    VolumePixelData *shutterData = image->getDisplayShutterForDisplayAsPixelData(zSlice);
+
+    vtkImageData *shutterData = image->getDisplayShutterForDisplayAsVtkImageData(zSlice);
 
     int extent[6];
-    shutterData->getExtent(extent);
-    
+    shutterData->GetExtent(extent);
+
     QCOMPARE(extent[0], 0);
     QCOMPARE(extent[2], 0);
     QCOMPARE(extent[1], columns - 1);
@@ -362,14 +362,14 @@ void test_Image::getDisplayShutterForDisplayAsPixelData_ShouldReturnExpectedValu
     QCOMPARE(extent[5], zSlice);
 
     double shutterSpacing[3];
-    shutterData->getSpacing(shutterSpacing);
+    shutterData->GetSpacing(shutterSpacing);
 
     QCOMPARE(shutterSpacing[0], imageSpacing[0]);
     QCOMPARE(shutterSpacing[1], imageSpacing[1]);
     QCOMPARE(shutterSpacing[2], 1.0);
 
     double shutterOrigin[3];
-    shutterData->getOrigin(shutterOrigin);
+    shutterData->GetOrigin(shutterOrigin);
 
     for (int i = 0; i < 3; ++i)
     {

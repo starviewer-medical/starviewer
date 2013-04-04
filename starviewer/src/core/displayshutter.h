@@ -3,12 +3,14 @@
 
 #include <QPolygon>
 
+#include "vtkSmartPointer.h"
+
 class QColor;
 class QImage;
 
-namespace udg {
+class vtkImageData;
 
-class VolumePixelData;
+namespace udg {
 
 /*
     Un display shutter consisteix en una forma geomètrica (cercle, rectangle o polígon)
@@ -67,9 +69,8 @@ public:
     /// Retorna el shutter com una QImage de mides width i height
     QImage getAsQImage(int width, int height) const;
 
-    /// Ens retorna el shutter en format VolumePixelData, amb un extent segons el width, height i slice indicats
-    /// Les dades retornades tindran com spacing i origin els valors que s'assignin per defecte a VolumePixelData
-    VolumePixelData* getAsVolumePixelData(int width, int height, int slice) const;
+    /// Returns the shutter in vtkImageData format, with extent defined by given width, height and slice.
+    vtkSmartPointer<vtkImageData> getAsVtkImageData(int width, int height, int slice) const;
     
     /// Donada una llista de shutters, ens retorna el shutter resultant de la intersecció d'aquests. 
     /// En quant al color resultant, serà la mitjana de tots els shutters de la llista.
