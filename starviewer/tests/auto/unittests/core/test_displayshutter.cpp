@@ -1,10 +1,12 @@
 #include "autotest.h"
 
 #include "displayshutter.h"
-#include "volumepixeldata.h"
+#include "vtkimagedatacreator.h"
 
 #include <QColor>
 #include <QPainter>
+
+#include <vtkImageData.h>
 
 using namespace udg;
 
@@ -38,8 +40,8 @@ private slots:
     void getAsQImage_ReturnsExpectedValues_data();
     void getAsQImage_ReturnsExpectedValues();
 
-    void getAsVolumePixelData_ReturnsExpectedValues_data();
-    void getAsVolumePixelData_ReturnsExpectedValues();
+    void getAsVtkImageData_ReturnsExpectedValues_data();
+    void getAsVtkImageData_ReturnsExpectedValues();
 };
 
 Q_DECLARE_METATYPE(DisplayShutter::ShapeType)
@@ -47,7 +49,7 @@ Q_DECLARE_METATYPE(QVector<QPoint>)
 Q_DECLARE_METATYPE(QList<DisplayShutter>)
 Q_DECLARE_METATYPE(DisplayShutter)
 Q_DECLARE_METATYPE(QColor)
-Q_DECLARE_METATYPE(VolumePixelData*)
+Q_DECLARE_METATYPE(vtkSmartPointer<vtkImageData>)
 
 void test_DisplayShutter::getShapeAsDICOMString_ReturnsExpectedValues_data()
 {
@@ -412,24 +414,24 @@ void test_DisplayShutter::getAsQImage_ReturnsExpectedValues()
     QCOMPARE(shutter.getAsQImage(width, height), expectedQImage);
 }
 
-void test_DisplayShutter::getAsVolumePixelData_ReturnsExpectedValues_data()
+void test_DisplayShutter::getAsVtkImageData_ReturnsExpectedValues_data()
 {
     QTest::addColumn<DisplayShutter>("shutter");
     QTest::addColumn<int>("width");
     QTest::addColumn<int>("height");
     QTest::addColumn<int>("slice");
-    QTest::addColumn<VolumePixelData*>("expectedPixelData");
+    QTest::addColumn<vtkSmartPointer<vtkImageData>>("expectedVtkImageData");
 
-    int extent1[6] = {0, 9, 0, 11, 0, 0};
+    VtkImageDataCreator creator;
+
     unsigned char *data1 = new unsigned char[10 * 12];
     memset(data1, 255, 10 * 12);
-    VolumePixelData *pixelData1 = new VolumePixelData;
-    pixelData1->setData(data1, extent1, 1, true);
-    QTest::newRow("Empty shutter") << DisplayShutter() << 10 << 12 << 0 << pixelData1;
+    vtkSmartPointer<vtkImageData> imageData1 = creator.createVtkImageData(10, 12, 1, data1);
+    delete[] data1;
+    QTest::newRow("Empty shutter") << DisplayShutter() << 10 << 12 << 0 << imageData1;
 
     DisplayShutter rectangularShutter;
     rectangularShutter.setPoints(QPoint(2, 2), QPoint(4, 4));
-    int extent2[6] = {0, 5, 0, 5, 1, 1};
     unsigned char *data2 = new unsigned char[36];
     memset(data2, 255, 36);
     for (int i = 2; i < 5; ++i)
@@ -439,34 +441,35 @@ void test_DisplayShutter::getAsVolumePixelData_ReturnsExpectedValues_data()
             data2[j + i * 6] = 0;
         }
     }
-    VolumePixelData *pixelData2 = new VolumePixelData;
-    pixelData2->setData(data2, extent2, 1, true);
-    QTest::newRow("Rectangular shutter") << rectangularShutter << 6 << 6 << 1 << pixelData2;
+    vtkSmartPointer<vtkImageData> imageData2 = creator.createVtkImageData(6, 6, 1, data2);
+    imageData2->SetExtent(0, 5, 0, 5, 1, 1);
+    delete[] data2;
+    QTest::newRow("Rectangular shutter") << rectangularShutter << 6 << 6 << 1 << imageData2;
 }
 
-void test_DisplayShutter::getAsVolumePixelData_ReturnsExpectedValues()
+void test_DisplayShutter::getAsVtkImageData_ReturnsExpectedValues()
 {
     QFETCH(DisplayShutter, shutter);
     QFETCH(int, width);
     QFETCH(int, height);
     QFETCH(int, slice);
-    QFETCH(VolumePixelData*, expectedPixelData);
-    
-    VolumePixelData *shutterPixelData = shutter.getAsVolumePixelData(width, height, slice);
-    
-    QCOMPARE(shutterPixelData->getNumberOfScalarComponents(), expectedPixelData->getNumberOfScalarComponents());
-    
+    QFETCH(vtkSmartPointer<vtkImageData>, expectedVtkImageData);
+
+    vtkSmartPointer<vtkImageData> shutterVtkImageData = shutter.getAsVtkImageData(width, height, slice);
+
+    QCOMPARE(shutterVtkImageData->GetNumberOfScalarComponents(), expectedVtkImageData->GetNumberOfScalarComponents());
+
     int shutterExtent[6];
     int expectedExtent[6];
-    shutterPixelData->getExtent(shutterExtent);
-    expectedPixelData->getExtent(expectedExtent);
+    shutterVtkImageData->GetExtent(shutterExtent);
+    expectedVtkImageData->GetExtent(expectedExtent);
     for (int i = 0; i < 6; ++i)
     {
         QCOMPARE(shutterExtent[i], expectedExtent[i]);
     }
 
-    unsigned char *shutterDataPointer = reinterpret_cast<unsigned char*>(shutterPixelData->getScalarPointer());
-    unsigned char *expectedDataPointer = reinterpret_cast<unsigned char*>(expectedPixelData->getScalarPointer());
+    unsigned char *shutterDataPointer = reinterpret_cast<unsigned char*>(shutterVtkImageData->GetScalarPointer());
+    unsigned char *expectedDataPointer = reinterpret_cast<unsigned char*>(expectedVtkImageData->GetScalarPointer());
     for (int j = 0; j < height; ++j)
     {
         for (int i = 0; i < width; ++i)

@@ -195,12 +195,12 @@ public:
     /// Ens retorna la composició de DisplayShutters adequada per display
     /// Si no existeixen shutters o no hi ha cap disposició vàlida ens tornarà un DisplayShutter buit
     DisplayShutter getDisplayShutterForDisplay();
-    
-    /// Ens retorna el display shutter per display en format VolumePixelData amb les característiques dimensionals de la imatge
-    /// Es pot indicar a quina llesca pertany (zSlice) si necessitem que aquestes dades es corresponguin amb els extents d'un determinat volum
-    /// La VolumePixelData es generarà el primer cop i després es retornarà l'objecte ja creat si es torna a demanar
-    VolumePixelData* getDisplayShutterForDisplayAsPixelData(int zSlice = 0);
-    
+
+    /// Returns display shutter for display in vtkImageData format, with the same dimensions as the image.
+    /// The z value of the extent can be specified with zSlice.
+    /// The vtkImageData object is created only the first time, subsequent calls return the same object.
+    vtkImageData* getDisplayShutterForDisplayAsVtkImageData(int zSlice = 0);
+
     /// Assingar/Obtenir el DICOMSource de la imatge. Indica quin és l'origen dels fitxers DICOM que conté la imatge
     void setDICOMSource(const DICOMSource &imageDICOMSource);
     DICOMSource getDICOMSource() const;
@@ -371,9 +371,9 @@ private:
     /// Ens indica si hem de crear el display shutter per display
     bool m_haveToBuildDisplayShutterForDisplay;
 
-    /// El display shutter per display en format VolumePixelData
-    VolumePixelData *m_displayShutterForDisplayPixelData;
-    
+    /// Display shutter for display in vtkImageData format.
+    vtkSmartPointer<vtkImageData> m_displayShutterForDisplayVtkImageData;
+
     /// La sèrie pare
     Series *m_parentSeries;
 

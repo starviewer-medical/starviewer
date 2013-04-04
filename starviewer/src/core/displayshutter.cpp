@@ -1,12 +1,15 @@
 #include "displayshutter.h"
 
 #include "mathtools.h"
-#include "volumepixeldata.h"
+#include "vtkimagedatacreator.h"
+
 #include <cmath>
 
 #include <QColor>
 #include <QPainter>
 #include <QRegExp>
+
+#include <vtkImageData.h>
 
 namespace udg {
 
@@ -278,12 +281,12 @@ QImage DisplayShutter::getAsQImage(int width, int height) const
     return shutterImage;
 }
 
-VolumePixelData* DisplayShutter::getAsVolumePixelData(int width, int height, int slice) const
+vtkSmartPointer<vtkImageData> DisplayShutter::getAsVtkImageData(int width, int height, int slice) const
 {
-    // Creem la màscara del shutter a través d'una QImage
+    // Create shutter mask as QImage
     QImage shutterImage = this->getAsQImage(width, height);
     
-    // Convertim la QImage en el format de buffer adequat per VolumePixelData
+    // Convert QImage to needed raw format
     unsigned char *data = new unsigned char[width * height];
     for (int i = 0; i < height; ++i)
     {
@@ -295,10 +298,10 @@ VolumePixelData* DisplayShutter::getAsVolumePixelData(int width, int height, int
         }
     }
 
-    int volumeExtent[6] = {0, width - 1, 0, height - 1, slice, slice};
-    
-    VolumePixelData *shutterData = new VolumePixelData;
-    shutterData->setData(data, volumeExtent, 1, true);
+    VtkImageDataCreator imageDataCreator;
+    vtkSmartPointer<vtkImageData> shutterData = imageDataCreator.createVtkImageData(width, height, 1, data);
+    shutterData->SetExtent(0, width - 1, 0, height - 1, slice, slice);
+    delete[] data;
 
     return shutterData;
 }

@@ -1134,25 +1134,25 @@ void Q2DViewer::updateShutterPipeline()
         m_imageActor->SetInput(m_windowLevelLUTMapper->GetOutput());
         return;
     }
-    
+
     bool isShutterFilterApplied = false;
     if (m_shuttersAreEnabled && !isThickSlabActive() && m_lastView == Axial)
     {
         Image *image = m_mainVolume->getImage(m_currentSlice, m_currentPhase);
         if (image)
         {
-            VolumePixelData *shutterData = image->getDisplayShutterForDisplayAsPixelData(m_mainVolume->getImageIndex(m_currentSlice, m_currentPhase));
+            vtkImageData *shutterData = image->getDisplayShutterForDisplayAsVtkImageData(m_mainVolume->getImageIndex(m_currentSlice, m_currentPhase));
             if (shutterData)
             {
-                m_shutterMaskFilter->SetMaskInput(shutterData->getVtkData());
+                m_shutterMaskFilter->SetMaskInput(shutterData);
                 m_shutterMaskFilter->SetImageInput(m_windowLevelLUTMapper->GetOutput());
                 m_imageActor->SetInput(m_shutterMaskFilter->GetOutput());
                 isShutterFilterApplied = true;
             }
         }
     }
-    
-    // Si no s'aplica cap shutter, llavors apliquem el pipeline habitual
+
+    // If no shutter is applied, the usual pipeline is used
     if (!isShutterFilterApplied)
     {
         m_imageActor->SetInput(m_windowLevelLUTMapper->GetOutput());
