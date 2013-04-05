@@ -100,7 +100,8 @@ inline int run()
     int i = 0;
     foreach (const QString &argument, arguments)
     {
-        char *tempArgument = new char[argument.length()];
+        // Add 1 to length to have room for '\0' at the end
+        char *tempArgument = new char[argument.length() + 1];
         strcpy(tempArgument, argument.toStdString().c_str());
         modifiedArgv[i] = tempArgument;
         i++;
