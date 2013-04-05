@@ -119,10 +119,10 @@ inline int run()
     //Eliminem la llista de paràmetres
     for (int i = 0; i < modifiedArgc; i++)
     {
-        delete modifiedArgv[i];
+        delete[] modifiedArgv[i];
     }
 
-    delete modifiedArgv;
+    delete[] modifiedArgv;
     return ret;
 }
 }
