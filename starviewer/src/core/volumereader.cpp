@@ -386,6 +386,7 @@ void VolumeReader::setUpPostprocessors(PixelDataReaderType readerType)
     switch (readerType)
     {
         case ITKDCMTKPixelDataReader:
+        case VTKGDCMPixelDataReader:
             m_postprocessorsQueue.enqueue(QSharedPointer<Postprocessor>(new ComputeZSpacingPostprocessor()));
             break;
 
