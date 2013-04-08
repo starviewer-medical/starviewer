@@ -302,11 +302,12 @@ void ExtensionHandler::processInput(const QStringList &inputFiles)
 
 void ExtensionHandler::processInput(QList<Patient*> patientsList, bool loadOnly)
 {
+    QList<Patient*> mergedPatientsList = mergePatients(patientsList);
     // Si de tots els pacients que es carreguen intentem carregar-ne un d'igual al que ja tenim carregat, el mantenim
     bool canReplaceActualPatient = true;
     if (m_mainApp->getCurrentPatient())
     {
-        QListIterator<Patient*> patientsIterator(patientsList);
+        QListIterator<Patient*> patientsIterator(mergedPatientsList);
         while (canReplaceActualPatient && patientsIterator.hasNext())
         {
             Patient *patient = patientsIterator.next();
@@ -322,7 +323,7 @@ void ExtensionHandler::processInput(QList<Patient*> patientsList, bool loadOnly)
     bool firstPatient = true;
 
     // Afegim els pacients carregats correctament
-    foreach (Patient *patient, patientsList)
+    foreach (Patient *patient, mergedPatientsList)
     {
         generatePatientVolumes(patient, QString());
         QApplicationMainWindow *mainApp = this->addPatientToWindow(patient, canReplaceActualPatient, loadOnly);
@@ -391,6 +392,29 @@ bool ExtensionHandler::askForPatientsSimilarity(Patient *patient1, Patient *pati
     }
 
     return false;
+}
+
+QList<Patient*> ExtensionHandler::mergePatients(const QList<Patient*> &patientList)
+{
+    QList<Patient*> mergedList;
+    Patient *currentPatient = 0;
+    QList<Patient*> workList = patientList;
+
+    while (!workList.isEmpty())
+    {
+        currentPatient = workList.takeFirst();
+        foreach (Patient *patientToCheck, workList)
+        {
+            if (currentPatient->compareTo(patientToCheck) == Patient::SamePatients)
+            {
+                *currentPatient += *patientToCheck;
+                workList.removeAll(patientToCheck);
+            }
+        }
+        mergedList << currentPatient;
+    }
+
+    return mergedList;
 }
 
 void ExtensionHandler::generatePatientVolumes(Patient *patient, const QString &defaultSeriesUID)
