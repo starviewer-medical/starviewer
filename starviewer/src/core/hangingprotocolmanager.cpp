@@ -25,7 +25,6 @@ HangingProtocolManager::HangingProtocolManager(QObject *parent)
  : QObject(parent)
 {
     m_studiesDownloading = new QMultiHash<QString, StructPreviousStudyDownloading*>();
-    m_patient = 0;
     m_relatedStudiesManager = new RelatedStudiesManager();
 
     copyHangingProtocolRepository();
@@ -242,12 +241,11 @@ void HangingProtocolManager::applyHangingProtocol(HangingProtocol *hangingProtoc
             bool isDownloading = m_studiesDownloading->contains(hangingProtocolImageSet->getPreviousStudyToDisplay()->getInstanceUID());
 
             m_studiesDownloading->insert(hangingProtocolImageSet->getPreviousStudyToDisplay()->getInstanceUID(), structPreviousStudyDownloading);
-            m_patient = patient;
 
             if (!isDownloading && hangingProtocolImageSet->getPreviousStudyToDisplay()->getDICOMSource().getRetrievePACS().count() > 0)
             {
                 //En principi sempre hauríem de tenir algun PACS al DICOMSource
-                connect(m_patient, SIGNAL(studyAdded(Study*)), SLOT(previousStudyDownloaded(Study*)));
+                connect(patient, SIGNAL(studyAdded(Study*)), SLOT(previousStudyDownloaded(Study*)));
                 m_relatedStudiesManager->retrieveAndLoad(hangingProtocolImageSet->getPreviousStudyToDisplay(),
                     hangingProtocolImageSet->getPreviousStudyToDisplay()->getDICOMSource().getRetrievePACS().at(0));
             }

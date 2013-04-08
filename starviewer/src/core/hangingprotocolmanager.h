@@ -116,8 +116,6 @@ private:
 
     QMultiHash<QString, StructPreviousStudyDownloading*> *m_studiesDownloading;
 
-    Patient *m_patient;
-
     /// Objecte utilitzat per descarregar estudis relacionats. No es fa servir QueryScreen per problemes de dependències entre carpetes.
     RelatedStudiesManager *m_relatedStudiesManager;
 };
