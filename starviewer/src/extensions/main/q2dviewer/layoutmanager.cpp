@@ -92,10 +92,12 @@ QList<StudyLayoutConfig> LayoutManager::getLayoutCandidates(Patient *patient)
         return configurationCandidates;
     }
     
+    QStringList patientModalities = patient->getModalities();
     StudyLayoutConfigSettingsManager settingsManager;
+    
     foreach (const StudyLayoutConfig &currentConfig, settingsManager.getConfigList())
     {
-        if (!patient->getStudiesByModality(currentConfig.getModality()).isEmpty())
+        if (patientModalities.contains(currentConfig.getModality(), Qt::CaseInsensitive))
         {
             configurationCandidates << currentConfig;
         }
