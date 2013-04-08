@@ -301,8 +301,6 @@ Patient Patient::operator +(const Patient &patient)
         result.addStudy(study);
     }
 
-    emit patientFused();
-
     return result;
 }
 
@@ -340,8 +338,6 @@ Patient Patient::operator +=(const Patient &patient)
             }
         }
     }
-
-    emit patientFused();
 
     return this;
 }
