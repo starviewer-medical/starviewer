@@ -40,6 +40,9 @@ signals:
     void previousStudiesSearchEnded();
 
 private:
+    /// True if current patient has at least one modality with hanging protocol priority configured over automatic layouts, false otherwise.
+    bool hasCurrentPatientAnyModalityWithHangingProtocolPriority();
+    
     /// Applies hanging protocols or automatic layouts depending on the user settings and the availability of the former
     void applyProperLayoutChoice();
     
