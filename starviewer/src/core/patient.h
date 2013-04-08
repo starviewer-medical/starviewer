@@ -106,9 +106,6 @@ public:
     void setSelectedSeries(const QString &selectedSeriesUID);
 
 signals:
-    /// Senyal que indica que s'ha fusionat el pacient
-    void patientFused();
-
     /// Emitted when a study has been added
     void studyAdded(Study*);
 
