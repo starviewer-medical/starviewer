@@ -33,32 +33,29 @@ void LayoutManager::initialize()
     applyProperLayoutChoice();
 }
 
-void LayoutManager::applyProperLayoutChoice()
+bool LayoutManager::hasCurrentPatientAnyModalityWithHangingProtocolPriority()
 {
-    // We first look which modalities the pacient has in order to decide if look first for hanging protocols or automatic layouts
     Settings settings;
+
     QStringList modalitiesWithHPPriority = settings.getValue(CoreSettings::ModalitiesToApplyHangingProtocolsAsFirstOption)
         .toString().split(";", QString::SkipEmptyParts);
 
-    bool hasToApplyHangingProtocol = false;
     QSet<QString> matchingModalities = modalitiesWithHPPriority.toSet().intersect(m_patient->getModalities().toSet());
-    if (matchingModalities.isEmpty())
+
+    return !matchingModalities.isEmpty();
+}
+
+void LayoutManager::applyProperLayoutChoice()
+{
+    bool layoutApplied = false;
+    if (hasCurrentPatientAnyModalityWithHangingProtocolPriority())
     {
-        // First we find out which candidate configurations we have according to the patient's modalities
-        applyLayoutCandidates(getLayoutCandidates(m_patient), m_patient);
-    }
-    else
-    {
-        hasToApplyHangingProtocol = true;
+        layoutApplied = applyBestHangingProtocol();
     }
 
-    if (hasToApplyHangingProtocol)
+    if (!layoutApplied)
     {
-        if (!applyBestHangingProtocol())
-        {
-            // There are no hanging protocols available, applying automatic layouts
-            applyLayoutCandidates(getLayoutCandidates(m_patient), m_patient);
-        }
+        applyLayoutCandidates(getLayoutCandidates(m_patient), m_patient);
     }
 }
 
