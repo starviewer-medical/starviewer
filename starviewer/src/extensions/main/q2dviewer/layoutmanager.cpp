@@ -108,21 +108,29 @@ QList<StudyLayoutConfig> LayoutManager::getLayoutCandidates(Patient *patient)
 
 void LayoutManager::applyLayoutCandidates(const QList<StudyLayoutConfig> &candidates, Patient *patient)
 {
-    StudyLayoutConfig layoutToApply;
+    StudyLayoutConfig layoutToApply = getBestLayoutCandidate(candidates, patient);
+
+    StudyLayoutMapper mapper;
+    mapper.applyConfig(layoutToApply, m_layout, patient);
+}
+
+StudyLayoutConfig LayoutManager::getBestLayoutCandidate(const QList<StudyLayoutConfig> &candidates, Patient *patient)
+{
+    StudyLayoutConfig bestLayout;
+
     if (!candidates.isEmpty())
     {
         // TODO We only take into account the first candidate, the others, if any, are discarded. We should take them into account too.
-        layoutToApply = candidates.first();
+        bestLayout = candidates.first();
     }
     else
     {
         // If no candidate found, we choose a default configuration.
         // This default configuration is not yet configurable through settings, could be done in a future enhancement.
-        layoutToApply = StudyLayoutConfigsLoader::getDefaultConfigForModality(patient->getModalities().first());
+        bestLayout = StudyLayoutConfigsLoader::getDefaultConfigForModality(patient->getModalities().first());
     }
 
-    StudyLayoutMapper mapper;
-    mapper.applyConfig(layoutToApply, m_layout, patient);
+    return bestLayout;
 }
 
 void LayoutManager::setHangingProtocol(int hangingProtocolNumber)

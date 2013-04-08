@@ -60,6 +60,9 @@ private:
     /// Applies the proper layout candidate from the list for the given Patient
     void applyLayoutCandidates(const QList<StudyLayoutConfig> &candidates, Patient *patient);
 
+    /// Returns the layout config that best suits for the given candidates and patient
+    StudyLayoutConfig getBestLayoutCandidate(const QList<StudyLayoutConfig> &candidates, Patient *patient);
+
 private slots:
     /// Sets and applies the hanging protocol with the given identifier
     void setHangingProtocol(int hangingProtocolNumber);
