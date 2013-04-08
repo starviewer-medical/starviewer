@@ -77,6 +77,10 @@ private:
     /// Retorna cert si l'usuari considera que els pacients són iguals.
     bool askForPatientsSimilarity(Patient *patient1, Patient *patient2);
 
+    /// Scans the list and returns a list where the patients which are the same are merged.
+    /// Patients are only considered to be the same if Patient::compareTo() returns SamePatients value.
+    QList<Patient*> mergePatients(const QList<Patient*> &patientList);
+
 private:
     /// Punter a l'aplicació principal
     QApplicationMainWindow *m_mainApp;
