@@ -120,8 +120,16 @@ StudyLayoutConfig LayoutManager::getBestLayoutCandidate(const QList<StudyLayoutC
 
     if (!candidates.isEmpty())
     {
-        // TODO We only take into account the first candidate, the others, if any, are discarded. We should take them into account too.
-        bestLayout = candidates.first();
+        if (candidates.count() > 1)
+        {
+            // If we different modalities/candidates we take the simple choice of apply a default generic layout
+            // TODO This could be enhanced making smarter decisions, which can include decisions based on user settings i.e.
+            bestLayout = StudyLayoutConfigsLoader::getDefaultConfigForModality("");
+        }
+        else
+        {
+            bestLayout = candidates.first();
+        }
     }
     else
     {
