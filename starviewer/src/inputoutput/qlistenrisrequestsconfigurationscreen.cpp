@@ -36,7 +36,7 @@ void QListenRisRequestsConfigurationScreen::createConnections()
 
 void QListenRisRequestsConfigurationScreen::configureInputValidator()
 {
-    m_textPortListenRisRequests->setValidator(new QIntValidator(0, 99999, m_textPortListenRisRequests));
+    m_textPortListenRisRequests->setValidator(new QIntValidator(0, 65535, m_textPortListenRisRequests));
 }
 
 void QListenRisRequestsConfigurationScreen::loadRisConfiguration()
@@ -53,42 +53,30 @@ void QListenRisRequestsConfigurationScreen::loadRisConfiguration()
     m_textPortListenRisRequests->setText(QString().setNum(settings.getValue(InputOutputSettings::RISRequestsPort).toInt()));
 }
 
-bool QListenRisRequestsConfigurationScreen::validateChanges()
-{
-    return 0 <= m_textPortListenRisRequests->text().toInt() && m_textPortListenRisRequests->text().toInt() <= 65535;
-}
-
 bool QListenRisRequestsConfigurationScreen::applyChanges()
 {
     Settings settings;
 
-    if (validateChanges())
+    if (m_textPortListenRisRequests->isModified() || m_checkBoxListenRisRequests->isChecked() !=
+        settings.getValue(InputOutputSettings::ListenToRISRequests).toBool())
     {
-        if (m_textPortListenRisRequests->isModified() || m_checkBoxListenRisRequests->isChecked() !=
-            settings.getValue(InputOutputSettings::ListenToRISRequests).toBool())
-        {
-            // S'ha de reiniciar en cas que iniciem/parem d'escoltar el port del RIS o canviem el port
-            QMessageBox::warning(this, ApplicationNameString, tr("The application has to be restarted to apply the changes."));
-        }
-
-        settings.setValue(InputOutputSettings::ListenToRISRequests, m_checkBoxListenRisRequests->isChecked());
-        if (m_textPortListenRisRequests->isModified())
-        {
-            settings.setValue(InputOutputSettings::RISRequestsPort, m_textPortListenRisRequests->text().toInt());
-            // Indiquem que no s'ha modfiicat perquè ja hem guardat el seu valor
-            m_textPortListenRisRequests->setModified(false);
-        }
-
-        settings.setValue(InputOutputSettings::RISRequestViewOnceRetrieved, m_checkBoxViewAutomaticallyStudies->isChecked());
-
-        m_buttonApplyListenRisConfiguration->setDisabled(true);
-
-        return true;
+        // S'ha de reiniciar en cas que iniciem/parem d'escoltar el port del RIS o canviem el port
+        QMessageBox::warning(this, ApplicationNameString, tr("The application has to be restarted to apply the changes."));
     }
-    else
+
+    settings.setValue(InputOutputSettings::ListenToRISRequests, m_checkBoxListenRisRequests->isChecked());
+    if (m_textPortListenRisRequests->isModified())
     {
-        return false;
+        settings.setValue(InputOutputSettings::RISRequestsPort, m_textPortListenRisRequests->text().toInt());
+        // Indiquem que no s'ha modfiicat perquè ja hem guardat el seu valor
+        m_textPortListenRisRequests->setModified(false);
     }
+
+    settings.setValue(InputOutputSettings::RISRequestViewOnceRetrieved, m_checkBoxViewAutomaticallyStudies->isChecked());
+
+    m_buttonApplyListenRisConfiguration->setDisabled(true);
+
+    return true;
 }
 
 void QListenRisRequestsConfigurationScreen::enableApplyButtons()
