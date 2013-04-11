@@ -6,7 +6,7 @@
 namespace udg {
 
 /**
-    Widget en el que es configuren els paràmetres de la Base de Dades local
+    Widget to edit RIS settings
   */
 class QListenRisRequestsConfigurationScreen : public QWidget, private Ui::QListenRisRequestsConfigurationScreenBase {
 Q_OBJECT
