@@ -39,10 +39,6 @@ private:
 
     /// Configura la màscara del textbox
     void configureInputValidator();
-
-    /// Crea els input validators necessaris pels diferents camps d'edició.
-    bool validateChanges();
-
 };
 
 };// end namespace udg
