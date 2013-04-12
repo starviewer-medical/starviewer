@@ -24,7 +24,6 @@ QConfigurationScreen::QConfigurationScreen(QWidget *parent) : QWidget(parent)
     loadPacsDefaults();
     loadInstitutionInformation();
     m_buttonApplyPacs->setEnabled(false);
-    m_configurationChanged = false;
 
     createConnections();
     m_buttonApplyPacs->setIcon(QIcon(":images/apply.png"));
@@ -383,7 +382,6 @@ bool QConfigurationScreen::applyChanges()
         }
         applyChangesPacs();
         applyChangesInstitutionInformation();
-        m_configurationChanged = false;
 
         return true;
     }
@@ -469,7 +467,6 @@ void QConfigurationScreen::applyChangesInstitutionInformation()
 void QConfigurationScreen::enableApplyButtons()
 {
     m_buttonApplyPacs->setEnabled(true);
-    m_configurationChanged = true;
 }
 
 bool QConfigurationScreen::isIncomingConnectionsPortInUseByAnotherApplication()
