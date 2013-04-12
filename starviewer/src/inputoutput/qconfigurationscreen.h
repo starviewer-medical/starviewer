@@ -23,10 +23,6 @@ public slots:
     /// Aplica els canvis de la configuració
     bool applyChanges();
 
-signals:
-    /// Signal que s'emet cada vegada que hi ha un canvi a la configuració que pot afectar al queryscreen
-    void configurationChanged(const QString &configuration);
-
 private slots:
     /// Neteja els line edit de la pantalla
     void clear();

@@ -12,8 +12,12 @@
 #include "inputoutputsettings.h"
 #include "echotopacs.h"
 #include "portinuse.h"
+#include "singleton.h"
+#include "queryscreen.h"
 
 namespace udg {
+
+typedef SingletonPointer<QueryScreen> QueryScreenSingleton;
 
 QConfigurationScreen::QConfigurationScreen(QWidget *parent) : QWidget(parent)
 {
@@ -141,7 +145,7 @@ void QConfigurationScreen::addPacs()
         {
             fillPacsListView();
             clear();
-            emit configurationChanged("Pacs/ListChanged");
+            QueryScreenSingleton::instance()->updateConfiguration("Pacs/ListChanged");
         }
     }
 }
@@ -206,7 +210,7 @@ void QConfigurationScreen::updatePacs()
 
         fillPacsListView();
         clear();
-        emit configurationChanged("Pacs/ListChanged");
+        QueryScreenSingleton::instance()->updateConfiguration("Pacs/ListChanged");
     }
 }
 
@@ -224,7 +228,7 @@ void QConfigurationScreen::deletePacs()
 
     fillPacsListView();
     clear();
-    emit configurationChanged("Pacs/ListChanged");
+    QueryScreenSingleton::instance()->updateConfiguration("Pacs/ListChanged");
 }
 
 void QConfigurationScreen::fillPacsListView()

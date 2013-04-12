@@ -12,8 +12,12 @@
 #include "logging.h"
 #include "databaseinstallation.h"
 #include "directoryutilities.h"
+#include "singleton.h"
+#include "queryscreen.h"
 
 namespace udg {
+
+typedef SingletonPointer<QueryScreen> QueryScreenSingleton;
 
 QLocalDatabaseConfigurationScreen::QLocalDatabaseConfigurationScreen(QWidget *parent) : QWidget(parent)
 {
@@ -282,7 +286,7 @@ void QLocalDatabaseConfigurationScreen::deleteStudies()
         INFO_LOG("Neteja de la cache");
 
         clearCache();
-        emit configurationChanged("Pacs/CacheCleared");
+        QueryScreenSingleton::instance()->updateConfiguration("Pacs/CacheCleared");
     }
 }
 
