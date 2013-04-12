@@ -188,11 +188,6 @@ ExtensionContext &ExtensionHandler::getContext()
     return m_extensionContext;
 }
 
-void ExtensionHandler::updateConfiguration(const QString &configuration)
-{
-    QueryScreenSingleton::instance()->updateConfiguration(configuration);
-}
-
 void ExtensionHandler::createConnections()
 {
     connect(&m_importFileApp, SIGNAL(selectedFiles(QStringList)), SLOT(processInput(QStringList)));
