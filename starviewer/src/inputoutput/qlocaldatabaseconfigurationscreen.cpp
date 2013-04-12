@@ -22,7 +22,6 @@ QLocalDatabaseConfigurationScreen::QLocalDatabaseConfigurationScreen(QWidget *pa
     loadCacheDefaults();
     m_buttonApplyCache->setEnabled(false);
 
-    m_configurationChanged = false;
     m_createDatabase = false;
 
     createConnections();
@@ -182,8 +181,6 @@ bool QLocalDatabaseConfigurationScreen::applyChanges()
             QMessageBox::warning(this, ApplicationNameString, tr("The application has to be restarted to apply the changes."));
         }
 
-        m_configurationChanged = false;
-
         return true;
     }
     else
@@ -195,7 +192,6 @@ bool QLocalDatabaseConfigurationScreen::applyChanges()
 void QLocalDatabaseConfigurationScreen::enableApplyButtons()
 {
     m_buttonApplyCache->setEnabled(true);
-    m_configurationChanged = true;
 }
 
 void QLocalDatabaseConfigurationScreen::configurationChangedDatabaseRoot()

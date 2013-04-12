@@ -73,8 +73,6 @@ private:
     bool validateChanges();
 
 private:
-    /// Indica si la configuració ha canviat
-    bool m_configurationChanged;
     /// Indica si s'ha comprovat demanat que es creï la base de dades indicada a m_textDatabaseRoot
     bool m_createDatabase;
 };

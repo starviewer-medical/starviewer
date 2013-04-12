@@ -108,8 +108,6 @@ private:
 private:
     /// Conté el ID del pacs seleccionat en aquell moment
     QString m_selectedPacsID;
-    /// Indica si la configuració ha canviat
-    bool m_configurationChanged;
 };
 
 };// end namespace udg
