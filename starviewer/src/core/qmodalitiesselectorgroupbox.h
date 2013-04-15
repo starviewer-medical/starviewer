@@ -38,8 +38,16 @@ public:
     /// Ens indica si el check box de "All" està marcat o no, independentment de si està habilitat o no
     bool isAllModalitiesCheckBoxChecked() const;
 
+signals:
+    /// Emitted when the checked modalities have changed when they have been clicked, by the user or programmatically
+    void checkedModalitiesChanged(const QStringList &checkedModalities);
+
 private:
     void initialize();
+
+private slots:
+    /// Called when a check box has been clicked
+    void onCheckBoxClicked();
 
 private:
     /// Grup per poder fer que els check box siguin exclusius o no

@@ -38,6 +38,7 @@ void QModalitiesSelectorGroupBox::clear()
         button->setChecked(false);
     }
     m_otherLineEdit->clear();
+    emit checkedModalitiesChanged(getCheckedModalities());
 }
 
 QStringList QModalitiesSelectorGroupBox::getCheckedModalities()
@@ -148,6 +149,13 @@ void QModalitiesSelectorGroupBox::initialize()
     // El quadre de text d'altres modalitats només estarà habilitat quan el corresponent check box estigui marcat
     m_otherLineEdit->setEnabled(false);
     connect(m_otherCheckBox, SIGNAL(toggled(bool)), m_otherLineEdit, SLOT(setEnabled(bool)));
+
+    connect(m_buttonGroup, SIGNAL(buttonClicked(int)), SLOT(onCheckBoxClicked()));
+}
+
+void QModalitiesSelectorGroupBox::onCheckBoxClicked()
+{
+    emit checkedModalitiesChanged(getCheckedModalities());
 }
 
 void QModalitiesSelectorGroupBox::setAllModalitiesCheckBoxChecked(bool checked)
