@@ -71,7 +71,7 @@ void QConfigurationScreen::createConnections()
     connect(m_checkBoxQueryRetrieveEnabled, SIGNAL(stateChanged(int)), SLOT(queryRetrieveServiceEnabledChanged()));
     connect(m_checkBoxStoreEnabled, SIGNAL(stateChanged(int)), SLOT(storeServiceEnabledChanged()));
 
-    connect(m_textQueryRetrieveServicePort, SIGNAL(editingFinished()), SLOT(m_textQueryRetrieveServicePortChanged()));
+    connect(m_textQueryRetrieveServicePort, SIGNAL(editingFinished()), SLOT(onQueryRetrieveServicePortChanged()));
 
     // Manteniment PACS
     connect(m_buttonAddPacs, SIGNAL(clicked()), SLOT(addPacs()));
@@ -506,7 +506,7 @@ void QConfigurationScreen::storeServiceEnabledChanged()
     m_textStoreServicePort->setText(m_checkBoxStoreEnabled->isChecked() ? m_textQueryRetrieveServicePort->text() : "");
 }
 
-void QConfigurationScreen::m_textQueryRetrieveServicePortChanged()
+void QConfigurationScreen::onQueryRetrieveServicePortChanged()
 {
     if (!m_textQueryRetrieveServicePort->text().isEmpty())
     {

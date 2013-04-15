@@ -57,7 +57,7 @@ private slots:
 
     /// Si s'ha indicat que el servei d'store està permés i aquest no té el port configurat al editar el valor del port de Q/R
     /// li donem per defecte el valor d'aquest
-    void m_textQueryRetrieveServicePortChanged();
+    void onQueryRetrieveServicePortChanged();
 
 private:
     /// Crea els connects dels signals i slots
