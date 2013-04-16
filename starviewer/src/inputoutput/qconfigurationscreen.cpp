@@ -27,10 +27,9 @@ QConfigurationScreen::QConfigurationScreen(QWidget *parent) : QWidget(parent)
     fillPacsListView();
     loadPacsDefaults();
     loadInstitutionInformation();
-    m_buttonApplyPacs->setEnabled(false);
 
     createConnections();
-    m_buttonApplyPacs->setIcon(QIcon(":images/apply.png"));
+    createLocalConfigurationTabConnections();
 
     configureInputValidator();
 
@@ -51,23 +50,6 @@ QConfigurationScreen::~QConfigurationScreen()
 
 void QConfigurationScreen::createConnections()
 {
-    // Connecta el boto aplicar del Pacs amb l'slot apply
-    connect(m_buttonApplyPacs, SIGNAL(clicked()), SLOT(applyChanges()));
-
-    connect(m_textAETitleMachine, SIGNAL(textChanged(const QString&)), SLOT(enableApplyButtons()));
-    connect(m_textTimeout, SIGNAL(textChanged(const QString&)), SLOT(enableApplyButtons()));
-    connect(m_textLocalPort, SIGNAL(textChanged(const QString&)), SLOT(enableApplyButtons()));
-    // En el moment en que ens editen el textBox si apareixia el missatge de port en ús el fem invisible
-    connect(m_textLocalPort, SIGNAL(textChanged(const QString&)), SLOT(checkIncomingConnectionsPortNotInUse()));
-    connect(m_textMaxConnections, SIGNAL(textChanged(const QString&)), SLOT(enableApplyButtons()));
-    connect(m_textInstitutionName, SIGNAL(textChanged(const QString&)), SLOT(enableApplyButtons()));
-    connect(m_textInstitutionAddress, SIGNAL(textChanged(const QString&)), SLOT(enableApplyButtons()));
-    connect(m_textInstitutionTown, SIGNAL(textChanged(const QString&)), SLOT(enableApplyButtons()));
-    connect(m_textInstitutionZipCode, SIGNAL(textChanged(const QString&)), SLOT(enableApplyButtons()));
-    connect(m_textInstitutionCountry, SIGNAL(textChanged(const QString&)), SLOT(enableApplyButtons()));
-    connect(m_textInstitutionPhoneNumber, SIGNAL(textChanged(const QString&)), SLOT(enableApplyButtons()));
-    connect(m_textInstitutionEmail, SIGNAL(textChanged(const QString&)), SLOT(enableApplyButtons()));
-
     connect(m_checkBoxQueryRetrieveEnabled, SIGNAL(stateChanged(int)), SLOT(queryRetrieveServiceEnabledChanged()));
     connect(m_checkBoxStoreEnabled, SIGNAL(stateChanged(int)), SLOT(storeServiceEnabledChanged()));
 
@@ -81,13 +63,31 @@ void QConfigurationScreen::createConnections()
     connect(m_PacsTreeView, SIGNAL(itemSelectionChanged()), SLOT(updateSelectedPACSInformation()));
 }
 
+void QConfigurationScreen::createLocalConfigurationTabConnections()
+{
+    // Local config
+    connect(m_textAETitleMachine, SIGNAL(editingFinished()), SLOT(updateAETitleSetting()));
+    connect(m_textTimeout, SIGNAL(editingFinished()), SLOT(updateTimeoutSetting()));
+    connect(m_textLocalPort, SIGNAL(textChanged(const QString&)), SLOT(checkIncomingConnectionsPortNotInUse()));
+    connect(m_textLocalPort, SIGNAL(editingFinished()), SLOT(updateLocalPortSetting()));
+    connect(m_textMaxConnections, SIGNAL(editingFinished()), SLOT(updateMaxConnectionsSetting()));
+    // Institution info
+    connect(m_textInstitutionName, SIGNAL(editingFinished()), SLOT(updateInstitutionNameSetting()));
+    connect(m_textInstitutionAddress, SIGNAL(editingFinished()), SLOT(updateInstitutionAddressSetting()));
+    connect(m_textInstitutionTown, SIGNAL(editingFinished()), SLOT(updateInstitutionTownSetting()));
+    connect(m_textInstitutionZipCode, SIGNAL(editingFinished()), SLOT(updateInstitutionZipCodeSetting()));
+    connect(m_textInstitutionCountry, SIGNAL(editingFinished()), SLOT(updateInstitutionCountrySetting()));
+    connect(m_textInstitutionEmail, SIGNAL(editingFinished()), SLOT(updateInstitutionEmailSetting()));
+    connect(m_textInstitutionPhoneNumber, SIGNAL(editingFinished()), SLOT(updateInstitutionPhoneNumberSetting()));
+}
+
 void QConfigurationScreen::configureInputValidator()
 {
     m_textQueryRetrieveServicePort->setValidator(new QIntValidator(0, 65535, m_textQueryRetrieveServicePort));
     m_textStoreServicePort->setValidator(new QIntValidator(0, 65535, m_textStoreServicePort));
     m_textLocalPort->setValidator(new QIntValidator(0, 65535, m_textLocalPort));
     m_textTimeout->setValidator(new QIntValidator(0, 99, m_textTimeout));
-    m_textMaxConnections->setValidator(new QIntValidator(0, 99, m_textMaxConnections));
+    m_textMaxConnections->setValidator(new QIntValidator(1, 15, m_textMaxConnections));
 }
 
 void QConfigurationScreen::loadPacsDefaults()
@@ -346,131 +346,112 @@ bool QConfigurationScreen::validatePacsDeviceToSave()
     }
 }
 
-bool QConfigurationScreen::validateChanges()
+bool QConfigurationScreen::applyChanges()
 {
-    if (m_textLocalPort->isModified())
-    {
-        if (m_textLocalPort->text().toInt(NULL, 10) < 0 || m_textLocalPort->text().toInt(NULL, 10) > 65535)
-        {
-            QMessageBox::warning(this, ApplicationNameString, tr("Local Port value has to be between 0 and 65535."));
-            return false;
-        }
-    }
-
-    if (m_textMaxConnections->isModified())
-    {
-        if (m_textMaxConnections->text().toInt(NULL, 10) < 1 || m_textMaxConnections->text().toInt(NULL, 10) > 15)
-        {
-            QMessageBox::warning(this, ApplicationNameString, tr("Maximum simultaneous connections has to be between 1 and 15."));
-            return false;
-        }
-    }
-
     return true;
 }
 
-bool QConfigurationScreen::applyChanges()
+void QConfigurationScreen::updateAETitleSetting()
 {
-    if (validateChanges())
-    {
-        if (isIncomingConnectionsPortInUseByAnotherApplication() && m_textLocalPort->isModified())
-        {
-            QMessageBox::StandardButton response = QMessageBox::question(this, ApplicationNameString,
-                tr("The port %1 for incoming connections is in use by another application. Are you sure you want to apply the changes?")
-                  .arg(m_textLocalPort->text()), QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
-
-            if (response == QMessageBox::No)
-            {
-                return false;
-            }
-        }
-        applyChangesPacs();
-        applyChangesInstitutionInformation();
-
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-void QConfigurationScreen::applyChangesPacs()
-{
-    // TODO realment cal fer INFO LOGS d'això?
-    Settings settings;
-
     if (m_textAETitleMachine->isModified())
     {
-        INFO_LOG("Modificació del AETitle de la màquina: " + m_textAETitleMachine->text());
+        Settings settings;
         settings.setValue(InputOutputSettings::LocalAETitle, m_textAETitleMachine->text());
+        INFO_LOG("Updated AETitle setting: " + m_textAETitleMachine->text());
     }
+}
 
+void QConfigurationScreen::updateTimeoutSetting()
+{
     if (m_textTimeout->isModified())
     {
-        INFO_LOG("Modificació del valor del timeout " + m_textTimeout->text());
+        Settings settings;
         settings.setValue(InputOutputSettings::PACSConnectionTimeout, m_textTimeout->text());
+        INFO_LOG("Updated timeout setting: " + m_textTimeout->text());
     }
+}
 
+void QConfigurationScreen::updateLocalPortSetting()
+{
     if (m_textLocalPort->isModified())
     {
-        INFO_LOG("Modificació del Port d'entrada dels estudis" + m_textLocalPort->text());
+        Settings settings;
         settings.setValue(InputOutputSettings::IncomingDICOMConnectionsPort, m_textLocalPort->text());
-        m_textLocalPort->setModified(false);
+        INFO_LOG("Updated local port settings: " + m_textLocalPort->text());
     }
+}
 
+void QConfigurationScreen::updateMaxConnectionsSetting()
+{
     if (m_textMaxConnections->isModified())
     {
-        INFO_LOG("Modificació del nombre màxim de connexions " + m_textMaxConnections->text());
+        Settings settings;
         settings.setValue(InputOutputSettings::MaximumPACSConnections, m_textMaxConnections->text());
+        INFO_LOG("Updated maximum connections setting: " + m_textMaxConnections->text());
     }
-
-    m_buttonApplyPacs->setEnabled(false);
 }
 
-void QConfigurationScreen::applyChangesInstitutionInformation()
+void QConfigurationScreen::updateInstitutionNameSetting()
 {
-    Settings settings;
-
     if (m_textInstitutionName->isModified())
     {
+        Settings settings;
         settings.setValue(InputOutputSettings::InstitutionName, m_textInstitutionName->text());
-    }
-
-    if (m_textInstitutionAddress->isModified())
-    {
-        settings.setValue(InputOutputSettings::InstitutionAddress, m_textInstitutionAddress->text());
-    }
-
-    if (m_textInstitutionTown->isModified())
-    {
-        settings.setValue(InputOutputSettings::InstitutionTown, m_textInstitutionTown->text());
-    }
-
-    if (m_textInstitutionZipCode->isModified())
-    {
-        settings.setValue(InputOutputSettings::InstitutionZipCode, m_textInstitutionZipCode->text());
-    }
-
-    if (m_textInstitutionCountry->isModified())
-    {
-        settings.setValue(InputOutputSettings::InstitutionCountry, m_textInstitutionCountry->text());
-    }
-
-    if (m_textInstitutionEmail->isModified())
-    {
-        settings.setValue(InputOutputSettings::InstitutionEmail, m_textInstitutionEmail->text());
-    }
-
-    if (m_textInstitutionPhoneNumber->isModified())
-    {
-        settings.setValue(InputOutputSettings::InstitutionPhoneNumber, m_textInstitutionPhoneNumber->text());
     }
 }
 
-void QConfigurationScreen::enableApplyButtons()
+void QConfigurationScreen::updateInstitutionAddressSetting()
 {
-    m_buttonApplyPacs->setEnabled(true);
+    if (m_textInstitutionAddress->isModified())
+    {
+        Settings settings;
+        settings.setValue(InputOutputSettings::InstitutionAddress, m_textInstitutionAddress->text());
+    }
+}
+
+void QConfigurationScreen::updateInstitutionTownSetting()
+{
+    if (m_textInstitutionTown->isModified())
+    {
+        Settings settings;
+        settings.setValue(InputOutputSettings::InstitutionTown, m_textInstitutionTown->text());
+    }
+}
+
+void QConfigurationScreen::updateInstitutionZipCodeSetting()
+{
+    if (m_textInstitutionZipCode->isModified())
+    {
+        Settings settings;
+        settings.setValue(InputOutputSettings::InstitutionZipCode, m_textInstitutionZipCode->text());
+    }
+}
+
+void QConfigurationScreen::updateInstitutionCountrySetting()
+{
+    if (m_textInstitutionCountry->isModified())
+    {
+        Settings settings;
+        settings.setValue(InputOutputSettings::InstitutionCountry, m_textInstitutionCountry->text());
+    }
+}
+
+void QConfigurationScreen::updateInstitutionEmailSetting()
+{
+    if (m_textInstitutionEmail->isModified())
+    {
+        Settings settings;
+        settings.setValue(InputOutputSettings::InstitutionEmail, m_textInstitutionEmail->text());
+    }
+}
+
+void QConfigurationScreen::updateInstitutionPhoneNumberSetting()
+{
+    if (m_textInstitutionPhoneNumber->isModified())
+    {
+        Settings settings;
+        settings.setValue(InputOutputSettings::InstitutionPhoneNumber, m_textInstitutionPhoneNumber->text());
+    }
 }
 
 bool QConfigurationScreen::isIncomingConnectionsPortInUseByAnotherApplication()

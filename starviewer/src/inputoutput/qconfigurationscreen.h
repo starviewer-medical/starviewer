@@ -42,9 +42,6 @@ private slots:
     /// Fa un echo a les dades del PACS que estan als textbox
     void test();
 
-    /// Slot que s'utilitza quant es fa algun canvi a la configuració, per activar els buttons apply
-    void enableApplyButtons();
-
     /// Si el port que s'indica per les connexions entrants del Pacs canvia, comprovem si està en ús per un altra aplicació que no sigui
     ///  l'Starviewer, si està en ús es mostrar un warning al cantó del TextBox
     void checkIncomingConnectionsPortNotInUse();
@@ -59,9 +56,25 @@ private slots:
     /// li donem per defecte el valor d'aquest
     void onQueryRetrieveServicePortChanged();
 
+    /// Updates for local DICOM configuration settings
+    void updateAETitleSetting();
+    void updateTimeoutSetting();
+    void updateLocalPortSetting();
+    void updateMaxConnectionsSetting();
+    
+    /// Updates for Institution contact information settings
+    void updateInstitutionNameSetting();
+    void updateInstitutionAddressSetting();
+    void updateInstitutionTownSetting();
+    void updateInstitutionZipCodeSetting();
+    void updateInstitutionCountrySetting();
+    void updateInstitutionEmailSetting();
+    void updateInstitutionPhoneNumberSetting();
+
 private:
     /// Crea els connects dels signals i slots
     void createConnections();
+    void createLocalConfigurationTabConnections();
 
     /// Crea els input validators necessaris pels diferents camps d'edició.
     void configureInputValidator();
@@ -73,13 +86,6 @@ private:
     /// Valida que tinguis les dades per fer un echo invocant el mètode validateBasicPacsDeviceToEcho() i a més comprova que la institució no estigui buida
     bool validatePacsDeviceToSave();
 
-    /// Valida que els canvis de la configuració siguin correctes
-    ///  Port local entre 0 i 65535
-    ///  Numero màxim de connexions 15
-    /// Path de la base de dades i directori dicom's existeix
-    ///  @return indica si els canvis son correctes
-    bool validateChanges();
-
     /// Emplena el ListView amb les dades dels PACS que tenim guardades a la bd
     void fillPacsListView();
 
@@ -88,12 +94,6 @@ private:
 
     /// Emplena els textbox amb la informació de la Institució
     void loadInstitutionInformation();
-
-    /// Guarda els canvis a la configuració dels paràmetres del PACS
-    void applyChangesPacs();
-
-    /// Guarda els canvis fets a la informació de la institució
-    void applyChangesInstitutionInformation();
 
     /// Indica si el port per Connexions Entrans del PACS és utilitzat per una altra aplicació
     bool isIncomingConnectionsPortInUseByAnotherApplication();
