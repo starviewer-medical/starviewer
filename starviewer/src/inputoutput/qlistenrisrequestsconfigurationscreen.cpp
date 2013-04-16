@@ -1,7 +1,6 @@
 #include "qlistenrisrequestsconfigurationscreen.h"
 
 #include <QIntValidator>
-#include <QMessageBox>
 
 #include "starviewerapplication.h"
 #include "inputoutputsettings.h"
@@ -11,13 +10,12 @@ namespace udg {
 QListenRisRequestsConfigurationScreen::QListenRisRequestsConfigurationScreen(QWidget *parent) : QWidget(parent)
 {
     setupUi(this);
-
+    m_RISRequestsPortWarningLabel->setVisible(false);
+    m_RISRequestsPortWarningIcon->setVisible(false);
     loadRisConfiguration();
-    m_buttonApplyListenRisConfiguration->setEnabled(false);
 
     this->setWindowIcon(QIcon(":images/RISConfiguration.png"));
     createConnections();
-    m_buttonApplyListenRisConfiguration->setIcon(QIcon(":images/apply.png"));
     configureInputValidator();
 }
 
@@ -27,11 +25,10 @@ QListenRisRequestsConfigurationScreen::~QListenRisRequestsConfigurationScreen()
 
 void QListenRisRequestsConfigurationScreen::createConnections()
 {
-    connect(m_checkBoxListenRisRequests, SIGNAL(toggled(bool)), SLOT(enableApplyButtons()));
-    connect(m_checkBoxViewAutomaticallyStudies, SIGNAL(toggled(bool)), SLOT(enableApplyButtons()));
-    connect(m_textPortListenRisRequests, SIGNAL(textChanged(QString)), SLOT(enableApplyButtons()));
-
-    connect(m_buttonApplyListenRisConfiguration, SIGNAL(clicked()), SLOT(applyChanges()));
+    connect(m_checkBoxListenRisRequests, SIGNAL(toggled(bool)), SLOT(updateListenRISRequestsSetting(bool)));
+    connect(m_textPortListenRisRequests, SIGNAL(textEdited(QString)), SLOT(updateRISRequestsPortWarning()));
+    connect(m_textPortListenRisRequests, SIGNAL(editingFinished()), SLOT(updateRISRequestsPortSetting()));
+    connect(m_checkBoxViewAutomaticallyStudies, SIGNAL(toggled(bool)), SLOT(updateAutomaticallyViewStudiesSetting(bool)));
 }
 
 void QListenRisRequestsConfigurationScreen::configureInputValidator()
@@ -55,33 +52,48 @@ void QListenRisRequestsConfigurationScreen::loadRisConfiguration()
 
 bool QListenRisRequestsConfigurationScreen::applyChanges()
 {
-    Settings settings;
-
-    if (m_textPortListenRisRequests->isModified() || m_checkBoxListenRisRequests->isChecked() !=
-        settings.getValue(InputOutputSettings::ListenToRISRequests).toBool())
-    {
-        // S'ha de reiniciar en cas que iniciem/parem d'escoltar el port del RIS o canviem el port
-        QMessageBox::warning(this, ApplicationNameString, tr("The application has to be restarted to apply the changes."));
-    }
-
-    settings.setValue(InputOutputSettings::ListenToRISRequests, m_checkBoxListenRisRequests->isChecked());
-    if (m_textPortListenRisRequests->isModified())
-    {
-        settings.setValue(InputOutputSettings::RISRequestsPort, m_textPortListenRisRequests->text().toInt());
-        // Indiquem que no s'ha modfiicat perquè ja hem guardat el seu valor
-        m_textPortListenRisRequests->setModified(false);
-    }
-
-    settings.setValue(InputOutputSettings::RISRequestViewOnceRetrieved, m_checkBoxViewAutomaticallyStudies->isChecked());
-
-    m_buttonApplyListenRisConfiguration->setDisabled(true);
-
+    // TODO This method will be removed when all configuration pages do automatic update of settings
     return true;
 }
 
-void QListenRisRequestsConfigurationScreen::enableApplyButtons()
+void QListenRisRequestsConfigurationScreen::updateRISRequestsPortWarning()
 {
-    m_buttonApplyListenRisConfiguration->setEnabled(true);
+    if (!m_textPortListenRisRequests->text().isEmpty())
+    {
+        m_RISRequestsPortWarningLabel->setText(tr("The application has to be restarted to apply the changes."));
+        m_RISRequestsPortWarningLabel->setVisible(true);
+        m_RISRequestsPortWarningIcon->setVisible(true);
+    }
+    else
+    {
+        Settings settings;
+        m_RISRequestsPortWarningLabel->setText(tr("A port number should be specified. Current configured port %1 will remain unchanged if none provided.")
+            .arg(settings.getValue(InputOutputSettings::RISRequestsPort).toInt()));
+    }
+}
+
+void QListenRisRequestsConfigurationScreen::updateListenRISRequestsSetting(bool enable)
+{
+    Settings settings;
+    settings.setValue(InputOutputSettings::ListenToRISRequests, enable);
+    
+    m_RISRequestsPortWarningLabel->setVisible(enable);
+    m_RISRequestsPortWarningIcon->setVisible(enable);
+}
+
+void QListenRisRequestsConfigurationScreen::updateRISRequestsPortSetting()
+{
+    if (m_textPortListenRisRequests->isModified() && !m_textPortListenRisRequests->text().isEmpty())
+    {
+        Settings settings;
+        settings.setValue(InputOutputSettings::RISRequestsPort, m_textPortListenRisRequests->text().toInt());
+    }
+}
+
+void QListenRisRequestsConfigurationScreen::updateAutomaticallyViewStudiesSetting(bool enable)
+{
+    Settings settings;
+    settings.setValue(InputOutputSettings::RISRequestViewOnceRetrieved, enable);
 }
 
 };
