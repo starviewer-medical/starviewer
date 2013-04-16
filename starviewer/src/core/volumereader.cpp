@@ -1,16 +1,12 @@
 #include "volumereader.h"
 
-#include "volumepixeldatareaderitkdcmtk.h"
-#include "volumepixeldatareaderitkgdcm.h"
-#include "volumepixeldatareadervtkgdcm.h"
-
-#include "volume.h"
 #include "image.h"
-#include "series.h"
 #include "logging.h"
+#include "postprocessor.h"
 #include "starviewerapplication.h"
-#include "coresettings.h"
-#include "computezspacingpostprocessor.h"
+#include "volume.h"
+#include "volumepixeldatareader.h"
+#include "volumepixeldatareaderfactory.h"
 
 #include <QMessageBox>
 
@@ -49,9 +45,7 @@ void VolumeReader::executePixelDataReader(Volume *volume)
         bool showProgress = fileList.count() > 1;
 
         // Posem a punt el reader i llegim les dades
-        PixelDataReaderType readerType = this->getSuitableReader(volume);
-        this->setUpReader(readerType, showProgress);
-        this->setUpPostprocessors(readerType);
+        this->setUpReader(volume, showProgress);
 
         m_lastError = m_volumePixelDataReader->read(fileList);
         if (m_lastError == VolumePixelDataReader::NoError)
@@ -194,158 +188,7 @@ QStringList VolumeReader::getFilesToRead(Volume *volume) const
     return fileList;
 }
 
-VolumeReader::PixelDataReaderType VolumeReader::getSuitableReader(Volume *volume) const
-{
-    // Primer de tot comprovarem si hem de forçar la lectura amb alguna llibreria específica
-    // Això només es farà servir com a backdoor en casos molt específics i controlats per poder
-    // oferir un workaround fins que puguem oferir una bugfix release que arregli el problema correctament
-    PixelDataReaderType forcedReaderLibrary;
-    if (mustForceReaderLibraryBackdoor(volume, forcedReaderLibrary))
-    {
-        return forcedReaderLibrary;
-    }
-
-    int firstImageRows = 0;
-    int firstImageColumns = 0;
-    QList<Image*> imageSet = volume->getImages();
-    if (!imageSet.empty())
-    {
-        firstImageRows = imageSet.first()->getRows();
-        firstImageColumns = imageSet.first()->getColumns();
-    }
-
-    bool containsDifferentSizeImages = false;
-    bool containsColorImages = false;
-    bool avoidWrongPixelType = false;
-
-    foreach (Image *image, imageSet)
-    {
-        // Comprovem que no tingui imatges de diferents mides
-        // TODO Aquesta comprovació podria desaparèixer ja que ara fem que les
-        // imatges de diferents mides es guardin en volums diferents, per tant, hauria de
-        // ser anòmal i inesperat trobar-nos amb aquest cas. Tot i així ens serveix per evitar que
-        // si es donés el cas ens petés el programa
-        if (firstImageRows != image->getRows() || firstImageColumns != image->getColumns())
-        {
-            DEBUG_LOG("Tenim imatges de diferents mides!");
-            containsDifferentSizeImages = true;
-        }
-
-        // Comprovem si es tracta d'una imatge a color
-        // TODO Caldria diferenciar també els casos en que tenim més d'una imatge de diferents mides i que alguna és de color
-        QString photometricInterpretation = image->getPhotometricInterpretation();
-        if (!photometricInterpretation.contains("MONOCHROME"))
-        {
-            // Si photometric interpretation no és ni MONOCHROME1 ni MONOCHROME2, llavors és algun tipu d'imatge a color:
-            // PALETTE COLOR, RGB YBR_FULL, YBR_FULL_422, YBR_PARTIAL_422, YBR_PARTIAL_420, YBR_ICT o YBR_RCT
-            containsColorImages = true;
-            DEBUG_LOG("Photometric Interpretation: " + photometricInterpretation);
-        }
-        else if (image->getBitsAllocated() == 16 && image->getBitsStored() == 16 && !image->getSOPInstanceUID().contains("MHDImage"))
-        {
-            // Aquesta comprovació es fa per evitar casos com el del ticket #1257
-            // Com que itkImage sempre s'allotja amb el tipus de pixel signed short int,
-            // quan tenim 16 bits allocated i stored, podria ser que el rang de dades necessités
-            // que el tipus de pixel fos unsigned short int (0..65536) perquè la imatge es visualitzi correctament
-
-            // Només ho aplicarem si es tracta de modalitats d'imatge "no volumètriques" per acotar el problema
-            // i evitar que es produeixi el problema remarcat al ticket #1313
-            QStringList supportedModalities;
-            supportedModalities << "CR" << "RF" << "DX" << "MG" << "OP" << "US" << "ES" << "NM" << "DT" << "PT" << "XA" << "XC";
-            if (supportedModalities.contains(image->getParentSeries()->getModality()))
-            {
-                avoidWrongPixelType = true;
-            }
-        }
-    }
-
-    if (!containsDifferentSizeImages && containsColorImages)
-    {
-        // Si conté imatges de color i totes són de la mateixa mida les llegirem amb VTK-GDCM
-        return VTKGDCMPixelDataReader;
-    }
-    else if (avoidWrongPixelType)
-    {
-        // Com que el reader de vtkGDCM decideix el tipus dinàmicament, allotjarem el tipus de pixel correcte
-        return VTKGDCMPixelDataReader;
-    }
-    else if (volume->isMultiframe())
-    {
-        // Si és un volum multiframe el llegirem amb ITK-DCMTK per evitar pics de memòria que es produeixen amb GDCM
-        return ITKDCMTKPixelDataReader;
-    }
-    else
-    {
-        // TODO De moment, per defecte llegirem amb ITK-GDCM excepte en les condicions anteriors
-        return ITKGDCMPixelDataReader;
-    }
-}
-
-bool VolumeReader::mustForceReaderLibraryBackdoor(Volume *volume, PixelDataReaderType &forcedReaderLibrary) const
-{
-    Q_ASSERT(volume);
-
-    bool forceLibrary = false;
-    Settings settings;
-
-    // Primer comprovem el setting més prioritari, que indicaria que tot s'ha de llegir amb una única llibreria
-    QString forceReadingWithSpecfiedLibrary = settings.getValue(CoreSettings::ForcedImageReaderLibrary).toString().trimmed();
-    if (forceReadingWithSpecfiedLibrary == "vtk")
-    {
-        INFO_LOG("Forcem la lectura de qualsevol imatge amb vtk");
-        forcedReaderLibrary = VTKGDCMPixelDataReader;
-        forceLibrary = true;
-    }
-    else if (forceReadingWithSpecfiedLibrary == "itk")
-    {
-        INFO_LOG("Forcem la lectura de qualsevol imatge amb itk");
-        forcedReaderLibrary = ITKGDCMPixelDataReader;
-        forceLibrary = true;
-    }
-    else if (forceReadingWithSpecfiedLibrary == "itkdcmtk")
-    {
-        INFO_LOG("Forcem la lectura de qualsevol imatge amb itkdcmtk");
-        forcedReaderLibrary = ITKDCMTKPixelDataReader;
-        forceLibrary = true;
-    }
-
-    // Si l'anterior no està assignat comprovarem el següent setting, que ens indica la llibreria segons la modalitat de la imatge
-    if (!forceLibrary)
-    {
-        // Obtenim la modalitat del volum actual
-        QString modality;
-        Image *firstImage = volume->getImage(0);
-        if (firstImage)
-        {
-            modality = firstImage->getParentSeries()->getModality();
-        }
-
-        // Primer comprovem si hi ha modalitats a forçar per ITK
-        QStringList forceITKForModalities = settings.getValue(CoreSettings::ForceITKImageReaderForSpecifiedModalities).toString().trimmed().split("\\");
-        if (forceITKForModalities.contains(modality))
-        {
-            INFO_LOG("Forcem la lectura del volum actual amb ITK perquè és de modalitat=" + modality);
-            forcedReaderLibrary = ITKGDCMPixelDataReader;
-            forceLibrary = true;
-        }
-
-        // Si no s'han de forçar per ITK ho comprovem per VTK
-        if (!forceLibrary)
-        {
-            QStringList forceVTKForModalities = settings.getValue(CoreSettings::ForceVTKImageReaderForSpecifiedModalities).toString().trimmed().split("\\");
-            if (forceVTKForModalities.contains(modality))
-            {
-                INFO_LOG("Forcem la lectura del volum actual amb VTK perquè és de modalitat=" + modality);
-                forcedReaderLibrary = VTKGDCMPixelDataReader;
-                forceLibrary = true;
-            }
-        }
-    }
-
-    return forceLibrary;
-}
-
-void VolumeReader::setUpReader(PixelDataReaderType readerType, bool showProgress)
+void VolumeReader::setUpReader(Volume *volume, bool showProgress)
 {
     // Eliminem un lector anterior si l'havia
     if (m_volumePixelDataReader)
@@ -353,45 +196,14 @@ void VolumeReader::setUpReader(PixelDataReaderType readerType, bool showProgress
         delete m_volumePixelDataReader;
     }
 
-    // Segons quin pixel data reader estigui seleccionat, crearem l'objecte que toqui
-    switch (readerType)
-    {
-        case ITKDCMTKPixelDataReader:
-            m_volumePixelDataReader = new VolumePixelDataReaderITKDCMTK(this);
-            DEBUG_LOG("Escollim ITK-DCMTK per llegir la pixel data del volum");
-            break;
-
-        case ITKGDCMPixelDataReader:
-            m_volumePixelDataReader = new VolumePixelDataReaderITKGDCM(this);
-            DEBUG_LOG("Escollim ITK-GDCM per llegir la pixel data del volum");
-            break;
-
-        case VTKGDCMPixelDataReader:
-            m_volumePixelDataReader = new VolumePixelDataReaderVTKGDCM(this);
-            DEBUG_LOG("Escollim VTK-GDCM per llegir la pixel data del volum");
-            break;
-    }
+    VolumePixelDataReaderFactory readerFactory(volume);
+    m_volumePixelDataReader = readerFactory.getReader();
+    m_postprocessorsQueue = readerFactory.getPostprocessors();
 
     if (showProgress)
     {
         // Connectem les senyals de notificació de progrés
         connect(m_volumePixelDataReader, SIGNAL(progress(int)), SIGNAL(progress(int)));
-    }
-}
-
-void VolumeReader::setUpPostprocessors(PixelDataReaderType readerType)
-{
-    m_postprocessorsQueue.clear();
-
-    switch (readerType)
-    {
-        case ITKDCMTKPixelDataReader:
-        case VTKGDCMPixelDataReader:
-            m_postprocessorsQueue.enqueue(QSharedPointer<Postprocessor>(new ComputeZSpacingPostprocessor()));
-            break;
-
-        default:
-            break;
     }
 }
 
