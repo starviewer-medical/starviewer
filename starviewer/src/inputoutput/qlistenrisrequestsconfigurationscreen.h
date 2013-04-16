@@ -22,10 +22,6 @@ public slots:
     /// Aplica els canvis de la configuració
     bool applyChanges();
 
-private slots:
-    /// Slot que s'utilitza quant es fa algun canvi a la configuració, per activar els buttons apply
-    void enableApplyButtons();
-
 private:
     /// Crea els connects dels signals i slots
     void createConnections();
@@ -35,6 +31,15 @@ private:
 
     /// Configura la màscara del textbox
     void configureInputValidator();
+
+private slots:
+    /// Updates the label with warning message when appropiate
+    void updateRISRequestsPortWarning();
+    
+    /// Slots that update the corresponding settings when appropiate
+    void updateListenRISRequestsSetting(bool enable);
+    void updateRISRequestsPortSetting();
+    void updateAutomaticallyViewStudiesSetting(bool enable);
 };
 
 };// end namespace udg
