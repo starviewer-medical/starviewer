@@ -29,7 +29,7 @@
    <iconset resource="../main/main.qrc">
     <normaloff>:/images/cdrom.png</normaloff>:/images/cdrom.png</iconset>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
+  <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
     <widget class="QLabel" name="label_2">
      <property name="font">
@@ -349,7 +349,7 @@
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>12</width>
+           <width>13</width>
            <height>20</height>
           </size>
          </property>
@@ -387,8 +387,8 @@
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
-       <item>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="0" column="0">
         <spacer name="horizontalSpacer_2">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -398,13 +398,13 @@
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>12</width>
+           <width>13</width>
            <height>20</height>
           </size>
          </property>
         </spacer>
        </item>
-       <item>
+       <item row="0" column="1">
         <widget class="QLabel" name="textLabel1_10">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -429,14 +429,14 @@
          </property>
         </widget>
        </item>
-       <item>
+       <item row="0" column="2">
         <widget class="QLineEdit" name="m_textDICOMDIRFolderPathToCopy">
          <property name="enabled">
           <bool>true</bool>
          </property>
         </widget>
        </item>
-       <item>
+       <item row="0" column="3">
         <widget class="QPushButton" name="m_buttonExaminateDICOMDIRFolderPathToCopy">
          <property name="enabled">
           <bool>true</bool>
@@ -453,22 +453,32 @@
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QLabel" name="m_copyFolderContentValidationIcon">
-         <property name="text">
-          <string/>
-         </property>
-         <property name="pixmap">
-          <pixmap resource="../main/main.qrc">:/images/beta-warning.png</pixmap>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="m_copyFolderContentValidationLabel">
-         <property name="text">
-          <string>Wrong path</string>
-         </property>
-        </widget>
+       <item row="1" column="2">
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QLabel" name="m_copyFolderContentValidationIcon">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="pixmap">
+            <pixmap resource="../main/main.qrc">:/images/beta-warning.png</pixmap>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="m_copyFolderContentValidationLabel">
+           <property name="text">
+            <string>Wrong path</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </item>
