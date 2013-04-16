@@ -743,11 +743,13 @@ void Q2DViewerExtension::validePhases()
     m_axialViewToolButton->setEnabled(true);
     if (m_workingArea->getSelectedViewer()->hasPhases())
     {
+        m_axialViewToolButton->setEnabled(false);
         m_sagitalViewToolButton->setEnabled(false);
         m_coronalViewToolButton->setEnabled(false);
     }
     else
     {
+        m_axialViewToolButton->setEnabled(true);
         m_sagitalViewToolButton->setEnabled(true);
         m_coronalViewToolButton->setEnabled(true);
     }
