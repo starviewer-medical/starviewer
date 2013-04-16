@@ -9,6 +9,7 @@ Q2DViewerConfigurationScreen::Q2DViewerConfigurationScreen(QWidget *parent)
 {
     setupUi(this);
     initialize();
+    createConnections();
 }
 
 Q2DViewerConfigurationScreen::~Q2DViewerConfigurationScreen()
@@ -28,6 +29,23 @@ void Q2DViewerConfigurationScreen::initialize()
 
     initializeModalitiesWithZoomByDefault();
     initializeMagnifyingGlassToolZoomFactor();
+}
+
+void Q2DViewerConfigurationScreen::createConnections()
+{
+    connect(m_sliceScrollLoopCheckBox, SIGNAL(toggled(bool)), SLOT(updateSliceScrollLoopSetting(bool)));
+    connect(m_phaseScrollLoopCheckBox, SIGNAL(toggled(bool)), SLOT(updatePhaseScrollLoopSetting(bool)));
+    connect(m_referenceLinesMRCheckBox, SIGNAL(toggled(bool)), SLOT(updateReferenceLinesForMRSetting(bool)));
+    connect(m_referenceLinesCTCheckBox, SIGNAL(toggled(bool)), SLOT(updateReferenceLinesForCTSetting(bool)));
+    connect(m_automaticSynchronizationMRCheckBox,SIGNAL(toggled(bool)), SLOT(updateAutomaticSynchronizationForMRSetting(bool)));
+    connect(m_automaticSynchronizationCTCheckBox,SIGNAL(toggled(bool)), SLOT(updateAutomaticSynchronizationForCTSetting(bool)));
+
+    connect(m_zoomByDefaultModalitiesGroupBox, SIGNAL(checkedModalitiesChanged(QStringList)), SLOT(updateModalitiesWithZoomByDefaultSetting(QStringList)));
+    connect(m_1point5XZoomFactorRadioButton, SIGNAL(clicked()), SLOT(updateMagnifyingGlassZoomFactorSetting()));
+    connect(m_2XZoomFactorRadioButton, SIGNAL(clicked()), SLOT(updateMagnifyingGlassZoomFactorSetting()));
+    connect(m_4XZoomFactorRadioButton, SIGNAL(clicked()), SLOT(updateMagnifyingGlassZoomFactorSetting()));
+    connect(m_6XZoomFactorRadioButton, SIGNAL(clicked()), SLOT(updateMagnifyingGlassZoomFactorSetting()));
+    connect(m_8XZoomFactorRadioButton, SIGNAL(clicked()), SLOT(updateMagnifyingGlassZoomFactorSetting()));
 }
 
 void Q2DViewerConfigurationScreen::initializeModalitiesWithZoomByDefault()
@@ -116,10 +134,10 @@ void Q2DViewerConfigurationScreen::updateAutomaticSynchronizationForCTSetting(bo
     settings.setValue(CoreSettings::EnableQ2DViewerAutomaticSynchronizationForCT, enable);
 }
 
-void Q2DViewerConfigurationScreen::updateModalitiesWithZoomByDefaultSetting()
+void Q2DViewerConfigurationScreen::updateModalitiesWithZoomByDefaultSetting(const QStringList &modalities)
 {
     Settings settings;
-    QString modalitiesWithZoom = m_zoomByDefaultModalitiesGroupBox->getCheckedModalities().join(";");
+    QString modalitiesWithZoom = modalities.join(";");
     settings.setValue(CoreSettings::ModalitiesWithZoomToolByDefault, modalitiesWithZoom);
 }
 
@@ -149,24 +167,11 @@ void Q2DViewerConfigurationScreen::updateMagnifyingGlassZoomFactorSetting()
     }
     else
     {
-        // Si no hi ha cap botó marcat, l'augment serà 4x per defecte. Tot i així, això no hauria de passar mai
+        // Si no hi ha cap botï¿½ marcat, l'augment serï¿½ 4x per defecte. Tot i aixï¿½, aixï¿½ no hauria de passar mai
         zoomFactor = "4";
     }
 
     Settings settings;
     settings.setValue(CoreSettings::MagnifyingGlassZoomFactor, zoomFactor);
 }
-
-void Q2DViewerConfigurationScreen::applyChanges()
-{
-    updateSliceScrollLoopSetting(m_sliceScrollLoopCheckBox->isChecked());
-    updatePhaseScrollLoopSetting(m_phaseScrollLoopCheckBox->isChecked());
-    updateReferenceLinesForMRSetting(m_referenceLinesMRCheckBox->isChecked());
-    updateReferenceLinesForCTSetting(m_referenceLinesCTCheckBox->isChecked());
-    updateModalitiesWithZoomByDefaultSetting();
-    updateMagnifyingGlassZoomFactorSetting();
-    updateAutomaticSynchronizationForMRSetting(m_automaticSynchronizationMRCheckBox->isChecked());
-    updateAutomaticSynchronizationForCTSetting(m_automaticSynchronizationCTCheckBox->isChecked());
-}
-
 }
