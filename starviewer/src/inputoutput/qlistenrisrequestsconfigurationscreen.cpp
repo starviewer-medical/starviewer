@@ -2,7 +2,6 @@
 
 #include <QIntValidator>
 
-#include "starviewerapplication.h"
 #include "inputoutputsettings.h"
 
 namespace udg {

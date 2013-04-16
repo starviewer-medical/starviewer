@@ -1,12 +1,9 @@
 #include "qdicomdirconfigurationscreen.h"
 
-#include <QMessageBox>
 #include <QFileDialog>
 
-#include "starviewerapplication.h"
 #include "inputoutputsettings.h"
 #include "logging.h"
-#include "settings.h"
 #include "converttodicomdir.h"
 
 namespace udg {
