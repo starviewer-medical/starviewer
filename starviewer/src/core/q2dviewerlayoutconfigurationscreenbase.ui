@@ -180,7 +180,6 @@
       </item>
      </layout>
      <zorder>m_restoreDefaultsButton</zorder>
-     <zorder>horizontalSpacer_3</zorder>
     </widget>
    </item>
    <item>
