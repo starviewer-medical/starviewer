@@ -18,10 +18,6 @@ public:
     /// Destructor de classe
     ~QListenRisRequestsConfigurationScreen();
 
-public slots:
-    /// Aplica els canvis de la configuració
-    bool applyChanges();
-
 private:
     /// Crea els connects dels signals i slots
     void createConnections();

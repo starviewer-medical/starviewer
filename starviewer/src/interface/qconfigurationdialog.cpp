@@ -27,31 +27,26 @@ QConfigurationDialog::QConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
     // Configuració del layout del visor 2D
     Q2DViewerLayoutConfigurationScreen *q2dviewerLayoutScreen = new Q2DViewerLayoutConfigurationScreen(this);
     addConfigurationWidget(q2dviewerLayoutScreen, tr("2D Viewer Layout"), BasicConfiguration);
-    connect(m_okButton, SIGNAL(clicked()), q2dviewerLayoutScreen, SLOT(applyChanges()));
 
 #ifndef STARVIEWER_LITE
     // No mostrem configuració del PACS
     QConfigurationScreen *pacsConfigurationScreen = new QConfigurationScreen(this);
     this->addConfigurationWidget(pacsConfigurationScreen, tr("PACS"), AdvancedConfiguration);
-    connect(m_okButton, SIGNAL(clicked()), pacsConfigurationScreen, SLOT(applyChanges()));
 #endif
 
     // Configuracions de la base de dades local
     QLocalDatabaseConfigurationScreen *localDatabaseScreen = new QLocalDatabaseConfigurationScreen(this);
     this->addConfigurationWidget(localDatabaseScreen, tr("Local Database"), AdvancedConfiguration);
-    connect(m_okButton, SIGNAL(clicked()), localDatabaseScreen, SLOT(applyChanges()));
 
 #ifndef STARVIEWER_LITE
     // No mostrem configuració del servei que escolta les peticions del RIS
     QListenRisRequestsConfigurationScreen *qListenRisRequestsConfigurationScreen = new QListenRisRequestsConfigurationScreen(this);
     this->addConfigurationWidget(qListenRisRequestsConfigurationScreen, tr("RIS Listener"), AdvancedConfiguration);
-    connect(m_okButton, SIGNAL(clicked()), qListenRisRequestsConfigurationScreen, SLOT(applyChanges()));
 #endif
 
     // Configuració del programa de gravació
     QDICOMDIRConfigurationScreen *dicomdirScreen = new QDICOMDIRConfigurationScreen(this);
     this->addConfigurationWidget(dicomdirScreen, tr("DICOMDIR"), AdvancedConfiguration);
-    connect(m_okButton, SIGNAL(clicked()), dicomdirScreen, SLOT(applyChanges()));
 
     connect(m_viewAdvancedOptions, SIGNAL(stateChanged(int)), SLOT(setViewAdvancedConfiguration()));
 

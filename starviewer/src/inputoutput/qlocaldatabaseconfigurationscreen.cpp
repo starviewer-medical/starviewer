@@ -279,11 +279,6 @@ bool QLocalDatabaseConfigurationScreen::validateDICOMFilesCachePath(const QStrin
     }
 }
 
-bool QLocalDatabaseConfigurationScreen::applyChanges()
-{
-    return true;
-}
-
 void QLocalDatabaseConfigurationScreen::examinateDataBaseRoot()
 {
     // A la pàgina de QT indica que en el cas que nomes deixem seleccionar un fitxer, agafar el primer element de la llista i punt, no hi ha cap mètode que

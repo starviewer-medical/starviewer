@@ -49,12 +49,6 @@ void QListenRisRequestsConfigurationScreen::loadRisConfiguration()
     m_textPortListenRisRequests->setText(QString().setNum(settings.getValue(InputOutputSettings::RISRequestsPort).toInt()));
 }
 
-bool QListenRisRequestsConfigurationScreen::applyChanges()
-{
-    // TODO This method will be removed when all configuration pages do automatic update of settings
-    return true;
-}
-
 void QListenRisRequestsConfigurationScreen::updateRISRequestsPortWarning()
 {
     if (!m_textPortListenRisRequests->text().isEmpty())

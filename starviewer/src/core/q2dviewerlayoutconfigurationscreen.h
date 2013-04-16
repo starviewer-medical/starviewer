@@ -25,9 +25,6 @@ private:
 
     void setCurrentStudyLayoutConfig(const StudyLayoutConfig &config);
 private slots:
-    /// Farà que s'apliquin els canvis corresponents en els settings
-    void applyChanges();
-
     /// Updates the modalities to apply hanging protocols settings
     void updateModalititesToApplyHangingProtocolsSetting(const QStringList &modalities);
     

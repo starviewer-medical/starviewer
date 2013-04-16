@@ -18,10 +18,6 @@ public:
     /// Destructor de classe
     ~QLocalDatabaseConfigurationScreen();
 
-public slots:
-    /// Aplica els canvis de la configuració
-    bool applyChanges();
-
 private slots:
     /// Mostra un QDialog per especificar on es troba la base de dades de la caché
     void examinateDataBaseRoot();

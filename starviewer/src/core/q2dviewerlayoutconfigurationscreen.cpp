@@ -126,11 +126,6 @@ void Q2DViewerLayoutConfigurationScreen::setCurrentStudyLayoutConfig(const Study
     }
 }
 
-void Q2DViewerLayoutConfigurationScreen::applyChanges()
-{
-    // TODO To be removed
-}
-
 void Q2DViewerLayoutConfigurationScreen::updateModalititesToApplyHangingProtocolsSetting(const QStringList &modalities)
 {
     Settings settings;
