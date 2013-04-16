@@ -106,7 +106,7 @@
      <item>
       <widget class="QPushButton" name="m_okButton">
        <property name="text">
-        <string>&amp;OK</string>
+        <string>Close</string>
        </property>
        <property name="shortcut">
         <string>Alt+B</string>
@@ -119,31 +119,11 @@
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QPushButton" name="m_cancelButton">
-       <property name="text">
-        <string>&amp;Cancel</string>
-       </property>
-       <property name="shortcut">
-        <string>Alt+C</string>
-       </property>
-       <property name="autoDefault">
-        <bool>true</bool>
-       </property>
-       <property name="default">
-        <bool>true</bool>
-       </property>
-       <property name="flat">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
     </layout>
    </item>
   </layout>
  </widget>
  <tabstops>
-  <tabstop>m_cancelButton</tabstop>
   <tabstop>m_okButton</tabstop>
   <tabstop>m_viewAdvancedOptions</tabstop>
   <tabstop>m_optionsList</tabstop>
@@ -161,22 +141,6 @@
    <hints>
     <hint type="sourcelabel">
      <x>312</x>
-     <y>238</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>m_cancelButton</sender>
-   <signal>clicked()</signal>
-   <receiver>QConfigurationDialogBase</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>393</x>
      <y>238</y>
     </hint>
     <hint type="destinationlabel">
