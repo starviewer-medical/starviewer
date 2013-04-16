@@ -2,6 +2,8 @@
 
 #include "image.h"
 #include "imagetesthelper.h"
+#include "series.h"
+#include "seriestesthelper.h"
 #include "volumepixeldata.h"
 #include "volume.h"
 #include <vtkImageData.h>
@@ -16,12 +18,12 @@ Volume* VolumeTestHelper::createVolume(int numberOfImages, int numberOfPhases, i
     Volume *testVolume = new Volume();
     testVolume->setNumberOfPhases(numberOfPhases);
     testVolume->setNumberOfSlicesPerPhase(numberOfSlicesPerPhase);
+    Series *series = SeriesTestHelper::createSeries(numberOfImages);
+    testVolume->setImages(series->getImages());
 
     for (int index = 0; index < numberOfImages; index++)
     {
-        Image *image = ImageTestHelper::createImageByUID(QString::number(index));
-        image->setPath(QString("C:\\Test\\path\\%1").arg(index));
-        testVolume->addImage(image);
+        testVolume->getImages().at(index)->setPath(QString("C:\\Test\\path\\%1").arg(index));
     }
 
     vtkImageData *testVtkImageData = vtkImageData::New();
@@ -35,12 +37,12 @@ Volume* VolumeTestHelper::createVolumeWithParameters(int numberOfImages, int num
     Volume *testVolume = new Volume();
     testVolume->setNumberOfPhases(numberOfPhases);
     testVolume->setNumberOfSlicesPerPhase(numberOfSlicesPerPhase);
+    Series *series = SeriesTestHelper::createSeries(numberOfImages);
+    testVolume->setImages(series->getImages());
 
     for (int index = 0; index < numberOfImages; index++)
     {
-        Image *image = ImageTestHelper::createImageByUID(QString::number(index));
-        image->setPath(QString("C:\\Test\\path\\%1").arg(index));
-        testVolume->addImage(image);
+        testVolume->getImages().at(index)->setPath(QString("C:\\Test\\path\\%1").arg(index));
     }
 
     vtkImageData *testVtkImageData = vtkImageData::New();
@@ -58,12 +60,12 @@ Volume* VolumeTestHelper::createMultiframeVolume(int numberOfImages, int numberO
     Volume *testVolume = new Volume();
     testVolume->setNumberOfPhases(numberOfPhases);
     testVolume->setNumberOfSlicesPerPhase(numberOfSlicesPerPhase);
+    Series *series = SeriesTestHelper::createSeries(numberOfImages);
+    testVolume->setImages(series->getImages());
 
     for (int index = 0; index < numberOfImages; index++)
     {
-        Image *image = ImageTestHelper::createImageByUID(QString::number(index));
-        image->setPath("C:\\Test\\path");
-        testVolume->addImage(image);
+        testVolume->getImages().at(index)->setPath(QString("C:\\Test\\path"));
     }
 
     vtkImageData *testVtkImageData = vtkImageData::New();
@@ -74,10 +76,10 @@ Volume* VolumeTestHelper::createMultiframeVolume(int numberOfImages, int numberO
 
 void VolumeTestHelper::cleanUp(Volume *volume)
 {
-    QList<Image*> images = volume->getImages();
-    foreach (Image *image, images)
+    if (volume->getImage(0))
     {
-        ImageTestHelper::cleanUp(image);
+        // This calls cleanUp() on SeriesTestHelper with the parent series and deletes the series and all images
+        ImageTestHelper::cleanUp(volume->getImage(0));
     }
 
     delete volume;
