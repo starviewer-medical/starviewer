@@ -4,7 +4,6 @@
 #include <QDir>
 #include <QMessageBox>
 #include <QFileDialog>
-#include <QProgressDialog>
 
 #include "localdatabasemanager.h"
 #include "starviewerapplication.h"
@@ -22,14 +21,23 @@ typedef SingletonPointer<QueryScreen> QueryScreenSingleton;
 QLocalDatabaseConfigurationScreen::QLocalDatabaseConfigurationScreen(QWidget *parent) : QWidget(parent)
 {
     setupUi(this);
+    
+    m_databasePathWarningLabel->setVisible(false);
+    m_databasePathWarningIcon->setVisible(false);
+    m_cachePathWarningIcon->setVisible(false);
+    m_cachePathWarningLabel->setVisible(false);
+    m_minimumSpaceWarningIcon->setVisible(false);
+    m_minimumSpaceWarningLabel->setVisible(false);
+    m_deleteNotViewedStudiesWarningIcon->setVisible(false);
+    m_deleteNotViewedStudiesWarningLabel->setVisible(false);
+    m_freeSpaceWarningIcon->setVisible(false);
+    m_freeSpaceWarningLabel->setVisible(false);
+    m_mustRestartToApplyWarningIcon->setVisible(false);
+    m_mustRestartToApplyWarningLabel->setVisible(false);
 
     loadCacheDefaults();
-    m_buttonApplyCache->setEnabled(false);
-
-    m_createDatabase = false;
 
     createConnections();
-    m_buttonApplyCache->setIcon(QIcon(":images/apply.png"));
     configureInputValidator();
 }
 
@@ -45,28 +53,18 @@ void QLocalDatabaseConfigurationScreen::createConnections()
     // Connecta el boto examinar de la cache amb el dialog per escollir el path de la base de dades
     connect(m_buttonExaminateCacheImage, SIGNAL(clicked()), SLOT(examinateCacheImagePath()));
 
-    // Connecta el boto aplicar de la cache amb l'slot apply
-    connect(m_buttonApplyCache, SIGNAL(clicked()), SLOT(applyChanges()));
-
-    // Connecta el boto aplicar de l'informació de l'institució amb l'slot apply
-    connect(m_buttonCreateDatabase, SIGNAL(clicked()), SLOT(createDatabase()));
-
-    // Activen el boto apply quant canvia el seu valor
-    connect(m_textDatabaseRoot, SIGNAL(textChanged(const QString&)), SLOT(enableApplyButtons()));
-    connect(m_textCacheImagePath, SIGNAL(textChanged(const QString&)), SLOT(enableApplyButtons()));
-    connect(m_textMinimumSpaceRequiredToRetrieve, SIGNAL(textChanged(const QString&)), SLOT(enableApplyButtons()));
-    connect(m_textDatabaseRoot, SIGNAL(textChanged(const QString&)), SLOT (configurationChangedDatabaseRoot()));
-    connect(m_textMaximumDaysNotViewed, SIGNAL(textChanged(const QString&)), SLOT(enableApplyButtons()));
-    connect(m_textSpaceToFreeIfNotEnoughSpaceAvailable, SIGNAL(textChanged(const QString&)), SLOT(enableApplyButtons()));
-    connect(m_checkBoxDeletedOldStudies, SIGNAL(toggled(bool)), SLOT(enableApplyButtons()));
-    connect(m_checkBoxDeleteStudiesIfNotEnoughFreeSpaceAvailable, SIGNAL(toggled(bool)), SLOT(enableApplyButtons()));
-
-    // Mateniment base de dades
+    // Updates
+    // Database and cache location
+    connect(m_textDatabaseRoot, SIGNAL(textChanged(QString)), SLOT(checkAndUpdateDatabasePathSetting(QString)));
+    // Automatic cache management
+    connect(m_textMinimumSpaceRequiredToRetrieve, SIGNAL(textChanged(QString)), SLOT(updateMinimumSpaceRequiredSetting(QString)));
+    connect(m_checkBoxDeletedOldStudies, SIGNAL(toggled(bool)), SLOT(updateDeleteOldStudiesSetting(bool)));
+    connect(m_textMaximumDaysNotViewed, SIGNAL(textChanged(QString)), SLOT(updateMaximumDaysNotViewedSetting(QString)));
+    connect(m_checkBoxDeleteStudiesIfNotEnoughFreeSpaceAvailable, SIGNAL(toggled(bool)), SLOT(updateDeleteStudiesWhenNoFreeSpaceSetting(bool)));
+    connect(m_textSpaceToFreeIfNotEnoughSpaceAvailable, SIGNAL(textChanged(QString)), SLOT(updateDiskSpaceToFreeSetting(QString)));
+    // Local database maintenance
     connect(m_buttonDeleteStudies, SIGNAL(clicked()), SLOT(deleteStudies()));
     connect(m_buttonCompactDatabase, SIGNAL(clicked()), SLOT(compactCache()));
-
-    // Afegeix la / al final del Path de la cache d'imatges
-    connect(m_textCacheImagePath, SIGNAL(editingFinished()), SLOT(cacheImagePathEditingFinish()));
 }
 
 void QLocalDatabaseConfigurationScreen::configureInputValidator()
@@ -94,115 +92,196 @@ void QLocalDatabaseConfigurationScreen::loadCacheDefaults()
     m_textMaximumDaysNotViewed->setEnabled(settings.getValue(InputOutputSettings::DeleteLeastRecentlyUsedStudiesInDaysCriteria).toBool());
 }
 
-bool QLocalDatabaseConfigurationScreen::validateChanges()
+void QLocalDatabaseConfigurationScreen::checkAndUpdateDatabasePathSetting(const QString &text)
 {
-    QDir dir;
-    bool valid = true;
-    QString messageBoxText = tr("Some configuration options are not valid:\n");
-
-    if (m_textDatabaseRoot->isModified())
+    bool databasePathHasChanged = false;
+    if (validateDatabaseApplicationPath(text))
     {
-        // Si el fitxer indicat no existeix i no s'ha demanat que es crei una nova base de dades, el path és invàlid
-        if (!dir.exists(m_textDatabaseRoot->text()) && m_createDatabase == false)
+        // Update only if path has changed from current setting
+        if (LocalDatabaseManager::getDatabaseFilePath() != text)
         {
-            QMessageBox::warning(this, ApplicationNameString, tr("Invalid database path."));
-            return false;
+            Settings settings;
+            settings.setValue(InputOutputSettings::DatabaseAbsoluteFilePath, text);
+            INFO_LOG("Updated database file path setting: " + text);
+
+            databasePathHasChanged = true;
         }
     }
 
-    if (m_textCacheImagePath->isModified())
+    m_mustRestartToApplyWarningIcon->setVisible(databasePathHasChanged);
+    m_mustRestartToApplyWarningLabel->setVisible(databasePathHasChanged);
+}
+
+void QLocalDatabaseConfigurationScreen::checkAndUpdateCachePathSetting(const QString &text)
+{
+    // TODO If we change cache path, what is suposed to be done with the previous cache items?
+    if (validateDICOMFilesCachePath(text))
     {
-        if (!dir.exists(m_textCacheImagePath->text()))
+        // Update only if path has changed from current setting
+        if (LocalDatabaseManager::getCachePath() != text)
         {
-            switch (QMessageBox::question(this,
-                    tr("Create directory?"),
-                    tr("The cache image directory does not exist. Do you want to create it?"),
-                    tr("&Yes"), tr("&No"), 0, 1))
-            {
-                case 0:
-                    if (!dir.mkpath(m_textCacheImagePath->text()))
-                    {
-                        QMessageBox::critical(this, ApplicationNameString, tr("Unable to create the directory. Please check user permissions."));
-                        return false;
-                    }
-                    else
-                    {
-                        return true;
-                    }
-                    break;
-                case 1:
-                    return false;
-                    break;
-            }
+            Settings settings;
+            settings.setValue(InputOutputSettings::CachePath, text);
+            INFO_LOG("Updated cache path setting: " + text);
         }
     }
+}
 
+void QLocalDatabaseConfigurationScreen::updateMinimumSpaceRequiredSetting(const QString &text)
+{
     if (m_textMinimumSpaceRequiredToRetrieve->isModified())
     {
-        if (m_textMinimumSpaceRequiredToRetrieve->text().toUInt() < 1)
+        if (text.isEmpty())
         {
-            messageBoxText += tr("\n- At least 1 GB of free space in hard disk is necessary to retrieve or import new studies.");
-            valid = false;
+            m_minimumSpaceWarningIcon->setVisible(true);
+            m_minimumSpaceWarningLabel->setVisible(true);
+            m_minimumSpaceWarningLabel->setText(tr("Value cannot be empty."));
+        }
+        else if (text.toUInt() < 1)
+        {
+            m_minimumSpaceWarningIcon->setVisible(true);
+            m_minimumSpaceWarningLabel->setVisible(true);
+            m_minimumSpaceWarningLabel->setText(tr("At least 1 GB of free space in hard disk is required."));
+        }
+        else
+        {
+            m_minimumSpaceWarningIcon->setVisible(false);
+            m_minimumSpaceWarningLabel->setVisible(false);
+
+            Settings settings;
+            settings.setValue(InputOutputSettings::MinimumFreeGigaBytesForCache, text.toUInt());
+            INFO_LOG("Updated minimum free space to download studies settings: " + text);
         }
     }
+}
 
-    if (m_textSpaceToFreeIfNotEnoughSpaceAvailable->isModified())
-    {
-        if (m_textSpaceToFreeIfNotEnoughSpaceAvailable->text().toUInt() < 1)
-        {
-            messageBoxText += tr("\n- At least 1 GB of studies must be deleted when there is not enough space to retrieve or import new studies.");
-            valid = false;
-        }
-    }
+void QLocalDatabaseConfigurationScreen::updateDeleteOldStudiesSetting(bool enable)
+{
+    Settings settings;
+    settings.setValue(InputOutputSettings::DeleteLeastRecentlyUsedStudiesInDaysCriteria, enable);
 
+    m_deleteNotViewedStudiesWarningIcon->setEnabled(enable);
+    m_deleteNotViewedStudiesWarningLabel->setEnabled(enable);
+
+}
+
+void QLocalDatabaseConfigurationScreen::updateMaximumDaysNotViewedSetting(const QString &text)
+{
     if (m_textMaximumDaysNotViewed->isModified())
     {
-        if (m_textMaximumDaysNotViewed->text().toUInt() < 1)
+        if (text.isEmpty())
         {
-            messageBoxText += tr("\n- Unable to delete studies not viewed in the last 0 days, must be at least 1 day.");
-            valid = false;
+            m_deleteNotViewedStudiesWarningIcon->setVisible(true);
+            m_deleteNotViewedStudiesWarningLabel->setVisible(true);
+            m_deleteNotViewedStudiesWarningLabel->setText(tr("Value cannot be empty."));
+        }
+        else if (text.toUInt() < 1)
+        {
+            m_deleteNotViewedStudiesWarningIcon->setVisible(true);
+            m_deleteNotViewedStudiesWarningLabel->setVisible(true);
+            m_deleteNotViewedStudiesWarningLabel->setText(tr("Must be at least 1 day."));
+        }
+        else
+        {
+            m_deleteNotViewedStudiesWarningIcon->setVisible(false);
+            m_deleteNotViewedStudiesWarningLabel->setVisible(false);
+
+            Settings settings;
+            settings.setValue(InputOutputSettings::MinimumDaysUnusedToDeleteStudy, text);
+            INFO_LOG("Updated maximum days study remains in cache if not viewed setting: " + text);
         }
     }
+}
 
-    if (!valid)
+void QLocalDatabaseConfigurationScreen::updateDeleteStudiesWhenNoFreeSpaceSetting(bool enable)
+{
+    Settings settings;
+    settings.setValue(InputOutputSettings::DeleteLeastRecentlyUsedStudiesNoFreeSpaceCriteria, enable);
+
+    m_freeSpaceWarningIcon->setEnabled(enable);
+    m_freeSpaceWarningLabel->setEnabled(enable);
+}
+
+void QLocalDatabaseConfigurationScreen::updateDiskSpaceToFreeSetting(const QString &text)
+{
+    if (m_textSpaceToFreeIfNotEnoughSpaceAvailable->isModified())
     {
-        QMessageBox::information(this, ApplicationNameString, messageBoxText);
+        if (text.isEmpty())
+        {
+            m_freeSpaceWarningIcon->setVisible(true);
+            m_freeSpaceWarningLabel->setVisible(true);
+            m_freeSpaceWarningLabel->setText(tr("Value cannot be empty."));
+        }
+        else if (text.toUInt() < 1)
+        {
+            m_freeSpaceWarningIcon->setVisible(true);
+            m_freeSpaceWarningLabel->setVisible(true);
+            m_freeSpaceWarningLabel->setText(tr("At least 1 GB of free space is required."));
+        }
+        else
+        {
+            m_freeSpaceWarningIcon->setVisible(false);
+            m_freeSpaceWarningLabel->setVisible(false);
+            
+            Settings settings;
+            settings.setValue(InputOutputSettings::MinimumGigaBytesToFreeIfCacheIsFull, text.toUInt());
+            INFO_LOG("Updated Giga Bytes to free if cache is full setting: " + text);
+        }
     }
+}
 
-    return valid;
+bool QLocalDatabaseConfigurationScreen::validateDatabaseApplicationPath(const QString &text)
+{
+    QFileInfo databaseFilePathInfo(text);
+    if (!databaseFilePathInfo.dir().exists())
+    {
+        m_databasePathWarningLabel->setText(tr("Invalid database path."));
+        m_databasePathWarningLabel->setVisible(true);
+        m_databasePathWarningIcon->setVisible(true);
+
+        return false;
+    }
+    else
+    {
+        if (text.right(4) != ".sdb")
+        {
+            m_databasePathWarningLabel->setText(tr("The extension of the database has to be '.sdb'"));
+            m_databasePathWarningLabel->setVisible(true);
+            m_databasePathWarningIcon->setVisible(true);
+
+            return false;
+        }
+        else
+        {
+            m_databasePathWarningLabel->setVisible(false);
+            m_databasePathWarningIcon->setVisible(false);
+            return true;
+        }
+    }
+}
+
+bool QLocalDatabaseConfigurationScreen::validateDICOMFilesCachePath(const QString &text)
+{
+    QFileInfo cachePathFileInfo(text);
+    if (!cachePathFileInfo.dir().exists())
+    {
+        m_cachePathWarningLabel->setText(tr("Invalid database path."));
+        m_cachePathWarningLabel->setVisible(true);
+        m_cachePathWarningIcon->setVisible(true);
+
+        return false;
+    }
+    else
+    {
+        m_cachePathWarningLabel->setVisible(false);
+        m_cachePathWarningIcon->setVisible(false);
+        return true;
+    }
 }
 
 bool QLocalDatabaseConfigurationScreen::applyChanges()
 {
-    if (validateChanges())
-    {
-        applyChangesCache();
-
-        // Només s'ha de reiniciar en el cas que que s'hagi canviat el path de la base de dades, per una ja existent. En el cas que la base de dades
-        // no existeixi, a l'usuari al fer click al botó crear base de dades, ja se li haurà informat que s'havia de reiniciar l'aplicació
-        if (m_textDatabaseRoot->isModified() && m_createDatabase == false)
-        {
-            QMessageBox::warning(this, ApplicationNameString, tr("The application has to be restarted to apply the changes."));
-        }
-
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-void QLocalDatabaseConfigurationScreen::enableApplyButtons()
-{
-    m_buttonApplyCache->setEnabled(true);
-}
-
-void QLocalDatabaseConfigurationScreen::configurationChangedDatabaseRoot()
-{
-    // Indiquem no s'ha demanat que es creï la base de dades indicada a m_textDatabaseRoot
-    m_createDatabase = false;
-    enableApplyButtons();
+    return true;
 }
 
 void QLocalDatabaseConfigurationScreen::examinateDataBaseRoot()
@@ -232,47 +311,8 @@ void QLocalDatabaseConfigurationScreen::examinateCacheImagePath()
     {
         m_textCacheImagePath->setText(path);
         cacheImagePathEditingFinish();
+        checkAndUpdateCachePathSetting(m_textCacheImagePath->text());
     }
-}
-
-void QLocalDatabaseConfigurationScreen::applyChangesCache()
-{
-    Settings settings;
-
-    // Aquest els guardem sempre
-    settings.setValue(InputOutputSettings::CachePath, m_textCacheImagePath->text());
-    settings.setValue(InputOutputSettings::DatabaseAbsoluteFilePath, m_textDatabaseRoot->text());
-
-    if (m_textMinimumSpaceRequiredToRetrieve->isModified())
-    {
-        INFO_LOG("Es modificarà l'espai mínim necessari per descarregar" + m_textMinimumSpaceRequiredToRetrieve->text());
-        settings.setValue(InputOutputSettings::MinimumFreeGigaBytesForCache, m_textMinimumSpaceRequiredToRetrieve->text().toUInt());
-    }
-
-    if (m_textCacheImagePath->isModified())
-    {
-        INFO_LOG("Es modificarà el directori de la cache d'imatges " + m_textCacheImagePath->text());
-        settings.setValue(InputOutputSettings::CachePath, m_textCacheImagePath->text());
-    }
-
-    if (m_textMaximumDaysNotViewed->isModified())
-    {
-        INFO_LOG("Es modificarà el nombre maxim de dies d'un estudi a la cache" + m_textMaximumDaysNotViewed->text());
-        settings.setValue(InputOutputSettings::MinimumDaysUnusedToDeleteStudy, m_textMaximumDaysNotViewed->text());
-    }
-
-    if (m_textSpaceToFreeIfNotEnoughSpaceAvailable->isModified())
-    {
-        INFO_LOG("Es modificarà el Gbytes a alliberar quan no hi ha suficent espai per descarregar nous estudis" +
-                 m_textSpaceToFreeIfNotEnoughSpaceAvailable->text());
-        settings.setValue(InputOutputSettings::MinimumGigaBytesToFreeIfCacheIsFull, m_textSpaceToFreeIfNotEnoughSpaceAvailable->text().toUInt());
-    }
-
-    settings.setValue(InputOutputSettings::DeleteLeastRecentlyUsedStudiesInDaysCriteria, m_checkBoxDeletedOldStudies->isChecked());
-    settings.setValue(InputOutputSettings::DeleteLeastRecentlyUsedStudiesNoFreeSpaceCriteria,
-                      m_checkBoxDeleteStudiesIfNotEnoughFreeSpaceAvailable->isChecked());
-
-    m_buttonApplyCache->setEnabled(false);
 }
 
 void QLocalDatabaseConfigurationScreen::deleteStudies()
@@ -348,31 +388,6 @@ void QLocalDatabaseConfigurationScreen::cacheImagePathEditingFinish()
     if (!m_textCacheImagePath->text().endsWith(QDir::toNativeSeparators("/"), Qt::CaseInsensitive))
     {
         m_textCacheImagePath->setText(QDir::toNativeSeparators(m_textCacheImagePath->text() + "/"));
-    }
-}
-
-void QLocalDatabaseConfigurationScreen::createDatabase()
-{
-    QFile databaseFile;
-    QString stringDatabasePath;
-
-    if (m_textDatabaseRoot->text().right(4) != ".sdb")
-    {
-        QMessageBox::warning(this, ApplicationNameString, tr("The extension of the database has to be '.sdb'"));
-    }
-    else
-    {
-        if (databaseFile.exists(m_textDatabaseRoot->text()))
-        {
-            QMessageBox::warning(this, ApplicationNameString, tr("Unable to create the database because a database with the same name exists in the directory."));
-        }
-        else
-        {
-            Settings settings;
-            settings.setValue(InputOutputSettings::DatabaseAbsoluteFilePath, m_textDatabaseRoot->text());
-            QMessageBox::warning(this, ApplicationNameString, tr("The application has to be restarted to apply the changes."));
-            m_createDatabase = true;
-        }
     }
 }
 

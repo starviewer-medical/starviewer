@@ -38,17 +38,14 @@ private slots:
     /// Compacta la base de dades de la cache
     void compactCache();
 
-    /// Slot que s'utilitza quant es fa algun canvi a la configuració, per activar els buttons apply
-    void enableApplyButtons();
-
-    /// Slot que s'utilitza quant es fa algun canvia el path de la base de dades, per activar els buttons apply
-    void configurationChangedDatabaseRoot();
-
-    /// Afegeix la '/' al final del path del directori si l'usuari no l'ha escrit
-    void cacheImagePathEditingFinish();
-
-    /// Crear base de dades
-    void createDatabase();
+    /// Update settings slots
+    void checkAndUpdateDatabasePathSetting(const QString &text);
+    void checkAndUpdateCachePathSetting(const QString &text);
+    void updateMinimumSpaceRequiredSetting(const QString &text);
+    void updateDeleteOldStudiesSetting(bool enable);
+    void updateMaximumDaysNotViewedSetting(const QString &text);
+    void updateDeleteStudiesWhenNoFreeSpaceSetting(bool enable);
+    void updateDiskSpaceToFreeSetting(const QString &text);
 
 private:
     /// Crea els connects dels signals i slots
@@ -60,17 +57,13 @@ private:
     /// Carrega les dades de configuració de la cache
     void loadCacheDefaults();
 
-    ///  Aplica els canvis fets a la configuració de la cache
-    void applyChangesCache();
+    /// Validation of settings values methods
+    bool validateDatabaseApplicationPath(const QString &text);
+    bool validateDICOMFilesCachePath(const QString &text);
 
-    /// Valida que els canvis de la configuració siguin correctes
-    ///  Path de la base de dades i directori dicom's existeix
-    ///  @return indica si els canvis son correctes
-    bool validateChanges();
-
+    /// Afegeix la '/' al final del path del directori si l'usuari no l'ha escrit
+    void cacheImagePathEditingFinish();
 private:
-    /// Indica si s'ha comprovat demanat que es creï la base de dades indicada a m_textDatabaseRoot
-    bool m_createDatabase;
 };
 
 };// end namespace udg
