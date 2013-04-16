@@ -28,6 +28,9 @@ private slots:
     /// Farà que s'apliquin els canvis corresponents en els settings
     void applyChanges();
 
+    /// Updates the modalities to apply hanging protocols settings
+    void updateModalititesToApplyHangingProtocolsSetting(const QStringList &modalities);
+    
     /// Actualitza el widget on es mostren els settings d'un layout de la modalitat escollida en el combo en aquell moment
     void updateLayoutSettingsWidgetForModality(const QString &modality);
 

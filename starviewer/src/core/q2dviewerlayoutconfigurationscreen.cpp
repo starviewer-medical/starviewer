@@ -55,8 +55,9 @@ void Q2DViewerLayoutConfigurationScreen::populateMaxViewersComboBox()
 void Q2DViewerLayoutConfigurationScreen::initializeModalitiesToApplyHangingProtocolsByDefault()
 {
     Settings settings;
-    
     m_applyHPOnModalitiesGroupBox->checkModalities(settings.getValue(CoreSettings::ModalitiesToApplyHangingProtocolsAsFirstOption).toString().split(";", QString::SkipEmptyParts));
+
+    connect(m_applyHPOnModalitiesGroupBox, SIGNAL(checkedModalitiesChanged(QStringList)), SLOT(updateModalititesToApplyHangingProtocolsSetting(QStringList)));
 }
 
 void Q2DViewerLayoutConfigurationScreen::initializeAutomaticLayoutSettings()
@@ -120,9 +121,13 @@ void Q2DViewerLayoutConfigurationScreen::setCurrentStudyLayoutConfig(const Study
 
 void Q2DViewerLayoutConfigurationScreen::applyChanges()
 {
+    // TODO To be removed
+}
+
+void Q2DViewerLayoutConfigurationScreen::updateModalititesToApplyHangingProtocolsSetting(const QStringList &modalities)
+{
     Settings settings;
-    
-    settings.setValue(CoreSettings::ModalitiesToApplyHangingProtocolsAsFirstOption, m_applyHPOnModalitiesGroupBox->getCheckedModalities().join(";"));
+    settings.setValue(CoreSettings::ModalitiesToApplyHangingProtocolsAsFirstOption, modalities.join(";"));
 }
 
 void Q2DViewerLayoutConfigurationScreen::updateLayoutSettingsWidgetForModality(const QString &modality)
