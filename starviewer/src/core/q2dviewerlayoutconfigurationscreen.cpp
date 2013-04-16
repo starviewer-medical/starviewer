@@ -73,8 +73,15 @@ void Q2DViewerLayoutConfigurationScreen::initializeAutomaticLayoutSettings()
     connect(m_modalityComboBox, SIGNAL(activated(QString)), SLOT(updateLayoutSettingsWidgetForModality(QString)));
     updateLayoutSettingsWidgetForModality(m_modalityComboBox->currentText());
 
-    connect(m_updateButton, SIGNAL(clicked()), SLOT(updateSelectedAutomaticLayoutSettings()));
     connect(m_restoreDefaultsButton, SIGNAL(clicked()), SLOT(restoreDefaultsForSelectedAutomaticLayoutSettings()));
+    // Automatic update of settings
+    connect(m_unfoldBySeriesRadioButton, SIGNAL(clicked()), SLOT(updateSelectedAutomaticLayoutSettings()));
+    connect(m_unfoldByImagesRadioButton, SIGNAL(clicked()), SLOT(updateSelectedAutomaticLayoutSettings()));
+    connect(m_leftToRightRadioButton, SIGNAL(clicked()), SLOT(updateSelectedAutomaticLayoutSettings()));
+    connect(m_topToBottomRadioButton, SIGNAL(clicked()), SLOT(updateSelectedAutomaticLayoutSettings()));
+    connect(m_localizerCheckBox, SIGNAL(clicked()), SLOT(updateSelectedAutomaticLayoutSettings()));
+    connect(m_surveyCheckBox, SIGNAL(clicked()), SLOT(updateSelectedAutomaticLayoutSettings()));
+    connect(m_maxViewersComboBox, SIGNAL(currentIndexChanged(int)), SLOT(updateSelectedAutomaticLayoutSettings()));
 }
 
 void Q2DViewerLayoutConfigurationScreen::setCurrentStudyLayoutConfig(const StudyLayoutConfig &config)

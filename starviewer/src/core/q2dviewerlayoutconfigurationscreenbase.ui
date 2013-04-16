@@ -178,20 +178,9 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="2">
-       <widget class="QPushButton" name="m_updateButton">
-        <property name="text">
-         <string>Update</string>
-        </property>
-       </widget>
-      </item>
      </layout>
-     <zorder>groupBox_3</zorder>
-     <zorder>groupBox</zorder>
-     <zorder>groupBox_2</zorder>
      <zorder>m_restoreDefaultsButton</zorder>
      <zorder>horizontalSpacer_3</zorder>
-     <zorder>m_updateButton</zorder>
     </widget>
    </item>
    <item>
