@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>652</width>
+    <width>651</width>
     <height>592</height>
    </rect>
   </property>
@@ -157,6 +157,20 @@
            <property name="icon">
             <iconset resource="../main/main.qrc">
              <normaloff>:/images/folderopen.png</normaloff>:/images/folderopen.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="m_burningApplicationPathValidationIcon">
+           <property name="pixmap">
+            <pixmap resource="../main/main.qrc">:/images/beta-warning.png</pixmap>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="m_burningApplicationPathValidationLabel">
+           <property name="text">
+            <string>Validation Message</string>
            </property>
           </widget>
          </item>
@@ -436,6 +450,23 @@
          <property name="icon">
           <iconset resource="../main/main.qrc">
            <normaloff>:/images/folderopen.png</normaloff>:/images/folderopen.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="m_copyFolderContentValidationIcon">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="pixmap">
+          <pixmap resource="../main/main.qrc">:/images/beta-warning.png</pixmap>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="m_copyFolderContentValidationLabel">
+         <property name="text">
+          <string>Wrong path</string>
          </property>
         </widget>
        </item>
