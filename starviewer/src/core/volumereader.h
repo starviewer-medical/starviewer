@@ -61,30 +61,14 @@ private:
     void fixSpacingIssues(Volume *volume);
 
 private:
-    /// Definim els tipus de lectors que podem fer servir segons les dades del volum
-    enum PixelDataReaderType { ITKDCMTKPixelDataReader, ITKGDCMPixelDataReader, VTKGDCMPixelDataReader };
 
     /// Ens retorna els arxius que hem de llegir, sense retornar-ne cap de repetit
     QStringList getFilesToRead(Volume *volume) const;
 
-    /// Retorna el tipus de lector mes adequat per llegir el volume que se li passa.
-    PixelDataReaderType getSuitableReader(Volume *volume) const;
+    /// Creates and sets up the pixel data reader for the given volume. The second parameter shows progress.
+    /// The second parameter allows to request progress reporting.
+    void setUpReader(Volume *volume, bool showProgress);
 
-    /// Ens diu si existeix algun setting que indiqui que s'hagi de forçar la lectura
-    /// del volum amb una llibreria específica i quina és aquesta
-    /// Els settings comprovats, amb el següent ordre de prioritat, són ForcedImageReaderLibrary,
-    /// ForceITKImageReaderForSpecifiedModalities i ForceVTKImageReaderForSpecifiedModalities
-    /// En cas que es torni fals, indicarà que s'ha de seguir el comportament normal i el valor de @param forcedReaderLibrary serà indefinit
-    /// ATENCIÓ: L'ús d'aquests settings està reservat exclusivament per a casos molt concrets que podrien servir per
-    /// proporcionar un workaround temporal en cas que alguna cas funcioni malament
-    bool mustForceReaderLibraryBackdoor(Volume *volume, PixelDataReaderType &forcedReaderLibrary) const;
-
-    /// Crea i posa a punt el tipus de reader que se li passa per poder llegir a continuació.
-    /// Podem especificar si volem que el reader ens doni el progrés o no.
-    void setUpReader(PixelDataReaderType readerType, bool showProgress);
-
-    /// Prepara la cua de postprocessadors que requereix el tipus de reader passat.
-    void setUpPostprocessors(PixelDataReaderType readerType);
     /// Treu i executa en ordre els postprocessadors de la cua sobre el volum passat.
     void runPostprocessors(Volume *volume);
 

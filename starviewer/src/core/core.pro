@@ -303,7 +303,8 @@ HEADERS += extensionfactory.h \
     itkDCMTKSeriesFileNames.h \
     volumepixeldatareaderitkdcmtk.h \
     postprocessor.h \
-    computezspacingpostprocessor.h
+    computezspacingpostprocessor.h \
+    volumepixeldatareaderfactory.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -561,7 +562,8 @@ SOURCES += extensionmediator.cpp \
     itkDCMTKImageIOFactory.cxx \
     itkDCMTKSeriesFileNames.cxx \
     volumepixeldatareaderitkdcmtk.cpp \
-    computezspacingpostprocessor.cpp
+    computezspacingpostprocessor.cpp \
+    volumepixeldatareaderfactory.cpp
 win32 {
     HEADERS += windowsfirewallaccess.h \
                windowssysteminformation.h
