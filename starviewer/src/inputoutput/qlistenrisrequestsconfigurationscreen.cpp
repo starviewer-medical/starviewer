@@ -62,6 +62,8 @@ void QListenRisRequestsConfigurationScreen::updateRISRequestsPortWarning()
         Settings settings;
         m_RISRequestsPortWarningLabel->setText(tr("A port number should be specified. Current configured port %1 will remain unchanged if none provided.")
             .arg(settings.getValue(InputOutputSettings::RISRequestsPort).toInt()));
+        m_RISRequestsPortWarningLabel->setVisible(true);
+        m_RISRequestsPortWarningIcon->setVisible(true);
     }
 }
 
@@ -69,9 +71,9 @@ void QListenRisRequestsConfigurationScreen::updateListenRISRequestsSetting(bool 
 {
     Settings settings;
     settings.setValue(InputOutputSettings::ListenToRISRequests, enable);
-    
-    m_RISRequestsPortWarningLabel->setVisible(enable);
-    m_RISRequestsPortWarningIcon->setVisible(enable);
+
+    m_RISRequestsPortWarningLabel->setEnabled(enable);
+    m_RISRequestsPortWarningIcon->setEnabled(enable);
 }
 
 void QListenRisRequestsConfigurationScreen::updateRISRequestsPortSetting()
