@@ -19,10 +19,6 @@ public:
     /// Destructor de classe
     ~QConfigurationScreen();
 
-public slots:
-    /// Aplica els canvis de la configuració
-    bool applyChanges();
-
 private slots:
     /// Neteja els line edit de la pantalla
     void clear();

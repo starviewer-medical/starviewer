@@ -346,11 +346,6 @@ bool QConfigurationScreen::validatePacsDeviceToSave()
     }
 }
 
-bool QConfigurationScreen::applyChanges()
-{
-    return true;
-}
-
 void QConfigurationScreen::updateAETitleSetting()
 {
     if (m_textAETitleMachine->isModified())

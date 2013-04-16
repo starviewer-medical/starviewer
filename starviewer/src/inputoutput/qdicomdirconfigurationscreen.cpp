@@ -192,12 +192,6 @@ bool QDICOMDIRConfigurationScreen::validateCopyFolderContentPath(const QString &
     return true;
 }
 
-bool QDICOMDIRConfigurationScreen::applyChanges()
-{
-    // TODO This method will be removed when all configuration pages do automatic update of settings
-    return true;
-}
-
 void QDICOMDIRConfigurationScreen::examinateDICOMDIRBurningApplicationPath()
 {
     Settings settings;
