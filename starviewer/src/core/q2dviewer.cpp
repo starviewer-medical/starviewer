@@ -960,24 +960,7 @@ void Q2DViewer::resetView(CameraOrientationType view)
         // estalviant-nos crides i crides
         m_maxSliceValue = this->getMaximumSlice();
 
-        // TODO Solució inmediata per afrontar el ticket #355, pero s'hauria de fer d'una manera mes elegant i consistent
-        // TODO Potser la solució més elegant sigui fer servir Q2DViewer::setImageOrientation() en comptes de fer-ho segons 
-        // el valor de patient position, ja que en sagital i coronal, sempre voldrem que la orientació sigui d'una forma determinada
-        QString position = m_mainVolume->getImage(0)->getParentSeries()->getPatientPosition();
-        if (position == "FFP" || position == "HFP")
-        {
-            if (m_lastView == Sagital)
-            {
-                rotateClockWise(2);
-            }
-            else if (m_lastView == Coronal)
-            {
-                verticalFlip();
-            }
-        }    
-        
         // Ara adaptem els actors a la nova configuració de la càmara perquè siguin visibles
-        
         // TODO Això s'hauria d'encapsular en un mètode tipu "resetDisplayExtent()"
         m_currentSlice = 0; // HACK! Necessari perquè s'actualitzi la llesca correctament
         updateDisplayExtent();
@@ -1019,6 +1002,8 @@ void Q2DViewer::resetViewToAxial()
     // The way m_lastView is being handled should be corrected. By now is assuming the original acquisition
     // plane is always Axial, and because of this bad assumption we have to do this hacks.
     // Camera view space and real world projection space should be decoupled
+    // We only apply setImageOrientation() when original acquisitions are different from axial
+    // because when the patient is acquired in prono position we don't want to change the acquisition orientation and respect the acquired one
     PatientOrientation desiredOrientation;
     desiredOrientation.setLabels(PatientOrientation::LeftLabel, PatientOrientation::PosteriorLabel);
     switch (AnatomicalPlane::getPlaneTypeFromPatientOrientation(image->getPatientOrientation()))
@@ -1060,8 +1045,6 @@ void Q2DViewer::resetViewToCoronal()
     // The way m_lastView is being handled should be corrected. By now is assuming the original acquisition
     // plane is always Axial, and because of this bad assumption we have to do this hacks.
     // Camera view space and real world projection space should be decoupled
-    PatientOrientation desiredOrientation;
-    desiredOrientation.setLabels(PatientOrientation::LeftLabel, PatientOrientation::FeetLabel);
     switch (AnatomicalPlane::getPlaneTypeFromPatientOrientation(image->getPatientOrientation()))
     {
         case AnatomicalPlane::Axial:
@@ -1070,18 +1053,22 @@ void Q2DViewer::resetViewToCoronal()
 
         case AnatomicalPlane::Sagittal:
             resetView(Q2DViewer::Sagital);
-            setImageOrientation(desiredOrientation);
             break;
 
         case AnatomicalPlane::Coronal:
             resetView(Q2DViewer::Axial);
-            setImageOrientation(desiredOrientation);
             break;
 
         default:
             resetView(Q2DViewer::Coronal);
             break;
     }
+    // Apply the right orientation for the standard coronal projection
+    // We have to apply this for any projection the original acquisition is 
+    // because when the patient is acquired in prono position it is easier to deal with the final orientation
+    PatientOrientation desiredOrientation;
+    desiredOrientation.setLabels(PatientOrientation::LeftLabel, PatientOrientation::FeetLabel);
+    setImageOrientation(desiredOrientation);
 }
 
 void Q2DViewer::resetViewToSagital()
@@ -1101,8 +1088,6 @@ void Q2DViewer::resetViewToSagital()
     // The way m_lastView is being handled should be corrected. By now is assuming the original acquisition
     // plane is always Axial, and because of this bad assumption we have to do this hacks.
     // Camera view space and real world projection space should be decoupled
-    PatientOrientation desiredOrientation;
-    desiredOrientation.setLabels(PatientOrientation::PosteriorLabel, PatientOrientation::FeetLabel);
     switch (AnatomicalPlane::getPlaneTypeFromPatientOrientation(image->getPatientOrientation()))
     {
         case AnatomicalPlane::Axial:
@@ -1111,18 +1096,23 @@ void Q2DViewer::resetViewToSagital()
 
         case AnatomicalPlane::Sagittal:
             resetView(Q2DViewer::Axial);
-            setImageOrientation(desiredOrientation);
             break;
 
         case AnatomicalPlane::Coronal:
             resetView(Q2DViewer::Sagital);
-            setImageOrientation(desiredOrientation);
             break;
 
         default:
             resetView(Q2DViewer::Sagital);
             break;
     }
+
+    // Apply the right orientation for the standard sagital projection.
+    // We have to apply this for any projection the original acquisition is 
+    // because when the patient is acquired in prono position it is easier to deal with the final orientation
+    PatientOrientation desiredOrientation;
+    desiredOrientation.setLabels(PatientOrientation::PosteriorLabel, PatientOrientation::FeetLabel);
+    setImageOrientation(desiredOrientation);
 }
 
 void Q2DViewer::updateCamera()
