@@ -786,13 +786,14 @@ void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVo
         m_blender->Delete();
         m_blender = 0;
     }
-    // Obtenim valors de gris i aquestes coses
-    // Aquí es crea tot el pipeline del visualitzador
-    this->buildWindowLevelPipeline();
 
     // Preparem el thickSlab
     // TODO Cada cop que fem setInput resetejem els valors per defecte?
     initializeThickSlab();
+    
+    // Obtenim valors de gris i aquestes coses
+    // Aquí es crea tot el pipeline del visualitzador
+    this->buildWindowLevelPipeline();
 
     updatePatientAnnotationInformation();
     this->enableAnnotation(m_enabledAnnotations);
