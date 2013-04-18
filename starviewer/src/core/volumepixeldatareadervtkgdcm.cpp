@@ -5,6 +5,7 @@
 
 // GDCM
 #include <gdcmException.h>
+#include <gdcmImageHelper.h>
 
 #include <vtkGDCMImageReader.h>
 #include <vtkStringArray.h>
@@ -36,6 +37,10 @@ VolumePixelDataReaderVTKGDCM::VolumePixelDataReaderVTKGDCM(QObject *parent)
     m_vtkQtConnections = vtkEventQtSlotConnect::New();
     m_vtkQtConnections->Connect(m_vtkGDCMReader, vtkCommand::ProgressEvent, this, SLOT(slotProgress()));
     m_abortRequested = false;
+
+    // Force to read and apply rescale for all images when it is present. Needed to correctly view some old MR single frame datasets from Philips
+    // (see http://sourceforge.net/apps/mediawiki/gdcm/index.php?title=Modality_LUT)
+    gdcm::ImageHelper::SetForceRescaleInterceptSlope(true);
 }
 
 VolumePixelDataReaderVTKGDCM::~VolumePixelDataReaderVTKGDCM()
