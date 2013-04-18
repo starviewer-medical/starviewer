@@ -76,8 +76,8 @@ void test_VolumePixelDataReaderFactory::getReader_ShouldReturnExpectedReaderType
         volume->getImage(0)->setPhotometricInterpretation("RGB");
         volume->getImage(1)->setSOPInstanceUID("MHDImage");
         volume->getImage(1)->setPhotometricInterpretation("RGB");
-        QTest::newRow("MHDImage & color | mhd, color, !avoid, !multiframe -> VTK-GDCM")
-            << volume << QString(typeid(VolumePixelDataReaderVTKGDCM).name());
+        QTest::newRow("MHDImage & color | mhd, color, !avoid, !multiframe -> ITK-GDCM")
+            << volume << QString(typeid(VolumePixelDataReaderITKGDCM).name());
     }
 
     {
@@ -121,7 +121,7 @@ void test_VolumePixelDataReaderFactory::getReader_ShouldReturnExpectedReaderType
         volume->getImage(0)->setSOPInstanceUID("MHDImage");
         volume->getImage(1)->setSOPInstanceUID("MHDImage");
         volume->getImage(0)->getParentSeries()->setModality("CR");
-        QTest::newRow("MHDImage & non-volumetric modality | mhd, !color, !avoid, !multiframe -> ITK-GDCM")
+        QTest::newRow("MHDImage & non-volumetric modality | mhd, !color, avoid, !multiframe -> ITK-GDCM")
             << volume << QString(typeid(VolumePixelDataReaderITKGDCM).name());
     }
 
@@ -141,8 +141,8 @@ void test_VolumePixelDataReaderFactory::getReader_ShouldReturnExpectedReaderType
         volume->getImage(1)->setSOPInstanceUID("MHDImage");
         volume->getImage(1)->setPhotometricInterpretation("RGB");
         volume->getImage(0)->getParentSeries()->setModality("CR");
-        QTest::newRow("MHDImage & color & non-volumetric modality | mhd, color, !avoid, !multiframe -> VTK-GDCM")
-            << volume << QString(typeid(VolumePixelDataReaderVTKGDCM).name());
+        QTest::newRow("MHDImage & color & non-volumetric modality | mhd, color, !avoid, !multiframe -> ITK-GDCM")
+            << volume << QString(typeid(VolumePixelDataReaderITKGDCM).name());
     }
 
     {
@@ -155,8 +155,8 @@ void test_VolumePixelDataReaderFactory::getReader_ShouldReturnExpectedReaderType
         Volume *volume = VolumeTestHelper::createMultiframeVolume(2);
         volume->getImage(0)->setSOPInstanceUID("MHDImage");
         volume->getImage(1)->setSOPInstanceUID("MHDImage");
-        QTest::newRow("MHDImage & multiframe | mhd, !color, !avoid, multiframe -> ITK-DCMTK")
-            << volume << QString(typeid(VolumePixelDataReaderITKDCMTK).name());
+        QTest::newRow("MHDImage & multiframe | mhd, !color, !avoid, multiframe -> ITK-GDCM")
+            << volume << QString(typeid(VolumePixelDataReaderITKGDCM).name());
     }
 
     {
@@ -173,8 +173,8 @@ void test_VolumePixelDataReaderFactory::getReader_ShouldReturnExpectedReaderType
         volume->getImage(0)->setPhotometricInterpretation("RGB");
         volume->getImage(1)->setSOPInstanceUID("MHDImage");
         volume->getImage(1)->setPhotometricInterpretation("RGB");
-        QTest::newRow("MHDImage & color & multiframe | mhd, color, !avoid, multiframe -> VTK-GDCM")
-            << volume << QString(typeid(VolumePixelDataReaderVTKGDCM).name());
+        QTest::newRow("MHDImage & color & multiframe | mhd, color, !avoid, multiframe -> ITK-GDCM")
+            << volume << QString(typeid(VolumePixelDataReaderITKGDCM).name());
     }
 
     {
@@ -189,8 +189,8 @@ void test_VolumePixelDataReaderFactory::getReader_ShouldReturnExpectedReaderType
         volume->getImage(0)->setSOPInstanceUID("MHDImage");
         volume->getImage(1)->setSOPInstanceUID("MHDImage");
         volume->getImage(0)->getParentSeries()->setModality("CR");
-        QTest::newRow("MHDImage & non-volumetric modality & multiframe | mhd, !color, !avoid, multiframe -> ITK-DCMTK")
-            << volume << QString(typeid(VolumePixelDataReaderITKDCMTK).name());
+        QTest::newRow("MHDImage & non-volumetric modality & multiframe | mhd, !color, avoid, multiframe -> ITK-GDCM")
+            << volume << QString(typeid(VolumePixelDataReaderITKGDCM).name());
     }
 
     {
@@ -209,8 +209,8 @@ void test_VolumePixelDataReaderFactory::getReader_ShouldReturnExpectedReaderType
         volume->getImage(1)->setSOPInstanceUID("MHDImage");
         volume->getImage(1)->setPhotometricInterpretation("RGB");
         volume->getImage(0)->getParentSeries()->setModality("CR");
-        QTest::newRow("MHDImage & color & non-volumetric modality & multiframe | mhd, color, !avoid, multiframe -> VTK-GDCM")
-            << volume << QString(typeid(VolumePixelDataReaderVTKGDCM).name());
+        QTest::newRow("MHDImage & color & non-volumetric modality & multiframe | mhd, color, !avoid, multiframe -> ITK-GDCM")
+            << volume << QString(typeid(VolumePixelDataReaderITKGDCM).name());
     }
 }
 
