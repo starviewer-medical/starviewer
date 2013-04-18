@@ -32,8 +32,6 @@ void test_VolumePixelDataReaderFactory::getReader_ShouldReturnExpectedReaderType
     QTest::addColumn<QString>("expectedReaderType");
 
     // Default image:
-    // - rows: 0
-    // - columns: 0
     // - photometric interpretation: "MONOCHROME2"
     // - bits allocated: 16
     // - bits stored: 16
@@ -43,7 +41,6 @@ void test_VolumePixelDataReaderFactory::getReader_ShouldReturnExpectedReaderType
     // - modality: "OT"
 
     // Conditions:
-    // - different size images (different rows or different columns or both)
     // - color images (photometric interpretation != MONOCHROME)
     // - bits allocated = 16
     // - bits stored = 16
@@ -53,33 +50,7 @@ void test_VolumePixelDataReaderFactory::getReader_ShouldReturnExpectedReaderType
 
     {
         Volume *volume = VolumeTestHelper::createVolume(2);
-        QTest::newRow("volume with 2 default images | !diff, !color, !avoid, !multiframe -> ITK-GDCM")
-            << volume << QString(typeid(VolumePixelDataReaderITKGDCM).name());
-    }
-
-    {
-        Volume *volume = VolumeTestHelper::createVolume(2);
-        volume->getImage(0)->setRows(1);
-        volume->getImage(1)->setRows(2);
-        QTest::newRow("different rows | diff, !color, !avoid, !multiframe -> ITK-GDCM")
-            << volume << QString(typeid(VolumePixelDataReaderITKGDCM).name());
-    }
-
-    {
-        Volume *volume = VolumeTestHelper::createVolume(2);
-        volume->getImage(0)->setColumns(1);
-        volume->getImage(1)->setColumns(2);
-        QTest::newRow("different columns | diff, !color, !avoid, !multiframe -> ITK-GDCM")
-            << volume << QString(typeid(VolumePixelDataReaderITKGDCM).name());
-    }
-
-    {
-        Volume *volume = VolumeTestHelper::createVolume(2);
-        volume->getImage(0)->setRows(1);
-        volume->getImage(0)->setColumns(1);
-        volume->getImage(1)->setRows(2);
-        volume->getImage(1)->setColumns(2);
-        QTest::newRow("different rows & different columns | diff, !color, !avoid, !multiframe -> ITK-GDCM")
+        QTest::newRow("volume with 2 default images | !color, !avoid, !multiframe -> ITK-GDCM")
             << volume << QString(typeid(VolumePixelDataReaderITKGDCM).name());
     }
 
@@ -87,24 +58,14 @@ void test_VolumePixelDataReaderFactory::getReader_ShouldReturnExpectedReaderType
         Volume *volume = VolumeTestHelper::createVolume(2);
         volume->getImage(0)->setPhotometricInterpretation("RGB");
         volume->getImage(1)->setPhotometricInterpretation("RGB");
-        QTest::newRow("color | !diff, color, !avoid, !multiframe -> VTK-GDCM")
+        QTest::newRow("color | color, !avoid, !multiframe -> VTK-GDCM")
             << volume << QString(typeid(VolumePixelDataReaderVTKGDCM).name());
     }
 
     {
         Volume *volume = VolumeTestHelper::createVolume(2);
-        volume->getImage(0)->setRows(1);
-        volume->getImage(1)->setRows(2);
-        volume->getImage(0)->setPhotometricInterpretation("RGB");
-        volume->getImage(1)->setPhotometricInterpretation("RGB");
-        QTest::newRow("different size & color | diff, color, !avoid, !multiframe -> ITK-GDCM")
-            << volume << QString(typeid(VolumePixelDataReaderITKGDCM).name());
-    }
-
-    {
-        Volume *volume = VolumeTestHelper::createVolume(2);
         volume->getImage(0)->getParentSeries()->setModality("CR");
-        QTest::newRow("non-volumetric modality | !diff, !color, avoid, !multiframe -> VTK-GDCM")
+        QTest::newRow("non-volumetric modality | !color, avoid, !multiframe -> VTK-GDCM")
             << volume << QString(typeid(VolumePixelDataReaderVTKGDCM).name());
     }
 
@@ -113,7 +74,7 @@ void test_VolumePixelDataReaderFactory::getReader_ShouldReturnExpectedReaderType
         volume->getImage(0)->setBitsStored(12);
         volume->getImage(1)->setBitsStored(12);
         volume->getImage(0)->getParentSeries()->setModality("CR");
-        QTest::newRow("bits stored != 16 & non-volumetric modality | !diff, !color, !avoid, !multiframe -> ITK-GDCM")
+        QTest::newRow("bits stored != 16 & non-volumetric modality | !color, !avoid, !multiframe -> ITK-GDCM")
             << volume << QString(typeid(VolumePixelDataReaderITKGDCM).name());
     }
 
@@ -122,7 +83,7 @@ void test_VolumePixelDataReaderFactory::getReader_ShouldReturnExpectedReaderType
         volume->getImage(0)->setBitsAllocated(32);
         volume->getImage(1)->setBitsAllocated(32);
         volume->getImage(0)->getParentSeries()->setModality("CR");
-        QTest::newRow("bits allocated != 16 & non-volumetric modality | !diff, !color, !avoid, !multiframe -> ITK-GDCM")
+        QTest::newRow("bits allocated != 16 & non-volumetric modality | !color, !avoid, !multiframe -> ITK-GDCM")
             << volume << QString(typeid(VolumePixelDataReaderITKGDCM).name());
     }
 
@@ -133,7 +94,7 @@ void test_VolumePixelDataReaderFactory::getReader_ShouldReturnExpectedReaderType
         volume->getImage(1)->setBitsAllocated(8);
         volume->getImage(1)->setBitsStored(8);
         volume->getImage(0)->getParentSeries()->setModality("CR");
-        QTest::newRow("bits allocated != 16 & bits stored != 16 & non-volumetric modality | !diff, !color, !avoid, !multiframe -> ITK-GDCM")
+        QTest::newRow("bits allocated != 16 & bits stored != 16 & non-volumetric modality | !color, !avoid, !multiframe -> ITK-GDCM")
             << volume << QString(typeid(VolumePixelDataReaderITKGDCM).name());
     }
 
@@ -142,7 +103,7 @@ void test_VolumePixelDataReaderFactory::getReader_ShouldReturnExpectedReaderType
         volume->getImage(0)->setSOPInstanceUID("MHDImage");
         volume->getImage(1)->setSOPInstanceUID("MHDImage");
         volume->getImage(0)->getParentSeries()->setModality("CR");
-        QTest::newRow("MHDImage & non-volumetric modality | !diff, !color, !avoid, !multiframe -> ITK-GDCM")
+        QTest::newRow("MHDImage & non-volumetric modality | !color, !avoid, !multiframe -> ITK-GDCM")
             << volume << QString(typeid(VolumePixelDataReaderITKGDCM).name());
     }
 
@@ -150,17 +111,8 @@ void test_VolumePixelDataReaderFactory::getReader_ShouldReturnExpectedReaderType
         Volume *volume = VolumeTestHelper::createVolume(2);
         volume->getImage(0)->setSOPInstanceUID("MHDImage");
         volume->getImage(1)->setSOPInstanceUID("MHDImage");
-        QTest::newRow("MHDImage | !diff, !color, !avoid, !multiframe -> ITK-GDCM")
+        QTest::newRow("MHDImage | !color, !avoid, !multiframe -> ITK-GDCM")
             << volume << QString(typeid(VolumePixelDataReaderITKGDCM).name());
-    }
-
-    {
-        Volume *volume = VolumeTestHelper::createVolume(2);
-        volume->getImage(0)->setRows(1);
-        volume->getImage(1)->setRows(2);
-        volume->getImage(0)->getParentSeries()->setModality("CR");
-        QTest::newRow("different size & non-volumetric modality | diff, !color, avoid, !multiframe -> VTK-GDCM")
-            << volume << QString(typeid(VolumePixelDataReaderVTKGDCM).name());
     }
 
     {
@@ -168,24 +120,13 @@ void test_VolumePixelDataReaderFactory::getReader_ShouldReturnExpectedReaderType
         volume->getImage(0)->setPhotometricInterpretation("RGB");
         volume->getImage(1)->setPhotometricInterpretation("RGB");
         volume->getImage(0)->getParentSeries()->setModality("CR");
-        QTest::newRow("color & non-volumetric modality | !diff, color, !avoid, !multiframe -> VTK-GDCM")
+        QTest::newRow("color & non-volumetric modality | color, !avoid, !multiframe -> VTK-GDCM")
             << volume << QString(typeid(VolumePixelDataReaderVTKGDCM).name());
-    }
-
-    {
-        Volume *volume = VolumeTestHelper::createVolume(2);
-        volume->getImage(0)->setRows(1);
-        volume->getImage(1)->setRows(2);
-        volume->getImage(0)->setPhotometricInterpretation("RGB");
-        volume->getImage(1)->setPhotometricInterpretation("RGB");
-        volume->getImage(0)->getParentSeries()->setModality("CR");
-        QTest::newRow("different size & color & non-volumetric modality | diff, color, !avoid, !multiframe -> ITK-GDCM")
-            << volume << QString(typeid(VolumePixelDataReaderITKGDCM).name());
     }
 
     {
         Volume *volume = VolumeTestHelper::createMultiframeVolume(2);
-        QTest::newRow("multiframe | !diff, !color, !avoid, multiframe -> ITK-DCMTK")
+        QTest::newRow("multiframe | !color, !avoid, multiframe -> ITK-DCMTK")
             << volume << QString(typeid(VolumePixelDataReaderITKDCMTK).name());
     }
 
@@ -193,14 +134,14 @@ void test_VolumePixelDataReaderFactory::getReader_ShouldReturnExpectedReaderType
         Volume *volume = VolumeTestHelper::createMultiframeVolume(2);
         volume->getImage(0)->setPhotometricInterpretation("RGB");
         volume->getImage(1)->setPhotometricInterpretation("RGB");
-        QTest::newRow("color & multiframe | !diff, color, !avoid, multiframe -> VTK-GDCM")
+        QTest::newRow("color & multiframe | color, !avoid, multiframe -> VTK-GDCM")
             << volume << QString(typeid(VolumePixelDataReaderVTKGDCM).name());
     }
 
     {
         Volume *volume = VolumeTestHelper::createMultiframeVolume(2);
         volume->getImage(0)->getParentSeries()->setModality("CR");
-        QTest::newRow("non-volumetric modality & multiframe | !diff, !color, avoid, multiframe -> VTK-GDCM")
+        QTest::newRow("non-volumetric modality & multiframe | !color, avoid, multiframe -> VTK-GDCM")
             << volume << QString(typeid(VolumePixelDataReaderVTKGDCM).name());
     }
 
@@ -209,7 +150,7 @@ void test_VolumePixelDataReaderFactory::getReader_ShouldReturnExpectedReaderType
         volume->getImage(0)->setPhotometricInterpretation("RGB");
         volume->getImage(1)->setPhotometricInterpretation("RGB");
         volume->getImage(0)->getParentSeries()->setModality("CR");
-        QTest::newRow("color & non-volumetric modality & multiframe | !diff, color, !avoid, multiframe -> VTK-GDCM")
+        QTest::newRow("color & non-volumetric modality & multiframe | color, !avoid, multiframe -> VTK-GDCM")
             << volume << QString(typeid(VolumePixelDataReaderVTKGDCM).name());
     }
 }

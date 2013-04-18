@@ -72,32 +72,13 @@ VolumePixelDataReaderFactory::PixelDataReaderType VolumePixelDataReaderFactory::
         return forcedReaderLibrary;
     }
 
-    int firstImageRows = 0;
-    int firstImageColumns = 0;
     QList<Image*> imageSet = volume->getImages();
-    if (!imageSet.empty())
-    {
-        firstImageRows = imageSet.first()->getRows();
-        firstImageColumns = imageSet.first()->getColumns();
-    }
-
-    bool containsDifferentSizeImages = false;
     bool containsColorImages = false;
     bool avoidWrongPixelType = false;
 
     foreach (Image *image, imageSet)
     {
-        // Check for images of different size
-        // TODO This check could in theory be removed because images of different size are separated in different volumes, but we are keeping it just in case
-        // there's a bug in the separation process
-        if (firstImageRows != image->getRows() || firstImageColumns != image->getColumns())
-        {
-            DEBUG_LOG("Images of different size!");
-            containsDifferentSizeImages = true;
-        }
-
         // Check for color image
-        // TODO Should also check for cases in which there are images of different size and some of them have color
         QString photometricInterpretation = image->getPhotometricInterpretation();
         if (!photometricInterpretation.contains("MONOCHROME"))
         {
@@ -122,9 +103,9 @@ VolumePixelDataReaderFactory::PixelDataReaderType VolumePixelDataReaderFactory::
         }
     }
 
-    if (!containsDifferentSizeImages && containsColorImages)
+    if (containsColorImages)
     {
-        // If there are color images and all of the same size, read with VTK-GDCM
+        // If there are color images, read with VTK-GDCM
         return VTKGDCMPixelDataReader;
     }
     else if (avoidWrongPixelType)
