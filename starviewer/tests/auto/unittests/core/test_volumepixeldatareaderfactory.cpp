@@ -34,8 +34,10 @@ void test_VolumePixelDataReaderFactory::getReader_ShouldReturnExpectedReaderType
     // Default image:
     // - SOP instance UID: ""
     // - photometric interpretation: "MONOCHROME2"
-    // - bits allocated: 16
     // - bits stored: 16
+    // - pixel representation: 0
+    // - rescale slope: 1.0
+    // - rescale intercept: 0.0
 
     // Default series:
     // - modality: "OT"
@@ -43,8 +45,7 @@ void test_VolumePixelDataReaderFactory::getReader_ShouldReturnExpectedReaderType
     // Conditions:
     // - SOP instance UID = MHDImage
     // - color images (photometric interpretation != MONOCHROME)
-    // - bits allocated = 16
-    // - bits stored = 16
+    // - rescale slope * bits (consider pixel representation) + rescale intercept > 32767.0
     // - modality = "CR" or "RF" or "DX" or "MG" or "OP" or "US" or "ES" or "NM" or "DT" or "PT" or "XA" or "XC"
     // - multiframe
 
@@ -89,31 +90,62 @@ void test_VolumePixelDataReaderFactory::getReader_ShouldReturnExpectedReaderType
 
     {
         Volume *volume = VolumeTestHelper::createVolume(2);
-        volume->getImage(0)->setBitsStored(12);
-        volume->getImage(1)->setBitsStored(12);
+        volume->getImage(0)->setBitsStored(15);
+        volume->getImage(1)->setBitsStored(15);
         volume->getImage(0)->getParentSeries()->setModality("CR");
-        QTest::newRow("bits stored != 16 & non-volumetric modality | !mhd, !color, !avoid, !multiframe -> ITK-GDCM")
+        QTest::newRow("bits stored = 15 & non-volumetric modality | !mhd, !color, !avoid, !multiframe -> ITK-GDCM")
             << volume << QString(typeid(VolumePixelDataReaderITKGDCM).name());
     }
 
     {
         Volume *volume = VolumeTestHelper::createVolume(2);
-        volume->getImage(0)->setBitsAllocated(32);
-        volume->getImage(1)->setBitsAllocated(32);
+        volume->getImage(0)->setPixelRepresentation(1);
+        volume->getImage(1)->setPixelRepresentation(1);
         volume->getImage(0)->getParentSeries()->setModality("CR");
-        QTest::newRow("bits allocated != 16 & non-volumetric modality | !mhd, !color, !avoid, !multiframe -> ITK-GDCM")
+        QTest::newRow("pixel representation = 1 & non-volumetric modality | !mhd, !color, !avoid, !multiframe -> ITK-GDCM")
             << volume << QString(typeid(VolumePixelDataReaderITKGDCM).name());
     }
 
     {
         Volume *volume = VolumeTestHelper::createVolume(2);
-        volume->getImage(0)->setBitsAllocated(8);
+        volume->getImage(0)->setRescaleSlope(0.4);
+        volume->getImage(1)->setRescaleSlope(0.4);
+        volume->getImage(0)->getParentSeries()->setModality("CR");
+        QTest::newRow("rescale slope = 0.4 & non-volumetric modality | !mhd, !color, !avoid, !multiframe -> ITK-GDCM")
+            << volume << QString(typeid(VolumePixelDataReaderITKGDCM).name());
+    }
+
+    {
+        Volume *volume = VolumeTestHelper::createVolume(2);
+        volume->getImage(0)->setRescaleIntercept(-32768.0);
+        volume->getImage(1)->setRescaleIntercept(-32768.0);
+        volume->getImage(0)->getParentSeries()->setModality("CR");
+        QTest::newRow("rescale intercept = -32768 & non-volumetric modality | !mhd, !color, !avoid, !multiframe -> ITK-GDCM")
+            << volume << QString(typeid(VolumePixelDataReaderITKGDCM).name());
+    }
+
+    {
+        Volume *volume = VolumeTestHelper::createVolume(2);
         volume->getImage(0)->setBitsStored(8);
-        volume->getImage(1)->setBitsAllocated(8);
+        volume->getImage(0)->setRescaleSlope(10.0);
+        volume->getImage(0)->setRescaleIntercept(-1000.0);
         volume->getImage(1)->setBitsStored(8);
+        volume->getImage(1)->setRescaleSlope(10.0);
+        volume->getImage(1)->setRescaleIntercept(-1000.0);
         volume->getImage(0)->getParentSeries()->setModality("CR");
-        QTest::newRow("bits allocated != 16 & bits stored != 16 & non-volumetric modality | !mhd, !color, !avoid, !multiframe -> ITK-GDCM")
+        QTest::newRow("small max value & non-volumetric modality | !mhd, !color, !avoid, !multiframe -> ITK-GDCM")
             << volume << QString(typeid(VolumePixelDataReaderITKGDCM).name());
+    }
+
+    {
+        Volume *volume = VolumeTestHelper::createVolume(2);
+        volume->getImage(0)->setBitsStored(12);
+        volume->getImage(0)->setRescaleSlope(100.0);
+        volume->getImage(1)->setBitsStored(12);
+        volume->getImage(1)->setRescaleSlope(100.0);
+        volume->getImage(0)->getParentSeries()->setModality("CR");
+        QTest::newRow("big max value & non-volumetric modality | !mhd, !color, avoid, !multiframe -> VTK-GDCM")
+            << volume << QString(typeid(VolumePixelDataReaderVTKGDCM).name());
     }
 
     {

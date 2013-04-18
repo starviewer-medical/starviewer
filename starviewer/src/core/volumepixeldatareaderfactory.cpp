@@ -94,12 +94,11 @@ VolumePixelDataReaderFactory::PixelDataReaderType VolumePixelDataReaderFactory::
             DEBUG_LOG("Photometric Interpretation: " + photometricInterpretation);
         }
 
-        if (image->getBitsAllocated() == 16 && image->getBitsStored() == 16)
+        // Check if maximum theoretical pixel value after rescale is representable by VoxelType
+        int bits = image->getPixelRepresentation() == 0 ? image->getBitsStored() : image->getBitsStored() - 1;
+        double maximumTheoreticalValue = image->getRescaleSlope() * (std::pow(2.0, bits) - 1.0) + image->getRescaleIntercept();
+        if (maximumTheoreticalValue > std::numeric_limits<VolumePixelData::VoxelType>::max())
         {
-            // This check is performed to avoid cases like in ticket #1257
-            // itk::Image has a fixed pixel type, currently signed short, but with 16 bits allocated and 16 bits stored the needed type might be unsigned short
-            // in order for the image to be correctly displayed
-
             // Apply only for "non-volumetric" image modalities to narrow this problem and avoid the problem described in ticket #1313
             QStringList supportedModalities;
             supportedModalities << "CR" << "RF" << "DX" << "MG" << "OP" << "US" << "ES" << "NM" << "DT" << "PT" << "XA" << "XC";
