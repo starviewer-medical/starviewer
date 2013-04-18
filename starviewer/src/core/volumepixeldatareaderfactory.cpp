@@ -73,11 +73,17 @@ VolumePixelDataReaderFactory::PixelDataReaderType VolumePixelDataReaderFactory::
     }
 
     QList<Image*> imageSet = volume->getImages();
+    bool isMetaImage = false;
     bool containsColorImages = false;
     bool avoidWrongPixelType = false;
 
     foreach (Image *image, imageSet)
     {
+        if (image->getSOPInstanceUID().contains("MHDImage"))
+        {
+            isMetaImage = true;
+        }
+
         // Check for color image
         QString photometricInterpretation = image->getPhotometricInterpretation();
         if (!photometricInterpretation.contains("MONOCHROME"))
@@ -87,7 +93,7 @@ VolumePixelDataReaderFactory::PixelDataReaderType VolumePixelDataReaderFactory::
             containsColorImages = true;
             DEBUG_LOG("Photometric Interpretation: " + photometricInterpretation);
         }
-        else if (image->getBitsAllocated() == 16 && image->getBitsStored() == 16 && !image->getSOPInstanceUID().contains("MHDImage"))
+        else if (image->getBitsAllocated() == 16 && image->getBitsStored() == 16)
         {
             // This check is performed to avoid cases like in ticket #1257
             // itk::Image has a fixed pixel type, currently signed short, but with 16 bits allocated and 16 bits stored the needed type might be unsigned short
@@ -103,7 +109,12 @@ VolumePixelDataReaderFactory::PixelDataReaderType VolumePixelDataReaderFactory::
         }
     }
 
-    if (containsColorImages || avoidWrongPixelType)
+    if (isMetaImage)
+    {
+        // MetaImages currently must be read with ITK-GDCM
+        return ITKGDCMPixelDataReader;
+    }
+    else if (containsColorImages || avoidWrongPixelType)
     {
         // If there are color images, read with VTK-GDCM
         // VTK-GDCM reader decides pixel type on run time, so it can choose the correct type
