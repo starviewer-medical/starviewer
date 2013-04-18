@@ -93,7 +93,8 @@ VolumePixelDataReaderFactory::PixelDataReaderType VolumePixelDataReaderFactory::
             containsColorImages = true;
             DEBUG_LOG("Photometric Interpretation: " + photometricInterpretation);
         }
-        else if (image->getBitsAllocated() == 16 && image->getBitsStored() == 16)
+
+        if (image->getBitsAllocated() == 16 && image->getBitsStored() == 16)
         {
             // This check is performed to avoid cases like in ticket #1257
             // itk::Image has a fixed pixel type, currently signed short, but with 16 bits allocated and 16 bits stored the needed type might be unsigned short
