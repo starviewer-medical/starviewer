@@ -103,13 +103,9 @@ VolumePixelDataReaderFactory::PixelDataReaderType VolumePixelDataReaderFactory::
         }
     }
 
-    if (containsColorImages)
+    if (containsColorImages || avoidWrongPixelType)
     {
         // If there are color images, read with VTK-GDCM
-        return VTKGDCMPixelDataReader;
-    }
-    else if (avoidWrongPixelType)
-    {
         // VTK-GDCM reader decides pixel type on run time, so it can choose the correct type
         return VTKGDCMPixelDataReader;
     }
