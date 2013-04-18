@@ -54,8 +54,8 @@ void test_VolumePixelDataReaderFactory::getReader_ShouldReturnExpectedReaderType
         Volume *volume = VolumeTestHelper::createVolume(2);
         volume->getImage(0)->setBitsStored(8);
         volume->getImage(1)->setBitsStored(8);
-        QTest::newRow("default reader | !mhd, !color, !avoid, !multiframe -> ITK-GDCM")
-            << volume << QString(typeid(VolumePixelDataReaderITKGDCM).name());
+        QTest::newRow("default reader | !mhd, !color, !avoid, !multiframe -> VTK-GDCM")
+            << volume << QString(typeid(VolumePixelDataReaderVTKGDCM).name());
     }
 
     {
@@ -94,32 +94,32 @@ void test_VolumePixelDataReaderFactory::getReader_ShouldReturnExpectedReaderType
         Volume *volume = VolumeTestHelper::createVolume(2);
         volume->getImage(0)->setBitsStored(15);
         volume->getImage(1)->setBitsStored(15);
-        QTest::newRow("bits stored = 15 | !mhd, !color, !avoid, !multiframe -> ITK-GDCM")
-            << volume << QString(typeid(VolumePixelDataReaderITKGDCM).name());
+        QTest::newRow("bits stored = 15 | !mhd, !color, !avoid, !multiframe -> VTK-GDCM")
+            << volume << QString(typeid(VolumePixelDataReaderVTKGDCM).name());
     }
 
     {
         Volume *volume = VolumeTestHelper::createVolume(2);
         volume->getImage(0)->setPixelRepresentation(1);
         volume->getImage(1)->setPixelRepresentation(1);
-        QTest::newRow("pixel representation = 1 | !mhd, !color, !avoid, !multiframe -> ITK-GDCM")
-            << volume << QString(typeid(VolumePixelDataReaderITKGDCM).name());
+        QTest::newRow("pixel representation = 1 | !mhd, !color, !avoid, !multiframe -> VTK-GDCM")
+            << volume << QString(typeid(VolumePixelDataReaderVTKGDCM).name());
     }
 
     {
         Volume *volume = VolumeTestHelper::createVolume(2);
         volume->getImage(0)->setRescaleSlope(0.4);
         volume->getImage(1)->setRescaleSlope(0.4);
-        QTest::newRow("rescale slope = 0.4 | !mhd, !color, !avoid, !multiframe -> ITK-GDCM")
-            << volume << QString(typeid(VolumePixelDataReaderITKGDCM).name());
+        QTest::newRow("rescale slope = 0.4 | !mhd, !color, !avoid, !multiframe -> VTK-GDCM")
+            << volume << QString(typeid(VolumePixelDataReaderVTKGDCM).name());
     }
 
     {
         Volume *volume = VolumeTestHelper::createVolume(2);
         volume->getImage(0)->setRescaleIntercept(-32768.0);
         volume->getImage(1)->setRescaleIntercept(-32768.0);
-        QTest::newRow("rescale intercept = -32768 | !mhd, !color, !avoid, !multiframe -> ITK-GDCM")
-            << volume << QString(typeid(VolumePixelDataReaderITKGDCM).name());
+        QTest::newRow("rescale intercept = -32768 | !mhd, !color, !avoid, !multiframe -> VTK-GDCM")
+            << volume << QString(typeid(VolumePixelDataReaderVTKGDCM).name());
     }
 
     {
@@ -130,8 +130,8 @@ void test_VolumePixelDataReaderFactory::getReader_ShouldReturnExpectedReaderType
         volume->getImage(1)->setBitsStored(8);
         volume->getImage(1)->setRescaleSlope(10.0);
         volume->getImage(1)->setRescaleIntercept(-1000.0);
-        QTest::newRow("small max value | !mhd, !color, !avoid, !multiframe -> ITK-GDCM")
-            << volume << QString(typeid(VolumePixelDataReaderITKGDCM).name());
+        QTest::newRow("small max value | !mhd, !color, !avoid, !multiframe -> VTK-GDCM")
+            << volume << QString(typeid(VolumePixelDataReaderVTKGDCM).name());
     }
 
     {
