@@ -121,8 +121,8 @@ VolumePixelDataReaderFactory::PixelDataReaderType VolumePixelDataReaderFactory::
     }
     else
     {
-        // TODO By now, read with ITK-GDCM by default in all cases not treated above
-        return ITKGDCMPixelDataReader;
+        // Read with VTK-GDCM by default in all cases not treated above
+        return VTKGDCMPixelDataReader;
     }
 }
 
