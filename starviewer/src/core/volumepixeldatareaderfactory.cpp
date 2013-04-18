@@ -99,13 +99,7 @@ VolumePixelDataReaderFactory::PixelDataReaderType VolumePixelDataReaderFactory::
         double maximumTheoreticalValue = image->getRescaleSlope() * (std::pow(2.0, bits) - 1.0) + image->getRescaleIntercept();
         if (maximumTheoreticalValue > std::numeric_limits<VolumePixelData::VoxelType>::max())
         {
-            // Apply only for "non-volumetric" image modalities to narrow this problem and avoid the problem described in ticket #1313
-            QStringList supportedModalities;
-            supportedModalities << "CR" << "RF" << "DX" << "MG" << "OP" << "US" << "ES" << "NM" << "DT" << "PT" << "XA" << "XC";
-            if (supportedModalities.contains(image->getParentSeries()->getModality()))
-            {
-                avoidWrongPixelType = true;
-            }
+            avoidWrongPixelType = true;
         }
     }
 
