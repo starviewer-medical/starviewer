@@ -5,21 +5,14 @@
     <allDifferent>yes</allDifferent>
     <protocol>CR</protocol>
     <iconType>CR</iconType>
-    <restriction identifier="1">
-        <usageFlag>MATCH</usageFlag>
-        <selectorAttribute>Anterior</selectorAttribute>
-        <valueRepresentation>1</valueRepresentation>
-    </restriction>
     <imageSet identifier="1">
     </imageSet>
     <imageSet identifier="2">
     </imageSet>
     <imageSet identifier="3">
-        <restriction>1</restriction>
         <previous>1</previous>
     </imageSet>
     <imageSet identifier="4">
-        <restriction>1</restriction>
         <previous>1</previous>
     </imageSet>
     <displaySet identifier="1">
