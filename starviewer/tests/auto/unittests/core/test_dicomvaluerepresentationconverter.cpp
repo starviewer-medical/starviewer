@@ -1,7 +1,12 @@
 #include "autotest.h"
+
+#include <QVector2D>
+
 #include "dicomvaluerepresentationconverter.h"
+#include "fuzzycomparetesthelper.h"
 
 using namespace udg;
+using namespace testing;
 
 class test_DICOMValueRepresentationConverter : public QObject {
 Q_OBJECT
@@ -18,6 +23,9 @@ private slots:
     // Cas en que l'string és correcte
     void decimalStringToDoubleVector_ShouldReturnNonEmptyQVectorAndOkIsTrue_data();
     void decimalStringToDoubleVector_ShouldReturnNonEmptyQVectorAndOkIsTrue();
+
+    void decimalStringTo2DDoubleVector_ShouldReturnExpectedValues_data();
+    void decimalStringTo2DDoubleVector_ShouldReturnExpectedValues();
 };
 
 void test_DICOMValueRepresentationConverter::decimalStringToDoubleVector_ShouldReturnEmptyQVectorAndOkIsFalse_data()
@@ -88,6 +96,39 @@ void test_DICOMValueRepresentationConverter::decimalStringToDoubleVector_ShouldR
     QVector<double> convertedString = DICOMValueRepresentationConverter::decimalStringToDoubleVector(string, &ok);
     QCOMPARE(convertedString.isEmpty(), false);
     QCOMPARE(ok, true);
+}
+
+void test_DICOMValueRepresentationConverter::decimalStringTo2DDoubleVector_ShouldReturnExpectedValues_data()
+{
+    QTest::addColumn<QString>("string");
+    QTest::addColumn<QVector2D>("expectedVector2D");
+    QTest::addColumn<bool>("expectedOk");
+
+    QString separator = "\\";
+    QString integerString = "123";
+    QString doubleString = "1.3";
+    QString wrongDoubleString = ".3e 10";
+    QString alphanumericString = "Hello 33!";
+    
+    QTest::newRow("Empty string") << QString() << QVector2D(0, 0) << false;
+    QTest::newRow("Single-valued decimal string") << doubleString << QVector2D(0, 0) << false;
+    QTest::newRow("3-valued decimal string") << doubleString + separator +  doubleString + separator + doubleString << QVector2D(0, 0) << false;
+    QTest::newRow("2-valued decimal string") << doubleString + separator + integerString << QVector2D(1.3, 123) << true;
+    QTest::newRow("2-valued decimal string - with invalid values") << doubleString + separator + alphanumericString << QVector2D(0, 0) << false;
+}
+
+void test_DICOMValueRepresentationConverter::decimalStringTo2DDoubleVector_ShouldReturnExpectedValues()
+{
+    QFETCH(QString, string);
+    QFETCH(QVector2D, expectedVector2D);
+    QFETCH(bool, expectedOk);
+
+    bool ok;
+    QVector2D resultVector = DICOMValueRepresentationConverter::decimalStringTo2DDoubleVector(string, &ok);
+    
+    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(resultVector.x(), expectedVector2D.x(), 0.001));
+    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(resultVector.y(), expectedVector2D.y(), 0.001));
+    QCOMPARE(ok, expectedOk);
 }
 
 DECLARE_TEST(test_DICOMValueRepresentationConverter)
