@@ -2,6 +2,7 @@
 
 #include <QStringList>
 #include <QLocale>
+#include <QVector2D>
 
 namespace udg {
 
@@ -69,6 +70,43 @@ QVector<double> DICOMValueRepresentationConverter::decimalStringToDoubleVector(c
     {
         return result;
     }
+}
+
+QVector2D DICOMValueRepresentationConverter::decimalStringTo2DDoubleVector(const QString &decimalString, bool *ok)
+{
+    QVector<double> vectorValue = DICOMValueRepresentationConverter::decimalStringToDoubleVector(decimalString, ok);
+    
+    bool localOk = true;
+    QVector2D vector2DValue(0, 0);
+    
+    // If a not-null ok pointer is given, we set computed local with ok's value
+    if (ok != 0)
+    {
+        localOk = *ok;
+    }
+    
+    // If first conversion is not ok, we return a default-constructed value, just for safety.
+    if (localOk)
+    {
+        // Check if it's a real 2D vector
+        if (vectorValue.size() == 2)
+        {
+            vector2DValue.setX(vectorValue.at(0));
+            vector2DValue.setY(vectorValue.at(1));
+            localOk = true;
+        }
+        else
+        {
+            localOk = false;
+        }
+    }
+
+    if (ok != 0)
+    {
+        *ok = localOk;
+    }
+        
+    return vector2DValue;
 }
 
 } // End namespace udg
