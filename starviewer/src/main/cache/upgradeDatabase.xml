@@ -16,6 +16,7 @@
             FOREIGN KEY (ImageInstanceUID, ImageFrameNumber) REFERENCES Image (SOPInstanceUID, FrameNumber)
             );
         </upgradeCommand>
+    </upgradeDatabaseToRevision>
     <upgradeDatabaseToRevision updateToRevision="7794">
         <upgradeCommand>
             CREATE TABLE PACSRetrievedImages
