@@ -1,6 +1,7 @@
 #ifndef UDGDICOMTAGREADER_H
 #define UDGDICOMTAGREADER_H
 
+#include <QMap>
 #include <QString>
 // Pràcticament sempre que volguem fer servir aquesta classe farem ús del diccionari
 #include "dicomdictionary.h"
@@ -69,12 +70,9 @@ public:
     /// No discrimina si aquell tag pot ser "pesat" o no, carregarà tota la informació demanada. Per exemple, si demanem 
     /// la Pixel Data ens carregarà tota la informació d'aquesta
     DICOMValueAttribute* getValueAttribute(const DICOMTag &attributeTag) const;
-    
-    /// Retorna un objecte nou que inclou tota la seqüència. Si no existeix o el tag no correspon a una seqüència retorna null.
-    /// Per defecte retorna el tag OverlayData i PixelData amb el seu valor, però si volem que ens el retornin amb el seu
-    /// valor buit degut a que pesen molt (en cas d'una mamo pot ocubar més de 80Mb de RAM el PixelData) i no els utilitzarem,
-    /// com a segon paràmetre s'ha de passar l'enum amb valor ExcludeHeavyTags.
-    /// La classe que invoqui aquest mètode és responsable d'esborrar la seqüència que es retorna
+
+    /// Returns an object that includes the whole sequence. If it doesn't exist or the tag doesn't correspond to a sequence, it returns null.
+    /// By default it returns OverlayData and PixelData with their values, but they are returned without value if the second parameter is ExcludeHeavyTags.
     DICOMSequenceAttribute* getSequenceAttribute(const DICOMTag &sequenceTag, DICOMTagReader::ReturnValueOfTags returnValueOfTags = AllTags) const;
 
     /// Retorna una llista de DICOMAttribute que inclou tots els Tags d'un DcmDataset (Es dóna per suposat que el dataset serà vàlid)
@@ -114,6 +112,10 @@ private:
 
     /// Ens indica si l'arxiu actual és vàlid
     bool m_hasValidFile;
+
+    /// Holds sequences that have been already retrieved.
+    mutable QMap<DICOMTag, DICOMSequenceAttribute*> m_sequencesCache;
+
 };
 
 }

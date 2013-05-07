@@ -77,8 +77,6 @@ QString getTagValue(const DICOMTagReader &dicomTagReader, int index, const DICOM
                     }
                 }
             }
-
-            delete functionalGroupsSequence;
         }
 
         return value;
@@ -474,8 +472,6 @@ void VtkDcmtkImageReader::readPerFrameRescale(const DICOMTagReader &dicomTagRead
                 }
             }
         }
-
-        delete sequence;
     }
     else
     {
