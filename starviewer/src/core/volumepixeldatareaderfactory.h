@@ -28,7 +28,7 @@ public:
 private:
 
     /// The different choosable implementations of VolumePixelDataReader.
-    enum PixelDataReaderType { ITKDCMTKPixelDataReader, ITKGDCMPixelDataReader, VTKGDCMPixelDataReader };
+    enum PixelDataReaderType { ITKDCMTKPixelDataReader, ITKGDCMPixelDataReader, VTKDCMTKPixelDataReader, VTKGDCMPixelDataReader };
 
     /// Chooses and returns the reader implementation most suitable to the given volume.
     PixelDataReaderType getSuitableReader(Volume *volume) const;
