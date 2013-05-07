@@ -8,6 +8,7 @@
 #include "volume.h"
 #include "volumepixeldatareaderitkdcmtk.h"
 #include "volumepixeldatareaderitkgdcm.h"
+#include "volumepixeldatareadervtkdcmtk.h"
 #include "volumepixeldatareadervtkgdcm.h"
 
 #include <QList>
@@ -35,6 +36,11 @@ VolumePixelDataReader* VolumePixelDataReaderFactory::getReader() const
             DEBUG_LOG("Volume pixel data will be read using ITK-GDCM");
             break;
 
+        case VTKDCMTKPixelDataReader:
+            reader = new VolumePixelDataReaderVTKDCMTK();
+            DEBUG_LOG("Volume pixel data will be read using VTK-DCMTK");
+            break;
+
         case VTKGDCMPixelDataReader:
             reader = new VolumePixelDataReaderVTKGDCM();
             DEBUG_LOG("Volume pixel data will be read using VTK-GDCM");
@@ -51,6 +57,7 @@ QQueue<QSharedPointer<Postprocessor>> VolumePixelDataReaderFactory::getPostproce
     switch (m_chosenReaderType)
     {
         case ITKDCMTKPixelDataReader:
+        case VTKDCMTKPixelDataReader:
         case VTKGDCMPixelDataReader:
             postprocessors.enqueue(QSharedPointer<Postprocessor>(new ComputeZSpacingPostprocessor()));
             break;
@@ -151,6 +158,12 @@ bool VolumePixelDataReaderFactory::mustForceReaderLibraryBackdoor(Volume *volume
     {
         INFO_LOG("Force read everything with ITK-DCMTK");
         forcedReaderLibrary = ITKDCMTKPixelDataReader;
+        forceLibrary = true;
+    }
+    else if (forceReadingWithSpecfiedLibrary == "vtkdcmtk")
+    {
+        INFO_LOG("Force read everything with VTK-DCMTK");
+        forcedReaderLibrary = VTKDCMTKPixelDataReader;
         forceLibrary = true;
     }
 
