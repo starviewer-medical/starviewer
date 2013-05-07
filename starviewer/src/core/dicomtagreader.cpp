@@ -45,6 +45,12 @@ void DICOMTagReader::deleteDataLastLoadedFile()
         delete m_dicomHeader;
         m_dicomHeader = NULL;
     }
+
+    // Clear cache from previous file
+    foreach (const DICOMTag &tag, m_sequencesCache.keys())
+    {
+        delete m_sequencesCache.take(tag);
+    }
 }
 
 bool DICOMTagReader::setFile(const QString &filename)
@@ -172,27 +178,32 @@ DICOMSequenceAttribute* DICOMTagReader::getSequenceAttribute(const DICOMTag &seq
 {
     if (!m_dicomData)
     {
-        DEBUG_LOG("No hi ha cap m_dicomData (DcmDataset) carregat. Tornem string-list buida.");
+        DEBUG_LOG("No m_dicomData (DcmDataset). Returning null.");
         return NULL;
     }
 
-    QStringList result;
-    // Obtenim els atributs de cada item d'una seqüència de "primer nivell"
-    DcmSequenceOfItems *sequence = NULL;
+    // If sequence is cached, return it from cache
+    if (m_sequencesCache.contains(sequenceTag))
+    {
+        return m_sequencesCache[sequenceTag];
+    }
 
+    // Get attributes of each item from a "first level" sequence
+    DcmSequenceOfItems *sequence = NULL;
     OFCondition status = m_dicomData->findAndGetSequence(DcmTagKey(sequenceTag.getGroup(), sequenceTag.getElement()), sequence, OFTrue);
 
     if (status.good())
     {
-        DEBUG_LOG(QString("Cerquem sequencia"));
-        return convertToDICOMSequenceAttribute(sequence, returnValueOfTags);
+        DEBUG_LOG(QString("Sequence %1 found").arg(sequenceTag.getKeyAsQString()));
+        m_sequencesCache[sequenceTag] = convertToDICOMSequenceAttribute(sequence, returnValueOfTags);
+        return m_sequencesCache[sequenceTag];
     }
     else
     {
         logStatusForTagOperation(sequenceTag, status);
+        m_sequencesCache[sequenceTag] = NULL;
+        return NULL;
     }
-
-    return NULL;
 }
 
 DICOMSequenceAttribute* DICOMTagReader::convertToDICOMSequenceAttribute(DcmSequenceOfItems *dcmtkSequence,
