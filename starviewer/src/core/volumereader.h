@@ -66,8 +66,7 @@ private:
     QStringList getFilesToRead(Volume *volume) const;
 
     /// Creates and sets up the pixel data reader for the given volume. The second parameter shows progress.
-    /// The second parameter allows to request progress reporting.
-    void setUpReader(Volume *volume, bool showProgress);
+    void setUpReader(Volume *volume);
 
     /// Treu i executa en ordre els postprocessadors de la cua sobre el volum passat.
     void runPostprocessors(Volume *volume);
