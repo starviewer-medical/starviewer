@@ -79,4 +79,9 @@ bool DICOMTag::operator!=(const DICOMTag &tag) const
     return m_group != tag.m_group || m_element != tag.m_element;
 }
 
+bool DICOMTag::operator<(const DICOMTag &tag) const
+{
+    return m_group < tag.m_group || (m_group == tag.m_group && m_element < tag.m_element);
+}
+
 }
