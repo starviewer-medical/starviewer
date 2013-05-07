@@ -79,57 +79,15 @@ VolumePixelDataReaderFactory::PixelDataReaderType VolumePixelDataReaderFactory::
         return forcedReaderLibrary;
     }
 
-    QList<Image*> imageSet = volume->getImages();
-    bool isMetaImage = false;
-    bool containsColorImages = false;
-    bool avoidWrongPixelType = false;
-
-    foreach (Image *image, imageSet)
-    {
-        if (image->getSOPInstanceUID().contains("MHDImage"))
-        {
-            isMetaImage = true;
-        }
-
-        // Check for color image
-        QString photometricInterpretation = image->getPhotometricInterpretation();
-        if (!photometricInterpretation.contains("MONOCHROME"))
-        {
-            // If photometric interpretation is not MONOCHROME1 nor MONOCHROME2, then it's a color image: PALETTE COLOR, RGB, YBR_FULL, YBR_FULL_422,
-            // YBR_PARTIAL_422, YBR_PARTIAL_420, YBR_ICT or YBR_RCT
-            containsColorImages = true;
-            DEBUG_LOG("Photometric Interpretation: " + photometricInterpretation);
-        }
-
-        // Check if maximum theoretical pixel value after rescale is representable by VoxelType
-        int bits = image->getPixelRepresentation() == 0 ? image->getBitsStored() : image->getBitsStored() - 1;
-        double maximumTheoreticalValue = image->getRescaleSlope() * (std::pow(2.0, bits) - 1.0) + image->getRescaleIntercept();
-        if (maximumTheoreticalValue > std::numeric_limits<VolumePixelData::VoxelType>::max())
-        {
-            avoidWrongPixelType = true;
-        }
-    }
-
-    if (isMetaImage)
+    if (volume->getImage(0)->getSOPInstanceUID().contains("MHDImage"))
     {
         // MetaImages currently must be read with ITK-GDCM
         return ITKGDCMPixelDataReader;
     }
-    else if (containsColorImages || avoidWrongPixelType)
-    {
-        // If there are color images, read with VTK-GDCM
-        // VTK-GDCM reader decides pixel type on run time, so it can choose the correct type
-        return VTKGDCMPixelDataReader;
-    }
-    else if (volume->isMultiframe())
-    {
-        // If the volume is multiframe, read with ITK-DCMTK to avoid memory peaks that happen with GDCM
-        return ITKDCMTKPixelDataReader;
-    }
     else
     {
-        // Read with VTK-GDCM by default in all cases not treated above
-        return VTKGDCMPixelDataReader;
+        // Read with VTK-DCMTK by default
+        return VTKDCMTKPixelDataReader;
     }
 }
 
