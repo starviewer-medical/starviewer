@@ -8,6 +8,7 @@ namespace udg {
 
 class Q2DViewer;
 class DrawerLine;
+class DrawerText;
 
 /**
     Eina per mesurar distàncies en un visor 2D.
@@ -45,6 +46,9 @@ private:
     
     /// Gets the text corresponding to the current measurement
     QString getMeasurementText();
+
+    /// Places the measurement text in an proper position relative to the drawn line
+    void placeMeasurementText(DrawerText *text);
     
     /// Gestiona quin punt de la distància estem dibuixant. Es cridarà cada cop que
     /// haguem fet un clic amb el botó esquerre del mouse.
