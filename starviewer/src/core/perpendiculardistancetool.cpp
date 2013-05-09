@@ -78,6 +78,44 @@ void PerpendicularDistanceTool::handleEvent(unsigned long eventId)
     }
 }
 
+double PerpendicularDistanceTool::computeDistance() const
+{
+    // HACK Comprovem si l'imatge té pixel spacing per saber si la mesura ha d'anar en píxels o mm
+    // TODO Proporcionar algun mètode alternatiu per no haver d'haver de fer aquest hack
+    double *vtkSpacing = m_2DViewer->getInput()->getSpacing();
+    const double *pixelSpacing = m_2DViewer->getInput()->getImage(0)->getPixelSpacing();
+
+    if (pixelSpacing[0] == 0.0 && pixelSpacing[1] == 0.0)
+    {
+        return m_distanceLine->computeDistance(vtkSpacing);
+    }
+    else
+    {
+        // En cas de Ultrasons es fa un tractament especial perquè VTK no agafa l'spacing correcte.
+        // TODO S'hauria d'unificar.
+        // Podem tenir imatges de la mateixa sèrie amb spacings diferents
+        if (m_2DViewer->getInput()->getImage(0)->getParentSeries()->getModality() == "US")
+        {
+            Image *image = m_2DViewer->getCurrentDisplayedImage();
+            if (image)
+            {
+                const double *usSpacing = image->getPixelSpacing();
+                double *firstPoint = m_distanceLine->getFirstPoint();
+                double *secondPoint = m_distanceLine->getSecondPoint();
+                double xx = (firstPoint[0] - secondPoint[0]) / vtkSpacing[0] * usSpacing[0];
+                double yy = (firstPoint[1] - secondPoint[1]) / vtkSpacing[1] * usSpacing[1];
+                double value = std::pow(xx, 2) + std::pow(yy, 2);
+                return std::sqrt(value);
+            }
+        }
+
+        // S'ha aplicat una reconstrucció, per tant l'spacing que es donarà serà el de vtk
+        // TODO Això en algun moment desapareixerà ja que caldria deshabilitar les reconstruccions per
+        // modalitats en les que les reconstruccions no tinguin sentit
+        return m_distanceLine->computeDistance();
+    }
+}
+
 void PerpendicularDistanceTool::handleClick()
 {
     switch (m_state)
@@ -389,39 +427,18 @@ void PerpendicularDistanceTool::drawDistanceLine()
 
 QString PerpendicularDistanceTool::getDistanceText() const
 {
+    double distance = computeDistance();
     // HACK Comprovem si l'imatge té pixel spacing per saber si la mesura ha d'anar en píxels o mm
     // TODO Proporcionar algun mètode alternatiu per no haver d'haver de fer aquest hack
-    double *vtkSpacing = m_2DViewer->getInput()->getSpacing();
     const double *pixelSpacing = m_2DViewer->getInput()->getImage(0)->getPixelSpacing();
 
     if (pixelSpacing[0] == 0.0 && pixelSpacing[1] == 0.0)
     {
-        return QString(tr("%1 px")).arg(m_distanceLine->computeDistance(vtkSpacing), 0, 'f', 0);
+        return QString(tr("%1 px")).arg(distance, 0, 'f', 0);
     }
     else
     {
-        // En cas de Ultrasons es fa un tractament especial perquè VTK no agafa l'spacing correcte.
-        // TODO S'hauria d'unificar.
-        // Podem tenir imatges de la mateixa sèrie amb spacings diferents
-        if (m_2DViewer->getInput()->getImage(0)->getParentSeries()->getModality() == "US")
-        {
-            Image *image = m_2DViewer->getCurrentDisplayedImage();
-            if (image)
-            {
-                const double *usSpacing = image->getPixelSpacing();
-                double *firstPoint = m_distanceLine->getFirstPoint();
-                double *secondPoint = m_distanceLine->getSecondPoint();
-                double xx = (firstPoint[0] - secondPoint[0]) / vtkSpacing[0] * usSpacing[0];
-                double yy = (firstPoint[1] - secondPoint[1]) / vtkSpacing[1] * usSpacing[1];
-                double value = std::pow(xx, 2) + std::pow(yy, 2);
-                return QString(tr("%1 mm")).arg(std::sqrt(value), 0, 'f', 2);
-            }
-        }
-
-        // S'ha aplicat una reconstrucció, per tant l'spacing que es donarà serà el de vtk
-        // TODO Això en algun moment desapareixerà ja que caldria deshabilitar les reconstruccions per
-        // modalitats en les que les reconstruccions no tinguin sentit
-        return QString(tr("%1 mm")).arg(m_distanceLine->computeDistance(), 0, 'f', 2);
+        return QString(tr("%1 mm")).arg(distance, 0, 'f', 2);
     }
 }
 
