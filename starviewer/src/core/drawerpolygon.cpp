@@ -289,57 +289,6 @@ void DrawerPolygon::getBounds(double bounds[6])
     }
 }
 
-double DrawerPolygon::computeArea(Q2DViewer::CameraOrientationType view, double *spacing)
-{
-    double volumeSpacing[3];
-    if (spacing == NULL)
-    {
-        volumeSpacing[0] = volumeSpacing[1] = volumeSpacing[2] = 1.0;
-    }
-    else
-    {
-        volumeSpacing[0] = spacing[0];
-        volumeSpacing[1] = spacing[1];
-        volumeSpacing[2] = spacing[2];
-    }
-    // Mètode extret de http://alienryderflex.com/polygon_area/
-
-    // Obtenim els índexs x,y depenent de la vista en que estan projectats els punts
-    int xIndex = Q2DViewer::getXIndexForView(view);
-    int yIndex = Q2DViewer::getYIndexForView(view);
-    // Realitzem el càlcul de l'àrea
-    double area = 0.0;
-    int j = 0;
-    int numberOfPoints = m_pointsList.count();
-    for (int i = 0; i < numberOfPoints; i++)
-    {
-        j++;
-        if (j == numberOfPoints)
-        {
-            j = 0;
-        }
-
-        area += (m_pointsList.at(i)[xIndex] + m_pointsList.at(j)[xIndex]) * volumeSpacing[xIndex] * (m_pointsList.at(i)[yIndex] - m_pointsList.at(j)[yIndex]) *
-                 volumeSpacing[yIndex];
-    }
-
-    // En el cas de que l'àrea de la polilínia ens doni negativa, vol dir que hem anotat els punts en sentit antihorari,
-    // per això cal girar-los per tenir una disposició correcta. Cal girar-ho del vtkPoints i de la QList de la ROI
-    if (area < 0)
-    {
-        // Donem el resultat el valor absolut
-        area *= -1;
-        // Intercanviem els punts de la QList
-        // TODO Cal realment fer això?
-        for (int i = 0; i < (int)(numberOfPoints / 2); i++)
-        {
-            m_pointsList.swap(i, (numberOfPoints - 1) - i);
-        }
-    }
-
-    return area * 0.5;
-}
-
 void DrawerPolygon::get2DPlaneIndices(int &xIndex, int &yIndex) const
 {
     // We guess on which plane is lying the polygon
