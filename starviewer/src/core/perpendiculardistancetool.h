@@ -56,7 +56,9 @@ private:
     enum State { NotDrawing, DrawingReferenceLine, DrawingFirstPerpendicularLine, DrawingSecondPerpendicularLine };
 
 private:
-
+    /// Computes distance for the current drawn TA-GT
+    double computeDistance() const;
+    
     /// Decideix què s'ha de fer quan es rep un clic.
     void handleClick();
     /// Afegeix el primer punt, per començar a dibuixar la línia de referència.
