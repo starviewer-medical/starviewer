@@ -130,6 +130,42 @@ QString DistanceTool::getMeasurementText()
     return tr("%1 %2").arg(distance, 0, 'f', decimalPrecision).arg(units);
 }
 
+void DistanceTool::placeMeasurementText(DrawerText *text)
+{
+    // Coloquem el text a l'esquerra o a la dreta del segon punt segons la forma de la línia.
+    int xIndex = Q2DViewer::getXIndexForView(m_2DViewer->getView());
+    double *firstPoint = m_line->getFirstPoint();
+    double *secondPoint = m_line->getSecondPoint();
+
+    // Apliquem un padding de 5 pixels
+    const double Padding = 5.0;
+    double textPadding;
+    if (firstPoint[xIndex] <= secondPoint[xIndex])
+    {
+        textPadding = Padding;
+        text->setHorizontalJustification("Left");
+    }
+    else
+    {
+        textPadding = -Padding;
+        text->setHorizontalJustification("Right");
+    }
+
+    double secondPointInDisplay[3];
+    // Passem secondPoint a coordenades de display
+    m_2DViewer->computeWorldToDisplay(secondPoint[0], secondPoint[1], secondPoint[2], secondPointInDisplay);
+    // Apliquem el padding i tornem a coordenades de món
+    double temporalWorldPoint[4];
+    m_2DViewer->computeDisplayToWorld(secondPointInDisplay[0] + textPadding, secondPointInDisplay[1], secondPointInDisplay[2], temporalWorldPoint);
+    double textPoint[3];
+    textPoint[0] = temporalWorldPoint[0];
+    textPoint[1] = temporalWorldPoint[1];
+    textPoint[2] = temporalWorldPoint[2];
+
+    text->setAttachmentPoint(textPoint);
+    m_2DViewer->getDrawer()->draw(text, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+}
+
 void DistanceTool::handlePointAddition()
 {
     if (m_2DViewer->getInput())
@@ -171,38 +207,7 @@ void DistanceTool::annotateNewPoint()
         DrawerText *text = new DrawerText;
         text->setText(getMeasurementText());
 
-        // Coloquem el text a l'esquerra o a la dreta del segon punt segons la forma de la línia.
-        int xIndex = Q2DViewer::getXIndexForView(m_2DViewer->getView());
-        double *firstPoint = m_line->getFirstPoint();
-        double *secondPoint = m_line->getSecondPoint();
-
-        // Apliquem un padding de 5 pixels
-        const double Padding = 5.0;
-        double textPadding;
-        if (firstPoint[xIndex] <= secondPoint[xIndex])
-        {
-            textPadding = Padding;
-            text->setHorizontalJustification("Left");
-        }
-        else
-        {
-            textPadding = -Padding;
-            text->setHorizontalJustification("Right");
-        }
-
-        double secondPointInDisplay[3];
-        // Passem secondPoint a coordenades de display
-        m_2DViewer->computeWorldToDisplay(secondPoint[0], secondPoint[1], secondPoint[2], secondPointInDisplay);
-        // Apliquem el padding i tornem a coordenades de món
-        double temporalWorldPoint[4];
-        m_2DViewer->computeDisplayToWorld(secondPointInDisplay[0] + textPadding, secondPointInDisplay[1], secondPointInDisplay[2], temporalWorldPoint);
-        double textPoint[3];
-        textPoint[0] = temporalWorldPoint[0];
-        textPoint[1] = temporalWorldPoint[1];
-        textPoint[2] = temporalWorldPoint[2];
-
-        text->setAttachmentPoint(textPoint);
-        m_2DViewer->getDrawer()->draw(text, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+        placeMeasurementText(text);
         
         // Alliberem la primitiva perquè pugui ser esborrada
         m_line->decreaseReferenceCount();
