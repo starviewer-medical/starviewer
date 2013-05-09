@@ -79,7 +79,6 @@ void DistanceTool::handleEvent(long unsigned eventID)
 
 double DistanceTool::computeDistance()
 {
-    double distance;
     // HACK Comprovem si l'imatge té pixel spacing per saber si la mesura ha d'anar en píxels o mm
     // TODO Proporcionar algun mètode alternatiu per no haver d'haver de fer aquest hack
     double *vtkSpacing = m_2DViewer->getInput()->getSpacing();
@@ -87,11 +86,10 @@ double DistanceTool::computeDistance()
 
     if (pixelSpacing[0] == 0.0 && pixelSpacing[1] == 0.0)
     {
-        distance = m_line->computeDistance(vtkSpacing);
+        return m_line->computeDistance(vtkSpacing);
     }
     else
     {
-        bool distanceIsComputed = false;
         // En cas de Ultrasons es fa un tractament especial perquè VTK no agafa l'spacing correcte.
         // TODO S'hauria d'unificar.
         // Podem tenir imatges de la mateixa sèrie amb spacings diferents
@@ -107,25 +105,13 @@ double DistanceTool::computeDistance()
                 double xx = (firstPoint[0] - secondPoint[0]) / vtkSpacing[0] * usSpacing[0];
                 double yy = (firstPoint[1] - secondPoint[1]) / vtkSpacing[1] * usSpacing[1];
                 double value = std::pow(xx, 2) + std::pow(yy, 2);
-                distance = std::sqrt(value);
-                distanceIsComputed = true;
-            }
-            else
-            {
-                // S'ha aplicat una reconstrucció, per tant l'spacing que es donarà serà el de vtk
-                // TODO Això en algun moment desapareixerà ja que caldria deshabilitar les reconstruccions per
-                // modalitats en les que les reconstruccions no tinguin sentit
-                distanceIsComputed = false;
+                
+                return std::sqrt(value);
             }
         }
 
-        if (!distanceIsComputed)
-        {
-            distance = m_line->computeDistance();
-        }
+        return m_line->computeDistance();
     }
-
-    return distance;
 }
 
 QString DistanceTool::getMeasurementText()
