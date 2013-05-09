@@ -55,6 +55,9 @@ protected:
     double m_standardDeviation;
 
 private:
+    /// Computes the area for the current drawn ROI
+    double computeArea();
+    
     /// Calcula les dades estadístiques de la ROI.
     /// Serà necessari cridar aquest mètode abans si volem obtenir la mitjana i/o la desviació estàndar
     void computeStatisticsData();

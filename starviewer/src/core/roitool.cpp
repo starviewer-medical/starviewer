@@ -29,6 +29,38 @@ ROITool::~ROITool()
 {
 }
 
+double ROITool::computeArea()
+{
+    // TODO proporcionar algun mètode alternatiu per no haver d'haver de fer aquest hack
+    const double *pixelSpacing = m_2DViewer->getInput()->getImage(0)->getPixelSpacing();
+    double spacing[3];
+    if (pixelSpacing[0] == 0.0 && pixelSpacing[1] == 0.0)
+    {
+        // Si no coneixem l'spacing ho mostrem en pixels.
+        double *vtkSpacing = m_2DViewer->getInput()->getSpacing();
+        spacing[0] = 1.0 / vtkSpacing[0];
+        spacing[1] = 1.0 / vtkSpacing[1];
+        spacing[2] = 1.0 / vtkSpacing[2];
+    }
+    else
+    {
+        // HACK Es fa aquesta comprovació perquè en US les vtk no agafen correctament el pixel spacing.
+        if (m_2DViewer->getInput()->getImage(0)->getParentSeries()->getModality() == "US")
+        {
+            double *vtkSpacing = m_2DViewer->getInput()->getSpacing();
+            spacing[0] = pixelSpacing[0] / vtkSpacing[0];
+            spacing[1] = pixelSpacing[1] / vtkSpacing[1];
+            spacing[2] = 1.0 / vtkSpacing[2];
+        }
+        else
+        {
+            spacing[0] = spacing[1] = spacing[2] = 1.0;
+        }
+    }
+
+    return m_roiPolygon->computeArea(m_2DViewer->getView(), spacing);
+}
+
 void ROITool::computeStatisticsData()
 {
     Q_ASSERT(m_roiPolygon);
@@ -378,35 +410,16 @@ QString ROITool::getAnnotation()
     // TODO proporcionar algun mètode alternatiu per no haver d'haver de fer aquest hack
     const double *pixelSpacing = m_2DViewer->getInput()->getImage(0)->getPixelSpacing();
     QString areaUnits;
-    double spacing[3];
     if (pixelSpacing[0] == 0.0 && pixelSpacing[1] == 0.0)
     {
-        // Si no coneixem l'spacing ho mostrem en pixels.
-        double *vtkSpacing = m_2DViewer->getInput()->getSpacing();
-        spacing[0] = 1.0 / vtkSpacing[0];
-        spacing[1] = 1.0 / vtkSpacing[1];
-        spacing[2] = 1.0 / vtkSpacing[2];
-
         areaUnits = "px2";
     }
     else
     {
-        // HACK Es fa aquesta comprovació perquè en US les vtk no agafen correctament el pixel spacing.
-        if (m_2DViewer->getInput()->getImage(0)->getParentSeries()->getModality() == "US")
-        {
-            double *vtkSpacing = m_2DViewer->getInput()->getSpacing();
-            spacing[0] = pixelSpacing[0] / vtkSpacing[0];
-            spacing[1] = pixelSpacing[1] / vtkSpacing[1];
-            spacing[2] = 1.0 / vtkSpacing[2];
-        }
-        else
-        {
-            spacing[0] = spacing[1] = spacing[2] = 1.0;
-        }
         areaUnits = "mm2";
     }
 
-    QString annotation = tr("Area: %1 %2").arg(m_roiPolygon->computeArea(m_2DViewer->getView(), spacing), 0, 'f', 0).arg(areaUnits);
+    QString annotation = tr("Area: %1 %2").arg(computeArea(), 0, 'f', 0).arg(areaUnits);
     // Només calcularem mitjana i desviació estàndar per imatges monocrom.
     if (m_2DViewer->getInput()->getImage(0)->getPhotometricInterpretation().contains("MONOCHROME"))
     {
