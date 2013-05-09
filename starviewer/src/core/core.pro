@@ -295,6 +295,7 @@ HEADERS += extensionfactory.h \
     studylayoutconfigsettingsconverter.h \
     studylayoutconfigsloader.h \
     studylayoutmapper.h \
+    measurementmanager.h \
     optimalviewersgridestimator.h \
     vtkimagedatacreator.h \
     itkDCMTKFileReader.h \
@@ -557,6 +558,7 @@ SOURCES += extensionmediator.cpp \
     studylayoutconfigsettingsconverter.cpp \
     studylayoutconfigsloader.cpp \
     studylayoutmapper.cpp \
+    measurementmanager.cpp \
     optimalviewersgridestimator.cpp \
     vtkimagedatacreator.cpp \
     itkDCMTKFileReader.cxx \
