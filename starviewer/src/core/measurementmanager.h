@@ -6,6 +6,7 @@
 namespace udg {
 
 class DrawerLine;
+class DrawerPolygon;
 class Image;
 
 class MeasurementManager {
@@ -24,6 +25,9 @@ public:
 
     /// Computes the distance relative to the line, the spacing of the volume it's laying in and the source image
     static double computeDistance(DrawerLine *line, Image *image, double dataSpacing[3]);
+
+    /// Computes the area relative to the polygon, the spacing of the volume it's laying in and the source image
+    static double computeArea(DrawerPolygon *polygon, Image *image, double dataSpacing[3]);
 };
 
 } // End namespace udg
