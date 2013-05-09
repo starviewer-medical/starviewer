@@ -75,6 +75,57 @@ void DistanceTool::handleEvent(long unsigned eventID)
     }
 }
 
+double DistanceTool::computeDistance()
+{
+    double distance;
+    // HACK Comprovem si l'imatge té pixel spacing per saber si la mesura ha d'anar en píxels o mm
+    // TODO Proporcionar algun mètode alternatiu per no haver d'haver de fer aquest hack
+    double *vtkSpacing = m_2DViewer->getInput()->getSpacing();
+    const double *pixelSpacing = m_2DViewer->getInput()->getImage(0)->getPixelSpacing();
+
+    if (pixelSpacing[0] == 0.0 && pixelSpacing[1] == 0.0)
+    {
+        distance = m_line->computeDistance(vtkSpacing);
+    }
+    else
+    {
+        bool distanceIsComputed = false;
+        // En cas de Ultrasons es fa un tractament especial perquè VTK no agafa l'spacing correcte.
+        // TODO S'hauria d'unificar.
+        // Podem tenir imatges de la mateixa sèrie amb spacings diferents
+        if (m_2DViewer->getInput()->getImage(0)->getParentSeries()->getModality() == "US")
+        {
+            Image *image = m_2DViewer->getCurrentDisplayedImage();
+            if (image)
+            {
+                const double *usSpacing = image->getPixelSpacing();
+                double *firstPoint = m_line->getFirstPoint();
+                double *secondPoint = m_line->getSecondPoint();
+
+                double xx = (firstPoint[0] - secondPoint[0]) / vtkSpacing[0] * usSpacing[0];
+                double yy = (firstPoint[1] - secondPoint[1]) / vtkSpacing[1] * usSpacing[1];
+                double value = std::pow(xx, 2) + std::pow(yy, 2);
+                distance = std::sqrt(value);
+                distanceIsComputed = true;
+            }
+            else
+            {
+                // S'ha aplicat una reconstrucció, per tant l'spacing que es donarà serà el de vtk
+                // TODO Això en algun moment desapareixerà ja que caldria deshabilitar les reconstruccions per
+                // modalitats en les que les reconstruccions no tinguin sentit
+                distanceIsComputed = false;
+            }
+        }
+
+        if (!distanceIsComputed)
+        {
+            distance = m_line->computeDistance();
+        }
+    }
+
+    return distance;
+}
+
 void DistanceTool::handlePointAddition()
 {
     if (m_2DViewer->getInput())
@@ -112,53 +163,19 @@ void DistanceTool::annotateNewPoint()
         m_line->setSecondPoint(clickedWorldPoint);
         m_line->update();
 
+        // Compute distance
+        double distance = computeDistance();
         // Posem el text
         DrawerText *text = new DrawerText;
         // HACK Comprovem si l'imatge té pixel spacing per saber si la mesura ha d'anar en píxels o mm
         // TODO Proporcionar algun mètode alternatiu per no haver d'haver de fer aquest hack
-        double *vtkSpacing = m_2DViewer->getInput()->getSpacing();
         const double *pixelSpacing = m_2DViewer->getInput()->getImage(0)->getPixelSpacing();
-
         if (pixelSpacing[0] == 0.0 && pixelSpacing[1] == 0.0)
         {
-            text->setText(tr("%1 px").arg(m_line->computeDistance(vtkSpacing), 0, 'f', 0));
+            text->setText(tr("%1 px").arg(distance, 0, 'f', 0));
         }
         else
         {
-            bool distanceIsComputed = false;
-            double distance;
-            // En cas de Ultrasons es fa un tractament especial perquè VTK no agafa l'spacing correcte.
-            // TODO S'hauria d'unificar.
-            // Podem tenir imatges de la mateixa sèrie amb spacings diferents
-            if (m_2DViewer->getInput()->getImage(0)->getParentSeries()->getModality() == "US")
-            {
-                Image *image = m_2DViewer->getCurrentDisplayedImage();
-                if (image)
-                {
-                    const double *usSpacing = image->getPixelSpacing();
-                    double *firstPoint = m_line->getFirstPoint();
-                    double *secondPoint = m_line->getSecondPoint();
-
-                    double xx = (firstPoint[0] - secondPoint[0]) / vtkSpacing[0] * usSpacing[0];
-                    double yy = (firstPoint[1] - secondPoint[1]) / vtkSpacing[1] * usSpacing[1];
-                    double value = std::pow(xx, 2) + std::pow(yy, 2);
-                    distance = std::sqrt(value);
-                    distanceIsComputed = true;
-                }
-                else
-                {
-                    // S'ha aplicat una reconstrucció, per tant l'spacing que es donarà serà el de vtk
-                    // TODO Això en algun moment desapareixerà ja que caldria deshabilitar les reconstruccions per
-                    // modalitats en les que les reconstruccions no tinguin sentit
-                    distanceIsComputed = false;
-                }
-            }
-
-            if (!distanceIsComputed)
-            {
-                distance = m_line->computeDistance();
-            }
-
             text->setText(tr("%1 mm").arg(distance, 0, 'f', 2));
         }
 
