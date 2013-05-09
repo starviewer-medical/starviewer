@@ -40,6 +40,9 @@ public:
     void handleEvent(long unsigned eventID);
 
 private:
+    /// Computes distance for the current drawn line
+    double computeDistance();
+    
     /// Gestiona quin punt de la distància estem dibuixant. Es cridarà cada cop que
     /// haguem fet un clic amb el botó esquerre del mouse.
     void handlePointAddition();
