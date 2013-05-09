@@ -340,4 +340,55 @@ double DrawerPolygon::computeArea(Q2DViewer::CameraOrientationType view, double 
     return area * 0.5;
 }
 
+void DrawerPolygon::get2DPlaneIndices(int &xIndex, int &yIndex) const
+{
+    // We guess on which plane is lying the polygon
+    bool xEqual = true;
+    bool yEqual = true;
+    bool zEqual = true;
+    int numberOfPoints = getNumberOfPoints();
+    for (int i = 0; i < numberOfPoints - 1; ++i)
+    {
+        const double *p1 = getVertix(i);
+        const double *p2 = getVertix(i + 1);
+
+        if (!qFuzzyCompare(p1[0], p2[0]))
+        {
+            xEqual = false;
+        }
+
+        if (!qFuzzyCompare(p1[1], p2[1]))
+        {
+            yEqual = false;
+        }
+
+        if (!qFuzzyCompare(p1[2], p2[2]))
+        {
+            zEqual = false;
+        }
+    }
+
+    if (!xEqual && !yEqual && zEqual)
+    {
+        xIndex = 0;
+        yIndex = 1;
+    }
+    else if (!xEqual && yEqual && !zEqual)
+    {
+        xIndex = 0;
+        yIndex = 2;
+    }
+    else if (xEqual && !yEqual && !zEqual)
+    {
+        xIndex = 1;
+        yIndex = 2;
+    }
+    else
+    {
+        // The result for other combinations is undetermined
+        xIndex = -1;
+        yIndex = -1;
+    }
+}
+
 }
