@@ -27,9 +27,6 @@ private slots:
     void isModified_ShouldReturnExpectedValue_data();
     void isModified_ShouldReturnExpectedValue();
 
-    void computeArea_ReturnsExpectedValue_data();
-    void computeArea_ReturnsExpectedValue();
-
     void get2DPlaneIndices_ReturnsExpectedValues_data();
     void get2DPlaneIndices_ReturnsExpectedValues();
 };
@@ -519,19 +516,6 @@ void test_DrawerPolygon::isModified_ShouldReturnExpectedValue_data()
 
     {
         DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
-        drawerPolygon->computeArea(QViewer::Axial);
-        QTest::newRow("after computeArea (on unmodified)") << drawerPolygon << false;
-    }
-
-    {
-        DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
-        drawerPolygon->addVertix(0.0, 0.0, 0.0);
-        drawerPolygon->computeArea(QViewer::Axial);
-        QTest::newRow("after computeArea (on modified)") << drawerPolygon << true;
-    }
-
-    {
-        DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
         drawerPolygon->addVertix(0.0, 0.0, 0.0);
         drawerPolygon->update();
         QTest::newRow("after update") << drawerPolygon << false;
@@ -544,94 +528,6 @@ void test_DrawerPolygon::isModified_ShouldReturnExpectedValue()
     QFETCH(bool, modified);
 
     QCOMPARE(drawerPolygon->isModified(), modified);
-}
-
-void test_DrawerPolygon::computeArea_ReturnsExpectedValue_data()
-{
-    QTest::addColumn<DrawerPolygon*>("drawerPolygon");
-    QTest::addColumn<Q2DViewer::CameraOrientationType>("projectionPlane");
-    QTest::addColumn<double*>("spacing");
-    QTest::addColumn<double>("expectedArea");
-
-    DrawerPolygon *drawerPolygon = 0;
-    double p1[3] = { 0.0, 0.0, 0.0 };
-    double p2[3] = { 1.0, 1.0, 0.0 };
-    double p3[3] = { 3.0, 4.0, 0.0 };
-    double p4[3] = { 4.0, 3.0, 0.0 };
-    double *spacing = 0;
-    
-    drawerPolygon = new DrawerPolygon(this);
-    drawerPolygon->addVertix(p1);
-    drawerPolygon->addVertix(p2);
-    drawerPolygon->addVertix(p3);
-    drawerPolygon->addVertix(p4);
-    spacing = 0;
-    QTest::newRow("NULL spacing - axial") << drawerPolygon << Q2DViewer::Axial << spacing << 3.0;
-
-    drawerPolygon = new DrawerPolygon(this);
-    drawerPolygon->addVertix(p1);
-    drawerPolygon->addVertix(p2);
-    drawerPolygon->addVertix(p3);
-    drawerPolygon->addVertix(p4);
-    spacing = new double[3];
-    spacing[0] = 1.2;
-    spacing[1] = 1.2;
-    spacing[2] = 3.5;
-    QTest::newRow("With spacing - axial - corrected area") << drawerPolygon << Q2DViewer::Axial << spacing << 4.32;
-
-    drawerPolygon = new DrawerPolygon(this);
-    qSwap<double>(p2[0], p2[2]);
-    qSwap<double>(p3[0], p3[2]);
-    qSwap<double>(p4[0], p4[2]);
-    drawerPolygon->addVertix(p1);
-    drawerPolygon->addVertix(p2);
-    drawerPolygon->addVertix(p3);
-    drawerPolygon->addVertix(p4);
-    spacing = 0;
-    QTest::newRow("NULL spacing - sagital") << drawerPolygon << Q2DViewer::Sagital << spacing << 3.0;
-
-    drawerPolygon = new DrawerPolygon(this);
-    drawerPolygon->addVertix(p1);
-    drawerPolygon->addVertix(p2);
-    drawerPolygon->addVertix(p3);
-    drawerPolygon->addVertix(p4);
-    spacing = new double[3];
-    spacing[0] = 1.2;
-    spacing[1] = 1.2;
-    spacing[2] = 3.5;
-    QTest::newRow("With spacing - sagital - corrected area") << drawerPolygon << Q2DViewer::Sagital << spacing << 12.6;
-
-    drawerPolygon = new DrawerPolygon(this);
-    qSwap<double>(p2[0], p2[1]);
-    qSwap<double>(p3[0], p3[1]);
-    qSwap<double>(p4[0], p4[1]);
-    drawerPolygon->addVertix(p1);
-    drawerPolygon->addVertix(p2);
-    drawerPolygon->addVertix(p3);
-    drawerPolygon->addVertix(p4);
-    spacing = 0;
-    QTest::newRow("NULL spacing - coronal") << drawerPolygon << Q2DViewer::Coronal << spacing << 3.0;
-
-    drawerPolygon = new DrawerPolygon(this);
-    drawerPolygon->addVertix(p1);
-    drawerPolygon->addVertix(p2);
-    drawerPolygon->addVertix(p3);
-    drawerPolygon->addVertix(p4);
-    spacing = new double[3];
-    spacing[0] = 1.2;
-    spacing[1] = 1.2;
-    spacing[2] = 3.5;
-    QTest::newRow("With spacing - coronal - corrected area") << drawerPolygon << Q2DViewer::Coronal << spacing << 12.6;
-}
-
-void test_DrawerPolygon::computeArea_ReturnsExpectedValue()
-{
-    QFETCH(DrawerPolygon*, drawerPolygon);
-    QFETCH(Q2DViewer::CameraOrientationType, projectionPlane);
-    QFETCH(double*, spacing);
-    QFETCH(double, expectedArea);
-
-    QCOMPARE(drawerPolygon->computeArea(projectionPlane, spacing), expectedArea);
 }
 
 void test_DrawerPolygon::get2DPlaneIndices_ReturnsExpectedValues_data()
