@@ -9,6 +9,11 @@ class DrawerLine;
 class DrawerPolygon;
 class Image;
 
+/**
+    This is a helper class to manage measurements safely.
+    This class should be used when we want to give the right measurement for diagnostics.
+    It handles the complexity that could be internally between DICOM and view spacings and coordinates.
+*/
 class MeasurementManager {
 public:
     enum MeasurementUnitsType { Pixels, Millimetres, NotAvailable };
