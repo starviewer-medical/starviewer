@@ -106,6 +106,9 @@ void test_MeasurementManager::computeDistance_ReturnsExpectedValues_data()
     spacing[2] = 3.5;
     QTest::newRow("Image spacing 1.2, 1.2 - Volume spacing 1.2, 1.2") << line << image << spacing << 6.75388;
 
+    line = 0;
+    QTest::newRow("null line") << line << image << spacing << 0.0;
+
     line = new DrawerLine(this);
     line->setFirstPoint(p1);
     line->setSecondPoint(p2);
