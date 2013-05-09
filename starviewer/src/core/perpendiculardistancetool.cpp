@@ -438,7 +438,7 @@ void PerpendicularDistanceTool::placeMeasurementText(DrawerText *text)
     // Passem secondPoint a coordenades de display
     m_2DViewer->computeWorldToDisplay(secondPoint[0], secondPoint[1], secondPoint[2], secondPointInDisplay);
     // Apliquem el padding i tornem a coordenades de món
-    double attachmentPoint[4];
+    double attachmentPoint[3];
     m_2DViewer->computeDisplayToWorld(secondPointInDisplay[0] + textPadding, secondPointInDisplay[1], secondPointInDisplay[2], attachmentPoint);
 
     text->setAttachmentPoint(attachmentPoint);

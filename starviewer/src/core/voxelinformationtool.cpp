@@ -205,11 +205,7 @@ void VoxelInformationTool::computeCaptionAttachmentPointAndTextAlignment(double 
     }
 
     // I finalment transformem la coordenada de viewport en coordenada de món
-    double dummy[4];
-    m_2DViewer->computeDisplayToWorld(adjustedCursorPosition.x(), adjustedCursorPosition.y(), 0.0, dummy);
-    attachmentPoint[0] = dummy[0];
-    attachmentPoint[1] = dummy[1];
-    attachmentPoint[2] = dummy[2];
+    m_2DViewer->computeDisplayToWorld(adjustedCursorPosition.x(), adjustedCursorPosition.y(), 0.0, attachmentPoint);
 }
 
 }
