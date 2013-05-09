@@ -128,6 +128,22 @@ double DistanceTool::computeDistance()
     return distance;
 }
 
+QString DistanceTool::getMeasurementText()
+{
+    // Compute distance
+    double distance = computeDistance();
+    // Determine units and precision of the measurement
+    int decimalPrecision = 2;
+    Image *image = m_2DViewer->getInput()->getImage(0);
+    if (MeasurementManager::getMeasurementUnits(image) == MeasurementManager::Pixels)
+    {
+        decimalPrecision = 0;
+    }
+    QString units = MeasurementManager::getMeasurementUnitsAsQString(image);
+
+    return tr("%1 %2").arg(distance, 0, 'f', decimalPrecision).arg(units);
+}
+
 void DistanceTool::handlePointAddition()
 {
     if (m_2DViewer->getInput())
@@ -165,20 +181,9 @@ void DistanceTool::annotateNewPoint()
         m_line->setSecondPoint(clickedWorldPoint);
         m_line->update();
 
-        // Compute distance
-        double distance = computeDistance();
-        // Determine units and precision of the measurement
-        int decimalPrecision = 2;
-        Image *image = m_2DViewer->getInput()->getImage(0);
-        if (MeasurementManager::getMeasurementUnits(image) == MeasurementManager::Pixels)
-        {
-            decimalPrecision = 0;
-        }
-        QString units = MeasurementManager::getMeasurementUnitsAsQString(image);
-        
         // Posem el text
         DrawerText *text = new DrawerText;
-        text->setText(tr("%1 %2").arg(distance, 0, 'f', decimalPrecision).arg(units));
+        text->setText(getMeasurementText());
 
         // Coloquem el text a l'esquerra o a la dreta del segon punt segons la forma de la línia.
         int xIndex = Q2DViewer::getXIndexForView(m_2DViewer->getView());
