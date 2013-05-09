@@ -2,8 +2,11 @@
 #include "measurementmanager.h"
 
 #include "image.h"
+#include "drawerline.h"
+#include "fuzzycomparetesthelper.h"
 
 using namespace udg;
+using namespace testing;
 
 class test_MeasurementManager : public QObject {
 Q_OBJECT
@@ -17,10 +20,15 @@ private slots:
     
     void getMeasurementUnitsAsQString_ReturnsExpectedValues_data();
     void getMeasurementUnitsAsQString_ReturnsExpectedValues();
+    
+    void computeDistance_ReturnsExpectedValues_data();
+    void computeDistance_ReturnsExpectedValues();
 };
 
 Q_DECLARE_METATYPE(Image*)
 Q_DECLARE_METATYPE(MeasurementManager::MeasurementUnitsType)
+Q_DECLARE_METATYPE(DrawerLine*)
+Q_DECLARE_METATYPE(double*)
 
 void test_MeasurementManager::setupGetMeasurementUnitsData()
 {
@@ -67,6 +75,74 @@ void test_MeasurementManager::getMeasurementUnitsAsQString_ReturnsExpectedValues
     QFETCH(QString, expectedString);
 
     QCOMPARE(MeasurementManager::getMeasurementUnitsAsQString(image), expectedString);
+}
+
+void test_MeasurementManager::computeDistance_ReturnsExpectedValues_data()
+{
+    QTest::addColumn<DrawerLine*>("drawerLine");
+    QTest::addColumn<Image*>("image");
+    QTest::addColumn<double*>("spacing");
+    QTest::addColumn<double>("expectedDistance");
+
+    DrawerLine *line = 0;
+    Image *image = 0;
+    double p1[3] = { 8.99, 10.2, 8.97 };
+    double p2[3] = { 2.34, 9.02, 8.97 };
+    double *spacing = 0;
+    
+    line = new DrawerLine(this);
+    line->setFirstPoint(p1);
+    line->setSecondPoint(p2);
+    image = new Image(this);
+    image->setPixelSpacing(1.2, 1.2);
+    spacing = new double[3];
+    spacing[0] = 1.2;
+    spacing[1] = 1.2;
+    spacing[2] = 3.5;
+    QTest::newRow("Image spacing 1.2, 1.2 - Volume spacing 1.2, 1.2") << line << image << spacing << 6.75388;
+
+    line = new DrawerLine(this);
+    line->setFirstPoint(p1);
+    line->setSecondPoint(p2);
+    image = new Image(this);
+    image->setPixelSpacing(1.2, 1.2);
+    spacing = new double[3];
+    spacing[0] = 0.75;
+    spacing[1] = 0.75;
+    spacing[2] = 3.5;
+    QTest::newRow("Image spacing 1.2, 1.2 - Volume spacing 0.75, 0.75") << line << image << spacing << 10.8062;
+
+    line = new DrawerLine(this);
+    line->setFirstPoint(p1);
+    line->setSecondPoint(p2);
+    image = new Image(this);
+    image->setPixelSpacing(0.0, 0.0);
+    spacing = new double[3];
+    spacing[0] = 1.0;
+    spacing[1] = 1.0;
+    spacing[2] = 1.0;
+    QTest::newRow("Image spacing 0,0 - Volume spacing 1, 1") << line << image << spacing << 6.75388;
+
+    line = new DrawerLine(this);
+    line->setFirstPoint(p1);
+    line->setSecondPoint(p2);
+    image = new Image(this);
+    image->setPixelSpacing(0.0, 0.0);
+    spacing = new double[3];
+    spacing[0] = 2.0;
+    spacing[1] = 2.0;
+    spacing[2] = 2.0;
+    QTest::newRow("Image spacing 0,0 - Volume spacing 2, 2") << line << image << spacing << 3.37694;
+}
+
+void test_MeasurementManager::computeDistance_ReturnsExpectedValues()
+{
+    QFETCH(DrawerLine*, drawerLine);
+    QFETCH(Image*, image);
+    QFETCH(double*, spacing);
+    QFETCH(double, expectedDistance);
+
+    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(MeasurementManager::computeDistance(drawerLine, image, spacing), expectedDistance, 0.00001));
 }
 
 DECLARE_TEST(test_MeasurementManager)
