@@ -278,62 +278,36 @@ void AngleTool::placeText(DrawerText *angleText)
     if (point1[0] <= point2[0])
     {
         angleText->setHorizontalJustification("Left");
-
-        if (point3[xIndex] <= point2[xIndex])
-        {
-            angleText->setAttachmentPoint(point2);
-        }
-        else
-        {
-            double point2InDisplay[3];
-            // Passem point2 a coordenades de display
-            m_2DViewer->computeWorldToDisplay(point2[0], point2[1], point2[2], point2InDisplay);
-
-            // Apliquem el padding
-            if (point2[yIndex] <= point3[yIndex])
-            {
-                point2InDisplay[1] -= Padding;
-            }
-            else
-            {
-                point2InDisplay[1] += Padding;
-            }
-            // Tornem a coordenades de món
-            m_2DViewer->computeDisplayToWorld(point2InDisplay[0], point2InDisplay[1], point2InDisplay[2], position);
-
-            // Ara position és l'attachment point que volem
-            angleText->setAttachmentPoint(position);
-        }
     }
     else
     {
         angleText->setHorizontalJustification("Right");
+    }
 
-        if (point3[xIndex] <= point2[xIndex])
+    if (point3[xIndex] <= point2[xIndex])
+    {
+        angleText->setAttachmentPoint(point2);
+    }
+    else
+    {
+        double point2InDisplay[3];
+        // Passem point2 a coordenades de display
+        m_2DViewer->computeWorldToDisplay(point2[0], point2[1], point2[2], point2InDisplay);
+
+        // Apliquem el padding
+        if (point2[yIndex] <= point3[yIndex])
         {
-            angleText->setAttachmentPoint(point2);
+            point2InDisplay[1] -= Padding;
         }
         else
         {
-            double point2InDisplay[3];
-            // Passem point2 a coordenades de display
-            m_2DViewer->computeWorldToDisplay(point2[0], point2[1], point2[2], point2InDisplay);
-
-            // Apliquem el padding
-            if (point2[yIndex] <= point3[yIndex])
-            {
-                point2InDisplay[1] += Padding;
-            }
-            else
-            {
-                point2InDisplay[1] -= Padding;
-            }
-            // Tornem a coordenades de món
-            m_2DViewer->computeDisplayToWorld(point2InDisplay[0], point2InDisplay[1], point2InDisplay[2], position);
-
-            // Ara position és l'attachment point que volem
-            angleText->setAttachmentPoint(position);
+            point2InDisplay[1] += Padding;
         }
+        // Tornem a coordenades de món
+        m_2DViewer->computeDisplayToWorld(point2InDisplay[0], point2InDisplay[1], point2InDisplay[2], position);
+
+        // Ara position és l'attachment point que volem
+        angleText->setAttachmentPoint(position);
     }
 }
 
