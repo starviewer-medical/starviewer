@@ -305,6 +305,7 @@ HEADERS += extensionfactory.h \
     volumepixeldatareaderitkdcmtk.h \
     postprocessor.h \
     computezspacingpostprocessor.h \
+    pixelspacingamenderpostprocessor.h \
     volumepixeldatareaderfactory.h \
     volumepixeldatareadervtkdcmtk.h \
     vtkdcmtkimagereader.h
@@ -567,6 +568,7 @@ SOURCES += extensionmediator.cpp \
     itkDCMTKSeriesFileNames.cxx \
     volumepixeldatareaderitkdcmtk.cpp \
     computezspacingpostprocessor.cpp \
+    pixelspacingamenderpostprocessor.cpp \
     volumepixeldatareaderfactory.cpp \
     volumepixeldatareadervtkdcmtk.cpp \
     vtkdcmtkimagereader.cpp
