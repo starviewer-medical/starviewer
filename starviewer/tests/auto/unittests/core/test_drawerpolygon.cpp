@@ -29,6 +29,9 @@ private slots:
 
     void computeArea_ReturnsExpectedValue_data();
     void computeArea_ReturnsExpectedValue();
+
+    void get2DPlaneIndices_ReturnsExpectedValues_data();
+    void get2DPlaneIndices_ReturnsExpectedValues();
 };
 
 Q_DECLARE_METATYPE(DrawerPolygon*)
@@ -629,6 +632,69 @@ void test_DrawerPolygon::computeArea_ReturnsExpectedValue()
     QFETCH(double, expectedArea);
 
     QCOMPARE(drawerPolygon->computeArea(projectionPlane, spacing), expectedArea);
+}
+
+void test_DrawerPolygon::get2DPlaneIndices_ReturnsExpectedValues_data()
+{
+    QTest::addColumn<DrawerPolygon*>("polygon");
+    QTest::addColumn<int>("expectedXIndex");
+    QTest::addColumn<int>("expectedYIndex");
+
+    DrawerPolygon *polygon = 0;
+    double p1[3] = { 0.0, 0.0, 0.0 };
+    double p2[3] = { 1.0, 1.0, 0.0 };
+    double p3[3] = { 3.0, 4.0, 0.0 };
+    double p4[3] = { 4.0, 3.0, 0.0 };
+
+    polygon = new DrawerPolygon(this);
+    polygon->addVertix(p1);
+    polygon->addVertix(p2);
+    polygon->addVertix(p3);
+    polygon->addVertix(p4);
+    QTest::newRow("Axial plane polygon") << polygon << 0 << 1;
+
+    polygon = new DrawerPolygon(this);
+    qSwap<double>(p2[0], p2[2]);
+    qSwap<double>(p3[0], p3[2]);
+    qSwap<double>(p4[0], p4[2]);
+    polygon->addVertix(p1);
+    polygon->addVertix(p2);
+    polygon->addVertix(p3);
+    polygon->addVertix(p4);
+    QTest::newRow("Sagital plane polygon") << polygon << 1 << 2;
+
+    polygon = new DrawerPolygon(this);
+    qSwap<double>(p2[0], p2[1]);
+    qSwap<double>(p3[0], p3[1]);
+    qSwap<double>(p4[0], p4[1]);
+    polygon->addVertix(p1);
+    polygon->addVertix(p2);
+    polygon->addVertix(p3);
+    polygon->addVertix(p4);
+    QTest::newRow("Coronal plane polygon") << polygon << 0 << 2;
+
+    polygon = new DrawerPolygon(this);
+    p1[1] = 1.0;
+    p2[1] = 2.0;
+    p3[1] = 3.0;
+    p4[1] = 4.0;
+    polygon->addVertix(p1);
+    polygon->addVertix(p2);
+    polygon->addVertix(p3);
+    polygon->addVertix(p4);
+    QTest::newRow("Undetermined plane polygon") << polygon << -1 << -1;
+}
+
+void test_DrawerPolygon::get2DPlaneIndices_ReturnsExpectedValues()
+{
+    QFETCH(DrawerPolygon*, polygon);
+    QFETCH(int, expectedXIndex);
+    QFETCH(int, expectedYIndex);
+
+    int x, y;
+    polygon->get2DPlaneIndices(x, y);
+    QCOMPARE(x, expectedXIndex);
+    QCOMPARE(y, expectedYIndex);
 }
 
 DECLARE_TEST(test_DrawerPolygon)

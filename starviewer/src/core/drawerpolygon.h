@@ -54,6 +54,10 @@ public:
     /// Calcula l'àrea del polígon
     double computeArea(Q2DViewer::CameraOrientationType view, double *spacing = NULL);
 
+    /// Returns the 2D coordinate indices corresponding to the plane where the polygon is lying on.
+    /// If the plane could not be determined, -1, -1 will be returned
+    void get2DPlaneIndices(int &x, int &y) const;
+
 public slots:
     void update();
 
