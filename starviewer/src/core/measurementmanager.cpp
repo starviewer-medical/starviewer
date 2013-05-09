@@ -84,6 +84,11 @@ double* MeasurementManager::amendCoordinate(double coordinate[3], double dataSpa
 
 double MeasurementManager::computeDistance(DrawerLine *line, Image *image, double dataSpacing[3])
 {
+    if (!line)
+    {
+        return 0.0;
+    }
+
     double *p1 = amendCoordinate(line->getFirstPoint(), dataSpacing, image);
     double *p2 = amendCoordinate(line->getSecondPoint(), dataSpacing, image);
 
