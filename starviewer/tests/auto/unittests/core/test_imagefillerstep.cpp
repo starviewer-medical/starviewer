@@ -31,7 +31,7 @@ private slots:
 
 private:
 
-    static TestingDICOMTagReader* createReader(int i);
+    static TestingDICOMTagReader* createReader(int i, const QString &modality = "CT", const QString &SOPClassUID = UIDCTImageStorage);
     void checkVolumeNumberInSeries();
 
 };
@@ -311,13 +311,13 @@ void test_ImageFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffer
     checkVolumeNumberInSeries();
 }
 
-TestingDICOMTagReader* test_ImageFillerStep::createReader(int i)
+TestingDICOMTagReader* test_ImageFillerStep::createReader(int i, const QString &modality, const QString &SOPClassUID)
 {
     auto *reader = new TestingDICOMTagReader();
     reader->addTag(DICOMPixelData);
-    reader->addTag(DICOMSOPClassUID, UIDCTImageStorage);
+    reader->addTag(DICOMSOPClassUID, SOPClassUID);
     reader->addTag(DICOMSOPInstanceUID, i);
-    reader->addTag(DICOMModality, "CT");
+    reader->addTag(DICOMModality, modality);
     return reader;
 }
 
