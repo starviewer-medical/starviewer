@@ -166,31 +166,6 @@ void DrawerLine::updateVtkActorProperties()
     propertiesBackground->SetColor(255.0, 255.0, 255.0);
 }
 
-double DrawerLine::computeDistance(double *spacing)
-{
-    double distance;
-    if (spacing == NULL)
-    {
-        distance = MathTools::getDistance3D(m_firstPoint, m_secondPoint);
-    }
-    else
-    {
-        double firstPoint[3];
-        double secondPoint[3];
-
-        firstPoint[0] = MathTools::truncate(m_firstPoint[0] / spacing[0]);
-        firstPoint[1] = MathTools::truncate(m_firstPoint[1] / spacing[1]);
-        firstPoint[2] = MathTools::truncate(m_firstPoint[2] / spacing[2]);
-
-        secondPoint[0] = MathTools::truncate(m_secondPoint[0] / spacing[0]);
-        secondPoint[1] = MathTools::truncate(m_secondPoint[1] / spacing[1]);
-        secondPoint[2] = MathTools::truncate(m_secondPoint[2] / spacing[2]);
-
-        distance = MathTools::getDistance3D(firstPoint, secondPoint);
-    }
-    return distance;
-}
-
 double DrawerLine::getDistanceToPoint(double *point3D, double closestPoint[3])
 {
     return MathTools::getPointToFiniteLineDistance(point3D, m_firstPoint, m_secondPoint, closestPoint);
