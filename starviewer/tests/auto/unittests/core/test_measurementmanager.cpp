@@ -3,6 +3,7 @@
 
 #include "image.h"
 #include "drawerline.h"
+#include "drawerpolygon.h"
 #include "fuzzycomparetesthelper.h"
 
 using namespace udg;
@@ -23,12 +24,16 @@ private slots:
     
     void computeDistance_ReturnsExpectedValues_data();
     void computeDistance_ReturnsExpectedValues();
+    
+    void computeArea_ReturnsExpectedValues_data();
+    void computeArea_ReturnsExpectedValues();
 };
 
 Q_DECLARE_METATYPE(Image*)
 Q_DECLARE_METATYPE(MeasurementManager::MeasurementUnitsType)
 Q_DECLARE_METATYPE(DrawerLine*)
 Q_DECLARE_METATYPE(double*)
+Q_DECLARE_METATYPE(DrawerPolygon*)
 
 void test_MeasurementManager::setupGetMeasurementUnitsData()
 {
@@ -143,6 +148,200 @@ void test_MeasurementManager::computeDistance_ReturnsExpectedValues()
     QFETCH(double, expectedDistance);
 
     QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(MeasurementManager::computeDistance(drawerLine, image, spacing), expectedDistance, 0.00001));
+}
+
+void test_MeasurementManager::computeArea_ReturnsExpectedValues_data()
+{
+    QTest::addColumn<DrawerPolygon*>("polygon");
+    QTest::addColumn<Image*>("image");
+    QTest::addColumn<double*>("spacing");
+    QTest::addColumn<double>("expectedArea");
+
+    DrawerPolygon *drawerPolygon = 0;
+    Image *image = 0;
+    double p1[3] = { 0.0, 0.0, 0.0 };
+    double p2[3] = { 1.0, 1.0, 0.0 };
+    double p3[3] = { 3.0, 4.0, 0.0 };
+    double p4[3] = { 4.0, 3.0, 0.0 };
+    double *spacing = 0;
+    
+    QTest::newRow("null polygon") << drawerPolygon << image << spacing << 0.0;
+    
+    // Axial areas
+    drawerPolygon = new DrawerPolygon(this);
+    drawerPolygon->addVertix(p1);
+    drawerPolygon->addVertix(p2);
+    drawerPolygon->addVertix(p3);
+    drawerPolygon->addVertix(p4);
+    image = new Image(this);
+    image->setPixelSpacing(1.2, 1.2);
+    spacing = new double[3];
+    spacing[0] = 1.2;
+    spacing[1] = 1.2;
+    spacing[2] = 3.5;
+    QTest::newRow("Image spacing 1.2, 1.2 - Volume spacing 1.2, 1.2 - axial plane") << drawerPolygon << image << spacing << 3.0;
+
+    drawerPolygon = new DrawerPolygon(this);
+    drawerPolygon->addVertix(p1);
+    drawerPolygon->addVertix(p2);
+    drawerPolygon->addVertix(p3);
+    drawerPolygon->addVertix(p4);
+    image = new Image(this);
+    image->setPixelSpacing(1.2, 1.2);
+    spacing = new double[3];
+    spacing[0] = 0.75;
+    spacing[1] = 0.75;
+    spacing[2] = 3.5;
+    QTest::newRow("Image spacing 1.2, 1.2 - Volume spacing 0.75, 0.75 - axial plane") << drawerPolygon << image << spacing << 7.68;
+
+    drawerPolygon = new DrawerPolygon(this);
+    drawerPolygon->addVertix(p1);
+    drawerPolygon->addVertix(p2);
+    drawerPolygon->addVertix(p3);
+    drawerPolygon->addVertix(p4);
+    image = new Image(this);
+    image->setPixelSpacing(0., 0.);
+    spacing = new double[3];
+    spacing[0] = 1.;
+    spacing[1] = 1.;
+    spacing[2] = 1.;
+    QTest::newRow("Image spacing 0.0, 0.0 - Volume spacing 1.0, 1.0 - axial plane") << drawerPolygon << image << spacing << 3.0;
+
+    drawerPolygon = new DrawerPolygon(this);
+    drawerPolygon->addVertix(p1);
+    drawerPolygon->addVertix(p2);
+    drawerPolygon->addVertix(p3);
+    drawerPolygon->addVertix(p4);
+    image = new Image(this);
+    image->setPixelSpacing(0., 0.);
+    spacing = new double[3];
+    spacing[0] = 2.;
+    spacing[1] = 2.;
+    spacing[2] = 2.;
+    QTest::newRow("Image spacing 0.0, 0.0 - Volume spacing 2.0, 2.0 - axial plane") << drawerPolygon << image << spacing << 0.75;
+    
+    // Sagital areas
+    drawerPolygon = new DrawerPolygon(this);
+    qSwap<double>(p2[0], p2[2]);
+    qSwap<double>(p3[0], p3[2]);
+    qSwap<double>(p4[0], p4[2]);
+    drawerPolygon->addVertix(p1);
+    drawerPolygon->addVertix(p2);
+    drawerPolygon->addVertix(p3);
+    drawerPolygon->addVertix(p4);
+    image = new Image(this);
+    image->setPixelSpacing(1.2, 1.2);
+    spacing = new double[3];
+    spacing[0] = 1.2;
+    spacing[1] = 1.2;
+    spacing[2] = 3.5;
+    QTest::newRow("Image spacing 1.2, 1.2 - Volume spacing 1.2, 1.2 - sagital plane") << drawerPolygon << image << spacing << 3.0;
+
+    drawerPolygon = new DrawerPolygon(this);
+    drawerPolygon->addVertix(p1);
+    drawerPolygon->addVertix(p2);
+    drawerPolygon->addVertix(p3);
+    drawerPolygon->addVertix(p4);
+    image = new Image(this);
+    image->setPixelSpacing(1.2, 1.2);
+    spacing = new double[3];
+    spacing[0] = 0.75;
+    spacing[1] = 0.75;
+    spacing[2] = 3.5;
+    QTest::newRow("Image spacing 1.2, 1.2 - Volume spacing 0.75, 0.75 - sagital plane") << drawerPolygon << image << spacing << 4.8;
+
+    drawerPolygon = new DrawerPolygon(this);
+    drawerPolygon->addVertix(p1);
+    drawerPolygon->addVertix(p2);
+    drawerPolygon->addVertix(p3);
+    drawerPolygon->addVertix(p4);
+    image = new Image(this);
+    image->setPixelSpacing(0., 0.);
+    spacing = new double[3];
+    spacing[0] = 1.;
+    spacing[1] = 1.;
+    spacing[2] = 1.;
+    QTest::newRow("Image spacing 0.0, 0.0 - Volume spacing 1.0, 1.0 - sagital plane") << drawerPolygon << image << spacing << 3.0;
+
+    drawerPolygon = new DrawerPolygon(this);
+    drawerPolygon->addVertix(p1);
+    drawerPolygon->addVertix(p2);
+    drawerPolygon->addVertix(p3);
+    drawerPolygon->addVertix(p4);
+    image = new Image(this);
+    image->setPixelSpacing(0., 0.);
+    spacing = new double[3];
+    spacing[0] = 2.;
+    spacing[1] = 2.;
+    spacing[2] = 2.;
+    QTest::newRow("Image spacing 0.0, 0.0 - Volume spacing 2.0, 2.0 - sagital plane") << drawerPolygon << image << spacing << 0.75;
+
+    // Coronal areas
+    drawerPolygon = new DrawerPolygon(this);
+    qSwap<double>(p2[0], p2[1]);
+    qSwap<double>(p3[0], p3[1]);
+    qSwap<double>(p4[0], p4[1]);
+    drawerPolygon->addVertix(p1);
+    drawerPolygon->addVertix(p2);
+    drawerPolygon->addVertix(p3);
+    drawerPolygon->addVertix(p4);
+    image = new Image(this);
+    image->setPixelSpacing(1.2, 1.2);
+    spacing = new double[3];
+    spacing[0] = 1.2;
+    spacing[1] = 1.2;
+    spacing[2] = 3.5;
+    QTest::newRow("Image spacing 1.2, 1.2 - Volume spacing 1.2, 1.2 - coronal plane") << drawerPolygon << image << spacing << 3.0;
+
+    drawerPolygon = new DrawerPolygon(this);
+    drawerPolygon->addVertix(p1);
+    drawerPolygon->addVertix(p2);
+    drawerPolygon->addVertix(p3);
+    drawerPolygon->addVertix(p4);
+    image = new Image(this);
+    image->setPixelSpacing(1.2, 1.2);
+    spacing = new double[3];
+    spacing[0] = 0.75;
+    spacing[1] = 0.75;
+    spacing[2] = 3.5;
+    QTest::newRow("Image spacing 1.2, 1.2 - Volume spacing 0.75, 0.75 - coronal plane") << drawerPolygon << image << spacing << 4.8;
+
+    drawerPolygon = new DrawerPolygon(this);
+    drawerPolygon->addVertix(p1);
+    drawerPolygon->addVertix(p2);
+    drawerPolygon->addVertix(p3);
+    drawerPolygon->addVertix(p4);
+    image = new Image(this);
+    image->setPixelSpacing(0., 0.);
+    spacing = new double[3];
+    spacing[0] = 1.;
+    spacing[1] = 1.;
+    spacing[2] = 1.;
+    QTest::newRow("Image spacing 0.0, 0.0 - Volume spacing 1.0, 1.0 - coronal plane") << drawerPolygon << image << spacing << 3.0;
+
+    drawerPolygon = new DrawerPolygon(this);
+    drawerPolygon->addVertix(p1);
+    drawerPolygon->addVertix(p2);
+    drawerPolygon->addVertix(p3);
+    drawerPolygon->addVertix(p4);
+    image = new Image(this);
+    image->setPixelSpacing(0., 0.);
+    spacing = new double[3];
+    spacing[0] = 2.;
+    spacing[1] = 2.;
+    spacing[2] = 2.;
+    QTest::newRow("Image spacing 0.0, 0.0 - Volume spacing 2.0, 2.0 - coronal plane") << drawerPolygon << image << spacing << 0.75;
+}
+
+void test_MeasurementManager::computeArea_ReturnsExpectedValues()
+{
+    QFETCH(DrawerPolygon*, polygon);
+    QFETCH(Image*, image);
+    QFETCH(double*, spacing);
+    QFETCH(double, expectedArea);
+
+    QCOMPARE(MeasurementManager::computeArea(polygon, image, spacing), expectedArea);
+    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(MeasurementManager::computeArea(polygon, image, spacing), expectedArea, 0.00001));
 }
 
 DECLARE_TEST(test_MeasurementManager)

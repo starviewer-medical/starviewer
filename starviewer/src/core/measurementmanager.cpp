@@ -1,6 +1,7 @@
 #include "measurementmanager.h"
 
 #include "drawerline.h"
+#include "drawerpolygon.h"
 #include "image.h"
 #include "mathtools.h"
 
@@ -87,6 +88,44 @@ double MeasurementManager::computeDistance(DrawerLine *line, Image *image, doubl
     double *p2 = amendCoordinate(line->getSecondPoint(), dataSpacing, image);
 
     return MathTools::getDistance3D(p1, p2);
+}
+
+double MeasurementManager::computeArea(DrawerPolygon *polygon, Image *image, double dataSpacing[3])
+{
+    if (!polygon)
+    {
+        return 0.0;
+    }
+    
+    // First we guess on which plane is lying the polygon
+    int xIndex;
+    int yIndex;
+    polygon->get2DPlaneIndices(xIndex, yIndex);
+    if (xIndex == -1 || yIndex == -1)
+    {
+        // For safety
+        xIndex = 0;
+        yIndex = 1;
+    }
+    // Now we can compute the 2D area
+    double area = 0.0;
+    int j = 0;
+    int numberOfPoints = polygon->getNumberOfPoints();
+    for (int i = 0; i < numberOfPoints; i++)
+    {
+        j++;
+        if (j == numberOfPoints)
+        {
+            j = 0;
+        }
+
+        double *p1 = amendCoordinate((double*)polygon->getVertix(i), dataSpacing, image);
+        double *p2 = amendCoordinate((double*)polygon->getVertix(j), dataSpacing, image);
+
+        area += (p1[xIndex] + p2[xIndex]) * (p1[yIndex] - p2[yIndex]);
+    }
+    
+    return std::abs(area) * 0.5;
 }
 
 }; // End namespace udg
