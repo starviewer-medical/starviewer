@@ -41,9 +41,6 @@ public:
     void handleEvent(long unsigned eventID);
 
 private:
-    /// Computes distance for the current drawn line
-    double computeDistance();
-    
     /// Gets the text corresponding to the current measurement
     QString getMeasurementText();
 

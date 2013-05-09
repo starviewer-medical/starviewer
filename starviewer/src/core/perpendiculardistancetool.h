@@ -57,9 +57,6 @@ private:
     enum State { NotDrawing, DrawingReferenceLine, DrawingFirstPerpendicularLine, DrawingSecondPerpendicularLine };
 
 private:
-    /// Computes distance for the current drawn TA-GT
-    double computeDistance() const;
-
     /// Places the measurement text in an proper position relative to the drawn TA-GT
     void placeMeasurementText(DrawerText *text);
     

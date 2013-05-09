@@ -79,23 +79,6 @@ void PerpendicularDistanceTool::handleEvent(unsigned long eventId)
     }
 }
 
-double PerpendicularDistanceTool::computeDistance() const
-{
-    // HACK Comprovem si l'imatge té pixel spacing per saber si la mesura ha d'anar en píxels o mm
-    // TODO Proporcionar algun mètode alternatiu per no haver d'haver de fer aquest hack
-    double *vtkSpacing = m_2DViewer->getInput()->getSpacing();
-    const double *pixelSpacing = m_2DViewer->getInput()->getImage(0)->getPixelSpacing();
-
-    if (pixelSpacing[0] == 0.0 && pixelSpacing[1] == 0.0)
-    {
-        return m_distanceLine->computeDistance(vtkSpacing);
-    }
-    else
-    {
-        return m_distanceLine->computeDistance();
-    }
-}
-
 void PerpendicularDistanceTool::handleClick()
 {
     switch (m_state)
@@ -380,7 +363,7 @@ void PerpendicularDistanceTool::drawDistanceLine()
 
 QString PerpendicularDistanceTool::getDistanceText() const
 {
-    double distance = computeDistance();
+    double distance = MeasurementManager::computeDistance(m_distanceLine, m_2DViewer->getCurrentDisplayedImage(), m_2DViewer->getInput()->getSpacing());
     // Determine units and precision of the measurement
     int decimalPrecision = 2;
     Image *image = m_2DViewer->getInput()->getImage(0);
