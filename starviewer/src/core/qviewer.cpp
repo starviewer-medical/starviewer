@@ -187,21 +187,24 @@ void QViewer::setActive(bool active)
     }
 }
 
-void QViewer::computeDisplayToWorld(double x, double y, double z, double worldPoint[4])
+void QViewer::computeDisplayToWorld(double x, double y, double z, double worldPoint[3])
 {
     vtkRenderer *renderer = this->getRenderer();
     if (renderer)
     {
+        double homogeneousWorldPoint[4];
         renderer->SetDisplayPoint(x, y, z);
         renderer->DisplayToWorld();
-        renderer->GetWorldPoint(worldPoint);
-        if (worldPoint[3])
+        renderer->GetWorldPoint(homogeneousWorldPoint);
+        
+        double divisor = 1.0;
+        if (homogeneousWorldPoint[3])
         {
-            worldPoint[0] /= worldPoint[3];
-            worldPoint[1] /= worldPoint[3];
-            worldPoint[2] /= worldPoint[3];
-            worldPoint[3] = 1.0;
+            divisor = homogeneousWorldPoint[3];
         }
+        worldPoint[0] = homogeneousWorldPoint[0] / divisor;
+        worldPoint[1] = homogeneousWorldPoint[1] / divisor;
+        worldPoint[2] = homogeneousWorldPoint[2] / divisor;
     }
 }
 
@@ -239,11 +242,7 @@ void QViewer::getRecentEventWorldCoordinate(double worldCoordinate[3], bool curr
         position = this->getLastEventPosition();
     }
 
-    double computedCoordinate[4];
-    this->computeDisplayToWorld(position.x(), position.y(), 0, computedCoordinate);
-    worldCoordinate[0] = computedCoordinate[0];
-    worldCoordinate[1] = computedCoordinate[1];
-    worldCoordinate[2] = computedCoordinate[2];
+    this->computeDisplayToWorld(position.x(), position.y(), 0, worldCoordinate);
 }
 
 void QViewer::setupInteraction()

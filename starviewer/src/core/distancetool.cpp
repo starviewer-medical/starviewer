@@ -155,12 +155,8 @@ void DistanceTool::placeMeasurementText(DrawerText *text)
     // Passem secondPoint a coordenades de display
     m_2DViewer->computeWorldToDisplay(secondPoint[0], secondPoint[1], secondPoint[2], secondPointInDisplay);
     // Apliquem el padding i tornem a coordenades de món
-    double temporalWorldPoint[4];
-    m_2DViewer->computeDisplayToWorld(secondPointInDisplay[0] + textPadding, secondPointInDisplay[1], secondPointInDisplay[2], temporalWorldPoint);
     double textPoint[3];
-    textPoint[0] = temporalWorldPoint[0];
-    textPoint[1] = temporalWorldPoint[1];
-    textPoint[2] = temporalWorldPoint[2];
+    m_2DViewer->computeDisplayToWorld(secondPointInDisplay[0] + textPadding, secondPointInDisplay[1], secondPointInDisplay[2], textPoint);
 
     text->setAttachmentPoint(textPoint);
     m_2DViewer->getDrawer()->draw(text, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());

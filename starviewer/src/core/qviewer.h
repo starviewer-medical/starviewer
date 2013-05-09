@@ -84,7 +84,7 @@ public:
     ToolProxy* getToolProxy() const;
 
     /// Passa coordenades de display a coordenades de món i viceversa
-    void computeDisplayToWorld(double x, double y, double z, double worldPoint[4]);
+    void computeDisplayToWorld(double x, double y, double z, double worldPoint[3]);
     void computeWorldToDisplay(double x, double y, double z, double displayPoint[3]);
 
     /// Ens dóna la coordenada de món de l'últim (o previ a aquest) event capturat

@@ -181,13 +181,8 @@ void MagnifyingGlassTool::setFocalPoint(const double cursorPosition[3])
     double offsetX = (offsetXMax - offsetXMin) / zoomFactor;
     double offsetY = (offsetYMax - offsetYMin) / zoomFactor;
 
-    double temporalWorldPoint[4];
-    m_2DViewer->computeDisplayToWorld(pointInDisplay[0] - offsetX, pointInDisplay[1] - offsetY, pointInDisplay[2], temporalWorldPoint);
-
     double focalPoint[3];
-    focalPoint[0] = temporalWorldPoint[0];
-    focalPoint[1] = temporalWorldPoint[1];
-    focalPoint[2] = temporalWorldPoint[2];
+    m_2DViewer->computeDisplayToWorld(pointInDisplay[0] - offsetX, pointInDisplay[1] - offsetY, pointInDisplay[2], focalPoint);
 
     m_magnifiedCamera->SetFocalPoint(focalPoint);
 
@@ -196,8 +191,8 @@ void MagnifyingGlassTool::setFocalPoint(const double cursorPosition[3])
 
     double position[3];
     m_magnifiedCamera->GetPosition(position);
-    position[xIndex] = temporalWorldPoint[xIndex];
-    position[yIndex] = temporalWorldPoint[yIndex];
+    position[xIndex] = focalPoint[xIndex];
+    position[yIndex] = focalPoint[yIndex];
     m_magnifiedCamera->SetPosition(position);
 }
 

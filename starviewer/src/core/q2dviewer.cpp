@@ -2468,7 +2468,7 @@ void Q2DViewer::setAlignPosition(AlignPosition alignPosition)
     m_imageActor->GetBounds(bounds);
     double motionVector[4] = { 0.0, 0.0, 0.0, 0.0 };
     
-    double alignmentPoint[4];
+    double alignmentPoint[3];
     if (alignPosition == AlignLeft)
     {
         computeDisplayToWorld(0.0, 0.0, 0.0, alignmentPoint);

@@ -131,11 +131,7 @@ void MagicROITool::setTextPosition(DrawerText *text)
     // Passem attachmentPoint a coordenades de display
     m_2DViewer->computeWorldToDisplay(attachmentPoint[0], attachmentPoint[1], attachmentPoint[2], attachmentPointInDisplay);
     // Apliquem el padding i tornem a coordenades de món
-    double temporalWorldPoint[4];
-    m_2DViewer->computeDisplayToWorld(attachmentPointInDisplay[0], attachmentPointInDisplay[1] + paddingY, attachmentPointInDisplay[2], temporalWorldPoint);
-    attachmentPoint[0] = temporalWorldPoint[0];
-    attachmentPoint[1] = temporalWorldPoint[1];
-    attachmentPoint[2] = temporalWorldPoint[2];
+    m_2DViewer->computeDisplayToWorld(attachmentPointInDisplay[0], attachmentPointInDisplay[1] + paddingY, attachmentPointInDisplay[2], attachmentPoint);
 
     text->setAttachmentPoint(attachmentPoint);
 }
