@@ -45,18 +45,7 @@ double ROITool::computeArea()
     }
     else
     {
-        // HACK Es fa aquesta comprovació perquè en US les vtk no agafen correctament el pixel spacing.
-        if (m_2DViewer->getInput()->getImage(0)->getParentSeries()->getModality() == "US")
-        {
-            double *vtkSpacing = m_2DViewer->getInput()->getSpacing();
-            spacing[0] = pixelSpacing[0] / vtkSpacing[0];
-            spacing[1] = pixelSpacing[1] / vtkSpacing[1];
-            spacing[2] = 1.0 / vtkSpacing[2];
-        }
-        else
-        {
-            spacing[0] = spacing[1] = spacing[2] = 1.0;
-        }
+        spacing[0] = spacing[1] = spacing[2] = 1.0;
     }
 
     return m_roiPolygon->computeArea(m_2DViewer->getView(), spacing);
