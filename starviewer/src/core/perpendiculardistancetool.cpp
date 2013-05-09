@@ -9,6 +9,7 @@
 #include "series.h"
 #include "q2dviewer.h"
 #include "volume.h"
+#include "measurementmanager.h"
 
 #include <QVector3D>
 
@@ -428,18 +429,16 @@ void PerpendicularDistanceTool::drawDistanceLine()
 QString PerpendicularDistanceTool::getDistanceText() const
 {
     double distance = computeDistance();
-    // HACK Comprovem si l'imatge té pixel spacing per saber si la mesura ha d'anar en píxels o mm
-    // TODO Proporcionar algun mètode alternatiu per no haver d'haver de fer aquest hack
-    const double *pixelSpacing = m_2DViewer->getInput()->getImage(0)->getPixelSpacing();
+    // Determine units and precision of the measurement
+    int decimalPrecision = 2;
+    Image *image = m_2DViewer->getInput()->getImage(0);
+    if (MeasurementManager::getMeasurementUnits(image) == MeasurementManager::Pixels)
+    {
+        decimalPrecision = 0;
+    }
+    QString units = MeasurementManager::getMeasurementUnitsAsQString(image);
 
-    if (pixelSpacing[0] == 0.0 && pixelSpacing[1] == 0.0)
-    {
-        return QString(tr("%1 px")).arg(distance, 0, 'f', 0);
-    }
-    else
-    {
-        return QString(tr("%1 mm")).arg(distance, 0, 'f', 2);
-    }
+    return tr("%1 %2").arg(distance, 0, 'f', decimalPrecision).arg(units);
 }
 
 void PerpendicularDistanceTool::abortDrawing()
