@@ -33,9 +33,6 @@ private slots:
     void start();
 
 private:
-    // Metode que converteix el volum de l'input (que té fases) en imatge itk temporal
-    void convertInputImageToTemporalImage();
-
     /// Metode per calcular la mitjana temporal de la regio del polyline
     double computeTemporalMean();
 

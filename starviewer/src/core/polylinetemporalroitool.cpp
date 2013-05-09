@@ -48,59 +48,6 @@ void PolylineTemporalROITool::start()
     double bounds[6];
     m_roiPolygon->getBounds(bounds);
     this->computeTemporalMean();
-/*        double *intersection = new double[3];
-
-        intersection[0] = (bounds[1]+bounds[0])/2.0;
-        intersection[1] = (bounds[3]+bounds[2])/2.0;
-        intersection[2] = (bounds[5]+bounds[4])/2.0;
-
-        DrawerText * text = new DrawerText;
-
-        const double * pixelSpacing = m_2DViewer->getInput()->getSeries()->getImage(0)->getPixelSpacing();
-
-        if (pixelSpacing[0] == 0.0 && pixelSpacing[1] == 0.0)
-        {
-            double * spacing = m_2DViewer->getInput()->getSpacing();
-            text->setText(tr("Area: %1 px2\nMean: %2").arg(m_roiPolygon->computeArea(m_2DViewer->getView(), spacing), 0, 'f', 0).arg(this->computeGrayMean(), 0, 'f', 2));
-        }
-        else
-        {
-            text->setText(tr("Area: %1 mm2\nMean: %2").arg(m_roiPolygon->computeArea(m_2DViewer->getView())).arg(this->computeGrayMean(), 0, 'f', 2));
-        }
-
-        text->setAttatchmentPoint(intersection);
-        m_2DViewer->getDrawer()->draw(text, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
- */
-}
-
-void PolylineTemporalROITool::convertInputImageToTemporalImage()
-{
-    // Potser no cal i només recorrem l'input la regió que en marca la roi
-    // d'aquesta manera no caldria fer la còpia
-/*
-    m_temporalImageHasBeenDefined = true;
-
-    TemporalImageType::RegionType regiont;
-    TemporalImageType::IndexType startt;
-    startt[0]=0;
-    startt[1]=0;
-    startt[2]=0;
-    startt[3]=0;
-
-    TemporalImageType::SizeType sizet;
-    sizet[0] = m_2DViewer->getInput()->getNumberOfPhases();  //les mostres temporals
-    sizet[1] = m_2DViewer->getInput()->getItkData()->GetBufferedRegion().GetSize()[0];  //les X
-    sizet[2] = m_2DViewer->getInput()->getItkData()->GetBufferedRegion().GetSize()[0];  //les Y
-    sizet[3] = m_2DViewer->getInput()->getNumberOfSlicesPerPhase();  //les Z
-
-    //Ho definim així perquè l'iterador passi per totes les mostres temporals
-    regiont.SetSize(sizet);
-    regiont.SetIndex(startt);
-
-    m_temporalImage = TemporalImageType::New();
-    m_temporalImage->SetRegions(regiont);
-    m_temporalImage->Allocate();
-*/
 }
 
 double PolylineTemporalROITool::computeTemporalMean()
