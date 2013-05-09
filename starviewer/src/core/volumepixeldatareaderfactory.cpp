@@ -1,6 +1,7 @@
 #include "volumepixeldatareaderfactory.h"
 
 #include "computezspacingpostprocessor.h"
+#include "pixelspacingamenderpostprocessor.h"
 #include "coresettings.h"
 #include "image.h"
 #include "logging.h"
@@ -60,6 +61,7 @@ QQueue<QSharedPointer<Postprocessor>> VolumePixelDataReaderFactory::getPostproce
         case VTKDCMTKPixelDataReader:
         case VTKGDCMPixelDataReader:
             postprocessors.enqueue(QSharedPointer<Postprocessor>(new ComputeZSpacingPostprocessor()));
+            postprocessors.enqueue(QSharedPointer<Postprocessor>(new PixelSpacingAmenderPostProcessor()));
             break;
 
         default:
