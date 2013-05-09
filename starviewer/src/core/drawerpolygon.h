@@ -39,7 +39,7 @@ public:
     void setVertix(int i, double x, double y, double z);
 
     /// Ens retorna l'i-èssim vèrtex del polígon. Si l'índex està fora de rang ens retornarà un array sense inicialitzar
-    const double* getVertix(int i);
+    const double* getVertix(int i) const;
 
     vtkProp* getAsVtkProp();
 
