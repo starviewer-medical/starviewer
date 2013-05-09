@@ -8,6 +8,8 @@
 #include "image.h"
 #include "volume.h"
 #include "series.h"
+#include "measurementmanager.h"
+
 // Vtk's
 #include <vtkRenderWindowInteractor.h>
 #include <vtkCommand.h>
@@ -165,19 +167,18 @@ void DistanceTool::annotateNewPoint()
 
         // Compute distance
         double distance = computeDistance();
+        // Determine units and precision of the measurement
+        int decimalPrecision = 2;
+        Image *image = m_2DViewer->getInput()->getImage(0);
+        if (MeasurementManager::getMeasurementUnits(image) == MeasurementManager::Pixels)
+        {
+            decimalPrecision = 0;
+        }
+        QString units = MeasurementManager::getMeasurementUnitsAsQString(image);
+        
         // Posem el text
         DrawerText *text = new DrawerText;
-        // HACK Comprovem si l'imatge té pixel spacing per saber si la mesura ha d'anar en píxels o mm
-        // TODO Proporcionar algun mètode alternatiu per no haver d'haver de fer aquest hack
-        const double *pixelSpacing = m_2DViewer->getInput()->getImage(0)->getPixelSpacing();
-        if (pixelSpacing[0] == 0.0 && pixelSpacing[1] == 0.0)
-        {
-            text->setText(tr("%1 px").arg(distance, 0, 'f', 0));
-        }
-        else
-        {
-            text->setText(tr("%1 mm").arg(distance, 0, 'f', 2));
-        }
+        text->setText(tr("%1 %2").arg(distance, 0, 'f', decimalPrecision).arg(units));
 
         // Coloquem el text a l'esquerra o a la dreta del segon punt segons la forma de la línia.
         int xIndex = Q2DViewer::getXIndexForView(m_2DViewer->getView());

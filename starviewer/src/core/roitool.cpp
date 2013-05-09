@@ -7,6 +7,7 @@
 #include "image.h"
 #include "series.h"
 #include "mathtools.h"
+#include "measurementmanager.h"
 
 #include <QApplication>
 
@@ -406,19 +407,14 @@ void ROITool::setTextPosition(DrawerText *text)
 QString ROITool::getAnnotation()
 {
     Q_ASSERT(m_roiPolygon);
-    // HACK Comprovem si l'imatge té pixel spacing per saber si la mesura ha d'anar en píxels o mm
-    // TODO proporcionar algun mètode alternatiu per no haver d'haver de fer aquest hack
-    const double *pixelSpacing = m_2DViewer->getInput()->getImage(0)->getPixelSpacing();
-    QString areaUnits;
-    if (pixelSpacing[0] == 0.0 && pixelSpacing[1] == 0.0)
+    
+    Image *image = m_2DViewer->getInput()->getImage(0);
+    QString areaUnits = MeasurementManager::getMeasurementUnitsAsQString(image);
+    if (MeasurementManager::getMeasurementUnits(image) != MeasurementManager::NotAvailable)
     {
-        areaUnits = "px2";
+        // If units are px or mm, we have to indicate they're squared
+        areaUnits += "2";
     }
-    else
-    {
-        areaUnits = "mm2";
-    }
-
     QString annotation = tr("Area: %1 %2").arg(computeArea(), 0, 'f', 0).arg(areaUnits);
     // Només calcularem mitjana i desviació estàndar per imatges monocrom.
     if (m_2DViewer->getInput()->getImage(0)->getPhotometricInterpretation().contains("MONOCHROME"))
