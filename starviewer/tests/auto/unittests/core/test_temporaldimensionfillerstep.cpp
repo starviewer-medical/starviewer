@@ -26,6 +26,9 @@ private slots:
     void postProcessing_ShouldSetSinglePhaseWhenNotAllSlicesHaveTheSameNumberOfPhases_data();
     void postProcessing_ShouldSetSinglePhaseWhenNotAllSlicesHaveTheSameNumberOfPhases();
 
+    void postProcessing_ShouldSetSinglePhaseWhenThereAreMultipleAcquisitionNumbers_data();
+    void postProcessing_ShouldSetSinglePhaseWhenThereAreMultipleAcquisitionNumbers();
+
     void postProcessing_ShouldSetSinglePhaseWhenTheVolumeIsNotProcessed_data();
     void postProcessing_ShouldSetSinglePhaseWhenTheVolumeIsNotProcessed();
 
@@ -66,6 +69,20 @@ void test_TemporalDimensionFillerStep::postProcessing_ShouldSetSinglePhaseWhenNo
     testPostProcessing([](int) { return 0; });
 }
 
+void test_TemporalDimensionFillerStep::postProcessing_ShouldSetSinglePhaseWhenThereAreMultipleAcquisitionNumbers_data()
+{
+    QTest::addColumn<QSharedPointer<TestingTemporalDimensionFillerStep>>("step");
+
+    auto step = createStep(10, [](int) { return 10; });
+    (*step->TemporalDimensionInternalInfo.begin())->value(0)->multipleAcquisitionNumber = true; // set multipleAcquisitionNumber to true for volume 0
+    QTest::newRow("multiple acquisition numbers") << step;
+}
+
+void test_TemporalDimensionFillerStep::postProcessing_ShouldSetSinglePhaseWhenThereAreMultipleAcquisitionNumbers()
+{
+    testPostProcessing([](int) { return 0; });
+}
+
 void test_TemporalDimensionFillerStep::postProcessing_ShouldSetSinglePhaseWhenTheVolumeIsNotProcessed_data()
 {
     QTest::addColumn<QSharedPointer<TestingTemporalDimensionFillerStep>>("step");
@@ -86,6 +103,7 @@ QSharedPointer<TestingTemporalDimensionFillerStep> test_TemporalDimensionFillerS
     Series *series = new Series(this);
     auto *volumeInfo = new TestingTemporalDimensionFillerStep::VolumeInfo();
     volumeInfo->numberOfPhases = numberOfPhasesForSlice(0);
+    volumeInfo->multipleAcquisitionNumber = false;
 
     for (int i = 0; i < numberOfSlices; i++)
     {
