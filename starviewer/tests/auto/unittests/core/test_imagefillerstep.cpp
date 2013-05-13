@@ -473,7 +473,7 @@ void test_ImageFillerStep::fillIndividually_ShouldNotFillBadFormattedPixelSpacin
     TestingDICOMTagReader *reader = 0;
     QString testRowDescription;
     QStringList badFormattedPixelSpacingList;
-    badFormattedPixelSpacingList << "1\\1\\" << "abc" << "1" << "a\\b";
+    badFormattedPixelSpacingList << "1\\1\\" << "abc" << "1" << "a\\b" << "1\\" << "\\1";
     
     foreach (const QString &badFormattedPixelSpacingString, badFormattedPixelSpacingList)
     {
