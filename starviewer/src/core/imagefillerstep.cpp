@@ -206,20 +206,7 @@ bool ImageFillerStep::fillCommonImageInformation(Image *image, DICOMTagReader *d
         //
         if (dicomReader->tagExists(DICOMImagerPixelSpacing))
         {
-            QString spacing = dicomReader->getValueAttributeAsQString(DICOMImagerPixelSpacing);
-            if (!spacing.isEmpty())
-            {
-                QStringList list;
-                list = spacing.split("\\");
-                if (list.size() == 2)
-                {
-                    image->setPixelSpacing(list.at(0).toDouble(), list.at(1).toDouble());
-                }
-                else
-                {
-                    DEBUG_LOG("No s'ha trobat cap valor de pixel spacing definit de forma estàndar esperada.");
-                }
-            }
+            validateAndSetPixelSpacing(image, dicomReader->getValueAttributeAsQString(DICOMImagerPixelSpacing));
         }
     }
 
@@ -545,19 +532,7 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
                 DICOMValueAttribute *dicomValue = item->getValueAttribute(DICOMPixelSpacing);
                 if (dicomValue)
                 {
-                    QString spacing = dicomValue->getValueAsQString();
-                    if (!spacing.isEmpty())
-                    {
-                        QStringList list = spacing.split("\\");
-                        if (list.size() == 2)
-                        {
-                            image->setPixelSpacing(list.at(0).toDouble(), list.at(1).toDouble());
-                        }
-                        else
-                        {
-                            DEBUG_LOG("No s'ha trobat cap valor de pixel spacing definit de forma estàndar esperada");
-                        }
-                    }
+                    validateAndSetPixelSpacing(image, dicomValue->getValueAsQString());
                 }
 
                 //
@@ -1157,19 +1132,7 @@ void ImageFillerStep::computePixelSpacing(Image *image, DICOMTagReader *dicomRea
         // la seqüència Contributing Sources Sequence, que de moment no tractarem
     }
 
-    QStringList list;
-    if (!value.isEmpty())
-    {
-        list = value.split("\\");
-        if (list.size() == 2)
-        {
-            image->setPixelSpacing(list.at(0).toDouble(), list.at(1).toDouble());
-        }
-        else
-        {
-            DEBUG_LOG("No s'ha trobat cap valor de pixel spacing definit de forma estàndar esperada. Modalitat de la imatge: [" + modality + "]");
-        }
-    }
+    validateAndSetPixelSpacing(image, value);
 }
 
 bool ImageFillerStep::areOfDifferentSize(Image *firstImage, Image *secondImage)
@@ -1206,4 +1169,29 @@ bool ImageFillerStep::isEnhancedImageSOPClass(const QString &sopClassUID)
         sopClassUID == UIDEnhancedPETImageStorage);
 }
 
+bool ImageFillerStep::validateAndSetPixelSpacing(Image *image, const QString &spacing)
+{
+    if (!image)
+    {
+        DEBUG_LOG("Can't set spacing. Image is null.");
+        return false;
+    }
+    
+    bool ok = false;
+    if (!spacing.isEmpty())
+    {
+        QStringList list = spacing.split("\\");
+        if (list.size() == 2)
+        {
+            image->setPixelSpacing(list.at(0).toDouble(), list.at(1).toDouble());
+            ok = true;
+        }
+        else
+        {
+            DEBUG_LOG("No s'ha trobat cap valor de pixel spacing definit de forma estàndar esperada");
+        }
+    }
+
+    return ok;
+}
 }
