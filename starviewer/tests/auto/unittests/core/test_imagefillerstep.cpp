@@ -389,11 +389,6 @@ void test_ImageFillerStep::fillIndividually_ShouldFillWellFormattedPixelSpacingP
     reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
     QTest::newRow("ES PixelSpacing - well formatted") << reader << imageWithNoPixelSpacing;
     
-    // TODO This case should take into account PixelSpacing!
-    reader = createReader(0, "PT", UIDPETImageStorage);
-    reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
-    QTest::newRow("PT PixelSpacing - well formatted") << reader << imageWithNoPixelSpacing;
-    
     // Modalities that take into account PixelSpacing
     Image *imageWithPixelSpacing =  new Image(this);
     imageWithPixelSpacing->setPixelSpacing(1, 1);
@@ -406,7 +401,7 @@ void test_ImageFillerStep::fillIndividually_ShouldFillWellFormattedPixelSpacingP
     reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
     QTest::newRow("MR PixelSpacing - well formatted") << reader << imageWithPixelSpacing;
 
-    reader = createReader(0, "PET", UIDPETImageStorage);
+    reader = createReader(0, "PT", UIDPETImageStorage);
     reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
     QTest::newRow("PET PixelSpacing - well formatted") << reader << imageWithPixelSpacing;
     
@@ -426,7 +421,7 @@ void test_ImageFillerStep::fillIndividually_ShouldFillWellFormattedPixelSpacingP
     reader->addTag(DICOMNumberOfFrames, 1);
     QTest::newRow("Enhanced MR Color PixelSpacing - well formatted") << reader << imageWithNoPixelSpacing;
     
-    reader = createReader(0, "PET", UIDEnhancedPETImageStorage);
+    reader = createReader(0, "PT", UIDEnhancedPETImageStorage);
     reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
     reader->addTag(DICOMNumberOfFrames, 1);
     QTest::newRow("Enhanced PET PixelSpacing - well formatted") << reader << imageWithNoPixelSpacing;
@@ -552,11 +547,6 @@ void test_ImageFillerStep::fillIndividually_ShouldNotFillBadFormattedPixelSpacin
         testRowDescription ="ES PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
         QTest::newRow(qPrintable(testRowDescription)) << reader;
     
-        reader = createReader(0, "PT", UIDPETImageStorage);
-        reader->addTag(DICOMPixelSpacing, badFormattedPixelSpacingString);
-        testRowDescription ="PT PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
-        QTest::newRow(qPrintable(testRowDescription)) << reader;
-    
         reader = createReader(0, "CT", UIDCTImageStorage);
         reader->addTag(DICOMPixelSpacing, badFormattedPixelSpacingString);
         testRowDescription ="CT PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
@@ -567,9 +557,9 @@ void test_ImageFillerStep::fillIndividually_ShouldNotFillBadFormattedPixelSpacin
         testRowDescription ="MR PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
         QTest::newRow(qPrintable(testRowDescription)) << reader;
 
-        reader = createReader(0, "PET", UIDPETImageStorage);
+        reader = createReader(0, "PT", UIDPETImageStorage);
         reader->addTag(DICOMPixelSpacing, badFormattedPixelSpacingString);
-        testRowDescription ="PET PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
+        testRowDescription ="PT PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
         QTest::newRow(qPrintable(testRowDescription)) << reader;
     
         reader = createReader(0, "CT", UIDEnhancedCTImageStorage);
@@ -590,7 +580,7 @@ void test_ImageFillerStep::fillIndividually_ShouldNotFillBadFormattedPixelSpacin
         testRowDescription ="Enhanced MR Color PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
         QTest::newRow(qPrintable(testRowDescription)) << reader;
     
-        reader = createReader(0, "PET", UIDEnhancedPETImageStorage);
+        reader = createReader(0, "PT", UIDEnhancedPETImageStorage);
         reader->addTag(DICOMPixelSpacing, badFormattedPixelSpacingString);
         reader->addTag(DICOMNumberOfFrames, 1);
         testRowDescription ="Enhanced PET PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
