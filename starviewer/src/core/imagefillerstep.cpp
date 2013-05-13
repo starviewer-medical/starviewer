@@ -1082,7 +1082,7 @@ void ImageFillerStep::computePixelSpacing(Image *image, DICOMTagReader *dicomRea
     // Per modalitats CT, MR i PET el pixel spacing el trobem
     // a Image Plane Module (C.7.6.2), al tag Pixel Spacing, tipus 1
     //
-    if (modality == "CT" || modality == "MR" || modality == "PET")
+    if (modality == "CT" || modality == "MR" || modality == "PT")
     {
         value = dicomReader->getValueAttributeAsQString(DICOMPixelSpacing);
     }
