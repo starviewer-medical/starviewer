@@ -13,6 +13,7 @@
 #include "patientorientation.h"
 #include "displayshutter.h"
 #include "dicomformattedvaluesconverter.h"
+#include "dicomvaluerepresentationconverter.h"
 // Pel fabs. Necessari per Mac
 #include <cmath>
 #include <QFileInfo>
@@ -1176,22 +1177,19 @@ bool ImageFillerStep::validateAndSetPixelSpacing(Image *image, const QString &sp
         DEBUG_LOG("Can't set spacing. Image is null.");
         return false;
     }
-    
-    bool ok = false;
-    if (!spacing.isEmpty())
+
+    bool ok;
+    QVector2D spacingVector = DICOMValueRepresentationConverter::decimalStringTo2DDoubleVector(spacing, &ok);
+    if (ok)
     {
-        QStringList list = spacing.split("\\");
-        if (list.size() == 2)
-        {
-            image->setPixelSpacing(list.at(0).toDouble(), list.at(1).toDouble());
-            ok = true;
-        }
-        else
-        {
-            DEBUG_LOG("No s'ha trobat cap valor de pixel spacing definit de forma estàndar esperada");
-        }
+        image->setPixelSpacing(spacingVector.x(), spacingVector.y());
+    }
+    else
+    {
+        DEBUG_LOG("No s'ha trobat cap valor de pixel spacing definit de forma estàndar esperada.");
     }
 
     return ok;
 }
+
 }
