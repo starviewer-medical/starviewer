@@ -82,6 +82,10 @@ private:
 
     /// Ens diu si el SOP Class UID es correspon amb el d'una imatge enhanced
     bool isEnhancedImageSOPClass(const QString &sopClassUID);
+
+    /// Validates the spacing string and sets it to the given image if it's well formatted.
+    /// Returns true on success, false otherwise
+    bool validateAndSetPixelSpacing(Image *image, const QString &spacing);
 };
 
 }
