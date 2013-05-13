@@ -55,9 +55,13 @@ private:
     void readOrigin(const DICOMTagReader &dicomTagReader);
     /// Reads rescale values from the DICOM per-frame functional groups sequence, if present.
     void readPerFrameRescale(const DICOMTagReader &dicomTagReader);
-    /// Decides the appropiate initial scalar type for the image data according to the range of values contained in the first frame of the image and sets the
-    /// number of scalar components. The scalar type may change to a bigger one while reading all the data.
-    void decideInitialScalarTypeAndNumberOfComponents(const DICOMTagReader &dicomTagReader);
+    /// Decides the appropiate initial scalar type for the image data according to the range of values contained in one frame of the image and sets the number
+    /// of scalar components. The scalar type may change to a bigger one while reading all the data. Returns false in case of error, if it can't decide the
+    /// scalar type.
+    bool decideInitialScalarTypeAndNumberOfComponents();
+    /// Decides the appropiate initial scalar type for the image data according to the range of values contained in the given frame of the given image file and
+    /// sets the number of scalar components. Returns false in case of error, if it can't decide the scalar type.
+    bool decideInitialScalarTypeAndNumberOfComponents(const char *filename, int frame);
 
     /// Loads image data from the file(s) for the given update extent.
     bool loadData(int updateExtent[6]);
