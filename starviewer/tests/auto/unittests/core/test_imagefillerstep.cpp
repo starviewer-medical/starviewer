@@ -355,10 +355,6 @@ void test_ImageFillerStep::fillIndividually_ShouldFillWellFormattedPixelSpacingP
     reader = createReader(0, "RF", UIDXRayFluoroscopyImageStorage);
     reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
     QTest::newRow("RF PixelSpacing - well formatted") << reader << imageWithNoPixelSpacing;
-    
-    reader = createReader(0, "XRF", UIDXRayFluoroscopyImageStorage);
-    reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
-    QTest::newRow("XRF PixelSpacing - well formatted") << reader << imageWithNoPixelSpacing;
 
     reader = createReader(0, "US", UIDUltrasoundImageStorage);
     reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
@@ -434,10 +430,10 @@ void test_ImageFillerStep::fillIndividually_ShouldFillWellFormattedPixelSpacingP
     reader->addTag(DICOMNumberOfFrames, 1);
     QTest::newRow("Enhanced XA PixelSpacing - well formatted") << reader << imageWithNoPixelSpacing;
     
-    reader = createReader(0, "XRF", UIDEnhancedXRFImageStorage);
+    reader = createReader(0, "RF", UIDEnhancedXRFImageStorage);
     reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
     reader->addTag(DICOMNumberOfFrames, 1);
-    QTest::newRow("Enhanced XRF PixelSpacing - well formatted") << reader << imageWithNoPixelSpacing;
+    QTest::newRow("Enhanced RF PixelSpacing - well formatted") << reader << imageWithNoPixelSpacing;
     
     reader = createReader(0, "US", UIDEnhancedUSVolumeStorage);
     reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
@@ -503,11 +499,6 @@ void test_ImageFillerStep::fillIndividually_ShouldNotFillBadFormattedPixelSpacin
         reader = createReader(0, "RF", UIDXRayFluoroscopyImageStorage);
         reader->addTag(DICOMPixelSpacing, badFormattedPixelSpacingString);
         testRowDescription ="RF PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
-        QTest::newRow(qPrintable(testRowDescription)) << reader;
-    
-        reader = createReader(0, "XRF", UIDXRayFluoroscopyImageStorage);
-        reader->addTag(DICOMPixelSpacing, badFormattedPixelSpacingString);
-        testRowDescription ="XRF PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
         QTest::newRow(qPrintable(testRowDescription)) << reader;
 
         reader = createReader(0, "US", UIDUltrasoundImageStorage);
@@ -595,10 +586,10 @@ void test_ImageFillerStep::fillIndividually_ShouldNotFillBadFormattedPixelSpacin
         testRowDescription ="Enhanced XA PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
         QTest::newRow(qPrintable(testRowDescription)) << reader;
     
-        reader = createReader(0, "XRF", UIDEnhancedXRFImageStorage);
+        reader = createReader(0, "RF", UIDEnhancedXRFImageStorage);
         reader->addTag(DICOMPixelSpacing, badFormattedPixelSpacingString);
         reader->addTag(DICOMNumberOfFrames, 1);
-        testRowDescription ="Enhanced XRF PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
+        testRowDescription ="Enhanced RF PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
         QTest::newRow(qPrintable(testRowDescription)) << reader;
     
         reader = createReader(0, "US", UIDEnhancedUSVolumeStorage);
@@ -685,10 +676,6 @@ void test_ImageFillerStep::fillIndividually_ShouldFillWellFormattedImagerPixelSp
     reader = createReader(0, "RF", UIDXRayFluoroscopyImageStorage);
     reader->addTag(DICOMImagerPixelSpacing, wellFormattedPixelSpacingString);
     QTest::newRow("RF PixelSpacing - well formatted") << reader << imageWithPixelSpacing;
-    
-    reader = createReader(0, "XRF", UIDXRayFluoroscopyImageStorage);
-    reader->addTag(DICOMImagerPixelSpacing, wellFormattedPixelSpacingString);
-    QTest::newRow("XRF PixelSpacing - well formatted") << reader << imageWithPixelSpacing;
 
     reader = createReader(0, "OP", UIDSecondaryCaptureImageStorage);
     reader->addTag(DICOMImagerPixelSpacing, wellFormattedPixelSpacingString);
@@ -720,10 +707,10 @@ void test_ImageFillerStep::fillIndividually_ShouldFillWellFormattedImagerPixelSp
     reader->addTag(DICOMNumberOfFrames, 1);
     QTest::newRow("Enhanced XA PixelSpacing - well formatted") << reader << imageWithPixelSpacing;
     
-    reader = createReader(0, "XRF", UIDEnhancedXRFImageStorage);
+    reader = createReader(0, "RF", UIDEnhancedXRFImageStorage);
     reader->addTag(DICOMImagerPixelSpacing, wellFormattedPixelSpacingString);
     reader->addTag(DICOMNumberOfFrames, 1);
-    QTest::newRow("Enhanced XRF PixelSpacing - well formatted") << reader << imageWithPixelSpacing;
+    QTest::newRow("Enhanced RF PixelSpacing - well formatted") << reader << imageWithPixelSpacing;
     
     // Enhanced modalities that should ignore ImagerPixelSpacing tag
     reader = createReader(0, "CT", UIDEnhancedCTImageStorage);
