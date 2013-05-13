@@ -29,6 +29,12 @@ private slots:
     void fillIndividually_ShouldCreateSeparateVolumesForDifferentSpacings_data();
     void fillIndividually_ShouldCreateSeparateVolumesForDifferentSpacings();
 
+    void fillIndividually_ShouldFillWellFormattedPixelSpacingProperly_data();
+    void fillIndividually_ShouldFillWellFormattedPixelSpacingProperly();
+
+    void fillIndividually_ShouldNotFillBadFormattedPixelSpacing_data();
+    void fillIndividually_ShouldNotFillBadFormattedPixelSpacing();
+
 private:
 
     static TestingDICOMTagReader* createReader(int i, const QString &modality = "CT", const QString &SOPClassUID = UIDCTImageStorage);
@@ -39,6 +45,7 @@ private:
 Q_DECLARE_METATYPE(TestingDICOMTagReader*)
 Q_DECLARE_METATYPE(QList<TestingDICOMTagReader*>)
 Q_DECLARE_METATYPE(QList<int>)
+Q_DECLARE_METATYPE(Image*)
 
 void test_ImageFillerStep::fillIndividually_ShouldReturnExpectedValue_data()
 {
@@ -309,6 +316,322 @@ void test_ImageFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffer
 void test_ImageFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDifferentSpacings()
 {
     checkVolumeNumberInSeries();
+}
+
+void test_ImageFillerStep::fillIndividually_ShouldFillWellFormattedPixelSpacingProperly_data()
+{
+    QTest::addColumn<TestingDICOMTagReader*>("tagReader");
+    QTest::addColumn<Image*>("expectedResultingImage");
+
+    TestingDICOMTagReader *reader = 0;
+    Image *imageWithNoPixelSpacing =  new Image(this);
+    imageWithNoPixelSpacing->setPixelSpacing(0, 0);
+    QString wellFormattedPixelSpacingString("1\\1");
+    
+    // Modalities that do not take into account PixelSpacing tag, although it exists
+    reader = createReader(0, "CR", UIDComputedRadiographyImageStorage);
+    reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
+    QTest::newRow("CR PixelSpacing - well formatted") << reader << imageWithNoPixelSpacing;
+
+    reader = createReader(0, "DX", UIDDigitalXRayImageStorageForPresentation);
+    reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
+    QTest::newRow("DX PixelSpacing - well formatted") << reader << imageWithNoPixelSpacing;
+    
+    reader = createReader(0, "MG", UIDDigitalMammographyXRayImageStorageForPresentation);
+    reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
+    QTest::newRow("MG PixelSpacing - well formatted") << reader << imageWithNoPixelSpacing;
+
+    reader = createReader(0, "XA", UIDXRayAngiographicImageStorage);
+    reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
+    QTest::newRow("XA PixelSpacing - well formatted") << reader << imageWithNoPixelSpacing;
+
+    reader = createReader(0, "XC", UIDVLPhotographicImageStorage);
+    reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
+    QTest::newRow("XC PixelSpacing - well formatted") << reader << imageWithNoPixelSpacing;
+    
+    reader = createReader(0, "RF", UIDXRayFluoroscopyImageStorage);
+    reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
+    QTest::newRow("RF PixelSpacing - well formatted") << reader << imageWithNoPixelSpacing;
+    
+    reader = createReader(0, "XRF", UIDXRayFluoroscopyImageStorage);
+    reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
+    QTest::newRow("XRF PixelSpacing - well formatted") << reader << imageWithNoPixelSpacing;
+
+    reader = createReader(0, "US", UIDUltrasoundImageStorage);
+    reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
+    QTest::newRow("US PixelSpacing - well formatted") << reader << imageWithNoPixelSpacing;
+    
+    reader = createReader(0, "US", UIDUltrasoundMultiframeImageStorage);
+    reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
+    QTest::newRow("US Multiframe PixelSpacing - well formatted") << reader << imageWithNoPixelSpacing;
+
+    reader = createReader(0, "OP", UIDSecondaryCaptureImageStorage);
+    reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
+    QTest::newRow("OP (SC SOP Class) PixelSpacing - well formatted") << reader << imageWithNoPixelSpacing;
+
+    reader = createReader(0, "OP", UIDOphthalmicPhotography16BitImageStorage);
+    reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
+    QTest::newRow("OP (16 bit SOP Class) PixelSpacing - well formatted") << reader << imageWithNoPixelSpacing;
+
+    reader = createReader(0, "OP", UIDOphthalmicPhotography8BitImageStorage);
+    reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
+    QTest::newRow("OP (8 bit SOP Class) PixelSpacing - well formatted") << reader << imageWithNoPixelSpacing;
+    
+    reader = createReader(0, "SC", UIDSecondaryCaptureImageStorage);
+    reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
+    QTest::newRow("SC PixelSpacing - well formatted") << reader << imageWithNoPixelSpacing;
+
+    reader = createReader(0, "NM", UIDSecondaryCaptureImageStorage);
+    reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
+    QTest::newRow("NM PixelSpacing - well formatted") << reader << imageWithNoPixelSpacing;
+    
+    reader = createReader(0, "ES", UIDSecondaryCaptureImageStorage);
+    reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
+    QTest::newRow("ES PixelSpacing - well formatted") << reader << imageWithNoPixelSpacing;
+    
+    // TODO This case should take into account PixelSpacing!
+    reader = createReader(0, "PT", UIDPETImageStorage);
+    reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
+    QTest::newRow("PT PixelSpacing - well formatted") << reader << imageWithNoPixelSpacing;
+    
+    // Modalities that take into account PixelSpacing
+    Image *imageWithPixelSpacing =  new Image(this);
+    imageWithPixelSpacing->setPixelSpacing(1, 1);
+    
+    reader = createReader(0, "CT", UIDCTImageStorage);
+    reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
+    QTest::newRow("CT PixelSpacing - well formatted") << reader << imageWithPixelSpacing;
+    
+    reader = createReader(0, "MR", UIDMRImageStorage);
+    reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
+    QTest::newRow("MR PixelSpacing - well formatted") << reader << imageWithPixelSpacing;
+
+    reader = createReader(0, "PET", UIDPETImageStorage);
+    reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
+    QTest::newRow("PET PixelSpacing - well formatted") << reader << imageWithPixelSpacing;
+    
+    // Enhanced modalities, should ignore PixelSpacing tag
+    reader = createReader(0, "CT", UIDEnhancedCTImageStorage);
+    reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
+    reader->addTag(DICOMNumberOfFrames, 1);
+    QTest::newRow("Enhanced CT PixelSpacing - well formatted") << reader << imageWithNoPixelSpacing;
+    
+    reader = createReader(0, "MR", UIDEnhancedMRImageStorage);
+    reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
+    reader->addTag(DICOMNumberOfFrames, 1);
+    QTest::newRow("Enhanced MR PixelSpacing - well formatted") << reader << imageWithNoPixelSpacing;
+    
+    reader = createReader(0, "MR", UIDEnhancedMRColorImageStorage);
+    reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
+    reader->addTag(DICOMNumberOfFrames, 1);
+    QTest::newRow("Enhanced MR Color PixelSpacing - well formatted") << reader << imageWithNoPixelSpacing;
+    
+    reader = createReader(0, "PET", UIDEnhancedPETImageStorage);
+    reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
+    reader->addTag(DICOMNumberOfFrames, 1);
+    QTest::newRow("Enhanced PET PixelSpacing - well formatted") << reader << imageWithNoPixelSpacing;
+    
+    reader = createReader(0, "XA", UIDEnhancedXAImageStorage);
+    reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
+    reader->addTag(DICOMNumberOfFrames, 1);
+    QTest::newRow("Enhanced XA PixelSpacing - well formatted") << reader << imageWithNoPixelSpacing;
+    
+    reader = createReader(0, "XRF", UIDEnhancedXRFImageStorage);
+    reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
+    reader->addTag(DICOMNumberOfFrames, 1);
+    QTest::newRow("Enhanced XRF PixelSpacing - well formatted") << reader << imageWithNoPixelSpacing;
+    
+    reader = createReader(0, "US", UIDEnhancedUSVolumeStorage);
+    reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
+    reader->addTag(DICOMNumberOfFrames, 1);
+    QTest::newRow("Enhanced US Volume PixelSpacing - well formatted") << reader << imageWithNoPixelSpacing;
+}
+
+void test_ImageFillerStep::fillIndividually_ShouldFillWellFormattedPixelSpacingProperly()
+{
+    QFETCH(TestingDICOMTagReader*, tagReader);
+    QFETCH(Image*, expectedResultingImage);
+
+    Series *series = new Series(this);
+    PatientFillerInput *input = new PatientFillerInput();
+    input->setCurrentSeries(series);
+    ImageFillerStep step;
+    step.setInput(input);
+    input->setDICOMFile(tagReader);
+    
+    QCOMPARE(step.fillIndividually(), true);
+    Image *image = series->getImageByIndex(0);
+    QVERIFY2(image, "Returned image is null");
+    QCOMPARE(image->getPixelSpacing()[0], expectedResultingImage->getPixelSpacing()[0]);
+    QCOMPARE(image->getPixelSpacing()[1], expectedResultingImage->getPixelSpacing()[1]);
+}
+
+void test_ImageFillerStep::fillIndividually_ShouldNotFillBadFormattedPixelSpacing_data()
+{
+    QTest::addColumn<TestingDICOMTagReader*>("tagReader");
+
+    TestingDICOMTagReader *reader = 0;
+    QString testRowDescription;
+    QStringList badFormattedPixelSpacingList;
+    badFormattedPixelSpacingList << "1\\1\\" << "abc" << "1" << "a\\b";
+    
+    foreach (const QString &badFormattedPixelSpacingString, badFormattedPixelSpacingList)
+    {
+        reader = createReader(0, "CR", UIDComputedRadiographyImageStorage);
+        reader->addTag(DICOMPixelSpacing, badFormattedPixelSpacingString);
+        testRowDescription = "CR PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
+        QTest::newRow(qPrintable(testRowDescription)) << reader;
+
+        reader = createReader(0, "DX", UIDDigitalXRayImageStorageForPresentation);
+        reader->addTag(DICOMPixelSpacing, badFormattedPixelSpacingString);
+        testRowDescription ="DX PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
+        QTest::newRow(qPrintable(testRowDescription)) << reader;
+    
+        reader = createReader(0, "MG", UIDDigitalMammographyXRayImageStorageForPresentation);
+        reader->addTag(DICOMPixelSpacing, badFormattedPixelSpacingString);
+        testRowDescription ="MG PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
+        QTest::newRow(qPrintable(testRowDescription)) << reader;
+
+        reader = createReader(0, "XA", UIDXRayAngiographicImageStorage);
+        reader->addTag(DICOMPixelSpacing, badFormattedPixelSpacingString);
+        testRowDescription ="XA PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
+        QTest::newRow(qPrintable(testRowDescription)) << reader;
+
+        reader = createReader(0, "XC", UIDVLPhotographicImageStorage);
+        reader->addTag(DICOMPixelSpacing, badFormattedPixelSpacingString);
+        testRowDescription ="XC PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
+        QTest::newRow(qPrintable(testRowDescription)) << reader;
+    
+        reader = createReader(0, "RF", UIDXRayFluoroscopyImageStorage);
+        reader->addTag(DICOMPixelSpacing, badFormattedPixelSpacingString);
+        testRowDescription ="RF PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
+        QTest::newRow(qPrintable(testRowDescription)) << reader;
+    
+        reader = createReader(0, "XRF", UIDXRayFluoroscopyImageStorage);
+        reader->addTag(DICOMPixelSpacing, badFormattedPixelSpacingString);
+        testRowDescription ="XRF PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
+        QTest::newRow(qPrintable(testRowDescription)) << reader;
+
+        reader = createReader(0, "US", UIDUltrasoundImageStorage);
+        reader->addTag(DICOMPixelSpacing, badFormattedPixelSpacingString);
+        testRowDescription ="US PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
+        QTest::newRow(qPrintable(testRowDescription)) << reader;
+    
+        reader = createReader(0, "US", UIDUltrasoundMultiframeImageStorage);
+        reader->addTag(DICOMPixelSpacing, badFormattedPixelSpacingString);
+        testRowDescription ="US Multiframe PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
+        QTest::newRow(qPrintable(testRowDescription)) << reader;
+
+        reader = createReader(0, "OP", UIDSecondaryCaptureImageStorage);
+        reader->addTag(DICOMPixelSpacing, badFormattedPixelSpacingString);
+        testRowDescription ="OP (SC SOP Class) PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
+        QTest::newRow(qPrintable(testRowDescription)) << reader;
+
+        reader = createReader(0, "OP", UIDOphthalmicPhotography16BitImageStorage);
+        reader->addTag(DICOMPixelSpacing, badFormattedPixelSpacingString);
+        testRowDescription ="OP (16 bit SOP Class) PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
+        QTest::newRow(qPrintable(testRowDescription)) << reader;
+
+        reader = createReader(0, "OP", UIDOphthalmicPhotography8BitImageStorage);
+        reader->addTag(DICOMPixelSpacing, badFormattedPixelSpacingString);
+        testRowDescription ="OP (8 bit SOP Class) PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
+        QTest::newRow(qPrintable(testRowDescription)) << reader;
+    
+        reader = createReader(0, "SC", UIDSecondaryCaptureImageStorage);
+        reader->addTag(DICOMPixelSpacing, badFormattedPixelSpacingString);
+        testRowDescription ="SC PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
+        QTest::newRow(qPrintable(testRowDescription)) << reader;
+
+        reader = createReader(0, "NM", UIDSecondaryCaptureImageStorage);
+        reader->addTag(DICOMPixelSpacing, badFormattedPixelSpacingString);
+        testRowDescription ="NM PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
+        QTest::newRow(qPrintable(testRowDescription)) << reader;
+    
+        reader = createReader(0, "ES", UIDSecondaryCaptureImageStorage);
+        reader->addTag(DICOMPixelSpacing, badFormattedPixelSpacingString);
+        testRowDescription ="ES PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
+        QTest::newRow(qPrintable(testRowDescription)) << reader;
+    
+        reader = createReader(0, "PT", UIDPETImageStorage);
+        reader->addTag(DICOMPixelSpacing, badFormattedPixelSpacingString);
+        testRowDescription ="PT PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
+        QTest::newRow(qPrintable(testRowDescription)) << reader;
+    
+        reader = createReader(0, "CT", UIDCTImageStorage);
+        reader->addTag(DICOMPixelSpacing, badFormattedPixelSpacingString);
+        testRowDescription ="CT PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
+        QTest::newRow(qPrintable(testRowDescription)) << reader;
+    
+        reader = createReader(0, "MR", UIDMRImageStorage);
+        reader->addTag(DICOMPixelSpacing, badFormattedPixelSpacingString);
+        testRowDescription ="MR PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
+        QTest::newRow(qPrintable(testRowDescription)) << reader;
+
+        reader = createReader(0, "PET", UIDPETImageStorage);
+        reader->addTag(DICOMPixelSpacing, badFormattedPixelSpacingString);
+        testRowDescription ="PET PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
+        QTest::newRow(qPrintable(testRowDescription)) << reader;
+    
+        reader = createReader(0, "CT", UIDEnhancedCTImageStorage);
+        reader->addTag(DICOMPixelSpacing, badFormattedPixelSpacingString);
+        reader->addTag(DICOMNumberOfFrames, 1);
+        testRowDescription ="Enhanced CT PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
+        QTest::newRow(qPrintable(testRowDescription)) << reader;
+    
+        reader = createReader(0, "MR", UIDEnhancedMRImageStorage);
+        reader->addTag(DICOMPixelSpacing, badFormattedPixelSpacingString);
+        reader->addTag(DICOMNumberOfFrames, 1);
+        testRowDescription ="Enhanced MR PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
+        QTest::newRow(qPrintable(testRowDescription)) << reader;
+    
+        reader = createReader(0, "MR", UIDEnhancedMRColorImageStorage);
+        reader->addTag(DICOMPixelSpacing, badFormattedPixelSpacingString);
+        reader->addTag(DICOMNumberOfFrames, 1);
+        testRowDescription ="Enhanced MR Color PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
+        QTest::newRow(qPrintable(testRowDescription)) << reader;
+    
+        reader = createReader(0, "PET", UIDEnhancedPETImageStorage);
+        reader->addTag(DICOMPixelSpacing, badFormattedPixelSpacingString);
+        reader->addTag(DICOMNumberOfFrames, 1);
+        testRowDescription ="Enhanced PET PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
+        QTest::newRow(qPrintable(testRowDescription)) << reader;
+    
+        reader = createReader(0, "XA", UIDEnhancedXAImageStorage);
+        reader->addTag(DICOMPixelSpacing, badFormattedPixelSpacingString);
+        reader->addTag(DICOMNumberOfFrames, 1);
+        testRowDescription ="Enhanced XA PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
+        QTest::newRow(qPrintable(testRowDescription)) << reader;
+    
+        reader = createReader(0, "XRF", UIDEnhancedXRFImageStorage);
+        reader->addTag(DICOMPixelSpacing, badFormattedPixelSpacingString);
+        reader->addTag(DICOMNumberOfFrames, 1);
+        testRowDescription ="Enhanced XRF PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
+        QTest::newRow(qPrintable(testRowDescription)) << reader;
+    
+        reader = createReader(0, "US", UIDEnhancedUSVolumeStorage);
+        reader->addTag(DICOMPixelSpacing, badFormattedPixelSpacingString);
+        reader->addTag(DICOMNumberOfFrames, 1);
+        testRowDescription ="Enhanced US Volume PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
+        QTest::newRow(qPrintable(testRowDescription)) << reader;
+    }
+}
+
+void test_ImageFillerStep::fillIndividually_ShouldNotFillBadFormattedPixelSpacing()
+{
+    QFETCH(TestingDICOMTagReader*, tagReader);
+
+    Series *series = new Series(this);
+    PatientFillerInput *input = new PatientFillerInput();
+    input->setCurrentSeries(series);
+    ImageFillerStep step;
+    step.setInput(input);
+    input->setDICOMFile(tagReader);
+    
+    QCOMPARE(step.fillIndividually(), true);
+    Image *image = series->getImageByIndex(0);
+    QVERIFY2(image, "Returned image is null");
+    QCOMPARE(image->getPixelSpacing()[0], .0);
+    QCOMPARE(image->getPixelSpacing()[1], .0);
 }
 
 TestingDICOMTagReader* test_ImageFillerStep::createReader(int i, const QString &modality, const QString &SOPClassUID)
