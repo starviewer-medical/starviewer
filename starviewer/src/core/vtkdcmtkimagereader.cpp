@@ -252,6 +252,12 @@ int VtkDcmtkImageReader::RequestInformation(vtkInformation *vtkNotUsed(request),
         return 0;
     }
 
+    if (!decideInitialScalarTypeAndNumberOfComponents())
+    {
+        ERROR_LOG("Can't decide a scalar type for the image. This may be due to corrupt data.");
+        return 0;
+    }
+
     this->SetNumberOfOutputPorts(1);
 
     // Allocate!
@@ -325,7 +331,6 @@ bool VtkDcmtkImageReader::readInformation(const QString &filename)
     readExtent(dicomTagReader);
     readSpacing(dicomTagReader);
     readOrigin(dicomTagReader);
-    decideInitialScalarTypeAndNumberOfComponents(dicomTagReader);
 
     // If we have a multiframe volume, read all per-frame rescale values now and keep them for later
     // Reading them individually while reading data is too slow
@@ -479,11 +484,44 @@ void VtkDcmtkImageReader::readPerFrameRescale(const DICOMTagReader &dicomTagRead
     }
 }
 
-void VtkDcmtkImageReader::decideInitialScalarTypeAndNumberOfComponents(const DICOMTagReader &dicomTagReader)
+bool VtkDcmtkImageReader::decideInitialScalarTypeAndNumberOfComponents()
 {
-    DcmDataset *dataset = dicomTagReader.getDcmDataset();
-    DicomImage image(dataset, dataset->getOriginalXfer(), CIF_UsePartialAccessToPixelData, 0, 1);
-    
+    bool hasDecidedScalarType = false;
+
+    if (this->FileName)
+    {
+        if (!m_isMultiframe)
+        {
+            hasDecidedScalarType = decideInitialScalarTypeAndNumberOfComponents(this->FileName, 0);
+        }
+        else
+        {
+            for (int i = this->DataExtent[4]; !hasDecidedScalarType && i <= this->DataExtent[5]; i++)
+            {
+                hasDecidedScalarType = decideInitialScalarTypeAndNumberOfComponents(this->FileName, i);
+            }
+        }
+    }
+    else if (this->FileNames && this->FileNames->GetNumberOfValues() > 0)
+    {
+        for (int i = 0; !hasDecidedScalarType && i < this->FileNames->GetNumberOfValues(); i++)
+        {
+            hasDecidedScalarType = decideInitialScalarTypeAndNumberOfComponents(this->FileNames->GetValue(i), i);
+        }
+    }
+
+    return hasDecidedScalarType;
+}
+
+bool VtkDcmtkImageReader::decideInitialScalarTypeAndNumberOfComponents(const char *filename, int frame)
+{
+    DicomImage image(filename, CIF_UsePartialAccessToPixelData, frame, 1);
+
+    if (image.getStatus() != EIS_Normal)
+    {
+        return false;
+    }
+
     if (image.isMonochrome())
     {
         EP_Representation representation = image.getInterData()->getRepresentation();
@@ -497,6 +535,8 @@ void VtkDcmtkImageReader::decideInitialScalarTypeAndNumberOfComponents(const DIC
         this->NumberOfScalarComponents = 3;
         m_isMonochrome = false;
     }
+
+    return true;
 }
 
 bool VtkDcmtkImageReader::loadData(int updateExtent[6])
@@ -574,6 +614,12 @@ void VtkDcmtkImageReader::loadMultiframeFile(const char *filename, void *buffer,
 
 void VtkDcmtkImageReader::copyDcmtkImageToBuffer(void *buffer, DicomImage &dicomImage)
 {
+    if (dicomImage.getStatus() != EIS_Normal)
+    {
+        ERROR_LOG("Found corrupt image or frame! Skipping copy.");
+        return;
+    }
+
     if (m_isMonochrome)
     {
         // Monochrome image, copy internal data
