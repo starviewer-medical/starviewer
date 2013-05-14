@@ -1,5 +1,6 @@
 #include "autotest.h"
 #include "qapplicationmainwindow.h"
+#include "inputoutputsettings.h"
 #include "patient.h"
 
 using namespace udg;
@@ -10,6 +11,8 @@ class test_QApplicationMainWindow : public QObject {
 Q_OBJECT
 
 private slots:
+    void initTestCase();
+
     void getCountQApplicationMainWindow_ShoudReturnExpectedNumberOfQApplicationMainWindows();
     void getQApplicationMainWindows_ShouldReturnExpectedQApplicationMainWindowList();
     void setPatientInNewWindow_ShouldReturnNewWindowWithExpectedPatient_data();
@@ -18,6 +21,13 @@ private slots:
 private:
     int countSameMainWindowObjects(const QList<QApplicationMainWindow*> &originalObjects, const QList<QApplicationMainWindow*> &gottenObjects);
 };
+
+void test_QApplicationMainWindow::initTestCase()
+{
+    // This is needed to initialize default settings values
+    InputOutputSettings inputOutputSettings;
+    inputOutputSettings.init();
+}
 
 void test_QApplicationMainWindow::getCountQApplicationMainWindow_ShoudReturnExpectedNumberOfQApplicationMainWindows()
 {
