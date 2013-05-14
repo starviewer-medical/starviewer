@@ -3,6 +3,7 @@
 
 #include "imageoverlaytesthelper.h"
 #include "drawerbitmap.h"
+#include "mathtools.h"
 
 #include <gdcmOverlay.h>
 
@@ -309,7 +310,9 @@ void test_ImageOverlay::fromGDCMOverlay_ReturnsExpectedValues_data()
     overlayWithData.SetOrigin(origin);
     overlayWithData.SetOverlay(gdcmBuffer, rows * columns);
 
-    unsigned char *imageOverlayBuffer = new unsigned char[rows * columns];
+    // #1903: buffer size has to be a multiple of 8 due to GetUnpackBuffer implementation
+    int bufferSize = MathTools::roundUpToMultipleOfNumber(rows * columns, 8);
+    unsigned char *imageOverlayBuffer = new unsigned char[bufferSize];
     overlayWithData.GetUnpackBuffer(imageOverlayBuffer);
     
     ImageOverlay imageOverlay;
