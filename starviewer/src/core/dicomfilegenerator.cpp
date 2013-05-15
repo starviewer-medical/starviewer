@@ -44,7 +44,7 @@ bool DICOMFileGenerator::setDirPath(QString path)
 void DICOMFileGenerator::fillPatientInfo(DICOMWriter *writer, Patient *patient)
 {
     DICOMValueAttribute patientsName;
-    patientsName.setTag(DICOMPatientsName);
+    patientsName.setTag(DICOMPatientName);
     patientsName.setValue(patient->getFullName());
     writer->addValueAttribute(&patientsName);
 
@@ -54,12 +54,12 @@ void DICOMFileGenerator::fillPatientInfo(DICOMWriter *writer, Patient *patient)
     writer->addValueAttribute(&patientID);
 
     DICOMValueAttribute patientBirthDate;
-    patientBirthDate.setTag(DICOMPatientsBirthDate);
+    patientBirthDate.setTag(DICOMPatientBirthDate);
     patientBirthDate.setValue(patient->getBirthDate());
     writer->addValueAttribute(&patientBirthDate);
 
     DICOMValueAttribute patientSex;
-    patientSex.setTag(DICOMPatientsSex);
+    patientSex.setTag(DICOMPatientSex);
     patientSex.setValue(patient->getSex());
     writer->addValueAttribute(&patientSex);
 
@@ -83,7 +83,7 @@ void DICOMFileGenerator::fillStudyInfo(DICOMWriter *writer, Study *study)
     writer->addValueAttribute(&studyTime);
 
     DICOMValueAttribute referringName;
-    referringName.setTag(DICOMReferringPhysiciansName);
+    referringName.setTag(DICOMReferringPhysicianName);
     referringName.setValue(study->getReferringPhysiciansName());
     writer->addValueAttribute(&referringName);
 
@@ -109,7 +109,7 @@ void DICOMFileGenerator::fillStudyInfo(DICOMWriter *writer, Study *study)
     if (!study->getPatientAge().isEmpty())
     {
         DICOMValueAttribute patientAge;
-        patientAge.setTag(DICOMPatientsAge);
+        patientAge.setTag(DICOMPatientAge);
         patientAge.setValue(study->getPatientAge());
         writer->addValueAttribute(&patientAge);
     }
