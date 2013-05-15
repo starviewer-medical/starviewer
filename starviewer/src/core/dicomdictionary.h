@@ -94,6 +94,42 @@ const char* const UIDEnhancedUSVolumeStorage                                = "1
 const char* const UIDEnhancedMRColorImageStorage                            = "1.2.840.10008.5.1.4.1.1.4.3";
 const char* const UIDEnhancedPETImageStorage                                = "1.2.840.10008.5.1.4.1.1.130";
 
+// 2011
+const char* const UIDGeneralAudioWaveformStorage                            = "1.2.840.10008.5.1.4.1.1.9.4.2";
+const char* const UIDArterialPulseWaveformStorage                           = "1.2.840.10008.5.1.4.1.1.9.5.1";
+const char* const UIDRespiratoryWaveformStorage                             = "1.2.840.10008.5.1.4.1.1.9.6.1";
+const char* const UIDXAXRFGrayscaleSoftcopyPresentationStateStorage         = "1.2.840.10008.5.1.4.1.1.11.5";
+const char* const UIDXRay3DAngiographicImageStorage                         = "1.2.840.10008.5.1.4.1.1.13.1.1";
+const char* const UIDXRay3DCraniofacialImageStorage                         = "1.2.840.10008.5.1.4.1.1.13.1.2";
+const char* const UIDBreastTomosynthesisImageStorage                        = "1.2.840.10008.5.1.4.1.1.13.1.3";
+const char* const UIDIntravascularOpticalCoherenceTomographyImageStorageForPresentation = "1.2.840.10008.5.1.4.1.1.14.1";
+const char* const UIDIntravascularOpticalCoherenceTomographyImageStorageForProcessing   = "1.2.840.10008.5.1.4.1.1.14.2";
+const char* const UIDDeformableSpatialRegistrationStorage                  = "1.2.840.10008.5.1.4.1.1.66.3";
+const char* const UIDSegmentationStorage                                   = "1.2.840.10008.5.1.4.1.1.66.4";
+const char* const UIDSurfaceSegmentationStorage                            = "1.2.840.10008.5.1.4.1.1.66.5";
+const char* const UIDOphthalmicTomographyImageStorage                      = "1.2.840.10008.5.1.4.1.1.77.1.5.4";
+const char* const UIDVLWholeSlideMicroscopyImageStorage                    = "1.2.840.10008.5.1.4.1.1.77.1.6";
+const char* const UIDLensometryMeasurementsStorage                         = "1.2.840.10008.5.1.4.1.1.78.1";
+const char* const UIDAutorefractionMeasurementsStorage                     = "1.2.840.10008.5.1.4.1.1.78.2";
+const char* const UIDKeratometryMeasurementsStorage                        = "1.2.840.10008.5.1.4.1.1.78.3";
+const char* const UIDSubjectiveRefractionMeasurementsStorage               = "1.2.840.10008.5.1.4.1.1.78.4";
+const char* const UIDVisualAcuityMeasurementsStorage                       = "1.2.840.10008.5.1.4.1.1.78.5";
+const char* const UIDSpectaclePrescriptionReportStorage                    = "1.2.840.10008.5.1.4.1.1.78.6";
+const char* const UIDOphthalmicAxialMeasurementsStorage                    = "1.2.840.10008.5.1.4.1.1.78.7";
+const char* const UIDIntraocularLensCalculationsStorage                    = "1.2.840.10008.5.1.4.1.1.78.8";
+const char* const UIDMacularGridThicknessAndVolumeReportStorage            = "1.2.840.10008.5.1.4.1.1.79.1";
+const char* const UIDOphthalmicVisualFieldStaticPerimetryMeasurementsStorage            = "1.2.840.10008.5.1.4.1.1.80.1";
+const char* const UIDOphthalmicThicknessMapStorage                         = "1.2.840.10008.5.1.4.1.1.81.1";
+const char* const UIDColonCADSRStorage                                     = "1.2.840.10008.5.1.4.1.1.88.69";
+const char* const UIDImplantationPlanSRDocumentStorage                     = "1.2.840.10008.5.1.4.1.1.88.70";
+const char* const UIDEncapsulatedCDAStorage                                = "1.2.840.10008.5.1.4.1.1.104.2";
+const char* const UIDBasicStructuredDisplayStorage                         = "1.2.840.10008.5.1.4.1.1.131";
+const char* const UIDRTIonPlanStorage                                      = "1.2.840.10008.5.1.4.1.1.481.8";
+const char* const UIDRTIonBeamsTreatmentRecordStorage                      = "1.2.840.10008.5.1.4.1.1.481.9";
+const char* const UIDGenericImplantTemplateStorage                         = "1.2.840.10008.5.1.4.43.1";
+const char* const UIDImplantAssemblyTemplateStorage                        = "1.2.840.10008.5.1.4.44.1";
+const char* const UIDImplantTemplateGroupStorage                           = "1.2.840.10008.5.1.4.45.1";
+
 // Tags
 const DICOMTag DICOMCommandGroupLength(0x0000, 0x0000);
 const DICOMTag DICOMACRNEMACommandGroupLengthToEnd(0x0000, 0x0001);
