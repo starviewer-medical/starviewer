@@ -14,10 +14,10 @@ Patient* CreateInformationModelObject::createPatient(DICOMTagReader *dicomTagRea
 {
     Patient *patient = new Patient;
 
-    patient->setFullName(dicomTagReader->getValueAttributeAsQString(DICOMPatientsName));
+    patient->setFullName(dicomTagReader->getValueAttributeAsQString(DICOMPatientName));
     patient->setID(dicomTagReader->getValueAttributeAsQString(DICOMPatientID));
-    patient->setBirthDate(dicomTagReader->getValueAttributeAsQString(DICOMPatientsBirthDate));
-    patient->setSex(dicomTagReader->getValueAttributeAsQString(DICOMPatientsSex));
+    patient->setBirthDate(dicomTagReader->getValueAttributeAsQString(DICOMPatientBirthDate));
+    patient->setSex(dicomTagReader->getValueAttributeAsQString(DICOMPatientSex));
 
     return patient;
 }
@@ -33,10 +33,10 @@ Study* CreateInformationModelObject::createStudy(DICOMTagReader *dicomTagReader)
     study->setID(dicomTagReader->getValueAttributeAsQString(DICOMStudyID));
     study->setAccessionNumber(dicomTagReader->getValueAttributeAsQString(DICOMAccessionNumber));
     study->setDescription(dicomTagReader->getValueAttributeAsQString(DICOMStudyDescription));
-    study->setPatientAge(dicomTagReader->getValueAttributeAsQString(DICOMPatientsAge));
-    study->setHeight(dicomTagReader->getValueAttributeAsQString(DICOMPatientsSize).toDouble());
-    study->setWeight(dicomTagReader->getValueAttributeAsQString(DICOMPatientsWeight).toDouble());
-    study->setReferringPhysiciansName(dicomTagReader->getValueAttributeAsQString(DICOMReferringPhysiciansName));
+    study->setPatientAge(dicomTagReader->getValueAttributeAsQString(DICOMPatientAge));
+    study->setHeight(dicomTagReader->getValueAttributeAsQString(DICOMPatientSize).toDouble());
+    study->setWeight(dicomTagReader->getValueAttributeAsQString(DICOMPatientWeight).toDouble());
+    study->setReferringPhysiciansName(dicomTagReader->getValueAttributeAsQString(DICOMReferringPhysicianName));
 
     // Afegim la modalitat de l'estudi
     // Tenir en compte si aquest objecte s'utilitza per fer el dicomclassifierfillerstep que ells omplen la modalitat a partir de les series

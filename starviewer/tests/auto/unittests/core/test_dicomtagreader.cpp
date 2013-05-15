@@ -85,9 +85,9 @@ void test_DICOMTagReader::getValueAttribute_ReturnsExpectedValues_data()
         << photometricInterpretationAttribute;
 
     DICOMValueAttribute *patientsNameAttribute = new DICOMValueAttribute;
-    patientsNameAttribute->setTag(DICOMPatientsName);
+    patientsNameAttribute->setTag(DICOMPatientName);
     patientsNameAttribute->setValue(QString("JOHN^DOE"));
-    QTest::newRow("PatientsName (PN VR)") << static_cast<DcmDataset*>(dataset->clone()) << DICOMPatientsName << patientsNameAttribute;
+    QTest::newRow("PatientsName (PN VR)") << static_cast<DcmDataset*>(dataset->clone()) << DICOMPatientName << patientsNameAttribute;
 
     DICOMValueAttribute *studyDateAttribute = new DICOMValueAttribute;
     studyDateAttribute->setTag(DICOMStudyDate);
