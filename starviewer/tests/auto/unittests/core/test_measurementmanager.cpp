@@ -48,19 +48,61 @@ void test_MeasurementManager::setupGetMeasurementUnitsData()
     QTest::addColumn<QString>("expectedString");
 
     Image *image = 0;
+    Series *series = 0;
+    
     QTest::newRow("null image") << image << MeasurementManager::NotAvailable << tr("N/A");
 
     image = new Image(this);
-    QTest::newRow("default pixel spacing values") << image << MeasurementManager::Pixels << tr("px");
+    QTest::newRow("default pixel spacing attributes values") << image << MeasurementManager::Pixels << tr("px");
 
     image = new Image(this);
     image->setPixelSpacing(0.0, 0.0);
     QTest::newRow("pixel spacing = 0.0, 0.0") << image << MeasurementManager::Pixels << tr("px");
 
-    PixelSpacing2D randomSpacing(MathTools::randomDouble(0.1, 3.5), MathTools::randomDouble(0.1, 3.5));
     image = new Image(this);
-    image->setPixelSpacing(randomSpacing);
-    QTest::newRow("any valid pixel spacing => mm") << image << MeasurementManager::Millimetres << tr("mm");
+    image->setImagerPixelSpacing(0.0, 0.0);
+    QTest::newRow("imager pixel spacing = 0.0, 0.0") << image << MeasurementManager::Pixels << tr("px");
+
+    image = new Image(this);
+    image->setPixelSpacing(0.0, 0.0);
+    image->setImagerPixelSpacing(0.0, 0.0);
+    QTest::newRow("imager pixel spacing && pixel spacing = 0.0, 0.0") << image << MeasurementManager::Pixels << tr("px");
+
+    PixelSpacing2D randomSpacing(MathTools::randomDouble(0.1, 3.5), MathTools::randomDouble(0.1, 3.5));
+    QStringList knownModalitiesInMM;
+    knownModalitiesInMM << "CR" << "DX" << "RF" << "XA" << "MG" << "IO" << "OP" << "XC" << "ES" << "CT" << "MR" << "PT" << "SC" << "US" << "NM";
+    
+    foreach (const QString &modality, knownModalitiesInMM)
+    {
+        image = new Image(this);
+        image->setPixelSpacing(randomSpacing);
+        series = new Series(this);
+        series->setModality(modality);
+        image->setParentSeries(series);
+        QTest::newRow(qPrintable(modality + ": valid pixel spacing = > mm")) << image << MeasurementManager::Millimetres << tr("mm");
+    }
+
+    foreach (const QString &modality, knownModalitiesInMM)
+    {
+        image = new Image(this);
+        image->setImagerPixelSpacing(randomSpacing);
+        series = new Series(this);
+        series->setModality(modality);
+        image->setParentSeries(series);
+        QTest::newRow(qPrintable(modality + ": valid imager pixel spacing = > mm")) << image << MeasurementManager::Millimetres << tr("mm");
+    }
+
+    PixelSpacing2D randomSpacing2(MathTools::randomDouble(0.1, 3.5), MathTools::randomDouble(0.1, 3.5));
+    foreach (const QString &modality, knownModalitiesInMM)
+    {
+        image = new Image(this);
+        image->setPixelSpacing(randomSpacing);
+        image->setImagerPixelSpacing(randomSpacing2);
+        series = new Series(this);
+        series->setModality(modality);
+        image->setParentSeries(series);
+        QTest::newRow(qPrintable(modality + ": valid imager pixel spacing & pixel spacing (both present)= > mm")) << image << MeasurementManager::Millimetres << tr("mm");
+    }
 }
 
 void test_MeasurementManager::getMeasurementUnits_ReturnsExpectedValues_data()
