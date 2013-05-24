@@ -23,7 +23,7 @@ VolumePixelData::ItkImageTypePointer ItkAndVtkImageTestHelper::createItkImage(in
 
     itk::ImageRegionIterator<VolumePixelData::ItkImageType> itkIterator(itkImage, itkImage->GetLargestPossibleRegion());
     itkIterator.GoToBegin();
-    VolumePixelData::VoxelType value = 0;
+    VolumePixelData::ItkPixelType value = 0;
 
     while (!itkIterator.IsAtEnd())
     {
@@ -62,8 +62,8 @@ void ItkAndVtkImageTestHelper::createItkAndVtkImages(int dimensions[3], int star
 
     itk::ImageRegionIterator<VolumePixelData::ItkImageType> itkIterator(itkImage, itkImage->GetLargestPossibleRegion());
     itkIterator.GoToBegin();
-    VolumePixelData::VoxelType *vtkPointer = static_cast<VolumePixelData::VoxelType*>(vtkImage->GetScalarPointer());
-    VolumePixelData::VoxelType value = 0;
+    VolumePixelData::ItkPixelType *vtkPointer = static_cast<VolumePixelData::ItkPixelType*>(vtkImage->GetScalarPointer());
+    VolumePixelData::ItkPixelType value = 0;
 
     while (!itkIterator.IsAtEnd())
     {

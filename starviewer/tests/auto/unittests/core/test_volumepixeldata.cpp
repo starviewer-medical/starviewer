@@ -104,8 +104,8 @@ void test_VolumePixelData::setData_itk_ShouldCreateExpectedVtkData()
         QCOMPARE(vtkData->GetExtent()[i], expectedVtkData->GetExtent()[i]);
     }
 
-    VolumePixelData::VoxelType *data = static_cast<VolumePixelData::VoxelType*>(vtkData->GetScalarPointer());
-    VolumePixelData::VoxelType *expectedData = static_cast<VolumePixelData::VoxelType*>(expectedVtkData->GetScalarPointer());
+    VolumePixelData::ItkPixelType *data = static_cast<VolumePixelData::ItkPixelType*>(vtkData->GetScalarPointer());
+    VolumePixelData::ItkPixelType *expectedData = static_cast<VolumePixelData::ItkPixelType*>(expectedVtkData->GetScalarPointer());
     int size = vtkData->GetNumberOfPoints();
 
     for (int i = 0; i < size; i++)
