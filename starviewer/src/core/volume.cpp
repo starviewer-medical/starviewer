@@ -351,12 +351,12 @@ void Volume::getStackDirection(double direction[3], int stack)
     }
 }
 
-Volume::VoxelType* Volume::getScalarPointer(int x, int y, int z)
+void* Volume::getScalarPointer(int x, int y, int z)
 {
     return this->getPixelData()->getScalarPointer(x, y, z);
 }
 
-Volume::VoxelType* Volume::getScalarPointer(int index[3])
+void* Volume::getScalarPointer(int index[3])
 {
     return this->getScalarPointer(index[0], index[1], index[2]);
 }
