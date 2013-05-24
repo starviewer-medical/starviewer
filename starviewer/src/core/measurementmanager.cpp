@@ -3,6 +3,7 @@
 #include "drawerline.h"
 #include "drawerpolygon.h"
 #include "image.h"
+#include "series.h"
 #include "mathtools.h"
 
 namespace udg {
@@ -131,6 +132,80 @@ double MeasurementManager::computeArea(DrawerPolygon *polygon, Image *image, dou
     }
     
     return std::abs(area) * 0.5;
+}
+
+MeasurementManager::MeasurementType MeasurementManager::getDefaultMeasurementType(Image *image)
+{
+    MeasurementType measurementType = NoDefinedUnits;
+    if (!image)
+    {
+        return measurementType;
+    }
+    
+    PixelSpacing2D pixelSpacing = image->getPixelSpacing();
+    bool pixelSpacingIsPresent = pixelSpacing.isValid();
+    PixelSpacing2D imagerPixelSpacing = image->getImagerPixelSpacing();
+    bool imagerPixelSpacingIsPresent = imagerPixelSpacing.isValid();
+    
+    QString modality;
+    if (image->getParentSeries())
+    {
+        modality = image->getParentSeries()->getModality();
+    }
+
+    if (pixelSpacingIsPresent && !imagerPixelSpacingIsPresent)
+    {
+        // Only pixel spacing is present
+        
+        // If only Pixel Spacing is present (e.g., in CR IOD), then Pixel Spacing should be used, but the user 
+        // should be informed that what it means is unknown (reiterating that this is only for projection radiographs
+        // - for 3D stuff like CT and MR, that is the only attribute that should be used and present).
+        if (modality == "CR" || modality == "DX" || modality == "RF" || modality == "XA" || modality == "MG" || modality == "IO"
+            || modality == "OP" || modality == "XC" || modality == "ES")
+        {
+            measurementType = UnknownMeaning;
+        }
+        else if (modality == "CT" || modality == "MR" || modality == "PT" || modality == "SC" || modality == "US" || modality == "NM")
+        {
+            // TODO Maybe SC should go in the prior group but we should then take into account Nominal Scanned Pixel Spacing attribute
+            measurementType = Physical;
+        }
+    }
+    else if (!pixelSpacingIsPresent && imagerPixelSpacingIsPresent)
+    {
+        // Only imager pixel spacing is present
+        if (modality == "MG" && image->getEstimatedRadiographicMagnificationFactor() != 0.0)
+        {
+            // Imager Pixel Spacing * Estimated Radiographic Magnification Factor should be used
+            measurementType = Magnified;
+        }
+        else
+        {
+            // Imager Pixel Spacing should be used
+            measurementType = Detector;
+        }
+    }
+    else if (pixelSpacingIsPresent && imagerPixelSpacingIsPresent)
+    {
+        // Both pixel spacing and imager pixel spacing are present
+        if (pixelSpacing.isEqual(imagerPixelSpacing))
+        {
+            // If both values are equal, measurements are at the detector
+            measurementType = Detector;
+        }
+        else
+        {
+            // If values are different, measurements are calibrated, pixel spacing used
+            measurementType = Calibrated;
+        }
+    }
+    else if (!pixelSpacingIsPresent && !imagerPixelSpacingIsPresent)
+    {
+        // Both pixel spacing and imager pixel spacing are *not* present
+        measurementType = NoDefinedUnits;
+    }
+    
+    return measurementType;
 }
 
 }; // End namespace udg

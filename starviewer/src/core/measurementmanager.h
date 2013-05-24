@@ -16,6 +16,9 @@ class Image;
 */
 class MeasurementManager {
 public:
+
+    enum MeasurementType { Detector, Magnified, Calibrated, Physical, NoDefinedUnits, UnknownMeaning };
+
     enum MeasurementUnitsType { Pixels, Millimetres, NotAvailable };
     
     /// Returns the corresponding measurement units for the given image
@@ -33,6 +36,9 @@ public:
 
     /// Computes the area relative to the polygon, the spacing of the volume it's laying in and the source image
     static double computeArea(DrawerPolygon *polygon, Image *image, double dataSpacing[3]);
+
+    /// Returns the default meaurement type regarding image properties, such as pixel spacing tags and modality
+    static MeasurementType getDefaultMeasurementType(Image *image);
 };
 
 } // End namespace udg
