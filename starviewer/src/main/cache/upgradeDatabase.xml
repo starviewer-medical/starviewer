@@ -30,4 +30,8 @@
         <upgradeCommand>CREATE UNIQUE INDEX IndexPacsDevice_AETitleAddressQueryPort ON PacsRetrievedImages(AETitle, Address, QueryPort)</upgradeCommand>
         <upgradeCommand>ALTER TABLE IMAGE ADD COLUMN RetrievedPACSID INTEGER</upgradeCommand>
     </upgradeDatabaseToRevision>
+    <upgradeDatabaseToRevision updateToRevision="9008">
+        <upgradeCommand>ALTER TABLE IMAGE ADD COLUMN ImagerPixelSpacing TEXT</upgradeCommand>
+        <upgradeCommand>ALTER TABLE IMAGE ADD COLUMN EstimatedRadiographicMagnificationFactor TEXT</upgradeCommand>
+    </upgradeDatabaseToRevision>
 </upgradeDatabase>
