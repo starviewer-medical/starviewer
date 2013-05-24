@@ -142,8 +142,8 @@ public:
     /// Returns a VolumePixelDataIterator pointing to the first voxel.
     VolumePixelDataIterator getIterator();
 
-    /// Obté el valor de la posició del VolumePixelData.
-    VoxelType getScalarValue(int x, int y, int z);
+    /// Returns value of voxel at index [x, y, z].
+    double getScalarValue(int x, int y, int z);
 
     /// Ens calcula si el volum quep a memòria. Si el volum ja ha estat carregat prèviament amb èxit, retornarà cert
     bool fitsIntoMemory();

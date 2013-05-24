@@ -371,9 +371,9 @@ VolumePixelDataIterator Volume::getIterator()
     return this->getPixelData()->getIterator();
 }
 
-Volume::VoxelType Volume::getScalarValue(int x, int y, int z)
+double Volume::getScalarValue(int x, int y, int z)
 {
-    return (double)(*this->getPixelData()->getScalarPointer(x, y, z));
+    return static_cast<double>(*this->getPixelData()->getScalarPointer(x, y, z));
 }
 
 void Volume::convertToNeutralVolume()
