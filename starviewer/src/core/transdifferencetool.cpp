@@ -3,6 +3,7 @@
 #include "logging.h"
 #include "transdifferencetooldata.h"
 #include "volume.h"
+#include "volumepixeldataiterator.h"
 
 #include <vtkCommand.h>
 #include <vtkRenderWindowInteractor.h>
@@ -234,7 +235,6 @@ void TransDifferenceTool::computeSingleDifferenceImage(int dx, int dy, int slice
     // Simplifiquem dient que la translació només pot ser per múltiples del píxel
     // Pintem la diferència al volume a la llesca "slice"
     // Ho fem amb vtk pq és més ràpid
-    Volume::VoxelType *valueRef, *valueMov, *valueDif;
     int indexRef[3];
     int indexMov[3];
     int indexDif[3];
@@ -285,25 +285,25 @@ void TransDifferenceTool::computeSingleDifferenceImage(int dx, int dy, int slice
             indexRef[1] = j;
             indexMov[1] = j - ty;
             indexDif[1] = j;
-            valueRef = mainVolume->getScalarPointer(indexRef);
-            valueMov = mainVolume->getScalarPointer(indexMov);
-            valueDif = differenceVolume->getScalarPointer(indexDif);
+            VolumePixelDataIterator itRef = mainVolume->getIterator(indexRef[0], indexRef[1], indexRef[2]);
+            VolumePixelDataIterator itMov = mainVolume->getIterator(indexMov[0], indexMov[1], indexMov[2]);
+            VolumePixelDataIterator itDif = differenceVolume->getIterator(indexDif[0], indexDif[1], indexDif[2]);
             for (i = 0; i < imin; i++)
             {
-                (*valueDif) = 0;
-                valueDif++;
+                itDif.set(0);
+                ++itDif;
             }
             for (i = imin; i < imax; i++)
             {
-                (*valueDif) = (*valueMov) - (*valueRef);
-                valueRef++;
-                valueMov++;
-                valueDif++;
+                itDif.set(itMov.get<int>() - itRef.get<int>());
+                ++itRef;
+                ++itMov;
+                ++itDif;
             }
             for (i = imax; i < size[0]; i++)
             {
-                (*valueDif) = 0;
-                valueDif++;
+                itDif.set(0);
+                ++itDif;
             }
         }
     }
@@ -318,11 +318,11 @@ void TransDifferenceTool::computeSingleDifferenceImage(int dx, int dy, int slice
     for (j = 0; j < jmin; j++)
     {
         indexDif[1] = j;
-        valueDif = differenceVolume->getScalarPointer(indexDif);
+        VolumePixelDataIterator itDif = differenceVolume->getIterator(indexDif[0], indexDif[1], indexDif[2]);
         for (i = 0; i < size[0]; i++)
         {
-            (*valueDif) = 0;
-            valueDif++;
+            itDif.set(0);
+            ++itDif;
         }
     }
     if (jmax < 0)
@@ -332,11 +332,11 @@ void TransDifferenceTool::computeSingleDifferenceImage(int dx, int dy, int slice
     for (j = jmax; j < size[1]; j++)
     {
         indexDif[1] = j;
-        valueDif = differenceVolume->getScalarPointer(indexDif);
+        VolumePixelDataIterator itDif = differenceVolume->getIterator(indexDif[0], indexDif[1], indexDif[2]);
         for (i = 0; i < size[0]; i++)
         {
-            (*valueDif) = 0;
-            valueDif++;
+            itDif.set(0);
+            ++itDif;
         }
     }
 

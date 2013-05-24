@@ -3,6 +3,7 @@
 #include "logging.h"
 #include "q2dviewer.h"
 #include "volume.h"
+#include "volumepixeldataiterator.h"
 
 // Vtk
 #include <vtkCommand.h>
@@ -66,18 +67,18 @@ void EditorTool::initialize()
         m_volumeCont = 0;
         m_2DViewer->getOverlayInput()->getWholeExtent(ext);
 
-        Volume::VoxelType *value = m_2DViewer->getOverlayInput()->getScalarPointer();
+        VolumePixelDataIterator it = m_2DViewer->getOverlayInput()->getIterator();
         for (i = ext[0]; i <= ext[1]; i++)
         {
             for (j = ext[2]; j <= ext[3]; j++)
             {
                 for (k = ext[4]; k <= ext[5]; k++)
                 {
-                    if ((*value) == m_insideValue)
+                    if (it.get<int>() == m_insideValue)
                     {
                         m_volumeCont++;
                     }
-                    value++;
+                    ++it;
                 }
             }
         }
@@ -328,7 +329,6 @@ void EditorTool::setPaintCursor()
 void EditorTool::eraseMask()
 {
     int i, j;
-    Volume::VoxelType *value;
     double pos[3];
     double origin[3];
     double spacing[3];
@@ -347,10 +347,10 @@ void EditorTool::eraseMask()
         {
             index[0] = centralIndex[0] + i;
             index[1] = centralIndex[1] + j;
-            value = m_2DViewer->getOverlayInput()->getScalarPointer(index);
-            if (value && ((*value) == m_insideValue))
+            VolumePixelDataIterator it = m_2DViewer->getOverlayInput()->getIterator(index[0], index[1], index[2]);
+            if (!it.isNull() && (it.get<int>() == m_insideValue))
             {
-                (*value) = m_outsideValue;
+                it.set(m_outsideValue);
                 m_volumeCont--;
             }
         }
@@ -361,7 +361,6 @@ void EditorTool::paintMask()
 {
     // DEBUG_LOG(QString("Màxim = %1 // Mínim = %2").arg(m_outsideValue).arg(m_insideValue));
     int i, j;
-    Volume::VoxelType *value;
     double pos[3];
     double origin[3];
     double spacing[3];
@@ -379,10 +378,10 @@ void EditorTool::paintMask()
         {
             index[0] = centralIndex[0] + i;
             index[1] = centralIndex[1] + j;
-            value = m_2DViewer->getOverlayInput()->getScalarPointer(index);
-            if (value && ((*value) != m_insideValue))
+            VolumePixelDataIterator it = m_2DViewer->getOverlayInput()->getIterator(index[0], index[1], index[2]);
+            if (!it.isNull() && (it.get<int>() != m_insideValue))
             {
-                (*value) = m_insideValue;
+                it.set(m_insideValue);
                 m_volumeCont++;
             }
         }
@@ -392,7 +391,6 @@ void EditorTool::paintMask()
 void EditorTool::eraseSliceMask()
 {
     int i, j;
-    Volume::VoxelType *value;
     int index[3];
     int ext[6];
     m_2DViewer->getInput()->getWholeExtent(ext);
@@ -403,10 +401,10 @@ void EditorTool::eraseSliceMask()
         {
             index[0] = i;
             index[1] = j;
-            value = m_2DViewer->getOverlayInput()->getScalarPointer(index);
-            if ((*value) == m_insideValue)
+            VolumePixelDataIterator it = m_2DViewer->getOverlayInput()->getIterator(index[0], index[1], index[2]);
+            if (it.get<int>() == m_insideValue)
             {
-                (*value) = m_outsideValue;
+                it.set(m_outsideValue);
                 m_volumeCont--;
             }
         }
@@ -436,10 +434,10 @@ void EditorTool::eraseRegionMaskRecursive(int a, int b, int c)
     m_2DViewer->getInput()->getWholeExtent(ext);
     if ((a >= ext[0]) && (a <= ext[1]) && (b >= ext[2]) && (b <= ext[3]) && (c >= ext[4]) && (c <= ext[5]))
     {
-        Volume::VoxelType *value = m_2DViewer->getOverlayInput()->getScalarPointer(a, b, c);
-        if ((*value) == m_insideValue)
+        VolumePixelDataIterator it = m_2DViewer->getOverlayInput()->getIterator(a, b, c);
+        if (it.get<int>() == m_insideValue)
         {
-            (*value) = m_outsideValue;
+            it.set(m_outsideValue);
             m_volumeCont--;
             eraseRegionMaskRecursive(a + 1, b, c);
             eraseRegionMaskRecursive(a - 1, b, c);
