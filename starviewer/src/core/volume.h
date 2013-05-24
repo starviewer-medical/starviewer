@@ -132,9 +132,10 @@ public:
     /// @param direction[]
     void getStackDirection(double direction[3], int stack = 0);
 
-    /// Obtenim un punter a les dades del VolumePixelData. Veure VolumePixelData::getScalarPointer per més informació.
-    VoxelType* getScalarPointer(int x = 0, int y = 0, int z = 0);
-    VoxelType* getScalarPointer(int index[3]);
+    /// Returns a pointer to the raw pixel data at index [x, y, z]. Avoid its use if possible and prefer using an iterator instead.
+    void* getScalarPointer(int x = 0, int y = 0, int z = 0);
+    /// Returns a pointer to the raw pixel data at the given index. Avoid its use if possible and prefer using an iterator instead.
+    void* getScalarPointer(int index[3]);
 
     /// Returns a VolumePixelDataIterator pointing to the voxel at index [x, y, z].
     VolumePixelDataIterator getIterator(int x, int y, int z);
