@@ -55,10 +55,10 @@ public:
     /// Retorna cert si conté dades carregades.
     bool isLoaded() const;
 
-    /// Obtenim el punter a les dades que es troben en l'índex donat. És un accés a molt baix nivell, ja que obtenim
-    /// el punter de les dades. Retornem el punter transformat al tipus natiu de dades VoxelType.
-    VoxelType* getScalarPointer(int x, int y, int z);
-    VoxelType* getScalarPointer();
+    /// Returns a pointer to the raw pixel data at index [x, y, z]. Avoid its use if possible and prefer using an iterator instead.
+    void* getScalarPointer(int x, int y, int z);
+    /// Returns a pointer to the raw pixel data. Avoid its use if possible and prefer using an iterator instead.
+    void* getScalarPointer();
 
     /// Returns a VolumePixelDataIterator pointing to the voxel at index [x, y, z].
     VolumePixelDataIterator getIterator(int x, int y, int z);

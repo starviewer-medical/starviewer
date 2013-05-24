@@ -113,14 +113,14 @@ bool VolumePixelData::isLoaded() const
     return m_loaded;
 }
 
-VolumePixelData::VoxelType* VolumePixelData::getScalarPointer(int x, int y, int z)
+void* VolumePixelData::getScalarPointer(int x, int y, int z)
 {
-    return static_cast<VolumePixelData::VoxelType*>(this->getVtkData()->GetScalarPointer(x, y, z));
+    return this->getVtkData()->GetScalarPointer(x, y, z);
 }
 
-VolumePixelData::VoxelType* VolumePixelData::getScalarPointer()
+void* VolumePixelData::getScalarPointer()
 {
-    return reinterpret_cast<VolumePixelData::VoxelType*>(this->getVtkData()->GetScalarPointer());
+    return this->getVtkData()->GetScalarPointer();
 }
 
 VolumePixelDataIterator VolumePixelData::getIterator(int x, int y, int z)
