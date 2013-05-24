@@ -7,6 +7,7 @@
 #include <QPair>
 #include <QStringList>
 #include <QPixmap>
+#include <QVector2D>
 
 #include "dicomsource.h"
 #include "imageorientation.h"
@@ -50,6 +51,14 @@ public:
     /// Assignar/Obtenir l'espaiat dels pixels
     void setPixelSpacing(double x, double y);
     const double* getPixelSpacing() const;
+
+    /// Set/Get Imager Pixel Spacing
+    void setImagerPixelSpacing(double x, double y);
+    QVector2D getImagerPixelSpacing() const;
+
+    /// Set/Get Estimated Radiographic Magnification Factor
+    void setEstimatedRadiographicMagnificationFactor(double x);
+    double getEstimatedRadiographicMagnificationFactor() const;
 
     /// Assignar/Obtenir l'slice thickness, aka espaiat de les Z
     void setSliceThickness(double z);
@@ -246,6 +255,17 @@ private:
     // Image Plane Module C.6.7.2
     /// Distància física entre el centre de cada píxel (row,column) en mm. Veure 10.7.1.3. (0028,0030) Tipus 1
     double m_pixelSpacing[2];
+    
+    /// Imager Pixel spacing (0018,1164)
+    /// Physical distance measured at the front plane of the Image Receptor housing between the center of each pixel.
+    /// Present in CR (3), DX, MG, IO (1), Enhanced XA/XRF (1C), 3D XA (1C)
+    QVector2D m_imagerPixelSpacing;
+
+    /// Estimated Radiographic Magnification Factor (0018,1114)
+    /// Ratio of Source Image Receptor Distance (SID) over Source Object Distance (SOD).
+    /// May be present (3) in DX Positioning Module (C.8.11.5) (MG, DX, IO), XA Positioner Module C.8.7.5 (XA),
+    /// XRF Positioner Module C.8.7.6 (RF), and must be present (1) in Breast Tomosynthesis Acquisition Module C.8.21.3.4 (Br To)
+    double m_estimatedRadiographicMagnificationFactor;
 
     /// Vectors d'orientació de la imatge respecte al pacient.
     /// Veure C.6.7.2.1.1. (020,0037) Tipus 1.

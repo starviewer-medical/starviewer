@@ -7,6 +7,7 @@
 #include "imageoverlayreader.h"
 
 #include <QFileInfo>
+#include <QVector2D>
 
 #include <vtkImageData.h>
 
@@ -19,6 +20,10 @@ Image::Image(QObject *parent)
 {
     m_pixelSpacing[0] = 0.;
     m_pixelSpacing[1] = 0.;
+    m_imagerPixelSpacing.setX(0.0);
+    m_imagerPixelSpacing.setY(0.0);
+    m_estimatedRadiographicMagnificationFactor = 1.0;
+    
     m_numberOfOverlays = 0;
     memset(m_imagePositionPatient, 0, 3 * sizeof(double));
 
@@ -78,6 +83,27 @@ void Image::setPixelSpacing(double x, double y)
 const double* Image::getPixelSpacing() const
 {
     return m_pixelSpacing;
+}
+
+void Image::setImagerPixelSpacing(double x, double y)
+{
+    m_imagerPixelSpacing.setX(x);
+    m_imagerPixelSpacing.setY(y);
+}
+
+QVector2D Image::getImagerPixelSpacing() const
+{
+    return m_imagerPixelSpacing;
+}
+
+void Image::setEstimatedRadiographicMagnificationFactor(double x)
+{
+    m_estimatedRadiographicMagnificationFactor = x;
+}
+
+double Image::getEstimatedRadiographicMagnificationFactor() const
+{
+    return m_estimatedRadiographicMagnificationFactor;
 }
 
 void Image::setSliceThickness(double z)
