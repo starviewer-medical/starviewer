@@ -308,7 +308,8 @@ HEADERS += extensionfactory.h \
     pixelspacingamenderpostprocessor.h \
     volumepixeldatareaderfactory.h \
     volumepixeldatareadervtkdcmtk.h \
-    vtkdcmtkimagereader.h
+    vtkdcmtkimagereader.h \
+    volumepixeldataiterator.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -571,7 +572,8 @@ SOURCES += extensionmediator.cpp \
     pixelspacingamenderpostprocessor.cpp \
     volumepixeldatareaderfactory.cpp \
     volumepixeldatareadervtkdcmtk.cpp \
-    vtkdcmtkimagereader.cpp
+    vtkdcmtkimagereader.cpp \
+    volumepixeldataiterator.cpp
 win32 {
     HEADERS += windowsfirewallaccess.h \
                windowssysteminformation.h
