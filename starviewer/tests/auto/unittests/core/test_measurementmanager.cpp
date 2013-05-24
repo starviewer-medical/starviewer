@@ -51,9 +51,10 @@ void test_MeasurementManager::setupGetMeasurementUnitsData()
     image->setPixelSpacing(0.0, 0.0);
     QTest::newRow("pixel spacing = 0.0, 0.0") << image << MeasurementManager::Pixels << tr("px");
 
+    PixelSpacing2D randomSpacing(MathTools::randomDouble(0.1, 3.5), MathTools::randomDouble(0.1, 3.5));
     image = new Image(this);
-    image->setPixelSpacing(1.0, 3.0);
-    QTest::newRow("pixel spacing = 1.0, 3.0") << image << MeasurementManager::Millimetres << tr("mm");
+    image->setPixelSpacing(randomSpacing);
+    QTest::newRow("any valid pixel spacing => mm") << image << MeasurementManager::Millimetres << tr("mm");
 }
 
 void test_MeasurementManager::getMeasurementUnits_ReturnsExpectedValues_data()
