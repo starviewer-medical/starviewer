@@ -516,7 +516,7 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
                 DICOMValueAttribute *dicomValue = item->getValueAttribute(DICOMPixelSpacing);
                 if (dicomValue)
                 {
-                    validateAndSetPixelSpacing(image, dicomValue->getValueAsQString());
+                    validateAndSetSpacingAttribute(image, dicomValue->getValueAsQString());
                 }
 
                 //
@@ -659,7 +659,7 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
                 DICOMValueAttribute *dicomValue = item->getValueAttribute(DICOMImagerPixelSpacing);
                 if (dicomValue)
                 {
-                    validateAndSetPixelSpacing(image, dicomValue->getValueAsQString(), DICOMImagerPixelSpacing);
+                    validateAndSetSpacingAttribute(image, dicomValue->getValueAsQString(), DICOMImagerPixelSpacing);
                 }
                 else
                 {
@@ -1173,8 +1173,8 @@ void ImageFillerStep::computePixelSpacing(Image *image, DICOMTagReader *dicomRea
     }
 
     // Put the computed values accordingly
-    validateAndSetPixelSpacing(image, pixelSpacing, DICOMPixelSpacing);
-    validateAndSetPixelSpacing(image, imagerPixelSpacing, DICOMImagerPixelSpacing);
+    validateAndSetSpacingAttribute(image, pixelSpacing, DICOMPixelSpacing);
+    validateAndSetSpacingAttribute(image, imagerPixelSpacing, DICOMImagerPixelSpacing);
 }
 
 void ImageFillerStep::checkAndSetEstimatedRadiographicMagnificationFactor(Image *image, DICOMTagReader *dicomReader)
@@ -1262,7 +1262,7 @@ bool ImageFillerStep::isEnhancedImageSOPClass(const QString &sopClassUID)
         sopClassUID == UIDEnhancedPETImageStorage);
 }
 
-bool ImageFillerStep::validateAndSetPixelSpacing(Image *image, const QString &spacing, const DICOMTag &tag)
+bool ImageFillerStep::validateAndSetSpacingAttribute(Image *image, const QString &spacing, const DICOMTag &tag)
 {
     if (!image)
     {

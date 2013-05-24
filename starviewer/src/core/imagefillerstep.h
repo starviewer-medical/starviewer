@@ -91,7 +91,7 @@ private:
     /// If no pixel spacing tag is specified, Pixel Spacing will be used by default
     /// PixelSpacing and ImagerPixelSpacing tags are the only tags supported currently
     /// Returns true on success, false otherwise
-    bool validateAndSetPixelSpacing(Image *image, const QString &spacing, const DICOMTag &tag = DICOMTag(0x0028, 0x0030));
+    bool validateAndSetSpacingAttribute(Image *image, const QString &spacing, const DICOMTag &tag = DICOMTag(0x0028, 0x0030));
 };
 
 }
