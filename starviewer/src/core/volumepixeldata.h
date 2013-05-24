@@ -17,6 +17,8 @@ class vtkImageData;
 
 namespace udg {
 
+class VolumePixelDataIterator;
+
 /**
     Classe que té com a responsabilitat mantenir el pixel data d'un Volume.
     El pixel data d'un volume és el lloc de memòria on es guarden els diferents valors de voxel d'un Volume.
@@ -57,6 +59,11 @@ public:
     /// el punter de les dades. Retornem el punter transformat al tipus natiu de dades VoxelType.
     VoxelType* getScalarPointer(int x, int y, int z);
     VoxelType* getScalarPointer();
+
+    /// Returns a VolumePixelDataIterator pointing to the voxel at index [x, y, z].
+    VolumePixelDataIterator getIterator(int x, int y, int z);
+    /// Returns a VolumePixelDataIterator pointing to the first voxel.
+    VolumePixelDataIterator getIterator();
 
     /// Donada una coordenada de món, ens dóna l'índex del vòxel corresponent.
     /// Si la coordenada està dins del volum retorna true, false altrament.

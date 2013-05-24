@@ -6,6 +6,7 @@
 #include "series.h"
 #include "study.h"
 #include "mathtools.h"
+#include "volumepixeldataiterator.h"
 
 namespace udg {
 
@@ -358,6 +359,16 @@ Volume::VoxelType* Volume::getScalarPointer(int x, int y, int z)
 Volume::VoxelType* Volume::getScalarPointer(int index[3])
 {
     return this->getScalarPointer(index[0], index[1], index[2]);
+}
+
+VolumePixelDataIterator Volume::getIterator(int x, int y, int z)
+{
+    return this->getPixelData()->getIterator(x, y, z);
+}
+
+VolumePixelDataIterator Volume::getIterator()
+{
+    return this->getPixelData()->getIterator();
 }
 
 Volume::VoxelType Volume::getScalarValue(int x, int y, int z)

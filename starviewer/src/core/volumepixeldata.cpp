@@ -1,5 +1,7 @@
 #include "volumepixeldata.h"
 
+#include "volumepixeldataiterator.h"
+
 #include <vtkImageChangeInformation.h>
 #include <vtkImageData.h>
 // Voxel information
@@ -119,6 +121,16 @@ VolumePixelData::VoxelType* VolumePixelData::getScalarPointer(int x, int y, int 
 VolumePixelData::VoxelType* VolumePixelData::getScalarPointer()
 {
     return reinterpret_cast<VolumePixelData::VoxelType*>(this->getVtkData()->GetScalarPointer());
+}
+
+VolumePixelDataIterator VolumePixelData::getIterator(int x, int y, int z)
+{
+    return VolumePixelDataIterator(this, x, y, z);
+}
+
+VolumePixelDataIterator VolumePixelData::getIterator()
+{
+    return VolumePixelDataIterator(this);
 }
 
 bool VolumePixelData::computeCoordinateIndex(const double coordinate[3], int index[3])
