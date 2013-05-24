@@ -57,7 +57,7 @@ double* MeasurementManager::amendCoordinate(double coordinate[3], double dataSpa
         return amendedCoordinate;
     }
 
-    PixelSpacing2D pixelSpacing = image->getPixelSpacing();
+    PixelSpacing2D pixelSpacing = image->getPreferredPixelSpacing();
     double multiplierFactor[2];
     
     if (!pixelSpacing.isValid())
