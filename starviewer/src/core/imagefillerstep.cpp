@@ -192,25 +192,6 @@ bool ImageFillerStep::fillCommonImageInformation(Image *image, DICOMTagReader *d
     // C.7.6.16 Multi-Frame Functional Groups Module
     image->setImageTime(dicomReader->getValueAttributeAsQString(DICOMContentTime));
 
-    // En el cas d'XA/XRF el pixel spacing vindrà especificat per totes les imatges per igual (no cal fer un recorregut per-frame)
-    QString sopClassUID = m_input->getDICOMFile()->getValueAttributeAsQString(DICOMSOPClassUID);
-    if (sopClassUID == UIDEnhancedXAImageStorage || sopClassUID == UIDEnhancedXRFImageStorage)
-    {
-        //
-        // XA/XRF Acquisition Module - C.8.19.3
-        // És requerit si el primer valor d'ImageType == ORIGINAL
-        // Pot estar present encara que no es compleixi la condició anterior.
-        //
-
-        //
-        // Obtenim el Pixel Spacing (Imager Pixel Spacing (1))
-        //
-        if (dicomReader->tagExists(DICOMImagerPixelSpacing))
-        {
-            validateAndSetPixelSpacing(image, dicomReader->getValueAttributeAsQString(DICOMImagerPixelSpacing));
-        }
-    }
-
     // C.9 Overlays
     image->setNumberOfOverlays(getNumberOfOverlays(dicomReader));
 
@@ -234,6 +215,8 @@ bool ImageFillerStep::processImage(Image *image, DICOMTagReader *dicomReader)
 
         // Calculem el pixel spacing
         computePixelSpacing(image, dicomReader);
+        // Fill other information
+        checkAndSetEstimatedRadiographicMagnificationFactor(image, dicomReader);
 
         //
         // Calculem propietats del pla imatge
@@ -659,6 +642,33 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
     else if (sopClassUID == UIDEnhancedXAImageStorage || sopClassUID == UIDEnhancedXRFImageStorage)
     {
         //
+        // XA/XRF Frame Pixel Data Properties Macro - C.8.19.6.4
+        //
+        DICOMSequenceAttribute *framePixelDataPropertiesSequence = frameItem->getSequenceAttribute(DICOMFramePixelDataPropertiesSequence);
+        if (framePixelDataPropertiesSequence)
+        {
+            // According to DICOM only a single Item shall be included in this sequence
+            QList<DICOMSequenceItem*> framePixelDataPropertiesItems = framePixelDataPropertiesSequence->getItems();
+            if (!framePixelDataPropertiesItems.empty())
+            {
+                DICOMSequenceItem *item = framePixelDataPropertiesItems.at(0);
+                //
+                // Imager Pixel Spacing (1C)
+                // Required if ImageType equals ORIGINAL. May be present otherwise.
+                //
+                DICOMValueAttribute *dicomValue = item->getValueAttribute(DICOMImagerPixelSpacing);
+                if (dicomValue)
+                {
+                    validateAndSetPixelSpacing(image, dicomValue->getValueAsQString(), DICOMImagerPixelSpacing);
+                }
+                else
+                {
+                    DEBUG_LOG("Imager Pixel Spacing not found in a sequence where is suposed to be present");
+                    ERROR_LOG("Imager Pixel Spacing not found in a sequence where is suposed to be present");
+                }
+            }
+        }
+        //
         // X-Ray Object Thickness Macro - C.8.19.6.7
         //
         DICOMSequenceAttribute *objectThicknessSequence = frameItem->getSequenceAttribute(DICOMObjectThicknessSequence);
@@ -1075,7 +1085,8 @@ void ImageFillerStep::computePixelSpacing(Image *image, DICOMTagReader *dicomRea
     //
     // Obtenim el pixel spacing segons la modalitat que estem tractant
     //
-    QString value;
+    QString pixelSpacing;
+    QString imagerPixelSpacing;
     QString modality = dicomReader->getValueAttributeAsQString(DICOMModality);
 
     //
@@ -1084,7 +1095,7 @@ void ImageFillerStep::computePixelSpacing(Image *image, DICOMTagReader *dicomRea
     //
     if (modality == "CT" || modality == "MR" || modality == "PT")
     {
-        value = dicomReader->getValueAttributeAsQString(DICOMPixelSpacing);
+        pixelSpacing = dicomReader->getValueAttributeAsQString(DICOMPixelSpacing);
     }
     else if (modality == "US")
     {
@@ -1112,28 +1123,109 @@ void ImageFillerStep::computePixelSpacing(Image *image, DICOMTagReader *dicomRea
                     physicalDeltaX = std::abs(physicalDeltaX) * 10.;
                     physicalDeltaY = std::abs(physicalDeltaY) * 10.;
 
-                    value = QString("%1").arg(physicalDeltaX);
-                    value += "\\";
-                    value += QString("%1").arg(physicalDeltaY);
+                    pixelSpacing = QString("%1").arg(physicalDeltaX);
+                    pixelSpacing += "\\";
+                    pixelSpacing += QString("%1").arg(physicalDeltaY);
                 }
             }
         }
     }
-    // Per altres modalitats li assignarem a partir d'aquest tag
+    else if (modality == "CR" || modality == "DX" || modality == "RF" || modality == "XA" || modality == "MG" || modality == "IO")
+    {
+        // These modalities can have both Pixel Spacing and Imager Pixel Spacing tags
+        pixelSpacing = dicomReader->getValueAttributeAsQString(DICOMPixelSpacing);
+        imagerPixelSpacing = dicomReader->getValueAttributeAsQString(DICOMImagerPixelSpacing);
+
+        if (dicomReader->getValueAttributeAsQString(DICOMSOPClassUID) == UIDXRay3DAngiographicImageStorage)
+        {
+            // In case it's a 3D XA, we should look for Imager Pixel Spacing in
+            // X-Ray 3D Angiographic Image Contributing Sources Module (C.8.21.2.1), Contributing Sources Sequence
+            DICOMSequenceAttribute *contributingSourcesSequence = dicomReader->getSequenceAttribute(DICOMContributingSourcesSequence);
+            if (contributingSourcesSequence)
+            {
+                QList<DICOMSequenceItem*> items = contributingSourcesSequence->getItems();
+                if (items.count() == 0)
+                {
+                    DEBUG_LOG("Error: Contributing Sources Sequence should have one ore more items. Sequence is empty.");
+                    ERROR_LOG("Error: Contributing Sources Sequence should have one ore more items. Sequence is empty.");
+                }
+                else
+                {
+                    // TODO What to do if we have more than one item? Meanwhile we only take into account the first item only.
+                    DICOMValueAttribute *value = items.first()->getValueAttribute(DICOMImagerPixelSpacing);
+                    if (value)
+                    {
+                        imagerPixelSpacing = value->getValueAsQString();
+                    }
+                    else
+                    {
+                        DEBUG_LOG("Error: Imager Pixel Spacing not found when it should be present in Contributing Sources Sequence (1C).");
+                        ERROR_LOG("Error: Imager Pixel Spacing not found when it should be present in Contributing Sources Sequence (1C).");
+                    }
+                }
+            }
+        }
+    }
     else
     {
-        // Als mòduls CR Image (C.8.1.2), X-Ray Acquisition (C.8.7.2), DX Detector (C.8.11.4),
-        // XA/XRF Acquisition (C.8.19.3), X-Ray 3D Angiographic Image Contributing Sources (C.8.21.2.1) i
-        // X-Ray 3D Craniofacial Image Contributing Sources (C.8.21.2.2)
-        // podem trobar el tag ImagerPixelSpacing, que segons el mòdul serà de tipus 1,1C ó 3
-        value = dicomReader->getValueAttributeAsQString(DICOMImagerPixelSpacing);
-
-        // TODO en els casos de X-Ray 3D Angiographic Image Contributing Sources (C.8.21.2.1) i
-        // X-Ray 3D Craniofacial Image Contributing Sources (C.8.21.2.2), aquest tag es troba dins de
-        // la seqüència Contributing Sources Sequence, que de moment no tractarem
+        // By the default, pixel spacing would be the only one checked for the rest of modalities
+        pixelSpacing = dicomReader->getValueAttributeAsQString(DICOMPixelSpacing);
     }
 
-    validateAndSetPixelSpacing(image, value);
+    // Put the computed values accordingly
+    validateAndSetPixelSpacing(image, pixelSpacing, DICOMPixelSpacing);
+    validateAndSetPixelSpacing(image, imagerPixelSpacing, DICOMImagerPixelSpacing);
+}
+
+void ImageFillerStep::checkAndSetEstimatedRadiographicMagnificationFactor(Image *image, DICOMTagReader *dicomReader)
+{
+    Q_ASSERT(image);
+    Q_ASSERT(dicomReader);
+
+    QString factor;
+    QString modality = dicomReader->getValueAttributeAsQString(DICOMModality);
+    //
+    // XA Positioner Module C.8.7.5 (3)
+    // XRF Positioner Module C.8.7.6 (3)
+    // DX Positioning Module C.8.11.5 (3) (U: MG, DX, IO)
+    // Breast Tomosynthesis Acquisition Module C.8.21.3.4, X-Ray 3D Acquisition Sequence, (1) (Br To)
+    //
+    if (modality == "XA" || modality == "RF" || modality == "DX" || modality == "MG" || modality == "IO")
+    {
+        factor = dicomReader->getValueAttributeAsQString(DICOMEstimatedRadiographicMagnificationFactor);
+    }
+    else
+    {
+        DICOMSequenceAttribute *xRay3DAcquisitionSequence = dicomReader->getSequenceAttribute(DICOMXRay3DAcquisitionSequence);
+        if (xRay3DAcquisitionSequence)
+        {
+            QList<DICOMSequenceItem*> items = xRay3DAcquisitionSequence->getItems();
+            if (items.count() == 0)
+            {
+                DEBUG_LOG("Error: X-Ray 3D Acquisition Sequence should have one ore more items. Sequence is empty.");
+                ERROR_LOG("Error: X-Ray 3D Acquisition Sequence should have one ore more items. Sequence is empty.");
+            }
+            else
+            {
+                // TODO What to do if we have more than one item? Meanwhile we only take into account the first item only.
+                DICOMValueAttribute *value = items.first()->getValueAttribute(DICOMEstimatedRadiographicMagnificationFactor);
+                if (value)
+                {
+                    factor = value->getValueAsQString();
+                }
+                else
+                {
+                    DEBUG_LOG("Error: Estimated Pixel Spacing not found when it is mandatory in X-Ray 3D Acquisition Sequence (1).");
+                    ERROR_LOG("Error: Estimated Pixel Spacing not found when it is mandatory in X-Ray 3D Acquisition Sequence (1).");
+                }
+            }
+        }
+    }
+
+    if (!factor.isEmpty())
+    {
+        image->setEstimatedRadiographicMagnificationFactor(factor.toDouble());
+    }
 }
 
 bool ImageFillerStep::areOfDifferentSize(Image *firstImage, Image *secondImage)
@@ -1170,7 +1262,7 @@ bool ImageFillerStep::isEnhancedImageSOPClass(const QString &sopClassUID)
         sopClassUID == UIDEnhancedPETImageStorage);
 }
 
-bool ImageFillerStep::validateAndSetPixelSpacing(Image *image, const QString &spacing)
+bool ImageFillerStep::validateAndSetPixelSpacing(Image *image, const QString &spacing, const DICOMTag &tag)
 {
     if (!image)
     {
@@ -1182,7 +1274,19 @@ bool ImageFillerStep::validateAndSetPixelSpacing(Image *image, const QString &sp
     QVector2D spacingVector = DICOMValueRepresentationConverter::decimalStringTo2DDoubleVector(spacing, &ok);
     if (ok)
     {
-        image->setPixelSpacing(spacingVector.x(), spacingVector.y());
+        if (tag == DICOMPixelSpacing)
+        {
+            image->setPixelSpacing(spacingVector.x(), spacingVector.y());
+        }
+        else if (tag == DICOMImagerPixelSpacing)
+        {
+            image->setImagerPixelSpacing(spacingVector.x(), spacingVector.y());
+        }
+        else
+        {
+            DEBUG_LOG("Wrong pixel spacing tag provided");
+            ok = false;
+        }
     }
     else
     {
