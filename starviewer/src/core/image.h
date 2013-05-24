@@ -15,6 +15,7 @@
 #include "imageoverlay.h"
 #include "displayshutter.h"
 #include "windowlevel.h"
+#include "pixelspacing2d.h"
 
 namespace udg {
 
@@ -254,12 +255,12 @@ private:
 
     // Image Plane Module C.6.7.2
     /// Distància física entre el centre de cada píxel (row,column) en mm. Veure 10.7.1.3. (0028,0030) Tipus 1
-    double m_pixelSpacing[2];
+    PixelSpacing2D m_pixelSpacing;
     
     /// Imager Pixel spacing (0018,1164)
     /// Physical distance measured at the front plane of the Image Receptor housing between the center of each pixel.
     /// Present in CR (3), DX, MG, IO (1), Enhanced XA/XRF (1C), 3D XA (1C)
-    QVector2D m_imagerPixelSpacing;
+    PixelSpacing2D m_imagerPixelSpacing;
 
     /// Estimated Radiographic Magnification Factor (0018,1114)
     /// Ratio of Source Image Receptor Distance (SID) over Source Object Distance (SOD).
