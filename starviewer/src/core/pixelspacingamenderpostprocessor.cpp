@@ -16,23 +16,22 @@ void PixelSpacingAmenderPostProcessor::postprocess(Volume *volume)
     
     double spacing[3];
     volume->getSpacing(spacing);
-    const double *pixelSpacing = image->getPixelSpacing();
-    if (pixelSpacing[0] == 0.0 && pixelSpacing[1] == 0.0)
+    PixelSpacing2D pixelSpacing = image->getPixelSpacing();
+    if (!pixelSpacing.isValid())
     {
         // TODO By default, volume spacing should be 1,1 in this case, leave it this way or setting spacing to 1,1 anyway?
         DEBUG_LOG(QString("Pixel Spacing is not present. Leaving default volume values: %1, %2").arg(spacing[0]).arg(spacing[1]));
         return;
     }
     
+    PixelSpacing2D volumeSpacing(spacing[0], spacing[1]);
     bool mustAmend = false;
-    for (int i = 0; i < 2; ++i)
+    
+    if (!pixelSpacing.isEqual(volumeSpacing))
     {
-        if (!qFuzzyCompare(spacing[i], pixelSpacing[i]))
-        {
-            DEBUG_LOG(QString("Volume spacing and Image spacing differs at index %1: %2 != %3").arg(i).arg(spacing[i]).arg(pixelSpacing[i]));
-            spacing[i] = pixelSpacing[i];
-            mustAmend = true;
-        }
+        spacing[0] = pixelSpacing.x();
+        spacing[1] = pixelSpacing.y();
+        mustAmend = true;
     }
     
     if (mustAmend)

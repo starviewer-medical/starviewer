@@ -7,7 +7,6 @@
 #include "imageoverlayreader.h"
 
 #include <QFileInfo>
-#include <QVector2D>
 
 #include <vtkImageData.h>
 
@@ -76,12 +75,14 @@ void Image::setPixelSpacing(double x, double y)
     m_pixelSpacing.setY(y);
 }
 
-const double* Image::getPixelSpacing() const
+void Image::setPixelSpacing(const PixelSpacing2D &spacing)
 {
-    double *spacing = new double[2];
-    spacing[0] = m_pixelSpacing.x();
-    spacing[1] = m_pixelSpacing.y();
-    return spacing;
+    m_pixelSpacing = spacing;
+}
+
+PixelSpacing2D Image::getPixelSpacing() const
+{
+    return m_pixelSpacing;
 }
 
 void Image::setImagerPixelSpacing(double x, double y)
@@ -90,9 +91,14 @@ void Image::setImagerPixelSpacing(double x, double y)
     m_imagerPixelSpacing.setY(y);
 }
 
-QVector2D Image::getImagerPixelSpacing() const
+void Image::setImagerPixelSpacing(const PixelSpacing2D &spacing)
 {
-    return QVector2D(m_imagerPixelSpacing.x(), m_imagerPixelSpacing.y());
+    m_imagerPixelSpacing = spacing;
+}
+
+PixelSpacing2D Image::getImagerPixelSpacing() const
+{
+    return m_imagerPixelSpacing;
 }
 
 void Image::setEstimatedRadiographicMagnificationFactor(double x)

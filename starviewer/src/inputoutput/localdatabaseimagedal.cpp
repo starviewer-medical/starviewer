@@ -390,9 +390,9 @@ QString LocalDatabaseImageDAL::getPixelSpacingAsQString(Image *newImage)
 {
     QString imagePixelSpacing = "";
     QString value;
-
-    imagePixelSpacing += value.setNum(newImage->getPixelSpacing()[0], 'g', 10) + "\\";
-    imagePixelSpacing += value.setNum(newImage->getPixelSpacing()[1], 'g', 10);
+    // TODO Add method to PixelSpacing2D getAsDICOMString? or maybe in a helper class
+    imagePixelSpacing += value.setNum(newImage->getPixelSpacing().x(), 'g', 10) + "\\";
+    imagePixelSpacing += value.setNum(newImage->getPixelSpacing().y(), 'g', 10);
 
     return imagePixelSpacing;
 }
@@ -417,8 +417,8 @@ double* LocalDatabaseImageDAL::getPixelSpacingAsDouble(const QString &pixelSpaci
 
 QString LocalDatabaseImageDAL::getImagerPixelSpacingAsQString(Image *newImage) const
 {
-    QVector2D imagerPixelSpacing = newImage->getImagerPixelSpacing();
-
+    PixelSpacing2D imagerPixelSpacing = newImage->getImagerPixelSpacing();
+    // TODO Add method to PixelSpacing2D getAsDICOMString? or maybe in a helper class
     return QString("%1\\%2").arg(imagerPixelSpacing.x(), 0, 'g', 10).arg(imagerPixelSpacing.y(), 0, 'g', 10);
 }
 
