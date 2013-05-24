@@ -52,7 +52,8 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_pixelspacingamenderpostprocessor.cpp \
            $$PWD/test_volumepixeldatareaderfactory.cpp \
            $$PWD/test_measurementmanager.cpp \
-           $$PWD/test_colortransferfunction.cpp
+           $$PWD/test_colortransferfunction.cpp \
+           $$PWD/test_volumepixeldataiterator.cpp
 
 win32 {
     SOURCES += $$PWD/test_windowsfirewallaccess.cpp \
