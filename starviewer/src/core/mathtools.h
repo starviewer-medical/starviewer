@@ -71,8 +71,9 @@ static double getDistance3D(const double firstPoint[3], const double secondPoint
 
 /// Random number generation helpers
 
-/// Generates a random number in the specified range, double precision
+/// Generates a random number in the specified range, double and int precision
 static double randomDouble(double minimum, double maximum);
+static int randomInt(int minimum, int maximum);
 
 /// Retorna a distància entre un punt i l'aresta més propera.
 /// LastToFirstEdge significa si volem que es comprovi l'aresta que forma l'últim i el primer punt de la llista.

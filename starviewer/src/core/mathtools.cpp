@@ -244,6 +244,15 @@ double MathTools::randomDouble(double minimum, double maximum)
     return minimum + r * (maximum - minimum);
 }
 
+int MathTools::randomInt(int minimum, int maximum)
+{
+    // Initializes random seed if necessary
+    MathTools::initializeRandomSeed();
+    
+    // Random number between minimum and maximum
+    return qrand() % ((maximum + 1) - minimum) + minimum;
+}
+
 double MathTools::getPointToClosestEdgeDistance(double point3D[3], const QList<QVector<double> > &pointsList, bool lastToFirstEdge, double closestPoint[3], int &closestEdge)
 {
     double minimumDistanceFound = MathTools::DoubleMaximumValue;
