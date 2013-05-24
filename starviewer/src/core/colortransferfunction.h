@@ -10,6 +10,9 @@ class vtkColorTransferFunction;
 
 namespace udg {
 
+/// Returns a default QColor value.
+template <>
+QColor TransferFunctionTemplate<QColor>::defaultValue();
 /// Retorna la interpolació lineal entre a i b avaluant "a + alpha * (b - a)", que és equivalent a "a * (1 - alpha) + b * alpha".
 template <>
 QColor TransferFunctionTemplate<QColor>::linearInterpolation(const QColor &a, const QColor &b, double alpha);

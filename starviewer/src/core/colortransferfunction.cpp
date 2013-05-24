@@ -8,6 +8,12 @@
 namespace udg {
 
 template <>
+QColor TransferFunctionTemplate<QColor>::defaultValue()
+{
+    return Qt::black;
+}
+
+template <>
 QColor TransferFunctionTemplate<QColor>::linearInterpolation(const QColor &a, const QColor &b, double alpha)
 {
     Q_ASSERT(a.isValid());
