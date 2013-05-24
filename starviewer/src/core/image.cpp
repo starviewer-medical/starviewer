@@ -18,10 +18,6 @@ Image::Image(QObject *parent)
  m_bitsStored(16), m_pixelRepresentation(0), m_rescaleSlope(1), m_rescaleIntercept(0), m_frameNumber(0), m_phaseNumber(0), m_volumeNumberInSeries(0),
  m_orderNumberInVolume(0), m_parentSeries(NULL)
 {
-    m_pixelSpacing[0] = 0.;
-    m_pixelSpacing[1] = 0.;
-    m_imagerPixelSpacing.setX(0.0);
-    m_imagerPixelSpacing.setY(0.0);
     m_estimatedRadiographicMagnificationFactor = 1.0;
     
     m_numberOfOverlays = 0;
@@ -76,13 +72,16 @@ PatientOrientation Image::getPatientOrientation() const
 
 void Image::setPixelSpacing(double x, double y)
 {
-    m_pixelSpacing[0] = x;
-    m_pixelSpacing[1] = y;
+    m_pixelSpacing.setX(x);
+    m_pixelSpacing.setY(y);
 }
 
 const double* Image::getPixelSpacing() const
 {
-    return m_pixelSpacing;
+    double *spacing = new double[2];
+    spacing[0] = m_pixelSpacing.x();
+    spacing[1] = m_pixelSpacing.y();
+    return spacing;
 }
 
 void Image::setImagerPixelSpacing(double x, double y)
@@ -93,7 +92,7 @@ void Image::setImagerPixelSpacing(double x, double y)
 
 QVector2D Image::getImagerPixelSpacing() const
 {
-    return m_imagerPixelSpacing;
+    return QVector2D(m_imagerPixelSpacing.x(), m_imagerPixelSpacing.y());
 }
 
 void Image::setEstimatedRadiographicMagnificationFactor(double x)
@@ -548,7 +547,7 @@ vtkImageData* Image::getDisplayShutterForDisplayAsVtkImageData(int zSlice)
             if (m_displayShutterForDisplayVtkImageData)
             {
                 m_displayShutterForDisplayVtkImageData->SetOrigin(m_imagePositionPatient);
-                m_displayShutterForDisplayVtkImageData->SetSpacing(m_pixelSpacing[0], m_pixelSpacing[1], 1);
+                m_displayShutterForDisplayVtkImageData->SetSpacing(m_pixelSpacing.x(), m_pixelSpacing.y(), 1);
             }
         }
     }
