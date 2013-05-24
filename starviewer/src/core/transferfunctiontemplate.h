@@ -63,6 +63,9 @@ protected:
     QMap<double, T> m_map;
 
 private:
+
+    /// Returns a default value of type T.
+    static T defaultValue();
     /// Retorna la interpolació lineal entre a i b avaluant "a + alpha * (b - a)", que és equivalent a "a * (1 - alpha) + b * alpha".
     static T linearInterpolation(const T &a, const T &b, double alpha);
 
@@ -101,7 +104,7 @@ T TransferFunctionTemplate<T>::get(double x) const
     {
         DEBUG_LOG("La funció de transferència és buida. Retornem un valor per defecte.");
         WARN_LOG("La funció de transferència és buida. Retornem un valor per defecte.");
-        return T();
+        return defaultValue();
     }
 
     typename QMap<double, T>::const_iterator lowerBound = m_map.lowerBound(x);
@@ -228,6 +231,12 @@ void TransferFunctionTemplate<T>::simplify()
 template <typename T>
 TransferFunctionTemplate<T>::TransferFunctionTemplate()
 {
+}
+
+template <typename T>
+T TransferFunctionTemplate<T>::defaultValue()
+{
+    return T();
 }
 
 template <typename T>
