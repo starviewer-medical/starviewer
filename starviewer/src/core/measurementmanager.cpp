@@ -15,14 +15,15 @@ MeasurementManager::MeasurementUnitsType MeasurementManager::getMeasurementUnits
         return MeasurementManager::NotAvailable;
     }
 
-    PixelSpacing2D pixelSpacing = image->getPixelSpacing();
-    if (!pixelSpacing.isValid())
+    switch (MeasurementManager::getDefaultMeasurementType(image))
     {
-        return MeasurementManager::Pixels;
-    }
-    else
-    {
-        return MeasurementManager::Millimetres;
+        case NoDefinedUnits:
+            return MeasurementManager::Pixels;
+            break;
+        
+        default:
+            return MeasurementManager::Millimetres;
+            break;
     }
 }
 
