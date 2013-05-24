@@ -2,6 +2,7 @@
 #define UDGIMAGEFILLERSTEP_H
 
 #include "patientfillerstep.h"
+#include "dicomtag.h"
 
 class QVector3D;
 
@@ -71,6 +72,9 @@ private:
     /// @param dicomReader Reader de DICOM que conté la font de dades de la Image associada
     void computePixelSpacing(Image *image, DICOMTagReader *dicomReader);
 
+    /// Checks and sets the Estimated Radiographic Magnification Factor tag for the corresponding modalities
+    void checkAndSetEstimatedRadiographicMagnificationFactor(Image *image, DICOMTagReader *dicomReader);
+
     /// Ens diu si les imatges són de mides diferents
     bool areOfDifferentSize(Image *firstImage, Image *secondImage);
 
@@ -84,8 +88,10 @@ private:
     bool isEnhancedImageSOPClass(const QString &sopClassUID);
 
     /// Validates the spacing string and sets it to the given image if it's well formatted.
+    /// If no pixel spacing tag is specified, Pixel Spacing will be used by default
+    /// PixelSpacing and ImagerPixelSpacing tags are the only tags supported currently
     /// Returns true on success, false otherwise
-    bool validateAndSetPixelSpacing(Image *image, const QString &spacing);
+    bool validateAndSetPixelSpacing(Image *image, const QString &spacing, const DICOMTag &tag = DICOMTag(0x0028, 0x0030));
 };
 
 }
