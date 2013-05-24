@@ -439,6 +439,8 @@ void test_ImageFillerStep::fillIndividually_ShouldFillWellFormattedPixelSpacingP
     reader->addTag(DICOMPixelSpacing, wellFormattedPixelSpacingString);
     reader->addTag(DICOMNumberOfFrames, 1);
     QTest::newRow("Enhanced US Volume PixelSpacing - well formatted") << reader << imageWithNoPixelSpacing;
+
+    // TODO Enhanced modalities test cases with their appropiate pixel spacing attributes in sequences are missing
 }
 
 void test_ImageFillerStep::fillIndividually_ShouldFillWellFormattedPixelSpacingProperly()
@@ -597,6 +599,8 @@ void test_ImageFillerStep::fillIndividually_ShouldNotFillBadFormattedPixelSpacin
         reader->addTag(DICOMNumberOfFrames, 1);
         testRowDescription ="Enhanced US Volume PixelSpacing - bad formatted ->" + badFormattedPixelSpacingString;
         QTest::newRow(qPrintable(testRowDescription)) << reader;
+
+        // TODO Enhanced modalities test cases with their appropiate pixel spacing attributes in sequences are missing
     }
 }
 
@@ -676,6 +680,8 @@ void test_ImageFillerStep::fillIndividually_ShouldFillWellFormattedImagerPixelSp
     reader = createReader(0, "RF", UIDXRayRadioFluoroscopicImageStorage);
     reader->addTag(DICOMImagerPixelSpacing, wellFormattedPixelSpacingString);
     QTest::newRow("RF PixelSpacing - well formatted") << reader << imageWithPixelSpacing;
+
+    // TODO Enhanced modalities test cases with their appropiate pixel spacing attributes in sequences are missing
 
     reader = createReader(0, "OP", UIDSecondaryCaptureImageStorage);
     reader->addTag(DICOMImagerPixelSpacing, wellFormattedPixelSpacingString);
