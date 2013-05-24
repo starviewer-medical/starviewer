@@ -62,6 +62,12 @@ public:
     void setEstimatedRadiographicMagnificationFactor(double x);
     double getEstimatedRadiographicMagnificationFactor() const;
 
+    /// Returns the preferred pixel spacing to use with this image. This method serves to deal with the cases
+    /// where, depending on the modality and the present pixel spacing attributes, choose the pixel spacing value that should be used by default
+    /// For instance, if we have an image with MG modality, imager pixel spacing and estimated radiographic factor, the value returned should be
+    /// ImagerPixelSpacing corrected by EstimatedRadiographicFactor
+    PixelSpacing2D getPreferredPixelSpacing() const;
+
     /// Assignar/Obtenir l'slice thickness, aka espaiat de les Z
     void setSliceThickness(double z);
     double getSliceThickness() const;
