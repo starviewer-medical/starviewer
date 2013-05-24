@@ -46,6 +46,7 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_studylayoutconfigsettingsconverter.cpp \
            $$PWD/test_optimalviewersgridestimator.cpp \
            $$PWD/test_vtkimagedatacreator.cpp \
+           $$PWD/test_pixelspacing2d.cpp \
            $$PWD/test_imagefillerstep.cpp \
            $$PWD/test_temporaldimensionfillerstep.cpp \
            $$PWD/test_computezspacingpostprocessor.cpp \

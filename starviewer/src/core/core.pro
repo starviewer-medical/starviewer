@@ -296,6 +296,7 @@ HEADERS += extensionfactory.h \
     studylayoutconfigsloader.h \
     studylayoutmapper.h \
     measurementmanager.h \
+    pixelspacing2d.h \
     optimalviewersgridestimator.h \
     vtkimagedatacreator.h \
     itkDCMTKFileReader.h \
@@ -561,6 +562,7 @@ SOURCES += extensionmediator.cpp \
     studylayoutconfigsloader.cpp \
     studylayoutmapper.cpp \
     measurementmanager.cpp \
+    pixelspacing2d.cpp \
     optimalviewersgridestimator.cpp \
     vtkimagedatacreator.cpp \
     itkDCMTKFileReader.cxx \
