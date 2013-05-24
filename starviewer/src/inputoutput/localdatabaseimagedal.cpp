@@ -1,6 +1,8 @@
 #include "localdatabaseimagedal.h"
 
 #include <QString>
+#include <QVector2D>
+
 #include <sqlite3.h>
 
 #include "study.h"
@@ -14,6 +16,7 @@
 #include "dicomsource.h"
 #include "localdatabasepacsretrievedimagesdal.h"
 #include "dicomformattedvaluesconverter.h"
+#include "dicomvaluerepresentationconverter.h"
 
 namespace udg {
 
@@ -154,6 +157,9 @@ Image* LocalDatabaseImageDAL::fillImage(char **reply, int row, int columns)
     image->setRetrievedTime(QTime().fromString(reply[32 + row * columns], "hhmmss"));
     image->setNumberOfOverlays(QString(reply[34 + row * columns]).toUShort());
     image->setDICOMSource(getImageDICOMSourceByIDPACSInDatabase(reply[35 + row * columns]));
+    QVector2D imagerPixelSpacing = getImagerPixelSpacingAs2DVector(reply[36 + row * columns]);
+    image->setImagerPixelSpacing(imagerPixelSpacing.x(), imagerPixelSpacing.y());
+    image->setEstimatedRadiographicMagnificationFactor(QString(reply[37 + row * columns]).toDouble());
 
     // TODO argghh!!! Això només hauria d'estar en un únic lloc, no aquí i en retrieveimages.cpp
     image->setPath(LocalDatabaseManager::getCachePath() + reply[2 + row * columns] + "/" + reply[3 + row * columns] + "/" + reply[0 + row * columns]);
@@ -170,7 +176,8 @@ QString LocalDatabaseImageDAL::buildSqlSelect(const DicomMask &imageMaskToSelect
                                     "WindowLevelExplanations, SliceLocation, RescaleIntercept,"
                                     "PhotometricInterpretation, ImageType, ViewPosition,"
                                     "ImageLaterality, ViewCodeMeaning , PhaseNumber, ImageTime,  VolumeNumberInSeries,"
-                                    "OrderNumberInVolume, RetrievedDate, RetrievedTime, State, NumberOfOverlays, RetrievedPACSID "
+                                    "OrderNumberInVolume, RetrievedDate, RetrievedTime, State, NumberOfOverlays, RetrievedPACSID,"
+                                    "ImagerPixelSpacing, EstimatedRadiographicMagnificationFactor "
                             "from Image ";
 
     QString orderSentence = " order by VolumeNumberInSeries, OrderNumberInVolume";
@@ -196,8 +203,9 @@ QString LocalDatabaseImageDAL::buildSqlInsert(Image *newImage)
                                              "PixelRepresentation, RescaleSlope, WindowLevelWidth, WindowLevelCenter,"
                                              "WindowLevelExplanations, SliceLocation,"
                                              "RescaleIntercept, PhotometricInterpretation, ImageType, ViewPosition,"
-                                             "ImageLaterality, ViewCodeMeaning, PhaseNumber, ImageTime, VolumeNumberInSeries, "
-                                             "OrderNumberInVolume, RetrievedDate, RetrievedTime, State, NumberOfOverlays, RetrievedPACSID)"
+                                             "ImageLaterality, ViewCodeMeaning, PhaseNumber, ImageTime, VolumeNumberInSeries,"
+                                             "OrderNumberInVolume, RetrievedDate, RetrievedTime, State, NumberOfOverlays, RetrievedPACSID,"
+                                             "ImagerPixelSpacing, EstimatedRadiographicMagnificationFactor) "
                                      "values ('%1', %2, '%3', '%4', '%5', "
                                              "'%6', '%7', '%8', %9,"
                                              "'%10', %11, %12, %13, %14, %15, "
@@ -205,7 +213,7 @@ QString LocalDatabaseImageDAL::buildSqlInsert(Image *newImage)
                                              "'%20', '%21', "
                                              "%22, '%23', '%24', '%25',"
                                              "'%26',  '%27', %28, '%29', %30,"
-                                             "%31, '%32', '%33', %34, %35, %36)")
+                                             "%31, '%32', '%33', %34, %35, %36, '%37', %38)")
                             .arg(DatabaseConnection::formatTextToValidSQLSyntax(newImage->getSOPInstanceUID()))
                             .arg(newImage->getFrameNumber())
                             .arg(DatabaseConnection::formatTextToValidSQLSyntax(newImage->getParentSeries()->getParentStudy()->getInstanceUID()))
@@ -241,7 +249,9 @@ QString LocalDatabaseImageDAL::buildSqlInsert(Image *newImage)
                             .arg(newImage->getRetrievedTime().toString("hhmmss"))
                             .arg(0)
                             .arg(newImage->getNumberOfOverlays())
-                            .arg(getIDPACSInDatabaseFromDICOMSource(newImage->getDICOMSource()));
+                            .arg(getIDPACSInDatabaseFromDICOMSource(newImage->getDICOMSource()))
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(getImagerPixelSpacingAsQString(newImage)))
+                            .arg(newImage->getEstimatedRadiographicMagnificationFactor());
 
     return insertSentence;
 }
@@ -284,7 +294,9 @@ QString LocalDatabaseImageDAL::buildSqlUpdate(Image *imageToUpdate)
                                               "RetrievedTime = '%31', "
                                               "State = %32, "
                                               "NumberOfOverlays = %33, "
-                                              "RetrievedPACSID = %34 "
+                                              "RetrievedPACSID = %34, "
+                                              "ImagerPixelSpacing = '%37', "
+                                              "EstimatedRadiographicMagnificationFactor = %38 "
                                      "Where SOPInstanceUID = '%35' And "
                                            "FrameNumber = %36")
                             .arg(DatabaseConnection::formatTextToValidSQLSyntax(imageToUpdate->getParentSeries()->getParentStudy()->getInstanceUID()))
@@ -322,7 +334,9 @@ QString LocalDatabaseImageDAL::buildSqlUpdate(Image *imageToUpdate)
                             .arg(imageToUpdate->getNumberOfOverlays())
                             .arg(getIDPACSInDatabaseFromDICOMSource(imageToUpdate->getDICOMSource()))
                             .arg(DatabaseConnection::formatTextToValidSQLSyntax(imageToUpdate->getSOPInstanceUID()))
-                            .arg(imageToUpdate->getFrameNumber());
+                            .arg(imageToUpdate->getFrameNumber())
+                            .arg(DatabaseConnection::formatTextToValidSQLSyntax(getImagerPixelSpacingAsQString(imageToUpdate)))
+                            .arg(imageToUpdate->getEstimatedRadiographicMagnificationFactor());
 
     return updateSentence;
 }
@@ -399,6 +413,18 @@ double* LocalDatabaseImageDAL::getPixelSpacingAsDouble(const QString &pixelSpaci
     }
 
     return m_pixelSpacing;
+}
+
+QString LocalDatabaseImageDAL::getImagerPixelSpacingAsQString(Image *newImage) const
+{
+    QVector2D imagerPixelSpacing = newImage->getImagerPixelSpacing();
+
+    return QString("%1\\%2").arg(imagerPixelSpacing.x(), 0, 'g', 10).arg(imagerPixelSpacing.y(), 0, 'g', 10);
+}
+
+QVector2D LocalDatabaseImageDAL::getImagerPixelSpacingAs2DVector(const QString &imagerPixelSpacing) const
+{
+    return DICOMValueRepresentationConverter::decimalStringTo2DDoubleVector(imagerPixelSpacing);
 }
 
 double* LocalDatabaseImageDAL::getPatientPositionAsDouble(const QString &patientPosition)

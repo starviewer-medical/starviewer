@@ -79,6 +79,12 @@ private:
     /// Retorna el Pixel spacing en format de double
     double* getPixelSpacingAsDouble(const QString &pixelSpacing);
 
+    /// Returns Imager Pixel Spacing in string format. Each value is delimited by "\\"
+    QString getImagerPixelSpacingAsQString(Image *newImage) const;
+    
+    /// Returns Imager Pixel Spacing in a 2D double vector.
+    QVector2D getImagerPixelSpacingAs2DVector(const QString &imagerPixelSpacing) const;
+
     /// Retorna l'imagePatientPosition en format d'string separat per "\\";
     QString getPatientPositionAsQString(Image *newImage);
     /// Retorna el Patient Position en format double
