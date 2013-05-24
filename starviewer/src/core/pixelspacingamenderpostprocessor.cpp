@@ -29,6 +29,8 @@ void PixelSpacingAmenderPostProcessor::postprocess(Volume *volume)
     
     if (!pixelSpacing.isEqual(volumeSpacing))
     {
+        DEBUG_LOG(QString("Volume spacing (%1, %2) and preferred Image spacing (%3, %4) are not equal:")
+            .arg(volumeSpacing.x()).arg(volumeSpacing.y()).arg(pixelSpacing.x()).arg(pixelSpacing.y()));
         spacing[0] = pixelSpacing.x();
         spacing[1] = pixelSpacing.y();
         mustAmend = true;
