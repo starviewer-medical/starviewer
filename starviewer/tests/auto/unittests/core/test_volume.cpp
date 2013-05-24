@@ -1163,9 +1163,9 @@ void test_Volume::getScalarPointer_ShouldReturnCorrectScalarPointer()
     Volume *volume = new Volume();
     volume->convertToNeutralVolume();
 
-    udg::Volume::VoxelType *voxelValue = volume->getScalarPointer(x,y,z);
+    void *voxelValue = volume->getScalarPointer(x,y,z);
     
-    QCOMPARE(voxelValue[0], (short)value);
+    QCOMPARE(static_cast<short*>(voxelValue)[0], static_cast<short>(value));
     
     delete volume;
 }
