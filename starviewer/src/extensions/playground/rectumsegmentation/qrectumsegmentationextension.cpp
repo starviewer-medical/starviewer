@@ -16,6 +16,7 @@
 #include "editortooldata.h"
 #include "rectumsegmentationsettings.h"
 #include "patientbrowsermenu.h"
+#include "volumepixeldataiterator.h"
 
 //Qt
 #include <QString>
@@ -524,18 +525,18 @@ void QRectumSegmentationExtension::updateVolumeForced()
         int cont = 0;
         m_2DView->getOverlayInput()->getWholeExtent(ext);
     
-        Volume::VoxelType *value = m_2DView->getOverlayInput()->getScalarPointer();
+        VolumePixelDataIterator it = m_2DView->getOverlayInput()->getIterator();
         for(i=ext[0];i<=ext[1];i++)
         {
             for(j=ext[2];j<=ext[3];j++)
             {
                 for(k=ext[4];k<=ext[5];k++)
                 {
-                    if ((*value) == m_insideValue)
+                    if (it.get<int>() == m_insideValue)
                     {
                         cont++;
                     }
-                    value++;
+                    ++it;
                 }
             }
         }
