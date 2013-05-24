@@ -234,6 +234,16 @@ double MathTools::getDistance3D(const double firstPoint[3], const double secondP
     return sqrt(value);
 }
 
+double MathTools::randomDouble(double minimum, double maximum)
+{
+    // Initializes random seed if necessary
+    MathTools::initializeRandomSeed();
+    // Generation of a number betweeen 0 and 1
+    double r = (double)qrand() / RAND_MAX;
+    // Returning a random number between the range indicated
+    return minimum + r * (maximum - minimum);
+}
+
 double MathTools::getPointToClosestEdgeDistance(double point3D[3], const QList<QVector<double> > &pointsList, bool lastToFirstEdge, double closestPoint[3], int &closestEdge)
 {
     double minimumDistanceFound = MathTools::DoubleMaximumValue;
@@ -431,6 +441,17 @@ double MathTools::copySign(double x, double y)
     else
     {
         return -x;
+    }
+}
+
+void MathTools::initializeRandomSeed()
+{
+    static bool seedInit = false;
+    if (!seedInit)
+    {
+        // If random number generation has not been seeded, we initialize it
+        qsrand((unsigned)std::time(NULL));
+        seedInit = true;
     }
 }
 

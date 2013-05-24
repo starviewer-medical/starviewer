@@ -69,6 +69,11 @@ static bool closeEnough(float f1, float f2);
 /// Distància entre punts 3D
 static double getDistance3D(const double firstPoint[3], const double secondPoint[3]);
 
+/// Random number generation helpers
+
+/// Generates a random number in the specified range, double precision
+static double randomDouble(double minimum, double maximum);
+
 /// Retorna a distància entre un punt i l'aresta més propera.
 /// LastToFirstEdge significa si volem que es comprovi l'aresta que forma l'últim i el primer punt de la llista.
 /// El paràmetre de sortida closestPoint, ens indicarà quin és el punt de la línia que queda més a prop del punt indicat i ClosestEdge ens indicarà l'aresta.
@@ -139,6 +144,9 @@ static unsigned int roundUpToMultipleOfNumber(unsigned int i, unsigned int multi
 /// Retorna un double amb la magnitud d'x i el signe d'y. La mateixa funcionalitat que std::copysign de C++11.
 static double copySign(double x, double y);
 
+private:
+    /// Initializes random seed if needed
+    static void initializeRandomSeed();
 };
 
 } // End namespace udg
