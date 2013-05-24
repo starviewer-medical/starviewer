@@ -470,11 +470,10 @@ void test_ImageFillerStep::fillIndividually_ShouldFillWellFormattedPixelSpacingP
     QCOMPARE(step.fillIndividually(), true);
     Image *image = series->getImageByIndex(0);
     QVERIFY2(image, "Returned image is null");
-    QCOMPARE(image->getPixelSpacing()[0], expectedResultingImage->getPixelSpacing()[0]);
-    QCOMPARE(image->getPixelSpacing()[1], expectedResultingImage->getPixelSpacing()[1]);
+    QVERIFY(image->getPixelSpacing().isEqual(expectedResultingImage->getPixelSpacing()));
 
     // Imager Pixel Spacing should not be filled
-    QCOMPARE(image->getImagerPixelSpacing(), QVector2D(.0, .0));
+    QVERIFY(image->getImagerPixelSpacing().isEqual(PixelSpacing2D()));
 }
 
 void test_ImageFillerStep::fillIndividually_ShouldNotFillBadFormattedPixelSpacing_data()
@@ -638,8 +637,7 @@ void test_ImageFillerStep::fillIndividually_ShouldNotFillBadFormattedPixelSpacin
     QCOMPARE(step.fillIndividually(), true);
     Image *image = series->getImageByIndex(0);
     QVERIFY2(image, "Returned image is null");
-    QCOMPARE(image->getPixelSpacing()[0], .0);
-    QCOMPARE(image->getPixelSpacing()[1], .0);
+    QVERIFY(image->getPixelSpacing().isEqual(PixelSpacing2D()));
 }
 
 void test_ImageFillerStep::fillIndividually_ShouldFillWellFormattedImagerPixelSpacingProperly_data()
@@ -787,11 +785,10 @@ void test_ImageFillerStep::fillIndividually_ShouldFillWellFormattedImagerPixelSp
     QCOMPARE(step.fillIndividually(), true);
     Image *image = series->getImageByIndex(0);
     QVERIFY2(image, "Returned image is null");
-    QCOMPARE(image->getImagerPixelSpacing(), expectedResultingImage->getImagerPixelSpacing());
+    QVERIFY(image->getImagerPixelSpacing().isEqual(expectedResultingImage->getImagerPixelSpacing()));
 
     // Pixel Spacing should not be filled
-    QCOMPARE(image->getPixelSpacing()[0], .0);
-    QCOMPARE(image->getPixelSpacing()[1], .0);
+    QVERIFY(image->getPixelSpacing().isEqual(PixelSpacing2D()));
 }
 
 void test_ImageFillerStep::fillIndividually_ShouldFillWellFormattedPixelSpacingAndImagerPixelSpacingProperly_data()
@@ -973,10 +970,9 @@ void test_ImageFillerStep::fillIndividually_ShouldFillWellFormattedPixelSpacingA
     Image *image = series->getImageByIndex(0);
     QVERIFY2(image, "Returned image is null");
     // Check PixelSpacing
-    QCOMPARE(image->getPixelSpacing()[0], expectedResultingImage->getPixelSpacing()[0]);
-    QCOMPARE(image->getPixelSpacing()[1], expectedResultingImage->getPixelSpacing()[1]);
+    QVERIFY(image->getPixelSpacing().isEqual(expectedResultingImage->getPixelSpacing()));
     // Check ImagerPixelSpacing
-    QCOMPARE(image->getImagerPixelSpacing(), expectedResultingImage->getImagerPixelSpacing());
+    QVERIFY(image->getImagerPixelSpacing().isEqual(expectedResultingImage->getImagerPixelSpacing()));
 }
 
 void test_ImageFillerStep::fillIndividually_ShouldFillEstimatedRadiographicMagnificationFactorForTheAppropiateModalities_data()

@@ -14,8 +14,8 @@ MeasurementManager::MeasurementUnitsType MeasurementManager::getMeasurementUnits
         return MeasurementManager::NotAvailable;
     }
 
-    const double *pixelSpacing = image->getPixelSpacing();
-    if (pixelSpacing[0] == 0.0 && pixelSpacing[1] == 0.0)
+    PixelSpacing2D pixelSpacing = image->getPixelSpacing();
+    if (!pixelSpacing.isValid())
     {
         return MeasurementManager::Pixels;
     }
@@ -57,10 +57,10 @@ double* MeasurementManager::amendCoordinate(double coordinate[3], double dataSpa
         return amendedCoordinate;
     }
 
-    const double *pixelSpacing = image->getPixelSpacing();
+    PixelSpacing2D pixelSpacing = image->getPixelSpacing();
     double multiplierFactor[2];
     
-    if (pixelSpacing[0] == 0.0 && pixelSpacing[1] == 0.0)
+    if (!pixelSpacing.isValid())
     {
         multiplierFactor[0] = multiplierFactor[1] = 1.0;
         
@@ -68,8 +68,8 @@ double* MeasurementManager::amendCoordinate(double coordinate[3], double dataSpa
     }
     else
     {
-        multiplierFactor[0] = pixelSpacing[0];
-        multiplierFactor[1] = pixelSpacing[1]; 
+        multiplierFactor[0] = pixelSpacing.x();
+        multiplierFactor[1] = pixelSpacing.y(); 
 
         amendedCoordinate[2] = coordinate[2];
     }

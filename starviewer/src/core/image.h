@@ -7,7 +7,6 @@
 #include <QPair>
 #include <QStringList>
 #include <QPixmap>
-#include <QVector2D>
 
 #include "dicomsource.h"
 #include "imageorientation.h"
@@ -51,11 +50,13 @@ public:
 
     /// Assignar/Obtenir l'espaiat dels pixels
     void setPixelSpacing(double x, double y);
-    const double* getPixelSpacing() const;
+    void setPixelSpacing(const PixelSpacing2D &spacing);
+    PixelSpacing2D getPixelSpacing() const;
 
     /// Set/Get Imager Pixel Spacing
     void setImagerPixelSpacing(double x, double y);
-    QVector2D getImagerPixelSpacing() const;
+    void setImagerPixelSpacing(const PixelSpacing2D &spacing);
+    PixelSpacing2D getImagerPixelSpacing() const;
 
     /// Set/Get Estimated Radiographic Magnification Factor
     void setEstimatedRadiographicMagnificationFactor(double x);

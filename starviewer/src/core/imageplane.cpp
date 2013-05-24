@@ -1,6 +1,7 @@
 #include "imageplane.h"
 #include "image.h"
 #include "mathtools.h"
+#include "pixelspacing2d.h"
 #include <QString>
 // Vtk's
 #include <vtkPlane.h>
@@ -157,7 +158,7 @@ bool ImagePlane::fillFromImage(const Image *image)
     if (image)
     {
         this->setImageOrientation(image->getImageOrientationPatient());
-        this->setSpacing(image->getPixelSpacing()[0], image->getPixelSpacing()[1]);
+        this->setSpacing(image->getPixelSpacing().x(), image->getPixelSpacing().y());
         this->setThickness(image->getSliceThickness());
         this->setRows(image->getRows());
         this->setColumns(image->getColumns());
