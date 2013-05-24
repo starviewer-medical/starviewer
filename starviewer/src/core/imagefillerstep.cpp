@@ -1249,8 +1249,8 @@ bool ImageFillerStep::areOfDifferentPixelSpacing(Image *firstImage, Image *secon
     Q_ASSERT(firstImage);
     Q_ASSERT(secondImage);
 
-    PixelSpacing2D spacing1 = firstImage->getPixelSpacing();
-    PixelSpacing2D spacing2 = secondImage->getPixelSpacing();
+    PixelSpacing2D spacing1 = firstImage->getPreferredPixelSpacing();
+    PixelSpacing2D spacing2 = secondImage->getPreferredPixelSpacing();
     
     return !spacing1.isEqual(spacing2);
 }

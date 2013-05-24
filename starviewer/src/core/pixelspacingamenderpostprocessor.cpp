@@ -16,7 +16,7 @@ void PixelSpacingAmenderPostProcessor::postprocess(Volume *volume)
     
     double spacing[3];
     volume->getSpacing(spacing);
-    PixelSpacing2D pixelSpacing = image->getPixelSpacing();
+    PixelSpacing2D pixelSpacing = image->getPreferredPixelSpacing();
     if (!pixelSpacing.isValid())
     {
         // TODO By default, volume spacing should be 1,1 in this case, leave it this way or setting spacing to 1,1 anyway?
