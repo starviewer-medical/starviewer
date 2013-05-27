@@ -402,32 +402,6 @@ int Volume::getImageIndex(int sliceNumber, int phaseNumber) const
     return sliceNumber * m_numberOfPhases + phaseNumber;
 }
 
-bool Volume::fitsIntoMemory()
-{
-    if (isPixelDataLoaded())
-    {
-        return true;
-    }
-
-    unsigned long long int size = 0;
-    foreach (Image *image, m_imageSet)
-    {
-        size += image->getColumns() * image->getRows() * sizeof(VoxelType);
-    }
-
-    char *p = 0;
-    try
-    {
-        p = new char[size];
-        delete[] p;
-        return true;
-    }
-    catch (std::bad_alloc)
-    {
-        return false;
-    }
-}
-
 VolumeReader* Volume::createVolumeReader()
 {
     return new VolumeReader(this);
