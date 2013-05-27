@@ -89,8 +89,6 @@ private slots:
     void toString_ShouldReturnExpectedString_data();
     void toString_ShouldReturnExpectedString();
 
-    void fitsIntoMemory_ShouldReturnTrueWhenDataIsLoaded();
-
     void getScalarPointer_ShouldReturnCorrectScalarPointer_data();
     void getScalarPointer_ShouldReturnCorrectScalarPointer();
 
@@ -1122,18 +1120,6 @@ void test_Volume::toString_ShouldReturnExpectedString()
     QFETCH(QString, expectedString);
 
     QCOMPARE(volume->toString(), expectedString);
-}
-
-void test_Volume::fitsIntoMemory_ShouldReturnTrueWhenDataIsLoaded()
-{
-    VolumePixelData *pixelData = new VolumePixelData(this);
-    pixelData->setData(vtkImageData::New());
-    Volume volume;
-    volume.setPixelData(pixelData);
-
-    QVERIFY(volume.isPixelDataLoaded());
-
-    QCOMPARE(volume.fitsIntoMemory(), true);
 }
 
 void test_Volume::getScalarPointer_ShouldReturnCorrectScalarPointer_data()

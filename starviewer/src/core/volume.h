@@ -145,9 +145,6 @@ public:
     /// Returns value of voxel at index [x, y, z].
     double getScalarValue(int x, int y, int z);
 
-    /// Ens calcula si el volum quep a memòria. Si el volum ja ha estat carregat prèviament amb èxit, retornarà cert
-    bool fitsIntoMemory();
-
     /// S'encarrega de convertir el volum a un volum "de mínims" per donar un output en casos que
     /// ens quedem sense memòria o ens trobem amb altres problemes. Vindria a ser un
     /// volum neutre per evitar que l'aplicació peti en casos d'error no controlats
