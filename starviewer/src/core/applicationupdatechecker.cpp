@@ -117,6 +117,7 @@ void ApplicationUpdateChecker::setProxy(const QUrl &url)
     {
         m_manager->setProxy(proxies[0]);
     }
+    QNetworkProxyFactory::setUseSystemConfiguration(false);
 }
 
 void ApplicationUpdateChecker::setCheckFinished()
