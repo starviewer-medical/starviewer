@@ -49,7 +49,7 @@ void ApplicationVersionChecker::checkReleaseNotes()
     // Utilitzar els settings
     readSettings();
     // En cas de que no hi hagi nova versió al server guardarem l'actual als settings
-    m_checkedVersion = m_lastVersionChecked;    
+    m_checkedVersion = m_lastVersionChecked;
 
     if (isNewVersionInstalled())
     {
