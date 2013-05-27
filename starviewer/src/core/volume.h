@@ -31,7 +31,6 @@ class Volume : public QObject {
 Q_OBJECT
 public:
     // TODO: Typedef's duplicats de VolumePixelData, es manté de moment mentre no es va substituïnt arreu on s'hi fa referència
-    typedef VolumePixelData::VoxelType VoxelType;
     typedef VolumePixelData::ItkPixelType ItkPixelType;
     static const unsigned int VDimension = VolumePixelData::VDimension;
     typedef VolumePixelData::ItkImageType ItkImageType;
