@@ -26,10 +26,9 @@ class VolumePixelDataIterator;
 class VolumePixelData : public QObject {
 Q_OBJECT
 public:
-    /// Tipus de vòxel del volum
-    typedef signed short int VoxelType;
+
     /// Tipus d'imatge intern per defecte d'itk
-    typedef VoxelType ItkPixelType;
+    typedef signed short int ItkPixelType;
     static const unsigned int VDimension = 3;
 
     typedef itk::Image<ItkPixelType, VDimension> ItkImageType;
