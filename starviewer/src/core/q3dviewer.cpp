@@ -1342,16 +1342,6 @@ bool Q3DViewer::checkInputVolume(Volume *volume)
         return false;
     }
 
-    // Comprovem que el volum que volem carregar càpiga a memòria
-    if (!volume->fitsIntoMemory())
-    {
-        DEBUG_LOG("No hi ha prou memòria per veure el volum actual en 3D.");
-        WARN_LOG("No hi ha prou memòria per veure el volum actual en 3D.");
-        QMessageBox::warning(this, tr("Volume too large"),
-                             tr("Current volume is too large. Please select another volume or close other extensions and try again."));
-        return false;
-    }
-
     if (!isSupportedVolume(volume))
     {
         DEBUG_LOG("El format del volum no està suportat");
