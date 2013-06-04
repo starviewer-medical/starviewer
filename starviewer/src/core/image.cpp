@@ -132,7 +132,7 @@ PixelSpacing2D Image::getPreferredPixelSpacing() const
     else if (!pixelSpacingIsPresent && imagerPixelSpacingIsPresent)
     {
         // Only imager pixel spacing is present
-        if (modality == "MG" && m_estimatedRadiographicMagnificationFactor != 0.0)
+        if (modality == "MG" && m_estimatedRadiographicMagnificationFactor != 0.0 && m_estimatedRadiographicMagnificationFactor != 1.0)
         {
             // When modality is MG and we have a valid value of estimated radiographic magnification factor
             // Imager Pixel Spacing corrected by Estimated Radiographic Magnification Factor should be used
