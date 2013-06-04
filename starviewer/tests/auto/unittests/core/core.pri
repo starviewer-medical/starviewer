@@ -53,6 +53,8 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_pixelspacingamenderpostprocessor.cpp \
            $$PWD/test_volumepixeldatareaderfactory.cpp \
            $$PWD/test_measurementmanager.cpp \
+           $$PWD/test_preferredpixelspacingselector.cpp \
+           $$PWD/test_defaultmeasurementtypeselector.cpp \
            $$PWD/test_distancemeasurecomputer.cpp \
            $$PWD/test_areameasurecomputer.cpp \
            $$PWD/test_colortransferfunction.cpp \
