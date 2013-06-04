@@ -1898,14 +1898,7 @@ void Q2DViewer::updateSliceAnnotationInformation()
     if (image->getParentSeries()->getModality() == "MG")
     {
         // Hi ha estudis que són de la modalitat MG que no s'han d'orientar. S'han afegit unes excepcions per poder-los controlar.
-        bool found = false;
-        QListIterator<QString> iterator(m_mammographyAutoOrientationExceptions);
-        while (!found && iterator.hasNext())
-        {
-            found = image->getParentSeries()->getParentStudy()->getDescription().contains(iterator.next(), Qt::CaseInsensitive);
-        }
-
-        if (!found)
+        if (isStandardMammographyImage(image))
         {
             m_enabledAnnotations = m_enabledAnnotations & ~Q2DViewer::SliceAnnotation;
 
