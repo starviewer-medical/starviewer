@@ -1984,27 +1984,18 @@ void Q2DViewer::updateSliceAnnotationInformation()
 
 void Q2DViewer::updateLateralityAnnotationInformation()
 {
-    Image *currentImage = getCurrentDisplayedImage();
-    if (currentImage)
+    QChar laterality = getCurrentDisplayedImageLaterality();
+    if (!laterality.isNull() && !laterality.isSpace())
     {
-        QChar laterality = currentImage->getImageLaterality();
-        if (laterality.isNull() || laterality.isSpace())
-        {
-            laterality = currentImage->getParentSeries()->getLaterality();
-        }
-
-        if (!laterality.isNull() && !laterality.isSpace())
-        {
-            QString lateralityAnnotation = "Lat: " + QString(laterality);
+        QString lateralityAnnotation = "Lat: " + QString(laterality);
             
-            if (m_lowerRightText.trimmed().isEmpty())
-            {
-                m_cornerAnnotations->SetText(1, qPrintable(lateralityAnnotation));
-            }
-            else
-            {
-                m_cornerAnnotations->SetText(1, qPrintable(lateralityAnnotation + "\n" + m_lowerRightText.trimmed()));
-            }
+        if (m_lowerRightText.trimmed().isEmpty())
+        {
+            m_cornerAnnotations->SetText(1, qPrintable(lateralityAnnotation));
+        }
+        else
+        {
+            m_cornerAnnotations->SetText(1, qPrintable(lateralityAnnotation + "\n" + m_lowerRightText.trimmed()));
         }
     }
 }
