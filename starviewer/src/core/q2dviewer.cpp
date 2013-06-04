@@ -471,6 +471,42 @@ QString Q2DViewer::getMammographyProjectionLabel(Image *image)
     return projectionLabel;
 }
 
+bool Q2DViewer::isStandardMammographyImage(Image *image)
+{
+    if (!image)
+    {
+        return false;
+    }
+    
+    Series *imageSeries = image->getParentSeries();
+    if (!imageSeries)
+    {
+        return false;
+    }
+
+    if (imageSeries->getModality() != "MG")
+    {
+        return false;
+    }
+    
+    Study *imageStudy = imageSeries->getParentStudy();
+    if (!imageStudy)
+    {
+        return true;
+    }
+    
+    QString studyDescription = imageStudy->getDescription();
+    // We check if this image has some exception that excludes it from standard mammography
+    bool hasException = false;
+    QListIterator<QString> iterator(m_mammographyAutoOrientationExceptions);
+    while (!hasException && iterator.hasNext())
+    {
+        hasException = studyDescription.contains(iterator.next(), Qt::CaseInsensitive);
+    }
+
+    return !hasException;
+}
+
 void Q2DViewer::refreshAnnotations()
 {
     if (!m_mainVolume)

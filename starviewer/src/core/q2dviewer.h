@@ -327,6 +327,9 @@ private:
     /// Translates View Code Meaning from image to the corresponding mammography projection label.
     QString getMammographyProjectionLabel(Image *image);
     
+    /// Returns true if we can treat the image as an standard mamography, false otherwise
+    bool isStandardMammographyImage(Image *image);
+    
     /// Refresca la visibilitat de les annotacions en funció dels flags que tenim
     void refreshAnnotations();
 
