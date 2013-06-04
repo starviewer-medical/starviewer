@@ -403,4 +403,5 @@ QString ROITool::getAnnotation()
 
     return annotation;
 }
+
 }
