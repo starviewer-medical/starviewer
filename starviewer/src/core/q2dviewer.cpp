@@ -416,11 +416,7 @@ void Q2DViewer::initializeShutterFilter()
 
 void Q2DViewer::updatePreferredImageOrientation()
 {
-    Image *image = 0;
-    if (m_lastView == Q2DViewer::Axial)
-    {
-        image = m_mainVolume->getImage(m_currentSlice, m_currentPhase);
-    }
+    Image *image = getCurrentDisplayedImage();
     
     if (!image)
     {
@@ -1386,7 +1382,7 @@ void Q2DViewer::updateShutterPipeline()
     bool isShutterFilterApplied = false;
     if (m_shuttersAreEnabled && !isThickSlabActive() && m_lastView == Axial)
     {
-        Image *image = m_mainVolume->getImage(m_currentSlice, m_currentPhase);
+        Image *image = getCurrentDisplayedImage();
         if (image)
         {
             vtkImageData *shutterData = image->getDisplayShutterForDisplayAsVtkImageData(m_mainVolume->getImageIndex(m_currentSlice, m_currentPhase));
@@ -1954,11 +1950,7 @@ void Q2DViewer::updateSliceAnnotationInformation()
     Q_ASSERT(m_cornerAnnotations);
     Q_ASSERT(m_mainVolume);
     
-    Image *image = 0;
-    if (m_lastView == Q2DViewer::Axial)
-    {
-        image = m_mainVolume->getImage(m_currentSlice, m_currentPhase);
-    }
+    Image *image = getCurrentDisplayedImage();
     
     if (isStandardMammographyImage(image))
     {
