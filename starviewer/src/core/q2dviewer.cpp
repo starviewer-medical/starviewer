@@ -2040,6 +2040,33 @@ void Q2DViewer::updatePatientInformationAnnotation()
     }
 }
 
+QChar Q2DViewer::getCurrentDisplayedImageLaterality() const
+{
+    QChar laterality;
+    bool searchSeriesLateralityOnly = false;
+    Image *currentImage = getCurrentDisplayedImage();
+    if (!currentImage)
+    {
+        currentImage = m_mainVolume->getImage(0);
+        searchSeriesLateralityOnly = true;
+    }
+    
+    if (currentImage)
+    {
+        if (!searchSeriesLateralityOnly)
+        {
+            laterality = currentImage->getImageLaterality();
+        }
+
+        if (laterality.isNull() || laterality.isSpace())
+        {
+            laterality = currentImage->getParentSeries()->getLaterality();
+        }
+    }
+    
+    return laterality;
+}
+
 void Q2DViewer::updateSliceAnnotation(int currentSlice, int maxSlice, int currentPhase, int maxPhase)
 {
     Q_ASSERT(m_cornerAnnotations);
