@@ -324,6 +324,10 @@ private:
     /// Inicialitza el filtre de màscara per als shutters
     void initializeShutterFilter();
     
+    /// Updates image orientation according to the preferred presentation depending on its attributes, like modality.
+    /// At this moment it is only applying to mammography (MG) images
+    void updatePreferredImageOrientation();
+    
     /// Translates View Code Meaning from image to the corresponding mammography projection label.
     QString getMammographyProjectionLabel(Image *image);
     
