@@ -22,6 +22,9 @@ public:
     /// serà 1 per la primera imatge, 2 per la segona imatge...
     static udg::Series* createSeriesByUID(QString seriesInstanceUID, int numberOfImagesToAddToSeries = 0);
 
+    /// Returns a random modality string
+    static QString getRandomModality();
+    
     /// Elimina els objectes de l'estructura Patient/Study/Series/Image que pertany la serie
     static void cleanUp(udg::Series *series);
 };
