@@ -344,6 +344,12 @@ private:
     void updateLateralityAnnotationInformation();
     void updatePatientInformationAnnotation();
 
+    /// Returns the laterality corresponding to the current displayed image.
+    /// If image is not reconstructed, image laterality is returned, or series laterality if not present
+    /// If image is reconstructed, series laterality is returned
+    /// If no laterality is found, en empty character will be returned
+    QChar getCurrentDisplayedImageLaterality() const;
+    
     /// Refresca els valors de les annotacions de llesca. Si els valors referents
     /// a les fases són < 2 no es printarà informació de fases
     /// Si hi ha thick slab, mostrarà el rang d'aquest
