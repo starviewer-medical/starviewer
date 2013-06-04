@@ -324,6 +324,9 @@ private:
     /// Inicialitza el filtre de màscara per als shutters
     void initializeShutterFilter();
     
+    /// Translates View Code Meaning from image to the corresponding mammography projection label.
+    QString getMammographyProjectionLabel(Image *image);
+    
     /// Refresca la visibilitat de les annotacions en funció dels flags que tenim
     void refreshAnnotations();
 
