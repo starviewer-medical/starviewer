@@ -1946,42 +1946,24 @@ void Q2DViewer::updateSliceAnnotationInformation()
 {
     Q_ASSERT(m_cornerAnnotations);
     Q_ASSERT(m_mainVolume);
-    // TODO De moment assumim que totes les imatges seran de la mateixa modalitat.
-    // Per evitar problemes amb el tractament de multiframe (que deixem per més endavant)
-    // agafem directament la primera imatge, però cal solucionar aquest aspecte adequadament.
-    Image *image = m_mainVolume->getImage(0);
-    if (image->getParentSeries()->getModality() == "MG")
+    
+    Image *image = 0;
+    if (m_lastView == Q2DViewer::Axial)
     {
-        // Hi ha estudis que són de la modalitat MG que no s'han d'orientar. S'han afegit unes excepcions per poder-los controlar.
-        if (isStandardMammographyImage(image))
-        {
-            m_enabledAnnotations = m_enabledAnnotations & ~Q2DViewer::SliceAnnotation;
+        image = m_mainVolume->getImage(m_currentSlice, m_currentPhase);
+    }
+    
+    if (isStandardMammographyImage(image))
+    {
+        // Specific mammography annotations should be displayed
+        m_enabledAnnotations = m_enabledAnnotations & ~Q2DViewer::SliceAnnotation;
+        
+        QString laterality = image->getImageLaterality();
+        QString projection = getMammographyProjectionLabel(image);
 
-            // En la modalitat de mamografia s'ha de mostar informació especifica de la imatge que s'està mostrant.
-            // Per tant si estem a la vista original agafem la imatge actual, altrament no mostrem cap informació.
-            if (m_lastView == Q2DViewer::Axial)
-            {
-                image = m_mainVolume->getImage(m_currentSlice);
-            }
-            else
-            {
-                image = 0;
-            }
-
-            if (image)
-            {
-                QString projection = getMammographyProjectionLabel(image);
-                QString laterality = image->getImageLaterality();
-
-                m_lowerRightText = laterality + " " + projection;
-            }
-            else
-            {
-                m_lowerRightText.clear();
-            }
-
-            m_cornerAnnotations->SetText(1, qPrintable(m_lowerRightText.trimmed()));
-        }
+        m_lowerRightText = laterality + " " + projection;
+        
+        m_cornerAnnotations->SetText(1, qPrintable(m_lowerRightText.trimmed()));
     }
     else
     {
