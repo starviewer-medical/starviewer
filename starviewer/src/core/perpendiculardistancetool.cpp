@@ -363,17 +363,15 @@ void PerpendicularDistanceTool::drawDistanceLine()
 
 QString PerpendicularDistanceTool::getDistanceText() const
 {
-    double distance = MeasurementManager::computeDistance(m_distanceLine, m_2DViewer->getCurrentDisplayedImage(), m_2DViewer->getInput()->getSpacing());
-    // Determine units and precision of the measurement
-    int decimalPrecision = 2;
-    Image *image = m_2DViewer->getInput()->getImage(0);
-    if (MeasurementManager::getMeasurementUnits(image) == MeasurementManager::Pixels)
+    // TODO This code is duplicated in every measurement tool and should be refactored in a single class/method
+    Image *image = m_2DViewer->getCurrentDisplayedImage();
+    if (!image)
     {
-        decimalPrecision = 0;
+        // In case a reconstruction is applied, image will be null, that's why we take the first image in this caseto have the pixel spacing properties.
+        // For these cases, the first image will be enough to properly compute the measurement
+        image = m_2DViewer->getInput()->getImage(0);
     }
-    QString units = MeasurementManager::getMeasurementUnitsAsQString(image);
-
-    return tr("%1 %2").arg(distance, 0, 'f', decimalPrecision).arg(units);
+    return MeasurementManager::getMeasurementForDisplay(m_distanceLine, image, m_2DViewer->getInput()->getSpacing());
 }
 
 void PerpendicularDistanceTool::placeMeasurementText(DrawerText *text)
