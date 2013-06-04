@@ -2014,8 +2014,16 @@ void Q2DViewer::updateLateralityAnnotationInformation()
 
         if (!laterality.isNull() && !laterality.isSpace())
         {
-            QString lateralityAnnotation = "Lat: " + QString(laterality) + "\n";
-            m_cornerAnnotations->SetText(1, qPrintable(lateralityAnnotation + m_lowerRightText.trimmed()));
+            QString lateralityAnnotation = "Lat: " + QString(laterality);
+            
+            if (m_lowerRightText.trimmed().isEmpty())
+            {
+                m_cornerAnnotations->SetText(1, qPrintable(lateralityAnnotation));
+            }
+            else
+            {
+                m_cornerAnnotations->SetText(1, qPrintable(lateralityAnnotation + "\n" + m_lowerRightText.trimmed()));
+            }
         }
     }
 }
