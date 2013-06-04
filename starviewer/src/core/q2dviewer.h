@@ -333,6 +333,7 @@ private:
     /// Desglossem les actualitzacions de les diferents informacions que es mostren per pantalla
     void updatePatientAnnotationInformation();
     void updateSliceAnnotationInformation();
+    void updateLateralityAnnotationInformation();
 
     /// Refresca els valors de les annotacions de llesca. Si els valors referents
     /// a les fases són < 2 no es printarà informació de fases

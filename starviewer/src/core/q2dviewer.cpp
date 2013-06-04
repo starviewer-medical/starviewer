@@ -1919,21 +1919,7 @@ void Q2DViewer::updateSliceAnnotationInformation()
     }
     else
     {
-        Image *currentImage = getCurrentDisplayedImage();
-        if (currentImage)
-        {
-            QChar laterality = currentImage->getImageLaterality();
-            if (laterality.isNull() || laterality.isSpace())
-            {
-                laterality = image->getParentSeries()->getLaterality();
-            }
-
-            if (!laterality.isNull() && !laterality.isSpace())
-            {
-                QString lateralityAnnotation = "Lat: " + QString(laterality) + "\n";
-                m_cornerAnnotations->SetText(1, qPrintable(lateralityAnnotation + m_lowerRightText.trimmed()));
-            }
-        }
+        updateLateralityAnnotationInformation();
     }
 
     int value = m_mainVolume->getImageIndex(m_currentSlice, m_currentPhase);
@@ -1970,6 +1956,25 @@ void Q2DViewer::updateSliceAnnotationInformation()
         else
         {
             m_cornerAnnotations->SetText(3, qPrintable(m_upperRightText));
+        }
+    }
+}
+
+void Q2DViewer::updateLateralityAnnotationInformation()
+{
+    Image *currentImage = getCurrentDisplayedImage();
+    if (currentImage)
+    {
+        QChar laterality = currentImage->getImageLaterality();
+        if (laterality.isNull() || laterality.isSpace())
+        {
+            laterality = currentImage->getParentSeries()->getLaterality();
+        }
+
+        if (!laterality.isNull() && !laterality.isSpace())
+        {
+            QString lateralityAnnotation = "Lat: " + QString(laterality) + "\n";
+            m_cornerAnnotations->SetText(1, qPrintable(lateralityAnnotation + m_lowerRightText.trimmed()));
         }
     }
 }
