@@ -1931,6 +1931,31 @@ void Q2DViewer::updateSliceAnnotationInformation()
     {
         this->updateSliceAnnotation(value + 1, m_maxSliceValue + 1);
     }
+    
+    updatePatientInformationAnnotation();
+}
+
+void Q2DViewer::updateLateralityAnnotationInformation()
+{
+    Image *currentImage = getCurrentDisplayedImage();
+    if (currentImage)
+    {
+        QChar laterality = currentImage->getImageLaterality();
+        if (laterality.isNull() || laterality.isSpace())
+        {
+            laterality = currentImage->getParentSeries()->getLaterality();
+        }
+
+        if (!laterality.isNull() && !laterality.isSpace())
+        {
+            QString lateralityAnnotation = "Lat: " + QString(laterality) + "\n";
+            m_cornerAnnotations->SetText(1, qPrintable(lateralityAnnotation + m_lowerRightText.trimmed()));
+        }
+    }
+}
+
+void Q2DViewer::updatePatientInformationAnnotation()
+{
     // Si aquestes anotacions estan activades, llavors li afegim la informació de la hora de la sèrie i la imatge
     if (m_enabledAnnotations.testFlag(Q2DViewer::PatientInformationAnnotation))
     {
@@ -1956,25 +1981,6 @@ void Q2DViewer::updateSliceAnnotationInformation()
         else
         {
             m_cornerAnnotations->SetText(3, qPrintable(m_upperRightText));
-        }
-    }
-}
-
-void Q2DViewer::updateLateralityAnnotationInformation()
-{
-    Image *currentImage = getCurrentDisplayedImage();
-    if (currentImage)
-    {
-        QChar laterality = currentImage->getImageLaterality();
-        if (laterality.isNull() || laterality.isSpace())
-        {
-            laterality = currentImage->getParentSeries()->getLaterality();
-        }
-
-        if (!laterality.isNull() && !laterality.isSpace())
-        {
-            QString lateralityAnnotation = "Lat: " + QString(laterality) + "\n";
-            m_cornerAnnotations->SetText(1, qPrintable(lateralityAnnotation + m_lowerRightText.trimmed()));
         }
     }
 }
