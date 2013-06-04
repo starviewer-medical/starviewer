@@ -15,6 +15,21 @@ MeasureComputer::~MeasureComputer()
 
 double* MeasureComputer::amendCoordinate(double coordinate[3], double coordinateSpacing[3], const PixelSpacing2D &amenderSpacing)
 {
+    if (!coordinate)
+    {
+        return 0;
+    }
+
+    if (!coordinateSpacing)
+    {
+        double *sameCoordinate = new double[3];
+        sameCoordinate[0] = coordinate[0];
+        sameCoordinate[1] = coordinate[1];
+        sameCoordinate[2] = coordinate[2];
+
+        return sameCoordinate;
+    }
+    
     double *amendedCoordinate = new double[3];
 
     double multiplierFactor[2];
