@@ -66,6 +66,12 @@ int VolumePixelDataReaderVTKDCMTK::read(const QStringList &filenames)
     {
         errorCode = OutOfMemory;
     }
+    catch (const VtkDcmtkImageReader::CantReadImageException &exception)
+    {
+        DEBUG_LOG(QString("Can't read image with VTK-DCMTK: %1").arg(exception.what()));
+        WARN_LOG(QString("Can't read image with VTK-DCMTK: %1").arg(exception.what()));
+        errorCode = CannotReadFile;
+    }
     catch (const std::exception &exception)
     {
         DEBUG_LOG(QString("An exception was thrown while reading with VtkDcmtkImageReader: %1").arg(exception.what()));
