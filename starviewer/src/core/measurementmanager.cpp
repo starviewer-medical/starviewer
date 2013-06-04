@@ -209,4 +209,32 @@ MeasurementManager::MeasurementType MeasurementManager::getDefaultMeasurementTyp
     return measurementType;
 }
 
+double* MeasurementManager::amendCoordinateExplicit(double coordinate[3], double coordinateSpacing[3], const PixelSpacing2D &amenderSpacing)
+{
+    double *amendedCoordinate = new double[3];
+
+    double multiplierFactor[2];
+    
+    if (!amenderSpacing.isValid())
+    {
+        multiplierFactor[0] = multiplierFactor[1] = 1.0;
+        
+        amendedCoordinate[2] = coordinate[2] / coordinateSpacing[2];
+    }
+    else
+    {
+        multiplierFactor[0] = amenderSpacing.x();
+        multiplierFactor[1] = amenderSpacing.y(); 
+
+        amendedCoordinate[2] = coordinate[2];
+    }
+    
+    for (int i = 0; i < 2; ++i)
+    {
+        amendedCoordinate[i] = coordinate[i] / coordinateSpacing[i] * multiplierFactor[i];
+    }
+    
+    return amendedCoordinate;
+}
+
 }; // End namespace udg
