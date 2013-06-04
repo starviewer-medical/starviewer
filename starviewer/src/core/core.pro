@@ -300,6 +300,9 @@ HEADERS += extensionfactory.h \
     distancemeasurecomputer.h \
     areameasurecomputer.h \
     pixelspacing2d.h \
+    pixelspacingschemepropertyselector.h \
+    preferredpixelspacingselector.h \
+    defaultmeasurementtypeselector.h \
     optimalviewersgridestimator.h \
     vtkimagedatacreator.h \
     itkDCMTKFileReader.h \
@@ -569,6 +572,9 @@ SOURCES += extensionmediator.cpp \
     distancemeasurecomputer.cpp \
     areameasurecomputer.cpp \
     pixelspacing2d.cpp \
+    pixelspacingschemepropertyselector.cpp \
+    preferredpixelspacingselector.cpp \
+    defaultmeasurementtypeselector.cpp \
     optimalviewersgridestimator.cpp \
     vtkimagedatacreator.cpp \
     itkDCMTKFileReader.cxx \
