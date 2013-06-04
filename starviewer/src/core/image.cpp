@@ -5,6 +5,7 @@
 #include "thumbnailcreator.h"
 #include "mathtools.h"
 #include "imageoverlayreader.h"
+#include "preferredpixelspacingselector.h"
 
 #include <QFileInfo>
 
@@ -113,59 +114,8 @@ double Image::getEstimatedRadiographicMagnificationFactor() const
 
 PixelSpacing2D Image::getPreferredPixelSpacing() const
 {
-    bool pixelSpacingIsPresent = m_pixelSpacing.isValid();
-    bool imagerPixelSpacingIsPresent = m_imagerPixelSpacing.isValid();
-    
-    PixelSpacing2D preferredPixelSpacing;
-    
-    QString modality;
-    if (getParentSeries())
-    {
-        modality = getParentSeries()->getModality();
-    }
-    
-    if (pixelSpacingIsPresent && !imagerPixelSpacingIsPresent)
-    {
-        // Only pixel spacing is present
-        preferredPixelSpacing = m_pixelSpacing;
-    }
-    else if (!pixelSpacingIsPresent && imagerPixelSpacingIsPresent)
-    {
-        // Only imager pixel spacing is present
-        if (modality == "MG" && m_estimatedRadiographicMagnificationFactor != 0.0 && m_estimatedRadiographicMagnificationFactor != 1.0)
-        {
-            // When modality is MG and we have a valid value of estimated radiographic magnification factor
-            // Imager Pixel Spacing corrected by Estimated Radiographic Magnification Factor should be used
-            preferredPixelSpacing.setX(m_imagerPixelSpacing.x() / m_estimatedRadiographicMagnificationFactor);
-            preferredPixelSpacing.setY(m_imagerPixelSpacing.y() / m_estimatedRadiographicMagnificationFactor);
-        }
-        else
-        {
-            // Imager Pixel Spacing should be used
-            preferredPixelSpacing = m_imagerPixelSpacing;
-        }
-    }
-    else if (pixelSpacingIsPresent && imagerPixelSpacingIsPresent)
-    {
-        // Both pixel spacing and imager pixel spacing are present
-        if (m_pixelSpacing.isEqual(m_imagerPixelSpacing))
-        {
-            // If both values are equal, we can use any of them. (Measurements are at detector)
-            preferredPixelSpacing = m_pixelSpacing;
-        }
-        else
-        {
-            // If values are different, we should use pixel spacing (measurements are calibrated)
-            preferredPixelSpacing = m_pixelSpacing;
-        }
-    }
-    else if (!pixelSpacingIsPresent && !imagerPixelSpacingIsPresent)
-    {
-        // Both pixel spacing and imager pixel spacing are *not* present,
-        // Default constructed value will be returned
-    }
-    
-    return preferredPixelSpacing;
+    PreferredPixelSpacingSelector preferredPixelSpacingSelector;
+    return preferredPixelSpacingSelector.getPreferredPixelSpacing(this);
 }
 
 void Image::setSliceThickness(double z)
