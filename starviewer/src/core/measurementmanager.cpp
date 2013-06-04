@@ -51,37 +51,15 @@ QString MeasurementManager::getMeasurementUnitsAsQString(Image *image)
 
 double* MeasurementManager::amendCoordinate(double coordinate[3], double dataSpacing[3], Image *image)
 {
-    double *amendedCoordinate = new double[3];
-
     if (!image)
     {
+        double *amendedCoordinate = new double[3];
         memcpy(amendedCoordinate, coordinate, sizeof(double) * 3);
         return amendedCoordinate;
     }
 
     PixelSpacing2D pixelSpacing = image->getPreferredPixelSpacing();
-    double multiplierFactor[2];
-    
-    if (!pixelSpacing.isValid())
-    {
-        multiplierFactor[0] = multiplierFactor[1] = 1.0;
-        
-        amendedCoordinate[2] = coordinate[2] / dataSpacing[2];
-    }
-    else
-    {
-        multiplierFactor[0] = pixelSpacing.x();
-        multiplierFactor[1] = pixelSpacing.y(); 
-
-        amendedCoordinate[2] = coordinate[2];
-    }
-    
-    for (int i = 0; i < 2; ++i)
-    {
-        amendedCoordinate[i] = coordinate[i] / dataSpacing[i] * multiplierFactor[i];
-    }
-    
-    return amendedCoordinate;
+    return amendCoordinateExplicit(coordinate, dataSpacing, pixelSpacing);
 }
 
 double MeasurementManager::computeDistance(DrawerLine *line, Image *image, double dataSpacing[3])
