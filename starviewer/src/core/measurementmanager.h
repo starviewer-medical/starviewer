@@ -8,6 +8,7 @@ namespace udg {
 class DrawerLine;
 class DrawerPolygon;
 class Image;
+class PixelSpacing2D;
 
 /**
     This is a helper class to manage measurements safely.
@@ -39,6 +40,8 @@ public:
 
     /// Returns the default meaurement type regarding image properties, such as pixel spacing tags and modality
     static MeasurementType getDefaultMeasurementType(Image *image);
+    /// Amends coordinate taken on coordinateSpacing with the given amenderSpacing
+    static double* amendCoordinateExplicit(double coordinate[3], double coordinateSpacing[3], const PixelSpacing2D &amenderSpacing);
 };
 
 } // End namespace udg
