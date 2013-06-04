@@ -18,6 +18,10 @@ class VtkDcmtkImageReader : public vtkImageReader2 {
 
 public:
 
+    class CantReadImageException;
+
+public:
+
     vtkTypeMacro(VtkDcmtkImageReader, vtkImageReader2);
 
     /// Create an object with Debug turned off, modified time initialized to zero, and reference counting on.
@@ -93,6 +97,15 @@ private:
     size_t m_frameSize;
     /// Maximum voxel value found in the image data.
     double m_maximumVoxelValue;
+
+};
+
+/// This exception is thrown when the image can't be loaded.
+class VtkDcmtkImageReader::CantReadImageException : public std::runtime_error {
+
+public:
+
+    explicit CantReadImageException(const std::string& what);
 
 };
 

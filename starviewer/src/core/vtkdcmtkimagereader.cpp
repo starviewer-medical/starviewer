@@ -254,8 +254,7 @@ int VtkDcmtkImageReader::RequestInformation(vtkInformation *vtkNotUsed(request),
 
     if (!decideInitialScalarTypeAndNumberOfComponents())
     {
-        ERROR_LOG("Can't decide a scalar type for the image. This may be due to corrupt data.");
-        return 0;
+        throw CantReadImageException("Can't decide a scalar type for the image. This may be due to corrupt data.");
     }
 
     this->SetNumberOfOutputPorts(1);
@@ -677,6 +676,11 @@ void VtkDcmtkImageReader::copyDcmtkImageToBuffer(void *buffer, DicomImage &dicom
         // Color image, use 8-bit RGB
         dicomImage.getOutputData(buffer, m_frameSize, 8);
     }
+}
+
+VtkDcmtkImageReader::CantReadImageException::CantReadImageException(const std::string &what) :
+    std::runtime_error(what)
+{
 }
 
 } // namespace udg
