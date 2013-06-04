@@ -3,6 +3,7 @@
 #include "studytesthelper.h"
 #include "imagetesthelper.h"
 #include "series.h"
+#include "mathtools.h"
 
 using namespace udg;
 
@@ -25,6 +26,13 @@ Series* SeriesTestHelper::createSeriesByUID(QString seriesInstanceUID, int numbe
     }
 
     return series;
+}
+
+QString SeriesTestHelper::getRandomModality()
+{
+    QStringList modalities;
+    modalities << "CT" << "MR" << "CR" << "MG" << "DX" << "US" << "NM" << "ES" << "PT" << "OP" << "XA" << "XC" << "RF" << "SC";
+    return modalities.at(MathTools::randomInt(0, modalities.count() - 1));
 }
 
 void SeriesTestHelper::cleanUp(Series *series)
