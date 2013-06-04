@@ -6,7 +6,9 @@
 #include "drawerline.h"
 #include "drawerpolygon.h"
 #include "fuzzycomparetesthelper.h"
+#include "seriestesthelper.h"
 #include "mathtools.h"
+#include "distancemeasurecomputer.h"
 
 using namespace udg;
 using namespace testing;
@@ -23,15 +25,18 @@ private slots:
     
     void getMeasurementUnitsAsQString_ReturnsExpectedValues_data();
     void getMeasurementUnitsAsQString_ReturnsExpectedValues();
-    
-    void computeDistance_ReturnsExpectedValues_data();
-    void computeDistance_ReturnsExpectedValues();
-    
-    void computeArea_ReturnsExpectedValues_data();
-    void computeArea_ReturnsExpectedValues();
-    
+
     void getDefaultMeasurementType_ReturnsExpectedValues_data();
     void getDefaultMeasurementType_ReturnsExpectedValues();
+
+    void getMeasurementForDisplay_ReturnsExpectedString_data();
+    void getMeasurementForDisplay_ReturnsExpectedString();
+    
+    void getMeasurementForDisplay_DrawerLine_ReturnsExpectedString_data();
+    void getMeasurementForDisplay_DrawerLine_ReturnsExpectedString();
+
+    void getMeasurementForDisplay_DrawerPolygon_ReturnsExpectedString_data();
+    void getMeasurementForDisplay_DrawerPolygon_ReturnsExpectedString();
 };
 
 Q_DECLARE_METATYPE(Image*)
@@ -40,6 +45,9 @@ Q_DECLARE_METATYPE(DrawerLine*)
 Q_DECLARE_METATYPE(double*)
 Q_DECLARE_METATYPE(DrawerPolygon*)
 Q_DECLARE_METATYPE(MeasurementManager::MeasurementType)
+Q_DECLARE_METATYPE(MeasureComputer*)
+Q_DECLARE_METATYPE(DistanceMeasureComputer*)
+Q_DECLARE_METATYPE(MeasurementManager::MeasurementDisplayVerbosityType)
 
 void test_MeasurementManager::setupGetMeasurementUnitsData()
 {
@@ -129,271 +137,6 @@ void test_MeasurementManager::getMeasurementUnitsAsQString_ReturnsExpectedValues
     QFETCH(QString, expectedString);
 
     QCOMPARE(MeasurementManager::getMeasurementUnitsAsQString(image), expectedString);
-}
-
-void test_MeasurementManager::computeDistance_ReturnsExpectedValues_data()
-{
-    QTest::addColumn<DrawerLine*>("drawerLine");
-    QTest::addColumn<Image*>("image");
-    QTest::addColumn<double*>("spacing");
-    QTest::addColumn<double>("expectedDistance");
-
-    DrawerLine *line = 0;
-    Image *image = 0;
-    double p1[3] = { 8.99, 10.2, 8.97 };
-    double p2[3] = { 2.34, 9.02, 8.97 };
-    double *spacing = 0;
-    
-    line = new DrawerLine(this);
-    line->setFirstPoint(p1);
-    line->setSecondPoint(p2);
-    image = new Image(this);
-    image->setPixelSpacing(1.2, 1.2);
-    spacing = new double[3];
-    spacing[0] = 1.2;
-    spacing[1] = 1.2;
-    spacing[2] = 3.5;
-    QTest::newRow("Image spacing 1.2, 1.2 - Volume spacing 1.2, 1.2") << line << image << spacing << 6.75388;
-
-    line = 0;
-    QTest::newRow("null line") << line << image << spacing << 0.0;
-
-    line = new DrawerLine(this);
-    line->setFirstPoint(p1);
-    line->setSecondPoint(p2);
-    image = new Image(this);
-    image->setPixelSpacing(1.2, 1.2);
-    spacing = new double[3];
-    spacing[0] = 0.75;
-    spacing[1] = 0.75;
-    spacing[2] = 3.5;
-    QTest::newRow("Image spacing 1.2, 1.2 - Volume spacing 0.75, 0.75") << line << image << spacing << 10.8062;
-
-    line = new DrawerLine(this);
-    line->setFirstPoint(p1);
-    line->setSecondPoint(p2);
-    image = new Image(this);
-    image->setPixelSpacing(0.0, 0.0);
-    spacing = new double[3];
-    spacing[0] = 1.0;
-    spacing[1] = 1.0;
-    spacing[2] = 1.0;
-    QTest::newRow("Image spacing 0,0 - Volume spacing 1, 1") << line << image << spacing << 6.75388;
-
-    line = new DrawerLine(this);
-    line->setFirstPoint(p1);
-    line->setSecondPoint(p2);
-    image = new Image(this);
-    image->setPixelSpacing(0.0, 0.0);
-    spacing = new double[3];
-    spacing[0] = 2.0;
-    spacing[1] = 2.0;
-    spacing[2] = 2.0;
-    QTest::newRow("Image spacing 0,0 - Volume spacing 2, 2") << line << image << spacing << 3.37694;
-}
-
-void test_MeasurementManager::computeDistance_ReturnsExpectedValues()
-{
-    QFETCH(DrawerLine*, drawerLine);
-    QFETCH(Image*, image);
-    QFETCH(double*, spacing);
-    QFETCH(double, expectedDistance);
-
-    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(MeasurementManager::computeDistance(drawerLine, image, spacing), expectedDistance, 0.00001));
-}
-
-void test_MeasurementManager::computeArea_ReturnsExpectedValues_data()
-{
-    QTest::addColumn<DrawerPolygon*>("polygon");
-    QTest::addColumn<Image*>("image");
-    QTest::addColumn<double*>("spacing");
-    QTest::addColumn<double>("expectedArea");
-
-    DrawerPolygon *drawerPolygon = 0;
-    Image *image = 0;
-    double p1[3] = { 0.0, 0.0, 0.0 };
-    double p2[3] = { 1.0, 1.0, 0.0 };
-    double p3[3] = { 3.0, 4.0, 0.0 };
-    double p4[3] = { 4.0, 3.0, 0.0 };
-    double *spacing = 0;
-    
-    QTest::newRow("null polygon") << drawerPolygon << image << spacing << 0.0;
-    
-    // Axial areas
-    drawerPolygon = new DrawerPolygon(this);
-    drawerPolygon->addVertix(p1);
-    drawerPolygon->addVertix(p2);
-    drawerPolygon->addVertix(p3);
-    drawerPolygon->addVertix(p4);
-    image = new Image(this);
-    image->setPixelSpacing(1.2, 1.2);
-    spacing = new double[3];
-    spacing[0] = 1.2;
-    spacing[1] = 1.2;
-    spacing[2] = 3.5;
-    QTest::newRow("Image spacing 1.2, 1.2 - Volume spacing 1.2, 1.2 - axial plane") << drawerPolygon << image << spacing << 3.0;
-
-    drawerPolygon = new DrawerPolygon(this);
-    drawerPolygon->addVertix(p1);
-    drawerPolygon->addVertix(p2);
-    drawerPolygon->addVertix(p3);
-    drawerPolygon->addVertix(p4);
-    image = new Image(this);
-    image->setPixelSpacing(1.2, 1.2);
-    spacing = new double[3];
-    spacing[0] = 0.75;
-    spacing[1] = 0.75;
-    spacing[2] = 3.5;
-    QTest::newRow("Image spacing 1.2, 1.2 - Volume spacing 0.75, 0.75 - axial plane") << drawerPolygon << image << spacing << 7.68;
-
-    drawerPolygon = new DrawerPolygon(this);
-    drawerPolygon->addVertix(p1);
-    drawerPolygon->addVertix(p2);
-    drawerPolygon->addVertix(p3);
-    drawerPolygon->addVertix(p4);
-    image = new Image(this);
-    image->setPixelSpacing(0., 0.);
-    spacing = new double[3];
-    spacing[0] = 1.;
-    spacing[1] = 1.;
-    spacing[2] = 1.;
-    QTest::newRow("Image spacing 0.0, 0.0 - Volume spacing 1.0, 1.0 - axial plane") << drawerPolygon << image << spacing << 3.0;
-
-    drawerPolygon = new DrawerPolygon(this);
-    drawerPolygon->addVertix(p1);
-    drawerPolygon->addVertix(p2);
-    drawerPolygon->addVertix(p3);
-    drawerPolygon->addVertix(p4);
-    image = new Image(this);
-    image->setPixelSpacing(0., 0.);
-    spacing = new double[3];
-    spacing[0] = 2.;
-    spacing[1] = 2.;
-    spacing[2] = 2.;
-    QTest::newRow("Image spacing 0.0, 0.0 - Volume spacing 2.0, 2.0 - axial plane") << drawerPolygon << image << spacing << 0.75;
-    
-    // Sagital areas
-    drawerPolygon = new DrawerPolygon(this);
-    qSwap<double>(p2[0], p2[2]);
-    qSwap<double>(p3[0], p3[2]);
-    qSwap<double>(p4[0], p4[2]);
-    drawerPolygon->addVertix(p1);
-    drawerPolygon->addVertix(p2);
-    drawerPolygon->addVertix(p3);
-    drawerPolygon->addVertix(p4);
-    image = new Image(this);
-    image->setPixelSpacing(1.2, 1.2);
-    spacing = new double[3];
-    spacing[0] = 1.2;
-    spacing[1] = 1.2;
-    spacing[2] = 3.5;
-    QTest::newRow("Image spacing 1.2, 1.2 - Volume spacing 1.2, 1.2 - sagital plane") << drawerPolygon << image << spacing << 3.0;
-
-    drawerPolygon = new DrawerPolygon(this);
-    drawerPolygon->addVertix(p1);
-    drawerPolygon->addVertix(p2);
-    drawerPolygon->addVertix(p3);
-    drawerPolygon->addVertix(p4);
-    image = new Image(this);
-    image->setPixelSpacing(1.2, 1.2);
-    spacing = new double[3];
-    spacing[0] = 0.75;
-    spacing[1] = 0.75;
-    spacing[2] = 3.5;
-    QTest::newRow("Image spacing 1.2, 1.2 - Volume spacing 0.75, 0.75 - sagital plane") << drawerPolygon << image << spacing << 4.8;
-
-    drawerPolygon = new DrawerPolygon(this);
-    drawerPolygon->addVertix(p1);
-    drawerPolygon->addVertix(p2);
-    drawerPolygon->addVertix(p3);
-    drawerPolygon->addVertix(p4);
-    image = new Image(this);
-    image->setPixelSpacing(0., 0.);
-    spacing = new double[3];
-    spacing[0] = 1.;
-    spacing[1] = 1.;
-    spacing[2] = 1.;
-    QTest::newRow("Image spacing 0.0, 0.0 - Volume spacing 1.0, 1.0 - sagital plane") << drawerPolygon << image << spacing << 3.0;
-
-    drawerPolygon = new DrawerPolygon(this);
-    drawerPolygon->addVertix(p1);
-    drawerPolygon->addVertix(p2);
-    drawerPolygon->addVertix(p3);
-    drawerPolygon->addVertix(p4);
-    image = new Image(this);
-    image->setPixelSpacing(0., 0.);
-    spacing = new double[3];
-    spacing[0] = 2.;
-    spacing[1] = 2.;
-    spacing[2] = 2.;
-    QTest::newRow("Image spacing 0.0, 0.0 - Volume spacing 2.0, 2.0 - sagital plane") << drawerPolygon << image << spacing << 0.75;
-
-    // Coronal areas
-    drawerPolygon = new DrawerPolygon(this);
-    qSwap<double>(p2[0], p2[1]);
-    qSwap<double>(p3[0], p3[1]);
-    qSwap<double>(p4[0], p4[1]);
-    drawerPolygon->addVertix(p1);
-    drawerPolygon->addVertix(p2);
-    drawerPolygon->addVertix(p3);
-    drawerPolygon->addVertix(p4);
-    image = new Image(this);
-    image->setPixelSpacing(1.2, 1.2);
-    spacing = new double[3];
-    spacing[0] = 1.2;
-    spacing[1] = 1.2;
-    spacing[2] = 3.5;
-    QTest::newRow("Image spacing 1.2, 1.2 - Volume spacing 1.2, 1.2 - coronal plane") << drawerPolygon << image << spacing << 3.0;
-
-    drawerPolygon = new DrawerPolygon(this);
-    drawerPolygon->addVertix(p1);
-    drawerPolygon->addVertix(p2);
-    drawerPolygon->addVertix(p3);
-    drawerPolygon->addVertix(p4);
-    image = new Image(this);
-    image->setPixelSpacing(1.2, 1.2);
-    spacing = new double[3];
-    spacing[0] = 0.75;
-    spacing[1] = 0.75;
-    spacing[2] = 3.5;
-    QTest::newRow("Image spacing 1.2, 1.2 - Volume spacing 0.75, 0.75 - coronal plane") << drawerPolygon << image << spacing << 4.8;
-
-    drawerPolygon = new DrawerPolygon(this);
-    drawerPolygon->addVertix(p1);
-    drawerPolygon->addVertix(p2);
-    drawerPolygon->addVertix(p3);
-    drawerPolygon->addVertix(p4);
-    image = new Image(this);
-    image->setPixelSpacing(0., 0.);
-    spacing = new double[3];
-    spacing[0] = 1.;
-    spacing[1] = 1.;
-    spacing[2] = 1.;
-    QTest::newRow("Image spacing 0.0, 0.0 - Volume spacing 1.0, 1.0 - coronal plane") << drawerPolygon << image << spacing << 3.0;
-
-    drawerPolygon = new DrawerPolygon(this);
-    drawerPolygon->addVertix(p1);
-    drawerPolygon->addVertix(p2);
-    drawerPolygon->addVertix(p3);
-    drawerPolygon->addVertix(p4);
-    image = new Image(this);
-    image->setPixelSpacing(0., 0.);
-    spacing = new double[3];
-    spacing[0] = 2.;
-    spacing[1] = 2.;
-    spacing[2] = 2.;
-    QTest::newRow("Image spacing 0.0, 0.0 - Volume spacing 2.0, 2.0 - coronal plane") << drawerPolygon << image << spacing << 0.75;
-}
-
-void test_MeasurementManager::computeArea_ReturnsExpectedValues()
-{
-    QFETCH(DrawerPolygon*, polygon);
-    QFETCH(Image*, image);
-    QFETCH(double*, spacing);
-    QFETCH(double, expectedArea);
-
-    QCOMPARE(MeasurementManager::computeArea(polygon, image, spacing), expectedArea);
-    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(MeasurementManager::computeArea(polygon, image, spacing), expectedArea, 0.00001));
 }
 
 void test_MeasurementManager::getDefaultMeasurementType_ReturnsExpectedValues_data()
@@ -498,6 +241,300 @@ void test_MeasurementManager::getDefaultMeasurementType_ReturnsExpectedValues()
     QFETCH(MeasurementManager::MeasurementType, expectedType);
 
     QCOMPARE(MeasurementManager::getDefaultMeasurementType(image), expectedType);
+}
+
+void test_MeasurementManager::getMeasurementForDisplay_ReturnsExpectedString_data()
+{
+    QTest::addColumn<MeasureComputer*>("measureComputer");
+    QTest::addColumn<Image*>("image");
+    QTest::addColumn<double*>("spacing");
+    QTest::addColumn<MeasurementManager::MeasurementDisplayVerbosityType>("verbosity");
+    QTest::addColumn<QString>("expectedString");
+
+    // Setup measure computer
+    DrawerLine *line = new DrawerLine(this);
+    double p1[3] = { 8.99, 10.2, 8.97 };
+    double p2[3] = { 2.34, 9.02, 8.97 };
+    line->setFirstPoint(p1);
+    line->setSecondPoint(p2);
+    MeasureComputer *anyMeasureComputer = new DistanceMeasureComputer(line);
+    
+    PixelSpacing2D invalidSpacing(0.0, 0.0);
+    PixelSpacing2D pixelSpacing(1.2, 1.2);
+    
+    // Image with no pixel spacing and no imager pixel spacing
+    Image *imageWithNoPixelSpacingAttributes = new Image(this);
+    Series *seriesWithRandomModality = new Series(this);
+    seriesWithRandomModality->setModality(SeriesTestHelper::getRandomModality());
+    imageWithNoPixelSpacingAttributes->setParentSeries(seriesWithRandomModality);
+
+    QList<MeasurementManager::MeasurementDisplayVerbosityType> verbosities;
+    verbosities << MeasurementManager::Minimal << MeasurementManager::MinimalExplicit << MeasurementManager::Verbose << MeasurementManager::VerboseExplicit;
+    double *nullSpacing = 0;
+    double randomZSpacing = MathTools::randomDouble(0.1, 9.8);
+    double *spacing = new double[3];
+    spacing[0] = 1.2;
+    spacing[1] = 1.2;
+    spacing[2] = randomZSpacing;
+    
+    foreach (MeasurementManager::MeasurementDisplayVerbosityType verbosity, verbosities)
+    {
+        QTest::newRow("Image with no pixel spacing attributes, any modality, null data spacing, any verbosity") << anyMeasureComputer << imageWithNoPixelSpacingAttributes << nullSpacing << verbosity << "7 px";
+        QTest::newRow("Image with no pixel spacing attributes, any modality, data spacing, , any verbosity") << anyMeasureComputer << imageWithNoPixelSpacingAttributes << spacing << verbosity << "6 px";
+    }
+    
+    // Image with pixel spacing, no imager pixel spacing
+    Image *imageWithPixelSpacing = new Image(this);
+    imageWithPixelSpacing->setPixelSpacing(pixelSpacing);
+    imageWithPixelSpacing->setParentSeries(seriesWithRandomModality);
+
+    foreach (MeasurementManager::MeasurementDisplayVerbosityType verbosity, verbosities)
+    {
+        QTest::newRow("Image with pixel spacing, any modality, data spacing, any verbosity") << anyMeasureComputer << imageWithPixelSpacing << spacing << verbosity << "6.75 mm";
+    }
+    
+    // Image with pixel spacing and imager pixel spacing
+    // Same values
+    Image *imageWithSamePixelSpacingAndImagerPixelSpacing = new Image(this);
+    imageWithSamePixelSpacingAndImagerPixelSpacing->setPixelSpacing(pixelSpacing);
+    imageWithSamePixelSpacingAndImagerPixelSpacing->setImagerPixelSpacing(pixelSpacing);
+    imageWithSamePixelSpacingAndImagerPixelSpacing->setParentSeries(seriesWithRandomModality);
+
+    QTest::newRow("Image with pixel spacing & imager pixel spacing, same values, any modality, Minimal") 
+        << anyMeasureComputer << imageWithSamePixelSpacingAndImagerPixelSpacing << spacing << MeasurementManager::Minimal << "6.75 mm";
+    
+    QTest::newRow("Image with pixel spacing & imager pixel spacing, same values, any modality, MinimalExplicit") 
+        << anyMeasureComputer << imageWithSamePixelSpacingAndImagerPixelSpacing << spacing << MeasurementManager::MinimalExplicit << "6.75 mm (detector)";
+    
+    QTest::newRow("Image with pixel spacing & imager pixel spacing, same values, any modality, Verbose") 
+        << anyMeasureComputer << imageWithSamePixelSpacingAndImagerPixelSpacing << spacing << MeasurementManager::Verbose << "6.75 mm";
+    
+    QTest::newRow("Image with pixel spacing & imager pixel spacing, same values, any modality, VerboseExplicit") 
+        << anyMeasureComputer << imageWithSamePixelSpacingAndImagerPixelSpacing << spacing << MeasurementManager::VerboseExplicit << "6.75 mm (detector)";
+    
+    // Different values
+    PixelSpacing2D imagerPixelSpacing(0.8, 0.8);
+    Image *imageWithDifferentPixelSpacingAndImagerPixelSpacing = new Image(this);
+    imageWithDifferentPixelSpacingAndImagerPixelSpacing->setPixelSpacing(pixelSpacing);
+    imageWithDifferentPixelSpacingAndImagerPixelSpacing->setImagerPixelSpacing(imagerPixelSpacing);
+    imageWithDifferentPixelSpacingAndImagerPixelSpacing->setParentSeries(seriesWithRandomModality);
+
+    QTest::newRow("Image with pixel spacing & imager pixel spacing, different values, any modality, Minimal") 
+        << anyMeasureComputer << imageWithDifferentPixelSpacingAndImagerPixelSpacing << spacing << MeasurementManager::Minimal << "6.75 mm (calibrated)";
+    
+    QTest::newRow("Image with pixel spacing & imager pixel spacing, different values, any modality, MinimalExplicit") 
+        << anyMeasureComputer << imageWithDifferentPixelSpacingAndImagerPixelSpacing << spacing << MeasurementManager::MinimalExplicit << "6.75 mm (calibrated)";
+
+    QTest::newRow("Image with pixel spacing & imager pixel spacing, different values, any modality, Verbose") 
+        << anyMeasureComputer << imageWithDifferentPixelSpacingAndImagerPixelSpacing << spacing << MeasurementManager::Verbose << "6.75 mm (calibrated)\n4.50 mm";
+
+    QTest::newRow("Image with pixel spacing & imager pixel spacing, different values, any modality, VerboseExplicit") 
+        << anyMeasureComputer << imageWithDifferentPixelSpacingAndImagerPixelSpacing << spacing << MeasurementManager::VerboseExplicit << "6.75 mm (calibrated)\n4.50 mm (detector)";
+    
+    // Image with imager pixel spacing
+    Image *imageWithImagerPixelSpacingOnly = new Image(this);
+    imageWithImagerPixelSpacingOnly->setImagerPixelSpacing(imagerPixelSpacing);
+    imageWithImagerPixelSpacingOnly->setParentSeries(seriesWithRandomModality);
+
+    QTest::newRow("Image with imager pixel spacing, any modality, Minimal") 
+        << anyMeasureComputer << imageWithImagerPixelSpacingOnly << spacing << MeasurementManager::Minimal << "4.50 mm";
+    
+    QTest::newRow("Image with imager pixel spacing, any modality, MinimalExplicit") 
+        << anyMeasureComputer << imageWithImagerPixelSpacingOnly << spacing << MeasurementManager::MinimalExplicit << "4.50 mm (detector)";
+
+    QTest::newRow("Image with imager pixel spacing, any modality, Verbose") 
+        << anyMeasureComputer << imageWithImagerPixelSpacingOnly << spacing << MeasurementManager::Verbose << "4.50 mm";
+
+    QTest::newRow("Image with imager pixel spacing, any modality, VerboseExplicit") 
+        << anyMeasureComputer << imageWithImagerPixelSpacingOnly << spacing << MeasurementManager::VerboseExplicit << "4.50 mm (detector)";
+    
+    // MG Image, with magnification factor
+    double magnificationFactor = 1.25;
+    Image *MGimageWithImagerPixelSpacingAndMagnificationFactor = new Image(this);
+    MGimageWithImagerPixelSpacingAndMagnificationFactor->setImagerPixelSpacing(imagerPixelSpacing);
+    MGimageWithImagerPixelSpacingAndMagnificationFactor->setEstimatedRadiographicMagnificationFactor(magnificationFactor);
+    Series *seriesMG = new Series(this);
+    seriesMG->setModality("MG");
+    MGimageWithImagerPixelSpacingAndMagnificationFactor->setParentSeries(seriesMG);
+
+    QTest::newRow("MG Image with imager pixel spacing + magnificationFactor, Minimal") 
+        << anyMeasureComputer << MGimageWithImagerPixelSpacingAndMagnificationFactor << spacing << MeasurementManager::Minimal << "3.60 mm (magnified)";
+    
+    QTest::newRow("MG Image with imager pixel spacing + magnificationFactor, MinimalExplicit") 
+        << anyMeasureComputer << MGimageWithImagerPixelSpacingAndMagnificationFactor << spacing << MeasurementManager::MinimalExplicit << "3.60 mm (magnified)";
+
+    QTest::newRow("MG Image with imager pixel spacing + magnificationFactor, Verbose") 
+        << anyMeasureComputer << MGimageWithImagerPixelSpacingAndMagnificationFactor << spacing << MeasurementManager::Verbose << "3.60 mm (magnified)\n4.50 mm";
+
+    QTest::newRow("MG Image with imager pixel spacing + magnificationFactor, VerboseExplicit") 
+        << anyMeasureComputer << MGimageWithImagerPixelSpacingAndMagnificationFactor << spacing << MeasurementManager::VerboseExplicit << "3.60 mm (magnified)\n4.50 mm (detector)";
+}
+
+void test_MeasurementManager::getMeasurementForDisplay_ReturnsExpectedString()
+{
+    QFETCH(MeasureComputer*, measureComputer);
+    QFETCH(Image*, image);
+    QFETCH(double*, spacing);
+    QFETCH(MeasurementManager::MeasurementDisplayVerbosityType, verbosity);
+    QFETCH(QString, expectedString);
+
+    QCOMPARE(MeasurementManager::getMeasurementForDisplay(measureComputer, image, spacing, verbosity), expectedString);
+}
+
+void test_MeasurementManager::getMeasurementForDisplay_DrawerLine_ReturnsExpectedString_data()
+{
+    QTest::addColumn<DrawerLine*>("drawerLine");
+    QTest::addColumn<Image*>("image");
+    QTest::addColumn<double*>("spacing");
+    QTest::addColumn<QString>("expectedString");
+
+    DrawerLine *nullLine = 0;
+    Image *imageWithPixelSpacing = 0;
+    Series *seriesWithRandomModality = 0;
+    double *nullSpacing = 0;
+    
+    PixelSpacing2D pixelSpacing(1.2, 1.2);
+    imageWithPixelSpacing = new Image(this);
+    imageWithPixelSpacing->setPixelSpacing(pixelSpacing);
+    seriesWithRandomModality = new Series(this);
+    seriesWithRandomModality->setModality(SeriesTestHelper::getRandomModality());
+    imageWithPixelSpacing->setParentSeries(seriesWithRandomModality);
+    QTest::newRow("null line, image with pixel spacing, null data spacing") << nullLine << imageWithPixelSpacing << nullSpacing << "0.00 mm";
+    
+    double *randomSpacing = new double[3];
+    randomSpacing[0] = MathTools::randomDouble(0.1, 9.7);
+    randomSpacing[1] = MathTools::randomDouble(0.1, 9.7);
+    randomSpacing[2] = MathTools::randomDouble(0.1, 9.7);
+    QTest::newRow("null line, image with pixel spacing, random data spacing") << nullLine << imageWithPixelSpacing << randomSpacing << "0.00 mm";
+
+    double *spacing = 0;
+    double randomZSpacing = MathTools::randomDouble(0.1, 9.8);
+    double p1[3] = { 8.99, 10.2, 8.97 };
+    double p2[3] = { 2.34, 9.02, 8.97 };
+    DrawerLine *line = new DrawerLine(this);
+    line->setFirstPoint(p1);
+    line->setSecondPoint(p2);
+    spacing = new double[3];
+    spacing[0] = 1.2;
+    spacing[1] = 1.2;
+    spacing[2] = randomZSpacing;
+    QTest::newRow("Image pixel spacing 1.2, 1.2 - Volume spacing 1.2, 1.2") << line << imageWithPixelSpacing << spacing << "6.75 mm";
+    
+    spacing = new double[3];
+    spacing[0] = 0.75;
+    spacing[1] = 0.75;
+    spacing[2] = randomZSpacing;
+    QTest::newRow("Image pixel spacing 1.2, 1.2 - Volume spacing 0.75, 0.75") << line << imageWithPixelSpacing << spacing << "10.81 mm";
+
+    PixelSpacing2D invalidPixelSpacing(0.0, 0.0);
+    Image *imageWithInvalidPixelSpacing = new Image(this);
+    imageWithInvalidPixelSpacing->setPixelSpacing(invalidPixelSpacing);
+    imageWithInvalidPixelSpacing->setParentSeries(seriesWithRandomModality);
+    QTest::newRow("null line, image with no pixel spacing, null spacing") << nullLine << imageWithInvalidPixelSpacing << nullSpacing << "0 px";
+    QTest::newRow("null line, image with no pixel spacing, random spacing") << nullLine << imageWithInvalidPixelSpacing << randomSpacing << "0 px";
+
+    spacing = new double[3];
+    spacing[0] = 1.0;
+    spacing[1] = 1.0;
+    spacing[2] = randomZSpacing;
+    QTest::newRow("Image pixel spacing 0,0 - Volume spacing 1, 1") << line << imageWithInvalidPixelSpacing << spacing << "7 px";
+    
+    spacing = new double[3];
+    spacing[0] = 2.0;
+    spacing[1] = 2.0;
+    spacing[2] = randomZSpacing;
+    QTest::newRow("Image pixel spacing 0,0 - Volume spacing 2, 2") << line << imageWithInvalidPixelSpacing << spacing << "3 px";
+}
+
+void test_MeasurementManager::getMeasurementForDisplay_DrawerLine_ReturnsExpectedString()
+{
+    QFETCH(DrawerLine*, drawerLine);
+    QFETCH(Image*, image);
+    QFETCH(double*, spacing);
+    QFETCH(QString, expectedString);
+
+    QCOMPARE(MeasurementManager::getMeasurementForDisplay(drawerLine, image, spacing), expectedString);
+}
+
+void test_MeasurementManager::getMeasurementForDisplay_DrawerPolygon_ReturnsExpectedString_data()
+{
+    QTest::addColumn<DrawerPolygon*>("polygon");
+    QTest::addColumn<Image*>("image");
+    QTest::addColumn<double*>("spacing");
+    QTest::addColumn<QString>("expectedString");
+
+    DrawerPolygon *nullPolygon = 0;
+    Image *imageWithPixelSpacing = 0;
+    Series *seriesWithRandomModality = 0;
+    double *nullSpacing = 0;
+    
+    PixelSpacing2D pixelSpacing(1.2, 1.2);
+    imageWithPixelSpacing = new Image(this);
+    imageWithPixelSpacing->setPixelSpacing(pixelSpacing);
+    seriesWithRandomModality = new Series(this);
+    seriesWithRandomModality->setModality(SeriesTestHelper::getRandomModality());
+    imageWithPixelSpacing->setParentSeries(seriesWithRandomModality);
+    
+    QTest::newRow("null polygon, image with pixel spacing, null data spacing") << nullPolygon << imageWithPixelSpacing << nullSpacing << "0.00 mm2";
+    
+    double *randomSpacing = new double[3];
+    randomSpacing[0] = MathTools::randomDouble(0.1, 9.7);
+    randomSpacing[1] = MathTools::randomDouble(0.1, 9.7);
+    randomSpacing[2] = MathTools::randomDouble(0.1, 9.7);
+    QTest::newRow("null line, image with pixel spacing, random data spacing") << nullPolygon << imageWithPixelSpacing << randomSpacing << "0.00 mm2";
+    
+    double p1[3] = { 0.0, 0.0, 0.0 };
+    double p2[3] = { 1.0, 1.0, 0.0 };
+    double p3[3] = { 3.0, 4.0, 0.0 };
+    double p4[3] = { 4.0, 3.0, 0.0 };
+    
+    double *spacing = 0;
+    
+    // Axial areas
+    DrawerPolygon *axialPolygon = new DrawerPolygon(this);
+    axialPolygon->addVertix(p1);
+    axialPolygon->addVertix(p2);
+    axialPolygon->addVertix(p3);
+    axialPolygon->addVertix(p4);
+    
+    double randomZSpacing = MathTools::randomDouble(0.1, 9.8);
+    spacing = new double[3];
+    spacing[0] = 1.2;
+    spacing[1] = 1.2;
+    spacing[2] = randomZSpacing;
+    QTest::newRow("Image pixel spacing 1.2, 1.2 - Volume spacing 1.2, 1.2 - axial plane") << axialPolygon << imageWithPixelSpacing << spacing << "3.00 mm2";
+    
+    spacing = new double[3];
+    spacing[0] = 0.75;
+    spacing[1] = 0.75;
+    spacing[2] = randomZSpacing;
+    QTest::newRow("Image pixel spacing 1.2, 1.2 - Volume spacing 0.75, 0.75 - axial plane") << axialPolygon << imageWithPixelSpacing << spacing << "7.68 mm2";
+    
+    PixelSpacing2D invalidPixelSpacing(0.0, 0.0);
+    Image *imageWithInvalidPixelSpacing = new Image(this);
+    imageWithInvalidPixelSpacing->setPixelSpacing(invalidPixelSpacing);
+    imageWithInvalidPixelSpacing->setParentSeries(seriesWithRandomModality);
+    spacing = new double[3];
+    spacing[0] = 1.;
+    spacing[1] = 1.;
+    spacing[2] = randomZSpacing;
+    QTest::newRow("Image pixel spacing 0.0, 0.0 - Volume spacing 1.0, 1.0 - axial plane") << axialPolygon << imageWithInvalidPixelSpacing << spacing << "3 px2";
+    
+    spacing = new double[3];
+    spacing[0] = 2.;
+    spacing[1] = 2.;
+    spacing[2] = randomZSpacing;
+    QTest::newRow("Image pixel spacing 0.0, 0.0 - Volume spacing 2.0, 2.0 - axial plane") << axialPolygon << imageWithInvalidPixelSpacing << spacing << "1 px2";
+}
+
+void test_MeasurementManager::getMeasurementForDisplay_DrawerPolygon_ReturnsExpectedString()
+{
+    QFETCH(DrawerPolygon*, polygon);
+    QFETCH(Image*, image);
+    QFETCH(double*, spacing);
+    QFETCH(QString, expectedString);
+
+    QCOMPARE(MeasurementManager::getMeasurementForDisplay(polygon, image, spacing), expectedString);
 }
 
 DECLARE_TEST(test_MeasurementManager)

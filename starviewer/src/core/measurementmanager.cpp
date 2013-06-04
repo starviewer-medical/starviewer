@@ -4,7 +4,8 @@
 #include "drawerpolygon.h"
 #include "image.h"
 #include "series.h"
-#include "mathtools.h"
+#include "distancemeasurecomputer.h"
+#include "areameasurecomputer.h"
 
 namespace udg {
 
@@ -49,68 +50,39 @@ QString MeasurementManager::getMeasurementUnitsAsQString(Image *image)
     return units;
 }
 
-double* MeasurementManager::amendCoordinate(double coordinate[3], double dataSpacing[3], Image *image)
+QString MeasurementManager::getMeasurementForDisplay(MeasureComputer *measureComputer, Image *image, double dataSpacing[3], 
+    MeasurementDisplayVerbosityType verbosity)
 {
-    if (!image)
-    {
-        double *amendedCoordinate = new double[3];
-        memcpy(amendedCoordinate, coordinate, sizeof(double) * 3);
-        return amendedCoordinate;
-    }
+    QString measurementString;
 
-    PixelSpacing2D pixelSpacing = image->getPreferredPixelSpacing();
-    return amendCoordinateExplicit(coordinate, dataSpacing, pixelSpacing);
-}
-
-double MeasurementManager::computeDistance(DrawerLine *line, Image *image, double dataSpacing[3])
-{
-    if (!line)
-    {
-        return 0.0;
-    }
-
-    double *p1 = amendCoordinate(line->getFirstPoint(), dataSpacing, image);
-    double *p2 = amendCoordinate(line->getSecondPoint(), dataSpacing, image);
-
-    return MathTools::getDistance3D(p1, p2);
-}
-
-double MeasurementManager::computeArea(DrawerPolygon *polygon, Image *image, double dataSpacing[3])
-{
-    if (!polygon)
-    {
-        return 0.0;
-    }
+    // Common computing in all cases, the preferred measure
+    double measure = measureComputer->computeMeasure(image, dataSpacing);
+    measurementString = formatMeasurementForDisplay(measure, image, verbosity, measureComputer->getMeasureDimensions());
     
-    // First we guess on which plane is lying the polygon
-    int xIndex;
-    int yIndex;
-    polygon->get2DPlaneIndices(xIndex, yIndex);
-    if (xIndex == -1 || yIndex == -1)
+    if (hasToAddDetectorMeasurementInformation(image, verbosity))
     {
-        // For safety
-        xIndex = 0;
-        yIndex = 1;
-    }
-    // Now we can compute the 2D area
-    double area = 0.0;
-    int j = 0;
-    int numberOfPoints = polygon->getNumberOfPoints();
-    for (int i = 0; i < numberOfPoints; i++)
-    {
-        j++;
-        if (j == numberOfPoints)
+        // In Verbose* cases we also compute Detector measurement if needed
+        bool verboseExplicit = verbosity == VerboseExplicit ? true : false;
+
+        QString detectorMeasurement = getMeasurementForDisplayExplicit(measureComputer, image, dataSpacing, Detector, verboseExplicit);
+
+        if (!detectorMeasurement.isEmpty())
         {
-            j = 0;
+            measurementString += "\n" + detectorMeasurement;
         }
-
-        double *p1 = amendCoordinate((double*)polygon->getVertix(i), dataSpacing, image);
-        double *p2 = amendCoordinate((double*)polygon->getVertix(j), dataSpacing, image);
-
-        area += (p1[xIndex] + p2[xIndex]) * (p1[yIndex] - p2[yIndex]);
     }
-    
-    return std::abs(area) * 0.5;
+
+    return measurementString;
+}
+
+QString MeasurementManager::getMeasurementForDisplay(DrawerLine *line, Image *image, double dataSpacing[3], MeasurementDisplayVerbosityType verbosity)
+{
+    return getMeasurementForDisplay(new DistanceMeasureComputer(line), image, dataSpacing, verbosity);
+}
+
+QString MeasurementManager::getMeasurementForDisplay(DrawerPolygon *polygon, Image *image, double dataSpacing[3], MeasurementDisplayVerbosityType verbosity)
+{
+    return getMeasurementForDisplay(new AreaMeasureComputer(polygon), image, dataSpacing, verbosity);
 }
 
 MeasurementManager::MeasurementType MeasurementManager::getDefaultMeasurementType(Image *image)
@@ -153,7 +125,7 @@ MeasurementManager::MeasurementType MeasurementManager::getDefaultMeasurementTyp
     else if (!pixelSpacingIsPresent && imagerPixelSpacingIsPresent)
     {
         // Only imager pixel spacing is present
-        if (modality == "MG" && image->getEstimatedRadiographicMagnificationFactor() != 0.0)
+        if (modality == "MG" && image->getEstimatedRadiographicMagnificationFactor() != 0.0 && image->getEstimatedRadiographicMagnificationFactor() != 1.0)
         {
             // Imager Pixel Spacing * Estimated Radiographic Magnification Factor should be used
             measurementType = Magnified;
@@ -187,32 +159,196 @@ MeasurementManager::MeasurementType MeasurementManager::getDefaultMeasurementTyp
     return measurementType;
 }
 
-double* MeasurementManager::amendCoordinateExplicit(double coordinate[3], double coordinateSpacing[3], const PixelSpacing2D &amenderSpacing)
+QString MeasurementManager::getMeasurementTypeInformationString(MeasurementType type)
 {
-    double *amendedCoordinate = new double[3];
-
-    double multiplierFactor[2];
+    QString information;
     
-    if (!amenderSpacing.isValid())
+    switch (type)
     {
-        multiplierFactor[0] = multiplierFactor[1] = 1.0;
+        case Detector:
+            information = QObject::tr("detector");
+            break;
+
+        case Magnified:
+            information = QObject::tr("magnified");
+            break;
+
+        case Calibrated:
+            information = QObject::tr("calibrated");
+            break;
+
+        case NoDefinedUnits:
+            break;
         
-        amendedCoordinate[2] = coordinate[2] / coordinateSpacing[2];
+        case UnknownMeaning:
+            information = QObject::tr("unknown");
+            break;
+    }
+
+    return information;
+}
+
+QString MeasurementManager::getMeasurementForDisplayExplicit(MeasureComputer *measureComputer, Image *image, double dataSpacing[3], 
+    MeasurementType explicitMeasurementType, bool verbose)
+{
+    MeasurementType appliedType;
+    double measure = computeMeasureExplicit(measureComputer, image, dataSpacing, explicitMeasurementType, appliedType);
+    if (appliedType != explicitMeasurementType)
+    {
+        return QString();
+    }
+
+    return formatMeasurementForDisplayExplicit(measure, image, explicitMeasurementType, verbose, measureComputer->getMeasureDimensions());
+}
+
+double MeasurementManager::computeMeasureExplicit(MeasureComputer *measureComputer, Image *image, double dataSpacing[3], MeasurementType explicitMeasurementType, 
+    MeasurementType &appliedMeasurementType)
+{
+    MeasurementType defaultMeasurementType = getDefaultMeasurementType(image);
+    if (defaultMeasurementType == explicitMeasurementType)
+    {
+        appliedMeasurementType = defaultMeasurementType;
+        return measureComputer->computeMeasure(image, dataSpacing);
+    }
+    
+    PixelSpacing2D spacing;
+    double factor = 1.0;
+    switch (explicitMeasurementType)
+    {
+        case Detector:
+            // We need imager pixel spacing
+            spacing = image->getImagerPixelSpacing();
+            if (!spacing.isValid())
+            {
+                appliedMeasurementType = defaultMeasurementType;
+            }
+            break;
+            
+        case Magnified:
+            // We need imager pixel spacing and estimated radiographic factor
+            spacing = image->getImagerPixelSpacing();
+            factor = image->getEstimatedRadiographicMagnificationFactor();
+            if (!spacing.isValid() || factor == 1.0 || factor == 0.0)
+            {
+                appliedMeasurementType = defaultMeasurementType;
+            }
+            
+            spacing.setX(spacing.x() / factor);
+            spacing.setY(spacing.y() / factor);
+            break;
+            
+        case Calibrated:
+        case Physical:
+            // We need pixel spacing
+            spacing = image->getPixelSpacing();
+            if (!spacing.isValid())
+            {
+                appliedMeasurementType = defaultMeasurementType;
+            }
+            break;
+            
+        case NoDefinedUnits:
+            // No attribute is needed
+            break;
+            
+        case UnknownMeaning:
+            // Use pixel spacing or discard this case...
+            break;
+    }
+
+    if (appliedMeasurementType == defaultMeasurementType)
+    {
+        return measureComputer->computeMeasure(image, dataSpacing);
     }
     else
     {
-        multiplierFactor[0] = amenderSpacing.x();
-        multiplierFactor[1] = amenderSpacing.y(); 
+        appliedMeasurementType = explicitMeasurementType;
+        
+        return measureComputer->computeMeasureExplicit(dataSpacing, spacing);
+    }
+}
 
-        amendedCoordinate[2] = coordinate[2];
-    }
+QString MeasurementManager::formatMeasurementForDisplay(double measurementValue, Image *image, MeasurementDisplayVerbosityType verbosity, int dimensions)
+{
+    MeasurementType defaultMeasurementType = getDefaultMeasurementType(image);
     
-    for (int i = 0; i < 2; ++i)
+    bool verbose = hasToBeExplicitAboutMeasurementType(defaultMeasurementType, verbosity);
+    
+    return formatMeasurementForDisplayExplicit(measurementValue, image, defaultMeasurementType, verbose, dimensions);
+}
+
+QString MeasurementManager::formatMeasurementForDisplayExplicit(double measurementValue, Image *image, MeasurementType explicitMeasurementType, bool verbose, 
+    int dimensions)
+{
+    // Determine units and precision of the measurement
+    int decimalPrecision = 2;
+    if (MeasurementManager::getMeasurementUnits(image) == MeasurementManager::Pixels)
     {
-        amendedCoordinate[i] = coordinate[i] / coordinateSpacing[i] * multiplierFactor[i];
+        decimalPrecision = 0;
     }
     
-    return amendedCoordinate;
+    QString units = MeasurementManager::getMeasurementUnitsAsQString(image);
+    if (dimensions == 2 || dimensions == 3)
+    {
+        // This would indicate if the units are squared or cubic. Other values will be just ignored
+        units += QString::number(dimensions);
+    }
+    
+    QString formattedMeasurement = QString("%1 %2").arg(measurementValue, 0, 'f', decimalPrecision).arg(units);
+    if (verbose) 
+    {
+        QString additionalInformation = getMeasurementTypeInformationString(explicitMeasurementType);
+        if (!additionalInformation.isEmpty())
+        {
+            formattedMeasurement += " (" + additionalInformation + ")";
+        }
+    }
+
+    return formattedMeasurement;
+}
+
+bool MeasurementManager::hasToAddDetectorMeasurementInformation(Image *image, MeasurementDisplayVerbosityType verbosity)
+{
+    bool addDetectorInformation = false;
+    
+    switch (verbosity)
+    {
+        case Verbose:
+        case VerboseExplicit:
+            {
+                // In Verbose* cases we also have to add Detector measurement information if needed
+                MeasurementType measurementType = getDefaultMeasurementType(image);
+                if (measurementType == Magnified || measurementType == Calibrated)
+                {
+                    addDetectorInformation = true;
+                }
+            }
+            break;
+    }
+
+    return addDetectorInformation;
+}
+
+bool MeasurementManager::hasToBeExplicitAboutMeasurementType(MeasurementType measurementType, MeasurementDisplayVerbosityType verbosity)
+{
+    bool verbose = false;
+    if (measurementType == Calibrated || measurementType == Magnified)
+    {
+        verbose = true;
+    }
+    
+    switch (verbosity)
+    {
+        case MinimalExplicit:
+        case VerboseExplicit:
+            if (measurementType == Detector)
+            {
+                verbose = true;
+            }
+            break;
+    }
+
+    return verbose;
 }
 
 }; // End namespace udg
