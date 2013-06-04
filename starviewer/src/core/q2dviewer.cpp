@@ -414,6 +414,59 @@ void Q2DViewer::initializeShutterFilter()
     m_shutterMaskFilter->SetMaskInput(0);
 }
 
+void Q2DViewer::updatePreferredImageOrientation()
+{
+    Image *image = 0;
+    if (m_lastView == Q2DViewer::Axial)
+    {
+        image = m_mainVolume->getImage(m_currentSlice, m_currentPhase);
+    }
+    
+    if (!image)
+    {
+        return;
+    }
+    
+    // Hi ha estudis que són de la modalitat MG que no s'han d'orientar. S'han afegit unes excepcions per poder-los controlar.
+    if (isStandardMammographyImage(image))
+    {
+        QString projection = getMammographyProjectionLabel(image);
+        QString laterality = image->getImageLaterality();
+        // S'han de seguir les recomanacions IHE de presentació d'imatges de Mammografia
+        // IHE Techincal Framework Vol. 2 revision 8.0, apartat 4.16.4.2.2.1.1.2 Image Orientation and Justification
+        PatientOrientation desiredOrientation;
+        if (projection == "CC" || projection == "XCC" || projection == "XCCL" || projection == "XCCM" || projection == "FB")
+        {
+            if (laterality == PatientOrientation::LeftLabel)
+            {
+                desiredOrientation.setLabels(PatientOrientation::AnteriorLabel, PatientOrientation::RightLabel);
+            }
+            else if (laterality == PatientOrientation::RightLabel)
+            {
+                desiredOrientation.setLabels(PatientOrientation::PosteriorLabel, PatientOrientation::LeftLabel);
+            }
+        }
+        else if (projection == "MLO" || projection == "ML" || projection == "LM" || projection == "LMO" || projection == "SIO")
+        {
+            if (laterality == PatientOrientation::LeftLabel)
+            {
+                desiredOrientation.setLabels(PatientOrientation::AnteriorLabel, PatientOrientation::FeetLabel);
+            }
+            else if (laterality == PatientOrientation::RightLabel)
+            {
+                desiredOrientation.setLabels(PatientOrientation::PosteriorLabel, PatientOrientation::FeetLabel);
+            }
+        }
+        else
+        {
+            DEBUG_LOG("Unkown projection found: " + projection);
+        }
+
+        // Apliquem la orientació que volem
+        setImageOrientation(desiredOrientation);
+    }
+}
+
 QString Q2DViewer::getMammographyProjectionLabel(Image *image)
 {
     QString projectionLabel;
