@@ -1428,6 +1428,7 @@ void Q2DViewer::setSlice(int value)
         this->updateDisplayExtent();
         updateDefaultPreset();
         updateSliceAnnotationInformation();
+        updatePreferredImageOrientation();
         updatePatientOrientationAnnotation();
         emit sliceChanged(m_currentSlice);
         render();
@@ -1473,6 +1474,7 @@ void Q2DViewer::setPhase(int value)
         this->updateDisplayExtent();
         updateDefaultPreset();
         updateSliceAnnotationInformation();
+        updatePreferredImageOrientation();
         emit phaseChanged(m_currentPhase);
         this->render();
     }
@@ -1969,41 +1971,9 @@ void Q2DViewer::updateSliceAnnotationInformation()
             if (image)
             {
                 QString projection = getMammographyProjectionLabel(image);
-
-                // S'han de seguir les recomanacions IHE de presentació d'imatges de Mammografia
-                // IHE Techincal Framework Vol. 2 revision 8.0, apartat 4.16.4.2.2.1.1.2 Image Orientation and Justification
-                PatientOrientation desiredOrientation;
                 QString laterality = image->getImageLaterality();
-                if (projection == "CC" || projection == "XCC" || projection == "XCCL" || projection == "XCCM" || projection == "FB")
-                {
-                    if (laterality == PatientOrientation::LeftLabel)
-                    {
-                        desiredOrientation.setLabels(PatientOrientation::AnteriorLabel, PatientOrientation::RightLabel);
-                    }
-                    else if (laterality == PatientOrientation::RightLabel)
-                    {
-                        desiredOrientation.setLabels(PatientOrientation::PosteriorLabel, PatientOrientation::LeftLabel);
-                    }
-                }
-                else if (projection == "MLO" || projection == "ML" || projection == "LM" || projection == "LMO" || projection == "SIO")
-                {
-                    if (laterality == PatientOrientation::LeftLabel)
-                    {
-                        desiredOrientation.setLabels(PatientOrientation::AnteriorLabel, PatientOrientation::FeetLabel);
-                    }
-                    else if (laterality == PatientOrientation::RightLabel)
-                    {
-                        desiredOrientation.setLabels(PatientOrientation::PosteriorLabel, PatientOrientation::FeetLabel);
-                    }
-                }
-                else
-                {
-                    DEBUG_LOG("Projecció no tractada! :: " + projection);
-                }
 
                 m_lowerRightText = laterality + " " + projection;
-                // Apliquem la orientació que volem
-                setImageOrientation(desiredOrientation);
             }
             else
             {
