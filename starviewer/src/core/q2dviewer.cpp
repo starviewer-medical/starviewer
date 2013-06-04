@@ -1998,6 +1998,10 @@ void Q2DViewer::updateLateralityAnnotationInformation()
             m_cornerAnnotations->SetText(1, qPrintable(lateralityAnnotation + "\n" + m_lowerRightText.trimmed()));
         }
     }
+    else
+    {
+        m_cornerAnnotations->SetText(1, qPrintable(m_lowerRightText.trimmed()));
+    }
 }
 
 void Q2DViewer::updatePatientInformationAnnotation()
