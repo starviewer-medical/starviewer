@@ -1596,7 +1596,14 @@ int Q2DViewer::getCurrentPhase() const
 
 Image* Q2DViewer::getCurrentDisplayedImage() const
 {
-    return m_mainVolume->getImage(m_currentSlice, m_currentPhase);
+    if (m_lastView == Axial)
+    {
+        return m_mainVolume->getImage(m_currentSlice, m_currentPhase);
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 ImagePlane* Q2DViewer::getCurrentImagePlane(bool vtkReconstructionHack)
