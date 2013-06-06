@@ -1,6 +1,7 @@
 #include "q2dviewerconfigurationscreen.h"
 
 #include "coresettings.h"
+#include "measurementmanager.h"
 
 namespace udg {
 
@@ -29,6 +30,7 @@ void Q2DViewerConfigurationScreen::initialize()
 
     initializeModalitiesWithZoomByDefault();
     initializeMagnifyingGlassToolZoomFactor();
+    initializeMeasurementsVerbosity();
 }
 
 void Q2DViewerConfigurationScreen::createConnections()
@@ -46,6 +48,11 @@ void Q2DViewerConfigurationScreen::createConnections()
     connect(m_4XZoomFactorRadioButton, SIGNAL(clicked()), SLOT(updateMagnifyingGlassZoomFactorSetting()));
     connect(m_6XZoomFactorRadioButton, SIGNAL(clicked()), SLOT(updateMagnifyingGlassZoomFactorSetting()));
     connect(m_8XZoomFactorRadioButton, SIGNAL(clicked()), SLOT(updateMagnifyingGlassZoomFactorSetting()));
+    
+    connect(m_minimalVerbosityRadioButton, SIGNAL(clicked()), SLOT(updateMeasurementVerbositySetting()));
+    connect(m_minimalExplicitVerbosityRadioButton, SIGNAL(clicked()), SLOT(updateMeasurementVerbositySetting()));
+    connect(m_verboseVerbosityRadioButton, SIGNAL(clicked()), SLOT(updateMeasurementVerbositySetting()));
+    connect(m_verboseExplicitVerbosityRadioButton, SIGNAL(clicked()), SLOT(updateMeasurementVerbositySetting()));
 }
 
 void Q2DViewerConfigurationScreen::initializeModalitiesWithZoomByDefault()
@@ -89,6 +96,30 @@ void Q2DViewerConfigurationScreen::initializeMagnifyingGlassToolZoomFactor()
     {
         // Si no hi ha cap valor vàlid, l'augment serà 4x per defecte
         m_4XZoomFactorRadioButton->setChecked(true);
+    }
+}
+
+void Q2DViewerConfigurationScreen::initializeMeasurementsVerbosity()
+{
+    MeasurementManager::MeasurementDisplayVerbosityType verbosity = MeasurementManager::getConfiguredDisplayVerbosity();
+
+    switch (verbosity)
+    {
+        case MeasurementManager::Minimal:
+            m_minimalVerbosityRadioButton->setChecked(true);
+            break;
+
+        case MeasurementManager::MinimalExplicit:
+            m_minimalExplicitVerbosityRadioButton->setChecked(true);
+            break;
+
+        case MeasurementManager::Verbose:
+            m_verboseVerbosityRadioButton->setChecked(true);
+            break;
+
+        case MeasurementManager::VerboseExplicit:
+            m_verboseExplicitVerbosityRadioButton->setChecked(true);
+            break;
     }
 }
 
@@ -174,4 +205,31 @@ void Q2DViewerConfigurationScreen::updateMagnifyingGlassZoomFactorSetting()
     Settings settings;
     settings.setValue(CoreSettings::MagnifyingGlassZoomFactor, zoomFactor);
 }
+
+void Q2DViewerConfigurationScreen::updateMeasurementVerbositySetting()
+{
+    MeasurementManager::MeasurementDisplayVerbosityType verbosity = MeasurementManager::Minimal;
+
+    if (m_minimalVerbosityRadioButton->isChecked())
+    {
+        verbosity = MeasurementManager::Minimal;
+        
+    }
+    else if (m_minimalExplicitVerbosityRadioButton->isChecked())
+    {
+        verbosity = MeasurementManager::MinimalExplicit;
+    }
+    else if (m_verboseVerbosityRadioButton->isChecked())
+    {
+        verbosity = MeasurementManager::Verbose;
+    }
+    else if (m_verboseExplicitVerbosityRadioButton->isChecked())
+    {
+        verbosity = MeasurementManager::VerboseExplicit;
+    }
+
+    Settings settings;
+    settings.setValue(CoreSettings::MeasurementDisplayVerbosity, MeasurementManager::getMeasurementDisplayVerbosityTypeAsQString(verbosity));
+}
+
 }
