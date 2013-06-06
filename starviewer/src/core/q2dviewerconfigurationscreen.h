@@ -27,6 +27,9 @@ private:
     /// Actualitza quin radio button del factor de zoom de lupa cal activar
     void initializeMagnifyingGlassToolZoomFactor();
 
+    /// Updates which measurement verbosity radio button should be checked
+    void initializeMeasurementsVerbosity();
+
 private slots:
     /// Es cridaran quan es modifiquin els check box actualitzant els corresponents settings
     void updateSliceScrollLoopSetting(bool enable);
@@ -35,6 +38,7 @@ private slots:
     void updateReferenceLinesForCTSetting(bool enable);
     void updateModalitiesWithZoomByDefaultSetting(const QStringList &modalities);
     void updateMagnifyingGlassZoomFactorSetting();
+    void updateMeasurementVerbositySetting();
     void updateAutomaticSynchronizationForMRSetting(bool enable);
     void updateAutomaticSynchronizationForCTSetting(bool enable);
 };
