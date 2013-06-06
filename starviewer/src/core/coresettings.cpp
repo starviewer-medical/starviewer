@@ -90,6 +90,8 @@ const QString CoreSettings::EnableQ2DViewerAutomaticSynchronizationForCT(Q2DView
 const QString CoreSettings::ModalitiesToApplyHangingProtocolsAsFirstOption(Q2DViewerBase + "modalitiesToApplyHangingProtocolsAsFirstOption");
 const QString CoreSettings::StudyLayoutConfigList(Q2DViewerBase + "StudyLayoutConfigList");
 
+const QString CoreSettings::MeasurementDisplayVerbosity(Q2DViewerBase + "Measurement/measurementDisplayVerbosity");
+
 CoreSettings::CoreSettings()
 {
 }

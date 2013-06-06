@@ -114,6 +114,9 @@ public:
     static const QString ModalitiesToApplyHangingProtocolsAsFirstOption;
     /// Nom de la llista on es guarden les configuracions de layouts automàtics
     static const QString StudyLayoutConfigList;
+
+    /// Defines the verbosity for measurements
+    static const QString MeasurementDisplayVerbosity;
 };
 
 } // End namespace udg
