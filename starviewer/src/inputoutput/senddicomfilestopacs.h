@@ -61,7 +61,7 @@ private:
     void processResponseFromStoreSCP(T_DIMSE_C_StoreRSP *response, DcmDataset *statusDetail, QString filePathDicomObjectStoredFailed);
 
     /// Envia una image al PACS amb l'associació passada per paràmetre, retorna si la imatge s'ha enviat correctament
-    bool storeSCU(T_ASC_Association *association, QString filePathToStore);
+    virtual bool storeSCU(T_ASC_Association *association, QString filePathToStore);
 
     /// Retorna un Status indicant com ha finalitzat l'operació C-Store
     PACSRequestStatus::SendRequestStatus getStatusStoreSCU();
