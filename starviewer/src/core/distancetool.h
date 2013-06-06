@@ -5,8 +5,6 @@
 
 namespace udg {
 
-class DrawerText;
-
 /**
     Eina per mesurar distàncies en un visor 2D.
     Ens permet fixar dos punts a la pantalla i calcular la distància que els separa.
@@ -44,9 +42,6 @@ private:
     /// Gets the text corresponding to the current measurement
     QString getMeasurementText();
 
-    /// Places the measurement text in an proper position relative to the drawn line
-    void placeMeasurementText(DrawerText *text);
-    
     /// Gestiona quin punt de la distància estem dibuixant. Es cridarà cada cop que
     /// haguem fet un clic amb el botó esquerre del mouse.
     void handlePointAddition();

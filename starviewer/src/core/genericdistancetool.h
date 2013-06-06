@@ -8,6 +8,7 @@
 namespace udg {
 
 class DrawerLine;
+class DrawerText;
 
 /**
     Abstract class to be superclass of distance-kind tools
@@ -25,6 +26,9 @@ protected:
     virtual void handleLeftButtonPress() = 0;
     virtual void handleMouseMove() = 0;
     virtual void handleKeyPress() = 0;
+
+    /// Places the measurement text in an proper position relative to the drawn distance line
+    void placeMeasurementText(DrawerText *text);
 
 protected:
     /// DrawerLine that holds the drawn distance
