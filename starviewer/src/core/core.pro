@@ -92,6 +92,7 @@ HEADERS += extensionfactory.h \
     tool.h \
     toolproxy.h \
     tooldata.h \
+    measurementtool.h \
     referencelinestool.h \
     referencelinestooldata.h \
     imageplane.h \
@@ -377,6 +378,7 @@ SOURCES += extensionmediator.cpp \
     tool.cpp \
     toolproxy.cpp \
     tooldata.cpp \
+    measurementtool.cpp \
     referencelinestool.cpp \
     referencelinestooldata.cpp \
     imageplane.cpp \
