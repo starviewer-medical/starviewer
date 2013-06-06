@@ -370,15 +370,7 @@ QString ROITool::getAnnotation()
 {
     Q_ASSERT(m_roiPolygon);
     
-    // TODO This code is duplicated in every measurement tool and should be refactored in a single class/method
-    Image *image = m_2DViewer->getCurrentDisplayedImage();
-    if (!image)
-    {
-        // In case a reconstruction is applied, image will be null, that's why we take the first image in this caseto have the pixel spacing properties.
-        // For these cases, the first image will be enough to properly compute the measurement
-        image = m_2DViewer->getInput()->getImage(0);
-    }
-    QString formattedAreaMeasurementString = MeasurementManager::getMeasurementForDisplay(m_roiPolygon, image, m_2DViewer->getInput()->getSpacing());
+    QString formattedAreaMeasurementString = MeasurementManager::getMeasurementForDisplay(m_roiPolygon, getImageForMeasurement(), m_2DViewer->getInput()->getSpacing());
 
     QString annotation = tr("Area: %1").arg(formattedAreaMeasurementString);
 

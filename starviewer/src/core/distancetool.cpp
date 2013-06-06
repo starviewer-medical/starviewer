@@ -72,15 +72,7 @@ void DistanceTool::handleEvent(long unsigned eventID)
 
 QString DistanceTool::getMeasurementText()
 {
-    // TODO This code is duplicated in every measurement tool and should be refactored in a single class/method
-    Image *image = m_2DViewer->getCurrentDisplayedImage();
-    if (!image)
-    {
-        // In case a reconstruction is applied, image will be null, that's why we take the first image in this caseto have the pixel spacing properties.
-        // For these cases, the first image will be enough to properly compute the measurement
-        image = m_2DViewer->getInput()->getImage(0);
-    }
-    return MeasurementManager::getMeasurementForDisplay(m_line, image, m_2DViewer->getInput()->getSpacing());
+    return MeasurementManager::getMeasurementForDisplay(m_line, getImageForMeasurement(), m_2DViewer->getInput()->getSpacing());
 }
 
 void DistanceTool::placeMeasurementText(DrawerText *text)
