@@ -5,8 +5,6 @@
 
 namespace udg {
 
-class DrawerLine;
-class DrawerPolygon;
 class Image;
 class MeasureComputer;
 /**
@@ -36,10 +34,6 @@ public:
     /// @param verbosity Will determine how much extra information will be added in order to be more descriptive about de measurement
     static QString getMeasurementForDisplay(MeasureComputer *measureComputer, Image *image, double dataSpacing[3], 
         MeasurementDisplayVerbosityType verbosity = Minimal);
-    /// Overloaded methods specifying the primitive on which we want the measure instead of the computer class.
-    /// It takes the proper measure computer for each primitive.
-    static QString getMeasurementForDisplay(DrawerLine *line, Image *image, double dataSpacing[3], MeasurementDisplayVerbosityType verbosity = Minimal);
-    static QString getMeasurementForDisplay(DrawerPolygon *polygon, Image *image, double dataSpacing[3], MeasurementDisplayVerbosityType verbosity = Minimal);
     
     /// Returns the default meaurement type regarding image properties, such as pixel spacing tags and modality
     static MeasurementType getDefaultMeasurementType(Image *image);
