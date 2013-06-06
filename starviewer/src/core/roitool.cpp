@@ -372,7 +372,6 @@ QString ROITool::getAnnotation()
 {
     Q_ASSERT(m_roiPolygon);
     
-    // Explicar perquè es fa aquest fallback. En cas que sigui recon, serà nul i per tant, obtenim les propietats de la primera imatge
     // TODO This code is duplicated in every measurement tool and should be refactored in a single class/method
     Image *image = m_2DViewer->getCurrentDisplayedImage();
     if (!image)
