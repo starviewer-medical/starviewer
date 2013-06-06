@@ -5,8 +5,6 @@
 
 namespace udg {
 
-class DrawerText;
-
 /**
     Eina per fer mesures TA-GT.
 
@@ -55,9 +53,7 @@ private:
     enum State { NotDrawing, DrawingReferenceLine, DrawingFirstPerpendicularLine, DrawingSecondPerpendicularLine };
 
 private:
-    /// Places the measurement text in an proper position relative to the drawn TA-GT
-    void placeMeasurementText(DrawerText *text);
-    
+
     /// Decideix què s'ha de fer quan es rep un clic.
     void handleClick();
     /// Afegeix el primer punt, per començar a dibuixar la línia de referència.

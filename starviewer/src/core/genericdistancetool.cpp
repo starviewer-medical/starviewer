@@ -2,6 +2,9 @@
 
 #include <vtkCommand.h>
 #include "q2dviewer.h"
+#include "drawer.h"
+#include "drawerline.h"
+#include "drawertext.h"
 
 namespace udg {
 
@@ -36,6 +39,38 @@ void GenericDistanceTool::handleEvent(long unsigned eventID)
             handleKeyPress();
             break;
     }
+}
+
+void GenericDistanceTool::placeMeasurementText(DrawerText *text)
+{
+    // We place text to the left or right of the second point depending on the way line had been drawn
+    int xIndex = Q2DViewer::getXIndexForView(m_2DViewer->getView());
+    double *firstPoint = m_distanceLine->getFirstPoint();
+    double *secondPoint = m_distanceLine->getSecondPoint();
+
+    // Applying 5-pixel padding
+    const double Padding = 5.0;
+    double textPadding;
+    if (firstPoint[xIndex] <= secondPoint[xIndex])
+    {
+        textPadding = Padding;
+        text->setHorizontalJustification("Left");
+    }
+    else
+    {
+        textPadding = -Padding;
+        text->setHorizontalJustification("Right");
+    }
+
+    double secondPointInDisplay[3];
+    // Converting secondPoint to display coordinates
+    m_2DViewer->computeWorldToDisplay(secondPoint[0], secondPoint[1], secondPoint[2], secondPointInDisplay);
+    // Applying padding and converting back to world coordinates
+    double attachmentPoint[3];
+    m_2DViewer->computeDisplayToWorld(secondPointInDisplay[0] + textPadding, secondPointInDisplay[1], secondPointInDisplay[2], attachmentPoint);
+
+    text->setAttachmentPoint(attachmentPoint);
+    m_2DViewer->getDrawer()->draw(text, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
 }
 
 } // End namespace udg

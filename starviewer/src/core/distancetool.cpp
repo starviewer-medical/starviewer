@@ -72,38 +72,6 @@ QString DistanceTool::getMeasurementText()
     return MeasurementManager::getMeasurementForDisplay(m_distanceLine, getImageForMeasurement(), m_2DViewer->getInput()->getSpacing());
 }
 
-void DistanceTool::placeMeasurementText(DrawerText *text)
-{
-    // Coloquem el text a l'esquerra o a la dreta del segon punt segons la forma de la línia.
-    int xIndex = Q2DViewer::getXIndexForView(m_2DViewer->getView());
-    double *firstPoint = m_distanceLine->getFirstPoint();
-    double *secondPoint = m_distanceLine->getSecondPoint();
-
-    // Apliquem un padding de 5 pixels
-    const double Padding = 5.0;
-    double textPadding;
-    if (firstPoint[xIndex] <= secondPoint[xIndex])
-    {
-        textPadding = Padding;
-        text->setHorizontalJustification("Left");
-    }
-    else
-    {
-        textPadding = -Padding;
-        text->setHorizontalJustification("Right");
-    }
-
-    double secondPointInDisplay[3];
-    // Passem secondPoint a coordenades de display
-    m_2DViewer->computeWorldToDisplay(secondPoint[0], secondPoint[1], secondPoint[2], secondPointInDisplay);
-    // Apliquem el padding i tornem a coordenades de món
-    double textPoint[3];
-    m_2DViewer->computeDisplayToWorld(secondPointInDisplay[0] + textPadding, secondPointInDisplay[1], secondPointInDisplay[2], textPoint);
-
-    text->setAttachmentPoint(textPoint);
-    m_2DViewer->getDrawer()->draw(text, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
-}
-
 void DistanceTool::handlePointAddition()
 {
     if (m_2DViewer->getInput())
