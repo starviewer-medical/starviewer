@@ -8,6 +8,11 @@
 
 namespace udg {
 
+const QString MinimalVerbosityString("Minimal");
+const QString MinimalExplicitVerbosityString("MinimalExplicit");
+const QString VerboseVerbosityString("Verbose");
+const QString VerboseExplicitVerbosityString("VerboseExplicit");
+
 MeasurementManager::MeasurementDisplayVerbosityType MeasurementManager::getConfiguredDisplayVerbosity()
 {
     Settings settings;
@@ -17,19 +22,19 @@ MeasurementManager::MeasurementDisplayVerbosityType MeasurementManager::getConfi
     // It will be Minimal by default
     MeasurementDisplayVerbosityType verbosity = Minimal;
     
-    if (configuredVerbosity == "Minimal")
+    if (configuredVerbosity == MinimalVerbosityString)
     {
         verbosity = Minimal;
     }
-    else if (configuredVerbosity == "MinimalExplicit")
+    else if (configuredVerbosity == MinimalExplicitVerbosityString)
     {
         verbosity = MinimalExplicit;
     }
-    else if (configuredVerbosity == "Verbose")
+    else if (configuredVerbosity == VerboseVerbosityString)
     {
         verbosity = Verbose;
     }
-    else if (configuredVerbosity == "VerboseExplicit")
+    else if (configuredVerbosity == VerboseExplicitVerbosityString)
     {
         verbosity = VerboseExplicit;
     }
