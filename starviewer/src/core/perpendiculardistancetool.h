@@ -1,7 +1,7 @@
 #ifndef UDGPERPENDICULARDISTANCETOOL_H
 #define UDGPERPENDICULARDISTANCETOOL_H
 
-#include "tool.h"
+#include "measurementtool.h"
 
 #include <QPointer>
 
@@ -9,7 +9,6 @@ namespace udg {
 
 class DrawerLine;
 class DrawerText;
-class Q2DViewer;
 
 /**
     Eina per fer mesures TA-GT.
@@ -39,7 +38,7 @@ class Q2DViewer;
 
     TODO Canviar el nom de la classe.
   */
-class PerpendicularDistanceTool : public Tool {
+class PerpendicularDistanceTool : public MeasurementTool {
 
 Q_OBJECT
 
@@ -102,8 +101,6 @@ private slots:
 
 private:
 
-    /// Visor 2D sobre el qual treballem.
-    Q2DViewer *m_2DViewer;
     /// La línia de referència, per fer després dues línies perpendiculars a aquesta.
     QPointer<DrawerLine> m_referenceLine;
     /// La primera línia perpendicular a la de referència, que és un extrem de la distància.

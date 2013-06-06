@@ -14,12 +14,10 @@
 namespace udg {
 
 ROITool::ROITool(QViewer *viewer, QObject *parent)
- : Tool(viewer, parent), m_roiPolygon(0), m_hasToComputeStatisticsData(true), m_mean(0.0), m_standardDeviation(0.0)
+ : MeasurementTool(viewer, parent), m_roiPolygon(0), m_hasToComputeStatisticsData(true), m_mean(0.0), m_standardDeviation(0.0)
 {
     m_toolName = "ROITool";
     m_hasSharedData = false;
-
-    m_2DViewer = castToQ2DViewer(viewer);
 }
 
 ROITool::~ROITool()

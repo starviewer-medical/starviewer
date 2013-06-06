@@ -16,12 +16,10 @@
 namespace udg {
 
 DistanceTool::DistanceTool(QViewer *viewer, QObject *parent)
- : Tool(viewer, parent)
+ : MeasurementTool(viewer, parent)
 {
     m_toolName = "DistanceTool";
     m_hasSharedData = false;
-
-    m_2DViewer = castToQ2DViewer(viewer);
 
     connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(initialize()));
     initialize();
