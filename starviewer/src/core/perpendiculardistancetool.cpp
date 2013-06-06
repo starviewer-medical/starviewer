@@ -300,7 +300,8 @@ void PerpendicularDistanceTool::drawDistance()
     drawDistanceLine();
 
     DrawerText *text = new DrawerText();
-    text->setText(getDistanceText());
+    QString measurementText = MeasurementManager::getMeasurementForDisplay(m_distanceLine, getImageForMeasurement(), m_2DViewer->getInput()->getSpacing());
+    text->setText(measurementText);
 
     placeMeasurementText(text);
 }
@@ -345,11 +346,6 @@ void PerpendicularDistanceTool::drawDistanceLine()
 
     // Pintem la línia de distància
     m_2DViewer->getDrawer()->draw(m_distanceLine, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
-}
-
-QString PerpendicularDistanceTool::getDistanceText() const
-{
-    return MeasurementManager::getMeasurementForDisplay(m_distanceLine, getImageForMeasurement(), m_2DViewer->getInput()->getSpacing());
 }
 
 void PerpendicularDistanceTool::abortDrawing()

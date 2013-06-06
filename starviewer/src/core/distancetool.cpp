@@ -67,11 +67,6 @@ void DistanceTool::handleKeyPress()
     }
 }
 
-QString DistanceTool::getMeasurementText()
-{
-    return MeasurementManager::getMeasurementForDisplay(m_distanceLine, getImageForMeasurement(), m_2DViewer->getInput()->getSpacing());
-}
-
 void DistanceTool::handlePointAddition()
 {
     if (m_2DViewer->getInput())
@@ -111,7 +106,8 @@ void DistanceTool::annotateNewPoint()
 
         // Posem el text
         DrawerText *text = new DrawerText;
-        text->setText(getMeasurementText());
+        QString measurementText = MeasurementManager::getMeasurementForDisplay(m_distanceLine, getImageForMeasurement(), m_2DViewer->getInput()->getSpacing());
+        text->setText(measurementText);
 
         placeMeasurementText(text);
         

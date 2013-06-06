@@ -39,9 +39,6 @@ protected:
     void handleKeyPress();
 
 private:
-    /// Gets the text corresponding to the current measurement
-    QString getMeasurementText();
-
     /// Gestiona quin punt de la distància estem dibuixant. Es cridarà cada cop que
     /// haguem fet un clic amb el botó esquerre del mouse.
     void handlePointAddition();
