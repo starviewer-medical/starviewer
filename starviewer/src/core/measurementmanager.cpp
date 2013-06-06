@@ -1,12 +1,9 @@
 #include "measurementmanager.h"
 
-#include "drawerline.h"
-#include "drawerpolygon.h"
 #include "image.h"
 #include "series.h"
-#include "distancemeasurecomputer.h"
-#include "areameasurecomputer.h"
 #include "defaultmeasurementtypeselector.h"
+#include "measurecomputer.h"
 
 namespace udg {
 
@@ -74,16 +71,6 @@ QString MeasurementManager::getMeasurementForDisplay(MeasureComputer *measureCom
     }
 
     return measurementString;
-}
-
-QString MeasurementManager::getMeasurementForDisplay(DrawerLine *line, Image *image, double dataSpacing[3], MeasurementDisplayVerbosityType verbosity)
-{
-    return getMeasurementForDisplay(new DistanceMeasureComputer(line), image, dataSpacing, verbosity);
-}
-
-QString MeasurementManager::getMeasurementForDisplay(DrawerPolygon *polygon, Image *image, double dataSpacing[3], MeasurementDisplayVerbosityType verbosity)
-{
-    return getMeasurementForDisplay(new AreaMeasureComputer(polygon), image, dataSpacing, verbosity);
 }
 
 MeasurementManager::MeasurementType MeasurementManager::getDefaultMeasurementType(Image *image)
