@@ -2,9 +2,11 @@
 
 #include <vtkCommand.h>
 #include "q2dviewer.h"
+#include "volume.h"
 #include "drawer.h"
 #include "drawerline.h"
 #include "drawertext.h"
+#include "measurementmanager.h"
 
 namespace udg {
 
@@ -39,6 +41,15 @@ void GenericDistanceTool::handleEvent(long unsigned eventID)
             handleKeyPress();
             break;
     }
+}
+
+void GenericDistanceTool::drawMeasurement()
+{
+    DrawerText *text = new DrawerText;
+    QString measurementText = MeasurementManager::getMeasurementForDisplay(m_distanceLine, getImageForMeasurement(), m_2DViewer->getInput()->getSpacing());
+    text->setText(measurementText);
+
+    placeMeasurementText(text);
 }
 
 void GenericDistanceTool::placeMeasurementText(DrawerText *text)

@@ -2,13 +2,11 @@
 
 #include "drawer.h"
 #include "drawerline.h"
-#include "drawertext.h"
 #include "image.h"
 #include "mathtools.h"
 #include "series.h"
 #include "q2dviewer.h"
 #include "volume.h"
-#include "measurementmanager.h"
 
 #include <QVector3D>
 
@@ -298,12 +296,7 @@ void PerpendicularDistanceTool::updateSecondPerpendicularLineAndRender()
 void PerpendicularDistanceTool::drawDistance()
 {
     drawDistanceLine();
-
-    DrawerText *text = new DrawerText();
-    QString measurementText = MeasurementManager::getMeasurementForDisplay(m_distanceLine, getImageForMeasurement(), m_2DViewer->getInput()->getSpacing());
-    text->setText(measurementText);
-
-    placeMeasurementText(text);
+    drawMeasurement();
 }
 
 void PerpendicularDistanceTool::drawDistanceLine()
