@@ -26,6 +26,9 @@ public:
     /// VerboseExplicit: Same as Verbose and Detector measure is explicitly pointed out if available
     enum MeasurementDisplayVerbosityType { Minimal, MinimalExplicit, Verbose, VerboseExplicit };
     
+    /// Gets the MeasurementDisplayVerbosityType configured in settings
+    static MeasurementDisplayVerbosityType getConfiguredDisplayVerbosity();
+    
     /// Returns the corresponding measurement units for the given image
     static MeasurementUnitsType getMeasurementUnits(Image *image);
     static QString getMeasurementUnitsAsQString(Image *image);

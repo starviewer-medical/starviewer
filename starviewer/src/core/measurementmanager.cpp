@@ -4,8 +4,38 @@
 #include "series.h"
 #include "defaultmeasurementtypeselector.h"
 #include "measurecomputer.h"
+#include "coresettings.h"
 
 namespace udg {
+
+MeasurementManager::MeasurementDisplayVerbosityType MeasurementManager::getConfiguredDisplayVerbosity()
+{
+    Settings settings;
+
+    QString configuredVerbosity = settings.getValue(CoreSettings::MeasurementDisplayVerbosity).toString();
+
+    // It will be Minimal by default
+    MeasurementDisplayVerbosityType verbosity = Minimal;
+    
+    if (configuredVerbosity == "Minimal")
+    {
+        verbosity = Minimal;
+    }
+    else if (configuredVerbosity == "MinimalExplicit")
+    {
+        verbosity = MinimalExplicit;
+    }
+    else if (configuredVerbosity == "Verbose")
+    {
+        verbosity = Verbose;
+    }
+    else if (configuredVerbosity == "VerboseExplicit")
+    {
+        verbosity = VerboseExplicit;
+    }
+
+    return verbosity;
+}
 
 MeasurementManager::MeasurementUnitsType MeasurementManager::getMeasurementUnits(Image *image)
 {
