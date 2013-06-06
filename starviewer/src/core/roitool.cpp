@@ -8,6 +8,7 @@
 #include "series.h"
 #include "mathtools.h"
 #include "measurementmanager.h"
+#include "areameasurecomputer.h"
 
 #include <QApplication>
 
@@ -22,6 +23,11 @@ ROITool::ROITool(QViewer *viewer, QObject *parent)
 
 ROITool::~ROITool()
 {
+}
+
+MeasureComputer* ROITool::getMeasureComputer()
+{
+    return new AreaMeasureComputer(m_roiPolygon);
 }
 
 void ROITool::computeStatisticsData()
@@ -370,7 +376,9 @@ QString ROITool::getAnnotation()
 {
     Q_ASSERT(m_roiPolygon);
     
-    QString formattedAreaMeasurementString = MeasurementManager::getMeasurementForDisplay(m_roiPolygon, getImageForMeasurement(), m_2DViewer->getInput()->getSpacing());
+    MeasureComputer *measureComputer = getMeasureComputer();
+    QString formattedAreaMeasurementString = MeasurementManager::getMeasurementForDisplay(measureComputer, getImageForMeasurement(), m_2DViewer->getInput()->getSpacing());
+    delete measureComputer;
 
     QString annotation = tr("Area: %1").arg(formattedAreaMeasurementString);
 

@@ -31,6 +31,8 @@ protected:
     /// Handles the key press event. Basically it invokes abortDrawing() when Esc key is pressed
     void handleKeyPress();
     
+    MeasureComputer* getMeasureComputer();
+    
     /// Draws the corresponding measurment
     void drawMeasurement();
     
