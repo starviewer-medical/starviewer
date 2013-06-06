@@ -26,7 +26,7 @@ public:
     /// Aquesta funció ens intenta connectar al PACS
     /// @param Especifica en quina modalitat ens volem connectar, fer echo, busca informació o descarregar imatges
     /// @return retorna l'estat de la connexió
-    bool connectToPACS(PACSServiceToRequest pacsServiceToRequest);
+    virtual bool connectToPACS(PACSServiceToRequest pacsServiceToRequest);
 
     /// Retorna els paràmetres del PACS
     /// @return paràmetres del Pacs
