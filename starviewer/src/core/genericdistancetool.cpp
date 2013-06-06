@@ -8,7 +8,6 @@
 #include "drawer.h"
 #include "drawerline.h"
 #include "drawertext.h"
-#include "measurementmanager.h"
 #include "distancemeasurecomputer.h"
 
 namespace udg {
@@ -63,10 +62,7 @@ MeasureComputer* GenericDistanceTool::getMeasureComputer()
 void GenericDistanceTool::drawMeasurement()
 {
     DrawerText *text = new DrawerText;
-    MeasureComputer *measureComputer = getMeasureComputer();
-    QString measurementText = MeasurementManager::getMeasurementForDisplay(measureComputer, getImageForMeasurement(), m_2DViewer->getInput()->getSpacing());
-    delete measureComputer;
-    text->setText(measurementText);
+    text->setText(getMeasurementString());
 
     placeMeasurementText(text);
 }
