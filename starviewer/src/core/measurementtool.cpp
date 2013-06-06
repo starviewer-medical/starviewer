@@ -2,6 +2,7 @@
 
 #include "q2dviewer.h"
 #include "volume.h"
+#include "measurementmanager.h"
 
 namespace udg {
 
@@ -13,6 +14,15 @@ MeasurementTool::MeasurementTool(QViewer *viewer, QObject *parent)
 
 MeasurementTool::~MeasurementTool()
 {
+}
+
+QString MeasurementTool::getMeasurementString()
+{
+    MeasureComputer *measureComputer = getMeasureComputer();
+    QString measurementString = MeasurementManager::getMeasurementForDisplay(measureComputer, getImageForMeasurement(), m_2DViewer->getInput()->getSpacing());
+    delete measureComputer;
+
+    return measurementString;
 }
 
 Image* MeasurementTool::getImageForMeasurement() const

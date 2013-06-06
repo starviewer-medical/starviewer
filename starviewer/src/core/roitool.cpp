@@ -7,7 +7,6 @@
 #include "image.h"
 #include "series.h"
 #include "mathtools.h"
-#include "measurementmanager.h"
 #include "areameasurecomputer.h"
 
 #include <QApplication>
@@ -376,11 +375,7 @@ QString ROITool::getAnnotation()
 {
     Q_ASSERT(m_roiPolygon);
     
-    MeasureComputer *measureComputer = getMeasureComputer();
-    QString formattedAreaMeasurementString = MeasurementManager::getMeasurementForDisplay(measureComputer, getImageForMeasurement(), m_2DViewer->getInput()->getSpacing());
-    delete measureComputer;
-
-    QString annotation = tr("Area: %1").arg(formattedAreaMeasurementString);
+    QString annotation = tr("Area: %1").arg(getMeasurementString());
 
     // Només calcularem mitjana i desviació estàndar per imatges monocrom.
     if (m_2DViewer->getInput()->getImage(0)->getPhotometricInterpretation().contains("MONOCHROME"))

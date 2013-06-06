@@ -23,6 +23,10 @@ protected:
     /// Returns the specific measure computer for the implemented measurement tool
     virtual MeasureComputer* getMeasureComputer() = 0;
     
+    /// Gets the measurement string to display. The results will dependend on the specific MeasureComputer returned by the subclass
+    QString getMeasurementString();
+    
+private:
     /// Returns the image that should be used to compute the measurements
     Image* getImageForMeasurement() const;
 
