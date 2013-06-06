@@ -1,7 +1,6 @@
 #include "magnifyingglasstool.h"
 
 #include "q2dviewer.h"
-#include "logging.h"
 #include "coresettings.h"
 
 // vtk
@@ -19,11 +18,7 @@ MagnifyingGlassTool::MagnifyingGlassTool(QViewer *viewer, QObject *parent)
     m_toolName = "MagnifyingGlassTool";
     m_magnifyingRendererIsVisible = false;
     
-    m_2DViewer = qobject_cast<Q2DViewer*>(viewer);
-    if (!m_2DViewer)
-    {
-        DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ") + viewer->metaObject()->className());
-    }
+    m_2DViewer = castToQ2DViewer(viewer);
 
     m_magnifiedRenderer = vtkRenderer::New();
 }

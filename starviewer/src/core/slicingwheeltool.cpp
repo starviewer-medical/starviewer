@@ -13,7 +13,7 @@ SlicingWheelTool::SlicingWheelTool(QViewer *viewer, QObject *parent)
 : SlicingTool(viewer, parent)
 {
     m_toolName = "SlicingWheelTool";
-    m_2DViewer = qobject_cast<Q2DViewer*>(viewer);
+    m_2DViewer = castToQ2DViewer(viewer);
     // Ens assegurem que desde la creació tenim un viewer vàlid
     Q_ASSERT(m_2DViewer);
     //m_slicingParent = qobject_cast<SlicingTool*>(parent);

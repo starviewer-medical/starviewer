@@ -22,7 +22,7 @@ SlicingTool::SlicingTool(QViewer *viewer, QObject *parent)
     m_toolName = "SlicingTool";
     m_startPosition = QPoint(0, 0);
     m_currentPosition = QPoint(0, 0);
-    m_2DViewer = qobject_cast<Q2DViewer*>(viewer);
+    m_2DViewer = castToQ2DViewer(viewer);
     // Ens assegurem que desde la creació tenim un viewer vàlid
     Q_ASSERT(m_2DViewer);
 

@@ -30,11 +30,7 @@ ReferenceLinesTool::ReferenceLinesTool(QViewer *viewer, QObject *parent)
     m_toolData = m_myData;
     connect(m_myData, SIGNAL(changed()), SLOT(updateProjectionLines()));
 
-    m_2DViewer = qobject_cast<Q2DViewer*>(viewer);
-    if (!m_2DViewer)
-    {
-        DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ") + viewer->metaObject()->className());
-    }
+    m_2DViewer = castToQ2DViewer(viewer);
 
 // Descomentar aquestes 4 linies si es vol mostrar el poligon del pla projectat
 //      m_projectedReferencePlane = new DrawerPolygon;

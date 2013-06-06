@@ -1,6 +1,5 @@
 #include "editortool.h"
 #include "editortooldata.h"
-#include "logging.h"
 #include "q2dviewer.h"
 #include "volume.h"
 #include "volumepixeldataiterator.h"
@@ -27,7 +26,7 @@ EditorTool::EditorTool(QViewer *viewer, QObject *parent)
     m_squareActor = vtkActor::New();
     m_myData = new EditorToolData;
 
-    m_2DViewer = qobject_cast<Q2DViewer*>(viewer);
+    m_2DViewer = castToQ2DViewer(viewer);
     // Ens assegurem que desde la creació tenim un viewer vàlid
     Q_ASSERT(m_2DViewer);
 
