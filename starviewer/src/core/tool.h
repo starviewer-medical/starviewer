@@ -8,6 +8,7 @@ namespace udg {
 class ToolConfiguration;
 class ToolData;
 class QViewer;
+class Q2DViewer;
 
 /**
     Classe base per a totes les tools
@@ -52,6 +53,11 @@ public:
 
     /// Decideix què s'ha de fer per cada event rebut
     virtual void handleEvent(unsigned long eventID) = 0;
+
+protected:
+    /// Casts the given QViewer to a Q2DViewer object
+    /// If casting is successful, casted pointer to Q2DViewer will be returned, null otherwise
+    Q2DViewer* castToQ2DViewer(QViewer *viewer);
 
 protected:
     /// Viewer sobre el que s'executa la tool
