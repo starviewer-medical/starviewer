@@ -49,6 +49,11 @@ signals:
    /// Sinal que indica que s'ha fet l'enviament de la imatge passada per paràmetre al PACS, i el número d'imatges que es porten enviades
     void DICOMFileSent(Image *image, int numberOfDICOMFilesSent);
 
+protected:
+
+    /// Number of files that have been sent successfully.
+    int m_numberOfDICOMFilesSentSuccessfully;
+
 private:
 
     /// Creates and returns a PACS connection to the given PACS device.
@@ -68,8 +73,6 @@ private:
 
 private:
 
-    /// Number of files that have been sent successfully.
-    int m_numberOfDICOMFilesSentSuccessfully;
     /// Number of files that have been sent but with a warning.
     int m_numberOfDICOMFilesSentWithWarning;
     /// Total number of files that had to be sent.
