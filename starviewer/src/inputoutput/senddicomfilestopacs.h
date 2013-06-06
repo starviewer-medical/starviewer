@@ -16,6 +16,7 @@ struct T_ASC_Association;
 namespace udg {
 
 class Image;
+class PACSConnection;
 
 class SendDICOMFilesToPACS : public QObject {
 Q_OBJECT
@@ -49,6 +50,10 @@ signals:
     void DICOMFileSent(Image *image, int numberOfDICOMFilesSent);
 
 private:
+
+    /// Creates and returns a PACS connection to the given PACS device.
+    virtual PACSConnection* createPACSConnection(const PacsDevice &pacsDevice) const;
+
     /// Inicialitze els comptadors d'imatges per controlar quantes han fallat/s'han enviat....
     void initialitzeDICOMFilesCounters(int numberOfDICOMFilesToSend);
 

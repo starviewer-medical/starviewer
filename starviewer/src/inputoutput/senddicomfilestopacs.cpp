@@ -29,9 +29,9 @@ PacsDevice SendDICOMFilesToPACS::getPacs()
 
 PACSRequestStatus::SendRequestStatus SendDICOMFilesToPACS::send(QList<Image*> imageListToSend)
 {
-    PACSConnection pacsConnection(m_pacs);
+    QScopedPointer<PACSConnection> pacsConnection(createPACSConnection(m_pacs));
     // TODO: S'hauria de comprovar que es tracti d'un PACS amb el servei d'store configurat
-    if (!pacsConnection.connectToPACS(PACSConnection::SendDICOMFiles))
+    if (!pacsConnection->connectToPACS(PACSConnection::SendDICOMFiles))
     {
         ERROR_LOG(" S'ha produit un error al intentar connectar al PACS per fer un send. AE Title: " + m_pacs.getAETitle());
         return PACSRequestStatus::SendCanNotConnectToPACS;
@@ -47,7 +47,7 @@ PACSRequestStatus::SendRequestStatus SendDICOMFilesToPACS::send(QList<Image*> im
         }
 
         INFO_LOG(QString("S'enviara al PACS %1 el fitxer %2").arg(m_pacs.getAETitle(), imageToStore->getPath()));
-        if (storeSCU(pacsConnection.getConnection(), qPrintable(imageToStore->getPath())))
+        if (storeSCU(pacsConnection->getConnection(), qPrintable(imageToStore->getPath())))
         {
             emit DICOMFileSent(imageToStore, getNumberOfDICOMFilesSentSuccesfully() + this->getNumberOfDICOMFilesSentWarning());
         }
@@ -58,7 +58,7 @@ PACSRequestStatus::SendRequestStatus SendDICOMFilesToPACS::send(QList<Image*> im
         }
     }
 
-    pacsConnection.disconnect();
+    pacsConnection->disconnect();
 
     return getStatusStoreSCU();
 }
@@ -67,6 +67,11 @@ void SendDICOMFilesToPACS::requestCancel()
 {
     m_abortIsRequested = true;
     INFO_LOG("Ens han demanat cancel·lar l'enviament dels fitxers al PACS");
+}
+
+PACSConnection* SendDICOMFilesToPACS::createPACSConnection(const PacsDevice &pacsDevice) const
+{
+    return new PACSConnection(pacsDevice);
 }
 
 void SendDICOMFilesToPACS::initialitzeDICOMFilesCounters(int numberOfDICOMFilesToSend)
