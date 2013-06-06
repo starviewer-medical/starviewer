@@ -3,11 +3,9 @@
 #include "q2dviewer.h"
 #include "drawer.h"
 #include "drawerline.h"
-#include "drawertext.h"
 #include "image.h"
 #include "volume.h"
 #include "series.h"
-#include "measurementmanager.h"
 
 // Vtk's
 #include <vtkRenderWindowInteractor.h>
@@ -105,11 +103,7 @@ void DistanceTool::annotateNewPoint()
         m_distanceLine->update();
 
         // Posem el text
-        DrawerText *text = new DrawerText;
-        QString measurementText = MeasurementManager::getMeasurementForDisplay(m_distanceLine, getImageForMeasurement(), m_2DViewer->getInput()->getSpacing());
-        text->setText(measurementText);
-
-        placeMeasurementText(text);
+        drawMeasurement();
         
         // Alliberem la primitiva perquè pugui ser esborrada
         m_distanceLine->decreaseReferenceCount();

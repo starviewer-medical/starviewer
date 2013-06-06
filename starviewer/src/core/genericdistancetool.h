@@ -27,6 +27,9 @@ protected:
     virtual void handleMouseMove() = 0;
     virtual void handleKeyPress() = 0;
 
+    /// Draws the corresponding measurment
+    void drawMeasurement();
+    
     /// Places the measurement text in an proper position relative to the drawn distance line
     void placeMeasurementText(DrawerText *text);
 
