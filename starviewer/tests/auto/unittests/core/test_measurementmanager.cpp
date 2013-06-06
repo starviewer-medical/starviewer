@@ -42,7 +42,6 @@ Q_DECLARE_METATYPE(MeasurementManager::MeasurementUnitsType)
 Q_DECLARE_METATYPE(double*)
 Q_DECLARE_METATYPE(MeasurementManager::MeasurementType)
 Q_DECLARE_METATYPE(MeasureComputer*)
-Q_DECLARE_METATYPE(DistanceMeasureComputer*)
 Q_DECLARE_METATYPE(MeasurementManager::MeasurementDisplayVerbosityType)
 
 void test_MeasurementManager::setupGetMeasurementUnitsData()
