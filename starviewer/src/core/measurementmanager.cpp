@@ -42,6 +42,28 @@ MeasurementManager::MeasurementDisplayVerbosityType MeasurementManager::getConfi
     return verbosity;
 }
 
+QString MeasurementManager::getMeasurementDisplayVerbosityTypeAsQString(MeasurementDisplayVerbosityType verbosity)
+{
+    switch (verbosity)
+    {
+        case MeasurementManager::Minimal:
+            return MinimalVerbosityString;
+            break;
+
+        case MeasurementManager::MinimalExplicit:
+            return MinimalExplicitVerbosityString;
+            break;
+
+        case MeasurementManager::Verbose:
+            return VerboseVerbosityString;
+            break;
+
+        case MeasurementManager::VerboseExplicit:
+            return VerboseExplicitVerbosityString;
+            break;
+    }
+}
+
 MeasurementManager::MeasurementUnitsType MeasurementManager::getMeasurementUnits(Image *image)
 {
     if (!image)
