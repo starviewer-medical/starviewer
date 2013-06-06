@@ -54,15 +54,6 @@ void PerpendicularDistanceTool::handleMouseMove()
     }
 }
 
-void PerpendicularDistanceTool::handleKeyPress()
-{
-    int keyCode = m_2DViewer->getInteractor()->GetKeyCode();
-    if (keyCode == 27 && m_state != NotDrawing) // Esc
-    {
-        abortDrawing();
-    }
-}
-
 void PerpendicularDistanceTool::handleClick()
 {
     switch (m_state)
@@ -343,8 +334,6 @@ void PerpendicularDistanceTool::drawDistanceLine()
 
 void PerpendicularDistanceTool::abortDrawing()
 {
-    Q_ASSERT(m_state != NotDrawing);
-
     reset();
 }
 
@@ -383,7 +372,7 @@ void PerpendicularDistanceTool::equalizeDepth()
 
 void PerpendicularDistanceTool::reset()
 {
-    bool hasToRender = m_2DViewer;
+    bool hasToRender = false;
 
     if (m_referenceLine)
     {

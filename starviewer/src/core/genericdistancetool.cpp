@@ -1,6 +1,8 @@
 #include "genericdistancetool.h"
 
 #include <vtkCommand.h>
+#include <vtkRenderWindowInteractor.h>
+
 #include "q2dviewer.h"
 #include "volume.h"
 #include "drawer.h"
@@ -40,6 +42,15 @@ void GenericDistanceTool::handleEvent(long unsigned eventID)
         case vtkCommand::KeyPressEvent:
             handleKeyPress();
             break;
+    }
+}
+
+void GenericDistanceTool::handleKeyPress()
+{
+    int keyCode = m_2DViewer->getInteractor()->GetKeyCode();
+    if (keyCode == 27) // Esc
+    {
+        abortDrawing();
     }
 }
 

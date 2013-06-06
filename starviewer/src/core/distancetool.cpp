@@ -56,13 +56,9 @@ void DistanceTool::handleMouseMove()
     simulateLine();
 }
 
-void DistanceTool::handleKeyPress()
+void DistanceTool::abortDrawing()
 {
-    int keyCode = m_2DViewer->getInteractor()->GetKeyCode();
-    if (keyCode == 27) // ESC
-    {
-        deleteTemporalRepresentation();
-    }
+    deleteTemporalRepresentation();
 }
 
 void DistanceTool::handlePointAddition()

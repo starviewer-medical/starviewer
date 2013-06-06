@@ -45,7 +45,7 @@ public:
 protected:
     void handleLeftButtonPress();
     void handleMouseMove();
-    void handleKeyPress();
+    void abortDrawing();
 
 private:
 
@@ -83,8 +83,6 @@ private:
     /// Dibuixa la línia de distància.
     void drawDistanceLine();
 
-    /// Avorta el dibuix de l'anotació TA-GT.
-    void abortDrawing();
     /// Equalitza la profunditat dels elements que formen l'anotació TA-GT final.
     void equalizeDepth();
 
