@@ -28,6 +28,9 @@ public:
     
     /// Gets the MeasurementDisplayVerbosityType configured in settings
     static MeasurementDisplayVerbosityType getConfiguredDisplayVerbosity();
+
+    /// Returns the given MeasurementDisplayVerbosityType as a QString
+    static QString getMeasurementDisplayVerbosityTypeAsQString(MeasurementDisplayVerbosityType verbosity);
     
     /// Returns the corresponding measurement units for the given image
     static MeasurementUnitsType getMeasurementUnits(Image *image);
