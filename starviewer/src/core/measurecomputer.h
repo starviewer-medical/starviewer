@@ -14,7 +14,7 @@ class PixelSpacing2D;
 class MeasureComputer {
 public:
     MeasureComputer();
-    ~MeasureComputer();
+    virtual ~MeasureComputer();
 
     /// Computes the measure where points have been taken in a volume with dataSpacing, using the preferred pixel spacing information from the given image
     virtual double computeMeasure(Image *image, double dataSpacing[3]) = 0;
