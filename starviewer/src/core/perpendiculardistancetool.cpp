@@ -4,7 +4,6 @@
 #include "drawerline.h"
 #include "drawertext.h"
 #include "image.h"
-#include "logging.h"
 #include "mathtools.h"
 #include "series.h"
 #include "q2dviewer.h"
@@ -23,11 +22,7 @@ PerpendicularDistanceTool::PerpendicularDistanceTool(QViewer *viewer, QObject *p
 {
     m_toolName = "PerpendicularDistanceTool";
 
-    m_2DViewer = qobject_cast<Q2DViewer*>(viewer);
-    if (!m_2DViewer)
-    {
-        DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ") + viewer->metaObject()->className());
-    }
+    m_2DViewer = castToQ2DViewer(viewer);
 
     connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(reset()));
 

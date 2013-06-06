@@ -27,11 +27,7 @@ Cursor3DTool::Cursor3DTool(QViewer *viewer, QObject *parent)
     connect(m_toolData, SIGNAL(changed()), SLOT(updateProjectedPoint()));
     connect(m_toolData, SIGNAL(turnOffCursor()), SLOT(hideCursor()));
 
-    m_2DViewer = qobject_cast<Q2DViewer*>(viewer);
-    if (!m_2DViewer)
-    {
-        DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ") + viewer->metaObject()->className());
-    }
+    m_2DViewer = castToQ2DViewer(viewer);
 
     m_state = None;
     

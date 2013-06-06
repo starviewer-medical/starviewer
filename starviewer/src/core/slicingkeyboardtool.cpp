@@ -1,5 +1,4 @@
 #include "slicingkeyboardtool.h"
-#include "logging.h"
 #include "q2dviewer.h"
 #include "volume.h"
 #include "study.h"
@@ -19,11 +18,7 @@ SlicingKeyboardTool::SlicingKeyboardTool(QViewer *viewer, QObject *parent)
  : Tool(viewer, parent)
 {
     m_toolName = "SlicingKeyboardTool";
-    m_2DViewer = qobject_cast<Q2DViewer*>(viewer);
-    if (!m_2DViewer)
-    {
-        DEBUG_LOG("No s'ha pogut realitzar el casting a 2DViewer!!!");
-    }
+    m_2DViewer = castToQ2DViewer(viewer);
 }
 
 SlicingKeyboardTool::~SlicingKeyboardTool()

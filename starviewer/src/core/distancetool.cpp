@@ -1,7 +1,6 @@
 #include "distancetool.h"
 
 #include "q2dviewer.h"
-#include "logging.h"
 #include "drawer.h"
 #include "drawerline.h"
 #include "drawertext.h"
@@ -22,11 +21,7 @@ DistanceTool::DistanceTool(QViewer *viewer, QObject *parent)
     m_toolName = "DistanceTool";
     m_hasSharedData = false;
 
-    m_2DViewer = qobject_cast<Q2DViewer*>(viewer);
-    if (!m_2DViewer)
-    {
-        DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ") + viewer->metaObject()->className());
-    }
+    m_2DViewer = castToQ2DViewer(viewer);
 
     connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(initialize()));
     initialize();
