@@ -82,8 +82,7 @@ private:
     void drawDistance();
     /// Dibuixa la línia de distància.
     void drawDistanceLine();
-    /// Calcula i retorna la distància entre les dues línies perpendiculars a la de referència en forma de text.
-    QString getDistanceText() const;
+
     /// Avorta el dibuix de l'anotació TA-GT.
     void abortDrawing();
     /// Equalitza la profunditat dels elements que formen l'anotació TA-GT final.
