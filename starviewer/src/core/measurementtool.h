@@ -8,6 +8,7 @@ namespace udg {
 class QViewer;
 class Q2DViewer;
 class Image;
+class MeasureComputer;
 
 /**
     Tool superclass for measurement tools
@@ -19,6 +20,9 @@ public:
     ~MeasurementTool();
 
 protected:
+    /// Returns the specific measure computer for the implemented measurement tool
+    virtual MeasureComputer* getMeasureComputer() = 0;
+    
     /// Returns the image that should be used to compute the measurements
     Image* getImageForMeasurement() const;
 

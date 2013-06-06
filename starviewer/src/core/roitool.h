@@ -26,6 +26,8 @@ public:
     virtual void handleEvent(long unsigned eventID) = 0;
 
 protected:
+    MeasureComputer* getMeasureComputer();
+    
     /// Mètode per escriure a pantalla les dades calculades.
     void printData();
 
