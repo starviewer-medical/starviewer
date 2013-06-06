@@ -18,11 +18,9 @@
 namespace udg {
 
 PerpendicularDistanceTool::PerpendicularDistanceTool(QViewer *viewer, QObject *parent)
-    : Tool(viewer, parent)
+    : MeasurementTool(viewer, parent)
 {
     m_toolName = "PerpendicularDistanceTool";
-
-    m_2DViewer = castToQ2DViewer(viewer);
 
     connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(reset()));
 

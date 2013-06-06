@@ -1,13 +1,12 @@
 #ifndef UDGROITOOL_H
 #define UDGROITOOL_H
 
-#include "tool.h"
+#include "measurementtool.h"
 #include "volume.h"
 #include <QPointer>
 
 namespace udg {
 
-class Q2DViewer;
 class DrawerPolygon;
 class DrawerText;
 
@@ -18,7 +17,7 @@ class DrawerText;
     La gestió dels events i de com es dibuixa la forma de la ROI queda delegada en les
     tools filles. La forma final de la tool ha de quedar dibuixada amb el membre m_roiPolygon.
   */
-class ROITool : public Tool {
+class ROITool : public MeasurementTool {
 Q_OBJECT
 public:
     ROITool(QViewer *viewer, QObject *parent = 0);
@@ -36,9 +35,6 @@ protected:
     virtual void setTextPosition(DrawerText *text);
 
 protected:
-    /// Viewer 2D sobre el qual treballem
-    Q2DViewer *m_2DViewer;
-
     /// Polígon que defineix la ROI
     QPointer<DrawerPolygon> m_roiPolygon;
 

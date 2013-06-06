@@ -1,12 +1,11 @@
 #ifndef UDGDISTANCETOOL_H
 #define UDGDISTANCETOOL_H
 
-#include "tool.h"
+#include "measurementtool.h"
 #include <QPointer>
 
 namespace udg {
 
-class Q2DViewer;
 class DrawerLine;
 class DrawerText;
 
@@ -32,7 +31,7 @@ class DrawerText;
     Quan es canvïi l'input del visor, les annotacions fetes fins aquell moment s'esborraran.
     Quan es desactivi l'eina, les annotacions fetes fins aquell moment es mantindran.
   */
-class DistanceTool : public Tool {
+class DistanceTool : public MeasurementTool {
 Q_OBJECT
 public:
     DistanceTool(QViewer *viewer, QObject *parent = 0);
@@ -71,9 +70,6 @@ private slots:
 private:
     /// Estats possibles de la línia dibuixada.
     enum { NoPointFixed, FirstPointFixed };
-
-    /// Viewer 2D sobre el qual treballem.
-    Q2DViewer *m_2DViewer;
 
     /// Línia que es dibuixa.
     QPointer<DrawerLine> m_line;
