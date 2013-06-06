@@ -19,7 +19,8 @@ MeasurementTool::~MeasurementTool()
 QString MeasurementTool::getMeasurementString()
 {
     MeasureComputer *measureComputer = getMeasureComputer();
-    QString measurementString = MeasurementManager::getMeasurementForDisplay(measureComputer, getImageForMeasurement(), m_2DViewer->getInput()->getSpacing());
+    QString measurementString = MeasurementManager::getMeasurementForDisplay(measureComputer, getImageForMeasurement(), m_2DViewer->getInput()->getSpacing(),
+        MeasurementManager::getConfiguredDisplayVerbosity());
     delete measureComputer;
 
     return measurementString;
