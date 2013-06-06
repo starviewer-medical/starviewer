@@ -11,15 +11,13 @@
 
 // Vtk's
 #include <vtkRenderWindowInteractor.h>
-#include <vtkCommand.h>
 
 namespace udg {
 
 DistanceTool::DistanceTool(QViewer *viewer, QObject *parent)
- : MeasurementTool(viewer, parent)
+ : GenericDistanceTool(viewer, parent)
 {
     m_toolName = "DistanceTool";
-    m_hasSharedData = false;
 
     connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(initialize()));
     initialize();
@@ -50,23 +48,22 @@ void DistanceTool::deleteTemporalRepresentation()
     m_lineState = NoPointFixed;
 }
 
-void DistanceTool::handleEvent(long unsigned eventID)
+void DistanceTool::handleLeftButtonPress()
 {
-    switch (eventID)
+    handlePointAddition();
+}
+
+void DistanceTool::handleMouseMove()
+{
+    simulateLine();
+}
+
+void DistanceTool::handleKeyPress()
+{
+    int keyCode = m_2DViewer->getInteractor()->GetKeyCode();
+    if (keyCode == 27) // ESC
     {
-        case vtkCommand::LeftButtonPressEvent:
-            handlePointAddition();
-            break;
-        case vtkCommand::MouseMoveEvent:
-            simulateLine();
-            break;
-        case vtkCommand::KeyPressEvent:
-            int keyCode = m_2DViewer->getInteractor()->GetKeyCode();
-            if (keyCode == 27) // ESC
-            {
-                deleteTemporalRepresentation();
-            }
-            break;
+        deleteTemporalRepresentation();
     }
 }
 
