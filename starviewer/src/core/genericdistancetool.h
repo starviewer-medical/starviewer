@@ -25,8 +25,12 @@ protected:
     /// These methods should be implemented by its subclasses giving the desired behaviour for each event
     virtual void handleLeftButtonPress() = 0;
     virtual void handleMouseMove() = 0;
-    virtual void handleKeyPress() = 0;
+    /// Abstract method for aborting the current drawn shapes and remove them
+    virtual void abortDrawing() = 0;
 
+    /// Handles the key press event. Basically it invokes abortDrawing() when Esc key is pressed
+    void handleKeyPress();
+    
     /// Draws the corresponding measurment
     void drawMeasurement();
     

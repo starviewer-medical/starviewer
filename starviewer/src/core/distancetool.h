@@ -36,7 +36,7 @@ public:
 protected:
     void handleLeftButtonPress();
     void handleMouseMove();
-    void handleKeyPress();
+    void abortDrawing();
 
 private:
     /// Gestiona quin punt de la distància estem dibuixant. Es cridarà cada cop que
