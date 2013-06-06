@@ -62,8 +62,13 @@ private:
     PACSRequestStatus::SendRequestStatus getStatusStoreSCU();
 
 private:
-    // Indica números d'imatges enviades correctament/Imatges enviades però que ha retorna warning/Total d'imatges que s'ha enviat
-    int m_numberOfDICOMFilesSentSuccessfully, m_numberOfDICOMFilesSentWithWarning, m_numberOfDICOMFilesToSend;
+
+    /// Number of files that have been sent successfully.
+    int m_numberOfDICOMFilesSentSuccessfully;
+    /// Number of files that have been sent but with a warning.
+    int m_numberOfDICOMFilesSentWithWarning;
+    /// Total number of files that had to be sent.
+    int m_numberOfDICOMFilesToSend;
     PacsDevice m_pacs;
     bool m_abortIsRequested;
     OFCondition m_lastOFCondition;
