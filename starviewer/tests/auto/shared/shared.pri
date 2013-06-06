@@ -20,7 +20,8 @@ SOURCES += $$PWD/gmock-gtest-all.cc \
            $$PWD/testingvolume.cpp \
            $$PWD/testingvolumereader.cpp \
            $$PWD/testingdicomtagreader.cpp \
-           $$PWD/testingpacsconnection.cpp
+           $$PWD/testingpacsconnection.cpp \
+           $$PWD/testingsenddicomfilestopacs.cpp
            
 HEADERS += $$PWD/autotest.h \
            $$PWD/gtest/gtest.h \
@@ -45,4 +46,5 @@ HEADERS += $$PWD/autotest.h \
            $$PWD/testingvolume.h \
            $$PWD/testingvolumereader.h \
            $$PWD/testingdicomtagreader.h \
-           $$PWD/testingpacsconnection.h
+           $$PWD/testingpacsconnection.h \
+           $$PWD/testingsenddicomfilestopacs.h
