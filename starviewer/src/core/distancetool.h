@@ -2,11 +2,9 @@
 #define UDGDISTANCETOOL_H
 
 #include "genericdistancetool.h"
-#include <QPointer>
 
 namespace udg {
 
-class DrawerLine;
 class DrawerText;
 
 /**
@@ -73,9 +71,6 @@ private slots:
 private:
     /// Estats possibles de la línia dibuixada.
     enum { NoPointFixed, FirstPointFixed };
-
-    /// Línia que es dibuixa.
-    QPointer<DrawerLine> m_line;
 
     /// Estat de la línia.
     int m_lineState;

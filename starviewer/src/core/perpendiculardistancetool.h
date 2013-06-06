@@ -3,11 +3,8 @@
 
 #include "genericdistancetool.h"
 
-#include <QPointer>
-
 namespace udg {
 
-class DrawerLine;
 class DrawerText;
 
 /**
@@ -109,8 +106,7 @@ private:
     QPointer<DrawerLine> m_firstPerpendicularLine;
     /// La segona línia perpendicular a la de referència, que és l'altre extrem de la distància.
     QPointer<DrawerLine> m_secondPerpendicularLine;
-    /// La línia de distància entre les dues perpendiculars, paral·lela a la de referència.
-    QPointer<DrawerLine> m_distanceLine;
+
     /// Estat de l'eina.
     State m_state;
 

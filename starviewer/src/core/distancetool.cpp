@@ -33,10 +33,10 @@ void DistanceTool::deleteTemporalRepresentation()
     bool hasToRefresh = false;
     // Cal decrementar el reference count perquè
     // l'annotació s'esborri si "matem" l'eina
-    if (m_line)
+    if (m_distanceLine)
     {
-        m_line->decreaseReferenceCount();
-        delete m_line;
+        m_distanceLine->decreaseReferenceCount();
+        delete m_distanceLine;
         hasToRefresh = true;
     }
 
@@ -69,15 +69,15 @@ void DistanceTool::handleKeyPress()
 
 QString DistanceTool::getMeasurementText()
 {
-    return MeasurementManager::getMeasurementForDisplay(m_line, getImageForMeasurement(), m_2DViewer->getInput()->getSpacing());
+    return MeasurementManager::getMeasurementForDisplay(m_distanceLine, getImageForMeasurement(), m_2DViewer->getInput()->getSpacing());
 }
 
 void DistanceTool::placeMeasurementText(DrawerText *text)
 {
     // Coloquem el text a l'esquerra o a la dreta del segon punt segons la forma de la línia.
     int xIndex = Q2DViewer::getXIndexForView(m_2DViewer->getView());
-    double *firstPoint = m_line->getFirstPoint();
-    double *secondPoint = m_line->getSecondPoint();
+    double *firstPoint = m_distanceLine->getFirstPoint();
+    double *secondPoint = m_distanceLine->getSecondPoint();
 
     // Apliquem un padding de 5 pixels
     const double Padding = 5.0;
@@ -117,11 +117,11 @@ void DistanceTool::handlePointAddition()
 
 void DistanceTool::annotateNewPoint()
 {
-    if (!m_line)
+    if (!m_distanceLine)
     {
-        m_line = new DrawerLine;
+        m_distanceLine = new DrawerLine;
         // Així evitem que durant l'edició la primitiva pugui ser esborrada per events externs
-        m_line->increaseReferenceCount();
+        m_distanceLine->increaseReferenceCount();
     }
 
     double clickedWorldPoint[3];
@@ -130,16 +130,16 @@ void DistanceTool::annotateNewPoint()
     // Afegim el punt
     if (m_lineState == NoPointFixed)
     {
-        m_line->setFirstPoint(clickedWorldPoint);
-        m_line->setSecondPoint(clickedWorldPoint);
+        m_distanceLine->setFirstPoint(clickedWorldPoint);
+        m_distanceLine->setSecondPoint(clickedWorldPoint);
         m_lineState = FirstPointFixed;
 
-        m_2DViewer->getDrawer()->draw(m_line);
+        m_2DViewer->getDrawer()->draw(m_distanceLine);
     }
     else
     {
-        m_line->setSecondPoint(clickedWorldPoint);
-        m_line->update();
+        m_distanceLine->setSecondPoint(clickedWorldPoint);
+        m_distanceLine->update();
 
         // Posem el text
         DrawerText *text = new DrawerText;
@@ -148,51 +148,51 @@ void DistanceTool::annotateNewPoint()
         placeMeasurementText(text);
         
         // Alliberem la primitiva perquè pugui ser esborrada
-        m_line->decreaseReferenceCount();
-        m_2DViewer->getDrawer()->erasePrimitive(m_line);
+        m_distanceLine->decreaseReferenceCount();
+        m_2DViewer->getDrawer()->erasePrimitive(m_distanceLine);
         equalizeDepth();
         // Coloquem la primitiva en el pla corresponent
-        m_2DViewer->getDrawer()->draw(m_line, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+        m_2DViewer->getDrawer()->draw(m_distanceLine, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
         // Reiniciem l'estat de la tool
         m_lineState = NoPointFixed;
-        m_line = NULL;
+        m_distanceLine = NULL;
     }
 }
 
 void DistanceTool::simulateLine()
 {
-    if (m_line)
+    if (m_distanceLine)
     {
         double clickedWorldPoint[3];
         m_2DViewer->getEventWorldCoordinate(clickedWorldPoint);
 
-        m_line->setSecondPoint(clickedWorldPoint);
-        m_line->update();
+        m_distanceLine->setSecondPoint(clickedWorldPoint);
+        m_distanceLine->update();
         m_2DViewer->render();
     }
 }
 
 void DistanceTool::initialize()
 {
-    if (m_line)
+    if (m_distanceLine)
     {
         // Així alliberem la primitiva perquè pugui ser esborrada
-        m_line->decreaseReferenceCount();
-        delete m_line;
+        m_distanceLine->decreaseReferenceCount();
+        delete m_distanceLine;
     }
     m_lineState = NoPointFixed;
-    m_line = NULL;
+    m_distanceLine = NULL;
 }
 
 void DistanceTool::equalizeDepth()
 {
     // Assignem al primer punt la z del segon
     int zIndex = Q2DViewer::getZIndexForView(m_2DViewer->getView());
-    double z = m_line->getSecondPoint()[zIndex];
-    double *firstPoint = m_line->getFirstPoint();
+    double z = m_distanceLine->getSecondPoint()[zIndex];
+    double *firstPoint = m_distanceLine->getFirstPoint();
     firstPoint[zIndex] = z;
-    m_line->setFirstPoint(firstPoint);
-    m_line->update();
+    m_distanceLine->setFirstPoint(firstPoint);
+    m_distanceLine->update();
 }
 
 }
