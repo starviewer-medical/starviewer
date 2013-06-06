@@ -8,5 +8,5 @@ SOURCES += $$PWD/test_dicommask.cpp \
            $$PWD/test_echotopacstest.cpp \
            $$PWD/test_dicomdirburningapplicationtest.cpp \
            $$PWD//test_pacsdevice.cpp \
-           $$PWD/test_cachetest.cpp
-
+           $$PWD/test_cachetest.cpp \
+           $$PWD/test_senddicomfilestopacs.cpp
