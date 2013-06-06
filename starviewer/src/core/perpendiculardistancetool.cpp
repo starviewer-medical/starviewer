@@ -12,13 +12,12 @@
 
 #include <QVector3D>
 
-#include <vtkCommand.h>
 #include <vtkRenderWindowInteractor.h>
 
 namespace udg {
 
 PerpendicularDistanceTool::PerpendicularDistanceTool(QViewer *viewer, QObject *parent)
-    : MeasurementTool(viewer, parent)
+    : GenericDistanceTool(viewer, parent)
 {
     m_toolName = "PerpendicularDistanceTool";
 
@@ -32,43 +31,37 @@ PerpendicularDistanceTool::~PerpendicularDistanceTool()
     reset();
 }
 
-void PerpendicularDistanceTool::handleEvent(unsigned long eventId)
+void PerpendicularDistanceTool::handleLeftButtonPress()
 {
-    if (!m_2DViewer || !m_2DViewer->getInput())
+    // Si hi ha doble clic només tenim en compte el primer
+    if (m_2DViewer->getInteractor()->GetRepeatCount() == 0)
     {
-        return;
+        handleClick();
     }
+}
 
-    switch (eventId)
+void PerpendicularDistanceTool::handleMouseMove()
+{
+    if (m_state == DrawingReferenceLine)
     {
-        case vtkCommand::LeftButtonPressEvent:
-            // Si hi ha doble clic només tenim en compte el primer
-            if (m_2DViewer->getInteractor()->GetRepeatCount() == 0)
-            {
-                handleClick();
-            }
-            break;
-        case vtkCommand::MouseMoveEvent:
-            if (m_state == DrawingReferenceLine)
-            {
-                updateReferenceLineAndRender();
-            }
-            else if (m_state == DrawingFirstPerpendicularLine)
-            {
-                updateFirstPerpendicularLineAndRender();
-            }
-            else if (m_state == DrawingSecondPerpendicularLine)
-            {
-                updateSecondPerpendicularLineAndRender();
-            }
-            break;
-        case vtkCommand::KeyPressEvent:
-            int keyCode = m_2DViewer->getInteractor()->GetKeyCode();
-            if (keyCode == 27 && m_state != NotDrawing) // Esc
-            {
-                abortDrawing();
-            }
-            break;
+        updateReferenceLineAndRender();
+    }
+    else if (m_state == DrawingFirstPerpendicularLine)
+    {
+        updateFirstPerpendicularLineAndRender();
+    }
+    else if (m_state == DrawingSecondPerpendicularLine)
+    {
+        updateSecondPerpendicularLineAndRender();
+    }
+}
+
+void PerpendicularDistanceTool::handleKeyPress()
+{
+    int keyCode = m_2DViewer->getInteractor()->GetKeyCode();
+    if (keyCode == 27 && m_state != NotDrawing) // Esc
+    {
+        abortDrawing();
     }
 }
 

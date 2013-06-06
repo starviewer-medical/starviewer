@@ -1,7 +1,7 @@
 #ifndef UDGDISTANCETOOL_H
 #define UDGDISTANCETOOL_H
 
-#include "measurementtool.h"
+#include "genericdistancetool.h"
 #include <QPointer>
 
 namespace udg {
@@ -31,13 +31,16 @@ class DrawerText;
     Quan es canvïi l'input del visor, les annotacions fetes fins aquell moment s'esborraran.
     Quan es desactivi l'eina, les annotacions fetes fins aquell moment es mantindran.
   */
-class DistanceTool : public MeasurementTool {
+class DistanceTool : public GenericDistanceTool {
 Q_OBJECT
 public:
     DistanceTool(QViewer *viewer, QObject *parent = 0);
     ~DistanceTool();
 
-    void handleEvent(long unsigned eventID);
+protected:
+    void handleLeftButtonPress();
+    void handleMouseMove();
+    void handleKeyPress();
 
 private:
     /// Gets the text corresponding to the current measurement

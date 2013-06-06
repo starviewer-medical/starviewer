@@ -1,7 +1,7 @@
 #ifndef UDGPERPENDICULARDISTANCETOOL_H
 #define UDGPERPENDICULARDISTANCETOOL_H
 
-#include "measurementtool.h"
+#include "genericdistancetool.h"
 
 #include <QPointer>
 
@@ -38,7 +38,7 @@ class DrawerText;
 
     TODO Canviar el nom de la classe.
   */
-class PerpendicularDistanceTool : public MeasurementTool {
+class PerpendicularDistanceTool : public GenericDistanceTool {
 
 Q_OBJECT
 
@@ -47,8 +47,10 @@ public:
     PerpendicularDistanceTool(QViewer *viewer, QObject *parent = 0);
     ~PerpendicularDistanceTool();
 
-    /// Decideix què s'ha de fer per cada esdeveniment rebut.
-    virtual void handleEvent(long unsigned eventId);
+protected:
+    void handleLeftButtonPress();
+    void handleMouseMove();
+    void handleKeyPress();
 
 private:
 
