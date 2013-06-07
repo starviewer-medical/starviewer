@@ -32,7 +32,7 @@ void test_ImagePlane::getRowLength_ReturnsExpectedValues_data()
     int randomColumns = MathTools::randomInt(128, 1024);
     
     ImagePlane plane;
-    plane.setSpacing(randomXSpacing, dummyYSpacing);
+    plane.setSpacing(PixelSpacing2D(randomXSpacing, dummyYSpacing));
     plane.setColumns(randomColumns);
     plane.setRows(0);
 
@@ -57,7 +57,7 @@ void test_ImagePlane::getColumnLength_ReturnsExpectedValues_data()
     int  randomRows = MathTools::randomInt(128, 1024);
     
     ImagePlane plane;
-    plane.setSpacing(dummyXSpacing, randomYSpacing);
+    plane.setSpacing(PixelSpacing2D(dummyXSpacing, randomYSpacing));
     plane.setRows(randomRows);
     plane.setColumns(0);
 
@@ -83,7 +83,7 @@ void test_ImagePlane::fillFromImage_fillsExpectedValues_data()
     
     ImagePlane expectedPlane;
     expectedPlane.setImageOrientation(image->getImageOrientationPatient());
-    expectedPlane.setSpacing(image->getPixelSpacing().x(), image->getPixelSpacing().y());
+    expectedPlane.setSpacing(image->getPixelSpacing());
     expectedPlane.setThickness(image->getSliceThickness());
     expectedPlane.setRows(image->getRows());
     expectedPlane.setColumns(image->getColumns());
@@ -109,7 +109,7 @@ void test_ImagePlane::fillFromImage_fillsExpectedValues_data()
     image->setImagePositionPatient(origin);
 
     expectedPlane.setImageOrientation(orientation);
-    expectedPlane.setSpacing(spacing.x(), spacing.y());
+    expectedPlane.setSpacing(spacing);
     expectedPlane.setThickness(thickness);
     expectedPlane.setRows(rows);
     expectedPlane.setColumns(columns);

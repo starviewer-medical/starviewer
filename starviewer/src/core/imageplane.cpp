@@ -1,7 +1,6 @@
 #include "imageplane.h"
 #include "image.h"
 #include "mathtools.h"
-#include "pixelspacing2d.h"
 #include <QString>
 // Vtk's
 #include <vtkPlane.h>
@@ -26,8 +25,7 @@ ImagePlane::ImagePlane(ImagePlane *imagePlane)
     m_center[1] = imagePlane->m_center[1];
     m_center[2] = imagePlane->m_center[2];
 
-    m_spacing[0] = imagePlane->m_spacing[0];
-    m_spacing[1] = imagePlane->m_spacing[1];
+    m_spacing = imagePlane->m_spacing;
 
     m_rows = imagePlane->getRows();
     m_columns = imagePlane->getColumns();
@@ -92,22 +90,14 @@ void ImagePlane::getOrigin(double origin[3])
     origin[2] = m_origin[2];
 }
 
-void ImagePlane::setSpacing(double spacing[2])
+void ImagePlane::setSpacing(const PixelSpacing2D &spacing)
 {
-    setSpacing(spacing[0], spacing[1]);
+    m_spacing = spacing;
 }
 
-void ImagePlane::setSpacing(double x, double y)
+PixelSpacing2D ImagePlane::getSpacing() const
 {
-    m_spacing[0] = x;
-    m_spacing[1] = y;
-    updateCenter();
-}
-
-void ImagePlane::getSpacing(double spacing[2])
-{
-    spacing[0] = m_spacing[0];
-    spacing[1] = m_spacing[1];
+    return m_spacing;
 }
 
 void ImagePlane::setThickness(double thickness)
@@ -145,12 +135,12 @@ int ImagePlane::getColumns() const
 
 double ImagePlane::getRowLength() const
 {
-    return m_columns * m_spacing[0];
+    return m_columns * m_spacing.x();
 }
 
 double ImagePlane::getColumnLength() const
 {
-    return m_rows * m_spacing[1];
+    return m_rows * m_spacing.y();
 }
 
 bool ImagePlane::fillFromImage(const Image *image)
@@ -158,7 +148,7 @@ bool ImagePlane::fillFromImage(const Image *image)
     if (image)
     {
         this->setImageOrientation(image->getImageOrientationPatient());
-        this->setSpacing(image->getPixelSpacing().x(), image->getPixelSpacing().y());
+        this->setSpacing(image->getPixelSpacing());
         this->setThickness(image->getSliceThickness());
         this->setRows(image->getRows());
         this->setColumns(image->getColumns());
@@ -175,8 +165,8 @@ bool ImagePlane::fillFromImage(const Image *image)
 bool ImagePlane::operator ==(const ImagePlane &imagePlane)
 {
     if (m_imageOrientation == imagePlane.m_imageOrientation && m_origin[0] == imagePlane.m_origin[0] && m_origin[1] == imagePlane.m_origin[1] &&
-        m_origin[2] == imagePlane.m_origin[2] && m_spacing[0] == imagePlane.m_spacing[0] && m_spacing[1] == imagePlane.m_spacing[1] &&
-        m_rows == imagePlane.m_rows && m_columns == imagePlane.m_columns && m_thickness == imagePlane.m_thickness)
+        m_origin[2] == imagePlane.m_origin[2] && m_spacing.isEqual(imagePlane.m_spacing) && m_rows == imagePlane.m_rows && m_columns == imagePlane.m_columns && 
+        m_thickness == imagePlane.m_thickness)
     {
         return true;
     }
@@ -259,7 +249,7 @@ QString ImagePlane::toString(bool verbose)
     QVector3D normalVector = m_imageOrientation.getNormalVector();
     result += QString("\nNormal Vector: %1, %2, %3").arg(normalVector.x()).arg(normalVector.y()).arg(normalVector.z());
     result += QString("\nCenter: %1, %2, %3").arg(m_center[0]).arg(m_center[1]).arg(m_center[2]);
-    result += QString("\nSpacing: %1, %2").arg(m_spacing[0]).arg(m_spacing[1]);
+    result += QString("\nSpacing: %1, %2").arg(m_spacing.x()).arg(m_spacing.y());
     result += QString("\nThickness: %1").arg(m_thickness);
     result += QString("\nRow length: %1").arg(getRowLength());
     result += QString("\nColumn length: %1").arg(getColumnLength());

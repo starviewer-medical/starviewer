@@ -5,6 +5,7 @@
 #include <QVector>
 
 #include "imageorientation.h"
+#include "pixelspacing2d.h"
 
 namespace udg {
 
@@ -34,9 +35,8 @@ public:
     void setOrigin(double x, double y, double z);
     void getOrigin(double origin[3]);
 
-    void setSpacing(double spacing[2]);
-    void setSpacing(double x, double y);
-    void getSpacing(double spacing[2]);
+    void setSpacing(const PixelSpacing2D &spacing);
+    PixelSpacing2D getSpacing() const;
 
     void setThickness(double thickness);
     double getThickness() const;
@@ -105,7 +105,7 @@ private:
     double m_origin[3];
 
     /// Espaiat de les X i les Y
-    double m_spacing[2];
+    PixelSpacing2D m_spacing;
 
     /// Files i columnes
     int m_rows, m_columns;
