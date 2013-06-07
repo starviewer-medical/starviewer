@@ -1290,7 +1290,7 @@ bool ImageFillerStep::validateAndSetSpacingAttribute(Image *image, const QString
     }
     else
     {
-        DEBUG_LOG("No s'ha trobat cap valor de pixel spacing definit de forma estàndar esperada.");
+        DEBUG_LOG("No s'ha trobat cap valor de pixel spacing definit de forma estàndar esperada: " + spacing);
     }
 
     return ok;
