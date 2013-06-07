@@ -50,10 +50,6 @@ public:
     double getRowLength() const;
     double getColumnLength() const;
 
-    /// TODO Per implementar. No tenim aquest membre. De moment no es necessita aquesta informació a partir d'aquesta classe
-    void setSliceLocation(double location);
-    double getSliceLocation() const;
-
     /// Omple les dades del pla a partir d'un objecte Image
     /// @param image objecte Image
     /// @return Cert si l'objecte Image és vàlid per omplir les dades, fals altrament
