@@ -54,7 +54,7 @@ void test_SendDICOMFilesToPACS::send_ShouldSendExpectedNumberOfFiles_data()
             images.append(image);
         }
 
-        QTest::newRow("multiple images with the same path") << images << PACSRequestStatus::SendOk << 10 << 0 << 0;
+        QTest::newRow("multiple images with the same path") << images << PACSRequestStatus::SendOk << 1 << 0 << 0;
     }
 
     {
@@ -88,7 +88,7 @@ void test_SendDICOMFilesToPACS::send_ShouldSendExpectedNumberOfFiles_data()
             images.append(image);
         }
 
-        QTest::newRow("multiple images with mixed paths") << images << PACSRequestStatus::SendOk << 10 << 0 << 0;
+        QTest::newRow("multiple images with mixed paths") << images << PACSRequestStatus::SendOk << 4 << 0 << 0;
     }
 }
 
