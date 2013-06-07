@@ -148,7 +148,7 @@ bool ImagePlane::fillFromImage(const Image *image)
     if (image)
     {
         this->setImageOrientation(image->getImageOrientationPatient());
-        this->setSpacing(image->getPixelSpacing());
+        this->setSpacing(image->getPreferredPixelSpacing());
         this->setThickness(image->getSliceThickness());
         this->setRows(image->getRows());
         this->setColumns(image->getColumns());
