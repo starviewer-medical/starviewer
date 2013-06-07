@@ -2,6 +2,7 @@
 #include "imageplane.h"
 
 #include "image.h"
+#include "mathtools.h"
 
 using namespace udg;
 
@@ -9,11 +10,67 @@ class test_ImagePlane : public QObject {
 Q_OBJECT
 
 private slots:
+    void getRowLength_ReturnsExpectedValues_data();
+    void getRowLength_ReturnsExpectedValues();
+    
+    void getColumnLength_ReturnsExpectedValues_data();
+    void getColumnLength_ReturnsExpectedValues();
+
     void fillFromImage_fillsExpectedValues_data();
     void fillFromImage_fillsExpectedValues();
 };
 
 Q_DECLARE_METATYPE(ImagePlane)
+
+void test_ImagePlane::getRowLength_ReturnsExpectedValues_data()
+{
+    QTest::addColumn<ImagePlane>("imagePlane");
+    QTest::addColumn<double>("expectedLength");
+
+    double randomXSpacing = MathTools::randomDouble(0.1, 5.6);
+    double dummyYSpacing = 0.0;
+    int randomColumns = MathTools::randomInt(128, 1024);
+    
+    ImagePlane plane;
+    plane.setSpacing(randomXSpacing, dummyYSpacing);
+    plane.setColumns(randomColumns);
+    plane.setRows(0);
+
+    QTest::newRow("Row length") << plane << randomXSpacing * randomColumns;
+}
+
+void test_ImagePlane::getRowLength_ReturnsExpectedValues()
+{
+    QFETCH(ImagePlane, imagePlane);
+    QFETCH(double, expectedLength);
+    
+    QCOMPARE(imagePlane.getRowLength(), expectedLength);
+}
+
+void test_ImagePlane::getColumnLength_ReturnsExpectedValues_data()
+{
+    QTest::addColumn<ImagePlane>("imagePlane");
+    QTest::addColumn<double>("expectedLength");
+
+    double dummyXSpacing = 0.0;
+    double randomYSpacing = MathTools::randomDouble(0.1, 5.6);
+    int  randomRows = MathTools::randomInt(128, 1024);
+    
+    ImagePlane plane;
+    plane.setSpacing(dummyXSpacing, randomYSpacing);
+    plane.setRows(randomRows);
+    plane.setColumns(0);
+
+    QTest::newRow("Column length") << plane << randomYSpacing * randomRows;
+}
+
+void test_ImagePlane::getColumnLength_ReturnsExpectedValues()
+{
+    QFETCH(ImagePlane, imagePlane);
+    QFETCH(double, expectedLength);
+    
+    QCOMPARE(imagePlane.getColumnLength(), expectedLength);
+}
 
 void test_ImagePlane::fillFromImage_fillsExpectedValues_data()
 {
