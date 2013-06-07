@@ -83,7 +83,7 @@ void test_ImagePlane::fillFromImage_fillsExpectedValues_data()
     
     ImagePlane expectedPlane;
     expectedPlane.setImageOrientation(image->getImageOrientationPatient());
-    expectedPlane.setSpacing(image->getPixelSpacing());
+    expectedPlane.setSpacing(image->getPreferredPixelSpacing());
     expectedPlane.setThickness(image->getSliceThickness());
     expectedPlane.setRows(image->getRows());
     expectedPlane.setColumns(image->getColumns());
