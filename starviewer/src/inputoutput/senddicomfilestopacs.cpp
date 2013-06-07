@@ -7,6 +7,7 @@
 #include <dcdeftag.h>
 
 #include <QDir>
+#include <QSet>
 
 #include "logging.h"
 #include "image.h"
@@ -37,6 +38,7 @@ PACSRequestStatus::SendRequestStatus SendDICOMFilesToPACS::send(QList<Image*> im
         return PACSRequestStatus::SendCanNotConnectToPACS;
     }
 
+    removeDuplicateFiles(imageListToSend);
     initialitzeDICOMFilesCounters(imageListToSend.count());
 
     foreach (Image *imageToStore, imageListToSend)
@@ -72,6 +74,26 @@ void SendDICOMFilesToPACS::requestCancel()
 PACSConnection* SendDICOMFilesToPACS::createPACSConnection(const PacsDevice &pacsDevice) const
 {
     return new PACSConnection(pacsDevice);
+}
+
+void SendDICOMFilesToPACS::removeDuplicateFiles(QList<Image*> &imageList) const
+{
+    QSet<QString> paths;
+    QMutableListIterator<Image*> it(imageList);
+
+    while (it.hasNext())
+    {
+        Image *image = it.next();
+
+        if (paths.contains(image->getPath()))
+        {
+            it.remove();
+        }
+        else
+        {
+            paths.insert(image->getPath());
+        }
+    }
 }
 
 void SendDICOMFilesToPACS::initialitzeDICOMFilesCounters(int numberOfDICOMFilesToSend)

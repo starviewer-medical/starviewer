@@ -59,6 +59,9 @@ private:
     /// Creates and returns a PACS connection to the given PACS device.
     virtual PACSConnection* createPACSConnection(const PacsDevice &pacsDevice) const;
 
+    /// Removes images from the list when multiple images point to the same file, so that at the end each file is present only once.
+    void removeDuplicateFiles(QList<Image*> &imageList) const;
+
     /// Inicialitze els comptadors d'imatges per controlar quantes han fallat/s'han enviat....
     void initialitzeDICOMFilesCounters(int numberOfDICOMFilesToSend);
 
