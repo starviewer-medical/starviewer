@@ -17,6 +17,7 @@
 #include "starviewerapplication.h"
 #include "interfacesettings.h"
 #include "screenmanager.h"
+#include "patientcomparer.h"
 
 // PACS --------------------------------------------
 #include "queryscreen.h"
@@ -25,6 +26,7 @@
 namespace udg {
 
 typedef SingletonPointer<QueryScreen> QueryScreenSingleton;
+typedef Singleton<PatientComparer> PatientComparerSingleton;
 
 QHash<QString, bool> ExtensionHandler::m_patientsSimilarityUserDecision;
 
@@ -310,7 +312,7 @@ void ExtensionHandler::processInput(QList<Patient*> patientsList, bool loadOnly)
             while (canReplaceActualPatient && mainAppsIterator.hasNext())
             {
                 QApplicationMainWindow *mainApp = mainAppsIterator.next();
-                canReplaceActualPatient = !askForPatientsSimilarity(mainApp->getCurrentPatient(), patient);
+                canReplaceActualPatient = !PatientComparerSingleton::instance()->areSamePatient(mainApp->getCurrentPatient(), patient);
             }
         }
     }
@@ -486,7 +488,7 @@ QApplicationMainWindow* ExtensionHandler::addPatientToWindow(Patient *patient, b
         while (!found && mainAppsIterator.hasNext())
         {
             mainApp = mainAppsIterator.next();
-            found = askForPatientsSimilarity(mainApp->getCurrentPatient(), patient);
+            found = PatientComparerSingleton::instance()->areSamePatient(mainApp->getCurrentPatient(), patient);
         }
 
         if (found)
