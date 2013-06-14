@@ -5,6 +5,66 @@
 #include <QChar>
 #include <QSet>
 
+namespace {
+
+enum EditDistanceMetricGaps { LevenshteinDistance = 1, NeedlemanWunschDistance = 2 };
+
+// Returns the edit cost to make one string equal to the other.
+double computeStringEditDistanceMetric(const QString &stringA, const QString &stringB, EditDistanceMetricGaps gap)
+{
+    // More information about the algorithm:
+    // http://staffwww.dcs.shef.ac.uk/people/S.Chapman/stringmetrics.html#Levenshtein
+    // http://en.wikipedia.org/wiki/Levenshtein_distance
+    // http://staffwww.dcs.shef.ac.uk/people/S.Chapman/stringmetrics.html#needleman
+    // http://en.wikipedia.org/wiki/Needleman%E2%80%93Wunsch_algorithm
+
+    int stringALength = stringA.length();
+    int stringBLength = stringB.length();
+
+    if (stringALength == 0)
+    {
+        return 1.;
+    }
+    else if (stringBLength == 0)
+    {
+        return 1.;
+    }
+
+    int *p = new int[stringALength + 1];
+    int *d = new int[stringALength + 1];
+
+    for (int i = 0; i <= stringALength; ++i)
+    {
+        p[i] = i;
+    }
+
+    int cost;
+    QChar currentStringBCharacter;
+
+    for (int j = 1; j <= stringBLength; ++j)
+    {
+        currentStringBCharacter = stringB.at(j - 1);
+        d[0] = j;
+
+        for (int i = 1; i <= stringALength; ++i)
+        {
+            cost = stringA.at(i - 1) == currentStringBCharacter ? 0 : 1;
+            d[i] = qMin(qMin(d[i - 1] + gap, p[i] + gap), p[i - 1] + cost);
+        }
+        qSwap(p, d);
+    }
+
+    int min = qMin(stringALength, stringBLength);
+    int difference = qMax(stringALength, stringBLength) - min;
+
+    double result = (double)p[stringALength] / (double)(min + difference * gap);
+    delete[] p;
+    delete[] d;
+    return result;
+}
+
+} // namespace
+
 namespace udg {
 
 Patient::Patient(QObject *parent)
@@ -457,59 +517,6 @@ int Patient::findStudyIndex(const QString &uid)
     }
 
     return i;
-}
-
-double Patient::computeStringEditDistanceMetric(const QString &stringA, const QString &stringB, int gap)
-{
-    /// Més informacíó sobre l'algorisme:
-    /// http://staffwww.dcs.shef.ac.uk/people/S.Chapman/stringmetrics.html#Levenshtein
-    /// http://en.wikipedia.org/wiki/Levenshtein_distance
-    /// http://staffwww.dcs.shef.ac.uk/people/S.Chapman/stringmetrics.html#needleman
-    /// http://en.wikipedia.org/wiki/Needleman%E2%80%93Wunsch_algorithm
-
-    int stringALength = stringA.length();
-    int stringBLength = stringB.length();
-
-    if (stringALength == 0)
-    {
-        return 1.;
-    }
-    else if (stringBLength == 0)
-    {
-        return 1.;
-    }
-
-    int *p = new int[stringALength + 1];
-    int *d = new int[stringALength + 1];
-
-    for (int i = 0; i <= stringALength; ++i)
-    {
-        p[i] = i;
-    }
-
-    int cost;
-    QChar currentStringBCharacter;
-
-    for (int j = 1; j <= stringBLength; ++j)
-    {
-        currentStringBCharacter = stringB.at(j - 1);
-        d[0] = j;
-
-        for (int i = 1; i <= stringALength; ++i)
-        {
-            cost = stringA.at(i - 1) == currentStringBCharacter ? 0 : 1;
-            d[i] = qMin(qMin(d[i - 1] + gap, p[i] + gap), p[i - 1] + cost);
-        }
-        qSwap(p, d);
-    }
-
-    int min = qMin(stringALength, stringBLength);
-    int difference = qMax(stringALength, stringBLength) - min;
-
-    double result = (double)p[stringALength] / (double)(min + difference * gap);
-    delete[] p;
-    delete[] d;
-    return result;
 }
 
 }
