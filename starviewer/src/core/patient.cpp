@@ -342,9 +342,9 @@ Patient Patient::operator +=(const Patient &patient)
     return this;
 }
 
-QString Patient::clearStrangeSymbols(const QString &patientName)
+QString Patient::getCleanName() const
 {
-    return patientName.toUpper().replace(QRegExp("[^A-Z\\d]"), " ").trimmed();
+    return this->getFullName().toUpper().replace(QRegExp("[^A-Z\\d]"), " ").trimmed();
 }
 
 Patient::PatientsSimilarity Patient::compareTo(const Patient *patient)
@@ -358,8 +358,8 @@ Patient::PatientsSimilarity Patient::compareTo(const Patient *patient)
     bool samePatientIDs = patient->m_patientID == this->m_patientID;
 
     // Pre-tractament sobre el nom del pacient per treure caràcters extranys
-    QString nameOfThis = clearStrangeSymbols(this->getFullName());
-    QString nameOfParameter = clearStrangeSymbols(patient->getFullName());
+    QString nameOfThis = this->getCleanName();
+    QString nameOfParameter = patient->getCleanName();
 
     // Mirem si tractant els caràcters extranys i canviant-los per espais els podem considerà iguals.
     bool samePatientNames = computeStringEditDistanceMetric(nameOfThis, nameOfParameter, NeedlemanWunschDistance) < 0.15;
