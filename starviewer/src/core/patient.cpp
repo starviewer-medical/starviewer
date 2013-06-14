@@ -407,7 +407,7 @@ QString Patient::getCleanName() const
     return this->getFullName().toUpper().replace(QRegExp("[^A-Z\\d]"), " ").trimmed();
 }
 
-Patient::PatientsSimilarity Patient::compareTo(const Patient *patient)
+Patient::PatientsSimilarity Patient::compareTo(const Patient *patient) const
 {
     if (!patient)
     {
