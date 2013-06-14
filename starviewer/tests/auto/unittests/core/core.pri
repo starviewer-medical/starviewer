@@ -59,7 +59,8 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_distancemeasurecomputer.cpp \
            $$PWD/test_areameasurecomputer.cpp \
            $$PWD/test_colortransferfunction.cpp \
-           $$PWD/test_volumepixeldataiterator.cpp
+           $$PWD/test_volumepixeldataiterator.cpp \
+           $$PWD/test_patientcomparer.cpp
 
 win32 {
     SOURCES += $$PWD/test_windowsfirewallaccess.cpp \
