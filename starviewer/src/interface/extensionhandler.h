@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QString>
 #include <QList>
-#include "patient.h"
+
 #include "extensioncontext.h"
 #include "appimportfile.h"
 
