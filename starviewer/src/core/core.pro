@@ -318,7 +318,8 @@ HEADERS += extensionfactory.h \
     volumepixeldatareaderfactory.h \
     volumepixeldatareadervtkdcmtk.h \
     vtkdcmtkimagereader.h \
-    volumepixeldataiterator.h
+    volumepixeldataiterator.h \
+    patientcomparer.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -591,7 +592,8 @@ SOURCES += extensionmediator.cpp \
     volumepixeldatareaderfactory.cpp \
     volumepixeldatareadervtkdcmtk.cpp \
     vtkdcmtkimagereader.cpp \
-    volumepixeldataiterator.cpp
+    volumepixeldataiterator.cpp \
+    patientcomparer.cpp
 win32 {
     HEADERS += windowsfirewallaccess.h \
                windowssysteminformation.h
