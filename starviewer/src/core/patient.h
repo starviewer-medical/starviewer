@@ -94,7 +94,7 @@ public:
 
     /// Retorna si es considera que es pot identificar com al mateix pacient (a partir de l'ID i el nom).
     /// No compara ni els estudis ni les sèries que conté, únicament la identificació de pacient.
-    Patient::PatientsSimilarity compareTo(const Patient *patient);
+    Patient::PatientsSimilarity compareTo(const Patient *patient) const;
 
     /// Volca informació sobre el pacient en un string útil per tasques de debug
     /// TODO Incorporar paràmetre "verbose" per poder escollir si fer un volcat complet o no
