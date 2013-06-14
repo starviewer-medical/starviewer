@@ -126,12 +126,6 @@ private:
     /// @return L'índex d'aquell estudi dins de la llista, -1 si no existeix l'estudi amb aquell uid.
     int findStudyIndex(const QString &uid);
 
-    enum EditDistanceMetricGaps { LevenshteinDistance = 1, NeedlemanWunschDistance = 2 };
-    /// Mètode per determinar quin cost d'edició hem d'assumir per fer que un string sigui igual a l'altre
-    /// Amb gap == 1, tenim la distància Levenshtein
-    /// Amb gap == 2, tenim la distància NeedlemanWunsch
-    double computeStringEditDistanceMetric(const QString &stringA, const QString &stringB, int gap);
-
     /// Crea un missatge de log per saber quins pacients estem fusionant
     /// @param patient Les dades del pacient que es fusiona amb aquest
     void patientFusionLogMessage(const Patient &patient);
