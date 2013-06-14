@@ -69,9 +69,6 @@ private:
     //  Li crea els volums al repositori i assigna quina és la sèrie per defecte
     void generatePatientVolumes(Patient *patient, const QString &defaultSeriesUID);
 
-    /// Retorna cert si l'usuari considera que els pacients són iguals.
-    bool askForPatientsSimilarity(Patient *patient1, Patient *patient2);
-
     /// Scans the list and returns a list where the patients which are the same are merged.
     /// Patients are only considered to be the same if Patient::compareTo() returns SamePatients value.
     QList<Patient*> mergePatients(const QList<Patient*> &patientList);
@@ -88,9 +85,7 @@ private:
 
     /// Indica si a aquesta finestra li pertoca o no tancar la QueryScreen
     bool m_haveToCloseQueryScreen;
-    
-    /// Estructura que ens diu si una parella de pacients (ID+Nom) són considerats el mateix pacient.
-    static QHash<QString, bool> m_patientsSimilarityUserDecision;
+
 };
 
 };  // end namespace udg
