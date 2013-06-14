@@ -347,11 +347,6 @@ QString Patient::clearStrangeSymbols(const QString &patientName)
     return patientName.toUpper().replace(QRegExp("[^A-Z\\d]"), " ").trimmed();
 }
 
-QString Patient::clearPatientName(const QString &patientName)
-{
-    return patientName.toUpper().replace(QRegExp("[^A-Z]"), " ").trimmed();
-}
-
 Patient::PatientsSimilarity Patient::compareTo(const Patient *patient)
 {
     if (!patient)

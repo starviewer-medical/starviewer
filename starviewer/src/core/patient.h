@@ -136,10 +136,6 @@ private:
     /// @param patient Les dades del pacient que es fusiona amb aquest
     void patientFusionLogMessage(const Patient &patient);
 
-    /// Fa tractament del nom del pacient, traient caràcters extranys, espais inicials, finals i passant a majúscules.
-    /// També elimina els números que contingui en nom del pacient.
-    QString clearPatientName(const QString &patientName);
-
     /// Fa tractament del nom del pacient, traient caràcters extranys, espais inicials, finals i passant a majúscules,
     /// però sense eliminar els números que contingui el nom, ja que poden haver pacients anonimitzats i diferenciats
     /// per un número, com per exemple VOLUNTARI1, VOLUNTARI2 i no són el mateix pacient, en canvi si treiem els números
