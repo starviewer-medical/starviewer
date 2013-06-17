@@ -450,15 +450,7 @@ Status ConvertToDicomdir::copyImageToDicomdirPath(Image *image)
         }
         else
         {
-            if (QFile::copy(image->getPath(), imageOutputPath))
-            {
-                state.setStatus("", true, 0);
-            }
-            else
-            {
-                ERROR_LOG(QString("No s'ha pogut copiar la imatge %1 a %2").arg(image->getPath(), imageOutputPath));
-                state.setStatus(QString("Unable to copy image %1 to %2").arg(image->getPath(), imageOutputPath), false, 3001);
-            }
+            copyFileToDICOMDIRDestination(image->getPath(), imageOutputPath, state);
         }
     }
 
@@ -472,6 +464,20 @@ Status ConvertToDicomdir::copyImageToDicomdirPath(Image *image)
 QString ConvertToDicomdir::getDICOMDIROutputFilenamePrefix() const
 {
     return "IMG";
+}
+
+void ConvertToDicomdir::copyFileToDICOMDIRDestination(const QString &sourceFile, const QString &destinationFile, Status &status)
+{
+    if (QFile::copy(sourceFile, destinationFile))
+    {
+        status.setStatus("", true, 0);
+    }
+    else
+    {
+        QString errorString = QString("Unable to copy file from %1 to %2").arg(sourceFile, destinationFile);
+        ERROR_LOG(qPrintable(errorString));
+        status.setStatus(errorString, false, 3001);
+    }
 }
 
 void ConvertToDicomdir::createReadmeTxt()
