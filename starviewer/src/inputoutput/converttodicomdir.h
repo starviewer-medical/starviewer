@@ -101,6 +101,9 @@ private:
     /// Gets the corresponding output prefix name
     QString getDICOMDIROutputFilenamePrefix() const;
 
+    /// Gets the corresponding output path for the current item to be copied
+    QString getCurrentItemOutputPath();
+    
     /// Copies source file to destination file and sets the Status for the operation
     void copyFileToDICOMDIRDestination(const QString &sourceFile, const QString &destinationFile, Status &status);
     
