@@ -422,14 +422,7 @@ Status ConvertToDicomdir::copyImageToDicomdirPath(Image *image)
 
         if (m_anonymizeDICOMDIR && state.good())
         {
-            if (m_DICOMAnonymizer->anonymizeDICOMFile(imageOutputPath, imageOutputPath))
-            {
-                state.setStatus("", true, 0);
-            }
-            else
-            {
-                state.setStatus(QString("Unable to anonymize image Little Endian Image %1").arg(imageOutputPath), false, 3003);
-            }
+            anonymizeFile(imageOutputPath, imageOutputPath, state, true);
         }
     }
     else
@@ -439,14 +432,7 @@ Status ConvertToDicomdir::copyImageToDicomdirPath(Image *image)
         // que no s'han de convertir a LittleEndian és més ràpid.
         if (m_anonymizeDICOMDIR)
         {
-            if (m_DICOMAnonymizer->anonymizeDICOMFile(image->getPath(), imageOutputPath))
-            {
-                state.setStatus("", true, 0);
-            }
-            else
-            {
-                state.setStatus(QString("Unable to anonymize image %1 to %2").arg(image->getPath(), imageOutputPath), false, 3003);
-            }
+            anonymizeFile(image->getPath(), imageOutputPath, state, false);
         }
         else
         {
@@ -482,6 +468,28 @@ void ConvertToDicomdir::copyFileToDICOMDIRDestination(const QString &sourceFile,
         QString errorString = QString("Unable to copy file from %1 to %2").arg(sourceFile, destinationFile);
         ERROR_LOG(qPrintable(errorString));
         status.setStatus(errorString, false, 3001);
+    }
+}
+
+void ConvertToDicomdir::anonymizeFile(const QString &sourceFile, const QString &destinationFile, Status &status, bool isLittleEndian)
+{
+    if (m_DICOMAnonymizer->anonymizeDICOMFile(sourceFile, destinationFile))
+    {
+        status.setStatus("", true, 0);
+    }
+    else
+    {
+        QString statusMessage;
+        if (isLittleEndian)
+        {
+            statusMessage = QString("Unable to anonymize Little Endian Image %1").arg(sourceFile);
+        }
+        else
+        {
+            statusMessage = QString("Unable to anonymize file %1 to %2").arg(sourceFile, destinationFile);
+        }
+        
+        status.setStatus(statusMessage, false, 3003);
     }
 }
 
