@@ -123,7 +123,8 @@ private:
     int m_patient;
     int m_study;
     int m_series;
-    int m_image;
+    /// Holds the number of the item being copied
+    int m_currentItemNumber;
 
     /// És necessari crear-la global per mantenir la consistència dels UID dels fitxers DICOM
     DICOMAnonymizer *m_DICOMAnonymizer;
