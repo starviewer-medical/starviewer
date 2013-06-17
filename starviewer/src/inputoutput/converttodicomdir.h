@@ -98,6 +98,9 @@ private:
     /// @return Indica l'estat en què finalitza el mètode
     Status copyImageToDicomdirPath(Image *image);
 
+    /// Gets the corresponding output prefix name
+    QString getDICOMDIROutputFilenamePrefix() const;
+
     /// Starviewer té l'opció de copiar el contingut d'una carpeta al DICOMDIR. Aquest mètode copia el contingut de la carpeta al DICOMDIR
     bool copyFolderContentToDICOMDIR();
 
