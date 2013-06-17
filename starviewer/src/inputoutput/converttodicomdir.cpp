@@ -411,7 +411,7 @@ Status ConvertToDicomdir::copySeriesToDicomdirPath(Series *series)
 Status ConvertToDicomdir::copyImageToDicomdirPath(Image *image)
 {
     // Creem el nom del fitxer de l'imatge, el format és IMGXXXXX, on XXXXX és el numero d'imatge dins la sèrie
-    QString imageOutputPath = m_dicomDirSeriesPath + QString("/%1%2").arg(getDICOMDIROutputFilenamePrefix()).arg(m_currentItemNumber, 5, 10, QChar('0'));
+    QString imageOutputPath = getCurrentItemOutputPath();
     Status state;
     m_currentItemNumber++;
 
@@ -464,6 +464,11 @@ Status ConvertToDicomdir::copyImageToDicomdirPath(Image *image)
 QString ConvertToDicomdir::getDICOMDIROutputFilenamePrefix() const
 {
     return "IMG";
+}
+
+QString ConvertToDicomdir::getCurrentItemOutputPath()
+{
+    return m_dicomDirSeriesPath + QString("/%1%2").arg(getDICOMDIROutputFilenamePrefix()).arg(m_currentItemNumber, 5, 10, QChar('0'));
 }
 
 void ConvertToDicomdir::copyFileToDICOMDIRDestination(const QString &sourceFile, const QString &destinationFile, Status &status)
