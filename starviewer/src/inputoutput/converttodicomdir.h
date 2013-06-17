@@ -106,6 +106,10 @@ private:
     
     /// Copies source file to destination file and sets the Status for the operation
     void copyFileToDICOMDIRDestination(const QString &sourceFile, const QString &destinationFile, Status &status);
+
+    /// Anonymizes sourceFile and puts the result in destinationFile.
+    /// isLittleEndian is needed in order to give an accurate message in status in case there are some error.
+    void anonymizeFile(const QString &sourceFile, const QString &destinationFile, Status &status, bool isLittleEndian);
     
     /// Starviewer té l'opció de copiar el contingut d'una carpeta al DICOMDIR. Aquest mètode copia el contingut de la carpeta al DICOMDIR
     bool copyFolderContentToDICOMDIR();
