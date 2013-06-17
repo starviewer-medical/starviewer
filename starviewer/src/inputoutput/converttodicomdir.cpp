@@ -383,21 +383,35 @@ Status ConvertToDicomdir::copySeriesToDicomdirPath(Series *series)
     Status state;
 
     m_series++;
-    m_currentItemNumber = 0;
     // Creem el directori on es guardarà la sèrie en format DicomDir
     m_dicomDirSeriesPath = m_dicomDirStudyPath + seriesName;
     seriesDir.mkdir(m_dicomDirSeriesPath);
 
+    state = copyImages(series->getImages());
+
+    return state;
+}
+
+Status ConvertToDicomdir::copyImages(QList<Image*> images)
+{
+    Status state;
+    m_currentItemNumber = 0;
     // HACK per evitar els casos en que siguin imatges procedents d'un multiframe
     // que copiem més d'una vegada un arxiu
     QString lastPath;
-    foreach (Image *imageToCopy, series->getImages())
+    foreach (Image *imageToCopy, images)
     {
         if (lastPath != imageToCopy->getPath())
         {
             lastPath = imageToCopy->getPath();
+            
+            m_currentItemNumber++;
             state = copyImageToDicomdirPath(imageToCopy);
-
+            
+            // La barra de progrés avança
+            m_progress->setValue(m_progress->value() + 1);
+            m_progress->repaint();
+            
             if (!state.good())
             {
                 break;
@@ -413,7 +427,6 @@ Status ConvertToDicomdir::copyImageToDicomdirPath(Image *image)
     // Creem el nom del fitxer de l'imatge, el format és IMGXXXXX, on XXXXX és el numero d'imatge dins la sèrie
     QString imageOutputPath = getCurrentItemOutputPath();
     Status state;
-    m_currentItemNumber++;
 
     if (getConvertDicomdirImagesToLittleEndian())
     {
@@ -439,10 +452,6 @@ Status ConvertToDicomdir::copyImageToDicomdirPath(Image *image)
             copyFileToDICOMDIRDestination(image->getPath(), imageOutputPath, state);
         }
     }
-
-    // La barra de progrés avança
-    m_progress->setValue(m_progress->value() + 1);
-    m_progress->repaint();
 
     return state;
 }
