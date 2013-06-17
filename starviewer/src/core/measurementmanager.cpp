@@ -61,6 +61,10 @@ QString MeasurementManager::getMeasurementDisplayVerbosityTypeAsQString(Measurem
         case MeasurementManager::VerboseExplicit:
             return VerboseExplicitVerbosityString;
             break;
+
+        default:
+            return QString();
+            break;
     }
 }
 
