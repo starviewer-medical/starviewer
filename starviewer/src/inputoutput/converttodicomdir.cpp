@@ -23,7 +23,7 @@ ConvertToDicomdir::ConvertToDicomdir()
 {
     m_study = 0;
     m_series = 0;
-    m_image = 0;
+    m_currentItemNumber = 0;
     m_patient = 0;
 
     m_convertDicomdirImagesToLittleEndian = false;
@@ -383,7 +383,7 @@ Status ConvertToDicomdir::copySeriesToDicomdirPath(Series *series)
     Status state;
 
     m_series++;
-    m_image = 0;
+    m_currentItemNumber = 0;
     // Creem el directori on es guardarà la sèrie en format DicomDir
     m_dicomDirSeriesPath = m_dicomDirStudyPath + seriesName;
     seriesDir.mkdir(m_dicomDirSeriesPath);
@@ -411,9 +411,9 @@ Status ConvertToDicomdir::copySeriesToDicomdirPath(Series *series)
 Status ConvertToDicomdir::copyImageToDicomdirPath(Image *image)
 {
     // Creem el nom del fitxer de l'imatge, el format és IMGXXXXX, on XXXXX és el numero d'imatge dins la sèrie
-    QString imageOutputPath = m_dicomDirSeriesPath + QString("/%1%2").arg(getDICOMDIROutputFilenamePrefix()).arg(m_image, 5, 10, QChar('0'));
+    QString imageOutputPath = m_dicomDirSeriesPath + QString("/%1%2").arg(getDICOMDIROutputFilenamePrefix()).arg(m_currentItemNumber, 5, 10, QChar('0'));
     Status state;
-    m_image++;
+    m_currentItemNumber++;
 
     if (getConvertDicomdirImagesToLittleEndian())
     {
