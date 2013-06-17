@@ -101,6 +101,9 @@ private:
     /// Gets the corresponding output prefix name
     QString getDICOMDIROutputFilenamePrefix() const;
 
+    /// Copies source file to destination file and sets the Status for the operation
+    void copyFileToDICOMDIRDestination(const QString &sourceFile, const QString &destinationFile, Status &status);
+    
     /// Starviewer té l'opció de copiar el contingut d'una carpeta al DICOMDIR. Aquest mètode copia el contingut de la carpeta al DICOMDIR
     bool copyFolderContentToDICOMDIR();
 
