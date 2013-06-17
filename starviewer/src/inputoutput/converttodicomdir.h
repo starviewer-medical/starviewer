@@ -93,6 +93,9 @@ private:
     /// @return Indica l'estat en què finalitza el mètode
     Status copySeriesToDicomdirPath(Series *series);
 
+    /// Does the process of copying a list of images to the corresponding DICOMDIR destination 
+    Status copyImages(QList<Image*> images);
+    
     /// Converteix una imatge al format littleendian, i la copia al directori dicomdir
     /// @param image
     /// @return Indica l'estat en què finalitza el mètode
