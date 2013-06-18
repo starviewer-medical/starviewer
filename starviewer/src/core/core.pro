@@ -18,7 +18,8 @@ FORMS += qlogviewerbase.ui \
     qdiagnosistestbase.ui \
     qmodalitiesselectorgroupboxbase.ui \
     q2dviewerlayoutconfigurationscreenbase.ui \
-    q2dviewerconfigurationscreenbase.ui
+    q2dviewerconfigurationscreenbase.ui \
+    qnotificationpopupbase.ui
 
 TRANSLATIONS += core_ca_ES.ts \
     core_es_ES.ts \
@@ -298,6 +299,7 @@ HEADERS += extensionfactory.h \
     studylayoutconfigsloader.h \
     studylayoutmapper.h \
     measurementmanager.h \
+    qnotificationpopup.h \
     measurecomputer.h \
     distancemeasurecomputer.h \
     areameasurecomputer.h \
@@ -573,6 +575,7 @@ SOURCES += extensionmediator.cpp \
     studylayoutconfigsloader.cpp \
     studylayoutmapper.cpp \
     measurementmanager.cpp \
+    qnotificationpopup.cpp \
     measurecomputer.cpp \
     distancemeasurecomputer.cpp \
     areameasurecomputer.cpp \
