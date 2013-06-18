@@ -19,8 +19,7 @@ QNotificationPopup::QNotificationPopup(QWidget *parent)
     
     setupOngoingOperationAnimation();
     setupTimers();
-
-    connect(&m_hideAnimation, SIGNAL(finished()), SLOT(finishHideAnimation()));
+    setupHideAnimation();
 
     // HACK This is the only way found at this time to achieve text is not being cut when its size is bigger
     // The dialogh should be enhanced to avoid this hack and take care about the current method used to place it because now it's a bit tricky
@@ -162,14 +161,20 @@ void QNotificationPopup::setupTimers()
     connect(m_moveAnimationDelayTimer, SIGNAL(timeout()), SLOT(runMoveAnimation()));
 }
 
+void QNotificationPopup::setupHideAnimation()
+{
+    m_hideAnimation.setTargetObject(this);
+    m_hideAnimation.setPropertyName("windowOpacity");
+    m_hideAnimation.setDuration(1000);
+    m_hideAnimation.setEndValue(0.0);
+
+    connect(&m_hideAnimation, SIGNAL(finished()), SLOT(finishHideAnimation()));
+}
+
 void QNotificationPopup::runSmoothHideAnimation()
 {
     if (m_hideAnimation.state() != QAbstractAnimation::Running)
     {
-        m_hideAnimation.setTargetObject(this);
-        m_hideAnimation.setPropertyName("windowOpacity");
-        m_hideAnimation.setDuration(1000);
-        m_hideAnimation.setEndValue(0.0);
         m_hideAnimation.start();
     }
 }
