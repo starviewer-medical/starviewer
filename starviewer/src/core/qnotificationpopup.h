@@ -50,6 +50,7 @@ protected:
 private:
     void setupOngoingOperationAnimation();
     void setupTimers();
+    void setupHideAnimation();
 
 private slots:
     /// Starts animation to hide the popup with a vanish effect
