@@ -1,11 +1,7 @@
 #ifndef UDGQPOPURISREQUESTSCREEN_H
 #define UDGQPOPURISREQUESTSCREEN_H
 
-#include <QDialog>
-#include <QPropertyAnimation>
-#include "ui_qpopuprisrequestsscreenbase.h"
-
-class QTimer;
+#include "qnotificationpopup.h"
 
 namespace udg {
 
@@ -17,7 +13,7 @@ class Study;
 /**
     Classe que mostra un PopUp indicant que s'ha rebut una petició del RIS per descarregar un estudi
   */
-class QPopUpRISRequestsScreen : public QDialog, private Ui::QPopUpRISRequestsScreenBase {
+class QPopUpRISRequestsScreen : public QNotificationPopup {
 Q_OBJECT
 public:
     /// Constructor
@@ -44,21 +40,7 @@ public:
     /// Sinó s'especifica per defecte són 5000 ms
     void setTimeOutToHidePopUpAfterStudiesHaveBeenRetrieved(int timeOutms);
 
-protected:
-    /// Quan es fa un show al popup s'activa un timer, que passat un temps amaga automàticament el PopUp
-    void showEvent(QShowEvent *);
-
-    /// Si es rep un event de fer click sobre el PopUp aquest s'amaga
-    bool eventFilter(QObject *obj, QEvent *event);
-
 private slots:
-    /// Slot que amaga el PopUp sempre i quan no s'estigui processant cap petició del RIS
-    void hidePopUp();
-    void hidePopUpSmoothly();
-
-    /// Mou el PopUp a la cantonada dreta de la pantalla a on es troba en aquest moment.
-    void moveToBottomRight();
-
     /// S'indica que la descàrrega dels estudis degut a una petició del RIS ha finalitzat
     void retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacsJob);
 
@@ -73,18 +55,9 @@ private:
     void showRetrieveFinished();
 
 private:
-    QTimer *m_qTimerToHidePopUp;
-    QTimer *m_qTimerToMovePopUpToBottomRight;
-    int m_msTimeOutToHidePopUp;
-    static const int msTimeOutToMovePopUpToBottomRight;
-
     QList<int> m_pacsJobIDOfStudiesToRetrieve;
     int m_numberOfStudiesRetrieved;
     int m_numberOfStudiesFailedToRetrieve;
-
-    /// Animació utilitzada per desplaçar el pop up fin a la cantonada dreta
-    QPropertyAnimation m_moveToBottomAnimation;
-    QPropertyAnimation m_hidePopUpAnimation;
 
     /// Guarda el número d'estudis que s'han de descarregar
     int m_numberOfStudiesToRetrieve;

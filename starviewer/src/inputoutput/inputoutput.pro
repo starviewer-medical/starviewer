@@ -15,7 +15,6 @@ FORMS += qconfigurationscreenbase.ui \
     qbasicsearchwidgetbase.ui \
     qlocaldatabaseconfigurationscreenbase.ui \
     qlistenrisrequestsconfigurationscreenbase.ui \
-    qpopuprisrequestsscreenbase.ui \
     qinputoutputdicomdirwidgetbase.ui \
     qinputoutputlocaldatabasewidgetbase.ui \
     qinputoutputpacswidgetbase.ui \
