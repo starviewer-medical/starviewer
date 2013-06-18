@@ -20,6 +20,7 @@ QNotificationPopup::QNotificationPopup(QWidget *parent)
     setupOngoingOperationAnimation();
     setupTimers();
     setupHideAnimation();
+    setupMoveAnimation();
 
     // HACK This is the only way found at this time to achieve text is not being cut when its size is bigger
     // The dialogh should be enhanced to avoid this hack and take care about the current method used to place it because now it's a bit tricky
@@ -171,6 +172,14 @@ void QNotificationPopup::setupHideAnimation()
     connect(&m_hideAnimation, SIGNAL(finished()), SLOT(finishHideAnimation()));
 }
 
+void QNotificationPopup::setupMoveAnimation()
+{
+    m_moveAnimation.setTargetObject(this);
+    m_moveAnimation.setPropertyName("pos");
+    m_moveAnimation.setDuration(2000);
+    m_moveAnimation.setEasingCurve(QEasingCurve::OutQuint);
+}
+
 void QNotificationPopup::runSmoothHideAnimation()
 {
     if (m_hideAnimation.state() != QAbstractAnimation::Running)
@@ -183,12 +192,8 @@ void QNotificationPopup::runMoveAnimation()
 {
     if (m_moveAnimation.state() != QAbstractAnimation::Running)
     {
-        m_moveAnimation.setTargetObject(this);
-        m_moveAnimation.setPropertyName("pos");
-        m_moveAnimation.setDuration(2000);
         // TODO The position should be enhanced with the information provided by ScreenManager and ScreenLayout classes
         m_moveAnimation.setEndValue(QApplication::desktop()->availableGeometry(this).bottomRight() - this->rect().bottomRight());
-        m_moveAnimation.setEasingCurve(QEasingCurve::OutQuint);
         m_moveAnimation.start();
     }
 }
