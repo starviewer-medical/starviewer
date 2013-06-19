@@ -17,6 +17,9 @@ class VolumePixelDataReaderFactory {
 
 public:
 
+    /// The different choosable implementations of VolumePixelDataReader.
+    enum PixelDataReaderType { ITKDCMTKPixelDataReader, ITKGDCMPixelDataReader, VTKDCMTKPixelDataReader, VTKGDCMPixelDataReader };
+
     /// Creates the factory and configures it according to the given volume. Reader implementation is decided on factory creation.
     VolumePixelDataReaderFactory(Volume *volume);
 
@@ -26,9 +29,6 @@ public:
     QQueue<QSharedPointer<Postprocessor>> getPostprocessors() const;
 
 private:
-
-    /// The different choosable implementations of VolumePixelDataReader.
-    enum PixelDataReaderType { ITKDCMTKPixelDataReader, ITKGDCMPixelDataReader, VTKDCMTKPixelDataReader, VTKGDCMPixelDataReader };
 
     /// Chooses and returns the reader implementation most suitable to the given volume.
     PixelDataReaderType getSuitableReader(Volume *volume) const;
