@@ -1,11 +1,11 @@
-#include "volumepixeldatareaderselector.h"
+#include "vtkdcmtkbydefaultvolumepixeldatareaderselector.h"
 
 #include "image.h"
 #include "volume.h"
 
 namespace udg {
 
-VolumePixelDataReaderFactory::PixelDataReaderType VolumePixelDataReaderSelector::selectVolumePixelDataReader(Volume *volume) const
+VolumePixelDataReaderFactory::PixelDataReaderType VtkDcmtkByDefaultVolumePixelDataReaderSelector::selectVolumePixelDataReader(Volume *volume) const
 {
     if (volume->getImage(0)->getSOPInstanceUID().contains("MHDImage"))
     {
