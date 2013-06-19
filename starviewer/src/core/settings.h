@@ -1,6 +1,8 @@
 #ifndef UDGSETTINGS_H
 #define UDGSETTINGS_H
 
+#include "settingsinterface.h"
+
 #include <QSettings>
 #include <QMap>
 
@@ -19,27 +21,27 @@ namespace udg {
     Aquest mecanisme funciona d'aquesta manera per raons d'eficiència, així podem assignar diversos
     settings alhora sense penalitzar un accés a disc fins que no es destrueixi l'objecte de Settings.
   */
-class Settings {
+class Settings : public SettingsInterface {
 public:
     enum AccessLevel { UserLevel, SystemLevel };
     enum PropertiesFlag { None = 0x0, Parseable = 0x1 };
     Q_DECLARE_FLAGS(Properties, PropertiesFlag)
 
     Settings();
-    ~Settings();
+    virtual ~Settings();
 
     /// Retorna el valor per la clau demanada. Si el setting no existeix, retorna el valor
     /// per defecte que aquesta clau tingui registrat
-    QVariant getValue(const QString &key) const;
+    virtual QVariant getValue(const QString &key) const;
 
     /// Assigna el valor al setting amb la clau indicada. Si la clau ja existeix, els valor anterior queda sobre-escrit.
-    void setValue(const QString &key, const QVariant &value);
+    virtual void setValue(const QString &key, const QVariant &value);
 
     /// Retorna cert si existeix un setting anomenat key; returna fals altrament.
-    bool contains(const QString &key) const;
+    virtual bool contains(const QString &key) const;
 
     /// Elimina els settings de key i totes les sub-settings que hi hagi per sota de la clau
-    void remove(const QString &key);
+    virtual void remove(const QString &key);
 
     // Mètodes per la manipulació de llistes de Settings
 
