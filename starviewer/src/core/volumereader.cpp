@@ -192,7 +192,8 @@ void VolumeReader::setUpReader(Volume *volume)
         delete m_volumePixelDataReader;
     }
 
-    VolumePixelDataReaderFactory readerFactory(volume);
+    VolumePixelDataReaderFactory readerFactory;
+    readerFactory.setVolume(volume);
     m_volumePixelDataReader = readerFactory.getReader();
     m_postprocessorsQueue = readerFactory.getPostprocessors();
 

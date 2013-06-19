@@ -18,7 +18,7 @@
 
 namespace udg {
 
-VolumePixelDataReaderFactory::VolumePixelDataReaderFactory(Volume *volume)
+void VolumePixelDataReaderFactory::setVolume(Volume *volume)
 {
     m_chosenReaderType = getSuitableReader(volume);
 }

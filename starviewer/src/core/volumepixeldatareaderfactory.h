@@ -20,8 +20,8 @@ public:
     /// The different choosable implementations of VolumePixelDataReader.
     enum PixelDataReaderType { ITKDCMTKPixelDataReader, ITKGDCMPixelDataReader, VTKDCMTKPixelDataReader, VTKGDCMPixelDataReader };
 
-    /// Creates the factory and configures it according to the given volume. Reader implementation is decided on factory creation.
-    VolumePixelDataReaderFactory(Volume *volume);
+    /// Configures the factory according to the given volume, deciding the appropriate reader implementation. Call this before using getter methods.
+    void setVolume(Volume *volume);
 
     /// Returns a new instance of the chosen reader implementation.
     VolumePixelDataReader* getReader() const;
