@@ -324,7 +324,8 @@ HEADERS += extensionfactory.h \
     patientcomparer.h \
     volumepixeldatareaderselector.h \
     vtkdcmtkbydefaultvolumepixeldatareaderselector.h \
-    itkgdcmbydefaultvolumepixeldatareaderselector.h
+    itkgdcmbydefaultvolumepixeldatareaderselector.h \
+    settingsinterface.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
