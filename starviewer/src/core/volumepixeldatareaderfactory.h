@@ -7,6 +7,7 @@
 namespace udg {
 
 class Postprocessor;
+class SettingsInterface;
 class Volume;
 class VolumePixelDataReader;
 
@@ -38,6 +39,9 @@ private:
     /// Warning: use of these settings should be restricted to special cases such as to have a temporal workaround in case some reader is failing, or for
     /// debugging purposes and the like.
     bool mustForceReaderLibraryBackdoor(Volume *volume, PixelDataReaderType &forcedReaderLibrary) const;
+
+    /// Creates and returns an object that implements SettingsInterface.
+    virtual SettingsInterface* getSettings() const;
 
 private:
 
