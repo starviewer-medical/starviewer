@@ -57,7 +57,8 @@ void test_VolumePixelDataReaderFactory::getReader_ShouldReturnExpectedReaderType
     QFETCH(Volume*, volume);
     QFETCH(QString, expectedReaderType);
 
-    VolumePixelDataReaderFactory factory(volume);
+    VolumePixelDataReaderFactory factory;
+    factory.setVolume(volume);
     VolumePixelDataReader *reader = factory.getReader();
 
     QCOMPARE(QString(typeid(*reader).name()), expectedReaderType);
