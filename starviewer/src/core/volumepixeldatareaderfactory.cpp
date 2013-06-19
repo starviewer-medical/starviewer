@@ -4,6 +4,7 @@
 #include "pixelspacingamenderpostprocessor.h"
 #include "coresettings.h"
 #include "image.h"
+#include "itkgdcmbydefaultvolumepixeldatareaderselector.h"
 #include "logging.h"
 #include "series.h"
 #include "volume.h"
@@ -74,6 +75,7 @@ QQueue<QSharedPointer<Postprocessor>> VolumePixelDataReaderFactory::getPostproce
 
 VolumePixelDataReaderFactory::PixelDataReaderType VolumePixelDataReaderFactory::getSuitableReader(Volume *volume) const
 {
+    Settings settings;
     PixelDataReaderType readerType;
 
     // Start by checking if reader type is forced by settings
@@ -81,7 +83,17 @@ VolumePixelDataReaderFactory::PixelDataReaderType VolumePixelDataReaderFactory::
     if (!mustForceReaderLibraryBackdoor(volume, readerType))
     {
         // If the reader type is not forced by settings, use the selector
-        VolumePixelDataReaderSelector *selector = new VtkDcmtkByDefaultVolumePixelDataReaderSelector();
+        VolumePixelDataReaderSelector *selector;
+
+        if (settings.getValue(CoreSettings::UseItkGdcmImageReaderByDefault).toBool())
+        {
+            selector = new ItkGdcmByDefaultVolumePixelDataReaderSelector();
+        }
+        else
+        {
+            selector = new VtkDcmtkByDefaultVolumePixelDataReaderSelector();
+        }
+
         readerType = selector->selectVolumePixelDataReader(volume);
         delete selector;
     }
