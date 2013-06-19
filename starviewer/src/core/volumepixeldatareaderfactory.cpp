@@ -9,6 +9,7 @@
 #include "volume.h"
 #include "volumepixeldatareaderitkdcmtk.h"
 #include "volumepixeldatareaderitkgdcm.h"
+#include "volumepixeldatareaderselector.h"
 #include "volumepixeldatareadervtkdcmtk.h"
 #include "volumepixeldatareadervtkgdcm.h"
 
@@ -73,24 +74,19 @@ QQueue<QSharedPointer<Postprocessor>> VolumePixelDataReaderFactory::getPostproce
 
 VolumePixelDataReaderFactory::PixelDataReaderType VolumePixelDataReaderFactory::getSuitableReader(Volume *volume) const
 {
+    PixelDataReaderType readerType;
+
     // Start by checking if reader type is forced by settings
     // This is intended as a kind of backdoor to be able to provide a workaround in case there is a bug with the usually chosen reader
-    PixelDataReaderType forcedReaderLibrary;
-    if (mustForceReaderLibraryBackdoor(volume, forcedReaderLibrary))
+    if (!mustForceReaderLibraryBackdoor(volume, readerType))
     {
-        return forcedReaderLibrary;
+        // If the reader type is not forced by settings, use the selector
+        VolumePixelDataReaderSelector *selector = new VolumePixelDataReaderSelector();
+        readerType = selector->selectVolumePixelDataReader(volume);
+        delete selector;
     }
 
-    if (volume->getImage(0)->getSOPInstanceUID().contains("MHDImage"))
-    {
-        // MetaImages currently must be read with ITK-GDCM
-        return ITKGDCMPixelDataReader;
-    }
-    else
-    {
-        // Read with VTK-DCMTK by default
-        return VTKDCMTKPixelDataReader;
-    }
+    return readerType;
 }
 
 bool VolumePixelDataReaderFactory::mustForceReaderLibraryBackdoor(Volume *volume, PixelDataReaderType &forcedReaderLibrary) const
