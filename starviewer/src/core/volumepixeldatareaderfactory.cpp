@@ -9,7 +9,7 @@
 #include "volume.h"
 #include "volumepixeldatareaderitkdcmtk.h"
 #include "volumepixeldatareaderitkgdcm.h"
-#include "volumepixeldatareaderselector.h"
+#include "vtkdcmtkbydefaultvolumepixeldatareaderselector.h"
 #include "volumepixeldatareadervtkdcmtk.h"
 #include "volumepixeldatareadervtkgdcm.h"
 
@@ -81,7 +81,7 @@ VolumePixelDataReaderFactory::PixelDataReaderType VolumePixelDataReaderFactory::
     if (!mustForceReaderLibraryBackdoor(volume, readerType))
     {
         // If the reader type is not forced by settings, use the selector
-        VolumePixelDataReaderSelector *selector = new VolumePixelDataReaderSelector();
+        VolumePixelDataReaderSelector *selector = new VtkDcmtkByDefaultVolumePixelDataReaderSelector();
         readerType = selector->selectVolumePixelDataReader(volume);
         delete selector;
     }
