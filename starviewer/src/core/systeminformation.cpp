@@ -1,5 +1,6 @@
 // Starviewer
 #include "systeminformation.h"
+
 #include "screenmanager.h"
 
 #ifdef WIN32
