@@ -52,6 +52,9 @@ private:
     void setupTimers();
     void setupHideAnimation();
     void setupMoveAnimation();
+    
+    /// Checks wether fade out effect can be enabled or not
+    void checkFadeOutEffectCanBeEnabled();
 
 private slots:
     /// Starts animation to hide the popup with a vanish effect
@@ -80,6 +83,9 @@ private:
 
     /// Movie to use an animated gif to give feedback of an ongoing operation
     QMovie *m_ongoingOperationAnimationMovie;
+
+    /// Tells if we can use the fade out effect or not. To check when the notification is hidden
+    bool m_fadeOutEffectCanBeEnabled;
 };
 
 } // End namespace udg

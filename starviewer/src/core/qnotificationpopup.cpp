@@ -6,6 +6,7 @@
 
 #include "settings.h"
 #include "applicationstylehelper.h"
+#include "systeminformation.h"
 
 namespace udg {
 
@@ -21,6 +22,8 @@ QNotificationPopup::QNotificationPopup(QWidget *parent)
     setupTimers();
     setupHideAnimation();
     setupMoveAnimation();
+    
+    checkFadeOutEffectCanBeEnabled();
 
     // HACK This is the only way found at this time to achieve text is not being cut when its size is bigger
     // The dialogh should be enhanced to avoid this hack and take care about the current method used to place it because now it's a bit tricky
@@ -178,6 +181,20 @@ void QNotificationPopup::setupMoveAnimation()
     m_moveAnimation.setPropertyName("pos");
     m_moveAnimation.setDuration(2000);
     m_moveAnimation.setEasingCurve(QEasingCurve::OutQuint);
+}
+
+void QNotificationPopup::checkFadeOutEffectCanBeEnabled()
+{
+    // Fade out can be enabled always except when desktop composition is available but disabled
+    m_fadeOutEffectCanBeEnabled = true;
+    
+    SystemInformation *systemInfo = SystemInformation::newInstance();
+    if (systemInfo->isDesktopCompositionAvailable())
+    {
+        m_fadeOutEffectCanBeEnabled = systemInfo->isDesktopCompositionEnabled();
+    }
+
+    delete systemInfo;
 }
 
 void QNotificationPopup::runSmoothHideAnimation()
