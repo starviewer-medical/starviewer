@@ -1,6 +1,5 @@
 #include "windowssysteminformation.h"
 
-#include "systeminformation.h"
 #include "logging.h"
 
 // Qt
