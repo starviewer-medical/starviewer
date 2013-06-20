@@ -13,7 +13,6 @@ class Volume;
 class VolumePixelDataReaderSelector {
 
 public:
-
     virtual ~VolumePixelDataReaderSelector() = 0 {}
 
     /// Chooses and returns the reader implementation most suitable to the given volume.
@@ -23,4 +22,4 @@ public:
 
 } // namespace udg
 
-#endif // VOLUMEPIXELDATAREADERSELECTOR_H
+#endif

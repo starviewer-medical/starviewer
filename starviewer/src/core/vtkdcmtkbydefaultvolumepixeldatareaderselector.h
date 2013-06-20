@@ -12,7 +12,6 @@ namespace udg {
 class VtkDcmtkByDefaultVolumePixelDataReaderSelector : public VolumePixelDataReaderSelector {
 
 public:
-
     /// Chooses and returns the reader implementation most suitable to the given volume.
     virtual VolumePixelDataReaderFactory::PixelDataReaderType selectVolumePixelDataReader(Volume *volume) const;
 
@@ -20,4 +19,4 @@ public:
 
 } // namespace udg
 
-#endif // VTKDCMTKBYDEFAULTVOLUMEPIXELDATAREADERSELECTOR_H
+#endif
