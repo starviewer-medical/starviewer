@@ -51,6 +51,9 @@ public:
 
     unsigned int getNetworkAdapterSpeed();
 
+    bool isDesktopCompositionAvailable();
+    bool isDesktopCompositionEnabled();
+
 protected:
     /// Mètode alternatiu per si no podem obtenir el nombre de nuclis via WMI
     virtual unsigned int getCPUNumberOfCoresFromEnvironmentVar();
@@ -66,6 +69,17 @@ protected:
 
 protected:
     IWbemServices* m_api;
+
+private:
+    /// Returns a pointer to Dwmapi.dll if available, null otherwise
+    HMODULE getDesktopWindowManagerDLL();
+
+private:
+    /// Constant string for Dwmapi.dll
+    static const LPWSTR DesktopWindowManagerDLLName;
+
+    /// Pointer to DwmIsCompositionEnabled function address (Dwmapi.dll)
+    typedef HRESULT (WINAPI* DwmIsCompositionEnabledType)(BOOL*);
 };
 
 }

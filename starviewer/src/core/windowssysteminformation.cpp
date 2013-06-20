@@ -17,6 +17,8 @@
 
 namespace udg {
 
+const LPWSTR WindowsSystemInformation::DesktopWindowManagerDLLName = L"Dwmapi.dll";
+
 WindowsSystemInformation::WindowsSystemInformation()
 {
     m_api = NULL;
@@ -634,6 +636,51 @@ unsigned int WindowsSystemInformation::getNetworkAdapterSpeed()
     return networkAdapterSpeed;
 }
 
+bool WindowsSystemInformation::isDesktopCompositionAvailable()
+{
+    HMODULE dwmDLL = getDesktopWindowManagerDLL();
+    if (dwmDLL == NULL)
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
+bool WindowsSystemInformation::isDesktopCompositionEnabled()
+{
+    bool enabled = false;
+    HMODULE dwmDLL = getDesktopWindowManagerDLL();
+    if (dwmDLL != NULL)
+    {
+        DwmIsCompositionEnabledType DwmIsCompositionEnabledFunctionPointer = (DwmIsCompositionEnabledType)GetProcAddress(dwmDLL, "DwmIsCompositionEnabled");
+        if (DwmIsCompositionEnabledFunctionPointer == NULL)
+        {
+            DEBUG_LOG("GetProcAddress() failed for [DwmIsCompositionEnabled] function");
+        }
+        else
+        {
+            HRESULT result = S_OK;
+            BOOL compositionIsEnabled;
+            result = DwmIsCompositionEnabledFunctionPointer(&compositionIsEnabled);
+            if (FAILED(result))
+            {
+                DEBUG_LOG(QString("DwmIsCompositionEnabled() call returned failed result: %1. compositionIsEnabled: %2").arg(result).arg(compositionIsEnabled));
+                ERROR_LOG(QString("DwmIsCompositionEnabled() call returned failed result: %1. compositionIsEnabled: %2").arg(result).arg(compositionIsEnabled));
+            }
+
+            if (compositionIsEnabled)
+            {
+                enabled = true;
+            }
+        }
+    }
+    
+    return enabled;
+}
+
 IWbemClassObject* WindowsSystemInformation::getNextObject(IEnumWbemClassObject *enumerator)
 {
     // Precondició: Si l'enumerador és nul, retornem nul
@@ -786,6 +833,11 @@ QString WindowsSystemInformation::createOpenGLContextAndGetVersion()
     window.updateGL();
 
     return QString((const char*)glGetString(GL_VERSION));
+}
+
+HMODULE WindowsSystemInformation::getDesktopWindowManagerDLL()
+{
+    return LoadLibrary(DesktopWindowManagerDLLName);
 }
 
 }
