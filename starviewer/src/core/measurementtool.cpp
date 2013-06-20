@@ -3,6 +3,7 @@
 #include "q2dviewer.h"
 #include "volume.h"
 #include "measurementmanager.h"
+#include "measurecomputer.h"
 
 namespace udg {
 
