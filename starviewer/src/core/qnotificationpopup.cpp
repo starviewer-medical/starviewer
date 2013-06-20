@@ -135,7 +135,7 @@ bool QNotificationPopup::eventFilter(QObject *, QEvent *event)
         m_hideDelayTimer->stop();
         m_moveAnimationDelayTimer->stop(); 
 
-        runSmoothHideAnimation();
+        hideMe();
         return true;
     }
     else
@@ -161,7 +161,7 @@ void QNotificationPopup::setupTimers()
     m_moveAnimationDelayTimer = new QTimer(this);
     m_moveAnimationDelayTimer->setSingleShot(true);
     
-    connect(m_hideDelayTimer, SIGNAL(timeout()), SLOT(runSmoothHideAnimation()));
+    connect(m_hideDelayTimer, SIGNAL(timeout()), SLOT(hideMe()));
     connect(m_moveAnimationDelayTimer, SIGNAL(timeout()), SLOT(runMoveAnimation()));
 }
 
@@ -181,6 +181,18 @@ void QNotificationPopup::setupMoveAnimation()
     m_moveAnimation.setPropertyName("pos");
     m_moveAnimation.setDuration(2000);
     m_moveAnimation.setEasingCurve(QEasingCurve::OutQuint);
+}
+
+void QNotificationPopup::hideMe()
+{
+    if (m_fadeOutEffectCanBeEnabled)
+    {
+        runSmoothHideAnimation();
+    }
+    else
+    {
+        this->close();
+    }
 }
 
 void QNotificationPopup::checkFadeOutEffectCanBeEnabled()

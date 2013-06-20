@@ -57,6 +57,9 @@ private:
     void checkFadeOutEffectCanBeEnabled();
 
 private slots:
+    /// Hides the popup and runs the proper animation if possible
+    void hideMe();
+
     /// Starts animation to hide the popup with a vanish effect
     void runSmoothHideAnimation();
     
