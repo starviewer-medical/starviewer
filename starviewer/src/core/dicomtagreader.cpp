@@ -14,17 +14,20 @@
 
 namespace udg {
 
-DICOMTagReader::DICOMTagReader() : m_dicomData(0), m_dicomHeader(0), m_hasValidFile(false)
+DICOMTagReader::DICOMTagReader()
 {
+    initialize();
 }
 
-DICOMTagReader::DICOMTagReader(const QString &filename, DcmDataset *dcmDataset) : m_dicomData(0), m_dicomHeader(0), m_hasValidFile(false)
+DICOMTagReader::DICOMTagReader(const QString &filename, DcmDataset *dcmDataset)
 {
+    initialize();
     this->setDcmDataset(filename, dcmDataset);
 }
 
-DICOMTagReader::DICOMTagReader(const QString &filename) : m_dicomData(0), m_dicomHeader(0), m_hasValidFile(false)
+DICOMTagReader::DICOMTagReader(const QString &filename)
 {
+    initialize();
     this->setFile(filename);
 }
 
@@ -204,6 +207,13 @@ DICOMSequenceAttribute* DICOMTagReader::getSequenceAttribute(const DICOMTag &seq
         m_sequencesCache[sequenceTag] = NULL;
         return NULL;
     }
+}
+
+void DICOMTagReader::initialize()
+{
+    m_dicomData = 0;
+    m_dicomHeader = 0;
+    m_hasValidFile = false;
 }
 
 DICOMSequenceAttribute* DICOMTagReader::convertToDICOMSequenceAttribute(DcmSequenceOfItems *dcmtkSequence,
