@@ -23,7 +23,8 @@
 namespace udg {
 
 RetrieveDICOMFilesFromPACSJob::RetrieveDICOMFilesFromPACSJob(PacsDevice pacsDevice, RetrievePriorityJob retrievePriorityJob, Study *studyToRetrieveDICOMFiles, 
-    const QString &seriesInstanceUIDToRetrieve, const QString &sopInstanceUIDToRetrieve) : PACSJob(pacsDevice)
+    const QString &seriesInstanceUIDToRetrieve, const QString &sopInstanceUIDToRetrieve)
+ : PACSJob(pacsDevice)
 {
     Q_ASSERT(studyToRetrieveDICOMFiles);
     Q_ASSERT(studyToRetrieveDICOMFiles->getParentPatient());

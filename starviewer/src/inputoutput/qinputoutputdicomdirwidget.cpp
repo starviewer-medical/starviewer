@@ -19,7 +19,8 @@
 
 namespace udg {
 
-QInputOutputDicomdirWidget::QInputOutputDicomdirWidget(QWidget *parent) : QWidget(parent)
+QInputOutputDicomdirWidget::QInputOutputDicomdirWidget(QWidget *parent)
+ : QWidget(parent)
 {
     setupUi(this);
 

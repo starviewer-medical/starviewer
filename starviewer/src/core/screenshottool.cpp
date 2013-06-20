@@ -24,7 +24,8 @@ const QString ScreenShotTool::JpegFileFilter = tr("JPEG (*.jpg)");
 const QString ScreenShotTool::BmpFileFilter = tr("BMP (*.bmp)");
 const QString ScreenShotTool::TiffFileFilter = tr("TIFF (*.tiff)");
 
-ScreenShotTool::ScreenShotTool(QViewer *viewer, QObject *parent) : Tool(viewer, parent)
+ScreenShotTool::ScreenShotTool(QViewer *viewer, QObject *parent)
+ : Tool(viewer, parent)
 {
     m_toolName = "ScreenShotTool";
     readSettings();

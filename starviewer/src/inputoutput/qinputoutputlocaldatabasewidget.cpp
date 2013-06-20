@@ -18,7 +18,8 @@
 
 namespace udg {
 
-QInputOutputLocalDatabaseWidget::QInputOutputLocalDatabaseWidget(QWidget *parent) : QWidget(parent)
+QInputOutputLocalDatabaseWidget::QInputOutputLocalDatabaseWidget(QWidget *parent)
+ : QWidget(parent)
 {
     setupUi(this);
 

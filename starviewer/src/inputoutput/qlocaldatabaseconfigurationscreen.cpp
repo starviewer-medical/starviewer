@@ -18,7 +18,8 @@ namespace udg {
 
 typedef SingletonPointer<QueryScreen> QueryScreenSingleton;
 
-QLocalDatabaseConfigurationScreen::QLocalDatabaseConfigurationScreen(QWidget *parent) : QWidget(parent)
+QLocalDatabaseConfigurationScreen::QLocalDatabaseConfigurationScreen(QWidget *parent)
+ : QWidget(parent)
 {
     setupUi(this);
     
