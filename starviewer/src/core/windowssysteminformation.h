@@ -1,7 +1,6 @@
 #ifndef UDGWINDOWSSYSTEMINFORMATION_H
 #define UDGWINDOWSSYSTEMINFORMATION_H
 
-// Starviewer
 #include "systeminformation.h"
 // Qt
 #include <QStringList>
@@ -12,9 +11,7 @@ namespace udg {
 
 class WindowsSystemInformation : public SystemInformation {
 public:
-    /// Constructor per defecte
     WindowsSystemInformation();
-    /// Destructor
     ~WindowsSystemInformation();
     
     OperatingSystem getOperatingSystem();
