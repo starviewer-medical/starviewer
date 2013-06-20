@@ -6,7 +6,8 @@
 
 namespace udg {
 
-QListenRisRequestsConfigurationScreen::QListenRisRequestsConfigurationScreen(QWidget *parent) : QWidget(parent)
+QListenRisRequestsConfigurationScreen::QListenRisRequestsConfigurationScreen(QWidget *parent)
+ : QWidget(parent)
 {
     setupUi(this);
     m_RISRequestsPortWarningLabel->setVisible(false);

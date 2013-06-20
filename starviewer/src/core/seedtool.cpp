@@ -10,7 +10,8 @@
 
 namespace udg {
 
-SeedTool::SeedTool(QViewer *viewer, QObject *parent) : Tool(viewer, parent)
+SeedTool::SeedTool(QViewer *viewer, QObject *parent)
+ : Tool(viewer, parent)
 {
     m_toolName = "SeedTool";
     m_hasSharedData = false;

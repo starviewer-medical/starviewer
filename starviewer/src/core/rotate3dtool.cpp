@@ -8,7 +8,8 @@
 
 namespace udg {
 
-Rotate3DTool::Rotate3DTool(QViewer *viewer, QObject *parent) : Tool(viewer, parent)
+Rotate3DTool::Rotate3DTool(QViewer *viewer, QObject *parent)
+ : Tool(viewer, parent)
 {
     m_toolName = "Rotate3DTool";
     m_state = None;

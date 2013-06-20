@@ -11,7 +11,8 @@
 
 namespace udg {
 
-DicomPrintExtensionMediator::DicomPrintExtensionMediator(QObject *parent) : ExtensionMediator(parent)
+DicomPrintExtensionMediator::DicomPrintExtensionMediator(QObject *parent)
+ : ExtensionMediator(parent)
 {
 }
 

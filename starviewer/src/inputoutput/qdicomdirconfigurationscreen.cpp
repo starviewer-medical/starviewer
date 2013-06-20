@@ -8,7 +8,8 @@
 
 namespace udg {
 
-QDICOMDIRConfigurationScreen::QDICOMDIRConfigurationScreen(QWidget *parent) : QWidget(parent)
+QDICOMDIRConfigurationScreen::QDICOMDIRConfigurationScreen(QWidget *parent)
+ : QWidget(parent)
 {
     setupUi(this);
     m_burningApplicationPathValidationLabel->setVisible(false);

@@ -9,7 +9,8 @@
 
 namespace udg {
 
-PatientBrowserMenuList::PatientBrowserMenuList(QWidget *parent) : QWidget(parent)
+PatientBrowserMenuList::PatientBrowserMenuList(QWidget *parent)
+ : QWidget(parent)
 {
     m_mainLayout = new QGridLayout(this);
     m_mainLayout->setMargin(0);

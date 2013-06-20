@@ -24,7 +24,8 @@
 
 namespace udg {
 
-QInputOutputPacsWidget::QInputOutputPacsWidget(QWidget *parent) : QWidget(parent)
+QInputOutputPacsWidget::QInputOutputPacsWidget(QWidget *parent)
+ : QWidget(parent)
 {
     setupUi(this);
 

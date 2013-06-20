@@ -4,7 +4,8 @@
 
 namespace udg
 {
-QTreeWidgetWithSeparatorLine::QTreeWidgetWithSeparatorLine(QWidget* parent) : QTreeWidget(parent)
+QTreeWidgetWithSeparatorLine::QTreeWidgetWithSeparatorLine(QWidget* parent)
+ : QTreeWidget(parent)
 {
     m_sepatorLineColor = QColor(152, 150, 140); 
 }
