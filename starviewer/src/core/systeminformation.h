@@ -54,6 +54,13 @@ public:
 
     virtual unsigned int getNetworkAdapterSpeed();
 
+    /// True if composition feature is available for the system, false otherwise
+    /// For example, if system is Windows XP, this feature is not available, but it does for Windows Vista and above
+    virtual bool isDesktopCompositionAvailable();
+
+    /// For systems with desktop composition feature, tells if this feature is enabled or not
+    virtual bool isDesktopCompositionEnabled();
+
 protected:
     SystemInformation();
 };

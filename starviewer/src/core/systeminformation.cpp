@@ -159,4 +159,14 @@ unsigned int SystemInformation::getNetworkAdapterSpeed()
     return 0;
 }
 
+bool SystemInformation::isDesktopCompositionAvailable()
+{
+    return false;
+}
+
+bool SystemInformation::isDesktopCompositionEnabled()
+{
+    return false;
+}
+
 }
