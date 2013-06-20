@@ -17,7 +17,6 @@ class VolumePixelDataReader;
 class VolumePixelDataReaderFactory {
 
 public:
-
     /// The different choosable implementations of VolumePixelDataReader.
     enum PixelDataReaderType { ITKDCMTKPixelDataReader, ITKGDCMPixelDataReader, VTKDCMTKPixelDataReader, VTKGDCMPixelDataReader };
 
@@ -26,13 +25,14 @@ public:
 
     /// Returns a new instance of the chosen reader implementation.
     VolumePixelDataReader* getReader() const;
+
     /// Returns the queue of postprocessors corresponding to the chosen reader implementation.
     QQueue<QSharedPointer<Postprocessor>> getPostprocessors() const;
 
 private:
-
     /// Chooses and returns the reader implementation most suitable to the given volume.
     PixelDataReaderType getSuitableReader(Volume *volume) const;
+
     /// Returns whether there is a setting to force reading with a specific implementation. If true, that implementation is returned in the second parameter.
     /// The following settings are checked to determine forced reader type, in the following order: ForcedImageReaderLibrary,
     /// ForceITKImageReaderForSpecifiedModalities and ForceVTKImageReaderForSpecifiedModalities.
@@ -44,7 +44,6 @@ private:
     virtual SettingsInterface* getSettings() const;
 
 private:
-
     /// Chosen VolumePixelDataReader implementation.
     PixelDataReaderType m_chosenReaderType;
 
@@ -52,4 +51,4 @@ private:
 
 } // namespace udg
 
-#endif // VOLUMEPIXELDATAREADERFACTORY_H
+#endif
