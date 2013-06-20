@@ -87,6 +87,9 @@ public:
     QList<DICOMAttribute*> getDICOMHeader() const;
 
 private:
+    /// Initializes class attributes on creation
+    void initialize();
+    
     /// Converteix una seqüència de DCMTK a una seqüència pròpia.
     DICOMSequenceAttribute* convertToDICOMSequenceAttribute(DcmSequenceOfItems *dcmtkSequence, DICOMTagReader::ReturnValueOfTags returnValueOfTags) const;
 
