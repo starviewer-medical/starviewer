@@ -2,14 +2,14 @@
 
 #include <QPainter>
 
-namespace udg
-{
+namespace udg {
+
 QTreeWidgetWithSeparatorLine::QTreeWidgetWithSeparatorLine(QWidget* parent)
  : QTreeWidget(parent)
 {
     m_sepatorLineColor = QColor(152, 150, 140); 
 }
- 
+
 void QTreeWidgetWithSeparatorLine::drawRow(QPainter* painter, const QStyleOptionViewItem &options, const QModelIndex &rowIndex) const
 {
     QTreeWidget::drawRow(painter, options, rowIndex);

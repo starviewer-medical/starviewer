@@ -18,17 +18,24 @@ public:
     static SystemInformation* newInstance();
 
     virtual OperatingSystem getOperatingSystem();
+    
     // Arquitectura de 32-bits o 64-bits
     virtual bool isOperatingSystem64BitArchitecture();
+    
     virtual QString getOperatingSystemVersion();
+    
     /// Retorna la versió de service pack instal·lat, només en windows
     virtual QString getOperatingSystemServicePackVersion();
+    
     /// Returna el nom complert del Sistema Operatiu (Nom, arquitectura, actualitzacions...)
     virtual QString getOperatingSystemAsString();
+    
     /// Retorna la quantitat total de memòria RAM en MegaBytes
     virtual unsigned int getRAMTotalAmount();
+    
     //En MBytes
     virtual QList<unsigned int> getRAMModulesCapacity();
+    
     //En MHz
     virtual QList<unsigned int> getRAMModulesFrequency();
 
@@ -43,7 +50,7 @@ public:
     virtual QString getGPUOpenGLVersion();
     virtual QStringList getGPUDriverVersion();
 
-    //Screen, Display, Monitor, Desktop, ...
+    // Screen, Display, Monitor, Desktop, ...
     QList<QSize> getScreenResolutions();
     virtual QStringList getScreenVendors();
 

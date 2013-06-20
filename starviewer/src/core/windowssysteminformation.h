@@ -30,6 +30,7 @@ public:
     QList<unsigned int> getRAMModulesFrequency();
 
     unsigned int getCPUNumberOfCores();
+    
     /// Retorna una llista amb la freqüència de cada processador 
     QList<unsigned int> getCPUFrequencies();
     unsigned int getCPUL2CacheSize();
@@ -41,7 +42,7 @@ public:
     QString getGPUOpenGLVersion();
     QStringList getGPUDriverVersion();
 
-    //Screen, Display, Monitor, Desktop, ...
+    // Screen, Display, Monitor, Desktop, ...
     QStringList getScreenVendors();
 
     QStringList getHardDiskDevices();
