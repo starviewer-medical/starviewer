@@ -51,9 +51,6 @@ private slots:
     void imageOfCurrentPhaseRadioButtonClicked();
     void phasesOfCurrentImageRadioButtonClicked();
 
-    /// S'utilitza per actualizar diferents elements segons quines destinacions tenim seleccionades
-    void destinationsChanged(bool checked);
-
 private:
     /// Visor passat en el constructor.
     QViewer *m_viewer;

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>622</width>
-    <height>308</height>
+    <height>317</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -158,32 +158,19 @@
        <item>
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>Destination:</string>
+          <string>Exported series will be stored in the local database</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="m_storeToLocalCheckBox">
+        <widget class="QLabel" name="label_3">
          <property name="text">
-          <string>Store to local database</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="m_sendToPacsCheckBox">
-         <property name="text">
-          <string>Send to PACS nodes</string>
+          <string>Additionally, send exported series to the PACS selected below:</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="udg::QPacsList" name="m_pacsList" native="true">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>

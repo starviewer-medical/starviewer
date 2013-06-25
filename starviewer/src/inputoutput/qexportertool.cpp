@@ -53,9 +53,6 @@ void QExporterTool::createConnections()
     connect(m_allImagesRadioButton, SIGNAL(clicked()), this, SLOT(allImagesRadioButtonClicked()));
     connect(m_imagesOfCurrentPhaseRadioButton, SIGNAL(clicked()), this, SLOT(imageOfCurrentPhaseRadioButtonClicked()));
     connect(m_phasesOfCurrentImageRadioButton, SIGNAL(clicked()), this, SLOT(phasesOfCurrentImageRadioButtonClicked()));
-    connect(m_storeToLocalCheckBox, SIGNAL(clicked(bool)), this, SLOT(destinationsChanged(bool)));
-    connect(m_sendToPacsCheckBox, SIGNAL(clicked(bool)), this, SLOT(destinationsChanged(bool)));
-    connect(m_sendToPacsCheckBox, SIGNAL(toggled(bool)), m_pacsList, SLOT(setEnabled(bool)));
 }
 
 void QExporterTool::initialize()
@@ -96,13 +93,6 @@ void QExporterTool::initialize()
 
 void QExporterTool::generateAndStoreNewSeries()
 {
-    if (m_sendToPacsCheckBox->isChecked() && m_pacsList->getSelectedPacs().isEmpty())
-    {
-        QMessageBox::information(this, tr("No PACS selected"), tr("You want to send the images to PACS but no PACS is selected. "
-                                                                  "Please, select at least one PACS node or uncheck the \"Send to PACS nodes\" checkbox."));
-        return;
-    }
-
     if (!canAllocateEnoughMemory())
     {
         DEBUG_LOG("No hi ha prou memòria per generar el nou volum.");
@@ -118,7 +108,7 @@ void QExporterTool::generateAndStoreNewSeries()
     QProgressDialog progress(this);
     progress.setWindowModality(Qt::WindowModal);
     progress.setMinimum(0);
-    if (m_sendToPacsCheckBox->isChecked())
+    if (!m_pacsList->getSelectedPacs().isEmpty())
     {
         progress.setMaximum(4);
     }
@@ -246,7 +236,7 @@ void QExporterTool::generateAndStoreNewSeries()
         // TODO Comprovar error
 
         // Enviem a PACS
-        if (m_sendToPacsCheckBox->isChecked())
+        if (!m_pacsList->getSelectedPacs().isEmpty())
         {
             progress.setLabelText(tr("Sending to PACS..."));
             progress.setValue(progress.value() + 1);
@@ -336,31 +326,6 @@ void QExporterTool::phasesOfCurrentImageRadioButtonClicked()
     else
     {
         DEBUG_LOG(QString("Només està pensat per visors 2D."));
-    }
-}
-
-void QExporterTool::destinationsChanged(bool checked)
-{
-    if (checked)
-    {
-        if (m_sendToPacsCheckBox->isChecked())
-        {
-            m_storeToLocalCheckBox->setChecked(true);
-        }
-
-        m_saveButton->setEnabled(true);
-    }
-    else
-    {
-        if (!m_storeToLocalCheckBox->isChecked())
-        {
-            m_sendToPacsCheckBox->setChecked(false);
-        }
-
-        if (!m_storeToLocalCheckBox->isChecked() && !m_sendToPacsCheckBox->isChecked())
-        {
-            m_saveButton->setEnabled(false);
-        }
     }
 }
 
