@@ -90,6 +90,8 @@ void QExporterTool::initialize()
     // Tenim el botó de capturar la image actual clicat
     this->currentImageRadioButtonClicked();
 
+    // No PACS selected by default
+    m_pacsList->clearSelection();
 }
 
 void QExporterTool::generateAndStoreNewSeries()
