@@ -12,7 +12,6 @@
 #include "patient.h"
 #include "inputoutputsettings.h"
 #include "localdatabasemanager.h"
-#include "pacsdevicemanager.h"
 #include "dicommask.h"
 #include "queryscreen.h"
 #include "singleton.h"
@@ -49,7 +48,6 @@ QExporterTool::~QExporterTool()
 void QExporterTool::createConnections()
 {
     connect(m_saveButton, SIGNAL(clicked()), this, SLOT (generateAndStoreNewSeries()));
-    connect(m_sendToPacsCheckBox, SIGNAL(toggled(bool)), m_pacsNodeComboBox, SLOT(setEnabled(bool)));
     connect(m_cancelButton, SIGNAL(clicked()), this, SLOT(close()));
     connect(m_currentImageRadioButton, SIGNAL(clicked()), this, SLOT(currentImageRadioButtonClicked()));
     connect(m_allImagesRadioButton, SIGNAL(clicked()), this, SLOT(allImagesRadioButtonClicked()));
@@ -57,7 +55,7 @@ void QExporterTool::createConnections()
     connect(m_phasesOfCurrentImageRadioButton, SIGNAL(clicked()), this, SLOT(phasesOfCurrentImageRadioButtonClicked()));
     connect(m_storeToLocalCheckBox, SIGNAL(clicked(bool)), this, SLOT(destinationsChanged(bool)));
     connect(m_sendToPacsCheckBox, SIGNAL(clicked(bool)), this, SLOT(destinationsChanged(bool)));
-    connect(m_sendToPacsCheckBox, SIGNAL(toggled(bool)), m_pacsNodeComboBox, SLOT(setEnabled(bool)));
+    connect(m_sendToPacsCheckBox, SIGNAL(toggled(bool)), m_pacsList, SLOT(setEnabled(bool)));
 }
 
 void QExporterTool::initialize()
@@ -89,21 +87,6 @@ void QExporterTool::initialize()
         m_allImagesRadioButton->setVisible(false);
     }
 
-    // Omplim la llista de pacs. En cas que sigui buida la opció d'enviar a PACS quedarà deshabilitada.
-    PacsDeviceManager deviceManager;
-
-    if (deviceManager.getPACSList(PacsDeviceManager::PacsWithStoreServiceEnabled).size() == 0)
-    {
-        m_sendToPacsCheckBox->setEnabled(false);
-    }
-    else
-    {
-        foreach (PacsDevice device, deviceManager.getPACSList(PacsDeviceManager::PacsWithStoreServiceEnabled))
-        {
-            m_pacsNodeComboBox->addItem(QString("%1 - %2").arg(device.getAETitle(), device.getDescription()), device.getID());
-        }
-    }
-
     // Tenim el botó de capturar la image actual clicat
     this->currentImageRadioButtonClicked();
 
@@ -111,6 +94,13 @@ void QExporterTool::initialize()
 
 void QExporterTool::generateAndStoreNewSeries()
 {
+    if (m_sendToPacsCheckBox->isChecked() && m_pacsList->getSelectedPacs().isEmpty())
+    {
+        QMessageBox::information(this, tr("No PACS selected"), tr("You want to send the images to PACS but no PACS is selected. "
+                                                                  "Please, select at least one PACS node or uncheck the \"Send to PACS nodes\" checkbox."));
+        return;
+    }
+
     if (!canAllocateEnoughMemory())
     {
         DEBUG_LOG("No hi ha prou memòria per generar el nou volum.");
@@ -260,10 +250,13 @@ void QExporterTool::generateAndStoreNewSeries()
             progress.setValue(progress.value() + 1);
             qApp->processEvents();
             QueryScreen *queryScreen = SingletonPointer<QueryScreen>::instance();
-            PacsDeviceManager deviceManager;
-            PacsDevice device = deviceManager.getPACSDeviceByID(m_pacsNodeComboBox->itemData(m_pacsNodeComboBox->currentIndex()).toString());
 
-            queryScreen->sendDicomObjectsToPacs(device, generetedVolume->getImages());
+            foreach (PacsDevice pacsDevice, m_pacsList->getSelectedPacs())
+            {
+                DEBUG_LOG(QString("Sending images to PACS %1 (%2)").arg(pacsDevice.getAETitle()).arg(pacsDevice.getDescription()));
+                INFO_LOG(QString("Sending images to PACS %1 (%2)").arg(pacsDevice.getAETitle()).arg(pacsDevice.getDescription()));
+                queryScreen->sendDicomObjectsToPacs(pacsDevice, generetedVolume->getImages());
+            }
         }
 
         progress.setValue(progress.value() + 1);
