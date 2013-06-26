@@ -104,6 +104,9 @@ private slots:
     /// l'actual visor seleccionat. Si no hi ha cap visor actiu, dehsabilitarà el botó.
     void updateDICOMInformationButton();
 
+    /// Enables or disables the exporter tool button according to the status of the selected viewer.
+    void updateExporterToolButton();
+
     /// Mètode que tracta el nou visualitzador afegit
     void activateNewViewer(Q2DViewerWidget *newViewerWidget);
 
