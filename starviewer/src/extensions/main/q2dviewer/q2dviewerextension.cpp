@@ -559,6 +559,8 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
 #endif
 
             disconnect(m_lastSelectedViewer->getViewer(), SIGNAL(viewChanged(int)), this, SLOT(updateDICOMInformationButton()));
+            disconnect(m_lastSelectedViewer->getViewer(), SIGNAL(viewerStatusChanged()), this, SLOT(updateExporterToolButton()));
+
             // És necessari associar cada cop al viewer actual les associacions del menú de la tool d'screen shot
             ScreenShotTool *screenShotTool = dynamic_cast<ScreenShotTool*>(m_lastSelectedViewer->getViewer()->getToolProxy()->getTool("ScreenShotTool"));
             disconnect(m_singleShotAction, SIGNAL(triggered()), screenShotTool, SLOT(singleCapture()));
@@ -579,6 +581,7 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
             connect(viewerWidget->getViewer(), SIGNAL(volumeChanged(Volume*)), SLOT(validePhases()));
 #endif
             connect(viewerWidget->getViewer(), SIGNAL(viewChanged(int)), SLOT(updateDICOMInformationButton()));
+            connect(m_lastSelectedViewer->getViewer(), SIGNAL(viewerStatusChanged()), this, SLOT(updateExporterToolButton()));
 
             // És necessari associar cada cop al viewer actual les associacions del menú de la tool d'screen shot
             ScreenShotTool *screenShotTool = dynamic_cast<ScreenShotTool*>(viewerWidget->getViewer()->getToolProxy()->getTool("ScreenShotTool"));
@@ -600,6 +603,7 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
             m_cineController->setQViewer(selected2DViewer);
             m_thickSlabWidget->link(selected2DViewer);
             updateDICOMInformationButton();
+            updateExporterToolButton();
 
             // Activem les "ActionTool" pel visor seleccionat
             m_toolManager->enableRegisteredActionTools(selected2DViewer);
@@ -784,6 +788,20 @@ void Q2DViewerExtension::updateDICOMInformationButton()
     else
     {
         m_dicomDumpToolButton->setEnabled(false);
+    }
+}
+
+void Q2DViewerExtension::updateExporterToolButton()
+{
+    Q2DViewerWidget *viewerWidget = m_workingArea->getSelectedViewer();
+
+    if (viewerWidget)
+    {
+        m_screenshotsExporterToolButton->setEnabled(viewerWidget->getViewer()->getViewerStatus() == QViewer::VisualizingVolume);
+    }
+    else
+    {
+        m_screenshotsExporterToolButton->setEnabled(false);
     }
 }
 
