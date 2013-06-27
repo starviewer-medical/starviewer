@@ -38,11 +38,15 @@ QList<DICOMSequenceItem*> DICOMSequenceAttribute::getItems()
     return m_itemList;
 }
 
-QString DICOMSequenceAttribute::toString()
+QString DICOMSequenceAttribute::toString(bool verbose)
 {
     QString result;
 
-    result = getTag()->getKeyAsQString() + ": (SQ) ->";
+    if (verbose)
+    {
+        result = getTag()->getName() + " ";
+    }
+    result += getTag()->getKeyAsQString() + ": (SQ) ->";
 
     foreach (DICOMSequenceItem *item, m_itemList)
     {

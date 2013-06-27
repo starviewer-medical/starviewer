@@ -28,7 +28,7 @@ public:
     virtual bool isSequenceAttribute() = 0;
 
     /// Mètode abstracte que retorna el contingut de l'atribut formatat
-    virtual QString toString() = 0;
+    virtual QString toString(bool verbose = false) = 0;
 
 private:
     /// Guarda el Tag associat a l'atribut
