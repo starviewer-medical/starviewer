@@ -42,7 +42,6 @@ void QueryPacsJob::run()
 
     // Busquem els estudis
     m_queryRequestStatus = m_queryPacs->query(m_mask);
-    m_dicomQueryResponseStatus = m_queryPacs->getResponseStatus();
 
     INFO_LOG(QString("Consulta al PACS %1 finalitzada").arg(getPacsDevice().getAETitle()));
 }
@@ -91,7 +90,7 @@ PACSRequestStatus::QueryRequestStatus QueryPacsJob::getStatus()
 QString QueryPacsJob::getStatusDescription()
 {
     QString message;
-    QString errorDetails = tr("\n\nError details:\n") + m_dicomQueryResponseStatus.toString();
+    QString errorDetails = tr("\n\nError details:\n") + m_queryPacs->getResponseStatus().toString();
     QString pacsAETitle = getPacsDevice().getAETitle();
 
     switch (getStatus())
