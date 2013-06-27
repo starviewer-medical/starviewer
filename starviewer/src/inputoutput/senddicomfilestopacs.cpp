@@ -18,6 +18,7 @@
 namespace udg {
 
 SendDICOMFilesToPACS::SendDICOMFilesToPACS(PacsDevice pacsDevice)
+ : DIMSECService()
 {
     m_pacs = pacsDevice;
     m_abortIsRequested = false;

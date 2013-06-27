@@ -24,6 +24,7 @@ namespace udg {
 static const char *MoveAbstractSyntax = UID_MOVEStudyRootQueryRetrieveInformationModel;
 
 RetrieveDICOMFilesFromPACS::RetrieveDICOMFilesFromPACS(PacsDevice pacs)
+ : DIMSECService()
 {
     m_pacs = pacs;
     m_abortIsRequested = false;
