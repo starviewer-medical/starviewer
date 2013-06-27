@@ -74,7 +74,7 @@ private:
     /// Configura l'objecte MoveRequest per la descàrrega de fitxers DICOM
     T_DIMSE_C_MoveRQ getConfiguredMoveRequest(T_ASC_Association *association);
 
-    /// En cas d'error processa la resposta rebuda per part del SCP, grava l'error al log i el retorna en forma d'objecte Status
+    /// Translates DIMSE status code to PACSRequestStatus::RetrieveRequestStatus
     PACSRequestStatus::RetrieveRequestStatus getDIMSEStatusCodeAsRetrieveRequestStatus(unsigned int dimseStatusCode);
 
     /// Callback de move, semblaria que s'executa cada vegada que s'ha descarregat una imatge
