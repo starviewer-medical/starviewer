@@ -22,6 +22,7 @@ namespace udg {
 static const char *FindStudyAbstractSyntax = UID_FINDStudyRootQueryRetrieveInformationModel;
 
 QueryPacs::QueryPacs(PacsDevice pacsDevice)
+ : DIMSECService()
 {
     m_pacsDevice = pacsDevice;
     m_pacsConnection = NULL;
