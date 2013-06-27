@@ -27,6 +27,9 @@ public:
 protected:
     /// Fills class' DICOMServiceResponseStatus attribute with the information obtained from the request
     void fillResponseStatusFromSCP(int serviceResponseStatusCode, DcmDataset *statusDetail);
+    
+    /// Processes SCP response status, filling properly DICOMServiceResponseStatus attribute and dumps the proper logs in case of unsuccessful status
+    void processServiceClassProviderResponseStatus(int serviceResponseStatusCode, DcmDataset *statusDetail);
 
 private:
     /// The response status of the last c-service request
