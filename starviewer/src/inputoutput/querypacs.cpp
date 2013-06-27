@@ -31,6 +31,8 @@ QueryPacs::QueryPacs(PacsDevice pacsDevice)
     m_patientStudyListGot = false;
     m_seriesListGot = false;
     m_imageListGot = false;
+
+    this->setUpAsCFind();
 }
 
 QueryPacs::~QueryPacs()
