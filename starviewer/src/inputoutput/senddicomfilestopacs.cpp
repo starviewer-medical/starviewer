@@ -194,9 +194,10 @@ bool SendDICOMFilesToPACS::storeSCU(T_ASC_Association *association, QString file
             ERROR_LOG("S'ha produit un error al fer el store de la imatge " + filepathToStore + ", descripció de l'error" + QString(m_lastOFCondition.text()));
         }
 
-        processResponseFromStoreSCP(&response, statusDetail, filepathToStore);
+        processResponseFromStoreSCP(&response, filepathToStore);
         fillResponseStatusFromSCP(response.DimseStatus, statusDetail);
-        
+        getResponseStatus().dumpLog();
+
         if (statusDetail != NULL)
         {
             delete statusDetail;
@@ -206,10 +207,8 @@ bool SendDICOMFilesToPACS::storeSCU(T_ASC_Association *association, QString file
     }
 }
 
-void SendDICOMFilesToPACS::processResponseFromStoreSCP(T_DIMSE_C_StoreRSP *response, DcmDataset *statusDetail, QString filePathDicomObjectStoredFailed)
+void SendDICOMFilesToPACS::processResponseFromStoreSCP(T_DIMSE_C_StoreRSP *response, QString filePathDicomObjectStoredFailed)
 {
-    // Llista de camps relacionats amb l'error que poden contenir informació adicional
-    QList<DcmTagKey> relatedFieldsList;
     QString messageErrorLog = "No s'ha pogut enviar el fitxer " + filePathDicomObjectStoredFailed + ", descripció error rebuda";
 
     // A la secció B.2.3, taula B.2-1 podem trobar un descripció dels errors.
@@ -230,24 +229,15 @@ void SendDICOMFilesToPACS::processResponseFromStoreSCP(T_DIMSE_C_StoreRSP *respo
     {
         case STATUS_STORE_Refused_OutOfResources:
             // 0xA7XX
-            // Refused: Out of Resources
-            // Related Fields DCM_ErrorComment (0000,0902)
-            relatedFieldsList << DCM_ErrorComment;
-
-            ERROR_LOG(messageErrorLog + QString(DU_cstoreStatusString(response->DimseStatus)));
-            break;
         case STATUS_STORE_Refused_SOPClassNotSupported:
             // 0x0122
         case STATUS_STORE_Error_DataSetDoesNotMatchSOPClass:
             // 0xA9XX
         case STATUS_STORE_Error_CannotUnderstand:
             // 0xCXXX
-            // Error: Sop Class Not Supported or Data Set Doest Not Match SOP Class or Can not Understant
-            // Related fields DCM_OffendingElement (0000,0901) DCM_ErrorComment (0000,0902)
-            relatedFieldsList << DCM_OffendingElement << DCM_ErrorComment;
-
             ERROR_LOG(messageErrorLog + QString(DU_cstoreStatusString(response->DimseStatus)));
             break;
+        
         // Coersió entre tipus, s'ha convertit un tipus a un altre tipus i es pot haver perdut dades, per exemple passar de decimal a enter, tot i així
         // els fitxers s'han enviat i guardat
         case STATUS_STORE_Warning_CoersionOfDataElements:
@@ -256,34 +246,14 @@ void SendDICOMFilesToPACS::processResponseFromStoreSCP(T_DIMSE_C_StoreRSP *respo
             // 0xB007
         case STATUS_STORE_Warning_ElementsDiscarded:
             // 0xB006
-            // Warning: Coersion Of Data Elements, Data set Dos Not Match SOP Class or Elements Discarded
-            // Related fields DCM_OffendingElement (0000,0901) DCM_ErrorComment (0000,0902)
-            relatedFieldsList << DCM_OffendingElement << DCM_ErrorComment;
-
             ERROR_LOG(messageErrorLog + QString(DU_cstoreStatusString(response->DimseStatus)));
             m_numberOfDICOMFilesSentWithWarning++;
             break;
+        
         default:
             // S'ha produït un error no contemplat. En principi no s'hauria d'arribar mai a aquesta branca
             ERROR_LOG(messageErrorLog + QString(DU_cstoreStatusString(response->DimseStatus)));
             break;
-    }
-
-    if (statusDetail)
-    {
-        // Mostrem els detalls de l'status rebut, si se'ns han proporcionat
-        if (!relatedFieldsList.isEmpty())
-        {
-            const char *text;
-            INFO_LOG("Status details");
-            foreach (DcmTagKey tagKey, relatedFieldsList)
-            {
-                // Fem un log per cada camp relacionat amb l'error amb el format
-                // NomDelTag (xxxx,xxxx): ContingutDelTag
-                statusDetail->findAndGetString(tagKey, text, false);
-                INFO_LOG(QString(DcmTag(tagKey).getTagName()) + " " + QString(tagKey.toString().c_str()) + ": " + QString(text));
-            }
-        }
     }
 }
 

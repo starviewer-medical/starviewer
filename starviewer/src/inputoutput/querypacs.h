@@ -68,8 +68,8 @@ private:
     /// Afegeix l'objecte dicom a la llista d'imatges si no hi existeix
     void addImage(DICOMTagReader *dicomTagReader);
 
-    /// Converteix la respota rebuda per partl del PACS a QueryRequestStatus i  en cas d'error processa la resposta i grava l'error al log
-    PACSRequestStatus::QueryRequestStatus processResponseStatusFromFindUser(T_DIMSE_C_FindRSP *findResponse, DcmDataset *statusDetail);
+    /// Converteix la respota rebuda per partl del PACS a QueryRequestStatus
+    PACSRequestStatus::QueryRequestStatus processResponseStatusFromFindUser(T_DIMSE_C_FindRSP *findResponse);
 
 private:
     T_ASC_PresentationContextID m_presId;

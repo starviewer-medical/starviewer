@@ -147,9 +147,10 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::query()
         ERROR_LOG(QString("Error al fer una consulta al PACS %1, descripcio error: %2").arg(m_pacsDevice.getAETitle(), condition.text()));
     }
 
-    PACSRequestStatus::QueryRequestStatus queryRequestStatus = processResponseStatusFromFindUser(&findResponse, statusDetail);
+    PACSRequestStatus::QueryRequestStatus queryRequestStatus = processResponseStatusFromFindUser(&findResponse);
     fillResponseStatusFromSCP(findResponse.DimseStatus, statusDetail);
-
+    getResponseStatus().dumpLog();
+    
     // Dump status detail information if there is some
     if (statusDetail != NULL)
     {
@@ -241,7 +242,7 @@ QList<Image*> QueryPacs::getQueryResultsAsImageList()
     return m_imageList;
 }
 
-PACSRequestStatus::QueryRequestStatus QueryPacs::processResponseStatusFromFindUser(T_DIMSE_C_FindRSP *findResponse, DcmDataset *statusDetail)
+PACSRequestStatus::QueryRequestStatus QueryPacs::processResponseStatusFromFindUser(T_DIMSE_C_FindRSP *findResponse)
 {
     // Al PS 3.4, secció C.4.1.1.4, taula C.4-1 podem trobar un descripció dels errors.
     // Per a detalls sobre els "related fields" consultar PS 3.7, Annex C - Status Type Enconding
@@ -251,32 +252,13 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::processResponseStatusFromFindUs
         return PACSRequestStatus::QueryOk;
     }
 
-    // Llista de camps relacionats amb l'error que poden contenir informació adicional
-    QList<DcmTagKey> relatedFieldsList;
-    QString messageErrorLog = "No s'ha pogut fer la cerca, descripció error rebuda: ";
     PACSRequestStatus::QueryRequestStatus queryRequestStatus;
 
     switch (findResponse->DimseStatus)
     {
         case STATUS_FIND_Refused_OutOfResources:
-            // 0xa700
-            // Refused: Out of Resources
-            // Related Fields DCM_ErrorComment (0000,0902)
-            relatedFieldsList << DCM_ErrorComment;
-
-            ERROR_LOG(messageErrorLog + QString(DU_cfindStatusString(findResponse->DimseStatus)));
-            queryRequestStatus = PACSRequestStatus::QueryFailedOrRefused;
-            break;
-
         case STATUS_FIND_Failed_IdentifierDoesNotMatchSOPClass:
-            // 0xa900
         case STATUS_FIND_Failed_UnableToProcess:
-            // 0xc000
-            // Identifier does not match SOP Class or Unable To Process
-            // Related fields DCM_OffendingElement (0000,0901) DCM_ErrorComment (0000,0902)
-            relatedFieldsList << DCM_OffendingElement << DCM_ErrorComment;
-
-            ERROR_LOG(messageErrorLog + QString(DU_cfindStatusString(findResponse->DimseStatus)));
             queryRequestStatus = PACSRequestStatus::QueryFailedOrRefused;
             break;
 
@@ -286,27 +268,8 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::processResponseStatusFromFindUs
             break;
 
         default:
-            ERROR_LOG(messageErrorLog + QString(DU_cfindStatusString(findResponse->DimseStatus)));
-            // S'ha produït un error no contemplat. En principi no s'hauria d'arribar mai a aquesta branca
             queryRequestStatus = PACSRequestStatus::QueryUnknowStatus;
             break;
-    }
-
-    if (statusDetail)
-    {
-        // Mostrem els detalls de l'status rebut, si se'ns han proporcionat
-        if (!relatedFieldsList.isEmpty())
-        {
-            const char *text;
-            INFO_LOG("Status details");
-            foreach (DcmTagKey tagKey, relatedFieldsList)
-            {
-                // Fem un log per cada camp relacionat amb l'error amb el format
-                // NomDelTag (xxxx,xxxx): ContingutDelTag
-                statusDetail->findAndGetString(tagKey, text, false);
-                INFO_LOG(QString(DcmTag(tagKey).getTagName()) + " " + QString(tagKey.toString().c_str()) + ": " + QString(text));
-            }
-        }
     }
 
     return queryRequestStatus;
