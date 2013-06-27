@@ -1,6 +1,7 @@
 #include "dicomserviceresponsestatus.h"
 
 #include "dicomdictionary.h"
+#include "logging.h"
 
 namespace udg {
 
@@ -250,6 +251,57 @@ void DICOMServiceResponseStatus::clear()
         delete value;
     }
     m_relatedFieldsValues.clear();
+}
+
+void DICOMServiceResponseStatus::dumpLog()
+{
+    switch (getServiceStatus())
+    {
+        case DICOMServiceResponseStatus::FailureStatus:
+        case DICOMServiceResponseStatus::UnknownStatus:
+            ERROR_LOG(getServiceTypeAsString() + " operation has failed and could not be performed. Error: " + getStatusCodeAsString());
+            break;
+
+        case DICOMServiceResponseStatus::WarningStatus:
+            WARN_LOG(getServiceTypeAsString() + " operation has failed partially and could not be performed completely. Error: " + getStatusCodeAsString());
+            break;
+    }
+
+    if (getServiceStatus() != DICOMServiceResponseStatus::SuccessStatus)
+    {
+        INFO_LOG("Response status details");
+        INFO_LOG(toString());
+    }
+}
+
+QString DICOMServiceResponseStatus::getServiceTypeAsString() const
+{
+    QString serviceType;
+
+    switch (m_serviceType)
+    {
+        case CFind:
+            serviceType = "C-FIND (Query)";
+            break;
+
+        case CMove:
+            serviceType = "C-MOVE (Retrieve)";
+            break;
+
+        case CStore:
+            serviceType = "C-STORE (Send)";
+            break;
+
+        case CGet:
+            serviceType = "C-GET (Query)";
+            break;
+
+        case UnknownService:
+            serviceType = "Unknown service";
+            break;
+    }
+
+    return serviceType;
 }
 
 } // end namespace udg
