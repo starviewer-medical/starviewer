@@ -209,6 +209,7 @@ HEADERS += extensionfactory.h \
     dicomdictionary.h \
     dicomimagefilegenerator.h \
     dicomvaluerepresentationconverter.h \
+    dicomserviceresponsestatus.h \
     imageorientationoperationsmapper.h \
     anatomicalplane.h \
     patientorientation.h \
@@ -493,6 +494,7 @@ SOURCES += extensionmediator.cpp \
     dicomfilegenerator.cpp \
     dicomimagefilegenerator.cpp \
     dicomvaluerepresentationconverter.cpp \
+    dicomserviceresponsestatus.cpp \
     imageorientationoperationsmapper.cpp \
     anatomicalplane.cpp \
     patientorientation.cpp \
