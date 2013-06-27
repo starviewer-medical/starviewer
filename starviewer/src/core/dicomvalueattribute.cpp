@@ -28,9 +28,17 @@ bool DICOMValueAttribute::isSequenceAttribute()
     return false;
 }
 
-QString DICOMValueAttribute::toString()
+QString DICOMValueAttribute::toString(bool verbose)
 {
-    return QString("%1: %2").arg(getTag()->getKeyAsQString()).arg(getValueAsQString());
+    QString result;
+    
+    if (verbose)
+    {
+        result = getTag()->getName() + " ";
+    }
+    result += QString("%1: %2").arg(getTag()->getKeyAsQString()).arg(getValueAsQString());
+    
+    return result;
 }
 
 void DICOMValueAttribute::setValue(int value)

@@ -35,7 +35,7 @@ public:
     QList<DICOMSequenceItem*> getItems();
 
     /// Retorna la sequència llegible
-    QString toString();
+    QString toString(bool verbose = false);
 
 private:
     /// Atribut que representa la llista d'items que té la seqüència.

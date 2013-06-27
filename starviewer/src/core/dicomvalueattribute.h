@@ -26,7 +26,7 @@ public:
     virtual bool isSequenceAttribute();
 
     /// Retorna el contingut de l'atribut formatat
-    QString toString();
+    QString toString(bool verbose = false);
 
     /// Mètodes per assignar el valor segons el tipus
     void setValue(int value);
