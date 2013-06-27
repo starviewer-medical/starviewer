@@ -194,7 +194,7 @@ bool SendDICOMFilesToPACS::storeSCU(T_ASC_Association *association, QString file
             ERROR_LOG("S'ha produit un error al fer el store de la imatge " + filepathToStore + ", descripció de l'error" + QString(m_lastOFCondition.text()));
         }
 
-        processResponseFromStoreSCP(&response, filepathToStore);
+        processResponseFromStoreSCP(response.DimseStatus, filepathToStore);
         processServiceClassProviderResponseStatus(response.DimseStatus, statusDetail);
 
         if (statusDetail != NULL)
@@ -206,7 +206,7 @@ bool SendDICOMFilesToPACS::storeSCU(T_ASC_Association *association, QString file
     }
 }
 
-void SendDICOMFilesToPACS::processResponseFromStoreSCP(T_DIMSE_C_StoreRSP *response, QString filePathDicomObjectStoredFailed)
+void SendDICOMFilesToPACS::processResponseFromStoreSCP(unsigned int dimseStatusCode, QString filePathDicomObjectStoredFailed)
 {
     QString messageErrorLog = "No s'ha pogut enviar el fitxer " + filePathDicomObjectStoredFailed + ", descripció error rebuda";
 
@@ -217,14 +217,14 @@ void SendDICOMFilesToPACS::processResponseFromStoreSCP(T_DIMSE_C_StoreRSP *respo
     //      - Failure la imatgen o s'ha pogut pujar
     //      - Warning la imatge s'ha pujat, però no condorcada la SOPClass, s'ha fet coerció d'algunes dades...
 
-    if (response->DimseStatus == STATUS_Success)
+    if (dimseStatusCode == STATUS_Success)
     {
         // La imatge s'ha enviat correctament
         m_numberOfDICOMFilesSentSuccessfully++;
         return;
     }
 
-    switch (response->DimseStatus)
+    switch (dimseStatusCode)
     {
         case STATUS_STORE_Refused_OutOfResources:
             // 0xA7XX
@@ -234,7 +234,7 @@ void SendDICOMFilesToPACS::processResponseFromStoreSCP(T_DIMSE_C_StoreRSP *respo
             // 0xA9XX
         case STATUS_STORE_Error_CannotUnderstand:
             // 0xCXXX
-            ERROR_LOG(messageErrorLog + QString(DU_cstoreStatusString(response->DimseStatus)));
+            ERROR_LOG(messageErrorLog + QString(DU_cstoreStatusString(dimseStatusCode)));
             break;
         
         // Coersió entre tipus, s'ha convertit un tipus a un altre tipus i es pot haver perdut dades, per exemple passar de decimal a enter, tot i així
@@ -245,13 +245,13 @@ void SendDICOMFilesToPACS::processResponseFromStoreSCP(T_DIMSE_C_StoreRSP *respo
             // 0xB007
         case STATUS_STORE_Warning_ElementsDiscarded:
             // 0xB006
-            ERROR_LOG(messageErrorLog + QString(DU_cstoreStatusString(response->DimseStatus)));
+            ERROR_LOG(messageErrorLog + QString(DU_cstoreStatusString(dimseStatusCode)));
             m_numberOfDICOMFilesSentWithWarning++;
             break;
         
         default:
             // S'ha produït un error no contemplat. En principi no s'hauria d'arribar mai a aquesta branca
-            ERROR_LOG(messageErrorLog + QString(DU_cstoreStatusString(response->DimseStatus)));
+            ERROR_LOG(messageErrorLog + QString(DU_cstoreStatusString(dimseStatusCode)));
             break;
     }
 }

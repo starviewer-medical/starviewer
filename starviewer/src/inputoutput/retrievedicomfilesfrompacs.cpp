@@ -393,7 +393,7 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::retrieve(co
 
     m_pacsConnection->disconnect();
 
-    retrieveRequestStatus = processResponseStatusFromMoveSCP(&moveResponse);
+    retrieveRequestStatus = processResponseStatusFromMoveSCP(moveResponse.DimseStatus);
     processServiceClassProviderResponseStatus(moveResponse.DimseStatus, statusDetail);
     
     // Dump status detail information if there is some
@@ -469,7 +469,7 @@ DcmDataset* RetrieveDICOMFilesFromPACS::getDcmDatasetOfImagesToRetrieve(const QS
     return dcmDatasetToRetrieve;
 }
 
-PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResponseStatusFromMoveSCP(T_DIMSE_C_MoveRSP *moveResponse)
+PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResponseStatusFromMoveSCP(unsigned int dimseStatusCode)
 {
     PACSRequestStatus::RetrieveRequestStatus retrieveRequestStatus;
 
@@ -481,12 +481,12 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResp
 
     // Per a detalls sobre els "related fields" consultar PS 3.7, Annex C - Status Type Enconding
 
-    if (moveResponse->DimseStatus == STATUS_Success)
+    if (dimseStatusCode == STATUS_Success)
     {
         return PACSRequestStatus::RetrieveOk;
     }
 
-    switch (moveResponse->DimseStatus)
+    switch (dimseStatusCode)
     {
         case STATUS_MOVE_Failed_MoveDestinationUnknown:
             retrieveRequestStatus = PACSRequestStatus::RetrieveDestinationAETileUnknown;
