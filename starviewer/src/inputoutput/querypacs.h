@@ -10,7 +10,7 @@
 #include "pacsrequeststatus.h"
 #include "dicommask.h"
 #include "dicomsource.h"
-#include "dicomserviceresponsestatus.h"
+#include "dimsecservice.h"
 /// This class helps to interactive with the pacs, allow us to find studies in the pacs setting a search mask. Very important for this class a connection
 /// and a mask search must be setted befoer query Studies
 
@@ -28,7 +28,7 @@ class Image;
 class DICOMTagReader;
 class PACSConnection;
 
-class QueryPacs {
+class QueryPacs : public DIMSECService {
 public:
     /// Constructor de la classe
     QueryPacs(PacsDevice pacsDevice);
@@ -37,9 +37,6 @@ public:
     /// Cerca els estudis que compleixin la màscara passada
     PACSRequestStatus::QueryRequestStatus query(const DicomMask &mask);
 
-    /// Gets the response status for the last query request
-    DICOMServiceResponseStatus getResponseStatus() const;
-    
     /// Indiquem que la consulta actual s'ha de cancel·lar.
     /// La cancel·lació de la query no es fa immediatament quan s'invoca el mètode, aquest mètode actualitza un flag, que cada vegada
     /// que rebem un element DICOM que compleix la màscara es comprova, si el flag indica que s'ha demanat cancel·lar llavors es
@@ -74,9 +71,6 @@ private:
     /// Converteix la respota rebuda per partl del PACS a QueryRequestStatus i  en cas d'error processa la resposta i grava l'error al log
     PACSRequestStatus::QueryRequestStatus processResponseStatusFromFindUser(T_DIMSE_C_FindRSP *findResponse, DcmDataset *statusDetail);
 
-    /// Returns a DICOMServiceResponseStatus object with the information obtained from the request
-    DICOMServiceResponseStatus fillResponseStatusFromFindSCP(int findResponseStatusCode, DcmDataset *statusDetail);
-
 private:
     T_ASC_PresentationContextID m_presId;
     DicomMask m_dicomMask;
@@ -99,9 +93,6 @@ private:
     bool m_patientStudyListGot;
     bool m_seriesListGot;
     bool m_imageListGot;
-
-    /// The response status of the last c-find request
-    DICOMServiceResponseStatus m_responseStatus;
 };
 };
 #endif
