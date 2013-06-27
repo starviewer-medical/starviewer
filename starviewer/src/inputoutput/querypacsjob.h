@@ -7,6 +7,7 @@
 #include "dicommask.h"
 #include "pacsjob.h"
 #include "pacsrequeststatus.h"
+#include "dicomserviceresponsestatus.h"
 
 class QString;
 
@@ -76,6 +77,9 @@ private:
     QueryLevel m_queryLevel;
 
     PACSRequestStatus::QueryRequestStatus m_queryRequestStatus;
+
+    /// Query service response
+    DICOMServiceResponseStatus m_dicomQueryResponseStatus;
 };
 
 }  // End namespace UdG

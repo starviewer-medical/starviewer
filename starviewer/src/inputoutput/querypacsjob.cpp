@@ -42,6 +42,7 @@ void QueryPacsJob::run()
 
     // Busquem els estudis
     m_queryRequestStatus = m_queryPacs->query(m_mask);
+    m_dicomQueryResponseStatus = m_queryPacs->getResponseStatus();
 
     INFO_LOG(QString("Consulta al PACS %1 finalitzada").arg(getPacsDevice().getAETitle()));
 }
@@ -90,6 +91,7 @@ PACSRequestStatus::QueryRequestStatus QueryPacsJob::getStatus()
 QString QueryPacsJob::getStatusDescription()
 {
     QString message;
+    QString errorDetails = tr("\n\nError details:\n") + m_dicomQueryResponseStatus.toString();
     QString pacsAETitle = getPacsDevice().getAETitle();
 
     switch (getStatus())
@@ -108,14 +110,17 @@ QString QueryPacsJob::getStatusDescription()
         case PACSRequestStatus::QueryFailedOrRefused:
             message = tr("PACS %1 could not process the query.\n\n").arg(pacsAETitle);
             message += tr("Try with a different query or wait a few minutes, if the problem persists contact with PACS administrator.");
+            message += errorDetails;
             break;
         case PACSRequestStatus::QueryUnknowStatus:
             message = tr("PACS %1 could not process the query returning an unknown error.\n\n").arg(pacsAETitle);
             message += tr("Please contact with PACS administrator to report the issue.");
+            message += errorDetails;
             break;
         default:
             message = tr("An unknown error has occurred querying %1 to PACS %2.").arg(getQueryLevelAsQString(), pacsAETitle);
             message += tr("\nIf the problem persists contact with an administrator.");
+            message += errorDetails;
             break;
     }
 

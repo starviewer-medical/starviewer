@@ -145,6 +145,7 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::query()
     }
 
     PACSRequestStatus::QueryRequestStatus queryRequestStatus = processResponseStatusFromFindUser(&findResponse, statusDetail);
+    m_responseStatus = fillResponseStatusFromFindSCP(findResponse.DimseStatus, statusDetail);
 
     // Dump status detail information if there is some
     if (statusDetail != NULL)
@@ -155,6 +156,11 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::query()
     delete m_pacsConnection;
 
     return queryRequestStatus;
+}
+
+DICOMServiceResponseStatus QueryPacs::getResponseStatus() const
+{
+    return m_responseStatus;
 }
 
 PACSRequestStatus::QueryRequestStatus QueryPacs::query(const DicomMask &mask)
@@ -306,6 +312,24 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::processResponseStatusFromFindUs
     }
 
     return queryRequestStatus;
+}
+
+DICOMServiceResponseStatus QueryPacs::fillResponseStatusFromFindSCP(int findResponseStatusCode, DcmDataset *statusDetail)
+{
+    DICOMServiceResponseStatus responseStatus;
+    responseStatus.setStatusCode(findResponseStatusCode);
+    if (statusDetail)
+    {
+        DICOMTagReader reader(QString(), (DcmDataset*)statusDetail->clone());
+        QList<DICOMTag> relatedFields = responseStatus.getRelatedFields();
+        foreach (const DICOMTag &tag, relatedFields)
+        {
+            DICOMValueAttribute *value = reader.getValueAttribute(tag);
+            responseStatus.addRelatedFieldValue(value);
+        }
+    }
+
+    return responseStatus;
 }
 
 }
