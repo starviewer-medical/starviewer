@@ -393,7 +393,7 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::retrieve(co
 
     m_pacsConnection->disconnect();
 
-    retrieveRequestStatus = processResponseStatusFromMoveSCP(moveResponse.DimseStatus);
+    retrieveRequestStatus = getDIMSEStatusCodeAsRetrieveRequestStatus(moveResponse.DimseStatus);
     processServiceClassProviderResponseStatus(moveResponse.DimseStatus, statusDetail);
     
     // Dump status detail information if there is some
@@ -469,7 +469,7 @@ DcmDataset* RetrieveDICOMFilesFromPACS::getDcmDatasetOfImagesToRetrieve(const QS
     return dcmDatasetToRetrieve;
 }
 
-PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResponseStatusFromMoveSCP(unsigned int dimseStatusCode)
+PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::getDIMSEStatusCodeAsRetrieveRequestStatus(unsigned int dimseStatusCode)
 {
     PACSRequestStatus::RetrieveRequestStatus retrieveRequestStatus;
 
