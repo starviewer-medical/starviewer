@@ -7,6 +7,7 @@
 
 #include "pacsdevice.h"
 #include "pacsrequeststatus.h"
+#include "dimsecservice.h"
 
 struct T_DIMSE_C_MoveRQ;
 struct T_DIMSE_C_MoveRSP;
@@ -27,7 +28,7 @@ class PACSConnection;
 /**
     Aquesta classe s'encarrega d'interactuars amb els PACS, responent als serveis move i store
   */
-class RetrieveDICOMFilesFromPACS : public QObject {
+class RetrieveDICOMFilesFromPACS : public QObject, public DIMSECService {
 Q_OBJECT
 public:
     RetrieveDICOMFilesFromPACS(PacsDevice pacs);

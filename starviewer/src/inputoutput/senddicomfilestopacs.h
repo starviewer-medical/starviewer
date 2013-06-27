@@ -7,6 +7,7 @@
 
 #include "pacsdevice.h"
 #include "pacsrequeststatus.h"
+#include "dimsecservice.h"
 
 class DcmDataset;
 
@@ -18,7 +19,7 @@ namespace udg {
 class Image;
 class PACSConnection;
 
-class SendDICOMFilesToPACS : public QObject {
+class SendDICOMFilesToPACS : public QObject, public DIMSECService {
 Q_OBJECT
 public:
     SendDICOMFilesToPACS(PacsDevice pacsDevice);

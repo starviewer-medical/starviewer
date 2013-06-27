@@ -391,7 +391,8 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::retrieve(co
     m_pacsConnection->disconnect();
 
     retrieveRequestStatus = processResponseStatusFromMoveSCP(&moveResponse, statusDetail);
-
+    fillResponseStatusFromSCP(moveResponse.DimseStatus, statusDetail);
+    
     // Dump status detail information if there is some
     if (statusDetail != NULL)
     {
