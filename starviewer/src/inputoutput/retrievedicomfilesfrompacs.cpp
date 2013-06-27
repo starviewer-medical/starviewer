@@ -393,8 +393,9 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::retrieve(co
 
     m_pacsConnection->disconnect();
 
-    retrieveRequestStatus = processResponseStatusFromMoveSCP(&moveResponse, statusDetail);
+    retrieveRequestStatus = processResponseStatusFromMoveSCP(&moveResponse);
     fillResponseStatusFromSCP(moveResponse.DimseStatus, statusDetail);
+    getResponseStatus().dumpLog();
     
     // Dump status detail information if there is some
     if (statusDetail != NULL)
@@ -469,12 +470,8 @@ DcmDataset* RetrieveDICOMFilesFromPACS::getDcmDatasetOfImagesToRetrieve(const QS
     return dcmDatasetToRetrieve;
 }
 
-PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResponseStatusFromMoveSCP(T_DIMSE_C_MoveRSP *moveResponse,
-    DcmDataset *statusDetail)
+PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResponseStatusFromMoveSCP(T_DIMSE_C_MoveRSP *moveResponse)
 {
-    // Llista de camps relacionats amb l'error que poden contenir informació adicional
-    QList<DcmTagKey> relatedFieldsList;
-    QString messageErrorLog = "No s'ha pogut descarregar l'estudi, descripcio error rebuda: ";
     PACSRequestStatus::RetrieveRequestStatus retrieveRequestStatus;
 
     // Al PS 3.4, secció C.4.2.1.5, taula C.4-2 podem trobar un descripció dels errors.
@@ -492,59 +489,18 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResp
 
     switch (moveResponse->DimseStatus)
     {
-        case STATUS_MOVE_Refused_OutOfResourcesNumberOfMatches:
-            // 0xa701
-            // Refused: Out of Resources – Unable to calculate number of matches
-            // Related Fields DCM_ErrorComment (0000,0902)
-            relatedFieldsList << DCM_ErrorComment;
-
-            ERROR_LOG(messageErrorLog + QString(DU_cmoveStatusString(moveResponse->DimseStatus)));
-            retrieveRequestStatus = PACSRequestStatus::RetrieveFailureOrRefused;
-            break;
-
-        case STATUS_MOVE_Refused_OutOfResourcesSubOperations:
-            // 0xa702
-            // Refused: Out of Resources – Unable to perform sub-operations
-            // Related Fields DCM_NumberOfRemainingSuboperations (0000,1020), DCM_NumberOfCompletedSuboperations (0000,1021)
-            // DCM_NumberOfFailedSuboperations (0000,1022), DCM_NumberOfWarningSuboperations (0000,1023)
-            relatedFieldsList << DCM_NumberOfRemainingSubOperations << DCM_NumberOfCompletedSubOperations;
-            relatedFieldsList << DCM_NumberOfFailedSubOperations << DCM_NumberOfWarningSubOperations;
-
-            ERROR_LOG(messageErrorLog + QString(DU_cmoveStatusString(moveResponse->DimseStatus)));
-            retrieveRequestStatus = PACSRequestStatus::RetrieveFailureOrRefused;
-            break;
-
         case STATUS_MOVE_Failed_MoveDestinationUnknown:
-            // 0xa801
-            // Refused: Move Destination unknown
-            // Related Fields DCM_ErrorComment (0000,0902)
-            relatedFieldsList << DCM_ErrorComment;
-
-            // El PACS no ens té registrat amb el nostre AETitle
-            ERROR_LOG(messageErrorLog + QString(DU_cmoveStatusString(moveResponse->DimseStatus)));
             retrieveRequestStatus = PACSRequestStatus::RetrieveDestinationAETileUnknown;
             break;
 
+        case STATUS_MOVE_Refused_OutOfResourcesNumberOfMatches:
+        case STATUS_MOVE_Refused_OutOfResourcesSubOperations:
         case STATUS_MOVE_Failed_IdentifierDoesNotMatchSOPClass:
-            // 0xa900
         case STATUS_MOVE_Failed_UnableToProcess:
-            // 0xc000
-            // Unable to Process or Identifier does not match SOP Class
-            // Related fields DCM_OffendingElement (0000,0901) DCM_ErrorComment (0000,0902)
-            relatedFieldsList << DCM_OffendingElement << DCM_ErrorComment;
-
-            ERROR_LOG(messageErrorLog + QString(DU_cmoveStatusString(moveResponse->DimseStatus)));
             retrieveRequestStatus = PACSRequestStatus::RetrieveFailureOrRefused;
             break;
 
         case STATUS_MOVE_Warning_SubOperationsCompleteOneOrMoreFailures:
-            // 0xb000
-            // Sub-operations Complete – One or more Failures
-            // Related fields DCM_NumberOfRemainingSuboperations (0000,1020), DCM_NumberOfFailedSuboperations (0000,1022),
-            // DCM_NumberOfWarningSuboperations (0000,1023)
-            relatedFieldsList << DCM_NumberOfRemainingSubOperations << DCM_NumberOfFailedSubOperations << DCM_NumberOfWarningSubOperations;
-
-            WARN_LOG("Error no s'ha pogut descarregar tot l'estudi. Descripcio rebuda: " + QString(DU_cmoveStatusString(moveResponse->DimseStatus)));
             retrieveRequestStatus = PACSRequestStatus::RetrieveSomeDICOMFilesFailed;
             break;
 
@@ -554,27 +510,8 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResp
             break;
 
         default:
-            ERROR_LOG(messageErrorLog + QString(DU_cmoveStatusString(moveResponse->DimseStatus)));
-            // S'ha produït un error no contemplat. En principi no s'hauria d'arribar mai a aquesta branca
             retrieveRequestStatus = PACSRequestStatus::RetrieveUnknowStatus;
             break;
-    }
-
-    if (statusDetail)
-    {
-        // Mostrem els detalls de l'status rebut, si se'ns han proporcionat
-        if (!relatedFieldsList.isEmpty())
-        {
-            const char *text;
-            INFO_LOG("Status details");
-            foreach (DcmTagKey tagKey, relatedFieldsList)
-            {
-                // Fem un log per cada camp relacionat amb l'error amb el format
-                // NomDelTag (xxxx,xxxx): ContingutDelTag
-                statusDetail->findAndGetString(tagKey, text, false);
-                INFO_LOG(QString(DcmTag(tagKey).getTagName()) + " " + QString(tagKey.toString().c_str()) + ": " + QString(text));
-            }
-        }
     }
 
     return retrieveRequestStatus;

@@ -67,7 +67,7 @@ private:
     void initialitzeDICOMFilesCounters(int numberOfDICOMFilesToSend);
 
     /// Processa un resposta del Store SCP que no ha tingut l'Status Successfull
-    void processResponseFromStoreSCP(T_DIMSE_C_StoreRSP *response, DcmDataset *statusDetail, QString filePathDicomObjectStoredFailed);
+    void processResponseFromStoreSCP(T_DIMSE_C_StoreRSP *response, QString filePathDicomObjectStoredFailed);
 
     /// Envia una image al PACS amb l'associació passada per paràmetre, retorna si la imatge s'ha enviat correctament
     virtual bool storeSCU(T_ASC_Association *association, QString filePathToStore);
