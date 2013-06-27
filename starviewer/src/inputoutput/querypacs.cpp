@@ -147,7 +147,7 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::query()
         ERROR_LOG(QString("Error al fer una consulta al PACS %1, descripcio error: %2").arg(m_pacsDevice.getAETitle(), condition.text()));
     }
 
-    PACSRequestStatus::QueryRequestStatus queryRequestStatus = processResponseStatusFromFindUser(findResponse.DimseStatus);
+    PACSRequestStatus::QueryRequestStatus queryRequestStatus = getDIMSEStatusCodeAsQueryRequestStatus(findResponse.DimseStatus);
     processServiceClassProviderResponseStatus(findResponse.DimseStatus, statusDetail);
     
     // Dump status detail information if there is some
@@ -241,7 +241,7 @@ QList<Image*> QueryPacs::getQueryResultsAsImageList()
     return m_imageList;
 }
 
-PACSRequestStatus::QueryRequestStatus QueryPacs::processResponseStatusFromFindUser(unsigned int dimseStatusCode)
+PACSRequestStatus::QueryRequestStatus QueryPacs::getDIMSEStatusCodeAsQueryRequestStatus(unsigned int dimseStatusCode)
 {
     // Al PS 3.4, secció C.4.1.1.4, taula C.4-1 podem trobar un descripció dels errors.
     // Per a detalls sobre els "related fields" consultar PS 3.7, Annex C - Status Type Enconding
