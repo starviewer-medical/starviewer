@@ -22,6 +22,8 @@ SendDICOMFilesToPACS::SendDICOMFilesToPACS(PacsDevice pacsDevice)
 {
     m_pacs = pacsDevice;
     m_abortIsRequested = false;
+
+    this->setUpAsCStore();
 }
 
 PacsDevice SendDICOMFilesToPACS::getPacs()

@@ -28,6 +28,8 @@ RetrieveDICOMFilesFromPACS::RetrieveDICOMFilesFromPACS(PacsDevice pacs)
 {
     m_pacs = pacs;
     m_abortIsRequested = false;
+
+    this->setUpAsCMove();
 }
 
 OFCondition RetrieveDICOMFilesFromPACS::acceptSubAssociation(T_ASC_Network *associationNetwork, T_ASC_Association **association)
