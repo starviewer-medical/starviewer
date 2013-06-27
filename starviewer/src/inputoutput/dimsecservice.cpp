@@ -54,4 +54,10 @@ void DIMSECService::fillResponseStatusFromSCP(int serviceResponseStatusCode, Dcm
     }
 }
 
+void DIMSECService::processServiceClassProviderResponseStatus(int serviceResponseStatusCode, DcmDataset *statusDetail)
+{
+    fillResponseStatusFromSCP(serviceResponseStatusCode, statusDetail);
+    m_responseStatus.dumpLog();
+}
+
 } // end namespace udg
