@@ -77,6 +77,7 @@ PACSRequestStatus::SendRequestStatus SendDICOMFilesToPACSJob::getStatus()
 QString SendDICOMFilesToPACSJob::getStatusDescription()
 {
     QString message;
+    QString errorDetails = tr("\n\nDetails:\n") + m_sendDICOMFilesToPACS->getResponseStatus().toString();
     QString studyID = getStudyOfDICOMFilesToSend()->getID();
     QString patientName = getStudyOfDICOMFilesToSend()->getParentPatient()->getFullName();
     QString pacsAETitle = getPacsDevice().getAETitle();
@@ -97,15 +98,18 @@ QString SendDICOMFilesToPACSJob::getStatusDescription()
             message = tr("The sent images from study %1 of patient %2 to PACS %3 has failed.\n\n")
                 .arg(studyID, patientName, pacsAETitle);
             message += tr("Wait a few minutes and try again, if the problem persist contact with an administrator.");
+            message += errorDetails;
             break;
         case PACSRequestStatus::SendSomeDICOMFilesFailed:
             message = tr("%1 images from study %2 of patient %3 cannot be sent because PACS %4 has rejected them.\n\n").arg(
                 QString().setNum(m_sendDICOMFilesToPACS->getNumberOfDICOMFilesSentFailed()), studyID, patientName, pacsAETitle);
             message += tr("Please contact with an administrator to solve the problem.");
+            message += errorDetails;
             break;
         case PACSRequestStatus::SendWarningForSomeImages:
             message = tr("The images from study %1 of patient %2 has been sent, but it's possible that the PACS %3 has changed some data of them.").arg(
                 studyID, patientName, pacsAETitle);
+            message += errorDetails;
             break;
         case PACSRequestStatus::SendCancelled:
             message = tr("The sent of images from study %1 from patient %2 to PACS %3 has been cancelled.").arg(
@@ -120,6 +124,7 @@ QString SendDICOMFilesToPACSJob::getStatusDescription()
                 studyID, patientName, pacsAETitle);
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
+            message += errorDetails;
             break;
     }
 
