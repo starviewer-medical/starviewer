@@ -25,10 +25,10 @@ public:
     void setUpAsCGet();
     
 protected:
-    /// Returns a DICOMServiceResponseStatus object with the information obtained from the request
-    DICOMServiceResponseStatus fillResponseStatusFromSCP(int serviceResponseStatusCode, DcmDataset *statusDetail);
+    /// Fills class' DICOMServiceResponseStatus attribute with the information obtained from the request
+    void fillResponseStatusFromSCP(int serviceResponseStatusCode, DcmDataset *statusDetail);
 
-protected:
+private:
     /// The response status of the last c-service request
     DICOMServiceResponseStatus m_responseStatus;
 };

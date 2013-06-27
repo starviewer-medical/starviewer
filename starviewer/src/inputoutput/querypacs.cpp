@@ -145,7 +145,7 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::query()
     }
 
     PACSRequestStatus::QueryRequestStatus queryRequestStatus = processResponseStatusFromFindUser(&findResponse, statusDetail);
-    m_responseStatus = fillResponseStatusFromSCP(findResponse.DimseStatus, statusDetail);
+    fillResponseStatusFromSCP(findResponse.DimseStatus, statusDetail);
 
     // Dump status detail information if there is some
     if (statusDetail != NULL)

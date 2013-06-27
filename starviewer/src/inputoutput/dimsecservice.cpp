@@ -38,22 +38,20 @@ void DIMSECService::setUpAsCGet()
     m_responseStatus.setServiceType(DICOMServiceResponseStatus::CGet);
 }
 
-DICOMServiceResponseStatus DIMSECService::fillResponseStatusFromSCP(int serviceResponseStatusCode, DcmDataset *statusDetail)
+void DIMSECService::fillResponseStatusFromSCP(int serviceResponseStatusCode, DcmDataset *statusDetail)
 {
-    DICOMServiceResponseStatus responseStatus;
-    responseStatus.setStatusCode(serviceResponseStatusCode);
+    m_responseStatus.clear();
+    m_responseStatus.setStatusCode(serviceResponseStatusCode);
     if (statusDetail)
     {
         DICOMTagReader reader(QString(), (DcmDataset*)statusDetail->clone());
-        QList<DICOMTag> relatedFields = responseStatus.getRelatedFields();
+        QList<DICOMTag> relatedFields = m_responseStatus.getRelatedFields();
         foreach (const DICOMTag &tag, relatedFields)
         {
             DICOMValueAttribute *value = reader.getValueAttribute(tag);
-            responseStatus.addRelatedFieldValue(value);
+            m_responseStatus.addRelatedFieldValue(value);
         }
     }
-
-    return responseStatus;
 }
 
 } // end namespace udg
