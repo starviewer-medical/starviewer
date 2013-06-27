@@ -69,7 +69,7 @@ private:
     void addImage(DICOMTagReader *dicomTagReader);
 
     /// Converteix la respota rebuda per partl del PACS a QueryRequestStatus
-    PACSRequestStatus::QueryRequestStatus processResponseStatusFromFindUser(T_DIMSE_C_FindRSP *findResponse);
+    PACSRequestStatus::QueryRequestStatus processResponseStatusFromFindUser(unsigned int dimseStatusCode);
 
 private:
     T_ASC_PresentationContextID m_presId;

@@ -75,7 +75,7 @@ private:
     T_DIMSE_C_MoveRQ getConfiguredMoveRequest(T_ASC_Association *association);
 
     /// En cas d'error processa la resposta rebuda per part del SCP, grava l'error al log i el retorna en forma d'objecte Status
-    PACSRequestStatus::RetrieveRequestStatus processResponseStatusFromMoveSCP(T_DIMSE_C_MoveRSP *moveResponse);
+    PACSRequestStatus::RetrieveRequestStatus processResponseStatusFromMoveSCP(unsigned int dimseStatusCode);
 
     /// Callback de move, semblaria que s'executa cada vegada que s'ha descarregat una imatge
     static void moveCallback(void *callbackData, T_DIMSE_C_MoveRQ *moveRequest, int responseCount, T_DIMSE_C_MoveRSP *moveResponse);
