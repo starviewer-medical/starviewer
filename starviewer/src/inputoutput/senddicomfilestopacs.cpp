@@ -195,8 +195,7 @@ bool SendDICOMFilesToPACS::storeSCU(T_ASC_Association *association, QString file
         }
 
         processResponseFromStoreSCP(&response, filepathToStore);
-        fillResponseStatusFromSCP(response.DimseStatus, statusDetail);
-        getResponseStatus().dumpLog();
+        processServiceClassProviderResponseStatus(response.DimseStatus, statusDetail);
 
         if (statusDetail != NULL)
         {
