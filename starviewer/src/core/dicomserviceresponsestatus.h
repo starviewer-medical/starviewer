@@ -73,6 +73,13 @@ public:
     /// Resets the object to its initial values
     void clear();
 
+    /// Dumps status to corresponding log level
+    void dumpLog();
+
+private:
+    /// Gets service type as string
+    QString getServiceTypeAsString() const;
+
 private:
     /// Status code
     unsigned int m_statusCode;
