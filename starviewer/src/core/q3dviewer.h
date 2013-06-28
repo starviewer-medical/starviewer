@@ -131,6 +131,9 @@ signals:
     void transferFunctionChanged();
 
 private:
+    /// Computes and sets the transformation matrix for the volume to convert from the DICOM space to the world space.
+    void setVolumeTransformation();
+
     /// Fa la visualització per raycasting
     void renderRayCasting();
 

@@ -491,65 +491,7 @@ void Q3DViewer::setInput(Volume *volume)
     }
     m_mainVolume = volume;
 
-    // Aquí corretgim el fet que no s'hagi adquirit la imatge en un espai ortogonal
-    // \TODO: caldria fer el mateix amb el vtkImageActor del q2Dviewer (veure tiquet #702)
-    ImagePlane *currentPlane = new ImagePlane();
-    // Sempre penem la primera llesca suposem que és constant
-    Image *imageReference = m_mainVolume->getImage(0);
-    currentPlane->fillFromImage(imageReference);
-    double currentPlaneRowVector[3], currentPlaneColumnVector[3];
-    currentPlane->getRowDirectionVector(currentPlaneRowVector);
-    currentPlane->getColumnDirectionVector(currentPlaneColumnVector);
-    // En realitat el vector normal no és el que ens dona la funció getNormalVector, sinó que és perpendicular a l'eix de coordenades
-    //currentPlane->getNormalVector(currentPlaneNormalVector);
-
-    vtkMatrix4x4 *projectionMatrix = vtkMatrix4x4::New();
-    projectionMatrix->Identity();
-
-    if (currentPlaneRowVector[0] != 0.0 || currentPlaneRowVector[1] != 0.0 || currentPlaneRowVector[2] != 0.0)
-    {
-        int row;
-
-        if (currentPlaneRowVector[0] > currentPlaneRowVector[1] || currentPlaneRowVector[0] > currentPlaneRowVector[2])
-        {
-            //Row = les X -> Column = les Y
-            for (row = 0; row < 3; row++)
-            {
-                projectionMatrix->SetElement(row, 0, (currentPlaneRowVector[row]));
-                projectionMatrix->SetElement(row, 1, (currentPlaneColumnVector[row]));
-            }
-        }
-        else
-        {
-            if (currentPlaneRowVector[1] > currentPlaneRowVector[2])
-            {
-                //Row = les Y -> Column = les Z
-                int row;
-                for (row = 0; row < 3; row++)
-                {
-                    projectionMatrix->SetElement(row, 1, (currentPlaneRowVector[row]));
-                    projectionMatrix->SetElement(row, 2, (currentPlaneColumnVector[row]));
-                }
-            }
-            else
-            {
-                //Row = les Z -> Column = les X
-                int row;
-                for (row = 0; row < 3; row++)
-                {
-                    projectionMatrix->SetElement(row, 2, (currentPlaneRowVector[row]));
-                    projectionMatrix->SetElement(row, 0, (currentPlaneColumnVector[row]));
-                }
-            }
-        }
-    }
-
-    DEBUG_LOG(QString("currentPlaneRowVector: %1 %2 %3").arg(currentPlaneRowVector[0]).arg(currentPlaneRowVector[1]).arg(currentPlaneRowVector[2]));
-    DEBUG_LOG(QString("currentPlaneColumnVector: %1 %2 %3").arg(currentPlaneColumnVector[0]).arg(currentPlaneColumnVector[1]).arg(currentPlaneColumnVector[2]));
-
-    m_vtkVolume->SetUserMatrix(projectionMatrix);
-    delete currentPlane;
-    projectionMatrix->Delete();
+    setVolumeTransformation();
 
     m_volumeMapper->SetInput(m_imageData);
     m_gpuRayCastMapper->SetInput(m_imageData);
@@ -778,6 +720,69 @@ bool Q3DViewer::rescale(Volume *volume)
         rescaler->Delete();
         return false;
     }
+}
+
+void Q3DViewer::setVolumeTransformation()
+{
+    // Aquí corretgim el fet que no s'hagi adquirit la imatge en un espai ortogonal
+    // \TODO: caldria fer el mateix amb el vtkImageActor del q2Dviewer (veure tiquet #702)
+    ImagePlane *currentPlane = new ImagePlane();
+    // Sempre penem la primera llesca suposem que és constant
+    Image *imageReference = m_mainVolume->getImage(0);
+    currentPlane->fillFromImage(imageReference);
+    double currentPlaneRowVector[3], currentPlaneColumnVector[3];
+    currentPlane->getRowDirectionVector(currentPlaneRowVector);
+    currentPlane->getColumnDirectionVector(currentPlaneColumnVector);
+    // En realitat el vector normal no és el que ens dona la funció getNormalVector, sinó que és perpendicular a l'eix de coordenades
+    //currentPlane->getNormalVector(currentPlaneNormalVector);
+
+    vtkMatrix4x4 *projectionMatrix = vtkMatrix4x4::New();
+    projectionMatrix->Identity();
+
+    if (currentPlaneRowVector[0] != 0.0 || currentPlaneRowVector[1] != 0.0 || currentPlaneRowVector[2] != 0.0)
+    {
+        int row;
+
+        if (currentPlaneRowVector[0] > currentPlaneRowVector[1] || currentPlaneRowVector[0] > currentPlaneRowVector[2])
+        {
+            //Row = les X -> Column = les Y
+            for (row = 0; row < 3; row++)
+            {
+                projectionMatrix->SetElement(row, 0, (currentPlaneRowVector[row]));
+                projectionMatrix->SetElement(row, 1, (currentPlaneColumnVector[row]));
+            }
+        }
+        else
+        {
+            if (currentPlaneRowVector[1] > currentPlaneRowVector[2])
+            {
+                //Row = les Y -> Column = les Z
+                int row;
+                for (row = 0; row < 3; row++)
+                {
+                    projectionMatrix->SetElement(row, 1, (currentPlaneRowVector[row]));
+                    projectionMatrix->SetElement(row, 2, (currentPlaneColumnVector[row]));
+                }
+            }
+            else
+            {
+                //Row = les Z -> Column = les X
+                int row;
+                for (row = 0; row < 3; row++)
+                {
+                    projectionMatrix->SetElement(row, 2, (currentPlaneRowVector[row]));
+                    projectionMatrix->SetElement(row, 0, (currentPlaneColumnVector[row]));
+                }
+            }
+        }
+    }
+
+    DEBUG_LOG(QString("currentPlaneRowVector: %1 %2 %3").arg(currentPlaneRowVector[0]).arg(currentPlaneRowVector[1]).arg(currentPlaneRowVector[2]));
+    DEBUG_LOG(QString("currentPlaneColumnVector: %1 %2 %3").arg(currentPlaneColumnVector[0]).arg(currentPlaneColumnVector[1]).arg(currentPlaneColumnVector[2]));
+
+    m_vtkVolume->SetUserMatrix(projectionMatrix);
+    delete currentPlane;
+    projectionMatrix->Delete();
 }
 
 void Q3DViewer::renderRayCasting()
