@@ -726,13 +726,14 @@ void Q3DViewer::setVolumeTransformation()
 {
     // Aquí corretgim el fet que no s'hagi adquirit la imatge en un espai ortogonal
     // \TODO: caldria fer el mateix amb el vtkImageActor del q2Dviewer (veure tiquet #702)
-    ImagePlane *currentPlane = new ImagePlane();
+
     // Sempre penem la primera llesca suposem que és constant
     Image *imageReference = m_mainVolume->getImage(0);
-    currentPlane->fillFromImage(imageReference);
+    ImagePlane currentPlane;
+    currentPlane.fillFromImage(imageReference);
     double currentPlaneRowVector[3], currentPlaneColumnVector[3];
-    currentPlane->getRowDirectionVector(currentPlaneRowVector);
-    currentPlane->getColumnDirectionVector(currentPlaneColumnVector);
+    currentPlane.getRowDirectionVector(currentPlaneRowVector);
+    currentPlane.getColumnDirectionVector(currentPlaneColumnVector);
     // En realitat el vector normal no és el que ens dona la funció getNormalVector, sinó que és perpendicular a l'eix de coordenades
     //currentPlane->getNormalVector(currentPlaneNormalVector);
 
@@ -781,7 +782,7 @@ void Q3DViewer::setVolumeTransformation()
     DEBUG_LOG(QString("currentPlaneColumnVector: %1 %2 %3").arg(currentPlaneColumnVector[0]).arg(currentPlaneColumnVector[1]).arg(currentPlaneColumnVector[2]));
 
     m_vtkVolume->SetUserMatrix(projectionMatrix);
-    delete currentPlane;
+
     projectionMatrix->Delete();
 }
 
