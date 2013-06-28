@@ -171,50 +171,28 @@ QList<DICOMTag> DICOMServiceResponseStatus::getRelatedFields()
     switch (m_statusCode)
     {
         case RefusedOutOfResources:
-            relatedFields << DICOMErrorComment;
-            break;
-
         case RefusedOutOfResourcesUnableToCalculateNumberOfMatches:
-            relatedFields << DICOMErrorComment;
-            break;
-
-        case RefusedOutOfResourcesUnableToPerformSubOperations:
-            relatedFields << DICOMNumberOfCompletedSubOperations << DICOMNumberOfFailedSubOperations << DICOMNumberOfWarningSubOperations;
-            break;
-
         case RefusedMoveDestinationUnknown:
             relatedFields << DICOMErrorComment;
             break;
 
-        case IdentifierDoesNotMatchSOPClass:
-            relatedFields << DICOMOffendingElement << DICOMErrorComment;
-            break;
-
-        case UnableToProcess:
-            relatedFields << DICOMOffendingElement << DICOMErrorComment;
-            break;
-
-        case TerminatedDueToCancelRequest:
-            relatedFields << DICOMNumberOfRemainingSubOperations << DICOMNumberOfCompletedSubOperations << DICOMNumberOfFailedSubOperations 
-                << DICOMNumberOfWarningSubOperations;
-            break;
-
+        case RefusedOutOfResourcesUnableToPerformSubOperations:
         case WarningSubOperationsCompleteOneOrMoreFailures:
+        case Success:
             relatedFields << DICOMNumberOfCompletedSubOperations << DICOMNumberOfFailedSubOperations << DICOMNumberOfWarningSubOperations;
             break;
 
+        case IdentifierDoesNotMatchSOPClass:
+        case UnableToProcess:
         case WarningDatasetDoesNotMatchSOPClass:
         case WarningElementsDiscarded:
             relatedFields << DICOMOffendingElement << DICOMErrorComment;
             break;
-        
+
+        case TerminatedDueToCancelRequest:
         case Pending:
             relatedFields << DICOMNumberOfRemainingSubOperations << DICOMNumberOfCompletedSubOperations << DICOMNumberOfFailedSubOperations 
                 << DICOMNumberOfWarningSubOperations;
-            break;
-
-        case Success:
-            relatedFields << DICOMNumberOfCompletedSubOperations << DICOMNumberOfFailedSubOperations << DICOMNumberOfWarningSubOperations;
             break;
     }
 
