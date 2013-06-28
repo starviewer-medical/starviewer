@@ -727,54 +727,23 @@ void Q3DViewer::setVolumeTransformation()
     Image *imageReference = m_mainVolume->getImage(0);
     ImagePlane currentPlane;
     currentPlane.fillFromImage(imageReference);
-    double currentPlaneRowVector[3], currentPlaneColumnVector[3];
+    double currentPlaneRowVector[3], currentPlaneColumnVector[3], stackDirection[3];
     currentPlane.getRowDirectionVector(currentPlaneRowVector);
     currentPlane.getColumnDirectionVector(currentPlaneColumnVector);
-    // En realitat el vector normal no és el que ens dona la funció getNormalVector, sinó que és perpendicular a l'eix de coordenades
-    //currentPlane->getNormalVector(currentPlaneNormalVector);
+    m_mainVolume->getStackDirection(stackDirection);
 
     DEBUG_LOG(QString("currentPlaneRowVector: %1 %2 %3").arg(currentPlaneRowVector[0]).arg(currentPlaneRowVector[1]).arg(currentPlaneRowVector[2]));
     DEBUG_LOG(QString("currentPlaneColumnVector: %1 %2 %3").arg(currentPlaneColumnVector[0]).arg(currentPlaneColumnVector[1]).arg(currentPlaneColumnVector[2]));
+    DEBUG_LOG(QString("stackDirection: %1 %2 %3").arg(stackDirection[0]).arg(stackDirection[1]).arg(stackDirection[2]));
 
     vtkMatrix4x4 *projectionMatrix = vtkMatrix4x4::New();
     projectionMatrix->Identity();
 
-    if (currentPlaneRowVector[0] != 0.0 || currentPlaneRowVector[1] != 0.0 || currentPlaneRowVector[2] != 0.0)
+    for (int row = 0; row < 3; row++)
     {
-        int row;
-
-        if (currentPlaneRowVector[0] > currentPlaneRowVector[1] || currentPlaneRowVector[0] > currentPlaneRowVector[2])
-        {
-            //Row = les X -> Column = les Y
-            for (row = 0; row < 3; row++)
-            {
-                projectionMatrix->SetElement(row, 0, (currentPlaneRowVector[row]));
-                projectionMatrix->SetElement(row, 1, (currentPlaneColumnVector[row]));
-            }
-        }
-        else
-        {
-            if (currentPlaneRowVector[1] > currentPlaneRowVector[2])
-            {
-                //Row = les Y -> Column = les Z
-                int row;
-                for (row = 0; row < 3; row++)
-                {
-                    projectionMatrix->SetElement(row, 1, (currentPlaneRowVector[row]));
-                    projectionMatrix->SetElement(row, 2, (currentPlaneColumnVector[row]));
-                }
-            }
-            else
-            {
-                //Row = les Z -> Column = les X
-                int row;
-                for (row = 0; row < 3; row++)
-                {
-                    projectionMatrix->SetElement(row, 2, (currentPlaneRowVector[row]));
-                    projectionMatrix->SetElement(row, 0, (currentPlaneColumnVector[row]));
-                }
-            }
-        }
+        projectionMatrix->SetElement(row, 0, currentPlaneRowVector[row]);
+        projectionMatrix->SetElement(row, 1, currentPlaneColumnVector[row]);
+        projectionMatrix->SetElement(row, 2, stackDirection[row]);
     }
 
     m_vtkVolume->SetUserMatrix(projectionMatrix);
