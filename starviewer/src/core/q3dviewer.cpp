@@ -724,10 +724,6 @@ bool Q3DViewer::rescale(Volume *volume)
 
 void Q3DViewer::setVolumeTransformation()
 {
-    // Aquí corretgim el fet que no s'hagi adquirit la imatge en un espai ortogonal
-    // \TODO: caldria fer el mateix amb el vtkImageActor del q2Dviewer (veure tiquet #702)
-
-    // Sempre penem la primera llesca suposem que és constant
     Image *imageReference = m_mainVolume->getImage(0);
     ImagePlane currentPlane;
     currentPlane.fillFromImage(imageReference);
