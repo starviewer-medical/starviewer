@@ -1083,6 +1083,18 @@ void Q2DViewer::setOverlayOpacity(double opacity)
 
 void Q2DViewer::resetView(CameraOrientationType view)
 {
+    // First we compute which slab thickness should be applied after the view has been reseted
+    int desiredSlabSlices = 1;
+    if (isThickSlabActive())
+    {
+        // In case thick slab is enabled, we should keep the slice thickness, 
+        // so the proper number of slices of the thick slab should be computed for the new view
+        double currentSlabThickness = getCurrentSliceThickness();
+        int viewIndex = getZIndexForView(view);
+        double zSpacingAfterReset = m_mainVolume->getSpacing()[viewIndex];
+        desiredSlabSlices = qRound(currentSlabThickness / zSpacingAfterReset);
+    }
+    
     // Important, cal desactivar el thickslab abans de fer m_lastView = view, sinó falla amb l'update extent
     enableThickSlab(false);
     m_lastView = view;
@@ -1125,6 +1137,8 @@ void Q2DViewer::resetView(CameraOrientationType view)
     
     // Thick Slab, li indiquem la direcció de projecció actual
     m_thickSlabProjectionFilter->SetProjectionDimension(m_lastView);
+    setSlabThickness(desiredSlabSlices);
+
     emit viewChanged(m_lastView);
 }
 
