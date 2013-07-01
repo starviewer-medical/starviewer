@@ -233,10 +233,11 @@ void QThickSlabWidget::onViewChanged()
         return;
     }
 
+    updateMaximumThickness();
+    
     // Quan canviem de vista, sempre que tinguem la opció marcada, mantenim el thickness màxim per aquella vista
     if (m_maximumThicknessCheckBox->isChecked())
     {
-        updateMaximumThickness();
         // Cal forçar que es faci el thickSlab des del viewer, ja que si canviem de vista i el nombre de llesques
         // a renderitzar és el mateix, no s'emetrà la senyal "valueChanged()" de l'slider i no s'aplicarà el thickSlab
         m_currentViewer->setSlabThickness(m_currentViewer->getMaximumSlice() + 1);
@@ -244,7 +245,16 @@ void QThickSlabWidget::onViewChanged()
     }
     else
     {
-        m_projectionModeComboBox->setCurrentIndex(0);
+        int currentSlabThickness = m_currentViewer->getSlabThickness();
+        if (currentSlabThickness > 1)
+        {
+            // Update the value of the slider with the current slab thickness
+            m_slabThicknessSlider->setValue(m_currentViewer->getSlabThickness());
+        }
+        else
+        {
+            m_projectionModeComboBox->setCurrentIndex(0);
+        }
     }
 }
 
