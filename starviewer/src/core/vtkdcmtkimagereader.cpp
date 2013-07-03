@@ -46,45 +46,45 @@ private:
     int m_newScalarType;
 };
 
+// Reads the tag from the given functional groups sequence. Returns null string if it hasn't read.
+QString getTagValueFromFunctionalGroupsSequence(DICOMSequenceAttribute *functionalGroupsSequence, int index, const DICOMTag &sequenceTag, const DICOMTag &tag)
+{
+    QString value;
+
+    if (functionalGroupsSequence)
+    {
+        if (index < functionalGroupsSequence->getItems().size())
+        {
+            DICOMSequenceItem *item = functionalGroupsSequence->getItems().at(index);
+            DICOMSequenceAttribute *sequence = item->getSequenceAttribute(sequenceTag);
+
+            if (sequence)
+            {
+                if (!sequence->getItems().isEmpty())
+                {
+                    DICOMSequenceItem *sequenceItem = sequence->getItems().first();
+                    DICOMValueAttribute *valueAttribute = sequenceItem->getValueAttribute(tag);
+
+                    if (valueAttribute)
+                    {
+                        value = valueAttribute->getValueAsQString();
+                    }
+                }
+            }
+        }
+    }
+
+    return value;
+};
+
 // Reads and returns the value of a tag from the given DICOM tag reader. It first tries to read the tag from the per-frame functional groups sequence (from the
 // item at the given index); if not found, it tries to read the tag from the shared functional groups sequence; if not found, it tries to read the tag from the
 // root; if not found, it returns a null QString. The sequence tag selects the sequence inside the functional groups sequences where the tag has to be searched.
 QString getTagValue(const DICOMTagReader &dicomTagReader, int index, const DICOMTag &sequenceTag, const DICOMTag &tag)
 {
-    // Reads the tag from the given functional groups sequence. Returns null string if it hasn't read.
-    auto getTagValueFromFunctionalGroupsSequence = [&](DICOMSequenceAttribute *functionalGroupsSequence) -> QString
-    {
-        QString value;
-        
-        if (functionalGroupsSequence)
-        {
-            if (index < functionalGroupsSequence->getItems().size())
-            {
-                DICOMSequenceItem *item = functionalGroupsSequence->getItems().at(index);
-                DICOMSequenceAttribute *sequence = item->getSequenceAttribute(sequenceTag);
-
-                if (sequence)
-                {
-                    if (!sequence->getItems().isEmpty())
-                    {
-                        DICOMSequenceItem *sequenceItem = sequence->getItems().first();
-                        DICOMValueAttribute *valueAttribute = sequenceItem->getValueAttribute(tag);
-
-                        if (valueAttribute)
-                        {
-                            value = valueAttribute->getValueAsQString();
-                        }
-                    }
-                }
-            }
-        }
-
-        return value;
-    };
-
     // Try to read from the per-frame functional groups sequence
     DICOMSequenceAttribute *sequence = dicomTagReader.getSequenceAttribute(DICOMPerFrameFunctionalGroupsSequence);
-    QString value = getTagValueFromFunctionalGroupsSequence(sequence);
+    QString value = getTagValueFromFunctionalGroupsSequence(sequence, index, sequenceTag, tag);
     if (!value.isNull())
     {
         return value;
@@ -93,7 +93,7 @@ QString getTagValue(const DICOMTagReader &dicomTagReader, int index, const DICOM
     // Try to read from the shared functional groups sequence
     sequence = dicomTagReader.getSequenceAttribute(DICOMSharedFunctionalGroupsSequence);
     index = 0;
-    value = getTagValueFromFunctionalGroupsSequence(sequence);
+    value = getTagValueFromFunctionalGroupsSequence(sequence, index, sequenceTag, tag);
     if (!value.isNull())
     {
         return value;
@@ -199,17 +199,17 @@ QSharedPointer<DcmDataset> getDataset(const char *filename)
     return QSharedPointer<DcmDataset>(dicomFile.getAndRemoveDataset());
 }
 
+const char* booleanToString(bool b)
+{
+    return b ? "yes" : "no";
+};
+
 } // namespace
 
 vtkStandardNewMacro(VtkDcmtkImageReader);
 
 void VtkDcmtkImageReader::PrintSelf(std::ostream &os, vtkIndent indent)
 {
-    auto booleanToString = [](bool b) -> const char*
-    {
-        return b ? "yes" : "no";
-    };
-
     this->Superclass::PrintSelf(os, indent);
 
     os << indent << "Is multiframe: " << booleanToString(m_isMultiframe) << "\n";

@@ -95,7 +95,7 @@ void test_ImageFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffer
 
         for (int i = 0; i < 10; i++)
         {
-            auto *reader = createReader(i);
+            TestingDICOMTagReader *reader = createReader(i);
             reader->addTag(DICOMRows, 256);
             reader->addTag(DICOMColumns, 256);
             readers.append(reader);
@@ -112,7 +112,7 @@ void test_ImageFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffer
 
         for (int i = 0; i < 1; i++)
         {
-            auto *reader = createReader(i);
+            TestingDICOMTagReader *reader = createReader(i);
             reader->addTag(DICOMRows, 256);
             reader->addTag(DICOMColumns, 256);
             readers.append(reader);
@@ -121,7 +121,7 @@ void test_ImageFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffer
 
         for (int i = 1; i < 3; i++)
         {
-            auto *reader = createReader(i);
+            TestingDICOMTagReader *reader = createReader(i);
             reader->addTag(DICOMRows, 256);
             reader->addTag(DICOMColumns, 512);
             readers.append(reader);
@@ -130,7 +130,7 @@ void test_ImageFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffer
 
         for (int i = 3; i < 6; i++)
         {
-            auto *reader = createReader(i);
+            TestingDICOMTagReader *reader = createReader(i);
             reader->addTag(DICOMRows, 512);
             reader->addTag(DICOMColumns, 512);
             readers.append(reader);
@@ -139,7 +139,7 @@ void test_ImageFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffer
 
         for (int i = 6; i < 10; i++)
         {
-            auto *reader = createReader(i);
+            TestingDICOMTagReader *reader = createReader(i);
             reader->addTag(DICOMRows, 256);
             reader->addTag(DICOMColumns, 256);
             readers.append(reader);
@@ -170,7 +170,7 @@ void test_ImageFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffer
 
         for (int i = 0; i < 10; i++)
         {
-            auto *reader = createReader(i);
+            TestingDICOMTagReader *reader = createReader(i);
             reader->addTag(DICOMPhotometricInterpretation, "MONOCHROME2");
             readers.append(reader);
             volumeNumberInSeries.append(100);
@@ -186,7 +186,7 @@ void test_ImageFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffer
 
         for (int i = 0; i < 4; i++)
         {
-            auto *reader = createReader(i);
+            TestingDICOMTagReader *reader = createReader(i);
             reader->addTag(DICOMPhotometricInterpretation, "MONOCHROME2");
             readers.append(reader);
             volumeNumberInSeries.append(100);
@@ -194,7 +194,7 @@ void test_ImageFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffer
 
         for (int i = 4; i < 10; i++)
         {
-            auto *reader = createReader(i);
+            TestingDICOMTagReader *reader = createReader(i);
             reader->addTag(DICOMPhotometricInterpretation, "RGB");
             readers.append(reader);
             volumeNumberInSeries.append(101);
@@ -210,7 +210,7 @@ void test_ImageFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffer
 
         for (int i = 0; i < 4; i++)
         {
-            auto *reader = createReader(i);
+            TestingDICOMTagReader *reader = createReader(i);
             reader->addTag(DICOMPhotometricInterpretation, "MONOCHROME2");
             readers.append(reader);
             volumeNumberInSeries.append(100);
@@ -218,7 +218,7 @@ void test_ImageFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffer
 
         for (int i = 4; i < 7; i++)
         {
-            auto *reader = createReader(i);
+            TestingDICOMTagReader *reader = createReader(i);
             reader->addTag(DICOMPhotometricInterpretation, "RGB");
             readers.append(reader);
             volumeNumberInSeries.append(101);
@@ -226,7 +226,7 @@ void test_ImageFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffer
         
         for (int i = 7; i < 10; i++)
         {
-            auto *reader = createReader(i);
+            TestingDICOMTagReader *reader = createReader(i);
             reader->addTag(DICOMPhotometricInterpretation, "MONOCHROME2");
             readers.append(reader);
             volumeNumberInSeries.append(102);
@@ -256,7 +256,7 @@ void test_ImageFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffer
 
         for (int i = 0; i < 10; i++)
         {
-            auto *reader = createReader(i);
+            TestingDICOMTagReader *reader = createReader(i);
             reader->addTag(DICOMPixelSpacing, "1\\1");
             readers.append(reader);
             volumeNumberInSeries.append(100);
@@ -272,7 +272,7 @@ void test_ImageFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffer
 
         for (int i = 0; i < 4; i++)
         {
-            auto *reader = createReader(i);
+            TestingDICOMTagReader *reader = createReader(i);
             reader->addTag(DICOMPixelSpacing, "1\\1");
             readers.append(reader);
             volumeNumberInSeries.append(100);
@@ -280,7 +280,7 @@ void test_ImageFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffer
 
         for (int i = 4; i < 10; i++)
         {
-            auto *reader = createReader(i);
+            TestingDICOMTagReader *reader = createReader(i);
             reader->addTag(DICOMPixelSpacing, "0.5\\0.5");
             readers.append(reader);
             volumeNumberInSeries.append(101);
@@ -296,7 +296,7 @@ void test_ImageFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffer
 
         for (int i = 0; i < 4; i++)
         {
-            auto *reader = createReader(i);
+            TestingDICOMTagReader *reader = createReader(i);
             reader->addTag(DICOMPixelSpacing, "1\\1");
             readers.append(reader);
             volumeNumberInSeries.append(100);
@@ -304,7 +304,7 @@ void test_ImageFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffer
 
         for (int i = 4; i < 7; i++)
         {
-            auto *reader = createReader(i);
+            TestingDICOMTagReader *reader = createReader(i);
             reader->addTag(DICOMPixelSpacing, "0.5\\0.5");
             readers.append(reader);
             volumeNumberInSeries.append(101);
@@ -312,7 +312,7 @@ void test_ImageFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffer
         
         for (int i = 7; i < 10; i++)
         {
-            auto *reader = createReader(i);
+            TestingDICOMTagReader *reader = createReader(i);
             reader->addTag(DICOMPixelSpacing, "1\\1");
             readers.append(reader);
             volumeNumberInSeries.append(102);
@@ -1115,7 +1115,7 @@ void test_ImageFillerStep::fillIndividually_ShouldFillEstimatedRadiographicMagni
 
 TestingDICOMTagReader* test_ImageFillerStep::createReader(int i, const QString &modality, const QString &SOPClassUID)
 {
-    auto *reader = new TestingDICOMTagReader();
+    TestingDICOMTagReader *reader = new TestingDICOMTagReader();
     reader->addTag(DICOMPixelData);
     reader->addTag(DICOMSOPClassUID, SOPClassUID);
     reader->addTag(DICOMSOPInstanceUID, i);
@@ -1134,7 +1134,7 @@ void test_ImageFillerStep::checkVolumeNumberInSeries()
     ImageFillerStep step;
     step.setInput(input);
 
-    foreach (auto *reader, readers)
+    foreach (TestingDICOMTagReader *reader, readers)
     {
         input->setDICOMFile(reader);
         QCOMPARE(step.fillIndividually(), true);
