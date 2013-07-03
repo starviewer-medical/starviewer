@@ -10,12 +10,9 @@
 
 using namespace udg;
 
-namespace {
+namespace udg{
 
-uint qHash(const DICOMTag &tag)
-{
-    return qHash(qMakePair(tag.getGroup(), tag.getElement()));
-}
+uint qHash(const DICOMTag &tag);
 
 }
 

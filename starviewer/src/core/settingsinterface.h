@@ -12,7 +12,7 @@ namespace udg {
 class SettingsInterface {
 
 public:
-    virtual ~SettingsInterface() = 0 {};
+    virtual ~SettingsInterface() {}
 
     /// Returns the value of the setting identified by the given key. If the value is not set, returs the default value of the setting.
     virtual QVariant getValue(const QString &key) const = 0;

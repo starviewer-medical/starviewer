@@ -1,6 +1,8 @@
 #ifndef VOLUMEPIXELDATAITERATOR_H
 #define VOLUMEPIXELDATAITERATOR_H
 
+#include <cstddef>
+
 namespace udg {
 
 class VolumePixelData;

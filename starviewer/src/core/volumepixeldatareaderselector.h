@@ -13,7 +13,7 @@ class Volume;
 class VolumePixelDataReaderSelector {
 
 public:
-    virtual ~VolumePixelDataReaderSelector() = 0 {}
+    virtual ~VolumePixelDataReaderSelector() {}
 
     /// Chooses and returns the reader implementation most suitable to the given volume.
     virtual VolumePixelDataReaderFactory::PixelDataReaderType selectVolumePixelDataReader(Volume *volume) const = 0;

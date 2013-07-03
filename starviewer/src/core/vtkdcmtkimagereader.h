@@ -1,6 +1,8 @@
 #ifndef VTKDCMTKIMAGEREADER_H
 #define VTKDCMTKIMAGEREADER_H
 
+#include <stdexcept>
+
 #include <vtkImageReader2.h>
 
 #include <QList>
