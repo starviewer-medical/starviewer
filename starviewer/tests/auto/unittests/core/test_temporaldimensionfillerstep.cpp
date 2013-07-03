@@ -72,7 +72,7 @@ void test_TemporalDimensionFillerStep::postProcessing_ShouldSetSinglePhaseWhenTh
 {
     QTest::addColumn<QSharedPointer<TestingTemporalDimensionFillerStep>>("step");
 
-    auto step = createStep(10, [](int) { return 10; });
+    QSharedPointer<TestingTemporalDimensionFillerStep> step = createStep(10, [](int) { return 10; });
     (*step->TemporalDimensionInternalInfo.begin())->value(0)->multipleAcquisitionNumber = true; // set multipleAcquisitionNumber to true for volume 0
     QTest::newRow("multiple acquisition numbers") << step;
 }
@@ -86,7 +86,7 @@ void test_TemporalDimensionFillerStep::postProcessing_ShouldSetSinglePhaseWhenTh
 {
     QTest::addColumn<QSharedPointer<TestingTemporalDimensionFillerStep>>("step");
 
-    auto step = createStep(10, [](int) { return 10; });
+    QSharedPointer<TestingTemporalDimensionFillerStep> step = createStep(10, [](int) { return 10; });
     delete (*step->TemporalDimensionInternalInfo.begin())->take(0); // esborrem el VolumeInfo del volum 0
     QTest::newRow("volume not processed") << step;
 }
@@ -101,7 +101,7 @@ QSharedPointer<TestingTemporalDimensionFillerStep> test_TemporalDimensionFillerS
                                                                                                 const Function &numberOfPhasesForSlice)
 {
     Series *series = new Series(this);
-    auto *volumeInfo = new TestingTemporalDimensionFillerStep::VolumeInfo();
+    TestingTemporalDimensionFillerStep::VolumeInfo *volumeInfo = new TestingTemporalDimensionFillerStep::VolumeInfo();
     volumeInfo->numberOfPhases = numberOfPhasesForSlice(0);
     volumeInfo->multipleAcquisitionNumber = false;
 
@@ -120,10 +120,10 @@ QSharedPointer<TestingTemporalDimensionFillerStep> test_TemporalDimensionFillerS
         volumeInfo->phasesPerPositionHash.insert(QString("0\\0\\%1").arg(i), numberOfPhases);
     }
 
-    auto *volumeHash = new QHash<int, TestingTemporalDimensionFillerStep::VolumeInfo*>();
+    QHash<int, TestingTemporalDimensionFillerStep::VolumeInfo*> *volumeHash = new QHash<int, TestingTemporalDimensionFillerStep::VolumeInfo*>();
     volumeHash->insert(0, volumeInfo);
 
-    auto step = QSharedPointer<TestingTemporalDimensionFillerStep>(new TestingTemporalDimensionFillerStep());
+    QSharedPointer<TestingTemporalDimensionFillerStep> step(new TestingTemporalDimensionFillerStep());
     step->TemporalDimensionInternalInfo.insert(series, volumeHash);
 
     return step;
@@ -134,7 +134,7 @@ void test_TemporalDimensionFillerStep::testPostProcessing(const Function &expect
 {
     QFETCH(QSharedPointer<TestingTemporalDimensionFillerStep>, step);
 
-    auto seriesList = step->TemporalDimensionInternalInfo.keys();
+    QList<Series*> seriesList = step->TemporalDimensionInternalInfo.keys();
 
     step->postProcessing();
 

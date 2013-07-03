@@ -55,11 +55,11 @@ void test_VtkImageDataCreator::createVtkImageData_ShouldReturnExpectedVtkImageDa
         ushortData[i] = i;
     }
 
-    auto imageDataCreator = QSharedPointer<VtkImageDataCreator>(new VtkImageDataCreator());
+    QSharedPointer<VtkImageDataCreator> imageDataCreator(new VtkImageDataCreator());
     imageDataCreator->setOrigin(origin);
     imageDataCreator->setSpacing(spacing);
 
-    auto expectedUcharVtkImageData = vtkSmartPointer<vtkImageData>::New();
+    vtkSmartPointer<vtkImageData> expectedUcharVtkImageData = vtkSmartPointer<vtkImageData>::New();
     expectedUcharVtkImageData->SetOrigin(origin);
     expectedUcharVtkImageData->SetSpacing(spacing);
     expectedUcharVtkImageData->SetExtent(0, width - 1, 0, height - 1, 0, depth - 1);
@@ -68,7 +68,7 @@ void test_VtkImageDataCreator::createVtkImageData_ShouldReturnExpectedVtkImageDa
     expectedUcharVtkImageData->AllocateScalars();
     memcpy(expectedUcharVtkImageData->GetScalarPointer(), ucharData.constData(), size * sizeof(unsigned char));
 
-    auto expectedUshortVtkImageData = vtkSmartPointer<vtkImageData>::New();
+    vtkSmartPointer<vtkImageData> expectedUshortVtkImageData = vtkSmartPointer<vtkImageData>::New();
     expectedUshortVtkImageData->SetOrigin(origin);
     expectedUshortVtkImageData->SetSpacing(spacing);
     expectedUshortVtkImageData->SetExtent(0, width - 1, 0, height - 1, 0, depth - 1);

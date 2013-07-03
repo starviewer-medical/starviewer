@@ -1134,32 +1134,36 @@ DCMTKFileReader
   return rval;
 }
 
+namespace {
+
+int getFromFunctionalGroupsSequence(DCMTKSequence &functionalGroupsSequence, int itemIndex, double &slope, double &intercept)
+{
+    DCMTKItem item;
+    int rval = functionalGroupsSequence.GetElementItem(itemIndex, item, false);
+
+    if (rval == EXIT_SUCCESS)
+    {
+        DCMTKSequence pixelValueTransformationSequence;
+        rval = item.GetElementSQ(0x0028, 0x9145, pixelValueTransformationSequence, false);
+
+        if (rval == EXIT_SUCCESS)
+        {
+            rval = pixelValueTransformationSequence.GetElementDS<double>(0x0028, 0x1053, 1, &slope, false);
+            rval = pixelValueTransformationSequence.GetElementDS<double>(0x0028, 0x1052, 1, &intercept, false);
+        }
+    }
+
+    return rval;
+};
+
+}
+
 int
 DCMTKFileReader
 ::GetSlopeIntercept(double &slope, double &intercept)
 {
     slope = 1.0;
     intercept = 0.0;
-
-    auto getFromFunctionalGroupsSequence = [&](DCMTKSequence &functionalGroupsSequence, int itemIndex) -> int
-    {
-        DCMTKItem item;
-        int rval = functionalGroupsSequence.GetElementItem(itemIndex, item, false);
-
-        if (rval == EXIT_SUCCESS)
-        {
-            DCMTKSequence pixelValueTransformationSequence;
-            rval = item.GetElementSQ(0x0028, 0x9145, pixelValueTransformationSequence, false);
-
-            if (rval == EXIT_SUCCESS)
-            {
-                rval = pixelValueTransformationSequence.GetElementDS<double>(0x0028, 0x1053, 1, &slope, false);
-                rval = pixelValueTransformationSequence.GetElementDS<double>(0x0028, 0x1052, 1, &intercept, false);
-            }
-        }
-
-        return rval;
-    };
 
     int rval = this->GetElementDS<double>(0x0028, 0x1053, 1, &slope, false);
     rval = this->GetElementDS<double>(0x0028, 0x1052, 1, &intercept, false);
@@ -1171,7 +1175,7 @@ DCMTKFileReader
 
         if (rval == EXIT_SUCCESS)
         {
-            rval = getFromFunctionalGroupsSequence(sharedFunctionalGroupsSequence, 0);
+            rval = getFromFunctionalGroupsSequence(sharedFunctionalGroupsSequence, 0, slope, intercept);
         }
     }
 
@@ -1182,7 +1186,7 @@ DCMTKFileReader
 
         if (rval == EXIT_SUCCESS)
         {
-            rval = getFromFunctionalGroupsSequence(perFrameFunctionalGroupsSequence, 0);
+            rval = getFromFunctionalGroupsSequence(perFrameFunctionalGroupsSequence, 0, slope, intercept);
         }
     }
 
@@ -1294,6 +1298,29 @@ DCMTKFileReader
   return EXIT_SUCCESS;
 }
 
+namespace {
+
+int getFromFunctionalGroupsSequence(DCMTKSequence &functionalGroupsSequence, int itemIndex, double _spacing[3])
+{
+    DCMTKItem item;
+    int rval = functionalGroupsSequence.GetElementItem(itemIndex, item, false);
+
+    if (rval == EXIT_SUCCESS)
+    {
+        DCMTKSequence pixelMeasuresSequence;
+        rval = item.GetElementSQ(0x0028, 0x9110, pixelMeasuresSequence, false);
+
+        if (rval == EXIT_SUCCESS)
+        {
+            rval = pixelMeasuresSequence.GetElementDS<double>(0x0028, 0x0030, 2, _spacing, false);
+        }
+    }
+
+    return rval;
+};
+
+}
+
 int
 DCMTKFileReader
 ::GetSpacing(double *spacing)
@@ -1303,25 +1330,6 @@ DCMTKFileReader
     // Imager Pixel spacing is inter-pixel spacing at the sensor front plane.
 
     double _spacing[3] = { 1.0, 1.0, 1.0 };
-
-    auto getFromFunctionalGroupsSequence = [&](DCMTKSequence &functionalGroupsSequence, int itemIndex) -> int
-    {
-        DCMTKItem item;
-        int rval = functionalGroupsSequence.GetElementItem(itemIndex, item, false);
-
-        if (rval == EXIT_SUCCESS)
-        {
-            DCMTKSequence pixelMeasuresSequence;
-            rval = item.GetElementSQ(0x0028, 0x9110, pixelMeasuresSequence, false);
-
-            if (rval == EXIT_SUCCESS)
-            {
-                rval = pixelMeasuresSequence.GetElementDS<double>(0x0028, 0x0030, 2, _spacing, false);
-            }
-        }
-
-        return rval;
-    };
 
     // Pixel spacing
     int rval = this->GetElementDS<double>(0x0028, 0x0030, 2, _spacing, false);
@@ -1333,7 +1341,7 @@ DCMTKFileReader
 
         if (rval == EXIT_SUCCESS)
         {
-            rval = getFromFunctionalGroupsSequence(sharedFunctionalGroupsSequence, 0);
+            rval = getFromFunctionalGroupsSequence(sharedFunctionalGroupsSequence, 0, _spacing);
         }
     }
 
@@ -1344,7 +1352,7 @@ DCMTKFileReader
 
         if (rval == EXIT_SUCCESS)
         {
-            rval = getFromFunctionalGroupsSequence(perFrameFunctionalGroupsSequence, 0);
+            rval = getFromFunctionalGroupsSequence(perFrameFunctionalGroupsSequence, 0, _spacing);
         }
     }
 
