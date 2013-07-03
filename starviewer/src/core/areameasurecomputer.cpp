@@ -54,7 +54,7 @@ double AreaMeasureComputer::computeMeasureExplicit(double dataSpacing[3], const 
         area += (p1[xIndex] + p2[xIndex]) * (p1[yIndex] - p2[yIndex]);
     }
     
-    return std::abs(area) * 0.5;
+    return qAbs(area) * 0.5;
 }
 
 int AreaMeasureComputer::getMeasureDimensions()

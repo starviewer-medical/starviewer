@@ -52,7 +52,7 @@ double WindowLevel::getCenter() const
 
 bool WindowLevel::isValid() const
 {
-    if (std::abs(m_width) < 1.0)
+    if (qAbs(m_width) < 1.0)
     {
         return false;
     }

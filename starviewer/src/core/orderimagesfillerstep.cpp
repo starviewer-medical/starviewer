@@ -463,7 +463,7 @@ void OrderImagesFillerStep::setOrderedImagesIntoSeries(Series *series)
                         int pos = (imagePositionSet->size())-1;
                         double key = imagePositionSet->keys().at(pos);
                         Image *lastImage = (*(imagePositionSet->value(key))->begin());
-                        double distanceToFirstImage = fabs(Image::distance(lastImage)-distance);
+                        double distanceToFirstImage = qAbs(Image::distance(lastImage)-distance);
                         if (distanceToFirstImage > 1.0) 
                         {
                             isRotational = false;
