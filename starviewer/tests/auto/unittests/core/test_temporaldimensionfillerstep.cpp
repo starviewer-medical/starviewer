@@ -4,9 +4,6 @@
 #include "image.h"
 #include "series.h"
 
-#include <functional>
-
-using namespace std;
 using namespace udg;
 
 class TestingTemporalDimensionFillerStep : public TemporalDimensionFillerStep {
@@ -34,8 +31,10 @@ private slots:
 
 private:
 
-    QSharedPointer<TestingTemporalDimensionFillerStep> createStep(int numberOfSlices, const function<int(int)> &numberOfPhasesForSlice);
-    void testPostProcessing(const function<int(int)> &expectedPhaseNumber);
+    template <typename Function>
+    QSharedPointer<TestingTemporalDimensionFillerStep> createStep(int numberOfSlices, const Function &numberOfPhasesForSlice);
+    template <typename Function>
+    void testPostProcessing(const Function &expectedPhaseNumber);
 
 };
 
@@ -97,8 +96,9 @@ void test_TemporalDimensionFillerStep::postProcessing_ShouldSetSinglePhaseWhenTh
     testPostProcessing([](int) { return 0; });
 }
 
+template <typename Function>
 QSharedPointer<TestingTemporalDimensionFillerStep> test_TemporalDimensionFillerStep::createStep(int numberOfSlices,
-                                                                                                const function<int(int)> &numberOfPhasesForSlice)
+                                                                                                const Function &numberOfPhasesForSlice)
 {
     Series *series = new Series(this);
     auto *volumeInfo = new TestingTemporalDimensionFillerStep::VolumeInfo();
@@ -129,7 +129,8 @@ QSharedPointer<TestingTemporalDimensionFillerStep> test_TemporalDimensionFillerS
     return step;
 }
 
-void test_TemporalDimensionFillerStep::testPostProcessing(const function<int(int)> &expectedPhaseNumber)
+template <typename Function>
+void test_TemporalDimensionFillerStep::testPostProcessing(const Function &expectedPhaseNumber)
 {
     QFETCH(QSharedPointer<TestingTemporalDimensionFillerStep>, step);
 
