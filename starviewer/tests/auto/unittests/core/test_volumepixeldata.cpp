@@ -52,7 +52,7 @@ void test_VolumePixelData::constructor_ShouldCreateDefaultVtkData()
 void test_VolumePixelData::setData_itk_ShouldCreateExpectedVtkData_data()
 {
     QTest::addColumn<VolumePixelData::ItkImageTypePointer>("itkData");
-    QTest::addColumn<vtkSmartPointer<vtkImageData>>("expectedVtkData");
+    QTest::addColumn< vtkSmartPointer<vtkImageData> >("expectedVtkData");
 
     {
         VolumePixelData::ItkImageTypePointer itkData = VolumePixelData::ItkImageType::New();
@@ -116,7 +116,7 @@ void test_VolumePixelData::setData_itk_ShouldCreateExpectedVtkData()
 
 void test_VolumePixelData::setData_vtk_ShouldSetDataCorrectly_data()
 {
-    QTest::addColumn<vtkSmartPointer<vtkImageData>>("vtkData");
+    QTest::addColumn< vtkSmartPointer<vtkImageData> >("vtkData");
 
     QTest::newRow("null") << vtkSmartPointer<vtkImageData>();
     QTest::newRow("not null") << vtkSmartPointer<vtkImageData>::New();

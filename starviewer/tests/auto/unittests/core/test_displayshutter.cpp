@@ -420,7 +420,7 @@ void test_DisplayShutter::getAsVtkImageData_ReturnsExpectedValues_data()
     QTest::addColumn<int>("width");
     QTest::addColumn<int>("height");
     QTest::addColumn<int>("slice");
-    QTest::addColumn<vtkSmartPointer<vtkImageData>>("expectedVtkImageData");
+    QTest::addColumn< vtkSmartPointer<vtkImageData> >("expectedVtkImageData");
 
     VtkImageDataCreator creator;
 

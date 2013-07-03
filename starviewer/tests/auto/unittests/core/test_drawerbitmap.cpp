@@ -176,7 +176,7 @@ void test_DrawerBitmap::getAsVtkProp_ShouldReturnNull()
 void test_DrawerBitmap::getAsVtkProp_ShouldReturnPropLikeExpected_data()
 {
     QTest::addColumn<DrawerBitmap*>("drawerBitmap");
-    QTest::addColumn<vtkSmartPointer<vtkImageActor>>("expectedProp");
+    QTest::addColumn< vtkSmartPointer<vtkImageActor> >("expectedProp");
 
     double origin[3] = { 1.0, 2.0, 3.0 };
     double spacing[3] = { 0.5, 0.5, 2.5 };

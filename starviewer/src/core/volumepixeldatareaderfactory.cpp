@@ -53,9 +53,9 @@ VolumePixelDataReader* VolumePixelDataReaderFactory::getReader() const
     return reader;
 }
 
-QQueue<QSharedPointer<Postprocessor>> VolumePixelDataReaderFactory::getPostprocessors() const
+QQueue< QSharedPointer<Postprocessor> > VolumePixelDataReaderFactory::getPostprocessors() const
 {
-    QQueue<QSharedPointer<Postprocessor>> postprocessors;
+    QQueue< QSharedPointer<Postprocessor> > postprocessors;
 
     switch (m_chosenReaderType)
     {

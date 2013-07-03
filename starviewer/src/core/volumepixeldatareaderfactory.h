@@ -27,7 +27,7 @@ public:
     VolumePixelDataReader* getReader() const;
 
     /// Returns the queue of postprocessors corresponding to the chosen reader implementation.
-    QQueue<QSharedPointer<Postprocessor>> getPostprocessors() const;
+    QQueue< QSharedPointer<Postprocessor> > getPostprocessors() const;
 
 private:
     /// Chooses and returns the reader implementation most suitable to the given volume.

@@ -176,7 +176,7 @@ void test_Volume::setData_itk_ShouldBehaveAsExpected()
 
 void test_Volume::setData_vtk_ShouldBehaveAsExpected_data()
 {
-    QTest::addColumn<vtkSmartPointer<vtkImageData>>("vtkData");
+    QTest::addColumn< vtkSmartPointer<vtkImageData> >("vtkData");
     QTest::addColumn<bool>("pixelDataLoaded");
 
     QTest::newRow("null") << vtkSmartPointer<vtkImageData>() << false;
@@ -642,7 +642,7 @@ void test_Volume::getPhaseImages_ShouldReturnExpectedPhaseImages_data()
 {
     QTest::addColumn<Volume*>("volume");
     QTest::addColumn<int>("phase");
-    QTest::addColumn<QList<Image*>>("phaseImages");
+    QTest::addColumn< QList<Image*> >("phaseImages");
 
     Volume *volumeWithPhases = VolumeTestHelper::createVolume(6, 2, 3);
     QList<Image*> images_1 = volumeWithPhases->getImages();
@@ -878,7 +878,7 @@ void test_Volume::setPhases_ShouldSetValidPhasesValue()
 void test_Volume::addImage_ShouldAddValidImages_data()
 {
     QTest::addColumn<Volume*>("volume");
-    QTest::addColumn<QList<Image*>>("images");
+    QTest::addColumn< QList<Image*> >("images");
     QTest::addColumn<bool>("loaded");
 
     Volume *volumeWithTwoDifferentImages = VolumeTestHelper::createVolume();
@@ -910,7 +910,7 @@ void test_Volume::addImage_ShouldAddValidImages()
 void test_Volume::setImages_ShouldAddImageList_data()
 {
     QTest::addColumn<Volume*>("volume");
-    QTest::addColumn<QList<Image*>>("images");
+    QTest::addColumn< QList<Image*> >("images");
     QTest::addColumn<bool>("loaded");
 
 
@@ -1158,7 +1158,7 @@ void test_Volume::getScalarPointer_ShouldReturnCorrectScalarPointer()
 
 void test_Volume::isMultiframe_ShouldReturnTrueForMultiframeVolumes_data()
 {
-    QTest::addColumn<QSharedPointer<Volume>>("volume");
+    QTest::addColumn< QSharedPointer<Volume> >("volume");
     QTest::addColumn<bool>("isMultiframe");
 
     QTest::newRow("singleframe 1 image") << QSharedPointer<Volume>(VolumeTestHelper::createVolume(1)) << false;

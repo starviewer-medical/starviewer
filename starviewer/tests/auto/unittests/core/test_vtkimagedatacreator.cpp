@@ -32,14 +32,14 @@ void test_VtkImageDataCreator::createVtkImageData_ShouldReturnNull()
 
 void test_VtkImageDataCreator::createVtkImageData_ShouldReturnExpectedVtkImageData_data()
 {
-    QTest::addColumn<QSharedPointer<VtkImageDataCreator>>("imageDataCreator");
+    QTest::addColumn< QSharedPointer<VtkImageDataCreator> >("imageDataCreator");
     QTest::addColumn<int>("width");
     QTest::addColumn<int>("height");
     QTest::addColumn<int>("depth");
-    QTest::addColumn<QVector<unsigned char>>("ucharData");
-    QTest::addColumn<QVector<unsigned short>>("ushortData");
-    QTest::addColumn<vtkSmartPointer<vtkImageData>>("expectedUcharVtkImageData");
-    QTest::addColumn<vtkSmartPointer<vtkImageData>>("expectedUshortVtkImageData");
+    QTest::addColumn< QVector<unsigned char> >("ucharData");
+    QTest::addColumn< QVector<unsigned short> >("ushortData");
+    QTest::addColumn< vtkSmartPointer<vtkImageData> >("expectedUcharVtkImageData");
+    QTest::addColumn< vtkSmartPointer<vtkImageData> >("expectedUshortVtkImageData");
 
     double origin[3] = { 1.0, 2.0, 3.0 };
     double spacing[3] = { 0.5, 0.5, 2.5 };

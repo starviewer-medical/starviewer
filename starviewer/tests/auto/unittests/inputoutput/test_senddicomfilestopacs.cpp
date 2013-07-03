@@ -22,7 +22,7 @@ Q_DECLARE_METATYPE(PACSRequestStatus::SendRequestStatus)
 
 void test_SendDICOMFilesToPACS::send_ShouldSendExpectedNumberOfFiles_data()
 {
-    QTest::addColumn<QList<Image*>>("images");
+    QTest::addColumn< QList<Image*> >("images");
     QTest::addColumn<PACSRequestStatus::SendRequestStatus>("expectedReturnValue");
     QTest::addColumn<int>("expectedNumberOfFilesSentSuccessfully");
     QTest::addColumn<int>("expectedNumberOfFilesSentFailed");

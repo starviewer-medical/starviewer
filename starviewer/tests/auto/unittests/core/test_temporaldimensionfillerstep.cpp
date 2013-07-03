@@ -42,7 +42,7 @@ Q_DECLARE_METATYPE(QSharedPointer<TestingTemporalDimensionFillerStep>)
 
 void test_TemporalDimensionFillerStep::postProcessing_ShouldSetExpectedPhaseNumberWhenAllSlicesHaveTheSameNumberOfPhases_data()
 {
-    QTest::addColumn<QSharedPointer<TestingTemporalDimensionFillerStep>>("step");
+    QTest::addColumn< QSharedPointer<TestingTemporalDimensionFillerStep> >("step");
     QTest::addColumn<int>("numberOfPhases");
 
     // Emulate a lambda function with a struct with function operator
@@ -68,7 +68,7 @@ void test_TemporalDimensionFillerStep::postProcessing_ShouldSetExpectedPhaseNumb
 
 void test_TemporalDimensionFillerStep::postProcessing_ShouldSetSinglePhaseWhenNotAllSlicesHaveTheSameNumberOfPhases_data()
 {
-    QTest::addColumn<QSharedPointer<TestingTemporalDimensionFillerStep>>("step");
+    QTest::addColumn< QSharedPointer<TestingTemporalDimensionFillerStep> >("step");
 
     // Emulate a lambda function with a struct with function operator
     struct { int operator()(int i) const { return i + 1; } } lambda;
@@ -86,7 +86,7 @@ void test_TemporalDimensionFillerStep::postProcessing_ShouldSetSinglePhaseWhenNo
 
 void test_TemporalDimensionFillerStep::postProcessing_ShouldSetSinglePhaseWhenThereAreMultipleAcquisitionNumbers_data()
 {
-    QTest::addColumn<QSharedPointer<TestingTemporalDimensionFillerStep>>("step");
+    QTest::addColumn< QSharedPointer<TestingTemporalDimensionFillerStep> >("step");
 
     // Emulate a lambda function with a struct with function operator
     struct { int operator()(int) const { return 10; } } lambda;
@@ -106,7 +106,7 @@ void test_TemporalDimensionFillerStep::postProcessing_ShouldSetSinglePhaseWhenTh
 
 void test_TemporalDimensionFillerStep::postProcessing_ShouldSetSinglePhaseWhenTheVolumeIsNotProcessed_data()
 {
-    QTest::addColumn<QSharedPointer<TestingTemporalDimensionFillerStep>>("step");
+    QTest::addColumn< QSharedPointer<TestingTemporalDimensionFillerStep> >("step");
 
     // Emulate a lambda function with a struct with function operator
     struct { int operator()(int) const { return 10; } } lambda;
