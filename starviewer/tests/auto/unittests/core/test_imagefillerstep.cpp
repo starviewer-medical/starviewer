@@ -82,8 +82,8 @@ void test_ImageFillerStep::fillIndividually_ShouldReturnExpectedValue()
 
 void test_ImageFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDifferentSizes_data()
 {
-    QTest::addColumn<QList<TestingDICOMTagReader*>>("readers");
-    QTest::addColumn<QList<int>>("volumeNumberInSeries");
+    QTest::addColumn< QList<TestingDICOMTagReader*> >("readers");
+    QTest::addColumn< QList<int> >("volumeNumberInSeries");
 
     QList<TestingDICOMTagReader*> readers;
     QList<int> volumeNumberInSeries;
@@ -157,8 +157,8 @@ void test_ImageFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffer
 
 void test_ImageFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDifferentPhotometricInterpretations_data()
 {
-    QTest::addColumn<QList<TestingDICOMTagReader*>>("readers");
-    QTest::addColumn<QList<int>>("volumeNumberInSeries");
+    QTest::addColumn< QList<TestingDICOMTagReader*> >("readers");
+    QTest::addColumn< QList<int> >("volumeNumberInSeries");
 
     QList<TestingDICOMTagReader*> readers;
     QList<int> volumeNumberInSeries;
@@ -243,8 +243,8 @@ void test_ImageFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffer
 
 void test_ImageFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDifferentSpacings_data()
 {
-    QTest::addColumn<QList<TestingDICOMTagReader*>>("readers");
-    QTest::addColumn<QList<int>>("volumeNumberInSeries");
+    QTest::addColumn< QList<TestingDICOMTagReader*> >("readers");
+    QTest::addColumn< QList<int> >("volumeNumberInSeries");
 
     QList<TestingDICOMTagReader*> readers;
     QList<int> volumeNumberInSeries;

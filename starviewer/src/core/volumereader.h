@@ -79,7 +79,7 @@ private:
     int m_lastError;
 
     /// Cua on guardarem els postprocessadors que s'han d'executar després de llegir el volum.
-    QQueue<QSharedPointer<Postprocessor>> m_postprocessorsQueue;
+    QQueue< QSharedPointer<Postprocessor> > m_postprocessorsQueue;
 };
 
 } // End namespace udg

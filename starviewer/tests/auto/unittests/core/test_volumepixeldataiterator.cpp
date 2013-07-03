@@ -77,7 +77,7 @@ Q_DECLARE_METATYPE(QSharedPointer<VolumePixelDataIterator>)
 
 void test_VolumePixelDataIterator::isNull_ShouldReturnExpectedValue_data()
 {
-    QTest::addColumn<QSharedPointer<VolumePixelDataIterator>>("iterator");
+    QTest::addColumn< QSharedPointer<VolumePixelDataIterator> >("iterator");
     QTest::addColumn<bool>("isNull");
 
     VolumePixelData emptyVolumePixelData;
@@ -96,7 +96,7 @@ void test_VolumePixelDataIterator::isNull_ShouldReturnExpectedValue()
 
 void test_VolumePixelDataIterator::get_ShouldReturnExpectedValue_data()
 {
-    QTest::addColumn<QSharedPointer<VolumePixelDataIterator>>("iterator");
+    QTest::addColumn< QSharedPointer<VolumePixelDataIterator> >("iterator");
     QTest::addColumn<qint8>("expectedValueInt8");
     QTest::addColumn<quint8>("expectedValueUint8");
     QTest::addColumn<qint16>("expectedValueInt16");
@@ -147,7 +147,7 @@ void test_VolumePixelDataIterator::get_ShouldReturnExpectedValue()
 
 void test_VolumePixelDataIterator::set_ShouldSetExpectedValue_data()
 {
-    QTest::addColumn<QSharedPointer<VolumePixelDataIterator>>("iterator");
+    QTest::addColumn< QSharedPointer<VolumePixelDataIterator> >("iterator");
     QTest::addColumn<qint8>("setValueInt8");
     QTest::addColumn<unsigned int>("expectedValueInt8");
     QTest::addColumn<quint8>("setValueUint8");
@@ -252,7 +252,7 @@ void test_VolumePixelDataIterator::operatorSubtract_ShouldReturnExpectedValue()
 
 void test_VolumePixelDataIterator::operatorPreIncrement_ShouldIncrementAndReturnNewIterator_data()
 {
-    QTest::addColumn<QSharedPointer<VolumePixelDataIterator>>("iterator");
+    QTest::addColumn< QSharedPointer<VolumePixelDataIterator> >("iterator");
     QTest::addColumn<unsigned int>("newVoxelValue");
 
     QTest::newRow("++it") << createIterator(0, 3, 1) << 584932269u;
@@ -271,7 +271,7 @@ void test_VolumePixelDataIterator::operatorPreIncrement_ShouldIncrementAndReturn
 
 void test_VolumePixelDataIterator::operatorPostIncrement_ShouldIncrementAndReturnOldIterator_data()
 {
-    QTest::addColumn<QSharedPointer<VolumePixelDataIterator>>("iterator");
+    QTest::addColumn< QSharedPointer<VolumePixelDataIterator> >("iterator");
     QTest::addColumn<unsigned int>("newVoxelValue");
     QTest::addColumn<unsigned int>("oldVoxelValue");
 
@@ -292,7 +292,7 @@ void test_VolumePixelDataIterator::operatorPostIncrement_ShouldIncrementAndRetur
 
 void test_VolumePixelDataIterator::operatorPreDecrement_ShouldDecrementAndReturnNewIterator_data()
 {
-    QTest::addColumn<QSharedPointer<VolumePixelDataIterator>>("iterator");
+    QTest::addColumn< QSharedPointer<VolumePixelDataIterator> >("iterator");
     QTest::addColumn<unsigned int>("newVoxelValue");
 
     QTest::newRow("--it") << createIterator(2, 1, 0) << 451505799u;
@@ -311,7 +311,7 @@ void test_VolumePixelDataIterator::operatorPreDecrement_ShouldDecrementAndReturn
 
 void test_VolumePixelDataIterator::operatorPostDecrement_ShouldDecrementAndReturnOldIterator_data()
 {
-    QTest::addColumn<QSharedPointer<VolumePixelDataIterator>>("iterator");
+    QTest::addColumn< QSharedPointer<VolumePixelDataIterator> >("iterator");
     QTest::addColumn<unsigned int>("newVoxelValue");
     QTest::addColumn<unsigned int>("oldVoxelValue");
 
@@ -486,7 +486,7 @@ QSharedPointer<VolumePixelDataIterator> test_VolumePixelDataIterator::createIter
 
 void test_VolumePixelDataIterator::setupTestDataForAddOperators()
 {
-    QTest::addColumn<QSharedPointer<VolumePixelDataIterator>>("iterator");
+    QTest::addColumn< QSharedPointer<VolumePixelDataIterator> >("iterator");
     QTest::addColumn<int>("delta");
     QTest::addColumn<unsigned int>("expectedVoxelValue");
 
@@ -497,7 +497,7 @@ void test_VolumePixelDataIterator::setupTestDataForAddOperators()
 
 void test_VolumePixelDataIterator::setupTestDataForSubtractOperators()
 {
-    QTest::addColumn<QSharedPointer<VolumePixelDataIterator>>("iterator");
+    QTest::addColumn< QSharedPointer<VolumePixelDataIterator> >("iterator");
     QTest::addColumn<int>("delta");
     QTest::addColumn<unsigned int>("expectedVoxelValue");
 
@@ -508,8 +508,8 @@ void test_VolumePixelDataIterator::setupTestDataForSubtractOperators()
 
 void test_VolumePixelDataIterator::setupTestDataForComparisonOperators()
 {
-    QTest::addColumn<QSharedPointer<VolumePixelDataIterator>>("iterator1");
-    QTest::addColumn<QSharedPointer<VolumePixelDataIterator>>("iterator2");
+    QTest::addColumn< QSharedPointer<VolumePixelDataIterator> >("iterator1");
+    QTest::addColumn< QSharedPointer<VolumePixelDataIterator> >("iterator2");
     QTest::addColumn<bool>("equal");
     QTest::addColumn<bool>("different");
     QTest::addColumn<bool>("greaterThan");

@@ -553,8 +553,8 @@ void test_Vector3Double::operatorDivisionByScalarEqual_ShouldModifyVectorAndRetu
 void test_Vector3Double::operatorQDataStreamIn_ShouldFillVectorAndReturnStream_data()
 {
     // La primera serveix perquè no ens esborri el byte array
-    QTest::addColumn<QSharedPointer<QByteArray>>("byteArray");
-    QTest::addColumn<QSharedPointer<QDataStream>>("stream");
+    QTest::addColumn< QSharedPointer<QByteArray> >("byteArray");
+    QTest::addColumn< QSharedPointer<QDataStream> >("stream");
     QTest::addColumn<Vector3>("filledVector");
 
     {
@@ -620,8 +620,8 @@ void test_Vector3Double::operatorQDataStreamOut_ShouldWriteToStreamAndReturnIt_d
 {
     QTest::addColumn<Vector3>("vector");
     // Aquesta serveix perquè no ens esborri el byte array
-    QTest::addColumn<QSharedPointer<QByteArray>>("byteArray");
-    QTest::addColumn<QSharedPointer<QDataStream>>("filledStream");
+    QTest::addColumn< QSharedPointer<QByteArray> >("byteArray");
+    QTest::addColumn< QSharedPointer<QDataStream> >("filledStream");
 
     {
         Vector3 vector;
