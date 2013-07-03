@@ -1,5 +1,14 @@
 #include "testingdicomtagreader.h"
 
+
+namespace udg {
+
+uint qHash(const DICOMTag &tag)
+{
+    return qHash(qMakePair(tag.getGroup(), tag.getElement()));
+}
+
+}
 namespace testing {
 
 TestingDICOMTagReader::TestingDICOMTagReader()

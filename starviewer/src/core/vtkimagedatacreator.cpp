@@ -48,19 +48,6 @@ template <class T> vtkSmartPointer<vtkImageData> VtkImageDataCreator::createVtkI
     return imageData;
 }
 
-// Fem que s'instanciï el mètode per tots aquests tipus. Això evita errors d'undefined reference o unresolved external symbol.
-template vtkSmartPointer<vtkImageData> VtkImageDataCreator::createVtkImageData(int width, int height, int depth, const char *data);
-template vtkSmartPointer<vtkImageData> VtkImageDataCreator::createVtkImageData(int width, int height, int depth, const signed char *data);
-template vtkSmartPointer<vtkImageData> VtkImageDataCreator::createVtkImageData(int width, int height, int depth, const unsigned char *data);
-template vtkSmartPointer<vtkImageData> VtkImageDataCreator::createVtkImageData(int width, int height, int depth, const short *data);
-template vtkSmartPointer<vtkImageData> VtkImageDataCreator::createVtkImageData(int width, int height, int depth, const unsigned short *data);
-template vtkSmartPointer<vtkImageData> VtkImageDataCreator::createVtkImageData(int width, int height, int depth, const int *data);
-template vtkSmartPointer<vtkImageData> VtkImageDataCreator::createVtkImageData(int width, int height, int depth, const unsigned int *data);
-template vtkSmartPointer<vtkImageData> VtkImageDataCreator::createVtkImageData(int width, int height, int depth, const long *data);
-template vtkSmartPointer<vtkImageData> VtkImageDataCreator::createVtkImageData(int width, int height, int depth, const unsigned long *data);
-template vtkSmartPointer<vtkImageData> VtkImageDataCreator::createVtkImageData(int width, int height, int depth, const float *data);
-template vtkSmartPointer<vtkImageData> VtkImageDataCreator::createVtkImageData(int width, int height, int depth, const double *data);
-
 template <> void VtkImageDataCreator::setImageDataScalarType<char>(vtkImageData *imageData)
 {
     imageData->SetScalarTypeToChar();
@@ -115,5 +102,18 @@ template <> void VtkImageDataCreator::setImageDataScalarType<double>(vtkImageDat
 {
     imageData->SetScalarTypeToDouble();
 }
+
+// Fem que s'instanciï el mètode per tots aquests tipus. Això evita errors d'undefined reference o unresolved external symbol.
+template vtkSmartPointer<vtkImageData> VtkImageDataCreator::createVtkImageData(int width, int height, int depth, const char *data);
+template vtkSmartPointer<vtkImageData> VtkImageDataCreator::createVtkImageData(int width, int height, int depth, const signed char *data);
+template vtkSmartPointer<vtkImageData> VtkImageDataCreator::createVtkImageData(int width, int height, int depth, const unsigned char *data);
+template vtkSmartPointer<vtkImageData> VtkImageDataCreator::createVtkImageData(int width, int height, int depth, const short *data);
+template vtkSmartPointer<vtkImageData> VtkImageDataCreator::createVtkImageData(int width, int height, int depth, const unsigned short *data);
+template vtkSmartPointer<vtkImageData> VtkImageDataCreator::createVtkImageData(int width, int height, int depth, const int *data);
+template vtkSmartPointer<vtkImageData> VtkImageDataCreator::createVtkImageData(int width, int height, int depth, const unsigned int *data);
+template vtkSmartPointer<vtkImageData> VtkImageDataCreator::createVtkImageData(int width, int height, int depth, const long *data);
+template vtkSmartPointer<vtkImageData> VtkImageDataCreator::createVtkImageData(int width, int height, int depth, const unsigned long *data);
+template vtkSmartPointer<vtkImageData> VtkImageDataCreator::createVtkImageData(int width, int height, int depth, const float *data);
+template vtkSmartPointer<vtkImageData> VtkImageDataCreator::createVtkImageData(int width, int height, int depth, const double *data);
 
 } // namespace udg
