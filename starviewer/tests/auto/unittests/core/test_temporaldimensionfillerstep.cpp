@@ -45,55 +45,83 @@ void test_TemporalDimensionFillerStep::postProcessing_ShouldSetExpectedPhaseNumb
     QTest::addColumn<QSharedPointer<TestingTemporalDimensionFillerStep>>("step");
     QTest::addColumn<int>("numberOfPhases");
 
-    QTest::newRow("one slice") << createStep(1, [](int) { return 10; }) << 10;
-    QTest::newRow("10 slices") << createStep(10, [](int) { return 12; }) << 12;
+    // Emulate a lambda function with a struct with function operator
+    struct { int operator()(int) const { return 10; } } lambda1;
+    struct { int operator()(int) const { return 12; } } lambda2;
+
+    QTest::newRow("one slice") << createStep(1, lambda1) << 10;
+    QTest::newRow("10 slices") << createStep(10, lambda2) << 12;
 }
 
 void test_TemporalDimensionFillerStep::postProcessing_ShouldSetExpectedPhaseNumberWhenAllSlicesHaveTheSameNumberOfPhases()
 {
     QFETCH(int, numberOfPhases);
 
-    testPostProcessing([=](int i) { return i % numberOfPhases; });
+    // Emulate a lambda function with a struct with function operator
+    struct {
+        int numberOfPhases;
+        int operator()(int i) const { return i % numberOfPhases; }
+    } lambda = { numberOfPhases };
+
+    testPostProcessing(lambda);
 }
 
 void test_TemporalDimensionFillerStep::postProcessing_ShouldSetSinglePhaseWhenNotAllSlicesHaveTheSameNumberOfPhases_data()
 {
     QTest::addColumn<QSharedPointer<TestingTemporalDimensionFillerStep>>("step");
 
-    QTest::newRow("differents numbers of phases per slice") << createStep(10, [](int i) { return i + 1; });
+    // Emulate a lambda function with a struct with function operator
+    struct { int operator()(int i) const { return i + 1; } } lambda;
+
+    QTest::newRow("differents numbers of phases per slice") << createStep(10, lambda);
 }
 
 void test_TemporalDimensionFillerStep::postProcessing_ShouldSetSinglePhaseWhenNotAllSlicesHaveTheSameNumberOfPhases()
 {
-    testPostProcessing([](int) { return 0; });
+    // Emulate a lambda function with a struct with function operator
+    struct { int operator()(int) const { return 0; } } lambda;
+
+    testPostProcessing(lambda);
 }
 
 void test_TemporalDimensionFillerStep::postProcessing_ShouldSetSinglePhaseWhenThereAreMultipleAcquisitionNumbers_data()
 {
     QTest::addColumn<QSharedPointer<TestingTemporalDimensionFillerStep>>("step");
 
-    QSharedPointer<TestingTemporalDimensionFillerStep> step = createStep(10, [](int) { return 10; });
+    // Emulate a lambda function with a struct with function operator
+    struct { int operator()(int) const { return 10; } } lambda;
+
+    QSharedPointer<TestingTemporalDimensionFillerStep> step = createStep(10, lambda);
     (*step->TemporalDimensionInternalInfo.begin())->value(0)->multipleAcquisitionNumber = true; // set multipleAcquisitionNumber to true for volume 0
     QTest::newRow("multiple acquisition numbers") << step;
 }
 
 void test_TemporalDimensionFillerStep::postProcessing_ShouldSetSinglePhaseWhenThereAreMultipleAcquisitionNumbers()
 {
-    testPostProcessing([](int) { return 0; });
+    // Emulate a lambda function with a struct with function operator
+    struct { int operator()(int) const { return 0; } } lambda;
+
+    testPostProcessing(lambda);
 }
 
 void test_TemporalDimensionFillerStep::postProcessing_ShouldSetSinglePhaseWhenTheVolumeIsNotProcessed_data()
 {
     QTest::addColumn<QSharedPointer<TestingTemporalDimensionFillerStep>>("step");
 
-    QSharedPointer<TestingTemporalDimensionFillerStep> step = createStep(10, [](int) { return 10; });
+    // Emulate a lambda function with a struct with function operator
+    struct { int operator()(int) const { return 10; } } lambda;
+
+    QSharedPointer<TestingTemporalDimensionFillerStep> step = createStep(10, lambda);
     delete (*step->TemporalDimensionInternalInfo.begin())->take(0); // esborrem el VolumeInfo del volum 0
     QTest::newRow("volume not processed") << step;
 }
 
 void test_TemporalDimensionFillerStep::postProcessing_ShouldSetSinglePhaseWhenTheVolumeIsNotProcessed()
 {
-    testPostProcessing([](int) { return 0; });
+    // Emulate a lambda function with a struct with function operator
+    struct { int operator()(int) const { return 0; } } lambda;
+
+    testPostProcessing(lambda);
 }
 
 template <typename Function>
