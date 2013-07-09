@@ -192,6 +192,7 @@ double MeasurementManager::computeMeasureExplicit(MeasureComputer *measureComput
         return measureComputer->computeMeasure(image, dataSpacing);
     }
     
+    appliedMeasurementType = explicitMeasurementType;
     PixelSpacing2D spacing;
     double factor = 1.0;
     switch (explicitMeasurementType)
@@ -243,8 +244,6 @@ double MeasurementManager::computeMeasureExplicit(MeasureComputer *measureComput
     }
     else
     {
-        appliedMeasurementType = explicitMeasurementType;
-        
         return measureComputer->computeMeasureExplicit(dataSpacing, spacing);
     }
 }
