@@ -553,9 +553,8 @@ void QViewer::getDefaultWindowLevel(double windowLevel[2])
     {
         if (m_mainVolume)
         {
-            double windowWidth, windowLevel;
-            computeAutomaticWindowLevel(windowWidth, windowLevel);
-            this->setDefaultWindowLevel(windowWidth, windowLevel);
+            WindowLevel automaticWindowLevel = getCurrentAutomaticWindowLevel();
+            this->setDefaultWindowLevel(automaticWindowLevel.getWidth(), automaticWindowLevel.getCenter());
         }
         else
         {
@@ -566,19 +565,24 @@ void QViewer::getDefaultWindowLevel(double windowLevel[2])
     windowLevel[1] = m_defaultLevel;
 }
 
-void QViewer::computeAutomaticWindowLevel(double &windowWidth, double &windowLevel)
+WindowLevel QViewer::getCurrentAutomaticWindowLevel()
 {
+    WindowLevel automaticWindowLevel;
+    automaticWindowLevel.setName(tr("Auto"));
+    
     if (m_mainVolume)
     {
         double range[2];
         m_mainVolume->getScalarRange(range);
-        windowWidth = range[1] - range[0];
-        windowLevel = range[0] + (windowWidth * 0.5);
+        automaticWindowLevel.setWidth(range[1] - range[0]);
+        automaticWindowLevel.setCenter(range[0] + (automaticWindowLevel.getWidth() * 0.5));
     }
     else
     {
-        DEBUG_LOG("Calculant el ww/wl automàtic sense input. Valors indefinits.");
+        DEBUG_LOG("No input to compute automatic ww/wl. Undefined values.");
     }
+
+    return automaticWindowLevel;
 }
 
 void QViewer::enableContextMenu()
@@ -633,7 +637,6 @@ void QViewer::updateWindowLevelData()
     }
 
     const QString DefaultWindowLevelName = tr("Default");
-    const QString AutomaticWindowLevelName = tr("Auto");
 
     m_windowLevelData->removePresetsFromGroup(WindowLevelPresetsToolData::FileDefined);
     m_windowLevelData->removePresetsFromGroup(WindowLevelPresetsToolData::AutomaticPreset);
@@ -681,15 +684,12 @@ void QViewer::updateWindowLevelData()
     }
 
     // Calculem un window level automàtic que sempre posarem disponible a l'usuari
-    double automaticWindowWidth;
-    double automaticWindowLevel;
-    computeAutomaticWindowLevel(automaticWindowWidth, automaticWindowLevel);
-    m_windowLevelData->addPreset(WindowLevel(automaticWindowWidth * windowWidthSign, automaticWindowLevel, AutomaticWindowLevelName),
-                                    WindowLevelPresetsToolData::AutomaticPreset);
+    WindowLevel automaticWindowLevel = getCurrentAutomaticWindowLevel();
+    m_windowLevelData->addPreset(automaticWindowLevel, WindowLevelPresetsToolData::AutomaticPreset);
     // Si no hi ha window levels definits per defecte activarem l'automàtic
     if (windowLevelCount <= 0)
     {
-        m_windowLevelData->activatePreset(AutomaticWindowLevelName);
+        m_windowLevelData->activatePreset(automaticWindowLevel.getName());
     }
 }
 
