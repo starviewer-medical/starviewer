@@ -40,8 +40,8 @@
 namespace udg {
 
 QViewer::QViewer(QWidget *parent)
- : QWidget(parent), m_mainVolume(0), m_contextMenuActive(true), m_mouseHasMoved(false), m_windowLevelData(0), m_defaultWindow(.0),
-   m_defaultLevel(.0), m_transferFunction(0), m_isRenderingEnabled(true), m_isActive(false), m_hasDefaultWindowLevelDefined(false)
+ : QWidget(parent), m_mainVolume(0), m_contextMenuActive(true), m_mouseHasMoved(false), m_windowLevelData(0), m_transferFunction(0),
+   m_isRenderingEnabled(true), m_isActive(false)
 {
     m_vtkWidget = new QVTKWidget(this);
     m_vtkWidget->setFocusPolicy(Qt::WheelFocus);
@@ -547,24 +547,6 @@ void QViewer::grabCurrentView()
     m_grabList << image;
 }
 
-void QViewer::getDefaultWindowLevel(double windowLevel[2])
-{
-    if (!m_hasDefaultWindowLevelDefined)
-    {
-        if (m_mainVolume)
-        {
-            WindowLevel automaticWindowLevel = getCurrentAutomaticWindowLevel();
-            this->setDefaultWindowLevel(automaticWindowLevel.getWidth(), automaticWindowLevel.getCenter());
-        }
-        else
-        {
-            DEBUG_LOG("QViewer::getDefaultWindowLevel() : No tenim input");
-        }
-    }
-    windowLevel[0] = m_defaultWindow;
-    windowLevel[1] = m_defaultLevel;
-}
-
 WindowLevel QViewer::getCurrentAutomaticWindowLevel()
 {
     WindowLevel automaticWindowLevel;
@@ -593,13 +575,6 @@ void QViewer::enableContextMenu()
 void QViewer::disableContextMenu()
 {
     m_contextMenuActive = false;
-}
-
-void QViewer::setDefaultWindowLevel(double window, double level)
-{
-    m_defaultWindow = window;
-    m_defaultLevel = level;
-    m_hasDefaultWindowLevelDefined = true;
 }
 
 TransferFunction* QViewer::getTransferFunction() const
