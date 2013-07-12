@@ -639,7 +639,8 @@ bool Q3DViewer::rescale(Volume *volume)
     double range[2];
     volume->getScalarRange(range);
     
-    double min = range[0], max = range[1];
+    double min = range[0];
+    double max = range[1];
     double rangeLength = max - min;
     double shift = -min;
     double window = rangeLength;
