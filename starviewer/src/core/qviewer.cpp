@@ -607,11 +607,6 @@ TransferFunction* QViewer::getTransferFunction() const
     return m_transferFunction;
 }
 
-void QViewer::resetWindowLevelToDefault()
-{
-    this->setWindowLevel(m_defaultWindow, m_defaultLevel);
-}
-
 void QViewer::contextMenuRelease()
 {
     // Extret dels exemples de vtkEventQtSlotConnect

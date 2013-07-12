@@ -322,7 +322,6 @@ void QDifuPerfuSegmentationExtension::setDiffusionImage( int index )
 
     // TODO ara ho fem "a saco" però s'hauria de millorar
     m_diffusion2DView->setInput( m_diffusionMainVolume );
-    //m_diffusion2DView->resetWindowLevelToDefault();
     m_diffusion2DView->render();
 
     connect( m_strokeLowerValueSlider, SIGNAL( valueChanged(int) ), SLOT( viewThresholds(int) ) );
@@ -642,7 +641,6 @@ void QDifuPerfuSegmentationExtension::applyRegistration()
         m_diffusionRescaledVolume->setData( rescalerDiffusion->GetOutput() );
 
         m_perfusion2DView->setInput( m_perfusionRescaledVolume );
-        //m_perfusion2DView->resetWindowLevelToDefault();
 
         m_perfusionSliceSlider->setMinimum( 0 );
         m_perfusionSliceSlider->setMaximum( m_perfusionRescaledVolume->getDimensions()[2] -1  );

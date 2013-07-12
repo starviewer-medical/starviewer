@@ -289,12 +289,10 @@ void QPerfusionMapReconstructionExtension::paintMap( )
         break;
     case 1:     //CBF
         m_2DView->getViewer()->setInput( m_mapCalculator->getCBFVolume() );
-        //m_2DView->resetWindowLevelToDefault();
         this->createColorMap(m_mapCalculator->getCBFImage(), m_2DView->getViewer());
         break;
     case 2:     //MTT
         m_2DView->getViewer()->setInput( m_mapCalculator->getMTTVolume() );
-        //m_2DView->resetWindowLevelToDefault();
         this->createColorMap(m_mapCalculator->getMTTImage(), m_2DView->getViewer());
         break;
     default:
@@ -984,7 +982,6 @@ void QPerfusionMapReconstructionExtension::applyFilterMapImage( )
         m_2DView->getViewer()->setInput( mapVolume );
         //m_2DView->removeAnnotation(Q2DViewer::AllAnnotation);
         m_2DView->getViewer()->removeAnnotation(Q2DViewer::NoAnnotation);
-        //m_2DView->resetWindowLevelToDefault();
         this->createColorMap(auxImage, m_2DView->getViewer());
         QApplication::restoreOverrideCursor();
 
