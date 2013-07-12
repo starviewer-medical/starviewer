@@ -173,10 +173,6 @@ public slots:
     /// Elimina totes les captures de pantalla
     void clearGrabbedViews();
 
-    /// Obté el window/level per defecte. Si no se n'especifica cap amb setDefaultWindowLevel
-    /// agafa un window/level que permeti veure correctament el Volum.
-    void getDefaultWindowLevel(double windowLevel[2]);
-
     /// Obté el window level actual de la imatge
     virtual void getCurrentWindowLevel(double wl[2]) = 0;
 
@@ -189,10 +185,6 @@ public slots:
     /// Activa o desactiva el menú de contexte
     void enableContextMenu();
     void disableContextMenu();
-
-    /// Ajusta ÚNICAMENT els valors de window i level per defecte. No els aplica sobre la imatge.
-    /// Mètode de conveniència pels presentation states
-    void setDefaultWindowLevel(double window, double level);
 
     /// Ajusta el window/level
     virtual void setWindowLevel(double window, double level) = 0;
@@ -302,9 +294,6 @@ protected:
     /// Dades de valors predeterminats de window level i dels valors actuals que s'apliquen
     WindowLevelPresetsToolData *m_windowLevelData;
 
-    /// Valors dels window level per defecte. Pot venir donat pel DICOM o assignat per nosaltres a un valor estàndar de constrast
-    double m_defaultWindow, m_defaultLevel;
-
     /// Funció de transferència
     TransferFunction *m_transferFunction;
 
@@ -323,8 +312,6 @@ protected:
 private:
     /// Indica si el viewer és actiu o no
     bool m_isActive;
-    /// Indica si s'ha definit o no un window level per defecte
-    bool m_hasDefaultWindowLevelDefined;
 
     /// Estats actual i previ del visor actual
     ViewerStatus m_viewerStatus;
