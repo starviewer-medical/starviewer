@@ -225,19 +225,15 @@ void QEdemaSegmentationExtension::setInput( Volume *input )
     m_sliceSpinBox->setMaximum(dim[2]-1);
     m_sliceViewSlider->setValue(m_2DView->getCurrentSlice());
 
-    //Posem els nivells de dins i fora de la màscara els valors del w/l per tal que es vegi correcte
-    double wl[2];
-    m_2DView->getDefaultWindowLevel( wl );
-    m_insideValue  = (int) wl[0];
-    m_outsideValue = (int) (wl[0] - 2.0*wl[1]);
-    //m_insideValue  = 255;
-    //m_outsideValue = 0;
-
     // obtenim els valors mínim i màxim del volum
     double range[2];
     m_mainVolume->getScalarRange(range);
     m_minValue = range[0];
     m_maxValue = range[1];
+
+    //Posem els nivells de dins i fora de la màscara per tal que es vegi correcte
+    m_insideValue = range[1] - range[0];
+    m_outsideValue = range[0];
 
     m_lowerValueSpinBox->setMinimum(m_minValue);
     m_lowerValueSpinBox->setMaximum(m_maxValue);
