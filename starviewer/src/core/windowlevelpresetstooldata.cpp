@@ -10,25 +10,25 @@ WindowLevelPresetsToolData::WindowLevelPresetsToolData(QObject *parent)
 {
     // Per defecte afegirem els window levels predeterminats estàndar.
     // TODO Més endavant aquests valors podrien estar continguts en algun determinat fitxer amb un format definit
-    addPreset(tr("CT Head"), 80, 40, StandardPresets);
-    addPreset(tr("CT Bone"), 2000, 500, StandardPresets);
-    addPreset(tr("CT Lung"), 1500, -650, StandardPresets);
-    addPreset(tr("CT Soft Tissues"), 400, 40, StandardPresets);
-    addPreset(tr("CT Soft Tissues+Contrast"), 400, 70, StandardPresets);
+    addPreset(WindowLevel(80, 40, tr("CT Head")), StandardPresets);
+    addPreset(WindowLevel(2000, 500, tr("CT Bone")), StandardPresets);
+    addPreset(WindowLevel(1500, -650, tr("CT Lung")), StandardPresets);
+    addPreset(WindowLevel(400, 40, tr("CT Soft Tissues")), StandardPresets);
+    addPreset(WindowLevel(400, 70, tr("CT Soft Tissues+Contrast")), StandardPresets);
 
     // 60-100
-    addPreset(tr("CT Liver+Contrast"), 300, 60, StandardPresets);
-    addPreset(tr("CT Liver"), 200, 40, StandardPresets);
-    addPreset(tr("CT Neck+Contrast"), 300, 50, StandardPresets);
+    addPreset(WindowLevel(300, 60, tr("CT Liver+Contrast")), StandardPresets);
+    addPreset(WindowLevel(200, 40, tr("CT Liver")), StandardPresets);
+    addPreset(WindowLevel(300, 50, tr("CT Neck+Contrast")), StandardPresets);
 
     // 100-200
-    addPreset(tr("Angiography"), 500, 100, StandardPresets);
+    addPreset(WindowLevel(500, 100, tr("Angiography")), StandardPresets);
 
     // 100-1500:window!
-    addPreset(tr("Osteoporosis"), 1000, 300, StandardPresets);
-    addPreset(tr("Emphysema"), 800, -800, StandardPresets);
-    addPreset(tr("Petrous Bone"), 4000, 700, StandardPresets);
-    addPreset(tr("Custom"), 0, 0, CustomPreset);
+    addPreset(WindowLevel(1000, 300, tr("Osteoporosis")), StandardPresets);
+    addPreset(WindowLevel(800, -800, tr("Emphysema")), StandardPresets);
+    addPreset(WindowLevel(4000, 700, tr("Petrous Bone")), StandardPresets);
+    addPreset(WindowLevel(0, 0, tr("Custom")), CustomPreset);
     // TODO ara caldria afegir els presets que tinguem guardats en QSettins, o altres tipus d'arxius tipus XML o ".ini"
     loadCustomWindowLevelPresets();
     connect(CustomWindowLevelsRepository::getRepository(), SIGNAL(changed()), this, SLOT(updateCustomWindowLevels()));
@@ -38,11 +38,12 @@ WindowLevelPresetsToolData::~WindowLevelPresetsToolData()
 {
 }
 
-void WindowLevelPresetsToolData::addPreset(const QString &description, double window, double level, int group)
+void WindowLevelPresetsToolData::addPreset(const WindowLevel &windowLevel, int group)
 {
+    QString description = windowLevel.getName();
     if (!m_presets.contains(description))
     {
-        WindowLevelStruct data = { window, level, group };
+        WindowLevelStruct data = { windowLevel.getWidth(), windowLevel.getCenter(), group };
         m_presets.insert(description, data);
         if (group == WindowLevelPresetsToolData::FileDefined)
         {
@@ -195,7 +196,7 @@ void WindowLevelPresetsToolData::loadCustomWindowLevelPresets()
 {
     foreach (WindowLevel *customWindowLevel, CustomWindowLevelsRepository::getRepository()->getItems())
     {
-        addPreset(customWindowLevel->getName(), customWindowLevel->getWidth(), customWindowLevel->getCenter(), UserDefined);
+        addPreset(*customWindowLevel, UserDefined);
     }
 }
 
