@@ -26,6 +26,7 @@ class WindowLevelPresetsToolData;
 class TransferFunction;
 class PatientBrowserMenu;
 class QViewerWorkInProgressWidget;
+class WindowLevel;
 
 /**
     Classe base per a totes les finestres de visualització
@@ -257,9 +258,8 @@ protected:
 
     virtual void setupInteraction();
 
-    /// Calcula un window level automàtic segons l'input actual.
-    /// Si no tenim input el resultat és indefinit
-    void computeAutomaticWindowLevel(double &windowWidth, double &windowLevel);
+    /// Computes the automatic window level for the current input
+    WindowLevel getCurrentAutomaticWindowLevel();
 
 private slots:
     /// Slot que s'utilitza quan s'ha seleccionat una sèrie amb el PatientBrowserMenu
