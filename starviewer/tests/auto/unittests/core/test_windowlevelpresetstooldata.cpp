@@ -1,5 +1,6 @@
 #include "autotest.h"
 #include "windowlevelpresetstooldata.h"
+#include "windowlevel.h"
 
 using namespace udg;
 
@@ -94,7 +95,8 @@ void test_WindowLevelPresetsToolData::addPreset_AddsGivenPreset()
     QFETCH(int, group);
 
     WindowLevelPresetsToolData wlData;
-    wlData.addPreset(presetDescription, window, level, group);
+    WindowLevel windowLevel(window, level, presetDescription);
+    wlData.addPreset(windowLevel, group);
 
     double dummyWindow, dummyLevel;
     QVERIFY(wlData.getWindowLevelFromDescription(presetDescription, dummyWindow, dummyLevel));
@@ -435,15 +437,15 @@ WindowLevelPresetsToolData* test_WindowLevelPresetsToolData::getWindowLevelPrese
     // Eliminem els presets que es posen per defecte al construir l'objecte de cares a tenir més ben controlat el testing del que aquí posem
     wlData->removePresetsFromGroup(WindowLevelPresetsToolData::StandardPresets);
     wlData->removePresetsFromGroup(WindowLevelPresetsToolData::CustomPreset);
-    wlData->addPreset(AutoPreset1Name, 128.0, 256.0, WindowLevelPresetsToolData::AutomaticPreset);
-    wlData->addPreset(AutoPreset2Name, 1024.0, 512.0, WindowLevelPresetsToolData::AutomaticPreset);
-    wlData->addPreset(FilePreset1Name, 328.5, 678.9, WindowLevelPresetsToolData::FileDefined);
-    wlData->addPreset(FilePreset2Name, 128.3, 583.4, WindowLevelPresetsToolData::FileDefined);
-    wlData->addPreset(StandardPreset1Name, 1500, -650, WindowLevelPresetsToolData::StandardPresets);
-    wlData->addPreset(StandardPreset2Name, 2000, 500, WindowLevelPresetsToolData::StandardPresets);
-    wlData->addPreset(UserPreset1Name, 110, 900, WindowLevelPresetsToolData::UserDefined);
-    wlData->addPreset(CustomPreset1Name, 1231, 412, WindowLevelPresetsToolData::CustomPreset);
-    wlData->addPreset(OtherPreset1Name, 100, 200, WindowLevelPresetsToolData::Other);
+    wlData->addPreset(WindowLevel(128.0, 256.0, AutoPreset1Name), WindowLevelPresetsToolData::AutomaticPreset);
+    wlData->addPreset(WindowLevel(1024.0, 512.0, AutoPreset2Name), WindowLevelPresetsToolData::AutomaticPreset);
+    wlData->addPreset(WindowLevel(328.5, 678.9, FilePreset1Name), WindowLevelPresetsToolData::FileDefined);
+    wlData->addPreset(WindowLevel(128.3, 583.4, FilePreset2Name), WindowLevelPresetsToolData::FileDefined);
+    wlData->addPreset(WindowLevel(1500, -650, StandardPreset1Name), WindowLevelPresetsToolData::StandardPresets);
+    wlData->addPreset(WindowLevel(2000, 500, StandardPreset2Name), WindowLevelPresetsToolData::StandardPresets);
+    wlData->addPreset(WindowLevel(110, 900, UserPreset1Name), WindowLevelPresetsToolData::UserDefined);
+    wlData->addPreset(WindowLevel(1231, 412, CustomPreset1Name), WindowLevelPresetsToolData::CustomPreset);
+    wlData->addPreset(WindowLevel(100, 200, OtherPreset1Name), WindowLevelPresetsToolData::Other);
 
     return wlData;
 }

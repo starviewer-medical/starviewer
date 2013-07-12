@@ -8,6 +8,8 @@
 
 namespace udg {
 
+class WindowLevel;
+
 /**
     Conté les dades de diversos valors predefinits de window level.
     Dins d'aquests valors, en podem tenir diverses procedències, com per exemple
@@ -34,11 +36,9 @@ public:
     enum GroupsLabel { AutomaticPreset, FileDefined, StandardPresets, UserDefined, CustomPreset, Other };
 
     /// Afegeix un nou preset. Si la operació es fa amb èxit s'emet un senyal donant la informació del preset.
-    /// @param description Descripció del preset. Ha de ser única
-    /// @param window Valor de window
-    /// @param level Valor de level
+    /// @param windowLevel WindowLevel object. Its description has to be unique.
     /// @param group Grup al que volem que pertanyi, que serà "Other" si no s'especifica
-    void addPreset(const QString &description, double window, double level, int group = Other);
+    void addPreset(const WindowLevel &windowLevel, int group = Other);
 
     /// Eliminem el preset que tingui la descripció donada
     /// @param description Descripció del preset que volem eliminar

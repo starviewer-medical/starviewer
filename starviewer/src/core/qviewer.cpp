@@ -671,7 +671,7 @@ void QViewer::updateWindowLevelData()
             {
                 description = QString("%1 %2").arg(DefaultWindowLevelName).arg(i);
             }
-            m_windowLevelData->addPreset(description, windowLevel.getWidth() * windowWidthSign, windowLevel.getCenter(), WindowLevelPresetsToolData::FileDefined);
+            m_windowLevelData->addPreset(WindowLevel(windowLevel.getWidth() * windowWidthSign, windowLevel.getCenter(), description), WindowLevelPresetsToolData::FileDefined);
 
             if (i == 0)
             {
@@ -684,8 +684,8 @@ void QViewer::updateWindowLevelData()
     double automaticWindowWidth;
     double automaticWindowLevel;
     computeAutomaticWindowLevel(automaticWindowWidth, automaticWindowLevel);
-    m_windowLevelData->addPreset(AutomaticWindowLevelName, automaticWindowWidth * windowWidthSign, automaticWindowLevel,
-                                 WindowLevelPresetsToolData::AutomaticPreset);
+    m_windowLevelData->addPreset(WindowLevel(automaticWindowWidth * windowWidthSign, automaticWindowLevel, AutomaticWindowLevelName),
+                                    WindowLevelPresetsToolData::AutomaticPreset);
     // Si no hi ha window levels definits per defecte activarem l'automàtic
     if (windowLevelCount <= 0)
     {
