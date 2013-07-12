@@ -203,9 +203,6 @@ public slots:
     virtual void setTransferFunction(TransferFunction *transferFunction) = 0;
     TransferFunction* getTransferFunction() const;
 
-    /// Reseteja el window level al que tingui per defecte el volum
-    virtual void resetWindowLevelToDefault();
-
 signals:
     /// Informem de l'event rebut. \TODO ara enviem el codi en vtkCommand, però podria (o hauria de) canviar per un mapeig nostre
     void eventReceived(unsigned long eventID);
