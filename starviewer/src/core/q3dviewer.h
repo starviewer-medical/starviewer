@@ -52,8 +52,6 @@ public:
     QString getRenderFunctionAsString();
 
     /// Obté el window level actual de la imatge
-    double getCurrentColorWindow();
-    double getCurrentColorLevel();
     void getCurrentWindowLevel(double wl[2]);
 
     void resetView(CameraOrientationType view);

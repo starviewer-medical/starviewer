@@ -1568,32 +1568,6 @@ void Q2DViewer::getCurrentWindowLevel(double wl[2])
     }
 }
 
-double Q2DViewer::getCurrentColorWindow()
-{
-    if (m_mainVolume)
-    {
-        return m_windowLevelLUTMapper->GetWindow();
-    }
-    else
-    {
-        DEBUG_LOG("::getCurrentColorWindow() : No tenim input ");
-        return 0;
-    }
-}
-
-double Q2DViewer::getCurrentColorLevel()
-{
-    if (m_mainVolume)
-    {
-        return m_windowLevelLUTMapper->GetLevel();
-    }
-    else
-    {
-        DEBUG_LOG("::getCurrentColorLevel() : No tenim input ");
-        return 0;
-    }
-}
-
 int Q2DViewer::getCurrentSlice() const
 {
     return m_currentSlice;

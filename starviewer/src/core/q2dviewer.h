@@ -87,9 +87,6 @@ public:
     void setOverlayOpacity(double opacity);
 
     /// Obté el window level actual de la imatge
-    /// TODO els mètodes no es criden enlloc, mirar si són necessaris o no
-    double getCurrentColorWindow();
-    double getCurrentColorLevel();
     void getCurrentWindowLevel(double wl[2]);
 
     /// Retorna la llesca/fase actual

@@ -59,7 +59,9 @@ void EditorTool::initialize()
         else
         {
             // En cas que siguin iguals
-            m_insideValue = (int)(range[0] + m_2DViewer->getCurrentColorWindow());
+            double wl[2];
+            m_2DViewer->getCurrentWindowLevel(wl);
+            m_insideValue = (int)(range[0] + wl[0]);
         }
         int ext[6];
         int i, j, k;

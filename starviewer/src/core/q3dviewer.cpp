@@ -250,32 +250,6 @@ void Q3DViewer::getCurrentWindowLevel(double wl[2])
     wl[1] = m_level;
 }
 
-double Q3DViewer::getCurrentColorWindow()
-{
-    if (m_mainVolume)
-    {
-        return m_window;
-    }
-    else
-    {
-        DEBUG_LOG("::getCurrentColorWindow() : No tenim input ");
-        return 0;
-    }
-}
-
-double Q3DViewer::getCurrentColorLevel()
-{
-    if (m_mainVolume)
-    {
-        return m_level;
-    }
-    else
-    {
-        DEBUG_LOG("::getCurrentColorLevel() : No tenim input ");
-        return 0;
-    }
-}
-
 void Q3DViewer::setWindowLevel(double window, double level)
 {
     if (m_mainVolume)
