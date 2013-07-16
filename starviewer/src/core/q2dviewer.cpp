@@ -2691,7 +2691,7 @@ void Q2DViewer::setWindowLevelPreset(const WindowLevel &preset)
     {
         if (group == WindowLevelPresetsToolData::FileDefined)
         {
-            m_defaultPresetToApply = m_windowLevelData->getFileDefinedPresetIndex(preset.getName());
+            m_defaultPresetToApply = m_windowLevelData->getDescriptionsFromGroup(WindowLevelPresetsToolData::FileDefined).indexOf(preset.getName());
             if (m_lastView == Q2DViewer::Axial)
             {
                 updateDefaultPreset();

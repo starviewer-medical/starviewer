@@ -55,10 +55,6 @@ void WindowLevelPresetsToolData::addPreset(const WindowLevel &preset, int group)
     if (!found)
     {
         m_presetsByGroup.insert(group, preset);
-        if (group == WindowLevelPresetsToolData::FileDefined)
-        {
-            m_fileDefinedPresets << presetName;
-        }
     }
     emit presetAdded(preset);
 }
@@ -84,11 +80,6 @@ void WindowLevelPresetsToolData::removePresetsFromGroup(int group)
         emit presetRemoved(preset);
     }
     m_presetsByGroup.remove(group);
-
-    if (group == FileDefined)
-    {
-        m_fileDefinedPresets.clear();
-    }
 }
 
 bool WindowLevelPresetsToolData::getFromDescription(const QString &description, WindowLevel &preset)
@@ -157,11 +148,6 @@ QString WindowLevelPresetsToolData::getCurrentPresetName() const
 WindowLevel WindowLevelPresetsToolData::getCurrentPreset() const
 {
     return m_currentPreset;
-}
-
-int WindowLevelPresetsToolData::getFileDefinedPresetIndex(const QString &preset) const
-{
-    return m_fileDefinedPresets.indexOf(preset);
 }
 
 bool WindowLevelPresetsToolData::updatePreset(const WindowLevel &preset)

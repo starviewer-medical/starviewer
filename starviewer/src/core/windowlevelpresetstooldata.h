@@ -77,11 +77,6 @@ public:
     /// Shortcut for getCurrentPreset().getName()
     QString getCurrentPresetName() const;
 
-    /// Ens retorna l'índex del preset definit al fitxer.
-    /// @param preset Nom del preset
-    /// @return Identificador del preset. Retorna -1 si el preset no és de tipus FileDefined
-    int getFileDefinedPresetIndex(const QString &preset) const;
-
     /// Updates the given preset with the new values of window/level. A preset with the same name has to be present in order to update it.
     /// Returns true in case the preset could be updated, false otherwise (i.e. no preset with such name exists)
     bool updatePreset(const WindowLevel &preset);
@@ -112,9 +107,6 @@ private slots:
     void updateCustomWindowLevels();
 
 private:
-    /// Guardem els FileDefined presets en l'ordre que s'han inserit
-    QStringList m_fileDefinedPresets;
-
     /// Últim preset activat
     WindowLevel m_currentPreset;
 

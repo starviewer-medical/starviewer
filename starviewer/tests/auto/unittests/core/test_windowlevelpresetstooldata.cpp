@@ -38,9 +38,6 @@ private slots:
 
     void getCurrentPreset_ReturnsExpectedPresetViaSetCustomWindowLevel();
 
-    void getFileDefinedPresetIndex_ReturnsExpectedValues_data();
-    void getFileDefinedPresetIndex_ReturnsExpectedValues();
-
     void updatePreset_WorksAsExpected_data();
     void updatePreset_WorksAsExpected();
 
@@ -339,29 +336,6 @@ void test_WindowLevelPresetsToolData::getCurrentPreset_ReturnsExpectedPresetViaS
 
     wlData.setCustomWindowLevel(1024.0, 512.0);
     QCOMPARE(wlData.getCurrentPreset(), WindowLevel(1024.0, 512.0, tr("Custom")));
-}
-
-void test_WindowLevelPresetsToolData::getFileDefinedPresetIndex_ReturnsExpectedValues_data()
-{
-    QTest::addColumn<QString>("presetName");
-    QTest::addColumn<int>("expectedIndex");
-
-    QTest::newRow("Existing file defined preset 1") << FilePreset1Name << 0;
-    QTest::newRow("Existing file defined preset 2") << FilePreset2Name << 1;
-    QTest::newRow("Existing preset, not in file defined group") << AutoPreset1Name << -1;
-    QTest::newRow("Non-Existing preset") << NonExistingPresetName << -1;
-}
-
-void test_WindowLevelPresetsToolData::getFileDefinedPresetIndex_ReturnsExpectedValues()
-{
-    QFETCH(QString, presetName);
-    QFETCH(int, expectedIndex);
-
-    WindowLevelPresetsToolData *wlData = getWindowLevelPresetsSample();
-
-    QCOMPARE(wlData->getFileDefinedPresetIndex(presetName), expectedIndex);
-    
-    delete wlData;
 }
 
 void test_WindowLevelPresetsToolData::updatePreset_WorksAsExpected_data()
