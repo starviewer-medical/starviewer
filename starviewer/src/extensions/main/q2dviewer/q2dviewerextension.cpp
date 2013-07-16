@@ -598,7 +598,7 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
             // TODO Canviem m_windowLevelComboBox->selectPreset() per windowLevelData->activatePreset per solucionar els tickets
             // 1226 i 1227, però potser s'hauria de millorar una mica el funcionament i/o la interfície de les classes implicades
             // Pendent de revisar perquè tingui un disseny i interfície més adeqequats (combo box, sobre tot)
-            windowLevelData->activatePreset(windowLevelData->getCurrentPreset());
+            windowLevelData->activatePreset(windowLevelData->getCurrentPreset().getName());
 
             m_cineController->setQViewer(selected2DViewer);
             m_thickSlabWidget->link(selected2DViewer);

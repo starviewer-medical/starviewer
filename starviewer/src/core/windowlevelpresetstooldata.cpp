@@ -38,50 +38,52 @@ WindowLevelPresetsToolData::~WindowLevelPresetsToolData()
 {
 }
 
-void WindowLevelPresetsToolData::addPreset(const WindowLevel &windowLevel, int group)
+void WindowLevelPresetsToolData::addPreset(const WindowLevel &preset, int group)
 {
-    QString description = windowLevel.getName();
-    if (!m_presets.contains(description))
+    QString presetName = preset.getName();
+    QMapIterator<int, WindowLevel> iterator(m_presetsByGroup);
+    bool found = false;
+    while (iterator.hasNext() && !found)
     {
-        WindowLevelStruct data = { windowLevel.getWidth(), windowLevel.getCenter(), group };
-        m_presets.insert(description, data);
+        iterator.next();
+        if (iterator.value().getName() == presetName)
+        {
+            found = true;
+        }
+    }
+    
+    if (!found)
+    {
+        m_presetsByGroup.insert(group, preset);
         if (group == WindowLevelPresetsToolData::FileDefined)
         {
-            m_fileDefinedPresets << description;
+            m_fileDefinedPresets << presetName;
         }
-        emit presetAdded(description);
     }
+    emit presetAdded(preset);
 }
 
-void WindowLevelPresetsToolData::removePreset(const QString &description)
+void WindowLevelPresetsToolData::removePreset(const WindowLevel &preset)
 {
-    if (m_presets.contains(description))
+    QMutableMapIterator<int, WindowLevel> iterator(m_presetsByGroup);
+    while (iterator.hasNext())
     {
-        int group;
-        if (getGroup(description, group))
+        iterator.next();
+        if (iterator.value().getName() == preset.getName())
         {
-            if (group == FileDefined)
-            {
-                m_fileDefinedPresets.removeAt(m_fileDefinedPresets.indexOf(description));
-            }
+            emit presetRemoved(preset);
+            iterator.remove();
         }
-        m_presets.remove(description);
-        emit presetRemoved(description);
     }
 }
 
 void WindowLevelPresetsToolData::removePresetsFromGroup(int group)
 {
-    QMutableMapIterator<QString, WindowLevelStruct> iterator(m_presets);
-    while (iterator.hasNext())
+    foreach (const WindowLevel &preset, m_presetsByGroup.values(group))
     {
-        iterator.next();
-        if (iterator.value().m_group == group)
-        {
-            emit presetRemoved(iterator.key());
-            iterator.remove();
-        }
+        emit presetRemoved(preset);
     }
+    m_presetsByGroup.remove(group);
 
     if (group == FileDefined)
     {
@@ -89,56 +91,70 @@ void WindowLevelPresetsToolData::removePresetsFromGroup(int group)
     }
 }
 
-bool WindowLevelPresetsToolData::getWindowLevelFromDescription(const QString &description, double &window, double &level)
+bool WindowLevelPresetsToolData::getFromDescription(const QString &description, WindowLevel &preset)
 {
-    bool ok = true;
-    if (m_presets.contains(description))
+    bool found = false;
+    QMapIterator<int, WindowLevel> iterator(m_presetsByGroup);
+    while (iterator.hasNext() && !found)
     {
-        WindowLevelStruct data = m_presets.value(description);
-        window = data.m_window;
-        level = data.m_level;
+        iterator.next();
+        if (iterator.value().getName() == description)
+        {
+            preset = iterator.value();
+            found = true;
+        }
     }
-    else
-    {
-        ok = false;
-        window = 0.0;
-        level = 0.0;
-    }
-    return ok;
+
+    return found;
 }
 
-bool WindowLevelPresetsToolData::getGroup(const QString &description, int &group)
+bool WindowLevelPresetsToolData::getGroup(const WindowLevel &preset, int &group)
 {
-    bool ok = true;
-    if (m_presets.contains(description))
+    bool found = false;
+    foreach (int key, m_presetsByGroup.keys())
     {
-        WindowLevelStruct data = m_presets.value(description);
-        group = data.m_group;
+        QStringList presetsNames = getDescriptionsFromGroup(key);
+        if (presetsNames.contains(preset.getName()))
+        {
+            found = true;
+            group = key;
+            break;
+        }
     }
-    else
+    
+    if (!found)
     {
-        ok = false;
         group = Other;
     }
-    return ok;
+
+    return found;
 }
 
 QStringList WindowLevelPresetsToolData::getDescriptionsFromGroup(int group)
 {
     QStringList descriptionList;
-    QMapIterator<QString, WindowLevelStruct> iterator(m_presets);
-    while (iterator.hasNext())
+    QList<WindowLevel> windowLevelList = getPresetsFromGroup(group);
+    foreach (const WindowLevel &preset, windowLevelList)
     {
-        iterator.next();
-        if (iterator.value().m_group == group)
-        {
-            descriptionList << iterator.key();
-        }
+        descriptionList << preset.getName();
     }
+    descriptionList.sort();
+    
     return descriptionList;
 }
 
-QString WindowLevelPresetsToolData::getCurrentPreset() const
+QList<WindowLevel> WindowLevelPresetsToolData::getPresetsFromGroup(int group)
+{
+    QList<WindowLevel> windowLevelList = m_presetsByGroup.values(group);
+    return windowLevelList;
+}
+
+QString WindowLevelPresetsToolData::getCurrentPresetName() const
+{
+    return m_currentPreset.getName();
+}
+
+WindowLevel WindowLevelPresetsToolData::getCurrentPreset() const
 {
     return m_currentPreset;
 }
@@ -148,47 +164,43 @@ int WindowLevelPresetsToolData::getFileDefinedPresetIndex(const QString &preset)
     return m_fileDefinedPresets.indexOf(preset);
 }
 
-void WindowLevelPresetsToolData::updateCurrentFileDefinedPreset(double window, double level)
+bool WindowLevelPresetsToolData::updatePreset(const WindowLevel &preset)
 {
-    int group;
-    if (getGroup(m_currentPreset, group))
+    bool found = false;
+    QMutableMapIterator<int, WindowLevel> iterator(m_presetsByGroup);
+    while (iterator.hasNext() && !found)
     {
-        if (group == FileDefined)
+        iterator.next();
+        if (iterator.value().getName() == preset.getName())
         {
-            WindowLevelStruct data = { window, level, FileDefined };
-            m_presets.insert(m_currentPreset, data);
-            emit currentWindowLevel(window, level);
-            // En aquest cas no fem emit presetChanged(preset) perquè sinó provocaria un bucle infinit
-            // Només cal notificar el valor perquè el diàleg de custom WW/WL actualitzi el seu valor
-        }
-        else
-        {
-            DEBUG_LOG("El preset actual no és de tipus FileDefined. No s'actualitza cap valor de window/level");
+            iterator.value() = preset;
+            found = true;
         }
     }
-    else
+
+    if (!found)
     {
-        DEBUG_LOG("El preset actual no existeix al contenidor de presets. No s'actualitza cap valor de window/level");
+        DEBUG_LOG("The given preset does not exist in the presets container. Nothing will be done.");
     }
+    
+    return found;
 }
 
 void WindowLevelPresetsToolData::setCustomWindowLevel(double window, double level)
 {
-    WindowLevelStruct data = { window, level, CustomPreset };
-    m_presets.insert(tr("Custom"), data);
-    emit currentWindowLevel(window, level);
-    emit presetChanged(tr("Custom"));
-    m_currentPreset = tr("Custom");
+    WindowLevel customPreset(window, level, tr("Custom"));
+    m_presetsByGroup.replace(CustomPreset, customPreset);
+    m_currentPreset = customPreset;
+    emit presetChanged(customPreset);
 }
 
-void WindowLevelPresetsToolData::activatePreset(const QString &preset)
+void WindowLevelPresetsToolData::activatePreset(const QString &presetName)
 {
-    double window, level;
-    if (this->getWindowLevelFromDescription(preset, window, level))
+    WindowLevel preset;
+    if (getFromDescription(presetName, preset))
     {
         m_currentPreset = preset;
-        emit currentWindowLevel(window, level);
-        emit presetChanged(preset);
+        emit presetChanged(preset); // TODO change signal name to presetActivated()?
     }
 }
 

@@ -28,10 +28,9 @@ void QCustomWindowLevelEditWidget::createConnections()
     connect(m_cancelPushButton, SIGNAL(clicked()), SLOT(close()));
 }
 
-void QCustomWindowLevelEditWidget::setDefaultWindowLevel(double width, double level)
+void QCustomWindowLevelEditWidget::setDefaultWindowLevel(const WindowLevel &windowLevel)
 {
-    m_defaultWindowWidth = width;
-    m_defaultWindowLevel = level;
+    m_defaultWindowLevel = windowLevel;
 }
 
 void QCustomWindowLevelEditWidget::loadCustomWindowLevelPresets()
@@ -45,19 +44,19 @@ void QCustomWindowLevelEditWidget::loadCustomWindowLevelPresets()
 
     foreach (WindowLevel *customWindowLevel, CustomWindowLevelsRepository::getRepository()->getItems())
     {
-        addWindowLevelItem(customWindowLevel->getName(), customWindowLevel->getWidth(), customWindowLevel->getCenter());
+        addWindowLevelItem(*customWindowLevel);
     }
     m_addWindowLevelPushButton->setFocus();
 }
 
 void QCustomWindowLevelEditWidget::addNewWindowLevel()
 {
-    QTreeWidgetItem *item = addWindowLevelItem("", m_defaultWindowWidth, m_defaultWindowLevel);
+    QTreeWidgetItem *item = addWindowLevelItem(m_defaultWindowLevel);
     m_customWindowLevelTreeWidget->editItem(item, 2);
     m_customWindowLevelTreeWidget->scrollToItem(item);
 }
 
-QTreeWidgetItem* QCustomWindowLevelEditWidget::addWindowLevelItem(const QString &description, double width, double level)
+QTreeWidgetItem* QCustomWindowLevelEditWidget::addWindowLevelItem(const WindowLevel &windowLevel)
 {
     QTreeWidgetItem *item = new QTreeWidgetItem(m_customWindowLevelTreeWidget);
     item->setFlags(Qt::ItemIsEditable | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
@@ -66,12 +65,12 @@ QTreeWidgetItem* QCustomWindowLevelEditWidget::addWindowLevelItem(const QString 
     QDoubleSpinBox *levelSpinBox = new QDoubleSpinBox(this);
     widthSpinBox->setRange(-131070, 131070);
     levelSpinBox->setRange(-131070, 131070);
-    widthSpinBox->setValue(width);
-    levelSpinBox->setValue(level);
+    widthSpinBox->setValue(windowLevel.getWidth());
+    levelSpinBox->setValue(windowLevel.getCenter());
 
     m_customWindowLevelTreeWidget->setItemWidget(item, 0, widthSpinBox);
     m_customWindowLevelTreeWidget->setItemWidget(item, 1, levelSpinBox);
-    item->setText(2, description);
+    item->setText(2, windowLevel.getName());
 
     return item;
 }

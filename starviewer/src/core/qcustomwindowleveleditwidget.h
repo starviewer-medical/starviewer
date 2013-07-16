@@ -3,6 +3,8 @@
 
 #include "ui_qcustomwindowleveleditwidgetbase.h"
 
+#include "windowlevel.h"
+
 namespace udg {
 
 /// Widget que permet afegir, modificar i eliminar els WW/WL definits per l'usuari.
@@ -15,7 +17,7 @@ public:
     ~QCustomWindowLevelEditWidget();
 
     /// Assigna els valors per defecte que es posarant quan s'afegeixi un custom
-    void setDefaultWindowLevel(double width, double level);
+    void setDefaultWindowLevel(const WindowLevel &windowLevel);
 
 private:
     /// Crea les connexions internes
@@ -28,7 +30,7 @@ private:
     bool validate() const;
 
     /// Afegeix una nova fila a la taula amb els valors passats per paràmetre
-    QTreeWidgetItem* addWindowLevelItem(const QString &description, double width, double level);
+    QTreeWidgetItem* addWindowLevelItem(const WindowLevel &windowLevel);
 
 private slots:
     /// Afegeix una nova fila assignant els valors per defecte guardats als atributs m_defaultWindowWidth i m_defaultWindowLevel
@@ -42,8 +44,7 @@ private slots:
 
 private:
     /// WW/WL per defecte que es posaran al afegir un nova fila
-    double m_defaultWindowWidth;
-    double m_defaultWindowLevel;
+    WindowLevel m_defaultWindowLevel;
 };
 
 }

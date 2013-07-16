@@ -534,7 +534,7 @@ void QViewer::setWindowLevelData(WindowLevelPresetsToolData *windowLevelData)
     }
 
     m_windowLevelData = windowLevelData;
-    connect(m_windowLevelData, SIGNAL(presetChanged(QString)), SLOT(setWindowLevelPreset(QString)));
+    connect(m_windowLevelData, SIGNAL(presetChanged(WindowLevel)), SLOT(setWindowLevelPreset(WindowLevel)));
 }
 
 void QViewer::grabCurrentView()
@@ -835,13 +835,11 @@ void QViewer::setInputAndRender(Volume *volume)
     this->render();
 }
 
-void QViewer::setWindowLevelPreset(const QString &preset)
+void QViewer::setWindowLevelPreset(const WindowLevel &preset)
 {
-    double window;
-    double level;
-    if (m_windowLevelData->getWindowLevelFromDescription(preset, window, level))
+    if (preset.isValid())
     {
-        setWindowLevel(window, level);
+        setWindowLevel(preset.getWidth(), preset.getCenter());
     }
 }
 

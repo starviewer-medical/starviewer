@@ -2683,33 +2683,28 @@ void Q2DViewer::fitImageIntoViewport()
     scaleToFit3D(topCorner, bottomCorner);
 }
 
-void Q2DViewer::setWindowLevelPreset(const QString &preset)
+void Q2DViewer::setWindowLevelPreset(const WindowLevel &preset)
 {
-    double window;
-    double level;
     int group;
 
-    if (m_windowLevelData->getWindowLevelFromDescription(preset, window, level))
+    if (m_windowLevelData->getGroup(preset, group))
     {
-        if (m_windowLevelData->getGroup(preset, group))
+        if (group == WindowLevelPresetsToolData::FileDefined)
         {
-            if (group == WindowLevelPresetsToolData::FileDefined)
+            m_defaultPresetToApply = m_windowLevelData->getFileDefinedPresetIndex(preset.getName());
+            if (m_lastView == Q2DViewer::Axial)
             {
-                m_defaultPresetToApply = m_windowLevelData->getFileDefinedPresetIndex(preset);
-                if (m_lastView == Q2DViewer::Axial)
-                {
-                    updateDefaultPreset();
-                }
-                else
-                {
-                    setWindowLevel(window, level);
-                }
+                updateDefaultPreset();
             }
             else
             {
-                m_defaultPresetToApply = -1;
-                setWindowLevel(window, level);
+                setWindowLevel(preset.getWidth(), preset.getCenter());
             }
+        }
+        else
+        {
+            m_defaultPresetToApply = -1;
+            setWindowLevel(preset.getWidth(), preset.getCenter());
         }
     }
 }
@@ -2729,7 +2724,7 @@ void Q2DViewer::updateDefaultPreset()
                     windowLevel.setWidth(-windowLevel.getWidth());
                 }
                 setWindowLevel(windowLevel.getWidth(), windowLevel.getCenter());
-                m_windowLevelData->updateCurrentFileDefinedPreset(windowLevel.getWidth(), windowLevel.getCenter());
+                m_windowLevelData->updatePreset(windowLevel);
             }
         }
     }

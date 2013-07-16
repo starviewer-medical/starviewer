@@ -4,6 +4,7 @@
 #include "windowlevelpresetstooldata.h"
 #include "qcustomwindowleveleditwidget.h"
 #include "coresettings.h"
+#include "windowlevel.h"
 
 namespace udg {
 
@@ -33,10 +34,9 @@ void QWindowLevelComboBox::setPresetsData(WindowLevelPresetsToolData *windowLeve
     }
     m_presetsData = windowLevelData;
     populateFromPresetsData();
-    connect(m_presetsData, SIGNAL(presetAdded(QString)), SLOT(addPreset(QString)));
-    connect(m_presetsData, SIGNAL(presetRemoved(QString)), SLOT(removePreset(QString)));
-    connect(m_presetsData, SIGNAL(presetChanged(QString)), SLOT(selectPreset(QString)));
-    connect(m_presetsData, SIGNAL(currentWindowLevel(double, double)), m_customWindowLevelDialog, SLOT(setDefaultWindowLevel(double, double)));
+    connect(m_presetsData, SIGNAL(presetAdded(WindowLevel)), SLOT(addPreset(WindowLevel)));
+    connect(m_presetsData, SIGNAL(presetRemoved(WindowLevel)), SLOT(removePreset(WindowLevel)));
+    connect(m_presetsData, SIGNAL(presetChanged(WindowLevel)), SLOT(selectPreset(WindowLevel)));
 
     // TODO Això es podria substituir fent que el CustomWindowLevelDialog també contingués les dades
     // de window level i directament li fes un setCustomWindowLevel() a WindowLevelPresetsToolData
@@ -56,7 +56,7 @@ void QWindowLevelComboBox::clearPresets()
     m_presetsData = 0;
 }
 
-void QWindowLevelComboBox::addPreset(const QString &preset)
+void QWindowLevelComboBox::addPreset(const WindowLevel &preset)
 {
     int group;
     if (m_presetsData->getGroup(preset, group))
@@ -65,52 +65,57 @@ void QWindowLevelComboBox::addPreset(const QString &preset)
         switch (group)
         {
             case WindowLevelPresetsToolData::AutomaticPreset:
-                index = m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() - 1;
+                index = m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() - 1;
                 break;
 
             case WindowLevelPresetsToolData::FileDefined:
-                index = m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() +
-                        m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::FileDefined).count() - 1;
+                index = m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() +
+                        m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::FileDefined).count() - 1;
                 break;
 
             case WindowLevelPresetsToolData::StandardPresets:
-                index = m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() +
-                        m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::FileDefined).count() +
-                        m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::StandardPresets).count() - 1;
+                index = m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() +
+                        m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::FileDefined).count() +
+                        m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::StandardPresets).count() - 1;
                 break;
 
             case WindowLevelPresetsToolData::UserDefined:
-                index = m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() +
-                        m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::FileDefined).count() +
-                        m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::StandardPresets).count() +
-                        m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::UserDefined).count() - 1;
+                index = m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() +
+                        m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::FileDefined).count() +
+                        m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::StandardPresets).count() +
+                        m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::UserDefined).count() - 1;
                 break;
 
             case WindowLevelPresetsToolData::Other:
-                index = m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() +
-                        m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::FileDefined).count() +
-                        m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::StandardPresets).count() +
-                        m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::UserDefined).count() +
-                        m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::Other).count() - 1;
+                index = m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() +
+                        m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::FileDefined).count() +
+                        m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::StandardPresets).count() +
+                        m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::UserDefined).count() +
+                        m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::Other).count() - 1;
                 break;
 
             case WindowLevelPresetsToolData::CustomPreset:
-                index = m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() +
-                        m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::FileDefined).count() +
-                        m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::StandardPresets).count() +
-                        m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::UserDefined).count() +
-                        m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::Other).count() +
-                        m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::CustomPreset).count() - 1;
+                index = m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() +
+                        m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::FileDefined).count() +
+                        m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::StandardPresets).count() +
+                        m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::UserDefined).count() +
+                        m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::Other).count() +
+                        m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::CustomPreset).count() - 1;
                 break;
         }
-        this->insertItem(index, preset);
+        this->insertItem(index, preset.getName());
     }
     else
     {
-        DEBUG_LOG("El preset " + preset + " no està present en les dades de window level proporcionades");
+        DEBUG_LOG("El preset " + preset.getName() + " no està present en les dades de window level proporcionades");
     }
 
     this->selectPreset(m_currentSelectedPreset);
+}
+
+void QWindowLevelComboBox::removePreset(const WindowLevel &preset)
+{
+    removePreset(preset.getName());
 }
 
 void QWindowLevelComboBox::removePreset(const QString &preset)
@@ -120,6 +125,11 @@ void QWindowLevelComboBox::removePreset(const QString &preset)
     {
         this->removeItem(index);
     }
+}
+
+void QWindowLevelComboBox::selectPreset(const WindowLevel &preset)
+{
+    selectPreset(preset.getName());
 }
 
 void QWindowLevelComboBox::selectPreset(const QString &preset)
@@ -160,19 +170,18 @@ void QWindowLevelComboBox::setActiveWindowLevel(const QString &text)
     {
         // Reestablim el valor que hi havia perquè no quedi seleccionat la fila de l'editor.
         this->selectPreset(m_currentSelectedPreset);
+        WindowLevel preset = m_presetsData->getCurrentPreset();
+        m_customWindowLevelDialog->setDefaultWindowLevel(preset.getWidth(), preset.getCenter());
         m_customWindowLevelDialog->exec();
     }
     else if (text == tr("Edit Custom WW/WL"))
     {
         // Reestablim el valor que hi havia perquè no quedi seleccionat la fila de l'editor.
         this->selectPreset(m_currentSelectedPreset);
-
-        double width;
-        double level;
-        m_presetsData->getWindowLevelFromDescription(m_presetsData->getCurrentPreset(), width, level);
+        WindowLevel preset = m_presetsData->getCurrentPreset();
 
         QCustomWindowLevelEditWidget customWindowLevelEditWidget;
-        customWindowLevelEditWidget.setDefaultWindowLevel(width, level);
+        customWindowLevelEditWidget.setDefaultWindowLevel(preset);
         customWindowLevelEditWidget.exec();
     }
     else

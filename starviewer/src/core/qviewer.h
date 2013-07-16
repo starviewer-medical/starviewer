@@ -189,7 +189,7 @@ public slots:
     /// Ajusta el window/level
     virtual void setWindowLevel(double window, double level) = 0;
     /// Ajusta el window/level a partir del preset. La implementació per defecte acaba cridant setWindowLevel sempre.
-    virtual void setWindowLevelPreset(const QString &preset);
+    virtual void setWindowLevelPreset(const WindowLevel &preset);
 
     /// Assigna/Obté la funció de transferència actual
     virtual void setTransferFunction(TransferFunction *transferFunction) = 0;
