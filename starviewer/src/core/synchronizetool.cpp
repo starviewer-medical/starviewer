@@ -192,12 +192,14 @@ void SynchronizeTool::applySliceChanges()
             disconnect(m_viewer, SIGNAL(sliceChanged(int)), this, SLOT(setIncrement(int)));
 
             int nextSlice = m_lastSlice + slices;
-            if ( nextSlice > m_q2dviewer->getMaximumSlice()) // Fixem a la última llesca per si hi ha l'slicinc cíclic activat
+            if (nextSlice > m_q2dviewer->getMaximumSlice())
             {
+                // Fixem a la última llesca per si hi ha l'slicinc cíclic activat
                 nextSlice = m_q2dviewer->getMaximumSlice();
             }
-            else if ( nextSlice < 0 ) // Fixem a la primera llesca per si hi ha l'slicinc cíclic activat
+            else if (nextSlice < 0)
             {
+                // Fixem a la primera llesca per si hi ha l'slicinc cíclic activat
                 nextSlice = 0;
             }
 
