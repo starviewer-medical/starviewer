@@ -95,9 +95,9 @@ void WindowLevelPresetsTool::applyPreset(char key)
         {
             if (!m_defaultPresets.isEmpty())
             {
-                if (m_defaultPresets.contains(m_myToolData->getCurrentPreset()))
+                if (m_defaultPresets.contains(m_myToolData->getCurrentPresetName()))
                 {
-                    m_defaultPresetsIndex = (m_defaultPresets.indexOf(m_myToolData->getCurrentPreset()) + 1) % m_defaultPresets.count();
+                    m_defaultPresetsIndex = (m_defaultPresets.indexOf(m_myToolData->getCurrentPresetName()) + 1) % m_defaultPresets.count();
                 }
                 else
                 {

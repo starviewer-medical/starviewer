@@ -135,7 +135,7 @@ void QDicomPrintExtension::updateInput()
     // TODO Canviem m_windowLevelComboBox->selectPreset() per windowLevelData->activatePreset per solucionar els tickets
     // 1226 i 1227, però potser s'hauria de millorar una mica el funcionament i/o la interfície de les classes implicades
     // Pendent de revisar perquè tingui un disseny i interfície més adeqequats (combo box, sobre tot)
-    windowLevelData->activatePreset(windowLevelData->getCurrentPreset());
+    windowLevelData->activatePreset(windowLevelData->getCurrentPreset().getName());
 }
 
 void QDicomPrintExtension::fillSelectedDicomPrinterComboBox()

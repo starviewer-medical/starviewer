@@ -1,6 +1,8 @@
 #include "autotest.h"
 #include "windowlevelpresetstooldata.h"
 #include "windowlevel.h"
+#include "mathtools.h"
+#include <QDebug>
 
 using namespace udg;
 
@@ -17,8 +19,8 @@ private slots:
     void removePresetsFromGroup_WorksAsExpected_data();
     void removePresetsFromGroup_WorksAsExpected();
 
-    void getWindowLevelFromDescription_ReturnsExpectedValues_data();
-    void getWindowLevelFromDescription_ReturnsExpectedValues();
+    void getFromDescription_ReturnsExpectedValues_data();
+    void getFromDescription_ReturnsExpectedValues();
 
     void getGroup_ReturnsExpectedValuesFromExistingPresets_data();
     void getGroup_ReturnsExpectedValuesFromExistingPresets();
@@ -39,8 +41,8 @@ private slots:
     void getFileDefinedPresetIndex_ReturnsExpectedValues_data();
     void getFileDefinedPresetIndex_ReturnsExpectedValues();
 
-    void updateCurrentFileDefinedPreset_WorksAsExpected_data();
-    void updateCurrentFileDefinedPreset_WorksAsExpected();
+    void updatePreset_WorksAsExpected_data();
+    void updatePreset_WorksAsExpected();
 
     void setCustomWindowLevel_UpdatesValues_data();
     void setCustomWindowLevel_UpdatesValues();
@@ -60,9 +62,22 @@ private:
     static const QString OtherPreset1Name;
     static const QString NonExistingPresetName;
 
+    static const WindowLevel AutoPreset1;
+    static const WindowLevel AutoPreset2;
+    static const WindowLevel FilePreset1;
+    static const WindowLevel FilePreset2;
+    static const WindowLevel StandardPreset1;
+    static const WindowLevel StandardPreset2;
+    static const WindowLevel UserPreset1;
+    static const WindowLevel CustomPreset1;
+    static const WindowLevel OtherPreset1;
+    static const WindowLevel NonExistingPreset;
+
 private:
     WindowLevelPresetsToolData* getWindowLevelPresetsSample();
 };
+
+Q_DECLARE_METATYPE(WindowLevel)
 
 const QString test_WindowLevelPresetsToolData::AutoPreset1Name("Preset 1 - Auto");
 const QString test_WindowLevelPresetsToolData::AutoPreset2Name("Preset 2 - Auto");
@@ -75,55 +90,63 @@ const QString test_WindowLevelPresetsToolData::CustomPreset1Name("Preset 1 - Cus
 const QString test_WindowLevelPresetsToolData::OtherPreset1Name("Preset 1 - Other");
 const QString test_WindowLevelPresetsToolData::NonExistingPresetName("Dummy name");
 
+const WindowLevel test_WindowLevelPresetsToolData::AutoPreset1(128.0, 256.0, AutoPreset1Name);
+const WindowLevel test_WindowLevelPresetsToolData::AutoPreset2(1024.0, 512.0, AutoPreset2Name);
+const WindowLevel test_WindowLevelPresetsToolData::FilePreset1(328.5, 678.9, FilePreset1Name);
+const WindowLevel test_WindowLevelPresetsToolData::FilePreset2(128.3, 583.4, FilePreset2Name);
+const WindowLevel test_WindowLevelPresetsToolData::StandardPreset1(1500, -650, StandardPreset1Name);
+const WindowLevel test_WindowLevelPresetsToolData::StandardPreset2(2000, 500, StandardPreset2Name);
+const WindowLevel test_WindowLevelPresetsToolData::UserPreset1(110, 900, UserPreset1Name);
+const WindowLevel test_WindowLevelPresetsToolData::CustomPreset1(1231, 412, CustomPreset1Name);
+const WindowLevel test_WindowLevelPresetsToolData::OtherPreset1(100, 200, OtherPreset1Name);
+const WindowLevel test_WindowLevelPresetsToolData::NonExistingPreset(0.0, 0.0, NonExistingPresetName);
+
 void test_WindowLevelPresetsToolData::addPreset_AddsGivenPreset_data()
 {
     QTest::addColumn<QString>("presetDescription");
-    QTest::addColumn<double>("window");
-    QTest::addColumn<double>("level");
+    QTest::addColumn<WindowLevel>("windowLevel");
     QTest::addColumn<int>("group");
 
-    QTest::newRow("Preset 1") << "Preset name 1" << 0.0 << 0.0 << 0;
-    QTest::newRow("Preset 2") << "Preset name 2" << 128.0 << 256.0 << 100;
-    QTest::newRow("Preset 3 in 'FileDefined' group") << "Preset 3" << 1.0 << 1.0 << static_cast<int>(WindowLevelPresetsToolData::FileDefined);
+    QTest::newRow("Preset 1") << "Preset name 1" << WindowLevel(0.0, 0.0, "Preset name 1") << 0;
+    QTest::newRow("Preset 2") << "Preset name 2" << WindowLevel(128.0, 256.0, "Preset name 2") << 100;
+    QTest::newRow("Preset 3 in 'FileDefined' group") << "Preset 3" << WindowLevel(1.0, 1.0, "Preset 3") << static_cast<int>(WindowLevelPresetsToolData::FileDefined);
 }
 
 void test_WindowLevelPresetsToolData::addPreset_AddsGivenPreset()
 {
     QFETCH(QString, presetDescription);
-    QFETCH(double, window);
-    QFETCH(double, level);
+    QFETCH(WindowLevel, windowLevel);
     QFETCH(int, group);
 
     WindowLevelPresetsToolData wlData;
-    WindowLevel windowLevel(window, level, presetDescription);
     wlData.addPreset(windowLevel, group);
 
-    double dummyWindow, dummyLevel;
-    QVERIFY(wlData.getWindowLevelFromDescription(presetDescription, dummyWindow, dummyLevel));
+    WindowLevel dummyWindowLevel;
+    QVERIFY(wlData.getFromDescription(presetDescription, dummyWindowLevel));
 }
 
 void test_WindowLevelPresetsToolData::removePreset_WorksAsExpected_data()
 {
-    QTest::addColumn<QString>("presetToRemove");
+    QTest::addColumn<WindowLevel>("presetToRemove");
 
-    QTest::newRow("Remove existing preset [Auto]") << AutoPreset1Name;
-    QTest::newRow("Remove existing preset [File]") << FilePreset1Name;
-    QTest::newRow("Remove existing preset [Standard]") << StandardPreset2Name;
-    QTest::newRow("Remove existing preset [User]") << UserPreset1Name;
-    QTest::newRow("Remove existing preset [Custom]") << CustomPreset1Name;
-    QTest::newRow("Remove existing preset [Other]") << OtherPreset1Name;
-    QTest::newRow("Remove non-existing preset") << NonExistingPresetName;
+    QTest::newRow("Remove existing preset [Auto]") << AutoPreset1;
+    QTest::newRow("Remove existing preset [File]") << FilePreset1;
+    QTest::newRow("Remove existing preset [Standard]") << StandardPreset2;
+    QTest::newRow("Remove existing preset [User]") << UserPreset1;
+    QTest::newRow("Remove existing preset [Custom]") << CustomPreset1;
+    QTest::newRow("Remove existing preset [Other]") << OtherPreset1;
+    QTest::newRow("Remove non-existing preset") << NonExistingPreset;
 }
 
 void test_WindowLevelPresetsToolData::removePreset_WorksAsExpected()
 {
-    QFETCH(QString, presetToRemove);
+    QFETCH(WindowLevel, presetToRemove);
 
     WindowLevelPresetsToolData* wlData = getWindowLevelPresetsSample();
     wlData->removePreset(presetToRemove);
 
-    double dummyWindow, dummyLevel;
-    QVERIFY(!wlData->getWindowLevelFromDescription(presetToRemove, dummyWindow, dummyLevel));
+    WindowLevel dummyWindowLevel;
+    QVERIFY(!wlData->getFromDescription(presetToRemove.getName(), dummyWindowLevel));
 
     delete wlData;
 }
@@ -153,61 +176,58 @@ void test_WindowLevelPresetsToolData::removePresetsFromGroup_WorksAsExpected()
     delete wlData;
 }
 
-void test_WindowLevelPresetsToolData::getWindowLevelFromDescription_ReturnsExpectedValues_data()
+void test_WindowLevelPresetsToolData::getFromDescription_ReturnsExpectedValues_data()
 {
     QTest::addColumn<QString>("presetName");
-    QTest::addColumn<double>("window");
-    QTest::addColumn<double>("level");
+    QTest::addColumn<WindowLevel>("preset");
     QTest::addColumn<bool>("returnValue");
 
-    QTest::newRow("Existing auto preset") << AutoPreset2Name << 1024.0 << 512.0 << true;
-    QTest::newRow("Existing file preset") << FilePreset1Name << 328.5 << 678.9 << true;
-    QTest::newRow("Existing standard preset") << StandardPreset1Name << 1500.0 << -650.0 << true;
-    QTest::newRow("Existing user preset") << UserPreset1Name << 110.0 << 900.0 << true;
-    QTest::newRow("Existing custom preset") << CustomPreset1Name << 1231.0 << 412.0 << true;
-    QTest::newRow("Existing other preset") << OtherPreset1Name << 100.0 << 200.0 << true;
-    QTest::newRow("NON-Existing preset") << NonExistingPresetName << 0.0 << 0.0 << false;
+    QTest::newRow("Existing auto preset") << AutoPreset2Name << AutoPreset2 << true;
+    QTest::newRow("Existing file preset") << FilePreset1Name << FilePreset1 << true;
+    QTest::newRow("Existing standard preset") << StandardPreset1Name << StandardPreset1 << true;
+    QTest::newRow("Existing user preset") << UserPreset1Name << UserPreset1 << true;
+    QTest::newRow("Existing custom preset") << CustomPreset1Name << CustomPreset1 << true;
+    QTest::newRow("Existing other preset") << OtherPreset1Name << OtherPreset1 << true;
+    QTest::newRow("NON-Existing preset") << NonExistingPresetName << WindowLevel() << false;
 }
 
-void test_WindowLevelPresetsToolData::getWindowLevelFromDescription_ReturnsExpectedValues()
+void test_WindowLevelPresetsToolData::getFromDescription_ReturnsExpectedValues()
 {
     QFETCH(QString, presetName);
-    QFETCH(double, window);
-    QFETCH(double, level);
+    QFETCH(WindowLevel, preset);
     QFETCH(bool, returnValue);
 
     WindowLevelPresetsToolData* wlData = getWindowLevelPresetsSample();
     
-    double returnedWindow, returnedLevel;
-    QCOMPARE(wlData->getWindowLevelFromDescription(presetName, returnedWindow, returnedLevel), returnValue);
-    QCOMPARE(returnedWindow, window);
-    QCOMPARE(returnedLevel, level);
+    WindowLevel returnedWindowLevel;
+    QCOMPARE(wlData->getFromDescription(presetName, returnedWindowLevel), returnValue);
+    QCOMPARE(preset, returnedWindowLevel);
 
     delete wlData;
 }
 
 void test_WindowLevelPresetsToolData::getGroup_ReturnsExpectedValuesFromExistingPresets_data()
 {
-    QTest::addColumn<QString>("presetName");
+    QTest::addColumn<WindowLevel>("preset");
     QTest::addColumn<int>("expectedGroup");
 
-    QTest::newRow("Auto preset") << AutoPreset1Name << static_cast<int>(WindowLevelPresetsToolData::AutomaticPreset);
-    QTest::newRow("File preset") << FilePreset1Name << static_cast<int>(WindowLevelPresetsToolData::FileDefined);
-    QTest::newRow("Standard preset") << StandardPreset1Name << static_cast<int>(WindowLevelPresetsToolData::StandardPresets);
-    QTest::newRow("Custom preset") << CustomPreset1Name << static_cast<int>(WindowLevelPresetsToolData::CustomPreset);
-    QTest::newRow("User preset") << UserPreset1Name << static_cast<int>(WindowLevelPresetsToolData::UserDefined);
-    QTest::newRow("Other preset") << OtherPreset1Name << static_cast<int>(WindowLevelPresetsToolData::Other);
+    QTest::newRow("Auto preset") << AutoPreset1 << static_cast<int>(WindowLevelPresetsToolData::AutomaticPreset);
+    QTest::newRow("File preset") << FilePreset1 << static_cast<int>(WindowLevelPresetsToolData::FileDefined);
+    QTest::newRow("Standard preset") << StandardPreset1 << static_cast<int>(WindowLevelPresetsToolData::StandardPresets);
+    QTest::newRow("Custom preset") << CustomPreset1 << static_cast<int>(WindowLevelPresetsToolData::CustomPreset);
+    QTest::newRow("User preset") << UserPreset1 << static_cast<int>(WindowLevelPresetsToolData::UserDefined);
+    QTest::newRow("Other preset") << OtherPreset1 << static_cast<int>(WindowLevelPresetsToolData::Other);
 }
 
 void test_WindowLevelPresetsToolData::getGroup_ReturnsExpectedValuesFromExistingPresets()
 {
-    QFETCH(QString, presetName);
+    QFETCH(WindowLevel, preset);
     QFETCH(int, expectedGroup);
 
     WindowLevelPresetsToolData* wlData = getWindowLevelPresetsSample();
 
     int returnedGroup;
-    QVERIFY(wlData->getGroup(presetName, returnedGroup));
+    QVERIFY(wlData->getGroup(preset, returnedGroup));
     QCOMPARE(returnedGroup, expectedGroup); 
 
     delete wlData;
@@ -215,22 +235,22 @@ void test_WindowLevelPresetsToolData::getGroup_ReturnsExpectedValuesFromExisting
 
 void test_WindowLevelPresetsToolData::getGroup_ReturnsExpectedValuesFromNonExistingPresets_data()
 {
-    QTest::addColumn<QString>("presetName");
+    QTest::addColumn<WindowLevel>("preset");
 
-    QTest::newRow("Non-existing preset 0") << NonExistingPresetName;
-    QTest::newRow("Non-existing preset 1") << "non-existing preset";
-    QTest::newRow("Non-existing preset 2") << "ABDCJS-##@|@@##-123456";
-    QTest::newRow("Non-existing preset 3") << "[" + AutoPreset1Name + "]";
+    QTest::newRow("Non-existing preset 0") << NonExistingPreset;
+    QTest::newRow("Non-existing preset 1") << WindowLevel(MathTools::randomDouble(1, 6000), MathTools::randomDouble(-6000, 6000), "non-existing preset");
+    QTest::newRow("Non-existing preset 2") << WindowLevel(MathTools::randomDouble(1, 6000), MathTools::randomDouble(-6000, 6000), "ABDCJS-##@|@@##-123456");
+    QTest::newRow("Non-existing preset 3") << WindowLevel(MathTools::randomDouble(1, 6000), MathTools::randomDouble(-6000, 6000), "[" + AutoPreset1Name + "]");
 }
 
 void test_WindowLevelPresetsToolData::getGroup_ReturnsExpectedValuesFromNonExistingPresets()
 {
-    QFETCH(QString, presetName);
+    QFETCH(WindowLevel, preset);
     
     WindowLevelPresetsToolData* wlData = getWindowLevelPresetsSample();
 
     int returnedDummyGroup;
-    QVERIFY(!wlData->getGroup(presetName, returnedDummyGroup));
+    QVERIFY(!wlData->getGroup(preset, returnedDummyGroup));
 
     delete wlData;
 }
@@ -288,7 +308,7 @@ void test_WindowLevelPresetsToolData::getCurrentPreset_IsEmptyAfterCreation()
 {
     WindowLevelPresetsToolData wlData;
 
-    QVERIFY(wlData.getCurrentPreset().isEmpty());
+    QCOMPARE(wlData.getCurrentPreset(), WindowLevel());
 }
 
 void test_WindowLevelPresetsToolData::getCurrentPreset_ReturnsExpectedPresetViaActivatePreset_data()
@@ -308,7 +328,7 @@ void test_WindowLevelPresetsToolData::getCurrentPreset_ReturnsExpectedPresetViaA
     WindowLevelPresetsToolData* wlData = getWindowLevelPresetsSample();
     wlData->activatePreset(presetNameToActivate);
     
-    QCOMPARE(wlData->getCurrentPreset(), expectedCurrentPresetName);
+    QCOMPARE(wlData->getCurrentPreset().getName(), expectedCurrentPresetName);
 
     delete wlData;
 }
@@ -318,7 +338,7 @@ void test_WindowLevelPresetsToolData::getCurrentPreset_ReturnsExpectedPresetViaS
     WindowLevelPresetsToolData wlData;
 
     wlData.setCustomWindowLevel(1024.0, 512.0);
-    QCOMPARE(wlData.getCurrentPreset(), tr("Custom"));
+    QCOMPARE(wlData.getCurrentPreset(), WindowLevel(1024.0, 512.0, tr("Custom")));
 }
 
 void test_WindowLevelPresetsToolData::getFileDefinedPresetIndex_ReturnsExpectedValues_data()
@@ -344,69 +364,57 @@ void test_WindowLevelPresetsToolData::getFileDefinedPresetIndex_ReturnsExpectedV
     delete wlData;
 }
 
-void test_WindowLevelPresetsToolData::updateCurrentFileDefinedPreset_WorksAsExpected_data()
+void test_WindowLevelPresetsToolData::updatePreset_WorksAsExpected_data()
 {
-    QTest::addColumn<QString>("presetToActivate");
-    QTest::addColumn<double>("windowToUpdate");
-    QTest::addColumn<double>("levelToUpdate");
-    QTest::addColumn<double>("windowAfterUpdate");
-    QTest::addColumn<double>("levelAfterUpdate");
+    QTest::addColumn<WindowLevel>("windowLevelToUpdate");
+    QTest::addColumn<WindowLevel>("windowLevelAfterUpdate");
 
-    QTest::newRow("Activated preset exists and is file defined") << FilePreset1Name << 1.5 << 2.5 << 1.5 << 2.5;
-    QTest::newRow("Activated preset exists but is not file defined") << AutoPreset1Name << 1.5 << 2.5 << 128.0 << 256.0;
-    QTest::newRow("Activated preset does not exist") << NonExistingPresetName << 1.5 << 2.5 << 0.0 << 0.0;
+    QTest::newRow("Activated preset exists and is file defined") << WindowLevel(1.5, 2.5, FilePreset1Name) << WindowLevel(1.5, 2.5, FilePreset1Name);
+    QTest::newRow("Activated preset exists but is not file defined") << WindowLevel(128.0, 256.0, AutoPreset1Name) << WindowLevel(128.0, 256.0, AutoPreset1Name);
+    QTest::newRow("Activated preset does not exist") << WindowLevel(1.5, 2.5, NonExistingPresetName) << WindowLevel();
 }
 
-void test_WindowLevelPresetsToolData::updateCurrentFileDefinedPreset_WorksAsExpected()
+void test_WindowLevelPresetsToolData::updatePreset_WorksAsExpected()
 {
-    QFETCH(QString, presetToActivate);
-    QFETCH(double, windowToUpdate);
-    QFETCH(double, levelToUpdate);
-    QFETCH(double, windowAfterUpdate);
-    QFETCH(double, levelAfterUpdate);
+    QFETCH(WindowLevel, windowLevelToUpdate);
+    QFETCH(WindowLevel, windowLevelAfterUpdate);
     
     WindowLevelPresetsToolData* wlData = getWindowLevelPresetsSample();
-    wlData->activatePreset(presetToActivate);
-    wlData->updateCurrentFileDefinedPreset(windowToUpdate, levelToUpdate);
+    wlData->updatePreset(windowLevelToUpdate);
     
-    double window, level;
-    wlData->getWindowLevelFromDescription(wlData->getCurrentPreset(), window, level);
+    WindowLevel obtainedWindowLevel;
+    wlData->getFromDescription(windowLevelToUpdate.getName(), obtainedWindowLevel);
     
-    QCOMPARE(window, windowAfterUpdate);
-    QCOMPARE(level,levelAfterUpdate);
+    QCOMPARE(obtainedWindowLevel, windowLevelAfterUpdate);
     
     delete wlData;
 }
 
 void test_WindowLevelPresetsToolData::setCustomWindowLevel_UpdatesValues_data()
 {
-    QTest::addColumn<double>("window");
-    QTest::addColumn<double>("level");
+    QTest::addColumn<WindowLevel>("customWindowLevel");
 
-    QTest::newRow("Some values 1") << 0.0 << 0.0;
-    QTest::newRow("Some values 2") << 1.0 << 0.0;
-    QTest::newRow("Some values 3") << 0.0 << 1.0;
-    QTest::newRow("Some values 4") << 1.0 << 1.0;
+    QTest::newRow("Some values 1") << WindowLevel(0.0, 0.0, tr("Custom"));
+    QTest::newRow("Some values 2") << WindowLevel(1.0, 0.0, tr("Custom"));
+    QTest::newRow("Some values 3") << WindowLevel(0.0, 1.0, tr("Custom"));
+    QTest::newRow("Some values 4") << WindowLevel(1.0, 1.0, tr("Custom"));
 }
 
 void test_WindowLevelPresetsToolData::setCustomWindowLevel_UpdatesValues()
 {
-    QFETCH(double, window);
-    QFETCH(double, level);
+    QFETCH(WindowLevel, customWindowLevel);
 
     WindowLevelPresetsToolData wlData;
-    wlData.setCustomWindowLevel(window, level);
+    wlData.setCustomWindowLevel(customWindowLevel.getWidth(), customWindowLevel.getCenter());
+    WindowLevel returnedWindowLevel;
+    wlData.getFromDescription(tr("Custom"), returnedWindowLevel);
 
-    double returnedWindow, returnedLevel;
-    wlData.getWindowLevelFromDescription(tr("Custom"), returnedWindow, returnedLevel);
-
-    QCOMPARE(returnedWindow, window);
-    QCOMPARE(returnedLevel, level);
+    QCOMPARE(returnedWindowLevel, customWindowLevel);
 }
 
 void test_WindowLevelPresetsToolData::activatePreset_WorksAsExpected_data()
 {
-    QTest::addColumn<QString>("presetToActivate");
+    QTest::addColumn<QString>("presetNameToActivate");
     QTest::addColumn<QString>("currentActivatedPreset");
 
     QTest::newRow("Activate existing preset [Auto]") << AutoPreset1Name << AutoPreset1Name;
@@ -420,13 +428,13 @@ void test_WindowLevelPresetsToolData::activatePreset_WorksAsExpected_data()
 
 void test_WindowLevelPresetsToolData::activatePreset_WorksAsExpected()
 {
-    QFETCH(QString, presetToActivate);
+    QFETCH(QString, presetNameToActivate);
     QFETCH(QString, currentActivatedPreset);
 
     WindowLevelPresetsToolData* wlData = getWindowLevelPresetsSample();
 
-    wlData->activatePreset(presetToActivate);
-    QCOMPARE(wlData->getCurrentPreset(), currentActivatedPreset);
+    wlData->activatePreset(presetNameToActivate);
+    QCOMPARE(wlData->getCurrentPreset().getName(), currentActivatedPreset);
     
     delete wlData;
 }
@@ -437,15 +445,15 @@ WindowLevelPresetsToolData* test_WindowLevelPresetsToolData::getWindowLevelPrese
     // Eliminem els presets que es posen per defecte al construir l'objecte de cares a tenir més ben controlat el testing del que aquí posem
     wlData->removePresetsFromGroup(WindowLevelPresetsToolData::StandardPresets);
     wlData->removePresetsFromGroup(WindowLevelPresetsToolData::CustomPreset);
-    wlData->addPreset(WindowLevel(128.0, 256.0, AutoPreset1Name), WindowLevelPresetsToolData::AutomaticPreset);
-    wlData->addPreset(WindowLevel(1024.0, 512.0, AutoPreset2Name), WindowLevelPresetsToolData::AutomaticPreset);
-    wlData->addPreset(WindowLevel(328.5, 678.9, FilePreset1Name), WindowLevelPresetsToolData::FileDefined);
-    wlData->addPreset(WindowLevel(128.3, 583.4, FilePreset2Name), WindowLevelPresetsToolData::FileDefined);
-    wlData->addPreset(WindowLevel(1500, -650, StandardPreset1Name), WindowLevelPresetsToolData::StandardPresets);
-    wlData->addPreset(WindowLevel(2000, 500, StandardPreset2Name), WindowLevelPresetsToolData::StandardPresets);
-    wlData->addPreset(WindowLevel(110, 900, UserPreset1Name), WindowLevelPresetsToolData::UserDefined);
-    wlData->addPreset(WindowLevel(1231, 412, CustomPreset1Name), WindowLevelPresetsToolData::CustomPreset);
-    wlData->addPreset(WindowLevel(100, 200, OtherPreset1Name), WindowLevelPresetsToolData::Other);
+    wlData->addPreset(AutoPreset1, WindowLevelPresetsToolData::AutomaticPreset);
+    wlData->addPreset(AutoPreset2, WindowLevelPresetsToolData::AutomaticPreset);
+    wlData->addPreset(FilePreset1, WindowLevelPresetsToolData::FileDefined);
+    wlData->addPreset(FilePreset2, WindowLevelPresetsToolData::FileDefined);
+    wlData->addPreset(StandardPreset1, WindowLevelPresetsToolData::StandardPresets);
+    wlData->addPreset(StandardPreset2, WindowLevelPresetsToolData::StandardPresets);
+    wlData->addPreset(UserPreset1, WindowLevelPresetsToolData::UserDefined);
+    wlData->addPreset(CustomPreset1, WindowLevelPresetsToolData::CustomPreset);
+    wlData->addPreset(OtherPreset1, WindowLevelPresetsToolData::Other);
 
     return wlData;
 }

@@ -8,6 +8,7 @@ namespace udg {
 // FWD declarations
 class QCustomWindowLevelDialog;
 class WindowLevelPresetsToolData;
+class WindowLevel;
 
 /**
     Combo box personalitzat per a escollir valors de window level predeterminats i personalitzats
@@ -29,17 +30,21 @@ public slots:
     /// Selecciona el preset indicat en el combo, però no l'activa
     /// @param preset Descripció del preset
     void selectPreset(const QString &preset);
+    void selectPreset(const WindowLevel &preset);
 
 private slots:
-    /// Afegeix o elimina un preset de la llista
-    /// @param preset Preset a afegir o eliminar
-    void addPreset(const QString &preset);
-    void removePreset(const QString &preset);
-
+    /// Adds/removes a preset from the list
+    void addPreset(const WindowLevel &preset);
+    void removePreset(const WindowLevel &preset);
+    
     /// Seleccionem el window level que volem aplicar com a actiu
     void setActiveWindowLevel(const QString &text);
 
 private:
+    /// Afegeix o elimina un preset de la llista
+    /// @param preset Preset a afegir o eliminar
+    void removePreset(const QString &preset);
+    
     /// Omple el combo a partir de les dades de presets. Neteja les dades que hi pugui haver anteriorment
     void populateFromPresetsData();
 

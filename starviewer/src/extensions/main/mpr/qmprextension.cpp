@@ -50,7 +50,7 @@ QMPRExtension::QMPRExtension(QWidget *parent)
     m_windowLevelComboBox->setPresetsData(m_axial2DView->getWindowLevelData());
     m_sagital2DView->setWindowLevelData(m_axial2DView->getWindowLevelData());
     m_coronal2DView->setWindowLevelData(m_axial2DView->getWindowLevelData());
-    m_windowLevelComboBox->selectPreset(m_axial2DView->getWindowLevelData()->getCurrentPreset());
+    m_windowLevelComboBox->selectPreset(m_axial2DView->getWindowLevelData()->getCurrentPresetName());
 
     initializeTools();
 

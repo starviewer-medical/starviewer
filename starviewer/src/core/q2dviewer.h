@@ -236,7 +236,7 @@ public slots:
 
     /// Ajusta el window/level a partir del preset.
     /// Si és de tipus FileDefined i en la vista original, per cada imatge aplicarà el seu WW/WL. Altrament aplicar el WW/WL que indica el preset.
-    virtual void setWindowLevelPreset(const QString &preset);
+    virtual void setWindowLevelPreset(const WindowLevel &preset);
 
     /// L'únic que fa és emetre el senyal seedPositionChanged, per poder-ho cridar desde la seedTool
     /// TODO Aquest mètode hauria de quedar obsolet

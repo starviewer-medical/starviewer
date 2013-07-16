@@ -6,9 +6,9 @@
 #include <QMultiMap>
 #include <QStringList>
 
-namespace udg {
+#include "windowlevel.h"
 
-class WindowLevel;
+namespace udg {
 
 /**
     Conté les dades de diversos valors predefinits de window level.
@@ -36,13 +36,13 @@ public:
     enum GroupsLabel { AutomaticPreset, FileDefined, StandardPresets, UserDefined, CustomPreset, Other };
 
     /// Afegeix un nou preset. Si la operació es fa amb èxit s'emet un senyal donant la informació del preset.
-    /// @param windowLevel WindowLevel object. Its description has to be unique.
+    /// @param preset WindowLevel object. Its description has to be unique.
     /// @param group Grup al que volem que pertanyi, que serà "Other" si no s'especifica
-    void addPreset(const WindowLevel &windowLevel, int group = Other);
+    void addPreset(const WindowLevel &preset, int group = Other);
 
     /// Eliminem el preset que tingui la descripció donada
     /// @param description Descripció del preset que volem eliminar
-    void removePreset(const QString &description);
+    void removePreset(const WindowLevel &preset);
 
     /// Elimina els presets d'un grup
     /// @param group Grup que volem buidar
@@ -54,14 +54,14 @@ public:
     /// @param window variable on es retornarà el valor de window
     /// @param level variable on es retornarà el valor de level
     /// @return Cert si existeix aquest preset, fals altrament
-    bool getWindowLevelFromDescription(const QString &description, double &window, double &level);
+    bool getFromDescription(const QString &description, WindowLevel &preset);
 
     /// Ens diu a quin grup pertany el preset indicat. Si no existeix la descripció,
     /// el valor retornat en group és indeterminat
     /// @param description Descripció del preset que busquem
     /// @param group variable on se'ns tornarà el grup al que pertany la descripció donada
     /// @return Cert si la descripció donada existeix, fals altrement
-    bool getGroup(const QString &description, int &group);
+    bool getGroup(const WindowLevel &preset, int &group);
 
     /// Ens retorna una llista de presets que conté un grup
     /// @param group grup de presets
@@ -69,19 +69,22 @@ public:
     /// Si no hi ha cap preset dins del grup demanat la llista serà buida.
     QStringList getDescriptionsFromGroup(int group);
 
-    /// Ens retorna l'últim preset activat
-    /// @return String amb l'últim preset activat
-    QString getCurrentPreset() const;
+    QList<WindowLevel> getPresetsFromGroup(int group);
+    
+    /// Returns the current activated preset
+    WindowLevel getCurrentPreset() const;
+
+    /// Shortcut for getCurrentPreset().getName()
+    QString getCurrentPresetName() const;
 
     /// Ens retorna l'índex del preset definit al fitxer.
     /// @param preset Nom del preset
     /// @return Identificador del preset. Retorna -1 si el preset no és de tipus FileDefined
     int getFileDefinedPresetIndex(const QString &preset) const;
 
-    /// Actualitza els valors del preset actual de tipus FileDefined.  
-    /// Només l'actualitza si el preset que està activat és de tipus FileDefined 
-    /// Cal doncs haver fet prèviament un activatePreset() d'un preset d'aquest tipus perquè l'actualitzaciósigui efectiva
-    void updateCurrentFileDefinedPreset(double window, double level);
+    /// Updates the given preset with the new values of window/level. A preset with the same name has to be present in order to update it.
+    /// Returns true in case the preset could be updated, false otherwise (i.e. no preset with such name exists)
+    bool updatePreset(const WindowLevel &preset);
 
 public slots:
     /// Donem el valor del preset "A mida"
@@ -91,18 +94,14 @@ public slots:
 
     /// Indiquem que volem activar el preset indicat
     /// @param preset Nom del preset a activar
-    void activatePreset(const QString &preset);
+    void activatePreset(const QString &presetName);
 
 signals:
-    /// Senyals emesos quan s'afegeixen o s'esborra un preset indicant la seva descripció
-    void presetAdded(QString preset);
-    void presetRemoved(QString preset);
-
-    /// Aquest senyal s'emet quan s'activa algun preset, per indicar els seus valors
-    void currentWindowLevel(double window, double level);
+    void presetAdded(WindowLevel preset);
+    void presetRemoved(WindowLevel preset);
 
     /// Aquest senyal s'envia pre notificar quin preset s'ha activat
-    void presetChanged(QString preset);
+    void presetChanged(WindowLevel preset);
 
 private:
     /// Afegeix els CustomWindowLevels que hi ha al repository
@@ -113,22 +112,14 @@ private slots:
     void updateCustomWindowLevels();
 
 private:
-    struct WindowLevelStruct
-    {
-        /// Valors de window level del preset en sí
-        double m_window, m_level;
-        /// Grup al que pertany
-        int m_group;
-    };
-
-    /// Mapa en el que guardem la informació de cada preset
-    QMap<QString, WindowLevelStruct> m_presets;
-
     /// Guardem els FileDefined presets en l'ordre que s'han inserit
     QStringList m_fileDefinedPresets;
 
     /// Últim preset activat
-    QString m_currentPreset;
+    WindowLevel m_currentPreset;
+
+    /// Map grouping presets by its group
+    QMultiMap<int, WindowLevel> m_presetsByGroup;
 };
 
 }
