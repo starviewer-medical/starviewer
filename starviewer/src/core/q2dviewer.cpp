@@ -2782,4 +2782,32 @@ int Q2DViewer::getNearestSlice(double projectedPosition[3], double &distance)
     return minimumSlice;
 }
 
+bool Q2DViewer::canShowDisplayShutter() const
+{
+    if (!m_mainVolume)
+    {
+        return false;
+    }
+
+    if (m_mainVolume->objectName() == DummyVolumeObjectName)
+    {
+        return false;
+    }
+
+    if (!isThickSlabActive() && m_lastView == Axial)
+    {
+        Image *image = getCurrentDisplayedImage();
+        if (image)
+        {
+            vtkImageData *shutterData = image->getDisplayShutterForDisplayAsVtkImageData(m_mainVolume->getImageIndex(m_currentSlice, m_currentPhase));
+            if (shutterData)
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 };  // End namespace udg
