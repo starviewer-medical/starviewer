@@ -78,7 +78,7 @@ Volume* VolumeTestHelper::createMultiframeVolume(int numberOfImages, int numberO
 
 void VolumeTestHelper::cleanUp(Volume *volume)
 {
-    if (volume->getImage(0))
+    if (volume && volume->getImage(0))
     {
         // This calls cleanUp() on SeriesTestHelper with the parent series and deletes the series and all images
         ImageTestHelper::cleanUp(volume->getImage(0));
