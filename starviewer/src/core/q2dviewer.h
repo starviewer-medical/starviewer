@@ -377,7 +377,7 @@ private:
     /// Actualitza el pipeline del filtre de shutter segons si està habilitat o no
     void updateShutterPipeline();
 
-    /// Updates the mask used as display shutter.
+    /// Updates the mask used as display shutter if display shutters should and can be shown.
     void updateDisplayShutterMask();
 
     /// Decides and sets the input image for the image actor, choosing between the display shutter mask output and the window level output.
