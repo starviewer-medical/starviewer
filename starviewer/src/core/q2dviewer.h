@@ -14,7 +14,6 @@ class vtkCoordinate;
 class vtkImageBlend;
 class vtkImageActor;
 class vtkImageData;
-class vtkImageMask;
 // Grayscale pipeline
 // Permet aplicar window/level amb imatges a color
 class vtkImageMapToWindowLevelColors2;
@@ -34,6 +33,7 @@ class ImageOrientationOperationsMapper;
 class VolumeReaderJob;
 class QViewerCommand;
 class PatientOrientation;
+class DisplayShutterFilter;
 
 /**
     Classe base per als visualitzadors 2D.
@@ -572,8 +572,8 @@ private:
     /// If true, display shutters are visible when they are available and it's possible to show them.
     bool m_showDisplayShutters;
 
-    /// Filtre de màscara per aplicar els shutters
-    vtkImageMask *m_shutterMaskFilter;
+    /// Filter to show display shutters.
+    DisplayShutterFilter *m_displayShutterFilter;
 
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(Q2DViewer::AnnotationFlags)

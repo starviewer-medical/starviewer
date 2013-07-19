@@ -18,6 +18,8 @@
 #include "starviewerapplication.h"
 #include "imageoverlay.h"
 #include "drawerbitmap.h"
+#include "displayshutterfilter.h"
+#include "filteroutput.h"
 // Thickslab
 #include "vtkProjectionImageFilter.h"
 #include "asynchronousvolumereader.h"
@@ -53,8 +55,6 @@
 #include <vtkColorTransferFunction.h>
 // Projecció de punts
 #include <vtkMatrix4x4.h>
-// Filtre pel shutter
-#include <vtkImageMask.h>
 
 namespace udg {
 
@@ -115,12 +115,14 @@ Q2DViewer::~Q2DViewer()
     m_imageActor->Delete();
     m_windowLevelLUTMapper->Delete();
     m_thickSlabProjectionFilter->Delete();
-    m_shutterMaskFilter->Delete();
+
     // Fem delete d'altres objectes vtk en cas que s'hagin hagut de crear
     if (m_blender)
     {
         m_blender->Delete();
     }
+
+    delete m_displayShutterFilter;
 
     removeViewerBitmaps();
     
@@ -405,14 +407,8 @@ void Q2DViewer::updatePatientOrientationAnnotation()
 
 void Q2DViewer::initializeShutterFilter()
 {
-    m_shutterMaskFilter = vtkImageMask::New();
-    m_shutterMaskFilter->SetMaskAlpha(1.0);
-    // TODO De moment assignem sempre el color del shutter a 0. 
-    // Si es volgués assignar segons el que indiqui l'objecte DisplayShutter, s'hauria de fer a updateShutterPipeline()
-    m_shutterMaskFilter->SetMaskedOutputValue(0);
-    m_shutterMaskFilter->NotMaskOn();
-    m_shutterMaskFilter->SetMaskInput(0);
-    m_shutterMaskFilter->SetImageInput(m_windowLevelLUTMapper->GetOutput());
+    m_displayShutterFilter = new DisplayShutterFilter();
+    m_displayShutterFilter->setInput(m_windowLevelLUTMapper->GetOutput());
 }
 
 void Q2DViewer::updatePreferredImageOrientation()
@@ -2774,8 +2770,8 @@ void Q2DViewer::updateDisplayShutterMask()
 
             if (shutterData)
             {
-                m_shutterMaskFilter->SetMaskInput(shutterData);
-                m_shutterMaskFilter->Update();
+                m_displayShutterFilter->setDisplayShutter(shutterData);
+                m_displayShutterFilter->update();
             }
         }
     }
@@ -2791,8 +2787,8 @@ void Q2DViewer::setImageActorInput()
     if (m_showDisplayShutters && this->canShowDisplayShutter())
     {
         // If we should show shutters and can do it, then enable and update that part of the pipeline
-        m_shutterMaskFilter->Update();
-        m_imageActor->SetInput(m_shutterMaskFilter->GetOutput());
+        m_displayShutterFilter->update();
+        m_imageActor->SetInput(m_displayShutterFilter->getOutput().getVtkImageData());
     }
     else
     {
