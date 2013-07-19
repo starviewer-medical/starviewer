@@ -217,8 +217,6 @@ HEADERS += extensionfactory.h \
     qreleasenotes.h \
     qdicomdumpbrowser.h \
     applicationversionchecker.h \
-    filter.h \
-    vtkthresholdfilter.h \
     dynamicmatrix.h \
     screenmanager.h \
     screenlayout.h \
@@ -502,8 +500,6 @@ SOURCES += extensionmediator.cpp \
     qreleasenotes.cpp \
     qdicomdumpbrowser.cpp \
     applicationversionchecker.cpp \
-    filter.cpp \
-    vtkthresholdfilter.cpp \
     dynamicmatrix.cpp \
     screenmanager.cpp \
     screenlayout.cpp \
