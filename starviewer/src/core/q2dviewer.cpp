@@ -1383,11 +1383,7 @@ void Q2DViewer::resetCamera()
 
 void Q2DViewer::updateShutterPipeline()
 {
-    if (m_showDisplayShutters && this->canShowDisplayShutter())
-    {
-        this->updateDisplayShutterMask();
-    }
-
+    this->updateDisplayShutterMask();
     this->setImageActorInput();
 }
 
@@ -2768,16 +2764,19 @@ bool Q2DViewer::canShowDisplayShutter() const
 
 void Q2DViewer::updateDisplayShutterMask()
 {
-    Image *image = getCurrentDisplayedImage();
-
-    if (image)
+    if (m_showDisplayShutters && this->canShowDisplayShutter())
     {
-        vtkImageData *shutterData = image->getDisplayShutterForDisplayAsVtkImageData(m_mainVolume->getImageIndex(m_currentSlice, m_currentPhase));
+        Image *image = getCurrentDisplayedImage();
 
-        if (shutterData)
+        if (image)
         {
-            m_shutterMaskFilter->SetMaskInput(shutterData);
-            m_shutterMaskFilter->Update();
+            vtkImageData *shutterData = image->getDisplayShutterForDisplayAsVtkImageData(m_mainVolume->getImageIndex(m_currentSlice, m_currentPhase));
+
+            if (shutterData)
+            {
+                m_shutterMaskFilter->SetMaskInput(shutterData);
+                m_shutterMaskFilter->Update();
+            }
         }
     }
 }
