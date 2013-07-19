@@ -194,6 +194,10 @@ public:
     /// Ens retorna l'acttor vtk de la imatge
     vtkImageActor* getVtkImageActor() const;
 
+    /// Returns true if this Q2DViewer can show a display shutter in its current state, i.e. if there is a display shutter for the current image and there isn't
+    /// any restriction to show display shutters.
+    bool canShowDisplayShutter() const;
+
 public slots:
     virtual void setInput(Volume *volume);
 
