@@ -559,8 +559,8 @@ private:
     /// Controla si els overlays estan habilitats o no
     bool m_overlaysAreEnabled;
     
-    /// Controla si els shutters estan habilitats o no
-    bool m_shuttersAreEnabled;
+    /// If true, display shutters are visible when they are available and it's possible to show them.
+    bool m_showDisplayShutters;
 
     /// Filtre de màscara per aplicar els shutters
     vtkImageMask *m_shutterMaskFilter;
