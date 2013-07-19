@@ -45,6 +45,8 @@ Volume* VolumeTestHelper::createVolumeWithParameters(int numberOfImages, int num
     for (int index = 0; index < numberOfImages; index++)
     {
         testVolume->getImages().at(index)->setPath(QString("C:\\Test\\path\\%1").arg(index));
+        testVolume->getImages().at(index)->setColumns(dimensions[0]);
+        testVolume->getImages().at(index)->setRows(dimensions[1]);
     }
 
     vtkImageData *testVtkImageData = vtkImageData::New();
