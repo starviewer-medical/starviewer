@@ -1387,15 +1387,9 @@ void Q2DViewer::updateShutterPipeline()
         return;
     }
 
-    if (m_mainVolume->objectName() == DummyVolumeObjectName)
+    if (m_showDisplayShutters && this->canShowDisplayShutter())
     {
-        m_imageActor->SetInput(m_windowLevelLUTMapper->GetOutput());
-        return;
-    }
-
-    bool isShutterFilterApplied = false;
-    if (m_showDisplayShutters && !isThickSlabActive() && m_lastView == Axial)
-    {
+        // If we should show shutters and can do it, then enable and update that part of the pipeline
         Image *image = getCurrentDisplayedImage();
         if (image)
         {
@@ -1405,14 +1399,12 @@ void Q2DViewer::updateShutterPipeline()
                 m_shutterMaskFilter->SetMaskInput(shutterData);
                 m_shutterMaskFilter->SetImageInput(m_windowLevelLUTMapper->GetOutput());
                 m_imageActor->SetInput(m_shutterMaskFilter->GetOutput());
-                isShutterFilterApplied = true;
             }
         }
     }
-
-    // If no shutter is applied, the usual pipeline is used
-    if (!isShutterFilterApplied)
+    else
     {
+        // If no shutter is applied, the usual pipeline is used
         m_imageActor->SetInput(m_windowLevelLUTMapper->GetOutput());
     }
 }
