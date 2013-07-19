@@ -412,6 +412,7 @@ void Q2DViewer::initializeShutterFilter()
     m_shutterMaskFilter->SetMaskedOutputValue(0);
     m_shutterMaskFilter->NotMaskOn();
     m_shutterMaskFilter->SetMaskInput(0);
+    m_shutterMaskFilter->SetImageInput(m_windowLevelLUTMapper->GetOutput());
 }
 
 void Q2DViewer::updatePreferredImageOrientation()
@@ -1391,8 +1392,6 @@ void Q2DViewer::updateShutterPipeline()
     {
         // If we should show shutters and can do it, then enable and update that part of the pipeline
         this->updateDisplayShutterMask();
-        m_shutterMaskFilter->SetImageInput(m_windowLevelLUTMapper->GetOutput());
-        m_shutterMaskFilter->Update();
         m_imageActor->SetInput(m_shutterMaskFilter->GetOutput());
     }
     else
