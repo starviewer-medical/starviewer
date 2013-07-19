@@ -2,8 +2,10 @@
 
 #include "image.h"
 #include "imagetesthelper.h"
+#include "patient.h"
+#include "patienttesthelper.h"
 #include "series.h"
-#include "seriestesthelper.h"
+#include "study.h"
 #include "volumepixeldata.h"
 #include "volume.h"
 #include <vtkImageData.h>
@@ -18,8 +20,8 @@ Volume* VolumeTestHelper::createVolume(int numberOfImages, int numberOfPhases, i
     Volume *testVolume = new Volume();
     testVolume->setNumberOfPhases(numberOfPhases);
     testVolume->setNumberOfSlicesPerPhase(numberOfSlicesPerPhase);
-    Series *series = SeriesTestHelper::createSeries(numberOfImages);
-    testVolume->setImages(series->getImages());
+    Patient *patient = PatientTestHelper::create(1, 1, numberOfImages);
+    testVolume->setImages(patient->getStudies().first()->getSeries().first()->getImages());
 
     for (int index = 0; index < numberOfImages; index++)
     {
@@ -37,8 +39,8 @@ Volume* VolumeTestHelper::createVolumeWithParameters(int numberOfImages, int num
     Volume *testVolume = new Volume();
     testVolume->setNumberOfPhases(numberOfPhases);
     testVolume->setNumberOfSlicesPerPhase(numberOfSlicesPerPhase);
-    Series *series = SeriesTestHelper::createSeries(numberOfImages);
-    testVolume->setImages(series->getImages());
+    Patient *patient = PatientTestHelper::create(1, 1, numberOfImages);
+    testVolume->setImages(patient->getStudies().first()->getSeries().first()->getImages());
 
     for (int index = 0; index < numberOfImages; index++)
     {
@@ -60,8 +62,8 @@ Volume* VolumeTestHelper::createMultiframeVolume(int numberOfImages, int numberO
     Volume *testVolume = new Volume();
     testVolume->setNumberOfPhases(numberOfPhases);
     testVolume->setNumberOfSlicesPerPhase(numberOfSlicesPerPhase);
-    Series *series = SeriesTestHelper::createSeries(numberOfImages);
-    testVolume->setImages(series->getImages());
+    Patient *patient = PatientTestHelper::create(1, 1, numberOfImages);
+    testVolume->setImages(patient->getStudies().first()->getSeries().first()->getImages());
 
     for (int index = 0; index < numberOfImages; index++)
     {
