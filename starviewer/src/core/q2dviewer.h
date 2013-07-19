@@ -377,6 +377,9 @@ private:
     /// Actualitza el pipeline del filtre de shutter segons si està habilitat o no
     void updateShutterPipeline();
 
+    /// Updates the mask used as display shutter.
+    void updateDisplayShutterMask();
+
     /// Re-inicia els paràmetres de la càmera segons la vista actual.
     void resetCamera();
 

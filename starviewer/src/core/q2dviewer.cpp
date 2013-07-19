@@ -1390,17 +1390,10 @@ void Q2DViewer::updateShutterPipeline()
     if (m_showDisplayShutters && this->canShowDisplayShutter())
     {
         // If we should show shutters and can do it, then enable and update that part of the pipeline
-        Image *image = getCurrentDisplayedImage();
-        if (image)
-        {
-            vtkImageData *shutterData = image->getDisplayShutterForDisplayAsVtkImageData(m_mainVolume->getImageIndex(m_currentSlice, m_currentPhase));
-            if (shutterData)
-            {
-                m_shutterMaskFilter->SetMaskInput(shutterData);
-                m_shutterMaskFilter->SetImageInput(m_windowLevelLUTMapper->GetOutput());
-                m_imageActor->SetInput(m_shutterMaskFilter->GetOutput());
-            }
-        }
+        this->updateDisplayShutterMask();
+        m_shutterMaskFilter->SetImageInput(m_windowLevelLUTMapper->GetOutput());
+        m_shutterMaskFilter->Update();
+        m_imageActor->SetInput(m_shutterMaskFilter->GetOutput());
     }
     else
     {
@@ -2782,6 +2775,22 @@ bool Q2DViewer::canShowDisplayShutter() const
         && m_lastView == Axial
         && getCurrentDisplayedImage()
         && getCurrentDisplayedImage()->getDisplayShutterForDisplayAsVtkImageData(m_mainVolume->getImageIndex(m_currentSlice, m_currentPhase));
+}
+
+void Q2DViewer::updateDisplayShutterMask()
+{
+    Image *image = getCurrentDisplayedImage();
+
+    if (image)
+    {
+        vtkImageData *shutterData = image->getDisplayShutterForDisplayAsVtkImageData(m_mainVolume->getImageIndex(m_currentSlice, m_currentPhase));
+
+        if (shutterData)
+        {
+            m_shutterMaskFilter->SetMaskInput(shutterData);
+            m_shutterMaskFilter->Update();
+        }
+    }
 }
 
 };  // End namespace udg
