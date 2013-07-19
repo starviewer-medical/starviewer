@@ -1383,22 +1383,12 @@ void Q2DViewer::resetCamera()
 
 void Q2DViewer::updateShutterPipeline()
 {
-    if (!m_mainVolume)
-    {
-        return;
-    }
-
     if (m_showDisplayShutters && this->canShowDisplayShutter())
     {
-        // If we should show shutters and can do it, then enable and update that part of the pipeline
         this->updateDisplayShutterMask();
-        m_imageActor->SetInput(m_shutterMaskFilter->GetOutput());
     }
-    else
-    {
-        // If no shutter is applied, the usual pipeline is used
-        m_imageActor->SetInput(m_windowLevelLUTMapper->GetOutput());
-    }
+
+    this->setImageActorInput();
 }
 
 void Q2DViewer::setSlice(int value)
@@ -2789,6 +2779,27 @@ void Q2DViewer::updateDisplayShutterMask()
             m_shutterMaskFilter->SetMaskInput(shutterData);
             m_shutterMaskFilter->Update();
         }
+    }
+}
+
+void Q2DViewer::setImageActorInput()
+{
+    if (!m_mainVolume)
+    {
+        return;
+    }
+
+    if (m_showDisplayShutters && this->canShowDisplayShutter())
+    {
+        // If we should show shutters and can do it, then enable and update that part of the pipeline
+        m_shutterMaskFilter->Update();
+        m_imageActor->SetInput(m_shutterMaskFilter->GetOutput());
+    }
+    else
+    {
+        // If no shutter is applied, the window level pipeline is used
+        m_windowLevelLUTMapper->Update();
+        m_imageActor->SetInput(m_windowLevelLUTMapper->GetOutput());
     }
 }
 
