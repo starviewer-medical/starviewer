@@ -99,7 +99,7 @@ Q2DViewer::Q2DViewer(QWidget *parent)
 
     // Inicialitzem el filtre de shutter
     initializeShutterFilter();
-    m_shuttersAreEnabled = true;
+    m_showDisplayShutters = true;
     m_overlaysAreEnabled = true;
 }
 
@@ -1394,7 +1394,7 @@ void Q2DViewer::updateShutterPipeline()
     }
 
     bool isShutterFilterApplied = false;
-    if (m_shuttersAreEnabled && !isThickSlabActive() && m_lastView == Axial)
+    if (m_showDisplayShutters && !isThickSlabActive() && m_lastView == Axial)
     {
         Image *image = getCurrentDisplayedImage();
         if (image)
@@ -2638,7 +2638,7 @@ void Q2DViewer::showImageOverlays(bool enable)
 
 void Q2DViewer::showDisplayShutters(bool enable)
 {
-    m_shuttersAreEnabled = enable;
+    m_showDisplayShutters = enable;
     updateShutterPipeline();
     render();
 }
