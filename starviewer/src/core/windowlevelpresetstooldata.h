@@ -95,7 +95,7 @@ signals:
     void presetAdded(WindowLevel preset);
     void presetRemoved(WindowLevel preset);
 
-    /// Aquest senyal s'envia pre notificar quin preset s'ha activat
+    /// Aquest senyal s'envia per notificar quin preset s'ha activat
     void presetChanged(WindowLevel preset);
 
 private:
