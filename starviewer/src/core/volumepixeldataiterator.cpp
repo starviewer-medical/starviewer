@@ -54,7 +54,7 @@ VolumePixelDataIterator::VolumePixelDataIterator(VolumePixelData *volumePixelDat
 
 bool VolumePixelDataIterator::isNull() const
 {
-    return m_pointer == nullptr;
+    return m_pointer == NULL;
 }
 
 template <class T>

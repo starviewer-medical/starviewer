@@ -61,7 +61,7 @@ void test_ImageFillerStep::fillIndividually_ShouldReturnExpectedValue_data()
     QTest::addColumn<TestingDICOMTagReader*>("reader");
     QTest::addColumn<bool>("expectedValue");
 
-    QTest::newRow("null reader") << static_cast<TestingDICOMTagReader*>(nullptr) << false;
+    QTest::newRow("null reader") << static_cast<TestingDICOMTagReader*>(NULL) << false;
     QTest::newRow("empty reader") << new TestingDICOMTagReader() << true;
 }
 
