@@ -170,7 +170,7 @@ void test_DrawerBitmap::getDistanceToPoint_ReturnsExpectedValues()
 
 void test_DrawerBitmap::getAsVtkProp_ShouldReturnNull()
 {
-    QCOMPARE((new DrawerBitmap(this))->getAsVtkProp(), static_cast<vtkProp*>(nullptr));
+    QCOMPARE((new DrawerBitmap(this))->getAsVtkProp(), static_cast<vtkProp*>(NULL));
 }
 
 void test_DrawerBitmap::getAsVtkProp_ShouldReturnPropLikeExpected_data()

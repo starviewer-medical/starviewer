@@ -27,7 +27,7 @@ Q_DECLARE_METATYPE(vtkSmartPointer<vtkImageData>)
 void test_VtkImageDataCreator::createVtkImageData_ShouldReturnNull()
 {
     VtkImageDataCreator imageDataCreator;
-    QCOMPARE(imageDataCreator.createVtkImageData(1, 1, 1, static_cast<char*>(nullptr)), vtkSmartPointer<vtkImageData>());
+    QCOMPARE(imageDataCreator.createVtkImageData(1, 1, 1, static_cast<char*>(NULL)), vtkSmartPointer<vtkImageData>());
 }
 
 void test_VtkImageDataCreator::createVtkImageData_ShouldReturnExpectedVtkImageData_data()

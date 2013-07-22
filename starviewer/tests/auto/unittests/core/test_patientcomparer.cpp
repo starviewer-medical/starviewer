@@ -58,9 +58,9 @@ void test_PatientComparer::areSamePatient_ShouldReturnExpectedValueWithoutAsking
     patient2->setID("2");
     patient2->setFullName("Foo Bar");
 
-    QTest::newRow("null, null") << static_cast<Patient*>(nullptr) << static_cast<Patient*>(nullptr) << false;
-    QTest::newRow("null, non-null") << static_cast<Patient*>(nullptr) << new Patient(this) << false;
-    QTest::newRow("non-null, null") << new Patient(this) << static_cast<Patient*>(nullptr) << false;
+    QTest::newRow("null, null") << static_cast<Patient*>(NULL) << static_cast<Patient*>(NULL) << false;
+    QTest::newRow("null, non-null") << static_cast<Patient*>(NULL) << new Patient(this) << false;
+    QTest::newRow("non-null, null") << new Patient(this) << static_cast<Patient*>(NULL) << false;
     QTest::newRow("same patient") << patient1 << patient1 << true;
     QTest::newRow("same id and same name") << patient1 << patient1Bis << true;
     QTest::newRow("different id and different name") << patient1 << patient2 << false;

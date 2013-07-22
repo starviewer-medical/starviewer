@@ -849,12 +849,6 @@ void test_MathTools::planeIntersection_2Planes_ShouldComputeIntersectionWithNaNP
     QTest::newRow("null normals") << Vector3() << Vector3() << Vector3() << Vector3();
     QTest::newRow("null plane 1 normal") << Vector3() << Vector3() << Vector3() << Vector3(13.81, -73.79, -30.48);
     QTest::newRow("null plane 2 normal") << Vector3() << Vector3(30.2, -84.56, 64.9) << Vector3() << Vector3();
-    // Ha d'anar a planeIntersection_2Planes_ShouldReturnNoIntersection_data quan s'arregli el tiquet #1897
-    QTest::newRow("same planes") << Vector3(39.88, -23.21, 33.92) << Vector3(30.2, -84.56, 64.9) << Vector3(39.88, -23.21, 33.92)
-                                 << Vector3(30.2, -84.56, 64.9);
-    // Ha d'anar a planeIntersection_2Planes_ShouldReturnNoIntersection_data quan s'arregli el tiquet #1897
-    QTest::newRow("parallel planes") << Vector3(39.88, -23.21, 33.92) << Vector3(30.2, -84.56, 64.9) << Vector3(82.85, 73.2, 87.71)
-                                     << Vector3(30.2, -84.56, 64.9);
 }
 
 void test_MathTools::planeIntersection_2Planes_ShouldComputeIntersectionWithNaNPointAndNullDirectorVector()
@@ -1539,8 +1533,6 @@ void test_MathTools::setupComputeAngleBetweenTwoVectorsNaNData()
     QTest::newRow("Two Zero-valued vectors") << QVector3D(0, 0, 0) << QVector3D(0, 0, 0);
     QTest::newRow("First vector is zero-valued") << QVector3D(0, 0, 0) << QVector3D(1, 1, 0);
     QTest::newRow("Second vector is zero-valued") << QVector3D(1, 1, 0) << QVector3D(0, 0, 0);
-    // Ha d'anar a setupComputeAngleBetweenTwoVectorsData() quan s'arregli el tiquet #1897
-    QTest::newRow("Equal vectors") << QVector3D(30.2, -84.56, 64.9) << QVector3D(30.2, -84.56, 64.9);
 }
 
 void test_MathTools::setupCrossAndDotProductData()
