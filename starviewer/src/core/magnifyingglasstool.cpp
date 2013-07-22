@@ -18,7 +18,7 @@ MagnifyingGlassTool::MagnifyingGlassTool(QViewer *viewer, QObject *parent)
     m_toolName = "MagnifyingGlassTool";
     m_magnifyingRendererIsVisible = false;
     
-    m_2DViewer = castToQ2DViewer(viewer);
+    m_2DViewer = Q2DViewer::castFromQViewer(viewer);
 
     m_magnifiedRenderer = vtkRenderer::New();
 }

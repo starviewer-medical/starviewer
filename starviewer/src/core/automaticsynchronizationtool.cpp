@@ -18,7 +18,7 @@ AutomaticSynchronizationTool::AutomaticSynchronizationTool(QViewer *viewer, QObj
     m_toolName = "AutomaticSynchronizationTool";
     m_hasSharedData = true;
 
-    m_2DViewer = castToQ2DViewer(viewer);
+    m_2DViewer = Q2DViewer::castFromQViewer(viewer);
 
     m_lastSlice = m_2DViewer->getCurrentSlice();
     m_roundLostSpacingBetweenSlices = 0.0;

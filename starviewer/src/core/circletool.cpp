@@ -17,7 +17,7 @@ CircleTool::CircleTool(QViewer *viewer, QObject *parent)
     : Tool(viewer, parent)
 {
     m_toolName = "CircleTool";
-    m_2DViewer = castToQ2DViewer(viewer);
+    m_2DViewer = Q2DViewer::castFromQViewer(viewer);
 
     connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(initialize()));
 

@@ -1,8 +1,5 @@
 #include "tool.h"
 
-#include "q2dviewer.h"
-#include "logging.h"
-
 namespace udg {
 
 Tool::Tool(QViewer *viewer, QObject *parent)
@@ -47,23 +44,6 @@ bool Tool::hasPersistentData() const
 QString Tool::toolName()
 {
     return m_toolName;
-}
-
-Q2DViewer* Tool::castToQ2DViewer(QViewer *viewer)
-{
-    if (!viewer)
-    {
-        DEBUG_LOG(QString("Cannot cas a null pointer"));
-        return 0;
-    }
-
-    Q2DViewer *viewer2D = qobject_cast<Q2DViewer*>(viewer);
-    if (!viewer2D)
-    {
-        DEBUG_LOG(QString("Q2DViewer casting failed! Provided viewer may not be a Q2DViewer object: %1").arg(viewer->metaObject()->className()));
-    }
-
-    return viewer2D;
 }
 
 }

@@ -23,7 +23,7 @@ TransDifferenceTool::TransDifferenceTool(QViewer *viewer, QObject *parent)
 
     // Ens assegurem que desde la creació tenim un viewer vàlid
     Q_ASSERT(m_viewer);
-    m_2DViewer = castToQ2DViewer(viewer);
+    m_2DViewer = Q2DViewer::castFromQViewer(viewer);
 }
 
 TransDifferenceTool::~TransDifferenceTool()

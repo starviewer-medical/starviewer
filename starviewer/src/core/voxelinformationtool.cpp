@@ -14,7 +14,7 @@ VoxelInformationTool::VoxelInformationTool(QViewer *viewer, QObject *parent)
 {
     m_toolName = "VoxelInformationTool";
 
-    m_2DViewer = castToQ2DViewer(viewer);
+    m_2DViewer = Q2DViewer::castFromQViewer(viewer);
     createCaption();
     connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(updateCaption()));
     connect(m_2DViewer, SIGNAL(phaseChanged(int)), SLOT(updateCaption()));

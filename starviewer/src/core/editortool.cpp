@@ -26,7 +26,7 @@ EditorTool::EditorTool(QViewer *viewer, QObject *parent)
     m_squareActor = vtkActor::New();
     m_myData = new EditorToolData;
 
-    m_2DViewer = castToQ2DViewer(viewer);
+    m_2DViewer = Q2DViewer::castFromQViewer(viewer);
     // Ens assegurem que desde la creació tenim un viewer vàlid
     Q_ASSERT(m_2DViewer);
 

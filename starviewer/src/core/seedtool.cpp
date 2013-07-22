@@ -19,7 +19,7 @@ SeedTool::SeedTool(QViewer *viewer, QObject *parent)
 
     m_myData = new SeedToolData;
 
-    m_2DViewer = castToQ2DViewer(viewer);
+    m_2DViewer = Q2DViewer::castFromQViewer(viewer);
 
     m_state = None;
     m_drawn = false;
