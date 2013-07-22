@@ -14,7 +14,7 @@ EraserTool::EraserTool(QViewer *viewer, QObject *parent)
     m_toolName = "EraserTool";
     m_hasSharedData = false;
 
-    m_2DViewer = castToQ2DViewer(viewer);
+    m_2DViewer = Q2DViewer::castFromQViewer(viewer);
 
     connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(reset()));
 }

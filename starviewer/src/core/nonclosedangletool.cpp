@@ -18,7 +18,7 @@ NonClosedAngleTool::NonClosedAngleTool(QViewer *viewer, QObject *parent)
     m_toolName = "NonClosedAngleTool";
     m_hasSharedData = false;
 
-    m_2DViewer = castToQ2DViewer(viewer);
+    m_2DViewer = Q2DViewer::castFromQViewer(viewer);
 
     connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(initialize()));
 }

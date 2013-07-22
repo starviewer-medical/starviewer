@@ -197,6 +197,10 @@ public:
     /// Returns true if this Q2DViewer can show a display shutter in its current state, i.e. if there is a display shutter for the current image and there isn't
     /// any restriction to show display shutters.
     bool canShowDisplayShutter() const;
+    
+    /// Casts the given QViewer to a Q2DViewer object
+    /// If casting is successful, casted pointer to Q2DViewer will be returned, null otherwise
+    static Q2DViewer* castFromQViewer(QViewer *viewer);
 
 public slots:
     virtual void setInput(Volume *volume);

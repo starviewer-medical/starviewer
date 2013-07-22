@@ -2712,6 +2712,23 @@ vtkImageActor* Q2DViewer::getVtkImageActor() const
     return m_imageActor;
 }
 
+Q2DViewer* Q2DViewer::castFromQViewer(QViewer *viewer)
+{
+    if (!viewer)
+    {
+        DEBUG_LOG(QString("Cannot cast a null pointer"));
+        return 0;
+    }
+
+    Q2DViewer *viewer2D = qobject_cast<Q2DViewer*>(viewer);
+    if (!viewer2D)
+    {
+        DEBUG_LOG(QString("Q2DViewer casting failed! Provided viewer may not be a Q2DViewer object: %1").arg(viewer->metaObject()->className()));
+    }
+
+    return viewer2D;
+}
+
 int Q2DViewer::getNearestSlice(double projectedPosition[3], double &distance)
 {
     double currentDistance;

@@ -18,7 +18,7 @@ SlicingKeyboardTool::SlicingKeyboardTool(QViewer *viewer, QObject *parent)
  : Tool(viewer, parent)
 {
     m_toolName = "SlicingKeyboardTool";
-    m_2DViewer = castToQ2DViewer(viewer);
+    m_2DViewer = Q2DViewer::castFromQViewer(viewer);
 }
 
 SlicingKeyboardTool::~SlicingKeyboardTool()

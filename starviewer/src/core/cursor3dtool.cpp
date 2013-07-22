@@ -27,7 +27,7 @@ Cursor3DTool::Cursor3DTool(QViewer *viewer, QObject *parent)
     connect(m_toolData, SIGNAL(changed()), SLOT(updateProjectedPoint()));
     connect(m_toolData, SIGNAL(turnOffCursor()), SLOT(hideCursor()));
 
-    m_2DViewer = castToQ2DViewer(viewer);
+    m_2DViewer = Q2DViewer::castFromQViewer(viewer);
 
     m_state = None;
     
