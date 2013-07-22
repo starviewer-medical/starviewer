@@ -1,6 +1,8 @@
 #ifndef FILTER_H
 #define FILTER_H
 
+#include "filteroutput.h"
+
 class vtkAlgorithm;
 
 namespace udg {
