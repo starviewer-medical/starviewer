@@ -185,7 +185,7 @@ void QTransferFunctionEditorByGradient::setTransferFunction(const QGradientStops
 {
     m_transferFunction.clear();
 
-    for (unsigned char i = 0; i < stops.size(); i++)
+    for (int i = 0; i < stops.size(); i++)
     {
         m_transferFunction.set(stops.at(i).first * m_maximum, stops.at(i).second, stops.at(i).second.alphaF());
     }
