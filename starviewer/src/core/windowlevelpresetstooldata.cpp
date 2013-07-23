@@ -166,7 +166,8 @@ bool WindowLevelPresetsToolData::updatePreset(const WindowLevel &preset)
 
     if (!found)
     {
-        DEBUG_LOG("The given preset does not exist in the presets container. Nothing will be done.");
+        DEBUG_LOG(QString("The given preset [%1: %2, %3] does not exist in the presets container. Nothing will be done.")
+            .arg(preset.getName()).arg(preset.getWidth()).arg(preset.getCenter()));
     }
     
     return found;
