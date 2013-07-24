@@ -24,15 +24,15 @@ void Drawer::draw(DrawerPrimitive *primitive, int plane, int slice)
 {
     switch (plane)
     {
-        case QViewer::AxialPlane:
+        case QViewer::XYPlane:
             m_axialPrimitives.insert(slice, primitive);
             break;
 
-        case QViewer::SagitalPlane:
+        case QViewer::YZPlane:
             m_sagitalPrimitives.insert(slice, primitive);
             break;
 
-        case QViewer::CoronalPlane:
+        case QViewer::XZPlane:
             m_coronalPrimitives.insert(slice, primitive);
             break;
 
@@ -73,15 +73,15 @@ void Drawer::clearViewer()
     QMultiMap<int, DrawerPrimitive*> primitivesContainer;
     switch (m_currentPlane)
     {
-        case QViewer::AxialPlane:
+        case QViewer::XYPlane:
             primitivesContainer = m_axialPrimitives;
             break;
 
-        case QViewer::SagitalPlane:
+        case QViewer::YZPlane:
             primitivesContainer = m_sagitalPrimitives;
             break;
 
-        case QViewer::CoronalPlane:
+        case QViewer::XZPlane:
             primitivesContainer = m_coronalPrimitives;
             break;
 
@@ -213,15 +213,15 @@ void Drawer::hide(int plane, int slice)
     QList<DrawerPrimitive*> primitivesList;
     switch (plane)
     {
-        case QViewer::AxialPlane:
+        case QViewer::XYPlane:
             primitivesList = m_axialPrimitives.values(slice);
             break;
 
-        case QViewer::SagitalPlane:
+        case QViewer::YZPlane:
             primitivesList = m_sagitalPrimitives.values(slice);
             break;
 
-        case QViewer::CoronalPlane:
+        case QViewer::XZPlane:
             primitivesList = m_coronalPrimitives.values(slice);
             break;
     }
@@ -240,15 +240,15 @@ void Drawer::show(int plane, int slice)
     QList<DrawerPrimitive*> primitivesList;
     switch (plane)
     {
-        case QViewer::AxialPlane:
+        case QViewer::XYPlane:
             primitivesList = m_axialPrimitives.values(slice);
             break;
 
-        case QViewer::SagitalPlane:
+        case QViewer::YZPlane:
             primitivesList = m_sagitalPrimitives.values(slice);
             break;
 
-        case QViewer::CoronalPlane:
+        case QViewer::XZPlane:
             primitivesList = m_coronalPrimitives.values(slice);
             break;
     }
@@ -296,15 +296,15 @@ void Drawer::enableGroup(const QString &groupName)
     int currentSlice = m_2DViewer->getCurrentSlice();
     switch (m_2DViewer->getView())
     {
-        case QViewer::AxialPlane:
+        case QViewer::XYPlane:
             currentVisiblePrimitives = m_axialPrimitives.values(currentSlice);
             break;
 
-        case QViewer::SagitalPlane:
+        case QViewer::YZPlane:
             currentVisiblePrimitives = m_sagitalPrimitives.values(currentSlice);
             break;
 
-        case QViewer::CoronalPlane:
+        case QViewer::XZPlane:
             currentVisiblePrimitives = m_coronalPrimitives.values(currentSlice);
             break;
     }
@@ -345,15 +345,15 @@ DrawerPrimitive* Drawer::getNearestErasablePrimitiveToPoint(double point[3], int
 
     switch (view)
     {
-        case QViewer::AxialPlane:
+        case QViewer::XYPlane:
             primitivesList = m_axialPrimitives.values(slice);
             break;
 
-        case QViewer::SagitalPlane:
+        case QViewer::YZPlane:
             primitivesList = m_sagitalPrimitives.values(slice);
             break;
 
-        case QViewer::CoronalPlane:
+        case QViewer::XZPlane:
             primitivesList = m_coronalPrimitives.values(slice);
             break;
 
@@ -386,15 +386,15 @@ void Drawer::erasePrimitivesInsideBounds(double bounds[6], Q2DViewer::CameraOrie
 
     switch (view)
     {
-        case QViewer::AxialPlane:
+        case QViewer::XYPlane:
             primitivesList = m_axialPrimitives.values(slice);
             break;
 
-        case QViewer::SagitalPlane:
+        case QViewer::YZPlane:
             primitivesList = m_sagitalPrimitives.values(slice);
             break;
 
-        case QViewer::CoronalPlane:
+        case QViewer::XZPlane:
             primitivesList = m_coronalPrimitives.values(slice);
             break;
 
