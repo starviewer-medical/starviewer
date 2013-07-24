@@ -87,7 +87,7 @@ void ROITool::computeStatisticsData()
     int intersectionCoordinateIndex;
     switch (currentView)
     {
-        case Q2DViewer::Axial:
+        case Q2DViewer::XYPlane:
             // xmin
             sweepLineBeginPoint[0] = bounds[0];
             // ymin
@@ -109,7 +109,7 @@ void ROITool::computeStatisticsData()
             verticalSpacingIncrement = spacing[1];
             break;
 
-        case Q2DViewer::Sagital:
+        case Q2DViewer::YZPlane:
             // xmin
             sweepLineBeginPoint[0] = bounds[0];
             // ymin
@@ -131,7 +131,7 @@ void ROITool::computeStatisticsData()
             verticalSpacingIncrement = spacing[2];
             break;
 
-        case Q2DViewer::Coronal:
+        case Q2DViewer::XZPlane:
             // xmin
             sweepLineBeginPoint[0] = bounds[0];
             // ymin
@@ -167,7 +167,7 @@ void ROITool::computeStatisticsData()
     else
     {
         pixelData = m_2DViewer->getInput()->getPixelData();
-        if (m_2DViewer->getView() == Q2DViewer::Axial && m_2DViewer->getInput()->getNumberOfPhases() > 1)
+        if (m_2DViewer->getView() == Q2DViewer::XYPlane && m_2DViewer->getInput()->getNumberOfPhases() > 1)
         {
             numberOfPhases = m_2DViewer->getInput()->getNumberOfPhases();
             phaseIndex = m_2DViewer->getCurrentPhase();

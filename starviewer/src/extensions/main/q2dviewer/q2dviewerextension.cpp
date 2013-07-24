@@ -776,7 +776,7 @@ void Q2DViewerExtension::updateDICOMInformationButton()
 
     if (viewerWidget->getViewer()->getInput())
     {
-        if (viewerWidget->getViewer()->getView() == Q2DViewer::Axial)
+        if (viewerWidget->getViewer()->getView() == Q2DViewer::XYPlane)
         {
             m_dicomDumpToolButton->setEnabled(true);
         }

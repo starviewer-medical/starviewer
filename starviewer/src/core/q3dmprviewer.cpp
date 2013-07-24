@@ -266,19 +266,19 @@ void Q3DMPRViewer::createOutline()
 void Q3DMPRViewer::resetViewToAxial()
 {
     this->resetPlanes();
-    this->setCameraOrientation(Axial);
+    this->setCameraOrientation(XYPlane);
 }
 
 void Q3DMPRViewer::resetViewToSagital()
 {
     this->resetPlanes();
-    this->setCameraOrientation(Sagital);
+    this->setCameraOrientation(YZPlane);
 }
 
 void Q3DMPRViewer::resetViewToCoronal()
 {
     this->resetPlanes();
-    this->setCameraOrientation(Coronal);
+    this->setCameraOrientation(XZPlane);
 }
 
 void Q3DMPRViewer::setSagitalVisibility(bool enable)

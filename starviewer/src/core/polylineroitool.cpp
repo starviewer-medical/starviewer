@@ -221,7 +221,7 @@ void PolylineROITool::setTextPosition(DrawerText *text)
     switch (closestEdge)
     {
         case 0:
-            if (m_2DViewer->getView() == Q2DViewer::Axial)
+            if (m_2DViewer->getView() == Q2DViewer::XYPlane)
             {
                 paddingY = Padding;
                 text->setVerticalJustification("Bottom");
@@ -239,7 +239,7 @@ void PolylineROITool::setTextPosition(DrawerText *text)
             text->setHorizontalJustification("Left");
             break;
         case 2:
-            if (m_2DViewer->getView() == Q2DViewer::Axial)
+            if (m_2DViewer->getView() == Q2DViewer::XYPlane)
             {
                 paddingY = -Padding;
                 text->setVerticalJustification("Top");

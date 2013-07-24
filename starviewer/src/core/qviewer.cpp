@@ -670,15 +670,15 @@ void QViewer::setCameraOrientation(int orientation)
     {
         switch (orientation)
         {
-            case Axial:
+            case XYPlane:
                 setCameraViewPlane(XYViewPlane);
                 break;
 
-            case Coronal:
+            case XZPlane:
                 setCameraViewPlane(XZViewPlane);
                 break;
 
-            case Sagital:
+            case YZPlane:
                 setCameraViewPlane(YZViewPlane);
                 break;
         }

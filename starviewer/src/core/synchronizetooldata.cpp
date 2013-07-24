@@ -8,7 +8,7 @@ SynchronizeToolData::SynchronizeToolData()
  : ToolData()
 {
     m_increment = 0;
-    m_incrementView = Q2DViewer::Axial;
+    m_incrementView = Q2DViewer::XYPlane;
     m_level = 0;
     m_window = 0;
     m_zoomFactor = 0;

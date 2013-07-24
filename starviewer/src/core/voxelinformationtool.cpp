@@ -112,7 +112,7 @@ QString VoxelInformationTool::computeVoxelValue(double worldCoordinate[3])
     else
     {
         pixelData = m_2DViewer->getInput()->getPixelData();
-        if (m_2DViewer->getView() == Q2DViewer::Axial && m_2DViewer->getInput()->getNumberOfPhases() > 1)
+        if (m_2DViewer->getView() == Q2DViewer::XYPlane && m_2DViewer->getInput()->getNumberOfPhases() > 1)
         {
             numberOfPhases = m_2DViewer->getInput()->getNumberOfPhases();
             phaseIndex = m_2DViewer->getCurrentPhase();
