@@ -24,7 +24,7 @@ public:
     /// @param primitive Primitiva a pintar
     /// @param plane Pla sobre el qual volem pintar la primitiva
     /// @param slice Llesca a la que adjuntem la primitiva
-    void draw(DrawerPrimitive *primitive, int plane, int slice);
+    void draw(DrawerPrimitive *primitive, OrthogonalPlane::OrthogonalPlaneType plane, int slice);
 
     /// Dibuixa la primitiva sempre al cim sense importar en quin pla o llesca ens trobem. 
     /// La visibilitat dependrà només de la propietat isVisible() de la primitiva
