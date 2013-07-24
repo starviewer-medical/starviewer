@@ -421,8 +421,8 @@ bool Drawer::isPrimitiveInside(DrawerPrimitive *primitive, OrthogonalPlane::Orth
     double primitiveBounds[6];
     primitive->getBounds(primitiveBounds);
 
-    int xIndex = Q2DViewer::getXIndexForView(view);
-    int yIndex = Q2DViewer::getYIndexForView(view);
+    int xIndex = OrthogonalPlane::getXIndexForView(view);
+    int yIndex = OrthogonalPlane::getYIndexForView(view);
 
     bool inside = false;
     if (bounds[xIndex * 2] <= primitiveBounds[xIndex * 2] && bounds[xIndex * 2 + 1] >= primitiveBounds[xIndex * 2 + 1] &&

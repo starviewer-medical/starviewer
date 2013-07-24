@@ -176,15 +176,6 @@ public:
     /// Valors: AXIAL, SAGITAL, CORONAL, OBLIQUE o N/A
     QString getCurrentAnatomicalPlaneLabel() const;
 
-    /// Obté els índexs dels eixos de coordenades corresponents a la vista 2D indicada
-    /// Aquests índexs indiquen com hem d'indexar una coordenada 3D per obtenir
-    /// la corresponent projecció sobre la vista 2D sobre la que estem operant
-    /// En cas que el valor de view no sigui un dels esperats, el valor de l'índex serà -1
-    static void getXYZIndexesForView(int &x, int &y, int &z, OrthogonalPlane::OrthogonalPlaneType view);
-    static int getXIndexForView(OrthogonalPlane::OrthogonalPlaneType view);
-    static int getYIndexForView(OrthogonalPlane::OrthogonalPlaneType view);
-    static int getZIndexForView(OrthogonalPlane::OrthogonalPlaneType view);
-
     /// Retorna l'espai que hi ha entre les llesques segons la vista actual i si hi ha el thickness activat
     double getCurrentSpacingBetweenSlices();
 

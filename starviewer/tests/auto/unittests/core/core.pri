@@ -65,7 +65,8 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_vtkdcmtkbydefaultvolumepixeldatareaderselector.cpp \
            $$PWD/test_itkgdcmbydefaultvolumepixeldatareaderselector.cpp \
            $$PWD/test_filter.cpp \
-           $$PWD/test_filteroutput.cpp
+           $$PWD/test_filteroutput.cpp \
+           $$PWD/test_orthogonalplane.cpp
 
 win32 {
     SOURCES += $$PWD/test_windowsfirewallaccess.cpp \

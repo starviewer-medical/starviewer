@@ -141,7 +141,7 @@ void DistanceTool::initialize()
 void DistanceTool::equalizeDepth()
 {
     // Assignem al primer punt la z del segon
-    int zIndex = Q2DViewer::getZIndexForView(m_2DViewer->getView());
+    int zIndex = OrthogonalPlane::getZIndexForView(m_2DViewer->getView());
     double z = m_distanceLine->getSecondPoint()[zIndex];
     double *firstPoint = m_distanceLine->getFirstPoint();
     firstPoint[zIndex] = z;
