@@ -9,7 +9,7 @@
 namespace udg {
 
 Drawer::Drawer(Q2DViewer *viewer, QObject *parent)
- : QObject(parent), m_currentPlane(0), m_currentSlice(0)
+ : QObject(parent), m_currentPlane(OrthogonalPlane::YZPlane), m_currentSlice(0)
 {
     m_2DViewer = viewer;
     connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(refresh()));
@@ -208,7 +208,7 @@ void Drawer::erasePrimitive(DrawerPrimitive *primitive)
     }
 }
 
-void Drawer::hide(int plane, int slice)
+void Drawer::hide(OrthogonalPlane::OrthogonalPlaneType plane, int slice)
 {
     QList<DrawerPrimitive*> primitivesList;
     switch (plane)
@@ -235,7 +235,7 @@ void Drawer::hide(int plane, int slice)
     }
 }
 
-void Drawer::show(int plane, int slice)
+void Drawer::show(OrthogonalPlane::OrthogonalPlaneType plane, int slice)
 {
     QList<DrawerPrimitive*> primitivesList;
     switch (plane)
@@ -335,7 +335,7 @@ void Drawer::enableGroup(const QString &groupName)
     }
 }
 
-DrawerPrimitive* Drawer::getNearestErasablePrimitiveToPoint(double point[3], int view, int slice, double closestPoint[3])
+DrawerPrimitive* Drawer::getNearestErasablePrimitiveToPoint(double point[3], OrthogonalPlane::OrthogonalPlaneType view, int slice, double closestPoint[3])
 {
     double distance;
     double minimumDistance = MathTools::DoubleMaximumValue;
