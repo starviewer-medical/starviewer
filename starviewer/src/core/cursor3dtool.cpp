@@ -124,12 +124,12 @@ void Cursor3DTool::updatePosition()
             double *spacing = m_2DViewer->getInput()->getSpacing();
             switch (m_2DViewer->getView())
             {
-                case Q2DViewer::XYPlane:
+                case OrthogonalPlane::XYPlane:
                     currentPlane = m_2DViewer->getCurrentImagePlane();
                     break;
 
-                case Q2DViewer::YZPlane:
-                case Q2DViewer::XZPlane:
+                case OrthogonalPlane::YZPlane:
+                case OrthogonalPlane::XZPlane:
                     if (index[2] < m_2DViewer->getInput()->getImages().count())
                     {
                         // La llesca sempre és l'index[2] del DICOM

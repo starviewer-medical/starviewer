@@ -119,7 +119,7 @@ double PolylineTemporalROITool::computeTemporalMean()
     int intersectionIndex;
     switch (currentView)
     {
-        case Q2DViewer::XYPlane:
+        case OrthogonalPlane::XYPlane:
             // xmin
             rayP1[0] = bounds[0];
             // y
@@ -138,7 +138,7 @@ double PolylineTemporalROITool::computeTemporalMean()
             verticalLimit = bounds[3];
             break;
 
-        case Q2DViewer::YZPlane:
+        case OrthogonalPlane::YZPlane:
             // xmin
             rayP1[0] = bounds[0];
             // ymin
@@ -157,7 +157,7 @@ double PolylineTemporalROITool::computeTemporalMean()
             verticalLimit = bounds[3];
             break;
 
-        case Q2DViewer::XZPlane:
+        case OrthogonalPlane::XZPlane:
             // xmin
             rayP1[0] = bounds[0];
             // ymin

@@ -328,7 +328,7 @@ void Q3DViewer::setWindowLevel(double window, double level)
     }
 }
 
-void Q3DViewer::resetView(CameraOrientationType view)
+void Q3DViewer::resetView(OrthogonalPlane::OrthogonalPlaneType view)
 {
     m_currentOrientation = view;
     // TODO replantejar si necessitem aquest mètode i el substituïm per aquest mateix
@@ -601,15 +601,15 @@ void Q3DViewer::resetOrientation()
 {
     switch (m_currentOrientation)
     {
-        case XYPlane:
+        case OrthogonalPlane::XYPlane:
             this->resetViewToAxial();
             break;
 
-        case YZPlane:
+        case OrthogonalPlane::YZPlane:
             this->resetViewToSagital();
             break;
 
-        case XZPlane:
+        case OrthogonalPlane::XZPlane:
             this->resetViewToCoronal();
             break;
 
@@ -625,7 +625,7 @@ void Q3DViewer::setDefaultOrientationForCurrentInput()
 {
     // De moment, sempre serà coronal
     // TODO cal implementar que analitzi l'input i esculli la millor orientació
-    m_currentOrientation = XZPlane;
+    m_currentOrientation = OrthogonalPlane::XZPlane;
 }
 
 // Desplacem les dades de manera que el mínim sigui 0 i ho convertim a un unsigned short, perquè el ray casting no accepta signed short.
@@ -1085,20 +1085,20 @@ void Q3DViewer::renderTexture3D()
 
 void Q3DViewer::resetViewToAxial()
 {
-    this->setCameraOrientation(XYPlane);
-    m_currentOrientation = XYPlane;
+    this->setCameraOrientation(OrthogonalPlane::XYPlane);
+    m_currentOrientation = OrthogonalPlane::XYPlane;
 }
 
 void Q3DViewer::resetViewToSagital()
 {
-    this->setCameraOrientation(YZPlane);
-    m_currentOrientation = YZPlane;
+    this->setCameraOrientation(OrthogonalPlane::YZPlane);
+    m_currentOrientation = OrthogonalPlane::YZPlane;
 }
 
 void Q3DViewer::resetViewToCoronal()
 {
-    this->setCameraOrientation(XZPlane);
-    m_currentOrientation = XZPlane;
+    this->setCameraOrientation(OrthogonalPlane::XZPlane);
+    m_currentOrientation = OrthogonalPlane::XZPlane;
 }
 
 void Q3DViewer::enableOrientationMarker(bool enable)

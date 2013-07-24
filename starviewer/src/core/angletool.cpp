@@ -265,7 +265,7 @@ void AngleTool::placeText(DrawerText *angleText)
     double *point2 = m_mainPolyline->getPoint(1);
     double *point3 = m_mainPolyline->getPoint(2);
     double position[3];
-    Q2DViewer::CameraOrientationType view = m_2DViewer->getView();
+    OrthogonalPlane::OrthogonalPlaneType view = m_2DViewer->getView();
     int xIndex = Q2DViewer::getXIndexForView(view);
     int yIndex = Q2DViewer::getYIndexForView(view);
 

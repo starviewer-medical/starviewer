@@ -24,15 +24,15 @@ void Drawer::draw(DrawerPrimitive *primitive, int plane, int slice)
 {
     switch (plane)
     {
-        case QViewer::XYPlane:
+        case OrthogonalPlane::XYPlane:
             m_axialPrimitives.insert(slice, primitive);
             break;
 
-        case QViewer::YZPlane:
+        case OrthogonalPlane::YZPlane:
             m_sagitalPrimitives.insert(slice, primitive);
             break;
 
-        case QViewer::XZPlane:
+        case OrthogonalPlane::XZPlane:
             m_coronalPrimitives.insert(slice, primitive);
             break;
 
@@ -73,15 +73,15 @@ void Drawer::clearViewer()
     QMultiMap<int, DrawerPrimitive*> primitivesContainer;
     switch (m_currentPlane)
     {
-        case QViewer::XYPlane:
+        case OrthogonalPlane::XYPlane:
             primitivesContainer = m_axialPrimitives;
             break;
 
-        case QViewer::YZPlane:
+        case OrthogonalPlane::YZPlane:
             primitivesContainer = m_sagitalPrimitives;
             break;
 
-        case QViewer::XZPlane:
+        case OrthogonalPlane::XZPlane:
             primitivesContainer = m_coronalPrimitives;
             break;
 
@@ -213,15 +213,15 @@ void Drawer::hide(int plane, int slice)
     QList<DrawerPrimitive*> primitivesList;
     switch (plane)
     {
-        case QViewer::XYPlane:
+        case OrthogonalPlane::XYPlane:
             primitivesList = m_axialPrimitives.values(slice);
             break;
 
-        case QViewer::YZPlane:
+        case OrthogonalPlane::YZPlane:
             primitivesList = m_sagitalPrimitives.values(slice);
             break;
 
-        case QViewer::XZPlane:
+        case OrthogonalPlane::XZPlane:
             primitivesList = m_coronalPrimitives.values(slice);
             break;
     }
@@ -240,15 +240,15 @@ void Drawer::show(int plane, int slice)
     QList<DrawerPrimitive*> primitivesList;
     switch (plane)
     {
-        case QViewer::XYPlane:
+        case OrthogonalPlane::XYPlane:
             primitivesList = m_axialPrimitives.values(slice);
             break;
 
-        case QViewer::YZPlane:
+        case OrthogonalPlane::YZPlane:
             primitivesList = m_sagitalPrimitives.values(slice);
             break;
 
-        case QViewer::XZPlane:
+        case OrthogonalPlane::XZPlane:
             primitivesList = m_coronalPrimitives.values(slice);
             break;
     }
@@ -296,15 +296,15 @@ void Drawer::enableGroup(const QString &groupName)
     int currentSlice = m_2DViewer->getCurrentSlice();
     switch (m_2DViewer->getView())
     {
-        case QViewer::XYPlane:
+        case OrthogonalPlane::XYPlane:
             currentVisiblePrimitives = m_axialPrimitives.values(currentSlice);
             break;
 
-        case QViewer::YZPlane:
+        case OrthogonalPlane::YZPlane:
             currentVisiblePrimitives = m_sagitalPrimitives.values(currentSlice);
             break;
 
-        case QViewer::XZPlane:
+        case OrthogonalPlane::XZPlane:
             currentVisiblePrimitives = m_coronalPrimitives.values(currentSlice);
             break;
     }
@@ -345,15 +345,15 @@ DrawerPrimitive* Drawer::getNearestErasablePrimitiveToPoint(double point[3], int
 
     switch (view)
     {
-        case QViewer::XYPlane:
+        case OrthogonalPlane::XYPlane:
             primitivesList = m_axialPrimitives.values(slice);
             break;
 
-        case QViewer::YZPlane:
+        case OrthogonalPlane::YZPlane:
             primitivesList = m_sagitalPrimitives.values(slice);
             break;
 
-        case QViewer::XZPlane:
+        case OrthogonalPlane::XZPlane:
             primitivesList = m_coronalPrimitives.values(slice);
             break;
 
@@ -380,21 +380,21 @@ DrawerPrimitive* Drawer::getNearestErasablePrimitiveToPoint(double point[3], int
     return nearestPrimitive;
 }
 
-void Drawer::erasePrimitivesInsideBounds(double bounds[6], Q2DViewer::CameraOrientationType view, int slice)
+void Drawer::erasePrimitivesInsideBounds(double bounds[6], OrthogonalPlane::OrthogonalPlaneType view, int slice)
 {
     QList<DrawerPrimitive*> primitivesList;
 
     switch (view)
     {
-        case QViewer::XYPlane:
+        case OrthogonalPlane::XYPlane:
             primitivesList = m_axialPrimitives.values(slice);
             break;
 
-        case QViewer::YZPlane:
+        case OrthogonalPlane::YZPlane:
             primitivesList = m_sagitalPrimitives.values(slice);
             break;
 
-        case QViewer::XZPlane:
+        case OrthogonalPlane::XZPlane:
             primitivesList = m_coronalPrimitives.values(slice);
             break;
 
@@ -414,7 +414,7 @@ void Drawer::erasePrimitivesInsideBounds(double bounds[6], Q2DViewer::CameraOrie
     }
 }
 
-bool Drawer::isPrimitiveInside(DrawerPrimitive *primitive, Q2DViewer::CameraOrientationType view, double bounds[6])
+bool Drawer::isPrimitiveInside(DrawerPrimitive *primitive, OrthogonalPlane::OrthogonalPlaneType view, double bounds[6])
 {
     // Comprovem que els bounds de la primitiva estiguin continguts
     // dins dels que ens han passat per paràmetre

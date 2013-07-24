@@ -86,7 +86,7 @@ void EllipticalROITool::setTextPosition(DrawerText *text)
 
     if (m_secondPoint[yIndex] >= bounds[yIndex * 2 + 1])
     {
-        if (m_2DViewer->getView() == Q2DViewer::XYPlane)
+        if (m_2DViewer->getView() == OrthogonalPlane::XYPlane)
         {
             paddingY = -Padding;
             text->setVerticalJustification("Top");
@@ -99,7 +99,7 @@ void EllipticalROITool::setTextPosition(DrawerText *text)
     }
     else
     {
-        if (m_2DViewer->getView() == Q2DViewer::XYPlane)
+        if (m_2DViewer->getView() == OrthogonalPlane::XYPlane)
         {
             paddingY = Padding;
             text->setVerticalJustification("Bottom");

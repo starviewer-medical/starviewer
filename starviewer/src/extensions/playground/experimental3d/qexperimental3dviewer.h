@@ -61,8 +61,8 @@ public slots:
     
     void setTransferFunction(TransferFunction *transferFunction);
 
-    /// Li indiquem quina vista volem del volum: Axial, Coronal o Sagital.
-    virtual void resetView(CameraOrientationType view);
+    /// Li indiquem quina vista volem del volum: XYPlane, YZPlane o XZPlane.
+    virtual void resetView(OrthogonalPlane::OrthogonalPlaneType view);
     virtual void resetViewToAxial();
     virtual void resetViewToSagital();
     virtual void resetViewToCoronal();

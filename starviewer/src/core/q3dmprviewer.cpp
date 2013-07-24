@@ -266,19 +266,19 @@ void Q3DMPRViewer::createOutline()
 void Q3DMPRViewer::resetViewToAxial()
 {
     this->resetPlanes();
-    this->setCameraOrientation(XYPlane);
+    this->setCameraOrientation(OrthogonalPlane::XYPlane);
 }
 
 void Q3DMPRViewer::resetViewToSagital()
 {
     this->resetPlanes();
-    this->setCameraOrientation(YZPlane);
+    this->setCameraOrientation(OrthogonalPlane::YZPlane);
 }
 
 void Q3DMPRViewer::resetViewToCoronal()
 {
     this->resetPlanes();
-    this->setCameraOrientation(XZPlane);
+    this->setCameraOrientation(OrthogonalPlane::XZPlane);
 }
 
 void Q3DMPRViewer::setSagitalVisibility(bool enable)
@@ -406,7 +406,7 @@ void Q3DMPRViewer::getCurrentWindowLevel(double wl[2])
     m_axialImagePlaneWidget->GetWindowLevel(wl);
 }
 
-void Q3DMPRViewer::resetView(CameraOrientationType)
+void Q3DMPRViewer::resetView(OrthogonalPlane::OrthogonalPlaneType)
 {
     // TODO estem obligats a implementar-lo. Caldria aplicar la orientació que se'ns demana
 }

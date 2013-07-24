@@ -44,25 +44,25 @@ private:
     void setupGetIndexForViewShouldReturnMinusOneData();
 };
 
-Q_DECLARE_METATYPE(Q2DViewer::CameraOrientationType)
+Q_DECLARE_METATYPE(OrthogonalPlane::OrthogonalPlaneType)
 Q_DECLARE_METATYPE(Q2DViewer*)
 Q_DECLARE_METATYPE(Volume*)
 
 void test_Q2DViewer::getXYZIndexesForView_ShouldReturnExpectedValues_data()
 {
-    QTest::addColumn<Q2DViewer::CameraOrientationType>("view");
+    QTest::addColumn<OrthogonalPlane::OrthogonalPlaneType>("view");
     QTest::addColumn<int>("xIndex");
     QTest::addColumn<int>("yIndex");
     QTest::addColumn<int>("zIndex");
 
-    QTest::newRow("XY view") << Q2DViewer::XYPlane << 0 << 1 << 2;
-    QTest::newRow("YZ view") << Q2DViewer::YZPlane << 1 << 2 << 0;
-    QTest::newRow("XZ view") << Q2DViewer::XZPlane << 0 << 2 << 1;
+    QTest::newRow("XY view") << OrthogonalPlane::XYPlane << 0 << 1 << 2;
+    QTest::newRow("YZ view") << OrthogonalPlane::YZPlane << 1 << 2 << 0;
+    QTest::newRow("XZ view") << OrthogonalPlane::XZPlane << 0 << 2 << 1;
 }
 
 void test_Q2DViewer::getXYZIndexesForView_ShouldReturnExpectedValues()
 {
-    QFETCH(Q2DViewer::CameraOrientationType, view);
+    QFETCH(OrthogonalPlane::OrthogonalPlaneType, view);
     QFETCH(int, xIndex);
     QFETCH(int, yIndex);
     QFETCH(int, zIndex);
@@ -85,7 +85,7 @@ void test_Q2DViewer::getXYZIndexesForView_ShouldReturnMinusOne()
     QFETCH(int, view);
 
     int x, y, z;
-    Q2DViewer::getXYZIndexesForView(x, y, z, (Q2DViewer::CameraOrientationType)view);
+    Q2DViewer::getXYZIndexesForView(x, y, z, (OrthogonalPlane::OrthogonalPlaneType)view);
     
     QCOMPARE(x, -1);
     QCOMPARE(y, -1);
@@ -94,17 +94,17 @@ void test_Q2DViewer::getXYZIndexesForView_ShouldReturnMinusOne()
 
 void test_Q2DViewer::getXIndexForView_ShouldReturnExpectedValues_data()
 {
-    QTest::addColumn<Q2DViewer::CameraOrientationType>("view");
+    QTest::addColumn<OrthogonalPlane::OrthogonalPlaneType>("view");
     QTest::addColumn<int>("xIndex");
 
-    QTest::newRow("XY view") << Q2DViewer::XYPlane << 0;
-    QTest::newRow("YZ view") << Q2DViewer::YZPlane << 1;
-    QTest::newRow("XZ view") << Q2DViewer::XZPlane << 0;
+    QTest::newRow("XY view") << OrthogonalPlane::XYPlane << 0;
+    QTest::newRow("YZ view") << OrthogonalPlane::YZPlane << 1;
+    QTest::newRow("XZ view") << OrthogonalPlane::XZPlane << 0;
 }
 
 void test_Q2DViewer::getXIndexForView_ShouldReturnExpectedValues()
 {
-    QFETCH(Q2DViewer::CameraOrientationType, view);
+    QFETCH(OrthogonalPlane::OrthogonalPlaneType, view);
     QFETCH(int, xIndex);
     
     QCOMPARE(Q2DViewer::getXIndexForView(view), xIndex);
@@ -119,22 +119,22 @@ void test_Q2DViewer::getXIndexForView_ShouldReturnMinusOne()
 {
     QFETCH(int, view);    
 
-    QCOMPARE(Q2DViewer::getXIndexForView((Q2DViewer::CameraOrientationType)view), -1);
+    QCOMPARE(Q2DViewer::getXIndexForView((OrthogonalPlane::OrthogonalPlaneType)view), -1);
 }
 
 void test_Q2DViewer::getYIndexForView_ShouldReturnExpectedValues_data()
 {
-    QTest::addColumn<Q2DViewer::CameraOrientationType>("view");
+    QTest::addColumn<OrthogonalPlane::OrthogonalPlaneType>("view");
     QTest::addColumn<int>("yIndex");
 
-    QTest::newRow("XY view") << Q2DViewer::XYPlane << 1;
-    QTest::newRow("YZ view") << Q2DViewer::YZPlane << 2;
-    QTest::newRow("XZ view") << Q2DViewer::XZPlane << 2;
+    QTest::newRow("XY view") << OrthogonalPlane::XYPlane << 1;
+    QTest::newRow("YZ view") << OrthogonalPlane::YZPlane << 2;
+    QTest::newRow("XZ view") << OrthogonalPlane::XZPlane << 2;
 }
 
 void test_Q2DViewer::getYIndexForView_ShouldReturnExpectedValues()
 {
-    QFETCH(Q2DViewer::CameraOrientationType, view);
+    QFETCH(OrthogonalPlane::OrthogonalPlaneType, view);
     QFETCH(int, yIndex);
     
     QCOMPARE(Q2DViewer::getYIndexForView(view), yIndex);
@@ -149,22 +149,22 @@ void test_Q2DViewer::getYIndexForView_ShouldReturnMinusOne()
 {
     QFETCH(int, view);
 
-    QCOMPARE(Q2DViewer::getYIndexForView((Q2DViewer::CameraOrientationType)view), -1);
+    QCOMPARE(Q2DViewer::getYIndexForView((OrthogonalPlane::OrthogonalPlaneType)view), -1);
 }
 
 void test_Q2DViewer::getZIndexForView_ShouldReturnExpectedValues_data()
 {
-    QTest::addColumn<Q2DViewer::CameraOrientationType>("view");
+    QTest::addColumn<OrthogonalPlane::OrthogonalPlaneType>("view");
     QTest::addColumn<int>("zIndex");
 
-    QTest::newRow("XY view") << Q2DViewer::XYPlane << 2;
-    QTest::newRow("YZ view") << Q2DViewer::YZPlane << 0;
-    QTest::newRow("XZ view") << Q2DViewer::XZPlane << 1;
+    QTest::newRow("XY view") << OrthogonalPlane::XYPlane << 2;
+    QTest::newRow("YZ view") << OrthogonalPlane::YZPlane << 0;
+    QTest::newRow("XZ view") << OrthogonalPlane::XZPlane << 1;
 }
 
 void test_Q2DViewer::getZIndexForView_ShouldReturnExpectedValues()
 {
-    QFETCH(Q2DViewer::CameraOrientationType, view);
+    QFETCH(OrthogonalPlane::OrthogonalPlaneType, view);
     QFETCH(int, zIndex);
     
     QCOMPARE(Q2DViewer::getZIndexForView(view), zIndex);
@@ -179,7 +179,7 @@ void test_Q2DViewer::getZIndexForView_ShouldReturnMinusOne()
 {
     QFETCH(int, view);
 
-    QCOMPARE(Q2DViewer::getZIndexForView((Q2DViewer::CameraOrientationType)view), -1);
+    QCOMPARE(Q2DViewer::getZIndexForView((OrthogonalPlane::OrthogonalPlaneType)view), -1);
 }
 
 void test_Q2DViewer::canShowDisplayShutter_ShouldReturnExpectedValue_data()
@@ -212,14 +212,14 @@ void test_Q2DViewer::canShowDisplayShutter_ShouldReturnExpectedValue_data()
     volume = VolumeTestHelper::createVolumeWithParameters(2, 1, 1, origin, spacing, dimensions, extent);
     viewer->setInput(volume);
     viewer->enableRendering(false);
-    viewer->resetView(QViewer::YZPlane);
+    viewer->resetView(OrthogonalPlane::YZPlane);
     QTest::newRow("no thick slab & no XY plane & no shutter") << viewer << false << volume;
 
     viewer = new Q2DViewer();
     volume = VolumeTestHelper::createVolumeWithParameters(2, 1, 1, origin, spacing, dimensions, extent);
     viewer->setInput(volume);
     viewer->enableRendering(false);
-    viewer->resetView(QViewer::YZPlane);
+    viewer->resetView(OrthogonalPlane::YZPlane);
     viewer->setSlabThickness(2);
     viewer->enableThickSlab();
     QTest::newRow("thick slab & no XY plane & no shutter") << viewer << false << volume;
@@ -228,14 +228,14 @@ void test_Q2DViewer::canShowDisplayShutter_ShouldReturnExpectedValue_data()
     volume = VolumeTestHelper::createVolumeWithParameters(2, 1, 1, origin, spacing, dimensions, extent);
     viewer->setInput(volume);
     viewer->enableRendering(false);
-    viewer->resetView(QViewer::XYPlane);
+    viewer->resetView(OrthogonalPlane::XYPlane);
     QTest::newRow("no thick slab & XY plane & no shutter") << viewer << false << volume;
 
     viewer = new Q2DViewer();
     volume = VolumeTestHelper::createVolumeWithParameters(2, 1, 1, origin, spacing, dimensions, extent);
     viewer->setInput(volume);
     viewer->enableRendering(false);
-    viewer->resetView(QViewer::XYPlane);
+    viewer->resetView(OrthogonalPlane::XYPlane);
     viewer->setSlabThickness(2);
     viewer->enableThickSlab();
     QTest::newRow("thick slab & XY plane & no shutter") << viewer << false << volume;
@@ -244,7 +244,7 @@ void test_Q2DViewer::canShowDisplayShutter_ShouldReturnExpectedValue_data()
     volume = VolumeTestHelper::createVolumeWithParameters(2, 1, 1, origin, spacing, dimensions, extent);
     viewer->setInput(volume);
     viewer->enableRendering(false);
-    viewer->resetView(QViewer::YZPlane);
+    viewer->resetView(OrthogonalPlane::YZPlane);
     volume->getImage(0)->setDisplayShutters(displayShutterList);
     QTest::newRow("no thick slab & no XY plane & shutter") << viewer << false << volume;
 
@@ -252,7 +252,7 @@ void test_Q2DViewer::canShowDisplayShutter_ShouldReturnExpectedValue_data()
     volume = VolumeTestHelper::createVolumeWithParameters(2, 1, 1, origin, spacing, dimensions, extent);
     viewer->setInput(volume);
     viewer->enableRendering(false);
-    viewer->resetView(QViewer::YZPlane);
+    viewer->resetView(OrthogonalPlane::YZPlane);
     viewer->setSlabThickness(2);
     viewer->enableThickSlab();
     volume->getImage(0)->setDisplayShutters(displayShutterList);
@@ -262,7 +262,7 @@ void test_Q2DViewer::canShowDisplayShutter_ShouldReturnExpectedValue_data()
     volume = VolumeTestHelper::createVolumeWithParameters(2, 1, 1, origin, spacing, dimensions, extent);
     viewer->setInput(volume);
     viewer->enableRendering(false);
-    viewer->resetView(QViewer::XYPlane);
+    viewer->resetView(OrthogonalPlane::XYPlane);
     volume->getImage(0)->setDisplayShutters(displayShutterList);
     QTest::newRow("no thick slab & XY plane & shutter") << viewer << true << volume;
 
@@ -270,7 +270,7 @@ void test_Q2DViewer::canShowDisplayShutter_ShouldReturnExpectedValue_data()
     volume = VolumeTestHelper::createVolumeWithParameters(2, 1, 1, origin, spacing, dimensions, extent);
     viewer->setInput(volume);
     viewer->enableRendering(false);
-    viewer->resetView(QViewer::XYPlane);
+    viewer->resetView(OrthogonalPlane::XYPlane);
     viewer->setSlabThickness(2);
     viewer->enableThickSlab();
     volume->getImage(0)->setDisplayShutters(displayShutterList);
