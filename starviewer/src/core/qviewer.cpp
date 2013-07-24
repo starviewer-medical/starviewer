@@ -663,7 +663,7 @@ void QViewer::updateWindowLevelData()
     }
 }
 
-void QViewer::setCameraOrientation(int orientation)
+void QViewer::setCameraOrientation(OrthogonalPlane::OrthogonalPlaneType orientation)
 {
     vtkCamera *camera = getActiveCamera();
     if (camera)

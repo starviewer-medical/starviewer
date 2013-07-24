@@ -223,8 +223,8 @@ protected:
 
     /// Fixem la orientació de la càmera del renderer principal
     /// Si el paràmetre donat no és un dels valors enumerats vàlids, no farà res
-    /// @param orientation Orientació, valors enumerats que podran ser Axial, Sagital o Coronal
-    void setCameraOrientation(int orientation);
+    /// @param orientation Orientació
+    void setCameraOrientation(OrthogonalPlane::OrthogonalPlaneType orientation);
 
     /// Configura la orientació de la càmera donada
     void setCameraViewPlane(OrthogonalPlane::OrthogonalPlaneType viewPlane);
