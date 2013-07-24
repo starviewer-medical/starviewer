@@ -112,7 +112,7 @@ void MagicROITool::setTextPosition(DrawerText *text)
     double attachmentPoint[3];
     attachmentPoint[xIndex] = (bounds[xIndex * 2] + bounds[xIndex * 2 + 1]) / 2.0;
     attachmentPoint[zIndex] = bounds[zIndex * 2];
-    if (m_2DViewer->getView() == Q2DViewer::Axial)
+    if (m_2DViewer->getView() == Q2DViewer::XYPlane)
     {
         attachmentPoint[yIndex] = bounds[yIndex * 2 + 1];
     }
@@ -301,7 +301,7 @@ void MagicROITool::computeLevelRange()
     // Com que els volums no suporten recontruccions, només hem de tractar el cas Axial
     // TODO Revisar això quan s'implementi el ticket #1247 (Suportar reconstruccions per volums amb fases)
     int z;
-    if (m_2DViewer->getView() == Q2DViewer::Axial && !m_2DViewer->isThickSlabActive())
+    if (m_2DViewer->getView() == Q2DViewer::XYPlane && !m_2DViewer->isThickSlabActive())
     {
         z = m_2DViewer->getInput()->getImageIndex(m_2DViewer->getCurrentSlice(), m_2DViewer->getCurrentPhase());
     }
@@ -348,7 +348,7 @@ void MagicROITool::computeRegionMask()
     // HACK Per poder crear les regions correctament quan tenim imatges amb fases
     // Com que els volums no suporten recontruccions, només hem de tractar el cas Axial
     // TODO Revisar això quan s'implementi el ticket #1247 (Suportar reconstruccions per volums amb fases)
-    if (m_2DViewer->getView() == Q2DViewer::Axial && !m_2DViewer->isThickSlabActive())
+    if (m_2DViewer->getView() == Q2DViewer::XYPlane && !m_2DViewer->isThickSlabActive())
     {
         z = m_2DViewer->getInput()->getImageIndex(m_2DViewer->getCurrentSlice(), m_2DViewer->getCurrentPhase());
     }

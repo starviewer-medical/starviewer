@@ -601,15 +601,15 @@ void Q3DViewer::resetOrientation()
 {
     switch (m_currentOrientation)
     {
-        case Axial:
+        case XYPlane:
             this->resetViewToAxial();
             break;
 
-        case Sagital:
+        case YZPlane:
             this->resetViewToSagital();
             break;
 
-        case Coronal:
+        case XZPlane:
             this->resetViewToCoronal();
             break;
 
@@ -625,7 +625,7 @@ void Q3DViewer::setDefaultOrientationForCurrentInput()
 {
     // De moment, sempre serà coronal
     // TODO cal implementar que analitzi l'input i esculli la millor orientació
-    m_currentOrientation = Coronal;
+    m_currentOrientation = XZPlane;
 }
 
 // Desplacem les dades de manera que el mínim sigui 0 i ho convertim a un unsigned short, perquè el ray casting no accepta signed short.
@@ -1085,20 +1085,20 @@ void Q3DViewer::renderTexture3D()
 
 void Q3DViewer::resetViewToAxial()
 {
-    this->setCameraOrientation(Axial);
-    m_currentOrientation = Axial;
+    this->setCameraOrientation(XYPlane);
+    m_currentOrientation = XYPlane;
 }
 
 void Q3DViewer::resetViewToSagital()
 {
-    this->setCameraOrientation(Sagital);
-    m_currentOrientation = Sagital;
+    this->setCameraOrientation(YZPlane);
+    m_currentOrientation = YZPlane;
 }
 
 void Q3DViewer::resetViewToCoronal()
 {
-    this->setCameraOrientation(Coronal);
-    m_currentOrientation = Coronal;
+    this->setCameraOrientation(XZPlane);
+    m_currentOrientation = XZPlane;
 }
 
 void Q3DViewer::enableOrientationMarker(bool enable)

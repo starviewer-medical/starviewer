@@ -41,7 +41,7 @@ public:
     enum PlaneType { AxialPlane = 2, SagitalPlane = 0, CoronalPlane = 1 };
 
     /// Definim les diverses orientacions que podem tenir: Axial: XY, Sagital: YZ, Coronal: XZ, Other: orientació arbitrària
-    enum CameraOrientationType { Axial = AxialPlane, Sagital = SagitalPlane, Coronal = CoronalPlane, Other };
+    enum CameraOrientationType { XYPlane = AxialPlane, YZPlane = SagitalPlane, XZPlane = CoronalPlane, Other };
 
     /// Tipus de fitxer que pot desar
     enum FileType { PNG, JPEG, TIFF, DICOM, PNM, META, BMP };
