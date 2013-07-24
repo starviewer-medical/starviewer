@@ -93,9 +93,9 @@ private:
     Q2DViewer *m_2DViewer;
 
     /// Contenidors de primitives per cada pla possible
-    QMultiMap<int, DrawerPrimitive*> m_axialPrimitives;
-    QMultiMap<int, DrawerPrimitive*> m_sagitalPrimitives;
-    QMultiMap<int, DrawerPrimitive*> m_coronalPrimitives;
+    QMultiMap<int, DrawerPrimitive*> m_XYPlanePrimitives;
+    QMultiMap<int, DrawerPrimitive*> m_YZPlanePrimitives;
+    QMultiMap<int, DrawerPrimitive*> m_XZPlanePrimitives;
     QList<DrawerPrimitive*> m_top2DPlanePrimitives;
 
     /// Pla i llesca en el que es troba en aquell moment el 2D Viewer. Serveix per controlar
