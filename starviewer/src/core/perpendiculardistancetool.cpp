@@ -204,7 +204,7 @@ void PerpendicularDistanceTool::updateFirstPerpendicularLine()
     QVector3D referenceLineDirectorVector = MathTools::directorVector(referenceLineFirstPoint, referenceLineSecondPoint);
     double aReferenceLineDirectorVector[3] = { referenceLineDirectorVector.x(), referenceLineDirectorVector.y(), referenceLineDirectorVector.z() };
     int xIndex, yIndex, zIndex;
-    Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
+    OrthogonalPlane::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
     double aAuxiliarLineDirectorVector[3];
     aAuxiliarLineDirectorVector[xIndex] = aReferenceLineDirectorVector[yIndex];
     aAuxiliarLineDirectorVector[yIndex] = -aReferenceLineDirectorVector[xIndex];
@@ -342,7 +342,7 @@ void PerpendicularDistanceTool::equalizeDepth()
     // Ens quedem amb la z de la llesca actual
     double currentPoint[3];
     m_2DViewer->getEventWorldCoordinate(currentPoint);
-    int zIndex = Q2DViewer::getZIndexForView(m_2DViewer->getView());
+    int zIndex = OrthogonalPlane::getZIndexForView(m_2DViewer->getView());
     double z = currentPoint[zIndex];
     double *point = m_referenceLine->getFirstPoint();
     point[zIndex] = z;

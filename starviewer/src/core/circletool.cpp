@@ -136,7 +136,7 @@ void CircleTool::getEndPoint()
     m_2DViewer->getEventWorldCoordinate(endPoint);
 
     int xIndex, yIndex, zIndex;
-    Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
+    OrthogonalPlane::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
     double startPoint[3] = { m_startPoint.x, m_startPoint.y, m_startPoint.z };
 
     double width = endPoint[xIndex] - startPoint[xIndex];
@@ -160,7 +160,7 @@ void CircleTool::getEndPoint()
 void CircleTool::updatePolygonPoints()
 {
     int xIndex, yIndex, zIndex;
-    Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
+    OrthogonalPlane::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
 
     double startPoint[3] = { m_startPoint.x, m_startPoint.y, m_startPoint.z };
     Vector3 vCenter = getCenter();
@@ -196,7 +196,7 @@ void CircleTool::equalizeDepth()
     // Ens quedem amb la z de la llesca actual
     double currentPoint[3];
     m_2DViewer->getEventWorldCoordinate(currentPoint);
-    int zIndex = Q2DViewer::getZIndexForView(m_2DViewer->getView());
+    int zIndex = OrthogonalPlane::getZIndexForView(m_2DViewer->getView());
     double z = currentPoint[zIndex];
     
     double startPoint[3] = { m_startPoint.x, m_startPoint.y, m_startPoint.z };

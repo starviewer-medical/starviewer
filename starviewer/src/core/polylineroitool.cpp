@@ -273,7 +273,7 @@ QList<QVector<double> > PolylineROITool::getBoundingBoxPoints()
     m_roiPolygon->getBounds(bounds);
 
     int xIndex, yIndex, zIndex;
-    Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
+    OrthogonalPlane::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
 
     QList<QVector<double> > pointsList;
     QVector<double> point(3);
@@ -325,7 +325,7 @@ void PolylineROITool::initialize()
 void PolylineROITool::equalizeDepth()
 {
     // Assignem a tots els punts la z de l'últim
-    int zIndex = Q2DViewer::getZIndexForView(m_2DViewer->getView());
+    int zIndex = OrthogonalPlane::getZIndexForView(m_2DViewer->getView());
     int n = m_roiPolygon->getNumberOfPoints();
     double z = m_roiPolygon->getVertix(n - 1)[zIndex];
     for (int i = 0; i < n - 1; i++)

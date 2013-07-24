@@ -321,7 +321,7 @@ void NonClosedAngleTool::placeText(double *firstLineVertex, double *secondLineVe
     double position[3];
     int xIndex, yIndex, zIndex;
 
-    Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
+    OrthogonalPlane::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
     position[xIndex] = (firstLineVertex[xIndex] + secondLineVertex[xIndex]) / 2.0;
     position[yIndex] = (firstLineVertex[yIndex] + secondLineVertex[yIndex]) / 2.0;
     position[zIndex] = firstLineVertex[zIndex];
@@ -353,7 +353,7 @@ void NonClosedAngleTool::initialize()
 void NonClosedAngleTool::equalizeDepth()
 {
     // Assignem a tots els punts la z de l'últim
-    int zIndex = Q2DViewer::getZIndexForView(m_2DViewer->getView());
+    int zIndex = OrthogonalPlane::getZIndexForView(m_2DViewer->getView());
     double z = m_secondLine->getSecondPoint()[zIndex];
     double *point = m_firstLine->getFirstPoint();
     point[zIndex] = z;

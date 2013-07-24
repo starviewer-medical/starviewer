@@ -292,7 +292,7 @@ QVector<double> PolylineTemporalROITool::getGraySerie(double *coords, int size)
     int xIndex, yIndex, zIndex;
     int i;
 
-    Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
+    OrthogonalPlane::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
     index[xIndex + 1] = (int)((coords[xIndex] - origin[xIndex])/spacing[xIndex]);
     index[yIndex + 1] = (int)((coords[yIndex] - origin[yIndex])/spacing[yIndex]);
     index[zIndex + 1] = m_2DViewer->getCurrentSlice();
