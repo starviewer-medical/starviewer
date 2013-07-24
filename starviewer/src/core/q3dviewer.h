@@ -54,7 +54,7 @@ public:
     /// Obté el window level actual de la imatge
     void getCurrentWindowLevel(double wl[2]);
 
-    void resetView(CameraOrientationType view);
+    void resetView(OrthogonalPlane::OrthogonalPlaneType view);
 
     /// Determina la bounding box que definex els plans de tall del volum
     void setClippingPlanes(vtkPlanes *clippingPlanes);

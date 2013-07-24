@@ -73,7 +73,7 @@ public:
     ~Q2DViewer();
 
     /// Ens retorna la vista que tenim en aquells moments del volum
-    CameraOrientationType getView() const;
+    OrthogonalPlane::OrthogonalPlaneType getView() const;
 
     /// Assigna/Retorna el volum solapat
     void setOverlayInput(Volume *volume);
@@ -180,10 +180,10 @@ public:
     /// Aquests índexs indiquen com hem d'indexar una coordenada 3D per obtenir
     /// la corresponent projecció sobre la vista 2D sobre la que estem operant
     /// En cas que el valor de view no sigui un dels esperats, el valor de l'índex serà -1
-    static void getXYZIndexesForView(int &x, int &y, int &z, CameraOrientationType view);
-    static int getXIndexForView(CameraOrientationType view);
-    static int getYIndexForView(CameraOrientationType view);
-    static int getZIndexForView(CameraOrientationType view);
+    static void getXYZIndexesForView(int &x, int &y, int &z, OrthogonalPlane::OrthogonalPlaneType view);
+    static int getXIndexForView(OrthogonalPlane::OrthogonalPlaneType view);
+    static int getYIndexForView(OrthogonalPlane::OrthogonalPlaneType view);
+    static int getZIndexForView(OrthogonalPlane::OrthogonalPlaneType view);
 
     /// Retorna l'espai que hi ha entre les llesques segons la vista actual i si hi ha el thickness activat
     double getCurrentSpacingBetweenSlices();
@@ -210,7 +210,7 @@ public slots:
     /// Útil per poder especificar canvis al viewer (canvi de llesca, w/l, etc.) sense preocupar-se de quan s'ha carregat el volume.
     void setInputAsynchronously(Volume *volume, QViewerCommand *inputFinishedCommand = 0);
 
-    void resetView(CameraOrientationType view);
+    void resetView(OrthogonalPlane::OrthogonalPlaneType view);
     void resetViewToAxial();
     void resetViewToCoronal();
     void resetViewToSagital();
@@ -464,7 +464,7 @@ protected:
     vtkImageActor *m_imageActor;
 
     /// Conserva la vista actual
-    CameraOrientationType m_lastView;
+    OrthogonalPlane::OrthogonalPlaneType m_lastView;
 
     /// La llesca actual que estem visualitzant
     int m_currentSlice;

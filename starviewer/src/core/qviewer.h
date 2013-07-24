@@ -1,6 +1,8 @@
 #ifndef UDGQVIEWER_H
 #define UDGQVIEWER_H
 
+#include "orthogonalplane.h"
+
 #include <QWidget>
 // Llista de captures de pantalla
 #include <QList>
@@ -36,9 +38,6 @@ Q_OBJECT
 public:
     QViewer(QWidget *parent = 0);
     ~QViewer();
-
-    /// Definim les diverses orientacions que podem tenir: Axial: XY, Sagital: YZ, Coronal: XZ, Other: orientació arbitrària
-    enum CameraOrientationType { XYPlane = 2, YZPlane = 0, XZPlane = 1, Other };
 
     /// Tipus de fitxer que pot desar
     enum FileType { PNG, JPEG, TIFF, DICOM, PNM, META, BMP };
@@ -174,7 +173,7 @@ public slots:
     virtual void getCurrentWindowLevel(double wl[2]) = 0;
 
     /// Li indiquem quina vista volem del volum: Axial, Coronal o Sagital
-    virtual void resetView(CameraOrientationType view) = 0;
+    virtual void resetView(OrthogonalPlane::OrthogonalPlaneType view) = 0;
     virtual void resetViewToAxial() = 0;
     virtual void resetViewToSagital() = 0;
     virtual void resetViewToCoronal() = 0;

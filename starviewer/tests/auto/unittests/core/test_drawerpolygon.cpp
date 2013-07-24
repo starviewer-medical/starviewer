@@ -34,7 +34,7 @@ private slots:
 Q_DECLARE_METATYPE(DrawerPolygon*)
 Q_DECLARE_METATYPE(vtkSmartPointer<vtkPropAssembly>)
 Q_DECLARE_METATYPE(double*)
-Q_DECLARE_METATYPE(Q2DViewer::CameraOrientationType)
+Q_DECLARE_METATYPE(OrthogonalPlane::OrthogonalPlaneType)
 
 void test_DrawerPolygon::getAsVtkProp_ShouldReturnPropLikeExpected_data()
 {
