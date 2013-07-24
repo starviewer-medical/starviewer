@@ -668,20 +668,7 @@ void QViewer::setCameraOrientation(OrthogonalPlane::OrthogonalPlaneType orientat
     vtkCamera *camera = getActiveCamera();
     if (camera)
     {
-        switch (orientation)
-        {
-            case OrthogonalPlane::XYPlane:
-                setCameraViewPlane(OrthogonalPlane::XYPlane);
-                break;
-
-            case OrthogonalPlane::XZPlane:
-                setCameraViewPlane(OrthogonalPlane::XZPlane);
-                break;
-
-            case OrthogonalPlane::YZPlane:
-                setCameraViewPlane(OrthogonalPlane::YZPlane);
-                break;
-        }
+        setCameraViewPlane(orientation);
         this->getRenderer()->ResetCamera();
         this->render();
     }
