@@ -20,7 +20,7 @@ Drawer::~Drawer()
 {
 }
 
-void Drawer::draw(DrawerPrimitive *primitive, int plane, int slice)
+void Drawer::draw(DrawerPrimitive *primitive, OrthogonalPlane::OrthogonalPlaneType plane, int slice)
 {
     switch (plane)
     {
