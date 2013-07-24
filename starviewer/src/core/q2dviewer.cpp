@@ -1359,22 +1359,20 @@ void Q2DViewer::resetCamera()
     switch (m_lastView)
     {
         case OrthogonalPlane::XYPlane:
-            setCameraViewPlane(OrthogonalPlane::XYPlane);
             cameraRoll = 180.0;
             break;
 
         case OrthogonalPlane::YZPlane:
-            setCameraViewPlane(OrthogonalPlane::YZPlane);
             cameraRoll = -90.0;
             break;
 
         case OrthogonalPlane::XZPlane:
-            setCameraViewPlane(OrthogonalPlane::XZPlane);
             cameraRoll = 0.0;
             break;
     }
 
     camera->SetRoll(cameraRoll);
+    setCameraViewPlane(m_lastView);
 }
 
 void Q2DViewer::updateShutterPipeline()
