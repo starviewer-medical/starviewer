@@ -57,7 +57,7 @@ QViewer::QViewer(QWidget *parent)
     m_windowToImageFilter = vtkWindowToImageFilter::New();
     m_windowToImageFilter->SetInput(getRenderWindow());
 
-    m_currentViewPlane = XYViewPlane;
+    m_currentViewPlane = OrthogonalPlane::XYPlane;
     
     // Connectem els events
     setupInteraction();
@@ -671,15 +671,15 @@ void QViewer::setCameraOrientation(int orientation)
         switch (orientation)
         {
             case OrthogonalPlane::XYPlane:
-                setCameraViewPlane(XYViewPlane);
+                setCameraViewPlane(OrthogonalPlane::XYPlane);
                 break;
 
             case OrthogonalPlane::XZPlane:
-                setCameraViewPlane(XZViewPlane);
+                setCameraViewPlane(OrthogonalPlane::XZPlane);
                 break;
 
             case OrthogonalPlane::YZPlane:
-                setCameraViewPlane(YZViewPlane);
+                setCameraViewPlane(OrthogonalPlane::YZPlane);
                 break;
         }
         this->getRenderer()->ResetCamera();
@@ -687,7 +687,7 @@ void QViewer::setCameraOrientation(int orientation)
     }
 }
 
-void QViewer::setCameraViewPlane(CameraViewPlaneType viewPlane)
+void QViewer::setCameraViewPlane(OrthogonalPlane::OrthogonalPlaneType viewPlane)
 {
     vtkCamera *camera = getActiveCamera();
     if (!camera)
@@ -701,17 +701,17 @@ void QViewer::setCameraViewPlane(CameraViewPlaneType viewPlane)
     camera->SetFocalPoint(0.0, 0.0, 0.0);
     switch (m_currentViewPlane)
     {
-        case XYViewPlane:
+        case OrthogonalPlane::XYPlane:
             camera->SetViewUp(0.0, -1.0, 0.0);
             camera->SetPosition(0.0, 0.0, -1.0);
             break;
 
-        case YZViewPlane:
+        case OrthogonalPlane::YZPlane:
             camera->SetViewUp(0.0, 0.0, 1.0);
             camera->SetPosition(1.0, 0.0, 0.0);
             break;
 
-        case XZViewPlane:
+        case OrthogonalPlane::XZPlane:
             camera->SetViewUp(0.0, 0.0, 1.0);
             camera->SetPosition(0.0, -1.0, 0.0);
             break;
