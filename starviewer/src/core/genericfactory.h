@@ -90,7 +90,7 @@ public:
         return theObject;
     }
 
-    QList<ClassIdentifier> getFactoryNamesList() const
+    QList<ClassIdentifier> getFactoryIdentifiersList() const
     {
         return m_registry.keys();
     }

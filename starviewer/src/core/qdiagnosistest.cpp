@@ -151,7 +151,7 @@ QList<DiagnosisTest*> QDiagnosisTest::getDiagnosisTestsToRun() const
 {
     QList<DiagnosisTest*> diagnosisTestsToRun;
 
-    foreach(QString className, DiagnosisTestFactory::instance()->getFactoryNamesList())
+    foreach(QString className, DiagnosisTestFactory::instance()->getFactoryIdentifiersList())
     {
         diagnosisTestsToRun.append(DiagnosisTestFactory::instance()->create(className));
     }
