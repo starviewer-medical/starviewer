@@ -325,6 +325,7 @@ HEADERS += extensionfactory.h \
     vtkdcmtkbydefaultvolumepixeldatareaderselector.h \
     itkgdcmbydefaultvolumepixeldatareaderselector.h \
     settingsinterface.h \
+    orthogonalplane.h \
     filter.h \
     filteroutput.h \
     displayshutterfilter.h
@@ -604,6 +605,7 @@ SOURCES += extensionmediator.cpp \
     patientcomparer.cpp \
     vtkdcmtkbydefaultvolumepixeldatareaderselector.cpp \
     itkgdcmbydefaultvolumepixeldatareaderselector.cpp \
+    orthogonalplane.cpp \
     filter.cpp \
     filteroutput.cpp \
     displayshutterfilter.cpp
