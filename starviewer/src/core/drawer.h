@@ -50,7 +50,7 @@ public:
     /// Retorna la primitiva esborrable més propera al punt donat, dins de la vista i llesca proporcionats
     /// Aquest mètode no té en compte cap llindar de proximitat, és a dir, ens retorna la primitiva que en termes
     /// absoluts és més propera al punt donat. En cas que no hi hagi cap primitiva per aquella vista i llesca, es retornarà nul.
-    DrawerPrimitive* getNearestErasablePrimitiveToPoint(double point[3], int view, int slice, double closestPoint[3]);
+    DrawerPrimitive* getNearestErasablePrimitiveToPoint(double point[3], OrthogonalPlane::OrthogonalPlaneType view, int slice, double closestPoint[3]);
 
     /// Ens esborra les primitives esborrables que estiguin dins de la zona delimitada pels punts passats per paràmetre.
     void erasePrimitivesInsideBounds(double bounds[6], OrthogonalPlane::OrthogonalPlaneType view, int slice);
@@ -71,8 +71,8 @@ private:
     /// Mostra/amaga les primitives que hi ha en un pla i llesca determinats
     /// @param plane Pla sobre que volem mostrar/amagar les primitives
     /// @param slice Llesca dins d'aquell pla.
-    void hide(int plane, int slice);
-    void show(int plane, int slice);
+    void hide(OrthogonalPlane::OrthogonalPlaneType plane, int slice);
+    void show(OrthogonalPlane::OrthogonalPlaneType plane, int slice);
 
     /// Ens diu si la primitiva donada, que es troba a la vista view, està dins dels bounds indicats
     bool isPrimitiveInside(DrawerPrimitive *primitive, OrthogonalPlane::OrthogonalPlaneType view, double bounds[6]);
@@ -100,7 +100,7 @@ private:
 
     /// Pla i llesca en el que es troba en aquell moment el 2D Viewer. Serveix per controlar
     /// els canvis de llesca i de pla, per saber quines primitives hem de netejar
-    int m_currentPlane;
+    OrthogonalPlane::OrthogonalPlaneType m_currentPlane;
     int m_currentSlice;
 
     /// Grups de primitives. Les agrupem per nom
