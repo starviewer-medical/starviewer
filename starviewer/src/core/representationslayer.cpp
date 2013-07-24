@@ -21,15 +21,15 @@ void RepresentationsLayer::addRepresentation(ToolRepresentation *toolRepresentat
 {
     switch (m_currentPlane)
     {
-        case QViewer::AxialPlane:
+        case QViewer::XYPlane:
             m_axialToolRepresentations.insert(m_currentSlice, toolRepresentation);
             break;
 
-        case QViewer::SagitalPlane:
+        case QViewer::YZPlane:
             m_sagitalToolRepresentations.insert(m_currentSlice, toolRepresentation);
             break;
 
-        case QViewer::CoronalPlane:
+        case QViewer::XZPlane:
             m_coronalToolRepresentations.insert(m_currentSlice, toolRepresentation);
             break;
 
@@ -46,7 +46,7 @@ void RepresentationsLayer::clearViewer()
     QMultiMap<int, ToolRepresentation*>::const_iterator it;
     switch (m_currentPlane)
     {
-        case QViewer::AxialPlane:
+        case QViewer::XYPlane:
             it = m_axialToolRepresentations.find(m_currentSlice);
             while(it != m_axialToolRepresentations.end() && it.key() == m_currentSlice)
             {
@@ -57,7 +57,7 @@ void RepresentationsLayer::clearViewer()
             m_axialToolRepresentations.remove(m_currentSlice);
             break;
 
-        case QViewer::SagitalPlane:
+        case QViewer::YZPlane:
             it = m_sagitalToolRepresentations.find(m_currentSlice);
             while(it != m_sagitalToolRepresentations.end() && it.key() == m_currentSlice)
             {
@@ -68,7 +68,7 @@ void RepresentationsLayer::clearViewer()
             m_sagitalToolRepresentations.remove(m_currentSlice);
             break;
 
-        case QViewer::CoronalPlane:
+        case QViewer::XZPlane:
             it = m_coronalToolRepresentations.find(m_currentSlice);
             while(it != m_coronalToolRepresentations.end() && it.key() == m_currentSlice)
             {
