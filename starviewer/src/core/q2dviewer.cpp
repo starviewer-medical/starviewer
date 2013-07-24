@@ -1359,17 +1359,17 @@ void Q2DViewer::resetCamera()
     switch (m_lastView)
     {
         case OrthogonalPlane::XYPlane:
-            setCameraViewPlane(XYViewPlane);
+            setCameraViewPlane(OrthogonalPlane::XYPlane);
             cameraRoll = 180.0;
             break;
 
         case OrthogonalPlane::YZPlane:
-            setCameraViewPlane(YZViewPlane);
+            setCameraViewPlane(OrthogonalPlane::YZPlane);
             cameraRoll = -90.0;
             break;
 
         case OrthogonalPlane::XZPlane:
-            setCameraViewPlane(XZViewPlane);
+            setCameraViewPlane(OrthogonalPlane::XZPlane);
             cameraRoll = 0.0;
             break;
     }

@@ -214,9 +214,6 @@ signals:
     void viewerStatusChanged();
 
 protected:
-    /// Definició de les diferents vistes amb les que pot operar la càmera
-    enum CameraViewPlaneType { XYViewPlane = 2, YZViewPlane = 0, XZViewPlane = 1 };
-
     virtual void contextMenuEvent(QContextMenuEvent *menuEvent);
 
     void contextMenuRelease();
@@ -230,7 +227,7 @@ protected:
     void setCameraOrientation(int orientation);
 
     /// Configura la orientació de la càmera donada
-    void setCameraViewPlane(CameraViewPlaneType viewPlane);
+    void setCameraViewPlane(OrthogonalPlane::OrthogonalPlaneType viewPlane);
 
     /// Ens retorna la càmera activa pel renderer principal, si n'hi ha, NUL altrament.
     vtkCamera* getActiveCamera();
@@ -303,7 +300,7 @@ protected:
     QViewerWorkInProgressWidget *m_workInProgressWidget;
 
     /// Vista que enfoca la càmera
-    CameraViewPlaneType m_currentViewPlane;
+    OrthogonalPlane::OrthogonalPlaneType m_currentViewPlane;
 
 private:
     /// Indica si el viewer és actiu o no
