@@ -25,15 +25,15 @@ void Drawer::draw(DrawerPrimitive *primitive, OrthogonalPlane::OrthogonalPlaneTy
     switch (plane)
     {
         case OrthogonalPlane::XYPlane:
-            m_axialPrimitives.insert(slice, primitive);
+            m_XYPlanePrimitives.insert(slice, primitive);
             break;
 
         case OrthogonalPlane::YZPlane:
-            m_sagitalPrimitives.insert(slice, primitive);
+            m_YZPlanePrimitives.insert(slice, primitive);
             break;
 
         case OrthogonalPlane::XZPlane:
-            m_coronalPrimitives.insert(slice, primitive);
+            m_XZPlanePrimitives.insert(slice, primitive);
             break;
 
         default:
@@ -74,15 +74,15 @@ void Drawer::clearViewer()
     switch (m_currentPlane)
     {
         case OrthogonalPlane::XYPlane:
-            primitivesContainer = m_axialPrimitives;
+            primitivesContainer = m_XYPlanePrimitives;
             break;
 
         case OrthogonalPlane::YZPlane:
-            primitivesContainer = m_sagitalPrimitives;
+            primitivesContainer = m_YZPlanePrimitives;
             break;
 
         case OrthogonalPlane::XZPlane:
-            primitivesContainer = m_coronalPrimitives;
+            primitivesContainer = m_XZPlanePrimitives;
             break;
 
         default:
@@ -135,9 +135,9 @@ void Drawer::refresh()
 
 void Drawer::removeAllPrimitives()
 {
-    QList <DrawerPrimitive*> list = m_axialPrimitives.values();
-    QList <DrawerPrimitive*> sagitalList = m_sagitalPrimitives.values();
-    QList <DrawerPrimitive*> coronalList = m_coronalPrimitives.values();
+    QList <DrawerPrimitive*> list = m_XYPlanePrimitives.values();
+    QList <DrawerPrimitive*> sagitalList = m_YZPlanePrimitives.values();
+    QList <DrawerPrimitive*> coronalList = m_XZPlanePrimitives.values();
 
     list += sagitalList;
     list += coronalList;
@@ -181,20 +181,20 @@ void Drawer::erasePrimitive(DrawerPrimitive *primitive)
     }
 
     // Busquem en el pla axial
-    if (erasePrimitiveFromContainer(primitive, m_axialPrimitives))
+    if (erasePrimitiveFromContainer(primitive, m_XYPlanePrimitives))
     {
         // En principi una mateixa primitiva només estarà en una de les llistes
         return;
     }
 
     // Busquem en el pla sagital
-    if (erasePrimitiveFromContainer(primitive, m_sagitalPrimitives))
+    if (erasePrimitiveFromContainer(primitive, m_YZPlanePrimitives))
     {
         return;
     }
 
     // Busquem en el pla coronal
-    if (erasePrimitiveFromContainer(primitive, m_coronalPrimitives))
+    if (erasePrimitiveFromContainer(primitive, m_XZPlanePrimitives))
     {
         return;
     }
@@ -214,15 +214,15 @@ void Drawer::hide(int plane, int slice)
     switch (plane)
     {
         case OrthogonalPlane::XYPlane:
-            primitivesList = m_axialPrimitives.values(slice);
+            primitivesList = m_XYPlanePrimitives.values(slice);
             break;
 
         case OrthogonalPlane::YZPlane:
-            primitivesList = m_sagitalPrimitives.values(slice);
+            primitivesList = m_YZPlanePrimitives.values(slice);
             break;
 
         case OrthogonalPlane::XZPlane:
-            primitivesList = m_coronalPrimitives.values(slice);
+            primitivesList = m_XZPlanePrimitives.values(slice);
             break;
     }
     foreach (DrawerPrimitive *primitive, primitivesList)
@@ -241,15 +241,15 @@ void Drawer::show(int plane, int slice)
     switch (plane)
     {
         case OrthogonalPlane::XYPlane:
-            primitivesList = m_axialPrimitives.values(slice);
+            primitivesList = m_XYPlanePrimitives.values(slice);
             break;
 
         case OrthogonalPlane::YZPlane:
-            primitivesList = m_sagitalPrimitives.values(slice);
+            primitivesList = m_YZPlanePrimitives.values(slice);
             break;
 
         case OrthogonalPlane::XZPlane:
-            primitivesList = m_coronalPrimitives.values(slice);
+            primitivesList = m_XZPlanePrimitives.values(slice);
             break;
     }
 
@@ -265,7 +265,7 @@ void Drawer::show(int plane, int slice)
 
 int Drawer::getNumberOfDrawnPrimitives()
 {
-    return (m_axialPrimitives.size() + m_sagitalPrimitives.size() + m_coronalPrimitives.size());
+    return (m_XYPlanePrimitives.size() + m_YZPlanePrimitives.size() + m_XZPlanePrimitives.size());
 }
 
 void Drawer::disableGroup(const QString &groupName)
@@ -297,15 +297,15 @@ void Drawer::enableGroup(const QString &groupName)
     switch (m_2DViewer->getView())
     {
         case OrthogonalPlane::XYPlane:
-            currentVisiblePrimitives = m_axialPrimitives.values(currentSlice);
+            currentVisiblePrimitives = m_XYPlanePrimitives.values(currentSlice);
             break;
 
         case OrthogonalPlane::YZPlane:
-            currentVisiblePrimitives = m_sagitalPrimitives.values(currentSlice);
+            currentVisiblePrimitives = m_YZPlanePrimitives.values(currentSlice);
             break;
 
         case OrthogonalPlane::XZPlane:
-            currentVisiblePrimitives = m_coronalPrimitives.values(currentSlice);
+            currentVisiblePrimitives = m_XZPlanePrimitives.values(currentSlice);
             break;
     }
     currentVisiblePrimitives << m_top2DPlanePrimitives;
@@ -346,15 +346,15 @@ DrawerPrimitive* Drawer::getNearestErasablePrimitiveToPoint(double point[3], int
     switch (view)
     {
         case OrthogonalPlane::XYPlane:
-            primitivesList = m_axialPrimitives.values(slice);
+            primitivesList = m_XYPlanePrimitives.values(slice);
             break;
 
         case OrthogonalPlane::YZPlane:
-            primitivesList = m_sagitalPrimitives.values(slice);
+            primitivesList = m_YZPlanePrimitives.values(slice);
             break;
 
         case OrthogonalPlane::XZPlane:
-            primitivesList = m_coronalPrimitives.values(slice);
+            primitivesList = m_XZPlanePrimitives.values(slice);
             break;
 
         default:
@@ -387,15 +387,15 @@ void Drawer::erasePrimitivesInsideBounds(double bounds[6], OrthogonalPlane::Orth
     switch (view)
     {
         case OrthogonalPlane::XYPlane:
-            primitivesList = m_axialPrimitives.values(slice);
+            primitivesList = m_XYPlanePrimitives.values(slice);
             break;
 
         case OrthogonalPlane::YZPlane:
-            primitivesList = m_sagitalPrimitives.values(slice);
+            primitivesList = m_YZPlanePrimitives.values(slice);
             break;
 
         case OrthogonalPlane::XZPlane:
-            primitivesList = m_coronalPrimitives.values(slice);
+            primitivesList = m_XZPlanePrimitives.values(slice);
             break;
 
         default:
