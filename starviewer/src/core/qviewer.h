@@ -23,6 +23,7 @@ namespace udg {
 // Fordward declarations
 class Volume;
 class Series;
+class Image;
 class ToolProxy;
 class WindowLevelPresetsToolData;
 class TransferFunction;
@@ -218,6 +219,11 @@ protected:
 
     void contextMenuRelease();
 
+    /// Gets the n-th default window level from the given image and index, prepared for display,
+    /// i.e. if image is MONOCHROME1, it will invert values and give a proper name if no description is available
+    /// If index is out of range, a non-valid WindowLevel will be returned
+    WindowLevel getDefaultWindowLevelForPresentation(Image *image, int index);
+    
     /// Gets a default name for the specified n-th window level. Used to give a default name for window levels without description.
     QString getDefaultWindowLevelDescription(int index);
     
