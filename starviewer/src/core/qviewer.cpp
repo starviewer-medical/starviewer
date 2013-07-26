@@ -773,6 +773,30 @@ void QViewer::setViewerStatus(ViewerStatus status)
     }
 }
 
+WindowLevel QViewer::getDefaultWindowLevelForPresentation(Image *image, int index)
+{
+    if (!image)
+    {
+        return WindowLevel();
+    }
+    
+    WindowLevel windowLevel = image->getWindowLevel(index);
+    if (windowLevel.isValid())
+    {
+        if (image->getPhotometricInterpretation() == "MONOCHROME1")
+        {
+            windowLevel.setWidth(-windowLevel.getWidth());
+        }
+        
+        if (windowLevel.getName().isEmpty())
+        {
+            windowLevel.setName(getDefaultWindowLevelDescription(index));
+        }
+    }
+
+    return windowLevel;
+}
+
 QString QViewer::getDefaultWindowLevelDescription(int index)
 {
     const QString DefaultWindowLevelName = tr("Default");
