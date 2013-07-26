@@ -2618,15 +2618,7 @@ void Q2DViewer::updateDefaultPreset()
             Image *image = getCurrentDisplayedImage();
             if (m_defaultPresetToApply < image->getNumberOfWindowLevels())
             {
-                WindowLevel windowLevel = image->getWindowLevel(m_defaultPresetToApply);
-                if (image->getPhotometricInterpretation() == "MONOCHROME1")
-                {
-                    windowLevel.setWidth(-windowLevel.getWidth());
-                }
-                if (windowLevel.getName().isEmpty())
-                {
-                    windowLevel.setName(getDefaultWindowLevelDescription(m_defaultPresetToApply));
-                }
+                WindowLevel windowLevel = getDefaultWindowLevelForPresentation(image, m_defaultPresetToApply);
                 setWindowLevel(windowLevel.getWidth(), windowLevel.getCenter());
                 m_windowLevelData->updatePreset(windowLevel);
             }

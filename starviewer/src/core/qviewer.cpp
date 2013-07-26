@@ -636,17 +636,12 @@ void QViewer::updateWindowLevelData()
     {
         for (int i = 0; i < windowLevelCount; i++)
         {
-            WindowLevel windowLevel = image->getWindowLevel(i);
-            QString description = windowLevel.getName();
-            if (description.isEmpty())
-            {
-                description = getDefaultWindowLevelDescription(i);
-            }
-            m_windowLevelData->addPreset(WindowLevel(windowLevel.getWidth() * windowWidthSign, windowLevel.getCenter(), description), WindowLevelPresetsToolData::FileDefined);
+            WindowLevel windowLevel = getDefaultWindowLevelForPresentation(image, i);
+            m_windowLevelData->addPreset(windowLevel, WindowLevelPresetsToolData::FileDefined);
 
             if (i == 0)
             {
-                m_windowLevelData->activatePreset(description);
+                m_windowLevelData->activatePreset(windowLevel.getName());
             }
         }
     }
