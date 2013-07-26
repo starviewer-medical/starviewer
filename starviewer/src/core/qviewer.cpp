@@ -606,8 +606,6 @@ void QViewer::updateWindowLevelData()
         return;
     }
 
-    const QString DefaultWindowLevelName = tr("Default");
-
     m_windowLevelData->removePresetsFromGroup(WindowLevelPresetsToolData::FileDefined);
     m_windowLevelData->removePresetsFromGroup(WindowLevelPresetsToolData::AutomaticPreset);
 
@@ -642,7 +640,7 @@ void QViewer::updateWindowLevelData()
             QString description = windowLevel.getName();
             if (description.isEmpty())
             {
-                description = QString("%1 %2").arg(DefaultWindowLevelName).arg(i);
+                description = getDefaultWindowLevelDescription(i);
             }
             m_windowLevelData->addPreset(WindowLevel(windowLevel.getWidth() * windowWidthSign, windowLevel.getCenter(), description), WindowLevelPresetsToolData::FileDefined);
 
@@ -773,6 +771,12 @@ void QViewer::setViewerStatus(ViewerStatus status)
         this->initializeWorkInProgressByViewerStatus(status);
         emit viewerStatusChanged();
     }
+}
+
+QString QViewer::getDefaultWindowLevelDescription(int index)
+{
+    const QString DefaultWindowLevelName = tr("Default");
+    return QString("%1 %2").arg(DefaultWindowLevelName).arg(index);
 }
 
 void QViewer::setCurrentWidgetByViewerStatus(ViewerStatus status)

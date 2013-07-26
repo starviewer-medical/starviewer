@@ -218,6 +218,9 @@ protected:
 
     void contextMenuRelease();
 
+    /// Gets a default name for the specified n-th window level. Used to give a default name for window levels without description.
+    QString getDefaultWindowLevelDescription(int index);
+    
     /// Actualitza les dades contingudes a m_windowLevelData
     void updateWindowLevelData();
 
