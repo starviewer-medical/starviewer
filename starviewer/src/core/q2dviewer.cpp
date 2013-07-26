@@ -2623,6 +2623,10 @@ void Q2DViewer::updateDefaultPreset()
                 {
                     windowLevel.setWidth(-windowLevel.getWidth());
                 }
+                if (windowLevel.getName().isEmpty())
+                {
+                    windowLevel.setName(getDefaultWindowLevelDescription(m_defaultPresetToApply));
+                }
                 setWindowLevel(windowLevel.getWidth(), windowLevel.getCenter());
                 m_windowLevelData->updatePreset(windowLevel);
             }
