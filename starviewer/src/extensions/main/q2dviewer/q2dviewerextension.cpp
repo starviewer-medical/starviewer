@@ -595,10 +595,7 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
             // que es digués activateCurrentPreset() i el poguéssim connectar a algun signal
             WindowLevelPresetsToolData *windowLevelData = selected2DViewer->getWindowLevelData();
             m_windowLevelComboBox->setPresetsData(windowLevelData);
-            // TODO Canviem m_windowLevelComboBox->selectPreset() per windowLevelData->activatePreset per solucionar els tickets
-            // 1226 i 1227, però potser s'hauria de millorar una mica el funcionament i/o la interfície de les classes implicades
-            // Pendent de revisar perquè tingui un disseny i interfície més adeqequats (combo box, sobre tot)
-            windowLevelData->activatePreset(windowLevelData->getCurrentPreset().getName());
+            windowLevelData->selectCurrentPreset(windowLevelData->getCurrentPreset().getName());
 
             m_cineController->setQViewer(selected2DViewer);
             m_thickSlabWidget->link(selected2DViewer);

@@ -177,18 +177,46 @@ void WindowLevelPresetsToolData::setCustomWindowLevel(double window, double leve
 {
     WindowLevel customPreset(window, level, tr("Custom"));
     m_presetsByGroup.replace(CustomPreset, customPreset);
-    m_currentPreset = customPreset;
-    emit presetChanged(customPreset);
+    if (m_currentPreset.getName() != customPreset.getName())
+    {
+        selectCurrentPreset(customPreset.getName());
+    }
+    else
+    {
+        emit presetChanged(customPreset);
+    }
 }
 
-void WindowLevelPresetsToolData::activatePreset(const QString &presetName)
+void WindowLevelPresetsToolData::selectCurrentPreset(const QString &presetName)
 {
     WindowLevel preset;
     if (getFromDescription(presetName, preset))
     {
         m_currentPreset = preset;
-        emit presetChanged(preset); // TODO change signal name to presetActivated()?
+        emit presetSelected(preset);
     }
+}
+
+void WindowLevelPresetsToolData::setCurrentPreset(const WindowLevel &preset)
+{
+    WindowLevel internalPreset;
+    if (getFromDescription(preset.getName(), internalPreset))
+    {
+        int group;
+        if (getGroup(preset, group))
+        {
+            if (group == CustomPreset)
+            {
+                updatePreset(preset);
+            }
+        }
+    }
+    else
+    {
+        addPreset(preset, Other);
+    }
+
+    selectCurrentPreset(preset.getName());
 }
 
 void WindowLevelPresetsToolData::loadCustomWindowLevelPresets()

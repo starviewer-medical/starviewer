@@ -535,6 +535,7 @@ void QViewer::setWindowLevelData(WindowLevelPresetsToolData *windowLevelData)
 
     m_windowLevelData = windowLevelData;
     connect(m_windowLevelData, SIGNAL(presetChanged(WindowLevel)), SLOT(setWindowLevelPreset(WindowLevel)));
+    connect(m_windowLevelData, SIGNAL(presetSelected(WindowLevel)), SLOT(setWindowLevelPreset(WindowLevel)));
 }
 
 void QViewer::grabCurrentView()
@@ -641,7 +642,7 @@ void QViewer::updateWindowLevelData()
 
             if (i == 0)
             {
-                m_windowLevelData->activatePreset(windowLevel.getName());
+                m_windowLevelData->selectCurrentPreset(windowLevel.getName());
             }
         }
     }
@@ -652,7 +653,7 @@ void QViewer::updateWindowLevelData()
     // Si no hi ha window levels definits per defecte activarem l'automàtic
     if (windowLevelCount <= 0)
     {
-        m_windowLevelData->activatePreset(automaticWindowLevel.getName());
+        m_windowLevelData->selectCurrentPreset(automaticWindowLevel.getName());
     }
 }
 
