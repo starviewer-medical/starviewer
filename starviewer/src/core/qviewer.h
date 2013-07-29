@@ -192,6 +192,9 @@ public slots:
     virtual void setTransferFunction(TransferFunction *transferFunction) = 0;
     TransferFunction* getTransferFunction() const;
 
+    /// Fits the current rendered item into the viewport size
+    void fitImageIntoViewport();
+
 signals:
     /// Informem de l'event rebut. \TODO ara enviem el codi en vtkCommand, però podria (o hauria de) canviar per un mapeig nostre
     void eventReceived(unsigned long eventID);
@@ -215,6 +218,9 @@ signals:
     void viewerStatusChanged();
 
 protected:
+    /// Gets the bounds of the rendered item
+    virtual void getCurrentRenderedItemBounds(double bounds[6]) = 0;
+
     virtual void contextMenuEvent(QContextMenuEvent *menuEvent);
 
     void contextMenuRelease();

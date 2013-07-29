@@ -520,6 +520,24 @@ void QViewer::scaleToFit3D(double topCorner[3], double bottomCorner[3], double m
     }
 }
 
+void QViewer::fitImageIntoViewport()
+{
+    // First we get the bounds of the current rendered item in world coordinates
+    double bounds[6];
+    getCurrentRenderedItemBounds(bounds);
+    
+    double topCorner[3];
+    double bottomCorner[3];
+    for (int i = 0; i < 3; ++i)
+    {
+        topCorner[i] = bounds[i * 2];
+        bottomCorner[i] = bounds[i * 2 + 1];
+    }
+
+    // Scaling the viewport to fit the current item bounds
+    scaleToFit3D(topCorner, bottomCorner);
+}
+
 WindowLevelPresetsToolData* QViewer::getWindowLevelData() const
 {
     return m_windowLevelData;

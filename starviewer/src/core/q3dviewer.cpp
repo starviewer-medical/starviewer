@@ -1271,6 +1271,11 @@ void Q3DViewer::setIsoValue(int isoValue)
     m_volumeRayCastIsosurfaceFunction->SetIsoValue(isoValue);
 }
 
+void Q3DViewer::getCurrentRenderedItemBounds(double bounds[6])
+{
+    m_vtkVolume->GetBounds(bounds);
+}
+
 bool Q3DViewer::checkInputVolume(Volume *volume)
 {
     if (!volume)
