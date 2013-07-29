@@ -81,6 +81,9 @@ public:
     /// Returns true in case the preset could be updated, false otherwise (i.e. no preset with such name exists)
     bool updatePreset(const WindowLevel &preset);
 
+    /// Name for the custom preset
+    static const QString CustomPresetName;
+
 public slots:
     /// Donem el valor del preset "A mida"
     /// @param window valor de window

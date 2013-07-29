@@ -5,6 +5,8 @@
 
 namespace udg {
 
+const QString WindowLevelPresetsToolData::CustomPresetName = tr("Custom");
+
 WindowLevelPresetsToolData::WindowLevelPresetsToolData(QObject *parent)
  : ToolData(parent)
 {
@@ -28,7 +30,7 @@ WindowLevelPresetsToolData::WindowLevelPresetsToolData(QObject *parent)
     addPreset(WindowLevel(1000, 300, tr("Osteoporosis")), StandardPresets);
     addPreset(WindowLevel(800, -800, tr("Emphysema")), StandardPresets);
     addPreset(WindowLevel(4000, 700, tr("Petrous Bone")), StandardPresets);
-    addPreset(WindowLevel(0, 0, tr("Custom")), CustomPreset);
+    addPreset(WindowLevel(0, 0, CustomPresetName), CustomPreset);
     // TODO ara caldria afegir els presets que tinguem guardats en QSettins, o altres tipus d'arxius tipus XML o ".ini"
     loadCustomWindowLevelPresets();
     connect(CustomWindowLevelsRepository::getRepository(), SIGNAL(changed()), this, SLOT(updateCustomWindowLevels()));
@@ -175,7 +177,7 @@ bool WindowLevelPresetsToolData::updatePreset(const WindowLevel &preset)
 
 void WindowLevelPresetsToolData::setCustomWindowLevel(double window, double level)
 {
-    WindowLevel customPreset(window, level, tr("Custom"));
+    WindowLevel customPreset(window, level, CustomPresetName);
     m_presetsByGroup.replace(CustomPreset, customPreset);
     if (m_currentPreset.getName() != customPreset.getName())
     {
