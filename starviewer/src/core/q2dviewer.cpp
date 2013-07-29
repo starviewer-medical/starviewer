@@ -95,7 +95,6 @@ Q2DViewer::Q2DViewer(QWidget *parent)
 
     Settings settings;
     m_mammographyAutoOrientationExceptions = settings.getValue(CoreSettings::MammographyAutoOrientationExceptions).toStringList();
-    m_defaultPresetToApply = 0;
 
     // Inicialitzem el filtre de shutter
     initializeShutterFilter();
@@ -1336,7 +1335,7 @@ void Q2DViewer::setSlice(int value)
         }
         
         this->updateDisplayExtent();
-        updateDefaultPreset();
+        updateCurrentImageDefaultPresets();
         updateSliceAnnotationInformation();
         updatePreferredImageOrientation();
         updatePatientOrientationAnnotation();
@@ -1382,7 +1381,7 @@ void Q2DViewer::setPhase(int value)
             m_thickSlabProjectionFilter->SetFirstSlice(m_mainVolume->getImageIndex(m_firstSlabSlice, m_currentPhase));
         }
         this->updateDisplayExtent();
-        updateDefaultPreset();
+        updateCurrentImageDefaultPresets();
         updateSliceAnnotationInformation();
         updatePreferredImageOrientation();
         emit phaseChanged(m_currentPhase);
@@ -2583,50 +2582,16 @@ void Q2DViewer::fitImageIntoViewport()
     scaleToFit3D(topCorner, bottomCorner);
 }
 
-void Q2DViewer::setWindowLevelPreset(const WindowLevel &preset)
+void Q2DViewer::updateCurrentImageDefaultPresets()
 {
-    int group;
-
-    if (m_windowLevelData->getGroup(preset, group))
+    if (m_lastView == OrthogonalPlane::XYPlane)
     {
-        if (group == WindowLevelPresetsToolData::FileDefined)
+        Image *image = getCurrentDisplayedImage();
+        for (int i = 0; i < image->getNumberOfWindowLevels(); ++i)
         {
-            m_defaultPresetToApply = m_windowLevelData->getDescriptionsFromGroup(WindowLevelPresetsToolData::FileDefined).indexOf(preset.getName());
-            if (m_lastView == OrthogonalPlane::XYPlane)
-            {
-                updateDefaultPreset();
-            }
-            else
-            {
-                setWindowLevel(preset.getWidth(), preset.getCenter());
-            }
+            WindowLevel windowLevel = getDefaultWindowLevelForPresentation(image, i);
+            m_windowLevelData->updatePreset(windowLevel);
         }
-        else
-        {
-            m_defaultPresetToApply = -1;
-            setWindowLevel(preset.getWidth(), preset.getCenter());
-        }
-    }
-}
-
-void Q2DViewer::updateDefaultPreset()
-{
-    if (m_mainVolume)
-    {
-        if (m_defaultPresetToApply >= 0 && m_lastView == OrthogonalPlane::XYPlane)
-        {
-            Image *image = getCurrentDisplayedImage();
-            if (m_defaultPresetToApply < image->getNumberOfWindowLevels())
-            {
-                WindowLevel windowLevel = getDefaultWindowLevelForPresentation(image, m_defaultPresetToApply);
-                setWindowLevel(windowLevel.getWidth(), windowLevel.getCenter());
-                m_windowLevelData->updatePreset(windowLevel);
-            }
-        }
-    }
-    else
-    {
-        DEBUG_LOG(QString("::updateDefaultPreset() : No tenim input"));
     }
 }
 
