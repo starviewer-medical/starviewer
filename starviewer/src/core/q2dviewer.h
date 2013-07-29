@@ -233,10 +233,6 @@ public slots:
     void setWindowLevel(double window, double level);
     void setTransferFunction(TransferFunction *transferFunction);
 
-    /// Ajusta el window/level a partir del preset.
-    /// Si és de tipus FileDefined i en la vista original, per cada imatge aplicarà el seu WW/WL. Altrament aplicar el WW/WL que indica el preset.
-    virtual void setWindowLevelPreset(const WindowLevel &preset);
-
     /// L'únic que fa és emetre el senyal seedPositionChanged, per poder-ho cridar desde la seedTool
     /// TODO Aquest mètode hauria de quedar obsolet
     void setSeedPosition(double pos[3]);
@@ -416,9 +412,8 @@ private:
     /// TODO: De moment només desconnecta el job del viewer, no cancel·la el job en sí
     void cancelCurrentVolumeReaderJob();
 
-    /// En cas que estem en la vista original en la que s'han adquirit les imatges i tinguem un preset
-    /// per defecte activat, actualitzarem el WW/WL perquè per cada imatge es mostri el seu.
-    void updateDefaultPreset();
+    /// Updates the current image default presets values. It only applies to original acquisition plane.
+    void updateCurrentImageDefaultPresets();
 
     /// Indica si el volum del visor s'està carregant assíncronament
     bool isVolumeLoadingAsynchronously();
@@ -554,9 +549,6 @@ private:
     QPointer<VolumeReaderJob> m_volumeReaderJob;
 
     QViewerCommand *m_inputFinishedCommand;
-
-    /// Indica el preset per defecte que s'ha d'aplicar.
-    int m_defaultPresetToApply;
 
     /// Llistat d'overlays
     QList<DrawerBitmap*> m_viewerBitmaps;
