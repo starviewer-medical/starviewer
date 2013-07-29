@@ -103,8 +103,8 @@ signals:
     void presetAdded(WindowLevel preset);
     void presetRemoved(WindowLevel preset);
 
-    /// Aquest senyal s'envia per notificar quin preset s'ha activat
-    void presetChanged(WindowLevel preset);
+    /// Emitted when the current preset values have changed
+    void currentPresetChanged(WindowLevel preset);
 
     /// Emitted when a preset is selected
     void presetSelected(WindowLevel preset);

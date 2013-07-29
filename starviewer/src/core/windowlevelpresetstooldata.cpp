@@ -167,6 +167,7 @@ bool WindowLevelPresetsToolData::updatePreset(const WindowLevel &preset)
             if (m_currentPreset.getName() == preset.getName())
             {
                 m_currentPreset = preset;
+                emit currentPresetChanged(preset);
             }
         }
     }
@@ -187,10 +188,6 @@ void WindowLevelPresetsToolData::setCustomWindowLevel(double window, double leve
     if (m_currentPreset.getName() != customPreset.getName())
     {
         selectCurrentPreset(customPreset.getName());
-    }
-    else
-    {
-        emit presetChanged(customPreset);
     }
 }
 
