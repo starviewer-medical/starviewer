@@ -87,9 +87,14 @@ public slots:
     /// @param level valor de level
     void setCustomWindowLevel(double window, double level);
 
-    /// Indiquem que volem activar el preset indicat
-    /// @param preset Nom del preset a activar
-    void activatePreset(const QString &presetName);
+    /// Selects the current present by name from the available presets. If there's no preset with such name, it does nothing
+    void selectCurrentPreset(const QString &presetName);
+
+    /// Sets the given preset as the current one.
+    /// If it already exists with the same name and values, it behaves exactly as selectCurrentPreset().
+    /// If it already exists, and it is the Custom one, but has different values, it updates its values and then selects it.
+    /// If it does not exist, it adds the preset, then selects it
+    void setCurrentPreset(const WindowLevel &preset);
 
 signals:
     void presetAdded(WindowLevel preset);
@@ -97,6 +102,9 @@ signals:
 
     /// Aquest senyal s'envia per notificar quin preset s'ha activat
     void presetChanged(WindowLevel preset);
+
+    /// Emitted when a preset is selected
+    void presetSelected(WindowLevel preset);
 
 private:
     /// Afegeix els CustomWindowLevels que hi ha al repository

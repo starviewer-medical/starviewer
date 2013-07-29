@@ -323,7 +323,7 @@ void test_WindowLevelPresetsToolData::getCurrentPreset_ReturnsExpectedPresetViaA
     QFETCH(QString, expectedCurrentPresetName);
 
     WindowLevelPresetsToolData* wlData = getWindowLevelPresetsSample();
-    wlData->activatePreset(presetNameToActivate);
+    wlData->selectCurrentPreset(presetNameToActivate);
     
     QCOMPARE(wlData->getCurrentPreset().getName(), expectedCurrentPresetName);
 
@@ -407,7 +407,7 @@ void test_WindowLevelPresetsToolData::activatePreset_WorksAsExpected()
 
     WindowLevelPresetsToolData* wlData = getWindowLevelPresetsSample();
 
-    wlData->activatePreset(presetNameToActivate);
+    wlData->selectCurrentPreset(presetNameToActivate);
     QCOMPARE(wlData->getCurrentPreset().getName(), currentActivatedPreset);
     
     delete wlData;
