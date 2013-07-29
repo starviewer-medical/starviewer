@@ -85,6 +85,8 @@ protected:
     /// Els respectius volums sobre cada pla de reslice
     Volume *m_axialResliced, *m_sagitalResliced, *m_coronalResliced;
 
+    void getCurrentRenderedItemBounds(double bounds[6]);
+    
     /// Inicialitza els plans
     void initializePlanes();
 

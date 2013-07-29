@@ -2559,27 +2559,9 @@ void Q2DViewer::rotate(int times)
     m_rotateFactor = (m_rotateFactor + times) % 4;
 }
 
-void Q2DViewer::fitImageIntoViewport()
+void Q2DViewer::getCurrentRenderedItemBounds(double bounds[6])
 {
-    // Obtenim els bounds de la imatge que estem visualitzant
-    double bounds[6];
     m_imageActor->GetBounds(bounds);
-
-    // Obtenim les coordenades corresponents a dues puntes oposades de la imatge
-    double topCorner[3], bottomCorner[3];
-    int xIndex, yIndex, zIndex;
-    OrthogonalPlane::getXYZIndexesForView(xIndex, yIndex, zIndex, m_lastView);
-
-    topCorner[xIndex] = bounds[xIndex * 2];
-    topCorner[yIndex] = bounds[yIndex * 2];
-    topCorner[zIndex] = 0.0;
-
-    bottomCorner[xIndex] = bounds[xIndex * 2 + 1];
-    bottomCorner[yIndex] = bounds[yIndex * 2 + 1];
-    bottomCorner[zIndex] = 0.0;
-
-    // Apliquem el zoom
-    scaleToFit3D(topCorner, bottomCorner);
 }
 
 void Q2DViewer::updateCurrentImageDefaultPresets()

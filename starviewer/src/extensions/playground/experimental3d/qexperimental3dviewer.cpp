@@ -158,4 +158,9 @@ void QExperimental3DViewer::resetViewToCoronal()
     // TODO Cal implementar, és un mètode virtual pur
 }
 
+void QExperimental3DViewer::getCurrentRenderedItemBounds(double bounds[6])
+{
+    // TODO Implement me!
+}
+
 } // namespace udg

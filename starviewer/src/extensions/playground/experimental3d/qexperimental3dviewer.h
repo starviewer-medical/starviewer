@@ -67,6 +67,9 @@ public slots:
     virtual void resetViewToSagital();
     virtual void resetViewToCoronal();
 
+protected:
+    void getCurrentRenderedItemBounds(double bounds[6]);
+
 private:
 
     /// El volum.

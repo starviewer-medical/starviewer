@@ -310,6 +310,8 @@ protected:
     /// Processem l'event de resize de la finestra Qt
     virtual void resizeEvent(QResizeEvent *resize);
 
+    void getCurrentRenderedItemBounds(double bounds[6]);
+
 private:
     /// Inicialitza el filtre de màscara per als shutters
     void initializeShutterFilter();
@@ -389,9 +391,6 @@ private:
     /// Aplica el factor de rotació adient segons els girs que li indiquem. No actualitza la càmera ni l'escena, simplement
     /// es fa servir per posar els valors correctes a les variables internes que controlen com està girada la imatge.
     void rotate(int times);
-
-    /// S'encarrega d'encaixar la imatge actual a la mida del viewport
-    void fitImageIntoViewport();
 
     /// Carrega un volum asíncronament
     void loadVolumeAsynchronously(Volume *volume);

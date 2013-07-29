@@ -129,6 +129,11 @@ void Q3DMPRViewer::addActors()
     }
 }
 
+void Q3DMPRViewer::getCurrentRenderedItemBounds(double bounds[6])
+{
+    m_outlineActor->GetBounds(bounds);
+}
+
 void Q3DMPRViewer::initializePlanes()
 {
     vtkCellPicker *picker = vtkCellPicker::New();

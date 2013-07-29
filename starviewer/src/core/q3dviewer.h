@@ -128,6 +128,9 @@ signals:
     void windowLevelChanged(double window, double level);
     void transferFunctionChanged();
 
+protected:
+    void getCurrentRenderedItemBounds(double bounds[6]);
+
 private:
     /// Computes and sets the transformation matrix for the volume to convert from the DICOM space to the world space.
     void setVolumeTransformation();
