@@ -196,7 +196,7 @@ public slots:
     TransferFunction* getTransferFunction() const;
 
     /// Fits the current rendered item into the viewport size
-    void fitImageIntoViewport();
+    void fitRenderingIntoViewport();
 
 signals:
     /// Informem de l'event rebut. \TODO ara enviem el codi en vtkCommand, però podria (o hauria de) canviar per un mapeig nostre

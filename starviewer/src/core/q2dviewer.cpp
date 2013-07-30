@@ -816,7 +816,7 @@ void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVo
 {
     // Cal que primer posem l'estatus en VisualizingVolume per tal de que el QVTKWidget pugui obtenir el tamany que li correspon
     // si no, ens podem trobar que encara no s'hagi mostrat i tingui tamanys no definits fent que la imatge no es mostri completa #1434
-    // TODO: Caldria que fitImageIntoViewport() fos indepdent de si s'està visualitzant o no el QVTKWidget
+    // TODO: Caldria que fitRenderingIntoViewport() fos indepdent de si s'està visualitzant o no el QVTKWidget
     if (setViewerStatusToVisualizingVolume)
     {
         this->setViewerStatus(VisualizingVolume);
@@ -1053,7 +1053,7 @@ void Q2DViewer::resetView(OrthogonalPlane::OrthogonalPlaneType view)
         // Fins aquí seria el mètode "resetDisplayExtent()"
         
         // Ajustem la imatge al viewport
-        fitImageIntoViewport();
+        fitRenderingIntoViewport();
         
         // Calculem la llesca que cal mostrar segons la vista escollida
         int initialSliceIndex = 0;
@@ -1420,7 +1420,7 @@ void Q2DViewer::resizeEvent(QResizeEvent *resize)
                 break;
 
             case AlignCenter:
-                fitImageIntoViewport();
+                fitRenderingIntoViewport();
                 break;
         }
     }
