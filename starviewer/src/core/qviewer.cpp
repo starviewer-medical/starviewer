@@ -588,7 +588,11 @@ WindowLevel QViewer::getCurrentAutomaticWindowLevel()
 
 void QViewer::resetViewToAcquisitionPlane()
 {
+    // HACK Disable rendering temporarily to enhance performance and avoid flickering
+    enableRendering(false);
     resetView(OrthogonalPlane::XYPlane);
+    // HACK End of performance hack
+    enableRendering(true);
     fitRenderingIntoViewport();
 }
 
