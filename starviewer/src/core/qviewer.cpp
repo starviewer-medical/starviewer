@@ -510,14 +510,8 @@ void QViewer::scaleToFit3D(double topCorner[3], double bottomCorner[3], double m
     // Ajustem la imatge segons si la finestra és més estreta per ample o per alçada. Si volem que es vegi tota la regió que em escollit, ajustarem per el que
     // sigui més estret, si ajustèssim pel més ample perderiem imatge per l'altre part
     QSize size = this->getRenderWindowSize();
-    if ((width / size.width()) > (height / size.height()))
-    {
-        this->zoom((size.width() / (float)width) * (1.0 - marginRate));
-    }
-    else
-    {
-        this->zoom((size.height() / (float)height) * (1.0 - marginRate));
-    }
+    double ratio = qMin(size.width() / width, size.height() / height);
+    this->zoom(ratio * (1.0 - marginRate));
 }
 
 void QViewer::fitRenderingIntoViewport()
