@@ -479,7 +479,12 @@ void QViewer::scaleToFit3D(double topCorner[3], double bottomCorner[3], double m
     // sigui més estret, si ajustèssim pel més ample perderiem imatge per l'altre part
     QSize size = this->getRenderWindowSize();
     double ratio = qMin(size.width() / width, size.height() / height);
-    this->zoom(ratio * (1.0 - marginRate));
+
+    double factor = ratio * (1.0 - marginRate);
+    if (adjustCameraScaleFactor(factor))
+    {
+        this->render();
+    }
 }
 
 void QViewer::fitRenderingIntoViewport()
