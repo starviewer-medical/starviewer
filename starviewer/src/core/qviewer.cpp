@@ -589,6 +589,7 @@ WindowLevel QViewer::getCurrentAutomaticWindowLevel()
 void QViewer::resetViewToAcquisitionPlane()
 {
     resetView(OrthogonalPlane::XYPlane);
+    fitRenderingIntoViewport();
 }
 
 void QViewer::enableContextMenu()

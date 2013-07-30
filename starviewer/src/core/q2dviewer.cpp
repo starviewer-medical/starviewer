@@ -1052,9 +1052,6 @@ void Q2DViewer::resetView(OrthogonalPlane::OrthogonalPlaneType view)
         getRenderer()->ResetCamera();
         // Fins aquí seria el mètode "resetDisplayExtent()"
         
-        // Ajustem la imatge al viewport
-        fitRenderingIntoViewport();
-        
         // Calculem la llesca que cal mostrar segons la vista escollida
         int initialSliceIndex = 0;
         if (m_lastView == OrthogonalPlane::YZPlane || m_lastView == OrthogonalPlane::XZPlane)
@@ -1113,6 +1110,8 @@ void Q2DViewer::resetViewToAxial()
             resetView(OrthogonalPlane::XYPlane);
             break;
     }
+    
+    fitRenderingIntoViewport();
 }
 
 void Q2DViewer::resetViewToCoronal()
@@ -1156,6 +1155,8 @@ void Q2DViewer::resetViewToCoronal()
     PatientOrientation desiredOrientation;
     desiredOrientation.setLabels(PatientOrientation::LeftLabel, PatientOrientation::FeetLabel);
     setImageOrientation(desiredOrientation);
+
+    fitRenderingIntoViewport();
 }
 
 void Q2DViewer::resetViewToSagital()
@@ -1200,6 +1201,8 @@ void Q2DViewer::resetViewToSagital()
     PatientOrientation desiredOrientation;
     desiredOrientation.setLabels(PatientOrientation::PosteriorLabel, PatientOrientation::FeetLabel);
     setImageOrientation(desiredOrientation);
+
+    fitRenderingIntoViewport();
 }
 
 void Q2DViewer::updateCamera()
