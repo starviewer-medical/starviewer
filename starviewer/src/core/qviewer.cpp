@@ -422,43 +422,11 @@ void QViewer::render()
 
 void QViewer::zoom(double factor)
 {
-    if (MathTools::isNaN(factor))
+    if (adjustCameraScaleFactor(factor))
     {
-        DEBUG_LOG("Zoom amb factor NaN. Marxem sense fer res.");
-        return;
-    }
-
-    // TODO Potser caldria una comprovació de seguretat pel que torna cadascuna d'aquestes crides
-    vtkRenderer *renderer = getRenderer();
-    if (renderer)
-    {
-        // Codi extret de void vtkInteractorStyleTrackballCamera::Dolly(double factor)
-        vtkCamera *camera = getActiveCamera();
-        if (camera->GetParallelProjection())
-        {
-            camera->SetParallelScale(camera->GetParallelScale() / factor);
-        }
-        else
-        {
-            camera->Dolly(factor);
-            //if (vtkInteractorStyle::SafeDownCast(this->getInteractor()->GetInteractorStyle())->GetAutoAdjustCameraClippingRange())
-            //{
-                // TODO en principi sempre ens interessarà fer això? ens podriem enstalviar l'if??
-                renderer->ResetCameraClippingRange();
-            //}
-        }
-        if (this->getInteractor()->GetLightFollowCamera())
-        {
-            renderer->UpdateLightsGeometryToFollowCamera();
-        }
-
         emit cameraChanged();
         emit zoomFactorChanged(factor);
         this->render();
-    }
-    else
-    {
-        DEBUG_LOG("::zoom(double factor): El renderer és NUL!");
     }
 }
 
