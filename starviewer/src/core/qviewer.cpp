@@ -721,6 +721,41 @@ void QViewer::setCameraViewPlane(OrthogonalPlane::OrthogonalPlaneType viewPlane)
     }
 }
 
+bool QViewer::adjustCameraScaleFactor(double factor)
+{
+    if (MathTools::isNaN(factor))
+    {
+        DEBUG_LOG("Scale factor is NaN. No scale factor will be applied.");
+        return false;
+    }
+
+    vtkRenderer *renderer = getRenderer();
+    if (!renderer)
+    {
+        DEBUG_LOG("Renderer is NULL. No scale factor will be applied.");
+        return false;
+    }
+        
+    // Code extracted from void vtkInteractorStyleTrackballCamera::Dolly(double factor)
+    vtkCamera *camera = getActiveCamera();
+    if (camera->GetParallelProjection())
+    {
+        camera->SetParallelScale(camera->GetParallelScale() / factor);
+    }
+    else
+    {
+        camera->Dolly(factor);
+        renderer->ResetCameraClippingRange();
+    }
+    
+    if (this->getInteractor()->GetLightFollowCamera())
+    {
+        renderer->UpdateLightsGeometryToFollowCamera();
+    }
+
+    return true;
+}
+
 void QViewer::contextMenuEvent(QContextMenuEvent *menuEvent)
 {
     if (m_contextMenuActive)
