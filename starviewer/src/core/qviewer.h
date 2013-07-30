@@ -247,6 +247,10 @@ protected:
     /// Configura la orientació de la càmera donada
     void setCameraViewPlane(OrthogonalPlane::OrthogonalPlaneType viewPlane);
 
+    /// Adjusts camera scale factor. Returns false if no scale could be performed, true otherwise.
+    /// To be used by zoom(), scaleToFit3D() methods and the so
+    bool adjustCameraScaleFactor(double factor);
+    
     /// Ens retorna la càmera activa pel renderer principal, si n'hi ha, NUL altrament.
     vtkCamera* getActiveCamera();
 
