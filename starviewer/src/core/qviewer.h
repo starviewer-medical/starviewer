@@ -178,6 +178,9 @@ public slots:
     virtual void resetViewToAxial() = 0;
     virtual void resetViewToSagital() = 0;
     virtual void resetViewToCoronal() = 0;
+    
+    /// Resets the view to the original acquisition plane of the input volume
+    void resetViewToAcquisitionPlane();
 
     /// Activa o desactiva el menú de contexte
     void enableContextMenu();

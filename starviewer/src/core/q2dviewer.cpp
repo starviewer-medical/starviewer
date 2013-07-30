@@ -876,10 +876,8 @@ void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVo
     this->updateWindowLevelData();
     loadOverlays(volume);
 
-    // TODO The camera, view and projection handling should be enhanced, being coherent with the used names, giving
-    // the real meaning and view correspondance to QViewer::Axial, QViewer::Sagital and QViewer::Coronal,
-    // because they assume original plane acquisition is always Axial
-    resetView(OrthogonalPlane::XYPlane);
+    // Reset the view to the acquisition plane
+    resetViewToAcquisitionPlane();
     // HACK
     // S'activa el rendering de nou per tal de que es renderitzi l'escena
     enableRendering(true);
@@ -2384,15 +2382,10 @@ void Q2DViewer::restore()
         m_drawer->removeAllPrimitives();
     }
 
-    // TODO Ara mateix fem un reset to axial, però potser el més adequat és que
-    // tinguèssim un command definit per col·locar adequadament la imatge
-    // per defecte segons l'input si no se n'ha definit cap
-    // Tenir en compte que aquesta crida també provoca la desactivació del thickslab
-    // Setting the default view to QViewer::Axial means to reset to the original acquisition plane.
-    // TODO The camera, view and projection handling should be enhanced, being coherent with the used names, giving
-    // the real meaning and view correspondance to QViewer::Axial, QViewer::Sagital and QViewer::Coronal,
-    // because they assume original plane acquisition is always Axial
-    resetView(OrthogonalPlane::XYPlane);
+    // TODO The view is reseted to the acquisition plane but could be more appropiate having a
+    // defined command to place the image properly by default depending on the input if no one is defined 
+    // Take into account this call disables thickslab
+    resetViewToAcquisitionPlane();
     updateWindowLevelData();
     
     // HACK Restaurem el rendering
