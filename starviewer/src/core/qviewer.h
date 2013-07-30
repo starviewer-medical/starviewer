@@ -122,7 +122,8 @@ public:
     /// @param topCorner Coordenada superior
     /// @param bottomCorner Coordenada inferior oposada a la superior
     /// @param marginRate valor en percentatge del marge que es vol deixar
-    void scaleToFit3D(double topCorner[3], double bottomCorner[3], double marginRate = 0.0);
+    /// @return True if scale could be performed, false otherwise
+    bool scaleToFit3D(double topCorner[3], double bottomCorner[3], double marginRate = 0.0);
 
     /// Ens retorna l'objecte que conté tota la informació referent al window level
     /// que es pot aplicar sobre aquest visor

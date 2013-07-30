@@ -458,11 +458,11 @@ void QViewer::pan(double motionVector[3])
     this->render();
 }
 
-void QViewer::scaleToFit3D(double topCorner[3], double bottomCorner[3], double marginRate)
+bool QViewer::scaleToFit3D(double topCorner[3], double bottomCorner[3], double marginRate)
 {
     if (!m_mainVolume)
     {
-        return;
+        return false;
     }
 
     // Calcular la width i height en coordenades de display
@@ -479,12 +479,9 @@ void QViewer::scaleToFit3D(double topCorner[3], double bottomCorner[3], double m
     // sigui més estret, si ajustèssim pel més ample perderiem imatge per l'altre part
     QSize size = this->getRenderWindowSize();
     double ratio = qMin(size.width() / width, size.height() / height);
-
     double factor = ratio * (1.0 - marginRate);
-    if (adjustCameraScaleFactor(factor))
-    {
-        this->render();
-    }
+    
+    return adjustCameraScaleFactor(factor);
 }
 
 void QViewer::fitRenderingIntoViewport()
@@ -502,7 +499,10 @@ void QViewer::fitRenderingIntoViewport()
     }
 
     // Scaling the viewport to fit the current item bounds
-    scaleToFit3D(topCorner, bottomCorner);
+    if (scaleToFit3D(topCorner, bottomCorner))
+    {
+        render();
+    }
 }
 
 WindowLevelPresetsToolData* QViewer::getWindowLevelData() const
