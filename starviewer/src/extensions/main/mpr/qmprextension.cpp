@@ -1046,7 +1046,6 @@ void QMPRExtension::setInput(Volume *input)
 
     m_coronal2DView->setInput(coronalResliced);
 
-    m_axial2DView->resetViewToAcquisitionPlane();
     m_sagital2DView->render();
     m_coronal2DView->render();
 }
