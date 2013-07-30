@@ -105,7 +105,7 @@ void Q3DMPRViewer::setInput(Volume *volume)
     // Ajustem els valors del window Level per defecte
     this->updateWindowLevelData();
     // Li donem la orientació per defecte
-    this->resetViewToAxial();
+    this->resetViewToAcquisitionPlane();
     render();
     // Indiquem el canvi de volum
     emit volumeChanged(m_mainVolume);
