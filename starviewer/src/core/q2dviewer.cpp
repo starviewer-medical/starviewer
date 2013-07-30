@@ -1082,6 +1082,9 @@ void Q2DViewer::resetViewToAxial()
         return;
     }
 
+    // HACK Disable rendering temporarily to enhance performance and avoid flickering
+    enableRendering(false);
+    
     // In the case the original acquisition plane is different to Axial, we have to do this tricky hack
     // The way m_lastView is being handled should be corrected. By now is assuming the original acquisition
     // plane is always Axial, and because of this bad assumption we have to do this hacks.
@@ -1111,6 +1114,8 @@ void Q2DViewer::resetViewToAxial()
             break;
     }
     
+    // HACK End of performance hack
+    enableRendering(true);
     fitRenderingIntoViewport();
 }
 
@@ -1127,6 +1132,9 @@ void Q2DViewer::resetViewToCoronal()
         return;
     }
 
+    // HACK Disable rendering temporarily to enhance performance and avoid flickering
+    enableRendering(false);
+    
     // In the case the original acquisition plane is different to Axial, we have to do this tricky hack
     // The way m_lastView is being handled should be corrected. By now is assuming the original acquisition
     // plane is always Axial, and because of this bad assumption we have to do this hacks.
@@ -1156,6 +1164,8 @@ void Q2DViewer::resetViewToCoronal()
     desiredOrientation.setLabels(PatientOrientation::LeftLabel, PatientOrientation::FeetLabel);
     setImageOrientation(desiredOrientation);
 
+    // HACK End of performance hack
+    enableRendering(true);
     fitRenderingIntoViewport();
 }
 
@@ -1172,6 +1182,9 @@ void Q2DViewer::resetViewToSagital()
         return;
     }
 
+    // HACK Disable rendering temporarily to enhance performance and avoid flickering
+    enableRendering(false);
+    
     // In the case the original acquisition plane is different to Axial, we have to do this tricky hack
     // The way m_lastView is being handled should be corrected. By now is assuming the original acquisition
     // plane is always Axial, and because of this bad assumption we have to do this hacks.
@@ -1202,6 +1215,8 @@ void Q2DViewer::resetViewToSagital()
     desiredOrientation.setLabels(PatientOrientation::PosteriorLabel, PatientOrientation::FeetLabel);
     setImageOrientation(desiredOrientation);
 
+    // HACK End of performance hack
+    enableRendering(true);
     fitRenderingIntoViewport();
 }
 
