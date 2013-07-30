@@ -520,7 +520,7 @@ void QViewer::scaleToFit3D(double topCorner[3], double bottomCorner[3], double m
     }
 }
 
-void QViewer::fitImageIntoViewport()
+void QViewer::fitRenderingIntoViewport()
 {
     // First we get the bounds of the current rendered item in world coordinates
     double bounds[6];
