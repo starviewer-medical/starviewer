@@ -34,6 +34,7 @@ class VolumeReaderJob;
 class QViewerCommand;
 class PatientOrientation;
 class DisplayShutterFilter;
+class WindowLevelFilter;
 
 /**
     Classe base per als visualitzadors 2D.
@@ -516,7 +517,7 @@ private:
     Drawer *m_drawer;
 
     /// Objectes per a les transformacions en el pipeline d'escala de grisos
-    vtkImageMapToWindowLevelColors2 *m_windowLevelLUTMapper;
+    WindowLevelFilter *m_windowLevelLUTMapper;
 
     // Secció "ThickSlab"
     /// Nombre de llesques que composen el thickSlab
