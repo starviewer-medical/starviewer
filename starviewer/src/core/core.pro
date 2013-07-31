@@ -328,7 +328,8 @@ HEADERS += extensionfactory.h \
     orthogonalplane.h \
     filter.h \
     filteroutput.h \
-    displayshutterfilter.h
+    displayshutterfilter.h \
+    windowlevelfilter.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -608,7 +609,9 @@ SOURCES += extensionmediator.cpp \
     orthogonalplane.cpp \
     filter.cpp \
     filteroutput.cpp \
-    displayshutterfilter.cpp
+    displayshutterfilter.cpp \
+    windowlevelfilter.cpp
+
 win32 {
     HEADERS += windowsfirewallaccess.h \
                windowssysteminformation.h
