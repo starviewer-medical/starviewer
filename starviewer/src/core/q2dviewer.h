@@ -34,6 +34,7 @@ class PatientOrientation;
 class DisplayShutterFilter;
 class WindowLevelFilter;
 class ThickSlabFilter;
+class BlendFilter;
 
 /**
     Classe base per als visualitzadors 2D.
@@ -461,7 +462,7 @@ protected:
     Volume *m_overlayVolume;
 
     /// Aquest és el blender per veure imatges fusionades
-    vtkImageBlend* m_blender;
+    BlendFilter* m_blender;
 
     /// Opacitat del volum solapat
     double m_overlayOpacity;
