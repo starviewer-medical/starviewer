@@ -17,8 +17,6 @@ class vtkImageData;
 // Grayscale pipeline
 // Permet aplicar window/level amb imatges a color
 class vtkImageMapToWindowLevelColors2;
-// Thick Slab
-class vtkProjectionImageFilter;
 
 namespace udg {
 
@@ -35,6 +33,7 @@ class QViewerCommand;
 class PatientOrientation;
 class DisplayShutterFilter;
 class WindowLevelFilter;
+class ThickSlabFilter;
 
 /**
     Classe base per als visualitzadors 2D.
@@ -524,7 +523,7 @@ private:
     int m_slabThickness;
 
     /// Filtre per composar les imatges del thick slab
-    vtkProjectionImageFilter *m_thickSlabProjectionFilter;
+    ThickSlabFilter *m_thickSlabProjectionFilter;
 
     /// Variables per controlar el rang de llesques en el que es troba l'slab
     int m_firstSlabSlice, m_lastSlabSlice;
