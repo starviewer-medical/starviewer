@@ -329,7 +329,8 @@ HEADERS += extensionfactory.h \
     filter.h \
     filteroutput.h \
     displayshutterfilter.h \
-    windowlevelfilter.h
+    windowlevelfilter.h \
+    thickslabfilter.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -610,7 +611,8 @@ SOURCES += extensionmediator.cpp \
     filter.cpp \
     filteroutput.cpp \
     displayshutterfilter.cpp \
-    windowlevelfilter.cpp
+    windowlevelfilter.cpp \
+    thickslabfilter.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \
