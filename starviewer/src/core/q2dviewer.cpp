@@ -21,8 +21,7 @@
 #include "displayshutterfilter.h"
 #include "filteroutput.h"
 #include "windowlevelfilter.h"
-// Thickslab
-#include "vtkProjectionImageFilter.h"
+#include "thickslabfilter.h"
 #include "asynchronousvolumereader.h"
 #include "volumereaderjob.h"
 #include "qviewercommand.h"
@@ -67,7 +66,7 @@ Q2DViewer::Q2DViewer(QWidget *parent)
     m_inputFinishedCommand = NULL;
 
     // Filtre de thick slab + grayscale
-    m_thickSlabProjectionFilter = vtkProjectionImageFilter::New();
+    m_thickSlabProjectionFilter = new ThickSlabFilter();
     m_windowLevelLUTMapper = new WindowLevelFilter();
 
     // Creem anotacions i actors
@@ -108,7 +107,6 @@ Q2DViewer::~Q2DViewer()
     m_cornerAnnotations->Delete();
     m_imagePointPicker->Delete();
     m_imageActor->Delete();
-    m_thickSlabProjectionFilter->Delete();
 
     // Fem delete d'altres objectes vtk en cas que s'hagin hagut de crear
     if (m_blender)
@@ -118,6 +116,7 @@ Q2DViewer::~Q2DViewer()
 
     delete m_displayShutterFilter;
     delete m_windowLevelLUTMapper;
+    delete m_thickSlabProjectionFilter;
 
     removeViewerBitmaps();
     
@@ -1058,7 +1057,7 @@ void Q2DViewer::resetView(OrthogonalPlane::OrthogonalPlaneType view)
     }
     
     // Thick Slab, li indiquem la direcció de projecció actual
-    m_thickSlabProjectionFilter->SetProjectionDimension(m_lastView);
+    m_thickSlabProjectionFilter->setProjectionAxis(m_lastView);
     setSlabThickness(desiredSlabSlices);
 
     emit viewChanged(m_lastView);
@@ -1334,9 +1333,9 @@ void Q2DViewer::setSlice(int value)
         this->checkAndUpdateSliceValue(value);
         if (isThickSlabActive())
         {
-            m_thickSlabProjectionFilter->SetFirstSlice(m_mainVolume->getImageIndex(m_firstSlabSlice, m_currentPhase));
+            m_thickSlabProjectionFilter->setFirstSlice(m_mainVolume->getImageIndex(m_firstSlabSlice, m_currentPhase));
             // TODO Cal actualitzar aquest valor?
-            m_thickSlabProjectionFilter->SetNumberOfSlicesToProject(m_slabThickness);
+            m_thickSlabProjectionFilter->setSlabThickness(m_slabThickness);
             // Si hi ha el thickslab activat, eliminem totes les roi's. És la decisió ràpida que s'ha près.
             this->getDrawer()->removeAllPrimitives();
         }
@@ -1389,7 +1388,7 @@ void Q2DViewer::setPhase(int value)
         m_currentPhase = value;
         if (isThickSlabActive())
         {
-            m_thickSlabProjectionFilter->SetFirstSlice(m_mainVolume->getImageIndex(m_firstSlabSlice, m_currentPhase));
+            m_thickSlabProjectionFilter->setFirstSlice(m_mainVolume->getImageIndex(m_firstSlabSlice, m_currentPhase));
         }
         this->updateDisplayExtent();
         updateCurrentImageDefaultPresets();
@@ -2102,7 +2101,7 @@ void Q2DViewer::buildWindowLevelPipeline()
     if (isThickSlabActive())
     {
         DEBUG_LOG("Grayscale pipeline: Source Data -> ThickSlab -> [Window Level] -> Output ");
-        m_windowLevelLUTMapper->setInput(m_thickSlabProjectionFilter->GetOutput());
+        m_windowLevelLUTMapper->setInput(m_thickSlabProjectionFilter->getOutput());
     }
     else
     {
@@ -2116,7 +2115,7 @@ void Q2DViewer::buildWindowLevelPipeline()
 void Q2DViewer::setSlabProjectionMode(int projectionMode)
 {
     m_slabProjectionMode = projectionMode;
-    m_thickSlabProjectionFilter->SetAccumulatorType(static_cast<AccumulatorFactory::AccumulatorType>(m_slabProjectionMode));
+    m_thickSlabProjectionFilter->setAccumulatorType(static_cast<AccumulatorFactory::AccumulatorType>(m_slabProjectionMode));
     updateDisplayExtent();
     this->render();
 }
@@ -2159,8 +2158,8 @@ void Q2DViewer::setSlabThickness(int thickness)
 
     if (isThickSlabActive())
     {
-        m_thickSlabProjectionFilter->SetFirstSlice(m_mainVolume->getImageIndex(m_firstSlabSlice, m_currentPhase));
-        m_thickSlabProjectionFilter->SetNumberOfSlicesToProject(m_slabThickness);
+        m_thickSlabProjectionFilter->setFirstSlice(m_mainVolume->getImageIndex(m_firstSlabSlice, m_currentPhase));
+        m_thickSlabProjectionFilter->setSlabThickness(m_slabThickness);
         updateDisplayExtent();
         updateSliceAnnotationInformation();
         this->render();
@@ -2326,12 +2325,12 @@ void Q2DViewer::initializeThickSlab()
     m_lastSlabSlice = 0;
     m_thickSlabActive = false;
     
-    m_thickSlabProjectionFilter->SetInput(m_mainVolume->getVtkData());
-    m_thickSlabProjectionFilter->SetProjectionDimension(m_lastView);
-    m_thickSlabProjectionFilter->SetAccumulatorType((AccumulatorFactory::AccumulatorType) m_slabProjectionMode);
-    m_thickSlabProjectionFilter->SetFirstSlice(m_mainVolume->getImageIndex(m_firstSlabSlice, m_currentPhase));
-    m_thickSlabProjectionFilter->SetNumberOfSlicesToProject(m_slabThickness);
-    m_thickSlabProjectionFilter->SetStep(m_numberOfPhases);
+    m_thickSlabProjectionFilter->setInput(m_mainVolume->getVtkData());
+    m_thickSlabProjectionFilter->setProjectionAxis(m_lastView);
+    m_thickSlabProjectionFilter->setAccumulatorType((AccumulatorFactory::AccumulatorType) m_slabProjectionMode);
+    m_thickSlabProjectionFilter->setFirstSlice(m_mainVolume->getImageIndex(m_firstSlabSlice, m_currentPhase));
+    m_thickSlabProjectionFilter->setSlabThickness(m_slabThickness);
+    m_thickSlabProjectionFilter->setStride(m_numberOfPhases);
 }
 
 void Q2DViewer::putCoordinateInCurrentImageBounds(double xyz[3])
@@ -2367,7 +2366,7 @@ void Q2DViewer::putCoordinateInCurrentImageBounds(double xyz[3])
 
 vtkImageData* Q2DViewer::getCurrentSlabProjection()
 {
-    return m_thickSlabProjectionFilter->GetOutput();
+    return m_thickSlabProjectionFilter->getOutput().getVtkImageData();
 }
 
 void Q2DViewer::restore()
