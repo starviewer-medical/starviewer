@@ -20,6 +20,7 @@
 #include "drawerbitmap.h"
 #include "displayshutterfilter.h"
 #include "filteroutput.h"
+#include "windowlevelfilter.h"
 // Thickslab
 #include "vtkProjectionImageFilter.h"
 #include "asynchronousvolumereader.h"
@@ -46,13 +47,8 @@
 #include <vtkTextProperty.h>
 #include <vtkProperty2D.h>
 #include <vtkProp.h>
-#include <vtkWindowLevelLookupTable.h>
 #include <vtkImageActor.h>
-// Grayscale pipeline
-// Permet aplicar window/level amb imatges a color
-#include <vtkImageMapToWindowLevelColors2.h>
 #include <vtkScalarsToColors.h>
-#include <vtkColorTransferFunction.h>
 // Projecció de punts
 #include <vtkMatrix4x4.h>
 
@@ -72,7 +68,7 @@ Q2DViewer::Q2DViewer(QWidget *parent)
 
     // Filtre de thick slab + grayscale
     m_thickSlabProjectionFilter = vtkProjectionImageFilter::New();
-    m_windowLevelLUTMapper = vtkImageMapToWindowLevelColors2::New();
+    m_windowLevelLUTMapper = new WindowLevelFilter();
 
     // Creem anotacions i actors
     createAnnotations();
@@ -112,7 +108,6 @@ Q2DViewer::~Q2DViewer()
     m_cornerAnnotations->Delete();
     m_imagePointPicker->Delete();
     m_imageActor->Delete();
-    m_windowLevelLUTMapper->Delete();
     m_thickSlabProjectionFilter->Delete();
 
     // Fem delete d'altres objectes vtk en cas que s'hagin hagut de crear
@@ -122,6 +117,7 @@ Q2DViewer::~Q2DViewer()
     }
 
     delete m_displayShutterFilter;
+    delete m_windowLevelLUTMapper;
 
     removeViewerBitmaps();
     
@@ -343,7 +339,7 @@ void Q2DViewer::updatePatientOrientationAnnotation()
 void Q2DViewer::initializeShutterFilter()
 {
     m_displayShutterFilter = new DisplayShutterFilter();
-    m_displayShutterFilter->setInput(m_windowLevelLUTMapper->GetOutput());
+    m_displayShutterFilter->setInput(m_windowLevelLUTMapper->getOutput());
 }
 
 void Q2DViewer::updatePreferredImageOrientation()
@@ -787,8 +783,8 @@ void Q2DViewer::setNewVolumeAndExecuteCommand(Volume *volume)
         
         m_windowToImageFilter->SetInput(getRenderWindow());
 
-        m_windowLevelLUTMapper->Delete();
-        m_windowLevelLUTMapper = vtkImageMapToWindowLevelColors2::New();
+        delete m_windowLevelLUTMapper;
+        m_windowLevelLUTMapper = new WindowLevelFilter();
 
         Volume *dummyVolume = this->getDummyVolumeFromVolume(m_mainVolume);
         dummyVolume->setIdentifier(m_mainVolume->getIdentifier());
@@ -989,8 +985,7 @@ void Q2DViewer::updateOverlay()
     {
         case None:
             // Actualitzem el pipeline
-            m_windowLevelLUTMapper->RemoveAllInputs();
-            m_windowLevelLUTMapper->SetInput(m_mainVolume->getVtkData());
+            m_windowLevelLUTMapper->setInput(m_mainVolume->getVtkData());
             // TODO aquest procediment és possible que sigui insuficient,
             // caldria unficar el pipeline en un mateix mètode
             break;
@@ -999,7 +994,7 @@ void Q2DViewer::updateOverlay()
             // TODO Revisar la manera de donar-li l'input d'un blending al visualitzador
             // Aquest procediment podria ser insuficent de cares a com estigui construit el pipeline
             m_blender->Modified();
-            m_windowLevelLUTMapper->SetInputConnection(m_blender->GetOutputPort());
+            m_windowLevelLUTMapper->setInput(m_blender->GetOutput());
             break;
     }
 
@@ -1413,8 +1408,7 @@ void Q2DViewer::setOverlapMethod(OverlapMethod method)
 void Q2DViewer::setOverlapMethodToNone()
 {
     setOverlapMethod(Q2DViewer::None);
-    m_windowLevelLUTMapper->RemoveAllInputs();
-    m_windowLevelLUTMapper->SetInput(m_mainVolume->getVtkData());
+    m_windowLevelLUTMapper->setInput(m_mainVolume->getVtkData());
 }
 
 void Q2DViewer::setOverlapMethodToBlend()
@@ -1448,10 +1442,10 @@ void Q2DViewer::setWindowLevel(double window, double level)
 {
     if (m_mainVolume)
     {
-        if ((m_windowLevelLUTMapper->GetWindow() != window) || (m_windowLevelLUTMapper->GetLevel() != level))
+        if ((m_windowLevelLUTMapper->getWindow() != window) || (m_windowLevelLUTMapper->getLevel() != level))
         {
-            m_windowLevelLUTMapper->SetWindow(window);
-            m_windowLevelLUTMapper->SetLevel(level);
+            m_windowLevelLUTMapper->setWindow(window);
+            m_windowLevelLUTMapper->setLevel(level);
             updateAnnotationsInformation(Q2DViewer::WindowInformationAnnotation);
             this->render();
             emit windowLevelChanged(window, level);
@@ -1467,15 +1461,15 @@ void Q2DViewer::setTransferFunction(TransferFunction *transferFunction)
 {
     m_transferFunction = transferFunction;
     // Apliquem la funció de transferència sobre el window level mapper
-    m_windowLevelLUTMapper->SetLookupTable(m_transferFunction->vtkColorTransferFunction());
+    m_windowLevelLUTMapper->setTransferFunction(*m_transferFunction);
 }
 
 void Q2DViewer::getCurrentWindowLevel(double wl[2])
 {
     if (m_mainVolume)
     {
-        wl[0] = m_windowLevelLUTMapper->GetWindow();
-        wl[1] = m_windowLevelLUTMapper->GetLevel();
+        wl[0] = m_windowLevelLUTMapper->getWindow();
+        wl[1] = m_windowLevelLUTMapper->getLevel();
     }
     else
     {
@@ -1774,8 +1768,8 @@ void Q2DViewer::updateAnnotationsInformation(AnnotationFlags annotation)
             m_upperLeftText = tr("%1 x %2\nWW: %5 WL: %6")
                 .arg(m_mainVolume->getDimensions()[OrthogonalPlane::getXIndexForView(getView())])
                 .arg(m_mainVolume->getDimensions()[OrthogonalPlane::getYIndexForView(getView())])
-                .arg(MathTools::roundToNearestInteger(m_windowLevelLUTMapper->GetWindow()))
-                .arg(MathTools::roundToNearestInteger(m_windowLevelLUTMapper->GetLevel()));
+                .arg(MathTools::roundToNearestInteger(m_windowLevelLUTMapper->getWindow()))
+                .arg(MathTools::roundToNearestInteger(m_windowLevelLUTMapper->getLevel()));
         }
         else
         {
@@ -2108,12 +2102,12 @@ void Q2DViewer::buildWindowLevelPipeline()
     if (isThickSlabActive())
     {
         DEBUG_LOG("Grayscale pipeline: Source Data -> ThickSlab -> [Window Level] -> Output ");
-        m_windowLevelLUTMapper->SetInput(m_thickSlabProjectionFilter->GetOutput());
+        m_windowLevelLUTMapper->setInput(m_thickSlabProjectionFilter->GetOutput());
     }
     else
     {
         DEBUG_LOG("Grayscale pipeline: Source Data -> [Window Level] -> Output ");
-        m_windowLevelLUTMapper->SetInput(m_mainVolume->getVtkData());
+        m_windowLevelLUTMapper->setInput(m_mainVolume->getVtkData());
     }
 
     updateShutterPipeline();
@@ -2698,8 +2692,8 @@ void Q2DViewer::setImageActorInput()
     else
     {
         // If no shutter is applied, the window level pipeline is used
-        m_windowLevelLUTMapper->Update();
-        m_imageActor->SetInput(m_windowLevelLUTMapper->GetOutput());
+        m_windowLevelLUTMapper->update();
+        m_imageActor->SetInput(m_windowLevelLUTMapper->getOutput().getVtkImageData());
     }
 }
 
