@@ -22,6 +22,7 @@
 #include "filteroutput.h"
 #include "windowlevelfilter.h"
 #include "thickslabfilter.h"
+#include "blendfilter.h"
 #include "asynchronousvolumereader.h"
 #include "volumereaderjob.h"
 #include "qviewercommand.h"
@@ -38,8 +39,6 @@
 #include <QVTKWidget.h>
 #include <vtkWindowToImageFilter.h>
 #include <vtkPlane.h>
-// Composició d'imatges
-#include <vtkImageBlend.h>
 // Anotacions
 #include <vtkCornerAnnotation.h>
 #include <vtkTextActor.h>
@@ -111,7 +110,7 @@ Q2DViewer::~Q2DViewer()
     // Fem delete d'altres objectes vtk en cas que s'hagin hagut de crear
     if (m_blender)
     {
-        m_blender->Delete();
+        delete m_blender;
     }
 
     delete m_displayShutterFilter;
@@ -852,7 +851,7 @@ void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVo
     // Això es fa per destruir el blender en cas que ja hi hagi algun input i es vulgui canviar
     if (m_blender != 0)
     {
-        m_blender->Delete();
+        delete m_blender;
         m_blender = 0;
     }
 
@@ -963,11 +962,11 @@ void Q2DViewer::setOverlayInput(Volume *volume)
     {
         if (!m_blender)
         {
-            m_blender = vtkImageBlend::New();
-            m_blender->SetInput(0, m_mainVolume->getVtkData());
+            m_blender = new BlendFilter();
+            m_blender->setBase(m_mainVolume->getVtkData());
         }
-        m_blender->SetInput(1, m_overlayVolume->getVtkData());
-        m_blender->SetOpacity(1, 1.0 - m_overlayOpacity);
+        m_blender->setOverlay(m_overlayVolume->getVtkData());
+        m_blender->setOverlayOpacity(1.0 - m_overlayOpacity);
     }
     updateOverlay();
     emit overlayChanged();
@@ -992,8 +991,8 @@ void Q2DViewer::updateOverlay()
         case Blend:
             // TODO Revisar la manera de donar-li l'input d'un blending al visualitzador
             // Aquest procediment podria ser insuficent de cares a com estigui construit el pipeline
-            m_blender->Modified();
-            m_windowLevelLUTMapper->setInput(m_blender->GetOutput());
+            m_blender->update();
+            m_windowLevelLUTMapper->setInput(m_blender->getOutput());
             break;
     }
 
