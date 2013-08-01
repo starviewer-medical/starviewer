@@ -28,6 +28,14 @@ Series* SeriesTestHelper::createSeriesByUID(QString seriesInstanceUID, int numbe
     return series;
 }
 
+Series *SeriesTestHelper::createSeriesByModality(QString modality, int numberOfImages)
+{
+    Series *series = createSeriesByUID("1", numberOfImages);
+    series->setModality(modality);
+
+    return series;
+}
+
 QString SeriesTestHelper::getRandomModality()
 {
     QStringList modalities;

@@ -27,6 +27,19 @@ Study* StudyTestHelper::createStudyByUID(QString instanceUID, int numberOfSeries
     return study;
 }
 
+Study *StudyTestHelper::createStudyWithDescriptionAndSeriesModality(QString description, QString modality, int numberOfSeriesToAddToStudy, int numberOfImagesToAddToSeries)
+{
+    Study *study = createStudyByUID("1", numberOfSeriesToAddToStudy, numberOfImagesToAddToSeries);
+    study->setDescription(description);
+
+    foreach (Series *series, study->getSeries())
+    {
+        series->setModality(modality);
+    }
+
+    return study;
+}
+
 void StudyTestHelper::cleanUp(Study *study)
 {
     if (study->getParentPatient() != NULL)
