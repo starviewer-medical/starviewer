@@ -22,6 +22,9 @@ public:
     /// serà 1 per la primera imatge, 2 per la segona imatge...
     static udg::Series* createSeriesByUID(QString seriesInstanceUID, int numberOfImagesToAddToSeries = 0);
 
+    /// Creats a series of a given modality and with the number of given images.
+    static udg::Series* createSeriesByModality(QString modality, int numberOfImagesToAddToSeries = 0);
+
     /// Returns a random modality string
     static QString getRandomModality();
     

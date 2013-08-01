@@ -331,7 +331,8 @@ HEADERS += extensionfactory.h \
     displayshutterfilter.h \
     windowlevelfilter.h \
     thickslabfilter.h \
-    blendfilter.h
+    blendfilter.h \
+    mammographyimagehelper.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -614,7 +615,8 @@ SOURCES += extensionmediator.cpp \
     displayshutterfilter.cpp \
     windowlevelfilter.cpp \
     thickslabfilter.cpp \
-    blendfilter.cpp
+    blendfilter.cpp \
+    mammographyimagehelper.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \

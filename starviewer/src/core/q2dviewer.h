@@ -542,9 +542,6 @@ private:
     /// Posició a on s'ha d'alinear la imatge (dreta, esquerre o centrat)
     AlignPosition m_alignPosition;
 
-    /// Llista d'excepcions per les quals no s'ha d'aplicar una orientació concreta per estudis de mamografia.
-    QStringList m_mammographyAutoOrientationExceptions;
-
     /// El job no ens pertany, per això ho guardem en un QPointer
     QPointer<VolumeReaderJob> m_volumeReaderJob;
 

@@ -22,7 +22,8 @@ SOURCES += $$PWD/gmock-gtest-all.cc \
            $$PWD/testingdicomtagreader.cpp \
            $$PWD/testingpacsconnection.cpp \
            $$PWD/testingsenddicomfilestopacs.cpp \
-           $$PWD/testingsettings.cpp
+           $$PWD/testingsettings.cpp \
+           $$PWD/testingmammographyimagehelper.cpp
            
 HEADERS += $$PWD/autotest.h \
            $$PWD/gtest/gtest.h \
@@ -49,4 +50,5 @@ HEADERS += $$PWD/autotest.h \
            $$PWD/testingdicomtagreader.h \
            $$PWD/testingpacsconnection.h \
            $$PWD/testingsenddicomfilestopacs.h \
-           $$PWD/testingsettings.h
+           $$PWD/testingsettings.h \
+           $$PWD/testingmammographyimagehelper.h
