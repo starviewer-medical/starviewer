@@ -329,6 +329,9 @@ HEADERS += extensionfactory.h \
     zoomfactorsyncaction.h \
     pansyncaction.h \
     signaltosyncactionmapper.h \
+    windowlevelsignaltosyncactionmapper.h \
+    zoomfactorsignaltosyncactionmapper.h \
+    pansignaltosyncactionmapper.h \
     signaltosyncactionmapperfactory.h \
     signaltosyncactionmapperfactoryregister.h \
     syncactionmetadata.h \
@@ -628,6 +631,9 @@ SOURCES += extensionmediator.cpp \
     zoomfactorsyncaction.cpp \
     pansyncaction.cpp \
     signaltosyncactionmapper.cpp \
+    windowlevelsignaltosyncactionmapper.cpp \
+    zoomfactorsignaltosyncactionmapper.cpp \
+    pansignaltosyncactionmapper.cpp \
     syncactionmetadata.cpp \
     syncactionsconfiguration.cpp \
     syncactionmanager.cpp \
