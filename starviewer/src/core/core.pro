@@ -322,6 +322,8 @@ HEADERS += extensionfactory.h \
     volumepixeldataiterator.h \
     patientcomparer.h \
     synccriterion.h \
+    anatomicalplanesynccriterion.h \
+    inputsynccriterion.h \
     syncaction.h \
     signaltosyncactionmapper.h \
     signaltosyncactionmapperfactory.h \
@@ -616,6 +618,8 @@ SOURCES += extensionmediator.cpp \
     volumepixeldataiterator.cpp \
     patientcomparer.cpp \
     synccriterion.cpp \
+    anatomicalplanesynccriterion.cpp \
+    inputsynccriterion.cpp \
     syncaction.cpp \
     signaltosyncactionmapper.cpp \
     syncactionmetadata.cpp \
