@@ -197,7 +197,7 @@ void Q2DViewer::rotateCounterClockWise(int times)
 
 void Q2DViewer::horizontalFlip()
 {
-    m_applyFlip = true;
+    setFlip(true);
     updateCamera();
     render();
 }
@@ -901,7 +901,7 @@ void Q2DViewer::resetView(OrthogonalPlane::OrthogonalPlaneType view)
     
     // Reiniciem valors per defecte de la càmera
     m_rotateFactor = 0;
-    m_applyFlip = false;
+    setFlip(false);
     m_isImageFlipped = false;
     m_alignPosition = Q2DViewer::AlignCenter;
     
@@ -1157,7 +1157,7 @@ void Q2DViewer::updateCamera()
             }
 
             this->getRenderer()->ResetCameraClippingRange();
-            m_applyFlip = false;
+            setFlip(false);
             m_isImageFlipped = !m_isImageFlipped;
         }
         emit cameraChanged();
@@ -2437,6 +2437,11 @@ void Q2DViewer::rotate(int times)
     }
 
     m_rotateFactor = (m_rotateFactor + times) % 4;
+}
+
+void Q2DViewer::setFlip(bool flip)
+{
+    m_applyFlip = flip;
 }
 
 void Q2DViewer::getCurrentRenderedItemBounds(double bounds[6])
