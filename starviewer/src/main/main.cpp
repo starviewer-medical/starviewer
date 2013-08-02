@@ -5,6 +5,7 @@
 #include "extensions.h"
 #include "extensionmediatorfactory.h"
 #include "diagnosistests.h"
+#include "syncactions.h"
 // Definicions globals d'aplicació
 #include "starviewerapplication.h"
 // Necessaris per suportar la decodificació de jpeg i RLE
