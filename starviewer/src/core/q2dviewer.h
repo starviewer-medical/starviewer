@@ -393,6 +393,9 @@ private:
     /// es fa servir per posar els valors correctes a les variables internes que controlen com està girada la imatge.
     void rotate(int times);
 
+    /// Sets if image should be flipped (horizontally) or not. It does not update the camera nor renders the scene.
+    void setFlip(bool flip);
+    
     /// Carrega un volum asíncronament
     void loadVolumeAsynchronously(Volume *volume);
 
