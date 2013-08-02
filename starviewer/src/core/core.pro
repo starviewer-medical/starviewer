@@ -324,6 +324,8 @@ HEADERS += extensionfactory.h \
     synccriterion.h \
     syncaction.h \
     signaltosyncactionmapper.h \
+    signaltosyncactionmapperfactory.h \
+    signaltosyncactionmapperfactoryregister.h \
     syncactionmetadata.h \
     syncactionsconfiguration.h \
     syncactionmanager.h \
