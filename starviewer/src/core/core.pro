@@ -321,6 +321,10 @@ HEADERS += extensionfactory.h \
     vtkdcmtkimagereader.h \
     volumepixeldataiterator.h \
     patientcomparer.h \
+    synccriterion.h \
+    syncaction.h \
+    signaltosyncactionmapper.h \
+    syncactionmetadata.h \
     volumepixeldatareaderselector.h \
     vtkdcmtkbydefaultvolumepixeldatareaderselector.h \
     itkgdcmbydefaultvolumepixeldatareaderselector.h \
@@ -607,6 +611,10 @@ SOURCES += extensionmediator.cpp \
     vtkdcmtkimagereader.cpp \
     volumepixeldataiterator.cpp \
     patientcomparer.cpp \
+    synccriterion.cpp \
+    syncaction.cpp \
+    signaltosyncactionmapper.cpp \
+    syncactionmetadata.cpp \
     vtkdcmtkbydefaultvolumepixeldatareaderselector.cpp \
     itkgdcmbydefaultvolumepixeldatareaderselector.cpp \
     orthogonalplane.cpp \
