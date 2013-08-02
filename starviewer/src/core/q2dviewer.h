@@ -399,6 +399,9 @@ private:
     /// Sets if image should be flipped (horizontally) or not. It does not update the camera nor renders the scene.
     void setFlip(bool flip);
     
+    /// Updates the camera, renders and emits the current image orientataion
+    void applyImageOrientationChanges();
+    
     /// Carrega un volum asíncronament
     void loadVolumeAsynchronously(Volume *volume);
 
