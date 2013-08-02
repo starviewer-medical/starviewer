@@ -2392,12 +2392,18 @@ void Q2DViewer::setImageOrientation(const PatientOrientation &desiredPatientOrie
     m_imageOrientationOperationsMapper->setInitialOrientation(getCurrentDisplayedImagePatientOrientation());
     m_imageOrientationOperationsMapper->setDesiredOrientation(desiredPatientOrientation);
 
-    // TODO ara mateix fet així és ineficient ja que es poden cridar fins a dos cops updateCamera() innecessàriament
-    // Caldria refactoritzar els mètodes de rotació i flip per aplicar aquests canvis requerint un únic updateCamera()
-    rotateClockWise(m_imageOrientationOperationsMapper->getNumberOfClockwiseTurnsToApply());
-    if (m_imageOrientationOperationsMapper->requiresHorizontalFlip())
+    int turns = m_imageOrientationOperationsMapper->getNumberOfClockwiseTurnsToApply();
+    bool flip = m_imageOrientationOperationsMapper->requiresHorizontalFlip();
+
+    // Update the obtained orientation parameters
+    rotate(turns);
+    setFlip(flip);
+
+    // Then, only update the camera and apply render if there have been changes on the orientation parameters
+    if (flip || turns > 0)
     {
-        horizontalFlip();
+        updateCamera();
+        render();
     }
 }
 
