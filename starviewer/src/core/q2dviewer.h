@@ -295,6 +295,9 @@ signals:
     /// Indica el nou window level
     void windowLevelChanged(double window, double level);
 
+    /// Emitted when a new patient orientation has been set
+    void imageOrientationChanged(const PatientOrientation &orientation);
+    
     /// Senyal que s'envia quan la llavor s'ha canviat
     /// TODO Mirar de treure-ho i posar-ho en la tool SeedTool
     void seedPositionChanged(double x, double y, double z);
