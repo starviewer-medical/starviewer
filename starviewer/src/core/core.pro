@@ -325,6 +325,9 @@ HEADERS += extensionfactory.h \
     anatomicalplanesynccriterion.h \
     inputsynccriterion.h \
     syncaction.h \
+    windowlevelsyncaction.h \
+    zoomfactorsyncaction.h \
+    pansyncaction.h \
     signaltosyncactionmapper.h \
     signaltosyncactionmapperfactory.h \
     signaltosyncactionmapperfactoryregister.h \
@@ -621,6 +624,9 @@ SOURCES += extensionmediator.cpp \
     anatomicalplanesynccriterion.cpp \
     inputsynccriterion.cpp \
     syncaction.cpp \
+    windowlevelsyncaction.cpp \
+    zoomfactorsyncaction.cpp \
+    pansyncaction.cpp \
     signaltosyncactionmapper.cpp \
     syncactionmetadata.cpp \
     syncactionsconfiguration.cpp \
