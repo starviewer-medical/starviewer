@@ -7,5 +7,6 @@
 #include "windowlevelsignaltosyncactionmapper.h"
 #include "zoomfactorsignaltosyncactionmapper.h"
 #include "pansignaltosyncactionmapper.h"
+#include "imageorientationsignaltosyncactionmapper.h"
 
 #endif
