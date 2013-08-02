@@ -211,7 +211,9 @@ void Q2DViewer::horizontalFlip()
 void Q2DViewer::verticalFlip()
 {
     rotate(2);
-    horizontalFlip();
+    setFlip(true);
+    updateCamera();
+    render();
 
     emit imageOrientationChanged(getCurrentDisplayedImagePatientOrientation());
 }
