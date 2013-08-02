@@ -180,6 +180,8 @@ void Q2DViewer::rotateClockWise(int times)
     rotate(times);
     updateCamera();
     render();
+
+    emit imageOrientationChanged(getCurrentDisplayedImagePatientOrientation());
 }
 
 void Q2DViewer::rotateCounterClockWise(int times)
@@ -193,6 +195,8 @@ void Q2DViewer::rotateCounterClockWise(int times)
     rotate(-times);
     updateCamera();
     render();
+
+    emit imageOrientationChanged(getCurrentDisplayedImagePatientOrientation());
 }
 
 void Q2DViewer::horizontalFlip()
@@ -200,12 +204,16 @@ void Q2DViewer::horizontalFlip()
     setFlip(true);
     updateCamera();
     render();
+
+    emit imageOrientationChanged(getCurrentDisplayedImagePatientOrientation());
 }
 
 void Q2DViewer::verticalFlip()
 {
     rotate(2);
     horizontalFlip();
+
+    emit imageOrientationChanged(getCurrentDisplayedImagePatientOrientation());
 }
 
 PatientOrientation Q2DViewer::getCurrentDisplayedImagePatientOrientation() const
@@ -2404,6 +2412,7 @@ void Q2DViewer::setImageOrientation(const PatientOrientation &desiredPatientOrie
     {
         updateCamera();
         render();
+        emit imageOrientationChanged(desiredPatientOrientation);
     }
 }
 
