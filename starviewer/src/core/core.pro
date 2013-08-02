@@ -325,6 +325,7 @@ HEADERS += extensionfactory.h \
     syncaction.h \
     signaltosyncactionmapper.h \
     syncactionmetadata.h \
+    syncactionsconfiguration.h \
     volumepixeldatareaderselector.h \
     vtkdcmtkbydefaultvolumepixeldatareaderselector.h \
     itkgdcmbydefaultvolumepixeldatareaderselector.h \
@@ -615,6 +616,7 @@ SOURCES += extensionmediator.cpp \
     syncaction.cpp \
     signaltosyncactionmapper.cpp \
     syncactionmetadata.cpp \
+    syncactionsconfiguration.cpp \
     vtkdcmtkbydefaultvolumepixeldatareaderselector.cpp \
     itkgdcmbydefaultvolumepixeldatareaderselector.cpp \
     orthogonalplane.cpp \
