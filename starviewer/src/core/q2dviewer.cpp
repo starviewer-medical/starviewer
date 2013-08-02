@@ -178,10 +178,8 @@ void Q2DViewer::rotateClockWise(int times)
     }
 
     rotate(times);
-    updateCamera();
-    render();
 
-    emit imageOrientationChanged(getCurrentDisplayedImagePatientOrientation());
+    applyImageOrientationChanges();
 }
 
 void Q2DViewer::rotateCounterClockWise(int times)
@@ -193,29 +191,23 @@ void Q2DViewer::rotateCounterClockWise(int times)
     }
 
     rotate(-times);
-    updateCamera();
-    render();
 
-    emit imageOrientationChanged(getCurrentDisplayedImagePatientOrientation());
+    applyImageOrientationChanges();
 }
 
 void Q2DViewer::horizontalFlip()
 {
     setFlip(true);
-    updateCamera();
-    render();
 
-    emit imageOrientationChanged(getCurrentDisplayedImagePatientOrientation());
+    applyImageOrientationChanges();
 }
 
 void Q2DViewer::verticalFlip()
 {
     rotate(2);
     setFlip(true);
-    updateCamera();
-    render();
 
-    emit imageOrientationChanged(getCurrentDisplayedImagePatientOrientation());
+    applyImageOrientationChanges();
 }
 
 PatientOrientation Q2DViewer::getCurrentDisplayedImagePatientOrientation() const
@@ -2412,9 +2404,7 @@ void Q2DViewer::setImageOrientation(const PatientOrientation &desiredPatientOrie
     // Then, only update the camera and apply render if there have been changes on the orientation parameters
     if (flip || turns > 0)
     {
-        updateCamera();
-        render();
-        emit imageOrientationChanged(desiredPatientOrientation);
+        applyImageOrientationChanges();
     }
 }
 
@@ -2459,6 +2449,14 @@ void Q2DViewer::rotate(int times)
 void Q2DViewer::setFlip(bool flip)
 {
     m_applyFlip = flip;
+}
+
+void Q2DViewer::applyImageOrientationChanges()
+{
+    updateCamera();
+    render();
+    
+    emit imageOrientationChanged(getCurrentDisplayedImagePatientOrientation());
 }
 
 void Q2DViewer::getCurrentRenderedItemBounds(double bounds[6])
