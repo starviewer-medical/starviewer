@@ -31,6 +31,8 @@ class LayoutManager;
 class QRelatedStudiesWidget;
 class RelatedStudiesManager;
 class AutomaticSynchronizationManager;
+class SyncActionManager;
+class ViewersLayoutToSyncActionManagerAdapter;
 #endif
 
 /**
@@ -223,6 +225,9 @@ private:
 
     /// Manager de la sincronització automàtica
     AutomaticSynchronizationManager *m_automaticSynchronizationManager;
+
+    SyncActionManager *m_syncActionManager;
+    ViewersLayoutToSyncActionManagerAdapter *m_layoutToSyncActionManagerAdapter;
 #endif
 
 };
