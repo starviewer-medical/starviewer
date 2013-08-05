@@ -86,7 +86,7 @@ void ViewersLayout::addColumns(int columns)
             }
 
             m_regularViewersGridLayout->addWidget(newViewer, rows, m_totalColumns - 1);
-            newViewer->show();
+            showViewer(newViewer);
             m_regularViewersGridVector.insert(viewerPosition, newViewer);
             viewerPosition += m_visibleColumns;
             if (rows >= m_visibleRows)
@@ -124,7 +124,7 @@ void ViewersLayout::addRows(int rows)
                 newViewer = getNewQ2DViewerWidget();
             }
             m_regularViewersGridLayout->addWidget(newViewer, m_visibleRows - 1, column);
-            newViewer->show();
+            showViewer(newViewer);
             m_regularViewersGridVector.push_back(newViewer);
             if (column >= m_visibleColumns)
             {
@@ -351,7 +351,7 @@ void ViewersLayout::showRows(int rows)
         for (int columnNumber = 0; columnNumber < m_visibleColumns; ++columnNumber)
         {
             Q2DViewerWidget *viewer = getViewerWidget((m_totalColumns * m_visibleRows) + columnNumber);
-            viewer->show();
+            showViewer(viewer);
         }
         ++m_visibleRows;
         --rows;
@@ -383,7 +383,7 @@ void ViewersLayout::showColumns(int columns)
         for (int rowNumber = 0; rowNumber < m_visibleRows; ++rowNumber)
         {
             Q2DViewerWidget *viewer = getViewerWidget((m_totalColumns * rowNumber) + m_visibleColumns);
-            viewer->show();
+            showViewer(viewer);
         }
         ++m_visibleColumns;
         --columns;
@@ -493,6 +493,15 @@ void ViewersLayout::hideViewer(Q2DViewerWidget *viewer)
     {
         viewer->hide();
         emit viewerHidden(viewer);
+    }
+}
+
+void ViewersLayout::showViewer(Q2DViewerWidget *viewer)
+{
+    if (viewer)
+    {
+        viewer->show();
+        emit viewerShown(viewer);
     }
 }
 

@@ -62,6 +62,9 @@ signals:
     // deixa de ser visible però segueix existint
     void viewerHidden(Q2DViewerWidget *viewer);
 
+    /// Emitted when a previously hid viewer is shown
+    void viewerShown(Q2DViewerWidget *viewer);
+
     /// Senyal que s'emet quan el visualitzador seleccionat canvia
     void selectedViewerChanged(Q2DViewerWidget *viewer);
 
@@ -104,6 +107,9 @@ private:
 
     /// Fa les accions necessàries per amagar el viewer indicat del layout actual
     void hideViewer(Q2DViewerWidget *viewer);
+
+    /// Performs the needed actions to show the given viewer of the current layout
+    void showViewer(Q2DViewerWidget *viewer);
 
 private:
     /// Grid per gestionar les distribucions regulars de visors
