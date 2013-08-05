@@ -55,6 +55,9 @@ signals:
     /// Senyal que s'emet quan s'afegeix un visualitzador
     void viewerAdded(Q2DViewerWidget *viewer);
 
+    /// Signal to be emitted just before the viewer widget is going to be deleted
+    void viewerRemoved(Q2DViewerWidget *viewer);
+
     /// Senyal que s'emet quan s'amaga un visualitzador, és a dir,
     // deixa de ser visible però segueix existint
     void viewerHidden(Q2DViewerWidget *viewer);
@@ -85,7 +88,7 @@ private:
     Q2DViewerWidget* getNewQ2DViewerWidget();
 
     /// Mètode auxiliar per un problema que ens pot provar que ens quedem sense memòria per un bug no solucionat
-    void deleteQ2DViewerWidget(Q2DViewerWidget *viewer) const;
+    void deleteQ2DViewerWidget(Q2DViewerWidget *viewer);
 
     /// Coloca el viewer donat en la posició i mides proporcionats
     /// @param viewer Visor que volem posicionar i ajustar dins del layout
