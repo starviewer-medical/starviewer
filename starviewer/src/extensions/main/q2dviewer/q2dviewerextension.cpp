@@ -70,6 +70,8 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
 #else
     m_syncActionManager = new SyncActionManager(this);
     m_layoutToSyncActionManagerAdapter = new ViewersLayoutToSyncActionManagerAdapter(m_workingArea, m_syncActionManager, this);
+    connect(m_propagateToolButton, SIGNAL(toggled(bool)), m_syncActionManager, SLOT(enable(bool)));
+    m_propagateToolButton->setChecked(false);
     m_automaticSynchronizationManager = 0;
     m_relatedStudiesManager = new RelatedStudiesManager();
 #endif
