@@ -28,6 +28,8 @@
 #include "qrelatedstudieswidget.h"
 #include "relatedstudiesmanager.h"
 #include "qexportertool.h"
+#include "syncactionmanager.h"
+#include "viewerslayouttosyncactionmanageradapter.h"
 #endif
 
 #include <QMenu>
@@ -66,6 +68,8 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_synchronizeAllViewersButton->hide();
     m_desynchronizeAllViewersButton->hide();
 #else
+    m_syncActionManager = new SyncActionManager(this);
+    m_layoutToSyncActionManagerAdapter = new ViewersLayoutToSyncActionManagerAdapter(m_workingArea, m_syncActionManager, this);
     m_automaticSynchronizationManager = 0;
     m_relatedStudiesManager = new RelatedStudiesManager();
 #endif
