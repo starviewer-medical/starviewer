@@ -88,7 +88,7 @@ void AutomaticSynchronizationTool::updateSliceLocator()
     }
 }
 
-ToolData *AutomaticSynchronizationTool::getToolData() const
+ToolData* AutomaticSynchronizationTool::getToolData() const
 {
     return this->m_toolData;
 }
@@ -127,7 +127,6 @@ void AutomaticSynchronizationTool::setPositionToToolData()
     m_lastSlice = slice;
 
     m_toolData->setPosition(frameOfReference, m_2DViewer->getCurrentAnatomicalPlaneLabel(), center, increment);
-
 }
 
 void AutomaticSynchronizationTool::updatePosition()

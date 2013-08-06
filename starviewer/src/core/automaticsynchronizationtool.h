@@ -13,12 +13,9 @@ class SliceLocator;
 /**
     Tool de sincronització automatica entre visualitzadors.
 */
-
 class AutomaticSynchronizationTool : public Tool {
 Q_OBJECT
-
 public:
-
     /// Constructor i destructor
     AutomaticSynchronizationTool(QViewer *viewer, QObject *parent = 0);
     ~AutomaticSynchronizationTool();
@@ -33,12 +30,10 @@ public:
     virtual ToolData* getToolData() const;
 
 public slots:
-
     /// Actualitza les dades si el visor està actiu
     void changePositionIfActive();
 
 private slots:
-
     /// Actualitza la posició segons les dades de la toolData
     void updatePosition();
 
@@ -46,7 +41,6 @@ private slots:
     void reset();
 
 private:
-
     /// Posa la posició actual a les dades, sobreescrivint l'existent si n'hi ha
     void setPositionToToolData();
 
@@ -57,7 +51,6 @@ private:
     void updateSliceLocator();
 
 private:
-    
     /// Dades de la tool
     AutomaticSynchronizationToolData *m_toolData;
 
