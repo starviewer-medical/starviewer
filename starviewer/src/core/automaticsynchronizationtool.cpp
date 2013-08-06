@@ -24,6 +24,8 @@ AutomaticSynchronizationTool::AutomaticSynchronizationTool(QViewer *viewer, QObj
     m_lastSlice = m_2DViewer->getCurrentSlice();
     m_roundLostSpacingBetweenSlices = 0.0;
 
+    m_sliceLocator = new SliceLocator;
+
     connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(changePositionIfActive()));
     
     connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(reset()));
@@ -34,7 +36,7 @@ AutomaticSynchronizationTool::AutomaticSynchronizationTool(QViewer *viewer, QObj
 
 AutomaticSynchronizationTool::~AutomaticSynchronizationTool()
 {
-
+    delete m_sliceLocator;
 }
 
 void AutomaticSynchronizationTool::reset()
@@ -136,10 +138,10 @@ void AutomaticSynchronizationTool::updatePosition()
                 {
                     // Actualitzem per posició
                     double *position = m_toolData->getPosition(frameOfReference, m_2DViewer->getCurrentAnatomicalPlaneLabel());
-                    SliceLocator locator;
-                    locator.setVolume(m_2DViewer->getInput());
-                    locator.setPlane(m_2DViewer->getView());
-                    int nearestSlice = locator.getNearestSlice(position);
+                    
+                    m_sliceLocator->setVolume(m_2DViewer->getInput());
+                    m_sliceLocator->setPlane(m_2DViewer->getView());
+                    int nearestSlice = m_sliceLocator->getNearestSlice(position);
 
                     if (nearestSlice != -1)
                     {

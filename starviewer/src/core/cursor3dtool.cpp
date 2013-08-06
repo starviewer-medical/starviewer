@@ -31,6 +31,8 @@ Cursor3DTool::Cursor3DTool(QViewer *viewer, QObject *parent)
     m_2DViewer = Q2DViewer::castFromQViewer(viewer);
 
     m_state = None;
+
+    m_sliceLocator = new SliceLocator;
     
     // Cada cop que el viewer canvïi d'input, hem d'actualitzar el frame of reference
     connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(refreshReferenceViewerData()));
@@ -51,6 +53,7 @@ Cursor3DTool::~Cursor3DTool()
         delete m_crossHair;
     }
     m_viewer->unsetCursor();
+    delete m_sliceLocator;
 }
 
 void Cursor3DTool::setToolData(ToolData *data)
@@ -229,10 +232,9 @@ void Cursor3DTool::projectPoint()
     double position[3];
     m_2DViewer->projectDICOMPointToCurrentDisplayedImage(m_myData->getOriginPointPosition(), position);
 
-    SliceLocator locator;
-    locator.setVolume(m_2DViewer->getInput());
-    locator.setPlane(m_2DViewer->getView());
-    int nearestSlice = locator.getNearestSlice(m_myData->getOriginPointPosition());
+    m_sliceLocator->setVolume(m_2DViewer->getInput());
+    m_sliceLocator->setPlane(m_2DViewer->getView());
+    int nearestSlice = m_sliceLocator->getNearestSlice(m_myData->getOriginPointPosition());
 
     if (nearestSlice != -1)
     {
