@@ -132,7 +132,6 @@ public:
     /// @param max valor màxim
     /// TODO podria ser protected o private, ningú necessita aquestes dades fora del visor
     void getSliceRange(int &min, int &max);
-    int* getSliceRange();
 
     /// Ens dóna la llesca mínima/màxima de llesques, tenint en compte totes les imatges,
     /// tant com si hi ha fases com si no
