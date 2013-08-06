@@ -2392,7 +2392,7 @@ int Q2DViewer::getNearestSlice(double projectedPosition[3], double &distance)
     double currentDistance;
     int minimumSlice = -1;
     ImagePlane *currentPlane = 0;
-    int maximumSlice = getMaximumSlice();
+    int maximumSlice = m_mainVolume->getMaximumSlice(m_lastView);
 
     // Inicialitzem la distància del punt al pla, que incialment serà màxima
     distance = MathTools::DoubleMaximumValue;
