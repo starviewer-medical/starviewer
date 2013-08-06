@@ -1,7 +1,6 @@
 #include "synchronizetool.h"
 #include "q2dviewer.h"
 #include "synchronizetooldata.h"
-#include "toolconfiguration.h"
 #include "logging.h"
 
 namespace udg {
@@ -27,16 +26,6 @@ SynchronizeTool::SynchronizeTool(QViewer *viewer, QObject *parent)
 SynchronizeTool::~SynchronizeTool()
 {
 
-}
-
-void SynchronizeTool::setConfiguration(ToolConfiguration *configuration)
-{
-    if (!(configuration->containsValue("Slicing")))
-    {
-        configuration->addAttribute("Slicing", QVariant(false));
-    }
-    
-    m_toolConfiguration = configuration;
 }
 
 void SynchronizeTool::setToolData(ToolData *data)
@@ -79,73 +68,63 @@ void SynchronizeTool::setEnabled(bool enabled)
 
 void SynchronizeTool::setIncrement(int slice)
 {
-    ToolConfiguration *configuration = getConfiguration();
-
-    if (configuration && configuration->getValue("Slicing").toBool())
+    if (m_lastView.compare(m_q2dviewer->getCurrentAnatomicalPlaneLabel()) == 0)
     {
-        if (m_lastView.compare(m_q2dviewer->getCurrentAnatomicalPlaneLabel()) == 0)
+        double currentSpacingBetweenSlices = m_q2dviewer->getCurrentSpacingBetweenSlices();
+        DEBUG_LOG(QString("setIncrement::currentSpacingBetweenSlices = %1").arg(currentSpacingBetweenSlices));
+        // Si la imatge no té espai entre llesques (0.0), llavors li donem un valor nominal
+        if (currentSpacingBetweenSlices == 0.0)
         {
-            double currentSpacingBetweenSlices = m_q2dviewer->getCurrentSpacingBetweenSlices();
-            DEBUG_LOG(QString("setIncrement::currentSpacingBetweenSlices = %1").arg(currentSpacingBetweenSlices));
-            // Si la imatge no té espai entre llesques (0.0), llavors li donem un valor nominal
-            if (currentSpacingBetweenSlices == 0.0)
-            {
-                currentSpacingBetweenSlices = 1.0;
-            }
+            currentSpacingBetweenSlices = 1.0;
+        }
 
-            // Distancia incrementada
-            double increment = (slice - m_lastSlice) * currentSpacingBetweenSlices;
-            m_lastSlice = slice;
-            disconnect(m_toolData, SIGNAL(sliceChanged()), this, SLOT(applySliceChanges()));
-            this->m_toolData->setIncrement(increment, m_q2dviewer->getCurrentAnatomicalPlaneLabel());
-            connect(m_toolData, SIGNAL(sliceChanged()), SLOT(applySliceChanges()));
-        }
-        else
-        {
-            // No es posa l'increment però s'actualitza la vista
-            m_lastView = m_q2dviewer->getCurrentAnatomicalPlaneLabel();
-        }
+        // Distancia incrementada
+        double increment = (slice - m_lastSlice) * currentSpacingBetweenSlices;
+        m_lastSlice = slice;
+        disconnect(m_toolData, SIGNAL(sliceChanged()), this, SLOT(applySliceChanges()));
+        this->m_toolData->setIncrement(increment, m_q2dviewer->getCurrentAnatomicalPlaneLabel());
+        connect(m_toolData, SIGNAL(sliceChanged()), SLOT(applySliceChanges()));
+    }
+    else
+    {
+        // No es posa l'increment però s'actualitza la vista
+        m_lastView = m_q2dviewer->getCurrentAnatomicalPlaneLabel();
     }
 }
 
 void SynchronizeTool::applySliceChanges()
 {
-    ToolConfiguration *configuration = getConfiguration();
-
-    if (configuration && configuration->getValue("Slicing").toBool())
+    if (m_q2dviewer->getCurrentAnatomicalPlaneLabel().compare(m_toolData->getIncrementView()) == 0)
     {
-        if (m_q2dviewer->getCurrentAnatomicalPlaneLabel().compare(m_toolData->getIncrementView()) == 0)
+        double currentSpacingBetweenSlices = m_q2dviewer->getCurrentSpacingBetweenSlices();
+        DEBUG_LOG(QString("applySliceChanges::currentSpacingBetweenSlices = %1").arg(currentSpacingBetweenSlices));
+        // Si la imatge no té espai entre llesques (0.0), llavors li donem un valor nominal
+        if (currentSpacingBetweenSlices == 0.0)
         {
-            double currentSpacingBetweenSlices = m_q2dviewer->getCurrentSpacingBetweenSlices();
-            DEBUG_LOG(QString("applySliceChanges::currentSpacingBetweenSlices = %1").arg(currentSpacingBetweenSlices));
-            // Si la imatge no té espai entre llesques (0.0), llavors li donem un valor nominal
-            if (currentSpacingBetweenSlices == 0.0)
-            {
-                currentSpacingBetweenSlices = 1.0;
-            }
-
-            double sliceIncrement = (this->m_toolData->getIncrement() / currentSpacingBetweenSlices) + m_roundLostSpacingBetweenSlices;
-            int slices = qRound(sliceIncrement);
-            m_roundLostSpacingBetweenSlices = sliceIncrement - slices;
-            disconnect(m_viewer, SIGNAL(sliceChanged(int)), this, SLOT(setIncrement(int)));
-
-            int nextSlice = m_lastSlice + slices;
-            if (nextSlice > m_q2dviewer->getMaximumSlice())
-            {
-                // Fixem a la última llesca per si hi ha l'slicinc cíclic activat
-                nextSlice = m_q2dviewer->getMaximumSlice();
-            }
-            else if (nextSlice < 0)
-            {
-                // Fixem a la primera llesca per si hi ha l'slicinc cíclic activat
-                nextSlice = 0;
-            }
-
-            m_q2dviewer->setSlice(nextSlice);
-
-            m_lastSlice += slices;
-            connect(m_viewer, SIGNAL(sliceChanged(int)), SLOT(setIncrement(int)));
+            currentSpacingBetweenSlices = 1.0;
         }
+
+        double sliceIncrement = (this->m_toolData->getIncrement() / currentSpacingBetweenSlices) + m_roundLostSpacingBetweenSlices;
+        int slices = qRound(sliceIncrement);
+        m_roundLostSpacingBetweenSlices = sliceIncrement - slices;
+        disconnect(m_viewer, SIGNAL(sliceChanged(int)), this, SLOT(setIncrement(int)));
+
+        int nextSlice = m_lastSlice + slices;
+        if (nextSlice > m_q2dviewer->getMaximumSlice())
+        {
+            // Fixem a la última llesca per si hi ha l'slicinc cíclic activat
+            nextSlice = m_q2dviewer->getMaximumSlice();
+        }
+        else if (nextSlice < 0)
+        {
+            // Fixem a la primera llesca per si hi ha l'slicinc cíclic activat
+            nextSlice = 0;
+        }
+
+        m_q2dviewer->setSlice(nextSlice);
+
+        m_lastSlice += slices;
+        connect(m_viewer, SIGNAL(sliceChanged(int)), SLOT(setIncrement(int)));
     }
 }
 
