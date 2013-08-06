@@ -73,10 +73,19 @@ void AutomaticSynchronizationTool::initialize()
             }
         }
 
+        updateSliceLocator();
         changePositionIfActive();
         updatePosition();
     }
+}
 
+void AutomaticSynchronizationTool::updateSliceLocator()
+{
+    if (m_2DViewer)
+    {
+        m_sliceLocator->setVolume(m_2DViewer->getInput());
+        m_sliceLocator->setPlane(m_2DViewer->getView());
+    }
 }
 
 ToolData *AutomaticSynchronizationTool::getToolData() const
@@ -139,10 +148,7 @@ void AutomaticSynchronizationTool::updatePosition()
                     // Actualitzem per posició
                     double *position = m_toolData->getPosition(frameOfReference, m_2DViewer->getCurrentAnatomicalPlaneLabel());
                     
-                    m_sliceLocator->setVolume(m_2DViewer->getInput());
-                    m_sliceLocator->setPlane(m_2DViewer->getView());
                     int nearestSlice = m_sliceLocator->getNearestSlice(position);
-
                     if (nearestSlice != -1)
                     {
                         m_2DViewer->setSlice(nearestSlice);
