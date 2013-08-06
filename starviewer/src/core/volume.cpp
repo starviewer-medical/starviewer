@@ -415,6 +415,35 @@ ImagePlane* Volume::getImagePlane(int sliceNumber, OrthogonalPlane::OrthogonalPl
     return imagePlane;
 }
 
+void Volume::getSliceRange(int &min, int &max, OrthogonalPlane::OrthogonalPlaneType plane)
+{
+    if (m_numberOfPhases > 1 && plane == OrthogonalPlane::XYPlane)
+    {
+        min = 0;
+        max = getNumberOfSlicesPerPhase() - 1;
+    }
+    else
+    {
+        int *extent = getWholeExtent();
+        min = extent[OrthogonalPlane::getZIndexForView(plane) * 2];
+        max = extent[OrthogonalPlane::getZIndexForView(plane) * 2 + 1];
+    }
+}
+
+int Volume::getMaximumSlice(OrthogonalPlane::OrthogonalPlaneType plane)
+{
+    int max, trash;
+    this->getSliceRange(trash, max, plane);
+    return max;
+}
+
+int Volume::getMinimumSlice(OrthogonalPlane::OrthogonalPlaneType plane)
+{
+    int min, trash;
+    this->getSliceRange(min, trash, plane);
+    return min;
+}
+
 void Volume::getStackDirection(double direction[3], int stack)
 {
     // TODO Encara no suportem múltiples stacks!!!!
