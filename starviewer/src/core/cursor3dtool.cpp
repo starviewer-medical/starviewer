@@ -10,6 +10,7 @@
 #include "imageplane.h"
 #include "drawercrosshair.h"
 #include "drawer.h"
+#include "slicelocator.h"
 // Vtk
 #include <vtkCommand.h>
 #include <vtkMatrix4x4.h>
@@ -229,7 +230,9 @@ void Cursor3DTool::projectPoint()
     m_2DViewer->projectDICOMPointToCurrentDisplayedImage(m_myData->getOriginPointPosition(), position);
 
     double distance;
-    int nearestSlice = m_2DViewer->getNearestSlice(m_myData->getOriginPointPosition(), distance);
+    SliceLocator locator;
+    locator.setVolume(m_2DViewer->getInput());
+    int nearestSlice = locator.getNearestSlice(m_myData->getOriginPointPosition(), m_2DViewer->getView(), distance);
 
     double currentSpacingBetweenSlices = m_2DViewer->getCurrentSpacingBetweenSlices();
     if (currentSpacingBetweenSlices == 0.0)
