@@ -344,8 +344,7 @@ void ReferenceLinesTool::updateReferenceImagePlanesToProject()
                 Volume *currentInput = m_2DViewer->getInput();
                 if (currentInput)
                 {
-                    planes << currentInput->getImagePlane(m_2DViewer->getCurrentSlice() + m_2DViewer->getSlabThickness() - 1, m_2DViewer->getCurrentPhase(),
-                        m_2DViewer->getView());
+                    planes << currentInput->getImagePlane(m_2DViewer->getCurrentSlice() + m_2DViewer->getSlabThickness() - 1, m_2DViewer->getView());
                 }
 
                 m_myData->setPlanesToProject(planes);

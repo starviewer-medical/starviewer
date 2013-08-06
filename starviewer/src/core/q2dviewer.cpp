@@ -1378,7 +1378,7 @@ ImagePlane* Q2DViewer::getCurrentImagePlane(bool vtkReconstructionHack)
         return 0;
     }
     
-    return m_mainVolume->getImagePlane(m_currentSlice, m_currentPhase, m_lastView, vtkReconstructionHack);
+    return m_mainVolume->getImagePlane(m_currentSlice, m_lastView, vtkReconstructionHack);
 }
 
 void Q2DViewer::projectDICOMPointToCurrentDisplayedImage(const double pointToProject[3], double projectedPoint[3], bool vtkReconstructionHack)
@@ -2410,14 +2410,13 @@ int Q2DViewer::getNearestSlice(double projectedPosition[3], double &distance)
     int minimumSlice = -1;
     ImagePlane *currentPlane = 0;
     int maximumSlice = getMaximumSlice();
-    int currentPhase = getCurrentPhase();
 
     // Inicialitzem la distància del punt al pla, que incialment serà màxima
     distance = MathTools::DoubleMaximumValue;
     
     for (int i = 0; i <= maximumSlice; i++)
     {
-        currentPlane = m_mainVolume->getImagePlane(i, currentPhase, m_lastView);
+        currentPlane = m_mainVolume->getImagePlane(i, m_lastView);
 
         if (currentPlane)
         {

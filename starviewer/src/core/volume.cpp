@@ -317,7 +317,7 @@ Image* Volume::getImage(int sliceNumber, int phaseNumber) const
     return image;
 }
 
-ImagePlane* Volume::getImagePlane(int sliceNumber, int phaseNumber, OrthogonalPlane::OrthogonalPlaneType plane, bool vtkReconstructionHack)
+ImagePlane* Volume::getImagePlane(int sliceNumber, OrthogonalPlane::OrthogonalPlaneType plane, bool vtkReconstructionHack)
 {
     ImagePlane *imagePlane = 0;
     int *dimensions = getDimensions();
@@ -328,7 +328,7 @@ ImagePlane* Volume::getImagePlane(int sliceNumber, int phaseNumber, OrthogonalPl
     {
         case OrthogonalPlane::XYPlane:
         {
-            Image *image = getImage(sliceNumber, phaseNumber);
+            Image *image = getImage(sliceNumber);
             if (image)
             {
                 imagePlane = new ImagePlane();
