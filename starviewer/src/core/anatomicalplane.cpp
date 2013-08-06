@@ -94,4 +94,32 @@ const AnatomicalPlane::AnatomicalPlaneType AnatomicalPlane::getPlaneTypeFromPati
     return planeType;
 }
 
+const PatientOrientation AnatomicalPlane::getDefaultRadiologicalOrienation(AnatomicalPlaneType plane)
+{
+    PatientOrientation orientation;
+
+    switch (plane)
+    {
+        case Axial:
+            orientation.setLabels(PatientOrientation::LeftLabel, PatientOrientation::PosteriorLabel);
+            break;
+
+        case Sagittal:
+            orientation.setLabels(PatientOrientation::PosteriorLabel, PatientOrientation::FeetLabel);
+            break;
+
+        case Coronal:
+            orientation.setLabels(PatientOrientation::LeftLabel, PatientOrientation::FeetLabel);
+            break;
+
+        case Oblique:
+        case NotAvailable:
+        default:
+            // We don't have enough information to provide such information
+            break;
+    }
+
+    return orientation;
+}
+
 } // End namespace udg
