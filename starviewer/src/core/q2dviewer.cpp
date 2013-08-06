@@ -39,7 +39,6 @@
 #include <vtkPropPicker.h>
 #include <QVTKWidget.h>
 #include <vtkWindowToImageFilter.h>
-#include <vtkPlane.h>
 // Anotacions
 #include <vtkCornerAnnotation.h>
 #include <vtkTextActor.h>
@@ -2409,7 +2408,6 @@ int Q2DViewer::getNearestSlice(double projectedPosition[3], double &distance)
 {
     double currentDistance;
     int minimumSlice = -1;
-    double currentPlaneOrigin[3], currentNormalVector[3];
     ImagePlane *currentPlane = 0;
     int maximumSlice = getMaximumSlice();
     int currentPhase = getCurrentPhase();
@@ -2423,10 +2421,7 @@ int Q2DViewer::getNearestSlice(double projectedPosition[3], double &distance)
 
         if (currentPlane)
         {
-            currentPlane->getOrigin(currentPlaneOrigin);
-            currentPlane->getNormalVector(currentNormalVector);
-            // TODO Calcular currentDistance amb QVector3D::distanceToPlane() i obtenir la normal amb ImagePlane::getImageOrientation()::getNormalVector()
-            currentDistance = vtkPlane::DistanceToPlane(projectedPosition, currentNormalVector, currentPlaneOrigin);
+            currentDistance = currentPlane->getDistanceToPoint(projectedPosition);
 
             if (currentDistance < distance)
             {
