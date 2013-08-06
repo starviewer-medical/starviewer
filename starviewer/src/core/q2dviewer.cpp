@@ -445,20 +445,7 @@ void Q2DViewer::getSliceRange(int &min, int &max)
 {
     if (m_mainVolume)
     {
-        // Si és un volum 3D normal...
-        if (m_numberOfPhases == 1)
-        {
-            int *extent = m_mainVolume->getWholeExtent();
-            min = extent[m_lastView * 2];
-            max = extent[m_lastView * 2 + 1];
-        }
-        // Si tenim 4D
-        else
-        {
-            // TODO Assumim que sempre estem en axial!
-            min = 0;
-            max = m_mainVolume->getNumberOfSlicesPerPhase() - 1;
-        }
+        m_mainVolume->getSliceRange(min, max, m_lastView);
     }
     else
     {
@@ -468,16 +455,26 @@ void Q2DViewer::getSliceRange(int &min, int &max)
 
 int Q2DViewer::getMinimumSlice()
 {
-    int min, trash;
-    this->getSliceRange(min, trash);
-    return min;
+    if (m_mainVolume)
+    {
+        return m_mainVolume->getMinimumSlice(m_lastView);
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 int Q2DViewer::getMaximumSlice()
 {
-    int max, trash;
-    this->getSliceRange(trash, max);
-    return max;
+    if (m_mainVolume)
+    {
+        return m_mainVolume->getMaximumSlice(m_lastView);
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 void Q2DViewer::addActors()
