@@ -53,6 +53,9 @@ private:
     /// Inicialitza el grup a les dades, si és que no està inicialitzat
     void initialize();
 
+    /// Updates the slice locator with the current data
+    void updateSliceLocator();
+
 private:
     
     /// Dades de la tool
