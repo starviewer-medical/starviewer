@@ -264,6 +264,7 @@ HEADERS += extensionfactory.h \
     applicationupdatechecker.h \
     diagnosistestfactory.h \
     diagnosistestfactoryregister.h \
+    slicelocator.h \
     automaticsynchronizationtool.h \
     automaticsynchronizationtooldata.h \
     firewallaccess.h \
@@ -570,6 +571,7 @@ SOURCES += extensionmediator.cpp \
     machineinformation.cpp \
     diagnosistestresult.cpp \
     applicationupdatechecker.cpp \
+    slicelocator.cpp \
     automaticsynchronizationtool.cpp \
     automaticsynchronizationtooldata.cpp \
     firewallaccess.cpp \
