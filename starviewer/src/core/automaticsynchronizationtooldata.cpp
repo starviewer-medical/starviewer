@@ -120,7 +120,6 @@ int AutomaticSynchronizationToolData::getNumberOfGroups()
     return m_numberOfGroups;
 }
 
-
 QString AutomaticSynchronizationToolData::getSelectedView()
 {
     return m_selectedView;
