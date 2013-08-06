@@ -115,13 +115,6 @@ public:
     /// @return El pla imatge actual
     ImagePlane* getCurrentImagePlane(bool vtkReconstructionHack = false);
 
-    /// Ens dóna el pla d'imatge de la llesca
-    /// @param vtkReconstructionHack HACK variable booleana que ens fa un petit hack
-    /// per casos en que el pla "real" no és el que volem i necessitem una petita modificació
-    /// ATENCIÓ: Només es donarà aquest paràmetre (amb valor true) en casos que realment se sàpiga el que s'està fent!
-    /// @return El pla imatge de la llesca
-    ImagePlane* getImagePlane(int sliceNumber, int phaseNumber, bool vtkReconstructionHack = false);
-
     /// donat un punt 3D en espai de referència DICOM, ens dóna la projecció d'aquest punt sobre
     /// el pla actual, transformat a coordenades de món VTK
     /// @param pointToProject[]

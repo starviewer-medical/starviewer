@@ -1374,12 +1374,12 @@ Image* Q2DViewer::getCurrentDisplayedImage() const
 
 ImagePlane* Q2DViewer::getCurrentImagePlane(bool vtkReconstructionHack)
 {
-    return this->getImagePlane(m_currentSlice, m_currentPhase, vtkReconstructionHack);
-}
-
-ImagePlane* Q2DViewer::getImagePlane(int sliceNumber, int phaseNumber, bool vtkReconstructionHack)
-{
-    return m_mainVolume->getImagePlane(sliceNumber, phaseNumber, m_lastView, vtkReconstructionHack);
+    if (!m_mainVolume)
+    {
+        return 0;
+    }
+    
+    return m_mainVolume->getImagePlane(m_currentSlice, m_currentPhase, m_lastView, vtkReconstructionHack);
 }
 
 void Q2DViewer::projectDICOMPointToCurrentDisplayedImage(const double pointToProject[3], double projectedPoint[3], bool vtkReconstructionHack)
@@ -2419,7 +2419,7 @@ int Q2DViewer::getNearestSlice(double projectedPosition[3], double &distance)
     
     for (int i = 0; i <= maximumSlice; i++)
     {
-        currentPlane = getImagePlane(i, currentPhase);
+        currentPlane = m_mainVolume->getImagePlane(i, currentPhase, m_lastView);
 
         if (currentPlane)
         {
