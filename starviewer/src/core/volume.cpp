@@ -7,6 +7,7 @@
 #include "study.h"
 #include "mathtools.h"
 #include "volumepixeldataiterator.h"
+#include "imageplane.h"
 
 namespace udg {
 
@@ -314,6 +315,104 @@ Image* Volume::getImage(int sliceNumber, int phaseNumber) const
     }
 
     return image;
+}
+
+ImagePlane* Volume::getImagePlane(int sliceNumber, int phaseNumber, OrthogonalPlane::OrthogonalPlaneType plane, bool vtkReconstructionHack)
+{
+    ImagePlane *imagePlane = 0;
+    int *dimensions = getDimensions();
+    double *spacing = getSpacing();
+    const double *origin = getOrigin();
+    
+    switch (plane)
+    {
+        case OrthogonalPlane::XYPlane:
+        {
+            Image *image = getImage(sliceNumber, phaseNumber);
+            if (image)
+            {
+                imagePlane = new ImagePlane();
+                imagePlane->fillFromImage(image);
+            }
+        }
+            break;
+
+        case OrthogonalPlane::YZPlane:
+        {
+            Image *image = getImage(0);
+            if (image)
+            {
+                QVector3D sagittalRowVector = image->getImageOrientationPatient().getColumnVector();
+                QVector3D sagittalColumnVector;
+                if (vtkReconstructionHack)
+                {
+                    // Returning a fake plane, regarding real world coords, but fits better to vtk world
+                    sagittalColumnVector = image->getImageOrientationPatient().getNormalVector();
+                }
+                else
+                {
+                    // This would be the norm, returning the real plane direction
+                    double sagittalColumnArray[3];
+                    getStackDirection(sagittalColumnArray, 0);
+                    sagittalColumnVector.setX(sagittalColumnArray[0]);
+                    sagittalColumnVector.setY(sagittalColumnArray[1]);
+                    sagittalColumnVector.setZ(sagittalColumnArray[2]);
+                }
+
+                imagePlane = new ImagePlane();
+                imagePlane->setImageOrientation(ImageOrientation(sagittalRowVector, sagittalColumnVector));
+                imagePlane->setSpacing(PixelSpacing2D(spacing[1], spacing[2]));
+                imagePlane->setThickness(spacing[0]);
+                imagePlane->setRows(dimensions[2]);
+                imagePlane->setColumns(dimensions[1]);
+
+                QVector3D sagittalNormalVector = image->getImageOrientationPatient().getRowVector();
+                imagePlane->setOrigin(origin[0] + sliceNumber * sagittalNormalVector.x() * spacing[0],
+                                        origin[1] + sliceNumber * sagittalNormalVector.y() * spacing[0],
+                                        origin[2] + sliceNumber * sagittalNormalVector.z() * spacing[0]);
+            }
+        }
+            break;
+
+        case OrthogonalPlane::XZPlane:
+        {
+            Image *image = getImage(0);
+            if (image)
+            {
+                QVector3D coronalRowVector = image->getImageOrientationPatient().getRowVector();
+                QVector3D coronalColumnVector;
+                if (vtkReconstructionHack)
+                {
+                    // Returning a fake plane, regarding real world coords, but fits better to vtk world
+                    coronalColumnVector = image->getImageOrientationPatient().getNormalVector();
+                }
+                else
+                {
+                    // This would be the norm, returning the real plane direction
+                    double coronalColumnArray[3];
+                    getStackDirection(coronalColumnArray, 0);
+                    coronalColumnVector.setX(coronalColumnArray[0]);
+                    coronalColumnVector.setY(coronalColumnArray[1]);
+                    coronalColumnVector.setZ(coronalColumnArray[2]);
+                }
+
+                imagePlane = new ImagePlane();
+                imagePlane->setImageOrientation(ImageOrientation(coronalRowVector, coronalColumnVector));
+                imagePlane->setSpacing(PixelSpacing2D(spacing[0], spacing[2]));
+                imagePlane->setThickness(spacing[1]);
+                imagePlane->setRows(dimensions[2]);
+                imagePlane->setColumns(dimensions[0]);
+
+                QVector3D coronalNormalVector = image->getImageOrientationPatient().getColumnVector();
+                imagePlane->setOrigin(origin[0] + coronalNormalVector.x() * sliceNumber * spacing[1],
+                                        origin[1] + coronalNormalVector.y() * sliceNumber * spacing[1],
+                                        origin[2] + coronalNormalVector.z() * sliceNumber * spacing[1]);
+            }
+        }
+            break;
+    }
+    
+    return imagePlane;
 }
 
 void Volume::getStackDirection(double direction[3], int stack)
