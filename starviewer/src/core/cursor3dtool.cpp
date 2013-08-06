@@ -229,21 +229,12 @@ void Cursor3DTool::projectPoint()
     double position[3];
     m_2DViewer->projectDICOMPointToCurrentDisplayedImage(m_myData->getOriginPointPosition(), position);
 
-    double distance;
     SliceLocator locator;
     locator.setVolume(m_2DViewer->getInput());
     locator.setPlane(m_2DViewer->getView());
-    int nearestSlice = locator.getNearestSlice(m_myData->getOriginPointPosition(), distance);
+    int nearestSlice = locator.getNearestSlice(m_myData->getOriginPointPosition());
 
-    double currentSpacingBetweenSlices = m_2DViewer->getCurrentSpacingBetweenSlices();
-    if (currentSpacingBetweenSlices == 0.0)
-    {
-        // Si la imatge no té espai entre llesques (0.0), llavors li donem un valor nominal
-        // TODO En teoria l'spacing mai hauria de poder ser 0.0, tot i així es manté per seguretat
-        currentSpacingBetweenSlices = 1.0;
-    }
-    
-    if (nearestSlice != -1 && distance < (currentSpacingBetweenSlices * 1.5))
+    if (nearestSlice != -1)
     {
         m_2DViewer->setSlice(nearestSlice);
         m_crossHair->setCentrePoint(position[0], position[1], position[2]);
