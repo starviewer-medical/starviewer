@@ -6,6 +6,7 @@
 namespace udg {
 
 class Volume;
+class ImagePlane;
 
 /**
     Class that given a point locates an specific slice from a Volume
@@ -21,10 +22,11 @@ public:
     /// Sets the plane where the computings will be taken. If no plane set, it will be the XY plane by default.
     void setPlane(OrthogonalPlane::OrthogonalPlaneType plane);
     
-    /// Returns the nearest slice to the given point.
+    /// Returns the nearest slice to the given point or ImagePlane.
     /// The nearest slice will be computed against the given volume and plane from setVolume() and setPlane() methods.
     /// If no slice is found to be considered near, -1 will be returned
     int getNearestSlice(double point[3]);
+    int getNearestSlice(ImagePlane *imagePlane);
 
 private:
     /// Returns true if the given slice distance could be considered to be within a certain proximity
