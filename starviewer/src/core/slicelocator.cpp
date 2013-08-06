@@ -36,21 +36,18 @@ int SliceLocator::getNearestSlice(double point[3])
         return -1;
     }
     
-    double distance = MathTools::DoubleMaximumValue;
-    double currentDistance;
+    double nearestSliceDistance = MathTools::DoubleMaximumValue;
     int nearestSlice = -1;
-    ImagePlane *currentPlane = 0;
-    int maximumSlice = m_volume->getMaximumSlice(m_volumePlane);
-
-    for (int i = 0; i <= maximumSlice; i++)
+    
+    for (int i = 0; i <= m_volume->getMaximumSlice(m_volumePlane); i++)
     {
-        currentPlane = m_volume->getImagePlane(i, m_volumePlane);
+        ImagePlane *currentPlane = m_volume->getImagePlane(i, m_volumePlane);
         if (currentPlane)
         {
-            currentDistance = currentPlane->getDistanceToPoint(point);
-            if (currentDistance < distance)
+            double currentDistance = currentPlane->getDistanceToPoint(point);
+            if (currentDistance < nearestSliceDistance)
             {
-                distance = currentDistance;
+                nearestSliceDistance = currentDistance;
                 nearestSlice = i;
             }
 
@@ -58,7 +55,7 @@ int SliceLocator::getNearestSlice(double point[3])
         }
     }
 
-    if (isWithinProximityBounds(distance))
+    if (isWithinProximityBounds(nearestSliceDistance))
     {
         return nearestSlice;
     }
