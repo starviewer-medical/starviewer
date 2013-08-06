@@ -38,26 +38,8 @@ private slots:
     /// Posa l'increment a les dades
     void setIncrement(int slice);
 
-    /// Posa el window level a les dades
-    void setWindowLevel(double window, double level);
-
-    /// Posa el factor de zoom
-    void setZoomFactor(double factor);
-
-    /// Posa el pan
-    void setPan(double *motionVector);
-
     /// Aplica els canvis de canvi de llesca
     void applySliceChanges();
-
-    /// Aplica els canvis del window level
-    void applyWindowLevelChanges();
-
-    /// Aplica els canvis de zoom
-    void applyZoomFactorChanges();
-
-    /// Aplica els canvis de pan
-    void applyPanChanges();
 
     /// Reseteja els paràmetres amb els que es realitza la sincronització
     /// S'invoca quan es canvia de volum, vista o s'activa l'eina

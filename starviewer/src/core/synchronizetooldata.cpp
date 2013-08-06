@@ -1,6 +1,5 @@
 #include "synchronizetooldata.h"
-#include "q2dviewer.h"
-#include "logging.h"
+#include "orthogonalplane.h"
 
 namespace udg {
 
@@ -9,12 +8,6 @@ SynchronizeToolData::SynchronizeToolData()
 {
     m_increment = 0;
     m_incrementView = OrthogonalPlane::XYPlane;
-    m_level = 0;
-    m_window = 0;
-    m_zoomFactor = 0;
-    m_panVector[0] = 0;
-    m_panVector[1] = 1;
-    m_panVector[2] = 2;
 }
 
 SynchronizeToolData::~SynchronizeToolData()
@@ -36,49 +29,6 @@ double SynchronizeToolData::getIncrement()
 QString SynchronizeToolData::getIncrementView()
 {
     return m_incrementView;
-}
-
-
-void SynchronizeToolData::setWindowLevel(double window, double level)
-{
-    m_level = level;
-    m_window = window;
-    emit(windowLevelChanged());
-}
-
-double SynchronizeToolData::getWindow()
-{
-    return m_window;
-}
-
-double SynchronizeToolData::getLevel()
-{
-    return m_level;
-}
-
-void SynchronizeToolData::setZoomFactor(double factor)
-{
-    m_zoomFactor = factor;
-    emit(zoomFactorChanged());
-}
-
-double SynchronizeToolData::getZoomFactor()
-{
-    return m_zoomFactor;
-}
-
-void SynchronizeToolData::setPan(double motionVector[3])
-{
-    m_panVector[0] = motionVector[0];
-    m_panVector[1] = motionVector[1];
-    m_panVector[2] = motionVector[2];
-    DEBUG_LOG(" DADES PAN CANVIADES ");
-    emit(panChanged());
-}
-
-double* SynchronizeToolData::getPan()
-{
-    return m_panVector;
 }
 
 }
