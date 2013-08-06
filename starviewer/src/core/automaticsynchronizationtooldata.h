@@ -9,11 +9,9 @@ namespace udg {
 /**
     Classe per guardar les dades de la tool automatica de sincronització.
 */
-
 class AutomaticSynchronizationToolData : public ToolData {
 Q_OBJECT
 public:
-
     /// Constructor i destructor
     AutomaticSynchronizationToolData();
     ~AutomaticSynchronizationToolData();
@@ -52,12 +50,10 @@ public:
     void updateActiveViewer(QString uid, QString view);
 
 public slots:
-
     /// Posa la posició pel frameOfReferenceUID i la vista view. Si existeix el sobreescriu, altrament l'afegeix.
     void setPosition(QString frameOfReferenceUID, QString view, double position[3], double displacement);
 
 private:
-
     /// Taula hash que guarda per cada frame of reference UID un altre hash, que guarda per cada vista la posició on es troba.
     QHash<QString, QHash <QString, double*> > m_positionForEachFrameOfReferenceAndReconstruction;
 
@@ -75,7 +71,6 @@ private:
 
     /// Ultim desplaçament realitzat
     double m_lastDisplacement;
-
 };
 
 }
