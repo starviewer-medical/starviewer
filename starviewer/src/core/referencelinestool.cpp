@@ -341,7 +341,12 @@ void ReferenceLinesTool::updateReferenceImagePlanesToProject()
             {
                 QList<ImagePlane*> planes;
                 planes << m_2DViewer->getCurrentImagePlane();
-                planes << m_2DViewer->getImagePlane(m_2DViewer->getCurrentSlice() + m_2DViewer->getSlabThickness() - 1, m_2DViewer->getCurrentPhase());
+                Volume *currentInput = m_2DViewer->getInput();
+                if (currentInput)
+                {
+                    planes << currentInput->getImagePlane(m_2DViewer->getCurrentSlice() + m_2DViewer->getSlabThickness() - 1, m_2DViewer->getCurrentPhase(),
+                        m_2DViewer->getView());
+                }
 
                 m_myData->setPlanesToProject(planes);
             }
