@@ -15,7 +15,6 @@
 #include "qdicomdumpbrowser.h"
 #include "statswatcher.h"
 #include "automaticsynchronizationtool.h"
-#include "automaticsynchronizationmanager.h"
 #include "automaticsynchronizationtooldata.h"
 #include "coresettings.h"
 // Per poder fer screenshots desde menú
@@ -72,7 +71,6 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_layoutToSyncActionManagerAdapter = new ViewersLayoutToSyncActionManagerAdapter(m_workingArea, m_syncActionManager, this);
     connect(m_propagateToolButton, SIGNAL(toggled(bool)), m_syncActionManager, SLOT(enable(bool)));
     m_propagateToolButton->setChecked(false);
-    m_automaticSynchronizationManager = 0;
     m_relatedStudiesManager = new RelatedStudiesManager();
 #endif
 
@@ -851,17 +849,6 @@ void Q2DViewerExtension::enableAutomaticSynchronizationToViewer(bool enable)
     {
         // Desactivem sincronització manual, però no el botó
         disableSynchronization();
-
-        Tool *tool = m_workingArea->getSelectedViewer()->getViewer()->getToolProxy()->getTool("AutomaticSynchronizationTool");
-        AutomaticSynchronizationToolData *toolData = dynamic_cast<AutomaticSynchronizationToolData*>(tool->getToolData());
-
-        if (m_automaticSynchronizationManager)
-        {
-            delete m_automaticSynchronizationManager;
-        }
-
-        m_automaticSynchronizationManager = new AutomaticSynchronizationManager(toolData, m_workingArea);
-        m_automaticSynchronizationManager->initialize();
     }
 }
 

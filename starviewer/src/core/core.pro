@@ -269,7 +269,6 @@ HEADERS += extensionfactory.h \
     automaticsynchronizationtooldata.h \
     firewallaccess.h \
     firewallaccesstest.h \
-    automaticsynchronizationmanager.h \
     slicingwheeltool.h \
     qmessageboxautoclose.h \
     commandlineoption.h \
@@ -576,7 +575,6 @@ SOURCES += extensionmediator.cpp \
     automaticsynchronizationtooldata.cpp \
     firewallaccess.cpp \
     firewallaccesstest.cpp \
-    automaticsynchronizationmanager.cpp \
     slicingwheeltool.cpp \
     qmessageboxautoclose.cpp \
     commandlineoption.cpp \
