@@ -962,8 +962,7 @@ void Q2DViewer::resetViewToAxial()
     // Camera view space and real world projection space should be decoupled
     // We only apply setImageOrientation() when original acquisitions are different from axial
     // because when the patient is acquired in prono position we don't want to change the acquisition orientation and respect the acquired one
-    PatientOrientation desiredOrientation;
-    desiredOrientation.setLabels(PatientOrientation::LeftLabel, PatientOrientation::PosteriorLabel);
+    PatientOrientation desiredOrientation = AnatomicalPlane::getDefaultRadiologicalOrienation(AnatomicalPlane::Axial);
     switch (AnatomicalPlane::getPlaneTypeFromPatientOrientation(image->getPatientOrientation()))
     {
         case AnatomicalPlane::Axial:
@@ -1031,8 +1030,7 @@ void Q2DViewer::resetViewToCoronal()
     // Apply the right orientation for the standard coronal projection
     // We have to apply this for any projection the original acquisition is 
     // because when the patient is acquired in prono position it is easier to deal with the final orientation
-    PatientOrientation desiredOrientation;
-    desiredOrientation.setLabels(PatientOrientation::LeftLabel, PatientOrientation::FeetLabel);
+    PatientOrientation desiredOrientation = AnatomicalPlane::getDefaultRadiologicalOrienation(AnatomicalPlane::Coronal);
     setImageOrientation(desiredOrientation);
 
     // HACK End of performance hack
@@ -1082,8 +1080,7 @@ void Q2DViewer::resetViewToSagital()
     // Apply the right orientation for the standard sagital projection.
     // We have to apply this for any projection the original acquisition is 
     // because when the patient is acquired in prono position it is easier to deal with the final orientation
-    PatientOrientation desiredOrientation;
-    desiredOrientation.setLabels(PatientOrientation::PosteriorLabel, PatientOrientation::FeetLabel);
+    PatientOrientation desiredOrientation = AnatomicalPlane::getDefaultRadiologicalOrienation(AnatomicalPlane::Sagittal);
     setImageOrientation(desiredOrientation);
 
     // HACK End of performance hack
