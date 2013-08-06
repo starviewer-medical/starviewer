@@ -39,7 +39,7 @@ int SliceLocator::getNearestSlice(double point[3])
     double nearestSliceDistance = MathTools::DoubleMaximumValue;
     int nearestSlice = -1;
     
-    for (int i = 0; i <= m_volume->getMaximumSlice(m_volumePlane); i++)
+    for (int i = 0; i <= m_volume->getMaximumSlice(m_volumePlane); ++i)
     {
         ImagePlane *currentPlane = m_volume->getImagePlane(i, m_volumePlane);
         if (currentPlane)
