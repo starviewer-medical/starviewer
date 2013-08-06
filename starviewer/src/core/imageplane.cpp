@@ -308,6 +308,15 @@ int ImagePlane::getIntersections(ImagePlane *planeToIntersect, double firstInter
     return numberOfIntersections;
 }
 
+double ImagePlane::getDistanceToPoint(double point[3])
+{
+    double currentNormalVector[3];
+    getNormalVector(currentNormalVector);
+    
+    // TODO An alternative method would be computing distance with QVector3D::distanceToPlane()
+    return vtkPlane::DistanceToPlane(point, currentNormalVector, m_origin);
+}
+
 void ImagePlane::updateCenter()
 {
     double rowVector[3];

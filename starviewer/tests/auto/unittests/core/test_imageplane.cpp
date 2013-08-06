@@ -18,9 +18,13 @@ private slots:
 
     void fillFromImage_fillsExpectedValues_data();
     void fillFromImage_fillsExpectedValues();
+
+    void getDistanceToPoint_ReturnsExpecteValues_data();
+    void getDistanceToPoint_ReturnsExpecteValues();
 };
 
 Q_DECLARE_METATYPE(ImagePlane)
+Q_DECLARE_METATYPE(double*)
 
 void test_ImagePlane::getRowLength_ReturnsExpectedValues_data()
 {
@@ -126,6 +130,33 @@ void test_ImagePlane::fillFromImage_fillsExpectedValues()
     QFETCH(ImagePlane, expectedImagePlane);
 
     QVERIFY(filledImagePlane == expectedImagePlane);
+}
+
+void test_ImagePlane::getDistanceToPoint_ReturnsExpecteValues_data()
+{
+    QTest::addColumn<double*>("point");
+    QTest::addColumn<ImagePlane>("plane");
+    QTest::addColumn<double>("expectedDistance");
+
+    double *p1 = new double[3];
+    p1[0] = 5.6;
+    p1[1] = 8.7;
+    p1[2] = -3.4;
+
+    ImagePlane plane;
+    plane.setOrigin(0.9, 1.4, 22.3);
+    plane.setSpacing(PixelSpacing2D(1.25, 1.25));
+    plane.setImageOrientation(ImageOrientation(QVector3D(1, 0, 0), QVector3D(0, 1, 0)));
+    QTest::newRow("Distance to an axial plane") << p1 << plane << 25.7;
+}
+
+void test_ImagePlane::getDistanceToPoint_ReturnsExpecteValues()
+{
+    QFETCH(double*, point);
+    QFETCH(ImagePlane, plane);
+    QFETCH(double, expectedDistance);
+
+    QCOMPARE(plane.getDistanceToPoint(point), expectedDistance);
 }
 
 DECLARE_TEST(test_ImagePlane)
