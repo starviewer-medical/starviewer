@@ -56,6 +56,9 @@ public:
     /// Si l'string donada no es correspon amb cap d'aquests valors, el valor transformat serà '?'
     static QString getOppositeOrientationLabel(const QString &label);
 
+    /// Equality operator
+    bool operator==(const PatientOrientation &orientation) const;
+
 private:
     /// Ens valida una cadena d'orientació de pacient en format DICOM. Acceptarem cadenes amb 2 o 3 elements o buides.
     /// Si la cadena és correcta retorna cert, fals altrament

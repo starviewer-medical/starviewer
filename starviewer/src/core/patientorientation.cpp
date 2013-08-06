@@ -130,6 +130,11 @@ QString PatientOrientation::getOppositeOrientationLabel(const QString &label)
     return oppositeLabel;
 }
 
+bool PatientOrientation::operator==(const PatientOrientation &orientation) const
+{
+    return m_patientOrientationString == orientation.m_patientOrientationString;
+}
+
 bool PatientOrientation::validateDICOMFormattedPatientOrientationString(const QString &string)
 {
     // Construim l'expressió regular que ens comprova que la cadena està en el format correcte: Cadena buida, o amb 2 o 3 elements.
