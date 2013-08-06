@@ -172,9 +172,6 @@ public:
     /// Retorna l'espai que hi ha entre les llesques segons la vista actual i si hi ha el thickness activat
     double getCurrentSpacingBetweenSlices();
 
-    /// retorna la llesca més propera al punt projectedPosition, i posa a distance la distancia de la llesca al punt
-    int getNearestSlice(double projectedPosition[3], double &distance);
-
     /// Ens retorna l'acttor vtk de la imatge
     vtkImageActor* getVtkImageActor() const;
 

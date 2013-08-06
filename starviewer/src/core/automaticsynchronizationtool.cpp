@@ -6,6 +6,7 @@
 #include "series.h"
 #include "volume.h"
 #include "imageplane.h"
+#include "slicelocator.h"
 
 #include <vtkPlane.h>
 
@@ -144,7 +145,9 @@ void AutomaticSynchronizationTool::updatePosition()
                     // Actualitzem per posició
                     double *position = m_toolData->getPosition(frameOfReference, m_2DViewer->getCurrentAnatomicalPlaneLabel());
                     double distance;
-                    int nearestSlice = m_2DViewer->getNearestSlice(position, distance);
+                    SliceLocator locator;
+                    locator.setVolume(m_2DViewer->getInput());
+                    int nearestSlice = locator.getNearestSlice(position, m_2DViewer->getView(), distance);
 
                     if (nearestSlice != -1 && distance < (currentSpacingBetweenSlices * 1.5))
                     {
