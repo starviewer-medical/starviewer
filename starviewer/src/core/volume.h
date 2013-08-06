@@ -6,6 +6,7 @@
 #include "identifier.h"
 #include "volumepixeldata.h"
 #include "anatomicalplane.h"
+#include "orthogonalplane.h"
 // Qt
 #include <QPixmap>
 #include <QVector>
@@ -18,6 +19,7 @@ class Image;
 class Study;
 class Patient;
 class VolumeReader;
+class ImagePlane;
 
 /**
     Aquesta classe respresenta un volum de dades. Aquesta serà la classe on es guardaran les dades que voldrem tractar.
@@ -120,6 +122,12 @@ public:
     /// @return la imatge en cas que els índexs siguin correctes, NULL altrament
     Image* getImage(int sliceNumber, int phaseNumber = 0) const;
 
+    /// Given a slice, phase and othogonal plane, returns the corresponding ImagePlane
+    /// @param vtkReconstructionHack HACK enables a hack for cases which the "real" plane is not the really wanted
+    /// applying a correction to satisfy some restrictions with vtk. This should only be used on very concrete cases. Default value should be used.
+    /// @return The corresponding image plane
+    ImagePlane* getImagePlane(int sliceNumber, int phaseNumber, OrthogonalPlane::OrthogonalPlaneType plane, bool vtkReconstructionHack = false);
+    
     /// Ens retorna la direcció REAL(DICOM) en la que es troben apilades
     /// les imatges que formen el volum. Com que dins d'un mateix volum podem tenir més
     /// d'un frame/stack, hem d'indicar de quin frame/stack volem la direcció
