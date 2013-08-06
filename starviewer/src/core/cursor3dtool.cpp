@@ -232,7 +232,8 @@ void Cursor3DTool::projectPoint()
     double distance;
     SliceLocator locator;
     locator.setVolume(m_2DViewer->getInput());
-    int nearestSlice = locator.getNearestSlice(m_myData->getOriginPointPosition(), m_2DViewer->getView(), distance);
+    locator.setPlane(m_2DViewer->getView());
+    int nearestSlice = locator.getNearestSlice(m_myData->getOriginPointPosition(), distance);
 
     double currentSpacingBetweenSlices = m_2DViewer->getCurrentSpacingBetweenSlices();
     if (currentSpacingBetweenSlices == 0.0)

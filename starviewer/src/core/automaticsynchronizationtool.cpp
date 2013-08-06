@@ -147,7 +147,8 @@ void AutomaticSynchronizationTool::updatePosition()
                     double distance;
                     SliceLocator locator;
                     locator.setVolume(m_2DViewer->getInput());
-                    int nearestSlice = locator.getNearestSlice(position, m_2DViewer->getView(), distance);
+                    locator.setPlane(m_2DViewer->getView());
+                    int nearestSlice = locator.getNearestSlice(position, distance);
 
                     if (nearestSlice != -1 && distance < (currentSpacingBetweenSlices * 1.5))
                     {
