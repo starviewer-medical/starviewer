@@ -128,6 +128,13 @@ public:
     /// @return The corresponding image plane
     ImagePlane* getImagePlane(int sliceNumber, OrthogonalPlane::OrthogonalPlaneType plane, bool vtkReconstructionHack = false);
     
+    /// Returns the slice range of the current volume corresponding to an specified orthogonal plane
+    void getSliceRange(int &min, int &max, OrthogonalPlane::OrthogonalPlaneType plane);
+
+    /// Returns the maximum/minimum slice for an specified orthogonal plane
+    int getMaximumSlice(OrthogonalPlane::OrthogonalPlaneType plane);
+    int getMinimumSlice(OrthogonalPlane::OrthogonalPlaneType plane);
+
     /// Ens retorna la direcció REAL(DICOM) en la que es troben apilades
     /// les imatges que formen el volum. Com que dins d'un mateix volum podem tenir més
     /// d'un frame/stack, hem d'indicar de quin frame/stack volem la direcció
