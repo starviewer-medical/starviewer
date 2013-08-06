@@ -21,12 +21,16 @@ private slots:
     void getPlaneTypeFromPatientOrientation_ShouldReturnConcreteLabel_data();
     void getPlaneTypeFromPatientOrientation_ShouldReturnConcreteLabel();
 
+    void getDefaultRadiologicalOrienation_ReturnsExpectedValues_data();
+    void getDefaultRadiologicalOrienation_ReturnsExpectedValues();
+
 private:
     void setupShouldReturnNotAvailableData();
     void setupShouldReturnConcreteLabelData();
 };
 
 Q_DECLARE_METATYPE(AnatomicalPlane::AnatomicalPlaneType)
+Q_DECLARE_METATYPE(PatientOrientation)
 
 void test_AnatomicalPlane::getPlaneOrientationLabel_ShouldReturnExpectedLabel_data()
 {
@@ -108,6 +112,35 @@ void test_AnatomicalPlane::getPlaneTypeFromPatientOrientation_ShouldReturnConcre
     patientOrientation.setDICOMFormattedPatientOrientation(string);
     
     QCOMPARE(AnatomicalPlane::getPlaneTypeFromPatientOrientation(patientOrientation), typeResult);
+}
+
+void test_AnatomicalPlane::getDefaultRadiologicalOrienation_ReturnsExpectedValues_data()
+{
+    QTest::addColumn<AnatomicalPlane::AnatomicalPlaneType>("plane");
+    QTest::addColumn<PatientOrientation>("expectedOrientation");
+
+    PatientOrientation axialOrientation;
+    axialOrientation.setLabels(PatientOrientation::LeftLabel, PatientOrientation::PosteriorLabel);
+    QTest::newRow("Default Axial orientation") << AnatomicalPlane::Axial << axialOrientation;
+
+    PatientOrientation sagittalOrientation;
+    sagittalOrientation.setLabels(PatientOrientation::PosteriorLabel, PatientOrientation::FeetLabel);
+    QTest::newRow("Default Sagittal orientation") << AnatomicalPlane::Sagittal << sagittalOrientation;
+
+    PatientOrientation coronalOrientation;
+    coronalOrientation.setLabels(PatientOrientation::LeftLabel, PatientOrientation::FeetLabel);
+    QTest::newRow("Default Coronal orientation") << AnatomicalPlane::Coronal << coronalOrientation;
+
+    QTest::newRow("Default Oblique orientation") << AnatomicalPlane::Oblique << PatientOrientation();
+    QTest::newRow("Default N/A orientation") << AnatomicalPlane::NotAvailable << PatientOrientation();
+}
+
+void test_AnatomicalPlane::getDefaultRadiologicalOrienation_ReturnsExpectedValues()
+{
+    QFETCH(AnatomicalPlane::AnatomicalPlaneType, plane);
+    QFETCH(PatientOrientation, expectedOrientation);
+
+    QCOMPARE(AnatomicalPlane::getDefaultRadiologicalOrienation(plane), expectedOrientation);
 }
 
 void test_AnatomicalPlane::setupShouldReturnNotAvailableData()

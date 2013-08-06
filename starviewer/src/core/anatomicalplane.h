@@ -21,6 +21,9 @@ public:
     /// Ens retorna l'etiqueta/tipus del pla anatòmic que es correspon amb el PatientOrientation donat
     static const QString getLabelFromPatientOrientation(const PatientOrientation &orientation);
     static const AnatomicalPlaneType getPlaneTypeFromPatientOrientation(const PatientOrientation &orientation);
+
+    /// Returns the default patient orientation for an specific anatomical plane
+    static const PatientOrientation getDefaultRadiologicalOrienation(AnatomicalPlaneType plane);
 };
 
 } // End namespace udg
