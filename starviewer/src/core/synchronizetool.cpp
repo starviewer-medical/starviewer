@@ -68,7 +68,7 @@ void SynchronizeTool::setEnabled(bool enabled)
 
 void SynchronizeTool::setIncrement(int slice)
 {
-    if (m_lastView.compare(m_q2dviewer->getCurrentAnatomicalPlaneLabel()) == 0)
+    if (m_lastView == m_q2dviewer->getCurrentAnatomicalPlaneLabel())
     {
         double currentSpacingBetweenSlices = m_q2dviewer->getCurrentSpacingBetweenSlices();
         DEBUG_LOG(QString("setIncrement::currentSpacingBetweenSlices = %1").arg(currentSpacingBetweenSlices));
@@ -94,7 +94,7 @@ void SynchronizeTool::setIncrement(int slice)
 
 void SynchronizeTool::applySliceChanges()
 {
-    if (m_q2dviewer->getCurrentAnatomicalPlaneLabel().compare(m_toolData->getIncrementView()) == 0)
+    if (m_q2dviewer->getCurrentAnatomicalPlaneLabel() == m_toolData->getIncrementView())
     {
         double currentSpacingBetweenSlices = m_q2dviewer->getCurrentSpacingBetweenSlices();
         DEBUG_LOG(QString("applySliceChanges::currentSpacingBetweenSlices = %1").arg(currentSpacingBetweenSlices));
