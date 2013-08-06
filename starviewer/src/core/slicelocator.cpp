@@ -65,6 +65,19 @@ int SliceLocator::getNearestSlice(double point[3])
     }
 }
 
+int SliceLocator::getNearestSlice(ImagePlane *imagePlane)
+{
+    if (!imagePlane)
+    {
+        return -1;
+    }
+
+    double planePoint[3];
+    imagePlane->getCenter(planePoint);
+
+    return getNearestSlice(planePoint);
+}
+
 bool SliceLocator::isWithinProximityBounds(double distanceToSlice)
 {
     if (!m_volume)
