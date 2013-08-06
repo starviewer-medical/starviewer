@@ -223,9 +223,6 @@ private:
     /// Manager per estudis relacionats
     RelatedStudiesManager *m_relatedStudiesManager;
 
-    /// Manager de la sincronització automàtica
-    AutomaticSynchronizationManager *m_automaticSynchronizationManager;
-
     SyncActionManager *m_syncActionManager;
     ViewersLayoutToSyncActionManagerAdapter *m_layoutToSyncActionManagerAdapter;
 #endif
