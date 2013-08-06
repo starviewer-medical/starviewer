@@ -9,6 +9,7 @@ namespace udg {
 SliceLocator::SliceLocator()
 {
     m_volume = 0;
+    m_volumePlane = OrthogonalPlane::XYPlane;
 }
 
 SliceLocator::~SliceLocator()
@@ -20,7 +21,12 @@ void SliceLocator::setVolume(Volume *volume)
     m_volume = volume;
 }
 
-int SliceLocator::getNearestSlice(double point[3], OrthogonalPlane::OrthogonalPlaneType plane, double &distance)
+void SliceLocator::setPlane(OrthogonalPlane::OrthogonalPlaneType plane)
+{
+    m_volumePlane = plane;
+}
+
+int SliceLocator::getNearestSlice(double point[3], double &distance)
 {
     distance = MathTools::DoubleMaximumValue;
     
@@ -32,11 +38,11 @@ int SliceLocator::getNearestSlice(double point[3], OrthogonalPlane::OrthogonalPl
     double currentDistance;
     int nearestSlice = -1;
     ImagePlane *currentPlane = 0;
-    int maximumSlice = m_volume->getMaximumSlice(plane);
+    int maximumSlice = m_volume->getMaximumSlice(m_volumePlane);
 
     for (int i = 0; i <= maximumSlice; i++)
     {
-        currentPlane = m_volume->getImagePlane(i, plane);
+        currentPlane = m_volume->getImagePlane(i, m_volumePlane);
         if (currentPlane)
         {
             currentDistance = currentPlane->getDistanceToPoint(point);
