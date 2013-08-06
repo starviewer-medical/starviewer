@@ -466,20 +466,6 @@ void Q2DViewer::getSliceRange(int &min, int &max)
     }
 }
 
-int* Q2DViewer::getSliceRange()
-{
-    if (m_mainVolume)
-    {
-        int *range = new int[2];
-        this->getSliceRange(range[0], range[1]);
-        return range;
-    }
-    else
-    {
-        return NULL;
-    }
-}
-
 int Q2DViewer::getMinimumSlice()
 {
     int min, trash;
