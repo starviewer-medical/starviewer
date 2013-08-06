@@ -84,6 +84,9 @@ public:
     /// @return el nombre d'interseccions trobades
     int getIntersections(ImagePlane *planeToIntersect, double firstIntersectionPoint[3], double secondIntersectionPoint[3]);
 
+    /// Returns the distance from the given point to the current plane
+    double getDistanceToPoint(double point[3]);
+    
     /// Quan es modifica algun dels vectors directors del pla es modifica el centre.
     void updateCenter();
 
