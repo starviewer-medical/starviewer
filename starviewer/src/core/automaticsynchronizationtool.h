@@ -8,6 +8,7 @@ namespace udg {
 class Q2DViewer;
 class AutomaticSynchronizationToolData;
 class ImagePlane;
+class SliceLocator;
 
 /**
     Tool de sincronització automatica entre visualitzadors.
@@ -66,6 +67,8 @@ private:
     /// Espai entre llesques perdut per arrodoniment
     double m_roundLostSpacingBetweenSlices;
 
+    /// Class to locate the corresponding slice to synchronize
+    SliceLocator *m_sliceLocator;
 };
 
 }

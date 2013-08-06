@@ -8,6 +8,7 @@ namespace udg {
 class Cursor3DToolData;
 class Q2DViewer;
 class DrawerCrossHair;
+class SliceLocator;
 
 /**
     Implementació de la tool del cursor 3D.
@@ -78,6 +79,9 @@ private:
 
     /// Objecte crosshair per representar el punt
     DrawerCrossHair *m_crossHair;
+
+    /// Class to locate the corresponding slice to the cursor 3D point
+    SliceLocator *m_sliceLocator;
 };
 
 }
