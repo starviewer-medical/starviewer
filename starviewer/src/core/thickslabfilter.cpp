@@ -42,6 +42,11 @@ void ThickSlabFilter::setSlabThickness(int numberOfSlices)
     m_filter->SetNumberOfSlicesToProject(numberOfSlices);
 }
 
+int ThickSlabFilter::getSlabThickness()
+{
+    return m_filter->GetNumberOfSlicesToProject();
+}
+
 void ThickSlabFilter::setStride(int stride)
 {
     m_filter->SetStep(stride);
