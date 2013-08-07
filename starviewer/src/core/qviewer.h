@@ -332,6 +332,9 @@ protected:
     /// Vista que enfoca la càmera
     OrthogonalPlane::OrthogonalPlaneType m_currentViewPlane;
 
+    /// The default margin for fit into viewport. Should be between 0..1.
+    double m_defaultFitIntoViewportMarginRate;
+
 private:
     /// Indica si el viewer és actiu o no
     bool m_isActive;

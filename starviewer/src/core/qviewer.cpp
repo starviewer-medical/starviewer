@@ -43,6 +43,7 @@ QViewer::QViewer(QWidget *parent)
  : QWidget(parent), m_mainVolume(0), m_contextMenuActive(true), m_mouseHasMoved(false), m_windowLevelData(0), m_transferFunction(0),
    m_isRenderingEnabled(true), m_isActive(false)
 {
+    m_defaultFitIntoViewportMarginRate = 0.0;
     m_vtkWidget = new QVTKWidget(this);
     m_vtkWidget->setFocusPolicy(Qt::WheelFocus);
     // Creem el renderer i li assignem a la render window
@@ -499,7 +500,7 @@ void QViewer::fitRenderingIntoViewport()
     }
 
     // Scaling the viewport to fit the current item bounds
-    if (scaleToFit3D(topCorner, bottomCorner))
+    if (scaleToFit3D(topCorner, bottomCorner, m_defaultFitIntoViewportMarginRate))
     {
         render();
     }
