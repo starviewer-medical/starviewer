@@ -590,30 +590,6 @@ void Q3DViewer::setNewTransferFunction()
     m_level = m_range/2.0;
 }
 
-void Q3DViewer::resetOrientation()
-{
-    switch (m_currentOrientation)
-    {
-        case OrthogonalPlane::XYPlane:
-            this->resetViewToAxial();
-            break;
-
-        case OrthogonalPlane::YZPlane:
-            this->resetViewToSagital();
-            break;
-
-        case OrthogonalPlane::XZPlane:
-            this->resetViewToCoronal();
-            break;
-
-        default:
-            setDefaultOrientationForCurrentInput();
-            DEBUG_LOG("Q3DViewer: m_currentOrientation no és cap de les tres esperades (Axial,Sagital,Coronal). Donem l'orientació per defecte.");
-            this->resetOrientation();
-            break;
-    }
-}
-
 void Q3DViewer::setDefaultViewForCurrentInput()
 {
     // De moment, sempre serà coronal
