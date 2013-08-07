@@ -2,7 +2,6 @@
 #include "windowlevelfilter.h"
 #include "thickslabfilter.h"
 #include "displayshutterfilter.h"
-#include "passthroughfilter.h"
 #include "transferfunction.h"
 
 #include "vtkImageData.h"
