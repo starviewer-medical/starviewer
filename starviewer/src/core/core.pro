@@ -142,6 +142,7 @@ HEADERS += extensionfactory.h \
     minimumaccumulator.h \
     maximumaccumulator.h \
     vtkProjectionImageFilter.h \
+    vtkRunThroughFilter.h \
     slicingkeyboardtool.h \
     qthickslabwidget.h \
     erasertool.h \
@@ -456,6 +457,7 @@ SOURCES += extensionmediator.cpp \
     qtransferfunctioneditorbygradient.cpp \
     accumulator.cpp \
     vtkProjectionImageFilter.cxx \
+    vtkRunThroughFilter.cxx \
     slicingkeyboardtool.cpp \
     qthickslabwidget.cpp \
     erasertool.cpp \
