@@ -11,12 +11,8 @@ class vtkPropPicker;
 class vtkTextActor;
 class vtkCornerAnnotation;
 class vtkCoordinate;
-class vtkImageBlend;
 class vtkImageActor;
 class vtkImageData;
-// Grayscale pipeline
-// Permet aplicar window/level amb imatges a color
-class vtkImageMapToWindowLevelColors2;
 
 namespace udg {
 
@@ -31,10 +27,8 @@ class ImageOrientationOperationsMapper;
 class VolumeReaderJob;
 class QViewerCommand;
 class PatientOrientation;
-class DisplayShutterFilter;
-class WindowLevelFilter;
-class ThickSlabFilter;
 class BlendFilter;
+class ImagePipeline;
 
 /**
     Classe base per als visualitzadors 2D.
@@ -306,9 +300,6 @@ protected:
     void getCurrentRenderedItemBounds(double bounds[6]);
 
 private:
-    /// Inicialitza el filtre de màscara per als shutters
-    void initializeShutterFilter();
-    
     /// Updates image orientation according to the preferred presentation depending on its attributes, like modality.
     /// At this moment it is only applying to mammography (MG) images
     void updatePreferredImageOrientation();
@@ -351,8 +342,8 @@ private:
     /// Actualitza les característiques dels actors dels viewports
     void updateDisplayExtent();
 
-    /// Construeix el pipeline pel tractament de window/level de la imatge
-    void buildWindowLevelPipeline();
+    /// Print some information related to the volume
+    void printVolumeInformation();
 
     /// Actualitza el pipeline del filtre de shutter segons si està habilitat o no
     void updateShutterPipeline();
@@ -508,22 +499,12 @@ private:
     /// Especialista en dibuixar primitives
     Drawer *m_drawer;
 
-    /// Objectes per a les transformacions en el pipeline d'escala de grisos
-    WindowLevelFilter *m_windowLevelLUTMapper;
-
     // Secció "ThickSlab"
     /// Nombre de llesques que composen el thickSlab
     int m_slabThickness;
 
-    /// Filtre per composar les imatges del thick slab
-    ThickSlabFilter *m_thickSlabProjectionFilter;
-
     /// Variables per controlar el rang de llesques en el que es troba l'slab
     int m_firstSlabSlice, m_lastSlabSlice;
-
-    /// Variable per controlar si el thickSlab s'està aplicant o no.
-    /// Perquè sigui true, m_slabThickness > 1, altrament false
-    bool m_thickSlabActive;
 
     /// Indica quin tipus de projecció apliquem sobre l'slab
     int m_slabProjectionMode;
@@ -548,8 +529,8 @@ private:
     /// If true, display shutters are visible when they are available and it's possible to show them.
     bool m_showDisplayShutters;
 
-    /// Filter to show display shutters.
-    DisplayShutterFilter *m_displayShutterFilter;
+    /// Pipeline to generate the volume visualization
+    ImagePipeline *m_pipeline;
 
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(Q2DViewer::AnnotationFlags)
