@@ -528,7 +528,7 @@ void Q3DViewer::applyCurrentRenderingMethod()
 
         if (m_firstRender)
         {
-            setDefaultOrientationForCurrentInput();
+            setDefaultViewForCurrentInput();
             m_firstRender = false;
         }
     }
@@ -614,7 +614,7 @@ void Q3DViewer::resetOrientation()
     }
 }
 
-void Q3DViewer::setDefaultOrientationForCurrentInput()
+void Q3DViewer::setDefaultViewForCurrentInput()
 {
     // De moment, sempre serà coronal
     // TODO cal implementar que analitzi l'input i esculli la millor orientació
