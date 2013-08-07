@@ -13,11 +13,8 @@ class Experimental3DVolume;
     Visualitzador de l'extensió Experimental 3D.
  */
 class QExperimental3DViewer : public QViewer {
-
-    Q_OBJECT
-
+Q_OBJECT
 public:
-
     QExperimental3DViewer(QWidget *parent = 0);
     virtual ~QExperimental3DViewer();
 
@@ -47,7 +44,6 @@ public:
     void screenshot(const QString &fileName);
 
 public slots:
-
     /// Força l'execució de la visualització.
     virtual void render();
 
@@ -56,6 +52,7 @@ public slots:
 
     /// Obté el window level actual de la imatge.
     virtual void getCurrentWindowLevel(double wl[2]);
+    
     /// Ajusta el window level.
     virtual void setWindowLevel(double window, double level);
     
@@ -68,7 +65,6 @@ protected:
     void getCurrentRenderedItemBounds(double bounds[6]);
 
 private:
-
     /// El volum.
     Experimental3DVolume *m_volume;
 
