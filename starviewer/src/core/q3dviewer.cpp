@@ -619,7 +619,7 @@ void Q3DViewer::setDefaultOrientationForCurrentInput()
 {
     // De moment, sempre serà coronal
     // TODO cal implementar que analitzi l'input i esculli la millor orientació
-    m_currentOrientation = OrthogonalPlane::XZPlane;
+    resetViewToCoronal();
 }
 
 // Desplacem les dades de manera que el mínim sigui 0 i ho convertim a un unsigned short, perquè el ray casting no accepta signed short.
