@@ -525,6 +525,81 @@ AnatomicalPlane::AnatomicalPlaneType Volume::getAcquisitionPlane() const
     }
 }
 
+OrthogonalPlane::OrthogonalPlaneType Volume::getCorrespondingOrthogonalPlane(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane) const
+{
+    OrthogonalPlane::OrthogonalPlaneType orthogonalPlane;
+    AnatomicalPlane::AnatomicalPlaneType acquisitionPlane = getAcquisitionPlane();
+    switch (acquisitionPlane)
+    {
+        case AnatomicalPlane::Axial:
+        case AnatomicalPlane::NotAvailable:
+        case AnatomicalPlane::Oblique:
+            switch(anatomicalPlane)
+            {
+                case AnatomicalPlane::Axial:
+                    orthogonalPlane = OrthogonalPlane::XYPlane;
+                    break;
+
+                case AnatomicalPlane::Sagittal:
+                    orthogonalPlane = OrthogonalPlane::YZPlane;
+                    break;
+
+                case AnatomicalPlane::Coronal:
+                    orthogonalPlane = OrthogonalPlane::XZPlane;
+                    break;
+
+                default:
+                    orthogonalPlane = OrthogonalPlane::XYPlane;
+                    break;
+            }
+            break;
+
+        case AnatomicalPlane::Sagittal:
+            switch(anatomicalPlane)
+            {
+                case AnatomicalPlane::Axial:
+                    orthogonalPlane = OrthogonalPlane::XZPlane;
+                    break;
+
+                case AnatomicalPlane::Sagittal:
+                    orthogonalPlane = OrthogonalPlane::XYPlane;
+                    break;
+
+                case AnatomicalPlane::Coronal:
+                    orthogonalPlane = OrthogonalPlane::YZPlane;
+                    break;
+
+                default:
+                    orthogonalPlane = OrthogonalPlane::XYPlane;
+                    break;
+            }
+            break;
+
+        case AnatomicalPlane::Coronal:
+            switch(anatomicalPlane)
+            {
+                case AnatomicalPlane::Axial:
+                    orthogonalPlane = OrthogonalPlane::XZPlane;
+                    break;
+
+                case AnatomicalPlane::Sagittal:
+                    orthogonalPlane = OrthogonalPlane::YZPlane;
+                    break;
+
+                case AnatomicalPlane::Coronal:
+                    orthogonalPlane = OrthogonalPlane::XYPlane;
+                    break;
+
+                default:
+                    orthogonalPlane = OrthogonalPlane::XYPlane;
+                    break;
+            }
+            break;
+    }
+
+    return orthogonalPlane;
+}
+
 int Volume::getImageIndex(int sliceNumber, int phaseNumber) const
 {
     return sliceNumber * m_numberOfPhases + phaseNumber;
