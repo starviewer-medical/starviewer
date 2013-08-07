@@ -3,8 +3,6 @@
 
 #include "qviewer.h"
 
-#include "anatomicalplane.h"
-
 #include <QPointer>
 
 // Fordward declarations
@@ -302,6 +300,8 @@ protected:
     virtual void resizeEvent(QResizeEvent *resize);
 
     void getCurrentRenderedItemBounds(double bounds[6]);
+
+    void setDefaultOrientation(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane);
 
 private:
     /// Updates image orientation according to the preferred presentation depending on its attributes, like modality.

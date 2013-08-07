@@ -326,6 +326,23 @@ void Q2DViewer::updatePatientOrientationAnnotation()
     }
 }
 
+void Q2DViewer::setDefaultOrientation(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane)
+{
+    if (!m_mainVolume)
+    {
+        return;
+    }
+
+    // We apply the standard orientation for the desired projection unless original acquisition is axial and is the same as the desired one
+    // because when the patient is acquired in prono position we don't want to change the acquisition orientation and thus respect the acquired one
+    AnatomicalPlane::AnatomicalPlaneType acquisitionPlane = m_mainVolume->getAcquisitionPlane();
+    if (acquisitionPlane != AnatomicalPlane::Axial || acquisitionPlane != anatomicalPlane)
+    {
+        PatientOrientation desiredOrientation = AnatomicalPlane::getDefaultRadiologicalOrienation(anatomicalPlane);
+        setImageOrientation(desiredOrientation);
+    }
+}
+
 void Q2DViewer::updatePreferredImageOrientation()
 {
     Image *image = getCurrentDisplayedImage();
@@ -905,34 +922,6 @@ void Q2DViewer::resetView(OrthogonalPlane::OrthogonalPlaneType view)
     setSlabThickness(desiredSlabSlices);
 
     emit viewChanged(m_lastView);
-}
-
-void Q2DViewer::resetView(AnatomicalPlane::AnatomicalPlaneType desiredAnatomicalPlane)
-{
-    if (!m_mainVolume)
-    {
-        return;
-    }
-
-    // HACK Disable rendering temporarily to enhance performance and avoid flickering
-    enableRendering(false);
-
-    // First we reset the view to the corresponding orthogonal plane
-    OrthogonalPlane::OrthogonalPlaneType orthogonalPlane = m_mainVolume->getCorrespondingOrthogonalPlane(desiredAnatomicalPlane);
-    resetView(orthogonalPlane);
-    
-    // Then we apply the standard orientation for the desired projection unless original acquisition is axial and is the same as the desired one
-    // because when the patient is acquired in prono position we don't want to change the acquisition orientation and thus respect the acquired one
-    AnatomicalPlane::AnatomicalPlaneType acquisitionPlane = m_mainVolume->getAcquisitionPlane();
-    if (acquisitionPlane != AnatomicalPlane::Axial || acquisitionPlane != desiredAnatomicalPlane)
-    {
-        PatientOrientation desiredOrientation = AnatomicalPlane::getDefaultRadiologicalOrienation(desiredAnatomicalPlane);
-        setImageOrientation(desiredOrientation);
-    }
-
-    // HACK End of performance hack
-    enableRendering(true);
-    fitRenderingIntoViewport();
 }
 
 void Q2DViewer::resetViewToAxial()

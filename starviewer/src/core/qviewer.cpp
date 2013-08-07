@@ -553,6 +553,28 @@ WindowLevel QViewer::getCurrentAutomaticWindowLevel()
     return automaticWindowLevel;
 }
 
+void QViewer::resetView(AnatomicalPlane::AnatomicalPlaneType desiredAnatomicalPlane)
+{
+    if (!m_mainVolume)
+    {
+        return;
+    }
+
+    // HACK Disable rendering temporarily to enhance performance and avoid flickering
+    enableRendering(false);
+
+    // First we reset the view to the corresponding orthogonal plane
+    OrthogonalPlane::OrthogonalPlaneType orthogonalPlane = m_mainVolume->getCorrespondingOrthogonalPlane(desiredAnatomicalPlane);
+    resetView(orthogonalPlane);
+    
+    // Then we apply the standard orientation for the desired projection
+    setDefaultOrientation(desiredAnatomicalPlane);
+
+    // HACK End of performance hack
+    enableRendering(true);
+    fitRenderingIntoViewport();
+}
+
 void QViewer::resetViewToAcquisitionPlane()
 {
     resetView(OrthogonalPlane::XYPlane);
@@ -723,6 +745,11 @@ bool QViewer::adjustCameraScaleFactor(double factor)
     }
 
     return true;
+}
+
+void QViewer::setDefaultOrientation(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane)
+{
+    Q_UNUSED(anatomicalPlane);
 }
 
 void QViewer::contextMenuEvent(QContextMenuEvent *menuEvent)
