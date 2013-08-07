@@ -172,6 +172,9 @@ public:
     /// es calcula en base a la primera imatge i prou
     AnatomicalPlane::AnatomicalPlaneType getAcquisitionPlane() const;
 
+    /// Returns which orthogonal plane of the current volume corresponds to the given anatomical plane
+    OrthogonalPlane::OrthogonalPlaneType getCorrespondingOrthogonalPlane(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane) const;
+
     /// Ens retorna l'índex intern d'imatge corresponent a la llesca i fase indicats
     int getImageIndex(int sliceNumber, int phaseNumber) const;
 
