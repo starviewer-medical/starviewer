@@ -81,9 +81,6 @@ public slots:
     void planeInteraction();
 
 protected:
-    /// Els respectius volums sobre cada pla de reslice
-    Volume *m_axialResliced, *m_sagitalResliced, *m_coronalResliced;
-
     void getCurrentRenderedItemBounds(double bounds[6]);
     
     /// Inicialitza els plans
@@ -101,6 +98,12 @@ protected:
     /// Afegeix els actors a l'escena
     void addActors();
 
+protected:
+    /// Els respectius volums sobre cada pla de reslice
+    Volume *m_axialResliced;
+    Volume *m_sagitalResliced;
+    Volume *m_coronalResliced;
+    
     /// Els plans
     vtkImagePlaneWidget *m_axialImagePlaneWidget;
     vtkImagePlaneWidget *m_sagitalImagePlaneWidget;
