@@ -328,13 +328,6 @@ void Q3DViewer::setWindowLevel(double window, double level)
     }
 }
 
-void Q3DViewer::resetView(OrthogonalPlane::OrthogonalPlaneType view)
-{
-    m_currentOrientation = view;
-    // TODO replantejar si necessitem aquest mètode i el substituïm per aquest mateix
-    resetOrientation();
-}
-
 void Q3DViewer::setClippingPlanes(vtkPlanes *clippingPlanes)
 {
     if (clippingPlanes)

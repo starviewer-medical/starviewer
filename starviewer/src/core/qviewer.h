@@ -176,7 +176,7 @@ public slots:
     virtual void getCurrentWindowLevel(double wl[2]) = 0;
 
     /// Resets the view to a determined orthogonal plane
-    virtual void resetView(OrthogonalPlane::OrthogonalPlaneType view) = 0;
+    virtual void resetView(OrthogonalPlane::OrthogonalPlaneType view);
     
     /// Resets the view to the specified anatomical plane
     void resetView(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane);

@@ -411,11 +411,6 @@ void Q3DMPRViewer::getCurrentWindowLevel(double wl[2])
     m_axialImagePlaneWidget->GetWindowLevel(wl);
 }
 
-void Q3DMPRViewer::resetView(OrthogonalPlane::OrthogonalPlaneType)
-{
-    // TODO estem obligats a implementar-lo. Caldria aplicar la orientació que se'ns demana
-}
-
 void Q3DMPRViewer::planeInteraction()
 {
     emit planesHasChanged();
