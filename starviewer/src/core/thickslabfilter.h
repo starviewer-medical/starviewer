@@ -33,6 +33,9 @@ public:
     /// Sets the accumulator type
     void setAccumulatorType(AccumulatorFactory::AccumulatorType type);
 
+    /// Get the thickness
+    int getSlabThickness();
+
 private:
     /// Returns the vtkAlgorithm used to implement the filter.
     virtual vtkAlgorithm* getVtkAlgorithm() const;
