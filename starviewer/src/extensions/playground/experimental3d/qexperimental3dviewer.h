@@ -63,9 +63,6 @@ public slots:
 
     /// Li indiquem quina vista volem del volum: XYPlane, YZPlane o XZPlane.
     virtual void resetView(OrthogonalPlane::OrthogonalPlaneType view);
-    virtual void resetViewToAxial();
-    virtual void resetViewToSagital();
-    virtual void resetViewToCoronal();
 
 protected:
     void getCurrentRenderedItemBounds(double bounds[6]);

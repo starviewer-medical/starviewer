@@ -1083,24 +1083,6 @@ void Q3DViewer::renderTexture3D()
     render();
 }
 
-void Q3DViewer::resetViewToAxial()
-{
-    this->setCameraOrientation(OrthogonalPlane::XYPlane);
-    m_currentOrientation = OrthogonalPlane::XYPlane;
-}
-
-void Q3DViewer::resetViewToSagital()
-{
-    this->setCameraOrientation(OrthogonalPlane::YZPlane);
-    m_currentOrientation = OrthogonalPlane::YZPlane;
-}
-
-void Q3DViewer::resetViewToCoronal()
-{
-    this->setCameraOrientation(OrthogonalPlane::XZPlane);
-    m_currentOrientation = OrthogonalPlane::XZPlane;
-}
-
 void Q3DViewer::enableOrientationMarker(bool enable)
 {
     m_orientationMarker->setEnabled(enable);
