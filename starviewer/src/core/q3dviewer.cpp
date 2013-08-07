@@ -78,7 +78,6 @@ Q3DViewer::Q3DViewer(QWidget *parent)
     // Per defecte
     m_renderFunction = RayCasting;
 
-    setDefaultOrientationForCurrentInput();
     m_orientationMarker = new Q3DOrientationMarker(this->getInteractor(), this);
 
     // Creem el pipeline del volum
@@ -529,7 +528,7 @@ void Q3DViewer::applyCurrentRenderingMethod()
 
         if (m_firstRender)
         {
-            this->resetOrientation();
+            setDefaultOrientationForCurrentInput();
             m_firstRender = false;
         }
     }
