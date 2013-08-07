@@ -2,6 +2,7 @@
 #define UDGQVIEWER_H
 
 #include "orthogonalplane.h"
+#include "anatomicalplane.h"
 
 #include <QWidget>
 // Llista de captures de pantalla
@@ -176,6 +177,9 @@ public slots:
 
     /// Resets the view to a determined orthogonal plane
     virtual void resetView(OrthogonalPlane::OrthogonalPlaneType view) = 0;
+    
+    /// Resets the view to the specified anatomical plane
+    void resetView(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane);
     virtual void resetViewToAxial() = 0;
     virtual void resetViewToSagital() = 0;
     virtual void resetViewToCoronal() = 0;
@@ -251,6 +255,9 @@ protected:
     /// Adjusts camera scale factor. Returns false if no scale could be performed, true otherwise.
     /// To be used by zoom(), scaleToFit3D() methods and the so
     bool adjustCameraScaleFactor(double factor);
+    
+    /// Sets the default rendered item orientation for the given anatomical plane
+    virtual void setDefaultOrientation(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane);
     
     /// Ens retorna la càmera activa pel renderer principal, si n'hi ha, NUL altrament.
     vtkCamera* getActiveCamera();
