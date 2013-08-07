@@ -553,6 +553,11 @@ WindowLevel QViewer::getCurrentAutomaticWindowLevel()
     return automaticWindowLevel;
 }
 
+void QViewer::resetView(OrthogonalPlane::OrthogonalPlaneType view)
+{
+    setCameraOrientation(view);
+}
+
 void QViewer::resetView(AnatomicalPlane::AnatomicalPlaneType desiredAnatomicalPlane)
 {
     if (!m_mainVolume)

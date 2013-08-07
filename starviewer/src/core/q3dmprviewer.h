@@ -42,7 +42,6 @@ public:
     void getCoronalPlaneNormal(double normal[3]);
 
     void getCurrentWindowLevel(double wl[2]);
-    void resetView(OrthogonalPlane::OrthogonalPlaneType view);
 
 signals:
     /// Senyal que indica que algun dels plans han canviat
