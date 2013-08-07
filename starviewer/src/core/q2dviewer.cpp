@@ -907,152 +907,47 @@ void Q2DViewer::resetView(OrthogonalPlane::OrthogonalPlaneType view)
     emit viewChanged(m_lastView);
 }
 
-void Q2DViewer::resetViewToAxial()
+void Q2DViewer::resetView(AnatomicalPlane::AnatomicalPlaneType desiredAnatomicalPlane)
 {
     if (!m_mainVolume)
     {
         return;
     }
 
-    Image *image = m_mainVolume->getImage(0);
-    if (!image)
-    {
-        return;
-    }
-
     // HACK Disable rendering temporarily to enhance performance and avoid flickering
     enableRendering(false);
+
+    // First we reset the view to the corresponding orthogonal plane
+    OrthogonalPlane::OrthogonalPlaneType orthogonalPlane = m_mainVolume->getCorrespondingOrthogonalPlane(desiredAnatomicalPlane);
+    resetView(orthogonalPlane);
     
-    // In the case the original acquisition plane is different to Axial, we have to do this tricky hack
-    // The way m_lastView is being handled should be corrected. By now is assuming the original acquisition
-    // plane is always Axial, and because of this bad assumption we have to do this hacks.
-    // Camera view space and real world projection space should be decoupled
-    // We only apply setImageOrientation() when original acquisitions are different from axial
-    // because when the patient is acquired in prono position we don't want to change the acquisition orientation and respect the acquired one
-    PatientOrientation desiredOrientation = AnatomicalPlane::getDefaultRadiologicalOrienation(AnatomicalPlane::Axial);
-    switch (AnatomicalPlane::getPlaneTypeFromPatientOrientation(image->getPatientOrientation()))
+    // Then we apply the standard orientation for the desired projection unless original acquisition is axial and is the same as the desired one
+    // because when the patient is acquired in prono position we don't want to change the acquisition orientation and thus respect the acquired one
+    AnatomicalPlane::AnatomicalPlaneType acquisitionPlane = m_mainVolume->getAcquisitionPlane();
+    if (acquisitionPlane != AnatomicalPlane::Axial || acquisitionPlane != desiredAnatomicalPlane)
     {
-        case AnatomicalPlane::Axial:
-            resetView(OrthogonalPlane::XYPlane);
-            break;
-
-        case AnatomicalPlane::Sagittal:
-            resetView(OrthogonalPlane::XZPlane);
-            setImageOrientation(desiredOrientation);
-            break;
-
-        case AnatomicalPlane::Coronal:
-            resetView(OrthogonalPlane::XZPlane);
-            setImageOrientation(desiredOrientation);
-            break;
-
-        default:
-            resetView(OrthogonalPlane::XYPlane);
-            break;
+        PatientOrientation desiredOrientation = AnatomicalPlane::getDefaultRadiologicalOrienation(desiredAnatomicalPlane);
+        setImageOrientation(desiredOrientation);
     }
-    
+
     // HACK End of performance hack
     enableRendering(true);
     fitRenderingIntoViewport();
+}
+
+void Q2DViewer::resetViewToAxial()
+{
+    resetView(AnatomicalPlane::Axial);
 }
 
 void Q2DViewer::resetViewToCoronal()
 {
-    if (!m_mainVolume)
-    {
-        return;
-    }
-
-    Image *image = m_mainVolume->getImage(0);
-    if (!image)
-    {
-        return;
-    }
-
-    // HACK Disable rendering temporarily to enhance performance and avoid flickering
-    enableRendering(false);
-    
-    // In the case the original acquisition plane is different to Axial, we have to do this tricky hack
-    // The way m_lastView is being handled should be corrected. By now is assuming the original acquisition
-    // plane is always Axial, and because of this bad assumption we have to do this hacks.
-    // Camera view space and real world projection space should be decoupled
-    switch (AnatomicalPlane::getPlaneTypeFromPatientOrientation(image->getPatientOrientation()))
-    {
-        case AnatomicalPlane::Axial:
-            resetView(OrthogonalPlane::XZPlane);
-            break;
-
-        case AnatomicalPlane::Sagittal:
-            resetView(OrthogonalPlane::YZPlane);
-            break;
-
-        case AnatomicalPlane::Coronal:
-            resetView(OrthogonalPlane::XYPlane);
-            break;
-
-        default:
-            resetView(OrthogonalPlane::XZPlane);
-            break;
-    }
-    // Apply the right orientation for the standard coronal projection
-    // We have to apply this for any projection the original acquisition is 
-    // because when the patient is acquired in prono position it is easier to deal with the final orientation
-    PatientOrientation desiredOrientation = AnatomicalPlane::getDefaultRadiologicalOrienation(AnatomicalPlane::Coronal);
-    setImageOrientation(desiredOrientation);
-
-    // HACK End of performance hack
-    enableRendering(true);
-    fitRenderingIntoViewport();
+    resetView(AnatomicalPlane::Coronal);
 }
 
 void Q2DViewer::resetViewToSagital()
 {
-    if (!m_mainVolume)
-    {
-        return;
-    }
-
-    Image *image = m_mainVolume->getImage(0);
-    if (!image)
-    {
-        return;
-    }
-
-    // HACK Disable rendering temporarily to enhance performance and avoid flickering
-    enableRendering(false);
-    
-    // In the case the original acquisition plane is different to Axial, we have to do this tricky hack
-    // The way m_lastView is being handled should be corrected. By now is assuming the original acquisition
-    // plane is always Axial, and because of this bad assumption we have to do this hacks.
-    // Camera view space and real world projection space should be decoupled
-    switch (AnatomicalPlane::getPlaneTypeFromPatientOrientation(image->getPatientOrientation()))
-    {
-        case AnatomicalPlane::Axial:
-            resetView(OrthogonalPlane::YZPlane);
-            break;
-
-        case AnatomicalPlane::Sagittal:
-            resetView(OrthogonalPlane::XYPlane);
-            break;
-
-        case AnatomicalPlane::Coronal:
-            resetView(OrthogonalPlane::YZPlane);
-            break;
-
-        default:
-            resetView(OrthogonalPlane::YZPlane);
-            break;
-    }
-
-    // Apply the right orientation for the standard sagital projection.
-    // We have to apply this for any projection the original acquisition is 
-    // because when the patient is acquired in prono position it is easier to deal with the final orientation
-    PatientOrientation desiredOrientation = AnatomicalPlane::getDefaultRadiologicalOrienation(AnatomicalPlane::Sagittal);
-    setImageOrientation(desiredOrientation);
-
-    // HACK End of performance hack
-    enableRendering(true);
-    fitRenderingIntoViewport();
+    resetView(AnatomicalPlane::Sagittal);
 }
 
 void Q2DViewer::updateCamera()
