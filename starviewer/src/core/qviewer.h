@@ -174,7 +174,7 @@ public slots:
     /// Obté el window level actual de la imatge
     virtual void getCurrentWindowLevel(double wl[2]) = 0;
 
-    /// Li indiquem quina vista volem del volum: Axial, Coronal o Sagital
+    /// Resets the view to a determined orthogonal plane
     virtual void resetView(OrthogonalPlane::OrthogonalPlaneType view) = 0;
     virtual void resetViewToAxial() = 0;
     virtual void resetViewToSagital() = 0;
