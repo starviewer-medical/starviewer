@@ -924,21 +924,6 @@ void Q2DViewer::resetView(OrthogonalPlane::OrthogonalPlaneType view)
     emit viewChanged(m_lastView);
 }
 
-void Q2DViewer::resetViewToAxial()
-{
-    resetView(AnatomicalPlane::Axial);
-}
-
-void Q2DViewer::resetViewToCoronal()
-{
-    resetView(AnatomicalPlane::Coronal);
-}
-
-void Q2DViewer::resetViewToSagital()
-{
-    resetView(AnatomicalPlane::Sagittal);
-}
-
 void Q2DViewer::updateCamera()
 {
     if (m_mainVolume)

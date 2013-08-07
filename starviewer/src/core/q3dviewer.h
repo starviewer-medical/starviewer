@@ -78,10 +78,6 @@ public slots:
     void setRenderFunctionToTexture3D();
     void setRenderFunctionToContouring();
 
-    void resetViewToAxial();
-    void resetViewToSagital();
-    void resetViewToCoronal();
-
     /// Mètodes per controlar la visibilitat de l'orientation marker widget
     void enableOrientationMarker(bool enable);
     void orientationMarkerOn();

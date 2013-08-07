@@ -180,9 +180,9 @@ public slots:
     
     /// Resets the view to the specified anatomical plane
     void resetView(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane);
-    virtual void resetViewToAxial() = 0;
-    virtual void resetViewToSagital() = 0;
-    virtual void resetViewToCoronal() = 0;
+    virtual void resetViewToAxial();
+    virtual void resetViewToSagital();
+    virtual void resetViewToCoronal();
     
     /// Resets the view to the original acquisition plane of the input volume
     void resetViewToAcquisitionPlane();

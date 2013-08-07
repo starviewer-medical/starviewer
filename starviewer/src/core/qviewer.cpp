@@ -575,6 +575,21 @@ void QViewer::resetView(AnatomicalPlane::AnatomicalPlaneType desiredAnatomicalPl
     fitRenderingIntoViewport();
 }
 
+void QViewer::resetViewToAxial()
+{
+    resetView(AnatomicalPlane::Axial);
+}
+
+void QViewer::resetViewToCoronal()
+{
+    resetView(AnatomicalPlane::Coronal);
+}
+
+void QViewer::resetViewToSagital()
+{
+    resetView(AnatomicalPlane::Sagittal);
+}
+
 void QViewer::resetViewToAcquisitionPlane()
 {
     resetView(OrthogonalPlane::XYPlane);

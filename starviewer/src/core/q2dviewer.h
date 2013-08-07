@@ -186,11 +186,6 @@ public slots:
     void setInputAsynchronously(Volume *volume, QViewerCommand *inputFinishedCommand = 0);
 
     void resetView(OrthogonalPlane::OrthogonalPlaneType view);
-    /// Resets the view to the specified anatomical plane
-    void resetView(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane);
-    void resetViewToAxial();
-    void resetViewToCoronal();
-    void resetViewToSagital();
 
     /// Restaura el visualitzador a l'estat inicial
     void restore();
