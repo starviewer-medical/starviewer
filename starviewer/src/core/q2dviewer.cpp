@@ -18,11 +18,9 @@
 #include "starviewerapplication.h"
 #include "imageoverlay.h"
 #include "drawerbitmap.h"
-#include "displayshutterfilter.h"
 #include "filteroutput.h"
-#include "windowlevelfilter.h"
-#include "thickslabfilter.h"
 #include "blendfilter.h"
+#include "imagepipeline.h"
 #include "asynchronousvolumereader.h"
 #include "volumereaderjob.h"
 #include "qviewercommand.h"
@@ -59,14 +57,12 @@ Q2DViewer::Q2DViewer(QWidget *parent)
 : QViewer(parent), m_lastView(OrthogonalPlane::XYPlane), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_imagePointPicker(0),
   m_cornerAnnotations(0), m_enabledAnnotations(Q2DViewer::AllAnnotation), m_overlapMethod(Q2DViewer::Blend), m_rotateFactor(0),
   m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false), m_slabThickness(1), m_firstSlabSlice(0),
-  m_lastSlabSlice(0), m_thickSlabActive(false), m_slabProjectionMode(AccumulatorFactory::Maximum)
+  m_lastSlabSlice(0), m_slabProjectionMode(AccumulatorFactory::Maximum)
 {
     m_volumeReaderJob = NULL;
     m_inputFinishedCommand = NULL;
 
-    // Filtre de thick slab + grayscale
-    m_thickSlabProjectionFilter = new ThickSlabFilter();
-    m_windowLevelLUTMapper = new WindowLevelFilter();
+    m_pipeline = new ImagePipeline();
 
     // Creem anotacions i actors
     createAnnotations();
@@ -88,7 +84,6 @@ Q2DViewer::Q2DViewer(QWidget *parent)
     m_alignPosition = Q2DViewer::AlignCenter;
 
     // Inicialitzem el filtre de shutter
-    initializeShutterFilter();
     m_showDisplayShutters = true;
     m_overlaysAreEnabled = true;
 }
@@ -110,9 +105,7 @@ Q2DViewer::~Q2DViewer()
         delete m_blender;
     }
 
-    delete m_displayShutterFilter;
-    delete m_windowLevelLUTMapper;
-    delete m_thickSlabProjectionFilter;
+    delete m_pipeline;
 
     removeViewerBitmaps();
     
@@ -331,12 +324,6 @@ void Q2DViewer::updatePatientOrientationAnnotation()
             m_patientOrientationTextActor[i]->SetVisibility(false);
         }
     }
-}
-
-void Q2DViewer::initializeShutterFilter()
-{
-    m_displayShutterFilter = new DisplayShutterFilter();
-    m_displayShutterFilter->setInput(m_windowLevelLUTMapper->getOutput());
 }
 
 void Q2DViewer::updatePreferredImageOrientation()
@@ -641,8 +628,8 @@ void Q2DViewer::setNewVolumeAndExecuteCommand(Volume *volume)
         
         m_windowToImageFilter->SetInput(getRenderWindow());
 
-        delete m_windowLevelLUTMapper;
-        m_windowLevelLUTMapper = new WindowLevelFilter();
+        delete m_pipeline;
+        m_pipeline = new ImagePipeline();
 
         Volume *dummyVolume = this->getDummyVolumeFromVolume(m_mainVolume);
         dummyVolume->setIdentifier(m_mainVolume->getIdentifier());
@@ -685,7 +672,7 @@ void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVo
         // Al canviar de volum, eliminem overlays que poguèssim tenir anteriorment
         removeViewerBitmaps();
     }
-    
+
     if (m_mainVolume)
     {
         // Al fer un nou input, les distàncies que guardava el drawer no tenen sentit, pertant s'esborren
@@ -715,13 +702,11 @@ void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVo
         m_blender = 0;
     }
 
-    // Preparem el thickSlab
-    // TODO Cada cop que fem setInput resetejem els valors per defecte?
     initializeThickSlab();
-    
-    // Obtenim valors de gris i aquestes coses
-    // Aquí es crea tot el pipeline del visualitzador
-    this->buildWindowLevelPipeline();
+    this->updateDisplayShutterMask();
+    this->setImageActorInput();
+
+    printVolumeInformation();
 
     updatePatientAnnotationInformation();
     this->enableAnnotation(m_enabledAnnotations);
@@ -843,7 +828,7 @@ void Q2DViewer::updateOverlay()
     {
         case None:
             // Actualitzem el pipeline
-            m_windowLevelLUTMapper->setInput(m_mainVolume->getVtkData());
+            m_pipeline->setInput(m_mainVolume->getVtkData());
             // TODO aquest procediment és possible que sigui insuficient,
             // caldria unficar el pipeline en un mateix mètode
             break;
@@ -852,7 +837,7 @@ void Q2DViewer::updateOverlay()
             // TODO Revisar la manera de donar-li l'input d'un blending al visualitzador
             // Aquest procediment podria ser insuficent de cares a com estigui construit el pipeline
             m_blender->update();
-            m_windowLevelLUTMapper->setInput(m_blender->getOutput());
+            m_pipeline->setInput(m_blender->getOutput());
             break;
     }
 
@@ -916,7 +901,7 @@ void Q2DViewer::resetView(OrthogonalPlane::OrthogonalPlaneType view)
     }
     
     // Thick Slab, li indiquem la direcció de projecció actual
-    m_thickSlabProjectionFilter->setProjectionAxis(m_lastView);
+    m_pipeline->setProjectionAxis(m_lastView);
     setSlabThickness(desiredSlabSlices);
 
     emit viewChanged(m_lastView);
@@ -1176,28 +1161,20 @@ void Q2DViewer::resetCamera()
     setCameraViewPlane(m_lastView);
 }
 
-void Q2DViewer::updateShutterPipeline()
-{
-    this->updateDisplayShutterMask();
-    this->setImageActorInput();
-}
-
 void Q2DViewer::setSlice(int value)
 {
     if (this->m_mainVolume && this->m_currentSlice != value)
     {
         this->checkAndUpdateSliceValue(value);
+        m_pipeline->setSlice(m_mainVolume->getImageIndex(m_firstSlabSlice, m_currentPhase));
         if (isThickSlabActive())
         {
-            m_thickSlabProjectionFilter->setFirstSlice(m_mainVolume->getImageIndex(m_firstSlabSlice, m_currentPhase));
-            // TODO Cal actualitzar aquest valor?
-            m_thickSlabProjectionFilter->setSlabThickness(m_slabThickness);
             // Si hi ha el thickslab activat, eliminem totes les roi's. És la decisió ràpida que s'ha près.
             this->getDrawer()->removeAllPrimitives();
         }
         else
         {
-            updateShutterPipeline();
+            updateDisplayShutterMask();
         }
         
         this->updateDisplayExtent();
@@ -1242,10 +1219,7 @@ void Q2DViewer::setPhase(int value)
         }
 
         m_currentPhase = value;
-        if (isThickSlabActive())
-        {
-            m_thickSlabProjectionFilter->setFirstSlice(m_mainVolume->getImageIndex(m_firstSlabSlice, m_currentPhase));
-        }
+        m_pipeline->setSlice(m_mainVolume->getImageIndex(m_firstSlabSlice, m_currentPhase));
         this->updateDisplayExtent();
         updateCurrentImageDefaultPresets();
         updateSliceAnnotationInformation();
@@ -1263,7 +1237,7 @@ void Q2DViewer::setOverlapMethod(OverlapMethod method)
 void Q2DViewer::setOverlapMethodToNone()
 {
     setOverlapMethod(Q2DViewer::None);
-    m_windowLevelLUTMapper->setInput(m_mainVolume->getVtkData());
+    m_pipeline->setInput(m_mainVolume->getVtkData());
 }
 
 void Q2DViewer::setOverlapMethodToBlend()
@@ -1297,10 +1271,8 @@ void Q2DViewer::setWindowLevel(double window, double level)
 {
     if (m_mainVolume)
     {
-        if ((m_windowLevelLUTMapper->getWindow() != window) || (m_windowLevelLUTMapper->getLevel() != level))
+        if (m_pipeline->setWindowLevel(window,level))
         {
-            m_windowLevelLUTMapper->setWindow(window);
-            m_windowLevelLUTMapper->setLevel(level);
             updateAnnotationsInformation(Q2DViewer::WindowInformationAnnotation);
             this->render();
             emit windowLevelChanged(window, level);
@@ -1316,15 +1288,14 @@ void Q2DViewer::setTransferFunction(TransferFunction *transferFunction)
 {
     m_transferFunction = transferFunction;
     // Apliquem la funció de transferència sobre el window level mapper
-    m_windowLevelLUTMapper->setTransferFunction(*m_transferFunction);
+    m_pipeline->setTransferFunction(m_transferFunction);
 }
 
 void Q2DViewer::getCurrentWindowLevel(double wl[2])
 {
     if (m_mainVolume)
     {
-        wl[0] = m_windowLevelLUTMapper->getWindow();
-        wl[1] = m_windowLevelLUTMapper->getLevel();
+        m_pipeline->getCurrentWindowLevel(wl);
     }
     else
     {
@@ -1522,11 +1493,13 @@ void Q2DViewer::updateAnnotationsInformation(AnnotationFlags annotation)
         // Informació de la finestra
         if (m_enabledAnnotations.testFlag(Q2DViewer::WindowInformationAnnotation))
         {
+            double windowLevel[2];
+            m_pipeline->getCurrentWindowLevel(windowLevel);
             m_upperLeftText = tr("%1 x %2\nWW: %5 WL: %6")
                 .arg(m_mainVolume->getDimensions()[OrthogonalPlane::getXIndexForView(getView())])
                 .arg(m_mainVolume->getDimensions()[OrthogonalPlane::getYIndexForView(getView())])
-                .arg(MathTools::roundToNearestInteger(m_windowLevelLUTMapper->getWindow()))
-                .arg(MathTools::roundToNearestInteger(m_windowLevelLUTMapper->getLevel()));
+                .arg(MathTools::roundToNearestInteger(windowLevel[0]))
+                .arg(MathTools::roundToNearestInteger(windowLevel[1]));
         }
         else
         {
@@ -1848,7 +1821,7 @@ void Q2DViewer::removeAnnotation(AnnotationFlags annotation)
     enableAnnotation(annotation, false);
 }
 
-void Q2DViewer::buildWindowLevelPipeline()
+void Q2DViewer::printVolumeInformation()
 {
     double range[2];
     m_mainVolume->getScalarRange(range);
@@ -1857,24 +1830,12 @@ void Q2DViewer::buildWindowLevelPipeline()
                  .arg(m_mainVolume->getImage(0)->getBitsAllocated()).arg(m_mainVolume->getImage(0)->getBitsStored()).arg(range[0]).arg(range[1])
                  .arg(m_mainVolume->getImage(0)->getPixelRepresentation()).arg(m_mainVolume->getImage(0)->getPhotometricInterpretation()));
     // Fins que no implementem Presentation states aquest serà el cas que sempre s'executarà el 100% dels casos
-    if (isThickSlabActive())
-    {
-        DEBUG_LOG("Grayscale pipeline: Source Data -> ThickSlab -> [Window Level] -> Output ");
-        m_windowLevelLUTMapper->setInput(m_thickSlabProjectionFilter->getOutput());
-    }
-    else
-    {
-        DEBUG_LOG("Grayscale pipeline: Source Data -> [Window Level] -> Output ");
-        m_windowLevelLUTMapper->setInput(m_mainVolume->getVtkData());
-    }
-
-    updateShutterPipeline();
 }
 
 void Q2DViewer::setSlabProjectionMode(int projectionMode)
 {
     m_slabProjectionMode = projectionMode;
-    m_thickSlabProjectionFilter->setAccumulatorType(static_cast<AccumulatorFactory::AccumulatorType>(m_slabProjectionMode));
+    m_pipeline->setSlabProjectionMode(static_cast<AccumulatorFactory::AccumulatorType>(m_slabProjectionMode));
     updateDisplayExtent();
     this->render();
 }
@@ -1893,36 +1854,14 @@ void Q2DViewer::setSlabThickness(int thickness)
     }
 
     computeRangeAndSlice(thickness);
-    // TODO Comprovar aquest pipeline si és millor calcular ara o més tard
-    if (m_slabThickness == 1 && isThickSlabActive())
-    {
-        DEBUG_LOG("Desactivem thick Slab i resetejem pipeline normal");
-        m_thickSlabActive = false;
-        // Resetejem el pipeline
-        buildWindowLevelPipeline();
-        updateDisplayExtent();
-        updateSliceAnnotationInformation();
-        this->render();
-    }
-    // La comprovacio es per constuir el pipeline nomes el primer cop
-    if (m_slabThickness > 1 && !isThickSlabActive())
-    {
-        DEBUG_LOG("Activem thick Slab i resetejem pipeline amb thickSlab");
-        m_thickSlabActive = true;
-        // Resetejem el pipeline
-        buildWindowLevelPipeline();
-    }
 
     m_lastSlabSlice = m_currentSlice + m_slabThickness - 1;
 
-    if (isThickSlabActive())
-    {
-        m_thickSlabProjectionFilter->setFirstSlice(m_mainVolume->getImageIndex(m_firstSlabSlice, m_currentPhase));
-        m_thickSlabProjectionFilter->setSlabThickness(m_slabThickness);
-        updateDisplayExtent();
-        updateSliceAnnotationInformation();
-        this->render();
-    }
+    m_pipeline->setSlice(m_mainVolume->getImageIndex(m_firstSlabSlice, m_currentPhase));
+    m_pipeline->setSlabThickness(m_slabThickness);
+    updateDisplayExtent();
+    updateSliceAnnotationInformation();
+    this->render();
 
     // TODO és del tot correcte que vagi aquí aquesta crida?
     // Tal com està posat se suposa que sempre el valor de thickness ha
@@ -1949,7 +1888,7 @@ void Q2DViewer::enableThickSlab(bool enable)
 
 bool Q2DViewer::isThickSlabActive() const
 {
-    return m_thickSlabActive;
+    return m_slabThickness > 1;
 }
 
 void Q2DViewer::computeRangeAndSlice(int newSlabThickness)
@@ -2082,14 +2021,13 @@ void Q2DViewer::initializeThickSlab()
     m_slabThickness = 1;
     m_firstSlabSlice = 0;
     m_lastSlabSlice = 0;
-    m_thickSlabActive = false;
     
-    m_thickSlabProjectionFilter->setInput(m_mainVolume->getVtkData());
-    m_thickSlabProjectionFilter->setProjectionAxis(m_lastView);
-    m_thickSlabProjectionFilter->setAccumulatorType((AccumulatorFactory::AccumulatorType) m_slabProjectionMode);
-    m_thickSlabProjectionFilter->setFirstSlice(m_mainVolume->getImageIndex(m_firstSlabSlice, m_currentPhase));
-    m_thickSlabProjectionFilter->setSlabThickness(m_slabThickness);
-    m_thickSlabProjectionFilter->setStride(m_numberOfPhases);
+    m_pipeline->setInput(m_mainVolume->getVtkData());
+    m_pipeline->setProjectionAxis(m_lastView);
+    m_pipeline->setSlabProjectionMode((AccumulatorFactory::AccumulatorType) m_slabProjectionMode);
+    m_pipeline->setSlice(m_mainVolume->getImageIndex(m_firstSlabSlice, m_currentPhase));
+    m_pipeline->setSlabThickness(m_slabThickness);
+    m_pipeline->setSlabStride(m_numberOfPhases);
 }
 
 void Q2DViewer::putCoordinateInCurrentImageBounds(double xyz[3])
@@ -2125,7 +2063,7 @@ void Q2DViewer::putCoordinateInCurrentImageBounds(double xyz[3])
 
 vtkImageData* Q2DViewer::getCurrentSlabProjection()
 {
-    return m_thickSlabProjectionFilter->getOutput().getVtkImageData();
+    return m_pipeline->getSlabProjectionOutput();
 }
 
 void Q2DViewer::restore()
@@ -2306,7 +2244,7 @@ void Q2DViewer::showImageOverlays(bool enable)
 void Q2DViewer::showDisplayShutters(bool enable)
 {
     m_showDisplayShutters = enable;
-    updateShutterPipeline();
+    updateDisplayShutterMask();
     render();
 }
 
@@ -2399,21 +2337,17 @@ bool Q2DViewer::canShowDisplayShutter() const
 
 void Q2DViewer::updateDisplayShutterMask()
 {
+    vtkImageData *shutterData = NULL;
     if (m_showDisplayShutters && this->canShowDisplayShutter())
     {
         Image *image = getCurrentDisplayedImage();
 
         if (image)
         {
-            vtkImageData *shutterData = image->getDisplayShutterForDisplayAsVtkImageData(m_mainVolume->getImageIndex(m_currentSlice, m_currentPhase));
-
-            if (shutterData)
-            {
-                m_displayShutterFilter->setDisplayShutter(shutterData);
-                m_displayShutterFilter->update();
-            }
+            shutterData = image->getDisplayShutterForDisplayAsVtkImageData(m_mainVolume->getImageIndex(m_currentSlice, m_currentPhase));
         }
     }
+    m_pipeline->setShutterData(shutterData);
 }
 
 void Q2DViewer::setImageActorInput()
@@ -2422,19 +2356,7 @@ void Q2DViewer::setImageActorInput()
     {
         return;
     }
-
-    if (m_showDisplayShutters && this->canShowDisplayShutter())
-    {
-        // If we should show shutters and can do it, then enable and update that part of the pipeline
-        m_displayShutterFilter->update();
-        m_imageActor->SetInput(m_displayShutterFilter->getOutput().getVtkImageData());
-    }
-    else
-    {
-        // If no shutter is applied, the window level pipeline is used
-        m_windowLevelLUTMapper->update();
-        m_imageActor->SetInput(m_windowLevelLUTMapper->getOutput().getVtkImageData());
-    }
+    m_imageActor->SetInput(m_pipeline->getOutput().getVtkImageData());
 }
 
 };  // End namespace udg
