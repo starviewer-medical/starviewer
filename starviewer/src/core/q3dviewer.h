@@ -156,9 +156,6 @@ private:
     /// Reescala les dades de volume en el format adequat per als corresponents algorismes. Retorna fals si no pot crear el volum reescalat.
     bool rescale(Volume *volume);
 
-    /// Reinicia la orientació
-    void resetOrientation();
-
     /// S'encarrega de decidir quina és la millor orientació
     /// depenent del tipus d'input que tenim. Generalment serà
     /// Coronal, però depenent del tipus de Sèrie podria ser una altra
@@ -255,9 +252,6 @@ private:
 
     /// Estimador de gradient que farem servir per les obscurances (i per la resta després de calcular les obscurances).
     Vtk4DLinearRegressionGradientEstimator *m_4DLinearRegressionGradientEstimator;
-
-    /// Orientació que tenim
-    int m_currentOrientation;
 
     /// Plans de tall
     vtkPlanes *m_clippingPlanes;
