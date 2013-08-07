@@ -162,7 +162,7 @@ private:
     /// S'encarrega de decidir quina és la millor orientació
     /// depenent del tipus d'input que tenim. Generalment serà
     /// Coronal, però depenent del tipus de Sèrie podria ser una altra
-    void setDefaultOrientationForCurrentInput();
+    void setDefaultViewForCurrentInput();
 
     /// Comprova si el volum és vàlid com a input. Retorna cert si és així, fals altrament
     bool checkInputVolume(Volume *volume);
