@@ -431,9 +431,6 @@ protected:
     /// Actor d'imatge
     vtkImageActor *m_imageActor;
 
-    /// Conserva la vista actual
-    OrthogonalPlane::OrthogonalPlaneType m_lastView;
-
     /// La llesca actual que estem visualitzant
     int m_currentSlice;
 
