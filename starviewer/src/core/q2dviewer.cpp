@@ -881,7 +881,7 @@ void Q2DViewer::resetView(OrthogonalPlane::OrthogonalPlaneType view)
     }
     
     // Important, cal desactivar el thickslab abans de fer m_currentViewPlane = view, sinó falla amb l'update extent
-    enableThickSlab(false);
+    disableThickSlab();
     m_currentViewPlane = view;
     updateAnnotationsInformation(Q2DViewer::WindowInformationAnnotation);
     
@@ -1743,16 +1743,9 @@ int Q2DViewer::getSlabThickness() const
     return m_slabThickness;
 }
 
-void Q2DViewer::enableThickSlab(bool enable)
+void Q2DViewer::disableThickSlab()
 {
-    if (!enable)
-    {
-        setSlabThickness(1);
-    }
-    else
-    {
-        setSlabThickness(m_slabThickness);
-    }
+    setSlabThickness(1);
 }
 
 bool Q2DViewer::isThickSlabActive() const

@@ -60,7 +60,6 @@ void test_Q2DViewer::canShowDisplayShutter_ShouldReturnExpectedValue_data()
     viewer->enableRendering(false);
     viewer->resetView(OrthogonalPlane::YZPlane);
     viewer->setSlabThickness(2);
-    viewer->enableThickSlab();
     QTest::newRow("thick slab & no XY plane & no shutter") << viewer << false << volume;
 
     viewer = new Q2DViewer();
@@ -76,7 +75,6 @@ void test_Q2DViewer::canShowDisplayShutter_ShouldReturnExpectedValue_data()
     viewer->enableRendering(false);
     viewer->resetView(OrthogonalPlane::XYPlane);
     viewer->setSlabThickness(2);
-    viewer->enableThickSlab();
     QTest::newRow("thick slab & XY plane & no shutter") << viewer << false << volume;
 
     viewer = new Q2DViewer();
@@ -93,7 +91,6 @@ void test_Q2DViewer::canShowDisplayShutter_ShouldReturnExpectedValue_data()
     viewer->enableRendering(false);
     viewer->resetView(OrthogonalPlane::YZPlane);
     viewer->setSlabThickness(2);
-    viewer->enableThickSlab();
     volume->getImage(0)->setDisplayShutters(displayShutterList);
     QTest::newRow("thick slab & no XY plane & shutter") << viewer << false << volume;
 
@@ -111,7 +108,6 @@ void test_Q2DViewer::canShowDisplayShutter_ShouldReturnExpectedValue_data()
     viewer->enableRendering(false);
     viewer->resetView(OrthogonalPlane::XYPlane);
     viewer->setSlabThickness(2);
-    viewer->enableThickSlab();
     volume->getImage(0)->setDisplayShutters(displayShutterList);
     QTest::newRow("thick slab & XY plane & shutter") << viewer << false << volume;
 }
