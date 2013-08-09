@@ -26,6 +26,7 @@
 #include "qviewercommand.h"
 #include "renderqviewercommand.h"
 #include "mammographyimagehelper.h"
+#include "slicehandler.h"
 // Qt
 #include <QResizeEvent>
 #include <QImage>
@@ -54,14 +55,13 @@ const QString Q2DViewer::OverlaysDrawerGroup("Overlays");
 const QString Q2DViewer::DummyVolumeObjectName("Dummy Volume");
 
 Q2DViewer::Q2DViewer(QWidget *parent)
-: QViewer(parent), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_imagePointPicker(0),
-  m_cornerAnnotations(0), m_enabledAnnotations(Q2DViewer::AllAnnotation), m_overlapMethod(Q2DViewer::Blend), m_rotateFactor(0),
-  m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false), m_slabThickness(1), m_firstSlabSlice(0),
-  m_lastSlabSlice(0), m_slabProjectionMode(AccumulatorFactory::Maximum)
+: QViewer(parent), m_overlayVolume(0), m_blender(0), m_imagePointPicker(0), m_cornerAnnotations(0), m_enabledAnnotations(Q2DViewer::AllAnnotation),
+  m_overlapMethod(Q2DViewer::Blend), m_rotateFactor(0), m_applyFlip(false), m_isImageFlipped(false), m_slabProjectionMode(AccumulatorFactory::Maximum)
 {
     m_volumeReaderJob = NULL;
     m_inputFinishedCommand = NULL;
-
+    
+    m_sliceHandler = new SliceHandler;
     m_pipeline = new ImagePipeline();
 
     // Creem anotacions i actors
@@ -90,6 +90,7 @@ Q2DViewer::Q2DViewer(QWidget *parent)
 
 Q2DViewer::~Q2DViewer()
 {
+    delete m_sliceHandler;
     // Fem delete de tots els objectes vtk dels que hem fet un ::New()
     m_patientOrientationTextActor[0]->Delete();
     m_patientOrientationTextActor[1]->Delete();
@@ -206,7 +207,7 @@ PatientOrientation Q2DViewer::getCurrentDisplayedImagePatientOrientation() const
 {
     // Si no estem a la vista axial (adquisició original) obtindrem 
     // la orientació a través de la primera imatge
-    int index = (m_currentViewPlane == OrthogonalPlane::XYPlane) ? m_currentSlice : 0;
+    int index = (m_currentViewPlane == OrthogonalPlane::XYPlane) ? getCurrentSlice() : 0;
 
     PatientOrientation originalOrientation;
     Image *image = m_mainVolume->getImage(index);
@@ -419,18 +420,18 @@ double Q2DViewer::getCurrentSliceThickness()
             if (image)
             {
                 thickness = image->getSliceThickness();
-                if (m_slabThickness > 1)
+                if (m_sliceHandler->getSlabThickness() > 1)
                 {
                     double gap = m_mainVolume->getSpacing()[2] - thickness;
                     if (gap < 0)
                     {
                         // If gap between spacing and thickness is negative, this means slices overlap, so
                         // we have to substract this gap between to get the real thickness
-                        thickness = (thickness + gap) * m_slabThickness;
+                        thickness = (thickness + gap) * m_sliceHandler->getSlabThickness();
                     }
                     else
                     {
-                        thickness = thickness * m_slabThickness;
+                        thickness = thickness * m_sliceHandler->getSlabThickness();
                     }
                 }
             }
@@ -438,11 +439,11 @@ double Q2DViewer::getCurrentSliceThickness()
             break;
 
         case OrthogonalPlane::YZPlane:
-            thickness = m_mainVolume->getSpacing()[0] * m_slabThickness;
+            thickness = m_mainVolume->getSpacing()[0] * m_sliceHandler->getSlabThickness();
             break;
 
         case OrthogonalPlane::XZPlane:
-            thickness = m_mainVolume->getSpacing()[1] * m_slabThickness;
+            thickness = m_mainVolume->getSpacing()[1] * m_sliceHandler->getSlabThickness();
             break;
     }
     return thickness;
@@ -707,13 +708,14 @@ void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVo
 
     // TODO Caldria fer neteja? bloquejar? Per tal que quedi en negre mentres es carrega el nou volum?
     m_mainVolume = volume;
-    m_currentSlice = 0;
-    m_currentPhase = 0;
+    m_sliceHandler->setSlice(0);
+    m_sliceHandler->setPhase(0);
+    
     m_currentViewPlane = OrthogonalPlane::XYPlane;
     m_alignPosition = Q2DViewer::AlignCenter;
 
-    m_numberOfPhases = m_mainVolume->getNumberOfPhases();
-    m_maxSliceValue = this->getMaximumSlice();
+    m_sliceHandler->setNumberOfPhases(m_mainVolume->getNumberOfPhases());
+    m_sliceHandler->setSliceRange(getMinimumSlice(), getMaximumSlice());
 
     // Això es fa per destruir el blender en cas que ja hi hagi algun input i es vulgui canviar
     if (m_blender != 0)
@@ -898,14 +900,13 @@ void Q2DViewer::resetView(OrthogonalPlane::OrthogonalPlaneType view)
     
     if (m_mainVolume)
     {
-        // En comptes de fer servir sempre this->getMaximumSlice(), actualitzem
-        // Aquest valor quan cal, és a dir, al posar input i al canviar de vista
-        // estalviant-nos crides i crides
-        m_maxSliceValue = this->getMaximumSlice();
+        // Update the slice range for the new view
+        m_sliceHandler->setSliceRange(getMinimumSlice(), getMaximumSlice());
 
         // Ara adaptem els actors a la nova configuració de la càmara perquè siguin visibles
         // TODO Això s'hauria d'encapsular en un mètode tipu "resetDisplayExtent()"
-        m_currentSlice = 0; // HACK! Necessari perquè s'actualitzi la llesca correctament
+        // HACK! Necessari perquè s'actualitzi la llesca correctament
+        m_sliceHandler->setSlice(0);
         updateDisplayExtent();
         getRenderer()->ResetCamera();
         // Fins aquí seria el mètode "resetDisplayExtent()"
@@ -914,9 +915,10 @@ void Q2DViewer::resetView(OrthogonalPlane::OrthogonalPlaneType view)
         int initialSliceIndex = 0;
         if (m_currentViewPlane == OrthogonalPlane::YZPlane || m_currentViewPlane == OrthogonalPlane::XZPlane)
         {
-            initialSliceIndex = m_maxSliceValue/2;
+            initialSliceIndex = m_sliceHandler->getMaximumSlice() / 2;
         }
-        m_currentSlice = -1; // HACK! Necessari perquè s'actualitzi la llesca correctament
+        // HACK! Necessari perquè s'actualitzi la llesca correctament
+        m_sliceHandler->setSlice(-1);
         setSlice(initialSliceIndex);
     }
     
@@ -1035,10 +1037,10 @@ void Q2DViewer::resetCamera()
 
 void Q2DViewer::setSlice(int value)
 {
-    if (this->m_mainVolume && this->m_currentSlice != value)
+    if (this->m_mainVolume)
     {
-        this->checkAndUpdateSliceValue(value);
-        m_pipeline->setSlice(m_mainVolume->getImageIndex(m_firstSlabSlice, m_currentPhase));
+        m_sliceHandler->setSlice(value);
+        m_pipeline->setSlice(m_mainVolume->getImageIndex(getCurrentSlice(), getCurrentPhase()));
         if (isThickSlabActive())
         {
             // Si hi ha el thickslab activat, eliminem totes les roi's. És la decisió ràpida que s'ha près.
@@ -1054,7 +1056,7 @@ void Q2DViewer::setSlice(int value)
         updateSliceAnnotationInformation();
         updatePreferredImageOrientation();
         updatePatientOrientationAnnotation();
-        emit sliceChanged(m_currentSlice);
+        emit sliceChanged(getCurrentSlice());
         render();
     }
 }
@@ -1064,39 +1066,13 @@ void Q2DViewer::setPhase(int value)
     // Comprovació de rang
     if (m_mainVolume)
     {
-        Settings settings;
-        bool phaseLoopIsEnabled = settings.getValue(CoreSettings::EnableQ2DViewerPhaseScrollLoop).toBool();
-
-        if (phaseLoopIsEnabled)
-        {
-            if (value < 0)
-            {
-                value = m_numberOfPhases - 1;
-            }
-            else if (value > m_numberOfPhases - 1)
-            {
-                value = 0;
-            }
-        }
-        else
-        {
-            if (value < 0)
-            {
-                value = 0;
-            }
-            else if (value > m_numberOfPhases - 1)
-            {
-                value = m_numberOfPhases - 1;
-            }
-        }
-
-        m_currentPhase = value;
-        m_pipeline->setSlice(m_mainVolume->getImageIndex(m_firstSlabSlice, m_currentPhase));
+        m_sliceHandler->setPhase(value);
+        m_pipeline->setSlice(m_mainVolume->getImageIndex(getCurrentSlice(), getCurrentPhase()));
         this->updateDisplayExtent();
         updateCurrentImageDefaultPresets();
         updateSliceAnnotationInformation();
         updatePreferredImageOrientation();
-        emit phaseChanged(m_currentPhase);
+        emit phaseChanged(getCurrentPhase());
         this->render();
     }
 }
@@ -1177,19 +1153,19 @@ void Q2DViewer::getCurrentWindowLevel(double wl[2])
 
 int Q2DViewer::getCurrentSlice() const
 {
-    return m_currentSlice;
+    return m_sliceHandler->getCurrentSlice();
 }
 
 int Q2DViewer::getCurrentPhase() const
 {
-    return m_currentPhase;
+    return m_sliceHandler->getCurrentPhase();
 }
 
 Image* Q2DViewer::getCurrentDisplayedImage() const
 {
     if (m_currentViewPlane == OrthogonalPlane::XYPlane)
     {
-        return m_mainVolume->getImage(m_currentSlice, m_currentPhase);
+        return m_mainVolume->getImage(getCurrentSlice(), getCurrentPhase());
     }
     else
     {
@@ -1204,7 +1180,7 @@ ImagePlane* Q2DViewer::getCurrentImagePlane(bool vtkReconstructionHack)
         return 0;
     }
     
-    return m_mainVolume->getImagePlane(m_currentSlice, m_currentViewPlane, vtkReconstructionHack);
+    return m_mainVolume->getImagePlane(getCurrentSlice(), m_currentViewPlane, vtkReconstructionHack);
 }
 
 void Q2DViewer::projectDICOMPointToCurrentDisplayedImage(const double pointToProject[3], double projectedPoint[3], bool vtkReconstructionHack)
@@ -1333,7 +1309,7 @@ bool Q2DViewer::getCurrentCursorImageCoordinate(double xyz[3])
         int zIndex = OrthogonalPlane::getZIndexForView(m_currentViewPlane);
         double zSpacing = m_mainVolume->getSpacing()[zIndex];
         double zOrigin = m_mainVolume->getOrigin()[zIndex];
-        xyz[zIndex] =  zOrigin + zSpacing * m_currentSlice;;
+        xyz[zIndex] =  zOrigin + zSpacing * getCurrentSlice();
     }
     else
     {
@@ -1469,14 +1445,15 @@ void Q2DViewer::updateSliceAnnotationInformation()
         updateLateralityAnnotationInformation();
     }
 
-    int value = m_mainVolume->getImageIndex(m_currentSlice, m_currentPhase);
-    if (m_numberOfPhases > 1)
+    int value = m_mainVolume->getImageIndex(getCurrentSlice(), getCurrentPhase());
+    if (m_sliceHandler->getNumberOfPhases() > 1)
     {
-        this->updateSliceAnnotation((value/m_numberOfPhases) + 1, m_maxSliceValue + 1, m_currentPhase + 1, m_numberOfPhases);
+        this->updateSliceAnnotation((value / m_sliceHandler->getNumberOfPhases()) + 1, m_sliceHandler->getMaximumSlice() + 1,
+            getCurrentPhase() + 1, m_sliceHandler->getNumberOfPhases());
     }
     else
     {
-        this->updateSliceAnnotation(value + 1, m_maxSliceValue + 1);
+        this->updateSliceAnnotation(value + 1, m_sliceHandler->getMaximumSlice() + 1);
     }
     
     updatePatientInformationAnnotation();
@@ -1584,7 +1561,7 @@ void Q2DViewer::updateSliceAnnotation(int currentSlice, int maxSlice, int curren
                     {
                         // TODO Necessitaríem funcions de més alt nivell per obtenir la imatge consecutiva d'acord amb els paràmetres
                         // de thicknes, fases, etc
-                        Image *secondImage = m_mainVolume->getImage(m_currentSlice + m_slabThickness - 1, m_currentPhase);
+                        Image *secondImage = m_mainVolume->getImage(m_sliceHandler->getLastSlabSlice(), getCurrentPhase());
                         if (secondImage)
                         {
                             lowerLeftText += tr("-%1").arg(secondImage->getSliceLocation().toDouble(), 0, 'f', 2);
@@ -1595,10 +1572,10 @@ void Q2DViewer::updateSliceAnnotation(int currentSlice, int maxSlice, int curren
             }
         }
 
-        if (m_slabThickness > 1)
+        if (m_sliceHandler->getSlabThickness() > 1)
         {
             // TODO Potser hauríem de tenir una variable "slabRange"
-            lowerLeftText += tr("Slice: %1-%2/%3").arg(currentSlice).arg(currentSlice + m_slabThickness - 1).arg(maxSlice);
+            lowerLeftText += tr("Slice: %1-%2/%3").arg(currentSlice).arg(m_sliceHandler->getLastSlabSlice() + 1).arg(maxSlice);
         }
         else
         {
@@ -1638,11 +1615,11 @@ void Q2DViewer::updateDisplayExtent()
     int sliceValue;
     if (isThickSlabActive())
     {
-        sliceValue = m_currentSlice;
+        sliceValue = getCurrentSlice();
     }
     else
     {
-        sliceValue = m_mainVolume->getImageIndex(m_currentSlice, m_currentPhase);
+        sliceValue = m_mainVolume->getImageIndex(getCurrentSlice(), getCurrentPhase());
     }
 
     // A partir de l'extent del volum, la vista i la llesca en la que ens trobem,
@@ -1709,17 +1686,15 @@ int Q2DViewer::getSlabProjectionMode() const
 void Q2DViewer::setSlabThickness(int thickness)
 {
     // Primera aproximació per evitar error dades de primitives: a l'activar o desactivar l'slabthickness, esborrem primitives
-    if (thickness != m_slabThickness)
+    if (thickness != m_sliceHandler->getSlabThickness())
     {
         this->getDrawer()->removeAllPrimitives();
     }
 
-    computeRangeAndSlice(thickness);
+    m_sliceHandler->setSlabThickness(thickness);
 
-    m_lastSlabSlice = m_currentSlice + m_slabThickness - 1;
-
-    m_pipeline->setSlice(m_mainVolume->getImageIndex(m_firstSlabSlice, m_currentPhase));
-    m_pipeline->setSlabThickness(m_slabThickness);
+    m_pipeline->setSlice(m_mainVolume->getImageIndex(getCurrentSlice(), getCurrentPhase()));
+    m_pipeline->setSlabThickness(m_sliceHandler->getSlabThickness());
     updateDisplayExtent();
     updateSliceAnnotationInformation();
     this->render();
@@ -1727,12 +1702,12 @@ void Q2DViewer::setSlabThickness(int thickness)
     // TODO és del tot correcte que vagi aquí aquesta crida?
     // Tal com està posat se suposa que sempre el valor de thickness ha
     // canviat i podria ser que no, seria més adequat posar-ho a computerangeAndSlice?
-    emit slabThicknessChanged(m_slabThickness);
+    emit slabThicknessChanged(m_sliceHandler->getSlabThickness());
 }
 
 int Q2DViewer::getSlabThickness() const
 {
-    return m_slabThickness;
+    return m_sliceHandler->getSlabThickness();
 }
 
 void Q2DViewer::disableThickSlab()
@@ -1742,146 +1717,20 @@ void Q2DViewer::disableThickSlab()
 
 bool Q2DViewer::isThickSlabActive() const
 {
-    return m_slabThickness > 1;
-}
-
-void Q2DViewer::computeRangeAndSlice(int newSlabThickness)
-{
-    // Checking del nou valor
-    if (newSlabThickness < 1)
-    {
-        DEBUG_LOG(" valor invàlid de thickness. Ha de ser >= 1 !!!!!");
-        return;
-    }
-    if (newSlabThickness == m_slabThickness)
-    {
-        DEBUG_LOG(" tenim el mateix slab thickness, no canviem res ");
-        return;
-    }
-    if (newSlabThickness > m_maxSliceValue + 1)
-    {
-        DEBUG_LOG(" el nou thickness supera el thickness màxim, tot queda igual ");
-        // TODO Podríem aplicar newSlabThickness=m_maxSliceValue+1
-        return;
-    }
-    if (newSlabThickness == 1)
-    {
-        m_slabThickness = 1;
-        return;
-    }
-
-    int difference = newSlabThickness - m_slabThickness;
-    // Si la diferència és positiva, augmentem el thickness
-    if (difference > 0)
-    {
-        // Divisió entera!
-        m_firstSlabSlice -= difference / 2;
-        m_lastSlabSlice += difference / 2;
-
-        // Si la diferència és senar creix més per un dels límits
-        if ((difference % 2) != 0)
-        {
-            // Si el thickness actual és parell creixem per sota
-            if ((m_slabThickness % 2) == 0)
-            {
-                m_firstSlabSlice--;
-            }
-            // Sinó creixem per dalt
-            else
-            {
-                m_lastSlabSlice++;
-            }
-        }
-        // Check per si ens passem de rang superior o inferior
-        if (m_firstSlabSlice < this->getMinimumSlice())
-        {
-            // Si ens passem per sota, cal compensar creixent per dalt
-            m_lastSlabSlice = this->getMinimumSlice() + newSlabThickness - 1;
-            // Queda al límit inferior
-            m_firstSlabSlice = this->getMinimumSlice();
-        }
-        else if (m_lastSlabSlice > m_maxSliceValue)
-        {
-            // Si ens passem per dalt, cal compensar creixent per sota
-            m_firstSlabSlice = m_maxSliceValue - newSlabThickness + 1;
-            m_lastSlabSlice = m_maxSliceValue;
-        }
-    }
-    // La diferència és negativa, decreix el thickness
-    else
-    {
-        // La convertim a positiva per conveniència
-        difference *= -1;
-        m_firstSlabSlice += difference / 2;
-        m_lastSlabSlice -= difference / 2;
-
-        // Si la diferència és senar decreix més per un dels límits
-        if ((difference % 2) != 0)
-        {
-            // Si el thickness actual és parell decreixem per amunt
-            if ((m_slabThickness%2) == 0)
-            {
-                m_lastSlabSlice--;
-            }
-            // Sinó decreixem per avall
-            else
-            {
-                m_firstSlabSlice++;
-            }
-        }
-    }
-    // Actualitzem el thickness
-    m_slabThickness = newSlabThickness;
-    // Actualitzem la llesca
-    m_currentSlice = m_firstSlabSlice;
-}
-
-void Q2DViewer::checkAndUpdateSliceValue(int value)
-{
-    Settings settings;
-    bool sliceLoopIsEnabled = settings.getValue(CoreSettings::EnableQ2DViewerSliceScrollLoop).toBool();
-    
-    if (sliceLoopIsEnabled)
-    {
-        if (value < 0)
-        {
-            value = m_maxSliceValue - m_slabThickness + 1;
-        }
-        else if (value + m_slabThickness - 1 > m_maxSliceValue)
-        {
-            value = 0;
-        }
-    }
-    else
-    {
-        if (value < 0)
-        {
-            value = 0;
-        }
-        else if (value + m_slabThickness - 1 > m_maxSliceValue)
-        {
-            value = m_maxSliceValue - m_slabThickness + 1;
-        }
-    }
-
-    m_currentSlice = value;
-
-    m_firstSlabSlice = m_currentSlice;
-    m_lastSlabSlice = m_firstSlabSlice + m_slabThickness;
+    return m_sliceHandler->getSlabThickness() > 1;
 }
 
 void Q2DViewer::initializeThickSlab()
 {
-    m_slabThickness = 1;
-    m_firstSlabSlice = 0;
-    m_lastSlabSlice = 0;
+    m_sliceHandler->setSlabThickness(1);
+    m_sliceHandler->setSlice(0);
     
     m_pipeline->setInput(m_mainVolume->getVtkData());
     m_pipeline->setProjectionAxis(m_currentViewPlane);
     m_pipeline->setSlabProjectionMode((AccumulatorFactory::AccumulatorType) m_slabProjectionMode);
-    m_pipeline->setSlice(m_mainVolume->getImageIndex(m_firstSlabSlice, m_currentPhase));
-    m_pipeline->setSlabThickness(m_slabThickness);
-    m_pipeline->setSlabStride(m_numberOfPhases);
+    m_pipeline->setSlice(m_mainVolume->getImageIndex(getCurrentSlice(), getCurrentPhase()));
+    m_pipeline->setSlabThickness(m_sliceHandler->getSlabThickness());
+    m_pipeline->setSlabStride(m_sliceHandler->getNumberOfPhases());
 }
 
 void Q2DViewer::putCoordinateInCurrentImageBounds(double xyz[3])
@@ -2186,7 +2035,7 @@ bool Q2DViewer::canShowDisplayShutter() const
         && !isThickSlabActive()
         && m_currentViewPlane == OrthogonalPlane::XYPlane
         && getCurrentDisplayedImage()
-        && getCurrentDisplayedImage()->getDisplayShutterForDisplayAsVtkImageData(m_mainVolume->getImageIndex(m_currentSlice, m_currentPhase));
+        && getCurrentDisplayedImage()->getDisplayShutterForDisplayAsVtkImageData(m_mainVolume->getImageIndex(getCurrentSlice(), getCurrentPhase()));
 }
 
 void Q2DViewer::updateDisplayShutterMask()
@@ -2198,7 +2047,7 @@ void Q2DViewer::updateDisplayShutterMask()
 
         if (image)
         {
-            shutterData = image->getDisplayShutterForDisplayAsVtkImageData(m_mainVolume->getImageIndex(m_currentSlice, m_currentPhase));
+            shutterData = image->getDisplayShutterForDisplayAsVtkImageData(m_mainVolume->getImageIndex(getCurrentSlice(), getCurrentPhase()));
         }
     }
     m_pipeline->setShutterData(shutterData);

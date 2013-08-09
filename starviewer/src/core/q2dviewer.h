@@ -29,6 +29,7 @@ class QViewerCommand;
 class PatientOrientation;
 class BlendFilter;
 class ImagePipeline;
+class SliceHandler;
 
 /**
     Classe base per als visualitzadors 2D.
@@ -356,10 +357,6 @@ private:
     void resetCamera();
 
     /// Thick slab
-    void computeRangeAndSlice(int newSlabThickness);
-
-    ///  Valida el valor d'slice donat i actualitza les variables membres pertinents, com m_currentSlice o m_firstSlabSlice
-    void checkAndUpdateSliceValue(int value);
 
     /// Inicialitza els paràmetres del thick slab i del seu filtre
     void initializeThickSlab();
@@ -430,11 +427,8 @@ protected:
     /// Actor d'imatge
     vtkImageActor *m_imageActor;
 
-    /// La llesca actual que estem visualitzant
-    int m_currentSlice;
-
-    /// La fase (instant de temps) de les llesques
-    int m_currentPhase;
+    /// Handles slice, phase and thick slab index
+    SliceHandler *m_sliceHandler;
 
     /// Aquest és el segon volum afegit a solapar
     Volume *m_overlayVolume;
@@ -478,13 +472,6 @@ private:
     /// Factor de rotació. En sentit de les agulles del rellotge 0: 0º, 1: 90º, 2: 180º, 3: 270º.
     int m_rotateFactor;
 
-    /// Ampliació tractament dinàmic
-    /// Nombre de fases
-    int m_numberOfPhases;
-
-    /// Valor màxim al que pot arribar m_currentSlice
-    int m_maxSliceValue;
-
     /// Indica si cal aplicar un flip horitzontal o no sobre la càmera
     bool m_applyFlip;
 
@@ -493,13 +480,6 @@ private:
 
     /// Especialista en dibuixar primitives
     Drawer *m_drawer;
-
-    // Secció "ThickSlab"
-    /// Nombre de llesques que composen el thickSlab
-    int m_slabThickness;
-
-    /// Variables per controlar el rang de llesques en el que es troba l'slab
-    int m_firstSlabSlice, m_lastSlabSlice;
 
     /// Indica quin tipus de projecció apliquem sobre l'slab
     int m_slabProjectionMode;
