@@ -415,22 +415,25 @@ double Q2DViewer::getCurrentSliceThickness()
     {
         case OrthogonalPlane::XYPlane:
         {
-                // HACK Fins que se solucioni de forma consistent el ticket #492
-                if (isThickSlabActive())
+            Image *image = getCurrentDisplayedImage();
+            if (image)
+            {
+                thickness = image->getSliceThickness();
+                if (m_slabThickness > 1)
                 {
-                    // Si hi ha thickslab, llavors el thickness es basa a partir de la
-                    // suma de l'espai entre llesques
-                    // TODO Repassar que això sigui del tot correcte
-                    thickness = m_mainVolume->getSpacing()[2] * m_slabThickness;
-                }
-                else
-                {
-                    Image *image = getCurrentDisplayedImage();
-                    if (image)
+                    double gap = m_mainVolume->getSpacing()[2] - thickness;
+                    if (gap < 0)
                     {
-                        thickness = image->getSliceThickness();
+                        // If gap between spacing and thickness is negative, this means slices overlap, so
+                        // we have to substract this gap between to get the real thickness
+                        thickness = (thickness + gap) * m_slabThickness;
+                    }
+                    else
+                    {
+                        thickness = thickness * m_slabThickness;
                     }
                 }
+            }
         }
             break;
 
