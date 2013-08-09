@@ -240,9 +240,8 @@ public slots:
     /// @param thickness Nombre de llesques que formen l'slab
     void setSlabThickness(int thickness);
 
-    /// Activem a desactivem l'aplicació del thick slab sobre la imatge
-    /// @param enable
-    void enableThickSlab(bool enable = true);
+    /// Disables thick slab. Acts as a shortcut for setSlabThickness(1)
+    void disableThickSlab();
 
     /// Alineament de la imatge dins del visualitzador
     void alignLeft();

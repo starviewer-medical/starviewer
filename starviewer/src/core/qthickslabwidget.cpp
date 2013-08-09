@@ -106,7 +106,7 @@ void QThickSlabWidget::applyProjectionMode(int comboItem)
         disconnect(m_slabThicknessSlider, SIGNAL(sliderPressed()), this, SLOT(turnOnDelayedUpdate()));
         disconnect(m_slabThicknessSlider, SIGNAL(sliderReleased()), this, SLOT(onSliderReleased()));
 
-        m_currentViewer->enableThickSlab(false);
+        m_currentViewer->disableThickSlab();
         m_slabThicknessSlider->setEnabled(false);
         m_slabThicknessLabel->setEnabled(false);
         m_maximumThicknessCheckBox->setEnabled(false);
@@ -220,8 +220,7 @@ void QThickSlabWidget::updateThicknessLabel(int value)
 
 void QThickSlabWidget::reset()
 {
-    m_currentViewer->enableThickSlab(false);
-    m_currentViewer->setSlabThickness(1);
+    m_currentViewer->disableThickSlab();
     this->link(m_currentViewer);
 }
 
