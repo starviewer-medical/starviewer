@@ -1592,33 +1592,22 @@ void Q2DViewer::updateSliceAnnotation(int currentSlice, int maxSlice, int curren
             }
         }
 
+        if (m_slabThickness > 1)
+        {
+            // TODO Potser hauríem de tenir una variable "slabRange"
+            lowerLeftText += tr("Slice: %1-%2/%3").arg(currentSlice).arg(currentSlice + m_slabThickness - 1).arg(maxSlice);
+        }
+        else
+        {
+            lowerLeftText += tr("Slice: %1/%2").arg(currentSlice).arg(maxSlice);
+        }
+        
         // Si tenim fases
         if (maxPhase > 1)
         {
-            if (m_slabThickness > 1)
-            {
-                // TODO Potser hauríem de tenir una variable "slabRange"
-                lowerLeftText += tr("Slice: %1-%2/%3 Phase: %4/%5").arg(currentSlice).arg(currentSlice + m_slabThickness - 1)
-                               .arg(maxSlice).arg(currentPhase).arg(maxPhase);
-            }
-            else
-            {
-                lowerLeftText += tr("Slice: %1/%2 Phase: %3/%4").arg(currentSlice).arg(maxSlice).arg(currentPhase).arg(maxPhase);
-            }
+            lowerLeftText += tr(" Phase: %1/%2").arg(currentPhase).arg(maxPhase);
         }
-        // Només llesques
-        else
-        {
-            if (m_slabThickness > 1)
-            {
-                // TODO Potser hauríem de tenir una variable "slabRange"
-                lowerLeftText += tr("Slice: %1-%2/%3").arg(currentSlice).arg(currentSlice + m_slabThickness - 1).arg(maxSlice);
-            }
-            else
-            {
-                lowerLeftText += tr("Slice: %1/%2").arg(currentSlice).arg(maxSlice);
-            }
-        }
+        
         // Afegim el thickness de la llesca nomes si es > 0mm
         if (this->getCurrentSliceThickness() > 0.0)
         {
