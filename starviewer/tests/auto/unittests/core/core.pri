@@ -68,6 +68,7 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_filter.cpp \
            $$PWD/test_filteroutput.cpp \
            $$PWD/test_orthogonalplane.cpp \
+           $$PWD/test_slicehandler.cpp \
            $$PWD/test_mammographyimagehelper.cpp
 
 win32 {
