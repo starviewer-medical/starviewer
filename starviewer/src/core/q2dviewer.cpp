@@ -1612,15 +1612,7 @@ void Q2DViewer::updateDisplayExtent()
         return;
     }
 
-    int sliceValue;
-    if (isThickSlabActive())
-    {
-        sliceValue = getCurrentSlice();
-    }
-    else
-    {
-        sliceValue = m_mainVolume->getImageIndex(getCurrentSlice(), getCurrentPhase());
-    }
+    int sliceValue = m_mainVolume->getImageIndex(getCurrentSlice(), getCurrentPhase());
 
     // A partir de l'extent del volum, la vista i la llesca en la que ens trobem,
     // calculem l'extent que li correspon a l'actor imatge
