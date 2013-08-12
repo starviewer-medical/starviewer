@@ -350,9 +350,6 @@ private:
     /// Updates the mask used as display shutter if display shutters should and can be shown.
     void updateDisplayShutterMask();
 
-    /// Decides and sets the input image for the image actor, choosing between the display shutter mask output and the window level output.
-    void setImageActorInput();
-
     /// Re-inicia els paràmetres de la càmera segons la vista actual.
     void resetCamera();
 

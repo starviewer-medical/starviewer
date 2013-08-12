@@ -726,7 +726,7 @@ void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVo
 
     initializeThickSlab();
     this->updateDisplayShutterMask();
-    this->setImageActorInput();
+    m_imageActor->SetInput(m_pipeline->getOutput().getVtkImageData());
 
     printVolumeInformation();
 
@@ -2043,15 +2043,6 @@ void Q2DViewer::updateDisplayShutterMask()
         }
     }
     m_pipeline->setShutterData(shutterData);
-}
-
-void Q2DViewer::setImageActorInput()
-{
-    if (!m_mainVolume)
-    {
-        return;
-    }
-    m_imageActor->SetInput(m_pipeline->getOutput().getVtkImageData());
 }
 
 };  // End namespace udg
