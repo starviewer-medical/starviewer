@@ -21,8 +21,7 @@
 #include "filteroutput.h"
 #include "blendfilter.h"
 #include "imagepipeline.h"
-#include "asynchronousvolumereader.h"
-#include "volumereaderjob.h"
+#include "volumereadermanager.h"
 #include "qviewercommand.h"
 #include "renderqviewercommand.h"
 #include "mammographyimagehelper.h"
@@ -58,9 +57,12 @@ Q2DViewer::Q2DViewer(QWidget *parent)
 : QViewer(parent), m_overlayVolume(0), m_blender(0), m_imagePointPicker(0), m_cornerAnnotations(0), m_enabledAnnotations(Q2DViewer::AllAnnotation),
   m_overlapMethod(Q2DViewer::Blend), m_rotateFactor(0), m_applyFlip(false), m_isImageFlipped(false), m_slabProjectionMode(AccumulatorFactory::Maximum)
 {
-    m_volumeReaderJob = NULL;
+    m_volumeReaderManager = new VolumeReaderManager(this);
     m_inputFinishedCommand = NULL;
     
+    connect(m_volumeReaderManager, SIGNAL(readingFinished()), SLOT(volumeReaderJobFinished()));
+    connect(m_volumeReaderManager, SIGNAL(progress(int)), m_workInProgressWidget, SLOT(updateProgress(int)));
+
     m_sliceHandler = new SliceHandler;
     m_pipeline = new ImagePipeline();
 
@@ -516,7 +518,7 @@ void Q2DViewer::setInput(Volume *volume)
         return;
     }
 
-    this->cancelCurrentVolumeReaderJob();
+    m_volumeReaderManager->cancelReading();
     this->deleteInputFinishedCommand();
 
     this->setNewVolume(volume);
@@ -530,7 +532,7 @@ void Q2DViewer::setInputAsynchronously(Volume *volume, QViewerCommand *inputFini
     }
     DEBUG_LOG(QString("Q2DViewer::setInputAsynchronously to Volume %1").arg(volume->getIdentifier().getValue()));
 
-    this->cancelCurrentVolumeReaderJob();
+    m_volumeReaderManager->cancelReading();
     this->setInputFinishedCommand(inputFinishedCommand);
 
     bool allowAsynchronousVolumeLoading = Settings().getValue(CoreSettings::AllowAsynchronousVolumeLoading).toBool();
@@ -577,27 +579,11 @@ void Q2DViewer::deleteInputFinishedCommand()
     m_inputFinishedCommand = NULL;
 }
 
-void Q2DViewer::cancelCurrentVolumeReaderJob()
-{
-    // TODO: Aquí s'hauria de cancel·lar realment el current job. De moment no podem fer-ho i simplement el desconnectem
-    // Quan es faci bé, tenir en compte què passa si algun altre visor el vol continuar descarregant igualment i nosaltres aquí el cancelem?
-    if (!m_volumeReaderJob.isNull())
-    {
-        disconnect(m_volumeReaderJob, SIGNAL(done(ThreadWeaver::Job*)), this, SLOT(volumeReaderJobFinished()));
-        disconnect(m_volumeReaderJob, SIGNAL(progress(int)), m_workInProgressWidget, SLOT(updateProgress(int)));
-    }
-    m_volumeReaderJob = NULL;
-}
-
 void Q2DViewer::loadVolumeAsynchronously(Volume *volume)
 {
     this->setViewerStatus(LoadingVolume);
 
-    // TODO Esborrar volumeReader!!
-    AsynchronousVolumeReader *volumeReader = new AsynchronousVolumeReader();
-    m_volumeReaderJob = volumeReader->read(volume);
-    connect(m_volumeReaderJob, SIGNAL(done(ThreadWeaver::Job*)), SLOT(volumeReaderJobFinished()));
-    connect(m_volumeReaderJob, SIGNAL(progress(int)), m_workInProgressWidget, SLOT(updateProgress(int)));
+    m_volumeReaderManager->readVolume(volume);
 
     // TODO: De moment no tenim cap més remei que especificar un volume fals. La resta del viewer (i els que en depenen) s'esperen
     // tenir un volum carregat després de cridar a setInput.
@@ -609,14 +595,14 @@ void Q2DViewer::loadVolumeAsynchronously(Volume *volume)
 
 void Q2DViewer::volumeReaderJobFinished()
 {
-    if (m_volumeReaderJob->success())
+    if (m_volumeReaderManager->readingSuccess())
     {
-        setNewVolumeAndExecuteCommand(m_volumeReaderJob->getVolume());
+        setNewVolumeAndExecuteCommand(m_volumeReaderManager->getVolume());
     }
     else
     {
         this->setViewerStatus(LoadingError);
-        m_workInProgressWidget->showError(m_volumeReaderJob->getLastErrorMessageToUser());
+        m_workInProgressWidget->showError(m_volumeReaderManager->getLastErrorMessageToUser());
     }
 }
 
@@ -656,11 +642,6 @@ void Q2DViewer::setNewVolumeAndExecuteCommand(Volume *volume)
         dummyVolume->setIdentifier(m_mainVolume->getIdentifier());
         this->setNewVolume(dummyVolume, false);
     }
-}
-
-bool Q2DViewer::isVolumeLoadingAsynchronously()
-{
-    return !m_volumeReaderJob.isNull() && !m_volumeReaderJob->isFinished();
 }
 
 Volume* Q2DViewer::getDummyVolumeFromVolume(Volume *volume)
@@ -1769,7 +1750,7 @@ void Q2DViewer::restore()
     }
 
     // Si hi ha un volum carregant no fem el restore
-    if (this->isVolumeLoadingAsynchronously())
+    if (m_volumeReaderManager->isReading())
     {
         return;
     }
