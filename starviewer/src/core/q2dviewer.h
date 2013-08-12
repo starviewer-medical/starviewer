@@ -24,7 +24,7 @@ class Drawer;
 class DrawerBitmap;
 class ImagePlane;
 class ImageOrientationOperationsMapper;
-class VolumeReaderJob;
+class VolumeReaderManager;
 class QViewerCommand;
 class PatientOrientation;
 class BlendFilter;
@@ -383,15 +383,8 @@ private:
     /// Si està definit, executa el command definit per després d'especificar un input al viewer
     void executeInputFinishedCommand();
 
-    /// Cancela el job actual de carregar un volum en el cas que existeixi
-    /// TODO: De moment només desconnecta el job del viewer, no cancel·la el job en sí
-    void cancelCurrentVolumeReaderJob();
-
     /// Updates the current image default presets values. It only applies to original acquisition plane.
     void updateCurrentImageDefaultPresets();
-
-    /// Indica si el volum del visor s'està carregant assíncronament
-    bool isVolumeLoadingAsynchronously();
 
     /// Crida els mètodes setNewVolume i executa el command. A més a més es fa un bloc try/catch per capturar
     /// qualsevol excepció possible durant el procés de rendering per evitar que peti
@@ -487,8 +480,8 @@ private:
     /// Posició a on s'ha d'alinear la imatge (dreta, esquerre o centrat)
     AlignPosition m_alignPosition;
 
-    /// El job no ens pertany, per això ho guardem en un QPointer
-    QPointer<VolumeReaderJob> m_volumeReaderJob;
+    /// Manager of the reading of volumes
+    VolumeReaderManager *m_volumeReaderManager;
 
     QViewerCommand *m_inputFinishedCommand;
 
