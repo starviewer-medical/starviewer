@@ -48,7 +48,7 @@ public:
 
 signals:
     /// Signal que s'emet amb el progrés de lectura
-    void progress(int progress);
+    void progress(ThreadWeaver::Job*, int progress);
 
 protected:
     /// Mètode on realment es fa la càrrega. S'executa en un thread de threadweaver.
@@ -57,7 +57,8 @@ protected:
 private slots:
     /// Slot que s'encarrega d'esborrar el job si autoDelete és true
     void autoDelete();
-
+    /// Slot to emit the current progress
+    void updateProgress(int value);
 private:
     Volume *m_volumeToRead;
     bool m_volumeReadSuccessfully;
