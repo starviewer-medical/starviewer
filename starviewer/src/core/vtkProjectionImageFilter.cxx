@@ -83,8 +83,8 @@ int vtkProjectionImageFilter::RequestInformation (
 //     DEBUG_LOG( QString( "inWholeExtent: %1 %2 %3 %4 %5 %6" ).arg(extent[0]).arg(extent[1]).arg(extent[2]).arg(extent[3]).arg(extent[4]).arg(extent[5]) );
 
     // \TODO aquí hi hauria d'anar un 0 per la versió final
-//     extent[2*ProjectionDimension] = extent[2*ProjectionDimension+1] = FirstSlice;
-    extent[2*ProjectionDimension] = extent[2*ProjectionDimension+1] = FirstSlice / Step;    // First = llesca * nFases + fase
+    extent[2*ProjectionDimension] = extent[2*ProjectionDimension+1] = FirstSlice;
+    //extent[2*ProjectionDimension] = extent[2*ProjectionDimension+1] = FirstSlice / Step;    // First = llesca * nFases + fase
                                                                                             // nFases = Step
                                                                                             // First / Step = llesca :)
 //     extent[2*ProjectionDimension] = extent[2*ProjectionDimension+1] = 0;
