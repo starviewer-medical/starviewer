@@ -100,8 +100,6 @@ void SliceHandler::setSlabThickness(int thickness)
 {
     computeRangeAndSlice(thickness);
     m_lastSlabSlice = m_currentSlice + m_slabThickness - 1;
-    
-    emit slabThicknessChanged(m_slabThickness);
 }
 
 int SliceHandler::getSlabThickness() const
