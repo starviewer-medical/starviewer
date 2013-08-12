@@ -3,6 +3,9 @@
 
 #include <QObject>
 #include <QPointer>
+#include <QHash>
+
+#include "volumereaderjob.h"
 
 namespace udg {
 
@@ -19,6 +22,9 @@ public:
     /// Starts the reading of a volume
     void readVolume(Volume *volume);
 
+    ///Starts the reading of n volumes
+    void readVolumes(const QList<Volume *> &volumes);
+
     /// Cancels the reading
     void cancelReading();
 
@@ -30,6 +36,7 @@ public:
 
     /// Returns the volume readed
     Volume *getVolume();
+    QList<Volume *> getVolumes();
 
     /// Returns the last error messege. An empty string is retured if no error.
     QString getLastErrorMessageToUser();
@@ -40,9 +47,18 @@ signals:
     /// Signal emitted at the end of the reading
     void readingFinished();
 
+private slots:
+    /// Updates the progress of the job and emits the global progress
+    void updateProgress(ThreadWeaver::Job*, int);
+    /// Slot executed when a job finished. It emits the signal readingFinished() if no jobs are reading.
+    void jobFinished();
+
 private:
-    /// Job to read the volume. It doesn't belong to us, that is why QPointer is used.
-    QPointer<VolumeReaderJob> m_volumeReaderJob;
+    /// List of jobs to read volumes. They don't belong to us, that is why QPointer is used.
+    QList<QPointer<VolumeReaderJob> > m_volumeReaderJobs;
+
+    /// List to control the progress of all jobs
+    QHash<ThreadWeaver::Job*, int> m_jobsProgress;
 };
 
 } // namespace udg

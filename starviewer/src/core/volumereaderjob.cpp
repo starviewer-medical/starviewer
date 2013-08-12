@@ -76,7 +76,7 @@ void VolumeReaderJob::run()
         m_volumeReaderToAbort = volumeReader;
     }
 
-    connect(volumeReader, SIGNAL(progress(int)), SIGNAL(progress(int)));
+    connect(volumeReader, SIGNAL(progress(int)), SLOT(updateProgress(int)));
     m_volumeReadSuccessfully = volumeReader->readWithoutShowingError(m_volumeToRead);
     m_lastErrorMessageToUser = volumeReader->getLastErrorMessageToUser();
 
@@ -92,6 +92,11 @@ void VolumeReaderJob::run()
     {
         DEBUG_LOG(QString("                          Error Volume: %1: %2").arg(m_volumeToRead->getIdentifier().getValue()).arg(m_lastErrorMessageToUser));
     }
+}
+
+void VolumeReaderJob::updateProgress(int value)
+{
+    emit progress(this, value);
 }
 
 void VolumeReaderJob::autoDelete()
