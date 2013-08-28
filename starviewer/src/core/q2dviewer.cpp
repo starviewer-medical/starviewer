@@ -404,7 +404,7 @@ void Q2DViewer::refreshAnnotations()
     updateAnnotationsInformation(Q2DViewer::WindowInformationAnnotation | Q2DViewer::SliceAnnotation);
 }
 
-double Q2DViewer::getCurrentSliceThickness()
+double Q2DViewer::getCurrentSliceThickness() const
 {
     return m_mainVolumeDisplayUnit->getSliceThickness(m_currentViewPlane);
 }
