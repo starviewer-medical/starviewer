@@ -5,6 +5,18 @@ using namespace udg;
 
 class TestingSliceHandler : public SliceHandler {
 public:
+    void setSliceRange(int min, int max)
+    {
+        m_minSliceValue = min;
+        m_maxSliceValue = max;
+    }
+
+    void setNumberOfPhases(int value)
+    {
+        m_numberOfPhases = value;
+    }
+
+public:
     bool m_sliceLoopEnabled;
     bool m_phaseLoopEnabled;
 
@@ -135,7 +147,7 @@ void test_SliceHandler::setSlabThickness_ComputesExpectedThickness()
     QFETCH(int, slabThicknessValue);
     QFETCH(int, expectedSlabThicknessValue);
 
-    SliceHandler sliceHandler;
+    TestingSliceHandler sliceHandler;
     sliceHandler.setSliceRange(minSlice, maxSlice);
     sliceHandler.setSlabThickness(slabThicknessValue);
     
@@ -165,7 +177,7 @@ void test_SliceHandler::getLastSlabSlice_ReturnsExpectedValue()
     QFETCH(int, slabThicknessValue);
     QFETCH(int, expectedLastSlabSlice);
 
-    SliceHandler sliceHandler;
+    TestingSliceHandler sliceHandler;
     sliceHandler.setSliceRange(minSlice, maxSlice);
     sliceHandler.setSlice(slice);
     sliceHandler.setSlabThickness(slabThicknessValue);
@@ -198,7 +210,7 @@ void test_SliceHandler::setSlabThickness_ModifiesCurrentSliceAsExpected()
     QFETCH(int, slabThicknessValue);
     QFETCH(int, expectedCurrentSlice);
 
-    SliceHandler sliceHandler;
+    TestingSliceHandler sliceHandler;
     sliceHandler.setSliceRange(minSlice, maxSlice);
     sliceHandler.setSlice(slice);
     sliceHandler.setSlabThickness(slabThicknessValue);

@@ -3,12 +3,11 @@
 
 class vtkImageActor;
 
-#include "orthogonalplane.h"
-
 namespace udg {
 
 class Image;
 class ImagePipeline;
+class OrthogonalPlane;
 class SliceHandler;
 class Volume;
 
@@ -39,7 +38,6 @@ private:
     ImagePipeline *m_imagePipeline;
     vtkImageActor *m_imageActor;
     SliceHandler *m_sliceHandler;
-    OrthogonalPlane m_viewPlane;
 
 };
 

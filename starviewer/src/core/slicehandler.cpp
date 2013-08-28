@@ -2,11 +2,12 @@
 
 #include "coresettings.h"
 #include "logging.h"
+#include "volume.h"
 
 namespace udg {
 
 SliceHandler::SliceHandler(QObject *parent)
- : QObject(parent)
+ : QObject(parent), m_volume(0)
 {
     m_currentSlice = 0;
     m_maxSliceValue = 0;
@@ -21,6 +22,32 @@ SliceHandler::~SliceHandler()
 {
 }
 
+void SliceHandler::setVolume(Volume *volume)
+{
+    m_volume = volume;
+
+    this->setSlice(0);
+    this->setPhase(0);
+
+    this->setViewPlane(OrthogonalPlane::XYPlane);
+
+    m_numberOfPhases = m_volume->getNumberOfPhases();
+    m_volume->getSliceRange(m_minSliceValue, m_maxSliceValue, this->getViewPlane());
+}
+
+void SliceHandler::setViewPlane(const OrthogonalPlane &viewPlane)
+{
+    m_viewPlane = viewPlane;
+
+    // Update the slice range for the new view
+    m_volume->getSliceRange(m_minSliceValue, m_maxSliceValue, viewPlane);
+}
+
+const OrthogonalPlane& SliceHandler::getViewPlane() const
+{
+    return m_viewPlane;
+}
+
 void SliceHandler::setSlice(int value)
 {
     if (m_currentSlice != value)
@@ -32,12 +59,6 @@ void SliceHandler::setSlice(int value)
 int SliceHandler::getCurrentSlice() const
 {
     return m_currentSlice;
-}
-
-void SliceHandler::setSliceRange(int min, int max)
-{
-    m_minSliceValue = min;
-    m_maxSliceValue = max;
 }
 
 int SliceHandler::getMinimumSlice() const
@@ -84,11 +105,6 @@ void SliceHandler::setPhase(int value)
 int SliceHandler::getCurrentPhase() const
 {
     return m_currentPhase;
-}
-
-void SliceHandler::setNumberOfPhases(int value)
-{
-    m_numberOfPhases = value;
 }
 
 int SliceHandler::getNumberOfPhases() const

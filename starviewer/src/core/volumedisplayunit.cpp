@@ -10,7 +10,7 @@
 namespace udg {
 
 VolumeDisplayUnit::VolumeDisplayUnit() :
-    m_volume(0), m_viewPlane(OrthogonalPlane::XYPlane)
+    m_volume(0)
 {
     m_imagePipeline = new ImagePipeline();
     m_imageActor = vtkImageActor::New();
@@ -32,14 +32,7 @@ Volume* VolumeDisplayUnit::getVolume() const
 void VolumeDisplayUnit::setVolume(Volume *volume)
 {
     m_volume = volume;
-
-    m_sliceHandler->setSlice(0);
-    m_sliceHandler->setPhase(0);
-
-    m_viewPlane = OrthogonalPlane::XYPlane;
-
-    m_sliceHandler->setNumberOfPhases(m_volume->getNumberOfPhases());
-    m_sliceHandler->setSliceRange(m_volume->getMinimumSlice(m_viewPlane), m_volume->getMaximumSlice(m_viewPlane));
+    m_sliceHandler->setVolume(volume);
 
     m_imageActor->SetInput(m_imagePipeline->getOutput().getVtkImageData());
 }
@@ -61,19 +54,19 @@ SliceHandler* VolumeDisplayUnit::getSliceHandler() const
 
 const OrthogonalPlane& VolumeDisplayUnit::getViewPlane() const
 {
-    return m_viewPlane;
+    return m_sliceHandler->getViewPlane();
 }
 
 void VolumeDisplayUnit::setViewPlane(const OrthogonalPlane &viewPlane)
 {
-    m_viewPlane = viewPlane;
+    m_sliceHandler->setViewPlane(viewPlane);
 }
 
 double VolumeDisplayUnit::getSliceThickness() const
 {
     double thickness = 0.0;
 
-    switch (m_viewPlane)
+    switch (this->getViewPlane())
     {
         case OrthogonalPlane::XYPlane:
             {
