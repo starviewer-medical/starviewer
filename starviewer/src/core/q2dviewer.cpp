@@ -406,43 +406,7 @@ void Q2DViewer::refreshAnnotations()
 
 double Q2DViewer::getCurrentSliceThickness()
 {
-    double thickness = 0.0;
-    
-    switch (m_currentViewPlane)
-    {
-        case OrthogonalPlane::XYPlane:
-        {
-            Image *image = getCurrentDisplayedImage();
-            if (image)
-            {
-                thickness = image->getSliceThickness();
-                if (m_mainVolumeDisplayUnit->getSliceHandler()->getSlabThickness() > 1)
-                {
-                    double gap = m_mainVolume->getSpacing()[2] - thickness;
-                    if (gap < 0)
-                    {
-                        // If gap between spacing and thickness is negative, this means slices overlap, so
-                        // we have to substract this gap between to get the real thickness
-                        thickness = (thickness + gap) * m_mainVolumeDisplayUnit->getSliceHandler()->getSlabThickness();
-                    }
-                    else
-                    {
-                        thickness = thickness * m_mainVolumeDisplayUnit->getSliceHandler()->getSlabThickness();
-                    }
-                }
-            }
-        }
-            break;
-
-        case OrthogonalPlane::YZPlane:
-            thickness = m_mainVolume->getSpacing()[0] * m_mainVolumeDisplayUnit->getSliceHandler()->getSlabThickness();
-            break;
-
-        case OrthogonalPlane::XZPlane:
-            thickness = m_mainVolume->getSpacing()[1] * m_mainVolumeDisplayUnit->getSliceHandler()->getSlabThickness();
-            break;
-    }
-    return thickness;
+    return m_mainVolumeDisplayUnit->getSliceThickness(m_currentViewPlane);
 }
 
 void Q2DViewer::getSliceRange(int &min, int &max)
