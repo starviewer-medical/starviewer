@@ -10,7 +10,7 @@
 namespace udg {
 
 VolumeDisplayUnit::VolumeDisplayUnit() :
-    m_volume(0)
+    m_volume(0), m_viewPlane(OrthogonalPlane::XYPlane)
 {
     m_imagePipeline = new ImagePipeline();
     m_imageActor = vtkImageActor::New();
@@ -47,6 +47,16 @@ vtkImageActor* VolumeDisplayUnit::getImageActor() const
 SliceHandler* VolumeDisplayUnit::getSliceHandler() const
 {
     return m_sliceHandler;
+}
+
+OrthogonalPlane::OrthogonalPlaneType VolumeDisplayUnit::getViewPlane() const
+{
+    return m_viewPlane;
+}
+
+void VolumeDisplayUnit::setViewPlane(OrthogonalPlane::OrthogonalPlaneType viewPlane)
+{
+    m_viewPlane = viewPlane;
 }
 
 double VolumeDisplayUnit::getSliceThickness(OrthogonalPlane::OrthogonalPlaneType viewPlane) const
