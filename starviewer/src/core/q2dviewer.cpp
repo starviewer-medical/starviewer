@@ -623,7 +623,6 @@ void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVo
     delete m_blender;
     m_blender = 0;
 
-    initializeThickSlab();
     this->updateDisplayShutterMask();
 
     printVolumeInformation();
@@ -1606,16 +1605,6 @@ void Q2DViewer::disableThickSlab()
 bool Q2DViewer::isThickSlabActive() const
 {
     return m_mainVolumeDisplayUnit->getSliceHandler()->getSlabThickness() > 1;
-}
-
-void Q2DViewer::initializeThickSlab()
-{
-    m_mainVolumeDisplayUnit->getImagePipeline()->setInput(m_mainVolume->getVtkData());
-    m_mainVolumeDisplayUnit->getImagePipeline()->setProjectionAxis(this->getCurrentViewPlane());
-    m_mainVolumeDisplayUnit->getImagePipeline()->setSlabProjectionMode((AccumulatorFactory::AccumulatorType) m_slabProjectionMode);
-    m_mainVolumeDisplayUnit->getImagePipeline()->setSlice(m_mainVolume->getImageIndex(getCurrentSlice(), getCurrentPhase()));
-    m_mainVolumeDisplayUnit->getImagePipeline()->setSlabThickness(m_mainVolumeDisplayUnit->getSliceHandler()->getSlabThickness());
-    m_mainVolumeDisplayUnit->getImagePipeline()->setSlabStride(m_mainVolumeDisplayUnit->getSliceHandler()->getNumberOfPhases());
 }
 
 void Q2DViewer::putCoordinateInCurrentImageBounds(double xyz[3])

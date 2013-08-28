@@ -42,6 +42,10 @@ public:
     void setViewPlane(const OrthogonalPlane &viewPlane);
 
 private:
+    /// Called when setting a new volume to reset the thick slab filter.
+    void resetThickSlab();
+
+private:
     /// The volume.
     Volume *m_volume;
 

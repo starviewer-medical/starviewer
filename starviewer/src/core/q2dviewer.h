@@ -350,11 +350,6 @@ private:
     /// Re-inicia els paràmetres de la càmera segons la vista actual.
     void resetCamera();
 
-    /// Thick slab
-
-    /// Inicialitza els paràmetres del thick slab i del seu filtre
-    void initializeThickSlab();
-    
     /// Aplica el factor de rotació adient segons els girs que li indiquem. No actualitza la càmera ni l'escena, simplement
     /// es fa servir per posar els valors correctes a les variables internes que controlen com està girada la imatge.
     void rotate(int times);
