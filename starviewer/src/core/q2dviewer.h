@@ -296,6 +296,12 @@ protected:
 
     void setDefaultOrientation(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane);
 
+    /// Returns the current view plane.
+    virtual OrthogonalPlane::OrthogonalPlaneType getCurrentViewPlane() const;
+
+    /// Sets the current view plane.
+    virtual void setCurrentViewPlane(OrthogonalPlane::OrthogonalPlaneType viewPlane);
+
 private:
     /// Updates image orientation according to the preferred presentation depending on its attributes, like modality.
     /// At this moment it is only applying to mammography (MG) images

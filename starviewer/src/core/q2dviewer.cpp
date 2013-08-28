@@ -1974,4 +1974,15 @@ void Q2DViewer::updateDisplayShutterMask()
     m_mainVolumeDisplayUnit->getImagePipeline()->setShutterData(shutterData);
 }
 
+OrthogonalPlane::OrthogonalPlaneType Q2DViewer::getCurrentViewPlane() const
+{
+    return m_mainVolumeDisplayUnit->getViewPlane();
+}
+
+void Q2DViewer::setCurrentViewPlane(OrthogonalPlane::OrthogonalPlaneType viewPlane)
+{
+    QViewer::setCurrentViewPlane(viewPlane);
+    m_mainVolumeDisplayUnit->setViewPlane(viewPlane);
+}
+
 };  // End namespace udg
