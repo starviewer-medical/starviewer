@@ -103,10 +103,7 @@ Q2DViewer::~Q2DViewer()
     m_imageActor->Delete();
 
     // Fem delete d'altres objectes vtk en cas que s'hagin hagut de crear
-    if (m_blender)
-    {
-        delete m_blender;
-    }
+    delete m_blender;
 
     delete m_pipeline;
 
@@ -572,10 +569,7 @@ void Q2DViewer::setInputFinishedCommand(QViewerCommand *command)
 
 void Q2DViewer::deleteInputFinishedCommand()
 {
-    if (m_inputFinishedCommand)
-    {
-        delete m_inputFinishedCommand;
-    }
+    delete m_inputFinishedCommand;
     m_inputFinishedCommand = NULL;
 }
 
@@ -699,11 +693,8 @@ void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVo
     m_sliceHandler->setSliceRange(getMinimumSlice(), getMaximumSlice());
 
     // Això es fa per destruir el blender en cas que ja hi hagi algun input i es vulgui canviar
-    if (m_blender != 0)
-    {
-        delete m_blender;
-        m_blender = 0;
-    }
+    delete m_blender;
+    m_blender = 0;
 
     initializeThickSlab();
     this->updateDisplayShutterMask();
