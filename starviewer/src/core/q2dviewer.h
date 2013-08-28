@@ -480,8 +480,8 @@ private:
     /// If true, display shutters are visible when they are available and it's possible to show them.
     bool m_showDisplayShutters;
 
-    /// Volume display unit of the main volume.
-    VolumeDisplayUnit *m_mainVolumeDisplayUnit;
+    /// Volume display units containing the volumes displayed in this viewer and their related objects.
+    QList<VolumeDisplayUnit*> m_volumeDisplayUnits;
 
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(Q2DViewer::AnnotationFlags)
