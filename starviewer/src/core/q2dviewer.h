@@ -17,7 +17,6 @@ class vtkImageData;
 namespace udg {
 
 // Fordward declarations
-class Volume;
 class Image;
 class ImageOverlay;
 class Drawer;
@@ -28,8 +27,7 @@ class VolumeReaderManager;
 class QViewerCommand;
 class PatientOrientation;
 class BlendFilter;
-class ImagePipeline;
-class SliceHandler;
+class VolumeDisplayUnit;
 
 /**
     Classe base per als visualitzadors 2D.
@@ -414,12 +412,6 @@ private slots:
     void volumeReaderJobFinished();
 
 protected:
-    /// Actor d'imatge
-    vtkImageActor *m_imageActor;
-
-    /// Handles slice, phase and thick slab index
-    SliceHandler *m_sliceHandler;
-
     /// Aquest és el segon volum afegit a solapar
     Volume *m_overlayVolume;
 
@@ -494,8 +486,8 @@ private:
     /// If true, display shutters are visible when they are available and it's possible to show them.
     bool m_showDisplayShutters;
 
-    /// Pipeline to generate the volume visualization
-    ImagePipeline *m_pipeline;
+    /// Volume display unit of the main volume.
+    VolumeDisplayUnit *m_mainVolumeDisplayUnit;
 
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(Q2DViewer::AnnotationFlags)
