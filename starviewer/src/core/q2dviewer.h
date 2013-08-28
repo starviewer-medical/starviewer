@@ -122,8 +122,8 @@ public:
     /// Ens dóna la llesca mínima/màxima de llesques, tenint en compte totes les imatges,
     /// tant com si hi ha fases com si no
     /// @return valor de la llesca mínima/màxima
-    int getMinimumSlice();
-    int getMaximumSlice();
+    int getMinimumSlice() const;
+    int getMaximumSlice() const;
 
     /// Ens indica si s'està aplicant o no thick slab
     bool isThickSlabActive() const;
