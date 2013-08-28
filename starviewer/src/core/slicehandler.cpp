@@ -32,7 +32,6 @@ void SliceHandler::setVolume(Volume *volume)
     this->setViewPlane(OrthogonalPlane::XYPlane);
 
     m_numberOfPhases = m_volume->getNumberOfPhases();
-    m_volume->getSliceRange(m_minSliceValue, m_maxSliceValue, this->getViewPlane());
 }
 
 void SliceHandler::setViewPlane(const OrthogonalPlane &viewPlane)
