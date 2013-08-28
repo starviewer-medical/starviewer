@@ -203,7 +203,7 @@ PatientOrientation Q2DViewer::getCurrentDisplayedImagePatientOrientation() const
 {
     // Si no estem a la vista axial (adquisició original) obtindrem 
     // la orientació a través de la primera imatge
-    int index = (m_currentViewPlane == OrthogonalPlane::XYPlane) ? getCurrentSlice() : 0;
+    int index = (this->getCurrentViewPlane() == OrthogonalPlane::XYPlane) ? getCurrentSlice() : 0;
 
     PatientOrientation originalOrientation;
     Image *image = m_mainVolume->getImage(index);
@@ -224,7 +224,7 @@ PatientOrientation Q2DViewer::getCurrentDisplayedImagePatientOrientation() const
     // Escollim les etiquetes que hem agafar com a referència segons la vista actual
     QString baseRowLabel;
     QString baseColumnLabel;
-    switch (m_currentViewPlane)
+    switch (this->getCurrentViewPlane())
     {
         case OrthogonalPlane::XYPlane:
             baseRowLabel = originalOrientation.getRowDirectionLabel();
@@ -248,7 +248,7 @@ PatientOrientation Q2DViewer::getCurrentDisplayedImagePatientOrientation() const
     QString rowLabel;
     QString columnLabel;
     int absoluteRotateFactor = (4 + m_rotateFactor) % 4;
-    if (m_currentViewPlane == OrthogonalPlane::YZPlane || m_currentViewPlane == OrthogonalPlane::XZPlane)
+    if (this->getCurrentViewPlane() == OrthogonalPlane::YZPlane || this->getCurrentViewPlane() == OrthogonalPlane::XZPlane)
     {
         // HACK FLIP De moment necessitem fer aquest truc. Durant el refactoring caldria
         // veure si es pot fer d'una manera millor
@@ -406,14 +406,14 @@ void Q2DViewer::refreshAnnotations()
 
 double Q2DViewer::getCurrentSliceThickness() const
 {
-    return m_mainVolumeDisplayUnit->getSliceThickness(m_currentViewPlane);
+    return m_mainVolumeDisplayUnit->getSliceThickness(this->getCurrentViewPlane());
 }
 
 void Q2DViewer::getSliceRange(int &min, int &max)
 {
     if (m_mainVolume)
     {
-        m_mainVolume->getSliceRange(min, max, m_currentViewPlane);
+        m_mainVolume->getSliceRange(min, max, this->getCurrentViewPlane());
     }
     else
     {
@@ -425,7 +425,7 @@ int Q2DViewer::getMinimumSlice()
 {
     if (m_mainVolume)
     {
-        return m_mainVolume->getMinimumSlice(m_currentViewPlane);
+        return m_mainVolume->getMinimumSlice(this->getCurrentViewPlane());
     }
     else
     {
@@ -437,7 +437,7 @@ int Q2DViewer::getMaximumSlice()
 {
     if (m_mainVolume)
     {
-        return m_mainVolume->getMaximumSlice(m_currentViewPlane);
+        return m_mainVolume->getMaximumSlice(this->getCurrentViewPlane());
     }
     else
     {
@@ -643,8 +643,8 @@ void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVo
     m_mainVolumeDisplayUnit->setVolume(m_mainVolume);
     m_mainVolumeDisplayUnit->getSliceHandler()->setSlice(0);
     m_mainVolumeDisplayUnit->getSliceHandler()->setPhase(0);
-    
-    m_currentViewPlane = OrthogonalPlane::XYPlane;
+
+    this->setCurrentViewPlane(OrthogonalPlane::XYPlane);
     m_alignPosition = Q2DViewer::AlignCenter;
 
     m_mainVolumeDisplayUnit->getSliceHandler()->setNumberOfPhases(m_mainVolume->getNumberOfPhases());
@@ -817,7 +817,7 @@ void Q2DViewer::resetView(OrthogonalPlane::OrthogonalPlaneType view)
     
     // Important, cal desactivar el thickslab abans de fer m_currentViewPlane = view, sinó falla amb l'update extent
     disableThickSlab();
-    m_currentViewPlane = view;
+    this->setCurrentViewPlane(view);
     updateAnnotationsInformation(Q2DViewer::WindowInformationAnnotation);
     
     // Reiniciem valors per defecte de la càmera
@@ -843,7 +843,7 @@ void Q2DViewer::resetView(OrthogonalPlane::OrthogonalPlaneType view)
         
         // Calculem la llesca que cal mostrar segons la vista escollida
         int initialSliceIndex = 0;
-        if (m_currentViewPlane == OrthogonalPlane::YZPlane || m_currentViewPlane == OrthogonalPlane::XZPlane)
+        if (this->getCurrentViewPlane() == OrthogonalPlane::YZPlane || this->getCurrentViewPlane() == OrthogonalPlane::XZPlane)
         {
             initialSliceIndex = m_mainVolumeDisplayUnit->getSliceHandler()->getMaximumSlice() / 2;
         }
@@ -853,10 +853,10 @@ void Q2DViewer::resetView(OrthogonalPlane::OrthogonalPlaneType view)
     }
     
     // Thick Slab, li indiquem la direcció de projecció actual
-    m_mainVolumeDisplayUnit->getImagePipeline()->setProjectionAxis(m_currentViewPlane);
+    m_mainVolumeDisplayUnit->getImagePipeline()->setProjectionAxis(this->getCurrentViewPlane());
     setSlabThickness(desiredSlabSlices);
 
-    emit viewChanged(m_currentViewPlane);
+    emit viewChanged(this->getCurrentViewPlane());
 }
 
 void Q2DViewer::updateCamera()
@@ -867,7 +867,7 @@ void Q2DViewer::updateCamera()
         Q_ASSERT(camera);
 
         double roll = 0.0;
-        switch (m_currentViewPlane)
+        switch (this->getCurrentViewPlane())
         {
             case OrthogonalPlane::XYPlane:
                 if (m_isImageFlipped)
@@ -912,7 +912,7 @@ void Q2DViewer::updateCamera()
             // el centre de la imatge. Una altra possibilitat es contrarestar el desplaçament de la
             // camera en l'eix en que s'ha produit
             camera->Azimuth(180);
-            switch (this->m_currentViewPlane)
+            switch (this->getCurrentViewPlane())
             {
                 // HACK Aquest hack esta relacionat amb els de getCurrentDisplayedImageOrientationLabels()
                 // és un petit truc perque la imatge quedi orientada correctament. Caldria
@@ -946,7 +946,7 @@ void Q2DViewer::resetCamera()
 
     // Ajustem els paràmetres de la càmera segons la vista
     double cameraRoll = 0.0;
-    switch (m_currentViewPlane)
+    switch (this->getCurrentViewPlane())
     {
         case OrthogonalPlane::XYPlane:
             cameraRoll = 180.0;
@@ -962,7 +962,7 @@ void Q2DViewer::resetCamera()
     }
 
     camera->SetRoll(cameraRoll);
-    setCameraViewPlane(m_currentViewPlane);
+    setCameraViewPlane(this->getCurrentViewPlane());
 }
 
 void Q2DViewer::setSlice(int value)
@@ -1093,7 +1093,7 @@ int Q2DViewer::getCurrentPhase() const
 
 Image* Q2DViewer::getCurrentDisplayedImage() const
 {
-    if (m_currentViewPlane == OrthogonalPlane::XYPlane)
+    if (this->getCurrentViewPlane() == OrthogonalPlane::XYPlane)
     {
         return m_mainVolume->getImage(getCurrentSlice(), getCurrentPhase());
     }
@@ -1110,7 +1110,7 @@ ImagePlane* Q2DViewer::getCurrentImagePlane(bool vtkReconstructionHack)
         return 0;
     }
     
-    return m_mainVolume->getImagePlane(getCurrentSlice(), m_currentViewPlane, vtkReconstructionHack);
+    return m_mainVolume->getImagePlane(getCurrentSlice(), this->getCurrentViewPlane(), vtkReconstructionHack);
 }
 
 void Q2DViewer::projectDICOMPointToCurrentDisplayedImage(const double pointToProject[3], double projectedPoint[3], bool vtkReconstructionHack)
@@ -1171,7 +1171,7 @@ void Q2DViewer::projectDICOMPointToCurrentDisplayedImage(const double pointToPro
 
         // Segons si hem fet una reconstrucció ortogonal haurem de fer
         // alguns canvis sobre la projecció
-        switch (m_currentViewPlane)
+        switch (this->getCurrentViewPlane())
         {
             case OrthogonalPlane::XYPlane:
                 for (int i = 0; i < 3; i++)
@@ -1236,7 +1236,7 @@ bool Q2DViewer::getCurrentCursorImageCoordinate(double xyz[3])
         // Calculem la profunditat correcta. S'ha de tenir en compte que en el cas que tinguem fases
         // vtk no n'és conscient (cada fase es desplaça en la profunditat z com si fos una imatge més)
         // i si no fèssim aquest càlcul, estaríem donant una coordenada Z incorrecta
-        int zIndex = OrthogonalPlane::getZIndexForView(m_currentViewPlane);
+        int zIndex = OrthogonalPlane::getZIndexForView(this->getCurrentViewPlane());
         double zSpacing = m_mainVolume->getSpacing()[zIndex];
         double zOrigin = m_mainVolume->getOrigin()[zIndex];
         xyz[zIndex] =  zOrigin + zSpacing * getCurrentSlice();
@@ -1250,7 +1250,7 @@ bool Q2DViewer::getCurrentCursorImageCoordinate(double xyz[3])
 
 OrthogonalPlane::OrthogonalPlaneType Q2DViewer::getView() const
 {
-    return m_currentViewPlane;
+    return this->getCurrentViewPlane();
 }
 
 void Q2DViewer::setSeedPosition(double pos[3])
@@ -1419,7 +1419,7 @@ void Q2DViewer::updatePatientInformationAnnotation()
     {
         // Si la vista és "AXIAL" (és a dir mostrem la imatge en l'adquisició original)
         // i tenim informació de la hora d'adquisició de la imatge, la incloem en la informació mostrada
-        if (m_currentViewPlane == OrthogonalPlane::XYPlane)
+        if (this->getCurrentViewPlane() == OrthogonalPlane::XYPlane)
         {
             Image *currentImage = getCurrentDisplayedImage();
             if (currentImage)
@@ -1479,7 +1479,7 @@ void Q2DViewer::updateSliceAnnotation(int currentSlice, int maxSlice, int curren
     {
         QString lowerLeftText;
         // TODO Ara només tenim en compte de posar l'slice location si estem en la vista "original"
-        if (m_currentViewPlane == OrthogonalPlane::XYPlane)
+        if (this->getCurrentViewPlane() == OrthogonalPlane::XYPlane)
         {
             Image *image = getCurrentDisplayedImage();
             if (image)
@@ -1545,7 +1545,7 @@ void Q2DViewer::updateDisplayExtent()
 
     // A partir de l'extent del volum, la vista i la llesca en la que ens trobem,
     // calculem l'extent que li correspon a l'actor imatge
-    int zIndex = OrthogonalPlane::getZIndexForView(m_currentViewPlane);
+    int zIndex = OrthogonalPlane::getZIndexForView(this->getCurrentViewPlane());
     int imageActorExtent[6];
     m_mainVolume->getWholeExtent(imageActorExtent);
     imageActorExtent[zIndex * 2] = imageActorExtent[zIndex * 2 + 1] = sliceValue;
@@ -1647,7 +1647,7 @@ void Q2DViewer::initializeThickSlab()
     m_mainVolumeDisplayUnit->getSliceHandler()->setSlice(0);
     
     m_mainVolumeDisplayUnit->getImagePipeline()->setInput(m_mainVolume->getVtkData());
-    m_mainVolumeDisplayUnit->getImagePipeline()->setProjectionAxis(m_currentViewPlane);
+    m_mainVolumeDisplayUnit->getImagePipeline()->setProjectionAxis(this->getCurrentViewPlane());
     m_mainVolumeDisplayUnit->getImagePipeline()->setSlabProjectionMode((AccumulatorFactory::AccumulatorType) m_slabProjectionMode);
     m_mainVolumeDisplayUnit->getImagePipeline()->setSlice(m_mainVolume->getImageIndex(getCurrentSlice(), getCurrentPhase()));
     m_mainVolumeDisplayUnit->getImagePipeline()->setSlabThickness(m_mainVolumeDisplayUnit->getSliceHandler()->getSlabThickness());
@@ -1659,8 +1659,8 @@ void Q2DViewer::putCoordinateInCurrentImageBounds(double xyz[3])
     double bounds[6];
     m_mainVolumeDisplayUnit->getImageActor()->GetBounds(bounds);
 
-    int xIndex = OrthogonalPlane::getXIndexForView(m_currentViewPlane);
-    int yIndex = OrthogonalPlane::getYIndexForView(m_currentViewPlane);
+    int xIndex = OrthogonalPlane::getXIndexForView(this->getCurrentViewPlane());
+    int yIndex = OrthogonalPlane::getYIndexForView(this->getCurrentViewPlane());
 
     // Comprovarem que estigui dins dels límits 2D de la imatge
     // La x està per sota del mínim
@@ -1780,7 +1780,7 @@ void Q2DViewer::setAlignPosition(AlignPosition alignPosition)
     
     // Càlcul del desplaçament
     int boundIndex = 0;
-    switch (m_currentViewPlane)
+    switch (this->getCurrentViewPlane())
     {
         case OrthogonalPlane::XYPlane:
             // Si es dóna el cas que o bé està rotada 180º o bé està voltejada, cal agafar l'altre extrem
@@ -1909,7 +1909,7 @@ void Q2DViewer::getCurrentRenderedItemBounds(double bounds[6])
 
 void Q2DViewer::updateCurrentImageDefaultPresets()
 {
-    if (m_currentViewPlane == OrthogonalPlane::XYPlane)
+    if (this->getCurrentViewPlane() == OrthogonalPlane::XYPlane)
     {
         Image *image = getCurrentDisplayedImage();
         for (int i = 0; i < image->getNumberOfWindowLevels(); ++i)
@@ -1922,7 +1922,7 @@ void Q2DViewer::updateCurrentImageDefaultPresets()
 
 double Q2DViewer::getCurrentSpacingBetweenSlices()
 {
-    int zIndex = OrthogonalPlane::getZIndexForView(m_currentViewPlane);
+    int zIndex = OrthogonalPlane::getZIndexForView(this->getCurrentViewPlane());
     
     return m_mainVolume->getSpacing()[zIndex];
 }
@@ -1954,7 +1954,7 @@ bool Q2DViewer::canShowDisplayShutter() const
     return m_mainVolume
         && m_mainVolume->objectName() != DummyVolumeObjectName
         && !isThickSlabActive()
-        && m_currentViewPlane == OrthogonalPlane::XYPlane
+        && this->getCurrentViewPlane() == OrthogonalPlane::XYPlane
         && getCurrentDisplayedImage()
         && getCurrentDisplayedImage()->getDisplayShutterForDisplayAsVtkImageData(m_mainVolume->getImageIndex(getCurrentSlice(), getCurrentPhase()));
 }
