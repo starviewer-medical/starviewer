@@ -32,6 +32,16 @@ Volume* VolumeDisplayUnit::getVolume() const
 void VolumeDisplayUnit::setVolume(Volume *volume)
 {
     m_volume = volume;
+
+    m_sliceHandler->setSlice(0);
+    m_sliceHandler->setPhase(0);
+
+    m_viewPlane = OrthogonalPlane::XYPlane;
+
+    m_sliceHandler->setNumberOfPhases(m_volume->getNumberOfPhases());
+    m_sliceHandler->setSliceRange(m_volume->getMinimumSlice(m_viewPlane), m_volume->getMaximumSlice(m_viewPlane));
+
+    m_imageActor->SetInput(m_imagePipeline->getOutput().getVtkImageData());
 }
 
 ImagePipeline* VolumeDisplayUnit::getImagePipeline() const

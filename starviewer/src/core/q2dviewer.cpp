@@ -641,14 +641,9 @@ void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVo
     // TODO Caldria fer neteja? bloquejar? Per tal que quedi en negre mentres es carrega el nou volum?
     m_mainVolume = volume;
     m_mainVolumeDisplayUnit->setVolume(m_mainVolume);
-    m_mainVolumeDisplayUnit->getSliceHandler()->setSlice(0);
-    m_mainVolumeDisplayUnit->getSliceHandler()->setPhase(0);
 
     this->setCurrentViewPlane(OrthogonalPlane::XYPlane);
     m_alignPosition = Q2DViewer::AlignCenter;
-
-    m_mainVolumeDisplayUnit->getSliceHandler()->setNumberOfPhases(m_mainVolume->getNumberOfPhases());
-    m_mainVolumeDisplayUnit->getSliceHandler()->setSliceRange(getMinimumSlice(), getMaximumSlice());
 
     // Això es fa per destruir el blender en cas que ja hi hagi algun input i es vulgui canviar
     delete m_blender;
@@ -656,7 +651,6 @@ void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVo
 
     initializeThickSlab();
     this->updateDisplayShutterMask();
-    m_mainVolumeDisplayUnit->getImageActor()->SetInput(m_mainVolumeDisplayUnit->getImagePipeline()->getOutput().getVtkImageData());
 
     printVolumeInformation();
 
