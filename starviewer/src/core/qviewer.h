@@ -273,6 +273,12 @@ protected:
     /// Computes the automatic window level for the current input
     WindowLevel getCurrentAutomaticWindowLevel();
 
+    /// Returns the current view plane.
+    virtual OrthogonalPlane::OrthogonalPlaneType getCurrentViewPlane() const;
+
+    /// Sets the current view plane.
+    virtual void setCurrentViewPlane(OrthogonalPlane::OrthogonalPlaneType viewPlane);
+
 private slots:
     /// Slot que s'utilitza quan s'ha seleccionat una sèrie amb el PatientBrowserMenu
     /// Mètode que especifica un input seguit d'una crida al mètode render()
@@ -329,13 +335,13 @@ protected:
     /// Widget que es mostra quan s'està realitzant algun treball asíncron
     QViewerWorkInProgressWidget *m_workInProgressWidget;
 
-    /// Vista que enfoca la càmera
-    OrthogonalPlane::OrthogonalPlaneType m_currentViewPlane;
-
     /// The default margin for fit into viewport. Should be between 0..1.
     double m_defaultFitIntoViewportMarginRate;
 
 private:
+    /// Current view plane: plane that is perpendicular to the camera pointing direction.
+    OrthogonalPlane::OrthogonalPlaneType m_currentViewPlane;
+
     /// Indica si el viewer és actiu o no
     bool m_isActive;
 

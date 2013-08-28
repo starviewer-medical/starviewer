@@ -58,8 +58,8 @@ QViewer::QViewer(QWidget *parent)
     m_windowToImageFilter = vtkWindowToImageFilter::New();
     m_windowToImageFilter->SetInput(getRenderWindow());
 
-    m_currentViewPlane = OrthogonalPlane::XYPlane;
-    
+    this->setCurrentViewPlane(OrthogonalPlane::XYPlane);
+
     // Connectem els events
     setupInteraction();
 
@@ -710,11 +710,11 @@ void QViewer::setCameraViewPlane(OrthogonalPlane::OrthogonalPlaneType viewPlane)
         return;
     }
 
-    m_currentViewPlane = viewPlane;
-    
+    this->setCurrentViewPlane(viewPlane);
+
     // Ajustem els paràmetres de la càmera segons la vista
     camera->SetFocalPoint(0.0, 0.0, 0.0);
-    switch (m_currentViewPlane)
+    switch (this->getCurrentViewPlane())
     {
         case OrthogonalPlane::XYPlane:
             camera->SetViewUp(0.0, -1.0, 0.0);
@@ -926,6 +926,16 @@ void QViewer::setWindowLevelPreset(const WindowLevel &preset)
     {
         setWindowLevel(preset.getWidth(), preset.getCenter());
     }
+}
+
+OrthogonalPlane::OrthogonalPlaneType QViewer::getCurrentViewPlane() const
+{
+    return m_currentViewPlane;
+}
+
+void QViewer::setCurrentViewPlane(OrthogonalPlane::OrthogonalPlaneType viewPlane)
+{
+    m_currentViewPlane = viewPlane;
 }
 
 };  // End namespace udg
