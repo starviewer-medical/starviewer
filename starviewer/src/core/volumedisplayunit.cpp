@@ -2,6 +2,7 @@
 
 #include "imagepipeline.h"
 #include "slicehandler.h"
+#include "volume.h"
 
 #include <vtkImageActor.h>
 
@@ -32,6 +33,8 @@ void VolumeDisplayUnit::setVolume(Volume *volume)
     m_volume = volume;
     m_sliceHandler->setVolume(volume);
 
+    resetThickSlab();
+
     m_imageActor->SetInput(m_imagePipeline->getOutput().getVtkImageData());
 }
 
@@ -58,6 +61,15 @@ const OrthogonalPlane& VolumeDisplayUnit::getViewPlane() const
 void VolumeDisplayUnit::setViewPlane(const OrthogonalPlane &viewPlane)
 {
     m_sliceHandler->setViewPlane(viewPlane);
+}
+
+void VolumeDisplayUnit::resetThickSlab()
+{
+    m_imagePipeline->setInput(m_volume->getVtkData());
+    m_imagePipeline->setProjectionAxis(this->getViewPlane());
+    m_imagePipeline->setSlice(m_volume->getImageIndex(m_sliceHandler->getCurrentSlice(), m_sliceHandler->getCurrentPhase()));
+    m_imagePipeline->setSlabThickness(m_sliceHandler->getSlabThickness());
+    m_imagePipeline->setSlabStride(m_sliceHandler->getNumberOfPhases());
 }
 
 }
