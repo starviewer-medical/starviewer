@@ -1,9 +1,7 @@
 #include "volumedisplayunit.h"
 
-#include "image.h"
 #include "imagepipeline.h"
 #include "slicehandler.h"
-#include "volume.h"
 
 #include <vtkImageActor.h>
 
@@ -60,51 +58,6 @@ const OrthogonalPlane& VolumeDisplayUnit::getViewPlane() const
 void VolumeDisplayUnit::setViewPlane(const OrthogonalPlane &viewPlane)
 {
     m_sliceHandler->setViewPlane(viewPlane);
-}
-
-double VolumeDisplayUnit::getSliceThickness() const
-{
-    double thickness = 0.0;
-
-    switch (this->getViewPlane())
-    {
-        case OrthogonalPlane::XYPlane:
-            {
-                Image *image = m_volume->getImage(m_sliceHandler->getCurrentSlice(), m_sliceHandler->getCurrentPhase());
-
-                if (image)
-                {
-                    thickness = image->getSliceThickness();
-
-                    if (m_sliceHandler->getSlabThickness() > 1)
-                    {
-                        double gap = m_volume->getSpacing()[2] - thickness;
-
-                        if (gap < 0)
-                        {
-                            // If gap between spacing and thickness is negative, this means slices overlap, so
-                            // we have to substract this gap between to get the real thickness
-                            thickness = (thickness + gap) * m_sliceHandler->getSlabThickness();
-                        }
-                        else
-                        {
-                            thickness = thickness * m_sliceHandler->getSlabThickness();
-                        }
-                    }
-                }
-            }
-            break;
-
-        case OrthogonalPlane::YZPlane:
-            thickness = m_volume->getSpacing()[0] * m_sliceHandler->getSlabThickness();
-            break;
-
-        case OrthogonalPlane::XZPlane:
-            thickness = m_volume->getSpacing()[1] * m_sliceHandler->getSlabThickness();
-            break;
-    }
-
-    return thickness;
 }
 
 }
