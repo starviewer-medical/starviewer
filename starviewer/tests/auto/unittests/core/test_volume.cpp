@@ -108,7 +108,7 @@ Q_DECLARE_METATYPE(Volume::ItkImageTypePointer)
 Q_DECLARE_METATYPE(vtkSmartPointer<vtkImageData>)
 Q_DECLARE_METATYPE(VolumePixelData*)
 Q_DECLARE_METATYPE(Image*)
-Q_DECLARE_METATYPE(OrthogonalPlane::OrthogonalPlaneType)
+Q_DECLARE_METATYPE(OrthogonalPlane)
 
 void test_Volume::constructor_ShouldCreateMinimalVolume()
 {
@@ -453,7 +453,7 @@ void test_Volume::getCorrespondingOrthogonalPlane_ShouldReturnExpectedValues_dat
 {
     QTest::addColumn<Volume*>("volume");
     QTest::addColumn<AnatomicalPlane::AnatomicalPlaneType>("anatomicalPlane");
-    QTest::addColumn<OrthogonalPlane::OrthogonalPlaneType>("expectedOrthogonalPlane");
+    QTest::addColumn<OrthogonalPlane>("expectedOrthogonalPlane");
 
     PatientOrientation axialPatientOrientation = AnatomicalPlane::getDefaultRadiologicalOrienation(AnatomicalPlane::Axial);
     Image *axialImage = new Image(this);
@@ -461,11 +461,11 @@ void test_Volume::getCorrespondingOrthogonalPlane_ShouldReturnExpectedValues_dat
     Volume *axialVolume = new Volume(this);
     axialVolume->addImage(axialImage);
 
-    QTest::newRow("Axial volume, axial plane") << axialVolume << AnatomicalPlane::Axial << OrthogonalPlane::XYPlane;
-    QTest::newRow("Axial volume, sagittal plane") << axialVolume << AnatomicalPlane::Sagittal << OrthogonalPlane::YZPlane;
-    QTest::newRow("Axial volume, coronal plane") << axialVolume << AnatomicalPlane::Coronal << OrthogonalPlane::XZPlane;
-    QTest::newRow("Axial volume, N/A plane") << axialVolume << AnatomicalPlane::NotAvailable << OrthogonalPlane::XYPlane;
-    QTest::newRow("Axial volume, Oblique plane") << axialVolume << AnatomicalPlane::Oblique << OrthogonalPlane::XYPlane;
+    QTest::newRow("Axial volume, axial plane") << axialVolume << AnatomicalPlane::Axial << OrthogonalPlane(OrthogonalPlane::XYPlane);
+    QTest::newRow("Axial volume, sagittal plane") << axialVolume << AnatomicalPlane::Sagittal << OrthogonalPlane(OrthogonalPlane::YZPlane);
+    QTest::newRow("Axial volume, coronal plane") << axialVolume << AnatomicalPlane::Coronal << OrthogonalPlane(OrthogonalPlane::XZPlane);
+    QTest::newRow("Axial volume, N/A plane") << axialVolume << AnatomicalPlane::NotAvailable << OrthogonalPlane(OrthogonalPlane::XYPlane);
+    QTest::newRow("Axial volume, Oblique plane") << axialVolume << AnatomicalPlane::Oblique << OrthogonalPlane(OrthogonalPlane::XYPlane);
 
     PatientOrientation sagittalPatientOrientation = AnatomicalPlane::getDefaultRadiologicalOrienation(AnatomicalPlane::Sagittal);
     Image *sagittalImage = new Image(this);
@@ -473,11 +473,11 @@ void test_Volume::getCorrespondingOrthogonalPlane_ShouldReturnExpectedValues_dat
     Volume *sagittalVolume = new Volume(this);
     sagittalVolume->addImage(sagittalImage);
 
-    QTest::newRow("Sagittal volume, axial plane") << sagittalVolume << AnatomicalPlane::Axial << OrthogonalPlane::XZPlane;
-    QTest::newRow("Sagittal volume, sagittal plane") << sagittalVolume << AnatomicalPlane::Sagittal << OrthogonalPlane::XYPlane;
-    QTest::newRow("Sagittal volume, coronal plane") << sagittalVolume << AnatomicalPlane::Coronal << OrthogonalPlane::YZPlane;
-    QTest::newRow("Sagittal volume, N/A plane") << sagittalVolume << AnatomicalPlane::NotAvailable << OrthogonalPlane::XYPlane;
-    QTest::newRow("Sagittal volume, Oblique plane") << sagittalVolume << AnatomicalPlane::Oblique << OrthogonalPlane::XYPlane;
+    QTest::newRow("Sagittal volume, axial plane") << sagittalVolume << AnatomicalPlane::Axial << OrthogonalPlane(OrthogonalPlane::XZPlane);
+    QTest::newRow("Sagittal volume, sagittal plane") << sagittalVolume << AnatomicalPlane::Sagittal << OrthogonalPlane(OrthogonalPlane::XYPlane);
+    QTest::newRow("Sagittal volume, coronal plane") << sagittalVolume << AnatomicalPlane::Coronal << OrthogonalPlane(OrthogonalPlane::YZPlane);
+    QTest::newRow("Sagittal volume, N/A plane") << sagittalVolume << AnatomicalPlane::NotAvailable << OrthogonalPlane(OrthogonalPlane::XYPlane);
+    QTest::newRow("Sagittal volume, Oblique plane") << sagittalVolume << AnatomicalPlane::Oblique << OrthogonalPlane(OrthogonalPlane::XYPlane);
 
     PatientOrientation coronalPatientOrientation = AnatomicalPlane::getDefaultRadiologicalOrienation(AnatomicalPlane::Coronal);
     Image *coronalImage = new Image(this);
@@ -485,11 +485,11 @@ void test_Volume::getCorrespondingOrthogonalPlane_ShouldReturnExpectedValues_dat
     Volume *coronalVolume = new Volume(this);
     coronalVolume->addImage(coronalImage);
 
-    QTest::newRow("Coronal volume, axial plane") << coronalVolume << AnatomicalPlane::Axial << OrthogonalPlane::XZPlane;
-    QTest::newRow("Coronal volume, sagittal plane") << coronalVolume << AnatomicalPlane::Sagittal << OrthogonalPlane::YZPlane;
-    QTest::newRow("Coronal volume, coronal plane") << coronalVolume << AnatomicalPlane::Coronal << OrthogonalPlane::XYPlane;
-    QTest::newRow("Coronal volume, N/A plane") << coronalVolume << AnatomicalPlane::NotAvailable << OrthogonalPlane::XYPlane;
-    QTest::newRow("Coronal volume, Oblique plane") << coronalVolume << AnatomicalPlane::Oblique << OrthogonalPlane::XYPlane;
+    QTest::newRow("Coronal volume, axial plane") << coronalVolume << AnatomicalPlane::Axial << OrthogonalPlane(OrthogonalPlane::XZPlane);
+    QTest::newRow("Coronal volume, sagittal plane") << coronalVolume << AnatomicalPlane::Sagittal << OrthogonalPlane(OrthogonalPlane::YZPlane);
+    QTest::newRow("Coronal volume, coronal plane") << coronalVolume << AnatomicalPlane::Coronal << OrthogonalPlane(OrthogonalPlane::XYPlane);
+    QTest::newRow("Coronal volume, N/A plane") << coronalVolume << AnatomicalPlane::NotAvailable << OrthogonalPlane(OrthogonalPlane::XYPlane);
+    QTest::newRow("Coronal volume, Oblique plane") << coronalVolume << AnatomicalPlane::Oblique << OrthogonalPlane(OrthogonalPlane::XYPlane);
     
     PatientOrientation obliquePatientOrientation;
     obliquePatientOrientation.setLabels("L", "L");
@@ -498,28 +498,28 @@ void test_Volume::getCorrespondingOrthogonalPlane_ShouldReturnExpectedValues_dat
     Volume *obliqueVolume = new Volume(this);
     obliqueVolume->addImage(obliqueImage);
 
-    QTest::newRow("Oblique volume, axial plane") << obliqueVolume << AnatomicalPlane::Axial << OrthogonalPlane::XYPlane;
-    QTest::newRow("Oblique volume, sagittal plane") << obliqueVolume << AnatomicalPlane::Sagittal << OrthogonalPlane::YZPlane;
-    QTest::newRow("Oblique volume, coronal plane") << obliqueVolume << AnatomicalPlane::Coronal << OrthogonalPlane::XZPlane;
-    QTest::newRow("Oblique volume, N/A plane") << obliqueVolume << AnatomicalPlane::NotAvailable << OrthogonalPlane::XYPlane;
-    QTest::newRow("Oblique volume, Oblique plane") << obliqueVolume << AnatomicalPlane::Oblique << OrthogonalPlane::XYPlane;
+    QTest::newRow("Oblique volume, axial plane") << obliqueVolume << AnatomicalPlane::Axial << OrthogonalPlane(OrthogonalPlane::XYPlane);
+    QTest::newRow("Oblique volume, sagittal plane") << obliqueVolume << AnatomicalPlane::Sagittal << OrthogonalPlane(OrthogonalPlane::YZPlane);
+    QTest::newRow("Oblique volume, coronal plane") << obliqueVolume << AnatomicalPlane::Coronal << OrthogonalPlane(OrthogonalPlane::XZPlane);
+    QTest::newRow("Oblique volume, N/A plane") << obliqueVolume << AnatomicalPlane::NotAvailable << OrthogonalPlane(OrthogonalPlane::XYPlane);
+    QTest::newRow("Oblique volume, Oblique plane") << obliqueVolume << AnatomicalPlane::Oblique << OrthogonalPlane(OrthogonalPlane::XYPlane);
 
     Image *naImage = new Image(this);
     Volume *naVolume = new Volume(this);
     naVolume->addImage(naImage);
 
-    QTest::newRow("Not Available Plane volume, axial plane") << naVolume << AnatomicalPlane::Axial << OrthogonalPlane::XYPlane;
-    QTest::newRow("Not Available Plane volume, sagittal plane") << naVolume << AnatomicalPlane::Sagittal << OrthogonalPlane::YZPlane;
-    QTest::newRow("Not Available Plane volume, coronal plane") << naVolume << AnatomicalPlane::Coronal << OrthogonalPlane::XZPlane;
-    QTest::newRow("Not Available Plane volume, N/A plane") << naVolume << AnatomicalPlane::NotAvailable << OrthogonalPlane::XYPlane;
-    QTest::newRow("Not Available Plane volume, Oblique plane") << naVolume << AnatomicalPlane::Oblique << OrthogonalPlane::XYPlane;
+    QTest::newRow("Not Available Plane volume, axial plane") << naVolume << AnatomicalPlane::Axial << OrthogonalPlane(OrthogonalPlane::XYPlane);
+    QTest::newRow("Not Available Plane volume, sagittal plane") << naVolume << AnatomicalPlane::Sagittal << OrthogonalPlane(OrthogonalPlane::YZPlane);
+    QTest::newRow("Not Available Plane volume, coronal plane") << naVolume << AnatomicalPlane::Coronal << OrthogonalPlane(OrthogonalPlane::XZPlane);
+    QTest::newRow("Not Available Plane volume, N/A plane") << naVolume << AnatomicalPlane::NotAvailable << OrthogonalPlane(OrthogonalPlane::XYPlane);
+    QTest::newRow("Not Available Plane volume, Oblique plane") << naVolume << AnatomicalPlane::Oblique << OrthogonalPlane(OrthogonalPlane::XYPlane);
 }
 
 void test_Volume::getCorrespondingOrthogonalPlane_ShouldReturnExpectedValues()
 {
     QFETCH(Volume*, volume);
     QFETCH(AnatomicalPlane::AnatomicalPlaneType, anatomicalPlane);
-    QFETCH(OrthogonalPlane::OrthogonalPlaneType, expectedOrthogonalPlane);
+    QFETCH(OrthogonalPlane, expectedOrthogonalPlane);
     
     QCOMPARE(volume->getCorrespondingOrthogonalPlane(anatomicalPlane), expectedOrthogonalPlane);
 }

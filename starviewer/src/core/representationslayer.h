@@ -3,6 +3,7 @@
 
 #include <QObject>
 
+#include "orthogonalplane.h"
 #include "toolrepresentation.h"
 
 #include <QMultiMap>
@@ -39,7 +40,7 @@ private:
 
     /// Pla i llesca en el que es troba en aquell moment el 2D Viewer. Serveix per controlar
     /// els canvis de llesca i de pla, per saber quines primitives hem de netejar
-    int m_currentPlane;
+    OrthogonalPlane m_currentPlane;
     int m_currentSlice;
 
     /// Contenidors de ToolRepresentation, un per cada pla

@@ -317,7 +317,7 @@ Image* Volume::getImage(int sliceNumber, int phaseNumber) const
     return image;
 }
 
-ImagePlane* Volume::getImagePlane(int sliceNumber, OrthogonalPlane::OrthogonalPlaneType plane, bool vtkReconstructionHack)
+ImagePlane* Volume::getImagePlane(int sliceNumber, const OrthogonalPlane &plane, bool vtkReconstructionHack)
 {
     ImagePlane *imagePlane = 0;
     int *dimensions = getDimensions();
@@ -415,7 +415,7 @@ ImagePlane* Volume::getImagePlane(int sliceNumber, OrthogonalPlane::OrthogonalPl
     return imagePlane;
 }
 
-void Volume::getSliceRange(int &min, int &max, OrthogonalPlane::OrthogonalPlaneType plane)
+void Volume::getSliceRange(int &min, int &max, const OrthogonalPlane &plane)
 {
     if (m_numberOfPhases > 1 && plane == OrthogonalPlane::XYPlane)
     {
@@ -425,19 +425,19 @@ void Volume::getSliceRange(int &min, int &max, OrthogonalPlane::OrthogonalPlaneT
     else
     {
         int *extent = getWholeExtent();
-        min = extent[OrthogonalPlane::getZIndexForView(plane) * 2];
-        max = extent[OrthogonalPlane::getZIndexForView(plane) * 2 + 1];
+        min = extent[plane.getZIndexForView() * 2];
+        max = extent[plane.getZIndexForView() * 2 + 1];
     }
 }
 
-int Volume::getMaximumSlice(OrthogonalPlane::OrthogonalPlaneType plane)
+int Volume::getMaximumSlice(const OrthogonalPlane &plane)
 {
     int max, trash;
     this->getSliceRange(trash, max, plane);
     return max;
 }
 
-int Volume::getMinimumSlice(OrthogonalPlane::OrthogonalPlaneType plane)
+int Volume::getMinimumSlice(const OrthogonalPlane &plane)
 {
     int min, trash;
     this->getSliceRange(min, trash, plane);
@@ -525,9 +525,9 @@ AnatomicalPlane::AnatomicalPlaneType Volume::getAcquisitionPlane() const
     }
 }
 
-OrthogonalPlane::OrthogonalPlaneType Volume::getCorrespondingOrthogonalPlane(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane) const
+OrthogonalPlane Volume::getCorrespondingOrthogonalPlane(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane) const
 {
-    OrthogonalPlane::OrthogonalPlaneType orthogonalPlane;
+    OrthogonalPlane orthogonalPlane;
     AnatomicalPlane::AnatomicalPlaneType acquisitionPlane = getAcquisitionPlane();
     switch (acquisitionPlane)
     {

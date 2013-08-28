@@ -136,7 +136,7 @@ void QExperimental3DViewer::setTransferFunction(TransferFunction *transferFuncti
     // TODO Aplicar la funció de transferència
 }
 
-void QExperimental3DViewer::resetView(OrthogonalPlane::OrthogonalPlaneType view)
+void QExperimental3DViewer::resetView(const OrthogonalPlane &view)
 {
     // TODO estem obligats a implementar-lo. De moment només assignem variable
     // però caldria aplicar la orientació que se'ns demana

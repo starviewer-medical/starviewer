@@ -24,7 +24,7 @@ void SliceLocator::setVolume(Volume *volume)
     m_volume = volume;
 }
 
-void SliceLocator::setPlane(OrthogonalPlane::OrthogonalPlaneType plane)
+void SliceLocator::setPlane(const OrthogonalPlane &plane)
 {
     m_volumePlane = plane;
 }
@@ -85,7 +85,7 @@ bool SliceLocator::isWithinProximityBounds(double distanceToSlice)
         return false;
     }
 
-    int zIndex = OrthogonalPlane::getZIndexForView(m_volumePlane);
+    int zIndex = m_volumePlane.getZIndexForView();
 
     double spacingBetweenSlices = m_volume->getSpacing()[zIndex];
 

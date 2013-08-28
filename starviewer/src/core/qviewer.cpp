@@ -554,7 +554,7 @@ WindowLevel QViewer::getCurrentAutomaticWindowLevel()
     return automaticWindowLevel;
 }
 
-void QViewer::resetView(OrthogonalPlane::OrthogonalPlaneType view)
+void QViewer::resetView(const OrthogonalPlane &view)
 {
     setCameraOrientation(view);
 }
@@ -570,7 +570,7 @@ void QViewer::resetView(AnatomicalPlane::AnatomicalPlaneType desiredAnatomicalPl
     enableRendering(false);
 
     // First we reset the view to the corresponding orthogonal plane
-    OrthogonalPlane::OrthogonalPlaneType orthogonalPlane = m_mainVolume->getCorrespondingOrthogonalPlane(desiredAnatomicalPlane);
+    const OrthogonalPlane &orthogonalPlane = m_mainVolume->getCorrespondingOrthogonalPlane(desiredAnatomicalPlane);
     resetView(orthogonalPlane);
     
     // Then we apply the standard orientation for the desired projection
@@ -691,7 +691,7 @@ void QViewer::updateWindowLevelData()
     }
 }
 
-void QViewer::setCameraOrientation(OrthogonalPlane::OrthogonalPlaneType orientation)
+void QViewer::setCameraOrientation(const OrthogonalPlane &orientation)
 {
     vtkCamera *camera = getActiveCamera();
     if (camera)
@@ -702,7 +702,7 @@ void QViewer::setCameraOrientation(OrthogonalPlane::OrthogonalPlaneType orientat
     }
 }
 
-void QViewer::setCameraViewPlane(OrthogonalPlane::OrthogonalPlaneType viewPlane)
+void QViewer::setCameraViewPlane(const OrthogonalPlane &viewPlane)
 {
     vtkCamera *camera = getActiveCamera();
     if (!camera)
@@ -928,12 +928,12 @@ void QViewer::setWindowLevelPreset(const WindowLevel &preset)
     }
 }
 
-OrthogonalPlane::OrthogonalPlaneType QViewer::getCurrentViewPlane() const
+const OrthogonalPlane& QViewer::getCurrentViewPlane() const
 {
     return m_currentViewPlane;
 }
 
-void QViewer::setCurrentViewPlane(OrthogonalPlane::OrthogonalPlaneType viewPlane)
+void QViewer::setCurrentViewPlane(const OrthogonalPlane &viewPlane)
 {
     m_currentViewPlane = viewPlane;
 }

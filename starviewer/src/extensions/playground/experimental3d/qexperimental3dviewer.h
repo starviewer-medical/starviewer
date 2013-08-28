@@ -59,7 +59,7 @@ public slots:
     void setTransferFunction(TransferFunction *transferFunction);
 
     /// Li indiquem quina vista volem del volum: XYPlane, YZPlane o XZPlane.
-    virtual void resetView(OrthogonalPlane::OrthogonalPlaneType view);
+    virtual void resetView(const OrthogonalPlane &view);
 
 protected:
     void getCurrentRenderedItemBounds(double bounds[6]);

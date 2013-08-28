@@ -107,7 +107,7 @@ void MagicROITool::setTextPosition(DrawerText *text)
     m_roiPolygon->getBounds(bounds);
 
     int xIndex, yIndex, zIndex;
-    OrthogonalPlane::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
+    m_2DViewer->getView().getXYZIndexesForView(xIndex, yIndex, zIndex);
 
     double attachmentPoint[3];
     attachmentPoint[xIndex] = (bounds[xIndex * 2] + bounds[xIndex * 2 + 1]) / 2.0;
@@ -142,7 +142,7 @@ void MagicROITool::computeMaskBounds()
     m_2DViewer->getInput()->getWholeExtent(extent);
 
     int xIndex, yIndex, zIndex;
-    OrthogonalPlane::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
+    m_2DViewer->getView().getXYZIndexesForView(xIndex, yIndex, zIndex);
 
     m_minX = extent[xIndex * 2];
     m_maxX = extent[(xIndex * 2) + 1];
@@ -153,7 +153,7 @@ void MagicROITool::computeMaskBounds()
 double MagicROITool::getVoxelValue(int x, int y, int z)
 {
     int xIndex, yIndex, zIndex;
-    OrthogonalPlane::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
+    m_2DViewer->getView().getXYZIndexesForView(xIndex, yIndex, zIndex);
 
     int index[3];
     index[xIndex] = x;
@@ -293,7 +293,7 @@ void MagicROITool::computeLevelRange()
     }
 
     int xIndex, yIndex, zIndex;
-    OrthogonalPlane::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
+    m_2DViewer->getView().getXYZIndexesForView(xIndex, yIndex, zIndex);
 
     int x = index[xIndex];
     int y = index[yIndex];
@@ -340,7 +340,7 @@ void MagicROITool::computeRegionMask()
     }
 
     int xIndex, yIndex, zIndex;
-    OrthogonalPlane::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
+    m_2DViewer->getView().getXYZIndexesForView(xIndex, yIndex, zIndex);
     
     int x = index[xIndex];
     int y = index[yIndex];
@@ -617,7 +617,7 @@ void MagicROITool::addPoint(int direction, int x, int y, double z)
     m_2DViewer->getInput()->getOrigin(origin);
 
     int xIndex, yIndex, zIndex;
-    OrthogonalPlane::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
+    m_2DViewer->getView().getXYZIndexesForView(xIndex, yIndex, zIndex);
  
     double point[3];
     switch (direction)

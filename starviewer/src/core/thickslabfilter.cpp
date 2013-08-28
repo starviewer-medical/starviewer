@@ -27,7 +27,7 @@ void ThickSlabFilter::setInput(FilterOutput input)
     m_filter->SetInputConnection(input.getVtkAlgorithmOutput());
 }
 
-void ThickSlabFilter::setProjectionAxis(OrthogonalPlane::OrthogonalPlaneType axis)
+void ThickSlabFilter::setProjectionAxis(const OrthogonalPlane &axis)
 {
     m_filter->SetProjectionDimension(static_cast<unsigned int>(axis));
 }

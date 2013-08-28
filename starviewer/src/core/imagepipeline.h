@@ -38,7 +38,7 @@ public:
     /// Sets the slice to be visualized
     void setSlice(int slice);
     /// Sets the orthogonal that has to be visualized
-    void setProjectionAxis(OrthogonalPlane::OrthogonalPlaneType axis);
+    void setProjectionAxis(const OrthogonalPlane &axis);
     /// Sets the slab thickness given by the number of slices
     void setSlabThickness(int numberOfSlices);
     /// Sets the stride between slices

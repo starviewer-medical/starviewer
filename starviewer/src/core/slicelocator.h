@@ -20,7 +20,7 @@ public:
     void setVolume(Volume *volume);
 
     /// Sets the plane where the computings will be taken. If no plane set, it will be the XY plane by default.
-    void setPlane(OrthogonalPlane::OrthogonalPlaneType plane);
+    void setPlane(const OrthogonalPlane &plane);
     
     /// Returns the nearest slice to the given point or ImagePlane.
     /// The nearest slice will be computed against the given volume and plane from setVolume() and setPlane() methods.
@@ -41,7 +41,7 @@ private:
     Volume *m_volume;
     
     /// The plane upon computing will be taken
-    OrthogonalPlane::OrthogonalPlaneType m_volumePlane;
+    OrthogonalPlane m_volumePlane;
 };
 
 } // End namespace udg
