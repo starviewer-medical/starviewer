@@ -1610,9 +1610,6 @@ bool Q2DViewer::isThickSlabActive() const
 
 void Q2DViewer::initializeThickSlab()
 {
-    m_mainVolumeDisplayUnit->getSliceHandler()->setSlabThickness(1);
-    m_mainVolumeDisplayUnit->getSliceHandler()->setSlice(0);
-    
     m_mainVolumeDisplayUnit->getImagePipeline()->setInput(m_mainVolume->getVtkData());
     m_mainVolumeDisplayUnit->getImagePipeline()->setProjectionAxis(this->getCurrentViewPlane());
     m_mainVolumeDisplayUnit->getImagePipeline()->setSlabProjectionMode((AccumulatorFactory::AccumulatorType) m_slabProjectionMode);
