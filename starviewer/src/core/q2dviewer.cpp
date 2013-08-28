@@ -411,26 +411,12 @@ double Q2DViewer::getCurrentSliceThickness() const
 
 int Q2DViewer::getMinimumSlice()
 {
-    if (m_mainVolume)
-    {
-        return m_mainVolume->getMinimumSlice(this->getCurrentViewPlane());
-    }
-    else
-    {
-        return 0;
-    }
+    return m_mainVolumeDisplayUnit->getSliceHandler()->getMinimumSlice();
 }
 
 int Q2DViewer::getMaximumSlice()
 {
-    if (m_mainVolume)
-    {
-        return m_mainVolume->getMaximumSlice(this->getCurrentViewPlane());
-    }
-    else
-    {
-        return 0;
-    }
+    return m_mainVolumeDisplayUnit->getSliceHandler()->getMaximumSlice();
 }
 
 void Q2DViewer::addActors()
