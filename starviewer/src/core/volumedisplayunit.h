@@ -26,6 +26,8 @@ public:
     ImagePipeline* getImagePipeline() const;
     vtkImageActor* getImageActor() const;
     SliceHandler* getSliceHandler() const;
+    OrthogonalPlane::OrthogonalPlaneType getViewPlane() const;
+    void setViewPlane(OrthogonalPlane::OrthogonalPlaneType viewPlane);
 
     /// Returns slice thickness of the currently displayed image.
     /// On the acquisition plane, this depends on DICOM's slice thickness and slab thickness (if DICOM's slice thickness is not defined, the method returns 0).
@@ -37,6 +39,7 @@ private:
     ImagePipeline *m_imagePipeline;
     vtkImageActor *m_imageActor;
     SliceHandler *m_sliceHandler;
+    OrthogonalPlane::OrthogonalPlaneType m_viewPlane;
 
 };
 
