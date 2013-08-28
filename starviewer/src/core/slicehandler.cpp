@@ -1,6 +1,7 @@
 #include "slicehandler.h"
 
 #include "coresettings.h"
+#include "image.h"
 #include "logging.h"
 #include "volume.h"
 
@@ -125,6 +126,51 @@ int SliceHandler::getSlabThickness() const
 int SliceHandler::getLastSlabSlice() const
 {
     return m_lastSlabSlice;
+}
+
+double SliceHandler::getSliceThickness() const
+{
+    double thickness = 0.0;
+
+    switch (this->getViewPlane())
+    {
+        case OrthogonalPlane::XYPlane:
+            {
+                Image *image = m_volume->getImage(this->getCurrentSlice(), this->getCurrentPhase());
+
+                if (image)
+                {
+                    thickness = image->getSliceThickness();
+
+                    if (this->getSlabThickness() > 1)
+                    {
+                        double gap = m_volume->getSpacing()[2] - thickness;
+
+                        if (gap < 0)
+                        {
+                            // If gap between spacing and thickness is negative, this means slices overlap, so
+                            // we have to substract this gap between to get the real thickness
+                            thickness = (thickness + gap) * this->getSlabThickness();
+                        }
+                        else
+                        {
+                            thickness = thickness * this->getSlabThickness();
+                        }
+                    }
+                }
+            }
+            break;
+
+        case OrthogonalPlane::YZPlane:
+            thickness = m_volume->getSpacing()[0] * this->getSlabThickness();
+            break;
+
+        case OrthogonalPlane::XZPlane:
+            thickness = m_volume->getSpacing()[1] * this->getSlabThickness();
+            break;
+    }
+
+    return thickness;
 }
 
 bool SliceHandler::isLoopEnabledForSlices() const

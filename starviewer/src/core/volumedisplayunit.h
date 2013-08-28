@@ -41,11 +41,6 @@ public:
     /// Sets a new view plane, resetting some properties of the slice handler.
     void setViewPlane(const OrthogonalPlane &viewPlane);
 
-    /// Returns slice thickness of the currently displayed image.
-    /// On the acquisition plane, this depends on DICOM's slice thickness and slab thickness (if DICOM's slice thickness is not defined, the method returns 0).
-    /// On the other planes, this depends on the spacing and the slab thickness.
-    double getSliceThickness() const;
-
 private:
     /// The volume.
     Volume *m_volume;

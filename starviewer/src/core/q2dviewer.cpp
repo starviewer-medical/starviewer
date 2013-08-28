@@ -406,7 +406,7 @@ void Q2DViewer::refreshAnnotations()
 
 double Q2DViewer::getCurrentSliceThickness() const
 {
-    return m_mainVolumeDisplayUnit->getSliceThickness();
+    return m_mainVolumeDisplayUnit->getSliceHandler()->getSliceThickness();
 }
 
 void Q2DViewer::getSliceRange(int &min, int &max)
