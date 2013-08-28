@@ -59,11 +59,11 @@ void VolumeDisplayUnit::setViewPlane(OrthogonalPlane::OrthogonalPlaneType viewPl
     m_viewPlane = viewPlane;
 }
 
-double VolumeDisplayUnit::getSliceThickness(OrthogonalPlane::OrthogonalPlaneType viewPlane) const
+double VolumeDisplayUnit::getSliceThickness() const
 {
     double thickness = 0.0;
 
-    switch (viewPlane)
+    switch (m_viewPlane)
     {
         case OrthogonalPlane::XYPlane:
             {
