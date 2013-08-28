@@ -74,7 +74,7 @@ void EllipticalROITool::setTextPosition(DrawerText *text)
     m_roiPolygon->getBounds(bounds);
 
     int xIndex, yIndex, zIndex;
-    OrthogonalPlane::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
+    m_2DViewer->getView().getXYZIndexesForView(xIndex, yIndex, zIndex);
 
     double attachmentPoint[3];
     attachmentPoint[xIndex] = (bounds[xIndex * 2] + bounds[xIndex * 2 + 1]) / 2.0;
@@ -173,7 +173,7 @@ void EllipticalROITool::updatePolygonPoints()
     computeEllipseCentre(centre);
 
     int xIndex, yIndex, zIndex;
-    OrthogonalPlane::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
+    m_2DViewer->getView().getXYZIndexesForView(xIndex, yIndex, zIndex);
 
     // Algorisme pel càlcul de l'el·lipse, extret de http://en.wikipedia.org/wiki/Ellipse#Ellipses_in_computer_graphics
     double xRadius = (m_secondPoint[xIndex] - m_firstPoint[xIndex]) * 0.5;
@@ -244,7 +244,7 @@ void EllipticalROITool::equalizeDepth()
     // Ens quedem amb la z de la llesca actual
     double currentPoint[3];
     m_2DViewer->getEventWorldCoordinate(currentPoint);
-    int zIndex = OrthogonalPlane::getZIndexForView(m_2DViewer->getView());
+    int zIndex = m_2DViewer->getView().getZIndexForView();
     double z = currentPoint[zIndex];
     m_firstPoint[zIndex] = z;
     m_secondPoint[zIndex] = z;

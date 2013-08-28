@@ -176,7 +176,7 @@ public slots:
     virtual void getCurrentWindowLevel(double wl[2]) = 0;
 
     /// Resets the view to a determined orthogonal plane
-    virtual void resetView(OrthogonalPlane::OrthogonalPlaneType view);
+    virtual void resetView(const OrthogonalPlane &view);
     
     /// Resets the view to the specified anatomical plane
     void resetView(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane);
@@ -247,10 +247,10 @@ protected:
     /// Fixem la orientació de la càmera del renderer principal
     /// Si el paràmetre donat no és un dels valors enumerats vàlids, no farà res
     /// @param orientation Orientació
-    void setCameraOrientation(OrthogonalPlane::OrthogonalPlaneType orientation);
+    void setCameraOrientation(const OrthogonalPlane &orientation);
 
     /// Configura la orientació de la càmera donada
-    void setCameraViewPlane(OrthogonalPlane::OrthogonalPlaneType viewPlane);
+    void setCameraViewPlane(const OrthogonalPlane &viewPlane);
 
     /// Adjusts camera scale factor. Returns false if no scale could be performed, true otherwise.
     /// To be used by zoom(), scaleToFit3D() methods and the so
@@ -274,10 +274,10 @@ protected:
     WindowLevel getCurrentAutomaticWindowLevel();
 
     /// Returns the current view plane.
-    virtual OrthogonalPlane::OrthogonalPlaneType getCurrentViewPlane() const;
+    virtual const OrthogonalPlane& getCurrentViewPlane() const;
 
     /// Sets the current view plane.
-    virtual void setCurrentViewPlane(OrthogonalPlane::OrthogonalPlaneType viewPlane);
+    virtual void setCurrentViewPlane(const OrthogonalPlane &viewPlane);
 
 private slots:
     /// Slot que s'utilitza quan s'ha seleccionat una sèrie amb el PatientBrowserMenu
@@ -340,7 +340,7 @@ protected:
 
 private:
     /// Current view plane: plane that is perpendicular to the camera pointing direction.
-    OrthogonalPlane::OrthogonalPlaneType m_currentViewPlane;
+    OrthogonalPlane m_currentViewPlane;
 
     /// Indica si el viewer és actiu o no
     bool m_isActive;

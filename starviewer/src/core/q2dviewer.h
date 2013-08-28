@@ -67,7 +67,7 @@ public:
     ~Q2DViewer();
 
     /// Ens retorna la vista que tenim en aquells moments del volum
-    OrthogonalPlane::OrthogonalPlaneType getView() const;
+    const OrthogonalPlane& getView() const;
 
     /// Assigna/Retorna el volum solapat
     void setOverlayInput(Volume *volume);
@@ -184,7 +184,7 @@ public slots:
     /// Útil per poder especificar canvis al viewer (canvi de llesca, w/l, etc.) sense preocupar-se de quan s'ha carregat el volume.
     void setInputAsynchronously(Volume *volume, QViewerCommand *inputFinishedCommand = 0);
 
-    void resetView(OrthogonalPlane::OrthogonalPlaneType view);
+    void resetView(const OrthogonalPlane &view);
 
     /// Restaura el visualitzador a l'estat inicial
     void restore();
@@ -297,10 +297,10 @@ protected:
     void setDefaultOrientation(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane);
 
     /// Returns the current view plane.
-    virtual OrthogonalPlane::OrthogonalPlaneType getCurrentViewPlane() const;
+    virtual const OrthogonalPlane& getCurrentViewPlane() const;
 
     /// Sets the current view plane.
-    virtual void setCurrentViewPlane(OrthogonalPlane::OrthogonalPlaneType viewPlane);
+    virtual void setCurrentViewPlane(const OrthogonalPlane &viewPlane);
 
 private:
     /// Updates image orientation according to the preferred presentation depending on its attributes, like modality.

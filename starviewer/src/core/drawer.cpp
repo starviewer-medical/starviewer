@@ -20,7 +20,7 @@ Drawer::~Drawer()
 {
 }
 
-void Drawer::draw(DrawerPrimitive *primitive, OrthogonalPlane::OrthogonalPlaneType plane, int slice)
+void Drawer::draw(DrawerPrimitive *primitive, const OrthogonalPlane &plane, int slice)
 {
     switch (plane)
     {
@@ -208,7 +208,7 @@ void Drawer::erasePrimitive(DrawerPrimitive *primitive)
     }
 }
 
-void Drawer::hide(OrthogonalPlane::OrthogonalPlaneType plane, int slice)
+void Drawer::hide(const OrthogonalPlane &plane, int slice)
 {
     QList<DrawerPrimitive*> primitivesList;
     switch (plane)
@@ -235,7 +235,7 @@ void Drawer::hide(OrthogonalPlane::OrthogonalPlaneType plane, int slice)
     }
 }
 
-void Drawer::show(OrthogonalPlane::OrthogonalPlaneType plane, int slice)
+void Drawer::show(const OrthogonalPlane &plane, int slice)
 {
     QList<DrawerPrimitive*> primitivesList;
     switch (plane)
@@ -335,7 +335,7 @@ void Drawer::enableGroup(const QString &groupName)
     }
 }
 
-DrawerPrimitive* Drawer::getNearestErasablePrimitiveToPoint(double point[3], OrthogonalPlane::OrthogonalPlaneType view, int slice, double closestPoint[3])
+DrawerPrimitive* Drawer::getNearestErasablePrimitiveToPoint(double point[3], const OrthogonalPlane &view, int slice, double closestPoint[3])
 {
     double distance;
     double minimumDistance = MathTools::DoubleMaximumValue;
@@ -380,7 +380,7 @@ DrawerPrimitive* Drawer::getNearestErasablePrimitiveToPoint(double point[3], Ort
     return nearestPrimitive;
 }
 
-void Drawer::erasePrimitivesInsideBounds(double bounds[6], OrthogonalPlane::OrthogonalPlaneType view, int slice)
+void Drawer::erasePrimitivesInsideBounds(double bounds[6], const OrthogonalPlane &view, int slice)
 {
     QList<DrawerPrimitive*> primitivesList;
 
@@ -414,15 +414,15 @@ void Drawer::erasePrimitivesInsideBounds(double bounds[6], OrthogonalPlane::Orth
     }
 }
 
-bool Drawer::isPrimitiveInside(DrawerPrimitive *primitive, OrthogonalPlane::OrthogonalPlaneType view, double bounds[6])
+bool Drawer::isPrimitiveInside(DrawerPrimitive *primitive, const OrthogonalPlane &view, double bounds[6])
 {
     // Comprovem que els bounds de la primitiva estiguin continguts
     // dins dels que ens han passat per paràmetre
     double primitiveBounds[6];
     primitive->getBounds(primitiveBounds);
 
-    int xIndex = OrthogonalPlane::getXIndexForView(view);
-    int yIndex = OrthogonalPlane::getYIndexForView(view);
+    int xIndex = view.getXIndexForView();
+    int yIndex = view.getYIndexForView();
 
     bool inside = false;
     if (bounds[xIndex * 2] <= primitiveBounds[xIndex * 2] && bounds[xIndex * 2 + 1] >= primitiveBounds[xIndex * 2 + 1] &&

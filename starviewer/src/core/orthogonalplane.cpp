@@ -4,71 +4,81 @@
 
 namespace udg {
 
-OrthogonalPlane::OrthogonalPlane()
+OrthogonalPlane::OrthogonalPlane(Plane plane) :
+    m_plane(plane)
 {
 }
 
-void OrthogonalPlane::getXYZIndexesForView(int &x, int &y, int &z, OrthogonalPlane::OrthogonalPlaneType view)
+void OrthogonalPlane::getXYZIndexesForView(int &x, int &y, int &z) const
 {
-    x = OrthogonalPlane::getXIndexForView(view);
-    y = OrthogonalPlane::getYIndexForView(view);
-    z = OrthogonalPlane::getZIndexForView(view);
+    x = getXIndexForView();
+    y = getYIndexForView();
+    z = getZIndexForView();
 }
 
-int OrthogonalPlane::getXIndexForView(OrthogonalPlane::OrthogonalPlaneType view)
+int OrthogonalPlane::getXIndexForView() const
 {
-    switch (view)
+    switch (m_plane)
     {
-        case OrthogonalPlane::XYPlane:
+        case XYPlane:
             return 0;
 
-        case OrthogonalPlane::YZPlane:
+        case YZPlane:
             return 1;
 
-        case OrthogonalPlane::XZPlane:
+        case XZPlane:
             return 0;
 
         default:
-            DEBUG_LOG(QString("El paràmetre 'view' conté un valor no esperat: %1.").arg(view));
+            DEBUG_LOG(QString("Unexpected plane: %1").arg(m_plane));
+            ERROR_LOG(QString("Unexpected plane: %1").arg(m_plane));
             return -1;
     }
 }
 
-int OrthogonalPlane::getYIndexForView(OrthogonalPlane::OrthogonalPlaneType view)
+int OrthogonalPlane::getYIndexForView() const
 {
-    switch (view)
+    switch (m_plane)
     {
-        case OrthogonalPlane::XYPlane:
+        case XYPlane:
             return 1;
 
-        case OrthogonalPlane::YZPlane:
+        case YZPlane:
             return 2;
 
-        case OrthogonalPlane::XZPlane:
+        case XZPlane:
             return 2;
 
         default:
-            DEBUG_LOG(QString("El paràmetre 'view' conté un valor no esperat: %1.").arg(view));
+            DEBUG_LOG(QString("Unexpected plane: %1").arg(m_plane));
+            ERROR_LOG(QString("Unexpected plane: %1").arg(m_plane));
             return -1;
     }
 }
 
-int OrthogonalPlane::getZIndexForView(OrthogonalPlane::OrthogonalPlaneType view)
+int OrthogonalPlane::getZIndexForView() const
 {
-    switch (view)
+    switch (m_plane)
     {
-        case OrthogonalPlane::XYPlane:
+        case XYPlane:
             return 2;
 
-        case OrthogonalPlane::YZPlane:
+        case YZPlane:
             return 0;
 
-        case OrthogonalPlane::XZPlane:
+        case XZPlane:
             return 1;
 
         default:
-            DEBUG_LOG(QString("El paràmetre 'view' conté un valor no esperat: %1.").arg(view));
+            DEBUG_LOG(QString("Unexpected plane: %1").arg(m_plane));
+            ERROR_LOG(QString("Unexpected plane: %1").arg(m_plane));
             return -1;
     }
 }
+
+OrthogonalPlane::operator Plane() const
+{
+    return m_plane;
+}
+
 }

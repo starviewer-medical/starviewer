@@ -59,12 +59,12 @@ SliceHandler* VolumeDisplayUnit::getSliceHandler() const
     return m_sliceHandler;
 }
 
-OrthogonalPlane::OrthogonalPlaneType VolumeDisplayUnit::getViewPlane() const
+const OrthogonalPlane& VolumeDisplayUnit::getViewPlane() const
 {
     return m_viewPlane;
 }
 
-void VolumeDisplayUnit::setViewPlane(OrthogonalPlane::OrthogonalPlaneType viewPlane)
+void VolumeDisplayUnit::setViewPlane(const OrthogonalPlane &viewPlane)
 {
     m_viewPlane = viewPlane;
 }

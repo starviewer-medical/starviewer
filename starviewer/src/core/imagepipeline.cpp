@@ -84,7 +84,7 @@ void ImagePipeline::setSlabStride(int step)
     m_thickSlabProjectionFilter->setStride(step);
 }
 
-void ImagePipeline::setProjectionAxis(OrthogonalPlane::OrthogonalPlaneType axis)
+void ImagePipeline::setProjectionAxis(const OrthogonalPlane &axis)
 {
     m_thickSlabProjectionFilter->setProjectionAxis(axis);
 }

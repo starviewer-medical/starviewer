@@ -126,14 +126,14 @@ public:
     /// @param vtkReconstructionHack HACK enables a hack for cases which the "real" plane is not the really wanted
     /// applying a correction to satisfy some restrictions with vtk. This should only be used on very concrete cases. Default value should be used.
     /// @return The corresponding image plane
-    ImagePlane* getImagePlane(int sliceNumber, OrthogonalPlane::OrthogonalPlaneType plane, bool vtkReconstructionHack = false);
+    ImagePlane* getImagePlane(int sliceNumber, const OrthogonalPlane &plane, bool vtkReconstructionHack = false);
     
     /// Returns the slice range of the current volume corresponding to an specified orthogonal plane
-    void getSliceRange(int &min, int &max, OrthogonalPlane::OrthogonalPlaneType plane);
+    void getSliceRange(int &min, int &max, const OrthogonalPlane &plane);
 
     /// Returns the maximum/minimum slice for an specified orthogonal plane
-    int getMaximumSlice(OrthogonalPlane::OrthogonalPlaneType plane);
-    int getMinimumSlice(OrthogonalPlane::OrthogonalPlaneType plane);
+    int getMaximumSlice(const OrthogonalPlane &plane);
+    int getMinimumSlice(const OrthogonalPlane &plane);
 
     /// Ens retorna la direcció REAL(DICOM) en la que es troben apilades
     /// les imatges que formen el volum. Com que dins d'un mateix volum podem tenir més
@@ -173,7 +173,7 @@ public:
     AnatomicalPlane::AnatomicalPlaneType getAcquisitionPlane() const;
 
     /// Returns which orthogonal plane of the current volume corresponds to the given anatomical plane
-    OrthogonalPlane::OrthogonalPlaneType getCorrespondingOrthogonalPlane(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane) const;
+    OrthogonalPlane getCorrespondingOrthogonalPlane(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane) const;
 
     /// Ens retorna l'índex intern d'imatge corresponent a la llesca i fase indicats
     int getImageIndex(int sliceNumber, int phaseNumber) const;

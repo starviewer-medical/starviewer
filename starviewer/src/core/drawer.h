@@ -24,7 +24,7 @@ public:
     /// @param primitive Primitiva a pintar
     /// @param plane Pla sobre el qual volem pintar la primitiva
     /// @param slice Llesca a la que adjuntem la primitiva
-    void draw(DrawerPrimitive *primitive, OrthogonalPlane::OrthogonalPlaneType plane, int slice);
+    void draw(DrawerPrimitive *primitive, const OrthogonalPlane &plane, int slice);
 
     /// Dibuixa la primitiva sempre al cim sense importar en quin pla o llesca ens trobem. 
     /// La visibilitat dependrà només de la propietat isVisible() de la primitiva
@@ -50,10 +50,10 @@ public:
     /// Retorna la primitiva esborrable més propera al punt donat, dins de la vista i llesca proporcionats
     /// Aquest mètode no té en compte cap llindar de proximitat, és a dir, ens retorna la primitiva que en termes
     /// absoluts és més propera al punt donat. En cas que no hi hagi cap primitiva per aquella vista i llesca, es retornarà nul.
-    DrawerPrimitive* getNearestErasablePrimitiveToPoint(double point[3], OrthogonalPlane::OrthogonalPlaneType view, int slice, double closestPoint[3]);
+    DrawerPrimitive* getNearestErasablePrimitiveToPoint(double point[3], const OrthogonalPlane &view, int slice, double closestPoint[3]);
 
     /// Ens esborra les primitives esborrables que estiguin dins de la zona delimitada pels punts passats per paràmetre.
-    void erasePrimitivesInsideBounds(double bounds[6], OrthogonalPlane::OrthogonalPlaneType view, int slice);
+    void erasePrimitivesInsideBounds(double bounds[6], const OrthogonalPlane &view, int slice);
 
     /// Ens diu el total de primitives dibuixades en totes les vistes
     int getNumberOfDrawnPrimitives();
@@ -71,11 +71,11 @@ private:
     /// Mostra/amaga les primitives que hi ha en un pla i llesca determinats
     /// @param plane Pla sobre que volem mostrar/amagar les primitives
     /// @param slice Llesca dins d'aquell pla.
-    void hide(OrthogonalPlane::OrthogonalPlaneType plane, int slice);
-    void show(OrthogonalPlane::OrthogonalPlaneType plane, int slice);
+    void hide(const OrthogonalPlane &plane, int slice);
+    void show(const OrthogonalPlane &plane, int slice);
 
     /// Ens diu si la primitiva donada, que es troba a la vista view, està dins dels bounds indicats
-    bool isPrimitiveInside(DrawerPrimitive *primitive, OrthogonalPlane::OrthogonalPlaneType view, double bounds[6]);
+    bool isPrimitiveInside(DrawerPrimitive *primitive, const OrthogonalPlane &view, double bounds[6]);
 
     /// Esborra la primitiva donada del contenidor de primitives especificat.
     /// Si la troba l'esborra. Retorna cert si la troba, fals altrament.
@@ -100,7 +100,7 @@ private:
 
     /// Pla i llesca en el que es troba en aquell moment el 2D Viewer. Serveix per controlar
     /// els canvis de llesca i de pla, per saber quines primitives hem de netejar
-    OrthogonalPlane::OrthogonalPlaneType m_currentPlane;
+    OrthogonalPlane m_currentPlane;
     int m_currentSlice;
 
     /// Grups de primitives. Les agrupem per nom

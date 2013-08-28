@@ -182,7 +182,7 @@ void MagnifyingGlassTool::setFocalPoint(const double cursorPosition[3])
     m_magnifiedCamera->SetFocalPoint(focalPoint);
 
     int xIndex, yIndex, zIndex;
-    OrthogonalPlane::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
+    m_2DViewer->getView().getXYZIndexesForView(xIndex, yIndex, zIndex);
 
     double position[3];
     m_magnifiedCamera->GetPosition(position);

@@ -72,7 +72,7 @@ void EraserTool::drawAreaOfErasure()
         int xIndex, yIndex, zIndex;
 
         m_2DViewer->getEventWorldCoordinate(m_endPoint);
-        OrthogonalPlane::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
+        m_2DViewer->getView().getXYZIndexesForView(xIndex, yIndex, zIndex);
 
         // Calculem el segon punt i el tercer
         p2[xIndex] = m_endPoint[xIndex];
@@ -127,7 +127,7 @@ void EraserTool::erasePrimitive()
     }
 }
 
-DrawerPrimitive* EraserTool::getErasablePrimitive(double point[3], OrthogonalPlane::OrthogonalPlaneType view, int slice)
+DrawerPrimitive* EraserTool::getErasablePrimitive(double point[3], const OrthogonalPlane &view, int slice)
 {
     double closestPoint[3];
     DrawerPrimitive *nearestPrimitive = m_2DViewer->getDrawer()->getNearestErasablePrimitiveToPoint(point, view, slice, closestPoint);

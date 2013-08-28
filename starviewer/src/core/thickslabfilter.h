@@ -23,7 +23,7 @@ public:
     void setInput(FilterOutput input);
 
 
-    void setProjectionAxis(OrthogonalPlane::OrthogonalPlaneType axis);
+    void setProjectionAxis(const OrthogonalPlane &axis);
     /// Sets the first slice
     void setFirstSlice(int slice);
     /// Sets the thickness (number of slices)

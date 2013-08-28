@@ -795,7 +795,7 @@ void Q2DViewer::setOverlayOpacity(double opacity)
     m_overlayOpacity = opacity;
 }
 
-void Q2DViewer::resetView(OrthogonalPlane::OrthogonalPlaneType view)
+void Q2DViewer::resetView(const OrthogonalPlane &view)
 {
     // First we compute which slab thickness should be applied after the view has been reseted
     int desiredSlabSlices = 1;
@@ -804,7 +804,7 @@ void Q2DViewer::resetView(OrthogonalPlane::OrthogonalPlaneType view)
         // In case thick slab is enabled, we should keep the slice thickness, 
         // so the proper number of slices of the thick slab should be computed for the new view
         double currentSlabThickness = getCurrentSliceThickness();
-        int viewIndex = OrthogonalPlane::getZIndexForView(view);
+        int viewIndex = view.getZIndexForView();
         double zSpacingAfterReset = m_mainVolume->getSpacing()[viewIndex];
         desiredSlabSlices = qRound(currentSlabThickness / zSpacingAfterReset);
     }
@@ -1230,7 +1230,7 @@ bool Q2DViewer::getCurrentCursorImageCoordinate(double xyz[3])
         // Calculem la profunditat correcta. S'ha de tenir en compte que en el cas que tinguem fases
         // vtk no n'és conscient (cada fase es desplaça en la profunditat z com si fos una imatge més)
         // i si no fèssim aquest càlcul, estaríem donant una coordenada Z incorrecta
-        int zIndex = OrthogonalPlane::getZIndexForView(this->getCurrentViewPlane());
+        int zIndex = this->getCurrentViewPlane().getZIndexForView();
         double zSpacing = m_mainVolume->getSpacing()[zIndex];
         double zOrigin = m_mainVolume->getOrigin()[zIndex];
         xyz[zIndex] =  zOrigin + zSpacing * getCurrentSlice();
@@ -1242,7 +1242,7 @@ bool Q2DViewer::getCurrentCursorImageCoordinate(double xyz[3])
     return inside;
 }
 
-OrthogonalPlane::OrthogonalPlaneType Q2DViewer::getView() const
+const OrthogonalPlane& Q2DViewer::getView() const
 {
     return this->getCurrentViewPlane();
 }
@@ -1268,8 +1268,8 @@ void Q2DViewer::updateAnnotationsInformation(AnnotationFlags annotation)
             double windowLevel[2];
             m_mainVolumeDisplayUnit->getImagePipeline()->getCurrentWindowLevel(windowLevel);
             m_upperLeftText = tr("%1 x %2\nWW: %5 WL: %6")
-                .arg(m_mainVolume->getDimensions()[OrthogonalPlane::getXIndexForView(getView())])
-                .arg(m_mainVolume->getDimensions()[OrthogonalPlane::getYIndexForView(getView())])
+                .arg(m_mainVolume->getDimensions()[getView().getXIndexForView()])
+                .arg(m_mainVolume->getDimensions()[getView().getYIndexForView()])
                 .arg(MathTools::roundToNearestInteger(windowLevel[0]))
                 .arg(MathTools::roundToNearestInteger(windowLevel[1]));
         }
@@ -1539,7 +1539,7 @@ void Q2DViewer::updateDisplayExtent()
 
     // A partir de l'extent del volum, la vista i la llesca en la que ens trobem,
     // calculem l'extent que li correspon a l'actor imatge
-    int zIndex = OrthogonalPlane::getZIndexForView(this->getCurrentViewPlane());
+    int zIndex = this->getCurrentViewPlane().getZIndexForView();
     int imageActorExtent[6];
     m_mainVolume->getWholeExtent(imageActorExtent);
     imageActorExtent[zIndex * 2] = imageActorExtent[zIndex * 2 + 1] = sliceValue;
@@ -1653,8 +1653,8 @@ void Q2DViewer::putCoordinateInCurrentImageBounds(double xyz[3])
     double bounds[6];
     m_mainVolumeDisplayUnit->getImageActor()->GetBounds(bounds);
 
-    int xIndex = OrthogonalPlane::getXIndexForView(this->getCurrentViewPlane());
-    int yIndex = OrthogonalPlane::getYIndexForView(this->getCurrentViewPlane());
+    int xIndex = this->getCurrentViewPlane().getXIndexForView();
+    int yIndex = this->getCurrentViewPlane().getYIndexForView();
 
     // Comprovarem que estigui dins dels límits 2D de la imatge
     // La x està per sota del mínim
@@ -1916,7 +1916,7 @@ void Q2DViewer::updateCurrentImageDefaultPresets()
 
 double Q2DViewer::getCurrentSpacingBetweenSlices()
 {
-    int zIndex = OrthogonalPlane::getZIndexForView(this->getCurrentViewPlane());
+    int zIndex = this->getCurrentViewPlane().getZIndexForView();
     
     return m_mainVolume->getSpacing()[zIndex];
 }
@@ -1968,12 +1968,12 @@ void Q2DViewer::updateDisplayShutterMask()
     m_mainVolumeDisplayUnit->getImagePipeline()->setShutterData(shutterData);
 }
 
-OrthogonalPlane::OrthogonalPlaneType Q2DViewer::getCurrentViewPlane() const
+const OrthogonalPlane& Q2DViewer::getCurrentViewPlane() const
 {
     return m_mainVolumeDisplayUnit->getViewPlane();
 }
 
-void Q2DViewer::setCurrentViewPlane(OrthogonalPlane::OrthogonalPlaneType viewPlane)
+void Q2DViewer::setCurrentViewPlane(const OrthogonalPlane &viewPlane)
 {
     QViewer::setCurrentViewPlane(viewPlane);
     m_mainVolumeDisplayUnit->setViewPlane(viewPlane);
