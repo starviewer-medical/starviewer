@@ -355,7 +355,8 @@ HEADERS += extensionfactory.h \
     blendfilter.h \
     mammographyimagehelper.h \
     imagepipeline.h \
-    volumereadermanager.h
+    volumereadermanager.h \
+    volumedisplayunit.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -660,7 +661,8 @@ SOURCES += extensionmediator.cpp \
     blendfilter.cpp \
     mammographyimagehelper.cpp \
     imagepipeline.cpp \
-    volumereadermanager.cpp
+    volumereadermanager.cpp \
+    volumedisplayunit.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \
