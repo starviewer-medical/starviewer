@@ -119,13 +119,6 @@ public:
     /// Retorna el thickness. En cas que no disposem del thickness, el valor retornat serà 0.0
     double getCurrentSliceThickness() const;
 
-    /// Ens retorna el rang actual de llesques, tenint en compte totes les imatges,
-    /// tant com si hi ha fases com si no
-    /// @param min valor mínim
-    /// @param max valor màxim
-    /// TODO podria ser protected o private, ningú necessita aquestes dades fora del visor
-    void getSliceRange(int &min, int &max);
-
     /// Ens dóna la llesca mínima/màxima de llesques, tenint en compte totes les imatges,
     /// tant com si hi ha fases com si no
     /// @return valor de la llesca mínima/màxima
