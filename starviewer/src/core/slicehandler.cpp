@@ -27,12 +27,11 @@ void SliceHandler::setVolume(Volume *volume)
 {
     m_volume = volume;
 
-    this->setSlice(0);
-    this->setPhase(0);
-
     this->setViewPlane(OrthogonalPlane::XYPlane);
 
     m_numberOfPhases = m_volume->getNumberOfPhases();
+
+    reset();
 }
 
 void SliceHandler::setViewPlane(const OrthogonalPlane &viewPlane)
@@ -183,6 +182,13 @@ bool SliceHandler::isLoopEnabledForPhases() const
 {
     Settings settings;
     return settings.getValue(CoreSettings::EnableQ2DViewerPhaseScrollLoop).toBool();
+}
+
+void SliceHandler::reset()
+{
+    setSlabThickness(1);
+    setSlice(0);
+    setPhase(0);
 }
 
 void SliceHandler::computeRangeAndSlice(int newSlabThickness)

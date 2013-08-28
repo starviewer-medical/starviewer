@@ -54,6 +54,8 @@ protected:
     int m_numberOfPhases;
 
 private:
+    /// Called when setting a new Volume to reset slab thickness, slice and phase.
+    void reset();
     void computeRangeAndSlice(int newSlabThickness);
     
     void checkAndUpdateSliceValue(int value);
