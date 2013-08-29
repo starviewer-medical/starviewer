@@ -456,9 +456,32 @@ void VtkDcmtkImageReader::readPerFrameRescale(const DICOMTagReader &dicomTagRead
         m_hasPerFrameRescale = true;
         m_perFrameRescale.clear();
 
+        DICOMSequenceAttribute *pixelValueTransformationSequencInSharedSequence = NULL;
+
+        // Checking if the functional group is located in Shared Functional Groups Sequence.
+        // In that case, we won't look into Per-Frame Functional Groups.
+        DICOMSequenceAttribute *sharedFunctionalGroupsSequence = dicomTagReader.getSequenceAttribute(DICOMSharedFunctionalGroupsSequence);
+        if (sharedFunctionalGroupsSequence)
+        {
+            QList<DICOMSequenceItem*> sharedItems = dicomTagReader.getSequenceAttribute(DICOMSharedFunctionalGroupsSequence)->getItems();
+            if (!sharedItems.isEmpty())
+            {
+                pixelValueTransformationSequencInSharedSequence = sharedItems.first()->getSequenceAttribute(DICOMPixelValueTransformationSequence);
+            }
+        }
+
         foreach (DICOMSequenceItem *item, sequence->getItems())
         {
-            DICOMSequenceAttribute *subSequence = item->getSequenceAttribute(DICOMPixelValueTransformationSequence);
+            DICOMSequenceAttribute *subSequence;
+
+            if (pixelValueTransformationSequencInSharedSequence)
+            {
+                subSequence = pixelValueTransformationSequencInSharedSequence;
+            }
+            else
+            {
+                subSequence = item->getSequenceAttribute(DICOMPixelValueTransformationSequence);
+            }
 
             if (subSequence)
             {
