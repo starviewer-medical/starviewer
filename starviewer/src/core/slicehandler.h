@@ -69,7 +69,6 @@ private:
     int m_slabThickness;
     int m_currentSlice;
     int m_currentPhase;
-    int m_lastSlabSlice;
 
 };
 

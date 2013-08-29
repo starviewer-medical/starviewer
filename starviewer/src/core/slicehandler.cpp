@@ -17,7 +17,6 @@ SliceHandler::SliceHandler(QObject *parent)
     m_currentPhase = 0;
     m_numberOfPhases = 1;
     m_slabThickness = 1;
-    m_lastSlabSlice = 0;
 }
 
 SliceHandler::~SliceHandler()
@@ -118,7 +117,6 @@ int SliceHandler::getNumberOfPhases() const
 void SliceHandler::setSlabThickness(int thickness)
 {
     computeRangeAndSlice(thickness);
-    m_lastSlabSlice = m_currentSlice + m_slabThickness - 1;
 }
 
 int SliceHandler::getSlabThickness() const
@@ -128,7 +126,7 @@ int SliceHandler::getSlabThickness() const
 
 int SliceHandler::getLastSlabSlice() const
 {
-    return m_lastSlabSlice;
+    return m_currentSlice + m_slabThickness - 1;
 }
 
 double SliceHandler::getSliceThickness() const
@@ -210,9 +208,8 @@ void SliceHandler::computeRangeAndSlice(int newSlabThickness)
     }
 
     int difference = newSlabThickness - m_slabThickness;
-    // First we distribute equally half of the difference of the new thickness above and below
+    // We distribute equally half of the difference of the new thickness above and below
     m_currentSlice -= difference / 2;
-    m_lastSlabSlice += difference / 2;
     
     // If difference is odd, we should then increase/decrease +-1 by one of its bounds (upper or lower)
     if (MathTools::isOdd(difference))
@@ -224,11 +221,12 @@ void SliceHandler::computeRangeAndSlice(int newSlabThickness)
             {
                 // Decrease on lower bound when difference is positive
                 m_currentSlice--;
-            }
-            else
-            {
-                // Decrease on upper bound when difference is negative
-                m_lastSlabSlice--;
+                
+                if (m_currentSlice < getMinimumSlice())
+                {
+                    // If we surpass lower bound, keep it in its corresponding bounds
+                    m_currentSlice = getMinimumSlice();
+                }
             }
         }
         else
@@ -236,31 +234,20 @@ void SliceHandler::computeRangeAndSlice(int newSlabThickness)
             // Otherwise (current thickness is odd)
             if (difference > 0)
             {
-                // Increase upper bound when difference is positive
-                m_lastSlabSlice++;
+                // Upper bound will be increased when difference is positive
+                int lastSlabSlice = getLastSlabSlice() + (difference / 2) + 1;
+                
+                if (lastSlabSlice > m_maxSliceValue)
+                {
+                    // If upper bound is surpassed, must decrease lower bound
+                    m_currentSlice = m_maxSliceValue - newSlabThickness + 1;
+                }
             }
             else
             {
                 // Increase lower bound when difference is negative
                 m_currentSlice++;
             }
-        }
-    }
-
-    // If difference is positive, thickness has been increased, should then check if we exceed min/max range
-    if (difference > 0)
-    {
-        if (m_currentSlice < getMinimumSlice())
-        {
-            // If exceeding on lower bound, must grow on upper bound
-            m_lastSlabSlice = getMinimumSlice() + newSlabThickness - 1;
-            m_currentSlice = getMinimumSlice();
-        }
-        else if (m_lastSlabSlice > m_maxSliceValue)
-        {
-            // If exceeding on upper bound, must grow on lower bound
-            m_currentSlice = m_maxSliceValue - newSlabThickness + 1;
-            m_lastSlabSlice = m_maxSliceValue;
         }
     }
     
@@ -319,7 +306,6 @@ void SliceHandler::checkAndUpdateSliceValue(int value)
     m_currentSlice = value;
 
     m_currentSlice = m_currentSlice;
-    m_lastSlabSlice = m_currentSlice + m_slabThickness - 1;
 }
 
 } // End namespace udg
