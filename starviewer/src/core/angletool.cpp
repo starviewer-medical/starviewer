@@ -132,7 +132,7 @@ void AngleTool::drawCircle()
     // Calculem el radi de l'arc de circumferència que mesurarà un quart del segment més curt dels dos que formen l'angle
     double distance1 = firstSegment.length();
     double distance2 = secondSegment.length();
-    double radius = MathTools::minimum(distance1, distance2) / 4.0;
+    double radius = qMin(distance1, distance2) / 4.0;
 
     // Calculem el rang de les iteracions per pintar l'angle correctament
     double initialAngle = MathTools::angleInRadians(firstSegment.toVector2D());
