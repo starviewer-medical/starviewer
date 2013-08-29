@@ -50,11 +50,11 @@ const OrthogonalPlane& SliceHandler::getViewPlane() const
     return m_viewPlane;
 }
 
-void SliceHandler::setSlice(int value)
+void SliceHandler::setSlice(int slice)
 {
-    if (m_currentSlice != value)
+    if (m_currentSlice != slice)
     {
-        checkAndUpdateSliceValue(value);
+        checkAndUpdateSliceValue(slice);
     }
 }
 
@@ -73,34 +73,34 @@ int SliceHandler::getMaximumSlice() const
     return m_maxSliceValue;
 }
 
-void SliceHandler::setPhase(int value)
+void SliceHandler::setPhase(int phase)
 {
-    if (m_currentPhase != value)
+    if (m_currentPhase != phase)
     {
         if (isLoopEnabledForPhases())
         {
-            if (value < 0)
+            if (phase < 0)
             {
-                value = m_numberOfPhases - 1;
+                phase = m_numberOfPhases - 1;
             }
-            else if (value > m_numberOfPhases - 1)
+            else if (phase > m_numberOfPhases - 1)
             {
-                value = 0;
+                phase = 0;
             }
         }
         else
         {
-            if (value < 0)
+            if (phase < 0)
             {
-                value = 0;
+                phase = 0;
             }
-            else if (value > m_numberOfPhases - 1)
+            else if (phase > m_numberOfPhases - 1)
             {
-                value = m_numberOfPhases - 1;
+                phase = m_numberOfPhases - 1;
             }
         }
 
-        m_currentPhase = value;
+        m_currentPhase = phase;
     }
 }
 
@@ -273,32 +273,32 @@ bool SliceHandler::hasSlabThicknessValueToBeUpated(int thickness)
     return true;
 }
 
-void SliceHandler::checkAndUpdateSliceValue(int value)
+void SliceHandler::checkAndUpdateSliceValue(int slice)
 {
     if (isLoopEnabledForSlices())
     {
-        if (value < 0)
+        if (slice < 0)
         {
-            value = m_maxSliceValue - m_slabThickness + 1;
+            slice = m_maxSliceValue - m_slabThickness + 1;
         }
-        else if (value + m_slabThickness - 1 > m_maxSliceValue)
+        else if (slice + m_slabThickness - 1 > m_maxSliceValue)
         {
-            value = 0;
+            slice = 0;
         }
     }
     else
     {
-        if (value < 0)
+        if (slice < 0)
         {
-            value = 0;
+            slice = 0;
         }
-        else if (value + m_slabThickness - 1 > m_maxSliceValue)
+        else if (slice + m_slabThickness - 1 > m_maxSliceValue)
         {
-            value = m_maxSliceValue - m_slabThickness + 1;
+            slice = m_maxSliceValue - m_slabThickness + 1;
         }
     }
 
-    m_currentSlice = value;
+    m_currentSlice = slice;
 }
 
 } // End namespace udg
