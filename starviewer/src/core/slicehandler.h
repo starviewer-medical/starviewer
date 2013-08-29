@@ -63,7 +63,8 @@ private:
     /// Checks whether the given thickness value is valid to update the current one
     bool hasSlabThicknessValueToBeUpated(int thickness);
     
-    void checkAndUpdateSliceValue(int slice);
+    /// Updates the slice value accordingly
+    void updateSlice(int slice);
 
 private:
     Volume *m_volume;
