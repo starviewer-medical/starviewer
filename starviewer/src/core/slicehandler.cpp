@@ -54,7 +54,7 @@ void SliceHandler::setSlice(int slice)
 {
     if (m_currentSlice != slice)
     {
-        checkAndUpdateSliceValue(slice);
+        updateSlice(slice);
     }
 }
 
@@ -273,7 +273,7 @@ bool SliceHandler::hasSlabThicknessValueToBeUpated(int thickness)
     return true;
 }
 
-void SliceHandler::checkAndUpdateSliceValue(int slice)
+void SliceHandler::updateSlice(int slice)
 {
     if (isLoopEnabledForSlices())
     {
