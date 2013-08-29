@@ -54,7 +54,7 @@ void SliceHandler::setSlice(int slice)
 {
     if (m_currentSlice != slice)
     {
-        updateSlice(slice);
+        m_currentSlice = MathTools::getBoundedValue(slice, 0, m_maxSliceValue - m_slabThickness + 1, isLoopEnabledForSlices());
     }
 }
 
@@ -248,11 +248,6 @@ bool SliceHandler::hasSlabThicknessValueToBeUpated(int thickness)
     }
 
     return true;
-}
-
-void SliceHandler::updateSlice(int slice)
-{
-    m_currentSlice = MathTools::getBoundedValue(slice, 0, m_maxSliceValue - m_slabThickness + 1, isLoopEnabledForSlices());
 }
 
 } // End namespace udg
