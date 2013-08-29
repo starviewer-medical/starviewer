@@ -11,10 +11,18 @@ VolumeReaderManager::VolumeReaderManager(QObject *parent) :
 {
 }
 
+VolumeReaderManager::~VolumeReaderManager()
+{
+    cancelReading();
+}
+
 void VolumeReaderManager::initialize()
 {
     m_volumeReaderJobs.clear();
     m_jobsProgress.clear();
+    m_volumes.clear();
+    m_success = true;
+    m_lastError = "";
 }
 
 void VolumeReaderManager::readVolume(Volume *volume)
@@ -35,7 +43,8 @@ void VolumeReaderManager::readVolumes(const QList<Volume*> &volumes)
         AsynchronousVolumeReader *volumeReader = new AsynchronousVolumeReader();
         m_volumeReaderJobs << volumeReader->read(volume);
         m_jobsProgress.insert(m_volumeReaderJobs.last(), 0);
-        connect(m_volumeReaderJobs.last(), SIGNAL(done(ThreadWeaver::Job*)), SLOT(jobFinished()));
+        m_volumes << NULL;
+        connect(m_volumeReaderJobs.last(), SIGNAL(done(ThreadWeaver::Job*)), SLOT(jobFinished(ThreadWeaver::Job*)));
         connect(m_volumeReaderJobs.last(), SIGNAL(progress(ThreadWeaver::Job*, int)), SLOT(updateProgress(ThreadWeaver::Job*, int)));
     }
 }
@@ -48,7 +57,7 @@ void VolumeReaderManager::cancelReading()
     {
         if (!m_volumeReaderJobs[i].isNull())
         {
-            disconnect(m_volumeReaderJobs[i], SIGNAL(done(ThreadWeaver::Job*)), this, SIGNAL(readingFinished()));
+            disconnect(m_volumeReaderJobs[i], SIGNAL(done(ThreadWeaver::Job*)), this, SIGNAL(jobFinished(ThreadWeaver::Job*)));
             disconnect(m_volumeReaderJobs[i], SIGNAL(progress(ThreadWeaver::Job*, int)), this, SLOT(updateProgress(ThreadWeaver::Job*, int)));
         }
         m_volumeReaderJobs[i] = NULL;
@@ -58,52 +67,23 @@ void VolumeReaderManager::cancelReading()
 
 bool VolumeReaderManager::readingSuccess()
 {
-    bool success = true;
-    int i = 0;
-    while (success && i < m_volumeReaderJobs.size())
-    {
-        success = m_volumeReaderJobs[i]->success();
-        i++;
-    }
-
-    return success;
+    return m_success;
 }
 
 Volume* VolumeReaderManager::getVolume()
 {
-    return m_volumeReaderJobs.first()->getVolume();
+    return m_volumes.first();
 }
 
 QList<Volume*> VolumeReaderManager::getVolumes()
 {
-    QList<Volume*> volumes;
-    foreach (const QPointer<VolumeReaderJob> &job, m_volumeReaderJobs)
-    {
-        volumes << job->getVolume();
-    }
-
-    return volumes;
+    return m_volumes;
 }
 
 QString VolumeReaderManager::getLastErrorMessageToUser()
 {
     // TODO Ara només retorna el missatge del primer que ha fallat
-    QString errorMessage;
-
-    bool success = true;
-    int i = 0;
-    while (success && i < m_volumeReaderJobs.size())
-    {
-        success = m_volumeReaderJobs[i]->success();
-
-        if (!success)
-        {
-            errorMessage = m_volumeReaderJobs[i]->getLastErrorMessageToUser();
-        }
-
-        i++;
-    }
-    return errorMessage;
+    return m_lastError;
 }
 
 bool VolumeReaderManager::isReading()
@@ -134,8 +114,22 @@ void VolumeReaderManager::updateProgress(ThreadWeaver::Job *job, int value)
     emit progress(currentProgress);
 }
 
-void VolumeReaderManager::jobFinished()
+void VolumeReaderManager::jobFinished(ThreadWeaver::Job *job)
 {
+    VolumeReaderJob *readerJob = qobject_cast<VolumeReaderJob*>(job);
+
+    m_volumes[m_volumeReaderJobs.indexOf(readerJob)] = readerJob->getVolume();
+
+    if (m_success)
+    {
+        m_success = readerJob->success();
+
+        if (!m_success)
+        {
+            m_lastError = readerJob->getLastErrorMessageToUser();
+        }
+    }
+
     if (!isReading())
     {
         emit readingFinished();
