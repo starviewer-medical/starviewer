@@ -223,7 +223,7 @@ void ROITool::computeStatisticsData()
         }
 
         // Fem el recompte de píxels
-        if ((intersectionList.count() % 2) == 0)
+        if (MathTools::isEven(intersectionList.count()))
         {
             int limit = intersectionList.count() / 2;
             for (int i = 0; i < limit; ++i)

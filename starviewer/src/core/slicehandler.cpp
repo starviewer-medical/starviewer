@@ -2,6 +2,7 @@
 
 #include "coresettings.h"
 #include "image.h"
+#include "mathtools.h"
 #include "logging.h"
 #include "volume.h"
 
@@ -217,10 +218,10 @@ void SliceHandler::computeRangeAndSlice(int newSlabThickness)
         m_lastSlabSlice += difference / 2;
 
         // If difference is odd, increase +1 by one of its bounds (upper or lower)
-        if ((difference % 2) != 0)
+        if (MathTools::isOdd(difference))
         {
             // If current thickness is pair, grow on lower bound
-            if ((m_slabThickness % 2) == 0)
+            if (MathTools::isEven(m_slabThickness))
             {
                 m_currentSlice--;
             }
@@ -253,10 +254,10 @@ void SliceHandler::computeRangeAndSlice(int newSlabThickness)
         m_lastSlabSlice -= difference / 2;
 
         // If difference is odd, decrease +1 by one of its bounds (upper or lower)
-        if ((difference % 2) != 0)
+        if (MathTools::isOdd(difference))
         {
             // If current thickness is pair, decrease on upper bound
-            if ((m_slabThickness % 2) == 0)
+            if (MathTools::isEven(m_slabThickness))
             {
                 m_lastSlabSlice--;
             }
