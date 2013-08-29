@@ -804,8 +804,6 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
 
         // Ara adaptem els actors a la nova configuració de la càmara perquè siguin visibles
         // TODO Això s'hauria d'encapsular en un mètode tipu "resetDisplayExtent()"
-        // HACK! Necessari perquè s'actualitzi la llesca correctament
-        m_volumeDisplayUnits.first()->getSliceHandler()->setSlice(0);
         updateDisplayExtent();
         getRenderer()->ResetCamera();
         // Fins aquí seria el mètode "resetDisplayExtent()"
@@ -816,8 +814,6 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
         {
             initialSliceIndex = m_volumeDisplayUnits.first()->getSliceHandler()->getMaximumSlice() / 2;
         }
-        // HACK! Necessari perquè s'actualitzi la llesca correctament
-        m_volumeDisplayUnits.first()->getSliceHandler()->setSlice(-1);
         setSlice(initialSliceIndex);
     }
     
