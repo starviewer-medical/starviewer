@@ -37,6 +37,32 @@ static const double DoubleMaximumValue;
 /// Operacions aritmètiques
 ///
 
+/// Returns the bounded value between minimum and maximum corresponding to the given value.
+/// If loop is true, when value is out of bounds, the oppposite of the surpassed bound (min or max) is returned
+/// NOTE: This method has been implemented here to avoid the include of the cpp file at the end of the file because of the templated method
+template<typename T>
+static T getBoundedValue(T value, T minimum, T maximum, bool loop)
+{
+    T boundedValue = value;
+    
+    if (loop)
+    {
+        if (boundedValue < minimum)
+        {
+            boundedValue = maximum;
+        }
+        else if (value > maximum)
+        {
+            boundedValue = minimum;
+        }
+    }
+    else
+    {
+        boundedValue = qBound(minimum, value, maximum);
+    }
+
+    return boundedValue;
+}
 
 /// Tells if the number is odd/even
 static bool isOdd(int x);
