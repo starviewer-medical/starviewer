@@ -188,38 +188,6 @@ double MathTools::normalize(double vector[3])
     return vtkMath::Normalize(vector);
 }
 
-double MathTools::minimum(double a, double b)
-{
-    double min;
-
-    if (a < b)
-    {
-        min = a;
-    }
-    else
-    {
-        min = b;
-    }
-
-    return min;
-}
-
-double MathTools::maximum(double a, double b)
-{
-    double max;
-
-    if (a > b)
-    {
-        max = a;
-    }
-    else
-    {
-        max = b;
-    }
-
-    return max;
-}
-
 bool MathTools::isOdd(int x)
 {
     return (x % 2);

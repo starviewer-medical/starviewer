@@ -37,11 +37,6 @@ static const double DoubleMaximumValue;
 /// Operacions aritmètiques
 ///
 
-/// Ens retorna el mínim dels dos valors
-static double minimum(double a, double b);
-
-/// Ens retorna el màxim dels dos valors
-static double maximum(double a, double b);
 
 /// Tells if the number is odd/even
 static bool isOdd(int x);
