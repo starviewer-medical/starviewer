@@ -38,8 +38,11 @@ void SliceHandler::setViewPlane(const OrthogonalPlane &viewPlane)
 {
     m_viewPlane = viewPlane;
 
-    // Update the slice range for the new view
-    m_volume->getSliceRange(m_minSliceValue, m_maxSliceValue, viewPlane);
+    if (m_volume)
+    {
+        // Update the slice range for the new view
+        m_volume->getSliceRange(m_minSliceValue, m_maxSliceValue, viewPlane);
+    }
 }
 
 const OrthogonalPlane& SliceHandler::getViewPlane() const
