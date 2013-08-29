@@ -56,7 +56,9 @@ protected:
 private:
     /// Called when setting a new Volume to reset slab thickness, slice and phase.
     void reset();
-    void computeRangeAndSlice(int newSlabThickness);
+
+    /// Updates the slab range and thickness according to the given slab thickness
+    void updateSlab(int newSlabThickness);
 
     /// Checks whether the given thickness value is valid to update the current one
     bool hasSlabThicknessValueToBeUpated(int thickness);

@@ -116,7 +116,7 @@ int SliceHandler::getNumberOfPhases() const
 
 void SliceHandler::setSlabThickness(int thickness)
 {
-    computeRangeAndSlice(thickness);
+    updateSlab(thickness);
 }
 
 int SliceHandler::getSlabThickness() const
@@ -193,7 +193,7 @@ void SliceHandler::reset()
     setPhase(0);
 }
 
-void SliceHandler::computeRangeAndSlice(int newSlabThickness)
+void SliceHandler::updateSlab(int newSlabThickness)
 {
     // First check the new value
     if (!hasSlabThicknessValueToBeUpated(newSlabThickness))
