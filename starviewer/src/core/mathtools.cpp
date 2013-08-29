@@ -220,6 +220,16 @@ double MathTools::maximum(double a, double b)
     return max;
 }
 
+bool MathTools::isOdd(int x)
+{
+    return (x % 2);
+}
+
+bool MathTools::isEven(int x)
+{
+    return !isOdd(x);
+}
+
 double MathTools::cubeRoot(double x)
 {
     return std::pow(x, 1.0 / 3.0);

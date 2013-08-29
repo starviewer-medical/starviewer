@@ -43,6 +43,10 @@ static double minimum(double a, double b);
 /// Ens retorna el màxim dels dos valors
 static double maximum(double a, double b);
 
+/// Tells if the number is odd/even
+static bool isOdd(int x);
+static bool isEven(int x);
+
 /// Ens retorna el valor truncat
 static double truncate(double x);
 
