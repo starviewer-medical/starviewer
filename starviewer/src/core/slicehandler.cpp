@@ -299,8 +299,6 @@ void SliceHandler::checkAndUpdateSliceValue(int value)
     }
 
     m_currentSlice = value;
-
-    m_currentSlice = m_currentSlice;
 }
 
 } // End namespace udg
