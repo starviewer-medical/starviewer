@@ -77,23 +77,7 @@ void SliceHandler::setPhase(int phase)
 {
     if (m_currentPhase != phase)
     {
-        if (isLoopEnabledForPhases())
-        {
-            if (phase < 0)
-            {
-                phase = m_numberOfPhases - 1;
-            }
-            else if (phase > m_numberOfPhases - 1)
-            {
-                phase = 0;
-            }
-        }
-        else
-        {
-            phase = qBound(0, phase, m_numberOfPhases - 1);
-        }
-
-        m_currentPhase = phase;
+        m_currentPhase = MathTools::getBoundedValue(phase, 0, m_numberOfPhases - 1, isLoopEnabledForPhases());
     }
 }
 
@@ -268,23 +252,7 @@ bool SliceHandler::hasSlabThicknessValueToBeUpated(int thickness)
 
 void SliceHandler::updateSlice(int slice)
 {
-    if (isLoopEnabledForSlices())
-    {
-        if (slice < 0)
-        {
-            slice = m_maxSliceValue - m_slabThickness + 1;
-        }
-        else if (slice + m_slabThickness - 1 > m_maxSliceValue)
-        {
-            slice = 0;
-        }
-    }
-    else
-    {
-        slice = qBound(0, slice, m_maxSliceValue - m_slabThickness + 1);
-    }
-
-    m_currentSlice = slice;
+    m_currentSlice = MathTools::getBoundedValue(slice, 0, m_maxSliceValue - m_slabThickness + 1, isLoopEnabledForSlices());
 }
 
 } // End namespace udg
