@@ -23,13 +23,13 @@ public:
     void setViewPlane(const OrthogonalPlane &viewPlane);
     const OrthogonalPlane& getViewPlane() const;
 
-    void setSlice(int value);
+    void setSlice(int slice);
     int getCurrentSlice() const;
 
     int getMinimumSlice() const;
     int getMaximumSlice() const;
     
-    void setPhase(int value);
+    void setPhase(int phase);
     int getCurrentPhase() const;
 
     int getNumberOfPhases() const;
@@ -61,7 +61,7 @@ private:
     /// Checks whether the given thickness value is valid to update the current one
     bool hasSlabThicknessValueToBeUpated(int thickness);
     
-    void checkAndUpdateSliceValue(int value);
+    void checkAndUpdateSliceValue(int slice);
 
 private:
     Volume *m_volume;
