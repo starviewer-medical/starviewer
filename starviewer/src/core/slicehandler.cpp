@@ -211,24 +211,25 @@ void SliceHandler::computeRangeAndSlice(int newSlabThickness)
     // We distribute equally half of the difference of the new thickness above and below
     m_currentSlice -= difference / 2;
     
-    // If difference is odd, we should then increase/decrease +-1 by one of its bounds (upper or lower)
     if (MathTools::isOdd(difference))
     {
+        // If thickness difference is odd, we should then increase/decrease the extra slice left of thickness
+        // on upper or lower bound depending on some conditions
+        
         if (MathTools::isEven(m_slabThickness))
         {
-            // If current thickness is even
             if (difference > 0)
             {
-                // Decrease on lower bound when difference is positive and keep it inside bounds
+                // Decrease on lower bound when thickness has been increased and keep it inside bounds
                 m_currentSlice = qMax(m_currentSlice - 1, getMinimumSlice());
             }
         }
         else
         {
-            // Otherwise (current thickness is odd)
             if (difference > 0)
             {
-                // Upper bound will be increased when difference is positive
+                // When thickness has been increased and current thickness is odd, upper bound will be increased
+                // and thus we must check if it will be out of upper bounds to update the lower bound accordingly
                 int lastSlabSlice = getLastSlabSlice() + (difference / 2) + 1;
                 
                 if (lastSlabSlice > m_maxSliceValue)
@@ -239,7 +240,7 @@ void SliceHandler::computeRangeAndSlice(int newSlabThickness)
             }
             else
             {
-                // Increase lower bound when difference is negative
+                // Increase lower bound when thickness has been decreased (when current thickness is odd)
                 m_currentSlice++;
             }
         }
