@@ -17,6 +17,9 @@ class test_MathTools : public QObject {
 Q_OBJECT
 
 private slots:
+    void getBoundedValue_ReturnsExpectedValue_data();
+    void getBoundedValue_ReturnsExpectedValue();
+    
     void truncate_ShouldReturnTruncatedValue_data();
     void truncate_ShouldReturnTruncatedValue();
 
@@ -152,6 +155,41 @@ const double crossProductEpsilon = 0.001;
 const double directorVectorEpsilon = 0.001;
 const double distance3DEpsion = 0.0005;
 const double LineIntersectionEpsilon = 0.0001;
+
+void test_MathTools::getBoundedValue_ReturnsExpectedValue_data()
+{
+    QTest::addColumn<int>("value");
+    QTest::addColumn<int>("min");
+    QTest::addColumn<int>("max");
+    QTest::addColumn<bool>("loop");
+    QTest::addColumn<int>("expectedBoundedValue");
+
+    int minimum = 0;
+    int maximum = 255;
+    int valueInBounds = MathTools::randomInt(minimum, maximum);
+    
+    bool dummyLoop = MathTools::randomInt(0, 1);
+    QTest::newRow("Value is in bounds, does not care about loop") << valueInBounds << minimum << maximum << dummyLoop << valueInBounds;
+    
+    int valueBelowMinBound = MathTools::randomInt(std::numeric_limits<int>::min(), minimum - 1);
+    QTest::newRow("Value below min bound, loop == false") << valueBelowMinBound << minimum << maximum << false << minimum;
+    QTest::newRow("Value below min bound, loop == true") << valueBelowMinBound << minimum << maximum << true << maximum;
+
+    int valueAboveMaxBound = MathTools::randomInt(maximum + 1, std::numeric_limits<int>::max());
+    QTest::newRow("Value above max bound, loop == false") << valueAboveMaxBound << minimum << maximum << false << maximum;
+    QTest::newRow("Value above max bound, loop == true") << valueAboveMaxBound << minimum << maximum << true << minimum;
+}
+
+void test_MathTools::getBoundedValue_ReturnsExpectedValue()
+{
+    QFETCH(int, value);
+    QFETCH(int, min);
+    QFETCH(int, max);
+    QFETCH(bool, loop);
+    QFETCH(int, expectedBoundedValue);
+    
+    QCOMPARE(MathTools::getBoundedValue(value, min, max, loop), expectedBoundedValue);
+}
 
 void test_MathTools::truncate_ShouldReturnTruncatedValue_data()
 {
