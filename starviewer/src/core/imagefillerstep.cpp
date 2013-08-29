@@ -455,9 +455,9 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
     QString sopClassUID = m_input->getDICOMFile()->getValueAttributeAsQString(DICOMSOPClassUID);
 
     //
-    // Atributs de CT i MR
+    // Atributs de CT i MR i MG Breast Tomosyntesis
     //
-    if (sopClassUID == UIDEnhancedCTImageStorage || sopClassUID == UIDEnhancedMRImageStorage)
+    if (sopClassUID == UIDEnhancedCTImageStorage || sopClassUID == UIDEnhancedMRImageStorage || sopClassUID == UIDBreastTomosynthesisImageStorage)
     {
         //
         // Per obtenir el Frame Type, haurem de seleccionar la seqüència adient, segons la modalitat
@@ -470,10 +470,17 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
             //
             imageFrameTypeSequence = frameItem->getSequenceAttribute(DICOMCTImageFrameTypeSequence);
         }
-        else
+        else if (sopClassUID == UIDEnhancedMRImageStorage)
         {
             // MR Image Frame Type (C.8.13.5.1)
             imageFrameTypeSequence = frameItem->getSequenceAttribute(DICOMMRImageFrameTypeSequence);
+        }
+        else
+        {
+            //
+            // X-Ray 3D Frame Type Macro (C.8.21.5.1)
+            //
+            imageFrameTypeSequence = frameItem->getSequenceAttribute(DICOMXRay3DFrameTypeSequence);
         }
 
         // Un cop seleccionada la seqüència adient, obtenim els valors
@@ -1260,7 +1267,7 @@ bool ImageFillerStep::isEnhancedImageSOPClass(const QString &sopClassUID)
 {
     return (sopClassUID == UIDEnhancedCTImageStorage || sopClassUID == UIDEnhancedMRImageStorage || sopClassUID == UIDEnhancedXAImageStorage ||
         sopClassUID == UIDEnhancedXRFImageStorage || sopClassUID == UIDEnhancedUSVolumeStorage || sopClassUID == UIDEnhancedMRColorImageStorage ||
-        sopClassUID == UIDEnhancedPETImageStorage);
+        sopClassUID == UIDEnhancedPETImageStorage || sopClassUID == UIDBreastTomosynthesisImageStorage);
 }
 
 bool ImageFillerStep::validateAndSetSpacingAttribute(Image *image, const QString &spacing, const DICOMTag &tag)
