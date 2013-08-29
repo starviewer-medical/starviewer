@@ -1,7 +1,10 @@
 #include "autotest.h"
 #include "slicehandler.h"
 
+#include "volumetesthelper.h"
+
 using namespace udg;
+using namespace testing;
 
 class TestingSliceHandler : public SliceHandler {
 public:
@@ -36,6 +39,13 @@ class test_SliceHandler : public QObject {
 Q_OBJECT
 
 private slots:
+    void constructor_InitializesWithExpectedValues();
+
+    void setVolume_UpdatesFieldsAsExpected();
+
+    void setViewPlane_UpdatesViewPlaneAndSliceRange_data();
+    void setViewPlane_UpdatesViewPlaneAndSliceRange();
+
     void setSlice_ComputesExpectedSlice_data();
     void setSlice_ComputesExpectedSlice();
     
@@ -51,6 +61,85 @@ private slots:
     void setSlabThickness_ModifiesCurrentSliceAsExpected_data();
     void setSlabThickness_ModifiesCurrentSliceAsExpected();
 };
+
+Q_DECLARE_METATYPE(Volume*)
+Q_DECLARE_METATYPE(OrthogonalPlane)
+
+void test_SliceHandler::constructor_InitializesWithExpectedValues()
+{
+    SliceHandler sliceHandler;
+
+    QCOMPARE(sliceHandler.getViewPlane(), OrthogonalPlane(OrthogonalPlane::XYPlane));
+    QCOMPARE(sliceHandler.getCurrentSlice(), 0);
+    QCOMPARE(sliceHandler.getMinimumSlice(), 0);
+    QCOMPARE(sliceHandler.getMaximumSlice(), 0);
+    QCOMPARE(sliceHandler.getCurrentPhase(), 0);
+    QCOMPARE(sliceHandler.getNumberOfPhases(), 1);
+    QCOMPARE(sliceHandler.getSlabThickness(), 1);
+    QCOMPARE(sliceHandler.getLastSlabSlice(), 0);
+}
+
+void test_SliceHandler::setVolume_UpdatesFieldsAsExpected()
+{
+    TestingSliceHandler sliceHandler;
+    sliceHandler.setViewPlane(OrthogonalPlane::XZPlane);
+    sliceHandler.setSliceRange(-10, 10);
+    sliceHandler.setSlice(5);
+    sliceHandler.setNumberOfPhases(30);
+    sliceHandler.setPhase(10);
+    sliceHandler.setSlabThickness(2);
+
+    Volume *volume = VolumeTestHelper::createVolume(20, 4, 5);
+    sliceHandler.setVolume(volume);
+
+    QCOMPARE(sliceHandler.getViewPlane(), OrthogonalPlane(OrthogonalPlane::XYPlane));
+    QCOMPARE(sliceHandler.getCurrentSlice(), 0);
+    QCOMPARE(sliceHandler.getMinimumSlice(), 0);
+    QCOMPARE(sliceHandler.getMaximumSlice(), 4);
+    QCOMPARE(sliceHandler.getCurrentPhase(), 0);
+    QCOMPARE(sliceHandler.getNumberOfPhases(), 4);
+    QCOMPARE(sliceHandler.getSlabThickness(), 1);
+    QCOMPARE(sliceHandler.getLastSlabSlice(), 0);
+
+    VolumeTestHelper::cleanUp(volume);
+}
+
+void test_SliceHandler::setViewPlane_UpdatesViewPlaneAndSliceRange_data()
+{
+    QTest::addColumn<Volume*>("volume");
+    QTest::addColumn<OrthogonalPlane>("viewPlane");
+    QTest::addColumn<int>("expectedMinimumSlice");
+    QTest::addColumn<int>("expectedMaximumSlice");
+
+    double origin[3] = { 0.0, 0.0, 0.0 };
+    double spacing[3] = { 1.0, 1.0, 1.0 };
+    int dimensions[3] = { 12, 16, 42 };
+    int extent[6] = { 0, 11, 5, 20, 1, 42 };
+
+    QTest::newRow("XY") << VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, spacing, dimensions, extent)
+                        << OrthogonalPlane(OrthogonalPlane::XYPlane) << 1 << 42;
+    QTest::newRow("YZ") << VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, spacing, dimensions, extent)
+                        << OrthogonalPlane(OrthogonalPlane::YZPlane) << 0 << 11;
+    QTest::newRow("XZ") << VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, spacing, dimensions, extent)
+                        << OrthogonalPlane(OrthogonalPlane::XZPlane) << 5 << 20;
+}
+
+void test_SliceHandler::setViewPlane_UpdatesViewPlaneAndSliceRange()
+{
+    QFETCH(Volume*, volume);
+    QFETCH(OrthogonalPlane, viewPlane);
+    QFETCH(int, expectedMinimumSlice);
+    QFETCH(int, expectedMaximumSlice);
+
+    SliceHandler sliceHandler;
+    sliceHandler.setVolume(volume);
+    sliceHandler.setViewPlane(viewPlane);
+
+    QCOMPARE(sliceHandler.getMinimumSlice(), expectedMinimumSlice);
+    QCOMPARE(sliceHandler.getMaximumSlice(), expectedMaximumSlice);
+
+    VolumeTestHelper::cleanUp(volume);
+}
 
 void test_SliceHandler::setSlice_ComputesExpectedSlice_data()
 {
