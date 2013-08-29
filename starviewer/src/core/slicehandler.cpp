@@ -219,14 +219,8 @@ void SliceHandler::computeRangeAndSlice(int newSlabThickness)
             // If current thickness is even
             if (difference > 0)
             {
-                // Decrease on lower bound when difference is positive
-                m_currentSlice--;
-                
-                if (m_currentSlice < getMinimumSlice())
-                {
-                    // If we surpass lower bound, keep it in its corresponding bounds
-                    m_currentSlice = getMinimumSlice();
-                }
+                // Decrease on lower bound when difference is positive and keep it inside bounds
+                m_currentSlice = qMax(m_currentSlice - 1, getMinimumSlice());
             }
         }
         else
