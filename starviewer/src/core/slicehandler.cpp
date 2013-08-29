@@ -197,21 +197,11 @@ void SliceHandler::reset()
 void SliceHandler::computeRangeAndSlice(int newSlabThickness)
 {
     // First check the new value
-    if (newSlabThickness < 1)
+    if (!hasSlabThicknessValueToBeUpated(newSlabThickness))
     {
-        DEBUG_LOG("Invalid thickness value. Must be >= 1.");
         return;
     }
-    if (newSlabThickness == m_slabThickness)
-    {
-        DEBUG_LOG("Same slab thickness, nothing is done.");
-        return;
-    }
-    if (newSlabThickness > m_maxSliceValue + 1)
-    {
-        DEBUG_LOG("New thickness exceeds maximum permitted thickness, it remains the same.");
-        return;
-    }
+    
     if (newSlabThickness == 1)
     {
         m_slabThickness = 1;
@@ -279,6 +269,29 @@ void SliceHandler::computeRangeAndSlice(int newSlabThickness)
     }
     // Update thickness
     m_slabThickness = newSlabThickness;
+}
+
+bool SliceHandler::hasSlabThicknessValueToBeUpated(int thickness)
+{
+    if (thickness < 1)
+    {
+        DEBUG_LOG("Invalid thickness value. Must be >= 1.");
+        return false;
+    }
+    
+    if (thickness == m_slabThickness)
+    {
+        DEBUG_LOG("Same slab thickness, nothing is done.");
+        return false;
+    }
+    
+    if (thickness > m_maxSliceValue + 1)
+    {
+        DEBUG_LOG("New thickness exceeds maximum permitted thickness, it remains the same.");
+        return false;
+    }
+
+    return true;
 }
 
 void SliceHandler::checkAndUpdateSliceValue(int value)
