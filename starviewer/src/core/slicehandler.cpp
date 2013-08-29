@@ -210,28 +210,46 @@ void SliceHandler::computeRangeAndSlice(int newSlabThickness)
     }
 
     int difference = newSlabThickness - m_slabThickness;
-    // If difference is positive, increase thickness
-    if (difference > 0)
+    // First we distribute equally half of the difference of the new thickness above and below
+    m_currentSlice -= difference / 2;
+    m_lastSlabSlice += difference / 2;
+    
+    // If difference is odd, we should then increase/decrease +-1 by one of its bounds (upper or lower)
+    if (MathTools::isOdd(difference))
     {
-        // Integer division
-        m_currentSlice -= difference / 2;
-        m_lastSlabSlice += difference / 2;
-
-        // If difference is odd, increase +1 by one of its bounds (upper or lower)
-        if (MathTools::isOdd(difference))
+        if (MathTools::isEven(m_slabThickness))
         {
-            // If current thickness is pair, grow on lower bound
-            if (MathTools::isEven(m_slabThickness))
+            // If current thickness is even
+            if (difference > 0)
             {
+                // Decrease on lower bound when difference is positive
                 m_currentSlice--;
             }
-            // Otherwise grow on upper bound
             else
             {
-                m_lastSlabSlice++;
+                // Decrease on upper bound when difference is negative
+                m_lastSlabSlice--;
             }
         }
-        // Check if we exceed min/max range
+        else
+        {
+            // Otherwise (current thickness is odd)
+            if (difference > 0)
+            {
+                // Increase upper bound when difference is positive
+                m_lastSlabSlice++;
+            }
+            else
+            {
+                // Increase lower bound when difference is negative
+                m_currentSlice++;
+            }
+        }
+    }
+
+    // If difference is positive, thickness has been increased, should then check if we exceed min/max range
+    if (difference > 0)
+    {
         if (m_currentSlice < getMinimumSlice())
         {
             // If exceeding on lower bound, must grow on upper bound
@@ -245,29 +263,7 @@ void SliceHandler::computeRangeAndSlice(int newSlabThickness)
             m_lastSlabSlice = m_maxSliceValue;
         }
     }
-    // Negative difference, decrease thickness
-    else
-    {
-        // Convert difference to positive value for ease of computing
-        difference *= -1;
-        m_currentSlice += difference / 2;
-        m_lastSlabSlice -= difference / 2;
-
-        // If difference is odd, decrease +1 by one of its bounds (upper or lower)
-        if (MathTools::isOdd(difference))
-        {
-            // If current thickness is pair, decrease on upper bound
-            if (MathTools::isEven(m_slabThickness))
-            {
-                m_lastSlabSlice--;
-            }
-            // Otherwise decrease on lower bound
-            else
-            {
-                m_currentSlice++;
-            }
-        }
-    }
+    
     // Update thickness
     m_slabThickness = newSlabThickness;
 }
