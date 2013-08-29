@@ -255,7 +255,7 @@ void test_SliceHandler::getLastSlabSlice_ReturnsExpectedValue_data()
     int maximumSlice = 255;
     int slice = 10;
     int slabThickness = 200;
-    QTest::newRow("Slab inside range") << minimumSlice << maximumSlice << slice << slabThickness << 199;
+    QTest::newRow("Slab inside range") << minimumSlice << maximumSlice << slice << slabThickness << 110;
 }
 
 void test_SliceHandler::getLastSlabSlice_ReturnsExpectedValue()
