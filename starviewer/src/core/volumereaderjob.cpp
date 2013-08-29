@@ -13,6 +13,7 @@ VolumeReaderJob::VolumeReaderJob(Volume *volume, QObject *parent)
     m_volumeReadSuccessfully = false;
     m_lastErrorMessageToUser = "";
     m_abortRequested = false;
+    m_autoDelete = true;
 
     connect(this, SIGNAL(done(ThreadWeaver::Job*)), SLOT(autoDelete()));
 }
