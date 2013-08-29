@@ -1,5 +1,7 @@
 #include "celshadingvoxelshader.h"
 
+#include "mathtools.h"
+
 namespace udg {
 
 CelShadingVoxelShader::CelShadingVoxelShader()
@@ -17,7 +19,7 @@ void CelShadingVoxelShader::setQuantums(int quantums)
 
     int maxQuantumSize = static_cast<int>(ceil(quantums / 2.0));
     int textureSize = maxQuantumSize * (maxQuantumSize + 1);
-    if (quantums % 2 != 0)
+    if (MathTools::isOdd(quantums))
     {
         textureSize -= 1;
     }

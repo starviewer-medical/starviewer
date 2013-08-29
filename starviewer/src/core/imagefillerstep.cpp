@@ -12,6 +12,7 @@
 #include "thumbnailcreator.h"
 #include "patientorientation.h"
 #include "displayshutter.h"
+#include "mathtools.h"
 #include "dicomformattedvaluesconverter.h"
 #include "dicomvaluerepresentationconverter.h"
 // Pel fabs. Necessari per Mac
@@ -1007,7 +1008,7 @@ void ImageFillerStep::fillDisplayShutterInformation(Image *image, DICOMSequenceI
         if (dicomValue)
         {
             QStringList vertices = dicomValue->getValueAsQString().split("\\");
-            if (vertices.count() % 2 != 0)
+            if (MathTools::isOdd(vertices.count()))
             {
                 DEBUG_LOG("L'atribut Vertices of the Polygonal Shutter està en un format inesperat: " + dicomValue->getValueAsQString());
                 ERROR_LOG("L'atribut Vertices of the Polygonal Shutter està en un format inesperat: " + dicomValue->getValueAsQString());

@@ -4,6 +4,7 @@
 #include "logging.h"
 #include "drawerpolygon.h"
 #include "drawer.h"
+#include "mathtools.h"
 // Vtk
 #include <vtkPoints.h>
 #include <vtkLine.h>
@@ -205,7 +206,7 @@ double PolylineTemporalROITool::computeTemporalMean()
             }
         }
 
-        if ((intersectionList.count() % 2) == 0)
+        if (MathTools::isEven(intersectionList.count()))
         {
             int limit = intersectionList.count() / 2;
             for (i = 0; i < limit; i++)

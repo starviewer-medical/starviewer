@@ -5,6 +5,7 @@
 #include "drawer.h"
 #include "drawerpolygon.h"
 #include "drawertext.h"
+#include "mathtools.h"
 
 #include <qmath.h>
 
@@ -536,7 +537,7 @@ void MagicROITool::computePolygon()
         next = m_mask[maskIndex];
         while (!next && !loop)
         {
-            if (((direction % 2) != 0) && !next)
+            if (MathTools::isOdd(direction) && !next)
             {
                 this->addPoint(direction, x, y, z);
                 loop = this->isLoopReached();
