@@ -18,7 +18,8 @@ class VolumeReaderManager : public QObject
     Q_OBJECT
 public:
     VolumeReaderManager(QObject *parent = 0);
-    
+    ~VolumeReaderManager();
+
     /// Starts the reading of a volume
     void readVolume(Volume *volume);
 
@@ -51,7 +52,7 @@ private slots:
     /// Updates the progress of the job and emits the global progress
     void updateProgress(ThreadWeaver::Job*, int);
     /// Slot executed when a job finished. It emits the signal readingFinished() if no jobs are reading.
-    void jobFinished();
+    void jobFinished(ThreadWeaver::Job *job);
 
 private:
     /// Initialize internal helpers
@@ -63,6 +64,15 @@ private:
 
     /// List to control the progress of all jobs
     QHash<ThreadWeaver::Job*, int> m_jobsProgress;
+
+    /// List of readed volumes
+    QList<Volume*> m_volumes;
+
+    /// It says if the reading ended successfully
+    int m_success;
+
+    /// It contains the reading error message if any
+    QString m_lastError;
 };
 
 } // namespace udg
