@@ -90,14 +90,7 @@ void SliceHandler::setPhase(int phase)
         }
         else
         {
-            if (phase < 0)
-            {
-                phase = 0;
-            }
-            else if (phase > m_numberOfPhases - 1)
-            {
-                phase = m_numberOfPhases - 1;
-            }
+            phase = qBound(0, phase, m_numberOfPhases - 1);
         }
 
         m_currentPhase = phase;
@@ -288,14 +281,7 @@ void SliceHandler::updateSlice(int slice)
     }
     else
     {
-        if (slice < 0)
-        {
-            slice = 0;
-        }
-        else if (slice + m_slabThickness - 1 > m_maxSliceValue)
-        {
-            slice = m_maxSliceValue - m_slabThickness + 1;
-        }
+        slice = qBound(0, slice, m_maxSliceValue - m_slabThickness + 1);
     }
 
     m_currentSlice = slice;
