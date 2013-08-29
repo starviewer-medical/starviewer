@@ -93,7 +93,59 @@ int SliceHandler::getNumberOfPhases() const
 
 void SliceHandler::setSlabThickness(int thickness)
 {
-    updateSlab(thickness);
+    // First check the new value
+    if (!hasSlabThicknessValueToBeUpated(thickness))
+    {
+        return;
+    }
+    
+    if (thickness == 1)
+    {
+        m_slabThickness = 1;
+        return;
+    }
+
+    int thicknessDifference = thickness - m_slabThickness;
+    // We distribute equally half of the difference of the new thickness above and below
+    m_currentSlice -= thicknessDifference / 2;
+    
+    if (MathTools::isOdd(thicknessDifference))
+    {
+        // If thickness difference is odd, we should then increase/decrease the extra slice left of thickness
+        // on upper or lower bound depending on some conditions
+        
+        if (MathTools::isEven(m_slabThickness))
+        {
+            if (thicknessDifference > 0)
+            {
+                // Decrease on lower bound when thickness has been increased and keep it inside bounds
+                m_currentSlice = qMax(m_currentSlice - 1, getMinimumSlice());
+            }
+        }
+        else
+        {
+            if (thicknessDifference > 0)
+            {
+                // When thickness has been increased and current thickness is odd, upper bound will be increased
+                // and thus we must check if it will be out of upper bounds to update the lower bound accordingly
+                int lastSlabSlice = getLastSlabSlice() + (thicknessDifference / 2) + 1;
+                
+                if (lastSlabSlice > m_maxSliceValue)
+                {
+                    // If upper bound is surpassed, must decrease lower bound
+                    m_currentSlice = m_maxSliceValue - thickness + 1;
+                }
+            }
+            else
+            {
+                // Increase lower bound when thickness has been decreased (when current thickness is odd)
+                m_currentSlice++;
+            }
+        }
+    }
+    
+    // Update thickness
+    m_slabThickness = thickness;
 }
 
 int SliceHandler::getSlabThickness() const
@@ -168,63 +220,6 @@ void SliceHandler::reset()
     setSlabThickness(1);
     setSlice(0);
     setPhase(0);
-}
-
-void SliceHandler::updateSlab(int newSlabThickness)
-{
-    // First check the new value
-    if (!hasSlabThicknessValueToBeUpated(newSlabThickness))
-    {
-        return;
-    }
-    
-    if (newSlabThickness == 1)
-    {
-        m_slabThickness = 1;
-        return;
-    }
-
-    int thicknessDifference = newSlabThickness - m_slabThickness;
-    // We distribute equally half of the difference of the new thickness above and below
-    m_currentSlice -= thicknessDifference / 2;
-    
-    if (MathTools::isOdd(thicknessDifference))
-    {
-        // If thickness difference is odd, we should then increase/decrease the extra slice left of thickness
-        // on upper or lower bound depending on some conditions
-        
-        if (MathTools::isEven(m_slabThickness))
-        {
-            if (thicknessDifference > 0)
-            {
-                // Decrease on lower bound when thickness has been increased and keep it inside bounds
-                m_currentSlice = qMax(m_currentSlice - 1, getMinimumSlice());
-            }
-        }
-        else
-        {
-            if (thicknessDifference > 0)
-            {
-                // When thickness has been increased and current thickness is odd, upper bound will be increased
-                // and thus we must check if it will be out of upper bounds to update the lower bound accordingly
-                int lastSlabSlice = getLastSlabSlice() + (thicknessDifference / 2) + 1;
-                
-                if (lastSlabSlice > m_maxSliceValue)
-                {
-                    // If upper bound is surpassed, must decrease lower bound
-                    m_currentSlice = m_maxSliceValue - newSlabThickness + 1;
-                }
-            }
-            else
-            {
-                // Increase lower bound when thickness has been decreased (when current thickness is odd)
-                m_currentSlice++;
-            }
-        }
-    }
-    
-    // Update thickness
-    m_slabThickness = newSlabThickness;
 }
 
 bool SliceHandler::hasSlabThicknessValueToBeUpated(int thickness)
