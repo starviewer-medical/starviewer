@@ -54,6 +54,10 @@ private slots:
     void jobFinished();
 
 private:
+    /// Initialize internal helpers
+    void initialize();
+
+private:
     /// List of jobs to read volumes. They don't belong to us, that is why QPointer is used.
     QList<QPointer<VolumeReaderJob> > m_volumeReaderJobs;
 
