@@ -11,6 +11,12 @@ VolumeReaderManager::VolumeReaderManager(QObject *parent) :
 {
 }
 
+void VolumeReaderManager::initialize()
+{
+    m_volumeReaderJobs.clear();
+    m_jobsProgress.clear();
+}
+
 void VolumeReaderManager::readVolume(Volume *volume)
 {
     QList<Volume*> volumes;
@@ -21,8 +27,7 @@ void VolumeReaderManager::readVolume(Volume *volume)
 
 void VolumeReaderManager::readVolumes(const QList<Volume*> &volumes)
 {
-    m_volumeReaderJobs.clear();
-    m_jobsProgress.clear();
+    initialize();
 
     foreach (Volume *volume, volumes)
     {
@@ -48,8 +53,7 @@ void VolumeReaderManager::cancelReading()
         }
         m_volumeReaderJobs[i] = NULL;
     }
-    m_volumeReaderJobs.clear();
-    m_jobsProgress.clear();
+    initialize();
 }
 
 bool VolumeReaderManager::readingSuccess()
