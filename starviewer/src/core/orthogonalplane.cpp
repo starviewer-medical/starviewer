@@ -4,8 +4,8 @@
 
 namespace udg {
 
-OrthogonalPlane::OrthogonalPlane(Plane plane) :
-    m_plane(plane)
+OrthogonalPlane::OrthogonalPlane(Plane plane)
+ : m_plane(plane)
 {
 }
 

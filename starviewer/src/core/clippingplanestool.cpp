@@ -34,7 +34,7 @@ ClippingPlanesTool::ClippingPlanesTool(QViewer *viewer, QObject *parent)
     m_vtkQtConnections->Connect(m_boundingBoxClipperWidget, vtkCommand::InteractionEvent, this, SLOT(boundingBoxEventHandler(vtkObject*, unsigned long, void*,
                                                                                                                              void*, vtkCommand*)));
 
-    if(m_3DViewer->getInput())
+    if (m_3DViewer->getInput())
     {
         updateInput();
     }
@@ -64,10 +64,8 @@ void ClippingPlanesTool::boundingBoxEventHandler(vtkObject *obj, unsigned long e
     switch (event)
     {
         case vtkCommand::InteractionEvent:
-        {
             updateViewerClippingPlanes();
-        }
-        break;
+            break;
     }
 }
 
@@ -86,7 +84,7 @@ void ClippingPlanesTool::updateInput()
 
     // Calculem la bounding box del widget
     vtkPlanes *planes = m_3DViewer->getClippingPlanes();
-    if(planes)
+    if (planes)
     {
         int nplanes = planes->GetNumberOfPlanes();
         vtkPlane *plane;
@@ -100,34 +98,34 @@ void ClippingPlanesTool::updateInput()
         bounds[4] = bounds[5] = origin[2];
         // Seguidament calculem els orígens menors i majors de cada eix
         // per obtenir la bounding box dels plans de tall
-        for(int i = 0; i < nplanes; i++)
+        for (int i = 0; i < nplanes; i++)
         {
             plane = planes->GetPlane(i);
             plane->GetOrigin(origin);
             // xmin, xmax
-            if(origin[0] < bounds[0])
+            if (origin[0] < bounds[0])
             {
                 bounds[0] = origin[0];
             }
-            if(origin[0] > bounds[1])
+            if (origin[0] > bounds[1])
             {
                 bounds[1] = origin[0];
             }
             // ymin, ymax
-            if(origin[1] < bounds[2])
+            if (origin[1] < bounds[2])
             {
                 bounds[2] = origin[1];
             }
-            if(origin[1] > bounds[3])
+            if (origin[1] > bounds[3])
             {
                 bounds[3] = origin[1];
             }
             // zmin, zmax
-            if(origin[2] < bounds[4])
+            if (origin[2] < bounds[4])
             {
                 bounds[4] = origin[2];
             }
-            if(origin[2] > bounds[5])
+            if (origin[2] > bounds[5])
             {
                 bounds[5] = origin[2];
             }
