@@ -212,7 +212,7 @@ void QEdemaSegmentationExtension::setInput( Volume *input )
     // \TODO ara ho fem "a saco" per?s'hauria de millorar
     m_2DView->setInput( m_mainVolume );
     //això ho fem per indicar que no hi ha cap overlay
-    m_2DView->setOverlapMethodToNone();
+    m_2DView->setOverlapMethod(Q2DViewer::None);
     //m_2DView->setOverlayInput(m_lesionMaskVolume);
     
     int* dim;
@@ -324,7 +324,7 @@ void QEdemaSegmentationExtension::applyMethod()
 
     DEBUG_LOG("FI apply filter!!");
 
-    m_2DView->setOverlapMethodToBlend();
+    m_2DView->setOverlapMethod(Q2DViewer::Blend);
     m_2DView->setOverlayOpacity(((double)m_opacitySlider->value())/100.0);
     m_2DView->setOverlayInput(m_lesionMaskVolume);
 
@@ -518,7 +518,7 @@ void QEdemaSegmentationExtension::viewEdemaOverlay()
         m_activedMaskVolume = m_edemaMaskVolume;
         m_activedCont = &m_edemaCont;
         m_activedVolume = &m_edemaVolume;
-        m_2DView->setOverlapMethodToBlend();
+        m_2DView->setOverlapMethod(Q2DViewer::Blend);
         m_2DView->setOverlayOpacity(((double)m_opacitySlider->value())/100.0);
         m_2DView->setOverlayInput(m_edemaMaskVolume);
         m_2DView->render();
@@ -532,7 +532,7 @@ void QEdemaSegmentationExtension::viewLesionOverlay()
         m_activedMaskVolume = m_lesionMaskVolume;
         m_activedCont = &m_cont;
         m_activedVolume = &m_volume;
-        m_2DView->setOverlapMethodToBlend();
+        m_2DView->setOverlapMethod(Q2DViewer::Blend);
         m_2DView->setOverlayOpacity(((double)m_opacitySlider->value())/100.0);
         m_2DView->setOverlayInput(m_lesionMaskVolume);
         m_2DView->render();
@@ -548,7 +548,7 @@ void QEdemaSegmentationExtension::viewVentriclesOverlay()
         m_activedMaskVolume = m_ventriclesMaskVolume;
         m_activedCont = &m_ventriclesCont;
         m_activedVolume = &m_ventriclesVolume;
-        m_2DView->setOverlapMethodToBlend();
+        m_2DView->setOverlapMethod(Q2DViewer::Blend);
         m_2DView->setOverlayOpacity(((double)m_opacitySlider->value())/100.0);
         m_2DView->setOverlayInput(m_ventriclesMaskVolume);
         m_2DView->render();
