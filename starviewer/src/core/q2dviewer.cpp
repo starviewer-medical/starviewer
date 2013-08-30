@@ -932,47 +932,67 @@ void Q2DViewer::resetCamera()
 
 void Q2DViewer::setSlice(int value)
 {
-    if (m_mainVolume)
-    {
-        m_volumeDisplayUnits.first()->getSliceHandler()->setSlice(value);
-        
-        updateDisplayExtent();
-        updateCurrentImageDefaultPresets();
-        updateSliceAnnotationInformation();
-        updatePreferredImageOrientation();
-        updatePatientOrientationAnnotation();
-
-        m_volumeDisplayUnits.first()->getImagePipeline()->setSlice(m_mainVolume->getImageIndex(getCurrentSlice(), getCurrentPhase()));
-        
-        if (isThickSlabActive())
-        {
-            // Si hi ha el thickslab activat, eliminem totes les roi's. És la decisió ràpida que s'ha près.
-            getDrawer()->removeAllPrimitives();
-        }
-        else
-        {
-            updateDisplayShutterMask();
-        }
-
-        emit sliceChanged(getCurrentSlice());
-        render();
-    }
+    updateSliceToDisplay(value, SpatialDimension);
 }
 
 void Q2DViewer::setPhase(int value)
 {
+    updateSliceToDisplay(value, TemporalDimension);
+}
+
+void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
+{
     if (m_mainVolume)
     {
-        m_volumeDisplayUnits.first()->getSliceHandler()->setPhase(value);
+        // First update the index of the corresponding dimension
+        switch (dimension)
+        {
+            case SpatialDimension:
+                m_volumeDisplayUnits.first()->getSliceHandler()->setSlice(value);
+                break;
+
+            case TemporalDimension:
+                m_volumeDisplayUnits.first()->getSliceHandler()->setPhase(value);
+                break;
+        }
         
+        // Then update display (image and associated annotations)
         updateDisplayExtent();
         updateCurrentImageDefaultPresets();
         updateSliceAnnotationInformation();
         updatePreferredImageOrientation();
+        
+        if (dimension == SpatialDimension)
+        {
+            updatePatientOrientationAnnotation();
 
+            if (isThickSlabActive())
+            {
+                // When thickslab enabled, erase all drawn primitives as we cannot associate slabs with them
+                // TODO Maybe it should be also applied on TemporalDimension
+                getDrawer()->removeAllPrimitives();
+            }
+            else
+            {
+                updateDisplayShutterMask();
+            }
+        }
+
+        // We set the proper slice index on the image pipeline
         m_volumeDisplayUnits.first()->getImagePipeline()->setSlice(m_mainVolume->getImageIndex(getCurrentSlice(), getCurrentPhase()));
 
-        emit phaseChanged(getCurrentPhase());
+        // Finally we emit the signal of the changed value and render the scene
+        switch (dimension)
+        {
+            case SpatialDimension:
+                emit sliceChanged(getCurrentSlice());
+                break;
+
+            case TemporalDimension:
+                emit phaseChanged(getCurrentPhase());
+                break;
+        }
+        
         render();
     }
 }

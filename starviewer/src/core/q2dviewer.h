@@ -386,6 +386,11 @@ private:
     /// Carrega en memòria els ImageOverlays del volum passat per paràmetre (sempre que no sigui un dummy) i els afegeix al Drawer
     void loadOverlays(Volume *volume);
 
+    /// Enum to define the different dimensions an image slice could be associated to
+    typedef enum SliceDimension { SpatialDimension, TemporalDimension };
+    /// Updates the image slice to be displayed on the specified dimension
+    void updateSliceToDisplay(int value, SliceDimension dimension);
+
 private slots:
     /// Actualitza les transformacions de càmera (de moment rotació i flip)
     void updateCamera();
