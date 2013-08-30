@@ -11,9 +11,9 @@ class ToolProxy;
 /**
     Tool que hereta de SlicingTool que serveix per fer slicing amb la rodeta en un visor 2D
   */
-class SlicingWheelTool : public SlicingTool{
+class SlicingWheelTool : public SlicingTool {
 Q_OBJECT
-public:    
+public:
     SlicingWheelTool(QViewer *viewer, QObject *parent = 0);
     ~SlicingWheelTool();
 
