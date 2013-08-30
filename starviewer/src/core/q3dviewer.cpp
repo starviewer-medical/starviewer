@@ -353,6 +353,23 @@ void Q3DViewer::getVolumeBounds(double bounds[6]) const
     m_vtkVolume->GetBounds(bounds);
 }
 
+Q3DViewer* Q3DViewer::castFromQViewer(QViewer *viewer)
+{
+    if (!viewer)
+    {
+        DEBUG_LOG(QString("Cannot cast a null pointer"));
+        return 0;
+    }
+
+    Q3DViewer *viewer3D = qobject_cast<Q3DViewer*>(viewer);
+    if (!viewer3D)
+    {
+        DEBUG_LOG(QString("Q3DViewer casting failed! Provided viewer may not be a Q3DViewer object: %1").arg(viewer->metaObject()->className()));
+    }
+
+    return viewer3D;
+}
+
 void Q3DViewer::setRenderFunction(RenderFunction function)
 {
     m_renderFunction = function;

@@ -18,11 +18,7 @@ ClippingPlanesTool::ClippingPlanesTool(QViewer *viewer, QObject *parent)
     m_toolName = "ClippingPlanesTool";
     m_hasSharedData = false;
 
-    m_3DViewer = qobject_cast<Q3DViewer*>(viewer);
-    if(!m_3DViewer)
-    {
-        DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q3DViewer!!!-> ") + viewer->metaObject()->className());
-    }
+    m_3DViewer = Q3DViewer::castFromQViewer(viewer);
 
     // Creem el widget per manipular els plans de tall
     m_boundingBoxClipperWidget = vtkBoxWidget::New();
