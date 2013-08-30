@@ -37,18 +37,7 @@ void ChangeSliceQViewerCommand::execute()
             }
             break;
         case CustomSlice:
-            if (m_customSliceNumber < m_viewer->getMinimumSlice())
-            {
-                m_viewer->setSlice(m_viewer->getMinimumSlice());
-            }
-            else if (m_customSliceNumber > m_viewer->getMaximumSlice())
-            {
-                m_viewer->setSlice(m_viewer->getMaximumSlice());
-            }
-            else
-            {
-                m_viewer->setSlice(m_customSliceNumber);
-            }
+            m_viewer->setSlice(qBound(m_viewer->getMinimumSlice(), m_customSliceNumber, m_viewer->getMaximumSlice()));
             break;
     }
     m_viewer->render();
