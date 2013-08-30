@@ -8,37 +8,37 @@ class test_OrthogonalPlane : public QObject {
     Q_OBJECT
 
 private slots:
-    void getXYZIndexesForView_ShouldReturnExpectedValues_data();
-    void getXYZIndexesForView_ShouldReturnExpectedValues();
+    void getXYZIndexes_ShouldReturnExpectedValues_data();
+    void getXYZIndexes_ShouldReturnExpectedValues();
 
-    void getXYZIndexesForView_ShouldReturnMinusOne_data();
-    void getXYZIndexesForView_ShouldReturnMinusOne();
+    void getXYZIndexes_ShouldReturnMinusOne_data();
+    void getXYZIndexes_ShouldReturnMinusOne();
 
-    void getXIndexForView_ShouldReturnExpectedValues_data();
-    void getXIndexForView_ShouldReturnExpectedValues();
+    void getXIndex_ShouldReturnExpectedValues_data();
+    void getXIndex_ShouldReturnExpectedValues();
 
-    void getXIndexForView_ShouldReturnMinusOne_data();
-    void getXIndexForView_ShouldReturnMinusOne();
+    void getXIndex_ShouldReturnMinusOne_data();
+    void getXIndex_ShouldReturnMinusOne();
 
-    void getYIndexForView_ShouldReturnExpectedValues_data();
-    void getYIndexForView_ShouldReturnExpectedValues();
+    void getYIndex_ShouldReturnExpectedValues_data();
+    void getYIndex_ShouldReturnExpectedValues();
 
-    void getYIndexForView_ShouldReturnMinusOne_data();
-    void getYIndexForView_ShouldReturnMinusOne();
+    void getYIndex_ShouldReturnMinusOne_data();
+    void getYIndex_ShouldReturnMinusOne();
 
-    void getZIndexForView_ShouldReturnExpectedValues_data();
-    void getZIndexForView_ShouldReturnExpectedValues();
+    void getZIndex_ShouldReturnExpectedValues_data();
+    void getZIndex_ShouldReturnExpectedValues();
 
-    void getZIndexForView_ShouldReturnMinusOne_data();
-    void getZIndexForView_ShouldReturnMinusOne();
+    void getZIndex_ShouldReturnMinusOne_data();
+    void getZIndex_ShouldReturnMinusOne();
 
 private:
-    void setupGetIndexForViewShouldReturnMinusOneData();
+    void setupGetIndexShouldReturnMinusOneData();
 };
 
 Q_DECLARE_METATYPE(OrthogonalPlane)
 
-void test_OrthogonalPlane::getXYZIndexesForView_ShouldReturnExpectedValues_data()
+void test_OrthogonalPlane::getXYZIndexes_ShouldReturnExpectedValues_data()
 {
     QTest::addColumn<OrthogonalPlane>("view");
     QTest::addColumn<int>("xIndex");
@@ -50,7 +50,7 @@ void test_OrthogonalPlane::getXYZIndexesForView_ShouldReturnExpectedValues_data(
     QTest::newRow("XZ view") << OrthogonalPlane(OrthogonalPlane::XZPlane) << 0 << 2 << 1;
 }
 
-void test_OrthogonalPlane::getXYZIndexesForView_ShouldReturnExpectedValues()
+void test_OrthogonalPlane::getXYZIndexes_ShouldReturnExpectedValues()
 {
     QFETCH(OrthogonalPlane, view);
     QFETCH(int, xIndex);
@@ -58,31 +58,31 @@ void test_OrthogonalPlane::getXYZIndexesForView_ShouldReturnExpectedValues()
     QFETCH(int, zIndex);
 
     int x, y, z;
-    view.getXYZIndexesForView(x, y, z);
+    view.getXYZIndexes(x, y, z);
 
     QCOMPARE(x, xIndex);
     QCOMPARE(y, yIndex);
     QCOMPARE(z, zIndex);
 }
 
-void test_OrthogonalPlane::getXYZIndexesForView_ShouldReturnMinusOne_data()
+void test_OrthogonalPlane::getXYZIndexes_ShouldReturnMinusOne_data()
 {
-    this->setupGetIndexForViewShouldReturnMinusOneData();
+    this->setupGetIndexShouldReturnMinusOneData();
 }
 
-void test_OrthogonalPlane::getXYZIndexesForView_ShouldReturnMinusOne()
+void test_OrthogonalPlane::getXYZIndexes_ShouldReturnMinusOne()
 {
     QFETCH(int, view);
 
     int x, y, z;
-    OrthogonalPlane(static_cast<OrthogonalPlane::Plane>(view)).getXYZIndexesForView(x, y, z);
+    OrthogonalPlane(static_cast<OrthogonalPlane::Plane>(view)).getXYZIndexes(x, y, z);
 
     QCOMPARE(x, -1);
     QCOMPARE(y, -1);
     QCOMPARE(z, -1);
 }
 
-void test_OrthogonalPlane::getXIndexForView_ShouldReturnExpectedValues_data()
+void test_OrthogonalPlane::getXIndex_ShouldReturnExpectedValues_data()
 {
     QTest::addColumn<OrthogonalPlane>("view");
     QTest::addColumn<int>("xIndex");
@@ -92,27 +92,27 @@ void test_OrthogonalPlane::getXIndexForView_ShouldReturnExpectedValues_data()
     QTest::newRow("XZ view") << OrthogonalPlane(OrthogonalPlane::XZPlane) << 0;
 }
 
-void test_OrthogonalPlane::getXIndexForView_ShouldReturnExpectedValues()
+void test_OrthogonalPlane::getXIndex_ShouldReturnExpectedValues()
 {
     QFETCH(OrthogonalPlane, view);
     QFETCH(int, xIndex);
 
-    QCOMPARE(view.getXIndexForView(), xIndex);
+    QCOMPARE(view.getXIndex(), xIndex);
 }
 
-void test_OrthogonalPlane::getXIndexForView_ShouldReturnMinusOne_data()
+void test_OrthogonalPlane::getXIndex_ShouldReturnMinusOne_data()
 {
-    this->setupGetIndexForViewShouldReturnMinusOneData();
+    this->setupGetIndexShouldReturnMinusOneData();
 }
 
-void test_OrthogonalPlane::getXIndexForView_ShouldReturnMinusOne()
+void test_OrthogonalPlane::getXIndex_ShouldReturnMinusOne()
 {
     QFETCH(int, view);
 
-    QCOMPARE(OrthogonalPlane(static_cast<OrthogonalPlane::Plane>(view)).getXIndexForView(), -1);
+    QCOMPARE(OrthogonalPlane(static_cast<OrthogonalPlane::Plane>(view)).getXIndex(), -1);
 }
 
-void test_OrthogonalPlane::getYIndexForView_ShouldReturnExpectedValues_data()
+void test_OrthogonalPlane::getYIndex_ShouldReturnExpectedValues_data()
 {
     QTest::addColumn<OrthogonalPlane>("view");
     QTest::addColumn<int>("yIndex");
@@ -122,27 +122,27 @@ void test_OrthogonalPlane::getYIndexForView_ShouldReturnExpectedValues_data()
     QTest::newRow("XZ view") << OrthogonalPlane(OrthogonalPlane::XZPlane) << 2;
 }
 
-void test_OrthogonalPlane::getYIndexForView_ShouldReturnExpectedValues()
+void test_OrthogonalPlane::getYIndex_ShouldReturnExpectedValues()
 {
     QFETCH(OrthogonalPlane, view);
     QFETCH(int, yIndex);
 
-    QCOMPARE(view.getYIndexForView(), yIndex);
+    QCOMPARE(view.getYIndex(), yIndex);
 }
 
-void test_OrthogonalPlane::getYIndexForView_ShouldReturnMinusOne_data()
+void test_OrthogonalPlane::getYIndex_ShouldReturnMinusOne_data()
 {
-    this->setupGetIndexForViewShouldReturnMinusOneData();
+    this->setupGetIndexShouldReturnMinusOneData();
 }
 
-void test_OrthogonalPlane::getYIndexForView_ShouldReturnMinusOne()
+void test_OrthogonalPlane::getYIndex_ShouldReturnMinusOne()
 {
     QFETCH(int, view);
 
-    QCOMPARE(OrthogonalPlane(static_cast<OrthogonalPlane::Plane>(view)).getYIndexForView(), -1);
+    QCOMPARE(OrthogonalPlane(static_cast<OrthogonalPlane::Plane>(view)).getYIndex(), -1);
 }
 
-void test_OrthogonalPlane::getZIndexForView_ShouldReturnExpectedValues_data()
+void test_OrthogonalPlane::getZIndex_ShouldReturnExpectedValues_data()
 {
     QTest::addColumn<OrthogonalPlane>("view");
     QTest::addColumn<int>("zIndex");
@@ -152,27 +152,27 @@ void test_OrthogonalPlane::getZIndexForView_ShouldReturnExpectedValues_data()
     QTest::newRow("XZ view") << OrthogonalPlane(OrthogonalPlane::XZPlane) << 1;
 }
 
-void test_OrthogonalPlane::getZIndexForView_ShouldReturnExpectedValues()
+void test_OrthogonalPlane::getZIndex_ShouldReturnExpectedValues()
 {
     QFETCH(OrthogonalPlane, view);
     QFETCH(int, zIndex);
 
-    QCOMPARE(view.getZIndexForView(), zIndex);
+    QCOMPARE(view.getZIndex(), zIndex);
 }
 
-void test_OrthogonalPlane::getZIndexForView_ShouldReturnMinusOne_data()
+void test_OrthogonalPlane::getZIndex_ShouldReturnMinusOne_data()
 {
-    this->setupGetIndexForViewShouldReturnMinusOneData();
+    this->setupGetIndexShouldReturnMinusOneData();
 }
 
-void test_OrthogonalPlane::getZIndexForView_ShouldReturnMinusOne()
+void test_OrthogonalPlane::getZIndex_ShouldReturnMinusOne()
 {
     QFETCH(int, view);
 
-    QCOMPARE(OrthogonalPlane(static_cast<OrthogonalPlane::Plane>(view)).getZIndexForView(), -1);
+    QCOMPARE(OrthogonalPlane(static_cast<OrthogonalPlane::Plane>(view)).getZIndex(), -1);
 }
 
-void test_OrthogonalPlane::setupGetIndexForViewShouldReturnMinusOneData()
+void test_OrthogonalPlane::setupGetIndexShouldReturnMinusOneData()
 {
     QTest::addColumn<int>("view");
 

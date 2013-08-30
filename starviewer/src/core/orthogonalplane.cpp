@@ -9,14 +9,14 @@ OrthogonalPlane::OrthogonalPlane(Plane plane) :
 {
 }
 
-void OrthogonalPlane::getXYZIndexesForView(int &x, int &y, int &z) const
+void OrthogonalPlane::getXYZIndexes(int &x, int &y, int &z) const
 {
-    x = getXIndexForView();
-    y = getYIndexForView();
-    z = getZIndexForView();
+    x = getXIndex();
+    y = getYIndex();
+    z = getZIndex();
 }
 
-int OrthogonalPlane::getXIndexForView() const
+int OrthogonalPlane::getXIndex() const
 {
     switch (m_plane)
     {
@@ -36,7 +36,7 @@ int OrthogonalPlane::getXIndexForView() const
     }
 }
 
-int OrthogonalPlane::getYIndexForView() const
+int OrthogonalPlane::getYIndex() const
 {
     switch (m_plane)
     {
@@ -56,7 +56,7 @@ int OrthogonalPlane::getYIndexForView() const
     }
 }
 
-int OrthogonalPlane::getZIndexForView() const
+int OrthogonalPlane::getZIndex() const
 {
     switch (m_plane)
     {

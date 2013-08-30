@@ -780,7 +780,7 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
         // In case thick slab is enabled, we should keep the slice thickness, 
         // so the proper number of slices of the thick slab should be computed for the new view
         double currentSlabThickness = getCurrentSliceThickness();
-        int viewIndex = view.getZIndexForView();
+        int viewIndex = view.getZIndex();
         double zSpacingAfterReset = m_mainVolume->getSpacing()[viewIndex];
         desiredSlabSlices = qRound(currentSlabThickness / zSpacingAfterReset);
     }
@@ -1220,7 +1220,7 @@ bool Q2DViewer::getCurrentCursorImageCoordinate(double xyz[3])
         // Calculem la profunditat correcta. S'ha de tenir en compte que en el cas que tinguem fases
         // vtk no n'és conscient (cada fase es desplaça en la profunditat z com si fos una imatge més)
         // i si no fèssim aquest càlcul, estaríem donant una coordenada Z incorrecta
-        int zIndex = getCurrentViewPlane().getZIndexForView();
+        int zIndex = getCurrentViewPlane().getZIndex();
         double zSpacing = m_mainVolume->getSpacing()[zIndex];
         double zOrigin = m_mainVolume->getOrigin()[zIndex];
         xyz[zIndex] =  zOrigin + zSpacing * getCurrentSlice();
@@ -1258,8 +1258,8 @@ void Q2DViewer::updateAnnotationsInformation(AnnotationFlags annotation)
             double windowLevel[2];
             m_volumeDisplayUnits.first()->getImagePipeline()->getCurrentWindowLevel(windowLevel);
             m_upperLeftText = tr("%1 x %2\nWW: %5 WL: %6")
-                .arg(m_mainVolume->getDimensions()[getView().getXIndexForView()])
-                .arg(m_mainVolume->getDimensions()[getView().getYIndexForView()])
+                .arg(m_mainVolume->getDimensions()[getView().getXIndex()])
+                .arg(m_mainVolume->getDimensions()[getView().getYIndex()])
                 .arg(MathTools::roundToNearestInteger(windowLevel[0]))
                 .arg(MathTools::roundToNearestInteger(windowLevel[1]));
         }
@@ -1529,7 +1529,7 @@ void Q2DViewer::updateDisplayExtent()
 
     // A partir de l'extent del volum, la vista i la llesca en la que ens trobem,
     // calculem l'extent que li correspon a l'actor imatge
-    int zIndex = getCurrentViewPlane().getZIndexForView();
+    int zIndex = getCurrentViewPlane().getZIndex();
     int imageActorExtent[6];
     m_mainVolume->getWholeExtent(imageActorExtent);
     imageActorExtent[zIndex * 2] = imageActorExtent[zIndex * 2 + 1] = sliceValue;
@@ -1630,8 +1630,8 @@ void Q2DViewer::putCoordinateInCurrentImageBounds(double xyz[3])
     double bounds[6];
     m_volumeDisplayUnits.first()->getImageActor()->GetBounds(bounds);
 
-    int xIndex = getCurrentViewPlane().getXIndexForView();
-    int yIndex = getCurrentViewPlane().getYIndexForView();
+    int xIndex = getCurrentViewPlane().getXIndex();
+    int yIndex = getCurrentViewPlane().getYIndex();
 
     // Comprovarem que estigui dins dels límits 2D de la imatge
     // La x està per sota del mínim
@@ -1893,7 +1893,7 @@ void Q2DViewer::updateCurrentImageDefaultPresets()
 
 double Q2DViewer::getCurrentSpacingBetweenSlices()
 {
-    int zIndex = getCurrentViewPlane().getZIndexForView();
+    int zIndex = getCurrentViewPlane().getZIndex();
     
     return m_mainVolume->getSpacing()[zIndex];
 }

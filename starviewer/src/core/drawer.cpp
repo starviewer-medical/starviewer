@@ -421,8 +421,8 @@ bool Drawer::isPrimitiveInside(DrawerPrimitive *primitive, const OrthogonalPlane
     double primitiveBounds[6];
     primitive->getBounds(primitiveBounds);
 
-    int xIndex = view.getXIndexForView();
-    int yIndex = view.getYIndexForView();
+    int xIndex = view.getXIndex();
+    int yIndex = view.getYIndex();
 
     bool inside = false;
     if (bounds[xIndex * 2] <= primitiveBounds[xIndex * 2] && bounds[xIndex * 2 + 1] >= primitiveBounds[xIndex * 2 + 1] &&

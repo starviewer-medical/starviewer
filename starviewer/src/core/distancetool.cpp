@@ -141,7 +141,7 @@ void DistanceTool::initialize()
 void DistanceTool::equalizeDepth()
 {
     // Assignem al primer punt la z del segon
-    int zIndex = m_2DViewer->getView().getZIndexForView();
+    int zIndex = m_2DViewer->getView().getZIndex();
     double z = m_distanceLine->getSecondPoint()[zIndex];
     double *firstPoint = m_distanceLine->getFirstPoint();
     firstPoint[zIndex] = z;
