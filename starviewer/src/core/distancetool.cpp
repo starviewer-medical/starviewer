@@ -3,9 +3,6 @@
 #include "q2dviewer.h"
 #include "drawer.h"
 #include "drawerline.h"
-#include "image.h"
-#include "volume.h"
-#include "series.h"
 
 // Vtk's
 #include <vtkRenderWindowInteractor.h>

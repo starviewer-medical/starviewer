@@ -1,6 +1,5 @@
 #include "angletool.h"
 #include "q2dviewer.h"
-#include "volume.h"
 #include "drawer.h"
 #include "drawerpolyline.h"
 #include "drawertext.h"

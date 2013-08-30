@@ -5,7 +5,6 @@
 #include "drawerpolygon.h"
 #include "drawertext.h"
 #include "image.h"
-#include "series.h"
 #include "mathtools.h"
 #include "areameasurecomputer.h"
 
