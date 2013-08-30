@@ -2,11 +2,8 @@
 
 #include "drawer.h"
 #include "drawerline.h"
-#include "image.h"
 #include "mathtools.h"
-#include "series.h"
 #include "q2dviewer.h"
-#include "volume.h"
 
 #include <QVector3D>
 
