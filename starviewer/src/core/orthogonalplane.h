@@ -14,7 +14,7 @@ public:
 
     OrthogonalPlane(Plane plane = XYPlane);
 
-    /// Returns the indices of the coordinate axes corresponding to this 2D view.
+    /// Returns the indices of the coordinate axes corresponding to this orthogonal plane.
     void getXYZIndexesForView(int &x, int &y, int &z) const;
     int getXIndexForView() const;
     int getYIndexForView() const;
