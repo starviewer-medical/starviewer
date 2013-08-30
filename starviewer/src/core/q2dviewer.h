@@ -196,8 +196,6 @@ public slots:
 
     /// Indica el tipu de solapament dels volums, per defecte blending
     void setOverlapMethod(OverlapMethod method);
-    void setOverlapMethodToNone();
-    void setOverlapMethodToBlend();
 
     /// Afegir o treure la visibilitat d'una anotació textual/gràfica
     void enableAnnotation(AnnotationFlags annotation, bool enable = true);

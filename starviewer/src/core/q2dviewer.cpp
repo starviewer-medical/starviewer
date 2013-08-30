@@ -975,17 +975,11 @@ void Q2DViewer::setPhase(int value)
 void Q2DViewer::setOverlapMethod(OverlapMethod method)
 {
     m_overlapMethod = method;
-}
-
-void Q2DViewer::setOverlapMethodToNone()
-{
-    setOverlapMethod(Q2DViewer::None);
-    m_volumeDisplayUnits.first()->getImagePipeline()->setInput(m_mainVolume->getVtkData());
-}
-
-void Q2DViewer::setOverlapMethodToBlend()
-{
-    setOverlapMethod(Q2DViewer::Blend);
+    
+    if (m_overlapMethod == Q2DViewer::None)
+    {
+        m_volumeDisplayUnits.first()->getImagePipeline()->setInput(m_mainVolume->getVtkData());
+    }
 }
 
 void Q2DViewer::resizeEvent(QResizeEvent *resize)
