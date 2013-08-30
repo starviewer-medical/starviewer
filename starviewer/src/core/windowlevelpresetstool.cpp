@@ -13,10 +13,6 @@ WindowLevelPresetsTool::WindowLevelPresetsTool(QViewer *viewer, QObject *parent)
  : Tool(viewer, parent), m_myToolData(0), m_defaultPresetsIndex(0)
 {
     m_toolName = "WindowLevelPresetsTool";
-//     m_hasSharedData = true;
-//     m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
-//     if (!m_2DViewer)
-//         DEBUG_LOG("No s'ha pogut realitzar el casting a 2DViewer!!!");
 
     setToolData(m_viewer->getWindowLevelData());
     m_characterIndexMap.insert('1', 0);
