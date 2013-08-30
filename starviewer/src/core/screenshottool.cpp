@@ -119,7 +119,7 @@ void ScreenShotTool::screenShot(bool singleShot)
         }
         else
         {
-            Q2DViewer *viewer2D = dynamic_cast<Q2DViewer*>(m_viewer);
+            Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(m_viewer);
             if (viewer2D)
             {
                 // Tenim un  Q2DViewer, llavors podem guardar totes les imatges
