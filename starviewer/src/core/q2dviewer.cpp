@@ -961,7 +961,6 @@ void Q2DViewer::setSlice(int value)
 
 void Q2DViewer::setPhase(int value)
 {
-    // Comprovació de rang
     if (m_mainVolume)
     {
         m_volumeDisplayUnits.first()->getSliceHandler()->setPhase(value);
