@@ -935,7 +935,15 @@ void Q2DViewer::setSlice(int value)
     if (m_mainVolume)
     {
         m_volumeDisplayUnits.first()->getSliceHandler()->setSlice(value);
+        
+        updateDisplayExtent();
+        updateCurrentImageDefaultPresets();
+        updateSliceAnnotationInformation();
+        updatePreferredImageOrientation();
+        updatePatientOrientationAnnotation();
+
         m_volumeDisplayUnits.first()->getImagePipeline()->setSlice(m_mainVolume->getImageIndex(getCurrentSlice(), getCurrentPhase()));
+        
         if (isThickSlabActive())
         {
             // Si hi ha el thickslab activat, eliminem totes les roi's. És la decisió ràpida que s'ha près.
@@ -945,12 +953,7 @@ void Q2DViewer::setSlice(int value)
         {
             updateDisplayShutterMask();
         }
-        
-        updateDisplayExtent();
-        updateCurrentImageDefaultPresets();
-        updateSliceAnnotationInformation();
-        updatePreferredImageOrientation();
-        updatePatientOrientationAnnotation();
+
         emit sliceChanged(getCurrentSlice());
         render();
     }
@@ -962,11 +965,14 @@ void Q2DViewer::setPhase(int value)
     if (m_mainVolume)
     {
         m_volumeDisplayUnits.first()->getSliceHandler()->setPhase(value);
-        m_volumeDisplayUnits.first()->getImagePipeline()->setSlice(m_mainVolume->getImageIndex(getCurrentSlice(), getCurrentPhase()));
+        
         updateDisplayExtent();
         updateCurrentImageDefaultPresets();
         updateSliceAnnotationInformation();
         updatePreferredImageOrientation();
+
+        m_volumeDisplayUnits.first()->getImagePipeline()->setSlice(m_mainVolume->getImageIndex(getCurrentSlice(), getCurrentPhase()));
+
         emit phaseChanged(getCurrentPhase());
         render();
     }
