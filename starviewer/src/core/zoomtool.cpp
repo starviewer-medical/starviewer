@@ -72,7 +72,7 @@ void ZoomTool::endZoom()
         m_state = None;
         m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate(m_viewer->getInteractor()->GetStillUpdateRate());
 
-        Q3DViewer *q3DViewer = qobject_cast<Q3DViewer*>(m_viewer);
+        Q3DViewer *q3DViewer = Q3DViewer::castFromQViewer(m_viewer);
         if (q3DViewer)
         {
             // Necessari perquè es torni a renderitzar a alta resolució en el 3D

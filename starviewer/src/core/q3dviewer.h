@@ -62,6 +62,10 @@ public:
     /// Retorna els bounds del vtkVolume.
     void getVolumeBounds(double bounds[6]) const;
 
+    /// Casts the given QViewer to a Q3DViewer object
+    /// If casting is successful, casted pointer to Q3DViewer will be returned, null otherwise
+    static Q3DViewer* castFromQViewer(QViewer *viewer);
+
 public slots:
     virtual void setInput(Volume* volume);
 
