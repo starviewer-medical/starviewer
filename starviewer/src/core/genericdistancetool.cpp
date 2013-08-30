@@ -70,7 +70,7 @@ void GenericDistanceTool::drawMeasurement()
 void GenericDistanceTool::placeMeasurementText(DrawerText *text)
 {
     // We place text to the left or right of the second point depending on the way line had been drawn
-    int xIndex = m_2DViewer->getView().getXIndexForView();
+    int xIndex = m_2DViewer->getView().getXIndex();
     double *firstPoint = m_distanceLine->getFirstPoint();
     double *secondPoint = m_distanceLine->getSecondPoint();
 

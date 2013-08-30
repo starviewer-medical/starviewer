@@ -425,8 +425,8 @@ void Volume::getSliceRange(int &min, int &max, const OrthogonalPlane &plane)
     else
     {
         int *extent = getWholeExtent();
-        min = extent[plane.getZIndexForView() * 2];
-        max = extent[plane.getZIndexForView() * 2 + 1];
+        min = extent[plane.getZIndex() * 2];
+        max = extent[plane.getZIndex() * 2 + 1];
     }
 }
 

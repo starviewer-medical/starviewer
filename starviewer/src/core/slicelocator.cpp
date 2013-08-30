@@ -85,7 +85,7 @@ bool SliceLocator::isWithinProximityBounds(double distanceToSlice)
         return false;
     }
 
-    int zIndex = m_volumePlane.getZIndexForView();
+    int zIndex = m_volumePlane.getZIndex();
 
     double spacingBetweenSlices = m_volume->getSpacing()[zIndex];
 

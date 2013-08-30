@@ -15,10 +15,10 @@ public:
     OrthogonalPlane(Plane plane = XYPlane);
 
     /// Returns the indices of the coordinate axes corresponding to this orthogonal plane.
-    void getXYZIndexesForView(int &x, int &y, int &z) const;
-    int getXIndexForView() const;
-    int getYIndexForView() const;
-    int getZIndexForView() const;
+    void getXYZIndexes(int &x, int &y, int &z) const;
+    int getXIndex() const;
+    int getYIndex() const;
+    int getZIndex() const;
 
     /// Conversion operator: allows to use an OrthogonalPlane in a switch.
     operator Plane() const;

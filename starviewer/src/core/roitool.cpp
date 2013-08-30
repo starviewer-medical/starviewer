@@ -318,7 +318,7 @@ DrawerPolygon *ROITool::createProjectedROIPolygon()
     Q_ASSERT(m_roiPolygon);
 
     int xIndex, yIndex, zIndex;
-    m_2DViewer->getView().getXYZIndexesForView(xIndex, yIndex, zIndex);
+    m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
     // Calculem la coordenda de profunditat a la que volem projectar el polígon
     Volume *input = m_2DViewer->getInput();
     double origin[3];

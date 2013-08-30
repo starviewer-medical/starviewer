@@ -72,7 +72,7 @@ void EraserTool::drawAreaOfErasure()
         int xIndex, yIndex, zIndex;
 
         m_2DViewer->getEventWorldCoordinate(m_endPoint);
-        m_2DViewer->getView().getXYZIndexesForView(xIndex, yIndex, zIndex);
+        m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
 
         // Calculem el segon punt i el tercer
         p2[xIndex] = m_endPoint[xIndex];

@@ -119,7 +119,7 @@ void AngleTool::drawCircle()
     double *lastPoint = m_mainPolyline->getPoint(2);
 
     int xIndex, yIndex, zIndex;
-    m_2DViewer->getView().getXYZIndexesForView(xIndex, yIndex, zIndex);
+    m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
     QVector3D firstPointProjected(firstPoint[xIndex], firstPoint[yIndex], 0.0);
     QVector3D circleCentreProjected(circleCentre[xIndex], circleCentre[yIndex], 0.0);
     QVector3D lastPointProjected(lastPoint[xIndex], lastPoint[yIndex], 0.0);
@@ -266,8 +266,8 @@ void AngleTool::placeText(DrawerText *angleText)
     double *point3 = m_mainPolyline->getPoint(2);
     double position[3];
     const OrthogonalPlane &view = m_2DViewer->getView();
-    int xIndex = view.getXIndexForView();
-    int yIndex = view.getYIndexForView();
+    int xIndex = view.getXIndex();
+    int yIndex = view.getYIndex();
 
     // Mirem on estan horitzontalment els punts point1 i point3 respecte del point2
     if (point1[0] <= point2[0])
@@ -329,7 +329,7 @@ void AngleTool::initialize()
 void AngleTool::equalizeDepth()
 {
     // Assignem a tots els punts la z de l'últim
-    int zIndex = m_2DViewer->getView().getZIndexForView();
+    int zIndex = m_2DViewer->getView().getZIndex();
     double z = m_mainPolyline->getPoint(2)[zIndex];
     for (int i = 0; i < 2; i++)
     {
