@@ -3,8 +3,7 @@
 #include "imagepipeline.h"
 #include "slicehandler.h"
 #include "volume.h"
-
-#include <vtkImageActor.h>
+#include "vtkdepthdisabledopenglimageactor.h"
 
 namespace udg {
 
@@ -12,7 +11,7 @@ VolumeDisplayUnit::VolumeDisplayUnit() :
     m_volume(0)
 {
     m_imagePipeline = new ImagePipeline();
-    m_imageActor = vtkImageActor::New();
+    m_imageActor = VtkDepthDisabledOpenGLImageActor::New();
     m_sliceHandler = new SliceHandler();
 }
 
