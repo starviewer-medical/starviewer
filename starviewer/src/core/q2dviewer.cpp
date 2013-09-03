@@ -455,7 +455,7 @@ void Q2DViewer::setInput(Volume *volume)
     m_volumeReaderManager->cancelReading();
     deleteInputFinishedCommand();
 
-    setNewVolume(volume);
+    setNewVolumes(QList<Volume*>() << volume);
 }
 
 void Q2DViewer::setInputAsynchronously(Volume *volume, QViewerCommand *inputFinishedCommand)
@@ -476,7 +476,7 @@ void Q2DViewer::setInputAsynchronously(Volume *volume, QViewerCommand *inputFini
     }
     else
     {
-        setNewVolumeAndExecuteCommand(volume);
+        setNewVolumesAndExecuteCommand(QList<Volume*>() << volume);
     }
 }
 
@@ -521,14 +521,14 @@ void Q2DViewer::loadVolumeAsynchronously(Volume *volume)
     // També tenim el problema de que perquè surti al menú de botó dret com a seleccionat, cal posar-li el mateix id.
     Volume *dummyVolume = getDummyVolumeFromVolume(volume);
     dummyVolume->setIdentifier(volume->getIdentifier());
-    setNewVolume(dummyVolume, false);
+    setNewVolumes(QList<Volume*>() << dummyVolume, false);
 }
 
 void Q2DViewer::volumeReaderJobFinished()
 {
     if (m_volumeReaderManager->readingSuccess())
     {
-        setNewVolumeAndExecuteCommand(m_volumeReaderManager->getVolume());
+        setNewVolumesAndExecuteCommand(m_volumeReaderManager->getVolumes());
     }
     else
     {
@@ -537,11 +537,11 @@ void Q2DViewer::volumeReaderJobFinished()
     }
 }
 
-void Q2DViewer::setNewVolumeAndExecuteCommand(Volume *volume)
+void Q2DViewer::setNewVolumesAndExecuteCommand(const QList<Volume*> &volumes)
 {
     try
     {
-        setNewVolume(volume);
+        setNewVolumes(volumes);
         executeInputFinishedCommand();
     }
     catch (...)
@@ -568,7 +568,7 @@ void Q2DViewer::setNewVolumeAndExecuteCommand(Volume *volume)
 
         Volume *dummyVolume = getDummyVolumeFromVolume(m_mainVolume);
         dummyVolume->setIdentifier(m_mainVolume->getIdentifier());
-        setNewVolume(dummyVolume, false);
+        setNewVolumes(QList<Volume*>() << dummyVolume, false);
     }
 }
 
@@ -583,8 +583,15 @@ Volume* Q2DViewer::getDummyVolumeFromVolume(Volume *volume)
     return newVolume;
 }
 
-void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVolume)
+void Q2DViewer::setNewVolumes(const QList<Volume*> &volumes, bool setViewerStatusToVisualizingVolume)
 {
+    if (volumes.isEmpty())
+    {
+        DEBUG_LOG("Received an empty volume list -> doing nothing");
+        WARN_LOG("Received an empty volume list -> doing nothing");
+        return;
+    }
+
     // Cal que primer posem l'estatus en VisualizingVolume per tal de que el QVTKWidget pugui obtenir el tamany que li correspon
     // si no, ens podem trobar que encara no s'hagi mostrat i tingui tamanys no definits fent que la imatge no es mostri completa #1434
     // TODO: Caldria que fitRenderingIntoViewport() fos indepdent de si s'està visualitzant o no el QVTKWidget
@@ -597,7 +604,7 @@ void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVo
     // Desactivem el rendering per tal de millorar l'eficiència del setInput ja que altrament es renderitza múltiples vegades
     enableRendering(false);
     
-    if (m_mainVolume != volume)
+    if (m_mainVolume != volumes.first())
     {
         // Al canviar de volum, eliminem overlays que poguèssim tenir anteriorment
         removeViewerBitmaps();
@@ -616,8 +623,14 @@ void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVo
     }
 
     // TODO Caldria fer neteja? bloquejar? Per tal que quedi en negre mentres es carrega el nou volum?
-    m_mainVolume = volume;
-    m_volumeDisplayUnits.first()->setVolume(m_mainVolume);
+    m_mainVolume = volumes.first();
+
+    setupVolumeDisplayUnits(volumes.size());
+
+    for (int i = 0; i < volumes.size(); i++)
+    {
+        m_volumeDisplayUnits.at(i)->setVolume(volumes.at(i));
+    }
 
     setCurrentViewPlane(OrthogonalPlane::XYPlane);
     m_alignPosition = Q2DViewer::AlignCenter;
@@ -635,10 +648,11 @@ void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVo
 
     // Actualitzem la informació de window level
     updateWindowLevelData();
-    loadOverlays(volume);
+    loadOverlays(volumes.first());
 
     // Reset the view to the acquisition plane
     resetViewToAcquisitionPlane();
+
     // HACK
     // S'activa el rendering de nou per tal de que es renderitzi l'escena
     enableRendering(true);
@@ -1953,7 +1967,30 @@ const OrthogonalPlane& Q2DViewer::getCurrentViewPlane() const
 void Q2DViewer::setCurrentViewPlane(const OrthogonalPlane &viewPlane)
 {
     QViewer::setCurrentViewPlane(viewPlane);
-    m_volumeDisplayUnits.first()->setViewPlane(viewPlane);
+
+    foreach (VolumeDisplayUnit *volumeDisplayUnit, m_volumeDisplayUnits)
+    {
+        volumeDisplayUnit->setViewPlane(viewPlane);
+    }
+}
+
+void Q2DViewer::setupVolumeDisplayUnits(int count)
+{
+    vtkRenderer *renderer = getRenderer();
+
+    // Destroy the last VDUs
+    while (count < m_volumeDisplayUnits.size())
+    {
+        renderer->RemoveViewProp(m_volumeDisplayUnits.last()->getImageActor());
+        delete m_volumeDisplayUnits.takeLast();
+    }
+
+    // Create new VDUs
+    while (count > m_volumeDisplayUnits.size())
+    {
+        m_volumeDisplayUnits.append(new VolumeDisplayUnit());
+        renderer->AddViewProp(m_volumeDisplayUnits.last()->getImageActor());
+    }
 }
 
 };  // End namespace udg
