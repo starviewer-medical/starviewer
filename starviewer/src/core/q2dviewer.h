@@ -376,9 +376,8 @@ private:
     /// Updates the current image default presets values. It only applies to original acquisition plane.
     void updateCurrentImageDefaultPresets();
 
-    /// Crida els mètodes setNewVolume i executa el command. A més a més es fa un bloc try/catch per capturar
-    /// qualsevol excepció possible durant el procés de rendering per evitar que peti
-    void setNewVolumeAndExecuteCommand(Volume *volume);
+    /// Calls setNewVolumes and excutes the command while catching any exception that may be thrown.
+    void setNewVolumesAndExecuteCommand(const QList<Volume*> &volumes);
 
     /// Elimina els bitmaps que s'hagin creat per aquest viewer
     void removeViewerBitmaps();
@@ -391,6 +390,9 @@ private:
     /// Updates the image slice to be displayed on the specified dimension
     void updateSliceToDisplay(int value, SliceDimension dimension);
 
+    /// Creates or destroys volume display units as needed according to the new number of volumes. Also, adds or removes image actors from the viewer.
+    void setupVolumeDisplayUnits(int count);
+
 private slots:
     /// Actualitza les transformacions de càmera (de moment rotació i flip)
     void updateCamera();
@@ -400,11 +402,9 @@ private slots:
     /// asíncrona a QViewer.
     virtual void setInputAndRender(Volume *volume);
 
-    /// Canvia el volum que s'està visualitzant per un de nou que es passa per paràmetre.
-    /// Sempre es canviarà, independentment de si el volume passat és el mateix o no al que ja hi havia.
-    /// Es pressuposa que el volume està carregat en memòria.
-    /// Ens permet escollir si al canviar el volum volem que es mostri o no canviant l'status del viewer.
-    void setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVolume = true);
+    /// Replaces the volumes displayed by this viewer by the new ones and resets the viewer.
+    /// If the second parameter is false, the volumes won't be rendered.
+    void setNewVolumes(const QList<Volume*> &volumes, bool setViewerStatusToVisualizingVolume = true);
 
     void volumeReaderJobFinished();
 
