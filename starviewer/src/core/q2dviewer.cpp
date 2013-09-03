@@ -814,11 +814,14 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
     
     if (m_mainVolume)
     {
-        m_volumeDisplayUnits.first()->setViewPlane(view);
+        foreach (VolumeDisplayUnit *volumeDisplayUnit, m_volumeDisplayUnits)
+        {
+            volumeDisplayUnit->setViewPlane(view);
+        }
 
         // Ara adaptem els actors a la nova configuració de la càmara perquè siguin visibles
         // TODO Això s'hauria d'encapsular en un mètode tipu "resetDisplayExtent()"
-        updateDisplayExtent();
+        updateDisplayExtents();
         getRenderer()->ResetCamera();
         // Fins aquí seria el mètode "resetDisplayExtent()"
         
@@ -971,7 +974,7 @@ void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
         }
         
         // Then update display (image and associated annotations)
-        updateDisplayExtent();
+        updateDisplayExtents();
         updateCurrentImageDefaultPresets();
         updateSliceAnnotationInformation();
         updatePreferredImageOrientation();
@@ -1531,7 +1534,7 @@ void Q2DViewer::updateSliceAnnotation(int currentSlice, int maxSlice, int curren
     }
 }
 
-void Q2DViewer::updateDisplayExtent()
+void Q2DViewer::updateDisplayExtents()
 {
     // Ens assegurem que tenim dades vàlides
     if (!m_mainVolume->isPixelDataLoaded())
@@ -1539,16 +1542,10 @@ void Q2DViewer::updateDisplayExtent()
         return;
     }
 
-    int sliceValue = m_mainVolume->getImageIndex(getCurrentSlice(), getCurrentPhase());
-
-    // A partir de l'extent del volum, la vista i la llesca en la que ens trobem,
-    // calculem l'extent que li correspon a l'actor imatge
-    int zIndex = getCurrentViewPlane().getZIndex();
-    int imageActorExtent[6];
-    m_mainVolume->getWholeExtent(imageActorExtent);
-    imageActorExtent[zIndex * 2] = imageActorExtent[zIndex * 2 + 1] = sliceValue;
-    m_volumeDisplayUnits.first()->getImageActor()->SetDisplayExtent(imageActorExtent[0], imageActorExtent[1], imageActorExtent[2], imageActorExtent[3],
-                                                               imageActorExtent[4], imageActorExtent[5]);
+    foreach (VolumeDisplayUnit *volumeDisplayUnit, m_volumeDisplayUnits)
+    {
+        volumeDisplayUnit->updateDisplayExtent();
+    }
 
     // TODO Si separem els renderers potser caldria aplicar-ho a cada renderer?
     getRenderer()->ResetCameraClippingRange();
@@ -1593,7 +1590,7 @@ void Q2DViewer::setSlabProjectionMode(int projectionMode)
 {
     m_slabProjectionMode = projectionMode;
     m_volumeDisplayUnits.first()->getImagePipeline()->setSlabProjectionMode(static_cast<AccumulatorFactory::AccumulatorType>(m_slabProjectionMode));
-    updateDisplayExtent();
+    updateDisplayExtents();
     render();
 }
 
@@ -1614,7 +1611,7 @@ void Q2DViewer::setSlabThickness(int thickness)
 
     m_volumeDisplayUnits.first()->getImagePipeline()->setSlice(m_mainVolume->getImageIndex(getCurrentSlice(), getCurrentPhase()));
     m_volumeDisplayUnits.first()->getImagePipeline()->setSlabThickness(m_volumeDisplayUnits.first()->getSliceHandler()->getSlabThickness());
-    updateDisplayExtent();
+    updateDisplayExtents();
     updateSliceAnnotationInformation();
     render();
 

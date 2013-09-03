@@ -333,8 +333,8 @@ private:
     /// Actualitza les etiquetes d'orientació del pacient segons la vista i orientació actuals de la càmera
     void updatePatientOrientationAnnotation();
 
-    /// Actualitza les característiques dels actors dels viewports
-    void updateDisplayExtent();
+    /// Updates the display extents of the image actors.
+    void updateDisplayExtents();
 
     /// Print some information related to the volume
     void printVolumeInformation();
