@@ -2014,4 +2014,9 @@ void Q2DViewer::setupVolumeDisplayUnits(int count)
     }
 }
 
+void Q2DViewer::setVolumeOpacity(int index, double opacity)
+{
+    m_volumeDisplayUnits.at(index)->getImageActor()->SetOpacity(opacity);
+}
+
 };  // End namespace udg
