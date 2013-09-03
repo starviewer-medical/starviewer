@@ -356,7 +356,8 @@ HEADERS += extensionfactory.h \
     mammographyimagehelper.h \
     imagepipeline.h \
     volumereadermanager.h \
-    volumedisplayunit.h
+    volumedisplayunit.h \
+    vtkdepthdisabledopenglimageactor.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -662,7 +663,8 @@ SOURCES += extensionmediator.cpp \
     mammographyimagehelper.cpp \
     imagepipeline.cpp \
     volumereadermanager.cpp \
-    volumedisplayunit.cpp
+    volumedisplayunit.cpp \
+    vtkdepthdisabledopenglimageactor.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \
