@@ -169,6 +169,9 @@ public:
     /// If casting is successful, casted pointer to Q2DViewer will be returned, null otherwise
     static Q2DViewer* castFromQViewer(QViewer *viewer);
 
+    /// Sets the opacity of the image actor of the volume at the given index.
+    void setVolumeOpacity(int index, double opacity);
+
 public slots:
     virtual void setInput(Volume *volume);
 
