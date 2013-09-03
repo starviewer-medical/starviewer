@@ -41,6 +41,9 @@ public:
     /// Sets a new view plane, resetting some properties of the slice handler.
     void setViewPlane(const OrthogonalPlane &viewPlane);
 
+    /// Updates the display extent of the image actor.
+    void updateDisplayExtent();
+
 private:
     /// Called when setting a new volume to reset the thick slab filter.
     void resetThickSlab();

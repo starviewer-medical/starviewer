@@ -63,6 +63,21 @@ void VolumeDisplayUnit::setViewPlane(const OrthogonalPlane &viewPlane)
     m_sliceHandler->setViewPlane(viewPlane);
 }
 
+void VolumeDisplayUnit::updateDisplayExtent()
+{
+    if (!m_volume || !m_volume->isPixelDataLoaded())
+    {
+        return;
+    }
+
+    int imageIndex = m_volume->getImageIndex(m_sliceHandler->getCurrentSlice(), m_sliceHandler->getCurrentPhase());
+    int zIndex = this->getViewPlane().getZIndex();
+    int displayExtent[6];
+    m_volume->getWholeExtent(displayExtent);
+    displayExtent[zIndex * 2] = displayExtent[zIndex * 2 + 1] = imageIndex;
+    m_imageActor->SetDisplayExtent(displayExtent);
+}
+
 void VolumeDisplayUnit::resetThickSlab()
 {
     m_imagePipeline->setInput(m_volume->getVtkData());
