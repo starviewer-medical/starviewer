@@ -27,6 +27,7 @@
 #include "mammographyimagehelper.h"
 #include "slicehandler.h"
 #include "volumedisplayunit.h"
+#include "slicelocator.h"
 // Qt
 #include <QResizeEvent>
 #include <QImage>
@@ -966,6 +967,7 @@ void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
         {
             case SpatialDimension:
                 m_volumeDisplayUnits.first()->getSliceHandler()->setSlice(value);
+                updateSecondaryVolumesSlices();
                 break;
 
             case TemporalDimension:
@@ -1011,6 +1013,28 @@ void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
         }
         
         render();
+    }
+}
+
+void Q2DViewer::updateSecondaryVolumesSlices()
+{
+    if (m_volumeDisplayUnits.size() <= 1)
+    {
+        return;
+    }
+
+    SliceLocator sliceLocator;
+    sliceLocator.setPlane(getCurrentViewPlane());
+
+    for (int i = 1; i < m_volumeDisplayUnits.size(); i++)
+    {
+        sliceLocator.setVolume(m_volumeDisplayUnits.at(i)->getVolume());
+        int nearestSlice = sliceLocator.getNearestSlice(getCurrentImagePlane());
+
+        if (nearestSlice >= 0)
+        {
+            m_volumeDisplayUnits.at(i)->getSliceHandler()->setSlice(nearestSlice);
+        }
     }
 }
 

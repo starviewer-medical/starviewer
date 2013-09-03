@@ -390,6 +390,9 @@ private:
     /// Updates the image slice to be displayed on the specified dimension
     void updateSliceToDisplay(int value, SliceDimension dimension);
 
+    /// Updates the slice to display in the secondary volumes to the closest one in the main volume.
+    void updateSecondaryVolumesSlices();
+
     /// Creates or destroys volume display units as needed according to the new number of volumes. Also, adds or removes image actors from the viewer.
     void setupVolumeDisplayUnits(int count);
 
