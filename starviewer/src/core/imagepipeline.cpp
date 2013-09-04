@@ -134,6 +134,11 @@ void ImagePipeline::setTransferFunction(const TransferFunction &transferFunction
     m_windowLevelLUTFilter->setTransferFunction(transferFunction);
 }
 
+void ImagePipeline::clearTransferFunction()
+{
+    m_windowLevelLUTFilter->clearTransferFunction();
+}
+
 
 vtkAlgorithm* ImagePipeline::getVtkAlgorithm() const
 {
