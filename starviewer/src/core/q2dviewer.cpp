@@ -1091,7 +1091,7 @@ void Q2DViewer::setTransferFunction(TransferFunction *transferFunction)
 {
     m_transferFunction = transferFunction;
     // Apliquem la funció de transferència sobre el window level mapper
-    m_volumeDisplayUnits.first()->getImagePipeline()->setTransferFunction(m_transferFunction);
+    m_volumeDisplayUnits.first()->getImagePipeline()->setTransferFunction(*m_transferFunction);
 }
 
 void Q2DViewer::getCurrentWindowLevel(double wl[2])
