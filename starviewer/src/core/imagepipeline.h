@@ -32,7 +32,7 @@ public:
     /// Gets the window window and window level
     void getCurrentWindowLevel(double wl[]);
     /// Sets the transfer function
-    void setTransferFunction(TransferFunction *transferFunction);
+    void setTransferFunction(const TransferFunction &transferFunction);
     /// Sets the shutter data
     void setShutterData(vtkImageData *shutterData);
     /// Sets the slice to be visualized
