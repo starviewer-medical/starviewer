@@ -262,8 +262,8 @@ void ROITool::computeStatisticsData()
                 {
                     while (firstIntersection[intersectionCoordinateIndex] <= secondIntersection[intersectionCoordinateIndex])
                     {
-                        Voxel voxel;
-                        if (pixelData->getVoxelValue(firstIntersection, voxel, phaseIndex, numberOfPhases))
+                        Voxel voxel = pixelData->getVoxelValue(firstIntersection, phaseIndex, numberOfPhases);
+                        if (!voxel.isEmpty())
                         {
                             m_grayValues << voxel.getComponent(0);
                         }
@@ -275,8 +275,8 @@ void ROITool::computeStatisticsData()
                 {
                     while (firstIntersection[intersectionCoordinateIndex] >= secondIntersection[intersectionCoordinateIndex])
                     {
-                        Voxel voxel;
-                        if (pixelData->getVoxelValue(firstIntersection, voxel, phaseIndex, numberOfPhases))
+                        Voxel voxel = pixelData->getVoxelValue(firstIntersection, phaseIndex, numberOfPhases);
+                        if (!voxel.isEmpty())
                         {
                             m_grayValues << voxel.getComponent(0);
                         }

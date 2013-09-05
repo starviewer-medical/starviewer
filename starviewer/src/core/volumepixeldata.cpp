@@ -162,13 +162,13 @@ bool VolumePixelData::computeCoordinateIndex(const double coordinate[3], int ind
     return inside;
 }
 
-bool VolumePixelData::getVoxelValue(double coordinate[3], Voxel &voxelValue, int phaseNumber, int numberOfPhases)
+Voxel VolumePixelData::getVoxelValue(double coordinate[3], int phaseNumber, int numberOfPhases)
 {
     if (!this->getVtkData())
     {
         DEBUG_LOG("Dades VTK nul·les!");
-        voxelValue.reset();
-        return false;
+        
+        return Voxel();
     }
 
     int voxelIndex[3];
@@ -185,17 +185,17 @@ bool VolumePixelData::getVoxelValue(double coordinate[3], Voxel &voxelValue, int
         vtkDataArray *scalars = this->getVtkData()->GetPointData()->GetScalars();
         int numberOfComponents = scalars->GetNumberOfComponents();
 
+        Voxel voxelValue;
         for (int i = 0; i < numberOfComponents; i++)
         {
             voxelValue.addComponent(scalars->GetComponent(pointId, i));
         }
 
-        return true;
+        return voxelValue;
     }
     else
     {
-        voxelValue.reset();
-        return false;
+        return Voxel();
     }
 }
 
