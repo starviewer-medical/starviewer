@@ -99,7 +99,6 @@ void VoxelInformationTool::updateCaption()
 
 QString VoxelInformationTool::computeVoxelValue(double worldCoordinate[3])
 {
-    Voxel voxel;
     VolumePixelData *pixelData = m_2DViewer->getCurrentPixelData();
     int phaseIndex = 0;
     int numberOfPhases = 1;
@@ -109,10 +108,8 @@ QString VoxelInformationTool::computeVoxelValue(double worldCoordinate[3])
         numberOfPhases = m_2DViewer->getInput()->getNumberOfPhases();
         phaseIndex = m_2DViewer->getCurrentPhase();
     }
-
-    pixelData->getVoxelValue(worldCoordinate, voxel, phaseIndex, numberOfPhases);
-
-    return voxel.getAsQString();
+    
+    return pixelData->getVoxelValue(worldCoordinate, phaseIndex, numberOfPhases).getAsQString();
 }
 
 void VoxelInformationTool::computeCaptionAttachmentPointAndTextAlignment(double attachmentPoint[3], QString &horizontalJustification,
