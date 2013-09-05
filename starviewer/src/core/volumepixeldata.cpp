@@ -57,6 +57,11 @@ vtkImageData* VolumePixelData::getVtkData()
 
 void VolumePixelData::setData(vtkImageData *vtkImage)
 {
+    if (m_imageDataVTK == vtkImage)
+    {
+        return;
+    }
+    
     if (m_imageDataVTK)
     {
         m_imageDataVTK->ReleaseData();
