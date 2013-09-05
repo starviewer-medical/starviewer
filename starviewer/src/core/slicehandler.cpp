@@ -41,7 +41,9 @@ void SliceHandler::setViewPlane(const OrthogonalPlane &viewPlane)
     if (m_volume)
     {
         // Update the slice range for the new view
-        m_volume->getSliceRange(m_minSliceValue, m_numberOfSlices, viewPlane);
+        int maxSliceValue;
+        m_volume->getSliceRange(m_minSliceValue, maxSliceValue, viewPlane);
+        m_numberOfSlices = maxSliceValue - m_minSliceValue + 1;
     }
 }
 
@@ -54,7 +56,7 @@ void SliceHandler::setSlice(int slice)
 {
     if (m_currentSlice != slice)
     {
-        m_currentSlice = MathTools::getBoundedValue(slice, 0, m_numberOfSlices - m_slabThickness + 1, isLoopEnabledForSlices());
+        m_currentSlice = MathTools::getBoundedValue(slice, 0, m_numberOfSlices - m_slabThickness, isLoopEnabledForSlices());
     }
 }
 
@@ -70,7 +72,7 @@ int SliceHandler::getMinimumSlice() const
 
 int SliceHandler::getMaximumSlice() const
 {
-    return m_numberOfSlices;
+    return m_minSliceValue + m_numberOfSlices - 1;
 }
 
 int SliceHandler::getNumberOfSlices() const
