@@ -358,7 +358,8 @@ HEADERS += extensionfactory.h \
     imagepipeline.h \
     volumereadermanager.h \
     volumedisplayunit.h \
-    vtkdepthdisabledopenglimageactor.h
+    vtkdepthdisabledopenglimageactor.h \
+    transferfunctionmodel.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -666,7 +667,8 @@ SOURCES += extensionmediator.cpp \
     imagepipeline.cpp \
     volumereadermanager.cpp \
     volumedisplayunit.cpp \
-    vtkdepthdisabledopenglimageactor.cpp
+    vtkdepthdisabledopenglimageactor.cpp \
+    transferfunctionmodel.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \
