@@ -46,7 +46,7 @@ EditorTool::~EditorTool()
 
 void EditorTool::initialize()
 {
-    if (!m_2DViewer->getOverlayInput())
+    if (m_2DViewer->getOverlayInput())
     {
         double range[2];
         m_2DViewer->getOverlayInput()->getScalarRange(range);
@@ -267,7 +267,7 @@ void EditorTool::setEditorPoint()
 
 void EditorTool::setPaintCursor()
 {
-    if (m_isLeftButtonPressed && !m_2DViewer->getOverlayInput())
+    if (m_isLeftButtonPressed && m_2DViewer->getOverlayInput())
     {
         setEditorPoint();
     }
