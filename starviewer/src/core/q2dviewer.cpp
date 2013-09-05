@@ -1674,11 +1674,6 @@ void Q2DViewer::putCoordinateInCurrentImageBounds(double xyz[3])
     }
 }
 
-vtkImageData* Q2DViewer::getCurrentSlabProjection()
-{
-    return m_volumeDisplayUnits.first()->getImagePipeline()->getSlabProjectionOutput();
-}
-
 VolumePixelData* Q2DViewer::getCurrentPixelData()
 {
     VolumeDisplayUnit *currentDisplayUnit = m_volumeDisplayUnits.first();

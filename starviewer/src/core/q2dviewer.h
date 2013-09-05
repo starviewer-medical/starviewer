@@ -145,9 +145,6 @@ public:
     /// es modificarà perquè caigui dins dels límits de la imatge
     void putCoordinateInCurrentImageBounds(double xyz[3]);
 
-    /// Retorna la informació de la llesca actual del visualitzador
-    vtkImageData* getCurrentSlabProjection();
-
     /// Gets the pixel data corresponding to the current rendered image
     VolumePixelData* getCurrentPixelData();
 
