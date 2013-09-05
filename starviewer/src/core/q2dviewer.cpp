@@ -1392,12 +1392,12 @@ void Q2DViewer::updateSliceAnnotationInformation()
     if (m_volumeDisplayUnits.first()->getSliceHandler()->getNumberOfPhases() > 1)
     {
         updateSliceAnnotation((value / m_volumeDisplayUnits.first()->getSliceHandler()->getNumberOfPhases()) + 1,
-                                    m_volumeDisplayUnits.first()->getSliceHandler()->getMaximumSlice() + 1, getCurrentPhase() + 1,
+                                    m_volumeDisplayUnits.first()->getSliceHandler()->getNumberOfSlices(), getCurrentPhase() + 1,
                                     m_volumeDisplayUnits.first()->getSliceHandler()->getNumberOfPhases());
     }
     else
     {
-        updateSliceAnnotation(value + 1, m_volumeDisplayUnits.first()->getSliceHandler()->getMaximumSlice() + 1);
+        updateSliceAnnotation(value + 1, m_volumeDisplayUnits.first()->getSliceHandler()->getNumberOfSlices());
     }
     
     updatePatientInformationAnnotation();
