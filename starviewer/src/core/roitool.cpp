@@ -187,9 +187,9 @@ void ROITool::computeStatisticsData()
     int intersectionState;
     // Obtenim el punter al contenidor de píxels amb el que calcularem els valors
     VolumePixelData *pixelData = m_2DViewer->getCurrentPixelData();
+    
     int phaseIndex = 0;
     int numberOfPhases = 1;
-    
     if (!m_2DViewer->isThickSlabActive() && m_2DViewer->getView() == OrthogonalPlane::XYPlane && m_2DViewer->getInput()->getNumberOfPhases() > 1)
     {
         numberOfPhases = m_2DViewer->getInput()->getNumberOfPhases();
