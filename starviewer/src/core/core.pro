@@ -242,6 +242,7 @@ HEADERS += extensionfactory.h \
     applyhangingprotocolqviewercommand.h \
     renderqviewercommand.h \
     volumepixeldata.h \
+    voxel.h \
     customwindowlevelswriter.h \
     qcustomwindowleveleditwidget.h \
     applicationstylehelper.h \
@@ -557,6 +558,7 @@ SOURCES += extensionmediator.cpp \
     applyhangingprotocolqviewercommand.cpp \
     renderqviewercommand.cpp \
     volumepixeldata.cpp \
+    voxel.cpp \
     customwindowlevelswriter.cpp \
     qcustomwindowleveleditwidget.cpp \
     applicationstylehelper.cpp \
