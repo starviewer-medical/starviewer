@@ -409,6 +409,12 @@ private:
     /// Creates or destroys volume display units as needed according to the new number of volumes. Also, adds or removes image actors from the viewer.
     void setupVolumeDisplayUnits(int count);
 
+    /// Sets the default opacity for each volume after setting new volumes.
+    void setDefaultOpacitiesForNewVolumes();
+
+    /// Sets the default transfer function for each volume after setting new volumes.
+    void setDefaultTransferFunctionsForNewVolumes();
+
 private slots:
     /// Actualitza les transformacions de càmera (de moment rotació i flip)
     void updateCamera();
