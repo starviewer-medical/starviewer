@@ -29,6 +29,9 @@ public:
     int getMinimumSlice() const;
     int getMaximumSlice() const;
     
+    /// Returns the total number of slices on the spatial dimension for the current view plane
+    int getNumberOfSlices() const;
+    
     void setPhase(int phase);
     int getCurrentPhase() const;
 
@@ -66,6 +69,7 @@ private:
     int m_slabThickness;
     int m_currentSlice;
     int m_currentPhase;
+    int m_numberOfSlices;
 
 };
 

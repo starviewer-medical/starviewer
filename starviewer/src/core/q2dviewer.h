@@ -126,6 +126,9 @@ public:
     int getMinimumSlice() const;
     int getMaximumSlice() const;
 
+    /// Returns the total number of slices on the spatial dimension that has the main input on the current view
+    int getNumberOfSlices() const;
+
     /// Ens indica si s'està aplicant o no thick slab
     bool isThickSlabActive() const;
 

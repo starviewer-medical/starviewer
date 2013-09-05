@@ -425,6 +425,11 @@ int Q2DViewer::getMaximumSlice() const
     return m_volumeDisplayUnits.first()->getSliceHandler()->getMaximumSlice();
 }
 
+int Q2DViewer::getNumberOfSlices() const
+{
+    return m_volumeDisplayUnits.first()->getSliceHandler()->getNumberOfSlices();
+}
+
 void Q2DViewer::addActors()
 {
     Q_ASSERT(m_cornerAnnotations);
