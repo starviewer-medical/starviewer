@@ -13,7 +13,7 @@ SliceHandler::SliceHandler(QObject *parent)
 {
     m_currentSlice = 0;
     m_minSliceValue = 0;
-    m_numberOfSlices = 0;
+    m_numberOfSlices = 1;
     m_currentPhase = 0;
     m_numberOfPhases = 1;
     m_slabThickness = 1;
