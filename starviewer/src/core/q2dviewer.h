@@ -28,6 +28,7 @@ class QViewerCommand;
 class PatientOrientation;
 class BlendFilter;
 class VolumeDisplayUnit;
+class VolumePixelData;
 
 /**
     Classe base per als visualitzadors 2D.
@@ -146,6 +147,9 @@ public:
 
     /// Retorna la informació de la llesca actual del visualitzador
     vtkImageData* getCurrentSlabProjection();
+
+    /// Gets the pixel data corresponding to the current rendered image
+    VolumePixelData* getCurrentPixelData();
 
     /// Retorna la orientació de pacient corresponent a la imatge que s'està visualitzant en aquell moment,
     /// és a dir, tenint en compte rotacions, flips, reconstruccions, etc.
@@ -491,6 +495,9 @@ private:
 
     /// Volume display units containing the volumes displayed in this viewer and their related objects.
     QList<VolumeDisplayUnit*> m_volumeDisplayUnits;
+
+    /// Holds the current thickslab pixel data
+    VolumePixelData *m_currentThickSlabPixelData;
 
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(Q2DViewer::AnnotationFlags)
