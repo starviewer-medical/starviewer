@@ -161,12 +161,7 @@ double MagicROITool::getVoxelValue(int x, int y, int z, VolumePixelData *pixelDa
     index[yIndex] = y;
     index[zIndex] = z;
 
-    double value = 0;
-
-    value = pixelData->getScalarComponentAsDouble(index[0], index[1], index[2]);
-
-    return value;
-
+    return pixelData->getScalarComponentAsDouble(index[0], index[1], index[2]);
 }
 
 void MagicROITool::startRegion()
