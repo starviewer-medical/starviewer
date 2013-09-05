@@ -28,6 +28,36 @@ MeasureComputer* ROITool::getMeasureComputer()
     return new AreaMeasureComputer(m_roiPolygon);
 }
 
+void ROITool::computeMean()
+{
+    m_mean = 0.0;
+    foreach (double value, m_grayValues)
+    {
+        m_mean += value;
+    }
+
+    m_mean = m_mean / m_grayValues.size();
+}
+
+void ROITool::computeStandardDeviation()
+{
+    m_standardDeviation = 0.0;
+    QList<double> deviations;
+    foreach (double value, m_grayValues)
+    {
+        double individualDeviation = value - m_mean;
+        deviations << (individualDeviation * individualDeviation);
+    }
+
+    foreach (double deviation, deviations)
+    {
+        m_standardDeviation += deviation;
+    }
+
+    m_standardDeviation /= deviations.size();
+    m_standardDeviation = std::sqrt(m_standardDeviation);
+}
+
 void ROITool::computeStatisticsData()
 {
     Q_ASSERT(m_roiPolygon);
@@ -266,30 +296,10 @@ void ROITool::computeStatisticsData()
     // Un cop hem obtingut les dades necessàries, calculem la mitjana i la desviació estàndar
 
     // Mitjana
-    m_mean = 0.0;
-    foreach (double value, m_grayValues)
-    {
-        m_mean += value;
-    }
-
-    m_mean = m_mean / m_grayValues.size();
+    computeMean();
 
     // Desviació estàndar
-    m_standardDeviation = 0.0;
-    QList<double> deviations;
-    foreach (double value, m_grayValues)
-    {
-        double individualDeviation = value - m_mean;
-        deviations << (individualDeviation * individualDeviation);
-    }
-
-    foreach (double deviation, deviations)
-    {
-        m_standardDeviation += deviation;
-    }
-
-    m_standardDeviation /= deviations.size();
-    m_standardDeviation = std::sqrt(m_standardDeviation);
+    computeStandardDeviation();
 
     // Ja s'han calculat les dades estadístiques
     m_hasToComputeStatisticsData = false;

@@ -53,6 +53,10 @@ protected:
     double m_standardDeviation;
 
 private:
+    /// Methods to compute statistics data, such as mean and standard deviation, upon the contained voxels on the ROI
+    void computeMean();
+    void computeStandardDeviation();
+    
     /// Calcula les dades estadístiques de la ROI.
     /// Serà necessari cridar aquest mètode abans si volem obtenir la mitjana i/o la desviació estàndar
     void computeStatisticsData();
