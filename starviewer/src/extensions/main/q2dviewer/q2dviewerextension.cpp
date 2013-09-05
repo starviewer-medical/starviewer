@@ -636,7 +636,7 @@ void Q2DViewerExtension::enableMaximumThicknessMode(bool enable)
         Q2DViewer *viewer = m_workingArea->getViewerWidget(viewerNumber)->getViewer();
         if (viewer->isThickSlabActive() && !viewer->isActive())
         {
-            viewer->setSlabThickness(viewer->getMaximumSlice() + 1);
+            viewer->setSlabThickness(viewer->getNumberOfSlices());
         }
     }
     QApplication::restoreOverrideCursor();

@@ -162,7 +162,7 @@ void QThickSlabWidget::applyProjectionMode(int comboItem)
         m_currentViewer->setSlabProjectionMode(projectionModeID);
         if (m_maximumThicknessCheckBox->isChecked())
         {
-            m_slabThicknessSlider->setValue(m_currentViewer->getMaximumSlice() + 1);
+            m_slabThicknessSlider->setValue(m_currentViewer->getNumberOfSlices());
         }
         else
         {
@@ -210,7 +210,7 @@ void QThickSlabWidget::onSliderReleased()
 
 void QThickSlabWidget::updateMaximumThickness()
 {
-    m_slabThicknessSlider->setRange(2, m_currentViewer->getMaximumSlice() + 1);
+    m_slabThicknessSlider->setRange(2, m_currentViewer->getNumberOfSlices());
 }
 
 void QThickSlabWidget::updateThicknessLabel(int value)
@@ -239,8 +239,8 @@ void QThickSlabWidget::onViewChanged()
     {
         // Cal forçar que es faci el thickSlab des del viewer, ja que si canviem de vista i el nombre de llesques
         // a renderitzar és el mateix, no s'emetrà la senyal "valueChanged()" de l'slider i no s'aplicarà el thickSlab
-        m_currentViewer->setSlabThickness(m_currentViewer->getMaximumSlice() + 1);
-        m_slabThicknessSlider->setValue(m_currentViewer->getMaximumSlice() + 1);
+        m_currentViewer->setSlabThickness(m_currentViewer->getNumberOfSlices());
+        m_slabThicknessSlider->setValue(m_currentViewer->getNumberOfSlices());
     }
     else
     {
@@ -261,7 +261,7 @@ void QThickSlabWidget::enableVolumeMode(bool enable)
 {
     if (enable)
     {
-        m_slabThicknessSlider->setValue(m_currentViewer->getMaximumSlice() + 1);
+        m_slabThicknessSlider->setValue(m_currentViewer->getNumberOfSlices());
         m_slabThicknessSlider->setEnabled(false);
         m_slabThicknessLabel->setEnabled(false);
     }
