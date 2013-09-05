@@ -7,8 +7,8 @@
 
 namespace udg {
 
-VolumeDisplayUnit::VolumeDisplayUnit() :
-    m_volume(0)
+VolumeDisplayUnit::VolumeDisplayUnit()
+ : m_volume(0)
 {
     m_imagePipeline = new ImagePipeline();
     m_imageActor = VtkDepthDisabledOpenGLImageActor::New();
