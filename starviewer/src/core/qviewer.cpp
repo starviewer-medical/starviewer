@@ -110,6 +110,18 @@ vtkRenderer* QViewer::getRenderer() const
     return m_renderer;
 }
 
+bool QViewer::hasInput() const
+{
+    if (m_mainVolume)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 vtkRenderWindow* QViewer::getRenderWindow() const
 {
     return m_vtkWidget->GetRenderWindow();
