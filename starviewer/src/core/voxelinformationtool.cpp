@@ -3,6 +3,7 @@
 #include "volume.h"
 #include "drawertext.h"
 #include "drawer.h"
+#include "voxel.h"
 #include "logging.h"
 // Vtk
 #include <vtkCommand.h>
@@ -98,9 +99,7 @@ void VoxelInformationTool::updateCaption()
 
 QString VoxelInformationTool::computeVoxelValue(double worldCoordinate[3])
 {
-    QString valueString;
-
-    QVector<double> voxelValue;
+    Voxel voxel;
     VolumePixelData *pixelData = m_2DViewer->getCurrentPixelData();
     int phaseIndex = 0;
     int numberOfPhases = 1;
@@ -111,31 +110,9 @@ QString VoxelInformationTool::computeVoxelValue(double worldCoordinate[3])
         phaseIndex = m_2DViewer->getCurrentPhase();
     }
 
-    if (pixelData->getVoxelValue(worldCoordinate, voxelValue, phaseIndex, numberOfPhases))
-    {
-        if (voxelValue.size() == 1)
-        {
-            valueString = QString("%1").arg(voxelValue.at(0));
-        }
-        else
-        {
-            valueString = QString("(%1").arg(voxelValue.at(0));
-            for (int i = 1; i < voxelValue.size(); i++)
-            {
-                valueString += QString(", %1").arg(voxelValue.at(i));
-            }
-            valueString += ")";
-        }
-    }
-    else
-    {
-        // Això no hauria de passar mai ja que se suposa que worldCoordinate
-        // és una coordenada vàlida dins del Volume actual
-        valueString = tr("N/A");
-        DEBUG_LOG("No s'ha trobat valor de la imatge");
-    }
+    pixelData->getVoxelValue(worldCoordinate, voxel, phaseIndex, numberOfPhases);
 
-    return valueString;
+    return voxel.getAsQString();
 }
 
 void VoxelInformationTool::computeCaptionAttachmentPointAndTextAlignment(double attachmentPoint[3], QString &horizontalJustification,

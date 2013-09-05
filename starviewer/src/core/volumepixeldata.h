@@ -18,6 +18,7 @@ class vtkImageData;
 namespace udg {
 
 class VolumePixelDataIterator;
+class Voxel;
 
 /**
     Classe que té com a responsabilitat mantenir el pixel data d'un Volume.
@@ -75,7 +76,7 @@ public:
     /// TODO S'espera que la coordenada sigui dins del món VTK!
     /// Caldria determinar si ha de ser així o hauria de ser DICOM o en un altre sistema.
     /// HACK S'introdueixen els paràmetres phaseNumber i numberOfPhases per poder calcular l'índex correcte dins del volum corresponent a la fase actual
-    bool getVoxelValue(double coordinate[3], QVector<double> &voxelValue, int phaseNumber = 0, int numberOfPhases = 1);
+    bool getVoxelValue(double coordinate[3], Voxel &voxelValue, int phaseNumber = 0, int numberOfPhases = 1);
 
     /// Donada una posició del volum, ens dona el valor coma double del vòxel corresponent
     /// Bàsicament crida el getScalarComponentAsDouble del vtkImageData

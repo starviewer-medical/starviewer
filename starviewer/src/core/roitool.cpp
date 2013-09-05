@@ -7,6 +7,7 @@
 #include "image.h"
 #include "mathtools.h"
 #include "areameasurecomputer.h"
+#include "voxel.h"
 
 #include <QApplication>
 
@@ -261,10 +262,10 @@ void ROITool::computeStatisticsData()
                 {
                     while (firstIntersection[intersectionCoordinateIndex] <= secondIntersection[intersectionCoordinateIndex])
                     {
-                        QVector<double> voxelValue;
-                        if (pixelData->getVoxelValue(firstIntersection, voxelValue, phaseIndex, numberOfPhases))
+                        Voxel voxel;
+                        if (pixelData->getVoxelValue(firstIntersection, voxel, phaseIndex, numberOfPhases))
                         {
-                            m_grayValues << voxelValue.at(0);
+                            m_grayValues << voxel.getComponent(0);
                         }
                         firstIntersection[intersectionCoordinateIndex] += horizontalSpacingIncrement;
                     }
@@ -274,10 +275,10 @@ void ROITool::computeStatisticsData()
                 {
                     while (firstIntersection[intersectionCoordinateIndex] >= secondIntersection[intersectionCoordinateIndex])
                     {
-                        QVector<double> voxelValue;
-                        if (pixelData->getVoxelValue(firstIntersection, voxelValue, phaseIndex, numberOfPhases))
+                        Voxel voxel;
+                        if (pixelData->getVoxelValue(firstIntersection, voxel, phaseIndex, numberOfPhases))
                         {
-                            m_grayValues << voxelValue.at(0);
+                            m_grayValues << voxel.getComponent(0);
                         }
                         firstIntersection[intersectionCoordinateIndex] -= horizontalSpacingIncrement;
                     }
