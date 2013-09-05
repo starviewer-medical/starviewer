@@ -28,6 +28,7 @@
 #include "slicehandler.h"
 #include "volumedisplayunit.h"
 #include "slicelocator.h"
+#include "transferfunctionmodel.h"
 // Qt
 #include <QResizeEvent>
 #include <QImage>
@@ -639,6 +640,9 @@ void Q2DViewer::setNewVolumes(const QList<Volume*> &volumes, bool setViewerStatu
     {
         m_volumeDisplayUnits.at(i)->setVolume(volumes.at(i));
     }
+
+    setDefaultOpacitiesForNewVolumes();
+    setDefaultTransferFunctionsForNewVolumes();
 
     setCurrentViewPlane(OrthogonalPlane::XYPlane);
     m_alignPosition = Q2DViewer::AlignCenter;
@@ -2030,6 +2034,43 @@ void Q2DViewer::setVolumeTransferFunction(int index, const TransferFunction &tra
 void Q2DViewer::clearVolumeTransferFunction(int index)
 {
     m_volumeDisplayUnits.at(index)->getImagePipeline()->clearTransferFunction();
+}
+
+void Q2DViewer::setDefaultOpacitiesForNewVolumes()
+{
+    // For now, the default opacities will be 1 for the first volume and 0.5 for the others
+    setVolumeOpacity(0, 1.0);
+
+    for (int i = 1; i < m_volumeDisplayUnits.size(); i++)
+    {
+        setVolumeOpacity(i, 0.5);
+    }
+}
+
+void Q2DViewer::setDefaultTransferFunctionsForNewVolumes()
+{
+    // By default, all volumes have no transfer function
+    for (int i = 0; i < m_volumeDisplayUnits.size(); i++)
+    {
+        clearVolumeTransferFunction(i);
+    }
+
+    // Exception (for CT-PET fusion): if we have two volumes, the second one will have the first default 2D transfer function
+    if (m_volumeDisplayUnits.size() == 2)
+    {
+        TransferFunctionModel model;
+        model.loadDefault2DTransferFunctions();
+
+        if (model.rowCount() > 0)
+        {
+            const TransferFunction &transferFunction = model.getTransferFunction(0);
+            double originalRange[2] = { transferFunction.keys().first(), transferFunction.keys().last() };
+            double newRange[2];
+            m_volumeDisplayUnits.at(1)->getVolume()->getScalarRange(newRange);
+            const TransferFunction &scaledTransferFunction = transferFunction.toNewRange(originalRange[0], originalRange[1], newRange[0], newRange[1]);
+            setVolumeTransferFunction(1, scaledTransferFunction);
+        }
+    }
 }
 
 };  // End namespace udg
