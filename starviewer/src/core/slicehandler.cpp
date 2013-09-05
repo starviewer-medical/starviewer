@@ -56,7 +56,7 @@ void SliceHandler::setSlice(int slice)
 {
     if (m_currentSlice != slice)
     {
-        m_currentSlice = MathTools::getBoundedValue(slice, 0, m_numberOfSlices - m_slabThickness, isLoopEnabledForSlices());
+        m_currentSlice = MathTools::getBoundedValue(slice, getMinimumSlice(), getMaximumSlice(), isLoopEnabledForSlices());
     }
 }
 
