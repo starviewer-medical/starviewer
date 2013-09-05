@@ -72,7 +72,7 @@ int SliceHandler::getMinimumSlice() const
 
 int SliceHandler::getMaximumSlice() const
 {
-    return m_minSliceValue + m_numberOfSlices - 1;
+    return m_minSliceValue + m_numberOfSlices - m_slabThickness;
 }
 
 int SliceHandler::getNumberOfSlices() const

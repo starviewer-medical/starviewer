@@ -312,14 +312,7 @@ void QViewerCINEController::updateThickness(int thickness)
 
     if (m_cineDimension == SpatialDimension)
     {
-        if (m_2DViewer->isThickSlabActive())
-        {
-            m_lastSliceInterval = m_2DViewer->getMaximumSlice() - thickness + 1;
-        }
-        else
-        {
-            m_lastSliceInterval = m_2DViewer->getMaximumSlice();
-        }
+        m_lastSliceInterval = m_2DViewer->getMaximumSlice();
     }
     else
     {
