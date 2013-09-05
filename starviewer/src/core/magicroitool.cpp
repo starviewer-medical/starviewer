@@ -251,23 +251,13 @@ void MagicROITool::generateRegion()
 {
     computeMaskBounds();
     
-    VolumePixelData *pixelData = m_2DViewer->getInput()->getPixelData();
-    if (m_2DViewer->isThickSlabActive())
-    {
-        pixelData = new VolumePixelData();
-        pixelData->setData(m_2DViewer->getCurrentSlabProjection());
-    }
+    VolumePixelData *pixelData = m_2DViewer->getCurrentPixelData();
 
     this->computeLevelRange(pixelData);
 
     // Posem a true els punts on la imatge està dins els llindard i connectat amb la llavor (region growing)
     this->computeRegionMask(pixelData);
 
-    if (m_2DViewer->isThickSlabActive())
-    {
-        delete pixelData;
-    }
-    
     // Trobem els punts frontera i creem el polígon
     this->computePolygon();
 

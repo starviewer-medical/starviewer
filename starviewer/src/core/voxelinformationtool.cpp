@@ -101,24 +101,16 @@ QString VoxelInformationTool::computeVoxelValue(double worldCoordinate[3])
     QString valueString;
 
     QVector<double> voxelValue;
-    VolumePixelData *pixelData = 0;
+    VolumePixelData *pixelData = m_2DViewer->getCurrentPixelData();
     int phaseIndex = 0;
     int numberOfPhases = 1;
-    if (m_2DViewer->isThickSlabActive())
-    {
-        pixelData = new VolumePixelData;
-        pixelData->setData(m_2DViewer->getCurrentSlabProjection());
-    }
-    else
-    {
-        pixelData = m_2DViewer->getInput()->getPixelData();
-        if (m_2DViewer->getView() == OrthogonalPlane::XYPlane && m_2DViewer->getInput()->getNumberOfPhases() > 1)
-        {
-            numberOfPhases = m_2DViewer->getInput()->getNumberOfPhases();
-            phaseIndex = m_2DViewer->getCurrentPhase();
-        }
-    }
     
+    if (!m_2DViewer->isThickSlabActive() && m_2DViewer->getView() == OrthogonalPlane::XYPlane && m_2DViewer->getInput()->getNumberOfPhases() > 1)
+    {
+        numberOfPhases = m_2DViewer->getInput()->getNumberOfPhases();
+        phaseIndex = m_2DViewer->getCurrentPhase();
+    }
+
     if (pixelData->getVoxelValue(worldCoordinate, voxelValue, phaseIndex, numberOfPhases))
     {
         if (voxelValue.size() == 1)
