@@ -176,6 +176,12 @@ public:
     /// Sets the opacity of the image actor of the volume at the given index.
     void setVolumeOpacity(int index, double opacity);
 
+    /// Sets the transfer function of the image pipeline of the volume at the given index.
+    void setVolumeTransferFunction(int index, const TransferFunction &transferFunction);
+
+    /// Removes the transfer function set to the volume at the given index.
+    void clearVolumeTransferFunction(int index);
+
 public slots:
     virtual void setInput(Volume *volume);
 
