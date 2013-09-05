@@ -130,7 +130,7 @@ void SynchronizeTool::applySliceChanges()
 
 void SynchronizeTool::reset()
 {
-    if (m_q2dviewer->getInput())
+    if (m_q2dviewer->hasInput())
     {
         m_lastSlice = m_q2dviewer->getCurrentSlice();
         m_lastView = m_q2dviewer->getCurrentAnatomicalPlaneLabel();

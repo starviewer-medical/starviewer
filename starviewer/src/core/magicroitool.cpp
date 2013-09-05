@@ -178,7 +178,7 @@ double MagicROITool::getVoxelValue(int x, int y, int z)
 
 void MagicROITool::startRegion()
 {
-    if (m_2DViewer->getInput())
+    if (m_2DViewer->hasInput())
     {
         if (m_2DViewer->getCurrentCursorImageCoordinate(m_pickedPosition))
         {

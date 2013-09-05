@@ -30,7 +30,7 @@ SlicingWheelTool::~SlicingWheelTool()
 
 void SlicingWheelTool::handleEvent(unsigned long eventID)
 {
-    if (!m_2DViewer->getInput())
+    if (!m_2DViewer->hasInput())
     {
         return;
     }

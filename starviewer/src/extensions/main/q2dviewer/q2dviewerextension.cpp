@@ -716,7 +716,7 @@ void Q2DViewerExtension::showScreenshotsExporterDialog()
     Q2DViewerWidget *selectedViewerWidget = m_workingArea->getSelectedViewer();
     if (selectedViewerWidget)
     {
-        if (selectedViewerWidget->getViewer()->getInput() == NULL)
+        if (!selectedViewerWidget->getViewer()->hasInput())
         {
             QMessageBox::warning(this, tr("Export to DICOM"), tr("This action is not allowed because the selected viewer is empty."));
         }
@@ -775,7 +775,7 @@ void Q2DViewerExtension::updateDICOMInformationButton()
         return;
     }
 
-    if (viewerWidget->getViewer()->getInput())
+    if (viewerWidget->getViewer()->hasInput())
     {
         if (viewerWidget->getViewer()->getView() == OrthogonalPlane::XYPlane)
         {
@@ -860,7 +860,7 @@ void Q2DViewerExtension::activateManualSynchronizationInAllViewers()
     {
         Q2DViewerWidget *widget = m_workingArea->getViewerWidget(i);
         
-        if (widget->getViewer()->getInput())
+        if (widget->getViewer()->hasInput())
         {
             widget->enableSynchronization(true);
         }
@@ -877,7 +877,7 @@ void Q2DViewerExtension::deactivateManualSynchronizationInAllViewers()
     {
         Q2DViewerWidget *widget = m_workingArea->getViewerWidget(i);
         
-        if (widget->getViewer()->getInput())
+        if (widget->getViewer()->hasInput())
         {
             widget->enableSynchronization(false);
         }

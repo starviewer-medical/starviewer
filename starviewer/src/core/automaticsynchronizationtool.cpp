@@ -56,7 +56,7 @@ void AutomaticSynchronizationTool::setToolData(ToolData *data)
 
 void AutomaticSynchronizationTool::initialize()
 {
-    if (m_2DViewer->getInput())
+    if (m_2DViewer->hasInput())
     {
         QString frameOfReferenceUID = m_2DViewer->getInput()->getImage(0)->getParentSeries()->getFrameOfReferenceUID();
         int groupOfActualViewer = m_toolData->getGroupForUID(frameOfReferenceUID);
@@ -100,7 +100,7 @@ void AutomaticSynchronizationTool::handleEvent(unsigned long eventID)
 
 void AutomaticSynchronizationTool::changePositionIfActive()
 {
-    if (m_2DViewer->getInput() && m_2DViewer->isActive())
+    if (m_2DViewer->hasInput() && m_2DViewer->isActive())
     {
         setPositionToToolData();
     }
@@ -131,7 +131,7 @@ void AutomaticSynchronizationTool::setPositionToToolData()
 
 void AutomaticSynchronizationTool::updatePosition()
 {
-    if (m_2DViewer->getInput() && !m_2DViewer->isActive())
+    if (m_2DViewer->hasInput() && !m_2DViewer->isActive())
     {
         QString frameOfReference = m_2DViewer->getInput()->getImage(0)->getParentSeries()->getFrameOfReferenceUID();
 

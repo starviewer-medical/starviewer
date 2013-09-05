@@ -89,7 +89,7 @@ void Cursor3DTool::handleEvent(long unsigned eventID)
 
 void Cursor3DTool::initializePosition()
 {
-    if (!m_2DViewer->getInput())
+    if (!m_2DViewer->hasInput())
     {
         return;
     }
@@ -205,9 +205,9 @@ void Cursor3DTool::removePosition()
 void Cursor3DTool::updateProjectedPoint()
 {
     // En cas que no sigui el viewer que estem modificant
-    if (!m_2DViewer->isActive() && m_2DViewer->getInput())
+    if (!m_2DViewer->isActive() && m_2DViewer->hasInput())
     {
-        if (!m_crossHair && m_2DViewer->getInput())
+        if (!m_crossHair && m_2DViewer->hasInput())
         {
             createNewCrossHair();
         }
@@ -252,7 +252,7 @@ void Cursor3DTool::projectPoint()
 void Cursor3DTool::updateFrameOfReference()
 {
     // Hi ha d'haver input per força
-    Q_ASSERT(m_2DViewer->getInput());
+    Q_ASSERT(m_2DViewer->hasInput());
 
     // TODO De moment agafem la primera imatge perquè assumim que totes pertanyen a la mateixa sèrie.
     // També ho fem així de moment per evitar problemes amb imatges multiframe, que encara no tractem correctament
@@ -276,7 +276,7 @@ void Cursor3DTool::updateFrameOfReference()
 void Cursor3DTool::refreshReferenceViewerData()
 {
     // Si es projectaven plans sobre el nostre drawer, les amaguem
-    if (m_2DViewer->getInput())
+    if (m_2DViewer->hasInput())
     {
         updateFrameOfReference();
     }

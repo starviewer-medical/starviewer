@@ -40,7 +40,7 @@ void EllipticalROITool::deleteTemporalRepresentation()
 
 void EllipticalROITool::handleEvent(long unsigned eventID)
 {
-    if (!m_2DViewer->getInput())
+    if (!m_2DViewer->hasInput())
     {
         return;
     }

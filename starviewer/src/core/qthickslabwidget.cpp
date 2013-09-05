@@ -66,7 +66,7 @@ void QThickSlabWidget::link(Q2DViewer *viewer)
     connect(m_slabThicknessSlider, SIGNAL(valueChanged(int)), SLOT(applyThickSlab()));
 
     // Si tenim input habilitem el combo, sinó el deshabilitem
-    if (m_currentViewer->getInput())
+    if (m_currentViewer->hasInput())
     {
         m_projectionModeComboBox->setEnabled(true);
     }

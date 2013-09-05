@@ -1066,7 +1066,7 @@ void QPerfusionMapReconstructionExtension::paintCursorSignal( )
 
 void QPerfusionMapReconstructionExtension::paintAIFSignal( )
 {
-    if(m_2DView->getViewer()->getInput())    //Si hi ha alguna cosa al viewer
+    if(m_2DView->getViewer()->hasInput())    //Si hi ha alguna cosa al viewer
     {
         double pos[3];
         Volume* inputVolume = m_2DView->getViewer()->getInput();

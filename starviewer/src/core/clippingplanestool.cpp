@@ -30,7 +30,7 @@ ClippingPlanesTool::ClippingPlanesTool(QViewer *viewer, QObject *parent)
     m_vtkQtConnections->Connect(m_boundingBoxClipperWidget, vtkCommand::InteractionEvent, this, SLOT(boundingBoxEventHandler(vtkObject*, unsigned long, void*,
                                                                                                                              void*, vtkCommand*)));
 
-    if (m_3DViewer->getInput())
+    if (m_3DViewer->hasInput())
     {
         updateInput();
     }
