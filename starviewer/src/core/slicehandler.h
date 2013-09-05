@@ -53,7 +53,7 @@ protected:
 
 protected:
     int m_minSliceValue;
-    int m_maxSliceValue;
+    int m_numberOfSlices;
     int m_numberOfPhases;
 
 private:
@@ -69,7 +69,6 @@ private:
     int m_slabThickness;
     int m_currentSlice;
     int m_currentPhase;
-    int m_numberOfSlices;
 
 };
 
