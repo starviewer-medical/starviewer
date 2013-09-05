@@ -27,6 +27,8 @@ public:
     int getCurrentSlice() const;
 
     int getMinimumSlice() const;
+
+    /// Returns the maximum slice that could be set, so it takes into account current slice thickness
     int getMaximumSlice() const;
     
     /// Returns the total number of slices on the spatial dimension for the current view plane
