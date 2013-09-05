@@ -62,6 +62,9 @@ public:
         return m_mainVolume;
     }
 
+    /// Returns true if viewer has some input set, false otherwise
+    bool hasInput() const;
+    
     /// Retorna el vtkRenderWindow
     vtkRenderWindow* getRenderWindow() const;
 
