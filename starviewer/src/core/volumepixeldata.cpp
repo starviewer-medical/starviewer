@@ -1,6 +1,7 @@
 #include "volumepixeldata.h"
 
 #include "volumepixeldataiterator.h"
+#include "voxel.h"
 
 #include <vtkImageChangeInformation.h>
 #include <vtkImageData.h>
@@ -161,12 +162,12 @@ bool VolumePixelData::computeCoordinateIndex(const double coordinate[3], int ind
     return inside;
 }
 
-bool VolumePixelData::getVoxelValue(double coordinate[3], QVector<double> &voxelValue, int phaseNumber, int numberOfPhases)
+bool VolumePixelData::getVoxelValue(double coordinate[3], Voxel &voxelValue, int phaseNumber, int numberOfPhases)
 {
     if (!this->getVtkData())
     {
         DEBUG_LOG("Dades VTK nul·les!");
-        voxelValue.clear();
+        voxelValue.reset();
         return false;
     }
 
@@ -183,18 +184,17 @@ bool VolumePixelData::getVoxelValue(double coordinate[3], QVector<double> &voxel
         vtkIdType pointId = this->getVtkData()->ComputePointId(voxelIndex);
         vtkDataArray *scalars = this->getVtkData()->GetPointData()->GetScalars();
         int numberOfComponents = scalars->GetNumberOfComponents();
-        voxelValue.resize(numberOfComponents);
 
         for (int i = 0; i < numberOfComponents; i++)
         {
-            voxelValue[i] = scalars->GetComponent(pointId, i);
+            voxelValue.addComponent(scalars->GetComponent(pointId, i));
         }
 
         return true;
     }
     else
     {
-        voxelValue.clear();
+        voxelValue.reset();
         return false;
     }
 }
