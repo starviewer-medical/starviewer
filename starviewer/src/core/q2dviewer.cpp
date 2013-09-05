@@ -1184,6 +1184,20 @@ void Q2DViewer::projectDICOMPointToCurrentDisplayedImage(const double pointToPro
         // Projectem el punt amb la matriu
         projectionMatrix->MultiplyPoint(homogeneousPointToProject, homogeneousProjectedPoint);
 
+        // Check if we have to apply vtk hack on projection matrix
+        if (getCurrentViewPlane() == OrthogonalPlane::YZPlane && vtkReconstructionHack)
+        {
+            // HACK Serveix de parxe pels casos de crani que no van bé.
+            // TODO Encara està per acabar, és una primera aproximació
+            projectionMatrix->SetElement(0, 0, 0);
+            projectionMatrix->SetElement(0, 1, 1);
+            projectionMatrix->SetElement(0, 2, 0);
+            // Projectem el punt amb la matriu
+            projectionMatrix->MultiplyPoint(homogeneousPointToProject, homogeneousProjectedPoint);
+        }
+        
+        projectionMatrix->Delete();
+        
         //
         // CORRECIÓ VTK!
         //
@@ -1193,45 +1207,12 @@ void Q2DViewer::projectDICOMPointToCurrentDisplayedImage(const double pointToPro
         // TODO provar si amb l'origen de m_mainVolume també funciona bé
         Image *firstImage = m_mainVolume->getImage(0);
         const double *ori = firstImage->getImagePositionPatient();
-
-        // Segons si hem fet una reconstrucció ortogonal haurem de fer
-        // alguns canvis sobre la projecció
-        switch (getCurrentViewPlane())
-        {
-            case OrthogonalPlane::XYPlane:
-                for (int i = 0; i < 3; i++)
-                {
-                    projectedPoint[i] = homogeneousProjectedPoint[i] + ori[i];
-                }
-                break;
-
-            case OrthogonalPlane::YZPlane:
-                {
-                    if (vtkReconstructionHack)
-                    {
-                        // HACK Serveix de parxe pels casos de crani que no van bé.
-                        // TODO Encara està per acabar, és una primera aproximació
-                        projectionMatrix->SetElement(0, 0, 0);
-                        projectionMatrix->SetElement(0, 1, 1);
-                        projectionMatrix->SetElement(0, 2, 0);
-                        // Projectem el punt amb la matriu
-                        projectionMatrix->MultiplyPoint(homogeneousPointToProject, homogeneousProjectedPoint);
-                    }
-
-                    projectedPoint[1] = homogeneousProjectedPoint[0] + ori[1];
-                    projectedPoint[2] = homogeneousProjectedPoint[1] + ori[2];
-                    projectedPoint[0] = homogeneousProjectedPoint[2] + ori[0];
-                }
-                break;
-
-            case OrthogonalPlane::XZPlane:
-                projectedPoint[0] = homogeneousProjectedPoint[0] + ori[0];
-                projectedPoint[2] = homogeneousProjectedPoint[1] + ori[2];
-                projectedPoint[1] = homogeneousProjectedPoint[2] + ori[1];
-                break;
-        }
-
-        projectionMatrix->Delete();
+        int xIndex, yIndex, zIndex;
+        getCurrentViewPlane().getXYZIndexes(xIndex, yIndex, zIndex);
+        
+        projectedPoint[xIndex] = homogeneousProjectedPoint[0] + ori[xIndex];
+        projectedPoint[yIndex] = homogeneousProjectedPoint[1] + ori[yIndex];
+        projectedPoint[zIndex] = homogeneousProjectedPoint[2] + ori[zIndex];
     }
     else
     {
