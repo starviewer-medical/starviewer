@@ -79,7 +79,7 @@ void PolylineROITool::handleEvent(long unsigned eventID)
 
 void PolylineROITool::handlePointAddition()
 {
-    if (m_2DViewer->getInput())
+    if (m_2DViewer->hasInput())
     {
         switch (m_2DViewer->getInteractor()->GetRepeatCount())
         {

@@ -100,7 +100,7 @@ void EditorTool::handleEvent(unsigned long eventID)
         break;
 
     case vtkCommand::MouseMoveEvent:
-        if (m_2DViewer->getInput() != 0)
+        if (m_2DViewer->hasInput())
         {
             this->setPaintCursor();
         }

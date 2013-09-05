@@ -136,7 +136,7 @@ void QViewerCINEController::record()
     {
         return;
     }
-    if (!m_2DViewer->getInput())
+    if (!m_2DViewer->hasInput())
     {
         return;
     }
@@ -305,7 +305,7 @@ void QViewerCINEController::resetCINEInformation(Volume *input)
 
 void QViewerCINEController::updateThickness(int thickness)
 {
-    if (!m_2DViewer->getInput())
+    if (!m_2DViewer->hasInput())
     {
         return;
     }

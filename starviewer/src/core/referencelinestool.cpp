@@ -112,7 +112,7 @@ void ReferenceLinesTool::setToolData(ToolData *data)
 void ReferenceLinesTool::updateProjectionLines()
 {
     // En cas que no sigui el viewer que estem modificant i que tingui input
-    if (!m_2DViewer->isActive() && m_2DViewer->getInput())
+    if (!m_2DViewer->isActive() && m_2DViewer->hasInput())
     {
         // Intentarem projectar el pla que hi ha a m_myData
         // Primer cal que comparteixin el mateix FrameOfReference
@@ -298,7 +298,7 @@ int ReferenceLinesTool::getIntersections(QVector<double> tlhc, QVector<double> t
 
 void ReferenceLinesTool::updateFrameOfReference()
 {
-    if (!m_2DViewer->getInput())
+    if (!m_2DViewer->hasInput())
     {
         // No hi ha frame of reference que valgui
         m_myFrameOfReferenceUID.clear();

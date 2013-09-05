@@ -177,7 +177,7 @@ void AngleTool::drawCircle()
 
 void AngleTool::handlePointAddition()
 {
-    if (m_2DViewer->getInput())
+    if (m_2DViewer->hasInput())
     {
         if (m_2DViewer->getInteractor()->GetRepeatCount() == 0)
         {

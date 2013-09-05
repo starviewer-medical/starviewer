@@ -31,7 +31,7 @@ CircleTool::~CircleTool()
 
 void CircleTool::handleEvent(unsigned long eventId)
 {
-    if (!m_2DViewer || !m_2DViewer->getInput())
+    if (!m_2DViewer || !m_2DViewer->hasInput())
     {
         return;
     }

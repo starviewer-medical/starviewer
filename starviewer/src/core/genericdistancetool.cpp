@@ -24,7 +24,7 @@ GenericDistanceTool::~GenericDistanceTool()
 
 void GenericDistanceTool::handleEvent(long unsigned eventID)
 {
-    if (!m_2DViewer || !m_2DViewer->getInput())
+    if (!m_2DViewer || !m_2DViewer->hasInput())
     {
         return;
     }
