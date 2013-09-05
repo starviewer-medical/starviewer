@@ -4,7 +4,6 @@
 #include <vtkRenderWindowInteractor.h>
 
 #include "q2dviewer.h"
-#include "volume.h"
 #include "drawer.h"
 #include "drawerline.h"
 #include "drawertext.h"
