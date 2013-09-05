@@ -46,7 +46,7 @@ EditorTool::~EditorTool()
 
 void EditorTool::initialize()
 {
-    if (m_2DViewer->getOverlayInput() != 0)
+    if (!m_2DViewer->getOverlayInput())
     {
         double range[2];
         m_2DViewer->getOverlayInput()->getScalarRange(range);
@@ -92,7 +92,7 @@ void EditorTool::handleEvent(unsigned long eventID)
     switch (eventID)
     {
     case vtkCommand::LeftButtonPressEvent:
-        if (m_2DViewer->getOverlayInput() != 0)
+        if (m_2DViewer->getOverlayInput())
         {
             m_isLeftButtonPressed = true;
             this->setEditorPoint();
@@ -267,7 +267,7 @@ void EditorTool::setEditorPoint()
 
 void EditorTool::setPaintCursor()
 {
-    if ((m_isLeftButtonPressed) && (m_2DViewer->getOverlayInput() != 0))
+    if (m_isLeftButtonPressed && !m_2DViewer->getOverlayInput())
     {
         setEditorPoint();
     }
