@@ -11,6 +11,7 @@ class Q2DViewer;
 class Volume;
 class DrawerText;
 class DrawerPolygon;
+class VolumePixelData;
 
 /**
     Tool que serveix per editar el volum sobreposat en un visor 2D
@@ -37,10 +38,10 @@ private:
     void generateRegion();
 
     /// Calcula el rang de valors d'intensitat vàlid a partir de \sa #m_magicSize i \see #m_magicFactor
-    void computeLevelRange();
+    void computeLevelRange(VolumePixelData *pixelData);
 
     /// Versió iterativa del region Growing
-    void computeRegionMask();
+    void computeRegionMask(VolumePixelData *pixelData);
 
     /// Fer un moviment des d'un índex cap a una direcció
     /// @param a, @param b índex del volum de la màscara que estem mirant en cada crida
@@ -64,7 +65,7 @@ private:
 
     /// Retorna la desviació estàndard dins la regió marcada per la magicSize
     /// @param a, @param b, @param c índex del volum de la màscara que estem mirant
-    double getStandardDeviation(int x, int y, int z);
+    double getStandardDeviation(int x, int y, int z, VolumePixelData *pixelData);
 
     /// Comença la generació de la regió màgica
     void startRegion();
@@ -79,7 +80,7 @@ private:
     void computeMaskBounds();
 
     ///Mini parche per obtenir el valor de Voxel depenent de si és Axial, Coronal o Sagital
-    double getVoxelValue(int x, int y, int z);
+    double getVoxelValue(int x, int y, int z, VolumePixelData *pixelData);
 
     /// Elimina la representacio temporal de la tool
     void deleteTemporalRepresentation();
