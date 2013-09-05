@@ -151,7 +151,7 @@ void MagicROITool::computeMaskBounds()
     m_maxY = extent[(yIndex * 2) + 1];
 }
 
-double MagicROITool::getVoxelValue(int x, int y, int z)
+double MagicROITool::getVoxelValue(int x, int y, int z, VolumePixelData *pixelData)
 {
     int xIndex, yIndex, zIndex;
     m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
@@ -162,15 +162,8 @@ double MagicROITool::getVoxelValue(int x, int y, int z)
     index[zIndex] = z;
 
     double value = 0;
-    VolumePixelData *volumePixelData = m_2DViewer->getInput()->getPixelData();
 
-    if (m_2DViewer->isThickSlabActive())
-    {
-        volumePixelData = new VolumePixelData();
-        volumePixelData->setData(m_2DViewer->getCurrentSlabProjection());
-    }
-
-    value = volumePixelData->getScalarComponentAsDouble(index[0], index[1], index[2]);
+    value = pixelData->getScalarComponentAsDouble(index[0], index[1], index[2]);
 
     return value;
 
@@ -263,35 +256,38 @@ void MagicROITool::generateRegion()
 {
     computeMaskBounds();
     
-    this->computeLevelRange();
+    VolumePixelData *pixelData = m_2DViewer->getInput()->getPixelData();
+    if (m_2DViewer->isThickSlabActive())
+    {
+        pixelData = new VolumePixelData();
+        pixelData->setData(m_2DViewer->getCurrentSlabProjection());
+    }
+
+    this->computeLevelRange(pixelData);
 
     // Posem a true els punts on la imatge està dins els llindard i connectat amb la llavor (region growing)
-    this->computeRegionMask();
+    this->computeRegionMask(pixelData);
 
+    if (m_2DViewer->isThickSlabActive())
+    {
+        delete pixelData;
+    }
+    
     // Trobem els punts frontera i creem el polígon
     this->computePolygon();
 
     m_2DViewer->render();
 }
 
-void MagicROITool::computeLevelRange()
+void MagicROITool::computeLevelRange(VolumePixelData *pixelData)
 {
+    if (!pixelData)
+    {
+        return;
+    }
+    
     int index[3];
-    VolumePixelData *pixelData = 0;
-    if (m_2DViewer->isThickSlabActive())
-    {
-        pixelData = new VolumePixelData();
-        pixelData->setData(m_2DViewer->getCurrentSlabProjection());
-    }
-    else
-    {
-        pixelData = m_2DViewer->getInput()->getPixelData();
-    }
     pixelData->computeCoordinateIndex(m_pickedPosition, index);
-    if (m_2DViewer->isThickSlabActive())
-    {
-        delete pixelData;
-    }
 
     int xIndex, yIndex, zIndex;
     m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
@@ -311,35 +307,20 @@ void MagicROITool::computeLevelRange()
         z = index[zIndex];
     }
     // Calculem la desviació estàndard dins la finestra que ens marca la magic size
-    double standardDeviation = getStandardDeviation(x, y, z);
+    double standardDeviation = getStandardDeviation(x, y, z, pixelData);
     
     // Calculem els llindars com el valor en el pixel +/- la desviació estàndard * magic factor
-    double value = this->getVoxelValue(x, y, z);
+    double value = this->getVoxelValue(x, y, z, pixelData);
     m_lowerLevel = value - m_magicFactor * standardDeviation;
     m_upperLevel = value + m_magicFactor * standardDeviation;
 }
 
-void MagicROITool::computeRegionMask()
+void MagicROITool::computeRegionMask(VolumePixelData *pixelData)
 {
     // Busquem el voxel inicial
-    VolumePixelData *pixelData = 0;
-    if (m_2DViewer->isThickSlabActive())
-    {
-        pixelData = new VolumePixelData();
-        pixelData->setData(m_2DViewer->getCurrentSlabProjection());
-    }
-    else
-    {
-        pixelData = m_2DViewer->getInput()->getPixelData();
-    }
-    
     int index[3];
     pixelData->computeCoordinateIndex(m_pickedPosition, index);
-    if (m_2DViewer->isThickSlabActive())
-    {
-        delete pixelData;
-    }
-
+    
     int xIndex, yIndex, zIndex;
     m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
     
@@ -370,7 +351,7 @@ void MagicROITool::computeRegionMask()
     
     // TODO Desfà els índexs projectats a 2D als originals 3D per poder obtenir el valor
     // Corretgir-ho d'una millor manera perquè no calgui fer servir aquest mètode (guardar els índexs x,y,z o d'una altra manera)
-    double value = this->getVoxelValue(x, y, z);
+    double value = this->getVoxelValue(x, y, z, pixelData);
     
     if ((value >= m_lowerLevel) && (value <= m_upperLevel))
     {
@@ -394,7 +375,7 @@ void MagicROITool::computeRegionMask()
         this->doMovement(x, y, i);
         // TODO Desfà els índexs projectats a 2D als originals 3D per poder obtenir el valor
         // Corretgir-ho d'una millor manera perquè no calgui fer servir aquest mètode (guardar els índexs x,y,z o d'una altra manera)
-        value = this->getVoxelValue(x, y, z);
+        value = this->getVoxelValue(x, y, z, pixelData);
 
         if ((value >= m_lowerLevel) && (value <= m_upperLevel))
         {
@@ -422,7 +403,7 @@ void MagicROITool::computeRegionMask()
             {
                 // TODO Desfà els índexs projectats a 2D als originals 3D per poder obtenir el valor
                 // Corretgir-ho d'una millor manera perquè no calgui fer servir aquest mètode (guardar els índexs x,y,z o d'una altra manera)
-                value = this->getVoxelValue(x, y, z);
+                value = this->getVoxelValue(x, y, z, pixelData);
                 maskIndex = computeMaskVectorIndex(x, y, m_maxX);
                 if ((value >= m_lowerLevel) && (value <= m_upperLevel) && (!m_mask[maskIndex]))
                 {
@@ -655,7 +636,7 @@ bool MagicROITool::isLoopReached()
     return ((qAbs(firstVertix[0] - lastVertix[0]) < 0.0001) && (qAbs(firstVertix[1] - lastVertix[1]) < 0.0001));
 }
 
-double MagicROITool::getStandardDeviation(int x, int y, int z)
+double MagicROITool::getStandardDeviation(int x, int y, int z, VolumePixelData *pixelData)
 {
     int minX = qMax(x - MagicSize, m_minX);
     int maxX = qMin(x + MagicSize, m_maxX);
@@ -670,7 +651,7 @@ double MagicROITool::getStandardDeviation(int x, int y, int z)
     {
         for (int j = minY; j <= maxY; ++j)
         {
-            value = this->getVoxelValue(i, j, z);
+            value = this->getVoxelValue(i, j, z, pixelData);
             mean += value;
         }
     }
@@ -684,7 +665,7 @@ double MagicROITool::getStandardDeviation(int x, int y, int z)
     {
         for (int j = minY; j <= maxY; ++j)
         {
-            value = this->getVoxelValue(i, j, z);
+            value = this->getVoxelValue(i, j, z, pixelData);
             deviation += qPow(value - mean, 2);
         }
     }
