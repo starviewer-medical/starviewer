@@ -120,7 +120,7 @@ void MagnifyingGlassTool::updateMagnifiedView()
     QPoint eventPosition = m_2DViewer->getEventPosition();
     QSize renderWindowSize = m_2DViewer->getRenderWindowSize();
 
-    QRect renderWindowBounds(QPoint(0, 0), renderWindowSize);    
+    QRect renderWindowBounds(QPoint(0, 0), renderWindowSize);
     if (!renderWindowBounds.contains(eventPosition))
     {
         // Si el punt està fora de la render window amaguem i sortim

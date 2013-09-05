@@ -151,6 +151,7 @@ DrawerPrimitive* EraserTool::getErasablePrimitive(double point[3], const Orthogo
 
     return nearestPrimitive;
 }
+
 void EraserTool::reset()
 {
     if (m_polygon)
