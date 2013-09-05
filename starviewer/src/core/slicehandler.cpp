@@ -14,6 +14,7 @@ SliceHandler::SliceHandler(QObject *parent)
     m_currentSlice = 0;
     m_maxSliceValue = 0;
     m_minSliceValue = 0;
+    m_numberOfSlices = 0;
     m_currentPhase = 0;
     m_numberOfPhases = 1;
     m_slabThickness = 1;
@@ -42,6 +43,7 @@ void SliceHandler::setViewPlane(const OrthogonalPlane &viewPlane)
     {
         // Update the slice range for the new view
         m_volume->getSliceRange(m_minSliceValue, m_maxSliceValue, viewPlane);
+        m_numberOfSlices = m_maxSliceValue;
     }
 }
 
@@ -71,6 +73,11 @@ int SliceHandler::getMinimumSlice() const
 int SliceHandler::getMaximumSlice() const
 {
     return m_maxSliceValue;
+}
+
+int SliceHandler::getNumberOfSlices() const
+{
+    return m_numberOfSlices;
 }
 
 void SliceHandler::setPhase(int phase)
