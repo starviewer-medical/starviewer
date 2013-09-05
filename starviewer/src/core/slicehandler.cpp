@@ -12,7 +12,6 @@ SliceHandler::SliceHandler(QObject *parent)
  : QObject(parent), m_volume(0)
 {
     m_currentSlice = 0;
-    m_maxSliceValue = 0;
     m_minSliceValue = 0;
     m_numberOfSlices = 0;
     m_currentPhase = 0;
@@ -42,8 +41,7 @@ void SliceHandler::setViewPlane(const OrthogonalPlane &viewPlane)
     if (m_volume)
     {
         // Update the slice range for the new view
-        m_volume->getSliceRange(m_minSliceValue, m_maxSliceValue, viewPlane);
-        m_numberOfSlices = m_maxSliceValue;
+        m_volume->getSliceRange(m_minSliceValue, m_numberOfSlices, viewPlane);
     }
 }
 
@@ -56,7 +54,7 @@ void SliceHandler::setSlice(int slice)
 {
     if (m_currentSlice != slice)
     {
-        m_currentSlice = MathTools::getBoundedValue(slice, 0, m_maxSliceValue - m_slabThickness + 1, isLoopEnabledForSlices());
+        m_currentSlice = MathTools::getBoundedValue(slice, 0, m_numberOfSlices - m_slabThickness + 1, isLoopEnabledForSlices());
     }
 }
 
@@ -72,7 +70,7 @@ int SliceHandler::getMinimumSlice() const
 
 int SliceHandler::getMaximumSlice() const
 {
-    return m_maxSliceValue;
+    return m_numberOfSlices;
 }
 
 int SliceHandler::getNumberOfSlices() const
@@ -137,10 +135,10 @@ void SliceHandler::setSlabThickness(int thickness)
                 // and thus we must check if it will be out of upper bounds to update the lower bound accordingly
                 int lastSlabSlice = getLastSlabSlice() + (thicknessDifference / 2) + 1;
                 
-                if (lastSlabSlice > m_maxSliceValue)
+                if (lastSlabSlice > m_numberOfSlices)
                 {
                     // If upper bound is surpassed, must decrease lower bound
-                    m_currentSlice = m_maxSliceValue - thickness + 1;
+                    m_currentSlice = m_numberOfSlices - thickness + 1;
                 }
             }
             else
@@ -243,7 +241,7 @@ bool SliceHandler::hasSlabThicknessValueToBeUpated(int thickness)
         return false;
     }
     
-    if (thickness > m_maxSliceValue + 1)
+    if (thickness > m_numberOfSlices + 1)
     {
         DEBUG_LOG("New thickness exceeds maximum permitted thickness, it remains the same.");
         return false;

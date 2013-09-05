@@ -11,7 +11,7 @@ public:
     void setSliceRange(int min, int max)
     {
         m_minSliceValue = min;
-        m_maxSliceValue = max;
+        m_numberOfSlices = max;
     }
 
     void setNumberOfPhases(int value)
