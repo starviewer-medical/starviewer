@@ -2022,4 +2022,14 @@ void Q2DViewer::setVolumeOpacity(int index, double opacity)
     m_volumeDisplayUnits.at(index)->getImageActor()->SetOpacity(opacity);
 }
 
+void Q2DViewer::setVolumeTransferFunction(int index, const TransferFunction &transferFunction)
+{
+    m_volumeDisplayUnits.at(index)->getImagePipeline()->setTransferFunction(transferFunction);
+}
+
+void Q2DViewer::clearVolumeTransferFunction(int index)
+{
+    m_volumeDisplayUnits.at(index)->getImagePipeline()->clearTransferFunction();
+}
+
 };  // End namespace udg
