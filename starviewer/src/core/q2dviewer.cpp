@@ -1520,15 +1520,13 @@ void Q2DViewer::updateSliceAnnotation(int currentSlice, int maxSlice, int curren
             }
         }
 
+        // Setup the slice/slab annotation
+        lowerLeftText += tr("Slice: %1").arg(currentSlice);
         if (m_volumeDisplayUnits.first()->getSliceHandler()->getSlabThickness() > 1)
         {
-            // TODO Potser hauríem de tenir una variable "slabRange"
-            lowerLeftText += tr("Slice: %1-%2/%3").arg(currentSlice).arg(m_volumeDisplayUnits.first()->getSliceHandler()->getLastSlabSlice() + 1).arg(maxSlice);
+            lowerLeftText += tr("-%2").arg(m_volumeDisplayUnits.first()->getSliceHandler()->getLastSlabSlice() + 1);
         }
-        else
-        {
-            lowerLeftText += tr("Slice: %1/%2").arg(currentSlice).arg(maxSlice);
-        }
+        lowerLeftText += tr("/%1").arg(maxSlice);
         
         // Si tenim fases
         if (maxPhase > 1)
