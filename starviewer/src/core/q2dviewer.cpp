@@ -48,8 +48,6 @@
 #include <vtkProp.h>
 #include <vtkImageActor.h>
 #include <vtkScalarsToColors.h>
-// Projecció de punts
-#include <vtkMatrix4x4.h>
 
 namespace udg {
 
@@ -1163,51 +1161,9 @@ void Q2DViewer::projectDICOMPointToCurrentDisplayedImage(const double pointToPro
     ImagePlane *currentPlane = getCurrentImagePlane(vtkReconstructionHack);
     if (currentPlane)
     {
-        // Recollim les dades del pla actual sobre el qual volem projectar el punt de l'altre pla
-        double currentPlaneRowVector[3], currentPlaneColumnVector[3], currentPlaneNormalVector[3], currentPlaneOrigin[3];
-        currentPlane->getRowDirectionVector(currentPlaneRowVector);
-        currentPlane->getColumnDirectionVector(currentPlaneColumnVector);
-        currentPlane->getNormalVector(currentPlaneNormalVector);
-        currentPlane->getOrigin(currentPlaneOrigin);
-        delete currentPlane;
-
-        // A partir d'aquestes dades creem la matriu de projecció,
-        // que projectarà el punt donat sobre el pla actual
-        vtkMatrix4x4 *projectionMatrix = vtkMatrix4x4::New();
-        projectionMatrix->Identity();
-        for (int column = 0; column < 3; column++)
-        {
-            projectionMatrix->SetElement(0, column, currentPlaneRowVector[column]);
-            projectionMatrix->SetElement(1, column, currentPlaneColumnVector[column]);
-            projectionMatrix->SetElement(2, column, currentPlaneNormalVector[column]);
-        }
-
-        // Un cop tenim la matriu podem fer la projeccio
-        // necessitem el punt en coordenades homogenies
-        double homogeneousPointToProject[4], homogeneousProjectedPoint[4];
-        for (int i = 0; i < 3; i++)
-        {
-            // Desplacem el punt a l'origen del pla
-            homogeneousPointToProject[i] = pointToProject[i] - currentPlaneOrigin[i];
-        }
-        homogeneousPointToProject[3] = 1.0;
-
-        // Projectem el punt amb la matriu
-        projectionMatrix->MultiplyPoint(homogeneousPointToProject, homogeneousProjectedPoint);
-
-        // Check if we have to apply vtk hack on projection matrix
-        if (getCurrentViewPlane() == OrthogonalPlane::YZPlane && vtkReconstructionHack)
-        {
-            // HACK Serveix de parxe pels casos de crani que no van bé.
-            // TODO Encara està per acabar, és una primera aproximació
-            projectionMatrix->SetElement(0, 0, 0);
-            projectionMatrix->SetElement(0, 1, 1);
-            projectionMatrix->SetElement(0, 2, 0);
-            // Projectem el punt amb la matriu
-            projectionMatrix->MultiplyPoint(homogeneousPointToProject, homogeneousProjectedPoint);
-        }
-        
-        projectionMatrix->Delete();
+        // First we project the point on the current image plane
+        double planeProjectedPoint[3];
+        currentPlane->projectPoint(pointToProject, planeProjectedPoint, getCurrentViewPlane() == OrthogonalPlane::YZPlane && vtkReconstructionHack);
         
         //
         // CORRECIÓ VTK!
@@ -1221,9 +1177,9 @@ void Q2DViewer::projectDICOMPointToCurrentDisplayedImage(const double pointToPro
         int xIndex, yIndex, zIndex;
         getCurrentViewPlane().getXYZIndexes(xIndex, yIndex, zIndex);
         
-        projectedPoint[xIndex] = homogeneousProjectedPoint[0] + ori[xIndex];
-        projectedPoint[yIndex] = homogeneousProjectedPoint[1] + ori[yIndex];
-        projectedPoint[zIndex] = homogeneousProjectedPoint[2] + ori[zIndex];
+        projectedPoint[xIndex] = planeProjectedPoint[0] + ori[xIndex];
+        projectedPoint[yIndex] = planeProjectedPoint[1] + ori[yIndex];
+        projectedPoint[zIndex] = planeProjectedPoint[2] + ori[zIndex];
     }
     else
     {
