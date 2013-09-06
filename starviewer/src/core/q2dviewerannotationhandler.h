@@ -46,6 +46,9 @@ private:
     void updatePatientInformationAnnotation();
     void updateWindowInformationAnnotation();
     
+    /// Returns the current slice location information, if any
+    QString getSliceLocationAnnotation();
+    
     /// Creates all the annotation actors
     void createAnnotations();
     

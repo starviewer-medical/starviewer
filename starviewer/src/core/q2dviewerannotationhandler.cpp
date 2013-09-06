@@ -242,33 +242,9 @@ void Q2DViewerAnnotationHandler::updateSliceAnnotation()
     if (m_enabledAnnotations.testFlag(SliceAnnotation))
     {
         QString lowerLeftText;
-        // Slice location will be present only when we are on the original acquisition plane
-        if (m_2DViewer->getView() == OrthogonalPlane::XYPlane)
-        {
-            Image *image = m_2DViewer->getCurrentDisplayedImage();
-            if (image)
-            {
-                QString location = image->getSliceLocation();
-                if (!location.isEmpty())
-                {
-                    lowerLeftText = QObject::tr("Loc: %1").arg(location.toDouble(), 0, 'f', 2);
-                    if (m_2DViewer->isThickSlabActive())
-                    {
-                        // TODO We should have high level methods to get consecutive images according to current thickness, phase, etc.
-                        Image *secondImage = m_2DViewer->getInput()->getImage(
-                            // TODO We need a getLastSlabSlice() method on Q2Dviewer to avoid doing this computing
-                            m_2DViewer->getCurrentSlice() + m_2DViewer->getSlabThickness() - 1,
-                            m_2DViewer->getCurrentPhase());
-                        if (secondImage)
-                        {
-                            lowerLeftText += QObject::tr("-%1").arg(secondImage->getSliceLocation().toDouble(), 0, 'f', 2);
-                        }
-                    }
-                    lowerLeftText += "\n";
-                }
-            }
-        }
-
+        
+        lowerLeftText = getSliceLocationAnnotation();
+        
         // Setup the slice/slab annotation
         lowerLeftText += QObject::tr("Slice: %1").arg(m_2DViewer->getCurrentSlice() + 1);
         if (m_2DViewer->isThickSlabActive())
@@ -372,6 +348,40 @@ void Q2DViewerAnnotationHandler::updateWindowInformationAnnotation()
     }
     
     m_cornerAnnotations->SetText(UpperLeftCornerIndex, qPrintable(m_upperLeftText));
+}
+
+QString Q2DViewerAnnotationHandler::getSliceLocationAnnotation()
+{
+    QString sliceLocation;
+    
+    // Slice location will be present only when we are on the original acquisition plane
+    if (m_2DViewer->getView() == OrthogonalPlane::XYPlane)
+    {
+        Image *image = m_2DViewer->getCurrentDisplayedImage();
+        if (image)
+        {
+            QString location = image->getSliceLocation();
+            if (!location.isEmpty())
+            {
+                sliceLocation = QObject::tr("Loc: %1").arg(location.toDouble(), 0, 'f', 2);
+                if (m_2DViewer->isThickSlabActive())
+                {
+                    // TODO We should have high level methods to get consecutive images according to current thickness, phase, etc.
+                    Image *secondImage = m_2DViewer->getInput()->getImage(
+                        // TODO We need a getLastSlabSlice() method on Q2Dviewer to avoid doing this computing
+                        m_2DViewer->getCurrentSlice() + m_2DViewer->getSlabThickness() - 1,
+                        m_2DViewer->getCurrentPhase());
+                    if (secondImage)
+                    {
+                        sliceLocation += QObject::tr("-%1").arg(secondImage->getSliceLocation().toDouble(), 0, 'f', 2);
+                    }
+                }
+                sliceLocation += "\n";
+            }
+        }
+    }
+
+    return sliceLocation;
 }
 
 void Q2DViewerAnnotationHandler::createAnnotations()
