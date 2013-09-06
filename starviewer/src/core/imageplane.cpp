@@ -4,6 +4,7 @@
 #include <QString>
 // Vtk's
 #include <vtkPlane.h>
+#include <vtkMatrix4x4.h>
 
 namespace udg {
 
@@ -315,6 +316,62 @@ double ImagePlane::getDistanceToPoint(double point[3])
     
     // TODO An alternative method would be computing distance with QVector3D::distanceToPlane()
     return vtkPlane::DistanceToPlane(point, currentNormalVector, m_origin);
+}
+
+void ImagePlane::projectPoint(const double pointToProject[3], double projectedPoint[3], bool vtkReconstructionHack)
+{
+    // First gather the needed plane data to project the point
+    double currentPlaneRowVector[3];
+    double currentPlaneColumnVector[3];
+    double currentPlaneNormalVector[3];
+    double currentPlaneOrigin[3];
+    getRowDirectionVector(currentPlaneRowVector);
+    getColumnDirectionVector(currentPlaneColumnVector);
+    getNormalVector(currentPlaneNormalVector);
+    getOrigin(currentPlaneOrigin);
+
+    // Then create the projection matrix
+    vtkMatrix4x4 *projectionMatrix = vtkMatrix4x4::New();
+    projectionMatrix->Identity();
+    for (int column = 0; column < 3; column++)
+    {
+        projectionMatrix->SetElement(0, column, currentPlaneRowVector[column]);
+        projectionMatrix->SetElement(1, column, currentPlaneColumnVector[column]);
+        projectionMatrix->SetElement(2, column, currentPlaneNormalVector[column]);
+    }
+
+    // Once we have the matrix, we can project the point i homogeneous coordinates
+    double homogeneousPointToProject[4];
+    for (int i = 0; i < 3; i++)
+    {
+        // We must shift the point to project to the plane origin
+        homogeneousPointToProject[i] = pointToProject[i] - currentPlaneOrigin[i];
+    }
+    homogeneousPointToProject[3] = 1.0;
+
+    // Project the point with the matrix
+    double homogeneousProjectedPoint[4];
+    projectionMatrix->MultiplyPoint(homogeneousPointToProject, homogeneousProjectedPoint);
+    
+    // Check if we have to apply vtk hack on projection matrix
+    if (vtkReconstructionHack)
+    {
+        // HACK Patch for the cranium cases that are not working properly (gantry tilt).
+        // TODO This is a first aproximation, must be more tested still
+        projectionMatrix->SetElement(0, 0, 0);
+        projectionMatrix->SetElement(0, 1, 1);
+        projectionMatrix->SetElement(0, 2, 0);
+        // Project the point with the matrix
+        projectionMatrix->MultiplyPoint(homogeneousPointToProject, homogeneousProjectedPoint);
+    }
+    
+    projectionMatrix->Delete();
+
+    // Convert the homogeneous projected point to the 3D projected point to return
+    for (int i = 0; i < 3; ++i)
+    {
+        projectedPoint[i] = homogeneousProjectedPoint[i];
+    }
 }
 
 void ImagePlane::updateCenter()

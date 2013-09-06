@@ -87,6 +87,9 @@ public:
     /// Returns the distance from the given point to the current plane
     double getDistanceToPoint(double point[3]);
     
+    /// Computes the projection of pointToProject on this image plane and sets it on projectedPoint parameter
+    void projectPoint(const double pointToProject[3], double projectedPoint[3], bool vtkReconstructionHack = false);
+    
     /// Quan es modifica algun dels vectors directors del pla es modifica el centre.
     void updateCenter();
 
