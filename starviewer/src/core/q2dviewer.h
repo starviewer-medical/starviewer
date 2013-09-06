@@ -332,7 +332,7 @@ private:
     /// Refresca els valors de les annotacions de llesca. Si els valors referents
     /// a les fases són < 2 no es printarà informació de fases
     /// Si hi ha thick slab, mostrarà el rang d'aquest
-    void updateSliceAnnotation(int currentSlice, int maxSlice, int currentPhase = 0, int maxPhase = 0);
+    void updateSliceAnnotation();
 
     /// Crea i inicialitza totes les anotacions que apareixeran per pantalla
     void createAnnotations();
