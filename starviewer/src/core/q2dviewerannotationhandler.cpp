@@ -26,10 +26,10 @@ Q2DViewerAnnotationHandler::Q2DViewerAnnotationHandler(Q2DViewer *viewer)
 
 Q2DViewerAnnotationHandler::~Q2DViewerAnnotationHandler()
 {
-    m_patientOrientationTextActor[0]->Delete();
-    m_patientOrientationTextActor[1]->Delete();
-    m_patientOrientationTextActor[2]->Delete();
-    m_patientOrientationTextActor[3]->Delete();
+    for (int i = 0; i < 4; ++i)
+    {
+        m_patientOrientationTextActor[i]->Delete();
+    }
     m_cornerAnnotations->Delete();
 }
 
