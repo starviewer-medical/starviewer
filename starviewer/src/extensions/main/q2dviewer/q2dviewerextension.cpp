@@ -531,9 +531,8 @@ void Q2DViewerExtension::activateNewViewer(Q2DViewerWidget *newViewerWidget)
 {
     // Activem/Desactivem les capes d'annotacions segons l'estat del botó
     // Informació de l'estudi
-    newViewerWidget->getViewer()->enableAnnotation(Q2DViewer::WindowInformationAnnotation | Q2DViewer::PatientOrientationAnnotation |
-                                                   Q2DViewer::SliceAnnotation | Q2DViewer::PatientInformationAnnotation |
-                                                   Q2DViewer::AcquisitionInformationAnnotation, m_showViewersTextualInformationAction->isChecked());
+    newViewerWidget->getViewer()->enableAnnotation(WindowInformationAnnotation | PatientOrientationAnnotation | SliceAnnotation | PatientInformationAnnotation |
+                                                   AcquisitionInformationAnnotation, m_showViewersTextualInformationAction->isChecked());
     // Overlays
     newViewerWidget->getViewer()->showImageOverlays(m_showOverlaysAction->isChecked());
     // Shutters
@@ -668,11 +667,11 @@ void Q2DViewerExtension::showViewersTextualInformation(bool show)
 
     for (int viewerNumber = 0; viewerNumber < numberOfViewers; ++viewerNumber)
     {
-        m_workingArea->getViewerWidget(viewerNumber)->getViewer()->enableAnnotation(Q2DViewer::WindowInformationAnnotation |
-                                                                                    Q2DViewer::PatientOrientationAnnotation |
-                                                                                    Q2DViewer::SliceAnnotation |
-                                                                                    Q2DViewer::PatientInformationAnnotation |
-                                                                                    Q2DViewer::AcquisitionInformationAnnotation, show);
+        m_workingArea->getViewerWidget(viewerNumber)->getViewer()->enableAnnotation(WindowInformationAnnotation |
+                                                                                    PatientOrientationAnnotation |
+                                                                                    SliceAnnotation |
+                                                                                    PatientInformationAnnotation |
+                                                                                    AcquisitionInformationAnnotation, show);
     }
 }
 

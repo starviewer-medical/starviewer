@@ -4,8 +4,6 @@
 #include "logging.h"
 #include "image.h"
 #include "series.h"
-#include "study.h"
-#include "patient.h"
 #include "imageplane.h"
 #include "mathtools.h"
 #include "imageorientationoperationsmapper.h"
@@ -29,6 +27,7 @@
 #include "volumedisplayunit.h"
 #include "slicelocator.h"
 #include "transferfunctionmodel.h"
+#include "q2dviewerannotationhandler.h"
 // Qt
 #include <QResizeEvent>
 #include <QImage>
@@ -40,12 +39,6 @@
 #include <vtkPropPicker.h>
 #include <QVTKWidget.h>
 #include <vtkWindowToImageFilter.h>
-// Anotacions
-#include <vtkCornerAnnotation.h>
-#include <vtkTextActor.h>
-#include <vtkTextProperty.h>
-#include <vtkProperty2D.h>
-#include <vtkProp.h>
 #include <vtkImageActor.h>
 #include <vtkScalarsToColors.h>
 
@@ -55,8 +48,8 @@ const QString Q2DViewer::OverlaysDrawerGroup("Overlays");
 const QString Q2DViewer::DummyVolumeObjectName("Dummy Volume");
 
 Q2DViewer::Q2DViewer(QWidget *parent)
-: QViewer(parent), m_overlayVolume(0), m_blender(0), m_imagePointPicker(0), m_cornerAnnotations(0), m_enabledAnnotations(Q2DViewer::AllAnnotation),
-  m_overlapMethod(Q2DViewer::Blend), m_rotateFactor(0), m_applyFlip(false), m_isImageFlipped(false), m_slabProjectionMode(AccumulatorFactory::Maximum)
+: QViewer(parent), m_overlayVolume(0), m_blender(0), m_imagePointPicker(0), m_overlapMethod(Q2DViewer::Blend), m_rotateFactor(0), m_applyFlip(false),
+  m_isImageFlipped(false), m_slabProjectionMode(AccumulatorFactory::Maximum)
 {
     m_volumeReaderManager = new VolumeReaderManager(this);
     m_inputFinishedCommand = NULL;
@@ -68,7 +61,7 @@ Q2DViewer::Q2DViewer(QWidget *parent)
     m_volumeDisplayUnits.append(new VolumeDisplayUnit());
 
     // Creem anotacions i actors
-    createAnnotations();
+    m_annotationsHandler = new Q2DViewerAnnotationHandler(this);
     addActors();
 
     // Creem el picker per obtenir les coordenades de la imatge
@@ -98,11 +91,6 @@ Q2DViewer::~Q2DViewer()
     }
 
     // Fem delete de tots els objectes vtk dels que hem fet un ::New()
-    m_patientOrientationTextActor[0]->Delete();
-    m_patientOrientationTextActor[1]->Delete();
-    m_patientOrientationTextActor[2]->Delete();
-    m_patientOrientationTextActor[3]->Delete();
-    m_cornerAnnotations->Delete();
     m_imagePointPicker->Delete();
 
     // Fem delete d'altres objectes vtk en cas que s'hagin hagut de crear
@@ -120,47 +108,6 @@ Q2DViewer::~Q2DViewer()
 
     delete m_currentThickSlabPixelData;
     deleteInputFinishedCommand();
-}
-
-void Q2DViewer::createAnnotations()
-{
-    // Contenidor d'anotacions
-    m_cornerAnnotations = vtkCornerAnnotation::New();
-    m_cornerAnnotations->GetTextProperty()->SetFontFamilyToArial();
-    m_cornerAnnotations->GetTextProperty()->ShadowOn();
-
-    // Anotacions de l'orientació del pacient
-    createOrientationAnnotations();
-}
-
-void Q2DViewer::createOrientationAnnotations()
-{
-    // Informació de referència de la orientació del pacient
-    for (int i = 0; i < 4; i++)
-    {
-        m_patientOrientationTextActor[i] = vtkTextActor::New();
-        m_patientOrientationTextActor[i]->SetTextScaleModeToNone();
-        m_patientOrientationTextActor[i]->GetTextProperty()->SetFontSize(18);
-        m_patientOrientationTextActor[i]->GetTextProperty()->BoldOn();
-        m_patientOrientationTextActor[i]->GetTextProperty()->SetFontFamilyToArial();
-        m_patientOrientationTextActor[i]->GetTextProperty()->ShadowOn();
-
-        m_patientOrientationTextActor[i]->GetPositionCoordinate()->SetCoordinateSystemToNormalizedViewport();
-        m_patientOrientationTextActor[i]->GetPosition2Coordinate()->SetCoordinateSystemToNormalizedViewport();
-    }
-    // Ara posem la informació concreta de cadascuna de les referència d'orientació. 0-4 en sentit anti-horari, començant per 0 = esquerra de la pantalla
-    m_patientOrientationTextActor[0]->GetTextProperty()->SetJustificationToLeft();
-    m_patientOrientationTextActor[0]->SetPosition(0.01, 0.5);
-
-    m_patientOrientationTextActor[1]->GetTextProperty()->SetJustificationToCentered();
-    m_patientOrientationTextActor[1]->SetPosition(0.5, 0.01);
-
-    m_patientOrientationTextActor[2]->GetTextProperty()->SetJustificationToRight();
-    m_patientOrientationTextActor[2]->SetPosition(0.99, 0.5);
-
-    m_patientOrientationTextActor[3]->GetTextProperty()->SetJustificationToCentered();
-    m_patientOrientationTextActor[3]->GetTextProperty()->SetVerticalJustificationToTop();
-    m_patientOrientationTextActor[3]->SetPosition(0.5, 0.99);
 }
 
 void Q2DViewer::rotateClockWise(int times)
@@ -301,33 +248,6 @@ QString Q2DViewer::getCurrentAnatomicalPlaneLabel() const
     return AnatomicalPlane::getLabelFromPatientOrientation(getCurrentDisplayedImagePatientOrientation());
 }
 
-void Q2DViewer::updatePatientOrientationAnnotation()
-{
-    // Obtenim l'orientació que estem presentant de la imatge actual
-    PatientOrientation currentPatientOrientation = getCurrentDisplayedImagePatientOrientation();
-
-    // Correspondència d'índexs: 0:Left, 1:Bottom, 2:Right, 3:Top
-    m_patientOrientationText[0] = PatientOrientation::getOppositeOrientationLabel(currentPatientOrientation.getRowDirectionLabel());
-    m_patientOrientationText[1] = currentPatientOrientation.getColumnDirectionLabel();
-    m_patientOrientationText[2] = currentPatientOrientation.getRowDirectionLabel();
-    m_patientOrientationText[3] = PatientOrientation::getOppositeOrientationLabel(currentPatientOrientation.getColumnDirectionLabel());
-    
-    bool textActorShouldBeVisible = m_enabledAnnotations.testFlag(Q2DViewer::PatientOrientationAnnotation);
-
-    for (int i = 0; i < 4; ++i)
-    {
-        if (!m_patientOrientationText[i].isEmpty())
-        {
-            m_patientOrientationTextActor[i]->SetInput(qPrintable(m_patientOrientationText[i]));
-            m_patientOrientationTextActor[i]->SetVisibility(textActorShouldBeVisible);
-        }
-        else
-        {
-            m_patientOrientationTextActor[i]->SetVisibility(false);
-        }
-    }
-}
-
 void Q2DViewer::setDefaultOrientation(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane)
 {
     if (!m_mainVolume)
@@ -365,50 +285,6 @@ void Q2DViewer::updatePreferredImageOrientation()
     }
 }
 
-void Q2DViewer::refreshAnnotations()
-{
-    if (!m_mainVolume)
-    {
-        return;
-    }
-
-    if (m_enabledAnnotations.testFlag(Q2DViewer::PatientInformationAnnotation))
-    {
-        m_cornerAnnotations->SetText(3, qPrintable(m_upperRightText));
-        m_cornerAnnotations->SetText(1, qPrintable(m_lowerRightText.trimmed()));
-    }
-    else
-    {
-        m_cornerAnnotations->SetText(3, "");
-        m_cornerAnnotations->SetText(1, "");
-    }
-
-    if (m_enabledAnnotations.testFlag(Q2DViewer::PatientOrientationAnnotation))
-    {
-        for (int j = 0; j < 4; j++)
-        {
-            if (!m_patientOrientationText[j].isEmpty())
-            {
-                m_patientOrientationTextActor[j]->VisibilityOn();
-            }
-            // Si l'etiqueta és buida, el mostrem invisible sempre ja que no tenim informació vàlida que mostrar
-            else
-            {
-                m_patientOrientationTextActor[j]->VisibilityOff();
-            }
-        }
-    }
-    else
-    {
-        for (int j = 0; j < 4; j++)
-        {
-            m_patientOrientationTextActor[j]->VisibilityOff();
-        }
-    }
-
-    updateAnnotationsInformation(Q2DViewer::WindowInformationAnnotation | Q2DViewer::SliceAnnotation);
-}
-
 double Q2DViewer::getCurrentSliceThickness() const
 {
     return m_volumeDisplayUnits.first()->getSliceHandler()->getSliceThickness();
@@ -431,20 +307,9 @@ int Q2DViewer::getNumberOfSlices() const
 
 void Q2DViewer::addActors()
 {
-    Q_ASSERT(m_cornerAnnotations);
-    Q_ASSERT(m_patientOrientationTextActor[0]);
-    Q_ASSERT(m_patientOrientationTextActor[1]);
-    Q_ASSERT(m_patientOrientationTextActor[2]);
-    Q_ASSERT(m_patientOrientationTextActor[3]);
-
     vtkRenderer *renderer = getRenderer();
     Q_ASSERT(renderer);
     // Anotacions de texte
-    renderer->AddViewProp(m_cornerAnnotations);
-    renderer->AddViewProp(m_patientOrientationTextActor[0]);
-    renderer->AddViewProp(m_patientOrientationTextActor[1]);
-    renderer->AddViewProp(m_patientOrientationTextActor[2]);
-    renderer->AddViewProp(m_patientOrientationTextActor[3]);
     renderer->AddViewProp(m_volumeDisplayUnits.first()->getImageActor());
     // TODO Colocar això en un lloc mes adient
     vtkCamera *camera = getActiveCamera();
@@ -653,8 +518,7 @@ void Q2DViewer::setNewVolumes(const QList<Volume*> &volumes, bool setViewerStatu
 
     printVolumeInformation();
 
-    updatePatientAnnotationInformation();
-    enableAnnotation(m_enabledAnnotations);
+    m_annotationsHandler->updatePatientAnnotationInformation();
 
     // Actualitzem la informació de window level
     updateWindowLevelData();
@@ -812,7 +676,7 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
     // Important, cal desactivar el thickslab abans de fer m_currentViewPlane = view, sinó falla amb l'update extent
     disableThickSlab();
     setCurrentViewPlane(view);
-    updateAnnotationsInformation(Q2DViewer::WindowInformationAnnotation);
+    m_annotationsHandler->updateAnnotationsInformation(WindowInformationAnnotation);
     
     // Reiniciem valors per defecte de la càmera
     m_rotateFactor = 0;
@@ -923,7 +787,7 @@ void Q2DViewer::updateCamera()
             m_isImageFlipped = !m_isImageFlipped;
         }
         emit cameraChanged();
-        updatePatientOrientationAnnotation();
+        m_annotationsHandler->updatePatientOrientationAnnotation();
     }
     else
     {
@@ -987,12 +851,12 @@ void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
         // Then update display (image and associated annotations)
         updateDisplayExtents();
         updateCurrentImageDefaultPresets();
-        updateSliceAnnotationInformation();
+        m_annotationsHandler->updateSliceAnnotationInformation();
         updatePreferredImageOrientation();
         
         if (dimension == SpatialDimension)
         {
-            updatePatientOrientationAnnotation();
+            m_annotationsHandler->updatePatientOrientationAnnotation();
 
             if (isThickSlabActive())
             {
@@ -1085,7 +949,7 @@ void Q2DViewer::setWindowLevel(double window, double level)
     {
         if (m_volumeDisplayUnits.first()->getImagePipeline()->setWindowLevel(window,level))
         {
-            updateAnnotationsInformation(Q2DViewer::WindowInformationAnnotation);
+            m_annotationsHandler->updateAnnotationsInformation(WindowInformationAnnotation);
             render();
             emit windowLevelChanged(window, level);
         }
@@ -1231,180 +1095,6 @@ void Q2DViewer::setSeedPosition(double pos[3])
     emit seedPositionChanged(pos[0], pos[1], pos[2]);
 }
 
-void Q2DViewer::updateAnnotationsInformation(AnnotationFlags annotation)
-{
-    if (!m_mainVolume)
-    {
-        return;
-    }
-
-    // Informació que es mostra per cada viewport
-    if (annotation.testFlag(Q2DViewer::WindowInformationAnnotation))
-    {
-        // Informació de la finestra
-        if (m_enabledAnnotations.testFlag(Q2DViewer::WindowInformationAnnotation))
-        {
-            double windowLevel[2];
-            m_volumeDisplayUnits.first()->getImagePipeline()->getCurrentWindowLevel(windowLevel);
-            m_upperLeftText = tr("%1 x %2\nWW: %5 WL: %6")
-                .arg(m_mainVolume->getDimensions()[getView().getXIndex()])
-                .arg(m_mainVolume->getDimensions()[getView().getYIndex()])
-                .arg(MathTools::roundToNearestInteger(windowLevel[0]))
-                .arg(MathTools::roundToNearestInteger(windowLevel[1]));
-        }
-        else
-        {
-            m_upperLeftText = "";
-        }
-        m_cornerAnnotations->SetText(2, qPrintable(m_upperLeftText));
-    }
-
-    if (annotation.testFlag(Q2DViewer::SliceAnnotation))
-    {
-        updateSliceAnnotationInformation();
-    }
-}
-
-void Q2DViewer::updatePatientAnnotationInformation()
-{
-    if (m_mainVolume)
-    {
-        // TODO De moment només agafem la primera imatge perquè assumim que totes pertanyen a la mateixa sèrie
-        Image *image = m_mainVolume->getImage(0);
-        Series *series = image->getParentSeries();
-        Study *study = series->getParentStudy();
-        Patient *patient = study->getParentPatient();
-
-        // Informació fixa
-        QString seriesTime = series->getTimeAsString();
-        if (seriesTime.isEmpty())
-        {
-            seriesTime = "--:--";
-        }
-
-        m_upperRightText = series->getInstitutionName() + "\n";
-        m_upperRightText += patient->getFullName() + "\n";
-        m_upperRightText += QString("%1 %2 %3\n").arg(study->getPatientAge()).arg(patient->getSex()).arg(patient->getID());
-        if (!study->getAccessionNumber().isEmpty())
-        {
-            m_upperRightText += tr("Acc: %1\n").arg(study->getAccessionNumber());
-        }
-        else
-        {
-            m_upperRightText += "\n";
-        }
-        m_upperRightText += study->getDate().toString(Qt::ISODate) + "\n";
-        m_upperRightText += seriesTime;
-
-        if (series->getModality() == "MG")
-        {
-            m_lowerRightText.clear();
-        }
-        else
-        {
-            // Si protocol i descripció coincideixen posarem el contingut de protocol
-            // Si són diferents, els fusionarem
-            QString protocolName, description;
-            protocolName = series->getProtocolName();
-            description = series->getDescription();
-            m_lowerRightText = protocolName;
-            if (description != protocolName)
-            {
-                m_lowerRightText += "\n" + description;
-            }
-        }
-
-        m_cornerAnnotations->SetText(3, qPrintable(m_upperRightText));
-        m_cornerAnnotations->SetText(1, qPrintable(m_lowerRightText.trimmed()));
-    }
-    else
-    {
-        DEBUG_LOG("No hi ha un volum vàlid. No es poden inicialitzar les annotacions de texte d'informació de pacient");
-    }
-}
-
-void Q2DViewer::updateSliceAnnotationInformation()
-{
-    Q_ASSERT(m_cornerAnnotations);
-    Q_ASSERT(m_mainVolume);
-    
-    Image *image = getCurrentDisplayedImage();
-    
-    MammographyImageHelper mammographyImageHelper;
-    if (mammographyImageHelper.isStandardMammographyImage(image))
-    {
-        // Specific mammography annotations should be displayed
-        m_enabledAnnotations = m_enabledAnnotations & ~Q2DViewer::SliceAnnotation;
-        
-        QString laterality = image->getImageLaterality();
-        QString projection = mammographyImageHelper.getMammographyProjectionLabel(image);
-
-        m_lowerRightText = laterality + " " + projection;
-        
-        m_cornerAnnotations->SetText(1, qPrintable(m_lowerRightText.trimmed()));
-    }
-    else
-    {
-        updateLateralityAnnotationInformation();
-    }
-
-    updateSliceAnnotation();
-    updatePatientInformationAnnotation();
-}
-
-void Q2DViewer::updateLateralityAnnotationInformation()
-{
-    QChar laterality = getCurrentDisplayedImageLaterality();
-    if (!laterality.isNull() && !laterality.isSpace())
-    {
-        QString lateralityAnnotation = "Lat: " + QString(laterality);
-            
-        if (m_lowerRightText.trimmed().isEmpty())
-        {
-            m_cornerAnnotations->SetText(1, qPrintable(lateralityAnnotation));
-        }
-        else
-        {
-            m_cornerAnnotations->SetText(1, qPrintable(lateralityAnnotation + "\n" + m_lowerRightText.trimmed()));
-        }
-    }
-    else
-    {
-        m_cornerAnnotations->SetText(1, qPrintable(m_lowerRightText.trimmed()));
-    }
-}
-
-void Q2DViewer::updatePatientInformationAnnotation()
-{
-    // Si aquestes anotacions estan activades, llavors li afegim la informació de la hora de la sèrie i la imatge
-    if (m_enabledAnnotations.testFlag(Q2DViewer::PatientInformationAnnotation))
-    {
-        // Si la vista és "AXIAL" (és a dir mostrem la imatge en l'adquisició original)
-        // i tenim informació de la hora d'adquisició de la imatge, la incloem en la informació mostrada
-        if (getCurrentViewPlane() == OrthogonalPlane::XYPlane)
-        {
-            Image *currentImage = getCurrentDisplayedImage();
-            if (currentImage)
-            {
-                QString imageTime = "\n" + currentImage->getFormattedImageTime();
-                if (imageTime.isEmpty())
-                {
-                    imageTime = "--:--";
-                }
-                m_cornerAnnotations->SetText(3, qPrintable(m_upperRightText + imageTime));
-            }
-            else
-            {
-                m_cornerAnnotations->SetText(3, qPrintable(m_upperRightText));
-            }
-        }
-        else
-        {
-            m_cornerAnnotations->SetText(3, qPrintable(m_upperRightText));
-        }
-    }
-}
-
 QChar Q2DViewer::getCurrentDisplayedImageLaterality() const
 {
     QChar laterality;
@@ -1432,67 +1122,6 @@ QChar Q2DViewer::getCurrentDisplayedImageLaterality() const
     return laterality;
 }
 
-void Q2DViewer::updateSliceAnnotation()
-{
-    Q_ASSERT(m_cornerAnnotations);
-
-    // Si les anotacions estan habilitades
-    if (m_enabledAnnotations.testFlag(Q2DViewer::SliceAnnotation))
-    {
-        QString lowerLeftText;
-        // TODO Ara només tenim en compte de posar l'slice location si estem en la vista "original"
-        if (getCurrentViewPlane() == OrthogonalPlane::XYPlane)
-        {
-            Image *image = getCurrentDisplayedImage();
-            if (image)
-            {
-                QString location = image->getSliceLocation();
-                if (!location.isEmpty())
-                {
-                    lowerLeftText = tr("Loc: %1").arg(location.toDouble(), 0, 'f', 2);
-                    if (isThickSlabActive())
-                    {
-                        // TODO Necessitaríem funcions de més alt nivell per obtenir la imatge consecutiva d'acord amb els paràmetres
-                        // de thicknes, fases, etc
-                        Image *secondImage = m_mainVolume->getImage(m_volumeDisplayUnits.first()->getSliceHandler()->getLastSlabSlice(), getCurrentPhase());
-                        if (secondImage)
-                        {
-                            lowerLeftText += tr("-%1").arg(secondImage->getSliceLocation().toDouble(), 0, 'f', 2);
-                        }
-                    }
-                    lowerLeftText += "\n";
-                }
-            }
-        }
-
-        // Setup the slice/slab annotation
-        lowerLeftText += tr("Slice: %1").arg(getCurrentSlice() + 1);
-        if (m_volumeDisplayUnits.first()->getSliceHandler()->getSlabThickness() > 1)
-        {
-            lowerLeftText += tr("-%2").arg(m_volumeDisplayUnits.first()->getSliceHandler()->getLastSlabSlice() + 1);
-        }
-        lowerLeftText += tr("/%1").arg(getNumberOfSlices());
-        
-        // Si tenim fases
-        if (m_volumeDisplayUnits.first()->getSliceHandler()->getNumberOfPhases() > 1)
-        {
-            lowerLeftText += tr(" Phase: %1/%2").arg(getCurrentPhase() + 1).arg(m_volumeDisplayUnits.first()->getSliceHandler()->getNumberOfPhases());
-        }
-        
-        // Afegim el thickness de la llesca nomes si es > 0mm
-        if (getCurrentSliceThickness() > 0.0)
-        {
-            lowerLeftText += tr(" Thickness: %1 mm").arg(getCurrentSliceThickness(), 0, 'f', 2);
-        }
-
-        m_cornerAnnotations->SetText(0, qPrintable(lowerLeftText));
-    }
-    else
-    {
-        m_cornerAnnotations->SetText(0, "");
-    }
-}
-
 void Q2DViewer::updateDisplayExtents()
 {
     // Ens assegurem que tenim dades vàlides
@@ -1512,21 +1141,7 @@ void Q2DViewer::updateDisplayExtents()
 
 void Q2DViewer::enableAnnotation(AnnotationFlags annotation, bool enable)
 {
-    if (enable)
-    {
-        m_enabledAnnotations = m_enabledAnnotations | annotation;
-    }
-    else
-    {
-        m_enabledAnnotations = m_enabledAnnotations & ~annotation;
-    }
-
-    refreshAnnotations();
-
-    if (m_mainVolume)
-    {
-        render();
-    }
+    m_annotationsHandler->enableAnnotation(annotation, enable);
 }
 
 void Q2DViewer::removeAnnotation(AnnotationFlags annotation)
@@ -1571,7 +1186,7 @@ void Q2DViewer::setSlabThickness(int thickness)
     m_volumeDisplayUnits.first()->getImagePipeline()->setSlice(m_mainVolume->getImageIndex(getCurrentSlice(), getCurrentPhase()));
     m_volumeDisplayUnits.first()->getImagePipeline()->setSlabThickness(m_volumeDisplayUnits.first()->getSliceHandler()->getSlabThickness());
     updateDisplayExtents();
-    updateSliceAnnotationInformation();
+    m_annotationsHandler->updateSliceAnnotationInformation();
     render();
 
     // TODO és del tot correcte que vagi aquí aquesta crida?

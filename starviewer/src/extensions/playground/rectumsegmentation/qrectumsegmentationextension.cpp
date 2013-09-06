@@ -180,7 +180,7 @@ void QRectumSegmentationExtension::setInput( Volume *input )
     m_mainVolume = input;
     m_2DView->setInput( input );
     this->updateInputFeatures(input);
-    m_2DView->removeAnnotation( Q2DViewer::AllAnnotation );
+    m_2DView->removeAnnotation( AllAnnotation );
     m_2DView->setOverlapMethod(Q2DViewer::Blend);
 }
 

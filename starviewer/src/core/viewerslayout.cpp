@@ -41,7 +41,7 @@ Q2DViewerWidget* ViewersLayout::getNewQ2DViewerWidget()
     connect(newViewer, SIGNAL(selected(Q2DViewerWidget*)), SLOT(setSelectedViewer(Q2DViewerWidget*)));
     connect(newViewer, SIGNAL(manualSynchronizationStateChanged(bool)), SIGNAL(manualSynchronizationStateChanged(bool)));
     // Per defecte no li posem cap annotació
-    newViewer->getViewer()->removeAnnotation(Q2DViewer::AllAnnotation);
+    newViewer->getViewer()->removeAnnotation(AllAnnotation);
 
     emit viewerAdded(newViewer);
     return newViewer;
