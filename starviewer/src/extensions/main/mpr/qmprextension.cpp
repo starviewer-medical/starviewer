@@ -140,8 +140,8 @@ void QMPRExtension::init()
     m_coronalReslice = 0;
 
     // Configurem les annotacions que volem veure
-    m_sagital2DView->removeAnnotation(Q2DViewer::PatientOrientationAnnotation | Q2DViewer::PatientInformationAnnotation | Q2DViewer::SliceAnnotation);
-    m_coronal2DView->removeAnnotation(Q2DViewer::PatientOrientationAnnotation | Q2DViewer::PatientInformationAnnotation | Q2DViewer::SliceAnnotation);
+    m_sagital2DView->removeAnnotation(PatientOrientationAnnotation | PatientInformationAnnotation | SliceAnnotation);
+    m_coronal2DView->removeAnnotation(PatientOrientationAnnotation | PatientInformationAnnotation | SliceAnnotation);
     showViewerInformation(m_viewerInformationToolButton->isChecked());
 
     m_sagital2DView->disableContextMenu();
@@ -447,10 +447,10 @@ void QMPRExtension::showScreenshotsExporterDialog()
 
 void QMPRExtension::showViewerInformation(bool show)
 {
-    m_axial2DView->enableAnnotation(Q2DViewer::WindowInformationAnnotation | Q2DViewer::PatientOrientationAnnotation | Q2DViewer::SliceAnnotation |
-                                    Q2DViewer::PatientInformationAnnotation | Q2DViewer::AcquisitionInformationAnnotation, show);
-    m_sagital2DView->enableAnnotation(Q2DViewer::WindowInformationAnnotation | Q2DViewer::AcquisitionInformationAnnotation, show);
-    m_coronal2DView->enableAnnotation(Q2DViewer::WindowInformationAnnotation | Q2DViewer::AcquisitionInformationAnnotation, show);
+    m_axial2DView->enableAnnotation(WindowInformationAnnotation | PatientOrientationAnnotation | SliceAnnotation | PatientInformationAnnotation |
+                                    AcquisitionInformationAnnotation, show);
+    m_sagital2DView->enableAnnotation(WindowInformationAnnotation | AcquisitionInformationAnnotation, show);
+    m_coronal2DView->enableAnnotation(WindowInformationAnnotation | AcquisitionInformationAnnotation, show);
 }
 
 void QMPRExtension::updateProjectionLabel()

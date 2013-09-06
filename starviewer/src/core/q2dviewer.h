@@ -2,14 +2,13 @@
 #define UDGQ2DVIEWER_H
 
 #include "qviewer.h"
+#include "annotationflags.h"
 
 #include <QPointer>
 
 // Fordward declarations
 // Vtk
 class vtkPropPicker;
-class vtkTextActor;
-class vtkCornerAnnotation;
 class vtkCoordinate;
 class vtkImageActor;
 class vtkImageData;
@@ -29,6 +28,7 @@ class PatientOrientation;
 class BlendFilter;
 class VolumeDisplayUnit;
 class VolumePixelData;
+class Q2DViewerAnnotationHandler;
 
 /**
     Classe base per als visualitzadors 2D.
@@ -46,9 +46,9 @@ class VolumePixelData;
 
     Per defecte el visualitzador mostra la primera imatge en Axial. Per les altres vistes (Sagital i Coronal) mostraria la imatge central
 
-    Podem escollir quines annotacions textuals i de referència apareixeran en la vista 2D a través dels flags "AnnotationFlags" definits com enums.
-    Aquests flags es poden passar en el constructor o els podem modificar a través dels mètodes \c addAnnotation() o \c removeAnnotation()
-    que faran visible o invisible l'anotació indicada. Per defecte el flag és \c AllAnnotation i per tant es veuen totes les anotacions per defecte.
+    Podem escollir quines annotacions textuals i de referència apareixeran en la vista 2D a través dels flags "AnnotationFlags" a través dels mètodes
+    \c enableAnnotation() o \c removeAnnotation() que faran visible o invisible l'anotació indicada.
+    Per defecte el flag és \c AllAnnotation i per tant es veuen totes les anotacions per defecte.
   */
 class Q2DViewer : public QViewer {
 Q_OBJECT
@@ -58,11 +58,6 @@ public:
 
     /// Alineament de la imatge (dreta, esquerre, centrat)
     enum AlignPosition { AlignCenter, AlignRight, AlignLeft };
-
-    /// Aquests flags els farem servir per decidir quines anotacions seran visibles i quines no
-    enum AnnotationFlag { NoAnnotation = 0x0, WindowInformationAnnotation = 0x1, PatientOrientationAnnotation = 0x2, SliceAnnotation = 0x8,
-                          PatientInformationAnnotation = 0x10, AcquisitionInformationAnnotation = 0x20, AllAnnotation = 0x7F };
-    Q_DECLARE_FLAGS(AnnotationFlags, AnnotationFlag)
 
     Q2DViewer(QWidget *parent = 0);
     ~Q2DViewer();
@@ -109,6 +104,12 @@ public:
     /// @return El pla imatge actual
     ImagePlane* getCurrentImagePlane(bool vtkReconstructionHack = false);
 
+    /// Returns the laterality corresponding to the current displayed image.
+    /// If image is not reconstructed, image laterality is returned, or series laterality if not present
+    /// If image is reconstructed, series laterality is returned
+    /// If no laterality is found, en empty character will be returned
+    QChar getCurrentDisplayedImageLaterality() const;
+    
     /// donat un punt 3D en espai de referència DICOM, ens dóna la projecció d'aquest punt sobre
     /// el pla actual, transformat a coordenades de món VTK
     /// @param pointToProject[]
@@ -310,41 +311,9 @@ private:
     /// Updates image orientation according to the preferred presentation depending on its attributes, like modality.
     /// At this moment it is only applying to mammography (MG) images
     void updatePreferredImageOrientation();
-    
-    /// Refresca la visibilitat de les annotacions en funció dels flags que tenim
-    void refreshAnnotations();
-
-    /// Actualitzem les dades de les annotacions, per defecte totes, sinó, només les especificades
-    void updateAnnotationsInformation(AnnotationFlags annotation = Q2DViewer::AllAnnotation);
-
-    /// Desglossem les actualitzacions de les diferents informacions que es mostren per pantalla
-    void updatePatientAnnotationInformation();
-    void updateSliceAnnotationInformation();
-    void updateLateralityAnnotationInformation();
-    void updatePatientInformationAnnotation();
-
-    /// Returns the laterality corresponding to the current displayed image.
-    /// If image is not reconstructed, image laterality is returned, or series laterality if not present
-    /// If image is reconstructed, series laterality is returned
-    /// If no laterality is found, en empty character will be returned
-    QChar getCurrentDisplayedImageLaterality() const;
-    
-    /// Refresca els valors de les annotacions de llesca. Si els valors referents
-    /// a les fases són < 2 no es printarà informació de fases
-    /// Si hi ha thick slab, mostrarà el rang d'aquest
-    void updateSliceAnnotation();
-
-    /// Crea i inicialitza totes les anotacions que apareixeran per pantalla
-    void createAnnotations();
-
-    /// Crea les anotacions de l'orientació del pacient
-    void createOrientationAnnotations();
 
     /// Afegeix tots els actors a l'escena
     void addActors();
-
-    /// Actualitza les etiquetes d'orientació del pacient segons la vista i orientació actuals de la càmera
-    void updatePatientOrientationAnnotation();
 
     /// Updates the display extents of the image actors.
     void updateDisplayExtents();
@@ -443,32 +412,15 @@ protected:
     /// El picker per agafar punts de la imatge
     vtkPropPicker *m_imagePointPicker;
 
-    /// Annotacions de texte referents a informació de la sèrie
-    /// (nom de pacient, protocol,descripció de sèrie, data de l'estudi, etc)
-    /// i altre informació rellevant (nº imatge, ww/wl, etc)
-    vtkCornerAnnotation *m_cornerAnnotations;
-
 private:
     /// Nom del grups dins del drawer per als Overlays
     static const QString OverlaysDrawerGroup;
 
     /// Constant per a definir el nom d'objecte dels volums "dummy"
     static const QString DummyVolumeObjectName;
-    
-    /// Flag que ens indica quines anotacions es veuran per la finestra
-    AnnotationFlags m_enabledAnnotations;
 
     /// Tipus de solapament dels volums en cas que en tinguem més d'un
     OverlapMethod m_overlapMethod;
-
-    /// Els strings amb els textes de cada part de la imatge
-    QString m_lowerLeftText, m_lowerRightText, m_upperLeftText, m_upperRightText;
-
-    /// Aquest string indica les anotacions que ens donen les referències del pacient (Right,Left,Posterior,Anterior,Inferior,Superior)
-    QString m_patientOrientationText[4];
-
-    /// Textes adicionals d'anotoació
-    vtkTextActor *m_patientOrientationTextActor[4];
 
     /// Factor de rotació. En sentit de les agulles del rellotge 0: 0º, 1: 90º, 2: 180º, 3: 270º.
     int m_rotateFactor;
@@ -511,8 +463,10 @@ private:
     /// Holds the current thickslab pixel data
     VolumePixelData *m_currentThickSlabPixelData;
 
+    /// Handles the textual annotations of the viewer
+    Q2DViewerAnnotationHandler *m_annotationsHandler;
 };
-Q_DECLARE_OPERATORS_FOR_FLAGS(Q2DViewer::AnnotationFlags)
+
 };  //  End namespace udg
 
 #endif

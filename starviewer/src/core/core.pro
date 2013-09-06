@@ -155,6 +155,8 @@ HEADERS += extensionfactory.h \
     starviewerapplication.h \
     viewerslayout.h \
     q2dviewerwidget.h \
+    q2dviewerannotationhandler.h \
+    annotationflags.h \
     hangingprotocol.h \
     hangingprotocollayout.h \
     hangingprotocolsloader.h \
@@ -476,6 +478,7 @@ SOURCES += extensionmediator.cpp \
     drawercrosshair.cpp \
     viewerslayout.cpp \
     q2dviewerwidget.cpp \
+    q2dviewerannotationhandler.cpp \
     hangingprotocol.cpp \
     hangingprotocollayout.cpp \
     hangingprotocolsloader.cpp \
