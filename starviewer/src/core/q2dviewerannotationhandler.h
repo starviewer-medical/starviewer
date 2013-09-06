@@ -44,6 +44,7 @@ private:
 
     void updateLateralityAnnotationInformation();
     void updatePatientInformationAnnotation();
+    void updateWindowInformationAnnotation();
     
     /// Creates all the annotation actors
     void createAnnotations();
