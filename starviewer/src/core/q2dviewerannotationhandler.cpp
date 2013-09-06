@@ -84,7 +84,7 @@ void Q2DViewerAnnotationHandler::updateAnnotationsInformation(AnnotationFlags an
         {
             m_upperLeftText = "";
         }
-        m_cornerAnnotations->SetText(2, qPrintable(m_upperLeftText));
+        m_cornerAnnotations->SetText(UpperLeftCornerIndex, qPrintable(m_upperLeftText));
     }
 
     if (annotation.testFlag(SliceAnnotation))
@@ -141,8 +141,8 @@ void Q2DViewerAnnotationHandler::updatePatientAnnotationInformation()
             }
         }
 
-        m_cornerAnnotations->SetText(3, qPrintable(m_upperRightText));
-        m_cornerAnnotations->SetText(1, qPrintable(m_lowerRightText.trimmed()));
+        m_cornerAnnotations->SetText(UpperRightCornerIndex, qPrintable(m_upperRightText));
+        m_cornerAnnotations->SetText(LowerRightCornerIndex, qPrintable(m_lowerRightText.trimmed()));
     }
     else
     {
@@ -168,7 +168,7 @@ void Q2DViewerAnnotationHandler::updateSliceAnnotationInformation()
 
         m_lowerRightText = laterality + " " + projection;
         
-        m_cornerAnnotations->SetText(1, qPrintable(m_lowerRightText.trimmed()));
+        m_cornerAnnotations->SetText(LowerRightCornerIndex, qPrintable(m_lowerRightText.trimmed()));
     }
     else
     {
@@ -188,10 +188,10 @@ void Q2DViewerAnnotationHandler::updatePatientOrientationAnnotation()
     PatientOrientation currentPatientOrientation = m_2DViewer->getCurrentDisplayedImagePatientOrientation();
 
     // Indices relationship: 0:Left, 1:Bottom, 2:Right, 3:Top
-    m_patientOrientationText[0] = PatientOrientation::getOppositeOrientationLabel(currentPatientOrientation.getRowDirectionLabel());
-    m_patientOrientationText[1] = currentPatientOrientation.getColumnDirectionLabel();
-    m_patientOrientationText[2] = currentPatientOrientation.getRowDirectionLabel();
-    m_patientOrientationText[3] = PatientOrientation::getOppositeOrientationLabel(currentPatientOrientation.getColumnDirectionLabel());
+    m_patientOrientationText[LeftOrientationLabelIndex] = PatientOrientation::getOppositeOrientationLabel(currentPatientOrientation.getRowDirectionLabel());
+    m_patientOrientationText[BottomOrientationLabelIndex] = currentPatientOrientation.getColumnDirectionLabel();
+    m_patientOrientationText[RightOrientationLabelIndex] = currentPatientOrientation.getRowDirectionLabel();
+    m_patientOrientationText[TopOrientationLabelIndex] = PatientOrientation::getOppositeOrientationLabel(currentPatientOrientation.getColumnDirectionLabel());
     
     bool textActorShouldBeVisible = m_enabledAnnotations.testFlag(PatientOrientationAnnotation);
 
@@ -218,13 +218,13 @@ void Q2DViewerAnnotationHandler::refreshAnnotations()
 
     if (m_enabledAnnotations.testFlag(PatientInformationAnnotation))
     {
-        m_cornerAnnotations->SetText(3, qPrintable(m_upperRightText));
-        m_cornerAnnotations->SetText(1, qPrintable(m_lowerRightText.trimmed()));
+        m_cornerAnnotations->SetText(UpperRightCornerIndex, qPrintable(m_upperRightText));
+        m_cornerAnnotations->SetText(LowerRightCornerIndex, qPrintable(m_lowerRightText.trimmed()));
     }
     else
     {
-        m_cornerAnnotations->SetText(3, "");
-        m_cornerAnnotations->SetText(1, "");
+        m_cornerAnnotations->SetText(UpperRightCornerIndex, "");
+        m_cornerAnnotations->SetText(LowerRightCornerIndex, "");
     }
 
     if (m_enabledAnnotations.testFlag(PatientOrientationAnnotation))
@@ -309,11 +309,11 @@ void Q2DViewerAnnotationHandler::updateSliceAnnotation()
             lowerLeftText += QObject::tr(" Thickness: %1 mm").arg(m_2DViewer->getCurrentSliceThickness(), 0, 'f', 2);
         }
 
-        m_cornerAnnotations->SetText(0, qPrintable(lowerLeftText));
+        m_cornerAnnotations->SetText(LowerLeftCornerIndex, qPrintable(lowerLeftText));
     }
     else
     {
-        m_cornerAnnotations->SetText(0, "");
+        m_cornerAnnotations->SetText(LowerLeftCornerIndex, "");
     }
 }
 
@@ -326,16 +326,16 @@ void Q2DViewerAnnotationHandler::updateLateralityAnnotationInformation()
             
         if (m_lowerRightText.trimmed().isEmpty())
         {
-            m_cornerAnnotations->SetText(1, qPrintable(lateralityAnnotation));
+            m_cornerAnnotations->SetText(LowerRightCornerIndex, qPrintable(lateralityAnnotation));
         }
         else
         {
-            m_cornerAnnotations->SetText(1, qPrintable(lateralityAnnotation + "\n" + m_lowerRightText.trimmed()));
+            m_cornerAnnotations->SetText(LowerRightCornerIndex, qPrintable(lateralityAnnotation + "\n" + m_lowerRightText.trimmed()));
         }
     }
     else
     {
-        m_cornerAnnotations->SetText(1, qPrintable(m_lowerRightText.trimmed()));
+        m_cornerAnnotations->SetText(LowerRightCornerIndex, qPrintable(m_lowerRightText.trimmed()));
     }
 }
 
@@ -354,16 +354,16 @@ void Q2DViewerAnnotationHandler::updatePatientInformationAnnotation()
                 {
                     imageTime = "--:--";
                 }
-                m_cornerAnnotations->SetText(3, qPrintable(m_upperRightText + imageTime));
+                m_cornerAnnotations->SetText(UpperRightCornerIndex, qPrintable(m_upperRightText + imageTime));
             }
             else
             {
-                m_cornerAnnotations->SetText(3, qPrintable(m_upperRightText));
+                m_cornerAnnotations->SetText(UpperRightCornerIndex, qPrintable(m_upperRightText));
             }
         }
         else
         {
-            m_cornerAnnotations->SetText(3, qPrintable(m_upperRightText));
+            m_cornerAnnotations->SetText(UpperRightCornerIndex, qPrintable(m_upperRightText));
         }
     }
 }
@@ -392,18 +392,18 @@ void Q2DViewerAnnotationHandler::createOrientationAnnotations()
         m_patientOrientationTextActor[i]->GetPosition2Coordinate()->SetCoordinateSystemToNormalizedViewport();
     }
     // Place each actor on its corresponding place. 0-3, counter-clockwise direction, starting at 0 = left of the viewer
-    m_patientOrientationTextActor[0]->GetTextProperty()->SetJustificationToLeft();
-    m_patientOrientationTextActor[0]->SetPosition(0.01, 0.5);
+    m_patientOrientationTextActor[LeftOrientationLabelIndex]->GetTextProperty()->SetJustificationToLeft();
+    m_patientOrientationTextActor[LeftOrientationLabelIndex]->SetPosition(0.01, 0.5);
 
-    m_patientOrientationTextActor[1]->GetTextProperty()->SetJustificationToCentered();
-    m_patientOrientationTextActor[1]->SetPosition(0.5, 0.01);
+    m_patientOrientationTextActor[BottomOrientationLabelIndex]->GetTextProperty()->SetJustificationToCentered();
+    m_patientOrientationTextActor[BottomOrientationLabelIndex]->SetPosition(0.5, 0.01);
 
-    m_patientOrientationTextActor[2]->GetTextProperty()->SetJustificationToRight();
-    m_patientOrientationTextActor[2]->SetPosition(0.99, 0.5);
+    m_patientOrientationTextActor[RightOrientationLabelIndex]->GetTextProperty()->SetJustificationToRight();
+    m_patientOrientationTextActor[RightOrientationLabelIndex]->SetPosition(0.99, 0.5);
 
-    m_patientOrientationTextActor[3]->GetTextProperty()->SetJustificationToCentered();
-    m_patientOrientationTextActor[3]->GetTextProperty()->SetVerticalJustificationToTop();
-    m_patientOrientationTextActor[3]->SetPosition(0.5, 0.99);
+    m_patientOrientationTextActor[TopOrientationLabelIndex]->GetTextProperty()->SetJustificationToCentered();
+    m_patientOrientationTextActor[TopOrientationLabelIndex]->GetTextProperty()->SetVerticalJustificationToTop();
+    m_patientOrientationTextActor[TopOrientationLabelIndex]->SetPosition(0.5, 0.99);
 }
 
 void Q2DViewerAnnotationHandler::addActors()
