@@ -66,25 +66,7 @@ void Q2DViewerAnnotationHandler::updateAnnotationsInformation(AnnotationFlags an
 
     if (annotation.testFlag(WindowInformationAnnotation))
     {
-        if (m_enabledAnnotations.testFlag(WindowInformationAnnotation))
-        {
-            double windowLevel[2];
-            m_2DViewer->getCurrentWindowLevel(windowLevel);
-            int dimensions[3];
-            m_2DViewer->getInput()->getDimensions(dimensions);
-            int xIndex = m_2DViewer->getView().getXIndex();
-            int yIndex = m_2DViewer->getView().getYIndex();
-            m_upperLeftText = QObject::tr("%1 x %2\nWW: %5 WL: %6")
-                .arg(dimensions[xIndex])
-                .arg(dimensions[yIndex])
-                .arg(MathTools::roundToNearestInteger(windowLevel[0]))
-                .arg(MathTools::roundToNearestInteger(windowLevel[1]));
-        }
-        else
-        {
-            m_upperLeftText = "";
-        }
-        m_cornerAnnotations->SetText(UpperLeftCornerIndex, qPrintable(m_upperLeftText));
+        updateWindowInformationAnnotation();
     }
 
     if (annotation.testFlag(SliceAnnotation))
@@ -366,6 +348,30 @@ void Q2DViewerAnnotationHandler::updatePatientInformationAnnotation()
             m_cornerAnnotations->SetText(UpperRightCornerIndex, qPrintable(m_upperRightText));
         }
     }
+}
+
+void Q2DViewerAnnotationHandler::updateWindowInformationAnnotation()
+{
+    if (m_enabledAnnotations.testFlag(WindowInformationAnnotation))
+    {
+        double windowLevel[2];
+        m_2DViewer->getCurrentWindowLevel(windowLevel);
+        int dimensions[3];
+        m_2DViewer->getInput()->getDimensions(dimensions);
+        int xIndex = m_2DViewer->getView().getXIndex();
+        int yIndex = m_2DViewer->getView().getYIndex();
+        m_upperLeftText = QObject::tr("%1 x %2\nWW: %5 WL: %6")
+            .arg(dimensions[xIndex])
+            .arg(dimensions[yIndex])
+            .arg(MathTools::roundToNearestInteger(windowLevel[0]))
+            .arg(MathTools::roundToNearestInteger(windowLevel[1]));
+    }
+    else
+    {
+        m_upperLeftText = "";
+    }
+    
+    m_cornerAnnotations->SetText(UpperLeftCornerIndex, qPrintable(m_upperLeftText));
 }
 
 void Q2DViewerAnnotationHandler::createAnnotations()
