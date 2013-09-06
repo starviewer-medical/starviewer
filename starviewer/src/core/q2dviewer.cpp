@@ -1392,18 +1392,7 @@ void Q2DViewer::updateSliceAnnotationInformation()
         updateLateralityAnnotationInformation();
     }
 
-    int value = m_mainVolume->getImageIndex(getCurrentSlice(), getCurrentPhase());
-    if (m_volumeDisplayUnits.first()->getSliceHandler()->getNumberOfPhases() > 1)
-    {
-        updateSliceAnnotation((value / m_volumeDisplayUnits.first()->getSliceHandler()->getNumberOfPhases()) + 1,
-                                    m_volumeDisplayUnits.first()->getSliceHandler()->getNumberOfSlices(), getCurrentPhase() + 1,
-                                    m_volumeDisplayUnits.first()->getSliceHandler()->getNumberOfPhases());
-    }
-    else
-    {
-        updateSliceAnnotation(value + 1, m_volumeDisplayUnits.first()->getSliceHandler()->getNumberOfSlices());
-    }
-    
+    updateSliceAnnotation();
     updatePatientInformationAnnotation();
 }
 
@@ -1487,7 +1476,7 @@ QChar Q2DViewer::getCurrentDisplayedImageLaterality() const
     return laterality;
 }
 
-void Q2DViewer::updateSliceAnnotation(int currentSlice, int maxSlice, int currentPhase, int maxPhase)
+void Q2DViewer::updateSliceAnnotation()
 {
     Q_ASSERT(m_cornerAnnotations);
 
@@ -1521,17 +1510,17 @@ void Q2DViewer::updateSliceAnnotation(int currentSlice, int maxSlice, int curren
         }
 
         // Setup the slice/slab annotation
-        lowerLeftText += tr("Slice: %1").arg(currentSlice);
+        lowerLeftText += tr("Slice: %1").arg(getCurrentSlice() + 1);
         if (m_volumeDisplayUnits.first()->getSliceHandler()->getSlabThickness() > 1)
         {
             lowerLeftText += tr("-%2").arg(m_volumeDisplayUnits.first()->getSliceHandler()->getLastSlabSlice() + 1);
         }
-        lowerLeftText += tr("/%1").arg(maxSlice);
+        lowerLeftText += tr("/%1").arg(getNumberOfSlices());
         
         // Si tenim fases
-        if (maxPhase > 1)
+        if (m_volumeDisplayUnits.first()->getSliceHandler()->getNumberOfPhases() > 1)
         {
-            lowerLeftText += tr(" Phase: %1/%2").arg(currentPhase).arg(maxPhase);
+            lowerLeftText += tr(" Phase: %1/%2").arg(getCurrentPhase() + 1).arg(m_volumeDisplayUnits.first()->getSliceHandler()->getNumberOfPhases());
         }
         
         // Afegim el thickness de la llesca nomes si es > 0mm
