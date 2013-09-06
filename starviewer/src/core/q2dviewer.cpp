@@ -30,7 +30,6 @@
 #include "q2dviewerannotationhandler.h"
 // Qt
 #include <QResizeEvent>
-#include <QImage>
 // Include's bàsics vtk
 #include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
@@ -40,7 +39,6 @@
 #include <QVTKWidget.h>
 #include <vtkWindowToImageFilter.h>
 #include <vtkImageActor.h>
-#include <vtkScalarsToColors.h>
 
 namespace udg {
 
