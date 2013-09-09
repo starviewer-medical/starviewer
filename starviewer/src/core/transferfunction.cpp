@@ -334,23 +334,7 @@ TransferFunction TransferFunction::toNewRange(double oldX1, double oldX2, double
 
 TransferFunction TransferFunction::to01(double x1, double x2) const
 {
-    Q_ASSERT(!MathTools::isNaN(x1));
-    Q_ASSERT(!MathTools::isNaN(x2));
-    Q_ASSERT(x1 < x2);
-
-    updateKeys();
-
-    double shift = -x1, scale = 1.0 / (x2 - x1);
-    TransferFunction transferFunction01;
-
-    foreach (double x, m_keys)
-    {
-        transferFunction01.set((x + shift) * scale, getColor(x), getScalarOpacity(x));
-    }
-
-    transferFunction01.setGradientOpacityTransferFunction(gradientOpacityTransferFunction());
-
-    return transferFunction01;
+    return toNewRange(x1, x2, 0.0, 1.0);
 }
 
 TransferFunction TransferFunction::simplify() const
