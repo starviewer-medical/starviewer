@@ -308,23 +308,23 @@ void TransferFunction::trim(double x1, double x2)
     m_changed = true;
 }
 
-TransferFunction TransferFunction::toNewRange(double ox1, double ox2, double nx1, double nx2) const
+TransferFunction TransferFunction::toNewRange(double oldX1, double oldX2, double newX1, double newX2) const
 {
-    Q_ASSERT(!MathTools::isNaN(ox1));
-    Q_ASSERT(!MathTools::isNaN(ox2));
-    Q_ASSERT(ox1 < ox2);
-    Q_ASSERT(!MathTools::isNaN(nx1));
-    Q_ASSERT(!MathTools::isNaN(nx2));
-    Q_ASSERT(nx1 < nx2);
+    Q_ASSERT(!MathTools::isNaN(oldX1));
+    Q_ASSERT(!MathTools::isNaN(oldX2));
+    Q_ASSERT(oldX1 < oldX2);
+    Q_ASSERT(!MathTools::isNaN(newX1));
+    Q_ASSERT(!MathTools::isNaN(newX2));
+    Q_ASSERT(newX1 < newX2);
 
     updateKeys();
 
-    double scale = (nx2 - nx1) / (ox2 - ox1);
+    double scale = (newX2 - newX1) / (oldX2 - oldX1);
     TransferFunction newRangetransferFunction;
 
     foreach (double x, m_keys)
     {
-        newRangetransferFunction.set((x - ox1) * scale + nx1, getColor(x), getScalarOpacity(x));
+        newRangetransferFunction.set((x - oldX1) * scale + newX1, getColor(x), getScalarOpacity(x));
     }
 
     newRangetransferFunction.setGradientOpacityTransferFunction(gradientOpacityTransferFunction());
