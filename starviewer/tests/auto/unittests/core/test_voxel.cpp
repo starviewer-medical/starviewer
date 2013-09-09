@@ -109,14 +109,17 @@ void test_Voxel::getAsQString_ReturnsExpectedValues_data()
 
     QTest::newRow("Empty voxel") << Voxel() << tr("N/A");
 
-    Voxel voxel = generateVoxelWithNComponents(MathTools::randomInt(1, 10));
-    QString voxelString;
-    voxelString = QString("%1").arg(voxel.getComponent(0));
+    Voxel voxel = generateVoxelWithNComponents(1);
+    QTest::newRow("Single component voxel") << voxel << QString("%1").arg(voxel.getComponent(0));
+    
+    voxel = generateVoxelWithNComponents(MathTools::randomInt(2, 10));
+    QString voxelString = QString("%1").arg(voxel.getComponent(0));
     for (int i = 1; i < voxel.getNumberOfComponents(); ++i)
     {
         voxelString += QString(", %1").arg(voxel.getComponent(i));
     }
-    QTest::newRow("Not empty voxel") << voxel << "(" + voxelString + ")";
+    
+    QTest::newRow("n-components (n > 1) voxel") << voxel << "(" + voxelString + ")";
 }
 
 void test_Voxel::getAsQString_ReturnsExpectedValues()
