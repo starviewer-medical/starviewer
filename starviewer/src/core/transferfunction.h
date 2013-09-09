@@ -124,9 +124,9 @@ public:
     /// La funció de transferència d'opacitat del gradient es manté.
     void trim(double x1, double x2);
 
-    /// Returns a new transfer function resulting from scaling and shifting this one so that the range [ox1, ox2] becomes [nx1, nx2].
+    /// Returns a new transfer function resulting from scaling and shifting this one so that the range [oldX1, oldX2] becomes [newX1, newX2].
     /// The gradient opacity transfer function is copied without change.
-    TransferFunction toNewRange(double ox1, double ox2, double nx1, double nx2) const;
+    TransferFunction toNewRange(double oldX1, double oldX2, double newX1, double newX2) const;
 
     /// Retorna una nova funció de transferència resultat d'escalar i desplaçar aquesta de manera que el rang [x1, x2] passi a ser [0, 1].
     /// La funció de transferència d'opacitat del gradient es copia directament.
