@@ -360,6 +360,11 @@ HEADERS += extensionfactory.h \
     imagepipeline.h \
     volumereadermanager.h \
     volumedisplayunit.h \
+    volumedisplayunithandlerfactory.h \
+    genericvolumedisplayunithandler.h \
+    singlevolumedisplayunithandler.h \
+    pairedvolumedisplayunithandler.h \
+    petctvolumedisplayunithandler.h \
     vtkdepthdisabledopenglimageactor.h \
     transferfunctionmodel.h
 
@@ -670,6 +675,11 @@ SOURCES += extensionmediator.cpp \
     imagepipeline.cpp \
     volumereadermanager.cpp \
     volumedisplayunit.cpp \
+    volumedisplayunithandlerfactory.cpp \
+    genericvolumedisplayunithandler.cpp \
+    singlevolumedisplayunithandler.cpp \
+    pairedvolumedisplayunithandler.cpp \
+    petctvolumedisplayunithandler.cpp \
     vtkdepthdisabledopenglimageactor.cpp \
     transferfunctionmodel.cpp
 
