@@ -8,7 +8,6 @@
 
 // Fordward declarations
 // Vtk
-class vtkPropPicker;
 class vtkCoordinate;
 class vtkImageActor;
 class vtkImageData;
@@ -408,9 +407,6 @@ protected:
 
     /// Opacitat del volum solapat
     double m_overlayOpacity;
-
-    /// El picker per agafar punts de la imatge
-    vtkPropPicker *m_imagePointPicker;
 
 private:
     /// Nom del grups dins del drawer per als Overlays

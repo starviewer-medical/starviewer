@@ -5,6 +5,8 @@
 #include "volume.h"
 #include "vtkdepthdisabledopenglimageactor.h"
 
+#include <vtkPropPicker.h>
+
 namespace udg {
 
 VolumeDisplayUnit::VolumeDisplayUnit()
@@ -13,6 +15,7 @@ VolumeDisplayUnit::VolumeDisplayUnit()
     m_imagePipeline = new ImagePipeline();
     m_imageActor = VtkDepthDisabledOpenGLImageActor::New();
     m_sliceHandler = new SliceHandler();
+    m_imagePointPicker =  0;
 }
 
 VolumeDisplayUnit::~VolumeDisplayUnit()
@@ -20,6 +23,11 @@ VolumeDisplayUnit::~VolumeDisplayUnit()
     delete m_imagePipeline;
     m_imageActor->Delete();
     delete m_sliceHandler;
+    
+    if (m_imagePointPicker)
+    {
+        m_imagePointPicker->Delete();
+    }
 }
 
 Volume* VolumeDisplayUnit::getVolume() const
@@ -50,6 +58,16 @@ vtkImageActor* VolumeDisplayUnit::getImageActor() const
 SliceHandler* VolumeDisplayUnit::getSliceHandler() const
 {
     return m_sliceHandler;
+}
+
+vtkPropPicker* VolumeDisplayUnit::getImagePointPicker()
+{
+    if (!m_imagePointPicker)
+    {
+        setupPicker();
+    }
+
+    return m_imagePointPicker;
 }
 
 const OrthogonalPlane& VolumeDisplayUnit::getViewPlane() const
@@ -84,6 +102,14 @@ void VolumeDisplayUnit::resetThickSlab()
     m_imagePipeline->setSlice(m_volume->getImageIndex(m_sliceHandler->getCurrentSlice(), m_sliceHandler->getCurrentPhase()));
     m_imagePipeline->setSlabThickness(m_sliceHandler->getSlabThickness());
     m_imagePipeline->setSlabStride(m_sliceHandler->getNumberOfPhases());
+}
+
+void VolumeDisplayUnit::setupPicker()
+{
+    m_imagePointPicker = vtkPropPicker::New();
+    m_imagePointPicker->InitializePickList();
+    m_imagePointPicker->AddPickList(getImageActor());
+    m_imagePointPicker->PickFromListOn();
 }
 
 }

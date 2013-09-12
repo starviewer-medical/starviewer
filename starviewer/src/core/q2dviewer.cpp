@@ -46,7 +46,7 @@ const QString Q2DViewer::OverlaysDrawerGroup("Overlays");
 const QString Q2DViewer::DummyVolumeObjectName("Dummy Volume");
 
 Q2DViewer::Q2DViewer(QWidget *parent)
-: QViewer(parent), m_overlayVolume(0), m_blender(0), m_imagePointPicker(0), m_overlapMethod(Q2DViewer::Blend), m_rotateFactor(0), m_applyFlip(false),
+: QViewer(parent), m_overlayVolume(0), m_blender(0), m_overlapMethod(Q2DViewer::Blend), m_rotateFactor(0), m_applyFlip(false),
   m_isImageFlipped(false), m_slabProjectionMode(AccumulatorFactory::Maximum)
 {
     m_volumeReaderManager = new VolumeReaderManager(this);
@@ -61,13 +61,6 @@ Q2DViewer::Q2DViewer(QWidget *parent)
     // Creem anotacions i actors
     m_annotationsHandler = new Q2DViewerAnnotationHandler(this);
     addActors();
-
-    // Creem el picker per obtenir les coordenades de la imatge
-    m_imagePointPicker = vtkPropPicker::New();
-    m_imagePointPicker->InitializePickList();
-    m_imagePointPicker->AddPickList(m_volumeDisplayUnits.first()->getImageActor());
-    m_imagePointPicker->PickFromListOn();
-    getInteractor()->SetPicker(m_imagePointPicker);
 
     // Creem el drawer, passant-li com a visor l'objecte this
     m_drawer = new Drawer(this);
@@ -87,9 +80,6 @@ Q2DViewer::~Q2DViewer()
     {
         delete volumeDisplayUnit;
     }
-
-    // Fem delete de tots els objectes vtk dels que hem fet un ::New()
-    m_imagePointPicker->Delete();
 
     // Fem delete d'altres objectes vtk en cas que s'hagin hagut de crear
     delete m_blender;
@@ -1062,12 +1052,15 @@ bool Q2DViewer::getCurrentCursorImageCoordinate(double xyz[3])
         return inside;
     }
 
+    vtkPropPicker *picker = m_volumeDisplayUnits.first()->getImagePointPicker();
+    getInteractor()->SetPicker(picker);
+
     QPoint position = getEventPosition();
-    if (m_imagePointPicker->Pick(position.x(), position.y(), 0.0, getRenderer()))
+    if (picker->Pick(position.x(), position.y(), 0.0, getRenderer()))
     {
         inside = true;
         // Calculem el pixel trobat
-        m_imagePointPicker->GetPickPosition(xyz);
+        picker->GetPickPosition(xyz);
         // Calculem la profunditat correcta. S'ha de tenir en compte que en el cas que tinguem fases
         // vtk no n'és conscient (cada fase es desplaça en la profunditat z com si fos una imatge més)
         // i si no fèssim aquest càlcul, estaríem donant una coordenada Z incorrecta
