@@ -1199,7 +1199,7 @@ bool Q2DViewer::isThickSlabActive() const
 void Q2DViewer::putCoordinateInCurrentImageBounds(double xyz[3])
 {
     double bounds[6];
-    m_volumeDisplayUnits.first()->getImageActor()->GetBounds(bounds);
+    getCurrentRenderedItemBounds(bounds);
 
     int xIndex = getCurrentViewPlane().getXIndex();
     int yIndex = getCurrentViewPlane().getYIndex();
@@ -1322,7 +1322,7 @@ void Q2DViewer::setAlignPosition(AlignPosition alignPosition)
 
     // Cas que sigui AlignRight o AlignLeft
     double bounds[6];
-    m_volumeDisplayUnits.first()->getImageActor()->GetBounds(bounds);
+    getCurrentRenderedItemBounds(bounds);
     double motionVector[4] = { 0.0, 0.0, 0.0, 0.0 };
     
     double alignmentPoint[3];
