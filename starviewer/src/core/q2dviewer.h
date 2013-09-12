@@ -314,6 +314,9 @@ private:
     /// Afegeix tots els actors a l'escena
     void addActors();
 
+    /// Initializes camera parameters
+    void initializeCamera();
+
     /// Updates the display extents of the image actors.
     void updateDisplayExtents();
 
