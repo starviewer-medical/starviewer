@@ -28,6 +28,8 @@ class BlendFilter;
 class VolumeDisplayUnit;
 class VolumePixelData;
 class Q2DViewerAnnotationHandler;
+class VolumeDisplayUnitHandlerFactory;
+class GenericVolumeDisplayUnitHandler;
 
 /**
     Classe base per als visualitzadors 2D.
@@ -75,6 +77,8 @@ public:
     /// Els valors podran anar de 0.0 a 1.0, on 0.0 és transparent i 1.0 és completament opac.
     void setOverlayOpacity(double opacity);
 
+    Volume* getMainInput() const;
+    
     /// Obté el window level actual de la imatge
     void getCurrentWindowLevel(double wl[2]);
 
@@ -178,9 +182,6 @@ public:
 
     /// Sets the transfer function of the image pipeline of the volume at the given index.
     void setVolumeTransferFunction(int index, const TransferFunction &transferFunction);
-
-    /// Removes the transfer function set to the volume at the given index.
-    void clearVolumeTransferFunction(int index);
 
 public slots:
     virtual void setInput(Volume *volume);
@@ -311,12 +312,13 @@ private:
     /// At this moment it is only applying to mammography (MG) images
     void updatePreferredImageOrientation();
 
-    /// Afegeix tots els actors a l'escena
-    void addActors();
-
     /// Initializes camera parameters
     void initializeCamera();
 
+    /// Adds/remove the image actors to/from the scene
+    void addImageActors();
+    void removeImageActors();
+    
     /// Updates the display extents of the image actors.
     void updateDisplayExtents();
 
@@ -377,14 +379,10 @@ private:
     /// Updates the slice to display in the secondary volumes to the closest one in the main volume.
     void updateSecondaryVolumesSlices();
 
-    /// Creates or destroys volume display units as needed according to the new number of volumes. Also, adds or removes image actors from the viewer.
-    void setupVolumeDisplayUnits(int count);
+    /// Returns the VolumeDisplayUnit of the given index. Returns null if there's no display unit or index is out of range
+    VolumeDisplayUnit* getDisplayUnit(int index) const;
+    VolumeDisplayUnit* getMainDisplayUnit() const;
 
-    /// Sets the default opacity for each volume after setting new volumes.
-    void setDefaultOpacitiesForNewVolumes();
-
-    /// Sets the default transfer function for each volume after setting new volumes.
-    void setDefaultTransferFunctionsForNewVolumes();
 
 private slots:
     /// Actualitza les transformacions de càmera (de moment rotació i flip)
@@ -456,9 +454,12 @@ private:
     /// If true, display shutters are visible when they are available and it's possible to show them.
     bool m_showDisplayShutters;
 
-    /// Volume display units containing the volumes displayed in this viewer and their related objects.
-    QList<VolumeDisplayUnit*> m_volumeDisplayUnits;
+    /// Factory to create the proper display units handler
+    VolumeDisplayUnitHandlerFactory *m_displayUnitsFactory;
 
+    /// VolumeDisplayUnits handler. Handles all the display units of the viewer.
+    GenericVolumeDisplayUnitHandler *m_displayUnitsHandler;
+    
     /// Holds the current thickslab pixel data
     VolumePixelData *m_currentThickSlabPixelData;
 
