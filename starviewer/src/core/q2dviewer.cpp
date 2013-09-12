@@ -61,6 +61,7 @@ Q2DViewer::Q2DViewer(QWidget *parent)
     // Creem anotacions i actors
     m_annotationsHandler = new Q2DViewerAnnotationHandler(this);
     addActors();
+    initializeCamera();
 
     // Creem el drawer, passant-li com a visor l'objecte this
     m_drawer = new Drawer(this);
@@ -299,7 +300,10 @@ void Q2DViewer::addActors()
     Q_ASSERT(renderer);
     // Anotacions de texte
     renderer->AddViewProp(m_volumeDisplayUnits.first()->getImageActor());
-    // TODO Colocar això en un lloc mes adient
+}
+
+void Q2DViewer::initializeCamera()
+{
     vtkCamera *camera = getActiveCamera();
     Q_ASSERT(camera);
     camera->ParallelProjectionOn();
