@@ -685,12 +685,6 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
             volumeDisplayUnit->setViewPlane(view);
         }
 
-        // Ara adaptem els actors a la nova configuració de la càmara perquè siguin visibles
-        // TODO Això s'hauria d'encapsular en un mètode tipu "resetDisplayExtent()"
-        updateDisplayExtents();
-        getRenderer()->ResetCamera();
-        // Fins aquí seria el mètode "resetDisplayExtent()"
-        
         // Calculem la llesca que cal mostrar segons la vista escollida
         int initialSliceIndex = 0;
         if (getCurrentViewPlane() == OrthogonalPlane::YZPlane || getCurrentViewPlane() == OrthogonalPlane::XZPlane)
@@ -698,6 +692,8 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
             initialSliceIndex = m_volumeDisplayUnits.first()->getSliceHandler()->getMaximumSlice() / 2;
         }
         setSlice(initialSliceIndex);
+        // Adapt the camera to the new view plane in order to make actors visible
+        getRenderer()->ResetCamera();
     }
     
     // Thick Slab, li indiquem la direcció de projecció actual
