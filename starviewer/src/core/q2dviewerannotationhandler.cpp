@@ -250,7 +250,7 @@ void Q2DViewerAnnotationHandler::updateSliceAnnotation()
         if (m_2DViewer->isThickSlabActive())
         {
             // TODO We need a getLastSlabSlice() method on Q2Dviewer to avoid doing this computing
-            lowerLeftText += QObject::tr("-%2").arg(m_2DViewer->getCurrentSlice() + m_2DViewer->getSlabThickness() - 1);
+            lowerLeftText += QObject::tr("-%2").arg(m_2DViewer->getCurrentSlice() + m_2DViewer->getSlabThickness());
         }
         lowerLeftText += QObject::tr("/%1").arg(m_2DViewer->getNumberOfSlices());
         
