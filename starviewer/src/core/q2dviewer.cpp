@@ -28,6 +28,9 @@
 #include "slicelocator.h"
 #include "transferfunctionmodel.h"
 #include "q2dviewerannotationhandler.h"
+#include "volumedisplayunithandlerfactory.h"
+#include "genericvolumedisplayunithandler.h"
+
 // Qt
 #include <QResizeEvent>
 // Include's bàsics vtk
@@ -49,6 +52,8 @@ Q2DViewer::Q2DViewer(QWidget *parent)
 : QViewer(parent), m_overlayVolume(0), m_blender(0), m_overlapMethod(Q2DViewer::Blend), m_rotateFactor(0), m_applyFlip(false),
   m_isImageFlipped(false), m_slabProjectionMode(AccumulatorFactory::Maximum)
 {
+    m_displayUnitsFactory = new VolumeDisplayUnitHandlerFactory;
+    m_displayUnitsHandler = 0;
     m_volumeReaderManager = new VolumeReaderManager(this);
     m_inputFinishedCommand = NULL;
     m_currentThickSlabPixelData = 0;
@@ -56,11 +61,8 @@ Q2DViewer::Q2DViewer(QWidget *parent)
     connect(m_volumeReaderManager, SIGNAL(readingFinished()), SLOT(volumeReaderJobFinished()));
     connect(m_volumeReaderManager, SIGNAL(progress(int)), m_workInProgressWidget, SLOT(updateProgress(int)));
 
-    m_volumeDisplayUnits.append(new VolumeDisplayUnit());
-
     // Creem anotacions i actors
     m_annotationsHandler = new Q2DViewerAnnotationHandler(this);
-    addActors();
     initializeCamera();
 
     // Creem el drawer, passant-li com a visor l'objecte this
@@ -77,11 +79,7 @@ Q2DViewer::Q2DViewer(QWidget *parent)
 
 Q2DViewer::~Q2DViewer()
 {
-    foreach (VolumeDisplayUnit *volumeDisplayUnit, m_volumeDisplayUnits)
-    {
-        delete volumeDisplayUnit;
-    }
-
+    delete m_displayUnitsFactory;
     // Fem delete d'altres objectes vtk en cas que s'hagin hagut de crear
     delete m_blender;
 
@@ -276,30 +274,54 @@ void Q2DViewer::updatePreferredImageOrientation()
 
 double Q2DViewer::getCurrentSliceThickness() const
 {
-    return m_volumeDisplayUnits.first()->getSliceHandler()->getSliceThickness();
+    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
+    if (mainDisplayUnit)
+    {
+        return mainDisplayUnit->getSliceHandler()->getSliceThickness();
+    }
+    else
+    {
+        return 0.0;
+    }
 }
 
 int Q2DViewer::getMinimumSlice() const
 {
-    return m_volumeDisplayUnits.first()->getSliceHandler()->getMinimumSlice();
+    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
+    if (mainDisplayUnit)
+    {
+        return mainDisplayUnit->getSliceHandler()->getMinimumSlice();
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 int Q2DViewer::getMaximumSlice() const
 {
-    return m_volumeDisplayUnits.first()->getSliceHandler()->getMaximumSlice();
+    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
+    if (mainDisplayUnit)
+    {
+        return mainDisplayUnit->getSliceHandler()->getMaximumSlice();
+    }
+    else
+    {
+        return 1;
+    }
 }
 
 int Q2DViewer::getNumberOfSlices() const
 {
-    return m_volumeDisplayUnits.first()->getSliceHandler()->getNumberOfSlices();
-}
-
-void Q2DViewer::addActors()
-{
-    vtkRenderer *renderer = getRenderer();
-    Q_ASSERT(renderer);
-    // Anotacions de texte
-    renderer->AddViewProp(m_volumeDisplayUnits.first()->getImageActor());
+    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
+    if (mainDisplayUnit)
+    {
+        return mainDisplayUnit->getSliceHandler()->getNumberOfSlices();
+    }
+    else
+    {
+        return 1;
+    }
 }
 
 void Q2DViewer::initializeCamera()
@@ -307,6 +329,30 @@ void Q2DViewer::initializeCamera()
     vtkCamera *camera = getActiveCamera();
     Q_ASSERT(camera);
     camera->ParallelProjectionOn();
+}
+
+void Q2DViewer::addImageActors()
+{
+    if (m_displayUnitsHandler)
+    {
+        vtkRenderer *renderer = getRenderer();
+        foreach (VolumeDisplayUnit* unit, m_displayUnitsHandler->getVolumeDisplayUnitList())
+        {
+            renderer->AddViewProp(unit->getImageActor());
+        }
+    }
+}
+
+void Q2DViewer::removeImageActors()
+{
+    if (m_displayUnitsHandler)
+    {
+        vtkRenderer *renderer = getRenderer();
+        foreach (VolumeDisplayUnit* unit, m_displayUnitsHandler->getVolumeDisplayUnitList())
+        {
+            renderer->RemoveViewProp(unit->getImageActor());
+        }
+    }
 }
 
 void Q2DViewer::setInput(Volume *volume)
@@ -468,36 +514,31 @@ void Q2DViewer::setNewVolumes(const QList<Volume*> &volumes, bool setViewerStatu
     // Desactivem el rendering per tal de millorar l'eficiència del setInput ja que altrament es renderitza múltiples vegades
     enableRendering(false);
     
-    if (getMainInput() != volumes.first())
-    {
-        // Al canviar de volum, eliminem overlays que poguèssim tenir anteriorment
-        removeViewerBitmaps();
-    }
-
+    // Check if there was input before and take the appropiate actions
     if (hasInput())
     {
         // Al fer un nou input, les distàncies que guardava el drawer no tenen sentit, pertant s'esborren
         m_drawer->removeAllPrimitives();
 
+        Volume *mainInput = getMainInput();
         // Si el volum anterior era un dummy, l'eliminem
-        if (getMainInput()->objectName() == DummyVolumeObjectName)
+        if (mainInput->objectName() == DummyVolumeObjectName)
         {
-            delete getMainInput();
+            delete mainInput;
+        }
+
+        if (getMainInput() != volumes.first())
+        {
+            // Al canviar de volum, eliminem overlays que poguèssim tenir anteriorment
+            removeViewerBitmaps();
         }
     }
 
-    // TODO Caldria fer neteja? bloquejar? Per tal que quedi en negre mentres es carrega el nou volum?
-    m_mainVolume = volumes.first();
-
-    setupVolumeDisplayUnits(volumes.size());
-
-    for (int i = 0; i < volumes.size(); i++)
-    {
-        m_volumeDisplayUnits.at(i)->setVolume(volumes.at(i));
-    }
-
-    setDefaultOpacitiesForNewVolumes();
-    setDefaultTransferFunctionsForNewVolumes();
+    // Init new input
+    removeImageActors();
+    delete m_displayUnitsHandler;
+    m_displayUnitsHandler = m_displayUnitsFactory->createVolumeDisplayUnitHandler(volumes);
+    addImageActors();
 
     setCurrentViewPlane(OrthogonalPlane::XYPlane);
     m_alignPosition = Q2DViewer::AlignCenter;
@@ -626,11 +667,17 @@ Volume* Q2DViewer::getOverlayInput()
 
 void Q2DViewer::updateOverlay()
 {
+    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
+    if (!mainDisplayUnit)
+    {
+        return;
+    }
+    
     switch (m_overlapMethod)
     {
         case None:
             // Actualitzem el pipeline
-            m_volumeDisplayUnits.first()->getImagePipeline()->setInput(getMainInput()->getVtkData());
+            mainDisplayUnit->getImagePipeline()->setInput(getMainInput()->getVtkData());
             // TODO aquest procediment és possible que sigui insuficient,
             // caldria unficar el pipeline en un mateix mètode
             break;
@@ -639,7 +686,7 @@ void Q2DViewer::updateOverlay()
             // TODO Revisar la manera de donar-li l'input d'un blending al visualitzador
             // Aquest procediment podria ser insuficent de cares a com estigui construit el pipeline
             m_blender->update();
-            m_volumeDisplayUnits.first()->getImagePipeline()->setInput(m_blender->getOutput());
+            mainDisplayUnit->getImagePipeline()->setInput(m_blender->getOutput());
             break;
     }
 
@@ -649,6 +696,20 @@ void Q2DViewer::updateOverlay()
 void Q2DViewer::setOverlayOpacity(double opacity)
 {
     m_overlayOpacity = opacity;
+}
+
+Volume* Q2DViewer::getMainInput() const
+{
+    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
+
+    if (mainDisplayUnit)
+    {
+        return mainDisplayUnit->getVolume();
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 void Q2DViewer::resetView(const OrthogonalPlane &view)
@@ -678,22 +739,23 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
     
     resetCamera();
     
-    if (hasInput())
+    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
+    if (mainDisplayUnit)
     {
         // Calculem la llesca que cal mostrar segons la vista escollida
         int initialSliceIndex = 0;
         if (getCurrentViewPlane() == OrthogonalPlane::YZPlane || getCurrentViewPlane() == OrthogonalPlane::XZPlane)
         {
-            initialSliceIndex = m_volumeDisplayUnits.first()->getSliceHandler()->getMaximumSlice() / 2;
+            initialSliceIndex = mainDisplayUnit->getSliceHandler()->getMaximumSlice() / 2;
         }
         setSlice(initialSliceIndex);
         // Adapt the camera to the new view plane in order to make actors visible
         getRenderer()->ResetCamera();
+
+        // Thick Slab, li indiquem la direcció de projecció actual
+        mainDisplayUnit->getImagePipeline()->setProjectionAxis(getCurrentViewPlane());
+        setSlabThickness(desiredSlabSlices);
     }
-    
-    // Thick Slab, li indiquem la direcció de projecció actual
-    m_volumeDisplayUnits.first()->getImagePipeline()->setProjectionAxis(getCurrentViewPlane());
-    setSlabThickness(desiredSlabSlices);
 
     emit viewChanged(getCurrentViewPlane());
 }
@@ -816,18 +878,19 @@ void Q2DViewer::setPhase(int value)
 
 void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
 {
-    if (hasInput())
+    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
+    if (mainDisplayUnit)
     {
         // First update the index of the corresponding dimension
         switch (dimension)
         {
             case SpatialDimension:
-                m_volumeDisplayUnits.first()->getSliceHandler()->setSlice(value);
+                mainDisplayUnit->getSliceHandler()->setSlice(value);
                 updateSecondaryVolumesSlices();
                 break;
 
             case TemporalDimension:
-                m_volumeDisplayUnits.first()->getSliceHandler()->setPhase(value);
+                mainDisplayUnit->getSliceHandler()->setPhase(value);
                 break;
         }
         
@@ -854,7 +917,7 @@ void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
         }
 
         // We set the proper slice index on the image pipeline
-        m_volumeDisplayUnits.first()->getImagePipeline()->setSlice(getMainInput()->getImageIndex(getCurrentSlice(), getCurrentPhase()));
+        mainDisplayUnit->getImagePipeline()->setSlice(getMainInput()->getImageIndex(getCurrentSlice(), getCurrentPhase()));
 
         // Finally we emit the signal of the changed value and render the scene
         switch (dimension)
@@ -874,7 +937,12 @@ void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
 
 void Q2DViewer::updateSecondaryVolumesSlices()
 {
-    if (m_volumeDisplayUnits.size() <= 1)
+    if (!hasInput())
+    {
+        return;
+    }
+    
+    if (m_displayUnitsHandler->getNumberOfInputs() <= 1)
     {
         return;
     }
@@ -882,14 +950,14 @@ void Q2DViewer::updateSecondaryVolumesSlices()
     SliceLocator sliceLocator;
     sliceLocator.setPlane(getCurrentViewPlane());
 
-    for (int i = 1; i < m_volumeDisplayUnits.size(); i++)
+    for (int i = 1; i < m_displayUnitsHandler->getNumberOfInputs(); i++)
     {
-        sliceLocator.setVolume(m_volumeDisplayUnits.at(i)->getVolume());
+        sliceLocator.setVolume(getDisplayUnit(i)->getVolume());
         int nearestSlice = sliceLocator.getNearestSlice(getCurrentImagePlane());
 
         if (nearestSlice >= 0)
         {
-            m_volumeDisplayUnits.at(i)->getSliceHandler()->setSlice(nearestSlice);
+            getDisplayUnit(i)->getSliceHandler()->setSlice(nearestSlice);
         }
     }
 }
@@ -900,7 +968,11 @@ void Q2DViewer::setOverlapMethod(OverlapMethod method)
     
     if (m_overlapMethod == Q2DViewer::None)
     {
-        m_volumeDisplayUnits.first()->getImagePipeline()->setInput(getMainInput()->getVtkData());
+        VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
+        if (mainDisplayUnit)
+        {
+            mainDisplayUnit->getImagePipeline()->setInput(getMainInput()->getVtkData());
+        }
     }
 }
 
@@ -928,14 +1000,13 @@ void Q2DViewer::resizeEvent(QResizeEvent *resize)
 
 void Q2DViewer::setWindowLevel(double window, double level)
 {
-    if (hasInput())
+    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
+    if (mainDisplayUnit)
     {
-        if (m_volumeDisplayUnits.first()->getImagePipeline()->setWindowLevel(window,level))
-        {
-            m_annotationsHandler->updateAnnotationsInformation(WindowInformationAnnotation);
-            render();
-            emit windowLevelChanged(window, level);
-        }
+        mainDisplayUnit->getImagePipeline()->setWindowLevel(window,level);
+        m_annotationsHandler->updateAnnotationsInformation(WindowInformationAnnotation);
+        render();
+        emit windowLevelChanged(window, level);
     }
     else
     {
@@ -947,14 +1018,19 @@ void Q2DViewer::setTransferFunction(TransferFunction *transferFunction)
 {
     m_transferFunction = transferFunction;
     // Apliquem la funció de transferència sobre el window level mapper
-    m_volumeDisplayUnits.first()->getImagePipeline()->setTransferFunction(*m_transferFunction);
+    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
+    if (mainDisplayUnit)
+    {
+        mainDisplayUnit->getImagePipeline()->setTransferFunction(*m_transferFunction);
+    }
 }
 
 void Q2DViewer::getCurrentWindowLevel(double wl[2])
 {
-    if (hasInput())
+    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
+    if (mainDisplayUnit)
     {
-        m_volumeDisplayUnits.first()->getImagePipeline()->getCurrentWindowLevel(wl);
+        mainDisplayUnit->getImagePipeline()->getCurrentWindowLevel(wl);
     }
     else
     {
@@ -964,12 +1040,28 @@ void Q2DViewer::getCurrentWindowLevel(double wl[2])
 
 int Q2DViewer::getCurrentSlice() const
 {
-    return m_volumeDisplayUnits.first()->getSliceHandler()->getCurrentSlice();
+    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
+    if (mainDisplayUnit)
+    {
+        return mainDisplayUnit->getSliceHandler()->getCurrentSlice();
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 int Q2DViewer::getCurrentPhase() const
 {
-    return m_volumeDisplayUnits.first()->getSliceHandler()->getCurrentPhase();
+    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
+    if (mainDisplayUnit)
+    {
+        return mainDisplayUnit->getSliceHandler()->getCurrentPhase();
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 Image* Q2DViewer::getCurrentDisplayedImage() const
@@ -1041,13 +1133,14 @@ Drawer* Q2DViewer::getDrawer() const
 
 bool Q2DViewer::getCurrentCursorImageCoordinate(double xyz[3])
 {
-    bool inside = false;
-    if (!hasInput())
+    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
+    if (!mainDisplayUnit)
     {
-        return inside;
+        return false;
     }
 
-    vtkPropPicker *picker = m_volumeDisplayUnits.first()->getImagePointPicker();
+    bool inside = false;
+    vtkPropPicker *picker = mainDisplayUnit->getImagePointPicker();
     getInteractor()->SetPicker(picker);
 
     QPoint position = getEventPosition();
@@ -1116,7 +1209,12 @@ void Q2DViewer::updateDisplayExtents()
         return;
     }
 
-    foreach (VolumeDisplayUnit *volumeDisplayUnit, m_volumeDisplayUnits)
+    if (!m_displayUnitsHandler)
+    {
+        return;
+    }
+    
+    foreach (VolumeDisplayUnit *volumeDisplayUnit, m_displayUnitsHandler->getVolumeDisplayUnitList())
     {
         volumeDisplayUnit->updateDisplayExtent();
     }
@@ -1149,9 +1247,13 @@ void Q2DViewer::printVolumeInformation()
 void Q2DViewer::setSlabProjectionMode(int projectionMode)
 {
     m_slabProjectionMode = projectionMode;
-    m_volumeDisplayUnits.first()->getImagePipeline()->setSlabProjectionMode(static_cast<AccumulatorFactory::AccumulatorType>(m_slabProjectionMode));
-    updateDisplayExtents();
-    render();
+    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
+    if (mainDisplayUnit)
+    {
+        mainDisplayUnit->getImagePipeline()->setSlabProjectionMode(static_cast<AccumulatorFactory::AccumulatorType>(m_slabProjectionMode));
+        updateDisplayExtents();
+        render();
+    }
 }
 
 int Q2DViewer::getSlabProjectionMode() const
@@ -1161,16 +1263,22 @@ int Q2DViewer::getSlabProjectionMode() const
 
 void Q2DViewer::setSlabThickness(int thickness)
 {
+    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
+    if (!mainDisplayUnit)
+    {
+        return;
+    }
+    
     // Primera aproximació per evitar error dades de primitives: a l'activar o desactivar l'slabthickness, esborrem primitives
-    if (thickness != m_volumeDisplayUnits.first()->getSliceHandler()->getSlabThickness())
+    if (thickness != mainDisplayUnit->getSliceHandler()->getSlabThickness())
     {
         getDrawer()->removeAllPrimitives();
     }
 
-    m_volumeDisplayUnits.first()->getSliceHandler()->setSlabThickness(thickness);
+    mainDisplayUnit->getSliceHandler()->setSlabThickness(thickness);
 
-    m_volumeDisplayUnits.first()->getImagePipeline()->setSlice(getMainInput()->getImageIndex(getCurrentSlice(), getCurrentPhase()));
-    m_volumeDisplayUnits.first()->getImagePipeline()->setSlabThickness(m_volumeDisplayUnits.first()->getSliceHandler()->getSlabThickness());
+    mainDisplayUnit->getImagePipeline()->setSlice(getMainInput()->getImageIndex(getCurrentSlice(), getCurrentPhase()));
+    mainDisplayUnit->getImagePipeline()->setSlabThickness(mainDisplayUnit->getSliceHandler()->getSlabThickness());
     updateDisplayExtents();
     m_annotationsHandler->updateSliceAnnotationInformation();
     render();
@@ -1178,12 +1286,20 @@ void Q2DViewer::setSlabThickness(int thickness)
     // TODO és del tot correcte que vagi aquí aquesta crida?
     // Tal com està posat se suposa que sempre el valor de thickness ha
     // canviat i podria ser que no, seria més adequat posar-ho a computerangeAndSlice?
-    emit slabThicknessChanged(m_volumeDisplayUnits.first()->getSliceHandler()->getSlabThickness());
+    emit slabThicknessChanged(mainDisplayUnit->getSliceHandler()->getSlabThickness());
 }
 
 int Q2DViewer::getSlabThickness() const
 {
-    return m_volumeDisplayUnits.first()->getSliceHandler()->getSlabThickness();
+    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
+    if (mainDisplayUnit)
+    {
+        return mainDisplayUnit->getSliceHandler()->getSlabThickness();
+    }
+    else
+    {
+        return 1;
+    }
 }
 
 void Q2DViewer::disableThickSlab()
@@ -1193,7 +1309,15 @@ void Q2DViewer::disableThickSlab()
 
 bool Q2DViewer::isThickSlabActive() const
 {
-    return m_volumeDisplayUnits.first()->getSliceHandler()->getSlabThickness() > 1;
+    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
+    if (mainDisplayUnit)
+    {
+        return mainDisplayUnit->getSliceHandler()->getSlabThickness() > 1;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 void Q2DViewer::putCoordinateInCurrentImageBounds(double xyz[3])
@@ -1229,21 +1353,25 @@ void Q2DViewer::putCoordinateInCurrentImageBounds(double xyz[3])
 
 VolumePixelData* Q2DViewer::getCurrentPixelData()
 {
-    VolumeDisplayUnit *currentDisplayUnit = m_volumeDisplayUnits.first();
+    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
+    if (!mainDisplayUnit)
+    {
+        return 0;
+    }
     
-    if (currentDisplayUnit->getSliceHandler()->getSlabThickness() > 1)
+    if (mainDisplayUnit->getSliceHandler()->getSlabThickness() > 1)
     {
         if (!m_currentThickSlabPixelData)
         {
             m_currentThickSlabPixelData = new VolumePixelData;
         }
-        m_currentThickSlabPixelData->setData(currentDisplayUnit->getImagePipeline()->getSlabProjectionOutput());
+        m_currentThickSlabPixelData->setData(mainDisplayUnit->getImagePipeline()->getSlabProjectionOutput());
 
         return m_currentThickSlabPixelData;
     }
     else
     {
-        return currentDisplayUnit->getVolume()->getPixelData();
+        return mainDisplayUnit->getVolume()->getPixelData();
     }
 }
 
@@ -1461,7 +1589,11 @@ void Q2DViewer::applyImageOrientationChanges()
 
 void Q2DViewer::getCurrentRenderedItemBounds(double bounds[6])
 {
-    m_volumeDisplayUnits.first()->getImageActor()->GetBounds(bounds);
+    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
+    if (mainDisplayUnit)
+    {
+        mainDisplayUnit->getImageActor()->GetBounds(bounds);
+    }
 }
 
 void Q2DViewer::updateCurrentImageDefaultPresets()
@@ -1486,7 +1618,15 @@ double Q2DViewer::getCurrentSpacingBetweenSlices()
 
 vtkImageActor* Q2DViewer::getVtkImageActor() const
 {
-    return m_volumeDisplayUnits.first()->getImageActor();
+    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
+    if (mainDisplayUnit)
+    {
+        return mainDisplayUnit->getImageActor();
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 Q2DViewer* Q2DViewer::castFromQViewer(QViewer *viewer)
@@ -1528,93 +1668,80 @@ void Q2DViewer::updateDisplayShutterMask()
             shutterData = image->getDisplayShutterForDisplayAsVtkImageData(getMainInput()->getImageIndex(getCurrentSlice(), getCurrentPhase()));
         }
     }
-    m_volumeDisplayUnits.first()->getImagePipeline()->setShutterData(shutterData);
+    
+    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
+    if (mainDisplayUnit)
+    {
+        mainDisplayUnit->getImagePipeline()->setShutterData(shutterData);
+    }
 }
 
 const OrthogonalPlane& Q2DViewer::getCurrentViewPlane() const
 {
-    return m_volumeDisplayUnits.first()->getViewPlane();
+    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
+    if (mainDisplayUnit)
+    {
+        return mainDisplayUnit->getViewPlane();
+    }
+    else
+    {
+        return OrthogonalPlane();
+    }
 }
 
 void Q2DViewer::setCurrentViewPlane(const OrthogonalPlane &viewPlane)
 {
     QViewer::setCurrentViewPlane(viewPlane);
 
-    foreach (VolumeDisplayUnit *volumeDisplayUnit, m_volumeDisplayUnits)
+    if (!m_displayUnitsHandler)
+    {
+        return;
+    }
+
+    foreach (VolumeDisplayUnit *volumeDisplayUnit, m_displayUnitsHandler->getVolumeDisplayUnitList())
     {
         volumeDisplayUnit->setViewPlane(viewPlane);
     }
 }
 
-void Q2DViewer::setupVolumeDisplayUnits(int count)
-{
-    vtkRenderer *renderer = getRenderer();
-
-    // Destroy the last VDUs
-    while (count < m_volumeDisplayUnits.size())
-    {
-        renderer->RemoveViewProp(m_volumeDisplayUnits.last()->getImageActor());
-        delete m_volumeDisplayUnits.takeLast();
-    }
-
-    // Create new VDUs
-    while (count > m_volumeDisplayUnits.size())
-    {
-        m_volumeDisplayUnits.append(new VolumeDisplayUnit());
-        renderer->AddViewProp(m_volumeDisplayUnits.last()->getImageActor());
-    }
-}
-
 void Q2DViewer::setVolumeOpacity(int index, double opacity)
 {
-    m_volumeDisplayUnits.at(index)->getImageActor()->SetOpacity(opacity);
+    VolumeDisplayUnit *unit = getDisplayUnit(index);
+    if (unit)
+    {
+        unit->getImageActor()->SetOpacity(opacity);
+    }
 }
 
 void Q2DViewer::setVolumeTransferFunction(int index, const TransferFunction &transferFunction)
 {
-    m_volumeDisplayUnits.at(index)->getImagePipeline()->setTransferFunction(transferFunction);
-}
-
-void Q2DViewer::clearVolumeTransferFunction(int index)
-{
-    m_volumeDisplayUnits.at(index)->getImagePipeline()->clearTransferFunction();
-}
-
-void Q2DViewer::setDefaultOpacitiesForNewVolumes()
-{
-    // For now, the default opacities will be 1 for the first volume and 0.5 for the others
-    setVolumeOpacity(0, 1.0);
-
-    for (int i = 1; i < m_volumeDisplayUnits.size(); i++)
+    VolumeDisplayUnit *unit = getDisplayUnit(index);
+    if (unit)
     {
-        setVolumeOpacity(i, 0.5);
+        unit->getImagePipeline()->setTransferFunction(transferFunction);
     }
 }
 
-void Q2DViewer::setDefaultTransferFunctionsForNewVolumes()
+VolumeDisplayUnit* Q2DViewer::getDisplayUnit(int index) const
 {
-    // By default, all volumes have no transfer function
-    for (int i = 0; i < m_volumeDisplayUnits.size(); i++)
+    if (!m_displayUnitsHandler)
     {
-        clearVolumeTransferFunction(i);
+        return 0;
     }
 
-    // Exception (for CT-PET fusion): if we have two volumes, the second one will have the first default 2D transfer function
-    if (m_volumeDisplayUnits.size() == 2)
-    {
-        TransferFunctionModel model;
-        model.loadDefault2DTransferFunctions();
+    return m_displayUnitsHandler->getVolumeDisplayUnit(index);
+}
 
-        if (model.rowCount() > 0)
-        {
-            const TransferFunction &transferFunction = model.getTransferFunction(0);
-            double originalRange[2] = { transferFunction.keys().first(), transferFunction.keys().last() };
-            double newRange[2];
-            m_volumeDisplayUnits.at(1)->getVolume()->getScalarRange(newRange);
-            const TransferFunction &scaledTransferFunction = transferFunction.toNewRange(originalRange[0], originalRange[1], newRange[0], newRange[1]);
-            setVolumeTransferFunction(1, scaledTransferFunction);
-        }
+VolumeDisplayUnit* Q2DViewer::getMainDisplayUnit() const
+{
+    if (!m_displayUnitsHandler)
+    {
+        return 0;
     }
+
+    return m_displayUnitsHandler->getMainVolumeDisplayUnit();
+}
+
 }
 
 };  // End namespace udg
