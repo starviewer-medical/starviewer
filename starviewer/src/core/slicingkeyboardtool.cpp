@@ -65,7 +65,7 @@ void SlicingKeyboardTool::handleEvent(unsigned long eventID)
                     QList<Volume*> volumesList;
                     int currentVolumeIndex = 0;
 
-                    Volume *currentVolume = m_2DViewer->getInput();
+                    Volume *currentVolume = m_2DViewer->getMainInput();
                     if (currentVolume != NULL)
                     {
                         Study *currentStudy = currentVolume->getStudy();

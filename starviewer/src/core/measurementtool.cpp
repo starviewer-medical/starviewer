@@ -20,7 +20,7 @@ MeasurementTool::~MeasurementTool()
 QString MeasurementTool::getMeasurementString()
 {
     MeasureComputer *measureComputer = getMeasureComputer();
-    QString measurementString = MeasurementManager::getMeasurementForDisplay(measureComputer, getImageForMeasurement(), m_2DViewer->getInput()->getSpacing(),
+    QString measurementString = MeasurementManager::getMeasurementForDisplay(measureComputer, getImageForMeasurement(), m_2DViewer->getMainInput()->getSpacing(),
         MeasurementManager::getConfiguredDisplayVerbosity());
     delete measureComputer;
 
@@ -39,7 +39,7 @@ Image* MeasurementTool::getImageForMeasurement() const
     {
         // In case a reconstruction is applied, image will be null, that's why we take the first image in this caseto have the pixel spacing properties.
         // For these cases, the first image will be enough to properly compute the measurement
-        image = m_2DViewer->getInput()->getImage(0);
+        image = m_2DViewer->getMainInput()->getImage(0);
     }
 
     return image;

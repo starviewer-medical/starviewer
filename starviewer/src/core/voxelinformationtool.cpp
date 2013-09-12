@@ -101,9 +101,9 @@ QString VoxelInformationTool::computeVoxelValue(double worldCoordinate[3])
 {
     int phaseIndex = 0;
     int numberOfPhases = 1;
-    if (!m_2DViewer->isThickSlabActive() && m_2DViewer->getView() == OrthogonalPlane::XYPlane && m_2DViewer->getInput()->getNumberOfPhases() > 1)
+    if (!m_2DViewer->isThickSlabActive() && m_2DViewer->getView() == OrthogonalPlane::XYPlane && m_2DViewer->getMainInput()->getNumberOfPhases() > 1)
     {
-        numberOfPhases = m_2DViewer->getInput()->getNumberOfPhases();
+        numberOfPhases = m_2DViewer->getMainInput()->getNumberOfPhases();
         phaseIndex = m_2DViewer->getCurrentPhase();
     }
     

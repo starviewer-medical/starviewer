@@ -63,7 +63,7 @@ void QViewerCINEController::setInputViewer(QViewer *viewer)
     connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(resetCINEInformation(Volume*)));
     connect(m_2DViewer, SIGNAL(slabThicknessChanged(int)), SLOT(updateThickness(int)));
 
-    resetCINEInformation(m_2DViewer->getInput());
+    resetCINEInformation(m_2DViewer->getMainInput());
 }
 
 void QViewerCINEController::setCINEDimension(int dimension)
@@ -141,7 +141,7 @@ void QViewerCINEController::record()
         return;
     }
 
-    int phases = m_2DViewer->getInput()->getNumberOfPhases();
+    int phases = m_2DViewer->getMainInput()->getNumberOfPhases();
     int currentSlice = m_2DViewer->getCurrentSlice();
 
     // Guardar els fotogrames
@@ -316,7 +316,7 @@ void QViewerCINEController::updateThickness(int thickness)
     }
     else
     {
-        m_lastSliceInterval = m_2DViewer->getInput()->getNumberOfPhases() - 1;
+        m_lastSliceInterval = m_2DViewer->getMainInput()->getNumberOfPhases() - 1;
     }
 }
 

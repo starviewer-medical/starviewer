@@ -114,7 +114,7 @@ double PolylineTemporalROITool::computeTemporalMean()
 
     double bounds[6];
     m_roiPolygon->getBounds(bounds);
-    double *spacing = m_2DViewer->getInput()->getSpacing();
+    double *spacing = m_2DViewer->getMainInput()->getSpacing();
 
     int rayPointIndex;
     int intersectionIndex;
@@ -287,8 +287,8 @@ double PolylineTemporalROITool::computeTemporalMean()
 QVector<double> PolylineTemporalROITool::getGraySerie(double *coords, int size)
 {
     QVector<double> v (size);
-    double *origin = m_2DViewer->getInput()->getOrigin();
-    double *spacing = m_2DViewer->getInput()->getSpacing();
+    double *origin = m_2DViewer->getMainInput()->getOrigin();
+    double *spacing = m_2DViewer->getMainInput()->getSpacing();
     itk::Index<4> index;
     int xIndex, yIndex, zIndex;
     int i;

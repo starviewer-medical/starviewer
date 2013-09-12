@@ -58,7 +58,7 @@ void AutomaticSynchronizationTool::initialize()
 {
     if (m_2DViewer->hasInput())
     {
-        QString frameOfReferenceUID = m_2DViewer->getInput()->getImage(0)->getParentSeries()->getFrameOfReferenceUID();
+        QString frameOfReferenceUID = m_2DViewer->getMainInput()->getImage(0)->getParentSeries()->getFrameOfReferenceUID();
         int groupOfActualViewer = m_toolData->getGroupForUID(frameOfReferenceUID);
 
         if (groupOfActualViewer == -1)
@@ -83,7 +83,7 @@ void AutomaticSynchronizationTool::updateSliceLocator()
 {
     if (m_2DViewer)
     {
-        m_sliceLocator->setVolume(m_2DViewer->getInput());
+        m_sliceLocator->setVolume(m_2DViewer->getMainInput());
         m_sliceLocator->setPlane(m_2DViewer->getView());
     }
 }
@@ -108,7 +108,7 @@ void AutomaticSynchronizationTool::changePositionIfActive()
 
 void AutomaticSynchronizationTool::setPositionToToolData()
 {
-    QString frameOfReference = m_2DViewer->getInput()->getImage(0)->getParentSeries()->getFrameOfReferenceUID();
+    QString frameOfReference = m_2DViewer->getMainInput()->getImage(0)->getParentSeries()->getFrameOfReferenceUID();
     
     double center[3];
     m_2DViewer->getCurrentImagePlane()->getCenter(center);
@@ -133,7 +133,7 @@ void AutomaticSynchronizationTool::updatePosition()
 {
     if (m_2DViewer->hasInput() && !m_2DViewer->isActive())
     {
-        QString frameOfReference = m_2DViewer->getInput()->getImage(0)->getParentSeries()->getFrameOfReferenceUID();
+        QString frameOfReference = m_2DViewer->getMainInput()->getImage(0)->getParentSeries()->getFrameOfReferenceUID();
 
         int activeGroup = m_toolData->getGroupForUID(m_toolData->getSelectedUID());
         int groupOfActualViewer = m_toolData->getGroupForUID(frameOfReference);

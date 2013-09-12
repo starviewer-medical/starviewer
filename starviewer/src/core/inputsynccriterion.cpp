@@ -17,7 +17,7 @@ InputSyncCriterion::~InputSyncCriterion()
 bool InputSyncCriterion::criterionIsMet(QViewer *viewer1, QViewer *viewer2)
 {
     // TODO Should also check if some reconstruction is applied, i.e. thick slab?
-    return viewer1->getInput() == viewer2->getInput();
+    return viewer1->getMainInput() == viewer2->getMainInput();
 }
 
 } // End namespace udg

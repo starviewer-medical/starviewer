@@ -140,7 +140,7 @@ void MagicROITool::setTextPosition(DrawerText *text)
 void MagicROITool::computeMaskBounds()
 {
     int extent[6];
-    m_2DViewer->getInput()->getWholeExtent(extent);
+    m_2DViewer->getMainInput()->getWholeExtent(extent);
 
     int xIndex, yIndex, zIndex;
     m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
@@ -285,7 +285,7 @@ void MagicROITool::computeLevelRange(VolumePixelData *pixelData)
     int z;
     if (m_2DViewer->getView() == OrthogonalPlane::XYPlane && !m_2DViewer->isThickSlabActive())
     {
-        z = m_2DViewer->getInput()->getImageIndex(m_2DViewer->getCurrentSlice(), m_2DViewer->getCurrentPhase());
+        z = m_2DViewer->getMainInput()->getImageIndex(m_2DViewer->getCurrentSlice(), m_2DViewer->getCurrentPhase());
     }
     else
     {
@@ -317,7 +317,7 @@ void MagicROITool::computeRegionMask(VolumePixelData *pixelData)
     // TODO Revisar això quan s'implementi el ticket #1247 (Suportar reconstruccions per volums amb fases)
     if (m_2DViewer->getView() == OrthogonalPlane::XYPlane && !m_2DViewer->isThickSlabActive())
     {
-        z = m_2DViewer->getInput()->getImageIndex(m_2DViewer->getCurrentSlice(), m_2DViewer->getCurrentPhase());
+        z = m_2DViewer->getMainInput()->getImageIndex(m_2DViewer->getCurrentSlice(), m_2DViewer->getCurrentPhase());
     }
     else
     {
@@ -580,8 +580,8 @@ void MagicROITool::addPoint(int direction, int x, int y, double z)
 {    
     double origin[3];
     double spacing[3];
-    m_2DViewer->getInput()->getSpacing(spacing);
-    m_2DViewer->getInput()->getOrigin(origin);
+    m_2DViewer->getMainInput()->getSpacing(spacing);
+    m_2DViewer->getMainInput()->getOrigin(origin);
 
     int xIndex, yIndex, zIndex;
     m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
