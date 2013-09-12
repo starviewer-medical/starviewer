@@ -506,7 +506,7 @@ void Q3DViewer::setInput(Volume *volume)
     setWindowLevel(m_window, m_level);
 
     // Indiquem el canvi de volum
-    emit volumeChanged(m_mainVolume);
+    emit volumeChanged(getMainInput());
 
     unsetCursor();
 }
@@ -685,13 +685,13 @@ bool Q3DViewer::rescale(Volume *volume)
 
 void Q3DViewer::setVolumeTransformation()
 {
-    Image *imageReference = m_mainVolume->getImage(0);
+    Image *imageReference = getMainInput()->getImage(0);
     ImagePlane currentPlane;
     currentPlane.fillFromImage(imageReference);
     double currentPlaneRowVector[3], currentPlaneColumnVector[3], stackDirection[3];
     currentPlane.getRowDirectionVector(currentPlaneRowVector);
     currentPlane.getColumnDirectionVector(currentPlaneColumnVector);
-    m_mainVolume->getStackDirection(stackDirection);
+    getMainInput()->getStackDirection(stackDirection);
 
     DEBUG_LOG(QString("currentPlaneRowVector: %1 %2 %3").arg(currentPlaneRowVector[0]).arg(currentPlaneRowVector[1]).arg(currentPlaneRowVector[2]));
     DEBUG_LOG(QString("currentPlaneColumnVector: %1 %2 %3").arg(currentPlaneColumnVector[0]).arg(currentPlaneColumnVector[1]).arg(currentPlaneColumnVector[2]));
@@ -912,7 +912,7 @@ void Q3DViewer::renderContouring()
     if (m_renderer->HasViewProp(m_vtkVolume))
     {
         vtkImageShrink3D *shrink = vtkImageShrink3D::New();
-        shrink->SetInput(m_mainVolume->getVtkData());
+        shrink->SetInput(getMainInput()->getVtkData());
         vtkImageGaussianSmooth *smooth = vtkImageGaussianSmooth::New();
         smooth->SetDimensionality(3);
         smooth->SetRadiusFactor(2);

@@ -147,7 +147,7 @@ PatientOrientation Q2DViewer::getCurrentDisplayedImagePatientOrientation() const
     int index = (getCurrentViewPlane() == OrthogonalPlane::XYPlane) ? getCurrentSlice() : 0;
 
     PatientOrientation originalOrientation;
-    Image *image = m_mainVolume->getImage(index);
+    Image *image = getMainInput()->getImage(index);
     if (image)
     {
         originalOrientation = image->getPatientOrientation();
@@ -246,7 +246,7 @@ void Q2DViewer::setDefaultOrientation(AnatomicalPlane::AnatomicalPlaneType anato
 
     // We apply the standard orientation for the desired projection unless original acquisition is axial and is the same as the desired one
     // because when the patient is acquired in prono position we don't want to change the acquisition orientation and thus respect the acquired one
-    AnatomicalPlane::AnatomicalPlaneType acquisitionPlane = m_mainVolume->getAcquisitionPlane();
+    AnatomicalPlane::AnatomicalPlaneType acquisitionPlane = getMainInput()->getAcquisitionPlane();
     if (acquisitionPlane != AnatomicalPlane::Axial || acquisitionPlane != anatomicalPlane)
     {
         PatientOrientation desiredOrientation = AnatomicalPlane::getDefaultRadiologicalOrienation(anatomicalPlane);
@@ -430,8 +430,8 @@ void Q2DViewer::setNewVolumesAndExecuteCommand(const QList<Volume*> &volumes)
         
         m_windowToImageFilter->SetInput(getRenderWindow());
 
-        Volume *dummyVolume = getDummyVolumeFromVolume(m_mainVolume);
-        dummyVolume->setIdentifier(m_mainVolume->getIdentifier());
+        Volume *dummyVolume = getDummyVolumeFromVolume(getMainInput());
+        dummyVolume->setIdentifier(getMainInput()->getIdentifier());
         setNewVolumes(QList<Volume*>() << dummyVolume, false);
     }
 }
@@ -468,7 +468,7 @@ void Q2DViewer::setNewVolumes(const QList<Volume*> &volumes, bool setViewerStatu
     // Desactivem el rendering per tal de millorar l'eficiència del setInput ja que altrament es renderitza múltiples vegades
     enableRendering(false);
     
-    if (m_mainVolume != volumes.first())
+    if (getMainInput() != volumes.first())
     {
         // Al canviar de volum, eliminem overlays que poguèssim tenir anteriorment
         removeViewerBitmaps();
@@ -480,9 +480,9 @@ void Q2DViewer::setNewVolumes(const QList<Volume*> &volumes, bool setViewerStatu
         m_drawer->removeAllPrimitives();
 
         // Si el volum anterior era un dummy, l'eliminem
-        if (m_mainVolume->objectName() == DummyVolumeObjectName)
+        if (getMainInput()->objectName() == DummyVolumeObjectName)
         {
-            delete m_mainVolume;
+            delete getMainInput();
         }
     }
 
@@ -524,7 +524,7 @@ void Q2DViewer::setNewVolumes(const QList<Volume*> &volumes, bool setViewerStatu
     enableRendering(true);
 
     // Indiquem el canvi de volum
-    emit volumeChanged(m_mainVolume);
+    emit volumeChanged(getMainInput());
 }
 
 void Q2DViewer::removeViewerBitmaps()
@@ -610,7 +610,7 @@ void Q2DViewer::setOverlayInput(Volume *volume)
         if (!m_blender)
         {
             m_blender = new BlendFilter();
-            m_blender->setBase(m_mainVolume->getVtkData());
+            m_blender->setBase(getMainInput()->getVtkData());
         }
         m_blender->setOverlay(m_overlayVolume->getVtkData());
         m_blender->setOverlayOpacity(1.0 - m_overlayOpacity);
@@ -630,7 +630,7 @@ void Q2DViewer::updateOverlay()
     {
         case None:
             // Actualitzem el pipeline
-            m_volumeDisplayUnits.first()->getImagePipeline()->setInput(m_mainVolume->getVtkData());
+            m_volumeDisplayUnits.first()->getImagePipeline()->setInput(getMainInput()->getVtkData());
             // TODO aquest procediment és possible que sigui insuficient,
             // caldria unficar el pipeline en un mateix mètode
             break;
@@ -661,7 +661,7 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
         // so the proper number of slices of the thick slab should be computed for the new view
         double currentSlabThickness = getCurrentSliceThickness();
         int viewIndex = view.getZIndex();
-        double zSpacingAfterReset = m_mainVolume->getSpacing()[viewIndex];
+        double zSpacingAfterReset = getMainInput()->getSpacing()[viewIndex];
         desiredSlabSlices = qRound(currentSlabThickness / zSpacingAfterReset);
     }
     
@@ -863,7 +863,7 @@ void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
         }
 
         // We set the proper slice index on the image pipeline
-        m_volumeDisplayUnits.first()->getImagePipeline()->setSlice(m_mainVolume->getImageIndex(getCurrentSlice(), getCurrentPhase()));
+        m_volumeDisplayUnits.first()->getImagePipeline()->setSlice(getMainInput()->getImageIndex(getCurrentSlice(), getCurrentPhase()));
 
         // Finally we emit the signal of the changed value and render the scene
         switch (dimension)
@@ -909,7 +909,7 @@ void Q2DViewer::setOverlapMethod(OverlapMethod method)
     
     if (m_overlapMethod == Q2DViewer::None)
     {
-        m_volumeDisplayUnits.first()->getImagePipeline()->setInput(m_mainVolume->getVtkData());
+        m_volumeDisplayUnits.first()->getImagePipeline()->setInput(getMainInput()->getVtkData());
     }
 }
 
@@ -985,7 +985,7 @@ Image* Q2DViewer::getCurrentDisplayedImage() const
 {
     if (getCurrentViewPlane() == OrthogonalPlane::XYPlane)
     {
-        return m_mainVolume->getImage(getCurrentSlice(), getCurrentPhase());
+        return getMainInput()->getImage(getCurrentSlice(), getCurrentPhase());
     }
     else
     {
@@ -1000,7 +1000,7 @@ ImagePlane* Q2DViewer::getCurrentImagePlane(bool vtkReconstructionHack)
         return 0;
     }
     
-    return m_mainVolume->getImagePlane(getCurrentSlice(), getCurrentViewPlane(), vtkReconstructionHack);
+    return getMainInput()->getImagePlane(getCurrentSlice(), getCurrentViewPlane(), vtkReconstructionHack);
 }
 
 void Q2DViewer::projectDICOMPointToCurrentDisplayedImage(const double pointToProject[3], double projectedPoint[3], bool vtkReconstructionHack)
@@ -1028,7 +1028,7 @@ void Q2DViewer::projectDICOMPointToCurrentDisplayedImage(const double pointToPro
         // cal sumar l'origen de la primera imatge, o el que seria el mateix, l'origen de m_mainVolume
         //
         // TODO provar si amb l'origen de m_mainVolume també funciona bé
-        Image *firstImage = m_mainVolume->getImage(0);
+        Image *firstImage = getMainInput()->getImage(0);
         const double *ori = firstImage->getImagePositionPatient();
         int xIndex, yIndex, zIndex;
         getCurrentViewPlane().getXYZIndexes(xIndex, yIndex, zIndex);
@@ -1069,8 +1069,8 @@ bool Q2DViewer::getCurrentCursorImageCoordinate(double xyz[3])
         // vtk no n'és conscient (cada fase es desplaça en la profunditat z com si fos una imatge més)
         // i si no fèssim aquest càlcul, estaríem donant una coordenada Z incorrecta
         int zIndex = getCurrentViewPlane().getZIndex();
-        double zSpacing = m_mainVolume->getSpacing()[zIndex];
-        double zOrigin = m_mainVolume->getOrigin()[zIndex];
+        double zSpacing = getMainInput()->getSpacing()[zIndex];
+        double zOrigin = getMainInput()->getOrigin()[zIndex];
         xyz[zIndex] =  zOrigin + zSpacing * getCurrentSlice();
     }
     else
@@ -1097,7 +1097,7 @@ QChar Q2DViewer::getCurrentDisplayedImageLaterality() const
     Image *currentImage = getCurrentDisplayedImage();
     if (!currentImage)
     {
-        currentImage = m_mainVolume->getImage(0);
+        currentImage = getMainInput()->getImage(0);
         searchSeriesLateralityOnly = true;
     }
     
@@ -1120,7 +1120,7 @@ QChar Q2DViewer::getCurrentDisplayedImageLaterality() const
 void Q2DViewer::updateDisplayExtents()
 {
     // Ens assegurem que tenim dades vàlides
-    if (!m_mainVolume->isPixelDataLoaded())
+    if (!getMainInput()->isPixelDataLoaded())
     {
         return;
     }
@@ -1147,11 +1147,11 @@ void Q2DViewer::removeAnnotation(AnnotationFlags annotation)
 void Q2DViewer::printVolumeInformation()
 {
     double range[2];
-    m_mainVolume->getScalarRange(range);
+    getMainInput()->getScalarRange(range);
     DEBUG_LOG("*** Grayscale Transform Pipeline Begin ***");
     DEBUG_LOG(QString("Image Information: Bits Allocated: %1, Bits Stored: %2, Pixel Range %3 to %4, SIGNED?Pixel Representation: %5, Photometric interpretation: %6")
-                 .arg(m_mainVolume->getImage(0)->getBitsAllocated()).arg(m_mainVolume->getImage(0)->getBitsStored()).arg(range[0]).arg(range[1])
-                 .arg(m_mainVolume->getImage(0)->getPixelRepresentation()).arg(m_mainVolume->getImage(0)->getPhotometricInterpretation()));
+                 .arg(getMainInput()->getImage(0)->getBitsAllocated()).arg(getMainInput()->getImage(0)->getBitsStored()).arg(range[0]).arg(range[1])
+                 .arg(getMainInput()->getImage(0)->getPixelRepresentation()).arg(getMainInput()->getImage(0)->getPhotometricInterpretation()));
     // Fins que no implementem Presentation states aquest serà el cas que sempre s'executarà el 100% dels casos
 }
 
@@ -1178,7 +1178,7 @@ void Q2DViewer::setSlabThickness(int thickness)
 
     m_volumeDisplayUnits.first()->getSliceHandler()->setSlabThickness(thickness);
 
-    m_volumeDisplayUnits.first()->getImagePipeline()->setSlice(m_mainVolume->getImageIndex(getCurrentSlice(), getCurrentPhase()));
+    m_volumeDisplayUnits.first()->getImagePipeline()->setSlice(getMainInput()->getImageIndex(getCurrentSlice(), getCurrentPhase()));
     m_volumeDisplayUnits.first()->getImagePipeline()->setSlabThickness(m_volumeDisplayUnits.first()->getSliceHandler()->getSlabThickness());
     updateDisplayExtents();
     m_annotationsHandler->updateSliceAnnotationInformation();
@@ -1490,7 +1490,7 @@ double Q2DViewer::getCurrentSpacingBetweenSlices()
 {
     int zIndex = getCurrentViewPlane().getZIndex();
     
-    return m_mainVolume->getSpacing()[zIndex];
+    return getMainInput()->getSpacing()[zIndex];
 }
 
 vtkImageActor* Q2DViewer::getVtkImageActor() const
@@ -1517,12 +1517,12 @@ Q2DViewer* Q2DViewer::castFromQViewer(QViewer *viewer)
 
 bool Q2DViewer::canShowDisplayShutter() const
 {
-    return m_mainVolume
-        && m_mainVolume->objectName() != DummyVolumeObjectName
+    return getMainInput()
+        && getMainInput()->objectName() != DummyVolumeObjectName
         && !isThickSlabActive()
         && getCurrentViewPlane() == OrthogonalPlane::XYPlane
         && getCurrentDisplayedImage()
-        && getCurrentDisplayedImage()->getDisplayShutterForDisplayAsVtkImageData(m_mainVolume->getImageIndex(getCurrentSlice(), getCurrentPhase()));
+        && getCurrentDisplayedImage()->getDisplayShutterForDisplayAsVtkImageData(getMainInput()->getImageIndex(getCurrentSlice(), getCurrentPhase()));
 }
 
 void Q2DViewer::updateDisplayShutterMask()
@@ -1534,7 +1534,7 @@ void Q2DViewer::updateDisplayShutterMask()
 
         if (image)
         {
-            shutterData = image->getDisplayShutterForDisplayAsVtkImageData(m_mainVolume->getImageIndex(getCurrentSlice(), getCurrentPhase()));
+            shutterData = image->getDisplayShutterForDisplayAsVtkImageData(getMainInput()->getImageIndex(getCurrentSlice(), getCurrentPhase()));
         }
     }
     m_volumeDisplayUnits.first()->getImagePipeline()->setShutterData(shutterData);

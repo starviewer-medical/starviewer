@@ -110,9 +110,14 @@ vtkRenderer* QViewer::getRenderer() const
     return m_renderer;
 }
 
+Volume* QViewer::getMainInput() const
+{
+    return m_mainVolume;
+}
+
 bool QViewer::hasInput() const
 {
-    if (m_mainVolume)
+    if (getMainInput())
     {
         return true;
     }
@@ -554,7 +559,7 @@ WindowLevel QViewer::getCurrentAutomaticWindowLevel()
     if (hasInput())
     {
         double range[2];
-        m_mainVolume->getScalarRange(range);
+        getMainInput()->getScalarRange(range);
         automaticWindowLevel.setWidth(range[1] - range[0]);
         automaticWindowLevel.setCenter(range[0] + (automaticWindowLevel.getWidth() * 0.5));
     }
@@ -582,7 +587,7 @@ void QViewer::resetView(AnatomicalPlane::AnatomicalPlaneType desiredAnatomicalPl
     enableRendering(false);
 
     // First we reset the view to the corresponding orthogonal plane
-    const OrthogonalPlane &orthogonalPlane = m_mainVolume->getCorrespondingOrthogonalPlane(desiredAnatomicalPlane);
+    const OrthogonalPlane &orthogonalPlane = getMainInput()->getCorrespondingOrthogonalPlane(desiredAnatomicalPlane);
     resetView(orthogonalPlane);
     
     // Then we apply the standard orientation for the desired projection
@@ -659,11 +664,11 @@ void QViewer::updateWindowLevelData()
     // Agafem el window level de la imatge central per evitar problemes
     // de que tinguem diferents windows levels a cada imatge i el de la
     // primera imatge sigui massa diferent a la resta. No deixa de ser un hack cutre.
-    int index = m_mainVolume->getNumberOfSlicesPerPhase() / 2;
+    int index = getMainInput()->getNumberOfSlicesPerPhase() / 2;
 
     int windowLevelCount = 0;
     signed short windowWidthSign = 1;
-    Image *image = m_mainVolume->getImage(index);
+    Image *image = getMainInput()->getImage(index);
     if (image)
     {
         windowLevelCount = image->getNumberOfWindowLevels();
@@ -805,7 +810,7 @@ void QViewer::contextMenuEvent(QContextMenuEvent *menuEvent)
         QString selectedItem;
         if (hasInput())
         {
-            selectedItem = QString::number(m_mainVolume->getIdentifier().getValue());
+            selectedItem = QString::number(getMainInput()->getIdentifier().getValue());
         }
         m_patientBrowserMenu->popup(menuEvent->globalPos(), selectedItem); //->globalPos() ?
     }

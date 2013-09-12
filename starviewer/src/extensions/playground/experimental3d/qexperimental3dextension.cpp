@@ -6533,7 +6533,7 @@ int QExperimental3DExtension::gradientBinFromCluster2D(int cluster) const
 void QExperimental3DExtension::importanceClustering()
 {
     // primer mirem si tenim la màscara, sinó no podem fer res
-    if (m_viewer->getMainVolume()->getStudy()->getNumberOfSeries() < 2)
+    if (m_viewer->getMainInput()->getStudy()->getNumberOfSeries() < 2)
     {
         DEBUG_LOG("No tenim màscara. Bye bye y hasta otro ratito, eh?");
         return;
@@ -6553,7 +6553,7 @@ void QExperimental3DExtension::importanceClustering()
     image->DeepCopy(m_volume->getImage());
     unsigned short *data = reinterpret_cast<unsigned short*>(image->GetScalarPointer());
     int size = image->GetNumberOfPoints();
-    const unsigned short *mask = reinterpret_cast<unsigned short*>(m_viewer->getMainVolume()->getStudy()->getSeries().at(1)->getFirstVolume()
+    const unsigned short *mask = reinterpret_cast<unsigned short*>(m_viewer->getMainInput()->getStudy()->getSeries().at(1)->getFirstVolume()
                                                                                                                            ->getVtkData()->GetScalarPointer());
 
     for (int i = 0; i < size; i++)

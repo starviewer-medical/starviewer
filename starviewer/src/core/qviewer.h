@@ -62,6 +62,9 @@ public:
         return m_mainVolume;
     }
 
+    /// Returns the main input
+    virtual Volume* getMainInput() const;
+
     /// Returns true if viewer has some input set, false otherwise
     bool hasInput() const;
     
