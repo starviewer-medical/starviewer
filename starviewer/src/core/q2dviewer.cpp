@@ -680,10 +680,7 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
     
     if (hasInput())
     {
-        foreach (VolumeDisplayUnit *volumeDisplayUnit, m_volumeDisplayUnits)
-        {
-            volumeDisplayUnit->setViewPlane(view);
-        }
+        setCurrentViewPlane(view);
 
         // Calculem la llesca que cal mostrar segons la vista escollida
         int initialSliceIndex = 0;
