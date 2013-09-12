@@ -64,6 +64,14 @@ static T getBoundedValue(T value, T minimum, T maximum, bool loop)
     return boundedValue;
 }
 
+/// Returns true if value is between min and mix (both inclusive), false otherwise
+/// NOTE: This method has been implemented here to avoid the include of the cpp file at the end of the file because of the templated method
+template<typename T>
+static bool isInsideRange(T value, T min, T max)
+{
+    return value >= min && value <= max;
+}
+
 /// Tells if the number is odd/even
 static bool isOdd(int x);
 static bool isEven(int x);
