@@ -10,7 +10,7 @@
 namespace udg {
 
 Q2DViewerWidget::Q2DViewerWidget(QWidget *parent)
- : QFrame(parent), m_mainVolume(0)
+ : QFrame(parent)
 {
     setupUi(this);
     setAutoFillBackground(true);
@@ -92,7 +92,6 @@ void Q2DViewerWidget::setSliderBarWidgetsEnabledFromViewerStatus()
 
 void Q2DViewerWidget::setInput(Volume *input)
 {
-    m_mainVolume = input;
     m_2DView->setInput(input);
     updateProjectionLabel();
 }
@@ -101,7 +100,6 @@ void Q2DViewerWidget::setInputAsynchronously(Volume *input, QViewerCommand *comm
 {
     if (input)
     {
-        m_mainVolume = input;
         m_2DView->setInputAsynchronously(input, command);
         updateProjectionLabel();
     }
@@ -109,7 +107,6 @@ void Q2DViewerWidget::setInputAsynchronously(Volume *input, QViewerCommand *comm
 
 void Q2DViewerWidget::updateInput(Volume *input)
 {
-    m_mainVolume = input;
     m_synchronizeButton->setEnabled(true);
     m_slider->setMaximum(m_2DView->getMaximumSlice());
 }
@@ -155,9 +152,9 @@ Q2DViewer* Q2DViewerWidget::getViewer()
 bool Q2DViewerWidget::hasPhases()
 {
     int phases = 0;
-    if (m_mainVolume)
+    if (m_2DView->hasInput())
     {
-        phases = m_mainVolume->getNumberOfPhases();
+        phases = m_2DView->getInput()->getNumberOfPhases();
     }
     return (phases > 1);
 }

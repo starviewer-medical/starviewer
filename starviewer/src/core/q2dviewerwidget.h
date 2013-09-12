@@ -8,7 +8,6 @@ class QAction;
 
 namespace udg {
 
-class Volume;
 class StatsWatcher;
 class QViewerCommand;
 
@@ -91,9 +90,6 @@ private slots:
     void setSliderBarWidgetsEnabledFromViewerStatus();
 
 private:
-    /// El volum principal
-    Volume *m_mainVolume;
-
     /// Acció del boto de sincronitzar
     QAction *m_synchronizeButtonAction;
 
