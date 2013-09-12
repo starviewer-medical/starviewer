@@ -473,7 +473,7 @@ void QViewer::pan(double motionVector[3])
 
 bool QViewer::scaleToFit3D(double topCorner[3], double bottomCorner[3], double marginRate)
 {
-    if (!m_mainVolume)
+    if (!hasInput())
     {
         return false;
     }
@@ -551,7 +551,7 @@ WindowLevel QViewer::getCurrentAutomaticWindowLevel()
     WindowLevel automaticWindowLevel;
     automaticWindowLevel.setName(tr("Auto"));
     
-    if (m_mainVolume)
+    if (hasInput())
     {
         double range[2];
         m_mainVolume->getScalarRange(range);
@@ -573,7 +573,7 @@ void QViewer::resetView(const OrthogonalPlane &view)
 
 void QViewer::resetView(AnatomicalPlane::AnatomicalPlaneType desiredAnatomicalPlane)
 {
-    if (!m_mainVolume)
+    if (!hasInput())
     {
         return;
     }
@@ -648,7 +648,7 @@ void QViewer::contextMenuRelease()
 
 void QViewer::updateWindowLevelData()
 {
-    if (!m_mainVolume)
+    if (!hasInput())
     {
         return;
     }
@@ -803,7 +803,7 @@ void QViewer::contextMenuEvent(QContextMenuEvent *menuEvent)
         m_patientBrowserMenu->setPatient(mainWindow->getCurrentPatient());
 
         QString selectedItem;
-        if (m_mainVolume)
+        if (hasInput())
         {
             selectedItem = QString::number(m_mainVolume->getIdentifier().getValue());
         }

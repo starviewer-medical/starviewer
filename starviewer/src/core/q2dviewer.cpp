@@ -239,7 +239,7 @@ QString Q2DViewer::getCurrentAnatomicalPlaneLabel() const
 
 void Q2DViewer::setDefaultOrientation(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane)
 {
-    if (!m_mainVolume)
+    if (!hasInput())
     {
         return;
     }
@@ -474,7 +474,7 @@ void Q2DViewer::setNewVolumes(const QList<Volume*> &volumes, bool setViewerStatu
         removeViewerBitmaps();
     }
 
-    if (m_mainVolume)
+    if (hasInput())
     {
         // Al fer un nou input, les distàncies que guardava el drawer no tenen sentit, pertant s'esborren
         m_drawer->removeAllPrimitives();
@@ -678,7 +678,7 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
     
     resetCamera();
     
-    if (m_mainVolume)
+    if (hasInput())
     {
         foreach (VolumeDisplayUnit *volumeDisplayUnit, m_volumeDisplayUnits)
         {
@@ -709,7 +709,7 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
 
 void Q2DViewer::updateCamera()
 {
-    if (m_mainVolume)
+    if (hasInput())
     {
         vtkCamera *camera = getActiveCamera();
         Q_ASSERT(camera);
@@ -825,7 +825,7 @@ void Q2DViewer::setPhase(int value)
 
 void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
 {
-    if (m_mainVolume)
+    if (hasInput())
     {
         // First update the index of the corresponding dimension
         switch (dimension)
@@ -916,7 +916,7 @@ void Q2DViewer::setOverlapMethod(OverlapMethod method)
 void Q2DViewer::resizeEvent(QResizeEvent *resize)
 {
     Q_UNUSED(resize);
-    if (m_mainVolume)
+    if (hasInput())
     {
         switch (m_alignPosition)
         {
@@ -937,7 +937,7 @@ void Q2DViewer::resizeEvent(QResizeEvent *resize)
 
 void Q2DViewer::setWindowLevel(double window, double level)
 {
-    if (m_mainVolume)
+    if (hasInput())
     {
         if (m_volumeDisplayUnits.first()->getImagePipeline()->setWindowLevel(window,level))
         {
@@ -961,7 +961,7 @@ void Q2DViewer::setTransferFunction(TransferFunction *transferFunction)
 
 void Q2DViewer::getCurrentWindowLevel(double wl[2])
 {
-    if (m_mainVolume)
+    if (hasInput())
     {
         m_volumeDisplayUnits.first()->getImagePipeline()->getCurrentWindowLevel(wl);
     }
@@ -995,7 +995,7 @@ Image* Q2DViewer::getCurrentDisplayedImage() const
 
 ImagePlane* Q2DViewer::getCurrentImagePlane(bool vtkReconstructionHack)
 {
-    if (!m_mainVolume)
+    if (!hasInput())
     {
         return 0;
     }
@@ -1051,7 +1051,7 @@ Drawer* Q2DViewer::getDrawer() const
 bool Q2DViewer::getCurrentCursorImageCoordinate(double xyz[3])
 {
     bool inside = false;
-    if (!m_mainVolume)
+    if (!hasInput())
     {
         return inside;
     }
@@ -1258,7 +1258,7 @@ VolumePixelData* Q2DViewer::getCurrentPixelData()
 
 void Q2DViewer::restore()
 {
-    if (!m_mainVolume)
+    if (!hasInput())
     {
         return;
     }
@@ -1275,7 +1275,7 @@ void Q2DViewer::restore()
     enableRendering(false);
     
     // Esborrem les anotacions
-    if (m_mainVolume)
+    if (hasInput())
     {
         m_drawer->removeAllPrimitives();
     }
