@@ -56,12 +56,6 @@ public:
     /// Retorna el renderer
     virtual vtkRenderer* getRenderer() const;
 
-    /// Ens retorna el volum d'entrada
-    virtual Volume* getInput() const
-    {
-        return m_mainVolume;
-    }
-
     /// Returns the main input
     virtual Volume* getMainInput() const;
 

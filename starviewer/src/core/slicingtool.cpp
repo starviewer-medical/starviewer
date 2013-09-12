@@ -28,7 +28,7 @@ SlicingTool::SlicingTool(QViewer *viewer, QObject *parent)
 
     // Cada cop que canvïi l'input cal fer algunes inicialitzacions
     connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(inputChanged(Volume*)));
-    inputChanged(m_2DViewer->getInput());
+    inputChanged(m_2DViewer->getMainInput());
 }
 
 SlicingTool::~SlicingTool()
@@ -214,7 +214,7 @@ void SlicingTool::computeImagesForScrollMode()
 {
     if (m_forcePhaseMode)
     {
-        m_numberOfImages = m_2DViewer->getInput()->getNumberOfPhases();
+        m_numberOfImages = m_2DViewer->getMainInput()->getNumberOfPhases();
     }
     else
     {
@@ -224,7 +224,7 @@ void SlicingTool::computeImagesForScrollMode()
         }
         else
         {
-            m_numberOfImages = m_2DViewer->getInput()->getNumberOfPhases();
+            m_numberOfImages = m_2DViewer->getMainInput()->getNumberOfPhases();
         }
     }
 }

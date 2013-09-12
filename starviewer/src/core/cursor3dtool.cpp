@@ -122,10 +122,10 @@ void Cursor3DTool::updatePosition()
         if (m_2DViewer->getCurrentCursorImageCoordinate(xyz))
         {
             // 2.- Trobar l'índex del vòxel en el DICOM
-            m_2DViewer->getInput()->computeCoordinateIndex(xyz, index);
+            m_2DViewer->getMainInput()->computeCoordinateIndex(xyz, index);
 
             // 3.- Necessitem la imatge la qual pertany el punt per tal de trobar la imatge del dicom que conté la informació del pla.
-            double *spacing = m_2DViewer->getInput()->getSpacing();
+            double *spacing = m_2DViewer->getMainInput()->getSpacing();
             switch (m_2DViewer->getView())
             {
                 case OrthogonalPlane::XYPlane:
@@ -134,10 +134,10 @@ void Cursor3DTool::updatePosition()
 
                 case OrthogonalPlane::YZPlane:
                 case OrthogonalPlane::XZPlane:
-                    if (index[2] < m_2DViewer->getInput()->getImages().count())
+                    if (index[2] < m_2DViewer->getMainInput()->getImages().count())
                     {
                         // La llesca sempre és l'index[2] del DICOM
-                        image = m_2DViewer->getInput()->getImage(index[2]);
+                        image = m_2DViewer->getMainInput()->getImage(index[2]);
                         currentPlane = new ImagePlane();
                         currentPlane->fillFromImage(image);
                     }
@@ -232,7 +232,7 @@ void Cursor3DTool::projectPoint()
     double position[3];
     m_2DViewer->projectDICOMPointToCurrentDisplayedImage(m_myData->getOriginPointPosition(), position);
 
-    m_sliceLocator->setVolume(m_2DViewer->getInput());
+    m_sliceLocator->setVolume(m_2DViewer->getMainInput());
     m_sliceLocator->setPlane(m_2DViewer->getView());
     int nearestSlice = m_sliceLocator->getNearestSlice(m_myData->getOriginPointPosition());
 
@@ -256,7 +256,7 @@ void Cursor3DTool::updateFrameOfReference()
 
     // TODO De moment agafem la primera imatge perquè assumim que totes pertanyen a la mateixa sèrie.
     // També ho fem així de moment per evitar problemes amb imatges multiframe, que encara no tractem correctament
-    Image *image = m_2DViewer->getInput()->getImage(0);
+    Image *image = m_2DViewer->getMainInput()->getImage(0);
     if (image)
     {
         Series *series = image->getParentSeries();

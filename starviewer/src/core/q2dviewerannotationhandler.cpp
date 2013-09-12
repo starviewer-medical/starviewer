@@ -80,7 +80,7 @@ void Q2DViewerAnnotationHandler::updatePatientAnnotationInformation()
     if (m_2DViewer->hasInput())
     {
         // TODO We only take the first image for the moment because we assume all belong to the same series
-        Image *image = m_2DViewer->getInput()->getImage(0);
+        Image *image = m_2DViewer->getMainInput()->getImage(0);
         Series *series = image->getParentSeries();
         Study *study = series->getParentStudy();
         Patient *patient = study->getParentPatient();
@@ -255,7 +255,7 @@ void Q2DViewerAnnotationHandler::updateSliceAnnotation()
         lowerLeftText += QObject::tr("/%1").arg(m_2DViewer->getNumberOfSlices());
         
         // If we have phases
-        int numberOfPhases = m_2DViewer->getInput()->getNumberOfPhases();
+        int numberOfPhases = m_2DViewer->getMainInput()->getNumberOfPhases();
         if (numberOfPhases > 1)
         {
             lowerLeftText += QObject::tr(" Phase: %1/%2").arg(m_2DViewer->getCurrentPhase() + 1).arg(numberOfPhases);
@@ -333,7 +333,7 @@ void Q2DViewerAnnotationHandler::updateWindowInformationAnnotation()
         double windowLevel[2];
         m_2DViewer->getCurrentWindowLevel(windowLevel);
         int dimensions[3];
-        m_2DViewer->getInput()->getDimensions(dimensions);
+        m_2DViewer->getMainInput()->getDimensions(dimensions);
         int xIndex = m_2DViewer->getView().getXIndex();
         int yIndex = m_2DViewer->getView().getYIndex();
         m_upperLeftText = QObject::tr("%1 x %2\nWW: %5 WL: %6")
@@ -367,7 +367,7 @@ QString Q2DViewerAnnotationHandler::getSliceLocationAnnotation()
                 if (m_2DViewer->isThickSlabActive())
                 {
                     // TODO We should have high level methods to get consecutive images according to current thickness, phase, etc.
-                    Image *secondImage = m_2DViewer->getInput()->getImage(
+                    Image *secondImage = m_2DViewer->getMainInput()->getImage(
                         // TODO We need a getLastSlabSlice() method on Q2Dviewer to avoid doing this computing
                         m_2DViewer->getCurrentSlice() + m_2DViewer->getSlabThickness() - 1,
                         m_2DViewer->getCurrentPhase());

@@ -101,7 +101,7 @@ void ROITool::computeStatisticsData()
     // Ja no necessitem més la còpia del polígon, per tant es pot eliminar de memòria
     delete projectedROIPolygon;
     
-    double *spacing = m_2DViewer->getInput()->getSpacing();
+    double *spacing = m_2DViewer->getMainInput()->getSpacing();
     double sweepLineBeginPoint[3];
     double sweepLineEndPoint[3];
     double verticalLimit;
@@ -183,9 +183,9 @@ void ROITool::computeStatisticsData()
     
     int phaseIndex = 0;
     int numberOfPhases = 1;
-    if (!m_2DViewer->isThickSlabActive() && m_2DViewer->getView() == OrthogonalPlane::XYPlane && m_2DViewer->getInput()->getNumberOfPhases() > 1)
+    if (!m_2DViewer->isThickSlabActive() && m_2DViewer->getView() == OrthogonalPlane::XYPlane && m_2DViewer->getMainInput()->getNumberOfPhases() > 1)
     {
-        numberOfPhases = m_2DViewer->getInput()->getNumberOfPhases();
+        numberOfPhases = m_2DViewer->getMainInput()->getNumberOfPhases();
         phaseIndex = m_2DViewer->getCurrentPhase();
     }
 
@@ -319,7 +319,7 @@ DrawerPolygon *ROITool::createProjectedROIPolygon()
     int xIndex, yIndex, zIndex;
     m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
     // Calculem la coordenda de profunditat a la que volem projectar el polígon
-    Volume *input = m_2DViewer->getInput();
+    Volume *input = m_2DViewer->getMainInput();
     double origin[3];
     double spacing[3];
     input->getOrigin(origin);
@@ -377,7 +377,7 @@ QString ROITool::getAnnotation()
     QString annotation = tr("Area: %1").arg(getMeasurementString());
 
     // Només calcularem mitjana i desviació estàndar per imatges monocrom.
-    if (m_2DViewer->getInput()->getImage(0)->getPhotometricInterpretation().contains("MONOCHROME"))
+    if (m_2DViewer->getMainInput()->getImage(0)->getPhotometricInterpretation().contains("MONOCHROME"))
     {
         // Calculem les dades estadístiques
         QApplication::setOverrideCursor(Qt::WaitCursor);

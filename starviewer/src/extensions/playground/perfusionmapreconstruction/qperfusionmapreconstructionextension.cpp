@@ -239,7 +239,7 @@ void QPerfusionMapReconstructionExtension::computePerfusionMap( )
         {
             //QVector<int> aifpos (m_seedToolData->getSeedPosition( ));
             int index[3];
-            Volume* inputVolume = m_2DView->getViewer()->getInput();
+            Volume* inputVolume = m_2DView->getViewer()->getMainInput();
             index[0] = (int)((m_seedToolData->getSeedPosition( )[0]- inputVolume->getOrigin()[0])/inputVolume->getSpacing()[0]);
             index[1] = (int)((m_seedToolData->getSeedPosition( )[1]- inputVolume->getOrigin()[1])/inputVolume->getSpacing()[1]);
             index[2] = (int)((m_seedToolData->getSeedPosition( )[2]- inputVolume->getOrigin()[2])/inputVolume->getSpacing()[2])/inputVolume->getNumberOfPhases();
@@ -919,7 +919,7 @@ void QPerfusionMapReconstructionExtension::applyFilterMapImage( )
         CurvatureFlowImageFilterType::Pointer smoothing = CurvatureFlowImageFilterType::New();
 
         //incaster->SetInput( m_map2Volume->getItkData() );
-        incaster->SetInput( m_2DView->getViewer()->getInput()->getItkData() );
+        incaster->SetInput( m_2DView->getViewer()->getMainInput()->getItkData() );
         smoothing->SetInput( incaster->GetOutput() );
         outcaster->SetInput( smoothing->GetOutput() );
 
@@ -1069,7 +1069,7 @@ void QPerfusionMapReconstructionExtension::paintAIFSignal( )
     if(m_2DView->getViewer()->hasInput())    //Si hi ha alguna cosa al viewer
     {
         double pos[3];
-        Volume* inputVolume = m_2DView->getViewer()->getInput();
+        Volume* inputVolume = m_2DView->getViewer()->getMainInput();
         
         if( m_2DView->getViewer()->getCurrentCursorImageCoordinate(pos) )
         {

@@ -23,7 +23,7 @@ SeedTool::SeedTool(QViewer *viewer, QObject *parent)
 
     m_state = None;
     m_drawn = false;
-    m_myData->setVolume(m_2DViewer->getInput());
+    m_myData->setVolume(m_2DViewer->getMainInput());
 }
 
 SeedTool::~SeedTool()
@@ -60,11 +60,11 @@ void SeedTool::setToolData(ToolData *data)
         m_toolData = data;
         m_myData = qobject_cast<SeedToolData*>(data);
         // Si tenim dades vol dir que ja hem pintat abans la seed si el volume ha canviat
-        if (m_2DViewer->getInput() != m_myData->getVolume())
+        if (m_2DViewer->getMainInput() != m_myData->getVolume())
         {
             // Canvi de input
             m_drawn = false;
-            m_myData->setVolume(m_2DViewer->getInput());
+            m_myData->setVolume(m_2DViewer->getMainInput());
             // Si tenim dades vol dir que el viewer ha eliminat el punt pel que el posem a 0 perquè es torni a crear
             m_myData->setPoint(NULL);
         }

@@ -154,7 +154,7 @@ bool Q2DViewerWidget::hasPhases()
     int phases = 0;
     if (m_2DView->hasInput())
     {
-        phases = m_2DView->getInput()->getNumberOfPhases();
+        phases = m_2DView->getMainInput()->getNumberOfPhases();
     }
     return (phases > 1);
 }

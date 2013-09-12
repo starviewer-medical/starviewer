@@ -280,7 +280,7 @@ void EditorTool::setPaintCursor()
         points->SetNumberOfPoints(4);
 
         double spacing[3];
-        m_2DViewer->getInput()->getSpacing(spacing);
+        m_2DViewer->getMainInput()->getSpacing(spacing);
         double sizeView[2];
         sizeView[0] = (double)(size + 0.5) * spacing[0];
         sizeView[1] = (double)(size + 0.5) * spacing[1];
@@ -336,8 +336,8 @@ void EditorTool::eraseMask()
     int centralIndex[3];
     int index[3];
     m_2DViewer->getCurrentCursorImageCoordinate(pos);
-    m_2DViewer->getInput()->getSpacing(spacing);
-    m_2DViewer->getInput()->getOrigin(origin);
+    m_2DViewer->getMainInput()->getSpacing(spacing);
+    m_2DViewer->getMainInput()->getOrigin(origin);
     centralIndex[0] = (int)((((double)pos[0] - origin[0]) / spacing[0]) + 0.5);
     centralIndex[1] = (int)((((double)pos[1] - origin[1]) / spacing[1]) + 0.5);
     index[2] = m_2DViewer->getCurrentSlice();
@@ -368,8 +368,8 @@ void EditorTool::paintMask()
     int centralIndex[3];
     int index[3];
     m_2DViewer->getCurrentCursorImageCoordinate(pos);
-    m_2DViewer->getInput()->getSpacing(spacing);
-    m_2DViewer->getInput()->getOrigin(origin);
+    m_2DViewer->getMainInput()->getSpacing(spacing);
+    m_2DViewer->getMainInput()->getOrigin(origin);
     centralIndex[0] = (int)((((double)pos[0] - origin[0]) / spacing[0]) + 0.5);
     centralIndex[1] = (int)((((double)pos[1] - origin[1]) / spacing[1]) + 0.5);
     index[2] = m_2DViewer->getCurrentSlice();
@@ -394,7 +394,7 @@ void EditorTool::eraseSliceMask()
     int i, j;
     int index[3];
     int ext[6];
-    m_2DViewer->getInput()->getWholeExtent(ext);
+    m_2DViewer->getMainInput()->getWholeExtent(ext);
     index[2] = m_2DViewer->getCurrentSlice();
     for (i = ext[0]; i <= ext[1]; i++)
     {
@@ -419,10 +419,10 @@ void EditorTool::eraseRegionMask()
     double spacing[3];
     int index[3];
     int ext[6];
-    m_2DViewer->getInput()->getWholeExtent(ext);
+    m_2DViewer->getMainInput()->getWholeExtent(ext);
     m_2DViewer->getCurrentCursorImageCoordinate(pos);
-    m_2DViewer->getInput()->getSpacing(spacing);
-    m_2DViewer->getInput()->getOrigin(origin);
+    m_2DViewer->getMainInput()->getSpacing(spacing);
+    m_2DViewer->getMainInput()->getOrigin(origin);
     index[0] = (int)((((double)pos[0] - origin[0]) / spacing[0]) + 0.5);
     index[1] = (int)((((double)pos[1] - origin[1]) / spacing[1]) + 0.5);
     index[2] = m_2DViewer->getCurrentSlice();
@@ -432,7 +432,7 @@ void EditorTool::eraseRegionMask()
 void EditorTool::eraseRegionMaskRecursive(int a, int b, int c)
 {
     int ext[6];
-    m_2DViewer->getInput()->getWholeExtent(ext);
+    m_2DViewer->getMainInput()->getWholeExtent(ext);
     if ((a >= ext[0]) && (a <= ext[1]) && (b >= ext[2]) && (b <= ext[3]) && (c >= ext[4]) && (c <= ext[5]))
     {
         VolumePixelDataIterator it = m_2DViewer->getOverlayInput()->getIterator(a, b, c);

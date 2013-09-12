@@ -299,11 +299,11 @@ QList<DicomPrintPage> QDicomPrintExtension::getDicomPrintPageListToPrint()
 
 QList<Image*> QDicomPrintExtension::getSelectedImagesToAddToPrint() const
 {
-    QList<Image*> imagesToPrint, imagesVolum = m_2DView->getInput()->getImages();
+    QList<Image*> imagesToPrint, imagesVolum = m_2DView->getMainInput()->getImages();
 
     if (m_currentImageRadioButton->isChecked())
     {
-        imagesToPrint.append(m_2DView->getInput()->getImage(m_2DView->getCurrentSlice(), m_2DView->getCurrentPhase()));
+        imagesToPrint.append(m_2DView->getMainInput()->getImage(m_2DView->getCurrentSlice(), m_2DView->getCurrentPhase()));
     }
     else
     {
@@ -466,7 +466,7 @@ DICOMPrintPresentationStateImage QDicomPrintExtension::getDICOMPrintPresentation
     m_2DView->getCurrentWindowLevel(windowLevelFromViewer);
 
     // Tenir en compte que imatges dins un mateixa sèrie poden tenir WL
-    Image *currentImageInViewer = m_2DView->getInput()->getImage(m_2DView->getCurrentSlice(), m_2DView->getCurrentPhase());
+    Image *currentImageInViewer = m_2DView->getMainInput()->getImage(m_2DView->getCurrentSlice(), m_2DView->getCurrentPhase());
     bool windowLevelHasBeenModifiedInViewer = currentImageInViewer->getWindowLevel().getWidth() != windowLevelFromViewer[0] ||
             currentImageInViewer->getWindowLevel().getCenter() != windowLevelFromViewer[1];
 
@@ -610,7 +610,7 @@ void QDicomPrintExtension::updateNumberOfDicomPrintPagesToPrint()
 void QDicomPrintExtension::resetAndUpdateSelectionImagesValue()
 {
     int tickInterval;
-    int numberOfImagesOfVolume = m_2DView->getInput()->getImages().count();
+    int numberOfImagesOfVolume = m_2DView->getMainInput()->getImages().count();
 
     m_intervalImagesSlider->setValue(1);
 
@@ -728,7 +728,7 @@ void QDicomPrintExtension::showDicomPrintError(DicomPrint::DicomPrintError error
 void QDicomPrintExtension::updateVolumeSupport()
 {
     // Comprovem si té color.
-    QString pi = m_2DView->getInput()->getImage(0)->getPhotometricInterpretation();
+    QString pi = m_2DView->getMainInput()->getImage(0)->getPhotometricInterpretation();
     if (pi != "MONOCHROME1" && pi != "MONOCHROME2")
     {
         m_noSupportedSeriesMissage->setText(tr("This series cannot be added to print because color is not supported."));
