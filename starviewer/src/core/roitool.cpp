@@ -69,17 +69,6 @@ void ROITool::computeStatisticsData()
         return;
     }
 
-    int initialPosition;
-    int endPosition;
-    double *firstIntersection;
-    double *secondIntersection;
-    QList<double*> intersectionList;
-    QList<int> intersectedSegmentsIndexList;
-    double sweepLineBeginPoint[3];
-    double sweepLineEndPoint[3];
-    double verticalLimit;
-    int currentView = m_2DViewer->getView();
-
     // Creem una còpia de m_roiPolygon projectada a la mateixa profunditat que la llesca actual
     // Serà amb aquest polígon amb el que calcularem els corresponents valors de vòxel
     DrawerPolygon *projectedROIPolygon = createProjectedROIPolygon();
@@ -109,13 +98,18 @@ void ROITool::computeStatisticsData()
     // Les interseccions marcaran el camí a seguir per fer el recompte de vòxels
     double bounds[6];
     projectedROIPolygon->getBounds(bounds);
+    // Ja no necessitem més la còpia del polígon, per tant es pot eliminar de memòria
+    delete projectedROIPolygon;
+    
     double *spacing = m_2DViewer->getInput()->getSpacing();
-
+    double sweepLineBeginPoint[3];
+    double sweepLineEndPoint[3];
+    double verticalLimit;
     double horizontalSpacingIncrement;
     double verticalSpacingIncrement;
     int sweepLineCoordinateIndex;
     int intersectionCoordinateIndex;
-    switch (currentView)
+    switch (m_2DViewer->getView())
     {
         case OrthogonalPlane::XYPlane:
             // xmin
@@ -184,7 +178,6 @@ void ROITool::computeStatisticsData()
             break;
     }
 
-    int intersectionState;
     // Obtenim el punter al contenidor de píxels amb el que calcularem els valors
     VolumePixelData *pixelData = m_2DViewer->getCurrentPixelData();
     
@@ -196,6 +189,12 @@ void ROITool::computeStatisticsData()
         phaseIndex = m_2DViewer->getCurrentPhase();
     }
 
+    int initialPosition;
+    int endPosition;
+    double *firstIntersection;
+    double *secondIntersection;
+    QList<double*> intersectionList;
+    QList<int> intersectedSegmentsIndexList;
     // Inicialitzem la llista de valors de gris
     m_grayValues.clear();
     while (sweepLineBeginPoint[sweepLineCoordinateIndex] <= verticalLimit)
@@ -216,6 +215,7 @@ void ROITool::computeStatisticsData()
         // Obtenim les interseccions entre tots els segments de la ROI i la línia d'escombrat actual
         foreach (int segmentIndex, intersectedSegmentsIndexList)
         {
+            int intersectionState;
             double *foundPoint = MathTools::infiniteLinesIntersection((double*)segmentsStartPoints.at(segmentIndex),
                                                                       (double*)segmentsEndPoints.at(segmentIndex),
                                                                       sweepLineBeginPoint, sweepLineEndPoint, intersectionState);
@@ -310,9 +310,6 @@ void ROITool::computeStatisticsData()
     {
         delete pixelData;
     }
-
-    // Ja no necessitem més la còpia del polígon, per tant es pot eliminar de memòria
-    delete projectedROIPolygon;
 }
 
 DrawerPolygon *ROITool::createProjectedROIPolygon()
