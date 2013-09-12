@@ -2,6 +2,7 @@
 #define VOLUMEDISPLAYUNIT_H
 
 class vtkImageActor;
+class vtkPropPicker;
 
 namespace udg {
 
@@ -36,6 +37,9 @@ public:
     /// Returns the slice handler.
     SliceHandler* getSliceHandler() const;
 
+    /// Returns the configured point picker for this unit.
+    vtkPropPicker* getImagePointPicker();
+    
     /// Returns the view plane.
     const OrthogonalPlane& getViewPlane() const;
     /// Sets a new view plane, resetting some properties of the slice handler.
@@ -47,6 +51,8 @@ public:
 private:
     /// Called when setting a new volume to reset the thick slab filter.
     void resetThickSlab();
+
+    void setupPicker();
 
 private:
     /// The volume.
@@ -61,6 +67,8 @@ private:
     /// The slice handler that controls slices, phases and slabs.
     SliceHandler *m_sliceHandler;
 
+    /// Point picker to probe pixels from the image to display
+    vtkPropPicker *m_imagePointPicker;
 };
 
 }
