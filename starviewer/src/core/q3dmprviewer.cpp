@@ -108,7 +108,7 @@ void Q3DMPRViewer::setInput(Volume *volume)
     this->resetViewToAcquisitionPlane();
     render();
     // Indiquem el canvi de volum
-    emit volumeChanged(m_mainVolume);
+    emit volumeChanged(getMainInput());
 }
 
 void Q3DMPRViewer::createActors()
@@ -204,7 +204,7 @@ void Q3DMPRViewer::updatePlanesData()
 {
     if (hasInput())
     {
-        m_axialImagePlaneWidget->SetInput(m_mainVolume->getVtkData());
+        m_axialImagePlaneWidget->SetInput(getMainInput()->getVtkData());
         if (!m_axialResliced)
         {
             m_axialResliced = new Volume();
@@ -215,9 +215,9 @@ void Q3DMPRViewer::updatePlanesData()
             m_axialResliced->setData(m_axialImagePlaneWidget->GetResliceOutput());
         }
         // TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
-        m_axialResliced->setImages(m_mainVolume->getImages());
+        m_axialResliced->setImages(getMainInput()->getImages());
 
-        m_sagitalImagePlaneWidget->SetInput(m_mainVolume->getVtkData());
+        m_sagitalImagePlaneWidget->SetInput(getMainInput()->getVtkData());
         if (!m_sagitalResliced)
         {
             m_sagitalResliced = new Volume();
@@ -228,9 +228,9 @@ void Q3DMPRViewer::updatePlanesData()
             m_sagitalResliced->setData(m_sagitalImagePlaneWidget->GetResliceOutput());
         }
         // TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
-        m_sagitalResliced->setImages(m_mainVolume->getImages());
+        m_sagitalResliced->setImages(getMainInput()->getImages());
 
-        m_coronalImagePlaneWidget->SetInput(m_mainVolume->getVtkData());
+        m_coronalImagePlaneWidget->SetInput(getMainInput()->getVtkData());
         if (!m_coronalResliced)
         {
             m_coronalResliced = new Volume();
@@ -241,7 +241,7 @@ void Q3DMPRViewer::updatePlanesData()
             m_coronalResliced->setData(m_coronalImagePlaneWidget->GetResliceOutput());
         }
         // TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
-        m_coronalResliced->setImages(m_mainVolume->getImages());
+        m_coronalResliced->setImages(getMainInput()->getImages());
     }
     else
     {
@@ -255,7 +255,7 @@ void Q3DMPRViewer::createOutline()
     {
         // Creem l'outline
         vtkOutlineFilter *outlineFilter = vtkOutlineFilter::New();
-        outlineFilter->SetInput(m_mainVolume->getVtkData());
+        outlineFilter->SetInput(getMainInput()->getVtkData());
         vtkPolyDataMapper *outlineMapper = vtkPolyDataMapper::New();
         outlineMapper->SetInput(outlineFilter->GetOutput());
         m_outlineActor->SetMapper(outlineMapper);
@@ -329,7 +329,7 @@ void Q3DMPRViewer::resetPlanes()
 {
     if (hasInput())
     {
-        int *size = m_mainVolume->getDimensions();
+        int *size = getMainInput()->getDimensions();
 
         m_axialImagePlaneWidget->SetPlaneOrientationToZAxes();
         m_axialImagePlaneWidget->SetSliceIndex(size[2]/2);

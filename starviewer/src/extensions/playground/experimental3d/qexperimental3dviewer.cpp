@@ -43,11 +43,6 @@ void QExperimental3DViewer::setInput(Volume *volume)
     m_mainVolume = volume;
 }
 
-Volume* QExperimental3DViewer::getMainVolume() const
-{
-    return m_mainVolume;
-}
-
 void QExperimental3DViewer::setVolume(Experimental3DVolume *volume)
 {
     m_volume = volume;
