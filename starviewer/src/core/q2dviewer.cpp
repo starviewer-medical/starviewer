@@ -1068,8 +1068,8 @@ bool Q2DViewer::getCurrentCursorImageCoordinate(double xyz[3])
         // Calculem la profunditat correcta. S'ha de tenir en compte que en el cas que tinguem fases
         // vtk no n'és conscient (cada fase es desplaça en la profunditat z com si fos una imatge més)
         // i si no fèssim aquest càlcul, estaríem donant una coordenada Z incorrecta
+        double zSpacing = getCurrentSpacingBetweenSlices();
         int zIndex = getCurrentViewPlane().getZIndex();
-        double zSpacing = getMainInput()->getSpacing()[zIndex];
         double zOrigin = getMainInput()->getOrigin()[zIndex];
         xyz[zIndex] =  zOrigin + zSpacing * getCurrentSlice();
     }
