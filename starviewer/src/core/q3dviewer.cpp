@@ -252,7 +252,7 @@ void Q3DViewer::getCurrentWindowLevel(double wl[2])
 
 void Q3DViewer::setWindowLevel(double window, double level)
 {
-    if (m_mainVolume)
+    if (hasInput())
     {
         m_window = window;
         m_level = level;
@@ -513,7 +513,7 @@ void Q3DViewer::setInput(Volume *volume)
 
 void Q3DViewer::applyCurrentRenderingMethod()
 {
-    if (m_mainVolume)
+    if (hasInput())
     {
         switch (m_renderFunction)
         {

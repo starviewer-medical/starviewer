@@ -202,7 +202,7 @@ void Q3DMPRViewer::initializePlanes()
 
 void Q3DMPRViewer::updatePlanesData()
 {
-    if (m_mainVolume)
+    if (hasInput())
     {
         m_axialImagePlaneWidget->SetInput(m_mainVolume->getVtkData());
         if (!m_axialResliced)
@@ -251,7 +251,7 @@ void Q3DMPRViewer::updatePlanesData()
 
 void Q3DMPRViewer::createOutline()
 {
-    if (m_mainVolume)
+    if (hasInput())
     {
         // Creem l'outline
         vtkOutlineFilter *outlineFilter = vtkOutlineFilter::New();
@@ -327,7 +327,7 @@ void Q3DMPRViewer::setAxialVisibility(bool enable)
 
 void Q3DMPRViewer::resetPlanes()
 {
-    if (m_mainVolume)
+    if (hasInput())
     {
         int *size = m_mainVolume->getDimensions();
 
@@ -357,7 +357,7 @@ void Q3DMPRViewer::resetPlanes()
 
 void Q3DMPRViewer::setWindowLevel(double window, double level)
 {
-    if (m_mainVolume)
+    if (hasInput())
     {
         // Amb un n'hi ha prou ja que cada vtkImagePlaneWidget comparteix la mateixa LUT
         m_axialImagePlaneWidget->SetWindowLevel(window, level);
