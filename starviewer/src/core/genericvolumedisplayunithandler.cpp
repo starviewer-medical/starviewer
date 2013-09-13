@@ -104,8 +104,9 @@ void GenericVolumeDisplayUnitHandler::addDisplayUnit(Volume *input)
     }
 
     VolumeDisplayUnit *displayUnit = new VolumeDisplayUnit();
-    displayUnit->setVolume(input);
+    // Add the vdu to the list before setting the volume to avoid a memory leak if setVolume throws a bad_alloc
     m_displayUnits << displayUnit;
+    displayUnit->setVolume(input);
 }
 
 void GenericVolumeDisplayUnitHandler::setupDisplayUnits()
