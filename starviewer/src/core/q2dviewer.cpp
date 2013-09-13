@@ -1166,7 +1166,7 @@ bool Q2DViewer::getCurrentCursorImageCoordinate(double xyz[3])
     return inside;
 }
 
-const OrthogonalPlane& Q2DViewer::getView() const
+OrthogonalPlane Q2DViewer::getView() const
 {
     return getCurrentViewPlane();
 }
@@ -1678,7 +1678,7 @@ void Q2DViewer::updateDisplayShutterMask()
     }
 }
 
-const OrthogonalPlane& Q2DViewer::getCurrentViewPlane() const
+OrthogonalPlane Q2DViewer::getCurrentViewPlane() const
 {
     VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
     if (mainDisplayUnit)
