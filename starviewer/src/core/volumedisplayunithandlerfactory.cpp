@@ -21,12 +21,12 @@ VolumeDisplayUnitHandlerFactory::~VolumeDisplayUnitHandlerFactory()
 {
 }
 
-GenericVolumeDisplayUnitHandler* VolumeDisplayUnitHandlerFactory::createVolumeDisplayUnitHandler(Volume *input)
+QSharedPointer<GenericVolumeDisplayUnitHandler> VolumeDisplayUnitHandlerFactory::createVolumeDisplayUnitHandler(Volume *input)
 {
     return createSingleVolumeDisplayUnitHandler(input);
 }
 
-GenericVolumeDisplayUnitHandler* VolumeDisplayUnitHandlerFactory::createVolumeDisplayUnitHandler(QList<Volume*> inputs)
+QSharedPointer<GenericVolumeDisplayUnitHandler> VolumeDisplayUnitHandlerFactory::createVolumeDisplayUnitHandler(QList<Volume*> inputs)
 {
     switch (inputs.size())
     {
@@ -44,31 +44,31 @@ GenericVolumeDisplayUnitHandler* VolumeDisplayUnitHandlerFactory::createVolumeDi
     }
 }
 
-SingleVolumeDisplayUnitHandler* VolumeDisplayUnitHandlerFactory::createSingleVolumeDisplayUnitHandler(Volume *input)
+QSharedPointer<SingleVolumeDisplayUnitHandler> VolumeDisplayUnitHandlerFactory::createSingleVolumeDisplayUnitHandler(Volume *input)
 {
-    SingleVolumeDisplayUnitHandler *inputHandler = new SingleVolumeDisplayUnitHandler;
+    QSharedPointer<SingleVolumeDisplayUnitHandler> inputHandler(new SingleVolumeDisplayUnitHandler());
     inputHandler->setInput(input);
 
     return inputHandler;
 }
 
-PairedVolumeDisplayUnitHandler* VolumeDisplayUnitHandlerFactory::createPairedVolumeDisplayUnitHandler(QList<Volume*> inputs)
+QSharedPointer<PairedVolumeDisplayUnitHandler> VolumeDisplayUnitHandlerFactory::createPairedVolumeDisplayUnitHandler(QList<Volume*> inputs)
 {
-    PairedVolumeDisplayUnitHandler *inputHandler = chooseBestPairedVolumeDisplayUnitHandler(inputs);
+    QSharedPointer<PairedVolumeDisplayUnitHandler> inputHandler(chooseBestPairedVolumeDisplayUnitHandler(inputs));
     inputHandler->setInputs(inputs);
     
     return inputHandler;
 }
 
-GenericVolumeDisplayUnitHandler* VolumeDisplayUnitHandlerFactory::createGenericVolumeDisplayUnitHandler(QList<Volume*> inputs)
+QSharedPointer<GenericVolumeDisplayUnitHandler> VolumeDisplayUnitHandlerFactory::createGenericVolumeDisplayUnitHandler(QList<Volume*> inputs)
 {
-    GenericVolumeDisplayUnitHandler *inputHandler = new GenericVolumeDisplayUnitHandler;
+    QSharedPointer<GenericVolumeDisplayUnitHandler> inputHandler(new GenericVolumeDisplayUnitHandler());
     inputHandler->setInputs(inputs);
 
     return inputHandler;
 }
 
-PairedVolumeDisplayUnitHandler* VolumeDisplayUnitHandlerFactory::chooseBestPairedVolumeDisplayUnitHandler(QList<Volume*> inputs)
+QSharedPointer<PairedVolumeDisplayUnitHandler> VolumeDisplayUnitHandlerFactory::chooseBestPairedVolumeDisplayUnitHandler(QList<Volume*> inputs)
 {
     QStringList modalities;
 
@@ -79,11 +79,11 @@ PairedVolumeDisplayUnitHandler* VolumeDisplayUnitHandlerFactory::chooseBestPaire
 
     if (modalities.contains("CT") && modalities.contains("PT"))
     {
-        return new PETCTVolumeDisplayUnitHandler;
+        return QSharedPointer<PairedVolumeDisplayUnitHandler>(new PETCTVolumeDisplayUnitHandler());
     }
     else
     {
-        return new PairedVolumeDisplayUnitHandler;
+        return QSharedPointer<PairedVolumeDisplayUnitHandler>(new PairedVolumeDisplayUnitHandler());
     }
 }
 

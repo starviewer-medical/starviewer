@@ -458,7 +458,7 @@ private:
     VolumeDisplayUnitHandlerFactory *m_displayUnitsFactory;
 
     /// VolumeDisplayUnits handler. Handles all the display units of the viewer.
-    GenericVolumeDisplayUnitHandler *m_displayUnitsHandler;
+    QSharedPointer<GenericVolumeDisplayUnitHandler> m_displayUnitsHandler;
     
     /// Holds the current thickslab pixel data
     VolumePixelData *m_currentThickSlabPixelData;
