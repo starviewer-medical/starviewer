@@ -520,16 +520,18 @@ void Q2DViewer::setNewVolumes(const QList<Volume*> &volumes, bool setViewerStatu
         m_drawer->removeAllPrimitives();
 
         Volume *mainInput = getMainInput();
-        // Si el volum anterior era un dummy, l'eliminem
-        if (mainInput->objectName() == DummyVolumeObjectName)
-        {
-            delete mainInput;
-        }
 
-        if (getMainInput() != volumes.first())
+        if (mainInput != volumes.first())
         {
             // Al canviar de volum, eliminem overlays que poguèssim tenir anteriorment
             removeViewerBitmaps();
+        }
+
+        // If the previous volume was a dummy, delete it
+        // Warning: assuming that we don't assign the same dummy again
+        if (mainInput->objectName() == DummyVolumeObjectName)
+        {
+            delete mainInput;
         }
     }
 
