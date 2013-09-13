@@ -24,7 +24,6 @@ vtkAlgorithmOutput* FilterOutput::getVtkAlgorithmOutput()
 
 vtkImageData* FilterOutput::getVtkImageData()
 {
-    m_filter->update();
     return vtkImageData::SafeDownCast(m_filter->getVtkAlgorithm()->GetOutputDataObject(0));
 }
 
