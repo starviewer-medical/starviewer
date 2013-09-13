@@ -274,7 +274,7 @@ protected:
     WindowLevel getCurrentAutomaticWindowLevel();
 
     /// Returns the current view plane.
-    virtual const OrthogonalPlane& getCurrentViewPlane() const;
+    virtual OrthogonalPlane getCurrentViewPlane() const;
 
     /// Sets the current view plane.
     virtual void setCurrentViewPlane(const OrthogonalPlane &viewPlane);

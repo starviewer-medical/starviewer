@@ -64,7 +64,7 @@ public:
     ~Q2DViewer();
 
     /// Ens retorna la vista que tenim en aquells moments del volum
-    const OrthogonalPlane& getView() const;
+    OrthogonalPlane getView() const;
 
     /// Assigna/Retorna el volum solapat
     void setOverlayInput(Volume *volume);
@@ -302,7 +302,7 @@ protected:
     void setDefaultOrientation(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane);
 
     /// Returns the current view plane.
-    virtual const OrthogonalPlane& getCurrentViewPlane() const;
+    virtual OrthogonalPlane getCurrentViewPlane() const;
 
     /// Sets the current view plane.
     virtual void setCurrentViewPlane(const OrthogonalPlane &viewPlane);

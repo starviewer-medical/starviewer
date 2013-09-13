@@ -945,7 +945,7 @@ void QViewer::setWindowLevelPreset(const WindowLevel &preset)
     }
 }
 
-const OrthogonalPlane& QViewer::getCurrentViewPlane() const
+OrthogonalPlane QViewer::getCurrentViewPlane() const
 {
     return m_currentViewPlane;
 }
