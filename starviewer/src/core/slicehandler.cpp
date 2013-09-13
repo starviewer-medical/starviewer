@@ -29,7 +29,10 @@ void SliceHandler::setVolume(Volume *volume)
 
     this->setViewPlane(OrthogonalPlane::XYPlane);
 
-    m_numberOfPhases = m_volume->getNumberOfPhases();
+    if (m_volume)
+    {
+        m_numberOfPhases = m_volume->getNumberOfPhases();
+    }
 
     reset();
 }
@@ -169,42 +172,45 @@ double SliceHandler::getSliceThickness() const
 {
     double thickness = 0.0;
 
-    switch (this->getViewPlane())
+    if (m_volume)
     {
-        case OrthogonalPlane::XYPlane:
-            {
-                Image *image = m_volume->getImage(this->getCurrentSlice(), this->getCurrentPhase());
-
-                if (image)
+        switch (this->getViewPlane())
+        {
+            case OrthogonalPlane::XYPlane:
                 {
-                    thickness = image->getSliceThickness();
+                    Image *image = m_volume->getImage(this->getCurrentSlice(), this->getCurrentPhase());
 
-                    if (this->getSlabThickness() > 1)
+                    if (image)
                     {
-                        double gap = m_volume->getSpacing()[2] - thickness;
+                        thickness = image->getSliceThickness();
 
-                        if (gap < 0)
+                        if (this->getSlabThickness() > 1)
                         {
-                            // If gap between spacing and thickness is negative, this means slices overlap, so
-                            // we have to substract this gap between to get the real thickness
-                            thickness = (thickness + gap) * this->getSlabThickness();
-                        }
-                        else
-                        {
-                            thickness = thickness * this->getSlabThickness();
+                            double gap = m_volume->getSpacing()[2] - thickness;
+
+                            if (gap < 0)
+                            {
+                                // If gap between spacing and thickness is negative, this means slices overlap, so
+                                // we have to substract this gap between to get the real thickness
+                                thickness = (thickness + gap) * this->getSlabThickness();
+                            }
+                            else
+                            {
+                                thickness = thickness * this->getSlabThickness();
+                            }
                         }
                     }
                 }
-            }
-            break;
+                break;
 
-        case OrthogonalPlane::YZPlane:
-            thickness = m_volume->getSpacing()[0] * this->getSlabThickness();
-            break;
+            case OrthogonalPlane::YZPlane:
+                thickness = m_volume->getSpacing()[0] * this->getSlabThickness();
+                break;
 
-        case OrthogonalPlane::XZPlane:
-            thickness = m_volume->getSpacing()[1] * this->getSlabThickness();
-            break;
+            case OrthogonalPlane::XZPlane:
+                thickness = m_volume->getSpacing()[1] * this->getSlabThickness();
+                break;
+        }
     }
 
     return thickness;
