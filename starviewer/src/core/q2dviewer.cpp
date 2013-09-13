@@ -475,8 +475,9 @@ void Q2DViewer::setNewVolumesAndExecuteCommand(const QList<Volume*> &volumes)
         
         m_windowToImageFilter->SetInput(getRenderWindow());
 
-        Volume *dummyVolume = getDummyVolumeFromVolume(getMainInput());
-        dummyVolume->setIdentifier(getMainInput()->getIdentifier());
+        // Use volumes.first() instead of getMainVolume() because the main volume has probably been deleted
+        Volume *dummyVolume = getDummyVolumeFromVolume(volumes.first());
+        dummyVolume->setIdentifier(volumes.first()->getIdentifier());
         setNewVolumes(QList<Volume*>() << dummyVolume, false);
     }
 }
