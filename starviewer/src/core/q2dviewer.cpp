@@ -532,6 +532,7 @@ void Q2DViewer::setNewVolumes(const QList<Volume*> &volumes, bool setViewerStatu
         if (mainInput->objectName() == DummyVolumeObjectName)
         {
             delete mainInput;
+            getMainDisplayUnit()->setVolume(0);
         }
     }
 
