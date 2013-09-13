@@ -53,7 +53,6 @@ Q2DViewer::Q2DViewer(QWidget *parent)
   m_isImageFlipped(false), m_slabProjectionMode(AccumulatorFactory::Maximum)
 {
     m_displayUnitsFactory = new VolumeDisplayUnitHandlerFactory;
-    m_displayUnitsHandler = 0;
     m_volumeReaderManager = new VolumeReaderManager(this);
     m_inputFinishedCommand = NULL;
     m_currentThickSlabPixelData = 0;
@@ -536,7 +535,6 @@ void Q2DViewer::setNewVolumes(const QList<Volume*> &volumes, bool setViewerStatu
 
     // Init new input
     removeImageActors();
-    delete m_displayUnitsHandler;
     m_displayUnitsHandler = m_displayUnitsFactory->createVolumeDisplayUnitHandler(volumes);
     addImageActors();
 
