@@ -97,11 +97,14 @@ void VolumeDisplayUnit::updateDisplayExtent()
 
 void VolumeDisplayUnit::resetThickSlab()
 {
-    m_imagePipeline->setInput(m_volume->getVtkData());
-    m_imagePipeline->setProjectionAxis(this->getViewPlane());
-    m_imagePipeline->setSlice(m_volume->getImageIndex(m_sliceHandler->getCurrentSlice(), m_sliceHandler->getCurrentPhase()));
-    m_imagePipeline->setSlabThickness(m_sliceHandler->getSlabThickness());
-    m_imagePipeline->setSlabStride(m_sliceHandler->getNumberOfPhases());
+    if (m_volume)
+    {
+        m_imagePipeline->setInput(m_volume->getVtkData());
+        m_imagePipeline->setProjectionAxis(this->getViewPlane());
+        m_imagePipeline->setSlice(m_volume->getImageIndex(m_sliceHandler->getCurrentSlice(), m_sliceHandler->getCurrentPhase()));
+        m_imagePipeline->setSlabThickness(m_sliceHandler->getSlabThickness());
+        m_imagePipeline->setSlabStride(m_sliceHandler->getNumberOfPhases());
+    }
 }
 
 void VolumeDisplayUnit::setupPicker()
