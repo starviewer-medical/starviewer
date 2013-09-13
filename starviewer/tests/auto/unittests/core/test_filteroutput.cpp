@@ -12,7 +12,7 @@ namespace {
 
 class TestingFilter: public Filter {
 public:
-    TestingFilter() : m_updated(false)
+    TestingFilter()
     {
         m_algorithm = vtkBooleanTexture::New();
     }
@@ -20,14 +20,8 @@ public:
     {
         m_algorithm->Delete();
     }
-    virtual void update()
-    {
-        Filter::update();
-        m_updated = true;
-    }
 public:
     vtkBooleanTexture *m_algorithm;
-    bool m_updated;
 private:
     virtual vtkAlgorithm* getVtkAlgorithm() const
     {
@@ -44,7 +38,7 @@ class test_FilterOutput : public QObject {
 private slots:
     void getFilter_ShouldReturnTheAssociatedFilter();
     void getVtkAlgorithmOutput_ShouldReturnVtkAlgorithmOutputFromTheAssociatedFilter();
-    void getVtkImageData_ShouldUpdateTheAssociatedFilterAndReturnItsOutputDataObject();
+    void getVtkImageData_ShouldReturnFiltersOutputDataObject();
 
 };
 
@@ -64,13 +58,12 @@ void test_FilterOutput::getVtkAlgorithmOutput_ShouldReturnVtkAlgorithmOutputFrom
     QCOMPARE(output.getVtkAlgorithmOutput(), filter.m_algorithm->GetOutputPort());
 }
 
-void test_FilterOutput::getVtkImageData_ShouldUpdateTheAssociatedFilterAndReturnItsOutputDataObject()
+void test_FilterOutput::getVtkImageData_ShouldReturnFiltersOutputDataObject()
 {
     TestingFilter filter;
     FilterOutput output(&filter);
 
     QCOMPARE(output.getVtkImageData(), static_cast<vtkImageData*>(filter.m_algorithm->GetOutputDataObject(0)));
-    QVERIFY(filter.m_updated);
 }
 
 DECLARE_TEST(test_FilterOutput)
