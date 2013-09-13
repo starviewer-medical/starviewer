@@ -21,16 +21,16 @@ public:
 
     /// Returns the proper display unit handler for the given input(s)
     QSharedPointer<GenericVolumeDisplayUnitHandler> createVolumeDisplayUnitHandler(Volume *input);
-    QSharedPointer<GenericVolumeDisplayUnitHandler> createVolumeDisplayUnitHandler(QList<Volume*> inputs);
+    QSharedPointer<GenericVolumeDisplayUnitHandler> createVolumeDisplayUnitHandler(const QList<Volume*> &inputs);
 
 private:
     /// Concrete creators for the different kind of handlers
     QSharedPointer<SingleVolumeDisplayUnitHandler> createSingleVolumeDisplayUnitHandler(Volume *input);
-    QSharedPointer<GenericVolumeDisplayUnitHandler> createGenericVolumeDisplayUnitHandler(QList<Volume*> inputs);
-    QSharedPointer<PairedVolumeDisplayUnitHandler> createPairedVolumeDisplayUnitHandler(QList<Volume*> inputs);
+    QSharedPointer<GenericVolumeDisplayUnitHandler> createGenericVolumeDisplayUnitHandler(const QList<Volume*> &inputs);
+    QSharedPointer<PairedVolumeDisplayUnitHandler> createPairedVolumeDisplayUnitHandler(const QList<Volume*> &inputs);
     
     /// Chooses the best handler among the family of paired handlers
-    QSharedPointer<PairedVolumeDisplayUnitHandler> chooseBestPairedVolumeDisplayUnitHandler(QList<Volume*> inputs);
+    QSharedPointer<PairedVolumeDisplayUnitHandler> chooseBestPairedVolumeDisplayUnitHandler(const QList<Volume*> &inputs);
 };
 
 } // End namespace udg

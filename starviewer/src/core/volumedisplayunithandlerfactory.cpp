@@ -26,7 +26,7 @@ QSharedPointer<GenericVolumeDisplayUnitHandler> VolumeDisplayUnitHandlerFactory:
     return createSingleVolumeDisplayUnitHandler(input);
 }
 
-QSharedPointer<GenericVolumeDisplayUnitHandler> VolumeDisplayUnitHandlerFactory::createVolumeDisplayUnitHandler(QList<Volume*> inputs)
+QSharedPointer<GenericVolumeDisplayUnitHandler> VolumeDisplayUnitHandlerFactory::createVolumeDisplayUnitHandler(const QList<Volume*> &inputs)
 {
     switch (inputs.size())
     {
@@ -52,7 +52,7 @@ QSharedPointer<SingleVolumeDisplayUnitHandler> VolumeDisplayUnitHandlerFactory::
     return inputHandler;
 }
 
-QSharedPointer<PairedVolumeDisplayUnitHandler> VolumeDisplayUnitHandlerFactory::createPairedVolumeDisplayUnitHandler(QList<Volume*> inputs)
+QSharedPointer<PairedVolumeDisplayUnitHandler> VolumeDisplayUnitHandlerFactory::createPairedVolumeDisplayUnitHandler(const QList<Volume*> &inputs)
 {
     QSharedPointer<PairedVolumeDisplayUnitHandler> inputHandler(chooseBestPairedVolumeDisplayUnitHandler(inputs));
     inputHandler->setInputs(inputs);
@@ -60,7 +60,7 @@ QSharedPointer<PairedVolumeDisplayUnitHandler> VolumeDisplayUnitHandlerFactory::
     return inputHandler;
 }
 
-QSharedPointer<GenericVolumeDisplayUnitHandler> VolumeDisplayUnitHandlerFactory::createGenericVolumeDisplayUnitHandler(QList<Volume*> inputs)
+QSharedPointer<GenericVolumeDisplayUnitHandler> VolumeDisplayUnitHandlerFactory::createGenericVolumeDisplayUnitHandler(const QList<Volume*> &inputs)
 {
     QSharedPointer<GenericVolumeDisplayUnitHandler> inputHandler(new GenericVolumeDisplayUnitHandler());
     inputHandler->setInputs(inputs);
@@ -68,7 +68,7 @@ QSharedPointer<GenericVolumeDisplayUnitHandler> VolumeDisplayUnitHandlerFactory:
     return inputHandler;
 }
 
-QSharedPointer<PairedVolumeDisplayUnitHandler> VolumeDisplayUnitHandlerFactory::chooseBestPairedVolumeDisplayUnitHandler(QList<Volume*> inputs)
+QSharedPointer<PairedVolumeDisplayUnitHandler> VolumeDisplayUnitHandlerFactory::chooseBestPairedVolumeDisplayUnitHandler(const QList<Volume*> &inputs)
 {
     QStringList modalities;
 
