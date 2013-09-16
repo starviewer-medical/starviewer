@@ -8,6 +8,7 @@
 #include "windowlevelpresetstooldata.h"
 #include "transferfunction.h"
 #include "qviewerworkinprogresswidget.h"
+#include "windowlevelhelper.h"
 
 // TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de
 // interface, pacs, etc.etc.!!
@@ -551,26 +552,6 @@ void QViewer::grabCurrentView()
     m_grabList << image;
 }
 
-WindowLevel QViewer::getCurrentAutomaticWindowLevel()
-{
-    WindowLevel automaticWindowLevel;
-    automaticWindowLevel.setName(tr("Auto"));
-    
-    if (hasInput())
-    {
-        double range[2];
-        getMainInput()->getScalarRange(range);
-        automaticWindowLevel.setWidth(range[1] - range[0]);
-        automaticWindowLevel.setCenter(range[0] + (automaticWindowLevel.getWidth() * 0.5));
-    }
-    else
-    {
-        DEBUG_LOG("No input to compute automatic ww/wl. Undefined values.");
-    }
-
-    return automaticWindowLevel;
-}
-
 void QViewer::resetView(const OrthogonalPlane &view)
 {
     setCameraOrientation(view);
@@ -658,54 +639,7 @@ void QViewer::updateWindowLevelData()
         return;
     }
 
-    m_windowLevelData->removePresetsFromGroup(WindowLevelPresetsToolData::FileDefined);
-    m_windowLevelData->removePresetsFromGroup(WindowLevelPresetsToolData::AutomaticPreset);
-
-    // Agafem el window level de la imatge central per evitar problemes
-    // de que tinguem diferents windows levels a cada imatge i el de la
-    // primera imatge sigui massa diferent a la resta. No deixa de ser un hack cutre.
-    int index = getMainInput()->getNumberOfSlicesPerPhase() / 2;
-
-    int windowLevelCount = 0;
-    signed short windowWidthSign = 1;
-    Image *image = getMainInput()->getImage(index);
-    if (image)
-    {
-        windowLevelCount = image->getNumberOfWindowLevels();
-        // Si la imatge és de tipus MONOCHROME1, llavors invertim els valors de window/level
-        // perquè la imatge resultant sigui l'adequada
-        if (image->getPhotometricInterpretation() == "MONOCHROME1")
-        {
-            windowWidthSign = -1;
-        }
-    }
-    else
-    {
-        DEBUG_LOG(QString("Índex [%1] fora de rang. No s'ha pogut obtenir la imatge indicada del volum actual.").arg(index));
-    }
-
-    if (windowLevelCount > 0)
-    {
-        for (int i = 0; i < windowLevelCount; i++)
-        {
-            WindowLevel windowLevel = getDefaultWindowLevelForPresentation(image, i);
-            m_windowLevelData->addPreset(windowLevel, WindowLevelPresetsToolData::FileDefined);
-
-            if (i == 0)
-            {
-                m_windowLevelData->selectCurrentPreset(windowLevel.getName());
-            }
-        }
-    }
-
-    // Calculem un window level automàtic que sempre posarem disponible a l'usuari
-    WindowLevel automaticWindowLevel = getCurrentAutomaticWindowLevel();
-    m_windowLevelData->addPreset(automaticWindowLevel, WindowLevelPresetsToolData::AutomaticPreset);
-    // Si no hi ha window levels definits per defecte activarem l'automàtic
-    if (windowLevelCount <= 0)
-    {
-        m_windowLevelData->selectCurrentPreset(automaticWindowLevel.getName());
-    }
+    WindowLevelHelper().initializeWindowLevelData(m_windowLevelData, getMainInput());
 }
 
 void QViewer::setCameraOrientation(const OrthogonalPlane &orientation)
@@ -858,36 +792,6 @@ void QViewer::setViewerStatus(ViewerStatus status)
         this->initializeWorkInProgressByViewerStatus(status);
         emit viewerStatusChanged();
     }
-}
-
-WindowLevel QViewer::getDefaultWindowLevelForPresentation(Image *image, int index)
-{
-    if (!image)
-    {
-        return WindowLevel();
-    }
-    
-    WindowLevel windowLevel = image->getWindowLevel(index);
-    if (windowLevel.isValid())
-    {
-        if (image->getPhotometricInterpretation() == "MONOCHROME1")
-        {
-            windowLevel.setWidth(-windowLevel.getWidth());
-        }
-        
-        if (windowLevel.getName().isEmpty())
-        {
-            windowLevel.setName(getDefaultWindowLevelDescription(index));
-        }
-    }
-
-    return windowLevel;
-}
-
-QString QViewer::getDefaultWindowLevelDescription(int index)
-{
-    const QString DefaultWindowLevelName = tr("Default");
-    return QString("%1 %2").arg(DefaultWindowLevelName).arg(index);
 }
 
 void QViewer::setCurrentWidgetByViewerStatus(ViewerStatus status)
