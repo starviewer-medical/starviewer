@@ -1194,6 +1194,15 @@ OrthogonalPlane Q2DViewer::getView() const
     return getCurrentViewPlane();
 }
 
+QList<Volume *> Q2DViewer::getInputs()
+{
+    QList<Volume*> volumes;
+    foreach (VolumeDisplayUnit *unit, m_displayUnitsHandler->getVolumeDisplayUnitList()) {
+        volumes << unit->getVolume();
+    }
+    return volumes;
+}
+
 void Q2DViewer::setSeedPosition(double pos[3])
 {
     emit seedPositionChanged(pos[0], pos[1], pos[2]);
