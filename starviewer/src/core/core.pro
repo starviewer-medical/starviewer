@@ -366,7 +366,8 @@ HEADERS += extensionfactory.h \
     pairedvolumedisplayunithandler.h \
     petctvolumedisplayunithandler.h \
     vtkdepthdisabledopenglimageactor.h \
-    transferfunctionmodel.h
+    transferfunctionmodel.h \
+    windowlevelhelper.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -681,7 +682,8 @@ SOURCES += extensionmediator.cpp \
     pairedvolumedisplayunithandler.cpp \
     petctvolumedisplayunithandler.cpp \
     vtkdepthdisabledopenglimageactor.cpp \
-    transferfunctionmodel.cpp
+    transferfunctionmodel.cpp \
+    windowlevelhelper.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \

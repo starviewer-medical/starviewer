@@ -233,14 +233,6 @@ protected:
 
     void contextMenuRelease();
 
-    /// Gets the n-th default window level from the given image and index, prepared for display,
-    /// i.e. if image is MONOCHROME1, it will invert values and give a proper name if no description is available
-    /// If index is out of range, a non-valid WindowLevel will be returned
-    WindowLevel getDefaultWindowLevelForPresentation(Image *image, int index);
-    
-    /// Gets a default name for the specified n-th window level. Used to give a default name for window levels without description.
-    QString getDefaultWindowLevelDescription(int index);
-    
     /// Actualitza les dades contingudes a m_windowLevelData
     void updateWindowLevelData();
 
@@ -269,9 +261,6 @@ protected:
     void getRecentEventWorldCoordinate(double worldCoordinate[3], bool current);
 
     virtual void setupInteraction();
-
-    /// Computes the automatic window level for the current input
-    WindowLevel getCurrentAutomaticWindowLevel();
 
     /// Returns the current view plane.
     virtual OrthogonalPlane getCurrentViewPlane() const;

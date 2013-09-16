@@ -30,6 +30,7 @@
 #include "q2dviewerannotationhandler.h"
 #include "volumedisplayunithandlerfactory.h"
 #include "genericvolumedisplayunithandler.h"
+#include "windowlevelhelper.h"
 
 // Qt
 #include <QResizeEvent>
@@ -1621,7 +1622,7 @@ void Q2DViewer::updateCurrentImageDefaultPresets()
         Image *image = getCurrentDisplayedImage();
         for (int i = 0; i < image->getNumberOfWindowLevels(); ++i)
         {
-            WindowLevel windowLevel = getDefaultWindowLevelForPresentation(image, i);
+            WindowLevel windowLevel = WindowLevelHelper().getDefaultWindowLevelForPresentation(image, i);
             m_windowLevelData->updatePreset(windowLevel);
         }
     }
