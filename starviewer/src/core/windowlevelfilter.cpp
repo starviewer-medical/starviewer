@@ -32,8 +32,7 @@ void WindowLevelFilter::setInput(FilterOutput input)
 
 void WindowLevelFilter::setWindowLevel(const WindowLevel &windowLevel)
 {
-    m_filter->SetWindow(windowLevel.getWidth());
-    m_filter->SetLevel(windowLevel.getCenter());
+    setWindowLevel(windowLevel.getWidth(), windowLevel.getCenter());
 }
 
 void WindowLevelFilter::setWindowLevel(double window, double level)
