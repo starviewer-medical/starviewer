@@ -66,6 +66,8 @@ public:
     /// Ens retorna la vista que tenim en aquells moments del volum
     OrthogonalPlane getView() const;
 
+    QList<Volume*> getInputs();
+
     /// Assigna/Retorna el volum solapat
     void setOverlayInput(Volume *volume);
     Volume* getOverlayInput();
