@@ -45,7 +45,7 @@ private:
     //  Angle       NormalVector    Distance    InstanceNumber0FrameNumber
     QMap<double, QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*>*> *m_orderedNormalsSet;
 
-    //    Series        Volume     AngleNormal    Distance  InstanceNumber0FrameNumber
+    //    Series        Volume     Angle     NormalVector    Distance  InstanceNumber0FrameNumber
     QHash<Series*, QMap<int, QMap<double, QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*>*>*>*> m_orderImagesInternalInfo;
    
     //    Series       Volume     AcqNumber MultipleAcqNumbers?
