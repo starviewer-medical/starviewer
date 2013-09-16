@@ -375,25 +375,36 @@ void Q2DViewer::setInputAsynchronously(Volume *volume, QViewerCommand *inputFini
     }
     DEBUG_LOG(QString("Q2DViewer::setInputAsynchronously to Volume %1").arg(volume->getIdentifier().getValue()));
 
+    setInputAsynchronously(QList<Volume*>() << volume, inputFinishedCommand);
+}
+
+void Q2DViewer::setInputAsynchronously(const QList<Volume *> &volumes, QViewerCommand *inputFinishedCommand)
+{
     m_volumeReaderManager->cancelReading();
     setInputFinishedCommand(inputFinishedCommand);
 
     bool allowAsynchronousVolumeLoading = Settings().getValue(CoreSettings::AllowAsynchronousVolumeLoading).toBool();
-    if (!volume->isPixelDataLoaded() && allowAsynchronousVolumeLoading)
+    if (allowAsynchronousVolumeLoading)
     {
-        loadVolumeAsynchronously(volume);
+        loadVolumesAsynchronously(volumes);
     }
     else
     {
-        setNewVolumesAndExecuteCommand(QList<Volume*>() << volume);
+        setNewVolumesAndExecuteCommand(volumes);
     }
 }
 
 void Q2DViewer::setInputAndRender(Volume *volume)
 {
-    RenderQViewerCommand *command = new RenderQViewerCommand(this);
-    setInputAsynchronously(volume, command);
+    setInputAsynchronously(QList<Volume*>() << volume);
 }
+
+void Q2DViewer::setInputAndRender(const QList<Volume*> &volumes)
+{
+    RenderQViewerCommand *command = new RenderQViewerCommand(this);
+    setInputAsynchronously(volumes, command);
+}
+
 
 void Q2DViewer::executeInputFinishedCommand()
 {
@@ -421,15 +432,20 @@ void Q2DViewer::deleteInputFinishedCommand()
 
 void Q2DViewer::loadVolumeAsynchronously(Volume *volume)
 {
+    loadVolumesAsynchronously(QList<Volume*>() << volume);
+}
+
+void Q2DViewer::loadVolumesAsynchronously(const QList<Volume*> &volumes)
+{
     setViewerStatus(LoadingVolume);
 
-    m_volumeReaderManager->readVolume(volume);
+    m_volumeReaderManager->readVolumes(volumes);
 
     // TODO: De moment no tenim cap més remei que especificar un volume fals. La resta del viewer (i els que en depenen) s'esperen
     // tenir un volum carregat després de cridar a setInput.
     // També tenim el problema de que perquè surti al menú de botó dret com a seleccionat, cal posar-li el mateix id.
-    Volume *dummyVolume = getDummyVolumeFromVolume(volume);
-    dummyVolume->setIdentifier(volume->getIdentifier());
+    Volume *dummyVolume = getDummyVolumeFromVolume(volumes.first());
+    dummyVolume->setIdentifier(volumes.first()->getIdentifier());
     setNewVolumes(QList<Volume*>() << dummyVolume, false);
 }
 
