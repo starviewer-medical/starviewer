@@ -142,4 +142,10 @@ void VolumeDisplayUnit::updateCurrentImageDefaultPresets()
     m_imagePipeline->setWindowLevel(wl.getWidth(), wl.getCenter());
 }
 
+void VolumeDisplayUnit::updateWindowLevel(const WindowLevel &windowLevel)
+{
+    m_windowLevelData->setCurrentPreset(windowLevel);
+    m_imagePipeline->setWindowLevel(windowLevel.getWidth(), windowLevel.getCenter());
+}
+
 }

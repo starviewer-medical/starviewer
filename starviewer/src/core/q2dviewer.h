@@ -3,6 +3,7 @@
 
 #include "qviewer.h"
 #include "annotationflags.h"
+#include "windowlevel.h"
 
 #include <QPointer>
 
@@ -218,6 +219,7 @@ public slots:
     void enableAnnotation(AnnotationFlags annotation, bool enable = true);
     void removeAnnotation(AnnotationFlags annotation);
 
+    void setWindowLevelInVolume(Volume *volume, const WindowLevel &windowLevel);
     void setWindowLevel(double window, double level);
     void setTransferFunction(TransferFunction *transferFunction);
 

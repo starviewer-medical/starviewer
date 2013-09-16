@@ -1267,6 +1267,23 @@ void Q2DViewer::removeAnnotation(AnnotationFlags annotation)
     enableAnnotation(annotation, false);
 }
 
+void Q2DViewer::setWindowLevelInVolume(Volume *volume, const WindowLevel &windowLevel)
+{
+    bool found = false;
+    int i = 0;
+    while (!found && i < m_displayUnitsHandler->getNumberOfInputs())
+    {
+        VolumeDisplayUnit *unit = m_displayUnitsHandler->getVolumeDisplayUnit(i);
+        if (unit->getVolume() == volume)
+        {
+            found = true;
+            unit->updateWindowLevel(windowLevel);
+            this->render();
+        }
+        i++;
+    }
+}
+
 void Q2DViewer::printVolumeInformation()
 {
     double range[2];

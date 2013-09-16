@@ -1,6 +1,8 @@
 #ifndef VOLUMEDISPLAYUNIT_H
 #define VOLUMEDISPLAYUNIT_H
 
+#include "windowlevel.h"
+
 class vtkImageActor;
 class vtkPropPicker;
 
@@ -56,6 +58,10 @@ public:
 
     /// Updates the current image default presets values. It only applies to original acquisition plane.
     void updateCurrentImageDefaultPresets();
+
+    /// Updates the current window level
+    void updateWindowLevel(const WindowLevel &windowLevel);
+
 private:
     /// Called when setting a new volume to reset the thick slab filter.
     void resetThickSlab();
