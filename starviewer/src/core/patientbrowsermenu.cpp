@@ -54,7 +54,6 @@ void PatientBrowserMenu::setPatient(Patient *patient)
 
             if (series->getNumberOfVolumes() > 1)
             {
-                QString volumeID;
                 int volumeNumber = 1;
                 foreach (Volume *volume, series->getVolumesList())
                 {
