@@ -36,6 +36,12 @@ void VolumeReader::executePixelDataReader(Volume *volume)
 
     m_lastError = VolumePixelDataReader::NoError;
 
+    if (volume->isPixelDataLoaded())
+    {
+        emit progress(100);
+        return;
+    }
+
     // Obtenim els arxius que hem de llegir
     QStringList fileList = this->getFilesToRead(volume);
     if (!fileList.isEmpty())
