@@ -176,6 +176,8 @@ public:
     /// Retorna la funció representada per variant.
     static TransferFunction fromVariant(const QVariant &variant);
 
+    /// Gets the transfer function as vtkLookupTable
+    vtkLookupTable* toVtkLookupTable() const;
 private:
     /// Actualitza m_keys si hi ha hagut canvis a la funció.
     void updateKeys() const;

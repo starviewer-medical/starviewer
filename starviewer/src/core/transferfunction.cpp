@@ -422,6 +422,27 @@ vtkPiecewiseFunction* TransferFunction::vtkOpacityTransferFunction() const
     return vtkScalarOpacityTransferFunction();
 }
 
+vtkLookupTable* TransferFunction::toVtkLookupTable() const
+{
+    updateKeys();
+
+    vtkLookupTable *table = vtkLookupTable::New();
+    table->SetNumberOfTableValues((int)(m_keys.last() - m_keys.first()) + 1);
+    table->Build();
+    table->SetTableRange(m_keys.first(), m_keys.last());
+
+    double min = m_keys.first();
+
+    for (int i = 0; i < table->GetNumberOfTableValues(); ++i)
+    {
+        double x = i + min;
+        QColor color = getColor(x);
+        double opacity = getScalarOpacity(x);
+        table->SetTableValue(i, color.redF(), color.greenF(), color.blueF(), opacity);
+    }
+    return table;
+}
+
 vtkPiecewiseFunction* TransferFunction::vtkScalarOpacityTransferFunction() const
 {
     return m_scalarOpacity.vtkOpacityTransferFunction();
