@@ -4,6 +4,9 @@
 #include "slicehandler.h"
 #include "volume.h"
 #include "vtkdepthdisabledopenglimageactor.h"
+#include "windowlevelpresetstooldata.h"
+#include "image.h"
+#include "windowlevelhelper.h"
 
 #include <vtkPropPicker.h>
 
@@ -16,6 +19,7 @@ VolumeDisplayUnit::VolumeDisplayUnit()
     m_imageActor = VtkDepthDisabledOpenGLImageActor::New();
     m_sliceHandler = new SliceHandler();
     m_imagePointPicker =  0;
+    m_windowLevelData = 0;
 }
 
 VolumeDisplayUnit::~VolumeDisplayUnit()
@@ -43,6 +47,17 @@ void VolumeDisplayUnit::setVolume(Volume *volume)
     resetThickSlab();
 
     m_imageActor->SetInput(m_imagePipeline->getOutput().getVtkImageData());
+}
+
+void VolumeDisplayUnit::setWindowLevelData(WindowLevelPresetsToolData *windowLevelData)
+{
+    m_windowLevelData = windowLevelData;
+    WindowLevelHelper().initializeWindowLevelData(m_windowLevelData, m_volume);
+}
+
+WindowLevelPresetsToolData *VolumeDisplayUnit::getWindowLevelData()
+{
+    return m_windowLevelData;
 }
 
 ImagePipeline* VolumeDisplayUnit::getImagePipeline() const
@@ -113,6 +128,18 @@ void VolumeDisplayUnit::setupPicker()
     m_imagePointPicker->InitializePickList();
     m_imagePointPicker->AddPickList(getImageActor());
     m_imagePointPicker->PickFromListOn();
+}
+
+void VolumeDisplayUnit::updateCurrentImageDefaultPresets()
+{
+    Image *image = getVolume()->getImage(m_sliceHandler->getCurrentSlice(), m_sliceHandler->getCurrentPhase());
+    for (int i = 0; i < image->getNumberOfWindowLevels(); ++i)
+    {
+        WindowLevel windowLevel = WindowLevelHelper().getDefaultWindowLevelForPresentation(image, i);
+        m_windowLevelData->updatePreset(windowLevel);
+    }
+    WindowLevel wl = m_windowLevelData->getCurrentPreset();
+    m_imagePipeline->setWindowLevel(wl.getWidth(), wl.getCenter());
 }
 
 }

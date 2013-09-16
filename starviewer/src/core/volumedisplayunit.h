@@ -11,6 +11,7 @@ class ImagePipeline;
 class OrthogonalPlane;
 class SliceHandler;
 class Volume;
+class WindowLevelPresetsToolData;
 
 /**
     This class groups together a Volume and the associated objects that a Q2DViewer needs to display a volume.
@@ -27,6 +28,11 @@ public:
     Volume* getVolume() const;
     /// Sets a new volume and resets display properties (pipeline and slice handler).
     void setVolume(Volume *volume);
+
+    /// Returns the window level data
+    WindowLevelPresetsToolData* getWindowLevelData();
+    /// Sets a new window level data
+    void setWindowLevelData(WindowLevelPresetsToolData *windowLevelData);
 
     /// Returns the image pipeline.
     ImagePipeline* getImagePipeline() const;
@@ -48,6 +54,8 @@ public:
     /// Updates the display extent of the image actor.
     void updateDisplayExtent();
 
+    /// Updates the current image default presets values. It only applies to original acquisition plane.
+    void updateCurrentImageDefaultPresets();
 private:
     /// Called when setting a new volume to reset the thick slab filter.
     void resetThickSlab();
@@ -69,6 +77,9 @@ private:
 
     /// Point picker to probe pixels from the image to display
     vtkPropPicker *m_imagePointPicker;
+
+    /// Window and level data
+    WindowLevelPresetsToolData *m_windowLevelData;
 };
 
 }
