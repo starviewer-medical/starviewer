@@ -1,6 +1,7 @@
 #include "windowlevelsyncaction.h"
 
 #include "qviewer.h"
+#include "q2dviewer.h"
 #include "windowlevelpresetstooldata.h"
 #include "inputsynccriterion.h"
 
@@ -20,11 +21,24 @@ void WindowLevelSyncAction::setWindowLevel(const WindowLevel &windowLevel)
     m_windowLevel = windowLevel;
 }
 
+void WindowLevelSyncAction::setVolume(Volume *volume)
+{
+    m_volume = volume;
+}
+
 void WindowLevelSyncAction::run(QViewer *viewer)
 {
     if (viewer)
     {
-        viewer->getWindowLevelData()->setCurrentPreset(m_windowLevel);
+        Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(viewer);
+        if (viewer2D)
+        {
+            viewer2D->setWindowLevelInVolume(m_volume, m_windowLevel);
+        }
+        else
+        {
+            viewer->getWindowLevelData()->setCurrentPreset(m_windowLevel);
+        }
     }
 }
 
