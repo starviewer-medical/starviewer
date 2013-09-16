@@ -40,6 +40,7 @@ void WindowLevelSignalToSyncActionMapper::mapToSyncAction(const WindowLevel &win
     {
         m_mappedSyncAction = new WindowLevelSyncAction();
     }
+    static_cast<WindowLevelSyncAction*>(m_mappedSyncAction)->setVolume(m_viewer->getMainInput());
     static_cast<WindowLevelSyncAction*>(m_mappedSyncAction)->setWindowLevel(windowLevel);
     
     emit actionMapped(m_mappedSyncAction);
