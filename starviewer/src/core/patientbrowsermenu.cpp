@@ -52,28 +52,21 @@ void PatientBrowserMenu::setPatient(Patient *patient)
                         .arg(series->getBodyPartExamined())
                         .arg(series->getViewPosition());
 
-            if (series->getNumberOfVolumes() > 1)
+            int volumeNumber = 1;
+            foreach (Volume *volume, series->getVolumesList())
             {
-                int volumeNumber = 1;
-                foreach (Volume *volume, series->getVolumesList())
-                {
-                    QPair<QString, QString> itemPair;
-                    // Label
-                    itemPair.first = label + " (" + QString::number(volumeNumber) + ")";
-                    volumeNumber++;
-                    // Identifier
-                    itemPair.second = QString::number(volume->getIdentifier().getValue());
-                    // Afegim el parell a la llista
-                    itemsList << itemPair;
-                }
-            }
-            // Només tenim un sol volum per la sèrie
-            else
-            {
-                Volume *volume = series->getFirstVolume();
                 QPair<QString, QString> itemPair;
                 // Label
-                itemPair.first = label;
+                if (series->getNumberOfVolumes() > 1)
+                {
+                    itemPair.first = label + " (" + QString::number(volumeNumber) + ")";
+                }
+                else
+                {
+                    itemPair.first = label;
+                }
+
+                volumeNumber++;
                 // Identifier
                 itemPair.second = QString::number(volume->getIdentifier().getValue());
                 // Afegim el parell a la llista
