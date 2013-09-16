@@ -73,6 +73,9 @@ private:
 
     /// It contains the reading error message if any
     QString m_lastError;
+
+    /// It counts the number of finished jobs
+    int m_numberOfFinishedJobs;
 };
 
 } // namespace udg

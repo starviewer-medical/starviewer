@@ -23,6 +23,7 @@ void VolumeReaderManager::initialize()
     m_volumes.clear();
     m_success = true;
     m_lastError = "";
+    m_numberOfFinishedJobs = 0;
 }
 
 void VolumeReaderManager::readVolume(Volume *volume)
@@ -88,15 +89,7 @@ QString VolumeReaderManager::getLastErrorMessageToUser()
 
 bool VolumeReaderManager::isReading()
 {
-    bool reading = false;
-    int i = 0;
-    while (!reading && i < m_volumeReaderJobs.size())
-    {
-        reading = !m_volumeReaderJobs[i].isNull() && !m_volumeReaderJobs[i]->isFinished();
-        i++;
-    }
-
-    return reading;
+    return m_numberOfFinishedJobs < m_volumeReaderJobs.size();
 }
 
 void VolumeReaderManager::updateProgress(ThreadWeaver::Job *job, int value)
@@ -129,6 +122,8 @@ void VolumeReaderManager::jobFinished(ThreadWeaver::Job *job)
             m_lastError = readerJob->getLastErrorMessageToUser();
         }
     }
+
+    m_numberOfFinishedJobs++;
 
     if (!isReading())
     {
