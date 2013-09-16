@@ -30,7 +30,6 @@
 #include "q2dviewerannotationhandler.h"
 #include "volumedisplayunithandlerfactory.h"
 #include "genericvolumedisplayunithandler.h"
-#include "windowlevelhelper.h"
 
 // Qt
 #include <QResizeEvent>
@@ -557,6 +556,13 @@ void Q2DViewer::setNewVolumes(const QList<Volume*> &volumes, bool setViewerStatu
     // Init new input
     removeImageActors();
     m_displayUnitsHandler = m_displayUnitsFactory->createVolumeDisplayUnitHandler(volumes);
+
+    m_displayUnitsHandler->getVolumeDisplayUnit(0)->setWindowLevelData(getWindowLevelData());
+    for (int i = 1; i < m_displayUnitsHandler->getNumberOfInputs(); i++)
+    {
+        m_displayUnitsHandler->getVolumeDisplayUnit(i)->setWindowLevelData(new WindowLevelPresetsToolData(this));
+    }
+
     addImageActors();
 
     setCurrentViewPlane(OrthogonalPlane::XYPlane);
@@ -1619,11 +1625,9 @@ void Q2DViewer::updateCurrentImageDefaultPresets()
 {
     if (getCurrentViewPlane() == OrthogonalPlane::XYPlane)
     {
-        Image *image = getCurrentDisplayedImage();
-        for (int i = 0; i < image->getNumberOfWindowLevels(); ++i)
+        foreach (VolumeDisplayUnit *unit, m_displayUnitsHandler->getVolumeDisplayUnitList())
         {
-            WindowLevel windowLevel = WindowLevelHelper().getDefaultWindowLevelForPresentation(image, i);
-            m_windowLevelData->updatePreset(windowLevel);
+            unit->updateCurrentImageDefaultPresets();
         }
     }
 }
