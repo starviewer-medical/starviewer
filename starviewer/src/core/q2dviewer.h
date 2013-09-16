@@ -190,6 +190,7 @@ public slots:
     /// Es pot indicar un command que s'executarà un cop el volum s'ha carregat i està a punt de ser visualitzat.
     /// Útil per poder especificar canvis al viewer (canvi de llesca, w/l, etc.) sense preocupar-se de quan s'ha carregat el volume.
     void setInputAsynchronously(Volume *volume, QViewerCommand *inputFinishedCommand = 0);
+    void setInputAsynchronously(const QList<Volume*> &volumes, QViewerCommand *inputFinishedCommand = 0);
 
     void resetView(const OrthogonalPlane &view);
 
@@ -346,6 +347,7 @@ private:
     
     /// Carrega un volum asíncronament
     void loadVolumeAsynchronously(Volume *volume);
+    void loadVolumesAsynchronously(const QList<Volume *> &volumes);
 
     /// Retorna un volum "dummy"
     Volume* getDummyVolumeFromVolume(Volume *volume);
@@ -392,6 +394,7 @@ private slots:
     /// TODO: De moment es fa així de manera xapussa fins que no es traspassin els mètode de càrrega
     /// asíncrona a QViewer.
     virtual void setInputAndRender(Volume *volume);
+    void setInputAndRender(const QList<Volume*> &volumes);
 
     /// Replaces the volumes displayed by this viewer by the new ones and resets the viewer.
     /// If the second parameter is false, the volumes won't be rendered.
