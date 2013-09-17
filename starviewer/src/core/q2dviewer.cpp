@@ -918,6 +918,9 @@ void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
                 mainDisplayUnit->getSliceHandler()->setPhase(value);
                 break;
         }
+
+        // We set the proper slice index on the image pipeline
+        mainDisplayUnit->getImagePipeline()->setSlice(getMainInput()->getImageIndex(getCurrentSlice(), getCurrentPhase()));
         
         // Then update display (image and associated annotations)
         updateDisplayExtents();
@@ -940,9 +943,6 @@ void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
                 updateDisplayShutterMask();
             }
         }
-
-        // We set the proper slice index on the image pipeline
-        mainDisplayUnit->getImagePipeline()->setSlice(getMainInput()->getImageIndex(getCurrentSlice(), getCurrentPhase()));
 
         // Finally we emit the signal of the changed value and render the scene
         switch (dimension)
