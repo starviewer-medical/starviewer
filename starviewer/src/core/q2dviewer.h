@@ -466,9 +466,6 @@ private:
 
     /// VolumeDisplayUnits handler. Handles all the display units of the viewer.
     QSharedPointer<GenericVolumeDisplayUnitHandler> m_displayUnitsHandler;
-    
-    /// Holds the current thickslab pixel data
-    VolumePixelData *m_currentThickSlabPixelData;
 
     /// Handles the textual annotations of the viewer
     Q2DViewerAnnotationHandler *m_annotationsHandler;

@@ -17,6 +17,7 @@ class SliceHandler;
 class TransferFunction;
 class Volume;
 class WindowLevelPresetsToolData;
+class VolumePixelData;
 
 /**
     This class groups together a Volume and the associated objects that a Q2DViewer needs to display a volume.
@@ -53,6 +54,9 @@ public:
     /// Sets a new view plane, resetting some properties of the slice handler.
     void setViewPlane(const OrthogonalPlane &viewPlane);
 
+    /// Gets the current pixel data according to the current state.
+    VolumePixelData* getCurrentPixelData();
+    
     /// Updates the display extent of the image actor.
     void updateDisplayExtent();
 
@@ -134,6 +138,8 @@ private:
 
     /// Window and level data
     WindowLevelPresetsToolData *m_windowLevelData;
+    /// Holds the current thickslab pixel data
+    VolumePixelData *m_currentThickSlabPixelData;
 };
 
 }
