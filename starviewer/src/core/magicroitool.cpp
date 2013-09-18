@@ -6,6 +6,7 @@
 #include "drawerpolygon.h"
 #include "drawertext.h"
 #include "mathtools.h"
+#include "voxel.h"
 
 #include <qmath.h>
 
@@ -161,7 +162,7 @@ double MagicROITool::getVoxelValue(int x, int y, int z, VolumePixelData *pixelDa
     index[yIndex] = y;
     index[zIndex] = z;
 
-    return pixelData->getScalarComponentAsDouble(index[0], index[1], index[2]);
+    return pixelData->getVoxelValue(index).getComponent(0);
 }
 
 void MagicROITool::startRegion()

@@ -213,11 +213,6 @@ Voxel VolumePixelData::getVoxelValue(int index[3])
     return voxelValue;
 }
 
-double VolumePixelData::getScalarComponentAsDouble(int x, int y, int z)
-{
-    return m_imageDataVTK->GetScalarComponentAsDouble(x, y, z, 0);
-}
-
 void VolumePixelData::convertToNeutralPixelData()
 {
     // Creem un objecte vtkImageData "neutre"
