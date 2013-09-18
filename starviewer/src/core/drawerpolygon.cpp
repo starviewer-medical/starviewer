@@ -99,6 +99,27 @@ const double* DrawerPolygon::getVertix(int i) const
     }
 }
 
+QList<Line3D> DrawerPolygon::getSegments()
+{
+    QList<Line3D> polygonSegments;
+
+    int numberOfSegments = getNumberOfPoints();
+    for (int i = 0; i < numberOfSegments - 1; ++i)
+    {
+        Point3D firstPoint((double*)getVertix(i));
+        Point3D secondPoint((double*)getVertix(i + 1));
+        Line3D segment(firstPoint, secondPoint);
+        polygonSegments << segment;
+    }
+    // Must add last segment corresponding to the last point to the first of the polygon
+    Point3D firstPoint((double*)getVertix(numberOfSegments - 1));
+    Point3D secondPoint((double*)getVertix(0));
+    Line3D segment(firstPoint, secondPoint);
+    polygonSegments << segment;
+
+    return polygonSegments;
+}
+
 vtkProp* DrawerPolygon::getAsVtkProp()
 {
     updateVtkProp();
