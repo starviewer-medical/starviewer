@@ -111,6 +111,8 @@ HEADERS += extensionfactory.h \
     windowlevelpresetstool.h \
     transdifferencetool.h \
     transdifferencetooldata.h \
+    point3d.h \
+    line3d.h \
     drawer.h \
     drawerprimitive.h \
     drawerpolygon.h \
@@ -446,6 +448,8 @@ SOURCES += extensionmediator.cpp \
     windowlevelpresetstool.cpp \
     transdifferencetool.cpp \
     transdifferencetooldata.cpp \
+    point3d.cpp \
+    line3d.cpp \
     drawer.cpp \
     drawerprimitive.cpp \
     drawerpolygon.cpp \
