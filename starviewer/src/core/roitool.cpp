@@ -99,6 +99,9 @@ void ROITool::computeStatisticsData()
     double bounds[6];
     projectedROIPolygon->getBounds(bounds);
     
+    // Ja no necessitem més la còpia del polígon, per tant es pot eliminar de memòria
+    delete projectedROIPolygon;
+
     int xIndex, yIndex, zIndex;
     m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
 
@@ -238,8 +241,6 @@ void ROITool::computeStatisticsData()
         sweepLineEndPoint[yIndex] += verticalSpacingIncrement;
     }
     
-    // Ja no necessitem més la còpia del polígon, per tant es pot eliminar de memòria
-    delete projectedROIPolygon;
     // Un cop hem obtingut les dades necessàries, calculem la mitjana i la desviació estàndar
 
     // Mitjana
