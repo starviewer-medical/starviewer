@@ -76,8 +76,8 @@ void ROITool::computeStatisticsData()
     int numberOfSegments = projectedROIPolygon->getNumberOfPoints();
 
     // Llistes de punts inicials i finals de cada segement
-    QVector<const double*> segmentsStartPoints;
-    QVector<const double*> segmentsEndPoints;
+    QList<const double*> segmentsStartPoints;
+    QList<const double*> segmentsEndPoints;
 
     // Creem els diferents segments
     for (int i = 0; i < numberOfSegments - 1; ++i)
