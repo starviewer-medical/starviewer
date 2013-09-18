@@ -129,18 +129,8 @@ void ROITool::computeStatisticsData()
     while (sweepLineBeginPoint[yIndex] <= verticalLimit)
     {
         intersectionList.clear();
-        intersectedSegmentsIndexList.clear();
-        for (int i = 0; i < polygonSegments.count(); ++i)
-        {
-            if ((sweepLineBeginPoint[yIndex] <= polygonSegments.at(i).getFirstPoint().at(yIndex) &&
-                sweepLineBeginPoint[yIndex] >= polygonSegments.at(i).getSecondPoint().at(yIndex))
-            || (sweepLineBeginPoint[yIndex] >= polygonSegments.at(i).getFirstPoint().at(yIndex) &&
-                sweepLineBeginPoint[yIndex] <= polygonSegments.at(i).getSecondPoint().at(yIndex)))
-            {
-                intersectedSegmentsIndexList << i;
-            }
-        }
 
+        intersectedSegmentsIndexList = getIndexOfSegmentsCrossingAtHeight(polygonSegments, sweepLineBeginPoint[yIndex], yIndex);
         // Obtenim les interseccions entre tots els segments de la ROI i la línia d'escombrat actual
         foreach (int segmentIndex, intersectedSegmentsIndexList)
         {
@@ -273,6 +263,22 @@ DrawerPolygon *ROITool::createProjectedROIPolygon()
     // o que potser en aquest cas estem fent servir un DrawerPrimitive per una tasca per la que no està pensat
     projectedROIPolygon->getAsVtkProp();
     return projectedROIPolygon;
+}
+
+QList<int> ROITool::getIndexOfSegmentsCrossingAtHeight(const QList<Line3D> &segments, double height, int heightIndex)
+{
+    QList<int> intersectedSegmentsIndexList;
+
+    for (int i = 0; i < segments.count(); ++i)
+    {
+        if ((height <= segments.at(i).getFirstPoint().at(heightIndex) && height >= segments.at(i).getSecondPoint().at(heightIndex))
+        || (height >= segments.at(i).getFirstPoint().at(heightIndex) && height <= segments.at(i).getSecondPoint().at(heightIndex)))
+        {
+            intersectedSegmentsIndexList << i;
+        }
+    }
+
+    return intersectedSegmentsIndexList;
 }
 
 void ROITool::printData()
