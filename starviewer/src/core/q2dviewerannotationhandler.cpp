@@ -255,10 +255,9 @@ void Q2DViewerAnnotationHandler::updateSliceAnnotation()
         lowerLeftText += QObject::tr("/%1").arg(m_2DViewer->getNumberOfSlices());
         
         // If we have phases
-        int numberOfPhases = m_2DViewer->getMainInput()->getNumberOfPhases();
-        if (numberOfPhases > 1)
+        if (m_2DViewer->hasPhases())
         {
-            lowerLeftText += QObject::tr(" Phase: %1/%2").arg(m_2DViewer->getCurrentPhase() + 1).arg(numberOfPhases);
+            lowerLeftText += QObject::tr(" Phase: %1/%2").arg(m_2DViewer->getCurrentPhase() + 1).arg(m_2DViewer->getNumberOfPhases());
         }
         
         // Add slice thickness only if it is > 0.0mm

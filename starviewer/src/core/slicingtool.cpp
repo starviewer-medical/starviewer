@@ -214,7 +214,7 @@ void SlicingTool::computeImagesForScrollMode()
 {
     if (m_forcePhaseMode)
     {
-        m_numberOfImages = m_2DViewer->getMainInput()->getNumberOfPhases();
+        m_numberOfImages = m_2DViewer->getNumberOfPhases();
     }
     else
     {
@@ -224,7 +224,7 @@ void SlicingTool::computeImagesForScrollMode()
         }
         else
         {
-            m_numberOfImages = m_2DViewer->getMainInput()->getNumberOfPhases();
+            m_numberOfImages = m_2DViewer->getNumberOfPhases();
         }
     }
 }
