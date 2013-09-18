@@ -776,8 +776,7 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
         // Adapt the camera to the new view plane in order to make actors visible
         getRenderer()->ResetCamera();
 
-        // Thick Slab, li indiquem la direcció de projecció actual
-        mainDisplayUnit->getImagePipeline()->setProjectionAxis(getCurrentViewPlane());
+        // Restore thick Slab
         setSlabThickness(desiredSlabSlices);
     }
 
@@ -918,9 +917,6 @@ void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
                 break;
         }
 
-        // We set the proper slice index on the image pipeline
-        mainDisplayUnit->getImagePipeline()->setSlice(getMainInput()->getImageIndex(getCurrentSlice(), getCurrentPhase()));
-        
         // Then update display (image and associated annotations)
         updateDisplayExtents();
         updateCurrentImageDefaultPresets();
@@ -1326,9 +1322,6 @@ void Q2DViewer::setSlabThickness(int thickness)
     }
 
     mainDisplayUnit->setSlabThickness(thickness);
-
-    mainDisplayUnit->getImagePipeline()->setSlice(getMainInput()->getImageIndex(getCurrentSlice(), getCurrentPhase()));
-    mainDisplayUnit->getImagePipeline()->setSlabThickness(mainDisplayUnit->getSlabThickness());
     updateDisplayExtents();
     m_annotationsHandler->updateSliceAnnotationInformation();
     render();
