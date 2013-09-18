@@ -395,7 +395,6 @@ private:
     VolumeDisplayUnit* getDisplayUnit(int index) const;
     VolumeDisplayUnit* getMainDisplayUnit() const;
 
-
 private slots:
     /// Actualitza les transformacions de càmera (de moment rotació i flip)
     void updateCamera();
