@@ -24,7 +24,7 @@ bool InputSyncCriterion::criterionIsMet(QViewer *viewer1, QViewer *viewer2)
         bool found = false;
         QList<Volume*> volumes = viewer2D->getInputs();
         int i = 0;
-        while(!found && i < volumes.size())
+        while (!found && i < volumes.size())
         {
             found = viewer1->getMainInput() == volumes.at(i);
             i++;

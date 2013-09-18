@@ -48,7 +48,7 @@ void RepresentationsLayer::clearViewer()
     {
         case OrthogonalPlane::XYPlane:
             it = m_axialToolRepresentations.find(m_currentSlice);
-            while(it != m_axialToolRepresentations.end() && it.key() == m_currentSlice)
+            while (it != m_axialToolRepresentations.end() && it.key() == m_currentSlice)
             {
                 list << it.value();
                 it++;
@@ -59,7 +59,7 @@ void RepresentationsLayer::clearViewer()
 
         case OrthogonalPlane::YZPlane:
             it = m_sagitalToolRepresentations.find(m_currentSlice);
-            while(it != m_sagitalToolRepresentations.end() && it.key() == m_currentSlice)
+            while (it != m_sagitalToolRepresentations.end() && it.key() == m_currentSlice)
             {
                 list << it.value();
                 it++;
@@ -70,7 +70,7 @@ void RepresentationsLayer::clearViewer()
 
         case OrthogonalPlane::XZPlane:
             it = m_coronalToolRepresentations.find(m_currentSlice);
-            while(it != m_coronalToolRepresentations.end() && it.key() == m_currentSlice)
+            while (it != m_coronalToolRepresentations.end() && it.key() == m_currentSlice)
             {
                 list << it.value();
                 it++;
@@ -85,7 +85,7 @@ void RepresentationsLayer::clearViewer()
             break;
     }
 
-    foreach(ToolRepresentation *representation, list)
+    foreach (ToolRepresentation *representation, list)
     {
         delete representation;
     }
