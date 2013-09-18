@@ -70,11 +70,6 @@ vtkImageActor* VolumeDisplayUnit::getImageActor() const
     return m_imageActor;
 }
 
-SliceHandler* VolumeDisplayUnit::getSliceHandler() const
-{
-    return m_sliceHandler;
-}
-
 vtkPropPicker* VolumeDisplayUnit::getImagePointPicker()
 {
     if (!m_imagePointPicker)
