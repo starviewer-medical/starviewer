@@ -54,7 +54,6 @@ Q2DViewer::Q2DViewer(QWidget *parent)
     m_displayUnitsFactory = new VolumeDisplayUnitHandlerFactory;
     m_volumeReaderManager = new VolumeReaderManager(this);
     m_inputFinishedCommand = NULL;
-    m_currentThickSlabPixelData = 0;
 
     connect(m_volumeReaderManager, SIGNAL(readingFinished()), SLOT(volumeReaderJobFinished()));
     connect(m_volumeReaderManager, SIGNAL(progress(int)), m_workInProgressWidget, SLOT(updateProgress(int)));
@@ -91,7 +90,6 @@ Q2DViewer::~Q2DViewer()
     delete m_drawer;
     delete m_imageOrientationOperationsMapper;
 
-    delete m_currentThickSlabPixelData;
     deleteInputFinishedCommand();
 }
 
@@ -1402,20 +1400,7 @@ VolumePixelData* Q2DViewer::getCurrentPixelData()
         return 0;
     }
     
-    if (mainDisplayUnit->getSlabThickness() > 1)
-    {
-        if (!m_currentThickSlabPixelData)
-        {
-            m_currentThickSlabPixelData = new VolumePixelData;
-        }
-        m_currentThickSlabPixelData->setData(mainDisplayUnit->getSlabProjectionOutput());
-
-        return m_currentThickSlabPixelData;
-    }
-    else
-    {
-        return mainDisplayUnit->getVolume()->getPixelData();
-    }
+    return mainDisplayUnit->getCurrentPixelData();
 }
 
 void Q2DViewer::restore()

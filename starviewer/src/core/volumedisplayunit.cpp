@@ -5,6 +5,7 @@
 #include "volume.h"
 #include "vtkdepthdisabledopenglimageactor.h"
 #include "windowlevelpresetstooldata.h"
+#include "volumepixeldata.h"
 #include "image.h"
 #include "windowlevelhelper.h"
 
@@ -20,6 +21,7 @@ VolumeDisplayUnit::VolumeDisplayUnit()
     m_sliceHandler = new SliceHandler();
     m_imagePointPicker =  0;
     m_windowLevelData = 0;
+    m_currentThickSlabPixelData = 0;
 }
 
 VolumeDisplayUnit::~VolumeDisplayUnit()
@@ -32,6 +34,7 @@ VolumeDisplayUnit::~VolumeDisplayUnit()
     {
         m_imagePointPicker->Delete();
     }
+    delete m_currentThickSlabPixelData;
 }
 
 Volume* VolumeDisplayUnit::getVolume() const
@@ -89,6 +92,30 @@ void VolumeDisplayUnit::setViewPlane(const OrthogonalPlane &viewPlane)
 {
     m_sliceHandler->setViewPlane(viewPlane);
     m_imagePipeline->setProjectionAxis(viewPlane);
+}
+
+VolumePixelData* VolumeDisplayUnit::getCurrentPixelData()
+{
+    if (!m_volume)
+    {
+        return 0;
+    }
+    
+    // TODO We should have a method kind of "isThickSlabActive()"
+    if (getSlabThickness() > 1)
+    {
+        if (!m_currentThickSlabPixelData)
+        {
+            m_currentThickSlabPixelData = new VolumePixelData;
+        }
+        m_currentThickSlabPixelData->setData(getImagePipeline()->getSlabProjectionOutput());
+
+        return m_currentThickSlabPixelData;
+    }
+    else
+    {
+        return m_volume->getPixelData();
+    }
 }
 
 void VolumeDisplayUnit::updateDisplayExtent()
