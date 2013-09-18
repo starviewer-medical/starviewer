@@ -42,9 +42,6 @@ public:
     /// Returns the image actor.
     vtkImageActor* getImageActor() const;
 
-    /// Returns the slice handler.
-    SliceHandler* getSliceHandler() const;
-
     /// Returns the configured point picker for this unit.
     vtkPropPicker* getImagePointPicker();
     
