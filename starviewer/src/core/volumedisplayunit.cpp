@@ -203,4 +203,34 @@ void VolumeDisplayUnit::updateWindowLevel(const WindowLevel &windowLevel)
     m_imagePipeline->setWindowLevel(windowLevel.getWidth(), windowLevel.getCenter());
 }
 
+void VolumeDisplayUnit::getWindowLevel(double windowLevel[2]) const
+{
+    m_imagePipeline->getCurrentWindowLevel(windowLevel);
+}
+
+void VolumeDisplayUnit::setWindowLevel(double window, double level)
+{
+    m_imagePipeline->setWindowLevel(window, level);
+}
+
+void VolumeDisplayUnit::setTransferFunction(const TransferFunction &transferFunction)
+{
+    m_imagePipeline->setTransferFunction(transferFunction);
+}
+
+void VolumeDisplayUnit::setSlabProjectionMode(AccumulatorFactory::AccumulatorType accumulatorType)
+{
+    m_imagePipeline->setSlabProjectionMode(accumulatorType);
+}
+
+vtkImageData* VolumeDisplayUnit::getSlabProjectionOutput() const
+{
+    return m_imagePipeline->getSlabProjectionOutput();
+}
+
+void VolumeDisplayUnit::setShutterData(vtkImageData *shutterData)
+{
+    m_imagePipeline->setShutterData(shutterData);
+}
+
 }

@@ -1,9 +1,11 @@
 #ifndef VOLUMEDISPLAYUNIT_H
 #define VOLUMEDISPLAYUNIT_H
 
+#include "accumulator.h"
 #include "windowlevel.h"
 
 class vtkImageActor;
+class vtkImageData;
 class vtkPropPicker;
 
 namespace udg {
@@ -12,6 +14,7 @@ class Image;
 class ImagePipeline;
 class OrthogonalPlane;
 class SliceHandler;
+class TransferFunction;
 class Volume;
 class WindowLevelPresetsToolData;
 
@@ -59,6 +62,14 @@ public:
     /// Updates the current window level
     void updateWindowLevel(const WindowLevel &windowLevel);
 
+    /// Returns the current window level on the given array.
+    void getWindowLevel(double windowLevel[2]) const;
+    /// Sets the window level.
+    void setWindowLevel(double window, double level);
+
+    /// Sets the transfer function.
+    void setTransferFunction(const TransferFunction &transferFunction);
+
     /// Returns the current slice index.
     int getSlice() const;
     /// Sets the current slice index.
@@ -89,6 +100,15 @@ public:
     /// On the acquisition plane, this depends on DICOM's slice thickness and slab thickness (if DICOM's slice thickness is not defined, the method returns 0).
     /// On the other planes, this depends on the spacing and the slab thickness.
     double getSliceThickness() const;
+
+    /// Sets the slab projection mode for the thick slab.
+    void setSlabProjectionMode(AccumulatorFactory::AccumulatorType accumulatorType);
+
+    /// Returns the vtkImageData obtained from the thick slab filter.
+    vtkImageData* getSlabProjectionOutput() const;
+
+    /// Sets the display shutter image data.
+    void setShutterData(vtkImageData *shutterData);
 
 private:
     /// Called when setting a new volume to reset the thick slab filter.
