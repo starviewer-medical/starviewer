@@ -78,6 +78,9 @@ public:
     /// HACK S'introdueixen els paràmetres phaseNumber i numberOfPhases per poder calcular l'índex correcte dins del volum corresponent a la fase actual
     Voxel getVoxelValue(double coordinate[3], int phaseNumber = 0, int numberOfPhases = 1);
 
+    /// Returns the voxel corresponding to the given index. If index is out of range, a default constructed value will be returned.
+    Voxel getVoxelValue(int index[3]);
+
     /// Donada una posició del volum, ens dona el valor coma double del vòxel corresponent
     /// Bàsicament crida el getScalarComponentAsDouble del vtkImageData
     /// TODO El mètode de vtkImageData incorpora el paràmetre int comp però no s'ha inclòs degut a que s'ha fet per realitzar un refactoring de volume i 

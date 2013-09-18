@@ -2,6 +2,7 @@
 
 #include "volumepixeldataiterator.h"
 #include "voxel.h"
+#include "mathtools.h"
 
 #include <vtkImageChangeInformation.h>
 #include <vtkImageData.h>
@@ -197,6 +198,29 @@ Voxel VolumePixelData::getVoxelValue(double coordinate[3], int phaseNumber, int 
     {
         return Voxel();
     }
+}
+
+Voxel VolumePixelData::getVoxelValue(int index[3])
+{
+    int extent[6];
+    getExtent(extent);
+
+    bool inside = true;
+    for (int i = 0; i < 3; ++i)
+    {
+        inside = inside && MathTools::isInsideRange(index[i], extent[i * 2], extent[i * 2 + 1]);
+    }
+    
+    Voxel voxelValue;
+    if (inside)
+    {
+        for (int i = 0; i < getVtkData()->GetNumberOfScalarComponents(); i++)
+        {
+            voxelValue.addComponent(m_imageDataVTK->GetScalarComponentAsDouble(index[0], index[1], index[2], i));
+        }
+    }
+
+    return voxelValue;
 }
 
 double VolumePixelData::getScalarComponentAsDouble(int x, int y, int z)
