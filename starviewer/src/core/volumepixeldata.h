@@ -69,7 +69,8 @@ public:
     /// Si la coordenada està dins del volum retorna true, false altrament.
     /// TODO S'espera que la coordenada sigui dins del món VTK!
     /// Caldria determinar si ha de ser així o hauria de ser DICOM o en un altre sistema.
-    bool computeCoordinateIndex(const double coordinate[3], int index[3]);
+    /// HACK S'introdueixen els paràmetres phaseNumber i numberOfPhases per poder calcular l'índex correcte dins del volum corresponent a la fase actual
+    bool computeCoordinateIndex(const double coordinate[3], int index[3], int phaseNumber = 0, int numberOfPhases = 1);
 
     /// Donada una coordenada de món, ens dóna el valor del vòxel corresponent.
     /// TODO S'espera que la coordenada sigui dins del món VTK!
