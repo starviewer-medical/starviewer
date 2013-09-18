@@ -118,97 +118,19 @@ void ROITool::computeStatisticsData()
         phaseIndex = m_2DViewer->getCurrentPhase();
     }
 
-    int initialPosition;
-    int endPosition;
-    double *firstIntersection;
-    double *secondIntersection;
     QList<double*> intersectionList;
     QList<int> intersectedSegmentsIndexList;
     // Inicialitzem la llista de valors de gris
     m_grayValues.clear();
     while (sweepLineBeginPoint[yIndex] <= verticalLimit)
     {
-        intersectionList.clear();
-
         intersectedSegmentsIndexList = getIndexOfSegmentsCrossingAtHeight(polygonSegments, sweepLineBeginPoint[yIndex], yIndex);
         // Obtenim les interseccions entre tots els segments de la ROI i la línia d'escombrat actual
-        foreach (int segmentIndex, intersectedSegmentsIndexList)
-        {
-            int intersectionState;
-            double *foundPoint = MathTools::infiniteLinesIntersection(polygonSegments.at(segmentIndex).getFirstPoint().getAsDoubleArray(),
-                                                                      polygonSegments.at(segmentIndex).getSecondPoint().getAsDoubleArray(),
-                                                                      sweepLineBeginPoint, sweepLineEndPoint, intersectionState);
-            if (intersectionState == MathTools::LinesIntersect)
-            {
-                // Cal ordenar les interseccions en la direcció horitzontal per tal que el recompte de píxels es faci correctament
-                bool found = false;
-                int i = 0;
-                while (!found && i < intersectionList.count())
-                {
-                    if (foundPoint[xIndex] > intersectionList.at(i)[xIndex])
-                    {
-                        intersectionList.insert(i, foundPoint);
-                        found = true;
-                    }
-                    else
-                    {
-                        ++i;
-                    }
-                }
-                // Si tots els punts són més grans, cal inserir la intersecció al final
-                if (!found)
-                {
-                    intersectionList << foundPoint;
-                }
-            }
-        }
+        intersectionList = getIntersectionPoints(polygonSegments, intersectedSegmentsIndexList, Line3D(Point3D(sweepLineBeginPoint), Point3D(sweepLineEndPoint)), xIndex);
 
         // Fem el recompte de píxels
-        if (MathTools::isEven(intersectionList.count()))
-        {
-            int limit = intersectionList.count() / 2;
-            for (int i = 0; i < limit; ++i)
-            {
-                initialPosition = i * 2;
-                endPosition = initialPosition + 1;
-
-                firstIntersection = intersectionList.at(initialPosition);
-                secondIntersection = intersectionList.at(endPosition);
-
-                // Tractem els dos sentits de les interseccions
-                // D'esquerra cap a dreta
-                if (firstIntersection[xIndex] <= secondIntersection[xIndex])
-                {
-                    while (firstIntersection[xIndex] <= secondIntersection[xIndex])
-                    {
-                        Voxel voxel = pixelData->getVoxelValue(firstIntersection, phaseIndex, numberOfPhases);
-                        if (!voxel.isEmpty())
-                        {
-                            m_grayValues << voxel.getComponent(0);
-                        }
-                        firstIntersection[xIndex] += horizontalSpacingIncrement;
-                    }
-                }
-                // I de dreta cap a esquerra
-                else
-                {
-                    while (firstIntersection[xIndex] >= secondIntersection[xIndex])
-                    {
-                        Voxel voxel = pixelData->getVoxelValue(firstIntersection, phaseIndex, numberOfPhases);
-                        if (!voxel.isEmpty())
-                        {
-                            m_grayValues << voxel.getComponent(0);
-                        }
-                        firstIntersection[xIndex] -= horizontalSpacingIncrement;
-                    }
-                }
-            }
-        }
-        else
-        {
-            DEBUG_LOG("EL NOMBRE D'INTERSECCIONS ENTRE EL RAIG I LA ROI ÉS IMPARELL!!");
-        }
-
+        addVoxelsFromIntersections(intersectionList, xIndex, horizontalSpacingIncrement, pixelData, phaseIndex, numberOfPhases);
+        
         // Desplacem la línia d'escombrat en la direcció que toca tant com espaiat de píxel tinguem en aquella direcció
         sweepLineBeginPoint[yIndex] += verticalSpacingIncrement;
         sweepLineEndPoint[yIndex] += verticalSpacingIncrement;
@@ -279,6 +201,96 @@ QList<int> ROITool::getIndexOfSegmentsCrossingAtHeight(const QList<Line3D> &segm
     }
 
     return intersectedSegmentsIndexList;
+}
+
+QList<double*> ROITool::getIntersectionPoints(const QList<Line3D> &polygonSegments, const QList<int> &indexListOfSegmentsToIntersect, const Line3D &sweepLine, int sortIndex)
+{
+    QList<double*> intersectionPoints;
+    
+    foreach (int segmentIndex, indexListOfSegmentsToIntersect)
+    {
+        int intersectionState;
+        double *foundPoint = MathTools::infiniteLinesIntersection(polygonSegments.at(segmentIndex).getFirstPoint().getAsDoubleArray(),
+                                                                    polygonSegments.at(segmentIndex).getSecondPoint().getAsDoubleArray(),
+                                                                    sweepLine.getFirstPoint().getAsDoubleArray(), sweepLine.getSecondPoint().getAsDoubleArray(),
+                                                                    intersectionState);
+        if (intersectionState == MathTools::LinesIntersect)
+        {
+            // Cal ordenar les interseccions en la direcció horitzontal per tal que el recompte de píxels es faci correctament
+            bool found = false;
+            int i = 0;
+            while (!found && i < intersectionPoints.count())
+            {
+                if (foundPoint[sortIndex] > intersectionPoints.at(i)[sortIndex])
+                {
+                    intersectionPoints.insert(i, foundPoint);
+                    found = true;
+                }
+                else
+                {
+                    ++i;
+                }
+            }
+            // Si tots els punts són més grans, cal inserir la intersecció al final
+            if (!found)
+            {
+                intersectionPoints << foundPoint;
+            }
+        }
+    }
+
+    return intersectionPoints;
+}
+
+void ROITool::addVoxelsFromIntersections(const QList<double*> &intersectionPoints, int scanDirectionIndex, double scanDirectionIncrement,
+    VolumePixelData *pixelData, int phaseIndex, int numberOfPhases)
+{
+    if (MathTools::isEven(intersectionPoints.count()))
+    {
+        int firstPointIndex;
+        int secondPointIndex;
+        int limit = intersectionPoints.count() / 2;
+        for (int i = 0; i < limit; ++i)
+        {
+            firstPointIndex = i * 2;
+            secondPointIndex = firstPointIndex + 1;
+
+            double *firstIntersection = intersectionPoints.at(firstPointIndex);
+            double *secondIntersection = intersectionPoints.at(secondPointIndex);
+
+            // Tractem els dos sentits de les interseccions
+            // D'esquerra cap a dreta
+            if (firstIntersection[scanDirectionIndex] <= secondIntersection[scanDirectionIndex])
+            {
+                while (firstIntersection[scanDirectionIndex] <= secondIntersection[scanDirectionIndex])
+                {
+                    Voxel voxel = pixelData->getVoxelValue(firstIntersection, phaseIndex, numberOfPhases);
+                    if (!voxel.isEmpty())
+                    {
+                        m_grayValues << voxel.getComponent(0);
+                    }
+                    firstIntersection[scanDirectionIndex] += scanDirectionIncrement;
+                }
+            }
+            // I de dreta cap a esquerra
+            else
+            {
+                while (firstIntersection[scanDirectionIndex] >= secondIntersection[scanDirectionIndex])
+                {
+                    Voxel voxel = pixelData->getVoxelValue(firstIntersection, phaseIndex, numberOfPhases);
+                    if (!voxel.isEmpty())
+                    {
+                        m_grayValues << voxel.getComponent(0);
+                    }
+                    firstIntersection[scanDirectionIndex] -= scanDirectionIncrement;
+                }
+            }
+        }
+    }
+    else
+    {
+        DEBUG_LOG("EL NOMBRE D'INTERSECCIONS ENTRE EL RAIG I LA ROI ÉS IMPARELL!!");
+    }
 }
 
 void ROITool::printData()
