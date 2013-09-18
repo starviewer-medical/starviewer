@@ -88,6 +88,7 @@ const OrthogonalPlane& VolumeDisplayUnit::getViewPlane() const
 void VolumeDisplayUnit::setViewPlane(const OrthogonalPlane &viewPlane)
 {
     m_sliceHandler->setViewPlane(viewPlane);
+    m_imagePipeline->setProjectionAxis(viewPlane);
 }
 
 void VolumeDisplayUnit::updateDisplayExtent()
@@ -113,6 +114,7 @@ int VolumeDisplayUnit::getSlice() const
 void VolumeDisplayUnit::setSlice(int slice)
 {
     m_sliceHandler->setSlice(slice);
+    m_imagePipeline->setSlice(m_volume->getImageIndex(getSlice(), getPhase()));
 }
 
 int VolumeDisplayUnit::getMinimumSlice() const
@@ -138,6 +140,7 @@ int VolumeDisplayUnit::getPhase() const
 void VolumeDisplayUnit::setPhase(int phase)
 {
     m_sliceHandler->setPhase(phase);
+    m_imagePipeline->setSlice(m_volume->getImageIndex(getSlice(), getPhase()));
 }
 
 int VolumeDisplayUnit::getNumberOfPhases() const
@@ -153,6 +156,8 @@ int VolumeDisplayUnit::getSlabThickness() const
 void VolumeDisplayUnit::setSlabThickness(int thickness)
 {
     m_sliceHandler->setSlabThickness(thickness);
+    m_imagePipeline->setSlice(m_volume->getImageIndex(getSlice(), getPhase()));
+    m_imagePipeline->setSlabThickness(thickness);
 }
 
 double VolumeDisplayUnit::getSliceThickness() const
