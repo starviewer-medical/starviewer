@@ -1023,7 +1023,7 @@ void Q2DViewer::setWindowLevel(double window, double level)
     VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
     if (mainDisplayUnit)
     {
-        mainDisplayUnit->getImagePipeline()->setWindowLevel(window,level);
+        mainDisplayUnit->setWindowLevel(window,level);
         m_annotationsHandler->updateAnnotationsInformation(WindowInformationAnnotation);
         render();
         emit windowLevelChanged(window, level);
@@ -1041,7 +1041,7 @@ void Q2DViewer::setTransferFunction(TransferFunction *transferFunction)
     VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
     if (mainDisplayUnit)
     {
-        mainDisplayUnit->getImagePipeline()->setTransferFunction(*m_transferFunction);
+        mainDisplayUnit->setTransferFunction(*m_transferFunction);
     }
 }
 
@@ -1050,7 +1050,7 @@ void Q2DViewer::getCurrentWindowLevel(double wl[2])
     VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
     if (mainDisplayUnit)
     {
-        mainDisplayUnit->getImagePipeline()->getCurrentWindowLevel(wl);
+        mainDisplayUnit->getWindowLevel(wl);
     }
     else
     {
@@ -1296,7 +1296,7 @@ void Q2DViewer::setSlabProjectionMode(int projectionMode)
     VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
     if (mainDisplayUnit)
     {
-        mainDisplayUnit->getImagePipeline()->setSlabProjectionMode(static_cast<AccumulatorFactory::AccumulatorType>(m_slabProjectionMode));
+        mainDisplayUnit->setSlabProjectionMode(static_cast<AccumulatorFactory::AccumulatorType>(m_slabProjectionMode));
         updateDisplayExtents();
         render();
     }
@@ -1408,7 +1408,7 @@ VolumePixelData* Q2DViewer::getCurrentPixelData()
         {
             m_currentThickSlabPixelData = new VolumePixelData;
         }
-        m_currentThickSlabPixelData->setData(mainDisplayUnit->getImagePipeline()->getSlabProjectionOutput());
+        m_currentThickSlabPixelData->setData(mainDisplayUnit->getSlabProjectionOutput());
 
         return m_currentThickSlabPixelData;
     }
@@ -1713,7 +1713,7 @@ void Q2DViewer::updateDisplayShutterMask()
     VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
     if (mainDisplayUnit)
     {
-        mainDisplayUnit->getImagePipeline()->setShutterData(shutterData);
+        mainDisplayUnit->setShutterData(shutterData);
     }
 }
 
@@ -1759,7 +1759,7 @@ void Q2DViewer::setVolumeTransferFunction(int index, const TransferFunction &tra
     VolumeDisplayUnit *unit = getDisplayUnit(index);
     if (unit)
     {
-        unit->getImagePipeline()->setTransferFunction(transferFunction);
+        unit->setTransferFunction(transferFunction);
     }
 }
 
