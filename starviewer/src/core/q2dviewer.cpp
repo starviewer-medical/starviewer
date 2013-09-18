@@ -23,7 +23,6 @@
 #include "qviewercommand.h"
 #include "renderqviewercommand.h"
 #include "mammographyimagehelper.h"
-#include "slicehandler.h"
 #include "volumedisplayunit.h"
 #include "slicelocator.h"
 #include "transferfunctionmodel.h"
@@ -276,7 +275,7 @@ double Q2DViewer::getCurrentSliceThickness() const
     VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
     if (mainDisplayUnit)
     {
-        return mainDisplayUnit->getSliceHandler()->getSliceThickness();
+        return mainDisplayUnit->getSliceThickness();
     }
     else
     {
@@ -289,7 +288,7 @@ int Q2DViewer::getMinimumSlice() const
     VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
     if (mainDisplayUnit)
     {
-        return mainDisplayUnit->getSliceHandler()->getMinimumSlice();
+        return mainDisplayUnit->getMinimumSlice();
     }
     else
     {
@@ -302,7 +301,7 @@ int Q2DViewer::getMaximumSlice() const
     VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
     if (mainDisplayUnit)
     {
-        return mainDisplayUnit->getSliceHandler()->getMaximumSlice();
+        return mainDisplayUnit->getMaximumSlice();
     }
     else
     {
@@ -315,7 +314,7 @@ int Q2DViewer::getNumberOfSlices() const
     VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
     if (mainDisplayUnit)
     {
-        return mainDisplayUnit->getSliceHandler()->getNumberOfSlices();
+        return mainDisplayUnit->getNumberOfSlices();
     }
     else
     {
@@ -771,7 +770,7 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
         int initialSliceIndex = 0;
         if (getCurrentViewPlane() == OrthogonalPlane::YZPlane || getCurrentViewPlane() == OrthogonalPlane::XZPlane)
         {
-            initialSliceIndex = mainDisplayUnit->getSliceHandler()->getMaximumSlice() / 2;
+            initialSliceIndex = mainDisplayUnit->getMaximumSlice() / 2;
         }
         setSlice(initialSliceIndex);
         // Adapt the camera to the new view plane in order to make actors visible
@@ -910,12 +909,12 @@ void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
         switch (dimension)
         {
             case SpatialDimension:
-                mainDisplayUnit->getSliceHandler()->setSlice(value);
+                mainDisplayUnit->setSlice(value);
                 updateSecondaryVolumesSlices();
                 break;
 
             case TemporalDimension:
-                mainDisplayUnit->getSliceHandler()->setPhase(value);
+                mainDisplayUnit->setPhase(value);
                 break;
         }
 
@@ -982,7 +981,7 @@ void Q2DViewer::updateSecondaryVolumesSlices()
 
         if (nearestSlice >= 0)
         {
-            getDisplayUnit(i)->getSliceHandler()->setSlice(nearestSlice);
+            getDisplayUnit(i)->setSlice(nearestSlice);
         }
     }
 }
@@ -1068,7 +1067,7 @@ int Q2DViewer::getCurrentSlice() const
     VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
     if (mainDisplayUnit)
     {
-        return mainDisplayUnit->getSliceHandler()->getCurrentSlice();
+        return mainDisplayUnit->getSlice();
     }
     else
     {
@@ -1081,7 +1080,7 @@ int Q2DViewer::getCurrentPhase() const
     VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
     if (mainDisplayUnit)
     {
-        return mainDisplayUnit->getSliceHandler()->getCurrentPhase();
+        return mainDisplayUnit->getPhase();
     }
     else
     {
@@ -1321,15 +1320,15 @@ void Q2DViewer::setSlabThickness(int thickness)
     }
     
     // Primera aproximació per evitar error dades de primitives: a l'activar o desactivar l'slabthickness, esborrem primitives
-    if (thickness != mainDisplayUnit->getSliceHandler()->getSlabThickness())
+    if (thickness != mainDisplayUnit->getSlabThickness())
     {
         getDrawer()->removeAllPrimitives();
     }
 
-    mainDisplayUnit->getSliceHandler()->setSlabThickness(thickness);
+    mainDisplayUnit->setSlabThickness(thickness);
 
     mainDisplayUnit->getImagePipeline()->setSlice(getMainInput()->getImageIndex(getCurrentSlice(), getCurrentPhase()));
-    mainDisplayUnit->getImagePipeline()->setSlabThickness(mainDisplayUnit->getSliceHandler()->getSlabThickness());
+    mainDisplayUnit->getImagePipeline()->setSlabThickness(mainDisplayUnit->getSlabThickness());
     updateDisplayExtents();
     m_annotationsHandler->updateSliceAnnotationInformation();
     render();
@@ -1337,7 +1336,7 @@ void Q2DViewer::setSlabThickness(int thickness)
     // TODO és del tot correcte que vagi aquí aquesta crida?
     // Tal com està posat se suposa que sempre el valor de thickness ha
     // canviat i podria ser que no, seria més adequat posar-ho a computerangeAndSlice?
-    emit slabThicknessChanged(mainDisplayUnit->getSliceHandler()->getSlabThickness());
+    emit slabThicknessChanged(mainDisplayUnit->getSlabThickness());
 }
 
 int Q2DViewer::getSlabThickness() const
@@ -1345,7 +1344,7 @@ int Q2DViewer::getSlabThickness() const
     VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
     if (mainDisplayUnit)
     {
-        return mainDisplayUnit->getSliceHandler()->getSlabThickness();
+        return mainDisplayUnit->getSlabThickness();
     }
     else
     {
@@ -1363,7 +1362,7 @@ bool Q2DViewer::isThickSlabActive() const
     VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
     if (mainDisplayUnit)
     {
-        return mainDisplayUnit->getSliceHandler()->getSlabThickness() > 1;
+        return mainDisplayUnit->getSlabThickness() > 1;
     }
     else
     {
@@ -1410,7 +1409,7 @@ VolumePixelData* Q2DViewer::getCurrentPixelData()
         return 0;
     }
     
-    if (mainDisplayUnit->getSliceHandler()->getSlabThickness() > 1)
+    if (mainDisplayUnit->getSlabThickness() > 1)
     {
         if (!m_currentThickSlabPixelData)
         {
