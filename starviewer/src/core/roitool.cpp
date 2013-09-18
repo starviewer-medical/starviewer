@@ -98,8 +98,6 @@ void ROITool::computeStatisticsData()
     // Les interseccions marcaran el camí a seguir per fer el recompte de vòxels
     double bounds[6];
     projectedROIPolygon->getBounds(bounds);
-    // Ja no necessitem més la còpia del polígon, per tant es pot eliminar de memòria
-    delete projectedROIPolygon;
     
     double *spacing = m_2DViewer->getMainInput()->getSpacing();
     double sweepLineBeginPoint[3];
@@ -294,6 +292,9 @@ void ROITool::computeStatisticsData()
         sweepLineBeginPoint[sweepLineCoordinateIndex] += verticalSpacingIncrement;
         sweepLineEndPoint[sweepLineCoordinateIndex] += verticalSpacingIncrement;
     }
+    
+    // Ja no necessitem més la còpia del polígon, per tant es pot eliminar de memòria
+    delete projectedROIPolygon;
     // Un cop hem obtingut les dades necessàries, calculem la mitjana i la desviació estàndar
 
     // Mitjana
