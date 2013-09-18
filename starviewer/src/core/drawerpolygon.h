@@ -3,6 +3,7 @@
 
 #include "drawerprimitive.h"
 #include "q2dviewer.h"
+#include "line3d.h"
 
 class vtkPolyData;
 class vtkPoints;
@@ -41,6 +42,9 @@ public:
     /// Ens retorna l'i-èssim vèrtex del polígon. Si l'índex està fora de rang ens retornarà un array sense inicialitzar
     const double* getVertix(int i) const;
 
+    /// Returns the segments of the polygon
+    QList<Line3D> getSegments();
+    
     vtkProp* getAsVtkProp();
 
     /// Ens retorna el nombre de punts que té el polígon
