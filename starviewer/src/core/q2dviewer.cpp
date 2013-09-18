@@ -1657,17 +1657,20 @@ double Q2DViewer::getCurrentSpacingBetweenSlices()
     return getMainInput()->getSpacing()[zIndex];
 }
 
-vtkImageActor* Q2DViewer::getVtkImageActor() const
+QList<vtkImageActor*> Q2DViewer::getVtkImageActorsList() const
 {
-    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
-    if (mainDisplayUnit)
+    QList<vtkImageActor*> actorsList;
+
+    if (m_displayUnitsHandler)
     {
-        return mainDisplayUnit->getImageActor();
+        for (int i = 0; i < m_displayUnitsHandler->getNumberOfInputs(); ++i)
+        {
+            VolumeDisplayUnit *unit = m_displayUnitsHandler->getVolumeDisplayUnit(i);
+            actorsList << unit->getImageActor();
+        }
     }
-    else
-    {
-        return 0;
-    }
+
+    return actorsList;
 }
 
 Q2DViewer* Q2DViewer::castFromQViewer(QViewer *viewer)
