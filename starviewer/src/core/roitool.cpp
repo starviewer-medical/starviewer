@@ -8,6 +8,7 @@
 #include "mathtools.h"
 #include "areameasurecomputer.h"
 #include "voxel.h"
+#include "line3d.h"
 
 #include <QApplication>
 
@@ -75,21 +76,21 @@ void ROITool::computeStatisticsData()
     // El nombre de segments és el mateix que el nombre de punts del polígon
     int numberOfSegments = projectedROIPolygon->getNumberOfPoints();
 
-    // Llistes de punts inicials i finals de cada segement
-    QList<QPair<const double*, const double*> > polygonSegments;
+    // List with the segments of the polygon
+    QList<Line3D> polygonSegments;
 
     // Creem els diferents segments
     for (int i = 0; i < numberOfSegments - 1; ++i)
     {
-        QPair<const double*, const double*> segment;
-        segment.first = projectedROIPolygon->getVertix(i);
-        segment.second = projectedROIPolygon->getVertix(i + 1);
+        Point3D firstPoint((double*)projectedROIPolygon->getVertix(i));
+        Point3D secondPoint((double*)projectedROIPolygon->getVertix(i + 1));
+        Line3D segment(firstPoint, secondPoint);
         polygonSegments << segment;
     }
     // Cal afegir l'últim segment que es correspondria amb el segment de l'últim punt al primer
-    QPair<const double*, const double*> segment;
-    segment.first = projectedROIPolygon->getVertix(numberOfSegments - 1);
-    segment.second = projectedROIPolygon->getVertix(0);
+    Point3D firstPoint((double*)projectedROIPolygon->getVertix(numberOfSegments - 1));
+    Point3D secondPoint((double*)projectedROIPolygon->getVertix(0));
+    Line3D segment(firstPoint, secondPoint);
     polygonSegments << segment;
 
     // Traçarem una lína d'escombrat dins de la regió quadrangular que ocupa el polígon
@@ -145,10 +146,10 @@ void ROITool::computeStatisticsData()
         intersectedSegmentsIndexList.clear();
         for (int i = 0; i < numberOfSegments; ++i)
         {
-            if ((sweepLineBeginPoint[yIndex] <= polygonSegments.at(i).first[yIndex] &&
-                sweepLineBeginPoint[yIndex] >= polygonSegments.at(i).second[yIndex])
-            || (sweepLineBeginPoint[yIndex] >= polygonSegments.at(i).first[yIndex] &&
-                sweepLineBeginPoint[yIndex] <= polygonSegments.at(i).second[yIndex]))
+            if ((sweepLineBeginPoint[yIndex] <= polygonSegments.at(i).getFirstPoint().at(yIndex) &&
+                sweepLineBeginPoint[yIndex] >= polygonSegments.at(i).getSecondPoint().at(yIndex))
+            || (sweepLineBeginPoint[yIndex] >= polygonSegments.at(i).getFirstPoint().at(yIndex) &&
+                sweepLineBeginPoint[yIndex] <= polygonSegments.at(i).getSecondPoint().at(yIndex)))
             {
                 intersectedSegmentsIndexList << i;
             }
@@ -158,8 +159,8 @@ void ROITool::computeStatisticsData()
         foreach (int segmentIndex, intersectedSegmentsIndexList)
         {
             int intersectionState;
-            double *foundPoint = MathTools::infiniteLinesIntersection((double*)polygonSegments.at(segmentIndex).first,
-                                                                      (double*)polygonSegments.at(segmentIndex).second,
+            double *foundPoint = MathTools::infiniteLinesIntersection(polygonSegments.at(segmentIndex).getFirstPoint().getAsDoubleArray(),
+                                                                      polygonSegments.at(segmentIndex).getSecondPoint().getAsDoubleArray(),
                                                                       sweepLineBeginPoint, sweepLineEndPoint, intersectionState);
             if (intersectionState == MathTools::LinesIntersect)
             {
