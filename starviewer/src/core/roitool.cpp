@@ -8,7 +8,6 @@
 #include "mathtools.h"
 #include "areameasurecomputer.h"
 #include "voxel.h"
-#include "line3d.h"
 
 #include <QApplication>
 
@@ -73,25 +72,9 @@ void ROITool::computeStatisticsData()
     // Creem una còpia de m_roiPolygon projectada a la mateixa profunditat que la llesca actual
     // Serà amb aquest polígon amb el que calcularem els corresponents valors de vòxel
     DrawerPolygon *projectedROIPolygon = createProjectedROIPolygon();
-    // El nombre de segments és el mateix que el nombre de punts del polígon
-    int numberOfSegments = projectedROIPolygon->getNumberOfPoints();
 
     // List with the segments of the polygon
-    QList<Line3D> polygonSegments;
-
-    // Creem els diferents segments
-    for (int i = 0; i < numberOfSegments - 1; ++i)
-    {
-        Point3D firstPoint((double*)projectedROIPolygon->getVertix(i));
-        Point3D secondPoint((double*)projectedROIPolygon->getVertix(i + 1));
-        Line3D segment(firstPoint, secondPoint);
-        polygonSegments << segment;
-    }
-    // Cal afegir l'últim segment que es correspondria amb el segment de l'últim punt al primer
-    Point3D firstPoint((double*)projectedROIPolygon->getVertix(numberOfSegments - 1));
-    Point3D secondPoint((double*)projectedROIPolygon->getVertix(0));
-    Line3D segment(firstPoint, secondPoint);
-    polygonSegments << segment;
+    QList<Line3D> polygonSegments = projectedROIPolygon->getSegments();
 
     // Traçarem una lína d'escombrat dins de la regió quadrangular que ocupa el polígon
     // Aquesta línia produirà unes interseccions amb els segments del polígon
@@ -147,7 +130,7 @@ void ROITool::computeStatisticsData()
     {
         intersectionList.clear();
         intersectedSegmentsIndexList.clear();
-        for (int i = 0; i < numberOfSegments; ++i)
+        for (int i = 0; i < polygonSegments.count(); ++i)
         {
             if ((sweepLineBeginPoint[yIndex] <= polygonSegments.at(i).getFirstPoint().at(yIndex) &&
                 sweepLineBeginPoint[yIndex] >= polygonSegments.at(i).getSecondPoint().at(yIndex))
