@@ -182,17 +182,7 @@ Voxel VolumePixelData::getVoxelValue(double coordinate[3], int phaseNumber, int 
 
     if (inside)
     {
-        vtkIdType pointId = this->getVtkData()->ComputePointId(voxelIndex);
-        vtkDataArray *scalars = this->getVtkData()->GetPointData()->GetScalars();
-        int numberOfComponents = scalars->GetNumberOfComponents();
-
-        Voxel voxelValue;
-        for (int i = 0; i < numberOfComponents; i++)
-        {
-            voxelValue.addComponent(scalars->GetComponent(pointId, i));
-        }
-
-        return voxelValue;
+        return getVoxelValue(voxelIndex);
     }
     else
     {
