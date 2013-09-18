@@ -141,7 +141,7 @@ void QExporterTool::generateAndStoreNewSeries()
         int maxSlice = viewer2D->getMaximumSlice() + 1;
 
         // En cas que tinguem fases farem tantes passades com fases
-        int phases = viewer2D->getMainInput()->getNumberOfPhases();
+        int phases = viewer2D->getNumberOfPhases();
 
         for (int i = 0; i < maxSlice; i++)
         {
@@ -183,7 +183,7 @@ void QExporterTool::generateAndStoreNewSeries()
 
         // Guardem la fase acutal
         int currentPhase = viewer2D->getCurrentPhase();
-        int phases = viewer2D->getMainInput()->getNumberOfPhases();
+        int phases = viewer2D->getNumberOfPhases();
 
         for (int i = 0; i < phases; i++)
         {
@@ -291,7 +291,7 @@ void QExporterTool::allImagesRadioButtonClicked()
     if (viewer2D)
     {
         this->generate2DPreview(0, 0);
-        m_numberOfImagesToStore->setText(QString("1/%1").arg(QString::number((viewer2D->getMaximumSlice() + 1) * viewer2D->getMainInput()->getNumberOfPhases())));
+        m_numberOfImagesToStore->setText(QString("1/%1").arg(QString::number((viewer2D->getMaximumSlice() + 1) * viewer2D->getNumberOfPhases())));
     }
     else
     {
@@ -387,7 +387,7 @@ bool QExporterTool::canAllocateEnoughMemory()
         Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(m_viewer);
 
         int maxSlice = viewer2D->getMaximumSlice() + 1;
-        int phases = viewer2D->getMainInput()->getNumberOfPhases();
+        int phases = viewer2D->getNumberOfPhases();
         numberOfScreenshots = maxSlice * phases;
     }
     else if (m_imagesOfCurrentPhaseRadioButton->isChecked())
@@ -400,7 +400,7 @@ bool QExporterTool::canAllocateEnoughMemory()
     {
         Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(m_viewer);
 
-        numberOfScreenshots = viewer2D->getMainInput()->getNumberOfPhases();
+        numberOfScreenshots = viewer2D->getNumberOfPhases();
     }
     else
     {

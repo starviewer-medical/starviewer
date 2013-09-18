@@ -183,9 +183,9 @@ void ROITool::computeStatisticsData()
     
     int phaseIndex = 0;
     int numberOfPhases = 1;
-    if (!m_2DViewer->isThickSlabActive() && m_2DViewer->getView() == OrthogonalPlane::XYPlane && m_2DViewer->getMainInput()->getNumberOfPhases() > 1)
+    if (!m_2DViewer->isThickSlabActive() && m_2DViewer->getView() == OrthogonalPlane::XYPlane && m_2DViewer->hasPhases())
     {
-        numberOfPhases = m_2DViewer->getMainInput()->getNumberOfPhases();
+        numberOfPhases = m_2DViewer->getNumberOfPhases();
         phaseIndex = m_2DViewer->getCurrentPhase();
     }
 

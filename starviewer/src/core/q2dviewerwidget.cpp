@@ -151,12 +151,7 @@ Q2DViewer* Q2DViewerWidget::getViewer()
 
 bool Q2DViewerWidget::hasPhases()
 {
-    int phases = 0;
-    if (m_2DView->hasInput())
-    {
-        phases = m_2DView->getMainInput()->getNumberOfPhases();
-    }
-    return (phases > 1);
+    return m_2DView->hasPhases();
 }
 
 void Q2DViewerWidget::setDefaultAction(QAction *synchronizeAction)

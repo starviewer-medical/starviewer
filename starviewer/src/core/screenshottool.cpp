@@ -129,7 +129,7 @@ void ScreenShotTool::screenShot(bool singleShot)
                 int currentPhase = viewer2D->getCurrentPhase();
                 int maxSlice = viewer2D->getMaximumSlice() + 1;
                 // En cas que tinguem fases farem tantes passades com fases
-                int phases = viewer2D->getMainInput()->getNumberOfPhases();
+                int phases = viewer2D->getNumberOfPhases();
                 for (int i = 0; i < maxSlice; i++)
                 {
                     viewer2D->setSlice(i);

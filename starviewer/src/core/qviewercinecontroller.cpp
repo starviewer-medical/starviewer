@@ -141,7 +141,7 @@ void QViewerCINEController::record()
         return;
     }
 
-    int phases = m_2DViewer->getMainInput()->getNumberOfPhases();
+    int phases = m_2DViewer->getNumberOfPhases();
     int currentSlice = m_2DViewer->getCurrentSlice();
 
     // Guardar els fotogrames
@@ -316,7 +316,7 @@ void QViewerCINEController::updateThickness(int thickness)
     }
     else
     {
-        m_lastSliceInterval = m_2DViewer->getMainInput()->getNumberOfPhases() - 1;
+        m_lastSliceInterval = m_2DViewer->getNumberOfPhases() - 1;
     }
 }
 
