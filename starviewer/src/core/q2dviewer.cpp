@@ -305,7 +305,7 @@ int Q2DViewer::getMaximumSlice() const
     }
     else
     {
-        return 1;
+        return 0;
     }
 }
 
