@@ -1205,10 +1205,11 @@ OrthogonalPlane Q2DViewer::getView() const
     return getCurrentViewPlane();
 }
 
-QList<Volume *> Q2DViewer::getInputs()
+QList<Volume*> Q2DViewer::getInputs()
 {
     QList<Volume*> volumes;
-    foreach (VolumeDisplayUnit *unit, m_displayUnitsHandler->getVolumeDisplayUnitList()) {
+    foreach (VolumeDisplayUnit *unit, m_displayUnitsHandler->getVolumeDisplayUnitList())
+    {
         volumes << unit->getVolume();
     }
     return volumes;

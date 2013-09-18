@@ -138,6 +138,7 @@ private:
 
     /// Window and level data
     WindowLevelPresetsToolData *m_windowLevelData;
+    
     /// Holds the current thickslab pixel data
     VolumePixelData *m_currentThickSlabPixelData;
 };
