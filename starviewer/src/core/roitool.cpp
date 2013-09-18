@@ -99,82 +99,27 @@ void ROITool::computeStatisticsData()
     double bounds[6];
     projectedROIPolygon->getBounds(bounds);
     
-    double *spacing = m_2DViewer->getMainInput()->getSpacing();
+    int xIndex, yIndex, zIndex;
+    m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
+
+    // Initialization of the sweep line
     double sweepLineBeginPoint[3];
     double sweepLineEndPoint[3];
-    double verticalLimit;
-    double horizontalSpacingIncrement;
-    double verticalSpacingIncrement;
-    int sweepLineCoordinateIndex;
-    int intersectionCoordinateIndex;
-    switch (m_2DViewer->getView())
-    {
-        case OrthogonalPlane::XYPlane:
-            // xmin
-            sweepLineBeginPoint[0] = bounds[0];
-            // ymin
-            sweepLineBeginPoint[1] = bounds[2];
-            // zmin
-            sweepLineBeginPoint[2] = bounds[4];
-            // xmax
-            sweepLineEndPoint[0] = bounds[1];
-            // ymin
-            sweepLineEndPoint[1] = bounds[2];
-            // zmin
-            sweepLineEndPoint[2] = bounds[4];
+    // Bounds xMin, yMin, zMin
+    sweepLineBeginPoint[xIndex] = bounds[xIndex * 2];
+    sweepLineBeginPoint[yIndex] = bounds[yIndex * 2];
+    sweepLineBeginPoint[zIndex] = bounds[zIndex * 2];
+    // Bounds xMax, yMin, zMin
+    sweepLineEndPoint[xIndex] = bounds[xIndex * 2 + 1];
+    sweepLineEndPoint[yIndex] = bounds[yIndex * 2];
+    sweepLineEndPoint[zIndex] = bounds[zIndex * 2];
 
-            sweepLineCoordinateIndex = 1;
-            intersectionCoordinateIndex = 0;
-            verticalLimit = bounds[3];
+    // Bounds yMax
+    double verticalLimit = bounds[yIndex * 2 + 1];
 
-            horizontalSpacingIncrement = spacing[0];
-            verticalSpacingIncrement = spacing[1];
-            break;
-
-        case OrthogonalPlane::YZPlane:
-            // xmin
-            sweepLineBeginPoint[0] = bounds[0];
-            // ymin
-            sweepLineBeginPoint[1] = bounds[2];
-            // zmin
-            sweepLineBeginPoint[2] = bounds[4];
-            // xmin
-            sweepLineEndPoint[0] = bounds[0];
-            // ymin
-            sweepLineEndPoint[1] = bounds[2];
-            // zmax
-            sweepLineEndPoint[2] = bounds[5];
-
-            sweepLineCoordinateIndex = 1;
-            intersectionCoordinateIndex = 2;
-            verticalLimit = bounds[3];
-
-            horizontalSpacingIncrement = spacing[1];
-            verticalSpacingIncrement = spacing[2];
-            break;
-
-        case OrthogonalPlane::XZPlane:
-            // xmin
-            sweepLineBeginPoint[0] = bounds[0];
-            // ymin
-            sweepLineBeginPoint[1] = bounds[2];
-            // zmin
-            sweepLineBeginPoint[2] = bounds[4];
-            // xmax
-            sweepLineEndPoint[0] = bounds[1];
-            // ymin
-            sweepLineEndPoint[1] = bounds[2];
-            // zmin
-            sweepLineEndPoint[2] = bounds[4];
-
-            sweepLineCoordinateIndex = 2;
-            intersectionCoordinateIndex = 0;
-            verticalLimit = bounds[5];
-
-            horizontalSpacingIncrement = spacing[0];
-            verticalSpacingIncrement = spacing[2];
-            break;
-    }
+    double *spacing = m_2DViewer->getMainInput()->getSpacing();
+    double horizontalSpacingIncrement = spacing[xIndex];
+    double verticalSpacingIncrement = spacing[yIndex];
 
     // Obtenim el punter al contenidor de píxels amb el que calcularem els valors
     VolumePixelData *pixelData = m_2DViewer->getCurrentPixelData();
@@ -195,16 +140,16 @@ void ROITool::computeStatisticsData()
     QList<int> intersectedSegmentsIndexList;
     // Inicialitzem la llista de valors de gris
     m_grayValues.clear();
-    while (sweepLineBeginPoint[sweepLineCoordinateIndex] <= verticalLimit)
+    while (sweepLineBeginPoint[yIndex] <= verticalLimit)
     {
         intersectionList.clear();
         intersectedSegmentsIndexList.clear();
         for (int i = 0; i < numberOfSegments; ++i)
         {
-            if ((sweepLineBeginPoint[sweepLineCoordinateIndex] <= segmentsStartPoints.at(i)[sweepLineCoordinateIndex] &&
-                sweepLineBeginPoint[sweepLineCoordinateIndex] >= segmentsEndPoints.at(i)[sweepLineCoordinateIndex])
-            || (sweepLineBeginPoint[sweepLineCoordinateIndex] >= segmentsStartPoints.at(i)[sweepLineCoordinateIndex] &&
-                sweepLineBeginPoint[sweepLineCoordinateIndex] <= segmentsEndPoints.at(i)[sweepLineCoordinateIndex]))
+            if ((sweepLineBeginPoint[yIndex] <= segmentsStartPoints.at(i)[yIndex] &&
+                sweepLineBeginPoint[yIndex] >= segmentsEndPoints.at(i)[yIndex])
+            || (sweepLineBeginPoint[yIndex] >= segmentsStartPoints.at(i)[yIndex] &&
+                sweepLineBeginPoint[yIndex] <= segmentsEndPoints.at(i)[yIndex]))
             {
                 intersectedSegmentsIndexList << i;
             }
@@ -224,7 +169,7 @@ void ROITool::computeStatisticsData()
                 int i = 0;
                 while (!found && i < intersectionList.count())
                 {
-                    if (foundPoint[intersectionCoordinateIndex] > intersectionList.at(i)[intersectionCoordinateIndex])
+                    if (foundPoint[xIndex] > intersectionList.at(i)[xIndex])
                     {
                         intersectionList.insert(i, foundPoint);
                         found = true;
@@ -256,29 +201,29 @@ void ROITool::computeStatisticsData()
 
                 // Tractem els dos sentits de les interseccions
                 // D'esquerra cap a dreta
-                if (firstIntersection[intersectionCoordinateIndex] <= secondIntersection[intersectionCoordinateIndex])
+                if (firstIntersection[xIndex] <= secondIntersection[xIndex])
                 {
-                    while (firstIntersection[intersectionCoordinateIndex] <= secondIntersection[intersectionCoordinateIndex])
+                    while (firstIntersection[xIndex] <= secondIntersection[xIndex])
                     {
                         Voxel voxel = pixelData->getVoxelValue(firstIntersection, phaseIndex, numberOfPhases);
                         if (!voxel.isEmpty())
                         {
                             m_grayValues << voxel.getComponent(0);
                         }
-                        firstIntersection[intersectionCoordinateIndex] += horizontalSpacingIncrement;
+                        firstIntersection[xIndex] += horizontalSpacingIncrement;
                     }
                 }
                 // I de dreta cap a esquerra
                 else
                 {
-                    while (firstIntersection[intersectionCoordinateIndex] >= secondIntersection[intersectionCoordinateIndex])
+                    while (firstIntersection[xIndex] >= secondIntersection[xIndex])
                     {
                         Voxel voxel = pixelData->getVoxelValue(firstIntersection, phaseIndex, numberOfPhases);
                         if (!voxel.isEmpty())
                         {
                             m_grayValues << voxel.getComponent(0);
                         }
-                        firstIntersection[intersectionCoordinateIndex] -= horizontalSpacingIncrement;
+                        firstIntersection[xIndex] -= horizontalSpacingIncrement;
                     }
                 }
             }
@@ -289,8 +234,8 @@ void ROITool::computeStatisticsData()
         }
 
         // Desplacem la línia d'escombrat en la direcció que toca tant com espaiat de píxel tinguem en aquella direcció
-        sweepLineBeginPoint[sweepLineCoordinateIndex] += verticalSpacingIncrement;
-        sweepLineEndPoint[sweepLineCoordinateIndex] += verticalSpacingIncrement;
+        sweepLineBeginPoint[yIndex] += verticalSpacingIncrement;
+        sweepLineEndPoint[yIndex] += verticalSpacingIncrement;
     }
     
     // Ja no necessitem més la còpia del polígon, per tant es pot eliminar de memòria
