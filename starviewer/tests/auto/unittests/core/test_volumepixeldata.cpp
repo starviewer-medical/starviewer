@@ -1,6 +1,8 @@
 #include "autotest.h"
 #include "volumepixeldata.h"
 
+#include "voxel.h"
+
 #include "itkandvtkimagetesthelper.h"
 #include "volumepixeldatatesthelper.h"
 #include "fuzzycomparetesthelper.h"
@@ -30,11 +32,11 @@ private slots:
     void convertToNeutralPixelData_ShouldActAsExpected_data();
     void convertToNeutralPixelData_ShouldActAsExpected();
 
-    void getScalarComponentAsDouble_ShouldReturnExpectedValueFromNeutral_data();
-    void getScalarComponentAsDouble_ShouldReturnExpectedValueFromNeutral();
+    void getVoxelValue_IndexVariant_ShouldReturnExpectedSingleComponentValueFromNeutral_data();
+    void getVoxelValue_IndexVariant_ShouldReturnExpectedSingleComponentValueFromNeutral();
 
-    void getScalarComponentAsDouble_ShouldReturnExpectedValue_data();
-    void getScalarComponentAsDouble_ShouldReturnExpectedValue();
+    void getVoxelValue_IndexVariant_ShouldReturnExpectedSingleComponentValue_data();
+    void getVoxelValue_IndexVariant_ShouldReturnExpectedSingleComponentValue();
 };
 
 Q_DECLARE_METATYPE(unsigned char*)
@@ -299,7 +301,7 @@ void test_VolumePixelData::convertToNeutralPixelData_ShouldActAsExpected()
     delete volumePixelData;
 }
 
-void test_VolumePixelData::getScalarComponentAsDouble_ShouldReturnExpectedValueFromNeutral_data()
+void test_VolumePixelData::getVoxelValue_IndexVariant_ShouldReturnExpectedSingleComponentValueFromNeutral_data()
 {
     QTest::addColumn<VolumePixelData*>("volumePixelData");
     int dimensions[3] = { 0, 0, 0 };
@@ -311,12 +313,13 @@ void test_VolumePixelData::getScalarComponentAsDouble_ShouldReturnExpectedValueF
     QTest::newRow("Every position of a neutralPixelData") << volumePixelDataTest;
 }
 
-void test_VolumePixelData::getScalarComponentAsDouble_ShouldReturnExpectedValueFromNeutral()
+void test_VolumePixelData::getVoxelValue_IndexVariant_ShouldReturnExpectedSingleComponentValueFromNeutral()
 {
     QFETCH(VolumePixelData*, volumePixelData);
 
     signed short expectedValue;
-
+    int index[3];
+    index[2] = 0;
     for (int i = 0; i < 10; i++)
     {
         expectedValue = 150 - i * 20;
@@ -328,12 +331,14 @@ void test_VolumePixelData::getScalarComponentAsDouble_ShouldReturnExpectedValueF
 
         for (int j = 0; j < 10; j++)
         {
-            QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(volumePixelData->getScalarComponentAsDouble(j, i, 0), expectedValue, 0.0000001));
+            index[0] = j;
+            index[1] = i;
+            QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(volumePixelData->getVoxelValue(index).getComponent(0), expectedValue, 0.0000001));
         }
     }
 }
 
-void test_VolumePixelData::getScalarComponentAsDouble_ShouldReturnExpectedValue_data()
+void test_VolumePixelData::getVoxelValue_IndexVariant_ShouldReturnExpectedSingleComponentValue_data()
 {
     QTest::addColumn<VolumePixelData*>("volumePixelData");
 
@@ -372,12 +377,13 @@ void test_VolumePixelData::getScalarComponentAsDouble_ShouldReturnExpectedValue_
     QTest::newRow("Every position of a synthetic volumePixelData") << volumePixelDataTest;
 }
 
-void test_VolumePixelData::getScalarComponentAsDouble_ShouldReturnExpectedValue()
+void test_VolumePixelData::getVoxelValue_IndexVariant_ShouldReturnExpectedSingleComponentValue()
 {
     QFETCH(VolumePixelData*, volumePixelData);
 
     signed short expectedValue;
 
+    int index[3];
     for (int i = 0; i < 10; i++)
     {
         expectedValue = i;
@@ -386,7 +392,10 @@ void test_VolumePixelData::getScalarComponentAsDouble_ShouldReturnExpectedValue(
             expectedValue = expectedValue + j;
             for (int k = 0; k < 10; k++)
             {
-                QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(volumePixelData->getScalarComponentAsDouble(k, j, i), expectedValue, 0.0000001));
+                index[0] = k;
+                index[1] = j;
+                index[2] = i;
+                QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(volumePixelData->getVoxelValue(index).getComponent(0), expectedValue, 0.0000001));
             }
         }
     }
