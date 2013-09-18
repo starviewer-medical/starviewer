@@ -84,13 +84,13 @@ void ROITool::computeStatisticsData()
     {
         const double *p1 = projectedROIPolygon->getVertix(i);
         const double *p2 = projectedROIPolygon->getVertix(i + 1);
-        segmentsStartPoints.append(p1);
+        segmentsStartPoints << p1;
         segmentsEndPoints << p2;
     }
     // Cal afegir l'últim segment que es correspondria amb el segment de l'últim punt al primer
     const double *p1 = projectedROIPolygon->getVertix(numberOfSegments - 1);
     const double *p2 = projectedROIPolygon->getVertix(0);
-    segmentsStartPoints.append(p1);
+    segmentsStartPoints << p1;
     segmentsEndPoints << p2;
 
     // Traçarem una lína d'escombrat dins de la regió quadrangular que ocupa el polígon
