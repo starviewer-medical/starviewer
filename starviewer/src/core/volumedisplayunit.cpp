@@ -110,6 +110,61 @@ void VolumeDisplayUnit::updateDisplayExtent()
     m_imageActor->SetDisplayExtent(displayExtent);
 }
 
+int VolumeDisplayUnit::getSlice() const
+{
+    return m_sliceHandler->getCurrentSlice();
+}
+
+void VolumeDisplayUnit::setSlice(int slice)
+{
+    m_sliceHandler->setSlice(slice);
+}
+
+int VolumeDisplayUnit::getMinimumSlice() const
+{
+    return m_sliceHandler->getMinimumSlice();
+}
+
+int VolumeDisplayUnit::getMaximumSlice() const
+{
+    return m_sliceHandler->getMaximumSlice();
+}
+
+int VolumeDisplayUnit::getNumberOfSlices() const
+{
+    return m_sliceHandler->getNumberOfSlices();
+}
+
+int VolumeDisplayUnit::getPhase() const
+{
+    return m_sliceHandler->getCurrentPhase();
+}
+
+void VolumeDisplayUnit::setPhase(int phase)
+{
+    m_sliceHandler->setPhase(phase);
+}
+
+int VolumeDisplayUnit::getNumberOfPhases() const
+{
+    return m_sliceHandler->getNumberOfPhases();
+}
+
+int VolumeDisplayUnit::getSlabThickness() const
+{
+    return m_sliceHandler->getSlabThickness();
+}
+
+void VolumeDisplayUnit::setSlabThickness(int thickness)
+{
+    m_sliceHandler->setSlabThickness(thickness);
+}
+
+double VolumeDisplayUnit::getSliceThickness() const
+{
+    return m_sliceHandler->getSliceThickness();
+}
+
 void VolumeDisplayUnit::resetThickSlab()
 {
     if (m_volume)

@@ -62,6 +62,37 @@ public:
     /// Updates the current window level
     void updateWindowLevel(const WindowLevel &windowLevel);
 
+    /// Returns the current slice index.
+    int getSlice() const;
+    /// Sets the current slice index.
+    void setSlice(int slice);
+
+    /// Returns the minimum slice index.
+    int getMinimumSlice() const;
+    /// Returns the maximum slice index that could be set, so it takes into account the current slice thickness.
+    int getMaximumSlice() const;
+
+    /// Returns the total number of slices in the spatial dimension for the current view plane.
+    int getNumberOfSlices() const;
+
+    /// Returns the current phase index.
+    int getPhase() const;
+    /// Sets the current phase index.
+    void setPhase(int phase);
+
+    /// Returns the number of phases in the temporal dimension.
+    int getNumberOfPhases() const;
+
+    /// Returns the number of slices that form a slab.
+    int getSlabThickness() const;
+    /// Sets the number of slices that form a slab.
+    void setSlabThickness(int thickness);
+
+    /// Returns slice thickness of the currently displayed image.
+    /// On the acquisition plane, this depends on DICOM's slice thickness and slab thickness (if DICOM's slice thickness is not defined, the method returns 0).
+    /// On the other planes, this depends on the spacing and the slab thickness.
+    double getSliceThickness() const;
+
 private:
     /// Called when setting a new volume to reset the thick slab filter.
     void resetThickSlab();
