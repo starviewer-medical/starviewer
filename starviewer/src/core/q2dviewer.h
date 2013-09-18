@@ -136,6 +136,12 @@ public:
     /// Returns the total number of slices on the spatial dimension that has the main input on the current view
     int getNumberOfSlices() const;
 
+    /// Returns the total number of phases that has the main input. It only applies to the original acquisition view plane. The minimum number of phases will be 1.
+    int getNumberOfPhases() const;
+
+    /// Returns true if the number of phases is greater than 1
+    bool hasPhases() const;
+    
     /// Ens indica si s'està aplicant o no thick slab
     bool isThickSlabActive() const;
 
