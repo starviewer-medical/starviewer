@@ -320,6 +320,24 @@ int Q2DViewer::getNumberOfSlices() const
     }
 }
 
+int Q2DViewer::getNumberOfPhases() const
+{
+    Volume *mainVolume = getMainInput();
+    if (mainVolume)
+    {
+        return mainVolume->getNumberOfPhases();
+    }
+    else
+    {
+        return 1;
+    }
+}
+
+bool Q2DViewer::hasPhases() const
+{
+    return getNumberOfPhases() > 1;
+}
+
 void Q2DViewer::initializeCamera()
 {
     vtkCamera *camera = getActiveCamera();
