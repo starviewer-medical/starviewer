@@ -139,7 +139,7 @@ VolumePixelDataIterator VolumePixelData::getIterator()
     return VolumePixelDataIterator(this);
 }
 
-bool VolumePixelData::computeCoordinateIndex(const double coordinate[3], int index[3])
+bool VolumePixelData::computeCoordinateIndex(const double coordinate[3], int index[3], int phaseNumber, int numberOfPhases)
 {
     if (!this->getVtkData())
     {
@@ -159,6 +159,11 @@ bool VolumePixelData::computeCoordinateIndex(const double coordinate[3], int ind
         inside = inside && index[i] >= extent[2 * i] && index[i] <= extent[2 * i + 1];
     }
 
+    // HACK Aquest càlcul és necessari per pal·liar la manca de coneixement de la fase
+    // TODO Cal resoldre això d'una forma més elegant, el qual comporta un redisseny del tractament de fases i volums
+    // Calculem l'índex correcte en cas que tinguem fases
+    index[2] = index[2] * numberOfPhases + phaseNumber;
+    
     return inside;
 }
 
@@ -172,15 +177,10 @@ Voxel VolumePixelData::getVoxelValue(double coordinate[3], int phaseNumber, int 
     }
 
     int voxelIndex[3];
-    bool inside = this->computeCoordinateIndex(coordinate, voxelIndex);
+    bool inside = this->computeCoordinateIndex(coordinate, voxelIndex, phaseNumber, numberOfPhases);
 
     if (inside)
     {
-        // HACK Aquest càlcul és necessari per pal·liar la manca de coneixement de la fase
-        // TODO Cal resoldre això d'una forma més elegant, el qual comporta un redisseny del tractament de fases i volums
-        // Calculem l'índex correcte en cas que tinguem fases
-        voxelIndex[2] = voxelIndex[2] * numberOfPhases + phaseNumber;
-        
         vtkIdType pointId = this->getVtkData()->ComputePointId(voxelIndex);
         vtkDataArray *scalars = this->getVtkData()->GetPointData()->GetScalars();
         int numberOfComponents = scalars->GetNumberOfComponents();
