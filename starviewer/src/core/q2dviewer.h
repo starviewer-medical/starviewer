@@ -169,8 +169,8 @@ public:
     /// Retorna l'espai que hi ha entre les llesques segons la vista actual i si hi ha el thickness activat
     double getCurrentSpacingBetweenSlices();
 
-    /// Ens retorna l'acttor vtk de la imatge
-    vtkImageActor* getVtkImageActor() const;
+    /// Returns all the vtkImageActors in the scene
+    QList<vtkImageActor*> getVtkImageActorsList() const;
 
     /// Returns true if this Q2DViewer can show a display shutter in its current state, i.e. if there is a display shutter for the current image and there isn't
     /// any restriction to show display shutters.
