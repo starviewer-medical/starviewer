@@ -107,8 +107,8 @@ VolumePixelData* VolumeDisplayUnit::getCurrentPixelData()
         if (!m_currentThickSlabPixelData)
         {
             m_currentThickSlabPixelData = new VolumePixelData;
+            m_currentThickSlabPixelData->setData(getImagePipeline()->getSlabProjectionOutput());
         }
-        m_currentThickSlabPixelData->setData(getImagePipeline()->getSlabProjectionOutput());
 
         return m_currentThickSlabPixelData;
     }
