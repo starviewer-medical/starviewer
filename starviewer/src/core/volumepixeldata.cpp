@@ -160,10 +160,14 @@ bool VolumePixelData::computeCoordinateIndex(const double coordinate[3], int ind
         inside = inside && index[i] >= extent[2 * i] && index[i] <= extent[2 * i + 1];
     }
 
-    // HACK Aquest càlcul és necessari per pal·liar la manca de coneixement de la fase
-    // TODO Cal resoldre això d'una forma més elegant, el qual comporta un redisseny del tractament de fases i volums
-    // Calculem l'índex correcte en cas que tinguem fases
-    index[2] = index[2] * numberOfPhases + phaseNumber;
+    // Apply phase correction (Safety check, phaseNumber and numberOfPhases must be coherent to apply it)
+    if (MathTools::isInsideRange(phaseNumber, 0, numberOfPhases - 1))
+    {
+        // HACK Aquest càlcul és necessari per pal·liar la manca de coneixement de la fase
+        // TODO Cal resoldre això d'una forma més elegant, el qual comporta un redisseny del tractament de fases i volums
+        // Calculem l'índex correcte en cas que tinguem fases
+        index[2] = index[2] * numberOfPhases + phaseNumber;
+    }
     
     return inside;
 }
