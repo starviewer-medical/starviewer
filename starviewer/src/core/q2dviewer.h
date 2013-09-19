@@ -67,31 +67,20 @@ public:
     /// Ens retorna la vista que tenim en aquells moments del volum
     OrthogonalPlane getView() const;
 
+    Volume* getMainInput() const;
+
     QList<Volume*> getInputs();
 
-    /// Assigna/Retorna el volum solapat
-    void setOverlayInput(Volume *volume);
-    Volume* getOverlayInput();
+    /// Ens retorna el drawer per poder pintar-hi primitives
+    /// @return Objecte drawer del viewer
+    Drawer* getDrawer() const;
 
-    /// Indiquem que cal actualitzar l'Overlay actual
-    void updateOverlay();
-
-    /// Assignem l'opacitat del volum solapat.
-    /// Els valors podran anar de 0.0 a 1.0, on 0.0 és transparent i 1.0 és completament opac.
-    void setOverlayOpacity(double opacity);
-
-    Volume* getMainInput() const;
-    
     /// Obté el window level actual de la imatge
     void getCurrentWindowLevel(double wl[2]);
 
     /// Retorna la llesca/fase actual
     int getCurrentSlice() const;
     int getCurrentPhase() const;
-
-    /// Ens retorna el drawer per poder pintar-hi primitives
-    /// @return Objecte drawer del viewer
-    Drawer* getDrawer() const;
 
     /// Calcula la coordenada de la imatge que es troba per sota del cursor en coordenades de món
     /// En el cas el cursor estigui fora de la imatge, la coordenada no té cap validesa
@@ -115,17 +104,23 @@ public:
     /// If image is reconstructed, series laterality is returned
     /// If no laterality is found, en empty character will be returned
     QChar getCurrentDisplayedImageLaterality() const;
-    
-    /// donat un punt 3D en espai de referència DICOM, ens dóna la projecció d'aquest punt sobre
-    /// el pla actual, transformat a coordenades de món VTK
-    /// @param pointToProject[]
-    /// @param projectedPoint[]
-    /// @param vtkReconstructionHack HACK variable booleana que ens fa un petit hack
-    /// per casos en que el pla "real" no és el que volem i necessitem una petita modificació
-    void projectDICOMPointToCurrentDisplayedImage(const double pointToProject[3], double projectedPoint[3], bool vtkReconstructionHack = false);
 
     /// Retorna el thickness. En cas que no disposem del thickness, el valor retornat serà 0.0
     double getCurrentSliceThickness() const;
+
+    /// Retorna la orientació de pacient corresponent a la imatge que s'està visualitzant en aquell moment,
+    /// és a dir, tenint en compte rotacions, flips, reconstruccions, etc.
+    PatientOrientation getCurrentDisplayedImagePatientOrientation() const;
+
+    /// Ens diu quin és el pla de projecció de la imatge que es veu en aquell moment
+    /// Valors: AXIAL, SAGITAL, CORONAL, OBLIQUE o N/A
+    QString getCurrentAnatomicalPlaneLabel() const;
+
+    /// Retorna l'espai que hi ha entre les llesques segons la vista actual i si hi ha el thickness activat
+    double getCurrentSpacingBetweenSlices();
+
+    /// Gets the pixel data corresponding to the current rendered image
+    VolumePixelData* getCurrentPixelData();
 
     /// Ens dóna la llesca mínima/màxima de llesques, tenint en compte totes les imatges,
     /// tant com si hi ha fases com si no
@@ -153,35 +148,6 @@ public:
     /// Si el thickslab no està actiu, el valor és indefinit
     int getSlabThickness() const;
 
-    /// Donada una coordenada de món, l'ajustem perquè caigui dins dels límits de l'imatge actual
-    /// Això ens serveix per tools que agafen qualsevol punt de món, però necessiten que aquesta estigui
-    /// dins dels límits de la imatge, com pot ser una ROI. Aquest mètode acaba d'ajustar la coordenada perquè
-    /// estigui dins dels límits de la pròpia imatge
-    /// @param xyz[] Coordenada que volem ajustar. Serà un paràmetre d'entrada/sortida i el seu contingut
-    /// es modificarà perquè caigui dins dels límits de la imatge
-    void putCoordinateInCurrentImageBounds(double xyz[3]);
-
-    /// Gets the pixel data corresponding to the current rendered image
-    VolumePixelData* getCurrentPixelData();
-
-    /// Retorna la orientació de pacient corresponent a la imatge que s'està visualitzant en aquell moment,
-    /// és a dir, tenint en compte rotacions, flips, reconstruccions, etc.
-    PatientOrientation getCurrentDisplayedImagePatientOrientation() const;
-
-    /// Ens diu quin és el pla de projecció de la imatge que es veu en aquell moment
-    /// Valors: AXIAL, SAGITAL, CORONAL, OBLIQUE o N/A
-    QString getCurrentAnatomicalPlaneLabel() const;
-
-    /// Retorna l'espai que hi ha entre les llesques segons la vista actual i si hi ha el thickness activat
-    double getCurrentSpacingBetweenSlices();
-
-    /// Returns all the vtkImageActors in the scene
-    QList<vtkImageActor*> getVtkImageActorsList() const;
-
-    /// Returns true if this Q2DViewer can show a display shutter in its current state, i.e. if there is a display shutter for the current image and there isn't
-    /// any restriction to show display shutters.
-    bool canShowDisplayShutter() const;
-    
     /// Casts the given QViewer to a Q2DViewer object
     /// If casting is successful, casted pointer to Q2DViewer will be returned, null otherwise
     static Q2DViewer* castFromQViewer(QViewer *viewer);
@@ -191,6 +157,40 @@ public:
 
     /// Sets the transfer function of the image pipeline of the volume at the given index.
     void setVolumeTransferFunction(int index, const TransferFunction &transferFunction);
+
+    /// Returns all the vtkImageActors in the scene
+    QList<vtkImageActor*> getVtkImageActorsList() const;
+
+    /// Returns true if this Q2DViewer can show a display shutter in its current state, i.e. if there is a display shutter for the current image and there isn't
+    /// any restriction to show display shutters.
+    bool canShowDisplayShutter() const;
+
+    /// Donada una coordenada de món, l'ajustem perquè caigui dins dels límits de l'imatge actual
+    /// Això ens serveix per tools que agafen qualsevol punt de món, però necessiten que aquesta estigui
+    /// dins dels límits de la imatge, com pot ser una ROI. Aquest mètode acaba d'ajustar la coordenada perquè
+    /// estigui dins dels límits de la pròpia imatge
+    /// @param xyz[] Coordenada que volem ajustar. Serà un paràmetre d'entrada/sortida i el seu contingut
+    /// es modificarà perquè caigui dins dels límits de la imatge
+    void putCoordinateInCurrentImageBounds(double xyz[3]);
+
+    /// donat un punt 3D en espai de referència DICOM, ens dóna la projecció d'aquest punt sobre
+    /// el pla actual, transformat a coordenades de món VTK
+    /// @param pointToProject[]
+    /// @param projectedPoint[]
+    /// @param vtkReconstructionHack HACK variable booleana que ens fa un petit hack
+    /// per casos en que el pla "real" no és el que volem i necessitem una petita modificació
+    void projectDICOMPointToCurrentDisplayedImage(const double pointToProject[3], double projectedPoint[3], bool vtkReconstructionHack = false);
+
+    /// Assigna/Retorna el volum solapat
+    void setOverlayInput(Volume *volume);
+    Volume* getOverlayInput();
+
+    /// Indiquem que cal actualitzar l'Overlay actual
+    void updateOverlay();
+
+    /// Assignem l'opacitat del volum solapat.
+    /// Els valors podran anar de 0.0 a 1.0, on 0.0 és transparent i 1.0 és completament opac.
+    void setOverlayOpacity(double opacity);
 
 public slots:
     virtual void setInput(Volume *volume);
