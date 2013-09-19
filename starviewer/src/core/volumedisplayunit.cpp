@@ -250,11 +250,6 @@ void VolumeDisplayUnit::setSlabProjectionMode(AccumulatorFactory::AccumulatorTyp
     m_imagePipeline->setSlabProjectionMode(accumulatorType);
 }
 
-vtkImageData* VolumeDisplayUnit::getSlabProjectionOutput() const
-{
-    return m_imagePipeline->getSlabProjectionOutput();
-}
-
 void VolumeDisplayUnit::setShutterData(vtkImageData *shutterData)
 {
     m_imagePipeline->setShutterData(shutterData);
