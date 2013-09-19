@@ -139,7 +139,6 @@ void ImagePipeline::clearTransferFunction()
     m_windowLevelLUTFilter->clearTransferFunction();
 }
 
-
 vtkAlgorithm* ImagePipeline::getVtkAlgorithm() const
 {
     return m_outputFilter;
