@@ -108,9 +108,6 @@ public:
     /// Sets the slab projection mode for the thick slab.
     void setSlabProjectionMode(AccumulatorFactory::AccumulatorType accumulatorType);
 
-    /// Returns the vtkImageData obtained from the thick slab filter.
-    vtkImageData* getSlabProjectionOutput() const;
-
     /// Sets the display shutter image data.
     void setShutterData(vtkImageData *shutterData);
 
