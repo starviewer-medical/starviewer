@@ -62,8 +62,8 @@ private:
     /// Called when setting a new Volume to reset slab thickness, slice and phase.
     void reset();
 
-    /// Checks whether the given thickness value is valid to update the current one
-    bool hasSlabThicknessValueToBeUpated(int thickness);
+    /// Returns true if the given slab thickness value is valid and false otherwise.
+    bool isValidSlabThickness(int thickness);
 
 private:
     Volume *m_volume;

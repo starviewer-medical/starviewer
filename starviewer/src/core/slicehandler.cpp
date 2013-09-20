@@ -103,8 +103,8 @@ int SliceHandler::getNumberOfPhases() const
 
 void SliceHandler::setSlabThickness(int thickness)
 {
-    // First check the new value
-    if (!hasSlabThicknessValueToBeUpated(thickness) || thickness == m_slabThickness)
+    // If the new thickness is invalid or is the same as the current one, then do nothing
+    if (!isValidSlabThickness(thickness) || thickness == m_slabThickness)
     {
         return;
     }
@@ -235,7 +235,7 @@ void SliceHandler::reset()
     setPhase(0);
 }
 
-bool SliceHandler::hasSlabThicknessValueToBeUpated(int thickness)
+bool SliceHandler::isValidSlabThickness(int thickness)
 {
     if (thickness < 1)
     {
