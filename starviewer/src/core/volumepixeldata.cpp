@@ -18,6 +18,8 @@ namespace udg {
 VolumePixelData::VolumePixelData(QObject *parent) :
     QObject(parent), m_loaded(false)
 {
+    setNumberOfPhases(1);
+    
     m_imageDataVTK = vtkSmartPointer<vtkImageData>::New();
 
     m_itkToVtkFilter = ItkToVtkFilterType::New();
@@ -113,6 +115,14 @@ void VolumePixelData::setData(unsigned char *data, int extent[6], int bytesPerPi
 
     this->setData(imageData);
     imageData->Delete();
+}
+
+void VolumePixelData::setNumberOfPhases(int numberOfPhases)
+{
+    if (numberOfPhases > 0)
+    {
+        m_numberOfPhases = numberOfPhases;
+    }
 }
 
 bool VolumePixelData::isLoaded() const
