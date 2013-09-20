@@ -108,54 +108,27 @@ void SliceHandler::setSlabThickness(int thickness)
     {
         return;
     }
-    
-    if (thickness == 1)
-    {
-        m_slabThickness = 1;
-        return;
-    }
 
-    int thicknessDifference = thickness - m_slabThickness;
-    // We distribute equally half of the difference of the new thickness above and below
-    m_currentSlice -= thicknessDifference / 2;
-    
-    if (MathTools::isOdd(thicknessDifference))
-    {
-        // If thickness difference is odd, we should then increase/decrease the extra slice left of thickness
-        // on upper or lower bound depending on some conditions
-        
-        if (MathTools::isEven(m_slabThickness))
-        {
-            if (thicknessDifference > 0)
-            {
-                // Decrease on lower bound when thickness has been increased and keep it inside bounds
-                m_currentSlice = qMax(m_currentSlice - 1, getMinimumSlice());
-            }
-        }
-        else
-        {
-            if (thicknessDifference > 0)
-            {
-                // When thickness has been increased and current thickness is odd, upper bound will be increased
-                // and thus we must check if it will be out of upper bounds to update the lower bound accordingly
-                int lastSlabSlice = getLastSlabSlice() + (thicknessDifference / 2) + 1;
-                
-                if (lastSlabSlice > m_numberOfSlices)
-                {
-                    // If upper bound is surpassed, must decrease lower bound
-                    m_currentSlice = m_numberOfSlices - thickness + 1;
-                }
-            }
-            else
-            {
-                // Increase lower bound when thickness has been decreased (when current thickness is odd)
-                m_currentSlice++;
-            }
-        }
-    }
-    
-    // Update thickness
+    // The slices of the slab are distributed with the following criterion:
+    // (in the examples 'X' represents the original slice and '|' represents the additional slab slices)
+    // - Assume that we start with a thickness of 1
+    // - Slices are added alternately on each side, starting towards the end, e.g.: X, X|, |X|, |X||, ||X||, ...
+    // - Slices are removed in the inverse order, e.g.: ..., ||X||, |X||, |X|, X|, X
+    // - If the slab range is out of range, it is moved appropriately to the beginning or the end
+
+    // This behaviour is implemented with this algorithm:
+    // 1. Find the slice at the center of the current slab; if the current thickness is even, choose the left center slice
+    int centerSlice = m_currentSlice + (m_slabThickness - 1) / 2;
+
+    // 2. Set the first slice (m_currentSlice) so that the first (maybe smaller) half of the additional (not counting the center) slices are before the center;
+    //    the other (maybe bigger) half goes after the center
+    m_currentSlice = centerSlice - (thickness - 1) / 2;
+
+    // 3. Set the thickness (m_slabThickness)
     m_slabThickness = thickness;
+
+    // 4. Keep the slab in range (getMaximumSlice() takes m_slabThickness into account)
+    m_currentSlice = qBound(getMinimumSlice(), m_currentSlice, getMaximumSlice());
 }
 
 int SliceHandler::getSlabThickness() const
