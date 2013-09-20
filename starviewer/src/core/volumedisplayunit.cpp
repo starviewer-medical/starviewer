@@ -115,8 +115,7 @@ VolumePixelData* VolumeDisplayUnit::getCurrentPixelData()
         return 0;
     }
     
-    // TODO We should have a method kind of "isThickSlabActive()"
-    if (getSlabThickness() > 1)
+    if (isThickSlabActive())
     {
         if (!m_currentThickSlabPixelData)
         {

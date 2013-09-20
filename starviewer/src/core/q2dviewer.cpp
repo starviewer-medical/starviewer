@@ -1372,7 +1372,7 @@ bool Q2DViewer::isThickSlabActive() const
     VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
     if (mainDisplayUnit)
     {
-        return mainDisplayUnit->getSlabThickness() > 1;
+        return mainDisplayUnit->isThickSlabActive();
     }
     else
     {
