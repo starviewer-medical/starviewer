@@ -99,6 +99,10 @@ public:
     /// @return Cert si el cursor es troba dins de la imatge, fals altrament
     bool getCurrentCursorImageCoordinate(double xyz[3]);
 
+    /// Same as getCurrentCursorImageCoordinate with the chance to specify from which input we want to get the coordinate.
+    /// If i is out of range, false will be returned
+    bool getCurrentCursorImageCoordinateOnInput(double xyz[3], int i);
+    
     /// Returns current displayed image.
     /// If some orthogonal reconstruction different from original acquisition is applied, returns null
     Image* getCurrentDisplayedImage() const;
