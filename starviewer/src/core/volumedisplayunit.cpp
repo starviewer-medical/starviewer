@@ -201,6 +201,11 @@ void VolumeDisplayUnit::setSlabThickness(int thickness)
     m_imagePipeline->setSlabThickness(thickness);
 }
 
+bool VolumeDisplayUnit::isThickSlabActive() const
+{
+    return getSliceThickness() > 1;
+}
+
 double VolumeDisplayUnit::getSliceThickness() const
 {
     return m_sliceHandler->getSliceThickness();
