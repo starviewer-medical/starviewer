@@ -74,8 +74,19 @@ void VoxelInformationTool::updateCaption()
         return;
     }
 
-    double xyz[3];
-    if (m_2DViewer->getCurrentCursorImageCoordinate(xyz))
+    // We create a list with the captions of each input of the viewer
+    QStringList inputsCaptions;
+    for (int i = 0; i < m_2DViewer->getNumberOfInputs(); ++i)
+    {
+        double xyz[3];
+        if (m_2DViewer->getCurrentCursorImageCoordinateOnInput(xyz, i))
+        {
+            inputsCaptions << computeVoxelValueOnInput(xyz, i);
+        }
+    }
+
+    // Update the DrawerText element according to the gathered information
+    if (!inputsCaptions.isEmpty())
     {
         double attachmentPoint[3];
         QString horizontalJustification, verticalJustification;
@@ -86,7 +97,7 @@ void VoxelInformationTool::updateCaption()
         m_caption->setAttachmentPoint(attachmentPoint);
         m_caption->setHorizontalJustification(horizontalJustification);
         m_caption->setVerticalJustification(verticalJustification);
-        m_caption->setText(computeVoxelValue(xyz));
+        m_caption->setText(inputsCaptions.join("\n"));
         m_caption->update();
     }
     else
@@ -97,15 +108,15 @@ void VoxelInformationTool::updateCaption()
     m_2DViewer->render();
 }
 
-QString VoxelInformationTool::computeVoxelValue(double worldCoordinate[3])
+QString VoxelInformationTool::computeVoxelValueOnInput(double worldCoordinate[3], int i)
 {
     int phaseIndex = 0;
-    if (!m_2DViewer->isThickSlabActive() && m_2DViewer->getView() == OrthogonalPlane::XYPlane && m_2DViewer->hasPhases())
+    if (!m_2DViewer->isThickSlabActiveOnInput(i) && m_2DViewer->getViewOnInput(i) == OrthogonalPlane::XYPlane && m_2DViewer->doesInputHavePhases(i))
     {
-        phaseIndex = m_2DViewer->getCurrentPhase();
+        phaseIndex = m_2DViewer->getCurrentPhaseOnInput(i);
     }
     
-    VolumePixelData *pixelData = m_2DViewer->getCurrentPixelData();
+    VolumePixelData *pixelData = m_2DViewer->getCurrentPixelDataFromInput(i);
     return pixelData->getVoxelValue(worldCoordinate, phaseIndex).getAsQString();
 }
 

@@ -31,8 +31,8 @@ private slots:
     void createCaption();
 
 private:
-    /// Ens retorna el valor de voxel en un string correctament formatat corresponent a la coordenada de món donada
-    QString computeVoxelValue(double worldCoordinate[3]);
+    /// Returns the voxel value in a properly formatted string corresponding to the given worldCoordinate on the i-th viewer's input
+    QString computeVoxelValueOnInput(double worldCoordinate[3], int i);
 
     /// Calcula quin és el punt on col·locarem el caption i la justificació del texte corresponent
     /// segons la posició en la que es trobi el punter del mouse.
