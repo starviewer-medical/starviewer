@@ -57,8 +57,11 @@ private slots:
     void setPhase_ComputesExpectedPhase_data();
     void setPhase_ComputesExpectedPhase();
 
-    void setSlabThickness_ComputesExpectedThickness_data();
-    void setSlabThickness_ComputesExpectedThickness();
+    void setSlabThickness_UpdatesThickness_data();
+    void setSlabThickness_UpdatesThickness();
+
+    void setSlabThickness_DoesntUpdateThickness_data();
+    void setSlabThickness_DoesntUpdateThickness();
 
     void getLastSlabSlice_ReturnsExpectedValue_data();
     void getLastSlabSlice_ReturnsExpectedValue();
@@ -221,93 +224,125 @@ void test_SliceHandler::setPhase_ComputesExpectedPhase()
     QCOMPARE(sliceHandler.getCurrentPhase(), expectedPhaseValue);
 }
 
-void test_SliceHandler::setSlabThickness_ComputesExpectedThickness_data()
+void test_SliceHandler::setSlabThickness_UpdatesThickness_data()
 {
-    QTest::addColumn<int>("minSlice");
-    QTest::addColumn<int>("maxSlice");
-    QTest::addColumn<int>("slabThicknessValue");
-    QTest::addColumn<int>("expectedSlabThicknessValue");
+    QTest::addColumn<int>("initialSlabThickness");
+    QTest::addColumn<int>("newSlabThickness");
 
-    int minimumSlice = 0;
-    int maximumSlice = 255;
-    QTest::newRow("Thickness inside range") << minimumSlice << maximumSlice << 200 << 200;
-    QTest::newRow("Thickness greater than range") << minimumSlice << maximumSlice << 500 << 1;
+    QTest::newRow("Thickness 1") << 5 << 1;
+    QTest::newRow("Thickness inside range") << 5 << 200;
+    QTest::newRow("Thickness just inside range") << 5 << 256;
 }
 
-void test_SliceHandler::setSlabThickness_ComputesExpectedThickness()
+void test_SliceHandler::setSlabThickness_UpdatesThickness()
 {
-    QFETCH(int, minSlice);
-    QFETCH(int, maxSlice);
-    QFETCH(int, slabThicknessValue);
-    QFETCH(int, expectedSlabThicknessValue);
+    QFETCH(int, initialSlabThickness);
+    QFETCH(int, newSlabThickness);
 
     TestingSliceHandler sliceHandler;
-    sliceHandler.setSliceRange(minSlice, maxSlice);
-    sliceHandler.setSlabThickness(slabThicknessValue);
-    
-    QCOMPARE(sliceHandler.getSlabThickness(), expectedSlabThicknessValue);
+    sliceHandler.setSliceRange(0, 255);
+    sliceHandler.setSlabThickness(initialSlabThickness);
+
+    sliceHandler.setSlabThickness(newSlabThickness);
+
+    QCOMPARE(sliceHandler.getSlabThickness(), newSlabThickness);
+}
+
+void test_SliceHandler::setSlabThickness_DoesntUpdateThickness_data()
+{
+    QTest::addColumn<int>("initialSlabThickness");
+    QTest::addColumn<int>("newSlabThickness");
+
+    QTest::newRow("Thickness less than 1") << 5 << 0;
+    QTest::newRow("Same thickness") << 5 << 5;
+    QTest::newRow("Thickness just greater than range") << 5 << 257;
+    QTest::newRow("Thickness greater than range") << 5 << 1000;
+}
+
+void test_SliceHandler::setSlabThickness_DoesntUpdateThickness()
+{
+    QFETCH(int, initialSlabThickness);
+    QFETCH(int, newSlabThickness);
+
+    TestingSliceHandler sliceHandler;
+    sliceHandler.setSliceRange(0, 255);
+    sliceHandler.setSlabThickness(initialSlabThickness);
+
+    sliceHandler.setSlabThickness(newSlabThickness);
+
+    QCOMPARE(sliceHandler.getSlabThickness(), initialSlabThickness);
 }
 
 void test_SliceHandler::getLastSlabSlice_ReturnsExpectedValue_data()
 {
-    QTest::addColumn<int>("minSlice");
-    QTest::addColumn<int>("maxSlice");
+    QTest::addColumn<int>("slabThickness");
     QTest::addColumn<int>("slice");
-    QTest::addColumn<int>("slabThicknessValue");
     QTest::addColumn<int>("expectedLastSlabSlice");
 
-    int minimumSlice = 0;
-    int maximumSlice = 255;
-    int slice = 10;
-    int slabThickness = 200;
-    QTest::newRow("Slab inside range") << minimumSlice << maximumSlice << slice << slabThickness << 110;
+    QTest::newRow("Thickness 1, first slice") << 1 << 0 << 0;
+    QTest::newRow("Thickness > 1, first slice") << 113 << 0 << 112;
+    QTest::newRow("Thickness 1, last slice") << 1 << 255 << 255;
+    QTest::newRow("Thickness > 1, last allowed slice") << 58 << 198 << 255;
+    QTest::newRow("Thickness 1, middle slice") << 1 << 130 << 130;
+    QTest::newRow("Thickness > 1, middle slice") << 51 << 59 << 109;
 }
 
 void test_SliceHandler::getLastSlabSlice_ReturnsExpectedValue()
 {
-    QFETCH(int, minSlice);
-    QFETCH(int, maxSlice);
+    QFETCH(int, slabThickness);
     QFETCH(int, slice);
-    QFETCH(int, slabThicknessValue);
     QFETCH(int, expectedLastSlabSlice);
 
     TestingSliceHandler sliceHandler;
-    sliceHandler.setSliceRange(minSlice, maxSlice);
+    sliceHandler.setSliceRange(0, 255);
+    sliceHandler.setSlabThickness(slabThickness);
     sliceHandler.setSlice(slice);
-    sliceHandler.setSlabThickness(slabThicknessValue);
-    
+
     QCOMPARE(sliceHandler.getLastSlabSlice(), expectedLastSlabSlice);
 }
 
 void test_SliceHandler::setSlabThickness_ModifiesCurrentSliceAsExpected_data()
 {
-    QTest::addColumn<int>("minSlice");
-    QTest::addColumn<int>("maxSlice");
-    QTest::addColumn<int>("slice");
-    QTest::addColumn<int>("slabThicknessValue");
+    QTest::addColumn<int>("initialSlabThickness");
+    QTest::addColumn<int>("initialSlice");
+    QTest::addColumn<int>("newSlabThickness");
     QTest::addColumn<int>("expectedCurrentSlice");
 
-    int minimumSlice = 0;
-    int maximumSlice = 255;
-    int slice = 50;
-    int slabThickness = 25;
-    QTest::newRow("Current slice decreases") << minimumSlice << maximumSlice << slice << slabThickness << 38;
+    QTest::newRow("1 to even increase, near the start") << 1 << 3 << 158 << 0;
+    QTest::newRow("1 to even increase, near the middle") << 1 << 114 << 158 << 36;
+    QTest::newRow("1 to even increase, near the end") << 1 << 206 << 158 << 98;
 
-    QTest::newRow("Current slice does not change") << minimumSlice << maximumSlice << slice << 2 << slice;
+    QTest::newRow("1 to odd increase, near the start") << 1 << 3 << 201 << 0;
+    QTest::newRow("1 to odd increase, near the middle") << 1 << 114 << 201 << 14;
+    QTest::newRow("1 to odd increase, near the end") << 1 << 206 << 201 << 55;
+
+    QTest::newRow("Odd to even increase, near the start") << 77 << 3 << 112 << 0;
+    QTest::newRow("Odd to even increase, near the middle") << 77 << 66 << 112 << 49;
+    QTest::newRow("Odd to even increase, near the end") << 77 << 170 << 112 << 144;
+
+    QTest::newRow("Even to odd increase, near the start") << 76 << 3 << 135 << 0;
+    QTest::newRow("Even to odd increase, near the middle") << 76 << 66 << 135 << 36;
+    QTest::newRow("Even to odd increase, near the end") << 76 << 170 << 135 << 121;
+
+    QTest::newRow("Odd to even decrease") << 211 << 35 << 26 << 128;
+    QTest::newRow("Even to odd decrease") << 94 << 110 << 91 << 111;
+    QTest::newRow("Odd to 1 decrease") << 211 << 35 << 1 << 140;
+    QTest::newRow("Even to 1 decrease") << 94 << 110 << 1 << 156;
 }
 
 void test_SliceHandler::setSlabThickness_ModifiesCurrentSliceAsExpected()
 {
-    QFETCH(int, minSlice);
-    QFETCH(int, maxSlice);
-    QFETCH(int, slice);
-    QFETCH(int, slabThicknessValue);
+    QFETCH(int, initialSlabThickness);
+    QFETCH(int, initialSlice);
+    QFETCH(int, newSlabThickness);
     QFETCH(int, expectedCurrentSlice);
 
     TestingSliceHandler sliceHandler;
-    sliceHandler.setSliceRange(minSlice, maxSlice);
-    sliceHandler.setSlice(slice);
-    sliceHandler.setSlabThickness(slabThicknessValue);
+    sliceHandler.setSliceRange(0, 255);
+    sliceHandler.setSlabThickness(initialSlabThickness);
+    sliceHandler.setSlice(initialSlice);
+
+    sliceHandler.setSlabThickness(newSlabThickness);
 
     QCOMPARE(sliceHandler.getCurrentSlice(), expectedCurrentSlice);
 }
