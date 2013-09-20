@@ -1134,15 +1134,7 @@ int Q2DViewer::getCurrentSlice() const
 
 int Q2DViewer::getCurrentPhase() const
 {
-    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
-    if (mainDisplayUnit)
-    {
-        return mainDisplayUnit->getPhase();
-    }
-    else
-    {
-        return 0;
-    }
+    return getCurrentPhaseOnInput(0);
 }
 
 int Q2DViewer::getCurrentPhaseOnInput(int i) const
@@ -1441,15 +1433,7 @@ void Q2DViewer::disableThickSlab()
 
 bool Q2DViewer::isThickSlabActive() const
 {
-    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
-    if (mainDisplayUnit)
-    {
-        return mainDisplayUnit->isThickSlabActive();
-    }
-    else
-    {
-        return false;
-    }
+    return isThickSlabActiveOnInput(0);
 }
 
 bool Q2DViewer::isThickSlabActiveOnInput(int i) const
@@ -1832,15 +1816,7 @@ void Q2DViewer::updateDisplayShutterMask()
 
 OrthogonalPlane Q2DViewer::getCurrentViewPlane() const
 {
-    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
-    if (mainDisplayUnit)
-    {
-        return mainDisplayUnit->getViewPlane();
-    }
-    else
-    {
-        return OrthogonalPlane();
-    }
+    return getViewOnInput(0);
 }
 
 void Q2DViewer::setCurrentViewPlane(const OrthogonalPlane &viewPlane)
