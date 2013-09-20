@@ -8,6 +8,11 @@ using namespace testing;
 
 class TestingSliceHandler : public SliceHandler {
 public:
+    TestingSliceHandler(QObject *parent = 0)
+        : SliceHandler(parent), m_sliceLoopEnabled(false), m_phaseLoopEnabled(false)
+    {
+    }
+
     void setSliceRange(int min, int max)
     {
         m_minSliceValue = min;
