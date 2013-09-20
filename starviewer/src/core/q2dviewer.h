@@ -71,6 +71,8 @@ public:
 
     QList<Volume*> getInputs();
 
+    int getNumberOfInputs() const;
+
     /// Ens retorna el drawer per poder pintar-hi primitives
     /// @return Objecte drawer del viewer
     Drawer* getDrawer() const;

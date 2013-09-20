@@ -752,6 +752,19 @@ Volume* Q2DViewer::getMainInput() const
     }
 }
 
+
+int Q2DViewer::getNumberOfInputs() const
+{
+    if (m_displayUnitsHandler.isNull())
+    {
+        return 0;
+    }
+    else
+    {
+        return m_displayUnitsHandler->getNumberOfInputs();
+    }
+}
+
 void Q2DViewer::resetView(const OrthogonalPlane &view)
 {
     // First we compute which slab thickness should be applied after the view has been reseted
