@@ -202,7 +202,7 @@ void VolumeDisplayUnit::setSlabThickness(int thickness)
 
 bool VolumeDisplayUnit::isThickSlabActive() const
 {
-    return getSliceThickness() > 1;
+    return getSlabThickness() > 1;
 }
 
 double VolumeDisplayUnit::getSliceThickness() const
