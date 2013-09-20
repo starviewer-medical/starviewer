@@ -109,6 +109,13 @@ void SliceHandler::setSlabThickness(int thickness)
         return;
     }
 
+    // Keep thickness in bounds
+    if (thickness > m_numberOfSlices)
+    {
+        thickness = m_numberOfSlices;
+        DEBUG_LOG("New thickness exceeds maximum permitted thickness, setting it to maximum.");
+    }
+
     // The slices of the slab are distributed with the following criterion:
     // (in the examples 'X' represents the original slice and '|' represents the additional slab slices)
     // - Assume that we start with a thickness of 1
@@ -213,12 +220,6 @@ bool SliceHandler::isValidSlabThickness(int thickness)
     if (thickness < 1)
     {
         DEBUG_LOG("Invalid thickness value. Must be >= 1.");
-        return false;
-    }
-    
-    if (thickness > m_numberOfSlices)
-    {
-        DEBUG_LOG("New thickness exceeds maximum permitted thickness, it remains the same.");
         return false;
     }
 

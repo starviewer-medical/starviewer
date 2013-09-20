@@ -228,16 +228,20 @@ void test_SliceHandler::setSlabThickness_UpdatesThickness_data()
 {
     QTest::addColumn<int>("initialSlabThickness");
     QTest::addColumn<int>("newSlabThickness");
+    QTest::addColumn<int>("expectedNewSlabThickness");
 
-    QTest::newRow("Thickness 1") << 5 << 1;
-    QTest::newRow("Thickness inside range") << 5 << 200;
-    QTest::newRow("Thickness just inside range") << 5 << 256;
+    QTest::newRow("Thickness 1") << 5 << 1 << 1;
+    QTest::newRow("Thickness inside range") << 5 << 200 << 200;
+    QTest::newRow("Thickness just inside range") << 5 << 256 << 256;
+    QTest::newRow("Thickness just greater than range") << 5 << 257 << 256;
+    QTest::newRow("Thickness greater than range") << 5 << 1000 << 256;
 }
 
 void test_SliceHandler::setSlabThickness_UpdatesThickness()
 {
     QFETCH(int, initialSlabThickness);
     QFETCH(int, newSlabThickness);
+    QFETCH(int, expectedNewSlabThickness);
 
     TestingSliceHandler sliceHandler;
     sliceHandler.setSliceRange(0, 255);
@@ -245,7 +249,7 @@ void test_SliceHandler::setSlabThickness_UpdatesThickness()
 
     sliceHandler.setSlabThickness(newSlabThickness);
 
-    QCOMPARE(sliceHandler.getSlabThickness(), newSlabThickness);
+    QCOMPARE(sliceHandler.getSlabThickness(), expectedNewSlabThickness);
 }
 
 void test_SliceHandler::setSlabThickness_DoesntUpdateThickness_data()
@@ -255,8 +259,6 @@ void test_SliceHandler::setSlabThickness_DoesntUpdateThickness_data()
 
     QTest::newRow("Thickness less than 1") << 5 << 0;
     QTest::newRow("Same thickness") << 5 << 5;
-    QTest::newRow("Thickness just greater than range") << 5 << 257;
-    QTest::newRow("Thickness greater than range") << 5 << 1000;
 }
 
 void test_SliceHandler::setSlabThickness_DoesntUpdateThickness()
