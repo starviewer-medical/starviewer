@@ -59,6 +59,9 @@ public:
     /// Returns the main input
     virtual Volume* getMainInput() const;
 
+    /// Returns the total number of inputs of the viewer
+    virtual int getNumberOfInputs() const;
+    
     /// Returns true if viewer has some input set, false otherwise
     bool hasInput() const;
     

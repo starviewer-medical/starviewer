@@ -116,6 +116,18 @@ Volume* QViewer::getMainInput() const
     return m_mainVolume;
 }
 
+int QViewer::getNumberOfInputs() const
+{
+    if (hasInput())
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
 bool QViewer::hasInput() const
 {
     if (getMainInput())
