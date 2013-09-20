@@ -49,13 +49,9 @@ void PETCTVolumeDisplayUnitHandler::updateMainDisplayUnitIndex()
 {
     if (getNumberOfInputs() == 2)
     {
-        for (int i = 0; i < 2; ++i)
+        if (m_displayUnits.at(1)->getVolume()->getImage(0)->getParentSeries()->getModality() == "CT")
         {
-            if (m_displayUnits.at(i)->getVolume()->getImage(0)->getParentSeries()->getModality() == "CT")
-            {
-                m_mainDisplayUnitIndex = i;
-                break;
-            }
+            m_displayUnits.move(0, 1);
         }
     }
 }

@@ -14,8 +14,9 @@ class VolumeDisplayUnit;
     The virtual method getMaximumNumberOfInputs() tells how many inputs it can handle.
     This method should be reimplemented by any subclass that has a limit on the number of inputs it can handle.
     It will also determine how many inputs are accepted by setInputs(). By default, there is no limit on the quantity of inputs.
-    It can also handle which input should be considered the main one. By default it will be the first provided. If there's some
-    different criteria to choose which must be considered the main input, this should be implemented in the virtual method updateMainDisplayUnitIndex().
+    There will be also a display unit to be considered the main one, which always will be on the first position of the list.
+    If there are any specific criteria to put a certain display unit as the main one, different than the order that it was set on setInputs(), 
+    this should be implemented in the virtual method updateMainDisplayUnitIndex().
  */
 class GenericVolumeDisplayUnitHandler {
 public:
@@ -47,13 +48,10 @@ protected:
     /// Should be reimplemented by the required subclasses that need to apply specific transfer functions on their inputs
     virtual void setupDefaultTransferFunctions(){};
 
-    /// To be reimplemented in case main display unit could be different than the first one
+    /// To be reimplemented in case a concrete display unit that meets some conditions should be put explicitly on first place
     virtual void updateMainDisplayUnitIndex(){};
 
 private:
-    /// Initializes the class in the constructor
-    void initialize();
-
     /// Clears all the existing display units
     void removeDisplayUnits();
 
@@ -72,9 +70,6 @@ private:
 protected:
     /// The list of the created display units
     QList<VolumeDisplayUnit*> m_displayUnits;
-
-    /// By default, the main display unit will be the first one
-    int m_mainDisplayUnitIndex;
 };
 
 } // End namespace udg

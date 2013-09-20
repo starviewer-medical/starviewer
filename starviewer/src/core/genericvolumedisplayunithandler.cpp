@@ -11,7 +11,6 @@ namespace udg {
 
 GenericVolumeDisplayUnitHandler::GenericVolumeDisplayUnitHandler()
 {
-    initialize();
 }
 
 GenericVolumeDisplayUnitHandler::~GenericVolumeDisplayUnitHandler()
@@ -57,7 +56,7 @@ int GenericVolumeDisplayUnitHandler::getNumberOfInputs() const
 
 VolumeDisplayUnit* GenericVolumeDisplayUnitHandler::getMainVolumeDisplayUnit() const
 {
-    return getVolumeDisplayUnit(m_mainDisplayUnitIndex);
+    return getVolumeDisplayUnit(0);
 }
 
 VolumeDisplayUnit* GenericVolumeDisplayUnitHandler::getVolumeDisplayUnit(int i) const
@@ -80,11 +79,6 @@ QList<VolumeDisplayUnit*> GenericVolumeDisplayUnitHandler::getVolumeDisplayUnitL
 int GenericVolumeDisplayUnitHandler::getMaximumNumberOfInputs() const
 {
     return std::numeric_limits<int>::max();
-}
-
-void GenericVolumeDisplayUnitHandler::initialize()
-{
-    m_mainDisplayUnitIndex = 0;
 }
 
 void GenericVolumeDisplayUnitHandler::removeDisplayUnits()
@@ -123,7 +117,7 @@ void GenericVolumeDisplayUnitHandler::setupDefaultOpacities()
     {
         vtkImageActor *actor = m_displayUnits.at(i)->getImageActor();
         double opacity = 0.5;
-        if (i == m_mainDisplayUnitIndex)
+        if (i == 0)
         {
             opacity = 1.0;
         }
