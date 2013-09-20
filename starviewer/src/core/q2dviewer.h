@@ -67,6 +67,9 @@ public:
     /// Ens retorna la vista que tenim en aquells moments del volum
     OrthogonalPlane getView() const;
 
+    /// Return the view plane on the specified input. If i is out of range, default constructed value will be returned.
+    OrthogonalPlane getViewOnInput(int i) const;
+
     Volume* getMainInput() const;
 
     /// Gets the i-th input. If i is out of range, null is returned
@@ -86,6 +89,9 @@ public:
     /// Retorna la llesca/fase actual
     int getCurrentSlice() const;
     int getCurrentPhase() const;
+
+    /// Gets the current phase on the specified input. If i is out of range, 0 will be returned
+    int getCurrentPhaseOnInput(int i) const;
 
     /// Calcula la coordenada de la imatge que es troba per sota del cursor en coordenades de món
     /// En el cas el cursor estigui fora de la imatge, la coordenada no té cap validesa
@@ -127,6 +133,9 @@ public:
     /// Gets the pixel data corresponding to the current rendered image
     VolumePixelData* getCurrentPixelData();
 
+    /// Gets the pixel data corresponding to the current rendered image from the specified input. If i is out of range, null will be returned.
+    VolumePixelData* getCurrentPixelDataFromInput(int i);
+    
     /// Ens dóna la llesca mínima/màxima de llesques, tenint en compte totes les imatges,
     /// tant com si hi ha fases com si no
     /// @return valor de la llesca mínima/màxima
@@ -139,11 +148,21 @@ public:
     /// Returns the total number of phases that has the main input. It only applies to the original acquisition view plane. The minimum number of phases will be 1.
     int getNumberOfPhases() const;
 
+    /// Returns the total number of phases from the specified input. It only applies to the original acquisition view plane. The minimum number of phases will be 1.
+    /// If i is out of range, 1 will be returned
+    int getNumberOfPhasesFromInput(int i) const;
+
     /// Returns true if the number of phases is greater than 1
     bool hasPhases() const;
+
+    /// Returns true if the number of phases is greater than 1 on the specified input. If i is out of range, false will be returned.
+    bool doesInputHavePhases(int i) const;
     
     /// Ens indica si s'està aplicant o no thick slab
     bool isThickSlabActive() const;
+    
+    /// Ask is thickslab is active on the i-th input. If i is out of range, false will be returned
+    bool isThickSlabActiveOnInput(int i) const;
 
     /// Obtenim el mode de projecció del thickslab.
     /// Si el thickslab no està actiu, el valor és indefinit

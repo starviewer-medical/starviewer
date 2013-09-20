@@ -333,9 +333,28 @@ int Q2DViewer::getNumberOfPhases() const
     }
 }
 
+int Q2DViewer::getNumberOfPhasesFromInput(int i) const
+{
+    Volume *input = getInput(i);
+
+    if (input)
+    {
+        return input->getNumberOfPhases();
+    }
+    else
+    {
+        return 1;
+    }
+}
+
 bool Q2DViewer::hasPhases() const
 {
     return getNumberOfPhases() > 1;
+}
+
+bool Q2DViewer::doesInputHavePhases(int i) const
+{
+    return getNumberOfPhasesFromInput(i) > 1;
 }
 
 void Q2DViewer::initializeCamera()
@@ -1126,6 +1145,19 @@ int Q2DViewer::getCurrentPhase() const
     }
 }
 
+int Q2DViewer::getCurrentPhaseOnInput(int i) const
+{
+    VolumeDisplayUnit *unit = getDisplayUnit(i);
+    if (unit)
+    {
+        return unit->getPhase();
+    }
+    else
+    {
+        return 0;
+    }
+}
+
 Image* Q2DViewer::getCurrentDisplayedImage() const
 {
     if (getCurrentViewPlane() == OrthogonalPlane::XYPlane)
@@ -1229,6 +1261,20 @@ bool Q2DViewer::getCurrentCursorImageCoordinate(double xyz[3])
 OrthogonalPlane Q2DViewer::getView() const
 {
     return getCurrentViewPlane();
+}
+
+OrthogonalPlane Q2DViewer::getViewOnInput(int i) const
+{
+    VolumeDisplayUnit *unit = getDisplayUnit(i);
+
+    if (unit)
+    {
+        return unit->getViewPlane();
+    }
+    else
+    {
+        return OrthogonalPlane();
+    }
 }
 
 QList<Volume*> Q2DViewer::getInputs()
@@ -1406,6 +1452,20 @@ bool Q2DViewer::isThickSlabActive() const
     }
 }
 
+bool Q2DViewer::isThickSlabActiveOnInput(int i) const
+{
+    VolumeDisplayUnit *unit = getDisplayUnit(i);
+
+    if (unit)
+    {
+        return unit->isThickSlabActive();
+    }
+    else
+    {
+        return false;
+    }
+}
+
 void Q2DViewer::putCoordinateInCurrentImageBounds(double xyz[3])
 {
     double bounds[6];
@@ -1446,6 +1506,20 @@ VolumePixelData* Q2DViewer::getCurrentPixelData()
     }
     
     return mainDisplayUnit->getCurrentPixelData();
+}
+
+VolumePixelData* Q2DViewer::getCurrentPixelDataFromInput(int i)
+{
+    VolumeDisplayUnit *unit = getDisplayUnit(i);
+
+    if (unit)
+    {
+        return unit->getCurrentPixelData();
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 void Q2DViewer::restore()
