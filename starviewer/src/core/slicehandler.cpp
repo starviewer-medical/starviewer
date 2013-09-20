@@ -249,7 +249,7 @@ bool SliceHandler::hasSlabThicknessValueToBeUpated(int thickness)
         return false;
     }
     
-    if (thickness > m_numberOfSlices + 1)
+    if (thickness > m_numberOfSlices)
     {
         DEBUG_LOG("New thickness exceeds maximum permitted thickness, it remains the same.");
         return false;
