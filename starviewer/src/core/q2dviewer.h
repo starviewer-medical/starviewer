@@ -69,6 +69,9 @@ public:
 
     Volume* getMainInput() const;
 
+    /// Gets the i-th input. If i is out of range, null is returned
+    Volume* getInput(int i) const;
+
     QList<Volume*> getInputs();
 
     int getNumberOfInputs() const;

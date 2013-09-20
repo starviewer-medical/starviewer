@@ -752,6 +752,19 @@ Volume* Q2DViewer::getMainInput() const
     }
 }
 
+Volume* Q2DViewer::getInput(int i) const
+{
+    VolumeDisplayUnit *unit = getDisplayUnit(i);
+
+    if (unit)
+    {
+        return unit->getVolume();
+    }
+    else
+    {
+        return 0;
+    }
+}
 
 int Q2DViewer::getNumberOfInputs() const
 {
