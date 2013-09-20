@@ -52,6 +52,11 @@ public:
     /// Les característiques d'spacing i origin no s'assignaran amb aquest mètode. Això caldrà fer-ho accedint posteriorment a les dades vtk
     void setData(unsigned char *data, int extent[6], int bytesPerPixel, bool deleteData = false);
 
+    /// Sets the number of phases of this pixel data.
+    /// This information is needed to be able to access to the right pixels when accessing through world coordinate
+    /// The minimum value must be 1, is less than, the method will do nothing
+    void setNumberOfPhases(int numberOfPhases);
+    
     /// Retorna cert si conté dades carregades.
     bool isLoaded() const;
 
@@ -121,6 +126,9 @@ private:
     /// Indica si conté dades carregades o no.
     bool m_loaded;
 
+    /// Number of phases of the pixel data. Its minimum value must be 1
+    int m_numberOfPhases;
+    
     /// Filtres per passar de vtk a itk
     ItkToVtkFilterType::Pointer m_itkToVtkFilter;
     VtkToItkFilterType::Pointer m_vtkToItkFilter;
