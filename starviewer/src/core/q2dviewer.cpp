@@ -1656,9 +1656,15 @@ void Q2DViewer::updateCurrentImageDefaultPresets()
 
 double Q2DViewer::getCurrentSpacingBetweenSlices()
 {
-    int zIndex = getCurrentViewPlane().getZIndex();
-    
-    return getMainInput()->getSpacing()[zIndex];
+    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
+    if (mainDisplayUnit)
+    {
+        return mainDisplayUnit->getCurrentSpacingBetweenSlices();
+    }
+    else
+    {
+        return 0.0;
+    }
 }
 
 QList<vtkImageActor*> Q2DViewer::getVtkImageActorsList() const
