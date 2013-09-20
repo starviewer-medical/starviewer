@@ -140,6 +140,7 @@ void Volume::setNumberOfPhases(int phases)
     if (phases >= 1)
     {
         m_numberOfPhases = phases;
+        getPixelData()->setNumberOfPhases(m_numberOfPhases);
     }
 }
 
