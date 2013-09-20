@@ -1219,14 +1219,25 @@ Drawer* Q2DViewer::getDrawer() const
 
 bool Q2DViewer::getCurrentCursorImageCoordinate(double xyz[3])
 {
-    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
-    if (!mainDisplayUnit)
+    return getCurrentCursorImageCoordinateOnInput(xyz, 0);
+}
+
+bool Q2DViewer::getCurrentCursorImageCoordinateOnInput(double xyz[3], int i)
+{
+    VolumeDisplayUnit *displayUnit = getDisplayUnit(i);
+    
+    if (!displayUnit)
     {
         return false;
     }
 
+    if (!displayUnit->getVolume())
+    {
+        return false;
+    }
+    
     bool inside = false;
-    vtkPropPicker *picker = mainDisplayUnit->getImagePointPicker();
+    vtkPropPicker *picker = displayUnit->getImagePointPicker();
     getInteractor()->SetPicker(picker);
 
     QPoint position = getEventPosition();
@@ -1238,10 +1249,10 @@ bool Q2DViewer::getCurrentCursorImageCoordinate(double xyz[3])
         // Calculem la profunditat correcta. S'ha de tenir en compte que en el cas que tinguem fases
         // vtk no n'és conscient (cada fase es desplaça en la profunditat z com si fos una imatge més)
         // i si no fèssim aquest càlcul, estaríem donant una coordenada Z incorrecta
-        double zSpacing = getCurrentSpacingBetweenSlices();
-        int zIndex = getCurrentViewPlane().getZIndex();
-        double zOrigin = getMainInput()->getOrigin()[zIndex];
-        xyz[zIndex] =  zOrigin + zSpacing * getCurrentSlice();
+        double zSpacing = displayUnit->getCurrentSpacingBetweenSlices();
+        int zIndex = displayUnit->getViewPlane().getZIndex();
+        double zOrigin = displayUnit->getVolume()->getOrigin()[zIndex];
+        xyz[zIndex] =  zOrigin + zSpacing * displayUnit->getSlice();
     }
     else
     {
