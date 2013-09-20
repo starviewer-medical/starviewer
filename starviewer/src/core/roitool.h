@@ -76,7 +76,7 @@ private:
 
     /// Adds the voxels that are in the path of the intersection points
     void addVoxelsFromIntersections(const QList<double*> &intersectionPoints, int scanDirectionIndex, double scanDirectionIncrement, VolumePixelData *pixelData,
-        int phaseIndex, int numberOfPhases);
+        int phaseIndex);
 
 private:
     /// Llista amb els valors de gris per calcular la mitjana i la desviació estàndard i altres dades estadístiques si cal.

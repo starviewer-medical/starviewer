@@ -111,10 +111,8 @@ void ROITool::computeStatisticsData()
     VolumePixelData *pixelData = m_2DViewer->getCurrentPixelData();
     
     int phaseIndex = 0;
-    int numberOfPhases = 1;
     if (!m_2DViewer->isThickSlabActive() && m_2DViewer->getView() == OrthogonalPlane::XYPlane && m_2DViewer->hasPhases())
     {
-        numberOfPhases = m_2DViewer->getNumberOfPhases();
         phaseIndex = m_2DViewer->getCurrentPhase();
     }
 
@@ -129,7 +127,7 @@ void ROITool::computeStatisticsData()
         intersectionList = getIntersectionPoints(polygonSegments, intersectedSegmentsIndexList, Line3D(Point3D(sweepLineBeginPoint), Point3D(sweepLineEndPoint)), xIndex);
 
         // Fem el recompte de píxels
-        addVoxelsFromIntersections(intersectionList, xIndex, horizontalSpacingIncrement, pixelData, phaseIndex, numberOfPhases);
+        addVoxelsFromIntersections(intersectionList, xIndex, horizontalSpacingIncrement, pixelData, phaseIndex);
         
         // Desplacem la línia d'escombrat en la direcció que toca tant com espaiat de píxel tinguem en aquella direcció
         sweepLineBeginPoint[yIndex] += verticalSpacingIncrement;
@@ -243,7 +241,7 @@ QList<double*> ROITool::getIntersectionPoints(const QList<Line3D> &polygonSegmen
 }
 
 void ROITool::addVoxelsFromIntersections(const QList<double*> &intersectionPoints, int scanDirectionIndex, double scanDirectionIncrement,
-    VolumePixelData *pixelData, int phaseIndex, int numberOfPhases)
+    VolumePixelData *pixelData, int phaseIndex)
 {
     if (MathTools::isEven(intersectionPoints.count()))
     {
@@ -264,7 +262,7 @@ void ROITool::addVoxelsFromIntersections(const QList<double*> &intersectionPoint
             {
                 while (firstIntersection[scanDirectionIndex] <= secondIntersection[scanDirectionIndex])
                 {
-                    Voxel voxel = pixelData->getVoxelValue(firstIntersection, phaseIndex, numberOfPhases);
+                    Voxel voxel = pixelData->getVoxelValue(firstIntersection, phaseIndex);
                     if (!voxel.isEmpty())
                     {
                         m_grayValues << voxel.getComponent(0);
@@ -277,7 +275,7 @@ void ROITool::addVoxelsFromIntersections(const QList<double*> &intersectionPoint
             {
                 while (firstIntersection[scanDirectionIndex] >= secondIntersection[scanDirectionIndex])
                 {
-                    Voxel voxel = pixelData->getVoxelValue(firstIntersection, phaseIndex, numberOfPhases);
+                    Voxel voxel = pixelData->getVoxelValue(firstIntersection, phaseIndex);
                     if (!voxel.isEmpty())
                     {
                         m_grayValues << voxel.getComponent(0);

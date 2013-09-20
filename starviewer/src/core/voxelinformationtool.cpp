@@ -100,15 +100,13 @@ void VoxelInformationTool::updateCaption()
 QString VoxelInformationTool::computeVoxelValue(double worldCoordinate[3])
 {
     int phaseIndex = 0;
-    int numberOfPhases = 1;
     if (!m_2DViewer->isThickSlabActive() && m_2DViewer->getView() == OrthogonalPlane::XYPlane && m_2DViewer->hasPhases())
     {
-        numberOfPhases = m_2DViewer->getNumberOfPhases();
         phaseIndex = m_2DViewer->getCurrentPhase();
     }
     
     VolumePixelData *pixelData = m_2DViewer->getCurrentPixelData();
-    return pixelData->getVoxelValue(worldCoordinate, phaseIndex, numberOfPhases).getAsQString();
+    return pixelData->getVoxelValue(worldCoordinate, phaseIndex).getAsQString();
 }
 
 void VoxelInformationTool::computeCaptionAttachmentPointAndTextAlignment(double attachmentPoint[3], QString &horizontalJustification,
