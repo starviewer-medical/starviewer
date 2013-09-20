@@ -54,6 +54,9 @@ public:
     /// Sets a new view plane, resetting some properties of the slice handler.
     void setViewPlane(const OrthogonalPlane &viewPlane);
 
+    /// Gets the current spacing between slices according to the current view on the set volume
+    double getCurrentSpacingBetweenSlices();
+    
     /// Gets the current pixel data according to the current state.
     VolumePixelData* getCurrentPixelData();
     
