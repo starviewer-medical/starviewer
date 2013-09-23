@@ -65,8 +65,8 @@ void QThickSlabWidget::link(Q2DViewer *viewer)
     connect(m_currentViewer, SIGNAL(viewChanged(int)), SLOT(onViewChanged()));
     connect(m_slabThicknessSlider, SIGNAL(valueChanged(int)), SLOT(applyThickSlab()));
 
-    // Si tenim input habilitem el combo, sinó el deshabilitem
-    if (m_currentViewer->hasInput())
+    // Enable the combo if the viewer has input and more than one slice; disable it otherwise
+    if (m_currentViewer->hasInput() && m_currentViewer->getNumberOfSlices() > 1)
     {
         m_projectionModeComboBox->setEnabled(true);
     }
