@@ -59,11 +59,11 @@ private:
     /// which its initial and end point are between the specified heigh on the heightIndex
     QList<int> getIndexOfSegmentsCrossingAtHeight(const QList<Line3D> &segments, double height, int heightIndex);
 
-    /// Gets the points that intersect with the subset of segments (pointed by the list of indices) with the given sweepLine and orders them by sortIndex
-    QList<double*> getIntersectionPoints(const QList<Line3D> &polygonSegments, const QList<int> &indexListOfSegmentsToIntersect,  const Line3D &sweepLine, int sortIndex);
+    /// Gets the points that intersect with the subset of segments (pointed by the list of indices) with the given sweepLine and orders them by the xIndex of view
+    QList<double*> getIntersectionPoints(const QList<Line3D> &polygonSegments, const QList<int> &indexListOfSegmentsToIntersect,  const Line3D &sweepLine, const OrthogonalPlane &view);
 
     /// Adds the voxels that are in the path of the intersection points to the given list
-    void addVoxelsFromIntersections(const QList<double*> &intersectionPoints, int scanDirectionIndex, VolumePixelData *pixelData, int phaseIndex, QList<double> &grayValues);
+    void addVoxelsFromIntersections(const QList<double*> &intersectionPoints, const OrthogonalPlane &view, VolumePixelData *pixelData, int phaseIndex, QList<double> &grayValues);
 };
 
 }
