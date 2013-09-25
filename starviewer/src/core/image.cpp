@@ -422,6 +422,16 @@ QString Image::getFormattedImageTime() const
     return formattedTime;
 }
 
+void Image::setTransferSyntaxUID(const QString &transferSyntaxUID)
+{
+    m_transferSyntaxUID = transferSyntaxUID;
+}
+
+const QString& Image::getTransferSyntaxUID() const
+{
+    return m_transferSyntaxUID;
+}
+
 double Image::distance(Image *image)
 {
     // Càlcul de la distància (basat en l'algorisme de Jolinda Smith)
