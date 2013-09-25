@@ -73,9 +73,8 @@ ROITool::StatisticsData ROITool::computeStatisticsData()
     double bounds[6];
     m_roiPolygon->getBounds(bounds);
 
-    OrthogonalPlane currentView = m_2DViewer->getView();
     int xIndex, yIndex, zIndex;
-    currentView.getXYZIndexes(xIndex, yIndex, zIndex);
+    m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
 
     // Initialization of the sweep line
     
