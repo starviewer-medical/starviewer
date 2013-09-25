@@ -236,17 +236,12 @@ void ROITool::addVoxelsFromIntersections(const QList<double*> &intersectionPoint
         double spacing[3];
         pixelData->getSpacing(spacing);
         double scanDirectionIncrement = spacing[scanDirectionIndex];
-        int firstPointIndex;
-        int secondPointIndex;
+        
         int limit = intersectionPoints.count() / 2;
         for (int i = 0; i < limit; ++i)
         {
-            firstPointIndex = i * 2;
-            secondPointIndex = firstPointIndex + 1;
-
-            double *firstIntersection = intersectionPoints.at(firstPointIndex);
-            double *secondIntersection = intersectionPoints.at(secondPointIndex);
-
+            double *firstIntersection = intersectionPoints.at(i * 2);
+            double *secondIntersection = intersectionPoints.at(i * 2 + 1);
             // First we check which will be the direction of the scan line
             Point3D currentScanLinePoint;
             double scanLineEnd;
