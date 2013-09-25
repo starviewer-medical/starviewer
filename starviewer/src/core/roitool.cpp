@@ -14,7 +14,7 @@
 namespace udg {
 
 ROITool::ROITool(QViewer *viewer, QObject *parent)
- : MeasurementTool(viewer, parent), m_roiPolygon(0), m_hasToComputeStatisticsData(true), m_mean(0.0), m_standardDeviation(0.0)
+ : MeasurementTool(viewer, parent), m_roiPolygon(0), m_hasToComputeStatisticsData(true)
 {
     m_toolName = "ROITool";
     m_hasSharedData = false;
@@ -63,7 +63,7 @@ double ROITool::computeStandardDeviation(const QList<double> &grayValues, double
     return standardDeviation;
 }
 
-void ROITool::computeStatisticsData()
+void ROITool::computeStatisticsData(double &mean, double &standardDeviation)
 {
     Q_ASSERT(m_roiPolygon);
 
@@ -140,10 +140,10 @@ void ROITool::computeStatisticsData()
     // Un cop hem obtingut les dades necessàries, calculem la mitjana i la desviació estàndar
 
     // Mitjana
-    m_mean = computeMean(grayValues);
+    mean = computeMean(grayValues);
 
     // Desviació estàndar
-    m_standardDeviation = computeStandardDeviation(grayValues, m_mean);
+    standardDeviation = computeStandardDeviation(grayValues, mean);
 
     // Ja s'han calculat les dades estadístiques
     m_hasToComputeStatisticsData = false;
@@ -325,12 +325,14 @@ QString ROITool::getAnnotation()
     if (m_2DViewer->getMainInput()->getImage(0)->getPhotometricInterpretation().contains("MONOCHROME"))
     {
         // Calculem les dades estadístiques
+        double mean;
+        double standardDeviation;
         QApplication::setOverrideCursor(Qt::WaitCursor);
-        computeStatisticsData();
+        computeStatisticsData(mean, standardDeviation);
         QApplication::restoreOverrideCursor();
 
         // Afegim la informació de les dades estadístiques a l'annotació
-        annotation += tr("\nMean: %1\nSt.Dev.: %2").arg(m_mean, 0, 'f', 2).arg(m_standardDeviation, 0, 'f', 2);
+        annotation += tr("\nMean: %1\nSt.Dev.: %2").arg(mean, 0, 'f', 2).arg(standardDeviation, 0, 'f', 2);
     }
 
     return annotation;
