@@ -130,9 +130,6 @@ void EllipticalROITool::handlePointAddition()
         memcpy(m_secondPoint, m_firstPoint, sizeof(double) * 3);
 
         m_state = FirstPointFixed;
-
-        // Com que estem afegint punts cal indicar que és necessari recalcular les dades estadístiques
-        m_hasToComputeStatisticsData = true;
     }
 }
 

@@ -41,12 +41,6 @@ protected:
     /// Polígon que defineix la ROI
     QPointer<DrawerPolygon> m_roiPolygon;
 
-    /// Controlarà si cal o no recalcular les dades estadístiques
-    /// Quan modifiquem la roi (afegint punts, creant una de nova, etc) el valor serà true
-    /// Un cop s'hagin calculat, serà false fins que no es torni a modificar
-    /// Per defecte el valor és true
-    bool m_hasToComputeStatisticsData;
-
 private:
     /// Methods to compute statistics data, such as mean and standard deviation, upon the contained voxels on the ROI
     double computeMean(const QList<double> &grayValues);

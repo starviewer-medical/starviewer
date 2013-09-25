@@ -522,7 +522,6 @@ void MagicROITool::computePolygon()
 
     m_roiPolygon->update();
     m_filledRoiPolygon->update();
-    m_hasToComputeStatisticsData = true;
 }
 
 void MagicROITool::getNextIndex(int direction, int x, int y, int &nextX, int &nextY)
