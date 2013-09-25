@@ -118,14 +118,12 @@ void ROITool::computeStatisticsData(double &mean, double &standardDeviation)
     }
 
     QList<double*> intersectionList;
-    QList<int> intersectedSegmentsIndexList;
     // Inicialitzem la llista de valors de gris
     QList<double> grayValues;
     while (sweepLineBeginPoint.at(yIndex) <= verticalLimit)
     {
-        intersectedSegmentsIndexList = getIndexOfSegmentsCrossingAtHeight(polygonSegments, sweepLineBeginPoint.at(yIndex), yIndex);
         // Obtenim les interseccions entre tots els segments de la ROI i la línia d'escombrat actual
-        intersectionList = getIntersectionPoints(polygonSegments, intersectedSegmentsIndexList, Line3D(sweepLineBeginPoint, sweepLineEndPoint), currentView);
+        intersectionList = getIntersectionPoints(polygonSegments, Line3D(sweepLineBeginPoint, sweepLineEndPoint), currentView);
 
         // Fem el recompte de píxels
         addVoxelsFromIntersections(intersectionList, currentView, pixelData, phaseIndex, grayValues);
@@ -188,11 +186,13 @@ QList<int> ROITool::getIndexOfSegmentsCrossingAtHeight(const QList<Line3D> &segm
     return intersectedSegmentsIndexList;
 }
 
-QList<double*> ROITool::getIntersectionPoints(const QList<Line3D> &polygonSegments, const QList<int> &indexListOfSegmentsToIntersect, const Line3D &sweepLine, const OrthogonalPlane &view)
+QList<double*> ROITool::getIntersectionPoints(const QList<Line3D> &polygonSegments, const Line3D &sweepLine, const OrthogonalPlane &view)
 {
     QList<double*> intersectionPoints;
     int sortIndex = view.getXIndex();
+    int heightIndex = view.getYIndex();
     
+    QList<int> indexListOfSegmentsToIntersect = getIndexOfSegmentsCrossingAtHeight(polygonSegments, sweepLine.getFirstPoint().at(heightIndex), heightIndex);
     foreach (int segmentIndex, indexListOfSegmentsToIntersect)
     {
         int intersectionState;
