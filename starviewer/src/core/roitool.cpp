@@ -122,7 +122,7 @@ void ROITool::computeStatisticsData()
     QList<double*> intersectionList;
     QList<int> intersectedSegmentsIndexList;
     // Inicialitzem la llista de valors de gris
-    m_grayValues.clear();
+    QList<double> grayValues;
     while (sweepLineBeginPoint[yIndex] <= verticalLimit)
     {
         intersectedSegmentsIndexList = getIndexOfSegmentsCrossingAtHeight(polygonSegments, sweepLineBeginPoint[yIndex], yIndex);
@@ -130,7 +130,7 @@ void ROITool::computeStatisticsData()
         intersectionList = getIntersectionPoints(polygonSegments, intersectedSegmentsIndexList, Line3D(Point3D(sweepLineBeginPoint), Point3D(sweepLineEndPoint)), xIndex);
 
         // Fem el recompte de píxels
-        addVoxelsFromIntersections(intersectionList, xIndex, pixelData, phaseIndex, m_grayValues);
+        addVoxelsFromIntersections(intersectionList, xIndex, pixelData, phaseIndex, grayValues);
         
         // Desplacem la línia d'escombrat en la direcció que toca tant com espaiat de píxel tinguem en aquella direcció
         sweepLineBeginPoint[yIndex] += verticalSpacingIncrement;
@@ -140,10 +140,10 @@ void ROITool::computeStatisticsData()
     // Un cop hem obtingut les dades necessàries, calculem la mitjana i la desviació estàndar
 
     // Mitjana
-    m_mean = computeMean(m_grayValues);
+    m_mean = computeMean(grayValues);
 
     // Desviació estàndar
-    m_standardDeviation = computeStandardDeviation(m_grayValues);
+    m_standardDeviation = computeStandardDeviation(grayValues);
 
     // Ja s'han calculat les dades estadístiques
     m_hasToComputeStatisticsData = false;
