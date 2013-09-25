@@ -121,6 +121,12 @@ QList<double> ROITool::computeVoxelValues(const QList<Line3D> &polygonSegments, 
     }
     
     OrthogonalPlane currentView = m_2DViewer->getView();
+    int yIndex = currentView.getYIndex();
+    double currentZDepth = m_2DViewer->getCurrentDisplayedImageDepthOnInput(inputNumber);
+    
+    double spacing[3];
+    pixelData->getSpacing(spacing);
+    double verticalSpacingIncrement = spacing[yIndex];
     
     int phaseIndex = 0;
     if (!m_2DViewer->isThickSlabActiveOnInput(inputNumber) && currentView == OrthogonalPlane::XYPlane && m_2DViewer->doesInputHavePhases(inputNumber))
@@ -128,21 +134,12 @@ QList<double> ROITool::computeVoxelValues(const QList<Line3D> &polygonSegments, 
         phaseIndex = m_2DViewer->getCurrentPhaseOnInput(inputNumber);
     }
 
-    int yIndex = currentView.getYIndex();
-    
-    double spacing[3];
-    pixelData->getSpacing(spacing);
-    double verticalSpacingIncrement = spacing[yIndex];
-    
-    double currentZDepth = m_2DViewer->getCurrentDisplayedImageDepthOnInput(inputNumber);
-    
-    QList<double*> intersectionList;
     // Voxel values list
     QList<double> voxelValues;
     while (sweepLineBeginPoint.at(yIndex) <= sweepLineEnd)
     {
         // We get the intersections bewteen ROI segments and current sweep line
-        intersectionList = getIntersectionPoints(polygonSegments, Line3D(sweepLineBeginPoint, sweepLineEndPoint), currentView);
+        QList<double*> intersectionList = getIntersectionPoints(polygonSegments, Line3D(sweepLineBeginPoint, sweepLineEndPoint), currentView);
 
         // Adding the voxels from the current intersections of the current sweep line to the voxel values list
         addVoxelsFromIntersections(intersectionList, currentZDepth, currentView, pixelData, phaseIndex, voxelValues);
