@@ -63,7 +63,7 @@ double ROITool::computeStandardDeviation(const QList<double> &grayValues, double
     return standardDeviation;
 }
 
-void ROITool::computeStatisticsData(double &mean, double &standardDeviation)
+ROITool::StatisticsData ROITool::computeStatisticsData()
 {
     Q_ASSERT(m_roiPolygon);
 
@@ -129,12 +129,14 @@ void ROITool::computeStatisticsData(double &mean, double &standardDeviation)
     }
     
     // Un cop hem obtingut les dades necessàries, calculem la mitjana i la desviació estàndar
-
+    StatisticsData data;
     // Mitjana
-    mean = computeMean(grayValues);
+    data.m_mean = computeMean(grayValues);
 
     // Desviació estàndar
-    standardDeviation = computeStandardDeviation(grayValues, mean);
+    data.m_standardDeviation = computeStandardDeviation(grayValues, data.m_mean);
+
+    return data;
 }
 
 QList<int> ROITool::getIndexOfSegmentsCrossingAtHeight(const QList<Line3D> &segments, double height, int heightIndex)
@@ -286,14 +288,12 @@ QString ROITool::getAnnotation()
     if (m_2DViewer->getMainInput()->getImage(0)->getPhotometricInterpretation().contains("MONOCHROME"))
     {
         // Calculem les dades estadístiques
-        double mean;
-        double standardDeviation;
         QApplication::setOverrideCursor(Qt::WaitCursor);
-        computeStatisticsData(mean, standardDeviation);
+        StatisticsData statistics = computeStatisticsData();
         QApplication::restoreOverrideCursor();
 
         // Afegim la informació de les dades estadístiques a l'annotació
-        annotation += tr("\nMean: %1\nSt.Dev.: %2").arg(mean, 0, 'f', 2).arg(standardDeviation, 0, 'f', 2);
+        annotation += tr("\nMean: %1\nSt.Dev.: %2").arg(statistics.m_mean, 0, 'f', 2).arg(statistics.m_standardDeviation, 0, 'f', 2);
     }
 
     return annotation;

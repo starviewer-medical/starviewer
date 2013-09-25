@@ -42,13 +42,19 @@ protected:
     QPointer<DrawerPolygon> m_roiPolygon;
 
 private:
+    typedef struct
+    {
+        double m_mean;
+        double m_standardDeviation;
+    } StatisticsData;
+    
     /// Methods to compute statistics data, such as mean and standard deviation, upon the contained voxels on the ROI
     double computeMean(const QList<double> &grayValues);
     double computeStandardDeviation(const QList<double> &grayValues, double meanOfGrayValues);
     
     /// Calcula les dades estadístiques de la ROI.
     /// Serà necessari cridar aquest mètode abans si volem obtenir la mitjana i/o la desviació estàndar
-    void computeStatisticsData(double &mean, double &standardDeviation);
+    StatisticsData computeStatisticsData();
 
     /// Returns a list with the indices of the corresponding segments of the given list which crosses the given height, that is, those segments
     /// which its initial and end point are between the specified heigh on the heightIndex
