@@ -143,12 +143,6 @@ void ROITool::computeStatisticsData()
 
     // Ja s'han calculat les dades estadístiques
     m_hasToComputeStatisticsData = false;
-
-    // Alliberem el pixel data, en cas que haguem creat un nou objecte
-    if (m_2DViewer->isThickSlabActive())
-    {
-        delete pixelData;
-    }
 }
 
 DrawerPolygon *ROITool::createProjectedROIPolygon()
