@@ -181,6 +181,11 @@ public:
     /// Ens retorna la hora en format hh:mm:ss en que va començar la creació de la imatge
     QString getFormattedImageTime() const;
 
+    /// Sets the transfer syntax UID.
+    void setTransferSyntaxUID(const QString &transferSyntaxUID);
+    /// Returns the transfer syntax UID.
+    const QString& getTransferSyntaxUID() const;
+
     /// Ens retorna la distància de l'orígen de la imatge passada per paràmetre respecte a un orígen 0, 0, 0, segons la normal del pla
     /// TODO Assignar-li un nom més entenedor
     static double distance(Image *image);
@@ -372,6 +377,11 @@ private:
     QString m_imageTime;
 
     // TODO C.7.6.5 CINE MODULE: Multi-frame Cine Image
+
+    /// Transfer Syntax UID (0002,0010)
+    /// Transfer syntax defines how DICOM objects are serialized.
+    QString m_transferSyntaxUID;
+
     /// Atributs NO-DICOM
 
     /// El path absolut de la imatge
