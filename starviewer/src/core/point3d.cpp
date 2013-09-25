@@ -61,6 +61,17 @@ const double& Point3D::operator[](int index) const
     return m_point[index];
 }
 
+bool Point3D::operator==(const Point3D &point)
+{
+    bool areEqual = true;
+    for (int i = 0; i < 3; ++i)
+    {
+        areEqual = areEqual && qFuzzyCompare(m_point[i], point.m_point[i]);
+    }
+
+    return areEqual;
+}
+
 double* Point3D::getAsDoubleArray()
 {
     return m_point;
