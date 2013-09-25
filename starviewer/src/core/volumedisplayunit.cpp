@@ -94,7 +94,7 @@ void VolumeDisplayUnit::setViewPlane(const OrthogonalPlane &viewPlane)
     m_imagePipeline->setProjectionAxis(viewPlane);
 }
 
-double VolumeDisplayUnit::getCurrentSpacingBetweenSlices()
+double VolumeDisplayUnit::getCurrentSpacingBetweenSlices() const
 {
     if (getVolume())
     {

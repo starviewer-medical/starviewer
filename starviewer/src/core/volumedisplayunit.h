@@ -55,7 +55,7 @@ public:
     void setViewPlane(const OrthogonalPlane &viewPlane);
 
     /// Gets the current spacing between slices according to the current view on the set volume
-    double getCurrentSpacingBetweenSlices();
+    double getCurrentSpacingBetweenSlices() const;
     
     /// Gets the current pixel data according to the current state.
     VolumePixelData* getCurrentPixelData();
