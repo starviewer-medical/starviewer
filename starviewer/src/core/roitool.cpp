@@ -67,9 +67,6 @@ ROITool::StatisticsData ROITool::computeStatisticsData()
 {
     Q_ASSERT(m_roiPolygon);
 
-    // List with the segments of the polygon
-    QList<Line3D> polygonSegments = m_roiPolygon->getSegments();
-
     // Traçarem una lína d'escombrat dins de la regió quadrangular que ocupa el polígon
     // Aquesta línia produirà unes interseccions amb els segments del polígon
     // Les interseccions marcaran el camí a seguir per fer el recompte de vòxels
@@ -97,36 +94,8 @@ ROITool::StatisticsData ROITool::computeStatisticsData()
     // Bounds yMax
     double verticalLimit = bounds[yIndex * 2 + 1];
 
-    // Obtenim el punter al contenidor de píxels amb el que calcularem els valors
-    VolumePixelData *pixelData = m_2DViewer->getCurrentPixelData();
-    
-    double spacing[3];
-    pixelData->getSpacing(spacing);
-    double verticalSpacingIncrement = spacing[yIndex];
-    
-    int phaseIndex = 0;
-    if (!m_2DViewer->isThickSlabActive() && m_2DViewer->getView() == OrthogonalPlane::XYPlane && m_2DViewer->hasPhases())
-    {
-        phaseIndex = m_2DViewer->getCurrentPhase();
-    }
-
-    double currentZDepth = m_2DViewer->getCurrentDisplayedImageDepth();
-    
-    QList<double*> intersectionList;
-    // Inicialitzem la llista de valors de gris
-    QList<double> grayValues;
-    while (sweepLineBeginPoint.at(yIndex) <= verticalLimit)
-    {
-        // Obtenim les interseccions entre tots els segments de la ROI i la línia d'escombrat actual
-        intersectionList = getIntersectionPoints(polygonSegments, Line3D(sweepLineBeginPoint, sweepLineEndPoint), currentView);
-
-        // Fem el recompte de píxels
-        addVoxelsFromIntersections(intersectionList, currentZDepth, currentView, pixelData, phaseIndex, grayValues);
-        
-        // Desplacem la línia d'escombrat en la direcció que toca tant com espaiat de píxel tinguem en aquella direcció
-        sweepLineBeginPoint[yIndex] += verticalSpacingIncrement;
-        sweepLineEndPoint[yIndex] += verticalSpacingIncrement;
-    }
+    // Compute the voxel values inside of the polygon
+    QList<double> grayValues = computeVoxelValues(m_roiPolygon->getSegments(), sweepLineBeginPoint, sweepLineEndPoint, verticalLimit);
     
     // Un cop hem obtingut les dades necessàries, calculem la mitjana i la desviació estàndar
     StatisticsData data;
@@ -137,6 +106,45 @@ ROITool::StatisticsData ROITool::computeStatisticsData()
     data.m_standardDeviation = computeStandardDeviation(grayValues, data.m_mean);
 
     return data;
+}
+
+QList<double> ROITool::computeVoxelValues(const QList<Line3D> &polygonSegments, Point3D sweepLineBeginPoint, Point3D sweepLineEndPoint, double sweepLineEnd)
+{
+    // Obtenim el punter al contenidor de píxels amb el que calcularem els valors
+    VolumePixelData *pixelData = m_2DViewer->getCurrentPixelData();
+    
+    int phaseIndex = 0;
+    if (!m_2DViewer->isThickSlabActive() && m_2DViewer->getView() == OrthogonalPlane::XYPlane && m_2DViewer->hasPhases())
+    {
+        phaseIndex = m_2DViewer->getCurrentPhase();
+    }
+
+    OrthogonalPlane currentView = m_2DViewer->getView();
+    int yIndex = currentView.getYIndex();
+    
+    double spacing[3];
+    pixelData->getSpacing(spacing);
+    double verticalSpacingIncrement = spacing[yIndex];
+    
+    double currentZDepth = m_2DViewer->getCurrentDisplayedImageDepth();
+    
+    QList<double*> intersectionList;
+    // Inicialitzem la llista de valors de gris
+    QList<double> voxelValues;
+    while (sweepLineBeginPoint.at(yIndex) <= sweepLineEnd)
+    {
+        // Obtenim les interseccions entre tots els segments de la ROI i la línia d'escombrat actual
+        intersectionList = getIntersectionPoints(polygonSegments, Line3D(sweepLineBeginPoint, sweepLineEndPoint), currentView);
+
+        // Fem el recompte de píxels
+        addVoxelsFromIntersections(intersectionList, currentZDepth, currentView, pixelData, phaseIndex, voxelValues);
+        
+        // Desplacem la línia d'escombrat en la direcció que toca tant com espaiat de píxel tinguem en aquella direcció
+        sweepLineBeginPoint[yIndex] += verticalSpacingIncrement;
+        sweepLineEndPoint[yIndex] += verticalSpacingIncrement;
+    }
+
+    return voxelValues;
 }
 
 QList<int> ROITool::getIndexOfSegmentsCrossingAtHeight(const QList<Line3D> &segments, double height, int heightIndex)
