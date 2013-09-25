@@ -134,6 +134,12 @@ public:
     /// Retorna l'espai que hi ha entre les llesques segons la vista actual i si hi ha el thickness activat
     double getCurrentSpacingBetweenSlices();
 
+    /// Returns the depth (z coordinate value) of the main displayed image
+    double getCurrentDisplayedImageDepth() const;
+    
+    /// Returns the depth (z coordinate value) of the displayed image from the specified input
+    double getCurrentDisplayedImageDepthOnInput(int i) const;
+
     /// Gets the pixel data corresponding to the current rendered image
     VolumePixelData* getCurrentPixelData();
 
