@@ -23,6 +23,9 @@ public:
     double& operator[](int index);
     const double& operator[](int index) const;
 
+    /// Equality operator (fuzzy)
+    bool operator==(const Point3D &point);
+
     /// Gets the values as a double array. Implemented for convenience.
     double* getAsDoubleArray();
 
