@@ -1760,6 +1760,25 @@ double Q2DViewer::getCurrentSpacingBetweenSlices()
     }
 }
 
+double Q2DViewer::getCurrentDisplayedImageDepth() const
+{
+    return getCurrentDisplayedImageDepthOnInput(0);
+}
+
+double Q2DViewer::getCurrentDisplayedImageDepthOnInput(int i) const
+{
+    VolumeDisplayUnit *displayUnit = getDisplayUnit(i);
+    
+    if (displayUnit)
+    {
+        return displayUnit->getCurrentDisplayedImageDepth();
+    }
+    else
+    {
+        return 0.0;
+    }
+}
+
 QList<vtkImageActor*> Q2DViewer::getVtkImageActorsList() const
 {
     QList<vtkImageActor*> actorsList;
