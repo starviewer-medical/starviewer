@@ -50,11 +50,6 @@ private:
     /// Serà necessari cridar aquest mètode abans si volem obtenir la mitjana i/o la desviació estàndar
     void computeStatisticsData(double &mean, double &standardDeviation);
 
-    /// Crea una còpia de m_roiPolygon, amb la diferència que aquesta tindrà el mateix valor de profunditat que la llesca actual
-    /// Això ho necessitarem a l'hora de calcular els valors de vòxel, ja que la coordenada de profunditat de les annotacions
-    /// és diferent a les llesques en sí, ja que estan en dos plans lleugerament separats
-    DrawerPolygon* createProjectedROIPolygon();
-
     /// Returns a list with the indices of the corresponding segments of the given list which crosses the given height, that is, those segments
     /// which its initial and end point are between the specified heigh on the heightIndex
     QList<int> getIndexOfSegmentsCrossingAtHeight(const QList<Line3D> &segments, double height, int heightIndex);
@@ -63,7 +58,7 @@ private:
     QList<double*> getIntersectionPoints(const QList<Line3D> &polygonSegments, const Line3D &sweepLine, const OrthogonalPlane &view);
 
     /// Adds the voxels that are in the path of the intersection points to the given list
-    void addVoxelsFromIntersections(const QList<double*> &intersectionPoints, const OrthogonalPlane &view, VolumePixelData *pixelData, int phaseIndex, QList<double> &grayValues);
+    void addVoxelsFromIntersections(const QList<double*> &intersectionPoints, double currentZDepth, const OrthogonalPlane &view, VolumePixelData *pixelData, int phaseIndex, QList<double> &grayValues);
 };
 
 }

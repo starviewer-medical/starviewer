@@ -67,21 +67,14 @@ void ROITool::computeStatisticsData(double &mean, double &standardDeviation)
 {
     Q_ASSERT(m_roiPolygon);
 
-    // Creem una còpia de m_roiPolygon projectada a la mateixa profunditat que la llesca actual
-    // Serà amb aquest polígon amb el que calcularem els corresponents valors de vòxel
-    DrawerPolygon *projectedROIPolygon = createProjectedROIPolygon();
-
     // List with the segments of the polygon
-    QList<Line3D> polygonSegments = projectedROIPolygon->getSegments();
+    QList<Line3D> polygonSegments = m_roiPolygon->getSegments();
 
     // Traçarem una lína d'escombrat dins de la regió quadrangular que ocupa el polígon
     // Aquesta línia produirà unes interseccions amb els segments del polígon
     // Les interseccions marcaran el camí a seguir per fer el recompte de vòxels
     double bounds[6];
-    projectedROIPolygon->getBounds(bounds);
-    
-    // Ja no necessitem més la còpia del polígon, per tant es pot eliminar de memòria
-    delete projectedROIPolygon;
+    m_roiPolygon->getBounds(bounds);
 
     OrthogonalPlane currentView = m_2DViewer->getView();
     int xIndex, yIndex, zIndex;
@@ -117,6 +110,8 @@ void ROITool::computeStatisticsData(double &mean, double &standardDeviation)
         phaseIndex = m_2DViewer->getCurrentPhase();
     }
 
+    double currentZDepth = m_2DViewer->getCurrentDisplayedImageDepth();
+    
     QList<double*> intersectionList;
     // Inicialitzem la llista de valors de gris
     QList<double> grayValues;
@@ -126,7 +121,7 @@ void ROITool::computeStatisticsData(double &mean, double &standardDeviation)
         intersectionList = getIntersectionPoints(polygonSegments, Line3D(sweepLineBeginPoint, sweepLineEndPoint), currentView);
 
         // Fem el recompte de píxels
-        addVoxelsFromIntersections(intersectionList, currentView, pixelData, phaseIndex, grayValues);
+        addVoxelsFromIntersections(intersectionList, currentZDepth, currentView, pixelData, phaseIndex, grayValues);
         
         // Desplacem la línia d'escombrat en la direcció que toca tant com espaiat de píxel tinguem en aquella direcció
         sweepLineBeginPoint[yIndex] += verticalSpacingIncrement;
@@ -140,34 +135,6 @@ void ROITool::computeStatisticsData(double &mean, double &standardDeviation)
 
     // Desviació estàndar
     standardDeviation = computeStandardDeviation(grayValues, mean);
-}
-
-DrawerPolygon *ROITool::createProjectedROIPolygon()
-{
-    Q_ASSERT(m_roiPolygon);
-
-    int xIndex, yIndex, zIndex;
-    m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
-    // Calculem la coordenda de profunditat a la que volem projectar el polígon
-    double zCoordinate = m_2DViewer->getCurrentDisplayedImageDepth();
-
-    DrawerPolygon *projectedROIPolygon = new DrawerPolygon;
-    int numberOfPolygonPoints = m_roiPolygon->getNumberOfPoints();
-    for (int i = 0; i < numberOfPolygonPoints; ++i)
-    {
-        const double *vertix = m_roiPolygon->getVertix(i);
-        double projectedVertix[3];
-        projectedVertix[xIndex] = vertix[xIndex];
-        projectedVertix[yIndex] = vertix[yIndex];
-        projectedVertix[zIndex] = zCoordinate;
-        projectedROIPolygon->addVertix(projectedVertix);
-    }
-
-    // Necessari perquè després necessitem el getBounds() que es calcula amb els objectes de vtk
-    // TODO Haver de fer aquesta crida ens planteja si el disseny dels DrawerPrimitive és prou bo
-    // o que potser en aquest cas estem fent servir un DrawerPrimitive per una tasca per la que no està pensat
-    projectedROIPolygon->getAsVtkProp();
-    return projectedROIPolygon;
 }
 
 QList<int> ROITool::getIndexOfSegmentsCrossingAtHeight(const QList<Line3D> &segments, double height, int heightIndex)
@@ -228,7 +195,7 @@ QList<double*> ROITool::getIntersectionPoints(const QList<Line3D> &polygonSegmen
     return intersectionPoints;
 }
 
-void ROITool::addVoxelsFromIntersections(const QList<double*> &intersectionPoints, const OrthogonalPlane &view, VolumePixelData *pixelData, int phaseIndex, QList<double> &grayValues)
+void ROITool::addVoxelsFromIntersections(const QList<double*> &intersectionPoints, double currentZDepth, const OrthogonalPlane &view, VolumePixelData *pixelData, int phaseIndex, QList<double> &grayValues)
 {
     if (MathTools::isEven(intersectionPoints.count()))
     {
@@ -237,6 +204,8 @@ void ROITool::addVoxelsFromIntersections(const QList<double*> &intersectionPoint
         pixelData->getSpacing(spacing);
         double scanDirectionIncrement = spacing[scanDirectionIndex];
         
+        int zIndex = view.getZIndex();
+
         int limit = intersectionPoints.count() / 2;
         for (int i = 0; i < limit; ++i)
         {
@@ -264,7 +233,10 @@ void ROITool::addVoxelsFromIntersections(const QList<double*> &intersectionPoint
             // Then we scan and get the voxels along the line
             while (currentScanLinePoint.at(scanDirectionIndex) <= scanLineEnd)
             {
-                Voxel voxel = pixelData->getVoxelValue(currentScanLinePoint.getAsDoubleArray(), phaseIndex);
+                Point3D voxelCoordinate(currentScanLinePoint.getAsDoubleArray());
+                voxelCoordinate[zIndex] = currentZDepth;
+                
+                Voxel voxel = pixelData->getVoxelValue(voxelCoordinate.getAsDoubleArray(), phaseIndex);
                 if (!voxel.isEmpty())
                 {
                     grayValues << voxel.getComponent(0);
