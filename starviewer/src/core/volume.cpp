@@ -60,6 +60,9 @@ VolumePixelData* Volume::getPixelData()
         connect(volumeReader, SIGNAL(progress(int)), SIGNAL(progress(int)));
         volumeReader->read(this);
         delete volumeReader;
+
+        // Set the number of phases to the new pixel data
+        m_volumePixelData->setNumberOfPhases(m_numberOfPhases);
     }
 
     return m_volumePixelData;
@@ -140,7 +143,12 @@ void Volume::setNumberOfPhases(int phases)
     if (phases >= 1)
     {
         m_numberOfPhases = phases;
-        getPixelData()->setNumberOfPhases(m_numberOfPhases);
+
+        // Set the number of phases to the pixel data only if it's already loaded, because we don't want to load it now
+        if (isPixelDataLoaded())
+        {
+            getPixelData()->setNumberOfPhases(m_numberOfPhases);
+        }
     }
 }
 
