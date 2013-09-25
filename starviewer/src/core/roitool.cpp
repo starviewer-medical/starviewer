@@ -104,7 +104,6 @@ void ROITool::computeStatisticsData()
     double verticalLimit = bounds[yIndex * 2 + 1];
 
     double *spacing = m_2DViewer->getMainInput()->getSpacing();
-    double horizontalSpacingIncrement = spacing[xIndex];
     double verticalSpacingIncrement = spacing[yIndex];
 
     // Obtenim el punter al contenidor de píxels amb el que calcularem els valors
@@ -127,7 +126,7 @@ void ROITool::computeStatisticsData()
         intersectionList = getIntersectionPoints(polygonSegments, intersectedSegmentsIndexList, Line3D(Point3D(sweepLineBeginPoint), Point3D(sweepLineEndPoint)), xIndex);
 
         // Fem el recompte de píxels
-        addVoxelsFromIntersections(intersectionList, xIndex, horizontalSpacingIncrement, pixelData, phaseIndex);
+        addVoxelsFromIntersections(intersectionList, xIndex, pixelData, phaseIndex);
         
         // Desplacem la línia d'escombrat en la direcció que toca tant com espaiat de píxel tinguem en aquella direcció
         sweepLineBeginPoint[yIndex] += verticalSpacingIncrement;
@@ -240,11 +239,13 @@ QList<double*> ROITool::getIntersectionPoints(const QList<Line3D> &polygonSegmen
     return intersectionPoints;
 }
 
-void ROITool::addVoxelsFromIntersections(const QList<double*> &intersectionPoints, int scanDirectionIndex, double scanDirectionIncrement,
-    VolumePixelData *pixelData, int phaseIndex)
+void ROITool::addVoxelsFromIntersections(const QList<double*> &intersectionPoints, int scanDirectionIndex, VolumePixelData *pixelData, int phaseIndex)
 {
     if (MathTools::isEven(intersectionPoints.count()))
     {
+        double spacing[3];
+        pixelData->getSpacing(spacing);
+        double scanDirectionIncrement = spacing[scanDirectionIndex];
         int firstPointIndex;
         int secondPointIndex;
         int limit = intersectionPoints.count() / 2;

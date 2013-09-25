@@ -75,8 +75,7 @@ private:
     QList<double*> getIntersectionPoints(const QList<Line3D> &polygonSegments, const QList<int> &indexListOfSegmentsToIntersect,  const Line3D &sweepLine, int sortIndex);
 
     /// Adds the voxels that are in the path of the intersection points
-    void addVoxelsFromIntersections(const QList<double*> &intersectionPoints, int scanDirectionIndex, double scanDirectionIncrement, VolumePixelData *pixelData,
-        int phaseIndex);
+    void addVoxelsFromIntersections(const QList<double*> &intersectionPoints, int scanDirectionIndex, VolumePixelData *pixelData, int phaseIndex);
 
 private:
     /// Llista amb els valors de gris per calcular la mitjana i la desviació estàndard i altres dades estadístiques si cal.
