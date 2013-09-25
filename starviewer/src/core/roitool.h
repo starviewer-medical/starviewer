@@ -55,8 +55,8 @@ protected:
 
 private:
     /// Methods to compute statistics data, such as mean and standard deviation, upon the contained voxels on the ROI
-    void computeMean();
-    void computeStandardDeviation();
+    double computeMean(const QList<double> &grayValues);
+    double computeStandardDeviation(const QList<double> &grayValues);
     
     /// Calcula les dades estadístiques de la ROI.
     /// Serà necessari cridar aquest mètode abans si volem obtenir la mitjana i/o la desviació estàndar
