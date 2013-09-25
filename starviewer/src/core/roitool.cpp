@@ -87,12 +87,14 @@ void ROITool::computeStatisticsData(double &mean, double &standardDeviation)
     m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
 
     // Initialization of the sweep line
-    double sweepLineBeginPoint[3];
-    double sweepLineEndPoint[3];
+    
+    Point3D sweepLineBeginPoint;
     // Bounds xMin, yMin, zMin
     sweepLineBeginPoint[xIndex] = bounds[xIndex * 2];
     sweepLineBeginPoint[yIndex] = bounds[yIndex * 2];
     sweepLineBeginPoint[zIndex] = bounds[zIndex * 2];
+    
+    Point3D sweepLineEndPoint;
     // Bounds xMax, yMin, zMin
     sweepLineEndPoint[xIndex] = bounds[xIndex * 2 + 1];
     sweepLineEndPoint[yIndex] = bounds[yIndex * 2];
@@ -117,11 +119,11 @@ void ROITool::computeStatisticsData(double &mean, double &standardDeviation)
     QList<int> intersectedSegmentsIndexList;
     // Inicialitzem la llista de valors de gris
     QList<double> grayValues;
-    while (sweepLineBeginPoint[yIndex] <= verticalLimit)
+    while (sweepLineBeginPoint.at(yIndex) <= verticalLimit)
     {
-        intersectedSegmentsIndexList = getIndexOfSegmentsCrossingAtHeight(polygonSegments, sweepLineBeginPoint[yIndex], yIndex);
+        intersectedSegmentsIndexList = getIndexOfSegmentsCrossingAtHeight(polygonSegments, sweepLineBeginPoint.at(yIndex), yIndex);
         // Obtenim les interseccions entre tots els segments de la ROI i la línia d'escombrat actual
-        intersectionList = getIntersectionPoints(polygonSegments, intersectedSegmentsIndexList, Line3D(Point3D(sweepLineBeginPoint), Point3D(sweepLineEndPoint)), xIndex);
+        intersectionList = getIntersectionPoints(polygonSegments, intersectedSegmentsIndexList, Line3D(sweepLineBeginPoint, sweepLineEndPoint), xIndex);
 
         // Fem el recompte de píxels
         addVoxelsFromIntersections(intersectionList, xIndex, pixelData, phaseIndex, grayValues);
