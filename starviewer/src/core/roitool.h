@@ -47,12 +47,6 @@ protected:
     /// Per defecte el valor és true
     bool m_hasToComputeStatisticsData;
 
-    /// Mitjana de valors de la ROI
-    double m_mean;
-
-    /// Desviació estàndar de la ROI
-    double m_standardDeviation;
-
 private:
     /// Methods to compute statistics data, such as mean and standard deviation, upon the contained voxels on the ROI
     double computeMean(const QList<double> &grayValues);
@@ -60,7 +54,7 @@ private:
     
     /// Calcula les dades estadístiques de la ROI.
     /// Serà necessari cridar aquest mètode abans si volem obtenir la mitjana i/o la desviació estàndar
-    void computeStatisticsData();
+    void computeStatisticsData(double &mean, double &standardDeviation);
 
     /// Crea una còpia de m_roiPolygon, amb la diferència que aquesta tindrà el mateix valor de profunditat que la llesca actual
     /// Això ho necessitarem a l'hora de calcular els valors de vòxel, ja que la coordenada de profunditat de les annotacions
