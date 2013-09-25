@@ -33,6 +33,33 @@ public:
     /// Returns the voxel values properly formatted as a string.
     QString getAsQString();
 
+    /// Equality operator
+    bool operator==(const Voxel &voxel) const;
+
+    /// Substraction operator. The resulting voxel will have as many components as the Voxel with the most number of components.
+    /// The missing components on the corresponding side will be treated as its value is 0.
+    Voxel operator+(const Voxel &value) const;
+
+    /// Adds each component of the given voxel to this voxel. The resulting voxel will have as many components as the Voxel with the most number of components.
+    /// The missing components on the corresponding side will be treated as its value is 0.
+    Voxel& operator+=(const Voxel &voxel);
+    
+    /// Substraction operator. The resulting voxel will have as many components as the Voxel with the most number of components.
+    /// The missing components on the corresponding side will be treated as its value is 0.
+    Voxel operator-(const Voxel &value) const;
+
+    /// Substracts each component of the given voxel to this voxel. The resulting voxel will have as many components as the Voxel with the most number of components.
+    /// The missing components on the corresponding side will be treated as its value is 0.
+    Voxel& operator-=(const Voxel &voxel);
+    
+    /// Multiply operator. The resulting voxel will have as many components as the Voxel with the most number of components.
+    /// Each component will be multiplied by the component with the same index.
+    /// The missing components on the corresponding side will be treated as its value is 1.
+    Voxel operator*(const Voxel &value) const;
+    
+    /// Divides each component by the given value
+    Voxel Voxel::operator/(double value) const;
+
 private:
     /// Vector containing the values of each component of the voxel.
     QVector<double> m_values;

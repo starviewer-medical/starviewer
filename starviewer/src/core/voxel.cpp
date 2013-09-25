@@ -73,4 +73,96 @@ QString Voxel::getAsQString()
     return valueString;
 }
 
+bool Voxel::operator==(const Voxel &voxel) const
+{
+    if (getNumberOfComponents() != voxel.getNumberOfComponents())
+    {
+        return false;
+    }
+
+    bool areEqual = true;
+    for (int i = 0; i < getNumberOfComponents(); ++i)
+    {
+        areEqual = areEqual && m_values.at(i) == voxel.m_values.at(i);
+    }
+
+    return areEqual;
+}
+
+Voxel Voxel::operator+(const Voxel &value) const
+{
+    Voxel addedVoxel;
+
+    int numberOfComponents = qMax(getNumberOfComponents(), value.getNumberOfComponents());
+
+    for (int i = 0; i < numberOfComponents; ++i)
+    {
+        double value1 = getNumberOfComponents() > i ? m_values.at(i) : 0.0;
+        double value2 = value.getNumberOfComponents() > i ? value.m_values.at(i) : 0.0;
+        
+        addedVoxel.addComponent(value1 + value2);
+    }
+
+    return addedVoxel;
+}
+
+Voxel& Voxel::operator+=(const Voxel &voxel)
+{
+    *this = *this + voxel;
+    
+    return *this;
+}
+
+Voxel Voxel::operator-(const Voxel &value) const
+{
+    Voxel substractedVoxel;
+
+    int numberOfComponents = qMax(getNumberOfComponents(), value.getNumberOfComponents());
+
+    for (int i = 0; i < numberOfComponents; ++i)
+    {
+        double value1 = getNumberOfComponents() > i ? m_values.at(i) : 0.0;
+        double value2 = value.getNumberOfComponents() > i ? value.m_values.at(i) : 0.0;
+        
+        substractedVoxel.addComponent(value1 - value2);
+    }
+
+    return substractedVoxel;
+}
+
+Voxel& Voxel::operator-=(const Voxel &voxel)
+{
+    *this = *this - voxel;
+    
+    return *this;
+}
+
+Voxel Voxel::operator*(const Voxel &value) const
+{
+    Voxel multipliedVoxel;
+
+    int numberOfComponents = qMax(getNumberOfComponents(), value.getNumberOfComponents());
+
+    for (int i = 0; i < numberOfComponents; ++i)
+    {
+        double value1 = getNumberOfComponents() > i ? m_values.at(i) : 1.0;
+        double value2 = value.getNumberOfComponents() > i ? value.m_values.at(i) : 1.0;
+        
+        multipliedVoxel.addComponent(value1 * value2);
+    }
+
+    return multipliedVoxel;
+}
+
+Voxel Voxel::operator/(double value) const
+{
+    Voxel dividedVoxel;
+    for (int i = 0; i < getNumberOfComponents(); ++i)
+    {
+        dividedVoxel.addComponent(m_values.at(i) / value);
+    }
+
+    return dividedVoxel;
+}
+
 } // End namespace udg
