@@ -119,36 +119,47 @@ DcmDataset* DICOMTagReader::getDcmDataset() const
 
 bool DICOMTagReader::tagExists(const DICOMTag &tag) const
 {
-    if (m_dicomData)
+    if (!m_dicomData && !m_dicomHeader)
     {
-        return m_dicomData->tagExists(DcmTagKey(tag.getGroup(), tag.getElement()));
-    }
-    else
-    {
-        DEBUG_LOG("No hi ha cap m_dicomData (DcmDataset) carregat");
+        DEBUG_LOG("No dataset nor header is loaded.");
         return false;
     }
+
+    bool existsInDataset = m_dicomData && m_dicomData->tagExists(DcmTagKey(tag.getGroup(), tag.getElement()));
+    bool existsInHeader = m_dicomHeader && m_dicomHeader->tagExists(DcmTagKey(tag.getGroup(), tag.getElement()));
+
+    return existsInDataset || existsInHeader;
 }
 
 QString DICOMTagReader::getValueAttributeAsQString(const DICOMTag &tag) const
 {
-    if (!m_dicomData)
+    if (!m_dicomData && !m_dicomHeader)
     {
-        DEBUG_LOG("No hi ha cap m_dicomData (DcmDataset) carregat. Tornem string buida.");
+        DEBUG_LOG("No dataset nor header is loaded. Returning default QString.");
         return QString();
     }
 
+    // Look for the attribute in the dataset first; if not found, then look in the header
+    DcmItem *dcmItems[2] = { m_dicomData, m_dicomHeader };
     QString result;
 
-    OFString value;
-    OFCondition status = m_dicomData->findAndGetOFStringArray(DcmTagKey(tag.getGroup(), tag.getElement()), value);
-    if (status.good())
+    for (int i = 0; i < 2; i++)
     {
-        result = value.c_str();
-    }
-    else
-    {
-        logStatusForTagOperation(tag, status);
+        if (dcmItems[i])
+        {
+            OFString value;
+            OFCondition status = dcmItems[i]->findAndGetOFStringArray(DcmTagKey(tag.getGroup(), tag.getElement()), value);
+
+            if (status.good())
+            {
+                result = value.c_str();
+                break;
+            }
+            else
+            {
+                logStatusForTagOperation(tag, status);
+            }
+        }
     }
 
     return result;
@@ -156,24 +167,35 @@ QString DICOMTagReader::getValueAttributeAsQString(const DICOMTag &tag) const
 
 DICOMValueAttribute* DICOMTagReader::getValueAttribute(const DICOMTag &attributeTag) const
 {
-    if (!m_dicomData)
+    if (!m_dicomData && !m_dicomHeader)
     {
-        DEBUG_LOG("No hi ha cap m_dicomData (DcmDataset) carregat. Tornem nul.");
+        DEBUG_LOG("No dataset nor header is loaded. Returning null.");
         return 0;
     }
-    
+
+    // Look for the attribute in the dataset first; if not found, then look in the header
+    DcmItem *dcmItems[2] = { m_dicomData, m_dicomHeader };
     DICOMValueAttribute *valueAttribute = 0;
-    DcmElement *dicomElement = NULL;
-    OFCondition status = m_dicomData->findAndGetElement(DcmTagKey(attributeTag.getGroup(), attributeTag.getElement()), dicomElement);
-    if (status.good())
+
+    for (int i = 0; i < 2; i++)
     {
-        valueAttribute = convertToDICOMValueAttribute(dicomElement, DICOMTagReader::AllTags);
+        if (dcmItems[i])
+        {
+            DcmElement *dicomElement = NULL;
+            OFCondition status = m_dicomData->findAndGetElement(DcmTagKey(attributeTag.getGroup(), attributeTag.getElement()), dicomElement);
+
+            if (status.good())
+            {
+                valueAttribute = convertToDICOMValueAttribute(dicomElement, DICOMTagReader::AllTags);
+                break;
+            }
+            else
+            {
+                logStatusForTagOperation(attributeTag, status);
+            }
+        }
     }
-    else
-    {
-        logStatusForTagOperation(attributeTag, status);
-    }
-    
+
     return valueAttribute;
 }
 
