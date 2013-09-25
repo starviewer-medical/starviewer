@@ -103,11 +103,12 @@ void ROITool::computeStatisticsData(double &mean, double &standardDeviation)
     // Bounds yMax
     double verticalLimit = bounds[yIndex * 2 + 1];
 
-    double *spacing = m_2DViewer->getMainInput()->getSpacing();
-    double verticalSpacingIncrement = spacing[yIndex];
-
     // Obtenim el punter al contenidor de píxels amb el que calcularem els valors
     VolumePixelData *pixelData = m_2DViewer->getCurrentPixelData();
+    
+    double spacing[3];
+    pixelData->getSpacing(spacing);
+    double verticalSpacingIncrement = spacing[yIndex];
     
     int phaseIndex = 0;
     if (!m_2DViewer->isThickSlabActive() && m_2DViewer->getView() == OrthogonalPlane::XYPlane && m_2DViewer->hasPhases())
