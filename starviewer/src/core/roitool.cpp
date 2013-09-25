@@ -126,7 +126,7 @@ void ROITool::computeStatisticsData()
         intersectionList = getIntersectionPoints(polygonSegments, intersectedSegmentsIndexList, Line3D(Point3D(sweepLineBeginPoint), Point3D(sweepLineEndPoint)), xIndex);
 
         // Fem el recompte de píxels
-        addVoxelsFromIntersections(intersectionList, xIndex, pixelData, phaseIndex);
+        addVoxelsFromIntersections(intersectionList, xIndex, pixelData, phaseIndex, m_grayValues);
         
         // Desplacem la línia d'escombrat en la direcció que toca tant com espaiat de píxel tinguem en aquella direcció
         sweepLineBeginPoint[yIndex] += verticalSpacingIncrement;
@@ -233,7 +233,7 @@ QList<double*> ROITool::getIntersectionPoints(const QList<Line3D> &polygonSegmen
     return intersectionPoints;
 }
 
-void ROITool::addVoxelsFromIntersections(const QList<double*> &intersectionPoints, int scanDirectionIndex, VolumePixelData *pixelData, int phaseIndex)
+void ROITool::addVoxelsFromIntersections(const QList<double*> &intersectionPoints, int scanDirectionIndex, VolumePixelData *pixelData, int phaseIndex, QList<double> &grayValues)
 {
     if (MathTools::isEven(intersectionPoints.count()))
     {
@@ -260,7 +260,7 @@ void ROITool::addVoxelsFromIntersections(const QList<double*> &intersectionPoint
                     Voxel voxel = pixelData->getVoxelValue(firstIntersection, phaseIndex);
                     if (!voxel.isEmpty())
                     {
-                        m_grayValues << voxel.getComponent(0);
+                        grayValues << voxel.getComponent(0);
                     }
                     firstIntersection[scanDirectionIndex] += scanDirectionIncrement;
                 }
@@ -273,7 +273,7 @@ void ROITool::addVoxelsFromIntersections(const QList<double*> &intersectionPoint
                     Voxel voxel = pixelData->getVoxelValue(firstIntersection, phaseIndex);
                     if (!voxel.isEmpty())
                     {
-                        m_grayValues << voxel.getComponent(0);
+                        grayValues << voxel.getComponent(0);
                     }
                     firstIntersection[scanDirectionIndex] -= scanDirectionIncrement;
                 }
