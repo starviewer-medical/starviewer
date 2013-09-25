@@ -52,9 +52,8 @@ private:
     double computeMean(const QList<double> &grayValues);
     double computeStandardDeviation(const QList<double> &grayValues, double meanOfGrayValues);
     
-    /// Calcula les dades estadístiques de la ROI.
-    /// Serà necessari cridar aquest mètode abans si volem obtenir la mitjana i/o la desviació estàndar
-    StatisticsData computeStatisticsData();
+    /// Returns the list of StatisticsData for each input corresponding to the current ROI polygon
+    QList<StatisticsData> computeStatisticsData();
 
     /// Computes the voxel values contained inside polygonSegments corresponding to inputNumber volume. It will use the sweepLine algorithm, 
     /// begining with the line defined with the given points and will end at sweepLineEnd height

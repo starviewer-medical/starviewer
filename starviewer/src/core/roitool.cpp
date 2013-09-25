@@ -63,7 +63,7 @@ double ROITool::computeStandardDeviation(const QList<double> &grayValues, double
     return standardDeviation;
 }
 
-ROITool::StatisticsData ROITool::computeStatisticsData()
+QList<ROITool::StatisticsData> ROITool::computeStatisticsData()
 {
     Q_ASSERT(m_roiPolygon);
 
@@ -93,15 +93,22 @@ ROITool::StatisticsData ROITool::computeStatisticsData()
     // The ending height of the sweep line will be at the maximum y bounds of the polygon
     double verticalLimit = bounds[yIndex * 2 + 1];
 
-    // Compute the voxel values inside of the polygon
-    QList<double> grayValues = computeVoxelValues(m_roiPolygon->getSegments(), sweepLineBeginPoint, sweepLineEndPoint, verticalLimit, 0);
-    
-    // Once we've got the voxel data, compute statistics data
-    StatisticsData data;
-    data.m_mean = computeMean(grayValues);
-    data.m_standardDeviation = computeStandardDeviation(grayValues, data.m_mean);
+    // Compute statistics corresponding for each input
+    QList<StatisticsData> statisticsDataList;
+    for (int i = 0; i < m_2DViewer->getNumberOfInputs(); ++i)
+    {
+        // Compute the voxel values inside of the polygon
+        QList<double> grayValues = computeVoxelValues(m_roiPolygon->getSegments(), sweepLineBeginPoint, sweepLineEndPoint, verticalLimit, i);
+        
+        // Once we've got the voxel data, compute statistics data
+        StatisticsData data;
+        data.m_mean = computeMean(grayValues);
+        data.m_standardDeviation = computeStandardDeviation(grayValues, data.m_mean);
 
-    return data;
+        statisticsDataList << data;
+    }
+
+    return statisticsDataList;
 }
 
 QList<double> ROITool::computeVoxelValues(const QList<Line3D> &polygonSegments, Point3D sweepLineBeginPoint, Point3D sweepLineEndPoint, double sweepLineEnd, int inputNumber)
@@ -297,11 +304,23 @@ QString ROITool::getAnnotation()
     {
         // Calculem les dades estadístiques
         QApplication::setOverrideCursor(Qt::WaitCursor);
-        StatisticsData statistics = computeStatisticsData();
+        QList<StatisticsData> statistics = computeStatisticsData();
         QApplication::restoreOverrideCursor();
 
         // Afegim la informació de les dades estadístiques a l'annotació
-        annotation += tr("\nMean: %1\nSt.Dev.: %2").arg(statistics.m_mean, 0, 'f', 2).arg(statistics.m_standardDeviation, 0, 'f', 2);
+        QString meansString;
+        QString standardDeviationsString;
+        foreach (const StatisticsData &data, statistics)
+        {
+            if (!meansString.isEmpty())
+            {
+                meansString += "; ";
+                standardDeviationsString += "; ";
+            }
+            meansString += QString("%1").arg(data.m_mean, 0, 'f', 2);
+            standardDeviationsString += QString("%1").arg(data.m_standardDeviation, 0, 'f', 2);
+        }
+        annotation += tr("\nMean: %1\nSt.Dev.: %2").arg(meansString).arg(standardDeviationsString);
     }
 
     return annotation;
