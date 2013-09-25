@@ -42,13 +42,13 @@ double ROITool::computeMean(const QList<double> &grayValues)
     return mean;
 }
 
-double ROITool::computeStandardDeviation(const QList<double> &grayValues)
+double ROITool::computeStandardDeviation(const QList<double> &grayValues, double meanOfGrayValues)
 {
     double standardDeviation = 0.0;
     QList<double> deviations;
     foreach (double value, grayValues)
     {
-        double individualDeviation = value - m_mean;
+        double individualDeviation = value - meanOfGrayValues;
         deviations << (individualDeviation * individualDeviation);
     }
 
@@ -143,7 +143,7 @@ void ROITool::computeStatisticsData()
     m_mean = computeMean(grayValues);
 
     // Desviació estàndar
-    m_standardDeviation = computeStandardDeviation(grayValues);
+    m_standardDeviation = computeStandardDeviation(grayValues, m_mean);
 
     // Ja s'han calculat les dades estadístiques
     m_hasToComputeStatisticsData = false;
