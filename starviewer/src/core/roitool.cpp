@@ -120,13 +120,14 @@ QList<double> ROITool::computeVoxelValues(const QList<Line3D> &polygonSegments, 
         return QList<double>();
     }
     
+    OrthogonalPlane currentView = m_2DViewer->getView();
+    
     int phaseIndex = 0;
-    if (!m_2DViewer->isThickSlabActiveOnInput(inputNumber) && m_2DViewer->getView() == OrthogonalPlane::XYPlane && m_2DViewer->doesInputHavePhases(inputNumber))
+    if (!m_2DViewer->isThickSlabActiveOnInput(inputNumber) && currentView == OrthogonalPlane::XYPlane && m_2DViewer->doesInputHavePhases(inputNumber))
     {
         phaseIndex = m_2DViewer->getCurrentPhaseOnInput(inputNumber);
     }
 
-    OrthogonalPlane currentView = m_2DViewer->getView();
     int yIndex = currentView.getYIndex();
     
     double spacing[3];
