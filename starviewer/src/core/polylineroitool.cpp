@@ -134,9 +134,6 @@ void PolylineROITool::annotateNewPoint()
     }
     // Afegim el punt al polígon de la ROI
     m_roiPolygon->addVertix(pickedPoint);
-
-    // Com que estem afegint punts cal indicar que si és necessari recalcular les dades estadístiques
-    m_hasToComputeStatisticsData = true;
 }
 
 void PolylineROITool::simulateClosingPolyline()

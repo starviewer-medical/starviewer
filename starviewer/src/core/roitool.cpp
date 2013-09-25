@@ -14,7 +14,7 @@
 namespace udg {
 
 ROITool::ROITool(QViewer *viewer, QObject *parent)
- : MeasurementTool(viewer, parent), m_roiPolygon(0), m_hasToComputeStatisticsData(true)
+ : MeasurementTool(viewer, parent), m_roiPolygon(0)
 {
     m_toolName = "ROITool";
     m_hasSharedData = false;
@@ -66,12 +66,6 @@ double ROITool::computeStandardDeviation(const QList<double> &grayValues, double
 void ROITool::computeStatisticsData(double &mean, double &standardDeviation)
 {
     Q_ASSERT(m_roiPolygon);
-
-    // Només cal calcular les dades si és necessari
-    if (!m_hasToComputeStatisticsData)
-    {
-        return;
-    }
 
     // Creem una còpia de m_roiPolygon projectada a la mateixa profunditat que la llesca actual
     // Serà amb aquest polígon amb el que calcularem els corresponents valors de vòxel
@@ -144,9 +138,6 @@ void ROITool::computeStatisticsData(double &mean, double &standardDeviation)
 
     // Desviació estàndar
     standardDeviation = computeStandardDeviation(grayValues, mean);
-
-    // Ja s'han calculat les dades estadístiques
-    m_hasToComputeStatisticsData = false;
 }
 
 DrawerPolygon *ROITool::createProjectedROIPolygon()
