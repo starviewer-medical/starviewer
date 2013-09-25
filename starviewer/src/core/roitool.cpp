@@ -246,32 +246,34 @@ void ROITool::addVoxelsFromIntersections(const QList<double*> &intersectionPoint
             double *firstIntersection = intersectionPoints.at(firstPointIndex);
             double *secondIntersection = intersectionPoints.at(secondPointIndex);
 
-            // Tractem els dos sentits de les interseccions
-            // D'esquerra cap a dreta
+            // First we check which will be the direction of the scan line
+            Point3D currentScanLinePoint;
+            double scanLineEnd;
             if (firstIntersection[scanDirectionIndex] <= secondIntersection[scanDirectionIndex])
             {
-                while (firstIntersection[scanDirectionIndex] <= secondIntersection[scanDirectionIndex])
+                for (int i = 0; i < 3; ++i)
                 {
-                    Voxel voxel = pixelData->getVoxelValue(firstIntersection, phaseIndex);
-                    if (!voxel.isEmpty())
-                    {
-                        grayValues << voxel.getComponent(0);
-                    }
-                    firstIntersection[scanDirectionIndex] += scanDirectionIncrement;
+                    currentScanLinePoint[i] = firstIntersection[i];
                 }
+                scanLineEnd = secondIntersection[scanDirectionIndex];
             }
-            // I de dreta cap a esquerra
             else
             {
-                while (firstIntersection[scanDirectionIndex] >= secondIntersection[scanDirectionIndex])
+                for (int i = 0; i < 3; ++i)
                 {
-                    Voxel voxel = pixelData->getVoxelValue(firstIntersection, phaseIndex);
-                    if (!voxel.isEmpty())
-                    {
-                        grayValues << voxel.getComponent(0);
-                    }
-                    firstIntersection[scanDirectionIndex] -= scanDirectionIncrement;
+                    currentScanLinePoint[i] = secondIntersection[i];
                 }
+                scanLineEnd = firstIntersection[scanDirectionIndex];
+            }
+            // Then we scan and get the voxels along the line
+            while (currentScanLinePoint.at(scanDirectionIndex) <= scanLineEnd)
+            {
+                Voxel voxel = pixelData->getVoxelValue(currentScanLinePoint.getAsDoubleArray(), phaseIndex);
+                if (!voxel.isEmpty())
+                {
+                    grayValues << voxel.getComponent(0);
+                }
+                currentScanLinePoint[scanDirectionIndex] += scanDirectionIncrement;
             }
         }
     }
