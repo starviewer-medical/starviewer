@@ -196,6 +196,9 @@ bool ImageFillerStep::fillCommonImageInformation(Image *image, DICOMTagReader *d
     // C.9 Overlays
     image->setNumberOfOverlays(getNumberOfOverlays(dicomReader));
 
+    // Transfer Syntax UID
+    image->setTransferSyntaxUID(dicomReader->getValueAttributeAsQString(DICOMTransferSyntaxUID));
+
     return true;
 }
 
