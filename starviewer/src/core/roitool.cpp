@@ -94,7 +94,7 @@ ROITool::StatisticsData ROITool::computeStatisticsData()
     double verticalLimit = bounds[yIndex * 2 + 1];
 
     // Compute the voxel values inside of the polygon
-    QList<double> grayValues = computeVoxelValues(m_roiPolygon->getSegments(), sweepLineBeginPoint, sweepLineEndPoint, verticalLimit);
+    QList<double> grayValues = computeVoxelValues(m_roiPolygon->getSegments(), sweepLineBeginPoint, sweepLineEndPoint, verticalLimit, 0);
     
     // Once we've got the voxel data, compute statistics data
     StatisticsData data;
@@ -104,15 +104,19 @@ ROITool::StatisticsData ROITool::computeStatisticsData()
     return data;
 }
 
-QList<double> ROITool::computeVoxelValues(const QList<Line3D> &polygonSegments, Point3D sweepLineBeginPoint, Point3D sweepLineEndPoint, double sweepLineEnd)
+QList<double> ROITool::computeVoxelValues(const QList<Line3D> &polygonSegments, Point3D sweepLineBeginPoint, Point3D sweepLineEndPoint, double sweepLineEnd, int inputNumber)
 {
     // We get the pointer of the pixel data to obtain voxels values from
-    VolumePixelData *pixelData = m_2DViewer->getCurrentPixelData();
+    VolumePixelData *pixelData = m_2DViewer->getCurrentPixelDataFromInput(inputNumber);
+    if (!pixelData)
+    {
+        return QList<double>();
+    }
     
     int phaseIndex = 0;
-    if (!m_2DViewer->isThickSlabActive() && m_2DViewer->getView() == OrthogonalPlane::XYPlane && m_2DViewer->hasPhases())
+    if (!m_2DViewer->isThickSlabActiveOnInput(inputNumber) && m_2DViewer->getView() == OrthogonalPlane::XYPlane && m_2DViewer->doesInputHavePhases(inputNumber))
     {
-        phaseIndex = m_2DViewer->getCurrentPhase();
+        phaseIndex = m_2DViewer->getCurrentPhaseOnInput(inputNumber);
     }
 
     OrthogonalPlane currentView = m_2DViewer->getView();
@@ -122,7 +126,7 @@ QList<double> ROITool::computeVoxelValues(const QList<Line3D> &polygonSegments, 
     pixelData->getSpacing(spacing);
     double verticalSpacingIncrement = spacing[yIndex];
     
-    double currentZDepth = m_2DViewer->getCurrentDisplayedImageDepth();
+    double currentZDepth = m_2DViewer->getCurrentDisplayedImageDepthOnInput(inputNumber);
     
     QList<double*> intersectionList;
     // Voxel values list

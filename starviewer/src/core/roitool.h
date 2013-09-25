@@ -56,9 +56,9 @@ private:
     /// Serà necessari cridar aquest mètode abans si volem obtenir la mitjana i/o la desviació estàndar
     StatisticsData computeStatisticsData();
 
-    /// Computes the voxel values contained inside polygonSegments. It will use the sweepLine algorithm, begining with the line defined 
-    /// with the given points and will end at sweepLineEnd height
-    QList<double> computeVoxelValues(const QList<Line3D> &polygonSegments, Point3D sweepLineBeginPoint, Point3D sweepLineEndPoint, double sweepLineEnd);
+    /// Computes the voxel values contained inside polygonSegments corresponding to inputNumber volume. It will use the sweepLine algorithm, 
+    /// begining with the line defined with the given points and will end at sweepLineEnd height
+    QList<double> computeVoxelValues(const QList<Line3D> &polygonSegments, Point3D sweepLineBeginPoint, Point3D sweepLineEndPoint, double sweepLineEnd, int inputNumber);
     
     /// Returns a list with the indices of the corresponding segments of the given list which crosses the given height, that is, those segments
     /// which its initial and end point are between the specified heigh on the heightIndex
