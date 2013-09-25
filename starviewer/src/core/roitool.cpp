@@ -67,41 +67,38 @@ ROITool::StatisticsData ROITool::computeStatisticsData()
 {
     Q_ASSERT(m_roiPolygon);
 
-    // Traçarem una lína d'escombrat dins de la regió quadrangular que ocupa el polígon
-    // Aquesta línia produirà unes interseccions amb els segments del polígon
-    // Les interseccions marcaran el camí a seguir per fer el recompte de vòxels
+    // To compute the voxels inside the polygon we'll use the sweep line algorithm approach
+    // tracing a set of lines within the bounds of the drawn polygon. Upon the resulting intersections between polygon segments and sweep lines
+    // we will be able to compute which points of the line are inside of the polygon and get the corresponding voxel values.
+    // The sweep lines will be horizontal and swept down in vertical direction
     double bounds[6];
     m_roiPolygon->getBounds(bounds);
 
     int xIndex, yIndex, zIndex;
     m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
 
-    // Initialization of the sweep line
-    
+    // Building up the initial sweep line
+    // First point of the sweep line, will be at the minimum x, y, z bounds of the polygon
     Point3D sweepLineBeginPoint;
-    // Bounds xMin, yMin, zMin
     sweepLineBeginPoint[xIndex] = bounds[xIndex * 2];
     sweepLineBeginPoint[yIndex] = bounds[yIndex * 2];
     sweepLineBeginPoint[zIndex] = bounds[zIndex * 2];
     
+    // Second point of the sweep line, will be the same as the first but with the maximum x bounds of the polygon so it will trace an horizontal line
     Point3D sweepLineEndPoint;
-    // Bounds xMax, yMin, zMin
     sweepLineEndPoint[xIndex] = bounds[xIndex * 2 + 1];
     sweepLineEndPoint[yIndex] = bounds[yIndex * 2];
     sweepLineEndPoint[zIndex] = bounds[zIndex * 2];
 
-    // Bounds yMax
+    // The ending height of the sweep line will be at the maximum y bounds of the polygon
     double verticalLimit = bounds[yIndex * 2 + 1];
 
     // Compute the voxel values inside of the polygon
     QList<double> grayValues = computeVoxelValues(m_roiPolygon->getSegments(), sweepLineBeginPoint, sweepLineEndPoint, verticalLimit);
     
-    // Un cop hem obtingut les dades necessàries, calculem la mitjana i la desviació estàndar
+    // Once we've got the voxel data, compute statistics data
     StatisticsData data;
-    // Mitjana
     data.m_mean = computeMean(grayValues);
-
-    // Desviació estàndar
     data.m_standardDeviation = computeStandardDeviation(grayValues, data.m_mean);
 
     return data;
@@ -109,7 +106,7 @@ ROITool::StatisticsData ROITool::computeStatisticsData()
 
 QList<double> ROITool::computeVoxelValues(const QList<Line3D> &polygonSegments, Point3D sweepLineBeginPoint, Point3D sweepLineEndPoint, double sweepLineEnd)
 {
-    // Obtenim el punter al contenidor de píxels amb el que calcularem els valors
+    // We get the pointer of the pixel data to obtain voxels values from
     VolumePixelData *pixelData = m_2DViewer->getCurrentPixelData();
     
     int phaseIndex = 0;
@@ -128,17 +125,17 @@ QList<double> ROITool::computeVoxelValues(const QList<Line3D> &polygonSegments, 
     double currentZDepth = m_2DViewer->getCurrentDisplayedImageDepth();
     
     QList<double*> intersectionList;
-    // Inicialitzem la llista de valors de gris
+    // Voxel values list
     QList<double> voxelValues;
     while (sweepLineBeginPoint.at(yIndex) <= sweepLineEnd)
     {
-        // Obtenim les interseccions entre tots els segments de la ROI i la línia d'escombrat actual
+        // We get the intersections bewteen ROI segments and current sweep line
         intersectionList = getIntersectionPoints(polygonSegments, Line3D(sweepLineBeginPoint, sweepLineEndPoint), currentView);
 
-        // Fem el recompte de píxels
+        // Adding the voxels from the current intersections of the current sweep line to the voxel values list
         addVoxelsFromIntersections(intersectionList, currentZDepth, currentView, pixelData, phaseIndex, voxelValues);
         
-        // Desplacem la línia d'escombrat en la direcció que toca tant com espaiat de píxel tinguem en aquella direcció
+        // Shift the sweep line the corresponding space in vertical direction
         sweepLineBeginPoint[yIndex] += verticalSpacingIncrement;
         sweepLineEndPoint[yIndex] += verticalSpacingIncrement;
     }
@@ -178,7 +175,7 @@ QList<double*> ROITool::getIntersectionPoints(const QList<Line3D> &polygonSegmen
                                                                     intersectionState);
         if (intersectionState == MathTools::LinesIntersect)
         {
-            // Cal ordenar les interseccions en la direcció horitzontal per tal que el recompte de píxels es faci correctament
+            // Must sort intersections horizontally in order to be able to get voxels inside polygon correctly
             bool found = false;
             int i = 0;
             while (!found && i < intersectionPoints.count())
@@ -193,7 +190,7 @@ QList<double*> ROITool::getIntersectionPoints(const QList<Line3D> &polygonSegmen
                     ++i;
                 }
             }
-            // Si tots els punts són més grans, cal inserir la intersecció al final
+            // If not found, it means it is the greatest point and must be placed at the end
             if (!found)
             {
                 intersectionPoints << foundPoint;
