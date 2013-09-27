@@ -272,54 +272,22 @@ void Q2DViewer::updatePreferredImageOrientation()
 
 double Q2DViewer::getCurrentSliceThickness() const
 {
-    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
-    if (mainDisplayUnit)
-    {
-        return mainDisplayUnit->getSliceThickness();
-    }
-    else
-    {
-        return 0.0;
-    }
+    return getMainDisplayUnit()->getSliceThickness();
 }
 
 int Q2DViewer::getMinimumSlice() const
 {
-    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
-    if (mainDisplayUnit)
-    {
-        return mainDisplayUnit->getMinimumSlice();
-    }
-    else
-    {
-        return 0;
-    }
+    return getMainDisplayUnit()->getMinimumSlice();
 }
 
 int Q2DViewer::getMaximumSlice() const
 {
-    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
-    if (mainDisplayUnit)
-    {
-        return mainDisplayUnit->getMaximumSlice();
-    }
-    else
-    {
-        return 0;
-    }
+    return getMainDisplayUnit()->getMaximumSlice();
 }
 
 int Q2DViewer::getNumberOfSlices() const
 {
-    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
-    if (mainDisplayUnit)
-    {
-        return mainDisplayUnit->getNumberOfSlices();
-    }
-    else
-    {
-        return 1;
-    }
+    return getMainDisplayUnit()->getNumberOfSlices();
 }
 
 int Q2DViewer::getNumberOfPhases() const
@@ -726,8 +694,7 @@ Volume* Q2DViewer::getOverlayInput()
 
 void Q2DViewer::updateOverlay()
 {
-    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
-    if (!mainDisplayUnit)
+    if (!hasInput())
     {
         return;
     }
@@ -736,7 +703,7 @@ void Q2DViewer::updateOverlay()
     {
         case None:
             // Actualitzem el pipeline
-            mainDisplayUnit->getImagePipeline()->setInput(getMainInput()->getVtkData());
+            getMainDisplayUnit()->getImagePipeline()->setInput(getMainInput()->getVtkData());
             // TODO aquest procediment és possible que sigui insuficient,
             // caldria unficar el pipeline en un mateix mètode
             break;
@@ -745,7 +712,7 @@ void Q2DViewer::updateOverlay()
             // TODO Revisar la manera de donar-li l'input d'un blending al visualitzador
             // Aquest procediment podria ser insuficent de cares a com estigui construit el pipeline
             m_blender->update();
-            mainDisplayUnit->getImagePipeline()->setInput(m_blender->getOutput());
+            getMainDisplayUnit()->getImagePipeline()->setInput(m_blender->getOutput());
             break;
     }
 
@@ -759,30 +726,12 @@ void Q2DViewer::setOverlayOpacity(double opacity)
 
 Volume* Q2DViewer::getMainInput() const
 {
-    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
-
-    if (mainDisplayUnit)
-    {
-        return mainDisplayUnit->getVolume();
-    }
-    else
-    {
-        return 0;
-    }
+    return getMainDisplayUnit()->getVolume();
 }
 
 Volume* Q2DViewer::getInput(int i) const
 {
-    VolumeDisplayUnit *unit = getDisplayUnit(i);
-
-    if (unit)
-    {
-        return unit->getVolume();
-    }
-    else
-    {
-        return 0;
-    }
+    return getDisplayUnit(i)->getVolume();
 }
 
 int Q2DViewer::getNumberOfInputs() const
@@ -824,14 +773,13 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
     
     resetCamera();
     
-    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
-    if (mainDisplayUnit)
+    if (hasInput())
     {
         // Calculem la llesca que cal mostrar segons la vista escollida
         int initialSliceIndex = 0;
         if (getCurrentViewPlane() == OrthogonalPlane::YZPlane || getCurrentViewPlane() == OrthogonalPlane::XZPlane)
         {
-            initialSliceIndex = mainDisplayUnit->getMaximumSlice() / 2;
+            initialSliceIndex = getMainDisplayUnit()->getMaximumSlice() / 2;
         }
         setSlice(initialSliceIndex);
         // Adapt the camera to the new view plane in order to make actors visible
@@ -962,19 +910,18 @@ void Q2DViewer::setPhase(int value)
 
 void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
 {
-    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
-    if (mainDisplayUnit)
+    if (hasInput())
     {
         // First update the index of the corresponding dimension
         switch (dimension)
         {
             case SpatialDimension:
-                mainDisplayUnit->setSlice(value);
+                getMainDisplayUnit()->setSlice(value);
                 updateSecondaryVolumesSlices();
                 break;
 
             case TemporalDimension:
-                mainDisplayUnit->setPhase(value);
+                getMainDisplayUnit()->setPhase(value);
                 break;
         }
 
@@ -1044,11 +991,7 @@ void Q2DViewer::setOverlapMethod(OverlapMethod method)
     
     if (m_overlapMethod == Q2DViewer::None)
     {
-        VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
-        if (mainDisplayUnit)
-        {
-            mainDisplayUnit->getImagePipeline()->setInput(getMainInput()->getVtkData());
-        }
+        getMainDisplayUnit()->getImagePipeline()->setInput(getMainInput()->getVtkData());
     }
 }
 
@@ -1076,10 +1019,9 @@ void Q2DViewer::resizeEvent(QResizeEvent *resize)
 
 void Q2DViewer::setWindowLevel(double window, double level)
 {
-    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
-    if (mainDisplayUnit)
+    if (hasInput())
     {
-        mainDisplayUnit->setWindowLevel(window,level);
+        getMainDisplayUnit()->setWindowLevel(window,level);
         m_annotationsHandler->updateAnnotationsInformation(WindowInformationAnnotation);
         render();
         emit windowLevelChanged(window, level);
@@ -1094,37 +1036,17 @@ void Q2DViewer::setTransferFunction(TransferFunction *transferFunction)
 {
     m_transferFunction = transferFunction;
     // Apliquem la funció de transferència sobre el window level mapper
-    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
-    if (mainDisplayUnit)
-    {
-        mainDisplayUnit->setTransferFunction(*m_transferFunction);
-    }
+    getMainDisplayUnit()->setTransferFunction(*m_transferFunction);
 }
 
 void Q2DViewer::getCurrentWindowLevel(double wl[2])
 {
-    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
-    if (mainDisplayUnit)
-    {
-        mainDisplayUnit->getWindowLevel(wl);
-    }
-    else
-    {
-        DEBUG_LOG("::getCurrentWindowLevel() : No tenim input ");
-    }
+    getMainDisplayUnit()->getWindowLevel(wl);
 }
 
 int Q2DViewer::getCurrentSlice() const
 {
-    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
-    if (mainDisplayUnit)
-    {
-        return mainDisplayUnit->getSlice();
-    }
-    else
-    {
-        return 0;
-    }
+    return getMainDisplayUnit()->getSlice();
 }
 
 int Q2DViewer::getCurrentPhase() const
@@ -1134,27 +1056,12 @@ int Q2DViewer::getCurrentPhase() const
 
 int Q2DViewer::getCurrentPhaseOnInput(int i) const
 {
-    VolumeDisplayUnit *unit = getDisplayUnit(i);
-    if (unit)
-    {
-        return unit->getPhase();
-    }
-    else
-    {
-        return 0;
-    }
+    return getDisplayUnit(i)->getPhase();
 }
 
 Image* Q2DViewer::getCurrentDisplayedImage() const
 {
-    if (hasInput())
-    {
-        return getMainDisplayUnit()->getCurrentDisplayedImage();
-    }
-    else
-    {
-        return 0;
-    }
+    return getMainDisplayUnit()->getCurrentDisplayedImage();
 }
 
 ImagePlane* Q2DViewer::getCurrentImagePlane(bool vtkReconstructionHack)
@@ -1261,16 +1168,7 @@ OrthogonalPlane Q2DViewer::getView() const
 
 OrthogonalPlane Q2DViewer::getViewOnInput(int i) const
 {
-    VolumeDisplayUnit *unit = getDisplayUnit(i);
-
-    if (unit)
-    {
-        return unit->getViewPlane();
-    }
-    else
-    {
-        return OrthogonalPlane();
-    }
+    return getDisplayUnit(i)->getViewPlane();
 }
 
 QList<Volume*> Q2DViewer::getInputs()
@@ -1374,10 +1272,9 @@ void Q2DViewer::printVolumeInformation()
 void Q2DViewer::setSlabProjectionMode(int projectionMode)
 {
     m_slabProjectionMode = projectionMode;
-    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
-    if (mainDisplayUnit)
+    if (hasInput())
     {
-        mainDisplayUnit->setSlabProjectionMode(static_cast<AccumulatorFactory::AccumulatorType>(m_slabProjectionMode));
+        getMainDisplayUnit()->setSlabProjectionMode(static_cast<AccumulatorFactory::AccumulatorType>(m_slabProjectionMode));
         updateDisplayExtents();
         render();
     }
@@ -1390,12 +1287,12 @@ int Q2DViewer::getSlabProjectionMode() const
 
 void Q2DViewer::setSlabThickness(int thickness)
 {
-    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
-    if (!mainDisplayUnit)
+    if (!hasInput())
     {
         return;
     }
     
+    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
     // Primera aproximació per evitar error dades de primitives: a l'activar o desactivar l'slabthickness, esborrem primitives
     if (thickness != mainDisplayUnit->getSlabThickness())
     {
@@ -1415,15 +1312,7 @@ void Q2DViewer::setSlabThickness(int thickness)
 
 int Q2DViewer::getSlabThickness() const
 {
-    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
-    if (mainDisplayUnit)
-    {
-        return mainDisplayUnit->getSlabThickness();
-    }
-    else
-    {
-        return 1;
-    }
+    return getMainDisplayUnit()->getSlabThickness();
 }
 
 void Q2DViewer::disableThickSlab()
@@ -1438,16 +1327,7 @@ bool Q2DViewer::isThickSlabActive() const
 
 bool Q2DViewer::isThickSlabActiveOnInput(int i) const
 {
-    VolumeDisplayUnit *unit = getDisplayUnit(i);
-
-    if (unit)
-    {
-        return unit->isThickSlabActive();
-    }
-    else
-    {
-        return false;
-    }
+    return getDisplayUnit(i)->isThickSlabActive();
 }
 
 void Q2DViewer::putCoordinateInCurrentImageBounds(double xyz[3])
@@ -1483,27 +1363,12 @@ void Q2DViewer::putCoordinateInCurrentImageBounds(double xyz[3])
 
 VolumePixelData* Q2DViewer::getCurrentPixelData()
 {
-    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
-    if (!mainDisplayUnit)
-    {
-        return 0;
-    }
-    
-    return mainDisplayUnit->getCurrentPixelData();
+    return getMainDisplayUnit()->getCurrentPixelData();
 }
 
 VolumePixelData* Q2DViewer::getCurrentPixelDataFromInput(int i)
 {
-    VolumeDisplayUnit *unit = getDisplayUnit(i);
-
-    if (unit)
-    {
-        return unit->getCurrentPixelData();
-    }
-    else
-    {
-        return 0;
-    }
+    return getDisplayUnit(i)->getCurrentPixelData();
 }
 
 void Q2DViewer::restore()
@@ -1720,11 +1585,7 @@ void Q2DViewer::applyImageOrientationChanges()
 
 void Q2DViewer::getCurrentRenderedItemBounds(double bounds[6])
 {
-    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
-    if (mainDisplayUnit)
-    {
-        mainDisplayUnit->getImageActor()->GetBounds(bounds);
-    }
+    getMainDisplayUnit()->getImageActor()->GetBounds(bounds);
 }
 
 void Q2DViewer::updateCurrentImageDefaultPresets()
@@ -1740,15 +1601,7 @@ void Q2DViewer::updateCurrentImageDefaultPresets()
 
 double Q2DViewer::getCurrentSpacingBetweenSlices()
 {
-    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
-    if (mainDisplayUnit)
-    {
-        return mainDisplayUnit->getCurrentSpacingBetweenSlices();
-    }
-    else
-    {
-        return 0.0;
-    }
+    return getMainDisplayUnit()->getCurrentSpacingBetweenSlices();
 }
 
 double Q2DViewer::getCurrentDisplayedImageDepth() const
@@ -1758,16 +1611,7 @@ double Q2DViewer::getCurrentDisplayedImageDepth() const
 
 double Q2DViewer::getCurrentDisplayedImageDepthOnInput(int i) const
 {
-    VolumeDisplayUnit *displayUnit = getDisplayUnit(i);
-    
-    if (displayUnit)
-    {
-        return displayUnit->getCurrentDisplayedImageDepth();
-    }
-    else
-    {
-        return 0.0;
-    }
+    return getDisplayUnit(i)->getCurrentDisplayedImageDepth();
 }
 
 QList<vtkImageActor*> Q2DViewer::getVtkImageActorsList() const
@@ -1822,11 +1666,7 @@ void Q2DViewer::updateDisplayShutterMask()
         }
     }
     
-    VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
-    if (mainDisplayUnit)
-    {
-        mainDisplayUnit->setShutterData(shutterData);
-    }
+    getMainDisplayUnit()->setShutterData(shutterData);
 }
 
 OrthogonalPlane Q2DViewer::getCurrentViewPlane() const
@@ -1846,20 +1686,12 @@ void Q2DViewer::setCurrentViewPlane(const OrthogonalPlane &viewPlane)
 
 void Q2DViewer::setVolumeOpacity(int index, double opacity)
 {
-    VolumeDisplayUnit *unit = getDisplayUnit(index);
-    if (unit)
-    {
-        unit->getImageActor()->SetOpacity(opacity);
-    }
+    getDisplayUnit(index)->getImageActor()->SetOpacity(opacity);
 }
 
 void Q2DViewer::setVolumeTransferFunction(int index, const TransferFunction &transferFunction)
 {
-    VolumeDisplayUnit *unit = getDisplayUnit(index);
-    if (unit)
-    {
-        unit->setTransferFunction(transferFunction);
-    }
+    getDisplayUnit(index)->setTransferFunction(transferFunction);
 }
 
 VolumeDisplayUnit* Q2DViewer::getDisplayUnit(int index) const
