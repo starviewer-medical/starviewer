@@ -52,6 +52,7 @@ Q2DViewer::Q2DViewer(QWidget *parent)
   m_isImageFlipped(false), m_slabProjectionMode(AccumulatorFactory::Maximum)
 {
     m_displayUnitsFactory = new VolumeDisplayUnitHandlerFactory;
+    m_dummyDisplayUnit = new VolumeDisplayUnit;
     m_volumeReaderManager = new VolumeReaderManager(this);
     m_inputFinishedCommand = NULL;
 
@@ -77,6 +78,7 @@ Q2DViewer::Q2DViewer(QWidget *parent)
 Q2DViewer::~Q2DViewer()
 {
     delete m_displayUnitsFactory;
+    delete m_dummyDisplayUnit;
     // Fem delete d'altres objectes vtk en cas que s'hagin hagut de crear
     delete m_blender;
 
@@ -1862,9 +1864,9 @@ void Q2DViewer::setVolumeTransferFunction(int index, const TransferFunction &tra
 
 VolumeDisplayUnit* Q2DViewer::getDisplayUnit(int index) const
 {
-    if (!m_displayUnitsHandler)
+    if (m_displayUnitsHandler.isNull() || !MathTools::isInsideRange(index, 0, getNumberOfInputs()))
     {
-        return 0;
+        return m_dummyDisplayUnit;
     }
 
     return m_displayUnitsHandler->getVolumeDisplayUnit(index);
