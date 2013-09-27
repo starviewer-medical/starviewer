@@ -104,7 +104,8 @@ QList<ROITool::StatisticsData> ROITool::computeStatisticsData()
         StatisticsData data;
         data.m_mean = computeMean(grayValues);
         data.m_standardDeviation = computeStandardDeviation(grayValues, data.m_mean);
-
+        data.m_units = m_2DViewer->getInput(i)->getPixelUnits();
+        
         statisticsDataList << data;
     }
 
@@ -317,6 +318,13 @@ QString ROITool::getAnnotation()
             }
             meansString += QString("%1").arg(data.m_mean, 0, 'f', 2);
             standardDeviationsString += QString("%1").arg(data.m_standardDeviation, 0, 'f', 2);
+
+            if (!data.m_units.isEmpty())
+            {
+                QString unitsSuffix = " " + data.m_units;
+                meansString += unitsSuffix;
+                standardDeviationsString += unitsSuffix;
+            }
         }
         annotation += tr("\nMean: %1\nSt.Dev.: %2").arg(meansString).arg(standardDeviationsString);
     }

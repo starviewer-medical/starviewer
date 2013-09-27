@@ -46,6 +46,7 @@ private:
     {
         double m_mean;
         double m_standardDeviation;
+        QString m_units;
     } StatisticsData;
     
     /// Methods to compute statistics data, such as mean and standard deviation, upon the contained voxels on the ROI
