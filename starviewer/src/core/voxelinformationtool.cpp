@@ -81,7 +81,7 @@ void VoxelInformationTool::updateCaption()
         double xyz[3];
         if (m_2DViewer->getCurrentCursorImageCoordinateOnInput(xyz, i))
         {
-            inputsCaptions << computeVoxelValueOnInput(xyz, i);
+            inputsCaptions << computeVoxelValueOnInput(xyz, i) + " " + m_2DViewer->getInput(i)->getPixelUnits();
         }
     }
 
