@@ -1896,12 +1896,7 @@ VolumeDisplayUnit* Q2DViewer::getDisplayUnit(int index) const
 
 VolumeDisplayUnit* Q2DViewer::getMainDisplayUnit() const
 {
-    if (!m_displayUnitsHandler)
-    {
-        return 0;
-    }
-
-    return m_displayUnitsHandler->getMainVolumeDisplayUnit();
+    return getDisplayUnit(0);
 }
 
 };  // End namespace udg
