@@ -326,6 +326,25 @@ Image* Volume::getImage(int sliceNumber, int phaseNumber) const
     return image;
 }
 
+const QString Volume::getPixelUnits() const
+{
+    QString units;
+    Image *image = getImage(0);
+    if (image)
+    {
+        if (image->getParentSeries())
+        {
+            QString modality = image->getParentSeries()->getModality();
+            if (modality == "CT")
+            {
+                units = "HU";
+            }
+        }
+    }
+
+    return units;
+}
+
 ImagePlane* Volume::getImagePlane(int sliceNumber, const OrthogonalPlane &plane, bool vtkReconstructionHack)
 {
     ImagePlane *imagePlane = 0;

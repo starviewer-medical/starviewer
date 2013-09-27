@@ -128,6 +128,9 @@ public:
     /// @return The corresponding image plane
     ImagePlane* getImagePlane(int sliceNumber, const OrthogonalPlane &plane, bool vtkReconstructionHack = false);
     
+    /// Returns the pixel units for this volume. If the units cannot be specified, an empty string will be returned
+    const QString getPixelUnits() const;
+    
     /// Returns the slice range of the current volume corresponding to an specified orthogonal plane
     void getSliceRange(int &min, int &max, const OrthogonalPlane &plane);
 
