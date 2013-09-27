@@ -779,7 +779,7 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
         int initialSliceIndex = 0;
         if (getCurrentViewPlane() == OrthogonalPlane::YZPlane || getCurrentViewPlane() == OrthogonalPlane::XZPlane)
         {
-            initialSliceIndex = getMainDisplayUnit()->getMaximumSlice() / 2;
+            initialSliceIndex = getMaximumSlice() / 2;
         }
         setSlice(initialSliceIndex);
         // Adapt the camera to the new view plane in order to make actors visible
