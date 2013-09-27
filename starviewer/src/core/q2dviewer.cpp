@@ -445,6 +445,11 @@ void Q2DViewer::executeInputFinishedCommand()
     {
         m_inputFinishedCommand->execute();
     }
+    else
+    {
+        // If no command is defined, we render by default
+        render();
+    }
 }
 
 void Q2DViewer::setInputFinishedCommand(QViewerCommand *command)
