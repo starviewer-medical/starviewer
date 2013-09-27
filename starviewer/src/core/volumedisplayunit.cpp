@@ -147,6 +147,18 @@ VolumePixelData* VolumeDisplayUnit::getCurrentPixelData()
     }
 }
 
+Image* VolumeDisplayUnit::getCurrentDisplayedImage() const
+{
+    if (m_volume && getViewPlane() == OrthogonalPlane::XYPlane)
+    {
+        return m_volume->getImage(m_sliceHandler->getCurrentSlice(), m_sliceHandler->getCurrentPhase());
+    }
+    else
+    {
+        return 0;
+    }
+}
+
 void VolumeDisplayUnit::updateDisplayExtent()
 {
     if (!m_volume || !m_volume->isPixelDataLoaded())

@@ -1156,9 +1156,9 @@ int Q2DViewer::getCurrentPhaseOnInput(int i) const
 
 Image* Q2DViewer::getCurrentDisplayedImage() const
 {
-    if (getCurrentViewPlane() == OrthogonalPlane::XYPlane)
+    if (hasInput())
     {
-        return getMainInput()->getImage(getCurrentSlice(), getCurrentPhase());
+        return getMainDisplayUnit()->getCurrentDisplayedImage();
     }
     else
     {
