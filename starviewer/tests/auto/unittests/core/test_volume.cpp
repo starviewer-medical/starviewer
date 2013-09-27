@@ -2,7 +2,9 @@
 
 #include "volume.h"
 #include "image.h"
+#include "series.h"
 #include "volumetesthelper.h"
+#include "seriestesthelper.h"
 #include "volumepixeldatatesthelper.h"
 #include "imagetesthelper.h"
 #include "itkandvtkimagetesthelper.h"
@@ -85,6 +87,9 @@ private slots:
 
     void getImage_ShouldReturnExpectedImage_data();
     void getImage_ShouldReturnExpectedImage();
+
+    void getPixelUnits_ShouldReturnExpectedValue_data();
+    void getPixelUnits_ShouldReturnExpectedValue();
 
     void getImageIndex_ShouldReturnExpectedImageIndex_data();
     void getImageIndex_ShouldReturnExpectedImageIndex();
@@ -1143,6 +1148,36 @@ void test_Volume::getImage_ShouldReturnExpectedImage()
     QCOMPARE(volume->getImage(sliceNumber, phaseNumber), image);
 
     VolumeTestHelper::cleanUp(volume);
+}
+
+void test_Volume::getPixelUnits_ShouldReturnExpectedValue_data()
+{
+    QTest::addColumn<QString>("modality");
+    QTest::addColumn<QString>("expectedUnits");
+
+    QTest::newRow("CT, Hounsfield units") << "CT" << "HU";
+
+    QStringList unspecifiedUnitsModalities;
+    unspecifiedUnitsModalities << "CR" << "MR" << "PT" << "ES" << "XA" << "US" << "XC" << "SC" << "OT" << "MG" << "RF";
+
+    foreach (const QString &modality, unspecifiedUnitsModalities)
+    {
+        QTest::newRow(qPrintable(QString("%1, unspecified units").arg(modality))) << modality << QString();
+    }
+}
+
+void test_Volume::getPixelUnits_ShouldReturnExpectedValue()
+{
+    QFETCH(QString, modality);
+    QFETCH(QString, expectedUnits);
+    
+    Series *series = SeriesTestHelper::createSeriesByModality(modality, 1);
+    Volume *volume = new Volume(this);
+    volume->setImages(series->getImages());
+
+    QCOMPARE(volume->getPixelUnits(), expectedUnits);
+    
+    SeriesTestHelper::cleanUp(series);
 }
 
 void test_Volume::getImageIndex_ShouldReturnExpectedImageIndex_data()
