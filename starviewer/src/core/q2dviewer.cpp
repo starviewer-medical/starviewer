@@ -595,10 +595,10 @@ void Q2DViewer::setNewVolumes(const QList<Volume*> &volumes, bool setViewerStatu
     removeImageActors();
     m_displayUnitsHandler = m_displayUnitsFactory->createVolumeDisplayUnitHandler(volumes);
 
-    m_displayUnitsHandler->getVolumeDisplayUnit(0)->setWindowLevelData(getWindowLevelData());
-    for (int i = 1; i < m_displayUnitsHandler->getNumberOfInputs(); i++)
+    getDisplayUnit(0)->setWindowLevelData(getWindowLevelData());
+    for (int i = 1; i < getNumberOfInputs(); i++)
     {
-        m_displayUnitsHandler->getVolumeDisplayUnit(i)->setWindowLevelData(new WindowLevelPresetsToolData(this));
+        getDisplayUnit(i)->setWindowLevelData(new WindowLevelPresetsToolData(this));
     }
 
     addImageActors();
@@ -1022,12 +1022,7 @@ void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
 
 void Q2DViewer::updateSecondaryVolumesSlices()
 {
-    if (!hasInput())
-    {
-        return;
-    }
-    
-    if (m_displayUnitsHandler->getNumberOfInputs() <= 1)
+    if (getNumberOfInputs() <= 1)
     {
         return;
     }
@@ -1035,7 +1030,7 @@ void Q2DViewer::updateSecondaryVolumesSlices()
     SliceLocator sliceLocator;
     sliceLocator.setPlane(getCurrentViewPlane());
 
-    for (int i = 1; i < m_displayUnitsHandler->getNumberOfInputs(); i++)
+    for (int i = 1; i < getNumberOfInputs(); i++)
     {
         sliceLocator.setVolume(getDisplayUnit(i)->getVolume());
         int nearestSlice = sliceLocator.getNearestSlice(getCurrentImagePlane());
@@ -1360,9 +1355,9 @@ void Q2DViewer::setWindowLevelInVolume(Volume *volume, const WindowLevel &window
 {
     bool found = false;
     int i = 0;
-    while (!found && i < m_displayUnitsHandler->getNumberOfInputs())
+    while (!found && i < getNumberOfInputs())
     {
-        VolumeDisplayUnit *unit = m_displayUnitsHandler->getVolumeDisplayUnit(i);
+        VolumeDisplayUnit *unit = getDisplayUnit(i);
         if (unit->getVolume() == volume)
         {
             found = true;
@@ -1787,13 +1782,9 @@ QList<vtkImageActor*> Q2DViewer::getVtkImageActorsList() const
 {
     QList<vtkImageActor*> actorsList;
 
-    if (m_displayUnitsHandler)
+    for (int i = 0; i < getNumberOfInputs(); ++i)
     {
-        for (int i = 0; i < m_displayUnitsHandler->getNumberOfInputs(); ++i)
-        {
-            VolumeDisplayUnit *unit = m_displayUnitsHandler->getVolumeDisplayUnit(i);
-            actorsList << unit->getImageActor();
-        }
+        actorsList << getDisplayUnit(i)->getImageActor();
     }
 
     return actorsList;
