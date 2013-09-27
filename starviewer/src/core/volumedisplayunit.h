@@ -63,6 +63,10 @@ public:
     /// Gets the current pixel data according to the current state.
     VolumePixelData* getCurrentPixelData();
     
+    /// Returns current displayed image.
+    /// If some orthogonal reconstruction different from original acquisition is applied, returns null
+    Image* getCurrentDisplayedImage() const;
+
     /// Updates the display extent of the image actor.
     void updateDisplayExtent();
 
