@@ -366,25 +366,19 @@ void Q2DViewer::initializeCamera()
 
 void Q2DViewer::addImageActors()
 {
-    if (m_displayUnitsHandler)
+    vtkRenderer *renderer = getRenderer();
+    foreach (VolumeDisplayUnit* unit, getDisplayUnits())
     {
-        vtkRenderer *renderer = getRenderer();
-        foreach (VolumeDisplayUnit* unit, m_displayUnitsHandler->getVolumeDisplayUnitList())
-        {
-            renderer->AddViewProp(unit->getImageActor());
-        }
+        renderer->AddViewProp(unit->getImageActor());
     }
 }
 
 void Q2DViewer::removeImageActors()
 {
-    if (m_displayUnitsHandler)
+    vtkRenderer *renderer = getRenderer();
+    foreach (VolumeDisplayUnit* unit, getDisplayUnits())
     {
-        vtkRenderer *renderer = getRenderer();
-        foreach (VolumeDisplayUnit* unit, m_displayUnitsHandler->getVolumeDisplayUnitList())
-        {
-            renderer->RemoveViewProp(unit->getImageActor());
-        }
+        renderer->RemoveViewProp(unit->getImageActor());
     }
 }
 
@@ -1280,10 +1274,11 @@ OrthogonalPlane Q2DViewer::getViewOnInput(int i) const
 QList<Volume*> Q2DViewer::getInputs()
 {
     QList<Volume*> volumes;
-    foreach (VolumeDisplayUnit *unit, m_displayUnitsHandler->getVolumeDisplayUnitList())
+    foreach (VolumeDisplayUnit *unit, getDisplayUnits())
     {
         volumes << unit->getVolume();
     }
+    
     return volumes;
 }
 
@@ -1327,12 +1322,7 @@ void Q2DViewer::updateDisplayExtents()
         return;
     }
 
-    if (!m_displayUnitsHandler)
-    {
-        return;
-    }
-    
-    foreach (VolumeDisplayUnit *volumeDisplayUnit, m_displayUnitsHandler->getVolumeDisplayUnitList())
+    foreach (VolumeDisplayUnit *volumeDisplayUnit, getDisplayUnits())
     {
         volumeDisplayUnit->updateDisplayExtent();
     }
@@ -1739,7 +1729,7 @@ void Q2DViewer::updateCurrentImageDefaultPresets()
 {
     if (getCurrentViewPlane() == OrthogonalPlane::XYPlane)
     {
-        foreach (VolumeDisplayUnit *unit, m_displayUnitsHandler->getVolumeDisplayUnitList())
+        foreach (VolumeDisplayUnit *unit, getDisplayUnits())
         {
             unit->updateCurrentImageDefaultPresets();
         }
@@ -1846,12 +1836,7 @@ void Q2DViewer::setCurrentViewPlane(const OrthogonalPlane &viewPlane)
 {
     QViewer::setCurrentViewPlane(viewPlane);
 
-    if (!m_displayUnitsHandler)
-    {
-        return;
-    }
-
-    foreach (VolumeDisplayUnit *volumeDisplayUnit, m_displayUnitsHandler->getVolumeDisplayUnitList())
+    foreach (VolumeDisplayUnit *volumeDisplayUnit, getDisplayUnits())
     {
         volumeDisplayUnit->setViewPlane(viewPlane);
     }
