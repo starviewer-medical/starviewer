@@ -429,6 +429,9 @@ private:
     VolumeDisplayUnit* getDisplayUnit(int index) const;
     VolumeDisplayUnit* getMainDisplayUnit() const;
 
+    /// Returns all the current display units. The list will be empty if we have no input.
+    QList<VolumeDisplayUnit*> getDisplayUnits() const;
+
 private slots:
     /// Actualitza les transformacions de càmera (de moment rotació i flip)
     void updateCamera();

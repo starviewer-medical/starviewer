@@ -1890,4 +1890,16 @@ VolumeDisplayUnit* Q2DViewer::getMainDisplayUnit() const
     return getDisplayUnit(0);
 }
 
+QList<VolumeDisplayUnit*> Q2DViewer::getDisplayUnits() const
+{
+    if (m_displayUnitsHandler.isNull())
+    {
+        return QList<VolumeDisplayUnit*>();
+    }
+    else
+    {
+        return m_displayUnitsHandler->getVolumeDisplayUnitList();
+    }
+}
+
 };  // End namespace udg
