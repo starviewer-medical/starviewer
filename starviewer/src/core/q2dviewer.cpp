@@ -1338,27 +1338,9 @@ void Q2DViewer::putCoordinateInCurrentImageBounds(double xyz[3])
     int xIndex = getCurrentViewPlane().getXIndex();
     int yIndex = getCurrentViewPlane().getYIndex();
 
-    // Comprovarem que estigui dins dels límits 2D de la imatge
-    // La x està per sota del mínim
-    if (xyz[xIndex] < bounds[xIndex * 2])
-    {
-        xyz[xIndex] = bounds[xIndex * 2];
-    }
-    // La x està per sobre del màxim
-    else if (xyz[xIndex] > bounds[xIndex * 2 + 1])
-    {
-        xyz[xIndex] = bounds[xIndex * 2 + 1];
-    }
-    // La y està per sota del mínim
-    if (xyz[yIndex] < bounds[yIndex * 2])
-    {
-        xyz[yIndex] = bounds[yIndex * 2];
-    }
-    // La y està per sobre del màxim
-    else if (xyz[yIndex] > bounds[yIndex * 2 + 1])
-    {
-        xyz[yIndex] = bounds[yIndex * 2 + 1];
-    }
+    // Make each coordinate index to be in its corresponding 2D bounds
+    xyz[xIndex] = qBound(bounds[xIndex * 2], xyz[xIndex], bounds[xIndex * 2 + 1]);
+    xyz[yIndex] = qBound(bounds[yIndex * 2], xyz[yIndex], bounds[yIndex * 2 + 1]);
 }
 
 VolumePixelData* Q2DViewer::getCurrentPixelData()
