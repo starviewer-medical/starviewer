@@ -506,6 +506,9 @@ private:
     /// Factory to create the proper display units handler
     VolumeDisplayUnitHandlerFactory *m_displayUnitsFactory;
 
+    /// Unit to be used when no input is present or an out of index unit have been requested. This way we can always return safe default values.
+    VolumeDisplayUnit *m_dummyDisplayUnit;
+    
     /// VolumeDisplayUnits handler. Handles all the display units of the viewer.
     QSharedPointer<GenericVolumeDisplayUnitHandler> m_displayUnitsHandler;
 
