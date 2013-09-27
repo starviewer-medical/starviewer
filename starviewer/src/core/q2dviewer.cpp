@@ -439,7 +439,6 @@ void Q2DViewer::setInputAndRender(const QList<Volume*> &volumes)
     setInputAsynchronously(volumes, command);
 }
 
-
 void Q2DViewer::executeInputFinishedCommand()
 {
     if (m_inputFinishedCommand)
