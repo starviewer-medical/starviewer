@@ -112,15 +112,7 @@ void Q2DViewerAnnotationHandler::updatePatientAnnotationInformation()
         }
         else
         {
-            // If protocol and description are equal, protocol will be set, otherwise they will be merged
-            QString protocolName, description;
-            protocolName = series->getProtocolName();
-            description = series->getDescription();
-            m_lowerRightText = protocolName;
-            if (description != protocolName)
-            {
-                m_lowerRightText += "\n" + description;
-            }
+            m_lowerRightText = getSeriesDescriptiveLabel(series);
         }
 
         m_cornerAnnotations->SetText(UpperRightCornerIndex, qPrintable(m_upperRightText));
@@ -381,6 +373,27 @@ QString Q2DViewerAnnotationHandler::getSliceLocationAnnotation()
     }
 
     return sliceLocation;
+}
+
+QString Q2DViewerAnnotationHandler::getSeriesDescriptiveLabel(Series *series) const
+{
+    if (!series)
+    {
+        return QString();
+    }
+    
+    // If protocol and description are equal, protocol will be set, otherwise they will be merged
+    QString protocolName = series->getProtocolName();
+    QString description = series->getDescription();
+    
+    QString label = protocolName;
+    
+    if (description != protocolName)
+    {
+        label += "\n" + description;
+    }
+
+    return label;
 }
 
 void Q2DViewerAnnotationHandler::createAnnotations()

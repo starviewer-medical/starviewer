@@ -10,6 +10,7 @@ class vtkTextActor;
 namespace udg {
 
 class Q2DViewer;
+class Series;
 
 /**
     Class to handle the annotations on a Q2DViewer.
@@ -48,6 +49,9 @@ private:
     
     /// Returns the current slice location information, if any
     QString getSliceLocationAnnotation();
+    
+    /// Gets a label that describes the given series. Protocol and description information is being used.
+    QString getSeriesDescriptiveLabel(Series *series) const;
     
     /// Creates all the annotation actors
     void createAnnotations();
