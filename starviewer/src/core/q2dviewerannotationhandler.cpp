@@ -113,6 +113,13 @@ void Q2DViewerAnnotationHandler::updatePatientAnnotationInformation()
         else
         {
             m_lowerRightText = getSeriesDescriptiveLabel(series);
+            
+            if (m_2DViewer->getNumberOfInputs() == 2)
+            {
+                QString fusedLabel = getSeriesDescriptiveLabel(m_2DViewer->getInput(1)->getImage(0)->getParentSeries());
+
+                m_lowerRightText = QObject::tr("Fusion: ") + m_lowerRightText + " +\n" + fusedLabel;
+            }
         }
 
         m_cornerAnnotations->SetText(UpperRightCornerIndex, qPrintable(m_upperRightText));
