@@ -3,7 +3,7 @@
 namespace udg {
 
 QColorSpinBox::QColorSpinBox(QWidget *parent)
-    : QSpinBox(parent)
+ : QSpinBox(parent)
 {
     m_settingColor = false;
 

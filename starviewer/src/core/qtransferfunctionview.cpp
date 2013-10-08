@@ -5,7 +5,7 @@
 namespace udg {
 
 QTransferFunctionView::QTransferFunctionView(TransferFunctionEditor *editor, QWidget *parent)
-    : QWidget(parent), m_editor(editor)
+ : QWidget(parent), m_editor(editor)
 {
 }
 

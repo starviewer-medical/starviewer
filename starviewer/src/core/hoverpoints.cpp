@@ -28,7 +28,7 @@
 namespace udg {
 
 HoverPoints::HoverPoints(QWidget *widget, PointShape shape)
-    : QObject(widget)
+ : QObject(widget)
 {
     m_widget = widget;
     widget->installEventFilter(this);

@@ -15,10 +15,7 @@
 namespace udg {
 
 ObscuranceThread::ObscuranceThread(int id, int numberOfThreads, const TransferFunction &transferFunction, QObject *parent)
-    : QThread(parent),
-      m_id(id), m_numberOfThreads(numberOfThreads),
-      m_transferFunction(transferFunction),
-      m_obscurance(0), m_saliency(0)
+ : QThread(parent), m_id(id), m_numberOfThreads(numberOfThreads), m_transferFunction(transferFunction), m_obscurance(0), m_saliency(0)
 {
 }
 

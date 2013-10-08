@@ -30,8 +30,7 @@ namespace udg {
 
     \author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.edu>
   */
-class QTransferFunctionIntervalEditor
-    : public QWidget, public Ui::QTransferFunctionIntervalEditorBase {
+class QTransferFunctionIntervalEditor : public QWidget, public Ui::QTransferFunctionIntervalEditorBase {
 Q_OBJECT
 
 public:

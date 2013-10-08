@@ -10,7 +10,7 @@
 namespace udg {
 
 QTransferFunctionEditorByValues::QTransferFunctionEditorByValues(QWidget *parent)
-    : QTransferFunctionEditor(parent)
+ : QTransferFunctionEditor(parent)
 {
     setupUi(this);
 

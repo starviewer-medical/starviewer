@@ -5,7 +5,7 @@
 namespace udg {
 
 QTransferFunctionIntervalEditor::QTransferFunctionIntervalEditor(QWidget *parent)
-    : QWidget(parent)
+ : QWidget(parent)
 {
     setupUi(this);
 
@@ -24,7 +24,7 @@ QTransferFunctionIntervalEditor::QTransferFunctionIntervalEditor(QWidget *parent
 }
 
 QTransferFunctionIntervalEditor::QTransferFunctionIntervalEditor(int maximum, QWidget *parent)
-    : QWidget(parent)
+ : QWidget(parent)
 {
     setupUi(this);
 

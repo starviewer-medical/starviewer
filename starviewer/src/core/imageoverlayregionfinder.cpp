@@ -26,7 +26,7 @@ int area(const QSize &size)
 namespace udg {
 
 ImageOverlayRegionFinder::ImageOverlayRegionFinder(const ImageOverlay &overlay)
-    : m_overlay(overlay)
+ : m_overlay(overlay)
 {
 }
 

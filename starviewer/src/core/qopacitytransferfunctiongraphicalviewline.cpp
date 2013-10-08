@@ -5,7 +5,7 @@
 namespace udg {
 
 QOpacityTransferFunctionGraphicalViewLine::QOpacityTransferFunctionGraphicalViewLine()
-    : m_leftNode(0), m_rightNode(0)
+ : m_leftNode(0), m_rightNode(0)
 {
     setZValue(-1.0);
 }

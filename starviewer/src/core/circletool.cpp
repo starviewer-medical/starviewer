@@ -14,7 +14,7 @@
 namespace udg {
 
 CircleTool::CircleTool(QViewer *viewer, QObject *parent)
-    : Tool(viewer, parent)
+ : Tool(viewer, parent)
 {
     m_toolName = "CircleTool";
     m_2DViewer = Q2DViewer::castFromQViewer(viewer);

@@ -12,7 +12,7 @@
 namespace udg {
 
 QColorTransferFunctionGraphicalView::QColorTransferFunctionGraphicalView(QWidget *parent)
-    : QGraphicsView(parent), m_zoom(1.0), m_backgroundUpdateRequested(false)
+ : QGraphicsView(parent), m_zoom(1.0), m_backgroundUpdateRequested(false)
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     setMaximumHeight(48);

@@ -3,7 +3,7 @@
 namespace udg {
 
 DirectIlluminationVoxelShader::DirectIlluminationVoxelShader()
-    : AmbientVoxelShader()
+ : AmbientVoxelShader()
 {
     m_encodedNormals = 0;
     m_redDiffuseShadingTable = m_greenDiffuseShadingTable = m_blueDiffuseShadingTable = 0;

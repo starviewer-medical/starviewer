@@ -7,7 +7,7 @@
 namespace udg {
 
 QViewerWorkInProgressWidget::QViewerWorkInProgressWidget(QWidget *parent)
-    : QWidget(parent)
+ : QWidget(parent)
 {
     this->setupUi(this);
 

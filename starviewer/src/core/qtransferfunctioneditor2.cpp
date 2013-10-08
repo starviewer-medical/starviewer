@@ -6,13 +6,13 @@
 namespace udg {
 
 QTransferFunctionEditor2::QTransferFunctionEditor2(QWidget *parent)
-    : QWidget(parent)
+ : QWidget(parent)
 {
     init(Everything, Graphical);
 }
 
 QTransferFunctionEditor2::QTransferFunctionEditor2(Features features, View view, QWidget *parent)
-    : QWidget(parent)
+ : QWidget(parent)
 {
     init(features, view);
 }
