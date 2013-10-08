@@ -16,7 +16,7 @@ PerfusionMapReconstructionSettings::~PerfusionMapReconstructionSettings()
 }
 
 void PerfusionMapReconstructionSettings::init()
-{    
+{
 }
 
 } // end namespace udg 

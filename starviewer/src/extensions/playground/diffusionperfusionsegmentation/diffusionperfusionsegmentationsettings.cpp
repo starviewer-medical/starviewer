@@ -17,7 +17,7 @@ DiffusionPerfusionSegmentationSettings::~DiffusionPerfusionSegmentationSettings(
 }
 
 void DiffusionPerfusionSegmentationSettings::init()
-{    
+{
 }
 
 } // end namespace udg 

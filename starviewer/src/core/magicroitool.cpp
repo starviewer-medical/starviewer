@@ -577,7 +577,7 @@ int MagicROITool::getInverseDirection(int direction)
 }
 
 void MagicROITool::addPoint(int direction, int x, int y, double z)
-{    
+{
     double origin[3];
     double spacing[3];
     m_2DViewer->getMainInput()->getSpacing(spacing);

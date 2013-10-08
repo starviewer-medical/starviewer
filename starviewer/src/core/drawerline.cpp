@@ -11,7 +11,7 @@
 namespace udg {
 
 DrawerLine::DrawerLine(QObject *parent)
-    : DrawerPrimitive(parent), m_vtkLineSource(0), m_vtkActor(0), m_vtkBackgroundActor(0), m_vtkMapper(0), m_vtkPropAssembly(0)
+ : DrawerPrimitive(parent), m_vtkLineSource(0), m_vtkActor(0), m_vtkBackgroundActor(0), m_vtkMapper(0), m_vtkPropAssembly(0)
 {
 }
 
