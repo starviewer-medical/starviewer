@@ -1,6 +1,8 @@
 #ifndef UDGPOINT3D_H
 #define UDGPOINT3D_H
 
+class QString;
+
 namespace udg {
 
 /**
@@ -26,6 +28,9 @@ public:
     /// Equality operator (fuzzy)
     bool operator==(const Point3D &point);
 
+    /// Returns the point formatted as a human readable string
+    const QString getAsQString() const;
+    
     /// Gets the values as a double array. Implemented for convenience.
     double* getAsDoubleArray();
 

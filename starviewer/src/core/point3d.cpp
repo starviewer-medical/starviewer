@@ -2,6 +2,8 @@
 
 #include "mathtools.h"
 
+#include <QString>
+
 namespace udg {
 
 Point3D::Point3D()
@@ -70,6 +72,15 @@ bool Point3D::operator==(const Point3D &point)
     }
 
     return areEqual;
+}
+
+const QString Point3D::getAsQString() const
+{
+    QString string;
+
+    string = QString("(%1, %2, %3)").arg(m_point[0]).arg(m_point[1]).arg(m_point[2]);
+    
+    return string;
 }
 
 double* Point3D::getAsDoubleArray()
