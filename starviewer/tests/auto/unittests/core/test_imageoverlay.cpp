@@ -76,7 +76,7 @@ Q_DECLARE_METATYPE(DrawerBitmap*)
 Q_DECLARE_METATYPE(double*)
 
 void test_ImageOverlay::ImageOverlay_InitializesClassAsExpected()
-{    
+{
     ImageOverlay overlay;
     QCOMPARE(overlay.getRows(), 0);
     QCOMPARE(overlay.getColumns(), 0);

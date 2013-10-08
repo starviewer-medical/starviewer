@@ -52,7 +52,7 @@ Experimental3DSettings::~Experimental3DSettings()
 }
 
 void Experimental3DSettings::init()
-{    
+{
 }
 
 } // end namespace udg

@@ -13,11 +13,10 @@ class test_HangingProtocol : public QObject {
 Q_OBJECT
 
 private slots:
-
-void copy_ShouldReturnExactHangingProtocolAndDifferentObjects_data();
-void copy_ShouldReturnExactHangingProtocolAndDifferentObjects();
-void compareTo_WorksWithDifferentTypesOfHangingProtocols_data();
-void compareTo_WorksWithDifferentTypesOfHangingProtocols();
+    void copy_ShouldReturnExactHangingProtocolAndDifferentObjects_data();
+    void copy_ShouldReturnExactHangingProtocolAndDifferentObjects();
+    void compareTo_WorksWithDifferentTypesOfHangingProtocols_data();
+    void compareTo_WorksWithDifferentTypesOfHangingProtocols();
 };
 
 Q_DECLARE_METATYPE(QSharedPointer<HangingProtocol>)
@@ -96,14 +95,13 @@ void test_HangingProtocol::compareTo_WorksWithDifferentTypesOfHangingProtocols_d
 }
 
 void test_HangingProtocol::compareTo_WorksWithDifferentTypesOfHangingProtocols()
-{    
+{
     QFETCH(QSharedPointer<HangingProtocol>, hangingProtocol1);
     QFETCH(QSharedPointer<HangingProtocol>, hangingProtocol2);
     QFETCH(bool, expectedResult);
 
     QCOMPARE(hangingProtocol1->compareTo(hangingProtocol2.data()), expectedResult);
 }
-
 
 DECLARE_TEST(test_HangingProtocol)
 

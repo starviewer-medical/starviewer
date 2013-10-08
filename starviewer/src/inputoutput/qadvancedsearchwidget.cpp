@@ -222,7 +222,7 @@ QPair<QTime, QTime> QAdvancedSearchWidget::getTimeRangeToSearchFromString(QStrin
 }
 
 bool QAdvancedSearchWidget::isQLineEditEnabledAndIsNotEmpty(QObject *qObject)
-{            
+{
     if (qobject_cast<QLineEdit*>(qObject) != NULL)
     {
         QLineEdit *lineEdit = qobject_cast<QLineEdit*>(qObject);
@@ -235,7 +235,7 @@ bool QAdvancedSearchWidget::isQLineEditEnabledAndIsNotEmpty(QObject *qObject)
 }
 
 bool QAdvancedSearchWidget::isQCheckboxAndIsChecked(QObject *qObject)
-{            
+{
     if (qobject_cast<QCheckBox*>(qObject) != NULL)
     {
         return (qobject_cast<QCheckBox*>(qObject))->isChecked();

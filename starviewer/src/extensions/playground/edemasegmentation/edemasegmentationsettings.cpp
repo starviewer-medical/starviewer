@@ -18,7 +18,7 @@ EdemaSegmentationSettings::~EdemaSegmentationSettings()
 }
 
 void EdemaSegmentationSettings::init()
-{    
+{
 }
 
 } // end namespace udg 

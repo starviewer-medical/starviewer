@@ -17,7 +17,7 @@ RectumSegmentationSettings::~RectumSegmentationSettings()
 }
 
 void RectumSegmentationSettings::init()
-{    
+{
 }
 
 } // end namespace udg 

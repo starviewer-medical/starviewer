@@ -488,7 +488,7 @@ void OrderImagesFillerStep::setOrderedImagesIntoSeries(Series *series)
             orderNumberInVolume = 0;
 
             for (int position = 0; position < orderedSet.size(); position++)
-            {    
+            {
                 lastOrderedImageSetDistance = orderedSet.value(position);
                 foreach (double key2, lastOrderedImageSetDistance->keys())
                 {
