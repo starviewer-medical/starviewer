@@ -78,20 +78,26 @@ QList<ROITool::StatisticsData> ROITool::computeStatisticsData()
     m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
 
     // Building up the initial sweep line
+    // We'll have to add some extra space to the x/y bounds just to help the sweep line algorithm work better
+    // when the vertices and segments are just on the bound lines
+    double *spacing = m_2DViewer->getMainInput()->getSpacing();
+    double xMargin = spacing[xIndex] * 1.1;
+    double yMargin = spacing[yIndex] * 1.1;
+    
     // First point of the sweep line, will be at the minimum x, y, z bounds of the polygon
     Point3D sweepLineBeginPoint;
-    sweepLineBeginPoint[xIndex] = bounds[xIndex * 2];
-    sweepLineBeginPoint[yIndex] = bounds[yIndex * 2];
+    sweepLineBeginPoint[xIndex] = bounds[xIndex * 2] - xMargin;
+    sweepLineBeginPoint[yIndex] = bounds[yIndex * 2] - yMargin;
     sweepLineBeginPoint[zIndex] = bounds[zIndex * 2];
     
     // Second point of the sweep line, will be the same as the first but with the maximum x bounds of the polygon so it will trace an horizontal line
     Point3D sweepLineEndPoint;
-    sweepLineEndPoint[xIndex] = bounds[xIndex * 2 + 1];
-    sweepLineEndPoint[yIndex] = bounds[yIndex * 2];
+    sweepLineEndPoint[xIndex] = bounds[xIndex * 2 + 1] + xMargin;
+    sweepLineEndPoint[yIndex] = bounds[yIndex * 2] - yMargin;
     sweepLineEndPoint[zIndex] = bounds[zIndex * 2];
 
     // The ending height of the sweep line will be at the maximum y bounds of the polygon
-    double verticalLimit = bounds[yIndex * 2 + 1];
+    double verticalLimit = bounds[yIndex * 2 + 1] + yMargin;
 
     // Compute statistics corresponding for each input
     QList<StatisticsData> statisticsDataList;
