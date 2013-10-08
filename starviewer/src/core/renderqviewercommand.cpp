@@ -5,7 +5,7 @@
 namespace udg {
 
 RenderQViewerCommand::RenderQViewerCommand(Q2DViewer *viewer, QObject *parent)
-    : QViewerCommand(parent)
+ : QViewerCommand(parent)
 {
     m_viewer = viewer;
 }

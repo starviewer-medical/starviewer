@@ -33,7 +33,7 @@
 namespace udg {
 
 QTransferFunctionEditorByGradient::QTransferFunctionEditorByGradient(QWidget *parent)
-    : QTransferFunctionEditor(parent)
+ : QTransferFunctionEditor(parent)
 {
     QVBoxLayout *vbox = new QVBoxLayout(this);
     vbox->setSpacing(1);

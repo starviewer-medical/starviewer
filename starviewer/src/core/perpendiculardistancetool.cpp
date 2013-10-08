@@ -12,7 +12,7 @@
 namespace udg {
 
 PerpendicularDistanceTool::PerpendicularDistanceTool(QViewer *viewer, QObject *parent)
-    : GenericDistanceTool(viewer, parent)
+ : GenericDistanceTool(viewer, parent)
 {
     m_toolName = "PerpendicularDistanceTool";
 

@@ -30,7 +30,7 @@ bool lessThan(const QGraphicsItem *item1, const QGraphicsItem *item2)
 namespace udg {
 
 QOpacityTransferFunctionGraphicalView::QOpacityTransferFunctionGraphicalView(QWidget *parent)
-    : QGraphicsView(parent), m_state(Ready)
+ : QGraphicsView(parent), m_state(Ready)
 {
     setFrameShape(QFrame::NoFrame);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);

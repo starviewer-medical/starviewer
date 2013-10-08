@@ -5,7 +5,7 @@
 namespace udg {
 
 ContourVoxelShader::ContourVoxelShader()
-    : VoxelShader()
+ : VoxelShader()
 {
     m_encodedNormals = 0;
     m_directionEncoder = 0;

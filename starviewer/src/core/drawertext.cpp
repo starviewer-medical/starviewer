@@ -11,7 +11,7 @@
 namespace udg {
 
 DrawerText::DrawerText(QObject *parent)
-    : DrawerPrimitive(parent)
+ : DrawerPrimitive(parent)
 {
     m_horizontalJustification = "Centered";
     m_verticalJustification = "Centered";

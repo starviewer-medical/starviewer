@@ -10,7 +10,7 @@ namespace udg {
 const double QOpacityTransferFunctionGraphicalViewNode::Size = 10.0;
 
 QOpacityTransferFunctionGraphicalViewNode::QOpacityTransferFunctionGraphicalViewNode()
-    : QGraphicsEllipseItem(-Size / 2.0, -Size / 2.0, Size, Size), m_leftLine(0), m_rightLine(0)
+ : QGraphicsEllipseItem(-Size / 2.0, -Size / 2.0, Size, Size), m_leftLine(0), m_rightLine(0)
 {
     setFlags(ItemIsMovable | ItemIsSelectable | ItemIgnoresTransformations | ItemSendsGeometryChanges);
     setBrush(QColor(127, 127, 127, 200));

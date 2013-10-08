@@ -10,7 +10,7 @@
 namespace udg {
 
 ApplyHangingProtocolQViewerCommand::ApplyHangingProtocolQViewerCommand(Q2DViewerWidget *viewer, HangingProtocolDisplaySet *displaySet, QObject *parent)
-    : QViewerCommand(parent)
+ : QViewerCommand(parent)
 {
     m_viewerWidget = viewer;
     m_displaySet = displaySet;

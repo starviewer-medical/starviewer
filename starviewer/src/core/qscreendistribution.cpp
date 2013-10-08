@@ -16,7 +16,7 @@ const int QScreenDistribution::MaximumScreenNumberPixelSize = 50;
 const int QScreenDistribution::WidgetMargin = 20;
 
 QScreenDistribution::QScreenDistribution(QWidget *parent)
-    : QWidget(parent)
+ : QWidget(parent)
 {
     setMouseTracking(true);
     m_mouseInScreen = -1;

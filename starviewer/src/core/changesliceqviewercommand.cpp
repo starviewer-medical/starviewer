@@ -5,7 +5,7 @@
 namespace udg {
 
 ChangeSliceQViewerCommand::ChangeSliceQViewerCommand(Q2DViewer *viewer, SlicePosition slice, QObject *parent)
-    : QViewerCommand(parent)
+ : QViewerCommand(parent)
 {
     m_viewer = viewer;
     m_slicePosition = slice;
@@ -13,7 +13,7 @@ ChangeSliceQViewerCommand::ChangeSliceQViewerCommand(Q2DViewer *viewer, SlicePos
 }
 
 ChangeSliceQViewerCommand::ChangeSliceQViewerCommand(Q2DViewer *viewer, int slice, QObject *parent)
-    : QViewerCommand(parent)
+ : QViewerCommand(parent)
 {
     m_viewer = viewer;
     m_slicePosition = CustomSlice;

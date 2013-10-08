@@ -27,7 +27,7 @@
 namespace udg {
 
 ShadeWidget::ShadeWidget(QWidget *parent)
-    : QWidget(parent), m_shade_type(BlackShade), m_alpha_gradient(QLinearGradient(0, 0, 0, 0))
+ : QWidget(parent), m_shade_type(BlackShade), m_alpha_gradient(QLinearGradient(0, 0, 0, 0))
 {
     // Checkers background
     setAttribute(Qt::WA_NoBackground);
@@ -50,7 +50,7 @@ ShadeWidget::ShadeWidget(QWidget *parent)
 }
 
 ShadeWidget::ShadeWidget(ShadeType type, QWidget *parent)
-    : QWidget(parent), m_shade_type(type), m_alpha_gradient(QLinearGradient(0, 0, 0, 0))
+ : QWidget(parent), m_shade_type(type), m_alpha_gradient(QLinearGradient(0, 0, 0, 0))
 {
     // Checkers background
     if (m_shade_type == ARGBShade)

@@ -8,7 +8,7 @@
 namespace udg {
 
 QColorTransferFunctionGraphicalViewNode::QColorTransferFunctionGraphicalViewNode(QColorTransferFunctionGraphicalView *view)
-    : QGraphicsRectItem(-2.5, -16.0, 5.0, 32.0), m_view(view)
+ : QGraphicsRectItem(-2.5, -16.0, 5.0, 32.0), m_view(view)
 {
     setFlags(ItemIsMovable | ItemIsSelectable | ItemSendsGeometryChanges);
     setBrush(QColor(0, 0, 0, 127));

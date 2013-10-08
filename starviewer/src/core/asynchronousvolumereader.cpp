@@ -21,7 +21,7 @@ QHash<int, VolumeReaderJob*> AsynchronousVolumeReader::m_volumesLoading;
 ThreadWeaver::ResourceRestrictionPolicy AsynchronousVolumeReader::m_resourceRestrictionPolicy;
 
 AsynchronousVolumeReader::AsynchronousVolumeReader(QObject *parent)
-    : QObject(parent)
+ : QObject(parent)
 {
 }
 

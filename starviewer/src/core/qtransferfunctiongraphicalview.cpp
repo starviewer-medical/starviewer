@@ -4,7 +4,7 @@
 namespace udg {
 
 QTransferFunctionGraphicalView::QTransferFunctionGraphicalView(TransferFunctionEditor *editor, QWidget *parent)
-    : QTransferFunctionView(editor, parent), m_editingConnectionsEnabled(false)
+ : QTransferFunctionView(editor, parent), m_editingConnectionsEnabled(false)
 {
     setupUi(this);
 

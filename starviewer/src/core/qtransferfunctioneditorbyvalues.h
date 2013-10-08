@@ -22,8 +22,7 @@ class QTransferFunctionIntervalEditor;
 
     \author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.edu>
   */
-class QTransferFunctionEditorByValues
-    : public QTransferFunctionEditor, private ::Ui::QTransferFunctionEditorByValuesBase {
+class QTransferFunctionEditorByValues : public QTransferFunctionEditor, private ::Ui::QTransferFunctionEditorByValuesBase {
 Q_OBJECT
 
 public:

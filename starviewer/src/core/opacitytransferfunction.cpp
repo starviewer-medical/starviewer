@@ -7,12 +7,12 @@
 namespace udg {
 
 OpacityTransferFunction::OpacityTransferFunction()
-    : m_vtkOpacityTransferFunction(0)
+ : m_vtkOpacityTransferFunction(0)
 {
 }
 
 OpacityTransferFunction::OpacityTransferFunction(const OpacityTransferFunction &opacityTransferFunction)
-    : TransferFunctionTemplate<double>(opacityTransferFunction), m_vtkOpacityTransferFunction(0)
+ : TransferFunctionTemplate<double>(opacityTransferFunction), m_vtkOpacityTransferFunction(0)
 {
 }
 

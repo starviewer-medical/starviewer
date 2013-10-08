@@ -3,7 +3,7 @@
 namespace udg {
 
 QTransferFunctionEditor::QTransferFunctionEditor(QWidget *parent)
-    : QWidget(parent)
+ : QWidget(parent)
 {
     m_maximum = 255;
 }

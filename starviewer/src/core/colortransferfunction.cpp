@@ -26,12 +26,12 @@ QColor TransferFunctionTemplate<QColor>::linearInterpolation(const QColor &a, co
 }
 
 ColorTransferFunction::ColorTransferFunction()
-    : m_vtkColorTransferFunction(0)
+ : m_vtkColorTransferFunction(0)
 {
 }
 
 ColorTransferFunction::ColorTransferFunction(const ColorTransferFunction &colorTransferFunction)
-    : TransferFunctionTemplate<QColor>(colorTransferFunction), m_vtkColorTransferFunction(0)
+ : TransferFunctionTemplate<QColor>(colorTransferFunction), m_vtkColorTransferFunction(0)
 {
 }
 
