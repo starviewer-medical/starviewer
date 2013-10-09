@@ -25,7 +25,6 @@
 #include "mammographyimagehelper.h"
 #include "volumedisplayunit.h"
 #include "slicelocator.h"
-#include "transferfunctionmodel.h"
 #include "q2dviewerannotationhandler.h"
 #include "volumedisplayunithandlerfactory.h"
 #include "genericvolumedisplayunithandler.h"
