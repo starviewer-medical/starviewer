@@ -12,9 +12,9 @@ namespace udg {
 class PairedVolumeDisplayUnitHandler : public GenericVolumeDisplayUnitHandler {
 public:
     PairedVolumeDisplayUnitHandler();
-    ~PairedVolumeDisplayUnitHandler();
+    virtual ~PairedVolumeDisplayUnitHandler();
 
-    int getMaximumNumberOfInputs() const;
+    virtual int getMaximumNumberOfInputs() const;
 };
 
 } // End namespace udg
