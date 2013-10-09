@@ -21,7 +21,7 @@ class VolumeDisplayUnit;
 class GenericVolumeDisplayUnitHandler {
 public:
     GenericVolumeDisplayUnitHandler();
-    ~GenericVolumeDisplayUnitHandler();
+    virtual ~GenericVolumeDisplayUnitHandler();
 
     /// Sets single input
     void setInput(Volume *input);
