@@ -12,12 +12,12 @@ namespace udg {
 class PETCTVolumeDisplayUnitHandler : public PairedVolumeDisplayUnitHandler {
 public:
     PETCTVolumeDisplayUnitHandler();
-    ~PETCTVolumeDisplayUnitHandler();
+    virtual ~PETCTVolumeDisplayUnitHandler();
 
 protected:
     /// Implementation of the corresponding virtual methods to configure the default transfer functions and the main input index
-    void setupDefaultTransferFunctions();
-    void updateMainDisplayUnitIndex();
+    virtual void setupDefaultTransferFunctions();
+    virtual void updateMainDisplayUnitIndex();
 
 private:
     /// Returns the display unit corresponding to the PET input

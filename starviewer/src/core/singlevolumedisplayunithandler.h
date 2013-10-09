@@ -12,9 +12,9 @@ namespace udg {
 class SingleVolumeDisplayUnitHandler : public GenericVolumeDisplayUnitHandler {
 public:
     SingleVolumeDisplayUnitHandler();
-    ~SingleVolumeDisplayUnitHandler();
+    virtual ~SingleVolumeDisplayUnitHandler();
 
-    int getMaximumNumberOfInputs() const;
+    virtual int getMaximumNumberOfInputs() const;
 };
 
 } // End namespace udg
