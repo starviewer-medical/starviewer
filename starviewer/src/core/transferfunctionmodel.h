@@ -27,7 +27,7 @@ public:
     /// Returns the transfer function at the given index. If the index is out of range, a default transfer function is returned.
     TransferFunction getTransferFunction(int index) const;
 
-    /// Returns the transfer function at the given index. If the index is invalid, a default transfer function is returned.
+    /// Returns the transfer function at the given index. If the index is out of range, a default transfer function is returned.
     TransferFunction getTransferFunction(const QModelIndex &index) const;
 
     /// Loads the default 2D transfer functions from resources.
