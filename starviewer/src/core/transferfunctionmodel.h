@@ -21,14 +21,29 @@ public:
     /// Returns the number of rows under the given parent. When the parent is valid it means that rowCount is returning the number of children of parent.
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
 
+    /// Inserts count rows into the model before the given row. Items in the new row will be children of the item represented by the parent model index.
+    virtual bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
+
+    /// Removes count rows starting with the given row under parent parent from the model.
+    virtual bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
+
     /// Returns the data stored under the given role for the item referred to by the index.
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+
+    /// Sets the role data for the item at index to value.
+    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
     /// Returns the transfer function at the given index. If the index is out of range, a default transfer function is returned.
     TransferFunction getTransferFunction(int index) const;
 
     /// Returns the transfer function at the given index. If the index is out of range, a default transfer function is returned.
     TransferFunction getTransferFunction(const QModelIndex &index) const;
+
+    /// Sets the transfer function at the given index. If the index is invalid, it does nothing.
+    void setTransferFunction(int index, const TransferFunction &transferFunction);
+
+    /// Sets the transfer function at the given index. If the index is invalid, it does nothing.
+    void setTransferFunction(const QModelIndex &index, const TransferFunction &transferFunction);
 
     /// Loads the default 2D transfer functions from resources.
     void loadDefault2DTransferFunctions();

@@ -25,6 +25,44 @@ int TransferFunctionModel::rowCount(const QModelIndex &parent) const
     return m_transferFunctionList.size();
 }
 
+bool TransferFunctionModel::insertRows(int row, int count, const QModelIndex &parent)
+{
+    if (row < 0 || row > rowCount(parent) || count < 1)
+    {
+        return false;
+    }
+
+    beginInsertRows(QModelIndex(), row, row + count - 1);
+
+    for (int i = 0; i < count; i++)
+    {
+        m_transferFunctionList.insert(row, TransferFunction());
+    }
+
+    endInsertRows();
+
+    return true;
+}
+
+bool TransferFunctionModel::removeRows(int row, int count, const QModelIndex &parent)
+{
+    if (row < 0 || row + count > rowCount(parent) || count < 1)
+    {
+        return false;
+    }
+
+    beginRemoveRows(QModelIndex(), row, row + count - 1);
+
+    for (int i = 0; i < count; i++)
+    {
+        m_transferFunctionList.removeAt(row);
+    }
+
+    endRemoveRows();
+
+    return true;
+}
+
 QVariant TransferFunctionModel::data(const QModelIndex &index, int role) const
 {
     if (index.row() < 0 || index.row() >= m_transferFunctionList.size())
@@ -43,6 +81,26 @@ QVariant TransferFunctionModel::data(const QModelIndex &index, int role) const
     }
 }
 
+bool TransferFunctionModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    if (index.row() >= 0 && index.row() < m_transferFunctionList.size() && (role == Qt::DisplayRole || role == Qt::UserRole))
+    {
+        if (role == Qt::DisplayRole)
+        {
+            m_transferFunctionList[index.row()].setName(value.toString());
+        }
+        else
+        {
+            m_transferFunctionList[index.row()] = TransferFunction::fromVariant(value);
+        }
+
+        emit dataChanged(index, index);
+        return true;
+    }
+
+    return false;
+}
+
 TransferFunction TransferFunctionModel::getTransferFunction(int index) const
 {
     return this->getTransferFunction(this->index(index));
@@ -57,6 +115,20 @@ TransferFunction TransferFunctionModel::getTransferFunction(const QModelIndex &i
     else
     {
         return TransferFunction();
+    }
+}
+
+void TransferFunctionModel::setTransferFunction(int index, const TransferFunction &transferFunction)
+{
+    this->setTransferFunction(this->index(index), transferFunction);
+}
+
+void TransferFunctionModel::setTransferFunction(const QModelIndex &index, const TransferFunction &transferFunction)
+{
+    if (index.row() >= 0 || index.row() < m_transferFunctionList.size())
+    {
+        m_transferFunctionList[index.row()] = transferFunction;
+        emit dataChanged(index, index);
     }
 }
 
