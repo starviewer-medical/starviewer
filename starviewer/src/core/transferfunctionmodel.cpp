@@ -139,7 +139,8 @@ void TransferFunctionModel::loadDefault2DTransferFunctions()
     while (it.hasNext())
     {
         TransferFunction *transferFunction = TransferFunctionIO::fromXmlFile(it.next());
-        m_transferFunctionList.append(*transferFunction);
+        this->insertRow(this->rowCount());
+        this->setTransferFunction(this->rowCount() - 1, *transferFunction);
         delete transferFunction;
     }
 }
