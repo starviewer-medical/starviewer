@@ -15,14 +15,19 @@ TransferFunctionModel::~TransferFunctionModel()
 {
 }
 
-int TransferFunctionModel::rowCount(const QModelIndex &) const
+int TransferFunctionModel::rowCount(const QModelIndex &parent) const
 {
+    if (parent.isValid())
+    {
+        return 0;
+    }
+
     return m_transferFunctionList.size();
 }
 
 QVariant TransferFunctionModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid())
+    if (index.row() < 0 || index.row() >= m_transferFunctionList.size())
     {
         return QVariant();
     }
@@ -45,7 +50,7 @@ TransferFunction TransferFunctionModel::getTransferFunction(int index) const
 
 TransferFunction TransferFunctionModel::getTransferFunction(const QModelIndex &index) const
 {
-    if (index.isValid())
+    if (index.row() >= 0 || index.row() < m_transferFunctionList.size())
     {
         return m_transferFunctionList.at(index.row());
     }
