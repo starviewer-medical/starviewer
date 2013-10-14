@@ -39,7 +39,7 @@ void PETCTVolumeDisplayUnitHandler::setupDefaultTransferFunctions()
                 double originalRange[2] = { transferFunction.keys().first(), transferFunction.keys().last() };
                 const TransferFunction &scaledTransferFunction = transferFunction.toNewRange(originalRange[0], originalRange[1], newRange[0], newRange[1]);
                 
-                petUnit->getImagePipeline()->setTransferFunction(scaledTransferFunction);
+                petUnit->setTransferFunction(scaledTransferFunction);
             }
         }
     }

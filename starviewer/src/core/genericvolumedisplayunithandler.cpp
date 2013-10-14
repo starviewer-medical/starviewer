@@ -125,7 +125,7 @@ void GenericVolumeDisplayUnitHandler::initializeTransferFunctions()
     // By default, all volumes have no transfer function
     foreach (VolumeDisplayUnit *unit, m_displayUnits)
     {
-        unit->getImagePipeline()->clearTransferFunction();
+        unit->clearTransferFunction();
     }
 
     setupDefaultTransferFunctions();
