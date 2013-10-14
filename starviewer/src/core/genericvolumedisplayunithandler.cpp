@@ -116,13 +116,7 @@ void GenericVolumeDisplayUnitHandler::setupDefaultOpacities()
     for (int i = 0; i < getNumberOfInputs(); i++)
     {
         vtkImageActor *actor = m_displayUnits.at(i)->getImageActor();
-        double opacity = 0.5;
-        if (i == 0)
-        {
-            opacity = 1.0;
-        }
-        
-        actor->SetOpacity(opacity);
+        actor->SetOpacity(1.0);
     }
 }
 

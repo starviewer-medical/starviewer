@@ -64,7 +64,7 @@ double WindowLevelFilter::getLevel() const
 
 void WindowLevelFilter::setTransferFunction(const TransferFunction &transferFunction)
 {
-    m_filter->SetLookupTable(transferFunction.vtkColorTransferFunction());
+    m_filter->SetLookupTable(transferFunction.toVtkLookupTable());
 }
 
 void WindowLevelFilter::clearTransferFunction()
