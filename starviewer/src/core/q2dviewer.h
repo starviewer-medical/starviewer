@@ -190,8 +190,12 @@ public:
     /// Sets the opacity of the image actor of the volume at the given index.
     void setVolumeOpacity(int index, double opacity);
 
-    /// Sets the transfer function of the image pipeline of the volume at the given index.
+    /// Returns the transfer function of the volume at the given index.
+    const TransferFunction& getVolumeTransferFunction(int index) const;
+    /// Sets the transfer function of the volume at the given index.
     void setVolumeTransferFunction(int index, const TransferFunction &transferFunction);
+    /// Clears the transfer function of the volume at the given index.
+    void clearVolumeTransferFunction(int index);
 
     /// Returns all the vtkImageActors in the scene
     QList<vtkImageActor*> getVtkImageActorsList() const;

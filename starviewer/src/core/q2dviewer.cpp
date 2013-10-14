@@ -1678,9 +1678,19 @@ void Q2DViewer::setVolumeOpacity(int index, double opacity)
     getDisplayUnit(index)->getImageActor()->SetOpacity(opacity);
 }
 
+const TransferFunction& Q2DViewer::getVolumeTransferFunction(int index) const
+{
+    return getDisplayUnit(index)->getTransferFunction();
+}
+
 void Q2DViewer::setVolumeTransferFunction(int index, const TransferFunction &transferFunction)
 {
     getDisplayUnit(index)->setTransferFunction(transferFunction);
+}
+
+void Q2DViewer::clearVolumeTransferFunction(int index)
+{
+    getDisplayUnit(index)->clearTransferFunction();
 }
 
 VolumeDisplayUnit* Q2DViewer::getDisplayUnit(int index) const
