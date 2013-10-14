@@ -6,13 +6,14 @@
 
 #include <vtkColorTransferFunction.h>
 #include <vtkImageData.h>
-#include <vtkImageMapToWindowLevelColors2.h>
+#include "vtkImageMapToWindowLevelColors3.h"
+#include <vtkLookupTable.h>
 
 namespace udg {
 
 WindowLevelFilter::WindowLevelFilter()
 {
-    m_filter = vtkImageMapToWindowLevelColors2::New();
+    m_filter = vtkImageMapToWindowLevelColors3::New();
 }
 
 WindowLevelFilter::~WindowLevelFilter()

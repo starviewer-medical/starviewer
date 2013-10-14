@@ -4,7 +4,7 @@
 #include "filter.h"
 
 class vtkImageData;
-class vtkImageMapToWindowLevelColors2;
+class vtkImageMapToWindowLevelColors3;
 
 namespace udg {
 
@@ -48,7 +48,7 @@ private:
     virtual vtkAlgorithm* getVtkAlgorithm() const;
 
 private:
-    vtkImageMapToWindowLevelColors2* m_filter;
+    vtkImageMapToWindowLevelColors3* m_filter;
 
 };
 
