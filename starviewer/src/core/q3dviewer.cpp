@@ -553,9 +553,14 @@ void Q3DViewer::applyCurrentRenderingMethod()
     }
 }
 
+const TransferFunction& Q3DViewer::getTransferFunction() const
+{
+    return m_transferFunction;
+}
+
 void Q3DViewer::setTransferFunction(const TransferFunction &transferFunction)
 {
-    QViewer::setTransferFunction(transferFunction);
+    m_transferFunction = transferFunction;
 
     m_volumeProperty->SetScalarOpacity(m_transferFunction.vtkOpacityTransferFunction());
     m_volumeProperty->SetColor(m_transferFunction.vtkColorTransferFunction());

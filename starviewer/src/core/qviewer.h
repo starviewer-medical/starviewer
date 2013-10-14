@@ -3,7 +3,6 @@
 
 #include "orthogonalplane.h"
 #include "anatomicalplane.h"
-#include "transferfunction.h"
 
 #include <QWidget>
 // Llista de captures de pantalla
@@ -199,10 +198,6 @@ public slots:
     /// Ajusta el window/level a partir del preset. La implementació per defecte acaba cridant setWindowLevel sempre.
     virtual void setWindowLevelPreset(const WindowLevel &preset);
 
-    /// Assigna/Obté la funció de transferència actual
-    virtual void setTransferFunction(const TransferFunction &transferFunction);
-    virtual const TransferFunction& getTransferFunction() const;
-
     /// Fits the current rendered item into the viewport size
     void fitRenderingIntoViewport();
 
@@ -314,9 +309,6 @@ protected:
 
     /// Dades de valors predeterminats de window level i dels valors actuals que s'apliquen
     WindowLevelPresetsToolData *m_windowLevelData;
-
-    /// Funció de transferència
-    TransferFunction m_transferFunction;
 
     /// Indica si hem de fer l'acció de renderitzar o no
     bool m_isRenderingEnabled;

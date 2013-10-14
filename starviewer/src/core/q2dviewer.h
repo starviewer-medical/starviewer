@@ -31,6 +31,7 @@ class VolumePixelData;
 class Q2DViewerAnnotationHandler;
 class VolumeDisplayUnitHandlerFactory;
 class GenericVolumeDisplayUnitHandler;
+class TransferFunction;
 
 /**
     Classe base per als visualitzadors 2D.
@@ -226,6 +227,9 @@ public:
     /// Els valors podran anar de 0.0 a 1.0, on 0.0 és transparent i 1.0 és completament opac.
     void setOverlayOpacity(double opacity);
 
+    /// Returns the current transfer function of the main volume.
+    const TransferFunction& getTransferFunction() const;
+
 public slots:
     virtual void setInput(Volume *volume);
 
@@ -261,7 +265,11 @@ public slots:
 
     void setWindowLevelInVolume(Volume *volume, const WindowLevel &windowLevel);
     void setWindowLevel(double window, double level);
-    virtual void setTransferFunction(const TransferFunction &transferFunction);
+
+    /// Sets the transfer function of the main volume.
+    void setTransferFunction(const TransferFunction &transferFunction);
+    /// Clears the transfer function of the main volume.
+    void clearTransferFunction();
 
     /// L'únic que fa és emetre el senyal seedPositionChanged, per poder-ho cridar desde la seedTool
     /// TODO Aquest mètode hauria de quedar obsolet

@@ -4,6 +4,7 @@
 #include "qviewer.h"
 
 #include "combiningvoxelshader.h"
+#include "transferfunction.h"
 #include "vtkVolumeRayCastSingleVoxelShaderCompositeFunction.h"
 
 // FWD declarations
@@ -66,6 +67,9 @@ public:
     /// If casting is successful, casted pointer to Q3DViewer will be returned, null otherwise
     static Q3DViewer* castFromQViewer(QViewer *viewer);
 
+    /// Returns the current transfer function.
+    const TransferFunction& getTransferFunction() const;
+
 public slots:
     virtual void setInput(Volume* volume);
 
@@ -88,7 +92,8 @@ public slots:
     /// Aplica el mètode de rendering actual.
     void applyCurrentRenderingMethod();
 
-    virtual void setTransferFunction(const TransferFunction &transferFunction);
+    /// Sets the current transfer function.
+    void setTransferFunction(const TransferFunction &transferFunction);
     void setWindowLevel(double window, double level);
     void setNewTransferFunction();
 
@@ -227,6 +232,9 @@ private:
     vtkVolumeRayCastSingleVoxelShaderCompositeFunction<AmbientContourObscuranceVoxelShader> *m_volumeRayCastAmbientContourObscuranceFunction;
     vtkVolumeRayCastSingleVoxelShaderCompositeFunction<DirectIlluminationContourObscuranceVoxelShader> *m_volumeRayCastDirectIlluminationContourObscuranceFunction;
     vtkVolumeRayCastIsosurfaceFunction *m_volumeRayCastIsosurfaceFunction;
+
+    /// Current transfer function.
+    TransferFunction m_transferFunction;
 
     /// La funció de transferència que s'aplica
     TransferFunction *m_newTransferFunction;
