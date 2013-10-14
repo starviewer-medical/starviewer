@@ -1031,11 +1031,11 @@ void Q2DViewer::setWindowLevel(double window, double level)
     }
 }
 
-void Q2DViewer::setTransferFunction(TransferFunction *transferFunction)
+void Q2DViewer::setTransferFunction(const TransferFunction &transferFunction)
 {
-    m_transferFunction = transferFunction;
+    QViewer::setTransferFunction(transferFunction);
     // Apliquem la funció de transferència sobre el window level mapper
-    getMainDisplayUnit()->setTransferFunction(*m_transferFunction);
+    getMainDisplayUnit()->setTransferFunction(transferFunction);
 }
 
 void Q2DViewer::getCurrentWindowLevel(double wl[2])

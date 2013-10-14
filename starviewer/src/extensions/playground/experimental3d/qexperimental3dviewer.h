@@ -53,8 +53,6 @@ public slots:
     
     /// Ajusta el window level.
     virtual void setWindowLevel(double window, double level);
-    
-    void setTransferFunction(TransferFunction *transferFunction);
 
     /// Li indiquem quina vista volem del volum: XYPlane, YZPlane o XZPlane.
     virtual void resetView(const OrthogonalPlane &view);

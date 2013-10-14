@@ -386,7 +386,7 @@ void QDifuPerfuSegmentationExtension::setPerfusionLut( int threshold )
     table->SetTupleValue( table->GetNumberOfTuples() - 1, tuple );
 
     // Transformem la vtkLookupTable a TransferFunction
-    TransferFunction *transferFunction = new TransferFunction(m_perfusionHueLut);
+    TransferFunction transferFunction(m_perfusionHueLut);
     m_perfusion2DView->setTransferFunction(transferFunction);
 }
 
@@ -675,7 +675,7 @@ void QDifuPerfuSegmentationExtension::applyRegistration()
         table->SetTupleValue( 0, tuple );
         table->SetTupleValue( table->GetNumberOfTuples() - 1, tuple );
 
-        TransferFunction *hueTransferFunction = new TransferFunction(hueLut);
+        TransferFunction hueTransferFunction(hueLut);
         m_perfusion2DView->setTransferFunction(hueTransferFunction);
 
         vtkImageCast * imageCast = vtkImageCast::New();

@@ -88,7 +88,7 @@ public slots:
     /// Aplica el mètode de rendering actual.
     void applyCurrentRenderingMethod();
 
-    void setTransferFunction(TransferFunction *transferFunction);
+    virtual void setTransferFunction(const TransferFunction &transferFunction);
     void setWindowLevel(double window, double level);
     void setNewTransferFunction();
 

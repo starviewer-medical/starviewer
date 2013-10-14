@@ -3,6 +3,7 @@
 
 #include "orthogonalplane.h"
 #include "anatomicalplane.h"
+#include "transferfunction.h"
 
 #include <QWidget>
 // Llista de captures de pantalla
@@ -27,7 +28,6 @@ class Series;
 class Image;
 class ToolProxy;
 class WindowLevelPresetsToolData;
-class TransferFunction;
 class PatientBrowserMenu;
 class QViewerWorkInProgressWidget;
 class WindowLevel;
@@ -200,8 +200,8 @@ public slots:
     virtual void setWindowLevelPreset(const WindowLevel &preset);
 
     /// Assigna/Obté la funció de transferència actual
-    virtual void setTransferFunction(TransferFunction *transferFunction) = 0;
-    TransferFunction* getTransferFunction() const;
+    virtual void setTransferFunction(const TransferFunction &transferFunction);
+    virtual const TransferFunction& getTransferFunction() const;
 
     /// Fits the current rendered item into the viewport size
     void fitRenderingIntoViewport();
@@ -316,7 +316,7 @@ protected:
     WindowLevelPresetsToolData *m_windowLevelData;
 
     /// Funció de transferència
-    TransferFunction *m_transferFunction;
+    TransferFunction m_transferFunction;
 
     /// Indica si hem de fer l'acció de renderitzar o no
     bool m_isRenderingEnabled;

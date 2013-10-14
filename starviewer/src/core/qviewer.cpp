@@ -41,7 +41,7 @@
 namespace udg {
 
 QViewer::QViewer(QWidget *parent)
- : QWidget(parent), m_mainVolume(0), m_contextMenuActive(true), m_mouseHasMoved(false), m_windowLevelData(0), m_transferFunction(0),
+ : QWidget(parent), m_mainVolume(0), m_contextMenuActive(true), m_mouseHasMoved(false), m_windowLevelData(0),
    m_isRenderingEnabled(true), m_isActive(false)
 {
     m_defaultFitIntoViewportMarginRate = 0.0;
@@ -622,7 +622,12 @@ void QViewer::disableContextMenu()
     m_contextMenuActive = false;
 }
 
-TransferFunction* QViewer::getTransferFunction() const
+void QViewer::setTransferFunction(const TransferFunction &transferFunction)
+{
+    m_transferFunction = transferFunction;
+}
+
+const TransferFunction& QViewer::getTransferFunction() const
 {
     return m_transferFunction;
 }

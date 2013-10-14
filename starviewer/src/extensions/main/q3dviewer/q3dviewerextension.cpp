@@ -397,7 +397,7 @@ void Q3DViewerExtension::applyClut(const TransferFunction &clut, bool preset)
     }
     m_gradientEditor->setTransferFunction(m_currentClut);
     m_editorByValues->setTransferFunction(m_currentClut);
-    m_3DView->setTransferFunction(new TransferFunction(m_currentClut));
+    m_3DView->setTransferFunction(m_currentClut);
     emit newTransferFunction();
 //     this->render();
 }
@@ -405,8 +405,8 @@ void Q3DViewerExtension::applyClut(const TransferFunction &clut, bool preset)
 void Q3DViewerExtension::changeViewerTransferFunction()
 {
     // Actualitzem l'editor de cluts quan es canvia per la funció pel w/l del visor
-    m_gradientEditor->setTransferFunction(*(m_3DView->getTransferFunction()));
-    m_editorByValues->setTransferFunction(*(m_3DView->getTransferFunction()));
+    m_gradientEditor->setTransferFunction(m_3DView->getTransferFunction());
+    m_editorByValues->setTransferFunction(m_3DView->getTransferFunction());
 }
 
 void Q3DViewerExtension::computeOrCancelObscurance()
