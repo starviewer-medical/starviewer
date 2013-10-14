@@ -6,9 +6,10 @@
 #include "patientbrowsermenu.h"
 // Per poder afegir i modificar els presets que visualitzem
 #include "windowlevelpresetstooldata.h"
-#include "transferfunction.h"
 #include "qviewerworkinprogresswidget.h"
 #include "windowlevelhelper.h"
+#include "logging.h"
+#include "mathtools.h"
 
 // TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de
 // interface, pacs, etc.etc.!!
@@ -620,16 +621,6 @@ void QViewer::enableContextMenu()
 void QViewer::disableContextMenu()
 {
     m_contextMenuActive = false;
-}
-
-void QViewer::setTransferFunction(const TransferFunction &transferFunction)
-{
-    m_transferFunction = transferFunction;
-}
-
-const TransferFunction& QViewer::getTransferFunction() const
-{
-    return m_transferFunction;
 }
 
 void QViewer::contextMenuRelease()
