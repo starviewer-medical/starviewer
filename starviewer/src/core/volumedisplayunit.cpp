@@ -288,7 +288,19 @@ void VolumeDisplayUnit::setWindowLevel(double window, double level)
 
 void VolumeDisplayUnit::setTransferFunction(const TransferFunction &transferFunction)
 {
+    m_transferFunction = transferFunction;
     m_imagePipeline->setTransferFunction(transferFunction);
+}
+
+const TransferFunction& VolumeDisplayUnit::getTransferFunction() const
+{
+    return m_transferFunction;
+}
+
+void VolumeDisplayUnit::clearTransferFunction()
+{
+    m_transferFunction.clear();
+    m_imagePipeline->clearTransferFunction();
 }
 
 void VolumeDisplayUnit::setSlabProjectionMode(AccumulatorFactory::AccumulatorType accumulatorType)

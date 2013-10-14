@@ -2,6 +2,7 @@
 #define VOLUMEDISPLAYUNIT_H
 
 #include "accumulator.h"
+#include "transferfunction.h"
 #include "windowlevel.h"
 
 class vtkImageActor;
@@ -14,7 +15,6 @@ class Image;
 class ImagePipeline;
 class OrthogonalPlane;
 class SliceHandler;
-class TransferFunction;
 class Volume;
 class WindowLevelPresetsToolData;
 class VolumePixelData;
@@ -83,6 +83,10 @@ public:
 
     /// Sets the transfer function.
     void setTransferFunction(const TransferFunction &transferFunction);
+    /// Returns the transfer function.
+    const TransferFunction& getTransferFunction() const;
+    /// Clears the transfer function.
+    void clearTransferFunction();
 
     /// Returns the current slice index.
     int getSlice() const;
@@ -148,7 +152,10 @@ private:
 
     /// Window and level data
     WindowLevelPresetsToolData *m_windowLevelData;
-    
+
+    /// The current transfer function.
+    TransferFunction m_transferFunction;
+
     /// Holds the current thickslab pixel data
     VolumePixelData *m_currentThickSlabPixelData;
 };
