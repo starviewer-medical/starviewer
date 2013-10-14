@@ -368,13 +368,6 @@ void Q3DMPRViewer::setWindowLevel(double window, double level)
     }
 }
 
-void Q3DMPRViewer::setTransferFunction(TransferFunction *transferFunction)
-{
-    m_transferFunction = transferFunction;
-    // Apliquem la funció de transferència sobre cadascun dels plans
-    // TODO Aplicar la funció de color: caldrà fer un pipeline similar al del 2D
-}
-
 void Q3DMPRViewer::enableOutline(bool enable)
 {
     m_isOutlineEnabled = enable;

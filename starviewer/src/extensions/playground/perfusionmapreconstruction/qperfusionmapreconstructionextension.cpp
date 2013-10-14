@@ -375,7 +375,7 @@ void QPerfusionMapReconstructionExtension::createColorMap( )
     unsigned char tuple2[4] = { 1, 1, 1, 1 };
     table->SetTupleValue( table->GetNumberOfTuples() - 1, tuple2 );
 
-    TransferFunction *hueTransferFunction = new TransferFunction(mapHueLut);
+    TransferFunction hueTransferFunction(mapHueLut);
     m_2DView->getViewer()->setTransferFunction(hueTransferFunction);
 
     m_2DView->getViewer()->setWindowLevel(1.0, m_mapMin - 1.0);
@@ -418,7 +418,7 @@ void QPerfusionMapReconstructionExtension::createColorMap2( )
     //unsigned char tuple2[4] = { 1.0, 1.0, 1.0, 1.0 };
     table->SetTupleValue( table->GetNumberOfTuples() - 1, tuple );
 
-    TransferFunction *hueTransferFunction = new TransferFunction(mapHueLut);
+    TransferFunction hueTransferFunction(mapHueLut);
     m_2DView->getViewer()->setTransferFunction(hueTransferFunction);
 
     m_2DView->getViewer()->setWindowLevel(1.0, m_mapMin - 1.0);
@@ -454,7 +454,7 @@ void QPerfusionMapReconstructionExtension::createColorMap( double window, double
     table->SetTupleValue( 0, tuple );
     table->SetTupleValue( table->GetNumberOfTuples() - 1, tuple );
 
-    TransferFunction *hueTransferFunction = new TransferFunction(mapHueLut);
+    TransferFunction hueTransferFunction(mapHueLut);
     m_2DView->getViewer()->setTransferFunction(hueTransferFunction);
 }
 
@@ -528,7 +528,7 @@ void QPerfusionMapReconstructionExtension::createColorMap(DoubleImageType::Point
     //table->SetTupleValue( 0, tuple );
     //table->SetTupleValue( table->GetNumberOfTuples() - 1, tuple );
 
-    TransferFunction *hueTransferFunction = new TransferFunction(mapHueLut);
+    TransferFunction hueTransferFunction(mapHueLut);
     viewer->setTransferFunction(hueTransferFunction);
     
     viewer->setWindowLevel(1.0,minmaxCalc->GetMinimum() - 1.0);
@@ -604,7 +604,7 @@ void QPerfusionMapReconstructionExtension::createColorMap(Volume::ItkImageType::
     //table->SetTupleValue( 0, tuple );
     //table->SetTupleValue( table->GetNumberOfTuples() - 1, tuple );
 
-    TransferFunction *hueTransferFunction = new TransferFunction(mapHueLut);
+    TransferFunction hueTransferFunction(mapHueLut);
     viewer->setTransferFunction(hueTransferFunction);
     
     viewer->setWindowLevel(1.0,minmaxCalc->GetMinimum() - 1.0);

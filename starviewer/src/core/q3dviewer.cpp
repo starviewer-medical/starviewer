@@ -90,20 +90,19 @@ Q3DViewer::Q3DViewer(QWidget *parent)
     m_vtkVolume->SetMapper(m_volumeMapper);
     m_renderer->AddViewProp(m_vtkVolume);
 
-    m_transferFunction = new TransferFunction;
     // Creem una funció de transferència per defecte TODO la tenim només per tenir alguna cosa per defecte
     // Opacitat
-    m_transferFunction->setOpacity(20.0, 0.0);
-    m_transferFunction->setOpacity(255.0, 0.2);
+    m_transferFunction.setOpacity(20.0, 0.0);
+    m_transferFunction.setOpacity(255.0, 0.2);
     // Colors
-    m_transferFunction->setColor(0.0, 0.0, 0.0, 0.0);
-    m_transferFunction->setColor(64.0, 1.0, 0.0, 0.0);
-    m_transferFunction->setColor(128.0, 0.0, 0.0, 1.0);
-    m_transferFunction->setColor(192.0, 0.0, 1.0, 0.0);
-    m_transferFunction->setColor(255.0, 0.0, 0.2, 0.0);
+    m_transferFunction.setColor(0.0, 0.0, 0.0, 0.0);
+    m_transferFunction.setColor(64.0, 1.0, 0.0, 0.0);
+    m_transferFunction.setColor(128.0, 0.0, 0.0, 1.0);
+    m_transferFunction.setColor(192.0, 0.0, 1.0, 0.0);
+    m_transferFunction.setColor(255.0, 0.0, 0.2, 0.0);
 
-    m_volumeProperty->SetColor(m_transferFunction->vtkColorTransferFunction());
-    m_volumeProperty->SetScalarOpacity(m_transferFunction->vtkOpacityTransferFunction());
+    m_volumeProperty->SetColor(m_transferFunction.vtkColorTransferFunction());
+    m_volumeProperty->SetScalarOpacity(m_transferFunction.vtkOpacityTransferFunction());
 
     m_ambientVoxelShader = new AmbientVoxelShader();
     m_directIlluminationVoxelShader = new DirectIlluminationVoxelShader();
@@ -182,7 +181,6 @@ Q3DViewer::~Q3DViewer()
     delete m_directIlluminationObscuranceVoxelShader;
     delete m_ambientContourObscuranceVoxelShader;
     delete m_directIlluminationContourObscuranceVoxelShader;
-    delete m_transferFunction;
     delete m_newTransferFunction;
     // Eliminem tots els elements vtk creats
     if (m_4DLinearRegressionGradientEstimator)
@@ -265,7 +263,7 @@ void Q3DViewer::setWindowLevel(double window, double level)
         bool pointInZero = false;
         bool pointInRange = false;
 
-        m_transferFunction->clear();
+        m_transferFunction.clear();
 
         QList<double> colorPoints = m_newTransferFunction->colorKeys();
 
@@ -284,7 +282,7 @@ void Q3DViewer::setWindowLevel(double window, double level)
                 pointInRange = true;
             }
 
-            m_transferFunction->setColor(newX, m_newTransferFunction->getColor(x));
+            m_transferFunction.setColor(newX, m_newTransferFunction->getColor(x));
         }
 
         QList<double> opacityPoints = m_newTransferFunction->opacityKeys();
@@ -304,18 +302,18 @@ void Q3DViewer::setWindowLevel(double window, double level)
                 pointInRange = true;
             }
 
-            m_transferFunction->setOpacity(newX, m_newTransferFunction->getOpacity(x));
+            m_transferFunction.setOpacity(newX, m_newTransferFunction->getOpacity(x));
         }
 
-        m_transferFunction->trim(0, m_range);
+        m_transferFunction.trim(0, m_range);
 
         if (!pointInZero)
         {
-            m_transferFunction->setOpacity(0.0, 0.0);
+            m_transferFunction.setOpacity(0.0, 0.0);
         }
         if (!pointInRange)
         {
-            m_transferFunction->setOpacity(m_range, 0.0);
+            m_transferFunction.setOpacity(m_range, 0.0);
         }
 
         this->applyCurrentRenderingMethod();
@@ -555,17 +553,14 @@ void Q3DViewer::applyCurrentRenderingMethod()
     }
 }
 
-void Q3DViewer::setTransferFunction(TransferFunction *transferFunction)
+void Q3DViewer::setTransferFunction(const TransferFunction &transferFunction)
 {
-    if (m_transferFunction != transferFunction)
-    {
-        delete m_transferFunction;
-        m_transferFunction = transferFunction;
-    }
-    m_volumeProperty->SetScalarOpacity(m_transferFunction->vtkOpacityTransferFunction());
-    m_volumeProperty->SetColor(m_transferFunction->vtkColorTransferFunction());
-    m_ambientVoxelShader->setTransferFunction(*m_transferFunction);
-    m_directIlluminationVoxelShader->setTransferFunction(*m_transferFunction);
+    QViewer::setTransferFunction(transferFunction);
+
+    m_volumeProperty->SetScalarOpacity(m_transferFunction.vtkOpacityTransferFunction());
+    m_volumeProperty->SetColor(m_transferFunction.vtkColorTransferFunction());
+    m_ambientVoxelShader->setTransferFunction(m_transferFunction);
+    m_directIlluminationVoxelShader->setTransferFunction(m_transferFunction);
 
     if (m_volumeProperty->GetShade())
     {
@@ -602,7 +597,7 @@ void Q3DViewer::setNewTransferFunction()
         delete m_newTransferFunction;
     }
 
-    m_newTransferFunction = new TransferFunction(*m_transferFunction);
+    m_newTransferFunction = new TransferFunction(m_transferFunction);
     m_window = m_range;
     m_level = m_range/2.0;
 }
@@ -1179,7 +1174,7 @@ void Q3DViewer::computeObscurance(ObscuranceQuality quality)
     }
 
     m_obscuranceMainThread->setVolume(m_vtkVolume);
-    m_obscuranceMainThread->setTransferFunction(*m_transferFunction);
+    m_obscuranceMainThread->setTransferFunction(m_transferFunction);
 
     connect(m_obscuranceMainThread, SIGNAL(progress(int)), this, SIGNAL(obscuranceProgress(int)));
     connect(m_obscuranceMainThread, SIGNAL(computed()), this, SLOT(endComputeObscurance()));

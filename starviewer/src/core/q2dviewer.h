@@ -261,7 +261,7 @@ public slots:
 
     void setWindowLevelInVolume(Volume *volume, const WindowLevel &windowLevel);
     void setWindowLevel(double window, double level);
-    void setTransferFunction(TransferFunction *transferFunction);
+    virtual void setTransferFunction(const TransferFunction &transferFunction);
 
     /// L'únic que fa és emetre el senyal seedPositionChanged, per poder-ho cridar desde la seedTool
     /// TODO Aquest mètode hauria de quedar obsolet
