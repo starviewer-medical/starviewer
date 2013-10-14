@@ -26,18 +26,11 @@ void PETCTVolumeDisplayUnitHandler::setupDefaultTransferFunctions()
     {
         if (m_transferFunctionModel->rowCount() > 0)
         {
-            
             VolumeDisplayUnit *petUnit = getPETDisplayUnit();
+
             if (petUnit)
             {
-                double newRange[2];
-                petUnit->getVolume()->getScalarRange(newRange);
-
-                const TransferFunction &transferFunction = m_transferFunctionModel->getTransferFunction(0);
-                double originalRange[2] = { transferFunction.keys().first(), transferFunction.keys().last() };
-                const TransferFunction &scaledTransferFunction = transferFunction.toNewRange(originalRange[0], originalRange[1], newRange[0], newRange[1]);
-                
-                petUnit->setTransferFunction(scaledTransferFunction);
+                petUnit->setTransferFunction(m_transferFunctionModel->getTransferFunction(0));
             }
         }
     }
