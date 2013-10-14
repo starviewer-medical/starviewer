@@ -12,6 +12,7 @@ namespace udg {
 PETCTVolumeDisplayUnitHandler::PETCTVolumeDisplayUnitHandler()
  : PairedVolumeDisplayUnitHandler()
 {
+    getTransferFunctionModel()->loadDefault2DTransferFunctions();
 }
 
 PETCTVolumeDisplayUnitHandler::~PETCTVolumeDisplayUnitHandler()
@@ -23,10 +24,7 @@ void PETCTVolumeDisplayUnitHandler::setupDefaultTransferFunctions()
     // If we have two volumes, the PET will have the first default 2D transfer function
     if (getNumberOfInputs() == 2)
     {
-        TransferFunctionModel model;
-        model.loadDefault2DTransferFunctions();
-
-        if (model.rowCount() > 0)
+        if (m_transferFunctionModel->rowCount() > 0)
         {
             
             VolumeDisplayUnit *petUnit = getPETDisplayUnit();
@@ -35,7 +33,7 @@ void PETCTVolumeDisplayUnitHandler::setupDefaultTransferFunctions()
                 double newRange[2];
                 petUnit->getVolume()->getScalarRange(newRange);
 
-                const TransferFunction &transferFunction = model.getTransferFunction(0);
+                const TransferFunction &transferFunction = m_transferFunctionModel->getTransferFunction(0);
                 double originalRange[2] = { transferFunction.keys().first(), transferFunction.keys().last() };
                 const TransferFunction &scaledTransferFunction = transferFunction.toNewRange(originalRange[0], originalRange[1], newRange[0], newRange[1]);
                 
