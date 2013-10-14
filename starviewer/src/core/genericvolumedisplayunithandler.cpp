@@ -4,6 +4,7 @@
 #include "logging.h"
 #include "volumedisplayunit.h"
 #include "imagepipeline.h"
+#include "transferfunctionmodel.h"
 
 #include <vtkImageActor.h>
 
@@ -11,11 +12,13 @@ namespace udg {
 
 GenericVolumeDisplayUnitHandler::GenericVolumeDisplayUnitHandler()
 {
+    m_transferFunctionModel = new TransferFunctionModel();
 }
 
 GenericVolumeDisplayUnitHandler::~GenericVolumeDisplayUnitHandler()
 {
     removeDisplayUnits();
+    delete m_transferFunctionModel;
 }
 
 void GenericVolumeDisplayUnitHandler::setInput(Volume *input)
@@ -79,6 +82,11 @@ QList<VolumeDisplayUnit*> GenericVolumeDisplayUnitHandler::getVolumeDisplayUnitL
 int GenericVolumeDisplayUnitHandler::getMaximumNumberOfInputs() const
 {
     return std::numeric_limits<int>::max();
+}
+
+TransferFunctionModel* GenericVolumeDisplayUnitHandler::getTransferFunctionModel() const
+{
+    return m_transferFunctionModel;
 }
 
 void GenericVolumeDisplayUnitHandler::removeDisplayUnits()

@@ -5,6 +5,7 @@
 
 namespace udg {
 
+class TransferFunctionModel;
 class Volume;
 class VolumeDisplayUnit;
 
@@ -43,6 +44,9 @@ public:
     /// Returns the maximum number of inputs supported by the handler
     virtual int getMaximumNumberOfInputs() const;
 
+    /// Returns the transfer function model containing the available transfer functions for the volume display units of this handler.
+    TransferFunctionModel* getTransferFunctionModel() const;
+
 protected:
     /// Sets up the default transfer functions for the required inputs.
     /// Should be reimplemented by the required subclasses that need to apply specific transfer functions on their inputs
@@ -70,6 +74,9 @@ private:
 protected:
     /// The list of the created display units
     QList<VolumeDisplayUnit*> m_displayUnits;
+
+    /// Holds the transfer functions available to this handler.
+    TransferFunctionModel *m_transferFunctionModel;
 };
 
 } // End namespace udg
