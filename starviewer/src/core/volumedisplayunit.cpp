@@ -288,8 +288,21 @@ void VolumeDisplayUnit::setWindowLevel(double window, double level)
 
 void VolumeDisplayUnit::setTransferFunction(const TransferFunction &transferFunction)
 {
-    m_transferFunction = transferFunction;
-    m_imagePipeline->setTransferFunction(transferFunction);
+    // Scale transfer function before applying (only if the transfer function has at least 2 points)
+    if (transferFunction.keys().size() > 1)
+    {
+        double newRange[2];
+        m_volume->getScalarRange(newRange);
+        double originalRange[2] = { transferFunction.keys().first(), transferFunction.keys().last() };
+        m_transferFunction = transferFunction.toNewRange(originalRange[0], originalRange[1], newRange[0], newRange[1]);
+        m_transferFunction.setName(transferFunction.name());
+    }
+    else
+    {
+        m_transferFunction = transferFunction;
+    }
+
+    m_imagePipeline->setTransferFunction(m_transferFunction);
 }
 
 const TransferFunction& VolumeDisplayUnit::getTransferFunction() const
