@@ -1720,4 +1720,14 @@ QList<VolumeDisplayUnit*> Q2DViewer::getDisplayUnits() const
     }
 }
 
+TransferFunctionModel* Q2DViewer::getTransferFunctionModel() const
+{
+    if (!m_displayUnitsHandler)
+    {
+        return 0;
+    }
+
+    return m_displayUnitsHandler->getTransferFunctionModel();
+}
+
 };  // End namespace udg

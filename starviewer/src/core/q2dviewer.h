@@ -32,6 +32,7 @@ class Q2DViewerAnnotationHandler;
 class VolumeDisplayUnitHandlerFactory;
 class GenericVolumeDisplayUnitHandler;
 class TransferFunction;
+class TransferFunctionModel;
 
 /**
     Classe base per als visualitzadors 2D.
@@ -233,6 +234,9 @@ public:
 
     /// Returns the current transfer function of the main volume.
     const TransferFunction& getTransferFunction() const;
+
+    /// Returns the transfer function model corresponding to the input(s) of this Q2DViewer.
+    TransferFunctionModel* getTransferFunctionModel() const;
 
 public slots:
     virtual void setInput(Volume *volume);
