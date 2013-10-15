@@ -159,16 +159,8 @@ Q2DViewerExtension::~Q2DViewerExtension()
     writeSettings();
 
 #ifndef STARVIEWER_LITE
-    // L'objecte es crea quan fem un setInput. Per tant, fem la comprovació.
-    if (m_relatedStudiesWidget)
-    {
-        delete m_relatedStudiesWidget;
-    }
-    
-    if (m_relatedStudiesManager)
-    {
-        delete m_relatedStudiesManager;
-    }
+    delete m_relatedStudiesWidget;
+    delete m_relatedStudiesManager;
 #endif
 
     delete m_hangingProtocolsMenu;
