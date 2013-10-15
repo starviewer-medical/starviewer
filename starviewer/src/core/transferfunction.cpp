@@ -247,6 +247,11 @@ bool TransferFunction::isSetGradientOpacity(double y) const
     return m_gradientOpacity.isSet(y);
 }
 
+bool TransferFunction::isEmpty() const
+{
+    return m_color.isEmpty() && m_scalarOpacity.isEmpty() && m_gradientOpacity.isEmpty();
+}
+
 const QList<double>& TransferFunction::keys() const
 {
     updateKeys();
