@@ -44,6 +44,9 @@ public:
     /// Retorna cert si hi ha un punt (x,y) definit explícitament, i fals altrament.
     bool isSet(double x) const;
 
+    /// Returns true if this transfer function doesn't have any point defined.
+    bool isEmpty() const;
+
     /// Retorna la llista de valors x de tots els punts (x,y) definits explícitament.
     QList<double> keys() const;
 
@@ -152,6 +155,12 @@ template <typename T>
 bool TransferFunctionTemplate<T>::isSet(double x) const
 {
     return m_map.contains(x);
+}
+
+template <typename T>
+bool TransferFunctionTemplate<T>::isEmpty() const
+{
+    return m_map.isEmpty();
 }
 
 template <typename T>

@@ -103,6 +103,10 @@ public:
     /// Retorna cert si hi ha un punt d'opacitat del gradient (y,o) definit explícitament, i fals altrament.
     bool isSetGradientOpacity(double y) const;
 
+    /// Returns true if this transfer function doesn't have any point defined,
+    /// i.e. if the color and the scalar and gradient opacity transfer functions are all empty.
+    bool isEmpty() const;
+
     /// Retorna la llista de valors de propietat x de tots els punts de color (x,c) i opacitat escalar (x,o) definits explícitament.
     const QList<double>& keys() const;
     /// Retorna la llista de valors de propietat x dels punts de color (x,c) i opacitat escalar (x,o) definits explícitament dins de l'interval [begin, end].
