@@ -45,6 +45,10 @@ public:
     /// Sets the transfer function at the given index. If the index is invalid, it does nothing.
     void setTransferFunction(const QModelIndex &index, const TransferFunction &transferFunction);
 
+    /// Returns the index of the given transfer function. If the transfer function is not found, returns -1.
+    /// If matchNameOnly is true, then transfer functions are compared only by their name, ignoring their values.
+    int getIndexOf(const TransferFunction &transferFunction, bool matchNameOnly = false) const;
+
     /// Loads the default 2D transfer functions from resources.
     void loadDefault2DTransferFunctions();
 

@@ -132,6 +132,26 @@ void TransferFunctionModel::setTransferFunction(const QModelIndex &index, const 
     }
 }
 
+int TransferFunctionModel::getIndexOf(const TransferFunction &transferFunction, bool matchNameOnly) const
+{
+    QModelIndexList matched = match(index(0), Qt::DisplayRole, transferFunction.name(), -1, Qt::MatchFixedString | Qt::MatchCaseSensitive);
+
+    if (matchNameOnly && !matched.isEmpty())
+    {
+        return matched.first().row();
+    }
+
+    foreach (const QModelIndex &index, matched)
+    {
+        if (getTransferFunction(index) == transferFunction)
+        {
+            return index.row();
+        }
+    }
+
+    return -1;
+}
+
 void TransferFunctionModel::loadDefault2DTransferFunctions()
 {
     QDirIterator it(":/cluts/2d");
