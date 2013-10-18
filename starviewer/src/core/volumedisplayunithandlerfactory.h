@@ -28,7 +28,10 @@ private:
     QSharedPointer<SingleVolumeDisplayUnitHandler> createSingleVolumeDisplayUnitHandler(Volume *input);
     QSharedPointer<GenericVolumeDisplayUnitHandler> createGenericVolumeDisplayUnitHandler(const QList<Volume*> &inputs);
     QSharedPointer<PairedVolumeDisplayUnitHandler> createPairedVolumeDisplayUnitHandler(const QList<Volume*> &inputs);
-    
+
+    /// Chooses the best handler among the family of single handlers
+    QSharedPointer<SingleVolumeDisplayUnitHandler> chooseBestSingleVolumeDisplayUnitHandler(Volume *input);
+
     /// Chooses the best handler among the family of paired handlers
     QSharedPointer<PairedVolumeDisplayUnitHandler> chooseBestPairedVolumeDisplayUnitHandler(const QList<Volume*> &inputs);
 };
