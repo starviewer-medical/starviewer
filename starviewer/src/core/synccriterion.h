@@ -19,7 +19,7 @@ public:
     bool isCriterionSatisfied(QViewer *viewer1, QViewer *viewer2);
 
 protected:
-    /// To be implemented by each su
+    /// To be implemented by each subclass
     virtual bool criterionIsMet(QViewer *viewer1, QViewer *viewer2) = 0;
 };
 
