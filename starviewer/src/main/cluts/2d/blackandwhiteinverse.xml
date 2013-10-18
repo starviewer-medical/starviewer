@@ -1,0 +1,11 @@
+<transferfunction version="0">
+ <name>Black &amp; White Inverse</name>
+ <color>
+  <point value="0" r="1" g="1" b="1"/>
+  <point value="255" r="0" g="0" b="0"/>
+ </color>
+ <opacity>
+  <point value="0" a="1"/>
+ </opacity>
+ <gradientopacity/>
+</transferfunction>
