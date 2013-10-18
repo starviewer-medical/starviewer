@@ -4,6 +4,7 @@
 #include "singlevolumedisplayunithandler.h"
 #include "pairedvolumedisplayunithandler.h"
 #include "petctvolumedisplayunithandler.h"
+#include "petvolumedisplayunithandler.h"
 
 #include "volume.h"
 #include "image.h"
@@ -46,7 +47,7 @@ QSharedPointer<GenericVolumeDisplayUnitHandler> VolumeDisplayUnitHandlerFactory:
 
 QSharedPointer<SingleVolumeDisplayUnitHandler> VolumeDisplayUnitHandlerFactory::createSingleVolumeDisplayUnitHandler(Volume *input)
 {
-    QSharedPointer<SingleVolumeDisplayUnitHandler> inputHandler(new SingleVolumeDisplayUnitHandler());
+    QSharedPointer<SingleVolumeDisplayUnitHandler> inputHandler(chooseBestSingleVolumeDisplayUnitHandler(input));
     inputHandler->setInput(input);
 
     return inputHandler;
@@ -66,6 +67,18 @@ QSharedPointer<GenericVolumeDisplayUnitHandler> VolumeDisplayUnitHandlerFactory:
     inputHandler->setInputs(inputs);
 
     return inputHandler;
+}
+
+QSharedPointer<SingleVolumeDisplayUnitHandler> VolumeDisplayUnitHandlerFactory::chooseBestSingleVolumeDisplayUnitHandler(Volume *input)
+{
+    if (input->getImage(0)->getParentSeries()->getModality() == "PT")
+    {
+        return QSharedPointer<SingleVolumeDisplayUnitHandler>(new PETVolumeDisplayUnitHandler());
+    }
+    else
+    {
+        return QSharedPointer<SingleVolumeDisplayUnitHandler>(new SingleVolumeDisplayUnitHandler());
+    }
 }
 
 QSharedPointer<PairedVolumeDisplayUnitHandler> VolumeDisplayUnitHandlerFactory::chooseBestPairedVolumeDisplayUnitHandler(const QList<Volume*> &inputs)
