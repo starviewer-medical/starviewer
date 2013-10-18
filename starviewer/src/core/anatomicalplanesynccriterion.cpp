@@ -20,7 +20,7 @@ bool AnatomicalPlaneSyncCriterion::criterionIsMet(QViewer *viewer1, QViewer *vie
 
 bool AnatomicalPlaneSyncCriterion::criterionIsMet(Q2DViewer *viewer1, Q2DViewer *viewer2)
 {
-    if (!viewer1 && !viewer2)
+    if (!viewer1 || !viewer2)
     {
         return false;
     }
