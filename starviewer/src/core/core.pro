@@ -368,6 +368,7 @@ HEADERS += extensionfactory.h \
     singlevolumedisplayunithandler.h \
     pairedvolumedisplayunithandler.h \
     petctvolumedisplayunithandler.h \
+    petvolumedisplayunithandler.h \
     vtkdepthdisabledopenglimageactor.h \
     transferfunctionmodel.h \
     windowlevelhelper.h
@@ -687,6 +688,7 @@ SOURCES += extensionmediator.cpp \
     singlevolumedisplayunithandler.cpp \
     pairedvolumedisplayunithandler.cpp \
     petctvolumedisplayunithandler.cpp \
+    petvolumedisplayunithandler.cpp \
     vtkdepthdisabledopenglimageactor.cpp \
     transferfunctionmodel.cpp \
     windowlevelhelper.cpp
