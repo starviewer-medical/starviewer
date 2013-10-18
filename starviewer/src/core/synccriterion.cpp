@@ -12,7 +12,7 @@ SyncCriterion::~SyncCriterion()
 
 bool SyncCriterion::isCriterionSatisfied(QViewer *viewer1, QViewer *viewer2)
 {
-    if (viewer1 != 0 && viewer2 != 0)
+    if (viewer1 && viewer2)
     {
         return criterionIsMet(viewer1, viewer2);
     }
