@@ -61,6 +61,9 @@ void removeEmptyTransferFunctionFromModel(QAbstractItemModel *model)
 
 namespace udg {
 
+// Minimum size in pixels of the unfolded combo box showing all the items. This is used for the window level and transfer function combos.
+const int MinimumComboBoxViewWidth = 170;
+
 Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
  : QWidget(parent), m_patient(0), m_lastSelectedViewer(0)
 {
@@ -173,6 +176,11 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_statsWatcher->addClicksCounter(m_relatedStudiesToolButton);
 
     m_emptyTransferFunctionModel = new TransferFunctionModel(this);
+
+    m_windowLevelComboBox->view()->setTextElideMode(Qt::ElideRight);
+    m_windowLevelComboBox->view()->setMinimumWidth(MinimumComboBoxViewWidth);
+    m_transferFunctionComboBox->view()->setTextElideMode(Qt::ElideRight);
+    m_transferFunctionComboBox->view()->setMinimumWidth(MinimumComboBoxViewWidth);
 }
 
 Q2DViewerExtension::~Q2DViewerExtension()
