@@ -22,6 +22,7 @@
 #include "toolproxy.h"
 #include "q2dviewersettings.h"
 #include "shortcutmanager.h"
+#include "transferfunctionmodel.h"
 
 #ifndef STARVIEWER_LITE
 #include "qrelatedstudieswidget.h"
@@ -37,8 +38,26 @@
 #include <QGridLayout>
 #include <QProgressDialog>
 #include <QMessageBox>
+#include <QListView>
 
 #include "layoutmanager.h"
+
+namespace {
+
+// Adds the special empty transfer function to the given model.
+void addEmptyTransferFunctionToModel(QAbstractItemModel *model)
+{
+    model->insertRow(0);
+    model->setData(model->index(0, 0), QObject::tr("None"), Qt::DisplayRole);
+}
+
+// Removes the special empty transfer function from the given model.
+void removeEmptyTransferFunctionFromModel(QAbstractItemModel *model)
+{
+    model->removeRow(0);
+}
+
+}
 
 namespace udg {
 
@@ -152,6 +171,8 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_statsWatcher->addClicksCounter(m_referenceLinesToolButton);
 
     m_statsWatcher->addClicksCounter(m_relatedStudiesToolButton);
+
+    m_emptyTransferFunctionModel = new TransferFunctionModel(this);
 }
 
 Q2DViewerExtension::~Q2DViewerExtension()
@@ -555,6 +576,7 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
 
             disconnect(m_lastSelectedViewer->getViewer(), SIGNAL(viewChanged(int)), this, SLOT(updateDICOMInformationButton()));
             disconnect(m_lastSelectedViewer->getViewer(), SIGNAL(viewerStatusChanged()), this, SLOT(updateExporterToolButton()));
+            disconnect(m_lastSelectedViewer->getViewer(), SIGNAL(volumeChanged(Volume*)), this, SLOT(updateTransferFunctionComboBoxWithCurrentViewerModel()));
 
             // És necessari associar cada cop al viewer actual les associacions del menú de la tool d'screen shot
             ScreenShotTool *screenShotTool = dynamic_cast<ScreenShotTool*>(m_lastSelectedViewer->getViewer()->getToolProxy()->getTool("ScreenShotTool"));
@@ -577,6 +599,7 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
 #endif
             connect(viewerWidget->getViewer(), SIGNAL(viewChanged(int)), SLOT(updateDICOMInformationButton()));
             connect(m_lastSelectedViewer->getViewer(), SIGNAL(viewerStatusChanged()), this, SLOT(updateExporterToolButton()));
+            connect(selected2DViewer, SIGNAL(volumeChanged(Volume*)), this, SLOT(updateTransferFunctionComboBoxWithCurrentViewerModel()));
 
             // És necessari associar cada cop al viewer actual les associacions del menú de la tool d'screen shot
             ScreenShotTool *screenShotTool = dynamic_cast<ScreenShotTool*>(viewerWidget->getViewer()->getToolProxy()->getTool("ScreenShotTool"));
@@ -591,6 +614,8 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
             WindowLevelPresetsToolData *windowLevelData = selected2DViewer->getWindowLevelData();
             m_windowLevelComboBox->setPresetsData(windowLevelData);
             windowLevelData->selectCurrentPreset(windowLevelData->getCurrentPreset().getName());
+
+            updateTransferFunctionComboBox(selected2DViewer->getTransferFunctionModel());
 
             m_cineController->setQViewer(selected2DViewer);
             m_thickSlabWidget->link(selected2DViewer);
@@ -608,6 +633,7 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
             m_windowLevelComboBox->clearPresets();
             m_cineController->setQViewer(0);
             m_thickSlabWidget->unlink();
+            updateTransferFunctionComboBox(0);
         }
     }
 }
@@ -891,6 +917,52 @@ void Q2DViewerExtension::setGrid(int rows, int columns)
     m_layoutManager->cancelOngoingOperations();
 #endif
     m_workingArea->setGrid(rows, columns);
+}
+
+void Q2DViewerExtension::updateTransferFunctionComboBoxWithCurrentViewerModel()
+{
+    updateTransferFunctionComboBox(m_workingArea->getSelectedViewer()->getViewer()->getTransferFunctionModel());
+}
+
+void Q2DViewerExtension::updateTransferFunctionComboBox(TransferFunctionModel *transferFunctionModel)
+{
+    disconnect(m_transferFunctionComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(setTransferFunctionToCurrentViewer(int)));
+
+    if (!transferFunctionModel)
+    {
+        transferFunctionModel = m_emptyTransferFunctionModel;
+    }
+
+    removeEmptyTransferFunctionFromModel(m_transferFunctionComboBox->model());
+    addEmptyTransferFunctionToModel(transferFunctionModel);
+    m_transferFunctionComboBox->setModel(transferFunctionModel);
+
+    const Q2DViewer *viewer = m_workingArea->getSelectedViewer()->getViewer();
+    // For now, always get the transfer function of the last volume
+    const TransferFunction &transferFunction = viewer->getVolumeTransferFunction(viewer->getNumberOfInputs() - 1);
+    int index = transferFunctionModel->getIndexOf(transferFunction, true);
+
+    if (index >= 0)
+    {
+        m_transferFunctionComboBox->setCurrentIndex(index);
+    }
+
+    connect(m_transferFunctionComboBox, SIGNAL(currentIndexChanged(int)), SLOT(setTransferFunctionToCurrentViewer(int)));
+}
+
+void Q2DViewerExtension::setTransferFunctionToCurrentViewer(int transferFunctionIndex)
+{
+    Q2DViewerWidget *currentViewerWidget = m_workingArea->getSelectedViewer();
+
+    if (!currentViewerWidget || transferFunctionIndex < 0)
+    {
+        return;
+    }
+
+    Q2DViewer *viewer = currentViewerWidget->getViewer();
+    // For now, always set the transfer function to the last volume
+    viewer->setVolumeTransferFunction(viewer->getNumberOfInputs() - 1, viewer->getTransferFunctionModel()->getTransferFunction(transferFunctionIndex));
+    viewer->render();
 }
 
 }

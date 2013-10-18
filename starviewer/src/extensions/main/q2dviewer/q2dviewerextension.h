@@ -81,6 +81,9 @@ private:
     /// Shows the given widget below the button, as if it was the button's menu
     void showWidgetBelowButton(QWidget *widget, QAbstractButton *button);
 
+    /// Sets the given transfer function model to the transfer function combo box and selects the index of the transfer function applied in the current viewer.
+    void updateTransferFunctionComboBox(TransferFunctionModel *transferFunctionModel);
+
 private slots:
     // HACK to be replaced by a proper solution
     void hideHangingProtocolsWithPreviousAreBeingSearchedInMenu();
@@ -170,6 +173,13 @@ private slots:
     /// Aplica un grid regular al layout, i elimina l'etiqueta si algun estudi relacionat està en descàrrega
     void setGrid(int rows, int columns);
 
+    /// Sets the transfer function model of the current viewer to the transfer function combo box and selects the index of the transfer function applied in the
+    /// current viewer.
+    void updateTransferFunctionComboBoxWithCurrentViewerModel();
+
+    /// Sets the transfer function at the given index in the current model to the current viewer.
+    void setTransferFunctionToCurrentViewer(int transferFunctionIndex);
+
 private:
     /// Accions
     QAction *m_singleShotAction;
@@ -226,6 +236,9 @@ private:
     SyncActionManager *m_syncActionManager;
     ViewersLayoutToSyncActionManagerAdapter *m_layoutToSyncActionManagerAdapter;
 #endif
+
+    /// Transfer function model to use when a viewer returns a null model or an empty viewer is selected.
+    TransferFunctionModel *m_emptyTransferFunctionModel;
 
 };
 
