@@ -10,7 +10,7 @@
     <height>636</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
    <property name="spacing">
     <number>0</number>
    </property>
@@ -18,11 +18,8 @@
     <number>0</number>
    </property>
    <item>
-    <layout class="QHBoxLayout">
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
      <property name="spacing">
-      <number>0</number>
-     </property>
-     <property name="margin">
       <number>0</number>
      </property>
      <item>
@@ -188,7 +185,7 @@
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../../../../../../../../.designer/backup</normaloff>../../../../../../../../.designer/backup</iconset>
+           <normaloff>../../../../../../../.designer/backup</normaloff>../../../../../../../.designer/backup</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -217,7 +214,7 @@
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../../../../../../../../.designer/backup</normaloff>../../../../../../../../.designer/backup</iconset>
+           <normaloff>../../../../../../../.designer/backup</normaloff>../../../../../../../.designer/backup</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -253,7 +250,7 @@
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../../../../../../../../.designer/backup</normaloff>../../../../../../../../.designer/backup</iconset>
+           <normaloff>../../../../../../../.designer/backup</normaloff>../../../../../../../.designer/backup</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -279,7 +276,7 @@
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../../../../../../../../.designer/backup</normaloff>../../../../../../../../.designer/backup</iconset>
+           <normaloff>../../../../../../../.designer/backup</normaloff>../../../../../../../.designer/backup</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -305,7 +302,7 @@
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../../../../../../../../.designer/backup</normaloff>../../../../../../../../.designer/backup</iconset>
+           <normaloff>../../../../../../../.designer/backup</normaloff>../../../../../../../.designer/backup</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -331,7 +328,7 @@
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../../../../../../../../.designer/backup</normaloff>../../../../../../../../.designer/backup</iconset>
+           <normaloff>../../../../../../../.designer/backup</normaloff>../../../../../../../.designer/backup</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -353,11 +350,8 @@
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout">
+      <layout class="QVBoxLayout" name="verticalLayout">
        <property name="spacing">
-        <number>0</number>
-       </property>
-       <property name="margin">
         <number>0</number>
        </property>
        <item>
@@ -375,7 +369,7 @@
            </property>
            <property name="icon">
             <iconset>
-             <normaloff>../../../../../../../../.designer/backup</normaloff>../../../../../../../../.designer/backup</iconset>
+             <normaloff>../../../../../../../.designer/backup</normaloff>../../../../../../../.designer/backup</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -398,7 +392,7 @@
            </property>
            <property name="icon">
             <iconset>
-             <normaloff>../../../../../../../../.designer/backup</normaloff>../../../../../../../../.designer/backup</iconset>
+             <normaloff>../../../../../../../.designer/backup</normaloff>../../../../../../../.designer/backup</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -421,7 +415,7 @@
            </property>
            <property name="icon">
             <iconset>
-             <normaloff>../../../../../../../../.designer/backup</normaloff>../../../../../../../../.designer/backup</iconset>
+             <normaloff>../../../../../../../.designer/backup</normaloff>../../../../../../../.designer/backup</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -440,108 +434,91 @@
         </layout>
        </item>
        <item>
-        <widget class="QLabel" name="m_orientationButtonsLabel">
-         <property name="text">
-          <string>Orientation</string>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <property name="spacing">
+          <number>0</number>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout">
-       <property name="spacing">
-        <number>6</number>
-       </property>
-       <property name="margin">
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="QToolButton" name="m_flipVerticalToolButton">
-         <property name="text">
-          <string>FlipV</string>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff>../../../../../../../../.designer/backup</normaloff>../../../../../../../../.designer/backup</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="autoRaise">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="m_flipHorizontalToolButton">
-         <property name="text">
-          <string>FlipH</string>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff>../../../../../../../../.designer/backup</normaloff>../../../../../../../../.designer/backup</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="autoRaise">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <widget class="QToolButton" name="m_rotateClockWiseToolButton">
-         <property name="text">
-          <string>Rotate</string>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff>../../../../../../../../.designer/backup</normaloff>../../../../../../../../.designer/backup</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="autoRaise">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="m_rotateCounterClockWiseToolButton">
-         <property name="text">
-          <string>-90</string>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff>../../../../../../../../.designer/backup</normaloff>../../../../../../../../.designer/backup</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="autoRaise">
-          <bool>true</bool>
-         </property>
-        </widget>
+         <item>
+          <widget class="QToolButton" name="m_rotateCounterClockWiseToolButton">
+           <property name="text">
+            <string>-90</string>
+           </property>
+           <property name="icon">
+            <iconset>
+             <normaloff>../../../../../../../.designer/backup</normaloff>../../../../../../../.designer/backup</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="m_rotateClockWiseToolButton">
+           <property name="text">
+            <string>Rotate</string>
+           </property>
+           <property name="icon">
+            <iconset>
+             <normaloff>../../../../../../../.designer/backup</normaloff>../../../../../../../.designer/backup</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="m_flipHorizontalToolButton">
+           <property name="text">
+            <string>FlipH</string>
+           </property>
+           <property name="icon">
+            <iconset>
+             <normaloff>../../../../../../../.designer/backup</normaloff>../../../../../../../.designer/backup</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="m_flipVerticalToolButton">
+           <property name="text">
+            <string>FlipV</string>
+           </property>
+           <property name="icon">
+            <iconset>
+             <normaloff>../../../../../../../.designer/backup</normaloff>../../../../../../../.designer/backup</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </item>
@@ -566,7 +543,7 @@
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../../../../../../../../.designer/backup</normaloff>../../../../../../../../.designer/backup</iconset>
+           <normaloff>../../../../../../../.designer/backup</normaloff>../../../../../../../.designer/backup</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -589,7 +566,7 @@
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../../../../../../../../.designer/backup</normaloff>../../../../../../../../.designer/backup</iconset>
+           <normaloff>../../../../../../../.designer/backup</normaloff>../../../../../../../.designer/backup</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -622,7 +599,7 @@
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../../../../../../../../.designer/backup</normaloff>../../../../../../../../.designer/backup</iconset>
+           <normaloff>../../../../../../../.designer/backup</normaloff>../../../../../../../.designer/backup</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -737,7 +714,7 @@
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../../../../../../../../.designer/backup</normaloff>../../../../../../../../.designer/backup</iconset>
+           <normaloff>../../../../../../../.designer/backup</normaloff>../../../../../../../.designer/backup</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -760,7 +737,7 @@
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../../../../../../../../.designer/backup</normaloff>../../../../../../../../.designer/backup</iconset>
+           <normaloff>../../../../../../../.designer/backup</normaloff>../../../../../../../.designer/backup</iconset>
          </property>
          <property name="iconSize">
           <size>
