@@ -137,6 +137,11 @@ void Q2DViewer::verticalFlip()
 
 PatientOrientation Q2DViewer::getCurrentDisplayedImagePatientOrientation() const
 {
+    if (!getMainInput())
+    {
+        return PatientOrientation();
+    }
+    
     // Si no estem a la vista axial (adquisició original) obtindrem 
     // la orientació a través de la primera imatge
     int index = (getCurrentViewPlane() == OrthogonalPlane::XYPlane) ? getCurrentSlice() : 0;
