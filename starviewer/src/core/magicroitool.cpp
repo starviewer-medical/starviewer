@@ -491,7 +491,6 @@ void MagicROITool::computePolygon()
     
     int nextX;
     int nextY;
-    int nextZ = z;
 
     int direction = 0;
 
