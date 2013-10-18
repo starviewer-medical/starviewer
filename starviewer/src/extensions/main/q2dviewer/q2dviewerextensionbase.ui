@@ -532,12 +532,6 @@
        </property>
        <item>
         <widget class="QToolButton" name="m_restoreToolButton">
-         <property name="maximumSize">
-          <size>
-           <width>32</width>
-           <height>16777215</height>
-          </size>
-         </property>
          <property name="text">
           <string>Restore</string>
          </property>
