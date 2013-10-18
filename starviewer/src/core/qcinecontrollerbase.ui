@@ -30,12 +30,6 @@
      </property>
      <item>
       <widget class="QToolButton" name="m_playToolButton">
-       <property name="minimumSize">
-        <size>
-         <width>46</width>
-         <height>0</height>
-        </size>
-       </property>
        <property name="text">
         <string>Play</string>
        </property>
