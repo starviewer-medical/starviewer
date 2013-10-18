@@ -14,6 +14,10 @@ public:
     PETVolumeDisplayUnitHandler();
     virtual ~PETVolumeDisplayUnitHandler();
 
+protected:
+    /// Sets up the default transfer functions for the required inputs.
+    virtual void setupDefaultTransferFunctions();
+
 };
 
 }
