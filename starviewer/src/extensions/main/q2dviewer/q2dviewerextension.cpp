@@ -934,6 +934,11 @@ void Q2DViewerExtension::updateTransferFunctionComboBoxWithCurrentViewerModel()
 
 void Q2DViewerExtension::updateTransferFunctionComboBox(TransferFunctionModel *transferFunctionModel)
 {
+    if (!m_workingArea->getSelectedViewer())
+    {
+        return;
+    }
+
     disconnect(m_transferFunctionComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(setTransferFunctionToCurrentViewer(int)));
 
     if (!transferFunctionModel)
