@@ -6,37 +6,35 @@
 namespace udg {
 
 /**
-    Widget per utilitzar com a item de menú. Pot representar diversos objectes i te la funcionalitat de canviar l'aparença al situar-se el mouse sobre l'element.
+    Object that represents an item of the browser menu
   */
-class PatientBrowserMenuBasicItem : public QLabel {
-Q_OBJECT
+class PatientBrowserMenuBasicItem : public QObject {
+
+    Q_OBJECT
+    Q_PROPERTY(QString text READ getText WRITE setText NOTIFY textChanged)
+    Q_PROPERTY(QString identifier READ getIdentifier WRITE setIdentifier NOTIFY identifierChanged)
+    Q_PROPERTY(QString type READ getType)
+
 public:
-    PatientBrowserMenuBasicItem(QWidget *parent = 0);
+    PatientBrowserMenuBasicItem(QObject *parent = 0);
     ~PatientBrowserMenuBasicItem(){}
+
+    void setText(const QString &text);
+    QString getText();
 
     void setIdentifier(const QString &identifier);
     QString getIdentifier() const;
 
-    /// La posem en negreta per marcar que es la que s'esta visualitzant
-    void setFontBold();
+    virtual QString getType();
 
 signals:
-    /// Aquest senyal s'emetrà quan el mouse entri al widget i ens notifica el seu identificador
-    void isActive(QString);
-
-    /// Aquest senyal s'emetrà quan el mouse surti del widget
-    void isNotActive();
-
-    /// Aquest senyal s'emet quan s'escull un ítem i ens notifica el seu identificador
-    void selectedItem(QString);
+    void textChanged();
+    void identifierChanged();
 
 protected:
-    /// Sobrecàrrega del mètode que tracta tots els events
-    bool event(QEvent *event);
-
-private:
     /// Identificador de l'ítem
     QString m_identifier;
+    QString m_text;
 };
 
 }

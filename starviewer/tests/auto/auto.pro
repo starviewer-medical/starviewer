@@ -12,7 +12,7 @@ SOURCES += autotests.cpp
 
 QT += testlib
 
-QT += xml opengl network webkit script xmlpatterns gui
+QT += xml opengl network webkit script xmlpatterns gui declarative
 
 OBJECTS_DIR = ../../tmp/obj
 UI_DIR = ../../tmp/ui

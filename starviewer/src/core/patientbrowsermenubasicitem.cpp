@@ -1,25 +1,27 @@
 #include "patientbrowsermenubasicitem.h"
 
-#include <QPalette>
-#include <QListWidgetItem>
-#include <QPixmap>
-#include <QVBoxLayout>
-#include <QMouseEvent>
-
-#include "logging.h"
-
 namespace udg {
 
-PatientBrowserMenuBasicItem::PatientBrowserMenuBasicItem(QWidget *parent)
-: QLabel(parent)
+PatientBrowserMenuBasicItem::PatientBrowserMenuBasicItem(QObject *parent)
+: QObject(parent)
 {
-    setFrameShape(QFrame::StyledPanel);
-    setStyleSheet("border: 1px solid gray; border-radius: 2;");
+}
+
+void PatientBrowserMenuBasicItem::setText(const QString &text)
+{
+    m_text = text;
+    emit textChanged();
+}
+
+QString PatientBrowserMenuBasicItem::getText()
+{
+    return m_text;
 }
 
 void PatientBrowserMenuBasicItem::setIdentifier(const QString &identifier)
 {
     m_identifier = identifier;
+    emit identifierChanged();
 }
 
 QString PatientBrowserMenuBasicItem::getIdentifier() const
@@ -27,47 +29,9 @@ QString PatientBrowserMenuBasicItem::getIdentifier() const
     return m_identifier;
 }
 
-void PatientBrowserMenuBasicItem::setFontBold()
+QString PatientBrowserMenuBasicItem::getType()
 {
-    setStyleSheet("border: 1px solid gray; border-radius: 2;font-weight: bold");
-}
-
-bool PatientBrowserMenuBasicItem::event(QEvent *event)
-{
-    if (event->type() == QEvent::Enter)
-    {
-        if (this->font().bold())
-        {
-            setStyleSheet("border: 1px solid gray; border-radius: 2; background-color: rgba(85, 160, 255, 128); font-weight: bold;");
-        }
-        else
-        {
-            setStyleSheet("border: 1px solid gray; border-radius: 2; background-color: rgba(85, 160, 255, 128);");
-        }
-        emit isActive(m_identifier);
-    }
-    else if (event->type() == QEvent::MouseButtonPress)
-    {
-        emit selectedItem(m_identifier);
-        return true;
-    }
-    else if (event->type() == QEvent::Leave)
-    {
-        if (this->font().bold())
-        {
-            setStyleSheet("border: 1px solid gray; border-radius: 2; font-weight: bold");
-        }
-        else
-        {
-            setStyleSheet("border: 1px solid gray; border-radius: 2;");
-        }
-    }
-    else if (event->type() == QEvent::Hide || event->type() == QEvent::Close)
-    {
-        emit isNotActive();
-    }
-
-    return QLabel::event(event);
+    return "BasicItem";
 }
 
 }

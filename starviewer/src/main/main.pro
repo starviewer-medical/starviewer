@@ -27,7 +27,7 @@ SOURCES += main.cpp \
 HEADERS += applicationtranslationsloader.h \
            syncactions.h \
            diagnosistests.h
-RESOURCES = main.qrc
+RESOURCES = main.qrc ../qml/qml.qrc
 
 win32{
 RC_FILE = starviewer.rc
@@ -52,7 +52,7 @@ include(../breakpad.inc)
 
 include(installextensions.inc)
 
-QT += xml opengl network webkit script xmlpatterns
+QT += xml opengl network webkit script xmlpatterns declarative
 
 #TODO: Qt 4.5.3 no afegeix la informacio de UI_DIR com a include a l'hora de compilar el main.cpp
 INCLUDEPATH += ../../tmp/ui
