@@ -51,6 +51,7 @@ void PatientBrowserMenu::setPatient(Patient *patient)
 
         // Per cada sèrie de l'estudi extreurem el seu label i l'identificador
         QList<QPair<QString, QString> > itemsList;
+        QList<QPair<QString, QString> > fusionItemsList;
         foreach (Series *series, study->getViewableSeries())
         {
             label = tr(" Series %1: %2 %3 %4 %5")
@@ -79,10 +80,37 @@ void PatientBrowserMenu::setPatient(Patient *patient)
                 itemPair.second = QString::number(volume->getIdentifier().getValue());
                 // Afegim el parell a la llista
                 itemsList << itemPair;
+
+                //Look for fusion pairs
+
+                if (series->getModality() == "CT" && !series->isCTLocalizer())
+                {
+                    foreach (Series * secondSeries, study->getSeries())
+                    {
+                        if (series->getModality() != secondSeries->getModality() && series->getFrameOfReferenceUID() == secondSeries->getFrameOfReferenceUID())
+                        {
+                            double range1[2], range2[2];
+                            range1[0] = series->getImages().first()->getSliceLocation().toDouble();
+                            range1[1] = series->getImages().last()->getSliceLocation().toDouble();
+                            range2[0] = secondSeries->getImages().first()->getSliceLocation().toDouble();
+                            range2[1] = secondSeries->getImages().last()->getSliceLocation().toDouble();
+                            if ((range1[0] > range2[0] && range1[1] < range2[1]) || (range2[0] > range1[0] && range2[1] < range1[1]))
+                            {
+                                QPair<QString, QString> itemPair;
+                                // Label
+                                itemPair.first = QString("%1 + %2").arg(series->getProtocolName().trimmed() + series->getDescription().trimmed()).arg(secondSeries->getProtocolName().trimmed() + secondSeries->getDescription().trimmed());
+                                // Identifier
+                                itemPair.second = QString("%1+%2").arg(series->getVolumesList().first()->getIdentifier().getValue()).arg(secondSeries->getVolumesList().first()->getIdentifier().getValue());
+                                // Afegim el parell a la llista
+                                fusionItemsList << itemPair;
+                            }
+                        }
+                    }
+                }
             }
         }
         // Afegim les sèries agrupades per estudi
-        m_patientBrowserList->addItemsGroup(caption, itemsList);
+        m_patientBrowserList->addItemsGroup(caption, itemsList << fusionItemsList);
     }
 
     connect(m_patientBrowserList, SIGNAL(isActive(QString)), SLOT(updateActiveItemView(QString)));
@@ -91,7 +119,7 @@ void PatientBrowserMenu::setPatient(Patient *patient)
 
 void PatientBrowserMenu::updateActiveItemView(const QString &identifier)
 {
-    Identifier id(identifier.toInt());
+    Identifier id(identifier.split("+").first().toInt());
     Volume *volume = VolumeRepository::getRepository()->getVolume(id);
     if (volume)
     {
@@ -313,8 +341,20 @@ void PatientBrowserMenu::processSelectedItem(const QString &identifier)
 
     if (m_patientBrowserList->getMarkedItem() != identifier)
     {
-        Identifier id(identifier.toInt());
-        emit selectedVolume(VolumeRepository::getRepository()->getVolume(id));
+        if (!identifier.contains("+"))
+        {
+            Identifier id(identifier.toInt());
+            emit selectedVolume(VolumeRepository::getRepository()->getVolume(id));
+        }
+        else
+        {
+            QList<Volume*> volumes;
+            foreach (const QString &id, identifier.split("+"))
+            {
+                volumes << VolumeRepository::getRepository()->getVolume(Identifier(id.toInt()));
+            }
+            emit selectedVolumes(volumes);
+        }
     }
 }
 
