@@ -28,6 +28,7 @@
 #include "q2dviewerannotationhandler.h"
 #include "volumedisplayunithandlerfactory.h"
 #include "genericvolumedisplayunithandler.h"
+#include "patientbrowsermenu.h"
 
 // Qt
 #include <QResizeEvent>
@@ -57,6 +58,7 @@ Q2DViewer::Q2DViewer(QWidget *parent)
 
     connect(m_volumeReaderManager, SIGNAL(readingFinished()), SLOT(volumeReaderJobFinished()));
     connect(m_volumeReaderManager, SIGNAL(progress(int)), m_workInProgressWidget, SLOT(updateProgress(int)));
+    connect(m_patientBrowserMenu, SIGNAL(selectedVolumes(QList<Volume*>)), this, SLOT(setInputAndRender(QList<Volume*>)));
 
     // Creem anotacions i actors
     m_annotationsHandler = new Q2DViewerAnnotationHandler(this);
