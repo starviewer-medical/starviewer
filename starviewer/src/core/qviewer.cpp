@@ -706,7 +706,7 @@ bool QViewer::adjustCameraScaleFactor(double factor)
         DEBUG_LOG("Renderer is NULL. No scale factor will be applied.");
         return false;
     }
-        
+    
     getActiveCamera()->Zoom(factor);
     
     if (this->getInteractor()->GetLightFollowCamera())
