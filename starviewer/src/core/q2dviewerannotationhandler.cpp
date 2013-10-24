@@ -122,8 +122,11 @@ void Q2DViewerAnnotationHandler::updatePatientAnnotationInformation()
             }
         }
 
-        m_cornerAnnotations->SetText(UpperRightCornerIndex, qPrintable(m_upperRightText));
-        m_cornerAnnotations->SetText(LowerRightCornerIndex, qPrintable(m_lowerRightText.trimmed()));
+        if (m_enabledAnnotations.testFlag(PatientInformationAnnotation))
+        {
+            m_cornerAnnotations->SetText(UpperRightCornerIndex, qPrintable(m_upperRightText));
+            m_cornerAnnotations->SetText(LowerRightCornerIndex, qPrintable(m_lowerRightText.trimmed()));
+        }
     }
     else
     {
