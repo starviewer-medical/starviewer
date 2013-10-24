@@ -10,6 +10,14 @@
 #include "applicationstylehelper.h"
 #include "screenmanager.h"
 
+#include "patientbrowsermenugroup.h"
+
+#include <QPainter>
+#include <QDeclarativeView>
+#include <QDeclarativeContext>
+#include <QDeclarativeItem>
+#include <QVBoxLayout>
+
 namespace udg {
 
 PatientBrowserMenu::PatientBrowserMenu(QWidget *parent)
@@ -111,15 +119,12 @@ void PatientBrowserMenu::popup(const QPoint &point, const QString &identifier)
     ScreenLayout screenLayout = screenManager.getScreenLayout();
     m_leftScreenID = screenLayout.getScreenOnTheLeftOf(m_currentScreenID);
     m_rightScreenID = screenLayout.getScreenOnTheRightOf(m_currentScreenID);
-    
-    // Mirem si l'alçada  del widget excedeix l'alçada de la pantalla
-    // En cas que sigui així anem afegint noves columnes per redistribuir els elements fins que l'alçada sigui menor a la de la pantalla
+
     QRect currentScreenGeometry = screenLayout.getScreen(m_currentScreenID).getAvailableGeometry();
-    while (m_patientBrowserList->sizeHint().height() > currentScreenGeometry.height())
-    {
-        m_patientBrowserList->addColumn();
-    }
-    
+
+    m_patientBrowserList->setMaximumWidth(currentScreenGeometry.width() - 300);
+    m_patientBrowserList->setMaximumHeight(currentScreenGeometry.height() - currentScreenGeometry.height() / 5);
+
     // Calculem l'alineament del menú
     bool rightAligned = shouldAlignMenuToTheRight(currentScreenGeometry);
     

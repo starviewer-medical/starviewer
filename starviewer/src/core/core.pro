@@ -371,7 +371,9 @@ HEADERS += extensionfactory.h \
     petvolumedisplayunithandler.h \
     vtkdepthdisabledopenglimageactor.h \
     transferfunctionmodel.h \
-    windowlevelhelper.h
+    windowlevelhelper.h \
+    patientbrowsermenugroup.h \
+    patientbrowsermenufusionitem.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -691,7 +693,9 @@ SOURCES += extensionmediator.cpp \
     petvolumedisplayunithandler.cpp \
     vtkdepthdisabledopenglimageactor.cpp \
     transferfunctionmodel.cpp \
-    windowlevelhelper.cpp
+    windowlevelhelper.cpp \
+    patientbrowsermenugroup.cpp \
+    patientbrowsermenufusionitem.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \
@@ -699,6 +703,9 @@ win32 {
     SOURCES += windowsfirewallaccess.cpp \
                windowssysteminformation.cpp
 }
+
+OTHER_FILES += ../qml/qmlpatientbrowsermenu.qml
+
 TEMPLATE = lib
 DESTDIR = ./
 CONFIG += staticlib
@@ -716,4 +723,5 @@ QT += xml \
     webkit \
     script \
     xmlpatterns \
-    opengl
+    opengl \
+    declarative

@@ -2,18 +2,31 @@
 
 #include <QLabel>
 #include <QGridLayout>
+#include "patientbrowsermenugroup.h"
 
 #include "patientbrowsermenubasicitem.h"
+#include "patientbrowsermenufusionitem.h"
 
-#include <cmath>
+#include <QDeclarativeItem>
+#include <QDeclarativeContext>
 
 namespace udg {
 
 PatientBrowserMenuList::PatientBrowserMenuList(QWidget *parent)
  : QWidget(parent)
 {
-    m_mainLayout = new QGridLayout(this);
-    m_mainLayout->setMargin(0);
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    layout->setMargin(10);
+    m_qmlView = new QDeclarativeView(this);
+    m_qmlView->rootContext()->setContextProperty("browserModel", QVariant::fromValue(m_groups));
+
+    layout->addWidget(m_qmlView);
+
+    m_qmlView->setSource(QUrl("qrc:///qmlpatientbrowsermenu.qml"));
+    QDeclarativeItem *object = qobject_cast<QDeclarativeItem*>(m_qmlView->rootObject());
+    connect(object, SIGNAL(isActive(QString)), this, SIGNAL(isActive(QString)));
+    connect(object, SIGNAL(selectedItem(QString)), this, SIGNAL(selectedItem(QString)));
+    connect(object, SIGNAL(sizeChanged()), this, SLOT(updateSize()));
 }
 
 PatientBrowserMenuList::~PatientBrowserMenuList()
@@ -22,110 +35,42 @@ PatientBrowserMenuList::~PatientBrowserMenuList()
 
 void PatientBrowserMenuList::addItemsGroup(const QString &caption, const QList<QPair<QString, QString> > &itemsList)
 {
-    QWidget *groupWidget = new QWidget(this);
-
-    QLabel *captionLabel = new QLabel(groupWidget);
-    captionLabel->setText(caption);
-    captionLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-    captionLabel->setFrameShape(QFrame::StyledPanel);
-
-    // Li donem l'style sheet a la caption que titula el grup d'ítems
-    QString backgroundColor = captionLabel->palette().color(captionLabel->backgroundRole()).name();
-    captionLabel->setStyleSheet("border: 2px solid #3E73B9;"
-                             "border-radius: 5;"
-                             "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,"
-                             "stop: 0 " + backgroundColor +
-                             ", stop: 0.1 #91C1FF, stop: 0.4 #8EBCF9, stop: 0.5 #86B2EC, stop: 1 #759CCF);");
-
-    QVBoxLayout *groupLayout = new QVBoxLayout(groupWidget);
-    QGridLayout *gridLayoutWidgets = new QGridLayout();
-
-    groupLayout->addWidget(captionLabel);
-    groupLayout->addLayout(gridLayoutWidgets);
-
-    // Comptem el nombre de series que seran visibles
-    int numberOfItems = itemsList.count();
-
-    int maxColumns = 2;
-    if (numberOfItems >= 20)
-    {
-        maxColumns = 3;
-    }
-
-    int row = 0;
-    int column = 0;
-    int itemsPerColumn = ceil ((double) numberOfItems / maxColumns);
-
+    QList<PatientBrowserMenuBasicItem*> elements;
+    QList<PatientBrowserMenuBasicItem*> fusionElements;
     typedef QPair<QString, QString> MyPair;
     foreach (MyPair itemPair, itemsList)
     {
-        gridLayoutWidgets->addWidget(createBasicItem(itemPair.first, itemPair.second), row, column);
-        row++;
-        if (row >= itemsPerColumn)
+        if (itemPair.second.contains("+"))
         {
-            row = 0;
-            column++;
+            PatientBrowserMenuFusionItem *item = new PatientBrowserMenuFusionItem;
+            item->setText(itemPair.first);
+            item->setIdentifier(itemPair.second);
+
+            fusionElements << item;
+        }
+        else
+        {
+            PatientBrowserMenuBasicItem *item = new PatientBrowserMenuBasicItem;
+            item->setText(itemPair.first);
+            item->setIdentifier(itemPair.second);
+
+            elements << item;
         }
     }
 
-    m_mainLayout->addWidget(groupWidget);
-}
+    PatientBrowserMenuGroup *group = new PatientBrowserMenuGroup();
+    group->setCaption(caption);
+    group->setElements(elements);
+    group->setFusionElements(fusionElements);
+    m_groups.append(group);
 
-void PatientBrowserMenuList::addColumn()
-{
-    int columns = m_mainLayout->columnCount();
-
-    int numberOfElements = m_mainLayout->count();
-    int rowsPerColum = ceil((double)numberOfElements / (columns + 1));
-    int currentElementIndex = numberOfElements - 1;
-
-    for (int j = columns; j >= 0; --j)
-    {
-        for (int i = rowsPerColum - 1; i >= 0 ; --i)
-        {
-            // Cal comprovar que l'índex està dins del nombre d'elements existents
-            if (i + (j * rowsPerColum) <= currentElementIndex && currentElementIndex >= 0)
-            {
-                QLayoutItem *item = m_mainLayout->takeAt(currentElementIndex);
-                m_mainLayout->addItem(item, i, j);
-                --currentElementIndex;
-            }
-        }
-    }
-}
-
-PatientBrowserMenuBasicItem *PatientBrowserMenuList::createBasicItem(const QString &label, const QString &identifier)
-{
-    PatientBrowserMenuBasicItem *seriebasicWidget = new PatientBrowserMenuBasicItem(this);
-
-    seriebasicWidget->setText(label);
-    seriebasicWidget->setIdentifier(identifier);
-    seriebasicWidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-
-    connect(seriebasicWidget, SIGNAL(selectedItem(QString)), SIGNAL(selectedItem(QString)));
-    connect(seriebasicWidget, SIGNAL(isActive(QString)), SIGNAL(isActive(QString)));
-    connect(seriebasicWidget, SIGNAL(isNotActive()), SIGNAL(isNotActive()));
-
-    m_itemsList.push_back(seriebasicWidget);
-
-    return seriebasicWidget;
+    m_qmlView->rootContext()->setContextProperty("browserModel", QVariant::fromValue(m_groups));
 }
 
 void PatientBrowserMenuList::markItem(const QString &identifier)
 {
-    int i = 0;
-    bool found = false;
-
-    while (i < m_itemsList.size() && !found)
-    {
-        if (m_itemsList.value(i)->getIdentifier() == identifier)
-        {
-            found = true;
-            m_itemsList.value(i)->setFontBold();
-            m_markedItem = identifier;
-        }
-        i++;
-    }
+    m_markedItem = identifier;
+    m_qmlView->rootObject()->setProperty("markedItem", QVariant::fromValue(m_markedItem));
 }
 
 QString PatientBrowserMenuList::getMarkedItem() const
@@ -140,7 +85,34 @@ bool PatientBrowserMenuList::event(QEvent *event)
     {
         emit closed();
     }
+
     return QWidget::event(event);
+}
+
+QSize PatientBrowserMenuList::sizeHint() const {
+    int width = m_qmlView->rootObject()->property("width").toInt() +  2 * this->layout()->margin();
+    int height = m_qmlView->rootObject()->property("height").toInt() +  2 * this->layout()->margin();
+    return QSize(width, height);
+}
+
+void PatientBrowserMenuList::setMaximumWidth(int width)
+{
+    QWidget::setMaximumWidth(width);
+    m_qmlView->rootObject()->setProperty("maxWidth", QVariant::fromValue((width - 2 * this->layout()->margin())));
+    updateSize();
+}
+
+void PatientBrowserMenuList::setMaximumHeight(int maxh)
+{
+    QWidget::setMaximumHeight(maxh);
+    m_qmlView->rootObject()->setProperty("maxHeight", QVariant::fromValue((maxh - 2 * this->layout()->margin())));
+
+}
+
+void PatientBrowserMenuList::updateSize()
+{
+    this->setFixedHeight(m_qmlView->rootObject()->property("height").toInt() +  2 * this->layout()->margin());
+    this->setFixedWidth(m_qmlView->rootObject()->property("width").toInt() +  2 * this->layout()->margin());
 }
 
 }
