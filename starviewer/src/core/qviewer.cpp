@@ -707,17 +707,7 @@ bool QViewer::adjustCameraScaleFactor(double factor)
         return false;
     }
         
-    // Code extracted from void vtkInteractorStyleTrackballCamera::Dolly(double factor)
-    vtkCamera *camera = getActiveCamera();
-    if (camera->GetParallelProjection())
-    {
-        camera->SetParallelScale(camera->GetParallelScale() / factor);
-    }
-    else
-    {
-        camera->Dolly(factor);
-        renderer->ResetCameraClippingRange();
-    }
+    getActiveCamera()->Zoom(factor);
     
     if (this->getInteractor()->GetLightFollowCamera())
     {
