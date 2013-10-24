@@ -412,7 +412,7 @@ int ViewersLayout::getNumberOfViewers() const
 {
     if (m_isRegular)
     {
-        return m_regularViewersGridVector.size();
+        return m_regularViewersGridVector.size() + m_freeLayoutViewersList.size();
     }
     else
     {
@@ -429,7 +429,14 @@ Q2DViewerWidget* ViewersLayout::getViewerWidget(int number)
     {
         if (m_isRegular)
         {
-            viewerWidget = m_regularViewersGridVector.at(number);
+            if (number < m_regularViewersGridVector.size())
+            {
+                viewerWidget = m_regularViewersGridVector.at(number);
+            }
+            else
+            {
+                viewerWidget = m_freeLayoutViewersList.at(number - m_regularViewersGridVector.size());
+            }
         }
         else
         {
