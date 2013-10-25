@@ -372,6 +372,7 @@ HEADERS += extensionfactory.h \
     vtkdepthdisabledopenglimageactor.h \
     transferfunctionmodel.h \
     transferfunctionmodelfiller.h \
+    defaulttransferfunctionselector.h \
     windowlevelhelper.h \
     patientbrowsermenugroup.h \
     patientbrowsermenufusionitem.h
@@ -695,6 +696,7 @@ SOURCES += extensionmediator.cpp \
     vtkdepthdisabledopenglimageactor.cpp \
     transferfunctionmodel.cpp \
     transferfunctionmodelfiller.cpp \
+    defaulttransferfunctionselector.cpp \
     windowlevelhelper.cpp \
     patientbrowsermenugroup.cpp \
     patientbrowsermenufusionitem.cpp

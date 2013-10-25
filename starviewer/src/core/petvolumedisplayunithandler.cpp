@@ -1,12 +1,11 @@
 #include "petvolumedisplayunithandler.h"
 
+#include "defaulttransferfunctionselector.h"
 #include "transferfunctionmodel.h"
 #include "transferfunctionmodelfiller.h"
 #include "volumedisplayunit.h"
 
 namespace udg {
-
-const char * const DefaultTransferFunctionName = "Black & White Inverse";
 
 PETVolumeDisplayUnitHandler::PETVolumeDisplayUnitHandler()
 {
@@ -19,9 +18,7 @@ PETVolumeDisplayUnitHandler::~PETVolumeDisplayUnitHandler()
 
 void PETVolumeDisplayUnitHandler::setupDefaultTransferFunctions()
 {
-    TransferFunction transferFunction;
-    transferFunction.setName(DefaultTransferFunctionName);
-    int index = m_transferFunctionModel->getIndexOf(transferFunction, true);
+    int index = DefaultTransferFunctionSelector().getDefaultTransferFunctionForPET(m_transferFunctionModel);
 
     if (index >= 0)
     {
