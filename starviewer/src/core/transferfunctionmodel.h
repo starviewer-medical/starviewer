@@ -49,9 +49,6 @@ public:
     /// If matchNameOnly is true, then transfer functions are compared only by their name, ignoring their values.
     int getIndexOf(const TransferFunction &transferFunction, bool matchNameOnly = false) const;
 
-    /// Loads the default 2D transfer functions from resources.
-    void loadDefault2DTransferFunctions();
-
 private:
     /// List where the transfer functions are stored.
     QList<TransferFunction> m_transferFunctionList;

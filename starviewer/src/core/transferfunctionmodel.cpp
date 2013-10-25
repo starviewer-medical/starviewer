@@ -1,9 +1,5 @@
 #include "transferfunctionmodel.h"
 
-#include "transferfunctionio.h"
-
-#include <QDirIterator>
-
 namespace udg {
 
 TransferFunctionModel::TransferFunctionModel(QObject *parent)
@@ -150,19 +146,6 @@ int TransferFunctionModel::getIndexOf(const TransferFunction &transferFunction, 
     }
 
     return -1;
-}
-
-void TransferFunctionModel::loadDefault2DTransferFunctions()
-{
-    QDirIterator it(":/cluts/2d");
-
-    while (it.hasNext())
-    {
-        TransferFunction *transferFunction = TransferFunctionIO::fromXmlFile(it.next());
-        this->insertRow(this->rowCount());
-        this->setTransferFunction(this->rowCount() - 1, *transferFunction);
-        delete transferFunction;
-    }
 }
 
 }
