@@ -23,18 +23,15 @@ PETCTVolumeDisplayUnitHandler::~PETCTVolumeDisplayUnitHandler()
 
 void PETCTVolumeDisplayUnitHandler::setupDefaultTransferFunctions()
 {
-    if (getNumberOfInputs() == 2)
+    VolumeDisplayUnit *petUnit = getPETDisplayUnit();
+
+    if (petUnit)
     {
-        VolumeDisplayUnit *petUnit = getPETDisplayUnit();
+        int index = DefaultTransferFunctionSelector().getDefaultTransferFunctionForPETCT(m_transferFunctionModel);
 
-        if (petUnit)
+        if (index >= 0)
         {
-            int index = DefaultTransferFunctionSelector().getDefaultTransferFunctionForPETCT(m_transferFunctionModel);
-
-            if (index >= 0)
-            {
-                petUnit->setTransferFunction(m_transferFunctionModel->getTransferFunction(index));
-            }
+            petUnit->setTransferFunction(m_transferFunctionModel->getTransferFunction(index));
         }
     }
 }
