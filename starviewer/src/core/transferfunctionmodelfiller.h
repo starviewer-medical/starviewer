@@ -11,6 +11,12 @@ class TransferFunctionModel;
 class TransferFunctionModelFiller {
 
 public:
+    /// Adds a special empty transfer function to the given model.
+    void addEmptyTransferFunction(TransferFunctionModel *model) const;
+
+    /// Removes the special empty transfer function from the given model.
+    void removeEmptyTransferFunction(TransferFunctionModel *model) const;
+
     /// Adds the 2D transfer functions from resources to the given model.
     void add2DTransferFunctions(TransferFunctionModel *model) const;
 
