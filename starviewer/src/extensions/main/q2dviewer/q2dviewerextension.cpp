@@ -929,11 +929,6 @@ void Q2DViewerExtension::updateTransferFunctionComboBoxWithCurrentViewerModel()
 
 void Q2DViewerExtension::updateTransferFunctionComboBox(TransferFunctionModel *transferFunctionModel)
 {
-    if (!m_workingArea->getSelectedViewer())
-    {
-        return;
-    }
-
     disconnect(m_transferFunctionComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(setTransferFunctionToCurrentViewer(int)));
 
     if (!transferFunctionModel)
@@ -945,14 +940,19 @@ void Q2DViewerExtension::updateTransferFunctionComboBox(TransferFunctionModel *t
     addEmptyTransferFunctionToModel(transferFunctionModel);
     m_transferFunctionComboBox->setModel(transferFunctionModel);
 
-    const Q2DViewer *viewer = m_workingArea->getSelectedViewer()->getViewer();
-    // For now, always get the transfer function of the last volume
-    const TransferFunction &transferFunction = viewer->getVolumeTransferFunction(viewer->getNumberOfInputs() - 1);
-    int index = transferFunctionModel->getIndexOf(transferFunction, true);
+    Q2DViewerWidget *selectedViewerWidget = m_workingArea->getSelectedViewer();
 
-    if (index >= 0)
+    if (selectedViewerWidget)
     {
-        m_transferFunctionComboBox->setCurrentIndex(index);
+        const Q2DViewer *viewer = m_workingArea->getSelectedViewer()->getViewer();
+        // For now, always get the transfer function of the last volume
+        const TransferFunction &transferFunction = viewer->getVolumeTransferFunction(viewer->getNumberOfInputs() - 1);
+        int index = transferFunctionModel->getIndexOf(transferFunction, true);
+
+        if (index >= 0)
+        {
+            m_transferFunctionComboBox->setCurrentIndex(index);
+        }
     }
 
     connect(m_transferFunctionComboBox, SIGNAL(currentIndexChanged(int)), SLOT(setTransferFunctionToCurrentViewer(int)));
