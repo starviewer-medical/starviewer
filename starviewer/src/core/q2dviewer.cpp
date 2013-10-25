@@ -986,7 +986,12 @@ void Q2DViewer::updateSecondaryVolumesSlices()
 
         if (nearestSlice >= 0)
         {
+            getDisplayUnit(i)->getImageActor()->VisibilityOn();
             getDisplayUnit(i)->setSlice(nearestSlice);
+        }
+        else
+        {
+            getDisplayUnit(i)->getImageActor()->VisibilityOff();
         }
     }
 }
