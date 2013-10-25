@@ -23,6 +23,7 @@
 #include "q2dviewersettings.h"
 #include "shortcutmanager.h"
 #include "transferfunctionmodel.h"
+#include "transferfunctionmodelfiller.h"
 
 #ifndef STARVIEWER_LITE
 #include "qrelatedstudieswidget.h"
@@ -41,23 +42,6 @@
 #include <QListView>
 
 #include "layoutmanager.h"
-
-namespace {
-
-// Adds the special empty transfer function to the given model.
-void addEmptyTransferFunctionToModel(QAbstractItemModel *model)
-{
-    model->insertRow(0);
-    model->setData(model->index(0, 0), QObject::tr("None"), Qt::DisplayRole);
-}
-
-// Removes the special empty transfer function from the given model.
-void removeEmptyTransferFunctionFromModel(QAbstractItemModel *model)
-{
-    model->removeRow(0);
-}
-
-}
 
 namespace udg {
 
@@ -936,8 +920,9 @@ void Q2DViewerExtension::updateTransferFunctionComboBox(TransferFunctionModel *t
         transferFunctionModel = m_emptyTransferFunctionModel;
     }
 
-    removeEmptyTransferFunctionFromModel(m_transferFunctionComboBox->model());
-    addEmptyTransferFunctionToModel(transferFunctionModel);
+    TransferFunctionModelFiller filler;
+    filler.removeEmptyTransferFunction(qobject_cast<TransferFunctionModel*>(m_transferFunctionComboBox->model()));
+    filler.addEmptyTransferFunction(transferFunctionModel);
     m_transferFunctionComboBox->setModel(transferFunctionModel);
 
     Q2DViewerWidget *selectedViewerWidget = m_workingArea->getSelectedViewer();
