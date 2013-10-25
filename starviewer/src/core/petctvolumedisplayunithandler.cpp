@@ -1,6 +1,7 @@
 #include "petctvolumedisplayunithandler.h"
 
 #include "transferfunctionmodel.h"
+#include "transferfunctionmodelfiller.h"
 #include "volume.h"
 #include "image.h"
 #include "series.h"
@@ -12,7 +13,7 @@ namespace udg {
 PETCTVolumeDisplayUnitHandler::PETCTVolumeDisplayUnitHandler()
  : PairedVolumeDisplayUnitHandler()
 {
-    getTransferFunctionModel()->loadDefault2DTransferFunctions();
+    TransferFunctionModelFiller().add2DTransferFunctions(getTransferFunctionModel());
 }
 
 PETCTVolumeDisplayUnitHandler::~PETCTVolumeDisplayUnitHandler()
