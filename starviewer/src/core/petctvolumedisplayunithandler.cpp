@@ -7,6 +7,7 @@
 #include "series.h"
 #include "volumedisplayunit.h"
 #include "imagepipeline.h"
+#include "defaulttransferfunctionselector.h"
 
 namespace udg {
 
@@ -22,16 +23,17 @@ PETCTVolumeDisplayUnitHandler::~PETCTVolumeDisplayUnitHandler()
 
 void PETCTVolumeDisplayUnitHandler::setupDefaultTransferFunctions()
 {
-    // If we have two volumes, the PET will have the first default 2D transfer function
     if (getNumberOfInputs() == 2)
     {
-        if (m_transferFunctionModel->rowCount() > 0)
-        {
-            VolumeDisplayUnit *petUnit = getPETDisplayUnit();
+        VolumeDisplayUnit *petUnit = getPETDisplayUnit();
 
-            if (petUnit)
+        if (petUnit)
+        {
+            int index = DefaultTransferFunctionSelector().getDefaultTransferFunctionForPETCT(m_transferFunctionModel);
+
+            if (index >= 0)
             {
-                petUnit->setTransferFunction(m_transferFunctionModel->getTransferFunction(0));
+                petUnit->setTransferFunction(m_transferFunctionModel->getTransferFunction(index));
             }
         }
     }
