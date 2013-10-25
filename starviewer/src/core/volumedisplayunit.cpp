@@ -296,11 +296,12 @@ void VolumeDisplayUnit::setTransferFunction(const TransferFunction &transferFunc
     }
     else
     {
-        // Scale transfer function before applying (only if the transfer function has at least 2 points)
-        if (transferFunction.keys().size() > 1)
+        double newRange[2];
+        m_volume->getScalarRange(newRange);
+
+        // Scale transfer function before applying (only if the volume has at least 2 distinct values and the transfer function has at least 2 points)
+        if (newRange[0] < newRange[1] && transferFunction.keys().size() > 1)
         {
-            double newRange[2];
-            m_volume->getScalarRange(newRange);
             double originalRange[2] = { transferFunction.keys().first(), transferFunction.keys().last() };
             m_transferFunction = transferFunction.toNewRange(originalRange[0], originalRange[1], newRange[0], newRange[1]);
             m_transferFunction.setName(transferFunction.name());
