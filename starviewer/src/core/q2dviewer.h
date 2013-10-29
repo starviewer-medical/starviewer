@@ -238,6 +238,9 @@ public:
     /// Returns the transfer function model corresponding to the input(s) of this Q2DViewer.
     TransferFunctionModel* getTransferFunctionModel() const;
 
+    /// Returns a unique string identifier of all inputs
+    virtual QString getInputIdentifier() const;
+
 public slots:
     virtual void setInput(Volume *volume);
 
