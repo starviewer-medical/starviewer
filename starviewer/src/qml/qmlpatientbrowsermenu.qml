@@ -11,6 +11,8 @@ Rectangle {
     property int maxHeight: 1500000
     property int maxWidth: computedColumnWidth * 2 + listview.anchors.leftMargin + listview.anchors.rightMargin;
 	property int scrollheight
+    property string fusionMarkedItem1: "-1"
+    property string fusionMarkedItem2: "-1"
 
     width: Math.min(computedColumnWidth * 2 + listview.anchors.leftMargin + listview.anchors.rightMargin, maxWidth);
     height: Math.min(listview.contentHeight + listview.anchors.topMargin + listview.anchors.bottomMargin, maxHeight);
@@ -105,11 +107,26 @@ Rectangle {
                     id: seriesItemsDelegate
 
                     Rectangle {
+                        property bool hovered: false;
+
                         width: seriesItems.cellWidth - 4
                         height: seriesItems.cellHeight - 4
                         radius: 4
                         border.color: "darkGray"
-                        color: myPalette.window
+                        color: {
+                            if (hovered)
+                            {
+                                return "lightsteelblue"
+                            }
+                            else if (browserMenu.fusionMarkedItem1 === modelData.identifier || browserMenu.fusionMarkedItem2 === modelData.identifier)
+                            {
+                                return "#8fd990"
+                            }
+                            else
+                            {
+                                return myPalette.window;
+                            }
+                        }
 
                         Text {
                             width: parent.width
@@ -128,9 +145,9 @@ Rectangle {
                             hoverEnabled: true
                             onEntered: {
                                 browserMenu.isActive(modelData.identifier);
-                                parent.color = "lightsteelblue"
+                                parent.hovered = true;
                             }
-                            onExited: parent.color = "transparent"
+                            onExited: parent.hovered = false;
                             onClicked: browserMenu.selectedItem(modelData.identifier)
                         }
                     }
@@ -200,8 +217,15 @@ Rectangle {
                                 onEntered: {
                                     browserMenu.isActive(modelData.identifier);
                                     parent.color = "lightsteelblue"
+                                    var fusionIDItems = modelData.identifier.split("+");
+                                    browserMenu.fusionMarkedItem1 = fusionIDItems[0];
+                                    browserMenu.fusionMarkedItem2 = fusionIDItems[1];
                                 }
-                                onExited: parent.color = "transparent"
+                                onExited: {
+                                    parent.color = "transparent"
+                                    browserMenu.fusionMarkedItem1 = "-1"
+                                    browserMenu.fusionMarkedItem2 = "-1"
+                                }
                                 onClicked: browserMenu.selectedItem(modelData.identifier)
                             }
                         }
