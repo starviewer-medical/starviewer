@@ -1,6 +1,7 @@
 #include "patientbrowsermenu.h"
 
 #include "patient.h"
+#include "patientbrowsermenuextendedinfo.h"
 #include "patientbrowsermenuextendeditem.h"
 #include "patientbrowsermenulist.h"
 #include "series.h"
@@ -128,21 +129,50 @@ void PatientBrowserMenu::setShowFusionOptions(bool show)
 
 void PatientBrowserMenu::updateActiveItemView(const QString &identifier)
 {
-    Identifier id(identifier.split("+").first().toInt());
-    Volume *volume = VolumeRepository::getRepository()->getVolume(id);
-    if (volume)
+    if (identifier.contains("+"))
     {
-        // Actualitzem les dades de l'item amb informació adicional
-        m_patientAdditionalInfo->setPixmap(volume->getThumbnail());
-        Series *series = volume->getImage(0)->getParentSeries();
-        m_patientAdditionalInfo->setText(QString(tr("%1 \n%2 \n%3\n%4 Images"))
-                                        .arg(series->getDescription().trimmed())
-                                        .arg(series->getModality().trimmed())
-                                        .arg(series->getProtocolName().trimmed())
-                                        .arg(volume->getNumberOfFrames())
-                                         );
-        placeAdditionalInfoWidget();
+        QList<PatientBrowserMenuExtendedItem*> items;
+        foreach(const QString &stringID, identifier.split("+"))
+        {
+            Identifier id(stringID.toInt());
+            Volume *volume = VolumeRepository::getRepository()->getVolume(id);
+            if (volume)
+            {
+                // Actualitzem les dades de l'item amb informació adicional
+                PatientBrowserMenuExtendedItem *item = new PatientBrowserMenuExtendedItem(m_patientAdditionalInfo);
+                item->setPixmap(volume->getThumbnail());
+                Series *series = volume->getImage(0)->getParentSeries();
+                item->setText(QString(tr("%1 \n%2 \n%3\n%4 Images"))
+                              .arg(series->getDescription().trimmed())
+                              .arg(series->getModality().trimmed())
+                              .arg(series->getProtocolName().trimmed())
+                              .arg(volume->getNumberOfFrames())
+                              );
+                items << item;
+            }
+        }
+        m_patientAdditionalInfo->setItems(items);
     }
+    else
+    {
+        Identifier id(identifier.toInt());
+        Volume *volume = VolumeRepository::getRepository()->getVolume(id);
+        if (volume)
+        {
+            // Actualitzem les dades de l'item amb informació adicional
+            PatientBrowserMenuExtendedItem *item = new PatientBrowserMenuExtendedItem(m_patientAdditionalInfo);
+            item->setPixmap(volume->getThumbnail());
+            Series *series = volume->getImage(0)->getParentSeries();
+            item->setText(QString(tr("%1 \n%2 \n%3\n%4 Images"))
+                                            .arg(series->getDescription().trimmed())
+                                            .arg(series->getModality().trimmed())
+                                            .arg(series->getProtocolName().trimmed())
+                                            .arg(volume->getNumberOfFrames())
+                                             );
+            m_patientAdditionalInfo->setItems(QList<PatientBrowserMenuExtendedItem*>() << item);
+        }
+    }
+    placeAdditionalInfoWidget();
 }
 
 void PatientBrowserMenu::popup(const QPoint &point, const QString &identifier)
@@ -379,7 +409,7 @@ void PatientBrowserMenu::createWidgets()
         delete m_patientBrowserList;
     }
 
-    m_patientAdditionalInfo = new PatientBrowserMenuExtendedItem(this);
+    m_patientAdditionalInfo = new PatientBrowserMenuExtendedInfo(this);
     m_patientBrowserList = new PatientBrowserMenuList(this);
 
     m_patientAdditionalInfo->setWindowFlags(Qt::Popup);

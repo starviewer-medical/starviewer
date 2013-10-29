@@ -5,7 +5,6 @@
 #include <QVBoxLayout>
 #include <QPixmap>
 #include <QPainter>
-#include <QEvent>
 
 namespace udg {
 
@@ -43,16 +42,6 @@ void PatientBrowserMenuExtendedItem::setPixmap(const QPixmap &pixmap)
 void PatientBrowserMenuExtendedItem::setText(const QString &text)
 {
     m_text->setText(text);
-}
-
-bool PatientBrowserMenuExtendedItem::event(QEvent *event)
-{
-    // Si s'ha pulsat l'escape
-    if (event->type() == QEvent::Close)
-    {
-        emit closed();
-    }
-    return QFrame::event(event);
 }
 
 }

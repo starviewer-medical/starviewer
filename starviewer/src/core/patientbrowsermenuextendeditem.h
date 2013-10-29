@@ -15,15 +15,8 @@ public:
     PatientBrowserMenuExtendedItem(QWidget *parent = 0);
     ~PatientBrowserMenuExtendedItem();
 
-    // Tractament dels events
-    bool event(QEvent *event);
-
     void setPixmap(const QPixmap &pixmap);
     void setText(const QString &text);
-
-signals:
-    /// Signal que s'emet quan es rep l'event de tancar el menu
-    void closed();
 
 private:
     /// Crea el widget inicial sense cap informació
