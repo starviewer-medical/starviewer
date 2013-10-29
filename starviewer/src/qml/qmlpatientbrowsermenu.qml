@@ -209,6 +209,7 @@ Rectangle {
                                 }
                                 text: modelData.text
                                 elide: Text.ElideMiddle
+                                font.bold: (browserMenu.markedItem === modelData.identifier)
                             }
 
                             MouseArea {

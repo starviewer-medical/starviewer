@@ -722,6 +722,17 @@ void QViewer::setDefaultOrientation(AnatomicalPlane::AnatomicalPlaneType anatomi
     Q_UNUSED(anatomicalPlane);
 }
 
+QString QViewer::getInputIdentifier() const
+{
+    QString selectedItem;
+    if (hasInput())
+    {
+        selectedItem = QString::number(getMainInput()->getIdentifier().getValue());
+    }
+
+    return selectedItem;
+}
+
 void QViewer::contextMenuEvent(QContextMenuEvent *menuEvent)
 {
     if (m_contextMenuActive)
@@ -739,11 +750,7 @@ void QViewer::contextMenuEvent(QContextMenuEvent *menuEvent)
         // Li actualitzem l'input perquè mostri els estudis actuals
         m_patientBrowserMenu->setPatient(mainWindow->getCurrentPatient());
 
-        QString selectedItem;
-        if (hasInput())
-        {
-            selectedItem = QString::number(getMainInput()->getIdentifier().getValue());
-        }
+        QString selectedItem = getInputIdentifier();
         m_patientBrowserMenu->popup(menuEvent->globalPos(), selectedItem); //->globalPos() ?
     }
 }

@@ -157,6 +157,9 @@ public:
     /// Canvia l'status del viewer
     void setViewerStatus(ViewerStatus status);
 
+    /// Returns a unique string identifier of all inputs
+    virtual QString getInputIdentifier() const;
+
 public slots:
     /// Indiquem les dades d'entrada
     virtual void setInput(Volume *volume) = 0;

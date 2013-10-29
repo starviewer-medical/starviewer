@@ -1201,6 +1201,17 @@ QList<Volume*> Q2DViewer::getInputs() const
     return volumes;
 }
 
+QString Q2DViewer::getInputIdentifier() const
+{
+    QStringList identifiers;
+    foreach(Volume *volume, getInputs())
+    {
+        identifiers << QString::number(volume->getIdentifier().getValue());
+    }
+
+    return identifiers.join("+");
+}
+
 void Q2DViewer::setSeedPosition(double pos[3])
 {
     emit seedPositionChanged(pos[0], pos[1], pos[2]);
