@@ -25,6 +25,9 @@ public:
     /// Assignem un pacient per representar al menu
     void setPatient(Patient *patient);
 
+    /// Sets if the menu can show fusion pair options if any
+    void setShowFusionOptions(bool show);
+
 public slots:
     /// Fem que es mostri el menú en la posició indicada
     void popup(const QPoint &point, const QString &identifier = QString());
@@ -69,6 +72,9 @@ private:
     int m_currentScreenID;
     int m_leftScreenID;
     int m_rightScreenID;
+
+    /// Boolean to know if menu can show fusion pair options if any
+    bool m_showFusionOptions;
 };
 
 }
