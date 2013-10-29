@@ -28,6 +28,8 @@ PatientBrowserMenu::PatientBrowserMenu(QWidget *parent)
 
     // Inicialment no sabem en quina pantalla es pot desplegar el menú
     m_currentScreenID = m_leftScreenID = m_rightScreenID = -1;
+
+    m_showFusionOptions = false;
 }
 
 PatientBrowserMenu::~PatientBrowserMenu()
@@ -82,27 +84,29 @@ void PatientBrowserMenu::setPatient(Patient *patient)
                 itemsList << itemPair;
 
                 //Look for fusion pairs
-
-                if (series->getModality() == "CT" && !series->isCTLocalizer())
+                if (m_showFusionOptions)
                 {
-                    foreach (Series * secondSeries, study->getSeries())
+                    if (series->getModality() == "CT" && !series->isCTLocalizer())
                     {
-                        if (series->getModality() != secondSeries->getModality() && series->getFrameOfReferenceUID() == secondSeries->getFrameOfReferenceUID())
+                        foreach (Series * secondSeries, study->getSeries())
                         {
-                            double range1[2], range2[2];
-                            range1[0] = series->getImages().first()->getSliceLocation().toDouble();
-                            range1[1] = series->getImages().last()->getSliceLocation().toDouble();
-                            range2[0] = secondSeries->getImages().first()->getSliceLocation().toDouble();
-                            range2[1] = secondSeries->getImages().last()->getSliceLocation().toDouble();
-                            if ((range1[0] > range2[0] && range1[1] < range2[1]) || (range2[0] > range1[0] && range2[1] < range1[1]))
+                            if (series->getModality() != secondSeries->getModality() && series->getFrameOfReferenceUID() == secondSeries->getFrameOfReferenceUID())
                             {
-                                QPair<QString, QString> itemPair;
-                                // Label
-                                itemPair.first = QString("%1 + %2").arg(series->getProtocolName().trimmed() + series->getDescription().trimmed()).arg(secondSeries->getProtocolName().trimmed() + secondSeries->getDescription().trimmed());
-                                // Identifier
-                                itemPair.second = QString("%1+%2").arg(series->getVolumesList().first()->getIdentifier().getValue()).arg(secondSeries->getVolumesList().first()->getIdentifier().getValue());
-                                // Afegim el parell a la llista
-                                fusionItemsList << itemPair;
+                                double range1[2], range2[2];
+                                range1[0] = series->getImages().first()->getSliceLocation().toDouble();
+                                range1[1] = series->getImages().last()->getSliceLocation().toDouble();
+                                range2[0] = secondSeries->getImages().first()->getSliceLocation().toDouble();
+                                range2[1] = secondSeries->getImages().last()->getSliceLocation().toDouble();
+                                if ((range1[0] > range2[0] && range1[1] < range2[1]) || (range2[0] > range1[0] && range2[1] < range1[1]))
+                                {
+                                    QPair<QString, QString> itemPair;
+                                    // Label
+                                    itemPair.first = QString("%1 + %2").arg(series->getProtocolName().trimmed() + series->getDescription().trimmed()).arg(secondSeries->getProtocolName().trimmed() + secondSeries->getDescription().trimmed());
+                                    // Identifier
+                                    itemPair.second = QString("%1+%2").arg(series->getVolumesList().first()->getIdentifier().getValue()).arg(secondSeries->getVolumesList().first()->getIdentifier().getValue());
+                                    // Afegim el parell a la llista
+                                    fusionItemsList << itemPair;
+                                }
                             }
                         }
                     }
@@ -115,6 +119,11 @@ void PatientBrowserMenu::setPatient(Patient *patient)
 
     connect(m_patientBrowserList, SIGNAL(isActive(QString)), SLOT(updateActiveItemView(QString)));
     connect(m_patientBrowserList, SIGNAL(selectedItem(QString)), SLOT(processSelectedItem(QString)));
+}
+
+void PatientBrowserMenu::setShowFusionOptions(bool show)
+{
+    m_showFusionOptions = show;
 }
 
 void PatientBrowserMenu::updateActiveItemView(const QString &identifier)

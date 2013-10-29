@@ -2,6 +2,8 @@
 
 #include "logging.h"
 
+#include "patientbrowsermenu.h"
+
 namespace udg {
 
 ViewersLayout::ViewersLayout(QWidget *parent)
@@ -42,6 +44,7 @@ Q2DViewerWidget* ViewersLayout::getNewQ2DViewerWidget()
     connect(newViewer, SIGNAL(manualSynchronizationStateChanged(bool)), SIGNAL(manualSynchronizationStateChanged(bool)));
     // Per defecte no li posem cap annotació
     newViewer->getViewer()->removeAnnotation(AllAnnotation);
+    newViewer->getViewer()->getPatientBrowserMenu()->setShowFusionOptions(true);
 
     emit viewerAdded(newViewer);
     return newViewer;
