@@ -9,7 +9,7 @@ namespace udg {
 
 class Patient;
 class Volume;
-class PatientBrowserMenuExtendedItem;
+class PatientBrowserMenuExtendedInfo;
 class PatientBrowserMenuList;
 
 /**
@@ -65,7 +65,7 @@ private:
     PatientBrowserMenuList *m_patientBrowserList;
 
     /// Atribut que guarda el punter al menú amb informació addicional de l'ítem seleccionat
-    PatientBrowserMenuExtendedItem *m_patientAdditionalInfo;
+    PatientBrowserMenuExtendedInfo *m_patientAdditionalInfo;
 
     /// Identificadors de les pantalles respecte on es troba desplegat el menú
     /// L'ID de la pantalla actual, i les pantalles annexes, es calcularà cada cop que es faci el popup del menú
