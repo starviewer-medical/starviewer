@@ -77,7 +77,7 @@ public:
     /// Gets the i-th input. If i is out of range, null is returned
     Volume* getInput(int i) const;
 
-    QList<Volume*> getInputs();
+    QList<Volume*> getInputs() const;
 
     int getNumberOfInputs() const;
 
