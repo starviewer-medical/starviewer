@@ -137,7 +137,27 @@ Rectangle {
                             }
                             text: modelData.text
                             elide: Text.ElideMiddle
-                            font.bold: (browserMenu.markedItem === modelData.identifier)
+                            font.bold: {
+                                if (browserMenu.markedItem === modelData.identifier) {
+                                    return true;
+                                }
+                                else if (browserMenu.markedItem.indexOf("+") > -1) {
+                                    var fusionIDItems = browserMenu.markedItem.split("+");
+                                    return fusionIDItems[0] === modelData.identifier || fusionIDItems[1] === modelData.identifier;
+                                }
+                                else {
+                                    return false;
+                                }
+                            }
+                            font.italic: {
+                                if (browserMenu.markedItem.indexOf("+") > -1) {
+                                    var fusionIDItems = browserMenu.markedItem.split("+");
+                                    return fusionIDItems[0] === modelData.identifier || fusionIDItems[1] === modelData.identifier;
+                                }
+                                else {
+                                    return false;
+                                }
+                            }
                         }
 
                         MouseArea {
