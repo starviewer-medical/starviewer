@@ -430,6 +430,8 @@ DicomMask QInputOutputPacsWidget::buildSeriesDicomMask(QString studyInstanceUID)
     mask.setPPSStartDate(QDate(), QDate());
     mask.setPPStartTime(QTime(), QTime());
     mask.setRequestAttributeSequence("", "");
+    mask.setSeriesDescription("");
+    mask.setSeriesProtocolName("");
 
     return mask;
 }
