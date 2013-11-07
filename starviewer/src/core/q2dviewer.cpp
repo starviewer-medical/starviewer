@@ -1271,21 +1271,19 @@ void Q2DViewer::removeAnnotation(AnnotationFlags annotation)
     enableAnnotation(annotation, false);
 }
 
-void Q2DViewer::setWindowLevelInVolume(Volume *volume, const WindowLevel &windowLevel)
+void Q2DViewer::setWindowLevelInVolume(int index, const WindowLevel &windowLevel)
 {
-    bool found = false;
-    int i = 0;
-    while (!found && i < getNumberOfInputs())
+    VolumeDisplayUnit *unit = this->getDisplayUnit(index);
+
+    if (unit == m_dummyDisplayUnit)
     {
-        VolumeDisplayUnit *unit = getDisplayUnit(i);
-        if (unit->getVolume() == volume)
-        {
-            found = true;
-            unit->updateWindowLevel(windowLevel);
-            this->render();
-        }
-        i++;
+        DEBUG_LOG(QString("No volume at index %1. Doing nothing.").arg(index));
+        WARN_LOG(QString("No volume at index %1. Doing nothing.").arg(index));
+        return;
     }
+
+    unit->updateWindowLevel(windowLevel);
+    this->render();
 }
 
 void Q2DViewer::printVolumeInformation()

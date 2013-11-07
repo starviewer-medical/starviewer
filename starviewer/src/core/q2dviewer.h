@@ -280,7 +280,7 @@ public slots:
     void enableAnnotation(AnnotationFlags annotation, bool enable = true);
     void removeAnnotation(AnnotationFlags annotation);
 
-    void setWindowLevelInVolume(Volume *volume, const WindowLevel &windowLevel);
+    void setWindowLevelInVolume(int index, const WindowLevel &windowLevel);
     void setWindowLevel(double window, double level);
 
     /// Sets the transfer function of the main volume.
