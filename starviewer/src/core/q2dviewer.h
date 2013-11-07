@@ -241,6 +241,12 @@ public:
     /// Returns a unique string identifier of all inputs
     virtual QString getInputIdentifier() const;
 
+    /// Returns true if this viewer contains the given volume.
+    bool containsVolume(const Volume *volume) const;
+
+    /// Returns the index of the given volume in this viewer. If this viewer doesn't contain the given volume, returns -1.
+    int indexOfVolume(const Volume *volume) const;
+
 public slots:
     virtual void setInput(Volume *volume);
 
