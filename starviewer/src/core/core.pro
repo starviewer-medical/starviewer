@@ -376,7 +376,9 @@ HEADERS += extensionfactory.h \
     defaulttransferfunctionselector.h \
     windowlevelhelper.h \
     patientbrowsermenugroup.h \
-    patientbrowsermenufusionitem.h
+    patientbrowsermenufusionitem.h \
+    phasesyncaction.h \
+    phasesignaltosyncactionmapper.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -701,7 +703,9 @@ SOURCES += extensionmediator.cpp \
     defaulttransferfunctionselector.cpp \
     windowlevelhelper.cpp \
     patientbrowsermenugroup.cpp \
-    patientbrowsermenufusionitem.cpp
+    patientbrowsermenufusionitem.cpp \
+    phasesyncaction.cpp \
+    phasesignaltosyncactionmapper.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \

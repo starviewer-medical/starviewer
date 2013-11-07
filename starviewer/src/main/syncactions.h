@@ -8,5 +8,6 @@
 #include "zoomfactorsignaltosyncactionmapper.h"
 #include "pansignaltosyncactionmapper.h"
 #include "imageorientationsignaltosyncactionmapper.h"
+#include "phasesignaltosyncactionmapper.h"
 
 #endif
