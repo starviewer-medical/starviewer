@@ -32,7 +32,7 @@ void WindowLevelSyncAction::run(QViewer *viewer)
 
     if (viewer2D)
     {
-        viewer2D->setWindowLevelInVolume(m_volume, m_windowLevel);
+        viewer2D->setWindowLevelInVolume(viewer2D->indexOfVolume(m_volume), m_windowLevel);
     }
     else
     {
