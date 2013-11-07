@@ -914,6 +914,23 @@ void Q2DViewer::setPhase(int value)
     updateSliceToDisplay(value, TemporalDimension);
 }
 
+void Q2DViewer::setPhaseInVolume(int index, int phase)
+{
+    VolumeDisplayUnit *unit = this->getDisplayUnit(index);
+
+    if (unit == m_dummyDisplayUnit)
+    {
+        DEBUG_LOG(QString("No volume at index %1. Doing nothing.").arg(index));
+        WARN_LOG(QString("No volume at index %1. Doing nothing.").arg(index));
+        return;
+    }
+
+    unit->setPhase(phase);
+    // This also resets the camera clipping range (needed)
+    this->updateDisplayExtents();
+    this->render();
+}
+
 void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
 {
     if (hasInput())

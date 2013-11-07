@@ -272,6 +272,8 @@ public slots:
 
     /// Sets the given phase index to the main volume.
     void setPhase(int value);
+    /// Sets the given phase index to the volume at the given index. If there isn't a volume at the given index, it does nothing.
+    void setPhaseInVolume(int index, int phase);
 
     /// Indica el tipu de solapament dels volums, per defecte blending
     void setOverlapMethod(OverlapMethod method);
