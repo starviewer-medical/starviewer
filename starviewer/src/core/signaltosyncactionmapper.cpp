@@ -3,10 +3,8 @@
 namespace udg {
 
 SignalToSyncActionMapper::SignalToSyncActionMapper(QObject *parent)
- : QObject(parent)
+ : QObject(parent), m_viewer(0), m_mappedSyncAction(0)
 {
-    m_viewer = 0;
-    m_mappedSyncAction = 0;
 }
 
 SignalToSyncActionMapper::~SignalToSyncActionMapper()
