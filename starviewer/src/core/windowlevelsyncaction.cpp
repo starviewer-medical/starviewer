@@ -28,17 +28,15 @@ void WindowLevelSyncAction::setVolume(Volume *volume)
 
 void WindowLevelSyncAction::run(QViewer *viewer)
 {
-    if (viewer)
+    Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(viewer);
+
+    if (viewer2D)
     {
-        Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(viewer);
-        if (viewer2D)
-        {
-            viewer2D->setWindowLevelInVolume(m_volume, m_windowLevel);
-        }
-        else
-        {
-            viewer->getWindowLevelData()->setCurrentPreset(m_windowLevel);
-        }
+        viewer2D->setWindowLevelInVolume(m_volume, m_windowLevel);
+    }
+    else
+    {
+        viewer->getWindowLevelData()->setCurrentPreset(m_windowLevel);
     }
 }
 
