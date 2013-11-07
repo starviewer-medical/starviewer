@@ -270,7 +270,7 @@ public slots:
     /// Canvia la llesca que veiem de la vista actual
     void setSlice(int value);
 
-    /// Canvia la fase en que es veuen les llesques si n'hi ha
+    /// Sets the given phase index to the main volume.
     void setPhase(int value);
 
     /// Indica el tipu de solapament dels volums, per defecte blending
