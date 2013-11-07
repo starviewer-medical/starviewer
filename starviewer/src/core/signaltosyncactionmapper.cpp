@@ -9,6 +9,7 @@ SignalToSyncActionMapper::SignalToSyncActionMapper(QObject *parent)
 
 SignalToSyncActionMapper::~SignalToSyncActionMapper()
 {
+    delete m_mappedSyncAction;
 }
 
 void SignalToSyncActionMapper::setViewer(QViewer *viewer)
