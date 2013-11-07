@@ -1753,4 +1753,22 @@ TransferFunctionModel* Q2DViewer::getTransferFunctionModel() const
     return m_displayUnitsHandler->getTransferFunctionModel();
 }
 
+bool Q2DViewer::containsVolume(const Volume *volume) const
+{
+    return this->indexOfVolume(volume) >= 0;
+}
+
+int Q2DViewer::indexOfVolume(const Volume *volume) const
+{
+    for (int i = 0; i < this->getNumberOfInputs(); i++)
+    {
+        if (this->getDisplayUnit(i)->getVolume() == volume)
+        {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
 };  // End namespace udg
