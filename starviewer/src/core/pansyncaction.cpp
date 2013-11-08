@@ -30,7 +30,7 @@ void PanSyncAction::run(QViewer *viewer)
 {
     if (viewer)
     {
-        viewer->pan(m_motionVector);
+        viewer->absolutePan(m_motionVector);
     }
 }
 

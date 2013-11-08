@@ -489,6 +489,32 @@ void QViewer::zoom(double factor)
     }
 }
 
+void QViewer::absolutePan(double motionVector[3])
+{
+    vtkCamera *camera = getActiveCamera();
+    if (!camera)
+    {
+        DEBUG_LOG("No hi ha càmera");
+        return;
+    }
+
+    double bounds[6];
+    getMainInput()->getVtkData()->GetBounds(bounds);
+
+    double currentPosition[3];
+    camera->GetPosition(currentPosition);
+
+    int x, y, z;
+    getCurrentViewPlane().getXYZIndexes(x, y, z);
+
+    double relativeMotionVector[3];
+    relativeMotionVector[x] = ((bounds[x] + bounds[x + 1]) / 2 - motionVector[x]) - currentPosition[x];
+    relativeMotionVector[y] = ((bounds[y * 2] + bounds[y * 2 + 1]) / 2 - motionVector[y]) - currentPosition[y];
+    relativeMotionVector[z] = 0.0;
+
+    pan(relativeMotionVector);
+}
+
 void QViewer::pan(double motionVector[3])
 {
     vtkCamera *camera = getActiveCamera();
@@ -512,8 +538,21 @@ void QViewer::pan(double motionVector[3])
         renderer->UpdateLightsGeometryToFollowCamera();
     }
 
+    double bounds[6];
+    getMainInput()->getVtkData()->GetBounds(bounds);
+
+    int x, y, z;
+    getCurrentViewPlane().getXYZIndexes(x, y, z);
+
+    double absoluteMotionVector[3];
+    camera->GetPosition(absoluteMotionVector);
+
+    absoluteMotionVector[x] = (bounds[x] + bounds[x + 1]) / 2.0 - absoluteMotionVector[x];
+    absoluteMotionVector[y] = (bounds[y * 2] + bounds[y * 2 + 1]) / 2.0 - absoluteMotionVector[y];
+    absoluteMotionVector[z] = 0.0;
+
     emit cameraChanged();
-    emit panChanged(motionVector);
+    emit panChanged(absoluteMotionVector);
     this->render();
 }
 
