@@ -114,6 +114,9 @@ public:
     /// @param factor Factor de zoom que volem aplicar a la càmera
     void zoom(double factor);
 
+    /// Absolute zoom to the scene based on the factor value
+    void absoluteZoom(double factor);
+
     /// Desplaça la càmera segons el vector de moviment que li passem
     /// @param motionVector[] Vector de moviment que determina cap on i quant es mou la càmera
     void pan(double motionVector[3]);

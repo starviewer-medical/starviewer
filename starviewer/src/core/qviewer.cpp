@@ -452,12 +452,39 @@ void QViewer::render()
     }
 }
 
+void QViewer::absoluteZoom(double factor)
+{
+    double currentFactor;
+
+    if(getActiveCamera()->GetParallelProjection())
+    {
+        currentFactor = getActiveCamera()->GetParallelScale();
+    }
+    else
+    {
+        currentFactor = getActiveCamera()->GetViewAngle();
+    }
+
+    zoom(currentFactor / (factor * getRenderWindowSize().height()));
+}
+
 void QViewer::zoom(double factor)
 {
     if (adjustCameraScaleFactor(factor))
     {
+        double zoomFactor;
+
+        if(getActiveCamera()->GetParallelProjection())
+        {
+            zoomFactor = getActiveCamera()->GetParallelScale();
+        }
+        else
+        {
+            zoomFactor = getActiveCamera()->GetViewAngle();
+        }
+
         emit cameraChanged();
-        emit zoomFactorChanged(factor);
+        emit zoomFactorChanged(zoomFactor / getRenderWindowSize().height());
         this->render();
     }
 }
