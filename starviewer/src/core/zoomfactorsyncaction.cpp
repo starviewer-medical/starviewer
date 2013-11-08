@@ -24,7 +24,7 @@ void ZoomFactorSyncAction::run(QViewer *viewer)
 {
     if (viewer)
     {
-        viewer->zoom(m_zoomFactor);
+        viewer->absoluteZoom(m_zoomFactor);
     }
 }
 
