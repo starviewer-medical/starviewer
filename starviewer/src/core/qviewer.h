@@ -121,6 +121,9 @@ public:
     /// @param motionVector[] Vector de moviment que determina cap on i quant es mou la càmera
     void pan(double motionVector[3]);
 
+    /// Moves the camera based on the absolute motion vector
+    void absolutePan(double motionVector[3]);
+
     /// Fem un zoom del requadre definit pels paràmetres topCorner i bottomCorner en coordenades de món
     /// perquè s'ajusti a la mida de la finestra.
     /// La determinació sobre quina coordenada es considera "superior" o "inferior" és relativa segons el punt de vista,
