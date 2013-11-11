@@ -29,6 +29,7 @@ void Q2DViewerConfigurationScreen::initialize()
     m_automaticSynchronizationCTCheckBox->setChecked(settings.getValue(CoreSettings::EnableQ2DViewerAutomaticSynchronizationForCT).toBool());
 
     initializeModalitiesWithZoomByDefault();
+    initializeModalitiesWithPropagationByDefault();
     initializeMagnifyingGlassToolZoomFactor();
     initializeMeasurementsVerbosity();
 }
@@ -43,6 +44,8 @@ void Q2DViewerConfigurationScreen::createConnections()
     connect(m_automaticSynchronizationCTCheckBox,SIGNAL(toggled(bool)), SLOT(updateAutomaticSynchronizationForCTSetting(bool)));
 
     connect(m_zoomByDefaultModalitiesGroupBox, SIGNAL(checkedModalitiesChanged(QStringList)), SLOT(updateModalitiesWithZoomByDefaultSetting(QStringList)));
+    connect(m_propagationModalitiesByDefaultGroupBox, SIGNAL(checkedModalitiesChanged(QStringList)), SLOT(updateModalitiesWithPropagationByDefaultSetting(QStringList)));
+
     connect(m_1point5XZoomFactorRadioButton, SIGNAL(clicked()), SLOT(updateMagnifyingGlassZoomFactorSetting()));
     connect(m_2XZoomFactorRadioButton, SIGNAL(clicked()), SLOT(updateMagnifyingGlassZoomFactorSetting()));
     connect(m_4XZoomFactorRadioButton, SIGNAL(clicked()), SLOT(updateMagnifyingGlassZoomFactorSetting()));
@@ -64,6 +67,17 @@ void Q2DViewerConfigurationScreen::initializeModalitiesWithZoomByDefault()
     Settings settings;
     QStringList modalitiesWithZoomList = settings.getValueAsQStringList(CoreSettings::ModalitiesWithZoomToolByDefault);
     m_zoomByDefaultModalitiesGroupBox->checkModalities(modalitiesWithZoomList);
+}
+
+void Q2DViewerConfigurationScreen::initializeModalitiesWithPropagationByDefault()
+{
+    m_propagationModalitiesByDefaultGroupBox->enableAllModalitiesCheckBox(false);
+    m_propagationModalitiesByDefaultGroupBox->enableOtherModalitiesCheckBox(false);
+    m_propagationModalitiesByDefaultGroupBox->setExclusive(false);
+    
+    Settings settings;
+    QStringList modalitiesWithPropagationList = settings.getValueAsQStringList(CoreSettings::ModalitiesWithPropagationEnabledByDefault);
+    m_propagationModalitiesByDefaultGroupBox->checkModalities(modalitiesWithPropagationList);
 }
 
 void Q2DViewerConfigurationScreen::initializeMagnifyingGlassToolZoomFactor()
@@ -170,6 +184,13 @@ void Q2DViewerConfigurationScreen::updateModalitiesWithZoomByDefaultSetting(cons
     Settings settings;
     QString modalitiesWithZoom = modalities.join(";");
     settings.setValue(CoreSettings::ModalitiesWithZoomToolByDefault, modalitiesWithZoom);
+}
+
+void Q2DViewerConfigurationScreen::updateModalitiesWithPropagationByDefaultSetting(const QStringList &modalities)
+{
+    Settings settings;
+    QString modalitiesWithPropagation = modalities.join(";");
+    settings.setValue(CoreSettings::ModalitiesWithPropagationEnabledByDefault, modalitiesWithPropagation);
 }
 
 void Q2DViewerConfigurationScreen::updateMagnifyingGlassZoomFactorSetting()
