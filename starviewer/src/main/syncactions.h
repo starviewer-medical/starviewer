@@ -9,5 +9,6 @@
 #include "pansignaltosyncactionmapper.h"
 #include "imageorientationsignaltosyncactionmapper.h"
 #include "phasesignaltosyncactionmapper.h"
+#include "thickslabsignaltosyncactionmapper.h"
 
 #endif
