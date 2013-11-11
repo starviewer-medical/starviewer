@@ -90,6 +90,7 @@ const QString CoreSettings::EnableQ2DViewerAutomaticSynchronizationForMR(Q2DView
 const QString CoreSettings::EnableQ2DViewerAutomaticSynchronizationForCT(Q2DViewerBase + "enable2DViewerAutomaticSynchronizationForCT");
 const QString CoreSettings::ModalitiesToApplyHangingProtocolsAsFirstOption(Q2DViewerBase + "modalitiesToApplyHangingProtocolsAsFirstOption");
 const QString CoreSettings::StudyLayoutConfigList(Q2DViewerBase + "StudyLayoutConfigList");
+const QString CoreSettings::ModalitiesWithPropagationEnabledByDefault(Q2DViewerBase + "ModalitiesWithPropagationEnabledByDefault");
 
 const QString CoreSettings::MeasurementDisplayVerbosity(Q2DViewerBase + "Measurement/measurementDisplayVerbosity");
 
@@ -131,6 +132,7 @@ void CoreSettings::init()
     settingsRegistry->addSetting(EnableQ2DViewerAutomaticSynchronizationForCT, true);
     // TODO Encara falta determinar quines seran les modalitats en les que posarem per defecte aplicar sempre hanging protocols
     settingsRegistry->addSetting(ModalitiesToApplyHangingProtocolsAsFirstOption, "CR;CT;MG;MR;US");
+    settingsRegistry->addSetting(ModalitiesWithPropagationEnabledByDefault, "CT;MR;PT");
 }
 
 } // End namespace udg

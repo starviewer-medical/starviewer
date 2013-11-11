@@ -341,6 +341,7 @@ void Q2DViewerExtension::setPatient(Patient *patient)
     setupDefaultLeftButtonTool();
 
 #ifndef STARVIEWER_LITE
+    setupPropagation();
     // Habilitem la possibilitat de buscar estudis relacionats.
     m_relatedStudiesToolButton->setEnabled(true);
     connect(m_relatedStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), m_layoutManager, SLOT(addHangingProtocolsWithPrevious(QList<Study*>)));
@@ -894,6 +895,21 @@ void Q2DViewerExtension::manualSynchronizationActivated(bool activated)
     {
         m_automaticSynchronizationToolButton->defaultAction()->setChecked(false);
         m_toolManager->deactivateTool("AutomaticSynchronizationTool");
+    }
+}
+
+void Q2DViewerExtension::setupPropagation()
+{
+    if (m_patient)
+    {
+        Settings settings;
+        QSet<QString> modalitiesWithPropagation = settings.getValueAsQStringList(CoreSettings::ModalitiesWithPropagationEnabledByDefault).toSet();
+
+        // Propagation will be enabled if any of the configured modalities is present in the current patient modalities
+        if (!modalitiesWithPropagation.intersect(m_patient->getModalities().toSet()).isEmpty())
+        {
+            m_propagateToolButton->setChecked(true);
+        }
     }
 }
 #endif
