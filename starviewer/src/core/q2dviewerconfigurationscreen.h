@@ -24,6 +24,9 @@ private:
     /// Actualitza els checkbox de les modalitats amb zoom per defecte segons els settings
     void initializeModalitiesWithZoomByDefault();
 
+    /// Updates the checkboxes of the modalities with propagation by default according to settings
+    void initializeModalitiesWithPropagationByDefault();
+    
     /// Actualitza quin radio button del factor de zoom de lupa cal activar
     void initializeMagnifyingGlassToolZoomFactor();
 
@@ -37,6 +40,7 @@ private slots:
     void updateReferenceLinesForMRSetting(bool enable);
     void updateReferenceLinesForCTSetting(bool enable);
     void updateModalitiesWithZoomByDefaultSetting(const QStringList &modalities);
+    void updateModalitiesWithPropagationByDefaultSetting(const QStringList &modalities);
     void updateMagnifyingGlassZoomFactorSetting();
     void updateMeasurementVerbositySetting();
     void updateAutomaticSynchronizationForMRSetting(bool enable);
