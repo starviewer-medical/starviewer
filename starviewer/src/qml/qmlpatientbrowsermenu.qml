@@ -7,14 +7,14 @@ Rectangle {
 
     property int columns: 2
     property string markedItem: ""
-    property int computedColumnWidth: calcColumnWidth(browserModel, browserMenu)
+    property int computedContentWidth: calcContentWidth(browserModel, browserMenu)
     property int maxHeight: 1500000
-    property int maxWidth: computedColumnWidth * 2 + listview.anchors.leftMargin + listview.anchors.rightMargin;
+    property int maxWidth: computedContentWidth + listview.anchors.leftMargin + listview.anchors.rightMargin;
 	property int scrollheight
     property string fusionMarkedItem1: "-1"
     property string fusionMarkedItem2: "-1"
 
-    width: Math.min(computedColumnWidth * 2 + listview.anchors.leftMargin + listview.anchors.rightMargin, maxWidth);
+    width: Math.min(computedContentWidth + listview.anchors.leftMargin + listview.anchors.rightMargin, maxWidth);
     height: Math.min(listview.contentHeight + listview.anchors.topMargin + listview.anchors.bottomMargin, maxHeight);
     color: myPalette.window
 
@@ -22,7 +22,7 @@ Rectangle {
     signal isActive(string identifier)
 	signal sizeChanged()
 
-	function calcColumnWidth(model, parent)
+    function calcContentWidth(model, parent)
     {
         var max = 0;
         for (var i = 0; i < model.length; ++i)
@@ -36,10 +36,17 @@ Rectangle {
                         + 'Text {'
                         + '   text: "' + item.text + '"; visible: false; font.bold: ' + (browserMenu.markedItem === item.identifier)
                         + '}',
-                        parent, "calcColumnWidth")
-                max = Math.max(textElement.width + 10, max)
+                        parent, "calcContentWidth")
+                max = Math.max((textElement.width + 10) * 2, max)
                 textElement.destroy()
             }
+            var captionElement = Qt.createQmlObject(
+                    'import QtQuick 1.0;'
+                    + 'Text {'
+                        + '   text: "' + model[i].caption + '"; visible: false;'
+                    + '}',
+                    parent, "calcContentWidth")
+            max = Math.max(captionElement.width + 20, max)
         }
         return max;
     }
@@ -83,10 +90,15 @@ Rectangle {
                 Text {
                     id: headerText
                     anchors {
-                        horizontalCenter: parent.horizontalCenter
                         verticalCenter: parent.verticalCenter
+                        left: parent.left
+                        right: parent.right
+                        leftMargin: 10
+                        rightMargin: 10
                     }
+                    horizontalAlignment: Text.AlignHCenter
                     text: caption
+                    elide: Text.ElideMiddle
                 }
             }
 
