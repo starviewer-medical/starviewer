@@ -1368,7 +1368,9 @@ void Q2DViewer::setSlabThickness(int thickness)
 
     mainDisplayUnit->setSlabThickness(thickness);
     updateDisplayExtents();
+    updateCurrentImageDefaultPresets();
     m_annotationsHandler->updateSliceAnnotationInformation();
+    emit sliceChanged(getCurrentSlice());
     render();
 
     // TODO és del tot correcte que vagi aquí aquesta crida?
