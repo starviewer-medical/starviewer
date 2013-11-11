@@ -456,7 +456,7 @@ void QViewer::absoluteZoom(double factor)
 {
     double currentFactor;
 
-    if(getActiveCamera()->GetParallelProjection())
+    if (getActiveCamera()->GetParallelProjection())
     {
         currentFactor = getActiveCamera()->GetParallelScale();
     }
@@ -474,7 +474,7 @@ void QViewer::zoom(double factor)
     {
         double zoomFactor;
 
-        if(getActiveCamera()->GetParallelProjection())
+        if (getActiveCamera()->GetParallelProjection())
         {
             zoomFactor = getActiveCamera()->GetParallelScale();
         }

@@ -263,13 +263,13 @@ void OrderImagesFillerStep::processImage(Image *image)
 
         double angle = 0;
 
-        if(m_orderedNormalsSet->isEmpty())
+        if (m_orderedNormalsSet->isEmpty())
         {
             m_firstPlaneVector3D = planeNormalVector3D;
         }
         else
         {
-            if(m_orderedNormalsSet->size() == 1) // Busquem la normal per saber la direcció per on s'han d'ordenar
+            if (m_orderedNormalsSet->size() == 1) // Busquem la normal per saber la direcció per on s'han d'ordenar
             {
                 m_direction = QVector3D::crossProduct(m_firstPlaneVector3D, planeNormalVector3D);
                 m_direction = QVector3D::crossProduct(m_direction, m_firstPlaneVector3D);
@@ -290,7 +290,7 @@ void OrderImagesFillerStep::processImage(Image *image)
     {
         foreach (double key, m_orderedNormalsSet->keys())
         {
-            if(m_orderedNormalsSet->value(key)->contains(keyPlaneNormal))
+            if (m_orderedNormalsSet->value(key)->contains(keyPlaneNormal))
             {
                 orderedImageSet = m_orderedNormalsSet->value(key);
             }
