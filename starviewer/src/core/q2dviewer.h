@@ -312,9 +312,13 @@ public slots:
 
     /// Sets the given slab projection mode to the main volume.
     void setSlabProjectionMode(int projectionMode);
+    /// Sets the given slab projection mode to the volume at the given index. If there isn't a volume at the given index, it does nothing.
+    void setSlabProjectionModeInVolume(int index, int slabProjectionMode);
 
     /// Sets the given slab thickness (number of slices) to the main volume.
     void setSlabThickness(int thickness);
+    /// Sets the given slab thickness (number of slices) to the volume at the given index. If there isn't a volume at the given index, it does nothing.
+    void setSlabThicknessInVolume(int index, int thickness);
 
     /// Disables thick slab. Acts as a shortcut for setSlabThickness(1)
     void disableThickSlab();

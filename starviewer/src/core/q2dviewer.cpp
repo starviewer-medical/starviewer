@@ -1331,6 +1331,22 @@ void Q2DViewer::setSlabProjectionMode(int projectionMode)
     }
 }
 
+void Q2DViewer::setSlabProjectionModeInVolume(int index, int slabProjectionMode)
+{
+    VolumeDisplayUnit *unit = this->getDisplayUnit(index);
+
+    if (unit == m_dummyDisplayUnit)
+    {
+        DEBUG_LOG(QString("No volume at index %1. Doing nothing.").arg(index));
+        WARN_LOG(QString("No volume at index %1. Doing nothing.").arg(index));
+        return;
+    }
+
+    unit->setSlabProjectionMode(static_cast<AccumulatorFactory::AccumulatorType>(slabProjectionMode));
+    this->updateDisplayExtents();
+    this->render();
+}
+
 int Q2DViewer::getSlabProjectionMode() const
 {
     return m_slabProjectionMode;
@@ -1359,6 +1375,22 @@ void Q2DViewer::setSlabThickness(int thickness)
     // Tal com està posat se suposa que sempre el valor de thickness ha
     // canviat i podria ser que no, seria més adequat posar-ho a computerangeAndSlice?
     emit slabThicknessChanged(mainDisplayUnit->getSlabThickness());
+}
+
+void Q2DViewer::setSlabThicknessInVolume(int index, int thickness)
+{
+    VolumeDisplayUnit *unit = this->getDisplayUnit(index);
+
+    if (unit == m_dummyDisplayUnit)
+    {
+        DEBUG_LOG(QString("No volume at index %1. Doing nothing.").arg(index));
+        WARN_LOG(QString("No volume at index %1. Doing nothing.").arg(index));
+        return;
+    }
+
+    unit->setSlabThickness(thickness);
+    this->updateDisplayExtents();
+    this->render();
 }
 
 int Q2DViewer::getSlabThickness() const
