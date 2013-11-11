@@ -118,6 +118,9 @@ public:
     /// Nom de la llista on es guarden les configuracions de layouts automàtics
     static const QString StudyLayoutConfigList;
 
+    /// Defines the modalities for which the propagation should be enabled by default
+    static const QString ModalitiesWithPropagationEnabledByDefault;
+    
     /// Defines the verbosity for measurements
     static const QString MeasurementDisplayVerbosity;
 };

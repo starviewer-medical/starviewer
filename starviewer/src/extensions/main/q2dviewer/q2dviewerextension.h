@@ -168,6 +168,9 @@ private slots:
 
     // Tracta l'event de quan s'ha seleccionat/desactivat la sincronització manual en qualsevol dels visors
     void manualSynchronizationActivated(bool enable);
+
+    /// Sets up if propagation must be enabled or not depending on the current patient modalities
+    void setupPropagation();
 #endif
 
     /// Aplica un grid regular al layout, i elimina l'etiqueta si algun estudi relacionat està en descàrrega
