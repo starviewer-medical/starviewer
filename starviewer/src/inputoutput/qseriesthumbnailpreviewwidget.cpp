@@ -81,7 +81,7 @@ QString QSeriesThumbnailPreviewWidget::getSeriesThumbnailDescription(Series *ser
         {
             thumbnailDescription += tr(" Presentation State");
         }
-        else if(series->getModality() == "SR")
+        else if (series->getModality() == "SR")
         {
             thumbnailDescription += tr(" Structured Report");
         }
