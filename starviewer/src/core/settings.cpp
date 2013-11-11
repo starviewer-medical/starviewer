@@ -72,6 +72,11 @@ void Settings::remove(const QString &key)
     getSettingsObject(key)->remove(key);
 }
 
+QStringList Settings::getValueAsQStringList(const QString &key, const QString &separator) const
+{
+    return getValue(key).toString().split(separator, QString::SkipEmptyParts);
+}
+
 Settings::SettingsListItemType Settings::getListItem(const QString &key, int index)
 {
     SettingsListItemType item;

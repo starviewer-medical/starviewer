@@ -43,6 +43,10 @@ public:
     /// Elimina els settings de key i totes les sub-settings que hi hagi per sota de la clau
     virtual void remove(const QString &key);
 
+    /// Helper method to return a value as a QStringList in case values are convertible to string and the adequate values separator is used
+    /// If no separator is used, the default value will be used
+    QStringList getValueAsQStringList(const QString &key, const QString &separator = ";") const;
+    
     // Mètodes per la manipulació de llistes de Settings
 
     // També existeix el tipus QSettings::SettingsMap que és QMap<QString, QVariant>
