@@ -55,7 +55,7 @@ void Q2DViewerLayoutConfigurationScreen::populateMaxViewersComboBox()
 void Q2DViewerLayoutConfigurationScreen::initializeModalitiesToApplyHangingProtocolsByDefault()
 {
     Settings settings;
-    m_applyHPOnModalitiesGroupBox->checkModalities(settings.getValue(CoreSettings::ModalitiesToApplyHangingProtocolsAsFirstOption).toString().split(";", QString::SkipEmptyParts));
+    m_applyHPOnModalitiesGroupBox->checkModalities(settings.getValueAsQStringList(CoreSettings::ModalitiesToApplyHangingProtocolsAsFirstOption));
 
     connect(m_applyHPOnModalitiesGroupBox, SIGNAL(checkedModalitiesChanged(QStringList)), SLOT(updateModalititesToApplyHangingProtocolsSetting(QStringList)));
 }

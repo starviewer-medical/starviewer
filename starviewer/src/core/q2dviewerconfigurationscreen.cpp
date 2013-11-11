@@ -62,7 +62,7 @@ void Q2DViewerConfigurationScreen::initializeModalitiesWithZoomByDefault()
     m_zoomByDefaultModalitiesGroupBox->setExclusive(false);
     
     Settings settings;
-    QStringList modalitiesWithZoomList = settings.getValue(CoreSettings::ModalitiesWithZoomToolByDefault).toString().split(";", QString::SkipEmptyParts);
+    QStringList modalitiesWithZoomList = settings.getValueAsQStringList(CoreSettings::ModalitiesWithZoomToolByDefault);
     m_zoomByDefaultModalitiesGroupBox->checkModalities(modalitiesWithZoomList);
 }
 

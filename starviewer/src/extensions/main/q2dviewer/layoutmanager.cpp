@@ -37,8 +37,7 @@ bool LayoutManager::hasCurrentPatientAnyModalityWithHangingProtocolPriority()
 {
     Settings settings;
 
-    QStringList modalitiesWithHPPriority = settings.getValue(CoreSettings::ModalitiesToApplyHangingProtocolsAsFirstOption)
-        .toString().split(";", QString::SkipEmptyParts);
+    QStringList modalitiesWithHPPriority = settings.getValueAsQStringList(CoreSettings::ModalitiesToApplyHangingProtocolsAsFirstOption);
 
     QSet<QString> matchingModalities = modalitiesWithHPPriority.toSet().intersect(m_patient->getModalities().toSet());
 
