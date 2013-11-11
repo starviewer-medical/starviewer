@@ -210,11 +210,7 @@ void QThickSlabWidget::onSliderReleased()
 
 void QThickSlabWidget::updateMaximumThickness()
 {
-    // Disconnect valueChanged from applyThickSlab while changing the maximum because if it's reduced it can change the slider value, leading to an undesired
-    // thickness (see #1982)
-    disconnect(m_slabThicknessSlider, SIGNAL(valueChanged(int)), this, SLOT(applyThickSlab()));
     m_slabThicknessSlider->setRange(2, m_currentViewer->getNumberOfSlices());
-    connect(m_slabThicknessSlider, SIGNAL(valueChanged(int)), SLOT(applyThickSlab()));
 }
 
 void QThickSlabWidget::updateThicknessLabel(int value)
@@ -236,8 +232,12 @@ void QThickSlabWidget::onViewChanged()
         return;
     }
 
+    // Disconnect valueChanged from applyThickSlab while changing the maximum because if it's reduced it can change the slider value, leading to an undesired
+    // thickness (see #1982)
+    disconnect(m_slabThicknessSlider, SIGNAL(valueChanged(int)), this, SLOT(applyThickSlab()));
     updateMaximumThickness();
-    
+    connect(m_slabThicknessSlider, SIGNAL(valueChanged(int)), SLOT(applyThickSlab()));
+
     // Quan canviem de vista, sempre que tinguem la opció marcada, mantenim el thickness màxim per aquella vista
     if (m_maximumThicknessCheckBox->isChecked())
     {
