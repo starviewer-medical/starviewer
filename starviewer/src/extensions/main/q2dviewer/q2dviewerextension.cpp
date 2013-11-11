@@ -266,7 +266,7 @@ void Q2DViewerExtension::setupDefaultLeftButtonTool()
         Settings settings;
         bool enableZoom = false;
 
-        QStringList modalitiesWithZoomList = settings.getValue(CoreSettings::ModalitiesWithZoomToolByDefault).toString().split(";", QString::SkipEmptyParts);
+        QStringList modalitiesWithZoomList = settings.getValueAsQStringList(CoreSettings::ModalitiesWithZoomToolByDefault);
         foreach (const QString &modality, modalitiesWithZoomList)
         {
             if (study->getModalities().contains(modality))
