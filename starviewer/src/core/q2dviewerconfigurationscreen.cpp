@@ -28,8 +28,8 @@ void Q2DViewerConfigurationScreen::initialize()
     m_automaticSynchronizationMRCheckBox->setChecked(settings.getValue(CoreSettings::EnableQ2DViewerAutomaticSynchronizationForMR).toBool());
     m_automaticSynchronizationCTCheckBox->setChecked(settings.getValue(CoreSettings::EnableQ2DViewerAutomaticSynchronizationForCT).toBool());
 
-    initializeModalitiesWithZoomByDefault();
-    initializeModalitiesWithPropagationByDefault();
+    initializeModalitiesGroupBox(CoreSettings::ModalitiesWithZoomToolByDefault, m_zoomByDefaultModalitiesGroupBox);
+    initializeModalitiesGroupBox(CoreSettings::ModalitiesWithPropagationEnabledByDefault, m_propagationModalitiesByDefaultGroupBox);
     initializeMagnifyingGlassToolZoomFactor();
     initializeMeasurementsVerbosity();
 }
@@ -58,26 +58,20 @@ void Q2DViewerConfigurationScreen::createConnections()
     connect(m_verboseExplicitVerbosityRadioButton, SIGNAL(clicked()), SLOT(updateMeasurementVerbositySetting()));
 }
 
-void Q2DViewerConfigurationScreen::initializeModalitiesWithZoomByDefault()
+void Q2DViewerConfigurationScreen::initializeModalitiesGroupBox(const QString &settingName, QModalitiesSelectorGroupBox *groupBox)
 {
-    m_zoomByDefaultModalitiesGroupBox->enableAllModalitiesCheckBox(false);
-    m_zoomByDefaultModalitiesGroupBox->enableOtherModalitiesCheckBox(false);
-    m_zoomByDefaultModalitiesGroupBox->setExclusive(false);
+    if (!groupBox)
+    {
+        return;
+    }
+    
+    groupBox->enableAllModalitiesCheckBox(false);
+    groupBox->enableOtherModalitiesCheckBox(false);
+    groupBox->setExclusive(false);
     
     Settings settings;
-    QStringList modalitiesWithZoomList = settings.getValueAsQStringList(CoreSettings::ModalitiesWithZoomToolByDefault);
-    m_zoomByDefaultModalitiesGroupBox->checkModalities(modalitiesWithZoomList);
-}
-
-void Q2DViewerConfigurationScreen::initializeModalitiesWithPropagationByDefault()
-{
-    m_propagationModalitiesByDefaultGroupBox->enableAllModalitiesCheckBox(false);
-    m_propagationModalitiesByDefaultGroupBox->enableOtherModalitiesCheckBox(false);
-    m_propagationModalitiesByDefaultGroupBox->setExclusive(false);
-    
-    Settings settings;
-    QStringList modalitiesWithPropagationList = settings.getValueAsQStringList(CoreSettings::ModalitiesWithPropagationEnabledByDefault);
-    m_propagationModalitiesByDefaultGroupBox->checkModalities(modalitiesWithPropagationList);
+    QStringList modalitiesList = settings.getValueAsQStringList(settingName);
+    groupBox->checkModalities(modalitiesList);
 }
 
 void Q2DViewerConfigurationScreen::initializeMagnifyingGlassToolZoomFactor()

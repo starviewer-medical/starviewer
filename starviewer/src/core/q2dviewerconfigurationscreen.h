@@ -21,11 +21,8 @@ private:
     /// Crea les connexions corresponents de signals i slots
     void createConnections();
 
-    /// Actualitza els checkbox de les modalitats amb zoom per defecte segons els settings
-    void initializeModalitiesWithZoomByDefault();
-
-    /// Updates the checkboxes of the modalities with propagation by default according to settings
-    void initializeModalitiesWithPropagationByDefault();
+    /// Updates the checkboxes of the specified modalities group box according to values of the given setting
+    void initializeModalitiesGroupBox(const QString &settingName, QModalitiesSelectorGroupBox *groupBox);
     
     /// Actualitza quin radio button del factor de zoom de lupa cal activar
     void initializeMagnifyingGlassToolZoomFactor();
