@@ -357,6 +357,9 @@ signals:
     /// TODO Mirar de treure-ho i posar-ho en la tool SeedTool
     void seedPositionChanged(double x, double y, double z);
 
+    /// Emitted when the slab projection mode has changed.
+    void slabProjectionModeChanged(int slabProjectionMode);
+
     /// S'emet quan canvia l'slab thickness
     /// @param thickness Nou valor de thickness
     void slabThicknessChanged(int thickness);

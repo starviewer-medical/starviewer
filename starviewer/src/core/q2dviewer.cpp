@@ -1316,12 +1316,18 @@ void Q2DViewer::printVolumeInformation()
 
 void Q2DViewer::setSlabProjectionMode(int projectionMode)
 {
-    m_slabProjectionMode = projectionMode;
-    if (hasInput())
+    if (m_slabProjectionMode != projectionMode)
     {
-        getMainDisplayUnit()->setSlabProjectionMode(static_cast<AccumulatorFactory::AccumulatorType>(m_slabProjectionMode));
-        updateDisplayExtents();
-        render();
+        m_slabProjectionMode = projectionMode;
+
+        if (hasInput())
+        {
+            getMainDisplayUnit()->setSlabProjectionMode(static_cast<AccumulatorFactory::AccumulatorType>(m_slabProjectionMode));
+            updateDisplayExtents();
+            render();
+        }
+
+        emit slabProjectionModeChanged(projectionMode);
     }
 }
 
