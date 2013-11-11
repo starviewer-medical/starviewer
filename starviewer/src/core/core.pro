@@ -378,7 +378,9 @@ HEADERS += extensionfactory.h \
     patientbrowsermenugroup.h \
     patientbrowsermenufusionitem.h \
     phasesyncaction.h \
-    phasesignaltosyncactionmapper.h
+    phasesignaltosyncactionmapper.h \
+    thickslabsyncaction.h \
+    thickslabsignaltosyncactionmapper.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -705,7 +707,9 @@ SOURCES += extensionmediator.cpp \
     patientbrowsermenugroup.cpp \
     patientbrowsermenufusionitem.cpp \
     phasesyncaction.cpp \
-    phasesignaltosyncactionmapper.cpp
+    phasesignaltosyncactionmapper.cpp \
+    thickslabsyncaction.cpp \
+    thickslabsignaltosyncactionmapper.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \
