@@ -213,6 +213,25 @@ void DiagnosisTestResultWriter::writeSystemInformation(QXmlStreamWriter &writer)
     writer.writeAttribute("class", "info");
     writer.writeStartElement("ul");
     writer.writeTextElement("li", QObject::tr("Operating System: %1").arg(systemInformation->getOperatingSystemAsString()));
+    QString desktopComposition = QObject::tr("Desktop composition: ");
+    if (systemInformation->isDesktopCompositionAvailable())
+    {
+        desktopComposition += QObject::tr("Available");
+
+        if (systemInformation->isDesktopCompositionEnabled())
+        {
+            desktopComposition += QObject::tr(" and enabled");
+        }
+        else
+        {
+            desktopComposition += QObject::tr(" but disabled");
+        }
+    }
+    else
+    {
+        desktopComposition += QObject::tr("Not available");
+    }
+    writer.writeTextElement("li", desktopComposition);
     writer.writeTextElement("li", QObject::tr("RAM Memory: %1 MB").arg(systemInformation->getRAMTotalAmount()));
 
     QStringList cpus;
