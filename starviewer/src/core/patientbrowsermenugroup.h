@@ -23,7 +23,7 @@ public:
     QString getCaption() const;
 
     /// Sets and gets the items
-    void setElements(const QList<PatientBrowserMenuBasicItem*>  &elements);
+    void setElements(const QList<PatientBrowserMenuBasicItem*> &elements);
     QList<PatientBrowserMenuBasicItem *> getElements() const;
     QList<QObject*> getElementsAsQObject() const;
 
@@ -42,7 +42,7 @@ private:
     QString m_caption;
 
     /// List of items
-    QList<PatientBrowserMenuBasicItem*>  m_elements;
+    QList<PatientBrowserMenuBasicItem*> m_elements;
 
     /// List of fusion items
     QList<PatientBrowserMenuBasicItem*> m_fusionElements;

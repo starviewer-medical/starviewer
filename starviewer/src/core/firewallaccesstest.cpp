@@ -8,7 +8,6 @@ namespace udg {
 FirewallAccessTest::FirewallAccessTest(QObject *parent)
  : DiagnosisTest(parent)
 {
-    
 }
 
 FirewallAccessTest::~FirewallAccessTest()

@@ -13,7 +13,7 @@ namespace udg {
 
 SystemRequerimentsTest::SystemRequerimentsTest(QObject *parent)
  : DiagnosisTest(parent)
-{   
+{
 }
 
 SystemRequerimentsTest::~SystemRequerimentsTest()
@@ -36,7 +36,6 @@ DiagnosisTestResult SystemRequerimentsTest::run()
 
     // TODO Temporal, s'ha de treure i veure com obtenir la unitat on està starviewer
     const QString whichHardDisk = "C:";
-
 
     SystemInformation *system = SystemInformation::newInstance();
     DiagnosisTestResult result;
@@ -250,7 +249,6 @@ DiagnosisTestResult SystemRequerimentsTest::run()
         }
         result.addError(problem);
     }
-
 
     // Que la unitat de CD/DVD no pugui grabar
     if (requeriments->doesOpticalDriveNeedWriteCapabilities() && !doesOpticalDriveHaveWriteCapabilities(system))
