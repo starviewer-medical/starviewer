@@ -161,7 +161,7 @@ QList<DiagnosisTest*> QDiagnosisTest::getDiagnosisTestsToRun() const
 
 void QDiagnosisTest::groupDiagnosisTestFromRunDiagnosisTestByState()
 {
-    QList<QPair<DiagnosisTest*, DiagnosisTestResult> >  runDiagnosisTests = m_runDiagnosisTest->getRunTests();
+    QList<QPair<DiagnosisTest*, DiagnosisTestResult> > runDiagnosisTests = m_runDiagnosisTest->getRunTests();
 
     for (int index = 0; index < runDiagnosisTests.count(); index++)
     {
