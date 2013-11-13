@@ -247,6 +247,9 @@ public:
     /// Returns the index of the given volume in this viewer. If this viewer doesn't contain the given volume, returns -1.
     int indexOfVolume(const Volume *volume) const;
 
+    /// Returns window level data corresponding to the volume at the given index.
+    WindowLevelPresetsToolData* getWindowLevelDataForVolume(int index) const;
+
 public slots:
     virtual void setInput(Volume *volume);
 
@@ -286,6 +289,9 @@ public slots:
     void setWindowLevelInVolume(int index, const WindowLevel &windowLevel);
     /// Sets the given window and level to the main volume.
     void setWindowLevel(double window, double level);
+
+    /// Selects the window level preset with the given name in the volume at the given index. If there isn't a volume at the given index, it does nothing.
+    void selectWindowLevelPresetInVolume(int index, const QString &presetName);
 
     /// Sets the transfer function of the main volume.
     void setTransferFunction(const TransferFunction &transferFunction);
