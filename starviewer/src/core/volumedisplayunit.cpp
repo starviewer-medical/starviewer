@@ -260,6 +260,11 @@ void VolumeDisplayUnit::setupPicker()
 
 void VolumeDisplayUnit::updateCurrentImageDefaultPresets()
 {
+    if (getViewPlane() != OrthogonalPlane::XYPlane)
+    {
+        return;
+    }
+
     Image *image = getVolume()->getImage(m_sliceHandler->getCurrentSlice(), m_sliceHandler->getCurrentPhase());
     for (int i = 0; i < image->getNumberOfWindowLevels(); ++i)
     {
