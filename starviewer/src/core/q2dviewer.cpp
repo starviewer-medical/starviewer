@@ -1370,13 +1370,13 @@ void Q2DViewer::setSlabThickness(int thickness)
     updateDisplayExtents();
     updateCurrentImageDefaultPresets();
     m_annotationsHandler->updateSliceAnnotationInformation();
-    emit sliceChanged(getCurrentSlice());
     render();
 
     // TODO és del tot correcte que vagi aquí aquesta crida?
     // Tal com està posat se suposa que sempre el valor de thickness ha
     // canviat i podria ser que no, seria més adequat posar-ho a computerangeAndSlice?
     emit slabThicknessChanged(mainDisplayUnit->getSlabThickness());
+    emit sliceChanged(getCurrentSlice());
 }
 
 void Q2DViewer::setSlabThicknessInVolume(int index, int thickness)
