@@ -27,17 +27,10 @@ void WindowLevelHelper::initializeWindowLevelData(WindowLevelPresetsToolData *wi
     int index = volume->getNumberOfSlicesPerPhase() / 2;
 
     int windowLevelCount = 0;
-    signed short windowWidthSign = 1;
     Image *image = volume->getImage(index);
     if (image)
     {
         windowLevelCount = image->getNumberOfWindowLevels();
-        // Si la imatge és de tipus MONOCHROME1, llavors invertim els valors de window/level
-        // perquè la imatge resultant sigui l'adequada
-        if (image->getPhotometricInterpretation() == "MONOCHROME1")
-        {
-            windowWidthSign = -1;
-        }
     }
     else
     {
