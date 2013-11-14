@@ -517,6 +517,11 @@ void QViewer::absolutePan(double motionVector[3])
 
 void QViewer::pan(double motionVector[3])
 {
+    if (!this->hasInput())
+    {
+        return;
+    }
+
     vtkCamera *camera = getActiveCamera();
     if (!camera)
     {
