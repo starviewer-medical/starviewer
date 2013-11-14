@@ -160,5 +160,6 @@
     <file>cluts/2d/hotmetalblue.xml</file>
     <file>cluts/2d/pet.xml</file>
     <file>cluts/2d/pet20step.xml</file>
+    <file>cluts/2d/rainbow.xml</file>
   </qresource>
 </RCC>
