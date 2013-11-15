@@ -499,7 +499,9 @@ void Q2DViewerExtension::initializeTools()
 
     m_desynchronizeAllViewersButton->setDefaultAction(m_desynchronizeAllAction);
     connect(m_desynchronizeAllAction, SIGNAL(triggered()), SLOT(deactivateManualSynchronizationInAllViewers()));
-    connect(m_toolManager->getRegisteredToolAction("AutomaticSynchronizationTool"), SIGNAL(triggered(bool)), SLOT(enableAutomaticSynchronizationToViewer(bool)));
+    // Must use the button directly instead of the action because the button's toogled signal is emitted before the action's triggered signal.
+    // This way we make sure that this slot, which turns off manual sync, is called before auto-sync is turned on.
+    connect(m_automaticSynchronizationToolButton, SIGNAL(toggled(bool)), SLOT(enableAutomaticSynchronizationToViewer(bool)));
 #endif
 
     // SCREEN SHOT TOOL
