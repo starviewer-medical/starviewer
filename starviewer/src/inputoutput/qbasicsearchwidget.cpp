@@ -89,7 +89,7 @@ DicomMask QBasicSearchWidget::buildDicomMask()
     // Per més informació consultar el PS 3.4 C.2.2.2
 
     // S'afegeix '*' al patientId i patientName automàticament
-    QString patientID = m_patientIDText->text();
+    QString patientID = m_patientIDText->text().trimmed();
     if (!patientID.isEmpty())
     {
         if (!patientID.startsWith("*"))
@@ -103,7 +103,7 @@ DicomMask QBasicSearchWidget::buildDicomMask()
     }
     mask.setPatientID(patientID);
 
-    QString patientName = m_patientNameText->text();
+    QString patientName = m_patientNameText->text().trimmed();
     if (!patientName.isEmpty())
     {
         if (!patientName.startsWith("*"))
