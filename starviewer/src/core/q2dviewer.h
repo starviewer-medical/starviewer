@@ -378,6 +378,9 @@ signals:
     void overlayChanged();
     void overlayModified();
 
+    /// Signal emitted when the viewer is restored
+    void restored();
+
 protected:
     /// Processem l'event de resize de la finestra Qt
     virtual void resizeEvent(QResizeEvent *resize);
