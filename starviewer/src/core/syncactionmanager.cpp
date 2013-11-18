@@ -66,6 +66,11 @@ void SyncActionManager::setSyncActionsConfiguration(SyncActionsConfiguration *co
 void SyncActionManager::enable(bool enable)
 {
     m_enabled = enable;
+
+    if (m_enabled && m_masterViewer && m_masterViewer->getMainInput())
+    {
+        synchronize();
+    }
 }
 
 void SyncActionManager::synchronize()
