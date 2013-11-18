@@ -18,6 +18,9 @@ public:
     PanSignalToSyncActionMapper(QObject *parent = 0);
     ~PanSignalToSyncActionMapper();
 
+    /// Maps current pan factor of the viewer
+    virtual void mapProperty();
+
 protected:
     void mapSignal();
     void unmapSignal();

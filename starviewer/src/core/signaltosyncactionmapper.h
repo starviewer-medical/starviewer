@@ -24,6 +24,9 @@ public:
     /// Viewer to map signals from
     void setViewer(QViewer *viewer);
 
+    /// Abstract method responible of mapping the viewer property directly
+    virtual void mapProperty() = 0;
+
 signals:
     /// This signal should be emitted when the correspoding viewer's signal had been mapped to the corresponding SyncAction
     void actionMapped(SyncAction*);

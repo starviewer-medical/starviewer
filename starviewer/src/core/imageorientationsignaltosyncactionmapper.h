@@ -20,6 +20,9 @@ public:
     ImageOrientationSignalToSyncActionMapper(QObject *parent = 0);
     ~ImageOrientationSignalToSyncActionMapper();
 
+    /// Maps current displayed image patient orientation
+    virtual void mapProperty();
+
 protected:
     void mapSignal();
     void unmapSignal();

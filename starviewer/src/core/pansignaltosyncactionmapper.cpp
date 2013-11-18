@@ -13,6 +13,17 @@ PanSignalToSyncActionMapper::~PanSignalToSyncActionMapper()
 {
 }
 
+void PanSignalToSyncActionMapper::mapProperty()
+{
+    if (m_viewer)
+    {
+        double currentPanFactor[3];
+        m_viewer->getCurrentPanFactor(currentPanFactor);
+        mapToSyncAction(currentPanFactor);
+    }
+}
+
+
 void PanSignalToSyncActionMapper::mapSignal()
 {
     if (m_viewer)

@@ -18,6 +18,9 @@ public:
     ZoomFactorSignalToSyncActionMapper(QObject *parent = 0);
     ~ZoomFactorSignalToSyncActionMapper();
 
+    /// Maps current zoom factor of the viewer
+    virtual void mapProperty();
+
 protected:
     void mapSignal();
     void unmapSignal();

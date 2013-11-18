@@ -13,6 +13,14 @@ ZoomFactorSignalToSyncActionMapper::~ZoomFactorSignalToSyncActionMapper()
 {
 }
 
+void ZoomFactorSignalToSyncActionMapper::mapProperty()
+{
+    if (m_viewer)
+    {
+        mapToSyncAction(m_viewer->getCurrentZoomFactor()  / m_viewer->getRenderWindowSize().height());
+    }
+}
+
 void ZoomFactorSignalToSyncActionMapper::mapSignal()
 {
     if (m_viewer)

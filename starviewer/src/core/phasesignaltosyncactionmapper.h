@@ -20,6 +20,9 @@ public:
     PhaseSignalToSyncActionMapper(QObject *parent = 0);
     virtual ~PhaseSignalToSyncActionMapper();
 
+    /// Maps current phase of the viewer
+    virtual void mapProperty();
+
 protected:
     /// Maps the phaseChanged(int) signal from the viewer to the actionMapped(SyncAction*) signal.
     virtual void mapSignal();

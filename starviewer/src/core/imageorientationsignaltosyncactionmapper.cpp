@@ -14,6 +14,15 @@ ImageOrientationSignalToSyncActionMapper::~ImageOrientationSignalToSyncActionMap
 {
 }
 
+void ImageOrientationSignalToSyncActionMapper::mapProperty()
+{
+    Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(m_viewer);
+    if (viewer2D)
+    {
+        mapToSyncAction(viewer2D->getCurrentDisplayedImagePatientOrientation());
+    }
+}
+
 void ImageOrientationSignalToSyncActionMapper::mapSignal()
 {
     Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(m_viewer);
