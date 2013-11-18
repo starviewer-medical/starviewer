@@ -166,6 +166,12 @@ public:
     /// Returns a unique string identifier of all inputs
     virtual QString getInputIdentifier() const;
 
+    /// Returns the current Zoom Factor
+    double getCurrentZoomFactor();
+
+    /// Returns the current pan factor
+    void getCurrentPanFactor(double absoluteMotionVector[3]);
+
 public slots:
     /// Indiquem les dades d'entrada
     virtual void setInput(Volume *volume) = 0;
@@ -274,12 +280,6 @@ protected:
 
     /// Sets the current view plane.
     virtual void setCurrentViewPlane(const OrthogonalPlane &viewPlane);
-
-    /// Returns the current Zoom Factor
-    double getCurrentZoomFactor();
-
-    /// Returns the current pan factor
-    void getCurrentPanFactor(double absoluteMotionVector[3]);
 
 private slots:
     /// Slot que s'utilitza quan s'ha seleccionat una sèrie amb el PatientBrowserMenu
