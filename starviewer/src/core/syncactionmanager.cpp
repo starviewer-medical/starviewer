@@ -68,6 +68,14 @@ void SyncActionManager::enable(bool enable)
     m_enabled = enable;
 }
 
+void SyncActionManager::synchronize()
+{
+    foreach (SignalToSyncActionMapper *mapper, m_registeredSignalMappers)
+    {
+        mapper->mapProperty();
+    }
+}
+
 void SyncActionManager::setupSignalMappers()
 {
     // We create an instance of each of the registered signal mappers, add it to our own list, and then
