@@ -513,6 +513,23 @@ void QViewer::absolutePan(double motionVector[3])
     pan(relativeMotionVector);
 }
 
+void QViewer::getCurrentPanFactor(double absoluteMotionVector[3])
+{
+    vtkCamera *camera = getActiveCamera();
+
+    double bounds[6];
+    getMainInput()->getVtkData()->GetBounds(bounds);
+
+    int x, y, z;
+    getCurrentViewPlane().getXYZIndexes(x, y, z);
+
+    camera->GetPosition(absoluteMotionVector);
+
+    absoluteMotionVector[x] = (bounds[x] + bounds[x + 1]) / 2.0 - absoluteMotionVector[x];
+    absoluteMotionVector[y] = (bounds[y * 2] + bounds[y * 2 + 1]) / 2.0 - absoluteMotionVector[y];
+    absoluteMotionVector[z] = 0.0;
+}
+
 void QViewer::pan(double motionVector[3])
 {
     if (!this->hasInput())
@@ -541,18 +558,8 @@ void QViewer::pan(double motionVector[3])
         renderer->UpdateLightsGeometryToFollowCamera();
     }
 
-    double bounds[6];
-    getMainInput()->getVtkData()->GetBounds(bounds);
-
-    int x, y, z;
-    getCurrentViewPlane().getXYZIndexes(x, y, z);
-
     double absoluteMotionVector[3];
-    camera->GetPosition(absoluteMotionVector);
-
-    absoluteMotionVector[x] = (bounds[x] + bounds[x + 1]) / 2.0 - absoluteMotionVector[x];
-    absoluteMotionVector[y] = (bounds[y * 2] + bounds[y * 2 + 1]) / 2.0 - absoluteMotionVector[y];
-    absoluteMotionVector[z] = 0.0;
+    getCurrentPanFactor(absoluteMotionVector);
 
     emit cameraChanged();
     emit panChanged(absoluteMotionVector);
