@@ -1488,6 +1488,8 @@ void Q2DViewer::restore()
     enableRendering(true);
     // Apliquem el command
     executeInputFinishedCommand();
+
+    emit restored();
 }
 
 void Q2DViewer::clearViewer()
