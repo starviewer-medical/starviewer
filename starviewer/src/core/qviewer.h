@@ -278,6 +278,9 @@ protected:
     /// Returns the current Zoom Factor
     double getCurrentZoomFactor();
 
+    /// Returns the current pan factor
+    void getCurrentPanFactor(double absoluteMotionVector[3]);
+
 private slots:
     /// Slot que s'utilitza quan s'ha seleccionat una sèrie amb el PatientBrowserMenu
     /// Mètode que especifica un input seguit d'una crida al mètode render()
