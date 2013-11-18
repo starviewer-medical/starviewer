@@ -476,6 +476,7 @@ void Q2DViewer::setNewVolumesAndExecuteCommand(const QList<Volume*> &volumes)
     {
         setNewVolumes(volumes);
         executeInputFinishedCommand();
+        emit newVolumesRendered();
     }
     catch (...)
     {
