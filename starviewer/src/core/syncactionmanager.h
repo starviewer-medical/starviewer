@@ -46,6 +46,9 @@ public slots:
     /// By default the manager will be disabled
     void enable(bool enable);
 
+    /// Force all mappers to map the property even no signal was received
+    void synchronize();
+
 private:
     /// Sets up the signal mappers that will generate the SyncActions
     void setupSignalMappers();
