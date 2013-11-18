@@ -14,6 +14,15 @@ WindowLevelSignalToSyncActionMapper::~WindowLevelSignalToSyncActionMapper()
 {
 }
 
+void WindowLevelSignalToSyncActionMapper::mapProperty()
+{
+    Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(m_viewer);
+    if (viewer2D)
+    {
+        mapToSyncAction(viewer2D->getWindowLevelData()->getCurrentPreset());
+    }
+}
+
 void WindowLevelSignalToSyncActionMapper::mapSignal()
 {
     Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(m_viewer);

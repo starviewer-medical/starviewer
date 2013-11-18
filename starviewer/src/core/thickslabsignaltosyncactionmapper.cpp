@@ -14,6 +14,17 @@ ThickSlabSignalToSyncActionMapper::~ThickSlabSignalToSyncActionMapper()
 {
 }
 
+void ThickSlabSignalToSyncActionMapper::mapProperty()
+{
+    Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(m_viewer);
+
+    if (viewer2D)
+    {
+        mapThicknessToSyncAction(viewer2D->getSlabThickness());
+        mapProjectionModeToSyncAction(viewer2D->getSlabProjectionMode());
+    }
+}
+
 void ThickSlabSignalToSyncActionMapper::mapSignal()
 {
     Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(m_viewer);

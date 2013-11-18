@@ -14,6 +14,16 @@ PhaseSignalToSyncActionMapper::~PhaseSignalToSyncActionMapper()
 {
 }
 
+void PhaseSignalToSyncActionMapper::mapProperty()
+{
+    Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(m_viewer);
+
+    if (viewer2D)
+    {
+        mapToSyncAction(viewer2D->getCurrentPhase());
+    }
+}
+
 void PhaseSignalToSyncActionMapper::mapSignal()
 {
     Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(m_viewer);

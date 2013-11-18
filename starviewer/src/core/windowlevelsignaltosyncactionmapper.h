@@ -20,6 +20,9 @@ public:
     WindowLevelSignalToSyncActionMapper(QObject *parent = 0);
     ~WindowLevelSignalToSyncActionMapper();
 
+    /// Maps current WW/WL of the viewer
+    virtual void mapProperty();
+
 protected:
     void mapSignal();
     void unmapSignal();

@@ -20,6 +20,9 @@ public:
     ThickSlabSignalToSyncActionMapper(QObject *parent = 0);
     virtual ~ThickSlabSignalToSyncActionMapper();
 
+    /// Maps both current projection mode and slab thickness of the given viewer
+    virtual void mapProperty();
+
 protected:
     /// Maps the thick slab signals from the viewer to the actionMapped(SyncAction*) signal.
     virtual void mapSignal();
