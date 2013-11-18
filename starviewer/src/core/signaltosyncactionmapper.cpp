@@ -1,5 +1,7 @@
 #include "signaltosyncactionmapper.h"
 
+#include "syncaction.h"
+
 namespace udg {
 
 SignalToSyncActionMapper::SignalToSyncActionMapper(QObject *parent)
