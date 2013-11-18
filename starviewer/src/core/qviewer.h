@@ -275,6 +275,9 @@ protected:
     /// Sets the current view plane.
     virtual void setCurrentViewPlane(const OrthogonalPlane &viewPlane);
 
+    /// Returns the current Zoom Factor
+    double getCurrentZoomFactor();
+
 private slots:
     /// Slot que s'utilitza quan s'ha seleccionat una sèrie amb el PatientBrowserMenu
     /// Mètode que especifica un input seguit d'una crida al mètode render()

@@ -454,34 +454,32 @@ void QViewer::render()
 
 void QViewer::absoluteZoom(double factor)
 {
-    double currentFactor;
+    double currentFactor = getCurrentZoomFactor();
+
+    zoom(currentFactor / (factor * getRenderWindowSize().height()));
+}
+
+double QViewer::getCurrentZoomFactor()
+{
+    double zoomFactor;
 
     if (getActiveCamera()->GetParallelProjection())
     {
-        currentFactor = getActiveCamera()->GetParallelScale();
+        zoomFactor = getActiveCamera()->GetParallelScale();
     }
     else
     {
-        currentFactor = getActiveCamera()->GetViewAngle();
+        zoomFactor = getActiveCamera()->GetViewAngle();
     }
 
-    zoom(currentFactor / (factor * getRenderWindowSize().height()));
+    return zoomFactor;
 }
 
 void QViewer::zoom(double factor)
 {
     if (adjustCameraScaleFactor(factor))
     {
-        double zoomFactor;
-
-        if (getActiveCamera()->GetParallelProjection())
-        {
-            zoomFactor = getActiveCamera()->GetParallelScale();
-        }
-        else
-        {
-            zoomFactor = getActiveCamera()->GetViewAngle();
-        }
+        double zoomFactor = getCurrentZoomFactor();
 
         emit cameraChanged();
         emit zoomFactorChanged(zoomFactor / getRenderWindowSize().height());
