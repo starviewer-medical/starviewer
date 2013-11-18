@@ -381,6 +381,9 @@ signals:
     /// Signal emitted when the viewer is restored
     void restored();
 
+    /// Signal emitted when a set of new volumes (not dummies) have been rendered
+    void newVolumesRendered();
+
 protected:
     /// Processem l'event de resize de la finestra Qt
     virtual void resizeEvent(QResizeEvent *resize);
