@@ -5,6 +5,8 @@
 #include "synccriterion.h"
 #include "syncactionsconfiguration.h"
 
+#include "q2dviewer.h"
+
 namespace udg {
 
 SyncActionManager::SyncActionManager(QObject *parent)
@@ -43,8 +45,27 @@ void SyncActionManager::setMasterViewer(QViewer *viewer)
 {
     if (m_syncedViewersSet.contains(viewer))
     {
+        Q2DViewer *masterViewer2D = Q2DViewer::castFromQViewer(m_masterViewer);
+        if (masterViewer2D)
+        {
+            disconnect(masterViewer2D, 0, this, 0);
+        }
+
         m_masterViewer = viewer;
         updateMasterViewerMappers();
+
+        Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(viewer);
+        if (viewer2D)
+        {
+            connect(viewer2D, SIGNAL(restored()), this, SLOT(synchronize()));
+            connect(viewer2D, SIGNAL(anatomicalViewChanged(AnatomicalPlane::AnatomicalPlaneType)), this, SLOT(synchronize()));
+            connect(viewer2D, SIGNAL(newVolumesRendered()), this, SLOT(synchronize()));
+        }
+
+        if (m_masterViewer->getMainInput())
+        {
+            synchronize();
+        }
     }
 }
 
