@@ -666,6 +666,8 @@ void QViewer::resetView(AnatomicalPlane::AnatomicalPlaneType desiredAnatomicalPl
     // HACK End of performance hack
     enableRendering(true);
     fitRenderingIntoViewport();
+
+    emit anatomicalViewChanged(desiredAnatomicalPlane);
 }
 
 void QViewer::resetViewToAxial()

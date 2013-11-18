@@ -238,6 +238,9 @@ signals:
     /// Indica que l'estat del visor ha canviat
     void viewerStatusChanged();
 
+    /// Signal emitted when the anatomical view has changed
+    void anatomicalViewChanged(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane);
+
 protected:
     /// Gets the bounds of the rendered item
     virtual void getCurrentRenderedItemBounds(double bounds[6]) = 0;
