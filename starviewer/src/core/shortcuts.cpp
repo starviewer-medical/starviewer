@@ -306,11 +306,11 @@ void Shortcuts::init()
     settingsRegistry->addSetting(AutomaticSynchronizationTool, shortcutsList);
 
     shortcutsList.clear();
-    shortcutsList.append(QString("P"));
+    shortcutsList.append(QString("U"));
     settingsRegistry->addSetting(SynchronizeAllViewers, shortcutsList);
 
     shortcutsList.clear();
-    shortcutsList.append(QString("Shift+P"));
+    shortcutsList.append(QString("Shift+U"));
     settingsRegistry->addSetting(DesynchronizeAllViewers, shortcutsList);
     
 }
