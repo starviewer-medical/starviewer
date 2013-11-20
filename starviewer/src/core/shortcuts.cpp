@@ -42,6 +42,7 @@ const QString Shortcuts::MagnifyingGlassTool(ShortcutsBase + "MagnifyingGlassToo
 const QString Shortcuts::AutomaticSynchronizationTool(ShortcutsBase + "AutomaticSynchronizationTool");
 const QString Shortcuts::SynchronizeAllViewers(ShortcutsBase + "SynchronizeAllViewers");
 const QString Shortcuts::DesynchronizeAllViewers(ShortcutsBase + "SynchronizeNoneViewer");
+const QString Shortcuts::Propagation(ShortcutsBase + "Propagation");
 
 const QString Shortcuts::SaveSingleScreenShot(ShortcutsBase + "SaveSingleScreenShot");
 const QString Shortcuts::SaveWholeSeriesScreenShot(ShortcutsBase + "SaveWholeSeriesScreenShot");
@@ -312,6 +313,10 @@ void Shortcuts::init()
     shortcutsList.clear();
     shortcutsList.append(QString("Shift+U"));
     settingsRegistry->addSetting(DesynchronizeAllViewers, shortcutsList);
+
+    shortcutsList.clear();
+    shortcutsList.append(QString("P"));
+    settingsRegistry->addSetting(Propagation, shortcutsList);
     
 }
 
