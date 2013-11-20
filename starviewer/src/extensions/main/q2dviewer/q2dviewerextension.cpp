@@ -75,8 +75,6 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
 #else
     m_syncActionManager = new SyncActionManager(this);
     m_layoutToSyncActionManagerAdapter = new ViewersLayoutToSyncActionManagerAdapter(m_workingArea, m_syncActionManager, this);
-    connect(m_propagateToolButton, SIGNAL(toggled(bool)), m_syncActionManager, SLOT(enable(bool)));
-    m_propagateToolButton->setChecked(false);
     m_relatedStudiesManager = new RelatedStudiesManager();
 #endif
 
@@ -502,6 +500,16 @@ void Q2DViewerExtension::initializeTools()
     // Must use the button directly instead of the action because the button's toogled signal is emitted before the action's triggered signal.
     // This way we make sure that this slot, which turns off manual sync, is called before auto-sync is turned on.
     connect(m_automaticSynchronizationToolButton, SIGNAL(toggled(bool)), SLOT(enableAutomaticSynchronizationToViewer(bool)));
+
+    m_propagationAction = new QAction(this);
+    m_propagationAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::Propagation));
+    m_propagationAction->setToolTip(tr("Propagate properties between viewers (%1)").arg(m_propagationAction->shortcut().toString()));
+    m_propagationAction->setIcon(QIcon(":/images/propagate.png"));
+    m_propagationAction->setText(tr("Propagate"));
+    m_propagationAction->setCheckable(true);
+    m_propagateToolButton->setDefaultAction(m_propagationAction);
+    connect(m_propagationAction, SIGNAL(toggled(bool)), m_syncActionManager, SLOT(enable(bool)));
+
 #endif
 
     // SCREEN SHOT TOOL
@@ -910,7 +918,7 @@ void Q2DViewerExtension::setupPropagation()
         // Propagation will be enabled if any of the configured modalities is present in the current patient modalities
         if (!modalitiesWithPropagation.intersect(m_patient->getModalities().toSet()).isEmpty())
         {
-            m_propagateToolButton->setChecked(true);
+            m_propagateToolButton->defaultAction()->setChecked(true);
         }
     }
 }
