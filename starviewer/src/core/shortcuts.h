@@ -48,6 +48,7 @@ public:
     static const QString AutomaticSynchronizationTool;
     static const QString SynchronizeAllViewers;
     static const QString DesynchronizeAllViewers;
+    static const QString Propagation;
 
     static const QString SaveSingleScreenShot;
     static const QString SaveWholeSeriesScreenShot;
