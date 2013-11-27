@@ -49,7 +49,7 @@ const QString Q2DViewer::DummyVolumeObjectName("Dummy Volume");
 
 Q2DViewer::Q2DViewer(QWidget *parent)
 : QViewer(parent), m_overlayVolume(0), m_blender(0), m_overlapMethod(Q2DViewer::Blend), m_rotateFactor(0), m_applyFlip(false),
-  m_isImageFlipped(false), m_slabProjectionMode(AccumulatorFactory::Maximum)
+  m_isImageFlipped(false), m_slabProjectionMode(AccumulatorFactory::Maximum), m_fusionBalance(50)
 {
     m_displayUnitsFactory = new VolumeDisplayUnitHandlerFactory;
     m_dummyDisplayUnit = new VolumeDisplayUnit;
@@ -1848,6 +1848,36 @@ int Q2DViewer::indexOfVolume(const Volume *volume) const
 WindowLevelPresetsToolData* Q2DViewer::getWindowLevelDataForVolume(int index) const
 {
     return getDisplayUnit(index)->getWindowLevelData();
+}
+
+int Q2DViewer::getFusionBalance() const
+{
+    return m_fusionBalance;
+}
+
+void Q2DViewer::setFusionBalance(int balance)
+{
+    if (this->getNumberOfInputs() != 2)
+    {
+        return;
+    }
+
+    Q_ASSERT(balance >= 0 && balance <= 100);
+    m_fusionBalance = balance;
+
+    if (balance < 50)
+    {
+        this->setVolumeOpacity(0, 1.0);
+        this->setVolumeOpacity(1, balance / 50.0);
+    }
+    else
+    {
+        this->setVolumeOpacity(0, (100 - balance) / 50.0);
+        this->setVolumeOpacity(1, 1.0);
+    }
+
+    m_annotationsHandler->updatePatientAnnotationInformation();
+    this->render();
 }
 
 };  // End namespace udg

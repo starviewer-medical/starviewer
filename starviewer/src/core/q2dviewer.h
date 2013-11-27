@@ -250,6 +250,9 @@ public:
     /// Returns window level data corresponding to the volume at the given index.
     WindowLevelPresetsToolData* getWindowLevelDataForVolume(int index) const;
 
+    /// Returns the fusion balance as a value in the range [0, 100] representing the weight of the second input.
+    int getFusionBalance() const;
+
 public slots:
     virtual void setInput(Volume *volume);
 
@@ -346,6 +349,9 @@ public slots:
 
     /// Fa que els shutters siguin visibles o no
     void showDisplayShutters(bool enable);
+
+    /// Sets the fusion balance as a value in the range [0, 100] representing the weight of the second input.
+    void setFusionBalance(int balance);
 
 signals:
     /// Envia la nova llesca en la que ens trobem
@@ -560,6 +566,10 @@ private:
 
     /// Handles the textual annotations of the viewer
     Q2DViewerAnnotationHandler *m_annotationsHandler;
+
+    /// Fusion balance stored as a value in the range [0, 100] representing the weight of the second input.
+    int m_fusionBalance;
+
 };
 
 };  //  End namespace udg
