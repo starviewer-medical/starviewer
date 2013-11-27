@@ -116,9 +116,13 @@ void Q2DViewerAnnotationHandler::updatePatientAnnotationInformation()
             
             if (m_2DViewer->getNumberOfInputs() == 2)
             {
+                int balance = m_2DViewer->getFusionBalance();
+                const QString &modality0 = m_2DViewer->getInput(0)->getImage(0)->getParentSeries()->getModality();
+                const QString &modality1 = m_2DViewer->getInput(1)->getImage(0)->getParentSeries()->getModality();
+                QString balanceText = QString("%1% %2 + %3% %4").arg(100 - balance).arg(modality0).arg(balance).arg(modality1);
                 QString fusedLabel = getSeriesDescriptiveLabel(m_2DViewer->getInput(1)->getImage(0)->getParentSeries());
 
-                m_lowerRightText = QObject::tr("Fusion: ") + m_lowerRightText + " +\n" + fusedLabel;
+                m_lowerRightText = QObject::tr("Fusion: ") + balanceText + "\n" + m_lowerRightText + " +\n" + fusedLabel;
             }
         }
 
