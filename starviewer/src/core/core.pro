@@ -380,7 +380,8 @@ HEADERS += extensionfactory.h \
     phasesyncaction.h \
     phasesignaltosyncactionmapper.h \
     thickslabsyncaction.h \
-    thickslabsignaltosyncactionmapper.h
+    thickslabsignaltosyncactionmapper.h \
+    qfusionbalancewidget.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -709,7 +710,8 @@ SOURCES += extensionmediator.cpp \
     phasesyncaction.cpp \
     phasesignaltosyncactionmapper.cpp \
     thickslabsyncaction.cpp \
-    thickslabsignaltosyncactionmapper.cpp
+    thickslabsignaltosyncactionmapper.cpp \
+    qfusionbalancewidget.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \
