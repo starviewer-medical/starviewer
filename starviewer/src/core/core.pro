@@ -381,6 +381,7 @@ HEADERS += extensionfactory.h \
     phasesignaltosyncactionmapper.h \
     thickslabsyncaction.h \
     thickslabsignaltosyncactionmapper.h \
+    qenhancedmenutoolbutton.h \
     qfusionbalancewidget.h
 
 SOURCES += extensionmediator.cpp \
@@ -711,6 +712,7 @@ SOURCES += extensionmediator.cpp \
     phasesignaltosyncactionmapper.cpp \
     thickslabsyncaction.cpp \
     thickslabsignaltosyncactionmapper.cpp \
+    qenhancedmenutoolbutton.cpp \
     qfusionbalancewidget.cpp
 
 win32 {
