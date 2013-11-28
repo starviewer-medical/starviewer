@@ -4,6 +4,8 @@
 #include <QLocale>
 #include <QVector2D>
 
+#include "mathtools.h"
+
 namespace udg {
 
 /// Definició de les constants
@@ -107,6 +109,62 @@ QVector2D DICOMValueRepresentationConverter::decimalStringTo2DDoubleVector(const
     }
         
     return vector2DValue;
+}
+
+QTime DICOMValueRepresentationConverter::timeToQTime(const QString &timeString)
+{
+    // Allowed format is HHMMSS.FFFFFF, where .FFFFFF is optional (and up to 6 digits)
+    // We treat separately the microseconds from the rest
+    QStringList splittedTime = timeString.trimmed().split(".");
+    QString simpleTime = splittedTime.first().trimmed();
+    QTime time;
+    switch (simpleTime.size())
+    {
+        case 2:
+            // Should be HH format, range 00-23
+            time = QTime(simpleTime.toInt(), 0);
+            break;
+
+        case 4:
+            // Should be HHMM format, range 00-23, 00-59
+            time.setHMS(simpleTime.left(2).toInt(), simpleTime.right(2).toInt(), 0);
+            break;
+
+        case 6:
+            {
+                // Should be HHMMSS format, range 00-23, 00-59, 00-60 (leap second)
+                int seconds = simpleTime.right(2).toInt();
+                if (seconds == 60)
+                {
+                    // To prevent create an invalid QTime, because DICOM accepts leap seconds on its time format
+                    seconds = 59;
+                }
+
+                simpleTime.chop(2);
+                int minutes = simpleTime.right(2).toInt();
+            
+                simpleTime.chop(2);
+                int hours = simpleTime.toInt();
+            
+                time.setHMS(hours, minutes, seconds);
+            }
+            break;
+
+        default:
+            break;
+    }
+
+    if (time.isValid())
+    {
+        if (splittedTime.count() == 2)
+        {
+            // Maximum QTime resolution is milliseconds
+            int milliseconds = splittedTime.last().left(3).toInt();
+            time = time.addMSecs(milliseconds);
+        }
+    }
+    
+    return time;
 }
 
 } // End namespace udg

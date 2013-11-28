@@ -4,6 +4,7 @@
 
 #include "dicomvaluerepresentationconverter.h"
 #include "fuzzycomparetesthelper.h"
+#include "mathtools.h"
 
 using namespace udg;
 using namespace testing;
@@ -26,6 +27,9 @@ private slots:
 
     void decimalStringTo2DDoubleVector_ShouldReturnExpectedValues_data();
     void decimalStringTo2DDoubleVector_ShouldReturnExpectedValues();
+
+    void timeToQTime_ShouldReturnExpectedValues_data();
+    void timeToQTime_ShouldReturnExpectedValues();
 };
 
 void test_DICOMValueRepresentationConverter::decimalStringToDoubleVector_ShouldReturnEmptyQVectorAndOkIsFalse_data()
@@ -129,6 +133,68 @@ void test_DICOMValueRepresentationConverter::decimalStringTo2DDoubleVector_Shoul
     QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(resultVector.x(), expectedVector2D.x(), 0.001));
     QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(resultVector.y(), expectedVector2D.y(), 0.001));
     QCOMPARE(ok, expectedOk);
+}
+
+void test_DICOMValueRepresentationConverter::timeToQTime_ShouldReturnExpectedValues_data()
+{
+    QTest::addColumn<QString>("timeString");
+    QTest::addColumn<QTime>("expectedTime");
+
+    QTest::newRow("Empty string") << QString() << QTime() ;
+
+    int randomHour = MathTools::randomInt(0, 23);
+    int randomMinute = MathTools::randomInt(0, 59);
+    int randomSecond = MathTools::randomInt(0, 60);
+    int randomMicroSecond = MathTools::randomInt(0, 999999);
+
+    QString randomHourString = QString("%1").arg(randomHour, 2, 10, QChar('0'));
+    QString randomMinuteString = QString("%1").arg(randomMinute, 2, 10, QChar('0'));
+    QString randomSecondString = QString("%1").arg(randomSecond, 2, 10, QChar('0'));
+    QString randomMicroSecondString = QString("%1").arg(randomMicroSecond, 6, 10, QChar('0'));
+    
+    QTest::newRow("2 digits (HH)") << randomHourString << QTime(randomHour, 0);
+    QTest::newRow("4 digits (HHMM") << randomHourString + randomMinuteString << QTime(randomHour, randomMinute);
+    QTest::newRow("6 digits (HHMMSS)") << randomHourString + randomMinuteString + randomSecondString << QTime(randomHour, randomMinute, randomSecond);
+    
+    QString precisionString = "F";
+    for (int i = 1; i < 7; ++i)
+    {
+        int leftChars = (i > 3) ? 3 : i;
+        QString microToMiliSecondString = randomMicroSecondString.left(leftChars);
+
+        QTest::newRow(qPrintable(QString("%1 digits (HHMMSS.%2)").arg(i + 6).arg(precisionString))) 
+            << randomHourString + randomMinuteString + randomSecondString + "." + randomMicroSecondString.left(i) 
+            << QTime(randomHour, randomMinute, randomSecond, microToMiliSecondString.toInt());
+        
+        precisionString += "F";
+    }
+
+    int randomInvalidHour = MathTools::randomInt(24, 99);
+    int randomInvalidMinute = MathTools::randomInt(60, 99);
+    int randomInvalidSecond = MathTools::randomInt(61, 99);
+
+    QString randomInvalidHourString = QString("%1").arg(randomInvalidHour, 2, 10, QChar('0'));
+    QString randomInvalidMinuteString = QString("%1").arg(randomInvalidMinute, 2, 10, QChar('0'));
+    QString randomInvalidSecondString = QString("%1").arg(randomInvalidSecond, 2, 10, QChar('0'));
+    
+    QTest::newRow("2 digits (HH) - hour invalid range") << randomInvalidHourString << QTime();
+    QTest::newRow("4 digits (HHMM) - invalid hour & invalid minute") << randomInvalidHourString + randomInvalidMinuteString << QTime();
+    QTest::newRow("6 digits (HHMMSS) - invalid hour & invalid minute & invalid second") << randomInvalidHourString + randomInvalidMinuteString + randomInvalidSecondString << QTime();
+    QTest::newRow("4 digits (HHMM) - hour ok & invalid minute") << randomHourString + randomInvalidMinuteString << QTime();
+    QTest::newRow("4 digits (HHMM) - invalid hour & minute ok") << randomInvalidHourString + randomMinuteString << QTime();
+    QTest::newRow("6 digits (HHMMSS) - hour ok & invalid (minute & second)") << randomHourString + randomInvalidMinuteString + randomInvalidSecondString << QTime();
+    QTest::newRow("6 digits (HHMMSS) - hour ok & minute ok & invalid second") << randomHourString + randomMinuteString + randomInvalidSecondString << QTime();
+    QTest::newRow("6 digits (HHMMSS) - hour ok & invalid minute & second ok") << randomHourString + randomInvalidMinuteString + randomSecondString << QTime();
+    QTest::newRow("6 digits (HHMMSS) - invalid hour & minute ok && invalid second") << randomInvalidHourString + randomMinuteString + randomInvalidSecondString << QTime();
+    QTest::newRow("6 digits (HHMMSS) - invalid hour & invalid minute && second ok") << randomInvalidHourString + randomInvalidMinuteString + randomSecondString << QTime();
+}
+
+void test_DICOMValueRepresentationConverter::timeToQTime_ShouldReturnExpectedValues()
+{
+    QFETCH(QString, timeString);
+    QFETCH(QTime, expectedTime);
+    
+    QCOMPARE(expectedTime, DICOMValueRepresentationConverter::timeToQTime(timeString));
 }
 
 DECLARE_TEST(test_DICOMValueRepresentationConverter)
