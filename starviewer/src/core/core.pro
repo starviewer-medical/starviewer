@@ -195,6 +195,7 @@ HEADERS += extensionfactory.h \
     leanbodymassformula.h \
     bodysurfaceareaformula.h \
     decaycorrectionfactorformula.h \
+    standardizeduptakevalueformula.h \
     formulacalculator.h \
     leanbodymassformulacalculator.h \
     bodysurfaceareaformulacalculator.h \
@@ -544,6 +545,7 @@ SOURCES += extensionmediator.cpp \
     leanbodymassformula.cpp \
     bodysurfaceareaformula.cpp \
     decaycorrectionfactorformula.cpp \
+    standardizeduptakevalueformula.cpp \
     formulacalculator.cpp \
     leanbodymassformulacalculator.cpp \
     bodysurfaceareaformulacalculator.cpp \
