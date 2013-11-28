@@ -191,6 +191,10 @@ HEADERS += extensionfactory.h \
     nonclosedangletool.h \
     abortrendercommand.h \
     roitool.h \
+    formula.h \
+    leanbodymassformula.h \
+    bodysurfaceareaformula.h \
+    decaycorrectionfactorformula.h \
     statswatcher.h \
     clippingplanestool.h \
     representationslayer.h \
@@ -532,6 +536,10 @@ SOURCES += extensionmediator.cpp \
     nonclosedangletool.cpp \
     abortrendercommand.cpp \
     roitool.cpp \
+    formula.cpp \
+    leanbodymassformula.cpp \
+    bodysurfaceareaformula.cpp \
+    decaycorrectionfactorformula.cpp \
     statswatcher.cpp \
     clippingplanestool.cpp \
     representationslayer.cpp \
