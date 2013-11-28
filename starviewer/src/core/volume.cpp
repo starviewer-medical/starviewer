@@ -159,7 +159,7 @@ int Volume::getNumberOfPhases() const
 
 Volume* Volume::getPhaseVolume(int index)
 {
-    Volume *result = NULL;
+    Volume *result = 0;
     if (m_numberOfPhases == 1)
     {
         // Si només tenim una sola fase, retornem totes les imatges que conté el volum
@@ -274,7 +274,7 @@ Study* Volume::getStudy() const
     }
     else
     {
-        return NULL;
+        return 0;
     }
 }
 
@@ -286,7 +286,7 @@ Patient* Volume::getPatient() const
     }
     else
     {
-        return NULL;
+        return 0;
     }
 }
 
@@ -325,7 +325,7 @@ QString Volume::toString(bool verbose)
 
 Image* Volume::getImage(int sliceNumber, int phaseNumber) const
 {
-    Image *image = NULL;
+    Image *image = 0;
 
     if (!m_imageSet.isEmpty())
     {
