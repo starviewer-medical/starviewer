@@ -271,6 +271,36 @@
       </widget>
      </item>
      <item>
+      <widget class="QGroupBox" name="groupBox_5">
+       <property name="title">
+        <string>Preferred SUV measurement normalization type</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
+         <widget class="QRadioButton" name="m_bodyWeightRadioButton">
+          <property name="text">
+           <string>Body Weight (bw) - g/ml</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QRadioButton" name="m_leanBodyMassRadioButton">
+          <property name="text">
+           <string>Lean Body Mass (lbm) - g/ml</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QRadioButton" name="m_bodySurfaceAreaRadioButton">
+          <property name="text">
+           <string>Body Surface Area (bsa) - cm2/ml</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
       <spacer name="horizontalSpacer_4">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
