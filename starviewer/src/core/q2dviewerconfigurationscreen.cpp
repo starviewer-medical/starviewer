@@ -228,7 +228,6 @@ void Q2DViewerConfigurationScreen::updateMeasurementVerbositySetting()
     if (m_minimalVerbosityRadioButton->isChecked())
     {
         verbosity = MeasurementManager::Minimal;
-        
     }
     else if (m_minimalExplicitVerbosityRadioButton->isChecked())
     {
