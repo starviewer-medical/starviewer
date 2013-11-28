@@ -4,6 +4,7 @@
 #include <QString>
 #include <QVector>
 #include <QVector2D>
+#include <QTime>
 
 namespace udg {
 
@@ -28,6 +29,9 @@ public:
     /// Given a decimal string, converts it to a 2D vector. If the decimal has less or more than 2 decimal values it is considered invalid
     /// ok will be false and a 0 initialized vector will be returned. It's an specific merthod for decimal strings with two values
     static QVector2D decimalStringTo2DDoubleVector(const QString &decimalString, bool *ok = 0);
+
+    /// Maximum resolution conversion are milliseconds (DICOM Time can have a resolution of a millionth of a second (6 digits).
+    static QTime timeToQTime(const QString &timeString);
 };
 
 } // End namespace udg
