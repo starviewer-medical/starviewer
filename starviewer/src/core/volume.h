@@ -109,8 +109,8 @@ public:
     bool isMultiframe() const;
 
     /// Mètodes ràpids per obtenir estudi/pacient al que pertany aquest volum
-    Study* getStudy();
-    Patient* getPatient();
+    Study* getStudy() const;
+    Patient* getPatient() const;
 
     /// Volcat d'informació en un string per poder-ho printar on interessi
     QString toString(bool verbose = false);

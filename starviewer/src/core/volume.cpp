@@ -253,7 +253,7 @@ bool Volume::isMultiframe() const
     return false;
 }
 
-Study* Volume::getStudy()
+Study* Volume::getStudy() const
 {
     if (!m_imageSet.isEmpty())
     {
@@ -265,7 +265,7 @@ Study* Volume::getStudy()
     }
 }
 
-Patient* Volume::getPatient()
+Patient* Volume::getPatient() const
 {
     if (this->getStudy())
     {
