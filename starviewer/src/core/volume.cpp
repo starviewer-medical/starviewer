@@ -267,9 +267,10 @@ Series* Volume::getSeries() const
 
 Study* Volume::getStudy() const
 {
-    if (!m_imageSet.isEmpty())
+    Series *series = getSeries();
+    if (series)
     {
-        return m_imageSet.at(0)->getParentSeries()->getParentStudy();
+        return series->getParentStudy();
     }
     else
     {
