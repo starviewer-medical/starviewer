@@ -253,6 +253,18 @@ bool Volume::isMultiframe() const
     return false;
 }
 
+Series* Volume::getSeries() const
+{
+    if (!m_imageSet.isEmpty())
+    {
+        return m_imageSet.at(0)->getParentSeries();
+    }
+    else
+    {
+        return 0;
+    }
+}
+
 Study* Volume::getStudy() const
 {
     if (!m_imageSet.isEmpty())

@@ -16,6 +16,7 @@ class vtkImageData;
 namespace udg {
 
 class Image;
+class Series;
 class Study;
 class Patient;
 class VolumeReader;
@@ -108,7 +109,8 @@ public:
     /// Retorna cert si el volum és multiframe.
     bool isMultiframe() const;
 
-    /// Mètodes ràpids per obtenir estudi/pacient al que pertany aquest volum
+    /// Shortcut methods to get the parent series/study/patient which this volume belongs to
+    Series* getSeries() const;
     Study* getStudy() const;
     Patient* getPatient() const;
 
