@@ -4,8 +4,13 @@
 #include "statswatcher.h"
 #include "synchronizetool.h"
 #include "toolproxy.h"
+#include "image.h"
+#include "qfusionbalancewidget.h"
+#include "series.h"
 
 #include <QAction>
+#include <QMenu>
+#include <QWidgetAction>
 
 namespace udg {
 
@@ -23,6 +28,17 @@ Q2DViewerWidget::Q2DViewerWidget(QWidget *parent)
     m_synchronizeButtonAction->setCheckable(true);
     m_synchronizeButton->setDefaultAction(m_synchronizeButtonAction);
     m_synchronizeButton->setEnabled(false);
+
+    // Set up fusion balance controls
+    m_fusionBalanceWidget = new QFusionBalanceWidget(this);
+    QWidgetAction *widgetAction = new QWidgetAction(this);
+    widgetAction->setDefaultWidget(m_fusionBalanceWidget);
+    QMenu *menu = new QMenu(this);
+    menu->addAction(widgetAction);
+    m_fusionBalanceToolButton->setMenu(menu);
+    m_fusionBalanceToolButton->setMenuPosition(QEnhancedMenuToolButton::Above);
+    m_fusionBalanceToolButton->setMenuAlignment(QEnhancedMenuToolButton::AlignRight);
+    m_fusionBalanceToolButton->hide();
 
     createConnections();
     m_viewText->setText(QString());
@@ -71,6 +87,9 @@ void Q2DViewerWidget::createConnections()
     connect(m_synchronizeButtonAction, SIGNAL(toggled(bool)), SLOT(enableSynchronization(bool)));
 
     connect(m_2DView, SIGNAL(viewerStatusChanged()), SLOT(setSliderBarWidgetsEnabledFromViewerStatus()));
+
+    connect(m_fusionBalanceWidget, SIGNAL(balanceChanged(int)), m_2DView, SLOT(setFusionBalance(int)));
+    connect(m_2DView, SIGNAL(volumeChanged(Volume*)), SLOT(resetFusionBalance()));
 }
 
 void Q2DViewerWidget::updateProjectionLabel()
@@ -217,6 +236,21 @@ void Q2DViewerWidget::setSliderBarWidgetsEnabled(bool enabled)
     m_slider->setEnabled(enabled);
     m_synchronizeButtonAction->setEnabled(enabled);
     m_viewText->setEnabled(enabled);
+}
+
+void Q2DViewerWidget::resetFusionBalance()
+{
+    if (m_2DView->getNumberOfInputs() == 2)
+    {
+        m_fusionBalanceWidget->setBalance(50);
+        m_fusionBalanceWidget->setFirstVolumeModality(m_2DView->getInput(0)->getImage(0)->getParentSeries()->getModality());
+        m_fusionBalanceWidget->setSecondVolumeModality(m_2DView->getInput(1)->getImage(0)->getParentSeries()->getModality());
+        m_fusionBalanceToolButton->show();
+    }
+    else
+    {
+        m_fusionBalanceToolButton->hide();
+    }
 }
 
 }
