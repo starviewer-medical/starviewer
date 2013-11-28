@@ -200,6 +200,7 @@ HEADERS += extensionfactory.h \
     leanbodymassformulacalculator.h \
     bodysurfaceareaformulacalculator.h \
     decaycorrectionfactorformulacalculator.h \
+    standardizeduptakevalueformulacalculator.h \
     statswatcher.h \
     clippingplanestool.h \
     representationslayer.h \
@@ -550,6 +551,7 @@ SOURCES += extensionmediator.cpp \
     leanbodymassformulacalculator.cpp \
     bodysurfaceareaformulacalculator.cpp \
     decaycorrectionfactorformulacalculator.cpp \
+    standardizeduptakevalueformulacalculator.cpp \
     statswatcher.cpp \
     clippingplanestool.cpp \
     representationslayer.cpp \
