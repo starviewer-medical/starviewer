@@ -201,6 +201,9 @@ HEADERS += extensionfactory.h \
     bodysurfaceareaformulacalculator.h \
     decaycorrectionfactorformulacalculator.h \
     standardizeduptakevalueformulacalculator.h \
+    standardizeduptakevaluebodyweightformulacalculator.h \
+    standardizeduptakevalueleanbodymassformulacalculator.h \
+    standardizeduptakevaluebodysurfaceareaformulacalculator.h \
     statswatcher.h \
     clippingplanestool.h \
     representationslayer.h \
@@ -552,6 +555,9 @@ SOURCES += extensionmediator.cpp \
     bodysurfaceareaformulacalculator.cpp \
     decaycorrectionfactorformulacalculator.cpp \
     standardizeduptakevalueformulacalculator.cpp \
+    standardizeduptakevaluebodyweightformulacalculator.cpp \
+    standardizeduptakevalueleanbodymassformulacalculator.cpp \
+    standardizeduptakevaluebodysurfaceareaformulacalculator.cpp \
     statswatcher.cpp \
     clippingplanestool.cpp \
     representationslayer.cpp \
