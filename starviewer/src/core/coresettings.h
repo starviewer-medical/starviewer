@@ -123,6 +123,9 @@ public:
     
     /// Defines the verbosity for measurements
     static const QString MeasurementDisplayVerbosity;
+
+    /// Defines the preferred SUV measurement normalization type
+    static const QString SUVMeasurementNormalizationType;
 };
 
 } // End namespace udg

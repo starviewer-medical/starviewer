@@ -93,6 +93,7 @@ const QString CoreSettings::StudyLayoutConfigList(Q2DViewerBase + "StudyLayoutCo
 const QString CoreSettings::ModalitiesWithPropagationEnabledByDefault(Q2DViewerBase + "ModalitiesWithPropagationEnabledByDefault");
 
 const QString CoreSettings::MeasurementDisplayVerbosity(Q2DViewerBase + "Measurement/measurementDisplayVerbosity");
+const QString CoreSettings::SUVMeasurementNormalizationType(Q2DViewerBase + "Measurement/SUVMeasurementNormalizationType");
 
 CoreSettings::CoreSettings()
 {
@@ -133,6 +134,7 @@ void CoreSettings::init()
     // TODO Encara falta determinar quines seran les modalitats en les que posarem per defecte aplicar sempre hanging protocols
     settingsRegistry->addSetting(ModalitiesToApplyHangingProtocolsAsFirstOption, "CR;CT;MG;MR;US");
     settingsRegistry->addSetting(ModalitiesWithPropagationEnabledByDefault, "CT;MR;PT");
+    settingsRegistry->addSetting(SUVMeasurementNormalizationType, "BodyWeight");
 }
 
 } // End namespace udg
