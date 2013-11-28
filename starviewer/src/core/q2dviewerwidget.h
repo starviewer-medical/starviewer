@@ -9,6 +9,7 @@ class QAction;
 namespace udg {
 
 class StatsWatcher;
+class QFusionBalanceWidget;
 class QViewerCommand;
 
 /**
@@ -89,12 +90,18 @@ private slots:
     /// Actualitza l'estat d'habilitat dels widgets de la barra amb l'slider a partir de l'estat del viewer
     void setSliderBarWidgetsEnabledFromViewerStatus();
 
+    /// If the viewer has 2 inputs shows the fusion balance tool button and resets the fusion balance to 50% for each input. Otherwise hides the button.
+    void resetFusionBalance();
+
 private:
     /// Acció del boto de sincronitzar
     QAction *m_synchronizeButtonAction;
 
     /// Per fer estadístiques
     StatsWatcher *m_statsWatcher;
+
+    /// Widget to adjust the fusion balance. Will be shown as the menu of the fusion balance tool button.
+    QFusionBalanceWidget *m_fusionBalanceWidget;
 };
 
 };

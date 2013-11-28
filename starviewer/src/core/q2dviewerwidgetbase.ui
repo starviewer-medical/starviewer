@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>udg::Q2DViewerWidgetBase</class>
- <widget class="QFrame" name="udg::Q2DViewerWidgetBase" >
-  <property name="geometry" >
+ <widget class="QFrame" name="udg::Q2DViewerWidgetBase">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,70 +10,87 @@
     <height>295</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>ViewerWidget</string>
   </property>
-  <property name="frameShape" >
+  <property name="frameShape">
    <enum>QFrame::NoFrame</enum>
   </property>
-  <property name="frameShadow" >
+  <property name="frameShadow">
    <enum>QFrame::Plain</enum>
   </property>
-  <property name="lineWidth" >
+  <property name="lineWidth">
    <number>2</number>
   </property>
-  <layout class="QGridLayout" >
-   <property name="margin" >
+  <layout class="QGridLayout">
+   <property name="margin">
     <number>3</number>
    </property>
-   <property name="spacing" >
+   <property name="spacing">
     <number>0</number>
    </property>
-   <item row="1" column="0" >
-    <layout class="QHBoxLayout" >
-     <property name="margin" >
+   <item row="1" column="0">
+    <layout class="QHBoxLayout">
+     <property name="spacing">
       <number>2</number>
      </property>
-     <property name="spacing" >
+     <property name="margin">
       <number>2</number>
      </property>
      <item>
-      <widget class="QLabel" name="m_viewText" >
-       <property name="text" >
+      <widget class="QLabel" name="m_viewText">
+       <property name="text">
         <string>XY : Axial</string>
        </property>
-       <property name="scaledContents" >
+       <property name="scaledContents">
         <bool>true</bool>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QSlider" name="m_slider" >
-       <property name="focusPolicy" >
+      <widget class="QSlider" name="m_slider">
+       <property name="focusPolicy">
         <enum>Qt::NoFocus</enum>
        </property>
-       <property name="maximum" >
+       <property name="maximum">
         <number>0</number>
        </property>
-       <property name="orientation" >
+       <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="m_synchronizeButton" >
-       <property name="text" >
+      <widget class="udg::QEnhancedMenuToolButton" name="m_fusionBalanceToolButton">
+       <property name="toolTip">
+        <string>Fusion balance</string>
+       </property>
+       <property name="text">
         <string>...</string>
        </property>
-       <property name="checkable" >
+       <property name="icon">
+        <iconset resource="../main/main.qrc">
+         <normaloff>:/images/fusionbalance.png</normaloff>:/images/fusionbalance.png</iconset>
+       </property>
+       <property name="popupMode">
+        <enum>QToolButton::InstantPopup</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="m_synchronizeButton">
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="checkable">
         <bool>true</bool>
        </property>
       </widget>
      </item>
     </layout>
    </item>
-   <item row="0" column="0" >
-    <widget class="udg::Q2DViewer" native="1" name="m_2DView" />
+   <item row="0" column="0">
+    <widget class="udg::Q2DViewer" name="m_2DView" native="true"/>
    </item>
   </layout>
  </widget>
@@ -82,10 +100,15 @@
    <extends>QWidget</extends>
    <header>q2dviewer.h</header>
   </customwidget>
+  <customwidget>
+   <class>udg::QEnhancedMenuToolButton</class>
+   <extends>QToolButton</extends>
+   <header>qenhancedmenutoolbutton.h</header>
+  </customwidget>
  </customwidgets>
  <resources>
-  <include location="q2dviewer.qrc" />
-  <include location="../../../main/main.qrc" />
+  <include location="../extensions/main/q2dviewer/q2dviewer.qrc"/>
+  <include location="../main/main.qrc"/>
  </resources>
  <connections/>
 </ui>
