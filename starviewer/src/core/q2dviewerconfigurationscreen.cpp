@@ -2,6 +2,7 @@
 
 #include "coresettings.h"
 #include "measurementmanager.h"
+#include "standarduptakevaluemeasurehandler.h"
 
 namespace udg {
 
@@ -32,6 +33,7 @@ void Q2DViewerConfigurationScreen::initialize()
     initializeModalitiesGroupBox(CoreSettings::ModalitiesWithPropagationEnabledByDefault, m_propagationModalitiesByDefaultGroupBox);
     initializeMagnifyingGlassToolZoomFactor();
     initializeMeasurementsVerbosity();
+    initializeSUVMeasurementType();
 }
 
 void Q2DViewerConfigurationScreen::createConnections()
@@ -56,6 +58,10 @@ void Q2DViewerConfigurationScreen::createConnections()
     connect(m_minimalExplicitVerbosityRadioButton, SIGNAL(clicked()), SLOT(updateMeasurementVerbositySetting()));
     connect(m_verboseVerbosityRadioButton, SIGNAL(clicked()), SLOT(updateMeasurementVerbositySetting()));
     connect(m_verboseExplicitVerbosityRadioButton, SIGNAL(clicked()), SLOT(updateMeasurementVerbositySetting()));
+
+    connect(m_bodyWeightRadioButton, SIGNAL(clicked()), SLOT(updateSUVMeasurementTypeSetting()));
+    connect(m_leanBodyMassRadioButton, SIGNAL(clicked()), SLOT(updateSUVMeasurementTypeSetting()));
+    connect(m_bodySurfaceAreaRadioButton, SIGNAL(clicked()), SLOT(updateSUVMeasurementTypeSetting()));
 }
 
 void Q2DViewerConfigurationScreen::initializeModalitiesGroupBox(const QString &settingName, QModalitiesSelectorGroupBox *groupBox)
@@ -127,6 +133,27 @@ void Q2DViewerConfigurationScreen::initializeMeasurementsVerbosity()
 
         case MeasurementManager::VerboseExplicit:
             m_verboseExplicitVerbosityRadioButton->setChecked(true);
+            break;
+    }
+}
+
+void Q2DViewerConfigurationScreen::initializeSUVMeasurementType()
+{
+    StandardUptakeValueMeasureHandler suvHandler;
+    StandardUptakeValueMeasureHandler::FormulaType formula = suvHandler.getPreferredFormula();
+
+    switch (formula)
+    {
+        case StandardUptakeValueMeasureHandler::BodyWeight:
+            m_bodyWeightRadioButton->setChecked(true);
+            break;
+
+        case StandardUptakeValueMeasureHandler::LeanBodyMass:
+            m_leanBodyMassRadioButton->setChecked(true);
+            break;
+
+        case StandardUptakeValueMeasureHandler::BodySurfaceArea:
+            m_bodySurfaceAreaRadioButton->setChecked(true);
             break;
     }
 }
@@ -244,6 +271,24 @@ void Q2DViewerConfigurationScreen::updateMeasurementVerbositySetting()
 
     Settings settings;
     settings.setValue(CoreSettings::MeasurementDisplayVerbosity, MeasurementManager::getMeasurementDisplayVerbosityTypeAsQString(verbosity));
+}
+
+void Q2DViewerConfigurationScreen::updateSUVMeasurementTypeSetting()
+{
+    StandardUptakeValueMeasureHandler suvHandler;
+
+    if (m_bodyWeightRadioButton->isChecked())
+    {
+        suvHandler.setPreferredFormula(StandardUptakeValueMeasureHandler::BodyWeight);
+    }
+    else if (m_leanBodyMassRadioButton->isChecked())
+    {
+        suvHandler.setPreferredFormula(StandardUptakeValueMeasureHandler::LeanBodyMass);
+    }
+    else if (m_bodySurfaceAreaRadioButton->isChecked())
+    {
+        suvHandler.setPreferredFormula(StandardUptakeValueMeasureHandler::BodySurfaceArea);
+    }
 }
 
 }

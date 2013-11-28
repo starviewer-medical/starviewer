@@ -29,6 +29,9 @@ private:
 
     /// Updates which measurement verbosity radio button should be checked
     void initializeMeasurementsVerbosity();
+    
+    /// Updates which SUV measurement type radio button should be checked
+    void initializeSUVMeasurementType();
 
 private slots:
     /// Es cridaran quan es modifiquin els check box actualitzant els corresponents settings
@@ -40,6 +43,7 @@ private slots:
     void updateModalitiesWithPropagationByDefaultSetting(const QStringList &modalities);
     void updateMagnifyingGlassZoomFactorSetting();
     void updateMeasurementVerbositySetting();
+    void updateSUVMeasurementTypeSetting();
     void updateAutomaticSynchronizationForMRSetting(bool enable);
     void updateAutomaticSynchronizationForCTSetting(bool enable);
 };
