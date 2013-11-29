@@ -58,7 +58,7 @@ public:
     Voxel operator*(const Voxel &value) const;
     
     /// Divides each component by the given value
-    Voxel Voxel::operator/(double value) const;
+    Voxel operator/(double value) const;
 
 private:
     /// Vector containing the values of each component of the voxel.
