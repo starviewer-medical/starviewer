@@ -1,4 +1,5 @@
 #include "bodysurfaceareaformula.h"
+#include <QtCore/qmath.h>
 
 namespace udg {
 
@@ -17,7 +18,7 @@ QString BodySurfaceAreaFormula::getUnits()
 
 double BodySurfaceAreaFormula::compute(int patientsHeightInCm, int patientsWeightInKg)
 {
-    return 71.84 * pow(patientsHeightInCm, 0.725) * pow(patientsWeightInKg, 0.425);
+    return 71.84 * pow(patientsHeightInCm, 0.725) * qPow(patientsWeightInKg, 0.425);
 }
 
 } // End namespace udg

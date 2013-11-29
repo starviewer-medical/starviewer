@@ -1,5 +1,7 @@
 #include "leanbodymassformula.h"
 
+#include <QtCore/qmath.h>
+
 namespace udg {
 
 /// Definition of teh different factors used in the formulas
@@ -33,7 +35,7 @@ double LeanBodyMassFormula::computeFemale(int patientsHeightInCm, int patientsWe
 
 double LeanBodyMassFormula::compute(int patientsHeightInCm, int patientsWeightInKg, double weightMultiplier, int weighHeightFactor) const
 {
-    return weightMultiplier * patientsWeightInKg - weighHeightFactor * pow(static_cast<double>(patientsWeightInKg) / patientsHeightInCm, 2);
+    return weightMultiplier * patientsWeightInKg - weighHeightFactor * qPow(static_cast<double>(patientsWeightInKg) / patientsHeightInCm, 2);
 }
 
 } // End namespace udg
