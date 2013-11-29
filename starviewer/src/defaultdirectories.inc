@@ -74,7 +74,7 @@ isEmpty(LOG4CXXLIBDIR){
 LOG4CXXINCLUDEDIR = $$(LOG4CXXINCLUDEDIR)
 isEmpty(LOG4CXXINCLUDEDIR){
     unix:LOG4CXXINCLUDEDIR = /usr/include/log4cxx
-    macx:LOG4CXXINCLUDEDIR = /usr/local/include/log4cxx
+    macx:LOG4CXXINCLUDEDIR = /usr/local/include
     win32:LOG4CXXINCLUDEDIR = C:/log4cxx/include
 }
 
