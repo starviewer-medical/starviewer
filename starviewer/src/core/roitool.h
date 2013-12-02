@@ -44,10 +44,6 @@ protected:
 
 private:
     
-    /// Methods to compute statistics data, such as mean and standard deviation, upon the contained voxels on the ROI
-    double computeMean(const QList<double> &grayValues);
-    double computeStandardDeviation(const QList<double> &grayValues, double meanOfGrayValues);
-    
     /// Returns the list of ROIData for each input corresponding to the current ROI polygon
     QList<ROIData> computeROIData();
     

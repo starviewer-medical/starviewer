@@ -30,40 +30,6 @@ MeasureComputer* ROITool::getMeasureComputer()
     return new AreaMeasureComputer(m_roiPolygon);
 }
 
-double ROITool::computeMean(const QList<double> &grayValues)
-{
-    double mean = 0.0;
-    foreach (double value, grayValues)
-    {
-        mean += value;
-    }
-
-    mean = mean / grayValues.size();
-
-    return mean;
-}
-
-double ROITool::computeStandardDeviation(const QList<double> &grayValues, double meanOfGrayValues)
-{
-    double standardDeviation = 0.0;
-    QList<double> deviations;
-    foreach (double value, grayValues)
-    {
-        double individualDeviation = value - meanOfGrayValues;
-        deviations << (individualDeviation * individualDeviation);
-    }
-
-    foreach (double deviation, deviations)
-    {
-        standardDeviation += deviation;
-    }
-
-    standardDeviation /= deviations.size();
-    standardDeviation = std::sqrt(standardDeviation);
-
-    return standardDeviation;
-}
-
 QList<ROIData> ROITool::computeROIData()
 {
     Q_ASSERT(m_roiPolygon);
