@@ -10,6 +10,7 @@ namespace udg {
 
 class DrawerPolygon;
 class DrawerText;
+class ROIData;
 
 /**
     Tool pare per totes aquelles tools destinades a crear ROIs.
@@ -42,23 +43,17 @@ protected:
     QPointer<DrawerPolygon> m_roiPolygon;
 
 private:
-    typedef struct
-    {
-        double m_mean;
-        double m_standardDeviation;
-        QString m_units;
-    } StatisticsData;
     
     /// Methods to compute statistics data, such as mean and standard deviation, upon the contained voxels on the ROI
     double computeMean(const QList<double> &grayValues);
     double computeStandardDeviation(const QList<double> &grayValues, double meanOfGrayValues);
     
-    /// Returns the list of StatisticsData for each input corresponding to the current ROI polygon
-    QList<StatisticsData> computeStatisticsData();
-
+    /// Returns the list of ROIData for each input corresponding to the current ROI polygon
+    QList<ROIData> computeROIData();
+    
     /// Computes the voxel values contained inside polygonSegments corresponding to inputNumber volume. It will use the sweepLine algorithm, 
-    /// begining with the line defined with the given points and will end at sweepLineEnd height
-    QList<double> computeVoxelValues(const QList<Line3D> &polygonSegments, Point3D sweepLineBeginPoint, Point3D sweepLineEndPoint, double sweepLineEnd, int inputNumber);
+    /// begining with the line defined with the given points and will end at sweepLineEnd height and returns them in a ROIData object
+    ROIData computeVoxelValues(const QList<Line3D> &polygonSegments, Point3D sweepLineBeginPoint, Point3D sweepLineEndPoint, double sweepLineEnd, int inputNumber);
     
     /// Returns a list with the indices of the corresponding segments of the given list which crosses the given height, that is, those segments
     /// which its initial and end point are between the specified heigh on the heightIndex
@@ -67,8 +62,8 @@ private:
     /// Gets the points that intersect with polygonSegments and the given sweepLine and orders them by the xIndex of view
     QList<double*> getIntersectionPoints(const QList<Line3D> &polygonSegments, const Line3D &sweepLine, const OrthogonalPlane &view);
 
-    /// Adds the voxels that are in the path of the intersection points to the given list
-    void addVoxelsFromIntersections(const QList<double*> &intersectionPoints, double currentZDepth, const OrthogonalPlane &view, VolumePixelData *pixelData, int phaseIndex, QList<double> &grayValues);
+    /// Adds the voxels that are in the path of the intersection points to the given ROIData
+    void addVoxelsFromIntersections(const QList<double*> &intersectionPoints, double currentZDepth, const OrthogonalPlane &view, VolumePixelData *pixelData, int phaseIndex, ROIData &roiData);
 };
 
 }

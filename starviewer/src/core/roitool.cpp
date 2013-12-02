@@ -8,6 +8,7 @@
 #include "mathtools.h"
 #include "areameasurecomputer.h"
 #include "voxel.h"
+#include "roidata.h"
 
 #include <QApplication>
 
@@ -63,7 +64,7 @@ double ROITool::computeStandardDeviation(const QList<double> &grayValues, double
     return standardDeviation;
 }
 
-QList<ROITool::StatisticsData> ROITool::computeStatisticsData()
+QList<ROIData> ROITool::computeROIData()
 {
     Q_ASSERT(m_roiPolygon);
 
@@ -99,32 +100,29 @@ QList<ROITool::StatisticsData> ROITool::computeStatisticsData()
     // The ending height of the sweep line will be at the maximum y bounds of the polygon
     double verticalLimit = bounds[yIndex * 2 + 1] + yMargin;
 
-    // Compute statistics corresponding for each input
-    QList<StatisticsData> statisticsDataList;
+    // Compute the ROI data corresponding for each input
+    QList<ROIData> roiDataList;
     for (int i = 0; i < m_2DViewer->getNumberOfInputs(); ++i)
     {
         // Compute the voxel values inside of the polygon
-        QList<double> grayValues = computeVoxelValues(m_roiPolygon->getSegments(), sweepLineBeginPoint, sweepLineEndPoint, verticalLimit, i);
+        ROIData roiData = computeVoxelValues(m_roiPolygon->getSegments(), sweepLineBeginPoint, sweepLineEndPoint, verticalLimit, i);
         
-        // Once we've got the voxel data, compute statistics data
-        StatisticsData data;
-        data.m_mean = computeMean(grayValues);
-        data.m_standardDeviation = computeStandardDeviation(grayValues, data.m_mean);
-        data.m_units = m_2DViewer->getInput(i)->getPixelUnits();
+        // Set additional information of the ROI data
+        roiData.setUnits(m_2DViewer->getInput(i)->getPixelUnits());
         
-        statisticsDataList << data;
+        roiDataList << roiData;
     }
 
-    return statisticsDataList;
+    return roiDataList;
 }
 
-QList<double> ROITool::computeVoxelValues(const QList<Line3D> &polygonSegments, Point3D sweepLineBeginPoint, Point3D sweepLineEndPoint, double sweepLineEnd, int inputNumber)
+ROIData ROITool::computeVoxelValues(const QList<Line3D> &polygonSegments, Point3D sweepLineBeginPoint, Point3D sweepLineEndPoint, double sweepLineEnd, int inputNumber)
 {
     // We get the pointer of the pixel data to obtain voxels values from
     VolumePixelData *pixelData = m_2DViewer->getCurrentPixelDataFromInput(inputNumber);
     if (!pixelData)
     {
-        return QList<double>();
+        return ROIData();
     }
     
     OrthogonalPlane currentView = m_2DViewer->getView();
@@ -141,22 +139,22 @@ QList<double> ROITool::computeVoxelValues(const QList<Line3D> &polygonSegments, 
         phaseIndex = m_2DViewer->getCurrentPhaseOnInput(inputNumber);
     }
 
-    // Voxel values list
-    QList<double> voxelValues;
+    // ROI voxel data to be obtained from the sweep line
+    ROIData roiData;
     while (sweepLineBeginPoint.at(yIndex) <= sweepLineEnd)
     {
         // We get the intersections bewteen ROI segments and current sweep line
         QList<double*> intersectionList = getIntersectionPoints(polygonSegments, Line3D(sweepLineBeginPoint, sweepLineEndPoint), currentView);
 
         // Adding the voxels from the current intersections of the current sweep line to the voxel values list
-        addVoxelsFromIntersections(intersectionList, currentZDepth, currentView, pixelData, phaseIndex, voxelValues);
+        addVoxelsFromIntersections(intersectionList, currentZDepth, currentView, pixelData, phaseIndex, roiData);
         
         // Shift the sweep line the corresponding space in vertical direction
         sweepLineBeginPoint[yIndex] += verticalSpacingIncrement;
         sweepLineEndPoint[yIndex] += verticalSpacingIncrement;
     }
 
-    return voxelValues;
+    return roiData;
 }
 
 QList<int> ROITool::getIndexOfSegmentsCrossingAtHeight(const QList<Line3D> &segments, double height, int heightIndex)
@@ -217,7 +215,7 @@ QList<double*> ROITool::getIntersectionPoints(const QList<Line3D> &polygonSegmen
     return intersectionPoints;
 }
 
-void ROITool::addVoxelsFromIntersections(const QList<double*> &intersectionPoints, double currentZDepth, const OrthogonalPlane &view, VolumePixelData *pixelData, int phaseIndex, QList<double> &grayValues)
+void ROITool::addVoxelsFromIntersections(const QList<double*> &intersectionPoints, double currentZDepth, const OrthogonalPlane &view, VolumePixelData *pixelData, int phaseIndex, ROIData &roiData)
 {
     if (MathTools::isEven(intersectionPoints.count()))
     {
@@ -258,11 +256,7 @@ void ROITool::addVoxelsFromIntersections(const QList<double*> &intersectionPoint
                 Point3D voxelCoordinate(currentScanLinePoint.getAsDoubleArray());
                 voxelCoordinate[zIndex] = currentZDepth;
                 
-                Voxel voxel = pixelData->getVoxelValue(voxelCoordinate.getAsDoubleArray(), phaseIndex);
-                if (!voxel.isEmpty())
-                {
-                    grayValues << voxel.getComponent(0);
-                }
+                roiData.addVoxel(pixelData->getVoxelValue(voxelCoordinate.getAsDoubleArray(), phaseIndex));
                 currentScanLinePoint[scanDirectionIndex] += scanDirectionIncrement;
             }
         }
@@ -309,25 +303,26 @@ QString ROITool::getAnnotation()
     {
         // Calculem les dades estadístiques
         QApplication::setOverrideCursor(Qt::WaitCursor);
-        QList<StatisticsData> statistics = computeStatisticsData();
+        QList<ROIData> roiDataList = computeROIData();
         QApplication::restoreOverrideCursor();
 
         // Afegim la informació de les dades estadístiques a l'annotació
         QString meansString;
         QString standardDeviationsString;
-        foreach (const StatisticsData &data, statistics)
+        foreach (ROIData roiData, roiDataList)
         {
             if (!meansString.isEmpty())
             {
                 meansString += "; ";
                 standardDeviationsString += "; ";
             }
-            meansString += QString("%1").arg(data.m_mean, 0, 'f', 2);
-            standardDeviationsString += QString("%1").arg(data.m_standardDeviation, 0, 'f', 2);
+            meansString += QString("%1").arg(roiData.getMean(), 0, 'f', 2);
+            standardDeviationsString += QString("%1").arg(roiData.getStandardDeviation(), 0, 'f', 2);
 
-            if (!data.m_units.isEmpty())
+            QString units = roiData.getUnits();
+            if (!units.isEmpty())
             {
-                QString unitsSuffix = " " + data.m_units;
+                QString unitsSuffix = " " + units;
                 meansString += unitsSuffix;
                 standardDeviationsString += unitsSuffix;
             }
