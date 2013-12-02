@@ -44,8 +44,9 @@ protected:
 
 private:
     
-    /// Returns the list of ROIData for each input corresponding to the current ROI polygon
-    QList<ROIData> computeROIData();
+    /// Returns a map of ROIData for each input corresponding to the current ROI polygon
+    /// The key is the index of the input on the viewer corresponding to the mapped ROIData
+    QMap<int, ROIData> computeROIData();
     
     /// Computes the voxel values contained inside polygonSegments corresponding to inputNumber volume. It will use the sweepLine algorithm, 
     /// begining with the line defined with the given points and will end at sweepLineEnd height and returns them in a ROIData object

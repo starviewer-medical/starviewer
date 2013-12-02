@@ -30,7 +30,7 @@ MeasureComputer* ROITool::getMeasureComputer()
     return new AreaMeasureComputer(m_roiPolygon);
 }
 
-QList<ROIData> ROITool::computeROIData()
+QMap<int, ROIData> ROITool::computeROIData()
 {
     Q_ASSERT(m_roiPolygon);
 
@@ -67,7 +67,7 @@ QList<ROIData> ROITool::computeROIData()
     double verticalLimit = bounds[yIndex * 2 + 1] + yMargin;
 
     // Compute the ROI data corresponding for each input
-    QList<ROIData> roiDataList;
+    QMap<int, ROIData> roiDataMap;
     for (int i = 0; i < m_2DViewer->getNumberOfInputs(); ++i)
     {
         // Compute the voxel values inside of the polygon
@@ -75,11 +75,12 @@ QList<ROIData> ROITool::computeROIData()
         
         // Set additional information of the ROI data
         roiData.setUnits(m_2DViewer->getInput(i)->getPixelUnits());
+        roiData.setModality(m_2DViewer->getInput(i)->getSeries()->getModality());
         
-        roiDataList << roiData;
+        roiDataMap.insert(i, roiData);
     }
 
-    return roiDataList;
+    return roiDataMap;
 }
 
 ROIData ROITool::computeVoxelValues(const QList<Line3D> &polygonSegments, Point3D sweepLineBeginPoint, Point3D sweepLineEndPoint, double sweepLineEnd, int inputNumber)
@@ -269,14 +270,17 @@ QString ROITool::getAnnotation()
     {
         // Calculem les dades estadístiques
         QApplication::setOverrideCursor(Qt::WaitCursor);
-        QList<ROIData> roiDataList = computeROIData();
+        QMap<int, ROIData> roiDataMap = computeROIData();
         QApplication::restoreOverrideCursor();
 
         // Afegim la informació de les dades estadístiques a l'annotació
         QString meansString;
         QString standardDeviationsString;
-        foreach (ROIData roiData, roiDataList)
+        QMapIterator<int, ROIData> roiDataIterator(roiDataMap);
+        while (roiDataIterator.hasNext())
         {
+            roiDataIterator.next();
+            ROIData roiData = roiDataIterator.value();
             if (!meansString.isEmpty())
             {
                 meansString += "; ";
