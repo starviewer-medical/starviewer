@@ -70,6 +70,7 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_orthogonalplane.cpp \
            $$PWD/test_slicehandler.cpp \
            $$PWD/test_voxel.cpp \
+           $$PWD/test_roidata.cpp \
            $$PWD/test_mammographyimagehelper.cpp \
            $$PWD/test_transferfunction.cpp
 

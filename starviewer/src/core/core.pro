@@ -191,6 +191,7 @@ HEADERS += extensionfactory.h \
     nonclosedangletool.h \
     abortrendercommand.h \
     roitool.h \
+    roidata.h \
     formula.h \
     leanbodymassformula.h \
     bodysurfaceareaformula.h \
@@ -546,6 +547,7 @@ SOURCES += extensionmediator.cpp \
     nonclosedangletool.cpp \
     abortrendercommand.cpp \
     roitool.cpp \
+    roidata.cpp \
     formula.cpp \
     leanbodymassformula.cpp \
     bodysurfaceareaformula.cpp \
