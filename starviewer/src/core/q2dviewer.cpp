@@ -52,8 +52,7 @@ Q2DViewer::Q2DViewer(QWidget *parent)
   m_isImageFlipped(false), m_slabProjectionMode(AccumulatorFactory::Maximum), m_fusionBalance(50)
 {
     m_displayUnitsFactory = new VolumeDisplayUnitHandlerFactory;
-    m_dummyDisplayUnit = new VolumeDisplayUnit;
-    m_dummyDisplayUnit->getImageActor()->VisibilityOff();
+    initializeDummyDisplayUnit();
     m_volumeReaderManager = new VolumeReaderManager(this);
     m_inputFinishedCommand = NULL;
 
@@ -344,6 +343,12 @@ void Q2DViewer::initializeCamera()
     vtkCamera *camera = getActiveCamera();
     Q_ASSERT(camera);
     camera->ParallelProjectionOn();
+}
+
+void Q2DViewer::initializeDummyDisplayUnit()
+{
+    m_dummyDisplayUnit = new VolumeDisplayUnit;
+    m_dummyDisplayUnit->getImageActor()->VisibilityOff();
 }
 
 void Q2DViewer::addImageActors()
