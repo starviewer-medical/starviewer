@@ -70,14 +70,17 @@ QMap<int, ROIData> ROITool::computeROIData()
     QMap<int, ROIData> roiDataMap;
     for (int i = 0; i < m_2DViewer->getNumberOfInputs(); ++i)
     {
-        // Compute the voxel values inside of the polygon
-        ROIData roiData = computeVoxelValues(m_roiPolygon->getSegments(), sweepLineBeginPoint, sweepLineEndPoint, verticalLimit, i);
-        
-        // Set additional information of the ROI data
-        roiData.setUnits(m_2DViewer->getInput(i)->getPixelUnits());
-        roiData.setModality(m_2DViewer->getInput(i)->getSeries()->getModality());
-        
-        roiDataMap.insert(i, roiData);
+        // Compute the voxel values inside of the polygon if the input is visible
+        if (m_2DViewer->isInputVisible(i))
+        {
+            ROIData roiData = computeVoxelValues(m_roiPolygon->getSegments(), sweepLineBeginPoint, sweepLineEndPoint, verticalLimit, i);
+            
+            // Set additional information of the ROI data
+            roiData.setUnits(m_2DViewer->getInput(i)->getPixelUnits());
+            roiData.setModality(m_2DViewer->getInput(i)->getModality());
+
+            roiDataMap.insert(i, roiData);
+        }
     }
 
     return roiDataMap;
