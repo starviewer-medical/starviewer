@@ -94,6 +94,9 @@ public:
     void setNumberOfSlicesPerPhase(int slicesPerPhase);
     int getNumberOfSlicesPerPhase() const;
 
+    /// Returns the modality, if available, of the images that compose the volume
+    QString getModality() const;
+
     /// Afegim una imatge al conjunt d'imatges que composen el volum
     void addImage(Image *image);
 
