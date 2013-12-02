@@ -43,7 +43,6 @@ protected:
     QPointer<DrawerPolygon> m_roiPolygon;
 
 private:
-    
     /// Returns a map of ROIData for each input corresponding to the current ROI polygon
     /// The key is the index of the input on the viewer corresponding to the mapped ROIData
     QMap<int, ROIData> computeROIData();
