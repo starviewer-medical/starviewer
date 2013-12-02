@@ -418,6 +418,9 @@ private:
     /// Initializes camera parameters
     void initializeCamera();
 
+    /// Initialized the dummy display unit with the proper parameters
+    void initializeDummyDisplayUnit();
+
     /// Adds/remove the image actors to/from the scene
     void addImageActors();
     void removeImageActors();
