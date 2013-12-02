@@ -53,6 +53,7 @@ Q2DViewer::Q2DViewer(QWidget *parent)
 {
     m_displayUnitsFactory = new VolumeDisplayUnitHandlerFactory;
     m_dummyDisplayUnit = new VolumeDisplayUnit;
+    m_dummyDisplayUnit->getImageActor()->VisibilityOff();
     m_volumeReaderManager = new VolumeReaderManager(this);
     m_inputFinishedCommand = NULL;
 
@@ -331,6 +332,11 @@ bool Q2DViewer::hasPhases() const
 bool Q2DViewer::doesInputHavePhases(int i) const
 {
     return getNumberOfPhasesFromInput(i) > 1;
+}
+
+bool Q2DViewer::isInputVisible(int i) const
+{
+    return getDisplayUnit(i)->getImageActor()->GetVisibility();
 }
 
 void Q2DViewer::initializeCamera()
