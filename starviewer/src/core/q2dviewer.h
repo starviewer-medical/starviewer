@@ -109,6 +109,9 @@ public:
     /// If some orthogonal reconstruction different from original acquisition is applied, returns null
     Image* getCurrentDisplayedImage() const;
 
+    /// Same as getCurrentDisplayedImage() but returning the corresponding image on the specified input
+    Image* getCurrentDisplayedImageOnInput(int i) const;
+
     /// Ens dóna el pla d'imatge actual que estem visualitzant
     /// @param vtkReconstructionHack HACK variable booleana que ens fa un petit hack
     /// per casos en que el pla "real" no és el que volem i necessitem una petita modificació

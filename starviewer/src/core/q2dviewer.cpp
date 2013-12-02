@@ -1101,6 +1101,11 @@ Image* Q2DViewer::getCurrentDisplayedImage() const
     return getMainDisplayUnit()->getCurrentDisplayedImage();
 }
 
+Image* Q2DViewer::getCurrentDisplayedImageOnInput(int i) const
+{
+    return getDisplayUnit(i)->getCurrentDisplayedImage();
+}
+
 ImagePlane* Q2DViewer::getCurrentImagePlane(bool vtkReconstructionHack)
 {
     if (!hasInput())
