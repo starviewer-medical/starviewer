@@ -201,6 +201,18 @@ int Volume::getNumberOfSlicesPerPhase() const
     return m_numberOfSlicesPerPhase;
 }
 
+QString Volume::getModality() const
+{
+    QString modality;
+
+    if (getSeries())
+    {
+        modality = getSeries()->getModality();
+    }
+    
+    return modality;
+}
+
 void Volume::addImage(Image *image)
 {
     if (!m_imageSet.contains(image))
