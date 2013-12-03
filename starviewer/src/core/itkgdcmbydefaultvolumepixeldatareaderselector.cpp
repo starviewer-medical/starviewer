@@ -35,13 +35,12 @@ VolumePixelDataReaderFactory::PixelDataReaderType ItkGdcmByDefaultVolumePixelDat
 
         // Check for color image
         // TODO Should also check for cases in which there are images of different size and some of them have color
-        QString photometricInterpretation = image->getPhotometricInterpretation();
-        if (!photometricInterpretation.contains("MONOCHROME"))
+        if (image->getPhotometricInterpretation().isColor())
         {
             // If photometric interpretation is not MONOCHROME1 nor MONOCHROME2, then it's a color image: PALETTE COLOR, RGB, YBR_FULL, YBR_FULL_422,
             // YBR_PARTIAL_422, YBR_PARTIAL_420, YBR_ICT or YBR_RCT
             containsColorImages = true;
-            DEBUG_LOG("Photometric Interpretation: " + photometricInterpretation);
+            DEBUG_LOG("Photometric Interpretation: " + image->getPhotometricInterpretation().getAsQString());
         }
         else if (image->getBitsAllocated() == 16 && image->getBitsStored() == 16 && !image->getSOPInstanceUID().contains("MHDImage"))
         {

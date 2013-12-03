@@ -83,7 +83,7 @@ public:
 
     /// Assignar/Obtenir la interpretació fotomètrica
     void setPhotometricInterpretation(const QString &value);
-    QString getPhotometricInterpretation() const;
+    PhotometricInterpretation getPhotometricInterpretation() const;
 
     /// Assignar/Obtenir files/columnes
     void setRows(int rows);

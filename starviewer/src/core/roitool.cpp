@@ -305,7 +305,7 @@ QString ROITool::getAnnotation()
     QString annotation = tr("Area: %1").arg(getMeasurementString());
 
     // Només calcularem mitjana i desviació estàndar per imatges monocrom.
-    if (m_2DViewer->getMainInput()->getImage(0)->getPhotometricInterpretation().contains("MONOCHROME"))
+    if (!m_2DViewer->getMainInput()->getImage(0)->getPhotometricInterpretation().isColor())
     {
         // Calculem les dades estadístiques
         QApplication::setOverrideCursor(Qt::WaitCursor);

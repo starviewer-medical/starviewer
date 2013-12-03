@@ -1252,7 +1252,7 @@ bool ImageFillerStep::areOfDifferentPhotometricInterpretation(Image *firstImage,
     Q_ASSERT(firstImage);
     Q_ASSERT(secondImage);
 
-    return firstImage->getPhotometricInterpretation().trimmed() != secondImage->getPhotometricInterpretation().trimmed();
+    return firstImage->getPhotometricInterpretation() != secondImage->getPhotometricInterpretation();
 }
 
 bool ImageFillerStep::areOfDifferentPixelSpacing(Image *firstImage, Image *secondImage)

@@ -1343,7 +1343,7 @@ void Q2DViewer::printVolumeInformation()
     DEBUG_LOG("*** Grayscale Transform Pipeline Begin ***");
     DEBUG_LOG(QString("Image Information: Bits Allocated: %1, Bits Stored: %2, Pixel Range %3 to %4, SIGNED?Pixel Representation: %5, Photometric interpretation: %6")
                  .arg(getMainInput()->getImage(0)->getBitsAllocated()).arg(getMainInput()->getImage(0)->getBitsStored()).arg(range[0]).arg(range[1])
-                 .arg(getMainInput()->getImage(0)->getPixelRepresentation()).arg(getMainInput()->getImage(0)->getPhotometricInterpretation()));
+                 .arg(getMainInput()->getImage(0)->getPixelRepresentation()).arg(getMainInput()->getImage(0)->getPhotometricInterpretation().getAsQString()));
     // Fins que no implementem Presentation states aquest serà el cas que sempre s'executarà el 100% dels casos
 }
 

@@ -520,8 +520,8 @@ void CreateDicomPrintSpool::setToDCMTKPresentationStateWindowLevelFromDICOMPrint
         windowWidth = 1;
     }
 
-    if ((imageToPrint->getPhotometricInterpretation() == "MONOCHROME1" && dicomPrintPresentationStateImage.getWindowWidth() >= 0) ||
-        (imageToPrint->getPhotometricInterpretation() != "MONOCHROME1" && dicomPrintPresentationStateImage.getWindowWidth() < 0))
+    if ((imageToPrint->getPhotometricInterpretation() == PhotometricInterpretation::Monochrome1 && dicomPrintPresentationStateImage.getWindowWidth() >= 0) ||
+        (imageToPrint->getPhotometricInterpretation() != PhotometricInterpretation::Monochrome1 && dicomPrintPresentationStateImage.getWindowWidth() < 0))
     {
             dcmtkPresentationState->invertImage();
     }

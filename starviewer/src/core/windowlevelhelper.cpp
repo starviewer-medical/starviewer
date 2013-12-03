@@ -71,7 +71,7 @@ WindowLevel WindowLevelHelper::getDefaultWindowLevelForPresentation(Image *image
     WindowLevel windowLevel = image->getWindowLevel(index);
     if (windowLevel.isValid())
     {
-        if (image->getPhotometricInterpretation() == "MONOCHROME1")
+        if (image->getPhotometricInterpretation() == PhotometricInterpretation::Monochrome1)
         {
             windowLevel.setWidth(-windowLevel.getWidth());
         }
