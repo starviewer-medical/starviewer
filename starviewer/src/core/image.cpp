@@ -150,12 +150,12 @@ int Image::getSamplesPerPixel() const
 
 void Image::setPhotometricInterpretation(const QString &value)
 {
-    m_photometricInterpretation = value;
+    m_photometricInterpretation.setValue(value.trimmed());
 }
 
 QString Image::getPhotometricInterpretation() const
 {
-    return m_photometricInterpretation;
+    return m_photometricInterpretation.getAsQString();
 }
 
 void Image::setRows(int rows)

@@ -11,6 +11,7 @@
 #include "dicomsource.h"
 #include "imageorientation.h"
 #include "patientorientation.h"
+#include "photometricinterpretation.h"
 #include "imageoverlay.h"
 #include "displayshutter.h"
 #include "windowlevel.h"
@@ -296,7 +297,7 @@ private:
     int m_samplesPerPixel;
 
     /// Interpretació fotomètrica (monocrom,color...). Veure C.6.7.3.1.2. (0028,0004) Tipus 1.
-    QString m_photometricInterpretation;
+    PhotometricInterpretation m_photometricInterpretation;
 
     /// Files i columnes de la imatge. (0028,0010),(0028,0011) Tipus 1
     int m_rows;
