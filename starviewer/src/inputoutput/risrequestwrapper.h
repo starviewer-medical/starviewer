@@ -1,4 +1,3 @@
-
 #ifndef UDGRISREQUESTWRAPPER_H
 #define UDGRISREQUESTWRAPPER_H
 
@@ -33,6 +32,7 @@ private:
     /// Imprimeix per pantalla i loggeja error al tancar connexió
     void errorClosing(QString errorDescription);
 };
-};
+
+}
 
 #endif
