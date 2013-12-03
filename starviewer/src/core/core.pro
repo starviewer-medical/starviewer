@@ -236,6 +236,7 @@ HEADERS += extensionfactory.h \
     anatomicalplane.h \
     patientorientation.h \
     imageorientation.h \
+    photometricinterpretation.h \
     qreleasenotes.h \
     qdicomdumpbrowser.h \
     applicationversionchecker.h \
@@ -591,6 +592,7 @@ SOURCES += extensionmediator.cpp \
     anatomicalplane.cpp \
     patientorientation.cpp \
     imageorientation.cpp \
+    photometricinterpretation.cpp \
     qreleasenotes.cpp \
     qdicomdumpbrowser.cpp \
     applicationversionchecker.cpp \
