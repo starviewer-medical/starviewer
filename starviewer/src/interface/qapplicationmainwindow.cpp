@@ -15,7 +15,7 @@
 #include "databaseinstallation.h"
 #include "interfacesettings.h"
 #include "starviewerapplicationcommandline.h"
-#include "qstarviewersapwrapper.h"
+#include "risrequestwrapper.h"
 #include "qaboutdialog.h"
 
 // Pel LanguageLocale
@@ -698,7 +698,7 @@ void QApplicationMainWindow::sendRequestRetrieveStudyWithAccessionNumberToLocalS
     Settings settings;
     if (settings.getValue(udg::InputOutputSettings::ListenToRISRequests).toBool())
     {
-        QStarviewerSAPWrapper().sendRequestToLocalStarviewer(accessionNumber);
+        RISRequestWrapper().sendRequestToLocalStarviewer(accessionNumber);
     }
     else
     {

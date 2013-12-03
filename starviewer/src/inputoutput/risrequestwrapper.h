@@ -1,6 +1,6 @@
 
-#ifndef UDGQSTARVIEWERSAPWRAPPER_H
-#define UDGQSTARVIEWERSAPWRAPPER_H
+#ifndef UDGRISREQUESTWRAPPER_H
+#define UDGRISREQUESTWRAPPER_H
 
 #include <QString>
 
@@ -13,7 +13,7 @@ namespace udg {
     fa el RIS PIER, d'aquesta manera aprofitant la part d'integració RIS PIER implementada del Starviewer tenim feta
     la integració amb el SAP.
   */
-class QStarviewerSAPWrapper {
+class RISRequestWrapper {
 
 public:
     /// Envia via Tcp/IP una petició de descarrega de l'estudi amb l'accession number passat per paràmetre al Starviewer de la màquina local
