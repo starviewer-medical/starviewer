@@ -106,8 +106,8 @@ QMap<int, ROIData> ROITool::computeROIData()
     QMap<int, ROIData> roiDataMap;
     for (int i = 0; i < m_2DViewer->getNumberOfInputs(); ++i)
     {
-        // Compute the voxel values inside of the polygon if the input is visible
-        if (m_2DViewer->isInputVisible(i))
+        // Compute the voxel values inside of the polygon if the input is visible and the images are monochrome
+        if (m_2DViewer->isInputVisible(i) && !m_2DViewer->getInput(i)->getImage(0)->getPhotometricInterpretation().isColor())
         {
             ROIData roiData = computeVoxelValues(m_roiPolygon->getSegments(), sweepLineBeginPoint, sweepLineEndPoint, verticalLimit, i);
             
@@ -304,52 +304,52 @@ QString ROITool::getAnnotation()
     
     QString annotation = tr("Area: %1").arg(getMeasurementString());
 
-    // Només calcularem mitjana i desviació estàndar per imatges monocrom.
-    if (!m_2DViewer->getMainInput()->getImage(0)->getPhotometricInterpretation().isColor())
+    // Calculem les dades estadístiques
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    QMap<int, ROIData> roiDataMap = computeROIData();
+    QApplication::restoreOverrideCursor();
+
+    // Afegim la informació de les dades estadístiques a l'annotació
+    QString meansString;
+    QString standardDeviationsString;
+    QString suvsString;
+    QMapIterator<int, ROIData> roiDataIterator(roiDataMap);
+    while (roiDataIterator.hasNext())
     {
-        // Calculem les dades estadístiques
-        QApplication::setOverrideCursor(Qt::WaitCursor);
-        QMap<int, ROIData> roiDataMap = computeROIData();
-        QApplication::restoreOverrideCursor();
-
-        // Afegim la informació de les dades estadístiques a l'annotació
-        QString meansString;
-        QString standardDeviationsString;
-        QString suvsString;
-        QMapIterator<int, ROIData> roiDataIterator(roiDataMap);
-        while (roiDataIterator.hasNext())
+        roiDataIterator.next();
+        ROIData roiData = roiDataIterator.value();
+        if (!meansString.isEmpty())
         {
-            roiDataIterator.next();
-            ROIData roiData = roiDataIterator.value();
-            if (!meansString.isEmpty())
-            {
-                meansString += "; ";
-                standardDeviationsString += "; ";
-            }
-            meansString += QString("%1").arg(roiData.getMean(), 0, 'f', 2);
-            standardDeviationsString += QString("%1").arg(roiData.getStandardDeviation(), 0, 'f', 2);
-
-            QString units = roiData.getUnits();
-            if (!units.isEmpty())
-            {
-                QString unitsSuffix = " " + units;
-                meansString += unitsSuffix;
-                standardDeviationsString += unitsSuffix;
-            }
-
-            QString suvMeasurement = getStandardizedUptakeValueMeasureString(roiData, roiDataIterator.key());
-            if (!suvsString.isEmpty() && !suvMeasurement.isEmpty())
-            {
-                // In case there are more SUV values put them in a new paragraph preceeded by the input index
-                suvsString += QString("\n(%1)").arg(roiDataIterator.key());
-            }
-            suvsString += suvMeasurement;
+            meansString += "; ";
+            standardDeviationsString += "; ";
         }
-        annotation += tr("\nMean: %1\nSt.Dev.: %2").arg(meansString).arg(standardDeviationsString);
-        
-        // Final annotation string with SUV measurement (if any) and statistical data
-        annotation = suvsString + "\n" + annotation;
+        meansString += QString("%1").arg(roiData.getMean(), 0, 'f', 2);
+        standardDeviationsString += QString("%1").arg(roiData.getStandardDeviation(), 0, 'f', 2);
+
+        QString units = roiData.getUnits();
+        if (!units.isEmpty())
+        {
+            QString unitsSuffix = " " + units;
+            meansString += unitsSuffix;
+            standardDeviationsString += unitsSuffix;
+        }
+
+        QString suvMeasurement = getStandardizedUptakeValueMeasureString(roiData, roiDataIterator.key());
+        if (!suvsString.isEmpty() && !suvMeasurement.isEmpty())
+        {
+            // In case there are more SUV values put them in a new paragraph preceeded by the input index
+            suvsString += QString("\n(%1)").arg(roiDataIterator.key());
+        }
+        suvsString += suvMeasurement;
     }
+    
+    if (!meansString.isEmpty())
+    {
+        annotation += tr("\nMean: %1\nSt.Dev.: %2").arg(meansString).arg(standardDeviationsString);
+    }
+
+    // Final annotation string with SUV measurement (if any) and statistical data
+    annotation = suvsString + "\n" + annotation;
 
     return annotation;
 }
