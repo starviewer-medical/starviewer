@@ -113,7 +113,7 @@ void DICOMImageFileGenerator::fillImagePixelInfo(DICOMWriter *writer, Image *ima
 
     DICOMValueAttribute photometricRepresentation;
     photometricRepresentation.setTag(DICOMPhotometricInterpretation);
-    photometricRepresentation.setValue(image->getPhotometricInterpretation());
+    photometricRepresentation.setValue(image->getPhotometricInterpretation().getAsQString());
     writer->addValueAttribute(&photometricRepresentation);
 
     DICOMValueAttribute rows;

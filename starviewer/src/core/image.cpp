@@ -153,9 +153,9 @@ void Image::setPhotometricInterpretation(const QString &value)
     m_photometricInterpretation.setValue(value.trimmed());
 }
 
-QString Image::getPhotometricInterpretation() const
+PhotometricInterpretation Image::getPhotometricInterpretation() const
 {
-    return m_photometricInterpretation.getAsQString();
+    return m_photometricInterpretation;
 }
 
 void Image::setRows(int rows)
