@@ -269,7 +269,7 @@ void QInputOutputLocalDatabaseWidget::deleteSelectedItemsFromLocalDatabase()
     if (!selectedDicomMaskDICOMSoruceToDelete.isEmpty())
     {
         QMessageBox::StandardButton response = QMessageBox::question(this, ApplicationNameString,
-                                                                           tr("Are you sure you want to delete the selected Items?"),
+                                                                           tr("Are you sure you want to delete the selected items?"),
                                                                            QMessageBox::Yes | QMessageBox::No,
                                                                            QMessageBox::No);
         if (response == QMessageBox::Yes)
@@ -287,15 +287,15 @@ void QInputOutputLocalDatabaseWidget::deleteSelectedItemsFromLocalDatabase()
 
                     if (dicomMaskToDelete.getSeriesInstanceUID().isEmpty())
                     {
-                        warningMessage = tr("The study %1 of patient %2 is in use by the DICOMDIR List. If you want to delete "
-                                            "this study you should remove it from the DICOMDIR List first.")
+                        warningMessage = tr("Study %1 of patient %2 is in use by the DICOMDIR list. If you want to delete "
+                                            "this study you must remove it from the DICOMDIR list first.")
                                          .arg(studyToDelete->getID(), studyToDelete->getParentPatient()->getFullName());
                     }
                     else
                     {
                         // TODO:Hauriem de mostar el Series ID en lloc del Series UID
-                        warningMessage = tr("The series with UID %1 of study %2 patient %3 is in use by the DICOMDIR List. If you want to delete "
-                                            "this series you should remove the study from the DICOMDIR List first.")
+                        warningMessage = tr("The series with UID %1 of study %2 of patient %3 is in use by the DICOMDIR list. If you want to delete "
+                                            "this series you must remove the study from the DICOMDIR list first.")
                                          .arg(dicomMaskToDelete.getSeriesInstanceUID(), studyToDelete->getID(),
                                               studyToDelete->getParentPatient()->getFullName());
                     }
@@ -520,7 +520,7 @@ void QInputOutputLocalDatabaseWidget::sendSelectedStudiesToSelectedPacs()
                                   .arg(localDatabaseManager.getLastError())
                                   .arg(dicomMaskToSend.getStudyInstanceUID()));
 
-                QString message = tr("An error occurred with database, preparing the DICOM files to send to PACS %1. The DICOM files won't be sent.")
+                QString message = tr("There has been a database error while preparing the DICOM files to send to PACS %1. The DICOM files won't be sent.")
                     .arg(pacsDevice.getAETitle());
                 message += tr("\nClose all %1 windows and try again."
                          "\n\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);

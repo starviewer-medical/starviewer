@@ -172,7 +172,7 @@
             <item>
              <widget class="QRadioButton" name="m_anyDateRadioButton">
               <property name="text">
-               <string>Any date</string>
+               <string>Any Date</string>
               </property>
               <property name="checked">
                <bool>true</bool>

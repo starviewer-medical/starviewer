@@ -32,7 +32,7 @@ DiagnosisTestResult CacheTest::run()
         DiagnosisTestProblem problem;
         problem.setState(DiagnosisTestProblem::Error);
         problem.setDescription(tr("The free space on the local database location is below the minimum %1 GB required").arg(minimumFreeSpace));
-        problem.setSolution(tr("Make some space on disk or change the local database to other location"));
+        problem.setSolution(tr("Make some space on disk or change the local database to another location"));
         problems.addError(problem);
     }
 
@@ -42,7 +42,7 @@ DiagnosisTestResult CacheTest::run()
         DiagnosisTestProblem problem;
         problem.setState(DiagnosisTestProblem::Error);
         problem.setDescription(tr("Invalid permissions on the local database directory"));
-        problem.setSolution(tr("Fix the permissions of the directory or change the local database to other location"));
+        problem.setSolution(tr("Fix the directory permissions or change the local database to another location"));
         problems.addError(problem);
     }
 

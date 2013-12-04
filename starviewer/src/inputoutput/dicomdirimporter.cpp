@@ -329,17 +329,17 @@ QString DICOMDIRImporter::getDescriptionForQProgressDialog(QString studyInstance
 
     if (imageToImport.count() == 1 && seriesToImport.count() == 1 && patientToImport.count() == 1)
     {
-        description = tr("Importing Image %1 of Series %2 from Study %3, %4").arg(imageToImport.at(0)->getInstanceNumber(), seriesToImport.at(0)->getSeriesNumber(),
+        description = tr("Importing image %1 of series %2 from study %3, %4").arg(imageToImport.at(0)->getInstanceNumber(), seriesToImport.at(0)->getSeriesNumber(),
                                                                                   patientToImport.at(0)->getStudies().at(0)->getID());
     }
     else if (seriesToImport.count() == 1 && patientToImport.count() == 1)
     {
-        description = tr("Importing Series %1 of Study %2, %3").arg(seriesToImport.at(0)->getSeriesNumber(), patientToImport.at(0)->getStudies().at(0)->getID(),
+        description = tr("Importing series %1 of study %2, %3").arg(seriesToImport.at(0)->getSeriesNumber(), patientToImport.at(0)->getStudies().at(0)->getID(),
                                                                     patientToImport.at(0)->getFullName());
     }
     else if (patientToImport.count() == 1)
     {
-        description = tr("Importing Study %1, %2").arg(patientToImport.at(0)->getStudies().at(0)->getID(), patientToImport.at(0)->getFullName());
+        description = tr("Importing study %1, %2").arg(patientToImport.at(0)->getStudies().at(0)->getID(), patientToImport.at(0)->getFullName());
     }
     else
     {

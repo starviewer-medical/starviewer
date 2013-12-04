@@ -110,7 +110,7 @@ void RISRequestManager::queryPACSRISStudyRequest(DicomMask maskRISRequest)
     QList<PacsDevice> queryablePACS = PacsDeviceManager().getPACSList(PacsDeviceManager::PacsWithQueryRetrieveServiceEnabled, true);
     if (queryablePACS.isEmpty())
     {
-        QMessageBox::information(0, ApplicationNameString, tr("The requested studies by RIS cannot be retrieved because there is no configured default "
+        QMessageBox::information(0, ApplicationNameString, tr("Cannot retrieve the studies requested from RIS because there is no configured default "
                                                               "PACS to query.") + "\n\n" + tr("Please, check your PACS settings."));
         INFO_LOG("No s'ha pogut processar la peticio del RIS perque no hi ha PACS configurats per cercar per defecte");
         m_queueRISRequests.dequeue();
@@ -221,7 +221,7 @@ void RISRequestManager::queryRequestRISFinished()
 
 void RISRequestManager::errorQueryingStudy(QueryPacsJob *queryPACSJob)
 {
-    QString errorMessage = tr("Processing the RIS request, cannot query PACS %1 from %2.\nBe sure its IP and AE Title are correct.")
+    QString errorMessage = tr("RIS request error: cannot query PACS %1 from %2.\nMake sure its IP and AE Title are correct.")
         .arg(queryPACSJob->getPacsDevice().getAETitle())
         .arg(queryPACSJob->getPacsDevice().getInstitution());
 
@@ -423,7 +423,7 @@ bool RISRequestManager::askToUserIfRetrieveFromPACSStudyWhenExistsInDatabase(con
     //Necessari indicar que estigui a sobre de tots els elements perquè sinó es mostra a sota del QPopUpRISRequestScreen impedint que l'usuari pugui llegir-ne el contingut
     //Hack: El SetWindowFlags s'ha de fer abans de setButtonToShowAutoCloseTimer, ja que sinó el botó que mostra el comptador endarrera no queda seleccionat per defecte
     qmessageBoxAutoClose.setWindowFlags(qmessageBoxAutoClose.windowFlags() | Qt::WindowStaysOnTopHint);
-    qmessageBoxAutoClose.setText(tr("Some studies requested from RIS of patient %1 exists in local database. Do you want to retrieve again?") .arg(fullPatientName));
+    qmessageBoxAutoClose.setText(tr("Some studies of patient %1 requested from RIS exist in the local database. Do you want to retrieve them again?") .arg(fullPatientName));
     qmessageBoxAutoClose.setWindowTitle(ApplicationNameString);
     qmessageBoxAutoClose.setIcon(QMessageBox::Question);
     qmessageBoxAutoClose.addButton(QMessageBox::Yes);
@@ -443,10 +443,10 @@ void RISRequestManager::showListenRISRequestsError(ListenRISRequests::ListenRISR
     switch (error)
     {
         case ListenRISRequests::RisPortInUse:
-            message = tr("Unable to listen RIS requests on port %1, the port is in use by another application.").arg(risPort);
+            message = tr("Unable to listen to RIS requests on port %1, the port is in use by another application.").arg(risPort);
             break;
         case ListenRISRequests::UnknownNetworkError:
-            message = tr("Unable to listen RIS requests on port %1, an unknown network error has occurred.").arg(risPort);
+            message = tr("Unable to listen to RIS requests on port %1, an unknown network error has occurred.").arg(risPort);
             message += tr("\nIf the problem persists contact with an administrator.");
             break;
     }

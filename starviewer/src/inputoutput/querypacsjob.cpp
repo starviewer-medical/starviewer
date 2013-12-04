@@ -96,28 +96,28 @@ QString QueryPacsJob::getStatusDescription()
     switch (getStatus())
     {
         case PACSRequestStatus::QueryOk:
-            message = tr("Query %1 to PACS %2 has been successful.").arg(getQueryLevelAsQString(), pacsAETitle);
+            message = tr("Query to PACS %2 for %1 has been successful.").arg(getQueryLevelAsQString(), pacsAETitle);
             break;
         case PACSRequestStatus::QueryCancelled:
-            message = tr("Query %1 to PACS %2 has been cancelled.").arg(getQueryLevelAsQString(), pacsAETitle);
+            message = tr("Query to PACS %2 for %1 has been cancelled.").arg(getQueryLevelAsQString(), pacsAETitle);
             break;
         case PACSRequestStatus::QueryCanNotConnectToPACS:
             message = tr("Query failed: Unable to connect to PACS %1.\n").arg(pacsAETitle);
-            message += tr("\nBe sure your computer is connected to the network and the PACS configuration is correct. ");
+            message += tr("\nMake sure your computer is connected to the network and the PACS configuration is correct. ");
             message += tr("If the problem persists contact with an administrator.");
             break;
         case PACSRequestStatus::QueryFailedOrRefused:
             message = tr("PACS %1 could not process the query.\n\n").arg(pacsAETitle);
-            message += tr("Try with a different query or wait a few minutes, if the problem persists contact with PACS administrator.");
+            message += tr("Try with a different query or wait a few minutes. If the problem persists contact with a PACS administrator.");
             message += errorDetails;
             break;
         case PACSRequestStatus::QueryUnknowStatus:
-            message = tr("PACS %1 could not process the query returning an unknown error.\n\n").arg(pacsAETitle);
-            message += tr("Please contact with PACS administrator to report the issue.");
+            message = tr("PACS %1 could not process the query and returned an unknown error.\n\n").arg(pacsAETitle);
+            message += tr("Please contact with a PACS administrator to report the issue.");
             message += errorDetails;
             break;
         default:
-            message = tr("An unknown error has occurred querying %1 to PACS %2.").arg(getQueryLevelAsQString(), pacsAETitle);
+            message = tr("An unknown error has occurred while querying PACS %2 for %1.").arg(getQueryLevelAsQString(), pacsAETitle);
             message += tr("\nIf the problem persists contact with an administrator.");
             message += errorDetails;
             break;

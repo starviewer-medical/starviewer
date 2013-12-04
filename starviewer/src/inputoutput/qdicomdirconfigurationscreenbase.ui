@@ -331,7 +331,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Copy the content of folder to DICOMDIR</string>
+      <string>Copy folder content to DICOMDIR</string>
      </property>
     </widget>
    </item>

@@ -77,7 +77,7 @@
      <item>
       <widget class="QCheckBox" name="m_checkBoxListenRisRequests">
        <property name="text">
-        <string>Listen RIS Requests on port</string>
+        <string>Listen to RIS requests on port</string>
        </property>
       </widget>
      </item>

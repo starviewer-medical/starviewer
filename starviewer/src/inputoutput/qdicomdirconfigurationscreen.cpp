@@ -137,7 +137,7 @@ bool QDICOMDIRConfigurationScreen::validateBurningApplicationPath(const QString 
     QFileInfo burningApplicationPathInfo(path);
     if (!burningApplicationPathInfo.isFile() || !burningApplicationPathInfo.isExecutable())
     {
-        m_burningApplicationPathValidationLabel->setText(tr("Burning application path has to be an executable file."));
+        m_burningApplicationPathValidationLabel->setText(tr("Burning application path has to point to an executable file."));
         m_burningApplicationPathValidationLabel->setVisible(true);
         m_burningApplicationPathValidationIcon->setVisible(true);
         return false;
@@ -154,7 +154,7 @@ bool QDICOMDIRConfigurationScreen::validateCopyFolderContentPath(const QString &
     {
         if (!QFile::exists(path))
         {
-            m_copyFolderContentValidationLabel->setText(tr("Invalid path of folder to copy to DICOMDIR."));
+            m_copyFolderContentValidationLabel->setText(tr("Invalid path."));
             m_copyFolderContentValidationLabel->setVisible(true);
             m_copyFolderContentValidationIcon->setVisible(true);
             return false;
@@ -163,8 +163,7 @@ bool QDICOMDIRConfigurationScreen::validateCopyFolderContentPath(const QString &
         {
             // TODO Add check path is a dir, not a file
             // Comprovem que el directori no tingui cap item que es digui DICOM o DICOMDIR
-            m_copyFolderContentValidationLabel->setText(tr("Invalid content of the folder to copy to DICOMDIR, this folder cannot contain any item "
-                                                            "called DICOM or DICOMDIR."));
+            m_copyFolderContentValidationLabel->setText(tr("This folder has invalid content. The folder cannot contain any item called DICOM or DICOMDIR."));
             m_copyFolderContentValidationLabel->setVisible(true);
             m_copyFolderContentValidationIcon->setVisible(true);
             return false;
@@ -172,7 +171,7 @@ bool QDICOMDIRConfigurationScreen::validateCopyFolderContentPath(const QString &
     }
     else
     {
-        m_copyFolderContentValidationLabel->setText(tr("You have to indicate the path of folder to copy to DICOMDIR."));
+        m_copyFolderContentValidationLabel->setText(tr("Please, enter the path of the folder to copy to DICOMDIR."));
         m_copyFolderContentValidationLabel->setVisible(true);
         m_copyFolderContentValidationIcon->setVisible(true);
         return false;
