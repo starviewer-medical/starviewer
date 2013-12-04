@@ -5,7 +5,7 @@
     <name>QDicomAddPrinterWidgetBase</name>
     <message>
         <source>Add new DICOM printer</source>
-        <translation>Añada nueva impresora DICOM</translation>
+        <translation>Añadir nueva impresora DICOM</translation>
     </message>
     <message>
         <source>Hostname:</source>
@@ -33,7 +33,7 @@
     </message>
     <message>
         <source>Printer Settings</source>
-        <translation>Parámetros impresora</translation>
+        <translation>Parámetros de la impresora</translation>
     </message>
     <message>
         <source>AE Title:</source>
@@ -124,7 +124,7 @@ border: 1px solid  #680000;
     </message>
     <message>
         <source>Images sent to DICOM print successfully.</source>
-        <translation>Las imágenes se han enviado correctamente a la impresora.</translation>
+        <translation>Las imágenes se han enviado correctamente a la impresora DICOM.</translation>
     </message>
     <message>
         <source>Restore</source>
@@ -136,11 +136,11 @@ border: 1px solid  #680000;
     </message>
     <message>
         <source>Clear</source>
-        <translation>Eliminar todas</translation>
+        <translation>Quitar todas</translation>
     </message>
     <message>
         <source>Remove selection</source>
-        <translation>Eliminar seleccionadas</translation>
+        <translation>Quitar imágenes seleccionadas</translation>
     </message>
 </context>
 <context>
@@ -214,7 +214,7 @@ border: 1px solid  #680000;
     </message>
     <message>
         <source>Printer Settings</source>
-        <translation>Parámetros impresora</translation>
+        <translation>Parámetros de la impresora</translation>
     </message>
     <message>
         <source>Hostname:</source>
@@ -238,7 +238,7 @@ border: 1px solid  #680000;
     </message>
     <message>
         <source>Magnification Type:</source>
-        <translation>Tipo de magnificación:</translation>
+        <translation>Tipo de ampliación:</translation>
     </message>
     <message>
         <source>Border Color:</source>
@@ -328,14 +328,14 @@ border: 1px solid  #680000;
     <name>udg::QDicomAddPrinterWidget</name>
     <message>
         <source>Unable to add the printer %1 because a printer with the same AE Title already exists.</source>
-        <translation>No se puede añadir la impresora %1 porque ya existe otra am con el mismo AE Title.</translation>
+        <translation>No se puede añadir la impresora %1 porque ya existe otra con el mismo AE Title.</translation>
     </message>
 </context>
 <context>
     <name>udg::QDicomPrintExtension</name>
     <message>
         <source>Close &apos;DICOM print&apos; tab and try it again.</source>
-        <translation>Cierre la pestaña &apos;Imprimir DICOM&quot; y vuelva a intentar-lo.</translation>
+        <translation>Cierre la pestaña «Impresión DICOM» y vuelva a intentar-lo.</translation>
     </message>
     <message>
         <source>Check printer DICOM Conformance to be sure that it accepts all your print parameters.</source>
@@ -351,7 +351,7 @@ border: 1px solid  #680000;
     </message>
     <message>
         <source>Series </source>
-        <translation>Serie</translation>
+        <translation>Serie </translation>
     </message>
     <message>
         <source>All images</source>
@@ -379,7 +379,7 @@ border: 1px solid  #680000;
     </message>
     <message>
         <source>No added images to print.</source>
-        <translation>No hay imágenes para imprimir.</translation>
+        <translation>No se ha añadido ninguna imagen para imprimir.</translation>
     </message>
     <message>
         <source>The images cannot be printed because </source>
@@ -430,15 +430,15 @@ border: 1px solid  #680000;
     <name>udg::QDicomPrinterConfigurationWidget</name>
     <message>
         <source>Automatic</source>
-        <translation>Automático</translation>
+        <translation>Automática</translation>
     </message>
     <message>
         <source>Test of printer %1 is correct.</source>
-        <translation>Test de la impresora %1 correcto.</translation>
+        <translation>La impresora %1 se ha comprobado correctamente.</translation>
     </message>
     <message>
         <source>No printer is selected to test.</source>
-        <translation>No se ha seleccionado ninguna impresora para el test.</translation>
+        <translation>No se ha seleccionado ninguna impresora para comprobar.</translation>
     </message>
     <message>
         <source>No printer is selected to apply the changes.</source>
@@ -447,22 +447,22 @@ border: 1px solid  #680000;
     <message>
         <source>Printer %1 does not respond correctly.
 Be sure the hostname and AE Title are correct.</source>
-        <translation>La impresora %1 no ha respondido correctamente.
+        <translation>La impresora %1 no responde correctamente.
 Asegúrese que la dirección y el AE Title son correctos.</translation>
     </message>
     <message>
         <source>Printer %1 does not respond.
 Be sure the hostname and AE Title are correct.</source>
-        <translation>La impresora %1 no ha respondido.
+        <translation>La impresora %1 no responde.
 Asegúrese que la dirección y el AE Title son correctos.</translation>
     </message>
     <message>
         <source>AE Title field cannot be empty.</source>
-        <translation>Se debe especificar el campo AE Title.</translation>
+        <translation>El campo AE Title no puede estar vacío.</translation>
     </message>
     <message>
         <source>Hostname cannot be empty.</source>
-        <translation>Se debe especificar la dirección de la impresora.</translation>
+        <translation>La dirección no puede estar vacía.</translation>
     </message>
     <message>
         <source>An error has occurred. Unable to apply changes to the printer.</source>
