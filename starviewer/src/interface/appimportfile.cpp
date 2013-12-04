@@ -36,7 +36,7 @@ void AppImportFile::open()
     imagesFilter << MetaIOImageFilter << DICOMImageFilter << AllFilesFilter;
 
     QFileDialog *openDialog = new QFileDialog(0);
-    openDialog->setWindowTitle(tr("Choose a file to open..."));
+    openDialog->setWindowTitle(tr("Select files to open..."));
     openDialog->setDirectory(m_workingDirectory);
     openDialog->setFilters(imagesFilter);
     openDialog->selectFilter (m_lastExtension);
