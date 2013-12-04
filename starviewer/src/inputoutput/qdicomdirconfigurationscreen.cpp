@@ -135,17 +135,7 @@ bool QDICOMDIRConfigurationScreen::validateBurningApplicationPath(const QString 
     }
 
     QFileInfo burningApplicationPathInfo(path);
-    if (burningApplicationPathInfo.isFile())
-    {
-        if (!burningApplicationPathInfo.isExecutable())
-        {
-            m_burningApplicationPathValidationLabel->setText(tr("Burning application path has to be an executable file."));
-            m_burningApplicationPathValidationLabel->setVisible(true);
-            m_burningApplicationPathValidationIcon->setVisible(true);
-            return false;
-        }
-    }
-    else
+    if (!burningApplicationPathInfo.isFile() || !burningApplicationPathInfo.isExecutable())
     {
         m_burningApplicationPathValidationLabel->setText(tr("Burning application path has to be an executable file."));
         m_burningApplicationPathValidationLabel->setVisible(true);
