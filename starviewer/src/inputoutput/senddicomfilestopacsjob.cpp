@@ -85,19 +85,19 @@ QString SendDICOMFilesToPACSJob::getStatusDescription()
     switch (getStatus())
     {
         case PACSRequestStatus::SendOk:
-            message = tr("Images from study %1 of patient %2 has been sent successfully to PACS %3.").arg(studyID, patientName, pacsAETitle);
+            message = tr("Images from study %1 of patient %2 have been successfully sent to PACS %3.").arg(studyID, patientName, pacsAETitle);
             break;
         case PACSRequestStatus::SendCanNotConnectToPACS:
             message = tr("Unable to send DICOM images from study %1 of patient %2 because cannot connect to PACS %3.\n")
                 .arg(studyID, patientName, pacsAETitle);
-            message += tr("\nBe sure your computer is connected to the network and the PACS parameters are correct.");
+            message += tr("\nMake sure that your computer is connected to the network and the PACS parameters are correct.");
             message += tr("\nIf the problem persists contact with an administrator.");
             break;
         case PACSRequestStatus::SendAllDICOMFilesFailed:
         case PACSRequestStatus::SendUnknowStatus:
-            message = tr("The sent images from study %1 of patient %2 to PACS %3 has failed.\n\n")
+            message = tr("Sending of images from study %1 of patient %2 to PACS %3 has failed.\n\n")
                 .arg(studyID, patientName, pacsAETitle);
-            message += tr("Wait a few minutes and try again, if the problem persist contact with an administrator.");
+            message += tr("Wait a few minutes and try again, if the problem persists contact with an administrator.");
             message += errorDetails;
             break;
         case PACSRequestStatus::SendSomeDICOMFilesFailed:
@@ -107,20 +107,20 @@ QString SendDICOMFilesToPACSJob::getStatusDescription()
             message += errorDetails;
             break;
         case PACSRequestStatus::SendWarningForSomeImages:
-            message = tr("The images from study %1 of patient %2 has been sent, but it's possible that the PACS %3 has changed some data of them.").arg(
+            message = tr("Images from study %1 of patient %2 have been sent, but it's possible that PACS %3 has changed some data of them.").arg(
                 studyID, patientName, pacsAETitle);
             message += errorDetails;
             break;
         case PACSRequestStatus::SendCancelled:
-            message = tr("The sent of images from study %1 from patient %2 to PACS %3 has been cancelled.").arg(
+            message = tr("Sending of images from study %1 of patient %2 to PACS %3 has been cancelled.").arg(
                 studyID, patientName, pacsAETitle);
             break;
         case PACSRequestStatus::SendPACSConnectionBroken:
-            message = tr("The connection with PACS %1 has been broken sending images from study %2 of patient %3.\n\n").arg(pacsAETitle, studyID, patientName);
+            message = tr("The connection with PACS %1 has been broken while sending images from study %2 of patient %3.\n\n").arg(pacsAETitle, studyID, patientName);
             message += tr("Wait a few minutes and try again, if the problem persist contact with an administrator.");
             break;
         default:
-            message = tr("An unknown error has occurred sending images from study %1 of patient %2 to PACS %3.").arg(
+            message = tr("An unknown error has occurred while sending images from study %1 of patient %2 to PACS %3.").arg(
                 studyID, patientName, pacsAETitle);
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);

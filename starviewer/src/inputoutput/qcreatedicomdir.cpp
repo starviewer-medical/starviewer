@@ -95,7 +95,7 @@ void QCreateDicomdir::createActions()
 
     m_cdromAction = new QAction(0);
     m_cdromAction->setText(tr("CD-ROM"));
-    m_cdromAction->setStatusTip(tr("Record DICOMDIR on a CD-ROM device"));
+    m_cdromAction->setStatusTip(tr("Record DICOMDIR on a CD-ROM"));
     m_cdromAction->setIcon(QIcon(":/images/cdrom.png"));
     m_cdromAction->setCheckable(true);
     m_signalMapper->setMapping(m_cdromAction, CreateDicomdir::CdRom);
@@ -104,7 +104,7 @@ void QCreateDicomdir::createActions()
 
     m_dvdromAction = new QAction(0);
     m_dvdromAction->setText(tr("DVD-ROM"));
-    m_dvdromAction->setStatusTip(tr("Record DICOMDIR on a DVD-ROM device"));
+    m_dvdromAction->setStatusTip(tr("Record DICOMDIR on a DVD-ROM"));
     m_dvdromAction->setIcon(QIcon(":/images/dvd.png"));
     m_dvdromAction->setCheckable(true);
     m_signalMapper->setMapping(m_dvdromAction, CreateDicomdir::DvdRom);
@@ -113,7 +113,7 @@ void QCreateDicomdir::createActions()
 
     m_hardDiskAction = new QAction(0);
     m_hardDiskAction->setText(tr("Hard Disk"));
-    m_hardDiskAction->setStatusTip(tr("Record DICOMDIR on a Hard Disk"));
+    m_hardDiskAction->setStatusTip(tr("Record DICOMDIR on the Hard Disk"));
     m_hardDiskAction->setIcon(QIcon(":/images/harddrive.png"));
     m_hardDiskAction->setCheckable(true);
     m_signalMapper->setMapping(m_hardDiskAction, CreateDicomdir::HardDisk);
@@ -121,8 +121,8 @@ void QCreateDicomdir::createActions()
     m_hardDiskDeviceToolButton->setDefaultAction(m_hardDiskAction);
 
     m_pendriveAction = new QAction(0);
-    m_pendriveAction->setText(tr("Pen Drive"));
-    m_pendriveAction->setStatusTip(tr("Record DICOMDIR on a USB Pen drive device"));
+    m_pendriveAction->setText(tr("USB Flash Drive"));
+    m_pendriveAction->setStatusTip(tr("Record DICOMDIR on a USB Flash Drive"));
     m_pendriveAction->setIcon(QIcon(":/images/usbpendrive.png"));
     m_pendriveAction->setCheckable(true);
     m_signalMapper->setMapping(m_pendriveAction, CreateDicomdir::UsbPen);
@@ -258,8 +258,8 @@ void QCreateDicomdir::createDicomdir()
     // TODO:S'hauria de crear mètodes amb aquestes precondicions a comprovar abans de crear un DICOMDIR
     if (m_dicomdirSizeBytes > m_availableSpaceToRecordInBytes)
     {
-        QMessageBox::warning(this, ApplicationNameString, tr("DICOMDIR creation aborted.\n The selected studies exceed the available space for the "
-                                                             "current device."));
+        QMessageBox::warning(this, ApplicationNameString,
+                             tr("DICOMDIR creation aborted.\nThe selected studies exceed the available space for the current device."));
         return;
     }
 
@@ -277,15 +277,15 @@ void QCreateDicomdir::createDicomdir()
         {
             if (!qdir.exists())
             {
-                message = tr("The directory '%1' to copy the content to DICOMDIR does not exist.\n\n")
+                message = tr("The directory '%1' from where to copy the content to DICOMDIR does not exist.\n\n")
                     .arg(settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString());
             }
             else
             {
-                message = tr("You don't have read permissions on directory '%1' to copy its content to DICOMDIR.\n\n")
+                message = tr("You don't have read permission on directory '%1' to copy its content to DICOMDIR.\n\n")
                     .arg(settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString());
             }
-            message += tr("Do you want to continue creating DICOMDIR without copying its content?");
+            message += tr("Do you want to create the DICOMDIR without copying its content?");
 
             if (QMessageBox::question(this, ApplicationNameString, message, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::No)
             {
@@ -339,7 +339,7 @@ Status QCreateDicomdir::createDicomdirOnCdOrDvd()
     // Creem el directori temporal
     if (!temporaryDirPath.mkpath(dicomdirPath))
     {
-        QMessageBox::critical(this, ApplicationNameString, tr("Unable to create the temporary directory to create DICOMDIR. Please check user permissions."));
+        QMessageBox::critical(this, ApplicationNameString, tr("Unable to create the temporary directory to create the DICOMDIR. Please check user permissions."));
         ERROR_LOG("Error al crear directori " + dicomdirPath);
         return state.setStatus("Unable to create temporary DICOMDIR", false, 3002);
     }
@@ -399,14 +399,14 @@ void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
         if (!directoryDicomdirPath.exists())
         {
                 switch (QMessageBox::question(this,
-                        tr("Create directory?"),
+                        tr("Create Directory?"),
                         tr("The DICOMDIR directory does not exist. Do you want to create it?"),
                         tr("&Yes"), tr("&No"), 0, 1))
                 {
                     case 0:
                         if (!directoryDicomdirPath.mkpath(dicomdirPath))
                         {
-                            QMessageBox::critical(this, ApplicationNameString, tr("Unable to create the directory. Please check user permissions."));
+                            QMessageBox::critical(this, ApplicationNameString, tr("Unable to create directory. Please check user permissions."));
                             ERROR_LOG("Error al crear directori " + dicomdirPath);
                         }
                         break;
@@ -447,7 +447,7 @@ Status QCreateDicomdir::startCreateDicomdir(QString dicomdirPath)
     // Comprovem que hi hagi estudis seleccionats per crear dicomdir
     if (dicomdirStudiesList.count() == 0)
     {
-        QMessageBox::information(this, ApplicationNameString, tr("Please, first select the studies you want to create a DICOMDIR."));
+        QMessageBox::information(this, ApplicationNameString, tr("You haven't selected any study to create the DICOMDIR. Please select at least one study."));
         return state.setStatus("No study selected to create the DICOMDIR", false, 3001);
     }
 
@@ -477,38 +477,38 @@ Status QCreateDicomdir::startCreateDicomdir(QString dicomdirPath)
         {
             case 4001:
                 // Alguna de les imatges no compleix l'estandard dicom però es pot continuar endavant
-                QMessageBox::information(this, ApplicationNameString, tr("Some images are not 100 % DICOM compliant. Some viewers might have problems" 
+                QMessageBox::information(this, ApplicationNameString, tr("Some images are not 100% DICOM compliant. Some viewers might have problems" 
                                                                             " to open them."));
                 clearScreen = true;
                 break;
             case 4002:
-                QMessageBox::warning(this, ApplicationNameString, tr("Unable to create the DICOMDIR. The content of '%1' cannot be copied. Be sure you have "
-                    "read permissions in the directory or uncheck copy folder content option.")
+                QMessageBox::warning(this, ApplicationNameString, tr("Unable to create DICOMDIR. The content of '%1' cannot be copied. Make sure you have "
+                    "read permission in the directory or uncheck copy folder content option.")
                     .arg(settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString()));
                 break;
             case 4003:
-                QMessageBox::warning(this, ApplicationNameString, tr("Unable to create the DICOMDIR. The folder '%1' to copy from, contents an item called "
-                    "DICOMDIR or DICOM.\n\nRemove it from the directory or uncheck copy folder content option.")
+                QMessageBox::warning(this, ApplicationNameString, tr("Unable to create DICOMDIR. The folder '%1' that should be copied contains an item called "
+                    "DICOMDIR or DICOM.\n\nRemove the item from the directory or uncheck copy folder content option.")
                     .arg(settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString()));
                 break;
             case 3003:
-                QMessageBox::warning(this, ApplicationNameString, tr("Error anonymizing DICOMDIR, be sure you have write permissions on %1 "
-                    "or try to create the DICOMDIR without anonymize option.")
+                QMessageBox::warning(this, ApplicationNameString, tr("Error anonymizing DICOMDIR, make sure you have write permission on %1 "
+                    "or try to create the DICOMDIR without the anonymize option.")
                     .arg(dicomdirPath));
                 break;
 
             case 3001:
-                QMessageBox::warning(this, ApplicationNameString, tr("Error copying files, be sure you have appropriate permissions on both source and "
+                QMessageBox::warning(this, ApplicationNameString, tr("Error copying files, make sure you have appropriate permissions on both source and "
                     "destination folders to copy the files."));
                 break;
             
             case 1301:
-                QMessageBox::warning(this, ApplicationNameString, tr("Error creating DICOMDIR file, be sure you have read and write permissions on "
+                QMessageBox::warning(this, ApplicationNameString, tr("Error creating DICOMDIR file, make sure you have read and write permissions on the "
                     "destination folder."));
                 break;
             
             default:
-                QMessageBox::critical(this, ApplicationNameString, tr("Error creating DICOMDIR. Be sure you have appropriate permissions on both source and "
+                QMessageBox::critical(this, ApplicationNameString, tr("Error creating DICOMDIR. Make sure you have appropriate permissions on both source and "
                     "destination folders and %1 folder is empty.").arg(m_lineEditDicomdirPath->text()));
                 ERROR_LOG(QString("Error (%1) al crear el DICOMDIR: %2").arg(state.code()).arg(state.text()));
                 DEBUG_LOG(QString("Error (%1) al crear el DICOMDIR: %2").arg(state.code()).arg(state.text()));
@@ -624,7 +624,7 @@ void QCreateDicomdir::removeSelectedStudy()
     }
     else
     {
-        QMessageBox::information(this, ApplicationNameString, tr("Please select a study to remove of the list."));
+        QMessageBox::information(this, ApplicationNameString, tr("Please select a study to remove it from the list."));
     }
 }
 
@@ -652,7 +652,7 @@ void QCreateDicomdir::burnDicomdir()
     isoPath = dicomdirPath + "/dicomdir.iso";
 
     // Es crea un ProgressDialog
-    m_progressBar = new QProgressDialog(QObject::tr("Creating DICOMDIR Image..."), "", 0, 0);
+    m_progressBar = new QProgressDialog(QObject::tr("Creating DICOMDIR image..."), "", 0, 0);
     m_progressBar->setMinimumDuration(0);
     m_progressBar->setCancelButton(0);
     m_progressBar->setModal(true);
@@ -864,8 +864,8 @@ void QCreateDicomdir::deviceChanged(int index)
             {
                 // La configuració de l'aplicació per gravar cd/dvd no ès vàlida
                 QMessageBox::warning(this, ApplicationNameString,
-                                     tr("Invalid DICOMDIR burning application configuration.\n"
-                                        "It can be solved in Tools -> Configuration -> DICOMDIR menu."));
+                                     tr("Invalid configuration of the DICOMDIR burning application.\n"
+                                        "Please, provide a valid configuration in Tools -> Configuration -> DICOMDIR."));
 
                 // Marquem la opció de crear el dicomdir al disc dur
                 m_hardDiskAction->trigger();

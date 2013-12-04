@@ -106,17 +106,17 @@
          </column>
          <column>
           <property name="text">
-           <string>Q/R port</string>
+           <string>Q/R Port</string>
           </property>
          </column>
          <column>
           <property name="text">
-           <string>Send port</string>
+           <string>Send Port</string>
           </property>
          </column>
          <column>
           <property name="text">
-           <string>Default query PACS</string>
+           <string>Default Query PACS</string>
           </property>
          </column>
          <column>
@@ -193,7 +193,7 @@
             </font>
            </property>
            <property name="text">
-            <string>Modify selected PACS Server/Add new PACS Server</string>
+            <string>Modify Selected PACS Server/Add New PACS Server</string>
            </property>
           </widget>
          </item>
@@ -262,7 +262,7 @@
            <item row="2" column="0">
             <widget class="QLabel" name="textLabel4_2">
              <property name="text">
-              <string>Q/R service:</string>
+              <string>Q/R Service:</string>
              </property>
             </widget>
            </item>
@@ -331,7 +331,7 @@
              <item row="0" column="3">
               <widget class="QCheckBox" name="m_checkDefault">
                <property name="text">
-                <string>Default query PACS</string>
+                <string>Default Query PACS</string>
                </property>
               </widget>
              </item>
@@ -356,7 +356,7 @@
            <item row="3" column="0">
             <widget class="QLabel" name="textLabel4_3">
              <property name="text">
-              <string>Send service:</string>
+              <string>Send Service:</string>
              </property>
             </widget>
            </item>
@@ -522,14 +522,14 @@
             <string>Add the new PACS to the list</string>
            </property>
            <property name="text">
-            <string>Add as new PACS</string>
+            <string>Add as New PACS</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QPushButton" name="m_buttonUpdatePacs">
            <property name="toolTip">
-            <string>Update the parameters of the selected PACS</string>
+            <string>Update parameters of the selected PACS</string>
            </property>
            <property name="text">
             <string>Update PACS</string>
@@ -597,7 +597,7 @@
             </size>
            </property>
            <property name="text">
-            <string>Incoming connections port:</string>
+            <string>Incoming Connections Port:</string>
            </property>
           </widget>
          </item>
@@ -623,7 +623,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Max. simultaneous connections:</string>
+            <string>Max. Simultaneous Connections:</string>
            </property>
           </widget>
          </item>
@@ -721,7 +721,7 @@
          <item row="1" column="1">
           <widget class="QLabel" name="textLabel5">
            <property name="text">
-            <string>Max. seconds for Timeout:</string>
+            <string>Max. Seconds for Timeout:</string>
            </property>
           </widget>
          </item>
@@ -744,7 +744,7 @@
          <item row="0" column="1">
           <widget class="QLabel" name="textLabel3">
            <property name="text">
-            <string>AE Title Local Machine:</string>
+            <string>Local Machine AE Title:</string>
            </property>
           </widget>
          </item>
@@ -817,7 +817,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Institution contact information</string>
+          <string>Institution Contact Information</string>
          </property>
         </widget>
        </item>

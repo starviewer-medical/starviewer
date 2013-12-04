@@ -277,14 +277,14 @@ void QConfigurationScreen::test()
             switch (echoToPACS.getLastError())
             {
                 case EchoToPACS::EchoFailed:
-                    message = tr("PACS \"%1\" did not respond correctly.\nBe sure its IP and AE Title are correct.").arg(pacsDevice.getAETitle());
+                    message = tr("PACS \"%1\" did not respond correctly.\nMake sure its IP and AE Title are correct.").arg(pacsDevice.getAETitle());
                     break;
                 case EchoToPACS::EchoCanNotConnectToPACS:
-                    message = tr("PACS \"%1\" did not respond.\nBe sure its IP and AE Title are correct.").arg(pacsDevice.getAETitle());
+                    message = tr("PACS \"%1\" did not respond.\nMake sure its IP and AE Title are correct.").arg(pacsDevice.getAETitle());
                     break;
                 default:
                     // No hauria de passar mai
-                    message = tr("PACS \"%1\" did not respond as expected, and unknown error has occurred.").arg(pacsDevice.getAETitle());
+                    message = tr("PACS \"%1\" did not respond as expected, an unknown error has occurred.").arg(pacsDevice.getAETitle());
                     break;
             }
 
@@ -309,19 +309,19 @@ bool QConfigurationScreen::validatePacsDeviceToEcho()
 
     if (!m_checkBoxQueryRetrieveEnabled->isChecked() && !m_checkBoxStoreEnabled->isChecked())
     {
-        QMessageBox::warning(this, ApplicationNameString, tr("At least one of the service Query/Retrieve or Send has to be enabled."));
+        QMessageBox::warning(this, ApplicationNameString, tr("At least one of the services Query/Retrieve or Send has to be enabled."));
         return false;
     }
 
     if (m_checkBoxQueryRetrieveEnabled->isChecked() && m_textQueryRetrieveServicePort->text().isEmpty())
     {
-        QMessageBox::warning(this, ApplicationNameString, tr("Query/Retrieve Port value has to be between 0 and 65535."));
+        QMessageBox::warning(this, ApplicationNameString, tr("Query/Retrieve port value has to be between 0 and 65535."));
         return false;
     }
 
     if (m_checkBoxStoreEnabled->isChecked() && m_textStoreServicePort->text().isEmpty())
     {
-        QMessageBox::warning(this, ApplicationNameString, tr("Send Port value has to be between 0 and 65535."));
+        QMessageBox::warning(this, ApplicationNameString, tr("Send port value has to be between 0 and 65535."));
         return false;
     }
 

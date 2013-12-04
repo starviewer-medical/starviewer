@@ -81,7 +81,7 @@
      </column>
      <column>
       <property name="text">
-       <string>Hour</string>
+       <string>Time</string>
       </property>
      </column>
      <column>
@@ -111,7 +111,7 @@
      </column>
      <column>
       <property name="text">
-       <string>Acc. Num</string>
+       <string>Acc. Num.</string>
       </property>
      </column>
      <column>
@@ -121,7 +121,7 @@
      </column>
      <column>
       <property name="text">
-       <string>Ref Physician Name</string>
+       <string>Ref. Physician's Name</string>
       </property>
      </column>
      <column>

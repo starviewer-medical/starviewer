@@ -33,7 +33,7 @@
    <item row="0" column="0">
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
-      <string>Database and cache location</string>
+      <string>Database and Cache Location</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_4">
       <item row="0" column="0">
@@ -53,7 +53,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Database path:</string>
+           <string>Database Location:</string>
           </property>
           <property name="textFormat">
            <enum>Qt::RichText</enum>
@@ -106,7 +106,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Cache DICOM files path:</string>
+           <string>DICOM Files Cache Location:</string>
           </property>
          </widget>
         </item>
@@ -165,7 +165,7 @@
         <item>
          <widget class="QLabel" name="m_mustRestartToApplyWarningLabel">
           <property name="text">
-           <string>Changes on database path will be applied when the application restarts</string>
+           <string>Changes on database location will be applied when the application is restarted</string>
           </property>
           <property name="textFormat">
            <enum>Qt::PlainText</enum>
@@ -196,7 +196,7 @@
    <item row="1" column="0">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Automatic cache management</string>
+      <string>Automatic Cache Management</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">
@@ -338,7 +338,7 @@
         <item>
          <widget class="QCheckBox" name="m_checkBoxDeleteStudiesIfNotEnoughFreeSpaceAvailable">
           <property name="text">
-           <string>When there is not enough free space to retrieve or import new studies, delete old studies until obtaining</string>
+           <string>When there is not enough free space to retrieve or import new studies, delete old studies until</string>
           </property>
          </widget>
         </item>
@@ -361,7 +361,7 @@
         <item>
          <widget class="QLabel" name="label_4">
           <property name="text">
-           <string>GB of free space.</string>
+           <string>GB of free space are obtained.</string>
           </property>
          </widget>
         </item>
@@ -403,7 +403,7 @@
    <item row="2" column="0">
     <widget class="QGroupBox" name="groupBox_3">
      <property name="title">
-      <string>Local database maintenance</string>
+      <string>Local Database Maintenance</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
       <item row="0" column="0">
@@ -443,10 +443,10 @@
         <item>
          <widget class="QPushButton" name="m_buttonDeleteStudies">
           <property name="toolTip">
-           <string>Delete all the studies of the cache</string>
+           <string>Delete all studies from the cache</string>
           </property>
           <property name="text">
-           <string>Delete all Studies</string>
+           <string>Delete All Studies</string>
           </property>
          </widget>
         </item>

@@ -145,7 +145,7 @@
         <item>
          <widget class="QPushButton" name="m_buttonRemoveAll">
           <property name="toolTip">
-           <string>Remove all the studies of the list</string>
+           <string>Remove all the studies from the list</string>
           </property>
           <property name="text">
            <string>Remove All</string>
@@ -350,7 +350,7 @@
           <item>
            <widget class="QLabel" name="label_4">
             <property name="text">
-             <string>Pen Drive</string>
+             <string>USB Flash Drive</string>
             </property>
            </widget>
           </item>

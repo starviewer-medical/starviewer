@@ -58,7 +58,7 @@
          <item>
           <widget class="QLabel" name="label_2">
            <property name="text">
-            <string>Images to store:</string>
+            <string>Images to export:</string>
            </property>
           </widget>
          </item>
@@ -210,14 +210,14 @@
      <item>
       <widget class="QPushButton" name="m_cancelButton">
        <property name="text">
-        <string>Discard</string>
+        <string>Cancel</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="m_saveButton">
        <property name="text">
-        <string>Save</string>
+        <string>Export</string>
        </property>
        <property name="default">
         <bool>true</bool>

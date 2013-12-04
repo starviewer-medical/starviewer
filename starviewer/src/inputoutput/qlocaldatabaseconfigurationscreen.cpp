@@ -136,7 +136,7 @@ void QLocalDatabaseConfigurationScreen::updateMinimumSpaceRequiredSetting(const 
         {
             m_minimumSpaceWarningIcon->setVisible(true);
             m_minimumSpaceWarningLabel->setVisible(true);
-            m_minimumSpaceWarningLabel->setText(tr("Value cannot be empty."));
+            m_minimumSpaceWarningLabel->setText(tr("Please, enter a value."));
         }
         else if (text.toUInt() < 1)
         {
@@ -174,7 +174,7 @@ void QLocalDatabaseConfigurationScreen::updateMaximumDaysNotViewedSetting(const 
         {
             m_deleteNotViewedStudiesWarningIcon->setVisible(true);
             m_deleteNotViewedStudiesWarningLabel->setVisible(true);
-            m_deleteNotViewedStudiesWarningLabel->setText(tr("Value cannot be empty."));
+            m_deleteNotViewedStudiesWarningLabel->setText(tr("Please, enter a value."));
         }
         else if (text.toUInt() < 1)
         {
@@ -211,7 +211,7 @@ void QLocalDatabaseConfigurationScreen::updateDiskSpaceToFreeSetting(const QStri
         {
             m_freeSpaceWarningIcon->setVisible(true);
             m_freeSpaceWarningLabel->setVisible(true);
-            m_freeSpaceWarningLabel->setText(tr("Value cannot be empty."));
+            m_freeSpaceWarningLabel->setText(tr("Please, enter a value."));
         }
         else if (text.toUInt() < 1)
         {
@@ -246,7 +246,7 @@ bool QLocalDatabaseConfigurationScreen::validateDatabaseApplicationPath(const QS
     {
         if (text.right(4) != ".sdb")
         {
-            m_databasePathWarningLabel->setText(tr("The extension of the database has to be '.sdb'"));
+            m_databasePathWarningLabel->setText(tr("The database must have '.sdb' extension"));
             m_databasePathWarningLabel->setVisible(true);
             m_databasePathWarningIcon->setVisible(true);
 
@@ -302,7 +302,7 @@ void QLocalDatabaseConfigurationScreen::examinateDataBaseRoot()
 
 void QLocalDatabaseConfigurationScreen::examinateCacheImagePath()
 {
-    QString path = QFileDialog::getExistingDirectory(0, tr("Choose the Cache images path..."), m_textCacheImagePath->text());
+    QString path = QFileDialog::getExistingDirectory(0, tr("Choose the cache images directory..."), m_textCacheImagePath->text());
     if (!path.isEmpty())
     {
         m_textCacheImagePath->setText(path);
@@ -314,7 +314,7 @@ void QLocalDatabaseConfigurationScreen::examinateCacheImagePath()
 void QLocalDatabaseConfigurationScreen::deleteStudies()
 {
     QMessageBox::StandardButton response = QMessageBox::question(this, ApplicationNameString,
-                                                                       tr("Are you sure you want to delete all Studies of the cache?"),
+                                                                       tr("Are you sure you want to delete all studies from the cache?"),
                                                                        QMessageBox::Yes | QMessageBox::No,
                                                                        QMessageBox::No);
     if (response == QMessageBox::Yes)
@@ -350,9 +350,9 @@ void QLocalDatabaseConfigurationScreen::clearCache()
     }
     if (!successReinstallingDatabase)
     {
-        QMessageBox::critical(this, ApplicationNameString, tr("An error has occurred deleting studies from database, be sure you have write "
-                                                              "permissions on database directory. ") +
-                                                           tr("\n\nClose all %1 windows and try again.").arg(ApplicationNameString) +
+        QMessageBox::critical(this, ApplicationNameString, tr("An error has occurred while deleting studies from the database, make sure you have write "
+                                                              "permission on the database directory.") +
+                                                           tr("\n\nClose all %1 windows and try again. ").arg(ApplicationNameString) +
                                                            tr("If the problem persists contact with an administrator."));
     }
 }
@@ -371,7 +371,7 @@ void QLocalDatabaseConfigurationScreen::compactCache()
     if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
     {
         QMessageBox::critical(this, ApplicationNameString, tr("The database cannot be compacted, an unknown error has occurred.\n\n") +
-            tr("Close all %1 windows and try again.").arg(ApplicationNameString) + tr("If the problem persists contact with an administrator."));
+            tr("Close all %1 windows and try again. ").arg(ApplicationNameString) + tr("If the problem persists contact with an administrator."));
     }
     else
     {
