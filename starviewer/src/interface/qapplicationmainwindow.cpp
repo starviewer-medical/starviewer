@@ -87,7 +87,7 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
     {
         QString errorMessage = databaseInstallation.getErrorMessage();
         QMessageBox::critical(0, ApplicationNameString, tr("There have been some errors:\n").append(errorMessage)
-                                                    .append(tr("\n\nYou can resolve this error by Tools>Configuration>Local Database menu.")));
+                                                    .append(tr("\n\nYou can resolve this error at Tools > Configuration > Local Database.")));
     }
 
     m_extensionHandler = new ExtensionHandler(this);
@@ -166,22 +166,22 @@ void QApplicationMainWindow::createActions()
     connect(m_signalMapper, SIGNAL(mapped(const QString)), m_extensionHandler, SLOT(request(const QString)));
 
     m_newAction = new QAction(this);
-    m_newAction->setText(tr("&New"));
+    m_newAction->setText(tr("&New Window"));
     m_newAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::NewWindow));
     m_newAction->setStatusTip(tr("Open a new working window"));
     m_newAction->setIcon(QIcon(":/images/new.png"));
     connect(m_newAction, SIGNAL(triggered()), SLOT(openBlankWindow()));
 
     m_openAction = new QAction(this);
-    m_openAction->setText(tr("&Open file..."));
+    m_openAction->setText(tr("&Open Files..."));
     m_openAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::OpenFile));
-    m_openAction->setStatusTip(tr("Open an existing volume file"));
+    m_openAction->setStatusTip(tr("Open one or several existing volume files"));
     m_openAction->setIcon(QIcon(":/images/open.png"));
     m_signalMapper->setMapping(m_openAction, 1);
     connect(m_openAction, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
 
     m_openDirAction = new QAction(this);
-    m_openDirAction->setText(tr("Open files from a directory..."));
+    m_openDirAction->setText(tr("Open Files from a Directory..."));
     m_openDirAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::OpenDirectory));
     m_openDirAction->setStatusTip(tr("Open an existing DICOM folder"));
     m_openDirAction->setIcon(QIcon(":/images/openDicom.png"));
@@ -202,7 +202,7 @@ void QApplicationMainWindow::createActions()
     m_localDatabaseAction = new QAction(this);
     m_localDatabaseAction->setText(tr("&Local Database Studies..."));
     m_localDatabaseAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::OpenLocalDatabaseStudies));
-    m_localDatabaseAction->setStatusTip(tr("Browse Local Database Studies"));
+    m_localDatabaseAction->setStatusTip(tr("Browse local database studies"));
     m_localDatabaseAction->setIcon(QIcon(":/images/database.png"));
     m_signalMapper->setMapping(m_localDatabaseAction, 10);
     connect(m_localDatabaseAction, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
@@ -215,7 +215,7 @@ void QApplicationMainWindow::createActions()
     m_openDICOMDIRAction = new QAction(this);
     m_openDICOMDIRAction->setText(tr("Open DICOMDIR..."));
     m_openDICOMDIRAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::OpenDICOMDIR));
-    m_openDICOMDIRAction->setStatusTip(tr("Open DICOMDIR from CD, DVD, Pendrive or hard disk"));
+    m_openDICOMDIRAction->setStatusTip(tr("Open DICOMDIR from CD, DVD, USB flash drive or hard disk"));
     m_openDICOMDIRAction->setIcon(QIcon(":/images/openDICOMDIR.png"));
     m_signalMapper->setMapping(m_openDICOMDIRAction, 8);
     connect(m_openDICOMDIRAction, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
@@ -244,8 +244,8 @@ void QApplicationMainWindow::createActions()
     }
 
     m_maximizeAction = new QAction(this);
-    m_maximizeAction->setText(tr("Maximize To Multiple Screen"));
-    m_maximizeAction->setStatusTip(tr("Maximize The Window To As Many Screens As Possible"));
+    m_maximizeAction->setText(tr("Maximize to Multiple Screens"));
+    m_maximizeAction->setStatusTip(tr("Maximize the window to as many screens as possible"));
     m_maximizeAction->setCheckable(false);
     m_maximizeAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::MaximizeMultipleScreens));
     connect(m_maximizeAction, SIGNAL(triggered(bool)), this, SLOT(maximizeMultipleScreens()));
@@ -253,8 +253,8 @@ void QApplicationMainWindow::createActions()
     m_moveToDesktopAction = new QWidgetAction(this);
     QScreenDistribution *screenDistribution = new QScreenDistribution(this);
     m_moveToDesktopAction->setDefaultWidget(screenDistribution);
-    m_moveToDesktopAction->setText(tr("Move To Screen"));
-    m_moveToDesktopAction->setStatusTip(tr("Move The Window To The Screen ..."));
+    m_moveToDesktopAction->setText(tr("Move to Screen"));
+    m_moveToDesktopAction->setStatusTip(tr("Move the window to the screen..."));
     m_moveToDesktopAction->setCheckable(false);
     connect(screenDistribution, SIGNAL(screenClicked(int)), this, SLOT(moveToDesktop(int)));
     // Shortcuts de MoveToDesktop
@@ -272,29 +272,29 @@ void QApplicationMainWindow::createActions()
     }
 
     m_openUserGuideAction = new QAction(this);
-    m_openUserGuideAction->setText(tr("User guide"));
-    m_openUserGuideAction->setStatusTip(tr("Open User guide"));
+    m_openUserGuideAction->setText(tr("User Guide"));
+    m_openUserGuideAction->setStatusTip(tr("Open user guide"));
     connect(m_openUserGuideAction, SIGNAL(triggered()), this, SLOT(openUserGuide()));
 
     m_openQuickStartGuideAction = new QAction(this);
-    m_openQuickStartGuideAction->setText(tr("Quick Start guide"));
-    m_openQuickStartGuideAction->setStatusTip(tr("Open Quick Start guide"));
+    m_openQuickStartGuideAction->setText(tr("Quick Start Guide"));
+    m_openQuickStartGuideAction->setStatusTip(tr("Open quick start guide"));
     connect(m_openQuickStartGuideAction, SIGNAL(triggered()), this, SLOT(openQuickStartGuide()));
 
     m_openShortcutsGuideAction = new QAction(this);
-    m_openShortcutsGuideAction->setText(tr("Shortcuts guide"));
-    m_openShortcutsGuideAction->setStatusTip(tr("Open Shortcuts guide"));
+    m_openShortcutsGuideAction->setText(tr("Shortcuts Guide"));
+    m_openShortcutsGuideAction->setStatusTip(tr("Open shortcuts guide"));
     connect(m_openShortcutsGuideAction, SIGNAL(triggered()), this, SLOT(openShortcutsGuide()));
 
     m_logViewerAction = new QAction(this);
-    m_logViewerAction->setText(tr("Show log file"));
+    m_logViewerAction->setText(tr("Show Log File"));
     m_logViewerAction->setStatusTip(tr("Show log file"));
     m_logViewerAction->setIcon(QIcon(":/images/logs.png"));
     connect(m_logViewerAction, SIGNAL(triggered()), m_logViewer, SLOT(updateData()));
     connect(m_logViewerAction, SIGNAL(triggered()), m_logViewer, SLOT(exec()));
 
     m_openReleaseNotesAction = new QAction(this);
-    m_openReleaseNotesAction->setText(tr("&Release notes"));
+    m_openReleaseNotesAction->setText(tr("&Release Notes"));
     m_openReleaseNotesAction->setStatusTip(tr("Show the application's release notes for current version"));
     connect(m_openReleaseNotesAction, SIGNAL(triggered()), SLOT(openReleaseNotes()));
 
@@ -307,7 +307,7 @@ void QApplicationMainWindow::createActions()
     m_closeAction = new QAction(this);
     m_closeAction->setText(tr("&Close"));
     m_closeAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::CloseCurrentExtension));
-    m_closeAction->setStatusTip(tr("Close the current extension page"));
+    m_closeAction->setStatusTip(tr("Close current extension page"));
     m_closeAction->setIcon(QIcon(":/images/fileclose.png"));
     connect(m_closeAction, SIGNAL(triggered()), m_extensionWorkspace, SLOT(closeCurrentApplication()));
 
@@ -326,8 +326,8 @@ void QApplicationMainWindow::createActions()
     connect(m_configurationAction, SIGNAL(triggered()), SLOT(showConfigurationDialog()));
 
     m_runDiagnosisTestsAction = new QAction(this);
-    m_runDiagnosisTestsAction->setText(tr("&Run diagnosis tests"));
-    m_runDiagnosisTestsAction->setStatusTip(tr("Run %1 diagnosis test").arg(ApplicationNameString));
+    m_runDiagnosisTestsAction->setText(tr("&Run Diagnosis Tests"));
+    m_runDiagnosisTestsAction->setStatusTip(tr("Run %1 diagnosis tests").arg(ApplicationNameString));
     connect(m_runDiagnosisTestsAction, SIGNAL(triggered()), SLOT(showDiagnosisTestDialog()));}
 
 void QApplicationMainWindow::maximizeMultipleScreens()
@@ -399,7 +399,7 @@ void QApplicationMainWindow::createMenus()
     // Menú 'window'
     m_windowMenu = menuBar()->addMenu(tr("&Window"));
     m_windowMenu->addAction(m_maximizeAction);
-    m_moveWindowToDesktopMenu = m_windowMenu->addMenu(tr("Move To Screen"));
+    m_moveWindowToDesktopMenu = m_windowMenu->addMenu(tr("Move to Screen"));
     m_moveWindowToDesktopMenu->addAction(m_moveToDesktopAction);
 
     menuBar()->addSeparator();
@@ -450,7 +450,7 @@ QAction* QApplicationMainWindow::createLanguageAction(const QString &language, c
 
     QAction *action = new QAction(this);
     action->setText(language);
-    action->setStatusTip(tr("Switch to %1 Language").arg(language));
+    action->setStatusTip(tr("Switch to %1 language").arg(language));
     action->setCheckable(true);
     action->setChecked(defaultLocale == locale);
 
@@ -483,7 +483,7 @@ void QApplicationMainWindow::switchToLanguage(QString locale)
     Settings settings;
     settings.setValue(CoreSettings::LanguageLocale, locale);
 
-    QMessageBox::information(this, tr("Language Switch"), tr("The changes will take effect the next time you startup the application"));
+    QMessageBox::information(this, tr("Language Switch"), tr("Changes will take effect the next time you start the application"));
 }
 
 QApplicationMainWindow* QApplicationMainWindow::setPatientInNewWindow(Patient *patient)
@@ -632,11 +632,11 @@ void QApplicationMainWindow::updateBetaVersionTextPosition()
 
 void QApplicationMainWindow::showBetaVersionDialog()
 {
-    QMessageBox::warning(this, tr("Beta version"),
+    QMessageBox::warning(this, tr("Beta Version"),
                          tr("<h2>%1</h2>"
                             "<p align='justify'>This is a preview release of %1 used exclusively for testing purposes.</p>"
                             "<p align='justify'>This version is intended for radiologists and our test-team members. "
-                            "Users of this version should not expect the extensions function properly.</p>"
+                            "Users of this version should not expect extensions to function properly.</p>"
                             "<p align='justify'>If you want to help us to improve %1, please report any found bug or "
                             "any feature request you may have by sending an e-mail to: <a href=\"mailto:%2\">%2</a></p>"
                             "<h3>We really appreciate your feedback!</h3>").arg(ApplicationNameString).arg(OrganizationEmailString));
@@ -704,7 +704,7 @@ void QApplicationMainWindow::sendRequestRetrieveStudyWithAccessionNumberToLocalS
     {
         // TODO:S'hauria de fer un missatge més genèric
         QMessageBox::information(this, ApplicationNameString,
-                                 tr("Please activate \"Listen RIS Request\" option in %1 configuration to retrieve studies from SAP.")
+                                 tr("Please activate \"Listen to RIS requests\" option in %1 configuration to retrieve studies from SAP.")
                                .arg(ApplicationNameString));
     }
 }

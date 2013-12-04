@@ -204,7 +204,7 @@ void ExtensionHandler::processInput(const QStringList &inputFiles)
     progressDialog.setModal(true);
     progressDialog.setRange(0, 0);
     progressDialog.setMinimumDuration(0);
-    progressDialog.setWindowTitle(tr("Patient loading"));
+    progressDialog.setWindowTitle(tr("Patient Loading"));
     progressDialog.setLabelText(tr("Loading, please wait..."));
     progressDialog.setCancelButton(0);
 
@@ -220,7 +220,7 @@ void ExtensionHandler::processInput(const QStringList &inputFiles)
 
     if (numberOfPatients == 0)
     {
-        QMessageBox::critical(0, ApplicationNameString, tr("Sorry, it seems that there is no patient data we can load."));
+        QMessageBox::critical(0, ApplicationNameString, tr("Sorry, it seems that there is no patient data that can be loaded."));
         ERROR_LOG("Error fent el fill de patientFiller. Ha retornat 0 pacients.");
         return;
     }
@@ -276,7 +276,7 @@ void ExtensionHandler::processInput(const QStringList &inputFiles)
                 patientsWithError += "- " + patientsList.at(i)->getFullName() + "; ID: " + patientsList.at(i)->getID() + "<br>";
             }
         }
-        QMessageBox::critical(0, ApplicationNameString, tr("Sorry, an error occurred while loading the data of patients:<br> %1").arg(patientsWithError));
+        QMessageBox::critical(0, ApplicationNameString, tr("Sorry, an error occurred while loading data from patients:<br>%1").arg(patientsWithError));
     }
     if (patientsWithError.isEmpty())
     {
