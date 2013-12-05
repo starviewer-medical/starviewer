@@ -13,7 +13,7 @@ namespace udg {
 class BodySurfaceAreaFormulaCalculator : public BodySurfaceAreaFormula, public FormulaCalculator {
 public:
     BodySurfaceAreaFormulaCalculator();
-    ~BodySurfaceAreaFormulaCalculator();
+    virtual ~BodySurfaceAreaFormulaCalculator();
 
     bool canCompute();
     double compute();

@@ -14,7 +14,7 @@ namespace udg {
 class BodySurfaceAreaFormula : public Formula {
 public:
     BodySurfaceAreaFormula();
-    ~BodySurfaceAreaFormula();
+    virtual ~BodySurfaceAreaFormula();
 
     static QString getUnits();
 
