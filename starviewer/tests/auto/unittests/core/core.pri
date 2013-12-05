@@ -75,7 +75,8 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_transferfunction.cpp \
            $$PWD/test_leanbodymassformula.cpp \
            $$PWD/test_bodysurfaceareaformula.cpp \
-           $$PWD/test_decaycorrectionfactorformula.cpp
+           $$PWD/test_decaycorrectionfactorformula.cpp \
+           $$PWD/test_leanbodymassformulacalculator.cpp
 
 win32 {
     SOURCES += $$PWD/test_windowsfirewallaccess.cpp \
