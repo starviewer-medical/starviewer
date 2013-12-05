@@ -14,7 +14,7 @@ namespace udg {
 class StandardizedUptakeValueFormulaCalculator : public StandardizedUptakeValueFormula, public FormulaCalculator {
 public:
     StandardizedUptakeValueFormulaCalculator();
-    ~StandardizedUptakeValueFormulaCalculator();
+    virtual ~StandardizedUptakeValueFormulaCalculator();
 
     /// Value upon the SUV value will be computed
     void setActivityConcentrationInBqMl(double activityConcentration);
