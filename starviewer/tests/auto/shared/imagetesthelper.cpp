@@ -33,6 +33,18 @@ Image *ImageTestHelper::createImageWithSexAndHeightAndWeight(QString sex, double
     return series->getImages().first();
 }
 
+Image* ImageTestHelper::createImageWithHeightAndWeight(double height, int weight)
+{
+    Patient *patient = PatientTestHelper::create(1, 1, 1);
+    Study *study = patient->getStudies().first();
+    Series *series = study->getSeries().first();
+
+    study->setHeight(height);
+    study->setWeight(weight);
+
+    return series->getImages().first();
+}
+
 void ImageTestHelper::cleanUp(Image *image)
 {
     if (image->getParentSeries() != NULL)
