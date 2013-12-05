@@ -1,5 +1,7 @@
 #include "roidata.h"
 
+#include <QtCore/qmath.h>
+
 namespace udg {
 
 ROIData::ROIData()
@@ -110,7 +112,7 @@ void ROIData::computeStandardDeviation()
     }
 
     m_standardDeviation /= deviations.size();
-    m_standardDeviation = std::sqrt(m_standardDeviation);
+    m_standardDeviation = qSqrt(m_standardDeviation);
 }
 
 void ROIData::computeMaximum()
