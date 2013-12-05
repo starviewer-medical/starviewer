@@ -26,7 +26,7 @@ void BodySurfaceAreaFormulaCalculator::initializeParameters()
 
 bool BodySurfaceAreaFormulaCalculator::parameterValuesAreValid() const
 {
-    if (m_patientsWeightInKg != 0 && m_patientsHeightInCm != 0)
+    if (m_patientsWeightInKg > 0 && m_patientsHeightInCm > 0)
     {
         return true;
     }
