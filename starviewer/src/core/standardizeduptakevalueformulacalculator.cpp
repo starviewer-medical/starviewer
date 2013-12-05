@@ -12,11 +12,14 @@ StandardizedUptakeValueFormulaCalculator::StandardizedUptakeValueFormulaCalculat
  : StandardizedUptakeValueFormula(), FormulaCalculator()
 {
     m_activityConcentrationInBqMl = 0.0;
+    m_decayCorrectionCalculator = new DecayCorrectionFactorFormulaCalculator();
+
     initializeCommonFormulaComponentParameters();
 }
 
 StandardizedUptakeValueFormulaCalculator::~StandardizedUptakeValueFormulaCalculator()
 {
+    delete m_decayCorrectionCalculator;
 }
 
 void StandardizedUptakeValueFormulaCalculator::setActivityConcentrationInBqMl(double activityConcentration)
@@ -73,11 +76,10 @@ void StandardizedUptakeValueFormulaCalculator::gatherRequiredCommonFormulaCompon
     // Not all the required parameters are present through image. By the moment we can only retrieve them accessing to the whole dataset
     gatherRequiredCommonFormulaComponentParameters(m_tagReaderSource);
 
-    DecayCorrectionFactorFormulaCalculator decayCorrectionCalculator;
-    decayCorrectionCalculator.setDataSource(m_tagReaderSource);
-    if (decayCorrectionCalculator.canCompute())
+    m_decayCorrectionCalculator->setDataSource(m_tagReaderSource);
+    if (m_decayCorrectionCalculator->canCompute())
     {
-        m_decayCorrectionFactor = decayCorrectionCalculator.compute();
+        m_decayCorrectionFactor = m_decayCorrectionCalculator->compute();
     }
 }
 

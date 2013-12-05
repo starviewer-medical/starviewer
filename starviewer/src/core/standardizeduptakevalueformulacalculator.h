@@ -3,6 +3,7 @@
 
 #include "formulacalculator.h"
 #include "standardizeduptakevalueformula.h"
+#include "decaycorrectionfactorformulacalculator.h"
 
 namespace udg {
 
@@ -51,6 +52,10 @@ private:
     bool commonFormulaComponentParameterValuesAreValid() const;
     void gatherRequiredCommonFormulaComponentParameters();
     void gatherRequiredCommonFormulaComponentParameters(DICOMTagReader *tagReader);
+
+protected:
+    /// Used to compute the decay
+    DecayCorrectionFactorFormulaCalculator *m_decayCorrectionCalculator;
 
 private:
     /// External given value to compute SUV from
