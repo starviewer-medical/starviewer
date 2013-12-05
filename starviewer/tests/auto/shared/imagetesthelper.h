@@ -15,6 +15,7 @@ class ImageTestHelper
 {
 public:
     static udg::Image* createImageByUID(QString SOPInstanceUID);
+    static udg::Image* createImageWithSexAndHeightAndWeight(QString sex, double height, int weight);
 
     /// Elimina els objectes de l'estructura Patient/Study/Series/Image que pertany la serie
     static void cleanUp(udg::Image *image);
