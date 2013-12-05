@@ -24,12 +24,14 @@ protected:
     void gatherRequiredNormalizationFactorParameter();
     void initializeNormalizationFactorParameter();
 
+protected:
+    /// Used to compute the body surface area
+    BodySurfaceAreaFormulaCalculator *m_bodySurfaceAreaCalculator;
+
 private:
     /// Computed body surface area in squared cm
     double m_bodySurfaceAreaInCm2;
 
-    /// Used to compute the body surface area
-    BodySurfaceAreaFormulaCalculator m_bodySurfaceAreaCalculator;
 };
 
 } // End namespace udg

@@ -7,11 +7,13 @@ namespace udg {
 StandardizedUptakeValueBodySurfaceAreaFormulaCalculator::StandardizedUptakeValueBodySurfaceAreaFormulaCalculator()
  : StandardizedUptakeValueFormulaCalculator()
 {
+    m_bodySurfaceAreaCalculator = new BodySurfaceAreaFormulaCalculator();
     initializeNormalizationFactorParameter();
 }
 
 StandardizedUptakeValueBodySurfaceAreaFormulaCalculator::~StandardizedUptakeValueBodySurfaceAreaFormulaCalculator()
 {
+    delete m_bodySurfaceAreaCalculator;
 }
 
 bool StandardizedUptakeValueBodySurfaceAreaFormulaCalculator::normalizationFactorValueIsValid() const
@@ -23,10 +25,10 @@ void StandardizedUptakeValueBodySurfaceAreaFormulaCalculator::gatherRequiredNorm
 {
     initializeNormalizationFactorParameter();
 
-    m_bodySurfaceAreaCalculator.setDataSource(m_tagReaderSource);
-    if (m_bodySurfaceAreaCalculator.canCompute())
+    m_bodySurfaceAreaCalculator->setDataSource(m_tagReaderSource);
+    if (m_bodySurfaceAreaCalculator->canCompute())
     {
-        m_bodySurfaceAreaInCm2 = m_bodySurfaceAreaCalculator.compute();
+        m_bodySurfaceAreaInCm2 = m_bodySurfaceAreaCalculator->compute();
     }
 }
 
@@ -37,7 +39,7 @@ void StandardizedUptakeValueBodySurfaceAreaFormulaCalculator::initializeNormaliz
 
 QString StandardizedUptakeValueBodySurfaceAreaFormulaCalculator::getNormalizationFactorUnits() const
 {
-     return m_bodySurfaceAreaCalculator.getUnits();
+     return m_bodySurfaceAreaCalculator->getUnits();
 }
 
 double StandardizedUptakeValueBodySurfaceAreaFormulaCalculator::getNormalizationFactor()
