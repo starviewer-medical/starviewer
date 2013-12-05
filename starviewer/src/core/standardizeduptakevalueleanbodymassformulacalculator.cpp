@@ -5,11 +5,13 @@ namespace udg {
 StandardizedUptakeValueLeanBodyMassFormulaCalculator::StandardizedUptakeValueLeanBodyMassFormulaCalculator()
  : StandardizedUptakeValueFormulaCalculator()
 {
+    m_leanBodyMassCalculator = new LeanBodyMassFormulaCalculator();
     initializeNormalizationFactorParameter();
 }
 
 StandardizedUptakeValueLeanBodyMassFormulaCalculator::~StandardizedUptakeValueLeanBodyMassFormulaCalculator()
 {
+    delete m_leanBodyMassCalculator;
 }
 
 bool StandardizedUptakeValueLeanBodyMassFormulaCalculator::normalizationFactorValueIsValid() const
@@ -21,10 +23,10 @@ void StandardizedUptakeValueLeanBodyMassFormulaCalculator::gatherRequiredNormali
 {
     initializeNormalizationFactorParameter();
     
-    m_leanBodyMassCalculator.setDataSource(m_tagReaderSource);
-    if (m_leanBodyMassCalculator.canCompute())
+    m_leanBodyMassCalculator->setDataSource(m_tagReaderSource);
+    if (m_leanBodyMassCalculator->canCompute())
     {
-        m_leanBodyMassInGr = m_leanBodyMassCalculator.compute() * 1000;
+        m_leanBodyMassInGr = m_leanBodyMassCalculator->compute() * 1000;
     }
 }
 

@@ -24,12 +24,14 @@ protected:
     void gatherRequiredNormalizationFactorParameter();
     void initializeNormalizationFactorParameter();
 
+protected:
+    /// Used to compute the lean body mass
+    LeanBodyMassFormulaCalculator *m_leanBodyMassCalculator;
+
 private:
     /// Computed lean body mass in grams
     double m_leanBodyMassInGr;
     
-    /// Used to compute the lean body mass
-    LeanBodyMassFormulaCalculator m_leanBodyMassCalculator;
 };
 
 } // End namespace udg
