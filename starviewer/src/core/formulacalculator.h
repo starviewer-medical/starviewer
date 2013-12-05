@@ -20,7 +20,7 @@ class DICOMTagReader;
 class FormulaCalculator {
 public:
     FormulaCalculator();
-    ~FormulaCalculator();
+    virtual ~FormulaCalculator();
 
     /// Tells wether the formula can be computed or not with the provided data sources.
     virtual bool canCompute() = 0;
