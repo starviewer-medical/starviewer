@@ -27,7 +27,7 @@ void LeanBodyMassFormulaCalculator::initializeParameters()
 
 bool LeanBodyMassFormulaCalculator::parameterValuesAreValid() const
 {
-    if (m_patientsWeightInKg != 0 && m_patientsHeightInCm != 0 && (m_patientsSex == "M" || m_patientsSex == "F"))
+    if (m_patientsWeightInKg > 0 && m_patientsHeightInCm > 0 && (m_patientsSex == "M" || m_patientsSex == "F"))
     {
         return true;
     }
