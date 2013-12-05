@@ -19,7 +19,7 @@ public:
     QString getUnits() const;
 
     /// Computes the whole formula with the given normalization factor
-    double compute(double activityConcentrationInBqMl, int injectedDoseInBq, int decayCorrectionFactor, double normalizationFactor = 1.0);
+    double compute(double activityConcentrationInBqMl, double injectedDoseInBq, double decayCorrectionFactor, double normalizationFactor = 1.0);
 
 protected:
     /// Gets the units of the used normalization factor
@@ -27,7 +27,7 @@ protected:
     
 private:
     /// Computes the common component of the formula
-    double computeCommonFormulaComponent(double activityConcentrationInBqMl, int injectedDoseInBq, int decayCorrectionFactor);
+    double computeCommonFormulaComponent(double activityConcentrationInBqMl, double injectedDoseInBq, double decayCorrectionFactor);
 
     /// Gets the units of the common component
     QString getCommonFormulaComponentUnits() const;

@@ -1,5 +1,5 @@
 #include "standardizeduptakevalueformula.h"
-
+#include <iostream>
 namespace udg {
 
 StandardizedUptakeValueFormula::StandardizedUptakeValueFormula()
@@ -15,12 +15,12 @@ QString StandardizedUptakeValueFormula::getUnits() const
     return getNormalizationFactorUnits() + "/" + getCommonFormulaComponentUnits();
 }
 
-double StandardizedUptakeValueFormula::compute(double activityConcentrationInBqMl, int injectedDoseInBq, int decayCorrectionFactor, double normalizationFactor)
+double StandardizedUptakeValueFormula::compute(double activityConcentrationInBqMl, double injectedDoseInBq, double decayCorrectionFactor, double normalizationFactor)
 {
     return computeCommonFormulaComponent(activityConcentrationInBqMl, injectedDoseInBq, decayCorrectionFactor) * normalizationFactor;
 }
 
-double StandardizedUptakeValueFormula::computeCommonFormulaComponent(double activityConcentrationInBqMl, int injectedDoseInBq, int decayCorrectionFactor)
+double StandardizedUptakeValueFormula::computeCommonFormulaComponent(double activityConcentrationInBqMl, double injectedDoseInBq, double decayCorrectionFactor)
 {
     return activityConcentrationInBqMl / (injectedDoseInBq * decayCorrectionFactor);
 }
