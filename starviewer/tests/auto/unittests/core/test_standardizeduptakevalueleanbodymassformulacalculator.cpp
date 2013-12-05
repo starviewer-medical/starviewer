@@ -1,7 +1,7 @@
 #include "autotest.h"
 #include "standardizeduptakevalueleanbodymassformulacalculator.h"
 #include "leanbodymassformulacalculator.h"
-#include "decaycorrectionfactorformulacalculator.h"
+#include "testingdecaycorrectionfactorformulacalculator.h"
 
 #include "testingdicomtagreader.h"
 #include "imagetesthelper.h"
@@ -16,22 +16,6 @@
 using namespace udg;
 using namespace testing;
 
-class TestingDecayCorrectionFactorFormulaCalculator : public DecayCorrectionFactorFormulaCalculator {
-public:
-    bool m_canCompute;
-    double m_computeValue;
-
-public:
-    bool canCompute()
-    {
-        return m_canCompute;
-    }
-
-    double compute()
-    {
-        return m_computeValue;
-    }
-};
 
 class TestingLeanBodyMassFormulaCalculator : public LeanBodyMassFormulaCalculator {
 public:
