@@ -100,7 +100,9 @@ void DecayCorrectionFactorFormulaCalculator::gatherRequiredParameters(DICOMTagRe
         if (!radiopharmaceuticalInfoSequence->getItems().isEmpty())
         {
             // TODO It could be more than one item!
-            radioPharmaceuticalStartTimeString = radiopharmaceuticalInfoSequence->getItems().first()->getValueAttribute(DICOMRadiopharmaceuticalStartTime)->getValueAsQString();
+            DICOMSequenceItem *item = radiopharmaceuticalInfoSequence->getItems().first();
+            radioPharmaceuticalStartTimeString = item->getValueAttribute(DICOMRadiopharmaceuticalStartTime)->getValueAsQString();
+            m_radionuclideHalfLifeInSeconds = item->getValueAttribute(DICOMRadionuclideHalfLife)->getValueAsInt();
         }
     }
     QTime radiopharmaceuticalStartTime = DICOMValueRepresentationConverter::timeToQTime(radioPharmaceuticalStartTimeString);
