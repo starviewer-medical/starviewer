@@ -120,7 +120,7 @@ void LeanBodyMassFormulaCalculator::gatherRequiredParameters(DICOMTagReader *tag
     }
 
     m_patientsWeightInKg = tagReader->getValueAttributeAsQString(DICOMPatientWeight).toInt();
-    m_patientsHeightInCm = tagReader->getValueAttributeAsQString(DICOMPatientSize).toInt() * 100;
+    m_patientsHeightInCm = tagReader->getValueAttributeAsQString(DICOMPatientSize).toDouble() * 100;
     m_patientsSex = tagReader->getValueAttributeAsQString(DICOMPatientSex);
 }
 
