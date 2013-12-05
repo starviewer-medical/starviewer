@@ -1,6 +1,7 @@
 #include "roidata.h"
 
 #include <QtCore/qmath.h>
+#include <cfloat>
 
 namespace udg {
 
