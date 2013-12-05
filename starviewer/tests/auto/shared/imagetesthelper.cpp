@@ -1,6 +1,10 @@
 #include "imagetesthelper.h"
 
 #include "seriestesthelper.h"
+#include "patienttesthelper.h"
+#include "patient.h"
+#include "study.h"
+#include "series.h"
 #include "image.h"
 
 using namespace udg;
@@ -14,6 +18,19 @@ Image* ImageTestHelper::createImageByUID(QString SOPInstanceUID)
     testImage->setSOPInstanceUID(SOPInstanceUID);
 
     return testImage;
+}
+
+Image *ImageTestHelper::createImageWithSexAndHeightAndWeight(QString sex, double height, int weight)
+{
+    Patient *patient = PatientTestHelper::create(1, 1, 1);
+    Study *study = patient->getStudies().first();
+    Series *series = study->getSeries().first();
+
+    patient->setSex(sex);
+    study->setHeight(height);
+    study->setWeight(weight);
+
+    return series->getImages().first();
 }
 
 void ImageTestHelper::cleanUp(Image *image)
