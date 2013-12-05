@@ -73,7 +73,7 @@ public:
 
     /// Returns an object that includes the whole sequence. If it doesn't exist or the tag doesn't correspond to a sequence, it returns null.
     /// By default it returns OverlayData and PixelData with their values, but they are returned without value if the second parameter is ExcludeHeavyTags.
-    DICOMSequenceAttribute* getSequenceAttribute(const DICOMTag &sequenceTag, DICOMTagReader::ReturnValueOfTags returnValueOfTags = AllTags) const;
+    virtual DICOMSequenceAttribute* getSequenceAttribute(const DICOMTag &sequenceTag, DICOMTagReader::ReturnValueOfTags returnValueOfTags = AllTags) const;
 
     /// Retorna una llista de DICOMAttribute que inclou tots els Tags d'un DcmDataset (Es dóna per suposat que el dataset serà vàlid)
     /// Per defecte retorna el tag OverlayData i PixelData amb el seu valor, però si volem que ens el retornin amb el seu

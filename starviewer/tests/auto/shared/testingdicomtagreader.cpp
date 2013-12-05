@@ -1,5 +1,7 @@
 #include "testingdicomtagreader.h"
 
+#include "dicomsequenceattribute.h"
+
 
 namespace udg {
 
@@ -29,9 +31,19 @@ QString TestingDICOMTagReader::getValueAttributeAsQString(const DICOMTag &tag) c
     return m_source.value(tag, QString()).toString();
 }
 
+DICOMSequenceAttribute *TestingDICOMTagReader::getSequenceAttribute(const DICOMTag &sequenceTag, DICOMTagReader::ReturnValueOfTags returnValueOfTags) const
+{
+    return m_sequences[sequenceTag];
+}
+
 void TestingDICOMTagReader::addTag(const DICOMTag &tag, const QVariant &value)
 {
     m_source[tag] = value;
+}
+
+void TestingDICOMTagReader::addSequence(DICOMSequenceAttribute *sequence)
+{
+    m_sequences[sequence->getTag()] = sequence;
 }
 
 }

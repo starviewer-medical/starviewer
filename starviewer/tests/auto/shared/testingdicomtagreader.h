@@ -12,6 +12,8 @@ using namespace udg;
 
 namespace udg{
 
+class DICOMSequenceAttribute;
+
 uint qHash(const DICOMTag &tag);
 
 }
@@ -30,14 +32,18 @@ public:
 
     virtual bool tagExists(const DICOMTag &tag) const;
     virtual QString getValueAttributeAsQString(const DICOMTag &tag) const;
+    virtual DICOMSequenceAttribute* getSequenceAttribute(const DICOMTag &sequenceTag, DICOMTagReader::ReturnValueOfTags returnValueOfTags = AllTags) const;
 
     /// Afegeix la parella de tag i valor al hash.
     void addTag(const DICOMTag &tag, const QVariant &value = QVariant());
 
+    /// Afegeix la parella de tag i valor al hash.
+    void addSequence(DICOMSequenceAttribute *sequence);
+
 private:
 
     QHash<DICOMTag, QVariant> m_source;
-
+    QHash<DICOMTag, DICOMSequenceAttribute*> m_sequences;
 };
 
 }
