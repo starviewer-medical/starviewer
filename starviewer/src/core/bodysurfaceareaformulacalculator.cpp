@@ -97,7 +97,7 @@ void BodySurfaceAreaFormulaCalculator::gatherRequiredParameters(DICOMTagReader *
     }
 
     m_patientsWeightInKg = tagReader->getValueAttributeAsQString(DICOMPatientWeight).toInt();
-    m_patientsHeightInCm = tagReader->getValueAttributeAsQString(DICOMPatientSize).toInt() * 100;
+    m_patientsHeightInCm = tagReader->getValueAttributeAsQString(DICOMPatientSize).toDouble() * 100;
 }
 
 } // End namespace udg
