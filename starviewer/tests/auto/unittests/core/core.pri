@@ -79,7 +79,8 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_leanbodymassformulacalculator.cpp \
            $$PWD/test_bodysurfaceareaformulacalculator.cpp \
            $$PWD/test_decaycorrectionfactorformulacalculator.cpp \
-           $$PWD/test_standardizeduptakevalueleanbodymassformulacalculator.cpp
+           $$PWD/test_standardizeduptakevalueleanbodymassformulacalculator.cpp \
+           $$PWD/test_standardizeduptakevaluebodyweightformulacalculator.cpp
 
 win32 {
     SOURCES += $$PWD/test_windowsfirewallaccess.cpp \
