@@ -72,7 +72,10 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_voxel.cpp \
            $$PWD/test_roidata.cpp \
            $$PWD/test_mammographyimagehelper.cpp \
-           $$PWD/test_transferfunction.cpp
+           $$PWD/test_transferfunction.cpp \
+           $$PWD/test_leanbodymassformula.cpp \
+           $$PWD/test_bodysurfaceareaformula.cpp \
+           $$PWD/test_decaycorrectionfactorformula.cpp
 
 win32 {
     SOURCES += $$PWD/test_windowsfirewallaccess.cpp \
