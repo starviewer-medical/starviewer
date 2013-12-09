@@ -42,7 +42,8 @@ void test_DecayCorrectionFactorFormulaCalculator::prepareComputeData()
     QTest::newRow("decayFactor filled") <<  notUsedString << "32.987" << notUsedString << notUsedString << notUsedInt << 32.987;
     QTest::newRow("decayFactor not filled, decayCorrection ADMIN") <<  "ADMIN" << "" << notUsedString << notUsedString << 23 << qPow(2, 0/(double)23);
     QTest::newRow("decayFactor not filled, decayCorrection START") <<  "START" << "" << "120000" << "120200" << 156 << qPow(2, 120/(double)156);
-    QTest::newRow("decayFactor not filled, decayCorrection ADMIN, radionuclideHalfLifeInSeconds is 0") <<  "ADMIN" << "" << notUsedString << notUsedString << 0 << qPow(2, 0/(double)0);
+    double zeroDouble = 0.0;
+    QTest::newRow("decayFactor not filled, decayCorrection ADMIN, radionuclideHalfLifeInSeconds is 0") <<  "ADMIN" << "" << notUsedString << notUsedString << 0 << qPow(2, 0/zeroDouble);
 }
 
 void test_DecayCorrectionFactorFormulaCalculator::compute_ShouldReturnExpectedResultUsingTagReaderAsDataSource_data()
