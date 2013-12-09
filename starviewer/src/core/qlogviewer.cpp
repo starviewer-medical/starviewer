@@ -35,7 +35,7 @@ void QLogViewer::updateData()
     if (!logFile.open(QFile::ReadOnly | QFile::Text))
     {
         ERROR_LOG("No s'ha pogut obrir l'arxiu de logs");
-        m_logBrowser->setPlainText(tr("ERROR: No Log file found at this path: %1\nEnvironment variable(logFilePath): %2").arg(udg::UserLogsFile).arg(
+        m_logBrowser->setPlainText(tr("ERROR: No Log file found at this path: %1\nEnvironment variable (logFilePath): %2").arg(udg::UserLogsFile).arg(
                                    QString::fromLocal8Bit(qgetenv("logFilePath"))));
     }
     else
@@ -54,7 +54,7 @@ void QLogViewer::createConnections()
 
 void QLogViewer::saveLogFileAs()
 {
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Save as..."), QString(), tr("Log Files (*.log)"));
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save As..."), QString(), tr("Log Files (*.log)"));
 
     if (fileName.isEmpty())
     {

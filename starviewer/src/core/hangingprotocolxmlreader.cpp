@@ -31,7 +31,7 @@ HangingProtocol* HangingProtocolXMLReader::readFile(const QString &path)
 
     if (!file.open(QFile::ReadOnly | QFile::Text))
     {
-        QMessageBox::warning(0, tr("Hanging protocol XML File"),
+        QMessageBox::warning(0, tr("Hanging Protocol XML File"),
                              tr("Unable to read file %1:\n%2.")
                              .arg(path)
                              .arg(file.errorString()));

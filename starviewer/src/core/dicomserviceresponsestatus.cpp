@@ -78,7 +78,7 @@ QString DICOMServiceResponseStatus::getStatusCodeAsString() const
             }
             else
             {
-                return QObject::tr("Identifiers does not match SOP Class");
+                return QObject::tr("Identifier does not match SOP Class");
             }
 
         case UnableToProcess:

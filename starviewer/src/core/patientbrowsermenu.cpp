@@ -142,7 +142,7 @@ void PatientBrowserMenu::updateActiveItemView(const QString &identifier)
                 PatientBrowserMenuExtendedItem *item = new PatientBrowserMenuExtendedItem(m_patientAdditionalInfo);
                 item->setPixmap(volume->getThumbnail());
                 Series *series = volume->getImage(0)->getParentSeries();
-                item->setText(QString(tr("%1 \n%2 \n%3\n%4 Images"))
+                item->setText(QString(tr("%1\n%2\n%3\n%4 Images"))
                               .arg(series->getDescription().trimmed())
                               .arg(series->getModality().trimmed())
                               .arg(series->getProtocolName().trimmed())
@@ -163,7 +163,7 @@ void PatientBrowserMenu::updateActiveItemView(const QString &identifier)
             PatientBrowserMenuExtendedItem *item = new PatientBrowserMenuExtendedItem(m_patientAdditionalInfo);
             item->setPixmap(volume->getThumbnail());
             Series *series = volume->getImage(0)->getParentSeries();
-            item->setText(QString(tr("%1 \n%2 \n%3\n%4 Images"))
+            item->setText(QString(tr("%1\n%2\n%3\n%4 Images"))
                                             .arg(series->getDescription().trimmed())
                                             .arg(series->getModality().trimmed())
                                             .arg(series->getProtocolName().trimmed())
